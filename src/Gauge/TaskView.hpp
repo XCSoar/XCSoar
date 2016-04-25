@@ -35,6 +35,7 @@ struct GeoPoint;
 struct MapSettings;
 struct TaskLook;
 struct AirspaceLook;
+struct OverlayLook;
 
 /**
  * Draw Task with the given projection.
@@ -65,6 +66,7 @@ PaintTask(Canvas &canvas, const PixelRect &rc, const OrderedTask &task,
           const MapSettings &settings_map,
           const TaskLook &task_look,
           const AirspaceLook &airspace_look,
+          const OverlayLook &overlay_look,
           const RasterTerrain *terrain, const Airspaces *airspaces,
           bool fai_sectors=false,
           int highlight_index = -1);
@@ -80,6 +82,7 @@ PaintTaskPoint(Canvas &canvas, const PixelRect &rc,
                const MapSettings &settings_map,
                const TaskLook &task_look,
                const AirspaceLook &airspace_look,
+               const OverlayLook &overlay_look,
                const RasterTerrain *terrain, const Airspaces *airspaces,
                int highlight_index = -1);
 

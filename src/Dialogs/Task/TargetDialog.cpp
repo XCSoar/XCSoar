@@ -60,9 +60,10 @@ public:
                         const TrailLook &trail_look,
                         const TaskLook &task_look,
                         const AircraftLook &aircraft_look,
-                        const TopographyLook &topography_look)
+                        const TopographyLook &topography_look,
+                        const OverlayLook &overlay_look)
     :TargetMapWindow(waypoint_look, airspace_look, trail_look,
-                     task_look, aircraft_look, topography_look),
+                     task_look, aircraft_look, topography_look, overlay_look),
      widget(_widget) {}
 
 protected:
@@ -123,7 +124,8 @@ public:
      map(*this,
          map_look.waypoint, map_look.airspace,
          map_look.trail, map_look.task, map_look.aircraft,
-         map_look.topography),
+         map_look.topography,
+         map_look.overlay),
      range(dialog_look),
      radial(dialog_look),
      ete(dialog_look),

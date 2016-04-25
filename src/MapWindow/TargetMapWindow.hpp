@@ -41,6 +41,7 @@ struct WaypointLook;
 struct TaskLook;
 struct AircraftLook;
 struct TopographyLook;
+struct OverlayLook;
 class ContainerWindow;
 class TopographyStore;
 class TopographyRenderer;
@@ -53,6 +54,7 @@ class TargetMapWindow : public BufferWindow {
   const TaskLook &task_look;
   const AircraftLook &aircraft_look;
   const TopographyLook &topography_look;
+  const OverlayLook &overlay_look;
 
 #ifndef ENABLE_OPENGL
   // graphics vars
@@ -111,7 +113,8 @@ public:
                   const TrailLook &trail_look,
                   const TaskLook &task_look,
                   const AircraftLook &aircraft_look,
-                  const TopographyLook &topography_look);
+                  const TopographyLook &topography_look,
+                  const OverlayLook &overlay_look);
   virtual ~TargetMapWindow();
 
   void Create(ContainerWindow &parent, PixelRect rc, WindowStyle style);

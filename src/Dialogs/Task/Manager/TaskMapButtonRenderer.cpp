@@ -39,7 +39,7 @@ DrawTask(Canvas &canvas, const PixelRect rc,
   PaintTask(canvas, rc, task,
             basic.location_available ? basic.location : GeoPoint::Invalid(),
             CommonInterface::GetMapSettings(),
-            look.task, look.airspace,
+            look.task, look.airspace, look.overlay,
             terrain, &airspace_database,
             true);
 }

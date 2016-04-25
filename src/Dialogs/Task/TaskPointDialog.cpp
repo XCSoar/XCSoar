@@ -477,7 +477,7 @@ TaskPointWidget::PaintMap(Canvas &canvas, const PixelRect &rc)
                  basic.location_available
                  ? basic.location : GeoPoint::Invalid(),
                  CommonInterface::GetMapSettings(),
-                 look.task, look.airspace,
+                 look.task, look.airspace, look.overlay,
                  terrain, &airspace_database);
 }
 

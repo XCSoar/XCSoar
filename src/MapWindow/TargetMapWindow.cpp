@@ -27,6 +27,7 @@ Copyright_License {
 #include "Renderer/TaskPointRenderer.hpp"
 #include "Renderer/OZRenderer.hpp"
 #include "Renderer/AircraftRenderer.hpp"
+#include "Renderer/MapScaleRenderer.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Interface.hpp"
 #include "Computer/GlideComputer.hpp"
@@ -74,10 +75,12 @@ TargetMapWindow::TargetMapWindow(const WaypointLook &waypoint_look,
                                  const TrailLook &_trail_look,
                                  const TaskLook &_task_look,
                                  const AircraftLook &_aircraft_look,
-                                 const TopographyLook &_topography_look)
+                                 const TopographyLook &_topography_look,
+                                 const OverlayLook &_overlay_look)
   :task_look(_task_look),
    aircraft_look(_aircraft_look),
    topography_look(_topography_look),
+   overlay_look(_overlay_look),
    airspace_renderer(_airspace_look),
    way_point_renderer(nullptr, waypoint_look),
    trail_renderer(_trail_look)
@@ -228,6 +231,8 @@ TargetMapWindow::OnPaintBuffer(Canvas &canvas)
     AircraftRenderer::Draw(canvas, GetMapSettings(), aircraft_look,
                            Basic().attitude.heading - projection.GetScreenAngle(),
                            aircraft_pos);
+
+  RenderMapScale(canvas, projection, GetClientRect(), overlay_look);
 }
 
 void
