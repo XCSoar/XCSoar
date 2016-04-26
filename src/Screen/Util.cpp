@@ -26,6 +26,8 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Math/Angle.hpp"
 
+static constexpr unsigned CIRCLE_SEGS = 64;
+
 gcc_const
 static PixelPoint
 CirclePoint(int radius, unsigned angle)
@@ -57,8 +59,8 @@ segment_poly(BulkPixelPoint *pt, const PixelPoint center,
   // add intermediate nodes (if any)
   if (forward) {
     const unsigned ilast = istart < iend ? iend : iend + INT_ANGLE_RANGE;
-    for (unsigned i = istart + INT_ANGLE_RANGE / 64; i < ilast;
-         i += INT_ANGLE_RANGE / 64) {
+    for (unsigned i = istart + INT_ANGLE_RANGE / CIRCLE_SEGS; i < ilast;
+         i += INT_ANGLE_RANGE / CIRCLE_SEGS) {
       const unsigned angle = i & INT_ANGLE_MASK;
       pt[npoly] = CirclePoint(center, radius, angle);
 
@@ -66,9 +68,9 @@ segment_poly(BulkPixelPoint *pt, const PixelPoint center,
         npoly++;
     }
   } else {
-    const unsigned ilast = istart > iend ? iend : iend - INT_ANGLE_RANGE;
-    for (int i = istart + INT_ANGLE_RANGE / 64; i > (int)ilast;
-         i -= INT_ANGLE_RANGE / 64) {
+    const unsigned ilast = istart > iend ? iend + INT_ANGLE_RANGE: iend;
+    for (unsigned i = istart + INT_ANGLE_RANGE / CIRCLE_SEGS + INT_ANGLE_RANGE; i > ilast;
+         i -= INT_ANGLE_RANGE / CIRCLE_SEGS) {
       const unsigned angle = i & INT_ANGLE_MASK;
       pt[npoly] = CirclePoint(center, radius, angle);
 
@@ -101,7 +103,7 @@ Segment(Canvas &canvas, PixelPoint center, unsigned radius,
   const int iend = NATIVE_TO_INT(end.Native());
 
   unsigned npoly = 0;
-  BulkPixelPoint pt[67];
+  BulkPixelPoint pt[CIRCLE_SEGS+3];
 
   // add center point
   if (!horizon) {
@@ -130,7 +132,7 @@ Annulus(Canvas &canvas, PixelPoint center, unsigned radius,
   const int iend = NATIVE_TO_INT(end.Native());
 
   unsigned npoly = 0;
-  BulkPixelPoint pt[66*2];
+  BulkPixelPoint pt[(CIRCLE_SEGS+2)*2];
 
   segment_poly(pt, center, radius, istart, iend, npoly);
   segment_poly(pt, center, inner_radius, iend, istart, npoly, false);
@@ -154,7 +156,7 @@ KeyHole(Canvas &canvas, PixelPoint center, unsigned radius,
   const int iend = NATIVE_TO_INT(end.Native());
 
   unsigned npoly = 0;
-  BulkPixelPoint pt[66*2];
+  BulkPixelPoint pt[(CIRCLE_SEGS+2)*2];
 
   segment_poly(pt, center, radius, istart, iend, npoly);
   segment_poly(pt, center, inner_radius, iend, istart, npoly);
@@ -171,7 +173,7 @@ RoundRect(Canvas &canvas, int left, int top,
           int right, int bottom, unsigned radius)
 {
   unsigned npoly = 0;
-  BulkPixelPoint pt[66*4];
+  BulkPixelPoint pt[(CIRCLE_SEGS+2)*4];
 
   segment_poly(pt, PixelPoint(left + radius, top + radius), radius,
                INT_ANGLE_RANGE * 3 / 4,
