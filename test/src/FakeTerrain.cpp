@@ -33,7 +33,8 @@ GeoPoint
 RasterMap::Intersection(const GeoPoint& origin,
                         const int h_origin,
                         const int h_glide,
-                        const GeoPoint& destination) const
+                        const GeoPoint& destination,
+                        const int height_floor) const
 {
   return GeoPoint(Angle::Zero(), Angle::Zero());
 }

@@ -125,7 +125,7 @@ public:
                          GeoPoint& intx, int &h) const;
 
   /**
-   * Find location where aircraft hits the ground
+   * Find location where aircraft hits the ground or height_floor
    * @todo margin
    * If the search goes outside the terrain area, will return the destination location
    *
@@ -133,6 +133,7 @@ public:
    * @param h_origin Height of aircraft (m)
    * @param h_glide Height to be glided (m)
    * @param destination Location of aircraft at MSL
+   * @param height_floor: minimum height to search
    *
    * @return location of intersection, or GeoPoint::Invalid() if none
    * was found
@@ -140,7 +141,8 @@ public:
   gcc_pure
   GeoPoint Intersection(const GeoPoint& origin,
                         int h_origin, int h_glide,
-                        const GeoPoint& destination) const;
+                        const GeoPoint& destination,
+                        const int height_floor) const;
 
 };
 

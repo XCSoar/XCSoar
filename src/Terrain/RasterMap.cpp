@@ -177,7 +177,8 @@ RasterMap::FirstIntersection(const GeoPoint &origin, const int h_origin,
 GeoPoint
 RasterMap::Intersection(const GeoPoint& origin,
                         const int h_origin, const int h_glide,
-                        const GeoPoint& destination) const
+                        const GeoPoint& destination,
+                        const int height_floor) const
 {
   const auto c_origin = projection.ProjectCoarseRound(origin);
   const auto c_destination = projection.ProjectCoarseRound(destination);
@@ -189,7 +190,7 @@ RasterMap::Intersection(const GeoPoint& origin,
 
   auto c_int =
     raster_tile_cache.Intersection(c_origin, c_destination,
-                                   h_origin, slope_fact);
+                                   h_origin, slope_fact, height_floor);
   if (c_int.x < 0)
     return GeoPoint::Invalid();
 

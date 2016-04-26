@@ -202,7 +202,8 @@ public:
    */
   gcc_pure SignedRasterLocation
   Intersection(SignedRasterLocation origin, SignedRasterLocation destination,
-               int h_origin, const int slope_fact) const;
+               int h_origin, const int slope_fact,
+               const int height_floor) const;
 
 private:
   /**

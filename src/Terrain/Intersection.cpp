@@ -255,7 +255,8 @@ SignedRasterLocation
 RasterTileCache::Intersection(const SignedRasterLocation origin,
                               const SignedRasterLocation destination,
                               const int h_origin,
-                              const int slope_fact) const
+                              const int slope_fact,
+                              const int height_floor) const
 {
   SignedRasterLocation location = origin;
 
@@ -316,16 +317,16 @@ RasterTileCache::Intersection(const SignedRasterLocation origin,
       // current aircraft height
       const int h_int = h_origin - dh;
 
-      if (h_int < h_terrain) {
+      if (h_int < std::max(h_terrain, height_floor)) {
         if (refine_step<3) // can't refine any further
           return RasterLocation(last_clear_location.x, last_clear_location.y);
 
         // refine solution
         return Intersection(last_clear_location, location,
-                            last_clear_h, slope_fact);
+                            last_clear_h, slope_fact, height_floor);
       }
 
-      if (h_int <= 0) 
+      if (h_int <= 0)
         break; // reached max range
 
       last_clear_location = location;
