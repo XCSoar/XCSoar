@@ -29,7 +29,6 @@ Copyright_License {
 #include "Terrain/RasterTileCache.hpp"
 #include "OS/Args.hpp"
 #include "OS/ConvertPathName.hpp"
-#include "Compatibility/path.h"
 #include "Operation/Operation.hpp"
 
 #include <stdio.h>
@@ -44,11 +43,11 @@ int main(int argc, char **argv)
 
   char jp2_path[4096];
   strcpy(jp2_path, map_path);
-  strcat(jp2_path, DIR_SEPARATOR_S "terrain.jp2");
+  strcat(jp2_path, "/terrain.jp2");
 
   TCHAR j2w_path[4096];
   _tcscpy(j2w_path, PathName(map_path));
-  _tcscat(j2w_path, _T(DIR_SEPARATOR_S) _T("terrain.j2w"));
+  _tcscat(j2w_path, _T("/terrain.j2w"));
 
   NullOperationEnvironment operation;
   RasterTileCache rtc;

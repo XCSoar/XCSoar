@@ -24,7 +24,6 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Profile/Profile.hpp"
 #include "OS/PathName.hpp"
-#include "Compatibility/path.h"
 
 #include <windef.h> /* for MAX_PATH */
 
@@ -40,7 +39,7 @@ RasterTerrain::OpenTerrain(FileCache *cache, OperationEnvironment &operation)
 
   if (Profile::GetPath(ProfileKeys::MapFile, szFile)) {
     _tcscpy(world_file_buffer, szFile);
-    _tcscat(world_file_buffer, _T(DIR_SEPARATOR_S "terrain.j2w"));
+    _tcscat(world_file_buffer, _T("/terrain.j2w"));
     world_file = world_file_buffer;
 
     _tcscat(szFile, _T("/terrain.jp2"));

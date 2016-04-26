@@ -6,6 +6,8 @@ Version 6.8.4 - not yet released
   - fix crash in NMEA logger
 * user interface
   - Australian units for weight are kg
+* Windows
+  - fix terrain loader (#3747)
 * Android
   - fix crash bug in IOIO driver (#3744)
 * Kobo
