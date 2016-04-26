@@ -29,6 +29,7 @@ Copyright_License {
 
 #include "Geoid.hpp"
 #include "Geo/GeoPoint.hpp"
+#include "Math/Util.hpp"
 
 #include <stdint.h>
 

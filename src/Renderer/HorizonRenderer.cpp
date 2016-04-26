@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Look/HorizonLook.hpp"
 #include "NMEA/Attitude.hpp"
+#include "Math/Util.hpp"
 #include "Util/Clamp.hpp"
 
 #include <algorithm>

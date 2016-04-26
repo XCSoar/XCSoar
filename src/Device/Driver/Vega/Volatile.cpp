@@ -24,6 +24,7 @@ Copyright_License {
 #include "Volatile.hpp"
 #include "NMEA/Derived.hpp"
 #include "Device/Util/NMEAWriter.hpp"
+#include "Math/Util.hpp"
 
 #include <stdio.h>
 

@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Terrain/RasterMap.hpp"
 #include "Geo/GeoClip.hpp"
+#include "Math/Util.hpp"
 
 #include <algorithm>
 #include <assert.h>

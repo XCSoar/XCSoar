@@ -32,6 +32,7 @@ Copyright_License {
 #include "Units/Descriptor.hpp"
 #include "Time/RoughTime.hpp"
 #include "Math/Angle.hpp"
+#include "Math/Util.hpp"
 #include "Renderer/SymbolRenderer.hpp"
 #include "Geo/CoordinateFormat.hpp"
 
