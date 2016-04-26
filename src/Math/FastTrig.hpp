@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_MATH_FAST_TRIG_HPP
 
 #include "Constants.hpp"
-#include "Util.hpp"
 #include "Compiler.h"
 
 static constexpr unsigned INT_ANGLE_RANGE = 4096;
@@ -54,7 +53,13 @@ IntAngleForCos(unsigned angle)
 static inline constexpr unsigned
 UnsafeRadiansToIntAngle(double radians)
 {
-  return uround(radians * INT_ANGLE_MULT);
+  /* add INT_ANGLE_RANGE to ensure that the result is not negative
+     (assuming the parameter is "sane"); the caller will normalise the
+     result using NormalizeIntAngle() */
+  /* add 0.5 for rounding; by definition, casting to integer rounds
+     towards zero, and adding 0.5 will apply correct rounding for
+     non-negative values */
+  return unsigned(radians * INT_ANGLE_MULT + (10 * INT_ANGLE_RANGE + 0.5));
 }
 
 static inline constexpr unsigned
