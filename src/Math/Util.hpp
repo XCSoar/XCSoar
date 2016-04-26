@@ -39,6 +39,9 @@ iround(double x)
 
 /**
  * Convert this number to an unsigned integer, with rounding.
+ *
+ * The parameter must not be negative.  The result for a negative
+ * parameter is undefined.
  */
 static inline constexpr unsigned
 uround(const double x)
