@@ -53,6 +53,9 @@ class RoutePolars
   /** Reciprocal of MacCready value (s/m) */
   double inv_mc;
 
+  /** Minimum working height (m) */
+  int height_min_working;
+
   RoutePlannerConfig config;
 
 public:
@@ -68,7 +71,8 @@ public:
    * @param wind Wind condition
    */
   void Initialise(const GlideSettings &settings, const GlidePolar& polar,
-                  const SpeedVector& wind);
+                  const SpeedVector& wind,
+                  const int _height_min_working=0);
 
   /**
    * Calculate the time required to fly the link.  Returns UINT_MAX
@@ -233,6 +237,10 @@ public:
 
   int GetSafetyHeight() const {
     return config.safety_height_terrain;
+  }
+
+  int GetFloor() const {
+    return height_min_working;
   }
 
   gcc_pure

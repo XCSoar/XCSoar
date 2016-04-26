@@ -45,11 +45,13 @@ RoutePolars::MSLIntercept(const int index, const FlatGeoPoint &fp,
 
 void
 RoutePolars::Initialise(const GlideSettings &settings, const GlidePolar &polar,
-                        const SpeedVector &wind)
+                        const SpeedVector &wind,
+                        const int _height_min_working)
 {
   polar_glide.Initialise(settings, polar, wind, true);
   polar_cruise.Initialise(settings, polar, wind, false);
   inv_mc = MC_CEILING_PENALTY_FACTOR * polar.GetInvMC();
+  height_min_working = std::max(0, _height_min_working - GetSafetyHeight());
 }
 
 unsigned
@@ -240,7 +242,7 @@ RoutePolars::CalcGlideArrival(const AFlatGeoPoint& origin,
 FlatGeoPoint
 RoutePolars::ReachIntercept(const int index, const AFlatGeoPoint &flat_origin,
                             const GeoPoint &origin,
-                             const RasterMap* map,
+                            const RasterMap* map,
                             const FlatProjection &proj) const
 {
   const bool valid = map && map->IsDefined();
