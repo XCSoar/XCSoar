@@ -188,7 +188,7 @@ void
 Canvas::DrawSegment(PixelPoint center, unsigned radius,
                     Angle start, Angle end, bool horizon)
 {
-  Segment(*this, center, radius, start, end, horizon);
+  ::Segment(*this, center, radius, start, end, horizon);
 }
 
 void
