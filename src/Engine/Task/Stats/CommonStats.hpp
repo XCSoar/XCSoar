@@ -78,6 +78,12 @@ public:
   /** Risk MC setting (m/s) */
   double current_risk_mc;
 
+  /** Working height floor (m MSL) */
+  double height_min_working;
+
+  /** Working height ceiling (m MSL) */
+  double height_max_working;
+
   /** Summary of ordered task progress */
   TaskSummary ordered_summary;
 
