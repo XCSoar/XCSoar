@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Geo/GeoPoint.hpp"
 #include "Math/FastRotation.hpp"
+#include "Math/Util.hpp"
 #include "Screen/Point.hpp"
 #include "Compiler.h"
 
@@ -201,7 +202,7 @@ public:
    * @return The converted distance in px
    */
   unsigned GeoToScreenDistance(const double x) const {
-    return iround(scale * x);
+    return uround(scale * x);
   }
 
   /**
