@@ -141,3 +141,20 @@ FlightStatistics::AddClimbRate(const double tflight, const double vario, const b
     vario_cruise_histogram.UpdateHistogram(vario);
   }
 }
+
+double
+FlightStatistics::GetMinWorkingHeight() const
+{
+  // working height is average base less one standard deviation, or
+  // the minimum encountered if this is higher
+  return std::max(altitude_base.GetMinY(), altitude_base.GetAverageY() - sqrt(altitude_base.GetVarY()));
+}
+
+double
+FlightStatistics::GetMaxWorkingHeight() const
+{
+  // working height is average ceiling plus one standard deviation, or
+  // the maximum encountered if this is lower
+  return std::max(altitude.GetMaxY(),
+                  std::min(altitude_ceiling.GetMaxY(), altitude_ceiling.GetAverageY() + sqrt(altitude_ceiling.GetVarY())));
+}

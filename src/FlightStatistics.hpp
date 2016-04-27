@@ -44,6 +44,8 @@ public:
   void StartTask();
 
   double AverageThermalAdjusted(double wthis, const bool circling);
+  double GetMinWorkingHeight() const;
+  double GetMaxWorkingHeight() const;
 
   void AddAltitude(double tflight, double alt, bool final_glide);
   void AddAltitudeTerrain(double tflight, double terrainalt);
