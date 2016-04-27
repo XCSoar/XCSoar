@@ -341,6 +341,8 @@ private:
 
   void RenderRasp(Canvas &canvas);
 
+  void RenderTerrainAbove(Canvas &canvas, bool working);
+
   /**
    * Renders the topography
    * @param canvas The drawing canvas
