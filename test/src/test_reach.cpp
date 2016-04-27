@@ -53,9 +53,6 @@ test_reach(const RasterMap &map, double mwind, double mc)
 
   GeoPoint origin(map.GetMapCenter());
 
-  double pd = map.PixelDistance(origin, 1);
-  printf("# pixel size %g\n", (double)pd);
-
   bool retval= true;
 
   int horigin = map.GetHeight(origin).GetValueOr0() + 1000;
@@ -96,6 +93,9 @@ test_reach(const RasterMap &map, double mwind, double mc)
     }
     fout << "\n";
   }
+
+  double pd = map.PixelDistance(origin, 1);
+  printf("# pixel size %g\n", (double)pd);
 }
 
 int main(int argc, char** argv) {
