@@ -70,8 +70,8 @@ ProtectedRoutePlanner::SolveReach(const AGeoPoint &origin,
 }
 
 const FlatProjection
-ProtectedRoutePlanner::GetReachProjection() const
+ProtectedRoutePlanner::GetTerrainReachProjection() const
 {
   Lease lease(*this);
-  return lease->GetReachProjection();
+  return lease->GetTerrainReachProjection();
 }

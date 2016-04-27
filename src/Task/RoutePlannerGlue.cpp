@@ -69,9 +69,9 @@ RoutePlannerGlue::SolveReach(const AGeoPoint &origin,
 {
   if (terrain) {
     RasterTerrain::Lease lease(*terrain);
-    planner.SolveReach(origin, config, h_ceiling, do_solve);
+    planner.SolveReachTerrain(origin, config, h_ceiling, do_solve);
   } else {
-    planner.SolveReach(origin, config, h_ceiling, do_solve);
+    planner.SolveReachTerrain(origin, config, h_ceiling, do_solve);
   }
 }
 

@@ -50,8 +50,8 @@ public:
                    const AGeoPoint &origin,
                    const AGeoPoint &destination);
 
-  bool IsReachEmpty() const {
-    return planner.IsReachEmpty();
+  bool IsTerrainReachEmpty() const {
+    return planner.IsTerrainReachEmpty();
   }
 
   void ClearReach() {
@@ -75,8 +75,8 @@ public:
 
   bool FindPositiveArrival(const AGeoPoint &dest, ReachResult &result_r) const;
 
-  const FlatProjection &GetReachProjection() const {
-    return planner.GetReachProjection();
+  const FlatProjection &GetTerrainReachProjection() const {
+    return planner.GetTerrainReachProjection();
   }
 
   void AcceptInRange(const GeoBounds &bounds,

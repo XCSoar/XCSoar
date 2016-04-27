@@ -104,9 +104,9 @@ protected:
   bool dirty;
   /** Task projection used for flat-earth representation */
   FlatProjection projection;
-  /** Aircraft performance model */
+  /** Aircraft performance model for route calculations */
   RoutePolars rpolars_route;
-  /** Aircraft performance model */
+  /** Aircraft performance model for reach to terrain */
   RoutePolars rpolars_reach;
   /** Terrain raster */
   const RasterMap *terrain;
@@ -141,7 +141,7 @@ private:
   /** Destination at last call to solve() */
   AFlatGeoPoint destination_last;
 
-  ReachFan reach;
+  ReachFan reach_terrain;
 
   RoutePlannerConfig::Polar reach_polar_mode;
 
@@ -172,8 +172,8 @@ public:
     terrain = _terrain;
   }
 
-  bool IsReachEmpty() const {
-    return reach.IsEmpty();
+  bool IsTerrainReachEmpty() const {
+    return reach_terrain.IsEmpty();
   }
 
   /**
@@ -198,25 +198,24 @@ public:
              int h_ceiling = INT_MAX);
 
   /**
-   * Solve reach footprint
+   * Solve reach footprint to terrain
    *
    * @param origin The start of the search (current aircraft location)
    * @param do_solve actually solve or just perform minimal calculations
    *
    * @return True if reach was scanned
    */
-  bool SolveReach(const AGeoPoint &origin, const RoutePlannerConfig &config,
-                  int h_ceiling, bool do_solve=true);
+  bool SolveReachTerrain(const AGeoPoint &origin, const RoutePlannerConfig &config,
+                         int h_ceiling, bool do_solve=true);
 
-  const FlatProjection &GetReachProjection() const {
-    return reach.GetProjection();
+
+  const FlatProjection &GetTerrainReachProjection() const {
+    return reach_terrain.GetProjection();
   }
 
   /** Visit reach */
   void AcceptInRange(const GeoBounds &bounds,
-                     FlatTriangleFanVisitor &visitor) const {
-    reach.AcceptInRange(bounds, visitor);
-  }
+                     FlatTriangleFanVisitor &visitor) const;
 
   /**
    * Retrieve current solution.  If solver failed previously,
@@ -268,11 +267,11 @@ public:
    */
   bool FindPositiveArrival(const AGeoPoint &dest,
                            ReachResult &result_r) const {
-    return reach.FindPositiveArrival(dest, rpolars_reach, result_r);
+    return reach_terrain.FindPositiveArrival(dest, rpolars_reach, result_r);
   }
 
   int GetTerrainBase() const {
-    return reach.GetTerrainBase();
+    return reach_terrain.GetTerrainBase();
   }
 
 protected:

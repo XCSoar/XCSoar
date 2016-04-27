@@ -251,7 +251,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     return;
 
   // Create a visitor for the Reach code
-  TriangleCompound visitor(route_planner->GetReachProjection(),
+  TriangleCompound visitor(route_planner->GetTerrainReachProjection(),
                            render_projection);
 
   // Fill the TriangleCompound with all TriangleFans in range

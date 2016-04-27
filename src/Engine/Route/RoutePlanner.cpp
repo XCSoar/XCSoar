@@ -35,7 +35,7 @@ RoutePlanner::RoutePlanner()
 void
 RoutePlanner::ClearReach()
 {
-  reach.Reset();
+  reach_terrain.Reset();
 }
 
 void
@@ -54,14 +54,14 @@ RoutePlanner::Reset()
 }
 
 bool
-RoutePlanner::SolveReach(const AGeoPoint &origin,
-                         const RoutePlannerConfig &config,
-                         const int h_ceiling, const bool do_solve)
+RoutePlanner::SolveReachTerrain(const AGeoPoint &origin,
+                                const RoutePlannerConfig &config,
+                                const int h_ceiling, const bool do_solve)
 {
   rpolars_reach.SetConfig(config, origin.altitude, h_ceiling);
   reach_polar_mode = config.reach_polar_mode;
 
-  return reach.Solve(origin, rpolars_reach, terrain, do_solve);
+  return reach_terrain.Solve(origin, rpolars_reach, terrain, do_solve);
 }
 
 bool

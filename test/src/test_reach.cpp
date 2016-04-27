@@ -60,7 +60,7 @@ test_reach(const RasterMap &map, double mwind, double mc)
 
   RoutePlannerConfig config;
   config.SetDefaults();
-  retval = route.SolveReach(aorigin, config, INT_MAX);
+  retval = route.SolveReachTerrain(aorigin, config, INT_MAX);
 
   ok(retval, "reach solve", 0);
 
@@ -83,7 +83,7 @@ test_reach(const RasterMap &map, double mwind, double mc)
         route.FindPositiveArrival(adest, reach);
         if ((i % 5 == 0) && (j % 5 == 0)) {
           AGeoPoint ao2(x, h + 1000);
-          route.SolveReach(ao2, config, INT_MAX);
+          route.SolveReachTerrain(ao2, config, INT_MAX);
         }
         fout << x.longitude.Degrees() << " "
              << x.latitude.Degrees() << " "

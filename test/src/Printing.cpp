@@ -146,7 +146,7 @@ void PrintHelper::print_route(RoutePlanner& r)
 void
 PrintHelper::print_reach_tree(const RoutePlanner& r)
 {
-  print(r.reach);
+  print(r.reach_terrain);
 }
 
 void

@@ -429,7 +429,7 @@ public:
                  const PolarSettings &polar_settings,
                  const TaskBehaviour &task_behaviour,
                  const DerivedInfo &calculated) {
-    if (route_planner != nullptr && !route_planner->IsReachEmpty())
+    if (route_planner != nullptr && !route_planner->IsTerrainReachEmpty())
       CalculateRoute(*route_planner);
     else
       CalculateDirect(polar_settings, task_behaviour, calculated);

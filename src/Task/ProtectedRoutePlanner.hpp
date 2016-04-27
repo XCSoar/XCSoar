@@ -60,9 +60,9 @@ public:
   }
 
   gcc_pure
-  bool IsReachEmpty() const {
+  bool IsTerrainReachEmpty() const {
     Lease lease(*this);
-    return lease->IsReachEmpty();
+    return lease->IsTerrainReachEmpty();
   }
 
   void SetTerrain(const RasterTerrain *terrain);
@@ -83,7 +83,7 @@ public:
                   int h_ceiling, bool do_solve);
 
   gcc_pure
-  const FlatProjection GetReachProjection() const;
+  const FlatProjection GetTerrainReachProjection() const;
 };
 
 #endif
