@@ -45,14 +45,14 @@ BarographCaption(TCHAR *sTmp, const FlightStatistics &fs)
   } else if (fs.altitude_ceiling.GetCount() < 4) {
     StringFormatUnsafe(sTmp, _T("%s:\r\n  %.0f-%.0f %s"),
                        _("Working band"),
-                       (double)Units::ToUserAltitude(fs.altitude_base.GetAverageY()),
-                       (double)Units::ToUserAltitude(fs.altitude_ceiling.GetAverageY()),
+                       (double)Units::ToUserAltitude(fs.GetMinWorkingHeight()),
+                       (double)Units::ToUserAltitude(fs.GetMaxWorkingHeight()),
                        Units::GetAltitudeName());
   } else {
     StringFormatUnsafe(sTmp, _T("%s:\r\n  %.0f-%.0f %s\r\n\r\n%s:\r\n  %.0f %s/hr"),
                        _("Working band"),
-                       (double)Units::ToUserAltitude(fs.altitude_base.GetAverageY()),
-                       (double)Units::ToUserAltitude(fs.altitude_ceiling.GetAverageY()),
+                       (double)Units::ToUserAltitude(fs.GetMinWorkingHeight()),
+                       (double)Units::ToUserAltitude(fs.GetMaxWorkingHeight()),
                        Units::GetAltitudeName(),
                        _("Ceiling trend"),
                        (double)Units::ToUserAltitude(fs.altitude_ceiling.GetGradient()),
