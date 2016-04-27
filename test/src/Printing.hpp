@@ -88,7 +88,8 @@ public:
   static void trace_print(const Trace& trace, const GeoPoint &loc);
   static void print(const ContestResult& result);
   static void print_route(RoutePlanner& r);
-  static void print_reach_tree(const RoutePlanner& r);
+  static void print_reach_terrain_tree(const RoutePlanner& r);
+  static void print_reach_working_tree(const RoutePlanner& r);
   static void print(const ReachFan& r);
   static void print(const FlatTriangleFanTree& r);
   static void print(const FlatTriangleFan& r, const unsigned depth);

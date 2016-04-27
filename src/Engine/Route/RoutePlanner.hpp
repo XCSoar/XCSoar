@@ -108,6 +108,8 @@ protected:
   RoutePolars rpolars_route;
   /** Aircraft performance model for reach to terrain */
   RoutePolars rpolars_reach;
+  /** Aircraft performance model for reach to working floor */
+  RoutePolars rpolars_reach_working;
   /** Terrain raster */
   const RasterMap *terrain;
   /** Minimum height scanned during solution (m) */
@@ -142,6 +144,7 @@ private:
   AFlatGeoPoint destination_last;
 
   ReachFan reach_terrain;
+  ReachFan reach_working;
 
   RoutePlannerConfig::Polar reach_polar_mode;
 
@@ -208,6 +211,16 @@ public:
   bool SolveReachTerrain(const AGeoPoint &origin, const RoutePlannerConfig &config,
                          int h_ceiling, bool do_solve=true);
 
+  /**
+   * Solve reach footprint to working height
+   *
+   * @param origin The start of the search (current aircraft location)
+   * @param do_solve actually solve or just perform minimal calculations
+   *
+   * @return True if reach was scanned
+   */
+  bool SolveReachWorking(const AGeoPoint &origin, const RoutePlannerConfig &config,
+                         int h_ceiling, bool do_solve=true);
 
   const FlatProjection &GetTerrainReachProjection() const {
     return reach_terrain.GetProjection();

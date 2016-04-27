@@ -41,14 +41,14 @@
 #include <string.h>
 
 static void
-test_reach(const RasterMap &map, double mwind, double mc)
+test_reach(const RasterMap &map, double mwind, double mc, double height_min_working)
 {
   GlideSettings settings;
   settings.SetDefaults();
   GlidePolar polar(mc);
   SpeedVector wind(Angle::Degrees(0), mwind);
   TerrainRoute route;
-  route.UpdatePolar(settings, polar, polar, wind);
+  route.UpdatePolar(settings, polar, polar, wind, height_min_working);
   route.SetTerrain(&map);
 
   GeoPoint origin(map.GetMapCenter());
@@ -61,10 +61,12 @@ test_reach(const RasterMap &map, double mwind, double mc)
   RoutePlannerConfig config;
   config.SetDefaults();
   retval = route.SolveReachTerrain(aorigin, config, INT_MAX);
+  ok(retval, "reach terrain", 0);
+  PrintHelper::print_reach_terrain_tree(route);
 
-  ok(retval, "reach solve", 0);
-
-  PrintHelper::print_reach_tree(route);
+  retval = route.SolveReachWorking(aorigin, config, INT_MAX);
+  ok(retval, "reach working", 0);
+  PrintHelper::print_reach_working_tree(route);
 
   {
     Directory::Create(Path(_T("output/results")));
@@ -94,8 +96,8 @@ test_reach(const RasterMap &map, double mwind, double mc)
     fout << "\n";
   }
 
-  double pd = map.PixelDistance(origin, 1);
-  printf("# pixel size %g\n", (double)pd);
+  //  double pd = map.PixelDistance(origin, 1);
+  //  printf("# pixel size %g\n", (double)pd);
 }
 
 int main(int argc, char** argv) {
@@ -130,8 +132,11 @@ int main(int argc, char** argv) {
   } while (map.IsDirty());
   zzip_dir_close(dir);
 
-  plan_tests(1);
-  test_reach(map, 0, 0.1);
+  plan_tests(8);
+  test_reach(map, 0, 0.1, 0);
+  test_reach(map, 0, 0.1, 750);
+  test_reach(map, 0, 0.1, 500);
+  test_reach(map, 0, 0.1, 250);
 
   return exit_status();
 }

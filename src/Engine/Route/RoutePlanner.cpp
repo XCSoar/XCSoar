@@ -36,6 +36,7 @@ void
 RoutePlanner::ClearReach()
 {
   reach_terrain.Reset();
+  reach_working.Reset();
 }
 
 void
@@ -62,6 +63,17 @@ RoutePlanner::SolveReachTerrain(const AGeoPoint &origin,
   reach_polar_mode = config.reach_polar_mode;
 
   return reach_terrain.Solve(origin, rpolars_reach, terrain, do_solve);
+}
+
+bool
+RoutePlanner::SolveReachWorking(const AGeoPoint &origin,
+                                const RoutePlannerConfig &config,
+                                const int h_ceiling, const bool do_solve)
+{
+  rpolars_reach_working.SetConfig(config, origin.altitude, h_ceiling);
+  // reach_polar_mode previously set by SolveReachTerrain
+
+  return reach_working.Solve(origin, rpolars_reach_working, terrain, do_solve);
 }
 
 bool
@@ -379,6 +391,7 @@ RoutePlanner::UpdatePolar(const GlideSettings &settings,
     rpolars_reach.Initialise(settings, safety_polar, wind);
     break;
   }
+  rpolars_reach_working.Initialise(settings, task_polar, wind, height_min_working);
 }
 
 /*
