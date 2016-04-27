@@ -81,8 +81,9 @@ public:
   }
 
   void AcceptInRange(const GeoBounds &bounds,
-                     FlatTriangleFanVisitor &visitor) const {
-    planner.AcceptInRange(bounds, visitor);
+                     FlatTriangleFanVisitor &visitor,
+                     bool working) const {
+    planner.AcceptInRange(bounds, visitor, working);
   }
 
   gcc_pure

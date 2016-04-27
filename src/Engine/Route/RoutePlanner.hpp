@@ -226,9 +226,10 @@ public:
     return reach_terrain.GetProjection();
   }
 
-  /** Visit reach */
+  /** Visit reach (working or terrain reach) */
   void AcceptInRange(const GeoBounds &bounds,
-                     FlatTriangleFanVisitor &visitor) const;
+                     FlatTriangleFanVisitor &visitor,
+                     bool working) const;
 
   /**
    * Retrieve current solution.  If solver failed previously,

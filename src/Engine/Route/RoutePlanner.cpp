@@ -518,3 +518,13 @@ RoutePlanner::Intersection(const AGeoPoint& origin,
     acknowledged in the airspace warning manager.
   - more documentation
  */
+
+void
+RoutePlanner::AcceptInRange(const GeoBounds &bounds,
+                            FlatTriangleFanVisitor &visitor, bool working) const
+{
+  if (working)
+    reach_working.AcceptInRange(bounds, visitor);
+  else
+    reach_terrain.AcceptInRange(bounds, visitor);
+}

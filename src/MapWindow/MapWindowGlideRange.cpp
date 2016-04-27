@@ -250,6 +250,8 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
       || route_planner == nullptr)
     return;
 
+  bool working = false;
+
   // Create a visitor for the Reach code
   TriangleCompound visitor(route_planner->GetTerrainReachProjection(),
                            render_projection);
@@ -257,7 +259,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   // Fill the TriangleCompound with all TriangleFans in range
   {
     const ProtectedRoutePlanner::Lease lease(*route_planner);
-    lease->AcceptInRange(render_projection.GetScreenBounds(), visitor);
+    lease->AcceptInRange(render_projection.GetScreenBounds(), visitor, working);
   }
 
   // Exit early if not fans found
@@ -269,8 +271,9 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   // Don't draw shade if
   // .. shade feature disabled
   // .. pan mode activated
+  // .. working reach (rather than terrain reach)
   if (GetComputerSettings().features.final_glide_terrain == FeaturesSettings::FinalGlideTerrain::SHADE &&
-      IsNearSelf()) {
+      IsNearSelf() && !working) {
 
 #ifdef ENABLE_OPENGL
 
