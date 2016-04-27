@@ -26,6 +26,7 @@ Copyright_License {
 #include "Geo/FAISphere.hpp"
 
 #include <algorithm>
+#include <assert.h>
 
 void
 RasterProjection::Set(const GeoBounds &bounds,
@@ -50,6 +51,10 @@ RasterProjection::FinePixelDistance(const GeoPoint &location,
      */
     FACTOR = 256,
   };
+
+  // must have called Set() first otherwise this is invalid
+  assert(x_scale != 0);
+  assert(y_scale != 0);
 
   Angle distance = WidthToAngle(M_SQRT2 * FACTOR * pixels);
   GeoPoint p = GeoPoint(location.longitude + distance, location.latitude);
