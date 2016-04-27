@@ -263,8 +263,6 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
 
   DrawBestCruiseTrack(canvas, aircraft_pos);
 
-  airspace_renderer.DrawIntersections(canvas, render_projection);
-
   // Draw wind vector at aircraft
   if (basic.location_available)
     DrawWind(canvas, aircraft_pos, rc);
@@ -285,6 +283,9 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
     AircraftRenderer::Draw(canvas, GetMapSettings(), look.aircraft,
                            basic.attitude.heading - render_projection.GetScreenAngle(),
                            aircraft_pos);
+
+  // Draw intersections on top of aircraft
+  airspace_renderer.DrawIntersections(canvas, render_projection);
 
   // Render compass
   DrawCompass(canvas, rc);
