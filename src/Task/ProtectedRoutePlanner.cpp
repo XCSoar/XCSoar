@@ -34,10 +34,11 @@ void
 ProtectedRoutePlanner::SetPolars(const GlideSettings &settings,
                                  const GlidePolar &glide_polar,
                                  const GlidePolar &safety_polar,
-                                 const SpeedVector &wind)
+                                 const SpeedVector &wind,
+                                 const int height_min_working)
 {
   ExclusiveLease lease(*this);
-  lease->UpdatePolar(settings, glide_polar, safety_polar, wind);
+  lease->UpdatePolar(settings, glide_polar, safety_polar, wind, height_min_working);
 }
 
 void

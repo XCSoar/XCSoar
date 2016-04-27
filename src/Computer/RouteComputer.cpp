@@ -59,7 +59,8 @@ RouteComputer::ProcessRoute(const MoreData &basic, DerivedInfo &calculated,
     return;
 
   protected_route_planner.SetPolars(settings, glide_polar, safety_polar,
-                                    calculated.GetWindOrZero());
+                                    calculated.GetWindOrZero(),
+                                    calculated.common_stats.height_min_working);
 
   Reach(basic, calculated, config);
   TerrainWarning(basic, calculated, config);

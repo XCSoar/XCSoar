@@ -231,10 +231,12 @@ public:
    * @param polar Glide performance model used for route planning
    * @param polar Glide performance model used for reach planning
    * @param wind Wind estimate
+   * @param height_min_working Minimum working height (m)
    */
   void UpdatePolar(const GlideSettings &settings,
                    const GlidePolar &polar, const GlidePolar &safety_polar,
-                   const SpeedVector &wind);
+                   const SpeedVector &wind,
+                   const int height_min_working=0);
 
   /** Reset the optimiser as if never flown and clear temporary buffers. */
   virtual void Reset();

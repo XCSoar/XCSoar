@@ -69,7 +69,8 @@ public:
 
   void SetPolars(const GlideSettings &settings,
                  const GlidePolar &glide_polar, const GlidePolar &safety_polar,
-                 const SpeedVector &wind);
+                 const SpeedVector &wind,
+                 const int height_min_working);
 
   void SolveRoute(const AGeoPoint &dest, const AGeoPoint &start,
                   const RoutePlannerConfig &config,

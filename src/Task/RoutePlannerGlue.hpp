@@ -41,8 +41,9 @@ public:
   void UpdatePolar(const GlideSettings &settings,
                    const GlidePolar &polar,
                    const GlidePolar &safety_polar,
-                   const SpeedVector &wind) {
-    planner.UpdatePolar(settings, polar, safety_polar, wind);
+                   const SpeedVector &wind,
+                   const int height_min_working) {
+    planner.UpdatePolar(settings, polar, safety_polar, wind, height_min_working);
   }
 
   void Synchronise(const Airspaces &master,

@@ -365,8 +365,9 @@ RoutePlanner::AddEdges(const RouteLink &e)
 void
 RoutePlanner::UpdatePolar(const GlideSettings &settings,
                           const GlidePolar &task_polar,
-                           const GlidePolar &safety_polar,
-                           const SpeedVector &wind)
+                          const GlidePolar &safety_polar,
+                          const SpeedVector &wind,
+                          const int height_min_working)
 {
   rpolars_route.Initialise(settings, task_polar, wind);
   switch (reach_polar_mode) {
