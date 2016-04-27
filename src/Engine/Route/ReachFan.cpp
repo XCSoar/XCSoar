@@ -25,6 +25,8 @@
 #include "ReachFanParms.hpp"
 #include "ReachResult.hpp"
 
+static constexpr int MIN_FLOOR_CLEARANCE = 100;
+
 void
 ReachFan::Reset()
 {
@@ -49,8 +51,11 @@ ReachFan::Solve(const AGeoPoint origin, const RoutePolars &rpolars,
   ReachFanParms parms(rpolars, projection, terrain_base, terrain);
   const AFlatGeoPoint ao(projection.ProjectInteger(origin), origin.altitude);
 
-  if (!h.IsInvalid() &&
-      (origin.altitude <= h2 + rpolars.GetSafetyHeight())) {
+  // immediate exit if starting below terrain, or starting below floor
+  // with some clearance (not worth scanning if too close)
+  if ((!h.IsInvalid() &&
+      (origin.altitude <= h2 + rpolars.GetSafetyHeight()))
+      || (origin.altitude < MIN_FLOOR_CLEARANCE + rpolars.GetFloor() + rpolars.GetSafetyHeight())) {
     terrain_base = h2;
     root.DummyReach(ao);
     return false;
