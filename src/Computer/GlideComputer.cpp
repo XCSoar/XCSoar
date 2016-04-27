@@ -119,6 +119,8 @@ GlideComputer::ProcessGPS(bool force)
                                  settings,
                                  force);
 
+  CalculateWorkingBand();
+
   task_computer.ProcessMoreTask(basic, calculated, settings);
 
   if (!last_finished && calculated.ordered_task_stats.task_finished)
@@ -347,4 +349,24 @@ GlideComputer::SetTerrain(RasterTerrain* _terrain)
 {
   air_data_computer.SetTerrain(_terrain);
   task_computer.SetTerrain(_terrain);
+}
+
+void
+GlideComputer::CalculateWorkingBand()
+{
+  const MoreData &basic = Basic();
+  DerivedInfo &calculated = SetCalculated();
+  const ComputerSettings &settings = GetComputerSettings();
+
+  calculated.common_stats.height_min_working = stats_computer.GetFlightStats().GetMinWorkingHeight();
+  if (calculated.terrain_base_valid) {
+    calculated.common_stats.height_min_working = std::max(calculated.common_stats.height_min_working,
+                                                          calculated.GetTerrainBaseFallback()+settings.task.safety_height_arrival);
+  }
+  calculated.common_stats.height_max_working = std::max(calculated.common_stats.height_min_working,
+                                                        stats_computer.GetFlightStats().GetMaxWorkingHeight());
+  if (basic.NavAltitudeAvailable()) {
+    calculated.common_stats.height_max_working = std::max(calculated.common_stats.height_max_working,
+                                                          basic.nav_altitude);
+  }
 }

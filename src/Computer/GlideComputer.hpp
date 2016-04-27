@@ -169,6 +169,8 @@ private:
 
   void CalculateTeammateBearingRange();
   void CalculateOwnTeamCode();
+
+  void CalculateWorkingBand();
 };
 
 #endif
