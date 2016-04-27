@@ -69,9 +69,6 @@ test_reach(const RasterMap &map, double mwind, double mc)
 
   PrintHelper::print_reach_tree(route);
 
-  GeoPoint dest(origin.longitude-Angle::Degrees(0.02),
-                origin.latitude-Angle::Degrees(0.02));
-
   {
     Directory::Create(Path(_T("output/results")));
     std::ofstream fout("output/results/terrain.txt");
