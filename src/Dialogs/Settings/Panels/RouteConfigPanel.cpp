@@ -159,10 +159,16 @@ RouteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   static constexpr StaticEnumChoice final_glide_terrain_list[] = {
     { (unsigned)FeaturesSettings::FinalGlideTerrain::OFF, N_("Off"),
       N_("Disables the reach display.") },
-    { (unsigned)FeaturesSettings::FinalGlideTerrain::LINE, N_("Line"),
-      N_("Draws a dashed line at the glide reach.") },
-    { (unsigned)FeaturesSettings::FinalGlideTerrain::SHADE, N_("Shade"),
+    { (unsigned)FeaturesSettings::FinalGlideTerrain::TERRAIN_LINE, N_("Terrain line"),
+      N_("Draws a dashed line at the terrain glide reach.") },
+    { (unsigned)FeaturesSettings::FinalGlideTerrain::TERRAIN_SHADE, N_("Terrain shade"),
       N_("Shades terrain outside glide reach.") },
+    { (unsigned)FeaturesSettings::FinalGlideTerrain::WORKING, N_("Working line"),
+      N_("Draws a dashed line at the working glide reach.") },
+    { (unsigned)FeaturesSettings::FinalGlideTerrain::WORKING_TERRAIN_LINE, N_("Working line, terrain line"),
+      N_("Draws a dashed line at the working and terrain glide reaches.") },
+    { (unsigned)FeaturesSettings::FinalGlideTerrain::WORKING_TERRAIN_SHADE, N_("Working line, terrain shade"),
+      N_("Draws a dashed line at working, and shade terrain, glide reaches.") },
     { 0 }
   };
 

@@ -129,8 +129,11 @@ struct FeaturesSettings {
   /** Calculate final glide over terrain */
   enum class FinalGlideTerrain : uint8_t {
     OFF,
-    LINE,
-    SHADE,
+    TERRAIN_LINE,
+    TERRAIN_SHADE,
+    WORKING,
+    WORKING_TERRAIN_LINE,
+    WORKING_TERRAIN_SHADE,
   } final_glide_terrain;
 
   /** block speed to fly instead of dolphin */

@@ -242,9 +242,14 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
       || route_planner == nullptr)
     return;
 
-  RenderTerrainAbove(canvas, true);
+  if ((GetComputerSettings().features.final_glide_terrain == FeaturesSettings::FinalGlideTerrain::WORKING) ||
+      (GetComputerSettings().features.final_glide_terrain == FeaturesSettings::FinalGlideTerrain::WORKING_TERRAIN_LINE) ||
+      (GetComputerSettings().features.final_glide_terrain == FeaturesSettings::FinalGlideTerrain::WORKING_TERRAIN_SHADE)) {
+    RenderTerrainAbove(canvas, true);
+  }
 
-  if (GetComputerSettings().features.final_glide_terrain != FeaturesSettings::FinalGlideTerrain::OFF) {
+  if ((GetComputerSettings().features.final_glide_terrain != FeaturesSettings::FinalGlideTerrain::OFF) &&
+      (GetComputerSettings().features.final_glide_terrain != FeaturesSettings::FinalGlideTerrain::WORKING)) {
     RenderTerrainAbove(canvas, false);
   }
 }
@@ -281,8 +286,9 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working)
   // .. shade feature disabled
   // .. pan mode activated
   // .. working reach (rather than terrain reach)
-  if (GetComputerSettings().features.final_glide_terrain == FeaturesSettings::FinalGlideTerrain::SHADE &&
-      IsNearSelf() && !working) {
+  if (IsNearSelf() && !working &&
+      ((GetComputerSettings().features.final_glide_terrain == FeaturesSettings::FinalGlideTerrain::TERRAIN_SHADE) ||
+       (GetComputerSettings().features.final_glide_terrain == FeaturesSettings::FinalGlideTerrain::WORKING_TERRAIN_SHADE))) {
 
 #ifdef ENABLE_OPENGL
 
