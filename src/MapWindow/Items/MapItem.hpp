@@ -129,10 +129,15 @@ struct ArrivalAltitudeMapItem: public MapItem
   /** Arrival altitudes [m MSL] */
   ReachResult reach;
 
+  /** Safety height (m) */
+  double safety_height;
+
+
   ArrivalAltitudeMapItem(double _elevation,
-                         ReachResult _reach)
+                         ReachResult _reach,
+                         double _safety_height)
     :MapItem(ARRIVAL_ALTITUDE),
-     elevation(_elevation), reach(_reach) {}
+     elevation(_elevation), reach(_reach), safety_height(_safety_height) {}
 
   bool HasElevation() const {
     return elevation > UNKNOWN_ELEVATION_THRESHOLD;

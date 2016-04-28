@@ -110,7 +110,7 @@ Draw(Canvas &canvas, PixelRect rc,
 
   bool reachable =
     item.reach.terrain_valid != ReachResult::Validity::UNREACHABLE &&
-    arrival_altitude >= 0;
+    arrival_altitude >= item.safety_height;
 
   // Draw final glide arrow icon
 
@@ -178,14 +178,14 @@ Draw(Canvas &canvas, PixelRect rc,
                         FormatUserAltitude(item.reach.terrain).c_str(),
                         _("MSL"));
   } else if (item.HasElevation() &&
-             item.reach.direct >= item.elevation &&
+             item.reach.direct >= item.elevation + item.safety_height &&
              item.reach.terrain_valid == ReachResult::Validity::UNREACHABLE) {
     buffer.UnsafeFormat(_T("%s "), _("Unreachable due to terrain."));
   } else {
     buffer.clear();
   }
 
-  buffer += _("Arrival altitude incl. safety height");
+  buffer += _("Arrival altitude");
 
   // Draw comment row
 

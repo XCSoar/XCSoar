@@ -152,12 +152,12 @@ MapItemListBuilder::AddArrivalAltitudes(
       .ToDouble(LocationMapItem::UNKNOWN_ELEVATION);
 
   // Calculate target altitude
-  double safety_elevation(safety_height);
+  double target_elevation = 0;
   if (elevation > ArrivalAltitudeMapItem::UNKNOWN_ELEVATION_THRESHOLD)
-    safety_elevation += elevation;
+    target_elevation += elevation;
 
   // Save destination point incl. elevation and safety height
-  const AGeoPoint destination(location, safety_elevation);
+  const AGeoPoint destination(location, target_elevation);
 
   // Calculate arrival altitudes
   ReachResult reach;
@@ -166,9 +166,7 @@ MapItemListBuilder::AddArrivalAltitudes(
   if (!leased_route_planner->FindPositiveArrival(destination, reach))
     return;
 
-  reach.Subtract(safety_height);
-
-  list.append(new ArrivalAltitudeMapItem(elevation, reach));
+  list.append(new ArrivalAltitudeMapItem(elevation, reach, safety_height));
 }
 
 void
