@@ -73,8 +73,11 @@ struct MapLook {
   Pen compass_triangle_pen;
   Brush compass_triangle_brush;
 
-  Pen reach_pen;
-  Pen reach_pen_thick;
+  Pen reach_terrain_pen;
+  Pen reach_terrain_pen_thick;
+
+  Pen reach_working_pen;
+  Pen reach_working_pen_thick;
 
   Pen track_line_pen;
 

@@ -273,6 +273,8 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working)
   if (visitor.fans.empty())
     return;
 
+  const Pen& reach_pen = working? look.reach_working_pen : look.reach_terrain_pen;
+  const Pen& reach_pen_thick = working? look.reach_working_pen_thick : look.reach_terrain_pen_thick;
   // @todo: update this rendering
 
   // Don't draw shade if
@@ -320,7 +322,7 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working)
 
     // Select the TerrainLine pen
     buffer.SelectHollowBrush();
-    buffer.Select(look.reach_pen_thick);
+    buffer.Select(reach_pen_thick);
     buffer.SetBackgroundColor(Color(0xf0, 0xf0, 0xf0));
 
     // Draw the TerrainLine polygons
@@ -353,11 +355,11 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working)
 
 #ifdef ENABLE_OPENGL
     const ScopeVertexPointer vp(&visitor.fans.points[0]);
-    look.reach_pen.Bind();
+    reach_pen.Bind();
 #else
     // Select the TerrainLine pen
     canvas.SelectHollowBrush();
-    canvas.Select(look.reach_pen);
+    canvas.Select(reach_pen);
     canvas.SetBackgroundOpaque();
     canvas.SetBackgroundColor(COLOR_WHITE);
 
@@ -369,7 +371,7 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working)
     visitor.fans.DrawOutline(canvas);
 
 #ifdef ENABLE_OPENGL
-    look.reach_pen.Unbind();
+    reach_pen.Unbind();
 #endif
   } else {
     /* more than one fan (turning reach enabled): we have to use a
@@ -393,9 +395,9 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working)
   glStencilFunc(GL_NOTEQUAL, 1, 1);
   glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
-  look.reach_pen_thick.Bind();
+  reach_pen_thick.Bind();
   visitor.fans.DrawOutline(canvas);
-  look.reach_pen_thick.Unbind();
+  reach_pen_thick.Unbind();
 
   glDisable(GL_STENCIL_TEST);
 
@@ -409,7 +411,7 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working)
 
   // Select the TerrainLine pen
   buffer.SelectHollowBrush();
-  buffer.Select(look.reach_pen_thick);
+  buffer.Select(reach_pen_thick);
   buffer.SetBackgroundOpaque();
   buffer.SetBackgroundColor(Color(0xf0, 0xf0, 0xf0));
 
