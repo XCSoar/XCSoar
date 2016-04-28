@@ -177,8 +177,8 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   SetExpertRow(UnitsLift);
 
   static constexpr StaticEnumChoice units_altitude_list[] = {
-    { (unsigned)Unit::FEET,  N_("foot") },
-    { (unsigned)Unit::METER, N_("meter") },
+    { (unsigned)Unit::FEET,  N_("feet") },
+    { (unsigned)Unit::METER, N_("meters") },
     { 0 }
   };
   AddEnum(_("Altitude"), _("Units used for altitude and heights."),
