@@ -440,7 +440,7 @@ ChartRenderer::DrawXGrid(double tic_step, double unit_step, UnitFormat unit_form
         FormatTicText(unit_text, xval * unit_step / tic_step, unit_step, unit_format);
         const auto w = canvas.CalcTextSize(unit_text).cx;
         xmin -= w/2;
-        if (xmin >= next_text) {
+        if ((xmin >= next_text) && ((int)(xmin + Layout::VptScale(30)) < rc_chart.right)) {
           canvas.DrawText(xmin, y, unit_text);
           next_text = xmin + w + Layout::GetTextPadding();
         }
@@ -484,7 +484,7 @@ ChartRenderer::DrawYGrid(double tic_step, double unit_step, UnitFormat unit_form
       }
       canvas.DrawLine(line[0], line[1]);
 
-      if (unit_format != UnitFormat::NONE) {
+      if ((unit_format != UnitFormat::NONE) && (ymin > (int)(rc.top + Layout::VptScale(30)))) {
         TCHAR unit_text[MAX_PATH];
         FormatTicText(unit_text, yval * unit_step / tic_step, unit_step, unit_format);
         const auto c = canvas.CalcTextSize(unit_text);
