@@ -42,6 +42,6 @@ ThermalBandLook::Initialise(bool _inverse, Color sky_color)
   brush.Create(ColorWithAlpha(sky_color, 0xA0));
   pen.Create(Layout::ScalePenWidth(1), DarkColor(sky_color));
 
-  white_pen.Create(2, COLOR_WHITE);
-  black_pen.Create(2, COLOR_BLACK);
+  white_pen.Create(Layout::ScalePenWidth(2), COLOR_WHITE);
+  black_pen.Create(Layout::ScalePenWidth(2), COLOR_BLACK);
 }
