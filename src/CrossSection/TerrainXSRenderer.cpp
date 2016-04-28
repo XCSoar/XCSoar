@@ -55,14 +55,14 @@ TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart,
         type != last_type &&
         last_type != TerrainType::UNKNOWN) {
       const auto center_distance = (distance + last_distance) / 2;
-      points.append() = chart.ToScreen(center_distance, 0);
-      points.append() = chart.ToScreen(center_distance, -500);
+      points.append() = chart.ToScreen(center_distance, hmin);
+      points.append() = chart.ToScreen(center_distance, hmin);
 
       DrawPolygon(canvas, last_type, points.begin(), points.size());
     }
 
     if (type != TerrainType::UNKNOWN) {
-      const double h = e.GetValueOr0();
+      const double h = std::max((double)e.GetValueOr0(), hmin);
 
       if (j == 0) {
         // Start first polygon
@@ -74,7 +74,7 @@ TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart,
 
         const auto center_distance = (distance + last_distance) / 2;
         points.append() = chart.ToScreen(center_distance, hmin);
-        points.append() = chart.ToScreen(center_distance, 0);
+        points.append() = chart.ToScreen(center_distance, hmin);
       }
 
       if (j + 1 == CrossSectionRenderer::NUM_SLICES) {
