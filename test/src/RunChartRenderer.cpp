@@ -99,6 +99,8 @@ ChartWindow::DrawChart(ChartRenderer &renderer)
     renderer.DrawYGrid(20, 20, ChartRenderer::UnitFormat::NUMERIC);
 
     renderer.DrawLabel(_T("hello"), 50, 50);
+    renderer.DrawXLabel(_T("VVV"),_T("m/s"));
+    renderer.DrawYLabel(_T("AAA"),_T("m/s"));
   }
 }
 
