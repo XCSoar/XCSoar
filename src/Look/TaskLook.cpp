@@ -38,12 +38,12 @@ TaskLook::Initialise()
   oz_inactive_pen.Create(Pen::SOLID, Layout::ScalePenWidth(1),
                       DarkColor(task_color));
 
-  leg_active_pen.Create(Pen::DASH, Layout::ScalePenWidth(2), task_color);
-  leg_inactive_pen.Create(Pen::DASH, Layout::ScalePenWidth(1), task_color);
+  leg_active_pen.Create(Pen::DASH2, Layout::ScalePenWidth(2), task_color);
+  leg_inactive_pen.Create(Pen::DASH2, Layout::ScalePenWidth(1), task_color);
   arrow_active_pen.Create(Layout::ScalePenWidth(2), task_color);
   arrow_inactive_pen.Create(Layout::ScalePenWidth(1), task_color);
 
-  isoline_pen.Create(Pen::DASH, Layout::ScalePenWidth(1), isoline_color);
+  isoline_pen.Create(Pen::DASH2, Layout::ScalePenWidth(1), isoline_color);
 
   bearing_pen.Create(Layout::ScalePenWidth(2),
                   HasColors() ? bearing_color : COLOR_BLACK);

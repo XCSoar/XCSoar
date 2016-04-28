@@ -32,7 +32,7 @@ WindArrowLook::Initialise(const Font &_font, bool inverse)
                    inverse
                    ? (HasColors() ? LightColor(COLOR_GRAY) : COLOR_WHITE)
                    : (HasColors() ? DarkColor(COLOR_GRAY) : COLOR_BLACK));
-  tail_pen.Create(Pen::DASH, 1, inverse ? COLOR_WHITE : COLOR_BLACK);
+  tail_pen.Create(Pen::DASH2, 1, inverse ? COLOR_WHITE : COLOR_BLACK);
   arrow_brush.Create(IsDithered() ? COLOR_DARK_GRAY : COLOR_GRAY);
 
   font = &_font;

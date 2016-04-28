@@ -35,7 +35,7 @@ CrossSectionLook::Initialise(const Font &_grid_font)
   sea_color = Color(0xbd, 0xc5, 0xd5); // ICAO open water area
   sea_brush.Create(sea_color);
 
-  grid_pen.Create(Pen::DASH, 1, Color(0x60, 0x60, 0x60));
+  grid_pen.Create(Pen::DASH2, 1, Color(0x60, 0x60, 0x60));
   aircraft_brush.Create(text_color);
 
   grid_font = &_grid_font;

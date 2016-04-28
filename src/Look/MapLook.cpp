@@ -62,12 +62,12 @@ MapLook::Initialise(const MapSettings &settings,
   traffic_alarm_icon.LoadResource(IDB_TRAFFIC_ALARM, IDB_TRAFFIC_ALARM_HD, false);
 
   static constexpr Color clrSepia(0x78,0x31,0x18);
-  reach_terrain_pen.Create(Pen::DASH, Layout::ScalePenWidth(1), clrSepia);
-  reach_terrain_pen_thick.Create(Pen::DASH, Layout::ScalePenWidth(2), clrSepia);
+  reach_terrain_pen.Create(Pen::DASH3, Layout::ScalePenWidth(1), clrSepia);
+  reach_terrain_pen_thick.Create(Pen::DASH3, Layout::ScalePenWidth(2), clrSepia);
 
   static constexpr Color clrBlupia(0x38,0x55,0xa7);
-  reach_working_pen.Create(Pen::DASH, Layout::ScalePenWidth(1), clrBlupia);
-  reach_working_pen_thick.Create(Pen::DASH, Layout::ScalePenWidth(2), clrBlupia);
+  reach_working_pen.Create(Pen::DASH1, Layout::ScalePenWidth(1), clrBlupia);
+  reach_working_pen_thick.Create(Pen::DASH1, Layout::ScalePenWidth(2), clrBlupia);
 
   track_line_pen.Create(3, COLOR_GRAY);
 
