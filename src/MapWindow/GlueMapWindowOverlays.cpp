@@ -72,8 +72,7 @@ GlueMapWindow::DrawCrossHairs(Canvas &canvas) const
   if (!render_projection.IsValid())
     return;
 
-  Pen dash_pen(Pen::DASH, 1, COLOR_DARK_GRAY);
-  canvas.Select(dash_pen);
+  canvas.Select(look.overlay.crosshair_pen);
 
   const auto center = render_projection.GetScreenOrigin();
 

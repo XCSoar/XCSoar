@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Screen/Icon.hpp"
 #include "Screen/Font.hpp"
+#include "Screen/Pen.hpp"
 
 struct OverlayLook {
 
@@ -33,6 +34,8 @@ struct OverlayLook {
   MaskedIcon map_scale_right_icon;
 
   const Font *overlay_font;
+
+  Pen crosshair_pen;
 
   void Initialise(const Font &font, const Font &bold_font);
 };
