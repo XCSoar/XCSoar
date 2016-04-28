@@ -109,23 +109,24 @@ GlideComputer::ProcessGPS(bool force)
 
   // Process basic information
   air_data_computer.ProcessBasic(Basic(), SetCalculated(),
-                                 GetComputerSettings());
+                                 settings);
 
   // Process basic task information
   const bool last_finished = calculated.ordered_task_stats.task_finished;
 
   task_computer.ProcessBasicTask(basic,
                                  calculated,
-                                 GetComputerSettings(),
+                                 settings,
                                  force);
-  task_computer.ProcessMoreTask(basic, calculated, GetComputerSettings());
+
+  task_computer.ProcessMoreTask(basic, calculated, settings);
 
   if (!last_finished && calculated.ordered_task_stats.task_finished)
     OnFinishTask();
 
   // Check if everything is okay with the gps time and process it
   air_data_computer.FlightTimes(Basic(), SetCalculated(),
-                                GetComputerSettings());
+                                settings);
 
   TakeoffLanding(last_flying);
 
@@ -134,7 +135,7 @@ GlideComputer::ProcessGPS(bool force)
   // Process extended information
   air_data_computer.ProcessVertical(Basic(),
                                     SetCalculated(),
-                                    GetComputerSettings());
+                                    settings);
 
   stats_computer.ProcessClimbEvents(calculated);
 
