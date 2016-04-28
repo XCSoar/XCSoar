@@ -3404,7 +3404,7 @@ msgid "Unreachable due to terrain."
 msgstr "Terep miatt elérhetetlen."
 
 #: src/Renderer/MapItemListRenderer.cpp:193
-msgid "Arrival altitude incl. safety height"
+msgid "Arrival altitude"
 msgstr "Érkezési magasság beleértve a biztonsági magasságot"
 
 #: src/Renderer/MapItemListRenderer.cpp:215

@@ -3442,7 +3442,7 @@ msgid "Unreachable due to terrain."
 msgstr "Недосяжний через ландшафт."
 
 #: src/Renderer/MapItemListRenderer.cpp:193
-msgid "Arrival altitude incl. safety height"
+msgid "Arrival altitude"
 msgstr "Висота прибуття, вкл. безпечну висоту"
 
 #: src/Renderer/MapItemListRenderer.cpp:215

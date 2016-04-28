@@ -3379,7 +3379,7 @@ msgid "Unreachable due to terrain."
 msgstr "Nedosažitelný kvůli terénu."
 
 #: src/Renderer/MapItemListRenderer.cpp:193
-msgid "Arrival altitude incl. safety height"
+msgid "Arrival altitude"
 msgstr "Doletová výška včetně bezpečnostní rezervy"
 
 #: src/Renderer/MapItemListRenderer.cpp:215

@@ -3370,7 +3370,7 @@ msgid "Unreachable due to terrain."
 msgstr "지상장애물에 도달할 수 없습니다."
 
 #: src/Renderer/MapItemListRenderer.cpp:193
-msgid "Arrival altitude incl. safety height"
+msgid "Arrival altitude"
 msgstr "도착예정고도(안전고도포함)"
 
 #: src/Renderer/MapItemListRenderer.cpp:215
