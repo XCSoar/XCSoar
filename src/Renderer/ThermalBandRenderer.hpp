@@ -74,6 +74,10 @@ protected:
                    const TaskBehaviour& task_props,
                    ChartRenderer &chart) const;
 
+  void DrawWorkingBand(const DerivedInfo& calculated,
+                       ChartRenderer &chart,
+                       const double hoffset) const;
+
   double GetHeightOffset(const DerivedInfo& calculated,
                          const TaskBehaviour& task_props) const;
 

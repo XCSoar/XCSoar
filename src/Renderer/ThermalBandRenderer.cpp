@@ -146,7 +146,9 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
       chart.DrawFilledY(thermal_profile, look.brush, fpen);
   }
 
-  // position of thermal band
+  DrawWorkingBand(calculated, chart, hoffset);
+
+  // position of MC
   if (basic.NavAltitudeAvailable()) {
     const Pen &pen = is_infobox && look.inverse
       ? look.white_pen : look.black_pen;
@@ -206,5 +208,20 @@ ThermalBandRenderer::DrawThermalBandSpark(const MoreData &basic,
   ScaleChart(calculated, settings_computer, task_props, chart);
   _DrawThermalBand(basic, calculated, settings_computer,
                    chart, task_props, true, nullptr);
+}
+
+void
+ThermalBandRenderer::DrawWorkingBand(const DerivedInfo& calculated_info,
+                                     ChartRenderer &chart,
+                                     const double hoffset) const
+{
+  const auto h_max = calculated_info.common_stats.height_max_working-hoffset;
+  if ((h_max> chart.GetYMin()) && (h_max< chart.GetYMax())) {
+    chart.DrawLine(0, h_max, chart.GetXMax(), h_max, look.working_band_pen);
+  }
+  const auto h_min = calculated_info.common_stats.height_min_working-hoffset;
+  if ((h_min> chart.GetYMin()) && (h_min< chart.GetYMax())) {
+    chart.DrawLine(0, h_min, chart.GetXMax(), h_min, look.working_band_pen);
+  }
 }
 
