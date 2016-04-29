@@ -71,7 +71,12 @@ protected:
 
   void ScaleChart(const DerivedInfo &calculated,
                    const ComputerSettings &settings_computer,
+                   const TaskBehaviour& task_props,
                    ChartRenderer &chart) const;
+
+  double GetHeightOffset(const DerivedInfo& calculated,
+                         const TaskBehaviour& task_props) const;
+
 };
 
 #endif

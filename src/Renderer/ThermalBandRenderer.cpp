@@ -40,9 +40,10 @@ Copyright_License {
 void
 ThermalBandRenderer::ScaleChart(const DerivedInfo &calculated,
                                  const ComputerSettings &settings_computer,
+                                 const TaskBehaviour& task_props,
                                  ChartRenderer &chart) const
 {
-  chart.ScaleYFromValue(0);
+  chart.ScaleYFromValue(task_props.route_planner.safety_height_terrain);
   chart.ScaleYFromValue(calculated.thermal_band.max_thermal_height);
 
   chart.ScaleXFromValue(0);
@@ -63,8 +64,8 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
   const ThermalBandInfo &thermal_band = calculated.thermal_band;
 
   // calculate height above safety height
-  auto hoffset = task_props.route_planner.safety_height_terrain +
-    calculated.GetTerrainBaseFallback();
+  const auto hoffset = calculated.GetTerrainBaseFallback();
+  const auto hsafety = task_props.route_planner.safety_height_terrain;
 
   double h = 0;
   if (basic.NavAltitudeAvailable()) {
@@ -110,7 +111,7 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
       // requires 5 items in bucket before displaying, to eliminate kinks
       auto wthis = thermal_band.thermal_profile_w[i] / thermal_band.thermal_profile_n[i];
       ht[numtherm] = i * thermal_band.max_thermal_height
-        / ThermalBandInfo::N_BUCKETS;
+          / ThermalBandInfo::N_BUCKETS + hsafety;
       Wt[numtherm] = wthis;
       Wmax = std::max(Wmax, wthis);
       Wav+= wthis;
@@ -180,7 +181,7 @@ ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
     chart.DrawNoData();
     return;
   }
-  ScaleChart(calculated, settings_computer, chart);
+  ScaleChart(calculated, settings_computer, task_props, chart);
   _DrawThermalBand(basic, calculated, settings_computer,
                    chart, task_props, false, ordered_props);
 
@@ -202,7 +203,8 @@ ThermalBandRenderer::DrawThermalBandSpark(const MoreData &basic,
 {
   ChartRenderer chart(chart_look, canvas, rc);
   chart.SetPadding(false);
-  ScaleChart(calculated, settings_computer, chart);
+  ScaleChart(calculated, settings_computer, task_props, chart);
   _DrawThermalBand(basic, calculated, settings_computer,
                    chart, task_props, true, nullptr);
 }
+
