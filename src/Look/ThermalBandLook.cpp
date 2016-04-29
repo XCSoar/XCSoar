@@ -44,4 +44,6 @@ ThermalBandLook::Initialise(bool _inverse, Color sky_color)
 
   white_pen.Create(Layout::ScalePenWidth(2), COLOR_WHITE);
   black_pen.Create(Layout::ScalePenWidth(2), COLOR_BLACK);
+
+  working_band_pen.Create(Layout::ScalePenWidth(2), COLOR_GRAY);
 }

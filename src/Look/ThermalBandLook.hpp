@@ -33,7 +33,11 @@ struct ThermalBandLook {
   Pen pen;
   Brush brush;
 
+  // pens used for drawing the MC setting
   Pen white_pen, black_pen;
+
+  // pen used for drawing the working band
+  Pen working_band_pen;
 
   void Initialise(bool inverse, Color sky_color);
 };
