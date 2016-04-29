@@ -97,6 +97,7 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
   }
 
   terrain_renderer.Draw(canvas, chart, elevations);
+  PaintWorking(chart);
   PaintGlide(chart);
   PaintAircraft(canvas, chart, rc);
   PaintGrid(canvas, chart);
@@ -153,6 +154,19 @@ CrossSectionRenderer::PaintGlide(ChartRenderer &chart) const
                      result.vector.distance * p, 0,
                      ChartLook::STYLE_BLUEDASH);
     }
+  }
+}
+
+void
+CrossSectionRenderer::PaintWorking(ChartRenderer &chart) const
+{
+  const auto &h_max = calculated_info.common_stats.height_max_working;
+  if ((h_max> chart.GetYMin()) && (h_max< chart.GetYMax())) {
+    chart.DrawLine(0, h_max, chart.GetXMax(), h_max, ChartLook::STYLE_BLUETHINDASH);
+  }
+  const auto &h_min = calculated_info.common_stats.height_min_working;
+  if ((h_min> chart.GetYMin()) && (h_min< chart.GetYMax())) {
+    chart.DrawLine(0, h_min, chart.GetXMax(), h_min, ChartLook::STYLE_BLUETHINDASH);
   }
 }
 

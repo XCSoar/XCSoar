@@ -144,6 +144,7 @@ protected:
   void PaintAircraft(Canvas &canvas, const ChartRenderer &chart,
                      const PixelRect rc) const;
   void PaintGrid(Canvas &canvas, ChartRenderer &chart) const;
+  void PaintWorking(ChartRenderer &chart) const;
 };
 
 #endif
