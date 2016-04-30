@@ -30,6 +30,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
@@ -52,6 +53,8 @@ public class BluetoothGattClientPort
       UUID.fromString("0000FFE1-0000-1000-8000-00805F9B34FB");
   private static final UUID DEVICE_NAME_CHARACTERISTIC_UUID =
       UUID.fromString("00002A00-0000-1000-8000-00805F9B34FB");
+  private static final UUID RX_TX_DESCRIPTOR_UUID =
+      UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
 
   private static final int MAX_WRITE_CHUNK_SIZE = 20;
 
@@ -182,6 +185,10 @@ public class BluetoothGattClientPort
     if (BluetoothGatt.GATT_SUCCESS == status) {
       if (findCharacteristics()) {
         if (gatt.setCharacteristicNotification(dataCharacteristic, true)) {
+          BluetoothGattDescriptor descriptor =
+            dataCharacteristic.getDescriptor(RX_TX_DESCRIPTOR_UUID);
+          descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+          gatt.writeDescriptor(descriptor);
           portState = STATE_READY;
         } else {
           Log.e(TAG, "Could not enable GATT characteristic notification");
