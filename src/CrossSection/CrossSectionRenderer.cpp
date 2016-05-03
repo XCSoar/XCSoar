@@ -60,7 +60,6 @@ CrossSectionRenderer::ReadBlackboard(const MoreData &_gps_info,
 void
 CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
 {
-  canvas.Clear(look.background_color);
   ChartRenderer chart(chart_look, canvas, rc);
 
   if (!vec.IsValid() || !start.IsValid()) {

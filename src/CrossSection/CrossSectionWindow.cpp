@@ -35,6 +35,6 @@ CrossSectionWindow::OnPaintBuffer(Canvas &canvas)
 #ifdef ENABLE_OPENGL
   const GLCanvasScissor scissor(rc);
 #endif
-
+  canvas.DrawFilledRectangle(rc, COLOR_WHITE);
   renderer.Paint(canvas, rc);
 }
