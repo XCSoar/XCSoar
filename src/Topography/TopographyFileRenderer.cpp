@@ -57,7 +57,7 @@ Copyright_License {
 TopographyFileRenderer::TopographyFileRenderer(const TopographyFile &_file,
                                                const TopographyLook &_look)
   :file(_file), look(_look),
-   pen(file.GetPenWidth(), file.GetColor()),
+   pen(Layout::ScaleFinePenWidth(file.GetPenWidth()), file.GetColor()),
 #ifdef ENABLE_OPENGL
    array_buffer(nullptr)
 #else
