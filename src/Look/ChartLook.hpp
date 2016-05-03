@@ -51,6 +51,7 @@ struct ChartLook {
   Brush bar_brush;
   Brush neg_brush;
   Brush blank_brush;
+  Brush label_blank_brush;
   Brush black_brush;
 
   /**

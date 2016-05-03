@@ -51,7 +51,9 @@ ChartLook::Initialise()
 
   bar_brush.Create(COLOR_GREEN);
   neg_brush.Create(COLOR_RED);
-  blank_brush.Create(Color(0xD0, 0xD0, 0xD0));
+
+  label_blank_brush.Create(ColorWithAlpha(COLOR_WHITE,0xC0));
+  blank_brush.Create(ColorWithAlpha(LightColor(COLOR_GRAY),0x80));
   black_brush.Create(COLOR_BLACK);
 
   label_font.Load(FontDescription(Layout::FontScale(12)));

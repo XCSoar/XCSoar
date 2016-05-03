@@ -30,6 +30,10 @@ Copyright_License {
 #include <assert.h>
 #include <windef.h> /* for MAX_PATH */
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scope.hpp"
+#endif
+
 void
 ChartRenderer::Axis::Reset()
 {
@@ -169,11 +173,16 @@ ChartRenderer::DrawLabel(const TCHAR *text, const double xv, const double yv)
   auto tsize = canvas.CalcTextSize(text);
   auto pt = ToScreen(xv, yv);
   canvas.SelectNullPen();
-  canvas.Select(look.blank_brush);
-  canvas.Rectangle(pt.x - tsize.cx / 2 - padding_text,
-                   pt.y - tsize.cy / 2 - padding_text,
-                   pt.x + tsize.cx / 2 + padding_text,
-                   pt.y + tsize.cy / 2 + padding_text);
+  {
+#ifdef ENABLE_OPENGL
+    const ScopeAlphaBlend alpha_blend;
+#endif
+    canvas.Select(look.label_blank_brush);
+    canvas.Rectangle(pt.x - tsize.cx / 2 - padding_text,
+                     pt.y - tsize.cy / 2 - padding_text,
+                     pt.x + tsize.cx / 2 + padding_text,
+                     pt.y + tsize.cy / 2 + padding_text);
+  }
   canvas.DrawText(pt.x - tsize.cx / 2, pt.y - tsize.cy / 2, text);
 }
 
