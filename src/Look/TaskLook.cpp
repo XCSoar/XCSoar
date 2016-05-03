@@ -24,7 +24,7 @@ Copyright_License {
 #include "TaskLook.hpp"
 #include "Screen/Layout.hpp"
 #include "Resources.hpp"
-#include "Look/Colors.hpp"
+#include "Colors.hpp"
 
 void
 TaskLook::Initialise()
@@ -48,7 +48,7 @@ TaskLook::Initialise()
 
   bearing_pen.Create(Layout::ScalePenWidth(2),
                   HasColors() ? bearing_color : COLOR_BLACK);
-  best_cruise_track_brush.Create(bearing_color);
+  best_cruise_track_brush.Create(ColorWithAlpha(bearing_color, ALPHA_OVERLAY));
   best_cruise_track_pen.Create(Layout::ScalePenWidth(1),
                                HasColors()
                                ? DarkColor(bearing_color)

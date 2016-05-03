@@ -29,6 +29,10 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "Util/Macros.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scope.hpp"
+#endif
+
 void
 BestCruiseArrowRenderer::Draw(Canvas &canvas, const TaskLook &look,
                               const Angle screen_angle,
@@ -51,6 +55,9 @@ BestCruiseArrowRenderer::Draw(Canvas &canvas, const TaskLook &look,
 
   PolygonRotateShift(arrow, ARRAY_SIZE(arrow), pos,
                      best_cruise_angle - screen_angle);
+#ifdef ENABLE_OPENGL
+  const ScopeAlphaBlend alpha_blend;
+#endif
   canvas.DrawPolygon(arrow, ARRAY_SIZE(arrow));
 }
 
