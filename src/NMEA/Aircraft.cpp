@@ -40,7 +40,7 @@ ToAircraftState(const MoreData &info, const DerivedInfo &calculated)
     ? info.nav_altitude
     : 0.;
 
-  aircraft.working_band_fraction = calculated.thermal_band.working_band_fraction;
+  aircraft.working_band_fraction = calculated.common_stats.height_fraction_working;
 
   aircraft.altitude_agl =
     info.NavAltitudeAvailable() && calculated.terrain_valid
