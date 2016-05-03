@@ -53,10 +53,13 @@ ChartRenderer::ResetScale()
 }
 
 ChartRenderer::ChartRenderer(const ChartLook &_look, Canvas &the_canvas,
-                             const PixelRect the_rc)
+                             const PixelRect the_rc,
+                             const bool has_padding)
   :look(_look), canvas(the_canvas), rc(the_rc), padding_text(Layout::GetTextPadding())
 {
-  SetPadding(true);
+  SetPadding(has_padding);
+  if (has_padding)
+    canvas.DrawFilledRectangle(rc_chart, COLOR_WHITE);
 }
 
 void

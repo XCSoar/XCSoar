@@ -36,7 +36,6 @@ TraceHistoryRenderer::ScaleChart(ChartRenderer &chart,
                                   const TraceVariableHistory& var,
                                   const bool centered) const
 {
-  chart.SetPadding(false);
   chart.ScaleXFromValue(0);
   chart.ScaleXFromValue(var.capacity() - 1);
 
@@ -66,7 +65,7 @@ TraceHistoryRenderer::RenderAxis(ChartRenderer &chart,
                  look.axis_pen);
 }
 
-void 
+void
 TraceHistoryRenderer::render_filled_posneg(ChartRenderer &chart,
                                            const TraceVariableHistory& var) const
 {
@@ -110,7 +109,7 @@ TraceHistoryRenderer::RenderVario(Canvas& canvas,
                                   const bool centered,
                                   const double mc) const
 {
-  ChartRenderer chart(chart_look, canvas, rc);
+  ChartRenderer chart(chart_look, canvas, rc, false);
   ScaleChart(chart, var, centered);
   chart.ScaleYFromValue(mc);
 

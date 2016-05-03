@@ -71,8 +71,7 @@ RenderBarographSpark(Canvas &canvas, const PixelRect rc,
                      const ProtectedTaskManager *_task)
 {
   ScopeLock lock(fs.mutex);
-  ChartRenderer chart(chart_look, canvas, rc);
-  chart.SetPadding(false);
+  ChartRenderer chart(chart_look, canvas, rc, false);
 
   if (!fs.altitude.HasResult())
     return;

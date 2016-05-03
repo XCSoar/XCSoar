@@ -59,9 +59,10 @@ class ChartRenderer
     int ToScreen(double value) const;
   } x, y;
 
+  void SetPadding(bool do_pad);
+
 public:
   int padding_text;
-  void SetPadding(bool do_pad);
   const PixelRect GetChartRect() const {
     return rc_chart;
   }
@@ -74,7 +75,8 @@ public:
 
 public:
   ChartRenderer(const ChartLook &look, Canvas &the_canvas,
-                const PixelRect the_rc);
+                const PixelRect the_rc,
+                const bool has_padding=true);
 
   void DrawBarChart(const XYDataStore &lsdata);
   void DrawFilledLineGraph(const XYDataStore &lsdata, bool swap=false);
