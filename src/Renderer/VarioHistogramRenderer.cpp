@@ -33,6 +33,10 @@ Copyright_License {
 #include "Util/StaticString.hxx"
 #include "GradientRenderer.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scope.hpp"
+#endif
+
 void
 RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
                      const ChartLook &chart_look,
@@ -78,10 +82,17 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
   }
 
   canvas.SelectNullPen();
-  canvas.Select(chart_look.black_brush);
-  chart.DrawFilledLineGraph(fs.vario_circling_histogram, true);
-  canvas.Select(chart_look.blank_brush);
-  chart.DrawFilledLineGraph(fs.vario_cruise_histogram, true);
+  {
+    canvas.Select(chart_look.black_brush);
+    chart.DrawFilledLineGraph(fs.vario_circling_histogram, true);
+  }
+  {
+    canvas.Select(chart_look.blank_brush);
+#ifdef ENABLE_OPENGL
+    const ScopeAlphaBlend alpha_blend;
+#endif
+    chart.DrawFilledLineGraph(fs.vario_cruise_histogram, true);
+  }
 
   // draw these after shaded regions, so they overlay
   chart.DrawLineGraph(fs.vario_cruise_histogram, ChartLook::STYLE_GREEN, true);
