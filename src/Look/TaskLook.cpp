@@ -24,6 +24,7 @@ Copyright_License {
 #include "TaskLook.hpp"
 #include "Screen/Layout.hpp"
 #include "Resources.hpp"
+#include "Look/Colors.hpp"
 
 void
 TaskLook::Initialise()

@@ -23,11 +23,12 @@ Copyright_License {
 
 #include "VarioBarLook.hpp"
 #include "Screen/Layout.hpp"
+#include "Look/Colors.hpp"
 
 void
 VarioBarLook::Initialise(const Font &_font)
 {
-  const uint8_t alpha = 0xA0;
+  const uint8_t alpha = ALPHA_OVERLAY;
 
   brush_sink.Create(ColorWithAlpha(COLOR_RED, alpha));
   brush_sink_avg.Create(ColorWithAlpha(LightColor(COLOR_RED), alpha));

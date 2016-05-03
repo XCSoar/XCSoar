@@ -36,4 +36,6 @@ static constexpr Color COLOR_XCSOAR = Color(0x3f, 0x76, 0xa8);
 static constexpr Color COLOR_XCSOAR_DARK = Color(0x00, 0x31, 0x5e);
 #endif
 
+static constexpr uint8_t ALPHA_OVERLAY = 0xA0;
+
 #endif

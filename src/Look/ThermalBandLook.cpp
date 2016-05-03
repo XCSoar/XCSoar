@@ -23,13 +23,16 @@ Copyright_License {
 
 #include "ThermalBandLook.hpp"
 #include "Screen/Layout.hpp"
+#include "Look/Colors.hpp"
 
 void
 ThermalBandLook::Initialise(bool _inverse, Color sky_color)
 {
+  const uint8_t alpha = ALPHA_OVERLAY;
+
   inverse = _inverse;
 
-  brush.Create(ColorWithAlpha(sky_color, 0xA0));
+  brush.Create(ColorWithAlpha(sky_color, alpha));
   pen.Create(Layout::ScalePenWidth(1), DarkColor(sky_color));
 
   white_pen.Create(Layout::ScalePenWidth(2), COLOR_WHITE);

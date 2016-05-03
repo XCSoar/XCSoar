@@ -23,13 +23,14 @@ Copyright_License {
 
 #include "FinalGlideBarLook.hpp"
 #include "Screen/Layout.hpp"
+#include "Look/Colors.hpp"
 
 void
 FinalGlideBarLook::Initialise(const Font &_font)
 {
-  const uint8_t alpha = 0xA0;
+  const uint8_t alpha = ALPHA_OVERLAY;
 
-  brush_below.Create(ColorWithAlpha(COLOR_RED, alpha));
+  brush_below.Create(ColorWithAlpha(COLOR_RED, ALPHA_OVERLAY));
   brush_below_mc0.Create(ColorWithAlpha(LightColor(COLOR_RED), alpha));
   pen_below.Create(Layout::ScalePenWidth(1),
                    HasColors()? DarkColor(COLOR_RED) : COLOR_BLACK);
