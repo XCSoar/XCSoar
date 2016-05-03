@@ -521,11 +521,12 @@ ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
 
     case _T('C'):
     case _T('c'):
-      if (input.ReadDouble(d)) {
-        temp_area.radius = Units::ToSysUnit(d, Unit::NAUTICAL_MILES);
-        temp_area.AddCircle(airspace_database);
-        temp_area.Reset();
-      }
+      if (!input.ReadDouble(d))
+        return false;
+
+      temp_area.radius = Units::ToSysUnit(d, Unit::NAUTICAL_MILES);
+      temp_area.AddCircle(airspace_database);
+      temp_area.Reset();
       break;
 
     case _T('A'):
