@@ -24,16 +24,17 @@ Copyright_License {
 #include "WindArrowLook.hpp"
 #include "Screen/Layout.hpp"
 #include "Asset.hpp"
+#include "Look/Colors.hpp"
 
 void
 WindArrowLook::Initialise(const Font &_font, bool inverse)
 {
-  arrow_pen.Create(Layout::Scale(1),
+  arrow_pen.Create(Layout::ScalePenWidth(1),
                    inverse
                    ? (HasColors() ? LightColor(COLOR_GRAY) : COLOR_WHITE)
                    : (HasColors() ? DarkColor(COLOR_GRAY) : COLOR_BLACK));
-  tail_pen.Create(Pen::DASH2, 1, inverse ? COLOR_WHITE : COLOR_BLACK);
-  arrow_brush.Create(IsDithered() ? COLOR_DARK_GRAY : COLOR_GRAY);
+  tail_pen.Create(Pen::DASH2, Layout::ScalePenWidth(1), inverse ? COLOR_WHITE : COLOR_BLACK);
+  arrow_brush.Create(IsDithered() ? COLOR_DARK_GRAY : ColorWithAlpha(COLOR_GRAY, ALPHA_OVERLAY));
 
   font = &_font;
 }

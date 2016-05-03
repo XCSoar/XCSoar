@@ -34,6 +34,10 @@ Copyright_License {
 
 #include <tchar.h>
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scope.hpp"
+#endif
+
 void
 WindArrowRenderer::DrawArrow(Canvas &canvas, PixelPoint pos, Angle angle,
                              unsigned length, WindArrowStyle arrow_style,
@@ -53,7 +57,12 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, PixelPoint pos, Angle angle,
 
   canvas.Select(look.arrow_pen);
   canvas.Select(look.arrow_brush);
-  canvas.DrawPolygon(arrow, ARRAY_SIZE(arrow));
+  {
+#ifdef ENABLE_OPENGL
+    const ScopeAlphaBlend alpha_blend;
+#endif
+    canvas.DrawPolygon(arrow, ARRAY_SIZE(arrow));
+  }
 
   // Draw arrow tail
 
