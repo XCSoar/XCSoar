@@ -646,7 +646,8 @@ ParseTypeTNP(const TCHAR *buffer)
 }
 
 static bool
-ReadNonNegativeAngleTNP(StringParser<TCHAR> &input, Angle &value_r)
+ReadNonNegativeAngleTNP(StringParser<TCHAR> &input, Angle &value_r,
+                        unsigned max_degrees)
 {
   unsigned deg, min, sec;
   if (!input.ReadUnsigned(sec))
@@ -655,6 +656,9 @@ ReadNonNegativeAngleTNP(StringParser<TCHAR> &input, Angle &value_r)
   deg = sec / 10000;
   min = (sec - deg * 10000) / 100;
   sec = sec - min * 100 - deg * 10000;
+
+  if (deg > max_degrees || min >= 60 || sec >= 60)
+    return false;
 
   value_r = Angle::DMS(deg, min, sec);
   return true;
@@ -673,7 +677,7 @@ ParseCoordsTNP(StringParser<TCHAR> &input, GeoPoint &point)
   else
     return false;
 
-  if (!ReadNonNegativeAngleTNP(input, point.latitude))
+  if (!ReadNonNegativeAngleTNP(input, point.latitude, 91))
     return false;
 
   if (negative)
@@ -688,7 +692,7 @@ ParseCoordsTNP(StringParser<TCHAR> &input, GeoPoint &point)
   else
     return false;
 
-  if (!ReadNonNegativeAngleTNP(input, point.longitude))
+  if (!ReadNonNegativeAngleTNP(input, point.longitude, 181))
     return false;
 
   if (negative)
