@@ -51,6 +51,7 @@ namespace Layout
   extern unsigned small_scale;
 
   extern unsigned pen_width_scale;
+  extern unsigned fine_pen_width_scale;
 
   /**
    * Fixed-point scaling factor to convert a point (1/72th inch) to
@@ -188,6 +189,16 @@ namespace Layout
       return width;
 
     return (width * pen_width_scale) >> 10;
+  }
+
+  gcc_const
+  static inline unsigned
+  ScaleFinePenWidth(unsigned width)
+  {
+    if (!ScaleSupported())
+      return width;
+
+    return (width * fine_pen_width_scale) >> 10;
   }
 
   /**
