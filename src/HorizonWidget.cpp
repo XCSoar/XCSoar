@@ -34,6 +34,7 @@
  */
 class HorizonWindow : public AntiFlickerWindow {
   const HorizonLook &look;
+  const bool& inverse;
 
   AttitudeState attitude;
 
@@ -41,7 +42,7 @@ public:
   /**
    * Constructor. Initializes most class members.
    */
-  HorizonWindow(const HorizonLook &_look):look(_look) {
+  HorizonWindow(const HorizonLook &_look, const bool &_inverse):look(_look),inverse(_inverse) {
     attitude.Reset();
   }
 
@@ -53,7 +54,10 @@ public:
 protected:
   /* virtual methods from AntiFlickerWindow */
   void OnPaintBuffer(Canvas &canvas) override {
-    canvas.ClearWhite();
+    if (inverse)
+      canvas.Clear(COLOR_BLACK);
+    else
+      canvas.ClearWhite();
 
     if (!attitude.IsBankAngleUseable() && !attitude.IsPitchAngleUseable())
       // TODO: paint "no data" hint
@@ -80,7 +84,7 @@ HorizonWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   style.Hide();
   style.Disable();
 
-  HorizonWindow *w = new HorizonWindow(look.horizon);
+  HorizonWindow *w = new HorizonWindow(look.horizon, look.info_box.inverse);
   w->Create(parent, rc, style);
   SetWindow(w);
 }

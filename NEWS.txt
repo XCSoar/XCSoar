@@ -4,6 +4,7 @@ Version 6.8.5 - not yet released
   - fix circling height gain calculation
 * user interface
   - fix "kg/m^2" and "lb/ft^2" unit display
+  - fix inverse colors in horizon page
 
 Version 6.8.4 - 2016/05/18
 * airspace cross-section
