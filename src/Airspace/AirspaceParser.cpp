@@ -521,7 +521,7 @@ ParseLine(Airspaces &airspace_database, StringParser<TCHAR> &&input,
 
     case _T('C'):
     case _T('c'):
-      if (!input.ReadDouble(d))
+      if (!input.ReadDouble(d) || d < 0 || d > 1000)
         return false;
 
       temp_area.radius = Units::ToSysUnit(d, Unit::NAUTICAL_MILES);
