@@ -24,17 +24,6 @@ Copyright_License {
 #include "FinalGlideBarLook.hpp"
 #include "Screen/Layout.hpp"
 
-static Color
-ColorWithAlpha(const Color &c, uint8_t a)
-{
-#ifdef ENABLE_OPENGL
-  return c.WithAlpha(a);
-#else
-  return c;
-#endif
-}
-
-
 void
 FinalGlideBarLook::Initialise(const Font &_font)
 {

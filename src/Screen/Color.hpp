@@ -95,4 +95,14 @@ DarkColor(Color c)
 
 Color Desaturate(Color c);
 
+static inline constexpr Color
+ColorWithAlpha(const Color &c, uint8_t a)
+{
+#ifdef ENABLE_OPENGL
+  return c.WithAlpha(a);
+#else
+  return c;
+#endif
+}
+
 #endif
