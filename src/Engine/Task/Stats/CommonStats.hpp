@@ -84,6 +84,9 @@ public:
   /** Working height ceiling (m MSL) */
   double height_max_working;
 
+  /** Ratio of current height above working floor to working height band */
+  double height_fraction_working;
+
   /** Summary of ordered task progress */
   TaskSummary ordered_summary;
 

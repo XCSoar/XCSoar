@@ -281,6 +281,9 @@ struct DerivedInfo:
     auto_mac_cready = mc;
     auto_mac_cready_available.Update(clock);
   }
+
+  // utility function
+  double CalculateWorkingFraction(const double h, const double safety_height) const;
 };
 
 static_assert(is_trivial_ndebug<DerivedInfo>::value, "type is not trivial");

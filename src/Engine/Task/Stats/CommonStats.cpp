@@ -30,6 +30,7 @@ CommonStats::Reset()
   current_risk_mc = 0;
   height_min_working = 0;
   height_max_working = 0;
+  height_fraction_working = 1;
 
   ResetTask();
 }

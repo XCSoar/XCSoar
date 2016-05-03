@@ -365,8 +365,14 @@ GlideComputer::CalculateWorkingBand()
   }
   calculated.common_stats.height_max_working = std::max(calculated.common_stats.height_min_working,
                                                         stats_computer.GetFlightStats().GetMaxWorkingHeight());
+
+  calculated.common_stats.height_fraction_working = 1; // fallback;
+
   if (basic.NavAltitudeAvailable()) {
     calculated.common_stats.height_max_working = std::max(calculated.common_stats.height_max_working,
                                                           basic.nav_altitude);
+    calculated.common_stats.height_fraction_working =
+        calculated.CalculateWorkingFraction(basic.nav_altitude,
+                                            settings.task.safety_height_arrival);
   }
 }
