@@ -59,8 +59,6 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
 
   ReinitialiseLayout(width);
 
-  title_font.Load(FontDescription(Layout::FontScale(8)));
-
   unit_fraction_pen.Create(1, value.fg_color);
 
   colors[0] = border_color;
@@ -77,6 +75,10 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
 void
 InfoBoxLook::ReinitialiseLayout(unsigned width)
 {
+  FontDescription title_font_d(8);
+  AutoSizeFont(title_font_d, width, _T("123456789012345"));
+  title_font.Load(title_font_d);
+
   FontDescription value_font_d(10, true);
   AutoSizeFont(value_font_d, width, _T("1234m"));
   value_font.Load(value_font_d);
