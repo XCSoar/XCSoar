@@ -104,7 +104,7 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
   wind_computer.Select(settings.wind, basic, calculated);
   wind_computer.ComputeHeadWind(basic, calculated);
 
-  thermallocator.Process(calculated.circling,
+  thermallocator.Process(calculated.circling && calculated.turning,
                          basic.time, basic.location,
                          basic.netto_vario,
                          calculated.GetWindOrZero(),
