@@ -55,7 +55,7 @@ RenderMapScale(Canvas &canvas,
   const unsigned height = font.GetCapitalHeight()
       + Layout::GetTextPadding();
 
-  int x = 0;
+  int x = rc.left;
   look.map_scale_left_icon.Draw(canvas, PixelPoint(x, rc.bottom - height));
 
   x += look.map_scale_left_icon.GetSize().cx;
