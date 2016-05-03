@@ -98,7 +98,7 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
 
   RenderTaskLegs(chart, task, nmea_info, derived_info, 0.33);
 
-  chart.DrawXGrid(0.5, 0.5, ChartRenderer::UnitFormat::TIME);
+  chart.DrawXGrid(0.25, 0.25, ChartRenderer::UnitFormat::TIME);
   chart.DrawYGrid(Units::ToSysTaskSpeed(10), 10, ChartRenderer::UnitFormat::NUMERIC);
 
   chart.DrawLine(chart.GetXMin(), vref,
