@@ -93,12 +93,13 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
                                     const TraceComputer &trace_computer,
                                     const Retrospective &retrospective) const
 {
+  ChartRenderer chart(chart_look, canvas, rc);
   if (!trail_renderer.LoadTrace(trace_computer)) {
-    ChartRenderer chart(chart_look, canvas, rc);
     chart.DrawNoData();
     return;
   }
 
+  const PixelRect &rc_chart = chart.GetChartRect();
   GeoBounds bounds(nmea_info.location);
   trail_renderer.ScanBounds(bounds);
 
@@ -111,7 +112,7 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
     }
   }
 
-  const ChartProjection proj(rc, TaskProjection(bounds));
+  const ChartProjection proj(rc_chart, TaskProjection(bounds));
 
   {
     // draw place names found in the retrospective task
@@ -163,7 +164,7 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
     break;
   }
 
-  RenderMapScale(canvas, proj, rc, map_look.overlay);
+  RenderMapScale(canvas, proj, rc_chart, map_look.overlay);
 }
 
 void
@@ -253,6 +254,8 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
 
   ChartProjection proj;
 
+  const PixelRect &rc_chart = chart.GetChartRect();
+
   {
     ProtectedTaskManager::Lease task_manager(_task_manager);
     const OrderedTask &task = task_manager->GetOrderedTask();
@@ -262,7 +265,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
       return;
     }
 
-    proj.Set(rc, task, nmea_info.location);
+    proj.Set(rc_chart, task, nmea_info.location);
 
     OZRenderer ozv(map_look.task, map_look.airspace, settings_map.airspace);
     TaskPointRenderer tpv(canvas, proj, map_look.task,
@@ -283,7 +286,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
                            nmea_info.attitude.heading, aircraft_pos);
   }
 
-  RenderMapScale(canvas, proj, rc, map_look.overlay);
+  RenderMapScale(canvas, proj, rc_chart, map_look.overlay);
 }
 
 void
