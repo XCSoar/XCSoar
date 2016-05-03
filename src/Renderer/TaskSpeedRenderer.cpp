@@ -118,5 +118,5 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
                   fs.task_speed.GetYAt(tref));
 
   chart.DrawXLabel(_T("t"), _T("hr"));
-  chart.DrawYLabel(_T("h"), Units::GetTaskSpeedName());
+  chart.DrawYLabel(_T("V"), Units::GetTaskSpeedName());
 }
