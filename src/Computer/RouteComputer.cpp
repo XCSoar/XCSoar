@@ -81,7 +81,7 @@ RouteComputer::TerrainWarning(const MoreData &basic,
 
   const AGeoPoint start (as.location, as.altitude);
   const RoughAltitude h_ceiling(std::max((int)basic.nav_altitude+500,
-                                         (int)calculated.thermal_band.working_band_ceiling));
+                                         (int)calculated.common_stats.height_max_working));
   // allow at least 500m of climb above current altitude as ceiling, in case
   // there are no actual working band stats.
   GeoVector v = sol.vector;
@@ -141,7 +141,7 @@ RouteComputer::Reach(const MoreData &basic, DerivedInfo &calculated,
   const AircraftState state = ToAircraftState(basic, calculated);
   const AGeoPoint start (state.location, state.altitude);
   const int h_ceiling(std::max((int)basic.nav_altitude + 500,
-                               (int)calculated.thermal_band.working_band_ceiling));
+                               (int)calculated.common_stats.height_max_working));
 
   if (reach_clock.CheckAdvance(basic.time, PERIOD)) {
     protected_route_planner.SolveReach(start, config, h_ceiling, do_solve);
