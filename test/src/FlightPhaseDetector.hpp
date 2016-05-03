@@ -198,6 +198,11 @@ class FlightPhaseDetector {
     const PhaseTotals &GetTotals() const {
       return totals;
     }
+
+    const Phase &GetCurrentPhase() const {
+      return current_phase;
+    }
+
 };
 
 #endif
