@@ -25,11 +25,14 @@ Copyright_License {
 #include "MapSettings.hpp"
 #include "Screen/Layout.hpp"
 #include "Resources.hpp"
+#include "Colors.hpp"
 
 void
 MapLook::Initialise(const MapSettings &settings,
                     const Font &font, const Font &bold_font)
 {
+  const uint8_t alpha = ALPHA_OVERLAY;
+
   waypoint.Initialise(settings.waypoint, font, bold_font);
   aircraft.Initialise();
   task.Initialise();
@@ -48,12 +51,12 @@ MapLook::Initialise(const MapSettings &settings,
 
   terrain_warning_icon.LoadResource(IDB_TERRAINWARNING, IDB_TERRAINWARNING_HD);
 
-  compass_brush.Create(IsDithered() ? COLOR_WHITE : Color(207, 207, 207));
+  compass_brush.Create(IsDithered() ? COLOR_WHITE : ColorWithAlpha(Color(207, 207, 207), alpha));
   compass_pen.Create(Layout::ScalePenWidth(1),
                      HasColors()? COLOR_GRAY : COLOR_BLACK);
   compass_triangle_brush.Create(IsDithered()
                                 ? COLOR_BLACK
-                                : Color(50, 50, 50));
+                                : ColorWithAlpha(Color(50, 50, 50), alpha));
   compass_triangle_pen.Create(Layout::ScalePenWidth(1),
                               HasColors() ? COLOR_GRAY : COLOR_BLACK);
 

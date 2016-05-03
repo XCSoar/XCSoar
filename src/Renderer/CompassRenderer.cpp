@@ -29,6 +29,10 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "Util/Macros.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scope.hpp"
+#endif
+
 void
 CompassRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                       const PixelRect rc)
@@ -46,6 +50,10 @@ CompassRenderer::Draw(Canvas &canvas, const Angle screen_angle,
 
   canvas.Select(look.compass_pen);
   canvas.Select(look.compass_brush);
+
+#ifdef ENABLE_OPENGL
+  const ScopeAlphaBlend alpha_blend;
+#endif
 
   // North arrow
   PolygonRotateShift(arrow, ARRAY_SIZE(arrow), pos, -screen_angle);
