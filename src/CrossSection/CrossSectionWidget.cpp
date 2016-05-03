@@ -62,7 +62,7 @@ CrossSectionWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   style.Disable();
 
   CrossSectionWindow *w =
-    new CrossSectionWindow(look.cross_section, look.map.airspace, look.chart);
+      new CrossSectionWindow(look.cross_section, look.map.airspace, look.chart, look.info_box);
   w->SetAirspaces(&airspace_database);
   w->SetTerrain(terrain);
   w->Create(parent, rc, style);

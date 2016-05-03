@@ -37,8 +37,9 @@
 
 CrossSectionRenderer::CrossSectionRenderer(const CrossSectionLook &_look,
                                            const AirspaceLook &_airspace_look,
-                                           const ChartLook &_chart_look)
-  :look(_look), chart_look(_chart_look), airspace_renderer(_airspace_look),
+                                           const ChartLook &_chart_look,
+                                           const bool &_inverse)
+    :inverse(_inverse), look(_look), chart_look(_chart_look), airspace_renderer(_airspace_look),
    terrain_renderer(look), terrain(NULL), airspace_database(NULL),
    start(GeoPoint::Invalid()),
    vec(50000, Angle::Zero()) {}
@@ -71,7 +72,7 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
                        look.sky_color, look.background_color,
                        look.background_color);
 
-  canvas.SetTextColor(look.text_color);
+  canvas.SetTextColor(inverse? COLOR_WHITE: look.text_color);
   canvas.Select(*look.grid_font);
 
   const auto nav_altitude = gps_info.NavAltitudeAvailable()
@@ -193,7 +194,7 @@ CrossSectionRenderer::PaintAircraft(Canvas &canvas, const ChartRenderer &chart,
 void
 CrossSectionRenderer::PaintGrid(Canvas &canvas, ChartRenderer &chart) const
 {
-  canvas.SetTextColor(look.text_color);
+  canvas.SetTextColor(inverse? COLOR_WHITE: look.text_color);
 
   chart.DrawXGrid(Units::ToSysDistance(5),5, ChartRenderer::UnitFormat::NUMERIC);
   chart.DrawYGrid(Units::ToSysAltitude(1000), 1000, ChartRenderer::UnitFormat::NUMERIC);

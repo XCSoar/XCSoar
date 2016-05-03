@@ -49,6 +49,7 @@ class CrossSectionRenderer :
 {
 public:
   static constexpr unsigned NUM_SLICES = 64;
+  const bool inverse;
 
 protected:
   const CrossSectionLook &look;
@@ -77,7 +78,8 @@ public:
    */
   CrossSectionRenderer(const CrossSectionLook &look,
                        const AirspaceLook &airspace_look,
-                       const ChartLook &chart_look);
+                       const ChartLook &chart_look,
+                       const bool &_inverse);
 
   void ReadBlackboard(const MoreData &_gps_info,
                       const DerivedInfo &_calculated_info,

@@ -96,7 +96,7 @@ public:
      cross_section_look(_cross_section_look),
      thermal_band_renderer(_thermal_band_look, chart_look),
      fs_renderer(chart_look, map_look),
-     cross_section_renderer(cross_section_look, airspace_look, chart_look),
+     cross_section_renderer(cross_section_look, airspace_look, chart_look, false),
      dragging(false),
      blackboard(_blackboard), glide_computer(_glide_computer) {
     cross_section_renderer.SetAirspaces(airspaces);

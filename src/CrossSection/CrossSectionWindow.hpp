@@ -26,6 +26,7 @@
 
 #include "Screen/BufferWindow.hpp"
 #include "CrossSectionRenderer.hpp"
+#include "Look/InfoBoxLook.hpp"
 
 struct CrossSectionLook;
 struct AirspaceLook;
@@ -51,8 +52,9 @@ public:
    */
   CrossSectionWindow(const CrossSectionLook &look,
                      const AirspaceLook &airspace_look,
-                     const ChartLook &chart_look):
-    renderer(look, airspace_look, chart_look) {}
+                     const ChartLook &chart_look,
+                     const InfoBoxLook &info_box_look):
+      renderer(look, airspace_look, chart_look, info_box_look.inverse) {}
 
   void ReadBlackboard(const MoreData &basic,
                       const DerivedInfo &calculated,
