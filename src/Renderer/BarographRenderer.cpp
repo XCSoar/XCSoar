@@ -92,6 +92,16 @@ RenderBarographSpark(Canvas &canvas, const PixelRect rc,
   chart.DrawFilledLineGraph(fs.altitude_terrain);
 
   chart.DrawLineGraph(fs.altitude, inverse? ChartLook::STYLE_WHITE: ChartLook::STYLE_BLACK);
+
+  // draw dot
+  if (fs.altitude.GetCount()) {
+    if (inverse)
+      chart.GetCanvas().SelectWhiteBrush();
+    else
+      chart.GetCanvas().SelectBlackBrush();
+    const auto &s = fs.altitude.GetSlots()[fs.altitude.GetCount()-1];
+    chart.DrawDot(s.x, s.y, Layout::Scale(2));
+  }
 }
 
 void
