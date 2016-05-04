@@ -30,6 +30,7 @@ Copyright_License {
 #include "Look/ThermalBandLook.hpp"
 #include "Units/Units.hpp"
 #include "Screen/Layout.hpp"
+#include "Math/LeastSquares.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scope.hpp"
@@ -116,12 +117,49 @@ ThermalBandRenderer::DrawThermalProfile(const ThermalBand &thermal_band,
 
 
 void
+ThermalBandRenderer::DrawRiskMC(const DerivedInfo& calculated,
+                                const ComputerSettings &settings_computer,
+                                ChartRenderer &chart,
+                                const double hoffset,
+                                const bool is_infobox,
+                                const bool is_map)
+{
+  if (settings_computer.polar.glide_polar_task.GetMC()<= 0)
+    return;
+
+  LeastSquares tmp;
+  tmp.Reset();
+  double h_m = 0;
+  double rmc = 0;
+  const double dh = calculated.common_stats.height_max_working/32;
+  for (double h= chart.GetYMin(); h<= chart.GetYMax(); h += dh) {
+    const double f = calculated.CalculateWorkingFraction(h+hoffset, settings_computer.task.safety_height_arrival);
+    const double risk_mc =
+        settings_computer.polar.glide_polar_task.GetRiskMC(f, settings_computer.task.risk_gamma);
+    if ((h_m<=0) && (risk_mc > 0.3*settings_computer.polar.glide_polar_task.GetMC())) {
+      h_m = h;
+      rmc = risk_mc;
+    }
+    tmp.Update(risk_mc, h);
+  }
+  if (tmp.IsEmpty())
+    return;
+
+  chart.DrawLineGraph(tmp, (is_map || is_infobox)? ChartLook::STYLE_WHITE: ChartLook::STYLE_REDTHICKDASH);
+  if (!is_map && !is_infobox) {
+    chart.DrawLabel(_T("MC"), rmc, h_m);
+  }
+}
+
+
+void
 ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
                                       const DerivedInfo& calculated,
                                       const ComputerSettings &settings_computer,
                                       ChartRenderer &chart,
                                       const TaskBehaviour& task_props,
                                       const bool is_infobox,
+                                      const bool is_map,
                                       const OrderedTaskSettings *ordered_props) const
 {
   // all heights here are relative to ground
@@ -165,6 +203,11 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
                        chart, hoffset, is_infobox, true);
   }
 
+  // risk mc
+  if (h>settings_computer.task.safety_height_arrival) {
+    DrawRiskMC(calculated, settings_computer, chart, hoffset, is_infobox, is_map);
+  }
+
   // draw working band lines
   DrawWorkingBand(calculated, chart, hoffset);
 
@@ -202,7 +245,7 @@ ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
     return;
   }
   _DrawThermalBand(basic, calculated, settings_computer,
-                   chart, task_props, false, ordered_props);
+                   chart, task_props, false, is_map, ordered_props);
 
   if (!is_map) {
     chart.DrawXGrid(Units::ToSysVSpeed(1), 1, ChartRenderer::UnitFormat::NUMERIC);
@@ -222,7 +265,7 @@ ThermalBandRenderer::DrawThermalBandSpark(const MoreData &basic,
 {
   ChartRenderer chart(chart_look, canvas, rc, false);
   _DrawThermalBand(basic, calculated, settings_computer,
-                   chart, task_props, true, nullptr);
+                   chart, task_props, true, false, nullptr);
 }
 
 void

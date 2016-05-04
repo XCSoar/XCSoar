@@ -68,6 +68,7 @@ protected:
                         ChartRenderer &chart,
                         const TaskBehaviour& task_props,
                         const bool is_infobox,
+                        const bool is_map,
                         const OrderedTaskSettings* ordered_props) const;
 
   void ScaleChart(const DerivedInfo &calculated,
@@ -92,6 +93,13 @@ protected:
   static void ScaleChartFromThermalBand(const ThermalBand &thermal_band,
                                         ChartRenderer &chart,
                                         const double hoffset);
+
+  static void DrawRiskMC(const DerivedInfo& calculated,
+                         const ComputerSettings &settings_computer,
+                         ChartRenderer &chart,
+                         const double hoffset,
+                         const bool is_infobox,
+                         const bool is_map);
 };
 
 #endif
