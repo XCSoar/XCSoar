@@ -83,7 +83,7 @@ RenderBarographSpark(Canvas &canvas, const PixelRect rc,
   if (_task != nullptr) {
     ProtectedTaskManager::Lease task(*_task);
     canvas.SelectHollowBrush();
-    RenderTaskLegs(chart, task, nmea_info, derived_info);
+    RenderTaskLegs(chart, task, nmea_info, derived_info, -1);
   }
 
   canvas.SelectNullPen();
