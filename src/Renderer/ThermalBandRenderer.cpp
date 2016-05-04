@@ -220,5 +220,6 @@ ThermalBandRenderer::DrawWorkingBand(const DerivedInfo& calculated_info,
   if ((h_min> chart.GetYMin()) && (h_min< chart.GetYMax())) {
     chart.DrawLine(0, h_min, chart.GetXMax(), h_min, look.working_band_pen);
   }
+  chart.DrawLine(0, chart.GetYMin(), chart.GetXMax()*0.5, chart.GetYMin(), look.working_band_pen);
 }
 
