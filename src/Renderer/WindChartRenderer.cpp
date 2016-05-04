@@ -30,6 +30,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Math/FastRotation.hpp"
 #include "Screen/Canvas.hpp"
+#include "Screen/Layout.hpp"
 
 static void
 DrawArrow(Canvas &canvas, PixelPoint point, const double mag, const Angle angle)
@@ -39,10 +40,13 @@ DrawArrow(Canvas &canvas, PixelPoint point, const double mag, const Angle angle)
   auto p = r.Rotate(mag, 0);
   canvas.DrawLine(point, point + PixelPoint((int)p.x, (int)p.y));
 
-  p = r.Rotate(mag - 5, -3);
+  const int l = Layout::Scale(5);
+  const int s = Layout::Scale(3);
+
+  p = r.Rotate(mag - l, -s);
   canvas.DrawLine(point, point + PixelPoint((int)p.x, (int)p.y));
 
-  p = r.Rotate(mag - 5, 3);
+  p = r.Rotate(mag - l, s);
   canvas.DrawLine(point, point + PixelPoint((int)p.x, (int)p.y));
 }
 
@@ -88,7 +92,7 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
   chart.DrawYGrid(Units::ToSysAltitude(1000), 1000, ChartRenderer::UnitFormat::NUMERIC);
   chart.DrawLineGraph(windstats_mag, ChartLook::STYLE_BLACK);
 
-#define WINDVECTORMAG 25
+#define WINDVECTORMAG Layout::Scale(25)
 
   numsteps = (int)(rc.GetHeight() / WINDVECTORMAG) - 1;
 
