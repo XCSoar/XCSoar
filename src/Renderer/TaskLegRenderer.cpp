@@ -63,8 +63,6 @@ RenderTaskLegs(ChartRenderer &chart,
   if (!task_stats.start.task_started)
     return;
 
-  assert((y>=0) && (y<=1));
-
   TCHAR sTmp[5];
 
   const OrderedTask &task = task_manager.GetOrderedTask();
@@ -76,18 +74,21 @@ RenderTaskLegs(ChartRenderer &chart,
     auto x = tp.GetEnteredState().time - calculated.flight.takeoff_time;
     if (x >= 0) {
       x /= 3600;
-      if (i==0) {
-        chart.DrawBlankRectangle(chart.GetXMin(), chart.GetYMin(),
-                                 x, chart.GetYMax());
-      } else if (i+1 == task.TaskSize()) {
-        chart.DrawBlankRectangle(x, chart.GetYMin(),
-                                 chart.GetXMax(), chart.GetYMax());
+      if (y>=0) {
+        if (i==0) {
+          chart.DrawBlankRectangle(chart.GetXMin(), chart.GetYMin(),
+                                   x, chart.GetYMax());
+        } else if (i+1 == task.TaskSize()) {
+          chart.DrawBlankRectangle(x, chart.GetYMin(),
+                                   chart.GetXMax(), chart.GetYMax());
+        }
+        chart.DrawLine(x, chart.GetYMin(), x, chart.GetYMax(),
+                       ChartLook::STYLE_GRIDZERO);
       }
-      chart.DrawLine(x, chart.GetYMin(), x, chart.GetYMax(),
-                     ChartLook::STYLE_GRIDZERO);
-
-      StringFormatUnsafe(sTmp, _T("%d"), i);
-      chart.DrawLabel(sTmp, x, chart.GetYMax()*y + chart.GetYMin()*(1-y));
+      if (y>=0) {
+        StringFormatUnsafe(sTmp, _T("%d"), i);
+        chart.DrawLabel(sTmp, x, chart.GetYMax()*y + chart.GetYMin()*(1-y));
+      }
     }
   }
 }

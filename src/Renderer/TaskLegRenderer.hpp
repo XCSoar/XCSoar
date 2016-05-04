@@ -29,6 +29,7 @@ struct NMEAInfo;
 struct DerivedInfo;
 class TaskManager;
 
+// draw task leg lines and, if y>=0, labels
 void
 RenderTaskLegs(ChartRenderer &chart,
                const TaskManager &task_manager,
