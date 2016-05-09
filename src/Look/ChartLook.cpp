@@ -47,6 +47,7 @@ ChartLook::Initialise()
   pens[STYLE_BLACK].Create(width_normal, COLOR_BLACK);
   pens[STYLE_WHITE].Create(width_normal, COLOR_WHITE);
   pens[STYLE_GRID].Create(Pen::DASH1, 1, Color(0xB0, 0xB0, 0xB0));
+  pens[STYLE_GRIDMINOR].Create(1, Color(0xB0, 0xB0, 0xB0));
   pens[STYLE_GRIDZERO].Create(width_normal, Color(0xB0, 0xB0, 0xB0));
 
   bar_brush.Create(COLOR_GREEN);

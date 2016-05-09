@@ -42,6 +42,7 @@ struct ChartLook {
     STYLE_BLACK,
     STYLE_WHITE,
     STYLE_GRID,
+    STYLE_GRIDMINOR,
     STYLE_GRIDZERO,
     STYLE_COUNT
   };
