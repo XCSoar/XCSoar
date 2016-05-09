@@ -122,6 +122,7 @@ TEST_NAMES = \
 	TestIGCFilenameFormatter \
 	TestLXNToIGC \
 	TestLeastSquares \
+	TestThermalBand
 
 
 TESTS = $(call name-to-bin,$(TEST_NAMES))
@@ -138,6 +139,15 @@ TEST_LEASTSQUARES_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestLeastSquares.cpp
 $(eval $(call link-program,TestLeastSquares,TEST_LEASTSQUARES))
+
+TEST_THERMALBAND_SOURCES = \
+$(ENGINE_SRC_DIR)/ThermalBand/ThermalBand.cpp \
+$(ENGINE_SRC_DIR)/ThermalBand/ThermalSlice.cpp \
+$(ENGINE_SRC_DIR)/ThermalBand/ThermalEncounterBand.cpp \
+$(ENGINE_SRC_DIR)/ThermalBand/ThermalEncounterCollection.cpp \
+$(TEST_SRC_DIR)/tap.c \
+$(TEST_SRC_DIR)/TestThermalBand.cpp
+$(eval $(call link-program,TestThermalBand,TEST_THERMALBAND))
 
 TEST_OVERWRITING_RING_BUFFER_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
