@@ -560,3 +560,12 @@ TaskManager::TakeoffAutotask(const GeoPoint &loc, const double terrain_alt)
   if (!active_task && goto_task->TakeoffAutotask(loc, terrain_alt))
     SetMode(TaskType::GOTO);
 }
+
+void
+TaskManager::ResetTask()
+{
+  if (active_task != nullptr) {
+    active_task->Reset();
+    UpdateCommonStatsTask();
+  }
+}

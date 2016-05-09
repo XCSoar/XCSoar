@@ -112,6 +112,8 @@ public:
   void SetRoutePlanner(const RoutePlannerGlue *_route);
 
   short GetTerrainBase() const;
+
+  void ResetTask();
 };
 
 #endif

@@ -333,3 +333,12 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
     Message::AddMessage(_("Task finished"));
   }
 }
+
+void
+InputEvents::eventResetTask(const TCHAR *misc)
+{
+  if (protected_task_manager == nullptr)
+    return;
+
+  protected_task_manager->ResetTask();
+}

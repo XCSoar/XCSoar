@@ -451,6 +451,8 @@ public:
 
   void UpdateCommonStatsTask();
 
+  void ResetTask();
+
 private:
   TaskType SetMode(const TaskType mode);
 

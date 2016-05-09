@@ -332,6 +332,14 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
                           _("Resume"), _("Abort"), Size);
   }
 
+  if (_tcsstr(OutBuffer, _T("$(CheckTaskRestart)"))) {
+    if (!(common_stats.task_type == TaskType::ORDERED &&
+          task_stats.start.task_started))
+      invalid = true;
+
+    ReplaceInString(OutBuffer, _T("$(CheckTaskRestart)"), _T(""), Size);
+  }
+
   return invalid;
 }
 

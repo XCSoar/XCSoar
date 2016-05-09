@@ -161,3 +161,10 @@ ReachIntersectionTest::Intersects(const AGeoPoint& destination)
     (result.terrain_valid == ReachResult::Validity::VALID &&
      result.terrain < destination.altitude);
 }
+
+void
+ProtectedTaskManager::ResetTask()
+{
+  ExclusiveLease lease(*this);
+  lease->ResetTask();
+}
