@@ -47,6 +47,7 @@ class ChartRenderer
   Canvas &canvas;
   PixelRect rc;
   PixelRect rc_chart;
+  int minor_tick_size;
 
   ReusableArray<BulkPixelPoint> point_buffer;
 
