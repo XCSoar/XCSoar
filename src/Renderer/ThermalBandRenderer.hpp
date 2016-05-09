@@ -34,6 +34,7 @@ struct DerivedInfo;
 struct ComputerSettings;
 struct OrderedTaskSettings;
 struct TaskBehaviour;
+class ThermalBand;
 
 class ThermalBandRenderer {
   const ThermalBandLook &look;
@@ -70,9 +71,10 @@ protected:
                         const OrderedTaskSettings* ordered_props) const;
 
   void ScaleChart(const DerivedInfo &calculated,
-                   const ComputerSettings &settings_computer,
-                   const TaskBehaviour& task_props,
-                   ChartRenderer &chart) const;
+                  const ComputerSettings &settings_computer,
+                  const TaskBehaviour& task_props,
+                  ChartRenderer &chart,
+                  const double hoffset) const;
 
   void DrawWorkingBand(const DerivedInfo& calculated,
                        ChartRenderer &chart,
@@ -81,6 +83,15 @@ protected:
   double GetHeightOffset(const DerivedInfo& calculated,
                          const TaskBehaviour& task_props) const;
 
+  void DrawThermalProfile(const ThermalBand &thermal_band,
+                          ChartRenderer &chart,
+                          const double hoffset,
+                          const bool alpha_shade,
+                          const bool active) const;
+
+  static void ScaleChartFromThermalBand(const ThermalBand &thermal_band,
+                                        ChartRenderer &chart,
+                                        const double hoffset);
 };
 
 #endif

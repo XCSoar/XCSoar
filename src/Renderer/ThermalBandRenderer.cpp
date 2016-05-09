@@ -41,14 +41,77 @@ void
 ThermalBandRenderer::ScaleChart(const DerivedInfo &calculated,
                                  const ComputerSettings &settings_computer,
                                  const TaskBehaviour& task_props,
-                                 ChartRenderer &chart) const
+                                ChartRenderer &chart,
+                                const double hoffset) const
 {
   chart.ScaleYFromValue(task_props.route_planner.safety_height_terrain);
-  chart.ScaleYFromValue(calculated.thermal_band.max_thermal_height);
+  chart.ScaleYFromValue(calculated.common_stats.height_max_working-hoffset);
 
   chart.ScaleXFromValue(0);
   chart.ScaleXFromValue(0.5);
   chart.ScaleXFromValue(settings_computer.polar.glide_polar_task.GetMC());
+}
+
+void
+ThermalBandRenderer::ScaleChartFromThermalBand(const ThermalBand &thermal_band,
+                                               ChartRenderer &chart,
+                                               const double hoffset)
+{
+  if (thermal_band.Valid()) {
+    chart.ScaleXFromValue(thermal_band.GetMaxW());
+    chart.ScaleYFromValue(thermal_band.GetCeiling()-hoffset);
+  }
+}
+
+
+void
+ThermalBandRenderer::DrawThermalProfile(const ThermalBand &thermal_band,
+                                        ChartRenderer &chart,
+                                        const double hoffset,
+                                        const bool is_infobox,
+                                        const bool active) const
+{
+  if (!thermal_band.Valid())
+    return;
+
+  const unsigned renderable = thermal_band.size();
+  // position of thermal band
+
+  std::vector<std::pair<double, double>> thermal_profile;
+  thermal_profile.reserve(renderable);
+
+  // add elements, with smoothing filter
+  for (unsigned i = 0; i < renderable; ++i) {
+    const double k_smooth = 0.5;
+    double k = thermal_band.GetSlice(i).n;
+    double w = thermal_band.GetSlice(i).w_n * k;
+    if (k) {
+      if (thermal_band.Occupied(i-1)) {
+        double k_this = k_smooth*thermal_band.GetSlice(i-1).n;
+        w += thermal_band.GetSlice(i-1).w_n * k_this;
+        k += k_this;
+      }
+      if (thermal_band.Occupied(i+1)) {
+        double k_this = k_smooth*thermal_band.GetSlice(i+1).n;
+        w += thermal_band.GetSlice(i+1).w_n * k_this;
+        k += k_this;
+      }
+      w /= k;
+    }
+    thermal_profile.emplace_back(w, thermal_band.GetSliceCenter(i)-hoffset);
+  }
+
+  const Pen *pen = is_infobox ? nullptr : (active? &look.pen_active : &look.pen_inactive);
+  const Brush& brush = active? look.brush_active : look.brush_inactive;
+
+  if (!is_infobox) {
+#ifdef ENABLE_OPENGL
+    const ScopeAlphaBlend alpha_blend;
+#endif
+    chart.DrawFilledY(thermal_profile, brush, pen);
+  } else {
+    chart.DrawFilledY(thermal_profile, brush, pen);
+  }
 }
 
 
@@ -61,11 +124,10 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
                                       const bool is_infobox,
                                       const OrderedTaskSettings *ordered_props) const
 {
-  const ThermalBandInfo &thermal_band = calculated.thermal_band;
-
-  // calculate height above safety height
+  // all heights here are relative to ground
   const auto hoffset = calculated.GetTerrainBaseFallback();
-  const auto hsafety = task_props.route_planner.safety_height_terrain;
+
+  ScaleChart(calculated, settings_computer, task_props, chart, hoffset);
 
   double h = 0;
   if (basic.NavAltitudeAvailable()) {
@@ -86,66 +148,24 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
         calculated.terrain_valid)
       hstart += calculated.terrain_altitude;
 
-    hstart -= hoffset;
-    chart.ScaleYFromValue(hstart);
+    chart.ScaleYFromValue(hstart-hoffset);
   }
 
-  // no thermalling has been done above safety height
-  if (thermal_band.max_thermal_height <= 0)
-    return;
+  // draw thermal profiles
+  ScaleChartFromThermalBand(calculated.thermal_encounter_collection,
+                            chart, hoffset);
+  ScaleChartFromThermalBand(calculated.thermal_encounter_band,
+                            chart, hoffset);
 
-  // calculate averages
-  int numtherm = 0;
-
-  double Wmax = 0;
-  double Wav = 0;
-  double Wt[ThermalBandInfo::N_BUCKETS];
-  double ht[ThermalBandInfo::N_BUCKETS];
-
-  for (unsigned i = 0; i < ThermalBandInfo::N_BUCKETS; ++i) {
-    if (thermal_band.thermal_profile_n[i] < 6) 
-      continue;
-
-    if (thermal_band.thermal_profile_w[i] > 0) {
-      // height of this thermal point [0,mth]
-      // requires 5 items in bucket before displaying, to eliminate kinks
-      auto wthis = thermal_band.thermal_profile_w[i] / thermal_band.thermal_profile_n[i];
-      ht[numtherm] = i * thermal_band.max_thermal_height
-          / ThermalBandInfo::N_BUCKETS + hsafety;
-      Wt[numtherm] = wthis;
-      Wmax = std::max(Wmax, wthis);
-      Wav+= wthis;
-      numtherm++;
-    }
-  }
-  chart.ScaleXFromValue(Wmax);
-  if (!numtherm)
-    return;
-  chart.ScaleXFromValue(1.5 * Wav / numtherm);
-
-  if ((!draw_start_height) && (numtherm<=1))
-    // don't display if insufficient statistics
-    // but do draw if start height needs to be drawn
-    return;
-
-  const Pen *fpen = is_infobox ? nullptr : &look.pen;
-
-  // position of thermal band
-  if (numtherm > 1) {
-    std::vector<std::pair<double, double>> thermal_profile;
-    thermal_profile.reserve(numtherm);
-    for (int i = 0; i < numtherm; ++i)
-      thermal_profile.emplace_back(Wt[i], ht[i]);
-
-    if (!is_infobox) {
-#ifdef ENABLE_OPENGL
-      const ScopeAlphaBlend alpha_blend;
-#endif
-      chart.DrawFilledY(thermal_profile, look.brush, fpen);
-    } else
-      chart.DrawFilledY(thermal_profile, look.brush, fpen);
+  const bool active = calculated.thermal_encounter_band.Valid();
+  DrawThermalProfile(calculated.thermal_encounter_collection,
+                     chart, hoffset, is_infobox, !active);
+  if (active) {
+    DrawThermalProfile(calculated.thermal_encounter_band,
+                       chart, hoffset, is_infobox, true);
   }
 
+  // draw working band lines
   DrawWorkingBand(calculated, chart, hoffset);
 
   // position of MC
@@ -176,12 +196,11 @@ ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
 {
   ChartRenderer chart(chart_look, canvas, rc, !is_map);
 
-  if (!is_map && calculated.thermal_band.max_thermal_height <= 0) {
-    // no climbs below safety height
+  if (!is_map && (calculated.common_stats.height_max_working <= 0)) {
+    // no climbs recorded
     chart.DrawNoData();
     return;
   }
-  ScaleChart(calculated, settings_computer, task_props, chart);
   _DrawThermalBand(basic, calculated, settings_computer,
                    chart, task_props, false, ordered_props);
 
@@ -202,7 +221,6 @@ ThermalBandRenderer::DrawThermalBandSpark(const MoreData &basic,
                                           const TaskBehaviour &task_props) const
 {
   ChartRenderer chart(chart_look, canvas, rc, false);
-  ScaleChart(calculated, settings_computer, task_props, chart);
   _DrawThermalBand(basic, calculated, settings_computer,
                    chart, task_props, true, nullptr);
 }

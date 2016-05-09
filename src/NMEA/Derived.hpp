@@ -33,7 +33,8 @@ Copyright_License {
 #include "NMEA/VarioInfo.hpp"
 #include "NMEA/ClimbInfo.hpp"
 #include "NMEA/CirclingInfo.hpp"
-#include "NMEA/ThermalBand.hpp"
+#include "Engine/ThermalBand/ThermalEncounterBand.hpp"
+#include "Engine/ThermalBand/ThermalEncounterCollection.hpp"
 #include "NMEA/ThermalLocator.hpp"
 #include "NMEA/Validity.hpp"
 #include "NMEA/ClimbHistory.hpp"
@@ -229,7 +230,8 @@ struct DerivedInfo:
 
   FlyingState flight;
 
-  ThermalBandInfo thermal_band;
+  ThermalEncounterBand thermal_encounter_band;
+  ThermalEncounterCollection thermal_encounter_collection;
 
   ThermalLocatorInfo thermal_locator;
 

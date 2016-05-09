@@ -81,7 +81,10 @@ DerivedInfo::Reset()
   contest_stats.Reset();
 
   flight.Reset();
-  thermal_band.Clear();
+
+  thermal_encounter_band.Reset();
+  thermal_encounter_collection.Reset();
+
   thermal_locator.Clear();
 
   trace_history.clear();

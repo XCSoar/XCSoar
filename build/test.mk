@@ -837,7 +837,10 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/NMEA/ClimbInfo.cpp \
 	$(SRC)/NMEA/ClimbHistory.cpp \
 	$(SRC)/NMEA/CirclingInfo.cpp \
-	$(SRC)/NMEA/ThermalBand.cpp \
+	$(ENGINE_SRC_DIR)/ThermalBand/ThermalBand.cpp \
+	$(ENGINE_SRC_DIR)/ThermalBand/ThermalSlice.cpp \
+	$(ENGINE_SRC_DIR)/ThermalBand/ThermalEncounterBand.cpp \
+	$(ENGINE_SRC_DIR)/ThermalBand/ThermalEncounterCollection.cpp \
 	$(SRC)/NMEA/ThermalLocator.cpp \
 	$(SRC)/NMEA/FlyingState.cpp \
 	$(SRC)/Operation/Operation.cpp \
@@ -1662,6 +1665,10 @@ ANALYSE_FLIGHT_SOURCES = \
 	$(SRC)/Computer/CirclingComputer.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
+	$(ENGINE_SRC_DIR)/ThermalBand/ThermalBand.cpp \
+    $(ENGINE_SRC_DIR)/ThermalBand/ThermalSlice.cpp \
+	$(ENGINE_SRC_DIR)/ThermalBand/ThermalEncounterBand.cpp \
+	$(ENGINE_SRC_DIR)/ThermalBand/ThermalEncounterCollection.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/ContestPrinting.cpp \
@@ -1723,6 +1730,8 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Engine/Trace/Trace.cpp \
 	$(SRC)/Engine/Trace/Vector.cpp \
 	$(SRC)/Engine/Navigation/Aircraft.cpp \
+	$(ENGINE_SRC_DIR)/ThermalBand/ThermalBand.cpp \
+	$(ENGINE_SRC_DIR)/ThermalBand/ThermalSlice.cpp \
 	$(IO_SRC_DIR)/MapFile.cpp \
 	$(IO_SRC_DIR)/DataFile.cpp \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
@@ -1740,7 +1749,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/NMEA/ClimbHistory.cpp \
 	$(SRC)/NMEA/CirclingInfo.cpp \
 	$(SRC)/NMEA/SwitchState.cpp \
-	$(SRC)/NMEA/ThermalBand.cpp \
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/Friends.cpp \
@@ -2110,10 +2118,11 @@ RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
 	$(SRC)/NMEA/VarioInfo.cpp \
 	$(SRC)/NMEA/CirclingInfo.cpp \
 	$(SRC)/NMEA/ClimbHistory.cpp \
-	$(SRC)/NMEA/ThermalBand.cpp \
 	$(SRC)/NMEA/ClimbInfo.cpp \
 	$(SRC)/NMEA/ThermalLocator.cpp \
 	$(SRC)/NMEA/FlyingState.cpp \
+	$(ENGINE_SRC_DIR)/ThermalBand/ThermalBand.cpp \
+	$(ENGINE_SRC_DIR)/ThermalBand/ThermalSlice.cpp \
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
@@ -2188,6 +2197,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Engine/Trace/Trace.cpp \
 	$(SRC)/Engine/Trace/Vector.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
+	$(ENGINE_SRC_DIR)/ThermalBand/ThermalBand.cpp \
 	$(SRC)/UIUtil/GestureManager.cpp \
 	$(SRC)/Task/Deserialiser.cpp \
 	$(SRC)/Task/LoadFile.cpp \

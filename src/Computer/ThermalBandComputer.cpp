@@ -30,50 +30,34 @@ void
 ThermalBandComputer::Reset()
 {
   last_vario_available.Clear();
+  in_encounter = false;
 }
 
 void
 ThermalBandComputer::Compute(const MoreData &basic,
                              const DerivedInfo &calculated,
-                             ThermalBandInfo &tbi,
+                             ThermalEncounterBand &teb,
+                             ThermalEncounterCollection &tec,
                              const ComputerSettings &settings)
 {
   if (!basic.NavAltitudeAvailable())
     return;
 
-  const auto h_safety =
-    settings.task.route_planner.safety_height_terrain +
-    calculated.GetTerrainBaseFallback();
-
-  tbi.working_band_height = basic.TE_altitude - h_safety;
-  if (tbi.working_band_height < 0) {
-    tbi.working_band_fraction = 0;
-    return;
-  }
-
-  const auto max_height = tbi.max_thermal_height;
-  if (max_height > 0)
-    tbi.working_band_fraction = tbi.working_band_height / max_height;
-  else
-    tbi.working_band_fraction = 1;
-
-  tbi.working_band_ceiling = std::max(max_height + h_safety,
-                                      basic.TE_altitude);
-
+  const auto h_thermal = basic.nav_altitude;
 
   last_vario_available.FixTimeWarp(basic.brutto_vario_available);
+
   if (basic.brutto_vario_available.Modified(last_vario_available)) {
     last_vario_available = basic.brutto_vario_available;
 
-    // JMW TODO accuracy: Should really work out dt here,
-    //           but i'm assuming constant time steps
-
-    if (tbi.max_thermal_height == 0)
-      tbi.max_thermal_height = tbi.working_band_height;
-
-    // only do this if in thermal and have been climbing
-    if (calculated.circling && calculated.turning &&
-        calculated.average > 0)
-      tbi.Add(tbi.working_band_height, basic.brutto_vario);
+    // only do this if in circling mode
+    if (calculated.circling) {
+      teb.AddSample(basic.time, h_thermal);
+      in_encounter = true;
+    } else if (in_encounter) {
+      tec.Merge(teb);
+      teb.Reset();
+      in_encounter = false;
+    }
   }
 }

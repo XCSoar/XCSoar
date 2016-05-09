@@ -30,8 +30,13 @@ Copyright_License {
 struct ThermalBandLook {
   bool inverse;
 
-  Pen pen;
-  Brush brush;
+  // elements for drawing active thermal bands
+  Pen pen_active;
+  Brush brush_active;
+
+  // elements for drawing inactive thermal band
+  Pen pen_inactive;
+  Brush brush_inactive;
 
   // pens used for drawing the MC setting
   Pen white_pen, black_pen;

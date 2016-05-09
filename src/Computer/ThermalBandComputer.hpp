@@ -28,7 +28,8 @@ Copyright_License {
 
 struct MoreData;
 struct DerivedInfo;
-struct ThermalBandInfo;
+class ThermalEncounterBand;
+class ThermalEncounterCollection;
 struct ComputerSettings;
 
 /**
@@ -43,7 +44,11 @@ public:
   void Reset();
 
   void Compute(const MoreData &basic, const DerivedInfo &calculated,
-               ThermalBandInfo &tbi, const ComputerSettings &settings);
+               ThermalEncounterBand &tbe,
+               ThermalEncounterCollection &tbc,
+               const ComputerSettings &settings);
+private:
+  bool in_encounter;
 };
 
 #endif

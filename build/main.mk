@@ -183,6 +183,10 @@ XCSOAR_SOURCES := \
 	$(SRC)/Engine/Trace/Trace.cpp \
 	$(SRC)/Engine/Trace/Vector.cpp \
 	$(SRC)/Engine/Util/Gradient.cpp \
+	$(SRC)/Engine/ThermalBand/ThermalBand.cpp \
+    $(SRC)/Engine/ThermalBand/ThermalSlice.cpp \
+	$(SRC)/Engine/ThermalBand/ThermalEncounterBand.cpp \
+	$(SRC)/Engine/ThermalBand/ThermalEncounterCollection.cpp \
 	$(SRC)/HorizonWidget.cpp \
 	$(SRC)/Renderer/TextRowRenderer.cpp \
 	$(SRC)/Renderer/TwoTextRowsRenderer.cpp \
@@ -288,7 +292,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/NMEA/VarioInfo.cpp \
 	$(SRC)/NMEA/ClimbInfo.cpp \
 	$(SRC)/NMEA/CirclingInfo.cpp \
-	$(SRC)/NMEA/ThermalBand.cpp \
 	$(SRC)/NMEA/ThermalLocator.cpp \
 	$(SRC)/NMEA/ClimbHistory.cpp \
 	$(SRC)/NMEA/SwitchState.cpp \
