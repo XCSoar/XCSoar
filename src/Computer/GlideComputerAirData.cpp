@@ -300,7 +300,7 @@ GlideComputerAirData::Turning(const MoreData &basic,
                             settings.circling);
 
   // Calculate circling time percentage and call thermal band calculation
-  circling_computer.PercentCircling(basic, calculated);
+  circling_computer.PercentCircling(basic, calculated.flight, calculated);
 
   thermal_band_computer.Compute(basic, calculated,
                                 calculated.thermal_band,

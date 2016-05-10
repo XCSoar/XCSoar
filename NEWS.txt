@@ -1,4 +1,6 @@
 Version 6.8.5 - not yet released
+* calculations
+  - update circling percentage only when flying
 * user interface
   - fix "kg/m^2" and "lb/ft^2" unit display
 

@@ -105,7 +105,7 @@ public:
   /**
    * Calculate the circling time and percentage
    */
-  void PercentCircling(const MoreData &basic,
+  void PercentCircling(const MoreData &basic, const FlyingState &flight,
                        CirclingInfo &circling_info);
 
   void MaxHeightGain(const MoreData &basic, const FlyingState &flight,

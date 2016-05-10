@@ -231,6 +231,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
 
 void
 CirclingComputer::PercentCircling(const MoreData &basic,
+                                  const FlyingState &flight,
                                   CirclingInfo &circling_info)
 {
   if (!basic.time_available)
@@ -242,6 +243,10 @@ CirclingComputer::PercentCircling(const MoreData &basic,
   const fixed dt = percent_delta_time.Update(basic.time,
                                              fixed(0), fixed(0));
   if (!positive(dt))
+    return;
+
+  // don't increment the accumulators unless actually flying
+  if (!flight.flying)
     return;
 
   // if (Circling)
