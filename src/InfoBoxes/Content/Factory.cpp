@@ -1043,6 +1043,13 @@ static constexpr MetaData meta_data[] = {
     next_waypoint_infobox_panels,
   },
 
+  // e_NonCircling_Climb_Perc
+  {
+    N_("Percentage non-circling climb"),
+    N_("% Str Climb"),
+    N_("Percentage of time spent climbing without circling. These statistics are reset upon starting the task."),
+    UpdateInfoBoxNonCirclingClimbRatio,
+  },
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,

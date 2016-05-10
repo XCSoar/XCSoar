@@ -58,6 +58,9 @@ void
 UpdateInfoBoxThermalRatio(InfoBoxData &data);
 
 void
+UpdateInfoBoxNonCirclingClimbRatio(InfoBoxData &data);
+
+void
 UpdateInfoBoxVarioDistance(InfoBoxData &data);
 
 void

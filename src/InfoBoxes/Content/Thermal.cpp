@@ -151,6 +151,17 @@ UpdateInfoBoxThermalRatio(InfoBoxData &data)
 }
 
 void
+UpdateInfoBoxNonCirclingClimbRatio(InfoBoxData &data)
+{
+  // Set Value
+
+  if (CommonInterface::Calculated().noncircling_climb_percentage < 0)
+    data.SetInvalid();
+  else
+    data.SetValueFromPercent(CommonInterface::Calculated().noncircling_climb_percentage);
+}
+
+void
 UpdateInfoBoxVarioDistance(InfoBoxData &data)
 {
   if (!CommonInterface::Calculated().task_stats.task_valid) {
