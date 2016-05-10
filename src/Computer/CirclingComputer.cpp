@@ -251,14 +251,14 @@ CirclingComputer::PercentCircling(const MoreData &basic,
 
   // if (Circling)
   if (circling_info.circling && circling_info.turning) {
-    // Add one second to the circling time
+    // Add time step to the circling time
     // timeCircling += (Basic->Time-LastTime);
     circling_info.time_climb += dt;
 
     // Add the Vario signal to the total climb height
-    circling_info.total_height_gain += basic.gps_vario;
+    circling_info.total_height_gain += basic.gps_vario * dt;
   } else {
-    // Add one second to the cruise time
+    // Add time step to the cruise time
     // timeCruising += (Basic->Time-LastTime);
     circling_info.time_cruise += dt;
   }
