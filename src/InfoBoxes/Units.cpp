@@ -55,6 +55,13 @@ InfoBoxData::SetValueFromSpeed(fixed new_value, bool precision)
 }
 
 void
+InfoBoxData::SetValueFromTaskSpeed(fixed new_value, bool precision)
+{
+  FormatUserTaskSpeed(new_value, value.buffer(), false, precision);
+  SetValueUnit(Units::current.task_speed_unit);
+}
+
+void
 InfoBoxData::SetCommentFromDistance(fixed new_value)
 {
   FormatUserDistanceSmart(new_value, comment.buffer());
@@ -70,6 +77,12 @@ void
 InfoBoxData::SetCommentFromSpeed(fixed new_value, bool precision)
 {
   FormatUserSpeed(new_value, comment.buffer(), true, precision);
+}
+
+void
+InfoBoxData::SetCommentFromTaskSpeed(fixed new_value, bool precision)
+{
+  FormatUserTaskSpeed(new_value, comment.buffer(), true, precision);
 }
 
 void

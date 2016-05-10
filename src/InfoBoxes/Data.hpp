@@ -127,6 +127,11 @@ struct InfoBoxData {
   void SetValueFromSpeed(fixed value, bool precision=true);
 
   /**
+   * Set the InfoBox value to the specified task speed.
+   */
+  void SetValueFromTaskSpeed(fixed value, bool precision=true);
+
+  /**
    * Sets the InfoBox comment to the given Value
    * @param Value New value of the InfoBox comment
    */
@@ -145,6 +150,11 @@ struct InfoBoxData {
    * Set the InfoBox comment to the specified horizontal speed.
    */
   void SetCommentFromSpeed(fixed value, bool precision=true);
+
+  /**
+   * Set the InfoBox comment to the specified task speed.
+   */
+  void SetCommentFromTaskSpeed(fixed value, bool precision=true);
 
   /**
    * Set the InfoBox value to the specified altitude in the alternate
