@@ -1,4 +1,6 @@
 Version 6.8.4 - not yet released
+* airspace cross-section
+  - use airspace visibility configuration (#3751)
 * data files
   - accept "Military Aerodrome Traffic Zone" (MATZ) airspaces in
     OpenAir files (#3732)
