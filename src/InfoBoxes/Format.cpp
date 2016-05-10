@@ -72,3 +72,15 @@ InfoBoxData::SetValueFromTimeTwoLines(int dd)
 {
   FormatTimeTwoLines(value.buffer(), comment.buffer(), dd);
 }
+
+void
+InfoBoxData::SetValueFromPercent(double dd)
+{
+  UnsafeFormatValue(_T("%d %%"), (int)(dd));
+}
+
+void
+InfoBoxData::SetCommentFromPercent(double dd)
+{
+  UnsafeFormatComment(_T("%d %%"), (int)(dd));
+}

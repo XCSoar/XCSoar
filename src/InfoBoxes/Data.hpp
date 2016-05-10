@@ -131,6 +131,11 @@ struct InfoBoxData {
   void SetValueFromTaskSpeed(double value, bool precision=true);
 
   /**
+   * Set the InfoBox value to the specified percentage value.
+   */
+  void SetValueFromPercent(double value);
+
+  /**
    * Sets the InfoBox comment to the given Value
    * @param Value New value of the InfoBox comment
    */
@@ -170,6 +175,11 @@ struct InfoBoxData {
    * Set the InfoBox value to time HH:MM and SS
    */
   void SetValueFromTimeTwoLines(int dd);
+
+  /**
+   * Set the InfoBox comment to the specified percentage value.
+   */
+  void SetCommentFromPercent(double value);
 
   template<typename... Args>
   void FormatTitle(const TCHAR *fmt, Args&&... args) {
