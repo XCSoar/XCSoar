@@ -1050,6 +1050,14 @@ static constexpr MetaData meta_data[] = {
     N_("Percentage of time spent climbing without circling. These statistics are reset upon starting the task."),
     UpdateInfoBoxNonCirclingClimbRatio,
   },
+
+  // e_Climb_Perc_Chart
+  {
+    N_("Percentage climb chart"),
+    N_("Climb %"),
+    N_("Pie chart of time circling and climbing, circling and descending, and climbing non-circling."),
+    IBFHelper<InfoBoxContentClimbPercent>::Create,
+  },
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,

@@ -160,6 +160,8 @@ namespace InfoBoxFactory
 
     e_NonCircling_Climb_Perc,
 
+    e_Climb_Perc_Chart,
+
     e_NUM_TYPES /* Last item */
   };
 
