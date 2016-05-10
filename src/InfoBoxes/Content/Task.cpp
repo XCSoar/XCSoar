@@ -784,7 +784,6 @@ UpdateInfoBoxNextETEVMG(InfoBoxData &data)
   const fixed v = basic.ground_speed;
 
   if (!task_stats.task_valid ||
-      !positive(d) ||
       !positive(v)) {
     data.SetInvalid();
     return;
@@ -815,7 +814,6 @@ UpdateInfoBoxFinalETEVMG(InfoBoxData &data)
   const fixed v = basic.ground_speed;
 
   if (!task_stats.task_valid ||
-      !positive(d) ||
       !positive(v)) {
     data.SetInvalid();
     return;
