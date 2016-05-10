@@ -29,6 +29,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
+#include "Renderer/ClimbPercentRenderer.hpp"
 
 #include <tchar.h>
 
@@ -255,4 +256,20 @@ InfoBoxContentThermalAssistant::OnCustomPaint(Canvas &canvas,
 {
   renderer.UpdateLayout(rc);
   renderer.Paint(canvas);
+}
+
+void
+InfoBoxContentClimbPercent::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
+{
+  const Look &look = UIGlobals::GetLook();
+  ClimbPercentRenderer renderer(look.circling_percent);
+  renderer.Draw(CommonInterface::Calculated(),
+                canvas, rc,
+                look.info_box.inverse);
+}
+
+void
+InfoBoxContentClimbPercent::Update(InfoBoxData &data)
+{
+  data.SetCustom();
 }

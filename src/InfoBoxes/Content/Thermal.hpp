@@ -80,4 +80,11 @@ public:
   virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) override;
 };
 
+class InfoBoxContentClimbPercent : public InfoBoxContent
+{
+ public:
+  virtual void Update(InfoBoxData &data) override;
+  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) override;
+};
+
 #endif
