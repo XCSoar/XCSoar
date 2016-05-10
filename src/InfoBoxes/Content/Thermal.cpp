@@ -96,13 +96,7 @@ UpdateInfoBoxThermalLastTime(InfoBoxData &data)
     return;
   }
 
-  // Set Value
-
-  TCHAR value[32], comment[32];
-  FormatTimeTwoLines(value, comment, (int)thermal.duration);
-
-  data.SetValue(value);
-  data.SetComment(comment);
+  data.SetValueFromTimeTwoLines((int)thermal.duration);
 }
 
 void

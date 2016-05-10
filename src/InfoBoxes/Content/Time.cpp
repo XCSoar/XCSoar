@@ -75,11 +75,5 @@ UpdateInfoBoxTimeFlight(InfoBoxData &data)
     data.SetInvalid();
     return;
   }
-
-  // Set Value
-  TCHAR value[32], comment[32];
-  FormatTimeTwoLines(value, comment, (int)flight.flight_time);
-
-  data.SetValue(value);
-  data.SetComment(comment);
+  data.SetValueFromTimeTwoLines((int)flight.flight_time);
 }

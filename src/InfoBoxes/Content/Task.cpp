@@ -250,13 +250,7 @@ UpdateInfoBoxNextETE(InfoBoxData &data)
 
   assert(task_stats.current_leg.time_remaining_now >= 0);
 
-  TCHAR value[32];
-  TCHAR comment[32];
-  const int dd = (int)task_stats.current_leg.time_remaining_now;
-  FormatTimeTwoLines(value, comment, dd);
-
-  data.SetValue(value);
-  data.SetComment(comment);
+  data.SetValueFromTimeTwoLines((int)task_stats.current_leg.time_remaining_now);
 }
 
 void
@@ -406,13 +400,7 @@ UpdateInfoBoxFinalETE(InfoBoxData &data)
 
   assert(task_stats.total.time_remaining_now >= 0);
 
-  TCHAR value[32];
-  TCHAR comment[32];
-  const int dd = abs((int)task_stats.total.time_remaining_now);
-  FormatTimeTwoLines(value, comment, dd);
-
-  data.SetValue(value);
-  data.SetComment(comment);
+  data.SetValueFromTimeTwoLines(abs((int)task_stats.total.time_remaining_now));
 }
 
 void
@@ -595,9 +583,7 @@ UpdateInfoBoxTaskAATimeDelta(InfoBoxData &data)
   TCHAR comment[32];
   const int dd = abs((int)diff);
   FormatTimeTwoLines(value, comment, dd);
-
   data.UnsafeFormatValue(diff < 0 ? _T("-%s") : _T("%s"), value);
-
   data.SetComment(comment);
 
   // Set Color (red/blue/black)
@@ -716,14 +702,8 @@ UpdateInfoBoxTaskTimeUnderMaxHeight(InfoBoxData &data)
     return;
   }
 
-  const int dd = (int)(CommonInterface::Basic().time -
-      common_stats.TimeUnderStartMaxHeight);
-
-  TCHAR value[32];
-  TCHAR comment[32];
-  FormatTimeTwoLines(value, comment, dd);
-
-  data.SetValue(value);
+  data.SetValueFromTimeTwoLines((int)(CommonInterface::Basic().time -
+                                      common_stats.TimeUnderStartMaxHeight));
   data.SetComment(_("Time Below"));
 }
 
@@ -748,13 +728,7 @@ UpdateInfoBoxNextETEVMG(InfoBoxData &data)
     return;
   }
 
-  TCHAR value[32];
-  TCHAR comment[32];
-  const int dd = (int)(d/v);
-  FormatTimeTwoLines(value, comment, dd);
-
-  data.SetValue(value);
-  data.SetComment(comment);
+  data.SetValueFromTimeTwoLines((int)(d/v));
 }
 
 void
@@ -809,13 +783,7 @@ UpdateInfoBoxFinalETEVMG(InfoBoxData &data)
     return;
   }
 
-  TCHAR value[32];
-  TCHAR comment[32];
-  const int dd = (int)(d/v);
-  FormatTimeTwoLines(value, comment, dd);
-
-  data.SetValue(value);
-  data.SetComment(comment);
+  data.SetValueFromTimeTwoLines((int)(d/v));
 }
 
 void
