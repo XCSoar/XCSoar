@@ -60,6 +60,7 @@ Look::InitialiseConfigured(const UISettings &settings,
   vario_bar.Initialise(map_bold_font);
   map.Initialise(settings.map, map_font, map_bold_font);
   icon.Initialise();
+  circling_percent.Initialise();
 }
 
 void

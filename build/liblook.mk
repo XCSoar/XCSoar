@@ -33,7 +33,8 @@ LOOK_SOURCES := \
 	$(SRC)/Look/VarioBarLook.cpp \
 	$(SRC)/Look/IconLook.cpp \
 	$(SRC)/Look/ThermalAssistantLook.cpp \
-	$(SRC)/Look/WaveLook.cpp
+	$(SRC)/Look/WaveLook.cpp \
+	$(SRC)/Look/ClimbPercentLook.cpp
 
 LOOK_CPPFLAGS_INTERNAL = $(SCREEN_CPPFLAGS)
 
