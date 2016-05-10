@@ -102,13 +102,13 @@ UpdateInfoBoxThermalLastTime(InfoBoxData &data)
 void
 UpdateInfoBoxThermalAllAvg(InfoBoxData &data)
 {
-  if (CommonInterface::Calculated().time_climb <= 0) {
+  if (CommonInterface::Calculated().time_circling <= 0) {
     data.SetInvalid();
     return;
   }
 
   SetVSpeed(data, CommonInterface::Calculated().total_height_gain /
-            CommonInterface::Calculated().time_climb);
+            CommonInterface::Calculated().time_circling);
 }
 
 void

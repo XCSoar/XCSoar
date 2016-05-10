@@ -32,7 +32,7 @@ CirclingInfo::Clear()
   turn_rate = turn_rate_heading = Angle::Zero();
 
   time_cruise = 0;
-  time_climb = 0;
+  time_circling = 0;
   time_climb_noncircling = 0;
   total_height_gain = 0;
 

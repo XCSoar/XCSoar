@@ -108,7 +108,7 @@ struct CirclingInfo
   /** Time spent in cruise mode */
   double time_cruise;
   /** Time spent in circling mode */
-  double time_climb;
+  double time_circling;
   /** Time spent in non-circling climb */
   double time_climb_noncircling;
 
