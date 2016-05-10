@@ -142,6 +142,8 @@ TestHHMM()
   ok1(StringIsEqual(buffer, _T("-19:47")));
 }
 
+#include <stdio.h>
+
 static void
 TestTwoLines()
 {
@@ -184,11 +186,11 @@ TestTwoLines()
   ok1(StringIsEqual(buffer2, _T("28")));
 
   FormatTimeTwoLines(buffer, buffer2, -(60 * 59));
-  ok1(StringIsEqual(buffer, _T("59'00")));
+  ok1(StringIsEqual(buffer, _T("-59'00")));
   ok1(StringIsEqual(buffer2, _T("")));
 
   FormatTimeTwoLines(buffer, buffer2, -(60 * 60 * 19 + 60 * 47 + 28));
-  ok1(StringIsEqual(buffer, _T("19:47")));
+  ok1(StringIsEqual(buffer, _T("-19:47")));
   ok1(StringIsEqual(buffer2, _T("28")));
 }
 

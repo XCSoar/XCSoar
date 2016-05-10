@@ -92,19 +92,27 @@ FormatSignedTimeHHMM(TCHAR* buffer, int _time)
 void
 FormatTimeTwoLines(TCHAR *buffer1, TCHAR *buffer2, int _time)
 {
-  if ((unsigned)abs(_time) >= 24u * 3600u) {
+  if (_time >= 24 * 3600) {
     _tcscpy(buffer1, _T(">24h"));
     buffer2[0] = '\0';
     return;
   }
+  if (_time <= -24 * 3600) {
+    _tcscpy(buffer1, _T("<-24h"));
+    buffer2[0] = '\0';
+    return;
+  }
+  if (_time < 0) {
+    *buffer1++ = _T('-');
+    _time = -_time;
+  }
 
-  const BrokenTime time = BrokenTime::FromSecondOfDay(abs(_time));
+  const BrokenTime time = BrokenTime::FromSecondOfDay(_time);
 
   if (time.hour > 0) { // hh:mm, ss
     // Set Value
     _stprintf(buffer1, _T("%02u:%02u"), time.hour, time.minute);
     _stprintf(buffer2, _T("%02u"), time.second);
-
   } else { // mm:ss
     _stprintf(buffer1, _T("%02u'%02u"), time.minute, time.second);
     buffer2[0] = '\0';
