@@ -476,12 +476,8 @@ UpdateInfoBoxTaskSpeed(InfoBoxData &data)
     return;
   }
 
-  // Set Value
-  data.SetValue(_T("%2.0f"),
-                    Units::ToUserTaskSpeed(task_stats.total.travelled.GetSpeed()));
-
-  // Set Unit
-  data.SetValueUnit(Units::current.task_speed_unit);
+  // Set Value and unit
+  data.SetValueFromTaskSpeed(task_stats.total.travelled.GetSpeed());
 }
 
 void
@@ -494,12 +490,8 @@ UpdateInfoBoxTaskSpeedAchieved(InfoBoxData &data)
     return;
   }
 
-  // Set Value
-  data.SetValue(_T("%2.0f"),
-                    Units::ToUserTaskSpeed(task_stats.total.remaining_effective.GetSpeed()));
-
-  // Set Unit
-  data.SetValueUnit(Units::current.task_speed_unit);
+  // Set Value and unit
+  data.SetValueFromTaskSpeed(task_stats.total.remaining_effective.GetSpeed());
 }
 
 void
@@ -512,8 +504,7 @@ UpdateInfoBoxTaskSpeedInstant(InfoBoxData &data)
   }
 
   // Set Value
-  data.SetValue(_T("%2.0f"),
-                    Units::ToUserTaskSpeed(task_stats.inst_speed_fast));
+  data.SetValueFromTaskSpeed(task_stats.inst_speed_fast);
 
   // Set Unit
   data.SetValueUnit(Units::current.task_speed_unit);
@@ -529,8 +520,8 @@ UpdateInfoBoxTaskSpeedHour(InfoBoxData &data)
     return;
   }
 
-  data.SetValue(_T("%2.0f"), Units::ToUserTaskSpeed(window.speed));
-  data.SetValueUnit(Units::current.task_speed_unit);
+  // Set Value and unit
+  data.SetValueFromTaskSpeed(window.speed);
 }
 
 void
@@ -670,12 +661,8 @@ UpdateInfoBoxTaskAASpeed(InfoBoxData &data)
     return;
   }
 
-  // Set Value
-  data.SetValue(_T("%2.0f"),
-                    Units::ToUserTaskSpeed(common_stats.aat_speed_target));
-
-  // Set Unit
-  data.SetValueUnit(Units::current.task_speed_unit);
+  // Set Value and units
+  data.SetValueFromTaskSpeed(common_stats.aat_speed_target);
 }
 
 void
@@ -690,12 +677,8 @@ UpdateInfoBoxTaskAASpeedMax(InfoBoxData &data)
     return;
   }
 
-  // Set Value
-  data.SetValue(_T("%2.0f"),
-                    Units::ToUserTaskSpeed(common_stats.aat_speed_max));
-
-  // Set Unit
-  data.SetValueUnit(Units::current.task_speed_unit);
+  // Set Value and units
+  data.SetValueFromTaskSpeed(common_stats.aat_speed_max);
 }
 
 void
@@ -711,12 +694,8 @@ UpdateInfoBoxTaskAASpeedMin(InfoBoxData &data)
     return;
   }
 
-  // Set Value
-  data.SetValue(_T("%2.0f"),
-                    Units::ToUserTaskSpeed(common_stats.aat_speed_min));
-
-  // Set Unit
-  data.SetValueUnit(Units::current.task_speed_unit);
+  // Set Value and units
+  data.SetValueFromTaskSpeed(common_stats.aat_speed_min);
 }
 
 void
