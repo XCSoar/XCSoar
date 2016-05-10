@@ -351,15 +351,6 @@ public:
     return fixed(internal(), m_nVal << 2);
   }
 
-  gcc_pure
-  fixed trunc() const {
-    value_t x = m_nVal;
-    if (x < 0)
-      x += resolution - 1;
-    return fixed(fixed::internal(),
-                 x & ((int64_t)-1 << resolution_shift));
-  }
-
   constexpr fixed floor() const {
     return fixed(fixed::internal(),
                  m_nVal & ~(resolution - 1));
@@ -852,11 +843,6 @@ gcc_pure
 inline fixed log(const fixed x)
 {
   return x.log();
-}
-
-inline fixed trunc(fixed x)
-{
-  return x.trunc();
 }
 
 constexpr
