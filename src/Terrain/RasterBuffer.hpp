@@ -30,6 +30,8 @@ Copyright_License {
 
 #include <cstddef>
 
+#include <stdint.h>
+
 class RasterBuffer : private NonCopyable {
 public:
   /** invalid value for terrain */
