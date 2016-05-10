@@ -24,6 +24,7 @@ Copyright_License {
 #include "Data.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "Formatter/GlideRatioFormatter.hpp"
+#include "Formatter/TimeFormatter.hpp"
 #include "Math/Angle.hpp"
 
 void
@@ -64,4 +65,10 @@ void
 InfoBoxData::SetCommentFromBearingDifference(Angle delta)
 {
   FormatAngleDelta(comment.buffer(), comment.capacity(), delta);
+}
+
+void
+InfoBoxData::SetValueFromTimeTwoLines(int dd)
+{
+  FormatTimeTwoLines(value.buffer(), comment.buffer(), dd);
 }

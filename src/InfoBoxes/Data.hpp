@@ -166,6 +166,11 @@ struct InfoBoxData {
    */
   void SetCommentFromVerticalSpeed(double value, bool include_sign=true);
 
+  /**
+   * Set the InfoBox value to time HH:MM and SS
+   */
+  void SetValueFromTimeTwoLines(int dd);
+
   template<typename... Args>
   void FormatTitle(const TCHAR *fmt, Args&&... args) {
     title.Format(fmt, args...);
