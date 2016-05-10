@@ -49,6 +49,7 @@ GlideComputerBlackboard::StartTask()
   calculated_info.time_circling = 0;
   calculated_info.time_cruise = 0;
   calculated_info.time_climb_noncircling = 0;
+  calculated_info.time_climb_circling = 0;
   calculated_info.total_height_gain = 0;
 
   // reset max height gain stuff on task start

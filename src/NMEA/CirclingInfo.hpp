@@ -100,6 +100,12 @@ struct CirclingInfo
   double circling_percentage;
 
   /**
+   * Time spent climbing and circling, ratio in percent.  Negative value means
+   * "unknown".
+   */
+  double circling_climb_percentage;
+
+  /**
    * Time spent climbing and not circling, ratio in percent.  Negative value means
    * "unknown".
    */
@@ -109,6 +115,8 @@ struct CirclingInfo
   double time_cruise;
   /** Time spent in circling mode */
   double time_circling;
+  /** Time spent in circling mode and climbing */
+  double time_climb_circling;
   /** Time spent in non-circling climb */
   double time_climb_noncircling;
 

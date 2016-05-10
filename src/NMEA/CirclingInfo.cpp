@@ -34,6 +34,7 @@ CirclingInfo::Clear()
   time_cruise = 0;
   time_circling = 0;
   time_climb_noncircling = 0;
+  time_climb_circling = 0;
   total_height_gain = 0;
 
   cruise_start_time = -1;
@@ -46,4 +47,5 @@ CirclingInfo::Clear()
 
   circling_percentage = -1;
   noncircling_climb_percentage = -1;
+  circling_climb_percentage = -1;
 }

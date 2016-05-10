@@ -253,6 +253,10 @@ CirclingComputer::PercentCircling(const MoreData &basic,
 
     // Add the Vario signal to the total climb height
     circling_info.total_height_gain += basic.gps_vario * dt;
+
+    if (basic.gps_vario>= 0) {
+      circling_info.time_climb_circling += dt;
+    }
   } else {
     // Add time step to the cruise time
     // timeCruising += (Basic->Time-LastTime);
@@ -267,10 +271,12 @@ CirclingComputer::PercentCircling(const MoreData &basic,
   // Calculate the circling and non-circling percentages
   if (time_total > 0) {
     circling_info.circling_percentage = 100 * circling_info.time_circling / time_total;
+    circling_info.circling_climb_percentage = 100 * circling_info.time_climb_circling / time_total;
     circling_info.noncircling_climb_percentage = 100 * circling_info.time_climb_noncircling /
         time_total;
   } else {
     circling_info.circling_percentage = -1;
+    circling_info.circling_climb_percentage = -1;
     circling_info.noncircling_climb_percentage = -1;
   }
 }
