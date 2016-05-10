@@ -48,6 +48,7 @@ GlideComputerBlackboard::StartTask()
   // JMW reset time cruising/time circling stats on task start
   calculated_info.time_climb = 0;
   calculated_info.time_cruise = 0;
+  calculated_info.time_climb_noncircling = 0;
   calculated_info.total_height_gain = 0;
 
   // reset max height gain stuff on task start

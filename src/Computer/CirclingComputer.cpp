@@ -257,14 +257,22 @@ CirclingComputer::PercentCircling(const MoreData &basic,
     // Add time step to the cruise time
     // timeCruising += (Basic->Time-LastTime);
     circling_info.time_cruise += dt;
+
+    if (basic.gps_vario>= 0) {
+      circling_info.time_climb_noncircling += dt;
+    }
   }
 
-  // Calculate the circling percentage
-  if (circling_info.time_cruise + circling_info.time_climb > 1)
-    circling_info.circling_percentage = 100 * circling_info.time_climb /
-        (circling_info.time_cruise + circling_info.time_climb);
-  else
+  const auto time_total = (circling_info.time_cruise + circling_info.time_climb);
+  // Calculate the circling and non-circling percentages
+  if (time_total > 0) {
+    circling_info.circling_percentage = 100 * circling_info.time_climb / time_total;
+    circling_info.noncircling_climb_percentage = 100 * circling_info.time_climb_noncircling /
+        time_total;
+  } else {
     circling_info.circling_percentage = -1;
+    circling_info.noncircling_climb_percentage = -1;
+  }
 }
 
 void
