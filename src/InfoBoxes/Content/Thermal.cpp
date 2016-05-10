@@ -147,8 +147,7 @@ UpdateInfoBoxThermalRatio(InfoBoxData &data)
   if (CommonInterface::Calculated().circling_percentage < 0)
     data.SetInvalid();
   else
-    data.SetValue(_T("%2.0f%%"),
-                  CommonInterface::Calculated().circling_percentage);
+    data.SetValueFromPercent(CommonInterface::Calculated().circling_percentage);
 }
 
 void

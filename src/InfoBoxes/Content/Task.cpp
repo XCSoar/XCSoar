@@ -795,7 +795,7 @@ UpdateInfoBoxCruiseEfficiency(InfoBoxData &data)
     return;
   }
 
-  data.UnsafeFormatValue(_T("%d"), (int) (task_stats.cruise_efficiency * 100));
+  data.SetValueFromPercent(task_stats.cruise_efficiency*100);
   data.SetCommentFromVerticalSpeed(task_stats.effective_mc, false);
 }
 

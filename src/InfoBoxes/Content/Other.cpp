@@ -81,9 +81,9 @@ UpdateInfoBoxBattery(InfoBoxData &data)
       if (Power::Battery::RemainingPercentValid){
 #endif
         if (!DisplaySupplyVoltageAsValue)
-          data.UnsafeFormatValue(_T("%d%%"), Power::Battery::RemainingPercent);
+          data.SetValueFromPercent(Power::Battery::RemainingPercent);
         else
-          data.UnsafeFormatComment(_T("%d%%"), Power::Battery::RemainingPercent);
+          data.SetCommentFromPercent(Power::Battery::RemainingPercent);
 #ifndef ANDROID
       }
       else
@@ -108,7 +108,7 @@ UpdateInfoBoxBattery(InfoBoxData &data)
     data.SetValue(_T("%2.1fV"), CommonInterface::Basic().voltage);
     return;
   } else if (CommonInterface::Basic().battery_level_available) {
-    data.SetValue(_T("%.0f%%"), CommonInterface::Basic().battery_level);
+    data.SetValueFromPercent(CommonInterface::Basic().battery_level);
     return;
   }
 
@@ -134,7 +134,7 @@ UpdateInfoBoxCPULoad(InfoBoxData &data)
 {
   unsigned percent_load = SystemLoadCPU();
   if (percent_load <= 100) {
-    data.UnsafeFormatValue(_T("%d%%"), percent_load);
+    data.SetValueFromPercent(percent_load);
   } else {
     data.SetInvalid();
   }
