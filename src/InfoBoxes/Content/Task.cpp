@@ -400,7 +400,7 @@ UpdateInfoBoxFinalETE(InfoBoxData &data)
 
   assert(task_stats.total.time_remaining_now >= 0);
 
-  data.SetValueFromTimeTwoLines(abs((int)task_stats.total.time_remaining_now));
+  data.SetValueFromTimeTwoLines((int)task_stats.total.time_remaining_now);
 }
 
 void
@@ -549,16 +549,8 @@ UpdateInfoBoxTaskAATime(InfoBoxData &data)
     return;
   }
 
-  TCHAR value[32];
-  TCHAR comment[32];
-  FormatTimeTwoLines(value, comment,
-                         abs((int) common_stats.aat_time_remaining));
-
-  data.UnsafeFormatValue(common_stats.aat_time_remaining < 0 ?
-                            _T("-%s") : _T("%s"), value);
+  data.SetValueFromTimeTwoLines(common_stats.aat_time_remaining);
   data.SetValueColor(common_stats.aat_time_remaining < 0 ? 1 : 0);
-
-  data.SetComment(comment);
 }
 
 void
@@ -579,13 +571,7 @@ UpdateInfoBoxTaskAATimeDelta(InfoBoxData &data)
   auto diff = task_stats.total.time_remaining_start -
     common_stats.aat_time_remaining;
 
-  TCHAR value[32];
-  TCHAR comment[32];
-  const int dd = abs((int)diff);
-  FormatTimeTwoLines(value, comment, dd);
-  data.UnsafeFormatValue(diff < 0 ? _T("-%s") : _T("%s"), value);
-  data.SetComment(comment);
-
+  data.SetValueFromTimeTwoLines(diff);
   // Set Color (red/blue/black)
   data.SetValueColor(diff < 0 ? 1 :
                    task_stats.total.time_remaining_start >
