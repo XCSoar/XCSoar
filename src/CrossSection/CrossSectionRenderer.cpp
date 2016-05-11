@@ -142,7 +142,7 @@ CrossSectionRenderer::PaintGlide(ChartRenderer &chart) const
   if (result.GetArrivalAltitude()> 0.) {
     chart.DrawLine(0, altitude, result.vector.distance,
                    result.GetArrivalAltitude(),
-                   ChartLook::STYLE_BLUEDASH);
+                   ChartLook::STYLE_BLUE);
   } else {
     // draw glide line to zero
     const auto dh = altitude - result.GetArrivalAltitude();
@@ -152,7 +152,7 @@ CrossSectionRenderer::PaintGlide(ChartRenderer &chart) const
 
       chart.DrawLine(0, altitude,
                      result.vector.distance * p, 0,
-                     ChartLook::STYLE_BLUEDASH);
+                     ChartLook::STYLE_BLUE);
     }
   }
 }
