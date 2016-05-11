@@ -51,6 +51,7 @@ enum class Unit: uint8_t {
   KG,
   LB,
   PERCENT,
+  GRADIENT,
 
   /**
    * The sentinel: the number of units in this enum.

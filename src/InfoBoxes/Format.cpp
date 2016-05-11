@@ -51,6 +51,7 @@ void
 InfoBoxData::SetValueFromGlideRatio(double gr)
 {
   FormatGlideRatio(value.buffer(), value.capacity(), gr);
+  SetValueUnit(Unit::GRADIENT);
 }
 
 void
