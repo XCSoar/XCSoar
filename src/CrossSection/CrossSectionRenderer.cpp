@@ -72,9 +72,6 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
                        look.sky_color, look.background_color,
                        look.background_color);
 
-  canvas.SetTextColor(inverse? COLOR_WHITE: look.text_color);
-  canvas.Select(*look.grid_font);
-
   const auto nav_altitude = gps_info.NavAltitudeAvailable()
     ? gps_info.nav_altitude
     : 0.;
@@ -100,6 +97,10 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
   PaintWorking(chart);
   PaintGlide(chart);
   PaintAircraft(canvas, chart, rc);
+
+  canvas.SetTextColor(inverse? COLOR_WHITE: look.text_color);
+  canvas.Select(*look.grid_font);
+
   PaintGrid(canvas, chart);
 }
 
