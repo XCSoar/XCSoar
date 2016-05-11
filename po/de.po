@@ -1615,7 +1615,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:532
 #, no-c-format
-msgid "Flight Duration"
+msgid "Flight duration"
 msgstr "Zeit - Dauer des Fluges"
 
 #: src/InfoBoxes/Content/Factory.cpp:533

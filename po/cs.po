@@ -1586,7 +1586,7 @@ msgstr "Čas v procentech strávený ve stoupání. Při začátku úlohy se vyn
 
 #: src/InfoBoxes/Content/Factory.cpp:532
 #, no-c-format
-msgid "Flight Duration"
+msgid "Flight duration"
 msgstr "Doba letu"
 
 #: src/InfoBoxes/Content/Factory.cpp:533

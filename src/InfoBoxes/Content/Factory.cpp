@@ -428,7 +428,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_TimeSinceTakeoff
   {
-    N_("Flight Duration"),
+    N_("Flight duration"),
     N_("Flt Duration"),
     N_("Time elapsed since takeoff was detected."),
     UpdateInfoBoxTimeFlight,

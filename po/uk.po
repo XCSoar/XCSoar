@@ -1613,7 +1613,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:532
 #, no-c-format
-msgid "Flight Duration"
+msgid "Flight duration"
 msgstr "Тривалість польоту"
 
 #: src/InfoBoxes/Content/Factory.cpp:533
