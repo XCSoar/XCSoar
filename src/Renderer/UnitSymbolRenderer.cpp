@@ -56,8 +56,8 @@ static constexpr UnitSymbolStrings symbol_strings[] = {
   { nullptr, _T("mb"), false },
   { _T("mm"), _T("Hg"), false },
   { _T("in"), _T("Hg"), false },
-  { _T("kg"), _T("m²"), false },
-  { _T("lb"), _T("ft²"), false },
+  { _T("kg"), _T("m²"), true },
+  { _T("lb"), _T("ft²"), true },
   { nullptr, _T("kg"), false },
   { nullptr, _T("lb"), false },
 };
