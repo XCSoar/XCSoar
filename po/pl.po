@@ -2952,7 +2952,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1244
 #, no-c-format
-msgid "Circle Diameter"
+msgid "Circle diameter"
 msgstr "KOM Śred.: śednica krążenia"
 
 #: src/InfoBoxes/Content/Factory.cpp:1245
