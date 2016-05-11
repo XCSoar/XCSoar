@@ -76,7 +76,8 @@ InfoBoxData::SetValueFromTimeTwoLines(int dd)
 void
 InfoBoxData::SetValueFromPercent(double dd)
 {
-  UnsafeFormatValue(_T("%d%%"), (int)(dd));
+  UnsafeFormatValue(_T("%d"), (int)(dd));
+  SetValueUnit(Unit::PERCENT);
 }
 
 void
