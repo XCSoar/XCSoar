@@ -969,7 +969,7 @@ msgstr "טיפוס ממוצע ב30 שניות"
 
 #: src/InfoBoxes/Content/Factory.cpp:195
 #, no-c-format
-msgid "Next Bearing"
+msgid "Next bearing"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:196

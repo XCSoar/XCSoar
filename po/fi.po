@@ -980,7 +980,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:195
 #, no-c-format
-msgid "Next Bearing"
+msgid "Next bearing"
 msgstr "Suunta seuraavaan"
 
 #: src/InfoBoxes/Content/Factory.cpp:196

@@ -1007,7 +1007,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:195
 #, no-c-format
-msgid "Next Bearing"
+msgid "Next bearing"
 msgstr "다음방위각"
 
 #: src/InfoBoxes/Content/Factory.cpp:196

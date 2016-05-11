@@ -157,7 +157,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Bearing
   {
-    N_("Next Bearing"),
+    N_("Next bearing"),
     N_("Bearing"),
     N_("True bearing of the next waypoint.  For AAT tasks, this is the true bearing to the target within the AAT sector."),
     UpdateInfoBoxBearing,
