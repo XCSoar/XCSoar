@@ -64,8 +64,7 @@ UpdateInfoBoxBattery(InfoBoxData &data)
         data.SetComment(_("AC ON"));
       else{
         DisplaySupplyVoltageAsValue = true;
-        data.SetValue(_T("%2.1fV"),
-                          CommonInterface::Basic().voltage);
+        data.SetValueFromVoltage(CommonInterface::Basic().voltage);
       }
       break;
     case Power::External::UNKNOWN:
@@ -105,7 +104,7 @@ UpdateInfoBoxBattery(InfoBoxData &data)
 #endif
 
   if (CommonInterface::Basic().voltage_available) {
-    data.SetValue(_T("%2.1fV"), CommonInterface::Basic().voltage);
+    data.SetValueFromVoltage(CommonInterface::Basic().voltage);
     return;
   } else if (CommonInterface::Basic().battery_level_available) {
     data.SetValueFromPercent(CommonInterface::Basic().battery_level);

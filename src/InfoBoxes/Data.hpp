@@ -136,6 +136,11 @@ struct InfoBoxData {
   void SetValueFromPercent(double value);
 
   /**
+   * Set the InfoBox value to the specified voltage value.
+   */
+  void SetValueFromVoltage(double value);
+
+  /**
    * Sets the InfoBox comment to the given Value
    * @param Value New value of the InfoBox comment
    */

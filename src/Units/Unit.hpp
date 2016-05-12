@@ -52,7 +52,7 @@ enum class Unit: uint8_t {
   LB,
   PERCENT,
   GRADIENT,
-
+  VOLT,
   /**
    * The sentinel: the number of units in this enum.
    */

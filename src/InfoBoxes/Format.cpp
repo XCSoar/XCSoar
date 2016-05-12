@@ -86,3 +86,10 @@ InfoBoxData::SetCommentFromPercent(double dd)
 {
   UnsafeFormatComment(_T("%d %%"), (int)(dd));
 }
+
+void
+InfoBoxData::SetValueFromVoltage(double dd)
+{
+  UnsafeFormatValue(_T("%2.1f"), dd);
+  SetValueUnit(Unit::VOLT);
+}
