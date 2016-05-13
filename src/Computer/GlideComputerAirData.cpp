@@ -34,6 +34,7 @@ Copyright_License {
 
 static constexpr double THERMAL_TIME_MIN = 45;
 static constexpr double THERMAL_SHEAR_RATIO_MAX = 10;
+static constexpr double DEFAULT_TAKEOFF_SPEED = 10;
 
 GlideComputerAirData::GlideComputerAirData(const Waypoints &_way_points)
   :waypoints(_way_points),
@@ -280,7 +281,7 @@ GlideComputerAirData::FlightState(const NMEAInfo &basic,
     ? glide_polar.GetVTakeoff()
     /* if there's no valid polar, assume 10 m/s (36 km/h); that's an
        arbitrary value, but better than nothing */
-    : 10;
+    : DEFAULT_TAKEOFF_SPEED;
 
   flying_computer.Compute(v_takeoff, basic,
                           calculated, flying);
