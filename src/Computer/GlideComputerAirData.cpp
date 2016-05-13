@@ -33,6 +33,7 @@ Copyright_License {
 #include "NMEA/MoreData.hpp"
 
 static constexpr double THERMAL_TIME_MIN = 45;
+static constexpr double THERMAL_SHEAR_RATIO_MAX = 10;
 
 GlideComputerAirData::GlideComputerAirData(const Waypoints &_way_points)
   :waypoints(_way_points),
@@ -315,7 +316,7 @@ GlideComputerAirData::ThermalSources(const MoreData &basic,
     return;
 
   if (calculated.wind_available &&
-      calculated.wind.norm / calculated.last_thermal.lift_rate > 10.0) {
+      calculated.wind.norm / calculated.last_thermal.lift_rate > THERMAL_SHEAR_RATIO_MAX) {
     // thermal strength is so weak compared to wind that source estimate
     // is unlikely to be reliable, so don't calculate or remember it
     return;
