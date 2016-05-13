@@ -37,6 +37,7 @@ static constexpr double THERMAL_SHEAR_RATIO_MAX = 10;
 static constexpr double DEFAULT_TAKEOFF_SPEED = 10;
 static constexpr double CLIMB_RATE_G_MIN = 0.25;
 static constexpr double LOW_PASS_FILTER_VARIO_LD_ALPHA = 0.3;
+static constexpr double LOW_PASS_FILTER_THERMAL_AVERAGE_ALPHA = 0.3;
 
 GlideComputerAirData::GlideComputerAirData(const Waypoints &_way_points)
   :waypoints(_way_points),
@@ -379,7 +380,7 @@ GlideComputerAirData::LastThermalStats(const MoreData &basic,
   else
     calculated.last_thermal_average_smooth =
         LowPassFilter(calculated.last_thermal_average_smooth,
-                      calculated.last_thermal.lift_rate, 0.3);
+                      calculated.last_thermal.lift_rate, LOW_PASS_FILTER_THERMAL_AVERAGE_ALPHA);
 
   ThermalSources(basic, calculated, calculated.thermal_locator);
 }
