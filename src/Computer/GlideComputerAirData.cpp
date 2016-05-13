@@ -316,8 +316,7 @@ GlideComputerAirData::ThermalSources(const MoreData &basic,
 {
   if (!thermal_locator.estimate_valid ||
       !basic.NavAltitudeAvailable() ||
-      !calculated.last_thermal.IsDefined() ||
-      calculated.last_thermal.lift_rate < 0)
+      !calculated.last_thermal.IsDefined())
     return;
 
   if (calculated.wind_available &&
@@ -373,6 +372,7 @@ GlideComputerAirData::LastThermalStats(const MoreData &basic,
   calculated.last_thermal.duration = duration;
   calculated.last_thermal.start_altitude = calculated.climb_start_altitude_te + (basic.nav_altitude-basic.TE_altitude);
   calculated.last_thermal.CalculateLiftRate();
+  assert(calculated.last_thermal.lift_rate > 0);
 
   if (!was_defined)
     calculated.last_thermal_average_smooth =
