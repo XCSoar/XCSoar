@@ -35,6 +35,7 @@ Copyright_License {
 static constexpr double THERMAL_TIME_MIN = 45;
 static constexpr double THERMAL_SHEAR_RATIO_MAX = 10;
 static constexpr double DEFAULT_TAKEOFF_SPEED = 10;
+static constexpr double CLIMB_RATE_G_MIN = 0.25;
 
 GlideComputerAirData::GlideComputerAirData(const Waypoints &_way_points)
   :waypoints(_way_points),
@@ -164,7 +165,7 @@ GlideComputerAirData::AverageClimbRate(const NMEAInfo &basic,
       !calculated.circling &&
       (!basic.acceleration.available ||
        !basic.acceleration.real ||
-       fabs(basic.acceleration.g_load - 1) <= 0.25)) {
+       fabs(basic.acceleration.g_load - 1) <= CLIMB_RATE_G_MIN)) {
     // TODO: Check this is correct for TAS/IAS
     auto ias_to_tas = basic.indicated_airspeed / basic.true_airspeed;
     auto w_tas = basic.total_energy_vario * ias_to_tas;
