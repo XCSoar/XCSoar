@@ -36,6 +36,7 @@ static constexpr double THERMAL_TIME_MIN = 45;
 static constexpr double THERMAL_SHEAR_RATIO_MAX = 10;
 static constexpr double DEFAULT_TAKEOFF_SPEED = 10;
 static constexpr double CLIMB_RATE_G_MIN = 0.25;
+static constexpr double LOW_PASS_FILTER_VARIO_LD_ALPHA = 0.3;
 
 GlideComputerAirData::GlideComputerAirData(const Waypoints &_way_points)
   :waypoints(_way_points),
@@ -189,6 +190,7 @@ GlideComputerAirData::CurrentThermal(const MoreData &basic,
     current_thermal.Clear();
 }
 
+
 inline void
 GlideComputerAirData::GR(const MoreData &basic, const FlyingState &flying,
                          VarioInfo &vario_info)
@@ -198,7 +200,7 @@ GlideComputerAirData::GR(const MoreData &basic, const FlyingState &flying,
       flying.flying) {
     vario_info.ld_vario =
       UpdateGR(vario_info.ld_vario, basic.indicated_airspeed,
-               -basic.total_energy_vario, 0.3);
+               -basic.total_energy_vario, LOW_PASS_FILTER_VARIO_LD_ALPHA);
   } else {
     vario_info.ld_vario = INVALID_GR;
   }
