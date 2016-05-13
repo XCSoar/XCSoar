@@ -296,6 +296,9 @@ public:
                    unsigned big_radius,
                    Angle start, Angle end);
 
+  void DrawArc(PixelPoint center, unsigned radius,
+               Angle start, Angle end);
+
   void DrawFocusRectangle(const PixelRect &rc) {
     DrawOutlineRectangle(rc.left, rc.top, rc.right, rc.bottom,
                          COLOR_DARK_GRAY);

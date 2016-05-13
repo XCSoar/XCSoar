@@ -98,6 +98,15 @@ Canvas::DrawKeyhole(PixelPoint center,
   ::KeyHole(*this, center, big_radius, start, end, small_radius);
 }
 
+void
+Canvas::DrawArc(PixelPoint center, unsigned radius,
+                Angle start, Angle end)
+{
+  assert(IsDefined());
+
+  ::Arc(*this, center, radius, start, end);
+}
+
 const PixelSize
 Canvas::CalcTextSize(const TCHAR *text, size_t length) const
 {

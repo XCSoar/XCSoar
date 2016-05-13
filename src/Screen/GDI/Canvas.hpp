@@ -383,6 +383,9 @@ public:
   void DrawKeyhole(PixelPoint center, unsigned small_radius,
                    unsigned big_radius, Angle start, Angle end);
 
+  void DrawArc(PixelPoint center, unsigned radius,
+               Angle start, Angle end);
+
   void DrawFocusRectangle(const PixelRect &_rc) {
     assert(IsDefined());
 

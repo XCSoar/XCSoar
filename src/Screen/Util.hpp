@@ -49,4 +49,8 @@ void
 RoundRect(Canvas &canvas, int left, int top,
           int right, int bottom, unsigned radius);
 
+bool
+Arc(Canvas &canvas, PixelPoint center, unsigned radius,
+    Angle start, Angle end);
+
 #endif

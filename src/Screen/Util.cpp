@@ -195,3 +195,26 @@ RoundRect(Canvas &canvas, int left, int top,
   if (npoly)
     canvas.DrawTriangleFan(pt, npoly);
 }
+
+bool
+Arc(Canvas &canvas, PixelPoint center, unsigned radius,
+    Angle start, Angle end)
+{
+  // dont draw if out of view
+  if (!IsCircleVisible(canvas, center, radius))
+    return false;
+
+  const int istart = NATIVE_TO_INT(start.Native());
+  const int iend = NATIVE_TO_INT(end.Native());
+
+  unsigned npoly = 0;
+  BulkPixelPoint pt[CIRCLE_SEGS+3];
+
+  segment_poly(pt, center, radius, istart, iend, npoly);
+
+  assert(npoly <= ARRAY_SIZE(pt));
+  if (npoly)
+    canvas.DrawPolyline(pt, npoly);
+
+  return true;
+}

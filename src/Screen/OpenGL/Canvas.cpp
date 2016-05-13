@@ -454,6 +454,13 @@ Canvas::DrawSegment(PixelPoint center, unsigned radius,
   ::Segment(*this, center, radius, start, end, horizon);
 }
 
+void
+Canvas::DrawArc(PixelPoint center, unsigned radius,
+                Angle start, Angle end)
+{
+  ::Arc(*this, center, radius, start, end);
+}
+
 gcc_const
 static unsigned
 AngleToDonutVertex(Angle angle)

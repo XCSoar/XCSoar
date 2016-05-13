@@ -326,6 +326,9 @@ public:
                    unsigned big_radius,
                    Angle start, Angle end);
 
+  void DrawArc(PixelPoint center, unsigned radius,
+               Angle start, Angle end);
+
   void DrawFocusRectangle(PixelRect rc);
 
   gcc_pure
