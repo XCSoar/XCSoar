@@ -130,6 +130,8 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
 
   if (calculated.circling)
     CurrentThermal(basic, calculated, calculated.current_thermal);
+  else
+    calculated.current_thermal = calculated.last_thermal;
 
   lift_database_computer.Compute(calculated.lift_database,
                                  calculated.trace_history.CirclingAverage,
