@@ -158,3 +158,20 @@ FlightStatistics::GetMaxWorkingHeight() const
   return std::max(altitude.GetMaxY(),
                   std::min(altitude_ceiling.GetMaxY(), altitude_ceiling.GetAverageY() + sqrt(altitude_ceiling.GetVarY())));
 }
+
+// percentile to look up to determine max/min value
+static constexpr double PERCENTILE_VARIO = 0.1;
+
+double
+FlightStatistics::GetVarioScalePositive() const
+{
+  return std::max(vario_circling_histogram.GetPercentile(1-PERCENTILE_VARIO),
+                  vario_cruise_histogram.GetPercentile(1-PERCENTILE_VARIO));
+}
+
+double
+FlightStatistics::GetVarioScaleNegative() const
+{
+  return std::min(vario_circling_histogram.GetPercentile(PERCENTILE_VARIO),
+                  vario_cruise_histogram.GetPercentile(PERCENTILE_VARIO));
+}
