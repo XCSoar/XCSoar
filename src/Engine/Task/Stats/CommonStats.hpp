@@ -99,6 +99,16 @@ public:
    * Reset the task stats
    */
   void ResetTask();
+
+  /**
+   * Automatic positive vario scale from history [m/s]
+   */
+  double vario_scale_positive;
+
+  /**
+   * Automatic negative vario scale from history [m/s]
+   */
+  double vario_scale_negative;
 };
 
 static_assert(std::is_trivial<CommonStats>::value, "type is not trivial");

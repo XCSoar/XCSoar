@@ -32,5 +32,8 @@ CommonStats::Reset()
   height_max_working = 0;
   height_fraction_working = 1;
 
+  vario_scale_positive = 0;
+  vario_scale_negative = 0;
+
   ResetTask();
 }
