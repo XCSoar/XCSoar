@@ -46,12 +46,16 @@ public:
   void RenderVario(Canvas& canvas,
                    const PixelRect rc,
                    const TraceVariableHistory& var,
-                   const bool centered = false,
-                   const double mc=0) const;
+                   const bool centered,
+                   const double mc,
+                   const double max,
+                   const double min) const;
 
 private:
   void ScaleChart(ChartRenderer &chart,
                    const TraceVariableHistory& var,
+                  const double max,
+                  const double min,
                    const bool centered) const;
 
   void RenderAxis(ChartRenderer &chart,
