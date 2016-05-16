@@ -171,6 +171,7 @@ private:
   void CalculateOwnTeamCode();
 
   void CalculateWorkingBand();
+  void CalculateVarioScale();
 };
 
 #endif

@@ -157,6 +157,8 @@ GlideComputer::ProcessGPS(bool force)
       calculated.trace_history.clear();
   }
 
+  CalculateVarioScale();
+
   // Update the ConditionMonitors
   ConditionMonitorsUpdate(Basic(), Calculated(), settings);
 
@@ -375,4 +377,12 @@ GlideComputer::CalculateWorkingBand()
         calculated.CalculateWorkingFraction(basic.nav_altitude,
                                             settings.task.safety_height_arrival);
   }
+}
+
+void
+GlideComputer::CalculateVarioScale()
+{
+  DerivedInfo &calculated = SetCalculated();
+  calculated.common_stats.vario_scale_positive = stats_computer.GetFlightStats().GetVarioScalePositive();
+  calculated.common_stats.vario_scale_negative = stats_computer.GetFlightStats().GetVarioScaleNegative();
 }
