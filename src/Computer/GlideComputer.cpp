@@ -383,6 +383,11 @@ void
 GlideComputer::CalculateVarioScale()
 {
   DerivedInfo &calculated = SetCalculated();
-  calculated.common_stats.vario_scale_positive = stats_computer.GetFlightStats().GetVarioScalePositive();
-  calculated.common_stats.vario_scale_negative = stats_computer.GetFlightStats().GetVarioScaleNegative();
+  const GlidePolar &glide_polar = GetComputerSettings().polar.glide_polar_task;
+  calculated.common_stats.vario_scale_positive =
+      std::max(stats_computer.GetFlightStats().GetVarioScalePositive(),
+               glide_polar.GetMC());
+  calculated.common_stats.vario_scale_negative =
+      std::min(stats_computer.GetFlightStats().GetVarioScaleNegative(),
+               -glide_polar.GetSBestLD());
 }
