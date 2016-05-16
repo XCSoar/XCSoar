@@ -92,11 +92,7 @@ InfoBoxContentSpark::SetVSpeedComment(InfoBoxData &data,
   if (var.empty())
     return;
 
-  TCHAR sTmp[32];
-  FormatUserVerticalSpeed(var.last(), sTmp,
-                          ARRAY_SIZE(sTmp));
-  data.SetComment(sTmp);
-
+  data.SetCommentFromVerticalSpeed(var.last());
   data.SetCustom();
 }
 
