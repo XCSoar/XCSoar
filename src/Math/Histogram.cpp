@@ -84,3 +84,22 @@ void Histogram::Clear()
   x_min = 0;
   x_max = 0;
 }
+
+double Histogram::GetPercentile(const double p) const
+{
+  assert(p>= 0);
+  assert(p<= 1);
+
+  const double np = n_pts*p;
+  double acc_n = 0;
+  for (unsigned i=0; i+1< sum_n; ++i) {
+    if (slots[i].y > np - acc_n) {
+      const double residual = (np- acc_n)/slots[i].y;
+      return slots[i+1].x * (residual) + slots[i].x* (1-residual)-0.5/m;
+    }
+    acc_n += slots[i].y;
+  }
+
+  // return mid point
+  return b+ (sum_n-1)/(2*m);
+}

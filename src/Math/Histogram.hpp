@@ -60,6 +60,12 @@ public:
   unsigned GetAccumulator() const {
     return n_pts;
   }
+
+  /**
+   * Return the x value associated with the cumulative percentile value,
+   * counted from lowest up.
+   */
+  double GetPercentile(const double p) const;
 };
 
 static_assert(std::is_trivial<Histogram>::value, "type is not trivial");
