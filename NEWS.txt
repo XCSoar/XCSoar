@@ -6,6 +6,8 @@ Version 6.8.4 - not yet released
     OpenAir files (#3732)
 * devices
   - CAI302: fix "airspace" marker in waypoint uploader (#3750)
+* calculations
+  - improve landing detection at high wind speeds (#3748)
 * logger
   - fix crash in NMEA logger
 * user interface
