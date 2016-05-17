@@ -130,7 +130,7 @@ BluetoothHelper::list(JNIEnv *env)
 bool
 BluetoothHelper::HasLe(JNIEnv *env)
 {
-  return env->GetStaticBooleanField(cls, hasLe_field);
+  return cls.IsDefined() && env->GetStaticBooleanField(cls, hasLe_field);
 }
 
 jobject
