@@ -88,6 +88,8 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
   bool inrange = true;
   auto v_dolphin_last = vmin;
   auto w_dolphin_last = MACCREADY;
+  double v_dolphin_last_l = 0;
+  double w_dolphin_last_l = 0;
   do {
     w += s_min*0.05;
     auto v_dolphin = glide_polar.SpeedToFly(-w, 0);
@@ -98,6 +100,10 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
                      ChartLook::STYLE_REDTHICKDASH);
       v_dolphin_last = v_dolphin;
       w_dolphin_last = w_dolphin;
+      if ((w_dolphin < 0.8*s_min) && (w_dolphin_last_l >= 0)) {
+        v_dolphin_last_l = v_dolphin;
+        w_dolphin_last_l = w_dolphin;
+      }
     }
   } while (inrange);
 
@@ -139,7 +145,7 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
   chart.DrawLabel(_T("Polar"), vv, -glide_polar.SinkRate(vv));
   vv = 0.8*vmax+0.2*vmin;
   chart.DrawLabel(_T("Best glide"), vv, MACCREADY + slope * vv);
-  chart.DrawLabel(_T("Dolphin"), v_dolphin_last, w_dolphin_last);
+  chart.DrawLabel(_T("Dolphin"), v_dolphin_last_l, w_dolphin_last_l);
 
   chart.DrawXLabel(_T("V"), Units::GetSpeedName());
   chart.DrawYLabel(_T("w"), Units::GetVerticalSpeedName());
