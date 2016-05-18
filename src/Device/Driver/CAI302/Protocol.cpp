@@ -463,7 +463,7 @@ CAI302::DownloadNavpoint(Port &port, const GeoPoint &location,
   unsigned attr = turnpoint | (airfield << 1) | (markpoint << 2) |
     (landing_point << 3) | (start_point << 4) | (finish_point << 5) |
     (home_point << 6) | (thermal_point << 7) | (waypoint << 8) |
-    (airfield << 9);
+    (airspace << 9);
 
   if (remark == nullptr)
     remark = "";

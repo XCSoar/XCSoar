@@ -171,7 +171,13 @@ static bool
 CheckTakeOffSpeed(double takeoff_speed, const NMEAInfo &basic)
 {
   const auto speed = basic.airspeed_available
-    ? std::max(basic.true_airspeed, basic.ground_speed)
+    ? (basic.airspeed_real || basic.ground_speed >= takeoff_speed / 4
+       ? std::max(basic.true_airspeed, basic.ground_speed)
+       /* at low ground speeds and an (unreal) airspeed vector derived
+          from the wind vector, take only half of the wind vector into
+          account, to reduce the risk of false negative landing
+          detections due to bogus wind vectors */
+       : (basic.true_airspeed + basic.ground_speed) / 2)
     : basic.ground_speed;
 
   // Speed too high for being on the ground

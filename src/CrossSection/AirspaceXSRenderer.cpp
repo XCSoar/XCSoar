@@ -28,6 +28,7 @@
 #include "Look/AirspaceLook.hpp"
 #include "Airspace/AirspaceIntersectionVisitor.hpp"
 #include "Airspace/AbstractAirspace.hpp"
+#include "Airspace/AirspaceVisibility.hpp"
 #include "Renderer/AirspacePreviewRenderer.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Navigation/Aircraft.hpp"
@@ -145,6 +146,9 @@ AirspaceIntersectionVisitorSlice::Render(const AbstractAirspace &as) const
 
   // No intersections for this airspace
   if (intersections.empty())
+    return;
+
+  if (!IsAirspaceTypeVisible(as, settings))
     return;
 
   PixelRect rcd;

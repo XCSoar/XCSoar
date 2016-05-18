@@ -30,7 +30,6 @@ Copyright_License {
 #include "Terrain/Loader.hpp"
 #include "OS/Args.hpp"
 #include "OS/ConvertPathName.hpp"
-#include "Compatibility/path.h"
 #include "Operation/Operation.hpp"
 
 #include <zzip/zzip.h>

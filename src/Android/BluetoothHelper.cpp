@@ -129,12 +129,14 @@ BluetoothHelper::list(JNIEnv *env)
 bool
 BluetoothHelper::HasLe(JNIEnv *env)
 {
-  return env->GetStaticBooleanField(cls, hasLe_field);
+  return cls.IsDefined() && env->GetStaticBooleanField(cls, hasLe_field);
 }
 
 jobject
 BluetoothHelper::StartLeScan(JNIEnv *env, LeScanCallback &_cb)
 {
+  assert(HasLe(env));
+
   jobject cb = NativeLeScanCallback::Create(env, _cb);
   if (cb == nullptr) {
     env->ExceptionClear();
@@ -153,6 +155,8 @@ BluetoothHelper::StartLeScan(JNIEnv *env, LeScanCallback &_cb)
 void
 BluetoothHelper::StopLeScan(JNIEnv *env, jobject cb)
 {
+  assert(HasLe(env));
+
   env->CallStaticVoidMethod(cls, stopLeScan_method, cb);
   env->DeleteLocalRef(cb);
 }

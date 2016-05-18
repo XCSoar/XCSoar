@@ -32,8 +32,10 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 {
   double bearing, norm;
 
-  bool bearing_valid = line.ReadChecked(bearing);
-  bool norm_valid = line.ReadChecked(norm);
+  bool bearing_valid = line.ReadChecked(bearing) &&
+    bearing > -1 && bearing < 361;
+  bool norm_valid = line.ReadChecked(norm) &&
+    norm >= 0 && norm < 2000;
 
   if (bearing_valid && norm_valid) {
     value_r.bearing = Angle::Degrees(bearing);

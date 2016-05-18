@@ -26,12 +26,25 @@ Version 7.0 - not yet released
 * Kobo
   - support Kobo Glo HD
 
-Version 6.8.4 - not yet released
+Version 6.8.4 - 2016/05/18
+* airspace cross-section
+  - use airspace visibility configuration (#3751)
 * data files
   - accept "Military Aerodrome Traffic Zone" (MATZ) airspaces in
     OpenAir files (#3732)
+* devices
+  - CAI302: fix "airspace" marker in waypoint uploader (#3750)
+* calculations
+  - improve landing detection at high wind speeds (#3748)
 * logger
   - fix crash in NMEA logger
+* user interface
+  - Australian units for weight are kg
+* Windows
+  - fix terrain loader (#3747)
+* Android
+  - fix crash bug in IOIO driver (#3744)
+  - fix crash bug on Android 1.6 (#3742)
 * Kobo
   - eliminate screen flashing on Kobo Glo HD, Kobo Touch 2.0
   - support battery status on Kobo Glo HD, Kobo Touch 2.0
