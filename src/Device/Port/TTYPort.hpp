@@ -26,7 +26,8 @@ Copyright_License {
 
 #include "BufferedPort.hpp"
 #include "OS/TTYDescriptor.hpp"
-#include "IO/Async/FileEventHandler.hpp"
+
+#include <boost/asio.hpp>
 
 #include <atomic>
 
@@ -35,11 +36,13 @@ Copyright_License {
 /**
  * A serial port class for POSIX (/dev/ttyS*, /dev/ttyUSB*).
  */
-class TTYPort : public BufferedPort, protected FileEventHandler
+class TTYPort : public BufferedPort
 {
   unsigned baud_rate;
 
   TTYDescriptor tty;
+
+  boost::asio::posix::stream_descriptor asio;
 
   std::atomic<bool> valid;
 
@@ -50,9 +53,7 @@ public:
    * @param _handler the callback object for input received on the
    * port
    */
-  TTYPort(PortListener *_listener, DataHandler &_handler)
-    :BufferedPort(_listener, _handler) {}
-
+  TTYPort(PortListener *_listener, DataHandler &_handler);
   virtual ~TTYPort();
 
   /**
@@ -79,9 +80,8 @@ public:
   virtual unsigned GetBaudrate() const override;
   virtual size_t Write(const void *data, size_t length) override;
 
-protected:
-  /* virtual methods from class FileEventHandler */
-  bool OnFileEvent(FileDescriptor fd, unsigned mask) override;
+private:
+  void OnReadReady(const boost::system::error_code &ec);
 };
 
 #endif

@@ -24,7 +24,9 @@ Copyright_License {
 #include "TTYPort.hpp"
 #include "Asset.hpp"
 #include "OS/LogError.hpp"
-#include "IO/Async/GlobalIOThread.hpp"
+#include "IO/Async/GlobalAsioThread.hpp"
+#include "IO/Async/AsioThread.hpp"
+#include "IO/Async/AsioUtil.hpp"
 #include "Util/StringFormat.hpp"
 
 #include <termios.h>
@@ -36,12 +38,18 @@ Copyright_License {
 #include <errno.h>
 #include <windef.h> // for MAX_PATH
 
+TTYPort::TTYPort(PortListener *_listener, DataHandler &_handler)
+  :BufferedPort(_listener, _handler),
+   asio(*asio_thread)
+{
+}
+
 TTYPort::~TTYPort()
 {
   BufferedPort::BeginClose();
 
-  if (tty.IsDefined())
-    io_thread->LockRemove(tty.ToFileDescriptor());
+  if (asio.is_open())
+    CancelWait(asio.get_io_service(), asio);
 
   BufferedPort::EndClose();
 }
@@ -81,7 +89,12 @@ TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
     return false;
 
   valid.store(true, std::memory_order_relaxed);
-  io_thread->LockAdd(tty.ToFileDescriptor(), Poll::READ, *this);
+
+  asio.assign(tty.Get());
+  asio.async_read_some(boost::asio::null_buffers(),
+                       std::bind(&TTYPort::OnReadReady, this,
+                                 std::placeholders::_1));
+
   StateChanged();
   return true;
 }
@@ -93,7 +106,12 @@ TTYPort::OpenPseudo()
     return nullptr;
 
   valid.store(true, std::memory_order_relaxed);
-  io_thread->LockAdd(tty.ToFileDescriptor(), Poll::READ, *this);
+
+  asio.assign(tty.Get());
+  asio.async_read_some(boost::asio::null_buffers(),
+                       std::bind(&TTYPort::OnReadReady, this,
+                                 std::placeholders::_1));
+
   StateChanged();
   return tty.GetSlaveName();
 }
@@ -259,20 +277,27 @@ TTYPort::SetBaudrate(unsigned BaudRate)
   return true;
 }
 
-bool
-TTYPort::OnFileEvent(gcc_unused FileDescriptor fd, unsigned mask)
+void
+TTYPort::OnReadReady(const boost::system::error_code &ec)
 {
+  if (ec == boost::asio::error::operation_aborted)
+    /* this object has already been deleted; bail out quickly without
+       touching anything */
+    return;
+
   char buffer[1024];
 
   ssize_t nbytes = tty.Read(buffer, sizeof(buffer));
   if (nbytes == 0 || (nbytes < 0 && errno != EAGAIN && errno != EINTR)) {
     valid.store(false, std::memory_order_relaxed);
     StateChanged();
-    return false;
+    return;
   }
 
   if (nbytes > 0)
     BufferedPort::DataReceived(buffer, nbytes);
 
-  return true;
+  asio.async_read_some(boost::asio::null_buffers(),
+                       std::bind(&TTYPort::OnReadReady, this,
+                                 std::placeholders::_1));
 }
