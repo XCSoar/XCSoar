@@ -1,3 +1,5 @@
+Version 6.8.5 - not yet released
+
 Version 6.8.4 - 2016/05/18
 * airspace cross-section
   - use airspace visibility configuration (#3751)
