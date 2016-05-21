@@ -27,6 +27,14 @@ Version 7.0 - not yet released
 * Kobo
   - support Kobo Glo HD
 
+Version 6.8.5 - not yet released
+* calculations
+  - update circling percentage only when flying
+  - fix circling height gain calculation
+* user interface
+  - fix "kg/m^2" and "lb/ft^2" unit display
+  - fix inverse colors in horizon page
+
 Version 6.8.4 - 2016/05/18
 * airspace cross-section
   - use airspace visibility configuration (#3751)

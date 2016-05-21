@@ -228,6 +228,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
 
 void
 CirclingComputer::PercentCircling(const MoreData &basic,
+                                  const FlyingState &flight,
                                   CirclingInfo &circling_info)
 {
   if (!basic.time_available)
@@ -240,16 +241,20 @@ CirclingComputer::PercentCircling(const MoreData &basic,
   if (dt <= 0)
     return;
 
+  // don't increment the accumulators unless actually flying
+  if (!flight.flying)
+    return;
+
   // if (Circling)
   if (circling_info.circling && circling_info.turning) {
-    // Add one second to the circling time
+    // Add time step to the circling time
     // timeCircling += (Basic->Time-LastTime);
     circling_info.time_climb += dt;
 
     // Add the Vario signal to the total climb height
-    circling_info.total_height_gain += basic.gps_vario;
+    circling_info.total_height_gain += basic.gps_vario * dt;
   } else {
-    // Add one second to the cruise time
+    // Add time step to the cruise time
     // timeCruising += (Basic->Time-LastTime);
     circling_info.time_cruise += dt;
   }
