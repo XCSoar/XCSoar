@@ -43,6 +43,7 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "OS/Args.hpp"
 #include "IO/Async/GlobalIOThread.hpp"
+#include "IO/Async/GlobalAsioThread.hpp"
 
 #ifndef NDEBUG
 #include "Thread/Thread.hpp"
@@ -108,6 +109,7 @@ Main()
   InitLanguage();
 
   InitialiseIOThread();
+  ScopeGlobalAsioThread global_asio_thread;
 
   // Perform application initialization and run loop
   int ret = EXIT_FAILURE;

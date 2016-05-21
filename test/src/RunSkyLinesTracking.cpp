@@ -32,6 +32,7 @@ Copyright_License {
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
 #include "IO/Async/GlobalIOThread.hpp"
+#include "IO/Async/GlobalAsioThread.hpp"
 
 class Handler : public SkyLinesTracking::Handler {
   Mutex mutex;
@@ -95,6 +96,7 @@ main(int argc, char *argv[])
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   InitialiseIOThread();
+  ScopeGlobalAsioThread global_asio_thread;
 #endif
 
   SkyLinesTracking::Client client;

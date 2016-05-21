@@ -33,6 +33,7 @@ Copyright_License {
 #include "Util/StringUtil.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "IO/Async/GlobalIOThread.hpp"
+#include "IO/Async/GlobalAsioThread.hpp"
 #include "Units/System.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "IO/DataHandler.hpp"
@@ -339,6 +340,7 @@ main(int argc, char **argv)
   args.ExpectEnd();
 
   InitialiseIOThread();
+  ScopeGlobalAsioThread global_asio_thread;
 
   NullDataHandler handler;
   std::unique_ptr<Port> port(OpenPort(config, nullptr, handler));

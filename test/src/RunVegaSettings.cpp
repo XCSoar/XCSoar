@@ -29,6 +29,7 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "IO/Async/GlobalIOThread.hpp"
+#include "IO/Async/GlobalAsioThread.hpp"
 
 #include <stdio.h>
 #include <string.h>
@@ -39,6 +40,7 @@ int main(int argc, char **argv)
   const DeviceConfig config = ParsePortArgs(args);
 
   InitialiseIOThread();
+  ScopeGlobalAsioThread global_asio_thread;
 
   Port *port = OpenPort(config, nullptr, *(DataHandler *)nullptr);
   if (port == NULL) {

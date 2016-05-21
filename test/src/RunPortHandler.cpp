@@ -28,6 +28,7 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "OS/Sleep.h"
 #include "IO/Async/GlobalIOThread.hpp"
+#include "IO/Async/GlobalAsioThread.hpp"
 #include "IO/DataHandler.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 
@@ -48,6 +49,7 @@ int main(int argc, char **argv)
   args.ExpectEnd();
 
   InitialiseIOThread();
+  ScopeGlobalAsioThread global_asio_thread;
 
   MyHandler handler;
   Port *port = OpenPort(config, nullptr, handler);

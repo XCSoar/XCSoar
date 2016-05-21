@@ -61,6 +61,7 @@ Copyright_License {
 #include "Compiler.h"
 #include "org_xcsoar_NativeView.h"
 #include "IO/Async/GlobalIOThread.hpp"
+#include "IO/Async/GlobalAsioThread.hpp"
 #include "Thread/Debug.hpp"
 
 #include "IOIOHelper.hpp"
@@ -123,6 +124,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   InitThreadDebug();
 
   InitialiseIOThread();
+  InitialiseAsioThread();
 
   Java::Init(env);
   Java::Object::Initialise(env);
@@ -271,6 +273,7 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   NativeView::Deinitialise(env);
   Java::URL::Deinitialise(env);
 
+  DeinitialiseAsioThread();
   DeinitialiseIOThread();
 }
 

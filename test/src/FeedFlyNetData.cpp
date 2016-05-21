@@ -28,6 +28,7 @@ Copyright_License {
 #include "Device/Config.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "IO/Async/GlobalIOThread.hpp"
+#include "IO/Async/GlobalAsioThread.hpp"
 #include "Util/StaticString.hxx"
 #include "Math/Util.hpp"
 #include "Time/PeriodClock.hpp"
@@ -42,6 +43,7 @@ int main(int argc, char **argv)
   args.ExpectEnd();
 
   InitialiseIOThread();
+  ScopeGlobalAsioThread global_asio_thread;
 
   Port *port = OpenPort(config, nullptr, *(DataHandler *)nullptr);
   if (port == nullptr) {
