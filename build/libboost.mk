@@ -1,5 +1,5 @@
-BOOST_URL = https://bintray.com/artifact/download/boostorg/release/boost_1_61_0_b1.tar.bz2
-BOOST_MD5 = 836e53b72fe851e28f3e2b53b3de4240
+BOOST_URL = http://downloads.sourceforge.net/boost/boost_1_61_0.tar.bz2
+BOOST_MD5 = 6095876341956f65f9d35939ccea1a9f
 
 BOOST_TARBALL_NAME = $(notdir $(BOOST_URL))
 BOOST_TARBALL = $(DOWNLOAD_DIR)/$(BOOST_TARBALL_NAME)
