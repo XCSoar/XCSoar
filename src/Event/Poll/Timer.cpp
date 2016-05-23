@@ -21,43 +21,57 @@ Copyright_License {
 }
 */
 
-#include "InputQueue.hpp"
-#include "../Shared/Event.hpp"
-#include "DisplayOrientation.hpp"
+#include "../Timer.hpp"
+#include "../Globals.hpp"
+#include "../Queue.hpp"
 
-InputEventQueue::InputEventQueue(boost::asio::io_service &io_service,
-                                 EventQueue &queue)
-  :
-#ifdef KOBO
-   keyboard(io_service, queue, merge_mouse),
-   mouse(io_service, queue, merge_mouse)
-#else
-   libinput_handler(io_service, queue)
-#endif
+Timer::Timer()
+  :enabled(false), queued(false),
+   timer(event_queue->get_io_service()) {}
+
+void
+Timer::Schedule(unsigned _ms)
 {
-#ifdef KOBO
-  /* power button */
-  keyboard.Open("/dev/input/event0");
+  if (queued.exchange(false))
+    timer.cancel();
 
-  /* Kobo touch screen */
-  mouse.Open("/dev/input/event1");
-#else
-  libinput_handler.Open();
-#endif
+  enabled.store(true);
+  ms = _ms;
+
+  if (!queued.exchange(true)) {
+    timer.expires_from_now(std::chrono::milliseconds(ms));
+    AsyncWait();
+  }
 }
 
-InputEventQueue::~InputEventQueue()
+void
+Timer::SchedulePreserve(unsigned _ms)
 {
+  if (!IsActive())
+    Schedule(_ms);
 }
 
-bool
-InputEventQueue::Generate(Event &event)
+void
+Timer::Cancel()
 {
-#ifdef KOBO
-  event = merge_mouse.Generate();
-  if (event.type != Event::Type::NOP)
-    return true;
-#endif
+  if (enabled.exchange(false) && queued.exchange(false))
+    timer.cancel();
+}
 
-  return false;
+void
+Timer::Invoke(const boost::system::error_code &ec)
+{
+  if (ec)
+    return;
+
+  if (!queued.exchange(false))
+    /* was cancelled by another thread */
+    return;
+
+  OnTimer();
+
+  if (enabled.load() && !queued.exchange(true)) {
+    timer.expires_from_now(std::chrono::milliseconds(ms));
+    AsyncWait();
+  }
 }

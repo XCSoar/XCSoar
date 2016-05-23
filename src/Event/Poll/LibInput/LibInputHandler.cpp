@@ -42,7 +42,7 @@ LibInputHandler::Open()
   if ((nullptr != udev_context)
       || (nullptr != li_if)
       || (nullptr != li)
-      || fd.IsDefined())
+      || fd.is_open())
     return false;
 
   if (nullptr == udev_context) {
@@ -71,20 +71,21 @@ LibInputHandler::Open()
   if (0 != assign_seat_ret)
     return false;
 
-  fd.Set(libinput_get_fd(li));
-  if (!fd.IsDefined())
+  int _fd = libinput_get_fd(li);
+  if (_fd < 0)
     return false;
-  io_loop.Add(fd, io_loop.READ, *this);
 
+  fd.assign(_fd);
+  AsyncRead();
   return true;
 }
 
 void
 LibInputHandler::Close()
 {
-  if (fd.IsDefined()) {
-    io_loop.Remove(fd);
-    fd.SetUndefined();
+  if (fd.is_open()) {
+    fd.cancel();
+    fd.release();
   }
 
   if (nullptr != li)
@@ -255,10 +256,12 @@ LibInputHandler::HandlePendingEvents()
     HandleEvent(li_event);
 }
 
-bool
-LibInputHandler::OnFileEvent(FileDescriptor fd, unsigned mask)
+void
+LibInputHandler::OnReadReady(const boost::system::error_code &ec)
 {
-  HandlePendingEvents();
+  if (ec)
+    return;
 
-  return true;
+  HandlePendingEvents();
+  AsyncRead();
 }

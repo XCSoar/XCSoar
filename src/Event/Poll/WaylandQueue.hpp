@@ -24,12 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_X11_EVENT_QUEUE_HPP
 #define XCSOAR_EVENT_X11_EVENT_QUEUE_HPP
 
-#include "IO/Async/FileEventHandler.hpp"
 #include "Math/Point2D.hpp"
+
+#include <boost/asio/posix/stream_descriptor.hpp>
 
 #include <stdint.h>
 
-class IOLoop;
 class EventQueue;
 struct Event;
 
@@ -37,8 +37,7 @@ struct Event;
  * This class opens a connection to the X11 server using Xlib and
  * listens for events.
  */
-class WaylandEventQueue final : FileEventHandler {
-  IOLoop &io_loop;
+class WaylandEventQueue final {
   EventQueue &queue;
 
   struct wl_display *const display;
@@ -49,14 +48,16 @@ class WaylandEventQueue final : FileEventHandler {
 
   IntPoint2D pointer_position = {0, 0};
 
+  boost::asio::posix::stream_descriptor fd;
+
 public:
   /**
-   * @param io_loop the #IOLoop that shall be used to register the
-   * Wayland client socket
+   * @param io_service the boost::asio::io_service that shall be used
+   * to register the Wayland client socket
    * @param queue the #EventQueue that shall receive Wayland input
    * events
    */
-  WaylandEventQueue(IOLoop &io_loop, EventQueue &queue);
+  WaylandEventQueue(boost::asio::io_service &io_service, EventQueue &queue);
 
   ~WaylandEventQueue();
 
@@ -89,8 +90,13 @@ public:
   void PointerButton(bool pressed);
 
 private:
-  /* virtual methods from FileEventHandler */
-  bool OnFileEvent(FileDescriptor fd, unsigned mask) override;
+  void AsyncRead() {
+    fd.async_read_some(boost::asio::null_buffers(),
+                       std::bind(&WaylandEventQueue::OnReadReady,
+                                 this, std::placeholders::_1));
+  }
+
+  void OnReadReady(const boost::system::error_code &ec);
 };
 
 #endif

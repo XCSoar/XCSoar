@@ -36,7 +36,6 @@ Copyright_License {
 #include <stdint.h>
 
 enum class DisplayOrientation : uint8_t;
-class IOLoop;
 class EventQueue;
 struct Event;
 
@@ -50,7 +49,7 @@ class InputEventQueue final {
 #endif /* !USE_LIBINPUT */
 
 public:
-  InputEventQueue(IOLoop &io_loop, EventQueue &queue);
+  InputEventQueue(boost::asio::io_service &io_service, EventQueue &queue);
   ~InputEventQueue();
 
   void SetScreenSize(unsigned width, unsigned height) {

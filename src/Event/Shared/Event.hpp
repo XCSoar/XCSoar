@@ -34,9 +34,10 @@ struct Event {
 
 #ifdef USE_POLL_EVENT
     CLOSE,
+#else
+    TIMER,
 #endif
 
-    TIMER,
     USER,
 
     CALLBACK,

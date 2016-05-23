@@ -24,7 +24,6 @@ Copyright_License {
 #include "X11Queue.hpp"
 #include "Queue.hpp"
 #include "../Shared/Event.hpp"
-#include "IO/Async/IOLoop.hpp"
 
 /* kludges to work around namespace collisions with X11 headers */
 
@@ -42,9 +41,10 @@ Copyright_License {
 #include <stdio.h>
 #include <stdlib.h>
 
-X11EventQueue::X11EventQueue(IOLoop &_io_loop, EventQueue &_queue)
-  :io_loop(_io_loop), queue(_queue),
-   display(XOpenDisplay(nullptr))
+X11EventQueue::X11EventQueue(boost::asio::io_service &io_service, EventQueue &_queue)
+  :queue(_queue),
+   display(XOpenDisplay(nullptr)),
+   asio(io_service)
 {
   if (display == nullptr) {
     fprintf(stderr, "XOpenDisplay() failed\n");
@@ -53,12 +53,13 @@ X11EventQueue::X11EventQueue(IOLoop &_io_loop, EventQueue &_queue)
 
   wm_delete_window = XInternAtom(display, "WM_DELETE_WINDOW", false);
 
-  io_loop.Add(FileDescriptor(ConnectionNumber(display)), io_loop.READ, *this);
+  asio.assign(ConnectionNumber(display));
+  AsyncRead();
 }
 
 X11EventQueue::~X11EventQueue()
 {
-  io_loop.Remove(FileDescriptor(ConnectionNumber(display)));
+  asio.cancel();
   XCloseDisplay(display);
 }
 
@@ -166,14 +167,17 @@ X11EventQueue::HandleEvent(_XEvent &event)
   }
 }
 
-bool
-X11EventQueue::OnFileEvent(FileDescriptor fd, unsigned mask)
+void
+X11EventQueue::OnReadReady(const boost::system::error_code &ec)
 {
+  if (ec)
+    return;
+
   while(XPending(display)) {
     XEvent event;
     XNextEvent(display, &event);
     HandleEvent(event);
   }
 
-  return true;
+  AsyncRead();
 }

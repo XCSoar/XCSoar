@@ -26,23 +26,22 @@ Copyright_License {
 #include "OS/Clock.hpp"
 
 EventQueue::EventQueue()
-  :SignalListener(io_loop),
+  :SignalListener(io_service),
    thread(ThreadHandle::GetCurrent()),
-   now_us(MonotonicClockUS()),
 #ifndef NON_INTERACTIVE
-   input_queue(io_loop, *this),
+   input_queue(io_service, *this),
 #endif
+   event_pipe_asio(io_service),
    quit(false)
 {
   SignalListener::Create(SIGINT, SIGTERM);
 
   event_pipe.Create();
-  io_loop.Add(event_pipe.GetReadFD(), io_loop.READ, discard);
+  event_pipe_asio.assign(event_pipe.GetReadFD().Get());
 }
 
 EventQueue::~EventQueue()
 {
-  io_loop.Remove(event_pipe.GetReadFD());
   SignalListener::Destroy();
 }
 
@@ -54,24 +53,11 @@ EventQueue::Push(const Event &event)
   WakeUp();
 }
 
-int
-EventQueue::GetTimeout() const
-{
-  int64_t timeout = timers.GetTimeoutUS(now_us);
-  return timeout > 0
-    ? int((timeout + 999) / 1000)
-    : int(timeout);
-}
-
 void
 EventQueue::Poll()
 {
-  io_loop.Lock();
-  now_us = MonotonicClockUS();
-  io_loop.Wait(GetTimeout());
-  now_us = MonotonicClockUS();
-  io_loop.Dispatch();
-  io_loop.Unlock();
+  io_service.run_one();
+  io_service.reset();
 }
 
 void
@@ -84,13 +70,6 @@ EventQueue::PushKeyPress(unsigned key_code)
 bool
 EventQueue::Generate(Event &event)
 {
-  Timer *timer = timers.Pop(now_us);
-  if (timer != nullptr) {
-    event.type = Event::TIMER;
-    event.ptr = timer;
-    return true;
-  }
-
 #ifndef NON_INTERACTIVE
   if (input_queue.Generate(event))
     return true;
@@ -205,27 +184,19 @@ EventQueue::Purge(Window &window)
 }
 
 void
-EventQueue::AddTimer(Timer &timer, unsigned ms)
-{
-  ScopeLock protect(mutex);
-
-  const uint64_t due_us = MonotonicClockUS() + ms * 1000;
-  timers.Add(timer, due_us);
-
-  if (timers.IsBefore(due_us))
-    WakeUp();
-}
-
-void
-EventQueue::CancelTimer(Timer &timer)
-{
-  ScopeLock protect(mutex);
-
-  timers.Cancel(timer);
-}
-
-void
 EventQueue::OnSignal(int signo)
 {
   Quit();
+}
+
+void
+EventQueue::OnEventPipe(const boost::system::error_code &ec)
+{
+  if (ec)
+    return;
+
+  if (event_pipe.Read())
+    event_pipe_asio.get_io_service().stop();
+
+  AsyncReadEventPipe();
 }

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_X11_EVENT_QUEUE_HPP
 #define XCSOAR_EVENT_X11_EVENT_QUEUE_HPP
 
-#include "IO/Async/FileEventHandler.hpp"
+#include <boost/asio/posix/stream_descriptor.hpp>
 
 /* kludges to work around namespace collisions with X11 headers */
 
@@ -38,7 +38,6 @@ Copyright_License {
 #undef Window
 #undef Display
 
-class IOLoop;
 class EventQueue;
 struct Event;
 struct _XDisplay;
@@ -48,11 +47,12 @@ union _XEvent;
  * This class opens a connection to the X11 server using Xlib and
  * listens for events.
  */
-class X11EventQueue final : FileEventHandler {
-  IOLoop &io_loop;
+class X11EventQueue {
   EventQueue &queue;
 
   _XDisplay *const display;
+
+  boost::asio::posix::stream_descriptor asio;
 
   Atom wm_delete_window;
 
@@ -62,11 +62,11 @@ class X11EventQueue final : FileEventHandler {
 
 public:
   /**
-   * @param io_loop the #IOLoop that shall be used to register the
-   * Xlib socket
+   * @param io_service the boost::asio::io_service that shall be used
+   * to register the Xlib socket
    * @param queue the #EventQueue that shall receive X11 events
    */
-  X11EventQueue(IOLoop &io_loop, EventQueue &queue);
+  X11EventQueue(boost::asio::io_service &io_service, EventQueue &queue);
 
   ~X11EventQueue();
 
@@ -95,8 +95,13 @@ public:
 private:
   void HandleEvent(_XEvent &event);
 
-  /* virtual methods from FileEventHandler */
-  bool OnFileEvent(FileDescriptor fd, unsigned mask) override;
+  void AsyncRead() {
+    asio.async_read_some(boost::asio::null_buffers(),
+                         std::bind(&X11EventQueue::OnReadReady, this,
+                                   std::placeholders::_1));
+  }
+
+  void OnReadReady(const boost::system::error_code &ec);
 };
 
 #endif

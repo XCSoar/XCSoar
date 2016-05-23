@@ -24,13 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_LIBINPUT_LIBINPUT_HPP
 #define XCSOAR_EVENT_LIBINPUT_LIBINPUT_HPP
 
-#include "IO/Async/FileEventHandler.hpp"
-#include "OS/FileDescriptor.hxx"
+#include <boost/asio/posix/stream_descriptor.hpp>
 
 #include <assert.h>
 
 class EventQueue;
-class IOLoop;
 class UdevContext;
 
 struct libinput;
@@ -39,8 +37,7 @@ struct libinput_interface;
 /**
  * A driver for handling libinput events.
  */
-class LibInputHandler final : private FileEventHandler {
-  IOLoop &io_loop;
+class LibInputHandler final {
   EventQueue &queue;
 
   UdevContext* udev_context = nullptr;
@@ -48,7 +45,7 @@ class LibInputHandler final : private FileEventHandler {
   struct libinput* li = nullptr;
   struct libinput_interface* li_if = nullptr;
 
-  FileDescriptor fd = FileDescriptor::Undefined();
+  boost::asio::posix::stream_descriptor fd;
 
   double x = -1.0, y = -1.0;
   unsigned width = 0, height = 0;
@@ -59,8 +56,9 @@ class LibInputHandler final : private FileEventHandler {
   unsigned n_pointers = 0, n_touch_screens = 0, n_keyboards = 0;
 
 public:
-  explicit LibInputHandler(IOLoop &_io_loop, EventQueue &_queue)
-    :io_loop(_io_loop), queue(_queue) {}
+  explicit LibInputHandler(boost::asio::io_service &io_service,
+                           EventQueue &_queue)
+    :queue(_queue), fd(io_service) {}
 
   ~LibInputHandler() {
     Close();
@@ -110,8 +108,13 @@ private:
   void HandleEvent(struct libinput_event *li_event);
   void HandlePendingEvents();
 
-  /* virtual methods from FileEventHandler */
-  bool OnFileEvent(FileDescriptor fd, unsigned mask) override;
+  void AsyncRead() {
+    fd.async_read_some(boost::asio::null_buffers(),
+                       std::bind(&LibInputHandler::OnReadReady, this,
+                                 std::placeholders::_1));
+  }
+
+  void OnReadReady(const boost::system::error_code &ec);
 };
 
 #endif

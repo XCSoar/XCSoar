@@ -25,12 +25,9 @@ Copyright_License {
 #define XCSOAR_EVENT_POLL_QUEUE_HPP
 
 #include "Thread/Handle.hpp"
-#include "../Shared/TimerQueue.hpp"
 #include "../Shared/Event.hpp"
 #include "Thread/Mutex.hpp"
 #include "OS/EventPipe.hpp"
-#include "IO/Async/IOLoop.hpp"
-#include "IO/Async/DiscardFileEventHandler.hpp"
 #include "Linux/SignalListener.hpp"
 
 #ifdef USE_X11
@@ -41,23 +38,31 @@ Copyright_License {
 #include "InputQueue.hpp"
 #endif
 
+#include <boost/asio.hpp>
+
 #include <stdint.h>
 
 #include <queue>
 
 enum class DisplayOrientation : uint8_t;
 class Window;
-class Timer;
 
-class EventQueue final : private SignalListener {
+/**
+ * Helper class to guarantee that io_service gets initialised before
+ * SignalListener.
+ */
+class IOServiceOwner {
+protected:
+  boost::asio::io_service io_service;
+
+public:
+  boost::asio::io_service &get_io_service() {
+    return io_service;
+  }
+};
+
+class EventQueue final : public IOServiceOwner, private SignalListener {
   const ThreadHandle thread;
-
-  /**
-   * The current time after the event thread returned from sleeping.
-   */
-  uint64_t now_us;
-
-  IOLoop io_loop;
 
 #ifdef USE_X11
   X11EventQueue input_queue;
@@ -71,10 +76,8 @@ class EventQueue final : private SignalListener {
 
   std::queue<Event> events;
 
-  TimerQueue timers;
-
   EventPipe event_pipe;
-  DiscardFileEventHandler discard;
+  boost::asio::posix::stream_descriptor event_pipe_asio;
 
   bool quit;
 
@@ -145,17 +148,6 @@ public:
 
 #endif /* !NON_INTERACTIVE */
 
-  /**
-   * Returns the monotonic clock in microseconds.  This method is only
-   * available in the main thread.
-   */
-  gcc_pure
-  uint64_t ClockUS() const {
-    assert(thread.IsInside());
-
-    return now_us;
-  }
-
   bool IsQuit() const {
     return quit;
   }
@@ -170,9 +162,6 @@ public:
   }
 
 private:
-  gcc_pure
-  int GetTimeout() const;
-
   void Poll();
   bool Generate(Event &event);
 
@@ -195,12 +184,17 @@ public:
   void Purge(Event::Callback callback, void *ctx);
   void Purge(Window &window);
 
-  void AddTimer(Timer &timer, unsigned ms);
-  void CancelTimer(Timer &timer);
-
 private:
   /* virtual methods from SignalListener */
   void OnSignal(int signo) override;
+
+  void AsyncReadEventPipe() {
+    event_pipe_asio.async_read_some(boost::asio::null_buffers(),
+                                    std::bind(&EventQueue::OnEventPipe, this,
+                                              std::placeholders::_1));
+  }
+
+  void OnEventPipe(const boost::system::error_code &ec);
 };
 
 #endif

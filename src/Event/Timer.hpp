@@ -24,6 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_TIMER_HPP
 #define XCSOAR_EVENT_TIMER_HPP
 
+#ifdef USE_POLL_EVENT
+#include <boost/asio/steady_timer.hpp>
+#endif
+
 #include <atomic>
 
 #include <assert.h>
@@ -44,11 +48,19 @@ class Timer {
   std::atomic<bool> enabled, queued;
   unsigned ms;
 
+#ifdef USE_POLL_EVENT
+  boost::asio::steady_timer timer;
+#endif
+
 public:
   /**
    * Construct a Timer object that is not set initially.
    */
+#ifdef USE_POLL_EVENT
+  Timer();
+#else
   Timer():enabled(false), queued(false) {}
+#endif
 
   Timer(const Timer &other) = delete;
 
@@ -58,7 +70,11 @@ protected:
    * shall only be used by derived classes to pass inactive instances
    * around.
    */
-  Timer(Timer &&other) {
+  Timer(Timer &&other)
+#ifdef USE_POLL_EVENT
+    :timer(other.timer.get_io_service())
+#endif
+  {
     assert(!IsActive());
     assert(!other.IsActive());
   }
@@ -107,8 +123,18 @@ protected:
    */
   virtual void OnTimer() = 0;
 
+#ifdef USE_POLL_EVENT
+private:
+  void AsyncWait() {
+    timer.async_wait(std::bind(&Timer::Invoke, this, std::placeholders::_1));
+  }
+
+  void Invoke(const boost::system::error_code &ec);
+
+#else
 public:
   void Invoke();
+#endif
 };
 
 #endif

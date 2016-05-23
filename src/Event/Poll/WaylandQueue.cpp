@@ -24,7 +24,6 @@ Copyright_License {
 #include "WaylandQueue.hpp"
 #include "Queue.hpp"
 #include "../Shared/Event.hpp"
-#include "IO/Async/IOLoop.hpp"
 #include "Util/StringAPI.hxx"
 
 #include <wayland-client.h>
@@ -121,9 +120,10 @@ static constexpr struct wl_pointer_listener pointer_listener = {
   WaylandPointerAxis,
 };
 
-WaylandEventQueue::WaylandEventQueue(IOLoop &_io_loop, EventQueue &_queue)
-  :io_loop(_io_loop), queue(_queue),
-   display(wl_display_connect(nullptr))
+WaylandEventQueue::WaylandEventQueue(boost::asio::io_service &io_service,
+                                     EventQueue &_queue)
+  :queue(_queue),
+   display(wl_display_connect(nullptr)), fd(io_service)
 {
   if (display == nullptr) {
     fprintf(stderr, "wl_display_connect() failed\n");
@@ -151,12 +151,13 @@ WaylandEventQueue::WaylandEventQueue(IOLoop &_io_loop, EventQueue &_queue)
     exit(EXIT_FAILURE);
   }
 
-  io_loop.Add(FileDescriptor(wl_display_get_fd(display)), io_loop.READ, *this);
+  fd.assign(wl_display_get_fd(display));
+  AsyncRead();
 }
 
 WaylandEventQueue::~WaylandEventQueue()
 {
-  io_loop.Remove(FileDescriptor(wl_display_get_fd(display)));
+  fd.cancel();
   wl_display_disconnect(display);
 }
 
@@ -167,11 +168,14 @@ WaylandEventQueue::Generate(Event &event)
   return false;
 }
 
-bool
-WaylandEventQueue::OnFileEvent(FileDescriptor fd, unsigned mask)
+void
+WaylandEventQueue::OnReadReady(const boost::system::error_code &ec)
 {
+  if (ec)
+    return;
+
   wl_display_dispatch(display);
-  return true;
+  AsyncRead();
 }
 
 inline void

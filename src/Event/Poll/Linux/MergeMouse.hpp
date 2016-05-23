@@ -28,7 +28,6 @@ Copyright_License {
 
 #include <assert.h>
 
-class IOLoop;
 struct Event;
 
 /**

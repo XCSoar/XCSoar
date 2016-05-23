@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "SignalListener.hpp"
-#include "IO/Async/IOLoop.hpp"
 
 #include <sys/signalfd.h>
 
@@ -37,7 +36,8 @@ SignalListener::InternalCreate(const sigset_t &mask)
     return false;
   }
 
-  io_loop.Add(fd.ToFileDescriptor(), io_loop.READ, *this);
+  asio.assign(fd.Get());
+  AsyncRead();
   return true;
 }
 
@@ -47,16 +47,20 @@ SignalListener::Destroy()
   if (!fd.IsDefined())
     return;
 
-  io_loop.Remove(fd.ToFileDescriptor());
+  asio.cancel();
+
   fd.Close();
 }
 
-bool
-SignalListener::OnFileEvent(FileDescriptor _fd, unsigned mask)
+void
+SignalListener::OnReadReady(const boost::system::error_code &ec)
 {
+  if (ec)
+    return;
+
   signalfd_siginfo info;
   while (fd.Read(&info, sizeof(info)) > 0)
     OnSignal(info.ssi_signo);
 
-  return true;
+  AsyncRead();
 }

@@ -24,18 +24,17 @@ Copyright_License {
 #ifndef XCSOAR_SIGNAL_LISTENER_HPP
 #define XCSOAR_SIGNAL_LISTENER_HPP
 
-#include "IO/Async/FileEventHandler.hpp"
 #include "OS/UniqueFileDescriptor.hxx"
 
-class IOLoop;
+#include <boost/asio/posix/stream_descriptor.hpp>
 
-class SignalListener : private FileEventHandler {
-  IOLoop &io_loop;
+class SignalListener {
   UniqueFileDescriptor fd;
+  boost::asio::posix::stream_descriptor asio;
 
 public:
-  explicit SignalListener(IOLoop &_io_loop)
-    :io_loop(_io_loop) {}
+  explicit SignalListener(boost::asio::io_service &io_service)
+    :asio(io_service) {}
 
 private:
   bool InternalCreate(const sigset_t &mask);
@@ -61,8 +60,13 @@ protected:
   virtual void OnSignal(int signo) = 0;
 
 private:
-  /* virtual methods from FileEventHandler */
-  bool OnFileEvent(FileDescriptor fd, unsigned mask) override;
+  void AsyncRead() {
+    asio.async_read_some(boost::asio::null_buffers(),
+                         std::bind(&SignalListener::OnReadReady, this,
+                                   std::placeholders::_1));
+  }
+
+  void OnReadReady(const boost::system::error_code &ec);
 };
 
 #endif
