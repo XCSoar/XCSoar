@@ -107,12 +107,12 @@ SkyLinesTracking::Client::SendPing(uint16_t id)
 
 bool
 SkyLinesTracking::Client::SendTrafficRequest(bool followees, bool club,
-                                             bool near)
+                                             bool near_)
 {
   assert(socket.is_open());
   assert(key != 0);
 
-  return SendPacket(MakeTrafficRequest(key, followees, club, near));
+  return SendPacket(MakeTrafficRequest(key, followees, club, near_));
 }
 
 bool
