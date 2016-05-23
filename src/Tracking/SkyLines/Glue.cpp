@@ -27,20 +27,14 @@ Copyright_License {
 #include "Assemble.hpp"
 #include "NMEA/Info.hpp"
 #include "Net/State.hpp"
-#include "Net/IPv4Address.hxx"
-
-#ifdef HAVE_POSIX
-#include "IO/Async/GlobalIOThread.hpp"
-#endif
+#include "IO/Async/AsioThread.hpp"
+#include "IO/Async/GlobalAsioThread.hpp"
 
 #include <assert.h>
 
 SkyLinesTracking::Glue::Glue()
+  :client(*asio_thread)
 {
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  assert(io_thread != nullptr);
-  client.SetIOThread(io_thread);
-#endif
 }
 
 SkyLinesTracking::Glue::~Glue()
@@ -139,9 +133,12 @@ SkyLinesTracking::Glue::SetSettings(const Settings &settings)
 
   interval = settings.interval;
 
-  if (!client.IsDefined())
+  if (!client.IsDefined()) {
     // TODO: fix hard-coded IP address:
-    client.Open(IPv4Address(95, 128, 34, 172, Client::GetDefaultPort()));
+    boost::asio::ip::udp::endpoint endpoint(boost::asio::ip::address_v4::from_string("95.128.34.172"),
+                                            Client::GetDefaultPort());
+    client.Open(endpoint);
+  }
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   traffic_enabled = settings.traffic_enabled;

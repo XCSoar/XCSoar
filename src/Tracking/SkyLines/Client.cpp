@@ -32,52 +32,41 @@ Copyright_License {
 #include "Util/ConstBuffer.hxx"
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-#include "IO/Async/IOThread.hpp"
+#include "IO/Async/AsioUtil.hpp"
 #include "Util/UTF8.hpp"
 #include "Util/ConvertString.hpp"
 
 #include <string>
 
 void
-SkyLinesTracking::Client::SetIOThread(IOThread *_io_thread)
-{
-  if (socket.IsDefined() && io_thread != nullptr && handler != nullptr)
-    io_thread->LockRemove(socket.ToFileDescriptor());
-
-  io_thread = _io_thread;
-
-  if (socket.IsDefined() && io_thread != nullptr && handler != nullptr)
-    io_thread->LockAdd(socket.ToFileDescriptor(), IOThread::READ, *this);
-}
-
-void
 SkyLinesTracking::Client::SetHandler(Handler *_handler)
 {
-  if (socket.IsDefined() && io_thread != nullptr && handler != nullptr)
-    io_thread->LockRemove(socket.ToFileDescriptor());
+  if (socket.is_open() && handler != nullptr)
+    CancelWait(socket.get_io_service(), socket);
 
   handler = _handler;
 
-  if (socket.IsDefined() && io_thread != nullptr && handler != nullptr)
-    io_thread->LockAdd(socket.ToFileDescriptor(), IOThread::READ, *this);
+  if (socket.is_open() && handler != nullptr)
+    AsyncReceive();
 }
 
 #endif
 
 bool
-SkyLinesTracking::Client::Open(SocketAddress _address)
+SkyLinesTracking::Client::Open(boost::asio::ip::udp::endpoint _endpoint)
 {
-  assert(_address.IsDefined());
-
   Close();
 
-  address = _address;
-  if (!socket.Create(address.GetFamily(), SOCK_DGRAM, 0))
+  endpoint = _endpoint;
+
+  boost::system::error_code ec;
+  socket.connect(endpoint, ec);
+  if (ec)
     return false;
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  if (io_thread != nullptr && handler != nullptr)
-    io_thread->LockAdd(socket.ToFileDescriptor(), IOThread::READ, *this);
+  if (handler != nullptr)
+    AsyncReceive();
 #endif
 
   return true;
@@ -86,21 +75,20 @@ SkyLinesTracking::Client::Open(SocketAddress _address)
 void
 SkyLinesTracking::Client::Close()
 {
-  if (!socket.IsDefined())
+  if (!socket.is_open())
     return;
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  if (io_thread != nullptr && handler != nullptr)
-    io_thread->LockRemove(socket.ToFileDescriptor());
+  CancelWait(socket.get_io_service(), socket);
 #endif
 
-  socket.Close();
+  socket.close();
 }
 
 bool
 SkyLinesTracking::Client::SendFix(const NMEAInfo &basic)
 {
-  assert(socket.IsDefined());
+  assert(socket.is_open());
   assert(key != 0);
 
   return SendPacket(ToFix(key, basic));
@@ -109,7 +97,7 @@ SkyLinesTracking::Client::SendFix(const NMEAInfo &basic)
 bool
 SkyLinesTracking::Client::SendPing(uint16_t id)
 {
-  assert(socket.IsDefined());
+  assert(socket.is_open());
   assert(key != 0);
 
   return SendPacket(MakePing(key, id));
@@ -121,7 +109,7 @@ bool
 SkyLinesTracking::Client::SendTrafficRequest(bool followees, bool club,
                                              bool near)
 {
-  assert(socket.IsDefined());
+  assert(socket.is_open());
   assert(key != 0);
 
   return SendPacket(MakeTrafficRequest(key, followees, club, near));
@@ -130,7 +118,7 @@ SkyLinesTracking::Client::SendTrafficRequest(bool followees, bool club,
 bool
 SkyLinesTracking::Client::SendUserNameRequest(uint32_t user_id)
 {
-  assert(socket.IsDefined());
+  assert(socket.is_open());
   assert(key != 0);
 
   return SendPacket(MakeUserNameRequest(key, user_id));
@@ -282,21 +270,25 @@ SkyLinesTracking::Client::OnDatagramReceived(void *data, size_t length)
   }
 }
 
-bool
-SkyLinesTracking::Client::OnSocketEvent(SocketDescriptor s, unsigned mask)
+void
+SkyLinesTracking::Client::OnReceive(const boost::system::error_code &ec,
+                                    size_t size)
 {
-  if (!socket.IsDefined())
-    return false;
+  if (ec)
+    return;
 
-  uint8_t buffer[4096];
-  ssize_t nbytes;
-  StaticSocketAddress source_address;
+  if (sender_endpoint == endpoint)
+    OnDatagramReceived(buffer, size);
+}
 
-  while ((nbytes = socket.Read(buffer, sizeof(buffer), source_address)) > 0)
-    if (source_address == address)
-      OnDatagramReceived(buffer, nbytes);
-
-  return true;
+void
+SkyLinesTracking::Client::AsyncReceive()
+{
+  socket.async_receive_from(boost::asio::buffer(buffer, sizeof(buffer)),
+                            sender_endpoint,
+                            std::bind(&Client::OnReceive, this,
+                                      std::placeholders::_1,
+                                      std::placeholders::_2));
 }
 
 #endif

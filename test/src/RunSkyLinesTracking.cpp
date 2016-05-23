@@ -33,32 +33,23 @@ Copyright_License {
 #include "IO/Async/GlobalAsioThread.hpp"
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#include "Thread/Mutex.hpp"
+#include "Thread/Cond.hxx"
+
+#include <boost/asio/deadline_timer.hpp>
 
 class Handler : public SkyLinesTracking::Handler {
-  Mutex mutex;
-  Cond cond;
+  SkyLinesTracking::Client &client;
 
-  bool done;
-
-public:
-  Handler():done(false) {}
-
-  bool Wait(unsigned timeout_ms=5000) {
-    const ScopeLock protect(mutex);
-    return done || (cond.timed_wait(mutex, timeout_ms) && done);
-  }
-
-protected:
-  void Done() {
-    const ScopeLock protect(mutex);
-    done = true;
-    cond.broadcast();
-  }
+  boost::asio::deadline_timer timer;
 
 public:
+  explicit Handler(SkyLinesTracking::Client &_client)
+    :client(_client), timer(client.get_io_service()) {}
+
   virtual void OnAck(unsigned id) override {
     printf("received ack %u\n", id);
-    Done();
+    client.Close();
   }
 
   virtual void OnTraffic(unsigned pilot_id, unsigned time_of_day_ms,
@@ -70,7 +61,12 @@ public:
            (double)location.longitude.Degrees(),
            (double)location.latitude.Degrees(),
            altitude);
-    Done();
+
+    timer.expires_from_now(boost::posix_time::seconds(1));
+    timer.async_wait([this](const boost::system::error_code &ec){
+        if (!ec)
+          client.Close();
+      });
   }
 };
 
@@ -78,36 +74,28 @@ public:
 
 int
 main(int argc, char *argv[])
-{
+try {
   Args args(argc, argv, "HOST KEY");
   const char *host = args.ExpectNext();
   const char *key = args.ExpectNext();
 
-  StaticSocketAddress address;
-  if (!address.Lookup(host, "5597", SOCK_DGRAM)) {
-    fprintf(stderr, "Failed to look up: %s\n", host);
-    return EXIT_FAILURE;
-  }
+  boost::asio::io_service io_service;
 
-  if (address.GetFamily() != AF_INET) {
-    fprintf(stderr, "Not an IPv4 address: %s\n", host);
-    return EXIT_FAILURE;
-  }
+  boost::asio::ip::udp::resolver resolver(io_service);
+  const auto endpoint = *resolver.resolve({host, "5597"});
 
   InitialiseIOThread();
   ScopeGlobalAsioThread global_asio_thread;
 
-  SkyLinesTracking::Client client;
+  SkyLinesTracking::Client client(io_service);
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  client.SetIOThread(io_thread);
-
-  Handler handler;
+  Handler handler(client);
   client.SetHandler(&handler);
 #endif
 
   client.SetKey(ParseUint64(key, NULL, 16));
-  if (!client.Open(address)) {
+  if (!client.Open(endpoint)) {
     fprintf(stderr, "Failed to create client\n");
     return EXIT_FAILURE;
   }
@@ -124,11 +112,11 @@ main(int argc, char *argv[])
     client.SendPing(1);
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-    handler.Wait();
+    io_service.run();
   } else if (StringIsEqual(args.PeekNext(), "traffic")) {
     client.SendTrafficRequest(true, true, true);
 
-    handler.Wait();
+    io_service.run();
 #endif
   } else {
     DebugReplay *replay = CreateDebugReplay(args);
@@ -141,11 +129,10 @@ main(int argc, char *argv[])
     }
   }
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  client.Close();
-#endif
-
   DeinitialiseIOThread();
 
   return EXIT_SUCCESS;
+} catch (const std::exception &e) {
+  fprintf(stderr, "%s\n", e.what());
+  return EXIT_FAILURE;
 }

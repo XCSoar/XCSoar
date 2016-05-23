@@ -27,7 +27,8 @@ Copyright_License {
 #include "Handler.hpp"
 #include "Net/AllocatedSocketAddress.hxx"
 #include "Net/SocketDescriptor.hpp"
-#include "IO/Async/SocketEventHandler.hpp"
+
+#include <boost/asio/ip/udp.hpp>
 
 #include <stdint.h>
 
@@ -40,22 +41,24 @@ namespace SkyLinesTracking {
   struct WaveResponsePacket;
   struct ThermalResponsePacket;
 
-  class Client
+  class Client {
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-    : private SocketEventHandler
-#endif
-  {
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-    IOThread *io_thread = nullptr;
     Handler *handler = nullptr;
 #endif
 
     uint64_t key = 0;
 
-    AllocatedSocketAddress address;
-    SocketDescriptor socket = SocketDescriptor::Undefined();
+    boost::asio::ip::udp::endpoint endpoint;
+    boost::asio::ip::udp::socket socket;
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+    uint8_t buffer[4096];
+    boost::asio::ip::udp::endpoint sender_endpoint;
+#endif
 
   public:
+    explicit Client(boost::asio::io_service &io_service)
+      :socket(io_service) {}
     ~Client() { Close(); }
 
     constexpr
@@ -63,13 +66,16 @@ namespace SkyLinesTracking {
       return 5597;
     }
 
+    boost::asio::io_service &get_io_service() {
+      return socket.get_io_service();
+    }
+
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-    void SetIOThread(IOThread *io_thread);
     void SetHandler(Handler *handler);
 #endif
 
     bool IsDefined() const {
-      return socket.IsDefined();
+      return socket.is_open();
     }
 
     uint64_t GetKey() const {
@@ -80,12 +86,12 @@ namespace SkyLinesTracking {
       key = _key;
     }
 
-    bool Open(SocketAddress _address);
+    bool Open(boost::asio::ip::udp::endpoint _endpoint);
     void Close();
 
     template<typename P>
     bool SendPacket(const P &packet) {
-      return socket.Write(&packet, sizeof(packet), address) == sizeof(packet);
+      return socket.send(boost::asio::buffer(&packet, sizeof(packet))) == sizeof(packet);
     }
 
     bool SendFix(const NMEAInfo &basic);
@@ -103,8 +109,8 @@ namespace SkyLinesTracking {
     void OnThermalReceived(const ThermalResponsePacket &packet, size_t length);
     void OnDatagramReceived(void *data, size_t length);
 
-    /* virtual methods from SocketEventHandler */
-    bool OnSocketEvent(SocketDescriptor s, unsigned mask) override;
+    void OnReceive(const boost::system::error_code &ec, size_t size);
+    void AsyncReceive();
 #endif
   };
 }
