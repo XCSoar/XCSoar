@@ -29,10 +29,10 @@ Copyright_License {
 #include "DebugReplay.hpp"
 #include "Net/IPv4Address.hxx"
 #include "Net/StaticSocketAddress.hxx"
-
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
 #include "IO/Async/GlobalIOThread.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
 
 class Handler : public SkyLinesTracking::Handler {
   Mutex mutex;
@@ -94,10 +94,8 @@ main(int argc, char *argv[])
     return EXIT_FAILURE;
   }
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
   InitialiseIOThread();
   ScopeGlobalAsioThread global_asio_thread;
-#endif
 
   SkyLinesTracking::Client client;
 
