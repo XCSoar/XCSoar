@@ -24,7 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_ASIO_UTIL_HPP
 #define XCSOAR_ASIO_UTIL_HPP
 
-#include "Thread/Thread.hpp"
+#include "Thread/Mutex.hpp"
+#include "Thread/Cond.hxx"
 
 #include <boost/asio.hpp>
 
