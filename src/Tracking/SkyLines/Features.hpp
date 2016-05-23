@@ -25,9 +25,6 @@ Copyright_License {
 #define XCSOAR_TRACKING_SKYLINES_FEATURES_HPP
 
 #define HAVE_SKYLINES_TRACKING
-
-#if defined(HAVE_POSIX) && !defined(KOBO)
 #define HAVE_SKYLINES_TRACKING_HANDLER
-#endif
 
 #endif
