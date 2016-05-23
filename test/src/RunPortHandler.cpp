@@ -23,18 +23,30 @@ Copyright_License {
 
 #include "DebugPort.hpp"
 #include "Device/Port/Port.hpp"
-#include "Device/Port/ConfiguredPort.hpp"
-#include "Device/Config.hpp"
 #include "OS/Args.hpp"
-#include "OS/Sleep.h"
-#include "IO/Async/GlobalAsioThread.hpp"
-#include "IO/Async/AsioThread.hpp"
 #include "IO/DataHandler.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "Util/PrintException.hxx"
 
+#include <boost/asio/io_service.hpp>
+
 #include <stdio.h>
 #include <stdlib.h>
+
+class MyListener final : public PortListener {
+  boost::asio::io_service &io_service;
+
+  Port &port;
+
+public:
+  MyListener(boost::asio::io_service &_io_service, Port &_port)
+    :io_service(_io_service), port(_port) {}
+
+  void PortStateChanged() override {
+    if (port.GetState() == PortState::FAILED)
+      io_service.stop();
+  }
+};
 
 class MyHandler : public DataHandler {
 public:
@@ -49,17 +61,14 @@ try {
   DebugPort debug_port(args);
   args.ExpectEnd();
 
-  ScopeGlobalAsioThread global_asio_thread;
+  boost::asio::io_service io_service;
 
   MyHandler handler;
-  auto port = debug_port.Open(*asio_thread, handler);
+  auto port = debug_port.Open(io_service, handler);
+  MyListener listener(io_service, *port);
+  debug_port.SetListener(listener);
 
   ConsoleOperationEnvironment env;
-
-  if (!port->WaitConnected(env)) {
-    fprintf(stderr, "Failed to connect the port\n");
-    return EXIT_FAILURE;
-  }
 
   /* turn off output buffering */
   setvbuf(stdout, NULL, _IONBF, 0);
@@ -69,8 +78,7 @@ try {
     return EXIT_FAILURE;
   }
 
-  while (true)
-    Sleep(10000);
+  io_service.run();
 
   return EXIT_SUCCESS;
 } catch (const std::exception &exception) {
