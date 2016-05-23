@@ -165,7 +165,7 @@ OpenPortInternal(boost::asio::io_service &io_service,
   }
 
   case DeviceConfig::PortType::TCP_LISTENER: {
-    TCPPort *port = new TCPPort(listener, handler);
+    TCPPort *port = new TCPPort(io_service, listener, handler);
     if (!port->Open(config.tcp_port)) {
       delete port;
       return nullptr;

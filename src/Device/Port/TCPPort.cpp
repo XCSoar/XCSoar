@@ -22,115 +22,112 @@ Copyright_License {
 */
 
 #include "TCPPort.hpp"
-
-#ifdef HAVE_POSIX
-#include "IO/Async/GlobalIOThread.hpp"
-#endif
-
-#include <assert.h>
+#include "Net/Option.hpp"
+#include "IO/Async/AsioUtil.hpp"
 
 TCPPort::~TCPPort()
 {
-  SocketPort::Close();
+  BufferedPort::BeginClose();
 
-#ifndef HAVE_POSIX
-  if (thread.IsDefined()) {
-    thread.BeginStop();
-    thread.Join();
-  }
-#endif
+  if (connection.is_open())
+    CancelWait(connection);
 
-  if (listener.IsDefined()) {
-#ifdef HAVE_POSIX
-    io_thread->LockRemove(listener.ToFileDescriptor());
-#endif
-    listener.Close();
-  }
+  if (acceptor.is_open())
+    CancelWait(acceptor);
+
+  BufferedPort::EndClose();
 }
 
 bool
 TCPPort::Open(unsigned port)
 {
-  if (!listener.CreateTCPListener(port, 1))
+  boost::system::error_code ec;
+
+  const boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::tcp::v4(),
+                                                port);
+
+  acceptor.open(endpoint.protocol(), ec);
+  if (ec)
     return false;
 
-  /* register the socket in then IOThread or the SocketThread */
-#ifdef HAVE_POSIX
-  io_thread->LockAdd(listener.ToFileDescriptor(), Poll::READ, *this);
-#else
-  thread.Start(listener);
-#endif
-  StateChanged();
+  acceptor.bind(endpoint, ec);
+  if (ec) {
+    acceptor.close();
+    return false;
+  }
+
+  acceptor.listen(1, ec);
+  if (ec) {
+    acceptor.close();
+    return false;
+  }
+
+  AsyncAccept();
   return true;
 }
 
 PortState
 TCPPort::GetState() const
 {
-  PortState state = SocketPort::GetState();
-  if (state != PortState::FAILED)
-    return state;
-
-  return listener.IsDefined()
-    ? PortState::LIMBO
-    : PortState::FAILED;
+  if (connection.is_open())
+    return PortState::READY;
+  else if (acceptor.is_open())
+    return PortState::LIMBO;
+  else
+    return PortState::FAILED;
 }
 
-bool
-TCPPort::OnSocketEvent(SocketDescriptor _socket, unsigned mask)
+size_t
+TCPPort::Write(const void *data, size_t length)
 {
-  assert(listener.IsDefined());
+  if (!connection.is_open())
+    return 0;
 
-  if (_socket == listener) {
-    /* connection should never be defined here */
-    assert(SocketPort::GetState() == PortState::FAILED);
+  boost::system::error_code ec;
+  size_t nbytes = connection.send(boost::asio::buffer(data, length), 0, ec);
+  if (ec)
+    nbytes = 0;
 
-    SocketDescriptor s = listener.Accept();
-    if (!s.IsDefined())
-      return true;
+  return nbytes;
+}
 
-#ifndef HAVE_POSIX
-    /* reset the flag so we can wait for it atomically after
-       SocketPort::Set() */
-    closed_trigger.Reset();
-#endif
+void
+TCPPort::OnAccept(const boost::system::error_code &ec)
+{
+  if (ec == boost::asio::error::operation_aborted)
+    /* this object has already been deleted; bail out quickly without
+       touching anything */
+    return;
 
-    SocketPort::Set(std::move(s));
-
-#ifdef HAVE_POSIX
-    /* disable the listener socket while the connection socket is
-       active */
-    return false;
-#else
-    /* for until the connection SocketThread finishes the connection;
-       meanwhile, incoming connections are ignored */
-    closed_trigger.Wait();
-    SocketPort::Close();
-
-    /* now continue listening for incoming connections */
-    return true;
-#endif
-  } else {
-    /* this event affects the connection socket */
-
-    if (!SocketPort::OnSocketEvent(_socket, mask)) {
-      /* the connection was closed; continue listening on incoming
-         connections */
-
-#ifdef HAVE_POSIX
-      /* close the connection, unregister the event, and reinstate the
-         listener socket */
-      SocketPort::Close();
-      io_thread->Add(listener.ToFileDescriptor(), Poll::READ, *this);
-#else
-      /* we must not call SocketPort::Close() here because it may
-         deadlock, waiting forever for this thread to finish; instead,
-         wake up the listener thread, and let it handle the event */
-      closed_trigger.Signal();
-#endif
-      return false;
-    } else
-      /* continue reading from the connection */
-      return true;
+  if (ec) {
+    acceptor.close();
+    StateChanged();
+    return;
   }
+
+  StateChanged();
+
+  connection.set_option(SendTimeoutS(1));
+
+  AsyncRead();
+}
+
+void
+TCPPort::OnRead(const boost::system::error_code &ec, size_t nbytes)
+{
+  if (ec == boost::asio::error::operation_aborted)
+    /* this object has already been deleted; bail out quickly without
+       touching anything */
+    return;
+
+  if (ec) {
+    connection.close();
+    AsyncAccept();
+    StateChanged();
+    return;
+  }
+
+  DataReceived(input, nbytes);
+
+  AsyncRead();
 }

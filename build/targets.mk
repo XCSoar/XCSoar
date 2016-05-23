@@ -624,6 +624,11 @@ ifeq ($(TARGET),ANDROID)
   endif
 endif
 
+ifeq ($(HAVE_WIN32),y)
+  # for boost::asio::ip::tcp::acceptor
+  TARGET_LDLIBS += -lmswsock
+endif
+
 ifneq ($(filter PC CYGWIN,$(TARGET)),)
   TARGET_LDLIBS += -lwinmm
 endif
