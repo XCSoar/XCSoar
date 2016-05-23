@@ -53,7 +53,8 @@ public:
    * @param _handler the callback object for input received on the
    * port
    */
-  TTYPort(PortListener *_listener, DataHandler &_handler);
+  TTYPort(boost::asio::io_service &io_service,
+          PortListener *_listener, DataHandler &_handler);
   virtual ~TTYPort();
 
   /**

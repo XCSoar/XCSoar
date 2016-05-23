@@ -42,7 +42,8 @@ class TCPClientPort final
   PortState state = PortState::LIMBO;
 
 public:
-  TCPClientPort(PortListener *_listener, DataHandler &_handler);
+  TCPClientPort(boost::asio::io_service &io_service,
+                PortListener *_listener, DataHandler &_handler);
   virtual ~TCPClientPort();
 
   bool Connect(const char *host, unsigned port);

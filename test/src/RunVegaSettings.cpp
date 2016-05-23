@@ -30,6 +30,7 @@ Copyright_License {
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "IO/Async/GlobalIOThread.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
+#include "IO/Async/AsioThread.hpp"
 
 #include <stdio.h>
 #include <string.h>
@@ -42,7 +43,8 @@ int main(int argc, char **argv)
   InitialiseIOThread();
   ScopeGlobalAsioThread global_asio_thread;
 
-  Port *port = OpenPort(config, nullptr, *(DataHandler *)nullptr);
+  Port *port = OpenPort(*asio_thread, config,
+                        nullptr, *(DataHandler *)nullptr);
   if (port == NULL) {
     fprintf(stderr, "Failed to open COM port\n");
     return EXIT_FAILURE;

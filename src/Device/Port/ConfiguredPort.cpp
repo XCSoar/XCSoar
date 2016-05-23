@@ -79,7 +79,8 @@ WrapPort(const DeviceConfig &config, PortListener *listener,
 }
 
 static Port *
-OpenPortInternal(const DeviceConfig &config, PortListener *listener,
+OpenPortInternal(boost::asio::io_service &io_service,
+                 const DeviceConfig &config, PortListener *listener,
                  DataHandler &handler)
 {
   const TCHAR *path = nullptr;
@@ -154,7 +155,7 @@ OpenPortInternal(const DeviceConfig &config, PortListener *listener,
     if (!ip_address.IsValid())
       return nullptr;
 
-    auto port = new TCPClientPort(listener, handler);
+    auto port = new TCPClientPort(io_service, listener, handler);
     if (!port->Connect(ip_address, config.tcp_port)) {
       delete port;
       return nullptr;
@@ -191,7 +192,7 @@ OpenPortInternal(const DeviceConfig &config, PortListener *listener,
     if (unlink(config.path.c_str()) < 0 && errno != ENOENT)
       return nullptr;
 
-    TTYPort *port = new TTYPort(listener, handler);
+    TTYPort *port = new TTYPort(io_service, listener, handler);
     const char *slave_path = port->OpenPseudo();
     if (slave_path == nullptr) {
       delete port;
@@ -214,7 +215,7 @@ OpenPortInternal(const DeviceConfig &config, PortListener *listener,
     return nullptr;
 
 #ifdef HAVE_POSIX
-  TTYPort *port = new TTYPort(listener, handler);
+  TTYPort *port = new TTYPort(io_service, listener, handler);
 #else
   SerialPort *port = new SerialPort(listener, handler);
 #endif
@@ -227,10 +228,11 @@ OpenPortInternal(const DeviceConfig &config, PortListener *listener,
 }
 
 Port *
-OpenPort(const DeviceConfig &config, PortListener *listener,
+OpenPort(boost::asio::io_service &io_service,
+         const DeviceConfig &config, PortListener *listener,
          DataHandler &handler)
 {
-  Port *port = OpenPortInternal(config, listener, handler);
+  Port *port = OpenPortInternal(io_service, config, listener, handler);
   if (port != nullptr)
     port = WrapPort(config, listener, handler, port);
   return port;

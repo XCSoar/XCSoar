@@ -28,9 +28,11 @@ class Port;
 class PortListener;
 class DataHandler;
 struct DeviceConfig;
+namespace boost { namespace asio { class io_service; }}
 
 Port *
-OpenPort(const DeviceConfig &config, PortListener *listener,
+OpenPort(boost::asio::io_service &io_service,
+         const DeviceConfig &config, PortListener *listener,
          DataHandler &handler);
 
 #endif

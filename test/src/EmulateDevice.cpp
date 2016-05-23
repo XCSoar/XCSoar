@@ -38,6 +38,7 @@ Copyright_License {
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "IO/Async/GlobalIOThread.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
+#include "IO/Async/AsioThread.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -67,7 +68,7 @@ main(int argc, char **argv)
   InitialiseIOThread();
   ScopeGlobalAsioThread global_asio_thread;
 
-  Port *port = OpenPort(config, nullptr, *emulator->handler);
+  Port *port = OpenPort(*asio_thread, config, nullptr, *emulator->handler);
   if (port == NULL) {
     delete emulator;
     fprintf(stderr, "Failed to open COM port\n");

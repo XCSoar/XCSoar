@@ -34,6 +34,7 @@ Copyright_License {
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "IO/Async/GlobalIOThread.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
+#include "IO/Async/AsioThread.hpp"
 #include "Units/System.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "IO/DataHandler.hpp"
@@ -343,7 +344,7 @@ main(int argc, char **argv)
   ScopeGlobalAsioThread global_asio_thread;
 
   NullDataHandler handler;
-  std::unique_ptr<Port> port(OpenPort(config, nullptr, handler));
+  std::unique_ptr<Port> port(OpenPort(*asio_thread, config, nullptr, handler));
   if (!port) {
     fprintf(stderr, "Failed to open COM port\n");
     return EXIT_FAILURE;

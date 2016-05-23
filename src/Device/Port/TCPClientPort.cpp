@@ -28,10 +28,11 @@ Copyright_License {
 #include "Net/Option.hpp"
 #include "Util/StaticString.hxx"
 
-TCPClientPort::TCPClientPort(PortListener *_listener, DataHandler &_handler)
+TCPClientPort::TCPClientPort(boost::asio::io_service &io_service,
+                             PortListener *_listener, DataHandler &_handler)
   :BufferedPort(_listener, _handler),
-   resolver(*asio_thread),
-   socket(*asio_thread)
+   resolver(io_service),
+   socket(io_service)
 {
 }
 

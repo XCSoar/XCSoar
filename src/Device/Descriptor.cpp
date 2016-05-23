@@ -38,6 +38,8 @@ Copyright_License {
 #include "Logger/NMEALogger.hpp"
 #include "Language/Language.hpp"
 #include "Operation/Operation.hpp"
+#include "IO/Async/AsioThread.hpp"
+#include "IO/Async/GlobalAsioThread.hpp"
 #include "OS/Path.hpp"
 #include "../Simulator.hpp"
 #include "Input/InputQueue.hpp"
@@ -424,7 +426,7 @@ DeviceDescriptor::DoOpen(OperationEnvironment &env)
 
   reopen_clock.Update();
 
-  Port *port = OpenPort(config, port_listener, *this);
+  Port *port = OpenPort(*asio_thread, config, port_listener, *this);
   if (port == nullptr) {
     TCHAR name_buffer[64];
     const TCHAR *name = config.GetPortName(name_buffer, 64);

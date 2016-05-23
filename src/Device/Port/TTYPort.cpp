@@ -24,8 +24,6 @@ Copyright_License {
 #include "TTYPort.hpp"
 #include "Asset.hpp"
 #include "OS/LogError.hpp"
-#include "IO/Async/GlobalAsioThread.hpp"
-#include "IO/Async/AsioThread.hpp"
 #include "IO/Async/AsioUtil.hpp"
 #include "Util/StringFormat.hpp"
 
@@ -38,9 +36,10 @@ Copyright_License {
 #include <errno.h>
 #include <windef.h> // for MAX_PATH
 
-TTYPort::TTYPort(PortListener *_listener, DataHandler &_handler)
+TTYPort::TTYPort(boost::asio::io_service &io_service,
+                 PortListener *_listener, DataHandler &_handler)
   :BufferedPort(_listener, _handler),
-   asio(*asio_thread)
+   asio(io_service)
 {
 }
 
