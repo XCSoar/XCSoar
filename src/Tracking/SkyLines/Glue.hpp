@@ -33,18 +33,18 @@ namespace SkyLinesTracking {
 
   class Glue {
     Client client;
-    unsigned interval;
+    unsigned interval = 0;
     GPSClock clock;
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
     GPSClock traffic_clock;
-    bool traffic_enabled;
-    bool near_traffic_enabled;
+    bool traffic_enabled = false;
+    bool near_traffic_enabled = false;
 #endif
 
-    bool roaming;
+    bool roaming = true;
 
-    Queue *queue;
+    Queue *queue = nullptr;
 
   public:
     Glue();

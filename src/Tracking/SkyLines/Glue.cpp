@@ -36,13 +36,6 @@ Copyright_License {
 #include <assert.h>
 
 SkyLinesTracking::Glue::Glue()
-  :interval(0),
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-   traffic_enabled(false),
-   near_traffic_enabled(false),
-#endif
-   roaming(true),
-   queue(nullptr)
 {
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   assert(io_thread != nullptr);
