@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "ConfiguredPort.hpp"
-#include "SocketPort.hpp"
+#include "UDPPort.hpp"
 #include "TCPPort.hpp"
 #include "K6BtPort.hpp"
 #include "Device/Config.hpp"
@@ -175,8 +175,8 @@ OpenPortInternal(boost::asio::io_service &io_service,
   }
 
   case DeviceConfig::PortType::UDP_LISTENER: {
-    SocketPort *port = new SocketPort(listener, handler);
-    if (!port->OpenUDPListener(config.tcp_port)) {
+    auto *port = new UDPPort(io_service, listener, handler);
+    if (!port->Open(config.tcp_port)) {
       delete port;
       return nullptr;
     }
