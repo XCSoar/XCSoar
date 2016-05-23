@@ -143,8 +143,9 @@ main(int argc, char *argv[])
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   client.Close();
-  DeinitialiseIOThread();
 #endif
+
+  DeinitialiseIOThread();
 
   return EXIT_SUCCESS;
 }
