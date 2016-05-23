@@ -28,7 +28,6 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "OS/Sleep.h"
 #include "Operation/ConsoleOperationEnvironment.hpp"
-#include "IO/Async/GlobalIOThread.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
 #include "IO/Async/AsioThread.hpp"
 #include "IO/DataHandler.hpp"
@@ -50,7 +49,6 @@ main(int argc, char **argv)
   const DeviceConfig config = ParsePortArgs(args);
   args.ExpectEnd();
 
-  InitialiseIOThread();
   ScopeGlobalAsioThread global_asio_thread;
 
   MyHandler handler;
@@ -64,14 +62,12 @@ main(int argc, char **argv)
 
   if (!port->WaitConnected(env)) {
     delete port;
-    DeinitialiseIOThread();
     fprintf(stderr, "Failed to connect the port\n");
     return EXIT_FAILURE;
   }
 
   if (!port->StartRxThread()) {
     delete port;
-    DeinitialiseIOThread();
     fprintf(stderr, "Failed to start the port thread\n");
     return EXIT_FAILURE;
   }
@@ -108,6 +104,5 @@ main(int argc, char **argv)
   }
 
   delete port;
-  DeinitialiseIOThread();
   return EXIT_SUCCESS;
 }

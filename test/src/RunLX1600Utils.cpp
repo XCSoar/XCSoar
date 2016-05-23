@@ -32,7 +32,6 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "Util/StringUtil.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
-#include "IO/Async/GlobalIOThread.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
 #include "IO/Async/AsioThread.hpp"
 #include "Units/System.hpp"
@@ -340,7 +339,6 @@ main(int argc, char **argv)
   const DeviceConfig config = ParsePortArgs(args);
   args.ExpectEnd();
 
-  InitialiseIOThread();
   ScopeGlobalAsioThread global_asio_thread;
 
   NullDataHandler handler;
@@ -358,8 +356,6 @@ main(int argc, char **argv)
   }
 
   RunUI(*port, env);
-
-  DeinitialiseIOThread();
 
   return EXIT_SUCCESS;
 }

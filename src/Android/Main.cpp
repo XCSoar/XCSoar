@@ -60,7 +60,6 @@ Copyright_License {
 #include "Java/URL.hxx"
 #include "Compiler.h"
 #include "org_xcsoar_NativeView.h"
-#include "IO/Async/GlobalIOThread.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
 #include "IO/Async/AsioThread.hpp"
 #include "Thread/Debug.hpp"
@@ -124,7 +123,6 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
 
   InitThreadDebug();
 
-  InitialiseIOThread();
   InitialiseAsioThread();
 
   Java::Init(env);
@@ -275,7 +273,6 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   Java::URL::Deinitialise(env);
 
   DeinitialiseAsioThread();
-  DeinitialiseIOThread();
 }
 
 gcc_visibility_default

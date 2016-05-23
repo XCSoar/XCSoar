@@ -29,7 +29,6 @@ Copyright_License {
 #include "DebugReplay.hpp"
 #include "Net/IPv4Address.hxx"
 #include "Net/StaticSocketAddress.hxx"
-#include "IO/Async/GlobalIOThread.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
@@ -84,7 +83,6 @@ try {
   boost::asio::ip::udp::resolver resolver(io_service);
   const auto endpoint = *resolver.resolve({host, "5597"});
 
-  InitialiseIOThread();
   ScopeGlobalAsioThread global_asio_thread;
 
   SkyLinesTracking::Client client(io_service);
@@ -128,8 +126,6 @@ try {
       usleep(100000);
     }
   }
-
-  DeinitialiseIOThread();
 
   return EXIT_SUCCESS;
 } catch (const std::exception &e) {

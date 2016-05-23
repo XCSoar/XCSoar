@@ -33,7 +33,6 @@ Copyright_License {
 #include "OS/ConvertPathName.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "OS/Args.hpp"
-#include "IO/Async/GlobalIOThread.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
 #include "IO/Async/AsioThread.hpp"
 #include "Util/ConvertString.hpp"
@@ -102,7 +101,6 @@ int main(int argc, char **argv)
   unsigned flight_id = args.IsEmpty() ? 0 : atoi(args.GetNext());
   args.ExpectEnd();
 
-  InitialiseIOThread();
   ScopeGlobalAsioThread global_asio_thread;
 
   Port *port = OpenPort(*asio_thread, config,
@@ -127,7 +125,6 @@ int main(int argc, char **argv)
 
   if (!port->WaitConnected(env)) {
     delete port;
-    DeinitialiseIOThread();
     fprintf(stderr, "Failed to connect the port\n");
     return EXIT_FAILURE;
   }
@@ -169,7 +166,6 @@ int main(int argc, char **argv)
 
   delete device;
   delete port;
-  DeinitialiseIOThread();
 
   printf("Flight downloaded successfully\n");
 

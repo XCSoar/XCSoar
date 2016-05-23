@@ -28,7 +28,6 @@ Copyright_License {
 #include "Device/Config.hpp"
 #include "OS/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
-#include "IO/Async/GlobalIOThread.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
 #include "IO/Async/AsioThread.hpp"
 
@@ -40,7 +39,6 @@ int main(int argc, char **argv)
   Args args(argc, argv, "PORT BAUD [NAME=VALUE] [NAME] ...");
   const DeviceConfig config = ParsePortArgs(args);
 
-  InitialiseIOThread();
   ScopeGlobalAsioThread global_asio_thread;
 
   Port *port = OpenPort(*asio_thread, config,
@@ -54,7 +52,6 @@ int main(int argc, char **argv)
 
   if (!port->WaitConnected(env)) {
     delete port;
-    DeinitialiseIOThread();
     fprintf(stderr, "Failed to connect the port\n");
     return EXIT_FAILURE;
   }
@@ -78,6 +75,5 @@ int main(int argc, char **argv)
   }
 
   delete port;
-  DeinitialiseIOThread();
   return EXIT_SUCCESS;
 }

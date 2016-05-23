@@ -34,7 +34,6 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "OS/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
-#include "IO/Async/GlobalIOThread.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
 #include "IO/Async/AsioThread.hpp"
 #include "Util/ConvertString.hpp"
@@ -106,7 +105,6 @@ int main(int argc, char **argv)
 
   assert(driver->CreateOnPort != NULL);
 
-  InitialiseIOThread();
   ScopeGlobalAsioThread global_asio_thread;
 
   Port *port = OpenPort(*asio_thread, config,
@@ -118,7 +116,6 @@ int main(int argc, char **argv)
 
   if (!port->WaitConnected(env)) {
     delete port;
-    DeinitialiseIOThread();
     fprintf(stderr, "Failed to connect the port\n");
     return EXIT_FAILURE;
   }
@@ -134,7 +131,6 @@ int main(int argc, char **argv)
 
   delete device;
   delete port;
-  DeinitialiseIOThread();
 
   for (auto i = flight_list.begin(); i != flight_list.end(); ++i) {
     const RecordedFlightInfo &flight = *i;

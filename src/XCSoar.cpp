@@ -42,7 +42,6 @@ Copyright_License {
 #include "Language/LanguageGlue.hpp"
 #include "Simulator.hpp"
 #include "OS/Args.hpp"
-#include "IO/Async/GlobalIOThread.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
 
 #ifndef NDEBUG
@@ -108,7 +107,6 @@ Main()
   AllowLanguage();
   InitLanguage();
 
-  InitialiseIOThread();
   ScopeGlobalAsioThread global_asio_thread;
 
   // Perform application initialization and run loop
@@ -117,8 +115,6 @@ Main()
     ret = CommonInterface::main_window->RunEventLoop();
 
   Shutdown();
-
-  DeinitialiseIOThread();
 
   DisallowLanguage();
 

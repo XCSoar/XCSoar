@@ -27,7 +27,6 @@ Copyright_License {
 #include "Device/Port/ConfiguredPort.hpp"
 #include "Device/Config.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
-#include "IO/Async/GlobalIOThread.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
 #include "IO/Async/AsioThread.hpp"
 #include "Util/StaticString.hxx"
@@ -43,13 +42,11 @@ int main(int argc, char **argv)
   const DeviceConfig config = ParsePortArgs(args);
   args.ExpectEnd();
 
-  InitialiseIOThread();
   ScopeGlobalAsioThread global_asio_thread;
 
   Port *port = OpenPort(*asio_thread, config,
                         nullptr, *(DataHandler *)nullptr);
   if (port == nullptr) {
-    DeinitialiseIOThread();
     fprintf(stderr, "Failed to open port\n");
     return EXIT_FAILURE;
   }
@@ -58,7 +55,6 @@ int main(int argc, char **argv)
 
   if (!port->WaitConnected(env)) {
     delete port;
-    DeinitialiseIOThread();
     fprintf(stderr, "Failed to connect the port\n");
     return EXIT_FAILURE;
   }
