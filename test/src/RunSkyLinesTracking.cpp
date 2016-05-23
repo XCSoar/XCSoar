@@ -35,12 +35,12 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "Thread/Cond.hxx"
 
-#include <boost/asio/deadline_timer.hpp>
+#include <boost/asio/steady_timer.hpp>
 
 class Handler : public SkyLinesTracking::Handler {
   SkyLinesTracking::Client &client;
 
-  boost::asio::deadline_timer timer;
+  boost::asio::steady_timer timer;
 
 public:
   explicit Handler(SkyLinesTracking::Client &_client)
@@ -61,7 +61,7 @@ public:
            (double)location.latitude.Degrees(),
            altitude);
 
-    timer.expires_from_now(boost::posix_time::seconds(1));
+    timer.expires_from_now(std::chrono::seconds(1));
     timer.async_wait([this](const boost::system::error_code &ec){
         if (!ec)
           client.Close();
