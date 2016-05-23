@@ -46,23 +46,16 @@ namespace SkyLinesTracking {
 #endif
   {
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-    IOThread *io_thread;
-    Handler *handler;
+    IOThread *io_thread = nullptr;
+    Handler *handler = nullptr;
 #endif
 
-    uint64_t key;
+    uint64_t key = 0;
 
     AllocatedSocketAddress address;
-    SocketDescriptor socket;
+    SocketDescriptor socket = SocketDescriptor::Undefined();
 
   public:
-    Client()
-      :
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-      io_thread(nullptr), handler(nullptr),
-#endif
-      key(0),
-      socket(SocketDescriptor::Undefined()) {}
     ~Client() { Close(); }
 
     constexpr
