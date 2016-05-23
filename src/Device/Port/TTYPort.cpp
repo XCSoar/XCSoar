@@ -49,7 +49,7 @@ TTYPort::~TTYPort()
   BufferedPort::BeginClose();
 
   if (asio.is_open())
-    CancelWait(asio.get_io_service(), asio);
+    CancelWait(asio);
 
   BufferedPort::EndClose();
 }

@@ -40,9 +40,9 @@ TCPClientPort::~TCPClientPort()
   BufferedPort::BeginClose();
 
   if (socket.is_open())
-    CancelWait(socket.get_io_service(), socket);
+    CancelWait(socket);
   else
-    CancelWait(socket.get_io_service(), resolver);
+    CancelWait(resolver);
 
   BufferedPort::EndClose();
 }

@@ -66,4 +66,14 @@ CancelWait(boost::asio::io_service &io_service, T &t)
     });
 }
 
+/**
+ * Cancel the specified object wait for its completion.
+ */
+template<typename T>
+void
+CancelWait(T &t)
+{
+  CancelWait(t.get_io_service(), t);
+}
+
 #endif
