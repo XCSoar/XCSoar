@@ -131,7 +131,10 @@ ThermalBandRenderer::DrawRiskMC(const DerivedInfo& calculated,
   tmp.Reset();
   double h_m = 0;
   double rmc = 0;
-  const double dh = calculated.common_stats.height_max_working/32;
+  const double dh = (chart.GetYMax()-chart.GetYMin())/32;
+  if (dh <= 0)
+    return;
+
   for (double h= chart.GetYMin(); h<= chart.GetYMax(); h += dh) {
     const double f = calculated.CalculateWorkingFraction(h+hoffset, settings_computer.task.safety_height_arrival);
     const double risk_mc =
