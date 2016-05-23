@@ -25,82 +25,16 @@ Copyright_License {
 #include "MapItem.hpp"
 #include "List.hpp"
 #include "Util/StaticArray.hxx"
-#include "Engine/Airspace/AirspaceWarning.hpp"
-#include "Engine/Airspace/AbstractAirspace.hpp"
-#include "Engine/Airspace/Airspaces.hpp"
-#include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
-#include "Airspace/AirspaceVisibility.hpp"
-#include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Engine/Waypoint/WaypointVisitor.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/ProtectedRoutePlanner.hpp"
-#include "NMEA/ThermalLocator.hpp"
-#include "NMEA/MoreData.hpp"
-#include "NMEA/Derived.hpp"
+#include "NMEA/Info.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "FLARM/Friends.hpp"
-#include "Tracking/SkyLines/Data.hpp"
-#include "Tracking/TrackingGlue.hpp"
-#include "Components.hpp"
-
-#ifdef HAVE_NOAA
-#include "Weather/NOAAStore.hpp"
-#endif
-
-class AirspaceWarningList
-{
-  StaticArray<const AbstractAirspace *,64> list;
-
-public:
-  void Add(const AirspaceWarning& as) {
-    if (as.GetWarningState() > AirspaceWarning::WARNING_CLEAR)
-      list.checked_append(&as.GetAirspace());
-  }
-
-  void Fill(const AirspaceWarningManager &awm) {
-    for (const AirspaceWarning &as : awm)
-      Add(as);
-  }
-
-  void Fill(const ProtectedAirspaceWarningManager &awm) {
-    const ProtectedAirspaceWarningManager::Lease lease(awm);
-    Fill(lease);
-  }
-
-  bool Contains(const AbstractAirspace& as) const {
-    return list.contains(&as);
-  }
-};
-
-class AirspaceAtPointPredicate: public AirspacePredicate
-{
-  const AirspaceVisibility visible_predicate;
-  const AirspaceWarningList &warnings;
-  const GeoPoint location;
-
-public:
-  AirspaceAtPointPredicate(const AirspaceComputerSettings &_computer_settings,
-                           const AirspaceRendererSettings &_renderer_settings,
-                           const AircraftState& _state,
-                           const AirspaceWarningList &_warnings,
-                           const GeoPoint _location)
-    :visible_predicate(_computer_settings, _renderer_settings, _state),
-     warnings(_warnings),
-     location(_location) {}
-
-  bool operator()(const AbstractAirspace& airspace) const {
-    // Airspace should be visible or have a warning/inside status
-    // and airspace needs to be at specified location
-
-    return (visible_predicate(airspace) || warnings.Contains(airspace)) &&
-      airspace.Inside(location);
-  }
-};
 
 class WaypointListBuilderVisitor:
   public WaypointVisitor
@@ -184,33 +118,6 @@ MapItemListBuilder::AddWaypoints(const Waypoints &waypoints)
 }
 
 void
-MapItemListBuilder::AddVisibleAirspace(
-    const Airspaces &airspaces,
-    const ProtectedAirspaceWarningManager *warning_manager,
-    const AirspaceComputerSettings &computer_settings,
-    const AirspaceRendererSettings &renderer_settings,
-    const MoreData &basic, const DerivedInfo &calculated)
-{
-  AirspaceWarningList warnings;
-  if (warning_manager != nullptr)
-    warnings.Fill(*warning_manager);
-
-  const AircraftState aircraft = ToAircraftState(basic, calculated);
-  AirspaceAtPointPredicate predicate(computer_settings, renderer_settings,
-                                     aircraft,
-                                     warnings, location);
-
-  for (const auto &i : airspaces.QueryWithinRange(location, 100)) {
-    if (list.full())
-      break;
-
-    const AbstractAirspace &airspace = i.GetAirspace();
-    if (predicate(airspace))
-      list.append(new AirspaceMapItem(airspace));
-  }
-}
-
-void
 MapItemListBuilder::AddTaskOZs(const ProtectedTaskManager &task)
 {
   ProtectedTaskManager::Lease task_manager(task);
@@ -233,91 +140,5 @@ MapItemListBuilder::AddTaskOZs(const ProtectedTaskManager &task)
     const ObservationZonePoint &oz = task_point.GetObservationZone();
     list.append(new TaskOZMapItem(i, oz, task_point.GetType(),
                                   task_point.GetWaypointPtr()));
-  }
-}
-
-#ifdef HAVE_NOAA
-void
-MapItemListBuilder::AddWeatherStations(NOAAStore &store)
-{
-  for (auto it = store.begin(), end = store.end(); it != end; ++it) {
-    if (list.full())
-      break;
-
-    if (it->parsed_metar_available &&
-        it->parsed_metar.location_available &&
-        location.DistanceS(it->parsed_metar.location) < range)
-      list.checked_append(new WeatherStationMapItem(it));
-  }
-}
-#endif
-
-void
-MapItemListBuilder::AddTraffic(const TrafficList &flarm)
-{
-  for (const auto &t : flarm.list) {
-    if (list.full())
-      break;
-
-    if (location.DistanceS(t.location) < range) {
-      auto color = FlarmFriends::GetFriendColor(t.id);
-      list.append(new TrafficMapItem(t.id, color));
-    }
-  }
-}
-
-void
-MapItemListBuilder::AddSkyLinesTraffic()
-{
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  const auto &data = tracking->GetSkyLinesData();
-  const ScopeLock protect(data.mutex);
-
-  StaticString<32> buffer;
-
-  for (const auto &i : data.traffic) {
-    if (list.full())
-      break;
-
-    if (i.second.location.IsValid() &&
-        location.DistanceS(i.second.location) < range) {
-      const uint32_t id = i.first;
-      auto name_i = data.user_names.find(id);
-      const TCHAR *name;
-      if (name_i == data.user_names.end()) {
-        /* no name found */
-        buffer.UnsafeFormat(_T("SkyLines %u"), (unsigned)id);
-        name = buffer;
-      } else
-        /* we know the name */
-        name = name_i->second.c_str();
-
-      list.append(new SkyLinesTrafficMapItem(id, i.second.time_of_day_ms,
-                                             i.second.altitude,
-                                             name));
-    }
-  }
-#endif
-}
-
-void
-MapItemListBuilder::AddThermals(const ThermalLocatorInfo &thermals,
-                                const MoreData &basic,
-                                const DerivedInfo &calculated)
-{
-  for (const auto &t : thermals.sources) {
-    if (list.full())
-      break;
-
-    // find height difference
-    if (basic.nav_altitude < t.ground_height)
-      continue;
-
-    GeoPoint loc = calculated.wind_available
-      ? t.CalculateAdjustedLocation(basic.nav_altitude, calculated.wind)
-      : t.location;
-
-    if (location.DistanceS(loc) < range)
-      list.append(new ThermalMapItem(t));
   }
 }

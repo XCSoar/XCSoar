@@ -462,6 +462,9 @@ XCSOAR_SOURCES := \
 	$(SRC)/MapWindow/Items/OverlayMapItem.cpp \
 	$(SRC)/MapWindow/Items/List.cpp \
 	$(SRC)/MapWindow/Items/Builder.cpp \
+	$(SRC)/MapWindow/Items/AirspaceBuilder.cpp \
+	$(SRC)/MapWindow/Items/TrafficBuilder.cpp \
+	$(SRC)/MapWindow/Items/WeatherBuilder.cpp \
 	$(SRC)/MapWindow/MapWindow.cpp \
 	$(SRC)/MapWindow/MapWindowEvents.cpp \
 	$(SRC)/MapWindow/MapWindowGlideRange.cpp \
