@@ -62,6 +62,7 @@ Copyright_License {
 #include "org_xcsoar_NativeView.h"
 #include "IO/Async/GlobalIOThread.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
+#include "IO/Async/AsioThread.hpp"
 #include "Thread/Debug.hpp"
 
 #include "IOIOHelper.hpp"
@@ -206,7 +207,7 @@ Java_org_xcsoar_NativeView_runNative(JNIEnv *env, jobject obj)
 
   OpenGL::Initialise();
 
-  CheckLogCat(*io_thread);
+  CheckLogCat(*asio_thread);
 
   CommonInterface::main_window->RunEventLoop();
 }

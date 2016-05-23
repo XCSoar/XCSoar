@@ -24,14 +24,14 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_LOGCAT_HPP
 #define XCSOAR_ANDROID_LOGCAT_HPP
 
-class IOThread;
+namespace boost { namespace asio { class io_service; }}
 
 /**
  * Check the logcat for a XCSoar crash.  Save the logcat in
  * XCSoarData/crash/.
  */
 void
-CheckLogCat(IOThread &io_thread);
+CheckLogCat(boost::asio::io_service &io_service);
 
 void
 StopLogCat();

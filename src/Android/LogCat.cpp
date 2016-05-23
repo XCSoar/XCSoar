@@ -25,9 +25,11 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 #include "IO/FileLineReader.hpp"
-#include "IO/Async/IOThread.hpp"
+#include "IO/Async/AsioUtil.hpp"
 #include "OS/FileDescriptor.hxx"
 #include "OS/FileUtil.hpp"
+
+#include <boost/asio.hpp>
 
 #include <atomic>
 #include <string>
@@ -44,22 +46,24 @@ Copyright_License {
 #include <sys/wait.h>
 #include <fcntl.h>
 
-class LogCatReader final : private FileEventHandler {
-  IOThread &io_thread;
-  FileDescriptor fd;
+class LogCatReader final {
+  boost::asio::posix::stream_descriptor fd;
   std::atomic<pid_t> pid;
 
   std::string data;
 
+  char buffer[4096];
+
 public:
-  LogCatReader(IOThread &_io_thread, FileDescriptor _fd, pid_t _pid)
-    :io_thread(_io_thread), fd(_fd), pid(_pid) {
-    io_thread.LockAdd(fd, IOThread::READ, *this);
+  LogCatReader(boost::asio::io_service &io_service,
+               FileDescriptor _fd, pid_t _pid)
+    :fd(io_service, _fd.Get()), pid(_pid) {
+    AsyncRead();
   }
 
   ~LogCatReader() {
-    io_thread.LockRemove(fd);
-    fd.Close();
+    CancelWait(fd);
+    fd.close();
 
     Kill(pid.exchange(0));
   }
@@ -70,7 +74,14 @@ private:
   void Save(int pid) const;
   void EndOfFile();
 
-  bool OnFileEvent(FileDescriptor fd, unsigned mask) override;
+  void OnRead(const boost::system::error_code &ec, size_t nbytes);
+
+  void AsyncRead() {
+    fd.async_read_some(boost::asio::buffer(buffer, sizeof(buffer)),
+                       std::bind(&LogCatReader::OnRead, this,
+                                 std::placeholders::_1,
+                                 std::placeholders::_2));
+  }
 };
 
 static void
@@ -176,27 +187,29 @@ LogCatReader::EndOfFile()
   OnLogCatFinished(pid > 0);
 }
 
-bool
-LogCatReader::OnFileEvent(FileDescriptor _fd, unsigned mask)
+void
+LogCatReader::OnRead(const boost::system::error_code &ec, size_t nbytes)
 {
-  assert(_fd == fd);
+  if (ec == boost::asio::error::operation_aborted)
+    /* this object has already been deleted; bail out quickly without
+       touching anything */
+    return;
 
-  char buffer[1024];
-  ssize_t nbytes = fd.Read(buffer, sizeof(buffer));
-  if (nbytes > 0) {
-    if (data.length() < 1024 * 1024)
-      data.append(buffer, nbytes);
-    return true;
-  } else {
+  if (ec) {
     EndOfFile();
-    return false;
+    return;
   }
+
+  if (data.length() < 1024 * 1024)
+    data.append(buffer, nbytes);
+
+  AsyncRead();
 }
 
 static std::atomic<LogCatReader *> log_cat_reader;
 
 void
-CheckLogCat(IOThread &io_thread)
+CheckLogCat(boost::asio::io_service &io_service)
 {
   LogFormat("Launching logcat");
 
@@ -222,7 +235,7 @@ CheckLogCat(IOThread &io_thread)
     return;
   }
 
-  log_cat_reader = new LogCatReader(io_thread, r, pid);
+  log_cat_reader = new LogCatReader(io_service, r, pid);
 }
 
 void
