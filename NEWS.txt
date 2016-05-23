@@ -17,6 +17,26 @@ Version 7.0 - not yet released
   - task restart
 * tracking
   - enable SkyLines traffic display on Windows
+* analysis
+  - enhanced graphics: minor tics, color scheme, layout
+  - key labels drawn on lines in several pages
+  - task turnpoint label drawn on relevant pages
+  - barogram: improved working band ceiling and floor calculation
+  - climb history: new display uses time of climb as width of bars
+  - new page: vario histogram in climb and cruise mode
+  - new page: maccready cross-country speed
+  - glide polar: dolphin speed line drawn on polar
+* map display
+  - new display: glide range line drawn to working floor
+* thermal band
+  - new algorithm, with improved statistics
+  - separate active climb and encounter-averaged bands
+* infoboxes
+  - added ":1" unit for gradient type displays
+  - new infobox: % time non-circling climb
+  - new infobox: % climb chart showing proportions of time spent circling climb (gray), cruise,
+      climbing cruise (green), circling non-climb (orange)
+  - improved auto-scaling of vario-like graphical infoboxes
 * Windows
   - drop support for Windows CE
   - require Windows Vista or later
