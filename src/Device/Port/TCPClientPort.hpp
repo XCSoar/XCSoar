@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "BufferedPort.hpp"
 
-#include <boost/asio.hpp>
+#include <boost/asio/ip/tcp.hpp>
 
 /**
  * A #Port implementation that connects to a TCP port.

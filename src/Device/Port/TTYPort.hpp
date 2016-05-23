@@ -27,7 +27,7 @@ Copyright_License {
 #include "BufferedPort.hpp"
 #include "OS/TTYDescriptor.hpp"
 
-#include <boost/asio.hpp>
+#include <boost/asio/posix/stream_descriptor.hpp>
 
 #include <atomic>
 
