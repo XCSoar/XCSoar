@@ -91,8 +91,9 @@ namespace SkyLinesTracking {
 
     template<typename P>
     bool SendPacket(const P &packet) {
+      boost::system::error_code ec;
       return socket.send_to(boost::asio::buffer(&packet, sizeof(packet)),
-                            endpoint) == sizeof(packet);
+                            endpoint, 0, ec) == sizeof(packet) && !ec;
     }
 
     bool SendFix(const NMEAInfo &basic);
