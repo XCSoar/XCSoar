@@ -25,9 +25,8 @@ Copyright_License {
 #define XCSOAR_DEVICE_TTY_PORT_HPP
 
 #include "BufferedPort.hpp"
-#include "OS/TTYDescriptor.hpp"
 
-#include <boost/asio/posix/stream_descriptor.hpp>
+#include <boost/asio/serial_port.hpp>
 
 #include <atomic>
 
@@ -40,9 +39,7 @@ class TTYPort : public BufferedPort
 {
   unsigned baud_rate;
 
-  TTYDescriptor tty;
-
-  boost::asio::posix::stream_descriptor asio;
+  boost::asio::serial_port serial_port;
 
   std::atomic<bool> valid;
 
@@ -85,9 +82,9 @@ private:
   void OnReadReady(const boost::system::error_code &ec);
 
   void AsyncRead() {
-    asio.async_read_some(boost::asio::null_buffers(),
-                         std::bind(&TTYPort::OnReadReady, this,
-                                   std::placeholders::_1));
+    serial_port.async_read_some(boost::asio::null_buffers(),
+                                std::bind(&TTYPort::OnReadReady, this,
+                                          std::placeholders::_1));
   }
 };
 

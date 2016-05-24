@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "TTYPort.hpp"
 #include "Asset.hpp"
+#include "OS/FileDescriptor.hxx"
 #include "OS/LogError.hpp"
 #include "IO/Async/AsioUtil.hpp"
 #include "Util/StringFormat.hpp"
@@ -39,7 +40,7 @@ Copyright_License {
 TTYPort::TTYPort(boost::asio::io_service &io_service,
                  PortListener *_listener, DataHandler &_handler)
   :BufferedPort(_listener, _handler),
-   asio(io_service)
+   serial_port(io_service)
 {
 }
 
@@ -47,8 +48,8 @@ TTYPort::~TTYPort()
 {
   BufferedPort::BeginClose();
 
-  if (asio.is_open())
-    CancelWait(asio);
+  if (serial_port.is_open())
+    CancelWait(serial_port);
 
   BufferedPort::EndClose();
 }
@@ -64,7 +65,12 @@ TTYPort::GetState() const
 bool
 TTYPort::Drain()
 {
-  return tty.Drain();
+#ifdef __BIONIC__
+  /* bionic doesn't have tcdrain() */
+  return true;
+#else
+  return tcdrain(serial_port.native_handle()) == 0;
+#endif
 }
 
 bool
@@ -78,10 +84,13 @@ TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
     system(command);
   }
 
-  if (!tty.OpenNonBlocking(path)) {
+  FileDescriptor fd;
+  if (!fd.OpenNonBlocking(path)) {
     LogErrno(_T("Failed to open port '%s'"), path);
     return false;
   }
+
+  serial_port.assign(fd.Get());
 
   baud_rate = _baud_rate;
   if (!SetBaudrate(baud_rate))
@@ -89,7 +98,6 @@ TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
 
   valid.store(true, std::memory_order_relaxed);
 
-  asio.assign(tty.Get());
   AsyncRead();
 
   StateChanged();
@@ -99,16 +107,25 @@ TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
 const char *
 TTYPort::OpenPseudo()
 {
-  if (!tty.OpenNonBlocking("/dev/ptmx") || !tty.Unlock())
+  const char *path = "/dev/ptmx";
+
+  FileDescriptor fd;
+  if (!fd.OpenNonBlocking(path)) {
+    LogErrno(_T("Failed to open port '%s'"), path);
+    return nullptr;
+  }
+
+  serial_port.assign(fd.Get());
+
+  if (unlockpt(serial_port.native_handle()) < 0)
     return nullptr;
 
   valid.store(true, std::memory_order_relaxed);
 
-  asio.assign(tty.Get());
   AsyncRead();
 
   StateChanged();
-  return tty.GetSlaveName();
+  return ptsname(serial_port.native_handle());
 }
 
 void
@@ -117,19 +134,20 @@ TTYPort::Flush()
   if (!valid.load(std::memory_order_relaxed))
     return;
 
-  tty.FlushInput();
+  tcflush(serial_port.native_handle(), TCIFLUSH);
   BufferedPort::Flush();
 }
 
 Port::WaitResult
 TTYPort::WaitWrite(unsigned timeout_ms)
 {
-  assert(tty.IsDefined());
+  assert(serial_port.is_open());
 
   if (!valid.load(std::memory_order_relaxed))
     return WaitResult::FAILED;
 
-  int ret = tty.WaitWritable(timeout_ms);
+  const FileDescriptor fd(serial_port.native_handle());
+  int ret = fd.WaitWritable(timeout_ms);
   if (ret > 0)
     return WaitResult::READY;
   else if (ret == 0)
@@ -141,135 +159,45 @@ TTYPort::WaitWrite(unsigned timeout_ms)
 size_t
 TTYPort::Write(const void *data, size_t length)
 {
-  assert(tty.IsDefined());
+  assert(serial_port.is_open());
 
   if (!valid.load(std::memory_order_relaxed))
     return 0;
 
-  ssize_t nbytes = tty.Write(data, length);
-  if (nbytes < 0 && errno == EAGAIN) {
+  boost::system::error_code ec;
+  auto nbytes = serial_port.write_some(boost::asio::buffer(data, length), ec);
+  if (ec == boost::asio::error::try_again) {
     /* the output fifo is full; wait until we can write (or until the
        timeout expires) */
     if (WaitWrite(5000) != Port::WaitResult::READY)
       return 0;
 
-    nbytes = tty.Write(data, length);
+    nbytes = serial_port.write_some(boost::asio::buffer(data, length), ec);
   }
 
-  return nbytes < 0 ? 0 : nbytes;
-}
-
-static unsigned
-speed_t_to_baud_rate(speed_t speed)
-{
-  switch (speed) {
-  case B1200:
-    return 1200;
-
-  case B2400:
-    return 2400;
-
-  case B4800:
-    return 4800;
-
-  case B9600:
-    return 9600;
-
-  case B19200:
-    return 19200;
-
-  case B38400:
-    return 38400;
-
-  case B57600:
-    return 57600;
-
-  case B115200:
-    return 115200;
-
-  default:
-    return 0;
-  }
+  return nbytes;
 }
 
 unsigned
 TTYPort::GetBaudrate() const
 {
-  assert(tty.IsDefined());
+  assert(serial_port.is_open());
 
-  struct termios attr;
-  if (!tty.GetAttr(attr))
-    return 0;
-
-  return speed_t_to_baud_rate(cfgetispeed(&attr));
-}
-
-/**
- * Convert a numeric baud rate to a termios.h constant (B*).  Returns
- * B0 on error.
- */
-static speed_t
-baud_rate_to_speed_t(unsigned baud_rate)
-{
-  switch (baud_rate) {
-  case 1200:
-    return B1200;
-
-  case 2400:
-    return B2400;
-
-  case 4800:
-    return B4800;
-
-  case 9600:
-    return B9600;
-
-  case 19200:
-    return B19200;
-
-  case 38400:
-    return B38400;
-
-  case 57600:
-    return B57600;
-
-  case 115200:
-    return B115200;
-
-  default:
-    return B0;
-  }
+  boost::asio::serial_port_base::baud_rate baud_rate;
+  boost::system::error_code ec;
+  const_cast<boost::asio::serial_port &>(serial_port).get_option(baud_rate, ec);
+  return ec ? 0 : baud_rate.value();
 }
 
 bool
 TTYPort::SetBaudrate(unsigned BaudRate)
 {
-  assert(tty.IsDefined());
+  assert(serial_port.is_open());
 
-  speed_t speed = baud_rate_to_speed_t(BaudRate);
-  if (speed == B0)
-    /* not supported */
-    return false;
-
-  struct termios attr;
-  if (!tty.GetAttr(attr))
-    return false;
-
-  attr.c_iflag &= ~(BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
-  attr.c_iflag |= (IGNPAR | IGNBRK);
-  attr.c_oflag &= ~OPOST;
-  attr.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
-  attr.c_cflag &= ~(CSIZE | PARENB | CRTSCTS);
-  attr.c_cflag |= (CS8 | CLOCAL);
-  attr.c_cc[VMIN] = 0;
-  attr.c_cc[VTIME] = 1;
-  cfsetospeed(&attr, speed);
-  cfsetispeed(&attr, speed);
-  if (!tty.SetAttr(TCSANOW, attr))
-    return false;
-
-  baud_rate = BaudRate;
-  return true;
+  boost::system::error_code ec;
+  serial_port.set_option(boost::asio::serial_port_base::baud_rate(baud_rate),
+                         ec);
+  return !ec;
 }
 
 void
@@ -282,8 +210,12 @@ TTYPort::OnReadReady(const boost::system::error_code &ec)
 
   char buffer[1024];
 
-  ssize_t nbytes = tty.Read(buffer, sizeof(buffer));
-  if (nbytes == 0 || (nbytes < 0 && errno != EAGAIN && errno != EINTR)) {
+  boost::system::error_code ec2;
+  auto nbytes = serial_port.read_some(boost::asio::buffer(buffer,
+                                                          sizeof(buffer)),
+                                      ec2);
+  if (nbytes == 0 || (ec2 && ec2 != boost::asio::error::try_again &&
+                      ec2 != boost::asio::error::interrupted)) {
     valid.store(false, std::memory_order_relaxed);
     StateChanged();
     return;
