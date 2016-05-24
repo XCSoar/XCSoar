@@ -22,8 +22,6 @@ Copyright_License {
 */
 
 #include "TCPClientPort.hpp"
-#include "IO/Async/GlobalAsioThread.hpp"
-#include "IO/Async/AsioThread.hpp"
 #include "IO/Async/AsioUtil.hpp"
 #include "Net/Option.hpp"
 #include "Util/StaticString.hxx"
