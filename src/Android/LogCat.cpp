@@ -25,7 +25,6 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 #include "IO/FileLineReader.hpp"
-#include "IO/Async/AsioUtil.hpp"
 #include "OS/FileDescriptor.hxx"
 #include "OS/FileUtil.hpp"
 
@@ -62,7 +61,7 @@ public:
   }
 
   ~LogCatReader() {
-    CancelWait(fd);
+    fd.cancel();
     fd.close();
 
     Kill(pid.exchange(0));
