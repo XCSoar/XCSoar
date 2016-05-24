@@ -391,25 +391,27 @@ bool
 NMEAParser::ReadTime(NMEAInputLine &line, BrokenTime &broken_time,
                      fixed &time_of_day_s)
 {
-  fixed value;
-  if (!line.ReadChecked(value))
+  double value;
+  if (!line.ReadChecked(value) || value < 0)
     return false;
 
   // Calculate Hour
-  fixed hours = value / 10000;
-  broken_time.hour = (int)hours;
+  unsigned hour = unsigned(value / 10000);
+  if (hour >= 24)
+    return false;
 
   // Calculate Minute
-  fixed mins = value / 100;
-  mins = mins - fixed(broken_time.hour) * 100;
-  broken_time.minute = (int)mins;
+  unsigned minute = unsigned(value / 100) - hour * 100;
+  if (minute >= 60)
+    return false;
 
   // Calculate Second
-  fixed secs = value - fixed(broken_time.hour * 10000 +
-                             broken_time.minute * 100);
-  broken_time.second = (int)secs;
+  double second = value - (hour * 10000 + minute * 100);
+  if (second >= 60)
+    return false;
 
-  time_of_day_s = secs + fixed(broken_time.minute * 60 + broken_time.hour * 3600);
+  broken_time = BrokenTime(hour, minute, (unsigned)second);
+  time_of_day_s = fixed(hour * 3600 + minute * 60) + fixed(second);
   return true;
 }
 
