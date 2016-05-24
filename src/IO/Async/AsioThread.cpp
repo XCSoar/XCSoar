@@ -44,6 +44,8 @@ AsioThread::Stop()
 void
 AsioThread::Run()
 {
+  /* a dummy work to keep the io_service alive even if we're
+     completely idle */
   boost::asio::io_service::work work(io_service);
 
   io_service.run();
