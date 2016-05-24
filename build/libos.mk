@@ -15,7 +15,6 @@ OS_SOURCES := \
 
 ifeq ($(HAVE_POSIX),y)
 OS_SOURCES += \
-	$(OS_SRC_DIR)/Poll.cpp \
 	$(OS_SRC_DIR)/EventPipe.cpp
 endif
 
