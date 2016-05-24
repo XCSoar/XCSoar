@@ -24,18 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_POLL_INPUT_QUEUE_HPP
 #define XCSOAR_EVENT_POLL_INPUT_QUEUE_HPP
 
-#ifdef USE_LIBINPUT
-#include "LibInput/LibInputHandler.hpp"
-#else
-#include "Linux/MergeMouse.hpp"
 #ifdef KOBO
+#include "Linux/MergeMouse.hpp"
 #include "Linux/Input.hpp"
-#elif defined(USE_LINUX_INPUT)
-#include "Linux/AllInput.hpp"
 #else
-#include "Linux/TTYKeyboard.hpp"
-#include "Linux/Mouse.hpp"
-#endif
+#include "LibInput/LibInputHandler.hpp"
 #endif
 
 #include "Screen/Point.hpp"
@@ -48,19 +41,12 @@ class EventQueue;
 struct Event;
 
 class InputEventQueue final {
-#ifdef USE_LIBINPUT
-  LibInputHandler libinput_handler;
-#else /* !USE_LIBINPUT */
-  MergeMouse merge_mouse;
 #ifdef KOBO
+  MergeMouse merge_mouse;
   LinuxInputDevice keyboard;
   LinuxInputDevice mouse;
-#elif defined(USE_LINUX_INPUT)
-  AllLinuxInputDevices all_input;
 #else
-  TTYKeyboard keyboard;
-  LinuxMouse mouse;
-#endif
+  LibInputHandler libinput_handler;
 #endif /* !USE_LIBINPUT */
 
 public:

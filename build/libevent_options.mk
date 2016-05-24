@@ -15,10 +15,3 @@ else
   # no libinput on the Kobo
   USE_LIBINPUT ?= n
 endif
-
-ifeq ($(USE_LIBINPUT),n)
-# query /dev/input/event* instead of stdin and /dev/input/mice or libinput?
-USE_LINUX_INPUT ?= $(call bool_and,$(TARGET_IS_LINUX),$(USE_CONSOLE))
-else
-USE_LINUX_INPUT = n
-endif

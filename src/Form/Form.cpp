@@ -391,7 +391,7 @@ WndForm::ShowModal()
       }
 #endif
 
-#ifdef USE_LINUX_INPUT
+#ifdef KOBO
       if (event.GetKeyCode() == KEY_POWER) {
         /* the Kobo power button closes the modal dialog */
         modal_result = mrCancel;

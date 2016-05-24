@@ -37,16 +37,8 @@ EVENT_SOURCES += $(SRC)/Event/Poll/LibInput/UdevContext.cpp
 endif
 else
 EVENT_SOURCES += \
-	$(SRC)/Event/Poll/Linux/MergeMouse.cpp
-ifeq ($(USE_LINUX_INPUT),y)
-EVENT_SOURCES += \
-	$(SRC)/Event/Poll/Linux/AllInput.cpp \
+	$(SRC)/Event/Poll/Linux/MergeMouse.cpp \
 	$(SRC)/Event/Poll/Linux/Input.cpp
-else
-EVENT_SOURCES += \
-	$(SRC)/Event/Poll/Linux/TTYKeyboard.cpp \
-	$(SRC)/Event/Poll/Linux/Mouse.cpp
-endif
 endif
 
 else ifeq ($(ENABLE_SDL),y)
@@ -57,10 +49,6 @@ else ifeq ($(HAVE_WIN32),y)
 EVENT_SOURCES += \
 	$(SRC)/Event/Windows/Loop.cpp \
 	$(SRC)/Event/Windows/Queue.cpp
-endif
-
-ifeq ($(USE_LINUX_INPUT),y)
-LINUX_INPUT_CPPFLAGS = -DUSE_LINUX_INPUT
 endif
 
 ifeq ($(USE_LIBINPUT),y)

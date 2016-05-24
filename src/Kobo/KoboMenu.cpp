@@ -122,7 +122,7 @@ bool
 KoboMenuWidget::KeyPress(unsigned key_code)
 {
   switch (key_code) {
-#ifdef USE_LINUX_INPUT
+#ifdef KOBO
   case KEY_POWER:
     dialog.OnAction(POWEROFF);
     return true;
