@@ -60,7 +60,7 @@ SkyLinesTracking::Client::Open(boost::asio::ip::udp::endpoint _endpoint)
   endpoint = _endpoint;
 
   boost::system::error_code ec;
-  socket.connect(endpoint, ec);
+  socket.open(endpoint.protocol(), ec);
   if (ec)
     return false;
 

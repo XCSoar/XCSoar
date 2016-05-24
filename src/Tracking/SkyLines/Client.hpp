@@ -91,7 +91,8 @@ namespace SkyLinesTracking {
 
     template<typename P>
     bool SendPacket(const P &packet) {
-      return socket.send(boost::asio::buffer(&packet, sizeof(packet))) == sizeof(packet);
+      return socket.send_to(boost::asio::buffer(&packet, sizeof(packet)),
+                            endpoint) == sizeof(packet);
     }
 
     bool SendFix(const NMEAInfo &basic);
