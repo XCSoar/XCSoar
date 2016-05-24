@@ -63,7 +63,7 @@ Pour être informé des mises à jour, vous pouvez vous abonner au flux RSS du s
 SkyLines est une plateforme internet de partage des vols, disponible à l'adresse \url{http://skylines.xcsoar.org}.\\
 La plateforme permet, entre autres, de visualiser ses vols, consulter les statistiques associées, superposer des vols, mais aussi une fonction de suivi en direct de votre vol (dite \textit{live tracking} en anglais). Cette dernière nécessite la version 6.4 d'XCSoar (ou plus récente), sous Android, avec un forfait téléphonique comprenant un accès internet mobile.\\
 %
-\section{Installation}
+\section{Installation et lancement}
 \noindent
 La première étape nécessaire à l'installation est le téléchagement de la dernière version d'XCSoar.\\
 %
@@ -81,13 +81,19 @@ Sur cette page figurent les différents systèmes d'exploitation supportés, sé
 XCSoar affiche alors le logo au centre, la version du logiciel en haut à gauche, un bouton "Quit" en haut à droite, et deux boutons de lancement \textbf{FLY} et \textbf{SIM} en bas de l'écran, respectivement pour le mode vol (pour voler et enregistrer la trace du vol) et le mode simulation (pour apprendre à l'utiliser et le configurer, de façon isolée ou avec votre appareil connecté à un simulateur, comme Condor par exemple). A ce stade vous pouvez quitter le logiciel (bouton "Quit").\\
 %
 Si vous avez lancé le mode \textbf{FLY} ou \textbf{SIM}, le menu principal peut être invoqué par un double clic sur le fond de carte.
-L'utilisation est détaillée plus bas.
+L'utilisation est détaillée plus bas.\\
+%
+\newline
+%
+Notez qu'à partir de la version 7, Windows CE n'est plus supporté. Téléchargez la dernière version 6 si vous voulez continuer à utiliser XCSoar sous Windows CE.\\
 %
 \section{Configuration}
 %
 \subsection{Les fichiers}
 \noindent
-XCSoar stocke tous les fichiers et répertoires nécessaires à son fonctionnement dans un répertoire nommé XCSoarData. Si vous diposez d'une carte mémoire, ce répertoire doit être à la racine (typiquement "/sdcard/XCSoarData"). Sinon le répertoire XCSoarData sera dans "Mes Documents" pour les systèmes Windows (c'est la configuration par défaut qu'il peut être préférable d'éviter sur les appareils ayant peu de mémoire interne).\\
+XCSoar stocke tous les fichiers et répertoires nécessaires à son fonctionnement dans un répertoire nommé XCSoarData. Si vous diposez d'une carte mémoire, ce répertoire doit être à la racine (typiquement "/sdcard/XCSoarData"). Sinon le répertoire XCSoarData sera dans "Mes Documents" pour les systèmes Windows (c'est la configuration par défaut qu'il peut être préférable d'éviter sur les appareils ayant peu de mémoire interne).
+%
+Sous Linux ce répertoire est ~/.xcsoar\\
 
 Les fichiers les plus utiles sont les suivants :
 \begin{itemize}
@@ -96,7 +102,10 @@ Les fichiers les plus utiles sont les suivants :
 \item fond cartographique (format .xcm).\\
 \end{itemize}
 %
-Pour trouver ces fichiers, voir le paragraphe \ref{LiensUtiles} "Liens utiles". Notez que le fond cartographique contient le relief (altitude du terrain), des éléments topographiques (contours de villes, rivières, etc...), mais aussi un fichier de points de virage. Ce dernier est ignoré si vous séectionnez vous-même un fichier dans la page de configuration. Notez également que le navigateur internet "Internet Explorer" renomme les fichiers .xcm en .zip, il peut donc être nécessaire de renommer manuellement le fichier en .zip (ou utiliser un meilleur navigateur).
+Pour trouver ces fichiers, voir le paragraphe \ref{LiensUtiles} "Liens utiles". Notez que le fond cartographique contient le relief (altitude du terrain), des éléments topographiques (contours de villes, rivières, etc...), mais aussi un fichier de points de virage. Ce dernier est ignoré si vous séectionnez vous-même un fichier dans la page de configuration. Notez également que le navigateur internet "Internet Explorer" renomme les fichiers .xcm en .zip, il peut donc être nécessaire de renommer manuellement le fichier en .zip (ou utiliser un meilleur navigateur).\\
+%
+\newline
+Sous Android les fichiers sont téléchargeables directement depuis XCSoar au travers du "Gestionnaire de fichiers".\\
 %
 \subsection{L'interface}
 \noindent
