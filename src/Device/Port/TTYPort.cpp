@@ -90,9 +90,7 @@ TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
   valid.store(true, std::memory_order_relaxed);
 
   asio.assign(tty.Get());
-  asio.async_read_some(boost::asio::null_buffers(),
-                       std::bind(&TTYPort::OnReadReady, this,
-                                 std::placeholders::_1));
+  AsyncRead();
 
   StateChanged();
   return true;
@@ -107,9 +105,7 @@ TTYPort::OpenPseudo()
   valid.store(true, std::memory_order_relaxed);
 
   asio.assign(tty.Get());
-  asio.async_read_some(boost::asio::null_buffers(),
-                       std::bind(&TTYPort::OnReadReady, this,
-                                 std::placeholders::_1));
+  AsyncRead();
 
   StateChanged();
   return tty.GetSlaveName();
@@ -296,7 +292,5 @@ TTYPort::OnReadReady(const boost::system::error_code &ec)
   if (nbytes > 0)
     BufferedPort::DataReceived(buffer, nbytes);
 
-  asio.async_read_some(boost::asio::null_buffers(),
-                       std::bind(&TTYPort::OnReadReady, this,
-                                 std::placeholders::_1));
+  AsyncRead();
 }

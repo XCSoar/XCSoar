@@ -83,6 +83,12 @@ public:
 
 private:
   void OnReadReady(const boost::system::error_code &ec);
+
+  void AsyncRead() {
+    asio.async_read_some(boost::asio::null_buffers(),
+                         std::bind(&TTYPort::OnReadReady, this,
+                                   std::placeholders::_1));
+  }
 };
 
 #endif
