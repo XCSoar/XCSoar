@@ -44,7 +44,11 @@ WorkerThread::Run()
       if (_CheckStoppedOrSuspended())
         break;
 
-      trigger_cond.wait(mutex);
+      /* check trigger_flag again to avoid a race condition, because
+         _CheckStoppedOrSuspended() may have unlocked the mutex while
+         we were suspended */
+      if (!trigger_flag)
+        trigger_cond.wait(mutex);
     }
 
     /* got the "stop" trigger? */
