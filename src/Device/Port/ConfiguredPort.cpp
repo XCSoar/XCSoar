@@ -45,6 +45,9 @@ Copyright_License {
 #include "DumpPort.hpp"
 #endif
 
+#include <stdexcept>
+#include <system_error>
+
 #if defined(HAVE_POSIX) && !defined(ANDROID)
 #include <unistd.h>
 #include <errno.h>
@@ -88,55 +91,46 @@ OpenPortInternal(boost::asio::io_service &io_service,
 
   switch (config.port_type) {
   case DeviceConfig::PortType::DISABLED:
-    return nullptr;
+    throw std::runtime_error("Port is disabled");
 
   case DeviceConfig::PortType::SERIAL:
     if (config.path.empty())
-      return nullptr;
+      throw std::runtime_error("No port path configured");
 
     path = config.path.c_str();
     break;
 
   case DeviceConfig::PortType::RFCOMM:
 #ifdef ANDROID
-    if (config.bluetooth_mac.empty()) {
-      LogFormat("No Bluetooth MAC configured");
-      return nullptr;
-    }
+    if (config.bluetooth_mac.empty())
+      throw std::runtime_error("No Bluetooth MAC configured");
 
     return OpenAndroidBluetoothPort(config.bluetooth_mac, listener, handler);
 #else
-    LogFormat("Bluetooth not available on this platform");
-    return nullptr;
+    throw std::runtime_error("Bluetooth not available");
 #endif
 
   case DeviceConfig::PortType::RFCOMM_SERVER:
 #ifdef ANDROID
     return OpenAndroidBluetoothServerPort(listener, handler);
 #else
-    LogFormat("Bluetooth not available on this platform");
-    return nullptr;
+    throw std::runtime_error("Bluetooth not available");
 #endif
 
   case DeviceConfig::PortType::IOIOUART:
 #if defined(ANDROID)
-    if (config.ioio_uart_id >= AndroidIOIOUartPort::getNumberUarts()) {
-      LogFormat("No IOIOUart configured in profile");
-      return nullptr;
-    }
+    if (config.ioio_uart_id >= AndroidIOIOUartPort::getNumberUarts())
+      throw std::runtime_error("No IOIOUart configured in profile");
 
     return OpenAndroidIOIOUartPort(config.ioio_uart_id, config.baud_rate,
                                    listener, handler);
 #else
-    LogFormat("IOIO Uart not available on this platform or version");
-    return nullptr;
+    throw std::runtime_error("IOIO driver not available");
 #endif
 
   case DeviceConfig::PortType::AUTO:
-    if (!DetectGPS(buffer, sizeof(buffer))) {
-      LogFormat("no GPS detected");
-      return nullptr;
-    }
+    if (!DetectGPS(buffer, sizeof(buffer)))
+      throw std::runtime_error("No GPS detected");
 
     LogFormat(_T("GPS detected: %s"), buffer);
 
@@ -153,7 +147,7 @@ OpenPortInternal(boost::asio::io_service &io_service,
   case DeviceConfig::PortType::TCP_CLIENT: {
     const WideToUTF8Converter ip_address(config.ip_address);
     if (!ip_address.IsValid())
-      return nullptr;
+      throw std::runtime_error("No IP address configured");
 
     auto port = new TCPClientPort(io_service, listener, handler);
     if (!port->Connect(ip_address, config.tcp_port)) {
@@ -187,10 +181,12 @@ OpenPortInternal(boost::asio::io_service &io_service,
   case DeviceConfig::PortType::PTY: {
 #if defined(HAVE_POSIX) && !defined(ANDROID)
     if (config.path.empty())
-      return nullptr;
+      throw std::runtime_error("No pty path configured");
 
     if (unlink(config.path.c_str()) < 0 && errno != ENOENT)
-      return nullptr;
+      throw std::system_error(std::error_code(errno,
+                                              std::system_category()),
+                              "Failed to delete pty");
 
     TTYPort *port = new TTYPort(io_service, listener, handler);
     const char *slave_path = port->OpenPseudo();
@@ -199,20 +195,20 @@ OpenPortInternal(boost::asio::io_service &io_service,
       return nullptr;
     }
 
-    if (symlink(slave_path, config.path.c_str()) < 0) {
-      delete port;
-      return nullptr;
-    }
+    if (symlink(slave_path, config.path.c_str()) < 0)
+      throw std::system_error(std::error_code(errno,
+                                              std::system_category()),
+                              "Failed to symlink pty");
 
     return port;
 #else
-    return nullptr;
+    throw std::runtime_error("Pty not available");
 #endif
   }
   }
 
   if (path == nullptr)
-    return nullptr;
+    throw std::runtime_error("No port path configured");
 
 #ifdef HAVE_POSIX
   TTYPort *port = new TTYPort(io_service, listener, handler);

@@ -35,6 +35,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "Thread/Mutex.hpp"
 #include "Util/StringAPI.hxx"
+#include "Util/ConvertString.hpp"
 #include "Logger/NMEALogger.hpp"
 #include "Language/Language.hpp"
 #include "Operation/Operation.hpp"
@@ -62,6 +63,8 @@ Copyright_License {
 #ifdef __APPLE__
 #include "Apple/InternalSensors.hpp"
 #endif
+
+#include <stdexcept>
 
 #include <assert.h>
 
@@ -426,7 +429,22 @@ DeviceDescriptor::DoOpen(OperationEnvironment &env)
 
   reopen_clock.Update();
 
-  Port *port = OpenPort(*asio_thread, config, port_listener, *this);
+  Port *port;
+  try {
+    port = OpenPort(*asio_thread, config, port_listener, *this);
+  } catch (const std::runtime_error &e) {
+    TCHAR name_buffer[64];
+    const TCHAR *name = config.GetPortName(name_buffer, 64);
+
+    LogError(WideToUTF8Converter(name), e);
+
+    StaticString<256> msg;
+    msg.Format(_T("%s: %s (%s)"), _("Unable to open port"), name,
+               (const TCHAR *)UTF8ToWideConverter(e.what()));
+    env.SetErrorMessage(msg);
+    return false;
+  }
+
   if (port == nullptr) {
     TCHAR name_buffer[64];
     const TCHAR *name = config.GetPortName(name_buffer, 64);
