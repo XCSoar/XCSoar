@@ -24,6 +24,16 @@ Copyright_License {
 #include "UDPPort.hpp"
 #include "IO/Async/AsioUtil.hpp"
 
+UDPPort::UDPPort(boost::asio::io_service &io_service,
+                 unsigned port,
+                 PortListener *_listener, DataHandler &_handler)
+  :BufferedPort(_listener, _handler),
+   socket(io_service,
+          boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port))
+{
+  AsyncRead();
+}
+
 UDPPort::~UDPPort()
 {
   BufferedPort::BeginClose();
@@ -32,28 +42,6 @@ UDPPort::~UDPPort()
     CancelWait(socket);
 
   BufferedPort::EndClose();
-}
-
-bool
-UDPPort::Open(unsigned port)
-{
-  boost::system::error_code ec;
-
-  const boost::asio::ip::udp::endpoint endpoint(boost::asio::ip::udp::v4(),
-                                                port);
-
-  socket.open(endpoint.protocol(), ec);
-  if (ec)
-    return false;
-
-  socket.bind(endpoint, ec);
-  if (ec) {
-    socket.close();
-    return false;
-  }
-
-  AsyncRead();
-  return true;
 }
 
 PortState

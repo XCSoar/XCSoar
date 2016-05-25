@@ -162,15 +162,8 @@ OpenPortInternal(boost::asio::io_service &io_service,
     return new TCPPort(io_service, config.tcp_port,
                        listener, handler);
 
-  case DeviceConfig::PortType::UDP_LISTENER: {
-    auto *port = new UDPPort(io_service, listener, handler);
-    if (!port->Open(config.tcp_port)) {
-      delete port;
-      return nullptr;
-    }
-
-    return port;
-  }
+  case DeviceConfig::PortType::UDP_LISTENER:
+    return new UDPPort(io_service, config.tcp_port, listener, handler);
 
   case DeviceConfig::PortType::PTY: {
 #if defined(HAVE_POSIX) && !defined(ANDROID)

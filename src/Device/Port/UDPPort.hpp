@@ -45,20 +45,13 @@ public:
    * port
    */
   UDPPort(boost::asio::io_service &io_service,
-          PortListener *_listener, DataHandler &_handler)
-    :BufferedPort(_listener, _handler),
-     socket(io_service) {}
+          unsigned port,
+          PortListener *_listener, DataHandler &_handler);
 
   /**
    * Closes the serial port (Destructor)
    */
   virtual ~UDPPort();
-
-  /**
-   * Opens the serial port
-   * @return True on success, False on failure
-   */
-  bool Open(unsigned port);
 
   /* virtual methods from class Port */
   PortState GetState() const override;
