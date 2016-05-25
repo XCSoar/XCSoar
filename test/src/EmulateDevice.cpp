@@ -38,6 +38,7 @@ Copyright_License {
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
 #include "IO/Async/AsioThread.hpp"
+#include "Util/PrintException.hxx"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -58,7 +59,7 @@ LoadEmulator(Args &args)
 
 int
 main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "DRIVER PORT BAUD");
   Emulator *emulator = LoadEmulator(args);
   const DeviceConfig config = ParsePortArgs(args);
@@ -98,4 +99,7 @@ main(int argc, char **argv)
   delete port;
   delete emulator;
   return EXIT_SUCCESS;
+} catch (const std::exception &exception) {
+  PrintException(exception);
+  return EXIT_FAILURE;
 }

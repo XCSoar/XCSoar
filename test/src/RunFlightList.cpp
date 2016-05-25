@@ -37,6 +37,7 @@ Copyright_License {
 #include "IO/Async/GlobalAsioThread.hpp"
 #include "IO/Async/AsioThread.hpp"
 #include "Util/ConvertString.hpp"
+#include "Util/PrintException.hxx"
 
 #include <stdio.h>
 
@@ -70,8 +71,9 @@ NMEAParser::TimeHasAdvanced(double this_time, double &last_time,
  * The actual code.
  */
 
-int main(int argc, char **argv)
-{
+int
+main(int argc, char **argv)
+try {
   NarrowString<1024> usage;
   usage = "DRIVER PORT BAUD\n\n"
           "Where DRIVER is one of:";
@@ -139,4 +141,7 @@ int main(int argc, char **argv)
            flight.start_time.hour, flight.start_time.minute,
            flight.end_time.hour, flight.end_time.minute);
   }
+} catch (const std::exception &exception) {
+  PrintException(exception);
+  return EXIT_FAILURE;
 }

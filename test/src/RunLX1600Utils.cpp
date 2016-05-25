@@ -31,6 +31,7 @@ Copyright_License {
 #include "Device/Driver/LX/LX1600.hpp"
 #include "OS/Args.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/PrintException.hxx"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
 #include "IO/Async/AsioThread.hpp"
@@ -334,7 +335,7 @@ public:
 
 int
 main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "PORT BAUD");
   const DeviceConfig config = ParsePortArgs(args);
   args.ExpectEnd();
@@ -358,4 +359,7 @@ main(int argc, char **argv)
   RunUI(*port, env);
 
   return EXIT_SUCCESS;
+} catch (const std::exception &exception) {
+  PrintException(exception);
+  return EXIT_FAILURE;
 }

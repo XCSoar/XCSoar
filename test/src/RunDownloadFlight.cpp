@@ -36,6 +36,7 @@ Copyright_License {
 #include "IO/Async/GlobalAsioThread.hpp"
 #include "IO/Async/AsioThread.hpp"
 #include "Util/ConvertString.hpp"
+#include "Util/PrintException.hxx"
 
 #include <stdio.h>
 
@@ -78,7 +79,7 @@ PrintFlightList(const RecordedFlightList &flight_list)
 }
 
 int main(int argc, char **argv)
-{
+try {
   NarrowString<1024> usage;
   usage = "DRIVER PORT BAUD FILE.igc [FLIGHT NR]\n\n"
           "Where DRIVER is one of:";
@@ -170,4 +171,7 @@ int main(int argc, char **argv)
   printf("Flight downloaded successfully\n");
 
   return EXIT_SUCCESS;
+} catch (const std::exception &exception) {
+  PrintException(exception);
+  return EXIT_FAILURE;
 }

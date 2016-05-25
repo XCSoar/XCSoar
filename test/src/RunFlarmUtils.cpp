@@ -32,6 +32,7 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/ConvertString.hpp"
+#include "Util/PrintException.hxx"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
 #include "IO/Async/AsioThread.hpp"
@@ -395,7 +396,7 @@ RunUI(FlarmDevice &flarm, OperationEnvironment &env)
 
 int
 main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "PORT BAUD");
   const DeviceConfig config = ParsePortArgs(args);
   args.ExpectEnd();
@@ -423,4 +424,7 @@ main(int argc, char **argv)
   delete port;
 
   return EXIT_SUCCESS;
+} catch (const std::exception &exception) {
+  PrintException(exception);
+  return EXIT_FAILURE;
 }

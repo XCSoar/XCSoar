@@ -31,6 +31,7 @@ Copyright_License {
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
 #include "IO/Async/AsioThread.hpp"
+#include "Util/PrintException.hxx"
 
 #define MORE_USAGE
 #include "OS/Args.hpp"
@@ -74,7 +75,7 @@ NMEAParser::TimeHasAdvanced(double this_time, double &last_time,
 }
 
 int main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "DRIVER PORT BAUD");
 
   tstring _driver_name = args.ExpectNextT();
@@ -115,4 +116,7 @@ int main(int argc, char **argv)
   delete port;
 
   return EXIT_SUCCESS;
+} catch (const std::exception &exception) {
+  PrintException(exception);
+  return EXIT_FAILURE;
 }

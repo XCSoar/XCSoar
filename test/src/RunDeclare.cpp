@@ -37,6 +37,7 @@ Copyright_License {
 #include "DebugPort.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
 #include "IO/Async/AsioThread.hpp"
+#include "Util/PrintException.hxx"
 
 #define MORE_USAGE
 #include "OS/Args.hpp"
@@ -97,7 +98,7 @@ MakeWaypoint(const TCHAR *name, int altitude,
 }
 
 int main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "[--through DRIVER0] DRIVER PORT BAUD");
 
   tstring _through_name;
@@ -201,4 +202,7 @@ int main(int argc, char **argv)
   delete port;
 
   return EXIT_SUCCESS;
+} catch (const std::exception &exception) {
+  PrintException(exception);
+  return EXIT_FAILURE;
 }

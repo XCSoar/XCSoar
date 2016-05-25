@@ -31,6 +31,7 @@ Copyright_License {
 #include "IO/Async/AsioThread.hpp"
 #include "IO/DataHandler.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
+#include "Util/PrintException.hxx"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,7 +44,7 @@ public:
 };
 
 int main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "PORT BAUD");
   const DeviceConfig config = ParsePortArgs(args);
   args.ExpectEnd();
@@ -79,4 +80,7 @@ int main(int argc, char **argv)
 
   delete port;
   return EXIT_SUCCESS;
+} catch (const std::exception &exception) {
+  PrintException(exception);
+  return EXIT_FAILURE;
 }

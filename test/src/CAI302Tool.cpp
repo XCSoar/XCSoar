@@ -29,6 +29,7 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "Util/Macros.hpp"
+#include "Util/PrintException.hxx"
 #include "IO/Async/GlobalAsioThread.hpp"
 #include "IO/Async/AsioThread.hpp"
 
@@ -149,7 +150,7 @@ RunCommand(CAI302Device &device, const char *command,
 }
 
 int main(int argc, char **argv)
-{
+try {
   const char *const usage = "PORT BAUD COMMAND\n\n"
     "Where COMMAND is one of:"
     "\n\tinfo"
@@ -191,4 +192,7 @@ int main(int argc, char **argv)
 
   delete port;
   return EXIT_SUCCESS;
+} catch (const std::exception &exception) {
+  PrintException(exception);
+  return EXIT_FAILURE;
 }

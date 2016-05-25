@@ -30,6 +30,7 @@ Copyright_License {
 #include "IO/Async/GlobalAsioThread.hpp"
 #include "IO/Async/AsioThread.hpp"
 #include "Util/StaticString.hxx"
+#include "Util/PrintException.hxx"
 #include "Math/Util.hpp"
 #include "Time/PeriodClock.hpp"
 
@@ -37,7 +38,7 @@ Copyright_License {
 #include <stdlib.h>
 
 int main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "PORT");
   const DeviceConfig config = ParsePortArgs(args);
   args.ExpectEnd();
@@ -105,4 +106,7 @@ int main(int argc, char **argv)
         battery_level--;
     }
   }
+} catch (const std::exception &exception) {
+  PrintException(exception);
+  return EXIT_FAILURE;
 }
