@@ -8,6 +8,7 @@ Version 7.0 - not yet released
   - parse wind from standard NMEA sentence WMV
   - driver for XC Tracer Vario
   - driver for KRT2 radio
+  - show detailed error message in device list
 * weather
   - merge all weather data in one dialog
   - allow showing both terrain and RASP
