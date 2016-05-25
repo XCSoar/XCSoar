@@ -412,6 +412,11 @@ DeviceDescriptor::DoOpen(OperationEnvironment &env)
 {
   assert(config.IsAvailable());
 
+  {
+    ScopeLock protect(mutex);
+    error_message.clear();
+  }
+
   if (config.port_type == DeviceConfig::PortType::INTERNAL)
     return OpenInternalSensors();
 
@@ -439,8 +444,16 @@ DeviceDescriptor::DoOpen(OperationEnvironment &env)
     LogError(WideToUTF8Converter(name), e);
 
     StaticString<256> msg;
+
+    const UTF8ToWideConverter what(e.what());
+    if (what.IsValid()) {
+      ScopeLock protect(mutex);
+      error_message = what;
+    }
+
     msg.Format(_T("%s: %s (%s)"), _("Unable to open port"), name,
-               (const TCHAR *)UTF8ToWideConverter(e.what()));
+               (const TCHAR *)what);
+
     env.SetErrorMessage(msg);
     return false;
   }

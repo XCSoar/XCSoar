@@ -36,6 +36,7 @@ Copyright_License {
 #include "Event/Notify.hpp"
 #include "Thread/Mutex.hpp"
 #include "Thread/Debug.hpp"
+#include "Util/tstring.hpp"
 
 #include <assert.h>
 #include <tchar.h>
@@ -69,7 +70,7 @@ class DeviceDescriptor final : private Notify, private PortLineSplitter {
    * you use the attribute "device" from a thread other than the main
    * thread, you must hold this mutex.
    */
-  Mutex mutex;
+  mutable Mutex mutex;
 
   /** the index of this device in the global list */
   const unsigned index;
@@ -187,6 +188,12 @@ class DeviceDescriptor final : private Notify, private PortLineSplitter {
   ExternalSettings settings_received;
 
   /**
+   * If this device has failed, then this attribute may contain an
+   * error message.
+   */
+  tstring error_message;
+
+  /**
    * Number of port failures since the device was last reset.
    *
    * @param see ResetFailureCounter()
@@ -237,6 +244,11 @@ public:
 
   gcc_pure
   PortState GetState() const;
+
+  tstring GetErrorMessage() const {
+    const ScopeLock protect(mutex);
+    return error_message;
+  }
 
   /**
    * Was there a failure on the #Port object?
