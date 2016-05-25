@@ -24,9 +24,11 @@ Copyright_License {
 #include "TTYPort.hpp"
 #include "Asset.hpp"
 #include "OS/FileDescriptor.hxx"
-#include "OS/LogError.hpp"
+#include "OS/Error.hxx"
 #include "IO/Async/AsioUtil.hpp"
 #include "Util/StringFormat.hpp"
+
+#include <system_error>
 
 #include <termios.h>
 
@@ -85,10 +87,8 @@ TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
   }
 
   FileDescriptor fd;
-  if (!fd.OpenNonBlocking(path)) {
-    LogErrno(_T("Failed to open port '%s'"), path);
-    return false;
-  }
+  if (!fd.OpenNonBlocking(path))
+    throw FormatErrno("Failed to open %s", path);
 
   serial_port.assign(fd.Get());
 
@@ -110,15 +110,13 @@ TTYPort::OpenPseudo()
   const char *path = "/dev/ptmx";
 
   FileDescriptor fd;
-  if (!fd.OpenNonBlocking(path)) {
-    LogErrno(_T("Failed to open port '%s'"), path);
-    return nullptr;
-  }
+  if (!fd.OpenNonBlocking(path))
+    throw FormatErrno("Failed to open %s", path);
 
   serial_port.assign(fd.Get());
 
   if (unlockpt(serial_port.native_handle()) < 0)
-    return nullptr;
+    throw FormatErrno("unlockpt('%s') failed", path);
 
   valid.store(true, std::memory_order_relaxed);
 
