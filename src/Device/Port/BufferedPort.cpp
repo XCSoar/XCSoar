@@ -34,15 +34,6 @@ BufferedPort::BufferedPort(PortListener *_listener, DataHandler &_handler)
 {
 }
 
-#ifndef NDEBUG
-
-BufferedPort::~BufferedPort()
-{
-  assert(closing);
-}
-
-#endif
-
 void
 BufferedPort::BeginClose()
 {

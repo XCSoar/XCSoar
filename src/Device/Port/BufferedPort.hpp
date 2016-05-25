@@ -59,10 +59,6 @@ class BufferedPort : public Port, protected DataHandler {
 public:
   BufferedPort(PortListener *_listener, DataHandler &_handler);
 
-#ifndef NDEBUG
-  virtual ~BufferedPort();
-#endif
-
 protected:
   void BeginClose();
   void EndClose();
