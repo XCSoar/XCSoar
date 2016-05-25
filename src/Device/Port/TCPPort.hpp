@@ -46,20 +46,13 @@ public:
    * port
    */
   TCPPort(boost::asio::io_service &io_service,
-          PortListener *_listener, DataHandler &_handler)
-    :BufferedPort(_listener, _handler),
-     acceptor(io_service), connection(io_service) {}
+          unsigned port,
+          PortListener *_listener, DataHandler &_handler);
 
   /**
    * Closes the serial port (Destructor)
    */
   virtual ~TCPPort();
-
-  /**
-   * Opens the serial port
-   * @return True on success, False on failure
-   */
-  bool Open(unsigned port);
 
   /* virtual methods from class Port */
   PortState GetState() const override;

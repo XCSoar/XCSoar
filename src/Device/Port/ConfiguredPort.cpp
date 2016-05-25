@@ -158,15 +158,9 @@ OpenPortInternal(boost::asio::io_service &io_service,
     return port;
   }
 
-  case DeviceConfig::PortType::TCP_LISTENER: {
-    TCPPort *port = new TCPPort(io_service, listener, handler);
-    if (!port->Open(config.tcp_port)) {
-      delete port;
-      return nullptr;
-    }
-
-    return port;
-  }
+  case DeviceConfig::PortType::TCP_LISTENER:
+    return new TCPPort(io_service, config.tcp_port,
+                       listener, handler);
 
   case DeviceConfig::PortType::UDP_LISTENER: {
     auto *port = new UDPPort(io_service, listener, handler);

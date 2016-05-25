@@ -25,6 +25,19 @@ Copyright_License {
 #include "Net/Option.hpp"
 #include "IO/Async/AsioUtil.hpp"
 
+TCPPort::TCPPort(boost::asio::io_service &io_service,
+                 unsigned port,
+                 PortListener *_listener, DataHandler &_handler)
+  :BufferedPort(_listener, _handler),
+   acceptor(io_service,
+            boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)),
+   connection(io_service)
+{
+  acceptor.listen(1);
+
+  AsyncAccept();
+}
+
 TCPPort::~TCPPort()
 {
   BufferedPort::BeginClose();
@@ -36,34 +49,6 @@ TCPPort::~TCPPort()
     CancelWait(acceptor);
 
   BufferedPort::EndClose();
-}
-
-bool
-TCPPort::Open(unsigned port)
-{
-  boost::system::error_code ec;
-
-  const boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::tcp::v4(),
-                                                port);
-
-  acceptor.open(endpoint.protocol(), ec);
-  if (ec)
-    return false;
-
-  acceptor.bind(endpoint, ec);
-  if (ec) {
-    acceptor.close();
-    return false;
-  }
-
-  acceptor.listen(1, ec);
-  if (ec) {
-    acceptor.close();
-    return false;
-  }
-
-  AsyncAccept();
-  return true;
 }
 
 PortState
