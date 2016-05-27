@@ -28,6 +28,7 @@ Copyright_License {
 #include "PortBridge.hpp"
 #include "Java/String.hxx"
 #include "Java/Class.hxx"
+#include "Java/Exception.hxx"
 
 #include <map>
 #include <string>
@@ -173,6 +174,7 @@ BluetoothHelper::connect(JNIEnv *env, const char *address)
   const Java::String address2(env, address);
   jobject obj = env->CallStaticObjectMethod(cls, connect_method,
                                             context->Get(), address2.Get());
+  Java::RethrowException(env);
   if (obj == nullptr)
     return nullptr;
 
@@ -189,6 +191,7 @@ BluetoothHelper::createServer(JNIEnv *env)
     throw std::runtime_error("Bluetooth not available");
 
   jobject obj = env->CallStaticObjectMethod(cls, createServer_method);
+  Java::RethrowException(env);
   if (obj == nullptr)
     return nullptr;
 
