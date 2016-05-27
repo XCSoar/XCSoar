@@ -86,6 +86,7 @@ TCPClientPort::OnResolved(const boost::system::error_code &ec,
   if (ec) {
     state = PortState::FAILED;
     StateChanged();
+    Error(ec.message().c_str());
     return;
   }
 
@@ -106,6 +107,7 @@ TCPClientPort::OnConnect(const boost::system::error_code &ec)
     socket.close();
     state = PortState::FAILED;
     StateChanged();
+    Error(ec.message().c_str());
     return;
   }
 
@@ -133,6 +135,7 @@ TCPClientPort::OnRead(const boost::system::error_code &ec, size_t nbytes)
     socket.close();
     state = PortState::FAILED;
     StateChanged();
+    Error(ec.message().c_str());
     return;
   }
 

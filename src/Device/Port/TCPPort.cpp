@@ -87,6 +87,7 @@ TCPPort::OnAccept(const boost::system::error_code &ec)
   if (ec) {
     acceptor.close();
     StateChanged();
+    Error(ec.message().c_str());
     return;
   }
 
@@ -109,6 +110,7 @@ TCPPort::OnRead(const boost::system::error_code &ec, size_t nbytes)
     connection.close();
     AsyncAccept();
     StateChanged();
+    Error(ec.message().c_str());
     return;
   }
 

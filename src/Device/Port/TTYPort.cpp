@@ -206,6 +206,13 @@ TTYPort::OnReadReady(const boost::system::error_code &ec)
        touching anything */
     return;
 
+  if (ec) {
+    valid.store(false, std::memory_order_relaxed);
+    StateChanged();
+    Error(ec.message().c_str());
+    return;
+  }
+
   char buffer[1024];
 
   boost::system::error_code ec2;

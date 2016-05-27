@@ -78,6 +78,7 @@ UDPPort::OnRead(const boost::system::error_code &ec, size_t nbytes)
   if (ec) {
     socket.close();
     StateChanged();
+    Error(ec.message().c_str());
     return;
   }
 
