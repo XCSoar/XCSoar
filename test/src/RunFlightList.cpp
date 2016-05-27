@@ -89,7 +89,7 @@ try {
 
   Args args(argc, argv, usage);
   tstring driver_name = args.ExpectNextT();
-  const DeviceConfig config = ParsePortArgs(args);
+  DebugPort debug_port(args);
   args.ExpectEnd();
 
   ConsoleOperationEnvironment env;
@@ -109,20 +109,14 @@ try {
 
   ScopeGlobalAsioThread global_asio_thread;
 
-  Port *port = OpenPort(*asio_thread, config,
-                        nullptr, *(DataHandler *)nullptr);
-  if (port == NULL) {
-    fprintf(stderr, "Failed to open COM port\n");
-    return EXIT_FAILURE;
-  }
+  auto port = debug_port.Open(*asio_thread, *(DataHandler *)nullptr);
 
   if (!port->WaitConnected(env)) {
-    delete port;
     fprintf(stderr, "Failed to connect the port\n");
     return EXIT_FAILURE;
   }
 
-  Device *device = driver->CreateOnPort(config, *port);
+  Device *device = driver->CreateOnPort(debug_port.GetConfig(), *port);
   assert(device != NULL);
 
   if (!device->ReadFlightList(flight_list, env)) {
@@ -132,7 +126,6 @@ try {
   }
 
   delete device;
-  delete port;
 
   for (auto i = flight_list.begin(); i != flight_list.end(); ++i) {
     const RecordedFlightInfo &flight = *i;

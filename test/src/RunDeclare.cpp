@@ -116,22 +116,16 @@ try {
 
   tstring _driver_name = args.ExpectNextT();
   const TCHAR *driver_name = _driver_name.c_str();
-  const DeviceConfig config = ParsePortArgs(args);
+  DebugPort debug_port(args);
   args.ExpectEnd();
 
   ScopeGlobalAsioThread global_asio_thread;
 
-  Port *port = OpenPort(*asio_thread, config,
-                        nullptr, *(DataHandler *)nullptr);
-  if (port == NULL) {
-    fprintf(stderr, "Failed to open COM port\n");
-    return EXIT_FAILURE;
-  }
+  auto port = debug_port.Open(*asio_thread, *(DataHandler *)nullptr);
 
   ConsoleOperationEnvironment env;
 
   if (!port->WaitConnected(env)) {
-    delete port;
     fprintf(stderr, "Failed to connect the port\n");
     return EXIT_FAILURE;
   }
@@ -167,7 +161,8 @@ try {
     }
 
     assert(through_driver->CreateOnPort != NULL);
-    through_device = through_driver->CreateOnPort(config, *port);
+    through_device = through_driver->CreateOnPort(debug_port.GetConfig(),
+                                                  *port);
     assert(through_device != NULL);
   }
 
@@ -183,7 +178,7 @@ try {
   }
 
   assert(driver->CreateOnPort != NULL);
-  Device *device = driver->CreateOnPort(config, *port);
+  Device *device = driver->CreateOnPort(debug_port.GetConfig(), *port);
   assert(device != NULL);
 
   if (through_device != NULL && !through_device->EnablePassThrough(env)) {
@@ -199,7 +194,6 @@ try {
 
   delete through_device;
   delete device;
-  delete port;
 
   return EXIT_SUCCESS;
 } catch (const std::exception &exception) {

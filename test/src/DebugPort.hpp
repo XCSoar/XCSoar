@@ -24,10 +24,32 @@ Copyright_License {
 #ifndef XCSOAR_DEBUG_PORT_HPP
 #define XCSOAR_DEBUG_PORT_HPP
 
+#include "Device/Config.hpp"
+
+#include <memory>
+
 class Args;
+class Port;
+class DataHandler;
 struct DeviceConfig;
+namespace boost { namespace asio { class io_service; }}
 
 DeviceConfig
 ParsePortArgs(Args &args);
+
+class DebugPort {
+  DeviceConfig config;
+
+public:
+  explicit DebugPort(Args &args)
+    :config(ParsePortArgs(args)) {}
+
+  const DeviceConfig &GetConfig() const {
+    return config;
+  }
+
+  std::unique_ptr<Port> Open(boost::asio::io_service &io_service,
+                             DataHandler &handler);
+};
 
 #endif

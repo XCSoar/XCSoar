@@ -62,32 +62,25 @@ main(int argc, char **argv)
 try {
   Args args(argc, argv, "DRIVER PORT BAUD");
   Emulator *emulator = LoadEmulator(args);
-  const DeviceConfig config = ParsePortArgs(args);
+  DebugPort debug_port(args);
   args.ExpectEnd();
 
   ScopeGlobalAsioThread global_asio_thread;
 
-  Port *port = OpenPort(*asio_thread, config, nullptr, *emulator->handler);
-  if (port == NULL) {
-    delete emulator;
-    fprintf(stderr, "Failed to open COM port\n");
-    return EXIT_FAILURE;
-  }
+  auto port = debug_port.Open(*asio_thread, *emulator->handler);
 
-  emulator->port = port;
+  emulator->port = port.get();
 
   ConsoleOperationEnvironment env;
   emulator->env = &env;
 
   if (!port->WaitConnected(env)) {
-    delete port;
     delete emulator;
     fprintf(stderr, "Failed to connect the port\n");
     return EXIT_FAILURE;
   }
 
   if (!port->StartRxThread()) {
-    delete port;
     delete emulator;
     fprintf(stderr, "Failed to start the port thread\n");
     return EXIT_FAILURE;
@@ -96,7 +89,6 @@ try {
   while (port->GetState() != PortState::FAILED)
     Sleep(1000);
 
-  delete port;
   delete emulator;
   return EXIT_SUCCESS;
 } catch (const std::exception &exception) {

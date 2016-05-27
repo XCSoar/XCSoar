@@ -24,6 +24,8 @@ Copyright_License {
 #include "DebugPort.hpp"
 #include "OS/Args.hpp"
 #include "Device/Config.hpp"
+#include "Device/Port/Port.hpp"
+#include "Device/Port/ConfiguredPort.hpp"
 
 DeviceConfig
 ParsePortArgs(Args &args)
@@ -82,4 +84,15 @@ ParsePortArgs(Args &args)
   }
 
   return config;
+}
+
+std::unique_ptr<Port>
+DebugPort::Open(boost::asio::io_service &io_service,
+                DataHandler &handler)
+{
+  Port *port = OpenPort(io_service, config, nullptr, handler);
+  if (port == nullptr)
+    throw std::runtime_error("Failed to open port");
+
+  return std::unique_ptr<Port>(port);
 }

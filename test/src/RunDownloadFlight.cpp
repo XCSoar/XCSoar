@@ -95,7 +95,7 @@ try {
 
   Args args(argc, argv, usage);
   tstring driver_name = args.ExpectNextT();
-  const DeviceConfig config = ParsePortArgs(args);
+  DebugPort debug_port(args);
 
   const auto path = args.ExpectNextPath();
 
@@ -104,12 +104,7 @@ try {
 
   ScopeGlobalAsioThread global_asio_thread;
 
-  Port *port = OpenPort(*asio_thread, config,
-                        nullptr, *(DataHandler *)nullptr);
-  if (port == NULL) {
-    fprintf(stderr, "Failed to open COM port\n");
-    return EXIT_FAILURE;
-  }
+  auto port = debug_port.Open(*asio_thread, *(DataHandler *)nullptr);
 
   const struct DeviceRegister *driver = FindDriverByName(driver_name.c_str());
   if (driver == NULL) {
@@ -125,26 +120,23 @@ try {
   ConsoleOperationEnvironment env;
 
   if (!port->WaitConnected(env)) {
-    delete port;
     fprintf(stderr, "Failed to connect the port\n");
     return EXIT_FAILURE;
   }
 
   assert(driver->CreateOnPort != NULL);
-  Device *device = driver->CreateOnPort(config, *port);
+  Device *device = driver->CreateOnPort(debug_port.GetConfig(), *port);
   assert(device != NULL);
 
   RecordedFlightList flight_list;
   if (!device->ReadFlightList(flight_list, env)) {
     delete device;
-    delete port;
     fprintf(stderr, "Failed to download flight list\n");
     return EXIT_FAILURE;
   }
 
   if (flight_list.empty()) {
     delete device;
-    delete port;
     fprintf(stderr, "Logger is empty\n");
     return EXIT_FAILURE;
   }
@@ -153,20 +145,17 @@ try {
 
   if (flight_id >= flight_list.size()) {
     delete device;
-    delete port;
     fprintf(stderr, "Flight id not found\n");
     return EXIT_FAILURE;
   }
 
   if (!device->DownloadFlight(flight_list[flight_id], path, env)) {
     delete device;
-    delete port;
     fprintf(stderr, "Failed to download flight\n");
     return EXIT_FAILURE;
   }
 
   delete device;
-  delete port;
 
   printf("Flight downloaded successfully\n");
 

@@ -39,8 +39,6 @@ Copyright_License {
 #include "Atmosphere/Pressure.hpp"
 #include "IO/DataHandler.hpp"
 
-#include <memory>
-
 #include <stdio.h>
 
 static bool
@@ -337,17 +335,13 @@ int
 main(int argc, char **argv)
 try {
   Args args(argc, argv, "PORT BAUD");
-  const DeviceConfig config = ParsePortArgs(args);
+  DebugPort debug_port(args);
   args.ExpectEnd();
 
   ScopeGlobalAsioThread global_asio_thread;
 
   NullDataHandler handler;
-  std::unique_ptr<Port> port(OpenPort(*asio_thread, config, nullptr, handler));
-  if (!port) {
-    fprintf(stderr, "Failed to open COM port\n");
-    return EXIT_FAILURE;
-  }
+  auto port = debug_port.Open(*asio_thread, *(DataHandler *)nullptr);
 
   ConsoleOperationEnvironment env;
 

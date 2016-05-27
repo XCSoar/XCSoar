@@ -50,28 +50,22 @@ public:
 int main(int argc, char **argv)
 try {
   Args args(argc, argv, "PORT BAUD");
-  const DeviceConfig config = ParsePortArgs(args);
+  DebugPort debug_port(args);
   args.ExpectEnd();
 
   ScopeGlobalAsioThread global_asio_thread;
 
   MyHandler handler;
-  Port *port = OpenPort(*asio_thread, config, nullptr, handler);
-  if (port == NULL) {
-    fprintf(stderr, "Failed to open COM port\n");
-    return EXIT_FAILURE;
-  }
+  auto port = debug_port.Open(*asio_thread, handler);
 
   ConsoleOperationEnvironment env;
 
   if (!port->WaitConnected(env)) {
-    delete port;
     fprintf(stderr, "Failed to connect the port\n");
     return EXIT_FAILURE;
   }
 
   if (!port->StartRxThread()) {
-    delete port;
     fprintf(stderr, "Failed to start the port thread\n");
     return EXIT_FAILURE;
   }
@@ -79,7 +73,6 @@ try {
   while (true)
     Sleep(10000);
 
-  delete port;
   return EXIT_SUCCESS;
 } catch (const std::exception &exception) {
   PrintException(exception);

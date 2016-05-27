@@ -162,35 +162,27 @@ try {
     "\n\tnavpoints"
     ;
   Args args(argc, argv, usage);
-  const DeviceConfig config = ParsePortArgs(args);
-
+  DebugPort debug_port(args);
   const char *command = args.ExpectNext();
   args.ExpectEnd();
 
   ScopeGlobalAsioThread global_asio_thread;
 
-  Port *port = OpenPort(*asio_thread, config,
-                        nullptr, *(DataHandler *)nullptr);
-  if (port == NULL) {
-    fprintf(stderr, "Failed to open port\n");
-    return EXIT_FAILURE;
-  }
+  auto port = debug_port.Open(*asio_thread, *(DataHandler *)nullptr);
 
   ConsoleOperationEnvironment env;
 
   if (!port->WaitConnected(env)) {
-    delete port;
     fprintf(stderr, "Failed to connect the port\n");
     return EXIT_FAILURE;
   }
 
-  CAI302Device device(config, *port);
+  CAI302Device device(debug_port.GetConfig(), *port);
   if (!RunCommand(device, command, env)) {
     fprintf(stderr, "error\n");
     return EXIT_FAILURE;
   }
 
-  delete port;
   return EXIT_SUCCESS;
 } catch (const std::exception &exception) {
   PrintException(exception);
