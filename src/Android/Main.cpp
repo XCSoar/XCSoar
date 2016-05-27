@@ -141,7 +141,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   PortBridge::Initialise(env);
   BluetoothHelper::Initialise(env);
   NativeLeScanCallback::Initialise(env);
-  IOIOHelper::Initialise(env);
+  const bool have_ioio = IOIOHelper::Initialise(env);
   NativeBMP085Listener::Initialise(env);
   BMP085Device::Initialise(env);
   NativeI2CbaroListener::Initialise(env);
@@ -173,7 +173,8 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   Vibrator::Initialise(env);
   vibrator = Vibrator::Create(env, *context);
 
-  ioio_helper = new IOIOHelper(env);
+  if (have_ioio)
+    ioio_helper = new IOIOHelper(env);
 
 #ifdef __arm__
   if (IsNookSimpleTouch()) {
