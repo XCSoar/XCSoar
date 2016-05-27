@@ -43,6 +43,8 @@ Java::RethrowException(JNIEnv *env)
 	if (exception == nullptr)
 		return;
 
+	LocalRef<jthrowable> ref(env, exception);
+
 	env->ExceptionClear();
 	throw Exception(env, Java::LocalRef<jthrowable>(env, exception));
 }
