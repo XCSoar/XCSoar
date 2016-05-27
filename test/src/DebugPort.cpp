@@ -90,9 +90,20 @@ std::unique_ptr<Port>
 DebugPort::Open(boost::asio::io_service &io_service,
                 DataHandler &handler)
 {
-  Port *port = OpenPort(io_service, config, nullptr, handler);
+  Port *port = OpenPort(io_service, config, this, handler);
   if (port == nullptr)
     throw std::runtime_error("Failed to open port");
 
   return std::unique_ptr<Port>(port);
+}
+
+void
+DebugPort::PortStateChanged()
+{
+}
+
+void
+DebugPort::PortError(const char *msg)
+{
+  fprintf(stderr, "Port error: %s\n", msg);
 }

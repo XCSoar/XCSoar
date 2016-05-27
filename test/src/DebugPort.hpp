@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_DEBUG_PORT_HPP
 
 #include "Device/Config.hpp"
+#include "Device/Port/Listener.hpp"
 
 #include <memory>
 
@@ -37,7 +38,7 @@ namespace boost { namespace asio { class io_service; }}
 DeviceConfig
 ParsePortArgs(Args &args);
 
-class DebugPort {
+class DebugPort final : PortListener {
   DeviceConfig config;
 
 public:
@@ -50,6 +51,11 @@ public:
 
   std::unique_ptr<Port> Open(boost::asio::io_service &io_service,
                              DataHandler &handler);
+
+private:
+  /* virtual methods from class PortListener */
+  void PortStateChanged() override;
+  void PortError(const char *msg) override;
 };
 
 #endif
