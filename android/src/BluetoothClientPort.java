@@ -92,6 +92,7 @@ class BluetoothClientPort extends ProxyAndroidPort implements Runnable {
       }
     } catch (Exception e) {
       Log.e(TAG, "Failed to connect to Bluetooth", e);
+      error(e.getMessage());
     } finally {
       socket = null;
       thread = null;
