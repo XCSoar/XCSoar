@@ -31,6 +31,7 @@ Copyright_License {
 
 #include <map>
 #include <string>
+#include <stdexcept>
 
 namespace BluetoothHelper {
   static Java::TrivialClass cls;
@@ -165,7 +166,7 @@ PortBridge *
 BluetoothHelper::connect(JNIEnv *env, const char *address)
 {
   if (!cls.IsDefined())
-    return nullptr;
+    throw std::runtime_error("Bluetooth not available");
 
   /* call BluetoothHelper.connect() */
 
@@ -185,7 +186,7 @@ PortBridge *
 BluetoothHelper::createServer(JNIEnv *env)
 {
   if (!cls.IsDefined())
-    return nullptr;
+    throw std::runtime_error("Bluetooth not available");
 
   jobject obj = env->CallStaticObjectMethod(cls, createServer_method);
   if (obj == nullptr)
