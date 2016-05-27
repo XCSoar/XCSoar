@@ -28,6 +28,7 @@ Copyright_License {
 #include "Config.hpp"
 #include "Device/Util/LineSplitter.hpp"
 #include "Port/State.hpp"
+#include "Port/Listener.hpp"
 #include "Device/Parser.hpp"
 #include "RadioFrequency.hpp"
 #include "NMEA/ExternalSettings.hpp"
@@ -62,9 +63,8 @@ class RecordedFlightList;
 struct RecordedFlightInfo;
 class OperationEnvironment;
 class OpenDeviceJob;
-class PortListener;
 
-class DeviceDescriptor final : private Notify, private PortLineSplitter {
+class DeviceDescriptor final : Notify, PortListener, PortLineSplitter {
   /**
    * This mutex protects modifications of the attribute "device".  If
    * you use the attribute "device" from a thread other than the main
@@ -518,6 +518,9 @@ private:
 
   /* virtual methods from class Notify */
   void OnNotification() override;
+
+  /* virtual methods from class PortListener */
+  void PortStateChanged() override;
 
   /* virtual methods from DataHandler  */
   void DataReceived(const void *data, size_t length) override;

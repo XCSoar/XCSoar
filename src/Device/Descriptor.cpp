@@ -436,7 +436,7 @@ DeviceDescriptor::DoOpen(OperationEnvironment &env)
 
   Port *port;
   try {
-    port = OpenPort(*asio_thread, config, port_listener, *this);
+    port = OpenPort(*asio_thread, config, this, *this);
   } catch (const std::runtime_error &e) {
     TCHAR name_buffer[64];
     const TCHAR *name = config.GetPortName(name_buffer, 64);
@@ -1155,6 +1155,13 @@ DeviceDescriptor::OnNotification()
 
   delete open_job;
   open_job = nullptr;
+}
+
+void
+DeviceDescriptor::PortStateChanged()
+{
+  if (port_listener != nullptr)
+    port_listener->PortStateChanged();
 }
 
 void
