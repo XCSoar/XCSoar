@@ -33,7 +33,6 @@ Copyright_License {
 #include <stdint.h>
 
 struct NMEAInfo;
-class IOThread;
 
 namespace SkyLinesTracking {
   struct TrafficResponsePacket;
