@@ -99,6 +99,7 @@ public:
 private:
   /* virtual methods from class PortListener */
   void PortStateChanged() override;
+  void PortError(const char *msg) override;
 };
 
 #endif

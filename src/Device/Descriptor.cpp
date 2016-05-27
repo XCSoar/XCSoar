@@ -1165,6 +1165,27 @@ DeviceDescriptor::PortStateChanged()
 }
 
 void
+DeviceDescriptor::PortError(const char *msg)
+{
+  {
+    TCHAR buffer[64];
+    LogFormat(_T("Error on device %s: %s"),
+              config.GetPortName(buffer, 64), msg);
+  }
+
+  {
+    const UTF8ToWideConverter tmsg(msg);
+    if (tmsg.IsValid()) {
+      ScopeLock protect(mutex);
+      error_message = tmsg;
+    }
+  }
+
+  if (port_listener != nullptr)
+    port_listener->PortError(msg);
+}
+
+void
 DeviceDescriptor::DataReceived(const void *data, size_t length)
 {
   if (monitor != nullptr)

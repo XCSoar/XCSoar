@@ -267,3 +267,11 @@ Port::StateChanged()
   if (l != nullptr)
     l->PortStateChanged();
 }
+
+void
+Port::Error(const char *msg)
+{
+  PortListener *l = listener;
+  if (l != nullptr)
+    l->PortError(msg);
+}

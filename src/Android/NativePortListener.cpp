@@ -24,6 +24,7 @@ Copyright_License {
 #include "NativePortListener.hpp"
 #include "Device/Port/Listener.hpp"
 #include "Java/Class.hxx"
+#include "Java/String.hxx"
 #include "org_xcsoar_NativePortListener.h"
 
 #include <stddef.h>
@@ -44,6 +45,19 @@ Java_org_xcsoar_NativePortListener_portStateChanged(JNIEnv *env, jobject obj)
 
   PortListener &listener = *(PortListener *)(void *)ptr;
   listener.PortStateChanged();
+}
+
+JNIEXPORT void JNICALL
+Java_org_xcsoar_NativePortListener_portError(JNIEnv *env, jobject obj,
+                                             jstring msg)
+{
+  jlong ptr = env->GetLongField(obj, NativePortListener::ptr_field);
+  if (ptr == 0)
+    /* not yet set */
+    return;
+
+  PortListener &listener = *(PortListener *)(void *)ptr;
+  listener.PortError(Java::String::ToString(env, msg).c_str());
 }
 
 void

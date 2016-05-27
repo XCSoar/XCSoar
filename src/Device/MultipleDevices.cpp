@@ -155,3 +155,12 @@ MultipleDevices::PortStateChanged()
   for (auto *listener : listeners)
     listener->PortStateChanged();
 }
+
+void
+MultipleDevices::PortError(const char *msg)
+{
+  const ScopeLock protect(listeners_mutex);
+
+  for (auto *listener : listeners)
+    listener->PortError(msg);
+}

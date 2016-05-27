@@ -32,4 +32,13 @@ interface PortListener {
    * the new value.
    */
   void portStateChanged();
+
+  /**
+   * An error has occurred, and the #Port is now permanently
+   * PortState::FAILED.
+   *
+   * @param msg a human-readable error message (probably not
+   * localised)
+   */
+  void portError(String msg);
 }

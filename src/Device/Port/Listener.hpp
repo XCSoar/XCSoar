@@ -34,6 +34,15 @@ public:
    * value.
    */
   virtual void PortStateChanged() = 0;
+
+  /**
+   * An error has occurred, and the #Port is now permanently
+   * PortState::FAILED.
+   *
+   * @param msg a human-readable error message (probably not
+   * localised)
+   */
+  virtual void PortError(const char *msg) {}
 };
 
 #endif

@@ -282,6 +282,11 @@ protected:
    * of GetState() would change.
    */
   void StateChanged();
+
+  /**
+   * Call PortListener::PortError().
+   */
+  void Error(const char *msg);
 };
 
 #endif

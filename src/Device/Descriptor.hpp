@@ -521,6 +521,7 @@ private:
 
   /* virtual methods from class PortListener */
   void PortStateChanged() override;
+  void PortError(const char *msg) override;
 
   /* virtual methods from DataHandler  */
   void DataReceived(const void *data, size_t length) override;

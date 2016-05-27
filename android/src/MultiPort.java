@@ -149,4 +149,10 @@ class MultiPort implements AndroidPort, InputListener {
     if (portListener != null)
       portListener.portStateChanged();
   }
+
+  protected void error(String msg) {
+    PortListener portListener = this.portListener;
+    if (portListener != null)
+      portListener.portError(msg);
+  }
 }

@@ -110,4 +110,10 @@ abstract class ProxyAndroidPort implements AndroidPort {
     if (portListener != null)
       portListener.portStateChanged();
   }
+
+  protected void error(String msg) {
+    PortListener portListener = this.portListener;
+    if (portListener != null)
+      portListener.portError(msg);
+  }
 }

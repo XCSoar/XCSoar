@@ -38,4 +38,5 @@ class NativePortListener implements PortListener {
   }
 
   @Override public native void portStateChanged();
+  @Override public native void portError(String msg);
 }
