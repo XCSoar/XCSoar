@@ -24,6 +24,7 @@ Copyright_License {
 #include "IOIOHelper.hpp"
 #include "PortBridge.hpp"
 #include "Java/Class.hxx"
+#include "Java/Exception.hxx"
 
 Java::TrivialClass IOIOHelper::cls;
 jmethodID IOIOHelper::ctor,
@@ -57,6 +58,7 @@ PortBridge *
 IOIOHelper::openUart(JNIEnv *env, unsigned ID, unsigned baud)
 {
   jobject obj = env->CallObjectMethod(Get(), openUart_method, ID, (int)baud);
+  Java::RethrowException(env);
   if (obj == nullptr)
     return nullptr;
 

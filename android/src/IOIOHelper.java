@@ -223,11 +223,6 @@ final class IOIOHelper implements IOIOConnectionHolder,
    * @return: ID of opened UArt or -1 if fail
    */
   public AndroidPort openUart(int ID, int baud) {
-    try {
-      return new GlueIOIOPort(this, ID, baud);
-    } catch (Exception e) {
-      Log.e(TAG, "Failed to open IOIO UART", e);
-      return null;
-    }
+    return new GlueIOIOPort(this, ID, baud);
   }
 }
