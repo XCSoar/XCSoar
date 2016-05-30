@@ -1,4 +1,4 @@
-This describes the setup of a development environment suitable to compile \xc for most supported platforms. The manual focuses on debian-based flavors of linux, but should be easily adapted to other distributions. It is developed with Ubuntu 14.04 LTS, and was last changed in March 2016. At this time, we recommend you use a newer Linux version (such as Ubuntu 15.10) which includes gcc 4.9 or higher.
+This describes the setup of a development environment suitable to compile \xc for most supported platforms. The manual focuses on debian-based flavors of linux, but should be easily adapted to other distributions. It is developed with Ubuntu 16.04 LTS, and was last changed in May 2016 for \xc 7.0 preview  6.
 
 \section{Install base system}
 The procedure uses the standard install, during/after which you should update all packages to the current level using
@@ -16,9 +16,15 @@ Components required for all platforms, plus git for downloading the source and u
 sudo apt-get install make \
   librsvg2-bin xsltproc \
   imagemagick gettext \
-  git quilt automake
+  git quilt
 \end{verbatim}
-(At this point,technically  \texttt{automake} is not required for all builds, but most of them.)
+Some of these packages might be already present in your distribution (e.g. in the case of Ubuntu).
+
+It is also recommended (though not required) to install \texttt{ccache}, which can speed up building a lot, when rebuilding after a \texttt{clean}.
+\begin{verbatim}
+sudo apt-get install ccache
+\end{verbatim}
+
 
 \section{Download source code}
 
@@ -32,10 +38,9 @@ git submodule init
 git submodule update
 \end{verbatim}
 
-
 \section{For Unix builds}
 
-Make sure your distribution contains a gcc compiler version 4.9 or higher. If you use Ubuntu 14.04 LTS (which has gcc 4.8.x), you will need to upgrade the compiler package.
+Make sure your distribution contains a gcc compiler version 4.9 or higher in order to build the Unix target.
 
 In addition, the following packages are needed:
 
@@ -46,7 +51,7 @@ sudo apt-get install make g++ \
   libpng-dev libjpeg-dev \
   libtiff5-dev libgeotiff-dev\
   libcurl4-openssl-dev \
-  liblua5.2-dev \
+  liblua5.2-dev lua5.2-dev\
   libxml-parser-perl \
   librsvg2-bin xsltproc \
   imagemagick gettext \
@@ -56,17 +61,16 @@ sudo apt-get install make g++ \
 
 \section{For Android  builds}
 \subsection{Install JDK}
-First of all, we need Java to work with Android. We use OpenJDK, slated to replace the original Sun/Oracle JDK officially for Android. At this point, both JDKs work, but the Oracle one is more complicated to install.
+First of all, we need Java to work with Android. We use OpenJDK 8 in this example, but OpenJDK 7 should also work.
 
-OpenJDK is installed via the packages
 \begin{verbatim}
-sudo apt-get install openjdk-7-jdk
-sudo apt-get install vorbis-tools  ant
+sudo apt-get install openjdk-8-jdk ant
+sudo apt-get install vorbis-tools automake
 \end{verbatim}
 
 \subsection{Install Android SDK and NDK}
 
-The SDK and NDK are installed in the user directory. The \texttt{Makefile} expects them in specific directories, therefore we make some symlinks.
+The SDK and NDK are installed in the user directory. The \texttt{Makefile} expects them in specific directories, therefore we create some symlinks.
 
 \begin{verbatim}
 cd ~/
@@ -78,7 +82,6 @@ wget "http://dl.google.com/android/android-sdk_r23-linux.tgz"
 
 tar xvfz android-sdk_r23-linux.tgz
 mv android-sdk-linux/ android-sdk-linux_x86/
-
 ln -s android-sdk-linux/ android-sdk-linux_x86
 rm android-sdk_r23-linux.tgz
 
@@ -88,7 +91,7 @@ wget "http://dl.google.com/android/\
 repository/android-ndk-r11c-linux-x86_64.zip"
 
 unzip android-ndk-r11c-linux-x86_64.zip
-mv android-ndk-r11c android-ndk-r11
+ln -s android-ndk-r11c android-ndk-r11
 rm android-ndk-r11c-linux-x86_64.zip
 \end{verbatim}
 
@@ -105,9 +108,16 @@ export ANDROID_NDK_HOME="~/opt/android-ndk-r11"
 export PATH="$PATH:$ANDROID_NDK_HOME"
 \end{verbatim}
 
-Now, you should start the Android manager with the \texttt{android} command, and install the required packages. Use the GUI to select and install SDK 19, and the (preselected) newest tools. Be warned, these will need many GB of space on your harddisk! (approximately 15 GB at the time of this writing)
+The Android SDK (which contains some 32bit components) seems to have trouble running on some 64bit distributions, the following packages fix this:
 
-Finally, for the \texttt{adb} debugger interface to work, most distributions require manual fixing of the \texttt{udev} rules. This can be done in the following way:
+\begin{verbatim}
+sudo apt-get install lib32z1 lib32ncurses5
+sudo apt-get install libgcc1:i386
+\end{verbatim}
+
+Now, you should start the Android manager with the \texttt{android} command, and install the required packages. Use the GUI to select and install SDK 22, and the (preselected) newest tools. Be warned, these will need many GB of space on your harddisk! (approximately 15 GB for typical defaults)
+
+Finally, for the \texttt{adb} debugger interface to work via USB, most distributions require manual fixing of the \texttt{udev} rules. This can be done in the following way:
 
 \begin{maxipage}
 \begin{verbatim}
