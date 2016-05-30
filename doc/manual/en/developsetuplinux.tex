@@ -189,39 +189,20 @@ sudo chmod a+r /etc/udev/rules.d/99-android.rules
 \end{maxipage}
 
 \section{Optional: Eclipse IDE}
-The standard IDE for Android development (directly suppoerted by Google) is Eclipse. It is not limited to Android, and can be used for all targets, of course. It is not required for \xc, but its installation including the extensions for Android development is described here as an example. Eclipse is quite heavyweight, and many developers prefer other IDEs for \xc development.
+One of the most widespread IDEs is eclipse. It is not limited to Android, and can be used for all targets. It is not required for \xc, but its installation is described here as an example. Eclipse is quite heavyweight, and many developers prefer other IDEs for \xc development.
 
-First we install the base package
+To install, download the eclipse installer (Sometimes called "\emph{Ooomph!}" for some reason) from here:\\
+\texttt{https://www.eclipse.org/downloads/}
 
-\begin{verbatim}
-apt-get install eclipse
-\end{verbatim}
+Important: Install the CDT version of eclipse for C development, not the Android/Java package, even if you plan developing for Android. In addition, it is very convenient to install the git support (egit).
 
-Now install ADT Android plugin for Eclipse inside the eclipse thing, using the Google instructions:
-First downloadt the ADT Plugin from the Google website.
+The current stable version is \emph{eclipse mars} (4.5) and works with OpenJDK 7 or 8, the new \emph{eclipse neon} 4.6, currently RC2, is also quite stable, and requires OpenJDK 8. Both can be installed with the installer.
 
-To add the ADT plugin to Eclipse:
-\begin{itemize}
-\item    Start Eclipse, then select Help > Install New Software.
-\item    Click Add, in the top-right corner.
-\item    In the Add Repository dialog that appears, enter "ADT Plugin" for the Name and the following URL for the Location:\\
-   \texttt{ https://dl-ssl.google.com/android/eclipse/}\\
-   (Note: The Android Developer Tools update site requires an https connection. Make sure you do not omit the \texttt{https})
-\item    Click OK.
-\item    In the Available Software dialog, select the checkbox next to Developer Tools and click Next.
-\item    In the next window, you'll see a list of the tools to be downloaded. Click Next.
-\item    Accept license agreements, click Finish.
-\item    If there is a warning that the authenticity or validity of the software can not be established, click OK.
-\item    When the installation completes, restart Eclipse.
-\end{itemize}
+You can also install the ADT (Android development tools) package for better integration with Android.
 
-When Eclipse restarts, you configure the location of the Android SDK directory:
+Next, create a new project, by generating a make project from existing sources files. Choose your xcsoar source directory which contains the makefile.
 
-\begin{itemize}
-\item In the "Welcome to Android Development" window that appears, select Use existing SDKs.
-\item Browse and select the location of the Android SDK directory you recently downloaded and unpacked.
-\item Click Next.
-\end{itemize}
+Important: After you have added the sources, eclipse will start indexing all files. If you have already started \texttt{make} before this time, then a lot of files have been downloaded for the various libraries which are exctracted/built within the \xc directory (most notably the boost libraries). Indexing all these takes a very long time, and a lot of heap space, so you should probably stop the indexer right away. In addition you should probably exclude these directories from the indexer for the future.
 
-For easy \texttt{git} operation via the eclipse IDE, you can install the Eclipse GIT Team provider from the ''install new software'' menu.
-
+For this, in the C/C++ scope, right-click on the "output" directory in the file tree on the left side, select "Properties", then "Resource/Resource Filters" and add a filter. In the "add filter" dialog, choose "exclude all", "files and folders", "all children (recursive)" and set the Filter details to "Name matches *".
+This will exclude the output tree from the indexer, leading to a minimal index.
