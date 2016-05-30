@@ -409,22 +409,13 @@ location=5
 
 mode=Nav2
 type=key
-data=0
-event=StatusMessage Task restart
-event=Mode default
-event=ResetTask
-label=Task\nRestart$(CheckTaskRestart)
-location=6
-
-mode=Nav2
-type=key
 data=7
 event=Mode default
 event=StatusMessage Dropped marker
 event=Logger note Mark
 event=MarkLocation
 label=Mark\nDrop
-location=7
+location=6
 
 mode=Nav2
 type=key
@@ -432,7 +423,7 @@ data=9
 event=Setup Target
 event=Mode default
 label=Target$(CheckTask)$(CheckTaskResumed)
-location=8
+location=7
 
 # -------------
 # mode=Display1
