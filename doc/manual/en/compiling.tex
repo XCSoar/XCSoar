@@ -151,15 +151,6 @@ git submodule init
 git submodule update
 \end{verbatim*}
 
-If you are using a 64-bit machine you might have a problem when you try to run the Android cross-compiler. 
-The cross-compiler is a 32bit version of the compiler and the build script might complain that the necessary 
-compiler is “not found”, which is obviously wrong since the file is there and accessible. Instead, the problem is
-that the supporting 32-bit libraries are missing, which can be fixed through the following command:
-
-\begin{verbatim*}
-sudo apt-get install ia32-libs
-\end{verbatim*}
-
 To compile, run:
 
 \begin{verbatim*}
@@ -185,6 +176,8 @@ extension \\
 \texttt{ANDROIDFAT} & "fat" package for all supported CPUs \\
 
 \end{tabularx}
+
+It is possible that problems occur on 64bit OS (which is now required for Android SDK) when you try to run the cross-compiler toolchain which contains 32 bit components. In some distributions this can be fixed by using the \emph{ia32-libs}, newer distributions (Ubuntu 16.04 for example) might require a different approach (e.g. \emph{lib32z1}).
 
 \subsection{Compiling for Windows}
 
