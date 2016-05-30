@@ -1,6 +1,6 @@
 This describes the setup of a development environment suitable to compile \xc for most supported platforms. The manual focuses on debian-based flavors of linux, but should be easily adapted to other distributions. It is developed with Ubuntu 16.04 LTS, and was last changed in May 2016 for \xc 7.0 preview  6.
 
-\section{Install base system}
+\section{Install base system}\label{sec:developsetup-base}
 The procedure uses the standard install, during/after which you should update all packages to the current level using
 
 \begin{verbatim}
@@ -8,7 +8,7 @@ sudo apt-get update
 sudo apt-get upgrade
 \end{verbatim}
 
-\section{Platform-independent components}
+\section{Platform-independent components}\label{sec:developsetup-general}
 
 Components required for all platforms, plus git for downloading the source and uploading commits.
 
@@ -26,7 +26,7 @@ sudo apt-get install ccache
 \end{verbatim}
 
 
-\section{Download source code}
+\section{Download source code}\label{sec:developsetup-sourcecode}
 
 Download the source code of \xc by executing /textt{git} in the following way in your project directory
 \begin{verbatim}
@@ -206,3 +206,66 @@ Important: After you have added the sources, eclipse will start indexing all fil
 
 For this, in the C/C++ scope, right-click on the "output" directory in the file tree on the left side, select "Properties", then "Resource/Resource Filters" and add a filter. In the "add filter" dialog, choose "exclude all", "files and folders", "all children (recursive)" and set the Filter details to "Name matches *".
 This will exclude the output tree from the indexer, leading to a minimal index.
+
+\section{Build setup for the Manual}
+To set up the LaTeX -- specifically, LuaLaTex -- system for compiling the manual, you need to install the following packages in addition to the steps from section \ref{sec:developsetup-base}, \ref{sec:developsetup-general} and \ref{sec:developsetup-sourcecode}:
+
+\begin{verbatim}
+sudo apt-get install texlive-luatex \
+  texlive-latex-base texlive-latex-extra
+\end{verbatim}
+
+Now you can compile the manuals with 
+
+\begin{verbatim}
+make manual
+\end{verbatim}
+
+This creates a lot of warnings, but this is normal.
+
+\section{Optional: modern LaTeX editor for editing the Manual}
+Most people today edit LaTeX files in specific editors, as this is much more comfortable and efficient. This is highly recommended especially if you are not very familiar with LaTeX: learning it is very easy with a modern editor. Here, we install TeXstudio as an example, as it is very widespread and supports the rather rare LuaLaTeX well.
+
+To install, get the relevant package:
+
+\begin{verbatim}
+sudo apt-get install texstudio
+\end{verbatim}
+
+As the directory tree of \xc is very unusual for a LaTeX project, we need to make some special configurations in order to allow for quick compiling from within the editor, and for full synctex functionality:
+
+In "Options / Configure TeXStudio", enable "show advanced options".
+
+In "Options / Configure TeXStudio / Commands / Commands / LuaLaTeX", replace
+\begin{verbatim}
+lualatex -synctex=1 -interaction=nonstopmode %.tex
+\end{verbatim}
+with
+\begin{verbatim}
+lualatex -synctex=1 -interaction=nonstopmode
+ -output-directory=?a)../../../output/manual %.tex
+\end{verbatim}
+
+In "Options / Configure TexStudio / Build / Build Options / Addition Search Paths":\\
+Enter in \emph{both} fields ("Log file" and in the field "PDF File"):
+\begin{verbatim}
+../../../output/manual/
+\end{verbatim}
+
+
+Add the following line to \emph{both} the \texttt{.profile} and the \texttt{.bashrc} file of your user directory:
+\begin{maxipage}
+\begin{verbatim}
+export TEXINPUTS="..:../../../output/manual:../../../output/manual/en:../../..:"
+\end{verbatim}
+\end{maxipage}
+
+
+Finally, you need to run "make manual" in the \xc base directory at least once from the command line before you can compile from within the TexStudio interface. This creates the path structure and generates the figure files which are included into the manual. Of course, if you change figures, you might have to run "make manual" again.
+
+Inside TeXStudio, open the file "XCSoar-manual.tex" (or one of the other root files) and right-click on this file to "set as explicit root document", in the structure view on the left. Now you are good to go. Make changes and press F5 to see the result immediately.
+
+
+
+
+
