@@ -21,26 +21,39 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_WEATHER_SETTINGS_HPP
-#define XCSOAR_WEATHER_SETTINGS_HPP
+#ifndef XCSOAR_WEATHER_PCMET_SETTINGS_HPP
+#define XCSOAR_WEATHER_PCMET_SETTINGS_HPP
 
-#include "Weather/Features.hpp"
+#include "Util/StaticString.hxx"
 
-#ifdef HAVE_PCMET
+struct PCMetSettings {
+  struct Credentials {
+    StaticString<64> username;
+    StaticString<64> password;
 
-#include "PCMet/Settings.hpp"
+    bool IsDefined() const {
+      return !username.empty() && !password.empty();
+    }
 
-#endif
+    void SetDefaults() {
+      username.clear();
+      password.clear();
+    }
+  };
 
-struct WeatherSettings {
-#ifdef HAVE_PCMET
-  PCMetSettings pcmet;
-#endif
+  /**
+   * Credentials for https://www.flugwetter.de/
+   */
+  Credentials www_credentials;
+
+  /**
+   * Credentials for ftp.pcmet.de
+   */
+  Credentials ftp_credentials;
 
   void SetDefaults() {
-#ifdef HAVE_PCMET
-    pcmet.SetDefaults();
-#endif
+    www_credentials.SetDefaults();
+    ftp_credentials.SetDefaults();
   }
 };
 
