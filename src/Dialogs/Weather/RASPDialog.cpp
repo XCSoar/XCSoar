@@ -52,6 +52,7 @@ public:
      rasp(std::move(_rasp)) {}
 
 private:
+  void FillItemControl();
   void UpdateTimeControl();
   void OnTimeModified(const DataFieldEnum &df);
 
@@ -67,6 +68,30 @@ private:
       OnTimeModified((const DataFieldEnum &)df);
   }
 };
+
+void
+RASPSettingsPanel::FillItemControl()
+{
+  auto &df = (DataFieldEnum &)GetDataField(ITEM);
+
+  df.ClearChoices();
+  df.AddChoice(-1, _T("none"), _T("none"), nullptr);
+  for (unsigned i = 0; i < rasp->GetItemCount(); i++) {
+    const auto &mi = rasp->GetItemInfo(i);
+    const TCHAR *label = mi.label;
+    if (label != nullptr)
+      label = gettext(label);
+
+    const TCHAR *help = mi.help;
+    if (help != nullptr)
+      help = gettext(help);
+
+    df.AddChoice(i, mi.name, label, help);
+  }
+
+  const WeatherUIState &state = CommonInterface::GetUIState().weather;
+  df.Set(state.map);
+}
 
 void
 RASPSettingsPanel::UpdateTimeControl()
@@ -111,23 +136,9 @@ RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   WndProperty *wp;
 
   wp = AddEnum(_("Field"), nullptr, this);
-  DataFieldEnum *dfe = (DataFieldEnum *)wp->GetDataField();
-  dfe->EnableItemHelp(true);
-  dfe->AddChoice(-1, _T("none"), _T("none"), nullptr);
-  for (unsigned i = 0; i < rasp->GetItemCount(); i++) {
-    const auto &mi = rasp->GetItemInfo(i);
-    const TCHAR *label = mi.label;
-    if (label != nullptr)
-      label = gettext(label);
+  wp->GetDataField()->EnableItemHelp(true);
+  FillItemControl();
 
-    const TCHAR *help = mi.help;
-    if (help != nullptr)
-      help = gettext(help);
-
-    dfe->AddChoice(i, mi.name, label, help);
-  }
-
-  dfe->Set(state.map);
   wp->RefreshDisplay();
 
   AddEnum(_("Time"), nullptr, this);
