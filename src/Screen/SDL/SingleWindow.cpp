@@ -42,10 +42,7 @@ SingleWindow::FilterEvent(const Event &_event, Window *allowed) const
   case SDL_MOUSEBUTTONUP:
 #ifdef HAVE_HIGHDPI_SUPPORT
     {
-      Sint32 x = event.button.x;
-      Sint32 y = event.button.y;
-      PointToReal(x, y);
-      return FilterMouseEvent(PixelPoint(x, y), allowed);
+      return FilterMouseEvent(PointToReal(PixelPoint(event.button.x, event.button.y)), allowed);
     }
 #else
     return FilterMouseEvent(PixelPoint(event.button.x, event.button.y),
