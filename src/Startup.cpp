@@ -346,7 +346,7 @@ Startup()
 
   // Scan for weather forecast
   LogFormat("RASP load");
-  rasp = new RaspStore();
+  auto rasp = std::make_shared<RaspStore>();
   rasp->ScanAll();
 
   // Reads the airspace files
@@ -392,7 +392,7 @@ Startup()
 
     map_window->SetTopography(topography);
     map_window->SetTerrain(terrain);
-    map_window->SetWeather(rasp);
+    map_window->SetRasp(rasp);
 
 #ifdef HAVE_NOAA
     map_window->SetNOAAStore(noaa_store);
@@ -580,10 +580,6 @@ Shutdown()
   way_points.Clear();
 
   operation.SetText(_("Shutdown, please wait..."));
-
-  // Clear weather database
-  delete rasp;
-  rasp = nullptr;
 
   // Clear terrain database
 

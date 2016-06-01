@@ -29,6 +29,7 @@ Copyright_License {
 #include "Gauge/BigTrafficWidget.hpp"
 #include "Computer/Settings.hpp"
 #include "Components.hpp"
+#include "DataGlobals.hpp"
 #include "MapSettings.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
@@ -418,6 +419,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
   }
 
   if (_tcsstr(OutBuffer, _T("$(CheckWeather)"))) {
+    const auto rasp = DataGlobals::GetRasp();
     if (rasp == nullptr || rasp->GetItemCount() == 0)
       invalid = true;
     ReplaceInString(OutBuffer, _T("$(CheckWeather)"), _T(""), Size);

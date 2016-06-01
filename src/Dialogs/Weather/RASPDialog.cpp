@@ -28,7 +28,7 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
-#include "Components.hpp"
+#include "DataGlobals.hpp"
 #include "UIGlobals.hpp"
 #include "UIState.hpp"
 #include "ActionInterface.hpp"
@@ -42,13 +42,14 @@ class RASPSettingsPanel final : public RowFormWidget, DataFieldListener {
     TIME,
   };
 
-  RaspStore &rasp;
+  std::shared_ptr<RaspStore> rasp;
 
   BrokenTime time;
 
 public:
-  explicit RASPSettingsPanel(RaspStore &_rasp)
-    :RowFormWidget(UIGlobals::GetDialogLook()), rasp(_rasp) {}
+  explicit RASPSettingsPanel(std::shared_ptr<RaspStore> &&_rasp)
+    :RowFormWidget(UIGlobals::GetDialogLook()),
+     rasp(std::move(_rasp)) {}
 
 private:
   void UpdateTimeControl();
@@ -80,7 +81,7 @@ RASPSettingsPanel::UpdateTimeControl()
     time_df.ClearChoices();
     time_df.addEnumText(_("Now"));
 
-    rasp.ForEachTime(item_index, [&time_df](BrokenTime t){
+    rasp->ForEachTime(item_index, [&time_df](BrokenTime t){
         TCHAR timetext[10];
         _stprintf(timetext, _T("%02u:%02u"), t.hour, t.minute);
         time_df.addEnumText(timetext, t.GetMinuteOfDay());
@@ -113,8 +114,8 @@ RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   DataFieldEnum *dfe = (DataFieldEnum *)wp->GetDataField();
   dfe->EnableItemHelp(true);
   dfe->AddChoice(-1, _T("none"), _T("none"), nullptr);
-  for (unsigned i = 0; i < rasp.GetItemCount(); i++) {
-    const auto &mi = rasp.GetItemInfo(i);
+  for (unsigned i = 0; i < rasp->GetItemCount(); i++) {
+    const auto &mi = rasp->GetItemInfo(i);
     const TCHAR *label = mi.label;
     if (label != nullptr)
       label = gettext(label);
@@ -149,11 +150,12 @@ RASPSettingsPanel::Save(bool &_changed)
 Widget *
 CreateRaspWidget()
 {
+  auto rasp = DataGlobals::GetRasp();
   if (rasp == nullptr || rasp->GetItemCount() == 0)
     return new LargeTextWidget(UIGlobals::GetDialogLook(),
                                _T("No RASP data"));
 
-  return new RASPSettingsPanel(*rasp);
+  return new RASPSettingsPanel(std::move(rasp));
 }
 
 /*

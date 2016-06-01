@@ -30,7 +30,6 @@ Copyright_License {
 FileCache *file_cache;
 TopographyStore *topography;
 RasterTerrain *terrain;
-RaspStore *rasp;
 
 #ifndef ENABLE_OPENGL
 DrawThread *draw_thread;

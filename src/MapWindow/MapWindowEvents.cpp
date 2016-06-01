@@ -78,7 +78,7 @@ MapWindow::OnDestroy()
   SetWaypoints(nullptr);
   SetTopography(nullptr);
   SetTerrain(nullptr);
-  SetWeather(nullptr);
+  SetRasp(nullptr);
 
 #ifndef ENABLE_OPENGL
   buffer_canvas.Destroy();

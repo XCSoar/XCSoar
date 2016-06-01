@@ -167,7 +167,7 @@ MapWindow::SetTerrain(RasterTerrain *_terrain)
 }
 
 void
-MapWindow::SetWeather(const RaspStore *_rasp_store)
+MapWindow::SetRasp(const std::shared_ptr<RaspStore> &_rasp_store)
 {
   rasp_renderer.reset();
   rasp_store = _rasp_store;
