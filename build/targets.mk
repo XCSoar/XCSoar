@@ -248,7 +248,7 @@ ifeq ($(TARGET),IOS32)
   HOST_TRIPLET = armv7-apple-darwin
   LLVM_TARGET = $(HOST_TRIPLET)
   ifeq ($(HOST_IS_DARWIN),y)
-    DARWIN_SDK_VERSION = 9.1
+    DARWIN_SDK_VERSION = 9.3
     DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS${DARWIN_SDK_VERSION}.sdk
   endif
   LIBCXX = y
