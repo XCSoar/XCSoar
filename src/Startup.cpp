@@ -346,7 +346,7 @@ Startup()
 
   // Scan for weather forecast
   LogFormat("RASP load");
-  auto rasp = std::make_shared<RaspStore>();
+  auto rasp = std::make_shared<RaspStore>(LocalPath(_T(RASP_FILENAME)));
   rasp->ScanAll();
 
   // Reads the airspace files

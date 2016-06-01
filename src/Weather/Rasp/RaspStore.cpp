@@ -24,7 +24,6 @@ Copyright_License {
 #include "RaspStore.hpp"
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
-#include "LocalPath.hpp"
 #include "OS/ConvertPathName.hpp"
 #include "OS/Path.hpp"
 #include "Util/StringCompare.hxx"
@@ -39,7 +38,6 @@ Copyright_License {
 #include <stdio.h>
 #include <windef.h> // for MAX_PATH
 
-#define RASP_FILENAME "xcsoar-rasp.dat"
 #define RASP_FORMAT "%s.curr.%02u%02ulst.d2.jp2"
 
 static constexpr RaspStore::MapInfo WeatherDescriptors[] = {
@@ -140,10 +138,8 @@ RaspStore::NarrowWeatherFilename(char *filename, Path name,
 }
 
 struct zzip_dir *
-RaspStore::OpenArchive()
+RaspStore::OpenArchive() const
 {
-  const auto path = LocalPath(_T(RASP_FILENAME));
-
   NarrowPathName narrow_path(path);
   if (!narrow_path.IsDefined())
     return nullptr;

@@ -181,7 +181,7 @@ RASPSettingsPanel::Download()
     return;
 
   const char *url = rasp_providers[i].url;
-  const auto path = LocalPath(_T("xcsoar-rasp.dat"));
+  auto path = LocalPath(_T(RASP_FILENAME));
 
   {
     DialogJobRunner runner(UIGlobals::GetMainWindow(),
@@ -198,7 +198,7 @@ RASPSettingsPanel::Download()
     transaction.Commit();
   }
 
-  rasp = std::make_shared<RaspStore>();
+  rasp = std::make_shared<RaspStore>(std::move(path));
   rasp->ScanAll();
 
   DataGlobals::SetRasp(std::shared_ptr<RaspStore>(rasp));

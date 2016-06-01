@@ -26,11 +26,14 @@ Copyright_License {
 
 #include "Util/StaticArray.hxx"
 #include "Util/StaticString.hxx"
+#include "OS/Path.hpp"
 #include "Time/BrokenTime.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
 #include <tchar.h>
+
+#define RASP_FILENAME "xcsoar-rasp.dat"
 
 class Path;
 class RasterMap;
@@ -84,6 +87,8 @@ public:
   typedef StaticArray<MapItem, MAX_WEATHER_MAP> MapList;
 
 private:
+  const AllocatedPath path;
+
   /**
    * Not protected by #lock because it's written only by ScanAll()
    * during startup.
@@ -91,6 +96,9 @@ private:
   MapList maps;
 
 public:
+  explicit RaspStore(AllocatedPath &&_path)
+    :path(std::move(_path)) {}
+
   gcc_const
   unsigned GetItemCount() const {
     return maps.size();
@@ -137,7 +145,7 @@ public:
   gcc_const
   static BrokenTime IndexToTime(unsigned index);
 
-  static struct zzip_dir *OpenArchive();
+  struct zzip_dir *OpenArchive() const;
 
   static bool NarrowWeatherFilename(char *filename, Path name,
                                     unsigned time_index);
