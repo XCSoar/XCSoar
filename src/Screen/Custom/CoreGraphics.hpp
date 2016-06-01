@@ -35,4 +35,7 @@ LoadJPEGFile(Path path);
 UncompressedImage
 LoadPNG(const void *data, size_t size);
 
+UncompressedImage
+LoadPNG(Path path);
+
 #endif

@@ -128,3 +128,22 @@ LoadPNG(const void *data, size_t size)
   
   return result;
 }
+
+UncompressedImage
+LoadPNG(Path path)
+{
+  CGDataProviderRef data_provider = CGDataProviderCreateWithFilename(path.c_str());
+  if (nullptr == data_provider)
+    return UncompressedImage();
+
+  CGImageRef image =  CGImageCreateWithPNGDataProvider(
+      data_provider, nullptr, false, kCGRenderingIntentDefault);
+
+  UncompressedImage result = CGImageToUncompressedImage(image);
+
+  if (nullptr != image)
+    CFRelease(image);
+  CFRelease(data_provider);
+
+  return result;
+}
