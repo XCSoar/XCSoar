@@ -248,6 +248,8 @@ const char LiveTrack24Password[] = "LiveTrack24Password";
 
 const char PCMetUsername[] = "PCMetUsername";
 const char PCMetPassword[] = "PCMetPassword";
+const char PCMetFtpUsername[] = "PCMetFtpUsername";
+const char PCMetFtpPassword[] = "PCMetFtpPassword";
 
 const char EnableLocationMapItem[] = "EnableLocationMapItem";
 const char EnableArrivalAltitudeMapItem[] = "EnableArrivalAltitudeMapItem";

@@ -246,6 +246,8 @@ extern const char LiveTrack24Password[];
 
 extern const char PCMetUsername[];
 extern const char PCMetPassword[];
+extern const char PCMetFtpUsername[];
+extern const char PCMetFtpPassword[];
 
 extern const char EnableLocationMapItem[];
 extern const char EnableArrivalAltitudeMapItem[];

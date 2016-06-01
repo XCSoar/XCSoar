@@ -50,8 +50,14 @@ struct PCMetSettings {
    */
   Credentials www_credentials;
 
+  /**
+   * Credentials for ftp.pcmet.de
+   */
+  Credentials ftp_credentials;
+
   void SetDefaults() {
     www_credentials.SetDefaults();
+    ftp_credentials.SetDefaults();
   }
 };
 

@@ -60,6 +60,11 @@ WeatherConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           settings.pcmet.www_credentials.username);
   AddPassword(_T("pc_met Password"), _T(""),
               settings.pcmet.www_credentials.password);
+
+  AddText(_T("pc_met FTP Username"), _T(""),
+          settings.pcmet.ftp_credentials.username);
+  AddPassword(_T("pc_met FTP Password"), _T(""),
+              settings.pcmet.ftp_credentials.password);
 }
 
 bool
@@ -75,6 +80,12 @@ WeatherConfigPanel::Save(bool &_changed)
 
   changed |= SaveValue(PCMET_PASSWORD, ProfileKeys::PCMetPassword,
                        settings.pcmet.www_credentials.password);
+
+  changed |= SaveValue(PCMET_USER, ProfileKeys::PCMetFtpUsername,
+                       settings.pcmet.ftp_credentials.username);
+
+  changed |= SaveValue(PCMET_PASSWORD, ProfileKeys::PCMetFtpPassword,
+                       settings.pcmet.ftp_credentials.password);
 #endif
 
   _changed |= changed;
