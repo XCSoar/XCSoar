@@ -29,6 +29,7 @@ Copyright_License {
 // IWYU pragma: begin_exports
 
 #ifdef ENABLE_SDL
+#include <SDL_platform.h>
 #if defined(HAVE_GLES)
 #ifdef HAVE_GLES2
 #include <SDL_opengles2.h>
