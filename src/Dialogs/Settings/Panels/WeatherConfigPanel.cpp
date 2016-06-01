@@ -56,8 +56,10 @@ WeatherConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   RowFormWidget::Prepare(parent, rc);
 
-  AddText(_T("pc_met Username"), _T(""), settings.pcmet.username);
-  AddPassword(_T("pc_met Password"), _T(""), settings.pcmet.password);
+  AddText(_T("pc_met Username"), _T(""),
+          settings.pcmet.www_credentials.username);
+  AddPassword(_T("pc_met Password"), _T(""),
+              settings.pcmet.www_credentials.password);
 }
 
 bool
@@ -69,10 +71,10 @@ WeatherConfigPanel::Save(bool &_changed)
 
 #ifdef HAVE_PCMET
   changed |= SaveValue(PCMET_USER, ProfileKeys::PCMetUsername,
-                       settings.pcmet.username);
+                       settings.pcmet.www_credentials.username);
 
   changed |= SaveValue(PCMET_PASSWORD, ProfileKeys::PCMetPassword,
-                       settings.pcmet.password);
+                       settings.pcmet.www_credentials.password);
 #endif
 
   _changed |= changed;

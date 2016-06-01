@@ -103,8 +103,8 @@ PCMet::DownloadLatestImage(const char *type, const char *area,
                            const PCMetSettings &settings,
                            JobRunner &runner)
 {
-  const WideToUTF8Converter username(settings.username);
-  const WideToUTF8Converter password(settings.password);
+  const WideToUTF8Converter username(settings.www_credentials.username);
+  const WideToUTF8Converter password(settings.www_credentials.password);
 
   char url[256];
   snprintf(url, sizeof(url),

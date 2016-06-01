@@ -30,8 +30,8 @@ Copyright_License {
 
 namespace Profile {
   static void Load(const ProfileMap &map, PCMetSettings &settings) {
-    map.Get(ProfileKeys::PCMetUsername, settings.username);
-    map.Get(ProfileKeys::PCMetPassword, settings.password);
+    map.Get(ProfileKeys::PCMetUsername, settings.www_credentials.username);
+    map.Get(ProfileKeys::PCMetPassword, settings.www_credentials.password);
   }
 }
 

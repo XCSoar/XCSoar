@@ -31,12 +31,27 @@ Copyright_License {
 #include "Util/StaticString.hxx"
 
 struct PCMetSettings {
-  StaticString<64> username;
-  StaticString<64> password;
+  struct Credentials {
+    StaticString<64> username;
+    StaticString<64> password;
+
+    bool IsDefined() const {
+      return !username.empty() && !password.empty();
+    }
+
+    void SetDefaults() {
+      username.clear();
+      password.clear();
+    }
+  };
+
+  /**
+   * Credentials for https://www.flugwetter.de/
+   */
+  Credentials www_credentials;
 
   void SetDefaults() {
-    username.clear();
-    password.clear();
+    www_credentials.SetDefaults();
   }
 };
 
