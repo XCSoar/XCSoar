@@ -21,27 +21,21 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DATA_GLOBALS_HPP
-#define XCSOAR_DATA_GLOBALS_HPP
+#include "Providers.hpp"
 
-#include <memory>
+const RaspProvider rasp_providers[] = {
+  { _T("Germany"),
+    "http://rasp.linta.de/GERMANY/xcsoar-rasp.dat" },
+  { _T("Germany Schwarzwald"),
+    "http://rasp.linta.de/BLACKFOREST_WAVE/xcsoar-rasp.dat" },
+  { _T("Germany Nordrhein-Westfalen"),
+    "http://rasp.segelflugschule-oerlinghausen.de/NRW/FCST/xcsoar-rasp.dat" },
+  { _T("Germany Niedersachsen"),
+    "http://rasp.linta.de/NIEDERSACHSEN_WAVE/xcsoar-rasp.dat" },
+  { _T("Scandinavia"),
+    "http://rasp.linta.de/SCANDINAVIA/xcsoar-rasp.dat" },
+  { _T("Great Britain "),
+    "http://rasp.inn.leedsmet.ac.uk/XCSoar/xcsoar-rasp.dat" },
 
-class RaspStore;
-
-/**
- * This namespace provides helper functions to access generic global
- * data objects.  Use them when you don't know where else to get them.
- * This is a last resort only, don't use it if you have a better way
- * to do it.
- *
- * This namespace exists to avoid direct access to #MainWindow and
- * others, because that would mean the code is not reusable in other
- * applications, while the functions in this namespace can easily be
- * replaced in another program.
- */
-namespace DataGlobals {
-std::shared_ptr<RaspStore> GetRasp();
-void SetRasp(std::shared_ptr<RaspStore> rasp);
+  { nullptr, nullptr }
 };
-
-#endif

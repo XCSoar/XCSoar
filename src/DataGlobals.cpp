@@ -22,8 +22,10 @@ Copyright_License {
 */
 
 #include "DataGlobals.hpp"
+#include "Weather/Rasp/RaspStore.hpp"
 #include "UIGlobals.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
+#include "Interface.hpp"
 
 std::shared_ptr<RaspStore>
 DataGlobals::GetRasp()
@@ -32,4 +34,16 @@ DataGlobals::GetRasp()
   return map != nullptr
     ? map->GetRasp()
     : nullptr;
+}
+
+void
+DataGlobals::SetRasp(std::shared_ptr<RaspStore> rasp)
+{
+  auto &state = CommonInterface::SetUIState().weather;
+  if (state.map >= int(rasp->GetItemCount()))
+    state.map = -1;
+
+  auto *map = UIGlobals::GetMap();
+  if (map != nullptr)
+    map->SetRasp(std::move(rasp));
 }

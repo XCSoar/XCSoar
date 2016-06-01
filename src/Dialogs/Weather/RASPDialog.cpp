@@ -22,24 +22,38 @@ Copyright_License {
 */
 
 #include "RASPDialog.hpp"
+#include "Dialogs/ListPicker.hpp"
+#include "Dialogs/JobDialog.hpp"
+#include "Renderer/TextRowRenderer.hpp"
 #include "Widget/RowFormWidget.hpp"
-#include "Widget/LargeTextWidget.hpp"
+#include "Look/DialogLook.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
+#include "Weather/Rasp/Providers.hpp"
 #include "Form/Edit.hpp"
+#include "Form/List.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
+#include "Form/ActionListener.hpp"
+#include "Protection.hpp"
 #include "DataGlobals.hpp"
 #include "UIGlobals.hpp"
 #include "UIState.hpp"
 #include "ActionInterface.hpp"
 #include "Language/Language.hpp"
+#include "LocalPath.hpp"
+#include "Net/HTTP/Session.hpp"
+#include "Net/HTTP/ToFile.hpp"
+#include "IO/FileTransaction.hpp"
 
 #include <stdio.h>
 
-class RASPSettingsPanel final : public RowFormWidget, DataFieldListener {
+class RASPSettingsPanel final
+  : public RowFormWidget, DataFieldListener, ActionListener {
+
   enum Controls {
     ITEM,
     TIME,
+    DOWNLOAD,
   };
 
   std::shared_ptr<RaspStore> rasp;
@@ -55,6 +69,7 @@ private:
   void FillItemControl();
   void UpdateTimeControl();
   void OnTimeModified(const DataFieldEnum &df);
+  void Download();
 
   /* methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
@@ -66,6 +81,15 @@ private:
       UpdateTimeControl();
     else if (IsDataField(TIME, df))
       OnTimeModified((const DataFieldEnum &)df);
+  }
+
+  /* virtual methods from class ActionListener */
+  void OnAction(int id) override {
+    switch (id) {
+    case DOWNLOAD:
+      Download();
+      break;
+    }
   }
 };
 
@@ -127,6 +151,60 @@ RASPSettingsPanel::OnTimeModified(const DataFieldEnum &df)
     : BrokenTime::Invalid();
 }
 
+class RaspProviderRenderer : public ListItemRenderer {
+  TextRowRenderer row_renderer;
+
+public:
+  unsigned CalculateLayout(const DialogLook &look) {
+    return row_renderer.CalculateLayout(*look.list.font);
+  }
+
+  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned i) override {
+    row_renderer.DrawTextRow(canvas, rc, rasp_providers[i].name);
+  }
+};
+
+void
+RASPSettingsPanel::Download()
+{
+  unsigned n = 0;
+  for (auto i = rasp_providers; i->url != nullptr; ++i)
+    ++n;
+
+  assert(n > 0);
+
+  RaspProviderRenderer renderer;
+  int i = ListPicker(_("Download"), n, 0, renderer.CalculateLayout(GetLook()),
+                     renderer);
+  if (i < 0)
+    return;
+
+  const char *url = rasp_providers[i].url;
+  const auto path = LocalPath(_T("xcsoar-rasp.dat"));
+
+  {
+    DialogJobRunner runner(UIGlobals::GetMainWindow(),
+                           GetLook(),
+                           _("Download"), true);
+
+    Net::Session session;
+
+    FileTransaction transaction(path);
+    Net::DownloadToFileJob job(session, url, transaction.GetTemporaryPath());
+    if (!runner.Run(job) || !job.WasSuccessful())
+      return;
+
+    transaction.Commit();
+  }
+
+  rasp = std::make_shared<RaspStore>();
+  rasp->ScanAll();
+
+  DataGlobals::SetRasp(std::shared_ptr<RaspStore>(rasp));
+  FillItemControl();
+}
+
 void
 RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
@@ -143,6 +221,8 @@ RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddEnum(_("Time"), nullptr, this);
   UpdateTimeControl();
+
+  AddButton(_("Download"), *this, DOWNLOAD);
 }
 
 bool
@@ -162,10 +242,6 @@ Widget *
 CreateRaspWidget()
 {
   auto rasp = DataGlobals::GetRasp();
-  if (rasp == nullptr || rasp->GetItemCount() == 0)
-    return new LargeTextWidget(UIGlobals::GetDialogLook(),
-                               _T("No RASP data"));
-
   return new RASPSettingsPanel(std::move(rasp));
 }
 
