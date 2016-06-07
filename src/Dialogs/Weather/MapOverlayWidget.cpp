@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "MapOverlayWidget.hpp"
 #include "Dialogs/Error.hpp"
+#include "Dialogs/JobDialog.hpp"
 #include "UIGlobals.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Canvas.hpp"
@@ -35,6 +36,8 @@ Copyright_License {
 #include "MapWindow/OverlayBitmap.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Language/Language.hpp"
+#include "Weather/PCMet/Overlays.hpp"
+#include "Interface.hpp"
 #include "LocalPath.hpp"
 #include "OS/Path.hpp"
 #include "OS/FileUtil.hpp"
@@ -55,6 +58,12 @@ class WeatherMapOverlayListWidget final
   struct Item {
     StaticString<80> name;
     AllocatedPath path;
+
+    std::unique_ptr<PCMet::OverlayInfo> pc_met;
+
+    explicit Item(PCMet::OverlayInfo &&_pc_met)
+      :name(_pc_met.label.c_str()), path(nullptr),
+       pc_met(new PCMet::OverlayInfo(std::move(_pc_met))) {}
 
     Item(const TCHAR *_name, Path _path)
       :name(_name), path(_path) {}
@@ -127,7 +136,7 @@ private:
 
     preview_bitmap.Reset();
     try {
-      if (!preview_bitmap.LoadFile(path))
+      if (path.IsNull() || !preview_bitmap.LoadFile(path))
         return;
     } catch (const std::exception &e) {
       return;
@@ -218,6 +227,11 @@ void
 WeatherMapOverlayListWidget::UpdateList()
 {
   items.clear();
+
+  const auto &pc_met_settings = CommonInterface::GetComputerSettings().weather.pcmet;
+  if (pc_met_settings.ftp_credentials.IsDefined())
+    for (auto &i : PCMet::CollectOverlays())
+      items.emplace_back(std::move(i));
 
   struct Visitor : public File::Visitor {
     std::vector<Item> &items;
@@ -333,6 +347,26 @@ WeatherMapOverlayListWidget::UseClicked(unsigned i)
 {
   if (int(i) == active_index) {
     DisableClicked();
+    return;
+  }
+
+  if (items[i].pc_met) {
+    const auto &settings = CommonInterface::GetComputerSettings().weather.pcmet;
+
+    DialogJobRunner runner(UIGlobals::GetMainWindow(),
+                           UIGlobals::GetDialogLook(),
+                           _("Download"), true);
+
+    try {
+      const auto &info = *items[i].pc_met;
+      auto overlay = PCMet::DownloadOverlay(info,
+                                            BrokenDateTime::NowUTC(),
+                                            settings, runner);
+      SetOverlay(overlay.path, info.label.c_str());
+    } catch (const std::exception &exception) {
+      ShowError(exception, _T("pc_met"));
+    }
+
     return;
   }
 
