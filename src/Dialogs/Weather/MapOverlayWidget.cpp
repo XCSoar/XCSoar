@@ -191,6 +191,8 @@ protected:
   }
 
 private:
+  void SetOverlay(Path path);
+
   void UseClicked(unsigned i);
 
   void DisableClicked() {
@@ -302,22 +304,15 @@ SetupOverlay(MapOverlayBitmap &bmp, Path::const_pointer name)
 }
 
 void
-WeatherMapOverlayListWidget::UseClicked(unsigned i)
+WeatherMapOverlayListWidget::SetOverlay(Path path)
 {
-  if (int(i) == active_index) {
-    DisableClicked();
-    return;
-  }
-
   auto *map = UIGlobals::GetMap();
   if (map == nullptr)
     return;
 
-  const Path path = items[i].path;
-
   std::unique_ptr<MapOverlayBitmap> bmp;
   try {
-    bmp.reset(new MapOverlayBitmap(items[i].path));
+    bmp.reset(new MapOverlayBitmap(path));
   } catch (const std::exception &e) {
     ShowError(e, _("Weather"));
     return;
@@ -328,6 +323,17 @@ WeatherMapOverlayListWidget::UseClicked(unsigned i)
   map->SetOverlay(std::move(bmp));
 
   UpdateActiveIndex();
+}
+
+void
+WeatherMapOverlayListWidget::UseClicked(unsigned i)
+{
+  if (int(i) == active_index) {
+    DisableClicked();
+    return;
+  }
+
+  SetOverlay(items[i].path);
 }
 
 void
