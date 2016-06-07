@@ -60,6 +60,25 @@ BrokenDate::IncrementDay()
   }
 }
 
+void
+BrokenDate::DecrementDay()
+{
+  assert(IsPlausible());
+
+  --day;
+
+  if (day < 1) {
+    --month;
+
+    if (month < 1) {
+      --year;
+      month = 12;
+    }
+
+    day = DaysInMonth(month, year);
+  }
+}
+
 int
 BrokenDate::DaysSince(const BrokenDate &other) const
 {

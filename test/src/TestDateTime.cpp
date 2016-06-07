@@ -65,6 +65,10 @@ TestDate()
   ok1(d == BrokenDate(2010, 2, 28));
   d.IncrementDay();
   ok1(d == BrokenDate(2010, 3, 1));
+  d.DecrementDay();
+  ok1(d == BrokenDate(2010, 2, 28));
+  d.DecrementDay();
+  ok1(d == BrokenDate(2010, 2, 27));
 
   d = BrokenDate(2010, 12, 31);
   d.IncrementDay();
@@ -183,7 +187,7 @@ TestDateTime()
 
 int main(int argc, char **argv)
 {
-  plan_tests(105);
+  plan_tests(107);
 
   TestDate();
   TestTime();

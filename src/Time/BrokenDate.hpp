@@ -114,6 +114,8 @@ struct BrokenDate {
 
   void IncrementDay();
 
+  void DecrementDay();
+
   /**
    * Returns the number of calendar days that have passed since the
    * two #BrokenDate structs.  The result may be negative if #other is
