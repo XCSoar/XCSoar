@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_PCMET_HPP
-#define XCSOAR_PCMET_HPP
+#ifndef XCSOAR_PCMET_IMAGES_HPP
+#define XCSOAR_PCMET_IMAGES_HPP
 
 #include <tchar.h>
 
