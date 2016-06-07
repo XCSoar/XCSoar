@@ -160,7 +160,7 @@ Widget *
 CreatePCMetWidget()
 {
   const auto &settings = CommonInterface::GetComputerSettings().weather.pcmet;
-  if (settings.www_credentials.IsDefined())
+  if (!settings.www_credentials.IsDefined())
     return new LargeTextWidget(UIGlobals::GetDialogLook(),
                                _T("No account was configured."));
 
