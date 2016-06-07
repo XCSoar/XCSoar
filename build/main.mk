@@ -765,6 +765,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Repository/Glue.cpp \
 	$(SRC)/Renderer/NOAAListRenderer.cpp \
 	$(SRC)/Weather/PCMet/Images.cpp \
+	$(SRC)/Weather/PCMet/Overlays.cpp \
 	$(SRC)/Weather/NOAAGlue.cpp \
 	$(SRC)/Weather/METARParser.cpp \
 	$(SRC)/Weather/NOAAFormatter.cpp \
