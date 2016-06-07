@@ -191,7 +191,7 @@ protected:
   }
 
 private:
-  void SetOverlay(Path path);
+  void SetOverlay(Path path, const TCHAR *label=nullptr);
 
   void UseClicked(unsigned i);
 
@@ -304,7 +304,7 @@ SetupOverlay(MapOverlayBitmap &bmp, Path::const_pointer name)
 }
 
 void
-WeatherMapOverlayListWidget::SetOverlay(Path path)
+WeatherMapOverlayListWidget::SetOverlay(Path path, const TCHAR *label)
 {
   auto *map = UIGlobals::GetMap();
   if (map == nullptr)
@@ -319,6 +319,9 @@ WeatherMapOverlayListWidget::SetOverlay(Path path)
   }
 
   SetupOverlay(*bmp, path.GetBase().c_str());
+
+  if (label != nullptr)
+    bmp->SetLabel(label);
 
   map->SetOverlay(std::move(bmp));
 
