@@ -75,6 +75,11 @@ public:
      simple_bounds(bounds.GetBounds()),
      label(_label) {}
 
+  template<typename T>
+  void SetLabel(T &&_label) {
+    label = std::forward<T>(_label);
+  }
+
   /**
    * By default, this class uses the bitmap's alpha channel.  This
    * method disables the alpha channel.
