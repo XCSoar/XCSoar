@@ -27,8 +27,6 @@ Copyright_License {
 #include "Util/NumberParser.hpp"
 #include "Util/StringUtil.hpp"
 #include "DebugReplay.hpp"
-#include "Net/IPv4Address.hxx"
-#include "Net/StaticSocketAddress.hxx"
 #include "IO/Async/GlobalAsioThread.hpp"
 
 #include <boost/asio/steady_timer.hpp>
