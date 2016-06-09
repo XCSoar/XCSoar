@@ -252,8 +252,11 @@ void
 SkyLinesTracking::Client::OnReceive(const boost::system::error_code &ec,
                                     size_t size)
 {
-  if (ec)
+  if (ec) {
+    if (ec != boost::asio::error::operation_aborted && handler != nullptr)
+      handler->OnSkyLinesError(boost::system::system_error(ec));
     return;
+  }
 
   if (sender_endpoint == endpoint)
     OnDatagramReceived(buffer, size);

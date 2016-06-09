@@ -58,6 +58,10 @@ public:
           timer.get_io_service().stop();
       });
   }
+
+  void OnSkyLinesError(const std::exception &e) override {
+    fprintf(stderr, "Error: %s\n", e.what());
+  }
 };
 
 int

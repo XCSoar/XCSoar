@@ -31,6 +31,7 @@ Copyright_License {
 
 struct GeoPoint;
 struct AGeoPoint;
+namespace std { class exception; }
 
 namespace SkyLinesTracking {
   class Handler {
@@ -44,6 +45,8 @@ namespace SkyLinesTracking {
     virtual void OnThermal(unsigned time_of_day_ms,
                            const AGeoPoint &bottom, const AGeoPoint &top,
                            double lift) {}
+
+    virtual void OnSkyLinesError(const std::exception &e) = 0;
   };
 }
 

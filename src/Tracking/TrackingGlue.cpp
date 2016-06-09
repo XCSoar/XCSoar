@@ -252,3 +252,9 @@ TrackingGlue::OnWave(unsigned time_of_day_ms,
   // TODO: replace existing item?
   skylines_data.waves.emplace_back(time_of_day_ms, a, b);
 }
+
+void
+TrackingGlue::OnSkyLinesError(const std::exception &e)
+{
+  LogError("SkyLines error", e);
+}
