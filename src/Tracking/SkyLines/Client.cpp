@@ -36,6 +36,19 @@ Copyright_License {
 
 #include <string>
 
+void
+SkyLinesTracking::Client::Open(boost::asio::ip::udp::resolver::query query)
+{
+  Close();
+
+  const ScopeLock protect(mutex);
+  resolving = true;
+  resolver.async_resolve(query,
+                         std::bind(&Client::OnResolved, this,
+                                   std::placeholders::_1,
+                                   std::placeholders::_2));
+}
+
 bool
 SkyLinesTracking::Client::Open(boost::asio::ip::udp::endpoint _endpoint)
 {
@@ -61,12 +74,15 @@ SkyLinesTracking::Client::Close()
 {
   const ScopeLock protect(mutex);
 
-  if (!socket.is_open())
-    return;
+  if (socket.is_open()) {
+    CancelWait(socket.get_io_service(), socket);
+    socket.close();
+  }
 
-  CancelWait(socket.get_io_service(), socket);
-
-  socket.close();
+  if (resolving) {
+    CancelWait(socket.get_io_service(), resolver);
+    resolving = false;
+  }
 }
 
 void
@@ -279,4 +295,25 @@ SkyLinesTracking::Client::AsyncReceive()
                             std::bind(&Client::OnReceive, this,
                                       std::placeholders::_1,
                                       std::placeholders::_2));
+}
+
+void
+SkyLinesTracking::Client::OnResolved(const boost::system::error_code &ec,
+                                     boost::asio::ip::udp::resolver::iterator i)
+{
+  if (ec == boost::asio::error::operation_aborted)
+    return;
+
+  {
+    const ScopeLock protect(mutex);
+    resolving = false;
+  }
+
+  if (ec) {
+    if (handler != nullptr)
+      handler->OnSkyLinesError(boost::system::system_error(ec));
+    return;
+  }
+
+  Open(*i);
 }

@@ -135,24 +135,17 @@ try {
 
   boost::asio::io_service io_service;
 
-  boost::asio::ip::udp::resolver resolver(io_service);
-
   /* IPv4 only for now, because the official SkyLines tracking server
      doesn't support IPv6 yet */
   const boost::asio::ip::udp::resolver::query query(boost::asio::ip::udp::v4(),
                                                     host,
                                                     SkyLinesTracking::Client::GetDefaultPortString());
 
-  const auto endpoint = *resolver.resolve(query);
-
   Handler handler(args, io_service);
 
   auto &client = handler.GetClient();
   client.SetKey(ParseUint64(key, NULL, 16));
-  if (!client.Open(endpoint)) {
-    fprintf(stderr, "Failed to create client\n");
-    return EXIT_FAILURE;
-  }
+  client.Open(query);
 
   io_service.run();
 

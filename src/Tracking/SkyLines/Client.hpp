@@ -45,12 +45,15 @@ namespace SkyLinesTracking {
     Handler *const handler;
 
     /**
-     * Protects #socket.
+     * Protects #resolving, #resolver, #socket.
      */
     mutable Mutex mutex;
 
     uint64_t key = 0;
 
+    bool resolving = false;
+
+    boost::asio::ip::udp::resolver resolver;
     boost::asio::ip::udp::endpoint endpoint;
     boost::asio::ip::udp::socket socket;
 
@@ -60,7 +63,7 @@ namespace SkyLinesTracking {
   public:
     explicit Client(boost::asio::io_service &io_service,
                     Handler *_handler=nullptr)
-      :handler(_handler), socket(io_service) {}
+      :handler(_handler), resolver(io_service), socket(io_service) {}
     ~Client() { Close(); }
 
     constexpr
@@ -85,7 +88,8 @@ namespace SkyLinesTracking {
     }
 
     bool IsDefined() const {
-      return IsConnected();
+      const ScopeLock protect(mutex);
+      return resolving || socket.is_open();
     }
 
     gcc_pure
@@ -102,6 +106,7 @@ namespace SkyLinesTracking {
       key = _key;
     }
 
+    void Open(boost::asio::ip::udp::resolver::query query);
     bool Open(boost::asio::ip::udp::endpoint _endpoint);
     void Close();
 
@@ -128,6 +133,9 @@ namespace SkyLinesTracking {
 
     void OnReceive(const boost::system::error_code &ec, size_t size);
     void AsyncReceive();
+
+    void OnResolved(const boost::system::error_code &ec,
+                    boost::asio::ip::udp::resolver::iterator i);
   };
 }
 
