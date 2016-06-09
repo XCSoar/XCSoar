@@ -32,8 +32,8 @@ Copyright_License {
 
 #include <assert.h>
 
-SkyLinesTracking::Glue::Glue()
-  :client(*asio_thread)
+SkyLinesTracking::Glue::Glue(Handler *_handler)
+  :client(*asio_thread, _handler)
 {
 }
 

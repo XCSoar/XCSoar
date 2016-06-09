@@ -49,12 +49,11 @@ MapVehicleTypeToLivetrack24(TrackingSettings::VehicleType vt)
 }
 
 TrackingGlue::TrackingGlue()
-  :StandbyThread("Tracking")
+  :StandbyThread("Tracking"),
+   skylines(this)
 {
   settings.SetDefaults();
   LiveTrack24::SetServer(settings.livetrack24.server);
-
-  skylines.SetHandler(this);
 }
 
 void

@@ -36,18 +36,6 @@ Copyright_License {
 
 #include <string>
 
-void
-SkyLinesTracking::Client::SetHandler(Handler *_handler)
-{
-  if (socket.is_open() && handler != nullptr)
-    CancelWait(socket.get_io_service(), socket);
-
-  handler = _handler;
-
-  if (socket.is_open() && handler != nullptr)
-    AsyncReceive();
-}
-
 bool
 SkyLinesTracking::Client::Open(boost::asio::ip::udp::endpoint _endpoint)
 {

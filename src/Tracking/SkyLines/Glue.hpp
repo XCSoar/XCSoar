@@ -45,12 +45,8 @@ namespace SkyLinesTracking {
     Queue *queue = nullptr;
 
   public:
-    Glue();
+    Glue(Handler *_handler);
     ~Glue();
-
-    void SetHandler(Handler *handler) {
-      client.SetHandler(handler);
-    }
 
     void SetSettings(const Settings &settings);
 

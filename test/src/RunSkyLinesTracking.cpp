@@ -72,10 +72,8 @@ try {
   boost::asio::ip::udp::resolver resolver(io_service);
   const auto endpoint = *resolver.resolve({host, "5597"});
 
-  SkyLinesTracking::Client client(io_service);
-
   Handler handler(io_service);
-  client.SetHandler(&handler);
+  SkyLinesTracking::Client client(io_service, &handler);
 
   client.SetKey(ParseUint64(key, NULL, 16));
   if (!client.Open(endpoint)) {

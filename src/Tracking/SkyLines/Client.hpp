@@ -41,7 +41,7 @@ namespace SkyLinesTracking {
   struct ThermalResponsePacket;
 
   class Client {
-    Handler *handler = nullptr;
+    Handler *const handler;
 
     uint64_t key = 0;
 
@@ -52,8 +52,9 @@ namespace SkyLinesTracking {
     boost::asio::ip::udp::endpoint sender_endpoint;
 
   public:
-    explicit Client(boost::asio::io_service &io_service)
-      :socket(io_service) {}
+    explicit Client(boost::asio::io_service &io_service,
+                    Handler *_handler=nullptr)
+      :handler(_handler), socket(io_service) {}
     ~Client() { Close(); }
 
     constexpr
@@ -64,8 +65,6 @@ namespace SkyLinesTracking {
     boost::asio::io_service &get_io_service() {
       return socket.get_io_service();
     }
-
-    void SetHandler(Handler *handler);
 
     bool IsDefined() const {
       return socket.is_open();
