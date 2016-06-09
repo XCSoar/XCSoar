@@ -40,7 +40,7 @@ class ASTPoint final : public IntermediateTaskPoint
    * If this is true, then exiting the observation zone is the goal,
    * not entering it.
    */
-  bool score_exit;
+  bool score_exit = false;
 
 public:
   /**
@@ -58,8 +58,7 @@ public:
            const TaskBehaviour &tb,
            bool boundary_scored=false)
     :IntermediateTaskPoint(TaskPointType::AST, _oz, std::move(wp),
-                           tb, boundary_scored),
-     score_exit(false){}
+                           tb, boundary_scored) {}
 
   bool GetScoreExit() const {
     return score_exit;
