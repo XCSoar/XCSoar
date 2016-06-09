@@ -31,17 +31,15 @@ Copyright_License {
 #include <boost/asio/steady_timer.hpp>
 
 class Handler : public SkyLinesTracking::Handler {
-  SkyLinesTracking::Client &client;
-
   boost::asio::steady_timer timer;
 
 public:
-  explicit Handler(SkyLinesTracking::Client &_client)
-    :client(_client), timer(client.get_io_service()) {}
+  explicit Handler(boost::asio::io_service &io_service)
+    :timer(io_service) {}
 
   virtual void OnAck(unsigned id) override {
     printf("received ack %u\n", id);
-    client.Close();
+    timer.get_io_service().stop();
   }
 
   virtual void OnTraffic(unsigned pilot_id, unsigned time_of_day_ms,
@@ -57,7 +55,7 @@ public:
     timer.expires_from_now(std::chrono::seconds(1));
     timer.async_wait([this](const boost::system::error_code &ec){
         if (!ec)
-          client.Close();
+          timer.get_io_service().stop();
       });
   }
 };
@@ -76,7 +74,7 @@ try {
 
   SkyLinesTracking::Client client(io_service);
 
-  Handler handler(client);
+  Handler handler(io_service);
   client.SetHandler(&handler);
 
   client.SetKey(ParseUint64(key, NULL, 16));
