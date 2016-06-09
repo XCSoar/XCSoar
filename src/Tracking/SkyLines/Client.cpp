@@ -48,8 +48,10 @@ SkyLinesTracking::Client::Open(boost::asio::ip::udp::endpoint _endpoint)
   if (ec)
     return false;
 
-  if (handler != nullptr)
+  if (handler != nullptr) {
     AsyncReceive();
+    handler->OnSkyLinesReady();
+  }
 
   return true;
 }

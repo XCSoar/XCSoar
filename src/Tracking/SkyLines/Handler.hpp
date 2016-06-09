@@ -36,6 +36,13 @@ namespace std { class exception; }
 namespace SkyLinesTracking {
   class Handler {
   public:
+    /**
+     * Called as soon as the UDP socket has been created and is
+     * available for I/O.  This does not imply that the SkyLines
+     * server is really available.
+     */
+    virtual void OnSkyLinesReady() {}
+
     virtual void OnAck(unsigned id) {}
     virtual void OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
                            const ::GeoPoint &location, int altitude) {}
