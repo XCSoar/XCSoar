@@ -86,14 +86,14 @@ class TrackingGlue final
    * The Unix UTC time stamp that was last submitted to the tracking
    * server.  This attribute is used to detect time warps.
    */
-  int64_t last_timestamp;
+  int64_t last_timestamp = 0;
 
   BrokenDateTime date_time;
   GeoPoint location;
   unsigned altitude;
   unsigned ground_speed;
   Angle track;
-  bool flying, last_flying;
+  bool flying = false, last_flying;
 #endif
 
 public:
