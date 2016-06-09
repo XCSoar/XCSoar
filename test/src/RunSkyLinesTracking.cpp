@@ -74,7 +74,8 @@ try {
   /* IPv4 only for now, because the official SkyLines tracking server
      doesn't support IPv6 yet */
   const boost::asio::ip::udp::resolver::query query(boost::asio::ip::udp::v4(),
-                                                    host, "5597");
+                                                    host,
+                                                    SkyLinesTracking::Client::GetDefaultPortString());
 
   const auto endpoint = *resolver.resolve(query);
 

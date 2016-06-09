@@ -62,6 +62,11 @@ namespace SkyLinesTracking {
       return 5597;
     }
 
+    constexpr
+    static const char *GetDefaultPortString() {
+      return "5597";
+    }
+
     boost::asio::io_service &get_io_service() {
       return socket.get_io_service();
     }
