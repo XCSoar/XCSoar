@@ -47,7 +47,7 @@ class FinishPoint final : public OrderedTaskPoint
    */
   FinishConstraints constraints;
 
-  double fai_finish_height;
+  double fai_finish_height = 0;
 
 public:
   /**

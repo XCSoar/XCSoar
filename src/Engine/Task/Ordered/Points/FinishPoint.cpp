@@ -32,8 +32,7 @@ FinishPoint::FinishPoint(ObservationZonePoint* _oz, WaypointPtr && wp,
                          bool boundary_scored)
   :OrderedTaskPoint(TaskPointType::FINISH, _oz, std::move(wp), boundary_scored),
    safety_height(tb.safety_height_arrival),
-   constraints(_constraints),
-   fai_finish_height(0)
+   constraints(_constraints)
 {
 }
 
