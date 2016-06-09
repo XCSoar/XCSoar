@@ -87,7 +87,7 @@ FinishPoint::SetNeighbours(OrderedTaskPoint *_prev, OrderedTaskPoint *_next)
 }
 
 void
-FinishPoint::set_fai_finish_height(const double height)
+FinishPoint::SetFaiFinishHeight(const double height)
 {
   fai_finish_height = std::max(0., height);
 }
@@ -98,11 +98,11 @@ FinishPoint::IsInSector(const AircraftState &state) const
   if (!OrderedTaskPoint::IsInSector(state))
     return false;
 
-  return is_in_height_limit(state);
+  return InInHeightLimit(state);
 }
 
 bool
-FinishPoint::is_in_height_limit(const AircraftState &state) const
+FinishPoint::InInHeightLimit(const AircraftState &state) const
 {
   if (!constraints.CheckHeight(state, GetBaseElevation()))
     return false;
@@ -117,8 +117,8 @@ bool
 FinishPoint::CheckEnterTransition(const AircraftState &ref_now,
                                   const AircraftState &ref_last) const
 {
-  const bool now_in_height = is_in_height_limit(ref_now);
-  const bool last_in_height = is_in_height_limit(ref_last);
+  const bool now_in_height = InInHeightLimit(ref_now);
+  const bool last_in_height = InInHeightLimit(ref_last);
 
   if (now_in_height && last_in_height)
     // both within height limit, so use normal location checks

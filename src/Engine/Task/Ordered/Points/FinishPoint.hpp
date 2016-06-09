@@ -71,7 +71,7 @@ public:
    *
    * @param height FAI finish height (m)
    */
-  void set_fai_finish_height(double height);
+  void SetFaiFinishHeight(double height);
 
   /* virtual methods from class TaskPoint */
   double GetElevation() const override;
@@ -100,7 +100,7 @@ private:
    * @param state
    * @return true if state is within valid height for sector
    */
-  bool is_in_height_limit(const AircraftState &state) const;
+  bool InInHeightLimit(const AircraftState &state) const;
 };
 
 #endif
