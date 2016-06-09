@@ -29,8 +29,6 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Util/Macros.hpp"
 
-#ifdef HAVE_LIVETRACK24
-
 static LiveTrack24::VehicleType
 MapVehicleTypeToLivetrack24(TrackingSettings::VehicleType vt)
 {
@@ -50,24 +48,14 @@ MapVehicleTypeToLivetrack24(TrackingSettings::VehicleType vt)
   return vehicleTypeMap[vti];
 }
 
-#endif
-
 TrackingGlue::TrackingGlue()
-#ifdef HAVE_LIVETRACK24
   :StandbyThread("Tracking")
-#endif
 {
   settings.SetDefaults();
-#ifdef HAVE_LIVETRACK24
   LiveTrack24::SetServer(settings.livetrack24.server);
-#endif
 
-#ifdef HAVE_SKYLINES_TRACKING
   skylines.SetHandler(this);
-#endif
 }
-
-#ifdef HAVE_LIVETRACK24
 
 void
 TrackingGlue::StopAsync()
@@ -83,16 +71,11 @@ TrackingGlue::WaitStopped()
   StandbyThread::WaitStopped();
 }
 
-#endif
-
 void
 TrackingGlue::SetSettings(const TrackingSettings &_settings)
 {
-#ifdef HAVE_SKYLINES_TRACKING
   skylines.SetSettings(_settings.skylines);
-#endif
 
-#ifdef HAVE_LIVETRACK24
   if (_settings.livetrack24.server != settings.livetrack24.server ||
       _settings.livetrack24.username != settings.livetrack24.username ||
       _settings.livetrack24.password != settings.livetrack24.password) {
@@ -109,17 +92,13 @@ TrackingGlue::SetSettings(const TrackingSettings &_settings)
     ScopeLock protect(mutex);
     settings = _settings;
   }
-#endif
 }
 
 void
 TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
 {
-#ifdef HAVE_SKYLINES_TRACKING
   skylines.Tick(basic);
-#endif
 
-#ifdef HAVE_LIVETRACK24
   if (!settings.livetrack24.enabled)
     /* disabled by configuration */
     /* note that we are allowed to read "settings" without locking the
@@ -161,10 +140,7 @@ TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
   flying = calculated.flight.flying;
 
   Trigger();
-#endif
 }
-
-#ifdef HAVE_LIVETRACK24
 
 void
 TrackingGlue::Tick()
@@ -237,10 +213,6 @@ TrackingGlue::Tick()
   }
 }
 
-#endif
-
-#ifdef HAVE_SKYLINES_TRACKING
-
 void
 TrackingGlue::OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
                         const GeoPoint &location, int altitude)
@@ -281,5 +253,3 @@ TrackingGlue::OnWave(unsigned time_of_day_ms,
   // TODO: replace existing item?
   skylines_data.waves.emplace_back(time_of_day_ms, a, b);
 }
-
-#endif
