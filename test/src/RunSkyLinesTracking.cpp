@@ -70,7 +70,13 @@ try {
   boost::asio::io_service io_service;
 
   boost::asio::ip::udp::resolver resolver(io_service);
-  const auto endpoint = *resolver.resolve({host, "5597"});
+
+  /* IPv4 only for now, because the official SkyLines tracking server
+     doesn't support IPv6 yet */
+  const boost::asio::ip::udp::resolver::query query(boost::asio::ip::udp::v4(),
+                                                    host, "5597");
+
+  const auto endpoint = *resolver.resolve(query);
 
   Handler handler(io_service);
   SkyLinesTracking::Client client(io_service, &handler);
