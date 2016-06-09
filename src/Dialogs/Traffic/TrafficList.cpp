@@ -75,7 +75,7 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
     /**
      * The SkyLines account id.
      */
-    uint32_t skylines_id;
+    uint32_t skylines_id = 0;
 
     uint32_t time_of_day_ms;
 #endif
@@ -84,14 +84,14 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
      * The color that was assigned by the user to this FLARM peer.  It
      * is FlarmColor::COUNT if the color has not yet been determined.
      */
-    FlarmColor color;
+    FlarmColor color = FlarmColor::COUNT;
 
     /**
      * Were the attributes below already lazy-loaded from the
      * database?  We can't use nullptr for this, because both will be
      * nullptr after a failed lookup.
      */
-    bool loaded;
+    bool loaded = false;
 
     const FlarmNetRecord *record;
     const TCHAR *callsign;
@@ -99,13 +99,13 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
     /**
      * This object's location.  Check GeoPoint::IsValid().
      */
-    GeoPoint location;
+    GeoPoint location = GeoPoint::Invalid();
 
     /**
      * The vector from the current aircraft location to this object's
      * location (if known).  Check GeoVector::IsValid().
      */
-    GeoVector vector;
+    GeoVector vector = GeoVector::Invalid();
 
     /**
      * The display name of the SkyLines account.
@@ -120,14 +120,7 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
 #endif
 
     explicit Item(FlarmId _id)
-      :id(_id),
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-       skylines_id(0),
-#endif
-       color(FlarmColor::COUNT),
-       loaded(false),
-       location(GeoPoint::Invalid()),
-       vector(GeoVector::Invalid()) {
+      :id(_id) {
       assert(id.IsDefined());
       assert(IsFlarm());
 
