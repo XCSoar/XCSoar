@@ -64,7 +64,7 @@ TrackingGlue::TrackingGlue()
   LiveTrack24::SetServer(settings.livetrack24.server);
 #endif
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
   skylines.SetHandler(this);
 #endif
 }
@@ -241,7 +241,7 @@ TrackingGlue::Tick()
 
 #endif
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
 
 void
 TrackingGlue::OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,

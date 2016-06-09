@@ -36,11 +36,9 @@ namespace SkyLinesTracking {
     unsigned interval = 0;
     GPSClock clock;
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
     GPSClock traffic_clock;
     bool traffic_enabled = false;
     bool near_traffic_enabled = false;
-#endif
 
     bool roaming = true;
 
@@ -50,21 +48,17 @@ namespace SkyLinesTracking {
     Glue();
     ~Glue();
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
     void SetHandler(Handler *handler) {
       client.SetHandler(handler);
     }
-#endif
 
     void SetSettings(const Settings &settings);
 
     void Tick(const NMEAInfo &basic);
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
     void RequestUserName(uint32_t user_id) {
       client.SendUserNameRequest(user_id);
     }
-#endif
 
   private:
     gcc_pure

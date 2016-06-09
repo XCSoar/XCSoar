@@ -31,10 +31,6 @@ Copyright_License {
 #include "Net/StaticSocketAddress.hxx"
 #include "IO/Async/GlobalAsioThread.hpp"
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-#include "Thread/Mutex.hpp"
-#include "Thread/Cond.hxx"
-
 #include <boost/asio/steady_timer.hpp>
 
 class Handler : public SkyLinesTracking::Handler {
@@ -69,8 +65,6 @@ public:
   }
 };
 
-#endif
-
 int
 main(int argc, char *argv[])
 try {
@@ -87,10 +81,8 @@ try {
 
   SkyLinesTracking::Client client(io_service);
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
   Handler handler(client);
   client.SetHandler(&handler);
-#endif
 
   client.SetKey(ParseUint64(key, NULL, 16));
   if (!client.Open(endpoint)) {
@@ -109,13 +101,11 @@ try {
   } else if (StringIsEqual(args.PeekNext(), "ping")) {
     client.SendPing(1);
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
     io_service.run();
   } else if (StringIsEqual(args.PeekNext(), "traffic")) {
     client.SendTrafficRequest(true, true, true);
 
     io_service.run();
-#endif
   } else {
     DebugReplay *replay = CreateDebugReplay(args);
     if (replay == NULL)

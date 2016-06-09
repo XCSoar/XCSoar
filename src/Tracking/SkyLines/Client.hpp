@@ -41,19 +41,15 @@ namespace SkyLinesTracking {
   struct ThermalResponsePacket;
 
   class Client {
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
     Handler *handler = nullptr;
-#endif
 
     uint64_t key = 0;
 
     boost::asio::ip::udp::endpoint endpoint;
     boost::asio::ip::udp::socket socket;
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
     uint8_t buffer[4096];
     boost::asio::ip::udp::endpoint sender_endpoint;
-#endif
 
   public:
     explicit Client(boost::asio::io_service &io_service)
@@ -69,9 +65,7 @@ namespace SkyLinesTracking {
       return socket.get_io_service();
     }
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
     void SetHandler(Handler *handler);
-#endif
 
     bool IsDefined() const {
       return socket.is_open();
@@ -98,7 +92,6 @@ namespace SkyLinesTracking {
     bool SendFix(const NMEAInfo &basic);
     bool SendPing(uint16_t id);
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
     bool SendTrafficRequest(bool followees, bool club, bool near_);
     bool SendUserNameRequest(uint32_t user_id);
 
@@ -112,7 +105,6 @@ namespace SkyLinesTracking {
 
     void OnReceive(const boost::system::error_code &ec, size_t size);
     void AsyncReceive();
-#endif
   };
 }
 

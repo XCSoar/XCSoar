@@ -47,7 +47,7 @@ MapItemListBuilder::AddTraffic(const TrafficList &flarm)
 void
 MapItemListBuilder::AddSkyLinesTraffic()
 {
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
   const auto &data = tracking->GetSkyLinesData();
   const ScopeLock protect(data.mutex);
 

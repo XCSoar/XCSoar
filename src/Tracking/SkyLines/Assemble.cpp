@@ -119,8 +119,6 @@ SkyLinesTracking::ToFix(uint64_t key, const NMEAInfo &basic)
   return packet;
 }
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-
 SkyLinesTracking::TrafficRequestPacket
 SkyLinesTracking::MakeTrafficRequest(uint64_t key, bool followees, bool club,
                                      bool near)
@@ -157,5 +155,3 @@ SkyLinesTracking::MakeUserNameRequest(uint64_t key, uint32_t user_id)
   packet.header.crc = ToBE16(UpdateCRC16CCITT(&packet, sizeof(packet), 0));
   return packet;
 }
-
-#endif

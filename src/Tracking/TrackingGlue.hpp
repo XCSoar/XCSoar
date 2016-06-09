@@ -42,16 +42,16 @@ struct MoreData;
 struct DerivedInfo;
 
 class TrackingGlue final
-#if defined(HAVE_LIVETRACK24) || defined(HAVE_SKYLINES_TRACKING_HANDLER)
+#if defined(HAVE_LIVETRACK24) || defined(HAVE_SKYLINES_TRACKING)
   :
 #endif
 #ifdef HAVE_LIVETRACK24
   protected StandbyThread
 #endif
-#if defined(HAVE_LIVETRACK24) && defined(HAVE_SKYLINES_TRACKING_HANDLER)
+#if defined(HAVE_LIVETRACK24) && defined(HAVE_SKYLINES_TRACKING)
   ,
 #endif
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
   private SkyLinesTracking::Handler
 #endif
 {
@@ -76,9 +76,7 @@ class TrackingGlue final
 #ifdef HAVE_SKYLINES_TRACKING
   SkyLinesTracking::Glue skylines;
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
   SkyLinesTracking::Data skylines_data;
-#endif
 #endif
 
 #ifdef HAVE_LIVETRACK24
@@ -117,7 +115,7 @@ protected:
   void Tick() override;
 #endif
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
 private:
   /* virtual methods from SkyLinesTracking::Handler */
   virtual void OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,

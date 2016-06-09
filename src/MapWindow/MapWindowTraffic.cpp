@@ -133,7 +133,7 @@ MapWindow::DrawTeammate(Canvas &canvas) const
   }
 }
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
 
 void
 MapWindow::DrawSkyLinesTraffic(Canvas &canvas) const

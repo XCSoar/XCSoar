@@ -115,10 +115,8 @@ SkyLinesTracking::Glue::Tick(const NMEAInfo &basic)
 
   SendFixes(basic);
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
   if (traffic_enabled && traffic_clock.CheckAdvance(basic.clock, 60))
     client.SendTrafficRequest(true, true, near_traffic_enabled);
-#endif
 }
 
 void
@@ -140,10 +138,8 @@ SkyLinesTracking::Glue::SetSettings(const Settings &settings)
     client.Open(endpoint);
   }
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
   traffic_enabled = settings.traffic_enabled;
   near_traffic_enabled = settings.near_traffic_enabled;
-#endif
 
   roaming = settings.roaming;
 }

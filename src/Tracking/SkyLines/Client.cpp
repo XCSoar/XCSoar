@@ -30,8 +30,6 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "Util/CRC.hpp"
 #include "Util/ConstBuffer.hxx"
-
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
 #include "IO/Async/AsioUtil.hpp"
 #include "Util/UTF8.hpp"
 #include "Util/ConvertString.hpp"
@@ -50,8 +48,6 @@ SkyLinesTracking::Client::SetHandler(Handler *_handler)
     AsyncReceive();
 }
 
-#endif
-
 bool
 SkyLinesTracking::Client::Open(boost::asio::ip::udp::endpoint _endpoint)
 {
@@ -64,10 +60,8 @@ SkyLinesTracking::Client::Open(boost::asio::ip::udp::endpoint _endpoint)
   if (ec)
     return false;
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
   if (handler != nullptr)
     AsyncReceive();
-#endif
 
   return true;
 }
@@ -78,9 +72,7 @@ SkyLinesTracking::Client::Close()
   if (!socket.is_open())
     return;
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
   CancelWait(socket.get_io_service(), socket);
-#endif
 
   socket.close();
 }
@@ -102,8 +94,6 @@ SkyLinesTracking::Client::SendPing(uint16_t id)
 
   return SendPacket(MakePing(key, id));
 }
-
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
 
 bool
 SkyLinesTracking::Client::SendTrafficRequest(bool followees, bool club,
@@ -290,5 +280,3 @@ SkyLinesTracking::Client::AsyncReceive()
                                       std::placeholders::_1,
                                       std::placeholders::_2));
 }
-
-#endif

@@ -163,7 +163,7 @@ MapWindow::DrawWaves(Canvas &canvas)
 {
   const WaveRenderer renderer(look.wave);
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
   if (skylines_data != nullptr) {
     ScopeLock protect(skylines_data->mutex);
     renderer.Draw(canvas, render_projection, *skylines_data);
@@ -289,7 +289,7 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
   //////////////////////////////////////////////// traffic
   // Draw traffic
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
   DrawSkyLinesTraffic(canvas);
 #endif
 

@@ -26,8 +26,6 @@ Copyright_License {
 
 #include "Features.hpp"
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-
 #include <stdint.h>
 #include <tchar.h>
 
@@ -48,7 +46,5 @@ namespace SkyLinesTracking {
                            double lift) {}
   };
 }
-
-#endif
 
 #endif

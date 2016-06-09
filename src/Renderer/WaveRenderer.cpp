@@ -78,7 +78,7 @@ WaveRenderer::Draw(Canvas &canvas, const WindowProjection &projection,
     Draw(canvas, projection, clip, wave);
 }
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
 
 void
 WaveRenderer::Draw(Canvas &canvas, const WindowProjection &projection,

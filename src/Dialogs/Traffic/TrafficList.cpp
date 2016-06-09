@@ -71,7 +71,7 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
      */
     FlarmId id;
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
     /**
      * The SkyLines account id.
      */
@@ -112,7 +112,7 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
      */
     tstring name;
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
     StaticString<20> near_name;
     double near_distance;
 
@@ -124,12 +124,12 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
       assert(id.IsDefined());
       assert(IsFlarm());
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
       near_name.clear();
 #endif
     }
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
     explicit Item(uint32_t _id, uint32_t _time_of_day_ms,
                   const GeoPoint &_location, int _altitude,
                   tstring &&_name)
@@ -153,7 +153,7 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
       return id.IsDefined();
     }
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
     /**
      * Does this object describe data from SkyLines live tracking?
      */
@@ -166,7 +166,7 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
       if (IsFlarm()) {
         record = traffic_databases->flarm_net.FindRecordById(id);
         callsign = traffic_databases->FindNameById(id);
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
       } else if (IsSkyLines()) {
         record = nullptr;
         callsign = nullptr;
@@ -396,7 +396,7 @@ TrafficListWidget::UpdateList()
       AddItem(i.id);
     }
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
     /* show SkyLines traffic unless this is a FLARM traffic picker
        dialog (from dlgTeamCode) */
     if (buttons != nullptr) {
@@ -474,7 +474,7 @@ TrafficListWidget::UpdateVolatile()
         i.location.SetInvalid();
         i.vector.SetInvalid();
       }
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
     } else if (i.IsSkyLines()) {
       const auto &data = tracking->GetSkyLinesData();
       const ScopeLock protect(data.mutex);
@@ -538,7 +538,7 @@ TrafficListWidget::Prepare(ContainerWindow &parent,
     list.SetLength(items.size());
 }
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
 
 /**
  * Calculate how many minutes have passed since #past_ms.
@@ -571,7 +571,7 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
   Item &item = items[index];
 
   assert(item.IsFlarm()
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
          || item.IsSkyLines()
 #endif
          );
@@ -603,7 +603,7 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
       tmp.Format(_T("%s - %s"), callsign, tmp_id);
     else
       tmp.Format(_T("%s"), tmp_id);
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
   } else if (item.IsSkyLines()) {
     if (!item.name.empty())
       tmp = item.name.c_str();
@@ -681,7 +681,7 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
 
     if (!tmp.empty())
       row_renderer.DrawSecondRow(canvas, rc, tmp);
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
   } else if (item.IsSkyLines()) {
     if (CommonInterface::Basic().time_available) {
       tmp.UnsafeFormat(_("%u minutes ago"),

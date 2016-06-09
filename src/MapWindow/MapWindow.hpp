@@ -154,7 +154,7 @@ protected:
   NOAAStore *noaa_store = nullptr;
 #endif
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
   const SkyLinesTracking::Data *skylines_data = nullptr;
 #endif
 
@@ -243,7 +243,7 @@ public:
   }
 #endif
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
   void SetSkyLinesData(const SkyLinesTracking::Data *_data) {
     skylines_data = _data;
   }
@@ -291,7 +291,7 @@ protected:
   virtual void RenderTrail(Canvas &canvas, PixelPoint aircraft_pos);
   virtual void RenderTrackBearing(Canvas &canvas, PixelPoint aircraft_pos);
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
   void DrawSkyLinesTraffic(Canvas &canvas) const;
 #endif
 

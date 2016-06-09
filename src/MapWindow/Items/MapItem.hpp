@@ -60,7 +60,7 @@ struct MapItem
     THERMAL,
     WAYPOINT,
     TRAFFIC,
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
     SKYLINES_TRAFFIC,
 #endif
     OVERLAY,
@@ -200,7 +200,7 @@ struct TrafficMapItem: public MapItem
     :MapItem(TRAFFIC), id(_id), color(_color) {}
 };
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
 
 struct SkyLinesTrafficMapItem : public MapItem
 {

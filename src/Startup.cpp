@@ -449,7 +449,7 @@ Startup()
   tracking = new TrackingGlue();
   tracking->SetSettings(computer_settings.tracking);
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
   if (map_window != nullptr)
     map_window->SetSkyLinesData(&tracking->GetSkyLinesData());
 #endif
