@@ -64,7 +64,7 @@ SkyLinesTracking::Glue::IsConnected() const
 inline void
 SkyLinesTracking::Glue::SendFixes(const NMEAInfo &basic)
 {
-  assert(client.IsDefined());
+  assert(client.IsConnected());
 
   if (!basic.time_available) {
     clock.Reset();
@@ -105,7 +105,7 @@ SkyLinesTracking::Glue::SendFixes(const NMEAInfo &basic)
 void
 SkyLinesTracking::Glue::Tick(const NMEAInfo &basic)
 {
-  if (!client.IsDefined())
+  if (!client.IsConnected())
     return;
 
   if (basic.location_available && !basic.gps.real)

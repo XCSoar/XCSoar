@@ -75,6 +75,10 @@ namespace SkyLinesTracking {
       return socket.is_open();
     }
 
+    bool IsConnected() const {
+      return socket.is_open();
+    }
+
     uint64_t GetKey() const {
       return key;
     }
