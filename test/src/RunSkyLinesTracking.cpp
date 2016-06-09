@@ -27,7 +27,6 @@ Copyright_License {
 #include "Util/NumberParser.hpp"
 #include "Util/StringUtil.hpp"
 #include "DebugReplay.hpp"
-#include "IO/Async/GlobalAsioThread.hpp"
 
 #include <boost/asio/steady_timer.hpp>
 
@@ -74,8 +73,6 @@ try {
 
   boost::asio::ip::udp::resolver resolver(io_service);
   const auto endpoint = *resolver.resolve({host, "5597"});
-
-  ScopeGlobalAsioThread global_asio_thread;
 
   SkyLinesTracking::Client client(io_service);
 
