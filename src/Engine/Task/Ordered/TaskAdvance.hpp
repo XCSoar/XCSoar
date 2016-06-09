@@ -35,10 +35,10 @@ class TaskAdvance
 {
 protected:
   /** arm state */
-  bool armed;
+  bool armed = false;
 
   /** need to arm */
-  bool request_armed;
+  bool request_armed = false;
 
 public:
 
@@ -59,11 +59,6 @@ public:
     /** Not yet armed for turn (user must arm when ready) */
     TURN_DISARMED
   };
-
-  /**
-   * Constructor.  Sets defaults to auto-mode
-   */
-  TaskAdvance():armed(false), request_armed(false) {}
 
   /**
    * Resets as if never flown
