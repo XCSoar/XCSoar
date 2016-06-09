@@ -99,7 +99,7 @@ try {
     basic.time = 1;
     basic.time_available.Update(basic.clock);
 
-    return client.SendFix(basic) ? EXIT_SUCCESS : EXIT_FAILURE;
+    client.SendFix(basic);
   } else if (StringIsEqual(args.PeekNext(), "ping")) {
     client.SendPing(1);
 

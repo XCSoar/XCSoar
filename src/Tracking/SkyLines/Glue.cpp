@@ -87,8 +87,7 @@ SkyLinesTracking::Glue::SendFixes(const NMEAInfo &basic)
     unsigned n = 8;
     while (n-- > 0) {
       const auto &packet = queue->Peek();
-      if (!client.SendPacket(packet))
-        break;
+      client.SendPacket(packet);
 
       queue->Pop();
       if (queue->IsEmpty()) {

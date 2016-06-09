@@ -96,7 +96,11 @@ TrackingGlue::SetSettings(const TrackingSettings &_settings)
 void
 TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
 {
-  skylines.Tick(basic);
+  try {
+    skylines.Tick(basic);
+  } catch (const std::runtime_error &e) {
+    LogError("SkyLines error", e);
+  }
 
   if (!settings.livetrack24.enabled)
     /* disabled by configuration */

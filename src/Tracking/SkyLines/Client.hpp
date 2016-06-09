@@ -87,17 +87,16 @@ namespace SkyLinesTracking {
     void Close();
 
     template<typename P>
-    bool SendPacket(const P &packet) {
-      boost::system::error_code ec;
-      return socket.send_to(boost::asio::buffer(&packet, sizeof(packet)),
-                            endpoint, 0, ec) == sizeof(packet) && !ec;
+    void SendPacket(const P &packet) {
+      socket.send_to(boost::asio::buffer(&packet, sizeof(packet)),
+                     endpoint, 0);
     }
 
-    bool SendFix(const NMEAInfo &basic);
-    bool SendPing(uint16_t id);
+    void SendFix(const NMEAInfo &basic);
+    void SendPing(uint16_t id);
 
-    bool SendTrafficRequest(bool followees, bool club, bool near_);
-    bool SendUserNameRequest(uint32_t user_id);
+    void SendTrafficRequest(bool followees, bool club, bool near_);
+    void SendUserNameRequest(uint32_t user_id);
 
   private:
     void OnTrafficReceived(const TrafficResponsePacket &packet, size_t length);

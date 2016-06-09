@@ -65,41 +65,41 @@ SkyLinesTracking::Client::Close()
   socket.close();
 }
 
-bool
+void
 SkyLinesTracking::Client::SendFix(const NMEAInfo &basic)
 {
   assert(socket.is_open());
   assert(key != 0);
 
-  return SendPacket(ToFix(key, basic));
+  SendPacket(ToFix(key, basic));
 }
 
-bool
+void
 SkyLinesTracking::Client::SendPing(uint16_t id)
 {
   assert(socket.is_open());
   assert(key != 0);
 
-  return SendPacket(MakePing(key, id));
+  SendPacket(MakePing(key, id));
 }
 
-bool
+void
 SkyLinesTracking::Client::SendTrafficRequest(bool followees, bool club,
                                              bool near_)
 {
   assert(socket.is_open());
   assert(key != 0);
 
-  return SendPacket(MakeTrafficRequest(key, followees, club, near_));
+  SendPacket(MakeTrafficRequest(key, followees, club, near_));
 }
 
-bool
+void
 SkyLinesTracking::Client::SendUserNameRequest(uint32_t user_id)
 {
   assert(socket.is_open());
   assert(key != 0);
 
-  return SendPacket(MakeUserNameRequest(key, user_id));
+  SendPacket(MakeUserNameRequest(key, user_id));
 }
 
 static constexpr Angle
