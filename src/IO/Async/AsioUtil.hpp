@@ -37,6 +37,15 @@ template<typename F>
 void
 DispatchWait(boost::asio::io_service &io_service, F &&f)
 {
+  if (io_service.stopped()) {
+    /* the io_service is not running, probably because we're shutting
+       down; running the function inside this thread is the best we
+       can do to avoid a deadlock; that is not completely safe, but
+       safe for our use cases */
+    f();
+    return;
+  }
+
   Mutex mutex;
   Cond cond;
   bool finished = false;
