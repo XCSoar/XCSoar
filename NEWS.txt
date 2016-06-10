@@ -19,6 +19,7 @@ Version 7.0 - not yet released
   - merge redundant waves
   - task restart
 * tracking
+  - use DNS to resolve SkyLines server IP (#2604)
   - enable SkyLines traffic display on Windows
 * analysis
   - enhanced graphics: minor tics, color scheme, layout

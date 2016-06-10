@@ -131,10 +131,12 @@ SkyLinesTracking::Glue::SetSettings(const Settings &settings)
   interval = settings.interval;
 
   if (!client.IsDefined()) {
-    // TODO: fix hard-coded IP address:
-    boost::asio::ip::udp::endpoint endpoint(boost::asio::ip::address_v4::from_string("95.128.34.172"),
-                                            Client::GetDefaultPort());
-    client.Open(endpoint);
+    /* IPv4 only for now, because the official SkyLines tracking server
+       doesn't support IPv6 yet */
+    const boost::asio::ip::udp::resolver::query query(boost::asio::ip::udp::v4(),
+                                                      "tracking.skylines.aero",
+                                                      Client::GetDefaultPortString());
+    client.Open(query);
   }
 
   traffic_enabled = settings.traffic_enabled;
