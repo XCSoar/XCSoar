@@ -79,7 +79,7 @@ namespace SkyLinesTracking {
     }
 
     bool IsDefined() const {
-      return socket.is_open();
+      return IsConnected();
     }
 
     bool IsConnected() const {
