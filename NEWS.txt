@@ -7,6 +7,9 @@ Version 6.8.5 - not yet released
   - fix inverse colors in horizon page
 * devices
   - fix crash on malformed NMEA time stamp
+* Kobo
+  - reduce ghosting on old Kobo models; regression due to screen
+    flashing fix in 6.8.4 (#3756)
 
 Version 6.8.4 - 2016/05/18
 * airspace cross-section
