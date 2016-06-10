@@ -31,11 +31,17 @@ Copyright_License {
 #include <boost/asio/steady_timer.hpp>
 
 class Handler : public SkyLinesTracking::Handler {
+  SkyLinesTracking::Client client;
+
   boost::asio::steady_timer timer;
 
 public:
   explicit Handler(boost::asio::io_service &io_service)
-    :timer(io_service) {}
+    :client(io_service, this), timer(io_service) {}
+
+  SkyLinesTracking::Client &GetClient() {
+    return client;
+  }
 
   virtual void OnAck(unsigned id) override {
     printf("received ack %u\n", id);
@@ -91,8 +97,8 @@ try {
   const auto endpoint = *resolver.resolve(query);
 
   Handler handler(io_service);
-  SkyLinesTracking::Client client(io_service, &handler);
 
+  auto &client = handler.GetClient();
   client.SetKey(ParseUint64(key, NULL, 16));
   if (!client.Open(endpoint)) {
     fprintf(stderr, "Failed to create client\n");
