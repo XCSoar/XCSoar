@@ -253,7 +253,11 @@ SkyLinesTracking::Client::OnReceive(const boost::system::error_code &ec,
                                     size_t size)
 {
   if (ec) {
-    if (ec != boost::asio::error::operation_aborted && handler != nullptr)
+    if (ec == boost::asio::error::operation_aborted)
+      return;
+
+    socket.close();
+    if (handler != nullptr)
       handler->OnSkyLinesError(boost::system::system_error(ec));
     return;
   }

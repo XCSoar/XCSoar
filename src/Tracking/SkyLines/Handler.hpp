@@ -46,6 +46,11 @@ namespace SkyLinesTracking {
                            const AGeoPoint &bottom, const AGeoPoint &top,
                            double lift) {}
 
+    /**
+     * An error has occurred, and the SkyLines tracking client is
+     * defunct.  To make restore its function, call Client::Open()
+     * again.
+     */
     virtual void OnSkyLinesError(const std::exception &e) = 0;
   };
 }
