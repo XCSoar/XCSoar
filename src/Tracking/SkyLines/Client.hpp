@@ -71,6 +71,13 @@ namespace SkyLinesTracking {
       return socket.get_io_service();
     }
 
+    /**
+     * Is SkyLines tracking enabled in configuration?
+     */
+    bool IsEnabled() const {
+      return key != 0;
+    }
+
     bool IsDefined() const {
       return socket.is_open();
     }
