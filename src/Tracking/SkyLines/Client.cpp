@@ -68,7 +68,6 @@ SkyLinesTracking::Client::Close()
 void
 SkyLinesTracking::Client::SendFix(const NMEAInfo &basic)
 {
-  assert(socket.is_open());
   assert(key != 0);
 
   SendPacket(ToFix(key, basic));
@@ -77,7 +76,6 @@ SkyLinesTracking::Client::SendFix(const NMEAInfo &basic)
 void
 SkyLinesTracking::Client::SendPing(uint16_t id)
 {
-  assert(socket.is_open());
   assert(key != 0);
 
   SendPacket(MakePing(key, id));
@@ -87,7 +85,6 @@ void
 SkyLinesTracking::Client::SendTrafficRequest(bool followees, bool club,
                                              bool near_)
 {
-  assert(socket.is_open());
   assert(key != 0);
 
   SendPacket(MakeTrafficRequest(key, followees, club, near_));
@@ -96,7 +93,6 @@ SkyLinesTracking::Client::SendTrafficRequest(bool followees, bool club,
 void
 SkyLinesTracking::Client::SendUserNameRequest(uint32_t user_id)
 {
-  assert(socket.is_open());
   assert(key != 0);
 
   SendPacket(MakeUserNameRequest(key, user_id));
