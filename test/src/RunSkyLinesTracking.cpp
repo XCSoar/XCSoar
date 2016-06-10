@@ -30,18 +30,26 @@ Copyright_License {
 
 #include <boost/asio/steady_timer.hpp>
 
+#include <memory>
+
 class Handler : public SkyLinesTracking::Handler {
+  Args &args;
+
   SkyLinesTracking::Client client;
 
   boost::asio::steady_timer timer;
 
+  std::unique_ptr<DebugReplay> replay;
+
 public:
-  explicit Handler(boost::asio::io_service &io_service)
-    :client(io_service, this), timer(io_service) {}
+  explicit Handler(Args &_args, boost::asio::io_service &io_service)
+    :args(_args), client(io_service, this), timer(io_service) {}
 
   SkyLinesTracking::Client &GetClient() {
     return client;
   }
+
+  void OnSkyLinesReady() override;
 
   virtual void OnAck(unsigned id) override {
     printf("received ack %u\n", id);
@@ -75,7 +83,48 @@ private:
           timer.get_io_service().stop();
       });
   }
+
+  void NextReplay(const boost::system::error_code &ec) {
+    if (ec)
+      return;
+
+    if (replay->Next()) {
+      client.SendFix(replay->Basic());
+      ScheduleNextReplay(std::chrono::milliseconds(100));
+    } else
+      timer.get_io_service().stop();
+  }
+
+  void ScheduleNextReplay(boost::asio::steady_timer::duration d) {
+    timer.expires_from_now(d);
+    timer.async_wait(std::bind(&Handler::NextReplay, this,
+                               std::placeholders::_1));
+  }
 };
+
+void
+Handler::OnSkyLinesReady()
+{
+  if (args.IsEmpty() || StringIsEqual(args.PeekNext(), "fix")) {
+    NMEAInfo basic;
+    basic.Reset();
+    basic.UpdateClock();
+    basic.time = 1;
+    basic.time_available.Update(basic.clock);
+
+    client.SendFix(basic);
+  } else if (StringIsEqual(args.PeekNext(), "ping")) {
+    client.SendPing(1);
+  } else if (StringIsEqual(args.PeekNext(), "traffic")) {
+    client.SendTrafficRequest(true, true, true);
+  } else {
+    replay.reset(CreateDebugReplay(args));
+    if (replay == nullptr)
+      throw std::runtime_error("CreateDebugReplay() failed");
+
+    ScheduleNextReplay(std::chrono::seconds(0));
+  }
+}
 
 int
 main(int argc, char *argv[])
@@ -96,7 +145,7 @@ try {
 
   const auto endpoint = *resolver.resolve(query);
 
-  Handler handler(io_service);
+  Handler handler(args, io_service);
 
   auto &client = handler.GetClient();
   client.SetKey(ParseUint64(key, NULL, 16));
@@ -105,32 +154,7 @@ try {
     return EXIT_FAILURE;
   }
 
-  if (args.IsEmpty() || StringIsEqual(args.PeekNext(), "fix")) {
-    NMEAInfo basic;
-    basic.Reset();
-    basic.UpdateClock();
-    basic.time = 1;
-    basic.time_available.Update(basic.clock);
-
-    client.SendFix(basic);
-  } else if (StringIsEqual(args.PeekNext(), "ping")) {
-    client.SendPing(1);
-
-    io_service.run();
-  } else if (StringIsEqual(args.PeekNext(), "traffic")) {
-    client.SendTrafficRequest(true, true, true);
-
-    io_service.run();
-  } else {
-    DebugReplay *replay = CreateDebugReplay(args);
-    if (replay == NULL)
-      return EXIT_FAILURE;
-
-    while (replay->Next()) {
-      client.SendFix(replay->Basic());
-      usleep(100000);
-    }
-  }
+  io_service.run();
 
   return EXIT_SUCCESS;
 } catch (const std::exception &e) {
