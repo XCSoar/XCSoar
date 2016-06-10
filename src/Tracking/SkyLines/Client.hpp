@@ -27,6 +27,7 @@ Copyright_License {
 #include "Handler.hpp"
 #include "Net/AllocatedSocketAddress.hxx"
 #include "Net/SocketDescriptor.hpp"
+#include "Thread/Mutex.hpp"
 
 #include <boost/asio/ip/udp.hpp>
 
@@ -42,6 +43,11 @@ namespace SkyLinesTracking {
 
   class Client {
     Handler *const handler;
+
+    /**
+     * Protects #socket.
+     */
+    mutable Mutex mutex;
 
     uint64_t key = 0;
 
@@ -82,7 +88,9 @@ namespace SkyLinesTracking {
       return IsConnected();
     }
 
+    gcc_pure
     bool IsConnected() const {
+      const ScopeLock protect(mutex);
       return socket.is_open();
     }
 
@@ -99,6 +107,7 @@ namespace SkyLinesTracking {
 
     template<typename P>
     void SendPacket(const P &packet) {
+      const ScopeLock protect(mutex);
       socket.send_to(boost::asio::buffer(&packet, sizeof(packet)),
                      endpoint, 0);
     }

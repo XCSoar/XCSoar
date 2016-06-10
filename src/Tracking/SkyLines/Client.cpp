@@ -57,6 +57,8 @@ SkyLinesTracking::Client::Open(boost::asio::ip::udp::endpoint _endpoint)
 void
 SkyLinesTracking::Client::Close()
 {
+  const ScopeLock protect(mutex);
+
   if (!socket.is_open())
     return;
 
@@ -252,7 +254,11 @@ SkyLinesTracking::Client::OnReceive(const boost::system::error_code &ec,
     if (ec == boost::asio::error::operation_aborted)
       return;
 
-    socket.close();
+    {
+      const ScopeLock protect(mutex);
+      socket.close();
+    }
+
     if (handler != nullptr)
       handler->OnSkyLinesError(boost::system::system_error(ec));
     return;
@@ -265,6 +271,7 @@ SkyLinesTracking::Client::OnReceive(const boost::system::error_code &ec,
 void
 SkyLinesTracking::Client::AsyncReceive()
 {
+  const ScopeLock protect(mutex);
   socket.async_receive_from(boost::asio::buffer(buffer, sizeof(buffer)),
                             sender_endpoint,
                             std::bind(&Client::OnReceive, this,
