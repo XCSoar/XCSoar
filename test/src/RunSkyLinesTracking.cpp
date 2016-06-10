@@ -52,17 +52,22 @@ public:
            (double)location.latitude.Degrees(),
            altitude);
 
-    timer.expires_from_now(std::chrono::seconds(1));
-    timer.async_wait([this](const boost::system::error_code &ec){
-        if (!ec)
-          timer.get_io_service().stop();
-      });
+    ScheduleStop(std::chrono::seconds(1));
   }
 
   void OnSkyLinesError(const std::exception &e) override {
     fprintf(stderr, "Error: %s\n", e.what());
 
     timer.cancel();
+  }
+
+private:
+  void ScheduleStop(boost::asio::steady_timer::duration d) {
+    timer.expires_from_now(d);
+    timer.async_wait([this](const boost::system::error_code &ec){
+        if (!ec)
+          timer.get_io_service().stop();
+      });
   }
 };
 
