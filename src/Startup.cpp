@@ -448,7 +448,7 @@ Startup()
   PageActions::Update();
 
 #ifdef HAVE_TRACKING
-  tracking = new TrackingGlue();
+  tracking = new TrackingGlue(*asio_thread);
   tracking->SetSettings(computer_settings.tracking);
 
 #ifdef HAVE_SKYLINES_TRACKING

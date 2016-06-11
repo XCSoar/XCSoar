@@ -45,7 +45,7 @@ namespace SkyLinesTracking {
     Queue *queue = nullptr;
 
   public:
-    Glue(Handler *_handler);
+    Glue(boost::asio::io_service &io_service, Handler *_handler);
     ~Glue();
 
     void SetSettings(const Settings &settings);

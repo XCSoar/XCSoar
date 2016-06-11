@@ -27,13 +27,12 @@ Copyright_License {
 #include "Assemble.hpp"
 #include "NMEA/Info.hpp"
 #include "Net/State.hpp"
-#include "IO/Async/AsioThread.hpp"
-#include "IO/Async/GlobalAsioThread.hpp"
 
 #include <assert.h>
 
-SkyLinesTracking::Glue::Glue(Handler *_handler)
-  :client(*asio_thread, _handler)
+SkyLinesTracking::Glue::Glue(boost::asio::io_service &io_service,
+                             Handler *_handler)
+  :client(io_service, _handler)
 {
 }
 
