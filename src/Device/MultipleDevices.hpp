@@ -38,6 +38,8 @@ Copyright_License {
 
 #include <tchar.h>
 
+namespace boost { namespace asio { class io_service; }}
+
 class DeviceDescriptor;
 class DeviceDispatcher;
 struct MoreData;
@@ -57,7 +59,7 @@ class MultipleDevices final : PortListener {
   std::list<PortListener *> listeners;
 
 public:
-  MultipleDevices();
+  MultipleDevices(boost::asio::io_service &io_service);
   ~MultipleDevices();
 
   DeviceDescriptor &operator[](unsigned i) const {

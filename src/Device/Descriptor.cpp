@@ -39,8 +39,6 @@ Copyright_License {
 #include "Logger/NMEALogger.hpp"
 #include "Language/Language.hpp"
 #include "Operation/Operation.hpp"
-#include "IO/Async/AsioThread.hpp"
-#include "IO/Async/GlobalAsioThread.hpp"
 #include "OS/Path.hpp"
 #include "../Simulator.hpp"
 #include "Input/InputQueue.hpp"
@@ -100,9 +98,10 @@ public:
   };
 };
 
-DeviceDescriptor::DeviceDescriptor(unsigned _index,
+DeviceDescriptor::DeviceDescriptor(boost::asio::io_service &_io_service,
+                                   unsigned _index,
                                    PortListener *_port_listener)
-  :index(_index),
+  :io_service(_io_service), index(_index),
    port_listener(_port_listener),
    open_job(nullptr),
    port(nullptr), monitor(nullptr), dispatcher(nullptr),
@@ -436,7 +435,7 @@ DeviceDescriptor::DoOpen(OperationEnvironment &env)
 
   Port *port;
   try {
-    port = OpenPort(*asio_thread, config, this, *this);
+    port = OpenPort(io_service, config, this, *this);
   } catch (const std::runtime_error &e) {
     TCHAR name_buffer[64];
     const TCHAR *name = config.GetPortName(name_buffer, 64);

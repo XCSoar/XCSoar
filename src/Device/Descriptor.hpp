@@ -43,6 +43,8 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
+namespace boost { namespace asio { class io_service; }}
+
 struct NMEAInfo;
 struct MoreData;
 struct DerivedInfo;
@@ -65,6 +67,11 @@ class OperationEnvironment;
 class OpenDeviceJob;
 
 class DeviceDescriptor final : Notify, PortListener, PortLineSplitter {
+  /**
+   * The io_service instance used by Port instances.
+   */
+  boost::asio::io_service &io_service;
+
   /**
    * This mutex protects modifications of the attribute "device".  If
    * you use the attribute "device" from a thread other than the main
@@ -222,7 +229,8 @@ class DeviceDescriptor final : Notify, PortListener, PortLineSplitter {
   bool borrowed;
 
 public:
-  DeviceDescriptor(unsigned index, PortListener *port_listener);
+  DeviceDescriptor(boost::asio::io_service &_io_service,
+                   unsigned index, PortListener *port_listener);
   ~DeviceDescriptor() {
     assert(!IsOccupied());
   }
