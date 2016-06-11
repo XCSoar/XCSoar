@@ -41,6 +41,8 @@ ParsePortArgs(Args &args);
 class DebugPort final : PortListener {
   DeviceConfig config;
 
+  PortListener *listener = nullptr;
+
 public:
   explicit DebugPort(Args &args)
     :config(ParsePortArgs(args)) {}
@@ -51,6 +53,10 @@ public:
 
   std::unique_ptr<Port> Open(boost::asio::io_service &io_service,
                              DataHandler &handler);
+
+  void SetListener(PortListener &_listener) {
+    listener = &_listener;
+  }
 
 private:
   /* virtual methods from class PortListener */
