@@ -70,6 +70,7 @@ protected:
   FastRotation fr;
   FastIntegerRotation fir;
   TrafficList data;
+  Validity data_modified;
   TeamCodeSettings settings;
 
 public:
