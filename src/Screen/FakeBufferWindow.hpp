@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2015 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,13 +21,30 @@ Copyright_License {
 }
 */
 
-#include "Settings.hpp"
+#ifndef XCSOAR_SCREEN_FAKE_BUFFER_WINDOW_HXX
+#define XCSOAR_SCREEN_FAKE_BUFFER_WINDOW_HXX
 
-void
-WindSettings::SetDefaults()
-{
-  circling_wind = true;
-  zig_zag_wind = true;
-  external_wind = true;
-  manual_wind_available.Clear();
-}
+#include "PaintWindow.hpp"
+
+/**
+ * Emulation of the #BufferWindow API without actually buffering.
+ */
+class FakeBufferWindow : public PaintWindow {
+protected:
+  /**
+   * Determines whether this class maintains a persistent buffer which
+   * allows incremental drawing in each frame.
+   */
+  static constexpr bool IsPersistent() {
+    return false;
+  }
+
+  virtual void OnPaintBuffer(Canvas &canvas) = 0;
+
+  /* virtual methods from class Window */
+  void OnPaint(Canvas &canvas) override {
+    OnPaintBuffer(canvas);
+  }
+};
+
+#endif

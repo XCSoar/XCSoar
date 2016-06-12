@@ -48,6 +48,8 @@ Profile::Load(const ProfileMap &map, WindSettings &settings)
   unsigned auto_wind_mode = settings.GetLegacyAutoWindMode();
   if (map.Get(ProfileKeys::AutoWind, auto_wind_mode))
     settings.SetLegacyAutoWindMode(auto_wind_mode);
+
+  map.Get(ProfileKeys::ExternalWind, settings.external_wind);
 }
 
 void

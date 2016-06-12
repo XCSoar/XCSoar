@@ -105,6 +105,8 @@ ReadBearing(NMEAInputLine &line, Angle &value_r)
 void
 ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, double clock)
 {
+  flarm.modified.Update(clock);
+
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
   FlarmTraffic traffic;

@@ -453,7 +453,7 @@ InfoBoxWindow::OnMouseMove(PixelPoint p, unsigned keys)
 }
 
 void
-InfoBoxWindow::OnPaint(Canvas &canvas)
+InfoBoxWindow::OnPaintBuffer(Canvas &canvas)
 {
   Paint(canvas);
 }

@@ -30,6 +30,7 @@ Copyright_License {
 
 #include <system_error>
 
+#include <sys/stat.h>
 #include <termios.h>
 
 #include <assert.h>
@@ -75,10 +76,18 @@ TTYPort::Drain()
 #endif
 }
 
+gcc_pure
+static bool
+IsCharDev(const char *path)
+{
+  struct stat st;
+  return stat(path, &st) == 0 && S_ISCHR(st.st_mode);
+}
+
 bool
 TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
 {
-  if (IsAndroid()) {
+  if (IsAndroid() && IsCharDev(path)) {
     /* attempt to give the XCSoar process permissions to access the
        USB serial adapter; this is mostly relevant to the Nook */
     TCHAR command[MAX_PATH];

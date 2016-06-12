@@ -53,13 +53,16 @@ Version 7.0 - not yet released
 * Kobo
   - support Kobo Glo HD
 
-Version 6.8.5 - not yet released
+Version 6.8.5 - 2016/06/12
 * calculations
   - update circling percentage only when flying
   - fix circling height gain calculation
 * user interface
   - fix "kg/m^2" and "lb/ft^2" unit display
   - fix inverse colors in horizon page
+  - reduce CPU load of some InfoBoxes (#3757)
+* calculations
+  - add option to disable external wind (#3693, #3773)
 * devices
   - fix crash on malformed NMEA time stamp
 * Android

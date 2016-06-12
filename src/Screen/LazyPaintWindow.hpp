@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2015 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,33 +21,28 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_ANTI_FLICKER_WINDOW_HXX
-#define XCSOAR_SCREEN_ANTI_FLICKER_WINDOW_HXX
+#ifndef XCSOAR_SCREEN_LAZY_PAINT_WINDOW_HXX
+#define XCSOAR_SCREEN_LAZY_PAINT_WINDOW_HXX
 
-#if defined(ENABLE_OPENGL) || defined(USE_MEMORY_CANVAS)
+#ifdef USE_GDI
 
 #include "FakeBufferWindow.hpp"
 
-/**
- * A #PaintWindow implementation that avoids flickering.  Some
- * platforms such as Windows draw directly to the screen, which may
- * expose the window before drawing has finished.  On these,
- * #AntiFlickerWindow will be buffered.  On OpenGL/SDL, which both have
- * full-screen double-buffering, this class is a simple #PaintWindow
- * without extra buffering.
- *
- * Note that this class is not supposed to reduce the number of
- * redraws when this is expensive.  Use it only when flicker avoidance
- * is the goal.
- */
-class AntiFlickerWindow : public FakeBufferWindow {
+class LazyPaintWindow : public FakeBufferWindow {
 };
 
 #else
 
 #include "BufferWindow.hpp"
 
-class AntiFlickerWindow : public BufferWindow {
+/**
+ * A #PaintWindow implementation which avoids calling OnPaint() unless
+ * Invalidate() has been called explicitly.  It will try to avoid
+ * OnPaint() if the old screen contents are still available (which is
+ * only possible with GDI).  Implementations which require XCSoar to
+ * redraw the whole screen at a time (like OpenGL) need a buffer.
+ */
+class LazyPaintWindow : public BufferWindow {
 };
 
 #endif

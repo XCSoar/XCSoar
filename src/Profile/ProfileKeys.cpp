@@ -57,6 +57,7 @@ const char TerrainContours[] = "TerrainContours";
 const char DrawTopography[] = "DrawTopology";
 const char FinalGlideTerrain[] = "FinalGlideTerrain";
 const char AutoWind[] = "AutoWind";
+const char ExternalWind[] = "ExternalWind";
 const char HomeWaypoint[] = "HomeWaypoint";
 const char HomeLocation[] = "HomeLocation";
 const char LiftUnitsValue[] = "LiftUnit";

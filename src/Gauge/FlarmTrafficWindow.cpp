@@ -57,6 +57,7 @@ FlarmTrafficWindow::FlarmTrafficWindow(const FlarmTrafficLook &_look,
    side_display_type(SIDE_INFO_VARIO)
 {
   data.Clear();
+  data_modified.Clear();
 }
 
 bool
@@ -186,6 +187,12 @@ void
 FlarmTrafficWindow::Update(Angle new_direction, const TrafficList &new_data,
                            const TeamCodeSettings &new_settings)
 {
+  static constexpr Angle min_heading_delta = Angle::Degrees(2);
+  if (new_data.modified == data_modified &&
+      (heading - new_direction).Absolute() < min_heading_delta)
+    /* no change - don't redraw */
+    return;
+
   FlarmId selection_id;
   PixelPoint pt;
   if (!small && selection >= 0) {
@@ -699,7 +706,7 @@ FlarmTrafficWindow::Paint(Canvas &canvas)
  * @param canvas The canvas to paint on
  */
 void
-FlarmTrafficWindow::OnPaint(Canvas &canvas)
+FlarmTrafficWindow::OnPaintBuffer(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
   if (small) {
