@@ -65,6 +65,10 @@ WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           _("This allows switching on or off the automatic wind algorithm."),
           auto_wind_list, settings.GetLegacyAutoWindMode());
 
+  AddBoolean(_("External wind"),
+             _("Should XCSoar accept wind estimates from other instruments?"),
+             settings.external_wind);
+
   if (edit_trail_drift)
     AddBoolean(_("Trail drift"),
                _("Determines whether the snail trail is drifted with the wind "
@@ -138,6 +142,9 @@ WindSettingsPanel::Save(bool &_changed)
     settings.SetLegacyAutoWindMode(auto_wind_mode);
     changed = true;
   }
+
+  changed |= SaveValue(EXTERNAL_WIND, ProfileKeys::ExternalWind,
+                       settings.external_wind);
 
   if (edit_trail_drift)
     changed |= SaveValue(TrailDrift, ProfileKeys::TrailDrift,

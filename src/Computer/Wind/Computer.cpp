@@ -120,7 +120,8 @@ WindComputer::Select(const WindSettings &settings,
       ? DerivedInfo::WindSource::EKF
       : DerivedInfo::WindSource::CIRCLING;
 
-  } else if (basic.external_wind_available.Modified(settings.manual_wind_available)) {
+  } else if (settings.external_wind &&
+             basic.external_wind_available.Modified(settings.manual_wind_available)) {
     // external wind available
     calculated.wind = basic.external_wind;
     calculated.wind_available = basic.external_wind_available;

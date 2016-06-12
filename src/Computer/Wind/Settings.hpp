@@ -59,6 +59,8 @@ struct WindSettings {
    */
   bool zig_zag_wind;
 
+  bool external_wind;
+
   /**
    * This is the manual wind set by the pilot. Validity is set when
    * changeing manual wind but does not expire.
