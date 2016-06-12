@@ -5,6 +5,7 @@ Version 6.8.5 - not yet released
 * user interface
   - fix "kg/m^2" and "lb/ft^2" unit display
   - fix inverse colors in horizon page
+  - reduce CPU load of some InfoBoxes (#3757)
 * calculations
   - add option to disable external wind (#3693, #3773)
 * devices

@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_INFO_BOX_HPP
 
 #include "InfoBoxes/Content/Base.hpp"
-#include "Screen/PaintWindow.hpp"
+#include "Screen/LazyPaintWindow.hpp"
 #include "Screen/Timer.hpp"
 #include "Data.hpp"
 
@@ -34,7 +34,7 @@ struct InfoBoxLook;
 struct UnitsLook;
 class Color;
 
-class InfoBoxWindow : public PaintWindow
+class InfoBoxWindow : public LazyPaintWindow
 {
   /** timeout of infobox focus [ms] */
   static constexpr unsigned FOCUS_TIMEOUT_MAX = 20 * 1000;
@@ -173,7 +173,8 @@ protected:
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
                            unsigned keys) override;
 
-  virtual void OnPaint(Canvas &canvas) override;
+  /* virtual methods from class LazyPaintWindow */
+  void OnPaintBuffer(Canvas &canvas) override;
 };
 
 #endif
