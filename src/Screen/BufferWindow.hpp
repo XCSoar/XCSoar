@@ -49,6 +49,11 @@ public:
     PaintWindow::Invalidate();
   }
 
+  void Invalidate(const PixelRect &rect) {
+    dirty = true;
+    PaintWindow::Invalidate(rect);
+  }
+
 protected:
   /**
    * Determines whether this BufferWindow maintains a persistent
