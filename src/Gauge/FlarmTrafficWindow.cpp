@@ -707,7 +707,7 @@ FlarmTrafficWindow::Paint(Canvas &canvas)
  * @param canvas The canvas to paint on
  */
 void
-FlarmTrafficWindow::OnPaint(Canvas &canvas)
+FlarmTrafficWindow::OnPaintBuffer(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
   if (small) {
