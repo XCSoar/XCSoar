@@ -38,6 +38,11 @@ struct TrafficList {
   static constexpr size_t MAX_COUNT = 25;
 
   /**
+   * Time stamp of the latest modification to this object.
+   */
+  Validity modified;
+
+  /**
    * When was the last new traffic received?
    */
   Validity new_traffic;
@@ -46,6 +51,7 @@ struct TrafficList {
   TrivialArray<FlarmTraffic, MAX_COUNT> list;
 
   void Clear() {
+    modified.Clear();
     new_traffic.Clear();
     list.clear();
   }
@@ -64,6 +70,7 @@ struct TrafficList {
   }
 
   void Expire(fixed clock) {
+    modified.Expire(clock, fixed(300));
     new_traffic.Expire(clock, fixed(60));
 
     for (unsigned i = list.size(); i-- > 0;)
