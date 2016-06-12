@@ -1,4 +1,4 @@
-Version 6.8.5 - not yet released
+Version 6.8.5 - 2016/06/12
 * calculations
   - update circling percentage only when flying
   - fix circling height gain calculation
