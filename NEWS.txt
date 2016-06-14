@@ -1,3 +1,5 @@
+Version 6.8.6 - not yet released
+
 Version 6.8.5 - 2016/06/12
 * calculations
   - update circling percentage only when flying
