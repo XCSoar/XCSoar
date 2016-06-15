@@ -1,6 +1,8 @@
 Version 6.8.6 - not yet released
 * user interface
   - fix graphics error on FLARM gauge
+* devices
+  - fix Nano 3 firmware 2.0 compatibility (#3764)
 
 Version 6.8.5 - 2016/06/12
 * calculations
