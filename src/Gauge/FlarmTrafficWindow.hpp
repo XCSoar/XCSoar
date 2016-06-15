@@ -24,7 +24,7 @@
 #ifndef FLARM_TRAFFIC_WINDOW_H
 #define FLARM_TRAFFIC_WINDOW_H
 
-#include "Screen/LazyPaintWindow.hpp"
+#include "Screen/PaintWindow.hpp"
 #include "FLARM/List.hpp"
 #include "FLARM/Color.hpp"
 #include "TeamCode/Settings.hpp"
@@ -37,7 +37,7 @@ struct FlarmTrafficLook;
 /**
  * A Window which renders FLARM traffic.
  */
-class FlarmTrafficWindow : public LazyPaintWindow {
+class FlarmTrafficWindow : public PaintWindow {
 protected:
   const FlarmTrafficLook &look;
 
@@ -138,8 +138,8 @@ protected:
   /* virtual methods from class Window */
   virtual void OnResize(PixelSize new_size) override;
 
-  /* virtual methods from class LazyPaintWindow */
-  virtual void OnPaintBuffer(Canvas &canvas) override;
+  /* virtual methods from class PaintWindow */
+  virtual void OnPaint(Canvas &canvas) override;
 };
 
 #endif

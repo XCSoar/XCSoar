@@ -1,4 +1,6 @@
 Version 6.8.6 - not yet released
+* user interface
+  - fix graphics error on FLARM gauge
 
 Version 6.8.5 - 2016/06/12
 * calculations
