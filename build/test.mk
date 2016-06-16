@@ -803,6 +803,10 @@ ifeq ($(HAVE_HTTP),y)
 DEBUG_PROGRAM_NAMES += DownloadFile RunDownloadToFile RunNOAADownloader RunSkyLinesTracking RunLiveTrack24
 endif
 
+ifeq ($(TARGET_IS_LINUX),y)
+DEBUG_PROGRAM_NAMES += RunWPASupplicant
+endif
+
 ifeq ($(HAVE_PCM_PLAYER),y)
 DEBUG_PROGRAM_NAMES += PlayTone PlayVario DumpVario
 endif
@@ -988,6 +992,12 @@ RUN_NOAA_DOWNLOADER_SOURCES = \
 	$(TEST_SRC_DIR)/RunNOAADownloader.cpp
 RUN_NOAA_DOWNLOADER_DEPENDS = GEO IO MATH LIBNET UTIL TIME
 $(eval $(call link-program,RunNOAADownloader,RUN_NOAA_DOWNLOADER))
+
+RUN_WPA_SUPPLICANT_SOURCES = \
+	$(SRC)/Kobo/WPASupplicant.cpp \
+	$(TEST_SRC_DIR)/RunWPASupplicant.cpp
+RUN_WPA_SUPPLICANT_DEPENDS = LIBNET OS UTIL
+$(eval $(call link-program,RunWPASupplicant,RUN_WPA_SUPPLICANT))
 
 RUN_SL_TRACKING_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
