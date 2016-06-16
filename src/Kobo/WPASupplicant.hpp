@@ -59,8 +59,6 @@ struct WifiConfiguredNetworkInfo {
 class WPASupplicant {
   SocketDescriptor fd;
 
-  char local_path[32];
-
 public:
   WPASupplicant():fd(SocketDescriptor::Undefined()) {}
 
