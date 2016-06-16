@@ -24,10 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_TRACKING_SKYLINES_CLIENT_HPP
 #define XCSOAR_TRACKING_SKYLINES_CLIENT_HPP
 
-#include "Handler.hpp"
-#include "Net/AllocatedSocketAddress.hxx"
-#include "Net/SocketDescriptor.hpp"
 #include "Thread/Mutex.hpp"
+#include "Compiler.h"
 
 #include <boost/asio/ip/udp.hpp>
 
@@ -41,6 +39,7 @@ struct TrafficResponsePacket;
 struct UserNameResponsePacket;
 struct WaveResponsePacket;
 struct ThermalResponsePacket;
+class Handler;
 
 class Client {
   Handler *const handler;

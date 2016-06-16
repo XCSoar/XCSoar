@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Tracking/SkyLines/Client.hpp"
+#include "Tracking/SkyLines/Handler.hpp"
 #include "NMEA/Info.hpp"
 #include "OS/Args.hpp"
 #include "Util/NumberParser.hpp"

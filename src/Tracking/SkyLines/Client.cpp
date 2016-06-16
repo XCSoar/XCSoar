@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Client.hpp"
+#include "Handler.hpp"
 #include "Assemble.hpp"
 #include "Protocol.hpp"
 #include "OS/ByteOrder.hpp"
