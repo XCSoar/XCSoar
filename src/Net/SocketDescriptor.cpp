@@ -163,6 +163,18 @@ SocketDescriptor::BindPort(unsigned port)
   return Bind(IPv4Address(port));
 }
 
+#ifdef __linux__
+
+bool
+SocketDescriptor::AutoBind()
+{
+	static constexpr sa_family_t family = AF_LOCAL;
+	return Bind(SocketAddress((const struct sockaddr *)&family,
+				  sizeof(family)));
+}
+
+#endif
+
 bool
 SocketDescriptor::CreateConnectUDP(const char *host, const char *port)
 {

@@ -121,6 +121,13 @@ public:
    */
   bool BindPort(unsigned port);
 
+#ifdef __linux__
+  /**
+   * Binds the socket to a unique abstract address.
+   */
+  bool AutoBind();
+#endif
+
   /***
    * Creates an UDP scoket
    */
