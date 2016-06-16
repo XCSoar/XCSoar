@@ -32,26 +32,28 @@ Copyright_License {
 struct NMEAInfo;
 
 namespace SkyLinesTracking {
-  struct PingPacket;
-  struct FixPacket;
-  struct TrafficRequestPacket;
-  struct UserNameRequestPacket;
 
-  gcc_const
-  PingPacket
-  MakePing(uint64_t key, uint16_t id);
+struct PingPacket;
+struct FixPacket;
+struct TrafficRequestPacket;
+struct UserNameRequestPacket;
 
-  gcc_pure
-  FixPacket
-  ToFix(uint64_t key, const NMEAInfo &basic);
+gcc_const
+PingPacket
+MakePing(uint64_t key, uint16_t id);
 
-  gcc_const
-  TrafficRequestPacket
-  MakeTrafficRequest(uint64_t key, bool followees, bool club, bool near);
+gcc_pure
+FixPacket
+ToFix(uint64_t key, const NMEAInfo &basic);
 
-  gcc_const
-  UserNameRequestPacket
-  MakeUserNameRequest(uint64_t key, uint32_t user_id);
-};
+gcc_const
+TrafficRequestPacket
+MakeTrafficRequest(uint64_t key, bool followees, bool club, bool near);
+
+gcc_const
+UserNameRequestPacket
+MakeUserNameRequest(uint64_t key, uint32_t user_id);
+
+} /* namespace SkyLinesTracking */
 
 #endif

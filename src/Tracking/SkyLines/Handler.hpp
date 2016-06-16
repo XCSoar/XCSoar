@@ -34,32 +34,34 @@ struct AGeoPoint;
 namespace std { class exception; }
 
 namespace SkyLinesTracking {
-  class Handler {
-  public:
-    /**
-     * Called as soon as the UDP socket has been created and is
-     * available for I/O.  This does not imply that the SkyLines
-     * server is really available.
-     */
-    virtual void OnSkyLinesReady() {}
 
-    virtual void OnAck(unsigned id) {}
-    virtual void OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
-                           const ::GeoPoint &location, int altitude) {}
-    virtual void OnUserName(uint32_t user_id, const TCHAR *name) {}
-    virtual void OnWave(unsigned time_of_day_ms,
-                        const ::GeoPoint &a, const ::GeoPoint &b) {}
-    virtual void OnThermal(unsigned time_of_day_ms,
-                           const AGeoPoint &bottom, const AGeoPoint &top,
-                           double lift) {}
+class Handler {
+public:
+  /**
+   * Called as soon as the UDP socket has been created and is
+   * available for I/O.  This does not imply that the SkyLines
+   * server is really available.
+   */
+  virtual void OnSkyLinesReady() {}
 
-    /**
-     * An error has occurred, and the SkyLines tracking client is
-     * defunct.  To make restore its function, call Client::Open()
-     * again.
-     */
-    virtual void OnSkyLinesError(const std::exception &e) = 0;
-  };
-}
+  virtual void OnAck(unsigned id) {}
+  virtual void OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
+                         const ::GeoPoint &location, int altitude) {}
+  virtual void OnUserName(uint32_t user_id, const TCHAR *name) {}
+  virtual void OnWave(unsigned time_of_day_ms,
+                      const ::GeoPoint &a, const ::GeoPoint &b) {}
+  virtual void OnThermal(unsigned time_of_day_ms,
+                         const AGeoPoint &bottom, const AGeoPoint &top,
+                         double lift) {}
+
+  /**
+   * An error has occurred, and the SkyLines tracking client is
+   * defunct.  To make restore its function, call Client::Open()
+   * again.
+   */
+  virtual void OnSkyLinesError(const std::exception &e) = 0;
+};
+
+} /* namespace SkyLinesTracking */
 
 #endif

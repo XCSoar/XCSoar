@@ -28,40 +28,42 @@ Copyright_License {
 #include "Time/GPSClock.hpp"
 
 namespace SkyLinesTracking {
-  struct Settings;
-  class Queue;
 
-  class Glue {
-    Client client;
-    unsigned interval = 0;
-    GPSClock clock;
+struct Settings;
+class Queue;
 
-    GPSClock traffic_clock;
-    bool traffic_enabled = false;
-    bool near_traffic_enabled = false;
+class Glue {
+  Client client;
+  unsigned interval = 0;
+  GPSClock clock;
 
-    bool roaming = true;
+  GPSClock traffic_clock;
+  bool traffic_enabled = false;
+  bool near_traffic_enabled = false;
 
-    Queue *queue = nullptr;
+  bool roaming = true;
 
-  public:
-    Glue(boost::asio::io_service &io_service, Handler *_handler);
-    ~Glue();
+  Queue *queue = nullptr;
 
-    void SetSettings(const Settings &settings);
+public:
+  Glue(boost::asio::io_service &io_service, Handler *_handler);
+  ~Glue();
 
-    void Tick(const NMEAInfo &basic);
+  void SetSettings(const Settings &settings);
 
-    void RequestUserName(uint32_t user_id) {
-      client.SendUserNameRequest(user_id);
-    }
+  void Tick(const NMEAInfo &basic);
 
-  private:
-    gcc_pure
-    bool IsConnected() const;
+  void RequestUserName(uint32_t user_id) {
+    client.SendUserNameRequest(user_id);
+  }
 
-    void SendFixes(const NMEAInfo &basic);
-  };
-}
+private:
+  gcc_pure
+  bool IsConnected() const;
+
+  void SendFixes(const NMEAInfo &basic);
+};
+
+} /* namespace SkyLinesTracking */
 
 #endif

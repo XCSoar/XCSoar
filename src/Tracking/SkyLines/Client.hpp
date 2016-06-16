@@ -36,107 +36,109 @@ Copyright_License {
 struct NMEAInfo;
 
 namespace SkyLinesTracking {
-  struct TrafficResponsePacket;
-  struct UserNameResponsePacket;
-  struct WaveResponsePacket;
-  struct ThermalResponsePacket;
 
-  class Client {
-    Handler *const handler;
+struct TrafficResponsePacket;
+struct UserNameResponsePacket;
+struct WaveResponsePacket;
+struct ThermalResponsePacket;
 
-    /**
-     * Protects #resolving, #resolver, #socket.
-     */
-    mutable Mutex mutex;
+class Client {
+  Handler *const handler;
 
-    uint64_t key = 0;
+  /**
+   * Protects #resolving, #resolver, #socket.
+   */
+  mutable Mutex mutex;
 
-    bool resolving = false;
+  uint64_t key = 0;
 
-    boost::asio::ip::udp::resolver resolver;
-    boost::asio::ip::udp::endpoint endpoint;
-    boost::asio::ip::udp::socket socket;
+  bool resolving = false;
 
-    uint8_t buffer[4096];
-    boost::asio::ip::udp::endpoint sender_endpoint;
+  boost::asio::ip::udp::resolver resolver;
+  boost::asio::ip::udp::endpoint endpoint;
+  boost::asio::ip::udp::socket socket;
 
-  public:
-    explicit Client(boost::asio::io_service &io_service,
-                    Handler *_handler=nullptr)
-      :handler(_handler), resolver(io_service), socket(io_service) {}
-    ~Client() { Close(); }
+  uint8_t buffer[4096];
+  boost::asio::ip::udp::endpoint sender_endpoint;
 
-    constexpr
-    static unsigned GetDefaultPort() {
-      return 5597;
-    }
+public:
+  explicit Client(boost::asio::io_service &io_service,
+                  Handler *_handler=nullptr)
+    :handler(_handler), resolver(io_service), socket(io_service) {}
+  ~Client() { Close(); }
 
-    constexpr
-    static const char *GetDefaultPortString() {
-      return "5597";
-    }
+  constexpr
+  static unsigned GetDefaultPort() {
+    return 5597;
+  }
 
-    boost::asio::io_service &get_io_service() {
-      return socket.get_io_service();
-    }
+  constexpr
+  static const char *GetDefaultPortString() {
+    return "5597";
+  }
 
-    /**
-     * Is SkyLines tracking enabled in configuration?
-     */
-    bool IsEnabled() const {
-      return key != 0;
-    }
+  boost::asio::io_service &get_io_service() {
+    return socket.get_io_service();
+  }
 
-    bool IsDefined() const {
-      const ScopeLock protect(mutex);
-      return resolving || socket.is_open();
-    }
+  /**
+   * Is SkyLines tracking enabled in configuration?
+   */
+  bool IsEnabled() const {
+    return key != 0;
+  }
 
-    gcc_pure
-    bool IsConnected() const {
-      const ScopeLock protect(mutex);
-      return socket.is_open();
-    }
+  bool IsDefined() const {
+    const ScopeLock protect(mutex);
+    return resolving || socket.is_open();
+  }
 
-    uint64_t GetKey() const {
-      return key;
-    }
+  gcc_pure
+  bool IsConnected() const {
+    const ScopeLock protect(mutex);
+    return socket.is_open();
+  }
 
-    void SetKey(uint64_t _key) {
-      key = _key;
-    }
+  uint64_t GetKey() const {
+    return key;
+  }
 
-    void Open(boost::asio::ip::udp::resolver::query query);
-    bool Open(boost::asio::ip::udp::endpoint _endpoint);
-    void Close();
+  void SetKey(uint64_t _key) {
+    key = _key;
+  }
 
-    template<typename P>
-    void SendPacket(const P &packet) {
-      const ScopeLock protect(mutex);
-      socket.send_to(boost::asio::buffer(&packet, sizeof(packet)),
-                     endpoint, 0);
-    }
+  void Open(boost::asio::ip::udp::resolver::query query);
+  bool Open(boost::asio::ip::udp::endpoint _endpoint);
+  void Close();
 
-    void SendFix(const NMEAInfo &basic);
-    void SendPing(uint16_t id);
+  template<typename P>
+  void SendPacket(const P &packet) {
+    const ScopeLock protect(mutex);
+    socket.send_to(boost::asio::buffer(&packet, sizeof(packet)),
+                   endpoint, 0);
+  }
 
-    void SendTrafficRequest(bool followees, bool club, bool near_);
-    void SendUserNameRequest(uint32_t user_id);
+  void SendFix(const NMEAInfo &basic);
+  void SendPing(uint16_t id);
 
-  private:
-    void OnTrafficReceived(const TrafficResponsePacket &packet, size_t length);
-    void OnUserNameReceived(const UserNameResponsePacket &packet,
-                            size_t length);
-    void OnWaveReceived(const WaveResponsePacket &packet, size_t length);
-    void OnThermalReceived(const ThermalResponsePacket &packet, size_t length);
-    void OnDatagramReceived(void *data, size_t length);
+  void SendTrafficRequest(bool followees, bool club, bool near_);
+  void SendUserNameRequest(uint32_t user_id);
 
-    void OnReceive(const boost::system::error_code &ec, size_t size);
-    void AsyncReceive();
+private:
+  void OnTrafficReceived(const TrafficResponsePacket &packet, size_t length);
+  void OnUserNameReceived(const UserNameResponsePacket &packet,
+                          size_t length);
+  void OnWaveReceived(const WaveResponsePacket &packet, size_t length);
+  void OnThermalReceived(const ThermalResponsePacket &packet, size_t length);
+  void OnDatagramReceived(void *data, size_t length);
 
-    void OnResolved(const boost::system::error_code &ec,
-                    boost::asio::ip::udp::resolver::iterator i);
-  };
-}
+  void OnReceive(const boost::system::error_code &ec, size_t size);
+  void AsyncReceive();
+
+  void OnResolved(const boost::system::error_code &ec,
+                  boost::asio::ip::udp::resolver::iterator i);
+};
+
+} /* namespace SkyLinesTracking */
 
 #endif
