@@ -35,61 +35,63 @@ Copyright_License {
 #include <stdint.h>
 
 namespace SkyLinesTracking {
-  struct Data {
-    struct Traffic {
-      /**
-       * Millisecond of day.
-       *
-       * @see SkyLinesTracking::TrafficResponsePacket::Traffic::time
-       */
-      uint32_t time_of_day_ms;
 
-      GeoPoint location;
-      int altitude;
+struct Data {
+  struct Traffic {
+    /**
+     * Millisecond of day.
+     *
+     * @see SkyLinesTracking::TrafficResponsePacket::Traffic::time
+     */
+    uint32_t time_of_day_ms;
 
-      Traffic() = default;
-      constexpr Traffic(uint32_t _time, GeoPoint _location,
-                        int _altitude)
-        :time_of_day_ms(_time),
-         location(_location), altitude(_altitude) {}
-    };
+    GeoPoint location;
+    int altitude;
 
-    struct Wave {
-      /**
-       * Millisecond of day.
-       *
-       * @see SkyLinesTracking::Wave::time
-       */
-      uint32_t time_of_day_ms;
+    Traffic() = default;
+    constexpr Traffic(uint32_t _time, GeoPoint _location,
+                      int _altitude)
+    :time_of_day_ms(_time),
+      location(_location), altitude(_altitude) {}
+  };
 
-      /**
-       * Two points describing the wave line.  This is the same as the
-       * corresponding attributes in #WaveInfo.
-       */
-      GeoPoint a, b;
-
-      Wave() = default;
-      constexpr Wave(uint32_t _time, GeoPoint _a, GeoPoint _b)
-        :time_of_day_ms(_time), a(_a), b(_b) {}
-    };
-
-    mutable Mutex mutex;
-
-    std::map<uint32_t, Traffic> traffic;
+  struct Wave {
+    /**
+     * Millisecond of day.
+     *
+     * @see SkyLinesTracking::Wave::time
+     */
+    uint32_t time_of_day_ms;
 
     /**
-     * A database of user-id to display-name.  An empty string means
-     * the server has failed/refused to supply a name.
+     * Two points describing the wave line.  This is the same as the
+     * corresponding attributes in #WaveInfo.
      */
-    std::map<uint32_t, tstring> user_names;
+    GeoPoint a, b;
 
-    std::list<Wave> waves;
-
-    gcc_pure
-    bool IsUserKnown(uint32_t id) const {
-      return user_names.find(id) != user_names.end();
-    }
+    Wave() = default;
+    constexpr Wave(uint32_t _time, GeoPoint _a, GeoPoint _b)
+    :time_of_day_ms(_time), a(_a), b(_b) {}
   };
-}
+
+  mutable Mutex mutex;
+
+  std::map<uint32_t, Traffic> traffic;
+
+  /**
+   * A database of user-id to display-name.  An empty string means
+   * the server has failed/refused to supply a name.
+   */
+  std::map<uint32_t, tstring> user_names;
+
+  std::list<Wave> waves;
+
+  gcc_pure
+  bool IsUserKnown(uint32_t id) const {
+    return user_names.find(id) != user_names.end();
+  }
+};
+
+} /* namespace SkyLinesTracking */
 
 #endif

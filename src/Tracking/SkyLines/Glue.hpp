@@ -28,50 +28,52 @@ Copyright_License {
 #include "Time/GPSClock.hpp"
 
 namespace SkyLinesTracking {
-  struct Settings;
-  class Queue;
 
-  class Glue {
-    Client client;
-    unsigned interval;
-    GPSClock clock;
+struct Settings;
+class Queue;
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-    GPSClock traffic_clock;
-    bool traffic_enabled;
-    bool near_traffic_enabled;
-#endif
-
-    bool roaming;
-
-    Queue *queue;
-
-  public:
-    Glue();
-    ~Glue();
+class Glue {
+  Client client;
+  unsigned interval;
+  GPSClock clock;
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-    void SetHandler(Handler *handler) {
-      client.SetHandler(handler);
-    }
+  GPSClock traffic_clock;
+  bool traffic_enabled;
+  bool near_traffic_enabled;
 #endif
 
-    void SetSettings(const Settings &settings);
+  bool roaming;
 
-    void Tick(const NMEAInfo &basic);
+  Queue *queue;
+
+public:
+  Glue();
+  ~Glue();
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-    void RequestUserName(uint32_t user_id) {
-      client.SendUserNameRequest(user_id);
-    }
+  void SetHandler(Handler *handler) {
+    client.SetHandler(handler);
+  }
 #endif
 
-  private:
-    gcc_pure
-    bool IsConnected() const;
+  void SetSettings(const Settings &settings);
 
-    void SendFixes(const NMEAInfo &basic);
-  };
-}
+  void Tick(const NMEAInfo &basic);
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  void RequestUserName(uint32_t user_id) {
+    client.SendUserNameRequest(user_id);
+  }
+#endif
+
+private:
+  gcc_pure
+  bool IsConnected() const;
+
+  void SendFixes(const NMEAInfo &basic);
+};
+
+} /* namespace SkyLinesTracking */
 
 #endif

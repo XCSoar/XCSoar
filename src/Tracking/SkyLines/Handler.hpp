@@ -35,19 +35,21 @@ struct GeoPoint;
 struct AGeoPoint;
 
 namespace SkyLinesTracking {
-  class Handler {
-  public:
-    virtual void OnAck(unsigned id) {}
-    virtual void OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
-                           const ::GeoPoint &location, int altitude) {}
-    virtual void OnUserName(uint32_t user_id, const TCHAR *name) {}
-    virtual void OnWave(unsigned time_of_day_ms,
-                        const ::GeoPoint &a, const ::GeoPoint &b) {}
-    virtual void OnThermal(unsigned time_of_day_ms,
-                           const AGeoPoint &bottom, const AGeoPoint &top,
-                           double lift) {}
-  };
-}
+
+class Handler {
+public:
+  virtual void OnAck(unsigned id) {}
+  virtual void OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
+                         const ::GeoPoint &location, int altitude) {}
+  virtual void OnUserName(uint32_t user_id, const TCHAR *name) {}
+  virtual void OnWave(unsigned time_of_day_ms,
+                      const ::GeoPoint &a, const ::GeoPoint &b) {}
+  virtual void OnThermal(unsigned time_of_day_ms,
+                         const AGeoPoint &bottom, const AGeoPoint &top,
+                         double lift) {}
+};
+
+} /* namespace SkyLinesTracking */
 
 #endif
 

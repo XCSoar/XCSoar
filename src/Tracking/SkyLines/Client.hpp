@@ -35,85 +35,87 @@ struct NMEAInfo;
 class IOThread;
 
 namespace SkyLinesTracking {
-  struct TrafficResponsePacket;
-  struct UserNameResponsePacket;
-  struct WaveResponsePacket;
-  struct ThermalResponsePacket;
 
-  class Client
+struct TrafficResponsePacket;
+struct UserNameResponsePacket;
+struct WaveResponsePacket;
+struct ThermalResponsePacket;
+
+class Client
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-    : private SocketEventHandler
+  : private SocketEventHandler
 #endif
-  {
+{
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-    IOThread *io_thread;
-    Handler *handler;
-#endif
-
-    uint64_t key;
-
-    AllocatedSocketAddress address;
-    SocketDescriptor socket;
-
-  public:
-    Client()
-      :
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-      io_thread(nullptr), handler(nullptr),
-#endif
-      key(0),
-      socket(SocketDescriptor::Undefined()) {}
-    ~Client() { Close(); }
-
-    constexpr
-    static unsigned GetDefaultPort() {
-      return 5597;
-    }
-
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-    void SetIOThread(IOThread *io_thread);
-    void SetHandler(Handler *handler);
+  IOThread *io_thread;
+  Handler *handler;
 #endif
 
-    bool IsDefined() const {
-      return socket.IsDefined();
-    }
+  uint64_t key;
 
-    uint64_t GetKey() const {
-      return key;
-    }
+  AllocatedSocketAddress address;
+  SocketDescriptor socket;
 
-    void SetKey(uint64_t _key) {
-      key = _key;
-    }
+public:
+  Client()
+    :
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+    io_thread(nullptr), handler(nullptr),
+#endif
+    key(0),
+    socket(SocketDescriptor::Undefined()) {}
+  ~Client() { Close(); }
 
-    bool Open(SocketAddress _address);
-    void Close();
-
-    template<typename P>
-    bool SendPacket(const P &packet) {
-      return socket.Write(&packet, sizeof(packet), address) == sizeof(packet);
-    }
-
-    bool SendFix(const NMEAInfo &basic);
-    bool SendPing(uint16_t id);
+  constexpr
+  static unsigned GetDefaultPort() {
+    return 5597;
+  }
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-    bool SendTrafficRequest(bool followees, bool club, bool near);
-    bool SendUserNameRequest(uint32_t user_id);
-
-  private:
-    void OnTrafficReceived(const TrafficResponsePacket &packet, size_t length);
-    void OnUserNameReceived(const UserNameResponsePacket &packet,
-                            size_t length);
-    void OnWaveReceived(const WaveResponsePacket &packet, size_t length);
-    void OnThermalReceived(const ThermalResponsePacket &packet, size_t length);
-    void OnDatagramReceived(void *data, size_t length);
-
-    /* virtual methods from SocketEventHandler */
-    bool OnSocketEvent(SocketDescriptor s, unsigned mask) override;
+  void SetIOThread(IOThread *io_thread);
+  void SetHandler(Handler *handler);
 #endif
-  };
-}
+
+  bool IsDefined() const {
+    return socket.IsDefined();
+  }
+
+  uint64_t GetKey() const {
+    return key;
+  }
+
+  void SetKey(uint64_t _key) {
+    key = _key;
+  }
+
+  bool Open(SocketAddress _address);
+  void Close();
+
+  template<typename P>
+  bool SendPacket(const P &packet) {
+    return socket.Write(&packet, sizeof(packet), address) == sizeof(packet);
+  }
+
+  bool SendFix(const NMEAInfo &basic);
+  bool SendPing(uint16_t id);
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  bool SendTrafficRequest(bool followees, bool club, bool near);
+  bool SendUserNameRequest(uint32_t user_id);
+
+private:
+  void OnTrafficReceived(const TrafficResponsePacket &packet, size_t length);
+  void OnUserNameReceived(const UserNameResponsePacket &packet,
+                          size_t length);
+  void OnWaveReceived(const WaveResponsePacket &packet, size_t length);
+  void OnThermalReceived(const ThermalResponsePacket &packet, size_t length);
+  void OnDatagramReceived(void *data, size_t length);
+
+  /* virtual methods from SocketEventHandler */
+  bool OnSocketEvent(SocketDescriptor s, unsigned mask) override;
+#endif
+};
+
+} /* namespace SkyLinesTracking */
 
 #endif

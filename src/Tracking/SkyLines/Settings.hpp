@@ -31,41 +31,43 @@ Copyright_License {
 #include <stdint.h>
 
 namespace SkyLinesTracking {
-  struct Settings {
-    bool enabled;
 
-    /**
-     * Enable tracking while on a "roamed" connection?
-     */
-    bool roaming;
+struct Settings {
+  bool enabled;
 
-    /**
-     * Periodically request friend traffic information?
-     */
-    bool traffic_enabled;
+  /**
+   * Enable tracking while on a "roamed" connection?
+   */
+  bool roaming;
 
-    /**
-     * Periodically request near traffic information?
-     */
-    bool near_traffic_enabled;
+  /**
+   * Periodically request friend traffic information?
+   */
+  bool traffic_enabled;
 
-    /**
-     * Tracking interval in seconds.
-     */
-    unsigned interval;
+  /**
+   * Periodically request near traffic information?
+   */
+  bool near_traffic_enabled;
 
-    uint64_t key;
+  /**
+   * Tracking interval in seconds.
+   */
+  unsigned interval;
 
-    void SetDefaults() {
-      enabled = false;
-      roaming = true;
-      traffic_enabled = false;
-      near_traffic_enabled = false;
-      interval = 5;
-      key = 0;
-    }
-  };
-}
+  uint64_t key;
+
+  void SetDefaults() {
+    enabled = false;
+    roaming = true;
+    traffic_enabled = false;
+    near_traffic_enabled = false;
+    interval = 5;
+    key = 0;
+  }
+};
+
+} /* namespace SkyLinesTracking */
 
 #endif
 
