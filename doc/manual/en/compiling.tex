@@ -299,19 +299,37 @@ To build a USB-OTG capable kernel for the Kobo, clone the git
 repository:
 
 \begin{verbatim*}
-git clone --branch kobo \
-  git://git.xcsoar.org/xcsoar/max/linux.git
+git clone git://git.xcsoar.org/xcsoar/max/linux.git
 \end{verbatim*}
 
-Configure the kernel using the file \texttt{kobo/kernel/otg.config}
-from XCSoar's \texttt{git} repository.  Install a
-\href{http://openlinux.amlogic.com:8000/download/ARM/gnutools/arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2}{gcc
-  4.4 cross compiler}, for example in \texttt{/opt}.
-
-Now type:
+Check out the correct branch. For the Kobo Mini, this is the "kobo" branch,
+for the Kobo Glo HD, the branch is called "kobo-glohd".
 
 \begin{verbatim*}
-make CROSS_COMPILE=/opt/arm-2010q1/bin/arm-none-linux-gnueabi- \
+git checkout kobo
+\end{verbatim*}
+
+Configure the kernel using the configuration files from the \texttt{kobo/kernel}
+directory in XCSoar's \texttt{git} repository. For the Kobo Mini, install a
+\href{http://openlinux.amlogic.com:8000/download/ARM/gnutools/arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2}{gcc
+  4.4 cross compiler}, for example in \texttt{/opt}. For the Kobo Glo HD,
+install a
+\href{https://launchpad.net/gcc-arm-embedded/4.6/4.6-2012-q4-update/+download/gcc-arm-none-eabi-4_6-2012q4-20121016.tar.bz2}{gcc
+  4.6 cross compiler}
+
+To compile a kernel image for the Kobo Mini, type:
+
+\begin{verbatim*}
+make \
+  CROSS_COMPILE=/opt/arm-2010q1/bin/arm-none-linux-gnueabi- \
+  ARCH=arm uImage
+\end{verbatim*}
+
+To compile a kernel image for the Kobo Glo HD, type:
+
+\begin{verbatim*}
+make \
+  CROSS_COMPILE=/opt/gcc-arm-none-eabi-4_6-2012q4/bin/arm-none-eabi- \
   ARCH=arm uImage
 \end{verbatim*}
 
@@ -328,8 +346,8 @@ permanently, install it in \texttt{/opt/xcsoar/lib/kernel}.  Read the
 file \texttt{kobo/rcS} to find out more about this.
 
 To include kernel images in \texttt{KoboRoot.tgz}, copy
-\texttt{uImage.otg} and \texttt{uImage.kobo} to
-\texttt{/opt/kobo/kernel}.
+\texttt{uImage.otg}, \texttt{uImage.kobo}, \texttt{uImage.glohd.otg} and
+\texttt{uImage.glohd} to \texttt{/opt/kobo/kernel}.
 
 \subsection{Editing the Manuals}
 
