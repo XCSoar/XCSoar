@@ -194,6 +194,7 @@ KoboWifiOn()
   Sleep(2000);
 
   Run("/sbin/ifconfig", "eth0", "up");
+  Run("/sbin/iwconfig", "eth0", "power", "off");
   Run("/bin/wlarm_le", "-i", "eth0", "up");
   Run("/bin/wpa_supplicant", "-i", "eth0",
       "-c", "/etc/wpa_supplicant/wpa_supplicant.conf",
