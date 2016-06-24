@@ -21,14 +21,6 @@ endef
 pkg-config-cppflags-filter = $(patsubst -I%,-isystem %,$(1))
 pkg-config-ldlibs-filter = $(1)
 
-ifeq ($(TARGET)$(ARMV7),ANDROIDy)
-# Android-ARMv7 requires "-lm_hard" instead of "-lm"; some libraries
-# such as libtiff however hard-code "-lm" in their pkg-config file,
-# which causes serious math breakage; therefore, filter out all "-lm"
-# flags.
-pkg-config-ldlibs-filter = $$(filter-out -lm,$(1))
-endif
-
 # Generates a pkg-config lookup for a library.
 #
 # Example: $(eval $(call pkg-config-library,CURL,libcurl >= 2.21))

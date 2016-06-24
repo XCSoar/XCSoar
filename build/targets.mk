@@ -325,7 +325,7 @@ ifeq ($(TARGET),UNIX)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r11c
+  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r12
 
   ANDROID_SDK_PLATFORM = android-22
   ANDROID_NDK_PLATFORM = android-19
@@ -339,7 +339,7 @@ ifeq ($(TARGET),ANDROID)
   ANDROID_GCC_VERSION = 4.9
 
   ifeq ($(ARMV7),y)
-    ANDROID_ABI3 = armeabi-v7a-hard
+    ANDROID_ABI3 = armeabi-v7a
     ANDROID_ABI5 = armeabi-v7a
 
     ifeq ($(NEON),y)
@@ -433,7 +433,7 @@ ifeq ($(TARGET),ANDROID)
 
   ifeq ($(ARMV7),y)
     LLVM_TARGET = armv7a-none-linux-androideabi
-    TARGET_ARCH += -march=armv7-a -mfloat-abi=hard -mhard-float -D_NDK_MATH_NO_SOFTFP=1
+    TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp
   endif
 
   ifeq ($(ARMV7)$(NEON),yy)
@@ -645,12 +645,7 @@ endif
 
 ifeq ($(TARGET),ANDROID)
   TARGET_LDLIBS += -lc
-
-  ifeq ($(ARMV7),y)
-    TARGET_LDLIBS += -lm_hard
-  else
-    TARGET_LDLIBS += -lm
-  endif
+  TARGET_LDLIBS += -lm
 
   TARGET_LDLIBS += -llog
   TARGET_LDLIBS += -lgcc
