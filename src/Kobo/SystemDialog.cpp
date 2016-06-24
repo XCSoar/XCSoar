@@ -71,8 +71,10 @@ SystemWidget::SwitchKernel()
 {
 #ifdef KOBO
   KoboModel model = DetectKoboModel();
-  if (model != KoboModel::MINI && model != KoboModel::GLO_HD &&
-      ShowMessageBox(_T("This feature was designed for the Kobo Mini and Glo HD, but this is not one.  Use at your own risk.  Continue?"),
+  if (model != KoboModel::MINI &&
+      model != KoboModel::TOUCH2 &&
+      model != KoboModel::GLO_HD &&
+      ShowMessageBox(_T("This feature was designed for the Kobo Mini, Touch 2.0 and Glo HD, but this is not one.  Use at your own risk.  Continue?"),
                      _T("USB-OTG"), MB_YESNO) != IDYES)
     return;
 
@@ -80,6 +82,7 @@ SystemWidget::SwitchKernel()
   switch (model)
   {
   case KoboModel::GLO_HD:
+  case KoboModel::TOUCH2:
     otg_kernel_image = "/opt/xcsoar/lib/kernel/uImage.glohd.otg";
     kobo_kernel_image = "/opt/xcsoar/lib/kernel/uImage.glohd";
     break;
