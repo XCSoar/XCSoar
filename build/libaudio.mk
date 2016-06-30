@@ -12,6 +12,10 @@ ifeq ($(TARGET),ANDROID)
 HAVE_PCM_PLAYER = y
 endif
 
+ifeq ($(ENABLE_ALSA),y)
+HAVE_PCM_PLAYER = y
+endif
+
 ifeq ($(HAVE_PCM_PLAYER),y)
 
 AUDIO_SRC_DIR = $(SRC)/Audio
@@ -27,6 +31,8 @@ AUDIO_SOURCES += \
 endif
 
 AUDIO_CPPFLAGS_INTERNAL = $(SDL_CPPFLAGS)
+AUDIO_CPPFLAGS = $(ALSA_CPPFLAGS)
+AUDIO_LDLIBS = $(ALSA_LDLIBS)
 
 $(eval $(call link-library,libaudio,AUDIO))
 

@@ -123,6 +123,7 @@ include $(topdir)/build/libtime.mk
 include $(topdir)/build/libprofile.mk
 include $(topdir)/build/libnet.mk
 include $(topdir)/build/sdl.mk
+include $(topdir)/build/alsa.mk
 include $(topdir)/build/zlib.mk
 include $(topdir)/build/zzip.mk
 include $(topdir)/build/jasper.mk

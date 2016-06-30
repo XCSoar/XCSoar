@@ -32,13 +32,33 @@ Copyright_License {
 
 #include <SLES/OpenSLES_Android.h>
 #elif defined(WIN32)
-#else
+#elif defined(ENABLE_ALSA)
+#include "IO/Async/AsioUtil.hpp"
+#include "OS/ByteOrder.hpp"
+#include "Util/NumberParser.hpp"
+
+#include <alsa/asoundlib.h>
+#elif defined(ENABLE_SDL)
 #include <SDL_audio.h>
 #endif
 
 #include <assert.h>
 
-PCMPlayer::PCMPlayer():sample_rate(0), synthesiser(nullptr) {}
+#ifdef ENABLE_ALSA
+static constexpr char ALSA_DEVICE_ENV[] = "ALSA_DEVICE";
+static constexpr char ALSA_LATENCY_ENV[] = "ALSA_LATENCY";
+
+static constexpr char DEFAULT_ALSA_DEVICE[] = "default";
+static constexpr unsigned DEFAULT_ALSA_LATENCY = 100000;
+#endif
+
+#ifdef PCMPLAYER_REQUIRES_IO_SERVICE
+PCMPlayer::PCMPlayer(boost::asio::io_service &_io_service) :
+  io_service(_io_service),
+#else
+PCMPlayer::PCMPlayer() :
+#endif
+  sample_rate(0), synthesiser(nullptr) {}
 
 PCMPlayer::~PCMPlayer()
 {
@@ -60,6 +80,66 @@ PlayedCallback(SLAndroidSimpleBufferQueueItf caller, void *pContext)
 }
 
 #elif defined(WIN32)
+#elif defined(ENABLE_ALSA)
+void
+PCMPlayer::OnEvent()
+{
+  snd_pcm_sframes_t n = snd_pcm_avail_update(alsa_handle.get());
+  if (n < 0) {
+    if (-EPIPE == n)
+      LogFormat("ALSA PCM buffer underrun");
+    else if ((-EINTR == n) || (-ESTRPIPE == n))
+      LogFormat("ALSA PCM error: %s - trying to recover",
+                snd_strerror(static_cast<int>(n)));
+    else
+      // snd_pcm_recover() can only handle EPIPE, EINTR and ESTRPIPE
+      LogFormat("Unrecoverable ALSA PCM error: %s",
+                snd_strerror(static_cast<int>(n)));
+      return;
+
+    if (0 == snd_pcm_recover(alsa_handle.get(), static_cast<int>(n), 1)) {
+      LogFormat("ALSA PCM successfully recovered");
+    }
+    n = static_cast<snd_pcm_sframes_t>(buffer_size);
+  }
+
+  if (n > 0) {
+    Synthesise(buffer.get(), static_cast<size_t>(n));
+    BOOST_VERIFY(n == snd_pcm_writei(alsa_handle.get(),
+                                     buffer.get(),
+                                     static_cast<snd_pcm_uframes_t>(n)));
+  }
+}
+
+void
+PCMPlayer::OnReadEvent(boost::asio::posix::stream_descriptor &fd,
+                       const boost::system::error_code &ec) {
+  if (ec == boost::asio::error::operation_aborted)
+    return;
+
+  OnEvent();
+
+  fd.async_read_some(boost::asio::null_buffers(),
+                     std::bind(&PCMPlayer::OnReadEvent,
+                               this,
+                               std::ref(fd),
+                               std::placeholders::_1));
+}
+
+void
+PCMPlayer::OnWriteEvent(boost::asio::posix::stream_descriptor &fd,
+                        const boost::system::error_code &ec) {
+  if (ec == boost::asio::error::operation_aborted)
+    return;
+
+  OnEvent();
+
+  fd.async_write_some(boost::asio::null_buffers(),
+                      std::bind(&PCMPlayer::OnWriteEvent,
+                                this,
+                                std::ref(fd),
+                                std::placeholders::_1));
+}
 #else
 
 static void
@@ -246,6 +326,155 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
 
   return true;
 #elif defined(WIN32)
+#elif defined(ENABLE_ALSA)
+  if ((nullptr != synthesiser) && alsa_handle && (_sample_rate == sample_rate)) {
+    /* just change the synthesiser */
+    DispatchWait(io_service, [this, &_synthesiser]() {
+      assert(alsa_handle);
+      BOOST_VERIFY(0 == snd_pcm_drop(alsa_handle.get()));
+      synthesiser = &_synthesiser;
+      Synthesise(buffer.get(), buffer_size);
+      BOOST_VERIFY(static_cast<snd_pcm_sframes_t>(buffer_size)
+                       == snd_pcm_writei(alsa_handle.get(),
+                                         buffer.get(),
+                                         buffer_size));
+    });
+    return true;
+  }
+
+  Stop();
+
+  assert(!alsa_handle);
+
+  AlsaHandleUniquePtr new_alsa_handle = MakeAlsaHandleUniquePtr();
+  {
+    /* The "default" alsa device is normally the dmix plugin, or PulseAudio.
+     * Some users might want to explicitly specify a hw (or plughw) device
+     * for reduced latency. */
+    const char *alsa_device = getenv(ALSA_DEVICE_ENV);
+    if ((nullptr == alsa_device) || ('\0' == *alsa_device))
+      alsa_device = DEFAULT_ALSA_DEVICE;
+    LogFormat("Using ALSA PCM device %s (use environment variable "
+                  "%s to override)",
+              alsa_device, ALSA_DEVICE_ENV);
+
+    snd_pcm_t *raw_alsa_handle;
+    int alsa_error = snd_pcm_open(&raw_alsa_handle, alsa_device,
+                                  SND_PCM_STREAM_PLAYBACK, 0);
+    if (alsa_error < 0) {
+      LogFormat("snd_pcm_open(0x%p, %s, SND_PCM_STREAM_PLAYBACK, 0) failed: %s",
+                &alsa_handle, alsa_device, snd_strerror(alsa_error));
+      return false;
+    }
+    new_alsa_handle = MakeAlsaHandleUniquePtr(raw_alsa_handle);
+    assert(new_alsa_handle);
+  }
+
+  /* With the latency parameter in snd_pcm_set_params(), ALSA determines
+   * buffer size and period time values to achieve this. We always want low
+   * latency. But lower latency values result in a smaller buffer size,
+   * more frequent interrupts, and a higher risk for buffer underruns. */
+  unsigned latency = DEFAULT_ALSA_LATENCY;
+  const char *latency_env_value = getenv(ALSA_LATENCY_ENV);
+  if ((nullptr == latency_env_value) || ('\0' == *latency_env_value)) {
+    latency = DEFAULT_ALSA_LATENCY;
+  } else {
+    char *p;
+    latency = ParseUnsigned(latency_env_value, &p);
+    if (*p != '\0') {
+      LogFormat("Invalid %s value \"%s\"", ALSA_LATENCY_ENV, latency_env_value);
+      return false;
+    }
+  }
+  LogFormat("Using ALSA PCM latency %u μs (use environment variable "
+                "%s to override)", latency, ALSA_LATENCY_ENV);
+
+  int alsa_error = snd_pcm_set_params(new_alsa_handle.get(),
+                                      IsLittleEndian()
+                                          ? SND_PCM_FORMAT_S16_LE
+                                          : SND_PCM_FORMAT_S16_BE,
+                                      SND_PCM_ACCESS_RW_INTERLEAVED,
+                                      1,
+                                      _sample_rate,
+                                      1,
+                                      latency);
+  if (alsa_error < 0) {
+    LogFormat("snd_pcm_set_params(0x%p, %s, SND_PCM_ACCESS_RW_INTERLEAVED, 1, "
+                  "%u, 1, %u) failed: %d - %s",
+              new_alsa_handle.get(),
+              IsLittleEndian()
+                  ? "SND_PCM_FORMAT_S16_LE" : "SND_PCM_FORMAT_S16_BE",
+              _sample_rate,
+              latency,
+              alsa_error,
+              snd_strerror(alsa_error));
+    return false;
+  }
+
+  snd_pcm_sframes_t n = snd_pcm_avail(new_alsa_handle.get());
+  if (n <= 0) {
+    LogFormat("snd_pcm_avail(0x%p) failed: %ld - %s",
+              new_alsa_handle.get(),
+              static_cast<long>(n),
+              snd_strerror(static_cast<int>(n)));
+    return false;
+  }
+
+  buffer_size = static_cast<snd_pcm_uframes_t>(n);
+  buffer = std::unique_ptr<int16_t[]>(new int16_t[buffer_size]);
+
+  /* Why does Boost.Asio make it so hard to register a set of of standard
+     poll() descriptors (struct pollfd)? */
+  int poll_fds_count = snd_pcm_poll_descriptors_count(new_alsa_handle.get());
+  if (poll_fds_count < 1) {
+    LogFormat("snd_pcm_poll_descriptors_count(0x%p) returned %d",
+              new_alsa_handle.get(),
+              poll_fds_count);
+    return false;
+  }
+  poll_descs = decltype(poll_descs)(
+      new std::unique_ptr<boost::asio::posix::stream_descriptor>[
+          poll_fds_count]);
+  std::unique_ptr<struct pollfd[]> poll_fds(
+      new struct pollfd[poll_fds_count]);
+  BOOST_VERIFY(
+      poll_fds_count ==
+          snd_pcm_poll_descriptors(new_alsa_handle.get(),
+                                   poll_fds.get(),
+                                   static_cast<unsigned>(poll_fds_count)));
+  for (int i = 0; i < poll_fds_count; ++i) {
+    poll_descs[i] = std::unique_ptr<boost::asio::posix::stream_descriptor>(
+        new boost::asio::posix::stream_descriptor(io_service, poll_fds[i].fd));
+  }
+
+  synthesiser = &_synthesiser;
+  Synthesise(buffer.get(), buffer_size);
+
+  BOOST_VERIFY(n == snd_pcm_writei(new_alsa_handle.get(),
+                                   buffer.get(),
+                                   buffer_size));
+
+  alsa_handle = std::move(new_alsa_handle);
+
+  for (int i = 0; i < poll_fds_count; ++i) {
+    if (poll_fds[i].events & POLLOUT) {
+      poll_descs[i]->async_write_some(boost::asio::null_buffers(),
+                         std::bind(&PCMPlayer::OnWriteEvent,
+                                   this,
+                                   std::ref(*(poll_descs[i])),
+                                   std::placeholders::_1));
+    }
+    if ((poll_fds[i].events & POLLIN) || (poll_fds[i].events & POLLPRI)) {
+      poll_descs[i]->async_read_some(boost::asio::null_buffers(),
+                         std::bind(&PCMPlayer::OnReadEvent,
+                                   this,
+                                   std::ref(*(poll_descs[i])),
+                                   std::placeholders::_1));
+    }
+    ++reg_poll_descs_count;
+  }
+
+  return true;
 #else
   if (synthesiser != nullptr) {
     if (_sample_rate == sample_rate) {
@@ -294,6 +523,25 @@ PCMPlayer::Stop()
   sample_rate = 0;
   synthesiser = nullptr;
 #elif defined(WIN32)
+#elif defined(ENABLE_ALSA)
+  if (reg_poll_descs_count > 0) {
+    DispatchWait(io_service, [&]() {
+      for (unsigned i = 0; i < reg_poll_descs_count; ++i) {
+        poll_descs[i]->cancel();
+      }
+
+      if (nullptr != alsa_handle) {
+        BOOST_VERIFY(0 == snd_pcm_drop(alsa_handle.get()));
+        alsa_handle.reset();
+      }
+    });
+  }
+
+  poll_descs.reset();
+  reg_poll_descs_count = 0;
+
+  sample_rate = 0;
+  synthesiser = nullptr;
 #else
   if (synthesiser == nullptr)
     return;

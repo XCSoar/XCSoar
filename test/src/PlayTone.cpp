@@ -30,6 +30,10 @@ Copyright_License {
 #include "Audio/PCMPlayer.hpp"
 #include "Audio/ToneSynthesiser.hpp"
 #include "Screen/Init.hpp"
+#ifdef PCMPLAYER_REQUIRES_IO_SERVICE
+#include "IO/Async/GlobalAsioThread.hpp"
+#include "IO/Async/AsioThread.hpp"
+#endif
 #include "OS/Args.hpp"
 #include "OS/Sleep.h"
 
@@ -51,7 +55,12 @@ main(int argc, char **argv)
 
   ScreenGlobalInit screen;
 
+#ifdef PCMPLAYER_REQUIRES_IO_SERVICE
+  ScopeGlobalAsioThread global_asio_thread;
+  PCMPlayer player(asio_thread->Get());
+#else
   PCMPlayer player;
+#endif
 
   const unsigned sample_rate = 44100;
 

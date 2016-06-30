@@ -30,6 +30,11 @@ Copyright_License {
 #include "SLES/Init.hpp"
 #endif
 
+#ifdef PCMPLAYER_REQUIRES_IO_SERVICE
+#include "IO/Async/AsioThread.hpp"
+#include "IO/Async/GlobalAsioThread.hpp"
+#endif
+
 #include <assert.h>
 
 static constexpr unsigned sample_rate = 44100;
@@ -63,7 +68,11 @@ AudioVarioGlue::Initialise()
     return;
 #endif
 
+#ifdef PCMPLAYER_REQUIRES_IO_SERVICE
+  player = new PCMPlayer(asio_thread->Get());
+#else
   player = new PCMPlayer();
+#endif
   synthesiser = new VarioSynthesiser();
 }
 

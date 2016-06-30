@@ -31,6 +31,15 @@ Copyright_License {
 #include "SLES/AndroidSimpleBufferQueue.hpp"
 
 #include <stdint.h>
+#elif defined(ENABLE_ALSA)
+#include <memory>
+
+#include <boost/assert.hpp>
+#include <boost/asio/posix/stream_descriptor.hpp>
+
+#include <alsa/asoundlib.h>
+
+#define PCMPLAYER_REQUIRES_IO_SERVICE
 #endif
 
 #include <stddef.h>
@@ -43,6 +52,10 @@ class PCMSynthesiser;
  * PCM samples are needed.
  */
 class PCMPlayer {
+#ifdef PCMPLAYER_REQUIRES_IO_SERVICE
+  boost::asio::io_service &io_service;
+#endif
+
   unsigned sample_rate;
 
   PCMSynthesiser *synthesiser;
@@ -86,11 +99,44 @@ class PCMPlayer {
   int16_t buffers[3][4096];
 
 #elif defined(WIN32)
+#elif defined(ENABLE_ALSA)
+  static inline void CloseAlsaHandle(snd_pcm_t *handle) {
+    if (nullptr != handle)
+      BOOST_VERIFY(0 == snd_pcm_close(handle));
+  }
+
+  using AlsaHandleUniquePtr =
+      std::unique_ptr<snd_pcm_t, decltype(&CloseAlsaHandle)>;
+
+  static inline AlsaHandleUniquePtr MakeAlsaHandleUniquePtr(
+      snd_pcm_t *handle = nullptr) {
+    return AlsaHandleUniquePtr(handle, &CloseAlsaHandle);
+  }
+
+  AlsaHandleUniquePtr alsa_handle = MakeAlsaHandleUniquePtr();
+
+  snd_pcm_uframes_t buffer_size;
+  std::unique_ptr<int16_t[]> buffer;
+
+  std::unique_ptr<std::unique_ptr<boost::asio::posix::stream_descriptor>[]>
+      poll_descs;
+  unsigned reg_poll_descs_count = 0;
+
+  void OnEvent();
+
+  void OnReadEvent(boost::asio::posix::stream_descriptor &fd,
+                   const boost::system::error_code &ec);
+  void OnWriteEvent(boost::asio::posix::stream_descriptor &fd,
+                    const boost::system::error_code &ec);
 #else
 #endif
 
 public:
+#ifdef PCMPLAYER_REQUIRES_IO_SERVICE
+  explicit PCMPlayer(boost::asio::io_service &_io_service);
+#else
   PCMPlayer();
+#endif
   ~PCMPlayer();
 
   /**
