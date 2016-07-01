@@ -434,14 +434,12 @@ ifeq ($(TARGET),ANDROID)
   ifeq ($(ARMV7),y)
     LLVM_TARGET = armv7a-none-linux-androideabi
     TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp
-  endif
 
-  ifeq ($(ARMV7)$(NEON),yy)
-    TARGET_ARCH += -mfpu=neon
-  endif
-
-  ifeq ($(ARMV7)$(NEON),yn)
-    TARGET_ARCH += -mfpu=vfpv3-d16
+    ifeq ($(NEON),y)
+      TARGET_ARCH += -mfpu=neon
+    else
+      TARGET_ARCH += -mfpu=vfpv3-d16
+    endif
   endif
 
   ifeq ($(AARCH64),y)
