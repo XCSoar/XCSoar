@@ -35,9 +35,6 @@ public:
   /**
    * The caller requests to generate PCM samples.
    *
-   * Note that this method may be called from any thread.  The
-   * PCMSynthesiser implementation must be thread-safe.
-   *
    * @param buffer the destination buffer (host byte order)
    * @param n the number of 16 bit mono samples that shall be generated
    */
