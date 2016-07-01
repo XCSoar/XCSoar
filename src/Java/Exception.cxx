@@ -46,5 +46,5 @@ Java::RethrowException(JNIEnv *env)
 	LocalRef<jthrowable> ref(env, exception);
 
 	env->ExceptionClear();
-	throw Exception(env, Java::LocalRef<jthrowable>(env, exception));
+	throw Exception(env, exception);
 }
