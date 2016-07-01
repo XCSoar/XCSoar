@@ -51,7 +51,7 @@ protected:
   UPixelScalar width, height;
   PixelRect bounds;
 
-  StaticArray<Label, 128u> labels;
+  StaticArray<Label, 256u> labels;
 
 public:
   WaypointLabelList(UPixelScalar _width, UPixelScalar _height)
