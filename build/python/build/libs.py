@@ -92,6 +92,7 @@ curl = AutotoolsProject(
         '--disable-crypto-auth', '--disable-ntlm-wb', '--disable-tls-srp', '--disable-cookies',
         '--without-ssl', '--without-gnutls', '--without-nss', '--without-libssh2',
     ],
+    patches=abspath('lib/curl/patches'),
     use_clang=True,
 )
 

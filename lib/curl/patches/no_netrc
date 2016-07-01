@@ -1,0 +1,20 @@
+Index: curl-7.49.1/lib/url.c
+===================================================================
+--- curl-7.49.1.orig/lib/url.c
++++ curl-7.49.1/lib/url.c
+@@ -5243,6 +5243,7 @@ static CURLcode override_login(struct Se
+   }
+ 
+   conn->bits.netrc = FALSE;
++#ifndef __BIONIC__
+   if(data->set.use_netrc != CURL_NETRC_IGNORED) {
+     int ret = Curl_parsenetrc(conn->host.name,
+                               userp, passwdp,
+@@ -5264,6 +5265,7 @@ static CURLcode override_login(struct Se
+       conn->bits.user_passwd = TRUE; /* enable user+password */
+     }
+   }
++#endif
+ 
+   return CURLE_OK;
+ }
