@@ -520,7 +520,7 @@ PCMPlayer::Stop()
   synthesiser = nullptr;
 #elif defined(WIN32)
 #elif defined(ENABLE_ALSA)
-  if (reg_poll_descs_count > 0) {
+  if ((nullptr != alsa_handle) || (reg_poll_descs_count > 0)) {
     DispatchWait(io_service, [&]() {
       for (unsigned i = 0; i < reg_poll_descs_count; ++i) {
         poll_descs[i]->cancel();
