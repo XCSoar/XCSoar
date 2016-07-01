@@ -3,6 +3,8 @@ Version 6.8.6 - not yet released
   - fix graphics error on FLARM gauge
 * devices
   - fix Nano 3 firmware 2.0 compatibility (#3764)
+* settings
+  - adjust range and step size of terrain/arrival safety height settings
 
 Version 6.8.5 - 2016/06/12
 * calculations
