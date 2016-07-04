@@ -138,18 +138,16 @@ PCMPlayer::OnWriteEvent(boost::asio::posix::stream_descriptor &fd,
                                 std::ref(fd),
                                 std::placeholders::_1));
 }
-#else
+#elif defined(ENABLE_SDL)
 
-static void
-Synthesise(void *udata, Uint8 *stream, int len)
+inline void
+PCMPlayer::AudioCallback(int16_t *stream, size_t len_bytes)
 {
-  PCMPlayer &player = *(PCMPlayer *)udata;
-
-  const size_t num_frames = len / 4;
-  int16_t *stereo = (int16_t *)(void *)stream;
+  const size_t num_frames = len_bytes / 4;
+  int16_t *stereo = stream;
   int16_t *mono = stereo + num_frames, *end = mono + num_frames;
 
-  player.Synthesise(mono, num_frames);
+  Synthesise(mono, num_frames);
 
   while (mono != end) {
     int16_t sample = *mono++;
@@ -493,7 +491,15 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
   spec.format = AUDIO_S16SYS;
   spec.channels = 2;
   spec.samples = 4096;
-  spec.callback = ::Synthesise;
+  spec.callback = [](void *ud, Uint8 *stream, int len_bytes) {
+    assert(nullptr != ud);
+    assert(nullptr != stream);
+    assert(len_bytes > 0);
+
+    reinterpret_cast<PCMPlayer *>(ud)->AudioCallback(
+        reinterpret_cast<int16_t *>(stream),
+        static_cast<size_t>(len_bytes));
+  };
   spec.userdata = this;
 
   device = SDL_OpenAudioDevice(nullptr, 0, &spec, nullptr, 0);
