@@ -40,6 +40,8 @@ Copyright_License {
 #include <alsa/asoundlib.h>
 
 #define PCMPLAYER_REQUIRES_IO_SERVICE
+#elif defined(ENABLE_SDL)
+#include <SDL_audio.h>
 #endif
 
 #include <stddef.h>
@@ -128,7 +130,8 @@ class PCMPlayer {
                    const boost::system::error_code &ec);
   void OnWriteEvent(boost::asio::posix::stream_descriptor &fd,
                     const boost::system::error_code &ec);
-#else
+#elif defined(ENABLE_SDL)
+  SDL_AudioDeviceID device = -1;
 #endif
 
 public:

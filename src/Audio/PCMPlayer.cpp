@@ -38,8 +38,6 @@ Copyright_License {
 #include "Util/NumberParser.hpp"
 
 #include <alsa/asoundlib.h>
-#elif defined(ENABLE_SDL)
-#include <SDL_audio.h>
 #endif
 
 #include <assert.h>
@@ -476,12 +474,12 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
 
   return true;
 #else
-  if (synthesiser != nullptr) {
+  if ((nullptr != synthesiser) && (device > 0)) {
     if (_sample_rate == sample_rate) {
       /* already open, just change the synthesiser */
-      SDL_LockAudio();
+      SDL_LockAudioDevice(device);
       synthesiser = &_synthesiser;
-      SDL_UnlockAudio();
+      SDL_UnlockAudioDevice(device);
       return true;
     }
 
@@ -498,11 +496,12 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
   spec.callback = ::Synthesise;
   spec.userdata = this;
 
-  if (SDL_OpenAudio(&spec, nullptr) < 0)
+  device = SDL_OpenAudioDevice(nullptr, 0, &spec, nullptr, 0);
+  if (device < 1)
     return false;
 
   synthesiser = &_synthesiser;
-  SDL_PauseAudio(0);
+  SDL_PauseAudioDevice(device, 0);
 
   return true;
 #endif
@@ -543,10 +542,10 @@ PCMPlayer::Stop()
   sample_rate = 0;
   synthesiser = nullptr;
 #else
-  if (synthesiser == nullptr)
-    return;
+  if (device > 0)
+    SDL_CloseAudioDevice(device);
 
-  SDL_CloseAudio();
+  device = -1;
   sample_rate = 0;
   synthesiser = nullptr;
 #endif
