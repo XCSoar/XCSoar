@@ -65,18 +65,6 @@ PCMPlayer::~PCMPlayer()
 
 #ifdef ANDROID
 
-/**
- * OpenSL/ES callback which gets invoked when a buffer has been
- * consumed.  It synthesises and enqueues the next buffer.
- */
-static void
-PlayedCallback(SLAndroidSimpleBufferQueueItf caller, void *pContext)
-{
-  PCMPlayer *player = (PCMPlayer *)pContext;
-
-  player->Enqueue();
-}
-
 #elif defined(WIN32)
 #elif defined(ENABLE_ALSA)
 void
@@ -293,7 +281,14 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
   }
 
   queue = SLES::AndroidSimpleBufferQueue(_queue);
-  result = queue.RegisterCallback(PlayedCallback, (void *)this);
+  result = queue.RegisterCallback([](SLAndroidSimpleBufferQueueItf caller,
+                                     void *pContext) {
+      /**
+       * OpenSL/ES callback which gets invoked when a buffer has been
+       * consumed.  It synthesises and enqueues the next buffer.
+       */
+      reinterpret_cast<PCMPlayer *>(pContext)->Enqueue();
+  }, this);
   if (result != SL_RESULT_SUCCESS) {
     LogFormat("PCMPlayer: Play.RegisterCallback() result=%#x", (int)result);
     play_object.Destroy();
