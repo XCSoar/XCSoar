@@ -136,6 +136,13 @@ class PCMPlayer {
   inline void AudioCallback(int16_t *stream, size_t len);
 #endif
 
+#ifdef ANDROID
+  void Enqueue();
+#elif defined(WIN32)
+#else
+  void Synthesise(void *buffer, size_t n);
+#endif
+
 public:
 #ifdef PCMPLAYER_REQUIRES_IO_SERVICE
   explicit PCMPlayer(boost::asio::io_service &_io_service);
@@ -158,13 +165,6 @@ public:
    * synchronous.
    */
   void Stop();
-
-#ifdef ANDROID
-  void Enqueue();
-#elif defined(WIN32)
-#else
-  void Synthesise(void *buffer, size_t n);
-#endif
 };
 
 #endif
