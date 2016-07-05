@@ -63,6 +63,10 @@ class PCMPlayer {
 
   PCMSynthesiser *synthesiser;
 
+#if !defined(ANDROID) && !defined(WIN32)
+  unsigned channels;
+#endif
+
 #ifdef ANDROID
 
   SLES::Object engine_object;
@@ -136,7 +140,6 @@ class PCMPlayer {
                     const boost::system::error_code &ec);
 #elif defined(ENABLE_SDL)
   SDL_AudioDeviceID device = -1;
-  size_t channels;
 
   inline void AudioCallback(int16_t *stream, size_t len);
 #endif

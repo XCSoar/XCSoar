@@ -38,7 +38,9 @@ Copyright_License {
 #include "Util/NumberParser.hpp"
 
 #include <alsa/asoundlib.h>
-#elif defined(ENABLE_SDL)
+#endif
+
+#if defined(ENABLE_SDL) || defined(ENABLE_ALSA)
 #include "AudioAlgorithms.hpp"
 #endif
 
@@ -129,7 +131,7 @@ PCMPlayer::OnEvent()
     if (0 == snd_pcm_recover(alsa_handle.get(), static_cast<int>(n), 1)) {
       LogFormat("ALSA PCM successfully recovered");
     }
-    n = static_cast<snd_pcm_sframes_t>(buffer_size);
+    n = static_cast<snd_pcm_sframes_t>(buffer_size / channels);
   }
 
   if (n > 0) {
@@ -358,11 +360,12 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
       assert(alsa_handle);
       BOOST_VERIFY(0 == snd_pcm_drop(alsa_handle.get()));
       synthesiser = &_synthesiser;
-      Synthesise(buffer.get(), buffer_size);
-      BOOST_VERIFY(static_cast<snd_pcm_sframes_t>(buffer_size)
+      const size_t n = buffer_size / channels;
+      Synthesise(buffer.get(), n);
+      BOOST_VERIFY(static_cast<snd_pcm_sframes_t>(n)
                        == snd_pcm_writei(alsa_handle.get(),
                                          buffer.get(),
-                                         buffer_size));
+                                         n));
     });
     return true;
   }
@@ -414,15 +417,30 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
   LogFormat("Using ALSA PCM latency %u μs (use environment variable "
                 "%s to override)", latency, ALSA_LATENCY_ENV);
 
+  channels = 1;
   int alsa_error = snd_pcm_set_params(new_alsa_handle.get(),
                                       IsLittleEndian()
                                           ? SND_PCM_FORMAT_S16_LE
                                           : SND_PCM_FORMAT_S16_BE,
                                       SND_PCM_ACCESS_RW_INTERLEAVED,
-                                      1,
+                                      static_cast<int>(channels),
                                       _sample_rate,
                                       1,
                                       latency);
+  if (-EINVAL == alsa_error) {
+    /* Some ALSA devices (e. g. DMIX) do not support mono. Try stereo */
+    channels = 2;
+    alsa_error = snd_pcm_set_params(new_alsa_handle.get(),
+                                    IsLittleEndian()
+                                        ? SND_PCM_FORMAT_S16_LE
+                                        : SND_PCM_FORMAT_S16_BE,
+                                    SND_PCM_ACCESS_RW_INTERLEAVED,
+                                    static_cast<int>(channels),
+                                    _sample_rate,
+                                    1,
+                                    latency);
+  }
+
   if (alsa_error < 0) {
     LogFormat("snd_pcm_set_params(0x%p, %s, SND_PCM_ACCESS_RW_INTERLEAVED, 1, "
                   "%u, 1, %u) failed: %d - %s",
@@ -445,7 +463,7 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
     return false;
   }
 
-  buffer_size = static_cast<snd_pcm_uframes_t>(n);
+  buffer_size = static_cast<snd_pcm_uframes_t>(n * channels);
   buffer = std::unique_ptr<int16_t[]>(new int16_t[buffer_size]);
 
   /* Why does Boost.Asio make it so hard to register a set of of standard
@@ -479,11 +497,11 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
   }
 
   synthesiser = &_synthesiser;
-  Synthesise(buffer.get(), buffer_size);
+  Synthesise(buffer.get(), static_cast<size_t>(n));
 
   BOOST_VERIFY(n == snd_pcm_writei(new_alsa_handle.get(),
                                    buffer.get(),
-                                   buffer_size));
+                                   static_cast<snd_pcm_uframes_t>(n)));
 
   alsa_handle = std::move(new_alsa_handle);
 
@@ -609,9 +627,7 @@ PCMPlayer::Synthesise(void *buffer, size_t n)
   assert(synthesiser != nullptr);
 
   synthesiser->Synthesise((int16_t *)buffer, n);
-#ifdef ENABLE_SDL
   UpmixMonoPCM(reinterpret_cast<int16_t *>(buffer), n, channels);
-#endif
 }
 
 #endif
