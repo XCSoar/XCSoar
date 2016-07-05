@@ -133,7 +133,7 @@ PCMPlayer::OnWriteEvent(boost::asio::posix::stream_descriptor &fd,
 inline void
 PCMPlayer::AudioCallback(int16_t *stream, size_t len_bytes)
 {
-  const size_t num_frames = len_bytes / 4;
+  const size_t num_frames = len_bytes / (channels * sizeof(stream[0]));
   Synthesise(stream, num_frames);
 }
 
@@ -472,14 +472,12 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
     Stop();
   }
 
-  sample_rate = _sample_rate;
-
-  SDL_AudioSpec spec;
-  spec.freq = sample_rate;
-  spec.format = AUDIO_S16SYS;
-  spec.channels = 2;
-  spec.samples = 4096;
-  spec.callback = [](void *ud, Uint8 *stream, int len_bytes) {
+  SDL_AudioSpec wanted, actual;
+  wanted.freq = sample_rate;
+  wanted.format = AUDIO_S16SYS;
+  wanted.channels = 1;
+  wanted.samples = 4096;
+  wanted.callback = [](void *ud, Uint8 *stream, int len_bytes) {
     assert(nullptr != ud);
     assert(nullptr != stream);
     assert(len_bytes > 0);
@@ -488,11 +486,15 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
         reinterpret_cast<int16_t *>(stream),
         static_cast<size_t>(len_bytes));
   };
-  spec.userdata = this;
+  wanted.userdata = this;
 
-  device = SDL_OpenAudioDevice(nullptr, 0, &spec, nullptr, 0);
+  device = SDL_OpenAudioDevice(nullptr, 0, &spec, &actual,
+                               SDL_AUDIO_ALLOW_CHANNELS_CHANGE);
   if (device < 1)
     return false;
+
+  channels = static_cast<size_t>(actual.channels);
+  sample_rate = static_cast<unsigned>(actual.freq);
 
   synthesiser = &_synthesiser;
   SDL_PauseAudioDevice(device, 0);
@@ -579,7 +581,7 @@ PCMPlayer::Synthesise(void *buffer, size_t n)
 
   synthesiser->Synthesise((int16_t *)buffer, n);
 #ifdef ENABLE_SDL
-  UpmixMonoPCM(reinterpret_cast<int16_t *>(buffer), n, 2);
+  UpmixMonoPCM(reinterpret_cast<int16_t *>(buffer), n, channels);
 #endif
 }
 
