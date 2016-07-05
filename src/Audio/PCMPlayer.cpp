@@ -38,6 +38,8 @@ Copyright_License {
 #include "Util/NumberParser.hpp"
 
 #include <alsa/asoundlib.h>
+#elif defined(ENABLE_SDL)
+#include "AudioAlgorithms.hpp"
 #endif
 
 #include <assert.h>
@@ -132,16 +134,7 @@ inline void
 PCMPlayer::AudioCallback(int16_t *stream, size_t len_bytes)
 {
   const size_t num_frames = len_bytes / 4;
-  int16_t *stereo = stream;
-  int16_t *mono = stereo + num_frames, *end = mono + num_frames;
-
-  Synthesise(mono, num_frames);
-
-  while (mono != end) {
-    int16_t sample = *mono++;
-    *stereo++ = sample;
-    *stereo++ = sample;
-  }
+  Synthesise(stream, num_frames);
 }
 
 #endif
@@ -585,6 +578,9 @@ PCMPlayer::Synthesise(void *buffer, size_t n)
   assert(synthesiser != nullptr);
 
   synthesiser->Synthesise((int16_t *)buffer, n);
+#ifdef ENABLE_SDL
+  UpmixMonoPCM(reinterpret_cast<int16_t *>(buffer), n, 2);
+#endif
 }
 
 #endif
