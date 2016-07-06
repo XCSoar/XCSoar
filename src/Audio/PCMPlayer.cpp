@@ -79,11 +79,12 @@ PCMPlayer::OnEvent()
     else if ((-EINTR == n) || (-ESTRPIPE == n))
       LogFormat("ALSA PCM error: %s - trying to recover",
                 snd_strerror(static_cast<int>(n)));
-    else
+    else {
       // snd_pcm_recover() can only handle EPIPE, EINTR and ESTRPIPE
       LogFormat("Unrecoverable ALSA PCM error: %s",
                 snd_strerror(static_cast<int>(n)));
       return;
+    }
 
     if (0 == snd_pcm_recover(alsa_handle.get(), static_cast<int>(n), 1)) {
       LogFormat("ALSA PCM successfully recovered");
