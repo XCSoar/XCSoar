@@ -32,6 +32,7 @@ Copyright_License {
 
 #include <stdint.h>
 #elif defined(ENABLE_ALSA)
+#include <list>
 #include <memory>
 
 #include <boost/assert.hpp>
@@ -120,9 +121,12 @@ class PCMPlayer {
   snd_pcm_uframes_t buffer_size;
   std::unique_ptr<int16_t[]> buffer;
 
-  std::unique_ptr<std::unique_ptr<boost::asio::posix::stream_descriptor>[]>
-      poll_descs;
-  unsigned reg_poll_descs_count = 0;
+  std::list<boost::asio::posix::stream_descriptor> read_poll_descs;
+  std::list<boost::asio::posix::stream_descriptor> write_poll_descs;
+  bool poll_descs_registered = false;
+
+  void StartEventHandling();
+  void StopEventHandling();
 
   void OnEvent();
 

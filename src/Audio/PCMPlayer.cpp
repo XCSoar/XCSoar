@@ -70,6 +70,46 @@ PCMPlayer::~PCMPlayer()
 #elif defined(WIN32)
 #elif defined(ENABLE_ALSA)
 void
+PCMPlayer::StartEventHandling()
+{
+  if (!poll_descs_registered) {
+    for (auto &fd : read_poll_descs) {
+      fd.async_read_some(boost::asio::null_buffers(),
+                          std::bind(&PCMPlayer::OnReadEvent,
+                                    this,
+                                    std::ref(fd),
+                                    std::placeholders::_1));
+    }
+
+    for (auto &fd : write_poll_descs) {
+      fd.async_write_some(boost::asio::null_buffers(),
+                          std::bind(&PCMPlayer::OnWriteEvent,
+                                    this,
+                                    std::ref(fd),
+                                    std::placeholders::_1));
+    }
+
+    poll_descs_registered = true;
+  }
+}
+
+void
+PCMPlayer::StopEventHandling()
+{
+  if (poll_descs_registered) {
+    for (auto &sd : read_poll_descs) {
+      sd.cancel();
+    }
+
+    for (auto &sd : write_poll_descs) {
+      sd.cancel();
+    }
+
+    poll_descs_registered = false;
+  }
+}
+
+void
 PCMPlayer::OnEvent()
 {
   snd_pcm_sframes_t n = snd_pcm_avail_update(alsa_handle.get());
@@ -417,9 +457,7 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
               poll_fds_count);
     return false;
   }
-  poll_descs = decltype(poll_descs)(
-      new std::unique_ptr<boost::asio::posix::stream_descriptor>[
-          poll_fds_count]);
+
   std::unique_ptr<struct pollfd[]> poll_fds(
       new struct pollfd[poll_fds_count]);
   BOOST_VERIFY(
@@ -427,9 +465,17 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
           snd_pcm_poll_descriptors(new_alsa_handle.get(),
                                    poll_fds.get(),
                                    static_cast<unsigned>(poll_fds_count)));
+  assert(read_poll_descs.empty());
+  assert(write_poll_descs.empty());
   for (int i = 0; i < poll_fds_count; ++i) {
-    poll_descs[i] = std::unique_ptr<boost::asio::posix::stream_descriptor>(
-        new boost::asio::posix::stream_descriptor(io_service, poll_fds[i].fd));
+    if ((poll_fds[i].events & POLLIN) || (poll_fds[i].events & POLLPRI)) {
+      read_poll_descs.emplace_back(
+          boost::asio::posix::stream_descriptor(io_service, poll_fds[i].fd));
+    }
+    if (poll_fds[i].events & POLLOUT) {
+      write_poll_descs.emplace_back(
+          boost::asio::posix::stream_descriptor(io_service, poll_fds[i].fd));
+    }
   }
 
   synthesiser = &_synthesiser;
@@ -441,23 +487,7 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
 
   alsa_handle = std::move(new_alsa_handle);
 
-  for (int i = 0; i < poll_fds_count; ++i) {
-    if (poll_fds[i].events & POLLOUT) {
-      poll_descs[i]->async_write_some(boost::asio::null_buffers(),
-                         std::bind(&PCMPlayer::OnWriteEvent,
-                                   this,
-                                   std::ref(*(poll_descs[i])),
-                                   std::placeholders::_1));
-    }
-    if ((poll_fds[i].events & POLLIN) || (poll_fds[i].events & POLLPRI)) {
-      poll_descs[i]->async_read_some(boost::asio::null_buffers(),
-                         std::bind(&PCMPlayer::OnReadEvent,
-                                   this,
-                                   std::ref(*(poll_descs[i])),
-                                   std::placeholders::_1));
-    }
-    ++reg_poll_descs_count;
-  }
+  StartEventHandling();
 
   return true;
 #else
@@ -520,11 +550,9 @@ PCMPlayer::Stop()
   synthesiser = nullptr;
 #elif defined(WIN32)
 #elif defined(ENABLE_ALSA)
-  if ((nullptr != alsa_handle) || (reg_poll_descs_count > 0)) {
+  if ((nullptr != alsa_handle) || poll_descs_registered) {
     DispatchWait(io_service, [&]() {
-      for (unsigned i = 0; i < reg_poll_descs_count; ++i) {
-        poll_descs[i]->cancel();
-      }
+      StopEventHandling();
 
       if (nullptr != alsa_handle) {
         BOOST_VERIFY(0 == snd_pcm_drop(alsa_handle.get()));
@@ -533,8 +561,8 @@ PCMPlayer::Stop()
     });
   }
 
-  poll_descs.reset();
-  reg_poll_descs_count = 0;
+  read_poll_descs.clear();
+  write_poll_descs.clear();
 
   sample_rate = 0;
   synthesiser = nullptr;
