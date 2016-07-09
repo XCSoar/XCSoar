@@ -35,6 +35,8 @@ Copyright_License {
 #include <list>
 #include <memory>
 
+#include <assert.h>
+
 #include <boost/assert.hpp>
 #include <boost/asio/posix/stream_descriptor.hpp>
 
@@ -131,6 +133,12 @@ class PCMPlayer {
 
   void StartEventHandling();
   void StopEventHandling();
+
+  static bool TryRecoverFromError(snd_pcm_t &alsa_handle, int error);
+  bool TryRecoverFromError(int error) {
+    assert(alsa_handle);
+    return TryRecoverFromError(*alsa_handle, error);
+  }
 
   void OnEvent();
 

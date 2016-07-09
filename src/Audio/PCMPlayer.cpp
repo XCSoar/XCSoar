@@ -71,6 +71,38 @@ PCMPlayer::~PCMPlayer()
 
 #elif defined(WIN32)
 #elif defined(ENABLE_ALSA)
+bool
+PCMPlayer::TryRecoverFromError(snd_pcm_t &alsa_handle,
+                               int error)
+{
+  assert(error < 0);
+
+  if (-EPIPE == error)
+    LogFormat("ALSA PCM buffer underrun");
+  else if ((-EINTR == error) || (-ESTRPIPE == error))
+    LogFormat("ALSA PCM error: %s - trying to recover",
+              snd_strerror(error));
+  else {
+    // snd_pcm_recover() can only handle EPIPE, EINTR and ESTRPIPE
+    LogFormat("Unrecoverable ALSA PCM error: %s",
+              snd_strerror(error));
+    return false;
+  }
+
+  int recover_error = snd_pcm_recover(&alsa_handle, error, 1);
+  if (0 == recover_error) {
+    LogFormat("ALSA PCM successfully recovered");
+    return true;
+  } else {
+    LogFormat("snd_pcm_recover(0x%p, %d, 1) failed: %d - %s",
+              &alsa_handle,
+              error,
+              recover_error,
+              snd_strerror(recover_error));
+    return false;
+  }
+}
+
 void
 PCMPlayer::StartEventHandling()
 {
@@ -116,21 +148,9 @@ PCMPlayer::OnEvent()
 {
   snd_pcm_sframes_t n = snd_pcm_avail_update(alsa_handle.get());
   if (n < 0) {
-    if (-EPIPE == n)
-      LogFormat("ALSA PCM buffer underrun");
-    else if ((-EINTR == n) || (-ESTRPIPE == n))
-      LogFormat("ALSA PCM error: %s - trying to recover",
-                snd_strerror(static_cast<int>(n)));
-    else {
-      // snd_pcm_recover() can only handle EPIPE, EINTR and ESTRPIPE
-      LogFormat("Unrecoverable ALSA PCM error: %s",
-                snd_strerror(static_cast<int>(n)));
+    if (!TryRecoverFromError(static_cast<int>(n)))
       return;
-    }
 
-    if (0 == snd_pcm_recover(alsa_handle.get(), static_cast<int>(n), 1)) {
-      LogFormat("ALSA PCM successfully recovered");
-    }
     n = static_cast<snd_pcm_sframes_t>(buffer_size / channels);
   }
 
