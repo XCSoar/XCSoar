@@ -102,6 +102,7 @@ else:
         libpng,
         libjpeg,
         lua,
+        libsalsa,
     ]
 
 # build the third-party libraries

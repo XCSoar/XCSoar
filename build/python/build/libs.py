@@ -186,3 +186,15 @@ lua = LuaProject(
     'lib/liblua.a',
     patches=abspath('lib/lua/patches'),
 )
+
+libsalsa = AutotoolsProject(
+    'ftp://ftp.suse.com/pub/people/tiwai/salsa-lib/salsa-lib-0.1.6.tar.bz2',
+    '08a6481cdbf4c79e05a9cba3b6c48375',
+    'lib/libsalsa.a',
+    [
+        '--disable-4bit',
+        '--disable-user-elem',
+        '--enable-shared=no'
+    ],
+    patches=abspath('lib/salsa-lib/patches')
+)

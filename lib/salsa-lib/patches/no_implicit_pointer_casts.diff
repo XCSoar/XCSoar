@@ -1,0 +1,69 @@
+commit 7b2ac12df6a593a32b20451fd9ea0e96bcfd029a
+Author: Felix Hädicke <felixhaedicke@web.de>
+Date:   Fri Jul 15 00:46:53 2016 +0200
+
+    mixer: explicit casts from void * to other pointer type
+    
+    g++ does not allow implicit casting of void * to another pointer type
+    (at least not without -fpermissive)
+
+diff --git a/src/mixer_macros.h b/src/mixer_macros.h
+index 9b38848..214e0db 100644
+--- a/src/mixer_macros.h
++++ b/src/mixer_macros.h
+@@ -487,7 +487,9 @@ int snd_mixer_selem_set_playback_volume(snd_mixer_elem_t *elem,
+ 					snd_mixer_selem_channel_id_t channel,
+ 					long value)
+ {
+-	return _snd_selem_update_volume(elem->items[SND_SELEM_ITEM_PVOLUME], channel, value);
++	return _snd_selem_update_volume((snd_selem_vol_item_t *)elem->items[SND_SELEM_ITEM_PVOLUME],
++					channel,
++					value);
+ }
+ 
+ __SALSA_EXPORT_FUNC
+@@ -495,19 +497,23 @@ int snd_mixer_selem_set_capture_volume(snd_mixer_elem_t *elem,
+ 				       snd_mixer_selem_channel_id_t channel,
+ 				       long value)
+ {
+-	return _snd_selem_update_volume(elem->items[SND_SELEM_ITEM_CVOLUME], channel, value);
++	return _snd_selem_update_volume((snd_selem_vol_item_t* )elem->items[SND_SELEM_ITEM_CVOLUME],
++					channel,
++					value);
+ }
+ 
+ __SALSA_EXPORT_FUNC
+ int snd_mixer_selem_set_playback_volume_all(snd_mixer_elem_t *elem, long value)
+ {
+-	return _snd_selem_update_volume_all(elem->items[SND_SELEM_ITEM_PVOLUME], value);
++	return _snd_selem_update_volume_all((snd_selem_vol_item_t *)elem->items[SND_SELEM_ITEM_PVOLUME],
++					    value);
+ }
+ 
+ __SALSA_EXPORT_FUNC
+ int snd_mixer_selem_set_capture_volume_all(snd_mixer_elem_t *elem, long value)
+ {
+-	return _snd_selem_update_volume_all(elem->items[SND_SELEM_ITEM_CVOLUME], value);
++	return _snd_selem_update_volume_all((snd_selem_vol_item_t *)elem->items[SND_SELEM_ITEM_CVOLUME],
++					    value);
+ }
+ 
+ __SALSA_EXPORT_FUNC
+@@ -531,7 +537,7 @@ int snd_mixer_selem_is_enum_capture(snd_mixer_elem_t *elem)
+ __SALSA_EXPORT_FUNC
+ int snd_mixer_selem_get_enum_items(snd_mixer_elem_t *elem)
+ {
+-	snd_selem_enum_item_t *eitem = elem->items[SND_SELEM_ITEM_ENUM];
++	snd_selem_enum_item_t *eitem = (snd_selem_enum_item_t *)elem->items[SND_SELEM_ITEM_ENUM];
+ 	if (!eitem)
+ 		return -EINVAL;
+ 	return eitem->items;
+@@ -542,7 +548,7 @@ int snd_mixer_selem_get_enum_item(snd_mixer_elem_t *elem,
+ 				  snd_mixer_selem_channel_id_t channel,
+ 				  unsigned int *itemp)
+ {
+-	snd_selem_enum_item_t *eitem = elem->items[SND_SELEM_ITEM_ENUM];
++	snd_selem_enum_item_t *eitem = (snd_selem_enum_item_t *)elem->items[SND_SELEM_ITEM_ENUM];
+ 	if (!eitem || (unsigned int)channel >= eitem->head.channels)
+ 		return -EINVAL;
+ 	*itemp =  eitem->item[channel];

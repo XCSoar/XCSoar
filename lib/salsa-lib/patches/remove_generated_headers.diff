@@ -1,0 +1,155 @@
+commit 189df03cfd30be5800a7e74b2a34066290768150
+Author: Felix Hädicke <felixhaedicke@web.de>
+Date:   Fri Jul 15 23:23:25 2016 +0200
+
+    remove generated header files
+    
+    In the released salsa-lib 0.1.6 tarball, the generated headers
+    asoundlib.h, version.h and recipe.h are included by mistake. When
+    performing an out-of-tree build, this causes unexpected behavoir,
+    because the included header files are used instead of the generated
+    ones.
+
+diff --git a/src/asoundlib.h b/src/asoundlib.h
+deleted file mode 100644
+index e2b4b88..0000000
+--- a/src/asoundlib.h
++++ /dev/null
+@@ -1,62 +0,0 @@
+-/*
+- *  SALSA-Lib - Small ALSA Library
+- *
+- *  Copyright (c) 2007-2012 by Takashi Iwai <tiwai@suse.de>
+- *
+- *   This library is free software; you can redistribute it and/or modify
+- *   it under the terms of the GNU Lesser General Public License as
+- *   published by the Free Software Foundation; either version 2.1 of
+- *   the License, or (at your option) any later version.
+- *
+- *   This program is distributed in the hope that it will be useful,
+- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- *   GNU Lesser General Public License for more details.
+- *
+- *   You should have received a copy of the GNU Lesser General Public
+- *   License along with this library; if not, write to the Free Software
+- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+- *
+- */
+-
+-#ifndef __ASOUNDLIB_H
+-#define __ASOUNDLIB_H
+-
+-#include <unistd.h>
+-#include <stdio.h>
+-#include <stdlib.h>
+-#include <string.h>
+-#include <fcntl.h>
+-#include <assert.h>
+-#include <endian.h>
+-#include <sys/poll.h>
+-#include <errno.h>
+-#include <stdarg.h>
+-
+-#ifdef __cplusplus
+-extern "C" {
+-#endif
+-
+-#include "recipe.h"
+-#include "asoundef.h"
+-#include "global.h"
+-#include "version.h"
+-#include "input.h"
+-#include "output.h"
+-#include "error.h"
+-#include "control.h"
+-#include "pcm.h"
+-#include "mixer.h"
+-#include "rawmidi.h"
+-#include "hwdep.h"
+-#include "timer.h"
+-#include "conf.h"
+-#include "seq_event.h"
+-#include "seq.h"
+-#include "seqmid.h"
+-
+-#ifdef __cplusplus
+-}
+-#endif
+-
+-#endif /* __ASOUNDLIB_H */
+diff --git a/src/recipe.h b/src/recipe.h
+deleted file mode 100644
+index d71c1a3..0000000
+--- a/src/recipe.h
++++ /dev/null
+@@ -1,40 +0,0 @@
+-#ifndef __ALSA_RECIPE_H
+-#define __ALSA_RECIPE_H
+-
+-/* Build with TLV support */
+-#define SALSA_HAS_TLV_SUPPORT	1
+-
+-/* Build with async support */
+-#define SALSA_HAS_ASYNC_SUPPORT	1
+-
+-/* Build with user-space control element support */
+-#define SALSA_HAS_USER_ELEM_SUPPORT	1
+-
+-/* Build with chmap API support */
+-#define SALSA_HAS_CHMAP_SUPPORT	1
+-
+-/* Build with dummy conf support */
+-#define SALSA_HAS_DUMMY_CONF	1
+-
+-/* Enable deprecated attribute for non-working functions */
+-#define SALSA_MARK_DEPRECATED	1
+-
+-/* Support string output via snd_output_*() */
+-#define SALSA_SUPPORT_OUTPUT_BUFFER	1
+-
+-/* Support floating pointer */
+-#define SALSA_SUPPORT_FLOAT	1
+-
+-/* Support 4bit PCM (IMA ADPCM) */
+-#define SALSA_SUPPORT_4BIT_PCM	1
+-
+-/* Enable library ABI check */
+-#define SALSA_CHECK_ABI		1
+-
+-/* Support ASCII value parser for ctl */
+-#define SALSA_CTL_ASCII_PARSER	1
+-
+-/* Default device path prefix */
+-#define SALSA_DEVPATH "/dev/snd"
+-
+-#endif /* __ALSA_RECIPE_H */
+diff --git a/src/version.h b/src/version.h
+deleted file mode 100644
+index 830eeea..0000000
+--- a/src/version.h
++++ /dev/null
+@@ -1,23 +0,0 @@
+-#ifndef __ALSA_VERSION_H
+-#define __ALSA_VERSION_H
+-
+-#define SND_LIB_MAJOR		1
+-#define SND_LIB_MINOR		0
+-#define SND_LIB_SUBMINOR	28
+-#define SND_LIB_EXTRAVER	1000000
+-/* library version */
+-#define SND_LIB_VERSION		((SND_LIB_MAJOR<<16)|\
+-				 (SND_LIB_MINOR<<8)|\
+-				  SND_LIB_SUBMINOR)
+-/* library version (string) */
+-#define SND_LIB_VERSION_STR	"1.0.28"
+-
+-#ifdef __SALSA_EXPORT_FUNC
+-__SALSA_EXPORT_FUNC
+-const char *snd_asoundlib_version(void)
+-{
+-	return SND_LIB_VERSION_STR;
+-}
+-#endif /* __SALSA_EXPORT_FUNC */
+-
+-#endif /* __ALSA_VERSION_H */
