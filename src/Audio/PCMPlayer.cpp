@@ -179,21 +179,24 @@ PCMPlayer::StopEventHandling()
   }
 }
 
-void
+bool
 PCMPlayer::OnEvent()
 {
   snd_pcm_sframes_t n = snd_pcm_avail_update(alsa_handle.get());
   if (n < 0) {
     if (!TryRecoverFromError(static_cast<int>(n)))
-      return;
+      return false;
 
     n = static_cast<snd_pcm_sframes_t>(buffer_size / channels);
   }
 
   if (n > 0) {
     Synthesise(buffer.get(), static_cast<size_t>(n));
-    WriteFrames(static_cast<size_t>(n));
+    if (!WriteFrames(static_cast<size_t>(n)))
+      return false;
   }
+
+  return true;
 }
 
 void
@@ -202,13 +205,14 @@ PCMPlayer::OnReadEvent(boost::asio::posix::stream_descriptor &fd,
   if (ec == boost::asio::error::operation_aborted)
     return;
 
-  OnEvent();
-
-  fd.async_read_some(boost::asio::null_buffers(),
-                     std::bind(&PCMPlayer::OnReadEvent,
-                               this,
-                               std::ref(fd),
-                               std::placeholders::_1));
+  if (OnEvent())
+    fd.async_read_some(boost::asio::null_buffers(),
+                       std::bind(&PCMPlayer::OnReadEvent,
+                                 this,
+                                 std::ref(fd),
+                                 std::placeholders::_1));
+  else
+    StopEventHandling();
 }
 
 void
@@ -217,14 +221,16 @@ PCMPlayer::OnWriteEvent(boost::asio::posix::stream_descriptor &fd,
   if (ec == boost::asio::error::operation_aborted)
     return;
 
-  OnEvent();
-
-  fd.async_write_some(boost::asio::null_buffers(),
-                      std::bind(&PCMPlayer::OnWriteEvent,
-                                this,
-                                std::ref(fd),
-                                std::placeholders::_1));
+  if (OnEvent())
+    fd.async_write_some(boost::asio::null_buffers(),
+                        std::bind(&PCMPlayer::OnWriteEvent,
+                                  this,
+                                  std::ref(fd),
+                                  std::placeholders::_1));
+  else
+    StopEventHandling();
 }
+
 #elif defined(ENABLE_SDL)
 
 inline void

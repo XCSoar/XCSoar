@@ -148,7 +148,7 @@ class PCMPlayer {
     return WriteFrames(*alsa_handle, buffer.get(), n, try_recover_on_error);
   }
 
-  void OnEvent();
+  bool OnEvent();
 
   void OnReadEvent(boost::asio::posix::stream_descriptor &fd,
                    const boost::system::error_code &ec);
