@@ -140,6 +140,14 @@ class PCMPlayer {
     return TryRecoverFromError(*alsa_handle, error);
   }
 
+  static bool WriteFrames(snd_pcm_t &alsa_handle, int16_t *buffer,
+                          size_t n, bool try_recover_on_error = true);
+  bool WriteFrames(size_t n, bool try_recover_on_error = true) {
+    assert(alsa_handle);
+    assert(buffer);
+    return WriteFrames(*alsa_handle, buffer.get(), n, try_recover_on_error);
+  }
+
   void OnEvent();
 
   void OnReadEvent(boost::asio::posix::stream_descriptor &fd,

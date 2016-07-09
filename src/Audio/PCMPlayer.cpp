@@ -103,6 +103,42 @@ PCMPlayer::TryRecoverFromError(snd_pcm_t &alsa_handle,
   }
 }
 
+bool
+PCMPlayer::WriteFrames(snd_pcm_t &alsa_handle, int16_t *buffer,
+                       size_t n, bool try_recover_on_error)
+{
+  assert(n > 0);
+  assert(nullptr != buffer);
+
+  snd_pcm_sframes_t write_ret =
+      snd_pcm_writei(&alsa_handle, buffer, static_cast<snd_pcm_uframes_t>(n));
+  if (write_ret < static_cast<snd_pcm_sframes_t>(n)) {
+    if (write_ret < 0) {
+      if (try_recover_on_error) {
+        return TryRecoverFromError(alsa_handle, static_cast<int>(write_ret));
+      } else {
+        LogFormat("snd_pcm_writei(0x%p, 0x%p, %u) failed: %d - %s",
+                  &alsa_handle,
+                  buffer,
+                  static_cast<unsigned>(n),
+                  static_cast<int>(write_ret),
+                  snd_strerror(static_cast<int>(write_ret)));
+        return false;
+      }
+    } else {
+      // Never observed this case. Should not happen? Cannot happen?
+      LogFormat("Only %u of %u ALSA PCM frames written",
+                static_cast<unsigned>(write_ret),
+                static_cast<unsigned>(n));
+    }
+    return false;
+  }
+
+  assert(write_ret == static_cast<snd_pcm_sframes_t>(n));
+
+  return true;
+}
+
 void
 PCMPlayer::StartEventHandling()
 {
@@ -156,9 +192,7 @@ PCMPlayer::OnEvent()
 
   if (n > 0) {
     Synthesise(buffer.get(), static_cast<size_t>(n));
-    BOOST_VERIFY(n == snd_pcm_writei(alsa_handle.get(),
-                                     buffer.get(),
-                                     static_cast<snd_pcm_uframes_t>(n)));
+    WriteFrames(static_cast<size_t>(n));
   }
 }
 
@@ -382,10 +416,7 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
       synthesiser = &_synthesiser;
       const size_t n = buffer_size / channels;
       Synthesise(buffer.get(), n);
-      BOOST_VERIFY(static_cast<snd_pcm_sframes_t>(n)
-                       == snd_pcm_writei(alsa_handle.get(),
-                                         buffer.get(),
-                                         n));
+      BOOST_VERIFY(WriteFrames(n));
     });
     return true;
   }
@@ -518,10 +549,9 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
 
   synthesiser = &_synthesiser;
   Synthesise(buffer.get(), static_cast<size_t>(n));
-
-  BOOST_VERIFY(n == snd_pcm_writei(new_alsa_handle.get(),
-                                   buffer.get(),
-                                   static_cast<snd_pcm_uframes_t>(n)));
+  if (!WriteFrames(*new_alsa_handle, buffer.get(),
+                     static_cast<size_t>(n), false))
+    return false;
 
   alsa_handle = std::move(new_alsa_handle);
 
