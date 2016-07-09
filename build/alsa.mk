@@ -5,9 +5,6 @@ else ifeq ($(ENABLE_SDL),y)
 # If SDL is being used, we do not use ALSA directly
 # unless it is explicitly activated
 ENABLE_ALSA ?= n
-else ifeq ($(TARGET_IS_KOBO),y)
-# No ALSA support for Kobo yet
-ENABLE_ALSA ?= n
 else ifeq ($(TARGET_IS_LINUX),y)
 # Enable ALSA for Linux by default
 ENABLE_ALSA ?= y
