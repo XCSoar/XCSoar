@@ -33,7 +33,14 @@ HI_RES_AWARE CEUX {1}
 #define HATCH_BITMAP(name, file)
 #endif
 
+#ifdef WIN32
 #define SOUND(name, file) name WAVE DISCARDABLE "sound/" file ".wav"
+#elif defined(ANDROID)
+/* included as Android resources */
+#define SOUND(name, file)
+#else
+#define SOUND(name, file) name WAVE DISCARDABLE "../output/data/sound/" file ".raw"
+#endif
 
 // --- Icons ---
 

@@ -41,6 +41,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Language/LanguageGlue.hpp"
 #include "Simulator.hpp"
+#include "Audio/GlobalPCMResourcePlayer.hpp"
 #include "OS/Args.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
 
@@ -108,6 +109,8 @@ Main()
   InitLanguage();
 
   ScopeGlobalAsioThread global_asio_thread;
+
+  ScopeGlobalPCMResourcePlayer global_pcm_resouce_player;
 
   // Perform application initialization and run loop
   int ret = EXIT_FAILURE;

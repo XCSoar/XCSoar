@@ -17,7 +17,7 @@ while (<>) {
     # merge adjacent strings
     while (s/"([^"]*)"\s+"([^"]*)"\s*$/"$1$2"/) {}
 
-    if (/^\s*([.\w]+)\s+(?:XMLDIALOG)\s+DISCARDABLE\s+"(.*?)"\s*$/) {
+    if (/^\s*([.\w]+)\s+(?:XMLDIALOG|WAVE)\s+DISCARDABLE\s+"(.*?)"\s*$/) {
         push @named, [ $1, -s "Data/$2" ];
         my $path = $2;
         my $variable = "resource_$1";

@@ -140,6 +140,21 @@ PNG_LAUNCH_ALL = $(patsubst %.bmp,%.png,$(BMP_LAUNCH_ALL))
 $(PNG_LAUNCH_ALL): %.png: %.bmp
 	$(Q)$(IM_PREFIX)convert $< $@
 
+####### sounds
+
+ifneq ($(TARGET),ANDROID)
+ifneq ($(HAVE_WIN32),y)
+
+WAV_SOUNDS = $(wildcard Data/sound/*.wav)
+RAW_SOUNDS = $(patsubst Data/sound/%.wav,$(DATA)/sound/%.raw,$(WAV_SOUNDS))
+
+$(RAW_SOUNDS): $(DATA)/sound/%.raw: Data/sound/%.wav | $(DATA)/sound/dirstamp
+	@$(NQ)echo "  FFMPEG    $@"
+	$(Q)ffmpeg -y -v 0  -i $< -f s16le -ar 44100 -ac 1 -acodec pcm_s16le $@
+
+endif
+endif
+
 #######
 
 DIALOG_FILES = $(wildcard Data/Dialogs/*.xml)
@@ -182,6 +197,8 @@ RESOURCE_FILES += $(BMP_SPLASH_160) $(BMP_SPLASH_80)
 RESOURCE_FILES += $(BMP_DIALOG_TITLE) $(BMP_PROGRESS_BORDER)
 RESOURCE_FILES += $(BMP_TITLE_320) $(BMP_TITLE_110)
 RESOURCE_FILES += $(BMP_LAUNCH_ALL)
+
+RESOURCE_FILES += $(RAW_SOUNDS)
 
 ifeq ($(USE_WIN32_RESOURCES),n)
 

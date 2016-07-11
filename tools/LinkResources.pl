@@ -29,7 +29,7 @@ while (<RC>) {
     while (s/"([^"]*)"\s+"([^"]*)"\s*$/"$1$2"/) {}
 
     if (/^\s*(\d+)\s+BITMAP\s+DISCARDABLE\s+"(.*?)"\s*$/ or
-          /^\s*([.\w]+)\s+(?:TEXT|XMLDIALOG|MO|RASTERDATA)\s+DISCARDABLE\s+"(.*?)"\s*$/) {
+          /^\s*([.\w]+)\s+(?:TEXT|XMLDIALOG|MO|RASTERDATA|WAVE)\s+DISCARDABLE\s+"(.*?)"\s*$/) {
         my ($id, $path) = ($1, $2);
         $path = "Data/${path}";
         my $name = "resource_${id}";
