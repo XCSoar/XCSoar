@@ -274,9 +274,12 @@ DigitEntry::CalculateLayout()
     last_right = 0;
     for (unsigned i = 0; i < length; ++i) {
       Column &digit = columns[i];
-      unsigned value_width = digit.right - digit.left;
+
+      unsigned old_width = digit.right - digit.left;
+      unsigned new_width = std::max(old_width - width_adjust, padding);
+
       digit.left = last_right;
-      last_right = digit.right = digit.left + value_width - width_adjust;
+      last_right = digit.right = digit.left + new_width;
     }
   }
 }
