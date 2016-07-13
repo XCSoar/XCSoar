@@ -36,8 +36,9 @@ Copyright_License {
  * includes the null byte
  * @param truncate the maximum number of characters (not bytes) to
  * copy
+ * @return a pointer to the end of the destination string
  */
-void
+TCHAR *
 CopyTruncateString(TCHAR *dest, size_t dest_size,
                    const TCHAR *src, size_t truncate);
 

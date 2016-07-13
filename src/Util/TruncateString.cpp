@@ -33,7 +33,7 @@ Copyright_License {
 
 #include <assert.h>
 
-void
+TCHAR *
 CopyTruncateString(TCHAR *dest, size_t dest_size,
                    const TCHAR *src, size_t truncate)
 {
@@ -47,7 +47,8 @@ CopyTruncateString(TCHAR *dest, size_t dest_size,
 
   auto *p = std::copy_n(src, copy, dest);
   *p = _T('\0');
+  return p;
 #else
-  CopyTruncateStringUTF8(dest, dest_size, src, truncate);
+  return CopyTruncateStringUTF8(dest, dest_size, src, truncate);
 #endif
 }
