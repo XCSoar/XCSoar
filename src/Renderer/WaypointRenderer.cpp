@@ -183,12 +183,9 @@ protected:
                    const Waypoint &way_point) const {
     buffer[0] = _T('\0');
 
-    if (way_point.name.length() >= buffer_size)
-      return;
-
     switch (settings.display_text_type) {
     case WaypointRendererSettings::DisplayTextType::NAME:
-      _tcscpy(buffer, way_point.name.c_str());
+      CopyTruncateString(buffer, buffer_size, way_point.name.c_str());
       break;
 
     case WaypointRendererSettings::DisplayTextType::FIRST_FIVE:
@@ -204,7 +201,7 @@ protected:
       break;
 
     case WaypointRendererSettings::DisplayTextType::FIRST_WORD:
-      _tcscpy(buffer, way_point.name.c_str());
+      CopyTruncateString(buffer, buffer_size, way_point.name.c_str());
       TCHAR *tmp;
       tmp = _tcsstr(buffer, _T(" "));
       if (tmp != nullptr)
