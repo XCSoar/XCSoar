@@ -415,16 +415,44 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
 #elif defined(WIN32)
 #elif defined(ENABLE_ALSA)
   if ((nullptr != synthesiser) && alsa_handle && (_sample_rate == sample_rate)) {
-    /* just change the synthesiser */
-    DispatchWait(io_service, [this, &_synthesiser]() {
-      assert(alsa_handle);
-      BOOST_VERIFY(0 == snd_pcm_drop(alsa_handle.get()));
-      synthesiser = &_synthesiser;
-      const size_t n = buffer_size / channels;
-      Synthesise(buffer.get(), n);
-      BOOST_VERIFY(WriteFrames(n));
+    /* just change the synthesiser / resume playback */
+    bool success = false;
+    DispatchWait(io_service, [this, &_synthesiser, &success]() {
+      bool recovered_from_underrun = false;
+
+      switch (snd_pcm_state(alsa_handle.get())) {
+      case SND_PCM_STATE_XRUN:
+        if (0 != snd_pcm_prepare(alsa_handle.get()))
+          return;
+        else {
+          recovered_from_underrun = true;
+          success = true;
+        }
+        break;
+
+      case SND_PCM_STATE_RUNNING:
+        success = true;
+        break;
+
+      default:
+        return;
+      }
+
+      if (success) {
+        synthesiser = &_synthesiser;
+
+        if (recovered_from_underrun) {
+          const size_t n = buffer_size / channels;
+          Synthesise(buffer.get(), n);
+          success = WriteFrames(n);
+        }
+
+        if (success)
+          StartEventHandling();
+      }
     });
-    return true;
+    if (success)
+      return true;
   }
 
   Stop();
