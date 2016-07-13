@@ -177,7 +177,7 @@ public:
   }
 
 protected:
-  void FormatTitle(TCHAR *buffer, const Waypoint &way_point) {
+  void FormatTitle(TCHAR *buffer, const Waypoint &way_point) const {
     buffer[0] = _T('\0');
 
     if (way_point.name.length() >= NAME_SIZE - 20)
@@ -216,7 +216,7 @@ protected:
 
   void FormatLabel(TCHAR *buffer, const Waypoint &way_point,
                    WaypointRenderer::Reachability reachable,
-                   const ReachResult &reach) {
+                   const ReachResult &reach) const {
     FormatTitle(buffer, way_point);
 
     if (!way_point.IsLandable() && !way_point.flags.watched)
