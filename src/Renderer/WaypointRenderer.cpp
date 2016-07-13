@@ -137,9 +137,8 @@ struct VisibleWaypoint {
   }
 };
 
-class WaypointVisitorMap: 
-  public WaypointVisitor, 
-  public TaskPointConstVisitor
+class WaypointVisitorMap final
+  : public WaypointVisitor, public TaskPointConstVisitor
 {
   const MapWindowProjection &projection;
   const WaypointRendererSettings &settings;
@@ -147,7 +146,7 @@ class WaypointVisitorMap:
   const TaskBehaviour &task_behaviour;
   const MoreData &basic;
 
-  TCHAR sAltUnit[4];
+  TCHAR altitude_unit[4];
   bool task_valid;
 
   /**
@@ -174,39 +173,37 @@ public:
      task_valid(false),
      labels(projection.GetScreenWidth(), projection.GetScreenHeight())
   {
-    _tcscpy(sAltUnit, Units::GetAltitudeName());
+    _tcscpy(altitude_unit, Units::GetAltitudeName());
   }
 
 protected:
-  void
-  FormatTitle(TCHAR* Buffer, const Waypoint &way_point)
-  {
-    Buffer[0] = _T('\0');
+  void FormatTitle(TCHAR *buffer, const Waypoint &way_point) {
+    buffer[0] = _T('\0');
 
     if (way_point.name.length() >= NAME_SIZE - 20)
       return;
 
     switch (settings.display_text_type) {
     case WaypointRendererSettings::DisplayTextType::NAME:
-      _tcscpy(Buffer, way_point.name.c_str());
+      _tcscpy(buffer, way_point.name.c_str());
       break;
 
     case WaypointRendererSettings::DisplayTextType::FIRST_FIVE:
-      CopyString(Buffer, way_point.name.c_str(), 6);
+      CopyString(buffer, way_point.name.c_str(), 6);
       break;
 
     case WaypointRendererSettings::DisplayTextType::FIRST_THREE:
-      CopyString(Buffer, way_point.name.c_str(), 4);
+      CopyString(buffer, way_point.name.c_str(), 4);
       break;
 
     case WaypointRendererSettings::DisplayTextType::NONE:
-      Buffer[0] = '\0';
+      buffer[0] = '\0';
       break;
 
     case WaypointRendererSettings::DisplayTextType::FIRST_WORD:
-      _tcscpy(Buffer, way_point.name.c_str());
+      _tcscpy(buffer, way_point.name.c_str());
       TCHAR *tmp;
-      tmp = _tcsstr(Buffer, _T(" "));
+      tmp = _tcsstr(buffer, _T(" "));
       if (tmp != nullptr)
         tmp[0] = '\0';
       break;
@@ -217,12 +214,9 @@ protected:
     }
   }
 
-
-  void
-  FormatLabel(TCHAR *buffer, const Waypoint &way_point,
-              WaypointRenderer::Reachability reachable,
-              const ReachResult &reach)
-  {
+  void FormatLabel(TCHAR *buffer, const Waypoint &way_point,
+                   WaypointRenderer::Reachability reachable,
+                   const ReachResult &reach) {
     FormatTitle(buffer, way_point);
 
     if (!way_point.IsLandable() && !way_point.flags.watched)
@@ -268,7 +262,8 @@ protected:
       if (reach.IsReachableTerrain()) {
         if (length > 0)
           buffer[length++] = _T(':');
-        StringFormatUnsafe(buffer + length, _T("%d%s"), uah_terrain, sAltUnit);
+        StringFormatUnsafe(buffer + length, _T("%d%s"),
+                           uah_terrain, altitude_unit);
       }
       return;
     }
@@ -280,16 +275,14 @@ protected:
         reach.IsReachableDirect() && reach.IsReachableTerrain() &&
         reach.IsDeltaConsiderable()) {
       StringFormatUnsafe(buffer + length, _T("%d/%d%s"), uah_glide,
-                         uah_terrain, sAltUnit);
+                         uah_terrain, altitude_unit);
       return;
     }
 
-    StringFormatUnsafe(buffer + length, _T("%d%s"), uah_glide, sAltUnit);
+    StringFormatUnsafe(buffer + length, _T("%d%s"), uah_glide, altitude_unit);
   }
 
-  void
-  DrawWaypoint(Canvas &canvas, const VisibleWaypoint &vwp)
-  {
+  void DrawWaypoint(Canvas &canvas, const VisibleWaypoint &vwp) {
     const Waypoint &way_point = *vwp.waypoint;
     bool watchedWaypoint = way_point.flags.watched;
 
@@ -337,8 +330,8 @@ protected:
       text_mode.move_in_view = true;
     }
 
-    TCHAR Buffer[NAME_SIZE+1];
-    FormatLabel(Buffer, way_point, vwp.reachable, vwp.reach);
+    TCHAR buffer[NAME_SIZE+1];
+    FormatLabel(buffer, way_point, vwp.reachable, vwp.reach);
 
     RasterPoint sc = vwp.point;
     if ((vwp.IsReachable() &&
@@ -347,7 +340,7 @@ protected:
       // make space for the green circle
       sc.x += 5;
 
-    labels.Add(Buffer, sc.x + 5, sc.y, text_mode, bold, vwp.reach.direct,
+    labels.Add(buffer, sc.x + 5, sc.y, text_mode, bold, vwp.reach.direct,
                vwp.in_task, way_point.IsLandable(), way_point.IsAirport(),
                watchedWaypoint);
   }
@@ -388,7 +381,7 @@ public:
   }
 
 public:
-  void set_task_valid() {
+  void SetTaskValid() {
     task_valid = true;
   }
 
@@ -479,7 +472,7 @@ WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
     // task items come first, this is the only way we know that an item is in task,
     // and we won't add it if it is already there
     if (task_stats.task_valid)
-      v.set_task_valid();
+      v.SetTaskValid();
 
     const AbstractTask *atask = task_manager->GetActiveTask();
     if (atask != nullptr)
