@@ -547,7 +547,7 @@ ALSAPCMPlayer::Start(PCMDataSource &_source)
     const char *alsa_device = getenv(ALSA_DEVICE_ENV);
     if ((nullptr == alsa_device) || ('\0' == *alsa_device))
       alsa_device = DEFAULT_ALSA_DEVICE;
-    LogFormat("Using ALSA PCM device %s (use environment variable "
+    LogFormat("Using ALSA PCM device \"%s\" (use environment variable "
                   "%s to override)",
               alsa_device, ALSA_DEVICE_ENV);
 
@@ -555,7 +555,8 @@ ALSAPCMPlayer::Start(PCMDataSource &_source)
     int alsa_error = snd_pcm_open(&raw_alsa_handle, alsa_device,
                                   SND_PCM_STREAM_PLAYBACK, 0);
     if (alsa_error < 0) {
-      LogFormat("snd_pcm_open(0x%p, %s, SND_PCM_STREAM_PLAYBACK, 0) failed: %s",
+      LogFormat("snd_pcm_open(0x%p, \"%s\", SND_PCM_STREAM_PLAYBACK, 0) "
+                    "failed: %s",
                 &alsa_handle, alsa_device, snd_strerror(alsa_error));
       return false;
     }
