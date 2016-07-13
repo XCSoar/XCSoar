@@ -3,6 +3,7 @@ Version 6.8.6 - not yet released
   - show takeoff time after landing (#3786)
 * user interface
   - fix graphics error on FLARM gauge
+  - fix crash in waypoint label renderer (#3781)
 * devices
   - fix Nano 3 firmware 2.0 compatibility (#3764)
 * settings

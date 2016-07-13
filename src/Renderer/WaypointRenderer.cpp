@@ -42,6 +42,7 @@ Copyright_License {
 #include "Task/ProtectedRoutePlanner.hpp"
 #include "Screen/Canvas.hpp"
 #include "Units/Units.hpp"
+#include "Util/TruncateString.hpp"
 #include "Util/StaticArray.hpp"
 #include "Util/Macros.hpp"
 #include "NMEA/MoreData.hpp"
@@ -191,11 +192,11 @@ protected:
       break;
 
     case WaypointRendererSettings::DisplayTextType::FIRST_FIVE:
-      CopyString(buffer, way_point.name.c_str(), 6);
+      CopyTruncateString(buffer, buffer_size, way_point.name.c_str(), 5);
       break;
 
     case WaypointRendererSettings::DisplayTextType::FIRST_THREE:
-      CopyString(buffer, way_point.name.c_str(), 4);
+      CopyTruncateString(buffer, buffer_size, way_point.name.c_str(), 3);
       break;
 
     case WaypointRendererSettings::DisplayTextType::NONE:
