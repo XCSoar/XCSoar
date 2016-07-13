@@ -107,6 +107,31 @@ void
 CropIncompleteUTF8(char *p);
 
 /**
+ * Return the number of bytes representing the first #max_chars
+ * characters of a null-terminated string.  If the string has fewer
+ * characters, the string length (in bytes) is returned.  No partial
+ * multi-byte sequence will be considered.
+ */
+gcc_pure gcc_nonnull_all
+size_t
+TruncateStringUTF8(const char *p, size_t max_chars, size_t max_bytes);
+
+/**
+ * Copy a string to a buffer, truncating it if the buffer is not large
+ * enough.  At most #truncate characters will be copied.  No partial
+ * multi-byte sequence will be copied.
+ *
+ * @param dest_size the total size of the destination buffer, which
+ * includes the null byte
+ * @param truncate the maximum number of characters (not bytes) to
+ * copy
+ * @return a pointer to the end of the destination string
+ */
+char *
+CopyTruncateStringUTF8(char *dest, size_t dest_size,
+                       const char *src, size_t truncate);
+
+/**
  * Decode the next UNICODE character.
  *
  * @param p a null-terminated valid UTF-8 string

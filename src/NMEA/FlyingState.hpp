@@ -42,12 +42,16 @@ struct FlyingState
 
   /** Time of flight */
   double flight_time;
-  /** Time of takeoff */
+
+  /**
+   * Time of takeoff.  Negative if aircraft was never observed flying.
+   */
   double takeoff_time;
 
   /**
-   * The location of the aircraft when it took off.  This attribute is
-   * only valid if #flying is true.
+   * The location of the aircraft when it took off.  If this attribute
+   * is "invalid" according to GeoPoint::IsValid(), then the aircraft
+   * was never observed flying.
    */
   GeoPoint takeoff_location;
 

@@ -49,7 +49,7 @@ public:
 protected:
   const unsigned width, height;
 
-  StaticArray<Label, 128u> labels;
+  StaticArray<Label, 256u> labels;
 
 public:
   WaypointLabelList(unsigned _width, unsigned _height)

@@ -65,13 +65,13 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddFloat(_("Arrival height"),
            _("The height above terrain that the glider should arrive at for a safe landing."),
            _T("%.0f %s"), _T("%.0f"),
-           0, 10000, 100, false,
+           0, 1000, 10, false,
            UnitGroup::ALTITUDE, task_behaviour.safety_height_arrival);
 
   AddFloat(_("Terrain height"),
            _("The height above terrain that the glider must clear during final glide."),
            _T("%.0f %s"), _T("%.0f"),
-           0, 10000, 100, false,
+           0, 1000, 10, false,
            UnitGroup::ALTITUDE, task_behaviour.route_planner.safety_height_terrain);
 
   static constexpr StaticEnumChoice abort_task_mode_list[] = {

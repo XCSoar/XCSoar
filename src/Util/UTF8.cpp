@@ -431,6 +431,45 @@ CropIncompleteUTF8(char *const p)
   assert(ValidateUTF8(p));
 }
 
+size_t
+TruncateStringUTF8(const char *p, size_t max_chars, size_t max_bytes)
+{
+#if !CLANG_CHECK_VERSION(3,6)
+  /* disabled on clang due to -Wtautological-pointer-compare */
+  assert(p != nullptr);
+#endif
+  assert(ValidateUTF8(p));
+
+  size_t result = 0;
+  while (max_chars > 0 && *p != '\0') {
+    size_t sequence = SequenceLengthUTF8(*p);
+    if (sequence > max_bytes)
+      break;
+
+    result += sequence;
+    max_bytes -= sequence;
+    p += sequence;
+    --max_chars;
+  }
+
+  return result;
+}
+
+char *
+CopyTruncateStringUTF8(char *dest, size_t dest_size,
+                       const char *src, size_t truncate)
+{
+  assert(dest != nullptr);
+  assert(dest_size > 0);
+  assert(src != nullptr);
+  assert(ValidateUTF8(src));
+
+  size_t copy = TruncateStringUTF8(src, truncate, dest_size - 1);
+  auto *p = std::copy_n(src, copy, dest);
+  *p = '\0';
+  return p;
+}
+
 std::pair<unsigned, const char *>
 NextUTF8(const char *p)
 {

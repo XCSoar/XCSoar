@@ -80,7 +80,7 @@ TimesStatusPanel::Refresh()
     ClearText(UTCDate);
   }
 
-  if (flight.flying) {
+  if (flight.takeoff_time >= 0) {
     SetText(TakeoffTime,
             FormatLocalTimeHHMM((int)flight.takeoff_time,
                                 settings.utc_offset));

@@ -204,6 +204,7 @@ FlarmTrafficWindow::Update(Angle new_direction, const TrafficList &new_data,
     pt.y = -100;
   }
 
+  data_modified = new_data.modified;
   heading = new_direction;
   fr.SetAngle(-heading);
   fir.SetAngle(heading);
@@ -706,7 +707,7 @@ FlarmTrafficWindow::Paint(Canvas &canvas)
  * @param canvas The canvas to paint on
  */
 void
-FlarmTrafficWindow::OnPaintBuffer(Canvas &canvas)
+FlarmTrafficWindow::OnPaint(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
   if (small) {
