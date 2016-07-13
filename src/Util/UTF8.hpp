@@ -125,8 +125,9 @@ TruncateStringUTF8(const char *p, size_t max_chars, size_t max_bytes);
  * includes the null byte
  * @param truncate the maximum number of characters (not bytes) to
  * copy
+ * @return a pointer to the end of the destination string
  */
-void
+char *
 CopyTruncateStringUTF8(char *dest, size_t dest_size,
                        const char *src, size_t truncate);
 

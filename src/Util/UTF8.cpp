@@ -460,7 +460,7 @@ TruncateStringUTF8(const char *p, size_t max_chars, size_t max_bytes)
   return result;
 }
 
-void
+char *
 CopyTruncateStringUTF8(char *dest, size_t dest_size,
                        const char *src, size_t truncate)
 {
@@ -472,6 +472,7 @@ CopyTruncateStringUTF8(char *dest, size_t dest_size,
   size_t copy = TruncateStringUTF8(src, truncate, dest_size - 1);
   auto *p = std::copy_n(src, copy, dest);
   *p = '\0';
+  return p;
 }
 
 std::pair<unsigned, const char *>
