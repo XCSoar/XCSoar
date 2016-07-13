@@ -43,6 +43,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Units/Units.hpp"
 #include "Util/StaticArray.hpp"
+#include "Util/Macros.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Engine/Route/ReachResult.hpp"
@@ -177,10 +178,11 @@ public:
   }
 
 protected:
-  void FormatTitle(TCHAR *buffer, const Waypoint &way_point) const {
+  void FormatTitle(TCHAR *buffer, size_t buffer_size,
+                   const Waypoint &way_point) const {
     buffer[0] = _T('\0');
 
-    if (way_point.name.length() >= NAME_SIZE - 20)
+    if (way_point.name.length() >= buffer_size)
       return;
 
     switch (settings.display_text_type) {
@@ -214,10 +216,11 @@ protected:
     }
   }
 
-  void FormatLabel(TCHAR *buffer, const Waypoint &way_point,
+  void FormatLabel(TCHAR *buffer, size_t buffer_size,
+                   const Waypoint &way_point,
                    WaypointRenderer::Reachability reachable,
                    const ReachResult &reach) const {
-    FormatTitle(buffer, way_point);
+    FormatTitle(buffer, buffer_size - 20, way_point);
 
     if (!way_point.IsLandable() && !way_point.flags.watched)
       return;
@@ -331,7 +334,8 @@ protected:
     }
 
     TCHAR buffer[NAME_SIZE+1];
-    FormatLabel(buffer, way_point, vwp.reachable, vwp.reach);
+    FormatLabel(buffer, ARRAY_SIZE(buffer),
+                way_point, vwp.reachable, vwp.reach);
 
     RasterPoint sc = vwp.point;
     if ((vwp.IsReachable() &&
