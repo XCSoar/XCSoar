@@ -90,8 +90,9 @@ class VarioSynthesiser final : public ToneSynthesiser {
   int min_dead, max_dead;
 
 public:
-  VarioSynthesiser()
-    :audible_count(0), silence_count(1),
+  explicit VarioSynthesiser(unsigned sample_rate)
+    :ToneSynthesiser(sample_rate),
+     audible_count(0), silence_count(1),
      audible_remaining(0), silence_remaining(0),
      dead_band_enabled(false),
      min_frequency(200), zero_frequency(500), max_frequency(1500),
@@ -104,7 +105,7 @@ public:
    *
    * @param vario the current vario value [m/s]
    */
-  void SetVario(unsigned sample_rate, double vario);
+  void SetVario(double vario);
 
   /**
    * Produce silence from now on.

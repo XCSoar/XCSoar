@@ -64,10 +64,10 @@ main(int argc, char **argv)
 
   const unsigned sample_rate = 44100;
 
-  ToneSynthesiser tone;
-  tone.SetTone(sample_rate, freq);
+  ToneSynthesiser tone(sample_rate);
+  tone.SetTone(freq);
 
-  if (!player.Start(tone, sample_rate)) {
+  if (!player.Start(tone)) {
     fprintf(stderr, "Failed to start PCMPlayer\n");
     return EXIT_FAILURE;
   }

@@ -56,9 +56,9 @@ main(int argc, char **argv)
 
   const unsigned sample_rate = 44100;
 
-  VarioSynthesiser synthesiser;
+  VarioSynthesiser synthesiser(sample_rate);
 
-  if (!player.Start(synthesiser, sample_rate)) {
+  if (!player.Start(synthesiser)) {
     fprintf(stderr, "Failed to start PCMPlayer\n");
     return EXIT_FAILURE;
   }
@@ -66,7 +66,7 @@ main(int argc, char **argv)
   while (replay->Next()) {
     auto vario = replay->Basic().brutto_vario;
     printf("%2.1f\n", (double)vario);
-    synthesiser.SetVario(sample_rate, vario);
+    synthesiser.SetVario(vario);
     Sleep(1000);
   }
 

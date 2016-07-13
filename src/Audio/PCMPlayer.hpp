@@ -24,13 +24,15 @@ Copyright_License {
 #ifndef XCSOAR_AUDIO_PCM_PLAYER_HPP
 #define XCSOAR_AUDIO_PCM_PLAYER_HPP
 
+#include "Compiler.h"
+
 #ifdef ANDROID
 #include "Thread/Mutex.hpp"
 #include "SLES/Object.hpp"
 #include "SLES/Play.hpp"
 #include "SLES/AndroidSimpleBufferQueue.hpp"
 
-#include <stdint.h>
+#define PCMPLAYER_SYNTHESISER_ONLY
 #elif defined(ENABLE_ALSA)
 #include <list>
 #include <memory>
@@ -48,12 +50,17 @@ Copyright_License {
 #endif
 
 #include <stddef.h>
+#include <stdint.h>
 
+#ifdef PCMPLAYER_SYNTHESISER_ONLY
 class PCMSynthesiser;
+#else
+class PCMDataSource;
+#endif
 
 /**
  * An audio player that plays synthesized 16 bit mono PCM data.  It is
- * being fed by a #PCMSynthesiser object that gets called when more
+ * being fed by a #PCMDataSource object that gets called when more
  * PCM samples are needed.
  */
 class PCMPlayer {
@@ -61,9 +68,11 @@ class PCMPlayer {
   boost::asio::io_service &io_service;
 #endif
 
-  unsigned sample_rate;
-
-  PCMSynthesiser *synthesiser;
+#ifdef PCMPLAYER_SYNTHESISER_ONLY
+  PCMSynthesiser *source = nullptr;
+#else
+  PCMDataSource *source = nullptr;
+#endif
 
 #if !defined(ANDROID) && !defined(WIN32)
   unsigned channels;
@@ -94,7 +103,7 @@ class PCMPlayer {
 
   /**
    * Does the "next" buffer already contain synthesised samples?  This
-   * can happen when PCMSynthesiser::Synthesise() has been called, but
+   * can happen when PCMDataSource::GetData() has been called, but
    * the OpenSL/ES buffer queue was full.  The buffer will then be
    * postponed.
    */
@@ -164,7 +173,20 @@ class PCMPlayer {
   void Enqueue();
 #elif defined(WIN32)
 #else
-  void Synthesise(void *buffer, size_t n);
+  /**
+   * Fill a buffer with data from the player's data source.
+   * Then perform upmixing if necessary.
+   * If the buffer could not be filled with the requested amount of frames
+   * completely, the rest of the frames is filled with silence (zeros).
+   * @param buffer The buffer which is filled. Must be at least n * channels
+   * elements long.
+   * @param n The number of mono frames which should be read.
+   * @return The number of read frames (an upmixed mono frame counts as one),
+   * not including the silence frames.
+   */
+  gcc_nonnull_all
+  size_t FillPCMBuffer(int16_t *buffer, size_t n);
+
 #endif
 
 public:
@@ -178,11 +200,15 @@ public:
   /**
    * Start playback.
    *
-   * @param synthesiser a PCMSynthesiser instance that will be used to
-   * generate sound; the caller is responsible for releasing it (not
+   * @param source a PCMDataSource instance that will be used to
+   * read sound; the caller is responsible for releasing it (not
    * before playback is stopped)
    */
-  bool Start(PCMSynthesiser &synthesiser, unsigned sample_rate);
+#ifdef PCMPLAYER_SYNTHESISER_ONLY
+  bool Start(PCMSynthesiser &source);
+#else
+  bool Start(PCMDataSource &source);
+#endif
 
   /**
    * Stop playback and close the audio device.  This method is

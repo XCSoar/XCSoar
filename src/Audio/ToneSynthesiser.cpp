@@ -28,7 +28,7 @@ Copyright_License {
 #include <assert.h>
 
 void
-ToneSynthesiser::SetTone(unsigned sample_rate, unsigned tone_hz)
+ToneSynthesiser::SetTone(unsigned tone_hz)
 {
   increment = ARRAY_SIZE(ISINETABLE) * tone_hz / sample_rate;
 }

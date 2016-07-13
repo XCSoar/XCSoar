@@ -22,9 +22,14 @@ Copyright_License {
 */
 
 #include "PCMPlayer.hpp"
-#include "PCMSynthesiser.hpp"
 #include "Util/Macros.hpp"
 #include "LogFile.hpp"
+
+#ifdef PCMPLAYER_SYNTHESISER_ONLY
+#include "PCMSynthesiser.hpp"
+#else
+#include "PCMDataSource.hpp"
+#endif
 
 #ifdef ANDROID
 #include "SLES/Init.hpp"
@@ -34,10 +39,10 @@ Copyright_License {
 #elif defined(WIN32)
 #elif defined(ENABLE_ALSA)
 #include "IO/Async/AsioUtil.hpp"
-#include "OS/ByteOrder.hpp"
 #include "Util/NumberParser.hpp"
 
 #include <alsa/asoundlib.h>
+#elif defined(ENABLE_SDL)
 #endif
 
 #if defined(ENABLE_SDL) || defined(ENABLE_ALSA)
@@ -56,11 +61,10 @@ static constexpr unsigned DEFAULT_ALSA_LATENCY = 100000;
 
 #ifdef PCMPLAYER_REQUIRES_IO_SERVICE
 PCMPlayer::PCMPlayer(boost::asio::io_service &_io_service) :
-  io_service(_io_service),
+  io_service(_io_service) {}
 #else
-PCMPlayer::PCMPlayer() :
+PCMPlayer::PCMPlayer() {}
 #endif
-  sample_rate(0), synthesiser(nullptr) {}
 
 PCMPlayer::~PCMPlayer()
 {
@@ -182,21 +186,25 @@ PCMPlayer::StopEventHandling()
 bool
 PCMPlayer::OnEvent()
 {
-  snd_pcm_sframes_t n = snd_pcm_avail_update(alsa_handle.get());
-  if (n < 0) {
-    if (!TryRecoverFromError(static_cast<int>(n)))
+  snd_pcm_sframes_t n_available = snd_pcm_avail_update(alsa_handle.get());
+  if (n_available < 0) {
+    if (!TryRecoverFromError(static_cast<int>(n_available)))
       return false;
 
-    n = static_cast<snd_pcm_sframes_t>(buffer_size / channels);
+    n_available = static_cast<snd_pcm_sframes_t>(buffer_size / channels);
   }
 
-  if (n > 0) {
-    Synthesise(buffer.get(), static_cast<size_t>(n));
-    if (!WriteFrames(static_cast<size_t>(n)))
-      return false;
-  }
+  if (n_available < 0)
+    return false;
+  else if (0 == n_available)
+    return true;
 
-  return true;
+  size_t n_read = FillPCMBuffer(buffer.get(),
+                                static_cast<size_t>(n_available));
+  if (!WriteFrames(static_cast<size_t>(n_available)))
+    return false;
+
+  return (n_read == static_cast<size_t>(n_available));
 }
 
 void
@@ -237,13 +245,21 @@ inline void
 PCMPlayer::AudioCallback(int16_t *stream, size_t len_bytes)
 {
   const size_t num_frames = len_bytes / (channels * sizeof(stream[0]));
-  Synthesise(stream, num_frames);
+  const size_t read_frames = FillPCMBuffer(stream, num_frames);
+  if (0 == read_frames)
+    SDL_PauseAudioDevice(device, 1);
 }
 
 #endif
 
+#ifdef PCMPLAYER_SYNTHESISER_ONLY
 bool
-PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
+PCMPlayer::
+PCMSynthesiser &_source)
+#else
+bool
+PCMPlayer::Start(PCMDataSource &_source)
+#endif
 {
 #ifdef ANDROID
 
@@ -304,11 +320,12 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
   format_pcm.numChannels = 1;
   /* from the Android NDK docs: "Note that the field samplesPerSec is
      actually in units of milliHz, despite the misleading name." */
-  format_pcm.samplesPerSec = _sample_rate * 1000;
+  format_pcm.samplesPerSec = _source.GetSampleRate() * 1000;
   format_pcm.bitsPerSample = SL_PCMSAMPLEFORMAT_FIXED_16;
   format_pcm.containerSize = SL_PCMSAMPLEFORMAT_FIXED_16;
   format_pcm.channelMask = SL_SPEAKER_FRONT_CENTER;
-  format_pcm.endianness = SL_BYTEORDER_LITTLEENDIAN; // XXX
+  format_pcm.endianness = _source.IsBigEndian() ?
+      SL_BYTEORDER_BIGENDIAN : SL_BYTEORDER_LITTLEENDIAN;
 
   SLDataSource audioSrc = { &loc_bufq, &format_pcm };
 
@@ -393,7 +410,7 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
     return false;
   }
 
-  synthesiser = &_synthesiser;
+  source = &_source;
 
   result = play.SetPlayState(SL_PLAYSTATE_PLAYING);
   if (result != SL_RESULT_SUCCESS) {
@@ -402,7 +419,7 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
     play_object.Destroy();
     mix_object.Destroy();
     engine_object.Destroy();
-    synthesiser = nullptr;
+    source = nullptr;
     return false;
   }
 
@@ -414,10 +431,14 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
   return true;
 #elif defined(WIN32)
 #elif defined(ENABLE_ALSA)
-  if ((nullptr != synthesiser) && alsa_handle && (_sample_rate == sample_rate)) {
-    /* just change the synthesiser / resume playback */
+  const unsigned new_sample_rate = _source.GetSampleRate();
+
+  if ((nullptr != source) &&
+      alsa_handle &&
+      (source->GetSampleRate() == new_sample_rate)) {
+    /* just change the source / resume playback */
     bool success = false;
-    DispatchWait(io_service, [this, &_synthesiser, &success]() {
+    DispatchWait(io_service, [this, &_source, &success]() {
       bool recovered_from_underrun = false;
 
       switch (snd_pcm_state(alsa_handle.get())) {
@@ -439,12 +460,15 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
       }
 
       if (success) {
-        synthesiser = &_synthesiser;
+        source = &_source;
 
         if (recovered_from_underrun) {
           const size_t n = buffer_size / channels;
-          Synthesise(buffer.get(), n);
-          success = WriteFrames(n);
+          const size_t n_read = FillPCMBuffer(buffer.get(), n);
+          if (!WriteFrames(n_read)) {
+            success = false;
+            return;
+          }
         }
 
         if (success)
@@ -503,25 +527,26 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
                 "%s to override)", latency, ALSA_LATENCY_ENV);
 
   channels = 1;
+  bool big_endian_source = _source.IsBigEndian();
   int alsa_error = snd_pcm_set_params(new_alsa_handle.get(),
-                                      IsLittleEndian()
-                                          ? SND_PCM_FORMAT_S16_LE
-                                          : SND_PCM_FORMAT_S16_BE,
+                                      big_endian_source
+                                          ? SND_PCM_FORMAT_S16_BE
+                                          : SND_PCM_FORMAT_S16_LE,
                                       SND_PCM_ACCESS_RW_INTERLEAVED,
                                       static_cast<int>(channels),
-                                      _sample_rate,
+                                      new_sample_rate,
                                       1,
                                       latency);
   if (-EINVAL == alsa_error) {
     /* Some ALSA devices (e. g. DMIX) do not support mono. Try stereo */
     channels = 2;
     alsa_error = snd_pcm_set_params(new_alsa_handle.get(),
-                                    IsLittleEndian()
-                                        ? SND_PCM_FORMAT_S16_LE
-                                        : SND_PCM_FORMAT_S16_BE,
+                                    big_endian_source
+                                        ? SND_PCM_FORMAT_S16_BE
+                                        : SND_PCM_FORMAT_S16_LE,
                                     SND_PCM_ACCESS_RW_INTERLEAVED,
                                     static_cast<int>(channels),
-                                    _sample_rate,
+                                    new_sample_rate,
                                     1,
                                     latency);
   }
@@ -530,25 +555,25 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
     LogFormat("snd_pcm_set_params(0x%p, %s, SND_PCM_ACCESS_RW_INTERLEAVED, 1, "
                   "%u, 1, %u) failed: %d - %s",
               new_alsa_handle.get(),
-              IsLittleEndian()
-                  ? "SND_PCM_FORMAT_S16_LE" : "SND_PCM_FORMAT_S16_BE",
-              _sample_rate,
+              big_endian_source
+                  ? "SND_PCM_FORMAT_S16_BE" : "SND_PCM_FORMAT_S16_LE",
+              new_sample_rate,
               latency,
               alsa_error,
               snd_strerror(alsa_error));
     return false;
   }
 
-  snd_pcm_sframes_t n = snd_pcm_avail(new_alsa_handle.get());
-  if (n <= 0) {
+  snd_pcm_sframes_t n_available = snd_pcm_avail(new_alsa_handle.get());
+  if (n_available <= 0) {
     LogFormat("snd_pcm_avail(0x%p) failed: %ld - %s",
               new_alsa_handle.get(),
-              static_cast<long>(n),
-              snd_strerror(static_cast<int>(n)));
+              static_cast<long>(n_available),
+              snd_strerror(static_cast<int>(n_available)));
     return false;
   }
 
-  buffer_size = static_cast<snd_pcm_uframes_t>(n * channels);
+  buffer_size = static_cast<snd_pcm_uframes_t>(n_available * channels);
   buffer = std::unique_ptr<int16_t[]>(new int16_t[buffer_size]);
 
   /* Why does Boost.Asio make it so hard to register a set of of standard
@@ -568,8 +593,7 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
           snd_pcm_poll_descriptors(new_alsa_handle.get(),
                                    poll_fds.get(),
                                    static_cast<unsigned>(poll_fds_count)));
-  assert(read_poll_descs.empty());
-  assert(write_poll_descs.empty());
+
   for (int i = 0; i < poll_fds_count; ++i) {
     if ((poll_fds[i].events & POLLIN) || (poll_fds[i].events & POLLPRI)) {
       read_poll_descs.emplace_back(
@@ -581,10 +605,17 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
     }
   }
 
-  synthesiser = &_synthesiser;
-  Synthesise(buffer.get(), static_cast<size_t>(n));
+  source = &_source;
+  size_t n_read = FillPCMBuffer(buffer.get(), static_cast<size_t>(n_available));
+
+  if (0 == n_read) {
+    LogFormat("ALSA PCMPlayer started with data source which "
+                  "does not deliver any data");
+    return false;
+  }
+
   if (!WriteFrames(*new_alsa_handle, buffer.get(),
-                     static_cast<size_t>(n), false))
+                   static_cast<size_t>(n_available), false))
     return false;
 
   alsa_handle = std::move(new_alsa_handle);
@@ -593,20 +624,22 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
 
   return true;
 #else
-  if ((nullptr != synthesiser) && (device > 0)) {
-    if (_sample_rate == sample_rate) {
+  const unsigned new_sample_rate = _source.GetSampleRate();
+
+  if ((nullptr != source) && (device > 0)) {
+    if (source->GetSampleRate() == new_sample_rate) {
       /* already open, just change the synthesiser */
       SDL_LockAudioDevice(device);
-      synthesiser = &_synthesiser;
+      source = &_source;
+      SDL_PauseAudioDevice(device, 0);
       SDL_UnlockAudioDevice(device);
-      return true;
     }
 
     Stop();
   }
 
   SDL_AudioSpec wanted, actual;
-  wanted.freq = sample_rate;
+  wanted.freq = static_cast<int>(new_sample_rate);
   wanted.format = AUDIO_S16SYS;
   wanted.channels = 1;
   wanted.samples = 4096;
@@ -621,15 +654,14 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
   };
   wanted.userdata = this;
 
-  device = SDL_OpenAudioDevice(nullptr, 0, &spec, &actual,
+  device = SDL_OpenAudioDevice(nullptr, 0, &wanted, &actual,
                                SDL_AUDIO_ALLOW_CHANNELS_CHANGE);
   if (device < 1)
     return false;
 
   channels = static_cast<size_t>(actual.channels);
-  sample_rate = static_cast<unsigned>(actual.freq);
 
-  synthesiser = &_synthesiser;
+  source = &_source;
   SDL_PauseAudioDevice(device, 0);
 
   return true;
@@ -640,7 +672,7 @@ void
 PCMPlayer::Stop()
 {
 #ifdef ANDROID
-  if (synthesiser == nullptr)
+  if (source == nullptr)
     return;
 
   play.SetPlayState(SL_PLAYSTATE_PAUSED);
@@ -648,8 +680,7 @@ PCMPlayer::Stop()
   mix_object.Destroy();
   engine_object.Destroy();
 
-  sample_rate = 0;
-  synthesiser = nullptr;
+  source = nullptr;
 #elif defined(WIN32)
 #elif defined(ENABLE_ALSA)
   if ((nullptr != alsa_handle) || poll_descs_registered) {
@@ -666,15 +697,13 @@ PCMPlayer::Stop()
   read_poll_descs.clear();
   write_poll_descs.clear();
 
-  sample_rate = 0;
-  synthesiser = nullptr;
+  source = nullptr;
 #else
   if (device > 0)
     SDL_CloseAudioDevice(device);
 
   device = -1;
-  sample_rate = 0;
-  synthesiser = nullptr;
+  source = nullptr;
 #endif
 }
 
@@ -683,13 +712,13 @@ PCMPlayer::Stop()
 void
 PCMPlayer::Enqueue()
 {
-  assert(synthesiser != nullptr);
+  assert(source != nullptr);
 
   ScopeLock protect(mutex);
 
   if (!filled) {
     filled = true;
-    synthesiser->Synthesise(buffers[next], ARRAY_SIZE(buffers[next]));
+    source->Synthesise(buffers[next], ARRAY_SIZE(buffers[next]));
   }
 
   SLresult result = queue.Enqueue(buffers[next], sizeof(buffers[next]));
@@ -705,13 +734,17 @@ PCMPlayer::Enqueue()
 #elif defined(WIN32)
 #else
 
-void
-PCMPlayer::Synthesise(void *buffer, size_t n)
+size_t
+PCMPlayer::FillPCMBuffer(int16_t *buffer, size_t n)
 {
-  assert(synthesiser != nullptr);
-
-  synthesiser->Synthesise((int16_t *)buffer, n);
-  UpmixMonoPCM(reinterpret_cast<int16_t *>(buffer), n, channels);
+  assert(n > 0);
+  assert(nullptr != source);
+  const size_t n_read = source->GetData(buffer, n);
+  if (n_read > 0)
+    UpmixMonoPCM(buffer, n_read, channels);
+  if (n_read < n)
+    std::fill(buffer + n_read * channels, buffer + n * channels, 0);
+  return n_read;
 }
 
 #endif

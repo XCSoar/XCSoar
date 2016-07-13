@@ -34,6 +34,13 @@ class ToneSynthesiser : public PCMSynthesiser {
   unsigned volume = 100, angle = 0, increment = 0;
 
 public:
+  explicit ToneSynthesiser(unsigned _sample_rate) : sample_rate(_sample_rate) {
+  }
+
+  unsigned GetSampleRate() const {
+    return sample_rate;
+  }
+
   /**
    * Set the (software) volume of the generated tone.
    *
@@ -44,12 +51,14 @@ public:
     volume = _volume;
   }
 
-  void SetTone(unsigned sample_rate, unsigned tone_hz);
+  void SetTone(unsigned tone_hz);
 
   /* methods from class PCMSynthesiser */
   virtual void Synthesise(int16_t *buffer, size_t n);
 
 protected:
+  const unsigned sample_rate;
+
   /**
    * Returns the number of samples until the sample value gets close
    * to zero.

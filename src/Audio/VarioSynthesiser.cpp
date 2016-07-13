@@ -42,7 +42,7 @@ VarioSynthesiser::VarioToFrequency(int ivario)
 }
 
 void
-VarioSynthesiser::SetVario(unsigned sample_rate, double vario)
+VarioSynthesiser::SetVario(double vario)
 {
   const ScopeLock protect(mutex);
 
@@ -55,7 +55,7 @@ VarioSynthesiser::SetVario(unsigned sample_rate, double vario)
   }
 
   /* update the ToneSynthesiser base class */
-  SetTone(sample_rate, VarioToFrequency(ivario));
+  SetTone(VarioToFrequency(ivario));
 
   if (ivario > 0) {
     /* while climbing, the vario sound gets interrupted by silence

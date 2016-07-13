@@ -42,11 +42,11 @@ main(int argc, char **argv)
 
   const unsigned sample_rate = 44100;
 
-  VarioSynthesiser synthesiser;
+  VarioSynthesiser synthesiser(sample_rate);
 
   while (replay->Next()) {
     auto vario = replay->Basic().brutto_vario;
-    synthesiser.SetVario(sample_rate, vario);
+    synthesiser.SetVario(vario);
 
     static int16_t buffer[sample_rate];
     synthesiser.Synthesise(buffer, ARRAY_SIZE(buffer));

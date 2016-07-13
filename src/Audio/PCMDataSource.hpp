@@ -21,36 +21,41 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_AUDIO_PCM_SYNTHESISER_HPP
-#define XCSOAR_AUDIO_PCM_SYNTHESISER_HPP
+#ifndef XCSOAR_AUDIO_PCM_DATA_SOURCE_HPP
+#define XCSOAR_AUDIO_PCM_DATA_SOURCE_HPP
 
 #include <stddef.h>
 #include <stdint.h>
 
-#include "PCMDataSource.hpp"
-#include "OS/ByteOrder.hpp"
-
-class PCMSynthesiser : public PCMDataSource {
+/**
+ * This interface is used by PCMPlayer.
+ */
+class PCMDataSource {
 public:
   /**
-   * The caller requests to generate PCM samples.
+   * Check if this data source delivers Big Endian PCM samples.
    *
-   * @param buffer the destination buffer (host byte order)
-   * @param n the number of 16 bit mono samples that shall be generated
+   * @return true means it delivers Big Endian samples, false means it
+   * delivers Little Endian samples
    */
-  virtual void Synthesise(int16_t *buffer, size_t n) = 0;
+  virtual bool IsBigEndian() const = 0;
 
-  /* virtual methods from class PCMDataSource */
+  /**
+   * Get the sample rate in hz which this PCM data source delivers.
+   */
+  virtual unsigned GetSampleRate() const = 0;
 
-  bool IsBigEndian() const {
-    /* Our PCM synthesisers always deliver data in host byte order */
-    return ::IsBigEndian();
-  }
-
-  size_t GetData(int16_t *buffer, size_t n) {
-    Synthesise(buffer, n);
-    return n;
-  }
+  /**
+   * The caller requests PCM data.
+   *
+   * @param buffer the destination buffer
+   * @param n the number of requested 16 bit mono samples
+   *
+   * @return the number of delivered samples. If less than n, it means that
+   * playback for this data source is to be stopped after playing the returned
+   * number of samples.
+   */
+  virtual size_t GetData(int16_t *buffer, size_t n) = 0;
 };
 
 #endif
