@@ -131,14 +131,4 @@ gcc_nonnull_all
 char *
 NormalizeSearchString(char *dest, const char *src);
 
-/**
- * Copy a portion of the string to a new allocation.  The given length
- * must not be smaller than the actual length of the null-terminated
- * string.  The return value will be null-terminated and must be freed
- * with free().
- */
-gcc_malloc gcc_nonnull_all
-char *
-DuplicateString(const char *p, size_t length);
-
 #endif

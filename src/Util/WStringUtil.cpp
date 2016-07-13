@@ -173,12 +173,3 @@ NormalizeSearchString(wchar_t *gcc_restrict dest,
 
   return retval;
 }
-
-wchar_t *
-DuplicateString(const wchar_t *p, size_t length)
-{
-  wchar_t *q = (wchar_t *)malloc((length + 1) * sizeof(*p));
-  if (q != nullptr)
-    *std::copy_n(p, length, q) = L'\0';
-  return q;
-}

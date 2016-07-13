@@ -101,8 +101,4 @@ gcc_nonnull_all
 wchar_t *
 NormalizeSearchString(wchar_t *dest, const wchar_t *src);
 
-gcc_malloc gcc_nonnull_all
-wchar_t *
-DuplicateString(const wchar_t *p, size_t length);
-
 #endif
