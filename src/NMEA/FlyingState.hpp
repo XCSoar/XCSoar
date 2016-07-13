@@ -43,7 +43,10 @@ struct FlyingState
 
   /** Time of flight */
   fixed flight_time;
-  /** Time of takeoff */
+
+  /**
+   * Time of takeoff.  Negative if aircraft was never observed flying.
+   */
   fixed takeoff_time;
 
   /**

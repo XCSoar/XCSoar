@@ -29,7 +29,8 @@ FlyingState::Reset()
   flying = false;
   on_ground = false;
   powered = false;
-  flight_time = takeoff_time = fixed(0);
+  flight_time = fixed(0);
+  takeoff_time = fixed(-1);
   takeoff_location.SetInvalid();
   release_time = fixed(-1);
   release_location.SetInvalid();
