@@ -40,8 +40,15 @@ static constexpr char DEFAULT_ALSA_DEVICE[] = "default";
 static constexpr unsigned DEFAULT_ALSA_LATENCY = 100000;
 
 
+static void alsa_error_handler_stub(const char *, int, const char *,
+                                    int, const char *, ...) {}
+
+
 ALSAPCMPlayer::ALSAPCMPlayer(boost::asio::io_service &_io_service) :
-  io_service(_io_service) {}
+  io_service(_io_service)
+{
+  snd_lib_error_set_handler(alsa_error_handler_stub);
+}
 
 ALSAPCMPlayer::~ALSAPCMPlayer()
 {
