@@ -210,9 +210,10 @@ protected:
         tmp[0] = '\0';
       break;
 
-    default:
-      assert(0);
-      break;
+    case WaypointRendererSettings::DisplayTextType::OBSOLETE_DONT_USE_NUMBER:
+    case WaypointRendererSettings::DisplayTextType::OBSOLETE_DONT_USE_NAMEIFINTASK:
+      assert(false);
+      gcc_unreachable();
     }
   }
 
