@@ -142,7 +142,7 @@ char *strrstr(char *string, char *find)
  * Appends src to string dst of size siz (unlike strncat, siz is the
  * full size of dst, not space left).  At most siz-1 characters
  * will be copied.  Always NUL terminates (unless siz <= strlen(dst)).
- * Returns strlen(src) + MIN(siz, strlen(initial dst)).
+ * Returns strlen(src) + MS_MIN(siz, strlen(initial dst)).
  * If retval >= siz, truncation occurred.
  */
 size_t strlcat(char *dst, const char *src, size_t siz)
@@ -1144,9 +1144,7 @@ char *msEncodeUrlExcept(const char *data, const char except)
   code = (char*)msSmallMalloc(strlen(data)+inc+1);
 
   for (j=code, i=data; *i!='\0'; i++, j++) {
-    if (*i == ' ')
-      *j = '+';
-    else if ( except != '\0' && *i == except ) {
+    if ( except != '\0' && *i == except ) {
       *j = except;
     } else if (msEncodeChar(*i)) {
       ch = *i;
@@ -2210,7 +2208,6 @@ int msLayerEncodeShapeAttributes( layerObj *layer, shapeObj *shape) {
   char *outp, *out = NULL;
   size_t len, bufsize, bufleft, iconv_status;
   int i;
-#endif
 
   if( !layer->encoding || !*layer->encoding || !strcasecmp(layer->encoding, "UTF-8"))
     return MS_SUCCESS;
@@ -2222,7 +2219,6 @@ int msLayerEncodeShapeAttributes( layerObj *layer, shapeObj *shape) {
     return MS_FAILURE;
   }
 
-#ifdef USE_ICONV
   for(i=0;i <shape->numvalues; i++) {
     if(!shape->values[i] || (len = strlen(shape->values[i]))==0) {
       continue;    /* Nothing to do */
@@ -2253,6 +2249,8 @@ int msLayerEncodeShapeAttributes( layerObj *layer, shapeObj *shape) {
 
   return MS_SUCCESS;
 #else
+  if( !layer->encoding || !*layer->encoding || !strcasecmp(layer->encoding, "UTF-8"))
+    return MS_SUCCESS;
   msSetError(MS_MISCERR, "Not implemented since Iconv is not enabled.", "msGetEncodedString()");
   return MS_FAILURE;
 #endif

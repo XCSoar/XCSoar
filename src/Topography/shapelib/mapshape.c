@@ -291,6 +291,7 @@ SHPHandle msSHPOpen(struct zzip_dir *zdir, const char * pszLayer, const char * p
     psSHP->fpSHX = zzip_open_rb(zdir, pszFullname);
   }
   if( psSHP->fpSHX == NULL ) {
+    zzip_file_close(psSHP->fpSHP);
     msFree(pszBasename);
     msFree(pszFullname);
     msFree(psSHP);

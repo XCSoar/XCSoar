@@ -1263,6 +1263,8 @@ static int getPolygonCenterOfGravity(shapeObj *p, pointObj *lp)
       sy = s>0?tsy:-tsy;
     }
   }
+  if(largestArea == 0) /*degenerate polygon*/
+    return MS_FAILURE;
 
   lp->x = sx/(6*largestArea);
   lp->y = sy/(6*largestArea);
@@ -1449,7 +1451,7 @@ int msPolygonLabelPoint(shapeObj *p, pointObj *lp, double min_dimension)
       if(len > max_len) {
         max_len = len;
         lp->x = (intersect[i] + intersect[i+1])/2;
-        /* lp->y = y; */
+        lp->y = y;
       }
     }
   } else { /* center vertically, fix x */
@@ -1528,7 +1530,7 @@ int msPolygonLabelPoint(shapeObj *p, pointObj *lp, double min_dimension)
       if(len > max_len) {
         max_len = len;
         lp->y = (intersect[i] + intersect[i+1])/2;
-        /* lp->x = x; */
+        lp->x = x;
       }
     }
   }
