@@ -241,10 +241,10 @@ DigitEntry::CreateTime(ContainerWindow &parent, const PixelRect &rc,
 void
 DigitEntry::CalculateLayout()
 {
-  const UPixelScalar control_height = Layout::GetMaximumControlHeight();
-  const UPixelScalar padding = Layout::GetTextPadding();
+  const unsigned control_height = Layout::GetMaximumControlHeight();
+  const unsigned padding = Layout::GetTextPadding();
 
-  const UPixelScalar min_value_height = control_height * 3 / 2;
+  const unsigned min_value_height = control_height * 3 / 2;
 
   PixelSize digit_size = look.text_font.TextSize(_T("8"));
   digit_size.cy += 2 * padding;
@@ -258,9 +258,9 @@ DigitEntry::CalculateLayout()
   for (unsigned i = 0; i < length; ++i) {
     Column &digit = columns[i];
 
-    PixelScalar value_width = digit.GetWidth() * digit_size.cx;
+    unsigned value_width = digit.GetWidth() * digit_size.cx;
     value_width += 2 * padding;
-    if (value_width < (PixelScalar)control_height)
+    if (value_width < control_height)
       value_width = control_height;
 
     digit.left = last_right;
@@ -274,7 +274,7 @@ DigitEntry::CalculateLayout()
     last_right = 0;
     for (unsigned i = 0; i < length; ++i) {
       Column &digit = columns[i];
-      PixelScalar value_width = digit.right - digit.left;
+      unsigned value_width = digit.right - digit.left;
       digit.left = last_right;
       last_right = digit.right = digit.left + value_width - width_adjust;
     }
