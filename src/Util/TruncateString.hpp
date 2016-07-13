@@ -29,6 +29,16 @@ Copyright_License {
 
 /**
  * Copy a string to a buffer, truncating it if the buffer is not large
+ * enough.  No partial (UTF-8) multi-byte sequence will be copied.
+ *
+ * @param dest_size the total size of the destination buffer, which
+ * includes the null byte
+ */
+void
+CopyTruncateString(TCHAR *dest, size_t dest_size, const TCHAR *src);
+
+/**
+ * Copy a string to a buffer, truncating it if the buffer is not large
  * enough.  At most #truncate characters will be copied.  No partial
  * (UTF-8) multi-byte sequence will be copied.
  *
