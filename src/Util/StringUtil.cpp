@@ -44,43 +44,6 @@ CopyString(char *gcc_restrict dest, const char *gcc_restrict src, size_t size)
   return p;
 }
 
-void
-CopyASCII(char *dest, const char *src)
-{
-  do {
-    if (IsASCII(*src))
-      *dest++ = *src;
-  } while (*src++ != '\0');
-}
-
-char *
-CopyASCII(char *dest, size_t dest_size, const char *src, const char *src_end)
-{
-  assert(dest_size > 0);
-  assert(src_end >= src);
-
-  for (const char *const dest_end = dest + dest_size;
-       dest != dest_end && src != src_end; ++src)
-    if (IsASCII(*src))
-      *dest++ = *src;
-
-  return dest;
-}
-
-void
-CopyASCIIUpper(char *dest, const char *src)
-{
-  do {
-    char ch = *src;
-    if (IsASCII(ch)) {
-      if (IsLowerAlphaASCII(ch))
-        ch -= 'a' - 'A';
-
-      *dest++ = ch;
-    }
-  } while (*src++ != '\0');
-}
-
 const char *
 StripLeft(const char *p)
 {

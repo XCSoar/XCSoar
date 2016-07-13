@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Compiler.h"
 
-#include <assert.h>
 #include <wchar.h>
 
 /**
@@ -40,31 +39,6 @@ Copyright_License {
 gcc_nonnull_all
 wchar_t *
 CopyString(wchar_t *dest, const wchar_t *src, size_t size);
-
-gcc_nonnull_all
-void
-CopyASCII(wchar_t *dest, const wchar_t *src);
-
-gcc_nonnull_all
-wchar_t *
-CopyASCII(wchar_t *dest, size_t dest_size,
-          const wchar_t *src, const wchar_t *src_end);
-
-gcc_nonnull_all
-void
-CopyASCII(wchar_t *dest, const char *src);
-
-gcc_nonnull_all
-wchar_t *
-CopyASCII(wchar_t *dest, size_t dest_size, const char *src, const char *src_end);
-
-gcc_nonnull_all
-char *
-CopyASCII(char *dest, size_t dest_size, const wchar_t *src, const wchar_t *src_end);
-
-gcc_nonnull_all
-void
-CopyASCIIUpper(char *dest, const wchar_t *src);
 
 gcc_pure gcc_nonnull_all
 const wchar_t *

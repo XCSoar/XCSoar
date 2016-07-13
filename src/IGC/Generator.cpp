@@ -25,7 +25,7 @@ Copyright_License {
 #include "Time/BrokenDateTime.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Math/Util.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/ASCII.hxx"
 
 #include <assert.h>
 #include <string.h>

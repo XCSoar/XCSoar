@@ -35,6 +35,7 @@
 #include "StringUtil.hpp"
 #include "StringFormat.hpp"
 #include "UTF8.hpp"
+#include "ASCII.hxx"
 
 #include <assert.h>
 #include <stddef.h>
