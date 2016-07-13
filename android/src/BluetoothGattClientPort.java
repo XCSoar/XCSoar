@@ -25,6 +25,7 @@ package org.xcsoar;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.io.IOException;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
@@ -85,9 +86,11 @@ public class BluetoothGattClientPort
     device = _device;
   }
 
-  public void startConnect(Context context) {
+  public void startConnect(Context context) throws IOException {
     shutdown = false;
     gatt = device.connectGatt(context, false, this);
+    if (gatt == null)
+      throw new IOException("Bluetooth GATT connect failed");
   }
 
   private boolean findCharacteristics() {
