@@ -1,4 +1,6 @@
 Version 6.8.6 - not yet released
+* calculations
+  - show takeoff time after landing (#3786)
 * user interface
   - fix graphics error on FLARM gauge
 * devices
