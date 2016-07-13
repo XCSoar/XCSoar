@@ -107,7 +107,6 @@ MyValidateUTF8(const char *p)
   }
 }
 
-#include <stdio.h>
 int main(int argc, char **argv)
 {
   plan_tests(2 * ARRAY_SIZE(valid) +
