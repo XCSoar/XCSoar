@@ -93,6 +93,10 @@ class ALSAPCMPlayer : public PCMPlayer {
   void OnWriteEvent(boost::asio::posix::stream_descriptor &fd,
                     const boost::system::error_code &ec);
 
+  static bool SetParameters(snd_pcm_t &alsa_handle, unsigned sample_rate,
+                            bool big_endian_source, unsigned latency,
+                            unsigned &channels);
+
 public:
   explicit ALSAPCMPlayer(boost::asio::io_service &_io_service);
   virtual ~ALSAPCMPlayer();

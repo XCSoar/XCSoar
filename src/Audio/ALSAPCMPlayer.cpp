@@ -212,6 +212,272 @@ ALSAPCMPlayer::OnWriteEvent(boost::asio::posix::stream_descriptor &fd,
 }
 
 bool
+ALSAPCMPlayer::SetParameters(snd_pcm_t &alsa_handle, unsigned sample_rate,
+                             bool big_endian_source, unsigned latency,
+                             unsigned &channels) {
+  /* adoption of alsa-libs's snd_pcm_set_params() function, which is not
+   * available on SALSA, with a few detail enhancements. */
+
+  snd_pcm_hw_params_t *hw_params;
+  snd_pcm_hw_params_alloca(&hw_params);
+
+  int alsa_error = snd_pcm_hw_params_any(&alsa_handle, hw_params);
+  if (alsa_error < 0) {
+    LogFormat("snd_pcm_hw_params_any(0x%p, 0x%p) failed: %d - %s",
+              &alsa_handle,
+              hw_params,
+              alsa_error,
+              snd_strerror(alsa_error));
+    return false;
+  }
+
+  /* Try to enable resampling, but do not give up if it fails. Probably we are
+   * lucky and our ALSA device supports our sample rate natively. */
+  snd_pcm_hw_params_set_rate_resample(&alsa_handle, hw_params, 1);
+
+  alsa_error = snd_pcm_hw_params_set_access(&alsa_handle,
+                                            hw_params,
+                                            SND_PCM_ACCESS_RW_INTERLEAVED);
+  if (0 != alsa_error) {
+    LogFormat("snd_pcm_hw_params_set_access(0x%p, 0x%p, "
+                  "SND_PCM_ACCESS_RW_INTERLEAVED) failed: %d - %s",
+              &alsa_handle,
+              hw_params,
+              alsa_error,
+              snd_strerror(alsa_error));
+    return false;
+  }
+
+  alsa_error = snd_pcm_hw_params_set_format(&alsa_handle,
+                                            hw_params,
+                                            big_endian_source
+                                                ? SND_PCM_FORMAT_S16_BE
+                                                : SND_PCM_FORMAT_S16_LE);
+  if (0 != alsa_error) {
+    LogFormat("snd_pcm_hw_params_set_format(0x%p, 0x%p, "
+                  "%s) failed: %d - %s",
+              &alsa_handle,
+              hw_params,
+              big_endian_source
+                  ? "SND_PCM_FORMAT_S16_BE"
+                  : "SND_PCM_FORMAT_S16_LE",
+              alsa_error,
+              snd_strerror(alsa_error));
+    return false;
+  }
+
+  assert(1 == channels);
+  alsa_error = snd_pcm_hw_params_set_channels_near(&alsa_handle,
+                                                   hw_params,
+                                                   &channels);
+  if (0 != alsa_error) {
+    LogFormat("snd_pcm_hw_params_set_channels_near(0x%p, 0x%p, 0x%p) "
+                  "failed: %d - %s",
+              &alsa_handle,
+              hw_params,
+              &channels,
+              alsa_error,
+              snd_strerror(alsa_error));
+    return false;
+  }
+
+  alsa_error = snd_pcm_hw_params_set_rate(&alsa_handle,
+                                          hw_params,
+                                          sample_rate,
+                                          0);
+  if (0 != alsa_error) {
+    LogFormat("snd_pcm_hw_params_set_rate(0x%p, 0x%p, %u, 0) "
+                  "failed: %d - %s",
+              &alsa_handle,
+              hw_params,
+              sample_rate,
+              alsa_error,
+              snd_strerror(alsa_error));
+    return false;
+  }
+
+  snd_pcm_uframes_t buffer_size, period_size;
+
+  alsa_error = snd_pcm_hw_params_set_buffer_time_near(&alsa_handle,
+                                                      hw_params,
+                                                      &latency,
+                                                      nullptr);
+  if (0 != alsa_error) {
+    unsigned period_time = latency / 4;
+    alsa_error = snd_pcm_hw_params_set_period_time_near(&alsa_handle,
+                                                        hw_params,
+                                                        &period_time,
+                                                        nullptr);
+    if (0 != alsa_error) {
+      LogFormat("snd_pcm_hw_params_set_period_time_near(0x%p, 0x%p, 0x%p, "
+                    "nullptr) failed: %d - %s",
+                &alsa_handle,
+                hw_params,
+                &period_time,
+                alsa_error,
+                snd_strerror(alsa_error));
+      return false;
+    }
+
+    alsa_error = snd_pcm_hw_params_get_period_size(hw_params,
+                                                   &period_size,
+                                                   nullptr);
+    if (0 != alsa_error) {
+      LogFormat("snd_pcm_hw_params_get_period_size(0x%p, 0x%p, nullptr) "
+                    "failed: %d - %s",
+                hw_params,
+                &period_size,
+                alsa_error,
+                snd_strerror(alsa_error));
+      return false;
+    }
+
+    buffer_size = period_size * 4;
+    alsa_error = snd_pcm_hw_params_set_buffer_size_near(&alsa_handle,
+                                                        hw_params,
+                                                        &buffer_size);
+    if (0 != alsa_error) {
+      LogFormat("snd_pcm_hw_params_set_buffer_size_near(0x%p, 0x%p, 0x%p) "
+                    "failed: %d - %s",
+                &alsa_handle,
+                hw_params,
+                &buffer_size,
+                alsa_error,
+                snd_strerror(alsa_error));
+      return false;
+    }
+
+    alsa_error = snd_pcm_hw_params_get_buffer_size(hw_params, &buffer_size);
+    if (0 != alsa_error) {
+      LogFormat("snd_pcm_hw_params_get_buffer_size(0x%p, 0x%p) "
+                    "failed: %d - %s",
+                hw_params,
+                &buffer_size,
+                alsa_error,
+                snd_strerror(alsa_error));
+      return false;
+    }
+  } else {
+    alsa_error = snd_pcm_hw_params_get_buffer_size(hw_params, &buffer_size);
+    if (0 != alsa_error) {
+      LogFormat("snd_pcm_hw_params_get_buffer_size(0x%p, 0x%p) "
+                    "failed: %d - %s",
+                hw_params,
+                &buffer_size,
+                alsa_error,
+                snd_strerror(alsa_error));
+      return false;
+    }
+
+    alsa_error = snd_pcm_hw_params_get_buffer_time(hw_params,
+                                                   &latency,
+                                                   nullptr);
+    if (0 != alsa_error) {
+      LogFormat("snd_pcm_hw_params_get_buffer_time(0x%p, 0x%p, nullptr) "
+                    "failed: %d - %s",
+                hw_params,
+                &latency,
+                alsa_error,
+                snd_strerror(alsa_error));
+      return false;
+    }
+
+    unsigned period_time = latency / 4;
+    alsa_error = snd_pcm_hw_params_set_period_time_near(&alsa_handle,
+                                                        hw_params,
+                                                        &period_time,
+                                                        nullptr);
+    if (0 != alsa_error) {
+      LogFormat("snd_pcm_hw_params_set_period_time_near(0x%p, 0x%p, 0x%p, "
+                    "nullptr) failed: %d - %s",
+                &alsa_handle,
+                hw_params,
+                &period_time,
+                alsa_error,
+                snd_strerror(alsa_error));
+      return false;
+    }
+
+    alsa_error = snd_pcm_hw_params_get_period_size(hw_params,
+                                                   &period_size,
+                                                   nullptr);
+    if (0 != alsa_error) {
+      LogFormat("snd_pcm_hw_params_get_period_size(0x%p, 0x%p, nullptr) "
+                    "failed: %d - %s",
+                hw_params,
+                &period_size,
+                alsa_error,
+                snd_strerror(alsa_error));
+      return false;
+    }
+  }
+
+  alsa_error = snd_pcm_hw_params(&alsa_handle, hw_params);
+  if (0 != alsa_error) {
+    LogFormat("snd_pcm_hw_params(0x%p, 0x%p) failed: %d - %s",
+              &alsa_handle,
+              hw_params,
+              alsa_error,
+              snd_strerror(alsa_error));
+    return false;
+  }
+
+  snd_pcm_sw_params_t *sw_params;
+  snd_pcm_sw_params_alloca(&sw_params);
+
+  alsa_error = snd_pcm_sw_params_current(&alsa_handle, sw_params);
+  if (0 != alsa_error) {
+    LogFormat("snd_pcm_sw_params_current(0x%p, 0x%p) failed: %d - %s",
+              &alsa_handle,
+              sw_params,
+              alsa_error,
+              snd_strerror(alsa_error));
+    return false;
+  }
+
+  snd_pcm_uframes_t  start_threshold =
+      (buffer_size / period_size) * period_size;
+  alsa_error = snd_pcm_sw_params_set_start_threshold(&alsa_handle,
+                                                     sw_params,
+                                                     start_threshold);
+  if (0 != alsa_error) {
+    LogFormat("snd_pcm_sw_params_set_start_threshold(0x%p, 0x%p, %u) "
+                  "failed: %d - %s",
+              &alsa_handle,
+              sw_params,
+              static_cast<unsigned>(start_threshold),
+              alsa_error,
+              snd_strerror(alsa_error));
+    return false;
+  }
+
+  alsa_error = snd_pcm_sw_params_set_avail_min(&alsa_handle,
+                                               sw_params,
+                                               period_size);
+  if (0 != alsa_error) {
+    LogFormat("snd_pcm_sw_params_set_avail_min(0x%p, 0x%p, %u) failed: %d - %s",
+              &alsa_handle,
+              sw_params,
+              static_cast<unsigned>(period_size),
+              alsa_error,
+              snd_strerror(alsa_error));
+    return false;
+  }
+
+  alsa_error = snd_pcm_sw_params(&alsa_handle, sw_params);
+  if (0 != alsa_error) {
+    LogFormat("snd_pcm_sw_params(0x%p, 0x%p) failed: %d - %s",
+              &alsa_handle,
+              sw_params,
+              alsa_error,
+              snd_strerror(alsa_error));
+    return false;
+  }
+
+  return true;
+}
+
+bool
 ALSAPCMPlayer::Start(PCMDataSource &_source)
 {
   const unsigned new_sample_rate = _source.GetSampleRate();
@@ -311,41 +577,9 @@ ALSAPCMPlayer::Start(PCMDataSource &_source)
 
   channels = 1;
   bool big_endian_source = _source.IsBigEndian();
-  int alsa_error = snd_pcm_set_params(new_alsa_handle.get(),
-                                      big_endian_source
-                                          ? SND_PCM_FORMAT_S16_BE
-                                          : SND_PCM_FORMAT_S16_LE,
-                                      SND_PCM_ACCESS_RW_INTERLEAVED,
-                                      static_cast<int>(channels),
-                                      new_sample_rate,
-                                      1,
-                                      latency);
-  if (-EINVAL == alsa_error) {
-    /* Some ALSA devices (e. g. DMIX) do not support mono. Try stereo */
-    channels = 2;
-    alsa_error = snd_pcm_set_params(new_alsa_handle.get(),
-                                    big_endian_source
-                                        ? SND_PCM_FORMAT_S16_BE
-                                        : SND_PCM_FORMAT_S16_LE,
-                                    SND_PCM_ACCESS_RW_INTERLEAVED,
-                                    static_cast<int>(channels),
-                                    new_sample_rate,
-                                    1,
-                                    latency);
-  }
-
-  if (alsa_error < 0) {
-    LogFormat("snd_pcm_set_params(0x%p, %s, SND_PCM_ACCESS_RW_INTERLEAVED, 1, "
-                  "%u, 1, %u) failed: %d - %s",
-              new_alsa_handle.get(),
-              big_endian_source
-                  ? "SND_PCM_FORMAT_S16_BE" : "SND_PCM_FORMAT_S16_LE",
-              new_sample_rate,
-              latency,
-              alsa_error,
-              snd_strerror(alsa_error));
+  if (!SetParameters(*new_alsa_handle, new_sample_rate, big_endian_source,
+                     latency, channels))
     return false;
-  }
 
   snd_pcm_sframes_t n_available = snd_pcm_avail(new_alsa_handle.get());
   if (n_available <= 0) {
