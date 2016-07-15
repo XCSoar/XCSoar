@@ -383,7 +383,7 @@ FindLeading(gcc_unused char *const begin, char *i)
   return i;
 }
 
-void
+char *
 CropIncompleteUTF8(char *const p)
 {
 #if !CLANG_CHECK_VERSION(3,6)
@@ -393,7 +393,7 @@ CropIncompleteUTF8(char *const p)
 
   char *const end = FindTerminator(p);
   if (end == p)
-    return;
+    return end;
 
   char *const last = end - 1;
   if (!IsContinuation(*last)) {
@@ -401,7 +401,7 @@ CropIncompleteUTF8(char *const p)
       *last = 0;
 
     assert(ValidateUTF8(p));
-    return;
+    return last;
   }
 
   char *const leading = FindLeading(p, last);
@@ -428,12 +428,18 @@ CropIncompleteUTF8(char *const p)
 
   assert(n_continuations <= expected_continuations);
 
-  if (n_continuations < expected_continuations)
+  char *result = end;
+
+  if (n_continuations < expected_continuations) {
     /* this continuation is incomplete: truncate here */
     *leading = 0;
+    result = leading;
+  }
 
   /* now the string must be completely valid */
   assert(ValidateUTF8(p));
+
+  return result;
 }
 
 size_t
