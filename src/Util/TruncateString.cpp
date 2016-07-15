@@ -46,7 +46,7 @@ CopyTruncateString(TCHAR *dest, size_t dest_size, const TCHAR *src)
   *p = _T('\0');
 
 #ifndef _UNICODE
-  CropIncompleteUTF8(p);
+  CropIncompleteUTF8(dest);
 #endif
 }
 
