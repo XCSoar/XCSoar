@@ -37,6 +37,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Math/Angle.hpp"
 #include "Util/StringAPI.hpp"
+#include "Util/TruncateString.hpp"
 
 #include <assert.h>
 
@@ -467,6 +468,6 @@ RowFormWidget::SaveValue(unsigned i, TCHAR *string, size_t max_size) const
   if (StringIsEqual(string, new_value))
     return false;
 
-  CopyString(string, new_value, max_size);
+  CopyTruncateString(string, max_size, new_value);
   return true;
 }
