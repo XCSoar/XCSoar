@@ -25,6 +25,7 @@ Copyright_License {
 #include "Device/Port/Port.hpp"
 #include "Util/ConvertString.hpp"
 #include "Util/StaticString.hxx"
+#include "Util/TruncateString.hpp"
 #include "Util/Macros.hpp"
 #include "Util/NumberParser.hpp"
 #include "Util/StringCompare.hxx"
@@ -251,7 +252,7 @@ FlarmDevice::GetConfig(const char *setting, TCHAR *buffer, size_t length,
   if (!wide.IsValid())
     return false;
 
-  CopyString(buffer, wide, length);
+  CopyTruncateString(buffer, length, wide);
   return true;
 }
 

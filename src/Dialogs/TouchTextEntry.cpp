@@ -30,9 +30,10 @@ Copyright_License {
 #include "Widget/KeyboardWidget.hpp"
 #include "Screen/Layout.hpp"
 #include "Event/KeyCode.hpp"
-#include "Util/StringCompare.hxx"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
+#include "Util/StringCompare.hxx"
+#include "Util/TruncateString.hpp"
 
 #include <algorithm>
 
@@ -246,7 +247,7 @@ TouchTextEntry(TCHAR *text, size_t width,
   ClearText();
 
   if (!StringIsEmpty(text)) {
-    CopyString(edittext, text, width);
+    CopyTruncateString(edittext, width, text);
     cursor = _tcslen(text);
   }
 
@@ -257,7 +258,7 @@ TouchTextEntry(TCHAR *text, size_t width,
   keyboard.Unprepare();
 
   if (result) {
-    CopyString(text, edittext, width);
+    CopyTruncateString(text, width, edittext);
   }
 
   return result;

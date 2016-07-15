@@ -101,9 +101,11 @@ LengthUTF8(const char *p);
  * incomplete sequence.
  *
  * The rest of the string must be valid UTF-8.
+ *
+ * @return a pointer to the new null terminator
  */
 gcc_nonnull_all
-void
+char *
 CropIncompleteUTF8(char *p);
 
 /**

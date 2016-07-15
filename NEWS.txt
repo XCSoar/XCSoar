@@ -61,7 +61,9 @@ Version 6.8.6 - not yet released
   - fix crash in waypoint label renderer (#3781)
   - fix crash in waypoint editor (#3553, #3784)
 * devices
-  - fix Nano 3 firmware 2.0 compatibility (#3764)
+  - EW: use first 6 characters of turn point names (was: 3)
+  - EW: fix broken umlauts in turn point names
+  - LX: fix Nano 3 firmware 2.0 compatibility (#3764)
 * settings
   - adjust range and step size of terrain/arrival safety height settings
 * map

@@ -31,6 +31,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Util/Macros.hpp"
+#include "Util/TruncateString.hpp"
 
 #include <algorithm>
 
@@ -76,7 +77,7 @@ public:
   KnobTextEntryWindow(const TCHAR *text, size_t width)
     :max_width(std::min(MAX_TEXTENTRY, width)),
      cursor(0), lettercursor(0) {
-    CopyString(buffer, text, max_width);
+    CopyTruncateString(buffer, max_width, text);
     MoveCursor();
   }
 
@@ -263,7 +264,7 @@ KnobTextEntry(TCHAR *text, size_t width,
 
   if (dialog.ShowModal() == mrOK) {
     StripRight(widget.GetValue());
-    CopyString(text, widget.GetValue(), width);
+    CopyTruncateString(text, width, widget.GetValue());
   }
 
   dialog.StealWidget();

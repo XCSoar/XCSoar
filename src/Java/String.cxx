@@ -28,7 +28,7 @@
  */
 
 #include "String.hxx"
-#include "Util/StringUtil.hpp"
+#include "Util/TruncateString.hpp"
 #include "Util/ScopeExit.hxx"
 
 char *
@@ -39,7 +39,7 @@ Java::String::CopyTo(JNIEnv *env, jstring value,
 	if (p == nullptr)
 		return nullptr;
 
-	char *result = CopyString(buffer, p, max_size);
+	char *result = CopyTruncateString(buffer, max_size, p);
 	env->ReleaseStringUTFChars(value, p);
 	return result;
 }
