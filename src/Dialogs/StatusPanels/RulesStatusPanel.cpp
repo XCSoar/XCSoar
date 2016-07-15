@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "RulesStatusPanel.hpp"
 #include "Util/Macros.hpp"
+#include "Util/TruncateString.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "Formatter/UserUnits.hpp"
@@ -82,8 +83,8 @@ RulesStatusPanel::Refresh()
     const unsigned task_size = task.TaskSize();
 
     if (task_size > 0) {
-      CopyString(Temp, task.GetTaskPoint(0).GetWaypoint().name.c_str(),
-                 ARRAY_SIZE(Temp));
+      CopyTruncateString(Temp, ARRAY_SIZE(Temp),
+                         task.GetTaskPoint(0).GetWaypoint().name.c_str());
       finish_height = task.GetTaskPoint(task_size - 1).GetElevation();
     }
   }
