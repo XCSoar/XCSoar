@@ -37,7 +37,7 @@ Copyright_License {
 #include "Terrain/RasterWeatherStore.hpp"
 #include "Device/device.hpp"
 #include "PageActions.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/TruncateString.hpp"
 #include "Util/Macros.hpp"
 #include "Net/HTTP/Features.hpp"
 #include "UIState.hpp"
@@ -383,7 +383,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
 {
   // ToDo, check Buffer Size
   bool invalid = false;
-  CopyString(OutBuffer, In, Size);
+  CopyTruncateString(OutBuffer, Size, In);
 
   if (_tcsstr(OutBuffer, _T("$(")) == nullptr)
     return false;
