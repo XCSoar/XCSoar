@@ -233,11 +233,10 @@ EWDevice::AddWaypoint(const Waypoint &way_point, OperationEnvironment &env)
     return false;
 
   char IDString[12];
-  CopyString(IDString, name_utf8, 7);
+  char *end = CopyString(IDString, name_utf8, 7);
 
   // fill up with spaces
-  while (strlen(IDString) < 6)
-    strcat(IDString, " ");
+  std::fill(end, IDString + 6, ' ');
 
   // prepare lat
   tmp = (double)way_point.location.latitude.Degrees();
