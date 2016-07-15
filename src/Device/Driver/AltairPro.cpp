@@ -31,7 +31,7 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "Units/System.hpp"
 #include "Waypoint/Waypoint.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/TruncateString.hpp"
 #include "Util/Macros.hpp"
 #include "Time/TimeoutClock.hpp"
 
@@ -301,7 +301,7 @@ AltairProDevice::PutTurnPoint(const TCHAR *propertyName,
 
   if (waypoint != nullptr){
 
-    CopyString(Name, waypoint->name.c_str(), ARRAY_SIZE(Name));
+    CopyTruncateString(Name, ARRAY_SIZE(Name), waypoint->name.c_str());
 
     tmp = (double)waypoint->location.latitude.Degrees();
 

@@ -32,7 +32,7 @@ Copyright_License {
 #include "Device/Declaration.hpp"
 #include "NMEA/Checksum.hpp"
 #include "Operation/Operation.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/TruncateString.hpp"
 #include "Util/ConvertString.hpp"
 
 #include <tchar.h>
@@ -233,7 +233,7 @@ EWDevice::AddWaypoint(const Waypoint &way_point, OperationEnvironment &env)
     return false;
 
   char IDString[12];
-  char *end = CopyString(IDString, name_utf8, 7);
+  char *end = CopyTruncateString(IDString, 7, name_utf8);
 
   // fill up with spaces
   std::fill(end, IDString + 6, ' ');
