@@ -30,7 +30,7 @@
 #ifndef STRING_BUILDER_HXX
 #define STRING_BUILDER_HXX
 
-#include "StringUtil.hpp"
+#include "TruncateString.hpp"
 #include "StringAPI.hpp"
 
 #include <utility>
@@ -63,7 +63,7 @@ public:
 	}
 
 	void Append(const_pointer src) {
-		p = CopyString(p, src, GetRemainingSize());
+		p = CopyTruncateString(p, GetRemainingSize(), src);
 	}
 
 	template<typename... Args>
