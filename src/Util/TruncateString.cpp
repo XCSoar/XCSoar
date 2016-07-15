@@ -23,14 +23,28 @@ Copyright_License {
 
 #include "TruncateString.hpp"
 #include "StringAPI.hpp"
-
-#ifndef _UNICODE
 #include "UTF8.hpp"
-#endif
 
 #include <algorithm>
 
 #include <assert.h>
+
+char *
+CopyTruncateString(char *dest, size_t dest_size, const char *src)
+{
+  assert(dest != nullptr);
+  assert(dest_size > 0);
+  assert(src != nullptr);
+
+  size_t src_length = StringLength(src);
+  size_t copy = std::min(src_length, dest_size - 1);
+
+  auto *p = std::copy_n(src, copy, dest);
+  *p = _T('\0');
+  return CropIncompleteUTF8(dest);
+}
+
+#ifdef _UNICODE
 
 TCHAR *
 CopyTruncateString(TCHAR *dest, size_t dest_size, const TCHAR *src)
@@ -44,13 +58,10 @@ CopyTruncateString(TCHAR *dest, size_t dest_size, const TCHAR *src)
 
   auto *p = std::copy_n(src, copy, dest);
   *p = _T('\0');
-
-#ifdef _UNICODE
   return p;
-#else
-  return CropIncompleteUTF8(dest);
-#endif
 }
+
+#endif
 
 TCHAR *
 CopyTruncateString(TCHAR *dest, size_t dest_size,

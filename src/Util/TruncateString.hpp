@@ -35,8 +35,13 @@ Copyright_License {
  * includes the null byte
  * @return a pointer to the end of the destination string
  */
+char *
+CopyTruncateString(char *dest, size_t dest_size, const char *src);
+
+#ifdef _UNICODE
 TCHAR *
 CopyTruncateString(TCHAR *dest, size_t dest_size, const TCHAR *src);
+#endif
 
 /**
  * Copy a string to a buffer, truncating it if the buffer is not large
