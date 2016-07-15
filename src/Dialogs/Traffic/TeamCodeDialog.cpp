@@ -39,6 +39,8 @@
 #include "Blackboard/BlackboardListener.hpp"
 #include "Language/Language.hpp"
 #include "TeamActions.hpp"
+#include "Util/TruncateString.hpp"
+#include "Util/Macros.hpp"
 
 class TeamCodeWidget final
   : public RowFormWidget, NullBlackboardListener, ActionListener {
@@ -169,8 +171,8 @@ TeamCodeWidget::OnCodeClicked()
 {
   TCHAR newTeammateCode[10];
 
-  CopyString(newTeammateCode,
-             CommonInterface::GetComputerSettings().team_code.team_code.GetCode(), 10);
+  CopyTruncateString(newTeammateCode, ARRAY_SIZE(newTeammateCode),
+                     CommonInterface::GetComputerSettings().team_code.team_code.GetCode());
 
   if (!TextEntryDialog(newTeammateCode, 7))
     return;
