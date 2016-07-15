@@ -42,9 +42,6 @@ Copyright_License {
 #include <windows.h>
 #endif
 
-// hack, soulf be configurable
-#define  USESHORTTPNAME   1
-
 // Additional sentance for EW support
 
 class EWDevice : public AbstractDevice {
@@ -236,11 +233,6 @@ EWDevice::AddWaypoint(const Waypoint &way_point, OperationEnvironment &env)
   // fill up with spaces
   while (_tcslen(IDString) < 6)
     _tcscat(IDString, _T(" "));
-
-#if USESHORTTPNAME > 0
-  // truncate to short name
-  _tcscpy(&IDString[3], _T("   "));
-#endif
 
   // prepare lat
   tmp = (double)way_point.location.latitude.Degrees();
