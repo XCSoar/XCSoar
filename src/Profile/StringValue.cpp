@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Map.hpp"
 #include "Util/UTF8.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/TruncateString.hpp"
 #include "Util/Macros.hpp"
 
 #ifdef _UNICODE
@@ -47,7 +47,7 @@ ProfileMap::Get(const char *key, TCHAR *value, size_t max_size) const
   if (!ValidateUTF8(src))
     return false;
 
-  CopyString(value, src, max_size);
+  CopyTruncateString(value, max_size, src);
   return true;
 #endif
 }
