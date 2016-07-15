@@ -33,8 +33,9 @@ Copyright_License {
  *
  * @param dest_size the total size of the destination buffer, which
  * includes the null byte
+ * @return a pointer to the end of the destination string
  */
-void
+TCHAR *
 CopyTruncateString(TCHAR *dest, size_t dest_size, const TCHAR *src);
 
 /**
