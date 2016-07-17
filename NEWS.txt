@@ -5,6 +5,7 @@ Version 6.8.6 - not yet released
   - fix graphics error on FLARM gauge
   - fix crash in waypoint label renderer (#3781)
   - fix crash in waypoint editor (#3553, #3784)
+  - fix crash in task manager
 * devices
   - EW: use first 6 characters of turn point names (was: 3)
   - EW: fix broken umlauts in turn point names
