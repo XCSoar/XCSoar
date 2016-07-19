@@ -38,7 +38,9 @@ AUDIO_SOURCES += \
 	$(AUDIO_SRC_DIR)/PCMResourcePlayer.cpp
 
 ifeq ($(ENABLE_ALSA),y)
-AUDIO_SOURCES += $(AUDIO_SRC_DIR)/ALSAPCMPlayer.cpp
+AUDIO_SOURCES += \
+	$(AUDIO_SRC_DIR)/ALSAEnv.cpp \
+	$(AUDIO_SRC_DIR)/ALSAPCMPlayer.cpp
 else ifeq ($(ENABLE_SDL),y)
 AUDIO_SOURCES += $(AUDIO_SRC_DIR)/SDLPCMPlayer.cpp
 endif

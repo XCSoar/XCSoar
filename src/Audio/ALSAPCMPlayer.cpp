@@ -23,21 +23,14 @@ Copyright_License {
 
 #include "ALSAPCMPlayer.hpp"
 
+#include "ALSAEnv.hpp"
 #include "PCMDataSource.hpp"
 #include "Util/Macros.hpp"
 #include "LogFile.hpp"
 
 #include "IO/Async/AsioUtil.hpp"
-#include "Util/NumberParser.hpp"
 
 #include <alsa/asoundlib.h>
-
-
-static constexpr char ALSA_DEVICE_ENV[] = "ALSA_DEVICE";
-static constexpr char ALSA_LATENCY_ENV[] = "ALSA_LATENCY";
-
-static constexpr char DEFAULT_ALSA_DEVICE[] = "default";
-static constexpr unsigned DEFAULT_ALSA_LATENCY = 100000;
 
 
 static void alsa_error_handler_stub(const char *, int, const char *,
@@ -541,15 +534,7 @@ ALSAPCMPlayer::Start(PCMDataSource &_source)
 
   AlsaHandleUniquePtr new_alsa_handle = MakeAlsaHandleUniquePtr();
   {
-    /* The "default" alsa device is normally the dmix plugin, or PulseAudio.
-     * Some users might want to explicitly specify a hw (or plughw) device
-     * for reduced latency. */
-    const char *alsa_device = getenv(ALSA_DEVICE_ENV);
-    if ((nullptr == alsa_device) || ('\0' == *alsa_device))
-      alsa_device = DEFAULT_ALSA_DEVICE;
-    LogFormat("Using ALSA PCM device \"%s\" (use environment variable "
-                  "%s to override)",
-              alsa_device, ALSA_DEVICE_ENV);
+    const char *alsa_device = ALSAEnv::GetALSADeviceName();
 
     snd_pcm_t *raw_alsa_handle;
     int alsa_error = snd_pcm_open(&raw_alsa_handle, alsa_device,
@@ -564,24 +549,7 @@ ALSAPCMPlayer::Start(PCMDataSource &_source)
     assert(new_alsa_handle);
   }
 
-  /* With the latency parameter in snd_pcm_set_params(), ALSA determines
-   * buffer size and period time values to achieve this. We always want low
-   * latency. But lower latency values result in a smaller buffer size,
-   * more frequent interrupts, and a higher risk for buffer underruns. */
-  unsigned latency = DEFAULT_ALSA_LATENCY;
-  const char *latency_env_value = getenv(ALSA_LATENCY_ENV);
-  if ((nullptr == latency_env_value) || ('\0' == *latency_env_value)) {
-    latency = DEFAULT_ALSA_LATENCY;
-  } else {
-    char *p;
-    latency = ParseUnsigned(latency_env_value, &p);
-    if (*p != '\0') {
-      LogFormat("Invalid %s value \"%s\"", ALSA_LATENCY_ENV, latency_env_value);
-      return false;
-    }
-  }
-  LogFormat("Using ALSA PCM latency %u μs (use environment variable "
-                "%s to override)", latency, ALSA_LATENCY_ENV);
+  unsigned latency = ALSAEnv::GetALSALatency();
 
   channels = 1;
   bool big_endian_source = _source.IsBigEndian();
