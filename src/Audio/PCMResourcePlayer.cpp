@@ -43,11 +43,7 @@ Copyright_License {
 
 
 PCMResourcePlayer::PCMResourcePlayer() :
-  player(PCMPlayerFactory::CreateInstance(
-#ifdef ENABLE_ALSA
-      asio_thread->Get()
-#endif
-      ))
+    player(PCMPlayerFactory::CreateInstance())
 {
 }
 

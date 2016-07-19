@@ -21,43 +21,22 @@ Copyright_License {
 }
 */
 
-/** \file
- *
- * This header provides macros and inline functions providing
- * information about the availability of audio playback features.
+#ifndef XCSOAR_AUDIO_MIXER_PCM_PLAYER_HPP
+#define XCSOAR_AUDIO_MIXER_PCM_PLAYER_HPP
+
+#include "PCMPlayer.hpp"
+
+/**
+ * PCMPlayer implementation which uses the #PCMMixer layer
  */
+class MixerPCMPlayer : public PCMPlayer {
+public:
+  MixerPCMPlayer() = default;
+  virtual ~MixerPCMPlayer();
 
-#ifndef XCSOAR_AUDIO_FEATURES_HPP
-#define XCSOAR_AUDIO_FEATURES_HPP
-
-#if defined(ENABLE_SDL) || defined(ANDROID) || defined(ENABLE_ALSA)
-#define HAVE_PCM_PLAYER
-#endif
-
-#if defined(HAVE_PCM_PLAYER) && (defined(ENABLE_SDL) || defined(ENABLE_ALSA))
-#define HAVE_PCM_MIXER
-#endif
-
-constexpr
-static inline bool
-HavePCMPlayer()
-{
-#ifdef HAVE_PCM_PLAYER
-  return true;
-#else
-  return false;
-#endif
-}
-
-constexpr
-static inline bool
-HavePCMMixer()
-{
-#ifdef HAVE_PCM_MIXER
-  return true;
-#else
-  return false;
-#endif
-}
+  /* virtual methods from class PCMPlayer */
+  bool Start(PCMDataSource &source) override;
+  void Stop() override;
+};
 
 #endif

@@ -21,43 +21,44 @@ Copyright_License {
 }
 */
 
-/** \file
- *
- * This header provides macros and inline functions providing
- * information about the availability of audio playback features.
- */
+#ifndef XCSOAR_AUDIO_GLOBAL_PCM_MIXER_HPP
+#define XCSOAR_AUDIO_GLOBAL_PCM_MIXER_HPP
 
-#ifndef XCSOAR_AUDIO_FEATURES_HPP
-#define XCSOAR_AUDIO_FEATURES_HPP
 
-#if defined(ENABLE_SDL) || defined(ANDROID) || defined(ENABLE_ALSA)
-#define HAVE_PCM_PLAYER
-#endif
+#include "Features.hpp"
 
-#if defined(HAVE_PCM_PLAYER) && (defined(ENABLE_SDL) || defined(ENABLE_ALSA))
-#define HAVE_PCM_MIXER
-#endif
 
-constexpr
-static inline bool
-HavePCMPlayer()
-{
-#ifdef HAVE_PCM_PLAYER
-  return true;
-#else
-  return false;
-#endif
-}
-
-constexpr
-static inline bool
-HavePCMMixer()
-{
 #ifdef HAVE_PCM_MIXER
-  return true;
+class PCMMixer;
+
+extern PCMMixer *pcm_mixer;
+
+void
+InitialisePCMMixer();
+
+void
+DeinitialisePCMMixer();
 #else
-  return false;
-#endif
+static inline void
+InitialisePCMMixer()
+{
 }
+
+static inline void
+DeinitialisePCMMixer()
+{
+}
+#endif
+
+class ScopeGlobalPCMMixer final {
+public:
+  ScopeGlobalPCMMixer() {
+    InitialisePCMMixer();
+  }
+
+  ~ScopeGlobalPCMMixer() {
+    DeinitialisePCMMixer();
+  }
+};
 
 #endif

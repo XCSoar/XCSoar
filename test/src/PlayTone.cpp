@@ -61,9 +61,10 @@ main(int argc, char **argv)
 #ifdef ENABLE_ALSA
   ScopeGlobalAsioThread global_asio_thread;
   std::unique_ptr<PCMPlayer> player(
-      PCMPlayerFactory::CreateInstance(asio_thread->Get()));
+      PCMPlayerFactory::CreateInstanceForDirectAccess(asio_thread->Get()));
 #else
-  std::unique_ptr<PCMPlayer> player(PCMPlayerFactory::CreateInstance());
+  std::unique_ptr<PCMPlayer> player(
+      PCMPlayerFactory::CreateInstanceForDirectAccess());
 #endif
 
   const unsigned sample_rate = 44100;

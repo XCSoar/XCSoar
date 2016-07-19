@@ -31,11 +31,6 @@ Copyright_License {
 #include "SLES/Init.hpp"
 #endif
 
-#ifdef ENABLE_ALSA
-#include "IO/Async/AsioThread.hpp"
-#include "IO/Async/GlobalAsioThread.hpp"
-#endif
-
 #include <assert.h>
 
 static constexpr unsigned sample_rate = 44100;
@@ -69,11 +64,7 @@ AudioVarioGlue::Initialise()
     return;
 #endif
 
-#ifdef ENABLE_ALSA
-  player = PCMPlayerFactory::CreateInstance(asio_thread->Get());
-#else
   player = PCMPlayerFactory::CreateInstance();
-#endif
   synthesiser = new VarioSynthesiser(sample_rate);
 }
 

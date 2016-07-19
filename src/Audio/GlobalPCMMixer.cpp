@@ -21,43 +21,40 @@ Copyright_License {
 }
 */
 
-/** \file
- *
- * This header provides macros and inline functions providing
- * information about the availability of audio playback features.
- */
+#include "GlobalPCMMixer.hpp"
 
-#ifndef XCSOAR_AUDIO_FEATURES_HPP
-#define XCSOAR_AUDIO_FEATURES_HPP
+#include "PCMPlayerFactory.hpp"
+#include "PCMMixer.hpp"
 
-#if defined(ENABLE_SDL) || defined(ANDROID) || defined(ENABLE_ALSA)
-#define HAVE_PCM_PLAYER
+#ifdef ENABLE_ALSA
+#include "IO/Async/AsioThread.hpp"
+#include "IO/Async/GlobalAsioThread.hpp"
 #endif
 
-#if defined(HAVE_PCM_PLAYER) && (defined(ENABLE_SDL) || defined(ENABLE_ALSA))
-#define HAVE_PCM_MIXER
-#endif
+#include <memory>
 
-constexpr
-static inline bool
-HavePCMPlayer()
+PCMMixer *pcm_mixer = nullptr;
+
+void
+InitialisePCMMixer()
 {
-#ifdef HAVE_PCM_PLAYER
-  return true;
-#else
-  return false;
+  assert(nullptr == pcm_mixer);
+
+  pcm_mixer =
+      new PCMMixer(44100,
+                   std::unique_ptr<PCMPlayer>(
+                       PCMPlayerFactory::CreateInstanceForDirectAccess(
+#ifdef ENABLE_ALSA
+                           asio_thread->Get()
 #endif
+                           )));
 }
 
-constexpr
-static inline bool
-HavePCMMixer()
+void
+DeinitialisePCMMixer()
 {
-#ifdef HAVE_PCM_MIXER
-  return true;
-#else
-  return false;
-#endif
-}
+  assert(nullptr != pcm_mixer);
 
-#endif
+  delete pcm_mixer;
+  pcm_mixer = nullptr;
+}

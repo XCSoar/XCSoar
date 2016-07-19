@@ -21,43 +21,36 @@ Copyright_License {
 }
 */
 
-/** \file
- *
- * This header provides macros and inline functions providing
- * information about the availability of audio playback features.
- */
+#include "MixerPCMPlayer.hpp"
 
-#ifndef XCSOAR_AUDIO_FEATURES_HPP
-#define XCSOAR_AUDIO_FEATURES_HPP
+#include "GlobalPCMMixer.hpp"
+#include "PCMMixer.hpp"
 
-#if defined(ENABLE_SDL) || defined(ANDROID) || defined(ENABLE_ALSA)
-#define HAVE_PCM_PLAYER
-#endif
+#include <boost/assert.hpp>
 
-#if defined(HAVE_PCM_PLAYER) && (defined(ENABLE_SDL) || defined(ENABLE_ALSA))
-#define HAVE_PCM_MIXER
-#endif
-
-constexpr
-static inline bool
-HavePCMPlayer()
+MixerPCMPlayer::~MixerPCMPlayer()
 {
-#ifdef HAVE_PCM_PLAYER
-  return true;
-#else
-  return false;
-#endif
+  Stop();
 }
 
-constexpr
-static inline bool
-HavePCMMixer()
+bool
+MixerPCMPlayer::Start(PCMDataSource &_source)
 {
-#ifdef HAVE_PCM_MIXER
-  return true;
-#else
-  return false;
-#endif
+  Stop();
+
+  if (pcm_mixer->Start(_source)) {
+    source = &_source;
+    return true;
+  } else {
+    return false;
+  }
 }
 
-#endif
+void
+MixerPCMPlayer::Stop()
+{
+  if (nullptr != source) {
+    pcm_mixer->Stop(*source);
+    source = nullptr;
+  }
+}
