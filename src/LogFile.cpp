@@ -29,6 +29,7 @@ Copyright_License {
 #include "Time/BrokenDateTime.hpp"
 #include "OS/Path.hpp"
 #include "OS/FileUtil.hpp"
+#include "OS/UniqueFileDescriptor.hxx"
 #include "Util/Error.hxx"
 
 #include <exception>
@@ -63,11 +64,10 @@ OpenLog()
     /* redirect stdout/stderr to xcsoar-startup.log on Android so we
        get debug logs from libraries and output from child processes
        there */
-    int fd = open(path.c_str(), O_APPEND|O_CREAT|O_WRONLY, 0666);
-    if (fd >= 0) {
-      dup2(fd, 1);
-      dup2(fd, 2);
-      close(fd);
+    UniqueFileDescriptor fd;
+    if (fd.Open(path.c_str(), O_APPEND|O_CREAT|O_WRONLY, 0666)) {
+      fd.CheckDuplicate(STDOUT_FILENO);
+      fd.CheckDuplicate(STDERR_FILENO);
     }
 #endif
   }
