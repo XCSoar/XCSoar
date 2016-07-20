@@ -305,7 +305,8 @@ ShowMapItemDialog(const MapItem &item,
                        airspace_warnings);
     break;
   case MapItem::WAYPOINT:
-    dlgWaypointDetailsShowModal(((const WaypointMapItem &)item).waypoint);
+    dlgWaypointDetailsShowModal(((const WaypointMapItem &)item).waypoint,
+                                true, true);
     break;
   case MapItem::TASK_OZ:
     dlgTargetShowModal(((const TaskOZMapItem &)item).index);

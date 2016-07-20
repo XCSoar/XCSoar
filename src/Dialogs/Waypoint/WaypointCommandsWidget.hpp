@@ -36,18 +36,22 @@ class ProtectedTaskManager;
  */
 class WaypointCommandsWidget final
   : public RowFormWidget, ActionListener {
-  WndForm *form;
+  WndForm *const form;
 
   const WaypointPtr waypoint;
 
-  ProtectedTaskManager *task_manager;
+  ProtectedTaskManager *const task_manager;
+
+  const bool allow_edit;
 
 public:
   WaypointCommandsWidget(const DialogLook &look, WndForm *_form,
                          WaypointPtr _waypoint,
-                         ProtectedTaskManager *_task_manager)
+                         ProtectedTaskManager *_task_manager,
+                         bool _allow_edit)
     :RowFormWidget(look), form(_form),
-     waypoint(std::move(_waypoint)), task_manager(_task_manager) {}
+     waypoint(std::move(_waypoint)), task_manager(_task_manager),
+     allow_edit(_allow_edit) {}
 
   /* methods from ActionListener */
   void OnAction(int id) override;

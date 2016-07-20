@@ -728,7 +728,7 @@ TargetWidget::OnNameClicked()
     waypoint = tp.GetWaypointPtr();
   }
 
-  dlgWaypointDetailsShowModal(waypoint);
+  dlgWaypointDetailsShowModal(waypoint, false);
 }
 
 bool

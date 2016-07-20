@@ -151,7 +151,7 @@ int main(int argc, char **argv)
   plan_tests(2 * ARRAY_SIZE(valid) +
              2 * ARRAY_SIZE(invalid) +
              2 * ARRAY_SIZE(length) +
-             ARRAY_SIZE(crop) +
+             4 * ARRAY_SIZE(crop) +
              ARRAY_SIZE(latin1_chars) +
 #ifndef _UNICODE
              ARRAY_SIZE(truncate_string_tests) +
@@ -182,8 +182,11 @@ int main(int argc, char **argv)
 
   for (auto &c : crop) {
     strcpy(buffer, c.input);
-    CropIncompleteUTF8(buffer);
+    auto *end = CropIncompleteUTF8(buffer);
     ok1(strcmp(c.output, buffer) == 0);
+    ok1(end != nullptr);
+    ok1(*end == '\0');
+    ok1(end == buffer + strlen(buffer));
   }
 
 #ifndef _UNICODE

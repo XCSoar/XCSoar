@@ -50,7 +50,7 @@ ShowNextWaypointDetails()
   if (wp == nullptr)
     return;
 
-  dlgWaypointDetailsShowModal(std::move(wp));
+  dlgWaypointDetailsShowModal(std::move(wp), false);
 }
 
 static Widget *
