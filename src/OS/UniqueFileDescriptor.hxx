@@ -94,6 +94,8 @@ public:
 
 	using FileDescriptor::SetNonBlocking;
 	using FileDescriptor::SetBlocking;
+	using FileDescriptor::EnableCloseOnExec;
+	using FileDescriptor::DisableCloseOnExec;
 	using FileDescriptor::Duplicate;
 
 	static bool CreatePipe(FileDescriptor &r, FileDescriptor &w);

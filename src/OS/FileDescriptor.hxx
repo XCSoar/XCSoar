@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2015 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2012-2016 Max Kellermann <max@duempel.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -110,6 +110,18 @@ public:
 	 * Enable blocking mode on this file descriptor.
 	 */
 	void SetBlocking();
+
+	/**
+	 * Auto-close this file descriptor when a new program is
+	 * executed.
+	 */
+	void EnableCloseOnExec();
+
+	/**
+	 * Do not auto-close this file descriptor when a new program
+	 * is executed.
+	 */
+	void DisableCloseOnExec();
 
 	/**
 	 * Duplicate the file descriptor onto the given file descriptor.
