@@ -137,6 +137,9 @@ class WaypointDetailsWidget final
   const DialogLook &look;
 
   const Waypoint &waypoint;
+
+  ProtectedTaskManager *const task_manager;
+
   const bool allow_navigation;
 
   Button goto_button;
@@ -169,10 +172,11 @@ public:
                         ProtectedTaskManager *_task_manager)
     :dialog(_dialog), look(dialog.GetLook()),
      waypoint(_waypoint),
+     task_manager(_task_manager),
      allow_navigation(_allow_navigation),
      page(0), last_page(0),
      info_widget(look, _waypoint),
-     commands_widget(look, &_dialog, _waypoint, _task_manager),
+     commands_widget(look, &_dialog, _waypoint, task_manager),
 #ifdef HAVE_RUN_FILE
      file_list(look), file_list_handler(_waypoint),
 #endif
@@ -597,10 +601,10 @@ WaypointDetailsWidget::KeyPress(unsigned key_code)
 void
 WaypointDetailsWidget::OnGotoClicked()
 {
-  if (protected_task_manager == nullptr)
+  if (task_manager == nullptr)
     return;
 
-  protected_task_manager->DoGoto(waypoint);
+  task_manager->DoGoto(waypoint);
   dialog.SetModalResult(mrOK);
 
   CommonInterface::main_window->FullRedraw();
