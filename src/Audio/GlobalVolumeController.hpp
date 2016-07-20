@@ -21,16 +21,44 @@ Copyright_License {
 }
 */
 
-#include "Settings.hpp"
+#ifndef XCSOAR_AUDIO_GLOBAL_VOLUME_CONTROLLER_HPP
+#define XCSOAR_AUDIO_GLOBAL_VOLUME_CONTROLLER_HPP
+
+
+#include "Features.hpp"
+
+
+#ifdef HAVE_VOLUME_CONTROLLER
+class VolumeController;
+
+extern VolumeController *volume_controller;
 
 void
-SoundSettings::SetDefaults()
+InitialiseVolumeController();
+
+void
+DeinitialiseVolumeController();
+#else
+static inline void
+InitialiseVolumeController()
 {
-  sound_task_enabled = true;
-  sound_modes_enabled = true;
-  sound_deadband = 5;
-
-  master_volume = 50;
-
-  vario.SetDefaults();
 }
+
+static inline void
+DeinitialiseVolumeController()
+{
+}
+#endif
+
+class ScopeGlobalVolumeController final {
+public:
+  ScopeGlobalVolumeController() {
+    InitialiseVolumeController();
+  }
+
+  ~ScopeGlobalVolumeController() {
+    DeinitialiseVolumeController();
+  }
+};
+
+#endif

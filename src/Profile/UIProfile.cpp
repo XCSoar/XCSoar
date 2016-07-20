@@ -108,6 +108,8 @@ Profile::Load(const ProfileMap &map, SoundSettings &settings)
   map.Get(ProfileKeys::SoundModes, settings.sound_modes_enabled);
   map.Get(ProfileKeys::SoundDeadband, settings.sound_deadband);
 
+  map.Get(ProfileKeys::MasterAudioVolume, settings.master_volume);
+
   Load(map, settings.vario);
 }
 

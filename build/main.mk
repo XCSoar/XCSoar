@@ -141,7 +141,9 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgQuickMenu.cpp \
 
 ifeq ($(HAVE_PCM_PLAYER),y)
-DIALOG_SOURCES += $(SRC)/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp
+DIALOG_SOURCES += \
+	$(SRC)/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/AudioConfigPanel.cpp
 endif
 
 ifeq ($(HAVE_HTTP),y)

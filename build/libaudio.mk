@@ -32,10 +32,12 @@ else
 AUDIO_SOURCES += \
 	$(AUDIO_SRC_DIR)/GlobalPCMResourcePlayer.cpp \
 	$(AUDIO_SRC_DIR)/GlobalPCMMixer.cpp \
+	$(AUDIO_SRC_DIR)/GlobalVolumeController.cpp \
 	$(AUDIO_SRC_DIR)/MixerPCMPlayer.cpp \
 	$(AUDIO_SRC_DIR)/PCMMixerDataSource.cpp \
 	$(AUDIO_SRC_DIR)/PCMMixer.cpp \
-	$(AUDIO_SRC_DIR)/PCMResourcePlayer.cpp
+	$(AUDIO_SRC_DIR)/PCMResourcePlayer.cpp \
+	$(AUDIO_SRC_DIR)/VolumeController.cpp
 
 ifeq ($(ENABLE_ALSA),y)
 AUDIO_SOURCES += \

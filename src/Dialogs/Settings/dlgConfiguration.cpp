@@ -69,6 +69,10 @@ Copyright_License {
 #include "Panels/AudioVarioConfigPanel.hpp"
 #endif
 
+#ifdef HAVE_VOLUME_CONTROLLER
+#include "Panels/AudioConfigPanel.hpp"
+#endif
+
 #ifdef HAVE_TRACKING
 #include "Panels/TrackingConfigPanel.hpp"
 #endif
@@ -142,6 +146,9 @@ static constexpr TabMenuPage setup_pages[] = {
 #endif
 #ifdef HAVE_PCMET
   { _T("Weather"), CreateWeatherConfigPanel },
+#endif
+#ifdef HAVE_VOLUME_CONTROLLER
+  { N_("Audio"), CreateAudioConfigPanel },
 #endif
   { nullptr, nullptr }
 };

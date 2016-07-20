@@ -268,4 +268,6 @@ const char PagesDistinctZoom[] = "PagesDistinctZoom";
 
 const char WaveAssistant[] = "WaveAssistant";
 
+const char MasterAudioVolume[] = "MasterAudioVolume";
+
 }

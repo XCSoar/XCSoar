@@ -21,16 +21,13 @@ Copyright_License {
 }
 */
 
-#include "Settings.hpp"
+#ifndef AUDIO_CONFIGPANEL_HPP
+#define AUDIO_CONFIGPANEL_HPP
 
-void
-SoundSettings::SetDefaults()
-{
-  sound_task_enabled = true;
-  sound_modes_enabled = true;
-  sound_deadband = 5;
 
-  master_volume = 50;
+class Widget;
 
-  vario.SetDefaults();
-}
+Widget *
+CreateAudioConfigPanel();
+
+#endif /* AUDIO_CONFIGPANEL_HPP */

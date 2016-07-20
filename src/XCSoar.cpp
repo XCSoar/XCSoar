@@ -43,6 +43,7 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "Audio/GlobalPCMMixer.hpp"
 #include "Audio/GlobalPCMResourcePlayer.hpp"
+#include "Audio/GlobalVolumeController.hpp"
 #include "OS/Args.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
 
@@ -113,6 +114,7 @@ Main()
 
   ScopeGlobalPCMMixer global_pcm_mixer;
   ScopeGlobalPCMResourcePlayer global_pcm_resouce_player;
+  ScopeGlobalVolumeController global_volume_controller;
 
   // Perform application initialization and run loop
   int ret = EXIT_FAILURE;

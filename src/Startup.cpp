@@ -52,7 +52,10 @@ Copyright_License {
 #include "Device/MultipleDevices.hpp"
 #include "Topography/TopographyStore.hpp"
 #include "Topography/TopographyGlue.hpp"
+#include "Audio/Features.hpp"
+#include "Audio/GlobalVolumeController.hpp"
 #include "Audio/VarioGlue.hpp"
+#include "Audio/VolumeController.hpp"
 #include "Screen/Busy.hpp"
 #include "CommandLine.hpp"
 #include "MainWindow.hpp"
@@ -366,6 +369,10 @@ Startup()
 #ifdef HAVE_NOAA
   noaa_store = new NOAAStore();
   noaa_store->LoadFromProfile();
+#endif
+
+#ifdef HAVE_VOLUME_CONTROLLER
+  volume_controller->SetVolume(ui_settings.sound.master_volume);
 #endif
 
   AudioVarioGlue::Initialise();

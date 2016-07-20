@@ -266,6 +266,8 @@ extern const char PagesDistinctZoom[];
 
 extern const char WaveAssistant[];
 
+extern const char MasterAudioVolume[];
+
 }
 
 #endif
