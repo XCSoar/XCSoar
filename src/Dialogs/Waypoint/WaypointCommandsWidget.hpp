@@ -36,11 +36,11 @@ class ProtectedTaskManager;
  */
 class WaypointCommandsWidget final
   : public RowFormWidget, ActionListener {
-  WndForm *form;
+  WndForm *const form;
 
   const Waypoint &waypoint;
 
-  ProtectedTaskManager *task_manager;
+  ProtectedTaskManager *const task_manager;
 
 public:
   WaypointCommandsWidget(const DialogLook &look, WndForm *_form,
