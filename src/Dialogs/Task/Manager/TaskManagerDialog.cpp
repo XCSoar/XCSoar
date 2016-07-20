@@ -233,7 +233,7 @@ TaskManagerDialog::Commit()
   }
 
   ShowMessageBox(getTaskValidationErrors(task->GetFactory().GetValidationErrors()),
-    _("Validation Errors"), MB_ICONEXCLAMATION);
+    _("Validation Errors"), MB_OK | MB_ICONEXCLAMATION);
 
   return (ShowMessageBox(_("Task not valid. Changes will be lost.\nContinue?"),
                       _("Task Manager"), MB_YESNO | MB_ICONQUESTION) == IDYES);
