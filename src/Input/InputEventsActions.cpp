@@ -319,6 +319,7 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
   const Waypoint* wp = NULL;
 
   bool allow_navigation = true;
+  bool allow_edit = true;
 
   if (StringIsEqual(misc, _T("current"))) {
     if (protected_task_manager == NULL)
@@ -335,11 +336,12 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
        require updating lots of internal task state, and the waypoint
        editor doesn't know how to do that */
     allow_navigation = false;
+    allow_edit = false;
   } else if (StringIsEqual(misc, _T("select"))) {
     wp = ShowWaypointListDialog(basic.location);
   }
   if (wp)
-    dlgWaypointDetailsShowModal(*wp, allow_navigation);
+    dlgWaypointDetailsShowModal(*wp, allow_navigation, allow_edit);
 }
 
 void

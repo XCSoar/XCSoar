@@ -296,5 +296,7 @@ WaypointCommandsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddButton(_("Pan to Waypoint"), *this, PAN);
   AddButton(_("Set Active Frequency"), *this, SET_ACTIVE_FREQUENCY);
   AddButton(_("Set Standby Frequency"), *this, SET_STANDBY_FREQUENCY);
-  AddButton(_("Edit"), *this, EDIT);
+
+  if (allow_edit)
+    AddButton(_("Edit"), *this, EDIT);
 }

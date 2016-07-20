@@ -46,7 +46,7 @@ PopupNearestWaypointDetails(const Waypoints &way_points,
 
   if (way_point) {
     LastUsedWaypoints::Add(*way_point);
-    dlgWaypointDetailsShowModal(*way_point);
+    dlgWaypointDetailsShowModal(*way_point, true, true);
     return true;
   }
   return false;
