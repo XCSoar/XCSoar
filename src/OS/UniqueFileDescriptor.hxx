@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2015 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2012-2016 Max Kellermann <max@duempel.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -71,6 +71,7 @@ public:
 
 	using FileDescriptor::IsDefined;
 	using FileDescriptor::Get;
+	using FileDescriptor::Steal;
 
 protected:
 	void Set(int _fd) {
@@ -79,8 +80,6 @@ protected:
 
 		FileDescriptor::Set(_fd);
 	}
-
-	using FileDescriptor::Steal;
 
 public:
 	using FileDescriptor::Open;
