@@ -176,7 +176,8 @@ public:
      allow_navigation(_allow_navigation),
      page(0), last_page(0),
      info_widget(look, _waypoint),
-     commands_widget(look, &_dialog, _waypoint, task_manager),
+     commands_widget(look, &_dialog, _waypoint,
+                     allow_navigation ? task_manager : nullptr),
 #ifdef HAVE_RUN_FILE
      file_list(look), file_list_handler(_waypoint),
 #endif
@@ -217,10 +218,8 @@ public:
       shrink_button.MoveAndShow(layout.shrink_button);
     }
 
-    if (allow_navigation) {
-      previous_button.MoveAndShow(layout.previous_button);
-      next_button.MoveAndShow(layout.next_button);
-    }
+    previous_button.MoveAndShow(layout.previous_button);
+    next_button.MoveAndShow(layout.next_button);
 
     close_button.MoveAndShow(layout.close_button);
 
@@ -249,10 +248,8 @@ public:
       shrink_button.Hide();
     }
 
-    if (allow_navigation) {
-      previous_button.Hide();
-      next_button.Hide();
-    }
+    previous_button.Hide();
+    next_button.Hide();
 
     close_button.Hide();
 
@@ -275,10 +272,8 @@ public:
       shrink_button.Move(layout.shrink_button);
     }
 
-    if (allow_navigation) {
-      previous_button.Move(layout.previous_button);
-      next_button.Move(layout.next_button);
-    }
+    previous_button.Move(layout.previous_button);
+    next_button.Move(layout.next_button);
 
     close_button.Move(layout.close_button);
 
@@ -452,14 +447,12 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
                          *this, SHRINK);
   }
 
-  if (allow_navigation) {
-    previous_button.Create(parent, layout.previous_button, button_style,
-                           new SymbolButtonRenderer(look.button, _T("<")),
-                           *this, PREVIOUS);
-    next_button.Create(parent, layout.next_button, button_style,
-                       new SymbolButtonRenderer(look.button, _T(">")),
-                       *this, NEXT);
-  }
+  previous_button.Create(parent, layout.previous_button, button_style,
+                         new SymbolButtonRenderer(look.button, _T("<")),
+                         *this, PREVIOUS);
+  next_button.Create(parent, layout.next_button, button_style,
+                     new SymbolButtonRenderer(look.button, _T(">")),
+                     *this, NEXT);
 
   close_button.Create(parent, look.button, _("Close"), layout.close_button,
                       button_style, dialog, mrOK);
