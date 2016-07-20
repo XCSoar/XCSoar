@@ -27,7 +27,12 @@ AUDIO_SOURCES = \
 
 ifeq ($(TARGET),ANDROID)
 AUDIO_SOURCES += \
+	$(AUDIO_SRC_DIR)/AndroidPCMPlayer.cpp \
 	$(AUDIO_SRC_DIR)/SLES/Init.cpp
+else ifeq ($(ENABLE_ALSA),y)
+AUDIO_SOURCES += $(AUDIO_SRC_DIR)/ALSAPCMPlayer.cpp
+else ifeq ($(ENABLE_SDL),y)
+AUDIO_SOURCES += $(AUDIO_SRC_DIR)/SDLPCMPlayer.cpp
 endif
 
 AUDIO_CPPFLAGS_INTERNAL = $(SDL_CPPFLAGS)

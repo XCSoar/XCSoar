@@ -22,9 +22,10 @@ Copyright_License {
 */
 
 #include "Audio/PCMPlayer.hpp"
+#include "Audio/PCMPlayerFactory.hpp"
 #include "Audio/VarioSynthesiser.hpp"
 #include "Screen/Init.hpp"
-#ifdef PCMPLAYER_REQUIRES_IO_SERVICE
+#ifdef ENABLE_ALSA
 #include "IO/Async/GlobalAsioThread.hpp"
 #include "IO/Async/AsioThread.hpp"
 #endif
@@ -34,6 +35,8 @@ Copyright_License {
 
 #include <stdio.h>
 #include <stdlib.h>
+
+#include <memory>
 
 int
 main(int argc, char **argv)
@@ -47,18 +50,20 @@ main(int argc, char **argv)
 
   ScreenGlobalInit screen;
 
-#ifdef PCMPLAYER_REQUIRES_IO_SERVICE
+#ifdef ENABLE_ALSA
   ScopeGlobalAsioThread global_asio_thread;
-  PCMPlayer player(asio_thread->Get());
+  std::unique_ptr<PCMPlayer> player(
+      PCMPlayerFactory::CreateInstance(asio_thread->Get()));
 #else
-  PCMPlayer player;
+  std::unique_ptr<PCMPlayer> player(PCMPlayerFactory::CreateInstance());
 #endif
+
 
   const unsigned sample_rate = 44100;
 
   VarioSynthesiser synthesiser(sample_rate);
 
-  if (!player.Start(synthesiser)) {
+  if (!player->Start(synthesiser)) {
     fprintf(stderr, "Failed to start PCMPlayer\n");
     return EXIT_FAILURE;
   }

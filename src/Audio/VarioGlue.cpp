@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "VarioGlue.hpp"
 #include "PCMPlayer.hpp"
+#include "PCMPlayerFactory.hpp"
 #include "VarioSynthesiser.hpp"
 #include "VarioSettings.hpp"
 
@@ -30,7 +31,7 @@ Copyright_License {
 #include "SLES/Init.hpp"
 #endif
 
-#ifdef PCMPLAYER_REQUIRES_IO_SERVICE
+#ifdef ENABLE_ALSA
 #include "IO/Async/AsioThread.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
 #endif
@@ -68,10 +69,10 @@ AudioVarioGlue::Initialise()
     return;
 #endif
 
-#ifdef PCMPLAYER_REQUIRES_IO_SERVICE
-  player = new PCMPlayer(asio_thread->Get());
+#ifdef ENABLE_ALSA
+  player = PCMPlayerFactory::CreateInstance(asio_thread->Get());
 #else
-  player = new PCMPlayer();
+  player = PCMPlayerFactory::CreateInstance();
 #endif
   synthesiser = new VarioSynthesiser(sample_rate);
 }

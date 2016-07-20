@@ -21,28 +21,45 @@ Copyright_License {
 }
 */
 
-#if !defined(ANDROID) && !defined(WIN32)
+#ifndef XCSOAR_AUDIO_PCM_PLAYER_FACTORY_HPP
+#define XCSOAR_AUDIO_PCM_PLAYER_FACTORY_HPP
 
-#include "PCMPlayer.hpp"
+#ifdef ANDROID
+#include "AndroidPCMPlayer.hpp"
+#elif defined(ENABLE_ALSA)
+#include "ALSAPCMPlayer.hpp"
+#elif defined(ENABLE_SDL)
+#include "SDLPCMPlayer.hpp"
+#endif
 
-#include "PCMDataSource.hpp"
-#include "AudioAlgorithms.hpp"
+#ifdef ENABLE_ALSA
+#include <boost/asio/io_service.hpp>
+#endif
 
-#include <assert.h>
-
-#include <algorithm>
-
-size_t
-PCMPlayer::FillPCMBuffer(int16_t *buffer, size_t n)
+namespace PCMPlayerFactory
 {
-  assert(n > 0);
-  assert(nullptr != source);
-  const size_t n_read = source->GetData(buffer, n);
-  if (n_read > 0)
-    UpmixMonoPCM(buffer, n_read, channels);
-  if (n_read < n)
-    std::fill(buffer + n_read * channels, buffer + n * channels, 0);
-  return n_read;
+
+/**
+ * Create an instance of a PCMPlayer implementation for the current platform
+ * @return Pointer to the created PCMPlayer instance
+ */
+inline PCMPlayer *CreateInstance(
+#ifdef ENABLE_ALSA
+    boost::asio::io_service &io_service
+#endif
+    )
+{
+#ifdef ANDROID
+  return new AndroidPCMPlayer();
+#elif defined(ENABLE_SDL)
+  return new SDLPCMPlayer();
+#elif defined(ENABLE_ALSA)
+  return new ALSAPCMPlayer(io_service);
+#else
+#error No PCMPlayer implementation available
+#endif
+}
+
 }
 
 #endif

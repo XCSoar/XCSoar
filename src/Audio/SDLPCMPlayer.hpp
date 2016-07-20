@@ -21,28 +21,28 @@ Copyright_License {
 }
 */
 
-#if !defined(ANDROID) && !defined(WIN32)
+#ifndef XCSOAR_AUDIO_SDL_PCM_PLAYER_HPP
+#define XCSOAR_AUDIO_SDL_PCM_PLAYER_HPP
 
 #include "PCMPlayer.hpp"
 
-#include "PCMDataSource.hpp"
-#include "AudioAlgorithms.hpp"
+#include <SDL_audio.h>
 
-#include <assert.h>
+/**
+ * PCMPlayer implementation based on SDL
+ */
+class SDLPCMPlayer : public PCMPlayer {
+  SDL_AudioDeviceID device = -1;
 
-#include <algorithm>
+  inline void AudioCallback(int16_t *stream, size_t len);
 
-size_t
-PCMPlayer::FillPCMBuffer(int16_t *buffer, size_t n)
-{
-  assert(n > 0);
-  assert(nullptr != source);
-  const size_t n_read = source->GetData(buffer, n);
-  if (n_read > 0)
-    UpmixMonoPCM(buffer, n_read, channels);
-  if (n_read < n)
-    std::fill(buffer + n_read * channels, buffer + n * channels, 0);
-  return n_read;
-}
+public:
+  SDLPCMPlayer() = default;
+  virtual ~SDLPCMPlayer();
+
+  /* virtual methods from class PCMPlayer */
+  bool Start(PCMDataSource &source) override;
+  void Stop() override;
+};
 
 #endif
