@@ -392,11 +392,14 @@ CropIncompleteUTF8(char *const p)
 
   char *const last = end - 1;
   if (!IsContinuation(*last)) {
-    if (!IsASCII(*last))
+    char *result = end;
+    if (!IsASCII(*last)) {
       *last = 0;
+      result = last;
+    }
 
     assert(ValidateUTF8(p));
-    return last;
+    return result;
   }
 
   char *const leading = FindLeading(p, last);
