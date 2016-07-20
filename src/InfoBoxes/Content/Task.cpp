@@ -51,7 +51,7 @@ ShowNextWaypointDetails()
   if (wp == nullptr)
     return;
 
-  dlgWaypointDetailsShowModal(*wp);
+  dlgWaypointDetailsShowModal(*wp, false);
 }
 
 static Widget *
