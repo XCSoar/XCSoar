@@ -140,8 +140,6 @@ class WaypointDetailsWidget final
 
   ProtectedTaskManager *const task_manager;
 
-  const bool allow_navigation;
-
   Button goto_button;
   Button magnify_button, shrink_button;
   Button previous_button, next_button;
@@ -168,16 +166,13 @@ class WaypointDetailsWidget final
 
 public:
   WaypointDetailsWidget(WidgetDialog &_dialog, const Waypoint &_waypoint,
-                        bool _allow_navigation,
                         ProtectedTaskManager *_task_manager)
     :dialog(_dialog), look(dialog.GetLook()),
      waypoint(_waypoint),
      task_manager(_task_manager),
-     allow_navigation(_allow_navigation),
      page(0), last_page(0),
      info_widget(look, _waypoint),
-     commands_widget(look, &_dialog, _waypoint,
-                     allow_navigation ? task_manager : nullptr),
+     commands_widget(look, &_dialog, _waypoint, task_manager),
 #ifdef HAVE_RUN_FILE
      file_list(look), file_list_handler(_waypoint),
 #endif
@@ -210,7 +205,7 @@ public:
   void Show(const PixelRect &rc) override {
     const Layout layout(rc, waypoint);
 
-    if (allow_navigation)
+    if (task_manager != nullptr)
       goto_button.MoveAndShow(layout.goto_button);
 
     if (!images.empty()) {
@@ -240,7 +235,7 @@ public:
   }
 
   void Hide() override {
-    if (allow_navigation)
+    if (task_manager != nullptr)
       goto_button.Hide();
 
     if (!images.empty()) {
@@ -264,7 +259,7 @@ public:
   void Move(const PixelRect &rc) override {
     const Layout layout(rc, waypoint);
 
-    if (allow_navigation)
+    if (task_manager != nullptr)
       goto_button.Move(layout.goto_button);
 
     if (!images.empty()) {
@@ -291,7 +286,7 @@ public:
   }
 
   bool SetFocus() override {
-    if (allow_navigation) {
+    if (task_manager != nullptr) {
       goto_button.SetFocus();
       return true;
     } else
@@ -434,7 +429,7 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   button_style.Hide();
   button_style.TabStop();
 
-  if (allow_navigation)
+  if (task_manager != nullptr)
     goto_button.Create(parent, look.button, _("GoTo"), layout.goto_button,
                        button_style, *this, GOTO);
 
@@ -700,8 +695,8 @@ dlgWaypointDetailsShowModal(const Waypoint &_waypoint,
 
   const DialogLook &look = UIGlobals::GetDialogLook();
   WidgetDialog dialog(look);
-  WaypointDetailsWidget widget(dialog, _waypoint, allow_navigation,
-                               protected_task_manager);
+  WaypointDetailsWidget widget(dialog, _waypoint,
+                               allow_navigation ? protected_task_manager : nullptr);
   dialog.CreateFull(UIGlobals::GetMainWindow(), _T(""), &widget);
 
   UpdateCaption(&dialog, &_waypoint);
