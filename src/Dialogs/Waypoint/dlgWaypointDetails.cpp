@@ -292,9 +292,11 @@ public:
   }
 
   bool SetFocus() override {
-    if (allow_navigation)
+    if (allow_navigation) {
       goto_button.SetFocus();
-    return true;
+      return true;
+    } else
+      return false;
   }
 
   bool KeyPress(unsigned key_code) override;
