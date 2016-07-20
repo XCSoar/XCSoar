@@ -97,6 +97,7 @@ public:
 	using FileDescriptor::EnableCloseOnExec;
 	using FileDescriptor::DisableCloseOnExec;
 	using FileDescriptor::Duplicate;
+	using FileDescriptor::CheckDuplicate;
 
 	static bool CreatePipe(FileDescriptor &r, FileDescriptor &w);
 #endif

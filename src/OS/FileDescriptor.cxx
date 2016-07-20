@@ -143,6 +143,16 @@ FileDescriptor::DisableCloseOnExec()
 	fcntl(fd, F_SETFD, old_flags & ~FD_CLOEXEC);
 }
 
+bool
+FileDescriptor::CheckDuplicate(int new_fd)
+{
+	if (fd == new_fd) {
+		DisableCloseOnExec();
+		return true;
+	} else
+		return Duplicate(new_fd);
+}
+
 #endif
 
 #ifdef HAVE_EVENTFD
