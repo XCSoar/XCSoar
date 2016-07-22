@@ -494,9 +494,6 @@ UpdateInfoBoxTaskSpeedInstant(InfoBoxData &data)
   // Set Value
   data.SetValueFromTaskSpeed(task_stats.inst_speed_fast);
 
-  // Set Unit
-  data.SetValueUnit(Units::current.task_speed_unit);
-
   // Add slow filtered task speed as comment item
   data.SetCommentFromTaskSpeed(task_stats.inst_speed_slow, false);
 }

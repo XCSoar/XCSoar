@@ -118,7 +118,7 @@ InfoBoxContentOLCSpeed::Update(InfoBoxData &data)
   }
 
   // Set Value
-  data.SetValueFromSpeed(result_olc.GetSpeed());
+  data.SetValueFromTaskSpeed(result_olc.GetSpeed());
 
   data.UnsafeFormatComment(_T("%.1f pts"), (double)result_olc.score);
 }

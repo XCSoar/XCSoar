@@ -53,7 +53,7 @@ Version 7.0 - not yet released
 * Kobo
   - support Kobo Glo HD
 
-Version 6.8.6 - not yet released
+Version 6.8.6 - 2016/07/22
 * calculations
   - show takeoff time after landing (#3786)
 * user interface
@@ -61,6 +61,7 @@ Version 6.8.6 - not yet released
   - fix crash in waypoint label renderer (#3781)
   - fix several crashes in waypoint editor (#3553, #3784)
   - fix crash in task manager
+  - use task speed unit for OLC speed InfoBox (#3785)
 * devices
   - EW: use first 6 characters of turn point names (was: 3)
   - EW: fix broken umlauts in turn point names
