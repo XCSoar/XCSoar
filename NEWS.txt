@@ -1,4 +1,4 @@
-Version 6.8.6 - not yet released
+Version 6.8.6 - 2016/07/22
 * calculations
   - show takeoff time after landing (#3786)
 * user interface
