@@ -29,7 +29,6 @@ Copyright_License {
 
 #ifdef HAVE_TRACKING
 
-#ifdef HAVE_SKYLINES_TRACKING
 namespace Profile {
   static void Load(const ProfileMap &map,
                    SkyLinesTracking::CloudSettings &settings) {
@@ -59,9 +58,7 @@ namespace Profile {
     Load(map, settings.cloud);
   }
 }
-#endif
 
-#ifdef HAVE_LIVETRACK24
 
 void
 Profile::Load(const ProfileMap &map, LiveTrack24Settings &settings)
@@ -79,22 +76,15 @@ Profile::Load(const ProfileMap &map, LiveTrack24Settings &settings)
   map.Get(ProfileKeys::LiveTrack24Password, settings.password);
 }
 
-#endif
 
 void
 Profile::Load(const ProfileMap &map, TrackingSettings &settings)
 {
-#ifdef HAVE_LIVETRACK24
   map.Get(ProfileKeys::TrackingInterval, settings.interval);
   map.GetEnum(ProfileKeys::TrackingVehicleType, settings.vehicleType);
   map.Get(ProfileKeys::TrackingVehicleName, settings.vehicle_name);
-#endif
-#ifdef HAVE_SKYLINES_TRACKING
   Load(map, settings.skylines);
-#endif
-#ifdef HAVE_LIVETRACK24
   Load(map, settings.livetrack24);
-#endif
 }
 
 #endif /* HAVE_TRACKING */

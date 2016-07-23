@@ -26,17 +26,13 @@ Copyright_License {
 
 #include "Tracking/Features.hpp"
 
-#ifdef HAVE_LIVETRACK24
 struct LiveTrack24Settings;
-#endif
-
 struct TrackingSettings;
 class ProfileMap;
 
 namespace Profile {
-#ifdef HAVE_LIVETRACK24
+
   void Load(const ProfileMap &map, LiveTrack24Settings &settings);
-#endif
 
   void Load(const ProfileMap &map, TrackingSettings &settings);
 };
