@@ -33,7 +33,6 @@ Copyright_License {
 
 #include "Util/StaticString.hxx"
 
-#ifdef HAVE_LIVETRACK24
 
 struct LiveTrack24Settings {
   bool enabled;
@@ -44,10 +43,7 @@ struct LiveTrack24Settings {
   void SetDefaults();
 };
 
-#endif
-
 struct TrackingSettings {
-#ifdef HAVE_LIVETRACK24
   enum class VehicleType {
     GLIDER = 0,
     PARAGLIDER = 1,
@@ -61,15 +57,10 @@ struct TrackingSettings {
   unsigned interval;
   VehicleType vehicleType;
   StaticString<64> vehicle_name;
-#endif
 
-#ifdef HAVE_SKYLINES_TRACKING
   SkyLinesTracking::Settings skylines;
-#endif
 
-#ifdef HAVE_LIVETRACK24
   LiveTrack24Settings livetrack24;
-#endif
 
   void SetDefaults();
 };

@@ -25,7 +25,6 @@ Copyright_License {
 
 #ifdef HAVE_TRACKING
 
-#ifdef HAVE_LIVETRACK24
 
 #include <tchar.h>
 
@@ -38,23 +37,16 @@ LiveTrack24Settings::SetDefaults()
   password.clear();
 }
 
-#endif
 
 void
 TrackingSettings::SetDefaults()
 {
-#ifdef HAVE_LIVETRACK24
   interval = 60;
   vehicleType = VehicleType::GLIDER;
-#endif
 
-#ifdef HAVE_SKYLINES_TRACKING
   skylines.SetDefaults();
-#endif
 
-#ifdef HAVE_LIVETRACK24
   livetrack24.SetDefaults();
-#endif
 }
 
 #endif /* HAVE_TRACKING */
