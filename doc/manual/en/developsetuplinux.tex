@@ -209,8 +209,13 @@ This will exclude the output tree from the indexer, leading to a minimal index.
 To set up the LaTeX -- specifically, LuaLaTex -- system for compiling the manual, you need to install the following packages in addition to the steps from section \ref{sec:developsetup-base}, \ref{sec:developsetup-general} and \ref{sec:developsetup-sourcecode}:
 
 \begin{verbatim}
-sudo apt-get install texlive-luatex \
-  texlive-latex-base texlive-latex-extra
+sudo apt-get install texlive \
+  texlive-latex-extra \
+  texlive-luatex \
+  texlive-lang-french \
+  texlive-lang-polish \
+  texlive-lang-german \
+  liblocale-po-perl
 \end{verbatim}
 
 Now you can compile the manuals with 
