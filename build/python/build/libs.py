@@ -194,7 +194,8 @@ libsalsa = AutotoolsProject(
     [
         '--disable-4bit',
         '--disable-user-elem',
-        '--enable-shared=no'
+        '--enable-shared=no',
+        '--enable-tlv'
     ],
     patches=abspath('lib/salsa-lib/patches')
 )
