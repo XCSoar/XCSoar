@@ -25,58 +25,22 @@ Copyright_License {
 
 #include "PCMPlayerFactory.hpp"
 
-#include "Compiler.h"
 #include "LogFile.hpp"
 #include "ResourceLoader.hpp"
 
-#include <assert.h>
-#include <stddef.h>
-#include <stdint.h>
-#include <tchar.h>
-
-#include <algorithm>
-
+#include <utility>
 
 PCMResourcePlayer::PCMResourcePlayer() :
     player(PCMPlayerFactory::CreateInstance())
 {
 }
 
-size_t
-PCMResourcePlayer::GetData(int16_t *buffer, size_t n)
-{
-  size_t copied = 0;
-
-  const ScopeLock protect(lock);
-
-  while ((copied < n) && !queued_data.empty()) {
-    PCMData &current_pcm_data = queued_data.front();
-    size_t current_available = current_pcm_data.size - offset;
-    size_t max = n - copied;
-    if (current_available > max) {
-      std::copy(current_pcm_data.data + offset,
-                current_pcm_data.data + offset + max,
-                buffer + copied);
-      offset += max;
-      return n;
-    } else {
-      std::copy(current_pcm_data.data + offset,
-                current_pcm_data.data + offset + current_available,
-                buffer + copied);
-      copied += current_available;
-      queued_data.pop_front();
-      offset = 0;
-    }
-  }
-
-  return copied;
-}
-
 bool
 PCMResourcePlayer::PlayResource(const TCHAR *resource_name)
 {
-  PCMData pcm_data =
-      PCMData::FromVoid(ResourceLoader::Load(resource_name, _T("WAVE")));
+  PCMBufferDataSource::PCMData pcm_data =
+      PCMBufferDataSource::PCMData::FromVoid(
+          ResourceLoader::Load(resource_name, _T("WAVE")));
   if (pcm_data.IsNull()) {
     LogFormat(_T("PCM resource \"%s\" not found!"), resource_name);
     return false;
@@ -84,15 +48,11 @@ PCMResourcePlayer::PlayResource(const TCHAR *resource_name)
 
   const ScopeLock protect(lock);
 
-  queued_data.push_back(pcm_data);
-  if (1 == queued_data.size()) {
-    offset = 0;
-    if (!player->Start(*this)) {
-      queued_data.clear();
-      offset = 0;
+  if (1 == buffer_data_source.Add(std::move(pcm_data))) {
+    if (!player->Start(buffer_data_source)) {
+      buffer_data_source.Clear();
       return false;
     }
-    return true;
   }
 
   return true;

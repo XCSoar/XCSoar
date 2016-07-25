@@ -24,40 +24,24 @@ Copyright_License {
 #ifndef XCSOAR_AUDIO_PCM_RESOURCE_PLAYER_HPP
 #define XCSOAR_AUDIO_PCM_RESOURCE_PLAYER_HPP
 
+#include "PCMBufferDataSource.hpp"
 #include "PCMDataSource.hpp"
 #include "PCMPlayer.hpp"
-#include "Util/ConstBuffer.hxx"
 #include "Thread/Mutex.hpp"
 
 #include <tchar.h>
-#include <stdint.h>
 
-#include <list>
 #include <memory>
 
 /**
  * Can play sounds, stored as raw PCM in an embedded resource, using #PCMPlayer
  */
-class PCMResourcePlayer : private PCMDataSource {
-  typedef ConstBuffer<int16_t> PCMData;
-
+class PCMResourcePlayer {
   Mutex lock;
 
   std::unique_ptr<PCMPlayer> player;
 
-  std::list<PCMData> queued_data;
-  unsigned offset;
-
-  /* virtual methods from class PCMDataSource */
-  bool IsBigEndian() const override {
-    return false; // Our PCM resources are always little endian
-  }
-
-  unsigned GetSampleRate() const override {
-    return 44100; // Our PCM resources have this sample rate
-  }
-
-  size_t GetData(int16_t *buffer, size_t n) override;
+  PCMBufferDataSource buffer_data_source;
 
 public:
   PCMResourcePlayer();
