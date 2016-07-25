@@ -29,11 +29,6 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "ResourceLoader.hpp"
 
-#ifdef ENABLE_ALSA
-#include "IO/Async/AsioThread.hpp"
-#include "IO/Async/GlobalAsioThread.hpp"
-#endif
-
 #include <assert.h>
 #include <stddef.h>
 #include <stdint.h>
