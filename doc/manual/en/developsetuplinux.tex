@@ -73,9 +73,8 @@ sudo apt-get install vorbis-tools automake
 The SDK and NDK are installed in the user directory. The \texttt{Makefile} expects them in specific directories, therefore we create some symlinks.
 
 \begin{verbatim}
-cd ~/
-mkdir opt
-cd opt/
+mkdir ~/opt
+cd ~/opt/
 
 # Download and extract SDK
 wget "http://dl.google.com/android/android-sdk_r23-linux.tgz"
@@ -97,13 +96,13 @@ We need to add the paths by appending the following lines to \texttt{\textasciit
 
 \begin{verbatim}
 # Android SDK
-export ANDROID_SDK_HOME="~/opt/android-sdk-linux_x86"
-export PATH="$PATH:$ANDROID_SDK_HOME/tools"
-export PATH="$PATH:$ANDROID_SDK_HOME/platform-tools"
+export ANDROID_SDK="~/opt/android-sdk-linux_x86"
+PATH="$PATH:$ANDROID_SDK_HOME/tools"
+PATH="$PATH:$ANDROID_SDK_HOME/platform-tools"
 
 # Android NDK
-export ANDROID_NDK_HOME="~/opt/android-ndk-r11"
-export PATH="$PATH:$ANDROID_NDK_HOME"
+export ANDROID_NDK="~/opt/android-ndk-r12"
+PATH="$PATH:$ANDROID_NDK"
 \end{verbatim}
 
 The Android SDK (which contains some 32bit components) seems to have trouble running on some 64bit distributions, the following packages fix this:
