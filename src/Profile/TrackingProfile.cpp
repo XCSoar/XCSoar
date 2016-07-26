@@ -57,12 +57,9 @@ static void Load(const ProfileMap &map,
 
   Load(map, settings.cloud);
 }
-}
 
-
-void
-Profile::Load(const ProfileMap &map, LiveTrack24::Settings &settings)
-{
+static void Load(const ProfileMap &map,
+                 LiveTrack24::Settings &settings) {
   map.Get(ProfileKeys::LiveTrack24Enabled, settings.enabled);
 
   if (!map.Get(ProfileKeys::LiveTrack24Server, settings.server))
@@ -75,7 +72,7 @@ Profile::Load(const ProfileMap &map, LiveTrack24::Settings &settings)
   map.Get(ProfileKeys::LiveTrack24Username, settings.username);
   map.Get(ProfileKeys::LiveTrack24Password, settings.password);
 }
-
+}
 
 void
 Profile::Load(const ProfileMap &map, TrackingSettings &settings)
