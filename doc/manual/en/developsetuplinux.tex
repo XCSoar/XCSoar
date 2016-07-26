@@ -15,7 +15,7 @@ Components required for all platforms, plus git for downloading the source and u
 \begin{verbatim}
 sudo apt-get install make \
   librsvg2-bin xsltproc \
-  imagemagick gettext \
+  imagemagick gettext ffmpeg \
   git quilt
 \end{verbatim}
 Some of these packages might be already present in your distribution (e.g. in the case of Ubuntu).
@@ -109,8 +109,8 @@ export PATH="$PATH:$ANDROID_NDK_HOME"
 The Android SDK (which contains some 32bit components) seems to have trouble running on some 64bit distributions, the following packages fix this:
 
 \begin{verbatim}
-sudo apt-get install lib32z1 lib32ncurses5
-sudo apt-get install libgcc1:i386
+sudo apt-get install lib32z1 lib32ncurses5 \
+libgcc1:i386
 \end{verbatim}
 
 Now, you should start the Android manager with the \texttt{android} command, and install the required packages. Use the GUI to select and install SDK 22, and the (preselected) newest tools. Be warned, these will need many GB of space on your harddisk! (approximately 15 GB for typical defaults)
