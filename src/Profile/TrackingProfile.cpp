@@ -30,33 +30,33 @@ Copyright_License {
 #ifdef HAVE_TRACKING
 
 namespace Profile {
-  static void Load(const ProfileMap &map,
-                   SkyLinesTracking::CloudSettings &settings) {
-    bool bvalue;
-    settings.enabled = map.Get(ProfileKeys::CloudEnabled, bvalue)
-      ? (bvalue ? TriState::TRUE : TriState::FALSE)
-      : TriState::UNKNOWN;
+static void Load(const ProfileMap &map,
+                 SkyLinesTracking::CloudSettings &settings) {
+  bool bvalue;
+  settings.enabled = map.Get(ProfileKeys::CloudEnabled, bvalue)
+    ? (bvalue ? TriState::TRUE : TriState::FALSE)
+    : TriState::UNKNOWN;
 
-    map.Get(ProfileKeys::CloudShowThermals, settings.show_thermals);
+  map.Get(ProfileKeys::CloudShowThermals, settings.show_thermals);
 
-    const char *key = map.Get(ProfileKeys::CloudKey);
-    if (key != nullptr)
-      settings.key = ParseUint64(key, nullptr, 16);
-  }
+  const char *key = map.Get(ProfileKeys::CloudKey);
+  if (key != nullptr)
+    settings.key = ParseUint64(key, nullptr, 16);
+}
 
-  static void Load(const ProfileMap &map,
-                   SkyLinesTracking::Settings &settings) {
-    map.Get(ProfileKeys::SkyLinesTrackingEnabled, settings.enabled);
-    map.Get(ProfileKeys::SkyLinesRoaming, settings.roaming);
-    map.Get(ProfileKeys::SkyLinesTrackingInterval, settings.interval);
-    map.Get(ProfileKeys::SkyLinesTrafficEnabled, settings.traffic_enabled);
+static void Load(const ProfileMap &map,
+                 SkyLinesTracking::Settings &settings) {
+  map.Get(ProfileKeys::SkyLinesTrackingEnabled, settings.enabled);
+  map.Get(ProfileKeys::SkyLinesRoaming, settings.roaming);
+  map.Get(ProfileKeys::SkyLinesTrackingInterval, settings.interval);
+  map.Get(ProfileKeys::SkyLinesTrafficEnabled, settings.traffic_enabled);
 
-    const char *key = map.Get(ProfileKeys::SkyLinesTrackingKey);
-    if (key != NULL)
-      settings.key = ParseUint64(key, NULL, 16);
+  const char *key = map.Get(ProfileKeys::SkyLinesTrackingKey);
+  if (key != NULL)
+    settings.key = ParseUint64(key, NULL, 16);
 
-    Load(map, settings.cloud);
-  }
+  Load(map, settings.cloud);
+}
 }
 
 
