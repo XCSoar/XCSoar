@@ -32,7 +32,6 @@ PYTHON_SOURCES = \
 	$(ENGINE_SRC_DIR)/Task/TaskBehaviour.cpp \
 	$(SRC)/Logger/Settings.cpp \
 	$(SRC)/TeamCode/Settings.cpp \
-	$(SRC)/Tracking/TrackingSettings.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideSettings.cpp \
 	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
 	$(ENGINE_SRC_DIR)/Task/Ordered/Settings.cpp \

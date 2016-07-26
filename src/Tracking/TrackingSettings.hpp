@@ -53,7 +53,13 @@ struct TrackingSettings {
   SkyLinesTracking::Settings skylines;
   LiveTrack24::Settings livetrack24;
 
-  void SetDefaults();
+  void SetDefaults() {
+    interval = 60;
+    vehicleType = VehicleType::GLIDER;
+
+    skylines.SetDefaults();
+    livetrack24.SetDefaults();
+  }
 };
 
 #endif /* HAVE_TRACKING */
