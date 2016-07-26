@@ -153,7 +153,7 @@ TrackingGlue::Tick()
     return;
 
   unsigned tracking_interval = settings.interval;
-  LiveTrack24Settings copy = this->settings.livetrack24;
+  LiveTrack24::Settings copy = this->settings.livetrack24;
 
   const ScopeUnlock unlock(mutex);
 

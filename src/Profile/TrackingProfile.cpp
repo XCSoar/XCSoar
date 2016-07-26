@@ -61,7 +61,7 @@ namespace Profile {
 
 
 void
-Profile::Load(const ProfileMap &map, LiveTrack24Settings &settings)
+Profile::Load(const ProfileMap &map, LiveTrack24::Settings &settings)
 {
   map.Get(ProfileKeys::LiveTrack24Enabled, settings.enabled);
 

@@ -28,15 +28,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-void
-LiveTrack24Settings::SetDefaults()
-{
-  enabled = false;
-  server = _T("www.livetrack24.com");
-  username.clear();
-  password.clear();
-}
-
 
 void
 TrackingSettings::SetDefaults()

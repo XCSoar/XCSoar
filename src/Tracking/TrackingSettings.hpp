@@ -30,18 +30,10 @@ Copyright_License {
 
 #include "Tracking/SkyLines/Features.hpp"
 #include "Tracking/SkyLines/Settings.hpp"
+#include "Tracking/LiveTrack24/Settings.hpp"
 
 #include "Util/StaticString.hxx"
 
-
-struct LiveTrack24Settings {
-  bool enabled;
-  StaticString<64> server;
-  StaticString<64> username;
-  StaticString<64> password;
-
-  void SetDefaults();
-};
 
 struct TrackingSettings {
   enum class VehicleType {
@@ -59,8 +51,7 @@ struct TrackingSettings {
   StaticString<64> vehicle_name;
 
   SkyLinesTracking::Settings skylines;
-
-  LiveTrack24Settings livetrack24;
+  LiveTrack24::Settings livetrack24;
 
   void SetDefaults();
 };

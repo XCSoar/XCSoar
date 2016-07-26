@@ -21,20 +21,29 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_TRACKING_PROFILE_HPP
-#define XCSOAR_TRACKING_PROFILE_HPP
+#ifndef XCSOAR_TRACKING_LIVETRACK24_SETTINGS_HPP
+#define XCSOAR_TRACKING_LIVETRACK24_SETTINGS_HPP
 
-#include "Tracking/Features.hpp"
+#include "Util/StaticString.hxx"
 
-struct LiveTrack24::Settings;
-struct TrackingSettings;
-class ProfileMap;
+#include <tchar.h>
 
-namespace Profile {
+namespace LiveTrack24 {
 
-  void Load(const ProfileMap &map, LiveTrack24::Settings &settings);
+struct Settings {
+  bool enabled;
+  StaticString<64> server;
+  StaticString<64> username;
+  StaticString<64> password;
 
-  void Load(const ProfileMap &map, TrackingSettings &settings);
+  void SetDefaults() {
+    enabled = false;
+    server = _T("www.livetrack24.com");
+    username.clear();
+    password.clear();
+  }
 };
+
+} /* namespace LiveTrack24 */
 
 #endif
