@@ -1,0 +1,60 @@
+# Define device nodes corresponding to devices from android vendors
+# to be readable/writable to everyone
+# (required by adb)
+
+# Acer
+SUBSYSTEM=="usb", SYSFS{idVendor}=="0502", MODE="0666"
+# ASUS
+SUBSYSTEM=="usb", SYSFS{idVendor}=="0b05", MODE="0666"
+# Dell
+SUBSYSTEM=="usb", SYSFS{idVendor}=="413c", MODE="0666"
+# Foxconn
+SUBSYSTEM=="usb", SYSFS{idVendor}=="0489", MODE="0666"
+# Garmin-Asus
+SUBSYSTEM=="usb", SYSFS{idVendor}=="091E", MODE="0666"
+# Google
+SUBSYSTEM=="usb", SYSFS{idVendor}=="18d1", MODE="0666"
+# HTC
+SUBSYSTEM=="usb", SYSFS{idVendor}=="0bb4", MODE="0666"
+# Huawei
+SUBSYSTEM=="usb", SYSFS{idVendor}=="12d1", MODE="0666"
+# K-Touch
+SUBSYSTEM=="usb", SYSFS{idVendor}=="24e3", MODE="0666"
+# KT Tech
+SUBSYSTEM=="usb", SYSFS{idVendor}=="2116", MODE="0666"
+# Kyocera
+SUBSYSTEM=="usb", SYSFS{idVendor}=="0482", MODE="0666"
+# Lenevo
+SUBSYSTEM=="usb", SYSFS{idVendor}=="17EF", MODE="0666"
+# LG
+SUBSYSTEM=="usb", SYSFS{idVendor}=="1004", MODE="0666"
+# Motorola
+SUBSYSTEM=="usb", SYSFS{idVendor}=="22b8", MODE="0666"
+# NEC
+SUBSYSTEM=="usb", SYSFS{idVendor}=="0409", MODE="0666"
+# Nook
+SUBSYSTEM=="usb", SYSFS{idVendor}=="2080", MODE="0666"
+# Nvidia
+SUBSYSTEM=="usb", SYSFS{idVendor}=="0955", MODE="0666"
+# OTGV
+SUBSYSTEM=="usb", SYSFS{idVendor}=="2257", MODE="0666"
+# Pantech
+SUBSYSTEM=="usb", SYSFS{idVendor}=="10A9", MODE="0666"
+# Philips
+SUBSYSTEM=="usb", SYSFS{idVendor}=="0471", MODE="0666"
+# PMC-Sierra
+SUBSYSTEM=="usb", SYSFS{idVendor}=="04da", MODE="0666"
+# Qualcomm
+SUBSYSTEM=="usb", SYSFS{idVendor}=="05c6", MODE="0666"
+# SK Telesys
+SUBSYSTEM=="usb", SYSFS{idVendor}=="1f53", MODE="0666"
+# Samsung
+SUBSYSTEM=="usb", SYSFS{idVendor}=="04e8", MODE="0666"
+# Sharp
+SUBSYSTEM=="usb", SYSFS{idVendor}=="04dd", MODE="0666"
+# Sony Ericsson
+SUBSYSTEM=="usb", SYSFS{idVendor}=="0fce", MODE="0666"
+# Toshiba
+SUBSYSTEM=="usb", SYSFS{idVendor}=="0930", MODE="0666"
+# ZTE
+SUBSYSTEM=="usb", SYSFS{idVendor}=="19D2", MODE="0666"

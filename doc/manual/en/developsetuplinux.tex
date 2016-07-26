@@ -85,7 +85,6 @@ ln -s android-sdk-linux/ android-sdk-linux_x86
 rm android-sdk_r23-linux.tgz
 
 # Download NDK installer
-
 wget "http://dl.google.com/android/\
 repository/android-ndk-r12b-linux-x86_64.zip"
 
@@ -112,78 +111,18 @@ sudo apt-get install lib32z1 lib32ncurses5 \
 libgcc1:i386
 \end{verbatim}
 
-Now, you should start the Android manager with the \texttt{android} command, and install the required packages. Use the GUI to select and install SDK 22, and the (preselected) newest tools. Be warned, these will need many GB of space on your harddisk! (approximately 15 GB for typical defaults)
+Now, you should start the Android manager with the \texttt{android} command and install the required packages.
+Use the GUI to select and install SDK 22 and the (preselected) newest tools.
+Be warned, these will need many GB of space on your harddisk (approximately 15 GB for typical defaults)!
 
-Finally, for the \texttt{adb} debugger interface to work via USB, most distributions require manual fixing of the \texttt{udev} rules. This can be done in the following way:
+Finally, for the \texttt{adb} debugger interface to work via USB, most distributions require manual fixing of the \texttt{udev} rules.
+Create the file \texttt{/etc/udev/rules.d/99-android.rules} and set unix permissions:
 
-\begin{maxipage}
 \begin{verbatim}
-#Create etc/udev/rules.d/99-android.rules file
-
-echo "#Acer" > 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="0502", MODE="0666"" >> 99-android.rules
-echo "#ASUS" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="0b05", MODE="0666"" >> 99-android.rules
-echo "#Dell" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="413c", MODE="0666"" >> 99-android.rules
-echo "#Foxconn" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="0489", MODE="0666"" >> 99-android.rules
-echo "#Garmin-Asus" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="091E", MODE="0666"" >> 99-android.rules
-echo "#Google" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="18d1", MODE="0666"" >> 99-android.rules
-echo "#HTC" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="0bb4", MODE="0666"" >> 99-android.rules
-echo "#Huawei" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="12d1", MODE="0666"" >> 99-android.rules
-echo "#K-Touch" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="24e3", MODE="0666"" >> 99-android.rules
-echo "#KT Tech" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="2116", MODE="0666"" >> 99-android.rules
-echo "#Kyocera" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="0482", MODE="0666"" >> 99-android.rules
-echo "#Lenevo" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="17EF", MODE="0666"" >> 99-android.rules
-echo "#LG" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="1004", MODE="0666"" >> 99-android.rules
-echo "#Motorola" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="22b8", MODE="0666"" >> 99-android.rules
-echo "#NEC" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="0409", MODE="0666"" >> 99-android.rules
-echo "#Nook" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="2080", MODE="0666"" >> 99-android.rules
-echo "#Nvidia" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="0955", MODE="0666"" >> 99-android.rules
-echo "#OTGV" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="2257", MODE="0666"" >> 99-android.rules
-echo "#Pantech" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="10A9", MODE="0666"" >> 99-android.rules
-echo "#Philips" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="0471", MODE="0666"" >> 99-android.rules
-echo "#PMC-Sierra" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="04da", MODE="0666"" >> 99-android.rules
+cd xcsoar
+sudo cp doc/manual/51-android.rules /etc/udev/rules.d/
+sudo chmod a+r /etc/udev/rules.d/51-android.rules
 \end{verbatim}
-\end{maxipage}
-\begin{maxipage}
-\begin{verbatim}
-echo "#Qualcomm" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="05c6", MODE="0666"" >> 99-android.rules
-echo "#SK Telesys" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="1f53", MODE="0666"" >> 99-android.rules
-echo "#Samsung" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="04e8", MODE="0666"" >> 99-android.rules
-echo "#Sharp" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="04dd", MODE="0666"" >> 99-android.rules
-echo "#Sony Ericsson" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="0fce", MODE="0666"" >> 99-android.rules
-echo "#Toshiba" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="0930", MODE="0666"" >> 99-android.rules
-echo "#ZTE" >> 99-android.rules
-echo "SUBSYSTEM=="usb", SYSFS{idVendor}=="19D2", MODE="0666"" >> 99-android.rules
-sudo mv -f 99-android.rules /etc/udev/rules.d/
-sudo chmod a+r /etc/udev/rules.d/99-android.rules
-\end{verbatim}
-\end{maxipage}
 
 \section{Optional: Eclipse IDE}
 One of the most widespread IDEs is eclipse. It is not limited to Android, and can be used for all targets. It is not required for \xc, but its installation is described here as an example. Eclipse is quite heavyweight, and many developers prefer other IDEs for \xc development.
@@ -266,8 +205,3 @@ export TEXINPUTS="..:../../../output/manual:../../../output/manual/en:../../..:"
 Finally, you need to run "make manual" in the \xc base directory at least once from the command line before you can compile from within the TexStudio interface. This creates the path structure and generates the figure files which are included into the manual. Of course, if you change figures, you might have to run "make manual" again.
 
 Inside TeXStudio, open the file "XCSoar-manual.tex" (or one of the other root files) and right-click on this file to "set as explicit root document", in the structure view on the left. Now you are good to go. Make changes and press F5 to see the result immediately.
-
-
-
-
-
