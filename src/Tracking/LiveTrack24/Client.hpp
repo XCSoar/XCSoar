@@ -21,19 +21,56 @@ Copyright_License {
 }
 */
 
-#ifndef LIVETRACK24_HPP
-#define LIVETRACK24_HPP
+#ifndef XCSOAR_TRACKING_LIVETRACK24_CLIENT_HPP
+#define XCSOAR_TRACKING_LIVETRACK24_CLIENT_HPP
+
+#include "Util/StaticString.hxx"
 
 #include <tchar.h>
 #include <stdint.h>
 
 class Angle;
-struct BrokenDateTime;
 struct GeoPoint;
 class OperationEnvironment;
 
+namespace LiveTrack24 {
+
+enum class VehicleType {
+  PARAGLIDER = 1,
+  FLEX_WING_FAI1 = 2,
+  RIGID_WING_FAI5 = 4,
+  GLIDER = 8,
+  PARAMOTOR = 16,
+  TRIKE = 32,
+  POWERED_AIRCRAFT = 64,
+  HOT_AIR_BALLOON = 128,
+
+  WALK = 16385,
+  RUN = 16386,
+  BIKE = 16388,
+
+  HIKE = 16400,
+  CYCLE = 16401,
+  MOUNTAIN_BIKE = 16402,
+  MOTORCYCLE = 16403,
+
+  WINDSURF = 16500,
+  KITESURF = 16501,
+  SAILING = 16502,
+
+  SNOWBOARD = 16600,
+  SKI = 16601,
+  SNOWKITE = 16602,
+
+  CAR = 17100,
+  CAR_4X4 = 17101,
+};
+
+typedef uint32_t UserID;
+typedef uint32_t SessionID;
+
 /**
- * API for the LiveTrack24.com server.
+ * legacy API Client for the LiveTrack24.com server.
  *
  * Procedure:
  *
@@ -50,60 +87,29 @@ class OperationEnvironment;
  *
  * @see http://www.livetrack24.com/wiki/en/Leonardo%20Live%20Tracking%20API
  */
-namespace LiveTrack24
-{
-  enum class VehicleType {
-    PARAGLIDER = 1,
-    FLEX_WING_FAI1 = 2,
-    RIGID_WING_FAI5 = 4,
-    GLIDER = 8,
-    PARAMOTOR = 16,
-    TRIKE = 32,
-    POWERED_AIRCRAFT = 64,
-    HOT_AIR_BALLOON = 128,
+class Client {
+    NarrowString<64> server;
+    NarrowString<64> username;
+    NarrowString<64> password;
 
-    WALK = 16385,
-    RUN = 16386,
-    BIKE = 16388,
+    SessionID session_id;
+    unsigned packet_id;
 
-    HIKE = 16400,
-    CYCLE = 16401,
-    MOUNTAIN_BIKE = 16402,
-    MOTORCYCLE = 16403,
-
-    WINDSURF = 16500,
-    KITESURF = 16501,
-    SAILING = 16502,
-
-    SNOWBOARD = 16600,
-    SKI = 16601,
-    SNOWKITE = 16602,
-
-    CAR = 17100,
-    CAR_4X4 = 17101,
-  };
-
-  typedef uint32_t UserID;
-  typedef uint32_t SessionID;
-
+public:
   /**
    * Queries the server for the user id with the given credentials.
    * @param username Case-insensitive username
    * @param password Case-insensitive password
    * @return 0 if userdata are incorrect, or else the userID of the user
    */
-  UserID GetUserID(const TCHAR *username, const TCHAR *password,
-                   OperationEnvironment &env);
+  bool GenerateSessionID(const TCHAR *_username, const TCHAR *_password,
+                         OperationEnvironment &env);
 
   /** Generates a random session id */
-  SessionID GenerateSessionID();
-  /** Generates a random session id containing the given user id */
-  SessionID GenerateSessionID(UserID user_id);
+  void GenerateSessionID();
 
   /** Sends the "start of track" packet to the tracking server */
-  bool StartTracking(SessionID session, const TCHAR *username,
-                     const TCHAR *password, unsigned tracking_interval,
-                     VehicleType vtype, const TCHAR *vname,
+  bool StartTracking(VehicleType vtype, const TCHAR *vname,
                      OperationEnvironment &env);
 
   /**
@@ -111,20 +117,37 @@ namespace LiveTrack24
    *
    * @param ground_speed Speed over ground in km/h
    */
-  bool SendPosition(SessionID session, unsigned packet_id,
-                    GeoPoint position, unsigned altitude, unsigned ground_speed,
+  bool SendPosition(GeoPoint position, unsigned altitude, unsigned ground_speed,
                     Angle track, int64_t timestamp_utc,
                     OperationEnvironment &env);
 
   /** Sends the "end of track" packet to the tracking server */
-  bool EndTracking(SessionID session, unsigned packet_id,
-                   OperationEnvironment &env);
+  bool EndTracking(OperationEnvironment &env);
 
   /**
    * Set the tracking server
    * @param server e.g. www.livetrack24.com (without http:// prefix)
    */
-  void SetServer(const TCHAR *server);
-}
+  void SetServer(const TCHAR *_server);
+
+
+  void ResetSession() {
+    session_id = 0;
+  }
+
+  bool HasSession() {
+    return session_id != 0;
+  }
+
+  SessionID GetSessionID() {
+      return session_id;
+  }
+
+  unsigned GetPacketID() {
+      return packet_id;
+  }
+};
+
+} /* namespace LiveTrack24 */
 
 #endif

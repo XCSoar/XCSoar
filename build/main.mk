@@ -777,7 +777,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/NOAAUpdater.cpp
 
 XCSOAR_SOURCES += \
-	$(SRC)/Tracking/LiveTrack24.cpp
+	$(SRC)/Tracking/LiveTrack24/Client.cpp
 endif
 
 XCSOAR_SOURCES += \

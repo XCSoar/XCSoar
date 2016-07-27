@@ -1015,7 +1015,7 @@ $(eval $(call link-program,RunSkyLinesTracking,RUN_SL_TRACKING))
 
 RUN_LIVETRACK24_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
-	$(SRC)/Tracking/LiveTrack24.cpp \
+	$(SRC)/Tracking/LiveTrack24/Client.cpp \
 	$(SRC)/Version.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
