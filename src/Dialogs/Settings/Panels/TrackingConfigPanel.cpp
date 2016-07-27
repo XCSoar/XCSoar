@@ -229,7 +229,7 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 #ifdef HAVE_LIVETRACK24
   AddBoolean(_T("LiveTrack24"),  _T(""), settings.livetrack24.enabled, this);
 
-  AddTime(_("Tracking Interval"), _T(""), 5, 3600, 5, settings.interval);
+  AddTime(_("Tracking Interval"), _T(""), 5, 3600, 5, settings.livetrack24.interval);
 
   AddEnum(_("Vehicle Type"), _("Type of vehicle used."), vehicle_type_list,
           (unsigned) settings.vehicleType);
@@ -278,7 +278,7 @@ TrackingConfigPanel::Save(bool &_changed)
     CommonInterface::SetComputerSettings().tracking;
 
 #ifdef HAVE_LIVETRACK24
-  changed |= SaveValue(TrackingInterval, ProfileKeys::TrackingInterval, settings.interval);
+  changed |= SaveValue(TrackingInterval, ProfileKeys::TrackingInterval, settings.livetrack24.interval);
 
   changed |= SaveValueEnum(TrackingVehicleType, ProfileKeys::TrackingVehicleType,
                            settings.vehicleType);

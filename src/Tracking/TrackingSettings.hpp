@@ -45,8 +45,6 @@ struct TrackingSettings {
     HANGGLIDER_RIGID = 5,
   };
 
-  /** Minimum time between two position updates (in seconds) */
-  unsigned interval;
   VehicleType vehicleType;
   StaticString<64> vehicle_name;
 
@@ -54,7 +52,6 @@ struct TrackingSettings {
   LiveTrack24::Settings livetrack24;
 
   void SetDefaults() {
-    interval = 60;
     vehicleType = VehicleType::GLIDER;
 
     skylines.SetDefaults();

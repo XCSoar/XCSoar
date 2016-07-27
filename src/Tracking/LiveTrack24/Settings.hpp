@@ -36,11 +36,19 @@ struct Settings {
   StaticString<64> username;
   StaticString<64> password;
 
+  /**
+   * Tracking interval in seconds.
+   */
+  unsigned interval;
+
+
   void SetDefaults() {
     enabled = false;
     server = _T("www.livetrack24.com");
     username.clear();
     password.clear();
+
+    interval = 60;
   }
 };
 
