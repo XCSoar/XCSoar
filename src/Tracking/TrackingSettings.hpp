@@ -36,24 +36,10 @@ Copyright_License {
 
 
 struct TrackingSettings {
-  enum class VehicleType {
-    GLIDER = 0,
-    PARAGLIDER = 1,
-    POWERED_AIRCRAFT = 2,
-    HOT_AIR_BALLOON = 3,
-    HANGGLIDER_FLEX = 4,
-    HANGGLIDER_RIGID = 5,
-  };
-
-  VehicleType vehicleType;
-  StaticString<64> vehicle_name;
-
   SkyLinesTracking::Settings skylines;
   LiveTrack24::Settings livetrack24;
 
   void SetDefaults() {
-    vehicleType = VehicleType::GLIDER;
-
     skylines.SetDefaults();
     livetrack24.SetDefaults();
   }

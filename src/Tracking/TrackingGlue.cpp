@@ -30,7 +30,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 
 static LiveTrack24::VehicleType
-MapVehicleTypeToLivetrack24(TrackingSettings::VehicleType vt)
+MapVehicleTypeToLivetrack24(LiveTrack24::Settings::VehicleType vt)
 {
   static constexpr LiveTrack24::VehicleType vehicleTypeMap[] = {
     LiveTrack24::VehicleType::GLIDER,
@@ -192,8 +192,8 @@ TrackingGlue::Tick()
         livetrack24.GenerateSessionID();
       }
 
-      if (!livetrack24.StartTracking(MapVehicleTypeToLivetrack24(settings.vehicleType),
-                                    settings.vehicle_name, env)) {
+      if (!livetrack24.StartTracking(MapVehicleTypeToLivetrack24(settings.livetrack24.vehicleType),
+                                    settings.livetrack24.vehicle_name, env)) {
         livetrack24.ResetSession();
         return;
       }

@@ -179,12 +179,12 @@ static constexpr StaticEnumChoice server_list[] = {
 };
 
 static constexpr StaticEnumChoice vehicle_type_list[] = {
-  { (unsigned) TrackingSettings::VehicleType::GLIDER, N_("Glider") },
-  { (unsigned) TrackingSettings::VehicleType::PARAGLIDER, N_("Paraglider") },
-  { (unsigned) TrackingSettings::VehicleType::POWERED_AIRCRAFT, N_("Powered aircraft") },
-  { (unsigned) TrackingSettings::VehicleType::HOT_AIR_BALLOON, N_("Hot-air balloon") },
-  { (unsigned) TrackingSettings::VehicleType::HANGGLIDER_FLEX, N_("Hangglider (Flex/FAI1)") },
-  { (unsigned) TrackingSettings::VehicleType::HANGGLIDER_RIGID, N_("Hangglider (Rigid/FAI5)") },
+  { (unsigned) LiveTrack24::Settings::VehicleType::GLIDER, N_("Glider") },
+  { (unsigned) LiveTrack24::Settings::VehicleType::PARAGLIDER, N_("Paraglider") },
+  { (unsigned) LiveTrack24::Settings::VehicleType::POWERED_AIRCRAFT, N_("Powered aircraft") },
+  { (unsigned) LiveTrack24::Settings::VehicleType::HOT_AIR_BALLOON, N_("Hot-air balloon") },
+  { (unsigned) LiveTrack24::Settings::VehicleType::HANGGLIDER_FLEX, N_("Hangglider (Flex/FAI1)") },
+  { (unsigned) LiveTrack24::Settings::VehicleType::HANGGLIDER_RIGID, N_("Hangglider (Rigid/FAI5)") },
   { 0 },
 };
 
@@ -232,9 +232,9 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddTime(_("Tracking Interval"), _T(""), 5, 3600, 5, settings.livetrack24.interval);
 
   AddEnum(_("Vehicle Type"), _("Type of vehicle used."), vehicle_type_list,
-          (unsigned) settings.vehicleType);
+          (unsigned) settings.livetrack24.vehicleType);
   AddText(_("Vehicle Name"), _T("Name of vehicle used."),
-          settings.vehicle_name);
+          settings.livetrack24.vehicle_name);
 
   WndProperty *edit = AddEnum(_("Server"), _T(""), server_list, 0);
   ((DataFieldEnum *)edit->GetDataField())->Set(settings.livetrack24.server);
@@ -281,10 +281,10 @@ TrackingConfigPanel::Save(bool &_changed)
   changed |= SaveValue(TrackingInterval, ProfileKeys::TrackingInterval, settings.livetrack24.interval);
 
   changed |= SaveValueEnum(TrackingVehicleType, ProfileKeys::TrackingVehicleType,
-                           settings.vehicleType);
+                           settings.livetrack24.vehicleType);
 
   changed |= SaveValue(TrackingVehicleName, ProfileKeys::TrackingVehicleName,
-                       settings.vehicle_name);
+                       settings.livetrack24.vehicle_name);
 #endif
 
 #ifdef HAVE_SKYLINES_TRACKING

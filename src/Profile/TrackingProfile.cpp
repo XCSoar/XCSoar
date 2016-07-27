@@ -79,8 +79,8 @@ static void Load(const ProfileMap &map,
 void
 Profile::Load(const ProfileMap &map, TrackingSettings &settings)
 {
-  map.GetEnum(ProfileKeys::TrackingVehicleType, settings.vehicleType);
-  map.Get(ProfileKeys::TrackingVehicleName, settings.vehicle_name);
+  map.GetEnum(ProfileKeys::TrackingVehicleType, settings.livetrack24.vehicleType);
+  map.Get(ProfileKeys::TrackingVehicleName, settings.livetrack24.vehicle_name);
   Load(map, settings.skylines);
   Load(map, settings.livetrack24);
 }

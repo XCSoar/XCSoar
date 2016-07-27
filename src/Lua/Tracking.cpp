@@ -57,7 +57,7 @@ l_tracking_index(lua_State *L)
   } else if (StringIsEqual(name, "livetrack24_interval")) {
       Lua::Push(L, (int)settings.livetrack24.interval);
   } else if (StringIsEqual(name, "livetrack24_vehicle_name")) { 
-      Lua::Push(L, settings.vehicle_name);
+      Lua::Push(L, settings.livetrack24.vehicle_name);
   } else
     return 0;
 
@@ -203,7 +203,7 @@ l_tracking_set_livetrack24_vehiclename(lua_State *L)
 
   TrackingSettings &settings =
     CommonInterface::SetComputerSettings().tracking;
-  settings.vehicle_name.SetUTF8(luaL_checkstring(L, 1)); 
+  settings.livetrack24.vehicle_name.SetUTF8(luaL_checkstring(L, 1));
   
   return 0;
 }

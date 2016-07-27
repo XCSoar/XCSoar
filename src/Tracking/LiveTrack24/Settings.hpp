@@ -31,6 +31,15 @@ Copyright_License {
 namespace LiveTrack24 {
 
 struct Settings {
+  enum class VehicleType {
+    GLIDER = 0,
+    PARAGLIDER = 1,
+    POWERED_AIRCRAFT = 2,
+    HOT_AIR_BALLOON = 3,
+    HANGGLIDER_FLEX = 4,
+    HANGGLIDER_RIGID = 5,
+  };
+
   bool enabled;
   StaticString<64> server;
   StaticString<64> username;
@@ -41,6 +50,8 @@ struct Settings {
    */
   unsigned interval;
 
+  VehicleType vehicleType;
+  StaticString<64> vehicle_name;
 
   void SetDefaults() {
     enabled = false;
@@ -49,6 +60,8 @@ struct Settings {
     password.clear();
 
     interval = 60;
+
+    vehicleType = VehicleType::GLIDER;
   }
 };
 
