@@ -114,7 +114,7 @@ CuSonde::UpdateMeasurements(const NMEAInfo &basic,
     return;
 
   // if (no temperature or humidity available) nothing to update...
-  if (!basic.temperature_available || !basic.humidity_available)
+  if (!basic.temperature_available)
     return;
 
   // find appropriate level
@@ -146,7 +146,9 @@ CuSonde::UpdateMeasurements(const NMEAInfo &basic,
   // if (going up)
   if (level > last_level) {
     // we round down (level) because of potential lag of temp sensor
-    cslevels[level].UpdateTemps(basic.humidity, basic.temperature);
+    cslevels[level].UpdateTemps(basic.humidity_available,
+                                basic.humidity,
+                                basic.temperature);
 
     auto h_agl = level * HEIGHT_STEP - ground_height;
     cslevels[level].UpdateThermalIndex(h_agl, max_ground_temperature);
@@ -159,7 +161,9 @@ CuSonde::UpdateMeasurements(const NMEAInfo &basic,
   // if (going down)
   } else {
     // we round up (level+1) because of potential lag of temp sensor
-    cslevels[level + 1].UpdateTemps(basic.humidity, basic.temperature);
+    cslevels[level + 1].UpdateTemps(basic.humidity_available,
+                                    basic.humidity,
+                                    basic.temperature);
 
     auto h_agl = (level + 1) * HEIGHT_STEP - ground_height;
     cslevels[level + 1].UpdateThermalIndex(h_agl, max_ground_temperature);
@@ -224,9 +228,9 @@ CuSonde::FindThermalHeight(unsigned short level)
 void
 CuSonde::FindCloudBase(unsigned short level)
 {
-  if (cslevels[level + 1].empty())
+  if (cslevels[level + 1].dewpoint_empty())
     return;
-  if (cslevels[level].empty())
+  if (cslevels[level].dewpoint_empty())
     return;
 
   auto dti = (cslevels[level + 1].dry_temperature - cslevels[level + 1].dewpoint)
@@ -265,22 +269,29 @@ CuSonde::FindCloudBase(unsigned short level)
  * @param t Temperature in K
  */
 void
-CuSonde::Level::UpdateTemps(double humidity, Temperature temperature)
+CuSonde::Level::UpdateTemps(bool humidity_valid, double humidity, Temperature temperature)
 {
-  auto log_ex = 7.5 * temperature.ToCelsius() / (237.3 + temperature.ToCelsius()) +
-            (log10(humidity) - 2);
-  auto _dewpoint = Temperature::FromCelsius(log_ex * 237.3 / (7.5 - log_ex));
+  if (humidity_valid)
+  {
+    auto log_ex = 7.5 * temperature.ToCelsius() / (237.3 + temperature.ToCelsius()) +
+              (log10(humidity) - 2);
+    auto _dewpoint = Temperature::FromCelsius(log_ex * 237.3 / (7.5 - log_ex));
 
-  // update statistics
-  if (empty()) {
-    dewpoint = _dewpoint;
-    air_temperature = temperature;
-  } else {
-    dewpoint = (_dewpoint + dewpoint) / 2;
-    air_temperature = (temperature + air_temperature) / 2;
+    if (dewpoint_empty())
+      dewpoint = _dewpoint;
+    else
+      dewpoint = (_dewpoint + dewpoint) / 2;
+
+    has_dewpoint = true;
   }
 
-  ++n_measurements;
+  // update statistics
+  if (empty())
+    air_temperature = temperature;
+  else
+    air_temperature = (temperature + air_temperature) / 2;
+
+  has_data = true;
 }
 
 /**

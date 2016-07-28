@@ -50,11 +50,13 @@ public:
     /** ThermalIndex in K */
     Temperature thermal_index;
 
-    void UpdateTemps(double humidity, Temperature temperature);
+    void UpdateTemps(bool humidity_valid, double humidity, Temperature temperature);
     void UpdateThermalIndex(double h_agl, Temperature max_ground_temperature);
 
-    /** Number of measurements */
-    unsigned n_measurements;
+    /** Has any data */
+    bool has_data;
+    /** Has dewpoint data */
+    bool has_dewpoint;
 
     /** Estimated ThermalHeight with data of this level */
     double thermal_height;
@@ -62,11 +64,16 @@ public:
     double cloud_base;
 
     bool empty() const {
-      return n_measurements == 0;
+      return !has_data;
+    }
+
+    bool dewpoint_empty() const {
+      return !has_dewpoint;
     }
 
     void Reset() {
-      n_measurements = 0;
+      has_data = false;
+      has_dewpoint = false;
     }
   };
 

@@ -54,12 +54,17 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
     hmin = min(hmin, (int)i);
     hmax = max(hmax, (int)i);
 
-    tmin = min(tmin, min(cu_sonde.cslevels[i].dry_temperature,
-                         min(cu_sonde.cslevels[i].air_temperature,
-                             cu_sonde.cslevels[i].dewpoint)));
-    tmax = max(tmax, max(cu_sonde.cslevels[i].dry_temperature,
-                         max(cu_sonde.cslevels[i].air_temperature,
-                             cu_sonde.cslevels[i].dewpoint)));
+    auto dry_temperature = cu_sonde.cslevels[i].dry_temperature;
+    auto air_temperature = cu_sonde.cslevels[i].air_temperature;
+
+    tmin = min(tmin, min(dry_temperature, air_temperature));
+    tmax = max(tmax, max(dry_temperature, air_temperature));
+
+    if (!cu_sonde.cslevels[i].dewpoint_empty()) {
+      auto dewpoint = cu_sonde.cslevels[i].dewpoint;
+      tmin = min(tmin, dewpoint);
+      tmax = max(tmax, dewpoint);
+    }
   }
 
   if (hmin >= hmax) {
@@ -83,6 +88,8 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
   int ipos = 0;
 
   for (unsigned i = 0; i < cu_sonde.NUM_LEVELS - 1u; i++) {
+    bool has_dewpoint = false;
+
     if (cu_sonde.cslevels[i].empty() ||
         cu_sonde.cslevels[i + 1].empty())
       continue;
@@ -100,9 +107,14 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
                    cu_sonde.cslevels[i + 1].air_temperature.ToUser(), next_alt,
                    ChartLook::STYLE_BLACK);
 
-    chart.DrawLine(cu_sonde.cslevels[i].dewpoint.ToUser(), alt,
-                   cu_sonde.cslevels[i + 1].dewpoint.ToUser(), next_alt,
-                   ChartLook::STYLE_BLUETHINDASH);
+    if (!cu_sonde.cslevels[i].dewpoint_empty() &&
+        !cu_sonde.cslevels[i + 1].dewpoint_empty()) {
+      chart.DrawLine(cu_sonde.cslevels[i].dewpoint.ToUser(), alt,
+                     cu_sonde.cslevels[i + 1].dewpoint.ToUser(), next_alt,
+                     ChartLook::STYLE_BLUETHINDASH);
+               
+      has_dewpoint = true;
+    }      
 
     if (ipos > 2) {
       if (!labelDry) {
@@ -113,7 +125,7 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
         chart.DrawLabel(_T("Air"),
                         cu_sonde.cslevels[i + 1].air_temperature.ToUser(), alt);
         labelAir = true;
-      } else if (!labelDew) {
+      } else if (!labelDew && has_dewpoint) {
         chart.DrawLabel(_T("Dew"),
                         cu_sonde.cslevels[i + 1].dewpoint.ToUser(), alt);
         labelDew = true;
