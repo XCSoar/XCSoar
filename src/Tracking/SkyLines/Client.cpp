@@ -25,6 +25,7 @@ Copyright_License {
 #include "Handler.hpp"
 #include "Assemble.hpp"
 #include "Protocol.hpp"
+#include "Import.hpp"
 #include "OS/ByteOrder.hpp"
 #include "Net/StaticSocketAddress.hxx"
 #include "Math/Angle.hpp"
@@ -117,22 +118,6 @@ SkyLinesTracking::Client::SendUserNameRequest(uint32_t user_id)
   assert(key != 0);
 
   SendPacket(MakeUserNameRequest(key, user_id));
-}
-
-static constexpr Angle
-ImportAngle(int32_t src)
-{
-  return Angle::Degrees(int32_t(FromBE32(src)) / 1000000.);
-}
-
-/**
- * Convert a SkyLines #SkyLinesTracking::GeoPoint to a XCSoar
- * #::GeoPoint.
- */
-static constexpr ::GeoPoint
-ImportGeoPoint(SkyLinesTracking::GeoPoint src)
-{
-  return ::GeoPoint(ImportAngle(src.longitude), ImportAngle(src.latitude));
 }
 
 inline void
