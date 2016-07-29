@@ -270,6 +270,8 @@ SkyLinesTracking::Client::OnReceive(const boost::system::error_code &ec,
 
   if (sender_endpoint == endpoint)
     OnDatagramReceived(buffer, size);
+
+  AsyncReceive();
 }
 
 void
