@@ -85,6 +85,8 @@ public:
   EventQueue();
   ~EventQueue();
 
+  using IOServiceOwner::get_io_service;
+
 #ifdef USE_X11
   _XDisplay *GetDisplay() const {
     return input_queue.GetDisplay();

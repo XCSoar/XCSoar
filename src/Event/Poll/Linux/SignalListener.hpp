@@ -36,6 +36,10 @@ public:
   explicit SignalListener(boost::asio::io_service &io_service)
     :asio(io_service) {}
 
+  boost::asio::io_service &get_io_service() {
+    return asio.get_io_service();
+  }
+
 private:
   bool InternalCreate(const sigset_t &mask);
 
