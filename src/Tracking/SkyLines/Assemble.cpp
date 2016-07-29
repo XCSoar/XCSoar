@@ -46,6 +46,24 @@ SkyLinesTracking::MakePing(uint64_t key, uint16_t id)
   return packet;
 }
 
+SkyLinesTracking::ACKPacket
+SkyLinesTracking::MakeAck(uint64_t key, uint16_t id, uint32_t flags)
+{
+  assert(key != 0);
+
+  ACKPacket packet;
+  packet.header.magic = ToBE32(MAGIC);
+  packet.header.crc = 0;
+  packet.header.type = ToBE16(Type::ACK);
+  packet.header.key = ToBE64(key);
+  packet.id = ToBE16(id);
+  packet.reserved = 0;
+  packet.flags = ToBE32(flags);
+
+  packet.header.crc = ToBE16(UpdateCRC16CCITT(&packet, sizeof(packet), 0));
+  return packet;
+}
+
 SkyLinesTracking::FixPacket
 SkyLinesTracking::ToFix(uint64_t key, const NMEAInfo &basic)
 {

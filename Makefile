@@ -158,6 +158,7 @@ include $(topdir)/build/harness.mk
 
 include $(topdir)/build/vali.mk
 include $(topdir)/build/main.mk
+include $(topdir)/build/cloud.mk
 include $(topdir)/build/kobo.mk
 include $(topdir)/build/test.mk
 include $(topdir)/build/hot.mk

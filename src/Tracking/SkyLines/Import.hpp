@@ -28,6 +28,8 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "OS/ByteOrder.hpp"
 
+#include <chrono>
+
 namespace SkyLinesTracking {
 
 constexpr Angle
@@ -44,6 +46,15 @@ constexpr ::GeoPoint
 ImportGeoPoint(SkyLinesTracking::GeoPoint src)
 {
   return ::GeoPoint(ImportAngle(src.longitude), ImportAngle(src.latitude));
+}
+
+/**
+ * Import a big-endian time stamp to std::chrono::milliseconds.
+ */
+constexpr std::chrono::milliseconds
+ImportTimeMs(uint32_t src_be)
+{
+  return std::chrono::milliseconds(FromBE32(src_be));
 }
 
 } /* namespace SkyLinesTracking */

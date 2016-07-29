@@ -34,6 +34,7 @@ struct NMEAInfo;
 namespace SkyLinesTracking {
 
 struct PingPacket;
+struct ACKPacket;
 struct FixPacket;
 struct TrafficRequestPacket;
 struct UserNameRequestPacket;
@@ -41,6 +42,10 @@ struct UserNameRequestPacket;
 gcc_const
 PingPacket
 MakePing(uint64_t key, uint16_t id);
+
+gcc_const
+ACKPacket
+MakeAck(uint64_t key, uint16_t id, uint32_t flags);
 
 gcc_pure
 FixPacket
