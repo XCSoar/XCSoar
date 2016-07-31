@@ -28,7 +28,7 @@ Copyright_License {
 #include "../Shared/Event.hpp"
 #include "Thread/Mutex.hpp"
 #include "OS/EventPipe.hpp"
-#include "Linux/SignalListener.hpp"
+#include "IO/Async/SignalListener.hpp"
 
 #ifdef USE_X11
 #include "X11Queue.hpp"

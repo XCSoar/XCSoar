@@ -7,7 +7,6 @@ EVENT_SOURCES = \
 ifeq ($(USE_POLL_EVENT),y)
 EVENT_SOURCES += \
 	$(SRC)/Event/Poll/Timer.cpp \
-	$(SRC)/Event/Poll/Linux/SignalListener.cpp \
 	$(SRC)/Event/Poll/Loop.cpp \
 	$(SRC)/Event/Poll/Queue.cpp
 POLL_EVENT_CPPFLAGS = -DUSE_POLL_EVENT
