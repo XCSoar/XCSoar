@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Assemble.hpp"
+#include "Export.hpp"
 #include "Protocol.hpp"
 #include "NMEA/Info.hpp"
 #include "OS/ByteOrder.hpp"
@@ -63,10 +64,7 @@ SkyLinesTracking::ToFix(uint64_t key, const NMEAInfo &basic)
 
   if (basic.location_available) {
     packet.flags |= ToBE32(FixPacket::FLAG_LOCATION);
-    ::GeoPoint location = basic.location;
-    location.Normalize();
-    packet.location.latitude = ToBE32(int(location.latitude.Degrees() * 1000000));
-    packet.location.longitude = ToBE32(int(location.longitude.Degrees() * 1000000));
+    packet.location = ExportGeoPoint(basic.location);
   } else
     packet.location.latitude = packet.location.longitude = 0;
 
