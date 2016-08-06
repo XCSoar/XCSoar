@@ -51,7 +51,7 @@ CuSonde::Reset()
   thermalHeight = 0;
   cloudBase = 0;
   hGround = 0;
-  maxGroundTemperature = 25;
+  maxGroundTemperature = CelsiusToKelvin(25);
 
   for (unsigned i = 0; i < NUM_LEVELS; ++i)
     cslevels[i].Reset();
@@ -61,7 +61,7 @@ CuSonde::Reset()
 
 /**
  * Sets the predicted maximum ground temperature to val
- * @param val New predicted maximum ground temperature in degrees C
+ * @param val New predicted maximum ground temperature in degrees K
  */
 void
 CuSonde::SetForecastTemperature(double val)
@@ -146,8 +146,7 @@ CuSonde::UpdateMeasurements(const NMEAInfo &basic,
   // if (going up)
   if (level > last_level) {
     // we round down (level) because of potential lag of temp sensor
-    cslevels[level].UpdateTemps(basic.humidity,
-                                KelvinToCelsius(basic.temperature));
+    cslevels[level].UpdateTemps(basic.humidity, basic.temperature);
 
     auto h_agl = level * HEIGHT_STEP - hGround;
     cslevels[level].UpdateThermalIndex(h_agl, maxGroundTemperature);
@@ -160,8 +159,7 @@ CuSonde::UpdateMeasurements(const NMEAInfo &basic,
   // if (going down)
   } else {
     // we round up (level+1) because of potential lag of temp sensor
-    cslevels[level + 1].UpdateTemps(basic.humidity,
-                                    KelvinToCelsius(basic.temperature));
+    cslevels[level + 1].UpdateTemps(basic.humidity, basic.temperature);
 
     auto h_agl = (level + 1) * HEIGHT_STEP - hGround;
     cslevels[level + 1].UpdateThermalIndex(h_agl, maxGroundTemperature);
@@ -269,9 +267,9 @@ CuSonde::FindCloudBase(unsigned short level)
 void
 CuSonde::Level::UpdateTemps(double humidity, double temperature)
 {
-  auto log_ex = 7.5 * temperature / (237.3 + temperature) +
-          (log10(humidity) - 2);
-  auto _dewpoint = log_ex * 237.3 / (7.5 - log_ex);
+  auto log_ex = 7.5 * KelvinToCelsius(temperature) / (237.3 + KelvinToCelsius(temperature)) +
+            (log10(humidity) - 2);
+  auto _dewpoint = CelsiusToKelvin(log_ex * 237.3 / (7.5 - log_ex));
 
   // update statistics
   if (empty()) {

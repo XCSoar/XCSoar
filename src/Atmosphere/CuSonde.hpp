@@ -39,13 +39,13 @@ public:
   static constexpr unsigned NUM_LEVELS = 100;
 
   struct Level {
-    /** Environmental temperature in degrees C */
+    /** Environmental temperature in degrees K */
     double airTemp;
-    /** DewPoint in degrees C */
+    /** DewPoint in degrees K */
     double dewpoint;
-    /** Dry temperature in degrees C */
+    /** Dry temperature in degrees K */
     double tempDry;
-    /** ThermalIndex in degrees C */
+    /** ThermalIndex in degrees K */
     double thermalIndex;
 
     void UpdateTemps(double humidity, double temperature);

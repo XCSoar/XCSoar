@@ -38,7 +38,7 @@ void
 CuComputer::Compute(const NMEAInfo &basic, const DerivedInfo &calculated,
                     const ComputerSettings &settings)
 {
-  cu_sonde.SetForecastTemperature(KelvinToCelsius(settings.forecast_temperature));
+  cu_sonde.SetForecastTemperature(settings.forecast_temperature);
 
   cu_sonde.UpdateMeasurements(basic, calculated);
 }

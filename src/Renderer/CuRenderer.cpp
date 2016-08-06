@@ -24,6 +24,7 @@ Copyright_License {
 #include "CuRenderer.hpp"
 #include "ChartRenderer.hpp"
 #include "Atmosphere/CuSonde.hpp"
+#include "Atmosphere/Temperature.hpp"
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
 #include "Util/StringFormat.hpp"
@@ -68,8 +69,8 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
 
   chart.ScaleYFromValue(hmin);
   chart.ScaleYFromValue(hmax);
-  chart.ScaleXFromValue(tmin);
-  chart.ScaleXFromValue(tmax);
+  chart.ScaleXFromValue(Units::ToUserTemperature(tmin));
+  chart.ScaleXFromValue(Units::ToUserTemperature(tmax));
 
   bool labelDry = false;
   bool labelAir = false;
@@ -84,36 +85,36 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
 
     ipos++;
 
-    chart.DrawLine(cu_sonde.cslevels[i].tempDry, i,
-                   cu_sonde.cslevels[i + 1].tempDry, i + 1,
+    chart.DrawLine(Units::ToUserTemperature(cu_sonde.cslevels[i].tempDry), i,
+                   Units::ToUserTemperature(cu_sonde.cslevels[i + 1].tempDry), i + 1,
                    ChartLook::STYLE_REDTHICKDASH);
 
-    chart.DrawLine(cu_sonde.cslevels[i].airTemp, i,
-                   cu_sonde.cslevels[i + 1].airTemp, i + 1,
+    chart.DrawLine(Units::ToUserTemperature(cu_sonde.cslevels[i].airTemp), i,
+                   Units::ToUserTemperature(cu_sonde.cslevels[i + 1].airTemp), i + 1,
                    ChartLook::STYLE_BLACK);
 
-    chart.DrawLine(cu_sonde.cslevels[i].dewpoint, i,
-                   cu_sonde.cslevels[i + 1].dewpoint, i + 1,
+    chart.DrawLine(Units::ToUserTemperature(cu_sonde.cslevels[i].dewpoint), i,
+                   Units::ToUserTemperature(cu_sonde.cslevels[i + 1].dewpoint), i + 1,
                    ChartLook::STYLE_BLUETHINDASH);
 
     if (ipos > 2) {
       if (!labelDry) {
         chart.DrawLabel(_T("DALR"),
-                        cu_sonde.cslevels[i + 1].tempDry, i);
+            Units::ToUserTemperature(cu_sonde.cslevels[i + 1].tempDry), i);
         labelDry = true;
       } else if (!labelAir) {
         chart.DrawLabel(_T("Air"),
-                        cu_sonde.cslevels[i + 1].airTemp, i);
+            Units::ToUserTemperature(cu_sonde.cslevels[i + 1].airTemp), i);
         labelAir = true;
       } else if (!labelDew) {
         chart.DrawLabel(_T("Dew"),
-                        cu_sonde.cslevels[i + 1].dewpoint, i);
+            Units::ToUserTemperature(cu_sonde.cslevels[i + 1].dewpoint), i);
         labelDew = true;
       }
     }
   }
 
-  chart.DrawXLabel(_T("T"), _T(DEG "C"));
+  chart.DrawXLabel(_T("T"), Units::GetTemperatureName());
   chart.DrawYLabel(_T("h"));
 }
 
