@@ -1,6 +1,7 @@
 Version 6.8.7 - not yet released
 * tracking
   - SkyLines: fix SkyLines tracking on non-Android
+  - new client for the experimental "XCSoar Cloud"
 
 Version 6.8.6 - 2016/07/22
 * calculations

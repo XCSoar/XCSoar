@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_TRACKING_SKYLINES_SETTINGS_HPP
 
 #include "Features.hpp"
+#include "Util/TriState.hpp"
 
 #ifdef HAVE_SKYLINES_TRACKING
 
@@ -51,19 +52,30 @@ struct Settings {
   bool near_traffic_enabled;
 
   /**
+   * Is submitting data to the (experimental) XCSoar Cloud enabled?
+   * TriState::UNKNOWN means the user has not yet been asked about
+   * it.
+   */
+  TriState cloud_enabled;
+
+  /**
    * Tracking interval in seconds.
    */
   unsigned interval;
 
   uint64_t key;
 
+  uint64_t cloud_key;
+
   void SetDefaults() {
     enabled = false;
     roaming = true;
     traffic_enabled = false;
     near_traffic_enabled = false;
+    cloud_enabled = TriState::UNKNOWN;
     interval = 5;
     key = 0;
+    cloud_key = 0;
   }
 };
 

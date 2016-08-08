@@ -41,6 +41,15 @@ namespace Profile {
     const char *key = map.Get(ProfileKeys::SkyLinesTrackingKey);
     if (key != NULL)
       settings.key = ParseUint64(key, NULL, 16);
+
+    bool bvalue;
+    settings.cloud_enabled = map.Get(ProfileKeys::CloudEnabled, bvalue)
+      ? (bvalue ? TriState::TRUE : TriState::FALSE)
+      : TriState::UNKNOWN;
+
+    key = map.Get(ProfileKeys::CloudKey);
+    if (key != nullptr)
+      settings.cloud_key = ParseUint64(key, nullptr, 16);
   }
 }
 #endif

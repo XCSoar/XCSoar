@@ -21,62 +21,18 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_TRACKING_SKYLINES_GLUE_HPP
-#define XCSOAR_TRACKING_SKYLINES_GLUE_HPP
+#ifndef XCSOAR_TRACKING_SKYLINES_KEY_HPP
+#define XCSOAR_TRACKING_SKYLINES_KEY_HPP
 
-#include "Client.hpp"
-#include "Time/GPSClock.hpp"
+#include <stdint.h>
 
 namespace SkyLinesTracking {
 
-struct Settings;
-class Queue;
-
-class Glue {
-  Client client;
-  unsigned interval;
-  GPSClock clock;
-
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  GPSClock traffic_clock;
-  bool traffic_enabled;
-  bool near_traffic_enabled;
-#endif
-
-  bool roaming;
-
-  Queue *queue;
-
-  Client cloud_client;
-  GPSClock cloud_clock;
-
-public:
-  Glue();
-  ~Glue();
-
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  void SetHandler(Handler *handler) {
-    client.SetHandler(handler);
-  }
-#endif
-
-  void SetSettings(const Settings &settings);
-
-  void Tick(const NMEAInfo &basic);
-
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  void RequestUserName(uint32_t user_id) {
-    client.SendUserNameRequest(user_id);
-  }
-#endif
-
-private:
-  gcc_pure
-  bool IsConnected() const;
-
-  void SendFixes(const NMEAInfo &basic);
-  void SendCloudFix(const NMEAInfo &basic);
-};
+/**
+ * Generate a new SkyLines tracking key that aims to be unique.
+ */
+uint64_t
+GenerateKey();
 
 } /* namespace SkyLinesTracking */
 

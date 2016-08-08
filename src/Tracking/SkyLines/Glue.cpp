@@ -35,6 +35,8 @@ Copyright_License {
 
 #include <assert.h>
 
+static constexpr fixed CLOUD_INTERVAL = fixed(60);
+
 SkyLinesTracking::Glue::Glue()
   :interval(0),
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
@@ -121,26 +123,57 @@ SkyLinesTracking::Glue::SendFixes(const NMEAInfo &basic)
 }
 
 void
-SkyLinesTracking::Glue::Tick(const NMEAInfo &basic)
+SkyLinesTracking::Glue::SendCloudFix(const NMEAInfo &basic)
 {
-  if (!client.IsDefined())
+  assert(cloud_client.IsDefined());
+
+  if (!basic.time_available) {
+    cloud_clock.Reset();
+    return;
+  }
+
+  if (!basic.location_available)
     return;
 
+  if (!IsConnected())
+    return;
+
+  if (cloud_clock.CheckAdvance(basic.time, CLOUD_INTERVAL))
+    cloud_client.SendFix(basic);
+}
+
+void
+SkyLinesTracking::Glue::Tick(const NMEAInfo &basic)
+{
   if (basic.location_available && !basic.gps.real)
     /* disable in simulator/replay */
     return;
 
-  SendFixes(basic);
+  if (client.IsDefined()) {
+    SendFixes(basic);
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  if (traffic_enabled && traffic_clock.CheckAdvance(basic.clock, fixed(60)))
-    client.SendTrafficRequest(true, true, near_traffic_enabled);
+    if (traffic_enabled && traffic_clock.CheckAdvance(basic.clock, fixed(60)))
+      client.SendTrafficRequest(true, true, near_traffic_enabled);
 #endif
+  }
+
+  if (cloud_client.IsDefined())
+    SendCloudFix(basic);
 }
 
 void
 SkyLinesTracking::Glue::SetSettings(const Settings &settings)
 {
+  if (settings.cloud_enabled == TriState::TRUE && settings.cloud_key != 0) {
+    cloud_client.SetKey(settings.cloud_key);
+    if (!cloud_client.IsDefined())
+      // TODO: change hard-coded IP address to "cloud.xcsoar.net"
+      cloud_client.Open(IPv4Address(78, 47, 110, 205,
+                                    Client::GetDefaultPort()));
+  } else
+    cloud_client.Close();
+
   if (!settings.enabled || settings.key == 0) {
     delete queue;
     queue = nullptr;

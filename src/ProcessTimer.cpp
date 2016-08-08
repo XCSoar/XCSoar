@@ -46,6 +46,7 @@ Copyright_License {
 #include "Tracking/TrackingGlue.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Event/Idle.hpp"
+#include "Dialogs/Tracking/CloudEnableDialog.hpp"
 
 #ifdef _WIN32_WCE
 static void
@@ -214,6 +215,7 @@ ProcessAutoBugs()
 static void
 SettingsProcessTimer()
 {
+  CloudEnableDialog();
   BallastDumpProcessTimer();
   ProcessAutoBugs();
 }
