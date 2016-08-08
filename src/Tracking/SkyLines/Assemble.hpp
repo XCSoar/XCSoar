@@ -30,11 +30,13 @@ Copyright_License {
 #include <stdint.h>
 
 struct NMEAInfo;
+struct GeoPoint;
 
 namespace SkyLinesTracking {
 
 struct PingPacket;
 struct FixPacket;
+struct ThermalSubmitPacket;
 struct TrafficRequestPacket;
 struct UserNameRequestPacket;
 
@@ -45,6 +47,13 @@ MakePing(uint64_t key, uint16_t id);
 gcc_pure
 FixPacket
 ToFix(uint64_t key, const NMEAInfo &basic);
+
+gcc_pure
+ThermalSubmitPacket
+MakeThermalSubmit(uint64_t key, uint32_t time,
+                  ::GeoPoint bottom_location, int bottom_altitude,
+                  ::GeoPoint top_location, int top_altitude,
+                  double lift);
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
 gcc_const

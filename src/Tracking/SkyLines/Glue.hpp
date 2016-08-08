@@ -52,6 +52,8 @@ class Glue {
   Client cloud_client;
   GPSClock cloud_clock;
 
+  fixed last_climb_time;
+
 public:
   Glue();
   ~Glue();

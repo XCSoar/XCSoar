@@ -45,7 +45,8 @@ SkyLinesTracking::Glue::Glue()
    near_traffic_enabled(false),
 #endif
    roaming(true),
-   queue(nullptr)
+   queue(nullptr),
+   last_climb_time(-1)
 {
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   assert(io_thread != nullptr);
@@ -142,6 +143,35 @@ SkyLinesTracking::Glue::SendCloudFix(const NMEAInfo &basic,
 
   if (cloud_clock.CheckAdvance(basic.time, CLOUD_INTERVAL))
     cloud_client.SendFix(basic);
+
+  if (last_climb_time > basic.time)
+    /* recover from time warp */
+    last_climb_time = fixed(-1);
+
+  constexpr fixed min_climb_duration(30);
+  constexpr fixed min_height_gain(100);
+  if (!calculated.circling &&
+      calculated.climb_start_time >= fixed(0) &&
+      calculated.climb_start_time > last_climb_time &&
+      calculated.cruise_start_time > calculated.climb_start_time + min_climb_duration &&
+      calculated.cruise_start_altitude > calculated.climb_start_altitude + min_height_gain &&
+      calculated.cruise_start_altitude_te > calculated.climb_start_altitude_te + min_height_gain) {
+    /* we just stopped circling - send our thermal location to the
+       XCSoar Cloud server */
+    // TODO: use TE altitude?
+    last_climb_time = calculated.cruise_start_time;
+
+    fixed duration = calculated.cruise_start_time - calculated.climb_start_time;
+    fixed height_gain = calculated.cruise_start_altitude - calculated.climb_start_altitude;
+    fixed lift = height_gain / duration;
+
+    cloud_client.SendThermal(ToBE32(uint32_t(basic.time * 1000)),
+                             calculated.climb_start_location,
+                             iround(calculated.climb_start_altitude),
+                             calculated.cruise_start_location,
+                             iround(calculated.cruise_start_altitude),
+                             (double)lift);
+  }
 }
 
 void

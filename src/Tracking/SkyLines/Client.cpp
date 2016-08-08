@@ -115,6 +115,23 @@ SkyLinesTracking::Client::SendPing(uint16_t id)
   return SendPacket(MakePing(key, id));
 }
 
+bool
+SkyLinesTracking::Client::SendThermal(uint32_t time,
+                                      ::GeoPoint bottom_location,
+                                      int bottom_altitude,
+                                      ::GeoPoint top_location,
+                                      int top_altitude,
+                                      double lift)
+{
+  assert(socket.IsDefined());
+  assert(key != 0);
+
+  return SendPacket(MakeThermalSubmit(key, time,
+                                      bottom_location, bottom_altitude,
+                                      top_location, top_altitude,
+                                      lift));
+}
+
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
 
 bool

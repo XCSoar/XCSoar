@@ -32,6 +32,7 @@ Copyright_License {
 #include <stdint.h>
 
 struct NMEAInfo;
+struct GeoPoint;
 class IOThread;
 
 namespace SkyLinesTracking {
@@ -98,6 +99,11 @@ public:
 
   bool SendFix(const NMEAInfo &basic);
   bool SendPing(uint16_t id);
+
+  bool SendThermal(uint32_t time,
+                   ::GeoPoint bottom_location, int bottom_altitude,
+                   ::GeoPoint top_location, int top_altitude,
+                   double lift);
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   bool SendTrafficRequest(bool followees, bool club, bool near);
