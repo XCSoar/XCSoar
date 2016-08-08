@@ -27,6 +27,8 @@ Copyright_License {
 #include "Client.hpp"
 #include "Time/GPSClock.hpp"
 
+struct DerivedInfo;
+
 namespace SkyLinesTracking {
 
 struct Settings;
@@ -62,7 +64,7 @@ public:
 
   void SetSettings(const Settings &settings);
 
-  void Tick(const NMEAInfo &basic);
+  void Tick(const NMEAInfo &basic, const DerivedInfo &calculated);
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   void RequestUserName(uint32_t user_id) {
@@ -75,7 +77,7 @@ private:
   bool IsConnected() const;
 
   void SendFixes(const NMEAInfo &basic);
-  void SendCloudFix(const NMEAInfo &basic);
+  void SendCloudFix(const NMEAInfo &basic, const DerivedInfo &calculated);
 };
 
 } /* namespace SkyLinesTracking */

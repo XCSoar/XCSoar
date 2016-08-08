@@ -116,7 +116,7 @@ void
 TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
 {
 #ifdef HAVE_SKYLINES_TRACKING
-  skylines.Tick(basic);
+  skylines.Tick(basic, calculated);
 #endif
 
 #ifdef HAVE_LIVETRACK24

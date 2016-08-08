@@ -123,7 +123,8 @@ SkyLinesTracking::Glue::SendFixes(const NMEAInfo &basic)
 }
 
 void
-SkyLinesTracking::Glue::SendCloudFix(const NMEAInfo &basic)
+SkyLinesTracking::Glue::SendCloudFix(const NMEAInfo &basic,
+                                     const DerivedInfo &calculated)
 {
   assert(cloud_client.IsDefined());
 
@@ -143,7 +144,8 @@ SkyLinesTracking::Glue::SendCloudFix(const NMEAInfo &basic)
 }
 
 void
-SkyLinesTracking::Glue::Tick(const NMEAInfo &basic)
+SkyLinesTracking::Glue::Tick(const NMEAInfo &basic,
+                             const DerivedInfo &calculated)
 {
   if (basic.location_available && !basic.gps.real)
     /* disable in simulator/replay */
@@ -159,7 +161,7 @@ SkyLinesTracking::Glue::Tick(const NMEAInfo &basic)
   }
 
   if (cloud_client.IsDefined())
-    SendCloudFix(basic);
+    SendCloudFix(basic, calculated);
 }
 
 void
