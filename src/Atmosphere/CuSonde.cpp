@@ -61,7 +61,7 @@ CuSonde::Reset()
 
 /**
  * Sets the predicted maximum ground temperature to val
- * @param val New predicted maximum ground temperature in degrees K
+ * @param val New predicted maximum ground temperature in K
  */
 void
 CuSonde::SetForecastTemperature(double val)
@@ -262,7 +262,7 @@ CuSonde::FindCloudBase(unsigned short level)
 /**
  * Calculates the dew point and saves the measurement
  * @param rh Humidity in percent
- * @param t Temperature in degrees C
+ * @param t Temperature in K
  */
 void
 CuSonde::Level::UpdateTemps(double humidity, double temperature)
