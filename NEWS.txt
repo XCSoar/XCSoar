@@ -53,6 +53,10 @@ Version 7.0 - not yet released
 * Kobo
   - support Kobo Glo HD
 
+Version 6.8.7 - not yet released
+* tracking
+  - SkyLines: fix SkyLines tracking on non-Android
+
 Version 6.8.6 - 2016/07/22
 * calculations
   - show takeoff time after landing (#3786)

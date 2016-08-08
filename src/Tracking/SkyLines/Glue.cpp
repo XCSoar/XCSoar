@@ -46,6 +46,10 @@ SkyLinesTracking::Glue::IsConnected() const
 {
   switch (GetNetState()) {
   case NetState::UNKNOWN:
+    /* we don't know if we have an internet connection - be
+       optimistic, and assume everything's ok */
+    return true;
+
   case NetState::DISCONNECTED:
     return false;
 
@@ -121,6 +125,8 @@ void
 SkyLinesTracking::Glue::SetSettings(const Settings &settings)
 {
   if (!settings.enabled || settings.key == 0) {
+    delete queue;
+    queue = nullptr;
     client.Close();
     return;
   }

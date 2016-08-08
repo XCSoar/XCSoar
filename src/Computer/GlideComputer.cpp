@@ -141,6 +141,8 @@ GlideComputer::ProcessGPS(bool force)
 
   stats_computer.ProcessClimbEvents(calculated);
 
+  cu_computer.Compute(basic, calculated, settings);
+
   // Calculate the team code
   CalculateOwnTeamCode();
 

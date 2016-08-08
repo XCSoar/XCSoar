@@ -550,7 +550,7 @@ InputEvents::eventRun(const TCHAR *misc)
 {
   #ifdef WIN32
   PROCESS_INFORMATION pi;
-  if (!::CreateProcess(misc, NULL, NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi))
+  if (!::CreateProcess(misc, NULL, NULL, NULL, false, 0, NULL, NULL, NULL, &pi))
     return;
 
   // wait for program to finish!

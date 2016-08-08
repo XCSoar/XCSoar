@@ -30,7 +30,6 @@ WndFrame::WndFrame(const DialogLook &_look)
   :look(_look),
    caption_color(look.text_color)
 {
-  text.clear();
 }
 
 WndFrame::WndFrame(ContainerWindow &parent, const DialogLook &_look,
@@ -39,8 +38,6 @@ WndFrame::WndFrame(ContainerWindow &parent, const DialogLook &_look,
   :look(_look),
    caption_color(look.text_color)
 {
-  text.clear();
-
   Create(parent, rc, style);
 }
 
