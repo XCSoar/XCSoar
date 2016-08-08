@@ -26,6 +26,7 @@ Copyright_License {
 #include "Queue.hpp"
 #include "Assemble.hpp"
 #include "NMEA/Info.hpp"
+#include "NMEA/Derived.hpp"
 #include "Net/State.hpp"
 #include "Net/IPv4Address.hxx"
 
@@ -133,7 +134,7 @@ SkyLinesTracking::Glue::SendCloudFix(const NMEAInfo &basic,
     return;
   }
 
-  if (!basic.location_available)
+  if (!basic.location_available || !calculated.flight.flying)
     return;
 
   if (!IsConnected())
