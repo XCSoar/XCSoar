@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/PaintWindow.hpp"
 #include "Screen/Color.hpp"
 #include "Renderer/TextRenderer.hpp"
-#include "Util/StaticString.hxx"
+#include "Util/tstring.hpp"
 
 #include <tchar.h>
 
@@ -40,7 +40,7 @@ class WndFrame : public PaintWindow {
 
   TextRenderer text_renderer;
 
-  StaticString<300> text;
+  tstring text;
 
 public:
   explicit WndFrame(const DialogLook &look);
