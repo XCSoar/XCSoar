@@ -60,6 +60,10 @@ SkyLinesTracking::Glue::IsConnected() const
 {
   switch (GetNetState()) {
   case NetState::UNKNOWN:
+    /* we don't know if we have an internet connection - be
+       optimistic, and assume everything's ok */
+    return true;
+
   case NetState::DISCONNECTED:
     return false;
 
