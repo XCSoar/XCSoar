@@ -138,6 +138,8 @@ void
 SkyLinesTracking::Glue::SetSettings(const Settings &settings)
 {
   if (!settings.enabled || settings.key == 0) {
+    delete queue;
+    queue = nullptr;
     client.Close();
     return;
   }
