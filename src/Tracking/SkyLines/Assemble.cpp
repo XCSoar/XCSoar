@@ -135,6 +135,31 @@ SkyLinesTracking::ToFix(uint64_t key, const NMEAInfo &basic)
   return packet;
 }
 
+SkyLinesTracking::ThermalSubmitPacket
+SkyLinesTracking::MakeThermalSubmit(uint64_t key, uint32_t time,
+                                    ::GeoPoint bottom_location,
+                                    int bottom_altitude,
+                                    ::GeoPoint top_location,
+                                    int top_altitude,
+                                    double lift)
+{
+  ThermalSubmitPacket packet;
+  packet.header.magic = ToBE32(MAGIC);
+  packet.header.crc = 0;
+  packet.header.type = ToBE16(Type::THERMAL_SUBMIT);
+  packet.header.key = ToBE64(key);
+  packet.thermal.time = time;
+  packet.thermal.reserved1 = 0;
+  packet.thermal.bottom_location = ExportGeoPoint(bottom_location);
+  packet.thermal.top_location = ExportGeoPoint(top_location);
+  packet.thermal.bottom_altitude = ToBE16(bottom_altitude);
+  packet.thermal.top_altitude = ToBE16(top_altitude);
+  packet.thermal.lift = ToBE16(lround(lift * 256));
+  packet.thermal.reserved2 = 0;
+  packet.header.crc = ToBE16(UpdateCRC16CCITT(&packet, sizeof(packet), 0));
+  return packet;
+}
+
 SkyLinesTracking::TrafficRequestPacket
 SkyLinesTracking::MakeTrafficRequest(uint64_t key, bool followees, bool club,
                                      bool near)

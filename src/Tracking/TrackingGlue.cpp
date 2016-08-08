@@ -97,7 +97,7 @@ void
 TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
 {
   try {
-    skylines.Tick(basic);
+    skylines.Tick(basic, calculated);
   } catch (const std::runtime_error &e) {
     LogError("SkyLines error", e);
   }

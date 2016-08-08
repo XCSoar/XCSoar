@@ -40,6 +40,7 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "Tracking/TrackingGlue.hpp"
 #include "Event/Idle.hpp"
+#include "Dialogs/Tracking/CloudEnableDialog.hpp"
 
 static void
 MessageProcessTimer()
@@ -175,6 +176,7 @@ ProcessAutoBugs()
 static void
 SettingsProcessTimer()
 {
+  CloudEnableDialog();
   BallastDumpProcessTimer();
   ProcessAutoBugs();
 }

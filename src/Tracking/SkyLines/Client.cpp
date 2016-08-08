@@ -104,6 +104,22 @@ SkyLinesTracking::Client::SendPing(uint16_t id)
 }
 
 void
+SkyLinesTracking::Client::SendThermal(uint32_t time,
+                                      ::GeoPoint bottom_location,
+                                      int bottom_altitude,
+                                      ::GeoPoint top_location,
+                                      int top_altitude,
+                                      double lift)
+{
+  assert(key != 0);
+
+  SendPacket(MakeThermalSubmit(key, time,
+                               bottom_location, bottom_altitude,
+                               top_location, top_altitude,
+                               lift));
+}
+
+void
 SkyLinesTracking::Client::SendTrafficRequest(bool followees, bool club,
                                              bool near_)
 {

@@ -240,6 +240,10 @@ extern const char SkyLinesTrackingInterval[];
 extern const char SkyLinesTrafficEnabled[];
 extern const char SkyLinesNearTrafficEnabled[];
 extern const char SkyLinesTrackingKey[];
+
+extern const char CloudEnabled[];
+extern const char CloudKey[];
+
 extern const char LiveTrack24Enabled[];
 extern const char LiveTrack24Server[];
 extern const char LiveTrack24Username[];
