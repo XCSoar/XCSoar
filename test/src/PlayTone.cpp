@@ -31,10 +31,10 @@ Copyright_License {
 #include "Audio/PCMPlayerFactory.hpp"
 #include "Audio/ToneSynthesiser.hpp"
 #include "Screen/Init.hpp"
-#include "IO/Async/GlobalAsioThread.hpp"
-#include "IO/Async/AsioThread.hpp"
 #include "OS/Args.hpp"
-#include "OS/Sleep.h"
+
+#include <boost/asio/io_service.hpp>
+#include <boost/asio/steady_timer.hpp>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -56,9 +56,10 @@ main(int argc, char **argv)
 
   ScreenGlobalInit screen;
 
-  ScopeGlobalAsioThread global_asio_thread;
+  boost::asio::io_service io_service;
+
   std::unique_ptr<PCMPlayer> player(
-      PCMPlayerFactory::CreateInstanceForDirectAccess(asio_thread->Get()));
+      PCMPlayerFactory::CreateInstanceForDirectAccess(io_service));
 
   const unsigned sample_rate = 44100;
 
@@ -70,6 +71,12 @@ main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  Sleep(1000);
+  boost::asio::steady_timer stop_timer(io_service, std::chrono::seconds(1));
+  stop_timer.async_wait([&](const boost::system::error_code &ec){
+      player->Stop();
+    });
+
+  io_service.run();
+
   return EXIT_SUCCESS;
 }

@@ -25,16 +25,54 @@ Copyright_License {
 #include "Audio/PCMPlayerFactory.hpp"
 #include "Audio/VarioSynthesiser.hpp"
 #include "Screen/Init.hpp"
-#include "IO/Async/GlobalAsioThread.hpp"
-#include "IO/Async/AsioThread.hpp"
-#include "OS/Sleep.h"
 #include "OS/Args.hpp"
 #include "DebugReplay.hpp"
+
+#include <boost/asio.hpp>
+#include <boost/asio/steady_timer.hpp>
+#include <boost/bind.hpp>
 
 #include <stdio.h>
 #include <stdlib.h>
 
 #include <memory>
+
+class ReplayTimer {
+  boost::asio::steady_timer timer;
+  DebugReplay &replay;
+  VarioSynthesiser &synthesiser;
+
+public:
+  ReplayTimer(boost::asio::io_service &io_service,
+              DebugReplay &_replay,
+              VarioSynthesiser &_synthesiser)
+    :timer(io_service, std::chrono::seconds(0)),
+     replay(_replay), synthesiser(_synthesiser) {}
+
+  ~ReplayTimer() {
+    timer.cancel();
+  }
+
+  void Start() {
+    timer.async_wait(boost::bind(&ReplayTimer::OnTimer, this,
+                                 boost::asio::placeholders::error));
+  }
+
+private:
+  void OnTimer(const boost::system::error_code &ec) {
+    if (ec || !replay.Next()) {
+      timer.get_io_service().stop();
+      return;
+    }
+
+    auto vario = replay.Basic().brutto_vario;
+    printf("%2.1f\n", (double)vario);
+    synthesiser.SetVario(vario);
+
+    timer.expires_from_now(std::chrono::seconds(1));
+    Start();
+  }
+};
 
 int
 main(int argc, char **argv)
@@ -48,9 +86,10 @@ main(int argc, char **argv)
 
   ScreenGlobalInit screen;
 
-  ScopeGlobalAsioThread global_asio_thread;
+  boost::asio::io_service io_service;
+
   std::unique_ptr<PCMPlayer> player(
-      PCMPlayerFactory::CreateInstanceForDirectAccess(asio_thread->Get()));
+      PCMPlayerFactory::CreateInstanceForDirectAccess(io_service));
 
   const unsigned sample_rate = 44100;
 
@@ -61,12 +100,10 @@ main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  while (replay->Next()) {
-    auto vario = replay->Basic().brutto_vario;
-    printf("%2.1f\n", (double)vario);
-    synthesiser.SetVario(vario);
-    Sleep(1000);
-  }
+  ReplayTimer timer(io_service, *replay, synthesiser);
+  timer.Start();
+
+  io_service.run();
 
   return EXIT_SUCCESS;
 }
