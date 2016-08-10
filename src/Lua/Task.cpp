@@ -223,7 +223,7 @@ l_task_index(lua_State *L)
   } else if (StringIsEqual(name, "task_speed_instant")) {
       const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
       if (!task_stats.task_valid)
-        return 0;
+        return -1;
 
       Lua::Push(L, task_stats.inst_speed_fast);
   } else if (StringIsEqual(name, "task_speed_hour")) {

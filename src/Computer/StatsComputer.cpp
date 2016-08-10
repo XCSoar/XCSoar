@@ -73,7 +73,8 @@ StatsComputer::DoLogging(const MoreData &basic,
                               basic.nav_altitude,
                               calculated.task_stats.flight_mode_final_glide);
 
-    if (calculated.task_stats.task_valid)
+    if (calculated.task_stats.task_valid &&
+        calculated.task_stats.inst_speed_slow >= 0)
       flightstats.AddTaskSpeed(calculated.flight.flight_time,
                                calculated.task_stats.inst_speed_slow);
   }

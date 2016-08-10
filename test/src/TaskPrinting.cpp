@@ -274,7 +274,7 @@ PrintHelper::abstracttask_print(const AbstractTask &task,
      << " " << stats.effective_mc
      << " " << (stats.task_valid
                 ? stats.inst_speed_slow
-                : 0)
+                : -1)
      << " " << stats.total.solution_remaining.altitude_difference
      << "\n";
   f6.flush();

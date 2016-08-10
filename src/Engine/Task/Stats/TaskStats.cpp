@@ -41,8 +41,8 @@ TaskStats::reset()
   distance_min = 0;
   distance_scored = 0;
 
-  inst_speed_slow = 0;
-  inst_speed_fast = 0;
+  inst_speed_slow = -1;
+  inst_speed_fast = -1;
 
   active_index = 0;
   task_valid = false;

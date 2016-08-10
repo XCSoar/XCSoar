@@ -57,7 +57,9 @@ public:
   /** Scored distance (m) */
   double distance_scored;
 
-  /** Calculated instantaneous speed (m/s) */
+  /**
+   * Calculated instantaneous speed (m/s).  Negative if unknown.
+   */
   double inst_speed_slow;
   double inst_speed_fast;
 

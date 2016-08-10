@@ -200,7 +200,9 @@ AbstractTask::UpdateGlideSolutions(const AircraftState &state,
     stats.current_leg.solution_mc0 = stats.current_leg.solution_remaining;
   }
 
-  { // instantaneous speed
+  // instantaneous speed
+  if (stats.total.solution_remaining.IsDefined() &&
+      stats.current_leg.solution_remaining.IsDefined()) {
     const double ss = stats.total.solution_remaining.InstantSpeed(
         state,
         stats.current_leg.solution_remaining,
@@ -208,6 +210,8 @@ AbstractTask::UpdateGlideSolutions(const AircraftState &state,
 
     stats.inst_speed_fast = stats_computer.inst_speed_fast.Update(ss);
     stats.inst_speed_slow = stats_computer.inst_speed_slow.Update(ss);
+  } else {
+    stats.inst_speed_fast = stats.inst_speed_slow = -1;
   }
 
   GlideSolutionTravelled(state, glide_polar,

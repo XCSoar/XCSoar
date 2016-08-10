@@ -486,7 +486,8 @@ void
 UpdateInfoBoxTaskSpeedInstant(InfoBoxData &data)
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-  if (!task_stats.task_valid) {
+  if (!task_stats.task_valid || task_stats.inst_speed_fast < 0 ||
+      task_stats.inst_speed_slow < 0) {
     data.SetInvalid();
     return;
   }
