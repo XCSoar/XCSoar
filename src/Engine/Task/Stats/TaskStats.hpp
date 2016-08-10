@@ -25,7 +25,6 @@
 #include "ElementStat.hpp"
 #include "StartStats.hpp"
 #include "WindowStats.hpp"
-#include "Math/Filter.hpp"
 
 #include <type_traits>
 
@@ -59,9 +58,6 @@ public:
   double distance_scored;
 
   /** Calculated instantaneous speed (m/s) */
-  Filter filter_inst_speed_slow;
-  Filter filter_inst_speed_fast;
-
   double inst_speed_slow;
   double inst_speed_fast;
 

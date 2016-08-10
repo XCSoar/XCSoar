@@ -43,10 +43,6 @@ TaskStats::reset()
 
   inst_speed_slow = 0;
   inst_speed_fast = 0;
-  filter_inst_speed_slow.Design(180, false);
-  filter_inst_speed_fast.Design(15, false);
-  filter_inst_speed_slow.Reset(0);
-  filter_inst_speed_fast.Reset(0);
 
   active_index = 0;
   task_valid = false;

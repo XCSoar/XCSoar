@@ -206,8 +206,8 @@ AbstractTask::UpdateGlideSolutions(const AircraftState &state,
         stats.current_leg.solution_remaining,
         glide_polar);
 
-    stats.inst_speed_fast = stats.filter_inst_speed_fast.Update(ss);
-    stats.inst_speed_slow = stats.filter_inst_speed_slow.Update(ss);
+    stats.inst_speed_fast = stats_computer.inst_speed_fast.Update(ss);
+    stats.inst_speed_slow = stats_computer.inst_speed_slow.Update(ss);
   }
 
   GlideSolutionTravelled(state, glide_polar,

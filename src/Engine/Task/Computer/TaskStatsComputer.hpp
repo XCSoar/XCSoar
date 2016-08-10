@@ -25,6 +25,7 @@
 
 #include "ElementStatComputer.hpp"
 #include "WindowStatsComputer.hpp"
+#include "Math/Filter.hpp"
 
 class TaskStats;
 
@@ -33,6 +34,9 @@ public:
   ElementStatComputer total;
   ElementStatComputer current_leg;
   WindowStatsComputer window;
+
+  Filter inst_speed_slow;
+  Filter inst_speed_fast;
 
 public:
   /** Reset each element (for incremental speeds). */
