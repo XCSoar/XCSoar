@@ -35,11 +35,11 @@ Copyright_License {
 #include <list>
 #include <memory>
 
-#include <boost/assert.hpp>
-#include <boost/asio/io_service.hpp>
 #include <boost/asio/posix/stream_descriptor.hpp>
 
 #include <alsa/asoundlib.h>
+
+namespace boost { namespace asio { class io_service; }}
 
 /**
  * PCMPlayer implementation for the ALSA sound system
