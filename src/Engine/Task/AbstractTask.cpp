@@ -40,6 +40,7 @@ AbstractTask::AbstractTask(TaskType _type,
    mc_lpf_valid(false)
 {
    stats.reset();
+   stats_computer.Reset(stats);
 }
 
 bool 
