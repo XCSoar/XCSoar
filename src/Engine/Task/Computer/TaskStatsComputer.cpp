@@ -24,7 +24,7 @@
 #include "Task/Stats/TaskStats.hpp"
 
 void
-TaskStatsComputer::reset(TaskStats &data)
+TaskStatsComputer::Reset(TaskStats &data)
 {
   total.Reset(data.total);
   current_leg.Reset(data.current_leg);
