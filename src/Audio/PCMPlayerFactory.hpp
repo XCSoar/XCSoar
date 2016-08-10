@@ -37,7 +37,7 @@ Copyright_License {
 #endif
 
 #ifdef ENABLE_ALSA
-#include <boost/asio/io_service.hpp>
+namespace boost { namespace asio { class io_service; }}
 #endif
 
 namespace PCMPlayerFactory
