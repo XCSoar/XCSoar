@@ -36,9 +36,7 @@ Copyright_License {
 #include "MixerPCMPlayer.hpp"
 #endif
 
-#ifdef ENABLE_ALSA
 namespace boost { namespace asio { class io_service; }}
-#endif
 
 namespace PCMPlayerFactory
 {
@@ -64,11 +62,8 @@ inline PCMPlayer *CreateInstance()
  * multiple clients at the same time).
  * @return Pointer to the created PCMPlayer instance
  */
-inline PCMPlayer *CreateInstanceForDirectAccess(
-#ifdef ENABLE_ALSA
-    boost::asio::io_service &io_service
-#endif
-    )
+inline PCMPlayer *
+CreateInstanceForDirectAccess(boost::asio::io_service &io_service)
 {
 #if defined(ENABLE_SDL)
   return new SDLPCMPlayer();

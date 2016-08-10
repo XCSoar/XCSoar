@@ -31,10 +31,8 @@ Copyright_License {
 #include "Audio/PCMPlayerFactory.hpp"
 #include "Audio/ToneSynthesiser.hpp"
 #include "Screen/Init.hpp"
-#ifdef ENABLE_ALSA
 #include "IO/Async/GlobalAsioThread.hpp"
 #include "IO/Async/AsioThread.hpp"
-#endif
 #include "OS/Args.hpp"
 #include "OS/Sleep.h"
 
@@ -58,14 +56,9 @@ main(int argc, char **argv)
 
   ScreenGlobalInit screen;
 
-#ifdef ENABLE_ALSA
   ScopeGlobalAsioThread global_asio_thread;
   std::unique_ptr<PCMPlayer> player(
       PCMPlayerFactory::CreateInstanceForDirectAccess(asio_thread->Get()));
-#else
-  std::unique_ptr<PCMPlayer> player(
-      PCMPlayerFactory::CreateInstanceForDirectAccess());
-#endif
 
   const unsigned sample_rate = 44100;
 

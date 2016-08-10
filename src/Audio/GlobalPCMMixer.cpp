@@ -26,10 +26,8 @@ Copyright_License {
 #include "PCMPlayerFactory.hpp"
 #include "PCMMixer.hpp"
 
-#ifdef ENABLE_ALSA
 #include "IO/Async/AsioThread.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
-#endif
 
 #include <memory>
 
@@ -44,9 +42,7 @@ InitialisePCMMixer()
       new PCMMixer(44100,
                    std::unique_ptr<PCMPlayer>(
                        PCMPlayerFactory::CreateInstanceForDirectAccess(
-#ifdef ENABLE_ALSA
                            asio_thread->Get()
-#endif
                            )));
 }
 
