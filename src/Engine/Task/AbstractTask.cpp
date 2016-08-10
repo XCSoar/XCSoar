@@ -308,6 +308,7 @@ AbstractTask::Reset()
   ResetAutoMC();
   ce_lpf.Reset(1);
   stats.reset();
+  stats_computer.Reset(stats);
   force_full_update = true;
 }
 
