@@ -45,10 +45,13 @@ test_troute(const RasterMap &map, double mwind, double mc, int ceiling)
 {
   GlideSettings settings;
   settings.SetDefaults();
+  RoutePlannerConfig config;
+  config.mode = RoutePlannerConfig::Mode::BOTH;
+
   GlidePolar polar(mc);
   SpeedVector wind(Angle::Degrees(0), mwind);
   TerrainRoute route;
-  route.UpdatePolar(settings, polar, polar, wind);
+  route.UpdatePolar(settings, config, polar, polar, wind);
   route.SetTerrain(&map);
 
   GeoPoint origin(map.GetMapCenter());
@@ -77,9 +80,6 @@ test_troute(const RasterMap &map, double mwind, double mc, int ceiling)
     }
     fout << "\n";
   }
-
-  RoutePlannerConfig config;
-  config.mode = RoutePlannerConfig::Mode::BOTH;
 
   unsigned i=0;
   for (double ang = 0; ang < M_2PI; ang += M_PI / 8) {

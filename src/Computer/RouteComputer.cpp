@@ -58,7 +58,8 @@ RouteComputer::ProcessRoute(const MoreData &basic, DerivedInfo &calculated,
   if (!basic.location_available || !basic.NavAltitudeAvailable())
     return;
 
-  protected_route_planner.SetPolars(settings, glide_polar, safety_polar,
+  protected_route_planner.SetPolars(settings, config,
+                                    glide_polar, safety_polar,
                                     calculated.GetWindOrZero(),
                                     calculated.common_stats.height_min_working);
 

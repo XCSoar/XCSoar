@@ -45,10 +45,13 @@ test_reach(const RasterMap &map, double mwind, double mc, double height_min_work
 {
   GlideSettings settings;
   settings.SetDefaults();
+  RoutePlannerConfig config;
+  config.SetDefaults();
+
   GlidePolar polar(mc);
   SpeedVector wind(Angle::Degrees(0), mwind);
   TerrainRoute route;
-  route.UpdatePolar(settings, polar, polar, wind, height_min_working);
+  route.UpdatePolar(settings, config, polar, polar, wind, height_min_working);
   route.SetTerrain(&map);
 
   GeoPoint origin(map.GetMapCenter());
@@ -58,8 +61,6 @@ test_reach(const RasterMap &map, double mwind, double mc, double height_min_work
   int horigin = map.GetHeight(origin).GetValueOr0() + 1000;
   AGeoPoint aorigin(origin, horigin);
 
-  RoutePlannerConfig config;
-  config.SetDefaults();
   retval = route.SolveReachTerrain(aorigin, config, INT_MAX);
   ok(retval, "reach terrain", 0);
   PrintHelper::print_reach_terrain_tree(route);

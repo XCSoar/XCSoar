@@ -39,11 +39,13 @@ public:
   void SetTerrain(const RasterTerrain *terrain);
 
   void UpdatePolar(const GlideSettings &settings,
+                   const RoutePlannerConfig &config,
                    const GlidePolar &polar,
                    const GlidePolar &safety_polar,
                    const SpeedVector &wind,
                    const int height_min_working) {
-    planner.UpdatePolar(settings, polar, safety_polar, wind, height_min_working);
+    planner.UpdatePolar(settings, config, polar, safety_polar,
+                        wind, height_min_working);
   }
 
   void Synchronise(const Airspaces &master,

@@ -68,6 +68,7 @@ public:
   void SetTerrain(const RasterTerrain *terrain);
 
   void SetPolars(const GlideSettings &settings,
+                 const RoutePlannerConfig &config,
                  const GlidePolar &glide_polar, const GlidePolar &safety_polar,
                  const SpeedVector &wind,
                  const int height_min_working);
