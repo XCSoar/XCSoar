@@ -131,6 +131,8 @@ int main(int argc, char** argv) {
     return EXIT_FAILURE;
   }
 
+  map.UpdateProjection();
+
   SharedMutex mutex;
   do {
     UpdateTerrainTiles(dir, map.GetTileCache(), mutex,
