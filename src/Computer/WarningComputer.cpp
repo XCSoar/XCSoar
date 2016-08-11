@@ -29,9 +29,10 @@ Copyright_License {
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 
-WarningComputer::WarningComputer(Airspaces &_airspaces)
+WarningComputer::WarningComputer(const AirspaceWarningConfig &_config,
+                                 Airspaces &_airspaces)
   :airspaces(_airspaces),
-   manager(airspaces),
+   manager(_config, airspaces),
    protected_manager(manager)
 {
 }

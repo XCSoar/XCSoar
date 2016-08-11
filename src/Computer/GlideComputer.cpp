@@ -36,7 +36,7 @@ GlideComputer::GlideComputer(const ComputerSettings &_settings,
                              ProtectedTaskManager &task,
                              GlideComputerTaskEvents& events)
   :air_data_computer(_way_points),
-   warning_computer(_airspace_database),
+   warning_computer(_settings.airspace.warnings, _airspace_database),
    task_computer(task, _airspace_database, &warning_computer.GetManager()),
    waypoints(_way_points),
    retrospective(_way_points),

@@ -76,7 +76,12 @@ static void
 Main()
 {
   Airspaces airspace_database;
-  AirspaceWarningManager airspace_warning(airspace_database);
+
+  AirspaceWarningConfig airspace_warning_config;
+  airspace_warning_config.SetDefaults();
+
+  AirspaceWarningManager airspace_warning(airspace_warning_config,
+                                          airspace_database);
   airspace_warnings = new ProtectedAirspaceWarningManager(airspace_warning);
 
   LoadFiles(airspace_database);

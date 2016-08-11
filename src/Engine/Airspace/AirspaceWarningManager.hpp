@@ -76,7 +76,8 @@ public:
    *
    * @return Initialised object
    */
-  AirspaceWarningManager(const Airspaces &_airspaces);
+  AirspaceWarningManager(const AirspaceWarningConfig &_config,
+                         const Airspaces &_airspaces);
 
   AirspaceWarningManager(const AirspaceWarningManager &) = delete;
 

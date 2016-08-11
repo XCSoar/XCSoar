@@ -48,7 +48,8 @@ class WarningComputer {
   bool initialised;
 
 public:
-  WarningComputer(Airspaces &_airspaces);
+  WarningComputer(const AirspaceWarningConfig &_config,
+                  Airspaces &_airspaces);
 
   ProtectedAirspaceWarningManager &GetManager() {
     return protected_manager;

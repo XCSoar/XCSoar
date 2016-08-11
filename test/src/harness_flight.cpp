@@ -131,7 +131,10 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
 
   AirspaceWarningManager *airspace_warnings;
   if (airspaces) {
-    airspace_warnings = new AirspaceWarningManager(*airspaces);
+    AirspaceWarningConfig airspace_warning_config;
+    airspace_warning_config.SetDefaults();
+    airspace_warnings = new AirspaceWarningManager(airspace_warning_config,
+                                                   *airspaces);
     airspace_warnings->Reset(aircraft.GetState());
   } else {
     airspace_warnings = NULL;

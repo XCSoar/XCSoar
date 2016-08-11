@@ -30,11 +30,14 @@
 
 #define CRUISE_FILTER_FACT 0.5
 
-AirspaceWarningManager::AirspaceWarningManager(const Airspaces &_airspaces)
+AirspaceWarningManager::AirspaceWarningManager(const AirspaceWarningConfig &_config,
+                                               const Airspaces &_airspaces)
   :airspaces(_airspaces), serial(0)
 {
   /* force filter initialisation in the first SetConfig() call */
   config.warning_time = -1;
+
+  SetConfig(_config);
 }
 
 const FlatProjection &
