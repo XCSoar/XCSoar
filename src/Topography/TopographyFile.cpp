@@ -54,7 +54,14 @@ TopographyFile::TopographyFile(zzip_dir *_dir, const char *filename,
     return;
   }
 
-  center = ImportRect(file.bounds).GetCenter();
+  const auto file_bounds = ImportRect(file.bounds);
+  if (!file_bounds.Check()) {
+    /* malformed bounds */
+    msShapefileClose(&file);
+    return;
+  }
+
+  center = file_bounds.GetCenter();
 
   shapes.ResizeDiscard(file.numshapes);
   std::fill(shapes.begin(), shapes.end(), ShapeList(nullptr));

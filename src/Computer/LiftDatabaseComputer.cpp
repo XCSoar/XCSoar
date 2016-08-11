@@ -62,7 +62,7 @@ LiftDatabaseComputer::Reset(LiftDatabase &lift_database,
  * @return The index for the LiftDatabase array
  */
 static unsigned
-heading_to_index(Angle &heading)
+heading_to_index(const Angle heading)
 {
   static constexpr Angle afive = Angle::Degrees(5);
 
