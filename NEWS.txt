@@ -1,4 +1,6 @@
 Version 6.8.7 - not yet released
+* data files
+  - fix freeze after loading malformed topography file
 * tracking
   - SkyLines: fix SkyLines tracking on non-Android
   - new client for the experimental "XCSoar Cloud"

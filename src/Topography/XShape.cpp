@@ -108,6 +108,12 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
   msSHPReadShape(shpfile->hSHP, i, &shape);
 
   bounds = ImportRect(shape.bounds);
+  if (!bounds.Check()) {
+    /* malformed bounds */
+    points = nullptr;
+    msFreeShape(&shape);
+    return;
+  }
 
   type = shape.type;
 
