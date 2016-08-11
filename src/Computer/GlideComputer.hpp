@@ -70,7 +70,8 @@ class GlideComputer : public GlideComputerBlackboard
   DeltaTime trace_history_time;
 
 public:
-  GlideComputer(const Waypoints &_way_points,
+  GlideComputer(const ComputerSettings &_settings,
+                const Waypoints &_way_points,
                 Airspaces &_airspace_database,
                 ProtectedTaskManager& task,
                 GlideComputerTaskEvents& events);

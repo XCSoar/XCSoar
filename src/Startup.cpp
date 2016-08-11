@@ -300,10 +300,10 @@ Startup()
 
   logger = new Logger();
 
-  glide_computer = new GlideComputer(way_points, airspace_database,
+  glide_computer = new GlideComputer(computer_settings,
+                                     way_points, airspace_database,
                                      *protected_task_manager,
                                      *task_events);
-  glide_computer->ReadComputerSettings(computer_settings);
   glide_computer->SetTerrain(terrain);
   glide_computer->SetLogger(logger);
   glide_computer->Initialise();

@@ -179,10 +179,10 @@ Main()
     delete task;
   }
 
-  GlideComputer glide_computer(way_points, airspace_database,
+  GlideComputer glide_computer(blackboard.GetComputerSettings(),
+                               way_points, airspace_database,
                                protected_task_manager,
                                task_events);
-  glide_computer.ReadComputerSettings(blackboard.GetComputerSettings());
   glide_computer.SetTerrain(terrain);
   glide_computer.SetContestIncremental(false);
   glide_computer.Initialise();

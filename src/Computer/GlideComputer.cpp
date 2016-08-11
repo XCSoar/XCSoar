@@ -30,7 +30,8 @@ Copyright_License {
 
 static PeriodClock last_team_code_update;
 
-GlideComputer::GlideComputer(const Waypoints &_way_points,
+GlideComputer::GlideComputer(const ComputerSettings &_settings,
+                             const Waypoints &_way_points,
                              Airspaces &_airspace_database,
                              ProtectedTaskManager &task,
                              GlideComputerTaskEvents& events)
@@ -41,6 +42,7 @@ GlideComputer::GlideComputer(const Waypoints &_way_points,
    retrospective(_way_points),
    team_code_ref_id(-1)
 {
+  ReadComputerSettings(_settings);
   events.SetComputer(*this);
   idle_clock.Update();
 }
