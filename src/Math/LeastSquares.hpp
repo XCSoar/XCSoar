@@ -51,6 +51,8 @@ Copyright_License {
 #include "XYDataStore.hpp"
 #include "Angle.hpp"
 
+#include <assert.h>
+
 struct ErrorEllipse {
   double x;
   double y;
@@ -114,14 +116,20 @@ public:
   void Reset();
 
   double GetGradient() const {
+    assert(!IsEmpty());
+
     return m;
   }
 
   double GetAverageY() const {
+    assert(!IsEmpty());
+
     return y_ave;
   }
 
   double GetYAt(double x) const {
+    assert(!IsEmpty());
+
     return x * m + b;
   }
 
@@ -134,22 +142,32 @@ public:
   }
 
   double GetMeanY() const {
+    assert(!IsEmpty());
+
     return y_mean;
   }
 
   double GetMeanX() const {
+    assert(!IsEmpty());
+
     return x_mean;
   }
 
   double GetVarX() const {
+    assert(!IsEmpty());
+
     return x_var;
   }
 
   double GetVarY() const {
+    assert(!IsEmpty());
+
     return y_var;
   }
 
   double GetCovXY() const {
+    assert(!IsEmpty());
+
     return xy_var;
   }
 

@@ -51,6 +51,7 @@ ConvexFilter::UpdateConvex(double x, double y, int csign)
 }
 
 double ConvexFilter::GetLastY() const {
-  assert(sum_n);
+  assert(!IsEmpty());
+
   return slots[sum_n-1].y;
 }

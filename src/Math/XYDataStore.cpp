@@ -30,10 +30,6 @@ XYDataStore::StoreReset()
   sum_xw = 0.;
   sum_yw = 0.;
   sum_weights = 0.;
-  y_max = 0.;
-  y_min = 0.;
-  x_min = 0.;
-  x_max = 0.;
   slots.clear();
 }
 
