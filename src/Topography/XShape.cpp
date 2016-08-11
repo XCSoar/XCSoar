@@ -26,6 +26,7 @@ Copyright_License {
 #include "Util/StringAPI.hxx"
 #include "Util/UTF8.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/ScopeExit.hxx"
 
 #ifdef ENABLE_OPENGL
 #include "Projection/Projection.hpp"
@@ -97,13 +98,13 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
 
   shapeObj shape;
   msInitShape(&shape);
+  AtScopeExit(&shape) { msFreeShape(&shape); };
   msSHPReadShape(shpfile->hSHP, i, &shape);
 
   bounds = ImportRect(shape.bounds);
   if (!bounds.Check()) {
     /* malformed bounds */
     points = nullptr;
-    msFreeShape(&shape);
     return;
   }
 
@@ -115,7 +116,6 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
   if (min_points < 0) {
     /* not supported, leave an empty XShape object */
     points = nullptr;
-    msFreeShape(&shape);
     return;
   }
 
@@ -165,8 +165,6 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
     const char *src = msDBFReadStringAttribute(shpfile->hDBF, i, label_field);
     label = ImportLabel(src);
   }
-
-  msFreeShape(&shape);
 }
 
 XShape::~XShape()
