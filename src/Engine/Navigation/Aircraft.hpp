@@ -61,6 +61,10 @@ struct SpeedState
    * @see IndicatedAirspeed
    */
   double true_airspeed;
+
+  void Reset() {
+    ground_speed = true_airspeed = 0;
+  }
 };
 
 /**
@@ -100,6 +104,10 @@ struct VarioState
    * @see NettoVarioAvailable
    */
   double netto_vario;
+
+  void Reset(){
+    vario = netto_vario = 0;
+  }
 };
 
 /**

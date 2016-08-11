@@ -37,7 +37,12 @@ void
 AircraftState::Reset()
 {
   AltitudeState::Reset();
+  SpeedState::Reset();
+  VarioState::Reset();
 
+  time = -1;
+  location.SetInvalid();
+  track = Angle::Zero();
   g_load = 1;
   wind = SpeedVector::Zero();
   flying = false;
