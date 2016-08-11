@@ -30,29 +30,21 @@ Copyright_License {
 
 static PeriodClock last_team_code_update;
 
-/**
- * Constructor of the GlideComputer class
- * @return
- */
 GlideComputer::GlideComputer(const Waypoints &_way_points,
                              Airspaces &_airspace_database,
                              ProtectedTaskManager &task,
-                             GlideComputerTaskEvents& events):
-  air_data_computer(_way_points),
-  warning_computer(_airspace_database),
-  task_computer(task, _airspace_database, &warning_computer.GetManager()),
-  waypoints(_way_points),
-  retrospective(_way_points),
-  team_code_ref_id(-1)
+                             GlideComputerTaskEvents& events)
+  :air_data_computer(_way_points),
+   warning_computer(_airspace_database),
+   task_computer(task, _airspace_database, &warning_computer.GetManager()),
+   waypoints(_way_points),
+   retrospective(_way_points),
+   team_code_ref_id(-1)
 {
   events.SetComputer(*this);
   idle_clock.Update();
 }
 
-/**
- * Resets the GlideComputer data
- * @param full Reset all data?
- */
 void
 GlideComputer::ResetFlight(const bool full)
 {
@@ -69,18 +61,12 @@ GlideComputer::ResetFlight(const bool full)
   trace_history_time.Reset();
 }
 
-/**
- * Initializes the GlideComputer
- */
 void
 GlideComputer::Initialise()
 {
   ResetFlight(true);
 }
 
-/**
- * Is called by the CalculationThread and processes the received GPS data in Basic()
- */
 bool
 GlideComputer::ProcessGPS(bool force)
 {
@@ -167,9 +153,6 @@ GlideComputer::ProcessGPS(bool force)
   return idle_clock.CheckUpdate(500);
 }
 
-/**
- * Process slow calculations. Called by the CalculationThread.
- */
 void
 GlideComputer::ProcessIdle(bool exhaustive)
 {
@@ -212,9 +195,6 @@ GlideComputer::DetermineTeamCodeRefLocation()
   return team_code_ref_found = true;
 }
 
-/**
- * Calculates the own TeamCode and saves it to Calculated
- */
 inline void
 GlideComputer::CalculateOwnTeamCode()
 {
@@ -326,7 +306,7 @@ GlideComputer::TakeoffLanding(bool last_flying)
     OnLanding();
 }
 
-void 
+void
 GlideComputer::OnStartTask()
 {
   GlideComputerBlackboard::StartTask();
@@ -335,7 +315,7 @@ GlideComputer::OnStartTask()
   log_computer.StartTask(Basic());
 }
 
-void 
+void
 GlideComputer::OnFinishTask()
 {
   SaveFinish();
