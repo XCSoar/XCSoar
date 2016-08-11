@@ -145,6 +145,9 @@ FlightStatistics::AddClimbRate(const double tflight, const double vario, const b
 double
 FlightStatistics::GetMinWorkingHeight() const
 {
+  if (altitude_base.IsEmpty())
+    return 0;
+
   // working height is average base less one standard deviation, or
   // the minimum encountered if this is higher
   return std::max(altitude_base.GetMinY(), altitude_base.GetAverageY() - sqrt(altitude_base.GetVarY()));
@@ -153,6 +156,9 @@ FlightStatistics::GetMinWorkingHeight() const
 double
 FlightStatistics::GetMaxWorkingHeight() const
 {
+  if (altitude_ceiling.IsEmpty())
+    return 0;
+
   // working height is average ceiling plus one standard deviation, or
   // the maximum encountered if this is lower
   return std::max(altitude.GetMaxY(),
