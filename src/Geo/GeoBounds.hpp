@@ -112,11 +112,21 @@ public:
    * Check if this object is "valid".  Returns false when it was
    * constructed by Invalid().  This is not an extensive plausibility
    * check; it is only designed to catch instances created by
-   * Invalid().
+   * Invalid().  If you want a real check, call Check().
    */
   constexpr
   bool IsValid() const {
     return latitude.end <= Angle::HalfCircle();
+  }
+
+  /**
+   * Check if this object is "valid".  This is an extensive test; if
+   * all you want is check if this object was constructed by
+   * Invalid(), then call the cheaper method IsValid().
+   */
+  constexpr bool Check() const {
+    return GetSouthWest().Check() && GetNorthEast().Check() &&
+      GetNorth() >= GetSouth();
   }
 
   constexpr bool IsEmpty() const {
