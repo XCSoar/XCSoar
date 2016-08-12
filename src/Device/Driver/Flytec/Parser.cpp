@@ -27,7 +27,6 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 #include "Units/System.hpp"
-#include "Atmosphere/Temperature.hpp"
 
 /**
  * Parse a "$BRSF" sentence.
@@ -85,7 +84,7 @@ FlytecParseVMVABD(NMEAInputLine &line, NMEAInfo &info)
   info.temperature_available =
     line.ReadCheckedCompare(value, "C");
   if (info.temperature_available)
-    info.temperature = CelsiusToKelvin(value);
+    info.temperature = Temperature::FromCelsius(value);
 
   return true;
 }
@@ -208,10 +207,10 @@ FlytecDevice::ParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
   bool balloon_temperature_available = line.ReadChecked(balloon_temperature);
 
   if (balloon_temperature_available) {
-    info.temperature = CelsiusToKelvin(balloon_temperature);
+    info.temperature = Temperature::FromCelsius(balloon_temperature);
     info.temperature_available = true;
   } else if (pcb_temperature_available) {
-    info.temperature = CelsiusToKelvin(pcb_temperature);
+    info.temperature = Temperature::FromCelsius(pcb_temperature);
     info.temperature_available = true;
   }
 

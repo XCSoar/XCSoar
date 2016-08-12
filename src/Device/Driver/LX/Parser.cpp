@@ -27,7 +27,6 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "Geo/SpeedVector.hpp"
 #include "Units/System.hpp"
-#include "Atmosphere/Temperature.hpp"
 #include "Util/Macros.hpp"
 #include "Util/StringCompare.hxx"
 
@@ -316,7 +315,7 @@ PLXVS(NMEAInputLine &line, NMEAInfo &info)
 {
   double temperature;
   if (line.ReadChecked(temperature)) {
-    info.temperature = CelsiusToKelvin(temperature);
+    info.temperature = Temperature::FromCelsius(temperature);
     info.temperature_available = true;
   }
 

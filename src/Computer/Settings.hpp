@@ -27,6 +27,7 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Atmosphere/Pressure.hpp"
+#include "Atmosphere/Temperature.hpp"
 #include "Engine/Contest/Settings.hpp"
 #include "Task/TaskBehaviour.hpp"
 #include "Tracking/TrackingSettings.hpp"
@@ -188,7 +189,7 @@ struct ComputerSettings {
   /**
    * The forecasted maximum ground temperature [Kelvin].
    */
-  double forecast_temperature;
+  Temperature forecast_temperature;
 
   /**
    * Troposhere atmosphere model for QNH correction

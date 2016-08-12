@@ -28,7 +28,6 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "Units/System.hpp"
 #include "Atmosphere/Pressure.hpp"
-#include "Atmosphere/Temperature.hpp"
 #include "Math/Util.hpp"
 
 class EyeDevice : public AbstractDevice {
@@ -99,7 +98,7 @@ EyeDevice::PEYA(NMEAInputLine &line, NMEAInfo &info)
 
   // Outside Air Temperature (?C) (i.e. +15.2)
   if (line.ReadChecked(value)) {
-    info.temperature = CelsiusToKelvin(value);
+    info.temperature = Temperature::FromCelsius(value);
     info.temperature_available = true;
   }
 

@@ -33,6 +33,7 @@ Copyright_License {
 #include "Time/BrokenDateTime.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Atmosphere/Pressure.hpp"
+#include "Atmosphere/Temperature.hpp"
 #include "DeviceInfo.hpp"
 #include "FLARM/Data.hpp"
 #include "Geo/SpeedVector.hpp"
@@ -292,7 +293,7 @@ struct NMEAInfo {
    * Temperature of outside air (if available)
    * @see TemperatureAvailable
    */
-  double temperature;
+  Temperature temperature;
 
   /**
    * Is heading information available?

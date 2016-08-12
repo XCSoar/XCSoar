@@ -51,7 +51,7 @@ CuSonde::Reset()
   thermal_height = 0;
   cloud_base = 0;
   ground_height = 0;
-  max_ground_temperature = CelsiusToKelvin(25);
+  max_ground_temperature = Temperature::FromCelsius(25);
 
   for (unsigned i = 0; i < NUM_LEVELS; ++i)
     cslevels[i].Reset();
@@ -64,7 +64,7 @@ CuSonde::Reset()
  * @param val New predicted maximum ground temperature in K
  */
 void
-CuSonde::SetForecastTemperature(double val)
+CuSonde::SetForecastTemperature(Temperature val)
 {
   if (max_ground_temperature == val)
     return;
@@ -192,13 +192,13 @@ CuSonde::FindThermalHeight(unsigned short level)
   // Reset estimated ThermalHeight
   cslevels[level].thermal_height = -1;
 
-  if (fabs(dti) < 0.001)
+  if (dti.Absolute() < Temperature::FromKelvin(0.001))
     return;
 
   // ti = dlevel * dti + ti0;
   // (-1.6 - ti0)/dti = dlevel;
 
-  auto dlevel = (TITHRESHOLD - cslevels[level].thermal_index) / dti;
+  auto dlevel = (TITHRESHOLD - cslevels[level].thermal_index.ToKelvin()) / dti.ToKelvin();
   auto dthermalheight = (level + dlevel) * HEIGHT_STEP;
 
   if (dlevel > 1
@@ -235,13 +235,13 @@ CuSonde::FindCloudBase(unsigned short level)
   // Reset estimated CloudBase
   cslevels[level].cloud_base = -1;
 
-  if (fabs(dti) < 0.001)
+  if (dti.Absolute() < Temperature::FromKelvin(0.001))
     return;
 
   // ti = dlevel * dti + ti0;
   // (-3 - ti0)/dti = dlevel;
 
-  auto dlevel = -(cslevels[level].dry_temperature - cslevels[level].dewpoint) / dti;
+  auto dlevel = -(cslevels[level].dry_temperature - cslevels[level].dewpoint).ToKelvin() / dti.ToKelvin();
   auto dcloudbase = (level + dlevel) * HEIGHT_STEP;
 
   if (dlevel > 1
@@ -265,11 +265,11 @@ CuSonde::FindCloudBase(unsigned short level)
  * @param t Temperature in K
  */
 void
-CuSonde::Level::UpdateTemps(double humidity, double temperature)
+CuSonde::Level::UpdateTemps(double humidity, Temperature temperature)
 {
-  auto log_ex = 7.5 * KelvinToCelsius(temperature) / (237.3 + KelvinToCelsius(temperature)) +
+  auto log_ex = 7.5 * temperature.ToCelsius() / (237.3 + temperature.ToCelsius()) +
             (log10(humidity) - 2);
-  auto _dewpoint = CelsiusToKelvin(log_ex * 237.3 / (7.5 - log_ex));
+  auto _dewpoint = Temperature::FromCelsius(log_ex * 237.3 / (7.5 - log_ex));
 
   // update statistics
   if (empty()) {
@@ -292,10 +292,11 @@ CuSonde::Level::UpdateTemps(double humidity, double temperature)
  * @param newdata Function logs data to debug file if true
  */
 void
-CuSonde::Level::UpdateThermalIndex(double h_agl, double max_ground_temperature)
+CuSonde::Level::UpdateThermalIndex(double h_agl,
+                                   Temperature max_ground_temperature)
 {
   // Calculate the dry temperature at altitude = hlevel
-  dry_temperature = DALR * h_agl + max_ground_temperature;
+  dry_temperature = max_ground_temperature + Temperature::FromKelvin(DALR * h_agl);
 
   // Calculate ThermalIndex
   thermal_index = air_temperature - dry_temperature;

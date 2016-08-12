@@ -320,10 +320,10 @@ FlightSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   wp = AddFloat(_("Max. temp."),
                 _("Set to forecast ground temperature.  Used by convection estimator (temperature trace page of Analysis dialog)"),
                 _T("%.0f %s"), _T("%.0f"),
-                Units::ToUserTemperature(CelsiusToKelvin(-50)),
-                Units::ToUserTemperature(CelsiusToKelvin(60)),
+                Temperature::FromCelsius(-50).ToUser(),
+                Temperature::FromCelsius(60).ToUser(),
                 1, false,
-                Units::ToUserTemperature(settings.forecast_temperature));
+                settings.forecast_temperature.ToUser());
   {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetUnits(Units::GetTemperatureName());
@@ -336,8 +336,11 @@ FlightSetupPanel::Save(bool &changed)
 {
   ComputerSettings &settings = CommonInterface::SetComputerSettings();
 
-  changed |= SaveValue(Temperature, UnitGroup::TEMPERATURE,
-                       settings.forecast_temperature);
+  double forecast_temperature = settings.forecast_temperature.ToKelvin();
+  if (SaveValue(Temperature, UnitGroup::TEMPERATURE, forecast_temperature)) {
+    settings.forecast_temperature = Temperature::FromKelvin(forecast_temperature);
+    changed = true;
+  }
 
   return true;
 }

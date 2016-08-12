@@ -27,7 +27,6 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Units/System.hpp"
-#include "Atmosphere/Temperature.hpp"
 
 class OpenVarioDevice : public AbstractDevice {
 public:
@@ -99,7 +98,7 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
         break;
       }
       case 'T': {
-        info.temperature = CelsiusToKelvin(value);
+        info.temperature = Temperature::FromCelsius(value);
         info.temperature_available = true;
         break;
       }

@@ -28,7 +28,6 @@ Copyright_License {
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
-#include "Atmosphere/Temperature.hpp"
 #include "Util/Clamp.hpp"
 
 #include <math.h>
@@ -115,7 +114,7 @@ PBB50(NMEAInputLine &line, NMEAInfo &info)
 
   info.temperature_available = line.ReadChecked(value);
   if (info.temperature_available)
-    info.temperature = CelsiusToKelvin(value);
+    info.temperature = Temperature::FromCelsius(value);
 
   return true;
 }

@@ -154,18 +154,6 @@ namespace Units
   }
 
   static inline double
-  ToUserTemperature(double value)
-  {
-    return ToUserUnit(value, current.temperature_unit);
-  }
-
-  static inline double
-  ToSysTemperature(double value)
-  {
-    return ToSysUnit(value, current.temperature_unit);
-  }
-
-  static inline double
   ToUserDistance(double value)
   {
     return ToUserUnit(value, current.distance_unit);

@@ -72,7 +72,7 @@ l_settings_index(lua_State *L)
       const ComputerSettings &settings_computer =
         CommonInterface::GetComputerSettings();
     
-      Lua::Push(L, settings_computer.forecast_temperature);
+      Lua::Push(L, settings_computer.forecast_temperature.ToKelvin());
   } else if (StringIsEqual(name, "safetymc")) {
       /* The MacCready setting used, when safety MC is enabled 
          for reach calculations, in task abort mode and for 
@@ -173,7 +173,7 @@ l_settings_setmaxtemp(lua_State *L)
     return luaL_error(L, "Invalid parameters");
 
   ComputerSettings &settings = CommonInterface::SetComputerSettings();
-  settings.forecast_temperature=luaL_checknumber(L, 1);
+  settings.forecast_temperature = Temperature::FromKelvin(luaL_checknumber(L, 1));
   return 0;
 }
 

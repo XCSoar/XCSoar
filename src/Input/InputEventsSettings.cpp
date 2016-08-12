@@ -287,15 +287,14 @@ void
 InputEvents::eventAdjustForecastTemperature(const TCHAR *misc)
 {
   if (StringIsEqual(misc, _T("+")))
-    CommonInterface::SetComputerSettings().forecast_temperature += 1;
+    CommonInterface::SetComputerSettings().forecast_temperature += Temperature::FromKelvin(1);
   else if (StringIsEqual(misc, _T("-")))
-    CommonInterface::SetComputerSettings().forecast_temperature -= 1;
+    CommonInterface::SetComputerSettings().forecast_temperature -= Temperature::FromKelvin(1);
   else if (StringIsEqual(misc, _T("show"))) {
     auto temperature =
       CommonInterface::GetComputerSettings().forecast_temperature;
     TCHAR Temp[100];
-    _stprintf(Temp, _T("%f"),
-              (double)Units::ToUserTemperature(temperature));
+    _stprintf(Temp, _T("%f"), temperature.ToUser());
     Message::AddMessage(_("Forecast temperature"), Temp);
   }
 }

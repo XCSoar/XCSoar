@@ -25,7 +25,6 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
-#include "Atmosphere/Temperature.hpp"
 #include "Math/Util.hpp"
 
 #include <stdint.h>
@@ -97,7 +96,7 @@ ParseData(NMEAInputLine &line, NMEAInfo &info)
   unsigned temperature;
   if (line.ReadHexChecked(temperature)) {
     info.temperature_available = true;
-    info.temperature = CelsiusToKelvin(int16_t(temperature) / 10.);
+    info.temperature = Temperature::FromCelsius(int16_t(temperature) / 10.);
   }
 
   unsigned humidity;

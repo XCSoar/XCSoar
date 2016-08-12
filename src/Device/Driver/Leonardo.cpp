@@ -26,7 +26,6 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Units/System.hpp"
-#include "Atmosphere/Temperature.hpp"
 
 class LeonardoDevice : public AbstractDevice {
 public:
@@ -85,7 +84,7 @@ LeonardoParseC(NMEAInputLine &line, NMEAInfo &info)
   double oat;
   info.temperature_available = line.ReadChecked(oat);
   if (info.temperature_available)
-    info.temperature = CelsiusToKelvin(oat);
+    info.temperature = Temperature::FromCelsius(oat);
 
   line.Skip(5);
 
@@ -133,7 +132,7 @@ LeonardoParseD(NMEAInputLine &line, NMEAInfo &info)
   double oat;
   info.temperature_available = line.ReadChecked(oat);
   if (info.temperature_available)
-    info.temperature = CelsiusToKelvin(oat);
+    info.temperature = Temperature::FromCelsius(oat);
 
   // 5 = compass [degrees]
   /* XXX unsupported by XCSoar */

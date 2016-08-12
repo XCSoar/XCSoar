@@ -130,7 +130,7 @@ Dump(const NMEAInfo &basic)
            (int)basic.external_wind.norm);
 
   if (basic.temperature_available)
-    printf("OutsideAirTemperature=%d\n", (int)basic.temperature);
+    printf("OutsideAirTemperature=%d\n", (int)basic.temperature.ToKelvin());
 
   if (basic.humidity_available)
     printf("RelativeHumidity=%d\n", (int)basic.humidity);

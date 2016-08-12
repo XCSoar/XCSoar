@@ -187,7 +187,7 @@ PDVVT(NMEAInputLine &line, NMEAInfo &info)
   int value;
   info.temperature_available = line.ReadChecked(value);
   if (info.temperature_available)
-    info.temperature = value / 10.;
+    info.temperature = Temperature::FromKelvin(value / 10.);
 
   info.humidity_available = line.ReadChecked(info.humidity);
 

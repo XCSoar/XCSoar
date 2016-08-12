@@ -27,7 +27,6 @@ Copyright_License {
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
-#include "Atmosphere/Temperature.hpp"
 
 class FlymasterF1Device : public AbstractDevice {
   Port &port;
@@ -79,7 +78,7 @@ VARIO(NMEAInputLine &line, NMEAInfo &info)
   }
 
   if (line.ReadChecked(value)) {
-    info.temperature = CelsiusToKelvin(value);
+    info.temperature = Temperature::FromCelsius(value);
     info.temperature_available = true;
   }
 

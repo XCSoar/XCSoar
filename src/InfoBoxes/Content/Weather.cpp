@@ -60,8 +60,7 @@ UpdateInfoBoxTemperature(InfoBoxData &data)
   }
 
   // Set Value
-  data.SetValue(_T("%2.1f"),
-                    Units::ToUserTemperature(basic.temperature));
+  data.SetValue(_T("%2.1f"), basic.temperature.ToUser());
 
   data.SetValueUnit(Units::current.temperature_unit);
 }
@@ -70,8 +69,7 @@ void
 InfoBoxContentTemperatureForecast::Update(InfoBoxData &data)
 {
   auto temperature = CommonInterface::GetComputerSettings().forecast_temperature;
-  data.SetValue(_T("%2.1f"),
-                    Units::ToUserTemperature(temperature));
+  data.SetValue(_T("%2.1f"), temperature.ToUser());
 
   data.SetValueUnit(Units::current.temperature_unit);
 }
@@ -81,11 +79,11 @@ InfoBoxContentTemperatureForecast::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch(keycode) {
   case ibkUp:
-    CommonInterface::SetComputerSettings().forecast_temperature += 0.5;
+    CommonInterface::SetComputerSettings().forecast_temperature += Temperature::FromKelvin(0.5);
     return true;
 
   case ibkDown:
-    CommonInterface::SetComputerSettings().forecast_temperature -= 0.5;
+    CommonInterface::SetComputerSettings().forecast_temperature -= Temperature::FromKelvin(0.5);
     return true;
 
   default:

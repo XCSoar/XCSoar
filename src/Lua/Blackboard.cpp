@@ -70,7 +70,8 @@ l_blackboard_index(lua_State *L)
   else if (StringIsEqual(name, "dynamic_pressure"))
     Lua::PushOptional(L, basic.dyn_pressure_available, basic.dyn_pressure.GetPascal());
   else if (StringIsEqual(name, "temperature"))
-    Lua::PushOptional(L, basic.temperature_available, basic.temperature);
+    Lua::PushOptional(L, basic.temperature_available,
+                      basic.temperature.ToKelvin());
   else if (StringIsEqual(name, "humidity"))
     Lua::PushOptional(L, basic.humidity_available, basic.humidity);
   else if (StringIsEqual(name, "voltage"))

@@ -100,9 +100,9 @@ VoltageDevice::onVoltageValues(int temp_adc, int voltage_index, int volt_adc)
   }
 
   if (temp_adc >= 0) {
-    auto v = CelsiusToKelvin(offset + temp_adc);
-    if (temperature_filter.Update(v))
-      v = temperature_filter.Average();
+    auto v = Temperature::FromCelsius(offset + temp_adc);
+    if (temperature_filter.Update(v.ToNative()))
+      v = Temperature::FromNative(temperature_filter.Average());
     basic.temperature = v;
     basic.temperature_available = true;
   } else {

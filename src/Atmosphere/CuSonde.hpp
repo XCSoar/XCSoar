@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_ATMOSPHERE_CUSONDE_HPP
 #define XCSOAR_ATMOSPHERE_CUSONDE_HPP
 
+#include "Atmosphere/Temperature.hpp"
+
 struct NMEAInfo;
 struct DerivedInfo;
 
@@ -40,16 +42,16 @@ public:
 
   struct Level {
     /** Environmental temperature in K */
-    double air_temperature;
+    Temperature air_temperature;
     /** DewPoint in K */
-    double dewpoint;
+    Temperature dewpoint;
     /** Dry temperature in K */
-    double dry_temperature;
+    Temperature dry_temperature;
     /** ThermalIndex in K */
-    double thermal_index;
+    Temperature thermal_index;
 
-    void UpdateTemps(double humidity, double temperature);
-    void UpdateThermalIndex(double h_agl, double max_ground_temperature);
+    void UpdateTemps(double humidity, Temperature temperature);
+    void UpdateThermalIndex(double h_agl, Temperature max_ground_temperature);
 
     /** Number of measurements */
     unsigned n_measurements;
@@ -69,7 +71,7 @@ public:
   };
 
   /** Expected temperature maximum on the ground */
-  double max_ground_temperature;
+  Temperature max_ground_temperature;
   /** Height of ground above MSL */
   double ground_height;
   unsigned short last_level;
@@ -85,7 +87,7 @@ public:
   void UpdateMeasurements(const NMEAInfo &basic, const DerivedInfo &calculated);
   void FindCloudBase(unsigned short level);
   void FindThermalHeight(unsigned short level);
-  void SetForecastTemperature(double val);
+  void SetForecastTemperature(Temperature temperature);
 };
 
 #endif
