@@ -72,9 +72,9 @@ inline std::ostream &
 operator<<(std::ostream &stream, const GeoPoint &p)
 {
   return p.IsValid()
-    ? stream << GeoAngle<'S', 'N'>(p.latitude)
+    ? stream << GeoAngle<'N', 'S'>(p.latitude)
              << '/'
-             << GeoAngle<'W', 'E'>(p.longitude)
+             << GeoAngle<'E', 'W'>(p.longitude)
     : stream << '?';
 }
 
