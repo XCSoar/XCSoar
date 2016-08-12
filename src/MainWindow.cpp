@@ -698,18 +698,6 @@ MainWindow::OnUser(unsigned id)
     if (restore_page_pending)
       PageActions::Restore();
     return true;
-
-#ifdef ANDROID
-  case Command::CRASH:
-    ShowMessageBox(_T("How embarassing, we're terribly sorry!\n"
-                      "Please submit a bug report and "
-                      "include the file from the 'crash' directory.\n"
-                      "http://bugs.xcsoar.org/newticket\n"
-                      "After your report, we'll fix it ASAP."),
-                   _T("XCSoar has crashed recently"),
-                   MB_OK|MB_ICONERROR);
-    return true;
-#endif
   }
 
   return false;
