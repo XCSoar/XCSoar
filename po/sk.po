@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-18 07:31+0200\n"
+"POT-Creation-Date: 2016-08-12 14:15+0200\n"
 "PO-Revision-Date: 2015-09-18 07:30+0000\n"
 "Last-Translator: Peter Brtko <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
@@ -420,11 +420,11 @@ msgstr "nie MAT otočné body"
 msgid "Loading Airspace File..."
 msgstr "Nahrávam súbor s vzdušným priestorom..."
 
-#: src/Airspace/AirspaceParser.cpp:277
+#: src/Airspace/AirspaceParser.cpp:278
 msgid "Parse Error at Line"
 msgstr "Chyba v kóde na riadku"
 
-#: src/Airspace/AirspaceParser.cpp:930
+#: src/Airspace/AirspaceParser.cpp:924
 msgid "Unknown airspace filetype"
 msgstr "Neznámy typ súboru vzdušného priestoru"
 
@@ -549,20 +549,20 @@ msgstr "Chyba loggeru"
 msgid "Stop Logger"
 msgstr "Ukončiť logger"
 
-#: src/Logger/ExternalLogger.cpp:81
+#: src/Logger/ExternalLogger.cpp:83
 msgid "Declare task?"
 msgstr "Deklarovať úlohu?"
 
-#: src/Logger/ExternalLogger.cpp:90 src/Logger/ExternalLogger.cpp:129
+#: src/Logger/ExternalLogger.cpp:92 src/Logger/ExternalLogger.cpp:131
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:96
 msgid "Declare task"
 msgstr "Deklarovať úlohu"
 
-#: src/Logger/ExternalLogger.cpp:97
+#: src/Logger/ExternalLogger.cpp:99
 msgid "Task declared!"
 msgstr "Úloha deklarovaná!"
 
-#: src/Logger/ExternalLogger.cpp:102
+#: src/Logger/ExternalLogger.cpp:104
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
@@ -570,28 +570,28 @@ msgstr ""
 "Vyskytla sa chyba,\n"
 "úloha NEdeklarovaná!"
 
-#: src/Logger/ExternalLogger.cpp:128
+#: src/Logger/ExternalLogger.cpp:130
 msgid "No logger connected"
 msgstr "Logger nepripojený"
 
-#: src/Logger/ExternalLogger.cpp:262
+#: src/Logger/ExternalLogger.cpp:264
 msgid "Failed to download flight list."
 msgstr "Sťahovanie zoznamu letov zlyhalo."
 
-#: src/Logger/ExternalLogger.cpp:263 src/Logger/ExternalLogger.cpp:274
-#: src/Logger/ExternalLogger.cpp:304 src/Logger/ExternalLogger.cpp:336
+#: src/Logger/ExternalLogger.cpp:265 src/Logger/ExternalLogger.cpp:276
+#: src/Logger/ExternalLogger.cpp:306 src/Logger/ExternalLogger.cpp:338
 msgid "Download flight"
 msgstr "Stiahnuť let"
 
-#: src/Logger/ExternalLogger.cpp:273
+#: src/Logger/ExternalLogger.cpp:275
 msgid "Logger is empty."
 msgstr "Logger je prázdny."
 
-#: src/Logger/ExternalLogger.cpp:303
+#: src/Logger/ExternalLogger.cpp:305
 msgid "Failed to download flight."
 msgstr "Sťiahnutie letu zlyhalo."
 
-#: src/Logger/ExternalLogger.cpp:335
+#: src/Logger/ExternalLogger.cpp:337
 msgid "Do you want to download another flight?"
 msgstr "Stiahnuť další let?"
 
@@ -628,11 +628,11 @@ msgstr "Nekrúži sa"
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:298
 #: src/Dialogs/Traffic/TrafficList.cpp:367
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:394
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:249 src/Dialogs/dlgAnalysis.cpp:313
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:251 src/Dialogs/dlgAnalysis.cpp:313
 #: src/Dialogs/dlgBrightness.cpp:143 src/Dialogs/ProfileListDialog.cpp:386
 #: src/Dialogs/Plane/PlaneListDialog.cpp:390 src/Dialogs/HelpDialog.cpp:50
 #: src/Dialogs/dlgInfoBoxAccess.cpp:112 src/Dialogs/ReplayDialog.cpp:154
-#: src/Dialogs/dlgStatus.cpp:62 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:458
+#: src/Dialogs/dlgStatus.cpp:62 src/Dialogs/Waypoint/dlgWaypointDetails.cpp:452
 #: src/Dialogs/Waypoint/Manager.cpp:317
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:150
 #: src/Dialogs/Task/Manager/TaskClosePanel.cpp:107
@@ -640,12 +640,12 @@ msgstr "Nekrúži sa"
 #: src/Dialogs/Task/TaskPointDialog.cpp:593
 #: src/Dialogs/Task/TargetDialog.cpp:491
 #: src/Dialogs/Task/AlternatesListDialog.cpp:111
-#: src/Dialogs/KnobTextEntry.cpp:263 src/Dialogs/Weather/NOAAList.cpp:277
+#: src/Dialogs/KnobTextEntry.cpp:264 src/Dialogs/Weather/NOAAList.cpp:277
 #: src/Dialogs/Weather/NOAADetails.cpp:155
 msgid "Close"
 msgstr "Zavrieť"
 
-#: src/Gauge/FlarmTrafficWindow.cpp:233
+#: src/Gauge/FlarmTrafficWindow.cpp:241
 msgid "No Traffic"
 msgstr "Žiadna prevádzka"
 
@@ -813,7 +813,7 @@ msgstr "Prerušiť"
 #: src/Menu/ExpandMacros.cpp:345 src/Menu/ExpandMacros.cpp:545
 #: src/Menu/ExpandMacros.cpp:576 src/Menu/ExpandMacros.cpp:636
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:53
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:199
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:206
 #, no-c-format
 msgid "Manual"
 msgstr "Ručne"
@@ -938,7 +938,7 @@ msgid "Task & Landables"
 msgstr "Úloha & P. plochy"
 
 #: src/Menu/ExpandMacros.cpp:564 src/Input/InputEventsSettings.cpp:308
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:195
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:202
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:85
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:58
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:178
@@ -1023,7 +1023,7 @@ msgid "Next Bearing"
 msgstr "Kurs k ďaľšiemu ob"
 
 #: src/InfoBoxes/Content/Factory.cpp:196
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:101
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:103
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:83
 #, no-c-format
 msgid "Bearing"
@@ -1972,7 +1972,7 @@ msgid "Team code"
 msgstr "Tímový kód"
 
 #: src/InfoBoxes/Content/Factory.cpp:726 src/InfoBoxes/Content/Team.cpp:49
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:247
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:249
 #, no-c-format
 msgid "Team Code"
 msgstr "Tímový kód"
@@ -2919,7 +2919,7 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1282
-#: src/InfoBoxes/Content/Factory.cpp:1283 src/InfoBoxes/Content/Task.cpp:964
+#: src/InfoBoxes/Content/Factory.cpp:1283 src/InfoBoxes/Content/Task.cpp:938
 #, no-c-format
 msgid "Next arrow"
 msgstr ""
@@ -2975,7 +2975,7 @@ msgstr "žiadne QNH"
 #: src/InfoBoxes/Content/MacCready.cpp:52 src/InfoBoxes/Content/Weather.cpp:108
 #: src/Dialogs/Device/DeviceListDialog.cpp:276
 #: src/Dialogs/Plane/PlaneListDialog.cpp:159
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:295
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:301
 #: src/Dialogs/Waypoint/Manager.cpp:123
 #, no-c-format
 msgid "Edit"
@@ -3009,19 +3009,19 @@ msgstr "DELFÍN"
 msgid "Next"
 msgstr "Ďalší"
 
-#: src/InfoBoxes/Content/Task.cpp:768
+#: src/InfoBoxes/Content/Task.cpp:744
 msgid "Time Below"
 msgstr "Doba pod"
 
-#: src/InfoBoxes/Content/Task.cpp:880 src/InfoBoxes/Content/Task.cpp:925
+#: src/InfoBoxes/Content/Task.cpp:854 src/InfoBoxes/Content/Task.cpp:899
 msgid "Closed"
 msgstr ""
 
-#: src/InfoBoxes/Content/Task.cpp:889 src/InfoBoxes/Content/Task.cpp:934
+#: src/InfoBoxes/Content/Task.cpp:863 src/InfoBoxes/Content/Task.cpp:908
 msgid "Open"
 msgstr ""
 
-#: src/InfoBoxes/Content/Task.cpp:894 src/InfoBoxes/Content/Task.cpp:939
+#: src/InfoBoxes/Content/Task.cpp:868 src/InfoBoxes/Content/Task.cpp:913
 msgid "Waiting"
 msgstr ""
 
@@ -3045,7 +3045,7 @@ msgstr "Analýza"
 #: src/InfoBoxes/InfoBoxSettings.cpp:79
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:110
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:55
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:203
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:210
 #, no-c-format
 msgid "Circling"
 msgstr "Pri krúžení"
@@ -3096,7 +3096,7 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Panel/ATCReference.cpp:88
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:656
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:650
 #: src/Dialogs/Task/TaskPointDialog.cpp:592
 msgid "Waypoint"
 msgstr "Otočný bod"
@@ -3104,7 +3104,7 @@ msgstr "Otočný bod"
 #: src/InfoBoxes/Panel/ATCReference.cpp:89
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:79
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:136
-#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:73
+#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:81
 msgid "Location"
 msgstr ""
 
@@ -3116,7 +3116,7 @@ msgstr "Premiestniť"
 
 #: src/InfoBoxes/Panel/ATCReference.cpp:92
 #: src/Dialogs/Device/PortMonitor.cpp:150
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:103
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:107
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:36
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:138
 #: src/Dialogs/TouchTextEntry.cpp:217 src/Dialogs/TimeEntry.cpp:80
@@ -3136,23 +3136,23 @@ msgstr ""
 msgid "Default InfoBoxes"
 msgstr ""
 
-#: src/Input/InputEventsActions.cpp:327
+#: src/Input/InputEventsActions.cpp:330
 msgid "No active waypoint!"
 msgstr "Žiadny aktívny otočný bod!"
 
-#: src/Input/InputEventsActions.cpp:423
+#: src/Input/InputEventsActions.cpp:433
 msgid "NMEA log on"
 msgstr "Zápis NMEA dát zapnutý"
 
-#: src/Input/InputEventsActions.cpp:425
+#: src/Input/InputEventsActions.cpp:435
 msgid "NMEA log off"
 msgstr "Zápis NMEA dát vypnutý"
 
-#: src/Input/InputEventsActions.cpp:429
+#: src/Input/InputEventsActions.cpp:439
 msgid "Logger on"
 msgstr "Logger zapnutý"
 
-#: src/Input/InputEventsActions.cpp:431
+#: src/Input/InputEventsActions.cpp:441
 msgid "Logger off"
 msgstr "Logger vypnutý"
 
@@ -3238,7 +3238,7 @@ msgstr "Žiadna trať"
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:317
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:150
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:80
-#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:74
+#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:85
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:113
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:187
 #, no-c-format
@@ -3250,7 +3250,7 @@ msgstr "Nadmor. výška"
 #: src/Renderer/FlightStatisticsRenderer.cpp:213
 #: src/Renderer/FlightStatisticsRenderer.cpp:239
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:79
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:83
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:87
 msgid "Speed"
 msgstr "Rýchlosť"
 
@@ -3342,7 +3342,7 @@ msgstr "Mapa (Celá obrazovka)"
 #: src/Renderer/MapItemListRenderer.cpp:81
 #: src/Renderer/MapItemListRenderer.cpp:85
 #: src/Dialogs/Airspace/AirspaceList.cpp:470
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:95
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:99
 #: src/Dialogs/Waypoint/WaypointList.cpp:422
 msgid "Direction"
 msgstr "Smer"
@@ -3638,15 +3638,15 @@ msgstr ""
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:365
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:193
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:302
-#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:126 src/Dialogs/NumberEntry.cpp:59
+#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:138 src/Dialogs/NumberEntry.cpp:59
 #: src/Dialogs/NumberEntry.cpp:103 src/Dialogs/NumberEntry.cpp:145
 #: src/Dialogs/TouchTextEntry.cpp:205 src/Dialogs/TimeEntry.cpp:66
 #: src/Dialogs/GeoPointEntry.cpp:76 src/Dialogs/Weather/RASPDialog.cpp:159
 msgid "OK"
 msgstr "OK"
 
-#: src/Dialogs/Message.cpp:106 src/Dialogs/StatusPanels/RulesStatusPanel.cpp:57
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:60
+#: src/Dialogs/Message.cpp:106 src/Dialogs/StatusPanels/RulesStatusPanel.cpp:58
+#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:61
 msgid "Yes"
 msgstr "Áno"
 
@@ -3668,7 +3668,7 @@ msgstr "Znovu"
 #: src/Dialogs/ProfileListDialog.cpp:401
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:194
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:303
-#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:127
+#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:139
 #: src/Dialogs/Waypoint/WaypointList.cpp:248 src/Dialogs/NumberEntry.cpp:60
 #: src/Dialogs/NumberEntry.cpp:104 src/Dialogs/NumberEntry.cpp:146
 #: src/Dialogs/TouchTextEntry.cpp:209 src/Dialogs/TimeEntry.cpp:67
@@ -3727,6 +3727,7 @@ msgstr ""
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:137
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:165
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:175
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:274
 #: src/Dialogs/Waypoint/Manager.cpp:250
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:273
 #: src/Dialogs/Weather/NOAAList.cpp:177 src/Dialogs/Weather/NOAAList.cpp:183
@@ -4364,7 +4365,7 @@ msgid "Threshold"
 msgstr ""
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:120
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:100
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:102
 msgid "Range"
 msgstr "Rozsah"
 
@@ -4374,7 +4375,7 @@ msgid "Unkown"
 msgstr ""
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:124
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:187
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:189
 #, no-c-format
 msgid "Glider"
 msgstr ""
@@ -4405,13 +4406,13 @@ msgid "Hang glider"
 msgstr ""
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:130
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:188
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:190
 #, no-c-format
 msgid "Paraglider"
 msgstr ""
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:132
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:189
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:191
 #, no-c-format
 msgid "Powered aircraft"
 msgstr ""
@@ -4450,7 +4451,7 @@ msgstr ""
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:74
 #: src/Dialogs/Airspace/AirspaceList.cpp:471
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:114
-#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:78
+#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:89
 #: src/Dialogs/Waypoint/WaypointList.cpp:423
 msgid "Type"
 msgstr "Typ"
@@ -4551,7 +4552,7 @@ msgstr "Kurz"
 #: src/Dialogs/Airspace/AirspaceList.cpp:468
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:260
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:135
-#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:71
+#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:79
 #: src/Dialogs/Waypoint/WaypointList.cpp:420
 msgid "Name"
 msgstr "Názov"
@@ -4641,7 +4642,7 @@ msgid "Requires only a GPS source."
 msgstr ""
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:57
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:207
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:214
 #, no-c-format
 msgid "ZigZag"
 msgstr "CikCak"
@@ -4671,12 +4672,21 @@ msgstr "Automat. výpočet vetra"
 msgid "This allows switching on or off the automatic wind algorithm."
 msgstr ""
 
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:68
+#, fuzzy
+msgid "External wind"
+msgstr "Externý"
+
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:69
+msgid "Should XCSoar accept wind estimates from other instruments?"
+msgstr ""
+
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:73
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:156
 msgid "Trail drift"
 msgstr "Unášanie stopy"
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:70
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:74
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:157
 msgid ""
 "Determines whether the snail trail is drifted with the wind when displayed "
@@ -4684,19 +4694,19 @@ msgid ""
 "drift."
 msgstr ""
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:80
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:84
 msgid "Source"
 msgstr ""
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:83
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:87
 msgid "Manual adjustment of wind speed."
 msgstr "Manuálne nastavenie rýchlosti vetra."
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:95
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:99
 msgid "Manual adjustment of wind direction."
 msgstr "Manuálne nastavenie smeru vetra."
 
-#: src/Dialogs/Settings/WindSettingsPanel.cpp:211
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:218
 msgid "External"
 msgstr "Externý"
 
@@ -4894,7 +4904,7 @@ msgstr "Prepísať?"
 msgid "InfoBox paste"
 msgstr "Vlož informačné okná"
 
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:430
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:431
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:117
 msgid "Invalid"
 msgstr "Neplatný"
@@ -4932,7 +4942,7 @@ msgid "Pilot"
 msgstr "Pilot"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:154
-#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:62
+#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:70
 #, no-c-format
 msgid "Airport"
 msgstr "Letisko"
@@ -4960,43 +4970,43 @@ msgstr ""
 msgid "New Teammate"
 msgstr ""
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:89
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:91
 msgid "Set code"
 msgstr ""
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:90
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:92
 msgid "Set WP"
 msgstr ""
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:91
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:93
 msgid "Flarm Lock"
 msgstr "FLARM zámok"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:98
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:100
 msgid "Own code"
 msgstr ""
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:99
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:101
 msgid "Mate code"
 msgstr "Kód priateľa"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:102
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:104
 msgid "Rel. bearing"
 msgstr "Relatívny kurz"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:103
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:105
 msgid "Flarm lock"
 msgstr "Flarm zámok"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:211
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:213
 msgid "Unknown Competition Number"
 msgstr "Neznáme súťažné číslo"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:212
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:214
 msgid "Not Found"
 msgstr "Nenájdené"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:216
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:218
 msgid "Set new teammate"
 msgstr ""
 
@@ -5068,11 +5078,11 @@ msgstr "Jas Displeja"
 msgid "Checklist"
 msgstr "Povinné úkony"
 
-#: src/Dialogs/dlgChecklist.cpp:88
+#: src/Dialogs/dlgChecklist.cpp:140
 msgid "No checklist loaded"
 msgstr ""
 
-#: src/Dialogs/dlgChecklist.cpp:88
+#: src/Dialogs/dlgChecklist.cpp:140
 msgid "Create xcsoar-checklist.txt"
 msgstr ""
 
@@ -5084,7 +5094,7 @@ msgstr "Nový"
 
 #: src/Dialogs/ProfileListDialog.cpp:194
 #: src/Dialogs/ProfilePasswordDialog.cpp:79
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:251
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:258
 msgid "Password"
 msgstr ""
 
@@ -5486,33 +5496,33 @@ msgstr ""
 "základe aktuálnej histórie letu s danou MC hodnotou. Výpočet začína po "
 "štarte úlohy."
 
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:99
+#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:100
 msgid "Valid start"
 msgstr "Platný štart"
 
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:100
+#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:101
 msgid "Start time"
 msgstr "Čas štartu"
 
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:101
+#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:102
 msgid "Start alt."
 msgstr "Výška štartu"
 
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:102
+#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:103
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:143
 #: src/Dialogs/Task/TaskPointDialog.cpp:415
 msgid "Start point"
 msgstr "Bod štartu"
 
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:103
+#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:104
 msgid "Start speed"
 msgstr "Rýchlosť pri štarte"
 
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:104
+#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:105
 msgid "Finish min. alt."
 msgstr ""
 
-#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:105
+#: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:106
 msgid "Valid finish"
 msgstr "Platné ukončenie úlohy"
 
@@ -5627,45 +5637,46 @@ msgstr "Otočný bod nieje v úlohe."
 msgid "Remove from task"
 msgstr "Odobrať z úlohy"
 
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:283
-msgid "Replace in Task"
-msgstr "Nahradiť v úlohe"
-
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:284
-msgid "Insert in Task"
-msgstr "Vložiť do úlohy"
-
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:285
-msgid "Append to Task"
-msgstr "Pridať k úlohe"
-
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:288
-msgid "Remove from Task"
-msgstr "Odobrať z úlohy"
-
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:291
-msgid "Set as New Home"
-msgstr "Nastav ako nový domov"
-
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:292
-msgid "Pan to Waypoint"
-msgstr ""
-
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:293
-msgid "Set Active Frequency"
-msgstr ""
-
-#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:294
-msgid "Set Standby Frequency"
-msgstr ""
-
-#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:437 Data/Input/default.xci:1022
-msgid "GoTo"
-msgstr "Navigovať na"
-
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:274
 #: src/Dialogs/Waypoint/Manager.cpp:250
 msgid "Failed to save waypoints"
 msgstr ""
+
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:287
+msgid "Replace in Task"
+msgstr "Nahradiť v úlohe"
+
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:288
+msgid "Insert in Task"
+msgstr "Vložiť do úlohy"
+
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:289
+msgid "Append to Task"
+msgstr "Pridať k úlohe"
+
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:292
+msgid "Remove from Task"
+msgstr "Odobrať z úlohy"
+
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:295
+msgid "Set as New Home"
+msgstr "Nastav ako nový domov"
+
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:296
+msgid "Pan to Waypoint"
+msgstr ""
+
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:297
+msgid "Set Active Frequency"
+msgstr ""
+
+#: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:298
+msgid "Set Standby Frequency"
+msgstr ""
+
+#: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:433 Data/Input/default.xci:1022
+msgid "GoTo"
+msgstr "Navigovať na"
 
 #: src/Dialogs/Waypoint/Manager.cpp:268
 msgid "Delete waypoint?"
@@ -5683,28 +5694,28 @@ msgstr "Uložiť zmeny do súboru s otočnými bodmi?"
 msgid "Waypoints edited"
 msgstr "Otočné body upravené"
 
-#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:61
+#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:69
 #, no-c-format
 msgid "Turnpoint"
 msgstr ""
 
-#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:63
+#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:71
 #, no-c-format
 msgid "Landable"
 msgstr ""
 
-#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:72
+#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:80
 msgid "Comment"
 msgstr "Komentár"
 
-#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:117
+#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:129
 msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
 "format."
 msgstr ""
 
-#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:118
-#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:125
+#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:130
+#: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:137
 msgid "Waypoint Editor"
 msgstr "Úprava otočných bodov"
 
@@ -5753,7 +5764,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:72
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:164
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:56
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:60
 #, no-c-format
 msgid "Default"
 msgstr "Štandardný"
@@ -6296,249 +6307,249 @@ msgstr ""
 msgid "Determines if haptic feedback like vibration is used."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:58
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:62
 #, no-c-format
 msgid "Portrait"
 msgstr "Portrét"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:60
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:64
 #, no-c-format
 msgid "Landscape"
 msgstr "Krajinka"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:62
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:66
 #, no-c-format
 msgid "Reverse Portrait"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:64
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:68
 #, no-c-format
 msgid "Reverse Landscape"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:70
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:74
 #, no-c-format
 msgid "8 Split"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:72
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:76
 #, no-c-format
 msgid "8 Bottom or Right"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:74
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:78
 #, no-c-format
 msgid "8 Bottom + Vario (Portrait)"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:76
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:80
 #, no-c-format
 msgid "8 Top or Left"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:78
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:82
 #, no-c-format
 msgid "8 Top + Vario (Portrait)"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:80
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:84
 #, no-c-format
 msgid "9 Right + Vario (Landscape)"
 msgstr "9 Vpravo + Vário (na šírku)"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:82
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:86
 #, no-c-format
 msgid "9 Left + Right + Vario (Landscape)"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:84
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:88
 #, no-c-format
 msgid "5 Right (Square)"
 msgstr "5 Vpravo (štvorec)"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:86
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:90
 #, no-c-format
 msgid "12 Bottom or Right"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:88
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:92
 #, no-c-format
 msgid "12 Top or Left"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:90
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:94
 #, no-c-format
 msgid "16 Right (Landscape)"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:92
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:96
 #, no-c-format
 msgid "24 Right (Landscape)"
 msgstr "24 Vpravo (na šírku)"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:94
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:98
 #, no-c-format
 msgid "4 Top or Left"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:96
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:100
 #, no-c-format
 msgid "4 Bottom or Right"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:102
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:106
 #, no-c-format
 msgid "Auto (follow infoboxes)"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:104
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:108
 #, no-c-format
 msgid "Top Left"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:106
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:110
 #, no-c-format
 msgid "Top Right"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:108
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:112
 #, no-c-format
 msgid "Bottom Left"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:110
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:114
 #, no-c-format
 msgid "Bottom Right"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:112
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:116
 #, no-c-format
 msgid "Centre Top"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:114
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:118
 #, no-c-format
 msgid "Centre Bottom"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:119
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:123
 #, no-c-format
 msgid "Text"
 msgstr "Text"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:120
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:124
 #, no-c-format
 msgid "Show text on tabbed dialogs."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:121
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:125
 #, no-c-format
 msgid "Icons"
 msgstr "Ikony"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:122
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:126
 #, no-c-format
 msgid "Show icons on tabbed dialogs."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:127
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:131
 #, no-c-format
 msgid "Center"
 msgstr "Stred"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:128
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:132
 #, no-c-format
 msgid "Center the status message boxes."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:129
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:133
 #, no-c-format
 msgid "Topleft"
 msgstr "Vľavo hore"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:130
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:134
 #, no-c-format
 msgid "Show status message boxes ina the top left corner."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:136
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:140
 #, no-c-format
 msgid "Box"
 msgstr "Rámik"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:136
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:140
 #, no-c-format
 msgid "Draws boxes around each InfoBox."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:138
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:142
 #, no-c-format
 msgid "Tab"
 msgstr "Záložka"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:138
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:142
 #, no-c-format
 msgid "Draws a tab at the top of the InfoBox across the title."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:140
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:144
 #, no-c-format
 msgid "Shaded"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:142
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:146
 #, no-c-format
 msgid "Glass"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:164
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:168
 msgid "Display orientation"
 msgstr "Orientácia displeja"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:164
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:168
 msgid "Rotate the display on devices that support it."
 msgstr "Otočí displej na zariadeniach ktoré to podporujú."
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:169
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:173
 msgid "InfoBox geometry"
 msgstr "Geometria info-okien"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:170
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:174
 msgid ""
 "A list of possible InfoBox layouts. Do some trials to find the best for your "
 "screen size."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:173
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:177
 msgid "FLARM display"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:173
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:177
 msgid "Choose a location for the FLARM display."
 msgstr "Zvoľ filter alebo klikni tu."
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:178
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:182
 msgid "Tab dialog style"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:181
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:185
 msgid "Message display"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:186
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:190
 msgid "Inverse InfoBoxes"
 msgstr "Inverzné info-okná"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:186
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:190
 msgid "If true, the InfoBoxes are white on black, otherwise black on white."
 msgstr ""
 "Ak aktivované info-okná budú invertované, biele písmo na čiernom podklade."
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:191
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:195
 msgid "Colored InfoBoxes"
 msgstr "Farebné info-okná"
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:192
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:196
 msgid ""
 "If true, certain InfoBoxes will have coloured text.  For example, the active "
 "waypoint InfoBox will be blue when the glider is above final glide."
@@ -6546,9 +6557,17 @@ msgstr ""
 "Ak aktivované niektoré Info-okná budú mať farebný text. Napríklad aktívny "
 "otočný bod bude modrý ak je vetroň nad doklzom."
 
-#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:199
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:203
 msgid "InfoBox border"
 msgstr "Okraj info-okien"
+
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:208
+msgid "Show Menubutton"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:208
+msgid "Show the Menubutton"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:56
 #, no-c-format
@@ -7380,15 +7399,15 @@ msgstr ""
 "žiadnu toleranciu."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:91
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:246
-#, no-c-format
-msgid "Reference is altitude above mean sea level."
-msgstr ""
-
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:93
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:244
 #, no-c-format
 msgid "Reference is the height above the task point."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:93
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:246
+#, no-c-format
+msgid "Reference is altitude above mean sea level."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:97
@@ -8084,60 +8103,66 @@ msgid ""
 "[On] Scale displayed runway length based on real length."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:190
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:192
 #, no-c-format
 msgid "Hot-air balloon"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:191
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:193
 #, no-c-format
 msgid "Hangglider (Flex/FAI1)"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:192
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:194
 #, no-c-format
 msgid "Hangglider (Rigid/FAI5)"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:211
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:239
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:213
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:246
 msgid "Tracking Interval"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:215
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:217
 msgid "Track friends"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:216
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:218
 msgid "Download the position of your friends live from the SkyLines server."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:219
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:221
 msgid "Show nearby traffic"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:220
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:222
 msgid ""
 "Download the position of your nearby traffic live from the SkyLines server."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:241
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:234
+msgid ""
+"Participate in the XCSoar Cloud field test?  This transmits your location, "
+"thermal/wave locations and other weather data to our test server."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:248
 msgid "Vehicle Type"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:241
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:248
 msgid "Type of vehicle used."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:243
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:250
 msgid "Vehicle Name"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:246
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:253
 msgid "Server"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:250
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:257
 msgid "Username"
 msgstr ""
 
@@ -8219,31 +8244,31 @@ msgstr "Úloha nebola zmenená"
 msgid "Revert Changes"
 msgstr ""
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:167
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:168
 msgid "Edit Point"
 msgstr ""
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:170
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:171
 msgid "Make Finish"
 msgstr ""
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:179
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:180
 msgid "Reverse"
 msgstr ""
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:182
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:183
 msgid "Clear All"
 msgstr ""
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:358
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:359
 msgid "Clear all points?"
 msgstr ""
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:358
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:359
 msgid "Task edit"
 msgstr "Upraviť úlohu"
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:411
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:412
 msgid "Add Turnpoint"
 msgstr ""
 
@@ -8536,6 +8561,16 @@ msgstr ""
 
 #: src/Dialogs/Task/TargetDialog.cpp:488
 msgid "Optimized"
+msgstr ""
+
+#: src/Dialogs/Tracking/CloudEnableDialog.cpp:70
+msgid ""
+"The XCSoar project is currently developing a revolutionary service which "
+"allows sharing thermal/wave locations and more with other pilots.\n"
+"Do you wish to participate in the field test? This means that your position, "
+"thermal/wave locations and other weather data will be transmitted to our "
+"test server. You can disable it at any time in the \"Tracking\" settings.\n"
+"Please help us improve XCSoar!"
 msgstr ""
 
 #: src/Dialogs/TimeEntry.cpp:74 src/Dialogs/Weather/RASPDialog.cpp:82
@@ -9339,11 +9374,113 @@ msgstr "blcwbase"
 msgid "Scanning weather forecast"
 msgstr "Skenovanie predpovede počasia"
 
-#: Data/Input/default.xci:733
+#: Data/Input/default.xci:350 Data/Input/default.xci:399
+#: Data/Input/default.xci:885
+msgid "Nav"
+msgstr "Navigačné menu"
+
+#: Data/Input/default.xci:414 Data/Input/default.xci:1046
+msgid "Dropped marker"
+msgstr ""
+
+#: Data/Input/default.xci:64
+msgid "Below final glide"
+msgstr "Ste pod doklzovou výškou"
+
+#: Data/Input/default.xci:874
 msgid ""
-"Cruise\n"
+"Message\n"
+"Repeat"
+msgstr ""
+"Opakuj\n"
+"správu"
+
+#: Data/Input/default.xci:726
+msgid "Store"
+msgstr "Uložiť"
+
+#: Data/Input/default.xci:824
+msgid ""
+"Team\n"
+"Code"
+msgstr ""
+"Tímový\n"
+"kód"
+
+#: Data/Input/default.xci:135 Data/Input/default.xci:451
+#: Data/Input/default.xci:943
+msgid ""
+"Zoom\n"
+"Out"
+msgstr "Oddiaľ"
+
+#: Data/Input/default.xci:69
+msgid "Final glide through terrain"
+msgstr "Doklz skrz terén"
+
+#: Data/Input/default.xci:711
+msgid ""
+"ASI\n"
+"Zero"
+msgstr ""
+
+#: Data/Input/default.xci:492 Data/Input/default.xci:1064
+msgid "Labels"
+msgstr "Popisky"
+
+#: Data/Input/default.xci:766 Data/Input/default.xci:1173
+msgid ""
+"METAR\n"
+"TAF"
+msgstr ""
+
+#: Data/Input/default.xci:964
+msgid "AVG/ALT"
+msgstr ""
+
+#: Data/Input/default.xci:500 Data/Input/default.xci:1072
+msgid "Trail"
+msgstr "Stopa"
+
+#: Data/Input/default.xci:678
+msgid ""
+"Manual\n"
 "Demo"
 msgstr ""
+
+#: Data/Input/default.xci:725
+msgid "Stored to EEPROM"
+msgstr ""
+
+#: Data/Input/default.xci:717
+msgid "Accelerometer leveled"
+msgstr ""
+
+#: Data/Input/default.xci:59
+msgid "Above final glide"
+msgstr "Ste nad doklzovou výškou"
+
+#: Data/Input/default.xci:685
+msgid ""
+"Setup\n"
+"Stall"
+msgstr ""
+
+#: Data/Input/default.xci:692
+msgid "Accel"
+msgstr ""
+
+#: Data/Input/default.xci:840 Data/Input/default.xci:1213
+msgid "Thermal Assistant"
+msgstr "Pomocník ustreď."
+
+#: Data/Input/default.xci:1103
+msgid ""
+"Flight\n"
+"Setup"
+msgstr ""
+"Zákl. letové\n"
+"nastavenia"
 
 #: Data/Input/default.xci:142 Data/Input/default.xci:774
 msgid ""
@@ -9351,74 +9488,31 @@ msgid ""
 "here?"
 msgstr ""
 
-#: Data/Input/default.xci:726
-msgid "Store"
-msgstr "Uložiť"
-
-#: Data/Input/default.xci:1181
+#: Data/Input/default.xci:128 Data/Input/default.xci:444
+#: Data/Input/default.xci:936
 msgid ""
-"Nearest\n"
-"Airspace"
-msgstr "Najbližší vzduš. priestor"
+"Zoom\n"
+"In"
+msgstr "Priblíž"
 
-#: Data/Input/default.xci:840 Data/Input/default.xci:1213
-msgid "Thermal Assistant"
-msgstr "Pomocník ustreď."
+#: Data/Input/default.xci:48
+msgid "Takeoff"
+msgstr "Vzlet"
 
-#: Data/Input/default.xci:671
-msgid "Setup Audio"
-msgstr "Nastavenie zvuku"
-
-#: Data/Input/default.xci:500 Data/Input/default.xci:1072
-msgid "Trail"
-msgstr "Stopa"
-
-#: Data/Input/default.xci:59
-msgid "Above final glide"
-msgstr "Ste nad doklzovou výškou"
-
-#: Data/Input/default.xci:1111
+#: Data/Input/default.xci:733
 msgid ""
-"Setup\n"
-"Wind"
-msgstr ""
-"Nastavenie\n"
-"vetra"
-
-#: Data/Input/default.xci:64
-msgid "Below final glide"
-msgstr "Ste pod doklzovou výškou"
-
-#: Data/Input/default.xci:782 Data/Input/default.xci:1189
-msgid ""
-"Check\n"
-"list"
-msgstr ""
-"Povinné\n"
-"Úkony"
-
-#: Data/Input/default.xci:414 Data/Input/default.xci:1046
-msgid "Dropped marker"
+"Cruise\n"
+"Demo"
 msgstr ""
 
-#: Data/Input/default.xci:492 Data/Input/default.xci:1064
-msgid "Labels"
-msgstr "Popisky"
+#: Data/Input/default.xci:638 Data/Input/default.xci:1142
+msgid "Raw Logger"
+msgstr "Logovať NMEA dáta"
 
-#: Data/Input/default.xci:832
-msgid "Traffic List"
-msgstr ""
-
-#: Data/Input/default.xci:664
-msgid ""
-"Airframe\n"
-"Switches"
-msgstr ""
-
-#: Data/Input/default.xci:531 Data/Input/default.xci:581
-#: Data/Input/default.xci:623 Data/Input/default.xci:899
-msgid "Config"
-msgstr "Nastavenia"
+#: Data/Input/default.xci:645 Data/Input/default.xci:656
+#: Data/Input/default.xci:703
+msgid "Vega"
+msgstr "Vega"
 
 #: Data/Input/default.xci:380 Data/Input/default.xci:998
 msgid ""
@@ -9428,8 +9522,56 @@ msgstr ""
 "Zoznam\n"
 "ot. bodov"
 
-#: Data/Input/default.xci:514 Data/Input/default.xci:1086
-msgid "Topo."
+#: Data/Input/default.xci:710
+msgid "Vario ASI zeroed"
+msgstr ""
+
+#: Data/Input/default.xci:671
+msgid "Setup Audio"
+msgstr "Nastavenie zvuku"
+
+#: Data/Input/default.xci:1158
+msgid "Setup Plane"
+msgstr ""
+
+#: Data/Input/default.xci:417 Data/Input/default.xci:1049
+msgid ""
+"Mark\n"
+"Drop"
+msgstr "Vytvor značku na mape"
+
+#: Data/Input/default.xci:1111
+msgid ""
+"Setup\n"
+"Wind"
+msgstr ""
+"Nastavenie\n"
+"vetra"
+
+#: Data/Input/default.xci:459 Data/Input/default.xci:950
+#: Data/Input/default.xci:1039
+msgid "Zoom"
+msgstr "Zoom"
+
+#: Data/Input/default.xci:718
+msgid ""
+"Accel\n"
+"Zero"
+msgstr ""
+
+#: Data/Input/default.xci:832
+msgid "Traffic List"
+msgstr ""
+
+#: Data/Input/default.xci:531 Data/Input/default.xci:581
+#: Data/Input/default.xci:623 Data/Input/default.xci:899
+msgid "Config"
+msgstr "Nastavenia"
+
+#: Data/Input/default.xci:740
+msgid ""
+"Climb\n"
+"Demo"
 msgstr ""
 
 #: Data/Input/default.xci:121
@@ -9440,42 +9582,6 @@ msgstr ""
 "Vypnúť\n"
 "posun mapy"
 
-#: Data/Input/default.xci:710
-msgid "Vario ASI zeroed"
-msgstr ""
-
-#: Data/Input/default.xci:717
-msgid "Accelerometer leveled"
-msgstr ""
-
-#: Data/Input/default.xci:350 Data/Input/default.xci:399
-#: Data/Input/default.xci:885
-msgid "Nav"
-msgstr "Navigačné menu"
-
-#: Data/Input/default.xci:692
-msgid "Accel"
-msgstr ""
-
-#: Data/Input/default.xci:638 Data/Input/default.xci:1142
-msgid "Raw Logger"
-msgstr "Logovať NMEA dáta"
-
-#: Data/Input/default.xci:711
-msgid ""
-"ASI\n"
-"Zero"
-msgstr ""
-
-#: Data/Input/default.xci:725
-msgid "Stored to EEPROM"
-msgstr ""
-
-#: Data/Input/default.xci:645 Data/Input/default.xci:656
-#: Data/Input/default.xci:703
-msgid "Vega"
-msgstr "Vega"
-
 #: Data/Input/default.xci:1119
 msgid ""
 "Setup\n"
@@ -9484,92 +9590,39 @@ msgstr ""
 "Systémové\n"
 "nastavenia"
 
-#: Data/Input/default.xci:766 Data/Input/default.xci:1173
+#: Data/Input/default.xci:664
 msgid ""
-"METAR\n"
-"TAF"
+"Airframe\n"
+"Switches"
 msgstr ""
 
-#: Data/Input/default.xci:69
-msgid "Final glide through terrain"
-msgstr "Doklz skrz terén"
-
-#: Data/Input/default.xci:459 Data/Input/default.xci:950
-#: Data/Input/default.xci:1039
-msgid "Zoom"
-msgstr "Zoom"
-
-#: Data/Input/default.xci:685
+#: Data/Input/default.xci:1181
 msgid ""
-"Setup\n"
-"Stall"
+"Nearest\n"
+"Airspace"
+msgstr "Najbližší vzduš. priestor"
+
+#: Data/Input/default.xci:514 Data/Input/default.xci:1086
+msgid "Topo."
 msgstr ""
 
-#: Data/Input/default.xci:874
+#: Data/Input/default.xci:782 Data/Input/default.xci:1189
 msgid ""
-"Message\n"
-"Repeat"
+"Check\n"
+"list"
 msgstr ""
-"Opakuj\n"
-"správu"
+"Povinné\n"
+"Úkony"
 
-#: Data/Input/default.xci:678
+#: Data/Input/default.xci:1127
 msgid ""
-"Manual\n"
-"Demo"
-msgstr ""
-
-#: Data/Input/default.xci:128 Data/Input/default.xci:444
-#: Data/Input/default.xci:936
-msgid ""
-"Zoom\n"
-"In"
-msgstr "Priblíž"
-
-#: Data/Input/default.xci:718
-msgid ""
-"Accel\n"
-"Zero"
-msgstr ""
-
-#: Data/Input/default.xci:964
-msgid "AVG/ALT"
-msgstr ""
-
-#: Data/Input/default.xci:135 Data/Input/default.xci:451
-#: Data/Input/default.xci:943
-msgid ""
-"Zoom\n"
-"Out"
-msgstr "Oddiaľ"
-
-#: Data/Input/default.xci:740
-msgid ""
-"Climb\n"
-"Demo"
-msgstr ""
-
-#: Data/Input/default.xci:824
-msgid ""
-"Team\n"
-"Code"
-msgstr ""
-"Tímový\n"
-"kód"
+"Settings\n"
+"Airspace"
+msgstr "Nastavenie vzduš. priestorov"
 
 #: Data/Input/default.xci:758 Data/Input/default.xci:1165
 msgid "FLARM Radar"
 msgstr "FLARM Radar"
-
-#: Data/Input/default.xci:417 Data/Input/default.xci:1049
-msgid ""
-"Mark\n"
-"Drop"
-msgstr "Vytvor značku na mape"
-
-#: Data/Input/default.xci:48
-msgid "Takeoff"
-msgstr "Vzlet"
 
 #: Data/Input/default.xci:473 Data/Input/default.xci:1056
 msgid ""
@@ -9578,24 +9631,6 @@ msgid ""
 msgstr ""
 "Zapnúť\n"
 "posun mapy"
-
-#: Data/Input/default.xci:1103
-msgid ""
-"Flight\n"
-"Setup"
-msgstr ""
-"Zákl. letové\n"
-"nastavenia"
-
-#: Data/Input/default.xci:1158
-msgid "Setup Plane"
-msgstr ""
-
-#: Data/Input/default.xci:1127
-msgid ""
-"Settings\n"
-"Airspace"
-msgstr "Nastavenie vzduš. priestorov"
 
 #~ msgid "Height GPS"
 #~ msgstr "Výška GPS"
