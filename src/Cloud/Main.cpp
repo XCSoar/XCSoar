@@ -37,6 +37,7 @@ Copyright_License {
 
 #include <array>
 #include <iostream>
+#include <iomanip>
 
 using std::cout;
 using std::cerr;
@@ -47,6 +48,34 @@ operator<<(std::ostream &stream,
            const boost::asio::ip::udp::endpoint &endpoint)
 {
   return stream << endpoint.address().to_string();
+}
+
+template<char positive, char negative>
+struct GeoAngle : Angle {
+  constexpr GeoAngle(Angle _angle):Angle(_angle) {}
+};
+
+template<char positive, char negative>
+inline std::ostream &
+operator<<(std::ostream &stream, const GeoAngle<positive, negative> value)
+{
+  const auto dms = value.ToDMS();
+  return stream << std::setfill('0')
+                << dms.degrees << '.'
+                << std::setw(2) << dms.minutes << '.'
+                << std::setw(2) << dms.seconds
+                << (dms.negative ? negative : positive)
+                << std::setfill(' ');
+}
+
+inline std::ostream &
+operator<<(std::ostream &stream, const GeoPoint &p)
+{
+  return p.IsValid()
+    ? stream << GeoAngle<'S', 'N'>(p.latitude)
+             << '/'
+             << GeoAngle<'W', 'E'>(p.longitude)
+    : stream << '?';
 }
 
 class CloudServer final
@@ -133,7 +162,9 @@ CloudServer::DumpClients()
   for (const auto &client : clients) {
     cout << client.endpoint << '\t'
          << std::hex << client.key << std::dec << '\t'
-         << client.id << '\n';
+         << client.id << '\t'
+         << client.location << '\t'
+         << client.altitude << "m\n";
   }
 
   cout.flush();
