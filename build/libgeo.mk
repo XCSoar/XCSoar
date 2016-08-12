@@ -6,6 +6,7 @@ GEO_SRC_DIR = $(SRC)/Geo
 # global variables that needs explicit global initialisation
 
 GEO_SOURCES := \
+	$(GEO_SRC_DIR)/Boost/RangeBox.cpp \
 	$(GEO_SRC_DIR)/ConvexHull/GrahamScan.cpp \
 	$(GEO_SRC_DIR)/ConvexHull/PolygonInterior.cpp \
 	$(GEO_SRC_DIR)/Memento/DistanceMemento.cpp \
