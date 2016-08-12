@@ -42,6 +42,13 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
+inline std::ostream &
+operator<<(std::ostream &stream,
+           const boost::asio::ip::udp::endpoint &endpoint)
+{
+  return stream << endpoint.address().to_string();
+}
+
 class CloudServer final
   : public SkyLinesTracking::Server
 #ifdef __linux__
@@ -94,7 +101,7 @@ protected:
 
   void OnSendError(const boost::asio::ip::udp::endpoint &endpoint,
                    std::exception &&e) override {
-    cerr << "Failed to send to " << endpoint.address().to_string()
+    cerr << "Failed to send to " << endpoint
          << ": " << e.what()
          << endl;
   }
@@ -124,7 +131,7 @@ void
 CloudServer::DumpClients()
 {
   for (const auto &client : clients) {
-    cout << client.endpoint.address().to_string() << '\t'
+    cout << client.endpoint << '\t'
          << std::hex << client.key << '\t'
          << client.id << '\n';
   }
