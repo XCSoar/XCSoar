@@ -23,23 +23,23 @@ Copyright_License {
 
 #include "Client.hpp"
 
-ClientContainer::ClientContainer()
+CloudClientContainer::CloudClientContainer()
   :key_set(typename KeySet::bucket_traits(key_buckets, N_KEY_BUCKETS)) {}
 
-ClientContainer::~ClientContainer()
+CloudClientContainer::~CloudClientContainer()
 {
   clear();
 }
 
 void
-ClientContainer::clear()
+CloudClientContainer::clear()
 {
   while (!list.empty())
     Remove(list.back());
 }
 
-Client *
-ClientContainer::Find(uint64_t key)
+CloudClient *
+CloudClientContainer::Find(uint64_t key)
 {
   auto i = key_set.find(key, key_set.hash_function(), key_set.key_eq());
   return i != key_set.end()
@@ -47,17 +47,17 @@ ClientContainer::Find(uint64_t key)
     : nullptr;
 }
 
-Client &
-ClientContainer::Make(const boost::asio::ip::udp::endpoint &endpoint,
-                      uint64_t key,
-                      const GeoPoint &location, int altitude)
+CloudClient &
+CloudClientContainer::Make(const boost::asio::ip::udp::endpoint &endpoint,
+                           uint64_t key,
+                           const GeoPoint &location, int altitude)
 {
   KeySet::insert_commit_data hint;
   auto result = key_set.insert_check(key, key_set.hash_function(),
                                      key_set.key_eq(), hint);
   if (result.second) {
-    auto client = std::make_shared<Client>(endpoint, key, next_id++,
-                                           location, altitude);
+    auto client = std::make_shared<CloudClient>(endpoint, key, next_id++,
+                                                location, altitude);
     list.push_front(*client);
     key_set.insert(*client);
     id_set.push_back(*client);
@@ -71,8 +71,8 @@ ClientContainer::Make(const boost::asio::ip::udp::endpoint &endpoint,
 }
 
 void
-ClientContainer::Refresh(Client &client,
-                         const boost::asio::ip::udp::endpoint &endpoint)
+CloudClientContainer::Refresh(CloudClient &client,
+                              const boost::asio::ip::udp::endpoint &endpoint)
 {
   client.Refresh(endpoint);
 
@@ -81,9 +81,9 @@ ClientContainer::Refresh(Client &client,
 }
 
 void
-ClientContainer::Refresh(Client &client,
-                         const boost::asio::ip::udp::endpoint &endpoint,
-                         const GeoPoint &location, int altitude)
+CloudClientContainer::Refresh(CloudClient &client,
+                              const boost::asio::ip::udp::endpoint &endpoint,
+                              const GeoPoint &location, int altitude)
 {
   Refresh(client, endpoint);
 
@@ -97,7 +97,7 @@ ClientContainer::Refresh(Client &client,
 }
 
 void
-ClientContainer::Remove(Client &client)
+CloudClientContainer::Remove(CloudClient &client)
 {
   list.erase(list.iterator_to(client));
   key_set.erase(key_set.iterator_to(client));
@@ -106,7 +106,7 @@ ClientContainer::Remove(Client &client)
 }
 
 void
-ClientContainer::Expire(std::chrono::steady_clock::time_point before)
+CloudClientContainer::Expire(std::chrono::steady_clock::time_point before)
 {
   while (!list.empty() && list.back().stamp < before)
     Remove(list.back());
@@ -136,8 +136,8 @@ RangeBox(const GeoPoint location, double range)
   return {GeoPoint(west, south), GeoPoint(east, north)};
 }
 
-ClientContainer::query_iterator_range
-ClientContainer::QueryWithinRange(GeoPoint location, double range) const
+CloudClientContainer::query_iterator_range
+CloudClientContainer::QueryWithinRange(GeoPoint location, double range) const
 {
   const auto q = boost::geometry::index::intersects(RangeBox(location, range));
   return {rtree.qbegin(q), rtree.qend()};

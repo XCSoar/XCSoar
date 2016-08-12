@@ -55,7 +55,7 @@ class CloudServer final
   , SignalListener
 #endif
 {
-  ClientContainer clients;
+  CloudClientContainer clients;
 
   boost::asio::steady_timer expire_timer;
 
