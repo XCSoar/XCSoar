@@ -323,7 +323,8 @@ CloudServer::OnWaveSubmit(const Client &c,
        << client->id << '\t'
        << a << '\t'
        << b << '\t'
-       << bottom_altitude << '-' << top_altitude << 'm'
+       << bottom_altitude << '-' << top_altitude << "m\t"
+       << lift << "m/s"
        << endl;
 }
 
@@ -347,7 +348,8 @@ CloudServer::OnThermalSubmit(const Client &c,
        << std::hex << client->key << std::dec << '\t'
        << client->id << '\t'
        << top_location << '\t'
-       << bottom_altitude << '-' << top_altitude << 'm'
+       << bottom_altitude << '-' << top_altitude << "m\t"
+       << lift << "m/s"
        << endl;
 }
 
