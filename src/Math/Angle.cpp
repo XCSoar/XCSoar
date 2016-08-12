@@ -25,20 +25,23 @@ Copyright_License {
 
 #include <assert.h>
 
-void
-Angle::ToDMS(unsigned &dd, unsigned &mm, unsigned &ss, bool &is_positive) const
+Angle::DMS
+Angle::ToDMS() const
 {
-  is_positive = value >= 0;
+  DMS dms;
+  dms.negative = value < 0;
 
   unsigned value = lround(AbsoluteDegrees() * 3600);
 
-  ss = value % 60;
+  dms.seconds = value % 60;
   value /= 60;
 
-  mm = value % 60;
+  dms.minutes = value % 60;
   value /= 60;
 
-  dd = value;
+  dms.degrees = value;
+
+  return dms;
 }
 
 void

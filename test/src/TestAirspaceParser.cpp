@@ -115,19 +115,19 @@ TestOpenAir()
 
       ok1(equals(points[0].GetLocation(),
                  Angle::DMS(1, 30, 30),
-                 Angle::DMS(1, 30, 30).Flipped()));
+                 Angle::DMS(1, 30, 30, true)));
       ok1(equals(points[1].GetLocation(),
                  Angle::DMS(1, 30, 30),
                  Angle::DMS(1, 30, 30)));
       ok1(equals(points[2].GetLocation(),
-                 Angle::DMS(1, 30, 30).Flipped(),
+                 Angle::DMS(1, 30, 30, true),
                  Angle::DMS(1, 30, 30)));
       ok1(equals(points[3].GetLocation(),
-                 Angle::DMS(1, 30, 30).Flipped(),
-                 Angle::DMS(1, 30, 30).Flipped()));
+                 Angle::DMS(1, 30, 30, true),
+                 Angle::DMS(1, 30, 30, true)));
       ok1(equals(points[4].GetLocation(),
                  Angle::DMS(1, 30, 30),
-                 Angle::DMS(1, 30, 30).Flipped()));
+                 Angle::DMS(1, 30, 30, true)));
     } else if (StringIsEqual(_T("Radio-Test"), airspace.GetName())) {
       ok1(StringIsEqual(_T("130.125 MHz"), airspace.GetRadioText().c_str()));
     } else if (StringIsEqual(_T("Height-Test-1"), airspace.GetName())) {
@@ -223,19 +223,19 @@ TestTNP()
 
       ok1(equals(points[0].GetLocation(),
                  Angle::DMS(1, 30, 30),
-                 Angle::DMS(1, 30, 30).Flipped()));
+                 Angle::DMS(1, 30, 30, true)));
       ok1(equals(points[1].GetLocation(),
                  Angle::DMS(1, 30, 30),
                  Angle::DMS(1, 30, 30)));
       ok1(equals(points[2].GetLocation(),
-                 Angle::DMS(1, 30, 30).Flipped(),
+                 Angle::DMS(1, 30, 30, true),
                  Angle::DMS(1, 30, 30)));
       ok1(equals(points[3].GetLocation(),
-                 Angle::DMS(1, 30, 30).Flipped(),
-                 Angle::DMS(1, 30, 30).Flipped()));
+                 Angle::DMS(1, 30, 30, true),
+                 Angle::DMS(1, 30, 30, true)));
       ok1(equals(points[4].GetLocation(),
                  Angle::DMS(1, 30, 30),
-                 Angle::DMS(1, 30, 30).Flipped()));
+                 Angle::DMS(1, 30, 30, true)));
     } else if (StringIsEqual(_T("Radio-Test"), airspace.GetName())) {
       ok1(StringIsEqual(_T("130.125 MHz"), airspace.GetRadioText().c_str()));
     } else if (StringIsEqual(_T("Height-Test-1"), airspace.GetName())) {

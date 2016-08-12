@@ -121,9 +121,29 @@ public:
     return value * 24 / M_2PI;
   }
 
-  constexpr
-  static Angle DMS(unsigned d, unsigned m, unsigned s) {
-    return Angle::Degrees(d + m / 60. + s / 3600.);
+  struct DMS {
+    unsigned degrees, minutes, seconds;
+    bool negative;
+
+    DMS() = default;
+
+    constexpr DMS(unsigned d, unsigned m=0, unsigned s=0, bool n=false)
+      :degrees(d), minutes(m), seconds(s), negative(n) {}
+
+    constexpr double ToAbsoluteFloat() const {
+      return degrees + minutes / 60. + seconds / 3600.;
+    }
+
+    constexpr double ToFloat() const {
+      return negative ? -ToAbsoluteFloat() : ToAbsoluteFloat();
+    }
+  };
+
+  constexpr Angle(DMS dms):Angle(Degrees(dms.ToFloat())) {}
+
+  static constexpr Angle FromDMS(unsigned d, unsigned m=0, unsigned s=0,
+                                 bool n=false) {
+    return DMS(d, m, s, n);
   }
 
   /**
@@ -135,8 +155,8 @@ public:
    * @param ss Seconds (pointer)
    * @param east True if East, False if West (pointer)
    */
-  void ToDMS(unsigned &dd, unsigned &mm, unsigned &ss,
-             bool &is_positive) const;
+  gcc_pure
+  DMS ToDMS() const;
 
   /**
    * Converts this Angle to degrees, minute, decimal minutes and a

@@ -42,23 +42,19 @@ GenerateNMEA(TextWriter &writer,
   time -= minute * 60;
   unsigned second = time;
 
-  unsigned lat_d, lat_m, lat_s;
-  bool lat_sign;
-  loc.latitude.ToDMS(lat_d, lat_m, lat_s, lat_sign);
-  double lat_ms = lat_m + lat_s / 60.;
+  const auto lat = loc.latitude.ToDMS();
+  double lat_ms = lat.minutes + lat.seconds / 60.;
 
-  unsigned lon_d, lon_m, lon_s;
-  bool lon_sign;
-  loc.longitude.ToDMS(lon_d, lon_m, lon_s, lon_sign);
-  double lon_ms = lon_m + lon_s / 60.;
+  const auto lon = loc.longitude.ToDMS();
+  double lon_ms = lon.minutes + lon.seconds / 60.;
 
   NarrowString<256> gprmc("$GPRMC");
   gprmc.AppendFormat(",%02d%02d%02d", hour, minute, second);
   gprmc.append(",A");
-  gprmc.AppendFormat(",%02d%06.3f", lat_d, lat_ms);
-  gprmc.append(lat_sign ? ",N" : ",S");
-  gprmc.AppendFormat(",%03d%06.3f", lon_d, lon_ms);
-  gprmc.append(lon_sign ? ",E" : ",W");
+  gprmc.AppendFormat(",%02d%06.3f", lat.degrees, lat_ms);
+  gprmc.append(lat.negative ? ",S" : ",N");
+  gprmc.AppendFormat(",%03d%06.3f", lon.degrees, lon_ms);
+  gprmc.append(lon.negative ? ",W" : ",E");
   gprmc.AppendFormat(",%.0f", (double)Units::ToUserUnit(speed, Unit::KNOTS));
   gprmc.AppendFormat(",%.0f", (double)bearing.Degrees());
   AppendNMEAChecksum(gprmc.buffer());
@@ -68,10 +64,10 @@ GenerateNMEA(TextWriter &writer,
 
   NarrowString<256> gpgga("$GPGGA");
   gpgga.AppendFormat(",%02d%02d%02d", hour, minute, second);
-  gpgga.AppendFormat(",%02d%06.3f", lat_d, lat_ms);
-  gpgga.append(lat_sign ? ",N" : ",S");
-  gpgga.AppendFormat(",%03d%06.3f", lon_d, lon_ms);
-  gpgga.append(lon_sign ? ",E" : ",W");
+  gpgga.AppendFormat(",%02d%06.3f", lat.degrees, lat_ms);
+  gprmc.append(lat.negative ? ",S" : ",N");
+  gpgga.AppendFormat(",%03d%06.3f", lon.degrees, lon_ms);
+  gprmc.append(lon.negative ? ",W" : ",E");
   gpgga.append(",1,,");
   gpgga.AppendFormat(",%.0f,m", (double)alt);
   AppendNMEAChecksum(gpgga.buffer());

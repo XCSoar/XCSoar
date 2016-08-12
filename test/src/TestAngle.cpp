@@ -72,7 +72,7 @@ int main(int argc, char **argv)
   ok1(equals(Angle::Degrees(-90).Hours(), -6));
 
   // Test DMS()
-  ok1(equals(Angle::DMS(90, 30, 15).Degrees(),
+  ok1(equals(Angle::FromDMS(90, 30, 15).Degrees(),
              90.504166667));
 
   // Test AbsoluteDegrees()
