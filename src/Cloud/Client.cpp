@@ -90,6 +90,7 @@ CloudClientContainer::Refresh(CloudClient &client,
   if (location != client.location) {
     auto ptr = client.shared_from_this();
     rtree.remove(ptr);
+    client.location = location;
     rtree.insert(ptr);
   }
 
