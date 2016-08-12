@@ -40,45 +40,45 @@ public:
 
   struct Level {
     /** Environmental temperature in K */
-    double airTemp;
+    double air_temperature;
     /** DewPoint in K */
     double dewpoint;
     /** Dry temperature in K */
-    double tempDry;
+    double dry_temperature;
     /** ThermalIndex in K */
-    double thermalIndex;
+    double thermal_index;
 
     void UpdateTemps(double humidity, double temperature);
     void UpdateThermalIndex(double h_agl, double max_ground_temperature);
 
     /** Number of measurements */
-    unsigned nmeasurements;
+    unsigned n_measurements;
 
     /** Estimated ThermalHeight with data of this level */
-    double thermalHeight;
+    double thermal_height;
     /** Estimated CloudBase with data of this level */
-    double cloudBase;
+    double cloud_base;
 
     bool empty() const {
-      return nmeasurements == 0;
+      return n_measurements == 0;
     }
 
     void Reset() {
-      nmeasurements = 0;
+      n_measurements = 0;
     }
   };
 
   /** Expected temperature maximum on the ground */
-  double maxGroundTemperature;
+  double max_ground_temperature;
   /** Height of ground above MSL */
-  double hGround;
+  double ground_height;
   unsigned short last_level;
   Level cslevels[NUM_LEVELS];
 
   /** Estimated ThermailHeight */
-  double thermalHeight;
+  double thermal_height;
   /** Estimated CloudBase */
-  double cloudBase;
+  double cloud_base;
 
   void Reset();
 

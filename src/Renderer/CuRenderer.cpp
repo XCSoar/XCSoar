@@ -43,8 +43,8 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
 
   int hmin = 10000;
   int hmax = -10000;
-  auto tmin = cu_sonde.maxGroundTemperature;
-  auto tmax = cu_sonde.maxGroundTemperature;
+  auto tmin = cu_sonde.max_ground_temperature;
+  auto tmax = cu_sonde.max_ground_temperature;
 
   // find range for scaling of graph
   for (unsigned i = 0; i < cu_sonde.NUM_LEVELS - 1u; i++) {
@@ -54,11 +54,11 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
     hmin = min(hmin, (int)i);
     hmax = max(hmax, (int)i);
 
-    tmin = min(tmin, min(cu_sonde.cslevels[i].tempDry,
-                         min(cu_sonde.cslevels[i].airTemp,
+    tmin = min(tmin, min(cu_sonde.cslevels[i].dry_temperature,
+                         min(cu_sonde.cslevels[i].air_temperature,
                              cu_sonde.cslevels[i].dewpoint)));
-    tmax = max(tmax, max(cu_sonde.cslevels[i].tempDry,
-                         max(cu_sonde.cslevels[i].airTemp,
+    tmax = max(tmax, max(cu_sonde.cslevels[i].dry_temperature,
+                         max(cu_sonde.cslevels[i].air_temperature,
                              cu_sonde.cslevels[i].dewpoint)));
   }
 
@@ -85,12 +85,12 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
 
     ipos++;
 
-    chart.DrawLine(Units::ToUserTemperature(cu_sonde.cslevels[i].tempDry), i,
-                   Units::ToUserTemperature(cu_sonde.cslevels[i + 1].tempDry), i + 1,
+    chart.DrawLine(Units::ToUserTemperature(cu_sonde.cslevels[i].dry_temperature), i,
+                   Units::ToUserTemperature(cu_sonde.cslevels[i + 1].dry_temperature), i + 1,
                    ChartLook::STYLE_REDTHICKDASH);
 
-    chart.DrawLine(Units::ToUserTemperature(cu_sonde.cslevels[i].airTemp), i,
-                   Units::ToUserTemperature(cu_sonde.cslevels[i + 1].airTemp), i + 1,
+    chart.DrawLine(Units::ToUserTemperature(cu_sonde.cslevels[i].air_temperature), i,
+                   Units::ToUserTemperature(cu_sonde.cslevels[i + 1].air_temperature), i + 1,
                    ChartLook::STYLE_BLACK);
 
     chart.DrawLine(Units::ToUserTemperature(cu_sonde.cslevels[i].dewpoint), i,
@@ -100,11 +100,11 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
     if (ipos > 2) {
       if (!labelDry) {
         chart.DrawLabel(_T("DALR"),
-            Units::ToUserTemperature(cu_sonde.cslevels[i + 1].tempDry), i);
+            Units::ToUserTemperature(cu_sonde.cslevels[i + 1].dry_temperature), i);
         labelDry = true;
       } else if (!labelAir) {
         chart.DrawLabel(_T("Air"),
-            Units::ToUserTemperature(cu_sonde.cslevels[i + 1].airTemp), i);
+            Units::ToUserTemperature(cu_sonde.cslevels[i + 1].air_temperature), i);
         labelAir = true;
       } else if (!labelDew) {
         chart.DrawLabel(_T("Dew"),
@@ -123,9 +123,9 @@ TemperatureChartCaption(TCHAR *sTmp, const CuSonde &cu_sonde)
 {
   StringFormatUnsafe(sTmp, _T("%s:\r\n  %5.0f %s\r\n\r\n%s:\r\n  %5.0f %s\r\n"),
                      _("Thermal height"),
-                     (double)Units::ToUserAltitude(cu_sonde.thermalHeight),
+                     (double)Units::ToUserAltitude(cu_sonde.thermal_height),
                      Units::GetAltitudeName(),
                      _("Cloud base"),
-                     (double)Units::ToUserAltitude(cu_sonde.cloudBase),
+                     (double)Units::ToUserAltitude(cu_sonde.cloud_base),
                      Units::GetAltitudeName());
 }

@@ -48,10 +48,10 @@ void
 CuSonde::Reset()
 {
   last_level = 0;
-  thermalHeight = 0;
-  cloudBase = 0;
-  hGround = 0;
-  maxGroundTemperature = CelsiusToKelvin(25);
+  thermal_height = 0;
+  cloud_base = 0;
+  ground_height = 0;
+  max_ground_temperature = CelsiusToKelvin(25);
 
   for (unsigned i = 0; i < NUM_LEVELS; ++i)
     cslevels[i].Reset();
@@ -66,23 +66,23 @@ CuSonde::Reset()
 void
 CuSonde::SetForecastTemperature(double val)
 {
-  if (maxGroundTemperature == val)
+  if (max_ground_temperature == val)
     return;
 
-  maxGroundTemperature = val;
+  max_ground_temperature = val;
 
   unsigned zlevel = 0;
 
   // set these to invalid, so old values must be overwritten
-  cloudBase = -1;
-  thermalHeight = -1;
+  cloud_base = -1;
+  thermal_height = -1;
 
   // iterate through all levels
-  auto h_agl = -CuSonde::hGround;
+  auto h_agl = -CuSonde::ground_height;
   for (unsigned level = 0; level < NUM_LEVELS; level++, h_agl += HEIGHT_STEP) {
     // update the ThermalIndex for each level with
-    // the new maxGroundTemperature
-    cslevels[level].UpdateThermalIndex(h_agl, maxGroundTemperature);
+    // the new max_ground_temperature
+    cslevels[level].UpdateThermalIndex(h_agl, max_ground_temperature);
 
     // determine to which level measurements are available
     if (!cslevels[level].empty())
@@ -141,15 +141,15 @@ CuSonde::UpdateMeasurements(const NMEAInfo &basic,
     return;
 
   // calculate ground height
-  hGround = calculated.altitude_agl;
+  ground_height = calculated.altitude_agl;
 
   // if (going up)
   if (level > last_level) {
     // we round down (level) because of potential lag of temp sensor
     cslevels[level].UpdateTemps(basic.humidity, basic.temperature);
 
-    auto h_agl = level * HEIGHT_STEP - hGround;
-    cslevels[level].UpdateThermalIndex(h_agl, maxGroundTemperature);
+    auto h_agl = level * HEIGHT_STEP - ground_height;
+    cslevels[level].UpdateThermalIndex(h_agl, max_ground_temperature);
 
     if (level > 0) {
       FindThermalHeight((unsigned short)(level - 1));
@@ -161,8 +161,8 @@ CuSonde::UpdateMeasurements(const NMEAInfo &basic,
     // we round up (level+1) because of potential lag of temp sensor
     cslevels[level + 1].UpdateTemps(basic.humidity, basic.temperature);
 
-    auto h_agl = (level + 1) * HEIGHT_STEP - hGround;
-    cslevels[level + 1].UpdateThermalIndex(h_agl, maxGroundTemperature);
+    auto h_agl = (level + 1) * HEIGHT_STEP - ground_height;
+    cslevels[level + 1].UpdateThermalIndex(h_agl, max_ground_temperature);
 
     if (level < NUM_LEVELS - 1) {
       FindThermalHeight(level);
@@ -187,10 +187,10 @@ CuSonde::FindThermalHeight(unsigned short level)
     return;
 
   // Delta of ThermalIndex
-  auto dti = cslevels[level + 1].thermalIndex - cslevels[level].thermalIndex;
+  auto dti = cslevels[level + 1].thermal_index - cslevels[level].thermal_index;
 
   // Reset estimated ThermalHeight
-  cslevels[level].thermalHeight = -1;
+  cslevels[level].thermal_height = -1;
 
   if (fabs(dti) < 0.001)
     return;
@@ -198,7 +198,7 @@ CuSonde::FindThermalHeight(unsigned short level)
   // ti = dlevel * dti + ti0;
   // (-1.6 - ti0)/dti = dlevel;
 
-  auto dlevel = (TITHRESHOLD - cslevels[level].thermalIndex) / dti;
+  auto dlevel = (TITHRESHOLD - cslevels[level].thermal_index) / dti;
   auto dthermalheight = (level + dlevel) * HEIGHT_STEP;
 
   if (dlevel > 1
@@ -209,10 +209,10 @@ CuSonde::FindThermalHeight(unsigned short level)
 
   if (dlevel > 0) {
     // set the level thermal height to the calculated value
-    cslevels[level].thermalHeight = dthermalheight;
+    cslevels[level].thermal_height = dthermalheight;
 
     // set the overall thermal height to the calculated value
-    thermalHeight = dthermalheight;
+    thermal_height = dthermalheight;
   }
 }
 
@@ -229,11 +229,11 @@ CuSonde::FindCloudBase(unsigned short level)
   if (cslevels[level].empty())
     return;
 
-  auto dti = (cslevels[level + 1].tempDry - cslevels[level + 1].dewpoint)
-               - (cslevels[level].tempDry - cslevels[level].dewpoint);
+  auto dti = (cslevels[level + 1].dry_temperature - cslevels[level + 1].dewpoint)
+               - (cslevels[level].dry_temperature - cslevels[level].dewpoint);
 
   // Reset estimated CloudBase
-  cslevels[level].cloudBase = -1;
+  cslevels[level].cloud_base = -1;
 
   if (fabs(dti) < 0.001)
     return;
@@ -241,7 +241,7 @@ CuSonde::FindCloudBase(unsigned short level)
   // ti = dlevel * dti + ti0;
   // (-3 - ti0)/dti = dlevel;
 
-  auto dlevel = -(cslevels[level].tempDry - cslevels[level].dewpoint) / dti;
+  auto dlevel = -(cslevels[level].dry_temperature - cslevels[level].dewpoint) / dti;
   auto dcloudbase = (level + dlevel) * HEIGHT_STEP;
 
   if (dlevel > 1
@@ -252,10 +252,10 @@ CuSonde::FindCloudBase(unsigned short level)
 
   if (dlevel > 0) {
     // set the level cloudbase to the calculated value
-    cslevels[level].cloudBase = dcloudbase;
+    cslevels[level].cloud_base = dcloudbase;
 
     // set the overall cloudbase to the calculated value
-    cloudBase = dcloudbase;
+    cloud_base = dcloudbase;
   }
 }
 
@@ -274,13 +274,13 @@ CuSonde::Level::UpdateTemps(double humidity, double temperature)
   // update statistics
   if (empty()) {
     dewpoint = _dewpoint;
-    airTemp = temperature;
+    air_temperature = temperature;
   } else {
     dewpoint = (_dewpoint + dewpoint) / 2;
-    airTemp = (temperature + airTemp) / 2;
+    air_temperature = (temperature + air_temperature) / 2;
   }
 
-  nmeasurements++;
+  ++n_measurements;
 }
 
 /**
@@ -295,10 +295,10 @@ void
 CuSonde::Level::UpdateThermalIndex(double h_agl, double max_ground_temperature)
 {
   // Calculate the dry temperature at altitude = hlevel
-  tempDry = DALR * h_agl + max_ground_temperature;
+  dry_temperature = DALR * h_agl + max_ground_temperature;
 
   // Calculate ThermalIndex
-  thermalIndex = airTemp - tempDry;
+  thermal_index = air_temperature - dry_temperature;
 }
 
 /*
