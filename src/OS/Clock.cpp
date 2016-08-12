@@ -104,6 +104,40 @@ MonotonicClockUS()
 #endif /* !HAVE_POSIX */
 }
 
+double
+MonotonicClockFloat()
+{
+#if defined(HAVE_POSIX) && !defined(__CYGWIN__)
+#ifdef CLOCK_MONOTONIC
+  struct timespec ts;
+  clock_gettime(CLOCK_MONOTONIC, &ts);
+  return ts.tv_sec + double(ts.tv_nsec) / 1000000000.;
+#elif defined(__APPLE__) /* OS X does not define CLOCK_MONOTONIC */
+  static mach_timebase_info_data_t base;
+  if (base.denom == 0)
+    (void)mach_timebase_info(&base);
+
+  return mach_absolute_time() * double(base.numer) / double(base.denom);
+#else
+  /* we have no monotonic clock, fall back to gettimeofday() */
+  struct timeval tv;
+  gettimeofday(&tv, 0);
+  return tv.tv_sec + double(tv.tv_usec) / 1000000.;
+#endif
+#else /* !HAVE_POSIX */
+  LARGE_INTEGER l_value, l_frequency;
+
+  if (!::QueryPerformanceCounter(&l_value) ||
+      !::QueryPerformanceFrequency(&l_frequency))
+    return 0;
+
+  uint64_t value = l_value.QuadPart;
+  uint64_t frequency = l_frequency.QuadPart;
+
+  return double(value) / double(frequency);
+#endif /* !HAVE_POSIX */
+}
+
 int
 GetSystemUTCOffset()
 {

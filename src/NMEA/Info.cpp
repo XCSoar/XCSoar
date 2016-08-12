@@ -53,7 +53,7 @@ GPSState::Expire(double now)
 void
 NMEAInfo::UpdateClock()
 {
-  clock = MonotonicClockMS() / 1000.;
+  clock = MonotonicClockFloat();
 }
 
 BrokenDateTime

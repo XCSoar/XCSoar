@@ -190,13 +190,13 @@ Java_org_xcsoar_InternalGPS_setConnected(JNIEnv *env, jobject obj,
     break;
 
   case 1: /* waiting for fix */
-    basic.alive.Update(MonotonicClockMS() / 1000.);
+    basic.alive.Update(MonotonicClockFloat());
     basic.gps.nonexpiring_internal_gps = true;
     basic.location_available.Clear();
     break;
 
   case 2: /* connected */
-    basic.alive.Update(MonotonicClockMS() / 1000.);
+    basic.alive.Update(MonotonicClockFloat());
     basic.gps.nonexpiring_internal_gps = true;
     break;
   }

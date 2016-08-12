@@ -43,6 +43,14 @@ uint64_t
 MonotonicClockUS();
 
 /**
+ * Returns the value of a monotonic clock in seconds as a floating
+ * point value.
+ */
+gcc_pure
+double
+MonotonicClockFloat();
+
+/**
  * Query the UTC offset from the OS.
  *
  * @return the offset in seconds
