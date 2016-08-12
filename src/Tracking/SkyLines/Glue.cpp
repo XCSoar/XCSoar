@@ -202,7 +202,7 @@ SkyLinesTracking::Glue::SetSettings(const Settings &settings)
     cloud_client.SetKey(settings.cloud_key);
     if (!cloud_client.IsDefined())
       // TODO: change hard-coded IP address to "cloud.xcsoar.net"
-      cloud_client.Open(IPv4Address(78, 47, 110, 205,
+      cloud_client.Open(IPv4Address(138, 201, 185, 127,
                                     Client::GetDefaultPort()));
   } else
     cloud_client.Close();
