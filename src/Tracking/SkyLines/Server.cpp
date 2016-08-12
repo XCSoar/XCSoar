@@ -90,10 +90,16 @@ Server::OnDatagramReceived(Client &&client,
 
   switch ((Type)FromBE16(header.type)) {
   case PING:
+    if (length < sizeof(ping))
+      return;
+
     OnPing(client, FromBE16(ping.id));
     break;
 
   case FIX:
+    if (length < sizeof(fix))
+      return;
+
     OnFix(client,
           ImportTimeMs(fix.time),
           fix.flags & ToBE32(FixPacket::FLAG_LOCATION)
@@ -105,16 +111,25 @@ Server::OnDatagramReceived(Client &&client,
     break;
 
   case TRAFFIC_REQUEST:
+    if (length < sizeof(traffic))
+      return;
+
     OnTrafficRequest(client,
                      traffic.flags & ToBE32(TrafficRequestPacket::FLAG_NEAR));
     break;
 
   case USER_NAME_REQUEST:
+    if (length < sizeof(user_name))
+      return;
+
     OnUserNameRequest(client,
                       FromBE32(user_name.user_id));
     break;
 
   case WAVE_SUBMIT:
+    if (length < sizeof(wave))
+      return;
+
     OnWaveSubmit(client,
                  ImportTimeMs(wave.time),
                  ImportGeoPoint(wave.a), ImportGeoPoint(wave.b),
@@ -128,6 +143,9 @@ Server::OnDatagramReceived(Client &&client,
     break;
 
   case THERMAL_SUBMIT:
+    if (length < sizeof(thermal))
+      return;
+
     OnThermalSubmit(client,
                     ImportTimeMs(thermal.time),
                     ImportGeoPoint(thermal.bottom_location),
