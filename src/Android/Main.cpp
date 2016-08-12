@@ -35,7 +35,6 @@ Copyright_License {
 #include "NativePortListener.hpp"
 #include "NativeInputListener.hpp"
 #include "TextUtil.hpp"
-#include "LogCat.hpp"
 #include "Product.hpp"
 #include "Nook.hpp"
 #include "Language/Language.hpp"
@@ -191,13 +190,6 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   return Startup();
 }
 
-void
-OnLogCatFinished(bool crash_found)
-{
-  if (crash_found)
-    CommonInterface::main_window->SendCrash();
-}
-
 gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_runNative(JNIEnv *env, jobject obj)
@@ -205,8 +197,6 @@ Java_org_xcsoar_NativeView_runNative(JNIEnv *env, jobject obj)
   InitThreadDebug();
 
   OpenGL::Initialise();
-
-  CheckLogCat(*asio_thread);
 
   CommonInterface::main_window->RunEventLoop();
 }
@@ -220,8 +210,6 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   if (IsNookSimpleTouch()) {
     Nook::ExitFastMode();
   }
-
-  StopLogCat();
 
   InitThreadDebug();
 

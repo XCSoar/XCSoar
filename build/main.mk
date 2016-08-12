@@ -736,7 +736,6 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/DownloadManager.cpp \
 	$(SRC)/Android/Vibrator.cpp \
 	$(SRC)/Android/Context.cpp \
-	$(SRC)/Android/LogCat.cpp \
 	$(SRC)/Android/NativeBMP085Listener.cpp \
 	$(SRC)/Android/BMP085Device.cpp \
 	$(SRC)/Android/NativeI2CbaroListener.cpp \
