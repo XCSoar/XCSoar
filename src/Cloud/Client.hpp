@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_CLOUD_CLIENT_HPP
 #define XCSOAR_CLOUD_CLIENT_HPP
 
-#include "Geo/BoostGeoPoint.hpp"
+#include "Geo/Boost/GeoPoint.hpp"
 
 #include <boost/intrusive/list.hpp>
 #include <boost/intrusive/set.hpp>

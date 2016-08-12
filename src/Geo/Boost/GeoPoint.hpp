@@ -23,7 +23,7 @@
 #ifndef XCSOAR_BOOST_GEO_POINT_HPP
 #define XCSOAR_BOOST_GEO_POINT_HPP
 
-#include "GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 
 #include <boost/geometry/geometries/register/point.hpp>
 #include <boost/geometry/geometries/concepts/point_concept.hpp>
