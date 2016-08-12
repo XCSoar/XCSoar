@@ -180,7 +180,15 @@ CloudServer::OnFix(const Client &c,
   if (location.IsValid()) {
     bool was_empty = clients.empty();
 
-    clients.Make(c.endpoint, c.key, location, altitude);
+    auto &client = clients.Make(c.endpoint, c.key, location, altitude);
+
+    cout << "FIX\t"
+         << client.endpoint << '\t'
+         << std::hex << client.key << std::dec << '\t'
+         << client.id << '\t'
+         << client.location << '\t'
+         << client.altitude << 'm'
+         << endl;
 
     if (was_empty)
       ScheduleExpire();
