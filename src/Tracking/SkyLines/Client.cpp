@@ -179,7 +179,7 @@ inline void
 SkyLinesTracking::Client::OnUserNameReceived(const UserNameResponsePacket &packet,
                                              size_t length)
 {
-  if (length != sizeof(packet) + packet.name_length)
+  if (length < sizeof(packet) || length != sizeof(packet) + packet.name_length)
     return;
 
   /* the name follows the UserNameResponsePacket object */
@@ -263,7 +263,8 @@ SkyLinesTracking::Client::OnDatagramReceived(void *data, size_t length)
     break;
 
   case ACK:
-    handler->OnAck(FromBE16(ack.id));
+    if (length >= sizeof(ack))
+      handler->OnAck(FromBE16(ack.id));
     break;
 
   case TRAFFIC_RESPONSE:
