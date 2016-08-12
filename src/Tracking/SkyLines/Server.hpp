@@ -44,7 +44,15 @@ class Server {
   boost::asio::ip::udp::socket socket;
 
   uint8_t buffer[4096];
-  boost::asio::ip::udp::endpoint sender_endpoint;
+
+public:
+  struct Client {
+    boost::asio::ip::udp::endpoint endpoint;
+    uint64_t key;
+  };
+
+private:
+  Client client_buffer;
 
 public:
   Server(boost::asio::io_service &io_service,
@@ -76,42 +84,31 @@ public:
   }
 
 private:
-  void OnDatagramReceived(const boost::asio::ip::udp::endpoint &sender,
-                          void *data, size_t length);
+  void OnDatagramReceived(Client &&client, void *data, size_t length);
   void OnReceive(const boost::system::error_code &ec, size_t size);
   void AsyncReceive();
 
 protected:
-  virtual void OnPing(const boost::asio::ip::udp::endpoint &sender,
-                      uint64_t key,
-                      unsigned id);
+  virtual void OnPing(const Client &client, unsigned id);
 
-  virtual void OnFix(const boost::asio::ip::udp::endpoint &sender,
-                     uint64_t key,
+  virtual void OnFix(const Client &client,
                      std::chrono::milliseconds time_of_day,
                      const ::GeoPoint &location, int altitude) {}
 
-  virtual void OnTrafficRequest(const boost::asio::ip::udp::endpoint &sender,
-                                uint64_t key,
-                                bool near) {}
+  virtual void OnTrafficRequest(const Client &client, bool near) {}
 
-  virtual void OnUserNameRequest(const boost::asio::ip::udp::endpoint &sender,
-                                 uint64_t key,
-                                 uint32_t user_id) {}
+  virtual void OnUserNameRequest(const Client &client, uint32_t user_id) {}
 
-  virtual void OnWaveSubmit(const boost::asio::ip::udp::endpoint &sender,
-                            uint64_t key,
+  virtual void OnWaveSubmit(const Client &client,
                             std::chrono::milliseconds time_of_day,
                             const ::GeoPoint &a, const ::GeoPoint &b,
                             int bottom_altitude,
                             int top_altitude,
                             double lift) {}
 
-  virtual void OnWaveRequest(const boost::asio::ip::udp::endpoint &sender,
-                             uint64_t key) {}
+  virtual void OnWaveRequest(const Client &client) {}
 
-  virtual void OnThermalSubmit(const boost::asio::ip::udp::endpoint &sender,
-                               uint64_t key,
+  virtual void OnThermalSubmit(const Client &client,
                                std::chrono::milliseconds time_of_day,
                                const ::GeoPoint &bottom_location,
                                int bottom_altitude,
@@ -119,8 +116,7 @@ protected:
                                int top_altitude,
                                double lift) {}
 
-  virtual void OnThermalRequest(const boost::asio::ip::udp::endpoint &sender,
-                                uint64_t key) {}
+  virtual void OnThermalRequest(const Client &client) {}
 
   /**
    * An error has occurred while sending a response to a client.  This

@@ -85,13 +85,11 @@ private:
 
 protected:
   /* virtual methods from class SkyLinesTracking::Server */
-  void OnFix(const boost::asio::ip::udp::endpoint &sender,
-             uint64_t key,
+  void OnFix(const Client &client,
              std::chrono::milliseconds time_of_day,
              const ::GeoPoint &location, int altitude) override;
 
-  void OnTrafficRequest(const boost::asio::ip::udp::endpoint &sender,
-                        uint64_t key,
+  void OnTrafficRequest(const Client &client,
                         bool near) override;
 
   void OnSendError(const boost::asio::ip::udp::endpoint &endpoint,
@@ -135,8 +133,7 @@ CloudServer::DumpClients()
 }
 
 void
-CloudServer::OnFix(const boost::asio::ip::udp::endpoint &sender,
-                   uint64_t key,
+CloudServer::OnFix(const Client &c,
                    std::chrono::milliseconds time_of_day,
                    const ::GeoPoint &location, int altitude)
 {
@@ -145,14 +142,14 @@ CloudServer::OnFix(const boost::asio::ip::udp::endpoint &sender,
   if (location.IsValid()) {
     bool was_empty = clients.empty();
 
-    clients.Make(sender, key, location, altitude);
+    clients.Make(c.endpoint, c.key, location, altitude);
 
     if (was_empty)
       ScheduleExpire();
   } else {
-    auto *client = clients.Find(key);
+    auto *client = clients.Find(c.key);
     if (client != nullptr)
-      clients.Refresh(*client, sender);
+      clients.Refresh(*client, c.endpoint);
   }
 }
 
@@ -173,9 +170,8 @@ class TrafficResponseSender {
 
 public:
   TrafficResponseSender(SkyLinesTracking::Server &_server,
-                        const Client &client,
-                        const boost::asio::ip::udp::endpoint &_endpoint)
-    :server(_server), endpoint(_endpoint) {
+                        const SkyLinesTracking::Server::Client &client)
+    :server(_server), endpoint(client.endpoint) {
     data.header.header.magic = ToBE32(SkyLinesTracking::MAGIC);
     data.header.header.type = ToBE16(SkyLinesTracking::Type::TRAFFIC_RESPONSE);
     data.header.header.key = ToBE64(client.key);
@@ -217,21 +213,19 @@ public:
 };
 
 void
-CloudServer::OnTrafficRequest(const boost::asio::ip::udp::endpoint &sender,
-                              uint64_t key,
-                              bool near)
+CloudServer::OnTrafficRequest(const Client &c, bool near)
 {
   if (!near)
     /* "near" is the only selection flag we know */
     return;
 
-  auto *client = clients.Find(key);
+  auto *client = clients.Find(c.key);
   if (client == nullptr)
     /* we don't send our data to clients who didn't sent anything to
        us yet */
     return;
 
-  TrafficResponseSender s(*this, *client, sender);
+  TrafficResponseSender s(*this, c);
 
   unsigned n = 0;
   for (const auto &traffic : clients.QueryWithinRange(client->location, 50000)) {
