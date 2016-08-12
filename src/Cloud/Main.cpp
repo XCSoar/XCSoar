@@ -132,7 +132,7 @@ CloudServer::DumpClients()
 {
   for (const auto &client : clients) {
     cout << client.endpoint << '\t'
-         << std::hex << client.key << '\t'
+         << std::hex << client.key << std::dec << '\t'
          << client.id << '\n';
   }
 
