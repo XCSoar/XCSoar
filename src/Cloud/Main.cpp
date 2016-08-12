@@ -128,6 +128,21 @@ protected:
   void OnTrafficRequest(const Client &client,
                         bool near) override;
 
+  void OnWaveSubmit(const Client &client,
+                    std::chrono::milliseconds time_of_day,
+                    const ::GeoPoint &a, const ::GeoPoint &b,
+                    int bottom_altitude,
+                    int top_altitude,
+                    double lift) override;
+
+  void OnThermalSubmit(const Client &client,
+                       std::chrono::milliseconds time_of_day,
+                       const ::GeoPoint &bottom_location,
+                       int bottom_altitude,
+                       const ::GeoPoint &top_location,
+                       int top_altitude,
+                       double lift) override;
+
   void OnSendError(const boost::asio::ip::udp::endpoint &endpoint,
                    std::exception &&e) override {
     cerr << "Failed to send to " << endpoint
@@ -286,6 +301,54 @@ CloudServer::OnTrafficRequest(const Client &c, bool near)
   }
 
   s.Flush();
+}
+
+void
+CloudServer::OnWaveSubmit(const Client &c,
+                          std::chrono::milliseconds time_of_day,
+                          const ::GeoPoint &a, const ::GeoPoint &b,
+                          int bottom_altitude,
+                          int top_altitude,
+                          double lift)
+{
+  auto *client = clients.Find(c.key);
+  if (client == nullptr)
+    /* we don't trust the client if he didn't sent anything to us
+       yet */
+    return;
+
+  cout << "WAVE\t"
+       << client->endpoint << '\t'
+       << std::hex << client->key << std::dec << '\t'
+       << client->id << '\t'
+       << a << '\t'
+       << b << '\t'
+       << bottom_altitude << '-' << top_altitude << 'm'
+       << endl;
+}
+
+void
+CloudServer::OnThermalSubmit(const Client &c,
+                             std::chrono::milliseconds time_of_day,
+                             const ::GeoPoint &bottom_location,
+                             int bottom_altitude,
+                             const ::GeoPoint &top_location,
+                             int top_altitude,
+                             double lift)
+{
+  auto *client = clients.Find(c.key);
+  if (client == nullptr)
+    /* we don't trust the client if he didn't sent anything to us
+       yet */
+    return;
+
+  cout << "THERMAL\t"
+       << client->endpoint << '\t'
+       << std::hex << client->key << std::dec << '\t'
+       << client->id << '\t'
+       << top_location << '\t'
+       << bottom_altitude << '-' << top_altitude << 'm'
+       << endl;
 }
 
 int
