@@ -39,7 +39,7 @@ TaskSpeedCaption(TCHAR *sTmp,
                  const FlightStatistics &fs,
                  const GlidePolar &glide_polar)
 {
-  if (!glide_polar.IsValid()) {
+  if (!glide_polar.IsValid() || fs.task_speed.IsEmpty()) {
     *sTmp = _T('\0');
     return;
   }

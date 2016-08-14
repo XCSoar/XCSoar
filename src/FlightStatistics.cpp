@@ -79,7 +79,7 @@ FlightStatistics::AverageThermalAdjusted(const double mc_current,
   ScopeLock lock(mutex);
 
   double mc_stats;
-  if (thermal_average.GetAverageY() > 0) {
+  if (! thermal_average.IsEmpty() && (thermal_average.GetAverageY() > 0)) {
     if (mc_current > 0 && circling)
       mc_stats = (thermal_average.GetCount() * thermal_average.GetAverageY() + mc_current) /
         (thermal_average.GetCount() + 1);
