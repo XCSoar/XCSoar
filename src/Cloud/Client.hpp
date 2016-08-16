@@ -229,6 +229,8 @@ public:
                const boost::asio::ip::udp::endpoint &endpoint,
                const GeoPoint &location, int altitude);
 
+  void Insert(CloudClient &client);
+
   /**
    * Remove a #CloudClient and its data.  Be careful - the given reference
    * is invalidated, unless the caller holds another #CloudClientPtr.

@@ -59,10 +59,7 @@ CloudClientContainer::Make(const boost::asio::ip::udp::endpoint &endpoint,
   if (result.second) {
     auto client = std::make_shared<CloudClient>(endpoint, key, next_id++,
                                                 location, altitude);
-    list.push_front(*client);
-    key_set.insert(*client);
-    id_set.push_back(*client);
-    rtree.insert(client);
+    Insert(*client);
     return *client;
   } else {
     auto &client = *result.first;
@@ -96,6 +93,15 @@ CloudClientContainer::Refresh(CloudClient &client,
   }
 
   client.altitude = altitude;
+}
+
+void
+CloudClientContainer::Insert(CloudClient &client)
+{
+  list.push_front(client);
+  key_set.insert(client);
+  id_set.push_back(client);
+  rtree.insert(client.shared_from_this());
 }
 
 void
