@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Client.hpp"
+#include "Data.hpp"
 #include "Dump.hpp"
 #include "Tracking/SkyLines/Server.hpp"
 #include "Tracking/SkyLines/Protocol.hpp"
@@ -45,13 +45,12 @@ using std::cerr;
 using std::endl;
 
 class CloudServer final
-  : public SkyLinesTracking::Server
+  : public SkyLinesTracking::Server,
 #ifdef __linux__
-  , SignalListener
+    SignalListener,
 #endif
+    CloudData
 {
-  CloudClientContainer clients;
-
   boost::asio::steady_timer expire_timer;
 
 public:
@@ -69,8 +68,6 @@ public:
   }
 
   using SkyLinesTracking::Server::get_io_service;
-
-  void DumpClients();
 
 private:
   void ScheduleExpire() {
@@ -136,20 +133,6 @@ protected:
   }
 #endif
 };
-
-void
-CloudServer::DumpClients()
-{
-  for (const auto &client : clients) {
-    cout << client.endpoint << '\t'
-         << std::hex << client.key << std::dec << '\t'
-         << client.id << '\t'
-         << client.location << '\t'
-         << client.altitude << "m\n";
-  }
-
-  cout.flush();
-}
 
 void
 CloudServer::OnFix(const Client &c,
