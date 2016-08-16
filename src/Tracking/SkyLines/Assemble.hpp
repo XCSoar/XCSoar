@@ -38,6 +38,7 @@ namespace SkyLinesTracking {
 struct PingPacket;
 struct ACKPacket;
 struct FixPacket;
+struct Thermal;
 struct ThermalSubmitPacket;
 struct TrafficRequestPacket;
 struct UserNameRequestPacket;
@@ -50,7 +51,7 @@ gcc_const
 ACKPacket
 MakeAck(uint64_t key, uint16_t id, uint32_t flags);
 
-gcc_pure
+gcc_const
 FixPacket
 MakeFix(uint64_t key, uint32_t flags, uint32_t time,
         ::GeoPoint location, Angle track,
@@ -61,7 +62,14 @@ gcc_pure
 FixPacket
 ToFix(uint64_t key, const NMEAInfo &basic);
 
-gcc_pure
+gcc_const
+Thermal
+MakeThermal(uint32_t time,
+            ::GeoPoint bottom_location, int bottom_altitude,
+            ::GeoPoint top_location, int top_altitude,
+            double lift);
+
+gcc_const
 ThermalSubmitPacket
 MakeThermalSubmit(uint64_t key, uint32_t time,
                   ::GeoPoint bottom_location, int bottom_altitude,
