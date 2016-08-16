@@ -65,6 +65,41 @@ SkyLinesTracking::MakeAck(uint64_t key, uint16_t id, uint32_t flags)
 }
 
 SkyLinesTracking::FixPacket
+SkyLinesTracking::MakeFix(uint64_t key, uint32_t flags, uint32_t time,
+                          ::GeoPoint location, Angle track,
+                          double ground_speed, double airspeed,
+                          int altitude, double vario, unsigned enl)
+{
+  assert(key != 0);
+
+  FixPacket packet;
+  packet.header.magic = ToBE32(MAGIC);
+  packet.header.crc = 0;
+  packet.header.type = ToBE16(Type::FIX);
+  packet.header.key = ToBE64(key);
+  packet.flags = 0;
+
+  packet.flags = ToBE32(flags);
+  packet.time = ToBE32(time);
+  packet.reserved = 0;
+
+  if (location.IsValid())
+    packet.location = ExportGeoPoint(location);
+  else
+    packet.location.latitude = packet.location.longitude = 0;
+
+  packet.track = ToBE16(uint16_t(track.AsBearing().Degrees()));
+  packet.ground_speed = ToBE16(uint16_t(ground_speed * 16));
+  packet.airspeed = ToBE16(uint16_t(airspeed * 16));
+  packet.altitude = ToBE16(altitude);
+  packet.vario = ToBE16(int(vario * 256));
+  packet.engine_noise_level = ToBE16(enl);
+
+  packet.header.crc = ToBE16(UpdateCRC16CCITT(&packet, sizeof(packet), 0));
+  return packet;
+}
+
+SkyLinesTracking::FixPacket
 SkyLinesTracking::ToFix(uint64_t key, const NMEAInfo &basic)
 {
   assert(key != 0);

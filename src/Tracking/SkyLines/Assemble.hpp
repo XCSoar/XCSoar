@@ -31,6 +31,7 @@ Copyright_License {
 
 struct NMEAInfo;
 struct GeoPoint;
+class Angle;
 
 namespace SkyLinesTracking {
 
@@ -48,6 +49,13 @@ MakePing(uint64_t key, uint16_t id);
 gcc_const
 ACKPacket
 MakeAck(uint64_t key, uint16_t id, uint32_t flags);
+
+gcc_pure
+FixPacket
+MakeFix(uint64_t key, uint32_t flags, uint32_t time,
+        ::GeoPoint location, Angle track,
+        double ground_speed, double airspeed,
+        int altitude, double vario, unsigned enl);
 
 gcc_pure
 FixPacket
