@@ -1,3 +1,5 @@
+Version 6.8.8 - not yet released
+
 Version 6.8.7 - 2016/08/12
 * data files
   - fix freeze after loading malformed topography file
