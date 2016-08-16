@@ -106,7 +106,7 @@ Path::GetParent() const
   if (p == nullptr || p == v)
     return AllocatedPath(_T("."));
 
-  return AllocatedPath(v, p - 1);
+  return AllocatedPath(v, p);
 }
 
 Path
