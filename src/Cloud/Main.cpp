@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Client.hpp"
+#include "Dump.hpp"
 #include "Tracking/SkyLines/Server.hpp"
 #include "Tracking/SkyLines/Protocol.hpp"
 #include "Tracking/SkyLines/Export.hpp"
@@ -42,41 +43,6 @@ Copyright_License {
 using std::cout;
 using std::cerr;
 using std::endl;
-
-inline std::ostream &
-operator<<(std::ostream &stream,
-           const boost::asio::ip::udp::endpoint &endpoint)
-{
-  return stream << endpoint.address().to_string();
-}
-
-template<char positive, char negative>
-struct GeoAngle : Angle {
-  constexpr GeoAngle(Angle _angle):Angle(_angle) {}
-};
-
-template<char positive, char negative>
-inline std::ostream &
-operator<<(std::ostream &stream, const GeoAngle<positive, negative> value)
-{
-  const auto dms = value.ToDMS();
-  return stream << std::setfill('0')
-                << dms.degrees << '.'
-                << std::setw(2) << dms.minutes << '.'
-                << std::setw(2) << dms.seconds
-                << (dms.negative ? negative : positive)
-                << std::setfill(' ');
-}
-
-inline std::ostream &
-operator<<(std::ostream &stream, const GeoPoint &p)
-{
-  return p.IsValid()
-    ? stream << GeoAngle<'N', 'S'>(p.latitude)
-             << '/'
-             << GeoAngle<'E', 'W'>(p.longitude)
-    : stream << '?';
-}
 
 class CloudServer final
   : public SkyLinesTracking::Server
