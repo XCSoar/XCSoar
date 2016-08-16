@@ -55,6 +55,8 @@ CloudData::Save(Serialiser &s) const
   s.Write32(CLOUD_MAGIC);
   s.Write32(CLOUD_VERSION);
   clients.Save(s);
+  s.Write8(1);
+  thermals.Save(s);
   s.Write8(0);
 }
 
@@ -68,4 +70,9 @@ CloudData::Load(Deserialiser &s)
     throw std::runtime_error("Bad version");
 
   clients.Load(s);
+
+  if (s.Read8() != 0) {
+    thermals.Load(s);
+    s.Read8();
+  }
 }

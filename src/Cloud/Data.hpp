@@ -25,12 +25,14 @@ Copyright_License {
 #define XCSOAR_CLOUD_DATA_HPP
 
 #include "Client.hpp"
+#include "Thermal.hpp"
 
 class Serialiser;
 class Deserialiser;
 
 struct CloudData {
   CloudClientContainer clients;
+  CloudThermalContainer thermals;
 
   void DumpClients();
 

@@ -130,6 +130,8 @@ protected:
                        int top_altitude,
                        double lift) override;
 
+  void OnThermalRequest(const Client &client) override;
+
   void OnSendError(const boost::asio::ip::udp::endpoint &endpoint,
                    std::exception &&e) override {
     cerr << "Failed to send to " << endpoint
@@ -328,6 +330,92 @@ CloudServer::OnThermalSubmit(const Client &c,
        << bottom_altitude << '-' << top_altitude << "m\t"
        << lift << "m/s"
        << endl;
+
+  thermals.Make(c.key,
+                AGeoPoint(bottom_location, bottom_altitude),
+                AGeoPoint(top_location, top_altitude),
+                lift);
+}
+
+class ThermalResponseSender {
+  SkyLinesTracking::Server &server;
+  const boost::asio::ip::udp::endpoint &endpoint;
+
+  static constexpr size_t MAX_THERMAL_SIZE = 1024;
+  static constexpr size_t MAX_THERMAL =
+    MAX_THERMAL_SIZE / sizeof(SkyLinesTracking::Thermal);
+
+  struct Packet {
+    SkyLinesTracking::ThermalResponsePacket header;
+    std::array<SkyLinesTracking::Thermal, MAX_THERMAL> thermal;
+  } data;
+
+  unsigned n_thermal = 0;
+
+public:
+  ThermalResponseSender(SkyLinesTracking::Server &_server,
+                        const SkyLinesTracking::Server::Client &client)
+    :server(_server), endpoint(client.endpoint) {
+    data.header.header.magic = ToBE32(SkyLinesTracking::MAGIC);
+    data.header.header.type = ToBE16(SkyLinesTracking::Type::THERMAL_RESPONSE);
+    data.header.header.key = ToBE64(client.key);
+
+    data.header.reserved1 = 0;
+    data.header.reserved2 = 0;
+    data.header.reserved3 = 0;
+  }
+
+  void Add(SkyLinesTracking::Thermal t) {
+    assert(n_thermal < MAX_THERMAL);
+
+    data.thermal[n_thermal++] = t;
+
+    if (n_thermal == MAX_THERMAL)
+      Flush();
+  }
+
+  void Flush() {
+    if (n_thermal == 0)
+      return;
+
+    size_t size = sizeof(data.header) + sizeof(data.thermal[0]) * n_thermal;
+
+    data.header.thermal_count = n_thermal;
+    n_thermal = 0;
+
+    data.header.header.crc = 0;
+    data.header.header.crc = ToBE16(UpdateCRC16CCITT(&data, size, 0));
+    server.SendBuffer(endpoint, boost::asio::const_buffer(&data, size));
+  }
+};
+
+void
+CloudServer::OnThermalRequest(const Client &c)
+{
+  auto *client = clients.Find(c.key);
+  if (client == nullptr)
+    /* we don't send our data to clients who didn't sent anything to
+       us yet */
+    return;
+
+  ThermalResponseSender s(*this, c);
+
+  unsigned n = 0;
+  for (const auto &thermal : thermals.QueryWithinRange(client->location, 50000)) {
+    if (thermal->client_key == c.key)
+      /* ignore this client's own submissions - he knows them
+         already */
+      continue;
+
+    // TODO: check time stamp, don't send old thermals
+
+    s.Add(thermal->Pack());
+
+    if (++n > 256)
+      break;
+  }
+
+  s.Flush();
 }
 
 void
