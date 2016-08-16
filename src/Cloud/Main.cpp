@@ -28,6 +28,7 @@ Copyright_License {
 #include "Tracking/SkyLines/Export.hpp"
 #include "OS/ByteOrder.hpp"
 #include "Util/CRC.hpp"
+#include "Util/PrintException.hxx"
 #include "Compiler.h"
 
 #ifdef __linux__
@@ -304,7 +305,7 @@ CloudServer::OnThermalSubmit(const Client &c,
 
 int
 main(int argc, char **argv)
-{
+try {
   boost::asio::io_service io_service;
 
   const boost::asio::ip::udp::endpoint endpoint(boost::asio::ip::udp::v4(),
@@ -315,4 +316,7 @@ main(int argc, char **argv)
   io_service.run();
 
   return EXIT_SUCCESS;
+} catch (const std::exception &exception) {
+  PrintException(exception);
+  return EXIT_FAILURE;
 }
