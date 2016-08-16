@@ -23,10 +23,13 @@ Copyright_License {
 
 #include "Data.hpp"
 #include "Dump.hpp"
+#include "Serialiser.hpp"
 #include "Tracking/SkyLines/Server.hpp"
 #include "Tracking/SkyLines/Protocol.hpp"
 #include "Tracking/SkyLines/Export.hpp"
 #include "OS/ByteOrder.hpp"
+#include "IO/FileOutputStream.hxx"
+#include "IO/FileReader.hxx"
 #include "Util/CRC.hpp"
 #include "Util/PrintException.hxx"
 #include "Compiler.h"
@@ -52,25 +55,45 @@ class CloudServer final
 #endif
     CloudData
 {
-  boost::asio::steady_timer expire_timer;
+  const AllocatedPath db_path;
+
+  boost::asio::steady_timer save_timer, expire_timer;
 
 public:
-  CloudServer(boost::asio::io_service &io_service,
+  CloudServer(AllocatedPath &&_db_path, boost::asio::io_service &io_service,
               boost::asio::ip::udp::endpoint endpoint)
     :SkyLinesTracking::Server(io_service, endpoint),
 #ifdef __linux__
     SignalListener(io_service),
 #endif
+    db_path(std::move(_db_path)),
+    save_timer(io_service),
     expire_timer(io_service)
   {
 #ifdef __linux__
-    SignalListener::Create(SIGTERM, SIGINT, SIGUSR1);
+    SignalListener::Create(SIGTERM, SIGINT, SIGHUP, SIGUSR1);
 #endif
+
+    ScheduleSave();
   }
 
   using SkyLinesTracking::Server::get_io_service;
 
+  void Load();
+  void Save();
+
 private:
+  void ScheduleSave() {
+    save_timer.expires_from_now(std::chrono::minutes(1));
+    save_timer.async_wait([this](const boost::system::error_code &ec){
+        if (ec)
+          return;
+
+        Save();
+        ScheduleSave();
+      });
+  }
+
   void ScheduleExpire() {
     expire_timer.expires_from_now(std::chrono::minutes(5));
     expire_timer.async_wait([this](const boost::system::error_code &ec){
@@ -123,6 +146,10 @@ protected:
   /* virtual methods from class SignalListener */
   void OnSignal(int signo) override {
     switch (signo) {
+    case SIGHUP:
+      Save();
+      break;
+
     case SIGUSR1:
       DumpClients();
       break;
@@ -303,17 +330,57 @@ CloudServer::OnThermalSubmit(const Client &c,
        << endl;
 }
 
+void
+CloudServer::Load()
+{
+  FileReader fr(db_path);
+  Deserialiser s(fr);
+  CloudData::Load(s);
+}
+
+void
+CloudServer::Save()
+{
+  cout << "Saving data to " << db_path.c_str() << endl;
+
+  FileOutputStream fos(db_path);
+
+  {
+    Serialiser s(fos);
+    CloudData::Save(s);
+    s.Flush();
+  }
+
+  fos.Commit();
+}
+
 int
 main(int argc, char **argv)
 try {
+  if (argc != 2) {
+    cerr << "Usage: " << argv[0] << " DBPATH" << endl;
+    return EXIT_FAILURE;
+  }
+
+  const Path db_path(argv[1]);
+
   boost::asio::io_service io_service;
 
   const boost::asio::ip::udp::endpoint endpoint(boost::asio::ip::udp::v4(),
                                                 CloudServer::GetDefaultPort());
 
-  CloudServer server(io_service, endpoint);
+  CloudServer server(db_path, io_service, endpoint);
+
+  try {
+    server.Load();
+  } catch (const std::runtime_error &e) {
+    cerr << "Failed to load database" << endl;
+    PrintException(e);
+  }
 
   io_service.run();
+
+  server.Save();
 
   return EXIT_SUCCESS;
 } catch (const std::exception &exception) {

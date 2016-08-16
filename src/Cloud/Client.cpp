@@ -22,7 +22,11 @@ Copyright_License {
 */
 
 #include "Client.hpp"
+#include "Serialiser.hpp"
 #include "Geo/Boost/RangeBox.hpp"
+#include "Tracking/SkyLines/Protocol.hpp"
+#include "Tracking/SkyLines/Assemble.hpp"
+#include "Tracking/SkyLines/Import.hpp"
 
 CloudClientContainer::CloudClientContainer()
   :key_set(typename KeySet::bucket_traits(key_buckets, N_KEY_BUCKETS)) {}
@@ -125,4 +129,91 @@ CloudClientContainer::QueryWithinRange(GeoPoint location, double range) const
 {
   const auto q = boost::geometry::index::intersects(BoostRangeBox(location, range));
   return {rtree.qbegin(q), rtree.qend()};
+}
+
+inline Serialiser &
+operator<<(Serialiser &s, const boost::asio::ip::udp::endpoint &endpoint)
+{
+  s.WriteString(endpoint.address().to_string());
+  s.Write16(endpoint.port());
+  return s;
+}
+
+inline Deserialiser &
+operator>>(Deserialiser &s, boost::asio::ip::udp::endpoint &endpoint)
+{
+  endpoint.address(boost::asio::ip::address::from_string(s.ReadString()));
+  endpoint.port(s.Read16());
+  return s;
+}
+
+void
+CloudClient::Save(Serialiser &s) const
+{
+  s.Write32(id);
+
+  s << stamp;
+
+  uint32_t flags = SkyLinesTracking::FixPacket::FLAG_LOCATION;
+  if (altitude != -1)
+    flags |= SkyLinesTracking::FixPacket::FLAG_ALTITUDE;
+
+  s.WriteT(SkyLinesTracking::MakeFix(key, flags, 0,
+                                     location, Angle::Zero(), 0, 0,
+                                     altitude, 0, 0));
+
+  s << endpoint;
+
+  s.Write8(0);
+}
+
+CloudClient
+CloudClient::Load(Deserialiser &s)
+{
+  const unsigned id = s.Read32();
+
+  std::chrono::steady_clock::time_point stamp;
+  s >> stamp;
+
+  SkyLinesTracking::FixPacket fix;
+  s.ReadT(fix);
+
+  boost::asio::ip::udp::endpoint endpoint;
+  s >> endpoint;
+
+  s.Read8();
+
+  CloudClient client(endpoint, FromBE64(fix.header.key),
+                     id,
+                     SkyLinesTracking::ImportGeoPoint(fix.location),
+                     FromBE16(fix.altitude));
+  client.stamp = stamp;
+  return client;
+}
+
+void
+CloudClientContainer::Save(Serialiser &s) const
+{
+  s.Write32(next_id);
+
+  for (const auto &client : list) {
+    s.Write8(1);
+    client.Save(s);
+  }
+
+  s.Write8(0);
+  s.Write8(0);
+}
+
+void
+CloudClientContainer::Load(Deserialiser &s)
+{
+  next_id = s.Read32();
+
+  while (s.Read8() != 0) {
+    auto client = std::make_shared<CloudClient>(CloudClient::Load(s));
+    Insert(*client);
+  }
+
+  s.Read8();
 }

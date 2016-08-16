@@ -21,51 +21,29 @@ Copyright_License {
 }
 */
 
-#include "Data.hpp"
-#include "Dump.hpp"
 #include "Serialiser.hpp"
 
-#include <iostream>
-#include <iomanip>
+#include <algorithm>
+#include <stdexcept>
 
-using std::cout;
-using std::cerr;
-using std::endl;
-
-static constexpr uint32_t CLOUD_MAGIC = 0x5753f60f;
-static constexpr uint32_t CLOUD_VERSION = 1;
+#include <string.h>
 
 void
-CloudData::DumpClients()
+Serialiser::WriteString(const char *s)
 {
-  for (const auto &client : clients) {
-    cout << client.endpoint << '\t'
-         << std::hex << client.key << std::dec << '\t'
-         << client.id << '\t'
-         << client.location << '\t'
-         << client.altitude << "m\n";
-  }
-
-  cout.flush();
+  size_t length = std::min<size_t>(strlen(s), 0xff00);
+  Write16(length);
+  Write(s, length);
 }
 
-void
-CloudData::Save(Serialiser &s) const
+std::string
+Deserialiser::ReadString()
 {
-  s.Write32(CLOUD_MAGIC);
-  s.Write32(CLOUD_VERSION);
-  clients.Save(s);
-  s.Write8(0);
-}
+  size_t length = Read16();
+  if (length > 0xff00)
+    throw std::runtime_error("Malformed string");
 
-void
-CloudData::Load(Deserialiser &s)
-{
-  if (s.Read32() != CLOUD_MAGIC)
-    throw std::runtime_error("Bad magic");
-
-  if (s.Read32() != CLOUD_VERSION)
-    throw std::runtime_error("Bad version");
-
-  clients.Load(s);
+  const char *data = (const char *)ReadFull(length);
+  Consume(length);
+  return std::string(data, length);
 }

@@ -26,10 +26,16 @@ Copyright_License {
 
 #include "Client.hpp"
 
+class Serialiser;
+class Deserialiser;
+
 struct CloudData {
   CloudClientContainer clients;
 
   void DumpClients();
+
+  void Save(Serialiser &s) const;
+  void Load(Deserialiser &s);
 };
 
 #endif

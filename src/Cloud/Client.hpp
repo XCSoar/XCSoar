@@ -36,6 +36,9 @@ Copyright_License {
 #include <memory>
 #include <chrono>
 
+class Serialiser;
+class Deserialiser;
+
 /**
  * A client which has submitted data to us recently.
  */
@@ -125,6 +128,9 @@ struct CloudClient
       endpoint = _endpoint;
       stamp = std::chrono::steady_clock::now();
   }
+
+  void Save(Serialiser &s) const;
+  static CloudClient Load(Deserialiser &s);
 };
 
 using CloudClientPtr = std::shared_ptr<CloudClient>;
@@ -244,6 +250,9 @@ public:
 
   gcc_pure
   query_iterator_range QueryWithinRange(GeoPoint location, double range) const;
+
+  void Save(Serialiser &s) const;
+  void Load(Deserialiser &s);
 };
 
 #endif
