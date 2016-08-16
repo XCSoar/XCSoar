@@ -125,6 +125,7 @@ public:
                    ::GeoPoint bottom_location, int bottom_altitude,
                    ::GeoPoint top_location, int top_altitude,
                    double lift);
+  void SendThermalRequest();
 
   void SendTrafficRequest(bool followees, bool club, bool near_);
   void SendUserNameRequest(uint32_t user_id);

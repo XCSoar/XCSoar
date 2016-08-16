@@ -40,6 +40,7 @@ struct ACKPacket;
 struct FixPacket;
 struct Thermal;
 struct ThermalSubmitPacket;
+struct ThermalRequestPacket;
 struct TrafficRequestPacket;
 struct UserNameRequestPacket;
 
@@ -75,6 +76,10 @@ MakeThermalSubmit(uint64_t key, uint32_t time,
                   ::GeoPoint bottom_location, int bottom_altitude,
                   ::GeoPoint top_location, int top_altitude,
                   double lift);
+
+gcc_const
+ThermalRequestPacket
+MakeThermalRequest(uint64_t key);
 
 gcc_const
 TrafficRequestPacket

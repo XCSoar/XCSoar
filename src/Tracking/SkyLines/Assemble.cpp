@@ -209,6 +209,23 @@ SkyLinesTracking::MakeThermalSubmit(uint64_t key, uint32_t time,
   return packet;
 }
 
+SkyLinesTracking::ThermalRequestPacket
+SkyLinesTracking::MakeThermalRequest(uint64_t key)
+{
+  assert(key != 0);
+
+  ThermalRequestPacket packet;
+  packet.header.magic = ToBE32(MAGIC);
+  packet.header.crc = 0;
+  packet.header.type = ToBE16(Type::THERMAL_REQUEST);
+  packet.header.key = ToBE64(key);
+  packet.flags = 0;
+  packet.reserved1 = 0;
+
+  packet.header.crc = ToBE16(UpdateCRC16CCITT(&packet, sizeof(packet), 0));
+  return packet;
+}
+
 SkyLinesTracking::TrafficRequestPacket
 SkyLinesTracking::MakeTrafficRequest(uint64_t key, bool followees, bool club,
                                      bool near)

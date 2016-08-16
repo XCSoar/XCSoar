@@ -120,6 +120,14 @@ SkyLinesTracking::Client::SendThermal(uint32_t time,
 }
 
 void
+SkyLinesTracking::Client::SendThermalRequest()
+{
+  assert(key != 0);
+
+  SendPacket(MakeThermalRequest(key));
+}
+
+void
 SkyLinesTracking::Client::SendTrafficRequest(bool followees, bool club,
                                              bool near_)
 {
