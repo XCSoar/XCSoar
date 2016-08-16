@@ -28,6 +28,8 @@ Copyright_License {
 #include "Util/AllocatedString.hxx"
 #include "Compiler.h"
 
+#include <string>
+
 #ifdef _UNICODE
 #include <tchar.h>
 #endif
@@ -78,6 +80,14 @@ public:
   constexpr const_pointer c_str() const {
     return value.c_str();
   }
+
+  /**
+   * Convert the path to UTF-8.
+   * Returns empty string on error or if this instance is "nulled"
+   * (#IsNull returns true).
+   */
+  gcc_pure
+  std::string ToUTF8() const;
 
   gcc_pure
   bool operator==(Path other) const;
@@ -229,6 +239,10 @@ public:
 
   const_pointer c_str() const {
     return value.c_str();
+  }
+
+  std::string ToUTF8() const {
+    return Path(*this).ToUTF8();
   }
 
   gcc_pure

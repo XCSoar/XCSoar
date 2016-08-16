@@ -27,9 +27,30 @@ Copyright_License {
 #include "Util/StringAPI.hxx"
 #include "Util/CharUtil.hpp"
 
+#ifdef _UNICODE
+#include "Util/ConvertString.hpp"
+#endif
+
 #include <algorithm>
 
 #include <assert.h>
+
+std::string
+Path::ToUTF8() const
+{
+  if (IsNull())
+    return std::string();
+
+#ifdef _UNICODE
+  const WideToUTF8Converter utf8(c_str());
+  if (!utf8.IsValid())
+    return std::string();
+
+  return (const char *)utf8;
+#else
+  return c_str();
+#endif
+}
 
 AllocatedPath
 Path::operator+(const_pointer other) const
