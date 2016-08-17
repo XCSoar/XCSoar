@@ -244,6 +244,7 @@ const char SkyLinesNearTrafficEnabled[] = "SkyLinesNearTrafficEnabled";
 const char SkyLinesTrackingKey[] = "SkyLinesTrackingKey";
 
 const char CloudEnabled[] = "CloudEnabled";
+const char CloudShowThermals[] = "CloudShowThermals";
 const char CloudKey[] = "CloudKey";
 
 const char LiveTrack24Enabled[] = "LiveTrack24Enabled";

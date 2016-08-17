@@ -242,6 +242,7 @@ extern const char SkyLinesNearTrafficEnabled[];
 extern const char SkyLinesTrackingKey[];
 
 extern const char CloudEnabled[];
+extern const char CloudShowThermals[];
 extern const char CloudKey[];
 
 extern const char LiveTrack24Enabled[];

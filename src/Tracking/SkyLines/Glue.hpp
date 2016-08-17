@@ -40,8 +40,12 @@ class Glue {
   GPSClock clock;
 
   GPSClock traffic_clock;
+  GPSClock thermal_clock;
+
   bool traffic_enabled = false;
   bool near_traffic_enabled = false;
+
+  bool thermal_enabled = false;
 
   bool roaming = true;
 

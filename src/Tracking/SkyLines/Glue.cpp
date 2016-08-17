@@ -175,13 +175,19 @@ SkyLinesTracking::Glue::Tick(const NMEAInfo &basic,
       client.SendTrafficRequest(true, true, near_traffic_enabled);
   }
 
-  if (cloud_client.IsConnected())
+  if (cloud_client.IsConnected()) {
     SendCloudFix(basic, calculated);
+
+    if (thermal_enabled && thermal_clock.CheckAdvance(basic.clock, 60))
+      cloud_client.SendThermalRequest();
+  }
 }
 
 void
 SkyLinesTracking::Glue::SetSettings(const Settings &settings)
 {
+  thermal_enabled = settings.cloud.show_thermals;
+
   if (settings.cloud.enabled == TriState::TRUE && settings.cloud.key != 0) {
     cloud_client.SetKey(settings.cloud.key);
     if (!cloud_client.IsDefined()) {

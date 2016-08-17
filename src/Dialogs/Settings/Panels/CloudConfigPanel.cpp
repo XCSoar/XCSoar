@@ -36,6 +36,7 @@ Copyright_License {
 
 enum ControlIndex {
   ENABLED,
+  SHOW_THERMALS,
 };
 
 class CloudConfigPanel final
@@ -58,6 +59,7 @@ private:
 void
 CloudConfigPanel::SetEnabled(bool enabled)
 {
+  SetRowEnabled(SHOW_THERMALS, enabled);
 }
 
 void
@@ -81,6 +83,12 @@ CloudConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              _("Participate in the XCSoar Cloud field test?  This transmits your location, thermal/wave locations and other weather data to our test server."),
              settings.enabled == TriState::TRUE,
              this);
+
+  AddBoolean(_T("Show thermals"),
+             _("Obtain and show thermal locations reported by others."),
+             settings.show_thermals);
+
+  SetEnabled(settings.enabled == TriState::TRUE);
 }
 
 bool
@@ -108,6 +116,9 @@ CloudConfigPanel::Save(bool &_changed)
 
     changed = true;
   }
+
+  changed |= SaveValue(SHOW_THERMALS, ProfileKeys::CloudShowThermals,
+                       settings.show_thermals);
 
   _changed |= changed;
 

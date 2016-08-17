@@ -38,6 +38,8 @@ namespace Profile {
       ? (bvalue ? TriState::TRUE : TriState::FALSE)
       : TriState::UNKNOWN;
 
+    map.Get(ProfileKeys::CloudShowThermals, settings.show_thermals);
+
     const char *key = map.Get(ProfileKeys::CloudKey);
     if (key != nullptr)
       settings.key = ParseUint64(key, nullptr, 16);
