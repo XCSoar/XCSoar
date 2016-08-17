@@ -269,6 +269,8 @@ void
 TrackingGlue::OnWave(unsigned time_of_day_ms,
                      const GeoPoint &a, const GeoPoint &b)
 {
+  const ScopeLock protect(skylines_data.mutex);
+
   /* garbage collection - hard-coded upper limit */
   auto n = skylines_data.waves.size();
   while (n-- >= 64)
