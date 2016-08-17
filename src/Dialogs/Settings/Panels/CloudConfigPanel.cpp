@@ -29,6 +29,8 @@ Copyright_License {
 #include "Widget/RowFormWidget.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
+#include "Form/DataField/Boolean.hpp"
+#include "Form/DataField/Listener.hpp"
 
 #include <stdio.h>
 
@@ -37,15 +39,35 @@ enum ControlIndex {
 };
 
 class CloudConfigPanel final
-  : public RowFormWidget {
+  : public RowFormWidget, DataFieldListener {
 public:
   CloudConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
+  void SetEnabled(bool enabled);
+
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
   bool Save(bool &changed) override;
+
+private:
+  /* methods from DataFieldListener */
+  void OnModified(DataField &df) override;
 };
+
+void
+CloudConfigPanel::SetEnabled(bool enabled)
+{
+}
+
+void
+CloudConfigPanel::OnModified(DataField &df)
+{
+  if (IsDataField(ENABLED, df)) {
+    const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
+    SetEnabled(dfb.GetAsBoolean());
+  }
+}
 
 void
 CloudConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
@@ -57,7 +79,8 @@ CloudConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddBoolean(_T("XCSoar Cloud"),
              _("Participate in the XCSoar Cloud field test?  This transmits your location, thermal/wave locations and other weather data to our test server."),
-             settings.skylines.cloud_enabled == TriState::TRUE);
+             settings.skylines.cloud_enabled == TriState::TRUE,
+             this);
 }
 
 bool
