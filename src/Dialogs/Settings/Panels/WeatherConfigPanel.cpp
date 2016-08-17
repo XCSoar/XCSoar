@@ -34,6 +34,8 @@ enum ControlIndex {
 #ifdef HAVE_PCMET
   PCMET_USER,
   PCMET_PASSWORD,
+  PCMET_FTP_USER,
+  PCMET_FTP_PASSWORD,
 #endif
 };
 
@@ -81,10 +83,10 @@ WeatherConfigPanel::Save(bool &_changed)
   changed |= SaveValue(PCMET_PASSWORD, ProfileKeys::PCMetPassword,
                        settings.pcmet.www_credentials.password);
 
-  changed |= SaveValue(PCMET_USER, ProfileKeys::PCMetFtpUsername,
+  changed |= SaveValue(PCMET_FTP_USER, ProfileKeys::PCMetFtpUsername,
                        settings.pcmet.ftp_credentials.username);
 
-  changed |= SaveValue(PCMET_PASSWORD, ProfileKeys::PCMetFtpPassword,
+  changed |= SaveValue(PCMET_FTP_PASSWORD, ProfileKeys::PCMetFtpPassword,
                        settings.pcmet.ftp_credentials.password);
 #endif
 
