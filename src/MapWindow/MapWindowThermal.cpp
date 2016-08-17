@@ -24,6 +24,7 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "Look/MapLook.hpp"
 #include "Screen/Icon.hpp"
+#include "Tracking/SkyLines/Data.hpp"
 
 template<typename T>
 static void
@@ -66,4 +67,15 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const
                      thermal_locator.sources, basic.nav_altitude,
                      calculated.wind_available
                      ? calculated.wind : SpeedVector::Zero());
+
+  const auto &cloud_settings = ComputerSettings().tracking.skylines.cloud;
+  if (cloud_settings.show_thermals && skylines_data != nullptr) {
+    ScopeLock protect(skylines_data->mutex);
+    for (auto &i : skylines_data->thermals) {
+      // TODO: apply wind drift
+      PixelPoint pt;
+      if (render_projection.GeoToScreenIfVisible(i.bottom_location, pt))
+        look.thermal_source_icon.Draw(canvas, pt);
+    }
+  }
 }

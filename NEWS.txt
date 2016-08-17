@@ -21,6 +21,7 @@ Version 7.0 - not yet released
 * tracking
   - use DNS to resolve SkyLines server IP (#2604)
   - enable SkyLines traffic display on Windows
+  - show thermals obtained from the XCSoar Cloud server
 * analysis
   - enhanced graphics: minor tics, color scheme, layout
   - key labels drawn on lines in several pages
