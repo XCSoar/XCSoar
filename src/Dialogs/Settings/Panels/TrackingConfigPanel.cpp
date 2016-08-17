@@ -49,7 +49,6 @@ enum ControlIndex {
   SL_TRAFFIC_ENABLED,
   SL_NEAR_TRAFFIC_ENABLED,
   SL_KEY,
-  CLOUD_ENABLED,
 #endif
 #if defined(HAVE_SKYLINES_TRACKING) && defined(HAVE_LIVETRACK24)
   SPACER,
@@ -221,11 +220,6 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   else
     buffer.clear();
   AddText(_T("Key"), nullptr, buffer);
-
-  AddBoolean(_T("XCSoar Cloud"),
-             _("Participate in the XCSoar Cloud field test?  This transmits your location, thermal/wave locations and other weather data to our test server."),
-             settings.skylines.cloud_enabled == TriState::TRUE,
-             this);
 #endif
 
 #if defined(HAVE_SKYLINES_TRACKING) && defined(HAVE_LIVETRACK24)
@@ -313,25 +307,6 @@ TrackingConfigPanel::Save(bool &_changed)
 
   changed |= SaveKey(*this, SL_KEY, ProfileKeys::SkyLinesTrackingKey,
                      settings.skylines.key);
-
-  bool cloud_enabled = settings.skylines.cloud_enabled == TriState::TRUE;
-  if (SaveValue(CLOUD_ENABLED, ProfileKeys::CloudEnabled, cloud_enabled)) {
-    settings.skylines.cloud_enabled = cloud_enabled
-      ? TriState::TRUE
-      : TriState::FALSE;
-
-    if (settings.skylines.cloud_enabled == TriState::TRUE &&
-        settings.skylines.cloud_key == 0) {
-      settings.skylines.cloud_key = SkyLinesTracking::GenerateKey();
-
-      char s[64];
-      snprintf(s, sizeof(s), "%llx",
-               (unsigned long long)settings.skylines.cloud_key);
-      Profile::Set(ProfileKeys::CloudKey, s);
-    }
-
-    changed = true;
-  }
 #endif
 
 #ifdef HAVE_LIVETRACK24

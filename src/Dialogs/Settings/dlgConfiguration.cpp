@@ -77,6 +77,8 @@ Copyright_License {
 #include "Panels/TrackingConfigPanel.hpp"
 #endif
 
+#include "Panels/CloudConfigPanel.hpp"
+
 #ifdef HAVE_PCMET
 #include "Panels/WeatherConfigPanel.hpp"
 #endif
@@ -144,6 +146,7 @@ static constexpr TabMenuPage setup_pages[] = {
 #ifdef HAVE_TRACKING
   { N_("Tracking"), CreateTrackingConfigPanel },
 #endif
+  { _T("XCSoar Cloud"), CreateCloudConfigPanel },
 #ifdef HAVE_PCMET
   { _T("Weather"), CreateWeatherConfigPanel },
 #endif
