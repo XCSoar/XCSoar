@@ -182,8 +182,8 @@ SkyLinesTracking::Glue::Tick(const NMEAInfo &basic,
 void
 SkyLinesTracking::Glue::SetSettings(const Settings &settings)
 {
-  if (settings.cloud_enabled == TriState::TRUE && settings.cloud_key != 0) {
-    cloud_client.SetKey(settings.cloud_key);
+  if (settings.cloud.enabled == TriState::TRUE && settings.cloud.key != 0) {
+    cloud_client.SetKey(settings.cloud.key);
     if (!cloud_client.IsDefined()) {
       const boost::asio::ip::udp::resolver::query query(boost::asio::ip::udp::v4(),
                                                         "cloud.xcsoar.net",

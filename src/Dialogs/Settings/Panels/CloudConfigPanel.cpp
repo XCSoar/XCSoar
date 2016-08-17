@@ -72,14 +72,14 @@ CloudConfigPanel::OnModified(DataField &df)
 void
 CloudConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  const TrackingSettings &settings =
-    CommonInterface::GetComputerSettings().tracking;
-
   RowFormWidget::Prepare(parent, rc);
+
+  const auto &settings =
+    CommonInterface::GetComputerSettings().tracking.skylines.cloud;
 
   AddBoolean(_T("XCSoar Cloud"),
              _("Participate in the XCSoar Cloud field test?  This transmits your location, thermal/wave locations and other weather data to our test server."),
-             settings.skylines.cloud_enabled == TriState::TRUE,
+             settings.enabled == TriState::TRUE,
              this);
 }
 
@@ -88,22 +88,21 @@ CloudConfigPanel::Save(bool &_changed)
 {
   bool changed = false;
 
-  TrackingSettings &settings =
-    CommonInterface::SetComputerSettings().tracking;
+  auto &settings =
+    CommonInterface::SetComputerSettings().tracking.skylines.cloud;
 
-  bool cloud_enabled = settings.skylines.cloud_enabled == TriState::TRUE;
+  bool cloud_enabled = settings.enabled == TriState::TRUE;
   if (SaveValue(ENABLED, ProfileKeys::CloudEnabled, cloud_enabled)) {
-    settings.skylines.cloud_enabled = cloud_enabled
+    settings.enabled = cloud_enabled
       ? TriState::TRUE
       : TriState::FALSE;
 
-    if (settings.skylines.cloud_enabled == TriState::TRUE &&
-        settings.skylines.cloud_key == 0) {
-      settings.skylines.cloud_key = SkyLinesTracking::GenerateKey();
+    if (settings.enabled == TriState::TRUE && settings.key == 0) {
+      settings.key = SkyLinesTracking::GenerateKey();
 
       char s[64];
       snprintf(s, sizeof(s), "%llx",
-               (unsigned long long)settings.skylines.cloud_key);
+               (unsigned long long)settings.key);
       Profile::Set(ProfileKeys::CloudKey, s);
     }
 

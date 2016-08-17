@@ -21,10 +21,9 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_TRACKING_SKYLINES_SETTINGS_HPP
-#define XCSOAR_TRACKING_SKYLINES_SETTINGS_HPP
+#ifndef XCSOAR_TRACKING_CLOUD_SETTINGS_HPP
+#define XCSOAR_TRACKING_CLOUD_SETTINGS_HPP
 
-#include "CloudSettings.hpp"
 #include "Features.hpp"
 #include "Util/TriState.hpp"
 
@@ -34,41 +33,19 @@ Copyright_License {
 
 namespace SkyLinesTracking {
 
-struct Settings {
-  bool enabled;
-
+struct CloudSettings {
   /**
-   * Enable tracking while on a "roamed" connection?
+   * Is submitting data to the (experimental) XCSoar Cloud enabled?
+   * TriState::UNKNOWN means the user has not yet been asked about
+   * it.
    */
-  bool roaming;
-
-  /**
-   * Periodically request friend traffic information?
-   */
-  bool traffic_enabled;
-
-  /**
-   * Periodically request near traffic information?
-   */
-  bool near_traffic_enabled;
-
-  /**
-   * Tracking interval in seconds.
-   */
-  unsigned interval;
+  TriState enabled;
 
   uint64_t key;
 
-  CloudSettings cloud;
-
   void SetDefaults() {
-    enabled = false;
-    roaming = true;
-    traffic_enabled = false;
-    near_traffic_enabled = false;
-    interval = 5;
+    enabled = TriState::UNKNOWN;
     key = 0;
-    cloud.SetDefaults();
   }
 };
 

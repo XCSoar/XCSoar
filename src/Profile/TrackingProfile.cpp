@@ -32,6 +32,18 @@ Copyright_License {
 #ifdef HAVE_SKYLINES_TRACKING
 namespace Profile {
   static void Load(const ProfileMap &map,
+                   SkyLinesTracking::CloudSettings &settings) {
+    bool bvalue;
+    settings.enabled = map.Get(ProfileKeys::CloudEnabled, bvalue)
+      ? (bvalue ? TriState::TRUE : TriState::FALSE)
+      : TriState::UNKNOWN;
+
+    const char *key = map.Get(ProfileKeys::CloudKey);
+    if (key != nullptr)
+      settings.key = ParseUint64(key, nullptr, 16);
+  }
+
+  static void Load(const ProfileMap &map,
                    SkyLinesTracking::Settings &settings) {
     map.Get(ProfileKeys::SkyLinesTrackingEnabled, settings.enabled);
     map.Get(ProfileKeys::SkyLinesRoaming, settings.roaming);
@@ -42,14 +54,7 @@ namespace Profile {
     if (key != NULL)
       settings.key = ParseUint64(key, NULL, 16);
 
-    bool bvalue;
-    settings.cloud_enabled = map.Get(ProfileKeys::CloudEnabled, bvalue)
-      ? (bvalue ? TriState::TRUE : TriState::FALSE)
-      : TriState::UNKNOWN;
-
-    key = map.Get(ProfileKeys::CloudKey);
-    if (key != nullptr)
-      settings.cloud_key = ParseUint64(key, nullptr, 16);
+    Load(map, settings.cloud);
   }
 }
 #endif
