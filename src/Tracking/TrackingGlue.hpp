@@ -101,6 +101,9 @@ private:
     virtual void OnUserName(uint32_t user_id, const TCHAR *name) override;
   void OnWave(unsigned time_of_day_ms,
               const GeoPoint &a, const GeoPoint &b) override;
+  void OnThermal(unsigned time_of_day_ms,
+                 const AGeoPoint &bottom, const AGeoPoint &top,
+                 double lift) override;
   void OnSkyLinesError(const std::exception &e) override;
 
 public:

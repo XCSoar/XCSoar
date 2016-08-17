@@ -31,6 +31,7 @@ Copyright_License {
 
 #include <map>
 #include <list>
+#include <chrono>
 
 #include <stdint.h>
 
@@ -74,6 +75,19 @@ struct Data {
     :time_of_day_ms(_time), a(_a), b(_b) {}
   };
 
+  struct Thermal {
+    std::chrono::steady_clock::time_point received_time;
+
+    AGeoPoint bottom_location, top_location;
+
+    double lift;
+
+    Thermal() = default;
+    Thermal(const AGeoPoint &_bottom, const AGeoPoint &_top, double _lift)
+      :received_time(std::chrono::steady_clock::now()),
+       bottom_location(_bottom), top_location(_top), lift(_lift) {}
+  };
+
   mutable Mutex mutex;
 
   std::map<uint32_t, Traffic> traffic;
@@ -85,6 +99,8 @@ struct Data {
   std::map<uint32_t, tstring> user_names;
 
   std::list<Wave> waves;
+
+  std::list<Thermal> thermals;
 
   gcc_pure
   bool IsUserKnown(uint32_t id) const {

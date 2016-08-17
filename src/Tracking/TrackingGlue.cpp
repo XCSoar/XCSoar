@@ -260,6 +260,22 @@ TrackingGlue::OnWave(unsigned time_of_day_ms,
 }
 
 void
+TrackingGlue::OnThermal(unsigned time_of_day_ms,
+                        const AGeoPoint &bottom, const AGeoPoint &top,
+                        double lift)
+{
+  const ScopeLock protect(skylines_data.mutex);
+
+  /* garbage collection - hard-coded upper limit */
+  auto n = skylines_data.thermals.size();
+  while (n-- >= 64)
+    skylines_data.thermals.pop_front();
+
+  // TODO: replace existing item?
+  skylines_data.thermals.emplace_back(bottom, top, lift);
+}
+
+void
 TrackingGlue::OnSkyLinesError(const std::exception &e)
 {
   LogError("SkyLines error", e);
