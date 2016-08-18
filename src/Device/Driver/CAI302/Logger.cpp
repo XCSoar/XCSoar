@@ -27,7 +27,8 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "OS/ByteOrder.hpp"
 #include "OS/Path.hpp"
-#include "IO/BinaryWriter.hpp"
+#include "IO/FileOutputStream.hxx"
+#include "IO/BufferedOutputStream.hxx"
 
 #include <memory>
 
@@ -111,9 +112,8 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
 {
   assert(flight.internal.cai302 < 64);
 
-  BinaryWriter writer(path);
-  if (writer.HasError())
-    return false;
+  FileOutputStream fos(path);
+  BufferedOutputStream os(fos);
 
   CAI302::FileASCII file_ascii;
   if (!UploadFileASCII(port, flight.internal.cai302, file_ascii, env) ||
@@ -143,8 +143,7 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
     if ((unsigned)i < valid_bytes)
       return false;
 
-    if (!writer.Write(data, 1, valid_bytes))
-      return false;
+    os.Write(data, valid_bytes);
 
     env.SetProgressPosition(current_block++);
   } while (valid_bytes == bytes_per_block);
@@ -159,8 +158,10 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
   if (valid_bytes > sizeof(signature.signature))
     return false;
 
-  if (!writer.Write(signature.signature, 1, valid_bytes))
-    return false;
+  os.Write(signature.signature, valid_bytes);
+
+  os.Flush();
+  fos.Commit();
 
   return true;
 }
@@ -180,10 +181,19 @@ CAI302Device::DownloadFlight(const RecordedFlightInfo &flight,
     return false;
   }
 
-  if (!DownloadFlightInner(port, flight, path, env)) {
+  try {
+    if (!DownloadFlightInner(port, flight, path, env)) {
+      mode = Mode::UNKNOWN;
+      DisableBulkMode(env);
+      return false;
+    }
+  } catch (...) {
     mode = Mode::UNKNOWN;
-    DisableBulkMode(env);
-    return false;
+    try {
+      DisableBulkMode(env);
+    } catch (...) {
+    }
+    throw;
   }
 
   DisableBulkMode(env);
