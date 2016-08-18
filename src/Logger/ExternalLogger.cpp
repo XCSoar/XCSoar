@@ -31,6 +31,7 @@
 #include "Device/RecordedFlight.hpp"
 #include "Components.hpp"
 #include "LocalPath.hpp"
+#include "LogFile.hpp"
 #include "UIGlobals.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Dialogs/JobDialog.hpp"
@@ -64,11 +65,14 @@ public:
 static TriStateJobResult
 DoDeviceDeclare(DeviceDescriptor &device, const Declaration &declaration,
                 const Waypoint *home)
-{
+try {
   TriStateJob<DeclareJob> job(device, declaration, home);
   JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
             _T(""), job, true);
   return job.GetResult();
+} catch (const std::runtime_error &e) {
+  LogError(e);
+  return TriStateJobResult::ERROR;
 }
 
 static bool
@@ -145,11 +149,14 @@ public:
 
 static TriStateJobResult
 DoReadFlightList(DeviceDescriptor &device, RecordedFlightList &flight_list)
-{
+try {
   TriStateJob<ReadFlightListJob> job(device, flight_list);
   JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
             _T(""), job, true);
   return job.GetResult();
+} catch (const std::runtime_error &e) {
+  LogError(e);
+  return TriStateJobResult::ERROR;
 }
 
 class DownloadFlightJob {
@@ -170,11 +177,14 @@ public:
 static TriStateJobResult
 DoDownloadFlight(DeviceDescriptor &device,
                  const RecordedFlightInfo &flight, Path path)
-{
+try {
   TriStateJob<DownloadFlightJob> job(device, flight, path);
   JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
             _T(""), job, true);
   return job.GetResult();
+} catch (const std::runtime_error &e) {
+  LogError(e);
+  return TriStateJobResult::ERROR;
 }
 
 static void
