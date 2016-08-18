@@ -27,6 +27,7 @@ Copyright_License {
 #include "Thread/Thread.hpp"
 
 #include <atomic>
+#include <exception>
 
 #include <assert.h>
 
@@ -47,6 +48,11 @@ class AsyncJobRunner final : private Thread {
   Notify *notify;
 
   std::atomic<bool> running;
+
+  /**
+   * The exception thrown by Job::Run(), to be rethrown by Wait().
+   */
+  std::exception_ptr exception;
 
 public:
   AsyncJobRunner():running(false) {}
@@ -99,6 +105,8 @@ public:
    * Wait synchronously for completion.  It clears the Job pointer and
    * returns ownership to the caller, who is responsible for deleting
    * it.
+   *
+   * If Job::Run() threw an exception, it gets rethrown by this method.
    *
    * This method must be called before this object is destructed.
    */

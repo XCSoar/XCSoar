@@ -69,6 +69,11 @@ AsyncJobRunner::Wait()
 
   delete env;
 
+  if (exception)
+    /* rethrow the exception that was thrown by Job::Run() in the
+       calling thread */
+    std::rethrow_exception(std::move(exception));
+
   return job;
 }
 
@@ -82,7 +87,13 @@ AsyncJobRunner::Run()
   assert(IsInside());
   assert(running.load(std::memory_order_relaxed));
 
-  job->Run(*env);
+  try {
+    job->Run(*env);
+  } catch (...) {
+    /* an exception was thrown by the Job: remember it, rethrow it in
+       the calling thread in Wait() */
+    exception = std::current_exception();
+  }
 
   if (notify != NULL && !env->IsCancelled())
     notify->SendNotification();

@@ -220,7 +220,12 @@ DeviceDescriptor::CancelAsync()
   assert(open_job != nullptr);
 
   async.Cancel();
-  async.Wait();
+
+  try {
+    async.Wait();
+  } catch (const std::runtime_error &e) {
+    LogError(e);
+  }
 
   delete open_job;
   open_job = nullptr;
@@ -1150,7 +1155,11 @@ DeviceDescriptor::OnNotification()
   assert(InMainThread());
   assert(open_job != nullptr);
 
-  async.Wait();
+  try {
+    async.Wait();
+  } catch (const std::runtime_error &e) {
+    LogError(e);
+  }
 
   delete open_job;
   open_job = nullptr;
