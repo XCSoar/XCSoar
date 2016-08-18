@@ -186,7 +186,7 @@ CloudClient::Load(Deserialiser &s)
   CloudClient client(endpoint, FromBE64(fix.header.key),
                      id,
                      SkyLinesTracking::ImportGeoPoint(fix.location),
-                     FromBE16(fix.altitude));
+                     (int16_t)FromBE16(fix.altitude));
   client.stamp = stamp;
   return client;
 }

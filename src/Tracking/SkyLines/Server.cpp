@@ -106,7 +106,7 @@ Server::OnDatagramReceived(Client &&client,
           ? ImportGeoPoint(fix.location)
           : ::GeoPoint::Invalid(),
           fix.flags & ToBE32(FixPacket::FLAG_ALTITUDE)
-          ? FromBE16(fix.altitude)
+          ? (int16_t)FromBE16(fix.altitude)
           : -1);
     break;
 
