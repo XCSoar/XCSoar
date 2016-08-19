@@ -31,6 +31,9 @@ Copyright_License {
 
 #include <iostream>
 
+static constexpr std::chrono::steady_clock::duration MAX_TRAFFIC_AGE = std::chrono::hours(12);
+static constexpr std::chrono::steady_clock::duration MAX_THERMAL_AGE = std::chrono::hours(12);
+
 using std::cout;
 using std::cerr;
 using std::endl;
@@ -78,8 +81,11 @@ ToKML(BufferedOutputStream &os, const CloudClientContainer &clients)
   os.Write("    <Folder>\n"
            "      <name>Traffic</name>\n");
 
+  const auto min_stamp = std::chrono::steady_clock::now() - MAX_TRAFFIC_AGE;
+
   for (const auto &client : clients)
-    ToKML(os, client);
+    if (client.stamp >= min_stamp)
+      ToKML(os, client);
 
   os.Write("    </Folder>\n");
   os.Write("  </Document>\n"
@@ -113,8 +119,11 @@ ToKML(BufferedOutputStream &os, const CloudThermalContainer &thermals)
   os.Write("    <Folder>\n"
            "      <name>Thermals</name>\n");
 
+  const auto min_time = std::chrono::steady_clock::now() - MAX_THERMAL_AGE;
+
   for (const auto &thermal : thermals)
-    ToKML(os, thermal);
+    if (thermal.time >= min_time)
+      ToKML(os, thermal);
 
   os.Write("    </Folder>\n");
   os.Write("  </Document>\n"
