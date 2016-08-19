@@ -44,6 +44,10 @@ Copyright_License {
 #include <iostream>
 #include <iomanip>
 
+// TODO: review these settings
+static constexpr std::chrono::steady_clock::duration MAX_TRAFFIC_AGE = std::chrono::minutes(15);
+static constexpr std::chrono::steady_clock::duration MAX_THERMAL_AGE = std::chrono::minutes(30);
+
 using std::cout;
 using std::cerr;
 using std::endl;
@@ -265,11 +269,17 @@ CloudServer::OnTrafficRequest(const Client &c, bool near)
        us yet */
     return;
 
+  const auto min_stamp = std::chrono::steady_clock::now() - MAX_TRAFFIC_AGE;
+
   TrafficResponseSender s(*this, c);
 
   unsigned n = 0;
   for (const auto &traffic : clients.QueryWithinRange(client->location, 50000)) {
     if (traffic.get() == client)
+      continue;
+
+    if (traffic->stamp < min_stamp)
+      /* don't send stale traffic, it's probably not there anymore */
       continue;
 
     s.Add(traffic->id, 0, //TODO: time?
@@ -398,6 +408,8 @@ CloudServer::OnThermalRequest(const Client &c)
        us yet */
     return;
 
+  const auto min_time = std::chrono::steady_clock::now() - MAX_THERMAL_AGE;
+
   ThermalResponseSender s(*this, c);
 
   unsigned n = 0;
@@ -407,7 +419,9 @@ CloudServer::OnThermalRequest(const Client &c)
          already */
       continue;
 
-    // TODO: check time stamp, don't send old thermals
+    if (thermal->time < min_time)
+      /* don't send old thermals, they're useless */
+      continue;
 
     s.Add(thermal->Pack());
 
