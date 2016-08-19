@@ -70,7 +70,7 @@ l_logger_setpilotname(lua_State *L)
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
   LoggerSettings &logger = settings_computer.logger;
   logger.pilot_name.SetUTF8(luaL_checkstring(L, 1));
-  
+
   return 0;
 }
 
@@ -90,7 +90,7 @@ l_logger_settimestepcruise(lua_State *L)
 }
 
 static int
-l_logger_settimestepcicrling(lua_State *L)
+l_logger_settimestepcircling(lua_State *L)
 {
   
   if (lua_gettop(L) != 1)
@@ -193,7 +193,7 @@ l_logger_setloggerid(lua_State *L)
 static constexpr struct luaL_Reg settings_funcs[] = {
   {"set_pilot_name", l_logger_setpilotname},
   {"set_time_step_cruise", l_logger_settimestepcruise},
-  {"set_time_step_circling", l_logger_settimestepcicrling},
+  {"set_time_step_circling", l_logger_settimestepcircling},
   {"set_autologger", l_logger_setautologger},
   {"enable_nmea", l_logger_enablenmea},
   {"disable_nmea", l_logger_disablenmea},
