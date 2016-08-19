@@ -44,6 +44,9 @@ Copyright_License {
 #include <iomanip>
 
 // TODO: review these settings
+static constexpr double TRAFFIC_RANGE = 50000;
+static constexpr double THERMAL_RANGE = 50000;
+
 static constexpr std::chrono::steady_clock::duration MAX_TRAFFIC_AGE = std::chrono::minutes(15);
 static constexpr std::chrono::steady_clock::duration MAX_THERMAL_AGE = std::chrono::minutes(30);
 
@@ -214,7 +217,8 @@ CloudServer::OnTrafficRequest(const Client &c, bool near)
   TrafficResponseSender s(*this, c);
 
   unsigned n = 0;
-  for (const auto &traffic : clients.QueryWithinRange(client->location, 50000)) {
+  for (const auto &traffic : clients.QueryWithinRange(client->location,
+                                                      TRAFFIC_RANGE)) {
     if (traffic.get() == client)
       continue;
 
@@ -301,7 +305,8 @@ CloudServer::OnThermalRequest(const Client &c)
   ThermalResponseSender s(*this, c);
 
   unsigned n = 0;
-  for (const auto &thermal : thermals.QueryWithinRange(client->location, 50000)) {
+  for (const auto &thermal : thermals.QueryWithinRange(client->location,
+                                                       THERMAL_RANGE)) {
     if (thermal->client_key == c.key)
       /* ignore this client's own submissions - he knows them
          already */
