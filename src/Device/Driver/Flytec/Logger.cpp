@@ -29,7 +29,8 @@ Copyright_License {
 #include "Time/TimeoutClock.hpp"
 #include "Util/Macros.hpp"
 #include "OS/Path.hpp"
-#include "IO/FileHandle.hpp"
+#include "IO/FileOutputStream.hxx"
+#include "IO/BufferedOutputStream.hxx"
 #include "Operation/Operation.hpp"
 #include "IGC/IGCParser.hpp"
 #include "Util/StringCompare.hxx"
@@ -269,9 +270,8 @@ FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
     return false;
 
   // Open file writer
-  FileHandle writer(path, _T("wb"));
-  if (!writer.IsOpen())
-    return false;
+  FileOutputStream fos(path);
+  BufferedOutputStream os(fos);
 
   unsigned start_sec = flight.start_time.GetSecondOfDay();
   unsigned end_sec = flight.end_time.GetSecondOfDay();
@@ -316,8 +316,11 @@ FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
     }
 
     // Write line to the file
-    writer.Write(buffer);
+    os.Write(buffer);
   }
+
+  os.Flush();
+  fos.Commit();
 
   return true;
 }
