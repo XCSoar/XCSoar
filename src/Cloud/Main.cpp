@@ -50,6 +50,8 @@ static constexpr double THERMAL_RANGE = 50000;
 static constexpr std::chrono::steady_clock::duration MAX_TRAFFIC_AGE = std::chrono::minutes(15);
 static constexpr std::chrono::steady_clock::duration MAX_THERMAL_AGE = std::chrono::minutes(30);
 
+static constexpr std::chrono::steady_clock::duration REQUEST_EXPIRY = std::chrono::minutes(5);
+
 using std::cout;
 using std::cerr;
 using std::endl;
@@ -177,25 +179,45 @@ CloudServer::OnFix(const Client &c,
 {
   (void)time_of_day; // TODO: use this parameter
 
+  CloudClient *client;
   if (location.IsValid()) {
     bool was_empty = clients.empty();
 
-    auto &client = clients.Make(c.endpoint, c.key, location, altitude);
+    client = &clients.Make(c.endpoint, c.key, location, altitude);
 
     cout << "FIX\t"
-         << client.endpoint << '\t'
-         << std::hex << client.key << std::dec << '\t'
-         << client.id << '\t'
-         << client.location << '\t'
-         << client.altitude << 'm'
+         << client->endpoint << '\t'
+         << std::hex << client->key << std::dec << '\t'
+         << client->id << '\t'
+         << client->location << '\t'
+         << client->altitude << 'm'
          << endl;
 
     if (was_empty)
       ScheduleExpire();
   } else {
-    auto *client = clients.Find(c.key);
+    client = clients.Find(c.key);
     if (client != nullptr)
       clients.Refresh(*client, c.endpoint);
+  }
+
+  /* send this new traffic location to all interested clients
+     immediately */
+  const auto now = std::chrono::steady_clock::now();
+  for (const auto &i : clients.QueryWithinRange(location, TRAFFIC_RANGE)) {
+    if (i->key == c.key)
+      /* ignore this client's own submissions - he knows them
+         already */
+      continue;
+
+    if (now > i->wants_traffic)
+      /* not interested (anymore) */
+      continue;
+
+    TrafficResponseSender s(*this, {i->endpoint, i->key});
+    s.Add(client->id, 0, //TODO: time?
+          client->location, client->altitude);
+    s.Flush();
   }
 }
 
@@ -212,7 +234,11 @@ CloudServer::OnTrafficRequest(const Client &c, bool near)
        us yet */
     return;
 
-  const auto min_stamp = std::chrono::steady_clock::now() - MAX_TRAFFIC_AGE;
+  const auto now = std::chrono::steady_clock::now();
+
+  client->wants_traffic = now + REQUEST_EXPIRY;
+
+  const auto min_stamp = now - MAX_TRAFFIC_AGE;
 
   TrafficResponseSender s(*this, c);
 
@@ -285,10 +311,29 @@ CloudServer::OnThermalSubmit(const Client &c,
        << lift << "m/s"
        << endl;
 
-  thermals.Make(c.key,
-                AGeoPoint(bottom_location, bottom_altitude),
-                AGeoPoint(top_location, top_altitude),
-                lift);
+  const auto &thermal =
+    thermals.Make(c.key,
+                  AGeoPoint(bottom_location, bottom_altitude),
+                  AGeoPoint(top_location, top_altitude),
+                  lift);
+
+  /* send this new thermal to all interested clients immediately */
+  const auto now = std::chrono::steady_clock::now();
+  for (const auto &i : clients.QueryWithinRange(bottom_location,
+                                                THERMAL_RANGE)) {
+    if (i->key == c.key)
+      /* ignore this client's own submissions - he knows them
+         already */
+      continue;
+
+    if (now > i->wants_thermals)
+      /* not interested (anymore) */
+      continue;
+
+    ThermalResponseSender s(*this, {i->endpoint, i->key});
+    s.Add(thermal.Pack());
+    s.Flush();
+  }
 }
 
 void
@@ -300,7 +345,11 @@ CloudServer::OnThermalRequest(const Client &c)
        us yet */
     return;
 
-  const auto min_time = std::chrono::steady_clock::now() - MAX_THERMAL_AGE;
+  const auto now = std::chrono::steady_clock::now();
+
+  client->wants_thermals = now + REQUEST_EXPIRY;
+
+  const auto min_time = now - MAX_THERMAL_AGE;
 
   ThermalResponseSender s(*this, c);
 

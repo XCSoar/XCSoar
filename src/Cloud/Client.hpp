@@ -72,6 +72,20 @@ struct CloudClient
   std::chrono::steady_clock::time_point stamp;
 
   /**
+   * The client wishes to receive traffic information until this time
+   * stamp.
+   */
+  std::chrono::steady_clock::time_point wants_traffic =
+    std::chrono::steady_clock::time_point::min();
+
+  /**
+   * The client wishes to receive thermal information until this time
+   * stamp.
+   */
+  std::chrono::steady_clock::time_point wants_thermals =
+    std::chrono::steady_clock::time_point::min();
+
+  /**
    * Last known location.  This is always "defined", because clients
    * without a location are not tracked.
    */
