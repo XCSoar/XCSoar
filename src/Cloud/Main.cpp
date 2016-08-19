@@ -23,14 +23,13 @@ Copyright_License {
 
 #include "Data.hpp"
 #include "Dump.hpp"
+#include "Sender.hpp"
 #include "Serialiser.hpp"
 #include "Tracking/SkyLines/Server.hpp"
 #include "Tracking/SkyLines/Protocol.hpp"
-#include "Tracking/SkyLines/Export.hpp"
 #include "OS/ByteOrder.hpp"
 #include "IO/FileOutputStream.hxx"
 #include "IO/FileReader.hxx"
-#include "Util/CRC.hpp"
 #include "Util/PrintException.hxx"
 #include "Compiler.h"
 
@@ -197,65 +196,6 @@ CloudServer::OnFix(const Client &c,
   }
 }
 
-class TrafficResponseSender {
-  SkyLinesTracking::Server &server;
-  const boost::asio::ip::udp::endpoint &endpoint;
-
-  static constexpr size_t MAX_TRAFFIC_SIZE = 1024;
-  static constexpr size_t MAX_TRAFFIC =
-    MAX_TRAFFIC_SIZE / sizeof(SkyLinesTracking::TrafficResponsePacket::Traffic);
-
-  struct Packet {
-    SkyLinesTracking::TrafficResponsePacket header;
-    std::array<SkyLinesTracking::TrafficResponsePacket::Traffic, MAX_TRAFFIC> traffic;
-  } data;
-
-  unsigned n_traffic = 0;
-
-public:
-  TrafficResponseSender(SkyLinesTracking::Server &_server,
-                        const SkyLinesTracking::Server::Client &client)
-    :server(_server), endpoint(client.endpoint) {
-    data.header.header.magic = ToBE32(SkyLinesTracking::MAGIC);
-    data.header.header.type = ToBE16(SkyLinesTracking::Type::TRAFFIC_RESPONSE);
-    data.header.header.key = ToBE64(client.key);
-
-    data.header.reserved = 0;
-    data.header.reserved2 = 0;
-    data.header.reserved3 = 0;
-  }
-
-  void Add(uint32_t pilot_id, uint32_t time,
-           GeoPoint location, int altitude) {
-    assert(n_traffic < MAX_TRAFFIC);
-
-    auto &traffic = data.traffic[n_traffic++];
-    traffic.pilot_id = ToBE32(pilot_id);
-    traffic.time = ToBE32(time);
-    traffic.location = SkyLinesTracking::ExportGeoPoint(location);
-    traffic.altitude = ToBE16(altitude);
-    traffic.reserved = 0;
-    traffic.reserved2 = 0;
-
-    if (n_traffic == MAX_TRAFFIC)
-      Flush();
-  }
-
-  void Flush() {
-    if (n_traffic == 0)
-      return;
-
-    size_t size = sizeof(data.header) + sizeof(data.traffic[0]) * n_traffic;
-
-    data.header.traffic_count = n_traffic;
-    n_traffic = 0;
-
-    data.header.header.crc = 0;
-    data.header.header.crc = ToBE16(UpdateCRC16CCITT(&data, size, 0));
-    server.SendBuffer(endpoint, boost::asio::const_buffer(&data, size));
-  }
-};
-
 void
 CloudServer::OnTrafficRequest(const Client &c, bool near)
 {
@@ -346,58 +286,6 @@ CloudServer::OnThermalSubmit(const Client &c,
                 AGeoPoint(top_location, top_altitude),
                 lift);
 }
-
-class ThermalResponseSender {
-  SkyLinesTracking::Server &server;
-  const boost::asio::ip::udp::endpoint &endpoint;
-
-  static constexpr size_t MAX_THERMAL_SIZE = 1024;
-  static constexpr size_t MAX_THERMAL =
-    MAX_THERMAL_SIZE / sizeof(SkyLinesTracking::Thermal);
-
-  struct Packet {
-    SkyLinesTracking::ThermalResponsePacket header;
-    std::array<SkyLinesTracking::Thermal, MAX_THERMAL> thermal;
-  } data;
-
-  unsigned n_thermal = 0;
-
-public:
-  ThermalResponseSender(SkyLinesTracking::Server &_server,
-                        const SkyLinesTracking::Server::Client &client)
-    :server(_server), endpoint(client.endpoint) {
-    data.header.header.magic = ToBE32(SkyLinesTracking::MAGIC);
-    data.header.header.type = ToBE16(SkyLinesTracking::Type::THERMAL_RESPONSE);
-    data.header.header.key = ToBE64(client.key);
-
-    data.header.reserved1 = 0;
-    data.header.reserved2 = 0;
-    data.header.reserved3 = 0;
-  }
-
-  void Add(SkyLinesTracking::Thermal t) {
-    assert(n_thermal < MAX_THERMAL);
-
-    data.thermal[n_thermal++] = t;
-
-    if (n_thermal == MAX_THERMAL)
-      Flush();
-  }
-
-  void Flush() {
-    if (n_thermal == 0)
-      return;
-
-    size_t size = sizeof(data.header) + sizeof(data.thermal[0]) * n_thermal;
-
-    data.header.thermal_count = n_thermal;
-    n_thermal = 0;
-
-    data.header.header.crc = 0;
-    data.header.header.crc = ToBE16(UpdateCRC16CCITT(&data, size, 0));
-    server.SendBuffer(endpoint, boost::asio::const_buffer(&data, size));
-  }
-};
 
 void
 CloudServer::OnThermalRequest(const Client &c)
