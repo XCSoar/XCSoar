@@ -41,6 +41,7 @@ Copyright_License {
 #include "Wind.hpp"
 #include "Logger.hpp"
 #include "Tracking.hpp"
+#include "Replay.hpp"
 
 lua_State *
 Lua::NewFullState()
@@ -60,6 +61,7 @@ Lua::NewFullState()
   InitWind(L);
   InitLogger(L);
   InitTracking(L);
+  InitReplay(L);
 
   {
     SetPackagePath(L,
