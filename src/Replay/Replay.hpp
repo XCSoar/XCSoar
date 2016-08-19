@@ -111,15 +111,19 @@ public:
   /**
    * Start fast-forwarding the replay by the specified number of
    * seconds.  This replays the given amount of time from the input
-   * time as quickly as possible.
+   * time as quickly as possible.  Returns false if unable to fast forward.
    */
-  void FastForward(double delta_s) {
+  bool FastForward(double delta_s) {
     if (!IsActive())
-      return;
+      return false;
 
     fast_forward = delta_s;
-    if (virtual_time >= 0)
+    if (virtual_time >= 0) {
       fast_forward += virtual_time;
+      return true;
+    } else {
+      return false;
+    }
   }
 
 private:
