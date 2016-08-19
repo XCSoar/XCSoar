@@ -126,6 +126,8 @@ contains the following names:
   \hline
   \verb|logger| & Access to logger settings. \\
   \hline
+  \verb|replay| & Access to replay system. \\
+  \hline
   \verb|tracking| & Access to tracking settings. \\
   \hline
   \verb|timer| & Class for scheduling periodic callbacks. \\
@@ -836,11 +838,47 @@ download the position \newline of your friends live from the SkyLines server.\\
 
 \hline
 
-\verb|livetrack24_vehicle_name| & Set current set vehicle name.\\
+\verb|livetrack24_vehicle_name| & Get current vehicle name.\\
 
 \hline
 
 \verb|set_livetrack24_vehiclename(char* name)| & Sets the livetrack24 vehiclename.\\
+
+\end{tabularx}
+\end{maxipage}
+
+\subsection{Replay}
+
+The Settings provides access to xcsoar Replay system.
+
+The following attributes are provided by \verb|xcsoar.replay|:
+
+\begin{maxipage}
+\begin{tabularx}{1.9\textwidth}{l|X}
+Name & Description \\
+\hline\hline
+
+\verb|start(path)| & Starts replay from file \verb|path|\\
+
+\hline
+
+\verb|stop())| & Stops replay\\
+
+\hline
+
+\verb|fast_forward(dt))| & Fast forwards \verb|dt| seconds\\
+
+\hline
+
+\verb|set_time_scale(r))| & Sets replay clock rate to \verb|r|\\
+
+\hline
+
+\verb|time_scale| & Gets replay clock rate $s$\\
+
+\hline
+
+\verb|virtual_time| & Gets replay virtual time $s$\\
 
 \end{tabularx}
 \end{maxipage}
