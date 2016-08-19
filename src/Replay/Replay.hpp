@@ -126,6 +126,10 @@ public:
     }
   }
 
+  double GetVirtualTime() const {
+    return virtual_time;
+  }
+
 private:
   void OnTimer() override;
 };
