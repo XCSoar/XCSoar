@@ -108,14 +108,6 @@ public:
     return fputs(s, file);
   }
 
-#ifdef _UNICODE
-  int Write(const TCHAR *s) {
-    assert(s != nullptr);
-    assert(file != nullptr);
-    return _fputts(s, file);
-  }
-#endif
-
   /** Writes a block of data to the file */
   size_t Write(const void *s, size_t size, size_t length) {
     assert(s != nullptr);
@@ -130,16 +122,6 @@ public:
 
     ::fprintf(file, format, args...);
   }
-
-#ifdef _UNICODE
-  template<typename... Args>
-  void WriteFormatted(const TCHAR *format, Args&&... args) {
-    assert(format != nullptr);
-    assert(file != nullptr);
-
-    ::_ftprintf(file, format, args...);
-  }
-#endif
 };
 
 #endif
