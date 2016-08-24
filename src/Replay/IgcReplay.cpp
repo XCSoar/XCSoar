@@ -28,16 +28,14 @@
 #include "NMEA/Info.hpp"
 #include "Units/System.hpp"
 
-IgcReplay::IgcReplay(NLineReader *_reader)
-  :AbstractReplay(),
-   reader(_reader)
+IgcReplay::IgcReplay(std::unique_ptr<NLineReader> &&_reader)
+  :reader(std::move(_reader))
 {
   extensions.clear();
 }
 
 IgcReplay::~IgcReplay()
 {
-  delete reader;
 }
 
 inline bool

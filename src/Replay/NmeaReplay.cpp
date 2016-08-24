@@ -30,8 +30,9 @@
 #include "NMEA/Info.hpp"
 #include "Util/StringCompare.hxx"
 
-NmeaReplay::NmeaReplay(NLineReader *_reader, const DeviceConfig &config)
-  :reader(_reader),
+NmeaReplay::NmeaReplay(std::unique_ptr<NLineReader> &&_reader,
+                       const DeviceConfig &config)
+  :reader(std::move(_reader)),
    parser(new NMEAParser()),
    device(nullptr)
 {
@@ -52,7 +53,6 @@ NmeaReplay::~NmeaReplay()
 {
   delete device;
   delete parser;
-  delete reader;
 }
 
 bool

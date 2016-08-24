@@ -91,8 +91,8 @@ inline void load_scores(unsigned &contest_handicap) {
 class ReplayLoggerSim: public IgcReplay
 {
 public:
-  ReplayLoggerSim(NLineReader *reader)
-    :IgcReplay(reader) {}
+  explicit ReplayLoggerSim(std::unique_ptr<NLineReader> &&_reader)
+    :IgcReplay(std::move(_reader)) {}
 
   void print(std::ostream &f, const MoreData &basic) {
     f << (double)basic.time << " " 
@@ -113,9 +113,7 @@ test_replay(const Contest olc_type,
 
   GlidePolar glide_polar(2);
 
-  FileLineReaderA *reader = new FileLineReaderA(replay_file);
-
-  ReplayLoggerSim sim(reader);
+  ReplayLoggerSim sim(std::make_unique<FileLineReaderA>(replay_file));
 
   ComputerSettings settings_computer;
   settings_computer.SetDefaults();

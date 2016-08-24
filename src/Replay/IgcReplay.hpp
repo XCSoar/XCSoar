@@ -27,17 +27,19 @@ Copyright_License {
 #include "AbstractReplay.hpp"
 #include "IGC/IGCExtensions.hpp"
 
+#include <memory>
+
 class NLineReader;
 struct IGCFix;
 
 class IgcReplay: public AbstractReplay
 {
-  NLineReader *reader;
+  std::unique_ptr<NLineReader> reader;
 
   IGCExtensions extensions;
 
 public:
-  IgcReplay(NLineReader *reader);
+  IgcReplay(std::unique_ptr<NLineReader> &&_reader);
   ~IgcReplay() override;
 
   bool Update(NMEAInfo &data) override;

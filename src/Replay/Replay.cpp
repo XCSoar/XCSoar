@@ -71,14 +71,12 @@ Replay::Start(Path _path)
   if (path.IsNull() || path.IsEmpty()) {
     replay = new DemoReplayGlue(task_manager);
   } else if (path.MatchesExtension(_T(".igc"))) {
-    auto reader = new FileLineReaderA(path);
-    replay = new IgcReplay(reader);
+    replay = new IgcReplay(std::make_unique<FileLineReaderA>(path));
 
     cli = new CatmullRomInterpolator(0.98);
     cli->Reset();
   } else {
-    auto reader = new FileLineReaderA(path);
-    replay = new NmeaReplay(reader,
+    replay = new NmeaReplay(std::make_unique<FileLineReaderA>(path),
                             CommonInterface::GetSystemSettings().devices[0]);
   }
 

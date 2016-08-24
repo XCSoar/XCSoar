@@ -28,6 +28,8 @@ Copyright_License {
 #include "Time/ReplayClock.hpp"
 #include "Device/Port/NullPort.hpp"
 
+#include <memory>
+
 class NLineReader;
 class NMEAParser;
 class Device;
@@ -36,7 +38,7 @@ struct NMEAInfo;
 
 class NmeaReplay: public AbstractReplay
 {
-  NLineReader *reader;
+  std::unique_ptr<NLineReader> reader;
 
   NMEAParser *parser;
   NullPort port;
@@ -45,7 +47,8 @@ class NmeaReplay: public AbstractReplay
   ReplayClock clock;
 
 public:
-  NmeaReplay(NLineReader *reader, const DeviceConfig &config);
+  NmeaReplay(std::unique_ptr<NLineReader> &&_reader,
+             const DeviceConfig &config);
   ~NmeaReplay();
 
   bool Update(NMEAInfo &data) override;
