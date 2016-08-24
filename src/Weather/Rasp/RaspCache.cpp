@@ -27,7 +27,7 @@ Copyright_License {
 #include "Terrain/Loader.hpp"
 #include "Language/Language.hpp"
 #include "OS/Path.hpp"
-#include "zzip/zzip.h"
+#include "IO/ZipArchive.hpp"
 
 #include <assert.h>
 #include <windef.h> // for MAX_PATH
@@ -101,8 +101,8 @@ RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
 
   Close();
 
-  ZZIP_DIR *dir = store.OpenArchive();
-  if (dir == nullptr)
+  auto archive = store.OpenArchive();
+  if (!archive)
     return;
 
   char new_name[MAX_PATH];
@@ -110,10 +110,9 @@ RaspCache::Reload(BrokenTime time_local, OperationEnvironment &operation)
                               effective_time);
 
   RasterMap *new_map = new RasterMap();
-  bool success = LoadTerrainOverview(dir, new_name, nullptr, new_map->GetTileCache(),
-                                     true, operation);
-  zzip_dir_close(dir);
-  if (!success) {
+  if (!LoadTerrainOverview(archive->get(), new_name, nullptr,
+                           new_map->GetTileCache(),
+                           true, operation)) {
     delete new_map;
     return;
   }

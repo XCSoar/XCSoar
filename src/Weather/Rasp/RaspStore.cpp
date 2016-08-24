@@ -26,6 +26,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "OS/ConvertPathName.hpp"
 #include "OS/Path.hpp"
+#include "IO/ZipArchive.hpp"
 #include "Util/StringCompare.hxx"
 #include "Util/Macros.hpp"
 #include "Util/tstring.hpp"
@@ -137,33 +138,28 @@ RaspStore::NarrowWeatherFilename(char *filename, Path name,
   return true;
 }
 
-struct zzip_dir *
+std::unique_ptr<ZipArchive>
 RaspStore::OpenArchive() const
 {
-  NarrowPathName narrow_path(path);
-  if (!narrow_path.IsDefined())
-    return nullptr;
-
-  return zzip_dir_open(narrow_path, nullptr);
+  return std::make_unique<ZipArchive>(path);
 }
 
 bool
-RaspStore::ExistsItem(struct zzip_dir *dir, Path name, unsigned time_index)
+RaspStore::ExistsItem(const ZipArchive &archive, Path name, unsigned time_index)
 {
   char filename[MAX_PATH];
   if (!NarrowWeatherFilename(filename, name, time_index))
     return false;
 
-  ZZIP_STAT st;
-  return zzip_dir_stat(dir, filename, &st, 0) == 0;
+  return archive.Exists(filename);
 }
 
 bool
-RaspStore::ScanMapItem(struct zzip_dir *dir, MapItem &item)
+RaspStore::ScanMapItem(const ZipArchive &archive, MapItem &item)
 {
   bool found = false;
   for (unsigned i = 0; i < MAX_WEATHER_TIMES; i++)
-    if (ExistsItem(dir, Path(item.name), i))
+    if (ExistsItem(archive, Path(item.name), i))
       found = item.times[i] = true;
 
   return found;
@@ -175,8 +171,8 @@ RaspStore::ScanAll()
   /* not holding the lock here, because this method is only called
      during startup, when the other threads aren't running yet */
 
-  ZZIP_DIR *dir = OpenArchive();
-  if (dir == nullptr)
+  auto archive = OpenArchive();
+  if (!archive)
     return;
 
   maps.clear();
@@ -190,40 +186,34 @@ RaspStore::ScanAll()
     MapItem item(i.name);
     item.label = i.label;
     item.help = i.help;
-    if (ScanMapItem(dir, item))
+    if (ScanMapItem(*archive, item))
       maps.push_back(item);
 
     names.insert(i.name);
   }
 
-  ZZIP_DIRENT e;
-  while (zzip_dir_read(dir, &e)) {
-    if (maps.full())
-      break;
-
-    const char *filename = e.d_name;
-    if (!StringEndsWith(filename, ".jp2"))
+  std::string name;
+  while (!maps.full() && !(name = archive->NextName()).empty()) {
+    if (!StringEndsWith(name.c_str(), ".jp2"))
       continue;
 
     MapItem item(_T(""));
 
-    const char *dot = strchr(filename, '.');
-    if (dot == nullptr || dot == filename ||
-        size_t(dot - filename) >= item.name.capacity())
+    auto dot = name.find('.');
+    if (dot == name.npos || dot == 0 ||
+        dot >= item.name.capacity())
       continue;
 
-    item.name.SetASCII(filename, dot);
+    item.name.SetASCII(name.c_str(), name.c_str() + dot);
     item.label = nullptr;
     item.help = nullptr;
 
     if (!names.insert(item.name.c_str()).second)
       continue;
 
-    if (ScanMapItem(dir, item))
+    if (ScanMapItem(*archive, item))
       maps.push_back(item);
   }
 
   // TODO: scan the rest
-
-  zzip_dir_close(dir);
 }

@@ -27,6 +27,7 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <algorithm>
+#include <string>
 #include <cstddef>
 
 class Path;
@@ -60,6 +61,13 @@ public:
 
   gcc_pure
   bool Exists(const char *name) const;
+
+  /**
+   * Obtain the next directory entry name.  Can be used to iterate
+   * over all files in the archive.  Returns an empty string after the
+   * last entry.
+   */
+  std::string NextName();
 };
 
 #endif

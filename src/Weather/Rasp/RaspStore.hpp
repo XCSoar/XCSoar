@@ -30,6 +30,8 @@ Copyright_License {
 #include "Time/BrokenTime.hpp"
 #include "Compiler.h"
 
+#include <memory>
+
 #include <assert.h>
 #include <tchar.h>
 
@@ -37,8 +39,8 @@ Copyright_License {
 
 class Path;
 class RasterMap;
+class ZipArchive;
 struct GeoPoint;
-struct zzip_dir;
 
 /**
  * Class to manage raster weather data.  Usually, these raster maps
@@ -145,17 +147,17 @@ public:
   gcc_const
   static BrokenTime IndexToTime(unsigned index);
 
-  struct zzip_dir *OpenArchive() const;
+  std::unique_ptr<ZipArchive> OpenArchive() const;
 
   static bool NarrowWeatherFilename(char *filename, Path name,
                                     unsigned time_index);
 
 private:
   gcc_pure
-  static bool ExistsItem(struct zzip_dir *dir, Path name,
+  static bool ExistsItem(const ZipArchive &archive, Path name,
                          unsigned time_index);
 
-  static bool ScanMapItem(struct zzip_dir *dir, MapItem &item);
+  static bool ScanMapItem(const ZipArchive &archive, MapItem &item);
 };
 
 #endif

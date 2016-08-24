@@ -47,3 +47,12 @@ ZipArchive::Exists(const char *name) const
   ZZIP_STAT st;
   return zzip_dir_stat(dir, name, &st, 0) == 0;
 }
+
+std::string
+ZipArchive::NextName()
+{
+  ZZIP_DIRENT e;
+  return zzip_dir_read(dir, &e)
+    ? std::string(e.d_name)
+    : std::string();
+}
