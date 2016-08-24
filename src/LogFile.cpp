@@ -135,16 +135,30 @@ LogFormat(const TCHAR *Str, ...)
 
 #endif
 
+static void
+LogNestedError(const std::exception &exception)
+{
+  try {
+    std::rethrow_if_nested(exception);
+  } catch (const std::exception &nested) {
+    LogError(nested);
+  } catch (...) {
+    LogString("Unrecognized nested exception");
+  }
+}
+
 void
 LogError(const std::exception &exception)
 {
   LogString(exception.what());
+  LogNestedError(exception);
 }
 
 void
 LogError(const char *msg, const std::exception &exception)
 {
   LogFormat("%s: %s", msg, exception.what());
+  LogNestedError(exception);
 }
 
 void
