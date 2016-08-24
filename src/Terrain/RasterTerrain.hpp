@@ -28,9 +28,9 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "Thread/Guard.hpp"
 #include "OS/Path.hpp"
+#include "IO/ZipArchive.hpp"
 #include "Compiler.h"
 
-struct zzip_dir;
 class FileCache;
 class OperationEnvironment;
 
@@ -45,7 +45,7 @@ public:
   friend class WaypointVisitorMap; // for intersection rendering
 
 private:
-  struct zzip_dir *const dir;
+  ZipArchive archive;
 
   RasterMap map;
 
@@ -53,12 +53,10 @@ private:
   /**
    * Constructor.  Returns uninitialised object.
    */
-  explicit RasterTerrain(struct zzip_dir *_dir)
-    :Guard<RasterMap>(map), dir(_dir) {}
+  explicit RasterTerrain(ZipArchive &&_archive)
+    :Guard<RasterMap>(map), archive(std::move(_archive)) {}
 
 public:
-  ~RasterTerrain();
-
   const Serial &GetSerial() const {
     return map.GetSerial();
   }

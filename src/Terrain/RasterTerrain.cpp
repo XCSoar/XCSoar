@@ -24,17 +24,13 @@ Copyright_License {
 #include "RasterTerrain.hpp"
 #include "Loader.hpp"
 #include "Profile/Profile.hpp"
+#include "IO/ZipArchive.hpp"
 #include "IO/FileCache.hpp"
 #include "OS/ConvertPathName.hpp"
-
-#include <zzip/zzip.h>
+#include "Operation/Operation.hpp"
+#include "Util/ConvertString.hpp"
 
 static const TCHAR *const terrain_cache_name = _T("terrain");
-
-RasterTerrain::~RasterTerrain()
-{
-    zzip_dir_close(dir);
-}
 
 inline bool
 RasterTerrain::LoadCache(FileCache &cache, Path path)
@@ -74,7 +70,7 @@ RasterTerrain::Load(Path path, FileCache *cache,
   if (LoadCache(cache, path))
     return true;
 
-  if (!LoadTerrainOverview(dir, map.GetTileCache(), operation))
+  if (!LoadTerrainOverview(archive.get(), map.GetTileCache(), operation))
     return false;
 
   map.UpdateProjection();
@@ -87,22 +83,21 @@ RasterTerrain::Load(Path path, FileCache *cache,
 
 RasterTerrain *
 RasterTerrain::OpenTerrain(FileCache *cache, OperationEnvironment &operation)
-{
+try {
   const auto path = Profile::GetPath(ProfileKeys::MapFile);
   if (path.IsNull())
     return nullptr;
 
-  ZZIP_DIR *dir = zzip_dir_open(NarrowPathName(path), nullptr);
-  if (dir == nullptr)
-    return nullptr;
-
-  RasterTerrain *rt = new RasterTerrain(dir);
+  RasterTerrain *rt = new RasterTerrain(ZipArchive(path));
   if (!rt->Load(path, cache, operation)) {
     delete rt;
     return nullptr;
   }
 
   return rt;
+} catch (const std::runtime_error &e) {
+  operation.SetErrorMessage(UTF8ToWideConverter(e.what()));
+  return nullptr;
 }
 
 bool
@@ -112,7 +107,7 @@ RasterTerrain::UpdateTiles(const GeoPoint &location, double radius)
   if (!tile_cache.IsValid())
     return false;
 
-  UpdateTerrainTiles(dir, tile_cache, mutex,
+  UpdateTerrainTiles(archive.get(), tile_cache, mutex,
                      map.GetProjection(), location, radius);
   return map.IsDirty();
 }
