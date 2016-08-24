@@ -21,30 +21,27 @@ Copyright_License {
 }
 */
 
+#include "IO/ZipArchive.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "OS/Args.hpp"
 #include "Util/Error.hxx"
+#include "Util/PrintException.hxx"
 
 #include <zzip/zzip.h>
 
 #include <stdio.h>
 
 int main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "ZIPFILE FILENAME");
-  const char *zip_path = args.ExpectNext();
+  const auto zip_path = args.ExpectNextPath();
   const char *filename = args.ExpectNext();
   args.ExpectEnd();
 
-  auto dir = zzip_dir_open(zip_path, nullptr);
-  if (dir == nullptr) {
-    fprintf(stderr, "Failed to open %s\n", zip_path);
-    return EXIT_FAILURE;
-  }
+  ZipArchive archive(zip_path);
 
   Error error;
-  ZipLineReader reader(dir, filename, error);
-  zzip_dir_close(dir);
+  ZipLineReader reader(archive.get(), filename, error);
   if (reader.error()) {
     fprintf(stderr, "%s\n", error.GetMessage());
     return EXIT_FAILURE;
@@ -55,4 +52,7 @@ int main(int argc, char **argv)
     _putts(line);
 
   return EXIT_SUCCESS;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }
