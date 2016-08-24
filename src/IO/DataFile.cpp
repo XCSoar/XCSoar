@@ -31,7 +31,7 @@ Copyright_License {
 
 #include <assert.h>
 
-Source<char> *
+std::unique_ptr<Source<char>>
 OpenDataFile(const TCHAR *name, Error &error)
 {
   assert(name != nullptr);
@@ -39,16 +39,14 @@ OpenDataFile(const TCHAR *name, Error &error)
 
   const auto path = LocalPath(name);
 
-  FileSource *source = new FileSource(path, error);
-  if (source->error()) {
-    delete source;
-    return nullptr;
-  }
+  auto source = std::make_unique<FileSource>(path, error);
+  if (source->error())
+    source.reset();
 
-  return source;
+  return std::move(source);
 }
 
-TLineReader *
+std::unique_ptr<TLineReader>
 OpenDataTextFile(const TCHAR *name, Error &error, Charset cs)
 {
   assert(name != nullptr);
@@ -56,16 +54,14 @@ OpenDataTextFile(const TCHAR *name, Error &error, Charset cs)
 
   const auto path = LocalPath(name);
 
-  FileLineReader *reader = new FileLineReader(path, error, cs);
-  if (reader->error()) {
-    delete reader;
-    return nullptr;
-  }
+  auto reader = std::make_unique<FileLineReader>(path, error, cs);
+  if (reader->error())
+    reader.reset();
 
-  return reader;
+  return std::move(reader);
 }
 
-NLineReader *
+std::unique_ptr<NLineReader>
 OpenDataTextFileA(const TCHAR *name, Error &error)
 {
   assert(name != nullptr);
@@ -73,16 +69,14 @@ OpenDataTextFileA(const TCHAR *name, Error &error)
 
   const auto path = LocalPath(name);
 
-  FileLineReaderA *reader = new FileLineReaderA(path, error);
-  if (reader->error()) {
-    delete reader;
-    return nullptr;
-  }
+  auto reader = std::make_unique<FileLineReaderA>(path, error);
+  if (reader->error())
+    reader.reset();
 
-  return reader;
+  return std::move(reader);
 }
 
-TextWriter *
+std::unique_ptr<TextWriter>
 CreateDataTextFile(const TCHAR *name, bool append)
 {
   assert(name != nullptr);
@@ -90,14 +84,9 @@ CreateDataTextFile(const TCHAR *name, bool append)
 
   const auto path = LocalPath(name);
 
-  TextWriter *writer = new TextWriter(path, append);
-  if (writer == nullptr)
-    return nullptr;
-
-  if (!writer->IsOpen()) {
-    delete writer;
-    return nullptr;
-  }
+  auto writer = std::make_unique<TextWriter>(path, append);
+  if (!writer->IsOpen())
+    writer.reset();
 
   return writer;
 }

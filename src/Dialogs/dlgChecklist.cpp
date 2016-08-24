@@ -81,8 +81,8 @@ LoadChecklist()
   free(ChecklistTitle[0]);
   ChecklistTitle[0] = NULL;
 
-  TLineReader *reader = OpenDataTextFile(_T(XCSCHKLIST), IgnoreError());
-  if (reader == NULL)
+  auto reader = OpenDataTextFile(_T(XCSCHKLIST), IgnoreError());
+  if (!reader)
     return;
 
   StaticString<MAXDETAILS> Details;
@@ -119,8 +119,6 @@ LoadChecklist()
       Details.push_back(_T('\n'));
     }
   }
-
-  delete reader;
 
   if (inDetails) {
     addChecklist(Name, Details);

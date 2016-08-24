@@ -42,13 +42,11 @@ Copyright_License {
 static void
 LoadFLARMnet(FlarmNetDatabase &db)
 {
-  NLineReader *reader = OpenDataTextFileA(_T("data.fln"), IgnoreError());
-  if (reader == NULL)
+  auto reader = OpenDataTextFileA(_T("data.fln"), IgnoreError());
+  if (!reader)
     return;
 
   unsigned num_records = FlarmNetReader::LoadFile(*reader, db);
-  delete reader;
-
   if (num_records > 0)
     LogFormat("%u FLARMnet ids found", num_records);
 }
@@ -63,12 +61,9 @@ LoadSecondary(FlarmNameDatabase &db)
 {
   LogFormat("OpenFLARMDetails");
 
-  TLineReader *reader = OpenDataTextFile(_T("xcsoar-flarm.txt"),
-                                         IgnoreError());
-  if (reader != NULL) {
+  auto reader = OpenDataTextFile(_T("xcsoar-flarm.txt"), IgnoreError());
+  if (reader)
     LoadFlarmNameFile(*reader, db);
-    delete reader;
-  }
 }
 
 void
@@ -104,12 +99,11 @@ SaveFlarmColors()
 static void
 SaveSecondary(FlarmNameDatabase &flarm_names)
 {
-  TextWriter *writer = CreateDataTextFile(_T("xcsoar-flarm.txt"));
-  if (writer == NULL)
+  auto writer = CreateDataTextFile(_T("xcsoar-flarm.txt"));
+  if (!writer)
     return;
 
   SaveFlarmNameFile(*writer, flarm_names);
-  delete writer;
 }
 
 void

@@ -39,9 +39,7 @@ MarkLocation(const GeoPoint &loc, const BrokenDateTime &time)
           (double)loc.longitude.Degrees(),
           (double)loc.latitude.Degrees());
 
-  TextWriter *writer = CreateDataTextFile(_T("xcsoar-marks.txt"), true);
-  if (writer != NULL) {
+  auto writer = CreateDataTextFile(_T("xcsoar-marks.txt"), true);
+  if (writer)
     writer->WriteLine(message);
-    delete writer;
-  }
 }

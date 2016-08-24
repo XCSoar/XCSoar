@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Charset.hpp"
 
+#include <memory>
+
 #include <tchar.h>
 
 template<class T> class Source;
@@ -41,7 +43,7 @@ class Error;
  * @return a Source which must be deleted by the caller; nullptr if an
  * error occurred opening the file
  */
-Source<char> *
+std::unique_ptr<Source<char>>
 OpenDataFile(const TCHAR *name, Error &error);
 
 /**
@@ -52,7 +54,7 @@ OpenDataFile(const TCHAR *name, Error &error);
  * @return a TLineReader which must be deleted by the caller; nullptr if
  * an error occurred opening the file
  */
-TLineReader *
+std::unique_ptr<TLineReader>
 OpenDataTextFile(const TCHAR *name, Error &error,
                  Charset cs=Charset::UTF8);
 
@@ -63,14 +65,14 @@ OpenDataTextFile(const TCHAR *name, Error &error,
  * @return a TLineReader which must be deleted by the caller; nullptr if
  * an error occurred opening the file
  */
-NLineReader *
+std::unique_ptr<NLineReader>
 OpenDataTextFileA(const TCHAR *name, Error &error);
 
 /**
  * Creates a text file in the data directory.  If the file already
  * exists, it is truncated, unless "append" is true.
  */
-TextWriter *
+std::unique_ptr<TextWriter>
 CreateDataTextFile(const TCHAR *name, bool append=false);
 
 #endif
