@@ -30,31 +30,26 @@ Copyright_License {
 #include "Terrain/Loader.hpp"
 #include "OS/Args.hpp"
 #include "OS/ConvertPathName.hpp"
+#include "IO/ZipArchive.hpp"
 #include "Operation/Operation.hpp"
-
-#include <zzip/zzip.h>
+#include "Util/PrintException.hxx"
 
 #include <stdio.h>
 #include <string.h>
 #include <tchar.h>
 
 int main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "PATH");
-  const auto map_path = args.ExpectNext();
+  const auto map_path = args.ExpectNextPath();
   args.ExpectEnd();
 
-  ZZIP_DIR *dir = zzip_dir_open(map_path, nullptr);
-  if (dir == nullptr) {
-    fprintf(stderr, "Failed to open %s\n", map_path);
-    return EXIT_FAILURE;
-  }
+  ZipArchive archive(map_path);
 
   NullOperationEnvironment operation;
   RasterTileCache rtc;
-  if (!LoadTerrainOverview(dir, rtc, operation)) {
+  if (!LoadTerrainOverview(archive.get(), rtc, operation)) {
     fprintf(stderr, "LoadOverview failed\n");
-    zzip_dir_close(dir);
     return EXIT_FAILURE;
   }
 
@@ -67,10 +62,12 @@ int main(int argc, char **argv)
 
   SharedMutex mutex;
   do {
-    UpdateTerrainTiles(dir, rtc, mutex,
+    UpdateTerrainTiles(archive.get(), rtc, mutex,
                        rtc.GetWidth() / 2, rtc.GetHeight() / 2, 1000);
   } while (rtc.IsDirty());
-  zzip_dir_close(dir);
 
   return EXIT_SUCCESS;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }
