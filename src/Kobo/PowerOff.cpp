@@ -93,7 +93,7 @@ DrawBanner(Canvas &canvas, PixelRect &rc)
 
 static void
 DrawFlights(Canvas &canvas, const PixelRect &rc)
-{
+try {
   FileLineReaderA file(Path("/mnt/onboard/XCSoarData/flights.log"), IgnoreError());
   if (file.error())
     return;
@@ -106,6 +106,7 @@ DrawFlights(Canvas &canvas, const PixelRect &rc)
     renderer.AddFlight(flight);
 
   renderer.Draw(canvas, rc);
+} catch (const std::runtime_error &e) {
 }
 
 static void
