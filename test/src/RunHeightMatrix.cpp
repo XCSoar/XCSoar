@@ -27,9 +27,9 @@ Copyright_License {
 #include "Projection/WindowProjection.hpp"
 #include "Screen/Layout.hpp"
 #include "OS/Args.hpp"
+#include "IO/ZipArchive.hpp"
 #include "Operation/Operation.hpp"
-
-#include <zzip/zzip.h>
+#include "Util/PrintException.hxx"
 
 #include <stdio.h>
 #include <string.h>
@@ -38,24 +38,19 @@ Copyright_License {
 unsigned Layout::scale_1024 = 1024;
 
 int main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "PATH");
-  const auto map_path = args.ExpectNext();
+  const auto map_path = args.ExpectNextPath();
   args.ExpectEnd();
 
-  ZZIP_DIR *dir = zzip_dir_open(map_path, nullptr);
-  if (dir == nullptr) {
-    fprintf(stderr, "Failed to open %s\n", map_path);
-    return EXIT_FAILURE;
-  }
+  ZipArchive archive(map_path);
 
   RasterMap map;
 
   NullOperationEnvironment operation;
-  if (!LoadTerrainOverview(dir, map.GetTileCache(),
+  if (!LoadTerrainOverview(archive.get(), map.GetTileCache(),
                            operation)) {
     fprintf(stderr, "failed to load map\n");
-    zzip_dir_close(dir);
     return EXIT_FAILURE;
   }
 
@@ -63,11 +58,10 @@ int main(int argc, char **argv)
 
   SharedMutex mutex;
   do {
-    UpdateTerrainTiles(dir, map.GetTileCache(), mutex,
+    UpdateTerrainTiles(archive.get(), map.GetTileCache(), mutex,
                        map.GetProjection(),
                        map.GetMapCenter(), 50000);
   } while (map.IsDirty());
-  zzip_dir_close(dir);
 
   double radius = 50000;
   WindowProjection projection;
@@ -87,4 +81,7 @@ int main(int argc, char **argv)
 #endif
 
   return EXIT_SUCCESS;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }
