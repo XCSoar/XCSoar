@@ -24,11 +24,15 @@ Copyright_License {
 #ifndef XCSOAR_IO_MAP_FILE_HPP
 #define XCSOAR_IO_MAP_FILE_HPP
 
+#include <memory>
+
+class ZipArchive;
+
 /**
  * Obtain the configured map file path from the profile and open it as
  * a ZIP file.
  */
-struct zzip_dir *
+std::unique_ptr<ZipArchive>
 OpenMapFile();
 
 #endif

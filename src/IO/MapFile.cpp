@@ -22,18 +22,22 @@ Copyright_License {
 */
 
 #include "MapFile.hpp"
+#include "ZipArchive.hpp"
 #include "Profile/Profile.hpp"
 #include "OS/ConvertPathName.hpp"
 #include "OS/Path.hpp"
 
-#include <zzip/zzip.h>
+#include <stdexcept>
 
-struct zzip_dir *
+std::unique_ptr<ZipArchive>
 OpenMapFile()
-{
+try {
   auto path = Profile::GetPath(ProfileKeys::MapFile);
   if (path.IsNull())
     return nullptr;
 
-  return zzip_dir_open(NarrowPathName(path), nullptr);
+  return std::make_unique<ZipArchive>(path);
+} catch (const std::runtime_error &e) {
+  // TODO: log error?
+  return nullptr;
 }

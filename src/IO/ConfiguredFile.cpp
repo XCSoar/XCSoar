@@ -24,6 +24,7 @@ Copyright_License {
 #include "ConfiguredFile.hpp"
 #include "MapFile.hpp"
 #include "FileLineReader.hpp"
+#include "ZipArchive.hpp"
 #include "ZipLineReader.hpp"
 #include "Profile/Profile.hpp"
 #include "LogFile.hpp"
@@ -78,13 +79,13 @@ OpenMapTextFile(const char *in_map_file, Charset cs)
 {
   assert(in_map_file != nullptr);
 
-  auto dir = OpenMapFile();
-  if (dir == nullptr)
+  auto archive = OpenMapFile();
+  if (!archive)
     return nullptr;
 
   Error error;
-  auto reader = std::make_unique<ZipLineReader>(dir, in_map_file, error, cs);
-  zzip_dir_close(dir);
+  auto reader = std::make_unique<ZipLineReader>(archive->get(), in_map_file,
+                                                error, cs);
   if (reader->error()) {
     LogError(error);
     return nullptr;

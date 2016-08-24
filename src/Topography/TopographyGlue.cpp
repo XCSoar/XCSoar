@@ -28,6 +28,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Operation/Operation.hpp"
 #include "IO/MapFile.hpp"
+#include "IO/ZipArchive.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "Util/Error.hxx"
 
@@ -41,19 +42,17 @@ static bool
 LoadConfiguredTopographyZip(TopographyStore &store,
                             OperationEnvironment &operation)
 {
-  auto dir = OpenMapFile();
-  if (dir == nullptr)
+  auto archive = OpenMapFile();
+  if (!archive)
     return false;
 
-  ZipLineReaderA reader(dir, "topology.tpl", IgnoreError());
+  ZipLineReaderA reader(archive->get(), "topology.tpl", IgnoreError());
   if (reader.error()) {
-    zzip_dir_close(dir);
     LogFormat(_T("No topography in map file"));
     return false;
   }
 
-  store.Load(operation, reader, nullptr, dir);
-  zzip_dir_close(dir);
+  store.Load(operation, reader, nullptr, archive->get());
   return true;
 }
 

@@ -33,8 +33,7 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "OS/Path.hpp"
 #include "IO/MapFile.hpp"
-
-#include <zzip/zzip.h>
+#include "IO/ZipArchive.hpp"
 
 static bool
 LoadWaypointFile(Waypoints &waypoints, Path path,
@@ -122,19 +121,17 @@ WaypointGlue::LoadWaypoints(Waypoints &way_points,
 
   // If no waypoint file found yet
   if (!found) {
-    auto dir = OpenMapFile();
-    if (dir != nullptr) {
-      found |= LoadWaypointFile(way_points, dir, "waypoints.xcw",
+    auto archive = OpenMapFile();
+    if (archive) {
+      found |= LoadWaypointFile(way_points, archive->get(), "waypoints.xcw",
                                 WaypointFileType::WINPILOT,
                                 WaypointOrigin::MAP,
                                 terrain, operation);
 
-      found |= LoadWaypointFile(way_points, dir, "waypoints.cup",
+      found |= LoadWaypointFile(way_points, archive->get(), "waypoints.cup",
                                 WaypointFileType::SEEYOU,
                                 WaypointOrigin::MAP,
                                 terrain, operation);
-
-      zzip_dir_close(dir);
     }
   }
 

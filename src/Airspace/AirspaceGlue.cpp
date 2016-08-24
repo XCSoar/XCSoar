@@ -30,12 +30,11 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "OS/Path.hpp"
 #include "IO/FileLineReader.hpp"
+#include "IO/ZipArchive.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "IO/MapFile.hpp"
 #include "Profile/Profile.hpp"
 #include "Util/Error.hxx"
-
-#include <zzip/zzip.h>
 
 #include <string.h>
 
@@ -108,11 +107,10 @@ ReadAirspace(Airspaces &airspaces,
   if (!path.IsNull())
     airspace_ok |= ParseAirspaceFile(parser, path, operation);
 
-  auto dir = OpenMapFile();
-  if (dir != nullptr) {
-    airspace_ok |= ParseAirspaceFile(parser, dir, "airspace.txt", operation);
-    zzip_dir_close(dir);
-  }
+  auto archive = OpenMapFile();
+  if (archive)
+    airspace_ok |= ParseAirspaceFile(parser, archive->get(), "airspace.txt",
+                                     operation);
 
   if (airspace_ok) {
     airspaces.Optimise();
