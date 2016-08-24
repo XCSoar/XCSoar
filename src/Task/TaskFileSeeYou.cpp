@@ -234,7 +234,7 @@ ParseOZs(SeeYouTurnpointInformation turnpoint_infos[], const TCHAR *params[],
  * @param turnpoint_infos Loads this with CU task tp info
  */
 static void
-ParseCUTaskDetails(FileLineReader &reader, SeeYouTaskInformation *task_info,
+ParseCUTaskDetails(TLineReader &reader, SeeYouTaskInformation *task_info,
                    SeeYouTurnpointInformation turnpoint_infos[])
 {
   // Read options/observation zones
@@ -443,7 +443,7 @@ CreatePoint(unsigned pos, unsigned n_waypoints, WaypointPtr &&wp,
 }
 
 static TCHAR *
-AdvanceReaderToTask(FileLineReader &reader, const unsigned index)
+AdvanceReaderToTask(TLineReader &reader, const unsigned index)
 {
   // Skip lines until n-th task
   unsigned count = 0;
