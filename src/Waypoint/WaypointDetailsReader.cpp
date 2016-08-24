@@ -155,9 +155,9 @@ void
 WaypointDetails::ReadFileFromProfile(Waypoints &way_points,
                                      OperationEnvironment &operation)
 {
-  std::unique_ptr<TLineReader>
-  reader(OpenConfiguredTextFile(ProfileKeys::AirfieldFile, "airfields.txt",
-                                Charset::AUTO));
+  auto reader = OpenConfiguredTextFile(ProfileKeys::AirfieldFile,
+                                       "airfields.txt",
+                                       Charset::AUTO);
   if (reader)
     ReadFile(*reader, way_points, operation);
 }

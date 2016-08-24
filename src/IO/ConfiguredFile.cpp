@@ -35,7 +35,7 @@ Copyright_License {
 #include <assert.h>
 #include <string.h>
 
-NLineReader *
+std::unique_ptr<NLineReader>
 OpenConfiguredTextFileA(const char *profile_key)
 {
   assert(profile_key != nullptr);
@@ -45,17 +45,16 @@ OpenConfiguredTextFileA(const char *profile_key)
     return nullptr;
 
   Error error;
-  FileLineReaderA *reader = new FileLineReaderA(path, error);
+  auto reader = std::make_unique<FileLineReaderA>(path, error);
   if (reader->error()) {
-    delete reader;
     LogError(error);
     return nullptr;
   }
 
-  return reader;
+  return std::move(reader);
 }
 
-TLineReader *
+std::unique_ptr<TLineReader>
 OpenConfiguredTextFile(const char *profile_key, Charset cs)
 {
   assert(profile_key != nullptr);
@@ -65,17 +64,16 @@ OpenConfiguredTextFile(const char *profile_key, Charset cs)
     return nullptr;
 
   Error error;
-  FileLineReader *reader = new FileLineReader(path, error, cs);
+  auto reader = std::make_unique<FileLineReader>(path, error, cs);
   if (reader->error()) {
     LogError(error);
-    delete reader;
     return nullptr;
   }
 
-  return reader;
+  return std::move(reader);
 }
 
-static TLineReader *
+static std::unique_ptr<TLineReader>
 OpenMapTextFile(const char *in_map_file, Charset cs)
 {
   assert(in_map_file != nullptr);
@@ -85,26 +83,25 @@ OpenMapTextFile(const char *in_map_file, Charset cs)
     return nullptr;
 
   Error error;
-  ZipLineReader *reader = new ZipLineReader(dir, in_map_file, error, cs);
+  auto reader = std::make_unique<ZipLineReader>(dir, in_map_file, error, cs);
   zzip_dir_close(dir);
   if (reader->error()) {
     LogError(error);
-    delete reader;
     return nullptr;
   }
 
-  return reader;
+  return std::move(reader);
 }
 
-TLineReader *
+std::unique_ptr<TLineReader>
 OpenConfiguredTextFile(const char *profile_key, const char *in_map_file,
                        Charset cs)
 {
   assert(profile_key != nullptr);
   assert(in_map_file != nullptr);
 
-  TLineReader *reader = OpenConfiguredTextFile(profile_key, cs);
-  if (reader == nullptr)
+  auto reader = OpenConfiguredTextFile(profile_key, cs);
+  if (!reader)
     reader = OpenMapTextFile(in_map_file, cs);
 
   return reader;

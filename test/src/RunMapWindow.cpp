@@ -124,8 +124,8 @@ LoadFiles(PlacesOfInterestSettings &poi_settings,
   WaypointGlue::SetHome(way_points, terrain, poi_settings, team_code_settings,
                         NULL, false);
 
-  std::unique_ptr<TLineReader> reader(OpenConfiguredTextFile(ProfileKeys::AirspaceFile,
-                                                             Charset::AUTO));
+  auto reader = OpenConfiguredTextFile(ProfileKeys::AirspaceFile,
+                                       Charset::AUTO);
   if (reader) {
     AirspaceParser parser(airspace_database);
     parser.Parse(*reader, operation);

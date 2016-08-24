@@ -114,7 +114,7 @@ InputEvents::readFile()
   LoadDefaults(input_config);
 
   // Read in user defined configuration file
-  std::unique_ptr<TLineReader> reader(OpenConfiguredTextFile(ProfileKeys::InputFile));
+  auto reader = OpenConfiguredTextFile(ProfileKeys::InputFile);
   if (reader)
     ::ParseInputFile(input_config, *reader);
 }

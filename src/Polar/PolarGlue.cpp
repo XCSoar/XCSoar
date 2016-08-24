@@ -50,7 +50,7 @@ PolarGlue::GetDefault()
 static bool
 ReadPolarFileFromProfile(PolarInfo &polar)
 {
-  std::unique_ptr<NLineReader> reader(OpenConfiguredTextFileA(ProfileKeys::PolarFile));
+  auto reader = OpenConfiguredTextFileA(ProfileKeys::PolarFile);
   return reader && PolarGlue::LoadFromFile(polar, *reader);
 }
 

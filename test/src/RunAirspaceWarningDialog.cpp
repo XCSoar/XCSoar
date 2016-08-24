@@ -63,8 +63,8 @@ LoadFiles(Airspaces &airspace_database)
 {
   NullOperationEnvironment operation;
 
-  std::unique_ptr<TLineReader> reader(OpenConfiguredTextFile(ProfileKeys::AirspaceFile,
-                                                             Charset::AUTO));
+  auto reader = OpenConfiguredTextFile(ProfileKeys::AirspaceFile,
+                                       Charset::AUTO);
   if (reader) {
     AirspaceParser parser(airspace_database);
     parser.Parse(*reader, operation);
