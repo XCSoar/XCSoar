@@ -72,7 +72,7 @@ addChecklist(const TCHAR *name, const TCHAR *details)
 
 static void
 LoadChecklist()
-{
+try {
   nLists = 0;
 
   free(ChecklistText[0]);
@@ -81,9 +81,7 @@ LoadChecklist()
   free(ChecklistTitle[0]);
   ChecklistTitle[0] = NULL;
 
-  auto reader = OpenDataTextFile(_T(XCSCHKLIST), IgnoreError());
-  if (!reader)
-    return;
+  auto reader = OpenDataTextFile(_T(XCSCHKLIST));
 
   StaticString<MAXDETAILS> Details;
   TCHAR Name[100];
@@ -123,6 +121,7 @@ LoadChecklist()
   if (inDetails) {
     addChecklist(Name, Details);
   }
+} catch (const std::runtime_error &e) {
 }
 
 void

@@ -28,50 +28,56 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "OS/Path.hpp"
 #include "Util/StringCompare.hxx"
+#include "Util/Error.hxx"
+
+#include <stdexcept>
 
 #include <assert.h>
 
 std::unique_ptr<Source<char>>
-OpenDataFile(const TCHAR *name, Error &error)
+OpenDataFile(const TCHAR *name)
 {
   assert(name != nullptr);
   assert(!StringIsEmpty(name));
 
   const auto path = LocalPath(name);
 
+  Error error;
   auto source = std::make_unique<FileSource>(path, error);
   if (source->error())
-    source.reset();
+    throw std::runtime_error(error.GetMessage());
 
   return std::move(source);
 }
 
 std::unique_ptr<TLineReader>
-OpenDataTextFile(const TCHAR *name, Error &error, Charset cs)
+OpenDataTextFile(const TCHAR *name, Charset cs)
 {
   assert(name != nullptr);
   assert(!StringIsEmpty(name));
 
   const auto path = LocalPath(name);
 
+  Error error;
   auto reader = std::make_unique<FileLineReader>(path, error, cs);
   if (reader->error())
-    reader.reset();
+    throw std::runtime_error(error.GetMessage());
 
   return std::move(reader);
 }
 
 std::unique_ptr<NLineReader>
-OpenDataTextFileA(const TCHAR *name, Error &error)
+OpenDataTextFileA(const TCHAR *name)
 {
   assert(name != nullptr);
   assert(!StringIsEmpty(name));
 
   const auto path = LocalPath(name);
 
+  Error error;
   auto reader = std::make_unique<FileLineReaderA>(path, error);
   if (reader->error())
-    reader.reset();
+    throw std::runtime_error(error.GetMessage());
 
   return std::move(reader);
 }
@@ -86,7 +92,8 @@ CreateDataTextFile(const TCHAR *name, bool append)
 
   auto writer = std::make_unique<TextWriter>(path, append);
   if (!writer->IsOpen())
-    writer.reset();
+    // TODO: improve error message
+    throw std::runtime_error("Failed to create text file");
 
   return writer;
 }

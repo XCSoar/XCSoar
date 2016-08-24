@@ -34,21 +34,20 @@ Copyright_License {
 #include "Profile/FlarmProfile.hpp"
 #include "Profile/Current.hpp"
 #include "LogFile.hpp"
-#include "Util/Error.hxx"
 
 /**
  * Loads the FLARMnet file
  */
 static void
 LoadFLARMnet(FlarmNetDatabase &db)
-{
-  auto reader = OpenDataTextFileA(_T("data.fln"), IgnoreError());
-  if (!reader)
-    return;
+try {
+  auto reader = OpenDataTextFileA(_T("data.fln"));
 
   unsigned num_records = FlarmNetReader::LoadFile(*reader, db);
   if (num_records > 0)
     LogFormat("%u FLARMnet ids found", num_records);
+} catch (const std::runtime_error &e) {
+  LogError(e);
 }
 
 /**
@@ -58,12 +57,13 @@ LoadFLARMnet(FlarmNetDatabase &db)
  */
 static void
 LoadSecondary(FlarmNameDatabase &db)
-{
+try {
   LogFormat("OpenFLARMDetails");
 
-  auto reader = OpenDataTextFile(_T("xcsoar-flarm.txt"), IgnoreError());
-  if (reader)
-    LoadFlarmNameFile(*reader, db);
+  auto reader = OpenDataTextFile(_T("xcsoar-flarm.txt"));
+  LoadFlarmNameFile(*reader, db);
+} catch (const std::runtime_error &e) {
+  LogError(e);
 }
 
 void
@@ -98,12 +98,11 @@ SaveFlarmColors()
    */
 static void
 SaveSecondary(FlarmNameDatabase &flarm_names)
-{
+try {
   auto writer = CreateDataTextFile(_T("xcsoar-flarm.txt"));
-  if (!writer)
-    return;
-
   SaveFlarmNameFile(*writer, flarm_names);
+} catch (const std::runtime_error &e) {
+  LogError(e);
 }
 
 void

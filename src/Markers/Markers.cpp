@@ -26,10 +26,11 @@ Copyright_License {
 #include "Time/BrokenDateTime.hpp"
 #include "IO/TextWriter.hpp"
 #include "IO/DataFile.hpp"
+#include "LogFile.hpp"
 
 void
 MarkLocation(const GeoPoint &loc, const BrokenDateTime &time)
-{
+try {
   assert(time.IsPlausible());
 
   char message[160];
@@ -40,6 +41,7 @@ MarkLocation(const GeoPoint &loc, const BrokenDateTime &time)
           (double)loc.latitude.Degrees());
 
   auto writer = CreateDataTextFile(_T("xcsoar-marks.txt"), true);
-  if (writer)
-    writer->WriteLine(message);
+  writer->WriteLine(message);
+} catch (const std::runtime_error &e) {
+  LogError(e);
 }
