@@ -25,9 +25,9 @@ Copyright_License {
 #include "Geo/GeoBounds.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "Util/NumberParser.hpp"
-#include "Util/Error.hxx"
 
 #include <algorithm>
+#include <stdexcept>
 
 static constexpr bool
 IsNearZero(double value)
@@ -84,9 +84,11 @@ ReadWorldFile(NLineReader &reader, WorldFileData &data)
 
 static bool
 ReadWorldFile(struct zzip_dir *dir, const char *path, WorldFileData &data)
-{
-  ZipLineReaderA reader(dir, path, IgnoreError());
-  return !reader.error() && ReadWorldFile(reader, data);
+try {
+  ZipLineReaderA reader(dir, path);
+  return ReadWorldFile(reader, data);
+} catch (const std::runtime_error &e) {
+  return false;
 }
 
 GeoBounds

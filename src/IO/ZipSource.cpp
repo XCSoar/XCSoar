@@ -22,20 +22,24 @@ Copyright_License {
 */
 
 #include "ZipSource.hpp"
-#include "Util/Error.hxx"
-#include "Util/Domain.hxx"
 
 #include <zzip/util.h>
 
-static constexpr Domain zzip_domain("zzip");
+#include <stdexcept>
 
-ZipSource::ZipSource(struct zzip_dir *dir, const char *path, Error &error)
+#include <stdio.h>
+
+ZipSource::ZipSource(struct zzip_dir *dir, const char *path)
 {
   file = zzip_open_rb(dir, path);
-  if (file == nullptr)
+  if (file == nullptr) {
     /* TODO: re-enable zziplib's error reporting, and improve this
        error message */
-    error.Format(zzip_domain, "Failed to open '%s' from ZIP file", path);
+    char msg[256];
+    snprintf(msg, sizeof(msg),
+             "Failed to open '%s' from ZIP file", path);
+    throw std::runtime_error(msg);
+  }
 }
 
 ZipSource::~ZipSource()

@@ -24,7 +24,6 @@ Copyright_License {
 #include "IO/ZipArchive.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "OS/Args.hpp"
-#include "Util/Error.hxx"
 #include "Util/PrintException.hxx"
 
 #include <zzip/zzip.h>
@@ -40,12 +39,7 @@ try {
 
   ZipArchive archive(zip_path);
 
-  Error error;
-  ZipLineReader reader(archive.get(), filename, error);
-  if (reader.error()) {
-    fprintf(stderr, "%s\n", error.GetMessage());
-    return EXIT_FAILURE;
-  }
+  ZipLineReader reader(archive.get(), filename);
 
   TCHAR *line;
   while ((line = reader.ReadLine()) != NULL)

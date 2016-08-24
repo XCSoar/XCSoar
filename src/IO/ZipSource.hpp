@@ -28,20 +28,18 @@ Copyright_License {
 
 struct zzip_file;
 struct zzip_dir;
-class Error;
 
 class ZipSource : public BufferedSource<char, 4096u> {
 private:
   struct zzip_file *file;
 
 public:
-  ZipSource(struct zzip_dir *dir, const char *path, Error &error);
+  /**
+   * Throws std::runtime_errror on error.
+   */
+  ZipSource(struct zzip_dir *dir, const char *path);
 
   virtual ~ZipSource();
-
-  bool error() const {
-    return file == nullptr;
-  }
 
 public:
   /* virtual methods from class Source */

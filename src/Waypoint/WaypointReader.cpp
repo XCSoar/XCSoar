@@ -31,7 +31,6 @@ Copyright_License {
 #include "WaypointFileType.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "IO/FileLineReader.hpp"
-#include "Util/Error.hxx"
 
 #include <memory>
 
@@ -93,16 +92,15 @@ bool
 ReadWaypointFile(struct zzip_dir *dir, const char *path,
                  WaypointFileType file_type, Waypoints &way_points,
                  WaypointFactory factory, OperationEnvironment &operation)
-{
+try {
   std::unique_ptr<WaypointReaderBase> reader(CreateWaypointReader(file_type,
                                                                   factory));
   if (!reader)
     return false;
 
-  ZipLineReader line_reader(dir, path, IgnoreError(), Charset::AUTO);
-  if (line_reader.error())
-    return false;
-
+  ZipLineReader line_reader(dir, path, Charset::AUTO);
   reader->Parse(way_points, line_reader, operation);
   return true;
+} catch (const std::runtime_error &e) {
+  return false;
 }

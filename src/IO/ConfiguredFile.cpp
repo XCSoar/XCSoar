@@ -29,7 +29,6 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "LogFile.hpp"
 #include "OS/Path.hpp"
-#include "Util/Error.hxx"
 
 #include <zzip/zzip.h>
 
@@ -70,22 +69,17 @@ try {
 
 static std::unique_ptr<TLineReader>
 OpenMapTextFile(const char *in_map_file, Charset cs)
-{
+try {
   assert(in_map_file != nullptr);
 
   auto archive = OpenMapFile();
   if (!archive)
     return nullptr;
 
-  Error error;
-  auto reader = std::make_unique<ZipLineReader>(archive->get(), in_map_file,
-                                                error, cs);
-  if (reader->error()) {
-    LogError(error);
-    return nullptr;
-  }
-
-  return std::move(reader);
+  return std::make_unique<ZipLineReader>(archive->get(), in_map_file, cs);
+} catch (const std::runtime_error &e) {
+  LogError(e);
+  return nullptr;
 }
 
 std::unique_ptr<TLineReader>

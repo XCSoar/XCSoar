@@ -33,7 +33,6 @@ Copyright_License {
 #include "IO/ZipArchive.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "Operation/Operation.hpp"
-#include "Util/Error.hxx"
 #include "Util/PrintException.hxx"
 
 #include <stdio.h>
@@ -70,12 +69,7 @@ try {
 
   ZipArchive archive(path);
 
-  Error error;
-  ZipLineReaderA reader(archive.get(), "topology.tpl", error);
-  if (reader.error()) {
-    fprintf(stderr, "%s\n", error.GetMessage());
-    return EXIT_FAILURE;
-  }
+  ZipLineReaderA reader(archive.get(), "topology.tpl");
 
   TopographyStore topography;
   NullOperationEnvironment operation;
