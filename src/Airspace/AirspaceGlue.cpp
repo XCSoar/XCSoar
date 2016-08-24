@@ -42,7 +42,7 @@ Copyright_License {
 static bool
 ParseAirspaceFile(AirspaceParser &parser, Path path,
                   OperationEnvironment &operation)
-{
+try {
   Error error;
   FileLineReader reader(path, error, Charset::AUTO);
   if (reader.error()) {
@@ -56,13 +56,17 @@ ParseAirspaceFile(AirspaceParser &parser, Path path,
   }
 
   return true;
+} catch (const std::runtime_error &e) {
+  LogFormat(_T("Failed to parse airspace file: %s"), path.c_str());
+  LogError(e);
+  return false;
 }
 
 static bool
 ParseAirspaceFile(AirspaceParser &parser,
                   struct zzip_dir *dir, const char *path,
                   OperationEnvironment &operation)
-{
+try {
   Error error;
   ZipLineReader reader(dir, path, error, Charset::AUTO);
   if (reader.error()) {
@@ -76,6 +80,10 @@ ParseAirspaceFile(AirspaceParser &parser,
   }
 
   return true;
+} catch (const std::runtime_error &e) {
+  LogFormat("Failed to parse airspace file: %s", path);
+  LogError(e);
+  return false;
 }
 
 void
