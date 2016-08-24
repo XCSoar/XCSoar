@@ -36,7 +36,6 @@ Copyright_License {
 
 class Path;
 class ProfileMap;
-class Error;
 
 gcc_pure
 TriState
@@ -63,21 +62,19 @@ enum class ProfilePasswordResult {
    * The user has cancelled the password dialog.
    */
   CANCEL,
-
-  /**
-   * An error has occurred.
-   */
-  ERROR,
 };
 
 ProfilePasswordResult
 CheckProfilePassword(const ProfileMap &map);
 
+/**
+ * Throws std::runtime_errror on error.
+ */
 ProfilePasswordResult
-CheckProfileFilePassword(Path path, Error &error);
+CheckProfileFilePassword(Path path);
 
 bool
-CheckProfilePasswordResult(ProfilePasswordResult result, const Error &error);
+CheckProfilePasswordResult(ProfilePasswordResult result);
 
 bool
 SetProfilePasswordDialog(ProfileMap &map);

@@ -33,45 +33,39 @@ Copyright_License {
 
 #include <zzip/zzip.h>
 
+#include <stdexcept>
+
 #include <assert.h>
 #include <string.h>
 
 std::unique_ptr<NLineReader>
 OpenConfiguredTextFileA(const char *profile_key)
-{
+try {
   assert(profile_key != nullptr);
 
   const auto path = Profile::GetPath(profile_key);
   if (path.IsNull())
     return nullptr;
 
-  Error error;
-  auto reader = std::make_unique<FileLineReaderA>(path, error);
-  if (reader->error()) {
-    LogError(error);
-    return nullptr;
-  }
-
-  return std::move(reader);
+  return std::make_unique<FileLineReaderA>(path);
+} catch (const std::runtime_error &e) {
+  LogError(e);
+  return nullptr;
 }
 
 std::unique_ptr<TLineReader>
 OpenConfiguredTextFile(const char *profile_key, Charset cs)
-{
+try {
   assert(profile_key != nullptr);
 
   const auto path = Profile::GetPath(profile_key);
   if (path.IsNull())
     return nullptr;
 
-  Error error;
-  auto reader = std::make_unique<FileLineReader>(path, error, cs);
-  if (reader->error()) {
-    LogError(error);
-    return nullptr;
-  }
-
-  return std::move(reader);
+  return std::make_unique<FileLineReader>(path, cs);
+} catch (const std::runtime_error &e) {
+  LogError(e);
+  return nullptr;
 }
 
 static std::unique_ptr<TLineReader>

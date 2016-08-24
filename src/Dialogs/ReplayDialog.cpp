@@ -33,7 +33,6 @@ Copyright_License {
 #include "Form/DataField/File.hpp"
 #include "Form/DataField/Float.hpp"
 #include "Language/Language.hpp"
-#include "Util/Error.hxx"
 
 enum Buttons {
   START,

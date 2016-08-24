@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "StartupDialog.hpp"
+#include "Error.hpp"
 #include "ProfilePasswordDialog.hpp"
 #include "ProfileListDialog.hpp"
 #include "WidgetDialog.hpp"
@@ -38,7 +39,6 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Gauge/LogoView.hpp"
 #include "LogFile.hpp"
-#include "Util/Error.hxx"
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
 
@@ -169,10 +169,13 @@ StartupWidget::Prepare(ContainerWindow &parent,
 static bool
 SelectProfile(Path path)
 {
-  Error error;
-  if (!CheckProfilePasswordResult(CheckProfileFilePassword(path, error),
-                                  error))
+  try {
+    if (!CheckProfilePasswordResult(CheckProfileFilePassword(path)))
+      return false;
+  } catch (const std::runtime_error &e) {
+    ShowError(e, _("Password"));
     return false;
+  }
 
   Profile::SetFiles(path);
 

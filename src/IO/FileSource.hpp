@@ -27,8 +27,6 @@ Copyright_License {
 #include "BufferedSource.hpp"
 #include "OS/Path.hpp"
 
-class Error;
-
 #ifdef HAVE_POSIX
 
 #include "OS/UniqueFileDescriptor.hxx"
@@ -38,11 +36,10 @@ private:
   UniqueFileDescriptor fd;
 
 public:
-  PosixFileSource(Path path, Error &error);
-
-  bool error() const {
-    return !fd.IsDefined();
-  }
+  /**
+   * Throws std::runtime_errror on error.
+   */
+  explicit PosixFileSource(Path path);
 
   /**
    * Rewind the file to the beginning.
@@ -72,12 +69,11 @@ private:
   HANDLE handle;
 
 public:
-  WindowsFileSource(Path path, Error &error);
+  /**
+   * Throws std::runtime_errror on error.
+   */
+  explicit WindowsFileSource(Path path);
   virtual ~WindowsFileSource();
-
-  bool error() const {
-    return handle == INVALID_HANDLE_VALUE;
-  }
 
   /**
    * Rewind the file to the beginning.
@@ -100,12 +96,12 @@ protected:
 #if defined(WIN32) && !defined(__CYGWIN__)
 class FileSource : public WindowsFileSource {
 public:
-  FileSource(Path path, Error &error):WindowsFileSource(path, error) {}
+  explicit FileSource(Path path):WindowsFileSource(path) {}
 };
 #else
 class FileSource : public PosixFileSource {
 public:
-  FileSource(Path path, Error &error):PosixFileSource(path, error) {}
+  explicit FileSource(Path path):PosixFileSource(path) {}
 };
 #endif
 

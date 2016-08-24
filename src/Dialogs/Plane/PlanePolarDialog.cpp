@@ -38,7 +38,6 @@ Copyright_License {
 #include "OS/Path.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
-#include "Util/Error.hxx"
 
 class PlanePolarWidget final
   : public RowFormWidget, DataFieldListener, ActionListener {
@@ -223,7 +222,10 @@ PlanePolarWidget::ImportClicked()
     return;
 
   PolarInfo polar;
-  PolarGlue::LoadFromFile(polar, path, IgnoreError());
+  try {
+    PolarGlue::LoadFromFile(polar, path);
+  } catch (const std::runtime_error &) {
+  }
 
   plane.reference_mass = polar.reference_mass;
   plane.dry_mass = polar.reference_mass;

@@ -25,7 +25,7 @@
 #include "IO/FileTransaction.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/TextWriter.hpp"
-#include "Util/Error.hxx"
+#include "Util/PrintException.hxx"
 
 #include <string.h>
 #include <stdio.h>
@@ -83,7 +83,7 @@ FixGRecord(NLineReader &reader, Path dest_path)
 
 int
 main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "FILE.igc");
   const auto path = args.ExpectNextPath();
   args.ExpectEnd();
@@ -91,12 +91,7 @@ main(int argc, char **argv)
   {
     GRecord grecord;
     grecord.Initialize();
-
-    Error error;
-    if (!grecord.VerifyGRecordInFile(path, error)) {
-      fprintf(stderr, "%s\n", error.GetMessage());
-      return EXIT_FAILURE;
-    }
+    grecord.VerifyGRecordInFile(path);
   }
 
   printf("Valid G record found\n");
@@ -104,12 +99,7 @@ main(int argc, char **argv)
   FileTransaction transaction(path);
 
   {
-    Error error;
-    FileLineReaderA reader(path, error);
-    if (reader.error()) {
-      fprintf(stderr, "%s\n", error.GetMessage());
-      return EXIT_FAILURE;
-    }
+    FileLineReaderA reader(path);
 
     if (!FixGRecord(reader, transaction.GetTemporaryPath())) {
       fprintf(stderr, "Failed to write output file\n");
@@ -124,4 +114,7 @@ main(int argc, char **argv)
 
   printf("New G record written\n");
   return EXIT_SUCCESS;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

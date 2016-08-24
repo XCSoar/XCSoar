@@ -25,7 +25,6 @@
 #include "Util/ExtractParameters.hpp"
 #include "Util/StringAPI.hxx"
 #include "Util/Macros.hpp"
-#include "Util/Error.hxx"
 #include "IO/FileLineReader.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointReaderSeeYou.hpp"
@@ -467,11 +466,9 @@ AdvanceReaderToTask(TLineReader &reader, const unsigned index)
 OrderedTask*
 TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
                         const Waypoints *waypoints, unsigned index) const
-{
+try {
   // Create FileReader for reading the task
-  FileLineReader reader(path, IgnoreError(), Charset::AUTO);
-  if (reader.error())
-    return nullptr;
+  FileLineReader reader(path, Charset::AUTO);
 
   // Read waypoints from the CUP file
   Waypoints file_waypoints;
@@ -581,18 +578,18 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
     delete pt;
   }
   return task;
+} catch (const std::runtime_error &e) {
+  return nullptr;
 }
 
 unsigned
 TaskFileSeeYou::Count()
-{
+try {
   // Reset internal task name memory
   namesuffixes.clear();
 
   // Open the CUP file
-  FileLineReader reader(path, IgnoreError(), Charset::AUTO);
-  if (reader.error())
-    return 0;
+  FileLineReader reader(path, Charset::AUTO);
 
   unsigned count = 0;
   bool in_task_section = false;
@@ -639,4 +636,6 @@ TaskFileSeeYou::Count()
 
   // Return number of tasks found in the CUP file
   return count;
+} catch (const std::runtime_error &e) {
+  return 0;
 }

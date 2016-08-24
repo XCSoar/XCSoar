@@ -32,7 +32,6 @@
 #include "Interface.hpp"
 #include "CatmullRomInterpolator.hpp"
 #include "Util/Clamp.hpp"
-#include "Util/Error.hxx"
 
 #include <stdexcept>
 
@@ -72,25 +71,13 @@ Replay::Start(Path _path)
   if (path.IsNull() || path.IsEmpty()) {
     replay = new DemoReplayGlue(task_manager);
   } else if (path.MatchesExtension(_T(".igc"))) {
-    Error error;
-    auto reader = new FileLineReaderA(path, error);
-    if (reader->error()) {
-      delete reader;
-      throw std::runtime_error(error.GetMessage());
-    }
-
+    auto reader = new FileLineReaderA(path);
     replay = new IgcReplay(reader);
 
     cli = new CatmullRomInterpolator(0.98);
     cli->Reset();
   } else {
-    Error error;
-    auto reader = new FileLineReaderA(path, error);
-    if (reader->error()) {
-      delete reader;
-      throw std::runtime_error(error.GetMessage());
-    }
-
+    auto reader = new FileLineReaderA(path);
     replay = new NmeaReplay(reader,
                             CommonInterface::GetSystemSettings().devices[0]);
   }

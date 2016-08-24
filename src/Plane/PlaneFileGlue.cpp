@@ -29,7 +29,6 @@ Copyright_License {
 #include "IO/TextWriter.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Util/NumberParser.hpp"
-#include "Util/Error.hxx"
 #include "LogFile.hpp"
 
 static bool
@@ -140,16 +139,13 @@ PlaneGlue::Read(Plane &plane, KeyValueFileReader &reader)
 
 bool
 PlaneGlue::ReadFile(Plane &plane, Path path)
-{
-  Error error;
-  FileLineReaderA reader(path, error);
-  if (reader.error()) {
-    LogError("Failed to parse plane file", error);
-    return false;
-  }
-
+try {
+  FileLineReaderA reader(path);
   KeyValueFileReader kvreader(reader);
   return Read(plane, kvreader);
+} catch (const std::runtime_error &e) {
+  LogError(e);
+  return false;
 }
 
 void

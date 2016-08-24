@@ -23,11 +23,12 @@ Copyright_License {
 
 #include "Kernel.hpp"
 
+#include <stdexcept>
+
 #ifdef KOBO
 
 #include "IO/FileSource.hpp"
 #include "IO/InflateLineReader.hpp"
-#include "Util/Error.hxx"
 
 #include <fcntl.h>
 #include <string.h>
@@ -105,11 +106,9 @@ KoboInstallKernel(const char *uimage_path)
 
 bool
 IsKoboOTGKernel()
-{
+try {
 #ifdef KOBO
-  FileSource file(Path("/proc/config.gz"), IgnoreError());
-  if (file.error())
-    return false;
+  FileSource file(Path("/proc/config.gz"));
 
   InflateLineReader reader(file);
   if (reader.HasFailed())
@@ -121,5 +120,7 @@ IsKoboOTGKernel()
       return true;
 #endif
 
+  return false;
+} catch (const std::runtime_error &e) {
   return false;
 }

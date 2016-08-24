@@ -31,12 +31,12 @@ Copyright_License {
 #include "Util/StringUtil.hpp"
 #include "Util/StringCompare.hxx"
 #include "Util/StringAPI.hxx"
-#include "Util/Error.hxx"
 #include "Util/tstring.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/Path.hpp"
 
 #include <windef.h> /* for MAX_PATH */
+#include <assert.h>
 
 #define XCSPROFILE "default.prf"
 #define OLDXCSPROFILE "xcsoar-registry.prf"
@@ -62,11 +62,12 @@ Profile::Load()
 void
 Profile::LoadFile(Path path)
 {
-  Error error;
-  if (LoadFile(map, path, error))
+  try {
+    LoadFile(map, path);
     LogFormat(_T("Loaded profile from %s"), path.c_str());
-  else
-    LogError("Failed to load profile", error);
+  } catch (const std::runtime_error &e) {
+    LogError("Failed to load profile", e);
+  }
 }
 
 void

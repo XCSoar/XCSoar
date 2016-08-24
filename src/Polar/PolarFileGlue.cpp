@@ -37,18 +37,11 @@ PolarGlue::LoadFromFile(PolarInfo &polar, NLineReader &reader)
   return false;
 }
 
-bool
-PolarGlue::LoadFromFile(PolarInfo &polar, Path path, Error &error)
+void
+PolarGlue::LoadFromFile(PolarInfo &polar, Path path)
 {
-  FileLineReaderA *reader = new FileLineReaderA(path, error);
-  if (reader->error()) {
-    delete reader;
-    return false;
-  }
-
-  LoadFromFile(polar, *reader);
-  delete reader;
-  return true;
+  FileLineReaderA reader(path);
+  LoadFromFile(polar, reader);
 }
 
 bool

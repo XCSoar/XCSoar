@@ -42,12 +42,7 @@ static bool
 ParseAirspaceFile(AirspaceParser &parser, Path path,
                   OperationEnvironment &operation)
 try {
-  Error error;
-  FileLineReader reader(path, error, Charset::AUTO);
-  if (reader.error()) {
-    LogError("Failed to parse airspace file", error);
-    return false;
-  }
+  FileLineReader reader(path, Charset::AUTO);
 
   if (!parser.Parse(reader, operation)) {
     LogFormat(_T("Failed to parse airspace file: %s"), path.c_str());

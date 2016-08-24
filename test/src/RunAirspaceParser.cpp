@@ -26,23 +26,18 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Operation/Operation.hpp"
-#include "Util/Error.hxx"
+#include "Util/PrintException.hxx"
 
 #include <stdio.h>
 #include <tchar.h>
 
 int main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "PATH");
   const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
-  Error error;
-  FileLineReader reader(path, error, Charset::AUTO);
-  if (reader.error()) {
-    fprintf(stderr, "%s\n", error.GetMessage());
-    return 1;
-  }
+  FileLineReader reader(path, Charset::AUTO);
 
   Airspaces airspaces;
   AirspaceParser parser(airspaces);
@@ -57,5 +52,8 @@ int main(int argc, char **argv)
 
   printf("OK\n");
 
-  return 0;
+  return EXIT_SUCCESS;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

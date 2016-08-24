@@ -32,7 +32,7 @@ class Error;
 
 namespace PolarGlue
 {
-  bool LoadFromFile(PolarInfo &polar, Path path, Error &error);
+  void LoadFromFile(PolarInfo &polar, Path path);
   bool SaveToFile(const PolarInfo &polar, Path path);
   bool LoadFromFile(PolarInfo &polar, NLineReader &reader);
   bool SaveToFile(const PolarInfo &polar, TextWriter &writer);

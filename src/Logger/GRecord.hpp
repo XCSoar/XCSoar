@@ -29,7 +29,6 @@
 
 class Path;
 class TextWriter;
-class Error;
 
 class GRecord
 {
@@ -74,22 +73,29 @@ public:
    */
   void GetDigest(char *buffer) const;
 
-  /** loads a file into the data buffer */
-  bool LoadFileToBuffer(Path path, Error &error);
+  /**
+   * Loads a file into the data buffer.
+   *
+   * Throws std::runtime_errror on error.
+   */
+  void LoadFileToBuffer(Path path);
 
   void WriteTo(TextWriter &writer) const;
 
   bool AppendGRecordToFile(Path path);
 
   /**
+   * Throws std::runtime_errror on error.
+   *
    * returns in szOutput the G Record from the file
    */
-  static bool ReadGRecordFromFile(Path path,
-                                  char *buffer, size_t max_length,
-                                  Error &error);
+  static void ReadGRecordFromFile(Path path,
+                                  char *buffer, size_t max_length);
 
-  /// returns 0 if false, 1 if true
-  bool VerifyGRecordInFile(Path path, Error &error);
+  /**
+   * Throws std::runtime_errror on error.
+   */
+  void VerifyGRecordInFile(Path path);
 
 private:
   void AppendStringToBuffer(const char *szIn);

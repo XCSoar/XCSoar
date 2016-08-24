@@ -37,7 +37,6 @@ Copyright_License {
 #include "FlightInfo.hpp"
 #include "Logger/FlightParser.hpp"
 #include "IO/FileLineReader.hpp"
-#include "Util/Error.hxx"
 
 #include <vector>
 
@@ -125,13 +124,7 @@ static void
 ParseCommandLine(Args &args)
 {
   const auto path = args.ExpectNextPath();
-  Error error;
-  FileLineReaderA file(path, error);
-  if (file.error()) {
-    fprintf(stderr, "%s\n", error.GetMessage());
-    return;
-  }
-
+  FileLineReaderA file(path);
   FlightParser parser(file);
   FlightInfo flight;
   while (parser.Read(flight))

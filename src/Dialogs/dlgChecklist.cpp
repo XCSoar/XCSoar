@@ -28,7 +28,6 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
 #include "Util/StringCompare.hxx"
-#include "Util/Error.hxx"
 #include "IO/DataFile.hpp"
 #include "IO/LineReader.hpp"
 #include "Language/Language.hpp"

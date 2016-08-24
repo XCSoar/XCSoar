@@ -189,16 +189,12 @@ try {
 
 static void
 ReadIGCMetaData(Path path, IGCHeader &header, BrokenDate &date)
-{
+try {
   strcpy(header.manufacturer, "XXX");
   strcpy(header.id, "000");
   header.flight = 0;
 
-  FileLineReaderA reader(path, IgnoreError());
-  if (reader.error()) {
-    date = BrokenDate::TodayUTC();
-    return;
-  }
+  FileLineReaderA reader(path);
 
   char *line = reader.ReadLine();
   if (line != nullptr)
@@ -207,6 +203,8 @@ ReadIGCMetaData(Path path, IGCHeader &header, BrokenDate &date)
   line = reader.ReadLine();
   if (line == nullptr || !IGCParseDateRecord(line, date))
     date = BrokenDate::TodayUTC();
+} catch (const std::runtime_error &e) {
+  date = BrokenDate::TodayUTC();
 }
 
 /**

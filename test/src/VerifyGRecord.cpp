@@ -22,13 +22,13 @@
 
 #include "Logger/GRecord.hpp"
 #include "OS/Args.hpp"
-#include "Util/Error.hxx"
+#include "Util/PrintException.hxx"
 
 #include <stdio.h>
 
 int
 main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "FILE.igc");
   const auto path = args.ExpectNextPath();
   args.ExpectEnd();
@@ -36,12 +36,10 @@ main(int argc, char **argv)
   GRecord g;
   g.Initialize();
 
-  Error error;
-  if (g.VerifyGRecordInFile(path, error)) {
-    fprintf(stderr, "G record is ok\n");
-    return 0;
-  } else {
-    fprintf(stderr, "%s\n", error.GetMessage());
-    return EXIT_FAILURE;
-  }
+  g.VerifyGRecordInFile(path);
+  fprintf(stderr, "G record is ok\n");
+  return EXIT_SUCCESS;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

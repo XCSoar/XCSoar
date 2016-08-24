@@ -25,7 +25,7 @@ Copyright_License {
 #include "IO/FileLineReader.hpp"
 #include "Logger/FlightParser.hpp"
 #include "FlightInfo.hpp"
-#include "Util/Error.hxx"
+#include "Util/PrintException.hxx"
 
 static void
 Print(const FlightInfo &flight)
@@ -51,22 +51,19 @@ Print(const FlightInfo &flight)
 
 int
 main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "PATH");
   const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
-  Error error;
-  FileLineReaderA file(path, error);
-  if (file.error()) {
-    fprintf(stderr, "%s\n", error.GetMessage());
-    return EXIT_FAILURE;
-  }
-
+  FileLineReaderA file(path);
   FlightParser parser(file);
   FlightInfo flight;
   while (parser.Read(flight))
     Print(flight);
 
   return EXIT_SUCCESS;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

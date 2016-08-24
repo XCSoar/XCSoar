@@ -28,7 +28,6 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "OS/Path.hpp"
 #include "Util/StringCompare.hxx"
-#include "Util/Error.hxx"
 
 #include <stdexcept>
 
@@ -41,13 +40,7 @@ OpenDataFile(const TCHAR *name)
   assert(!StringIsEmpty(name));
 
   const auto path = LocalPath(name);
-
-  Error error;
-  auto source = std::make_unique<FileSource>(path, error);
-  if (source->error())
-    throw std::runtime_error(error.GetMessage());
-
-  return std::move(source);
+  return std::make_unique<FileSource>(path);
 }
 
 std::unique_ptr<TLineReader>
@@ -57,13 +50,7 @@ OpenDataTextFile(const TCHAR *name, Charset cs)
   assert(!StringIsEmpty(name));
 
   const auto path = LocalPath(name);
-
-  Error error;
-  auto reader = std::make_unique<FileLineReader>(path, error, cs);
-  if (reader->error())
-    throw std::runtime_error(error.GetMessage());
-
-  return std::move(reader);
+  return std::make_unique<FileLineReader>(path, cs);
 }
 
 std::unique_ptr<NLineReader>
@@ -73,13 +60,7 @@ OpenDataTextFileA(const TCHAR *name)
   assert(!StringIsEmpty(name));
 
   const auto path = LocalPath(name);
-
-  Error error;
-  auto reader = std::make_unique<FileLineReaderA>(path, error);
-  if (reader->error())
-    throw std::runtime_error(error.GetMessage());
-
-  return std::move(reader);
+  return std::make_unique<FileLineReaderA>(path);
 }
 
 std::unique_ptr<TextWriter>

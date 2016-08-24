@@ -68,18 +68,17 @@ bool
 ReadWaypointFile(Path path, WaypointFileType file_type,
                  Waypoints &way_points,
                  WaypointFactory factory, OperationEnvironment &operation)
-{
+try {
   std::unique_ptr<WaypointReaderBase> reader(CreateWaypointReader(file_type,
                                                                   factory));
   if (!reader)
     return false;
 
-  FileLineReader line_reader(path, IgnoreError(), Charset::AUTO);
-  if (line_reader.error())
-    return false;
-
+  FileLineReader line_reader(path, Charset::AUTO);
   reader->Parse(way_points, line_reader, operation);
   return true;
+} catch (const std::runtime_error &) {
+  return false;
 }
 
 bool

@@ -36,7 +36,6 @@ Copyright_License {
 #include "Profile/File.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
-#include "Util/Error.hxx"
 
 #include <vector>
 
@@ -228,14 +227,16 @@ ProfileListWidget::PasswordClicked()
 
   const auto &item = list[GetList().GetCursorIndex()];
 
-  Error error;
   ProfileMap data;
-  if (!Profile::LoadFile(data, item.path, error)) {
-    ShowError(error, _("Failed to load file."));
+
+  try {
+    Profile::LoadFile(data, item.path);
+  } catch (const std::runtime_error &e) {
+    ShowError(e, _("Failed to load file."));
     return;
   }
 
-  if (!CheckProfilePasswordResult(CheckProfilePassword(data), error) ||
+  if (!CheckProfilePasswordResult(CheckProfilePassword(data)) ||
       !SetProfilePasswordDialog(data))
     return;
 
@@ -252,14 +253,16 @@ ProfileListWidget::CopyClicked()
   const auto &item = list[GetList().GetCursorIndex()];
   const Path old_path = item.path;
 
-  Error error;
   ProfileMap data;
-  if (!Profile::LoadFile(data, old_path, error)) {
-    ShowError(error, _("Failed to load file."));
+
+  try {
+    Profile::LoadFile(data, old_path);
+  } catch (const std::runtime_error &e) {
+    ShowError(e, _("Failed to load file."));
     return;
   }
 
-  if (!CheckProfilePasswordResult(CheckProfilePassword(data), error))
+  if (!CheckProfilePasswordResult(CheckProfilePassword(data)))
     return;
 
   StaticString<64> new_name;
@@ -309,22 +312,25 @@ ProfileListWidget::DeleteClicked()
 
   const auto &item = list[GetList().GetCursorIndex()];
 
-  Error error;
-  const auto password_result = CheckProfileFilePassword(item.path, error);
-  switch (password_result) {
-  case ProfilePasswordResult::UNPROTECTED:
-    if (!ConfirmDeleteProfile(item.name))
+  try {
+    const auto password_result = CheckProfileFilePassword(item.path);
+    switch (password_result) {
+    case ProfilePasswordResult::UNPROTECTED:
+      if (!ConfirmDeleteProfile(item.name))
+        return;
+
+      break;
+
+    case ProfilePasswordResult::MATCH:
+      break;
+
+    case ProfilePasswordResult::MISMATCH:
+    case ProfilePasswordResult::CANCEL:
+      CheckProfilePasswordResult(password_result);
       return;
-
-    break;
-
-  case ProfilePasswordResult::MATCH:
-    break;
-
-  case ProfilePasswordResult::MISMATCH:
-  case ProfilePasswordResult::CANCEL:
-  case ProfilePasswordResult::ERROR:
-    CheckProfilePasswordResult(password_result, error);
+    }
+  } catch (const std::runtime_error &e) {
+    ShowError(e, _("Password"));
     return;
   }
 

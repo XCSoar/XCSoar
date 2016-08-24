@@ -31,13 +31,10 @@ Copyright_License {
 #include "OS/Path.hpp"
 #include "Util/StringAPI.hxx"
 
-bool
-Profile::LoadFile(ProfileMap &map, Path path, Error &error)
+void
+Profile::LoadFile(ProfileMap &map, Path path)
 {
-  FileLineReaderA reader(path, error);
-  if (reader.error())
-    return false;
-
+  FileLineReaderA reader(path);
   KeyValueFileReader kvreader(reader);
   KeyValuePair pair;
   while (kvreader.Read(pair))
@@ -46,8 +43,6 @@ Profile::LoadFile(ProfileMap &map, Path path, Error &error)
        interface */
     if (!StringIsEqual(pair.key, "Vega", 4))
       map.Set(pair.key, pair.value);
-
-  return true;
 }
 
 namespace Profile {

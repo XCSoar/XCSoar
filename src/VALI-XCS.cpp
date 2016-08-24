@@ -28,9 +28,10 @@
 #include "OS/ConvertPathName.hpp"
 #include "Logger/GRecord.hpp"
 #include "Version.hpp"
-#include "Util/Error.hxx"
+#include "Util/PrintException.hxx"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <tchar.h>
 
@@ -39,7 +40,6 @@
 #endif
 
 enum STATUS_t {
-  eValidationFailed,
   eValidationPassed,
   eValidationFileNotFound,
   eValidationFileRead,
@@ -61,13 +61,9 @@ ValidateXCS(Path path, GRecord &oGRecord)
 
   fclose(inFile);
 
-  eStatus = eValidationFailed;
-
   oGRecord.Initialize();
-  if (oGRecord.VerifyGRecordInFile(path, IgnoreError()))
-    eStatus = eValidationPassed;
-
-  return eStatus;
+  oGRecord.VerifyGRecordInFile(path);
+  return eValidationPassed;
 }
 
 static int
@@ -76,10 +72,6 @@ RunValidate(Path path)
   GRecord oGRecord;
   STATUS_t eStatus = ValidateXCS(path, oGRecord);
   switch (eStatus) {
-  case eValidationFailed:
-    puts(szFail);
-    return 0;
-
   case eValidationPassed:
     puts(szPass);
     return 0; // success
@@ -95,7 +87,7 @@ RunValidate(Path path)
 }
 
 int main(int argc, char* argv[])
-{
+try {
   printf("Vali XCS for the XCSoar Flight Computer Version "
 #ifdef _UNICODE
          "%S\n",
@@ -109,4 +101,7 @@ int main(int argc, char* argv[])
     return RunValidate(path);
   } else
     return 0;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

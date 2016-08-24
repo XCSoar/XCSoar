@@ -29,7 +29,7 @@
 #include "Engine/Trace/Vector.hpp"
 #include "Printing.hpp"
 #include "TestUtil.hpp"
-#include "Util/Error.hxx"
+#include "Util/PrintException.hxx"
 
 #include <windef.h>
 #include <assert.h>
@@ -53,12 +53,7 @@ OnAdvance(Trace &trace, const GeoPoint &loc, const double alt, const double t)
 static bool
 TestTrace(Path filename, unsigned ntrace, bool output=false)
 {
-  Error error;
-  FileLineReaderA reader(filename, error);
-  if (reader.error()) {
-    fprintf(stderr, "%s\n", error.GetMessage());
-    return false;
-  }
+  FileLineReaderA reader(filename);
 
   printf("# %d", ntrace);  
   Trace trace(1000, ntrace);
@@ -90,7 +85,7 @@ TestTrace(Path filename, unsigned ntrace, bool output=false)
 
 
 int main(int argc, char **argv)
-{
+try {
   if (argc < 3) {
     unsigned n = 100;
     if (argc > 1) {
@@ -110,4 +105,7 @@ int main(int argc, char **argv)
     }
   }
   return 0;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

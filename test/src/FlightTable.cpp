@@ -26,7 +26,7 @@
 #include "IO/FileLineReader.hpp"
 #include "OS/FileUtil.hpp"
 #include "Util/StaticString.hxx"
-#include "Util/Error.hxx"
+#include "Util/PrintException.hxx"
 #include "Compiler.h"
 
 #include <cstdio>
@@ -126,12 +126,7 @@ class IGCFileVisitor : public File::Visitor {
 void
 IGCFileVisitor::Visit(Path path, Path filename)
 {
-  Error error;
-  FileLineReaderA reader(path, error);
-  if (reader.error()) {
-    fprintf(stderr, "%s\n", error.GetMessage());
-    return;
-  }
+  FileLineReaderA reader(path);
 
   IGCExtensions extensions;
   extensions.clear();
@@ -159,8 +154,11 @@ IGCFileVisitor::Visit(Path path, Path filename)
 }
 
 int main(gcc_unused int argc, gcc_unused char **argv)
-{
+try {
   IGCFileVisitor visitor;
   Directory::VisitSpecificFiles(Path(_T(".")), _T("*.igc"), visitor);
   return 0;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

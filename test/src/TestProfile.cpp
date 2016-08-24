@@ -26,7 +26,7 @@
 #include "TestUtil.hpp"
 #include "Util/StringAPI.hxx"
 #include "Util/StaticString.hxx"
-#include "Util/Error.hxx"
+#include "Util/PrintException.hxx"
 
 static void
 TestMap()
@@ -88,12 +88,7 @@ TestWriter()
 
   Profile::SaveFile(Path(_T("output/TestProfileWriter.prf")));
 
-  Error error;
-  FileLineReader reader(Path(_T("output/TestProfileWriter.prf")), error);
-  if (reader.error()) {
-    skip(3, 0, error.GetMessage());
-    return;
-  }
+  FileLineReader reader(Path(_T("output/TestProfileWriter.prf")));
 
   unsigned count = 0;
   bool found1 = false, found2 = false;
@@ -142,7 +137,7 @@ TestReader()
 }
 
 int main(int argc, char **argv)
-{
+try {
   plan_tests(31);
 
   TestMap();
@@ -150,4 +145,7 @@ int main(int argc, char **argv)
   TestReader();
 
   return exit_status();
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

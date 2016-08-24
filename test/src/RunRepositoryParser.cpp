@@ -25,24 +25,19 @@ Copyright_License {
 #include "Repository/FileRepository.hpp"
 #include "IO/FileLineReader.hpp"
 #include "OS/Args.hpp"
-#include "Util/Error.hxx"
+#include "Util/PrintException.hxx"
 
 #include <stdio.h>
 #include <stdlib.h>
 
 int
 main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "PATH");
   const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
-  Error error;
-  FileLineReaderA reader(path, error);
-  if (reader.error()) {
-    fprintf(stderr, "%s\n", error.GetMessage());
-    return EXIT_FAILURE;
-  }
+  FileLineReaderA reader(path);
 
   FileRepository repository;
 
@@ -59,4 +54,7 @@ main(int argc, char **argv)
   }
 
   return EXIT_SUCCESS;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

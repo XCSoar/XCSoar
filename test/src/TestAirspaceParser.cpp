@@ -29,7 +29,7 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Util/Macros.hpp"
 #include "Util/StringAPI.hxx"
-#include "Util/Error.hxx"
+#include "Util/PrintException.hxx"
 #include "IO/FileLineReader.hpp"
 #include "Operation/Operation.hpp"
 #include "TestUtil.hpp"
@@ -45,13 +45,7 @@ struct AirspaceClassTestCouple
 static bool
 ParseFile(Path path, Airspaces &airspaces)
 {
-  Error error;
-  FileLineReader reader(path, error, Charset::AUTO);
-
-  if (!ok1(!reader.error())) {
-    skip(1, 0, error.GetMessage());
-    return false;
-  }
+  FileLineReader reader(path, Charset::AUTO);
 
   AirspaceParser parser(airspaces);
   NullOperationEnvironment operation;
@@ -280,11 +274,14 @@ TestTNP()
 }
 
 int main(int argc, char **argv)
-{
-  plan_tests(104);
+try {
+  plan_tests(102);
 
   TestOpenAir();
   TestTNP();
 
   return exit_status();
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

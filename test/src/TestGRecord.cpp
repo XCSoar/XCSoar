@@ -23,7 +23,7 @@
 #include "Logger/GRecord.hpp"
 #include "TestUtil.hpp"
 #include "OS/Path.hpp"
-#include "Util/Error.hxx"
+#include "Util/PrintException.hxx"
 
 #include <tchar.h>
 
@@ -32,11 +32,12 @@ CheckGRecord(const TCHAR *path)
 {
   GRecord grecord;
   grecord.Initialize();
-  ok1(grecord.VerifyGRecordInFile(Path(path), IgnoreError()));
+  grecord.VerifyGRecordInFile(Path(path));
+  ok1(true);
 }
 
 int main(int argc, char **argv)
-{
+try {
   plan_tests(4);
 
   CheckGRecord(_T("test/data/grecord64a.igc"));
@@ -45,4 +46,7 @@ int main(int argc, char **argv)
   CheckGRecord(_T("test/data/grecord65b.igc"));
 
   return exit_status();
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

@@ -38,12 +38,11 @@ protected:
   LineSplitter splitter;
 
 public:
-  FileLineReaderA(Path path, Error &error)
-    :file(path, error), splitter(file) {}
-
-  bool error() const {
-    return file.error();
-  }
+  /**
+   * Throws std::runtime_errror on error.
+   */
+  explicit FileLineReaderA(Path path)
+    :file(path), splitter(file) {}
 
   /**
    * Rewind the file to the beginning.
@@ -74,13 +73,11 @@ protected:
   ConvertLineReader convert;
 
 public:
-  FileLineReader(Path path, Error &error,
-                 Charset cs=Charset::UTF8)
-    :file(path, error), splitter(file), convert(splitter, cs) {}
-
-  bool error() const {
-    return file.error();
-  }
+  /**
+   * Throws std::runtime_errror on error.
+   */
+  FileLineReader(Path path, Charset cs=Charset::UTF8)
+    :file(path), splitter(file), convert(splitter, cs) {}
 
   /**
    * Rewind the file to the beginning.

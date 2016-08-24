@@ -10,7 +10,7 @@
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "test_debug.hpp"
-#include "Util/Error.hxx"
+#include "Util/PrintException.hxx"
 
 #include <fstream>
 
@@ -113,13 +113,7 @@ test_replay(const Contest olc_type,
 
   GlidePolar glide_polar(2);
 
-  Error error;
-  FileLineReaderA *reader = new FileLineReaderA(replay_file, error);
-  if (reader->error()) {
-    delete reader;
-    fprintf(stderr, "%s\n", error.GetMessage());
-    return false;
-  }
+  FileLineReaderA *reader = new FileLineReaderA(replay_file);
 
   ReplayLoggerSim sim(reader);
 
@@ -207,7 +201,7 @@ test_replay(const Contest olc_type,
 
 
 int main(int argc, char** argv) 
-{
+try {
   if (!ParseArgs(argc,argv)) {
     return 0;
   }
@@ -226,5 +220,7 @@ int main(int argc, char** argv)
      "replay plus", 0);
 
   return exit_status();
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }
-

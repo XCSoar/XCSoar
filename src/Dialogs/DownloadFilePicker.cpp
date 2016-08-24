@@ -44,7 +44,6 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "Operation/ThreadedOperationEnvironment.hpp"
 #include "Util/ConvertString.hpp"
-#include "Util/Error.hxx"
 
 #include <vector>
 
@@ -261,18 +260,17 @@ try {
   FileRepository repository;
 
   const auto path = LocalPath(_T("repository"));
-  FileLineReaderA reader(path, IgnoreError());
-  if (!reader.error()) {
-    ParseFileRepository(repository, reader);
+  FileLineReaderA reader(path);
 
-    for (auto &i : repository)
-      if (i.type == file_type)
-        items.emplace_back(std::move(i));
+  ParseFileRepository(repository, reader);
 
-    ListControl &list = GetList();
-    list.SetLength(items.size());
-    list.Invalidate();
-  }
+  for (auto &i : repository)
+    if (i.type == file_type)
+      items.emplace_back(std::move(i));
+
+  ListControl &list = GetList();
+  list.SetLength(items.size());
+  list.Invalidate();
 
   UpdateButtons();
 } catch (const std::runtime_error &e) {

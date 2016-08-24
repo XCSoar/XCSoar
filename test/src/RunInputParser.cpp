@@ -27,7 +27,7 @@ Copyright_License {
 #include "Menu/MenuData.hpp"
 #include "IO/FileLineReader.hpp"
 #include "OS/Args.hpp"
-#include "Util/Error.hxx"
+#include "Util/PrintException.hxx"
 
 #include <stdio.h>
 #include <tchar.h>
@@ -64,17 +64,12 @@ Dump(InputConfig::Event &event, unsigned id)
 }
 
 int main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "PATH");
   const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
-  Error error;
-  FileLineReader reader(path, error);
-  if (reader.error()) {
-    fprintf(stderr, "%s\n", error.GetMessage());
-    return EXIT_FAILURE;
-  }
+  FileLineReader reader(path);
 
   InputConfig config;
   config.SetDefaults();
@@ -112,5 +107,8 @@ int main(int argc, char **argv)
     }
   }
 
-  return 0;
+  return EXIT_SUCCESS;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

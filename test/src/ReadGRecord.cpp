@@ -21,15 +21,15 @@
 */
 
 #include "Logger/GRecord.hpp"
-#include "Util/Macros.hpp"
-#include "Util/Error.hxx"
 #include "OS/Args.hpp"
+#include "Util/Macros.hpp"
+#include "Util/PrintException.hxx"
 
 #include <stdio.h>
 
 int
 main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "FILE.igc");
   const auto path = args.ExpectNextPath();
   args.ExpectEnd();
@@ -37,13 +37,11 @@ main(int argc, char **argv)
   GRecord g;
   g.Initialize();
 
-  Error error;
   char data[1024];
-  if (!g.ReadGRecordFromFile(path, data, ARRAY_SIZE(data), error)) {
-    fprintf(stderr, "%s\n", error.GetMessage());
-    return 2;
-  }
-
+  g.ReadGRecordFromFile(path, data, ARRAY_SIZE(data));
   puts(data);
   return 0;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

@@ -24,22 +24,17 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Math/KalmanFilter1d.hpp"
-#include "Util/Error.hxx"
+#include "Util/PrintException.hxx"
 
 #include <stdio.h>
 
 int main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "FILE");
   const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
-  Error error;
-  FileLineReaderA reader(path, error);
-  if (reader.error()) {
-    fprintf(stderr, "%s\n", error.GetMessage());
-    return EXIT_FAILURE;
-  }
+  FileLineReaderA reader(path);
 
   KalmanFilter1d kalman_filter(0.0075);
 
@@ -78,5 +73,7 @@ int main(int argc, char **argv)
   }
 
   return EXIT_SUCCESS;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }
-

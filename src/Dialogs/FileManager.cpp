@@ -42,7 +42,6 @@ Copyright_License {
 #include "Net/HTTP/Features.hpp"
 #include "Util/ConvertString.hpp"
 #include "Util/Macros.hpp"
-#include "Util/Error.hxx"
 #include "Repository/FileRepository.hpp"
 #include "Repository/Parser.hpp"
 
@@ -356,10 +355,7 @@ try {
   repository.Clear();
 
   const auto path = LocalPath(_T("repository"));
-  FileLineReaderA reader(path, IgnoreError());
-  if (reader.error())
-    return;
-
+  FileLineReaderA reader(path);
   ParseFileRepository(repository, reader);
 } catch (const std::runtime_error &e) {
 }

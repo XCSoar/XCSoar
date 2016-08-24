@@ -28,18 +28,18 @@ Copyright_License {
 #include "WaypointReaderCompeGPS.hpp"
 #include "OS/Path.hpp"
 #include "IO/FileLineReader.hpp"
-#include "Util/Error.hxx"
+
+#include <stdexcept>
 
 template<class R>
 gcc_pure
 static bool
 VerifyFormat(Path path)
-{
-  FileLineReader reader(path, IgnoreError(), Charset::UTF8);
-  if (reader.error())
-    return false;
-
+try {
+  FileLineReader reader(path, Charset::UTF8);
   return R::VerifyFormat(reader);
+} catch (const std::runtime_error &) {
+  return false;
 }
 
 WaypointFileType

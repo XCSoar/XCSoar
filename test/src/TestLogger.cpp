@@ -25,7 +25,7 @@
 #include "NMEA/Info.hpp"
 #include "IO/FileLineReader.hpp"
 #include "TestUtil.hpp"
-#include "Util/Error.hxx"
+#include "Util/PrintException.hxx"
 
 #include <assert.h>
 #include <cstdio>
@@ -33,8 +33,7 @@
 static void
 CheckTextFile(Path path, const char *const* expect)
 {
-  FileLineReaderA reader(path, IgnoreError());
-  ok1(!reader.error());
+  FileLineReaderA reader(path);
 
   const char *line;
   while ((line = reader.ReadLine()) != NULL) {
@@ -155,8 +154,8 @@ Run(Path path)
 }
 
 int main(int argc, char **argv)
-{
-  plan_tests(51);
+try {
+  plan_tests(49);
 
   const Path path(_T("output/test/test.igc"));
   File::Delete(path);
@@ -167,7 +166,10 @@ int main(int argc, char **argv)
 
   GRecord grecord;
   grecord.Initialize();
-  ok1(grecord.VerifyGRecordInFile(path, IgnoreError()));
+  grecord.VerifyGRecordInFile(path);
 
   return exit_status();
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

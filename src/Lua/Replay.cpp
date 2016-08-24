@@ -26,7 +26,6 @@ Copyright_License {
 #include "OS/Path.hpp"
 #include "Components.hpp"
 #include "Replay/Replay.hpp"
-#include "Util/Error.hxx"
 #include "Util/ConvertString.hpp"
 
 extern "C" {

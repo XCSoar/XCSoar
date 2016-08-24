@@ -31,14 +31,17 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "OS/Path.hpp"
 #include "Util/StringAPI.hxx"
-#include "Util/Error.hxx"
 
 TriState
 ProfileFileHasPassword(Path path)
 {
   ProfileMap map;
-  if (!Profile::LoadFile(map, path, IgnoreError()))
+
+  try {
+    Profile::LoadFile(map, path);
+  } catch (const std::runtime_error &) {
     return TriState::UNKNOWN;
+  }
 
   return map.Exists(ProfileKeys::Password)
     ? TriState::TRUE
@@ -66,17 +69,15 @@ CheckProfilePassword(const ProfileMap &map)
 }
 
 ProfilePasswordResult
-CheckProfileFilePassword(Path path, Error &error)
+CheckProfileFilePassword(Path path)
 {
   ProfileMap map;
-  if (!Profile::LoadFile(map, path, error))
-    return ProfilePasswordResult::ERROR;
-
+  Profile::LoadFile(map, path);
   return CheckProfilePassword(map);
 }
 
 bool
-CheckProfilePasswordResult(ProfilePasswordResult result, const Error &error)
+CheckProfilePasswordResult(ProfilePasswordResult result)
 {
   switch (result) {
   case ProfilePasswordResult::UNPROTECTED:
@@ -88,10 +89,6 @@ CheckProfilePasswordResult(ProfilePasswordResult result, const Error &error)
     return false;
 
   case ProfilePasswordResult::CANCEL:
-    return false;
-
-  case ProfilePasswordResult::ERROR:
-    ShowError(error, _("Password"));
     return false;
   }
 
