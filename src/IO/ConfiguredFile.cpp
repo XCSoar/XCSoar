@@ -66,12 +66,8 @@ OpenConfiguredTextFile(const char *profile_key, Charset cs)
 
   Error error;
   FileLineReader *reader = new FileLineReader(path, error, cs);
-  if (reader == nullptr) {
-    LogError(error);
-    return nullptr;
-  }
-
   if (reader->error()) {
+    LogError(error);
     delete reader;
     return nullptr;
   }
@@ -91,12 +87,8 @@ OpenMapTextFile(const char *in_map_file, Charset cs)
   Error error;
   ZipLineReader *reader = new ZipLineReader(dir, in_map_file, error, cs);
   zzip_dir_close(dir);
-  if (reader == nullptr) {
-    LogError(error);
-    return nullptr;
-  }
-
   if (reader->error()) {
+    LogError(error);
     delete reader;
     return nullptr;
   }
