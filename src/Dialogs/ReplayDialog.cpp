@@ -105,9 +105,12 @@ ReplayControlWidget::OnStartClicked()
 {
   const auto &df = (const FileDataField &)GetDataField(FILE);
   const Path path = df.GetPathFile();
-  Error error;
-  if (!replay->Start(path, error))
-    ShowError(error, _("Replay"));
+
+  try {
+    replay->Start(path);
+  } catch (const std::runtime_error &e) {
+    ShowError(e, _("Replay"));
+  }
 }
 
 void

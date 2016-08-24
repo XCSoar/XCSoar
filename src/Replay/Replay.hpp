@@ -94,7 +94,11 @@ private:
 
 public:
   void Stop();
-  bool Start(Path _path, Error &error);
+
+  /**
+   * Throws std::runtime_errror on error.
+   */
+  void Start(Path _path);
 
   Path GetFilename() const {
     return path;

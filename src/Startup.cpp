@@ -312,9 +312,11 @@ Startup()
 
 #ifdef HAVE_CMDLINE_REPLAY
   if (CommandLine::replay_path != nullptr) {
-    Error error;
-    if (!replay->Start(Path(CommandLine::replay_path), error))
-      LogError(error);
+    try {
+      replay->Start(Path(CommandLine::replay_path));
+    } catch (const std::runtime_error &e) {
+      LogError(e);
+    }
   }
 #endif
 

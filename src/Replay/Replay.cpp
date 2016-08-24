@@ -25,13 +25,16 @@
 #include "IgcReplay.hpp"
 #include "NmeaReplay.hpp"
 #include "DemoReplayGlue.hpp"
-#include "Util/Clamp.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Logger/Logger.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "CatmullRomInterpolator.hpp"
+#include "Util/Clamp.hpp"
+#include "Util/Error.hxx"
+
+#include <stdexcept>
 
 #include <assert.h>
 
@@ -55,8 +58,8 @@ Replay::Stop()
     logger->ClearBuffer();
 }
 
-bool
-Replay::Start(Path _path, Error &error)
+void
+Replay::Start(Path _path)
 {
   assert(_path != nullptr);
 
@@ -69,10 +72,11 @@ Replay::Start(Path _path, Error &error)
   if (path.IsNull() || path.IsEmpty()) {
     replay = new DemoReplayGlue(task_manager);
   } else if (path.MatchesExtension(_T(".igc"))) {
+    Error error;
     auto reader = new FileLineReaderA(path, error);
     if (reader->error()) {
       delete reader;
-      return false;
+      throw std::runtime_error(error.GetMessage());
     }
 
     replay = new IgcReplay(reader);
@@ -80,10 +84,11 @@ Replay::Start(Path _path, Error &error)
     cli = new CatmullRomInterpolator(0.98);
     cli->Reset();
   } else {
+    Error error;
     auto reader = new FileLineReaderA(path, error);
     if (reader->error()) {
       delete reader;
-      return false;
+      throw std::runtime_error(error.GetMessage());
     }
 
     replay = new NmeaReplay(reader,
@@ -98,8 +103,6 @@ Replay::Start(Path _path, Error &error)
   next_data.Reset();
 
   Timer::Schedule(100);
-
-  return true;
 }
 
 bool
