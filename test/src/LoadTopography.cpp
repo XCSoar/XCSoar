@@ -30,11 +30,11 @@ Copyright_License {
 #include "Topography/TopographyFile.hpp"
 #include "Topography/XShape.hpp"
 #include "OS/Args.hpp"
+#include "IO/ZipArchive.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "Operation/Operation.hpp"
 #include "Util/Error.hxx"
-
-#include <zzip/zzip.h>
+#include "Util/PrintException.hxx"
 
 #include <stdio.h>
 #include <tchar.h>
@@ -63,19 +63,15 @@ TriangulateAll(const TopographyStore &store)
 #endif
 
 int main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "PATH");
-  const char *path = args.ExpectNext();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
-  ZZIP_DIR *dir = zzip_dir_open(path, NULL);
-  if (dir == NULL) {
-    fprintf(stderr, "Failed to open %s\n", (const char *)path);
-    return EXIT_FAILURE;
-  }
+  ZipArchive archive(path);
 
   Error error;
-  ZipLineReaderA reader(dir, "topology.tpl", error);
+  ZipLineReaderA reader(archive.get(), "topology.tpl", error);
   if (reader.error()) {
     fprintf(stderr, "%s\n", error.GetMessage());
     return EXIT_FAILURE;
@@ -83,8 +79,7 @@ int main(int argc, char **argv)
 
   TopographyStore topography;
   NullOperationEnvironment operation;
-  topography.Load(operation, reader, NULL, dir);
-  zzip_dir_close(dir);
+  topography.Load(operation, reader, NULL, archive.get());
 
   topography.LoadAll();
 
@@ -93,4 +88,7 @@ int main(int argc, char **argv)
 #endif
 
   return EXIT_SUCCESS;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }
