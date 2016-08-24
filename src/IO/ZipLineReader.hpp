@@ -48,26 +48,14 @@ public:
   long Tell() const override;
 };
 
-/**
- * Glue class which combines ZipSource, LineSplitter and
- * ConvertLineReader, and provides a public TLineReader interface.
- */
-class ZipLineReader : public TLineReader {
-protected:
-  ZipSource zip;
-  LineSplitter splitter;
-  ConvertLineReader convert;
-
+class ZipLineReader : public ConvertLineReader {
 public:
+  /**
+   * Throws std::runtime_errror on error.
+   */
   ZipLineReader(struct zzip_dir *dir, const char *path,
                 Charset cs=Charset::UTF8)
-    :zip(dir, path), splitter(zip), convert(splitter, cs) {}
-
-public:
-  /* virtual methods from class TLineReader */
-  TCHAR *ReadLine() override;
-  long GetSize() const override;
-  long Tell() const override;
+    :ConvertLineReader(std::make_unique<ZipLineReaderA>(dir, path), cs) {}
 };
 
 #endif

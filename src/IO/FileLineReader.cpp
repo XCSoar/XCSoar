@@ -40,21 +40,3 @@ FileLineReaderA::Tell() const
 {
   return splitter.Tell();
 }
-
-TCHAR *
-FileLineReader::ReadLine()
-{
-  return convert.ReadLine();
-}
-
-long
-FileLineReader::GetSize() const
-{
-  return convert.GetSize();
-}
-
-long
-FileLineReader::Tell() const
-{
-  return convert.Tell();
-}

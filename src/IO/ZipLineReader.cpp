@@ -40,21 +40,3 @@ ZipLineReaderA::Tell() const
 {
   return splitter.Tell();
 }
-
-TCHAR *
-ZipLineReader::ReadLine()
-{
-  return convert.ReadLine();
-}
-
-long
-ZipLineReader::GetSize() const
-{
-  return convert.GetSize();
-}
-
-long
-ZipLineReader::Tell() const
-{
-  return convert.Tell();
-}

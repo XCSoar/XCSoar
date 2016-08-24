@@ -26,6 +26,7 @@ Copyright_License {
 #include "FileLineReader.hpp"
 #include "ZipArchive.hpp"
 #include "ZipLineReader.hpp"
+#include "ConvertLineReader.hpp"
 #include "Profile/Profile.hpp"
 #include "LogFile.hpp"
 #include "OS/Path.hpp"
@@ -54,21 +55,18 @@ try {
 
 std::unique_ptr<TLineReader>
 OpenConfiguredTextFile(const char *profile_key, Charset cs)
-try {
+{
   assert(profile_key != nullptr);
 
-  const auto path = Profile::GetPath(profile_key);
-  if (path.IsNull())
+  auto reader = OpenConfiguredTextFileA(profile_key);
+  if (!reader)
     return nullptr;
 
-  return std::make_unique<FileLineReader>(path, cs);
-} catch (const std::runtime_error &e) {
-  LogError(e);
-  return nullptr;
+  return std::make_unique<ConvertLineReader>(std::move(reader), cs);
 }
 
-static std::unique_ptr<TLineReader>
-OpenMapTextFile(const char *in_map_file, Charset cs)
+static std::unique_ptr<NLineReader>
+OpenMapTextFileA(const char *in_map_file)
 try {
   assert(in_map_file != nullptr);
 
@@ -76,10 +74,22 @@ try {
   if (!archive)
     return nullptr;
 
-  return std::make_unique<ZipLineReader>(archive->get(), in_map_file, cs);
+  return std::make_unique<ZipLineReaderA>(archive->get(), in_map_file);
 } catch (const std::runtime_error &e) {
   LogError(e);
   return nullptr;
+}
+
+static std::unique_ptr<TLineReader>
+OpenMapTextFile(const char *in_map_file, Charset cs)
+{
+  assert(in_map_file != nullptr);
+
+  auto reader = OpenMapTextFileA(in_map_file);
+  if (!reader)
+    return nullptr;
+
+  return std::make_unique<ConvertLineReader>(std::move(reader), cs);
 }
 
 std::unique_ptr<TLineReader>

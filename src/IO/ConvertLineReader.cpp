@@ -30,8 +30,9 @@ Copyright_License {
 #include <windows.h>
 #endif
 
-ConvertLineReader::ConvertLineReader(LineReader<char> &_source, Charset cs)
-  :source(_source),
+ConvertLineReader::ConvertLineReader(std::unique_ptr<LineReader<char>> &&_source,
+                                     Charset cs)
+  :source(std::move(_source)),
    charset(cs)
 {
 }
@@ -51,7 +52,7 @@ iso_latin_1_to_tchar(TCHAR *dest, const char *src)
 TCHAR *
 ConvertLineReader::ReadLine()
 {
-  char *narrow = source.ReadLine();
+  char *narrow = source->ReadLine();
 
   if (narrow == nullptr)
     return nullptr;
@@ -132,11 +133,11 @@ ConvertLineReader::ReadLine()
 long
 ConvertLineReader::GetSize() const
 {
-  return source.GetSize();
+  return source->GetSize();
 }
 
 long
 ConvertLineReader::Tell() const
 {
-  return source.Tell();
+  return source->Tell();
 }

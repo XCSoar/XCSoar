@@ -62,39 +62,20 @@ public:
   long Tell() const override;
 };
 
-/**
- * Glue class which combines FileSource, LineSplitter and
- * ConvertLineReader, and provides a public TLineReader interface.
- */
-class FileLineReader : public TLineReader {
-protected:
-  FileSource file;
-  LineSplitter splitter;
-  ConvertLineReader convert;
-
+class FileLineReader : public ConvertLineReader {
 public:
   /**
    * Throws std::runtime_errror on error.
    */
   FileLineReader(Path path, Charset cs=Charset::UTF8)
-    :file(path), splitter(file), convert(splitter, cs) {}
+    :ConvertLineReader(std::make_unique<FileLineReaderA>(path), cs) {}
 
   /**
    * Rewind the file to the beginning.
    */
   bool Rewind() {
-    if (!file.Rewind())
-      return false;
-
-    splitter.ResetBuffer();
-    return true;
+    return ((FileLineReaderA &)GetSource()).Rewind();
   }
-
-public:
-  /* virtual methods from class TLineReader */
-  TCHAR *ReadLine() override;
-  long GetSize() const override;
-  long Tell() const override;
 };
 
 #endif

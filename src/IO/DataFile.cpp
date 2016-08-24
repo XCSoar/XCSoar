@@ -24,6 +24,7 @@ Copyright_License {
 #include "DataFile.hpp"
 #include "FileSource.hpp"
 #include "FileLineReader.hpp"
+#include "ConvertLineReader.hpp"
 #include "TextWriter.hpp"
 #include "LocalPath.hpp"
 #include "OS/Path.hpp"
@@ -46,11 +47,7 @@ OpenDataFile(const TCHAR *name)
 std::unique_ptr<TLineReader>
 OpenDataTextFile(const TCHAR *name, Charset cs)
 {
-  assert(name != nullptr);
-  assert(!StringIsEmpty(name));
-
-  const auto path = LocalPath(name);
-  return std::make_unique<FileLineReader>(path, cs);
+  return std::make_unique<ConvertLineReader>(OpenDataTextFileA(name), cs);
 }
 
 std::unique_ptr<NLineReader>
