@@ -33,6 +33,8 @@ Copyright_License {
 #include "IO/FileLineReader.hpp"
 #include "Util/Error.hxx"
 
+#include <memory>
+
 static WaypointReaderBase *
 CreateWaypointReader(WaypointFileType type, WaypointFactory factory)
 {
@@ -67,20 +69,17 @@ ReadWaypointFile(Path path, WaypointFileType file_type,
                  Waypoints &way_points,
                  WaypointFactory factory, OperationEnvironment &operation)
 {
-  auto *reader = CreateWaypointReader(file_type, factory);
-  if (reader == nullptr)
+  std::unique_ptr<WaypointReaderBase> reader(CreateWaypointReader(file_type,
+                                                                  factory));
+  if (!reader)
     return false;
 
-  bool success = false;
-
   FileLineReader line_reader(path, IgnoreError(), Charset::AUTO);
-  if (!line_reader.error()) {
-    reader->Parse(way_points, line_reader, operation);
-    success = true;
-  }
+  if (line_reader.error())
+    return false;
 
-  delete reader;
-  return success;
+  reader->Parse(way_points, line_reader, operation);
+  return true;
 }
 
 bool
@@ -96,18 +95,15 @@ ReadWaypointFile(struct zzip_dir *dir, const char *path,
                  WaypointFileType file_type, Waypoints &way_points,
                  WaypointFactory factory, OperationEnvironment &operation)
 {
-  auto *reader = CreateWaypointReader(file_type, factory);
-  if (reader == nullptr)
+  std::unique_ptr<WaypointReaderBase> reader(CreateWaypointReader(file_type,
+                                                                  factory));
+  if (!reader)
     return false;
 
-  bool success = false;
-
   ZipLineReader line_reader(dir, path, IgnoreError(), Charset::AUTO);
-  if (!line_reader.error()) {
-    reader->Parse(way_points, line_reader, operation);
-    success = true;
-  }
+  if (line_reader.error())
+    return false;
 
-  delete reader;
-  return success;
+  reader->Parse(way_points, line_reader, operation);
+  return true;
 }
