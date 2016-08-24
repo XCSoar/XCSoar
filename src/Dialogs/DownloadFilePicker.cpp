@@ -252,7 +252,7 @@ DownloadFilePickerWidget::Unprepare()
 
 void
 DownloadFilePickerWidget::RefreshList()
-{
+try {
   mutex.Lock();
   repository_modified = false;
   repository_failed = false;
@@ -275,6 +275,7 @@ DownloadFilePickerWidget::RefreshList()
   }
 
   UpdateButtons();
+} catch (const std::runtime_error &e) {
 }
 
 void

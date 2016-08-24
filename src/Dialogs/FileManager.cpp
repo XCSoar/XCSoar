@@ -345,7 +345,7 @@ ManagedFileListWidget::FindItem(const TCHAR *name) const
 
 void
 ManagedFileListWidget::LoadRepositoryFile()
-{
+try {
 #ifdef HAVE_DOWNLOAD_MANAGER
   mutex.Lock();
   repository_modified = false;
@@ -361,6 +361,7 @@ ManagedFileListWidget::LoadRepositoryFile()
     return;
 
   ParseFileRepository(repository, reader);
+} catch (const std::runtime_error &e) {
 }
 
 void
