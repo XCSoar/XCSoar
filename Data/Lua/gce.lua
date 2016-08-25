@@ -1,68 +1,68 @@
--- Glide computer events-------------------------------------------------------
 
-xcsoar.input_event.new("gce_takeoff",
-                                function(e)
-                                   xcsoar.fire_legacy_event("AutoLogger","start");
-                                   xcsoar.fire_legacy_event("AddWaypoint","takeoff");
-                                   xcsoar.fire_legacy_event("StatusMessage","Takeoff");
+-- registration function
+function bind_events(t, verbose)
+   for key,value in pairs(t) do
+      xcsoar.input_event.new(key,
+                             function(e)
+                                if (verbose) then
+                                   print(key); -- logging of events
                                 end
-)
+                                value(e);
+                             end
+      )
+   end
+end
 
-xcsoar.input_event.new("gce_landing",
-                                function(e)
-                                   xcsoar.fire_legacy_event("StatusMessage","Landing");
-                                   xcsoar.fire_legacy_event("AutoLogger","stop");
-                                end
-)
+-- Glide computer event handlers ----------------------------------------------
 
-xcsoar.input_event.new("gce_flightmode_finalglide_above",
-                                function(e)
-                                   xcsoar.fire_legacy_event("StatusMessage","Above final glide");
-                                end
-)
+function beep()
+   xcsoar.fire_legacy_event("Beep","1");
+end
 
-xcsoar.input_event.new("gce_flightmode_finalglide_below",
-                                function(e)
-                                   xcsoar.fire_legacy_event("StatusMessage","Below final glide");
-                                end
-)
+function on_task_transition(mode)
+   beep();
+   xcsoar.fire_legacy_event("TaskTransition",mode);
+end
 
-xcsoar.input_event.new("gce_flightmode_finalglide_terrain",
-                                function(e)
-                                   xcsoar.fire_legacy_event("StatusMessage","Final glide through terrain");
-                                end
-)
+function on_final_glide_event(mode)
+   xcsoar.fire_legacy_event("StatusMessage",mode);
+end
 
-xcsoar.input_event.new("gce_landable_unreachable",
-                                function(e)
-                                   xcsoar.fire_legacy_event("Beep","1");
-                                end
-)
+-- Glide computer event table -------------------------------------------------
 
-xcsoar.input_event.new("gce_task_start",
-                       function(e)
-                          xcsoar.fire_legacy_event("Beep","1");
-                          xcsoar.fire_legacy_event("TaskTransition","start");
-                       end
-)
+local gce_events = {
+  ["gce_takeoff"] = function(e)
+     xcsoar.fire_legacy_event("AutoLogger","start");
+     xcsoar.fire_legacy_event("AddWaypoint","takeoff");
+     xcsoar.fire_legacy_event("StatusMessage","Takeoff");
+  end,
+  ["gce_landing"] = function(e)
+     xcsoar.fire_legacy_event("StatusMessage","Landing");
+     xcsoar.fire_legacy_event("AutoLogger","stop");
+  end,
+  ["gce_flightmode_finalglide_above"] = function(e)
+     on_final_glide_event("Above final glide");
+  end,
+  ["gce_flightmode_finalglide_below"] = function(e)
+     on_final_glide_event("Below final glide");
+  end,
+  ["gce_flightmode_finalglide_terrain"] = function(e)
+     on_final_glide_event("Final glide through terrain");
+  end,
+  ["gce_landable_unreachable"] = beep,
+  ["gce_task_start"] = function(e)
+     on_task_transition("start");
+  end,
+  ["gce_task_finish"] = function(e)
+     on_task_transition("finish");
+  end,
+  ["gce_task_nextwaypoint"] = function(e)
+     on_task_transition("next");
+  end,
+};
 
-xcsoar.input_event.new("gce_task_finish",
-                       function(e)
-                          xcsoar.fire_legacy_event("Beep","1");
-                          xcsoar.fire_legacy_event("TaskTransition","finish");
-                       end
-)
+-- Bind events ---------------------------------------------------------------
 
-xcsoar.input_event.new("gce_task_nextwaypoint",
-                       function(e)
-                          xcsoar.fire_legacy_event("Beep","1");
-                          xcsoar.fire_legacy_event("TaskTransition","next");
-                       end
-)
+local verbose = 1;
+bind_events(gce_events, verbose);
 
-xcsoar.input_event.new("gce_startup_simulator",
-                                function(e)
-                                   print("start sim!");
-                                   -- e:cancel();
-                                end
-)
