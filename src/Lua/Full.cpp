@@ -42,6 +42,7 @@ Copyright_License {
 #include "Logger.hpp"
 #include "Tracking.hpp"
 #include "Replay.hpp"
+#include "InputEvent.hpp"
 
 lua_State *
 Lua::NewFullState()
@@ -62,6 +63,7 @@ Lua::NewFullState()
   InitLogger(L);
   InitTracking(L);
   InitReplay(L);
+  InitInputEvent(L);
 
   {
     SetPackagePath(L,
