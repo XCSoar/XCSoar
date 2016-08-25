@@ -62,6 +62,8 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Event/KeyCode.hpp"
 #endif
 
+#include "Lua/InputEvent.hpp"
+
 #include <assert.h>
 #include <tchar.h>
 #include <stdio.h>
@@ -313,6 +315,10 @@ InputEvents::ProcessKey(Mode mode, unsigned key_code)
 #endif
 #endif
 
+  if (Lua::FireKey(key_code)) {
+    //    return true;
+  }
+
   // Which key - can be defined locally or at default (fall back to default)
   unsigned event_id = key_to_event(mode, overlay_mode, key_code);
   if (event_id == 0)
@@ -343,7 +349,7 @@ InputEvents::gesture_to_event(const TCHAR *data)
 bool
 InputEvents::IsGesture(const TCHAR *data)
 {
-  return gesture_to_event(data) != 0;
+  return (Lua::IsGesture(data)) || (gesture_to_event(data) != 0);
 }
 
 bool
@@ -356,7 +362,7 @@ InputEvents::processGesture(const TCHAR *data)
     InputEvents::processGo(event_id);
     return true;
   }
-  return false;
+  return Lua::FireGesture(data);
 }
 
 /*
@@ -381,8 +387,7 @@ InputEvents::processNmea_real(unsigned ne_id)
     InputEvents::processGo(event_id);
     return true;
   }
-
-  return false;
+  return Lua::FireNMEAEvent(ne_id);
 }
 
 /*
@@ -408,7 +413,7 @@ InputEvents::processGlideComputer_real(unsigned gce_id)
     return true;
   }
 
-  return false;
+  return Lua::FireGlideComputerEvent(gce_id);
 }
 
 // EXECUTE an Event - lookup event handler and call back - no return
