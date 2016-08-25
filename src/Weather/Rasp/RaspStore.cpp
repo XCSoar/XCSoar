@@ -31,6 +31,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Util/tstring.hpp"
 #include "zzip/zzip.h"
+#include "LogFile.hpp"
 
 #include <set>
 
@@ -167,7 +168,7 @@ RaspStore::ScanMapItem(const ZipArchive &archive, MapItem &item)
 
 void
 RaspStore::ScanAll()
-{
+try {
   /* not holding the lock here, because this method is only called
      during startup, when the other threads aren't running yet */
 
@@ -216,4 +217,6 @@ RaspStore::ScanAll()
   }
 
   // TODO: scan the rest
+} catch (const std::runtime_error &e) {
+  LogError("No rasp data file", e);
 }
