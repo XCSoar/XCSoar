@@ -34,3 +34,23 @@ xcsoar.timer.new(10,
                     end
                  end
 )
+
+
+xcsoar.input_event.new("key_UP",
+                       function(e)
+                          print("up");
+                       end
+);
+
+xcsoar.input_event.new("key_UP",
+                       function(e)
+                          print("up2");
+                       end
+);
+
+xcsoar.input_event.new("key_DOWN",
+                       function(e)
+                          print("erase up");
+                          xcsoar.input_event.clear("key_UP");
+                       end
+);
