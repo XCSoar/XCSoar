@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003-2015 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2003-2016 Max Kellermann <max@duempel.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef FIFO_BUFFER_HPP
-#define FIFO_BUFFER_HPP
+#ifndef STATIC_FIFO_BUFFER_HXX
+#define STATIC_FIFO_BUFFER_HXX
 
 #include "WritableBuffer.hxx"
 
@@ -46,89 +46,89 @@
 template<class T, size_t size>
 class StaticFifoBuffer {
 public:
-  typedef size_t size_type;
+	typedef size_t size_type;
 
 public:
-  typedef WritableBuffer<T> Range;
+	typedef WritableBuffer<T> Range;
 
 protected:
-  size_type head, tail;
-  T data[size];
+	size_type head, tail;
+	T data[size];
 
 public:
-  constexpr
-  StaticFifoBuffer():head(0), tail(0) {}
+	constexpr
+	StaticFifoBuffer():head(0), tail(0) {}
 
-  void Shift() {
-    if (head == 0)
-      return;
+	void Shift() {
+		if (head == 0)
+			return;
 
-    assert(head <= size);
-    assert(tail <= size);
-    assert(tail >= head);
+		assert(head <= size);
+		assert(tail <= size);
+		assert(tail >= head);
 
-    std::move(data + head, data + tail, data);
+		std::move(data + head, data + tail, data);
 
-    tail -= head;
-    head = 0;
-  }
+		tail -= head;
+		head = 0;
+	}
 
-  void Clear() {
-    head = tail = 0;
-  }
+	void Clear() {
+		head = tail = 0;
+	}
 
-  bool IsEmpty() const {
-    return head == tail;
-  }
+	bool IsEmpty() const {
+		return head == tail;
+	}
 
-  bool IsFull() const {
-    return head == 0 && tail == size;
-  }
+	bool IsFull() const {
+		return head == 0 && tail == size;
+	}
 
-  /**
-   * Prepares writing.  Returns a buffer range which may be written.
-   * When you are finished, call append().
-   */
-  Range Write() {
-    if (IsEmpty())
-      Clear();
-    else if (tail == size)
-      Shift();
+	/**
+	 * Prepares writing.  Returns a buffer range which may be written.
+	 * When you are finished, call append().
+	 */
+	Range Write() {
+		if (IsEmpty())
+			Clear();
+		else if (tail == size)
+			Shift();
 
-    return Range(data + tail, size - tail);
-  }
+		return Range(data + tail, size - tail);
+	}
 
-  /**
-   * Expands the tail of the buffer, after data has been written to
-   * the buffer returned by write().
-   */
-  void Append(size_type n) {
-    assert(tail <= size);
-    assert(n <= size);
-    assert(tail + n <= size);
+	/**
+	 * Expands the tail of the buffer, after data has been written to
+	 * the buffer returned by write().
+	 */
+	void Append(size_type n) {
+		assert(tail <= size);
+		assert(n <= size);
+		assert(tail + n <= size);
 
-    tail += n;
-  }
+		tail += n;
+	}
 
-  /**
-   * Return a buffer range which may be read.  The buffer pointer is
-   * writable, to allow modifications while parsing.
-   */
-  Range Read() {
-    return Range(data + head, tail - head);
-  }
+	/**
+	 * Return a buffer range which may be read.  The buffer pointer is
+	 * writable, to allow modifications while parsing.
+	 */
+	Range Read() {
+		return Range(data + head, tail - head);
+	}
 
-  /**
-   * Marks a chunk as consumed.
-   */
-  void Consume(size_type n) {
-    assert(tail <= size);
-    assert(head <= tail);
-    assert(n <= tail);
-    assert(head + n <= tail);
+	/**
+	 * Marks a chunk as consumed.
+	 */
+	void Consume(size_type n) {
+		assert(tail <= size);
+		assert(head <= tail);
+		assert(n <= tail);
+		assert(head + n <= tail);
 
-    head += n;
-  }
+		head += n;
+	}
 };
 
 #endif

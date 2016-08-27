@@ -38,6 +38,7 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "Thread/Debug.hpp"
 #include "Util/tstring.hpp"
+#include "Util/StaticFifoBuffer.hxx"
 
 #include <assert.h>
 #include <tchar.h>

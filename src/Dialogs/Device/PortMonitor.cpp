@@ -30,7 +30,7 @@ Copyright_License {
 #include "Form/ActionListener.hpp"
 #include "Device/Descriptor.hpp"
 #include "Util/Macros.hpp"
-#include "Util/StaticFifoBuffer.hpp"
+#include "Util/StaticFifoBuffer.hxx"
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Event/DelayedNotify.hpp"

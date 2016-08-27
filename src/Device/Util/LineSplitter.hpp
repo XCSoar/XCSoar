@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "IO/DataHandler.hpp"
 #include "LineHandler.hpp"
-#include "Util/StaticFifoBuffer.hpp"
+#include "Util/StaticFifoBuffer.hxx"
 
 class PortLineSplitter : public DataHandler, protected PortLineHandler {
   typedef StaticFifoBuffer<char, 256u> Buffer;

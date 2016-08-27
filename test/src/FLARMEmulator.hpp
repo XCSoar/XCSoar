@@ -31,7 +31,7 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 #include "Util/Macros.hpp"
-#include "Util/StaticFifoBuffer.hpp"
+#include "Util/StaticFifoBuffer.hxx"
 #include "Util/StaticString.hxx"
 
 #include <string>

@@ -29,7 +29,7 @@ Copyright_License {
 #include "Thread/Cond.hxx"
 #include "Thread/Mutex.hpp"
 #include "Util/CharUtil.hpp"
-#include "Util/StaticFifoBuffer.hpp"
+#include "Util/StaticFifoBuffer.hxx"
 
 #include <stdint.h>
 #include <stdio.h>

@@ -28,7 +28,7 @@ Copyright_License {
 #include "IO/DataHandler.hpp"
 #include "Thread/Mutex.hpp"
 #include "Thread/Cond.hxx"
-#include "Util/StaticFifoBuffer.hpp"
+#include "Util/StaticFifoBuffer.hxx"
 
 #include <stdint.h>
 

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_IO_BUFFERED_SOURCE_HPP
 #define XCSOAR_IO_BUFFERED_SOURCE_HPP
 
-#include "Util/StaticFifoBuffer.hpp"
+#include "Util/StaticFifoBuffer.hxx"
 #include "Source.hpp"
 
 template<class T, unsigned size>
