@@ -84,6 +84,10 @@ public:
 
 	void Close();
 
+	void Rewind() {
+		Seek(0);
+	}
+
 	void Seek(off_t offset);
 	void Skip(off_t offset);
 
