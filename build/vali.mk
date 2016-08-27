@@ -6,7 +6,7 @@ VALI_XCS_SOURCES = \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Version.cpp \
 	$(SRC)/VALI-XCS.cpp
-VALI_XCS_DEPENDS = IO UTIL
+VALI_XCS_DEPENDS = IO OS UTIL
 VALI_XCS_STRIP = y
 
 $(eval $(call link-program,vali-xcs,VALI_XCS))

@@ -26,17 +26,17 @@ Copyright_License {
 char *
 FileLineReaderA::ReadLine()
 {
-  return splitter.ReadLine();
+  return buffered.ReadLine();
 }
 
 long
 FileLineReaderA::GetSize() const
 {
-  return splitter.GetSize();
+  return file.GetSize();
 }
 
 long
 FileLineReaderA::Tell() const
 {
-  return splitter.Tell();
+  return file.GetPosition();
 }

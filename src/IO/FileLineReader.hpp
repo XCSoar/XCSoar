@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_IO_FILE_LINE_READER_HPP
 #define XCSOAR_IO_FILE_LINE_READER_HPP
 
-#include "FileSource.hpp"
-#include "LineSplitter.hpp"
+#include "FileReader.hxx"
+#include "BufferedReader.hxx"
 #include "ConvertLineReader.hpp"
 
 /**
@@ -33,26 +33,22 @@ Copyright_License {
  * a public NLineReader interface.
  */
 class FileLineReaderA : public NLineReader {
-protected:
-  FileSource file;
-  LineSplitter splitter;
+  FileReader file;
+  BufferedReader buffered;
 
 public:
   /**
    * Throws std::runtime_errror on error.
    */
   explicit FileLineReaderA(Path path)
-    :file(path), splitter(file) {}
+    :file(path), buffered(file) {}
 
   /**
    * Rewind the file to the beginning.
    */
-  bool Rewind() {
-    if (!file.Rewind())
-      return false;
-
-    splitter.ResetBuffer();
-    return true;
+  void Rewind() {
+    file.Rewind();
+    buffered.Reset();
   }
 
 public:
@@ -73,8 +69,8 @@ public:
   /**
    * Rewind the file to the beginning.
    */
-  bool Rewind() {
-    return ((FileLineReaderA &)GetSource()).Rewind();
+  void Rewind() {
+    ((FileLineReaderA &)GetSource()).Rewind();
   }
 };
 

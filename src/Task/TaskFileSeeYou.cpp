@@ -480,8 +480,7 @@ try {
   }
   file_waypoints.Optimise();
 
-  if (!reader.Rewind())
-    return nullptr;
+  reader.Rewind();
 
   TCHAR *line = AdvanceReaderToTask(reader, index);
   if (line == nullptr)
