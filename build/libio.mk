@@ -14,14 +14,12 @@ IO_SOURCES = \
 	$(IO_SRC_DIR)/FileSource.cpp \
 	$(IO_SRC_DIR)/ZipArchive.cpp \
 	$(IO_SRC_DIR)/ZipSource.cpp \
-	$(IO_SRC_DIR)/InflateSource.cpp \
 	$(IO_SRC_DIR)/LineSplitter.cpp \
 	$(IO_SRC_DIR)/ConvertLineReader.cpp \
 	$(IO_SRC_DIR)/FileLineReader.cpp \
 	$(IO_SRC_DIR)/KeyValueFileReader.cpp \
 	$(IO_SRC_DIR)/KeyValueFileWriter.cpp \
 	$(IO_SRC_DIR)/ZipLineReader.cpp \
-	$(IO_SRC_DIR)/InflateLineReader.cpp \
 	$(IO_SRC_DIR)/CSVLine.cpp \
 	$(IO_SRC_DIR)/TextWriter.cpp
 
