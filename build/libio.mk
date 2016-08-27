@@ -11,7 +11,6 @@ IO_SOURCES = \
 	$(IO_SRC_DIR)/ZlibError.cxx \
 	$(IO_SRC_DIR)/FileTransaction.cpp \
 	$(IO_SRC_DIR)/FileCache.cpp \
-	$(IO_SRC_DIR)/FileSource.cpp \
 	$(IO_SRC_DIR)/ZipArchive.cpp \
 	$(IO_SRC_DIR)/ZipSource.cpp \
 	$(IO_SRC_DIR)/LineSplitter.cpp \
