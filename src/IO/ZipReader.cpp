@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "ZipSource.hpp"
+#include "ZipReader.hpp"
 
 #include <zzip/util.h>
 
@@ -29,9 +29,9 @@ Copyright_License {
 
 #include <stdio.h>
 
-ZipSource::ZipSource(struct zzip_dir *dir, const char *path)
+ZipReader::ZipReader(struct zzip_dir *dir, const char *path)
+  :file(zzip_open_rb(dir, path))
 {
-  file = zzip_open_rb(dir, path);
   if (file == nullptr) {
     /* TODO: re-enable zziplib's error reporting, and improve this
        error message */
@@ -42,26 +42,32 @@ ZipSource::ZipSource(struct zzip_dir *dir, const char *path)
   }
 }
 
-ZipSource::~ZipSource()
+ZipReader::~ZipReader()
 {
   if (file != nullptr)
     zzip_file_close(file);
 }
 
-long
-ZipSource::GetSize() const
+uint64_t
+ZipReader::GetSize() const
 {
   ZZIP_STAT st;
   return zzip_file_stat(file, &st) >= 0
-    ? (long)st.st_size
-    : -1l;
+    ? st.st_size
+    : 0;
 }
 
-unsigned
-ZipSource::Read(char *p, unsigned n)
+uint64_t
+ZipReader::GetPosition() const
 {
-  zzip_ssize_t nbytes = zzip_file_read(file, p, n);
-  return nbytes >= 0
-    ? (unsigned)nbytes
-    : 0;
+  return zzip_tell(file);
+}
+
+size_t
+ZipReader::Read(void *data, size_t size)
+{
+  zzip_ssize_t nbytes = zzip_file_read(file, data, size);
+  if (nbytes < 0)
+    throw std::runtime_error("Failed to read from ZIP file");
+  return nbytes;
 }

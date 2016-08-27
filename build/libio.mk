@@ -12,7 +12,7 @@ IO_SOURCES = \
 	$(IO_SRC_DIR)/FileTransaction.cpp \
 	$(IO_SRC_DIR)/FileCache.cpp \
 	$(IO_SRC_DIR)/ZipArchive.cpp \
-	$(IO_SRC_DIR)/ZipSource.cpp \
+	$(IO_SRC_DIR)/ZipReader.cpp \
 	$(IO_SRC_DIR)/LineSplitter.cpp \
 	$(IO_SRC_DIR)/ConvertLineReader.cpp \
 	$(IO_SRC_DIR)/FileLineReader.cpp \

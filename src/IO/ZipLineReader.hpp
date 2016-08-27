@@ -24,22 +24,21 @@ Copyright_License {
 #ifndef XCSOAR_IO_ZIP_LINE_READER_HPP
 #define XCSOAR_IO_ZIP_LINE_READER_HPP
 
-#include "ZipSource.hpp"
-#include "LineSplitter.hpp"
+#include "ZipReader.hpp"
+#include "BufferedReader.hxx"
 #include "ConvertLineReader.hpp"
 
 /**
- * Glue class which combines ZipSource, LineSplitter and
- * ConvertLineReader, and provides a public TLineReader interface.
+ * Glue class which combines ZipReader and BufferedReader, and provides
+ * a public NLineReader interface.
  */
 class ZipLineReaderA : public NLineReader {
-protected:
-  ZipSource zip;
-  LineSplitter splitter;
+  ZipReader zip;
+  BufferedReader buffered;
 
 public:
   ZipLineReaderA(struct zzip_dir *dir, const char *path)
-    :zip(dir, path), splitter(zip) {}
+    :zip(dir, path), buffered(zip) {}
 
 public:
   /* virtual methods from class NLineReader */

@@ -21,33 +21,35 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_IO_ZIP_SOURCE_HPP
-#define XCSOAR_IO_ZIP_SOURCE_HPP
+#ifndef XCSOAR_IO_ZIP_READER_HPP
+#define XCSOAR_IO_ZIP_READER_HPP
 
-#include "BufferedSource.hpp"
+#include "Reader.hxx"
+
+#include <stdint.h>
 
 struct zzip_file;
 struct zzip_dir;
 
-class ZipSource : public BufferedSource<char, 4096u> {
-private:
-  struct zzip_file *file;
+class ZipReader final : public Reader {
+  struct zzip_file *const file;
 
 public:
   /**
    * Throws std::runtime_errror on error.
    */
-  ZipSource(struct zzip_dir *dir, const char *path);
+  ZipReader(struct zzip_dir *dir, const char *path);
 
-  virtual ~ZipSource();
+  virtual ~ZipReader();
 
-public:
-  /* virtual methods from class Source */
-  long GetSize() const override;
+  gcc_pure
+  uint64_t GetSize() const;
 
-protected:
-  /* virtual methods from class BufferedSource */
-  unsigned Read(char *p, unsigned n) override;
+  gcc_pure
+  uint64_t GetPosition() const;
+
+  /* virtual methods from class Reader */
+  size_t Read(void *data, size_t size) override;
 };
 
 #endif
