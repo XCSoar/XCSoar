@@ -29,7 +29,7 @@ Copyright_License {
 #include "ConvertLineReader.hpp"
 
 /**
- * Glue class which combines FileSource and LineSplitter, and provides
+ * Glue class which combines FileReader and BufferedReader, and provides
  * a public NLineReader interface.
  */
 class FileLineReaderA : public NLineReader {
