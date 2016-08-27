@@ -26,7 +26,10 @@
 class Path;
 class OrderedTask;
 
-bool
+/**
+ * Throws std::runtime_error on error.
+ */
+void
 SaveTask(Path path, const OrderedTask &task);
 
 #endif

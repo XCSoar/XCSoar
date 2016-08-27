@@ -24,12 +24,13 @@
 #include "Serialiser.hpp"
 #include "XML/DataNodeXML.hpp"
 #include "XML/Node.hpp"
-#include "IO/TextWriter.hpp"
+#include "IO/FileOutputStream.hxx"
+#include "IO/BufferedOutputStream.hxx"
 #include "OS/Path.hpp"
 
 #include <tchar.h>
 
-bool
+void
 SaveTask(Path path, const OrderedTask &task)
 {
   XMLNode root_node = XMLNode::CreateRoot(_T("Task"));
@@ -39,10 +40,9 @@ SaveTask(Path path, const OrderedTask &task)
     SaveTask(root, task);
   }
 
-  TextWriter writer(path);
-  if (!writer.IsOpen())
-    return false;
-
-  root_node.Serialise(writer, true);
-  return true;
+  FileOutputStream file(path);
+  BufferedOutputStream buffered(file);
+  root_node.Serialise(buffered, true);
+  buffered.Flush();
+  file.Commit();
 }

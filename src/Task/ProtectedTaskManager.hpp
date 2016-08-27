@@ -94,9 +94,15 @@ public:
    */
   bool TaskCommit(const OrderedTask& that);
 
-  bool TaskSave(Path path);
+  /**
+   * Throws std::runtime_error on error.
+   */
+  void TaskSave(Path path);
 
-  bool TaskSaveDefault();
+  /**
+   * Throws std::runtime_error on error.
+   */
+  void TaskSaveDefault();
 
   /** Reset the tasks (as if never flown) */
   void Reset();

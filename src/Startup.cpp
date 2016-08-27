@@ -584,8 +584,13 @@ Shutdown()
   operation.SetText(_("Shutdown, saving task..."));
 
   LogFormat("Save default task");
-  if (protected_task_manager != nullptr)
-    protected_task_manager->TaskSaveDefault();
+  if (protected_task_manager != nullptr) {
+    try {
+      protected_task_manager->TaskSaveDefault();
+    } catch (const std::runtime_error &e) {
+      LogError(e);
+    }
+  }
 
   // Clear waypoint database
   way_points.Clear();

@@ -23,7 +23,8 @@ Copyright_License {
 
 #include "XML/Node.hpp"
 #include "XML/Parser.hpp"
-#include "IO/TextWriter.hpp"
+#include "IO/StdioOutputStream.hxx"
+#include "IO/BufferedOutputStream.hxx"
 #include "OS/Args.hpp"
 
 #include <stdio.h>
@@ -41,10 +42,10 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-#ifndef WIN32
-  TextWriter writer(Path("/dev/stdout"));
-  node->Serialise(writer, true);
-#endif
+  StdioOutputStream out(stdout);
+  BufferedOutputStream bos(out);
+  node->Serialise(bos, true);
+  bos.Flush();
   delete node;
 
   return EXIT_SUCCESS;

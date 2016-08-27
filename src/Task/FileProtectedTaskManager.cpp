@@ -28,18 +28,16 @@ Copyright_License {
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "OS/Path.hpp"
 
-bool
+void
 ProtectedTaskManager::TaskSave(Path path)
 {
-  OrderedTask* task = TaskClone();
-  bool retval = SaveTask(path, *task);
-  delete task;
-  return retval;
+  std::unique_ptr<OrderedTask> task(TaskClone());
+  SaveTask(path, *task);
 }
 
-bool
+void
 ProtectedTaskManager::TaskSaveDefault()
 {
   const auto path = LocalPath(default_task_path);
-  return TaskSave(path);
+  TaskSave(path);
 }

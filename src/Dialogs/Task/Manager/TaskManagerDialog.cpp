@@ -34,6 +34,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
+#include "Dialogs/Error.hpp"
 #include "Screen/Layout.hpp"
 #include "Event/KeyCode.hpp"
 #include "Screen/SingleWindow.hpp"
@@ -218,7 +219,13 @@ TaskManagerDialog::Commit()
     }
 
     protected_task_manager->TaskCommit(*task);
-    protected_task_manager->TaskSaveDefault();
+
+    try {
+      protected_task_manager->TaskSaveDefault();
+    } catch (const std::runtime_error &e) {
+      ShowError(e, _("Failed to save file."));
+      return false;
+    }
 
     modified = false;
     return true;

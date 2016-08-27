@@ -27,55 +27,55 @@
  */
 
 #include "Node.hpp"
-#include "IO/TextWriter.hpp"
+#include "IO/BufferedOutputStream.hxx"
 #include "Util/CharUtil.hpp"
 
 #define INDENTCHAR '\t'
 
 static void
-WriteXMLChar(TextWriter &writer, TCHAR ch)
+WriteXMLChar(BufferedOutputStream &os, TCHAR ch)
 {
   switch (ch) {
   case '<':
-    writer.Write("&lt;");
+    os.Write("&lt;");
     break;
   case '>':
-    writer.Write("&gt;");
+    os.Write("&gt;");
     break;
   case '&':
-    writer.Write("&amp;");
+    os.Write("&amp;");
     break;
   case '\'':
-    writer.Write("&apos;");
+    os.Write("&apos;");
     break;
   case '"':
-    writer.Write("&quot;");
+    os.Write("&quot;");
     break;
   default:
     if (IsWhitespaceOrNull(ch))
       ch = ' ';
 
-    writer.Write(ch);
+    os.Write(ch);
     break;
   }
 }
 
 static void
-WriteXMLString(TextWriter &writer, const tstring &source)
+WriteXMLString(BufferedOutputStream &os, const tstring &source)
 {
   for (auto ch : source)
-    WriteXMLChar(writer, ch);
+    WriteXMLChar(os, ch);
 }
 
 static void
-WriteIndent(TextWriter &writer, unsigned n)
+WriteIndent(BufferedOutputStream &os, unsigned n)
 {
   while (n-- > 0)
-    writer.Write(INDENTCHAR);
+    os.Write(INDENTCHAR);
 }
 
 void
-XMLNode::Serialise(const Data &data, TextWriter &writer, int format)
+XMLNode::Serialise(const Data &data, BufferedOutputStream &os, int format)
 {
   bool has_children = false;
 
@@ -84,37 +84,37 @@ XMLNode::Serialise(const Data &data, TextWriter &writer, int format)
     // "<elementname "
     const unsigned cb = format == -1 ? 0 : format;
 
-    WriteIndent(writer, cb);
-    writer.Write('<');
+    WriteIndent(os, cb);
+    os.Write('<');
     if (data.is_declaration)
-      writer.Write('?');
-    writer.Write(data.name.c_str());
+      os.Write('?');
+    os.Write(data.name.c_str());
 
     // Enumerate attributes and add them to the string
     for (auto i = data.attributes.begin(), end = data.attributes.end();
          i != end; ++i) {
       const Data::Attribute *pAttr = &*i;
-      writer.Write(' ');
-      writer.Write(pAttr->name.c_str());
-      writer.Write('=');
-      writer.Write('"');
-      WriteXMLString(writer, pAttr->value);
-      writer.Write('"');
+      os.Write(' ');
+      os.Write(pAttr->name.c_str());
+      os.Write('=');
+      os.Write('"');
+      WriteXMLString(os, pAttr->value);
+      os.Write('"');
       pAttr++;
     }
 
     has_children = data.HasChildren();
     if (data.is_declaration) {
-      writer.Write('?');
-      writer.Write('>');
+      os.Write('?');
+      os.Write('>');
       if (format != -1)
-        writer.NewLine();
+        os.Write('\n');
     } else
     // If there are child nodes we need to terminate the start tag
     if (has_children) {
-      writer.Write('>');
+      os.Write('>');
       if (format != -1)
-        writer.NewLine();
+        os.Write('\n');
     }
   }
 
@@ -130,16 +130,16 @@ XMLNode::Serialise(const Data &data, TextWriter &writer, int format)
 
   /* write the child elements */
   for (auto i = data.begin(), end = data.end(); i != end; ++i)
-    Serialise(*i->d, writer, child_format);
+    Serialise(*i->d, os, child_format);
 
   /* write the text */
   if (!data.text.empty()) {
     if (format != -1) {
-      WriteIndent(writer, format + 1);
-      WriteXMLString(writer, data.text);
-      writer.NewLine();
+      WriteIndent(os, format + 1);
+      WriteXMLString(os, data.text);
+      os.Write('\n');
     } else {
-      WriteXMLString(writer, data.text);
+      WriteXMLString(os, data.text);
     }
   }
 
@@ -149,26 +149,26 @@ XMLNode::Serialise(const Data &data, TextWriter &writer, int format)
     if (has_children) {
       // "</elementname>\0"
       if (format != -1)
-        WriteIndent(writer, format);
+        WriteIndent(os, format);
 
-      writer.Write("</");
-      writer.Write(data.name.c_str());
+      os.Write("</");
+      os.Write(data.name.c_str());
 
-      writer.Write('>');
+      os.Write('>');
     } else {
       // If there are no children we can use shorthand XML notation -
       // "<elementname/>"
       // "/>\0"
-      writer.Write("/>");
+      os.Write("/>");
     }
 
     if (format != -1)
-      writer.NewLine();
+      os.Write('\n');
   }
 }
 
 void
-XMLNode::Serialise(TextWriter &writer, bool format) const
+XMLNode::Serialise(BufferedOutputStream &os, bool format) const
 {
-  Serialise(*d, writer, format ? 0 : -1);
+  Serialise(*d, os, format ? 0 : -1);
 }

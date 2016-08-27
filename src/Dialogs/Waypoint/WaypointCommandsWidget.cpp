@@ -24,6 +24,7 @@ Copyright_License {
 #include "WaypointCommandsWidget.hpp"
 #include "WaypointDialogs.hpp"
 #include "Dialogs/Message.hpp"
+#include "Dialogs/Error.hpp"
 #include "Form/Form.hpp"
 #include "Language/Language.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
@@ -57,7 +58,13 @@ ReplaceInTask(ProtectedTaskManager &task_manager,
 {
   switch (MapTaskManager::ReplaceInTask(std::move(waypoint))) {
   case MapTaskManager::SUCCESS:
-    task_manager.TaskSaveDefault();
+    try {
+      task_manager.TaskSaveDefault();
+    } catch (const std::runtime_error &e) {
+      ShowError(e, _("Failed to save file."));
+      return false;
+    }
+
     return true;
 
   case MapTaskManager::NOTASK:
@@ -89,7 +96,13 @@ InsertInTask(ProtectedTaskManager &task_manager,
 {
   switch (MapTaskManager::InsertInTask(std::move(waypoint))) {
   case MapTaskManager::SUCCESS:
-    task_manager.TaskSaveDefault();
+    try {
+      task_manager.TaskSaveDefault();
+    } catch (const std::runtime_error &e) {
+      ShowError(e, _("Failed to save file."));
+      return false;
+    }
+
     return true;
 
   case MapTaskManager::NOTASK:
@@ -123,7 +136,13 @@ AppendToTask(ProtectedTaskManager &task_manager,
 {
   switch (MapTaskManager::AppendToTask(std::move(waypoint))) {
   case MapTaskManager::SUCCESS:
-    task_manager.TaskSaveDefault();
+    try {
+      task_manager.TaskSaveDefault();
+    } catch (const std::runtime_error &e) {
+      ShowError(e, _("Failed to save file."));
+      return false;
+    }
+
     return true;
 
   case MapTaskManager::NOTASK:
@@ -157,7 +176,13 @@ RemoveFromTask(ProtectedTaskManager &task_manager,
 {
   switch (MapTaskManager::RemoveFromTask(waypoint)) {
   case MapTaskManager::SUCCESS:
-    task_manager.TaskSaveDefault();
+    try {
+      task_manager.TaskSaveDefault();
+    } catch (const std::runtime_error &e) {
+      ShowError(e, _("Failed to save file."));
+      return false;
+    }
+
     return true;
 
   case MapTaskManager::NOTASK:

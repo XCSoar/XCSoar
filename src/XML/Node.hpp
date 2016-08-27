@@ -39,7 +39,7 @@
 #include <assert.h>
 #include <tchar.h>
 
-class TextWriter;
+class BufferedOutputStream;
 
 class XMLNode {
   /**
@@ -193,7 +193,7 @@ public:
    * @param format false if no formatting is required, true
    * for formatted text with carriage returns and indentation.
    */
-  void Serialise(TextWriter &writer, bool format) const;
+  void Serialise(BufferedOutputStream &os, bool format) const;
 
   gcc_pure
   bool IsDeclaration() const {
@@ -280,7 +280,8 @@ private:
    * This recurses through all subnodes then adds contents of the
    * nodes to the string.
    */
-  static void Serialise(const Data &data, TextWriter &writer, int format);
+  static void Serialise(const Data &data, BufferedOutputStream &os,
+                        int format);
 };
 
 #endif
