@@ -30,7 +30,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-template<class T> class Source;
+class Reader;
 class TLineReader;
 class NLineReader;
 class TextWriter;
@@ -42,7 +42,7 @@ class TextWriter;
  *
  * @param name the file name relative to the data directory
  */
-std::unique_ptr<Source<char>>
+std::unique_ptr<Reader>
 OpenDataFile(const TCHAR *name);
 
 /**

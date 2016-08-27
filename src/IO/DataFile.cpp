@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "DataFile.hpp"
-#include "FileSource.hpp"
+#include "FileReader.hxx"
 #include "FileLineReader.hpp"
 #include "ConvertLineReader.hpp"
 #include "TextWriter.hpp"
@@ -34,14 +34,14 @@ Copyright_License {
 
 #include <assert.h>
 
-std::unique_ptr<Source<char>>
+std::unique_ptr<Reader>
 OpenDataFile(const TCHAR *name)
 {
   assert(name != nullptr);
   assert(!StringIsEmpty(name));
 
   const auto path = LocalPath(name);
-  return std::make_unique<FileSource>(path);
+  return std::make_unique<FileReader>(path);
 }
 
 std::unique_ptr<TLineReader>
