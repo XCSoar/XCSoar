@@ -27,8 +27,9 @@ Copyright_License {
 
 #ifdef KOBO
 
-#include "IO/FileSource.hpp"
-#include "IO/InflateLineReader.hpp"
+#include "IO/FileReader.hxx"
+#include "IO/GunzipReader.hxx"
+#include "IO/BufferedReader.hxx"
 
 #include <fcntl.h>
 #include <string.h>
@@ -108,11 +109,9 @@ bool
 IsKoboOTGKernel()
 try {
 #ifdef KOBO
-  FileSource file(Path("/proc/config.gz"));
-
-  InflateLineReader reader(file);
-  if (reader.HasFailed())
-    return false;
+  FileReader file(Path("/proc/config.gz"));
+  GunzipReader gunzip(file);
+  BufferedReader reader(gunzip);
 
   char *line;
   while ((line = reader.ReadLine()) != nullptr)
