@@ -21,8 +21,9 @@ Copyright_License {
 }
 */
 
-#include "IO/InflateLineReader.hpp"
-#include "IO/FileSource.hpp"
+#include "IO/FileReader.hxx"
+#include "IO/GunzipReader.hxx"
+#include "IO/BufferedReader.hxx"
 #include "OS/Args.hpp"
 #include "Util/PrintException.hxx"
 
@@ -34,13 +35,9 @@ try {
   const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
-  FileSource file(path);
-
-  InflateLineReader reader(file);
-  if (reader.HasFailed()) {
-    fprintf(stderr, "Failed to inflate file\n");
-    return EXIT_FAILURE;
-  }
+  FileReader file(path);
+  GunzipReader gunzip(file);
+  BufferedReader reader(gunzip);
 
   char *line;
   while ((line = reader.ReadLine()) != nullptr)
