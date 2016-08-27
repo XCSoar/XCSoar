@@ -7,6 +7,8 @@ IO_SOURCES = \
 	$(IO_SRC_DIR)/FileReader.cxx \
 	$(IO_SRC_DIR)/BufferedOutputStream.cxx \
 	$(IO_SRC_DIR)/FileOutputStream.cxx \
+	$(IO_SRC_DIR)/GunzipReader.cxx \
+	$(IO_SRC_DIR)/ZlibError.cxx \
 	$(IO_SRC_DIR)/FileTransaction.cpp \
 	$(IO_SRC_DIR)/FileCache.cpp \
 	$(IO_SRC_DIR)/FileSource.cpp \
