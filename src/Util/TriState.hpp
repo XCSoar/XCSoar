@@ -34,8 +34,14 @@
 
 #ifdef WIN32
 #include <windows.h>
-/* those are WIN32 macros - undefine */
+#endif
+
+/* TRUE and FALSE are macros on some platforms (at least on Win32, iOS and
+ * macOS) - undefine */
+#ifdef TRUE
 #undef TRUE
+#endif
+#ifdef FALSE
 #undef FALSE
 #endif
 
