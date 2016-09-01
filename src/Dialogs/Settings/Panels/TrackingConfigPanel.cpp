@@ -278,12 +278,12 @@ TrackingConfigPanel::Save(bool &_changed)
     CommonInterface::SetComputerSettings().tracking;
 
 #ifdef HAVE_LIVETRACK24
-  changed |= SaveValue(LT24_INVERVAL, ProfileKeys::TrackingInterval, settings.livetrack24.interval);
+  changed |= SaveValue(LT24_INVERVAL, ProfileKeys::LiveTrack24TrackingInterval, settings.livetrack24.interval);
 
-  changed |= SaveValueEnum(LT24_VEHICLE_TYPE, ProfileKeys::TrackingVehicleType,
+  changed |= SaveValueEnum(LT24_VEHICLE_TYPE, ProfileKeys::LiveTrack24TrackingVehicleType,
                            settings.livetrack24.vehicleType);
 
-  changed |= SaveValue(LT24_VEHICLE_NAME, ProfileKeys::TrackingVehicleName,
+  changed |= SaveValue(LT24_VEHICLE_NAME, ProfileKeys::LiveTrack24TrackingVehicleName,
                        settings.livetrack24.vehicle_name);
 #endif
 
