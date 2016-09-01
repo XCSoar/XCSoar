@@ -73,14 +73,14 @@ static void Load(const ProfileMap &map,
   map.Get(ProfileKeys::LiveTrack24Password, settings.password);
 
   map.Get(ProfileKeys::LiveTrack24TrackingInterval, settings.interval);
+  map.GetEnum(ProfileKeys::LiveTrack24TrackingVehicleType, settings.vehicleType);
+  map.Get(ProfileKeys::LiveTrack24TrackingVehicleName, settings.vehicle_name);
 }
 }
 
 void
 Profile::Load(const ProfileMap &map, TrackingSettings &settings)
 {
-  map.GetEnum(ProfileKeys::LiveTrack24TrackingVehicleType, settings.livetrack24.vehicleType);
-  map.Get(ProfileKeys::LiveTrack24TrackingVehicleName, settings.livetrack24.vehicle_name);
   Load(map, settings.skylines);
   Load(map, settings.livetrack24);
 }
