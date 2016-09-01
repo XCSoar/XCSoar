@@ -54,13 +54,13 @@ enum ControlIndex {
   SPACER,
 #endif
 #ifdef HAVE_LIVETRACK24
-  LT24Enabled,
-  TrackingInterval,
-  TrackingVehicleType,
-  TrackingVehicleName,
-  LT24Server,
-  LT24Username,
-  LT24Password
+  LT24_ENABLED,
+  LT24_INVERVAL,
+  LT24_VEHICLE_TYPE,
+  LT24_VEHICLE_NAME,
+  LT24_SERVER,
+  LT24_USERNAME,
+  LT24_PASSWORD
 #endif
 };
 
@@ -110,12 +110,12 @@ TrackingConfigPanel::SetSkyLinesEnabled(bool enabled)
 void
 TrackingConfigPanel::SetEnabled(bool enabled)
 {
-  SetRowEnabled(TrackingInterval, enabled);
-  SetRowEnabled(TrackingVehicleType, enabled);
-  SetRowEnabled(TrackingVehicleName, enabled);
-  SetRowEnabled(LT24Server, enabled);
-  SetRowEnabled(LT24Username, enabled);
-  SetRowEnabled(LT24Password, enabled);
+  SetRowEnabled(LT24_INVERVAL, enabled);
+  SetRowEnabled(LT24_VEHICLE_TYPE, enabled);
+  SetRowEnabled(LT24_VEHICLE_NAME, enabled);
+  SetRowEnabled(LT24_SERVER, enabled);
+  SetRowEnabled(LT24_USERNAME, enabled);
+  SetRowEnabled(LT24_PASSWORD, enabled);
 }
 
 #endif
@@ -138,7 +138,7 @@ TrackingConfigPanel::OnModified(DataField &df)
 #endif
 
 #ifdef HAVE_LIVETRACK24
-  if (IsDataField(LT24Enabled, df)) {
+  if (IsDataField(LT24_ENABLED, df)) {
     const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
     SetEnabled(dfb.GetAsBoolean());
   }
@@ -278,12 +278,12 @@ TrackingConfigPanel::Save(bool &_changed)
     CommonInterface::SetComputerSettings().tracking;
 
 #ifdef HAVE_LIVETRACK24
-  changed |= SaveValue(TrackingInterval, ProfileKeys::TrackingInterval, settings.livetrack24.interval);
+  changed |= SaveValue(LT24_INVERVAL, ProfileKeys::TrackingInterval, settings.livetrack24.interval);
 
-  changed |= SaveValueEnum(TrackingVehicleType, ProfileKeys::TrackingVehicleType,
+  changed |= SaveValueEnum(LT24_VEHICLE_TYPE, ProfileKeys::TrackingVehicleType,
                            settings.livetrack24.vehicleType);
 
-  changed |= SaveValue(TrackingVehicleName, ProfileKeys::TrackingVehicleName,
+  changed |= SaveValue(LT24_VEHICLE_NAME, ProfileKeys::TrackingVehicleName,
                        settings.livetrack24.vehicle_name);
 #endif
 
@@ -310,15 +310,15 @@ TrackingConfigPanel::Save(bool &_changed)
 #endif
 
 #ifdef HAVE_LIVETRACK24
-  changed |= SaveValue(LT24Enabled, ProfileKeys::LiveTrack24Enabled, settings.livetrack24.enabled);
+  changed |= SaveValue(LT24_ENABLED, ProfileKeys::LiveTrack24Enabled, settings.livetrack24.enabled);
 
-  changed |= SaveValue(LT24Server, ProfileKeys::LiveTrack24Server,
+  changed |= SaveValue(LT24_SERVER, ProfileKeys::LiveTrack24Server,
                        settings.livetrack24.server);
 
-  changed |= SaveValue(LT24Username, ProfileKeys::LiveTrack24Username,
+  changed |= SaveValue(LT24_USERNAME, ProfileKeys::LiveTrack24Username,
                        settings.livetrack24.username);
 
-  changed |= SaveValue(LT24Password, ProfileKeys::LiveTrack24Password,
+  changed |= SaveValue(LT24_PASSWORD, ProfileKeys::LiveTrack24Password,
                        settings.livetrack24.password);
 #endif
 
