@@ -76,7 +76,7 @@ public:
 #endif
 
 #ifdef HAVE_LIVETRACK24
-  void SetEnabled(bool enabled);
+  void SetLiveTrack24Enabled(bool enabled);
 #endif
 
   /* methods from Widget */
@@ -108,7 +108,7 @@ TrackingConfigPanel::SetSkyLinesEnabled(bool enabled)
 #ifdef HAVE_LIVETRACK24
 
 void
-TrackingConfigPanel::SetEnabled(bool enabled)
+TrackingConfigPanel::SetLiveTrack24Enabled(bool enabled)
 {
   SetRowEnabled(LT24_INVERVAL, enabled);
   SetRowEnabled(LT24_VEHICLE_TYPE, enabled);
@@ -140,7 +140,7 @@ TrackingConfigPanel::OnModified(DataField &df)
 #ifdef HAVE_LIVETRACK24
   if (IsDataField(LT24_ENABLED, df)) {
     const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
-    SetEnabled(dfb.GetAsBoolean());
+    SetLiveTrack24Enabled(dfb.GetAsBoolean());
   }
 #endif
 }
@@ -249,7 +249,7 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 #endif
 
 #ifdef HAVE_LIVETRACK24
-  SetEnabled(settings.livetrack24.enabled);
+  SetLiveTrack24Enabled(settings.livetrack24.enabled);
 #endif
 }
 
