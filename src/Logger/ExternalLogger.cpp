@@ -43,7 +43,6 @@
 #include "IGC/IGCHeader.hpp"
 #include "Formatter/IGCFilenameFormatter.hpp"
 #include "Time/BrokenDate.hpp"
-#include "Util/Error.hxx"
 
 class DeclareJob {
   DeviceDescriptor &device;
