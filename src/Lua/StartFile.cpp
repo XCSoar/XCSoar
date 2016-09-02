@@ -35,16 +35,12 @@ extern "C" {
 bool
 Lua::StartFile(Path path, Error &error)
 {
-  lua_State *L = Lua::NewFullState();
-  if (!RunFile(L, path, error)) {
-    lua_close(L);
+  StatePtr state(Lua::NewFullState());
+  if (!RunFile(state.get(), path, error))
     return false;
-  }
 
-  if (IsPersistent(L))
-    AddBackground(L);
-  else
-    lua_close(L);
+  if (IsPersistent(state.get()))
+    AddBackground(std::move(state));
 
   return true;
 }

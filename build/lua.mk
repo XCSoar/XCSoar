@@ -10,6 +10,7 @@ $(eval $(call pkg-config-library,LIBLUA,lua5.2))
 endif
 
 LUA_SOURCES = \
+	$(SRC)/Lua/Ptr.cpp \
 	$(SRC)/Lua/Error.cpp \
 	$(SRC)/Lua/Catch.cpp \
 	$(SRC)/Lua/Persistent.cpp \

@@ -39,17 +39,16 @@ static constexpr char background_lua_key[] = "xcsoar.background";
 class BackgroundLua final
   : public boost::intrusive::list_base_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>>
 {
-  lua_State *const L;
+  Lua::StatePtr state;
 
 public:
-  explicit BackgroundLua(lua_State *_L):L(_L) {
-    Lua::SetRegistry(L, background_lua_key, Lua::LightUserData(this));
-    Lua::SetPersistentCallback(L, PersistentCallback);
+  explicit BackgroundLua(Lua::StatePtr &&_state):state(std::move(_state)) {
+    Lua::SetRegistry(state.get(), background_lua_key, Lua::LightUserData(this));
+    Lua::SetPersistentCallback(state.get(), PersistentCallback);
   }
 
   ~BackgroundLua() {
-    Lua::SetRegistry(L, background_lua_key, nullptr);
-    lua_close(L);
+    Lua::SetRegistry(state.get(), background_lua_key, nullptr);
   }
 
 private:
@@ -59,7 +58,7 @@ private:
     auto *b = (BackgroundLua *)
       Lua::GetRegistryLightUserData(L, background_lua_key);
     if (b != nullptr) {
-      assert(b->L == L);
+      assert(b->state.get() == L);
       b->PersistentCallback();
     }
   }
@@ -75,15 +74,15 @@ static boost::intrusive::list<BackgroundLua,
 void
 BackgroundLua::PersistentCallback()
 {
-  Lua::SetRegistry(L, background_lua_key, nullptr);
+  Lua::SetRegistry(state.get(), background_lua_key, nullptr);
   Lua::background.erase_and_dispose(Lua::background.iterator_to(*this),
                                     DeleteDisposer());
 }
 
 void
-Lua::AddBackground(lua_State *L)
+Lua::AddBackground(StatePtr &&state)
 {
-  auto *b = new BackgroundLua(L);
+  auto *b = new BackgroundLua(std::move(state));
   background.push_front(*b);
 }
 

@@ -21,42 +21,14 @@ Copyright_License {
 }
 */
 
-#include "Lua/Basic.hpp"
-#include "Lua/Log.hpp"
-#include "Lua/RunFile.hpp"
-#include "Lua/Ptr.hpp"
-#include "OS/Args.hpp"
-#include "Util/Error.hxx"
+#include "Ptr.hpp"
 
 extern "C" {
 #include <lua.h>
 }
 
-#include <stdio.h>
-
-static int
-l_alert(lua_State *L)
+void
+Lua::StateDeleter::operator()(lua_State *state) const
 {
-  fprintf(stderr, "%s\n", lua_tostring(L, 1));
-  return 0;
-}
-
-int main(int argc, char **argv)
-{
-  Args args(argc, argv, "FILE.lua");
-  const auto path = args.ExpectNextPath();
-  args.ExpectEnd();
-
-  Lua::StatePtr state(Lua::NewBasicState());
-  Lua::InitLog(state.get());
-
-  lua_register(state.get(), "alert", l_alert);
-
-  Error error;
-  if (!Lua::RunFile(state.get(), path, error)) {
-    fprintf(stderr, "%s\n", error.GetMessage());
-    return EXIT_FAILURE;
-  }
-
-  return EXIT_SUCCESS;
+  lua_close(state);
 }

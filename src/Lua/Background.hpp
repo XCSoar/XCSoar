@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_LUA_BACKGROUND_HPP
 #define XCSOAR_LUA_BACKGROUND_HPP
 
-struct lua_State;
+#include "Ptr.hpp"
 
 namespace Lua {
 
@@ -35,7 +35,7 @@ namespace Lua {
  * be invoked eventually.  See Lua::IsPersistent().
  */
 void
-AddBackground(lua_State *L);
+AddBackground(StatePtr &&state);
 
 /**
  * Stop all background scripts.  Call this before shutting down
