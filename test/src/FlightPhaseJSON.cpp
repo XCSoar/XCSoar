@@ -57,7 +57,7 @@ FormatCirclingDirection(Phase::CirclingDirection circling_direction)
 }
 
 static void
-WritePhase(TextWriter &writer, Phase &phase)
+WritePhase(BufferedOutputStream &writer, Phase &phase)
 {
   JSON::ObjectWriter object(writer);
   NarrowString<64> buffer;
@@ -83,7 +83,7 @@ WritePhase(TextWriter &writer, Phase &phase)
 }
 
 static void
-WriteCirclingStats(TextWriter &writer, const Phase &stats)
+WriteCirclingStats(BufferedOutputStream &writer, const Phase &stats)
 {
   JSON::ObjectWriter object(writer);
   object.WriteElement("alt_diff", JSON::WriteInteger, (int)stats.alt_diff);
@@ -94,7 +94,7 @@ WriteCirclingStats(TextWriter &writer, const Phase &stats)
 }
 
 static void
-WriteCruiseStats(TextWriter &writer, const Phase &stats)
+WriteCruiseStats(BufferedOutputStream &writer, const Phase &stats)
 {
   JSON::ObjectWriter object(writer);
   object.WriteElement("alt_diff", JSON::WriteInteger, (int)stats.alt_diff);
@@ -110,7 +110,7 @@ WriteCruiseStats(TextWriter &writer, const Phase &stats)
 }
 
 void
-WritePerformanceStats(TextWriter &writer, const PhaseTotals &totals)
+WritePerformanceStats(BufferedOutputStream &writer, const PhaseTotals &totals)
 {
   JSON::ObjectWriter object(writer);
   object.WriteElement("circling_total", WriteCirclingStats,
@@ -126,7 +126,7 @@ WritePerformanceStats(TextWriter &writer, const PhaseTotals &totals)
 }
 
 void
-WritePhaseList(TextWriter &writer, const PhaseList &phases)
+WritePhaseList(BufferedOutputStream &writer, const PhaseList &phases)
 {
   JSON::ArrayWriter array(writer);
   for (Phase phase : phases) {

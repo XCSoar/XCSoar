@@ -24,7 +24,7 @@ Copyright_License {
 #include "Writer.hpp"
 
 void
-JSON::WriteString(TextWriter &writer, const char *value)
+JSON::WriteString(BufferedOutputStream &writer, const char *value)
 {
   writer.Write('"');
   // TODO: escape

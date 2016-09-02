@@ -24,7 +24,7 @@
 
 #include "FlightPhaseDetector.hpp"
 
-class TextWriter;
+class BufferedOutputStream;
 
 /**
  * Write JSON code for flight preformance statistics to the writer
@@ -35,7 +35,7 @@ class TextWriter;
  * @see FlightPhaseDetector
  */
 void
-WritePerformanceStats(TextWriter &writer, const PhaseTotals &totals);
+WritePerformanceStats(BufferedOutputStream &writer, const PhaseTotals &totals);
 
 /**
  * Write JSON code for list of flight phases to the writer
@@ -46,6 +46,6 @@ WritePerformanceStats(TextWriter &writer, const PhaseTotals &totals);
  * @see FlightPhaseDetector
  */
 void
-WritePhaseList(TextWriter &writer, const PhaseList &phases);
+WritePhaseList(BufferedOutputStream &writer, const PhaseList &phases);
 
 #endif

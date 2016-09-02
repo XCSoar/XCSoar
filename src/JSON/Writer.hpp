@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_JSON_WRITER_HPP
 #define XCSOAR_JSON_WRITER_HPP
 
-#include "IO/TextWriter.hpp"
+#include "IO/BufferedOutputStream.hxx"
 
 #include <assert.h>
 
@@ -32,35 +32,35 @@ namespace JSON {
   /**
    * Writer for a JSON "null" value.
    */
-  static inline void WriteNull(TextWriter &writer) {
+  static inline void WriteNull(BufferedOutputStream &writer) {
     writer.Write("null");
   }
 
   /**
    * Writer for a JSON integer value.
    */
-  static inline void WriteInteger(TextWriter &writer, int value) {
+  static inline void WriteInteger(BufferedOutputStream &writer, int value) {
     writer.Format("%d", value);
   }
 
   /**
    * Writer for a JSON integer value.
    */
-  static inline void WriteUnsigned(TextWriter &writer, unsigned value) {
+  static inline void WriteUnsigned(BufferedOutputStream &writer, unsigned value) {
     writer.Format("%u", value);
   }
 
   /**
    * Writer for a JSON integer value.
    */
-  static inline void WriteLong(TextWriter &writer, long value) {
+  static inline void WriteLong(BufferedOutputStream &writer, long value) {
     writer.Format("%ld", value);
   }
 
   /**
    * Writer for a JSON string.
    */
-  void WriteString(TextWriter &writer, const char *value);
+  void WriteString(BufferedOutputStream &writer, const char *value);
 
   /**
    * Generate a JSON array.  The constructor/destructor
@@ -71,11 +71,11 @@ namespace JSON {
    * three steps in one method call.
    */
   class ArrayWriter {
-    TextWriter &writer;
+    BufferedOutputStream &writer;
     bool first;
 
   public:
-    ArrayWriter(TextWriter &_writer):writer(_writer), first(true) {
+    ArrayWriter(BufferedOutputStream &_writer):writer(_writer), first(true) {
       writer.Write('[');
     }
 
@@ -96,7 +96,7 @@ namespace JSON {
 
     /**
      * Write an element using a callback.  The first callback argument
-     * is a reference to the TextWriter.  Additional arguments are
+     * is a reference to the BufferedOutputStream.  Additional arguments are
      * passed to the callback.
      */
     template<typename T, typename... Args>
@@ -116,11 +116,11 @@ namespace JSON {
    * three steps in one method call.
    */
   class ObjectWriter {
-    TextWriter &writer;
+    BufferedOutputStream &writer;
     bool first;
 
   public:
-    ObjectWriter(TextWriter &_writer):writer(_writer), first(true) {
+    ObjectWriter(BufferedOutputStream &_writer):writer(_writer), first(true) {
       writer.Write('{');
     }
 
@@ -144,7 +144,7 @@ namespace JSON {
 
     /**
      * Write an element using a callback.  The first callback argument
-     * is a reference to the TextWriter.  Additional arguments are
+     * is a reference to the BufferedOutputStream.  Additional arguments are
      * passed to the callback.
      */
     template<typename T, typename... Args>

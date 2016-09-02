@@ -31,11 +31,11 @@ namespace JSON {
   /**
    * Writer for a JSON floating point value.
    */
-  static inline void WriteDouble(TextWriter &writer, double value) {
+  static inline void WriteDouble(BufferedOutputStream &writer, double value) {
     writer.Format("%f", (double)value);
   }
 
-  static inline void WriteAngle(TextWriter &writer, Angle value) {
+  static inline void WriteAngle(BufferedOutputStream &writer, Angle value) {
     WriteDouble(writer, value.Degrees());
   }
 
@@ -45,7 +45,7 @@ namespace JSON {
     object.WriteElement("latitude", WriteAngle, value.latitude);
   }
 
-  static inline void WriteGeoPoint(TextWriter &writer,
+  static inline void WriteGeoPoint(BufferedOutputStream &writer,
                                    const ::GeoPoint &value) {
     ObjectWriter object(writer);
     WriteGeoPointAttributes(object, value);

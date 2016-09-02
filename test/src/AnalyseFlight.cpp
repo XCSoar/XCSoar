@@ -26,7 +26,7 @@
 #include "Computer/CirclingComputer.hpp"
 #include "DebugReplay.hpp"
 #include "Util/Macros.hpp"
-#include "IO/TextWriter.hpp"
+#include "IO/StdioOutputStream.hxx"
 #include "Formatter/TimeFormatter.hpp"
 #include "JSON/Writer.hpp"
 #include "JSON/GeoWriter.hpp"
@@ -184,7 +184,7 @@ SolveContest(Contest contest,
 }
 
 static void
-WriteEventAttributes(TextWriter &writer,
+WriteEventAttributes(BufferedOutputStream &writer,
                      const BrokenDateTime &time, const GeoPoint &location)
 {
   JSON::ObjectWriter object(writer);
@@ -208,7 +208,7 @@ WriteEvent(JSON::ObjectWriter &object, const char *name,
 }
 
 static void
-WriteEvents(TextWriter &writer, const Result &result)
+WriteEvents(BufferedOutputStream &writer, const Result &result)
 {
   JSON::ObjectWriter object(writer);
 
@@ -224,7 +224,7 @@ WriteResult(JSON::ObjectWriter &root, const Result &result)
 }
 
 static void
-WritePoint(TextWriter &writer, const ContestTracePoint &point,
+WritePoint(BufferedOutputStream &writer, const ContestTracePoint &point,
            const ContestTracePoint *previous)
 {
   JSON::ObjectWriter object(writer);
@@ -248,7 +248,7 @@ WritePoint(TextWriter &writer, const ContestTracePoint &point,
 }
 
 static void
-WriteTrace(TextWriter &writer, const ContestTraceVector &trace)
+WriteTrace(BufferedOutputStream &writer, const ContestTraceVector &trace)
 {
   JSON::ArrayWriter array(writer);
 
@@ -260,7 +260,7 @@ WriteTrace(TextWriter &writer, const ContestTraceVector &trace)
 }
 
 static void
-WriteContest(TextWriter &writer,
+WriteContest(BufferedOutputStream &writer,
              const ContestResult &result, const ContestTraceVector &trace)
 {
   JSON::ObjectWriter object(writer);
@@ -274,7 +274,7 @@ WriteContest(TextWriter &writer,
 }
 
 static void
-WriteOLCPlus(TextWriter &writer, const ContestStatistics &stats)
+WriteOLCPlus(BufferedOutputStream &writer, const ContestStatistics &stats)
 {
   JSON::ObjectWriter object(writer);
 
@@ -287,7 +287,7 @@ WriteOLCPlus(TextWriter &writer, const ContestStatistics &stats)
 }
 
 static void
-WriteDMSt(TextWriter &writer, const ContestStatistics &stats)
+WriteDMSt(BufferedOutputStream &writer, const ContestStatistics &stats)
 {
   JSON::ObjectWriter object(writer);
 
@@ -296,7 +296,7 @@ WriteDMSt(TextWriter &writer, const ContestStatistics &stats)
 }
 
 static void
-WriteContests(TextWriter &writer, const ContestStatistics &olc_plus,
+WriteContests(BufferedOutputStream &writer, const ContestStatistics &olc_plus,
               const ContestStatistics &dmst)
 {
   JSON::ObjectWriter object(writer);
@@ -372,7 +372,8 @@ int main(int argc, char **argv)
   const ContestStatistics olc_plus = SolveContest(Contest::OLC_PLUS, full_trace, triangle_trace, sprint_trace);
   const ContestStatistics dmst = SolveContest(Contest::DMST, full_trace, triangle_trace, sprint_trace);
 
-  TextWriter writer(Path(_T("/dev/stdout")), true);
+  StdioOutputStream os(stdout);
+  BufferedOutputStream writer(os);
 
   {
     JSON::ObjectWriter root(writer);
@@ -384,4 +385,6 @@ int main(int argc, char **argv)
                       flight_phase_detector.GetTotals());
     root.WriteElement("contests", WriteContests, olc_plus, dmst);
   }
+
+  writer.Flush();
 }
