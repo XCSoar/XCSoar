@@ -32,15 +32,12 @@ extern "C" {
 #include <lua.h>
 }
 
-bool
-Lua::StartFile(Path path, Error &error)
+void
+Lua::StartFile(Path path)
 {
   StatePtr state(Lua::NewFullState());
-  if (!RunFile(state.get(), path, error))
-    return false;
+  RunFile(state.get(), path);
 
   if (IsPersistent(state.get()))
     AddBackground(std::move(state));
-
-  return true;
 }

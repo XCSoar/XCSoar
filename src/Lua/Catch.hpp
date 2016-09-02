@@ -25,10 +25,10 @@ Copyright_License {
 #define XCSOAR_LUA_CATCH_HPP
 
 struct lua_State;
-class Domain;
-class Error;
 
 namespace Lua {
+
+class Error;
 
 typedef void (*CatchCallback)(Error &&error);
 

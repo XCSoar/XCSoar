@@ -31,9 +31,10 @@ Copyright_License {
 #include "OS/Path.hpp"
 #include "OS/FileUtil.hpp"
 #include "Form/DataField/ComboList.hpp"
-#include "Util/Error.hxx"
 #include "Util/StringFormat.hpp"
 #include "Util/StringCompare.hxx"
+
+#include <stdexcept>
 
 #include <windef.h> /* for MAX_PATH */
 
@@ -85,10 +86,11 @@ InputEvents::eventRunLuaFile(const TCHAR *misc)
   if (path.IsNull())
     return;
 
-  Error error;
-  if (!Lua::StartFile(path, error)) {
+  try {
+    Lua::StartFile(path);
+  } catch (const std::runtime_error &e) {
     TCHAR buffer[MAX_PATH];
     StringFormat(buffer, MAX_PATH, _T("RunLuaFile %s"), misc);
-    ShowError(error, buffer);
+    ShowError(e, buffer);
   }
 }

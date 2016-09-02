@@ -29,7 +29,6 @@ Copyright_License {
 #include "Input/InputQueue.hpp"
 #include "Input/InputKeys.hpp"
 #include "Compiler.h"
-#include "Util/Error.hxx"
 #include "Util/StringAPI.hxx"
 #include "Util/ConvertString.hpp"
 #include "Util.hpp"

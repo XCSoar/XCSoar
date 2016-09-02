@@ -30,13 +30,9 @@ extern "C" {
 #include <lauxlib.h>
 }
 
-bool
-Lua::RunFile(lua_State *L, Path path, Error &error)
+void
+Lua::RunFile(lua_State *L, Path path)
 {
-  if (luaL_loadfile(L, NarrowPathName(path)) || lua_pcall(L, 0, 0, 0)) {
-    PopError(L, error);
-    return false;
-  }
-
-  return true;
+  if (luaL_loadfile(L, NarrowPathName(path)) || lua_pcall(L, 0, 0, 0))
+    throw PopError(L);
 }

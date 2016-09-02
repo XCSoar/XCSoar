@@ -26,7 +26,7 @@ Copyright_License {
 #include "Lua/RunFile.hpp"
 #include "Lua/Ptr.hpp"
 #include "OS/Args.hpp"
-#include "Util/Error.hxx"
+#include "Util/PrintException.hxx"
 
 extern "C" {
 #include <lua.h>
@@ -42,7 +42,7 @@ l_alert(lua_State *L)
 }
 
 int main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "FILE.lua");
   const auto path = args.ExpectNextPath();
   args.ExpectEnd();
@@ -52,11 +52,10 @@ int main(int argc, char **argv)
 
   lua_register(state.get(), "alert", l_alert);
 
-  Error error;
-  if (!Lua::RunFile(state.get(), path, error)) {
-    fprintf(stderr, "%s\n", error.GetMessage());
-    return EXIT_FAILURE;
-  }
+  Lua::RunFile(state.get(), path);
 
   return EXIT_SUCCESS;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

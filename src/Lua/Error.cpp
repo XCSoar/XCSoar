@@ -22,26 +22,15 @@ Copyright_License {
 */
 
 #include "Error.hpp"
-#include "Util/Error.hxx"
-#include "Util/Domain.hxx"
 
 extern "C" {
 #include <lua.h>
 }
 
-const Domain Lua::domain("lua");
-
-void
-Lua::PopError(lua_State *L, Error &error)
-{
-  error.Set(domain, lua_tostring(L, -1));
-  lua_pop(L, 1);
-}
-
-Error
+Lua::Error
 Lua::PopError(lua_State *L)
 {
-  Error error;
-  PopError(L, error);
-  return error;
+  Error e(lua_tostring(L, -1));
+  lua_pop(L, 1);
+  return e;
 }

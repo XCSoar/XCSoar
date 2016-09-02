@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Dialogs.hpp"
 #include "Catch.hpp"
+#include "Error.hpp"
 #include "Util/ConvertString.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/Error.hpp"
@@ -45,7 +46,7 @@ l_alert(lua_State *L)
 }
 
 static void
-DialogCatchCallback(Error &&error)
+DialogCatchCallback(Lua::Error &&error)
 {
   ShowError(error, _T("Lua"));
 }

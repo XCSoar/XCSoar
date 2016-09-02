@@ -98,7 +98,6 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Formatter/UserGeoPointFormatter.hpp"
 #include "Thread/Debug.hpp"
-#include "Util/Error.hxx"
 
 #include "Lua/StartFile.hpp"
 #include "Lua/Background.hpp"
@@ -136,11 +135,11 @@ AfterStartup()
 {
   StartupLogFreeRamAndStorage();
 
-  {
-    Error error;
+  try {
     const auto lua_path = LocalPath(_T("lua"));
-    if (!Lua::StartFile(AllocatedPath::Build(lua_path, _T("init.lua")), error))
-      LogError(error);
+    Lua::StartFile(AllocatedPath::Build(lua_path, _T("init.lua")));
+  } catch (const std::runtime_error &e) {
+      LogError(e);
   }
 
   if (is_simulator()) {

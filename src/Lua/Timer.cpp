@@ -28,7 +28,6 @@ Copyright_License {
 #include "Persistent.hpp"
 #include "Event/Timer.hpp"
 #include "Compiler.h"
-#include "Util/Error.hxx"
 
 extern "C" {
 #include <lauxlib.h>
