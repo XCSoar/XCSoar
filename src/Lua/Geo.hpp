@@ -31,14 +31,21 @@ struct GeoPoint;
 class Angle;
 
 namespace Lua {
-  void Push(lua_State *L, Angle value);
-  void Push(lua_State *L, GeoPoint value);
 
-  gcc_pure
-  Angle ToAngle(lua_State *L, int idx);
+void
+Push(lua_State *L, Angle value);
 
-  gcc_pure
-  GeoPoint ToGeoPoint(lua_State *L, int idx);
+void
+Push(lua_State *L, GeoPoint value);
+
+gcc_pure
+Angle
+ToAngle(lua_State *L, int idx);
+
+gcc_pure
+GeoPoint
+ToGeoPoint(lua_State *L, int idx);
+
 }
 
 #endif

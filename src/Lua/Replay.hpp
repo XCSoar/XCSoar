@@ -27,10 +27,13 @@ Copyright_License {
 struct lua_State;
 
 namespace Lua {
-  /**
-   * Provide the Lua table "xcsoar.replay".
-   */
-  void InitReplay(lua_State *L);
+
+/**
+ * Provide the Lua table "xcsoar.replay".
+ */
+void
+InitReplay(lua_State *L);
+
 }
 
 #endif

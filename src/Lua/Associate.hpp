@@ -29,31 +29,38 @@ Copyright_License {
 struct lua_State;
 
 namespace Lua {
-  void InitAssociatePointer(lua_State *L, const char *table);
 
-  /**
-   * Associate the given pointer with a native Lua value.
-   */
-  void AssociatePointer(lua_State *L, const char *table,
-                        void *p, int value_idx);
+void
+InitAssociatePointer(lua_State *L, const char *table);
 
-  /**
-   * Remove the given pointer from the registry table.
-   */
-  void DisassociatePointer(lua_State *L, const char *table, void *p);
+/**
+ * Associate the given pointer with a native Lua value.
+ */
+void
+AssociatePointer(lua_State *L, const char *table,
+                 void *p, int value_idx);
 
-  /**
-   * Look up the native Lua value associated with the given pointer
-   * and push it on the stack.
-   */
-  void LookupPointer(lua_State *L, const char *table, void *p);
+/**
+ * Remove the given pointer from the registry table.
+ */
+void
+DisassociatePointer(lua_State *L, const char *table, void *p);
 
-  /**
-   * Check the registry table if there is at least one association.
-   */
-  gcc_pure
-  bool HasPointerAssociations(lua_State *L, const char *table,
-                              bool (*predicate)(void *key)=nullptr);
+/**
+ * Look up the native Lua value associated with the given pointer
+ * and push it on the stack.
+ */
+void
+LookupPointer(lua_State *L, const char *table, void *p);
+
+/**
+ * Check the registry table if there is at least one association.
+ */
+gcc_pure
+bool
+HasPointerAssociations(lua_State *L, const char *table,
+                       bool (*predicate)(void *key)=nullptr);
+
 }
 
 #endif

@@ -27,11 +27,14 @@ Copyright_License {
 struct lua_State;
 
 namespace Lua {
-  /**
-   * Wrapper for luaL_newstate() that loads some basic Lua standard
-   * libraries.
-   */
-  lua_State *NewBasicState();
+
+/**
+ * Wrapper for luaL_newstate() that loads some basic Lua standard
+ * libraries.
+ */
+lua_State *
+NewBasicState();
+
 }
 
 #endif

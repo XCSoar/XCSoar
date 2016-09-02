@@ -27,10 +27,13 @@ Copyright_License {
 struct lua_State;
 
 namespace Lua {
-  /**
-   * Wrapper for luaL_newstate() that initialises all XCSoar APIs.
-   */
-  lua_State *NewFullState();
+
+/**
+ * Wrapper for luaL_newstate() that initialises all XCSoar APIs.
+ */
+lua_State *
+NewFullState();
+
 }
 
 #endif

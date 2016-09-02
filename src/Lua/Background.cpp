@@ -66,8 +66,10 @@ private:
 };
 
 namespace Lua {
-  static boost::intrusive::list<BackgroundLua,
-                                boost::intrusive::constant_time_size<false>> background;
+
+static boost::intrusive::list<BackgroundLua,
+                              boost::intrusive::constant_time_size<false>> background;
+
 }
 
 void

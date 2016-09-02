@@ -30,15 +30,28 @@ Copyright_License {
 struct lua_State;
 
 namespace Lua {
-  /**
-   * Provide the Lua class "xcsoar.input_event".
-   */
-  void InitInputEvent(lua_State *L);
 
-  bool FireGlideComputerEvent(unsigned event);
-  bool FireNMEAEvent(unsigned event);
-  bool FireGesture(const TCHAR* gesture);
-  bool FireKey(unsigned key);
-  bool IsGesture(const TCHAR* gesture);
+/**
+ * Provide the Lua class "xcsoar.input_event".
+ */
+void
+InitInputEvent(lua_State *L);
+
+bool
+FireGlideComputerEvent(unsigned event);
+
+bool
+FireNMEAEvent(unsigned event);
+
+bool
+FireGesture(const TCHAR *gesture);
+
+bool
+FireKey(unsigned key);
+
+bool
+IsGesture(const TCHAR *gesture);
+
 }
+
 #endif

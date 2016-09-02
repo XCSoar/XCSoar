@@ -27,10 +27,13 @@ Copyright_License {
 struct lua_State;
 
 namespace Lua {
-  /**
-   * Provides the Lua table "xcsoar.task".
-   */
-  void InitTask(lua_State *L);
+
+/**
+ * Provides the Lua table "xcsoar.task".
+ */
+void
+InitTask(lua_State *L);
+
 }
 
 #endif

@@ -27,10 +27,13 @@ Copyright_License {
 struct lua_State;
 
 namespace Lua {
-  /**
-   * Provide a Lua API to show XCSoar dialogs.
-   */
-  void InitDialogs(lua_State *L);
+
+/**
+ * Provide a Lua API to show XCSoar dialogs.
+ */
+void
+InitDialogs(lua_State *L);
+
 }
 
 #endif

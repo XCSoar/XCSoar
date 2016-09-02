@@ -28,12 +28,15 @@ class Error;
 class Path;
 
 namespace Lua {
-  /**
-   * Load, compile and run the specified file.  If the script is
-   * "persistent" as determined by Lua::IsPersistent(), move it to
-   * background it using Lua::AddBackground().
-   */
-  bool StartFile(Path path, Error &error);
+
+/**
+ * Load, compile and run the specified file.  If the script is
+ * "persistent" as determined by Lua::IsPersistent(), move it to
+ * background it using Lua::AddBackground().
+ */
+bool
+StartFile(Path path, Error &error);
+
 }
 
 #endif

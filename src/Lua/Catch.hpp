@@ -29,18 +29,22 @@ class Domain;
 class Error;
 
 namespace Lua {
-  typedef void (*CatchCallback)(Error &&error);
 
-  /**
-   * Register the function that will be called by ThrowError().  It is
-   * responsible for logging or showing the error.
-   */
-  void SetCatchCallback(lua_State *L, CatchCallback callback);
+typedef void (*CatchCallback)(Error &&error);
 
-  /**
-   * Invoke the CatchCallback.
-   */
-  void ThrowError(lua_State *L, Error &&error);
+/**
+ * Register the function that will be called by ThrowError().  It is
+ * responsible for logging or showing the error.
+ */
+void
+SetCatchCallback(lua_State *L, CatchCallback callback);
+
+/**
+ * Invoke the CatchCallback.
+ */
+void
+ThrowError(lua_State *L, Error &&error);
+
 }
 
 #endif

@@ -29,14 +29,19 @@ class Domain;
 class Error;
 
 namespace Lua {
-  extern const Domain domain;
 
-  /**
-   * After a failed call to lua_pcall(), load and pop the Lua error
-   * from the stack and store it in an #Error instance.
-   */
-  void PopError(lua_State *L, Error &error);
-  Error PopError(lua_State *L);
+extern const Domain domain;
+
+/**
+ * After a failed call to lua_pcall(), load and pop the Lua error
+ * from the stack and store it in an #Error instance.
+ */
+void
+PopError(lua_State *L, Error &error);
+
+Error
+PopError(lua_State *L);
+
 }
 
 #endif

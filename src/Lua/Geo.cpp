@@ -40,33 +40,35 @@ l_GeoPoint_tostring(lua_State *L)
 }
 
 namespace Lua {
-  void Push(lua_State *L, Angle value) {
-    Push(L, value.Degrees());
-  }
 
-  Angle ToAngle(lua_State *L, int idx) {
-    return Angle::Degrees(lua_tonumber(L, idx));
-  }
+void Push(lua_State *L, Angle value) {
+  Push(L, value.Degrees());
+}
 
-  void Push(lua_State *L, GeoPoint value) {
-    if (value.IsValid()) {
-      lua_newtable(L);
+Angle ToAngle(lua_State *L, int idx) {
+  return Angle::Degrees(lua_tonumber(L, idx));
+}
 
-      lua_newtable(L);
-      SetField(L, -2, "__tostring", l_GeoPoint_tostring);
-      lua_setmetatable(L, -2);
+void Push(lua_State *L, GeoPoint value) {
+  if (value.IsValid()) {
+    lua_newtable(L);
 
-      SetField(L, -2, "longitude", value.longitude);
-      SetField(L, -2, "latitude", value.latitude);
-    } else
-      lua_pushnil(L);
-  }
+    lua_newtable(L);
+    SetField(L, -2, "__tostring", l_GeoPoint_tostring);
+    lua_setmetatable(L, -2);
 
-  GeoPoint ToGeoPoint(lua_State *L, int idx) {
-    lua_getfield(L, 1, "longitude");
-    lua_getfield(L, 1, "latitude");
-    GeoPoint value(ToAngle(L, -2), ToAngle(L, -1));
-    lua_pop(L, 2);
-    return value;
-  }
+    SetField(L, -2, "longitude", value.longitude);
+    SetField(L, -2, "latitude", value.latitude);
+  } else
+    lua_pushnil(L);
+}
+
+GeoPoint ToGeoPoint(lua_State *L, int idx) {
+  lua_getfield(L, 1, "longitude");
+  lua_getfield(L, 1, "latitude");
+  GeoPoint value(ToAngle(L, -2), ToAngle(L, -1));
+  lua_pop(L, 2);
+  return value;
+}
+
 }

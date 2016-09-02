@@ -27,19 +27,23 @@ Copyright_License {
 struct lua_State;
 
 namespace Lua {
-  /**
-   * Add a Lua script that runs in background.
-   *
-   * It does not actually run, but has registered a callback that will
-   * be invoked eventually.  See Lua::IsPersistent().
-   */
-  void AddBackground(lua_State *L);
 
-  /**
-   * Stop all background scripts.  Call this before shutting down
-   * XCSoar.
-   */
-  void StopAllBackground();
+/**
+ * Add a Lua script that runs in background.
+ *
+ * It does not actually run, but has registered a callback that will
+ * be invoked eventually.  See Lua::IsPersistent().
+ */
+void
+AddBackground(lua_State *L);
+
+/**
+ * Stop all background scripts.  Call this before shutting down
+ * XCSoar.
+ */
+void
+StopAllBackground();
+
 }
 
 #endif

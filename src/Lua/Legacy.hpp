@@ -27,11 +27,14 @@ Copyright_License {
 struct lua_State;
 
 namespace Lua {
-  /**
-   * Provide legacy APIs, e.g. a function that calls an old-style
-   * InputEvent.
-   */
-  void InitLegacy(lua_State *L);
+
+/**
+ * Provide legacy APIs, e.g. a function that calls an old-style
+ * InputEvent.
+ */
+void
+InitLegacy(lua_State *L);
+
 }
 
 #endif

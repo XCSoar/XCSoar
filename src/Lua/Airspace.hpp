@@ -27,10 +27,13 @@ Copyright_License {
 struct lua_State;
 
 namespace Lua {
-  /**
-   * Provide the Lua table "xcsoar.airspace".
-   */
-  void InitAirspace(lua_State *L);
+
+/**
+ * Provide the Lua table "xcsoar.airspace".
+ */
+void
+InitAirspace(lua_State *L);
+
 }
 
 #endif

@@ -28,13 +28,15 @@ Copyright_License {
 #include "Interface.hpp"
 
 namespace Lua {
-  template<typename V>
-  static void PushOptional(lua_State *L, bool available, V &&value) {
-    if (available)
-      Push(L, value);
-    else
-      lua_pushnil(L);
-  }
+
+template<typename V>
+static void PushOptional(lua_State *L, bool available, V &&value) {
+  if (available)
+    Push(L, value);
+  else
+    lua_pushnil(L);
+}
+
 }
 
 static int

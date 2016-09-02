@@ -29,10 +29,13 @@ class Path;
 class Error;
 
 namespace Lua {
-  /**
-   * Load, compile and run the specified file.
-   */
-  bool RunFile(lua_State *L, Path path, Error &error);
+
+/**
+ * Load, compile and run the specified file.
+ */
+bool
+RunFile(lua_State *L, Path path, Error &error);
+
 }
 
 #endif

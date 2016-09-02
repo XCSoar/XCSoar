@@ -27,7 +27,10 @@ Copyright_License {
 struct lua_State;
 
 namespace Lua {
-  void InitLog(lua_State *L);
+
+void
+InitLog(lua_State *L);
+
 }
 
 #endif
