@@ -28,9 +28,11 @@ Copyright_License {
 #include "NameFile.hpp"
 #include "Components.hpp"
 #include "MergeThread.hpp"
+#include "LocalPath.hpp"
 #include "IO/DataFile.hpp"
 #include "IO/LineReader.hpp"
-#include "IO/TextWriter.hpp"
+#include "IO/FileOutputStream.hxx"
+#include "IO/BufferedOutputStream.hxx"
 #include "Profile/FlarmProfile.hpp"
 #include "Profile/Current.hpp"
 #include "LogFile.hpp"
@@ -99,8 +101,11 @@ SaveFlarmColors()
 static void
 SaveSecondary(FlarmNameDatabase &flarm_names)
 try {
-  auto writer = CreateDataTextFile(_T("xcsoar-flarm.txt"));
-  SaveFlarmNameFile(*writer, flarm_names);
+  FileOutputStream fos(LocalPath(_T("xcsoar-flarm.txt")));
+  BufferedOutputStream bos(fos);
+  SaveFlarmNameFile(bos, flarm_names);
+  bos.Flush();
+  fos.Commit();
 } catch (const std::runtime_error &e) {
   LogError(e);
 }

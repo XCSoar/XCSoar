@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "NameFile.hpp"
 #include "NameDatabase.hpp"
-#include "IO/TextWriter.hpp"
 #include "IO/LineReader.hpp"
+#include "IO/BufferedOutputStream.hxx"
 
 void
 LoadFlarmNameFile(TLineReader &reader, FlarmNameDatabase &db)
@@ -47,15 +47,16 @@ LoadFlarmNameFile(TLineReader &reader, FlarmNameDatabase &db)
 }
 
 void
-SaveFlarmNameFile(TextWriter &writer, FlarmNameDatabase &db)
+SaveFlarmNameFile(BufferedOutputStream &writer, FlarmNameDatabase &db)
 {
   TCHAR id[16];
 
   for (const auto &i : db) {
     assert(i.id.IsDefined());
 
-    writer.FormatLine(_T("%s=%s"),
-                       i.id.Format(id),
-                       i.name.c_str());
+    writer.Write(i.id.Format(id));
+    writer.Write('=');
+    writer.Write(i.name.c_str());
+    writer.Write('\n');
   }
 }

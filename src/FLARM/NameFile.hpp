@@ -26,12 +26,12 @@ Copyright_License {
 
 class FlarmNameDatabase;
 class TLineReader;
-class TextWriter;
+class BufferedOutputStream;
 
 void
 LoadFlarmNameFile(TLineReader &reader, FlarmNameDatabase &db);
 
 void
-SaveFlarmNameFile(TextWriter &writer, FlarmNameDatabase &db);
+SaveFlarmNameFile(BufferedOutputStream &writer, FlarmNameDatabase &db);
 
 #endif
