@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "KeyValueFileWriter.hpp"
-#include "TextWriter.hpp"
+#include "BufferedOutputStream.hxx"
 #include "Util/Macros.hpp"
 
 #include <assert.h>
@@ -44,7 +44,7 @@ KeyValueFileWriter::Write(const char *key, const char *value)
     value = "";
 
   // write the value to the output file
-  writer.FormatLine("%s=\"%s\"", key, value);
+  os.Format("%s=\"%s\"\n", key, value);
 }
 
 #ifdef _UNICODE

@@ -33,7 +33,10 @@ namespace Profile {
    */
   void LoadFile(ProfileMap &map, Path path);
 
-  bool SaveFile(const ProfileMap &map, Path path);
+/**
+ * Throws std::runtime_errror on error.
+ */
+void SaveFile(const ProfileMap &map, Path path);
 }
 
 #endif

@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "PlaneDialogs.hpp"
+#include "Dialogs/Error.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/ListWidget.hpp"
@@ -263,7 +264,13 @@ PlaneListWidget::NewClicked()
         continue;
     }
 
-    PlaneGlue::WriteFile(plane, path);
+    try {
+      PlaneGlue::WriteFile(plane, path);
+    } catch (const std::runtime_error &e) {
+      ShowError(e, _("Failed to save file."));
+      return;
+    }
+
     UpdateList();
     break;
   }
@@ -305,14 +312,27 @@ PlaneListWidget::EditClicked()
       }
 
       File::Delete(old_path);
-      PlaneGlue::WriteFile(plane, path);
+
+      try {
+        PlaneGlue::WriteFile(plane, path);
+      } catch (const std::runtime_error &e) {
+        ShowError(e, _("Failed to save file."));
+        return;
+      }
+
       if (Profile::GetPathIsEqual("PlanePath", old_path)) {
         list[index].path = Path(path);
         list[index].name = filename;
         Load(index);
       }
     } else {
-      PlaneGlue::WriteFile(plane, old_path);
+      try {
+        PlaneGlue::WriteFile(plane, old_path);
+      } catch (const std::runtime_error &e) {
+        ShowError(e, _("Failed to save file."));
+        return;
+      }
+
       if (Profile::GetPathIsEqual("PlanePath", old_path))
         Load(index);
     }

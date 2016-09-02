@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "InputEvents.hpp"
+#include "Dialogs/Error.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
 #include "ActionInterface.hpp"
@@ -274,8 +275,14 @@ InputEvents::eventProfileLoad(const TCHAR *misc)
 void
 InputEvents::eventProfileSave(const TCHAR *misc)
 {
-  if (!StringIsEmpty(misc))
-    Profile::SaveFile(Path(misc));
+  if (!StringIsEmpty(misc)) {
+      try {
+        Profile::SaveFile(Path(misc));
+      } catch (const std::runtime_error &e) {
+        ShowError(e, _("Failed to save file."));
+        return;
+      }
+  }
 }
 
 // AdjustForecastTemperature

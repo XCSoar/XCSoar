@@ -240,9 +240,12 @@ ProfileListWidget::PasswordClicked()
       !SetProfilePasswordDialog(data))
     return;
 
-  if (!Profile::SaveFile(data, item.path))
-    ShowMessageBox(item.name, _("Failed to save file."),
-                   MB_OK|MB_ICONEXCLAMATION);
+  try {
+    Profile::SaveFile(data, item.path);
+  } catch (const std::runtime_error &e) {
+    ShowError(e, _("Failed to save file."));
+    return;
+  }
 }
 
 inline void
@@ -282,9 +285,10 @@ ProfileListWidget::CopyClicked()
     return;
   }
 
-  if (!Profile::SaveFile(data, new_path)) {
-    ShowMessageBox(new_name, _("Failed to save file."),
-                   MB_OK|MB_ICONEXCLAMATION);
+  try {
+    Profile::SaveFile(data, item.path);
+  } catch (const std::runtime_error &e) {
+    ShowError(e, _("Failed to save file."));
     return;
   }
 

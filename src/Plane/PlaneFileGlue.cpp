@@ -26,7 +26,8 @@ Copyright_License {
 #include "Polar/Parser.hpp"
 #include "IO/KeyValueFileReader.hpp"
 #include "IO/KeyValueFileWriter.hpp"
-#include "IO/TextWriter.hpp"
+#include "IO/FileOutputStream.hxx"
+#include "IO/BufferedOutputStream.hxx"
 #include "IO/FileLineReader.hpp"
 #include "Util/NumberParser.hpp"
 #include "LogFile.hpp"
@@ -179,14 +180,13 @@ PlaneGlue::Write(const Plane &plane, KeyValueFileWriter &writer)
   writer.Write("WingArea", tmp);
 }
 
-bool
+void
 PlaneGlue::WriteFile(const Plane &plane, Path path)
 {
-  TextWriter writer(path);
-  if (!writer.IsOpen())
-    return false;
-
-  KeyValueFileWriter kvwriter(writer);
+  FileOutputStream file(path);
+  BufferedOutputStream buffered(file);
+  KeyValueFileWriter kvwriter(buffered);
   Write(plane, kvwriter);
-  return true;
+  buffered.Flush();
+  file.Commit();
 }

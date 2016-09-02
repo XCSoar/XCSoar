@@ -28,13 +28,13 @@ Copyright_License {
 #include <tchar.h>
 #endif
 
-class TextWriter;
+class BufferedOutputStream;
 
 class KeyValueFileWriter {
-  TextWriter &writer;
+  BufferedOutputStream &os;
 
 public:
-  KeyValueFileWriter(TextWriter &_writer):writer(_writer) {}
+  explicit KeyValueFileWriter(BufferedOutputStream &_os):os(_os) {}
 
   void Write(const char *key, const char *value);
 
