@@ -25,11 +25,17 @@
 
 #include <stddef.h>
 
+#ifdef _UNICODE
+#include <wchar.h>
+#endif
+
 class OutputStream;
 
 /**
  * An #OutputStream wrapper that buffers its output to reduce the
  * number of OutputStream::Write() calls.
+ *
+ * All wchar_t based strings are converted to UTF-8.
  */
 class BufferedOutputStream {
 	OutputStream &os;
@@ -51,6 +57,14 @@ public:
 	gcc_printf(2,3)
 	void Format(const char *fmt, ...);
 
+#ifdef _UNICODE
+	void Write(const wchar_t &ch) {
+		WriteWideToUTF8(&ch, 1);
+	}
+
+	void Write(const wchar_t *p);
+#endif
+
 	/**
 	 * Write buffer contents to the #OutputStream.
 	 */
@@ -58,6 +72,10 @@ public:
 
 private:
 	bool AppendToBuffer(const void *data, size_t size) noexcept;
+
+#ifdef _UNICODE
+	void WriteWideToUTF8(const wchar_t *p, size_t length);
+#endif
 };
 
 #endif
