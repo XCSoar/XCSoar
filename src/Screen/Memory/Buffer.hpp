@@ -26,13 +26,6 @@ Copyright_License {
 
 #include "Compiler.h"
 
-#if CLANG_CHECK_VERSION(3,3)
-/* no thanks, constexpr without const is fine -
-   WritableImageBuffer::At() returns a writable buffer; the pointer
-   itself is constexpr, but the result may modify the buffer object */
-#pragma GCC diagnostic ignored "-Wconstexpr-not-const"
-#endif
-
 /**
  * A reference to an image buffer (or a portion of it) that we can
  * write to.  This class does not allocate or free any memory, it
@@ -42,6 +35,8 @@ template<typename PixelTraits>
 struct WritableImageBuffer {
   typedef typename PixelTraits::pointer_type pointer_type;
   typedef typename PixelTraits::rpointer_type rpointer_type;
+
+  typedef typename PixelTraits::const_pointer_type const_pointer_type;
 
   rpointer_type data;
 
@@ -69,6 +64,10 @@ struct WritableImageBuffer {
   }
 
   constexpr pointer_type At(unsigned x, unsigned y) {
+    return PixelTraits::At(data, pitch, x, y);
+  }
+
+  constexpr const_pointer_type At(unsigned x, unsigned y) const {
     return PixelTraits::At(data, pitch, x, y);
   }
 };
@@ -105,7 +104,7 @@ struct ConstImageBuffer {
     return x < width && y < height;
   }
 
-  constexpr pointer_type At(unsigned x, unsigned y) {
+  constexpr pointer_type At(unsigned x, unsigned y) const {
     return PixelTraits::At(data, pitch, x, y);
   }
 };
