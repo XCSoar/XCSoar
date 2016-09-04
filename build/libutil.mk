@@ -3,7 +3,6 @@
 UTIL_SRC_DIR = $(SRC)/Util
 
 UTIL_SOURCES = \
-	$(UTIL_SRC_DIR)/Error.cxx \
 	$(UTIL_SRC_DIR)/PrintException.cxx \
 	$(UTIL_SRC_DIR)/Base64.cxx \
 	$(UTIL_SRC_DIR)/CRC.cpp \
