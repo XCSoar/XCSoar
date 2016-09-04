@@ -27,15 +27,15 @@ Copyright_License {
 struct PolarInfo;
 class Path;
 class NLineReader;
-class TextWriter;
+class BufferedOutputStream;
 class Error;
 
 namespace PolarGlue
 {
   void LoadFromFile(PolarInfo &polar, Path path);
-  bool SaveToFile(const PolarInfo &polar, Path path);
+  void SaveToFile(const PolarInfo &polar, Path path);
   bool LoadFromFile(PolarInfo &polar, NLineReader &reader);
-  bool SaveToFile(const PolarInfo &polar, TextWriter &writer);
+  void SaveToFile(const PolarInfo &polar, BufferedOutputStream &writer);
 }
 
 #endif
