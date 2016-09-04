@@ -33,7 +33,6 @@ Copyright_License {
 class Reader;
 class TLineReader;
 class NLineReader;
-class TextWriter;
 
 /**
  * Opens a file from the data directory.
@@ -65,14 +64,5 @@ OpenDataTextFile(const TCHAR *name, Charset cs=Charset::UTF8);
  */
 std::unique_ptr<NLineReader>
 OpenDataTextFileA(const TCHAR *name);
-
-/**
- * Creates a text file in the data directory.  If the file already
- * exists, it is truncated, unless "append" is true.
- *
- * Throws exception on error.
- */
-std::unique_ptr<TextWriter>
-CreateDataTextFile(const TCHAR *name, bool append=false);
 
 #endif

@@ -25,12 +25,9 @@ Copyright_License {
 #include "FileReader.hxx"
 #include "FileLineReader.hpp"
 #include "ConvertLineReader.hpp"
-#include "TextWriter.hpp"
 #include "LocalPath.hpp"
 #include "OS/Path.hpp"
 #include "Util/StringCompare.hxx"
-
-#include <stdexcept>
 
 #include <assert.h>
 
@@ -58,20 +55,4 @@ OpenDataTextFileA(const TCHAR *name)
 
   const auto path = LocalPath(name);
   return std::make_unique<FileLineReaderA>(path);
-}
-
-std::unique_ptr<TextWriter>
-CreateDataTextFile(const TCHAR *name, bool append)
-{
-  assert(name != nullptr);
-  assert(!StringIsEmpty(name));
-
-  const auto path = LocalPath(name);
-
-  auto writer = std::make_unique<TextWriter>(path, append);
-  if (!writer->IsOpen())
-    // TODO: improve error message
-    throw std::runtime_error("Failed to create text file");
-
-  return writer;
 }
