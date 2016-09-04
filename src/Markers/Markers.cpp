@@ -24,24 +24,28 @@ Copyright_License {
 #include "Markers.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Time/BrokenDateTime.hpp"
-#include "IO/TextWriter.hpp"
-#include "IO/DataFile.hpp"
+#include "IO/FileOutputStream.hxx"
+#include "IO/BufferedOutputStream.hxx"
 #include "LogFile.hpp"
+#include "LocalPath.hpp"
+
+#include <stdexcept>
 
 void
 MarkLocation(const GeoPoint &loc, const BrokenDateTime &time)
 try {
   assert(time.IsPlausible());
 
-  char message[160];
-  sprintf(message, "%02u.%02u.%04u\t%02u:%02u:%02u\tLon:%f\tLat:%f",
-          time.day, time.month, time.year,
-          time.hour, time.minute, time.second,
-          (double)loc.longitude.Degrees(),
-          (double)loc.latitude.Degrees());
-
-  auto writer = CreateDataTextFile(_T("xcsoar-marks.txt"), true);
-  writer->WriteLine(message);
+  FileOutputStream file(LocalPath(_T("xcsoar-marks.txt")),
+                        FileOutputStream::Mode::APPEND_OR_CREATE);
+  BufferedOutputStream os(file);
+  os.Format("%02u.%02u.%04u\t%02u:%02u:%02u\tLon:%f\tLat:%f\n",
+            time.day, time.month, time.year,
+            time.hour, time.minute, time.second,
+            (double)loc.longitude.Degrees(),
+            (double)loc.latitude.Degrees());
+  os.Flush();
+  file.Commit();
 } catch (const std::runtime_error &e) {
   LogError(e);
 }
