@@ -24,7 +24,9 @@ Copyright_License {
 #include "FlightLogger.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
-#include "IO/TextWriter.hpp"
+#include "IO/FileOutputStream.hxx"
+#include "IO/BufferedOutputStream.hxx"
+#include "LogFile.hpp"
 
 void
 FlightLogger::Reset()
@@ -37,21 +39,23 @@ FlightLogger::Reset()
 
 void
 FlightLogger::LogEvent(const BrokenDateTime &date_time, const char *type)
-{
+try {
   assert(type != nullptr);
 
-  TextWriter writer(path, true);
-  if (!writer.IsOpen())
-    /* Shall we log this error?  Not sure, because when this happens,
-       usually the log file cannot be written either .. */
-    return;
+  FileOutputStream file(path, FileOutputStream::Mode::APPEND_OR_CREATE);
+  BufferedOutputStream writer(file);
 
   /* XXX log pilot name, glider, airfield name */
 
-  writer.FormatLine("%04u-%02u-%02uT%02u:%02u:%02u %s",
-                    date_time.year, date_time.month, date_time.day,
-                    date_time.hour, date_time.minute, date_time.second,
-                    type);
+  writer.Format("%04u-%02u-%02uT%02u:%02u:%02u %s\n",
+                date_time.year, date_time.month, date_time.day,
+                date_time.hour, date_time.minute, date_time.second,
+                type);
+
+  writer.Flush();
+  file.Commit();
+} catch (const std::runtime_error &e) {
+  LogError(e);
 }
 
 void

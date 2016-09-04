@@ -1554,6 +1554,7 @@ RUN_FLIGHT_LOGGER_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Computer/CirclingComputer.cpp \
 	$(SRC)/Logger/FlightLogger.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/RunFlightLogger.cpp
 RUN_FLIGHT_LOGGER_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_FLIGHT_LOGGER_DEPENDS = GEO MATH UTIL TIME
