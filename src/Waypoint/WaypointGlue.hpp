@@ -106,12 +106,19 @@ namespace WaypointGlue {
                      const RasterTerrain *terrain,
                      OperationEnvironment &operation);
 
-  bool SaveWaypoints(const Waypoints &way_points);
+  /**
+   * Append one waypoint to the file "user.cup".
+   *
+   * Throws std::runtime_error on error;
+   */
+  void SaveWaypoints(const Waypoints &way_points);
 
   /**
    * Append one waypoint to the file "user.cup".
+   *
+   * Throws std::runtime_error on error;
    */
-  bool SaveWaypoint(const Waypoint &wp);
+  void SaveWaypoint(const Waypoint &wp);
 };
 
 #endif

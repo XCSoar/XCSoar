@@ -49,6 +49,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "UIState.hpp"
 #include "Computer/Settings.hpp"
 #include "Dialogs/Dialogs.h"
+#include "Dialogs/Error.hpp"
 #include "Dialogs/Device/Vega/SwitchesDialog.hpp"
 #include "Dialogs/Airspace/Airspace.hpp"
 #include "Dialogs/Task/TaskDialogs.hpp"
@@ -135,7 +136,13 @@ static WaypointPtr
 SuspendAppendSaveWaypoint(Waypoint &&wp)
 {
   auto ptr = SuspendAppendWaypoint(std::move(wp));
-  WaypointGlue::SaveWaypoint(*ptr);
+
+  try {
+    WaypointGlue::SaveWaypoint(*ptr);
+  } catch (const std::runtime_error &e) {
+    ShowError(e, _("Failed to save waypoints"));
+  }
+
   return ptr;
 }
 

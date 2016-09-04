@@ -294,8 +294,11 @@ WaypointCommandsWidget::OnAction(int id)
           way_points.Optimise();
         }
 
-        if (!WaypointGlue::SaveWaypoints(way_points))
-          ShowMessageBox(_("Failed to save waypoints"), _("Error"), MB_OK);
+        try {
+          WaypointGlue::SaveWaypoints(way_points);
+        } catch (const std::runtime_error &e) {
+          ShowError(e, _("Failed to save waypoints"));
+        }
       }
     }
     break;

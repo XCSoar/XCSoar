@@ -25,37 +25,36 @@ Copyright_License {
 #include "CupWriter.hpp"
 #include "LogFile.hpp"
 #include "OS/Path.hpp"
-#include "IO/TextWriter.hpp"
+#include "IO/FileOutputStream.hxx"
+#include "IO/BufferedOutputStream.hxx"
 #include "LocalPath.hpp"
 
-bool
+void
 WaypointGlue::SaveWaypoints(const Waypoints &way_points)
 {
   const auto path = LocalPath(_T("user.cup"));
 
-  TextWriter writer(path);
-  if (!writer.IsOpen()) {
-    LogFormat(_T("Waypoint file '%s' can not be written"), path.c_str());
-    return false;
-  }
+  FileOutputStream file(path);
+  BufferedOutputStream writer(file);
 
   WriteCup(writer, way_points, WaypointOrigin::USER);
 
+  writer.Flush();
+  file.Commit();
+
   LogFormat(_T("Waypoint file '%s' saved"), path.c_str());
-  return true;
 }
 
-bool
+void
 WaypointGlue::SaveWaypoint(const Waypoint &wp)
 {
   const auto path = LocalPath(_T("user.cup"));
 
-  TextWriter writer(path, true);
-  if (!writer.IsOpen()) {
-    LogFormat(_T("Waypoint file '%s' can not be written"), path.c_str());
-    return false;
-  }
+  FileOutputStream file(path, FileOutputStream::Mode::APPEND_OR_CREATE);
+  BufferedOutputStream writer(file);
 
   WriteCup(writer, wp);
-  return true;
+
+  writer.Flush();
+  file.Commit();
 }

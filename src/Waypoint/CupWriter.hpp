@@ -28,13 +28,13 @@ Copyright_License {
 
 struct Waypoint;
 class Waypoints;
-class TextWriter;
+class BufferedOutputStream;
 
 void
-WriteCup(TextWriter &writer, const Waypoint &wp);
+WriteCup(BufferedOutputStream &writer, const Waypoint &wp);
 
 void
-WriteCup(TextWriter &writer, const Waypoints &waypoints,
+WriteCup(BufferedOutputStream &writer, const Waypoints &waypoints,
          WaypointOrigin origin);
 
 #endif

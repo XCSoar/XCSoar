@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "WaypointDialogs.hpp"
 #include "Dialogs/Message.hpp"
+#include "Dialogs/Error.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Renderer/WaypointListRenderer.hpp"
@@ -245,10 +246,12 @@ WaypointManagerWidget::OnWaypointEditClicked(unsigned i)
 void
 WaypointManagerWidget::SaveWaypoints()
 {
-  if (!WaypointGlue::SaveWaypoints(way_points))
-    ShowMessageBox(_("Failed to save waypoints"), _("Error"), MB_OK);
-  else
+  try {
+    WaypointGlue::SaveWaypoints(way_points);
     WaypointFileChanged = true;
+  } catch (const std::runtime_error &e) {
+    ShowError(e, _("Failed to save waypoints"));
+  }
 
   modified = false;
 }

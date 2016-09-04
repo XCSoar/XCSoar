@@ -23,11 +23,11 @@ Copyright_License {
 
 #include "CupWriter.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
-#include "IO/TextWriter.hpp"
+#include "IO/BufferedOutputStream.hxx"
 #include "Engine/Waypoint/Runway.hpp"
 
 static void
-WriteAngleDMM(TextWriter &writer, const Angle angle, bool is_latitude)
+WriteAngleDMM(BufferedOutputStream &writer, const Angle angle, bool is_latitude)
 {
   // Calculate degrees, minutes and decimal minutes
   unsigned deg, min, mmm;
@@ -46,13 +46,13 @@ WriteAngleDMM(TextWriter &writer, const Angle angle, bool is_latitude)
 }
 
 static void
-WriteAltitude(TextWriter &writer, double altitude)
+WriteAltitude(BufferedOutputStream &writer, double altitude)
 {
   writer.Format("%dM", (int)altitude);
 }
 
 static void
-WriteSeeYouFlags(TextWriter &writer, const Waypoint &wp)
+WriteSeeYouFlags(BufferedOutputStream &writer, const Waypoint &wp)
 {
   switch (wp.type) {
   case Waypoint::Type::NORMAL:
@@ -106,10 +106,13 @@ WriteSeeYouFlags(TextWriter &writer, const Waypoint &wp)
 }
 
 void
-WriteCup(TextWriter &writer, const Waypoint &wp)
+WriteCup(BufferedOutputStream &writer, const Waypoint &wp)
 {
   // Write Title
-  writer.Format(_T("\"%s\","), wp.name.c_str());
+  writer.Write('"');
+  writer.Write(wp.name.c_str());
+  writer.Write('"');
+  writer.Write(',');
 
   // Write Code
   writer.Write(',');
@@ -158,15 +161,18 @@ WriteCup(TextWriter &writer, const Waypoint &wp)
   writer.Write(',');
 
   // Write Description
-  writer.FormatLine(_T("\"%s\""), wp.comment.c_str());
+  writer.Write('"');
+  writer.Write(wp.comment.c_str());
+  writer.Write('"');
+  writer.Write('\n');
 }
 
 void
-WriteCup(TextWriter &writer, const Waypoints &waypoints,
+WriteCup(BufferedOutputStream &writer, const Waypoints &waypoints,
          WaypointOrigin origin)
 {
   // Iterate through the waypoint list and save each waypoint with
-  // the right file number to the TextWriter
+  // the right file number to the BufferedOutputStream
   /// @todo JMW: iteration ordered by ID would be preferred
   for (auto i : waypoints) {
     const Waypoint &wp = *i;
