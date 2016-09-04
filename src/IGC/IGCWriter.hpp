@@ -26,7 +26,8 @@ Copyright_License {
 
 #include "Logger/GRecord.hpp"
 #include "IGCFix.hpp"
-#include "IO/TextWriter.hpp"
+#include "IO/FileOutputStream.hxx"
+#include "IO/BufferedOutputStream.hxx"
 
 #include <tchar.h>
 
@@ -41,7 +42,8 @@ class IGCWriter {
     MAX_IGC_BUFF = 255,
   };
 
-  TextWriter file;
+  FileOutputStream file;
+  BufferedOutputStream buffered;
 
   GRecord grecord;
 
@@ -55,12 +57,8 @@ public:
    */
   explicit IGCWriter(Path path);
 
-  bool IsOpen() const {
-    return file.IsOpen();
-  }
-
-  bool Flush() {
-    return file.Flush();
+  void Flush() {
+    buffered.Flush();
   }
 
   void Sign();
@@ -80,12 +78,11 @@ private:
    * Finish writing the line.
    *
    * @param line the buffer obtained with BeginLine()
-   * @return true on success
    */
-  bool CommitLine(char *line);
+  void CommitLine(char *line);
 
-  bool WriteLine(const char *line);
-  bool WriteLine(const char *a, const TCHAR *b);
+  void WriteLine(const char *line);
+  void WriteLine(const char *a, const TCHAR *b);
 
   static const char *GetHFFXARecord();
   static const char *GetIRecord();

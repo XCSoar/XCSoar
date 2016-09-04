@@ -38,10 +38,7 @@ try {
   g.LoadFileToBuffer(path);
   g.FinalizeBuffer();
 
-  if (!g.AppendGRecordToFile(path)) {
-    fprintf(stderr, "Failed to write file\n");
-    return 2;
-  }
+  g.AppendGRecordToFile(path);
 
   return EXIT_SUCCESS;
 } catch (const std::runtime_error &e) {

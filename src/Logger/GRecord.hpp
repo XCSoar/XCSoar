@@ -28,7 +28,7 @@
 #define XCSOAR_IGC_CODE "XCS"
 
 class Path;
-class TextWriter;
+class BufferedOutputStream;
 
 class GRecord
 {
@@ -80,9 +80,12 @@ public:
    */
   void LoadFileToBuffer(Path path);
 
-  void WriteTo(TextWriter &writer) const;
+  void WriteTo(BufferedOutputStream &writer) const;
 
-  bool AppendGRecordToFile(Path path);
+  /**
+   * Throws std::runtime_errror on error.
+   */
+  void AppendGRecordToFile(Path path);
 
   /**
    * Throws std::runtime_errror on error.

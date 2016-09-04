@@ -24,15 +24,16 @@
 #include "OS/Args.hpp"
 #include "IO/FileTransaction.hpp"
 #include "IO/FileLineReader.hpp"
-#include "IO/TextWriter.hpp"
+#include "IO/FileOutputStream.hxx"
+#include "IO/BufferedOutputStream.hxx"
 #include "Util/PrintException.hxx"
 
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-static bool
-FixGRecord(NLineReader &reader, TextWriter &writer)
+static void
+FixGRecord(NLineReader &reader, BufferedOutputStream &writer)
 {
   GRecord grecord;
   grecord.Initialize();
@@ -65,20 +66,22 @@ FixGRecord(NLineReader &reader, TextWriter &writer)
 
     grecord.AppendRecordToBuffer(line);
 
-    if (!writer.WriteLine(line))
-      return false;
+    writer.Write(line);
+    writer.Write('\n');
   }
 
   grecord.FinalizeBuffer();
   grecord.WriteTo(writer);
-  return true;
 }
 
-static bool
+static void
 FixGRecord(NLineReader &reader, Path dest_path)
 {
-  TextWriter writer(dest_path);
-  return writer.IsOpen() && FixGRecord(reader, writer) && writer.Flush();
+  FileOutputStream file(dest_path);
+  BufferedOutputStream writer(file);
+  FixGRecord(reader, writer);
+  writer.Flush();
+  file.Commit();
 }
 
 int
@@ -101,10 +104,7 @@ try {
   {
     FileLineReaderA reader(path);
 
-    if (!FixGRecord(reader, transaction.GetTemporaryPath())) {
-      fprintf(stderr, "Failed to write output file\n");
-      return EXIT_FAILURE;
-    }
+    FixGRecord(reader, transaction.GetTemporaryPath());
   }
 
   if (!transaction.Commit()) {

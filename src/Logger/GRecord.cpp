@@ -24,7 +24,8 @@
 #include "Logger/MD5.hpp"
 #include "IGC/IGCString.hpp"
 #include "IO/FileLineReader.hpp"
-#include "IO/TextWriter.hpp"
+#include "IO/FileOutputStream.hxx"
+#include "IO/BufferedOutputStream.hxx"
 #include "OS/Path.hpp"
 #include "Util/Macros.hpp"
 
@@ -142,7 +143,7 @@ GRecord::LoadFileToBuffer(Path path)
 }
 
 void
-GRecord::WriteTo(TextWriter &writer) const
+GRecord::WriteTo(BufferedOutputStream &writer) const
 {
   char digest[DIGEST_LENGTH + 1];
   GetDigest(digest);
@@ -154,19 +155,18 @@ GRecord::WriteTo(TextWriter &writer) const
        i != end; i += chars_per_line) {
     writer.Write('G');
     writer.Write(i, chars_per_line);
-    writer.NewLine();
+    writer.Write('\n');
   }
 }
 
-bool
+void
 GRecord::AppendGRecordToFile(Path path)
 {
-  TextWriter writer(path, true);
-  if (!writer.IsOpen())
-    return false;
-
+  FileOutputStream file(path, FileOutputStream::Mode::APPEND_EXISTING);
+  BufferedOutputStream writer(file);
   WriteTo(writer);
-  return true;
+  writer.Flush();
+  file.Commit();
 }
 
 void
