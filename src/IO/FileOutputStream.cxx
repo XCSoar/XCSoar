@@ -25,7 +25,11 @@ FileOutputStream::FileOutputStream(Path _path, Mode _mode)
 {
 	switch (mode) {
 	case Mode::CREATE:
-		OpenCreate();
+		OpenCreate(false);
+		break;
+
+	case Mode::CREATE_VISIBLE:
+		OpenCreate(true);
 		break;
 
 	case Mode::APPEND_EXISTING:
@@ -41,7 +45,7 @@ FileOutputStream::FileOutputStream(Path _path, Mode _mode)
 #ifdef WIN32
 
 inline void
-FileOutputStream::OpenCreate()
+FileOutputStream::OpenCreate(gcc_unused bool visible)
 {
 	handle = CreateFile(path.c_str(), GENERIC_WRITE, 0, nullptr,
 			    CREATE_ALWAYS,
@@ -146,11 +150,11 @@ OpenTempFile(FileDescriptor &fd, Path path)
 #endif /* HAVE_LINKAT */
 
 inline void
-FileOutputStream::OpenCreate()
+FileOutputStream::OpenCreate(bool visible)
 {
 #ifdef HAVE_LINKAT
 	/* try Linux's O_TMPFILE first */
-	is_tmpfile = OpenTempFile(fd, GetPath());
+	is_tmpfile = !visible && OpenTempFile(fd, GetPath());
 	if (!is_tmpfile) {
 #endif
 		/* fall back to plain POSIX */
@@ -240,6 +244,7 @@ FileOutputStream::Cancel()
 			unlink(GetPath().c_str());
 		break;
 
+	case Mode::CREATE_VISIBLE:
 	case Mode::APPEND_EXISTING:
 	case Mode::APPEND_OR_CREATE:
 		/* can't roll this back */
