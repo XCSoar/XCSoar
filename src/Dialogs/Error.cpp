@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Error.hpp"
 #include "Message.hpp"
-#include "Util/Error.hxx"
 #include "Util/ConvertString.hpp"
 
 #include <exception>
@@ -32,12 +31,5 @@ void
 ShowError(const std::exception &exception, const TCHAR *caption)
 {
   ShowMessageBox(UTF8ToWideConverter(exception.what()), caption,
-                 MB_OK|MB_ICONEXCLAMATION);
-}
-
-void
-ShowError(const Error &error, const TCHAR *caption)
-{
-  ShowMessageBox(UTF8ToWideConverter(error.GetMessage()), caption,
                  MB_OK|MB_ICONEXCLAMATION);
 }
