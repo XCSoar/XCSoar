@@ -30,8 +30,6 @@ Copyright_License {
 #include <tchar.h>
 #endif
 
-class Error;
-
 namespace std {
   class exception;
 }
@@ -68,11 +66,5 @@ LogError(const std::exception &exception);
 
 void
 LogError(const char *msg, const std::exception &exception);
-
-void
-LogError(const Error &error);
-
-void
-LogError(const char *msg, const Error &error);
 
 #endif

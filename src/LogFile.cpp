@@ -30,7 +30,6 @@ Copyright_License {
 #include "OS/Path.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/UniqueFileDescriptor.hxx"
-#include "Util/Error.hxx"
 
 #include <exception>
 
@@ -159,16 +158,4 @@ LogError(const char *msg, const std::exception &exception)
 {
   LogFormat("%s: %s", msg, exception.what());
   LogNestedError(exception);
-}
-
-void
-LogError(const Error &error)
-{
-  LogString(error.GetMessage());
-}
-
-void
-LogError(const char *msg, const Error &error)
-{
-  LogFormat("%s: %s", msg, error.GetMessage());
 }
