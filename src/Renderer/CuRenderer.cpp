@@ -68,9 +68,13 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
   }
 
   chart.ScaleYFromValue(hmin * CuSonde::HEIGHT_STEP);
+  chart.ScaleYFromValue(0);
   chart.ScaleYFromValue(hmax * CuSonde::HEIGHT_STEP);
   chart.ScaleXFromValue(tmin.ToUser());
   chart.ScaleXFromValue(tmax.ToUser());
+
+  chart.DrawXGrid(5, 5, ChartRenderer::UnitFormat::NUMERIC);
+  chart.DrawYGrid(Units::ToSysAltitude(500), 500, ChartRenderer::UnitFormat::NUMERIC);
 
   bool labelDry = false;
   bool labelAir = false;
