@@ -152,7 +152,8 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
 #endif
 
   // Build file url
-  char url[256] = "http://weather.noaa.gov/pub/data/observations/metar/decoded/";
+  char url[256] = "http://tgftp.nws.noaa.gov/data/observations/metar/decoded/";
+
   strcat(url, code);
   strcat(url, ".TXT");
 
@@ -247,7 +248,7 @@ NOAADownloader::DownloadTAF(const char *code, TAF &taf,
 #endif
 
   // Build file url
-  char url[256] = "http://weather.noaa.gov/pub/data/forecasts/taf/stations/";
+  char url[256] = "http://tgftp.nws.noaa.gov/data/forecasts/taf/stations/";
   strcat(url, code);
   strcat(url, ".TXT");
 

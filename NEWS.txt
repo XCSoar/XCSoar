@@ -1,4 +1,6 @@
 Version 6.8.8 - not yet released
+* weather
+  - update source URLs for METARs and TAFs
 
 Version 6.8.7 - 2016/08/12
 * data files
