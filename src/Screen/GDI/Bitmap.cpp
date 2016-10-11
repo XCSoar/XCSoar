@@ -52,12 +52,12 @@ load_imgdecmp_file(const TCHAR *path)
 {
   ImgDeCmpDLL imgdecmp_dll;
   if (!imgdecmp_dll.IsDefined())
-    return false;
+    return nullptr;
 
   HANDLE file = ::CreateFile(path, GENERIC_READ, FILE_SHARE_READ, nullptr,
                              OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
   if (file == INVALID_HANDLE_VALUE)
-    return false;
+    return nullptr;
 
   BYTE buffer[1024];
   HBITMAP bitmap;
