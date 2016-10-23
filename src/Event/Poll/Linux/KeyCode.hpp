@@ -33,6 +33,7 @@ Copyright_License {
 
 /* wrong meaning */
 #undef KEY_NEXT
+#undef KEY_BACK
 #endif
 
 enum {
@@ -41,6 +42,7 @@ enum {
   KEY_ESCAPE = KEY_ESC,
   KEY_PRIOR = KEY_PAGEUP,
   KEY_NEXT = KEY_PAGEDOWN,
+  KEY_BACK = KEY_BACKSPACE,
   KEY_UP = 103,
   KEY_DOWN = 108,
 #else
