@@ -28,4 +28,8 @@ Copyright_License {
 
 #define HAVE_ALPHA_BLEND
 
+#if defined(USE_FB) && !defined(KOBO)
+#define DRAW_MOUSE_CURSOR
+#endif
+
 #endif
