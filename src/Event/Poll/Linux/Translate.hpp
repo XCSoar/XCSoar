@@ -76,6 +76,8 @@ static constexpr struct {
   { KEY_X, 'X', true },
   { KEY_Y, 'Y', true },
   { KEY_Z, 'Z', true },
+
+  { KEY_SPACE, ' ', true },
 };
 
 gcc_const
