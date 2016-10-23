@@ -152,10 +152,12 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event)
       uint32_t key_code = libinput_event_keyboard_get_key(kb_li_event);
       libinput_key_state key_state =
         libinput_event_keyboard_get_key_state(kb_li_event);
-      queue.Push(Event(key_state == LIBINPUT_KEY_STATE_PRESSED
-                       ? Event::KEY_DOWN
-                       : Event::KEY_UP,
-                       TranslateKeyCode(key_code)));
+      bool is_char;
+      Event e(key_state == LIBINPUT_KEY_STATE_PRESSED
+                  ? Event::KEY_DOWN : Event::KEY_UP,
+              TranslateKeyCode(key_code, is_char));
+      e.is_char = is_char;
+      queue.Push(e);
     }
     break;
   case LIBINPUT_EVENT_POINTER_MOTION:

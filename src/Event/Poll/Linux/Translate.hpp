@@ -30,61 +30,66 @@ Copyright_License {
 
 static constexpr struct {
   unsigned from, to;
+  bool is_char;
 } key_code_translation_table[] = {
 #ifdef KOBO
   /* the Kobo Touch "home" button shall open the menu */
-  { KEY_HOME, KEY_MENU },
+  { KEY_HOME, KEY_MENU, false },
 #endif
 
   /* TODO: the ASCII codes overlap with many of the Linux key codes,
      and we should fix that */
-  { KEY_0, '0' },
-  { KEY_1, '1' },
-  { KEY_2, '2' },
-  { KEY_3, '3' },
-  { KEY_4, '4' },
-  { KEY_5, '5' },
-  { KEY_6, '6' },
-  { KEY_7, '7' },
-  { KEY_8, '8' },
-  { KEY_9, '9' },
+  { KEY_0, '0', true },
+  { KEY_1, '1', true },
+  { KEY_2, '2', true },
+  { KEY_3, '3', true },
+  { KEY_4, '4', true },
+  { KEY_5, '5', true },
+  { KEY_6, '6', true },
+  { KEY_7, '7', true },
+  { KEY_8, '8', true },
+  { KEY_9, '9', true },
 
-  { KEY_A, 'A' },
-  { KEY_B, 'B' },
-  { KEY_C, 'C' },
-  { KEY_D, 'D' },
-  { KEY_E, 'E' },
-  { KEY_F, 'F' },
-  { KEY_G, 'G' },
-  { KEY_H, 'H' },
-  { KEY_I, 'I' },
-  { KEY_J, 'J' },
-  { KEY_K, 'K' },
-  { KEY_L, 'L' },
-  { KEY_M, 'M' },
-  { KEY_N, 'N' },
-  { KEY_O, 'O' },
-  { KEY_P, 'P' },
-  { KEY_Q, 'Q' },
-  { KEY_R, 'R' },
-  { KEY_S, 'S' },
-  { KEY_T, 'T' },
-  { KEY_U, 'U' },
-  { KEY_V, 'V' },
-  { KEY_W, 'W' },
-  { KEY_X, 'X' },
-  { KEY_Y, 'Y' },
-  { KEY_Z, 'Z' },
+  { KEY_A, 'A', true },
+  { KEY_B, 'B', true },
+  { KEY_C, 'C', true },
+  { KEY_D, 'D', true },
+  { KEY_E, 'E', true },
+  { KEY_F, 'F', true },
+  { KEY_G, 'G', true },
+  { KEY_H, 'H', true },
+  { KEY_I, 'I', true },
+  { KEY_J, 'J', true },
+  { KEY_K, 'K', true },
+  { KEY_L, 'L', true },
+  { KEY_M, 'M', true },
+  { KEY_N, 'N', true },
+  { KEY_O, 'O', true },
+  { KEY_P, 'P', true },
+  { KEY_Q, 'Q', true },
+  { KEY_R, 'R', true },
+  { KEY_S, 'S', true },
+  { KEY_T, 'T', true },
+  { KEY_U, 'U', true },
+  { KEY_V, 'V', true },
+  { KEY_W, 'W', true },
+  { KEY_X, 'X', true },
+  { KEY_Y, 'Y', true },
+  { KEY_Z, 'Z', true },
 };
 
 gcc_const
 static unsigned
-TranslateKeyCode(unsigned key_code)
+TranslateKeyCode(unsigned key_code, bool &is_char)
 {
-  for (auto i : key_code_translation_table)
-    if (key_code == i.from)
+  for (auto i : key_code_translation_table) {
+    if (key_code == i.from) {
+      is_char = i.is_char;
       return i.to;
+    }
+  }
 
+  is_char = false;
   return key_code;
 }
 

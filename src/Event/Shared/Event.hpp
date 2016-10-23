@@ -104,6 +104,8 @@ struct Event {
 
 #ifdef USE_X11
   unsigned ch;
+#else
+  bool is_char;
 #endif
 
   Event() = default;
@@ -135,7 +137,7 @@ struct Event {
 #ifdef USE_X11
     return type == KEY_DOWN && ch != 0;
 #else
-    return 0;
+    return type == KEY_DOWN && is_char;
 #endif
   }
 
@@ -146,8 +148,9 @@ struct Event {
 
     return ch;
 #else
-    assert(false);
-    return 0;
+    assert(characterIdx == 0);
+    assert(1 == GetCharacterCount());
+    return param;
 #endif
   }
 
