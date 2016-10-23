@@ -320,6 +320,7 @@ FillTCPPorts(DataFieldEnum &dfe)
   dfe.addEnumText(_T("10110"), 10110);
   dfe.addEnumText(_T("4352"), 4352);
   dfe.addEnumText(_T("2000"), 2000);
+  dfe.addEnumText(_T("23"), 23);
 }
 
 static void
