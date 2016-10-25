@@ -33,11 +33,9 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #endif
 
-#ifdef KOBO
-#include "Screen/Memory/Canvas.hpp"
-#endif
-
 #ifdef USE_FB
+
+#include "Screen/Memory/Canvas.hpp"
 
 void
 TopWindow::CheckResize()

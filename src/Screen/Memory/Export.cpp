@@ -28,6 +28,8 @@ Copyright_License {
 #include "../Memory/Dither.hpp"
 #endif
 
+#include <assert.h>
+
 #ifdef GREYSCALE
 
 #ifdef KOBO

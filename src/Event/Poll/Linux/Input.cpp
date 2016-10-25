@@ -202,8 +202,11 @@ LinuxInputDevice::Read()
          * on the executing shell. This fixes #3403. */
         tcflush(STDIN_FILENO, TCIFLUSH);
 
-        queue.Push(Event(e.value ? Event::KEY_DOWN : Event::KEY_UP,
-                         TranslateKeyCode(e.code)));
+        bool is_char;
+        Event ev(e.value ? Event::KEY_DOWN : Event::KEY_UP,
+                 TranslateKeyCode(e.code, is_char));
+        ev.is_char = is_char;
+        queue.Push(ev);
       }
 
       break;
