@@ -59,6 +59,7 @@ class AutotoolsProject(Project):
             'LDFLAGS=' + toolchain.ldflags + ' ' + self.ldflags,
             'LIBS=' + toolchain.libs + ' ' + self.libs,
             'AR=' + toolchain.ar,
+            'RANLIB=' + toolchain.ranlib,
             'STRIP=' + toolchain.strip,
             '--host=' + toolchain.arch,
             '--prefix=' + install_prefix,

@@ -32,7 +32,7 @@ libs: $(THIRDPARTY_LIBS_DIR)/stamp
 
 compile-depends += $(THIRDPARTY_LIBS_DIR)/stamp
 $(THIRDPARTY_LIBS_DIR)/stamp:
-	./build/thirdparty.py $(TARGET_OUTPUT_DIR) $(TARGET) $(HOST_TRIPLET) "$(TARGET_ARCH)" "$(TARGET_CPPFLAGS)" "$(filter-out $(THIRDPARTY_LDFLAGS_FILTER_OUT),$(TARGET_LDFLAGS))" $(CC) $(CXX) $(AR) $(STRIP)
+	./build/thirdparty.py $(TARGET_OUTPUT_DIR) $(TARGET) $(HOST_TRIPLET) "$(TARGET_ARCH)" "$(TARGET_CPPFLAGS)" "$(filter-out $(THIRDPARTY_LDFLAGS_FILTER_OUT),$(TARGET_LDFLAGS))" $(CC) $(CXX) $(AR) $(RANLIB) $(STRIP)
 	touch $@
 
 TARGET_CPPFLAGS += -isystem $(THIRDPARTY_LIBS_ROOT)/include
