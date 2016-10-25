@@ -86,9 +86,9 @@ rm android-sdk_r23-linux.tgz
 
 # Download NDK installer
 wget "http://dl.google.com/android/\
-repository/android-ndk-r12b-linux-x86_64.zip"
+repository/android-ndk-r13-linux-x86_64.zip"
 
-unzip android-ndk-r12b-linux-x86_64.zip
+unzip android-ndk-r13-linux-x86_64.zip
 \end{verbatim}
 
 We need to add the paths by appending the following lines to \texttt{\textasciitilde/.profile} and \texttt{\textasciitilde/.bashrc} --- here relative paths work.
@@ -100,7 +100,7 @@ PATH="$PATH:$ANDROID_SDK_HOME/tools"
 PATH="$PATH:$ANDROID_SDK_HOME/platform-tools"
 
 # Android NDK
-export ANDROID_NDK="~/opt/android-ndk-r12"
+export ANDROID_NDK="~/opt/android-ndk-r13"
 PATH="$PATH:$ANDROID_NDK"
 \end{verbatim}
 
