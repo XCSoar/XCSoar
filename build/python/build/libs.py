@@ -156,8 +156,8 @@ libtiff = AutotoolsProject(
 )
 
 libgeotiff = AutotoolsProject(
-    'http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.4.1.tar.gz',
-    '48bdf817e6e7a37671cc1f41b01e10fc',
+    'http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.4.2.tar.gz',
+    '96ab80e0d4eff7820579957245d844f8',
     'lib/libgeotiff.a',
     [
         '--disable-shared', '--enable-static',
