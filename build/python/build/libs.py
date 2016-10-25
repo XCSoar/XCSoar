@@ -97,8 +97,8 @@ curl = AutotoolsProject(
 )
 
 proj = AutotoolsProject(
-    'http://download.osgeo.org/proj/proj-4.9.2.tar.gz',
-    '9843131676e31bbd903d60ae7dc76cf9',
+    'http://download.osgeo.org/proj/proj-4.9.3.tar.gz',
+    'd598336ca834742735137c5674b214a1',
     'lib/libproj.a',
     [
         '--disable-shared', '--enable-static',
