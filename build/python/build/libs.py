@@ -8,8 +8,8 @@ from build.sdl2 import SDL2Project
 from build.lua import LuaProject
 
 glibc = AutotoolsProject(
-    'http://mirror.netcologne.de/gnu/libc/glibc-2.23.tar.xz',
-    '456995968f3acadbed39f5eba31678df',
+    'http://mirror.netcologne.de/gnu/libc/glibc-2.24.tar.xz',
+    '97dc5517f92016f3d70d83e3162ad318',
     'include/unistd.h',
     [
         '--enable-static-nss',
