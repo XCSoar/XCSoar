@@ -73,8 +73,8 @@ freetype = FreeTypeProject(
 )
 
 curl = AutotoolsProject(
-    'http://curl.haxx.se/download/curl-7.49.1.tar.lzma',
-    'ae5e5e395da413d1fa0864e1d0a3fa57',
+    'http://curl.haxx.se/download/curl-7.50.3.tar.lzma',
+    '6080c1eb3e72d5da6c892ba72a074ad2',
     'lib/libcurl.a',
     [
         '--disable-shared', '--enable-static',
