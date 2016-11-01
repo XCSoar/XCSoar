@@ -36,26 +36,6 @@ if [ -f /mnt/onboard/.kobo/Kobo.tgz -o -f /mnt/onboard/.kobo/KoboRoot.tgz \
     -o -f /mnt/onboard/XCSoarData/kobo/start_nickel \
     -o ! -x /opt/xcsoar/bin/KoboMenu ]; then
 
-    # check the kernel
-    /bin/mkdir -p /proc /dev
-    /bin/mount -t proc none /proc
-
-    if zcat /proc/config.gz |grep -q ^CONFIG_USB_EHCI_ARC_OTG=y; then
-        # this is the USB-OTG kernel, but Nickel should better have
-        # the original Kobo kernel; install it and reboot
-        /bin/mount -t tmpfs none /dev
-        /bin/mknod /dev/mmcblk0 b 179 0
-        if [ -f /opt/xcsoar/lib/kernel/uImage.kobo ] && zcat /proc/config.gz |grep -q ^CONFIG_ARCH_MX5=y; then
-            echo "Switch to Kobo Mini kernel"
-            dd if=/opt/xcsoar/lib/kernel/uImage.kobo of=/dev/mmcblk0 bs=512 seek=2048 && sync && reboot
-        elif [ -f /opt/xcsoar/lib/kernel/uImage.glohd ] && zcat /proc/config.gz |grep -q ^CONFIG_ARCH_MX6=y; then
-            echo "Switch to Kobo Glo HD kernel"
-            dd if=/opt/xcsoar/lib/kernel/uImage.glohd of=/dev/mmcblk0 bs=512 seek=2048 && sync && reboot
-        fi
-    fi
-
-    umount /proc
-
     rm -f /mnt/onboard/XCSoarData/kobo/start_nickel
     # launch user script before nickel start
     if [ -f /mnt/onboard/XCSoarData/kobo/init_nickel.sh ]; then
