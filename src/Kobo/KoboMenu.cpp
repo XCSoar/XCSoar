@@ -35,6 +35,7 @@ Copyright_License {
 #include "Form/ActionListener.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Canvas.hpp"
+#include "Kernel.hpp"
 #include "System.hpp"
 #include "NetworkDialog.hpp"
 #include "SystemDialog.hpp"
@@ -99,7 +100,8 @@ public:
 void
 KoboMenuWidget::CreateButtons(WidgetDialog &buttons)
 {
-  buttons.AddButton(("Nickel"), dialog, LAUNCH_NICKEL);
+  buttons.AddButton(("Nickel"), dialog, LAUNCH_NICKEL)
+      ->SetEnabled(!IsKoboOTGKernel());
   buttons.AddButton(("Tools"), *this, TOOLS);
   buttons.AddButton(_("Network"), *this, NETWORK);
   buttons.AddButton("System", *this, SYSTEM);
