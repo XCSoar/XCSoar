@@ -74,7 +74,8 @@ SystemWidget::SwitchKernel()
   if (model != KoboModel::MINI &&
       model != KoboModel::TOUCH2 &&
       model != KoboModel::GLO_HD &&
-      ShowMessageBox(_T("This feature was designed for the Kobo Mini, Touch 2.0 and Glo HD, but this is not one.  Use at your own risk.  Continue?"),
+      model != KoboModel::AURA2 &&
+      ShowMessageBox(_T("This feature was designed for the Kobo Mini, Touch 2.0, Glo HD and Aura 2, but this is not one.  Use at your own risk.  Continue?"),
                      _T("USB-OTG"), MB_YESNO) != IDYES)
     return;
 
