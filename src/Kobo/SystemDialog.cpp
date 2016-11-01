@@ -72,6 +72,7 @@ SystemWidget::SwitchKernel()
 #ifdef KOBO
   KoboModel model = DetectKoboModel();
   if (model != KoboModel::MINI &&
+      model != KoboModel::GLO &&
       model != KoboModel::TOUCH2 &&
       model != KoboModel::GLO_HD &&
       model != KoboModel::AURA2 &&
@@ -86,6 +87,11 @@ SystemWidget::SwitchKernel()
   case KoboModel::TOUCH2:
     otg_kernel_image = "/opt/xcsoar/lib/kernel/uImage.glohd.otg";
     kobo_kernel_image = "/opt/xcsoar/lib/kernel/uImage.glohd";
+    break;
+
+  case KoboModel::AURA2:
+    otg_kernel_image = "/opt/xcsoar/lib/kernel/uImage.aura2.otg";
+    kobo_kernel_image = "/opt/xcsoar/lib/kernel/uImage.aura2";
     break;
 
   default:

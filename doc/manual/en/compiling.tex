@@ -364,7 +364,8 @@ git clone git://git.xcsoar.org/xcsoar/max/linux.git
 \end{verbatim*}
 
 Check out the correct branch. For the Kobo Mini, this is the "kobo" branch,
-for the Kobo Glo HD, the branch is called "kobo-glohd".
+for the Kobo Glo HD, the branch is called "kobo-glohd", and for the Kobo Aura 2,
+use the branch "kobo-aura2".
 
 \begin{verbatim*}
 git checkout kobo
@@ -373,8 +374,8 @@ git checkout kobo
 Configure the kernel using the configuration files from the \texttt{kobo/kernel}
 directory in XCSoar's \texttt{git} repository. For the Kobo Mini, install a
 \href{http://openlinux.amlogic.com:8000/download/ARM/gnutools/arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2}{gcc
-  4.4 cross compiler}, for example in \texttt{/opt}. For the Kobo Glo HD,
-install a
+  4.4 cross compiler}, for example in \texttt{/opt}. For the Kobo Glo HD and
+Aura 2, install a
 \href{https://launchpad.net/gcc-arm-embedded/4.6/4.6-2012-q4-update/+download/gcc-arm-none-eabi-4_6-2012q4-20121016.tar.bz2}{gcc
   4.6 cross compiler}
 
@@ -407,8 +408,9 @@ permanently, install it in \texttt{/opt/xcsoar/lib/kernel}.  Read the
 file \texttt{kobo/rcS} to find out more about this.
 
 To include kernel images in \texttt{KoboRoot.tgz}, copy
-\texttt{uImage.otg}, \texttt{uImage.kobo}, \texttt{uImage.glohd.otg} and
-\texttt{uImage.glohd} to \texttt{/opt/kobo/kernel}.
+\texttt{uImage.otg}, \texttt{uImage.kobo}, \texttt{uImage.glohd.otg},
+\texttt{uImage.glohd}, \texttt{uImage.aura2} and \texttt{uImage.aura2.otg} to
+\texttt{/opt/kobo/kernel}.
 
 \subsection{Editing the Manuals}
 
