@@ -1,6 +1,8 @@
 Version 6.8.8 - not yet released
 * weather
   - update source URLs for METARs and TAFs
+* Kobo
+  - support for Kobo Aura Edition 2
 
 Version 6.8.7 - 2016/08/12
 * data files
