@@ -796,6 +796,7 @@ ifeq ($(HAVE_CE),y)
     TARGET_CPPFLAGS += -DHAVE_AYGSHELL_DLL
     TARGET_CPPFLAGS += -DHAVE_IMGDECMP_DLL
   endif
+  TARGET_LDLIBS += -latomic
 endif
 
 ifeq ($(TARGET),UNIX)

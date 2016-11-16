@@ -6,6 +6,8 @@ Version 6.8.13 - not yet released
   - use the full screen on very narrow/wide displays
 * Kobo
   - fix build failure with GCC 9
+* WinCE
+  - build with GCC 9
 * allow the hyphen in XCI files
 
 Version 6.8.12 - 2019/04/30

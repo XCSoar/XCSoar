@@ -49,15 +49,15 @@ sudo apt-get install make g++ \
 
 \section{For Windows Mobile (Windows CE) builds}
 
-\xc requires a special version of mingw32 \texttt{cegcc} compiler which was patched to enable compilation of the source. Download at: \href{http://max.kellermann.name/projects/cegcc/}{http://max.kellermann.name/projects/cegcc/}. We are using \texttt{mingw32ce-mk-2013-04-03-i386.tar.xz}.
+\xc requires a special version of mingw32 \texttt{cegcc} compiler which was patched to enable compilation of the source. Download at: \href{http://max.kellermann.name/projects/cegcc/}{http://max.kellermann.name/projects/cegcc/}. We are using \texttt{mingw32ce-mk-2020-03-23-amd64.tar.xz}.
 
 The compiler is installed locally in the user directory:
 
 \begin{verbatim}
 cd ~/opt/
-unxz mingw32ce-mk-2013-04-03-i386.tar.xz 
-tar xvf mingw32ce-mk-2013-04-03-i386.tar
-ln -s  mingw32ce-mk-2013-04-03-i386 mingw32ce
+unxz mingw32ce-mk-2020-03-23-i386.tar.xz
+tar xvf mingw32ce-mk-2020-03-23-i386.tar
+ln -s  mingw32ce-mk-2020-03-23-i386 mingw32ce
 \end{verbatim}
 
 The compiler needs to be added to the path in \texttt{.profile} and \texttt{.bashrc} with \emph{absolute} path. (so do not use \texttt{~/opt/mingw32ce/bin}), otherwise \texttt{cegcc} is not executed by \texttt{make} for some reason.

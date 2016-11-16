@@ -4,6 +4,10 @@ WARNINGS += -Wundef
 WARNINGS += -Wmissing-declarations
 WARNINGS += -Wredundant-decls
 
+ifeq ($(HAVE_CE),y)
+WARNINGS += -Wno-cast-function-type
+endif
+
 CXXFLAGS += $(WARNINGS)
 CXXFLAGS += -Wmissing-noreturn
 
