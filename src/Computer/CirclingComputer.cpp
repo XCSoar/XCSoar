@@ -157,6 +157,10 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
     if (!force_circling)
       break;
 
+#if GCC_CHECK_VERSION(7,0)
+    [[fallthrough]];
+#endif
+
   case CirclingMode::POSSIBLE_CLIMB:
     if (force_cruise) {
       circling_info.turn_mode = CirclingMode::CRUISE;
@@ -197,6 +201,10 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
     }
     if (!force_cruise)
       break;
+
+#if GCC_CHECK_VERSION(7,0)
+    [[fallthrough]];
+#endif
 
   case CirclingMode::POSSIBLE_CRUISE:
     if (force_circling) {

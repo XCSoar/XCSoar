@@ -72,9 +72,11 @@ SystemWidget::SwitchKernel()
 #ifdef KOBO
   KoboModel model = DetectKoboModel();
   if (model != KoboModel::MINI &&
+      model != KoboModel::GLO &&
       model != KoboModel::TOUCH2 &&
       model != KoboModel::GLO_HD &&
-      ShowMessageBox(_T("This feature was designed for the Kobo Mini, Touch 2.0 and Glo HD, but this is not one.  Use at your own risk.  Continue?"),
+      model != KoboModel::AURA2 &&
+      ShowMessageBox(_T("This feature was designed for the Kobo Mini, Touch 2.0, Glo HD and Aura 2, but this is not one.  Use at your own risk.  Continue?"),
                      _T("USB-OTG"), MB_YESNO) != IDYES)
     return;
 
@@ -85,6 +87,11 @@ SystemWidget::SwitchKernel()
   case KoboModel::TOUCH2:
     otg_kernel_image = "/opt/xcsoar/lib/kernel/uImage.glohd.otg";
     kobo_kernel_image = "/opt/xcsoar/lib/kernel/uImage.glohd";
+    break;
+
+  case KoboModel::AURA2:
+    otg_kernel_image = "/opt/xcsoar/lib/kernel/uImage.aura2.otg";
+    kobo_kernel_image = "/opt/xcsoar/lib/kernel/uImage.aura2";
     break;
 
   default:

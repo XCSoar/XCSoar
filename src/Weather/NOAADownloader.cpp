@@ -152,7 +152,7 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
   // Build file url
   char url[256];
   snprintf(url, sizeof(url),
-           "http://weather.noaa.gov/pub/data/observations/metar/decoded/%s.TXT",
+           "http://tgftp.nws.noaa.gov/data/observations/metar/decoded/%s.TXT",
            code);
 
   // Request the file
@@ -200,6 +200,9 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
   if (*p == 0 || !ParseDecodedDateTime(p, metar.last_update))
     return false;
 
+  if (BrokenDateTime::NowUTC() - metar.last_update > 24*60*60)
+    return false;
+
   // Search for line feed followed by "ob:"
   char *ob = strstr(p, "\nob:");
   if (ob == NULL)
@@ -243,7 +246,7 @@ NOAADownloader::DownloadTAF(const char *code, TAF &taf,
   // Build file url
   char url[256];
   snprintf(url, sizeof(url),
-           "http://weather.noaa.gov/pub/data/forecasts/taf/stations/%s.TXT",
+           "http://tgftp.nws.noaa.gov/data/forecasts/taf/stations/%s.TXT",
            code);
 
   // Request the file
@@ -269,6 +272,9 @@ NOAADownloader::DownloadTAF(const char *code, TAF &taf,
   // Parse date and time of last update
   const char *p = ParseDateTime(buffer, taf.last_update);
   if (p == buffer)
+    return false;
+
+  if (BrokenDateTime::NowUTC() - taf.last_update > 2*24*60*60)
     return false;
 
   // Skip characters until line feed or string end
