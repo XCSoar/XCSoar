@@ -45,6 +45,7 @@ Copyright_License {
 
 #ifdef WIN32
 #include <windows.h>
+#include <string.h>
 #endif
 
 #if defined(DM_DISPLAYORIENTATION) && defined(_WIN32_WCE) && _WIN32_WCE >= 0x400
