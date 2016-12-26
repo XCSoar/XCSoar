@@ -474,7 +474,8 @@ TopCanvas::Flip()
     uint32_t(enable_dither &&
              (/* use A2 mode only on some Kobo models */
               DetectKoboModel() == KoboModel::TOUCH2 ||
-              DetectKoboModel() == KoboModel::GLO_HD)
+              DetectKoboModel() == KoboModel::GLO_HD ||
+              DetectKoboModel() == KoboModel::AURA2)
              ? WAVEFORM_MODE_A2
              : WAVEFORM_MODE_AUTO),
     UPDATE_MODE_FULL, // PARTIAL
