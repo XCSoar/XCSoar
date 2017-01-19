@@ -265,8 +265,8 @@ thirdparty_libs = [
     ),
 
     AutotoolsProject(
-        'ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/libpng-1.6.26.tar.xz',
-        'faed9bb495d2e12dd0c9ec561ca60cd8',
+        'ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/libpng-1.6.28.tar.xz',
+        '425354f86c392318d31aedca71019372',
         'lib/libpng.a',
         [
             '--disable-shared', '--enable-static',
