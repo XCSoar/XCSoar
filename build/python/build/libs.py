@@ -22,8 +22,8 @@ glibc = AutotoolsProject(
 )
 
 openssl = OpenSSLProject(
-    'https://www.openssl.org/source/openssl-1.0.2j.tar.gz',
-    '96322138f0b69e61b7212bc53d5e912b',
+    'https://www.openssl.org/source/openssl-1.0.2k.tar.gz',
+    '6b3977c61f2aedf0f96367dcfb5c6e578cf37e7b8d913b4ecb6643c3cb88d8c0',
     'include/openssl/ossl_typ.h',
 )
 
