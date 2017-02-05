@@ -1,4 +1,3 @@
 no_locale.diff
 ublas_no_serialization.patch
-no_log.diff
 no_TRUE_FALSE.diff
