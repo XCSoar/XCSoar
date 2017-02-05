@@ -128,8 +128,8 @@ libjpeg = AutotoolsProject(
 )
 
 libtiff = AutotoolsProject(
-    'http://download.osgeo.org/libtiff/tiff-4.0.6.tar.gz',
-    'd1d2e940dea0b5ad435f21f03d96dd72',
+    'http://download.osgeo.org/libtiff/tiff-4.0.7.tar.gz',
+    '9f43a2cfb9589e5cecaa66e16bf87f814c945f22df7ba600d63aac4632c4f019',
     'lib/libtiff.a',
     [
         '--disable-shared', '--enable-static',
