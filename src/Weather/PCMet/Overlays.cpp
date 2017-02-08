@@ -89,13 +89,15 @@ FindLatestOverlay(PCMet::OverlayInfo &info)
   struct Visitor : public File::Visitor {
     PCMet::OverlayInfo &info;
     uint64_t latest_modification;
+    uint64_t now;
 
     explicit Visitor(PCMet::OverlayInfo &_info)
-      :info(_info), latest_modification(0) {}
+      :info(_info), latest_modification(0), now(File::Now()) {}
 
     void Visit(Path path, Path) override {
       uint64_t last_modification = File::GetLastModification(path);
-      if (last_modification > latest_modification) {
+      if (last_modification > latest_modification &&
+          last_modification <= now) {
         latest_modification = last_modification;
         info.path = path;
       }
