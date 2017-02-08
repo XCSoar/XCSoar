@@ -36,11 +36,16 @@ Copyright_License {
 #include <geotiff.h>
 #include <geo_normalize.h>
 #include <geovalues.h>
+#include <xtiffio.h>
 #endif
 
 static TIFF *
 TiffOpen(Path path, const char *mode)
 {
+#ifdef USE_GEOTIFF
+  XTIFFInitialize();
+#endif
+
 #ifdef _UNICODE
   return TIFFOpenW(path.c_str(), mode);
 #else
