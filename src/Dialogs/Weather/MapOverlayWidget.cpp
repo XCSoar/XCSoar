@@ -363,6 +363,8 @@ WeatherMapOverlayListWidget::UseClicked(unsigned i)
                                             BrokenDateTime::NowUTC(),
                                             settings, runner);
       SetOverlay(overlay.path, info.label.c_str());
+      items[i].path = AllocatedPath(overlay.path.c_str());
+      UpdatePreview(items[i].path);
     } catch (const std::exception &exception) {
       ShowError(exception, _T("pc_met"));
     }
