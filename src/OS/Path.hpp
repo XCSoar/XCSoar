@@ -181,7 +181,6 @@ private:
   AllocatedPath(value_type &&src):value(std::move(src)) {}
 
 public:
-  AllocatedPath(const AllocatedPath &) = default;
   AllocatedPath(AllocatedPath &&) = default;
 
   AllocatedPath(std::nullptr_t n):value(n) {}
@@ -212,7 +211,6 @@ public:
     return Build(a, b.c_str());
   }
 
-  AllocatedPath &operator=(const AllocatedPath &) = default;
   AllocatedPath &operator=(AllocatedPath &&) = default;
 
   AllocatedPath &operator=(std::nullptr_t n) {
