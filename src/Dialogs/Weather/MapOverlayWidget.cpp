@@ -62,7 +62,7 @@ class WeatherMapOverlayListWidget final
     std::unique_ptr<PCMet::OverlayInfo> pc_met;
 
     explicit Item(PCMet::OverlayInfo &&_pc_met)
-      :name(_pc_met.label.c_str()), path(nullptr),
+      :name(_pc_met.label.c_str()), path(_pc_met.path.c_str()),
        pc_met(new PCMet::OverlayInfo(std::move(_pc_met))) {}
 
     Item(const TCHAR *_name, Path _path)
