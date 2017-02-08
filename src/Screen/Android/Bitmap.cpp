@@ -138,7 +138,7 @@ Bitmap::LoadFile(Path path)
 
   Reset();
 
-  auto *new_bmp = native_view->loadFileBitmap(path.c_str());
+  auto *new_bmp = native_view->loadFileBitmap(path);
   if (new_bmp == nullptr)
     return false;
 

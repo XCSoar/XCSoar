@@ -27,6 +27,8 @@ Copyright_License {
 #include "Screen/Custom/UncompressedImage.hpp"
 #include "NativeView.hpp"
 
+#include <tchar.h>
+
 Java::TrivialClass NativeView::cls;
 jfieldID NativeView::textureNonPowerOfTwo_field;
 jmethodID NativeView::init_surface_method, NativeView::deinit_surface_method;
@@ -85,9 +87,9 @@ NativeView::Deinitialise(JNIEnv *env)
   cls.Clear(env);
 }
 
-jobject NativeView::loadFileTiff(const char *path)
+jobject NativeView::loadFileTiff(Path path)
 {
-  UncompressedImage image = LoadTiff(Path(path));
+  UncompressedImage image = LoadTiff(path);
 
   // create a Bitmap.Config enum
   Java::String config_name(env, "ARGB_8888");
@@ -112,12 +114,12 @@ jobject NativeView::loadFileTiff(const char *path)
   return bitmap;
 }
 
-jobject NativeView::loadFileBitmap(const char *path)
+jobject NativeView::loadFileBitmap(Path path)
 {
-  if (StringEndsWithIgnoreCase(path, ".tif") ||
-      StringEndsWithIgnoreCase(path, ".tiff"))
+  if (path.MatchesExtension(_T(".tif")) ||
+      path.MatchesExtension(_T(".tiff")))
     return loadFileTiff(path);
 
-  Java::String path2(env, path);
+  Java::String path2(env, path.c_str());
   return env->CallObjectMethod(obj, loadFileBitmap_method, path2.Get());
 }

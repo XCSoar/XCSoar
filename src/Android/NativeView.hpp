@@ -27,6 +27,7 @@ Copyright_License {
 #include "Java/Object.hxx"
 #include "Java/Class.hxx"
 #include "Java/String.hxx"
+#include "OS/Path.hpp"
 
 #ifndef NO_SCREEN
 #include "Screen/Point.hpp"
@@ -136,9 +137,9 @@ public:
     return env->CallObjectMethod(obj, loadResourceBitmap_method, name2.Get());
   }
 
-  jobject loadFileTiff(const char *path);
+  jobject loadFileTiff(Path path);
 
-  jobject loadFileBitmap(const char *path);
+  jobject loadFileBitmap(Path path);
 
   bool bitmapToTexture(jobject bmp, bool alpha, jint *result) {
     jintArray result2 = env->NewIntArray(5);
