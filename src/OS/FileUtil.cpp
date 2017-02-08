@@ -38,6 +38,7 @@ Copyright_License {
 #include <unistd.h>
 #include <fnmatch.h>
 #include <utime.h>
+#include <time.h>
 #else
 #include <windows.h>
 #endif
@@ -353,6 +354,33 @@ File::GetLastModification(Path path)
 
   return data.ftLastWriteTime.dwLowDateTime |
          ((uint64_t)data.ftLastWriteTime.dwHighDateTime << 32);
+#endif
+}
+
+#ifndef HAVE_POSIX
+
+constexpr
+static uint64_t
+FileTimeToInteger(FILETIME ft)
+{
+  return ft.dwLowDateTime | ((uint64_t)ft.dwHighDateTime << 32);
+}
+
+#endif
+
+uint64_t
+File::Now()
+{
+#ifdef HAVE_POSIX
+  return time(nullptr);
+#else
+  SYSTEMTIME system_time;
+  GetSystemTime(&system_time);
+
+  FILETIME system_time2;
+  SystemTimeToFileTime(&system_time, &system_time2);
+
+  return FileTimeToInteger(system_time2);
 #endif
 }
 

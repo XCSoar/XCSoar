@@ -173,6 +173,13 @@ namespace File
   uint64_t GetLastModification(Path path);
 
   /**
+   * Get a timestamp that can be used to compare to file timestamps
+   * @return a timestamp for comparison
+   */
+  gcc_pure
+  uint64_t Now();
+
+  /**
    * Sets the modification timestamp of the file to the current system time
    * @param path Path to the file
    * @return True in case of success, False otherwise

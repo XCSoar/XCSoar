@@ -27,7 +27,6 @@ Copyright_License {
 
 #include <stdint.h>
 #include <string.h>
-#include <time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -37,34 +36,6 @@ Copyright_License {
 #endif
 
 static constexpr unsigned FILE_CACHE_MAGIC = 0xab352f8a;
-
-#ifndef HAVE_POSIX
-
-constexpr
-static uint64_t
-FileTimeToInteger(FILETIME ft)
-{
-  return ft.dwLowDateTime | ((uint64_t)ft.dwHighDateTime << 32);
-}
-
-#endif
-
-gcc_pure
-static uint64_t
-Now()
-{
-#ifdef HAVE_POSIX
-  return time(nullptr);
-#else
-  SYSTEMTIME system_time;
-  GetSystemTime(&system_time);
-
-  FILETIME system_time2;
-  SystemTimeToFileTime(&system_time, &system_time2);
-
-  return FileTimeToInteger(system_time2);
-#endif
-}
 
 struct FileInfo {
   uint64_t mtime;
@@ -83,7 +54,7 @@ struct FileInfo {
    */
   gcc_pure
   bool IsFuture() const {
-    return mtime > Now();
+    return mtime > File::Now();
   }
 };
 
