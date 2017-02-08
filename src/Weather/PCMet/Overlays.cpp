@@ -121,8 +121,6 @@ PCMet::DownloadOverlay(const OverlayInfo &info, BrokenDateTime now_utc,
   auto path = AllocatedPath::Build(cache_path,
                                    UTF8ToWideConverter(url.c_str() + sizeof(PCMET_FTP)));
 
-  /* TODO: what if file exists already?  Reuse? */
-
   {
     const WideToUTF8Converter username(settings.ftp_credentials.username);
     const WideToUTF8Converter password(settings.ftp_credentials.password);
