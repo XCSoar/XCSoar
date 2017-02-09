@@ -446,8 +446,7 @@ public:
   /**
    * Copy pixels from this object to a texture.  The texture must be
    * initialised already.  Note that the texture will be flipped
-   * vertically, and to draw it back to the screen, you need
-   * GLTexture::DrawFlipped().
+   * vertically. So the texture must be created with flipped=true.
    */
   void CopyToTexture(GLTexture &texture, PixelRect src_rc) const;
 };

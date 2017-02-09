@@ -55,10 +55,14 @@ protected:
    */
   PixelSize allocated_size;
 
+  /** Texture may be vertically flipped. */
+  bool flipped;
+
 public:
 #ifdef ANDROID
-  GLTexture(GLuint _id, PixelSize _size, PixelSize _allocated_size)
-    :id(_id), size(_size), allocated_size(_allocated_size) {
+  GLTexture(GLuint _id, PixelSize _size, PixelSize _allocated_size,
+            bool _flipped = false)
+    :id(_id), size(_size), allocated_size(_allocated_size), flipped(_flipped) {
 #ifndef NDEBUG
     assert(allocated_size.cx >= size.cx);
     assert(allocated_size.cy >= size.cy);
@@ -71,10 +75,11 @@ public:
   /**
    * Create a texture with undefined content.
    */
-  explicit GLTexture(PixelSize _size);
+  explicit GLTexture(PixelSize _size, bool _flipped = false);
 
   GLTexture(GLint internal_format, PixelSize _size,
-            GLenum format, GLenum type, const GLvoid *data);
+            GLenum format, GLenum type, const GLvoid *data,
+            bool _flipped = false);
 
   ~GLTexture() {
     glDeleteTextures(1, &id);
@@ -121,6 +126,10 @@ public:
     return allocated_size;
   }
 
+  bool IsFlipped() const {
+    return flipped;
+  }
+
   /**
    * Enable interpolation when minifying/magnifying the texture.  The
    * caller must bind the texture prior to calling this method.
@@ -140,7 +149,6 @@ protected:
 #ifdef HAVE_OES_DRAW_TEXTURE
 private:
   void DrawOES(PixelRect dest, PixelRect src) const;
-  void DrawFlippedOES(PixelRect dest, PixelRect src) const;
 #endif
 
 public:
@@ -158,12 +166,6 @@ public:
   void Draw(PixelPoint dest) const {
     Draw(PixelRect(dest, GetSize()), GetRect());
   }
-
-  /**
-   * Just like Draw(), but flip the texture vertically.  This is used
-   * for textures that were recorded with glCopyTexSubImage2D().
-   */
-  void DrawFlipped(PixelRect dest, PixelRect src) const;
 };
 
 #endif
