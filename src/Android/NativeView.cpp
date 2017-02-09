@@ -87,6 +87,17 @@ NativeView::Deinitialise(JNIEnv *env)
   cls.Clear(env);
 }
 
+static void
+ConvertABGRToARGB(UncompressedImage &image)
+{
+  // TODO: Get rid of the const_cast! Maybe move this to UncompressedImage?
+  uint8_t *data = static_cast<uint8_t *>(const_cast<void *>(image.GetData()));
+  const uint8_t *data_end = data + image.GetWidth() * image.GetHeight() * 4;
+  for (uint8_t *p = data; p != data_end; p +=4) {
+    std::swap(p[0], p[2]);
+  }
+}
+
 jobject NativeView::loadFileTiff(Path path)
 {
   UncompressedImage image = LoadTiff(path);
@@ -96,7 +107,10 @@ jobject NativeView::loadFileTiff(Path path)
   jobject bitmap_config = env->CallStaticObjectMethod(
     clsBitmapConfig, bitmapConfigValueOf_method, config_name.Get());
 
-  // TODO: convert ABGR to ARGB
+  // convert ABGR to ARGB
+  // TODO: I am not sure if this conversion depends on endianess. So
+  //       it might be wrong for Intel CPUs?!
+  ConvertABGRToARGB(image);
 
   // create int array
   unsigned size = image.GetWidth() * image.GetHeight();
