@@ -75,7 +75,7 @@ LoadResourceBitmap(ResourceId id)
 }
 
 bool
-Bitmap::Set(JNIEnv *env, jobject _bmp, Type _type)
+Bitmap::Set(JNIEnv *env, jobject _bmp, Type _type, bool flipped)
 {
   assert(bmp == nullptr);
   assert(_bmp != nullptr);
@@ -90,7 +90,7 @@ Bitmap::Set(JNIEnv *env, jobject _bmp, Type _type)
 
   AddSurfaceListener(*this);
 
-  if (surface_valid && !MakeTexture(bmp, type)) {
+  if (surface_valid && !MakeTexture(bmp, type, flipped)) {
     Reset();
     return false;
   }
@@ -99,7 +99,7 @@ Bitmap::Set(JNIEnv *env, jobject _bmp, Type _type)
 }
 
 bool
-Bitmap::MakeTexture(jobject _bmp, Type _type)
+Bitmap::MakeTexture(jobject _bmp, Type _type, bool flipped)
 {
   assert(_bmp != nullptr);
 
@@ -108,7 +108,7 @@ Bitmap::MakeTexture(jobject _bmp, Type _type)
     return false;
 
   texture = new GLTexture(result[0], PixelSize(result[1], result[2]),
-                          PixelSize(result[3], result[4]));
+                          PixelSize(result[3], result[4]), flipped);
   if (interpolation) {
     texture->Bind();
     texture->EnableInterpolation();
@@ -138,11 +138,18 @@ Bitmap::LoadFile(Path path)
 
   Reset();
 
-  auto *new_bmp = native_view->loadFileBitmap(path);
+  jobject new_bmp;
+  bool flipped = false;
+  if (path.MatchesExtension(_T(".tif")) || path.MatchesExtension(_T(".tiff"))) {
+    new_bmp = native_view->loadFileTiff(path);
+    flipped = true;
+  } else {
+    new_bmp = native_view->loadFileBitmap(path);
+  }
   if (new_bmp == nullptr)
     return false;
 
-  return Set(Java::GetEnv(), new_bmp, Type::STANDARD);
+  return Set(Java::GetEnv(), new_bmp, Type::STANDARD, flipped);
 }
 
 void

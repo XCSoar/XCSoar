@@ -130,10 +130,6 @@ jobject NativeView::loadFileTiff(Path path)
 
 jobject NativeView::loadFileBitmap(Path path)
 {
-  if (path.MatchesExtension(_T(".tif")) ||
-      path.MatchesExtension(_T(".tiff")))
-    return loadFileTiff(path);
-
   Java::String path2(env, path.c_str());
   return env->CallObjectMethod(obj, loadFileBitmap_method, path2.Get());
 }

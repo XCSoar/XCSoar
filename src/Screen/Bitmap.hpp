@@ -235,8 +235,8 @@ private:
   bool MakeTexture(const UncompressedImage &uncompressed, Type type);
 
 #ifdef ANDROID
-  bool Set(JNIEnv *env, jobject _bmp, Type _type);
-  bool MakeTexture(jobject _bmp, Type _type);
+  bool Set(JNIEnv *env, jobject _bmp, Type _type, bool flipped = false);
+  bool MakeTexture(jobject _bmp, Type _type, bool flipped = false);
 
   /* from GLSurfaceListener */
   virtual void SurfaceCreated() override;
