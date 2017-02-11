@@ -95,8 +95,6 @@ ProgressBar::OnPaint(Canvas &canvas)
   }
 
 #ifdef ROUND_PROGRESS_BAR
-  unsigned margin = GetHeight() / 9;
-
   canvas.SelectNullPen();
   canvas.SelectWhiteBrush();
   canvas.DrawRoundRectangle(0, 0, GetWidth(), GetHeight(),
@@ -104,8 +102,20 @@ ProgressBar::OnPaint(Canvas &canvas)
 
   Brush progress_brush(IsDithered() ? COLOR_BLACK : COLOR_XCSOAR_LIGHT);
   canvas.Select(progress_brush);
-  canvas.DrawRoundRectangle(margin, margin, margin + position,
-                            GetHeight() - margin, GetHeight(), GetHeight());
+  unsigned margin = GetHeight() / 9;
+  unsigned top, bottom;
+  if (position <= GetHeight() - 2 * margin) {
+    // Use a centered "circle" for small position values. This keeps the progress
+    // bar inside the background.
+    unsigned center_y = GetHeight() / 2;
+    top = center_y - position / 2;
+    bottom = center_y + position / 2;
+  } else {
+    top = margin;
+    bottom = GetHeight() - margin;
+  }
+  canvas.DrawRoundRectangle(margin, top, margin + position, bottom,
+                            GetHeight(), GetHeight());
 #else
   canvas.DrawFilledRectangle(0, 0, position, GetHeight(),
                              IsDithered() ? COLOR_BLACK : COLOR_GREEN);
