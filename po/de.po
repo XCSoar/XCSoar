@@ -6031,11 +6031,11 @@ msgstr "Aktivieren/Abschalten der Luftraumwarnungen."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:212
 msgid "Warnings dialog"
-msgstr "Warnungen"
+msgstr "Warnungsfenster"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:213
 msgid "Enable/disable displaying airspaces warnings dialog."
-msgstr "Aktivieren/deaktivieren von Luftraumwarnungen"
+msgstr "Aktivieren/deaktivieren der Anzeige des Luftraumwarnfensters"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:217
 msgid "Warning time"
