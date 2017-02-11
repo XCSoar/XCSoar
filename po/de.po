@@ -6410,7 +6410,7 @@ msgid ""
 "Controls whether the \"final glide\" InfoBox mode should be used on \"auto\" "
 "pages."
 msgstr ""
-"Bestimmt, ob das \"Endanflug\" InfoBox-Set für fur \"Auto\" Seite gezeigt "
+"Bestimmt, ob das \"Endanflug\" InfoBox-Set auf der \"Auto\" Seite benutzt "
 "wird."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:98
