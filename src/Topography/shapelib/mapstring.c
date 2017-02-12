@@ -910,7 +910,7 @@ char ** msStringSplitComplex( const char * pszString,
   int         bStripLeadSpaces = (nFlags & MS_STRIPLEADSPACES);
   int         bStripEndSpaces = (nFlags & MS_STRIPENDSPACES);
 
-  pszToken = (char *) msSmallMalloc(sizeof(char)*10);;
+  pszToken = (char *) msSmallMalloc(sizeof(char)*10);
   nTokenMax = 10;
 
   while( pszString != NULL && *pszString != '\0' ) {

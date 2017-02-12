@@ -178,7 +178,7 @@ bool
 InterfaceConfigPanel::Save(bool &_changed)
 {
   UISettings &settings = CommonInterface::SetUISettings();
-  bool changed = false;;
+  bool changed = false;
 
   if (SaveValueEnum(UIScale, ProfileKeys::UIScale,
                     settings.scale))

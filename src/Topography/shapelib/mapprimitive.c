@@ -1050,7 +1050,7 @@ void msTransformShapeToPixelRound(shapeObj *shape, rectObj extent, double cellsi
   inv_cs = 1.0 / cellsize; /* invert and multiply much faster */
   if(shape->type == MS_SHAPE_LINE || shape->type == MS_SHAPE_POLYGON) { /* remove duplicate vertices */
     for(i=0; i<shape->numlines; i++) { /* for each part */
-      shape->line[i].point[0].x = MS_MAP2IMAGE_X_IC(shape->line[i].point[0].x, extent.minx, inv_cs);;
+      shape->line[i].point[0].x = MS_MAP2IMAGE_X_IC(shape->line[i].point[0].x, extent.minx, inv_cs);
       shape->line[i].point[0].y = MS_MAP2IMAGE_Y_IC(shape->line[i].point[0].y, extent.maxy, inv_cs);
       for(j=1, k=1; j < shape->line[i].numpoints; j++ ) {
         shape->line[i].point[k].x = MS_MAP2IMAGE_X_IC(shape->line[i].point[j].x, extent.minx, inv_cs);

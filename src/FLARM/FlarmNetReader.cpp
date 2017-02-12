@@ -148,5 +148,5 @@ try {
   FileLineReaderA file(path);
   return LoadFile(file, database);
 } catch (const std::runtime_error &e) {
-  return 0;;
+  return 0;
 }
