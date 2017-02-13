@@ -26,6 +26,7 @@ Copyright_License {
 namespace ProfileKeys {
 
 const char UIScale[] = "UIScale";
+const char CustomDPI[] = "CustomDPI";
 const char Password[] = "Password";
 const char AirspaceWarning[] = "AirspaceWarn";
 const char AirspaceWarningDialog[] = "AirspaceWarnDialog";

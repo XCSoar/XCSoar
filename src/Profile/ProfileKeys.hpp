@@ -28,6 +28,7 @@ namespace ProfileKeys {
 
 extern const char ShowMenuButton[];
 extern const char UIScale[];
+extern const char CustomDPI[];
 extern const char Password[];
 extern const char SpeedUnitsValue[];
 extern const char DistanceUnitsValue[];

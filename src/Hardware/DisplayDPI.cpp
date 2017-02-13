@@ -110,7 +110,7 @@ GetDPI()
 #endif
 
 void
-Display::SetDPI(unsigned x_dpi, unsigned y_dpi)
+Display::SetForcedDPI(unsigned x_dpi, unsigned y_dpi)
 {
 #ifndef ANDROID
   forced_x_dpi = x_dpi;
@@ -119,12 +119,15 @@ Display::SetDPI(unsigned x_dpi, unsigned y_dpi)
 }
 
 unsigned
-Display::GetXDPI()
+Display::GetXDPI(unsigned custom_dpi)
 {
 #ifndef ANDROID
   if (forced_x_dpi > 0)
     return forced_x_dpi;
 #endif
+
+  if (custom_dpi)
+    return custom_dpi;
 
 #ifdef WIN32
   RootDC dc;
@@ -144,12 +147,15 @@ Display::GetXDPI()
 }
 
 unsigned
-Display::GetYDPI()
+Display::GetYDPI(unsigned custom_dpi)
 {
 #ifndef ANDROID
   if (forced_y_dpi > 0)
     return forced_y_dpi;
 #endif
+
+  if (custom_dpi)
+    return custom_dpi;
 
 #ifdef WIN32
   RootDC dc;

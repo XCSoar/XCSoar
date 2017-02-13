@@ -32,24 +32,26 @@ namespace Display {
    * @param x Number of pixels per logical inch along the screen width
    * @param y Number of pixels per logical inch along the screen height
    */
-  void SetDPI(unsigned x_dpi, unsigned y_dpi);
+  void SetForcedDPI(unsigned x_dpi, unsigned y_dpi);
 
   /**
    * Returns the number of pixels per logical inch along the screen width
+   * @param custom_dpi overide system dpi settings, but not command line dpi
    * @return Number of pixels per logical inch along the screen width
    */
 #ifndef __APPLE__
   gcc_const
 #endif
-  unsigned GetXDPI();
+  unsigned GetXDPI(unsigned custom_dpi=0);
   /**
    * Returns the number of pixels per logical inch along the screen height
+   * @param custom_dpi overide system dpi settings, but not command line dpi
    * @return Number of pixels per logical inch along the screen height
    */
 #ifndef __APPLE__
   gcc_const
 #endif
-  unsigned GetYDPI();
+  unsigned GetYDPI(unsigned custom_dpi=0);
 }
 
 #endif

@@ -49,6 +49,9 @@ struct UISettings {
 
   unsigned scale;
 
+  /** Override OS dpi settings */
+  unsigned custom_dpi;
+
   /** Show ThermalAssistant if circling */
   bool enable_thermal_assistant_gauge;
 

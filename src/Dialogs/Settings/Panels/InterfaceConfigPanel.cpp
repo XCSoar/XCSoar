@@ -40,6 +40,7 @@ Copyright_License {
 
 enum ControlIndex {
   UIScale,
+  CustomDPI,
   InputFile,
 #ifndef HAVE_NATIVE_GETTEXT
   LanguageFile,
@@ -88,6 +89,28 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              nullptr,
              _T("%d %%"), _T("%d"), 75, 200, 5,
              settings.scale);
+
+  WndProperty *wp_dpi = AddEnum(_("Display Resolution"),
+                                _("The display resolution is used to adapt line widths, "
+                                  "font size, landable size and more."));
+  if (wp_dpi != nullptr) {
+    static constexpr unsigned dpi_choices[] = {
+      120, 160, 240, 260, 280, 300, 340, 360, 400, 420, 520,
+    };
+    const unsigned *dpi_choices_end =
+      dpi_choices + sizeof(dpi_choices) / sizeof(dpi_choices[0]);
+
+    DataFieldEnum &df = *(DataFieldEnum *)wp_dpi->GetDataField();
+    df.AddChoice(0, _("Automatic"));
+    for (const unsigned *dpi = dpi_choices; dpi != dpi_choices_end; ++dpi) {
+      TCHAR buffer[20];
+      _stprintf(buffer, _("%d dpi"), *dpi);
+      df.AddChoice(*dpi, buffer);
+    }
+    df.Set(settings.custom_dpi);
+    wp_dpi->RefreshDisplay();
+  }
+  SetExpertRow(CustomDPI);
 
   AddFile(_("Events"),
           _("The Input Events file defines the menu system and how XCSoar responds to "
@@ -182,6 +205,10 @@ InterfaceConfigPanel::Save(bool &_changed)
 
   if (SaveValueEnum(UIScale, ProfileKeys::UIScale,
                     settings.scale))
+    require_restart = changed = true;
+
+  if (SaveValueEnum(CustomDPI, ProfileKeys::CustomDPI,
+                    settings.custom_dpi))
     require_restart = changed = true;
 
   if (SaveValueFileReader(InputFile, ProfileKeys::InputFile))

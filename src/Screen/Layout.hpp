@@ -88,8 +88,10 @@ namespace Layout
    *
    * @param screen_size the size of the screen in pixels
    * @param ui_scale the UI scale setting in percent
+   * @param custom_dpi user defined DPI setting or 0 for system settings
    */
-  void Initialize(PixelSize screen_size, unsigned ui_scale=100);
+  void Initialize(PixelSize screen_size, unsigned ui_scale=100,
+                  unsigned custom_dpi=0);
 
   /**
    * Is scaling supported by this platform?

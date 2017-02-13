@@ -189,7 +189,8 @@ void
 MainWindow::Initialise()
 {
   Layout::Initialize(GetSize(),
-                     CommonInterface::GetUISettings().GetPercentScale());
+                     CommonInterface::GetUISettings().GetPercentScale(),
+                     CommonInterface::GetUISettings().custom_dpi);
 
   LogFormat("Initialise fonts");
   if (!Fonts::Initialize()) {
@@ -512,7 +513,8 @@ void
 MainWindow::OnResize(PixelSize new_size)
 {
   Layout::Initialize(new_size,
-                     CommonInterface::GetUISettings().GetPercentScale());
+                     CommonInterface::GetUISettings().GetPercentScale(),
+                     CommonInterface::GetUISettings().custom_dpi);
 
   SingleWindow::OnResize(new_size);
 

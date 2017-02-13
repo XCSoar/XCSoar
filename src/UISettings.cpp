@@ -32,6 +32,8 @@ UISettings::SetDefaults()
 
   scale = 100;
 
+  custom_dpi = 0;  // automatic
+
   enable_thermal_assistant_gauge = true;
 
   enable_airspace_warning_dialog = true;
