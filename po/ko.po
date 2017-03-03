@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-08-12 14:15+0200\n"
-"PO-Revision-Date: 2016-06-01 14:22+0000\n"
+"PO-Revision-Date: 2016-08-15 14:41+0000\n"
 "Last-Translator: Dongwon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-06-10 13:16+0000\n"
-"X-Generator: Launchpad (build 18097)\n"
+"X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
+"X-Generator: Launchpad (build 18329)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -4671,13 +4671,12 @@ msgid "This allows switching on or off the automatic wind algorithm."
 msgstr "이 설정은 바람표시 알고리즘을 켜고 끄는데 사용한다."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:68
-#, fuzzy
 msgid "External wind"
-msgstr "외부"
+msgstr "외부측정바람"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:69
 msgid "Should XCSoar accept wind estimates from other instruments?"
-msgstr ""
+msgstr "다른 기기에서 측정된 바람을 XCSoar에서 사용하시겠습니까?"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:73
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:156
@@ -6593,11 +6592,11 @@ msgstr "정보창 경계"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:208
 msgid "Show Menubutton"
-msgstr ""
+msgstr "메뉴버튼 보기"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:208
 msgid "Show the Menubutton"
-msgstr ""
+msgstr "메뉴버튼을 보여줍니다. 켰을 경우 나침반이 가려질 수 있습니다."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:56
 #, no-c-format
@@ -8245,6 +8244,8 @@ msgid ""
 "Participate in the XCSoar Cloud field test?  This transmits your location, "
 "thermal/wave locations and other weather data to our test server."
 msgstr ""
+"XCSoar의 클라우드 필드테스트에 참여하시겠습니까? 이 정보는 당신의 비행중에 얻"
+"어진 날씨와 바람, 열에 대한 정보를 테스트 서버로 전송합니다."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:248
 msgid "Vehicle Type"
@@ -8682,6 +8683,11 @@ msgid ""
 "test server. You can disable it at any time in the \"Tracking\" settings.\n"
 "Please help us improve XCSoar!"
 msgstr ""
+"XCSoar 프로젝트는 현재 다른 조종사와 열/바람의 위치를 공유할 수 있는 서비스"
+"를 개발중입니다. 이 필드 테스트에 참여하시겠습니까? 당신의 비행위치, 열, 바람"
+"의 위치와 다른 날씨데이터 만을 저희 테스트 서버로 전송합니다. 이 설정은 \"라"
+"이브 트래킹\" 설정에서 언제든지 해제 할 수 있습니다. XCSoar의 기능 향상을 도"
+"와주세요!"
 
 #: src/Dialogs/TimeEntry.cpp:74 src/Dialogs/Weather/RASPDialog.cpp:82
 msgid "Now"
