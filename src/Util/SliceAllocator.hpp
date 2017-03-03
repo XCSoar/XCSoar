@@ -207,6 +207,13 @@ public:
   }
 };
 
+#ifdef __clang__
+#pragma GCC diagnostic push
+/* suppress this warning, because GlobalSliceAllocator::allocator is
+   going to be instantiated in GlobalSliceAllocator.hpp */
+#pragma GCC diagnostic ignored "-Wundefined-var-template"
+#endif
+
 /**
  * This allocator refers to one global SliceAllocator, instead of
  * creating a new SliceAllocator for each container.
@@ -257,5 +264,9 @@ public:
     allocator.destroy(t);
   }
 };
+
+#ifdef __clang__
+#pragma GCC diagnostic pop
+#endif
 
 #endif
