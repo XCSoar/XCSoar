@@ -75,6 +75,11 @@ PrintFlightList(const RecordedFlightList &flight_list)
   }
 }
 
+#ifdef __clang__
+/* true, the nullptr cast below is a bad kludge */
+#pragma GCC diagnostic ignored "-Wnull-dereference"
+#endif
+
 int main(int argc, char **argv)
 {
   NarrowString<1024> usage;

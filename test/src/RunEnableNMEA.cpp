@@ -71,6 +71,11 @@ NMEAParser::TimeHasAdvanced(fixed this_time, fixed &last_time, NMEAInfo &info)
   return false;
 }
 
+#ifdef __clang__
+/* true, the nullptr cast below is a bad kludge */
+#pragma GCC diagnostic ignored "-Wnull-dereference"
+#endif
+
 int main(int argc, char **argv)
 {
   Args args(argc, argv, "DRIVER PORT BAUD");

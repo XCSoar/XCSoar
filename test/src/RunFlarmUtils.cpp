@@ -392,6 +392,11 @@ RunUI(FlarmDevice &flarm, OperationEnvironment &env)
   }
 }
 
+#ifdef __clang__
+/* true, the nullptr cast below is a bad kludge */
+#pragma GCC diagnostic ignored "-Wnull-dereference"
+#endif
+
 int
 main(int argc, char **argv)
 {
