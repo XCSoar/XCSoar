@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-08-12 14:15+0200\n"
-"PO-Revision-Date: 2014-07-10 06:45+0000\n"
-"Last-Translator: Morten Nørgaard  <morten@koldingflyveklub.dk>\n"
+"PO-Revision-Date: 2016-09-18 08:36+0000\n"
+"Last-Translator: Bo Gamba <Unknown>\n"
 "Language-Team: Danish <da@li.org>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-07-19 13:48+0000\n"
-"X-Generator: Launchpad (build 17114)\n"
+"X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
+"X-Generator: Launchpad (build 18329)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -65,7 +65,7 @@ msgstr "AAT"
 #: src/Task/TypeStrings.cpp:37
 #, no-c-format
 msgid "Modified area task (MAT)"
-msgstr ""
+msgstr "Modificeret opgave område"
 
 #: src/Task/TypeStrings.cpp:38
 #, no-c-format
@@ -83,21 +83,23 @@ msgid ""
 "FAI rules, allows only FAI start, finish and turn point types, for badges "
 "and records.  Enables FAI finish height for final glide calculation."
 msgstr ""
+"FAI regler tillader kun FAI start, slut og vendepunkt typer. Aktiverer FAI "
+"slut højde for slut glids beregning."
 
 #: src/Task/TypeStrings.cpp:54
 #, no-c-format
 msgid "FAI rules, path from a start to two turn points and return."
-msgstr ""
+msgstr "FAI regler, rute fra start til to vendepunkter og retur."
 
 #: src/Task/TypeStrings.cpp:55
 #, no-c-format
 msgid "FAI rules, path from start to a single turn point and return."
-msgstr ""
+msgstr "FAI regler, rute fra start til et enkelt vendepunkt og retur."
 
 #: src/Task/TypeStrings.cpp:56
 #, no-c-format
 msgid "FAI rules, path from start to a goal destination."
-msgstr ""
+msgstr "FAI regler, rute fra start til mål destination."
 
 #: src/Task/TypeStrings.cpp:57
 #, no-c-format
@@ -105,6 +107,8 @@ msgid ""
 "Racing task around turn points.  Can also be used for FAI badge and record "
 "tasks.  Allows all shapes of observation zones."
 msgstr ""
+"Racing opgave omkring vendepunkt. Kan også anvendes til FAI diplomer og "
+"rekorder. Tillader alle former for observations zoner."
 
 #: src/Task/TypeStrings.cpp:59
 #, no-c-format
@@ -112,6 +116,8 @@ msgid ""
 "Task through assigned areas, minimum task time applies.  Restricted to "
 "cylinder and sector observation zones."
 msgstr ""
+"Opgaver gennem tildelte områder, minimum opgave tid tæller. Begrænset til "
+"cylinder og sektor observations zoner."
 
 #: src/Task/TypeStrings.cpp:61
 #, no-c-format
@@ -571,9 +577,8 @@ msgid "Loading Waypoints..."
 msgstr "Hneter vendepunkter..."
 
 #: src/CrossSection/CrossSectionRenderer.cpp:73
-#, fuzzy
 msgid "Not moving"
-msgstr "Kurver ikke"
+msgstr ""
 
 #: src/Gauge/ThermalAssistantRenderer.cpp:193
 msgid "Not Circling"
@@ -1092,9 +1097,9 @@ msgid "Total altitude gain/loss in the last thermal."
 msgstr "Total højde- vinding/tab i sidste termikboble"
 
 #: src/InfoBoxes/Content/Factory.cpp:256
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Last thermal duration"
-msgstr "Sidste højdevinding"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:257
 #, no-c-format
@@ -2730,9 +2735,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1272
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Final MC0 altitude difference"
-msgstr "Endelig højde difference"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1273
 #, no-c-format
@@ -2740,17 +2745,17 @@ msgid "Fin MC0 AltD"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1274
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the final waypoint with MC 0 setting relative to the "
 "safety arrival height."
-msgstr "Ankomsthøjden til ankomstpunktet relativ til sikkerhedshøjden."
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1282
 #: src/InfoBoxes/Content/Factory.cpp:1283 src/InfoBoxes/Content/Task.cpp:938
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next arrow"
-msgstr "Næste vendepunkt"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1284
 #, no-c-format
@@ -4937,9 +4942,8 @@ msgid "File exists already."
 msgstr ""
 
 #: src/Dialogs/ProfileListDialog.cpp:265 src/Dialogs/ProfileListDialog.cpp:307
-#, fuzzy
 msgid "Failed to save file."
-msgstr "Kan ikke downloade flyvninger"
+msgstr ""
 
 #: src/Dialogs/ProfileListDialog.cpp:324
 #, c-format
@@ -5445,9 +5449,8 @@ msgstr ""
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:274
 #: src/Dialogs/Waypoint/Manager.cpp:250
-#, fuzzy
 msgid "Failed to save waypoints"
-msgstr "Kan ikke downloade flyvninger"
+msgstr ""
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:287
 msgid "Replace in Task"
@@ -8372,14 +8375,12 @@ msgid "This function is not available on your platform yet."
 msgstr ""
 
 #: src/Monitor/AirspaceWarningMonitor.cpp:62
-#, fuzzy
 msgid "Inside airspace"
-msgstr "Luftrum"
+msgstr ""
 
 #: src/Monitor/AirspaceWarningMonitor.cpp:64
-#, fuzzy
 msgid "Near airspace"
-msgstr "Luftrum"
+msgstr ""
 
 #: src/Monitor/TaskConstraintsMonitor.cpp:57
 msgid "Maximum start speed exceeded"
@@ -9296,67 +9297,75 @@ msgid ""
 "Pan\n"
 "Off"
 msgstr ""
+"Pan\n"
+"Slukket"
 
 #: Data/Input/default.xci:1119
 msgid ""
 "Setup\n"
 "System"
 msgstr ""
+"Opsætning\n"
+"System"
 
 #: Data/Input/default.xci:664
 msgid ""
 "Airframe\n"
 "Switches"
 msgstr ""
+"Flyskrog\n"
+"Knapper"
 
 #: Data/Input/default.xci:1181
 msgid ""
 "Nearest\n"
 "Airspace"
 msgstr ""
+"Nærmeste\n"
+"Luftrum"
 
 #: Data/Input/default.xci:514 Data/Input/default.xci:1086
 msgid "Topo."
-msgstr ""
+msgstr "Topo"
 
 #: Data/Input/default.xci:782 Data/Input/default.xci:1189
 msgid ""
 "Check\n"
 "list"
 msgstr ""
+"Tjek\n"
+"Liste"
 
 #: Data/Input/default.xci:1127
 msgid ""
 "Settings\n"
 "Airspace"
 msgstr ""
+"Indstillinger\n"
+"Luftrum"
 
 #: Data/Input/default.xci:758 Data/Input/default.xci:1165
 msgid "FLARM Radar"
-msgstr ""
+msgstr "FLARM Radar"
 
 #: Data/Input/default.xci:473 Data/Input/default.xci:1056
 msgid ""
 "Pan\n"
 "On"
 msgstr ""
+"Pan\n"
+"Tændt"
 
 #~ msgid ""
 #~ "Start rules slightly violated\n"
 #~ "but within margin"
 #~ msgstr "Startregler lettere overtrådt, men inden for margin"
 
-#~ msgid "Start rules violated"
-#~ msgstr "Startregler overtrådt"
-
-#~ msgid "Last thermal time"
-#~ msgstr "Tid i sidste termik"
-
-#~ msgid "TL Time"
-#~ msgstr "TL tid"
-
 #~ msgid "Line skipped."
 #~ msgstr "Linie skippet"
+
+#~ msgid "Start rules violated"
+#~ msgstr "Startregler overtrådt"
 
 #~ msgid "Height GPS"
 #~ msgstr "GPS-højde"
@@ -9371,6 +9380,12 @@ msgstr ""
 
 #~ msgid "H GPS"
 #~ msgstr "H GPS"
+
+#~ msgid "Last thermal time"
+#~ msgstr "Tid i sidste termik"
+
+#~ msgid "TL Time"
+#~ msgstr "TL tid"
 
 #, fuzzy
 #~ msgid "Next radial ATC"
