@@ -6,15 +6,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-08-12 14:15+0200\n"
-"PO-Revision-Date: 2016-06-25 17:01+0000\n"
-"Last-Translator: Miloš Hrabě <darktroll@mybox.cz>\n"
+"PO-Revision-Date: 2017-01-24 19:05+0000\n"
+"Last-Translator: Radoslav Půr <radoslavpur@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-08-01 08:12+0000\n"
-"X-Generator: Launchpad (build 18169)\n"
+"X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
+"X-Generator: Launchpad (build 18329)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -48,7 +48,7 @@ msgstr "FAI návratová"
 #: src/Task/TypeStrings.cpp:34
 #, no-c-format
 msgid "FAI goal"
-msgstr "FAI meta"
+msgstr "FAI cíl"
 
 #: src/Task/TypeStrings.cpp:35
 #, no-c-format
@@ -73,7 +73,7 @@ msgstr "Smíšená"
 #: src/Task/TypeStrings.cpp:39
 #, no-c-format
 msgid "Touring"
-msgstr ""
+msgstr "Cestovní"
 
 #: src/Task/TypeStrings.cpp:52
 #, no-c-format
@@ -210,7 +210,7 @@ msgstr "Válec. Libovolný bod v oblasti bodovaný od středu."
 #: src/Task/TypeStrings.cpp:88
 #, no-c-format
 msgid "A 1 mile cylinder.  Scored by farthest point reached in area."
-msgstr "1 mílový Válec. Bodovaný podle njezazšího dosaženého bodu v oblasti."
+msgstr "1 mílový Válec. Bodovaný podle nejzazšího dosaženého bodu v oblasti."
 
 #: src/Task/TypeStrings.cpp:89
 #, no-c-format
@@ -223,7 +223,7 @@ msgid ""
 "A sector that can vary in angle and radius.  Scored by farthest point "
 "reached inside area."
 msgstr ""
-"Sektor který múže mít různý úhel apoloměr. Bodováno podle nejzazšího "
+"Sektor, který může mít různý úhel a poloměr. Bodováno podle nejzazšího "
 "dosaženého bodu v oblasti."
 
 #: src/Task/TypeStrings.cpp:92
@@ -759,7 +759,7 @@ msgid ""
 "Advance\n"
 "(auto)"
 msgstr ""
-"Rzšířené\n"
+"Rozšířené\n"
 "(auto)"
 
 #: src/Menu/ExpandMacros.cpp:292
@@ -2423,12 +2423,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1012
 #, no-c-format
 msgid "Climb band"
-msgstr ""
+msgstr "Rozsah stoupání"
 
 #: src/InfoBoxes/Content/Factory.cpp:1013
 #, no-c-format
 msgid "Climb Band"
-msgstr ""
+msgstr "Rozsah stoupání"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
 #, no-c-format
@@ -4685,9 +4685,8 @@ msgid "This allows switching on or off the automatic wind algorithm."
 msgstr "Umožňuje vypnutí a zapnutí automatického výpočtu větru."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:68
-#, fuzzy
 msgid "External wind"
-msgstr "Externí"
+msgstr ""
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:69
 msgid "Should XCSoar accept wind estimates from other instruments?"
@@ -5584,7 +5583,7 @@ msgstr "Příliš velký vítr"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:57
 msgid "No solution"
-msgstr ""
+msgstr "Nemá řešení"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:132
 msgid "Runway"
@@ -5724,7 +5723,7 @@ msgstr "Otočný bod"
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:71
 #, no-c-format
 msgid "Landable"
-msgstr ""
+msgstr "Přistáníhodné"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:80
 msgid "Comment"
