@@ -48,7 +48,7 @@ inline void UpmixMonoPCM(T *pcm_stream_buffer, size_t num_mono_frames,
   if (1 == num_channels)
       return;
 
-  for (ssize_t i = static_cast<ssize_t>(num_mono_frames) - 1; i >= 0; --i) {
+  for (size_t i = num_mono_frames; i-- > 0;) {
     std::fill(pcm_stream_buffer + i * num_channels,
               pcm_stream_buffer + i * num_channels + num_channels,
               pcm_stream_buffer[i]);
