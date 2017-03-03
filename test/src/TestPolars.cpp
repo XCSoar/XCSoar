@@ -34,6 +34,7 @@
 #include "Util/Macros.hpp"
 #include "Util/PrintException.hxx"
 
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 

@@ -30,6 +30,8 @@
 #include "Util/StringAPI.hxx"
 #include "Util/PrintException.hxx"
 
+#include <stdlib.h>
+
 static void
 TestReader()
 {

@@ -31,6 +31,8 @@
 
 #include <cstdio>
 
+#include <stdlib.h>
+
 class FlightCheck {
   StaticString<64> name;
 

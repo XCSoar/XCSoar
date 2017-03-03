@@ -26,6 +26,7 @@
 #include "Util/PrintException.hxx"
 
 #include <tchar.h>
+#include <stdlib.h>
 
 static void
 CheckGRecord(const TCHAR *path)
