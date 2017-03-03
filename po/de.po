@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-08-12 14:15+0200\n"
-"PO-Revision-Date: 2016-08-12 14:21+0200\n"
-"Last-Translator: Max Kellermann <max@xcsoar.org>\n"
+"PO-Revision-Date: 2016-12-27 22:14+0000\n"
+"Last-Translator: Carsten Sonyi <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-08-01 08:12+0000\n"
-"X-Generator: Launchpad (build 18169)\n"
+"X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
+"X-Generator: Launchpad (build 18329)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -4796,13 +4796,12 @@ msgid "This allows switching on or off the automatic wind algorithm."
 msgstr "Hiermit wird die automatische Windberechnung ein- und ausgeschaltet."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:68
-#, fuzzy
 msgid "External wind"
-msgstr "Extern"
+msgstr "Externer Wind"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:69
 msgid "Should XCSoar accept wind estimates from other instruments?"
-msgstr ""
+msgstr "Soll XCSoar Windschätzungen anderer Instrumente akzeptieren?"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:73
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:156
@@ -6769,9 +6768,8 @@ msgid "Show Menubutton"
 msgstr "Zeige Menübutton"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:208
-#, fuzzy
 msgid "Show the Menubutton"
-msgstr "Zeige Menübutton"
+msgstr "Menütaste zeigen"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:56
 #, no-c-format
@@ -8489,6 +8487,9 @@ msgid ""
 "Participate in the XCSoar Cloud field test?  This transmits your location, "
 "thermal/wave locations and other weather data to our test server."
 msgstr ""
+"An der Erprobung der XCSoar Cloud teilnehmen? Dies übermittelt deine "
+"Position, Thermik/Wellen-Positionen und andere Wetterdaten zu unserem "
+"Testserver."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:248
 msgid "Vehicle Type"
@@ -8928,8 +8929,13 @@ msgid ""
 "test server. You can disable it at any time in the \"Tracking\" settings.\n"
 "Please help us improve XCSoar!"
 msgstr ""
-"Das XCSoar-Project entwickelt derzeit einen revolutionären Dienst, der das Teilen der Thermik- und Wellenpositionen und mehr mit anderen Piloten ermöglicht.\n"
-"Möchtest du am Feldtest teilnehmen? Das bedeutet, daß deine Position, deine Thermik- und Wellenpositionen und andere Wetterdaten an unseren Testserver übermittelt werden. Du kannst das jederzeit in den \"Verfolgungs\"-Einstellungen deaktivieren.\n"
+"Das XCSoar-Project entwickelt derzeit einen revolutionären Dienst, der das "
+"Teilen der Thermik- und Wellenpositionen und mehr mit anderen Piloten "
+"ermöglicht.\n"
+"Möchtest du am Feldtest teilnehmen? Das bedeutet, daß deine Position, deine "
+"Thermik- und Wellenpositionen und andere Wetterdaten an unseren Testserver "
+"übermittelt werden. Du kannst das jederzeit in den \"Verfolgungs\"-"
+"Einstellungen deaktivieren.\n"
 "Bitte hilf uns, XCSoar zu verbessern!"
 
 #: src/Dialogs/TimeEntry.cpp:74 src/Dialogs/Weather/RASPDialog.cpp:82

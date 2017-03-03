@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-08-12 14:15+0200\n"
-"PO-Revision-Date: 2016-03-29 08:33+0000\n"
-"Last-Translator: Staszek <rodacki.stanislaw@gmail.com>\n"
+"PO-Revision-Date: 2016-12-06 20:14+0000\n"
+"Last-Translator: Tomasz Olejnik <oltomasz@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-03-31 16:44+0000\n"
-"X-Generator: Launchpad (build 17967)\n"
+"X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
+"X-Generator: Launchpad (build 18329)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -608,7 +608,7 @@ msgstr "Ładowanie punktów zwrotnych..."
 
 #: src/CrossSection/CrossSectionRenderer.cpp:73
 msgid "Not moving"
-msgstr ""
+msgstr "Brak ruchu"
 
 #: src/Gauge/ThermalAssistantRenderer.cpp:193
 msgid "Not Circling"
@@ -1158,7 +1158,7 @@ msgstr "Czas w ostatnim kominie"
 #: src/InfoBoxes/Content/Factory.cpp:257
 #, no-c-format
 msgid "TL duration"
-msgstr ""
+msgstr "Wartość osi czasu"
 
 #: src/InfoBoxes/Content/Factory.cpp:258
 #, no-c-format
@@ -3981,7 +3981,7 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:705
 msgid "Second Driver"
-msgstr ""
+msgstr "Drugi sterownik"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:707
 msgid "Sync. from device"
@@ -4184,7 +4184,7 @@ msgstr "Ciśnienie"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:87
 msgid "Sink tone"
-msgstr ""
+msgstr "Dźwięk opadania"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:41
 #: src/Dialogs/ProfileListDialog.cpp:255 src/Dialogs/ProfileListDialog.cpp:280
@@ -4233,7 +4233,7 @@ msgstr "Głośność"
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:70
 #, no-c-format
 msgid "Output mode"
-msgstr ""
+msgstr "Tryb wyjścia"
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:72
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:129
@@ -4591,7 +4591,7 @@ msgstr "Interwał loggera"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:148
 msgid "No tracking mode"
-msgstr ""
+msgstr "Bez śledzenia"
 
 #: src/Dialogs/MapItemListDialog.cpp:174 src/Dialogs/dlgAnalysis.cpp:467
 #: src/Dialogs/dlgAnalysis.cpp:503 src/Dialogs/dlgAnalysis.cpp:512
@@ -4747,7 +4747,7 @@ msgstr ""
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:106
 #: src/Monitor/AirspaceWarningMonitor.cpp:80
 msgid "ACK"
-msgstr ""
+msgstr "Przyjąłem"
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:109
 #: src/Monitor/AirspaceWarningMonitor.cpp:81
@@ -4808,13 +4808,12 @@ msgid "This allows switching on or off the automatic wind algorithm."
 msgstr "To pozwala na wł/wył automatycznego algorytmu wiatru."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:68
-#, fuzzy
 msgid "External wind"
-msgstr "Zewnętrzny"
+msgstr "Inny czujnik wiatru"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:69
 msgid "Should XCSoar accept wind estimates from other instruments?"
-msgstr ""
+msgstr "Czy XCSoar ma przyjmować kalkulacje wiatru z innych przyrządów?"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:73
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:156
@@ -5270,7 +5269,7 @@ msgstr "Plik już istnieje."
 
 #: src/Dialogs/ProfileListDialog.cpp:265 src/Dialogs/ProfileListDialog.cpp:307
 msgid "Failed to save file."
-msgstr ""
+msgstr "Błąd zapisu pliku"
 
 #: src/Dialogs/ProfileListDialog.cpp:324
 #, c-format
@@ -5296,7 +5295,7 @@ msgstr "Aktywny"
 #: src/Dialogs/Plane/PlaneListDialog.cpp:227
 #, c-format
 msgid "Activating plane \"%s\" failed."
-msgstr ""
+msgstr "Wczytanie \"%s\" nie powiodło się"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:249
 #: src/Dialogs/Plane/PlaneListDialog.cpp:289
@@ -5307,7 +5306,7 @@ msgstr "Proszę wpisać znaki rejestracyjne."
 #: src/Dialogs/Plane/PlaneListDialog.cpp:305
 #, c-format
 msgid "Plane \"%s\" already exists. Overwrite it?"
-msgstr ""
+msgstr "Statek powietrzny \"%s\" juz istnieje. Nadpisać?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:265
 #: src/Dialogs/Plane/PlaneListDialog.cpp:308
@@ -5317,12 +5316,12 @@ msgstr "Nadpisz"
 #: src/Dialogs/Plane/PlaneListDialog.cpp:340
 #, c-format
 msgid "Delete plane \"%s\"?"
-msgstr ""
+msgstr "Usunąć \"%s\"?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:377
 #, c-format
 msgid "Activate plane \"%s\"?"
-msgstr ""
+msgstr "Czy użyć danych dla \"%s\" ?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:389
 msgid "Planes"
@@ -5381,7 +5380,7 @@ msgstr "Masa referencyjna"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:142
 msgid "Reference mass of the polar"
-msgstr ""
+msgstr "Masa referencyjna biegunowej"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:147
 msgid "Dry Mass"
@@ -5826,11 +5825,11 @@ msgstr "Przesuń do PT"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:297
 msgid "Set Active Frequency"
-msgstr ""
+msgstr "Ustaw używaną częstotliwość"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:298
 msgid "Set Standby Frequency"
-msgstr ""
+msgstr "Ustaw częstotliwość oczekującą"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:433 Data/Input/default.xci:1022
 msgid "GoTo"
@@ -6011,7 +6010,7 @@ msgstr "Pokazuj etykiety"
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:197
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:156
 msgid "Determines what labels are displayed."
-msgstr ""
+msgstr "Określa, które etykiety będą wyświetlone"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:201
 msgid "Clip altitude"
@@ -6047,7 +6046,7 @@ msgstr "Okno z ostrzeżeniem"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:213
 msgid "Enable/disable displaying airspaces warnings dialog."
-msgstr ""
+msgstr "Wł./wył. wyświetlanie ostrzeżeń o strefach"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:217
 msgid "Warning time"
@@ -6781,11 +6780,11 @@ msgstr "Ramka InfoBox"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:208
 msgid "Show Menubutton"
-msgstr ""
+msgstr "Pokaż guzik menu"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:208
 msgid "Show the Menubutton"
-msgstr ""
+msgstr "Pokazywanie guzika menu"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:56
 #, no-c-format
@@ -7045,7 +7044,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:191
 #, no-c-format
 msgid "A custom InfoBox set"
-msgstr ""
+msgstr "Własny zestaw infoboksów."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:209
 #, no-c-format
@@ -8448,7 +8447,7 @@ msgstr "Balot na ogrzane powietrze"
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:193
 #, no-c-format
 msgid "Hangglider (Flex/FAI1)"
-msgstr ""
+msgstr "Lotnia (Flex/FAI1)"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:194
 #, no-c-format
@@ -8475,13 +8474,16 @@ msgstr "Pokaż ruch w pobliżu"
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:222
 msgid ""
 "Download the position of your nearby traffic live from the SkyLines server."
-msgstr ""
+msgstr "Pobierz dane o ruchu w okolicy z serwera SkyLines"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:234
 msgid ""
 "Participate in the XCSoar Cloud field test?  This transmits your location, "
 "thermal/wave locations and other weather data to our test server."
 msgstr ""
+"Bierzesz udział w testach XCSoar Cloud? Twoja lokalizacja, lokalizacja "
+"miejsc termicznych/falowych i inne dane pogodowe będzie wysyłana na nasze "
+"serwery."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:248
 msgid "Vehicle Type"
@@ -8493,7 +8495,7 @@ msgstr "Rodzaj użytego pojazdu."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:250
 msgid "Vehicle Name"
-msgstr ""
+msgstr "Nazwa statku powietrznego"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:253
 msgid "Server"
@@ -8920,6 +8922,13 @@ msgid ""
 "test server. You can disable it at any time in the \"Tracking\" settings.\n"
 "Please help us improve XCSoar!"
 msgstr ""
+"XCSoar rozwija rewolucyjną usługę współdzielenia z innymi pilotami danych o "
+"warunkach termicznych/falowych i pogodowych w czasie rzeczywistym.\n"
+"Chcesz wziąć udział w testach? Oznacza to zgodę na udostępnienie swojej "
+"lokalizacji i informacji o warunkach w niej panujących za pośrednictwem "
+"naszych serwerów. Opcję możesz zawsze wyłączyć w ustawieniach \"Śledzenia"
+"\".\n"
+"Pomóż nam proszę udoskonalać XCSoar!"
 
 #: src/Dialogs/TimeEntry.cpp:74 src/Dialogs/Weather/RASPDialog.cpp:82
 msgid "Now"

@@ -45,6 +45,7 @@ Copyright_License {
 
 #ifdef WIN32
 #include <windows.h>
+#include <string.h>
 #endif
 
 void
