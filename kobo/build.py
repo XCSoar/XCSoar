@@ -9,6 +9,8 @@ if len(sys.argv) != 8:
     sys.exit(1)
 
 target_output_dir, host_arch, cc, cxx, ar, ranlib, strip = sys.argv[1:]
+host_triplet = 'arm-linux-gnueabihf'
+arch_ldflags = ''
 
 # the path to the XCSoar sources
 xcsoar_path = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]) or '.', '..'))
@@ -28,9 +30,6 @@ build_path = os.path.join(arch_path, 'build')
 root_path = os.path.join(arch_path, 'root')
 
 target_arch = '-march=armv7-a -mcpu=cortex-a8 -mfpu=neon -mfloat-abi=hard'
-common_flags = '-Os -g -ffunction-sections -fdata-sections -fvisibility=hidden ' + target_arch
-cflags = common_flags
-cxxflags = common_flags
 cppflags = '-isystem ' + os.path.join(root_path, 'include') + ' -DNDEBUG'
 ldflags = '-L' + os.path.join(root_path, 'lib')
 libs = ''
@@ -43,6 +42,35 @@ if 'MAKEFLAGS' in os.environ:
     # build/make.mk adds "--no-builtin-rules --no-builtin-variables",
     # which breaks the zlib Makefile (and maybe others)
     del os.environ['MAKEFLAGS']
+
+class Toolchain:
+    def __init__(self, tarball_path, src_path, build_path, install_prefix,
+                 arch, arch_cflags, cppflags, arch_ldflags,
+                 cc, cxx, ar, ranlib, strip):
+        self.tarball_path = tarball_path
+        self.src_path = src_path
+        self.build_path = build_path
+        self.install_prefix = install_prefix
+        self.arch = arch
+
+        self.cc = cc
+        self.cxx = cxx
+        self.ar = ar
+        self.ranlib = ranlib
+        self.strip = strip
+
+        common_flags = '-Os -g -ffunction-sections -fdata-sections -fvisibility=hidden ' + arch_cflags
+        self.cflags = common_flags
+        self.cxxflags = common_flags
+        self.cppflags = '-isystem ' + os.path.join(install_prefix, 'include') + ' -DNDEBUG ' + cppflags
+        self.ldflags = '-L' + os.path.join(install_prefix, 'lib') + ' ' + arch_ldflags
+        self.libs = ''
+
+        self.env = dict(os.environ)
+
+        # redirect pkg-config to use our root directory instead of the
+        # default one on the build host
+        self.env['PKG_CONFIG_LIBDIR'] = os.path.join(install_prefix, 'lib/pkgconfig')
 
 class Project:
     def __init__(self, url, md5, installed, name=None, version=None,
@@ -71,31 +99,28 @@ class Project:
         self.use_cxx = use_cxx
         self.use_clang = use_clang
 
-    def download(self):
-        global tarball_path
-        return download_and_verify(self.url, self.md5, tarball_path)
+    def download(self, toolchain):
+        return download_and_verify(self.url, self.md5, toolchain.tarball_path)
 
-    def is_installed(self):
-        global root_path
-        tarball = self.download()
-        installed = os.path.join(root_path, self.installed)
+    def is_installed(self, toolchain):
+        tarball = self.download(toolchain)
+        installed = os.path.join(toolchain.install_prefix, self.installed)
         tarball_mtime = os.path.getmtime(tarball)
         try:
             return os.path.getmtime(installed) >= tarball_mtime
         except FileNotFoundError:
             return False
 
-    def unpack(self, out_of_tree=True):
-        global src_path, build_path
+    def unpack(self, toolchain, out_of_tree=True):
         if out_of_tree:
-            parent_path = src_path
+            parent_path = toolchain.src_path
         else:
-            parent_path = build_path
-        path = untar(self.download(), parent_path, self.base)
+            parent_path = toolchain.build_path
+        path = untar(self.download(toolchain), parent_path, self.base)
         return path
 
-    def make_build_path(self):
-        path = os.path.join(build_path, self.base)
+    def make_build_path(self, toolchain):
+        path = os.path.join(toolchain.build_path, self.base)
         try:
             shutil.rmtree(path)
         except FileNotFoundError:
@@ -108,17 +133,18 @@ class ZlibProject(Project):
                  **kwargs):
         Project.__init__(self, url, md5, installed, **kwargs)
 
-    def build(self):
-        src = self.unpack(out_of_tree=False)
+    def build(self, toolchain):
+        src = self.unpack(toolchain, out_of_tree=False)
 
-        subprocess.check_call(['./configure', '--prefix=' + root_path, '--static'], cwd=src)
+        subprocess.check_call(['./configure', '--prefix=' + toolchain.install_prefix, '--static'],
+                              cwd=src, env=toolchain.env)
         subprocess.check_call(['/usr/bin/make', '--quiet',
-                               'CC=' + cc,
-                               'CPP=' + cc + ' -E',
-                               'AR=' + ar,
-                               'LDSHARED=' + cc + ' -shared',
+                               'CC=' + toolchain.cc,
+                               'CPP=' + toolchain.cc + ' -E',
+                               'AR=' + toolchain.ar,
+                               'LDSHARED=' + toolchain.cc + ' -shared',
                                'install'],
-                              cwd=src)
+                              cwd=src, env=toolchain.env)
 
 class AutotoolsProject(Project):
     def __init__(self, url, md5, installed, configure_args=[],
@@ -130,45 +156,47 @@ class AutotoolsProject(Project):
         self.autogen = autogen
         self.cppflags = cppflags
 
-    def configure(self):
-        src = self.unpack()
+    def configure(self, toolchain):
+        src = self.unpack(toolchain)
         if self.autogen:
             subprocess.check_call(['/usr/bin/aclocal'], cwd=src)
             subprocess.check_call(['/usr/bin/automake', '--add-missing', '--force-missing', '--foreign'], cwd=src)
             subprocess.check_call(['/usr/bin/autoconf'], cwd=src)
             subprocess.check_call(['/usr/bin/libtoolize', '--force'], cwd=src)
 
-        build = self.make_build_path()
+        build = self.make_build_path(toolchain)
 
         configure = [
             os.path.join(src, 'configure'),
-            'CC=' + cc,
-            'CXX=' + cxx,
-            'CFLAGS=' + cflags,
-            'CXXFLAGS=' + cxxflags,
-            'CPPFLAGS=' + cppflags + ' ' + self.cppflags,
-            'LDFLAGS=' + ldflags,
-            'LIBS=' + libs,
-            'AR=' + ar,
-            'RANLIB=' + ranlib,
-            'STRIP=' + strip,
-            '--host=' + host_arch,
-            '--prefix=' + root_path,
+            'CC=' + toolchain.cc,
+            'CXX=' + toolchain.cxx,
+            'CFLAGS=' + toolchain.cflags,
+            'CXXFLAGS=' + toolchain.cxxflags,
+            'CPPFLAGS=' + toolchain.cppflags + ' ' + self.cppflags,
+            'LDFLAGS=' + toolchain.ldflags,
+            'LIBS=' + toolchain.libs,
+            'AR=' + toolchain.ar,
+            'RANLIB=' + toolchain.ranlib,
+            'STRIP=' + toolchain.strip,
+            '--host=' + toolchain.arch,
+            '--prefix=' + toolchain.install_prefix,
             '--enable-silent-rules',
         ] + self.configure_args
 
-        subprocess.check_call(configure, cwd=build)
+        subprocess.check_call(configure, cwd=build, env=toolchain.env)
         return build
 
-    def build(self):
-        build = self.configure()
+    def build(self, toolchain):
+        build = self.configure(toolchain)
 
-        subprocess.check_call(['/usr/bin/make', '--quiet', '-j12'], cwd=build)
-        subprocess.check_call(['/usr/bin/make', '--quiet', 'install'], cwd=build)
+        subprocess.check_call(['/usr/bin/make', '--quiet', '-j12'],
+                              cwd=build, env=toolchain.env)
+        subprocess.check_call(['/usr/bin/make', '--quiet', 'install'],
+                              cwd=build, env=toolchain.env)
 
 class FreeTypeProject(AutotoolsProject):
-    def configure(self):
-        build = AutotoolsProject.configure(self)
+    def configure(self, toolchain):
+        build = AutotoolsProject.configure(self, toolchain)
 
         comment_re = re.compile(r'^\w+_MODULES\s*\+=\s*(?:type1|cff|cid|pfr|type42|winfonts|pcf|bdf|lzw|bzip2|psaux|psnames)\s*$')
         modules_cfg = os.path.join(build, 'modules.cfg')
@@ -247,6 +275,9 @@ thirdparty_libs = [
 ]
 
 # build the third-party libraries
+toolchain = Toolchain(tarball_path, src_path, build_path, root_path,
+                      host_triplet, target_arch, cppflags, arch_ldflags,
+                      cc, cxx, ar, ranlib, strip)
 for x in thirdparty_libs:
-    if not x.is_installed():
-        x.build()
+    if not x.is_installed(toolchain):
+        x.build(toolchain)
