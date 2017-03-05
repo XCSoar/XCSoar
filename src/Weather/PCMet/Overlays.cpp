@@ -105,8 +105,8 @@ FindLatestOverlay(PCMet::OverlayInfo &info)
   } visitor(info);
 
   const auto cache_path = MakeLocalPath(_T("pc_met"));
-  NarrowString<256> pattern;
-  pattern.Format("%s_%s_lv_%06u_p_%03u_*.tiff",
+  StaticString<256> pattern;
+  pattern.Format(_T("%s_%s_lv_%06u_p_%03u_*.tiff"),
                  type_names[unsigned(info.type)],
                  area_names[unsigned(info.area)],
                  info.level, info.step);
