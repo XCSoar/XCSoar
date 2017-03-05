@@ -2,7 +2,6 @@
 
 import os, os.path
 import sys, shutil, subprocess
-import urllib.request
 import re
 
 if len(sys.argv) != 7:
@@ -14,7 +13,7 @@ target_output_dir, host_arch, cc, cxx, ar, strip = sys.argv[1:]
 # the path to the XCSoar sources
 xcsoar_path = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]) or '.', '..'))
 sys.path[0] = os.path.join(xcsoar_path, 'build/python')
-from build.verify import verify_file_digest
+from build.download import download_and_verify
 
 output_path = os.path.abspath('output')
 tarball_path = os.path.join(output_path, 'download')
@@ -44,30 +43,6 @@ if 'MAKEFLAGS' in os.environ:
     # which breaks the zlib Makefile (and maybe others)
     del os.environ['MAKEFLAGS']
 
-def download_tarball(url, md5):
-    """Download a tarball, verify its MD5 checksum and return the local path."""
-
-    global tarball_path
-    os.makedirs(tarball_path, exist_ok=True)
-    path = os.path.join(tarball_path, os.path.basename(url))
-
-    try:
-        if verify_file_digest(path, md5): return path
-        os.unlink(path)
-    except FileNotFoundError:
-        pass
-
-    tmp_path = path + '.tmp'
-
-    print("download", url)
-    urllib.request.urlretrieve(url, tmp_path)
-    if not verify_file_digest(tmp_path, md5):
-        os.unlink(tmp_path)
-        raise "MD5 mismatch"
-
-    os.rename(tmp_path, path)
-    return path
-
 class Project:
     def __init__(self, url, md5, installed, name=None, version=None,
                  base=None,
@@ -96,7 +71,8 @@ class Project:
         self.use_clang = use_clang
 
     def download(self):
-        return download_tarball(self.url, self.md5)
+        global tarball_path
+        return download_and_verify(self.url, self.md5, tarball_path)
 
     def is_installed(self):
         global root_path
