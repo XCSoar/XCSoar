@@ -14,6 +14,7 @@ target_output_dir, host_arch, cc, cxx, ar, strip = sys.argv[1:]
 xcsoar_path = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]) or '.', '..'))
 sys.path[0] = os.path.join(xcsoar_path, 'build/python')
 from build.download import download_and_verify
+from build.tar import untar
 
 output_path = os.path.abspath('output')
 tarball_path = os.path.join(output_path, 'download')
@@ -86,18 +87,11 @@ class Project:
 
     def unpack(self, out_of_tree=True):
         global src_path, build_path
-        tarball = self.download()
         if out_of_tree:
             parent_path = src_path
         else:
             parent_path = build_path
-        path = os.path.join(parent_path, self.base)
-        try:
-            shutil.rmtree(path)
-        except FileNotFoundError:
-            pass
-        os.makedirs(parent_path, exist_ok=True)
-        subprocess.check_call(['/bin/tar', 'xfC', tarball, parent_path])
+        path = untar(self.download(), parent_path, self.base)
         return path
 
     def make_build_path(self):
