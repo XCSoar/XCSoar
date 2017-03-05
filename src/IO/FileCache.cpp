@@ -37,6 +37,17 @@ Copyright_License {
 
 static constexpr unsigned FILE_CACHE_MAGIC = 0xab352f8a;
 
+#ifndef HAVE_POSIX
+
+constexpr
+static uint64_t
+FileTimeToInteger(FILETIME ft)
+{
+  return ft.dwLowDateTime | ((uint64_t)ft.dwHighDateTime << 32);
+}
+
+#endif
+
 struct FileInfo {
   uint64_t mtime;
   uint64_t size;
