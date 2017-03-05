@@ -4,11 +4,11 @@ import os, os.path
 import sys, shutil, subprocess
 import re
 
-if len(sys.argv) != 7:
-    print("Usage: build.py TARGET_OUTPUT_DIR HOST_ARCH CC CXX AR STRIP", file=sys.stderr)
+if len(sys.argv) != 8:
+    print("Usage: build.py TARGET_OUTPUT_DIR HOST_ARCH CC CXX AR RANLIB STRIP", file=sys.stderr)
     sys.exit(1)
 
-target_output_dir, host_arch, cc, cxx, ar, strip = sys.argv[1:]
+target_output_dir, host_arch, cc, cxx, ar, ranlib, strip = sys.argv[1:]
 
 # the path to the XCSoar sources
 xcsoar_path = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]) or '.', '..'))
@@ -150,6 +150,7 @@ class AutotoolsProject(Project):
             'LDFLAGS=' + ldflags,
             'LIBS=' + libs,
             'AR=' + ar,
+            'RANLIB=' + ranlib,
             'STRIP=' + strip,
             '--host=' + host_arch,
             '--prefix=' + root_path,

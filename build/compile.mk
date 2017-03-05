@@ -7,6 +7,7 @@ endif
 
 EXE := $(findstring .exe,$(MAKE))
 AR = $(TCPREFIX)ar$(EXE)
+RANLIB = $(TCPREFIX)ranlib$(EXE)
 
 ifneq ($(ANALYZER),y)
   ifeq ($(CLANG),y)
