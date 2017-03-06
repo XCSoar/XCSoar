@@ -30,6 +30,8 @@
 #ifndef SLICE_ALLOCATOR_HPP
 #define SLICE_ALLOCATOR_HPP
 
+#include "Compiler.h"
+
 #include <utility>
 #include <cstddef>
 #include <assert.h>
@@ -207,7 +209,7 @@ public:
   }
 };
 
-#ifdef __clang__
+#if CLANG_CHECK_VERSION(3,9)
 #pragma GCC diagnostic push
 /* suppress this warning, because GlobalSliceAllocator::allocator is
    going to be instantiated in GlobalSliceAllocator.hpp */
