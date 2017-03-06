@@ -1,0 +1,63 @@
+from build.zlib import ZlibProject
+from build.autotools import AutotoolsProject
+from build.freetype import FreeTypeProject
+
+zlib = ZlibProject(
+    'http://zlib.net/zlib-1.2.8.tar.xz',
+    '28f1205d8dd2001f26fec1e8c2cebe37',
+    'lib/libz.a',
+)
+
+freetype = FreeTypeProject(
+    'http://download.savannah.gnu.org/releases/freetype/freetype-2.6.3.tar.bz2',
+    '0037b25a8c090bc8a1218e867b32beb1',
+    'lib/libfreetype.a',
+    [
+        '--disable-shared', '--enable-static',
+        '--without-bzip2', '--without-png',
+        '--without-harfbuzz',
+    ],
+)
+
+curl = AutotoolsProject(
+    'http://curl.haxx.se/download/curl-7.49.1.tar.lzma',
+    'ae5e5e395da413d1fa0864e1d0a3fa57',
+    'lib/libcurl.a',
+    [
+        '--disable-shared', '--enable-static',
+        '--disable-debug',
+        '--enable-http',
+        '--enable-ipv6',
+        '--disable-ftp', '--disable-file',
+        '--disable-ldap', '--disable-ldaps',
+        '--disable-rtsp', '--disable-proxy', '--disable-dict', '--disable-telnet',
+        '--disable-tftp', '--disable-pop3', '--disable-imap', '--disable-smb',
+        '--disable-smtp',
+        '--disable-gopher',
+        '--disable-manual',
+        '--disable-threaded-resolver', '--disable-verbose', '--disable-sspi',
+        '--disable-crypto-auth', '--disable-ntlm-wb', '--disable-tls-srp', '--disable-cookies',
+        '--without-ssl', '--without-gnutls', '--without-nss', '--without-libssh2',
+    ],
+    use_clang=True,
+)
+
+libpng = AutotoolsProject(
+    'ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/libpng-1.6.28.tar.xz',
+    '425354f86c392318d31aedca71019372',
+    'lib/libpng.a',
+    [
+        '--disable-shared', '--enable-static',
+        '--enable-arm-neon',
+    ]
+)
+
+libjpeg = AutotoolsProject(
+    'http://downloads.sourceforge.net/project/libjpeg-turbo/1.5.0/libjpeg-turbo-1.5.0.tar.gz',
+    '3fc5d9b6a8bce96161659ae7a9939257',
+    'lib/libjpeg.a',
+    [
+        '--disable-shared', '--enable-static',
+        '--enable-arm-neon',
+    ]
+)
