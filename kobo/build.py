@@ -2,7 +2,6 @@
 
 import os, os.path
 import sys, subprocess
-import re
 
 if len(sys.argv) != 8:
     print("Usage: build.py TARGET_OUTPUT_DIR HOST_ARCH CC CXX AR RANLIB STRIP", file=sys.stderr)
@@ -18,6 +17,7 @@ sys.path[0] = os.path.join(xcsoar_path, 'build/python')
 from build.project import Project
 from build.zlib import ZlibProject
 from build.autotools import AutotoolsProject
+from build.freetype import FreeTypeProject
 
 output_path = os.path.abspath('output')
 tarball_path = os.path.join(output_path, 'download')
@@ -72,23 +72,6 @@ class Toolchain:
         # redirect pkg-config to use our root directory instead of the
         # default one on the build host
         self.env['PKG_CONFIG_LIBDIR'] = os.path.join(install_prefix, 'lib/pkgconfig')
-
-class FreeTypeProject(AutotoolsProject):
-    def configure(self, toolchain):
-        build = AutotoolsProject.configure(self, toolchain)
-
-        comment_re = re.compile(r'^\w+_MODULES\s*\+=\s*(?:type1|cff|cid|pfr|type42|winfonts|pcf|bdf|lzw|bzip2|psaux|psnames)\s*$')
-        modules_cfg = os.path.join(build, 'modules.cfg')
-        tmp = modules_cfg + '.tmp'
-        with open(modules_cfg) as src:
-            with open(tmp, 'w') as dest:
-                for line in src:
-                    if comment_re.match(line):
-                        line = '# ' + line
-                    dest.write(line)
-        os.rename(tmp, modules_cfg)
-
-        return build
 
 # a list of third-party libraries to be used by XCSoar
 thirdparty_libs = [
