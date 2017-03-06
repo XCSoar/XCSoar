@@ -16,6 +16,7 @@ arch_ldflags = ''
 xcsoar_path = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]) or '.', '..'))
 sys.path[0] = os.path.join(xcsoar_path, 'build/python')
 from build.project import Project
+from build.zlib import ZlibProject
 
 output_path = os.path.abspath('output')
 tarball_path = os.path.join(output_path, 'download')
@@ -70,24 +71,6 @@ class Toolchain:
         # redirect pkg-config to use our root directory instead of the
         # default one on the build host
         self.env['PKG_CONFIG_LIBDIR'] = os.path.join(install_prefix, 'lib/pkgconfig')
-
-class ZlibProject(Project):
-    def __init__(self, url, md5, installed,
-                 **kwargs):
-        Project.__init__(self, url, md5, installed, **kwargs)
-
-    def build(self, toolchain):
-        src = self.unpack(toolchain, out_of_tree=False)
-
-        subprocess.check_call(['./configure', '--prefix=' + toolchain.install_prefix, '--static'],
-                              cwd=src, env=toolchain.env)
-        subprocess.check_call(['/usr/bin/make', '--quiet',
-                               'CC=' + toolchain.cc,
-                               'CPP=' + toolchain.cc + ' -E',
-                               'AR=' + toolchain.ar,
-                               'LDSHARED=' + toolchain.cc + ' -shared',
-                               'install'],
-                              cwd=src, env=toolchain.env)
 
 class AutotoolsProject(Project):
     def __init__(self, url, md5, installed, configure_args=[],
