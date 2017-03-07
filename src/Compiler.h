@@ -43,7 +43,7 @@ Copyright_License {
  * other compiler) or newer?
  */
 #define GCC_CHECK_VERSION(major, minor) \
-  (defined(__GNUC__) && !defined(__clang__) && \
+  (!CLANG_VERSION && \
    GCC_VERSION >= GCC_MAKE_VERSION(major, minor, 0))
 
 /**
@@ -51,14 +51,14 @@ Copyright_License {
  * gcc version?
  */
 #define CLANG_OR_GCC_VERSION(major, minor) \
-  (defined(__clang__) || GCC_CHECK_VERSION(major, minor))
+  (CLANG_VERSION || GCC_CHECK_VERSION(major, minor))
 
 /**
  * Are we building with gcc (not clang or any other compiler) and a
  * version older than the specified one?
  */
 #define GCC_OLDER_THAN(major, minor) \
-  (defined(__GNUC__) && !defined(__clang__) && \
+  (GCC_VERSION && !CLANG_VERSION && \
    GCC_VERSION < GCC_MAKE_VERSION(major, minor, 0))
 
 #ifdef __clang__
@@ -77,8 +77,7 @@ Copyright_License {
  * Are we building with the specified version of clang or newer?
  */
 #define CLANG_CHECK_VERSION(major, minor) \
-  (defined(__clang__) && \
-   CLANG_VERSION >= GCC_MAKE_VERSION(major, minor, 0))
+  (CLANG_VERSION >= GCC_MAKE_VERSION(major, minor, 0))
 
 #if CLANG_OR_GCC_VERSION(4,0)
 
