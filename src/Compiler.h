@@ -32,6 +32,10 @@ Copyright_License {
 #define GCC_VERSION 0
 #endif
 
+#ifdef __clang__
+#  define CLANG_VERSION GCC_MAKE_VERSION(__clang_major__, __clang_minor__, __clang_patchlevel__)
+#endif
+
 /**
  * Are we building with the specified version of gcc (not clang or any
  * other compiler) or newer?
@@ -56,7 +60,6 @@ Copyright_License {
    GCC_VERSION < GCC_MAKE_VERSION(major, minor, 0))
 
 #ifdef __clang__
-#  define CLANG_VERSION GCC_MAKE_VERSION(__clang_major__, __clang_minor__, __clang_patchlevel__)
 #  if __clang_major__ < 3
 #    error Sorry, your clang version is too old.  You need at least version 3.1.
 #  endif
