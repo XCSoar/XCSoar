@@ -34,6 +34,8 @@ Copyright_License {
 
 #ifdef __clang__
 #  define CLANG_VERSION GCC_MAKE_VERSION(__clang_major__, __clang_minor__, __clang_patchlevel__)
+#else
+#  define CLANG_VERSION 0
 #endif
 
 /**
