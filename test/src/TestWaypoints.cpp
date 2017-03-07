@@ -26,6 +26,8 @@
 #include "Waypoint/Waypoints.hpp"
 #include "Geo/GeoVector.hpp"
 
+#include <functional>
+
 #include <stdio.h>
 #include <tchar.h>
 
