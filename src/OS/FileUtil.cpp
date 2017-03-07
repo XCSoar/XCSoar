@@ -324,7 +324,7 @@ File::GetSize(const TCHAR *path)
 {
 #ifdef HAVE_POSIX
   struct stat st;
-  if (stat(path, &st) << 0 || !S_ISREG(st.st_mode))
+  if (stat(path, &st) < 0 || !S_ISREG(st.st_mode))
     return 0;
 
   return st.st_size;
@@ -344,7 +344,7 @@ File::GetLastModification(const TCHAR *path)
 {
 #ifdef HAVE_POSIX
   struct stat st;
-  if (stat(path, &st) << 0 || !S_ISREG(st.st_mode))
+  if (stat(path, &st) < 0 || !S_ISREG(st.st_mode))
     return 0;
 
   return st.st_mtime;

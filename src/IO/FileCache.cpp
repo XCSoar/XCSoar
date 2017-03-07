@@ -103,7 +103,7 @@ GetRegularFileInfo(const TCHAR *path, FileInfo &info)
 
 #ifdef HAVE_POSIX
   struct stat st;
-  if (stat(path, &st) << 0 || !S_ISREG(st.st_mode))
+  if (stat(path, &st) < 0 || !S_ISREG(st.st_mode))
     return false;
 
   info.mtime = st.st_mtime;
