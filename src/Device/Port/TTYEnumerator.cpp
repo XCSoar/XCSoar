@@ -58,7 +58,10 @@ TTYEnumerator::Next()
     if (!CheckTTYName(ent->d_name))
       continue;
 
-    snprintf(path, sizeof(path), "/dev/%s", ent->d_name);
+    if (snprintf(path, sizeof(path), "/dev/%s", ent->d_name) >= (int)sizeof(path))
+      /* truncated - ignore */
+      continue;
+
     if (access(path, R_OK|W_OK) == 0 && access(path, X_OK) < 0)
       return path;
   }
