@@ -118,8 +118,8 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
       env.IsCancelled())
     return false;
 
-  unsigned bytes_per_block = ReadUnalignedBE16(&file_ascii.bytes_per_block);
-  unsigned num_blocks = ReadUnalignedBE16(&file_ascii.num_blocks);
+  unsigned bytes_per_block = file_ascii.bytes_per_block;
+  unsigned num_blocks = file_ascii.num_blocks;
   env.SetProgressRange(num_blocks);
 
   unsigned allocated_size = sizeof(CAI302::FileData) + bytes_per_block;

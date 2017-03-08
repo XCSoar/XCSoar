@@ -168,11 +168,11 @@ FLARM::PrepareFrameHeader(unsigned sequence_number, MessageType message_type,
          (data == nullptr && length == 0));
 
   FrameHeader header;
-  header.SetLength(8 + length);
+  header.length = 8 + length;
   header.version = 0;
-  header.SetSequenceNumber(sequence_number++);
+  header.sequence_number = sequence_number++;
   header.type = (uint8_t)message_type;
-  header.SetCRC(CalculateCRC(header, data, length));
+  header.crc = CalculateCRC(header, data, length);
   return header;
 }
 
@@ -217,7 +217,7 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
       continue;
 
     // Read and check length of the FrameHeader
-    length = header.GetLength();
+    length = header.length;
     if (length <= sizeof(header))
       continue;
 
@@ -231,7 +231,7 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
       continue;
 
     // Verify CRC
-    if (header.GetCRC() != FLARM::CalculateCRC(header, data.begin(), length))
+    if (header.crc != FLARM::CalculateCRC(header, data.begin(), length))
       continue;
 
     // Check message type
@@ -278,7 +278,7 @@ FlarmDevice::BinaryPing(OperationEnvironment &env, unsigned timeout_ms)
   // Send request and wait for positive answer
   return SendStartByte() &&
     SendFrameHeader(header, env, timeout.GetRemainingOrZero()) &&
-    WaitForACK(header.GetSequenceNumber(), env, timeout.GetRemainingOrZero());
+    WaitForACK(header.sequence_number, env, timeout.GetRemainingOrZero());
 }
 
 bool
