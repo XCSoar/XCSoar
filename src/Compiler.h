@@ -32,12 +32,18 @@ Copyright_License {
 #define GCC_VERSION 0
 #endif
 
+#ifdef __clang__
+#  define CLANG_VERSION GCC_MAKE_VERSION(__clang_major__, __clang_minor__, __clang_patchlevel__)
+#else
+#  define CLANG_VERSION 0
+#endif
+
 /**
  * Are we building with the specified version of gcc (not clang or any
  * other compiler) or newer?
  */
 #define GCC_CHECK_VERSION(major, minor) \
-  (defined(__GNUC__) && !defined(__clang__) && \
+  (!CLANG_VERSION && \
    GCC_VERSION >= GCC_MAKE_VERSION(major, minor, 0))
 
 /**
@@ -45,18 +51,17 @@ Copyright_License {
  * gcc version?
  */
 #define CLANG_OR_GCC_VERSION(major, minor) \
-  (defined(__clang__) || GCC_CHECK_VERSION(major, minor))
+  (CLANG_VERSION || GCC_CHECK_VERSION(major, minor))
 
 /**
  * Are we building with gcc (not clang or any other compiler) and a
  * version older than the specified one?
  */
 #define GCC_OLDER_THAN(major, minor) \
-  (defined(__GNUC__) && !defined(__clang__) && \
+  (GCC_VERSION && !CLANG_VERSION && \
    GCC_VERSION < GCC_MAKE_VERSION(major, minor, 0))
 
 #ifdef __clang__
-#  define CLANG_VERSION GCC_MAKE_VERSION(__clang_major__, __clang_minor__, __clang_patchlevel__)
 #  if CLANG_VERSION < GCC_MAKE_VERSION(3, 4, 0)
 #    error Sorry, your clang version is too old.  You need at least version 3.4.
 #  endif
@@ -72,8 +77,7 @@ Copyright_License {
  * Are we building with the specified version of clang or newer?
  */
 #define CLANG_CHECK_VERSION(major, minor) \
-  (defined(__clang__) && \
-   CLANG_VERSION >= GCC_MAKE_VERSION(major, minor, 0))
+  (CLANG_VERSION >= GCC_MAKE_VERSION(major, minor, 0))
 
 #if CLANG_OR_GCC_VERSION(4,0)
 

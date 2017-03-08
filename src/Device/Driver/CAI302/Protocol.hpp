@@ -85,13 +85,16 @@ namespace CAI302 {
      */
     char result;
 
-    uint16_t bytes_per_block;
+    PackedBE16 bytes_per_block;
 
     /**
      * Approximate number of blocks.
      */
-    uint16_t num_blocks;
-  } gcc_packed;
+    PackedBE16 num_blocks;
+  };
+
+  static_assert(sizeof(FileASCII) == 5, "Wrong size");
+  static_assert(alignof(FileASCII) == 1, "Wrong alignment");
 
   /**
    * Download file in binary format (direct memory dump).
@@ -104,12 +107,15 @@ namespace CAI302 {
      */
     char result;
 
-    uint16_t bytes_per_block;
+    PackedBE16 bytes_per_block;
 
     uint8_t num_bytes[3];
 
-    uint16_t logging_code;
-  } gcc_packed;
+    PackedBE16 logging_code;
+  };
+
+  static_assert(sizeof(FileBinary) == 8, "Wrong size");
+  static_assert(alignof(FileBinary) == 1, "Wrong alignment");
 
   /**
    * Transfer a block.

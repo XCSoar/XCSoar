@@ -40,6 +40,7 @@ double
 aat_min_time(int test_num)
 {
   OrderedTaskSettings beh;
+  beh.SetDefaults();
   switch (test_num) {
   case 2:
     return 3600 * 3.8;

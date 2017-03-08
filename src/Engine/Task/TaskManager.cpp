@@ -85,15 +85,17 @@ TaskManager::SetMode(const TaskType _mode)
     if (ordered_task->TaskSize()) {
       active_task = ordered_task;
       mode = TaskType::ORDERED;
-      break;
     }
+
+    break;
 
   case TaskType::GOTO:
     if (goto_task->GetActiveTaskPoint()) {
       active_task = goto_task;
       mode = TaskType::GOTO;
-      break;
     }
+
+    break;
 
   case TaskType::NONE:
     active_task = NULL;

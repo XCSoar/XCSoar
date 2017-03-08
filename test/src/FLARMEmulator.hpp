@@ -158,11 +158,11 @@ private:
     switch (header.type) {
     case FLARM::MT_PING:
     case FLARM::MT_SELECTRECORD:
-      SendACK(header.GetSequenceNumber());
+      SendACK(header.sequence_number);
       break;
 
     case FLARM::MT_EXIT:
-      SendACK(header.GetSequenceNumber());
+      SendACK(header.sequence_number);
       binary = false;
       break;
     }

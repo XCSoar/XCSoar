@@ -25,6 +25,8 @@
 #include "Geo/GeoVector.hpp"
 #include "test_debug.hpp"
 
+#include <functional>
+
 #include <stdio.h>
 #include <tchar.h>
 

@@ -75,7 +75,7 @@ GetRegularFileInfo(Path path, FileInfo &info)
 {
 #ifdef HAVE_POSIX
   struct stat st;
-  if (stat(path.c_str(), &st) << 0 || !S_ISREG(st.st_mode))
+  if (stat(path.c_str(), &st) < 0 || !S_ISREG(st.st_mode))
     return false;
 
   info.mtime = st.st_mtime;

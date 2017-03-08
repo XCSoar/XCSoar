@@ -94,7 +94,7 @@ test_troute(const RasterMap &map, double mwind, double mc, int ceiling)
                                    ? hdest
                                    : std::max(hdest, 3200)),
                          config, ceiling);
-    char buffer[80];
+    char buffer[128];
     sprintf(buffer,"terrain route solve, dir=%g, wind=%g, mc=%g ceiling=%d",
             (double)ang, (double)mwind, (double)mc, (int)ceiling);
     ok(retval, buffer, 0);
