@@ -267,7 +267,7 @@ public:
   }
 };
 
-#ifdef __clang__
+#if CLANG_CHECK_VERSION(3,9)
 #pragma GCC diagnostic pop
 #endif
 
