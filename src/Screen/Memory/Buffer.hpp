@@ -67,9 +67,11 @@ struct WritableImageBuffer {
     return PixelTraits::At(data, pitch, x, y);
   }
 
+#if !GCC_OLDER_THAN(5,0)
   constexpr const_pointer_type At(unsigned x, unsigned y) const {
     return PixelTraits::At(data, pitch, x, y);
   }
+#endif
 };
 
 /**
