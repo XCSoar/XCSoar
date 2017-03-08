@@ -118,22 +118,16 @@ cd opt/
 
 # Download SDK
 wget 'http://dl.google.com/android/android-sdk_r23-linux.tgz'
-
-# Download NDK (BOTH 32bit and 64bit versions are required)
-# We are using the 32 bit host version here.
-wget 'http://dl.google.com/android/ndk/
-android-ndk32-r10b-linux-x86.tar.bz2'
-wget 'http://dl.google.com/android/ndk/
-android-ndk64-r10b-linux-x86.tar.bz2'
         
 tar xvfz android-sdk_r23-linux.tgz
 mv android-sdk-linux/ android-sdk-linux_x86/
-
-tar --bzip2 -xvf android-ndk32-r10b-linux-x86.tar.bz2
-tar --bzip2 -xvf android-ndk64-r10b-linux-x86.tar.bz2
-
-ln -s android-ndk-r10b android-ndk-r10
 ln -s android-sdk-linux_x86 android-sdk-linux
+
+# Download NDK installer
+wget "http://dl.google.com/android/\
+repository/android-ndk-r14-linux-x86_64.zip"
+
+unzip android-ndk-r14-linux-x86_64.zip
 \end{verbatim}
 
 We need to add the paths by appending the following lines to \texttt{\~/.profile} and \texttt{/~/.bashrc} --- here relative paths work.
@@ -145,7 +139,7 @@ export PATH="$PATH:$ANDROID_SDK_HOME/tools"
 export PATH="$PATH:$ANDROID_SDK_HOME/platform-tools"
 
 # Android NDK
-export ANDROID_NDK_HOME="~/opt/android-ndk-r10"
+export ANDROID_NDK_HOME="~/opt/android-ndk-r14"
 export PATH="$PATH:$ANDROID_NDK_HOME"
 \end{verbatim}
 

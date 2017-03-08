@@ -62,7 +62,7 @@ BrokenDateTime::FromUnixTimeUTC(int64_t _t)
 
 #if defined(ANDROID) && !defined(__LP64__)
 #include <stdlib.h>
-static time_t
+time_t
 timegm(struct tm *tm)
 {
   /* Android's Bionic C library doesn't have the GNU extension
