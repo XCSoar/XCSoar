@@ -796,12 +796,10 @@ endif
 
 ifeq ($(TARGET),ANDROID)
   TARGET_LDLIBS += -lc
+  TARGET_LDLIBS += -lm
 
   ifeq ($(ARMV7),y)
-    TARGET_LDLIBS += -lm_hard
     TARGET_LDLIBS += -Wl,--no-warn-mismatch
-  else
-    TARGET_LDLIBS += -lm
   endif
 
   TARGET_LDLIBS += -llog
