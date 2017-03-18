@@ -202,7 +202,7 @@ TTYPort::SetBaudrate(unsigned BaudRate)
   assert(serial_port.is_open());
 
   boost::system::error_code ec;
-  serial_port.set_option(boost::asio::serial_port_base::baud_rate(baud_rate),
+  serial_port.set_option(boost::asio::serial_port_base::baud_rate(BaudRate),
                          ec);
   return !ec;
 }
