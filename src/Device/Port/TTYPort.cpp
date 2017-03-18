@@ -85,7 +85,7 @@ IsCharDev(const char *path)
 }
 
 bool
-TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
+TTYPort::Open(const TCHAR *path, unsigned baud_rate)
 {
   if (IsAndroid() && IsCharDev(path)) {
     /* attempt to give the XCSoar process permissions to access the
@@ -101,7 +101,7 @@ TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
 
   serial_port.assign(fd.Get());
 
-  if (!SetBaudrate(_baud_rate))
+  if (!SetBaudrate(baud_rate))
     return false;
 
   valid.store(true, std::memory_order_relaxed);
@@ -196,12 +196,12 @@ TTYPort::GetBaudrate() const
 }
 
 bool
-TTYPort::SetBaudrate(unsigned BaudRate)
+TTYPort::SetBaudrate(unsigned baud_rate)
 {
   assert(serial_port.is_open());
 
   boost::system::error_code ec;
-  serial_port.set_option(boost::asio::serial_port_base::baud_rate(BaudRate),
+  serial_port.set_option(boost::asio::serial_port_base::baud_rate(baud_rate),
                          ec);
   return !ec;
 }
