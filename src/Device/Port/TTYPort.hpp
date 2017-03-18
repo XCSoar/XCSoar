@@ -37,8 +37,6 @@ Copyright_License {
  */
 class TTYPort : public BufferedPort
 {
-  unsigned baud_rate;
-
   boost::asio::serial_port serial_port;
 
   std::atomic<bool> valid;

@@ -101,8 +101,7 @@ TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
 
   serial_port.assign(fd.Get());
 
-  baud_rate = _baud_rate;
-  if (!SetBaudrate(baud_rate))
+  if (!SetBaudrate(_baud_rate))
     return false;
 
   valid.store(true, std::memory_order_relaxed);
