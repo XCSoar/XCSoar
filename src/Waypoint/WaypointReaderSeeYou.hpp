@@ -30,7 +30,7 @@ Copyright_License {
 /**
  * Parses a SeeYou waypoint file.
  *
- * @see http://data.naviter.si/docs/cup_format.pdf
+ * @see http://www.keepitsoaring.com/LKSC/Downloads/cup_format.pdf
  */
 class WaypointReaderSeeYou final : public WaypointReaderBase {
   bool first;
