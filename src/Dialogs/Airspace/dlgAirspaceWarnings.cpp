@@ -43,6 +43,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Compiler.h"
 #include "Audio/Sound.hpp"
+#include "Input/InputQueue.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -387,6 +388,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
       auto delta = solution.altitude - CommonInterface::Basic().nav_altitude;
       FormatRelativeUserAltitude(delta, buffer + _tcslen(buffer), true);
     }
+    InputEvents::processGlideComputer(GCE_AIRSPACE_NEAR);
 
     canvas.DrawClippedText(paint_rc.left + left0, second_row_y,
                            rc_text_clip, buffer);
@@ -400,6 +402,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
   if (warning.state == AirspaceWarning::WARNING_INSIDE) {
     state_color = warning.ack_expired ? inside_color : inside_ack_color;
     state_text = _T("inside");
+    InputEvents::processGlideComputer(GCE_AIRSPACE_INSIDE);
   } else if (warning.state > AirspaceWarning::WARNING_CLEAR) {
     state_color = warning.ack_expired ? near_color : near_ack_color;
     state_text = _T("near");
