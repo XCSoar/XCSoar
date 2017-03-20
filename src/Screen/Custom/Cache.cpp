@@ -24,7 +24,7 @@ Copyright_License {
 #include "Cache.hpp"
 #include "Screen/Point.hpp"
 #include "Screen/Font.hpp"
-#include "Util/Cache.hpp"
+#include "Util/Cache.hxx"
 #include "Util/StringCompare.hxx"
 #include "Util/StringAPI.hxx"
 
