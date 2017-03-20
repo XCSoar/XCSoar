@@ -36,8 +36,6 @@
 #include <boost/intrusive/list.hpp>
 #include <boost/intrusive/unordered_set.hpp>
 
-#include <unordered_map>
-#include <limits>
 #include <assert.h>
 
 template<typename Key, typename Data,
