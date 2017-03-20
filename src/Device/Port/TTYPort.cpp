@@ -107,6 +107,30 @@ TTYPort::Open(const TCHAR *path, unsigned baud_rate)
   if (!SetBaudrate(baud_rate))
     return false;
 
+  serial_port.set_option(boost::asio::serial_port_base::parity(
+                             boost::asio::serial_port_base::parity::none),
+                         ec);
+  if (ec)
+    return false;
+
+  serial_port.set_option(boost::asio::serial_port_base::character_size(
+                             boost::asio::serial_port_base::character_size(8)),
+                         ec);
+  if (ec)
+    return false;
+
+  serial_port.set_option(boost::asio::serial_port_base::stop_bits(
+                             boost::asio::serial_port_base::stop_bits::one),
+                         ec);
+  if (ec)
+    return false;
+
+  serial_port.set_option(boost::asio::serial_port_base::flow_control(
+                             boost::asio::serial_port_base::flow_control::none),
+                         ec);
+  if (ec)
+    return false;
+
   class
   {
   public:
