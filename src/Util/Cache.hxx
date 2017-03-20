@@ -39,7 +39,7 @@
 #include <assert.h>
 
 template<typename Key, typename Data,
-	 unsigned capacity,
+	 std::size_t capacity,
 	 typename Hash=std::hash<Key>,
 	 typename Equal=std::equal_to<Key>>
 class Cache {
@@ -106,7 +106,7 @@ class Cache {
 	/**
 	 * The number of cached items.
 	 */
-	unsigned size = 0;
+	std::size_t size = 0;
 
 	/**
 	 * The list of unallocated items.
@@ -127,7 +127,7 @@ class Cache {
 
 	Item buffer[capacity];
 
-	static constexpr unsigned N_BUCKETS = capacity;
+	static constexpr std::size_t N_BUCKETS = capacity;
 	typename KeyMap::bucket_type buckets[N_BUCKETS];
 
 	Item &GetOldest() {
@@ -182,7 +182,7 @@ class Cache {
 public:
 	Cache()
 		:map(typename KeyMap::bucket_traits(buckets, N_BUCKETS)) {
-		for (unsigned i = 0; i < capacity; ++i)
+		for (std::size_t i = 0; i < capacity; ++i)
 			unallocated_list.push_back(buffer[i]);
 	}
 
