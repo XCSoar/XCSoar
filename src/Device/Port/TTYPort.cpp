@@ -107,6 +107,25 @@ TTYPort::Open(const TCHAR *path, unsigned baud_rate)
   if (!SetBaudrate(baud_rate))
     return false;
 
+  class
+  {
+  public:
+    boost::system::error_code store(
+        termios& attr, boost::system::error_code& ec) const {
+      /* The IGNBRK flag is explicitly cleared by boost::asio::serial_port, and
+         it offers no built-in option to change this.
+         This flag is needed for some setups, to avoid receiving unwanted '\0'
+         charachters, which cannot be detected by weak checksum algorithms. */
+      attr.c_iflag |= IGNBRK;
+
+      ec = boost::system::error_code();
+      return ec;
+    }
+  } custom_options;
+  serial_port.set_option(custom_options, ec);
+  if (ec)
+    return false;
+
   valid.store(true, std::memory_order_relaxed);
 
   AsyncRead();
