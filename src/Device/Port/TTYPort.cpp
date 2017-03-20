@@ -29,6 +29,7 @@ Copyright_License {
 #include "Util/StringFormat.hpp"
 
 #include <system_error>
+#include <boost/system/system_error.hpp>
 
 #include <sys/stat.h>
 #include <termios.h>
@@ -95,11 +96,13 @@ TTYPort::Open(const TCHAR *path, unsigned baud_rate)
     system(command);
   }
 
-  FileDescriptor fd;
-  if (!fd.OpenNonBlocking(path))
-    throw FormatErrno("Failed to open %s", path);
-
-  serial_port.assign(fd.Get());
+  boost::system::error_code ec;
+  serial_port.open(path, ec);
+  if (ec) {
+    char error_msg[MAX_PATH + 16];
+    StringFormat(error_msg, sizeof(error_msg), "Failed to open %s", path);
+    throw boost::system::system_error(ec);
+  }
 
   if (!SetBaudrate(baud_rate))
     return false;
