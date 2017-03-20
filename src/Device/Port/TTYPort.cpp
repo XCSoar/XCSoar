@@ -118,6 +118,11 @@ TTYPort::Open(const TCHAR *path, unsigned baud_rate)
          charachters, which cannot be detected by weak checksum algorithms. */
       attr.c_iflag |= IGNBRK;
 
+      /* boost::asio::serial_port leaves the VMIN and VTIME parameters
+         unintialised, which can lead to undesired behaviour. */
+      attr.c_cc[VMIN] = 1;
+      attr.c_cc[VTIME] = 0;
+
       ec = boost::system::error_code();
       return ec;
     }
