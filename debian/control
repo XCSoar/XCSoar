@@ -1,7 +1,7 @@
 Source: xcsoar
 Section: misc
 Priority: extra
-Maintainer: Max Kellermann <max@duempel.org>
+Maintainer: Max Kellermann <max.kellermann@gmail.com>
 Build-Depends: debhelper (>= 5), g++ (>= 4.8),
  libraspberrypi-dev | libegl1-mesa-dev | libsdl1.2-dev,
  libfreetype6-dev,
