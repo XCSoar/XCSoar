@@ -108,7 +108,7 @@ class Cache {
 	/**
 	 * The number of cached items.
 	 */
-	unsigned size;
+	unsigned size = 0;
 
 	/**
 	 * The list of unallocated items.
@@ -183,8 +183,7 @@ class Cache {
 
 public:
 	Cache()
-		:size(0),
-		 map(typename KeyMap::bucket_traits(buckets, N_BUCKETS)) {
+		:map(typename KeyMap::bucket_traits(buckets, N_BUCKETS)) {
 		for (unsigned i = 0; i < capacity; ++i)
 			unallocated_list.push_back(buffer[i]);
 	}
