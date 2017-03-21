@@ -106,11 +106,6 @@ class Cache {
 				       boost::intrusive::constant_time_size<false>> ItemList;
 
 	/**
-	 * The number of cached items.
-	 */
-	std::size_t size = 0;
-
-	/**
 	 * The list of unallocated items.
 	 */
 	ItemList unallocated_list;
@@ -147,10 +142,6 @@ class Cache {
 
 		map.erase(map.iterator_to(item));
 		chronological_list.erase(chronological_list.iterator_to(item));
-
-#ifndef NDEBUG
-		--size;
-#endif
 
 		return item;
 	}
@@ -193,26 +184,16 @@ public:
 	}
 
 	bool IsFull() const {
-		assert(size <= capacity);
-
-		return size == capacity;
+		return unallocated_list.empty();
 	}
 
 	void Clear() {
 		map.clear();
 
 		chronological_list.clear_and_dispose([this](Item *item){
-#ifndef NDEBUG
-				assert(size > 0);
-				--size;
-#endif
-
 				item->Destruct();
 				unallocated_list.push_front(*item);
 			});
-
-		assert(size == 0);
-		size = 0;
 	}
 
 	const Data *Get(const Key &key) {
@@ -236,10 +217,6 @@ public:
 		Item &item = Make(std::forward<K>(key), std::forward<U>(data));
 		chronological_list.push_front(item);
 		map.insert(item);
-
-#ifndef NDEBUG
-		++size;
-#endif
 	}
 };
 
