@@ -123,12 +123,13 @@ class Cache {
 						     boost::intrusive::hash<ItemHash>,
 						     boost::intrusive::equal<ItemEqual>,
 						     boost::intrusive::constant_time_size<false>> KeyMap;
-	KeyMap map;
-
-	Item buffer[capacity];
 
 	static constexpr std::size_t N_BUCKETS = capacity;
 	typename KeyMap::bucket_type buckets[N_BUCKETS];
+
+	KeyMap map;
+
+	Item buffer[capacity];
 
 	Item &GetOldest() {
 		assert(!chronological_list.empty());
