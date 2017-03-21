@@ -40,6 +40,11 @@
 
 #include <assert.h>
 
+/**
+ * A simple LRU cache.  Item lookup is done with a hash table.  No
+ * dynamic allocation; all items are allocated statically inside this
+ * class.
+ */
 template<typename Key, typename Data,
 	 std::size_t capacity,
 	 typename Hash=std::hash<Key>,
@@ -199,6 +204,10 @@ public:
 			});
 	}
 
+	/**
+	 * Look up an item by its key.  Returns nullptr if no such
+	 * item exists.
+	 */
 	const Data *Get(const Key &key) {
 		auto i = map.find(key, map.hash_function(), map.key_eq());
 		if (i == map.end())
@@ -213,6 +222,13 @@ public:
 		return &item.GetData();
 	}
 
+	/**
+	 * Insert a new item into the cache.  The key must not exist
+	 * already, i.e. Get() has returned nullptr; it is not
+	 * possible to replace an existing item.  If the cache is
+	 * full, then the least recently used item is deleted, making
+	 * room for this one.
+	 */
 	template<typename K, typename U>
 	void Put(K &&key, U &&data) {
 		assert(map.find(key, map.hash_function(), map.key_eq()) == map.end());
