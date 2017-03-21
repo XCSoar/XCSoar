@@ -183,6 +183,9 @@ public:
 		Clear();
 	}
 
+	Cache(const Cache &) = delete;
+	Cache &operator=(const Cache &) = delete;
+
 	bool IsFull() const {
 		return unallocated_list.empty();
 	}
