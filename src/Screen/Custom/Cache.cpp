@@ -193,8 +193,8 @@ struct RenderedText {
 static Mutex text_cache_mutex;
 #endif
 
-static Cache<TextCacheKey, PixelSize, 1024u, TextCacheKey::Hash> size_cache;
-static Cache<TextCacheKey, RenderedText, 256u, TextCacheKey::Hash> text_cache;
+static Cache<TextCacheKey, PixelSize, 1024u, 701u, TextCacheKey::Hash> size_cache;
+static Cache<TextCacheKey, RenderedText, 256u, 211u, TextCacheKey::Hash> text_cache;
 
 PixelSize
 TextCache::GetSize(const Font &font, const char *text)

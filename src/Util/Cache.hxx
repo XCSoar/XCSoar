@@ -44,9 +44,14 @@
  * A simple LRU cache.  Item lookup is done with a hash table.  No
  * dynamic allocation; all items are allocated statically inside this
  * class.
+ *
+ * @param max_size the maximum number of items in the cache
+ * @param table_size the size of the internal hash table; rule of
+ * thumb: should be prime
  */
 template<typename Key, typename Data,
-	 std::size_t capacity,
+	 std::size_t max_size,
+	 std::size_t table_size,
 	 typename Hash=std::hash<Key>,
 	 typename Equal=std::equal_to<Key>>
 class Cache {
@@ -126,11 +131,11 @@ class Cache {
 						     boost::intrusive::equal<ItemEqual>,
 						     boost::intrusive::constant_time_size<false>> KeyMap;
 
-	std::array<typename KeyMap::bucket_type, capacity> buckets;
+	std::array<typename KeyMap::bucket_type, table_size> buckets;
 
 	KeyMap map;
 
-	std::array<Item, capacity> buffer;
+	std::array<Item, max_size> buffer;
 
 	Item &GetOldest() {
 		assert(!chronological_list.empty());
