@@ -36,6 +36,8 @@
 #include <boost/intrusive/list.hpp>
 #include <boost/intrusive/unordered_set.hpp>
 
+#include <array>
+
 #include <assert.h>
 
 template<typename Key, typename Data,
@@ -124,12 +126,11 @@ class Cache {
 						     boost::intrusive::equal<ItemEqual>,
 						     boost::intrusive::constant_time_size<false>> KeyMap;
 
-	static constexpr std::size_t N_BUCKETS = capacity;
-	typename KeyMap::bucket_type buckets[N_BUCKETS];
+	std::array<typename KeyMap::bucket_type, capacity> buckets;
 
 	KeyMap map;
 
-	Item buffer[capacity];
+	std::array<Item, capacity> buffer;
 
 	Item &GetOldest() {
 		assert(!chronological_list.empty());
@@ -182,8 +183,8 @@ class Cache {
 
 public:
 	Cache()
-		:map(typename KeyMap::bucket_traits(buckets, N_BUCKETS)) {
-		for (std::size_t i = 0; i < capacity; ++i)
+		:map(typename KeyMap::bucket_traits(&buckets.front(), buckets.size())) {
+		for (std::size_t i = 0; i < buffer.size(); ++i)
 			unallocated_list.push_back(buffer[i]);
 	}
 
