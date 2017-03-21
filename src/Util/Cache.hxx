@@ -175,8 +175,8 @@ class Cache {
 public:
 	Cache()
 		:map(typename KeyMap::bucket_traits(&buckets.front(), buckets.size())) {
-		for (std::size_t i = 0; i < buffer.size(); ++i)
-			unallocated_list.push_back(buffer[i]);
+		for (auto &i : buffer)
+			unallocated_list.push_back(i);
 	}
 
 	~Cache() {
