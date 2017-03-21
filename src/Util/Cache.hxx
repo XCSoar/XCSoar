@@ -56,38 +56,51 @@ template<typename Key, typename Data,
 	 typename Equal=std::equal_to<Key>>
 class Cache {
 
+	struct Pair {
+		Key key;
+		Data data;
+
+		template<typename K, typename U>
+		Pair(K &&_key, U &&_data)
+			:key(std::forward<K>(_key)),
+			 data(std::forward<U>(_data)) {}
+
+		template<typename K, typename U>
+		void Replace(K &&_key, U &&_data) {
+			key = std::forward<K>(_key);
+			data = std::forward<U>(_data);
+		}
+	};
+
 	class Item
 		: public boost::intrusive::unordered_set_base_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>>,
 		  public boost::intrusive::list_base_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>> {
 
-		Manual<Key> key;
-
-		Manual<Data> data;
+		Manual<Pair> pair;
 
 	public:
 		const Key &GetKey() const {
-			return key.Get();
+			return pair->key;
 		}
 
 		const Data &GetData() const {
-			return data.Get();
+			return pair->data;
 		}
 
 		template<typename K, typename U>
 		void Construct(K &&_key, U &&value) {
-			key.Construct(std::forward<K>(_key));
-			data.Construct(std::forward<U>(value));
+			pair.Construct(std::forward<K>(_key),
+				       std::forward<U>(value));
 		}
 
 		void Destruct() {
-			key.Destruct();
-			data.Destruct();
+			pair.Destruct();
 		}
 
 		template<typename K, typename U>
 		void Replace(K &&_key, U &&value) {
-			key.Get() = std::forward<K>(_key);
-			data.Get() = std::forward<U>(value);
+			pair->Replace(std::forward<K>(_key),
+				      std::forward<U>(value));
 		}
 	};
 
