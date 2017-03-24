@@ -21,42 +21,42 @@
 }
 */
 
-#ifndef XCSOAR_AUSTRALIAN_KEYHOLE_ZONE_EDIT_WIDGET_HPP
-#define XCSOAR_AUSTRALIAN_KEYHOLE_ZONE_EDIT_WIDGET_HPP
+#ifndef XCSOAR_VARIABLE_KEYHOLE_ZONE_EDIT_WIDGET_HPP
+#define XCSOAR_VARIABLE_KEYHOLE_ZONE_EDIT_WIDGET_HPP
 
 #include "ObservationZoneEditWidget.hpp"
-#include "Engine/Task/ObservationZones/AustralianKeyholeZone.hpp"
+#include "Engine/Task/ObservationZones/VariableKeyholeZone.hpp"
 
 /**
  * The purpose of this class is to enter or edit the so called
- * 'AustralianKeyholeZone' observation zone type.
+ * 'VariableKeyholeZone' observation zone type.
  */
-class AustralianKeyholeZoneEditWidget : public ObservationZoneEditWidget
+class VariableKeyholeZoneEditWidget : public ObservationZoneEditWidget
   {
 public:
   /**
    * Ctor.
    * @param oz The observation zone definition.
    */
-  AustralianKeyholeZoneEditWidget(AustralianKeyholeZone &_oz);
+  VariableKeyholeZoneEditWidget(VariableKeyholeZone &_oz);
 
 protected:
   /**
    * The const version of the observation zone.
    * @return The OZ for const operations.
    */
-  const AustralianKeyholeZone &GetObject() const
+  const VariableKeyholeZone &GetObject() const
     {
-    return (const AustralianKeyholeZone &)ObservationZoneEditWidget::GetObject();
+    return (const VariableKeyholeZone &)ObservationZoneEditWidget::GetObject();
     }
 
   /**
    * The non const instance of the observation zone.
    * @return The OZ for non const operations.
    */
-  AustralianKeyholeZone &GetObject()
+  VariableKeyholeZone &GetObject()
     {
-    return (AustralianKeyholeZone &)ObservationZoneEditWidget::GetObject();
+    return (VariableKeyholeZone &)ObservationZoneEditWidget::GetObject();
     }
 
 public:
@@ -65,4 +65,4 @@ public:
   bool Save(bool &changed) override;
   };
 
-#endif  // XCSOAR_AUSTRALIAN_KEYHOLE_ZONE_EDIT_WIDGET_HPP
+#endif  // XCSOAR_VARIABLE_KEYHOLE_ZONE_EDIT_WIDGET_HPP

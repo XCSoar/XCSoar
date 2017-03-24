@@ -23,7 +23,7 @@ Copyright_License {
 
 #define USE_FREETYPE 1
 #define ENABLE_OPENGL 1
-#include "Engine/Task/ObservationZones/AustralianKeyholeZone.hpp"
+#include "Engine/Task/ObservationZones/VariableKeyholeZone.hpp"
 #include "Engine/Task/ObservationZones/Boundary.hpp"
 #include "Geo/GeoVector.hpp"
 #include "Math/Angle.hpp"
@@ -94,7 +94,7 @@ void Test(Args &);
 void
 Test(Args &args)
   {
-  AustralianKeyholeZone *z = AustralianKeyholeZone::New(args.ref,
+  VariableKeyholeZone *z = VariableKeyholeZone::New(args.ref,
                                                         args.outer_radius,
                                                         args.inner_radius,
                                                         args.start_radial,

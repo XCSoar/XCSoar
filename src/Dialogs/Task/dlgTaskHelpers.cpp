@@ -32,7 +32,7 @@ Copyright_License {
 #include "Task/ObservationZones/SectorZone.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
-#include "Task/ObservationZones/AustralianKeyholeZone.hpp"
+#include "Task/ObservationZones/VariableKeyholeZone.hpp"
 #include "Task/Shapes/FAITriangleTask.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Points/Type.hpp"
@@ -189,11 +189,11 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
                        Units::GetDistanceName());
     return;
 
-  case ObservationZone::Shape::AUSTRALIAN_KEYHOLE:
+  case ObservationZone::Shape::VARIABLE_KEYHOLE:
     StringFormatUnsafe(buffer, _T("%s - %s: %.1f%s"),
-                               _("Australian Sector"),
+                               _("Variable Sector"),
                                _("Radius"),
-                               (double )Units::ToUserDistance(((const AustralianKeyholeZone &)ozp).GetRadius()),
+                               (double )Units::ToUserDistance(((const VariableKeyholeZone &)ozp).GetRadius()),
                                Units::GetDistanceName());
     return;
 

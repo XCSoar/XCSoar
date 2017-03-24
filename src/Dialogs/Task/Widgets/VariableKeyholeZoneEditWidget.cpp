@@ -21,7 +21,7 @@
 }
 */
 
-#include "AustralianKeyholeZoneEditWidget.hpp"
+#include "VariableKeyholeZoneEditWidget.hpp"
 #include "Engine/Task/ObservationZones/KeyholeZone.hpp"
 #include "Language/Language.hpp"
 
@@ -34,12 +34,12 @@ enum Controls
   };
 
 //------------------------------------------------------------------------------
-AustralianKeyholeZoneEditWidget::AustralianKeyholeZoneEditWidget(AustralianKeyholeZone &_oz)
+VariableKeyholeZoneEditWidget::VariableKeyholeZoneEditWidget(VariableKeyholeZone &_oz)
   :ObservationZoneEditWidget(_oz) {}
 
 //------------------------------------------------------------------------------
 void
-AustralianKeyholeZoneEditWidget::Prepare(ContainerWindow &parent,
+VariableKeyholeZoneEditWidget::Prepare(ContainerWindow &parent,
                                          const PixelRect &rc)
   {
   ObservationZoneEditWidget::Prepare(parent, rc);
@@ -85,7 +85,7 @@ AustralianKeyholeZoneEditWidget::Prepare(ContainerWindow &parent,
 
 //------------------------------------------------------------------------------
 bool
-AustralianKeyholeZoneEditWidget::Save(bool &_changed)
+VariableKeyholeZoneEditWidget::Save(bool &_changed)
   {
   bool changed = false;
 

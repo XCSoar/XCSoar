@@ -42,7 +42,7 @@ class SectorZone;
 class LineSectorZone;
 class KeyholeZone;
 class AnnularSectorZone;
-class AustralianKeyholeZone;
+class VariableKeyholeZone;
 
 class ObservationZoneVisitorPrint
 {
@@ -67,9 +67,9 @@ public:
     printf("# symmetric quadrant\n");
   }
 
-  void Visit(const AustralianKeyholeZone &oz)
+  void Visit(const VariableKeyholeZone &oz)
     {
-    printf("# Australian keyhole\n");
+    printf("# Variable keyhole\n");
     }
 
   void Visit(const ObservationZonePoint &oz) {
@@ -104,8 +104,8 @@ public:
       Visit((const SymmetricSectorZone &)oz);
       break;
 
-    case ObservationZone::Shape::AUSTRALIAN_KEYHOLE:
-      Visit((const AustralianKeyholeZone &)oz);
+    case ObservationZone::Shape::VARIABLE_KEYHOLE:
+      Visit((const VariableKeyholeZone &)oz);
       break;
     }
   }

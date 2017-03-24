@@ -21,13 +21,13 @@
 }
 */
 
-#ifndef AUSTRALIAN_KEYHOLE_ZONE_HPP
-#define AUSTRALIAN_KEYHOLE_ZONE_HPP
+#ifndef VARIABLE_KEYHOLE_ZONE_HPP
+#define VARIABLE_KEYHOLE_ZONE_HPP
 
 #include "SectorZone.hpp"
 
 /**
- * This class implements the so called 'Australian Sector'. This sector is
+ * This class implements the so called 'Variable Sector'. This sector is
  * an AAT turn point type.
  *
  * This sector type consists of two user defined vectors from the origin at
@@ -36,7 +36,7 @@
  * the outer radius.
  */
 
-class AustralianKeyholeZone final : public SectorZone
+class VariableKeyholeZone final : public SectorZone
   {
 private:
   double inner_radius;
@@ -60,7 +60,7 @@ protected:
    * @param inner_radius The radius of the inner cylinder, centered on loc,
    *                     in meters.
    */
-  AustralianKeyholeZone(Shape shape,
+  VariableKeyholeZone(Shape shape,
                         bool  can_start_through_top,
                         bool  arc_boundary,
                         const GeoPoint &loc,
@@ -84,7 +84,7 @@ protected:
    * @param other The reference observation zone.
    * @param reference The location the cloned obsevation zone.
    */
-  AustralianKeyholeZone(const AustralianKeyholeZone &other,
+  VariableKeyholeZone(const VariableKeyholeZone &other,
                         const GeoPoint &reference)
   : SectorZone((const SectorZone &)other, reference),
     inner_radius(other.inner_radius)
@@ -93,20 +93,20 @@ protected:
 
 public:
   /**
-   * Create a fully populated AustralianKeyholeZone.
+   * Create a fully populated VariableKeyholeZone.
    * @param ref The zone's reference point - phi, lambda.
    * @param radius The radius of the sector encompassed by the radials.
    * @param inner_radius The radius of the cylinder whose center is reference.
    * @param start_radial The most CCW radial.
    * @param end_radial The most CW radial.
    */
-  static AustralianKeyholeZone *New(const GeoPoint &ref,
+  static VariableKeyholeZone *New(const GeoPoint &ref,
                                     double radius,
                                     double inner_radius,
                                     Angle start_radial,
                                     Angle end_radial)
     {
-    return new AustralianKeyholeZone(Shape::AUSTRALIAN_KEYHOLE,
+    return new VariableKeyholeZone(Shape::VARIABLE_KEYHOLE,
                                      true,
                                      true,
                                      ref,
@@ -117,26 +117,26 @@ public:
     }
 
   /**
-   * Create a proto AustralianKeyholeZone with some parameters set "sensibly".
+   * Create a proto VariableKeyholeZone with some parameters set "sensibly".
    * @param ref The zone's reference point - phi, lambda.
    */
-  static AustralianKeyholeZone *New(const GeoPoint &ref)
+  static VariableKeyholeZone *New(const GeoPoint &ref)
     {
-    return new AustralianKeyholeZone(Shape::AUSTRALIAN_KEYHOLE,
+    return new VariableKeyholeZone(Shape::VARIABLE_KEYHOLE,
                                      true,
                                      true,
                                      ref);
     }
 
   /**
-   * Create a proto AustralianKeyholeZone with some parameters set "sensibly".
+   * Create a proto VariableKeyholeZone with some parameters set "sensibly".
    * @param ref The zone's reference point - phi, lambda.
    * @param radius The radius of the sector portion of the zone.
    */
-  static AustralianKeyholeZone *New(const GeoPoint &ref,
+  static VariableKeyholeZone *New(const GeoPoint &ref,
                                     double radius)
     {
-    return new AustralianKeyholeZone(Shape::AUSTRALIAN_KEYHOLE,
+    return new VariableKeyholeZone(Shape::VARIABLE_KEYHOLE,
                                      true,
                                      true,
                                      ref,
@@ -163,9 +163,9 @@ public:
   /* virtual methods from class ObservationZonePoint */
   ObservationZonePoint *Clone(const GeoPoint &reference) const override
     {
-    return new AustralianKeyholeZone(*this, reference);
+    return new VariableKeyholeZone(*this, reference);
     }
 
   };
 
-#endif  // AUSTRALIAN_KEYHOLE_ZONE_HPP
+#endif  // VARIABLE_KEYHOLE_ZONE_HPP

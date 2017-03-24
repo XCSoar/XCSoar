@@ -28,8 +28,7 @@
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
-#include "Task/ObservationZones/SymmetricSectorZone.hpp"
-#include "Task/ObservationZones/AustralianKeyholeZone.hpp"
+#include "Task/ObservationZones/VariableKeyholeZone.hpp"
 #include "XML/DataNode.hpp"
 #include "Compiler.h"
 
@@ -114,9 +113,9 @@ Visit(WritableDataNode &node, const AnnularSectorZone &data)
 
 //------------------------------------------------------------------------------
 static void
-Visit(WritableDataNode &node, const AustralianKeyholeZone &data)
+Visit(WritableDataNode &node, const VariableKeyholeZone &data)
   {
-  node.SetAttribute(_T("type"),         _T("AustralianKeyholeZone"));
+  node.SetAttribute(_T("type"),         _T("VariableKeyholeZone"));
   node.SetAttribute(_T("radius"),       data.GetRadius());
   node.SetAttribute(_T("inner_radius"), data.GetInnerRadius());
   node.SetAttribute(_T("start_radial"), data.GetStartRadial());
@@ -188,8 +187,8 @@ Serialise(WritableDataNode &node, const ObservationZonePoint &data)
     Visit(node, (const AnnularSectorZone &)data);
     break;
 
-  case ObservationZone::Shape::AUSTRALIAN_KEYHOLE:
-    Visit(node, (const AustralianKeyholeZone &)data);
+  case ObservationZone::Shape::VARIABLE_KEYHOLE:
+    Visit(node, (const VariableKeyholeZone &)data);
     break;
 
   case ObservationZone::Shape::SYMMETRIC_QUADRANT:

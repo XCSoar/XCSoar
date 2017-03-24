@@ -45,7 +45,7 @@ static constexpr LegalPointSet aat_im_types{
   TaskPointFactoryType::AAT_SEGMENT,
   TaskPointFactoryType::AAT_ANNULAR_SECTOR,
   TaskPointFactoryType::AAT_KEYHOLE,
-  TaskPointFactoryType::AAT_AUSTRALIAN_KEYHOLE_SECTOR,
+  TaskPointFactoryType::AAT_VARIABLE_KEYHOLE_SECTOR,
 };
 
 static constexpr LegalPointSet aat_finish_types{
@@ -99,7 +99,7 @@ AATTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
   case TaskPointFactoryType::AAT_CYLINDER:
   case TaskPointFactoryType::AAT_ANNULAR_SECTOR:
   case TaskPointFactoryType::AAT_KEYHOLE:
-  case TaskPointFactoryType::AAT_AUSTRALIAN_KEYHOLE_SECTOR:
+  case TaskPointFactoryType::AAT_VARIABLE_KEYHOLE_SECTOR:
     break;
 
   case TaskPointFactoryType::COUNT:

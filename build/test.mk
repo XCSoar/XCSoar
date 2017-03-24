@@ -789,7 +789,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunKalmanFilter1d \
 	ArcApprox \
   CanvasKeyhole \
-  AustralianKeyholeZone
+  VariableKeyholeZone
 
 ifeq ($(TARGET),UNIX)
 DEBUG_PROGRAM_NAMES += \
@@ -970,9 +970,9 @@ CANVAS_KEYHOLE_DEPENDS = SCREEN UTIL OS RESOURCE MATH
 $(eval $(call link-program,CanvasKeyhole,CANVAS_KEYHOLE))
 
 AUSTRALIAN_KEYHOLE_ZONE_SOURCES = \
-  $(TEST_SRC_DIR)/AustralianKeyholeZone.cpp
+  $(TEST_SRC_DIR)/VariableKeyholeZone.cpp
 AUSTRALIAN_KEYHOLE_ZONE_DEPENDS = SCREEN TASK GEO FORM OS MATH UTIL
-$(eval $(call link-program,AustralianKeyholeZone,AUSTRALIAN_KEYHOLE_ZONE))
+$(eval $(call link-program,VariableKeyholeZone,AUSTRALIAN_KEYHOLE_ZONE))
 
 RUN_DOWNLOAD_TO_FILE_SOURCES = \
 	$(SRC)/Version.cpp \

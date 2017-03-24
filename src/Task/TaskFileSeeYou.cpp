@@ -332,7 +332,7 @@ CalcIntermediateAngle(const SeeYouTurnpointInformation &turnpoint_infos,
  * @param factType The XCSoar factory type
  * @return the XCSoar OZ
  *
- * /TODO Get hold of a CU file containing an Australian Keyhole Sector and
+ * /TODO Get hold of a CU file containing an Variable Keyhole Sector and
  *       modify this code to parse it.
  */
 static ObservationZonePoint*

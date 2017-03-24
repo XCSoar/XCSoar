@@ -126,7 +126,7 @@ static const TCHAR *const tp_factory_names[] = {
   N_("Finish cylinder"),
   N_("BGA start sector"),
   N_("Area sector with inner radius"),
-  N_("\'Australian Keyhole\' sector"),
+  N_("Variable Keyhole sector"),
   N_("Symmetric quadrant"),
   N_("Area keyhole"),
 };

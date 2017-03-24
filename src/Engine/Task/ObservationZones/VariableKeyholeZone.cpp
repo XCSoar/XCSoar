@@ -20,13 +20,13 @@
 }
 */
 
-#include "AustralianKeyholeZone.hpp"
+#include "VariableKeyholeZone.hpp"
 #include "Boundary.hpp"
 #include "Geo/GeoVector.hpp"
 
 //------------------------------------------------------------------------------
 OZBoundary
-AustralianKeyholeZone::GetBoundary() const
+VariableKeyholeZone::GetBoundary() const
   {
   OZBoundary boundary;
   boundary.push_front(this->GetSectorStart());
@@ -53,7 +53,7 @@ AustralianKeyholeZone::GetBoundary() const
 
 //------------------------------------------------------------------------------
 bool
-AustralianKeyholeZone::IsInSector(const GeoPoint &location) const
+VariableKeyholeZone::IsInSector(const GeoPoint &location) const
   {
   GeoVector f(GetReference(), location);
 
