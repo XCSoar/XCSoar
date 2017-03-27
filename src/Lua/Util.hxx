@@ -197,6 +197,35 @@ Push(lua_State *L, _Lambda<T> l)
 
 template<typename V>
 void
+SetGlobal(lua_State *L, const char *name, V &&value)
+{
+	Push(L, std::forward<V>(value));
+	lua_setglobal(L, name);
+}
+
+template<typename K>
+void
+GetTable(lua_State *L, int idx, K &&key)
+{
+	const ScopeCheckStack check_stack(L, 1);
+
+	Push(L, std::forward<K>(key));
+	lua_gettable(L, idx);
+}
+
+template<typename K, typename V>
+void
+SetTable(lua_State *L, int idx, K &&key, V &&value)
+{
+	const ScopeCheckStack check_stack(L);
+
+	Push(L, std::forward<K>(key));
+	Push(L, std::forward<V>(value));
+	lua_settable(L, idx);
+}
+
+template<typename V>
+void
 SetField(lua_State *L, int idx, const char *name, V &&value)
 {
 	const ScopeCheckStack check_stack(L);
