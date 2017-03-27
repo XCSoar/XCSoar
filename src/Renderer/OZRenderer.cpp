@@ -179,8 +179,7 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
                        projection.GeoToScreenDistance(oz.GetRadius()),
                        oz.GetStartRadial() - projection.GetScreenAngle(),
                        oz.GetEndRadial() - projection.GetScreenAngle());
-
-
+    break;
     }
 
   case ObservationZone::Shape::ANNULAR_SECTOR: {
