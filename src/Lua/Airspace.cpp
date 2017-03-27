@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Airspace.hpp"
-#include "Util.hpp"
+#include "Util.hxx"
 #include "Util/StringAPI.hxx"
 #include "Interface.hpp"
 #include "Components.hpp"

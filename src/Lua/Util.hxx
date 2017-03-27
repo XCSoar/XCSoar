@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_LUA_UTIL_HPP
-#define XCSOAR_LUA_UTIL_HPP
+#ifndef LUA_UTIL_HXX
+#define LUA_UTIL_HXX
 
 #include "Compiler.h"
 
@@ -41,90 +41,90 @@ extern "C" {
 namespace Lua {
 
 struct LightUserData {
-  void *value;
+	void *value;
 
-  constexpr LightUserData(void *_value):value(_value) {}
+	constexpr LightUserData(void *_value):value(_value) {}
 };
 
 static inline void
 Push(lua_State *L, std::nullptr_t)
 {
-  lua_pushnil(L);
+	lua_pushnil(L);
 }
 
 gcc_nonnull_all
 static inline void
 Push(lua_State *L, bool value)
 {
-  lua_pushboolean(L, value);
+	lua_pushboolean(L, value);
 }
 
 gcc_nonnull_all
 static inline void
 Push(lua_State *L, const char *value)
 {
-  lua_pushstring(L, value);
+	lua_pushstring(L, value);
 }
 
 gcc_nonnull_all
 static inline void
 Push(lua_State *L, int value)
 {
-  lua_pushinteger(L, value);
+	lua_pushinteger(L, value);
 }
 
 gcc_nonnull_all
 static inline void
 Push(lua_State *L, double value)
 {
-  lua_pushnumber(L, value);
+	lua_pushnumber(L, value);
 }
 
 gcc_nonnull_all
 static inline void
 Push(lua_State *L, lua_CFunction value)
 {
-  lua_pushcfunction(L, value);
+	lua_pushcfunction(L, value);
 }
 
 gcc_nonnull_all
 static inline void
 Push(lua_State *L, LightUserData value)
 {
-  lua_pushlightuserdata(L, value.value);
+	lua_pushlightuserdata(L, value.value);
 }
 
 template<typename V>
 void
 SetField(lua_State *L, int idx, const char *name, V &&value)
 {
-  Push(L, value);
-  lua_setfield(L, idx, name);
+	Push(L, value);
+	lua_setfield(L, idx, name);
 }
 
 template<typename V>
 static inline void
 SetRegistry(lua_State *L, const char *name, V &&value)
 {
-  SetField(L, LUA_REGISTRYINDEX, name, value);
+	SetField(L, LUA_REGISTRYINDEX, name, value);
 }
 
 static inline void *
 GetRegistryLightUserData(lua_State *L, const char *name)
 {
-  lua_getfield(L, LUA_REGISTRYINDEX, name);
-  void *value = lua_touserdata(L, -1);
-  lua_pop(L, 1);
-  return value;
+	lua_getfield(L, LUA_REGISTRYINDEX, name);
+	void *value = lua_touserdata(L, -1);
+	lua_pop(L, 1);
+	return value;
 }
 
 template<typename V>
 static inline void
 SetField(lua_State *L, const char *package, const char *name, V &&value)
 {
-  lua_getglobal(L, package);
-  SetField(L, -2, name, value);
-  lua_pop(L, 1);
+	lua_getglobal(L, package);
+	SetField(L, -2, name, value);
+	lua_pop(L, 1);
 }
 
 /**
@@ -134,7 +134,7 @@ SetField(lua_State *L, const char *package, const char *name, V &&value)
 gcc_nonnull_all
 static inline void
 SetPackagePath(lua_State *L, const char *path) {
-  SetField(L, "package", "path", path);
+	SetField(L, "package", "path", path);
 }
 
 template<typename F>

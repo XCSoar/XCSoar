@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Background.hpp"
-#include "Util.hpp"
+#include "Util.hxx"
 #include "Persistent.hpp"
 #include "Util/DeleteDisposer.hxx"
 

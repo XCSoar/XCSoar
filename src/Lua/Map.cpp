@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Map.hpp"
 #include "Geo.hpp"
-#include "Util.hpp"
+#include "Util.hxx"
 #include "Util/StringAPI.hxx"
 #include "UIGlobals.hpp"
 #include "PageActions.hpp"

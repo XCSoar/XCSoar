@@ -31,7 +31,7 @@ Copyright_License {
 #include "Compiler.h"
 #include "Util/StringAPI.hxx"
 #include "Util/ConvertString.hpp"
-#include "Util.hpp"
+#include "Util.hxx"
 #include "Interface.hpp"
 
 #include <map>
