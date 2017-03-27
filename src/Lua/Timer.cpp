@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Timer.hpp"
+#include "Util.hxx"
 #include "Error.hpp"
 #include "Catch.hpp"
 #include "Associate.hpp"
@@ -81,11 +82,8 @@ private:
     lua_newtable(L);
     --this_idx;
 
-    lua_pushvalue(L, callback_idx);
-    lua_setfield(L, -2, "callback");
-
-    lua_pushvalue(L, this_idx);
-    lua_setfield(L, -2, "timer");
+    Lua::SetField(L, -2, "callback", Lua::StackIndex(callback_idx));
+    Lua::SetField(L, -2, "timer", Lua::StackIndex(this_idx));
 
     Lua::AssociatePointer(L, registry_table, (void *)this, -1);
     lua_pop(L, 1); // pop table

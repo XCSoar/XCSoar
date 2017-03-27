@@ -41,6 +41,15 @@ extern "C" {
 
 namespace Lua {
 
+/**
+ * This type represents an index on the Lua stack.
+ */
+struct StackIndex {
+	int idx;
+
+	explicit constexpr StackIndex(int _idx):idx(_idx) {}
+};
+
 struct LightUserData {
 	void *value;
 
@@ -51,6 +60,12 @@ static inline void
 Push(lua_State *L, std::nullptr_t)
 {
 	lua_pushnil(L);
+}
+
+static inline void
+Push(lua_State *L, StackIndex i)
+{
+	lua_pushvalue(L, i.idx);
 }
 
 gcc_nonnull_all
