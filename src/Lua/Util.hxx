@@ -30,6 +30,7 @@
 #ifndef LUA_UTIL_HXX
 #define LUA_UTIL_HXX
 
+#include "Assert.hxx"
 #include "Compiler.h"
 
 extern "C" {
@@ -98,6 +99,8 @@ template<typename V>
 void
 SetField(lua_State *L, int idx, const char *name, V &&value)
 {
+	const ScopeCheckStack check_stack(L);
+
 	Push(L, value);
 	lua_setfield(L, idx, name);
 }
@@ -112,6 +115,8 @@ SetRegistry(lua_State *L, const char *name, V &&value)
 static inline void *
 GetRegistryLightUserData(lua_State *L, const char *name)
 {
+	const ScopeCheckStack check_stack(L);
+
 	lua_getfield(L, LUA_REGISTRYINDEX, name);
 	void *value = lua_touserdata(L, -1);
 	lua_pop(L, 1);
@@ -122,6 +127,8 @@ template<typename V>
 static inline void
 SetField(lua_State *L, const char *package, const char *name, V &&value)
 {
+	const ScopeCheckStack check_stack(L);
+
 	lua_getglobal(L, package);
 	SetField(L, -2, name, value);
 	lua_pop(L, 1);
