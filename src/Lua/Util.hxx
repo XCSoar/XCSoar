@@ -38,6 +38,7 @@ extern "C" {
 }
 
 #include <cstddef>
+#include <tuple>
 
 namespace Lua {
 
@@ -94,6 +95,32 @@ static inline void
 Push(lua_State *L, double value)
 {
 	lua_pushnumber(L, value);
+}
+
+template<std::size_t i>
+struct _PushTuple {
+	template<typename T>
+	static void PushTuple(lua_State *L, const T &t) {
+		_PushTuple<i - 1>::template PushTuple<T>(L, t);
+		Push(L, std::get<i - 1>(t));
+	}
+};
+
+template<>
+struct _PushTuple<0> {
+	template<typename T>
+	static void PushTuple(lua_State *, const T &) {
+	}
+};
+
+template<typename... T>
+gcc_nonnull_all
+void
+Push(lua_State *L, const std::tuple<T...> &t)
+{
+	const ScopeCheckStack check_stack(L, sizeof...(T));
+
+	_PushTuple<sizeof...(T)>::template PushTuple<std::tuple<T...>>(L, t);
 }
 
 gcc_nonnull_all
