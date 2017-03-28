@@ -331,9 +331,6 @@ CalcIntermediateAngle(const SeeYouTurnpointInformation &turnpoint_infos,
  * @param array of wps for each point in task
  * @param factType The XCSoar factory type
  * @return the XCSoar OZ
- *
- * /TODO Get hold of a CU file containing an Variable Keyhole Sector and
- *       modify this code to parse it.
  */
 static ObservationZonePoint*
 CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
