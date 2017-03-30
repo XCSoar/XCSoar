@@ -69,14 +69,14 @@ VariableKeyholeZoneEditWidget::Prepare(ContainerWindow &parent,
                  this);
 
   this->AddAngle(_("Start radial"),
-                 _("Start radial of the OZ area"),
+                 _("The most CCW radial of the OZ area"),
                  this->GetObject().GetStartRadial(),
                  10,
                  true,
                  this);
 
   this->AddAngle(_("Finish radial"),
-                 _("Finish radial of the OZ area"),
+                 _("The most CW radial of the OZ area"),
                  this->GetObject().GetEndRadial(),
                  10,
                  true,
