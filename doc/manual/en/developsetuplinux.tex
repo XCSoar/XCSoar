@@ -125,9 +125,9 @@ ln -s android-sdk-linux_x86 android-sdk-linux
 
 # Download NDK installer
 wget "http://dl.google.com/android/\
-repository/android-ndk-r14-linux-x86_64.zip"
+repository/android-ndk-r14b-linux-x86_64.zip"
 
-unzip android-ndk-r14-linux-x86_64.zip
+unzip android-ndk-r14b-linux-x86_64.zip
 \end{verbatim}
 
 We need to add the paths by appending the following lines to \texttt{\~/.profile} and \texttt{/~/.bashrc} --- here relative paths work.
@@ -139,7 +139,7 @@ export PATH="$PATH:$ANDROID_SDK_HOME/tools"
 export PATH="$PATH:$ANDROID_SDK_HOME/platform-tools"
 
 # Android NDK
-export ANDROID_NDK_HOME="~/opt/android-ndk-r14"
+export ANDROID_NDK_HOME="~/opt/android-ndk-r14b"
 export PATH="$PATH:$ANDROID_NDK_HOME"
 \end{verbatim}
 
