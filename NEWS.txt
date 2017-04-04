@@ -55,6 +55,8 @@ Version 7.0 - not yet released
   - support Kobo Glo HD
 
 Version 6.8.8 - not yet released
+* data files
+  - support "GSEC" in OpenAir files
 * weather
   - update source URLs for METARs and TAFs
 * Kobo
