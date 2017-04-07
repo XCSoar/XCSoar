@@ -274,3 +274,10 @@ CAI302Device::WriteNavpoint(unsigned id, const Waypoint &wp,
 
   return true;
 }
+
+bool
+CAI302Device::CloseNavpoints(OperationEnvironment &env)
+{
+  return CAI302::CloseNavpoints(port, env);
+}
+
