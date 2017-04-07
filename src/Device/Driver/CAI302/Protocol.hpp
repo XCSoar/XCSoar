@@ -485,6 +485,9 @@ namespace CAI302 {
                  OperationEnvironment &env);
 
   bool
+  CloseNavpoints(Port &port, OperationEnvironment &env);
+
+  bool
   DownloadNavpoint(Port &port, const GeoPoint &location,
                    int altitude, unsigned id,
                    bool turnpoint, bool airfield, bool markpoint,

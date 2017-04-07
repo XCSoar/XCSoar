@@ -77,6 +77,6 @@ CAI302WaypointUploader::Run(OperationEnvironment &env)
       break;
     }
   }
-
+  device.CloseNavpoints(env);
   device.DisableBulkMode(env);
 }

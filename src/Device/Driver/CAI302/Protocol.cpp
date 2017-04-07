@@ -475,6 +475,13 @@ CAI302::DownloadNavpoint(Port &port, const GeoPoint &location,
 }
 
 bool
+CAI302::CloseNavpoints(Port &port, OperationEnvironment &env)
+{
+  return DownloadCommand(port, "C,-1\r", env, 5000);
+}
+
+
+bool
 CAI302::DeclareTP(Port &port, unsigned i, const GeoPoint &location,
                   int altitude, const char *name, OperationEnvironment &env)
 {
