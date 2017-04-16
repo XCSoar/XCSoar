@@ -61,13 +61,13 @@ protected:
    *                     in meters.
    */
   VariableKeyholeZone(Shape shape,
-                        bool  can_start_through_top,
-                        bool  arc_boundary,
-                        const GeoPoint &loc,
-                        const double radiusOuter = 10000.0,
-                        const Angle startRadial = Angle::Zero(),
-                        const Angle endRadial = Angle::FullCircle(),
-                        const double inner_radius = 500.0)
+                      bool  can_start_through_top,
+                      bool  arc_boundary,
+                      const GeoPoint &loc,
+                      const double radiusOuter = 10000.0,
+                      const Angle startRadial = Angle::Zero(),
+                      const Angle endRadial = Angle::FullCircle(),
+                      const double inner_radius = 500.0)
     : SectorZone(shape,
                  can_start_through_top,
                  arc_boundary,
@@ -85,7 +85,7 @@ protected:
    * @param reference The location the cloned obsevation zone.
    */
   VariableKeyholeZone(const VariableKeyholeZone &other,
-                        const GeoPoint &reference)
+                      const GeoPoint &reference)
   : SectorZone((const SectorZone &)other, reference),
     inner_radius(other.inner_radius)
       {
@@ -101,19 +101,19 @@ public:
    * @param end_radial The most CW radial.
    */
   static VariableKeyholeZone *New(const GeoPoint &ref,
-                                    double radius,
-                                    double inner_radius,
-                                    Angle start_radial,
-                                    Angle end_radial)
+                                  double radius,
+                                  double inner_radius,
+                                  Angle start_radial,
+                                  Angle end_radial)
     {
     return new VariableKeyholeZone(Shape::VARIABLE_KEYHOLE,
-                                     true,
-                                     true,
-                                     ref,
-                                     radius,
-                                     start_radial,
-                                     end_radial,
-                                     inner_radius);
+                                   true,
+                                   true,
+                                   ref,
+                                   radius,
+                                   start_radial,
+                                   end_radial,
+                                   inner_radius);
     }
 
   /**
@@ -123,9 +123,9 @@ public:
   static VariableKeyholeZone *New(const GeoPoint &ref)
     {
     return new VariableKeyholeZone(Shape::VARIABLE_KEYHOLE,
-                                     true,
-                                     true,
-                                     ref);
+                                   true,
+                                   true,
+                                   ref);
     }
 
   /**
@@ -134,13 +134,13 @@ public:
    * @param radius The radius of the sector portion of the zone.
    */
   static VariableKeyholeZone *New(const GeoPoint &ref,
-                                    double radius)
+                                  double radius)
     {
     return new VariableKeyholeZone(Shape::VARIABLE_KEYHOLE,
-                                     true,
-                                     true,
-                                     ref,
-                                     radius);
+                                   true,
+                                   true,
+                                   ref,
+                                   radius);
     }
 
   /**
