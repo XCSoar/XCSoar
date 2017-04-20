@@ -192,6 +192,7 @@ ParseOZs(SeeYouTurnpointInformation turnpoint_infos[], const TCHAR *params[],
   turnpoint_infos[oz_index].valid = true;
   // Defaults
   turnpoint_infos[oz_index].radius2 = 0;
+
   // Iterate through available OZ options
   for (unsigned i = 1; i < n_params; i++) {
     const TCHAR *pair = params[i];
