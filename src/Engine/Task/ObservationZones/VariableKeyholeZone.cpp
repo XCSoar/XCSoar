@@ -27,7 +27,7 @@
 //------------------------------------------------------------------------------
 OZBoundary
 VariableKeyholeZone::GetBoundary() const
-  {
+{
   OZBoundary boundary;
   boundary.push_front(this->GetSectorStart());
   boundary.push_front(this->GetSectorEnd());
@@ -49,16 +49,16 @@ VariableKeyholeZone::GetBoundary() const
                                 this->GetStartRadial());
 
   return boundary;
-  }
+}
 
 //------------------------------------------------------------------------------
 bool
 VariableKeyholeZone::IsInSector(const GeoPoint &location) const
-  {
+{
   GeoVector f(GetReference(), location);
 
   return ((f.distance <= this->inner_radius) ||
           (f.distance <= this->GetRadius() &&
            this->IsAngleInSector(f.bearing)));
-  }
+}
 

@@ -32,12 +32,16 @@
  *
  * This sector type consists of two user defined vectors from the origin at
  * the waypoint and bounded by the outer radius. Also included is a cylinder
- * having an inner radius. Plainly the value inner radius is less that than
- * the outer radius.
+ * having an inner radius. Plainly the value inner radius is less than, or
+ * equal to, that of the outer radius.
+ *
+ * By manipulation of the inner, outer radii, and the start and end radial
+ * this class can handle so called sector, arbitrary keyhole and circle
+ * observation zones.
  */
 
 class VariableKeyholeZone final : public SectorZone
-  {
+{
 private:
   double inner_radius;
 
@@ -73,11 +77,11 @@ protected:
                  arc_boundary,
                  loc,
                  radiusOuter),
-      inner_radius(inner_radius)
-    {
+    inner_radius(inner_radius)
+  {
     this->SectorZone::SetStartRadial(startRadial);
     this->SectorZone::SetEndRadial(endRadial);
-    }
+  }
 
   /**
    * Clone ctor.
@@ -86,10 +90,10 @@ protected:
    */
   VariableKeyholeZone(const VariableKeyholeZone &other,
                       const GeoPoint &reference)
-  : SectorZone((const SectorZone &)other, reference),
-    inner_radius(other.inner_radius)
-      {
-      }
+    : SectorZone((const SectorZone &)other, reference),
+      inner_radius(other.inner_radius)
+  {
+  }
 
 public:
   /**
@@ -105,7 +109,7 @@ public:
                                   double inner_radius,
                                   Angle start_radial,
                                   Angle end_radial)
-    {
+  {
     return new VariableKeyholeZone(Shape::VARIABLE_KEYHOLE,
                                    true,
                                    true,
@@ -114,19 +118,19 @@ public:
                                    start_radial,
                                    end_radial,
                                    inner_radius);
-    }
+  }
 
   /**
    * Create a proto VariableKeyholeZone with some parameters set "sensibly".
    * @param ref The zone's reference point - phi, lambda.
    */
   static VariableKeyholeZone *New(const GeoPoint &ref)
-    {
+  {
     return new VariableKeyholeZone(Shape::VARIABLE_KEYHOLE,
                                    true,
                                    true,
                                    ref);
-    }
+  }
 
   /**
    * Create a proto VariableKeyholeZone with some parameters set "sensibly".
@@ -162,10 +166,10 @@ public:
 
   /* virtual methods from class ObservationZonePoint */
   ObservationZonePoint *Clone(const GeoPoint &reference) const override
-    {
+  {
     return new VariableKeyholeZone(*this, reference);
-    }
+  }
 
-  };
+};
 
 #endif  // VARIABLE_KEYHOLE_ZONE_HPP

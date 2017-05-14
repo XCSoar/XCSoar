@@ -114,13 +114,13 @@ Visit(WritableDataNode &node, const AnnularSectorZone &data)
 //------------------------------------------------------------------------------
 static void
 Visit(WritableDataNode &node, const VariableKeyholeZone &data)
-  {
+{
   node.SetAttribute(_T("type"),         _T("VariableKeyholeZone"));
   node.SetAttribute(_T("radius"),       data.GetRadius());
   node.SetAttribute(_T("inner_radius"), data.GetInnerRadius());
   node.SetAttribute(_T("start_radial"), data.GetStartRadial());
   node.SetAttribute(_T("end_radial"),   data.GetEndRadial());
-  }
+}
 
 static void
 Visit(WritableDataNode &node, const LineSectorZone &data)
