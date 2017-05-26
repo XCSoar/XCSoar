@@ -90,7 +90,7 @@ LogoPageWindow::OnPaint(Canvas &canvas)
   y += Layout::FastScale(22);
 
   canvas.SetTextColor(COLOR_XCSOAR);
-  canvas.DrawText(x, y, _T("pfb@exadios.org"));
+  canvas.DrawText(x, y, _T("pfb@exadios.com"));
   y += Layout::FastScale(37);
 
   canvas.SetTextColor(COLOR_RED);
