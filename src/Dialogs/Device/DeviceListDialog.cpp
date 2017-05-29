@@ -81,6 +81,8 @@ class DeviceListWidget final
     bool duplicate:1;
     bool open:1, error:1;
     bool alive:1, location:1, gps:1, baro:1, airspeed:1, vario:1, traffic:1;
+    bool temperature:1;
+    bool humidity:1;
     bool debug:1;
 
     void Set(const DeviceConfig &config, const DeviceDescriptor &device,
@@ -116,6 +118,8 @@ class DeviceListWidget final
       airspeed = basic.airspeed_available;
       vario = basic.total_energy_vario_available;
       traffic = basic.flarm.IsDetected();
+      temperature = basic.temperature_available;
+      humidity = basic.humidity_available;
       debug = device.IsDumpEnabled();
     }
   };
@@ -384,6 +388,11 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 
     if (flags.traffic)
       buffer.append(_T("; FLARM"));
+
+    if (flags.temperature || flags.humidity) {
+      buffer.append(_T("; "));
+      buffer.append(_T("Environment"));
+    }
 
     if (flags.debug) {
       buffer.append(_T("; "));
