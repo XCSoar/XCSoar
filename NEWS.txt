@@ -3,6 +3,8 @@ Version 6.8.8 - not yet released
   - support "GSEC" in OpenAir files
 * weather
   - update source URLs for METARs and TAFs
+* devices
+  - LX: fix Nano 3 task declaration (#3858)
 * Kobo
   - support for Kobo Aura Edition 2
   - fix Wifi on recent Kobo firmware releases
