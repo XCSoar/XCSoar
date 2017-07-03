@@ -32,7 +32,7 @@ SCREEN_CUSTOM_SOURCES = \
 
 ifeq ($(COREGRAPHICS),y)
 SCREEN_CUSTOM_SOURCES_IMG = \
-	$(SCREEN_SRC_DIR)/Custom/CoreGraphics.cpp
+	$(SCREEN_SRC_DIR)/Apple/ImageDecoder.cpp
 endif
 
 ifeq ($(LIBPNG),y)

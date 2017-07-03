@@ -26,7 +26,7 @@ Copyright_License {
 #include "OS/Path.hpp"
 
 #ifdef ENABLE_COREGRAPHICS
-#include "CoreGraphics.hpp"
+#include "Screen/Apple/ImageDecoder.hpp"
 #else
 #include "LibPNG.hpp"
 #include "LibJPEG.hpp"
