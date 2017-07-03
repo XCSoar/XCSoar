@@ -44,6 +44,8 @@
         <string></string>
         <key>NSLocationWhenInUseUsageDescription</key>
         <string></string>
+        <key>UIFileSharingEnabled</key>
+        <true/>
     </dict>
 </plist>
 
