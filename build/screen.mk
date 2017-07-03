@@ -254,7 +254,8 @@ SCREEN_LDLIBS = \
 	$(WAYLAND_LDLIBS) \
 	$(EGL_LDLIBS) \
 	$(GLX_LDLIBS) \
-	$(FB_LDLIBS)
+	$(FB_LDLIBS) \
+	$(COREGRAPHICS_LDLIBS)
 
 $(eval $(call link-library,screen,SCREEN))
 
