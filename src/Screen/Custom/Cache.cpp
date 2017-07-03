@@ -275,7 +275,7 @@ TextCache::Get(const Font &font, const char *text)
   /* render the text into a OpenGL texture */
 
 #ifdef USE_FREETYPE
-#if defined(USE_FREETYPE) && defined(UNICODE)
+#ifdef UNICODE
   UTF8ToWideConverter text2(text);
 #else
   const TCHAR* text2 = text;
