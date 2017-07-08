@@ -27,6 +27,19 @@
             <key>opengles-2</key>
             <true/>
         </dict>
+        <key>UISupportedInterfaceOrientations</key>
+        <array>
+          <string>UIInterfaceOrientationPortrait</string>
+          <string>UIInterfaceOrientationLandscapeLeft</string>
+          <string>UIInterfaceOrientationLandscapeRight</string>
+        </array>
+        <key>UISupportedInterfaceOrientations~ipad</key>
+        <array>
+          <string>UIInterfaceOrientationPortrait</string>
+          <string>UIInterfaceOrientationPortraitUpsideDown</string>
+          <string>UIInterfaceOrientationLandscapeLeft</string>
+          <string>UIInterfaceOrientationLandscapeRight</string>
+        </array>
         <key>LSMinimumSystemVersion</key>
         <string>5.1.1</string>
         <key>UIDeviceFamily</key>
