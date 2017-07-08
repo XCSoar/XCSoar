@@ -56,8 +56,6 @@ GetMacAddress(MacAddress &address, const char *interface_name)
     return true;
 }
 
-#endif
-
 static constexpr uint64_t
 MakeUint64_64(uint64_t a, uint64_t b, uint64_t c, uint64_t d,
               uint64_t e, uint64_t f, uint64_t g, uint64_t h)
@@ -72,6 +70,7 @@ MakeUint64(uint8_t a, uint8_t b, uint8_t c, uint8_t d,
 {
   return MakeUint64_64(a, b, c, d, e, f, g, h);
 }
+#endif
 
 static constexpr uint64_t
 ReplaceHighestByte64(uint64_t value, uint64_t new_highest_byte)
