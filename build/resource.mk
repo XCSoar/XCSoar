@@ -54,19 +54,19 @@ PNG_SPLASH_160 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_160.png,$(SVG
 BMP_SPLASH_160 = $(PNG_SPLASH_160:.png=.bmp)
 PNG_SPLASH_80 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_80.png,$(SVG_SPLASH))
 BMP_SPLASH_80 = $(PNG_SPLASH_80:.png=.bmp)
-PNG_SPLASH_128 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_128.png,$(SVG_SPLASH))
-ICNS_SPLASH_128 = $(PNG_SPLASH_128:.png=.icns)
+PNG_SPLASH_1024 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_1024.png,$(SVG_SPLASH))
+ICNS_SPLASH_1024 = $(PNG_SPLASH_1024:.png=.icns)
 
 # render from SVG to PNG
 $(eval $(call rsvg-convert,$(PNG_SPLASH_160),$(DATA)/graphics/%_160.png,Data/graphics/%.svg,--width=160))
 $(eval $(call rsvg-convert,$(PNG_SPLASH_80),$(DATA)/graphics/%_80.png,Data/graphics/%.svg,--width=80))
-$(eval $(call rsvg-convert,$(PNG_SPLASH_128),$(DATA)/graphics/%_128.png,Data/graphics/%.svg,--width=128))
+$(eval $(call rsvg-convert,$(PNG_SPLASH_1024),$(DATA)/graphics/%_1024.png,Data/graphics/%.svg,--width=1024))
 
 # convert to uncompressed 8-bit BMP
 $(eval $(call convert-to-bmp-white,$(BMP_SPLASH_160) $(BMP_SPLASH_80),%.bmp,%.png))
 
 # convert to icns (mac os x icon)
-$(ICNS_SPLASH_128): %.icns: %.png
+$(ICNS_SPLASH_1024): %.icns: %.png
 	@$(NQ)echo "  ICNS    $@"
 	$(Q)$(IM_PREFIX)png2icns $@ $<
 
