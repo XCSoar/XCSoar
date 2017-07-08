@@ -2,6 +2,12 @@ ifeq ($(TARGET_IS_OSX),y)
 
 TARGET_LDLIBS += -framework AppKit
 
+# WORKAROUND: Apple's "AssertMacros.h" header (at least in SDK 10.12) declares a
+# check() method, which conflicts with our code (and boost).
+# Defining __ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0 avoids this
+# problem.
+TARGET_CPPFLAGS += -D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0
+
 DMG_TMPDIR = $(TARGET_OUTPUT_DIR)/dmg
 
 MKISOFS ?= mkisofs
