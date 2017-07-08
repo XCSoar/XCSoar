@@ -22,7 +22,7 @@
         <true />
         <key>UIRequiredDeviceCapabilities</key>
         <dict>
-            <key>armv7</key>
+            <key>IOS_ARCH_PLACEHOLDER</key>
             <true/>
             <key>opengles-2</key>
             <true/>

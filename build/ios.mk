@@ -20,6 +20,14 @@ IOS_APP_BUNDLE_INENTIFIER = XCSoar
 IOS_APP_DISPLAY_NAME = XCSoar
 endif
 
+ifeq ($(findstring aarch64,$(HOST_TRIPLET)),aarch64)
+IOS_INFO_PLIST_ARCH_PLACEHOLDER = arm64
+else ifeq ($(findstring armv7,$(HOST_TRIPLET)),armv7)
+IOS_INFO_PLIST_ARCH_PLACEHOLDER = armv7
+else
+$(error Could not determine correct architecture identifier for Info.plist)
+endif
+
 $(TARGET_OUTPUT_DIR)/$(IPA_NAME): $(TARGET_BIN_DIR)/xcsoar $(IOS_LOGO_SVG) $(topdir)/Data/iOS/Info.plist.in.xml
 	@$(NQ)echo "  IPA     $@"
 	$(Q)rm -rf $(IPA_TMPDIR)
@@ -88,6 +96,7 @@ $(TARGET_OUTPUT_DIR)/$(IPA_NAME): $(TARGET_BIN_DIR)/xcsoar $(IOS_LOGO_SVG) $(top
 	$(Q)sed -e 's/IOS_APP_DISPLAY_NAME_PLACEHOLDER/$(IOS_APP_DISPLAY_NAME)/g' \
 		-e 's/IOS_APP_BUNDLE_INENTIFIER_PLACEHOLDER/$(IOS_APP_BUNDLE_INENTIFIER)/g' \
 		-e 's/VERSION_PLACEHOLDER/$(IOS_APP_VERSION)/g' \
+		-e 's/IOS_ARCH_PLACEHOLDER/$(IOS_INFO_PLIST_ARCH_PLACEHOLDER)/g' \
 		$(topdir)/Data/iOS/Info.plist.in.xml \
 		> $(TARGET_OUTPUT_DIR)/Info.plist.xml
 ifeq ($(HOST_IS_DARWIN),y)
