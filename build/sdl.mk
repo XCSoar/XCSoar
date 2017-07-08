@@ -16,11 +16,16 @@ ifeq ($(ENABLE_SDL),y)
 
 ifeq ($(TARGET_IS_DARWIN),y)
 COREGRAPHICS = y
+ifeq ($(TARGET_IS_IOS),y)
+UIKIT = y
+else
+APPKIT = y
+endif
 else
 LIBPNG = y
 LIBJPEG = y
-endif
 FREETYPE = y
+endif
 
 $(eval $(call pkg-config-library,SDL,sdl2))
 SDL_CPPFLAGS += -DENABLE_SDL

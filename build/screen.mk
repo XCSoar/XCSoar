@@ -72,6 +72,10 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/FreeType/Init.cpp
 endif
 
+ifeq ($(call bool_or,$(APPKIT),$(UIKIT)),y)
+SCREEN_SOURCES += $(SCREEN_SRC_DIR)/Apple/Font.cpp
+endif
+
 ifeq ($(USE_X11),y)
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/X11/TopWindow.cpp
@@ -235,6 +239,8 @@ SCREEN_CPPFLAGS = \
 	$(SDL_CPPFLAGS) \
 	$(GDI_CPPFLAGS) \
 	$(FREETYPE_FEATURE_CPPFLAGS) \
+	$(APPKIT_CPPFLAGS) \
+	$(UIKIT_CPPFLAGS) \
 	$(MEMORY_CANVAS_CPPFLAGS) \
 	$(OPENGL_CPPFLAGS) \
 	$(WAYLAND_CPPFLAGS) \
@@ -255,7 +261,9 @@ SCREEN_LDLIBS = \
 	$(EGL_LDLIBS) \
 	$(GLX_LDLIBS) \
 	$(FB_LDLIBS) \
-	$(COREGRAPHICS_LDLIBS)
+	$(COREGRAPHICS_LDLIBS) \
+	$(APPKIT_LDLIBS) \
+	$(UIKIT_LDLIBS)
 
 $(eval $(call link-library,screen,SCREEN))
 

@@ -27,6 +27,10 @@ Copyright_License {
 #include "Screen/Point.hpp"
 #include "Compiler.h"
 
+#if defined(USE_APPKIT) || defined(USE_UIKIT)
+#import <Foundation/Foundation.h>
+#endif
+
 #ifdef USE_FREETYPE
 typedef struct FT_FaceRec_ *FT_Face;
 #endif
@@ -53,6 +57,8 @@ protected:
   unsigned line_spacing;
 #elif defined(USE_GDI)
   HFONT font = nullptr;
+#elif defined(USE_APPKIT) || defined(USE_UIKIT)
+  NSDictionary *draw_attributes = nil;
 #else
 #error No font renderer
 #endif
@@ -64,7 +70,9 @@ protected:
 public:
   Font() = default;
 
+#if !defined(USE_APPKIT) && !defined(USE_UIKIT)
   ~Font() { Destroy(); }
+#endif
 
   Font(const Font &other) = delete;
   Font &operator=(const Font &other) = delete;
@@ -82,6 +90,8 @@ public:
   IsDefined() const {
 #ifdef USE_FREETYPE
     return face != nullptr;
+#elif defined(USE_APPKIT) || defined(USE_UIKIT)
+    return nil != draw_attributes;
 #elif defined(ANDROID)
     return text_util_object != nullptr;
     #else
@@ -95,12 +105,17 @@ public:
 #endif
 
   bool Load(const FontDescription &d);
+
+#if defined(USE_APPKIT) || defined(USE_UIKIT)
+  void Destroy() {}
+#else
   void Destroy();
+#endif
 
   gcc_pure
   PixelSize TextSize(const TCHAR *text) const;
 
-#ifdef USE_FREETYPE
+#if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
   gcc_const
   static size_t BufferSize(const PixelSize size) {
     return size.cx * size.cy;
@@ -126,7 +141,7 @@ public:
     return capital_height;
   }
 
-#ifdef USE_FREETYPE
+#if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
   unsigned GetLineSpacing() const {
     return height;
   }

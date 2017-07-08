@@ -147,6 +147,8 @@ include $(topdir)/build/libpng.mk
 include $(topdir)/build/libjpeg.mk
 include $(topdir)/build/libtiff.mk
 include $(topdir)/build/coregraphics.mk
+include $(topdir)/build/appkit.mk
+include $(topdir)/build/uikit.mk
 include $(topdir)/build/screen.mk
 include $(topdir)/build/libthread.mk
 include $(topdir)/build/form.mk

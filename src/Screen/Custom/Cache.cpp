@@ -132,7 +132,7 @@ struct RenderedText {
     other.texture = nullptr;
   }
 
-#ifdef USE_FREETYPE
+#if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
   RenderedText(unsigned width, unsigned height, const uint8_t *buffer) {
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     texture = new GLTexture(GL_ALPHA, PixelSize(width, height),
@@ -274,7 +274,7 @@ TextCache::Get(const Font &font, const char *text)
 
   /* render the text into a OpenGL texture */
 
-#ifdef USE_FREETYPE
+#if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
 #ifdef UNICODE
   UTF8ToWideConverter text2(text);
 #else

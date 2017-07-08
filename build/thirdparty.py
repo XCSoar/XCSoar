@@ -69,7 +69,6 @@ if 'mingw32' in host_triplet:
     ]
 elif re.match('(arm.*|aarch64)-apple-darwin', host_triplet) is not None:
     thirdparty_libs = [
-        freetype,
         curl,
         lua,
         proj,
@@ -79,7 +78,6 @@ elif re.match('(arm.*|aarch64)-apple-darwin', host_triplet) is not None:
     ]
 elif 'apple-darwin' in host_triplet:
     thirdparty_libs = [
-        freetype,
         lua,
         proj,
         libtiff,
