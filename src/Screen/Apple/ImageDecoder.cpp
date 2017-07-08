@@ -27,6 +27,7 @@ Copyright_License {
 #include "ImageDecoder.hpp"
 #include "OS/Path.hpp"
 #include "Screen/Custom/UncompressedImage.hpp"
+#include "Util/ScopeExit.hxx"
 
 #import <CoreGraphics/CoreGraphics.h>
 
@@ -82,9 +83,10 @@ CGImageToUncompressedImage(CGImageRef image)
   if (nullptr == bitmap) {
     return UncompressedImage();
   }
+
+  AtScopeExit(bitmap) { CFRelease(bitmap); };
+
   CGContextDrawImage(bitmap, CGRectMake(0, 0, width, height), image);
-  
-  CFRelease(bitmap);
   
   return UncompressedImage(format, row_size, width, height,
                            std::move(uncompressed));
