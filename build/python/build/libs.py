@@ -127,9 +127,9 @@ libpng = AutotoolsProject(
 )
 
 libjpeg = AutotoolsProject(
-    'http://downloads.sourceforge.net/project/libjpeg-turbo/1.5.1/libjpeg-turbo-1.5.1.tar.gz',
-    'http://sourceforge.mirrorservice.org/l/li/libjpeg-turbo/1.5.1/libjpeg-turbo-1.5.1.tar.gz',
-    '41429d3d253017433f66e3d472b8c7d998491d2f41caa7306b8d9a6f2a2c666c',
+    'http://downloads.sourceforge.net/project/libjpeg-turbo/1.5.2/libjpeg-turbo-1.5.2.tar.gz',
+    'http://sourceforge.mirrorservice.org/l/li/libjpeg-turbo/1.5.2/libjpeg-turbo-1.5.2.tar.gz',
+    '9098943b270388727ae61de82adec73cf9f0dbb240b3bc8b172595ebf405b528',
     'lib/libjpeg.a',
     [
         '--disable-shared', '--enable-static',
