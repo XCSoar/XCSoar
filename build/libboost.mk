@@ -1,4 +1,5 @@
 BOOST_URL = http://downloads.sourceforge.net/project/boost/boost/1.64.0/boost_1_64_0.tar.bz2
+BOOST_ALTERNATIVE_URL = http://mirror.nienbo.com/boost/1.64.0/boost_1_64_0.tar.bz2
 BOOST_MD5 = 7bcc5caace97baa948931d712ea5f37038dbb1c5d89b43ad4def4ed7cb683332
 
 BOOST_TARBALL_NAME = $(notdir $(BOOST_URL))
@@ -10,7 +11,7 @@ BOOST_PATCHES = $(addprefix $(BOOST_PATCHES_DIR)/,$(shell cat $(BOOST_PATCHES_DI
 
 $(BOOST_TARBALL): | $(DOWNLOAD_DIR)/dirstamp
 	@$(NQ)echo "  GET     $@"
-	$(Q)./build/download.py $(BOOST_URL) $(BOOST_MD5) $(DOWNLOAD_DIR)
+	$(Q)./build/download.py $(BOOST_URL) $(BOOST_ALTERNATIVE_URL) $(BOOST_MD5) $(DOWNLOAD_DIR)
 
 BOOST_UNTAR_STAMP = $(OUT)/src/stamp-$(BOOST_BASE_NAME)
 $(BOOST_UNTAR_STAMP): $(BOOST_TARBALL) $(BOOST_PATCHES_DIR)/series $(BOOST_PATCHES) | $(OUT)/src/dirstamp
