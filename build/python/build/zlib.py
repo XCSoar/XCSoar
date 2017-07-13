@@ -3,9 +3,9 @@ import subprocess
 from build.project import Project
 
 class ZlibProject(Project):
-    def __init__(self, url, md5, installed,
+    def __init__(self, url, alternative_url, md5, installed,
                  **kwargs):
-        Project.__init__(self, url, md5, installed, **kwargs)
+        Project.__init__(self, url, alternative_url, md5, installed, **kwargs)
 
     def build(self, toolchain):
         src = self.unpack(toolchain, out_of_tree=False)
