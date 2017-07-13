@@ -137,9 +137,9 @@ libjpeg = AutotoolsProject(
 )
 
 libtiff = AutotoolsProject(
-    'http://download.osgeo.org/libtiff/tiff-4.0.7.tar.gz',
-    'http://ftp.lfs-matrix.net/pub/blfs/conglomeration/tiff/tiff-4.0.7.tar.gz',
-    '9f43a2cfb9589e5cecaa66e16bf87f814c945f22df7ba600d63aac4632c4f019',
+    'http://download.osgeo.org/libtiff/tiff-4.0.8.tar.gz',
+    'http://ftp.lfs-matrix.net/pub/blfs/conglomeration/tiff/tiff-4.0.8.tar.gz',
+    '59d7a5a8ccd92059913f246877db95a2918e6c04fb9d43fd74e5c3390dac2910',
     'lib/libtiff.a',
     [
         '--disable-shared', '--enable-static',
@@ -160,7 +160,7 @@ libtiff = AutotoolsProject(
         '--disable-strip-chopping',
         '--disable-extrasample-as-alpha',
     ],
-    base='tiff-4.0.7',
+    base='tiff-4.0.8',
     patches=abspath('lib/libtiff/patches'),
     autogen=True,
 )
