@@ -6,7 +6,8 @@ ifeq ($(TARGET),ANDROID)
 
 ANDROID_KEYSTORE ?= $(HOME)/.android/mk.keystore
 ANDROID_KEY_ALIAS ?= mk
-ANDROID_BUILD = $(TARGET_OUTPUT_DIR)/build
+
+ANDROID_BUILD = $(TARGET_OUTPUT_DIR)/$(XCSOAR_ABI)/build
 ANDROID_BIN = $(TARGET_BIN_DIR)
 
 ifeq ($(HOST_IS_DARWIN),y)
@@ -15,32 +16,27 @@ else
   ANDROID_SDK ?= $(HOME)/opt/android-sdk-linux
 endif
 ANDROID_SDK_PLATFORM_DIR = $(ANDROID_SDK)/platforms/$(ANDROID_SDK_PLATFORM)
-ANDROID_ABI_DIR = $(ANDROID_BUILD)/libs/$(ANDROID_ABI5)
+ANDROID_ABI_DIR = $(ANDROID_BUILD)/lib/$(ANDROID_ABI5)
 
-ANDROID_BUILD_TOOLS_DIR = $(ANDROID_SDK)/build-tools/20.0.0
+JAVA_CLASSFILES_DIR = $(ABI_BIN_DIR)/bin/classes
+
+ANDROID_BUILD_TOOLS_DIR = $(ANDROID_SDK)/build-tools/26.0.0
 ZIPALIGN = $(ANDROID_BUILD_TOOLS_DIR)/zipalign
+AAPT = $(ANDROID_BUILD_TOOLS_DIR)/aapt
+DX = $(ANDROID_BUILD_TOOLS_DIR)/dx
 
 ANDROID_LIB_NAMES = xcsoar
 
-ifneq ($(V),2)
-ANDROID_TOOL_OPTIONS = --silent
-else
-ANDROID_TOOL_OPTIONS = --verbose
-endif
-
-JARSIGNER += -digestalg SHA1 -sigalg MD5withRSA
+JARSIGNER_RELEASE := $(JARSIGNER) -digestalg SHA1 -sigalg MD5withRSA
 
 # The environment variable ANDROID_KEYSTORE_PASS may be used to
 # specify the keystore password; if you don't set it, you will be
 # asked interactively
 ifeq ($(origin ANDROID_KEYSTORE_PASS),environment)
-JARSIGNER += -storepass:env ANDROID_KEYSTORE_PASS
+JARSIGNER_RELEASE += -storepass:env ANDROID_KEYSTORE_PASS
 endif
 
 JAVA_PACKAGE = org.xcsoar
-CLASS_NAME = $(JAVA_PACKAGE).NativeView
-CLASS_SOURCE = $(subst .,/,$(CLASS_NAME)).java
-CLASS_CLASS = $(patsubst %.java,%.class,$(CLASS_SOURCE))
 
 NATIVE_CLASSES = NativeView EventBridge InternalGPS NonGPSSensors NativeInputListener DownloadUtil BatteryReceiver
 NATIVE_CLASSES += NativePortListener
@@ -53,7 +49,21 @@ NATIVE_SOURCES = $(patsubst %,android/src/%.java,$(NATIVE_CLASSES))
 NATIVE_PREFIX = $(TARGET_OUTPUT_DIR)/include/$(subst .,_,$(JAVA_PACKAGE))_
 NATIVE_HEADERS = $(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES))
 
-ANDROID_JAVA_SOURCES := $(wildcard android/src/*.java)
+JAVA_SOURCES := \
+	$(wildcard android/src/*.java) \
+	$(wildcard android/ioio/software/IOIOLib/src/ioio/lib/*/*.java) \
+	$(wildcard android/ioio/software/IOIOLib/src/ioio/lib/*/*/*.java) \
+	$(wildcard android/ioio/software/IOIOLib/target/android/src/ioio/lib/spi/*.java) \
+	android/ioio/software/IOIOLib/target/android/src/ioio/lib/util/android/ContextWrapperDependent.java \
+	$(wildcard android/ioio/software/IOIOLibAccessory/src/ioio/lib/android/accessory/*.java) \
+	$(wildcard android/ioio/software/IOIOLibBT/src/ioio/lib/android/bluetooth/*.java) \
+	$(wildcard android/ioio/software/IOIOLibAndroidDevice/src/ioio/lib/android/device/*.java)
+ifeq ($(TESTING),y)
+	JAVA_SOURCES += $(wildcard android/src/testing/*.java)
+endif
+
+ANDROID_XML_RES := $(wildcard android/res/*/*.xml)
+ANDROID_XML_RES_COPIES := $(patsubst android/%,$(ANDROID_BUILD)/%,$(ANDROID_XML_RES))
 
 DRAWABLE_DIR = $(ANDROID_BUILD)/res/drawable
 RAW_DIR = $(ANDROID_BUILD)/res/raw
@@ -156,39 +166,31 @@ else
 MANIFEST = android/AndroidManifest.xml
 endif
 
-# symlink some important files to $(ANDROID_BUILD) and let the Android
-# SDK generate build.xml
-$(ANDROID_BUILD)/build.xml: $(MANIFEST) $(PNG_FILES) | $(TARGET_BIN_DIR)/dirstamp
-	@$(NQ)echo "  ANDROID $@"
-	$(Q)rm -r -f $@ $(@D)/*_rules.xml $(@D)/AndroidManifest.xml $(@D)/src $(@D)/bin $(@D)/res/values $(@D)/res/xml
-	$(Q)mkdir -p $(ANDROID_BUILD)/res $(ANDROID_BUILD)/src/org/xcsoar $(ANDROID_BUILD)/src/ioio/lib/android
-	$(Q)ln -s ../../../$(MANIFEST) $(@D)/AndroidManifest.xml
-	$(Q)ln -s ../bin $(@D)/bin
-	$(Q)ln -s $(addprefix ../../../../../../,$(ANDROID_JAVA_SOURCES)) $(@D)/src/org/xcsoar
-	$(Q)ln -s ../../../../../../android/ioio/software/IOIOLib/src/ioio/lib/api $(ANDROID_BUILD)/src/ioio/lib/api
-	$(Q)ln -s ../../../../../../android/ioio/software/IOIOLib/src/ioio/lib/spi $(ANDROID_BUILD)/src/ioio/lib/spi
-	$(Q)ln -s ../../../../../../android/ioio/software/IOIOLib/src/ioio/lib/util $(ANDROID_BUILD)/src/ioio/lib/util
-	$(Q)ln -s ../../../../../../android/ioio/software/IOIOLib/src/ioio/lib/impl $(ANDROID_BUILD)/src/ioio/lib/impl
-	$(Q)ln -s ../../../../../../android/ioio/software/IOIOLib/target/android/src/ioio/lib/spi $(ANDROID_BUILD)/src/ioio/lib/spi2
-	$(Q)ln -s ../../../../../android/ioio/software/IOIOLib/target/android/src/ioio/lib/util/android/ContextWrapperDependent.java $(ANDROID_BUILD)/src/ioio/
-	$(Q)ln -s ../../../../../../../android/ioio/software/IOIOLibAccessory/src/ioio/lib/android/accessory $(ANDROID_BUILD)/src/ioio/lib/android/accessory
-	$(Q)ln -s ../../../../../../../android/ioio/software/IOIOLibBT/src/ioio/lib/android/bluetooth $(ANDROID_BUILD)/src/ioio/lib/android/bluetooth
-	$(Q)ln -s ../../../../../../../android/ioio/software/IOIOLibAndroidDevice/src/ioio/lib/android/device $(ANDROID_BUILD)/src/ioio/lib/android/device
-	$(Q)ln -s ../../../../android/res/values $(@D)/res/values
-	$(Q)ln -s ../../../../android/res/xml $(@D)/res/xml
-ifeq ($(HOST_IS_WIN32),y)
-	echo "now run your android build followed by exit.  For example:"
-	echo "c:\opt\android-sdk\tools\android.bat update project --path c:\xcsoar\output\android\build --target $(ANDROID_SDK_PLATFORM)"
-	cmd
-else
-	$(Q)$(ANDROID_SDK)/tools/android $(ANDROID_TOOL_OPTIONS) update project --path $(@D) --target $(ANDROID_SDK_PLATFORM)
-	$(Q)ln -s ../../../android/custom_rules.xml $(@D)/
-endif
-ifeq ($(TESTING),y)
-	$(Q)ln -s ../../../../../../android/src/testing $(@D)/src/org/xcsoar
-	$(Q)ln -s ../../../android/testing/testing_rules.xml $(@D)/
-endif
-	@touch $@
+$(ANDROID_XML_RES_COPIES): $(ANDROID_XML_RES)
+	$(Q)-$(MKDIR) -p $(dir $@)
+	$(Q)cp $(patsubst $(ANDROID_BUILD)/%,android/%,./$@) $@
+
+$(ANDROID_BUILD)/resources.apk: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_RES_COPIES) | $(ANDROID_BUILD)/gen/dirstamp
+	@$(NQ)echo "  AAPT"
+	$(Q)$(AAPT) package -f -m --auto-add-overlay \
+		--custom-package $(JAVA_PACKAGE) \
+		-M $(MANIFEST) \
+		-S $(ANDROID_BUILD)/res \
+		-J $(ANDROID_BUILD)/gen \
+		-I $(ANDROID_SDK_PLATFORM_DIR)/android.jar \
+		-F $(ANDROID_BUILD)/resources.apk
+
+# R.java is generated by aapt, when resources.apk is generated
+$(ANDROID_BUILD)/gen/org/xcsoar/R.java: $(ANDROID_BUILD)/resources.apk
+
+$(ANDROID_BUILD)/classes.dex: $(JAVA_SOURCES) $(ANDROID_BUILD)/gen/org/xcsoar/R.java | $(JAVA_CLASSFILES_DIR)/dirstamp
+	@$(NQ)echo "  JAVAC   $(JAVA_CLASSFILES_DIR)"
+	$(Q)$(JAVAC) -source 1.5 -target 1.5 -Xlint:-options \
+		-cp $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(JAVA_CLASSFILES_DIR) \
+		-d $(JAVA_CLASSFILES_DIR) $(ANDROID_BUILD)/gen/org/xcsoar/R.java \
+		$(JAVA_SOURCES)
+	@$(NQ)echo "  DX      $@"
+	$(Q)$(DX) --dex --output $@ $(JAVA_CLASSFILES_DIR)
 
 ifeq ($(FAT_BINARY),y)
 
@@ -199,9 +201,9 @@ ANDROID_LIB_BUILD =
 # Example: $(eval $(call generate-abi,xcsoar,armeabi-v7a,ANDROID7))
 define generate-abi
 
-ANDROID_LIB_BUILD += $$(ANDROID_BUILD)/libs/$(2)/lib$(1).so
+ANDROID_LIB_BUILD += $$(ANDROID_BUILD)/lib/$(2)/lib$(1).so
 
-$$(ANDROID_BUILD)/libs/$(2)/lib$(1).so: $$(OUT)/$(3)/$$(XCSOAR_ABI)/bin/lib$(1).so | $$(ANDROID_BUILD)/libs/$(2)/dirstamp
+$$(ANDROID_BUILD)/lib/$(2)/lib$(1).so: $$(OUT)/$(3)/$$(XCSOAR_ABI)/bin/lib$(1).so | $$(ANDROID_BUILD)/lib/$(2)/dirstamp
 	$$(Q)cp $$< $$@
 
 $$(OUT)/$(3)/bin/lib$(1).so:
@@ -242,33 +244,29 @@ ANDROID_LIB_BUILD = $(patsubst %,$(ANDROID_ABI_DIR)/lib%.so,$(ANDROID_LIB_NAMES)
 $(ANDROID_LIB_BUILD): $(ANDROID_ABI_DIR)/lib%.so: $(ABI_BIN_DIR)/lib%.so | $(ANDROID_ABI_DIR)/dirstamp
 	$(Q)cp $< $@
 
-$(ANDROID_BUILD)/bin/classes/$(CLASS_CLASS): $(NATIVE_SOURCES) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png $(SOUND_FILES)
-	@$(NQ)echo "  ANT     $@"
-	$(Q)cd $(ANDROID_BUILD) && $(ANT) nodeps compile-jni-classes
-	@touch $@
-
-$(NATIVE_HEADERS): $(NATIVE_PREFIX)%.h: android/src/%.java $(ANDROID_BUILD)/bin/classes/$(CLASS_CLASS)
-	@$(NQ)echo "  JAVAH   $@"
-	$(Q)javah -classpath $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(ANDROID_BUILD)/bin/classes -d $(@D) $(subst _,.,$(patsubst $(patsubst ./%,%,$(TARGET_OUTPUT_DIR))/include/%.h,%,$@))
-	@touch $@
-
 endif # !FAT_BINARY
 
-$(ANDROID_BIN)/XCSoar-debug.apk: $(ANDROID_LIB_BUILD) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png $(SOUND_FILES) $(ANDROID_JAVA_SOURCES)
-	@$(NQ)echo "  ANT     $@"
-	@rm -f $@ $(patsubst %.apk,%-unaligned.apk,$@) $(@D)/classes.dex
-	$(Q)cd $(ANDROID_BUILD) && $(ANT) nodeps debug
 
-$(ANDROID_BIN)/XCSoar-release-unsigned.apk: $(ANDROID_LIB_BUILD) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png $(SOUND_FILES) $(ANDROID_JAVA_SOURCES)
-	@$(NQ)echo "  ANT     $@"
-	@rm -f $@ $(@D)/classes.dex
-	$(Q)cd $(ANDROID_BUILD) && $(ANT) nodeps release
+$(NATIVE_HEADERS): $(NATIVE_PREFIX)%.h: $(ANDROID_BUILD)/classes.dex
+	@$(NQ)echo "  JAVAH   $@"
+	$(Q)javah -classpath $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(JAVA_CLASSFILES_DIR) -d $(@D) $(subst _,.,$(patsubst $(patsubst ./%,%,$(TARGET_OUTPUT_DIR))/include/%.h,%,$@))
+	@touch $@
 
-$(ANDROID_BIN)/XCSoar-release-unaligned.apk: $(ANDROID_BIN)/XCSoar-release-unsigned.apk
+.DELETE_ON_ERROR: $(ANDROID_BUILD)/unsigned.apk
+$(ANDROID_BUILD)/unsigned.apk: $(ANDROID_BUILD)/classes.dex $(ANDROID_BUILD)/resources.apk $(ANDROID_LIB_BUILD)
+	@$(NQ)echo "  APK     $@"
+	$(Q)cp $(ANDROID_BUILD)/resources.apk $@
+	$(Q)cd $(dir $@) && zip -q -r $(notdir $@) classes.dex lib
+
+$(ANDROID_BIN)/XCSoar-debug.apk: $(ANDROID_BUILD)/unsigned.apk | $(ANDROID_BIN)/dirstamp
 	@$(NQ)echo "  SIGN    $@"
-	$(Q)$(JARSIGNER) -keystore $(ANDROID_KEYSTORE) -signedjar $@ $< $(ANDROID_KEY_ALIAS)
+	$(Q)$(JARSIGNER) -keystore $(HOME)/.android/debug.keystore -storepass android -signedjar $@ $< androiddebugkey
 
-$(ANDROID_BIN)/XCSoar.apk: $(ANDROID_BIN)/XCSoar-release-unaligned.apk
+$(ANDROID_BUILD)/XCSoar-release-unaligned.apk: $(ANDROID_BUILD)/unsigned.apk
+	@$(NQ)echo "  SIGN    $@"
+	$(Q)$(JARSIGNER_RELEASE) -keystore $(ANDROID_KEYSTORE) -signedjar $@ $< $(ANDROID_KEY_ALIAS)
+
+$(ANDROID_BIN)/XCSoar.apk: $(ANDROID_BUILD)/XCSoar-release-unaligned.apk | $(ANDROID_BIN)/dirstamp
 	@$(NQ)echo "  ALIGN   $@"
 	$(Q)$(ZIPALIGN) -f 8 $< $@
 
