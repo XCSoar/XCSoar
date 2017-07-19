@@ -265,7 +265,20 @@ $(ANDROID_BUILD)/unsigned.apk: $(ANDROID_BUILD)/classes.dex $(ANDROID_BUILD)/res
 	$(Q)cp $(ANDROID_BUILD)/resources.apk $@
 	$(Q)cd $(dir $@) && zip -q -r $(notdir $@) classes.dex lib
 
-$(ANDROID_BIN)/XCSoar-debug.apk: $(ANDROID_BUILD)/unsigned.apk | $(ANDROID_BIN)/dirstamp
+# Generate ~/.android/debug.keystore, if it does not exists, as the official
+# Android build tools do it:
+$(HOME)/.android/debug.keystore:
+	@$(NQ)echo "  KEYTOOL $@"
+	$(Q)-$(MKDIR) -p $(HOME)/.android
+	$(Q)$(KEYTOOL) -genkey -noprompt \
+		-keystore $@ \
+		-storepass android \
+		-alias androiddebugkey \
+		-keypass android \
+		-dname "CN=Android Debug" \
+		-keyalg RSA -keysize 2048 -validity 10000
+
+$(ANDROID_BIN)/XCSoar-debug.apk: $(ANDROID_BUILD)/unsigned.apk $(HOME)/.android/debug.keystore | $(ANDROID_BIN)/dirstamp
 	@$(NQ)echo "  SIGN    $@"
 	$(Q)$(JARSIGNER) -keystore $(HOME)/.android/debug.keystore -storepass android -signedjar $@ $< androiddebugkey
 
