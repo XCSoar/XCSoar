@@ -270,6 +270,6 @@ $(ANDROID_BIN)/XCSoar-release-unaligned.apk: $(ANDROID_BIN)/XCSoar-release-unsig
 
 $(ANDROID_BIN)/XCSoar.apk: $(ANDROID_BIN)/XCSoar-release-unaligned.apk
 	@$(NQ)echo "  ALIGN   $@"
-	$(Q)$(ZIPALIGN) -f 4 $< $@
+	$(Q)$(ZIPALIGN) -f 8 $< $@
 
 endif
