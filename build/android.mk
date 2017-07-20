@@ -38,13 +38,20 @@ endif
 
 JAVA_PACKAGE = org.xcsoar
 
-NATIVE_CLASSES = NativeView EventBridge InternalGPS NonGPSSensors NativeInputListener DownloadUtil BatteryReceiver
-NATIVE_CLASSES += NativePortListener
-NATIVE_CLASSES += NativeLeScanCallback
-NATIVE_CLASSES += NativeBMP085Listener
-NATIVE_CLASSES += NativeI2CbaroListener
-NATIVE_CLASSES += NativeNunchuckListener
-NATIVE_CLASSES += NativeVoltageListener
+NATIVE_CLASSES := \
+	NativeView \
+	EventBridge \
+	InternalGPS \
+	NonGPSSensors \
+	NativeInputListener \
+	DownloadUtil \
+	BatteryReceiver \
+	NativePortListener \
+	NativeLeScanCallback \
+	NativeBMP085Listener \
+	NativeI2CbaroListener \
+	NativeNunchuckListener \
+	NativeVoltageListener
 NATIVE_SOURCES = $(patsubst %,android/src/%.java,$(NATIVE_CLASSES))
 NATIVE_PREFIX = $(TARGET_OUTPUT_DIR)/include/$(subst .,_,$(JAVA_PACKAGE))_
 NATIVE_HEADERS = $(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES))
