@@ -16,6 +16,8 @@ class ZlibProject(Project):
                                'CC=' + toolchain.cc,
                                'CPP=' + toolchain.cc + ' -E',
                                'AR=' + toolchain.ar,
+                               'ARFLAGS=' + toolchain.arflags,
+                               'RANLIB=' + toolchain.ranlib,
                                'LDSHARED=' + toolchain.cc + ' -shared',
                                'install'],
                               cwd=src, env=toolchain.env)
