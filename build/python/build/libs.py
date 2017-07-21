@@ -4,6 +4,7 @@ from build.zlib import ZlibProject
 from build.autotools import AutotoolsProject
 from build.openssl import OpenSSLProject
 from build.freetype import FreeTypeProject
+from build.libpng import LibPNGProject
 from build.sdl2 import SDL2Project
 from build.lua import LuaProject
 
@@ -108,13 +109,12 @@ proj = AutotoolsProject(
     autogen=True,
 )
 
-libpng = AutotoolsProject(
+libpng = LibPNGProject(
     'ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/libpng-1.6.29.tar.xz',
     '4245b684e8fe829ebb76186327bb37ce5a639938b219882b53d64bd3cfc5f239',
     'lib/libpng.a',
     [
         '--disable-shared', '--enable-static',
-        '--enable-arm-neon',
     ]
 )
 
