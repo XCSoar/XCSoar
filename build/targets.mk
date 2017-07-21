@@ -185,6 +185,7 @@ ifeq ($(TARGET),PI)
   override TARGET = UNIX
   TCPREFIX := arm-linux-gnueabihf-
   PI ?= /opt/pi/root
+  TARGET_IS_LINUX = y
   TARGET_IS_PI = y
   TARGET_IS_ARM = y
   TARGET_IS_ARMHF = y
@@ -211,7 +212,7 @@ ifeq ($(TARGET),KOBO)
 endif
 
 ifeq ($(TARGET),NEON)
-  # Experimental target for generic ARMv7 with NEON
+  # Experimental target for generic ARMv7 with NEON on Linux
   override TARGET = UNIX
   ifeq ($(USE_CROSSTOOL_NG),y)
     HOST_TRIPLET = arm-unknown-linux-gnueabihf
@@ -222,6 +223,7 @@ ifeq ($(TARGET),NEON)
   ifneq ($(CLANG),y)
     TARGET_ARCH += -mcpu=cortex-a8
   endif
+  TARGET_IS_LINUX = y
   TARGET_IS_ARM = y
   TARGET_IS_ARMHF = y
   ARMV7 := y
@@ -271,15 +273,6 @@ ifeq ($(TARGET),IOS64)
   CLANG = y
   TARGET_ARCH += -miphoneos-version-min=$(IOS_MIN_SUPPORTED_VERSION) -arch arm64
   ASFLAGS += -arch arm64
-endif
-
-ifeq ($(TARGET),UNIX)
-  ifeq ($(HOST_IS_LINUX)$(TARGET_IS_DARWIN),yn)
-    TARGET_IS_LINUX := y
-  endif
-  ifeq ($(HOST_IS_DARWIN),y)
-    TARGET_IS_DARWIN := y
-  endif
 endif
 
 ifeq ($(TARGET),UNIX)
