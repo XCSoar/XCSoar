@@ -256,7 +256,7 @@ endif # !FAT_BINARY
 
 $(NATIVE_HEADERS): $(NATIVE_PREFIX)%.h: $(ANDROID_BUILD)/classes.dex
 	@$(NQ)echo "  JAVAH   $@"
-	$(Q)javah -classpath $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(JAVA_CLASSFILES_DIR) -d $(@D) $(subst _,.,$(patsubst $(patsubst ./%,%,$(TARGET_OUTPUT_DIR))/include/%.h,%,$@))
+	$(Q)$(JAVAH) -classpath $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(JAVA_CLASSFILES_DIR) -d $(@D) $(subst _,.,$(patsubst $(patsubst ./%,%,$(TARGET_OUTPUT_DIR))/include/%.h,%,$@))
 	@touch $@
 
 .DELETE_ON_ERROR: $(ANDROID_BUILD)/unsigned.apk
