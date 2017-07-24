@@ -4,6 +4,7 @@ Version 7.11 - not yet released
   - fix truncated labels in many dialogs
 * Android
   - fix reconnect to Bluetooth LE devices
+  - fix distorted colors on some devices
 
 Version 7.10 - 2021/07/09
 * weather
