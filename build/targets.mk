@@ -219,9 +219,9 @@ ifeq ($(TARGET),NEON)
   # Experimental target for generic ARMv7 with NEON on Linux
   override TARGET = UNIX
   ifeq ($(USE_CROSSTOOL_NG),y)
-    HOST_TRIPLET = arm-unknown-linux-gnueabihf
+    HOST_TRIPLET ?= arm-unknown-linux-gnueabihf
   else
-    HOST_TRIPLET = arm-linux-gnueabihf
+    HOST_TRIPLET ?= arm-linux-gnueabihf
   endif
   TCPREFIX = $(HOST_TRIPLET)-
   ifeq ($(CLANG),n)
