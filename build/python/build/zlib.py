@@ -13,8 +13,8 @@ class ZlibProject(Project):
         subprocess.check_call(['./configure', '--prefix=' + toolchain.install_prefix, '--static'],
                               cwd=src, env=toolchain.env)
         subprocess.check_call(['/usr/bin/make', '--quiet',
-                               'CC=' + toolchain.cc,
-                               'CPP=' + toolchain.cc + ' -E',
+                               'CC=' + toolchain.cc + ' ' + toolchain.cppflags + ' ' + toolchain.cflags,
+                               'CPP=' + toolchain.cc + ' -E ' + toolchain.cppflags,
                                'AR=' + toolchain.ar,
                                'ARFLAGS=' + toolchain.arflags,
                                'RANLIB=' + toolchain.ranlib,
