@@ -316,9 +316,9 @@ ifeq ($(TARGET),UNIX)
 
   ifeq ($(TARGET_IS_ARM)$(TARGET_IS_LINUX),yy)
     ifeq ($(TARGET_IS_ARMHF),y)
-      LLVM_TARGET = arm-linux-gnueabihf
+      LLVM_TARGET ?= arm-linux-gnueabihf
     else
-      LLVM_TARGET = arm-linux-gnueabi
+      LLVM_TARGET ?= arm-linux-gnueabi
     endif
   endif
 endif
