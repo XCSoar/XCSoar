@@ -161,11 +161,11 @@ public:
 		return data.begin();
 	}
 
-	iterator end() {
+	constexpr iterator end() {
 		return std::next(data.begin(), the_size);
 	}
 
-	const_iterator end() const {
+	constexpr const_iterator end() const {
 		return std::next(data.begin(), the_size);
 	}
 
