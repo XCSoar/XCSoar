@@ -32,8 +32,9 @@
 
 #include "StringPointer.hxx"
 
-#include <utility>
 #include <algorithm>
+#include <cstddef>
+#include <utility>
 
 /**
  * A string pointer whose memory is managed by this class.
@@ -46,6 +47,7 @@ public:
 	typedef typename StringPointer<T>::value_type value_type;
 	typedef typename StringPointer<T>::pointer pointer;
 	typedef typename StringPointer<T>::const_pointer const_pointer;
+	typedef std::size_t size_type;
 
 	static constexpr value_type SENTINEL = '\0';
 
@@ -89,7 +91,7 @@ public:
 	}
 
 	static AllocatedString Duplicate(const_pointer begin,
-					 size_t length) {
+					 size_type length) {
 		auto p = new value_type[length + 1];
 		*std::copy_n(begin, length, p) = 0;
 		return Donate(p);
