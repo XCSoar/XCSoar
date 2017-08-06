@@ -33,8 +33,9 @@
 #include "WritableBuffer.hxx"
 #include "Compiler.h"
 
-#include <assert.h>
 #include <algorithm>
+
+#include <assert.h>
 
 /**
  * An array allocated on the heap with a length determined at runtime.
@@ -93,6 +94,10 @@ public:
 	AllocatedArray &operator=(AllocatedArray &&other) {
 		std::swap(buffer, other.buffer);
 		return *this;
+	}
+
+	constexpr bool IsNull() const {
+		return buffer.IsNull();
 	}
 
 	/**
