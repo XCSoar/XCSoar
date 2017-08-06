@@ -46,9 +46,9 @@ curl = AutotoolsProject(
 )
 
 libpng = AutotoolsProject(
-    'ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/libpng-1.6.29.tar.xz',
-    'http://downloads.sourceforge.net/project/libpng/libpng16/1.6.29/libpng-1.6.29.tar.xz',
-    '4245b684e8fe829ebb76186327bb37ce5a639938b219882b53d64bd3cfc5f239',
+    'ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/libpng-1.6.31.tar.xz',
+    'http://downloads.sourceforge.net/project/libpng/libpng16/1.6.31/libpng-1.6.31.tar.xz',
+    '232a602de04916b2b5ce6f901829caf419519e6a16cc9cd7c1c91187d3ee8b41',
     'lib/libpng.a',
     [
         '--disable-shared', '--enable-static',
