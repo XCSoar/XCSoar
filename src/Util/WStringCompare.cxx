@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2015 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright (C) 2013-2017 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -34,13 +34,13 @@
 #include <string.h>
 
 bool
-StringStartsWith(const wchar_t *haystack, const wchar_t *needle)
+StringStartsWith(const wchar_t *haystack, const wchar_t *needle) noexcept
 {
 	return memcmp(haystack, needle, StringLength(needle) * sizeof(needle[0])) == 0;
 }
 
 bool
-StringEndsWith(const wchar_t *haystack, const wchar_t *needle)
+StringEndsWith(const wchar_t *haystack, const wchar_t *needle) noexcept
 {
 	const size_t haystack_length = StringLength(haystack);
 	const size_t needle_length = StringLength(needle);
@@ -50,7 +50,8 @@ StringEndsWith(const wchar_t *haystack, const wchar_t *needle)
 }
 
 bool
-StringEndsWithIgnoreCase(const wchar_t *haystack, const wchar_t *needle)
+StringEndsWithIgnoreCase(const wchar_t *haystack,
+			 const wchar_t *needle) noexcept
 {
 	const size_t haystack_length = StringLength(haystack);
 	const size_t needle_length = StringLength(needle);
@@ -61,7 +62,7 @@ StringEndsWithIgnoreCase(const wchar_t *haystack, const wchar_t *needle)
 }
 
 const wchar_t *
-StringAfterPrefix(const wchar_t *string, const wchar_t *prefix)
+StringAfterPrefix(const wchar_t *string, const wchar_t *prefix) noexcept
 {
 	assert(string != nullptr);
 	assert(prefix != nullptr);
@@ -73,7 +74,7 @@ StringAfterPrefix(const wchar_t *string, const wchar_t *prefix)
 }
 
 const wchar_t *
-StringAfterPrefixCI(const wchar_t *string, const wchar_t *prefix)
+StringAfterPrefixCI(const wchar_t *string, const wchar_t *prefix) noexcept
 {
 	assert(string != nullptr);
 	assert(prefix != nullptr);
@@ -85,7 +86,8 @@ StringAfterPrefixCI(const wchar_t *string, const wchar_t *prefix)
 }
 
 bool
-StringStartsWithIgnoreCase(const wchar_t *haystack, const wchar_t *needle)
+StringStartsWithIgnoreCase(const wchar_t *haystack,
+			   const wchar_t *needle) noexcept
 {
 	return StringIsEqualIgnoreCase(haystack, needle,
 				       StringLength(needle));

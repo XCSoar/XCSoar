@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2015 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright (C) 2013-2017 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -37,21 +37,21 @@
 #endif
 
 static inline bool
-StringIsEmpty(const char *string)
+StringIsEmpty(const char *string) noexcept
 {
 	return *string == 0;
 }
 
 gcc_pure
 bool
-StringStartsWith(const char *haystack, const char *needle);
+StringStartsWith(const char *haystack, const char *needle) noexcept;
 
 bool
-StringEndsWith(const char *haystack, const char *needle);
+StringEndsWith(const char *haystack, const char *needle) noexcept;
 
 gcc_pure
 bool
-StringEndsWithIgnoreCase(const char *haystack, const char *needle);
+StringEndsWithIgnoreCase(const char *haystack, const char *needle) noexcept;
 
 /**
  * Returns the portion of the string after a prefix.  If the string
@@ -60,7 +60,7 @@ StringEndsWithIgnoreCase(const char *haystack, const char *needle);
  */
 gcc_nonnull_all
 const char *
-StringAfterPrefix(const char *string, const char *prefix);
+StringAfterPrefix(const char *string, const char *prefix) noexcept;
 
 /**
  * Returns the portion of the string after a prefix.  If the string
@@ -70,10 +70,10 @@ StringAfterPrefix(const char *string, const char *prefix);
  */
 gcc_nonnull_all
 const char *
-StringAfterPrefixCI(const char *string, const char *prefix);
+StringAfterPrefixCI(const char *string, const char *prefix) noexcept;
 
 gcc_pure
 bool
-StringStartsWithIgnoreCase(const char *haystack, const char *needle);
+StringStartsWithIgnoreCase(const char *haystack, const char *needle) noexcept;
 
 #endif

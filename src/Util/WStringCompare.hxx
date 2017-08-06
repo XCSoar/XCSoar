@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2015 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright (C) 2013-2017 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -35,22 +35,23 @@
 #include <wchar.h>
 
 static inline bool
-StringIsEmpty(const wchar_t *string)
+StringIsEmpty(const wchar_t *string) noexcept
 {
 	return *string == 0;
 }
 
 gcc_pure
 bool
-StringStartsWith(const wchar_t *haystack, const wchar_t *needle);
+StringStartsWith(const wchar_t *haystack, const wchar_t *needle) noexcept;
 
 gcc_pure
 bool
-StringEndsWith(const wchar_t *haystack, const wchar_t *needle);
+StringEndsWith(const wchar_t *haystack, const wchar_t *needle) noexcept;
 
 gcc_pure
 bool
-StringEndsWithIgnoreCase(const wchar_t *haystack, const wchar_t *needle);
+StringEndsWithIgnoreCase(const wchar_t *haystack,
+			 const wchar_t *needle) noexcept;
 
 /**
  * Returns the portion of the string after a prefix.  If the string
@@ -59,7 +60,7 @@ StringEndsWithIgnoreCase(const wchar_t *haystack, const wchar_t *needle);
  */
 gcc_nonnull_all
 const wchar_t *
-StringAfterPrefix(const wchar_t *string, const wchar_t *prefix);
+StringAfterPrefix(const wchar_t *string, const wchar_t *prefix) noexcept;
 
 /**
  * Returns the portion of the string after a prefix.  If the string
@@ -69,10 +70,11 @@ StringAfterPrefix(const wchar_t *string, const wchar_t *prefix);
  */
 gcc_nonnull_all
 const wchar_t *
-StringAfterPrefixCI(const wchar_t *string, const wchar_t *prefix);
+StringAfterPrefixCI(const wchar_t *string, const wchar_t *prefix) noexcept;
 
 gcc_pure
 bool
-StringStartsWithIgnoreCase(const wchar_t *haystack, const wchar_t *needle);
+StringStartsWithIgnoreCase(const wchar_t *haystack,
+			   const wchar_t *needle) noexcept;
 
 #endif
