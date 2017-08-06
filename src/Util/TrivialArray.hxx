@@ -79,8 +79,9 @@ public:
 	}
 
 	template<typename U>
-	TrivialArray(std::initializer_list<U> l):the_size(l.size()) {
-		std::move(l.begin(), l.end(), data.begin());
+	TrivialArray(std::initializer_list<U> init)
+		:the_size(init.size()) {
+		std::move(init.begin(), init.end(), data.begin());
 	}
 
 	constexpr
