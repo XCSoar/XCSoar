@@ -58,6 +58,15 @@ class Toolchain:
         # default one on the build host
         self.env['PKG_CONFIG_LIBDIR'] = os.path.join(install_prefix, 'lib/pkgconfig')
 
+        # WORKAROUND: Under some circumstances, if QEMU User Emulation is
+        # installed on the build system, and enabled for binfmt_misc, it can
+        # break detection of cross compiling (at least autoconf's cross
+        # compiling detection), which can lead to undesired behaviour.
+        # Setting the following nonsense environment variable values should
+        # always circumvent QEMU User Emulation.
+        self.env['QEMU_CPU'] = 'Deep Thought'
+        self.env['QEMU_GUEST_BASE'] = '42'
+
 # a list of third-party libraries to be used by XCSoar
 from build.libs import *
 

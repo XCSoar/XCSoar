@@ -204,7 +204,7 @@ KoboWifiOn()
   Run("/bin/wlarm_le", "-i", "eth0", "up");
   Run("/bin/wpa_supplicant", "-i", "eth0",
       "-c", "/etc/wpa_supplicant/wpa_supplicant.conf",
-      "-C", "/var/run/wpa_supplicant", "-B");
+      "-C", "/var/run/wpa_supplicant", "-B", "-D", "wext");
 
   Sleep(2000);
 

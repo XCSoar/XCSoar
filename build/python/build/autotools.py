@@ -3,7 +3,7 @@ import os.path, subprocess, sys
 from build.project import Project
 
 class AutotoolsProject(Project):
-    def __init__(self, url, md5, installed, configure_args=[],
+    def __init__(self, url, alternative_url, md5, installed, configure_args=[],
                  autogen=False,
                  cppflags='',
                  ldflags='',
@@ -13,7 +13,7 @@ class AutotoolsProject(Project):
                  install_target='install',
                  use_destdir=False,
                  **kwargs):
-        Project.__init__(self, url, md5, installed, **kwargs)
+        Project.__init__(self, url, alternative_url, md5, installed, **kwargs)
         self.configure_args = configure_args
         self.autogen = autogen
         self.cppflags = cppflags

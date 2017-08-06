@@ -158,7 +158,7 @@ $$($(2)_OBJS): CPPFLAGS += $$($(2)_CPPFLAGS)
 $$($(2)_OBJS): CPPFLAGS += $(patsubst %,$$(%_CPPFLAGS),$($(2)_DEPENDS))
 
 # Link the unstripped binary
-ifneq ($(HOST_IS_DARWIN),y)
+ifneq ($(TARGET_IS_DARWIN),y)
 $$($(2)_NOSTRIP): LDFLAGS += -Wl,-shared,-Bsymbolic
 endif
 

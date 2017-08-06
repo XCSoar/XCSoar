@@ -3,9 +3,9 @@ import subprocess
 from build.project import Project
 
 class ZlibProject(Project):
-    def __init__(self, url, md5, installed,
+    def __init__(self, url, alternative_url, md5, installed,
                  **kwargs):
-        Project.__init__(self, url, md5, installed, **kwargs)
+        Project.__init__(self, url, alternative_url, md5, installed, **kwargs)
 
     def build(self, toolchain):
         src = self.unpack(toolchain, out_of_tree=False)
@@ -13,8 +13,8 @@ class ZlibProject(Project):
         subprocess.check_call(['./configure', '--prefix=' + toolchain.install_prefix, '--static'],
                               cwd=src, env=toolchain.env)
         subprocess.check_call(['/usr/bin/make', '--quiet',
-                               'CC=' + toolchain.cc,
-                               'CPP=' + toolchain.cc + ' -E',
+                               'CC=' + toolchain.cc + ' ' + toolchain.cppflags + ' ' + toolchain.cflags,
+                               'CPP=' + toolchain.cc + ' -E ' + toolchain.cppflags,
                                'AR=' + toolchain.ar,
                                'LDSHARED=' + toolchain.cc + ' -shared',
                                'install'],
