@@ -125,6 +125,10 @@ public:
 		address.sin_port = ToBE16(port);
 	}
 
+	constexpr const struct in_addr &GetAddress() const {
+		return address.sin_addr;
+	}
+
 #if defined(__GLIBC__) || defined(__APPLE__)
 	/**
 	 * Returns a StaticSocketAddress for the specified device. Caller
