@@ -249,6 +249,19 @@ public:
 		--the_size;
 	}
 
+	template<typename I>
+	void insert(size_type i, I _begin, I _end) {
+		size_type n = std::distance(_begin, _end);
+		assert(the_size + n < capacity());
+
+		auto dest_begin = std::next(begin(), i);
+		auto dest_end = end();
+		the_size += n;
+
+		std::move_backward(dest_begin, dest_end, end());
+		std::copy(_begin, _end, dest_begin);
+	}
+
 	/* STL API emulation */
 
 	void push_back(const T &value) {
