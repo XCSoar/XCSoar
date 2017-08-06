@@ -91,6 +91,16 @@ public:
 		address.ss_family = AF_UNSPEC;
 	}
 
+#ifdef HAVE_TCP
+	/**
+	 * Extract the port number.  Returns 0 if not applicable.
+	 */
+	gcc_pure
+	unsigned GetPort() const {
+		return ((SocketAddress)*this).GetPort();
+	}
+#endif
+
 	gcc_pure
 	bool operator==(SocketAddress other) const {
 		return (SocketAddress)*this == other;

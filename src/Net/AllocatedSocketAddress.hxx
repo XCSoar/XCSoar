@@ -143,6 +143,16 @@ public:
 	void SetLocal(const char *path) noexcept;
 #endif
 
+#ifdef HAVE_TCP
+	/**
+	 * Extract the port number.  Returns 0 if not applicable.
+	 */
+	gcc_pure
+	unsigned GetPort() const noexcept {
+		return ((SocketAddress)*this).GetPort();
+	}
+#endif
+
 private:
 	void SetSize(size_type new_size) noexcept;
 };

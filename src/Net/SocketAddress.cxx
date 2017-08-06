@@ -28,6 +28,8 @@
  */
 
 #include "SocketAddress.hxx"
+#include "IPv4Address.hxx"
+#include "IPv6Address.hxx"
 
 #include <string.h>
 
@@ -36,3 +38,25 @@ SocketAddress::operator==(SocketAddress other) const noexcept
 {
 	return size == other.size && memcmp(address, other.address, size) == 0;
 }
+
+#ifdef HAVE_TCP
+
+unsigned
+SocketAddress::GetPort() const noexcept
+{
+	if (IsNull())
+		return 0;
+
+	switch (GetFamily()) {
+	case AF_INET:
+		return IPv4Address(*this).GetPort();
+
+	case AF_INET6:
+		return IPv6Address(*this).GetPort();
+
+	default:
+		return 0;
+	}
+}
+
+#endif

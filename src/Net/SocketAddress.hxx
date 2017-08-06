@@ -30,6 +30,7 @@
 #ifndef SOCKET_ADDRESS_HXX
 #define SOCKET_ADDRESS_HXX
 
+#include "Features.hxx"
 #include "Compiler.h"
 
 #include <cstddef>
@@ -92,6 +93,14 @@ public:
 	bool IsDefined() const noexcept {
 		return GetFamily() != AF_UNSPEC;
 	}
+
+#ifdef HAVE_TCP
+	/**
+	 * Extract the port number.  Returns 0 if not applicable.
+	 */
+	gcc_pure
+	unsigned GetPort() const noexcept;
+#endif
 
 	gcc_pure
 	bool operator==(const SocketAddress other) const noexcept;
