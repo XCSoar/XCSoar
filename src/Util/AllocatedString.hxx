@@ -34,6 +34,8 @@
 
 #include <algorithm>
 
+#include <cstddef>
+
 /**
  * A string pointer whose memory is managed by this class.
  *
@@ -100,6 +102,14 @@ public:
 	AllocatedString &operator=(AllocatedString &&src) {
 		std::swap(value, src.value);
 		return *this;
+	}
+
+	constexpr bool operator==(std::nullptr_t) const {
+		return value == nullptr;
+	}
+
+	constexpr bool operator!=(std::nullptr_t) const {
+		return value != nullptr;
 	}
 
 	constexpr bool IsNull() const {
