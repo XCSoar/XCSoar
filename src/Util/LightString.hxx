@@ -43,18 +43,18 @@ template<typename T=char>
 class LightString : public StringPointer<T> {
 public:
 	typedef typename StringPointer<T>::value_type value_type;
-	typedef typename StringPointer<T>::pointer pointer;
-	typedef typename StringPointer<T>::const_pointer const_pointer;
+	typedef typename StringPointer<T>::pointer_type pointer_type;
+	typedef typename StringPointer<T>::const_pointer_type const_pointer_type;
 
 private:
 	AllocatedString<T> allocation;
 
-	explicit LightString(pointer _allocation)
+	explicit LightString(pointer_type _allocation)
 		:StringPointer<T>(_allocation),
 		allocation(AllocatedString<T>::Donate(_allocation)) {}
 
 public:
-	explicit LightString(const_pointer _value)
+	explicit LightString(const_pointer_type _value)
 		:StringPointer<T>(_value), allocation(nullptr) {}
 
 	LightString(std::nullptr_t n)
@@ -64,7 +64,7 @@ public:
 		:StringPointer<T>(std::move(src)),
 		 allocation(std::move(src.allocation)) {}
 
-	static LightString Donate(pointer allocation) {
+	static LightString Donate(pointer_type allocation) {
 		return LightString(allocation);
 	}
 
@@ -78,7 +78,7 @@ public:
 		return *this;
 	}
 
-	pointer Steal() {
+	pointer_type Steal() {
 		return allocation.Steal();
 	}
 };
