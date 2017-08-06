@@ -34,6 +34,8 @@
 
 #ifdef WIN32
 #include <windows.h>
+#elif defined(__APPLE__)
+#import <Foundation/Foundation.h>
 #endif
 
 /* TRUE and FALSE are macros on some platforms (at least on Win32, iOS and

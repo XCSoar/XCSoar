@@ -246,12 +246,11 @@ ifeq ($(TARGET),IOS32)
   override TARGET = UNIX
   TARGET_IS_DARWIN = y
   TARGET_IS_IOS = y
-  IOS_MIN_SUPPORTED_VERSION = 5.1
+  IOS_MIN_SUPPORTED_VERSION = 7.0
   HOST_TRIPLET = armv7-apple-darwin
   LLVM_TARGET = $(HOST_TRIPLET)
   ifeq ($(HOST_IS_DARWIN),y)
-    DARWIN_SDK_VERSION = 9.3
-    DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS${DARWIN_SDK_VERSION}.sdk
+    DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk
   endif
   LIBCXX = y
   CLANG = y
@@ -266,8 +265,7 @@ ifeq ($(TARGET),IOS64)
   HOST_TRIPLET = aarch64-apple-darwin
   LLVM_TARGET = $(HOST_TRIPLET)
   ifeq ($(HOST_IS_DARWIN),y)
-    DARWIN_SDK_VERSION = 9.1
-    DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS${DARWIN_SDK_VERSION}.sdk
+    DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk
   endif
   LIBCXX = y
   CLANG = y

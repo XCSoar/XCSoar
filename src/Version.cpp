@@ -40,7 +40,7 @@ Copyright_License {
   #if TARGET_OS_IPHONE
     #define TARGET "iOS"
   #else
-    #define TARGET "OSX"
+    #define TARGET "macOS"
   #endif
 #elif !defined(WIN32)
   #define TARGET "UNIX"

@@ -1,0 +1,38 @@
+diff -Nuar SDL2-2.0.5.orig/configure SDL2-2.0.5/configure
+--- SDL2-2.0.5.orig/configure	2017-07-04 23:25:23.000000000 +0200
++++ SDL2-2.0.5/configure	2017-07-08 19:42:54.000000000 +0200
+@@ -23610,6 +23610,7 @@
+         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,-framework,CoreGraphics"
+         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,-framework,CoreMotion"
+         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,-framework,GameController"
++        EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,-framework,AVFoundation"
+         ;;
+     *-*-darwin* )
+         # This could be either full "Mac OS X", or plain "Darwin" which is
+@@ -23695,6 +23696,7 @@
+         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,-framework,Cocoa"
+         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,-framework,Carbon"
+         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,-framework,IOKit"
++        EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,-framework,AVFoundation"
+         ;;
+     *-nacl|*-pnacl)
+         ARCH=nacl
+diff -Nuar SDL2-2.0.5.orig/configure.in SDL2-2.0.5/configure.in
+--- SDL2-2.0.5.orig/configure.in	2017-07-04 23:25:23.000000000 +0200
++++ SDL2-2.0.5/configure.in	2017-07-08 19:43:59.000000000 +0200
+@@ -3337,6 +3337,7 @@
+         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,-framework,CoreGraphics"
+         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,-framework,CoreMotion"
+         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,-framework,GameController"
++        EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,-framework,AVFoundation"
+         ;;
+     *-*-darwin* )
+         # This could be either full "Mac OS X", or plain "Darwin" which is
+@@ -3410,6 +3411,7 @@
+         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,-framework,Cocoa"
+         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,-framework,Carbon"
+         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,-framework,IOKit"
++        EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,-framework,AVFoundation"
+         ;;
+     *-nacl|*-pnacl)
+         ARCH=nacl

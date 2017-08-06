@@ -1,0 +1,22 @@
+diff -Nuar SDL2-2.0.5.orig/configure SDL2-2.0.5/configure
+--- SDL2-2.0.5.orig/configure	2017-07-04 23:25:23.000000000 +0200
++++ SDL2-2.0.5/configure	2017-07-08 19:53:51.000000000 +0200
+@@ -23691,6 +23691,7 @@
+         # The Mac OS X platform requires special setup.
+         EXTRA_CFLAGS="$EXTRA_CFLAGS -fpascal-strings"
+         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -lobjc"
++        EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,-framework,CoreServices"
+         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,-framework,CoreVideo"
+         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,-framework,Cocoa"
+         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,-framework,Carbon"
+diff -Nuar SDL2-2.0.5.orig/configure.in SDL2-2.0.5/configure.in
+--- SDL2-2.0.5.orig/configure.in	2017-07-04 23:25:23.000000000 +0200
++++ SDL2-2.0.5/configure.in	2017-07-08 19:53:33.000000000 +0200
+@@ -3406,6 +3406,7 @@
+         # The Mac OS X platform requires special setup.
+         EXTRA_CFLAGS="$EXTRA_CFLAGS -fpascal-strings"
+         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -lobjc"
++        EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,-framework,CoreServices"
+         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,-framework,CoreVideo"
+         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,-framework,Cocoa"
+         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -Wl,-framework,Carbon"
