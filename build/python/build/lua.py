@@ -4,9 +4,9 @@ from build.project import Project
 from build.quilt import push_all
 
 class LuaProject(Project):
-    def __init__(self, url, md5, installed,
+    def __init__(self, url, alternative_url, md5, installed,
                  **kwargs):
-        Project.__init__(self, url, md5, installed, **kwargs)
+        Project.__init__(self, url, alternative_url, md5, installed, **kwargs)
 
     def build(self, toolchain):
         src = self.unpack(toolchain, out_of_tree=False)
