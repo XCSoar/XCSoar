@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2016 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright (C) 2012-2017 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -58,6 +58,14 @@
 
 #ifndef O_CLOEXEC
 #define O_CLOEXEC 0
+#endif
+
+#ifdef HAVE_POSIX
+bool
+FileDescriptor::IsValid() const noexcept
+{
+	return IsDefined() && fcntl(fd, F_GETFL) >= 0;
+}
 #endif
 
 bool

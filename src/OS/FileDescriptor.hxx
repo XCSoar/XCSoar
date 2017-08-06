@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2016 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright (C) 2012-2017 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -64,6 +64,14 @@ public:
 	constexpr bool IsDefined() const {
 		return fd >= 0;
 	}
+
+#ifdef HAVE_POSIX
+	/**
+	 * Ask the kernel whether this is a valid file descriptor.
+	 */
+	gcc_pure
+	bool IsValid() const noexcept;
+#endif
 
 	/**
 	 * Returns the file descriptor.  This may only be called if
