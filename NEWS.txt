@@ -5,6 +5,7 @@ Version 6.8.8 - not yet released
   - update source URLs for METARs and TAFs
 * Kobo
   - support for Kobo Aura Edition 2
+  - fix Wifi on recent Kobo firmware releases
 
 Version 6.8.7 - 2016/08/12
 * data files
