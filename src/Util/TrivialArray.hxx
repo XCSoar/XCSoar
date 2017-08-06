@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2015 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright (C) 2010-2017 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -150,11 +150,11 @@ public:
 		return data[i];
 	}
 
-	iterator begin() {
+	constexpr iterator begin() {
 		return data.begin();
 	}
 
-	const_iterator begin() const {
+	constexpr const_iterator begin() const {
 		return data.begin();
 	}
 
