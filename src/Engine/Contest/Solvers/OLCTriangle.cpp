@@ -564,7 +564,7 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
 
     unsigned last = 0, first = i;
 
-    const auto visitor = [this, i, start,
+    const auto visitor = [i, start,
                           half_max_range_sq,
                           min_altitude, max_altitude,
                           &first, &last]
