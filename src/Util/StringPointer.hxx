@@ -36,9 +36,11 @@
 template<typename T=char>
 class StringPointer {
 public:
-	typedef T value_type;
-	typedef T *pointer;
-	typedef const T *const_pointer;
+	using value_type = T;
+	using reference = T &;
+	using const_reference = const T &;
+	using pointer = T *;
+	using const_pointer = const T *;
 
 private:
 	const_pointer value;

@@ -46,10 +46,12 @@
 template<typename T=char>
 class AllocatedString {
 public:
-	typedef typename StringPointer<T>::value_type value_type;
-	typedef typename StringPointer<T>::pointer pointer;
-	typedef typename StringPointer<T>::const_pointer const_pointer;
-	typedef std::size_t size_type;
+	using value_type = typename StringPointer<T>::value_type;
+	using reference = typename StringPointer<T>::reference;
+	using const_reference = typename StringPointer<T>::const_reference;
+	using pointer = typename StringPointer<T>::pointer;
+	using const_pointer = typename StringPointer<T>::const_pointer;
+	using size_type = std::size_t;
 
 	static constexpr value_type SENTINEL = '\0';
 
@@ -122,6 +124,14 @@ public:
 
 	bool empty() const {
 		return *value == SENTINEL;
+	}
+
+	reference operator[](size_type i) {
+		return value[i];
+	}
+
+	const reference operator[](size_type i) const {
+		return value[i];
 	}
 
 	pointer Steal() {
