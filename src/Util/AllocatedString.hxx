@@ -88,14 +88,14 @@ public:
 	static AllocatedString Duplicate(const_pointer begin,
 					 const_pointer end) {
 		auto p = new value_type[end - begin + 1];
-		*std::copy(begin, end, p) = 0;
+		*std::copy(begin, end, p) = SENTINEL;
 		return Donate(p);
 	}
 
 	static AllocatedString Duplicate(const_pointer begin,
 					 size_type length) {
 		auto p = new value_type[length + 1];
-		*std::copy_n(begin, length, p) = 0;
+		*std::copy_n(begin, length, p) = SENTINEL;
 		return Donate(p);
 	}
 
