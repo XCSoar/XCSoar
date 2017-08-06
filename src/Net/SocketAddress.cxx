@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2015 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright (C) 2012-2017 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -32,7 +32,7 @@
 #include <string.h>
 
 bool
-SocketAddress::operator==(SocketAddress other) const
+SocketAddress::operator==(SocketAddress other) const noexcept
 {
 	return size == other.size && memcmp(address, other.address, size) == 0;
 }

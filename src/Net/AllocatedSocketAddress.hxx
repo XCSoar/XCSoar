@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2015 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright (C) 2012-2017 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -54,16 +54,16 @@ private:
 		:address(_address), size(_size) {}
 
 public:
-	AllocatedSocketAddress():address(nullptr), size(0) {}
+	AllocatedSocketAddress() noexcept:address(nullptr), size(0) {}
 
-	explicit AllocatedSocketAddress(SocketAddress src)
+	explicit AllocatedSocketAddress(SocketAddress src) noexcept
 		:address(nullptr), size(0) {
 		*this = src;
 	}
 
 	AllocatedSocketAddress(const AllocatedSocketAddress &) = delete;
 
-	AllocatedSocketAddress(AllocatedSocketAddress &&src)
+	AllocatedSocketAddress(AllocatedSocketAddress &&src) noexcept
 		:address(src.address), size(src.size) {
 		src.address = nullptr;
 		src.size = 0;
@@ -73,51 +73,51 @@ public:
 		free(address);
 	}
 
-	AllocatedSocketAddress &operator=(SocketAddress src);
+	AllocatedSocketAddress &operator=(SocketAddress src) noexcept;
 
 	AllocatedSocketAddress &operator=(const AllocatedSocketAddress &) = delete;
 
-	AllocatedSocketAddress &operator=(AllocatedSocketAddress &&src) {
+	AllocatedSocketAddress &operator=(AllocatedSocketAddress &&src) noexcept {
 		std::swap(address, src.address);
 		std::swap(size, src.size);
 		return *this;
 	}
 
 	gcc_pure
-	bool operator==(SocketAddress other) const {
+	bool operator==(SocketAddress other) const noexcept {
 		return (SocketAddress)*this == other;
 	}
 
-	bool operator!=(SocketAddress &other) const {
+	bool operator!=(SocketAddress &other) const noexcept {
 		return !(*this == other);
 	}
 
 	gcc_const
-	static AllocatedSocketAddress Null() {
+	static AllocatedSocketAddress Null() noexcept {
 		return AllocatedSocketAddress(nullptr, 0);
 	}
 
-	bool IsNull() const {
+	bool IsNull() const noexcept {
 		return address == nullptr;
 	}
 
-	size_type GetSize() const {
+	size_type GetSize() const noexcept {
 		return size;
 	}
 
-	const struct sockaddr *GetAddress() const {
+	const struct sockaddr *GetAddress() const noexcept {
 		return address;
 	}
 
-	operator SocketAddress() const {
+	operator SocketAddress() const noexcept {
 		return SocketAddress(address, size);
 	}
 
-	operator const struct sockaddr *() const {
+	operator const struct sockaddr *() const noexcept {
 		return address;
 	}
 
-	int GetFamily() const {
+	int GetFamily() const noexcept {
 		return address->sa_family;
 	}
 
@@ -125,11 +125,11 @@ public:
 	 * Does the object have a well-defined address?  Check !IsNull()
 	 * before calling this method.
 	 */
-	bool IsDefined() const {
+	bool IsDefined() const noexcept {
 		return GetFamily() != AF_UNSPEC;
 	}
 
-	void Clear() {
+	void Clear() noexcept {
 		free(address);
 		address = nullptr;
 		size = 0;
@@ -141,11 +141,11 @@ public:
 	 * begins with a '@', then the rest specifies an "abstract" local
 	 * address.
 	 */
-	void SetLocal(const char *path);
+	void SetLocal(const char *path) noexcept;
 #endif
 
 private:
-	void SetSize(size_type new_size);
+	void SetSize(size_type new_size) noexcept;
 };
 
 #endif

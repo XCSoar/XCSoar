@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2015 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright (C) 2012-2017 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -36,7 +36,7 @@
 #endif
 
 AllocatedSocketAddress &
-AllocatedSocketAddress::operator=(SocketAddress src)
+AllocatedSocketAddress::operator=(SocketAddress src) noexcept
 {
 	if (src.IsNull()) {
 		Clear();
@@ -49,7 +49,7 @@ AllocatedSocketAddress::operator=(SocketAddress src)
 }
 
 void
-AllocatedSocketAddress::SetSize(size_type new_size)
+AllocatedSocketAddress::SetSize(size_type new_size) noexcept
 {
 	if (size == new_size)
 		return;
@@ -62,7 +62,7 @@ AllocatedSocketAddress::SetSize(size_type new_size)
 #ifdef HAVE_UN
 
 void
-AllocatedSocketAddress::SetLocal(const char *path)
+AllocatedSocketAddress::SetLocal(const char *path) noexcept
 {
 	const bool is_abstract = *path == '@';
 
