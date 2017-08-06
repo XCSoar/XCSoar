@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef IPV4_ADDRESS_HPP
-#define IPV4_ADDRESS_HPP
+#ifndef IPV4_ADDRESS_HXX
+#define IPV4_ADDRESS_HXX
 
 #include "SocketAddress.hxx"
 #include "OS/ByteOrder.hpp"

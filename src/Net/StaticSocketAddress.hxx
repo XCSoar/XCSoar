@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef STATIC_SOCKET_ADDRESS_HPP
-#define STATIC_SOCKET_ADDRESS_HPP
+#ifndef STATIC_SOCKET_ADDRESS_HXX
+#define STATIC_SOCKET_ADDRESS_HXX
 
 #include "SocketAddress.hxx"
 #include "Compiler.h"
