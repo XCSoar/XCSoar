@@ -117,6 +117,14 @@ public:
 		return address.sin_family != AF_UNSPEC;
 	}
 
+	constexpr uint16_t GetPort() const {
+		return FromBE16(address.sin_port);
+	}
+
+	void SetPort(uint16_t port) {
+		address.sin_port = ToBE16(port);
+	}
+
 #if defined(__GLIBC__) || defined(__APPLE__)
 	/**
 	 * Returns a StaticSocketAddress for the specified device. Caller
