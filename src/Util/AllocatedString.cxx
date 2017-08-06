@@ -38,11 +38,10 @@ AllocatedString<char>::Duplicate(const_pointer src)
 }
 
 #ifdef _UNICODE
-#include <tchar.h>
 
 template<>
-AllocatedString<TCHAR>
-AllocatedString<TCHAR>::Duplicate(const_pointer src)
+AllocatedString<wchar_t>
+AllocatedString<wchar_t>::Duplicate(const_pointer src)
 {
 	return Duplicate(src, StringLength(src));
 }
