@@ -38,7 +38,6 @@ AllocatedString<char>::Duplicate(const_pointer_type src)
 }
 
 #ifdef _UNICODE
-#include <tchar.h>
 
 template<>
 AllocatedString<wchar_t>
