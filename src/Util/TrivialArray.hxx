@@ -81,6 +81,8 @@ public:
 	template<typename U>
 	TrivialArray(std::initializer_list<U> init)
 		:the_size(init.size()) {
+		assert(init.size() <= max);
+
 		std::move(init.begin(), init.end(), data.begin());
 	}
 
