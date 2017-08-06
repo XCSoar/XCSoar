@@ -4,11 +4,11 @@ import os, os.path
 import re
 import sys
 
-if len(sys.argv) != 12:
-    print("Usage: build.py TARGET_OUTPUT_DIR TARGET HOST_TRIPLET ARCH_CFLAGS CPPFLAGS ARCH_LDFLAGS CC CXX AR RANLIB STRIP", file=sys.stderr)
+if len(sys.argv) != 13:
+    print("Usage: build.py TARGET_OUTPUT_DIR TARGET HOST_TRIPLET ARCH_CFLAGS CPPFLAGS ARCH_LDFLAGS CC CXX AR ARFLAGS RANLIB STRIP", file=sys.stderr)
     sys.exit(1)
 
-target_output_dir, target, host_triplet, arch_cflags, cppflags, arch_ldflags, cc, cxx, ar, ranlib, strip = sys.argv[1:]
+target_output_dir, target, host_triplet, arch_cflags, cppflags, arch_ldflags, cc, cxx, ar, arflags, ranlib, strip = sys.argv[1:]
 
 # the path to the XCSoar sources
 xcsoar_path = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]) or '.', '..'))
@@ -32,7 +32,7 @@ if 'MAKEFLAGS' in os.environ:
 class Toolchain:
     def __init__(self, tarball_path, src_path, build_path, install_prefix,
                  arch, arch_cflags, cppflags, arch_ldflags,
-                 cc, cxx, ar, ranlib, strip):
+                 cc, cxx, ar, arflags, ranlib, strip):
         self.tarball_path = tarball_path
         self.src_path = src_path
         self.build_path = build_path
@@ -42,6 +42,7 @@ class Toolchain:
         self.cc = cc
         self.cxx = cxx
         self.ar = ar
+        self.arflags = arflags
         self.ranlib = ranlib
         self.strip = strip
 
@@ -118,7 +119,7 @@ else:
 # build the third-party libraries
 toolchain = Toolchain(tarball_path, src_path, build_path, install_prefix,
                       host_triplet, arch_cflags, cppflags, arch_ldflags,
-                      cc, cxx, ar, ranlib, strip)
+                      cc, cxx, ar, arflags, ranlib, strip)
 for x in thirdparty_libs:
     if not x.is_installed(toolchain):
         x.build(toolchain)
