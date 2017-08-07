@@ -780,7 +780,7 @@ DeviceEditWidget::Save(bool &_changed)
     if (CanPassThrough(GetDataField(Driver))) {
       changed |= SaveValue(UseSecondDriver, config.use_second_device);
       changed |= SaveValue(SecondDriver, config.driver2_name.buffer(),
-                           config.driver2_name.CAPACITY);
+                           config.driver2_name.capacity());
     }
   }
 

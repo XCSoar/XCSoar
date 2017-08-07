@@ -35,7 +35,7 @@
 /**
  * A statically allocated string buffer.
  */
-template<typename T, size_t _CAPACITY>
+template<typename T, size_t CAPACITY>
 class BasicStringBuffer {
 public:
 	typedef T value_type;
@@ -45,7 +45,6 @@ public:
 	typedef const_pointer const_iterator;
 	typedef size_t size_type;
 
-	static constexpr size_type CAPACITY = _CAPACITY;
 	static constexpr value_type SENTINEL = '\0';
 
 protected:

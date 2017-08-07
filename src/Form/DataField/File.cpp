@@ -111,7 +111,7 @@ FileDataField::ScanDirectoryTop(const TCHAR *filter)
 {
   if (!loaded) {
     if (!postponed_patterns.full() &&
-        _tcslen(filter) < PatternList::value_type::CAPACITY) {
+        _tcslen(filter) < PatternList::value_type().capacity()) {
       postponed_patterns.append() = filter;
       return;
     } else
