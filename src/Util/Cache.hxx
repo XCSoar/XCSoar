@@ -251,11 +251,11 @@ public:
 	 */
 	template<typename K, typename U>
 	void Put(K &&key, U &&data) {
-		assert(map.find(key, map.hash_function(), map.key_eq()) == map.end());
-
 		Item &item = Make(std::forward<K>(key), std::forward<U>(data));
 		chronological_list.push_front(item);
-		map.insert(item);
+		auto i = map.insert(item);
+		(void)i;
+		assert(i.second && "Key must not exist already");
 	}
 
 	/**
