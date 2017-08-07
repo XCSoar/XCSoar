@@ -38,7 +38,6 @@
 #include <ws2tcpip.h>
 #else
 #include <netinet/in.h>
-#include <netdb.h>
 #endif
 
 StaticSocketAddress &
@@ -74,24 +73,3 @@ StaticSocketAddress::SetPort(unsigned port)
 }
 
 #endif
-
-bool
-StaticSocketAddress::Lookup(const char *host, const char *service, int socktype)
-{
-	struct addrinfo hints;
-	memset(&hints, 0, sizeof(hints));
-	hints.ai_family = AF_UNSPEC;
-	hints.ai_socktype = socktype;
-
-	struct addrinfo *ai;
-	if (getaddrinfo(host, service, &hints, &ai) != 0)
-		return false;
-
-	size = ai->ai_addrlen;
-	assert(size_t(size) <= sizeof(address));
-
-	memcpy(reinterpret_cast<void *>(&address),
-	       reinterpret_cast<void *>(ai->ai_addr), size);
-	freeaddrinfo(ai);
-	return true;
-}

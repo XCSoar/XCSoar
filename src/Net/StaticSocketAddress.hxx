@@ -123,8 +123,6 @@ public:
 	bool operator!=(SocketAddress other) const {
 		return !(*this == other);
 	}
-
-	bool Lookup(const char *host, const char *service, int socktype);
 };
 
 #endif
