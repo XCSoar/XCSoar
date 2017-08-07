@@ -48,8 +48,6 @@ Net::Request::Request(Session &_session, ResponseHandler &_handler,
 Net::Request::~Request()
 {
   session.Remove(handle.GetHandle());
-
-  curl_slist_free_all(request_headers);
 }
 
 void
@@ -59,7 +57,7 @@ Net::Request::AddHeader(const char *name, const char *value)
 
   char buffer[4096];
   snprintf(buffer, sizeof(buffer), "%s: %s", name, value);
-  request_headers = curl_slist_append(request_headers, buffer);
+  request_headers.Append(buffer);
 }
 
 void
@@ -99,8 +97,8 @@ Net::Request::WriteCallback(char *ptr, size_t size, size_t nmemb,
 void
 Net::Request::Send(unsigned _timeout_ms)
 {
-  if (request_headers != nullptr)
-    handle.SetHeaders(request_headers);
+  if (request_headers.Get() != nullptr)
+    handle.SetHeaders(request_headers.Get());
 
   const int timeout_ms = _timeout_ms == INFINITE ? -1 : _timeout_ms;
 

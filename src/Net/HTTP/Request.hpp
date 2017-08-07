@@ -25,6 +25,7 @@ Copyright_License {
 #define NET_REQUEST_HPP
 
 #include "Easy.hpp"
+#include "Slist.hxx"
 
 #include <curl/curl.h>
 
@@ -45,7 +46,7 @@ namespace Net {
 
     CurlEasy handle;
 
-    struct curl_slist *request_headers = nullptr;
+    CurlSlist request_headers;
 
     ResponseHandler &handler;
 
