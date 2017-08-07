@@ -54,24 +54,3 @@ LogLastError(const TCHAR *fmt, ...)
 }
 
 #endif
-
-#ifdef HAVE_POSIX
-
-#include <string.h>
-#include <errno.h>
-
-void
-LogErrno(const TCHAR *fmt, ...)
-{
-  const int error = errno;
-
-  TCHAR buffer[1024];
-  va_list ap;
-  va_start(ap, fmt);
-  _vsntprintf(buffer, ARRAY_SIZE(buffer), fmt, ap);
-  va_end(ap);
-
-  LogFormat(_T("%s: %s"), buffer, strerror(error));
-}
-
-#endif
