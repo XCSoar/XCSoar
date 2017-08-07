@@ -67,13 +67,14 @@ public:
 	typedef typename Base::const_iterator const_iterator;
 	typedef typename Base::size_type size_type;
 
-	static constexpr size_type CAPACITY = Base::CAPACITY;
 	static constexpr value_type SENTINEL = Base::SENTINEL;
 
 	StaticStringBase() = default;
 	explicit StaticStringBase(const_pointer value) {
 		assign(value);
 	}
+
+	using Base::capacity;
 
 	size_type length() const {
 		return StringLength(c_str());
@@ -82,7 +83,7 @@ public:
 	using Base::empty;
 
 	bool full() const {
-		return length() >= CAPACITY - 1;
+		return length() >= capacity() - 1;
 	}
 
 	/**
@@ -98,7 +99,7 @@ public:
 	}
 
 	void SetASCII(const char *src, const char *src_end) {
-		pointer end = ::CopyASCII(data(), CAPACITY - 1, src, src_end);
+		pointer end = ::CopyASCII(data(), capacity() - 1, src, src_end);
 		*end = SENTINEL;
 	}
 
@@ -108,7 +109,7 @@ public:
 
 #ifdef _UNICODE
 	void SetASCII(const TCHAR *src, const TCHAR *src_end) {
-		pointer end = ::CopyASCII(data(), CAPACITY - 1, src, src_end);
+		pointer end = ::CopyASCII(data(), capacity() - 1, src, src_end);
 		*end = SENTINEL;
 	}
 
@@ -130,7 +131,7 @@ public:
 	 * @return false if #src was invalid UTF-8
 	 */
 	bool SetUTF8(const char *src) {
-		return ::CopyUTF8(data(), CAPACITY, src);
+		return ::CopyUTF8(data(), capacity(), src);
 	}
 
 	bool equals(const_pointer other) const {
@@ -191,14 +192,14 @@ public:
 	void assign(const_pointer new_value) {
 		assert(new_value != nullptr);
 
-		CopyString(data(), new_value, CAPACITY);
+		CopyString(data(), new_value, capacity());
 	}
 
 	void assign(const_pointer new_value, size_type length) {
 		assert(new_value != nullptr);
 
-		size_type max_length = length + 1 > CAPACITY
-			? CAPACITY
+		size_type max_length = length + 1 > capacity()
+			? capacity()
 			: length + 1;
 		CopyString(data(), new_value, max_length);
 	}
@@ -207,21 +208,21 @@ public:
 		assert(new_value != nullptr);
 
 		size_type len = length();
-		CopyString(data() + len, new_value, CAPACITY - len);
+		CopyString(data() + len, new_value, capacity() - len);
 	}
 
 	void append(const_pointer new_value, size_type _length) {
 		assert(new_value != nullptr);
 
 		size_type len = length();
-		size_type max_length = (CAPACITY - len < _length + 1) ?
-			CAPACITY - len : _length + 1;
+		size_type max_length = (capacity() - len < _length + 1) ?
+			capacity() - len : _length + 1;
 		CopyString(data() + len, new_value, max_length);
 	}
 
 	bool push_back(value_type ch) {
 		size_t l = length();
-		if (l >= CAPACITY - 1)
+		if (l >= capacity() - 1)
 			return false;
 
 		auto *p = data() + l;
@@ -287,7 +288,7 @@ public:
 	 */
 	template<typename... Args>
 	void Format(const_pointer fmt, Args&&... args) {
-		StringFormat(data(), CAPACITY, fmt, args...);
+		StringFormat(data(), capacity(), fmt, args...);
 	}
 
 	/**
@@ -297,7 +298,7 @@ public:
 	template<typename... Args>
 	void AppendFormat(const_pointer fmt, Args&&... args) {
 		size_t l = length();
-		StringFormat(data() + l, CAPACITY - l, fmt, args...);
+		StringFormat(data() + l, capacity() - l, fmt, args...);
 	}
 
 	/**
