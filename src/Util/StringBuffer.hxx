@@ -36,7 +36,7 @@
  * A statically allocated string buffer.
  */
 template<typename T, size_t _CAPACITY>
-class StringBuffer {
+class BasicStringBuffer {
 public:
 	typedef T value_type;
 	typedef T &reference;
@@ -102,5 +102,8 @@ public:
 		return c_str();
 	}
 };
+
+template<size_t CAPACITY>
+class StringBuffer : public BasicStringBuffer<char, CAPACITY> {};
 
 #endif

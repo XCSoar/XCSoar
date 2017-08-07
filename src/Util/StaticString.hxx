@@ -56,8 +56,8 @@ CopyUTF8(wchar_t *dest, size_t dest_size, const char *src);
  * A string with a maximum size known at compile time.
  */
 template<typename T, size_t max>
-class StaticStringBase : public StringBuffer<T, max> {
-	typedef StringBuffer<T, max> Base;
+class StaticStringBase : public BasicStringBuffer<T, max> {
+	typedef BasicStringBuffer<T, max> Base;
 
 public:
 	using typename Base::value_type;

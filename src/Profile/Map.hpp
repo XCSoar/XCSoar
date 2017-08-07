@@ -99,7 +99,7 @@ public:
   bool Get(const char *key, TCHAR *value, size_t max_size) const;
 
   template<size_t max>
-  bool Get(const char *key, StringBuffer<TCHAR, max> &value) const {
+  bool Get(const char *key, BasicStringBuffer<TCHAR, max> &value) const {
     return Get(key, value.data(), value.capacity());
   }
 
