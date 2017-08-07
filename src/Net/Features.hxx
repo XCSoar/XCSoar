@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_NET_FEATURES_HXX
 #define XCSOAR_NET_FEATURES_HXX
 
+#define HAVE_TCP
+
 #ifdef HAVE_POSIX
 #define HAVE_UN
 #endif
