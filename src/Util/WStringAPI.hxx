@@ -38,69 +38,69 @@ gcc_pure gcc_nonnull_all
 static inline size_t
 StringLength(const wchar_t *p) noexcept
 {
-  return wcslen(p);
+	return wcslen(p);
 }
 
 gcc_pure gcc_nonnull_all
 static inline const wchar_t *
 StringFind(const wchar_t *haystack, const wchar_t *needle) noexcept
 {
-  return wcsstr(haystack, needle);
+	return wcsstr(haystack, needle);
 }
 
 gcc_pure gcc_nonnull_all
 static inline const wchar_t *
 StringFind(const wchar_t *haystack, wchar_t needle, size_t size) noexcept
 {
-  return wmemchr(haystack, needle, size);
+	return wmemchr(haystack, needle, size);
 }
 
 gcc_pure gcc_nonnull_all
 static inline wchar_t *
 StringFind(wchar_t *haystack, wchar_t needle, size_t size) noexcept
 {
-  return wmemchr(haystack, needle, size);
+	return wmemchr(haystack, needle, size);
 }
 
 gcc_pure gcc_nonnull_all
 static inline const wchar_t *
 StringFind(const wchar_t *haystack, wchar_t needle) noexcept
 {
-  return wcschr(haystack, needle);
+	return wcschr(haystack, needle);
 }
 
 gcc_pure gcc_nonnull_all
 static inline wchar_t *
 StringFind(wchar_t *haystack, wchar_t needle) noexcept
 {
-  return wcschr(haystack, needle);
+	return wcschr(haystack, needle);
 }
 
 gcc_pure gcc_nonnull_all
 static inline const wchar_t *
 StringFindLast(const wchar_t *haystack, wchar_t needle) noexcept
 {
-  return wcsrchr(haystack, needle);
+	return wcsrchr(haystack, needle);
 }
 
 gcc_pure gcc_nonnull_all
 static inline wchar_t *
 StringFindLast(wchar_t *haystack, wchar_t needle) noexcept
 {
-  return wcsrchr(haystack, needle);
+	return wcsrchr(haystack, needle);
 }
 
 static inline wchar_t *
 StringToken(wchar_t *str, const wchar_t *delim) noexcept
 {
-  return wcstok(str, delim);
+	return wcstok(str, delim);
 }
 
 gcc_nonnull_all
 static inline void
 UnsafeCopyString(wchar_t *dest, const wchar_t *src) noexcept
 {
-  wcscpy(dest, src);
+	wcscpy(dest, src);
 }
 
 gcc_nonnull_all
@@ -108,11 +108,11 @@ static inline wchar_t *
 UnsafeCopyStringP(wchar_t *dest, const wchar_t *src) noexcept
 {
 #ifdef WIN32
-  /* emulate wcpcpy() */
-  UnsafeCopyString(dest, src);
-  return dest + StringLength(dest);
+	/* emulate wcpcpy() */
+	UnsafeCopyString(dest, src);
+	return dest + StringLength(dest);
 #else
-  return wcpcpy(dest, src);
+	return wcpcpy(dest, src);
 #endif
 }
 
@@ -126,7 +126,7 @@ gcc_pure gcc_nonnull_all
 static inline bool
 StringIsEqual(const wchar_t *str1, const wchar_t *str2) noexcept
 {
-  return wcscmp(str1, str2) == 0;
+	return wcscmp(str1, str2) == 0;
 }
 
 /**
@@ -136,14 +136,14 @@ gcc_pure gcc_nonnull_all
 static inline bool
 StringIsEqual(const wchar_t *a, const wchar_t *b, size_t length) noexcept
 {
-  return wcsncmp(a, b, length) == 0;
+	return wcsncmp(a, b, length) == 0;
 }
 
 gcc_pure gcc_nonnull_all
 static inline bool
 StringIsEqualIgnoreCase(const wchar_t *a, const wchar_t *b) noexcept
 {
-  return _wcsicmp(a, b) == 0;
+	return _wcsicmp(a, b) == 0;
 }
 
 gcc_pure gcc_nonnull_all
@@ -151,21 +151,21 @@ static inline bool
 StringIsEqualIgnoreCase(const wchar_t *a, const wchar_t *b,
 			size_t size) noexcept
 {
-  return _wcsnicmp(a, b, size) == 0;
+	return _wcsnicmp(a, b, size) == 0;
 }
 
 gcc_pure gcc_nonnull_all
 static inline int
 StringCollate(const wchar_t *a, const wchar_t *b) noexcept
 {
-  return wcscoll(a, b);
+	return wcscoll(a, b);
 }
 
 gcc_malloc gcc_nonnull_all
 static inline wchar_t *
 DuplicateString(const wchar_t *p) noexcept
 {
-  return wcsdup(p);
+	return wcsdup(p);
 }
 
 #endif
