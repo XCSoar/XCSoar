@@ -50,61 +50,6 @@ SocketDescriptor::Close()
 
 #endif
 
-bool
-SocketDescriptor::CreateTCP()
-{
-	return Create(AF_INET, SOCK_STREAM, 0);
-}
-
-bool
-SocketDescriptor::CreateUDP()
-{
-	return Create(AF_INET, SOCK_DGRAM, 0);
-}
-
-bool
-SocketDescriptor::CreateUDPListener(unsigned port)
-{
-	if (!CreateUDP())
-		return false;
-
-	// Bind socket to specified port number
-	if (!BindPort(port)){
-		Close();
-		return false;
-	}
-	return true;
-}
-
-bool
-SocketDescriptor::CreateTCPListener(unsigned port, unsigned backlog)
-{
-	if (!CreateTCP())
-		return false;
-
-	// Set socket options
-	const int reuse = 1;
-#ifdef HAVE_POSIX
-	const void *optval = &reuse;
-#else
-	const char *optval = (const char *)&reuse;
-#endif
-	setsockopt(Get(), SOL_SOCKET, SO_REUSEADDR, optval, sizeof(reuse));
-
-	// Bind socket to specified port number
-	if (!BindPort(port)){
-		Close();
-		return false;
-	}
-
-	if (listen(Get(), backlog) < 0) {
-		Close();
-		return false;
-	}
-
-	return true;
-}
-
 SocketDescriptor
 SocketDescriptor::Accept()
 {

@@ -128,19 +128,6 @@ public:
 	bool AutoBind();
 #endif
 
-	/***
-	 * Creates an UDP scoket
-	 */
-	bool CreateUDP();
-
-	/**
-	 * Creates A BOUND udp socket
-	 */
-	bool CreateUDPListener(unsigned port);
-
-	bool CreateTCP();
-	bool CreateTCPListener(unsigned port, unsigned backlog=8);
-
 	SocketDescriptor Accept();
 
 	bool Connect(SocketAddress address);
