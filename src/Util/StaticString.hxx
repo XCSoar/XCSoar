@@ -41,7 +41,7 @@
 #include <stddef.h>
 
 #ifdef _UNICODE
-#include <tchar.h>
+#include <wchar.h>
 #endif
 
 bool
@@ -49,7 +49,7 @@ CopyUTF8(char *dest, size_t dest_size, const char *src);
 
 #ifdef _UNICODE
 bool
-CopyUTF8(TCHAR *dest, size_t dest_size, const char *src);
+CopyUTF8(wchar_t *dest, size_t dest_size, const char *src);
 #endif
 
 /**
@@ -108,12 +108,12 @@ public:
 	}
 
 #ifdef _UNICODE
-	void SetASCII(const TCHAR *src, const TCHAR *src_end) {
+	void SetASCII(const wchar_t *src, const wchar_t *src_end) {
 		pointer end = ::CopyASCII(data(), capacity() - 1, src, src_end);
 		*end = SENTINEL;
 	}
 
-	void SetASCII(const TCHAR *src) {
+	void SetASCII(const wchar_t *src) {
 		SetASCII(src, src + StringLength(src));
 	}
 #endif
@@ -357,9 +357,9 @@ public:
  * This is the TCHAR-based sister of the NarrowString class.
  */
 template<size_t max>
-class StaticString: public StaticStringBase<TCHAR, max>
+class StaticString: public StaticStringBase<wchar_t, max>
 {
-	typedef StaticStringBase<TCHAR, max> Base;
+	typedef StaticStringBase<wchar_t, max> Base;
 
 public:
 	using typename Base::value_type;
@@ -385,7 +385,7 @@ public:
 	}
 
 	void CropIncompleteUTF8() {
-		/* this is a TCHAR string, it's not multi-byte,
+		/* this is a wchar_t string, it's not multi-byte,
 		   therefore we have no incomplete sequences */
 	}
 };
