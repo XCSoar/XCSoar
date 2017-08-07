@@ -304,6 +304,22 @@ public:
 		item.Destruct();
 		unallocated_list.push_front(item);
 	}
+
+	/**
+	 * Iterates over all items and remove all those which match
+	 * the given predicate.
+	 */
+	template<typename P>
+	void RemoveIf(P &&p) {
+		chronological_list.remove_and_dispose_if([&p](const Item &item){
+				return p(item.GetKey(), item.GetData());
+			},
+			[this](Item *item){
+				map.erase(map.iterator_to(*item));
+				item->Destruct();
+				unallocated_list.push_front(*item);
+			});
+	}
 };
 
 #endif
