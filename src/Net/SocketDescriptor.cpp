@@ -175,18 +175,6 @@ SocketDescriptor::AutoBind()
 
 #endif
 
-bool
-SocketDescriptor::CreateConnectUDP(const char *host, const char *port)
-{
-  const int socktype = SOCK_DGRAM;
-
-  StaticSocketAddress address;
-  if (!address.Lookup(host, port, socktype))
-    return false;
-
-  return Create(address.GetFamily(), socktype, 0) && Connect(address);
-}
-
 ssize_t
 SocketDescriptor::Read(void *buffer, size_t length)
 {
