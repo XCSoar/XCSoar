@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2015 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright (C) 2010-2017 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,7 +30,7 @@
 #ifndef STRING_BUFFER_HPP
 #define STRING_BUFFER_HPP
 
-#include <stddef.h>
+#include <array>
 
 /**
  * A statically allocated string buffer.
@@ -42,15 +42,17 @@ public:
 	typedef T &reference;
 	typedef T *pointer;
 	typedef const T *const_pointer;
-	typedef const_pointer const_iterator;
 	typedef size_t size_type;
 
 	static constexpr value_type SENTINEL = '\0';
 
 protected:
-	value_type the_data[CAPACITY];
+	typedef std::array<value_type, CAPACITY> Array;
+	Array the_data;
 
 public:
+	typedef typename Array::const_iterator const_iterator;
+
 	constexpr size_type capacity() const {
 		return CAPACITY;
 	}
@@ -64,15 +66,15 @@ public:
 	}
 
 	constexpr const_pointer c_str() const {
-		return the_data;
+		return &the_data.front();
 	}
 
 	pointer data() {
-		return the_data;
+		return &the_data.front();
 	}
 
 	constexpr value_type front() const {
-		return c_str()[0];
+		return the_data.front();
 	}
 
 	/**
@@ -90,11 +92,11 @@ public:
 	}
 
 	constexpr const_iterator begin() const {
-		return the_data;
+		return the_data.begin();
 	}
 
 	constexpr const_iterator end() const {
-		return the_data + capacity();
+		return the_data.end();
 	}
 
 	constexpr operator const_pointer() const {
