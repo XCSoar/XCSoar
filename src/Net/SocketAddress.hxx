@@ -96,6 +96,18 @@ public:
 
 #ifdef HAVE_TCP
 	/**
+	 * Is this the IPv6 wildcard address (in6addr_any)?
+	 */
+	gcc_pure
+	bool IsV6Any() const noexcept;
+
+	/**
+	 * Is this an IPv4 address mapped inside struct sockaddr_in6?
+	 */
+	gcc_pure
+	bool IsV4Mapped() const noexcept;
+
+	/**
 	 * Extract the port number.  Returns 0 if not applicable.
 	 */
 	gcc_pure
