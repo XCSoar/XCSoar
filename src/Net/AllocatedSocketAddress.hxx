@@ -39,7 +39,6 @@
 #include <stdlib.h>
 
 struct sockaddr;
-class Error;
 
 class AllocatedSocketAddress {
 public:
@@ -150,6 +149,23 @@ public:
 	gcc_pure
 	unsigned GetPort() const noexcept {
 		return ((SocketAddress)*this).GetPort();
+	}
+
+	/**
+	 * @return true on success, false if this address cannot have
+	 * a port number
+	 */
+	bool SetPort(unsigned port) noexcept;
+
+	static AllocatedSocketAddress WithPort(SocketAddress src,
+					       unsigned port) noexcept {
+		AllocatedSocketAddress result(src);
+		result.SetPort(port);
+		return result;
+	}
+
+	AllocatedSocketAddress WithPort(unsigned port) const noexcept {
+		return WithPort(*this, port);
 	}
 #endif
 

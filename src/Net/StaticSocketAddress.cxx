@@ -37,6 +37,7 @@
 #ifdef WIN32
 #include <ws2tcpip.h>
 #else
+#include <netinet/in.h>
 #include <netdb.h>
 #endif
 
@@ -47,6 +48,32 @@ StaticSocketAddress::operator=(SocketAddress other)
 	memcpy(&address, other.GetAddress(), size);
 	return *this;
 }
+
+#ifdef HAVE_TCP
+
+bool
+StaticSocketAddress::SetPort(unsigned port)
+{
+	switch (GetFamily()) {
+	case AF_INET:
+		{
+			auto &a = (struct sockaddr_in &)address;
+			a.sin_port = htons(port);
+			return true;
+		}
+
+	case AF_INET6:
+		{
+			auto &a = (struct sockaddr_in6 &)address;
+			a.sin6_port = htons(port);
+			return true;
+		}
+	}
+
+	return false;
+}
+
+#endif
 
 bool
 StaticSocketAddress::Lookup(const char *host, const char *service, int socktype)

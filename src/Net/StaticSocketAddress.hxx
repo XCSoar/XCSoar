@@ -99,6 +99,12 @@ public:
 	unsigned GetPort() const {
 		return ((SocketAddress)*this).GetPort();
 	}
+
+	/**
+	 * @return true on success, false if this address cannot have
+	 * a port number
+	 */
+	bool SetPort(unsigned port);
 #endif
 
 	gcc_pure

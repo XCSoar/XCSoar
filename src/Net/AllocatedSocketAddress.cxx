@@ -35,6 +35,14 @@
 #include <sys/un.h>
 #endif
 
+#ifdef HAVE_TCP
+#ifdef WIN32
+#include <ws2tcpip.h>
+#else
+#include <netinet/in.h>
+#endif
+#endif
+
 AllocatedSocketAddress &
 AllocatedSocketAddress::operator=(SocketAddress src) noexcept
 {
@@ -78,6 +86,35 @@ AllocatedSocketAddress::SetLocal(const char *path) noexcept
 
 	if (is_abstract)
 		sun->sun_path[0] = 0;
+}
+
+#endif
+
+#ifdef HAVE_TCP
+
+bool
+AllocatedSocketAddress::SetPort(unsigned port) noexcept
+{
+	if (IsNull())
+		return false;
+
+	switch (GetFamily()) {
+	case AF_INET:
+		{
+			auto *a = (struct sockaddr_in *)(void *)address;
+			a->sin_port = htons(port);
+			return true;
+		}
+
+	case AF_INET6:
+		{
+			auto *a = (struct sockaddr_in6 *)(void *)address;
+			a->sin6_port = htons(port);
+			return true;
+		}
+	}
+
+	return false;
 }
 
 #endif
