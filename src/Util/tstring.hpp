@@ -4,7 +4,6 @@
 #include <string>
 
 #ifdef _UNICODE
-#include <tchar.h>
 using tstring = std::wstring;
 #else
 using tstring = std::string;
