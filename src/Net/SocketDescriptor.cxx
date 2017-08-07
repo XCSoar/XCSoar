@@ -175,6 +175,32 @@ SocketDescriptor::AutoBind()
 
 #endif
 
+StaticSocketAddress
+SocketDescriptor::GetLocalAddress() const
+{
+	assert(IsDefined());
+
+	StaticSocketAddress result;
+	result.size = result.GetCapacity();
+	if (getsockname(fd, result.GetAddress(), &result.size) < 0)
+		result.Clear();
+
+	return result;
+}
+
+StaticSocketAddress
+SocketDescriptor::GetPeerAddress() const
+{
+	assert(IsDefined());
+
+	StaticSocketAddress result;
+	result.size = result.GetCapacity();
+	if (getpeername(fd, result.GetAddress(), &result.size) < 0)
+		result.Clear();
+
+	return result;
+}
+
 ssize_t
 SocketDescriptor::Read(void *buffer, size_t length)
 {

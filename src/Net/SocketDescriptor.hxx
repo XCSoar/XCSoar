@@ -145,6 +145,12 @@ public:
 
 	bool Connect(SocketAddress address);
 
+	gcc_pure
+	StaticSocketAddress GetLocalAddress() const;
+
+	gcc_pure
+	StaticSocketAddress GetPeerAddress() const;
+
 	ssize_t Read(void *buffer, size_t length);
 	ssize_t Write(const void *buffer, size_t length);
 
