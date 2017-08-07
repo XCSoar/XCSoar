@@ -42,12 +42,12 @@ Net::Request::Request(Session &_session, ResponseHandler &_handler,
   handle.SetFailOnError(true);
   handle.SetWriteFunction(WriteCallback, this);
 
-  session.Add(handle.GetHandle());
+  session.Add(handle.Get());
 }
 
 Net::Request::~Request()
 {
-  session.Remove(handle.GetHandle());
+  session.Remove(handle.Get());
 }
 
 void
@@ -98,13 +98,13 @@ void
 Net::Request::Send(unsigned _timeout_ms)
 {
   if (request_headers.Get() != nullptr)
-    handle.SetHeaders(request_headers.Get());
+    handle.SetRequestHeaders(request_headers.Get());
 
   const int timeout_ms = _timeout_ms == INFINITE ? -1 : _timeout_ms;
 
   CURLMcode mcode = CURLM_CALL_MULTI_PERFORM;
   while (true) {
-    CURLcode code = session.InfoRead(handle.GetHandle());
+    CURLcode code = session.InfoRead(handle.Get());
     if (code != CURLE_AGAIN) {
       if (code != CURLE_OK)
         throw std::runtime_error(curl_easy_strerror(code));

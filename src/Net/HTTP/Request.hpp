@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef NET_REQUEST_HPP
 #define NET_REQUEST_HPP
 
-#include "Easy.hpp"
+#include "Easy.hxx"
 #include "Slist.hxx"
 
 #include <curl/curl.h>
