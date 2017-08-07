@@ -31,7 +31,7 @@ Copyright_License {
 #include <string>
 
 #ifdef _UNICODE
-#include <tchar.h>
+#include <wchar.h>
 #endif
 
 #include <cstddef>
@@ -48,7 +48,7 @@ class AllocatedPath;
 class Path {
 public:
 #ifdef _UNICODE
-  typedef TCHAR char_type;
+  typedef wchar_t char_type;
 #else
   typedef char char_type;
 #endif

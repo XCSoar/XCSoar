@@ -31,7 +31,7 @@ Copyright_License {
 #include "Util/ConvertString.hpp"
 #include "Util/LightString.hxx"
 
-#include <tchar.h>
+#include <wchar.h>
 #else
 #include "Util/StringPointer.hxx"
 #endif
@@ -44,7 +44,7 @@ Copyright_License {
  */
 class PathName {
 #ifdef _UNICODE
-  typedef LightString<TCHAR> Value;
+  typedef LightString<wchar_t> Value;
 #else
   typedef StringPointer<> Value;
 #endif
