@@ -255,6 +255,22 @@ public:
 		chronological_list.push_front(item);
 		map.insert(item);
 	}
+
+	/**
+	 * Remove an item from the cache.
+	 */
+	void Remove(const Key &key) {
+		auto i = map.find(key, map.hash_function(), map.key_eq());
+		assert(i != map.end());
+
+		Item &item = *i;
+
+		map.erase(i);
+		chronological_list.erase(chronological_list.iterator_to(item));
+
+		item.Destruct();
+		unallocated_list.push_front(item);
+	}
 };
 
 #endif
