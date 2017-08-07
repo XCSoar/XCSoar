@@ -47,6 +47,11 @@ namespace Net {
         throw std::bad_alloc();
     }
 
+    explicit CurlEasy(const char *url)
+      :CurlEasy() {
+      SetURL(url);
+    }
+
     CurlEasy(const CurlEasy &other) = delete;
 
     ~CurlEasy() {

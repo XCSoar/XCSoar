@@ -30,7 +30,9 @@ Copyright_License {
 
 Net::Request::Request(Session &_session, ResponseHandler &_handler,
                       const char *url)
-  :session(_session), handler(_handler)
+  :session(_session),
+   handle(url),
+   handler(_handler)
 {
   char user_agent[32];
   snprintf(user_agent, 32, "XCSoar/%s",
@@ -39,8 +41,6 @@ Net::Request::Request(Session &_session, ResponseHandler &_handler,
   handle.SetUserAgent(user_agent);
   handle.SetFailOnError(true);
   handle.SetWriteFunction(WriteCallback, this);
-
-  handle.SetURL(url);
 
   session.Add(handle.GetHandle());
 }
