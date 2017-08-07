@@ -135,14 +135,10 @@ class Cache {
 
 	ItemList chronological_list;
 
-	/* This is a multiset, even though we use at most one cache item for
-	   a key.  A multiset means less overhead, because insert() does not
-	   need to do a full lookup, and this class will only insert new
-	   items when it knows an item does not already exists */
-	typedef boost::intrusive::unordered_multiset<Item,
-						     boost::intrusive::hash<ItemHash>,
-						     boost::intrusive::equal<ItemEqual>,
-						     boost::intrusive::constant_time_size<false>> KeyMap;
+	typedef boost::intrusive::unordered_set<Item,
+						boost::intrusive::hash<ItemHash>,
+						boost::intrusive::equal<ItemEqual>,
+						boost::intrusive::constant_time_size<false>> KeyMap;
 
 	std::array<typename KeyMap::bucket_type, table_size> buckets;
 
