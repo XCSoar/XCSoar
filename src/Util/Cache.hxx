@@ -65,6 +65,11 @@ class Cache {
 			:key(std::forward<K>(_key)),
 			 data(std::forward<U>(_data)) {}
 
+		template<typename U>
+		void ReplaceData(U &&_data) {
+			data = std::forward<U>(_data);
+		}
+
 		template<typename K, typename U>
 		void Replace(K &&_key, U &&_data) {
 			key = std::forward<K>(_key);
@@ -95,6 +100,11 @@ class Cache {
 
 		void Destruct() {
 			pair.Destruct();
+		}
+
+		template<typename U>
+		void ReplaceData(U &&value) {
+			pair->ReplaceData(std::forward<U>(value));
 		}
 
 		template<typename K, typename U>
@@ -256,6 +266,25 @@ public:
 		auto i = map.insert(item);
 		(void)i;
 		assert(i.second && "Key must not exist already");
+	}
+
+	/**
+	 * Insert a new item into the cache.  If the key exists
+	 * already, then the item is replaced.
+	 */
+	template<typename K, typename U>
+	void PutOrReplace(K &&key, U &&data) {
+		typename KeyMap::insert_commit_data icd;
+		auto i = map.insert_check(key,
+					  map.hash_function(), map.key_eq(),
+					  icd);
+		if (i.second) {
+			Item &item = Make(std::forward<K>(key), std::forward<U>(data));
+			chronological_list.push_front(item);
+			map.insert_commit(item, icd);
+		} else {
+			i.first->ReplaceData(std::forward<U>(data));
+		}
 	}
 
 	/**
