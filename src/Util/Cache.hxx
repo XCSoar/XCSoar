@@ -230,8 +230,10 @@ public:
 	 * Look up an item by its key.  Returns nullptr if no such
 	 * item exists.
 	 */
-	const Data *Get(const Key &key) {
-		auto i = map.find(key, map.hash_function(), map.key_eq());
+	template<typename K>
+	const Data *Get(K &&key) {
+		auto i = map.find(std::forward<K>(key),
+				  map.hash_function(), map.key_eq());
 		if (i == map.end())
 			return nullptr;
 
@@ -263,8 +265,10 @@ public:
 	/**
 	 * Remove an item from the cache.
 	 */
-	void Remove(const Key &key) {
-		auto i = map.find(key, map.hash_function(), map.key_eq());
+	template<typename K>
+	void Remove(K &&key) {
+		auto i = map.find(std::forward<K>(key),
+				  map.hash_function(), map.key_eq());
 		assert(i != map.end());
 
 		Item &item = *i;
