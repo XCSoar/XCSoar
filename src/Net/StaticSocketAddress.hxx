@@ -119,7 +119,7 @@ public:
 		return (SocketAddress)*this == other;
 	}
 
-	bool operator!=(SocketAddress &other) const {
+	bool operator!=(SocketAddress other) const {
 		return !(*this == other);
 	}
 
