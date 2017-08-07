@@ -95,6 +95,7 @@ public:
 	}
 
 	void Clear() {
+		size = sizeof(address.ss_family);
 		address.ss_family = AF_UNSPEC;
 	}
 
