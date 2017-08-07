@@ -60,12 +60,12 @@ class StaticStringBase : public StringBuffer<T, max> {
 	typedef StringBuffer<T, max> Base;
 
 public:
-	typedef typename Base::value_type value_type;
-	typedef typename Base::reference reference;
-	typedef typename Base::pointer pointer;
-	typedef typename Base::const_pointer const_pointer;
-	typedef typename Base::const_iterator const_iterator;
-	typedef typename Base::size_type size_type;
+	using typename Base::value_type;
+	using typename Base::reference;
+	using typename Base::pointer;
+	using typename Base::const_pointer;
+	using typename Base::const_iterator;
+	using typename Base::size_type;
 
 	static constexpr value_type SENTINEL = Base::SENTINEL;
 
@@ -323,12 +323,12 @@ class NarrowString: public StaticStringBase<char, max>
 	typedef StaticStringBase<char, max> Base;
 
 public:
-	typedef typename Base::value_type value_type;
-	typedef typename Base::reference reference;
-	typedef typename Base::pointer pointer;
-	typedef typename Base::const_pointer const_pointer;
-	typedef typename Base::const_iterator const_iterator;
-	typedef typename Base::size_type size_type;
+	using typename Base::value_type;
+	using typename Base::reference;
+	using typename Base::pointer;
+	using typename Base::const_pointer;
+	using typename Base::const_iterator;
+	using typename Base::size_type;
 
 	NarrowString() = default;
 	explicit NarrowString(const_pointer value):Base(value) {}
@@ -362,12 +362,12 @@ class StaticString: public StaticStringBase<TCHAR, max>
 	typedef StaticStringBase<TCHAR, max> Base;
 
 public:
-	typedef typename Base::value_type value_type;
-	typedef typename Base::reference reference;
-	typedef typename Base::pointer pointer;
-	typedef typename Base::const_pointer const_pointer;
-	typedef typename Base::const_iterator const_iterator;
-	typedef typename Base::size_type size_type;
+	using typename Base::value_type;
+	using typename Base::reference;
+	using typename Base::pointer;
+	using typename Base::const_pointer;
+	using typename Base::const_iterator;
+	using typename Base::size_type;
 
 	StaticString() = default;
 	explicit StaticString(const_pointer value):Base(value) {}
