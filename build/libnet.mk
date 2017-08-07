@@ -7,7 +7,7 @@ LIBNET_SOURCES = \
 	$(SRC)/Net/StaticSocketAddress.cxx \
 	$(SRC)/Net/AllocatedSocketAddress.cxx \
 	$(SRC)/Net/SocketAddress.cxx \
-	$(SRC)/Net/SocketDescriptor.cpp
+	$(SRC)/Net/SocketDescriptor.cxx
 
 HAVE_HTTP := y
 

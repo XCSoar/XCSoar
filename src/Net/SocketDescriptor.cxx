@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2015 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright (C) 2012-2017 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,7 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "SocketDescriptor.hpp"
+#include "SocketDescriptor.hxx"
 #include "SocketAddress.hxx"
 #include "StaticSocketAddress.hxx"
 #include "IPv4Address.hxx"
@@ -44,8 +44,8 @@
 void
 SocketDescriptor::Close()
 {
-  if (IsDefined())
-    ::closesocket(Steal());
+	if (IsDefined())
+		::closesocket(Steal());
 }
 
 #endif
@@ -53,114 +53,114 @@ SocketDescriptor::Close()
 bool
 SocketDescriptor::CreateTCP()
 {
-  return Create(AF_INET, SOCK_STREAM, 0);
+	return Create(AF_INET, SOCK_STREAM, 0);
 }
 
 bool
 SocketDescriptor::CreateUDP()
 {
-  return Create(AF_INET, SOCK_DGRAM, 0);
+	return Create(AF_INET, SOCK_DGRAM, 0);
 }
 
 bool
 SocketDescriptor::CreateUDPListener(unsigned port)
 {
-  if (!CreateUDP())
-    return false;
+	if (!CreateUDP())
+		return false;
 
-  // Bind socket to specified port number
-  if (!BindPort(port)){
-    Close();
-    return false;
-  }
-  return true;
+	// Bind socket to specified port number
+	if (!BindPort(port)){
+		Close();
+		return false;
+	}
+	return true;
 }
 
 bool
 SocketDescriptor::CreateTCPListener(unsigned port, unsigned backlog)
 {
-  if (!CreateTCP())
-    return false;
+	if (!CreateTCP())
+		return false;
 
-  // Set socket options
-  const int reuse = 1;
+	// Set socket options
+	const int reuse = 1;
 #ifdef HAVE_POSIX
-  const void *optval = &reuse;
+	const void *optval = &reuse;
 #else
-  const char *optval = (const char *)&reuse;
+	const char *optval = (const char *)&reuse;
 #endif
-  setsockopt(Get(), SOL_SOCKET, SO_REUSEADDR, optval, sizeof(reuse));
+	setsockopt(Get(), SOL_SOCKET, SO_REUSEADDR, optval, sizeof(reuse));
 
-  // Bind socket to specified port number
-  if (!BindPort(port)){
-    Close();
-    return false;
-  }
+	// Bind socket to specified port number
+	if (!BindPort(port)){
+		Close();
+		return false;
+	}
 
-  if (listen(Get(), backlog) < 0) {
-    Close();
-    return false;
-  }
+	if (listen(Get(), backlog) < 0) {
+		Close();
+		return false;
+	}
 
-  return true;
+	return true;
 }
 
 SocketDescriptor
 SocketDescriptor::Accept()
 {
 #if defined(__linux__) && !defined(__BIONIC__) && !defined(KOBO)
-  int fd = ::accept4(Get(), nullptr, nullptr, SOCK_CLOEXEC);
+	int fd = ::accept4(Get(), nullptr, nullptr, SOCK_CLOEXEC);
 #else
-  int fd = ::accept(Get(), nullptr, nullptr);
+	int fd = ::accept(Get(), nullptr, nullptr);
 #endif
-  return fd >= 0
-    ? SocketDescriptor(fd)
-    : Undefined();
+	return fd >= 0
+		? SocketDescriptor(fd)
+		: Undefined();
 }
 
 bool
 SocketDescriptor::Connect(SocketAddress address)
 {
-  assert(address.IsDefined());
+	assert(address.IsDefined());
 
-  return ::connect(Get(), address.GetAddress(), address.GetSize()) >= 0;
+	return ::connect(Get(), address.GetAddress(), address.GetSize()) >= 0;
 }
 
 bool
 SocketDescriptor::Create(int domain, int type, int protocol)
 {
 #ifdef WIN32
-  static bool initialised = false;
-  if (!initialised) {
-    WSADATA data;
-    WSAStartup(MAKEWORD(2,2), &data);
-    initialised = true;
-  }
+	static bool initialised = false;
+	if (!initialised) {
+		WSADATA data;
+		WSAStartup(MAKEWORD(2,2), &data);
+		initialised = true;
+	}
 #endif
 
 #ifdef SOCK_CLOEXEC
-  /* implemented since Linux 2.6.27 */
-  type |= SOCK_CLOEXEC;
+	/* implemented since Linux 2.6.27 */
+	type |= SOCK_CLOEXEC;
 #endif
 
-  int fd = socket(domain, type, protocol);
-  if (fd < 0)
-    return false;
+	int fd = socket(domain, type, protocol);
+	if (fd < 0)
+		return false;
 
-  Set(fd);
-  return true;
+	Set(fd);
+	return true;
 }
 
 bool
 SocketDescriptor::Bind(SocketAddress address)
 {
-  return bind(Get(), address.GetAddress(), address.GetSize()) == 0;
+	return bind(Get(), address.GetAddress(), address.GetSize()) == 0;
 }
 
 bool
 SocketDescriptor::BindPort(unsigned port)
 {
-  return Bind(IPv4Address(port));
+	return Bind(IPv4Address(port));
 }
 
 #ifdef __linux__
@@ -178,23 +178,23 @@ SocketDescriptor::AutoBind()
 ssize_t
 SocketDescriptor::Read(void *buffer, size_t length)
 {
-  int flags = 0;
+	int flags = 0;
 #ifdef HAVE_POSIX
-  flags |= MSG_DONTWAIT;
+	flags |= MSG_DONTWAIT;
 #endif
 
-  return ::recv(Get(), (char *)buffer, length, flags);
+	return ::recv(Get(), (char *)buffer, length, flags);
 }
 
 ssize_t
 SocketDescriptor::Write(const void *buffer, size_t length)
 {
-  int flags = 0;
+	int flags = 0;
 #ifdef __linux__
-  flags |= MSG_NOSIGNAL;
+	flags |= MSG_NOSIGNAL;
 #endif
 
-  return ::send(Get(), (const char *)buffer, length, flags);
+	return ::send(Get(), (const char *)buffer, length, flags);
 }
 
 #ifndef HAVE_POSIX
@@ -202,73 +202,73 @@ SocketDescriptor::Write(const void *buffer, size_t length)
 int
 SocketDescriptor::WaitReadable(int timeout_ms) const
 {
-  assert(IsDefined());
+	assert(IsDefined());
 
-  fd_set rfds;
-  FD_ZERO(&rfds);
-  FD_SET(Get(), &rfds);
+	fd_set rfds;
+	FD_ZERO(&rfds);
+	FD_SET(Get(), &rfds);
 
-  struct timeval timeout, *timeout_p = nullptr;
-  if (timeout_ms >= 0) {
-    timeout.tv_sec = unsigned(timeout_ms) / 1000;
-    timeout.tv_usec = (unsigned(timeout_ms) % 1000) * 1000;
-    timeout_p = &timeout;
-  }
+	struct timeval timeout, *timeout_p = nullptr;
+	if (timeout_ms >= 0) {
+		timeout.tv_sec = unsigned(timeout_ms) / 1000;
+		timeout.tv_usec = (unsigned(timeout_ms) % 1000) * 1000;
+		timeout_p = &timeout;
+	}
 
-  return select(Get() + 1, &rfds, nullptr, nullptr, timeout_p);
+	return select(Get() + 1, &rfds, nullptr, nullptr, timeout_p);
 }
 
 int
 SocketDescriptor::WaitWritable(int timeout_ms) const
 {
-  assert(IsDefined());
+	assert(IsDefined());
 
-  fd_set wfds;
-  FD_ZERO(&wfds);
-  FD_SET(Get(), &wfds);
+	fd_set wfds;
+	FD_ZERO(&wfds);
+	FD_SET(Get(), &wfds);
 
-  struct timeval timeout, *timeout_p = nullptr;
-  if (timeout_ms >= 0) {
-    timeout.tv_sec = unsigned(timeout_ms) / 1000;
-    timeout.tv_usec = (unsigned(timeout_ms) % 1000) * 1000;
-    timeout_p = &timeout;
-  }
+	struct timeval timeout, *timeout_p = nullptr;
+	if (timeout_ms >= 0) {
+		timeout.tv_sec = unsigned(timeout_ms) / 1000;
+		timeout.tv_usec = (unsigned(timeout_ms) % 1000) * 1000;
+		timeout_p = &timeout;
+	}
 
-  return select(Get() + 1, nullptr, &wfds, nullptr, timeout_p);
+	return select(Get() + 1, nullptr, &wfds, nullptr, timeout_p);
 }
 
 #endif
 
 ssize_t
 SocketDescriptor::Read(void *buffer, size_t length,
-                       StaticSocketAddress &address)
+		       StaticSocketAddress &address)
 {
-  int flags = 0;
+	int flags = 0;
 #ifdef HAVE_POSIX
-  flags |= MSG_DONTWAIT;
+	flags |= MSG_DONTWAIT;
 #endif
 
-  socklen_t addrlen = address.GetCapacity();
-  ssize_t nbytes = ::recvfrom(Get(), (char *)buffer, length, flags,
-			      address.GetAddress(), &addrlen);
-  if (nbytes > 0)
-    address.SetSize(addrlen);
+	socklen_t addrlen = address.GetCapacity();
+	ssize_t nbytes = ::recvfrom(Get(), (char *)buffer, length, flags,
+				    address.GetAddress(), &addrlen);
+	if (nbytes > 0)
+		address.SetSize(addrlen);
 
-  return nbytes;
+	return nbytes;
 }
 
 ssize_t
 SocketDescriptor::Write(const void *buffer, size_t length,
-                        SocketAddress address)
+			SocketAddress address)
 {
-  int flags = 0;
+	int flags = 0;
 #ifdef HAVE_POSIX
-  flags |= MSG_DONTWAIT;
+	flags |= MSG_DONTWAIT;
 #endif
 #ifdef __linux__
-  flags |= MSG_NOSIGNAL;
+	flags |= MSG_NOSIGNAL;
 #endif
 
-  return ::sendto(Get(), (const char *)buffer, length, flags,
-                  address.GetAddress(), address.GetSize());
+	return ::sendto(Get(), (const char *)buffer, length, flags,
+			address.GetAddress(), address.GetSize());
 }
