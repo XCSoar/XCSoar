@@ -154,6 +154,7 @@ public:
 #else
   using FileDescriptor::WaitReadable;
   using FileDescriptor::WaitWritable;
+  using FileDescriptor::IsReadyForWriting;
 #endif
 
   /**

@@ -203,6 +203,9 @@ public:
 
 	int WaitReadable(int timeout) const;
 	int WaitWritable(int timeout) const;
+
+	gcc_pure
+	bool IsReadyForWriting() const;
 #endif
 };
 
