@@ -113,6 +113,7 @@ else:
         lua,
         libsalsa,
         libusb,
+        simple_usbmodeswitch,
     ]
 
 # build the third-party libraries

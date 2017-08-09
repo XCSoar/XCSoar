@@ -147,6 +147,14 @@ libusb = AutotoolsProject(
     ]
 )
 
+simple_usbmodeswitch = AutotoolsProject(
+    'https://github.com/felixhaedicke/simple_usbmodeswitch/releases/download/v1.0/simple_usbmodeswitch-1.0.tar.bz2',
+    'http://s15356785.onlinehome-server.info/~felix/simple_usbmodeswitch/simple_usbmodeswitch-1.0.tar.bz2',
+    '35e8a6ed8551ef419baf7310e54d6d1a81e18bf44e111b07d74285001f18e98d',
+    'bin/simple_usbmodeswitch',
+    ldflags='-pthread',
+)
+
 libtiff = AutotoolsProject(
     'http://download.osgeo.org/libtiff/tiff-4.0.8.tar.gz',
     'http://ftp.lfs-matrix.net/pub/blfs/conglomeration/tiff/tiff-4.0.8.tar.gz',
