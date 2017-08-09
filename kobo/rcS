@@ -92,6 +92,11 @@ if [ `dd if=/dev/mmcblk0 bs=8 count=1 skip=64` = "SN-N905B" ]; then
     sleep 1
 fi
 
+# WORKAROUND: USB devices which require USB mode switching might not
+# suffesscully switched, if simple_modeswitch was called too early (before the
+# USB device files were created). Call it again to make sure.
+/opt/xcsoar/bin/simple_usbmodeswitch
+
 # finally, open the menu
 exec /opt/xcsoar/bin/KoboMenu
 
