@@ -112,6 +112,7 @@ else:
         libjpeg,
         lua,
         libsalsa,
+        libusb,
     ]
 
 # build the third-party libraries

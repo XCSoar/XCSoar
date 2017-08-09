@@ -136,6 +136,17 @@ libjpeg = AutotoolsProject(
     ]
 )
 
+libusb = AutotoolsProject(
+    'https://github.com//libusb/libusb/releases/download/v1.0.21/libusb-1.0.21.tar.bz2',
+    'http://sourceforge.net/projects/libusb/files/libusb-1.0/libusb-1.0.21/libusb-1.0.21.tar.bz2',
+    '7dce9cce9a81194b7065ee912bcd55eeffebab694ea403ffb91b67db66b1824b',
+    'lib/libusb-1.0.a',
+    [
+        '--disable-shared', '--enable-static',
+        '--disable-udev',
+    ]
+)
+
 libtiff = AutotoolsProject(
     'http://download.osgeo.org/libtiff/tiff-4.0.8.tar.gz',
     'http://ftp.lfs-matrix.net/pub/blfs/conglomeration/tiff/tiff-4.0.8.tar.gz',
