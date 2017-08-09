@@ -57,6 +57,11 @@ fi
 /bin/mount -t tmpfs none -o size=128k /var/run
 /bin/mount -t sysfs none -o size=500k /sys
 
+# WORKAROUND: /dev/null might be needed in udev rules, before /dev/null is
+# created by udev, therefore create it before starting udev.
+/bin/mknod /dev/null c 1 3
+/bin/chmod 666 /dev/null
+
 /sbin/udevd --daemon
 /sbin/udevadm trigger
 
