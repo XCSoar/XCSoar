@@ -123,6 +123,9 @@ public:
 	}
 
 	using FileDescriptor::Rewind;
+	using FileDescriptor::Seek;
+	using FileDescriptor::Skip;
+	using FileDescriptor::Tell;
 	using FileDescriptor::GetSize;
 	using FileDescriptor::Read;
 	using FileDescriptor::Write;
@@ -131,6 +134,7 @@ public:
 	using FileDescriptor::Poll;
 	using FileDescriptor::WaitReadable;
 	using FileDescriptor::WaitWritable;
+	using FileDescriptor::IsReadyForWriting;
 #endif
 };
 
