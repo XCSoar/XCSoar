@@ -9,13 +9,6 @@ export USE_CCACHE=y
 export CCACHE_DIR=/vagrant/tmp/.ccache
 EOF
 
-sudo bash -c "cat > /etc/apt/sources.list" << EOF
-deb mirror://mirrors.ubuntu.com/mirrors.txt precise main restricted universe multiverse
-deb mirror://mirrors.ubuntu.com/mirrors.txt precise-updates main restricted universe multiverse
-deb mirror://mirrors.ubuntu.com/mirrors.txt precise-backports main restricted universe multiverse
-deb mirror://mirrors.ubuntu.com/mirrors.txt precise-security main restricted universe multiverse
-EOF
-
 # set ANDROID variables
 export ANDROID_API_LEVEL=22
 export ANDROID_SDK_VERSION=24.0.2
@@ -74,7 +67,7 @@ sudo apt-get install --no-install-recommends -y \
 SCRIPT
 
 Vagrant.configure("2") do |config|
-    config.vm.box = "puppetlabs/ubuntu-12.04-64-nocm"
+    config.vm.box = "koalephant/debian9-amd64"
 
     config.vm.network "private_network", type: "dhcp"
     config.vm.synced_folder "../..", "/vagrant", type: "nfs"
