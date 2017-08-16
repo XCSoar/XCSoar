@@ -244,14 +244,14 @@ You need an ARM toolchain.  For example, you can use the Debian
 package \verb|g++-arm-linux-gnueabihf|:
 
 \begin{verbatim*}
-make TARGET=PI TCSUFFIX=-5
+make TARGET=PI
 \end{verbatim*}
 
 To optimize for the Raspberry Pi 2 (which has an ARMv7 with NEON
 instead of an ARMv6):
 
 \begin{verbatim*}
-make TARGET=PI2 TCSUFFIX=-5
+make TARGET=PI2
 \end{verbatim*}
 
 These targets are only used for cross-compiling on a (desktop)
@@ -279,7 +279,7 @@ package \verb|g++-arm-linux-gnueabihf|.
 To compile XCSoar, run:
 
 \begin{verbatim*}
-make TARGET=KOBO TCSUFFIX=-5
+make TARGET=KOBO
 \end{verbatim*}
 
 To build the kobo install file \texttt{KoboRoot.tgz}, you need the
@@ -292,7 +292,7 @@ sudo apt-get install fakeroot ttf-bitstream-vera
 Then compile using this command:
 
 \begin{verbatim*}
-make TARGET=KOBO TCSUFFIX=-5 output/KOBO/KoboRoot.tgz
+make TARGET=KOBO output/KOBO/KoboRoot.tgz
 \end{verbatim*}
 
 For this, you need the Debian package \verb|libc6-armhf-cross|.
