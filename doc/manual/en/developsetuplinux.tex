@@ -6,6 +6,9 @@ In the following instructions, \texttt{sudo} is used to execute commands with
 root privileges. This is not enabled by default in Debian (but on some Debian
 based distributions, like Ubuntu).
 
+To install a virtual machine with the required, you can use \texttt{Vagrant},
+see section \ref{sec:vagrant}.
+
 \section{Download source code}
 To download the \xc source code, make sure you have git installed:
 \begin{verbatim}
@@ -25,9 +28,10 @@ git submodule update
 \end{verbatim}
 
 \section{Use provisioning scripts}
-With an existing standard installation of a Debian-based Linux distribution,
-you can run the scripts from \texttt{ide/provisioning} subfolder of the \xc
-source to install the build dependencies for various \xc target platforms.
+If you are not using Vagrant, but an existing standard installation of a
+Debian-based Linux distribution, you can run the scripts from
+\texttt{ide/provisioning} subfolder of the \xc source to install the build
+dependencies for various \xc target platforms.
 
 \begin{verbatim}
 cd ide/provisioning

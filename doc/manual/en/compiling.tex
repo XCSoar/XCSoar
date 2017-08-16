@@ -454,3 +454,37 @@ to the make command line:
 sudo apt-get install ccache
 make TARGET=UNIX USE_CCACHE=y
 \end{verbatim*}
+
+\section{Using a build VM with Vagrant}\label{sec:vagrant}
+An easy way to install a virtual machine with all build dependencies required
+for various targets (e. g. Linux, Windows, Android and Kobo), is using Vagrant.
+
+The following is needed to install the VM with Vagrant:
+
+\begin{itemize}
+\item \href{https://www.vagrantup.com/}{Vagrant}
+\item \href{https://www.virtualbox.org/}{VirtualBox}
+\end{itemize}
+
+The Vagrantfile can be found in the \texttt{ide/vagrant} subfolder of the \xc
+source. To set up the VM, and connect to it, type:
+
+\begin{verbatim*}
+cd ide/vagrant
+vagrant up
+vagrant ssh
+\end{verbatim*}
+
+The XCSoar source directory on the host is automatically mounted as a shared
+folder at \texttt{/xcsoar-src} in the VM. For performance reasons, it is not
+recommended to compile directly in this folder. A git clone of this directory is
+automatically created in the home directory (\texttt{~/xcsoar-src}), which
+should be used instead. In this git clone, the XSoar source directory on the
+host is preconfigured as a git remote named "host", and the XCSoar master
+directory is preconfigured as a remote named "master".
+
+To shutdown the VM, type:
+
+\begin{verbatim*}
+vagrant halt
+\end{verbatim*}
