@@ -95,6 +95,9 @@ Vagrant.configure("2") do |config|
 
         v.customize ["modifyvm", :id, "--memory", mem]
         v.customize ["modifyvm", :id, "--cpus", cpus]
+
+        # Decrease VirtualBox timesync threshold to 500 ms
+        v.customize ["guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 500]
     end
 
     config.vm.provision "shell", inline: $script, privileged: false
