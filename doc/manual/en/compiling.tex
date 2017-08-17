@@ -191,12 +191,15 @@ extension \\
 
 \subsection{Compiling for Windows}
 
-To cross-compile to (desktop) Windows, you need the mingw-w64 version
-of gcc:
+To cross-compile to (desktop) Windows, you need \item \href{http://mingw-w64.org}{Mingw-w64}.
 
- http://mingw-w64.sourceforge.net/
+The following command installs it on Debian:
 
-To compile, run one of the following:
+\begin{verbatim*}
+sudo apt-get install g++-mingw-w64
+\end{verbatim*}
+
+To compile for 32 bit Windows, run:
 
 \begin{verbatim*}
 make TARGET=PC
