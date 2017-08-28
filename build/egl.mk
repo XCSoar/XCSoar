@@ -36,7 +36,12 @@ LIBJPEG = y
 ENABLE_SDL = n
 
 EGL_CPPFLAGS = -DUSE_EGL
+
+ifeq ($(TARGET_IS_PI),y)
+EGL_LDLIBS = -lbrcmEGL
+else
 EGL_LDLIBS = -lEGL
+endif
 
 ifeq ($(TARGET_IS_PI),y)
 # Raspberry Pi detected
