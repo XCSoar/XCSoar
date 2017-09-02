@@ -6,6 +6,7 @@ Version 6.8.8 - not yet released
 * Kobo
   - support for Kobo Aura Edition 2
   - fix Wi-Fi on recent Kobo firmware releases (#3850)
+  - fix USB storage compatibility with Windows 10
 
 Version 6.8.7 - 2016/08/12
 * data files
