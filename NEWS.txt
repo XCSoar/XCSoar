@@ -9,6 +9,8 @@ Version 6.8.8 - not yet released
   - fix USB storage compatibility with Windows 10
 * Raspberry Pi
   - fix Raspbian Stretch compatibility
+* Raspberry Pi / Cubieboard
+  - fix for freeze on shutdown (#3679)
 
 Version 6.8.7 - 2016/08/12
 * data files
