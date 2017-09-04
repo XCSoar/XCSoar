@@ -5,6 +5,7 @@ Version 6.8.8 - not yet released
   - update source URLs for METARs and TAFs
 * Kobo
   - support for Kobo Aura Edition 2
+  - support for Kobo Glo Refurbished
   - fix Wi-Fi on recent Kobo firmware releases (#3850)
   - fix USB storage compatibility with Windows 10
 * Raspberry Pi
