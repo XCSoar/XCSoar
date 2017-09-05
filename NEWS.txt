@@ -5,6 +5,7 @@ Version 6.8.8 - not yet released
   - update source URLs for METARs and TAFs
 * devices
   - CAI302: fix waypoint download (#3830)
+  - IMI: fix PGRMZ parsing (was interpreted as altitude, now is pressure altitude)
   - LX: fix Nano 3 task declaration (#3858)
 * Kobo
   - support for Kobo Aura Edition 2

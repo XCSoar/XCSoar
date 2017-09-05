@@ -25,6 +25,12 @@ Copyright_License {
 #include "Protocol/Protocol.hpp"
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"
+#include "NMEA/Info.hpp"
+#include "NMEA/InputLine.hpp"
+#include "Units/Unit.hpp"
+#include "Units/Units.hpp"
+#include "NMEA/Checksum.hpp"
+#include "Util/StringAPI.hpp"
 
 bool
 IMIDevice::Connect(OperationEnvironment &env)
@@ -41,4 +47,48 @@ IMIDevice::Disconnect(OperationEnvironment &env)
 {
   // disconnect
   IMI::Disconnect(port, env);
+}
+
+static bool
+ReadAltitude(NMEAInputLine &line, fixed &value_r)
+{
+  fixed value;
+  bool available = line.ReadChecked(value);
+  char unit = line.ReadFirstChar();
+  if (!available)
+    return false;
+
+  if (unit == _T('f') || unit == _T('F'))
+    value = Units::ToSysUnit(value, Unit::FEET);
+
+  value_r = value;
+  return true;
+}
+
+bool
+IMIDevice::ParseNMEA(const char *String, NMEAInfo &info)
+{
+  if (!VerifyNMEAChecksum(String))
+    return false;
+
+  NMEAInputLine line(String);
+  char type[16];
+  line.Read(type, 16);
+
+  if (StringIsEqual(type, "$PGRMZ")) {
+    fixed value;
+
+    /* The normal Garmin $PGRMZ line contains the "true" barometric
+       altitude above MSL (corrected with QNH), but IMIDevice differs:
+       it emits the uncorrected barometric altitude (i.e. pressure
+       altitude). That is the only reason why we catch this sentence
+       in the driver instead of letting the generic class NMEAParser
+       do it. (solution inspired by EWMicroRecorderDevice, and
+       AltairProDevice. ) */
+    if (ReadAltitude(line, value))
+      info.ProvidePressureAltitude(value);
+
+    return true;
+  } else
+    return false;
 }
