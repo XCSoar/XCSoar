@@ -1,22 +1,22 @@
-XCSoar README
-=============
+XCSoar
+======
 
 XCSoar is a tactical glide computer for Android, Linux, Mac OS X,
 Windows and Windows CE/Mobile.
 
 This file is aimed at developers.  Users should read the manual which
-can be found on the XCSoar home page (http://www.xcsoar.org/).
+can be found on the `XCSoar home page <http://www.xcsoar.org/>`__.
 
 
 Getting the source
 ------------------
 
-The XCSoar source code is managed with git (http://git-scm.com/).  It
-can be downloaded with the following command:
+The XCSoar source code is managed with `git <http://git-scm.com/>`__.  It
+can be downloaded with the following command::
 
  git clone git://git.xcsoar.org/xcsoar/master/xcsoar.git
 
-To update your repository, type:
+To update your repository, type::
 
  git pull
 
@@ -27,18 +27,15 @@ Compiling from source
 ---------------------
 
 Please read the developer manual for detailed build instructions.  You
-can download it on the XCSoar website:
-
- http://www.xcsoar.org/discover/manual.html
+can download it on `the XCSoar website
+<http://www.xcsoar.org/discover/manual.html>`__.
 
 
 Submitting patches
 ------------------
 
-Subscribe to the XCSoar developer mailing list:
-
- https://lists.sourceforge.net/lists/listinfo/xcsoar-devel
- xcsoar-devel@lists.sourceforge.net
+Subscribe to the `XCSoar developer mailing list
+<https://lists.sourceforge.net/lists/listinfo/xcsoar-devel>`__.
 
 Use this mailing list to submit patches or "git pull" requests.
 
