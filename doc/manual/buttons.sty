@@ -7,12 +7,12 @@
 % Simple gray button
 \newcommand{\blink}[0]{$\triangleright$}
 \newcommand{\bmenug}[1]{
-	\fcolorbox {black}{buttongray}{{\footnotesize\sf{#1}}}
+	\fcolorbox {black}{buttongray}{{\footnotesize\textsf{#1}}}
 }
 \newcommand{\button}{\bmenug}
 \newcommand{\bmenu}{\bmenug}
 \newcommand{\bmenuw}[1]{
-    \fcolorbox {black}{white}{{\footnotesize\sf{#1}}}
+    \fcolorbox {black}{white}{{\footnotesize\textsf{#1}}}
 }
 \newcounter{mboxwidth}
 \setcounter{mboxwidth}{14}
@@ -21,8 +21,8 @@
     \fcolorbox {black}{buttongray}{
     \makebox[\value{mboxwidth}mm][c]{
         \begin{tabular}{c}
-        {\footnotesize\sf{#1}}\\
-        {\footnotesize\sf{#2}}
+        {\footnotesize\textsf{#1}}\\
+        {\footnotesize\textsf{#2}}
         \end{tabular}
     }
   }
@@ -31,9 +31,9 @@
     \fcolorbox {black}{buttongray}{
     \makebox[\value{mboxwidth}mm][c]{
         \begin{tabular}{c}
-        {\footnotesize\sf{#1}}\\
-        {\footnotesize\sf{#2}}\\
-        {\footnotesize\sf{#3}}
+        {\footnotesize\textsf{#1}}\\
+        {\footnotesize\textsf{#2}}\\
+        {\footnotesize\textsf{#3}}
         \end{tabular}
     }
   }
@@ -42,14 +42,14 @@
     \fcolorbox {black}{buttongray}{
     \makebox[\value{mboxwidth}mm][c]{
       \begin{tabular}{c}
-        {\footnotesize\sf{#1}}\\
+        {\footnotesize\textsf{#1}}\\
           \\
       \end{tabular}
       }
     }
 }
 \newcommand{\infobox}[1]{    % Normal Info box in text
-    \fcolorbox {black}{white}{\makebox[1.7cm][c]{\sf\strut #1}}
+    \fcolorbox {black}{white}{\makebox[1.7cm][c]{\textsf\strut #1}}
 }
 
 % Some more convenience
