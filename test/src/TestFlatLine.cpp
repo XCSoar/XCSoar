@@ -27,15 +27,19 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(39);
+  plan_tests(49);
 
   FlatPoint p1(1, 1);
   FlatPoint p2(1, 2);
   FlatPoint p3(3, 10);
+  FlatPoint p4(4, 11.5);
+  FlatPoint p5(2, 2.5);
 
   FlatLine l1(p1, p2); // 0, 1
   FlatLine l2(p1, p3); // 2, 9
   FlatLine l3(p2, p3); // 2, 8
+  FlatLine l4(p3, p1); // -2, -9
+  FlatLine l5(p4, p5); // -2, -9
 
   // test GetMiddle()
   FlatPoint av;
@@ -88,6 +92,12 @@ int main(int argc, char **argv)
   ok1(equals(i2.x, -0.517647));
   ok1(equals(i2.y, -5.829411));
 
+  ok1(l4.IntersectOriginCircle(5.8523499553598125545510491371143, i1, i2));
+  ok1(equals(i1.x, 2));
+  ok1(equals(i1.y, 5.5));
+  ok1(equals(i2.x, -0.517647));
+  ok1(equals(i2.y, -5.829411));
+
   // test IntersectCircle()
   FlatPoint c(1, 1.5);
   ok1(l1.IntersectCircle(0.25, c, i1, i2));
@@ -101,6 +111,12 @@ int main(int argc, char **argv)
   ok1(equals(i1.y, 2.5));
   ok1(equals(i2.x, 1));
   ok1(equals(i2.y, 0.5));
+
+  ok1(l5.IntersectCircle(5.8523499553598125545510491371143, c, i1, i2));
+  ok1(equals(i1.x, 3));
+  ok1(equals(i1.y, 7));
+  ok1(equals(i2.x, 0.482353));
+  ok1(equals(i2.y, -4.329411));
 
   return exit_status();
 }
