@@ -209,13 +209,3 @@ Lua::InitTimer(lua_State *L)
 
   assert(lua_gettop(L) == old_top);
 }
-
-bool
-Lua::HasPendingTimer(lua_State *L)
-{
-  return HasPointerAssociations(L, LuaTimer::registry_table,
-                                [](void *key) {
-                                  auto &timer = *(LuaTimer *)key;
-                                  return timer.IsActive();
-                                });
-}
