@@ -81,7 +81,7 @@ DataFieldFloat::Inc()
   // no keypad, allow user to scroll small values
   if (mFine && mValue < 0.95 && mStep >= 0.5 &&
       mMin >= 0)
-    SetAsFloat(mValue + 1 / 10);
+    SetAsFloat(mValue + 0.1);
   else
     SetAsFloat(mValue + mStep * SpeedUp(true));
 }
@@ -92,7 +92,7 @@ DataFieldFloat::Dec()
   // no keypad, allow user to scroll small values
   if (mFine && mValue <= 1 && mStep >= 0.5 &&
       mMin >= 0)
-    SetAsFloat(mValue - 1 / 10);
+    SetAsFloat(mValue - 0.1);
   else
     SetAsFloat(mValue - mStep * SpeedUp(false));
 }
