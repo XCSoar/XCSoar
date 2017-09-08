@@ -194,7 +194,8 @@ private:
   /**
    * Adjust the flarm radar position
    */
-  void ReinitialiseLayout_flarm(PixelRect rc, const InfoBoxLayout::Layout ib_layout);
+  void ReinitialiseLayout_flarm(PixelRect rc,
+                                const InfoBoxLayout::Layout &ib_layout);
 
   /**
    * Adjust vario
