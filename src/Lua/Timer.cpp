@@ -36,15 +36,13 @@ extern "C" {
 }
 
 class LuaTimer final : public Timer {
-  lua_State *const L;
-
   Lua::Value callback;
 
 public:
   static constexpr const char *registry_table = "xcsoar.timers";
 
-  explicit LuaTimer(lua_State *_l, int callback_idx)
-    :L(_l), callback(L, Lua::StackIndex(callback_idx)) {
+  explicit LuaTimer(lua_State *L, int callback_idx)
+    :callback(L, Lua::StackIndex(callback_idx)) {
     auto d = (LuaTimer **)lua_newuserdata(L, sizeof(LuaTimer **));
     *d = this;
 
@@ -56,22 +54,27 @@ public:
   }
 
   ~LuaTimer() {
-    Lua::DisassociatePointer(L, registry_table, (void *)this);
+    Lua::DisassociatePointer(GetLuaState(), registry_table, (void *)this);
+  }
+
+  lua_State *GetLuaState() {
+    return callback.GetState();
   }
 
   void Schedule(unsigned ms) {
-    Lua::AddPersistent(L, this);
+    Lua::AddPersistent(GetLuaState(), this);
     Timer::Schedule(ms);
   }
 
   void Cancel() {
     Timer::Cancel();
-    Lua::RemovePersistent(L, this);
+    Lua::RemovePersistent(GetLuaState(), this);
   }
 
 protected:
   void OnTimer() override {
     if (PushTable()) {
+      const auto L = GetLuaState();
       callback.Push();
       lua_getfield(L, -2, "timer");
       if (lua_pcall(L, 1, 0, 0))
@@ -83,6 +86,8 @@ protected:
 
 private:
   void Register(int callback_idx, int this_idx) {
+    const auto L = GetLuaState();
+
     lua_newtable(L);
     --this_idx;
 
@@ -93,6 +98,7 @@ private:
   }
 
   bool PushTable() {
+    const auto L = GetLuaState();
     Lua::LookupPointer(L, registry_table, (void *)this);
     if (lua_isnil(L, -1)) {
       lua_pop(L, 1); // pop table
