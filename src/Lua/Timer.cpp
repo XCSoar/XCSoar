@@ -27,10 +27,9 @@ Copyright_License {
 #include "Util.hxx"
 #include "Error.hpp"
 #include "Catch.hpp"
-#include "Associate.hpp"
+#include "Class.hxx"
 #include "Persistent.hpp"
 #include "Event/Timer.hpp"
-#include "Compiler.h"
 
 extern "C" {
 #include <lauxlib.h>
@@ -47,22 +46,11 @@ class LuaTimer final : public Timer {
   Lua::Value timer;
 
 public:
-  static constexpr const char *registry_table = "xcsoar.timers";
-
   explicit LuaTimer(lua_State *L, int callback_idx)
-    :callback(L, Lua::StackIndex(callback_idx)), timer(L) {
-    auto d = (LuaTimer **)lua_newuserdata(L, sizeof(LuaTimer **));
-    *d = this;
-
-    luaL_setmetatable(L, "xcsoar.timer");
-
-    Register(callback_idx, -1);
-
-    /* 'this' is left on stack */
-  }
+    :callback(L, Lua::StackIndex(callback_idx)), timer(L) {}
 
   ~LuaTimer() {
-    Lua::DisassociatePointer(GetLuaState(), registry_table, (void *)this);
+    Timer::Cancel();
   }
 
   lua_State *GetLuaState() {
@@ -98,36 +86,8 @@ protected:
     Lua::CheckPersistent(L);
   }
 
-private:
-  void Register(int callback_idx, int this_idx) {
-    const auto L = GetLuaState();
-
-    lua_newtable(L);
-    --this_idx;
-
-    Lua::SetField(L, -2, "timer", Lua::StackIndex(this_idx));
-
-    Lua::AssociatePointer(L, registry_table, (void *)this, -1);
-    lua_pop(L, 1); // pop table
-  }
-
-  gcc_pure
-  static LuaTimer &Check(lua_State *L, int idx) {
-    auto d = (LuaTimer **)luaL_checkudata(L, idx, "xcsoar.timer");
-    luaL_argcheck(L, d != nullptr, idx, "`xcsoar.timer' expected");
-    return **d;
-  }
-
 public:
   static int l_new(lua_State *L);
-
-  static int l_gc(lua_State *L) {
-    auto &timer = Check(L, 1);
-    timer.Cancel();
-    delete &timer;
-    return 0;
-  }
-
   static int l_cancel(lua_State *L);
   static int l_schedule(lua_State *L);
 };
@@ -143,6 +103,9 @@ static constexpr struct luaL_Reg timer_methods[] = {
   {nullptr, nullptr}
 };
 
+static constexpr char lua_timer_class[] = "xcsoar.timer";
+typedef Lua::Class<LuaTimer, lua_timer_class> LuaTimerClass;
+
 int
 LuaTimer::l_new(lua_State *L)
 {
@@ -155,7 +118,7 @@ LuaTimer::l_new(lua_State *L)
   if (!lua_isfunction(L, 2))
     luaL_argerror(L, 1, "function expected");
 
-  auto *timer = new LuaTimer(L, 2);
+  auto *timer = LuaTimerClass::New(L, L, 2);
   timer->Schedule(Lua::StackIndex(-2),
                   unsigned(lua_tonumber(L, 1) * 1000));
   return 1;
@@ -164,7 +127,7 @@ LuaTimer::l_new(lua_State *L)
 int
 LuaTimer::l_cancel(lua_State *L)
 {
-  auto &timer = Check(L, 1);
+  auto &timer = LuaTimerClass::Cast(L, 1);
   timer.Cancel();
   return 0;
 }
@@ -175,7 +138,7 @@ LuaTimer::l_schedule(lua_State *L)
   if (lua_gettop(L) != 2)
     return luaL_error(L, "Invalid parameters");
 
-  auto &timer = Check(L, 1);
+  auto &timer = LuaTimerClass::Cast(L, 1);
 
   if (!lua_isnumber(L, 2))
     luaL_argerror(L, 2, "number expected");
@@ -188,15 +151,11 @@ LuaTimer::l_schedule(lua_State *L)
 static void
 CreateTimerMetatable(lua_State *L)
 {
-  luaL_newmetatable(L, "xcsoar.timer");
+  LuaTimerClass::Register(L);
 
   /* metatable.__index = timer_methods */
   luaL_newlib(L, timer_methods);
   lua_setfield(L, -2, "__index");
-
-  /* metatable.__gc = l_gc */
-  lua_pushcfunction(L, LuaTimer::l_gc);
-  lua_setfield(L, -2, "__gc");
 
   /* pop metatable */
   lua_pop(L, 1);
@@ -214,6 +173,4 @@ Lua::InitTimer(lua_State *L)
   lua_pop(L, 1); // pop global "xcsoar"
 
   CreateTimerMetatable(L);
-
-  Lua::InitAssociatePointer(L, LuaTimer::registry_table);
 }
