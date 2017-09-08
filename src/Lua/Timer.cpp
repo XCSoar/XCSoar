@@ -119,21 +119,7 @@ private:
   }
 
 public:
-  static int l_new(lua_State *L) {
-    if (lua_gettop(L) != 2)
-      return luaL_error(L, "Invalid parameters");
-
-    if (!lua_isnumber(L, 1))
-      luaL_argerror(L, 1, "number expected");
-
-    if (!lua_isfunction(L, 2))
-      luaL_argerror(L, 1, "function expected");
-
-    auto *timer = new LuaTimer(L, 2);
-    timer->Schedule(Lua::StackIndex(-2),
-                    unsigned(lua_tonumber(L, 1) * 1000));
-    return 1;
-  }
+  static int l_new(lua_State *L);
 
   static int l_gc(lua_State *L) {
     auto &timer = Check(L, 1);
@@ -142,25 +128,8 @@ public:
     return 0;
   }
 
-  static int l_cancel(lua_State *L) {
-    auto &timer = Check(L, 1);
-    timer.Cancel();
-    return 0;
-  }
-
-  static int l_schedule(lua_State *L) {
-    if (lua_gettop(L) != 2)
-      return luaL_error(L, "Invalid parameters");
-
-    auto &timer = Check(L, 1);
-
-    if (!lua_isnumber(L, 2))
-      luaL_argerror(L, 2, "number expected");
-
-    timer.Schedule(Lua::StackIndex(1),
-                   unsigned(lua_tonumber(L, 2) * 1000));
-    return 0;
-  }
+  static int l_cancel(lua_State *L);
+  static int l_schedule(lua_State *L);
 };
 
 static constexpr struct luaL_Reg timer_funcs[] = {
@@ -173,6 +142,48 @@ static constexpr struct luaL_Reg timer_methods[] = {
   {"schedule", LuaTimer::l_schedule},
   {nullptr, nullptr}
 };
+
+int
+LuaTimer::l_new(lua_State *L)
+{
+  if (lua_gettop(L) != 2)
+    return luaL_error(L, "Invalid parameters");
+
+  if (!lua_isnumber(L, 1))
+    luaL_argerror(L, 1, "number expected");
+
+  if (!lua_isfunction(L, 2))
+    luaL_argerror(L, 1, "function expected");
+
+  auto *timer = new LuaTimer(L, 2);
+  timer->Schedule(Lua::StackIndex(-2),
+                  unsigned(lua_tonumber(L, 1) * 1000));
+  return 1;
+}
+
+int
+LuaTimer::l_cancel(lua_State *L)
+{
+  auto &timer = Check(L, 1);
+  timer.Cancel();
+  return 0;
+}
+
+int
+LuaTimer::l_schedule(lua_State *L)
+{
+  if (lua_gettop(L) != 2)
+    return luaL_error(L, "Invalid parameters");
+
+  auto &timer = Check(L, 1);
+
+  if (!lua_isnumber(L, 2))
+    luaL_argerror(L, 2, "number expected");
+
+  timer.Schedule(Lua::StackIndex(1),
+                 unsigned(lua_tonumber(L, 2) * 1000));
+  return 0;
+}
 
 static void
 CreateTimerMetatable(lua_State *L)
