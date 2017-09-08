@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "InputEvent.hpp"
+#include "Value.hxx"
 #include "Util.hxx"
 #include "Error.hpp"
 #include "Catch.hpp"
@@ -86,16 +87,18 @@ static const char* event_enum_names[] = {
 class LuaInputEvent final {
   lua_State *const L;
 
+  Lua::Value callback;
+
 public:
   static constexpr const char *registry_table = "xcsoar.input_events";
 
-  explicit LuaInputEvent(lua_State *_l, int callback_idx):L(_l) {
+  explicit LuaInputEvent(lua_State *_l, int callback_idx):L(_l), callback(L, Lua::StackIndex(callback_idx)) {
     auto d = (LuaInputEvent **)lua_newuserdata(L, sizeof(LuaInputEvent **));
     *d = this;
 
     luaL_setmetatable(L, "xcsoar.input_event");
 
-    Register(callback_idx, -1);
+    Register(-1);
 
     /* 'this' is left on stack */
   }
@@ -131,7 +134,7 @@ public:
 
   void OnEvent() {
     if (PushTable()) {
-      lua_getfield(L, -1, "callback");
+      callback.Push();
       lua_getfield(L, -2, "input_event");
       if (lua_pcall(L, 1, 0, 0))
         Lua::ThrowError(L, Lua::PopError(L));
@@ -145,11 +148,10 @@ public:
   }
 
 private:
-  void Register(int callback_idx, int this_idx) {
+  void Register(int this_idx) {
     lua_newtable(L);
     --this_idx;
 
-    Lua::SetField(L, -2, "callback", Lua::StackIndex(callback_idx));
     Lua::SetField(L, -2, "input_event", Lua::StackIndex(this_idx));
 
     Lua::AssociatePointer(L, registry_table, (void *)this, -1);
