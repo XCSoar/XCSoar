@@ -54,7 +54,7 @@ struct StackIndex {
 struct LightUserData {
 	void *value;
 
-	constexpr LightUserData(void *_value):value(_value) {}
+	explicit constexpr LightUserData(void *_value):value(_value) {}
 };
 
 template<typename... T>
