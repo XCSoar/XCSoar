@@ -274,6 +274,10 @@ ifeq ($(TARGET),IOS64)
 endif
 
 ifeq ($(TARGET),UNIX)
+  ifeq ($(HOST_IS_LINUX)$(TARGET_IS_DARWIN),yn)
+    TARGET_IS_LINUX := y
+  endif
+
   HAVE_POSIX := y
   HAVE_WIN32 := n
   HAVE_MSVCRT := n
