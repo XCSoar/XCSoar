@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Timer.hpp"
+#include "Assert.hxx"
 #include "Value.hxx"
 #include "Util.hxx"
 #include "Error.hpp"
@@ -69,12 +70,16 @@ public:
   }
 
   void Schedule(Lua::StackIndex timer_index, unsigned ms) {
+    const Lua::ScopeCheckStack check_stack(GetLuaState());
+
     Lua::AddPersistent(GetLuaState(), this);
     timer.Set(timer_index);
     Timer::Schedule(ms);
   }
 
   void Cancel() {
+    const Lua::ScopeCheckStack check_stack(GetLuaState());
+
     Timer::Cancel();
     timer.Set(nullptr);
     Lua::RemovePersistent(GetLuaState(), this);
@@ -83,6 +88,8 @@ public:
 protected:
   void OnTimer() override {
     const auto L = GetLuaState();
+    const Lua::ScopeCheckStack check_stack(L);
+
     callback.Push();
     timer.Push();
     if (lua_pcall(L, 1, 0, 0))
@@ -187,9 +194,7 @@ CreateTimerMetatable(lua_State *L)
 void
 Lua::InitTimer(lua_State *L)
 {
-#ifndef NDEBUG
-  const int old_top = lua_gettop(L);
-#endif
+  const Lua::ScopeCheckStack check_stack(L);
 
   lua_getglobal(L, "xcsoar");
 
@@ -197,13 +202,7 @@ Lua::InitTimer(lua_State *L)
   lua_setfield(L, -2, "timer"); // xcsoar.timer = timer
   lua_pop(L, 1); // pop global "xcsoar"
 
-  assert(lua_gettop(L) == old_top);
-
   CreateTimerMetatable(L);
 
-  assert(lua_gettop(L) == old_top);
-
   Lua::InitAssociatePointer(L, LuaTimer::registry_table);
-
-  assert(lua_gettop(L) == old_top);
 }
