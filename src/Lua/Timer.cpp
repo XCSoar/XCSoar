@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Timer.hpp"
+#include "Value.hxx"
 #include "Util.hxx"
 #include "Error.hpp"
 #include "Catch.hpp"
@@ -37,10 +38,13 @@ extern "C" {
 class LuaTimer final : public Timer {
   lua_State *const L;
 
+  Lua::Value callback;
+
 public:
   static constexpr const char *registry_table = "xcsoar.timers";
 
-  explicit LuaTimer(lua_State *_l, int callback_idx):L(_l) {
+  explicit LuaTimer(lua_State *_l, int callback_idx)
+    :L(_l), callback(L, Lua::StackIndex(callback_idx)) {
     auto d = (LuaTimer **)lua_newuserdata(L, sizeof(LuaTimer **));
     *d = this;
 
@@ -68,7 +72,7 @@ public:
 protected:
   void OnTimer() override {
     if (PushTable()) {
-      lua_getfield(L, -1, "callback");
+      callback.Push();
       lua_getfield(L, -2, "timer");
       if (lua_pcall(L, 1, 0, 0))
         Lua::ThrowError(L, Lua::PopError(L));
@@ -82,7 +86,6 @@ private:
     lua_newtable(L);
     --this_idx;
 
-    Lua::SetField(L, -2, "callback", Lua::StackIndex(callback_idx));
     Lua::SetField(L, -2, "timer", Lua::StackIndex(this_idx));
 
     Lua::AssociatePointer(L, registry_table, (void *)this, -1);
