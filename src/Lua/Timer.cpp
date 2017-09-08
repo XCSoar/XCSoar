@@ -38,11 +38,18 @@ extern "C" {
 class LuaTimer final : public Timer {
   Lua::Value callback;
 
+  /**
+   * A LightUserData pointing to this instance.  It is only set while
+   * the #Timer is scheduled, to avoid holding a reference on an
+   * otherwise unused Lua object.
+   */
+  Lua::Value timer;
+
 public:
   static constexpr const char *registry_table = "xcsoar.timers";
 
   explicit LuaTimer(lua_State *L, int callback_idx)
-    :callback(L, Lua::StackIndex(callback_idx)) {
+    :callback(L, Lua::StackIndex(callback_idx)), timer(L) {
     auto d = (LuaTimer **)lua_newuserdata(L, sizeof(LuaTimer **));
     *d = this;
 
@@ -61,27 +68,27 @@ public:
     return callback.GetState();
   }
 
-  void Schedule(unsigned ms) {
+  void Schedule(Lua::StackIndex timer_index, unsigned ms) {
     Lua::AddPersistent(GetLuaState(), this);
+    timer.Set(timer_index);
     Timer::Schedule(ms);
   }
 
   void Cancel() {
     Timer::Cancel();
+    timer.Set(nullptr);
     Lua::RemovePersistent(GetLuaState(), this);
   }
 
 protected:
   void OnTimer() override {
-    if (PushTable()) {
-      const auto L = GetLuaState();
-      callback.Push();
-      lua_getfield(L, -2, "timer");
-      if (lua_pcall(L, 1, 0, 0))
-        Lua::ThrowError(L, Lua::PopError(L));
+    const auto L = GetLuaState();
+    callback.Push();
+    timer.Push();
+    if (lua_pcall(L, 1, 0, 0))
+      Lua::ThrowError(L, Lua::PopError(L));
 
-      Lua::CheckPersistent(L);
-    }
+    Lua::CheckPersistent(L);
   }
 
 private:
@@ -95,17 +102,6 @@ private:
 
     Lua::AssociatePointer(L, registry_table, (void *)this, -1);
     lua_pop(L, 1); // pop table
-  }
-
-  bool PushTable() {
-    const auto L = GetLuaState();
-    Lua::LookupPointer(L, registry_table, (void *)this);
-    if (lua_isnil(L, -1)) {
-      lua_pop(L, 1); // pop table
-      return false;
-    }
-
-    return true;
   }
 
   gcc_pure
@@ -127,7 +123,8 @@ public:
       luaL_argerror(L, 1, "function expected");
 
     auto *timer = new LuaTimer(L, 2);
-    timer->Schedule(unsigned(lua_tonumber(L, 1) * 1000));
+    timer->Schedule(Lua::StackIndex(-2),
+                    unsigned(lua_tonumber(L, 1) * 1000));
     return 1;
   }
 
@@ -153,7 +150,8 @@ public:
     if (!lua_isnumber(L, 2))
       luaL_argerror(L, 2, "number expected");
 
-    timer.Schedule(unsigned(lua_tonumber(L, 2) * 1000));
+    timer.Schedule(Lua::StackIndex(1),
+                   unsigned(lua_tonumber(L, 2) * 1000));
     return 0;
   }
 };
