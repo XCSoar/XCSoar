@@ -669,6 +669,7 @@ Shutdown()
   LogFormat("Close Windows - main");
   main_window->Destroy();
   delete main_window;
+  CommonInterface::main_window = nullptr;
 
   CloseLanguageFile();
 
