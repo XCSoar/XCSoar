@@ -1,4 +1,4 @@
-Version 6.8.8 - not yet released
+Version 6.8.8 - 2017/09/09
 * data files
   - support "GSEC" in OpenAir files
 * weather
