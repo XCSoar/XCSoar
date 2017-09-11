@@ -44,6 +44,7 @@ public:
 
   bool Declare(const Declaration &declaration, const Waypoint *home,
                OperationEnvironment &env) override;
+  bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
 
 private:
   bool Connect(OperationEnvironment &env);

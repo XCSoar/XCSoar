@@ -59,9 +59,19 @@ Version 6.8.8 - not yet released
   - support "GSEC" in OpenAir files
 * weather
   - update source URLs for METARs and TAFs
+* devices
+  - CAI302: fix waypoint download (#3830)
+  - IMI: fix PGRMZ parsing (was interpreted as altitude, now is pressure altitude)
+  - LX: fix Nano 3 task declaration (#3858)
 * Kobo
   - support for Kobo Aura Edition 2
-  - fix Wifi on recent Kobo firmware releases
+  - support for Kobo Glo Refurbished
+  - fix Wi-Fi on recent Kobo firmware releases (#3850)
+  - fix USB storage compatibility with Windows 10
+* Raspberry Pi
+  - fix Raspbian Stretch compatibility
+* Raspberry Pi / Cubieboard
+  - fix for freeze on shutdown (#3679)
 
 Version 6.8.7 - 2016/08/12
 * data files

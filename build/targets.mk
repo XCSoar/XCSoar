@@ -184,7 +184,9 @@ endif
 ifeq ($(TARGET),PI)
   override TARGET = UNIX
   TCPREFIX := arm-linux-gnueabihf-
-  PI ?= /opt/pi/root
+  ifeq ($(HOST_IS_PI),n)
+    PI ?= /opt/pi/root
+  endif
   TARGET_IS_LINUX = y
   TARGET_IS_PI = y
   TARGET_IS_ARM = y
@@ -194,7 +196,9 @@ endif
 
 ifeq ($(TARGET),PI2)
   override TARGET = NEON
-  PI ?= /opt/pi/root
+  ifeq ($(HOST_IS_PI),n)
+    PI ?= /opt/pi/root
+  endif
   TARGET_IS_PI = y
 endif
 
@@ -220,7 +224,7 @@ ifeq ($(TARGET),NEON)
     HOST_TRIPLET = arm-linux-gnueabihf
   endif
   TCPREFIX = $(HOST_TRIPLET)-
-  ifneq ($(CLANG),y)
+  ifeq ($(CLANG),n)
     TARGET_ARCH += -mcpu=cortex-a8
   endif
   TARGET_IS_LINUX = y
@@ -500,8 +504,10 @@ ifeq ($(HAVE_WIN32),n)
   TARGET_INCLUDES += -I$(SRC)/unix
 endif
 
-ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)
-  TARGET_CPPFLAGS += --sysroot=$(PI) -isystem $(PI)/usr/include/arm-linux-gnueabihf -isystem $(PI)/usr/include
+ifeq ($(TARGET_IS_PI),ny)
+  ifneq ($(PI),)
+    TARGET_CPPFLAGS += --sysroot=$(PI) -isystem $(PI)/usr/include/arm-linux-gnueabihf -isystem $(PI)/usr/include
+  endif
 endif
 
 ifeq ($(HOST_IS_ARM)$(TARGET_HAS_MALI),ny)

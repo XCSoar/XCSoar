@@ -329,6 +329,10 @@ RasterTileCache::LoadCache(FILE *file)
       header.version != CacheHeader::VERSION ||
       header.width < 1024 || header.width > 1024 * 1024 ||
       header.height < 1024 || header.height > 1024 * 1024 ||
+      header.tile_width < 16 || header.tile_width > 16 * 1024 ||
+      header.tile_height < 16 || header.tile_height > 16 * 1024 ||
+      header.tile_columns < 1 || header.tile_columns > 1024 ||
+      header.tile_rows < 1 || header.tile_rows > 1024 ||
       header.num_marker_segments < 4 ||
       header.num_marker_segments > segments.capacity() ||
       header.bounds.IsEmpty())

@@ -46,7 +46,12 @@ ENABLE_SDL = n
 
 EGL_CPPFLAGS =
 EGL_FEATURE_CPPFLAGS = -DUSE_EGL
+
+ifeq ($(TARGET_IS_PI),y)
+EGL_LDLIBS = -lbrcmEGL
+else
 EGL_LDLIBS = -lEGL
+endif
 
 ifeq ($(TARGET_IS_PI),y)
 # Raspberry Pi detected

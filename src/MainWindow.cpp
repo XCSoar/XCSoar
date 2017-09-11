@@ -382,7 +382,8 @@ MainWindow::ReinitialiseLayout()
 }
 
 void 
-MainWindow::ReinitialiseLayout_flarm(PixelRect rc, const InfoBoxLayout::Layout ib_layout)
+MainWindow::ReinitialiseLayout_flarm(PixelRect rc,
+                                     const InfoBoxLayout::Layout &ib_layout)
 {
   TrafficSettings::GaugeLocation val =
     CommonInterface::GetUISettings().traffic.gauge_location;
