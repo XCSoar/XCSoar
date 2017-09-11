@@ -27,10 +27,6 @@ root_path = os.path.join(arch_path, 'root')
 target_arch = '-march=armv7-a -mcpu=cortex-a8 -mfpu=neon -mfloat-abi=hard'
 cppflags = ''
 
-# redirect pkg-config to use our root directory instead of the default
-# one on the build host
-os.environ['PKG_CONFIG_LIBDIR'] = os.path.join(root_path, 'lib/pkgconfig')
-
 if 'MAKEFLAGS' in os.environ:
     # build/make.mk adds "--no-builtin-rules --no-builtin-variables",
     # which breaks the zlib Makefile (and maybe others)
