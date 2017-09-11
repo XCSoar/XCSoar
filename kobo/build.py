@@ -3,11 +3,11 @@
 import os, os.path
 import sys
 
-if len(sys.argv) != 11:
-    print("Usage: build.py TARGET_OUTPUT_DIR HOST_TRIPLET ARCH_CFLAGS ARCH_LDFLAGS CC CXX AR ARFLAGS RANLIB STRIP", file=sys.stderr)
+if len(sys.argv) != 12:
+    print("Usage: build.py TARGET_OUTPUT_DIR HOST_TRIPLET ARCH_CFLAGS CPPFLAGS ARCH_LDFLAGS CC CXX AR ARFLAGS RANLIB STRIP", file=sys.stderr)
     sys.exit(1)
 
-target_output_dir, host_triplet, arch_cflags, arch_ldflags, cc, cxx, ar, arflags, ranlib, strip = sys.argv[1:]
+target_output_dir, host_triplet, arch_cflags, cppflags, arch_ldflags, cc, cxx, ar, arflags, ranlib, strip = sys.argv[1:]
 
 # the path to the XCSoar sources
 xcsoar_path = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]) or '.', '..'))
@@ -22,8 +22,6 @@ lib_path = os.path.join(target_output_dir, 'lib')
 arch_path = os.path.join(lib_path, host_triplet)
 build_path = os.path.join(arch_path, 'build')
 install_prefix = os.path.join(arch_path, 'root')
-
-cppflags = ''
 
 if 'MAKEFLAGS' in os.environ:
     # build/make.mk adds "--no-builtin-rules --no-builtin-variables",
