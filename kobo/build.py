@@ -25,7 +25,7 @@ build_path = os.path.join(arch_path, 'build')
 root_path = os.path.join(arch_path, 'root')
 
 target_arch = '-march=armv7-a -mcpu=cortex-a8 -mfpu=neon -mfloat-abi=hard'
-cppflags = '-isystem ' + os.path.join(root_path, 'include') + ' -DNDEBUG'
+cppflags = ''
 
 # redirect pkg-config to use our root directory instead of the default
 # one on the build host
