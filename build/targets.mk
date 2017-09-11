@@ -656,7 +656,7 @@ ifeq ($(TARGET),WINE)
   TARGET_INCLUDES += -I$(SRC)/wine
 endif
 
-ifeq ($(TARGET_IS_PI),ny)
+ifeq ($(TARGET_IS_PI),y)
   ifneq ($(PI),)
     TARGET_CPPFLAGS += --sysroot=$(PI) -isystem $(PI)/usr/include/arm-linux-gnueabihf -isystem $(PI)/usr/include
   endif
