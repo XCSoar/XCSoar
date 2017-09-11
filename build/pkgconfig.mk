@@ -1,5 +1,9 @@
 PKG_CONFIG = pkg-config
 
+ifeq ($(USE_THIRDPARTY_LIBS),y)
+  PKG_CONFIG := PKG_CONFIG_LIBDIR=$(THIRDPARTY_LIBS_ROOT)/lib/pkgconfig $(PKG_CONFIG) --static
+endif
+
 ifeq ($(TARGET_IS_DARWIN),y)
   ifeq ($(DARWIN_LIBS),)
     PKG_CONFIG := $(PKG_CONFIG) --static
@@ -10,10 +14,6 @@ endif
 
 ifeq ($(HOST_IS_WIN32)$(HAVE_WIN32)$(HAVE_CE)$(call string_equals,WINE,$(TARGET)),nynn)
   PKG_CONFIG := PKG_CONFIG_LIBDIR=/usr/local/i686-w64-mingw32/lib/pkgconfig $(PKG_CONFIG)
-endif
-
-ifeq ($(TARGET_IS_KOBO),y)
-  PKG_CONFIG := PKG_CONFIG_LIBDIR=$(KOBO)/lib/pkgconfig $(PKG_CONFIG)
 endif
 
 ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)

@@ -46,12 +46,6 @@ endif
 
 ifeq ($(TARGET_IS_KOBO),y)
 
-THIRDPARTY_LDFLAGS_FILTER_OUT = -L%
-
-.PHONY: kobo-libs
-kobo-libs:
-	./kobo/build.py $(TARGET_OUTPUT_DIR) $(HOST_TRIPLET) "$(TARGET_ARCH)" "$(TARGET_CPPFLAGS)" "$(filter-out $(THIRDPARTY_LDFLAGS_FILTER_OUT),$(TARGET_LDFLAGS))" $(CC) $(CXX) $(AR) $(ARFLAGS) $(RANLIB) $(STRIP)
-
 KOBO_POWER_OFF_SOURCES = \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp \

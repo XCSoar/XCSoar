@@ -276,7 +276,6 @@ endif
 ifeq ($(TARGET),KOBO)
   # Experimental target for Kobo Mini
   override TARGET = NEON
-  KOBO = $(TARGET_OUTPUT_DIR)/lib/$(HOST_TRIPLET)/root
   TARGET_IS_KOBO = y
 endif
 
@@ -665,7 +664,6 @@ endif
 
 ifeq ($(TARGET_IS_KOBO),y)
   TARGET_CPPFLAGS += -DKOBO
-  TARGET_CPPFLAGS += -isystem $(KOBO)/include
 endif
 
 ifeq ($(TARGET),ANDROID)
@@ -752,7 +750,6 @@ ifeq ($(HOST_IS_ARM)$(TARGET_HAS_MALI),ny)
 endif
 
 ifeq ($(TARGET_IS_KOBO),y)
-  TARGET_LDFLAGS += -L$(KOBO)/lib
   TARGET_LDFLAGS += -static-libstdc++
 
   # use our glibc version and its ld.so on the Kobo, not the one from
