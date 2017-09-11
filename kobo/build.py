@@ -3,11 +3,11 @@
 import os, os.path
 import sys
 
-if len(sys.argv) != 9:
-    print("Usage: build.py TARGET_OUTPUT_DIR HOST_TRIPLET CC CXX AR ARFLAGS RANLIB STRIP", file=sys.stderr)
+if len(sys.argv) != 10:
+    print("Usage: build.py TARGET_OUTPUT_DIR HOST_TRIPLET ARCH_CFLAGS CC CXX AR ARFLAGS RANLIB STRIP", file=sys.stderr)
     sys.exit(1)
 
-target_output_dir, host_triplet, cc, cxx, ar, arflags, ranlib, strip = sys.argv[1:]
+target_output_dir, host_triplet, arch_cflags, cc, cxx, ar, arflags, ranlib, strip = sys.argv[1:]
 arch_ldflags = ''
 
 # the path to the XCSoar sources
@@ -24,7 +24,6 @@ arch_path = os.path.join(lib_path, host_triplet)
 build_path = os.path.join(arch_path, 'build')
 install_prefix = os.path.join(arch_path, 'root')
 
-target_arch = '-march=armv7-a -mcpu=cortex-a8 -mfpu=neon -mfloat-abi=hard'
 cppflags = ''
 
 if 'MAKEFLAGS' in os.environ:
@@ -83,7 +82,7 @@ thirdparty_libs = [
 
 # build the third-party libraries
 toolchain = Toolchain(tarball_path, src_path, build_path, install_prefix,
-                      host_triplet, target_arch, cppflags, arch_ldflags,
+                      host_triplet, arch_cflags, cppflags, arch_ldflags,
                       cc, cxx, ar, arflags, ranlib, strip)
 for x in thirdparty_libs:
     if not x.is_installed(toolchain):
