@@ -22,7 +22,7 @@ target_output_dir = os.path.abspath(target_output_dir)
 lib_path = os.path.join(target_output_dir, 'lib')
 arch_path = os.path.join(lib_path, host_triplet)
 build_path = os.path.join(arch_path, 'build')
-root_path = os.path.join(arch_path, 'root')
+install_prefix = os.path.join(arch_path, 'root')
 
 target_arch = '-march=armv7-a -mcpu=cortex-a8 -mfpu=neon -mfloat-abi=hard'
 cppflags = ''
@@ -81,7 +81,7 @@ thirdparty_libs = [
 ]
 
 # build the third-party libraries
-toolchain = Toolchain(tarball_path, src_path, build_path, root_path,
+toolchain = Toolchain(tarball_path, src_path, build_path, install_prefix,
                       host_triplet, target_arch, cppflags, arch_ldflags,
                       cc, cxx, ar, ranlib, strip)
 for x in thirdparty_libs:
