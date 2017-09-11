@@ -253,7 +253,9 @@ endif
 ifeq ($(TARGET),PI)
   override TARGET = UNIX
   TCPREFIX := arm-linux-gnueabihf-
-  PI ?= /opt/pi/root
+  ifeq ($(HOST_IS_PI),n)
+    PI ?= /opt/pi/root
+  endif
   TARGET_IS_PI = y
   TARGET_IS_ARM = y
   TARGET_IS_ARMHF = y
@@ -262,7 +264,9 @@ endif
 
 ifeq ($(TARGET),PI2)
   override TARGET = NEON
-  PI ?= /opt/pi/root
+  ifeq ($(HOST_IS_PI),n)
+    PI ?= /opt/pi/root
+  endif
   TARGET_IS_PI = y
 endif
 
@@ -652,8 +656,10 @@ ifeq ($(TARGET),WINE)
   TARGET_INCLUDES += -I$(SRC)/wine
 endif
 
-ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)
-  TARGET_CPPFLAGS += --sysroot=$(PI) -isystem $(PI)/usr/include/arm-linux-gnueabihf -isystem $(PI)/usr/include
+ifeq ($(TARGET_IS_PI),ny)
+  ifneq ($(PI),)
+    TARGET_CPPFLAGS += --sysroot=$(PI) -isystem $(PI)/usr/include/arm-linux-gnueabihf -isystem $(PI)/usr/include
+  endif
 endif
 
 ifeq ($(HOST_IS_ARM)$(TARGET_HAS_MALI),ny)
