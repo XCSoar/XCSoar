@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import os, os.path
-import sys, subprocess
+import sys
 
 if len(sys.argv) != 8:
     print("Usage: build.py TARGET_OUTPUT_DIR HOST_ARCH CC CXX AR RANLIB STRIP", file=sys.stderr)
@@ -14,10 +14,6 @@ arch_ldflags = ''
 # the path to the XCSoar sources
 xcsoar_path = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]) or '.', '..'))
 sys.path[0] = os.path.join(xcsoar_path, 'build/python')
-from build.project import Project
-from build.zlib import ZlibProject
-from build.autotools import AutotoolsProject
-from build.freetype import FreeTypeProject
 
 output_path = os.path.abspath('output')
 tarball_path = os.path.join(output_path, 'download')
