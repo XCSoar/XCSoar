@@ -32,6 +32,8 @@ Copyright_License {
 
 #include <assert.h>
 
+struct StringView;
+
 class BlueFlyDevice : public AbstractDevice {
 public:
   struct BlueFlySettings {
@@ -69,7 +71,7 @@ public:
       return ExportOutputMode(output_mode);
     }
 
-    void Parse(const char *name, unsigned long value);
+    void Parse(StringView name, unsigned long value);
 };
 
 private:
