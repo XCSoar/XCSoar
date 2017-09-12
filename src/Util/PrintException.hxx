@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2016 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2015-2017 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -32,7 +32,13 @@
 
 #include <stdexcept>
 
+/**
+ * Print this exception (and its nested exceptions, if any) to stderr.
+ */
 void
 PrintException(const std::exception &e);
+
+void
+PrintException(const std::exception_ptr &ep);
 
 #endif

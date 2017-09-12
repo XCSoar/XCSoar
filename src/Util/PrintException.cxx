@@ -43,3 +43,15 @@ PrintException(const std::exception &e)
 		fprintf(stderr, "Unrecognized nested exception\n");
 	}
 }
+
+void
+PrintException(const std::exception_ptr &ep)
+{
+	try {
+		std::rethrow_exception(ep);
+	} catch (const std::exception &e) {
+		PrintException(e);
+	} catch (...) {
+		fprintf(stderr, "Unrecognized exception\n");
+	}
+}
