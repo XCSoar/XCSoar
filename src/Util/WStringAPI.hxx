@@ -90,12 +90,6 @@ StringFindLast(wchar_t *haystack, wchar_t needle) noexcept
 	return wcsrchr(haystack, needle);
 }
 
-static inline wchar_t *
-StringToken(wchar_t *str, const wchar_t *delim) noexcept
-{
-	return wcstok(str, delim);
-}
-
 gcc_nonnull_all
 static inline void
 UnsafeCopyString(wchar_t *dest, const wchar_t *src) noexcept
