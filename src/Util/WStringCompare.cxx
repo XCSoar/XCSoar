@@ -36,7 +36,7 @@
 bool
 StringStartsWith(const wchar_t *haystack, const wchar_t *needle) noexcept
 {
-	return memcmp(haystack, needle, StringLength(needle) * sizeof(needle[0])) == 0;
+	return StringIsEqual(haystack, needle, StringLength(needle));
 }
 
 bool
