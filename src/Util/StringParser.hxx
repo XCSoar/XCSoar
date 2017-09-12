@@ -30,7 +30,7 @@
 #ifndef STRING_PARSER_HXX
 #define STRING_PARSER_HXX
 
-#include "CharUtil.hpp"
+#include "CharUtil.hxx"
 #include "StringUtil.hpp"
 #include "NumberParser.hpp"
 

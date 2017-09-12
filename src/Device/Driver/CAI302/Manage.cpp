@@ -24,7 +24,7 @@ Copyright_License {
 #include "Internal.hpp"
 #include "Protocol.hpp"
 #include "Util/Macros.hpp"
-#include "Util/CharUtil.hpp"
+#include "Util/CharUtil.hxx"
 #include "Engine/Waypoint/Waypoint.hpp"
 
 bool

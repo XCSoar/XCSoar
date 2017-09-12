@@ -25,7 +25,7 @@ Copyright_License {
 #include "Compatibility/path.h"
 #include "Util/StringCompare.hxx"
 #include "Util/StringAPI.hxx"
-#include "Util/CharUtil.hpp"
+#include "Util/CharUtil.hxx"
 
 #ifdef _UNICODE
 #include "Util/ConvertString.hpp"

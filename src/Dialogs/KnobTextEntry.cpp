@@ -27,9 +27,9 @@ Copyright_License {
 #include "Widget/WindowWidget.hpp"
 #include "Screen/Canvas.hpp"
 #include "Event/KeyCode.hpp"
-#include "Util/CharUtil.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
+#include "Util/CharUtil.hxx"
 #include "Util/Macros.hpp"
 #include "Util/TruncateString.hpp"
 

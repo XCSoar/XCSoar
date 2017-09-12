@@ -27,7 +27,7 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "Units/System.hpp"
 #include "Language/Language.hpp"
-#include "Util/CharUtil.hpp"
+#include "Util/CharUtil.hxx"
 #include "Util/StringAPI.hxx"
 #include "Util/StringParser.hxx"
 #include "Util/Macros.hpp"

@@ -28,7 +28,7 @@ Copyright_License {
 #include "IGCDeclaration.hpp"
 #include "Time/BrokenDate.hpp"
 #include "Time/BrokenTime.hpp"
-#include "Util/CharUtil.hpp"
+#include "Util/CharUtil.hxx"
 #include "Util/StringAPI.hxx"
 
 #include <stdlib.h>

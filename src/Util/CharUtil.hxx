@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2015 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright (C) 2011-2017 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,30 +27,39 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef WCHAR_UTIL_HPP
-#define WCHAR_UTIL_HPP
+#ifndef CHAR_UTIL_HXX
+#define CHAR_UTIL_HXX
 
-#include <wchar.h>
+#ifdef _UNICODE
+#include "WCharUtil.hxx"
+#endif
 
 constexpr
 static inline bool
-IsASCII(const wchar_t ch)
+IsASCII(const unsigned char ch)
 {
-  return (ch & ~0x7f) == 0;
+	return ch < 0x80;
 }
 
 constexpr
 static inline bool
-IsWhitespaceOrNull(const wchar_t ch)
+IsASCII(const char ch)
 {
-  return (unsigned)ch <= 0x20;
+	return IsASCII((unsigned char)ch);
 }
 
 constexpr
 static inline bool
-IsWhitespaceNotNull(const wchar_t ch)
+IsWhitespaceOrNull(const char ch)
 {
-  return ch > 0 && ch <= 0x20;
+	return (unsigned char)ch <= 0x20;
+}
+
+constexpr
+static inline bool
+IsWhitespaceNotNull(const char ch)
+{
+	return ch > 0 && ch <= 0x20;
 }
 
 /**
@@ -61,51 +70,51 @@ IsWhitespaceNotNull(const wchar_t ch)
  */
 constexpr
 static inline bool
-IsWhitespaceFast(const wchar_t ch)
+IsWhitespaceFast(const char ch)
 {
-  return IsWhitespaceOrNull(ch);
+	return IsWhitespaceOrNull(ch);
 }
 
 constexpr
 static inline bool
-IsPrintableASCII(wchar_t ch)
+IsPrintableASCII(char ch)
 {
-  return IsASCII(ch) && ch >= 0x20;
+	return (signed char)ch >= 0x20;
 }
 
 constexpr
 static inline bool
-IsDigitASCII(wchar_t ch)
+IsDigitASCII(char ch)
 {
-  return ch >= '0' && ch <= '9';
+	return ch >= '0' && ch <= '9';
 }
 
 constexpr
 static inline bool
-IsUpperAlphaASCII(wchar_t ch)
+IsUpperAlphaASCII(char ch)
 {
-  return ch >= 'A' && ch <= 'Z';
+	return ch >= 'A' && ch <= 'Z';
 }
 
 constexpr
 static inline bool
-IsLowerAlphaASCII(wchar_t ch)
+IsLowerAlphaASCII(char ch)
 {
-  return ch >= 'a' && ch <= 'z';
+	return ch >= 'a' && ch <= 'z';
 }
 
 constexpr
 static inline bool
-IsAlphaASCII(wchar_t ch)
+IsAlphaASCII(char ch)
 {
-  return IsUpperAlphaASCII(ch) || IsLowerAlphaASCII(ch);
+	return IsUpperAlphaASCII(ch) || IsLowerAlphaASCII(ch);
 }
 
 constexpr
 static inline bool
-IsAlphaNumericASCII(wchar_t ch)
+IsAlphaNumericASCII(char ch)
 {
-  return IsAlphaASCII(ch) || IsDigitASCII(ch);
+	return IsAlphaASCII(ch) || IsDigitASCII(ch);
 }
 
 /**
@@ -113,12 +122,12 @@ IsAlphaNumericASCII(wchar_t ch)
  * Unlike toupper(), it ignores the system locale.
  */
 constexpr
-static inline wchar_t
-ToUpperASCII(wchar_t ch)
+static inline char
+ToUpperASCII(char ch)
 {
-  return ch >= 'a' && ch <= 'z'
-    ? (ch - ('a' - 'A'))
-    : ch;
+	return ch >= 'a' && ch <= 'z'
+		? (ch - ('a' - 'A'))
+		: ch;
 }
 
 /**
@@ -126,12 +135,12 @@ ToUpperASCII(wchar_t ch)
  * Unlike tolower(), it ignores the system locale.
  */
 constexpr
-static inline wchar_t
-ToLowerASCII(wchar_t ch)
+static inline char
+ToLowerASCII(char ch)
 {
-  return ch >= 'A' && ch <= 'Z'
-    ? (ch + ('a' - 'A'))
-    : ch;
+	return ch >= 'A' && ch <= 'Z'
+		? (ch + ('a' - 'A'))
+		: ch;
 }
 
 #endif

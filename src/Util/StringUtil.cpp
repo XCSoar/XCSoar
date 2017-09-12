@@ -24,7 +24,7 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "StringAPI.hxx"
 #include "StringCompare.hxx"
-#include "CharUtil.hpp"
+#include "CharUtil.hxx"
 
 #include <algorithm>
 

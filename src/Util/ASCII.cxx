@@ -28,7 +28,7 @@
  */
 
 #include "ASCII.hxx"
-#include "CharUtil.hpp"
+#include "CharUtil.hxx"
 
 #include <assert.h>
 

@@ -31,9 +31,9 @@
 #include "OS/FileUtil.hpp"
 #include "Formatter/IGCFilenameFormatter.hpp"
 #include "Interface.hpp"
-#include "Util/CharUtil.hpp"
 #include "IGCFileCleanup.hpp"
 #include "IGC/IGCWriter.hpp"
+#include "Util/CharUtil.hxx"
 
 #include <tchar.h>
 #include <algorithm>

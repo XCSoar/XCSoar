@@ -28,7 +28,7 @@
  */
 
 #include "WASCII.hxx"
-#include "CharUtil.hpp"
+#include "WCharUtil.hxx"
 
 #include <assert.h>
 
