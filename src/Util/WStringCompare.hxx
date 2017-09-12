@@ -72,6 +72,13 @@ StringAfterPrefix(const wchar_t *haystack, WStringView needle) noexcept
 		: nullptr;
 }
 
+inline wchar_t *
+StringAfterPrefix(wchar_t *haystack, WStringView needle) noexcept
+{
+	return const_cast<wchar_t *>(StringAfterPrefix((const wchar_t *)haystack,
+						       needle));
+}
+
 gcc_pure
 static inline bool
 StringStartsWithIgnoreCase(const wchar_t *haystack,

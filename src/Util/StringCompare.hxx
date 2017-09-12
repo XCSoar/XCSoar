@@ -72,6 +72,13 @@ StringAfterPrefix(const char *haystack, StringView needle) noexcept
 		: nullptr;
 }
 
+inline char *
+StringAfterPrefix(char *haystack, StringView needle) noexcept
+{
+	return const_cast<char *>(StringAfterPrefix((const char *)haystack,
+						    needle));
+}
+
 gcc_pure
 static inline bool
 StringStartsWithIgnoreCase(const char *haystack, StringView needle) noexcept
