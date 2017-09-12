@@ -269,20 +269,6 @@ public:
 	}
 
 	/**
-	 * Don't use - not thread safe.
-	 */
-	pointer first_token(const_pointer delim) {
-		return StringToken(data(), delim);
-	}
-
-	/**
-	 * Don't use - not thread safe.
-	 */
-	pointer next_token(const_pointer delim) {
-		return StringToken(nullptr, delim);
-	}
-
-	/**
 	 * Use snprintf() to set the value of this string.  The value
 	 * is truncated if it is too long for the buffer.
 	 */
