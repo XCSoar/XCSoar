@@ -29,6 +29,7 @@ Copyright_License {
 #include "Util/RadixTree.hpp"
 #include "Util/StaticString.hxx"
 #include "Util/TrivialArray.hxx"
+#include "Util/StringView.hxx"
 
 #include <assert.h>
 #include <tchar.h>
@@ -100,24 +101,24 @@ struct InputConfig {
   void SetDefaults();
 
   gcc_pure
-  int LookupMode(const TCHAR *name) const {
+  int LookupMode(TStringView name) const noexcept {
     for (unsigned i = 0, size = modes.size(); i < size; ++i)
-      if (modes[i] == name)
+      if (name.Equals(modes[i].c_str()))
         return i;
 
     return -1;
   }
 
-  int AppendMode(const TCHAR *name) {
+  int AppendMode(TStringView name) {
     if (modes.full())
       return -1;
 
-    modes.append() = name;
+    modes.append().assign(name.data, name.size);
     return modes.size() - 1;
   }
 
   gcc_pure
-  int MakeMode(const TCHAR *name) {
+  int MakeMode(TStringView name) {
     int mode = LookupMode(name);
     if (mode < 0)
       mode = AppendMode(name);

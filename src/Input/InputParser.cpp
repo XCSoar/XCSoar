@@ -31,6 +31,7 @@ Copyright_License {
 #include "Util/StaticString.hxx"
 #include "Util/EscapeBackslash.hpp"
 #include "Util/NumberParser.hpp"
+#include "Util/IterableSplitString.hxx"
 #include "LogFile.hpp"
 
 #include <tchar.h>
@@ -73,16 +74,15 @@ struct EventBuilder {
     if (empty())
       return;
 
-    TCHAR *token;
-
-    // For each mode
-    token = mode.first_token(_T(" "));
-
     // General errors - these should be true
     assert(location < 1024);
 
     const TCHAR *new_label = NULL;
-    while (token != NULL) {
+
+    // For each mode
+    for (const auto token : TIterableSplitString(mode.c_str(), ' ')) {
+      if (token.IsEmpty())
+        continue;
 
       // All modes are valid at this point
       int mode_id = config.MakeMode(token);
@@ -155,8 +155,6 @@ struct EventBuilder {
       } else {
         LogFormat(_T("Invalid type: %s at %u"), type.c_str(), line);
       }
-
-      token = mode.next_token(_T(" "));
     }
   }
 };

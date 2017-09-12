@@ -219,7 +219,7 @@ InputEvents::UpdateOverlayMode()
                 flavour);
 
     /* see if it exists */
-    int new_mode = input_config.LookupMode(name);
+    int new_mode = input_config.LookupMode(name.c_str());
     if (new_mode >= 0)
       /* yep, it does */
       overlay_mode = (Mode)new_mode;
