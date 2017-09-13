@@ -113,9 +113,11 @@ public:
 
 #ifndef _WIN32
 	bool OpenNonBlocking(const char *pathname) noexcept;
+#endif
 
 	static bool CreatePipe(FileDescriptor &r, FileDescriptor &w) noexcept;
 
+#ifndef _WIN32
 	/**
 	 * Enable non-blocking mode on this file descriptor.
 	 */
