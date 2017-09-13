@@ -80,7 +80,7 @@ StringAfterPrefixCI(const wchar_t *string, const wchar_t *prefix) noexcept
 	assert(prefix != nullptr);
 
 	size_t prefix_length = StringLength(prefix);
-	return StringIsEqual(string, prefix, prefix_length)
+	return StringIsEqualIgnoreCase(string, prefix, prefix_length)
 		? string + prefix_length
 		: nullptr;
 }
