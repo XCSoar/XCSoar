@@ -35,6 +35,8 @@
 #include <system_error>
 #include <utility>
 
+#include <stdio.h>
+
 template<typename... Args>
 static inline std::system_error
 FormatSystemError(std::error_code code, const char *fmt, Args&&... args)
