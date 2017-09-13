@@ -35,7 +35,7 @@
 #include <assert.h>
 #include <string.h>
 
-#ifdef HAVE_POSIX
+#ifndef _WIN32
 #include <arpa/inet.h>
 #endif
 

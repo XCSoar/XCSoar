@@ -36,11 +36,11 @@
 
 #include <stdint.h>
 
-#ifdef HAVE_POSIX
-#include <netinet/in.h>
-#else
+#ifdef _WIN32
 #include <winsock2.h>
 #include <ws2tcpip.h>
+#else
+#include <netinet/in.h>
 #endif
 
 /**
