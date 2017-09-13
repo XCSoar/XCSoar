@@ -113,6 +113,7 @@ struct BasicStringView : ConstBuffer<T> {
 struct StringView : BasicStringView<char> {
 	using BasicStringView::BasicStringView;
 
+	StringView() = default;
 	constexpr StringView(BasicStringView<value_type> src) noexcept
 		:BasicStringView(src) {}
 };
@@ -122,6 +123,7 @@ struct StringView : BasicStringView<char> {
 struct WStringView : BasicStringView<wchar_t> {
 	using BasicStringView::BasicStringView;
 
+	WStringView() = default;
 	constexpr WStringView(BasicStringView<value_type> src) noexcept
 		:BasicStringView(src) {}
 };
@@ -129,6 +131,7 @@ struct WStringView : BasicStringView<wchar_t> {
 struct TStringView : WStringView {
 	using WStringView::WStringView;
 
+	TStringView() = default;
 	constexpr TStringView(WStringView src) noexcept
 		:WStringView(src) {}
 };
@@ -138,6 +141,7 @@ struct TStringView : WStringView {
 struct TStringView : StringView {
 	using StringView::StringView;
 
+	TStringView() = default;
 	constexpr TStringView(StringView src) noexcept
 		:StringView(src) {}
 };
