@@ -29,7 +29,7 @@ Copyright_License {
 #include "Util/RadixTree.hpp"
 #include "Util/StaticString.hxx"
 #include "Util/TrivialArray.hxx"
-#include "Util/StringView.hxx"
+#include "Util/TStringView.hxx"
 
 #include <assert.h>
 #include <tchar.h>
