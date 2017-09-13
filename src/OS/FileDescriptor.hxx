@@ -45,6 +45,10 @@
 #include <signal.h>
 #endif
 
+#ifdef _WIN32
+#include <wchar.h>
+#endif
+
 /**
  * An OO wrapper for a UNIX file descriptor.
  *
@@ -100,6 +104,11 @@ public:
 	}
 
 	bool Open(const char *pathname, int flags, mode_t mode=0666) noexcept;
+
+#ifdef _WIN32
+	bool Open(const wchar_t *pathname, int flags, mode_t mode=0666) noexcept;
+#endif
+
 	bool OpenReadOnly(const char *pathname) noexcept;
 
 #ifdef HAVE_POSIX
