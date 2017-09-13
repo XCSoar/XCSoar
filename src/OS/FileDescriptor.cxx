@@ -36,7 +36,7 @@
 #include <sys/syscall.h>
 #endif
 
-#ifdef HAVE_POSIX
+#ifndef _WIN32
 #include <poll.h>
 #endif
 
@@ -60,7 +60,7 @@
 #define O_CLOEXEC 0
 #endif
 
-#ifdef HAVE_POSIX
+#ifndef _WIN32
 bool
 FileDescriptor::IsValid() const noexcept
 {
@@ -92,7 +92,7 @@ FileDescriptor::OpenReadOnly(const char *pathname) noexcept
 	return Open(pathname, O_RDONLY);
 }
 
-#ifdef HAVE_POSIX
+#ifndef _WIN32
 
 bool
 FileDescriptor::OpenNonBlocking(const char *pathname) noexcept
@@ -252,7 +252,7 @@ FileDescriptor::GetSize() const noexcept
 		: -1;
 }
 
-#ifdef HAVE_POSIX
+#ifndef _WIN32
 
 int
 FileDescriptor::Poll(short events, int timeout) const noexcept

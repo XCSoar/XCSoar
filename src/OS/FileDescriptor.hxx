@@ -71,7 +71,7 @@ public:
 		return fd >= 0;
 	}
 
-#ifdef HAVE_POSIX
+#ifndef _WIN32
 	/**
 	 * Ask the kernel whether this is a valid file descriptor.
 	 */
@@ -111,7 +111,7 @@ public:
 
 	bool OpenReadOnly(const char *pathname) noexcept;
 
-#ifdef HAVE_POSIX
+#ifndef _WIN32
 	bool OpenNonBlocking(const char *pathname) noexcept;
 
 	static bool CreatePipe(FileDescriptor &r, FileDescriptor &w) noexcept;
@@ -207,7 +207,7 @@ public:
 		return ::write(fd, buffer, length);
 	}
 
-#ifdef HAVE_POSIX
+#ifndef _WIN32
 	int Poll(short events, int timeout) const noexcept;
 
 	int WaitReadable(int timeout) const noexcept;
