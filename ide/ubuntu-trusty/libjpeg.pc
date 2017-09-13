@@ -1,0 +1,10 @@
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${prefix}/lib/x86_64-linux-gnu
+includedir=${prefix}/include
+
+Name: libjpeg
+Description: JPEG image codec
+Version: 
+Libs: -L${libdir} -ljpeg
+Cflags: -I${includedir}

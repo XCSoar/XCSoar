@@ -1,0 +1,28 @@
+sudo: required
+
+language: cpp
+
+env:
+  matrix:
+    - TARGET=UNIX
+
+addons:
+  apt:
+    packages:
+      - libjpeg-dev
+      - librsvg2-bin
+      - mesa-common-dev
+      - xsltproc
+
+before_script:
+  # Fix libjpeg-dev package which is missing pkg-config file
+  - sudo cp ./ide/ubuntu-trusty/libjpeg.pc /usr/lib/x86_64-linux-gnu/pkgconfig/libjpeg.pc
+
+script:
+  # Compile
+  - make -j4 TARGET=$TARGET everything;
+
+  # Run unit tests on platforms where possible (Unix)
+  - if [ "$TARGET" = "UNIX" ]; then
+      make TARGET=$TARGET check;
+    fi
