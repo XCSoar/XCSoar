@@ -126,6 +126,10 @@ public:
 		return *value == SENTINEL;
 	}
 
+	constexpr pointer data() const {
+		return value;
+	}
+
 	reference operator[](size_type i) {
 		return value[i];
 	}
