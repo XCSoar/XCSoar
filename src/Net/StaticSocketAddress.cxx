@@ -41,7 +41,7 @@
 #endif
 
 StaticSocketAddress &
-StaticSocketAddress::operator=(SocketAddress other)
+StaticSocketAddress::operator=(SocketAddress other) noexcept
 {
 	size = std::min(other.GetSize(), GetCapacity());
 	memcpy(&address, other.GetAddress(), size);
@@ -51,7 +51,7 @@ StaticSocketAddress::operator=(SocketAddress other)
 #ifdef HAVE_TCP
 
 bool
-StaticSocketAddress::SetPort(unsigned port)
+StaticSocketAddress::SetPort(unsigned port) noexcept
 {
 	switch (GetFamily()) {
 	case AF_INET:
