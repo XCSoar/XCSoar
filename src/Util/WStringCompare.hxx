@@ -95,4 +95,12 @@ StringAfterPrefixCI(const wchar_t *string, WStringView needle) noexcept
 		: nullptr;
 }
 
+/**
+ * Check if the given string ends with the specified suffix.  If yes,
+ * returns the position of the suffix, and nullptr otherwise.
+ */
+gcc_pure
+const wchar_t *
+FindStringSuffix(const wchar_t *p, const wchar_t *suffix) noexcept;
+
 #endif

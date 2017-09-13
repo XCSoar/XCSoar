@@ -52,3 +52,18 @@ StringEndsWithIgnoreCase(const wchar_t *haystack,
 		StringIsEqualIgnoreCase(haystack + haystack_length - needle_length,
 					needle);
 }
+
+const wchar_t *
+FindStringSuffix(const wchar_t *p, const wchar_t *suffix) noexcept
+{
+	const size_t p_length = StringLength(p);
+	const size_t suffix_length = StringLength(suffix);
+
+	if (p_length < suffix_length)
+		return nullptr;
+
+	const auto *q = p + p_length - suffix_length;
+	return memcmp(q, suffix, suffix_length * sizeof(*suffix)) == 0
+		? q
+		: nullptr;
+}
