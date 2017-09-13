@@ -78,6 +78,9 @@ public:
 #endif
 
 	using FileDescriptor::IsDefined;
+#ifndef _WIN32
+	using FileDescriptor::IsValid;
+#endif
 	using FileDescriptor::Get;
 	using FileDescriptor::Set;
 	using FileDescriptor::Steal;
@@ -90,6 +93,9 @@ public:
 #ifndef _WIN32
 	using FileDescriptor::SetNonBlocking;
 	using FileDescriptor::SetBlocking;
+	using FileDescriptor::EnableCloseOnExec;
+	using FileDescriptor::DisableCloseOnExec;
+	using FileDescriptor::Duplicate;
 	using FileDescriptor::Close;
 #else
 	/**
