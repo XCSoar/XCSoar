@@ -132,6 +132,39 @@ FileDescriptor::CreatePipe(FileDescriptor &r, FileDescriptor &w) noexcept
 
 #ifndef _WIN32
 
+bool
+FileDescriptor::CreatePipeNonBlock(FileDescriptor &r,
+				   FileDescriptor &w) noexcept
+{
+	int fds[2];
+
+#ifdef __linux__
+	const int flags = O_CLOEXEC|O_NONBLOCK;
+#ifdef __BIONIC__
+	/* Bionic provides the pipe2() function only since Android 2.3,
+	   therefore we must roll our own system call here */
+	const int result = syscall(__NR_pipe2, fds, flags);
+#else
+	const int result = pipe2(fds, flags);
+#endif
+#else
+	const int result = pipe(fds);
+#endif
+
+	if (result < 0)
+		return false;
+
+	r = FileDescriptor(fds[0]);
+	w = FileDescriptor(fds[1]);
+
+#ifndef __linux__
+	r.SetNonBlocking();
+	w.SetNonBlocking();
+#endif
+
+	return true;
+}
+
 void
 FileDescriptor::SetNonBlocking() noexcept
 {
