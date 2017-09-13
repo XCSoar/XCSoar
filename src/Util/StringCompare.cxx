@@ -28,15 +28,6 @@
  */
 
 #include "StringCompare.hxx"
-#include "StringAPI.hxx"
-
-#include <string.h>
-
-bool
-StringStartsWith(const char *haystack, const char *needle) noexcept
-{
-	return StringIsEqual(haystack, needle, StringLength(needle));
-}
 
 bool
 StringEndsWith(const char *haystack, const char *needle) noexcept
@@ -57,29 +48,4 @@ StringEndsWithIgnoreCase(const char *haystack, const char *needle) noexcept
 	return haystack_length >= needle_length &&
 		StringIsEqualIgnoreCase(haystack + haystack_length - needle_length,
 					needle);
-}
-
-const char *
-StringAfterPrefix(const char *string, const char *prefix) noexcept
-{
-	size_t prefix_length = strlen(prefix);
-	return StringIsEqual(string, prefix, prefix_length)
-		? string + prefix_length
-		: nullptr;
-}
-
-const char *
-StringAfterPrefixCI(const char *string, const char *prefix) noexcept
-{
-	size_t prefix_length = StringLength(prefix);
-	return strncasecmp(string, prefix, prefix_length) == 0
-		? string + prefix_length
-		: nullptr;
-}
-
-bool
-StringStartsWithIgnoreCase(const char *haystack, const char *needle) noexcept
-{
-	return StringIsEqualIgnoreCase(haystack, needle,
-				       StringLength(needle) * sizeof(needle[0]));
 }

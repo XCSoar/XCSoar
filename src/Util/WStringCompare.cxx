@@ -28,16 +28,8 @@
  */
 
 #include "WStringCompare.hxx"
-#include "WStringAPI.hxx"
 
 #include <assert.h>
-#include <string.h>
-
-bool
-StringStartsWith(const wchar_t *haystack, const wchar_t *needle) noexcept
-{
-	return StringIsEqual(haystack, needle, StringLength(needle));
-}
 
 bool
 StringEndsWith(const wchar_t *haystack, const wchar_t *needle) noexcept
@@ -59,36 +51,4 @@ StringEndsWithIgnoreCase(const wchar_t *haystack,
 	return haystack_length >= needle_length &&
 		StringIsEqualIgnoreCase(haystack + haystack_length - needle_length,
 					needle);
-}
-
-const wchar_t *
-StringAfterPrefix(const wchar_t *string, const wchar_t *prefix) noexcept
-{
-	assert(string != nullptr);
-	assert(prefix != nullptr);
-
-	size_t prefix_length = StringLength(prefix);
-	return StringIsEqual(string, prefix, prefix_length)
-		? string + prefix_length
-		: nullptr;
-}
-
-const wchar_t *
-StringAfterPrefixCI(const wchar_t *string, const wchar_t *prefix) noexcept
-{
-	assert(string != nullptr);
-	assert(prefix != nullptr);
-
-	size_t prefix_length = StringLength(prefix);
-	return StringIsEqualIgnoreCase(string, prefix, prefix_length)
-		? string + prefix_length
-		: nullptr;
-}
-
-bool
-StringStartsWithIgnoreCase(const wchar_t *haystack,
-			   const wchar_t *needle) noexcept
-{
-	return StringIsEqualIgnoreCase(haystack, needle,
-				       StringLength(needle));
 }

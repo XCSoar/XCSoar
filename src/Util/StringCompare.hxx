@@ -30,6 +30,8 @@
 #ifndef STRING_COMPARE_HXX
 #define STRING_COMPARE_HXX
 
+#include "StringView.hxx"
+#include "StringAPI.hxx"
 #include "Compiler.h"
 
 #ifdef _UNICODE
@@ -42,9 +44,12 @@ StringIsEmpty(const char *string) noexcept
 	return *string == 0;
 }
 
-gcc_pure
-bool
-StringStartsWith(const char *haystack, const char *needle) noexcept;
+gcc_pure gcc_nonnull_all
+static inline bool
+StringStartsWith(const char *haystack, StringView needle) noexcept
+{
+	return StringIsEqual(haystack, needle.data, needle.size);
+}
 
 bool
 StringEndsWith(const char *haystack, const char *needle) noexcept;
@@ -58,9 +63,21 @@ StringEndsWithIgnoreCase(const char *haystack, const char *needle) noexcept;
  * does not begin with the specified prefix, this function returns
  * nullptr.
  */
-gcc_nonnull_all
-const char *
-StringAfterPrefix(const char *string, const char *prefix) noexcept;
+gcc_pure gcc_nonnull_all
+static inline const char *
+StringAfterPrefix(const char *haystack, StringView needle) noexcept
+{
+	return StringStartsWith(haystack, needle)
+		? haystack + needle.size
+		: nullptr;
+}
+
+gcc_pure
+static inline bool
+StringStartsWithIgnoreCase(const char *haystack, StringView needle) noexcept
+{
+	return StringIsEqualIgnoreCase(haystack, needle.data, needle.size);
+}
 
 /**
  * Returns the portion of the string after a prefix.  If the string
@@ -69,11 +86,12 @@ StringAfterPrefix(const char *string, const char *prefix) noexcept;
  * This function is case-independent.
  */
 gcc_nonnull_all
-const char *
-StringAfterPrefixCI(const char *string, const char *prefix) noexcept;
-
-gcc_pure
-bool
-StringStartsWithIgnoreCase(const char *haystack, const char *needle) noexcept;
+static inline const char *
+StringAfterPrefixCI(const char *string, StringView needle) noexcept
+{
+	return StringIsEqualIgnoreCase(string, needle.data, needle.size)
+		? string + needle.size
+		: nullptr;
+}
 
 #endif
