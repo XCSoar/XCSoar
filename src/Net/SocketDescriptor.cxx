@@ -54,12 +54,12 @@ SocketDescriptor
 SocketDescriptor::Accept()
 {
 #if defined(__linux__) && !defined(__BIONIC__) && !defined(KOBO)
-	int fd = ::accept4(Get(), nullptr, nullptr, SOCK_CLOEXEC);
+	int connection_fd = ::accept4(Get(), nullptr, nullptr, SOCK_CLOEXEC);
 #else
-	int fd = ::accept(Get(), nullptr, nullptr);
+	int connection_fd = ::accept(Get(), nullptr, nullptr);
 #endif
-	return fd >= 0
-		? SocketDescriptor(fd)
+	return connection_fd >= 0
+		? SocketDescriptor(connection_fd)
 		: Undefined();
 }
 
@@ -88,11 +88,11 @@ SocketDescriptor::Create(int domain, int type, int protocol)
 	type |= SOCK_CLOEXEC;
 #endif
 
-	int fd = socket(domain, type, protocol);
-	if (fd < 0)
+	int new_fd = socket(domain, type, protocol);
+	if (new_fd < 0)
 		return false;
 
-	Set(fd);
+	Set(new_fd);
 	return true;
 }
 
