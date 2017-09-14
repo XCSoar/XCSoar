@@ -54,6 +54,9 @@ Version 7.0 - not yet released
 * Kobo
   - support Kobo Glo HD
 
+Version 6.8.9 - not yet released
+* fix two crash bugs
+
 Version 6.8.8 - 2017/09/09
 * data files
   - support "GSEC" in OpenAir files

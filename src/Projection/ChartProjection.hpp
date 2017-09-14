@@ -43,24 +43,20 @@ public:
     Set(rc, task_projection, radius_factor);
   }
 
-  ChartProjection(const PixelRect &rc, const OrderedTask &task,
-                  const GeoPoint &fallback_loc) {
-    Set(rc, task, fallback_loc);
+  ChartProjection(const PixelRect &rc, const OrderedTask &task) {
+    Set(rc, task);
   }
 
-  ChartProjection(const PixelRect &rc, const OrderedTaskPoint &point,
-                  const GeoPoint &fallback_loc) {
-    Set(rc, point, fallback_loc);
+  ChartProjection(const PixelRect &rc, const OrderedTaskPoint &point) {
+    Set(rc, point);
   }
 
   void Set(const PixelRect &rc, const TaskProjection &task_projection,
            double radius_factor=1.1);
 
-  void Set(const PixelRect &rc, const OrderedTask &task,
-           const GeoPoint &fallback_loc);
+  void Set(const PixelRect &rc, const OrderedTask &task);
 
-  void Set(const PixelRect &rc, const OrderedTaskPoint &point,
-           const GeoPoint &fallback_loc);
+  void Set(const PixelRect &rc, const OrderedTaskPoint &point);
 
 private:
   void Set(const PixelRect &rc, const GeoPoint &center, double radius);

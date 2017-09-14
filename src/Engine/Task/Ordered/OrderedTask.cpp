@@ -1228,22 +1228,6 @@ OrderedTask::HasTargets() const
   return false;
 }
 
-GeoPoint
-OrderedTask::GetTaskCenter() const
-{
-  return task_points.empty()
-    ? GeoPoint::Invalid()
-    : task_projection.GetCenter();
-}
-
-double
-OrderedTask::GetTaskRadius() const
-{
-  return task_points.empty()
-    ? 0
-    : task_projection.ApproxRadius();
-}
-
 OrderedTask*
 OrderedTask::Clone(const TaskBehaviour &tb) const
 {
@@ -1474,9 +1458,7 @@ OrderedTask::Clear()
 void
 OrderedTask::RotateOptionalStarts()
 {
-  if (!TaskSize())
-    return;
-  if (!optional_start_points.size())
+  if (IsEmpty() || optional_start_points.empty())
     return;
 
   SelectOptionalStart(0);
