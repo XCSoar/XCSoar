@@ -643,7 +643,10 @@ public:
    * @return Location of center of task or GeoPoint::Invalid()
    */
   gcc_pure
-  GeoPoint GetTaskCenter() const;
+  GeoPoint GetTaskCenter() const noexcept {
+    assert(!IsEmpty());
+    return task_projection.GetCenter();
+  }
 
   /**
    * Find approximate radius of task from center to edge (for rendering purposes)
@@ -651,7 +654,10 @@ public:
    * @return Radius (m) from center to edge of task
    */
   gcc_pure
-  fixed GetTaskRadius() const;
+  fixed GetTaskRadius() const noexcept {
+    assert(!IsEmpty());
+    return task_projection.ApproxRadius();
+  }
 
   /**
    * returns the index of the highest intermediate TP that has been entered.

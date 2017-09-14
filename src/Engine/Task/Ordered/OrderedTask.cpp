@@ -1230,22 +1230,6 @@ OrderedTask::HasTargets() const
   return false;
 }
 
-GeoPoint
-OrderedTask::GetTaskCenter() const
-{
-  return task_points.empty()
-    ? GeoPoint::Invalid()
-    : task_projection.GetCenter();
-}
-
-fixed
-OrderedTask::GetTaskRadius() const
-{
-  return task_points.empty()
-    ? fixed(0)
-    : task_projection.ApproxRadius();
-}
-
 OrderedTask*
 OrderedTask::Clone(const TaskBehaviour &tb) const
 {
