@@ -28,6 +28,8 @@ Copyright_License {
 #include "Util/StringAPI.hpp"
 #include "Util/Macros.hpp"
 
+#include <algorithm>
+
 class NOAALineSplitter
 {
   const TCHAR *start;
@@ -61,12 +63,12 @@ public:
 };
 
 static bool
-CheckTitle(const TCHAR *title, unsigned title_length, const TCHAR *check)
+CheckTitle(const TCHAR *title, size_t title_length, const TCHAR *check)
 {
   if (_tcslen(check) != title_length)
     return false;
 
-  return memcmp(title, check, title_length) == 0;
+  return std::equal(title, title + title_length, check);
 }
 
 static bool
