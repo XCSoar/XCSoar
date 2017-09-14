@@ -1460,7 +1460,7 @@ OrderedTask::Clear()
 FlatBoundingBox
 OrderedTask::GetBoundingBox(const GeoBounds &bounds) const
 {
-  if (!TaskSize()) {
+  if (IsEmpty()) {
     // undefined!
     return FlatBoundingBox(FlatGeoPoint(0,0),FlatGeoPoint(0,0));
   }
@@ -1482,9 +1482,7 @@ OrderedTask::GetBoundingBox(const GeoBounds &bounds) const
 void
 OrderedTask::RotateOptionalStarts()
 {
-  if (!TaskSize())
-    return;
-  if (!optional_start_points.size())
+  if (IsEmpty() || optional_start_points.empty())
     return;
 
   SelectOptionalStart(0);
