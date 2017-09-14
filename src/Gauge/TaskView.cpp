@@ -111,6 +111,8 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
           bool fai_sectors,
           int highlight_index)
 {
+  assert(!task.IsEmpty());
+
   BackgroundRenderer background;
   background.SetTerrain(terrain);
   background.Draw(canvas, projection, settings_map.terrain);
@@ -199,6 +201,11 @@ PaintTask(Canvas &canvas, const PixelRect &rc, const OrderedTask &task,
           bool fai_sectors,
           int highlight_index)
 {
+  if (task.IsEmpty()) {
+    canvas.ClearWhite();
+    return;
+  }
+
   /* TODO: check location_available in ChartProjection */
   ChartProjection projection(rc, task, location);
   PaintTask(canvas, projection, task, location,
