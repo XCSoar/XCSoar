@@ -81,7 +81,7 @@ SystemStatusPanel::Refresh()
     ClearText(NumSat);
   else if (gps.satellites_used_available) {
     // known number of sats
-    Temp.Format(_T("%d"), gps.satellites_used);
+    Temp.Format(_T("%u"), gps.satellites_used);
     SetText(NumSat, Temp);
   } else
     // valid but unknown number of sats
@@ -111,7 +111,7 @@ SystemStatusPanel::Refresh()
   Temp.clear();
 #ifdef HAVE_BATTERY
   if (Power::Battery::RemainingPercentValid) {
-    Temp.Format(_T("%d %% "), Power::Battery::RemainingPercent);
+    Temp.Format(_T("%u %% "), Power::Battery::RemainingPercent);
   }
 #endif
   if (basic.voltage_available)
