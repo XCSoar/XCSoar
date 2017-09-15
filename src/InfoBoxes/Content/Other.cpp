@@ -53,7 +53,7 @@ UpdateInfoBoxBattery(InfoBoxData &data)
   switch (Power::External::Status) {
     case Power::External::OFF:
       if (CommonInterface::Basic().battery_level_available)
-        data.UnsafeFormatComment(_T("%s; %d%%"),
+        data.UnsafeFormatComment(_T("%s; %u%%"),
                                  _("AC Off"),
                                  (int)CommonInterface::Basic().battery_level);
       else
@@ -167,3 +167,38 @@ InfoBoxContentHorizon::Update(InfoBoxData &data)
 
   data.SetCustom();
 }
+
+
+gcc_pure
+static const TCHAR *
+GetGPSStatus(const NMEAInfo &basic)
+{
+  if (!basic.alive)
+    return N_("Disconnected");
+  else if (!basic.location_available)
+    return N_("Fix invalid");
+  else if (!basic.gps_altitude_available)
+    return N_("2D fix");
+  else
+    return N_("3D fix");
+}
+
+void
+UpdateInfoBoxNbrSat(InfoBoxData &data) {
+    const NMEAInfo &basic = CommonInterface::Basic();
+    const GPSState &gps = basic.gps;
+
+    data.SetComment(gettext(GetGPSStatus(basic)));
+    
+    if (!basic.alive)
+        data.SetComment(_("No GPS"));
+    else if (gps.satellites_used_available) {
+        // known number of sats
+        data.FormatValue(_T("%u"), gps.satellites_used);
+    } else {
+        // valid but unknown number of sats
+        data.SetValue(_("Unknown"));
+    }
+}
+
+
