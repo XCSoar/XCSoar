@@ -167,3 +167,44 @@ InfoBoxContentHorizon::Update(InfoBoxData &data)
 
   data.SetCustom();
 }
+
+
+gcc_pure
+static const TCHAR *
+GetGPSStatus(const NMEAInfo &basic)
+{
+  if (!basic.alive)
+    return N_("Disconnected");
+  else if (!basic.location_available)
+    return N_("Fix invalid");
+  else if (!basic.gps_altitude_available)
+    return N_("2D fix");
+  else
+    return N_("3D fix");
+}
+
+void
+UpdateInfoBoxNbrSat(InfoBoxData &data) {
+    const NMEAInfo &basic = CommonInterface::Basic();
+    const GPSState &gps = basic.gps;
+
+    StaticString<80> Temp;
+    StaticString<20> GpsStatus;
+
+    GpsStatus = gettext(GetGPSStatus(basic));
+    data.SetComment(_(GpsStatus));
+    
+    if (!basic.alive)
+        data.SetComment(_("No GPS"));
+        //    ClearText(NumSat);
+    else if (gps.satellites_used_available) {
+        // known number of sats
+        Temp.Format(_T("%d"), gps.satellites_used);
+        data.SetValue(Temp);
+    } else {
+        // valid but unknown number of sats
+        data.SetValue(_("Unknown"));
+    }
+}
+
+
