@@ -188,19 +188,13 @@ UpdateInfoBoxNbrSat(InfoBoxData &data) {
     const NMEAInfo &basic = CommonInterface::Basic();
     const GPSState &gps = basic.gps;
 
-    StaticString<80> Temp;
-    StaticString<20> GpsStatus;
-
-    GpsStatus = gettext(GetGPSStatus(basic));
-    data.SetComment(_(GpsStatus));
+    data.SetComment(_(GetGPSStatus(basic)));
     
     if (!basic.alive)
         data.SetComment(_("No GPS"));
-        //    ClearText(NumSat);
     else if (gps.satellites_used_available) {
         // known number of sats
-        Temp.Format(_T("%d"), gps.satellites_used);
-        data.SetValue(Temp);
+        data.FormatValue(_T("%d"), gps.satellites_used);
     } else {
         // valid but unknown number of sats
         data.SetValue(_("Unknown"));
