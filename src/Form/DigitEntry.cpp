@@ -661,7 +661,7 @@ DigitEntry::GetGeoAngle(CoordinateFormat format) const
   assert(columns[1].type == Column::Type::DIGIT ||
          columns[1].type == Column::Type::DIGIT19);
   assert(columns[2].type == Column::Type::DIGIT);
-  auto degrees = columns[1].value * 10 + columns[2].value;
+  double degrees = columns[1].value * 10 + columns[2].value;
 
   // Read columns according to specified format
   /// \todo support UTM format
