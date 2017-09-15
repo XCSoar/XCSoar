@@ -1964,6 +1964,10 @@ int msTiledSHPOpenFile(layerObj *layer)
 
   msTiledSHPLayerInfo *tSHP=NULL;
 
+  if (layer->layerinfo != NULL) {
+    return MS_SUCCESS;  // Nothing to do... layer is already opened
+  }
+
   if ( msCheckParentPointer(layer->map,"map")==MS_FAILURE )
     return MS_FAILURE;
 
@@ -2236,6 +2240,7 @@ int msTiledSHPNextShape(layerObj *layer, shapeObj *shape)
             continue;
           } else if(status != MS_SUCCESS) {
             msShapefileClose(tSHP->shpfile);
+            tSHP->tileshpfile->lastshape = -1;
             return(MS_FAILURE);
           }
 
@@ -2244,7 +2249,10 @@ int msTiledSHPNextShape(layerObj *layer, shapeObj *shape)
           break;
         }
 
-        if(status == MS_DONE) return(MS_DONE); /* no more tiles */
+        if(status == MS_DONE) {
+            tSHP->tileshpfile->lastshape = -1;
+            return(MS_DONE); /* no more tiles */
+        }
         else {
           msFreeShape(&tshape);
           continue; /* we've got shapes */
@@ -2278,6 +2286,7 @@ int msTiledSHPNextShape(layerObj *layer, shapeObj *shape)
               continue;
             } else if(status != MS_SUCCESS) {
               msShapefileClose(tSHP->shpfile);
+              tSHP->tileshpfile->lastshape = -1;
               return(MS_FAILURE);
             }
 
@@ -2286,7 +2295,10 @@ int msTiledSHPNextShape(layerObj *layer, shapeObj *shape)
           }
         } /* end for loop */
 
-        if(i == tSHP->tileshpfile->numshapes) return(MS_DONE); /* no more tiles */
+        if(i == tSHP->tileshpfile->numshapes) {
+            tSHP->tileshpfile->lastshape = -1;
+            return(MS_DONE); /* no more tiles */
+        }
         else continue; /* we've got shapes */
       }
     }
@@ -2334,6 +2346,8 @@ int msTiledSHPGetShape(layerObj *layer, shapeObj *shape, resultObj *record)
     return(MS_FAILURE);
   }
 
+  msTileIndexAbsoluteDir(tiFileAbsDir, layer);
+
   if((tileindex < 0) || (tileindex >= tSHP->tileshpfile->numshapes)) return(MS_FAILURE); /* invalid tile id */
 
   if(tileindex != tSHP->tileshpfile->lastshape) { /* correct tile is not currenly open so open the correct tile */
@@ -2362,6 +2376,7 @@ int msTiledSHPGetShape(layerObj *layer, shapeObj *shape, resultObj *record)
 
   msSHPReadShape(tSHP->shpfile->hSHP, shapeindex, shape);
   tSHP->shpfile->lastshape = shapeindex;
+  tSHP->tileshpfile->lastshape = tileindex;
 
   if(layer->numitems > 0 && layer->iteminfo) {
     shape->numvalues = layer->numitems;
@@ -2654,8 +2669,8 @@ int msSHPLayerOpen(layerObj *layer)
             }
             OSRDestroySpatialReference(hSRS);
         }
+      fclose(fp);
     }
-    fclose(fp);
 
     if( bOK != MS_TRUE )
     {

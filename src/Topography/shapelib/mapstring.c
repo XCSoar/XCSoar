@@ -737,8 +737,9 @@ char *msBuildPath(char *pszReturnPath, const char *abs_path, const char *path)
     abslen = strlen(abs_path);
 
   if((pathlen + abslen + 2) > MS_MAXPATHLEN) {
-    msSetError(MS_IOERR, "(%s%s): path is too long", "msBuildPath()",
-               abs_path, path);
+    msSetError(MS_IOERR, "Path is too long.  Check server logs.",
+               "msBuildPath()");
+    msDebug("msBuildPath(): (%s%s): path is too long.\n", abs_path, path);
     return NULL;
   }
 
@@ -910,7 +911,7 @@ char ** msStringSplitComplex( const char * pszString,
   int         bStripLeadSpaces = (nFlags & MS_STRIPLEADSPACES);
   int         bStripEndSpaces = (nFlags & MS_STRIPENDSPACES);
 
-  pszToken = (char *) msSmallMalloc(sizeof(char)*10);
+  pszToken = (char *) msSmallMalloc(sizeof(char)*10);;
   nTokenMax = 10;
 
   while( pszString != NULL && *pszString != '\0' ) {

@@ -275,7 +275,7 @@ extern "C" {
 #define MS_URL_LENGTH 1024
 #define MS_MAXPATHLEN 1024
 
-#define MS_MAXIMAGESIZE_DEFAULT 2048
+#define MS_MAXIMAGESIZE_DEFAULT 4096
 
 #define MS_MAXPROJARGS 20
 #define MS_MAXJOINS 20
@@ -490,7 +490,9 @@ extern "C" {
 #define MS_IS_VALID_ARRAY_INDEX(index, size) ((index<0 || index>=size)?MS_FALSE:MS_TRUE)
 
 #define MS_CONVERT_UNIT(src_unit, dst_unit, value) (value * msInchesPerUnit(src_unit,0) / msInchesPerUnit(dst_unit,0))
-  
+
+#define MS_INIT_INVALID_RECT { -1e300, -1e300, 1e300, 1e300 }
+
 #endif
 
   /* General enumerated types - needed by scripts */
@@ -2336,7 +2338,7 @@ void msPopulateTextSymbolForLabelAndString(textSymbolObj *ts, labelObj *l, char 
   MS_DLL_EXPORT int WARN_UNUSED msGetStringSize(mapObj *map, labelObj *label, int size, char *string, rectObj *r);
 
   MS_DLL_EXPORT int WARN_UNUSED msAddLabel(mapObj *map, imageObj *image, labelObj *label, int layerindex, int classindex, shapeObj *shape, pointObj *point, double featuresize, textSymbolObj *ts);
-  MS_DLL_EXPORT int WARN_UNUSED msAddLabelGroup(mapObj *map, imageObj *image, int layerindex, int classindex, shapeObj *shape, pointObj *point, double featuresize);
+  MS_DLL_EXPORT int WARN_UNUSED msAddLabelGroup(mapObj *map, imageObj *image, layerObj *layer, int classindex, shapeObj *shape, pointObj *point, double featuresize);
   MS_DLL_EXPORT void insertRenderedLabelMember(mapObj *map, labelCacheMemberObj *cachePtr);
   MS_DLL_EXPORT int msTestLabelCacheCollisions(mapObj *map, labelCacheMemberObj *cachePtr, label_bounds *lb, int current_priority, int current_label);
   MS_DLL_EXPORT int msTestLabelCacheLeaderCollision(mapObj *map, pointObj *lp1, pointObj *lp2);
@@ -2453,6 +2455,7 @@ void msPopulateTextSymbolForLabelAndString(textSymbolObj *ts, labelObj *l, char 
   MS_DLL_EXPORT int msClusterLayerOpen(layerObj *layer); /* in mapcluster.c */
   MS_DLL_EXPORT int msLayerIsOpen(layerObj *layer);
   MS_DLL_EXPORT void msLayerClose(layerObj *layer);
+  MS_DLL_EXPORT void msLayerFreeExpressions(layerObj *layer);
   MS_DLL_EXPORT int msLayerWhichShapes(layerObj *layer, rectObj rect, int isQuery);
   MS_DLL_EXPORT int msLayerGetItemIndex(layerObj *layer, char *item);
   MS_DLL_EXPORT int msLayerWhichItems(layerObj *layer, int get_all, const char *metadata);
@@ -2629,6 +2632,7 @@ void msPopulateTextSymbolForLabelAndString(textSymbolObj *ts, labelObj *l, char 
   MS_DLL_EXPORT int msGetClass(layerObj *layer, colorObj *color, int colormap_index);
   MS_DLL_EXPORT int msGetClass_FloatRGB(layerObj *layer, float fValue,
                                         int red, int green, int blue );
+  int msGetClass_FloatRGB_WithFirstClassToTry(layerObj *layer, float fValue, int red, int green, int blue, int firstClassToTry );
 
   /* in mapdrawgdal.c */
   MS_DLL_EXPORT int msDrawRasterLayerGDAL(mapObj *map, layerObj *layer, imageObj *image, rasterBufferObj *rb, void *hDSVoid );
@@ -3182,6 +3186,8 @@ shapeObj *msOffsetCurve(shapeObj *p, double offset);
 #if defined USE_GEOS && (GEOS_VERSION_MAJOR > 3 || (GEOS_VERSION_MAJOR == 3 && GEOS_VERSION_MINOR >= 3))
 shapeObj *msGEOSOffsetCurve(shapeObj *p, double offset);
 #endif
+
+int msOGRIsSpatialite(layerObj* layer);
 
 #endif /* SWIG */
 

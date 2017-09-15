@@ -295,7 +295,17 @@ int *msGetInnerList(shapeObj *shape, int r, int *outerlist)
       continue;
     }
 
-    list[i] = msPointInPolygon(&(shape->line[i].point[0]), &(shape->line[r]));
+    /* A valid inner ring may touch its outer ring at most one point. */
+    /* In the case the first point matches a vertex of an outer ring, */
+    /* msPointInPolygon() might return 0 or 1 (depending on coordinate values, */
+    /* see msGetOuterList()), so test a second point if the first test */
+    /* returned that the point is not inside the outer ring. */
+    /* Fixes #5299 */
+    /* Of course all of this assumes that the geometries are indeed valid in */
+    /* OGC terms, otherwise all logic of msIsOuterRing(), msGetOuterList(), */
+    /* and msGetInnerList() has undefined behaviour. */
+    list[i] = msPointInPolygon(&(shape->line[i].point[0]), &(shape->line[r])) ||
+              msPointInPolygon(&(shape->line[i].point[1]), &(shape->line[r]));
   }
 
   return(list);
@@ -1050,7 +1060,7 @@ void msTransformShapeToPixelRound(shapeObj *shape, rectObj extent, double cellsi
   inv_cs = 1.0 / cellsize; /* invert and multiply much faster */
   if(shape->type == MS_SHAPE_LINE || shape->type == MS_SHAPE_POLYGON) { /* remove duplicate vertices */
     for(i=0; i<shape->numlines; i++) { /* for each part */
-      shape->line[i].point[0].x = MS_MAP2IMAGE_X_IC(shape->line[i].point[0].x, extent.minx, inv_cs);
+      shape->line[i].point[0].x = MS_MAP2IMAGE_X_IC(shape->line[i].point[0].x, extent.minx, inv_cs);;
       shape->line[i].point[0].y = MS_MAP2IMAGE_Y_IC(shape->line[i].point[0].y, extent.maxy, inv_cs);
       for(j=1, k=1; j < shape->line[i].numpoints; j++ ) {
         shape->line[i].point[k].x = MS_MAP2IMAGE_X_IC(shape->line[i].point[j].x, extent.minx, inv_cs);
