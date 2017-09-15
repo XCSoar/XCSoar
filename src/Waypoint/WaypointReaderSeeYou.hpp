@@ -33,14 +33,13 @@ Copyright_License {
  * @see http://data.naviter.si/docs/cup_format.pdf
  */
 class WaypointReaderSeeYou final : public WaypointReaderBase {
-  bool first;
+  bool first = true;
 
-  bool ignore_following;
+  bool ignore_following = false;
 
 public:
   explicit WaypointReaderSeeYou(WaypointFactory _factory)
-    :WaypointReaderBase(_factory),
-     first(true), ignore_following(false) {}
+    :WaypointReaderBase(_factory) {}
 
 protected:
   /* virtual methods from class WaypointReaderBase */

@@ -27,11 +27,11 @@ Copyright_License {
 #include "WaypointReaderBase.hpp"
 
 class WaypointReaderFS final : public WaypointReaderBase {
-  bool is_utm;
+  bool is_utm = false;
 
 public:
   explicit WaypointReaderFS(WaypointFactory _factory)
-    :WaypointReaderBase(_factory), is_utm(false) {}
+    :WaypointReaderBase(_factory) {}
 
   static bool VerifyFormat(TLineReader &reader);
 
