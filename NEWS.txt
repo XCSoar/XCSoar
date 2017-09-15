@@ -42,6 +42,7 @@ Version 7.0 - not yet released
   - new infobox: % climb chart showing proportions of time spent circling climb (gray), cruise,
       climbing cruise (green), circling non-climb (orange)
   - improved auto-scaling of vario-like graphical infoboxes
+  - new infobox: "Number Of Satellites"
 * Windows
   - drop support for Windows CE
   - require Windows Vista or later

@@ -162,6 +162,8 @@ namespace InfoBoxFactory
 
     e_Climb_Perc_Chart,
 
+    e_NbrSat, /* Number of used Sat by GPS module */
+
     e_NUM_TYPES /* Last item */
   };
 
