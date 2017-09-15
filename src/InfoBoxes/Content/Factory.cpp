@@ -1063,7 +1063,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Number of used satellites"),
     N_("Satellites"),
-    N_("The number of actually used (seen) satellites by GPS module"),
+    N_("The number of actually used (seen) satellites by GPS module. If this information is unavailable, the displayed value is '---'."),
     UpdateInfoBoxNbrSat,
   },
 

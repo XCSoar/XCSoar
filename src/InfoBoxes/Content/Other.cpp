@@ -198,6 +198,6 @@ UpdateInfoBoxNbrSat(InfoBoxData &data)
         data.FormatValue(_T("%u"), gps.satellites_used);
     } else {
         // valid but unknown number of sats
-        data.SetValue(_("Unknown"));
+        data.SetValueInvalid();
     }
 }
