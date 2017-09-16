@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2017-09-16 16:53+0000\n"
-"Last-Translator: anonymous <>\n"
+"PO-Revision-Date: 2017-09-17 23:05+0000\n"
+"Last-Translator: Carsten Sonyi <carsten.sonyi@yahoo.de>\n"
 "Language-Team: German "
 "<https://hosted.weblate.org/projects/xcsoar/translations/de/>\n"
 "Language: de\n"
@@ -597,7 +597,7 @@ msgstr "Der Logger ist leer."
 
 #: src/Logger/ExternalLogger.cpp:301
 msgid "Failed to download flight."
-msgstr "Flug herunterladen fehlgeschlagen"
+msgstr "Flug herunterladen fehlgeschlagen."
 
 #: src/Logger/ExternalLogger.cpp:324
 msgid "Do you want to download another flight?"
@@ -688,7 +688,7 @@ msgstr "Distanz"
 
 #: src/Gauge/BigTrafficWidget.cpp:425 src/Gauge/BigTrafficWidget.cpp:428
 msgid "Rel. Alt."
-msgstr "rel. Höhe"
+msgstr "rel. Höhe."
 
 #: src/Gauge/BigTrafficWidget.cpp:881 src/InfoBoxes/Content/Task.cpp:67
 #: src/Dialogs/MapItemListDialog.cpp:178
@@ -745,15 +745,11 @@ msgstr "Abflugpunkt"
 
 #: src/Menu/ExpandMacros.cpp:141
 msgid "Arm start"
-msgstr ""
-"Abflug\n"
-"Bereit!"
+msgstr "Bereit zum Abflug"
 
 #: src/Menu/ExpandMacros.cpp:144
 msgid "Arm turn"
-msgstr ""
-"Wende\n"
-"bereit!"
+msgstr "Bereit zum Wenden"
 
 #: src/Menu/ExpandMacros.cpp:165
 msgid "Disarm start"
@@ -796,8 +792,8 @@ msgid ""
 "Arm\n"
 "Start"
 msgstr ""
-"Abflug\n"
-"bereit!"
+"Bereit zum\n"
+"Abflug"
 
 #: src/Menu/ExpandMacros.cpp:190
 msgid ""
@@ -812,8 +808,8 @@ msgid ""
 "Arm\n"
 "Turn"
 msgstr ""
-"Wende\n"
-"bereit!"
+"Bereit zur\n"
+"Wende"
 
 #: src/Menu/ExpandMacros.cpp:202 src/Menu/ExpandMacros.cpp:206
 #: src/Dialogs/Device/PortMonitor.cpp:175
@@ -1197,7 +1193,7 @@ msgstr "Nächster Wegpunkt - Distanz"
 #: src/InfoBoxes/Content/Factory.cpp:226 src/InfoBoxes/Content/Task.cpp:182
 #, no-c-format
 msgid "WP Dist"
-msgstr "WP Dist"
+msgstr "WP Distanz"
 
 #: src/InfoBoxes/Content/Factory.cpp:227
 #, no-c-format
@@ -1566,7 +1562,7 @@ msgstr "Höhe - barometrisch"
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:84
 #, no-c-format
 msgid "Alt Baro"
-msgstr "Höhe Baro."
+msgstr "Höhe Baro"
 
 #: src/InfoBoxes/Content/Factory.cpp:408
 #, no-c-format
@@ -2010,7 +2006,7 @@ msgstr "Team - Peilung"
 #: src/InfoBoxes/Content/Factory.cpp:595
 #, no-c-format
 msgid "Team Brng"
-msgstr "Team Peil."
+msgstr "Team Peil"
 
 #: src/InfoBoxes/Content/Factory.cpp:596
 #, no-c-format
@@ -2042,7 +2038,7 @@ msgstr "Team - Distanz"
 #: src/InfoBoxes/Content/Factory.cpp:611
 #, no-c-format
 msgid "Team Dist"
-msgstr "Teamdist."
+msgstr "Teamdist"
 
 #: src/InfoBoxes/Content/Factory.cpp:612
 #, no-c-format
@@ -2076,7 +2072,7 @@ msgstr "Heimdistanz"
 #: src/InfoBoxes/Content/Factory.cpp:627
 #, no-c-format
 msgid "Home Dist"
-msgstr "Heimdist."
+msgstr "Heimdist"
 
 #: src/InfoBoxes/Content/Factory.cpp:628
 #, no-c-format
@@ -2383,7 +2379,7 @@ msgstr "Freier Speicher"
 #: src/InfoBoxes/Content/Factory.cpp:766
 #, no-c-format
 msgid "Free RAM as reported by OS."
-msgstr "Freier Speicher laut Betriebsystem"
+msgstr "Freier Speicher laut Betriebsystem."
 
 #: src/InfoBoxes/Content/Factory.cpp:772
 #, no-c-format
@@ -3020,18 +3016,18 @@ msgid "Percentage non-circling climb"
 msgstr "Steigfluganteil Geradeausflug"
 
 #: src/InfoBoxes/Content/Factory.cpp:1049
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "% Str Climb"
-msgstr "% Steigen"
+msgstr "% Steigen im Geradeausflug"
 
 #: src/InfoBoxes/Content/Factory.cpp:1050
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Percentage of time spent climbing without circling. These statistics are "
 "reset upon starting the task."
 msgstr ""
-"Prozentsatz der Zeit, die im Steigmodus verbracht wurde. Die Statistik wird "
-"beim Start der Aufgabe neu gestartet."
+"Prozentsatz der Zeit, die im Geradeausflug gestiegen wurde. Der Prozentsatz "
+"wird beim Start der Aufgabe zurückgesetzt."
 
 #: src/InfoBoxes/Content/Factory.cpp:1056
 #, fuzzy, no-c-format
@@ -3163,9 +3159,8 @@ msgid "3D fix"
 msgstr "3D Positionsbestimmung"
 
 #: src/InfoBoxes/Content/Other.cpp:195
-#, fuzzy
 msgid "No GPS"
-msgstr "H GPS"
+msgstr "Kein GPS"
 
 #: src/InfoBoxes/Content/Speed.cpp:120
 msgid "BLOCK"
@@ -5409,9 +5404,8 @@ msgid "Glide Polar"
 msgstr "Polare"
 
 #: src/Dialogs/dlgAnalysis.cpp:528
-#, fuzzy
 msgid "MacCready Speeds"
-msgstr "MacCready "
+msgstr "MacCready Geschwindigkeiten"
 
 #: src/Dialogs/dlgAnalysis.cpp:537
 msgid "Temperature Trace"
@@ -6580,9 +6574,8 @@ msgid "Text size"
 msgstr "Schriftgröße"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:93
-#, fuzzy
 msgid "Display Resolution"
-msgstr "Ausrichtung der Anzeige"
+msgstr "Bildschirmauflösung"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:94
 msgid ""
@@ -6731,9 +6724,9 @@ msgid "9 Left + Right + Vario (Landscape)"
 msgstr "9 Links + Rechts + Vario (Querformat)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:88
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "12 Left + 3 Right Vario (Landscape)"
-msgstr "9 Links + Rechts + Vario (Querformat)"
+msgstr "12 Links + 3 Rechts + Vario (Querformat)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:90
 #, no-c-format
@@ -7361,14 +7354,14 @@ msgid "Terrain line"
 msgstr "Gelände ein"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:163
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Draws a dashed line at the terrain glide reach."
-msgstr "Zeichnet eine gestrichelte Linie um den Gleitbereich."
+msgstr "Zeichnet eine gestrichelte Linie um den erreichbaren Gleitbereich."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:164
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terrain shade"
-msgstr "Geländefreiheit"
+msgstr "Geländeschattierung"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:165
 #, no-c-format
@@ -7381,9 +7374,11 @@ msgid "Working line"
 msgstr "Arbeitsbereich"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:167
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Draws a dashed line at the working glide reach."
-msgstr "Zeichnet eine gestrichelte Linie um den Gleitbereich."
+msgstr ""
+"Zeichnet eine gestrichelte Linie um den Gleitbereich, der oberhalb der "
+"Arbeitshöhe erreicht werden kann."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:168
 #, fuzzy, no-c-format
@@ -9243,14 +9238,12 @@ msgstr ""
 "Tonausblendung aktiviert ist."
 
 #: src/Dialogs/Settings/Panels/AudioConfigPanel.cpp:60
-#, fuzzy
 msgid "Master Volume"
-msgstr "Volumen"
+msgstr "Gesamtlautstärke"
 
 #: src/Dialogs/Weather/PCMetDialog.cpp:68
-#, fuzzy
 msgid "Failed to download file."
-msgstr "Konnte Datei nicht laden."
+msgstr "Fehler beim Herunterladen der Datei."
 
 #: src/Dialogs/Weather/NOAAList.cpp:121 src/Dialogs/Weather/NOAADetails.cpp:72
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:227
