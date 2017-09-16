@@ -8,15 +8,18 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2014-06-01 13:13+0000\n"
-"Last-Translator: Dorin Paslaru <dpaslaru@cloudbasesolutions.com>\n"
-"Language-Team: Romanian <ro@li.org>\n"
+"PO-Revision-Date: 2017-09-17 23:09+0000\n"
+"Last-Translator: Costel Alexandru Pavelescu <pavelescu.alexandru@gmail.com>\n"
+"Language-Team: Romanian "
+"<https://hosted.weblate.org/projects/xcsoar/translations/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
+"X-Generator: Weblate 2.17-dev\n"
 "X-Launchpad-Export-Date: 2014-06-09 12:20+0000\n"
-"X-Generator: Launchpad (build 17031)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -90,7 +93,7 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:54
 #, no-c-format
 msgid "FAI rules, path from a start to two turn points and return."
-msgstr ""
+msgstr "Reguli FAI, drumul de la start la două puncte și înapoi."
 
 #: src/Task/TypeStrings.cpp:55
 #, no-c-format
@@ -117,6 +120,8 @@ msgid ""
 "Task through assigned areas, minimum task time applies.  Restricted to "
 "cylinder and sector observation zones."
 msgstr ""
+"Area task cu un timp minim de zbor. Punctele pot fi definite ca cilindru sau "
+"sector de cilindru."
 
 #: src/Task/TypeStrings.cpp:61
 #, no-c-format
@@ -213,11 +218,12 @@ msgstr "Un cilindru. Orice punct din zonă, punctajul se calculează din centru.
 #, no-c-format
 msgid "A 1 mile cylinder.  Scored by farthest point reached in area."
 msgstr ""
+"Cilindru cu raza de 1 mila. Se ia calcul de la punctul cel mai indepartat."
 
 #: src/Task/TypeStrings.cpp:89
 #, no-c-format
 msgid "A cylinder.  Scored by farthest point reached in area."
-msgstr ""
+msgstr "Cilindru. Se ia calcul cel mai indepartat punct atins."
 
 #: src/Task/TypeStrings.cpp:90
 #, no-c-format
@@ -225,11 +231,13 @@ msgid ""
 "A sector that can vary in angle and radius.  Scored by farthest point "
 "reached inside area."
 msgstr ""
+"Sector cu raza si unghi variabil. Se ia calcul cel mai indepartat punct "
+"atins."
 
 #: src/Task/TypeStrings.cpp:92
 #, no-c-format
 msgid "A 90 degree sector with 1km radius.  Cross edge to finish."
-msgstr ""
+msgstr "Sector cu unghi de 90° si raza de 1km. Treci înăuntru pentru finish."
 
 #: src/Task/TypeStrings.cpp:93
 #, no-c-format
@@ -246,28 +254,32 @@ msgstr "Intră in cilindru pentru a termina."
 msgid ""
 "A 180 degree sector with 5km radius.  Exit area in any direction to start."
 msgstr ""
+"Sector cu unghi de 180° si raza se 5 km. Ieși din el in orice direcție "
+"pentru a incepe."
 
 #: src/Task/TypeStrings.cpp:96
 #, no-c-format
 msgid ""
 "A sector that can vary in angle, inner and outer radius.  Scored by farthest "
 "point reached inside area."
-msgstr ""
+msgstr "Sector variabil in unghi, raza interioara si raza exterioara."
 
 #: src/Task/TypeStrings.cpp:98
 #, no-c-format
 msgid "A symmetric quadrant with a custom radius."
-msgstr ""
+msgstr "Cvadrant simetric cu rază variabila."
 
 #: src/Task/TypeStrings.cpp:99
 #, no-c-format
 msgid "A keyhole.  Scored by farthest point reached in area."
 msgstr ""
+"Cilindru intr-un sector de cerc. Se ia in calcul cel mai indepartat punct "
+"atins."
 
 #: src/Task/TypeStrings.cpp:112
 #, no-c-format
 msgid "FAI start quadrant"
-msgstr ""
+msgstr "Cvadrant start FAI"
 
 #: src/Task/TypeStrings.cpp:113
 #, no-c-format
@@ -282,12 +294,12 @@ msgstr "Cilindru de start"
 #: src/Task/TypeStrings.cpp:115 src/Dialogs/Task/dlgTaskHelpers.cpp:181
 #, no-c-format
 msgid "FAI quadrant"
-msgstr ""
+msgstr "Cvadrant FAI"
 
 #: src/Task/TypeStrings.cpp:116
 #, no-c-format
 msgid "Keyhole sector (DAeC)"
-msgstr ""
+msgstr "Cilindru inscris in sector de cerc (DAeC)"
 
 #: src/Task/TypeStrings.cpp:117
 #, no-c-format
@@ -342,7 +354,7 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:127
 #, no-c-format
 msgid "Area sector with inner radius"
-msgstr ""
+msgstr "Sector de cerc cu raza interioara."
 
 #: src/Task/TypeStrings.cpp:128 src/Dialogs/Task/dlgTaskHelpers.cpp:230
 #, no-c-format
@@ -352,7 +364,7 @@ msgstr "Cvadrant simetric"
 #: src/Task/TypeStrings.cpp:129
 #, no-c-format
 msgid "Area keyhole"
-msgstr ""
+msgstr "Cerc inscris in sector de cerc."
 
 #: src/Task/ValidationErrorStrings.cpp:32
 #, no-c-format
@@ -469,7 +481,7 @@ msgstr "Necunoscut"
 #: src/FLARM/Error.cpp:48
 #, no-c-format
 msgid "Firmware timeout"
-msgstr ""
+msgstr "Firmware timeout"
 
 #: src/FLARM/Error.cpp:49
 #, no-c-format
@@ -524,7 +536,7 @@ msgstr "Receptor transponder"
 #: src/FLARM/Error.cpp:60
 #, no-c-format
 msgid "Other"
-msgstr ""
+msgstr "Altele"
 
 #: src/Logger/Logger.cpp:112 src/Dialogs/Device/ManageCAI302Dialog.cpp:69
 msgid "Start Logger"
@@ -594,9 +606,8 @@ msgid "Loading Waypoints..."
 msgstr "Încărcare balize..."
 
 #: src/CrossSection/CrossSectionRenderer.cpp:67
-#, fuzzy
 msgid "Not moving"
-msgstr "Nu spiralezi"
+msgstr "Nu se mișcă"
 
 #: src/Gauge/ThermalAssistantRenderer.cpp:193
 msgid "Not Circling"
@@ -835,7 +846,7 @@ msgstr "Pista sus"
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:48
 #, no-c-format
 msgid "North up"
-msgstr ""
+msgstr "Nordul sus"
 
 #: src/Menu/ExpandMacros.cpp:313 src/Dialogs/Settings/dlgBasicSettings.cpp:141
 #: src/Dialogs/ReplayDialog.cpp:56
@@ -927,7 +938,7 @@ msgstr "Tot/Toate"
 #: src/Menu/ExpandMacros.cpp:370 src/Input/InputEventsSettings.cpp:314
 #, no-c-format
 msgid "Task & Landables"
-msgstr ""
+msgstr "Proba si relief"
 
 #: src/Menu/ExpandMacros.cpp:372 src/Input/InputEventsSettings.cpp:316
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:201
@@ -946,7 +957,7 @@ msgstr "Nimic"
 #: src/Menu/ExpandMacros.cpp:373 src/Input/InputEventsSettings.cpp:317
 #, no-c-format
 msgid "Task & Airfields"
-msgstr ""
+msgstr "Proba si aerodroame"
 
 #: src/InfoBoxes/Content/Factory.cpp:135
 #, no-c-format
@@ -966,6 +977,9 @@ msgid ""
 "PC only: In simulation mode, this value is adjustable with the up/down arrow "
 "keys and the right/left arrow keys also cause the glider to turn."
 msgstr ""
+"Altitudinea deasupra nivelului marii data de GPS. Touchscreen/PC only: in "
+"mod simulare valoarea poate fi schimbata cu tastele sus/jos iar tastele "
+"stanga/dreapta fac planorul sa vireze."
 
 #: src/InfoBoxes/Content/Factory.cpp:143
 #, no-c-format
@@ -994,7 +1008,7 @@ msgstr "Câștig în termică, ultimele 30 s"
 #: src/InfoBoxes/Content/Factory.cpp:153
 #, no-c-format
 msgid "TC 30s"
-msgstr ""
+msgstr "TC 30s"
 
 #: src/InfoBoxes/Content/Factory.cpp:154
 #, no-c-format
@@ -1129,9 +1143,9 @@ msgid "Total altitude gain/loss in the last thermal."
 msgstr "Înălțime totală câștigată sau pierdută în ultima termică."
 
 #: src/InfoBoxes/Content/Factory.cpp:209
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Last thermal duration"
-msgstr "Câştig în ultima termică"
+msgstr "Durata in ultima termica"
 
 #: src/InfoBoxes/Content/Factory.cpp:210
 #, no-c-format
@@ -1217,12 +1231,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:252
 #, no-c-format
 msgid "Next waypoint"
-msgstr ""
+msgstr "Urmatorul sector"
 
 #: src/InfoBoxes/Content/Factory.cpp:253
 #, no-c-format
 msgid "Next WP"
-msgstr ""
+msgstr "Urmatorul punct"
 
 #: src/InfoBoxes/Content/Factory.cpp:254
 #, no-c-format
@@ -1299,7 +1313,7 @@ msgstr "Dist Fin"
 #: src/InfoBoxes/Content/Factory.cpp:286
 #, no-c-format
 msgid "Distance to finish around remaining turn points."
-msgstr ""
+msgstr "Distanta ramasa din proba."
 
 #: src/InfoBoxes/Content/Factory.cpp:300
 #, no-c-format
@@ -1309,14 +1323,14 @@ msgstr "Elevatie teren"
 #: src/InfoBoxes/Content/Factory.cpp:301
 #, no-c-format
 msgid "Terr Elev"
-msgstr ""
+msgstr "Elevatia terenului."
 
 #: src/InfoBoxes/Content/Factory.cpp:302
 #, no-c-format
 msgid ""
 "This is the elevation of the terrain above mean sea level, obtained from the "
 "terrain file at the current GPS location."
-msgstr ""
+msgstr "Elevatia punctului GPS actual din fisierul cu harta."
 
 #: src/InfoBoxes/Content/Factory.cpp:308
 #, no-c-format
@@ -1334,6 +1348,8 @@ msgid ""
 "Altitude gained/lost in the current thermal, divided by time spent "
 "thermalling."
 msgstr ""
+"Înălțimea câștigată/pierdută în termica  actuala, împărțită la timpul "
+"petrecut în termică."
 
 #: src/InfoBoxes/Content/Factory.cpp:316
 #, no-c-format
@@ -1394,7 +1410,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:349
 #, no-c-format
 msgid "Wind bearing"
-msgstr ""
+msgstr "Direcția vântului"
 
 #: src/InfoBoxes/Content/Factory.cpp:350
 #, no-c-format
@@ -1438,7 +1454,7 @@ msgstr "AAT maxD"
 #: src/InfoBoxes/Content/Factory.cpp:368
 #, no-c-format
 msgid "Assigned Area Task maximum distance possible for remainder of task."
-msgstr ""
+msgstr "Distanță maximă posibilă rămasă pentru AAT."
 
 #: src/InfoBoxes/Content/Factory.cpp:374
 #, no-c-format
@@ -1453,7 +1469,7 @@ msgstr "AAT Dmin"
 #: src/InfoBoxes/Content/Factory.cpp:376
 #, no-c-format
 msgid "Assigned Area Task minimum distance possible for remainder of task."
-msgstr ""
+msgstr "Distanță maximă posibilă rămasă pentru AAT."
 
 #: src/InfoBoxes/Content/Factory.cpp:382
 #, no-c-format
@@ -1515,7 +1531,7 @@ msgstr "Altitudine barometrica"
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:84
 #, no-c-format
 msgid "Alt Baro"
-msgstr ""
+msgstr "Altitudine barometrică"
 
 #: src/InfoBoxes/Content/Factory.cpp:408
 #, no-c-format
@@ -1566,12 +1582,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:431
 #, no-c-format
 msgid "Flight duration"
-msgstr ""
+msgstr "Durata zborului"
 
 #: src/InfoBoxes/Content/Factory.cpp:432
 #, no-c-format
 msgid "Flt Duration"
-msgstr ""
+msgstr "Durata zborului"
 
 #: src/InfoBoxes/Content/Factory.cpp:433
 #, no-c-format
@@ -1626,17 +1642,17 @@ msgstr "Timp aici"
 #: src/InfoBoxes/Content/Factory.cpp:458
 #, no-c-format
 msgid "GPS time expressed in local time zone."
-msgstr ""
+msgstr "Ora GPS exprimată în ora locală."
 
 #: src/InfoBoxes/Content/Factory.cpp:464 src/InfoBoxes/Content/Factory.cpp:465
 #, no-c-format
 msgid "Time UTC"
-msgstr ""
+msgstr "Ora UTC"
 
 #: src/InfoBoxes/Content/Factory.cpp:466
 #, no-c-format
 msgid "GPS time expressed in UTC."
-msgstr ""
+msgstr "Ora GPS exprimată in UTC."
 
 #: src/InfoBoxes/Content/Factory.cpp:472
 #, no-c-format
@@ -1646,7 +1662,7 @@ msgstr "Timp ramas pentru parcurgerea task-ului"
 #: src/InfoBoxes/Content/Factory.cpp:473
 #, no-c-format
 msgid "Fin ETE"
-msgstr ""
+msgstr "Ora estimată la finish."
 
 #: src/InfoBoxes/Content/Factory.cpp:474
 #, no-c-format
@@ -1780,9 +1796,9 @@ msgid "Outside air temperature"
 msgstr "Termperatura aerului de afara"
 
 #: src/InfoBoxes/Content/Factory.cpp:531
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "OAT"
-msgstr ""
+msgstr "OAT"
 
 #: src/InfoBoxes/Content/Factory.cpp:532
 #, no-c-format
@@ -1790,6 +1806,8 @@ msgid ""
 "Outside air temperature measured by a probe if supported by a connected "
 "intelligent variometer."
 msgstr ""
+"Temperatura exterioară măsurată cu un senzor al unui variometru independent, "
+"dacă acesta este conectat."
 
 #: src/InfoBoxes/Content/Factory.cpp:538
 #, no-c-format
