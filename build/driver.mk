@@ -82,6 +82,10 @@ BLUEFLY_SOURCES = \
 	$(DRIVER_SRC_DIR)/BlueFly/Settings.cpp \
 	$(DRIVER_SRC_DIR)/BlueFly/Register.cpp
 
+XCTRACER_SOURCES = \
+	$(DRIVER_SRC_DIR)/XCTracer/Parser.cpp \
+	$(DRIVER_SRC_DIR)/XCTracer/Register.cpp
+
 DRIVER_SOURCES = \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
@@ -93,6 +97,7 @@ DRIVER_SOURCES = \
 	$(FLYTEC_SOURCES) \
 	$(VEGA_SOURCES) \
 	$(BLUEFLY_SOURCES) \
+	$(XCTRACER_SOURCES) \
 	$(DRIVER_SRC_DIR)/AltairPro.cpp \
 	$(DRIVER_SRC_DIR)/BorgeltB50.cpp \
 	$(DRIVER_SRC_DIR)/CaiGpsNav.cpp \
