@@ -54,6 +54,7 @@ Copyright_License {
 #include "Device/Driver/OpenVario.hpp"
 #include "Device/Driver/Vaulter.hpp"
 #include "Device/Driver/ATR833.hpp"
+#include "Device/Driver/XCTracer.hpp"
 #include "Util/Macros.hpp"
 #include "Util/StringAPI.hpp"
 
@@ -96,6 +97,7 @@ static const struct DeviceRegister *const driver_list[] = {
   /* disabled due to http://bugs.xcsoar.org/ticket/3585 and
      http://bugs.xcsoar.org/ticket/3586 - scheduled for deletion */
   &atr833_driver,
+  &xctracer_driver,
   nullptr
 };
 
