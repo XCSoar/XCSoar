@@ -271,17 +271,31 @@ TestSeeYouWaypoint(const Waypoint org_wp, const Waypoint *wp)
 static void
 TestSeeYou(wp_vector org_wp)
 {
+  // Test a SeeYou waypoint file with no runway width field:
   Waypoints way_points;
   if (!TestWaypointFile(Path(_T("test/data/waypoints.cup")), way_points,
                         org_wp.size())) {
-    skip(9 * org_wp.size(), 0, "opening waypoint file failed");
+    skip(9 * org_wp.size(), 0, "opening waypoints.cup failed");
+  } else {
+    wp_vector::iterator it;
+    for (it = org_wp.begin(); it < org_wp.end(); it++) {
+      const auto wp = GetWaypoint(*it, way_points);
+      TestSeeYouWaypoint(*it, wp.get());
+    }
+  }
+
+  // Test a SeeYou waypoint file with a runway width field:
+  Waypoints way_points2;
+  if (!TestWaypointFile(Path(_T("test/data/waypoints2.cup")), way_points2,
+                        org_wp.size())) {
+    skip(9 * org_wp.size(), 0, "opening waypoints2.cup failed");
     return;
   }
 
-  wp_vector::iterator it;
-  for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    const auto wp = GetWaypoint(*it, way_points);
-    TestSeeYouWaypoint(*it, wp.get());
+  wp_vector::iterator it2;
+  for (it2 = org_wp.begin(); it2 < org_wp.end(); it2++) {
+    const auto wp2 = GetWaypoint(*it2, way_points2);
+    TestSeeYouWaypoint(*it2, wp2.get());
   }
 }
 
@@ -523,7 +537,7 @@ int main(int argc, char **argv)
 {
   wp_vector org_wp = CreateOriginalWaypoints();
 
-  plan_tests(307);
+  plan_tests(360);
 
   TestExtractParameters();
 
