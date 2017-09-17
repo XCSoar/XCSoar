@@ -1,0 +1,35 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: buildpack-deps:stretch
+
+    steps:
+      - type: shell
+        name: Install System Dependencies
+        command: |
+          apt-get update -qqy
+          apt-get install -qqy --no-install-recommends \
+            ffmpeg \
+            gettext \
+            libasound2-dev \
+            libgeotiff-dev \
+            libgl1-mesa-dev \
+            liblua5.2-dev \
+            librsvg2-bin \
+            quilt \
+            xsltproc
+
+      - type: checkout
+
+      - type: run
+        name: Update git submodules
+        command: git submodule update --init --recursive
+
+      - type: run
+        name: Build
+        command: make -j2 TARGET=UNIX everything
+
+      - type: run
+        name: Tests
+        command: make TARGET=UNIX check
