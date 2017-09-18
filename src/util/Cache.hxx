@@ -320,6 +320,17 @@ public:
 				unallocated_list.push_front(*item);
 			});
 	}
+
+	/**
+	 * Iterates over all items, passing each key/value pair to a
+	 * given function.  The cache must not be modified from within
+	 * that function.
+	 */
+	template<typename F>
+	void ForEach(F &&f) const {
+		for (const auto &i : chronological_list)
+			f(i.GetKey(), i.GetData());
+	}
 };
 
 #endif
