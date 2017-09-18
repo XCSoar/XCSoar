@@ -238,7 +238,7 @@ public:
 	 * item exists.
 	 */
 	template<typename K>
-	const Data *Get(K &&key) noexcept {
+	Data *Get(K &&key) noexcept {
 		auto i = map.find(std::forward<K>(key),
 				  map.hash_function(), map.key_eq());
 		if (i == map.end())
