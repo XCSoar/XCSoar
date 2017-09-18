@@ -84,11 +84,11 @@ class Cache {
 		Manual<Pair> pair;
 
 	public:
-		const Key &GetKey() const {
+		const Key &GetKey() const noexcept {
 			return pair->key;
 		}
 
-		const Data &GetData() const {
+		const Data &GetData() const noexcept {
 			return pair->data;
 		}
 
@@ -98,7 +98,7 @@ class Cache {
 				       std::forward<U>(value));
 		}
 
-		void Destruct() {
+		void Destruct() noexcept {
 			pair.Destruct();
 		}
 
@@ -118,19 +118,19 @@ class Cache {
 		using Hash::operator();
 
 		gcc_pure
-		std::size_t operator()(const Item &a) const {
+		std::size_t operator()(const Item &a) const noexcept {
 			return Hash::operator()(a.GetKey());
 		}
 	};
 
 	struct ItemEqual : Equal {
 		gcc_pure
-		bool operator()(const Item &a, const Item &b) const {
+		bool operator()(const Item &a, const Item &b) const noexcept {
 			return Equal::operator()(a.GetKey(), b.GetKey());
 		}
 
 		gcc_pure
-		bool operator()(const Key &a, const Item &b) const {
+		bool operator()(const Key &a, const Item &b) const noexcept {
 			return Equal::operator()(a, b.GetKey());
 		}
 	};
@@ -156,7 +156,8 @@ class Cache {
 
 	std::array<Item, max_size> buffer;
 
-	Item &GetOldest() {
+	gcc_pure
+	Item &GetOldest() noexcept {
 		assert(!chronological_list.empty());
 
 		return chronological_list.back();
@@ -166,7 +167,7 @@ class Cache {
 	 * Remove the oldest item from the cache (both from the #map and
 	 * from #chronological_list), but do not destruct it.
 	 */
-	Item &RemoveOldest() {
+	Item &RemoveOldest() noexcept {
 		Item &item = GetOldest();
 
 		map.erase(map.iterator_to(item));
@@ -178,7 +179,7 @@ class Cache {
 	/**
 	 * Allocate an item from #unallocated_list, but do not construct it.
 	 */
-	Item &Allocate() {
+	Item &Allocate() noexcept {
 		assert(!unallocated_list.empty());
 
 		Item &item = unallocated_list.front();
@@ -202,28 +203,28 @@ class Cache {
 	}
 
 public:
-	Cache()
+	Cache() noexcept
 		:map(typename KeyMap::bucket_traits(&buckets.front(), buckets.size())) {
 		for (auto &i : buffer)
 			unallocated_list.push_back(i);
 	}
 
-	~Cache() {
+	~Cache() noexcept {
 		Clear();
 	}
 
 	Cache(const Cache &) = delete;
 	Cache &operator=(const Cache &) = delete;
 
-	bool IsEmpty() const {
+	bool IsEmpty() const noexcept {
 		return chronological_list.empty();
 	}
 
-	bool IsFull() const {
+	bool IsFull() const noexcept {
 		return unallocated_list.empty();
 	}
 
-	void Clear() {
+	void Clear() noexcept {
 		map.clear();
 
 		chronological_list.clear_and_dispose([this](Item *item){
@@ -237,7 +238,7 @@ public:
 	 * item exists.
 	 */
 	template<typename K>
-	const Data *Get(K &&key) {
+	const Data *Get(K &&key) noexcept {
 		auto i = map.find(std::forward<K>(key),
 				  map.hash_function(), map.key_eq());
 		if (i == map.end())
@@ -291,7 +292,7 @@ public:
 	 * Remove an item from the cache.
 	 */
 	template<typename K>
-	void Remove(K &&key) {
+	void Remove(K &&key) noexcept {
 		auto i = map.find(std::forward<K>(key),
 				  map.hash_function(), map.key_eq());
 		assert(i != map.end());
@@ -310,7 +311,7 @@ public:
 	 * the given predicate.
 	 */
 	template<typename P>
-	void RemoveIf(P &&p) {
+	void RemoveIf(P &&p) noexcept {
 		chronological_list.remove_and_dispose_if([&p](const Item &item){
 				return p(item.GetKey(), item.GetData());
 			},
