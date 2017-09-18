@@ -92,6 +92,10 @@ class Cache {
 			return pair->data;
 		}
 
+		Data &GetData() noexcept {
+			return pair->data;
+		}
+
 		template<typename K, typename U>
 		void Construct(K &&_key, U &&value) {
 			pair.Construct(std::forward<K>(_key),
@@ -261,12 +265,13 @@ public:
 	 * room for this one.
 	 */
 	template<typename K, typename U>
-	void Put(K &&key, U &&data) {
+	Data &Put(K &&key, U &&data) {
 		Item &item = Make(std::forward<K>(key), std::forward<U>(data));
 		chronological_list.push_front(item);
 		auto i = map.insert(item);
 		(void)i;
 		assert(i.second && "Key must not exist already");
+		return item.GetData();
 	}
 
 	/**
@@ -274,7 +279,7 @@ public:
 	 * already, then the item is replaced.
 	 */
 	template<typename K, typename U>
-	void PutOrReplace(K &&key, U &&data) {
+	Data &PutOrReplace(K &&key, U &&data) {
 		typename KeyMap::insert_commit_data icd;
 		auto i = map.insert_check(key,
 					  map.hash_function(), map.key_eq(),
@@ -283,8 +288,10 @@ public:
 			Item &item = Make(std::forward<K>(key), std::forward<U>(data));
 			chronological_list.push_front(item);
 			map.insert_commit(item, icd);
+			return item.GetData();
 		} else {
 			i.first->ReplaceData(std::forward<U>(data));
+			return i.first->GetData();
 		}
 	}
 
