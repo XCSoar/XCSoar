@@ -31,6 +31,7 @@
 #define CACHE_HXX
 
 #include "Manual.hxx"
+#include "Cast.hxx"
 #include "Compiler.h"
 
 #include <boost/intrusive/list.hpp>
@@ -65,6 +66,10 @@ class Cache {
 			:key(std::forward<K>(_key)),
 			 data(std::forward<U>(_data)) {}
 
+		static constexpr Pair &Cast(Data &data) {
+			return ContainerCast(data, &Pair::data);
+		}
+
 		template<typename U>
 		void ReplaceData(U &&_data) {
 			data = std::forward<U>(_data);
@@ -84,6 +89,11 @@ class Cache {
 		Manual<Pair> pair;
 
 	public:
+		static constexpr Item &Cast(Data &data) {
+			return ContainerCast(Manual<Pair>::Cast(Pair::Cast(data)),
+					     &Item::pair);
+		}
+
 		const Key &GetKey() const noexcept {
 			return pair->key;
 		}
@@ -293,6 +303,20 @@ public:
 			i.first->ReplaceData(std::forward<U>(data));
 			return i.first->GetData();
 		}
+	}
+
+	/**
+	 * Remove an item from the cache using a reference to the
+	 * value.
+	 */
+	void RemoveItem(Data &data) noexcept {
+		auto &item = Item::Cast(data);
+
+		map.erase(map.iterator_to(item));
+		chronological_list.erase(chronological_list.iterator_to(item));
+
+		item.Destruct();
+		unallocated_list.push_front(item);
 	}
 
 	/**
