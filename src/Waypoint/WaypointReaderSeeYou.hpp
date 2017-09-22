@@ -37,6 +37,11 @@ class WaypointReaderSeeYou final : public WaypointReaderBase {
 
   bool ignore_following = false;
 
+private:
+  /* field positions for typical SeeYou *.cup waypoint file */
+  unsigned iFrequency = 9;
+  unsigned iDescription = 10;
+
 public:
   explicit WaypointReaderSeeYou(WaypointFactory _factory)
     :WaypointReaderBase(_factory) {}
