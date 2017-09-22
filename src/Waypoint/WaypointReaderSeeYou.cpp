@@ -169,7 +169,7 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
     iElevation = 5,
     iStyle = 6,
     iRWDir = 7,
-    iRWLen = 8
+    iRWLen = 8,
   };
 
   // If (end-of-file or comment)

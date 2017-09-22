@@ -37,6 +37,11 @@ class WaypointReaderSeeYou final : public WaypointReaderBase {
 
   bool ignore_following = false;
 
+private:
+  /* field positions for typical SeeYou *.cup waypoint file */
+  unsigned iFrequency = 9;
+  unsigned iDescription = 10;
+
 public:
   explicit WaypointReaderSeeYou(WaypointFactory _factory)
     :WaypointReaderBase(_factory) {}
@@ -44,11 +49,6 @@ public:
 protected:
   /* virtual methods from class WaypointReaderBase */
   bool ParseLine(const TCHAR* line, Waypoints &way_points) override;
-
-private:
-  /* field positions for typical SeeYou *.cup waypoint file */
-  unsigned short iFrequency = 9;
-  unsigned short iDescription = 10;
 };
 
 #endif
