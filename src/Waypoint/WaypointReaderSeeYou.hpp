@@ -44,6 +44,11 @@ public:
 protected:
   /* virtual methods from class WaypointReaderBase */
   bool ParseLine(const TCHAR* line, Waypoints &way_points) override;
+
+private:
+  /* field positions for typical SeeYou *.cup waypoint file */
+  unsigned short iFrequency = 9;
+  unsigned short iDescription = 10;
 };
 
 #endif
