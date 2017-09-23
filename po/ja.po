@@ -8,15 +8,17 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2016-10-10 20:10+0000\n"
+"PO-Revision-Date: 2017-09-24 22:46+0000\n"
 "Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
-"Language-Team: Japanese <ja@li.org>\n"
+"Language-Team: Japanese "
+"<https://hosted.weblate.org/projects/xcsoar/translations/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 2.17-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
-"X-Generator: Launchpad (build 18329)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -592,7 +594,7 @@ msgstr "航跡ダウンロード失敗"
 
 #: src/Logger/ExternalLogger.cpp:324
 msgid "Do you want to download another flight?"
-msgstr "他のフライトログをダウンロードしますか"
+msgstr "他のフライトログをダウンロードしますか？"
 
 #: src/Waypoint/WaypointGlue.cpp:91
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:37
@@ -2971,74 +2973,74 @@ msgstr ""
 "GOTPポイントあるいは　AATセクター内のターゲットから表示される"
 
 #: src/InfoBoxes/Content/Factory.cpp:1039
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next waypoint arrival time (ground speed)"
-msgstr "次のポイントまでの時間　（対地速度値）"
+msgstr "次のポイントまでの到着時間　（対地速度）"
 
 #: src/InfoBoxes/Content/Factory.cpp:1040
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "WP ETA VMG"
-msgstr "次WP時間　現在速度"
+msgstr "次WP到着時間　対地速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:1041
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Estimated arrival time at next waypoint, assuming current ground speed is "
 "maintained."
-msgstr "次のウエイポイントまでの時間　現在の対地速度を維持した場合の値"
+msgstr "次のウエイポイントまでの予想到着時間　現在の対地速度を維持した場合の値"
 
 #: src/InfoBoxes/Content/Factory.cpp:1048
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Percentage non-circling climb"
-msgstr "旋回時間　％"
+msgstr "非旋回上昇時間　％"
 
 #: src/InfoBoxes/Content/Factory.cpp:1049
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "% Str Climb"
-msgstr "旋回時間　％"
+msgstr "直線上昇　％"
 
 #: src/InfoBoxes/Content/Factory.cpp:1050
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Percentage of time spent climbing without circling. These statistics are "
 "reset upon starting the task."
 msgstr ""
-"旋回時間　％\r\n"
-"タスク開始飛行時間のうち上昇旋回に使用した時間（％）"
+"非旋回時間　％\n"
+"タスク飛行時間のうち非旋回で上昇に使用した時間（％）"
 
 #: src/InfoBoxes/Content/Factory.cpp:1056
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Percentage climb chart"
-msgstr "旋回時間　％"
+msgstr "上昇図　％"
 
 #: src/InfoBoxes/Content/Factory.cpp:1057
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Climb %"
-msgstr "上昇"
+msgstr "上昇　％"
 
 #: src/InfoBoxes/Content/Factory.cpp:1058
 #, no-c-format
 msgid ""
 "Pie chart of time circling and climbing, circling and descending, and "
 "climbing non-circling."
-msgstr ""
+msgstr "グラフ表示（時間）　旋回上昇、旋回、沈下、非旋回上昇"
 
 #: src/InfoBoxes/Content/Factory.cpp:1064
 #, no-c-format
 msgid "Number of used satellites"
-msgstr ""
+msgstr "受信衛星数"
 
 #: src/InfoBoxes/Content/Factory.cpp:1065
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Satellites"
-msgstr "捕捉衛星表示"
+msgstr "捕捉衛星"
 
 #: src/InfoBoxes/Content/Factory.cpp:1066
 #, no-c-format
 msgid ""
 "The number of actually used (seen) satellites by GPS module. If this "
 "information is unavailable, the displayed value is '---'."
-msgstr ""
+msgstr "GPSモジュールが使用している衛星数。　受信が０の場合’---’を表示"
 
 #: src/InfoBoxes/Content/Alternate.cpp:49
 #: src/Dialogs/Task/AlternatesListDialog.cpp:162 Data/Input/default.xci:388
@@ -3132,9 +3134,8 @@ msgid "3D fix"
 msgstr "３D　捕捉"
 
 #: src/InfoBoxes/Content/Other.cpp:195
-#, fuzzy
 msgid "No GPS"
-msgstr "GPS高度"
+msgstr "GPS無し"
 
 #: src/InfoBoxes/Content/Speed.cpp:120
 msgid "BLOCK"
@@ -3840,11 +3841,11 @@ msgstr "雲底高度"
 
 #: src/Renderer/MacCreadyRenderer.cpp:51 src/Renderer/TaskSpeedRenderer.cpp:49
 msgid "Vave"
-msgstr ""
+msgstr "ウエーブ"
 
 #: src/Renderer/TaskSpeedRenderer.cpp:52
 msgid "Vest"
-msgstr ""
+msgstr "最良"
 
 #: src/UIActions.cpp:52
 msgid "Quit program?"
@@ -4388,7 +4389,7 @@ msgstr "再起動"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:132
 msgid "Do you really want to delete all flights from the device?"
-msgstr "フライトログを全て消去しますか"
+msgstr "フライトログを全て消去しますか？"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:53
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:194
@@ -5144,9 +5145,9 @@ msgid "Tracking"
 msgstr "航跡"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:154
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Audio"
-msgstr "オーディオバリオ"
+msgstr "オーディオ"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:161
 #, no-c-format
@@ -5262,7 +5263,7 @@ msgstr "FLARM　情報"
 #. Ask for confirmation
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:312
 msgid "Do you want to set this FLARM contact as your new teammate?"
-msgstr "FLARMを新しいチームメートに通知しますか"
+msgstr "FLARMを新しいチームメートに通知しますか？"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:313
 msgid "New Teammate"
@@ -5325,9 +5326,8 @@ msgid "Thermal Band"
 msgstr "サーマル　バンド"
 
 #: src/Dialogs/dlgAnalysis.cpp:502
-#, fuzzy
 msgid "Vario Histogram"
-msgstr "高度トレース"
+msgstr "高度ヒストグラム"
 
 #: src/Dialogs/dlgAnalysis.cpp:510
 msgid "Wind at Altitude"
@@ -5342,9 +5342,8 @@ msgid "Glide Polar"
 msgstr "ポーラーカーブ"
 
 #: src/Dialogs/dlgAnalysis.cpp:528
-#, fuzzy
 msgid "MacCready Speeds"
-msgstr "マクレディ "
+msgstr "マクレディ 速度"
 
 #: src/Dialogs/dlgAnalysis.cpp:537
 msgid "Temperature Trace"
@@ -5439,7 +5438,7 @@ msgstr "機体登録情報　入力"
 #: src/Dialogs/Plane/PlaneListDialog.cpp:307
 #, c-format
 msgid "Plane \"%s\" already exists. Overwrite it?"
-msgstr "航空機 \"%s\" はすでに存在します"
+msgstr "航空機 \"%s\" はすでに存在します　上書きしますか？"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:263
 #: src/Dialogs/Plane/PlaneListDialog.cpp:310
@@ -6506,15 +6505,14 @@ msgid "Text size"
 msgstr "文字サイズ"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:93
-#, fuzzy
 msgid "Display Resolution"
-msgstr "向きを表示"
+msgstr "表示解像度"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:94
 msgid ""
 "The display resolution is used to adapt line widths, font size, landable "
 "size and more."
-msgstr ""
+msgstr "画面表示解像度は、線の幅、フォントサイズ、表示ラベルなど。"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:104
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:129
@@ -6524,7 +6522,7 @@ msgstr "自動"
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:107
 #, c-format
 msgid "%d dpi"
-msgstr ""
+msgstr "%d　ドット/インチ"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:115
 msgid "Events"
@@ -6655,9 +6653,9 @@ msgid "9 Left + Right + Vario (Landscape)"
 msgstr "9左　+右　+バリオ　（横型）"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:88
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "12 Left + 3 Right Vario (Landscape)"
-msgstr "9左　+右　+バリオ　（横型）"
+msgstr "12左　+3右　バリオ　（横型）"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:90
 #, no-c-format
@@ -7263,19 +7261,19 @@ msgid "Disables the reach display."
 msgstr "到達範囲　非表示"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:162
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terrain line"
-msgstr "地形図 オン"
+msgstr "地形図 境界線"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:163
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Draws a dashed line at the terrain glide reach."
-msgstr "到着ライン（破線）を表示する"
+msgstr "地形境界線（破線）を表示する"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:164
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terrain shade"
-msgstr "地点標高"
+msgstr "地形の影"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:165
 #, no-c-format
@@ -7283,34 +7281,34 @@ msgid "Shades terrain outside glide reach."
 msgstr "到達範囲外に影をつける"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:166
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Working line"
-msgstr "飛行バンド"
+msgstr "飛行範囲"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:167
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Draws a dashed line at the working glide reach."
-msgstr "到着ライン（破線）を表示する"
+msgstr "到達ラインを破線表示する"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:168
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Working line, terrain line"
-msgstr "直線　＆　地形飛行"
+msgstr "飛行バンド　地形境界線"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:169
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Draws a dashed line at the working and terrain glide reaches."
-msgstr "到着ライン（破線）を表示する"
+msgstr "到着ライン（破線と地形線）を表示する"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:170
 #, no-c-format
 msgid "Working line, terrain shade"
-msgstr ""
+msgstr "飛行バンド　と地形の影"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:171
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Draws a dashed line at working, and shade terrain, glide reaches."
-msgstr "到着ライン（破線）を表示する"
+msgstr "到着ライン（破線）、と地形の影、到達ラインを表示する"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:175
 msgid "Reach display"
@@ -8204,16 +8202,16 @@ msgstr "昇降速度の単位　（バリオメーター）"
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:180
 #, no-c-format
 msgid "feet"
-msgstr ""
+msgstr "フィート"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:181
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "meters"
 msgstr "メートル"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:184
 msgid "Units used for altitude and heights."
-msgstr "高度および高さの単位"
+msgstr "高度と高さの単位"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:194
 msgid "Units used for temperature."
@@ -8582,7 +8580,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/CloudConfigPanel.cpp:88
 msgid "Obtain and show thermal locations reported by others."
-msgstr ""
+msgstr "他機からのサーマルの位置情報を見る"
 
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:42
 msgid "Radius of the OZ cylinder."
@@ -8678,7 +8676,7 @@ msgstr "すべて消去"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:354
 msgid "Clear all points?"
-msgstr "すべてのポイントを削除"
+msgstr "すべてのポイントを削除？"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:354
 msgid "Task edit"
@@ -9095,12 +9093,10 @@ msgid ""
 msgstr "制限空域を設定している場合　その高度以上では　バリオ計器が警告音をだす"
 
 #: src/Dialogs/Settings/Panels/AudioConfigPanel.cpp:60
-#, fuzzy
 msgid "Master Volume"
-msgstr "音量"
+msgstr "主音量"
 
 #: src/Dialogs/Weather/PCMetDialog.cpp:68
-#, fuzzy
 msgid "Failed to download file."
 msgstr "ファイルの読み込み失敗"
 
@@ -9161,9 +9157,8 @@ msgid "Add this turn point?"
 msgstr "この旋回転を追加しますか？"
 
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:225
-#, fuzzy
 msgid "Use"
-msgstr "ユーザー　上"
+msgstr "使用"
 
 #: src/Renderer/NOAAListRenderer.cpp:45
 msgid "No METAR available"
@@ -9189,7 +9184,7 @@ msgstr "空模様"
 #: src/Weather/NOAAFormatter.cpp:247
 #, c-format
 msgid "METAR for %s:"
-msgstr "%sのMETAR"
+msgstr "%sのMETAR："
 
 #: src/Weather/NOAAFormatter.cpp:273
 msgid "No METAR available!"
@@ -9980,7 +9975,7 @@ msgstr "アクセラレータ"
 
 #: Data/Input/default.xci:646
 msgid "Lua"
-msgstr ""
+msgstr "ルア"
 
 #: Data/Input/default.xci:957
 msgid "AVG/ALT"
