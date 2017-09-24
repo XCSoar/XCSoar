@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2017-09-17 23:09+0000\n"
+"PO-Revision-Date: 2017-09-25 16:47+0000\n"
 "Last-Translator: Costel Alexandru Pavelescu <pavelescu.alexandru@gmail.com>\n"
 "Language-Team: Romanian "
 "<https://hosted.weblate.org/projects/xcsoar/translations/ro/>\n"
@@ -58,7 +58,7 @@ msgstr "Țintă FAI"
 #: src/Task/TypeStrings.cpp:35
 #, no-c-format
 msgid "Racing"
-msgstr "Cursă"
+msgstr "Cursă/viteză"
 
 #: src/Task/TypeStrings.cpp:36
 #, no-c-format
@@ -68,7 +68,7 @@ msgstr "AAT"
 #: src/Task/TypeStrings.cpp:37
 #, no-c-format
 msgid "Modified area task (MAT)"
-msgstr "Probă pe zonă modificată (MAT)"
+msgstr "Probă pe zonă(AAT) modificată (MAT)"
 
 #: src/Task/TypeStrings.cpp:38
 #, no-c-format
@@ -98,12 +98,12 @@ msgstr "Reguli FAI, drumul de la start la două puncte și înapoi."
 #: src/Task/TypeStrings.cpp:55
 #, no-c-format
 msgid "FAI rules, path from start to a single turn point and return."
-msgstr ""
+msgstr "Reguli FAI, drumul de la start la un punct și înapoi."
 
 #: src/Task/TypeStrings.cpp:56
 #, no-c-format
 msgid "FAI rules, path from start to a goal destination."
-msgstr ""
+msgstr "Reguli FAI, drumul de la start la un țel/destinație."
 
 #: src/Task/TypeStrings.cpp:57
 #, no-c-format
@@ -111,8 +111,8 @@ msgid ""
 "Racing task around turn points.  Can also be used for FAI badge and record "
 "tasks.  Allows all shapes of observation zones."
 msgstr ""
-"Probă de cursă (RACE) cu balize de întoarcere. Poate fi folosită deasemenea "
-"pentru insigne FAI și recorduri. Permite forme ale zonelor de observare."
+"Probă de viteză (Racing). Poate fi folosită deasemenea pentru insigne FAI și "
+"recorduri. Permite toate tipurile de zone de observare."
 
 #: src/Task/TypeStrings.cpp:59
 #, no-c-format
@@ -135,16 +135,17 @@ msgstr ""
 "probă."
 
 #: src/Task/TypeStrings.cpp:62
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "Racing task with a mix of assigned areas and turn points, minimum task time "
 "applies."
 msgstr ""
-"Probă de cursă (RACE), cu mix de AAT-uri și balize de întoarcere, se aplică "
+"Probă de viteză (Racing), cu mix de  puncte AA( assigned area) și puncte "
+"racing ( raza de 0.5 km, se activează când intri in cilindru). Se aplică "
 "timpul minim de probă."
 
 #: src/Task/TypeStrings.cpp:63
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "Casual touring task, uses start and finish cylinders and FAI sector turn "
 "points."
@@ -158,20 +159,21 @@ msgid ""
 "A 90 degree sector with 1km radius. Cross corner edge from inside area to "
 "start."
 msgstr ""
-"Un sector de 90º într-un cilindru cu raza de 1 km. Traversează latura "
-"colțului din interior pentru a porni."
+"Un sector de 90º dintr-un cilindru cu raza de 1 km. Traversează laturile din "
+"interior pentru a porni."
 
 #: src/Task/TypeStrings.cpp:77
 #, no-c-format
 msgid ""
 "A straight line start gate.  Cross start gate from inside area to start."
 msgstr ""
-"Linie de start. Traverseză linia din interior spre exterior pentru a porni."
+"Linie de start. Traversează linia dinspre interior spre exterior pentru a "
+"porni."
 
 #: src/Task/TypeStrings.cpp:78
 #, no-c-format
 msgid "A cylinder.  Exit area to start."
-msgstr "Clindru. Ieși din zonă pentru a porni."
+msgstr "Cilindru. Ieși din cilindru pentru a porni."
 
 #: src/Task/TypeStrings.cpp:79
 #, no-c-format
@@ -180,10 +182,10 @@ msgid ""
 "from corner point."
 msgstr ""
 "Un sector de 90 de grade cu laturi de lungime infinită. Traversează orice "
-"latură, punctajul se calculează din punctul de colț."
+"latură, punctajul se calculează din vârful unghiului."
 
 #: src/Task/TypeStrings.cpp:81
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "(German rules) Any point within 1/2 km of center or 10km of a 90 degree "
 "sector.  Scored from center."
@@ -192,7 +194,7 @@ msgstr ""
 "sector de 90º. Punctajul se calculează din centru."
 
 #: src/Task/TypeStrings.cpp:83
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "(British rules) Any point within 1/2 km of center or 20km of a 90 degree "
 "sector.  Scored from center."
@@ -201,7 +203,7 @@ msgstr ""
 "sector de 90º. Punctajul se calculează din centru."
 
 #: src/Task/TypeStrings.cpp:85
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "(British rules) Any point within 1/2 km of center or 10km of a 180 degree "
 "sector.  Scored from center."
@@ -218,12 +220,13 @@ msgstr "Un cilindru. Orice punct din zonă, punctajul se calculează din centru.
 #, no-c-format
 msgid "A 1 mile cylinder.  Scored by farthest point reached in area."
 msgstr ""
-"Cilindru cu raza de 1 mila. Se ia calcul de la punctul cel mai indepartat."
+"Cilindru cu raza de 1 mila. Se ia calcul de la punctul cel mai îndepărtat "
+"atins în interior."
 
 #: src/Task/TypeStrings.cpp:89
 #, no-c-format
 msgid "A cylinder.  Scored by farthest point reached in area."
-msgstr "Cilindru. Se ia calcul cel mai indepartat punct atins."
+msgstr "Cilindru. Se ia calcul cel mai îndepărtat punct atins în interior."
 
 #: src/Task/TypeStrings.cpp:90
 #, no-c-format
@@ -231,8 +234,8 @@ msgid ""
 "A sector that can vary in angle and radius.  Scored by farthest point "
 "reached inside area."
 msgstr ""
-"Sector cu raza si unghi variabil. Se ia calcul cel mai indepartat punct "
-"atins."
+"Sector cu raza si unghi variabil. Se ia calcul cel mai îndepărtat punct "
+"atins în interior."
 
 #: src/Task/TypeStrings.cpp:92
 #, no-c-format
@@ -242,27 +245,29 @@ msgstr "Sector cu unghi de 90° si raza de 1km. Treci înăuntru pentru finish."
 #: src/Task/TypeStrings.cpp:93
 #, no-c-format
 msgid "Cross finish gate line into area to finish."
-msgstr "Traversează poarta de finiș în zonă pentru a termina."
+msgstr "Traversează linia de finiș în zonă pentru a termina."
 
 #: src/Task/TypeStrings.cpp:94
 #, no-c-format
 msgid "Enter cylinder to finish."
-msgstr "Intră in cilindru pentru a termina."
+msgstr "Intră în cilindru pentru a termina."
 
 #: src/Task/TypeStrings.cpp:95
 #, no-c-format
 msgid ""
 "A 180 degree sector with 5km radius.  Exit area in any direction to start."
 msgstr ""
-"Sector cu unghi de 180° si raza se 5 km. Ieși din el in orice direcție "
-"pentru a incepe."
+"Sector cu unghi de 180° și raza se 5 km. Ieși din el în orice direcție "
+"pentru a începe."
 
 #: src/Task/TypeStrings.cpp:96
 #, no-c-format
 msgid ""
 "A sector that can vary in angle, inner and outer radius.  Scored by farthest "
 "point reached inside area."
-msgstr "Sector variabil in unghi, raza interioara si raza exterioara."
+msgstr ""
+"Sector variabil in unghi, raza interioara si raza exterioara. Se ia in "
+"calcul punctul cel mai îndepărtat atins în interior."
 
 #: src/Task/TypeStrings.cpp:98
 #, no-c-format
@@ -273,8 +278,8 @@ msgstr "Cvadrant simetric cu rază variabila."
 #, no-c-format
 msgid "A keyhole.  Scored by farthest point reached in area."
 msgstr ""
-"Cilindru intr-un sector de cerc. Se ia in calcul cel mai indepartat punct "
-"atins."
+"Cilindru într-un sector de cerc. Se ia in calcul cel mai îndepărtat punct "
+"atins în interior."
 
 #: src/Task/TypeStrings.cpp:112
 #, no-c-format
@@ -299,7 +304,7 @@ msgstr "Cvadrant FAI"
 #: src/Task/TypeStrings.cpp:116
 #, no-c-format
 msgid "Keyhole sector (DAeC)"
-msgstr "Cilindru inscris in sector de cerc (DAeC)"
+msgstr "Cilindru înscris în sector de cerc (DAeC)"
 
 #: src/Task/TypeStrings.cpp:117
 #, no-c-format
@@ -314,7 +319,7 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:119
 #, no-c-format
 msgid "Turn point cylinder"
-msgstr "Cilindru de balizaj"
+msgstr "Punct de tip cilindru"
 
 #: src/Task/TypeStrings.cpp:120
 #, no-c-format
@@ -324,7 +329,7 @@ msgstr "Cilindru cu raza de 1 milă"
 #: src/Task/TypeStrings.cpp:121
 #, no-c-format
 msgid "Area cylinder"
-msgstr "Clindru de zonă"
+msgstr "Cilindru pentru AAT"
 
 #: src/Task/TypeStrings.cpp:122
 #, no-c-format
@@ -364,7 +369,7 @@ msgstr "Cvadrant simetric"
 #: src/Task/TypeStrings.cpp:129
 #, no-c-format
 msgid "Area keyhole"
-msgstr "Cerc inscris in sector de cerc."
+msgstr "Cerc inscris în sector se cerc."
 
 #: src/Task/ValidationErrorStrings.cpp:32
 #, no-c-format
@@ -377,65 +382,66 @@ msgid "No valid finish"
 msgstr "Nici un finiș valid"
 
 #: src/Task/ValidationErrorStrings.cpp:34
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Task not closed"
 msgstr "Proba nu s-a închis"
 
 #: src/Task/ValidationErrorStrings.cpp:35
 #, no-c-format
 msgid "All turnpoints not the same type"
-msgstr "Toate balizele nu sunt de același tip"
+msgstr "Toate punctele nu sunt de același tip"
 
 #: src/Task/ValidationErrorStrings.cpp:36
 #, no-c-format
 msgid "Incorrect number of turnpoints"
-msgstr "Număr incorect de balize"
+msgstr "Număr incorect de puncte"
 
 #: src/Task/ValidationErrorStrings.cpp:37
 #, no-c-format
 msgid "Too many turnpoints"
-msgstr "Prea multe balize"
+msgstr "Prea multe puncte"
 
 #: src/Task/ValidationErrorStrings.cpp:38
 #, no-c-format
 msgid "Not enough turnpoints"
-msgstr "Nu sunt destule balize"
+msgstr "Nu sunt destule puncte"
 
 #: src/Task/ValidationErrorStrings.cpp:39
 #, no-c-format
 msgid "Turnpoints not unique"
-msgstr "Balizele nu sunt unice"
+msgstr "Punctele nu sunt unice"
 
 #: src/Task/ValidationErrorStrings.cpp:40
 #, no-c-format
 msgid "Empty task"
-msgstr "Probă goală"
+msgstr "Probă goală( fără puncte )"
 
 #: src/Task/ValidationErrorStrings.cpp:41
 #, no-c-format
 msgid "non-FAI turn points"
-msgstr "Balize non-FAI"
+msgstr "Puncte non-FAI"
 
 #: src/Task/ValidationErrorStrings.cpp:42
 #, no-c-format
 msgid "non-MAT turn points"
-msgstr "Balize non-MAT"
+msgstr "Puncte non-MAT"
 
 #: src/Airspace/AirspaceGlue.cpp:84
 msgid "Loading Airspace File..."
-msgstr "Se încarcă fişierului de spațiu aerian"
+msgstr "Se încarcă fişierul de spațiu aerian"
 
 #: src/Airspace/AirspaceParser.cpp:277
+#, fuzzy
 msgid "Parse Error at Line"
 msgstr "Eroare de parsare la linia"
 
 #: src/Airspace/AirspaceParser.cpp:892
 msgid "Unknown airspace filetype"
-msgstr "Fișier spațiu aerian de tip necunoscut"
+msgstr "Fișier de spațiu aerian de tip necunoscut"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorAATTime.cpp:51
 msgid "Expect early task arrival"
-msgstr "Aşteaptă probă timpurie."
+msgstr "Așteaptă-te la terminarea probei sub timpul minim."
 
 #: src/Computer/ConditionMonitor/ConditionMonitorSunset.cpp:65
 msgid "Expect arrival past sunset"
@@ -461,7 +467,7 @@ msgid "Reduced functionality"
 msgstr "funcționalitate redusă"
 
 #: src/FLARM/Error.cpp:32
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Fatal problem"
 msgstr "problemă fatală"
 
@@ -526,7 +532,7 @@ msgstr "Bază de date cu obstacole"
 #: src/FLARM/Error.cpp:57
 #, no-c-format
 msgid "Flight recorder"
-msgstr "Recorder de zbor"
+msgstr "Înregistrator de zbor"
 
 #: src/FLARM/Error.cpp:59
 #, no-c-format
@@ -540,19 +546,19 @@ msgstr "Altele"
 
 #: src/Logger/Logger.cpp:112 src/Dialogs/Device/ManageCAI302Dialog.cpp:69
 msgid "Start Logger"
-msgstr "Start jurnal"
+msgstr "Start înregistrare"
 
 #: src/Logger/Logger.cpp:119
 msgid "Logger inactive, insufficient storage!"
-msgstr "Jurnal inactiv, spațiu insuficient"
+msgstr "Înregistrator inactiv, spațiu insuficient"
 
 #: src/Logger/Logger.cpp:120
 msgid "Logger Error"
-msgstr "Eroare de jurnal"
+msgstr "Eroare de înregistrator de zbor"
 
 #: src/Logger/Logger.cpp:148 src/Dialogs/Device/ManageCAI302Dialog.cpp:70
 msgid "Stop Logger"
-msgstr "Oprește jurnalul"
+msgstr "Oprește înregistratorul"
 
 #: src/Logger/ExternalLogger.cpp:84
 msgid "Declare task?"
@@ -572,12 +578,12 @@ msgid ""
 "Error occured,\n"
 "Task NOT declared!"
 msgstr ""
-"Erorare, \n"
-"proba NU este declarată!"
+"Eroare, \n"
+"Proba NU este declarată!"
 
 #: src/Logger/ExternalLogger.cpp:131
 msgid "No logger connected"
-msgstr "Nici un recorder de jurnal conectat"
+msgstr "Nici un înregistrator nu este conectat."
 
 #: src/Logger/ExternalLogger.cpp:269
 msgid "Failed to download flight list."
@@ -586,15 +592,15 @@ msgstr "Descărcarea listei de zboruri nereușită."
 #: src/Logger/ExternalLogger.cpp:270 src/Logger/ExternalLogger.cpp:281
 #: src/Logger/ExternalLogger.cpp:302 src/Logger/ExternalLogger.cpp:325
 msgid "Download flight"
-msgstr "descarcare zbor"
+msgstr "Descărcă zbor."
 
 #: src/Logger/ExternalLogger.cpp:280
 msgid "Logger is empty."
-msgstr "Jurnalul este gol"
+msgstr "Înregistratorul este gol."
 
 #: src/Logger/ExternalLogger.cpp:301
 msgid "Failed to download flight."
-msgstr "Descarcare zbor nereușită/"
+msgstr "Descărcarea zborului nereușită."
 
 #: src/Logger/ExternalLogger.cpp:324
 msgid "Do you want to download another flight?"
@@ -603,7 +609,7 @@ msgstr "Dorești să descarci un alt zbor?"
 #: src/Waypoint/WaypointGlue.cpp:91
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:37
 msgid "Loading Waypoints..."
-msgstr "Încărcare balize..."
+msgstr "Încărcare puncte..."
 
 #: src/CrossSection/CrossSectionRenderer.cpp:67
 msgid "Not moving"
@@ -652,6 +658,7 @@ msgid "Close"
 msgstr "Închide"
 
 #: src/Gauge/FlarmTrafficWindow.cpp:241
+#, fuzzy
 msgid "No Traffic"
 msgstr "Nici un trafic"
 
@@ -662,7 +669,7 @@ msgstr "Nici un trafic"
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:37
 #: src/Dialogs/Settings/dlgConfiguration.cpp:118
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:150
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Vario"
 msgstr "Vario"
 
@@ -684,6 +691,7 @@ msgid "Distance"
 msgstr "Distanță"
 
 #: src/Gauge/BigTrafficWidget.cpp:425 src/Gauge/BigTrafficWidget.cpp:428
+#, fuzzy
 msgid "Rel. Alt."
 msgstr "Alt. rel."
 
@@ -705,12 +713,12 @@ msgstr "Încărcare fișier detalii aeroport..."
 #: src/Menu/ExpandMacros.cpp:83 src/Menu/ExpandMacros.cpp:116
 #: src/Menu/ExpandMacros.cpp:138
 msgid "Next Turnpoint"
-msgstr "Următoarea baliză"
+msgstr "Următorul punct"
 
 #: src/Menu/ExpandMacros.cpp:87 src/Menu/ExpandMacros.cpp:124
 #: src/Menu/ExpandMacros.cpp:161
 msgid "Previous Turnpoint"
-msgstr "Baliză precedentă"
+msgstr "Punctul anterior"
 
 #: src/Menu/ExpandMacros.cpp:94
 msgid "Furthest Landpoint"
@@ -730,15 +738,15 @@ msgstr "Punct de aterizare precedent"
 
 #: src/Menu/ExpandMacros.cpp:115 src/Menu/ExpandMacros.cpp:137
 msgid "Finish Turnpoint"
-msgstr "Baliză de finiș"
+msgstr "Punct de finiș"
 
 #: src/Menu/ExpandMacros.cpp:119 src/Menu/ExpandMacros.cpp:156
 msgid "Next Startpoint"
-msgstr "Următoarea baliză de start"
+msgstr "Următorul punct de start"
 
 #: src/Menu/ExpandMacros.cpp:123 src/Menu/ExpandMacros.cpp:160
 msgid "Start Turnpoint"
-msgstr "Baliză de start"
+msgstr "Punct de start"
 
 #: src/Menu/ExpandMacros.cpp:141
 msgid "Arm start"
@@ -746,7 +754,7 @@ msgstr "Armează startul"
 
 #: src/Menu/ExpandMacros.cpp:144
 msgid "Arm turn"
-msgstr "Armează baliza"
+msgstr "Armează punctul"
 
 #: src/Menu/ExpandMacros.cpp:165
 msgid "Disarm start"
@@ -754,7 +762,7 @@ msgstr "Dezarmează startul"
 
 #: src/Menu/ExpandMacros.cpp:168
 msgid "Disarm turn"
-msgstr "Dezarmează baliza"
+msgstr "Dezarmează startul"
 
 #: src/Menu/ExpandMacros.cpp:177
 msgid ""
@@ -794,7 +802,7 @@ msgid ""
 "Turn"
 msgstr ""
 "Întrerupe\n"
-"baliza"
+"Punctul"
 
 #: src/Menu/ExpandMacros.cpp:193
 msgid ""
@@ -802,7 +810,7 @@ msgid ""
 "Turn"
 msgstr ""
 "Armează\n"
-"baliza"
+"Punctul"
 
 #: src/Menu/ExpandMacros.cpp:202 src/Menu/ExpandMacros.cpp:206
 #: src/Dialogs/Device/PortMonitor.cpp:175
@@ -840,7 +848,7 @@ msgstr "Automat"
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:44
 #, no-c-format
 msgid "Track up"
-msgstr "Pista sus"
+msgstr "Orientat în funcție de direcția de zbor"
 
 #: src/Menu/ExpandMacros.cpp:229
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:48
@@ -914,11 +922,11 @@ msgstr "Pornit"
 
 #: src/Menu/ExpandMacros.cpp:343
 msgid "Topography On"
-msgstr "Topografie pornită"
+msgstr "Topografie afișată"
 
 #: src/Menu/ExpandMacros.cpp:346
 msgid "Terrain On"
-msgstr "Teren pornit"
+msgstr "Teren afișat"
 
 #: src/Menu/ExpandMacros.cpp:349
 msgid "Terrain + Topography"
@@ -926,7 +934,7 @@ msgstr "Teren + Topografie"
 
 #: src/Menu/ExpandMacros.cpp:352
 msgid "Terrain Off"
-msgstr "Teren oprit"
+msgstr "Nu afișa terenul"
 
 #: src/Menu/ExpandMacros.cpp:369 src/Input/InputEventsSettings.cpp:313
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:84
@@ -938,7 +946,7 @@ msgstr "Tot/Toate"
 #: src/Menu/ExpandMacros.cpp:370 src/Input/InputEventsSettings.cpp:314
 #, no-c-format
 msgid "Task & Landables"
-msgstr "Proba si relief"
+msgstr "Proba si zone de aterizare"
 
 #: src/Menu/ExpandMacros.cpp:372 src/Input/InputEventsSettings.cpp:316
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:201
@@ -977,9 +985,9 @@ msgid ""
 "PC only: In simulation mode, this value is adjustable with the up/down arrow "
 "keys and the right/left arrow keys also cause the glider to turn."
 msgstr ""
-"Altitudinea deasupra nivelului marii data de GPS. Touchscreen/PC only: in "
-"mod simulare valoarea poate fi schimbata cu tastele sus/jos iar tastele "
-"stanga/dreapta fac planorul sa vireze."
+"Altitudinea deasupra nivelului mării dată de GPS. Touchscreen/PC only: în "
+"mod simulare valoarea poate fi schimbată cu tastele sus/jos iar tastele "
+"stânga/dreapta fac planorul să vireze."
 
 #: src/InfoBoxes/Content/Factory.cpp:143
 #, no-c-format
@@ -988,9 +996,9 @@ msgstr "Înălţime AGL"
 
 #: src/InfoBoxes/Content/Factory.cpp:144
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:85
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "H AGL"
-msgstr "ÎN AGL"
+msgstr "H AGL"
 
 #: src/InfoBoxes/Content/Factory.cpp:145
 #, no-c-format
