@@ -4,6 +4,7 @@ from build.zlib import ZlibProject
 from build.autotools import AutotoolsProject
 from build.openssl import OpenSSLProject
 from build.freetype import FreeTypeProject
+from build.curl import CurlProject
 from build.libpng import LibPNGProject
 from build.sdl2 import SDL2Project
 from build.lua import LuaProject
@@ -78,7 +79,7 @@ freetype = FreeTypeProject(
     ],
 )
 
-curl = AutotoolsProject(
+curl = CurlProject(
     'http://curl.haxx.se/download/curl-7.55.1.tar.xz',
     'https://github.com/curl/curl/releases/download/curl-7_55_1/curl-7.55.1.tar.bz2',
     '3eafca6e84ecb4af5f35795dee84e643d5428287e88c041122bb8dac18676bb7',
