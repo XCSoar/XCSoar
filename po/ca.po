@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2017-09-17 22:46+0000\n"
+"PO-Revision-Date: 2017-09-25 19:44+0000\n"
 "Last-Translator: Jaume Prats <prats.jaume@gmail.com>\n"
 "Language-Team: Catalan "
 "<https://hosted.weblate.org/projects/xcsoar/translations/ca/>\n"
@@ -76,7 +76,7 @@ msgstr "Mixte"
 #: src/Task/TypeStrings.cpp:39
 #, no-c-format
 msgid "Touring"
-msgstr ""
+msgstr "turisme"
 
 #: src/Task/TypeStrings.cpp:52
 #, no-c-format
@@ -178,6 +178,8 @@ msgid ""
 "A 90 degree sector with 'infinite' length sides.  Cross any edge, scored "
 "from corner point."
 msgstr ""
+"Un sector de 90 graus amb cames de \"inifinita\" mida. Creua qualsevol "
+"vorera, puntuat desde el cap de cantó."
 
 #: src/Task/TypeStrings.cpp:81
 #, no-c-format
@@ -185,6 +187,8 @@ msgid ""
 "(German rules) Any point within 1/2 km of center or 10km of a 90 degree "
 "sector.  Scored from center."
 msgstr ""
+"(Regles alemanys). Qualsevol punt dins dels 0.5 km del centre o 10 km de un "
+"sector de 90 graus. Puntuat des del centre."
 
 #: src/Task/TypeStrings.cpp:83
 #, no-c-format
@@ -192,6 +196,8 @@ msgid ""
 "(British rules) Any point within 1/2 km of center or 20km of a 90 degree "
 "sector.  Scored from center."
 msgstr ""
+"(Regles britàniques). Qualsevol punt dins dels 0.5 km del centre o 20 km de "
+"un sector de 90 graus. Puntuat des del centre."
 
 #: src/Task/TypeStrings.cpp:85
 #, no-c-format
