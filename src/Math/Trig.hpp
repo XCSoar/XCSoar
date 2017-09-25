@@ -34,12 +34,12 @@ gcc_const
 static inline std::pair<double, double>
 sin_cos(const double thetha)
 {
-#if defined(__GLIBC__) && defined(_GNU_SOURCE)
+#ifdef __BIONIC__
+  return std::make_pair(sin(thetha), cos(thetha));
+#else
   double s, c;
   sincos(thetha, &s, &c);
   return std::make_pair(s, c);
-#else
-  return std::make_pair(sin(thetha), cos(thetha));
 #endif
 }
 
