@@ -140,7 +140,7 @@ public:
 		return address.sin_addr;
 	}
 
-#if defined(__GLIBC__) || defined(__APPLE__)
+#if !defined(WIN32) && !defined(__BIONIC__)
 	/**
 	 * Returns a StaticSocketAddress for the specified device. Caller
 	 * should check for validity of returned StaticSocketAddress.
