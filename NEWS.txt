@@ -5,6 +5,8 @@ Version 6.8.14 - not yet released
   - compatibility with Android 9
   - request all permissions without manual restarts
   - fix crash bug
+* Kobo
+  - fix crash bug
 
 Version 6.8.13 - 2020/04/08
 * devices
