@@ -2,7 +2,7 @@ from build.autotools import AutotoolsProject
 
 class CurlProject(AutotoolsProject):
     def configure(self, toolchain):
-        # append argument --enable-arm-neon for targets supporting NEON
+        # disable usage of pthreads for Win32 builds
         if 'mingw' in toolchain.arch:
             self.configure_args.append('--enable-pthreads=no')
 
