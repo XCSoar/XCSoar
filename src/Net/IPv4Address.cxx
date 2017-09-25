@@ -39,7 +39,7 @@
 #include <arpa/inet.h>
 #endif
 
-#if defined(__GLIBC__) || defined(__APPLE__)
+#if !defined(WIN32) && !defined(__BIONIC__)
 #include <ifaddrs.h>
 #endif
 
@@ -56,7 +56,7 @@ CastToIPv4(const struct sockaddr *p)
 IPv4Address::IPv4Address(SocketAddress src)
 	:address(*CastToIPv4(src.GetAddress())) {}
 
-#if defined(__GLIBC__) || defined(__APPLE__)
+#if !defined(WIN32) && !defined(__BIONIC__)
 
 /**
  * helper to iterate over available devices, locate the

@@ -117,7 +117,7 @@ public:
 		return address.sin_family != AF_UNSPEC;
 	}
 
-#if defined(__GLIBC__) || defined(__APPLE__)
+#if !defined(_WIN32) && !defined(__BIONIC__)
 	/**
 	 * Returns a StaticSocketAddress for the specified device. Caller
 	 * should check for validity of returned StaticSocketAddress.
