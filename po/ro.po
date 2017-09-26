@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2017-09-25 16:47+0000\n"
+"PO-Revision-Date: 2017-09-27 04:48+0000\n"
 "Last-Translator: Costel Alexandru Pavelescu <pavelescu.alexandru@gmail.com>\n"
 "Language-Team: Romanian "
 "<https://hosted.weblate.org/projects/xcsoar/translations/ro/>\n"
@@ -1007,6 +1007,9 @@ msgid ""
 "the terrain file. The value is coloured red when the glider is below the "
 "terrain safety clearance height."
 msgstr ""
+"Înălțimea - diferența dintre altitudinea curentă și elevația terenului la "
+"punctul survolat. Valoarea devine roșie când planorul este sub înălțimea de "
+"siguranță."
 
 #: src/InfoBoxes/Content/Factory.cpp:152
 #, no-c-format
@@ -1045,18 +1048,18 @@ msgid ""
 "True bearing of the next waypoint.  For AAT tasks, this is the true bearing "
 "to the target within the AAT sector."
 msgstr ""
-"Relevment adevărat a următoarei balize. Pentru probe AAT, acesta este "
+"Relevment adevărat către următorul punct. Pentru probe AAT, acesta este "
 "relevmentul  adevărat către ținta în sectorul AAT."
 
 #: src/InfoBoxes/Content/Factory.cpp:169
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "GR instantaneous"
 msgstr "Finețe instantanee"
 
 #: src/InfoBoxes/Content/Factory.cpp:170
 #, no-c-format
 msgid "GR Inst"
-msgstr "Fin. inst"
+msgstr "Fin inst"
 
 #: src/InfoBoxes/Content/Factory.cpp:171
 #, no-c-format
@@ -1066,7 +1069,7 @@ msgid ""
 "indicate climbing cruise. If the vertical speed is close to zero, the "
 "displayed value is '---'."
 msgstr ""
-"Finețe instantanee la sol, dată de viteza la sol împărțită la viteza pe "
+"Finețe instantanee fața de sol, dată de viteza la sol împărțită la viteza pe "
 "orizontală (viteză GPS) în ultimele 20 de secunde. Valorile negative indică "
 "croazieră în urcare. Dacă viteza pe verticală este apropiată de zero, "
 "valoarea afișată este \"---\"."
@@ -1089,11 +1092,10 @@ msgid ""
 "(height gain since leaving the last thermal). If the vertical speed is close "
 "to zero, the displayed value is '---'."
 msgstr ""
-"Distanţa parcursa de la partea de sus a ultimei termice, împărţit cu "
-"altitudinea pierduta de la partea de sus a ultimei termice. Valorile "
-"negative indică urcare (câştig de înălţime de la plecarea din ultima "
-"termica). Dacă viteza verticala este aproape de zero, valoarea afişată este "
-"\"---\"."
+"Distanţa parcursa de la ultima termică, împărţită cu altitudinea pierduta "
+"de  la ultima termică. Valorile negative indică urcare (câştig de înălţime "
+"de la plecarea din ultima termica). Dacă viteza verticala este aproape de "
+"zero, valoarea afişată este \"---\"."
 
 #: src/InfoBoxes/Content/Factory.cpp:185
 #, no-c-format
@@ -1112,9 +1114,9 @@ msgid ""
 "mode, pressing the up and down arrows adjusts the speed, and left and right "
 "turn the glider."
 msgstr ""
-"Viteza la sol măsurata prin GPS. Dacă acestă casuță info este activă în "
-"modul de simulare, săgeţile sus/jos reglează viteza iar stânga/dreapta "
-"virează planorul."
+"Viteza la sol măsurata de GPS. Această căsuță info este activă în modul de "
+"simulare, săgeţile sus/jos reglează viteza iar stânga/dreapta virează "
+"planorul."
 
 #: src/InfoBoxes/Content/Factory.cpp:193
 #, no-c-format
@@ -1122,9 +1124,9 @@ msgid "Last thermal average"
 msgstr "Media ultimei termici"
 
 #: src/InfoBoxes/Content/Factory.cpp:194
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "TL Avg"
-msgstr ""
+msgstr "TL Avg"
 
 #: src/InfoBoxes/Content/Factory.cpp:195
 #, no-c-format
@@ -1132,7 +1134,7 @@ msgid ""
 "Total altitude gain/loss in the last thermal divided by the time spent "
 "circling."
 msgstr ""
-"Înălțimea totală câștigată sau pierdută în ultima termică împărţită cu "
+"Înălțimea totală câștigată sau pierdută în ultima termică împărţită la "
 "timpul de spiralare."
 
 #: src/InfoBoxes/Content/Factory.cpp:201
@@ -1141,9 +1143,9 @@ msgid "Last thermal gain"
 msgstr "Câştig în ultima termică"
 
 #: src/InfoBoxes/Content/Factory.cpp:202
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "TL Gain"
-msgstr ""
+msgstr "TL Gain"
 
 #: src/InfoBoxes/Content/Factory.cpp:203
 #, no-c-format
@@ -1153,12 +1155,12 @@ msgstr "Înălțime totală câștigată sau pierdută în ultima termică."
 #: src/InfoBoxes/Content/Factory.cpp:209
 #, no-c-format
 msgid "Last thermal duration"
-msgstr "Durata in ultima termica"
+msgstr "Durata în ultima termica"
 
 #: src/InfoBoxes/Content/Factory.cpp:210
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "TL duration"
-msgstr ""
+msgstr "TL duration"
 
 #: src/InfoBoxes/Content/Factory.cpp:211
 #, no-c-format
@@ -1168,7 +1170,7 @@ msgstr "Timp petrecut spiralând în ultima termică."
 #: src/InfoBoxes/Content/Factory.cpp:217
 #, no-c-format
 msgid "MacCready setting"
-msgstr "Setări MacCready"
+msgstr "Setarea MacCready"
 
 #: src/InfoBoxes/Content/Factory.cpp:218
 #, no-c-format
@@ -1182,16 +1184,18 @@ msgid ""
 "auto). (Touch-screen/PC only) Also used to adjust the MacCready setting if "
 "the InfoBox is active, by using the up/down cursor keys."
 msgstr ""
+"Setarea MacCready curentă si modul MacCready current( manual sau automat). "
+"Poți ajusta setarea MacCready cu butoanele sus jos, cand e selectată căsuță."
 
 #: src/InfoBoxes/Content/Factory.cpp:225
 #, no-c-format
 msgid "Next distance"
-msgstr "Distanță la următoarea baliză"
+msgstr "Distanță până la următorul punct"
 
 #: src/InfoBoxes/Content/Factory.cpp:226 src/InfoBoxes/Content/Task.cpp:182
 #, no-c-format
 msgid "WP Dist"
-msgstr "Distanță baliză"
+msgstr "Dist pct"
 
 #: src/InfoBoxes/Content/Factory.cpp:227
 #, no-c-format
@@ -1199,18 +1203,18 @@ msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the target within the AAT sector."
 msgstr ""
-"Distanța până la umătoarea baliză selectată. Pentru probe AAT, aceasta este "
-"distanța la ținta în sectorul AAT."
+"Distanța până la următorul punct selectat. Pentru probe AAT, aceasta este "
+"distanța până la ținta din sectorul AAT."
 
 #: src/InfoBoxes/Content/Factory.cpp:234
 #, no-c-format
 msgid "Next altitude difference"
-msgstr ""
+msgstr "Diferența de altitudine la următorul punct"
 
 #: src/InfoBoxes/Content/Factory.cpp:235
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "WP AltD"
-msgstr ""
+msgstr "WP AltD"
 
 #: src/InfoBoxes/Content/Factory.cpp:236
 #, no-c-format
@@ -1218,16 +1222,19 @@ msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival height. "
 "For AAT tasks, the target within the AAT sector is used."
 msgstr ""
+"Altitudinea cu care vei ajunge la următorul punct în relațiile (deasupra) cu "
+"altitudinea de siguranță. Pentru AAT calculul se face pentru ținta selectată "
+"în sector."
 
 #: src/InfoBoxes/Content/Factory.cpp:243
 #, no-c-format
 msgid "Next altitude required"
-msgstr ""
+msgstr "Următoarea altitudine necesară"
 
 #: src/InfoBoxes/Content/Factory.cpp:244
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "WP AltR"
-msgstr ""
+msgstr "WP AltR"
 
 #: src/InfoBoxes/Content/Factory.cpp:245
 #, no-c-format
@@ -1235,35 +1242,39 @@ msgid ""
 "Additional altitude required to reach the next turn point. For AAT tasks, "
 "the target within the AAT sector is used."
 msgstr ""
+"Înălțimea suplimentară necesară pentru a ajunge la următorul punct. Pentru "
+"AAT calculul se face pentru ținta selectată în sector."
 
 #: src/InfoBoxes/Content/Factory.cpp:252
 #, no-c-format
 msgid "Next waypoint"
-msgstr "Urmatorul sector"
+msgstr "Următorul punct"
 
 #: src/InfoBoxes/Content/Factory.cpp:253
 #, no-c-format
 msgid "Next WP"
-msgstr "Urmatorul punct"
+msgstr "Pct urm"
 
 #: src/InfoBoxes/Content/Factory.cpp:254
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "The name of the currently selected turn point. When this InfoBox is active, "
 "using the up/down cursor keys selects the next/previous waypoint in the "
 "task. (Touch-screen/PC only) Pressing the enter cursor key brings up the "
 "waypoint details."
 msgstr ""
+"Numele punctului curent. Când căsuță este selectată poți alege precedentul "
+"sau următorul punct din probă."
 
 #: src/InfoBoxes/Content/Factory.cpp:260
 #, no-c-format
 msgid "Final altitude difference"
-msgstr "Diferenta de altitudine finala"
+msgstr "Diferența finală de altitudine"
 
 #: src/InfoBoxes/Content/Factory.cpp:261
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Fin AltD"
-msgstr ""
+msgstr "Fin AltD"
 
 #: src/InfoBoxes/Content/Factory.cpp:262
 #, no-c-format
@@ -1271,8 +1282,8 @@ msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
 "height."
 msgstr ""
-"Altitudine sosirea la punctul final rândul său de activitate în raport cu "
-"înălţimea de sosire de siguranţă."
+"Altitudine sosirea la punctul final în raport cu înălţimea de sosire de "
+"siguranţă."
 
 #: src/InfoBoxes/Content/Factory.cpp:268
 #, no-c-format
@@ -1280,24 +1291,24 @@ msgid "Final altitude required"
 msgstr "Altitudine finala necesara"
 
 #: src/InfoBoxes/Content/Factory.cpp:269
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Fin AltR"
-msgstr ""
+msgstr "Fin AltR"
 
 #: src/InfoBoxes/Content/Factory.cpp:270
 #, no-c-format
 msgid "Additional altitude required to finish the task."
-msgstr "Altitudine suplimentara necesara pentru finalizarea task-ului."
+msgstr "Altitudine suplimentara necesara pentru finalizarea probei."
 
 #: src/InfoBoxes/Content/Factory.cpp:276
 #, no-c-format
 msgid "Speed task average"
-msgstr "Viteza medie a task-ului."
+msgstr "Viteza medie a probei"
 
 #: src/InfoBoxes/Content/Factory.cpp:277
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "V Task Avg"
-msgstr ""
+msgstr "V Task Avg"
 
 #: src/InfoBoxes/Content/Factory.cpp:278
 #, no-c-format
@@ -1305,13 +1316,13 @@ msgid ""
 "Average cross country speed while on current task, not compensated for "
 "altitude."
 msgstr ""
-"Media de viteza la cross contry pentru task-ul curent, nu este compensată de "
-"altitudine."
+"Media de viteza la cross country pentru proba curentă, nu este compensată  "
+"pentru altitudine."
 
 #: src/InfoBoxes/Content/Factory.cpp:284
 #, no-c-format
 msgid "Final distance"
-msgstr "Distanta finala"
+msgstr "Distanță finală"
 
 #: src/InfoBoxes/Content/Factory.cpp:285
 #, no-c-format
@@ -1321,34 +1332,35 @@ msgstr "Dist Fin"
 #: src/InfoBoxes/Content/Factory.cpp:286
 #, no-c-format
 msgid "Distance to finish around remaining turn points."
-msgstr "Distanta ramasa din proba."
+msgstr "Distanta rămasă din probă."
 
 #: src/InfoBoxes/Content/Factory.cpp:300
 #, no-c-format
 msgid "Terrain elevation"
-msgstr "Elevatie teren"
+msgstr "Elevația terenului"
 
 #: src/InfoBoxes/Content/Factory.cpp:301
 #, no-c-format
 msgid "Terr Elev"
-msgstr "Elevatia terenului."
+msgstr "Elev trn"
 
 #: src/InfoBoxes/Content/Factory.cpp:302
 #, no-c-format
 msgid ""
 "This is the elevation of the terrain above mean sea level, obtained from the "
 "terrain file at the current GPS location."
-msgstr "Elevatia punctului GPS actual din fisierul cu harta."
+msgstr ""
+"Elevatia terenului în punctului GPS actual citită din fisierul cu harta."
 
 #: src/InfoBoxes/Content/Factory.cpp:308
 #, no-c-format
 msgid "Thermal average"
-msgstr "Termică medie"
+msgstr "Media termicii"
 
 #: src/InfoBoxes/Content/Factory.cpp:309
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "TC Avg"
-msgstr ""
+msgstr "TC Avg"
 
 #: src/InfoBoxes/Content/Factory.cpp:310
 #, no-c-format
@@ -1362,23 +1374,23 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:316
 #, no-c-format
 msgid "Thermal gain"
-msgstr "Castig in termica"
+msgstr "Câștig în termică"
 
 #: src/InfoBoxes/Content/Factory.cpp:317
 #, no-c-format
 msgid "TC Gain"
-msgstr "TC Castigat"
+msgstr "TC Câștigat"
 
 #: src/InfoBoxes/Content/Factory.cpp:318
 #, no-c-format
 msgid "The altitude gained/lost in the current thermal."
-msgstr "Altitudinea castigata/pierduta in termana curenta"
+msgstr "Altitudinea câștigată/pierdută în termica curentă"
 
 #: src/InfoBoxes/Content/Factory.cpp:324 src/InfoBoxes/Content/Factory.cpp:325
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:59
 #, no-c-format
 msgid "Track"
-msgstr "Pistă"
+msgstr "Urmă"
 
 #: src/InfoBoxes/Content/Factory.cpp:326
 #, no-c-format
@@ -1387,6 +1399,8 @@ msgid ""
 "is active in simulation mode, pressing the up and down  arrows adjusts the "
 "track."
 msgstr ""
+"Direcția magnetică dată de GPS. Dacă căsuță e activă în modul simulator, "
+"poți ajusta direcția."
 
 #: src/InfoBoxes/Content/Factory.cpp:334
 #, no-c-format
@@ -1394,18 +1408,18 @@ msgid ""
 "Instantaneous vertical speed, as reported by the GPS, or the intelligent "
 "vario total energy vario value if connected to one."
 msgstr ""
-"Viteza instantanee verticală, raportata de GPS sau altivario inteligent,  "
-"valoare totală de energie în cazul în care conectat la unul."
+"Viteza verticală instantanee, raportată de GPS sau variometru în cazul în "
+"care este conectat la unul."
 
 #: src/InfoBoxes/Content/Factory.cpp:340
 #, no-c-format
 msgid "Wind speed"
-msgstr "Viteza vantului"
+msgstr "Viteza vântului"
 
 #: src/InfoBoxes/Content/Factory.cpp:341
 #, no-c-format
 msgid "Wind V"
-msgstr "Vant V"
+msgstr "V Vânt"
 
 #: src/InfoBoxes/Content/Factory.cpp:342 src/InfoBoxes/Content/Factory.cpp:939
 #, no-c-format
@@ -1413,7 +1427,7 @@ msgid ""
 "Wind speed estimated by XCSoar. Manual adjustment is possible with the "
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
-msgstr ""
+msgstr "Viteza vântului estimată de XcSoar. Ajustarea manuală este posibilă."
 
 #: src/InfoBoxes/Content/Factory.cpp:349
 #, no-c-format
@@ -1423,7 +1437,7 @@ msgstr "Direcția vântului"
 #: src/InfoBoxes/Content/Factory.cpp:350
 #, no-c-format
 msgid "Wind Brng"
-msgstr ""
+msgstr "Dir vânt"
 
 #: src/InfoBoxes/Content/Factory.cpp:351
 #, no-c-format
@@ -1431,28 +1445,28 @@ msgid ""
 "Wind bearing estimated by XCSoar. Manual adjustment is possible with the "
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
-msgstr ""
+msgstr "Direcția vântului estimată de XcSoar. Ajustarea manuală e posibilă."
 
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
 msgid "AAT time"
-msgstr "AAT timp"
+msgstr "Timp AAT"
 
 #: src/InfoBoxes/Content/Factory.cpp:359
 #, no-c-format
 msgid "AAT Time"
-msgstr "AAT Timp"
+msgstr "Timp AAT"
 
 #: src/InfoBoxes/Content/Factory.cpp:360
 #, no-c-format
 msgid ""
 "Assigned Area Task time remaining. Goes red when time remaining has expired."
-msgstr "Timpul ramas alocat task-ului. Apare rosu cand timpul expira."
+msgstr "Timpul rămas din AAT. Devine roșu când timpul este depășit."
 
 #: src/InfoBoxes/Content/Factory.cpp:366
 #, no-c-format
 msgid "AAT max. distance "
-msgstr "AAT distanta maxima "
+msgstr "distanta maxima AAT "
 
 #: src/InfoBoxes/Content/Factory.cpp:367
 #, no-c-format
@@ -1462,12 +1476,12 @@ msgstr "AAT maxD"
 #: src/InfoBoxes/Content/Factory.cpp:368
 #, no-c-format
 msgid "Assigned Area Task maximum distance possible for remainder of task."
-msgstr "Distanță maximă posibilă rămasă pentru AAT."
+msgstr "Distanță maximă posibilă pentru AAT rămas."
 
 #: src/InfoBoxes/Content/Factory.cpp:374
 #, no-c-format
 msgid "AAT min. distance"
-msgstr "AAT min. distanta"
+msgstr "distanta mim. AAT"
 
 #: src/InfoBoxes/Content/Factory.cpp:375
 #, no-c-format
@@ -1477,12 +1491,12 @@ msgstr "AAT Dmin"
 #: src/InfoBoxes/Content/Factory.cpp:376
 #, no-c-format
 msgid "Assigned Area Task minimum distance possible for remainder of task."
-msgstr "Distanță maximă posibilă rămasă pentru AAT."
+msgstr "Distanța minimă posibilă rămasă din AAT."
 
 #: src/InfoBoxes/Content/Factory.cpp:382
 #, no-c-format
 msgid "AAT speed max. distance"
-msgstr "AAT viteza max. distanta"
+msgstr "viteza pt distanța maximă AAT"
 
 #: src/InfoBoxes/Content/Factory.cpp:383
 #, no-c-format
@@ -1495,13 +1509,13 @@ msgid ""
 "Assigned Area Task average speed achievable if flying maximum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
-"Viteza medie de zbor pentru task-ul in curs poate fi atins daca se zboara la "
-"viteza maxima posibila pana la sfarsitul timpului AAT."
+"Viteza medie de zbor pentru proba în curs daca se va zbura distanța rămasă "
+"maximă posibila, în timpul rămas pentru AAT."
 
 #: src/InfoBoxes/Content/Factory.cpp:390
 #, no-c-format
 msgid "AAT speed min. distance"
-msgstr "AAT viteza min. distanta"
+msgstr "viteza AAT pentru distanța minimă"
 
 #: src/InfoBoxes/Content/Factory.cpp:391
 #, no-c-format
@@ -1514,6 +1528,8 @@ msgid ""
 "Assigned Area Task average speed achievable if flying minimum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
+"Viteza medie pe proba curentă dacă se va zbura distanța minimă rămasă "
+"posibilă în timpul rămas din AAT."
 
 #: src/InfoBoxes/Content/Factory.cpp:398
 #, no-c-format
@@ -1528,18 +1544,18 @@ msgstr "V IAS"
 #: src/InfoBoxes/Content/Factory.cpp:400
 #, no-c-format
 msgid "Indicated Airspeed reported by a supported external intelligent vario."
-msgstr "Viteza vantului raportata de un altivario extern suportat"
+msgstr "Viteza vântului dată de un variometru atașat."
 
 #: src/InfoBoxes/Content/Factory.cpp:406
 #, no-c-format
 msgid "Barometric altitude"
-msgstr "Altitudine barometrica"
+msgstr "Altitudine barometrică"
 
 #: src/InfoBoxes/Content/Factory.cpp:407
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:84
 #, no-c-format
 msgid "Alt Baro"
-msgstr "Altitudine barometrică"
+msgstr "Alt Baro"
 
 #: src/InfoBoxes/Content/Factory.cpp:408
 #, no-c-format
@@ -1547,7 +1563,7 @@ msgid ""
 "This is the barometric altitude obtained from a device equipped with a "
 "pressure sensor."
 msgstr ""
-"Aceasta e altitudinea barometrica obtinuta de la un aparat echipat cu senzor "
+"Aceasta e altitudinea barometrica obținută de la un aparat echipat cu senzor "
 "de presiune"
 
 #: src/InfoBoxes/Content/Factory.cpp:415
@@ -1567,6 +1583,8 @@ msgid ""
 "cruise flight mode, this speed-to-fly is calculated for maintaining "
 "altitude. In final glide mode, this speed-to-fly is calculated for descent."
 msgstr ""
+"Viteza optimă MacCready pentru următorul punct. În salt final această viteză "
+"ia în considerare înălțimea față de finish."
 
 #: src/InfoBoxes/Content/Factory.cpp:423
 #, no-c-format
@@ -1584,8 +1602,8 @@ msgid ""
 "Percentage of time spent in climb mode. These statistics are reset upon "
 "starting the task."
 msgstr ""
-"Procent timp petrecut in modul de urcare. Aceste statistici sunt resetate la "
-"incepulul task-ului."
+"Timp petrecut in modul de urcare exprimat în procente. Aceste statistici "
+"sunt resetate la începutul probei."
 
 #: src/InfoBoxes/Content/Factory.cpp:431
 #, no-c-format
@@ -1600,12 +1618,12 @@ msgstr "Durata zborului"
 #: src/InfoBoxes/Content/Factory.cpp:433
 #, no-c-format
 msgid "Time elapsed since takeoff was detected."
-msgstr "Timp parcurs de cand a fost depistata decolarea"
+msgstr "Timp parcurs de când a fost detectată decolarea"
 
 #: src/InfoBoxes/Content/Factory.cpp:439
 #, no-c-format
 msgid "G load"
-msgstr "G incarcare"
+msgstr "Suprasarcina"
 
 #: src/InfoBoxes/Content/Factory.cpp:440
 #, no-c-format
@@ -1617,25 +1635,28 @@ msgstr "G"
 msgid ""
 "Magnitude of G loading reported by a supported external intelligent vario. "
 "This value is negative for pitch-down manoeuvres."
-msgstr ""
+msgstr "Suprasarcina dată de un aparat conectat."
 
 #: src/InfoBoxes/Content/Factory.cpp:447
 #, no-c-format
 msgid "Next GR"
-msgstr ""
+msgstr "Următoarea finețe"
 
 #: src/InfoBoxes/Content/Factory.cpp:448
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "WP GR"
-msgstr ""
+msgstr "WP GR"
 
 #: src/InfoBoxes/Content/Factory.cpp:449
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "The required glide ratio over ground to reach the next waypoint, given by "
 "the distance to next waypoint divided by the height required to arrive at "
 "the safety arrival height."
 msgstr ""
+"Finețea față de sol necesară pentru a ajunge la următorul punct. Distanța "
+"până la punctul următor împărțită la altitudinea actuală fața de înălțimea "
+"de siguranță a punctului."
 
 #: src/InfoBoxes/Content/Factory.cpp:456
 #, no-c-format
@@ -1645,7 +1666,7 @@ msgstr "Timp local"
 #: src/InfoBoxes/Content/Factory.cpp:457
 #, no-c-format
 msgid "Time loc"
-msgstr "Timp aici"
+msgstr "Timp local"
 
 #: src/InfoBoxes/Content/Factory.cpp:458
 #, no-c-format
@@ -1665,12 +1686,12 @@ msgstr "Ora GPS exprimată in UTC."
 #: src/InfoBoxes/Content/Factory.cpp:472
 #, no-c-format
 msgid "Task time to go"
-msgstr "Timp ramas pentru parcurgerea task-ului"
+msgstr "Timp rămas din probă curentă"
 
 #: src/InfoBoxes/Content/Factory.cpp:473
 #, no-c-format
 msgid "Fin ETE"
-msgstr "Ora estimată la finish."
+msgstr "Fin ETE"
 
 #: src/InfoBoxes/Content/Factory.cpp:474
 #, no-c-format
@@ -1678,18 +1699,18 @@ msgid ""
 "Estimated time required to complete task, assuming performance of ideal "
 "MacCready cruise/climb cycle."
 msgstr ""
-"Timp necesar pentru parcurgerea task-ului, luand in considerare performanta "
+"Timp necesar pentru parcurgerea task-ului, luând în considerare performanta "
 "de croaziera/urcare calculata de MacCready"
 
 #: src/InfoBoxes/Content/Factory.cpp:480
 #, no-c-format
 msgid "Next time to go"
-msgstr "De mers data viitoare"
+msgstr "Timp pană la următorul punct"
 
 #: src/InfoBoxes/Content/Factory.cpp:481
 #, no-c-format
 msgid "WP ETE"
-msgstr ""
+msgstr "WP ETE"
 
 #: src/InfoBoxes/Content/Factory.cpp:482
 #, no-c-format
@@ -1697,21 +1718,21 @@ msgid ""
 "Estimated time required to reach next waypoint, assuming performance of "
 "ideal MacCready cruise/climb cycle."
 msgstr ""
-"Timpul estimat pentru a ajunge la urmatorul checkpoint, luand in considerare "
+"Timpul estimat pentru a ajunge la următorul punct, luând in considerare "
 "performanta de croaziera/urcare calculata de MacCready"
 
 #: src/InfoBoxes/Content/Factory.cpp:489
 #, no-c-format
 msgid "Speed dolphin"
-msgstr ""
+msgstr "Viteza pentru delfinare"
 
 #: src/InfoBoxes/Content/Factory.cpp:490 src/Renderer/MacCreadyRenderer.cpp:48
 #, no-c-format
 msgid "Vopt"
-msgstr ""
+msgstr "Vopt"
 
 #: src/InfoBoxes/Content/Factory.cpp:491
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "The instantaneous MacCready speed-to-fly, making use of netto vario "
 "calculations to determine dolphin cruise speed in the glider's current "
@@ -1720,17 +1741,17 @@ msgid ""
 "for descent. In climb mode, this switches to the speed for minimum sink at "
 "the current load factor (if an accelerometer is connected). When Block mode "
 "speed to fly is selected, this InfoBox displays the MacCready speed."
-msgstr ""
+msgstr "Viteza MacCready instantanee"
 
 #: src/InfoBoxes/Content/Factory.cpp:497
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Netto vario"
-msgstr ""
+msgstr "Netto vario"
 
 #: src/InfoBoxes/Content/Factory.cpp:498
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Netto"
-msgstr "Net"
+msgstr "Netto"
 
 #: src/InfoBoxes/Content/Factory.cpp:499
 #, no-c-format
@@ -1740,33 +1761,36 @@ msgid ""
 "vario are connected, otherwise calculations are based on GPS measurements "
 "and wind estimates."
 msgstr ""
+"Viteza instantanee a masei de aer, valoarea variometrului fără rata de "
+"coborâre a planorului. Util când ai conectat altimetru, variometru si "
+"accelerometre, în caz contrar se bazează pe GPS."
 
 #: src/InfoBoxes/Content/Factory.cpp:505
 #, no-c-format
 msgid "Task arrival time"
-msgstr "Timp indeplinire task"
+msgstr "Ora la care vei termina proba"
 
 #: src/InfoBoxes/Content/Factory.cpp:506
 #, no-c-format
 msgid "Fin ETA"
-msgstr ""
+msgstr "Fin ETA"
 
 #: src/InfoBoxes/Content/Factory.cpp:507
 #, no-c-format
 msgid ""
 "Estimated arrival local time at task completion, assuming performance of "
 "ideal MacCready cruise/climb cycle."
-msgstr ""
+msgstr "Timpul local la terminarea probei pentru zbor ideal MacCready"
 
 #: src/InfoBoxes/Content/Factory.cpp:513
 #, no-c-format
 msgid "Next arrival time"
-msgstr "Urmatorul timp de sosire"
+msgstr "timpul de sosire la următorul punct"
 
 #: src/InfoBoxes/Content/Factory.cpp:514
 #, no-c-format
 msgid "WP ETA"
-msgstr ""
+msgstr "WP ETA"
 
 #: src/InfoBoxes/Content/Factory.cpp:515
 #, no-c-format
@@ -1774,19 +1798,21 @@ msgid ""
 "Estimated arrival local time at next waypoint, assuming performance of ideal "
 "MacCready cruise/climb cycle."
 msgstr ""
+"Ora locală la care vei ajunge la următorul punct, după modelul MacCready "
+"ideal"
 
 #: src/InfoBoxes/Content/Factory.cpp:522
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Bearing difference"
-msgstr ""
+msgstr "Diferența de cap compas"
 
 #: src/InfoBoxes/Content/Factory.cpp:523
 #, no-c-format
 msgid "Brng D"
-msgstr ""
+msgstr "Brng D"
 
 #: src/InfoBoxes/Content/Factory.cpp:524
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "The difference between the glider's track bearing, to the bearing of the "
 "next waypoint, or for AAT tasks, to the bearing to the target within the AAT "
@@ -1797,6 +1823,9 @@ msgid ""
 "good is pointing directly at the next waypoint. This bearing takes into "
 "account the curvature of the Earth."
 msgstr ""
+"Unghiul format între capul compas al planorului și drumul dintre planor și "
+"punctul următor, sau ținta selectată în sector pentru AAT. GPS-ul folosește "
+"drumul planorului pe sol pentru capul planorului, acesta putând fi diferit."
 
 #: src/InfoBoxes/Content/Factory.cpp:530
 #, no-c-format
@@ -1833,13 +1862,13 @@ msgid ""
 "Relative humidity of the air in percent as measured by a probe if supported "
 "by a connected intelligent variometer."
 msgstr ""
-"Umiditatea relativa a aerului masurata in procente identificata de un "
+"Umiditatea relativa a aerului măsurată în procente identificată de un "
 "variometru inteligent, daca e conectat"
 
 #: src/InfoBoxes/Content/Factory.cpp:546 src/Input/InputEventsSettings.cpp:305
 #, no-c-format
 msgid "Forecast temperature"
-msgstr "Temperatura anuntata"
+msgstr "Temperatura prognozată"
 
 #: src/InfoBoxes/Content/Factory.cpp:547
 #, no-c-format
@@ -1854,31 +1883,34 @@ msgid ""
 "and relative humidity probe. (Touch-screen/PC only) Pressing the up/down "
 "cursor keys adjusts this forecast temperature."
 msgstr ""
+"Temperatura prognozată a solului la aeroportul de bază, folosită pentru a "
+"calcula înălțimea convecției și a bazei norilor, cu ajutorul temperaturii și "
+"a umezelii exterioare."
 
 #: src/InfoBoxes/Content/Factory.cpp:554
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "AAT distance around target"
-msgstr "AAT distanta pana la tinta"
+msgstr "AAT distanta pana la ținta"
 
 #: src/InfoBoxes/Content/Factory.cpp:555
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "AAT Dtgt"
-msgstr ""
+msgstr "AAT Dtgt"
 
 #: src/InfoBoxes/Content/Factory.cpp:556
 #, no-c-format
 msgid "Assigned Area Task distance around target points for remainder of task."
-msgstr ""
+msgstr "Distanța rămasă din AAT prin punctele selectate."
 
 #: src/InfoBoxes/Content/Factory.cpp:562
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "AAT speed around target"
-msgstr "AAT viteza pana la tinta"
+msgstr "AAT viteza pana la țintă"
 
 #: src/InfoBoxes/Content/Factory.cpp:563
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "AAT Vtgt"
-msgstr ""
+msgstr "AAT Vtgt"
 
 #: src/InfoBoxes/Content/Factory.cpp:564
 #, no-c-format
@@ -1886,16 +1918,18 @@ msgid ""
 "Assigned Area Task average speed achievable around target points remaining "
 "in minimum AAT time."
 msgstr ""
+"Viteza medie AAT ce ar fi atinsă dacă s-ar zbura distanța rămasă în jurul "
+"punctelor selectate, în timpul minim rămas."
 
 #: src/InfoBoxes/Content/Factory.cpp:570
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "L/D vario"
-msgstr ""
+msgstr "L/D vario"
 
 #: src/InfoBoxes/Content/Factory.cpp:571
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "L/D Vario"
-msgstr ""
+msgstr "L/D Vario"
 
 #: src/InfoBoxes/Content/Factory.cpp:572
 #, no-c-format
