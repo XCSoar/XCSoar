@@ -1,5 +1,6 @@
 Version 6.8.9 - not yet released
 * fix two crash bugs
+* support for Kobo Glo HD Refurbished
 
 Version 6.8.8 - 2017/09/09
 * data files

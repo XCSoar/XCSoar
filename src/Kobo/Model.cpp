@@ -63,6 +63,7 @@ static constexpr struct {
   { "SN-613A4", KoboModel::GLO },
   { "SN-R13A5", KoboModel::GLO },
   { "SN-N437", KoboModel::GLO_HD },
+  { "SN-RN437", KoboModel::GLO_HD },
 };
 
 static KoboModel
