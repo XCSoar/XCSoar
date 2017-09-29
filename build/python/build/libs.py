@@ -59,7 +59,6 @@ curl = AutotoolsProject(
         '--disable-crypto-auth', '--disable-ntlm-wb', '--disable-tls-srp', '--disable-cookies',
         '--without-ssl', '--without-gnutls', '--without-nss', '--without-libssh2',
     ],
-    use_clang=True,
 )
 
 libpng = AutotoolsProject(
