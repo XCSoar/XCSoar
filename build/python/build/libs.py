@@ -21,6 +21,7 @@ glibc = AutotoolsProject(
         '--disable-build-nscd',
         '--disable-nscd',
     ],
+    patches=abspath('lib/glibc/patches'),
     shared=True,
 )
 
