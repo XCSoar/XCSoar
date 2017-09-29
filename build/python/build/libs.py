@@ -1,3 +1,5 @@
+from os.path import abspath
+
 from build.zlib import ZlibProject
 from build.autotools import AutotoolsProject
 from build.freetype import FreeTypeProject
@@ -13,6 +15,7 @@ glibc = AutotoolsProject(
         '--disable-build-nscd',
         '--disable-nscd',
     ],
+    patches=abspath('lib/glibc/patches'),
     shared=True,
 
     # This is needed so glibc can find its NSS modules
