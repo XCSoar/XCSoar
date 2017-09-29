@@ -180,7 +180,6 @@ libtiff = AutotoolsProject(
         '--disable-strip-chopping',
         '--disable-extrasample-as-alpha',
     ],
-    base='tiff-4.0.8',
     patches=abspath('lib/libtiff/patches'),
     autogen=True,
 )
