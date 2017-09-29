@@ -101,7 +101,6 @@ curl = CurlProject(
         '--without-ssl', '--without-gnutls', '--without-nss', '--without-libssh2',
     ],
     patches=abspath('lib/curl/patches'),
-    use_clang=True,
 )
 
 proj = AutotoolsProject(
