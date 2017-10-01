@@ -686,6 +686,21 @@ endif
 ifeq ($(TARGET_IS_KOBO),y)
   TARGET_CPPFLAGS += -DKOBO
 
+  # Use Thumb instructions (which is the default in Debian's arm-linux-gnueabihf
+  # toolchain, but this might be different when using another toolchain, or
+  # Clang instead of GCC).
+  TARGET_ARCH += -mthumb
+
+  # We are using a GNU toolchain (triplet arm-linux-gnueabihf) by default, but
+  # the actual host triplet is different.
+  ACTUAL_HOST_TRIPLET = armv7a-a8neon-linux-musleabihf
+
+  LIBSTDCXX_HEADERS_DIR = $(abspath $(THIRDPARTY_LIBS_ROOT)/include/libstdc++)
+  TARGET_CXXFLAGS += \
+      -nostdinc++ \
+      -isystem $(LIBSTDCXX_HEADERS_DIR) \
+      -isystem $(LIBSTDCXX_HEADERS_DIR)/$(ACTUAL_HOST_TRIPLET)
+
   ifeq ($(USE_CROSSTOOL_NG),y)
     ifeq ($(CLANG),y)
       TARGET_CPPFLAGS += -B$(KOBO_TOOLCHAIN)

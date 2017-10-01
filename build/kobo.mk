@@ -73,29 +73,6 @@ fi)
 BITSTREAM_VERA_NAMES = Vera VeraBd VeraIt VeraBI VeraMono
 BITSTREAM_VERA_FILES = $(patsubst %,$(BITSTREAM_VERA_DIR)/%.ttf,$(BITSTREAM_VERA_NAMES))
 
-ifeq ($(USE_CROSSTOOL_NG),y)
-  SYSROOT = $(shell $(CC) -print-sysroot)
-else
-  # from Debian package libc6-armhf-cross
-  SYSROOT = /usr/arm-linux-gnueabihf
-endif
-
-# install our version of the system libraries in /opt/xcsoar/lib; this
-# is necessary because:
-# - we cannot link statically because we need NSS (name service
-#   switch) modules
-# - Kobo's stock glibc may be incompatible on some older firmware
-#   versions
-KOBO_SYS_LIB_NAMES = libc.so.6 libm.so.6 libpthread.so.0 librt.so.1 \
-	libdl.so.2 \
-	libresolv.so.2 libnss_dns.so.2 libnss_files.so.2 \
-	ld-linux-armhf.so.3
-
-KOBO_SYS_LIB_PATHS = $(addprefix $(THIRDPARTY_LIBS_ROOT)/lib/,$(KOBO_SYS_LIB_NAMES))
-
-# from Debian package libgcc1-armhf-cross
-KOBO_SYS_LIB_PATHS += $(SYSROOT)/lib/libgcc_s.so.1
-
 KOBO_KERNEL_DIR = /opt/kobo/kernel
 
 # /mnt/onboard/.kobo/KoboRoot.tgz is a file that is picked up by
@@ -109,7 +86,6 @@ $(TARGET_OUTPUT_DIR)/KoboRoot.tgz: $(XCSOAR_BIN) \
 	$(Q)rm -rf $(@D)/KoboRoot
 	$(Q)install -m 0755 -d $(@D)/KoboRoot/etc $(@D)/KoboRoot/opt/xcsoar/bin $(@D)/KoboRoot/opt/xcsoar/lib/kernel $(@D)/KoboRoot/opt/xcsoar/share/fonts
 	$(Q)install -m 0755 $(XCSOAR_BIN) $(KOBO_MENU_BIN) $(KOBO_POWER_OFF_BIN) $(topdir)/kobo/rcS $(@D)/KoboRoot/opt/xcsoar/bin
-	$(Q)install -m 0755 $(KOBO_SYS_LIB_PATHS) $(@D)/KoboRoot/opt/xcsoar/lib
 	$(Q)if test -f $(KOBO_KERNEL_DIR)/uImage.kobo; then install -m 0644 $(KOBO_KERNEL_DIR)/uImage.kobo $(@D)/KoboRoot/opt/xcsoar/lib/kernel; fi
 	$(Q)if test -f $(KOBO_KERNEL_DIR)/uImage.otg; then install -m 0644 $(KOBO_KERNEL_DIR)/uImage.otg $(@D)/KoboRoot/opt/xcsoar/lib/kernel; fi
 	$(Q)if test -f $(KOBO_KERNEL_DIR)/uImage.glohd; then install -m 0644 $(KOBO_KERNEL_DIR)/uImage.glohd $(@D)/KoboRoot/opt/xcsoar/lib/kernel; fi
