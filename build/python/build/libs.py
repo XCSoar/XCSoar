@@ -27,6 +27,16 @@ glibc = AutotoolsProject(
     make_args=['default-rpath=/opt/xcsoar/lib'],
 )
 
+musl = AutotoolsProject(
+    'https://www.musl-libc.org/releases/musl-1.1.16.tar.gz',
+    'https://fossies.org/linux/misc/musl-1.1.16.tar.gz',
+    '937185a5e5d721050306cf106507a006c3f1f86d86cd550024ea7be909071011',
+    'include/unistd.h',
+    [
+        '--disable-shared',
+    ],
+)
+
 openssl = OpenSSLProject(
     'https://www.openssl.org/source/openssl-1.0.2k.tar.gz',
     'ftp://ftp.kfki.hu/pub/packages/security/openssl/openssl-1.0.2k.tar.gz',
