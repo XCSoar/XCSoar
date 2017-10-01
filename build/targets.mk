@@ -518,6 +518,21 @@ endif
 
 ifeq ($(TARGET_IS_KOBO),y)
   TARGET_CPPFLAGS += -DKOBO
+
+  # Use Thumb instructions (which is the default in Debian's arm-linux-gnueabihf
+  # toolchain, but this might be different when using another toolchain, or
+  # Clang instead of GCC).
+  TARGET_ARCH += -mthumb
+
+  # We are using a GNU toolchain (triplet arm-linux-gnueabihf) by default, but
+  # the actual host triplet is different.
+  ACTUAL_HOST_TRIPLET = armv7a-a8neon-linux-musleabihf
+
+  LIBSTDCXX_HEADERS_DIR = $(abspath $(THIRDPARTY_LIBS_ROOT)/include/libstdc++)
+  TARGET_CXXFLAGS += \
+      -nostdinc++ \
+      -isystem $(LIBSTDCXX_HEADERS_DIR) \
+      -isystem $(LIBSTDCXX_HEADERS_DIR)/$(ACTUAL_HOST_TRIPLET)
 endif
 
 ifeq ($(TARGET),ANDROID)
@@ -598,12 +613,7 @@ ifeq ($(HOST_IS_ARM)$(TARGET_HAS_MALI),ny)
 endif
 
 ifeq ($(TARGET_IS_KOBO),y)
-  TARGET_LDFLAGS += -static-libstdc++
-
-  # use our glibc version and its ld.so on the Kobo, not the one from
-  # the stock Kobo firmware, as it may be incompatible
-  TARGET_LDFLAGS += -Wl,--dynamic-linker=/opt/xcsoar/lib/ld-linux-armhf.so.3
-  TARGET_LDFLAGS += -Wl,--rpath=/opt/xcsoar/lib
+  TARGET_LDFLAGS += --static -specs=$(abspath $(THIRDPARTY_LIBS_ROOT)/lib/musl-gcc.specs)
 endif
 
 ifeq ($(TARGET),ANDROID)
