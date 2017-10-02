@@ -72,11 +72,13 @@
 * Includes.
 \******************************************************************************/
 
+/* The configuration header file should be included first. */
+#include <jasper/jas_config.h>
+
 #include <stdio.h>
 
-#include <jasper/jas_config.h>
-#include "jasper/jas_types.h"
-#include "jasper/jas_debug.h"
+#include <jasper/jas_types.h>
+#include <jasper/jas_debug.h>
 
 #include "Compiler.h"
 
@@ -107,13 +109,24 @@ int jas_setdbglevel(int dbglevel);
 
 /* Perform formatted output to standard error. */
 int jas_eprintf(const char *fmt, ...);
-#else
-#define jas_getdbglevel() 0
-#define jas_eprintf(...)
-#endif
 
 /* Dump memory to a stream. */
 int jas_memdump(FILE *out, void *data, size_t len);
+
+/* Warn about use of deprecated functionality. */
+void jas_deprecated(const char *s);
+#else
+#define jas_getdbglevel() 0
+#define jas_eprintf(...) do {} while (0)
+#define jas_memdump(out, data, len) do {} while (0)
+#define jas_deprecated(s) do {} while (0)
+#endif
+
+/* Convert to a string literal */
+#define JAS_STRINGIFY(x) #x
+
+/* Convert to a string literal after macro expansion */
+#define JAS_STRINGIFYX(x) JAS_STRINGIFY(x)
 
 #ifdef __cplusplus
 }

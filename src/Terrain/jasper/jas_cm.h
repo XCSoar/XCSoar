@@ -68,7 +68,9 @@
 #ifndef JAS_CM_H
 #define JAS_CM_H
 
+/* The configuration header file should be included first. */
 #include <jasper/jas_config.h>
+
 #include <jasper/jas_icc.h>
 
 #ifdef __cplusplus

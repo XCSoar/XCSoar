@@ -1,4 +1,6 @@
 Version 6.8.9 - not yet released
+* terrain
+  - fix several crash bugs
 * fix two crash bugs
 * support for Kobo Glo HD Refurbished
 

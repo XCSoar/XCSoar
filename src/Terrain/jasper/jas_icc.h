@@ -62,7 +62,9 @@
 #ifndef JAS_ICC_H
 #define	JAS_ICC_H
 
+/* The configuration header file should be included first. */
 #include <jasper/jas_config.h>
+
 #include <jasper/jas_types.h>
 #include <jasper/jas_stream.h>
 
@@ -252,10 +254,10 @@ typedef struct {
 	char *ascdata; /* ASCII invariant description */
 	jas_iccuint32_t uclangcode; /* Unicode language code */
 	jas_iccuint32_t uclen; /* Unicode localizable description count */
-	uchar *ucdata; /* Unicode localizable description */
+	jas_uchar *ucdata; /* Unicode localizable description */
 	jas_iccuint16_t sccode; /* ScriptCode code */
 	jas_iccuint8_t maclen; /* Localizable Macintosh description count */
-	uchar macdata[69]; /* Localizable Macintosh description */
+	jas_uchar macdata[69]; /* Localizable Macintosh description */
 } jas_icctxtdesc_t;
 
 /* Text type. */
@@ -392,11 +394,11 @@ jas_iccattrval_t *jas_iccattrval_create(jas_iccuint32_t type);
 
 void jas_iccattrtab_dump(jas_iccattrtab_t *attrtab, FILE *out);
 
-extern uchar jas_iccprofdata_srgb[];
+extern jas_uchar jas_iccprofdata_srgb[];
 extern int jas_iccprofdata_srgblen;
-extern uchar jas_iccprofdata_sgray[];
+extern jas_uchar jas_iccprofdata_sgray[];
 extern int jas_iccprofdata_sgraylen;
-jas_iccprof_t *jas_iccprof_createfrombuf(uchar *buf, int len);
+jas_iccprof_t *jas_iccprof_createfrombuf(jas_uchar *buf, int len);
 jas_iccprof_t *jas_iccprof_createfromclrspc(int clrspc);
 
 #ifdef __cplusplus

@@ -74,12 +74,15 @@
 * Includes.
 \******************************************************************************/
 
+/* The configuration header file should be included first. */
+#include <jasper/jas_config.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 
-#include <jasper/jas_config.h>
 #include <jasper/jas_types.h>
+#include <jasper/jas_debug.h>
 
 #ifdef __cplusplus
 extern "C" {

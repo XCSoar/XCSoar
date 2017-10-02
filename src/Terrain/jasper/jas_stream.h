@@ -74,14 +74,15 @@
 * Includes.
 \******************************************************************************/
 
+/* The configuration header file should be included first. */
 #include <jasper/jas_config.h>
 
 #include <stdio.h>
-#if defined(HAVE_FCNTL_H)
+#if defined(JAS_HAVE_FCNTL_H)
 #include <fcntl.h>
 #endif
 #include <string.h>
-#if defined(HAVE_UNISTD_H)
+#if defined(JAS_HAVE_UNISTD_H)
 #include <unistd.h>
 #endif
 #include <jasper/jas_types.h>
@@ -210,24 +211,24 @@ typedef struct {
 	int flags_;
 
 	/* The start of the buffer area to use for reading/writing. */
-	uchar *bufbase_;
+	jas_uchar *bufbase_;
 
 	/* The start of the buffer area excluding the extra initial space for
 	  character putback. */
-	uchar *bufstart_;
+	jas_uchar *bufstart_;
 
 	/* The buffer size. */
 	int bufsize_;
 
 	/* The current position in the buffer. */
-	uchar *ptr_;
+	jas_uchar *ptr_;
 
 	/* The number of characters that must be read/written before
 	the buffer needs to be filled/flushed. */
 	int cnt_;
 
 	/* A trivial buffer to be used for unbuffered operation. */
-	uchar tinybuf_[JAS_STREAM_MAXPUTBACK + 1];
+	jas_uchar tinybuf_[JAS_STREAM_MAXPUTBACK + 1];
 
 	/* The operations for the underlying stream file object. */
 	jas_stream_ops_t *ops_;
@@ -250,12 +251,10 @@ typedef struct {
 /*
  * File descriptor file object.
  */
-#define DIM_MAX_FILE_NAME 2048
 typedef struct {
 	int fd;
 	int flags;
-	//char pathname[L_tmpnam + 1];
-	char pathname[DIM_MAX_FILE_NAME]; // dima
+	char pathname[L_tmpnam + 1];
 } jas_stream_fileobj_t;
 
 #define	JAS_STREAM_FILEOBJ_DELONCLOSE	0x01
@@ -268,10 +267,10 @@ typedef struct {
 typedef struct {
 
 	/* The data associated with this file. */
-	uchar *buf_;
+	jas_uchar *buf_;
 
 	/* The allocated size of the buffer for holding file data. */
-	int bufsize_;
+	size_t bufsize_;
 
 	/* The length of the file. */
 	int_fast32_t len_;
@@ -301,6 +300,10 @@ jas_stream_t *jas_stream_fopen(const char *filename, const char *mode);
 /* Open a memory buffer as a stream. */
 gcc_malloc
 jas_stream_t *jas_stream_memopen(char *buf, int bufsize);
+
+/* Do not use this function.
+It will eventually replace jas_stream_memopen. */
+jas_stream_t *jas_stream_memopen2(char *buf, size_t bufsize);
 
 /* Open a file descriptor as a stream. */
 jas_stream_t *jas_stream_fdopen(int fd, const char *mode);
@@ -454,7 +457,7 @@ directly, you will die a horrible, miserable, and painful death! */
 	  jas_stream_putc2(stream, c)) : EOF)
 #define jas_stream_putc2(stream, c) \
 	(((stream)->bufmode_ |= JAS_STREAM_WRBUF, --(stream)->cnt_ < 0) ? \
-	  jas_stream_flushbuf((stream), (uchar)(c)) : \
+	  jas_stream_flushbuf((stream), (jas_uchar)(c)) : \
 	  (++(stream)->rwcnt_, (int)(*(stream)->ptr_++ = (c))))
 
 /* These prototypes need to be here for the sake of the stream_getc and
