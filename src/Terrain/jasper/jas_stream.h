@@ -295,27 +295,27 @@ jas_stream_t *jas_stream_create(void);
 void jas_stream_initbuf(jas_stream_t *stream, int bufmode, char *buf, int bufsize);
 
 /* Open a file as a stream. */
-jas_stream_t *jas_stream_fopen(const char *filename, const char *mode);
+JAS_DLLEXPORT jas_stream_t *jas_stream_fopen(const char *filename, const char *mode);
 
 /* Open a memory buffer as a stream. */
 gcc_malloc
-jas_stream_t *jas_stream_memopen(char *buf, int bufsize);
+JAS_DLLEXPORT jas_stream_t *jas_stream_memopen(char *buf, int bufsize);
 
 /* Do not use this function.
 It will eventually replace jas_stream_memopen. */
-jas_stream_t *jas_stream_memopen2(char *buf, size_t bufsize);
+JAS_DLLEXPORT jas_stream_t *jas_stream_memopen2(char *buf, size_t bufsize);
 
 /* Open a file descriptor as a stream. */
-jas_stream_t *jas_stream_fdopen(int fd, const char *mode);
+JAS_DLLEXPORT jas_stream_t *jas_stream_fdopen(int fd, const char *mode);
 
 /* Open a stdio stream as a stream. */
-jas_stream_t *jas_stream_freopen(const char *path, const char *mode, FILE *fp);
+JAS_DLLEXPORT jas_stream_t *jas_stream_freopen(const char *path, const char *mode, FILE *fp);
 
 /* Open a temporary file as a stream. */
-jas_stream_t *jas_stream_tmpfile(void);
+JAS_DLLEXPORT jas_stream_t *jas_stream_tmpfile(void);
 
 /* Close a stream. */
-int jas_stream_close(jas_stream_t *stream);
+JAS_DLLEXPORT int jas_stream_close(jas_stream_t *stream);
 
 /******************************************************************************\
 * Macros/functions for getting/setting the stream state.
@@ -338,14 +338,14 @@ int jas_stream_close(jas_stream_t *stream);
 	(((const jas_stream_t *)(stream))->rwlimit_)
 
 /* Set the read/write limit for a stream. */
-int jas_stream_setrwlimit(jas_stream_t *stream, long rwlimit);
+JAS_DLLEXPORT int jas_stream_setrwlimit(jas_stream_t *stream, long rwlimit);
 
 /* Get the read/write count for a stream. */
 #define	jas_stream_getrwcount(stream) \
 	(((const jas_stream_t *)(stream))->rwcnt_)
 
 /* Set the read/write count for a stream. */
-long jas_stream_setrwcount(jas_stream_t *stream, long rwcnt);
+JAS_DLLEXPORT long jas_stream_setrwcount(jas_stream_t *stream, long rwcnt);
 
 /******************************************************************************\
 * Macros/functions for I/O.
@@ -366,19 +366,19 @@ long jas_stream_setrwcount(jas_stream_t *stream, long rwcnt);
 #endif
 
 /* Read characters from a stream into a buffer. */
-int jas_stream_read(jas_stream_t *stream, void *buf, int cnt);
+JAS_DLLEXPORT int jas_stream_read(jas_stream_t *stream, void *buf, int cnt);
 
 /* Write characters from a buffer to a stream. */
-int jas_stream_write(jas_stream_t *stream, const void *buf, int cnt);
+JAS_DLLEXPORT int jas_stream_write(jas_stream_t *stream, const void *buf, int cnt);
 
 /* Write formatted output to a stream. */
-int jas_stream_printf(jas_stream_t *stream, const char *fmt, ...);
+JAS_DLLEXPORT int jas_stream_printf(jas_stream_t *stream, const char *fmt, ...);
 
 /* Write a string to a stream. */
-int jas_stream_puts(jas_stream_t *stream, const char *s);
+JAS_DLLEXPORT int jas_stream_puts(jas_stream_t *stream, const char *s);
 
 /* Read a line of input from a stream. */
-char *jas_stream_gets(jas_stream_t *stream, char *buf, int bufsize);
+JAS_DLLEXPORT char *jas_stream_gets(jas_stream_t *stream, char *buf, int bufsize);
 
 /* Look at the next character to be read from a stream without actually
   removing it from the stream. */
@@ -387,7 +387,7 @@ char *jas_stream_gets(jas_stream_t *stream, char *buf, int bufsize);
 	  ((int)(*(stream)->ptr_)))
 
 /* Put a character back on a stream. */
-int jas_stream_ungetc(jas_stream_t *stream, int c);
+JAS_DLLEXPORT int jas_stream_ungetc(jas_stream_t *stream, int c);
 
 /******************************************************************************\
 * Macros/functions for getting/setting the stream position.
@@ -395,40 +395,45 @@ int jas_stream_ungetc(jas_stream_t *stream, int c);
 
 /* Is it possible to seek on this stream? */
 gcc_pure
-int jas_stream_isseekable(jas_stream_t *stream);
+JAS_DLLEXPORT int jas_stream_isseekable(jas_stream_t *stream);
 
 /* Set the current position within the stream. */
-long jas_stream_seek(jas_stream_t *stream, long offset, int origin);
+JAS_DLLEXPORT long jas_stream_seek(jas_stream_t *stream, long offset, int origin);
 
 /* Get the current position within the stream. */
-long jas_stream_tell(jas_stream_t *stream);
+JAS_DLLEXPORT long jas_stream_tell(jas_stream_t *stream);
 
 /* Seek to the beginning of a stream. */
-int jas_stream_rewind(jas_stream_t *stream);
+JAS_DLLEXPORT int jas_stream_rewind(jas_stream_t *stream);
 
 /******************************************************************************\
 * Macros/functions for flushing.
 \******************************************************************************/
 
 /* Flush any pending output to a stream. */
-int jas_stream_flush(jas_stream_t *stream);
+JAS_DLLEXPORT int jas_stream_flush(jas_stream_t *stream);
 
 /******************************************************************************\
 * Miscellaneous macros/functions.
 \******************************************************************************/
 
 /* Copy data from one stream to another. */
-int jas_stream_copy(jas_stream_t *dst, jas_stream_t *src, int n);
+JAS_DLLEXPORT int jas_stream_copy(jas_stream_t *dst, jas_stream_t *src, int n);
+
+#if 0
+/* Display stream contents (for debugging purposes). */
+JAS_DLLEXPORT int jas_stream_display(jas_stream_t *stream, FILE *fp, int n);
+#endif
 
 /* Consume (i.e., discard) characters from stream. */
-int jas_stream_gobble(jas_stream_t *stream, int n);
+JAS_DLLEXPORT int jas_stream_gobble(jas_stream_t *stream, int n);
 
 /* Write a character multiple times to a stream. */
-int jas_stream_pad(jas_stream_t *stream, int n, int c);
+JAS_DLLEXPORT int jas_stream_pad(jas_stream_t *stream, int n, int c);
 
 /* Get the size of the file associated with the specified stream.
   The specified stream must be seekable. */
-long jas_stream_length(jas_stream_t *stream);
+JAS_DLLEXPORT long jas_stream_length(jas_stream_t *stream);
 
 /******************************************************************************\
 * Internal functions.
@@ -462,10 +467,10 @@ directly, you will die a horrible, miserable, and painful death! */
 
 /* These prototypes need to be here for the sake of the stream_getc and
 stream_putc macros. */
-int jas_stream_fillbuf(jas_stream_t *stream, int getflag);
-int jas_stream_flushbuf(jas_stream_t *stream, int c);
-int jas_stream_getc_func(jas_stream_t *stream);
-int jas_stream_putc_func(jas_stream_t *stream, int c);
+JAS_DLLEXPORT int jas_stream_fillbuf(jas_stream_t *stream, int getflag);
+JAS_DLLEXPORT int jas_stream_flushbuf(jas_stream_t *stream, int c);
+JAS_DLLEXPORT int jas_stream_getc_func(jas_stream_t *stream);
+JAS_DLLEXPORT int jas_stream_putc_func(jas_stream_t *stream, int c);
 
 #ifdef __cplusplus
 }

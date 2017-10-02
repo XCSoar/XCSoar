@@ -92,36 +92,37 @@ extern "C" {
 
 /* Allocate memory. */
 gcc_malloc
-void *jas_malloc(size_t size);
+JAS_DLLEXPORT void *jas_malloc(size_t size);
 
 /* Free memory. */
-void jas_free(void *ptr);
+JAS_DLLEXPORT void jas_free(void *ptr);
 
 /* Resize a block of allocated memory. */
 gcc_malloc
-void *jas_realloc(void *ptr, size_t size);
+JAS_DLLEXPORT void *jas_realloc(void *ptr, size_t size);
 
 /* Allocate a block of memory and initialize the contents to zero. */
 gcc_malloc
-void *jas_calloc(size_t num_elements, size_t element_size);
+JAS_DLLEXPORT void *jas_calloc(size_t num_elements, size_t element_size);
 
 /* Allocate array (with overflow checking) . */
 gcc_malloc
-void *jas_alloc2(size_t num_elements, size_t element_size);
+JAS_DLLEXPORT void *jas_alloc2(size_t num_elements, size_t element_size);
 
 /* Allocate array of arrays (with overflow checking) . */
 gcc_malloc
-void *jas_alloc3(size_t num_arrays, size_t array_size, size_t element_size);
+JAS_DLLEXPORT void *jas_alloc3(size_t num_arrays, size_t array_size, size_t element_size);
 
 /* Resize a block of allocated memory (with overflow checking) . */
 gcc_malloc
-void *jas_realloc2(void *ptr, size_t num_elements, size_t element_size);
+JAS_DLLEXPORT void *jas_realloc2(void *ptr, size_t num_elements, size_t element_size);
 
 #if defined(JAS_DEFAULT_MAX_MEM_USAGE)
 
-void jas_set_max_mem_usage(size_t max_mem);
+JAS_DLLEXPORT void jas_set_max_mem_usage(size_t max_mem);
 
-size_t jas_get_mem_usage();
+gcc_pure
+JAS_DLLEXPORT size_t jas_get_mem_usage();
 
 #endif
 

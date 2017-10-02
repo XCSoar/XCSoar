@@ -21,6 +21,8 @@
 
 #define JAS_HAVE_SNPRINTF 1
 
+#define JAS_DLLEXPORT
+#define JAS_DLLLOCAL
 
 #else
 
