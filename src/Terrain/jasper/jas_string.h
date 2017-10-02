@@ -91,7 +91,7 @@ extern "C" {
 
 /* Copy a string (a la strdup). */
 gcc_malloc
-char *jas_strdup(const char *);
+JAS_DLLEXPORT char *jas_strdup(const char *);
 
 #ifdef __cplusplus
 }

@@ -102,13 +102,13 @@ extern "C" {
 #ifdef ENABLE_JASPER_LOG
 /* Get the library debug level. */
 gcc_const
-int jas_getdbglevel(void);
+JAS_DLLEXPORT int jas_getdbglevel(void);
 
 /* Set the library debug level. */
-int jas_setdbglevel(int dbglevel);
+JAS_DLLEXPORT int jas_setdbglevel(int dbglevel);
 
 /* Perform formatted output to standard error. */
-int jas_eprintf(const char *fmt, ...);
+JAS_DLLEXPORT int jas_eprintf(const char *fmt, ...);
 
 /* Dump memory to a stream. */
 int jas_memdump(FILE *out, void *data, size_t len);

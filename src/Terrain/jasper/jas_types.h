@@ -101,7 +101,6 @@
 /* Note: The immediately following header files should eventually be removed. */
 #include <stdlib.h>
 #include <stddef.h>
-#include <stdbool.h>
 #include <stdint.h>
 
 #if defined(JAS_HAVE_SYS_TYPES_H)
@@ -114,11 +113,44 @@
 #define jas_longlong long long
 #define jas_ulonglong unsigned long long
 
+#if defined(_MSC_VER) && (_MSC_VER < 1800)
+#define bool  int
+#define false 0
+#define true  1
+
+#define PRIxFAST32 "x"
+#define PRIxFAST16 PRIxFAST32
+#define PRIuFAST32 "u"
+#define PRIuFAST16 PRIuFAST32
+#define PRIiFAST32 "i"
+#ifdef _WIN64
+    #define PRIdPTR "lld"
+#else
+    #define PRIdPTR "d"
+#endif
+
+#ifndef _HUGE_ENUF
+    #define _HUGE_ENUF 1e+300
+#endif
+
+#define INFINITY ((float)(_HUGE_ENUF * _HUGE_ENUF))
+
+#define strtoull _strtoui64
+
+#else
+#include <stdbool.h>
+#include <inttypes.h>
+#endif
+
 /* The below macro is intended to be used for type casts.  By using this
   macro, type casts can be easily located in the source code with
   tools like "grep". */
 #define	JAS_CAST(t, e) \
 	((t) (e))
+
+/* The number of bits in the integeral type uint_fast32_t. */
+/* NOTE: This could underestimate the size on some exotic architectures. */
+#define JAS_UINTFAST32_NUMBITS (8 * sizeof(uint_fast32_t))
 
 #ifdef __cplusplus
 extern "C" {

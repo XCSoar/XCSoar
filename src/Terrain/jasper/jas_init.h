@@ -73,9 +73,9 @@ extern "C" {
 * Functions.
 \******************************************************************************/
 
-int jas_init(void);
+JAS_DLLEXPORT int jas_init(void);
 
-void jas_cleanup(void);
+JAS_DLLEXPORT void jas_cleanup(void);
 
 #ifdef __cplusplus
 }

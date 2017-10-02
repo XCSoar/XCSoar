@@ -72,7 +72,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include <inttypes.h>
 
 #include "jasper/jas_types.h"
 #include "jasper/jas_math.h"
@@ -1375,7 +1374,10 @@ static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
 
 	dec->numhtiles = JPC_CEILDIV(dec->xend - dec->tilexoff, dec->tilewidth);
 	dec->numvtiles = JPC_CEILDIV(dec->yend - dec->tileyoff, dec->tileheight);
-	if (!jas_safe_size_mul(dec->numhtiles, dec->numvtiles, &size)) {
+	assert(dec->numhtiles >= 0);
+	assert(dec->numvtiles >= 0);
+	if (!jas_safe_size_mul(dec->numhtiles, dec->numvtiles, &size) ||
+	  size > INT_MAX) {
 		return -1;
 	}
 	dec->numtiles = size;
