@@ -74,11 +74,14 @@
 * Includes.
 \******************************************************************************/
 
+/* The configuration header file should be included first. */
 #include <jasper/jas_config.h>
+
 #include <jasper/jas_stream.h>
 #include <jasper/jas_seq.h>
 #include <jasper/jas_cm.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -92,8 +95,12 @@ extern "C" {
  * Miscellaneous constants.
  */
 
+/* Basic units */
+#define JAS_IMAGE_KIBI			(JAS_CAST(size_t, 1024))
+#define JAS_IMAGE_MEBI			(JAS_IMAGE_KIBI * JAS_IMAGE_KIBI)
+
 /* The threshold at which image data is no longer stored in memory. */
-#define JAS_IMAGE_INMEMTHRESH	(16 * 1024 * 1024)
+#define JAS_IMAGE_INMEMTHRESH	(256 * JAS_IMAGE_MEBI)
 
 /*
  * Component types
@@ -119,6 +126,8 @@ extern "C" {
 
 /* Image coordinate. */
 typedef int_fast32_t jas_image_coord_t;
+#define JAS_IMAGE_COORD_MAX INT_FAST32_MAX
+#define JAS_IMAGE_COORD_MIN INT_FAST32_MIN
 
 /* Color space (e.g., RGB, YCbCr). */
 typedef int_fast16_t jas_image_colorspc_t;
@@ -210,7 +219,7 @@ typedef struct {
 
 	jas_cmprof_t *cmprof_;
 
-	bool inmem_;
+//	bool inmem_;
 
 } jas_image_t;
 
@@ -399,6 +408,9 @@ void jas_image_destroy(jas_image_t *image);
 	((image)->cmpts_[cmptno]->tly_ + (image)->cmpts_[cmptno]->height_ * \
 	  (image)->cmpts_[cmptno]->vstep_)
 
+// Test if all components are specified at the same positions in space. */
+bool jas_image_cmpt_domains_same(jas_image_t *image);
+
 /* Get the raw size of an image (i.e., the nominal size of the image without
   any compression. */
 uint_fast32_t jas_image_rawsize(jas_image_t *image);
@@ -413,13 +425,13 @@ int jas_image_encode(jas_image_t *image, jas_stream_t *out, int fmt,
 /* Read a rectangular region of an image component. */
 /* The position and size of the rectangular region to be read is specified
 relative to the component's coordinate system. */
-int jas_image_readcmpt(jas_image_t *image, int cmptno,
-  jas_image_coord_t x, jas_image_coord_t y, jas_image_coord_t width, jas_image_coord_t height,
+int jas_image_readcmpt(jas_image_t *image, int cmptno, jas_image_coord_t x,
+  jas_image_coord_t y, jas_image_coord_t width, jas_image_coord_t height,
   jas_matrix_t *data);
 
 /* Write a rectangular region of an image component. */
-int jas_image_writecmpt(jas_image_t *image, int cmptno,
-  jas_image_coord_t x, jas_image_coord_t y, jas_image_coord_t width, jas_image_coord_t height,
+int jas_image_writecmpt(jas_image_t *image, int cmptno, jas_image_coord_t x,
+  jas_image_coord_t y, jas_image_coord_t width, jas_image_coord_t height,
   jas_matrix_t *data);
 
 /* Delete a component from an image. */
@@ -556,14 +568,6 @@ jas_image_t *pgx_decode(jas_stream_t *in, const char *optstr);
 int pgx_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
 int pgx_validate(jas_stream_t *in);
 #endif
-
-#if !defined(EXCLUDE_TIFF_SUPPORT)
-/* Format-dependent operations for TIFF support. */
-jas_image_t *tiff_decode(jas_stream_t *in, char *optstr);
-int tiff_encode(jas_image_t *image, jas_stream_t *out, char *optstr);
-int tiff_validate(jas_stream_t *in);
-#endif
-
 
 #ifdef __cplusplus
 }

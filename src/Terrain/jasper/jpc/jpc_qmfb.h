@@ -103,7 +103,7 @@ any particular platform.  Hopefully, it is not too unreasonable, however. */
 
 typedef struct {
 #ifdef ENABLE_JASPER_ENCODE
-	int (*analyze)(int *, int, int, int, int, int);
+	int (*analyze)(jpc_fix_t *, int, int, int, int, int);
 #endif /* ENABLE_JASPER_ENCODE */
 	int (*synthesize)(jpc_fix_t *, int, int, int, int, int);
 	const double *lpenergywts;

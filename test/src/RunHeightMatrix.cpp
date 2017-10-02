@@ -47,6 +47,8 @@ try {
 
   RasterMap map;
 
+  RasterMap map(jp2_path);
+
   NullOperationEnvironment operation;
   if (!LoadTerrainOverview(archive.get(), map.GetTileCache(),
                            operation)) {

@@ -109,7 +109,7 @@ typedef struct {
 	jas_stream_t *in;
 
 	/* The last character read. */
-	uchar inbuffer;
+	jas_uchar inbuffer;
 
 	/* The EOF indicator. */
 	int eof;

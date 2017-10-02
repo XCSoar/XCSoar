@@ -74,12 +74,14 @@
 * Includes.
 \******************************************************************************/
 
+/* The configuration header file should be included first. */
 #include <jasper/jas_config.h>
 
-#include <jasper/jas_stream.h>
 #include <jasper/jas_types.h>
 
 #include "Compiler.h"
+
+#include <stdio.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -102,6 +104,8 @@ typedef int_fast32_t jas_seqent_t;
 /* An element in a matrix. */
 typedef int_fast32_t jas_matent_t;
 
+typedef int_fast32_t jas_matind_t;
+
 /* Matrix. */
 
 typedef struct jas_matrix {
@@ -110,22 +114,22 @@ typedef struct jas_matrix {
 	int flags_;
 
 	/* The starting horizontal index. */
-	int_fast32_t xstart_;
+	jas_matind_t xstart_;
 
 	/* The starting vertical index. */
-	int_fast32_t ystart_;
+	jas_matind_t ystart_;
 
 	/* The ending horizontal index. */
-	int_fast32_t xend_;
+	jas_matind_t xend_;
 
 	/* The ending vertical index. */
-	int_fast32_t yend_;
+	jas_matind_t yend_;
 
 	/* The number of rows in the matrix. */
-	int_fast32_t numrows_;
+	jas_matind_t numrows_;
 
 	/* The number of columns in the matrix. */
-	int_fast32_t numcols_;
+	jas_matind_t numcols_;
 
 	/* Pointers to the start of each row. */
 	jas_seqent_t **rows_;
@@ -156,6 +160,9 @@ typedef jas_matrix_t jas_seq_t;
 #define jas_matrix_numcols(matrix) \
 	((matrix)->numcols_)
 
+#define jas_matrix_size(matrix) \
+	(jas_matrix_width(matrix) * jas_matrix_height(matrix))
+
 /* Get a matrix element. */
 #define jas_matrix_get(matrix, i, j) \
 	((matrix)->rows_[i][j])
@@ -179,24 +186,25 @@ typedef jas_matrix_t jas_seq_t;
 	(&(matrix)->rows_[i][j])
 
 #define	jas_matrix_getvref(matrix, i) \
-	(((matrix)->numrows_ > 1) ? jas_matrix_getref(matrix, i, 0) : jas_matrix_getref(matrix, 0, i))
+	(((matrix)->numrows_ > 1) ? jas_matrix_getref(matrix, i, 0) : \
+	  jas_matrix_getref(matrix, 0, i))
 
 #define jas_matrix_length(matrix) \
 	(max((matrix)->numrows_, (matrix)->numcols_))
 
 /* Create a matrix with the specified dimensions. */
 gcc_malloc
-jas_matrix_t *jas_matrix_create(int numrows, int numcols);
+jas_matrix_t *jas_matrix_create(jas_matind_t numrows, jas_matind_t numcols);
 
 /* Destroy a matrix. */
 void jas_matrix_destroy(jas_matrix_t *matrix);
 
 /* Resize a matrix.  The previous contents of the matrix are lost. */
-int jas_matrix_resize(jas_matrix_t *matrix, int numrows, int numcols);
+int jas_matrix_resize(jas_matrix_t *matrix, jas_matind_t numrows, jas_matind_t numcols);
 
 /* Create a matrix that references part of another matrix. */
-void jas_matrix_bindsub(jas_matrix_t *mat0, jas_matrix_t *mat1, int r0, int c0,
-  int r1, int c1);
+void jas_matrix_bindsub(jas_matrix_t *mat0, jas_matrix_t *mat1, jas_matind_t r0,
+  jas_matind_t c0, jas_matind_t r1, jas_matind_t c1);
 
 /* Create a matrix that is a reference to a row of another matrix. */
 #define jas_matrix_bindrow(mat0, mat1, r) \
@@ -238,6 +246,9 @@ jas_matrix_t *jas_matrix_copy(jas_matrix_t *x);
 
 jas_matrix_t *jas_matrix_input(FILE *);
 
+#define jas_seqent_asl jas_fast32_asl
+#define jas_seqent_asr jas_fast32_asr
+
 /******************************************************************************\
 * Functions/macros for 2-D sequence class.
 \******************************************************************************/
@@ -246,7 +257,8 @@ gcc_malloc
 jas_seq2d_t *jas_seq2d_copy(jas_seq2d_t *x);
 
 gcc_malloc
-jas_matrix_t *jas_seq2d_create(int xstart, int ystart, int xend, int yend);
+jas_matrix_t *jas_seq2d_create(jas_matind_t xstart, jas_matind_t ystart,
+  jas_matind_t xend, jas_matind_t yend);
 
 #define	jas_seq2d_destroy(s) \
 	jas_matrix_destroy(s)
@@ -273,9 +285,11 @@ jas_matrix_t *jas_seq2d_create(int xstart, int ystart, int xend, int yend);
 	((s)->xstart_ = (x), (s)->ystart_ = (y), \
 	  (s)->xend_ = (s)->xstart_ + (s)->numcols_, \
 	  (s)->yend_ = (s)->ystart_ + (s)->numrows_)
+#define jas_seq2d_size(s) \
+	(jas_seq2d_width(s) * jas_seq2d_height(s))
 
-void jas_seq2d_bindsub(jas_matrix_t *s, jas_matrix_t *s1, int xstart,
-  int ystart, int xend, int yend);
+void jas_seq2d_bindsub(jas_matrix_t *s, jas_matrix_t *s1, jas_matind_t xstart,
+  jas_matind_t ystart, jas_matind_t xend, jas_matind_t yend);
 
 /******************************************************************************\
 * Functions/macros for 1-D sequence class.

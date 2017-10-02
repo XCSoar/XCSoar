@@ -70,13 +70,15 @@
 #ifndef JAS_TYPES_H
 #define JAS_TYPES_H
 
+/* The configuration header file should be included first. */
 #include <jasper/jas_config.h>
 
 #ifdef JASPER_DISABLED
 
 #if !defined(JAS_CONFIGURE)
 
-#if defined(WIN32) || defined(HAVE_WINDOWS_H)
+#if defined(WIN32) || defined(JAS_HAVE_WINDOWS_H)
+// THIS SHOULD NO LONGER BE NEEDED SINCE MSVC SUPPORTS LONG LONG.
 /*
    We are dealing with Microsoft Windows and most likely Microsoft
    Visual C (MSVC).  (Heaven help us.)  Sadly, MSVC does not correctly
@@ -86,134 +88,31 @@
    and "UINT64" types that are defined in the header file "windows.h".
  */
 #include <windows.h>
-#undef longlong
-#define	longlong	INT64
-#undef ulonglong
-#define	ulonglong	UINT64
+//#undef longlong
+//#define	longlong	INT64
+//#undef ulonglong
+//#define	ulonglong	UINT64
 #endif
 
 #endif
 
 #endif /* JASPER_DISABLED */
 
-#if defined(HAVE_STDLIB_H)
-#undef false
-#undef true
+/* Note: The immediately following header files should eventually be removed. */
 #include <stdlib.h>
-#endif
-#if defined(HAVE_STDDEF_H)
 #include <stddef.h>
-#endif
-#if defined(HAVE_SYS_TYPES_H)
+#include <stdbool.h>
+#include <stdint.h>
+
+#if defined(JAS_HAVE_SYS_TYPES_H)
 #include <sys/types.h>
 #endif
 
-#ifndef __cplusplus
-#if defined(HAVE_STDBOOL_H)
-/*
- * The C language implementation does correctly provide the standard header
- * file "stdbool.h".
- */
-#include <stdbool.h>
-#else
-
-/*
- * The C language implementation does not provide the standard header file
- * "stdbool.h" as required by ISO/IEC 9899:1999.  Try to compensate for this
- * braindamage below.
- */
-#if !defined(bool)
-#define	bool	int
-#endif
-#if !defined(true)
-#define true	1
-#endif
-#if !defined(false)
-#define	false	0
-#endif
-#endif
-
-#endif
-
-#if defined(HAVE_STDINT_H)
-/*
- * The C language implementation does correctly provide the standard header
- * file "stdint.h".
- */
-#include <stdint.h>
-#else
-/*
- * The C language implementation does not provide the standard header file
- * "stdint.h" as required by ISO/IEC 9899:1999.  Try to compensate for this
- * braindamage below.
- */
-#include <limits.h>
-/**********/
-#if !defined(INT_FAST8_MIN) && !defined(__MINGW32__)
-typedef signed char int_fast8_t;
-#define INT_FAST8_MIN	(-127)
-#define INT_FAST8_MAX	128
-#endif
-/**********/
-#if !defined(UINT_FAST8_MAX)
-typedef unsigned char uint_fast8_t;
-#define UINT_FAST8_MAX	255
-#endif
-/**********/
-#if !defined(INT_FAST16_MIN)
-typedef short int_fast16_t;
-#define INT_FAST16_MIN	SHRT_MIN
-#define INT_FAST16_MAX	SHRT_MAX
-#endif
-/**********/
-#if !defined(UINT_FAST16_MAX)
-typedef unsigned short uint_fast16_t;
-#define UINT_FAST16_MAX	USHRT_MAX
-#endif
-/**********/
-#if !defined(INT_FAST32_MIN)
-typedef int int_fast32_t;
-#define INT_FAST32_MIN	INT_MIN
-#define INT_FAST32_MAX	INT_MAX
-#endif
-/**********/
-#if !defined(UINT_FAST32_MIN) && !defined(UINT_FAST32_MAX)
-typedef unsigned int uint_fast32_t;
-#define UINT_FAST32_MAX	UINT_MAX
-#endif
-/**********/
-#if !defined(INT_FAST64_MIN) && !defined(INT_FAST64_MAX)
-typedef longlong int_fast64_t;
-#define INT_FAST64_MIN	LLONG_MIN
-#define INT_FAST64_MAX	LLONG_MAX
-#endif
-/**********/
-#if !defined(UINT_FAST64_MIN) && !defined(UINT_FAST64_MAX)
-typedef ulonglong uint_fast64_t;
-#define UINT_FAST64_MAX	ULLONG_MAX
-#endif
-/**********/
-#endif
-
-/* Hopefully, these macro definitions will fix more problems than they cause. */
-#if !defined(uchar)
-#define uchar unsigned char
-#endif
-#if !defined(ushort)
-#define ushort unsigned short
-#endif
-#if !defined(uint)
-#define uint unsigned int
-#endif
-#if !defined(ulong)
-#define ulong unsigned long
-#endif
-#if !defined(longlong)
-#define longlong long long
-#endif
-#if !defined(ulonglong)
-#define ulonglong unsigned long long
-#endif
+#define jas_uchar unsigned char
+#define jas_uint unsigned int
+#define jas_ulong unsigned long
+#define jas_longlong long long
+#define jas_ulonglong unsigned long long
 
 /* The below macro is intended to be used for type casts.  By using this
   macro, type casts can be easily located in the source code with

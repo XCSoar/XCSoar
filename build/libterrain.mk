@@ -16,6 +16,7 @@ TERRAIN_SOURCES = \
 	$(SRC)/Terrain/TerrainRenderer.cpp \
 	$(SRC)/Terrain/TerrainSettings.cpp
 
+TERRAIN_CXXFLAGS_INTERNAL = -Wno-shift-negative-value
 TERRAIN_CPPFLAGS_INTERNAL = $(JASPER_CPPFLAGS) $(SCREEN_CPPFLAGS)
 
 $(eval $(call link-library,libterrain,TERRAIN))

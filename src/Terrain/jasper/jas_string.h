@@ -74,7 +74,9 @@
 * Includes.
 \******************************************************************************/
 
+/* The configuration header file should be included first. */
 #include <jasper/jas_config.h>
+
 #include <string.h>
 
 #include "Compiler.h"

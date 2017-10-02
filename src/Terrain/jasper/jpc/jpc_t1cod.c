@@ -138,9 +138,9 @@ int JPC_NOMINALGAIN(int qmfbid, int numlvls, int lvlno, int orient)
 	/* Avoid compiler warnings about unused parameters. */
 	numlvls = 0;
 
-if (qmfbid == JPC_COX_INS) {
-	return 0;
-}
+	if (qmfbid == JPC_COX_INS) {
+		return 0;
+	}
 	assert(qmfbid == JPC_COX_RFT);
 	if (lvlno == 0) {
 		assert(orient == JPC_TSFB_LL);
@@ -154,11 +154,11 @@ if (qmfbid == JPC_COX_INS) {
 		case JPC_TSFB_HH:
 			return 2;
 			break;
+		default:
+			abort();
+			break;
 		}
 	}
-	abort();
-	// JMW shouldn't get here?
-	return 0;
 }
 
 /******************************************************************************\
@@ -312,7 +312,6 @@ int jpc_getzcctxno(int f, int orient)
 		t = h;
 		h = v;
 		v = t;
-		// fallthrough
 	case JPC_TSFB_LL:
 	case JPC_TSFB_LH:
 		if (!h) {

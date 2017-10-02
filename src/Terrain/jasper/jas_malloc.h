@@ -74,6 +74,7 @@
 * Includes.
 \******************************************************************************/
 
+/* The configuration header file should be included first. */
 #include <jasper/jas_config.h>
 
 #include <stdlib.h>
@@ -86,27 +87,8 @@ extern "C" {
 #endif
 
 /******************************************************************************\
-* Hack follows...
-\******************************************************************************/
-
-#if defined(DEBUG_MEMALLOC)
-/* This is somewhat of a hack, but it's a useful hack. :-) */
-/* Use my own custom memory allocator for debugging. */
-#include "../../../../local/src/memalloc.h"
-#define jas_malloc	MEMALLOC
-#define	jas_free	MEMFREE
-#define	jas_realloc	MEMREALLOC
-#define	jas_calloc	MEMCALLOC
-#define jas_alloc2(a, b)	MEMALLOC((a)*(b))
-#define jas_alloc3(a, b, c)	MEMALLOC((a)*(b)*(c))
-#define jas_realloc2(p, a, b)	MEMREALLOC((p), (a)*(b))
-#endif
-
-/******************************************************************************\
 * Functions.
 \******************************************************************************/
-
-#if !defined(DEBUG_MEMALLOC)
 
 /* Allocate memory. */
 gcc_malloc
@@ -121,14 +103,26 @@ void *jas_realloc(void *ptr, size_t size);
 
 /* Allocate a block of memory and initialize the contents to zero. */
 gcc_malloc
-void *jas_calloc(size_t nmemb, size_t size);
+void *jas_calloc(size_t num_elements, size_t element_size);
 
-/* size-checked double allocation .*/
-void *jas_alloc2(size_t, size_t);
+/* Allocate array (with overflow checking) . */
+gcc_malloc
+void *jas_alloc2(size_t num_elements, size_t element_size);
 
-void *jas_alloc3(size_t, size_t, size_t);
+/* Allocate array of arrays (with overflow checking) . */
+gcc_malloc
+void *jas_alloc3(size_t num_arrays, size_t array_size, size_t element_size);
 
-void *jas_realloc2(void *, size_t, size_t);
+/* Resize a block of allocated memory (with overflow checking) . */
+gcc_malloc
+void *jas_realloc2(void *ptr, size_t num_elements, size_t element_size);
+
+#if defined(JAS_DEFAULT_MAX_MEM_USAGE)
+
+void jas_set_max_mem_usage(size_t max_mem);
+
+size_t jas_get_mem_usage();
+
 #endif
 
 #ifdef __cplusplus

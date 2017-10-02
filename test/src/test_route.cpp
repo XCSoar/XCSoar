@@ -190,6 +190,8 @@ main(int argc, char** argv)
 
   RasterMap map;
 
+  RasterMap map(jp2_path);
+
   NullOperationEnvironment operation;
   if (!LoadTerrainOverview(dir, map.GetTileCache(), operation)) {
     fprintf(stderr, "failed to load map\n");
