@@ -47,6 +47,15 @@ class AutotoolsProject(Project):
 
         build = self.make_build_path(toolchain)
 
+        cppflags = toolchain.cppflags
+        if self.name == 'glibc':
+            # glibc's Makefile goes into an endless re-execution loop
+            # if it is already installed; this kludge works around
+            # this problem by removing all "-isystem" directives (some
+            # of which probably point to the installation directory)
+            import re
+            cppflags = re.sub(r'\s*-isystem\s+\S+\s*', ' ', cppflags)
+
         install_prefix = self.install_prefix
         if install_prefix is None:
             install_prefix = toolchain.install_prefix
@@ -57,7 +66,7 @@ class AutotoolsProject(Project):
             'CXX=' + toolchain.cxx,
             'CFLAGS=' + self._filter_cflags(toolchain.cflags),
             'CXXFLAGS=' + self._filter_cflags(toolchain.cxxflags),
-            'CPPFLAGS=' + toolchain.cppflags + ' ' + self.cppflags,
+            'CPPFLAGS=' + cppflags + ' ' + self.cppflags,
             'LDFLAGS=' + toolchain.ldflags + ' ' + self.ldflags,
             'LIBS=' + toolchain.libs + ' ' + self.libs,
             'AR=' + toolchain.ar,
