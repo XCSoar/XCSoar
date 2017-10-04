@@ -8,7 +8,6 @@ glibc = AutotoolsProject(
     '456995968f3acadbed39f5eba31678df',
     'include/unistd.h',
     [
-        '--enable-static-nss',
         '--enable-kernel=2.6.35',
         '--disable-werror',
         '--disable-build-nscd',
