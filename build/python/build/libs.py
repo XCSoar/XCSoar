@@ -14,6 +14,9 @@ glibc = AutotoolsProject(
         '--disable-nscd',
     ],
     shared=True,
+
+    # This is needed so glibc can find its NSS modules
+    make_args=['default-rpath=/opt/xcsoar/lib'],
 )
 
 zlib = ZlibProject(

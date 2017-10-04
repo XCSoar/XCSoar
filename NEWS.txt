@@ -3,6 +3,7 @@ Version 6.8.9 - not yet released
   - fix several crash bugs
 * fix two crash bugs
 * Kobo
+  - fix internet access (#3869)
   - support for Kobo Glo HD Refurbished
 
 Version 6.8.8 - 2017/09/09
