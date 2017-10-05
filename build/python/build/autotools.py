@@ -12,6 +12,7 @@ class AutotoolsProject(Project):
                  install_prefix=None,
                  install_target='install',
                  use_destdir=False,
+                 make_args=[],
                  **kwargs):
         Project.__init__(self, url, alternative_url, md5, installed, **kwargs)
         self.configure_args = configure_args
@@ -23,6 +24,7 @@ class AutotoolsProject(Project):
         self.install_prefix = install_prefix
         self.install_target = install_target
         self.use_destdir = use_destdir
+        self.make_args = make_args
 
     def _filter_cflags(self, flags):
         if self.shared:
@@ -45,6 +47,15 @@ class AutotoolsProject(Project):
 
         build = self.make_build_path(toolchain)
 
+        cppflags = toolchain.cppflags
+        if self.name == 'glibc':
+            # glibc's Makefile goes into an endless re-execution loop
+            # if it is already installed; this kludge works around
+            # this problem by removing all "-isystem" directives (some
+            # of which probably point to the installation directory)
+            import re
+            cppflags = re.sub(r'\s*-isystem\s+\S+\s*', ' ', cppflags)
+
         install_prefix = self.install_prefix
         if install_prefix is None:
             install_prefix = toolchain.install_prefix
@@ -55,7 +66,7 @@ class AutotoolsProject(Project):
             'CXX=' + toolchain.cxx,
             'CFLAGS=' + self._filter_cflags(toolchain.cflags),
             'CXXFLAGS=' + self._filter_cflags(toolchain.cxxflags),
-            'CPPFLAGS=' + toolchain.cppflags + ' ' + self.cppflags,
+            'CPPFLAGS=' + cppflags + ' ' + self.cppflags,
             'LDFLAGS=' + toolchain.ldflags + ' ' + self.ldflags,
             'LIBS=' + toolchain.libs + ' ' + self.libs,
             'AR=' + toolchain.ar,
@@ -77,7 +88,7 @@ class AutotoolsProject(Project):
         if self.use_destdir:
             destdir = ['DESTDIR=' + toolchain.install_prefix]
 
-        subprocess.check_call(['/usr/bin/make', '--quiet', '-j12'],
+        subprocess.check_call(['/usr/bin/make', '--quiet', '-j12'] + self.make_args,
                               cwd=build, env=toolchain.env)
         subprocess.check_call(['/usr/bin/make', '--quiet', self.install_target] + destdir,
                               cwd=build, env=toolchain.env)
