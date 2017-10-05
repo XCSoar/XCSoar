@@ -219,6 +219,7 @@ LoadJPG2000(jas_stream_t *in, void *loader)
   opts.debug = 0;
   opts.maxlyrs = JPC_MAXLYRS;
   opts.maxpkts = -1;
+  opts.max_samples = JAS_DEC_DEFAULT_MAX_SAMPLES;
 
   jpc_initluts();
 
