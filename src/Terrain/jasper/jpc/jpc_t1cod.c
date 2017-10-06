@@ -210,7 +210,8 @@ int JPC_SEGPASSCNT(int passno, int firstpassno, int numpasses, int bypass, int t
 	} else {
 		ret = JPC_PREC * 3 - 2;
 	}
-	ret = JAS_MIN(ret, numpasses - passno);
+	if (passno < numpasses)
+		ret = JAS_MIN(ret, numpasses - passno);
 	return ret;
 }
 
