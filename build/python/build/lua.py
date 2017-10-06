@@ -1,16 +1,14 @@
 import os.path, subprocess, shutil
 
-from build.project import Project
+from build.makeproject import MakeProject
 from build.quilt import push_all
 
-class LuaProject(Project):
+class LuaProject(MakeProject):
     def __init__(self, url, alternative_url, md5, installed,
                  **kwargs):
-        Project.__init__(self, url, alternative_url, md5, installed, **kwargs)
+        MakeProject.__init__(self, url, alternative_url, md5, installed, **kwargs)
 
-    def build(self, toolchain):
-        src = self.unpack(toolchain, out_of_tree=False)
-
+    def get_make_args(self, toolchain):
         cflags = toolchain.cflags + ' ' + toolchain.cppflags
 
         # hard-code lua_getlocaledecpoint() because
@@ -18,14 +16,21 @@ class LuaProject(Project):
         # version we're depnding on
         cflags += " \"-Dlua_getlocaledecpoint()='.'\""
 
-        subprocess.check_call(['/usr/bin/make', '-j12',
-                               'CC=' + toolchain.cc,
-                               'AR=' + toolchain.ar + ' rcu',
-                               'RANLIB=true',
-                               'MYCFLAGS=' + cflags,
-                               'MYLDFLAGS=' + toolchain.ldflags,
-                               'liblua.a'],
-                              cwd=os.path.join(src, 'src'), env=toolchain.env)
+        return MakeProject.get_make_args(self, toolchain) + [
+            'CC=' + toolchain.cc,
+            'AR=' + toolchain.ar + ' rcu',
+            'RANLIB=true',
+            'MYCFLAGS=' + cflags,
+            'MYLDFLAGS=' + toolchain.ldflags,
+            'liblua.a'
+        ]
+
+    def build(self, toolchain):
+        src = self.unpack(toolchain, out_of_tree=False)
+
+        wd = os.path.join(src, 'src')
+
+        MakeProject.build(self, toolchain, wd, False)
 
         includedir = os.path.join(toolchain.install_prefix, 'include')
         libdir = os.path.join(toolchain.install_prefix, 'lib')
