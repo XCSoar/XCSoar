@@ -732,6 +732,9 @@ static int jpc_cox_getcompparms(jpc_ms_t *ms, jpc_cstate_t *cstate,
 	if (compparms->numdlvls > 32) {
 		goto error;
 	}
+	if (compparms->qmfbid != JPC_COX_INS &&
+	    compparms->qmfbid != JPC_COX_RFT)
+		goto error;
 	compparms->numrlvls = compparms->numdlvls + 1;
 	if (compparms->numrlvls > JPC_MAXRLVLS) {
 		goto error;
