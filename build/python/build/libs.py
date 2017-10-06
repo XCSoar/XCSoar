@@ -35,6 +35,7 @@ musl = AutotoolsProject(
     [
         '--disable-shared',
     ],
+    patches=abspath('lib/musl/patches'),
 )
 
 openssl = OpenSSLProject(
