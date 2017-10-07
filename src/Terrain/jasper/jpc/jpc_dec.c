@@ -1794,7 +1794,7 @@ static int jpc_dec_cp_isvalid(jpc_dec_cp_t *cp)
 	return 1;
 }
 
-static void calcstepsizes(uint_fast16_t refstepsize, int numrlvls,
+static int calcstepsizes(uint_fast16_t refstepsize, int numrlvls,
   uint_fast16_t *stepsizes)
 {
 	int bandno;
@@ -1809,6 +1809,7 @@ static void calcstepsizes(uint_fast16_t refstepsize, int numrlvls,
 		stepsizes[bandno] = JPC_QCX_MANT(mant) | JPC_QCX_EXPN(expn +
 		  (numrlvls - 1) - (numrlvls - 1 - ((bandno > 0) ? ((bandno + 2) / 3) : (0))));
 	}
+	return 0;
 }
 
 static int jpc_dec_cp_prepare(jpc_dec_cp_t *cp)
@@ -1825,7 +1826,9 @@ static int jpc_dec_cp_prepare(jpc_dec_cp_t *cp)
 			}
 		}
 		if (ccp->qsty == JPC_QCX_SIQNT) {
-			calcstepsizes(ccp->stepsizes[0], ccp->numrlvls, ccp->stepsizes);
+			if (calcstepsizes(ccp->stepsizes[0], ccp->numrlvls, ccp->stepsizes)) {
+				return -1;
+			}
 		}
 	}
 	return 0;
