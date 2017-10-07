@@ -6,6 +6,7 @@ from build.openssl import OpenSSLProject
 from build.freetype import FreeTypeProject
 from build.curl import CurlProject
 from build.libpng import LibPNGProject
+from build.libstdcxxmuslheaders import LibstdcxxMuslHeadersProject
 from build.sdl2 import SDL2Project
 from build.lua import LuaProject
 
@@ -36,6 +37,20 @@ musl = AutotoolsProject(
         '--disable-shared',
     ],
     patches=abspath('lib/musl/patches'),
+)
+
+libstdcxx_musl_headers = LibstdcxxMuslHeadersProject(
+    'https://ftp.gnu.org/gnu/gcc/gcc-6.4.0/gcc-6.4.0.tar.xz',
+    'http://mirrors.ibiblio.org/gnu/ftp/gnu/gcc/gcc-6.4.0/gcc-6.4.0.tar.xz',
+    '850bf21eafdfe5cd5f6827148184c08c4a0852a37ccf36ce69855334d2c914d4',
+    'include/libstdc++/algorithm',
+    [
+        '--enable-clocale=generic',
+        '--disable-shared',
+        '--disable-multilib',
+    ],
+    config_script='libstdc++-v3/configure',
+    use_actual_arch=True,
 )
 
 openssl = OpenSSLProject(
