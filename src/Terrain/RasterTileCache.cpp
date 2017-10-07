@@ -36,6 +36,7 @@ static void
 CopyOverviewRow(TerrainHeight *gcc_restrict dest, const jas_seqent_t *gcc_restrict src,
                 unsigned width, unsigned skip)
 {
+  /* note: this loop rounds up */
   for (unsigned x = 0; x < width; ++x, src += skip)
     *dest++ = TerrainHeight(*src);
 }
@@ -68,6 +69,7 @@ RasterTileCache::PutOverviewTile(unsigned index,
   auto *gcc_restrict dest = overview.GetData()
     + start_y * dest_pitch + start_x;
 
+  /* note: this loop rounds up */
   for (unsigned i = 0, y = 0; i < height; ++i, y += skip, dest += dest_pitch)
     CopyOverviewRow(dest, m.rows_[y], width, skip);
 }
@@ -204,8 +206,10 @@ RasterTileCache::SetSize(unsigned _width, unsigned _height,
   tile_width = _tile_width;
   tile_height = _tile_height;
 
-  overview.Resize(RasterTraits::ToOverview(width),
-                  RasterTraits::ToOverview(height));
+  /* round the overview size up, because PutOverviewTile() does the
+     same */
+  overview.Resize(RasterTraits::ToOverviewCeil(width),
+                  RasterTraits::ToOverviewCeil(height));
   overview_width_fine = width << RasterTraits::SUBPIXEL_BITS;
   overview_height_fine = height << RasterTraits::SUBPIXEL_BITS;
 

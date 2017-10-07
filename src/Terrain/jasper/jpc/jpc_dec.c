@@ -640,7 +640,9 @@ static int jpc_dec_process_sod(jpc_dec_t *dec, jpc_ms_t *ms)
 		if (!jpc_dec_cp_isvalid(tile->cp)) {
 			return -1;
 		}
-		jpc_dec_cp_prepare(tile->cp);
+		if (jpc_dec_cp_prepare(tile->cp)) {
+			return -1;
+		}
 
 		if (jpc_dec_tileinit(dec, tile)) {
 			return -1;
@@ -1389,6 +1391,15 @@ static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
 
 	for (tileno = 0, tile = dec->tiles; tileno < dec->numtiles; ++tileno,
 	  ++tile) {
+		/* initialize all tiles with JPC_TILE_DONE so
+		   jpc_dec_destroy() knows which ones need a
+		   jpc_dec_tilefini() call; they are not actually
+		   "done", of course */
+		tile->state = JPC_TILE_DONE;
+	}
+
+	for (tileno = 0, tile = dec->tiles; tileno < dec->numtiles; ++tileno,
+	  ++tile) {
 		htileno = tileno % dec->numhtiles;
 		vtileno = tileno / dec->numhtiles;
 		tile->realmode = 0;
@@ -1658,10 +1669,6 @@ static int jpc_dec_process_com(jpc_dec_t *dec, jpc_ms_t *ms)
 {
 	const jpc_com_t *com = &ms->parms.com;
 
-	/* Eliminate compiler warnings about unused variables. */
-	dec = 0;
-	ms = 0;
-
 	jas_rtc_ProcessComment(dec->loader,
 			       (const char *)com->data, com->len);
 
@@ -1796,7 +1803,7 @@ static int jpc_dec_cp_isvalid(jpc_dec_cp_t *cp)
 	return 1;
 }
 
-static void calcstepsizes(uint_fast16_t refstepsize, int numrlvls,
+static int calcstepsizes(uint_fast16_t refstepsize, int numrlvls,
   uint_fast16_t *stepsizes)
 {
 	int bandno;
@@ -1808,9 +1815,12 @@ static void calcstepsizes(uint_fast16_t refstepsize, int numrlvls,
 	numbands = 3 * numrlvls - 2;
 	for (bandno = 0; bandno < numbands; ++bandno) {
 //jas_eprintf("DEBUG %d %d %d %d %d\n", bandno, expn, numrlvls, bandno, ((numrlvls - 1) - (numrlvls - 1 - ((bandno > 0) ? ((bandno + 2) / 3) : (0)))));
-		stepsizes[bandno] = JPC_QCX_MANT(mant) | JPC_QCX_EXPN(expn +
-		  (numrlvls - 1) - (numrlvls - 1 - ((bandno > 0) ? ((bandno + 2) / 3) : (0))));
+		uint_fast16_t e = expn + (bandno + 2) / 3;
+		if (e >= 0x20)
+			return -1;
+		stepsizes[bandno] = JPC_QCX_MANT(mant) | JPC_QCX_EXPN(e);
 	}
+	return 0;
 }
 
 static int jpc_dec_cp_prepare(jpc_dec_cp_t *cp)
@@ -1827,7 +1837,9 @@ static int jpc_dec_cp_prepare(jpc_dec_cp_t *cp)
 			}
 		}
 		if (ccp->qsty == JPC_QCX_SIQNT) {
-			calcstepsizes(ccp->stepsizes[0], ccp->numrlvls, ccp->stepsizes);
+			if (calcstepsizes(ccp->stepsizes[0], ccp->numrlvls, ccp->stepsizes)) {
+				return -1;
+			}
 		}
 	}
 	return 0;
@@ -2132,6 +2144,16 @@ void jpc_dec_destroy(jpc_dec_t *dec)
 	}
 
 	if (dec->tiles) {
+		int tileno;
+		jpc_dec_tile_t *tile;
+
+		for (tileno = 0, tile = dec->tiles; tileno < dec->numtiles; ++tileno,
+		  ++tile) {
+			if (tile->state != JPC_TILE_DONE) {
+				jpc_dec_tilefini(dec, tile);
+			}
+		}
+
 		jas_free(dec->tiles);
 	}
 
