@@ -14,6 +14,7 @@ class AutotoolsProject(MakeProject):
                  use_destdir=False,
                  make_args=[],
                  config_script='configure',
+                 use_actual_arch=False,
                  **kwargs):
         MakeProject.__init__(self, url, alternative_url, md5, installed, **kwargs)
         self.configure_args = configure_args
@@ -26,6 +27,7 @@ class AutotoolsProject(MakeProject):
         self.use_destdir = use_destdir
         self.make_args = make_args
         self.config_script = config_script
+        self.use_actual_arch = use_actual_arch
 
     def _filter_cflags(self, flags):
         if self.shared:
@@ -74,7 +76,7 @@ class AutotoolsProject(MakeProject):
             'ARFLAGS=' + toolchain.arflags,
             'RANLIB=' + toolchain.ranlib,
             'STRIP=' + toolchain.strip,
-            '--host=' + toolchain.arch,
+            '--host=' + (toolchain.actual_arch if self.use_actual_arch else toolchain.toolchain_arch),
             '--prefix=' + install_prefix,
             '--enable-silent-rules',
         ] + self.configure_args
