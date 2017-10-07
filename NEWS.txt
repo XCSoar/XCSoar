@@ -1,4 +1,4 @@
-Version 6.8.10 - not yet releases
+Version 6.8.10 - 2017/10/07
 * terrain
   - fix crash bug (6.8.9 regression)
 
