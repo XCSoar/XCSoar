@@ -640,7 +640,9 @@ static int jpc_dec_process_sod(jpc_dec_t *dec, jpc_ms_t *ms)
 		if (!jpc_dec_cp_isvalid(tile->cp)) {
 			return -1;
 		}
-		jpc_dec_cp_prepare(tile->cp);
+		if (jpc_dec_cp_prepare(tile->cp)) {
+			return -1;
+		}
 
 		if (jpc_dec_tileinit(dec, tile)) {
 			return -1;
