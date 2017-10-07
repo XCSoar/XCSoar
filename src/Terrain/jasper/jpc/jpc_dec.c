@@ -1391,6 +1391,15 @@ static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
 
 	for (tileno = 0, tile = dec->tiles; tileno < dec->numtiles; ++tileno,
 	  ++tile) {
+		/* initialize all tiles with JPC_TILE_DONE so
+		   jpc_dec_destroy() knows which ones need a
+		   jpc_dec_tilefini() call; they are not actually
+		   "done", of course */
+		tile->state = JPC_TILE_DONE;
+	}
+
+	for (tileno = 0, tile = dec->tiles; tileno < dec->numtiles; ++tileno,
+	  ++tile) {
 		htileno = tileno % dec->numhtiles;
 		vtileno = tileno / dec->numhtiles;
 		tile->realmode = 0;
@@ -2135,6 +2144,16 @@ void jpc_dec_destroy(jpc_dec_t *dec)
 	}
 
 	if (dec->tiles) {
+		int tileno;
+		jpc_dec_tile_t *tile;
+
+		for (tileno = 0, tile = dec->tiles; tileno < dec->numtiles; ++tileno,
+		  ++tile) {
+			if (tile->state != JPC_TILE_DONE) {
+				jpc_dec_tilefini(dec, tile);
+			}
+		}
+
 		jas_free(dec->tiles);
 	}
 
