@@ -13,6 +13,7 @@ class AutotoolsProject(MakeProject):
                  install_target='install',
                  use_destdir=False,
                  make_args=[],
+                 config_script='configure',
                  **kwargs):
         MakeProject.__init__(self, url, alternative_url, md5, installed, **kwargs)
         self.configure_args = configure_args
@@ -24,6 +25,7 @@ class AutotoolsProject(MakeProject):
         self.install_prefix = install_prefix
         self.use_destdir = use_destdir
         self.make_args = make_args
+        self.config_script = config_script
 
     def _filter_cflags(self, flags):
         if self.shared:
@@ -60,7 +62,7 @@ class AutotoolsProject(MakeProject):
             install_prefix = toolchain.install_prefix
 
         configure = [
-            os.path.join(src, 'configure'),
+            os.path.join(src, self.config_script),
             'CC=' + toolchain.cc,
             'CXX=' + toolchain.cxx,
             'CFLAGS=' + self._filter_cflags(toolchain.cflags),
