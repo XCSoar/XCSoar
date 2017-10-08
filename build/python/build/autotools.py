@@ -59,6 +59,16 @@ class AutotoolsProject(MakeProject):
             import re
             cppflags = re.sub(r'\s*-isystem\s+\S+\s*', ' ', cppflags)
 
+        cflags = toolchain.cflags
+        if self.name == 'musl':
+            # WORKAROUND: Use ARM instructions (not Thumb) for musl, to
+            # circumvent crash.
+            # See http://www.openwall.com/lists/musl/2017/10/08/2
+            if '-mthumb' in cflags:
+              cflags = cflags.replace('-mthumb', '-marm')
+            else:
+              cflags = cflags + ' -marm '
+
         install_prefix = self.install_prefix
         if install_prefix is None:
             install_prefix = toolchain.install_prefix
@@ -67,7 +77,7 @@ class AutotoolsProject(MakeProject):
             os.path.join(src, self.config_script),
             'CC=' + toolchain.cc,
             'CXX=' + toolchain.cxx,
-            'CFLAGS=' + self._filter_cflags(toolchain.cflags),
+            'CFLAGS=' + self._filter_cflags(cflags),
             'CXXFLAGS=' + self._filter_cflags(toolchain.cxxflags),
             'CPPFLAGS=' + cppflags + ' ' + self.cppflags,
             'LDFLAGS=' + toolchain.ldflags + ' ' + self.ldflags,
