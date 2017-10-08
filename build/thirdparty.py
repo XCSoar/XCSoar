@@ -103,6 +103,18 @@ elif target == 'ANDROID':
         libtiff,
         libgeotiff,
     ]
+elif toolchain_host_triplet.endswith('-musleabihf'):
+    thirdparty_libs = [
+        zlib,
+        freetype,
+        curl,
+        libpng,
+        libjpeg,
+        lua,
+        libsalsa,
+        libusb,
+        simple_usbmodeswitch,
+    ]
 else:
     thirdparty_libs = [
         musl,
