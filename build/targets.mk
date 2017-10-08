@@ -530,9 +530,15 @@ ifeq ($(TARGET_IS_KOBO),y)
 
   ifeq ($(USE_CROSSTOOL_NG),y)
     HOST_TRIPLET = $(ACTUAL_HOST_TRIPLET)
+    LLVM_TARGET = $(ACTUAL_HOST_TRIPLET)
     KOBO_TOOLCHAIN = $(HOME)/x-tools/$(HOST_TRIPLET)
     KOBO_SYSROOT = $(KOBO_TOOLCHAIN)/$(HOST_TRIPLET)/sysroot
     TCPREFIX = $(KOBO_TOOLCHAIN)/bin/$(HOST_TRIPLET)-
+
+    ifeq ($(CLANG),y)
+      TARGET_CPPFLAGS += -B$(KOBO_TOOLCHAIN)
+      TARGET_CPPFLAGS += --sysroot=$(KOBO_SYSROOT)
+    endif
   else
     LIBSTDCXX_HEADERS_DIR = $(abspath $(THIRDPARTY_LIBS_ROOT)/include/libstdc++)
     TARGET_CXXFLAGS += \
@@ -621,7 +627,13 @@ endif
 
 ifeq ($(TARGET_IS_KOBO),y)
   TARGET_LDFLAGS += --static
-  ifneq ($(USE_CROSSTOOL_NG),y)
+  ifeq ($(USE_CROSSTOOL_NG),y)
+    ifeq ($(CLANG),y)
+     TARGET_LDFLAGS += -B$(KOBO_TOOLCHAIN)
+     TARGET_LDFLAGS += -B$(KOBO_TOOLCHAIN)/bin
+     TARGET_LDFLAGS += --sysroot=$(KOBO_SYSROOT)
+    endif
+  else
     TARGET_LDFLAGS += -specs=$(abspath $(THIRDPARTY_LIBS_ROOT)/lib/musl-gcc.specs)
   endif
 endif
