@@ -51,6 +51,14 @@ OPTIMIZE += -emit-llvm
 endif
 
 OPTIMIZE_LDFLAGS = $(filter-out -emit-llvm,$(OPTIMIZE))
+ifeq ($(CLANG)$(TARGET_IS_DARWIN)$(LTO),yny)
+# The Gold linker is known to work for LTO with LLVM Clang.
+# LLD migh be an option in the future, when it working reliably.
+USE_LD ?= gold
+# The -Os flag is incorrecly passed to the LLVM Gold plugin and LLD. -O3 works.
+OPTIMIZE_LDFLAGS := $(subst -Os,-O3,$(OPTIMIZE_LDFLAGS))
+endif
+
 ifeq ($(PROFILE),y)
 FLAGS_PROFILE := -pg
 else
