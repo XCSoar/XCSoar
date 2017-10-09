@@ -524,6 +524,11 @@ ifeq ($(TARGET_IS_KOBO),y)
   # Clang instead of GCC).
   TARGET_ARCH += -mthumb
 
+  # At least in Debian's arm-linux-gnueabihf GCC, PIE is enabled by default.
+  # PIE brings no benefit for us, and we can get smaller binaries when disabling
+  # it.
+  TARGET_ARCH += -fno-PIE
+
   # We are using a GNU toolchain (triplet arm-linux-gnueabihf) by default, but
   # the actual host triplet is different.
   ACTUAL_HOST_TRIPLET = armv7a-a8neon-linux-musleabihf
