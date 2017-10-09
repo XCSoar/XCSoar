@@ -15,6 +15,10 @@ C_FEATURES += -fPIC
 LDFLAGS += -fPIC -shared
 endif
 
+ifneq ($(USE_LD),)
+LDFLAGS += -fuse-ld=$(USE_LD)
+endif
+
 ifeq ($(HAVE_WIN32),n)
 CXX_FEATURES += -fvisibility=hidden
 C_FEATURES += -fvisibility=hidden
