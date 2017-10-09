@@ -9,10 +9,6 @@ ifeq ($(CLANG),y)
 
 DEPFLAGS = -MD -MF $(DEPFILE) -MT $@
 
-ifeq ($(DEBUG)$(LLVM)$(TARGET_IS_DARWIN)$(LTO),nnny)
-AR += --plugin /usr/local/lib/LLVMgold.so
-endif
-
 ifeq ($(USE_CCACHE),y)
   # ccache will not use the optimisation of avoiding the 2nd call to the
   # pre-processor by compiling the pre-processed output that was used for

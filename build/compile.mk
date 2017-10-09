@@ -47,6 +47,9 @@ ifeq ($(CLANG)$(TARGET_IS_DARWIN)$(LTO),nny)
 # use gcc's "ar" wrapper which takes care for loading the LTO plugin
 AR = $(TCPREFIX)gcc-ar$(TCSUFFIX)$(EXE)
 endif
+
+ifeq ($(CLANG)$(TARGET_IS_DARWIN)$(LTO),yny)
+AR = $(LLVM_PREFIX)llvm-ar$(LLVM_SUFFIX)$(EXE)
 endif
 
 CXX_VERSION := $(shell $(CXX) -dumpversion)
