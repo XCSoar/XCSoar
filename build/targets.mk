@@ -529,6 +529,13 @@ ifeq ($(TARGET_IS_KOBO),y)
   # it.
   TARGET_ARCH += -fno-PIE
 
+  ifeq ($(CLANG),y)
+    # Always use -fomit-frame-pointer for now, to circumvent Clang bug #34165.
+    # https://bugs.llvm.org/show_bug.cgi?id=34165
+    # http://www.openwall.com/lists/musl/2017/10/07/3
+    TARGET_ARCH += -fomit-frame-pointer
+  endif
+
   # We are using a GNU toolchain (triplet arm-linux-gnueabihf) by default, but
   # the actual host triplet is different.
   ACTUAL_HOST_TRIPLET = armv7a-a8neon-linux-musleabihf
