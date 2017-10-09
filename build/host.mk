@@ -2,17 +2,15 @@ HOST_EXEEXT = $(findstring .exe,$(MAKE))
 HOSTCC = $(LOCAL_TCPREFIX)gcc$(LOCAL_TCSUFFIX)$(HOST_EXEEXT)
 HOSTCXX = $(LOCAL_TCPREFIX)g++$(LOCAL_TCSUFFIX)$(HOST_EXEEXT)
 
-ifeq ($(HOST_IS_WIN32),y)
-HOST_CPPFLAGS = $(INCLUDES) $(CPPFLAGS) -DHAVE_MSVCRT
-HOST_CXXFLAGS = $(OPTIMIZE) $(CXX_FEATURES) $(CXXFLAGS) -DHAVE_MSVCRT
-else
-HOST_CPPFLAGS = $(INCLUDES) $(CPPFLAGS)
-HOST_CXXFLAGS = $(OPTIMIZE) $(CXX_FEATURES) $(CXXFLAGS)
-endif
-HOST_CFLAGS = $(OPTIMIZE) $(C_FEATURES) $(CFLAGS)
+HOST_CPPFLAGS = $(INCLUDES)
+HOST_CXXFLAGS = $(OPTIMIZE)
 
-host-cc-flags = $(filter-out -gstabs -finput-charset=$(CHARSET),$(DEPFLAGS) $(HOST_CFLAGS) $(HOST_CPPFLAGS))
-host-cxx-flags = $(filter-out -gstabs -fconserve-space -fno-operator-names -finput-charset=$(CHARSET) -D__STDC_VERSION__=199901L,$(DEPFLAGS) $(HOST_CXXFLAGS) $(HOST_CPPFLAGS))
+ifeq ($(HOST_IS_WIN32),y)
+HOST_CPPFLAGS += -DHAVE_MSVCRT
+endif
+
+host-cc-flags = $(DEPFLAGS) $(HOST_CFLAGS) $(HOST_CPPFLAGS)
+host-cxx-flags = $(DEPFLAGS) $(HOST_CXXFLAGS) $(HOST_CPPFLAGS)
 host-ld-libs = -lm -lstdc++
 
 $(HOST_OUTPUT_DIR)/%.o: %.c | $(HOST_OUTPUT_DIR)/%/../dirstamp
