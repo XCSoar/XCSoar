@@ -50,6 +50,7 @@ ifeq ($(LLVM),y)
 OPTIMIZE += -emit-llvm
 endif
 
+OPTIMIZE_LDFLAGS = $(filter-out -emit-llvm,$(OPTIMIZE))
 ifeq ($(PROFILE),y)
 FLAGS_PROFILE := -pg
 else
