@@ -50,6 +50,9 @@ endif
 
 ifeq ($(CLANG)$(TARGET_IS_DARWIN)$(LTO),yny)
 AR = $(LLVM_PREFIX)llvm-ar$(LLVM_SUFFIX)$(EXE)
+# ranlib has nothing to do for LLVM bytecode which is emitted in Clang's LTO
+# mode. Use "true" command as dummy.
+RANLIB = true
 endif
 
 CXX_VERSION := $(shell $(CXX) -dumpversion)
