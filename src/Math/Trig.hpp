@@ -38,7 +38,11 @@ sin_cos(const double thetha)
   return std::make_pair(sin(thetha), cos(thetha));
 #else
   double s, c;
+#ifdef __APPLE__
+  __sincos(thetha, &s, &c);
+#else
   sincos(thetha, &s, &c);
+#endif
   return std::make_pair(s, c);
 #endif
 }
