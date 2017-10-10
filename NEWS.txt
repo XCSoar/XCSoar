@@ -1,4 +1,6 @@
 Version 6.8.11 - not yet releases
+* terrain
+  - fix yet another crash bug (libJasper)
 
 Version 6.8.10 - 2017/10/07
 * terrain
