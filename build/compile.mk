@@ -41,11 +41,18 @@ DLLTOOL = $(TCPREFIX)dlltool$(EXE)
 SIZE = $(TCPREFIX)size$(EXE)
 STRIP = $(TCPREFIX)strip$(EXE)
 WINDRES = $(TCPREFIX)windres$(EXE)
-ARFLAGS = -rcs
+ARFLAGS = rcs
 
 ifeq ($(CLANG)$(TARGET_IS_DARWIN)$(LTO),nny)
 # use gcc's "ar" wrapper which takes care for loading the LTO plugin
-AR = $(LLVM_PREFIX)gcc-ar$(LLVM_SUFFIX)$(EXE)
+AR = $(TCPREFIX)gcc-ar$(TCSUFFIX)$(EXE)
+endif
+
+ifeq ($(CLANG)$(TARGET_IS_DARWIN)$(LTO),yny)
+AR = $(LLVM_PREFIX)llvm-ar$(LLVM_SUFFIX)$(EXE)
+# ranlib has nothing to do for LLVM bytecode which is emitted in Clang's LTO
+# mode. Use "true" command as dummy.
+RANLIB = true
 endif
 
 CXX_VERSION := $(shell $(CXX) -dumpversion)

@@ -170,18 +170,7 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
     iStyle = 6,
     iRWDir = 7,
     iRWLen = 8,
-    iFrequency = 9,
-    iDescription = 10,
   };
-
-  if (first) {
-    first = false;
-
-    /* skip first line if it doesn't begin with a quotation character
-       (usually the field order line) */
-    if (line[0] != _T('\"'))
-      return true;
-  }
 
   // If (end-of-file or comment)
   if (StringIsEmpty(line) ||
@@ -204,6 +193,28 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
   const TCHAR *params[20];
   size_t n_params = ExtractParameters(line, ctemp, params,
                                       ARRAY_SIZE(params), true, _T('"'));
+
+  if (first) {
+    first = false;
+    if (line[0] != _T('\"')) {
+      /*
+       * If the first line doesn't begin with a quotation mark, it
+       * doesn't describe a waypoint. It probably contains field names.
+       */
+      if (StringIsEqual(params[9], _T("rwwidth"))) {
+        /*
+         * The name of the 10th field is "rwwidth" (runway width).
+         * This field doesn't exist in "typical" SeeYou (*.cup) waypoint
+         * files but is in files saved by at least some versions of
+         * SeeYou Mobile. If the rwwidth field exists, the frequency and
+         * description fields are shifted one position to the right.
+         */
+        iFrequency = 10;
+        iDescription = 11;
+      }
+      return true;
+    }
+  }
 
   // Check if the basic fields are provided
   if (iName >= n_params ||

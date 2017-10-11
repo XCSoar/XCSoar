@@ -15,6 +15,7 @@ JASPER_SOURCES = \
 	$(JASSRC)/jpc/jpc_tagtree.c	$(JASSRC)/jpc/jpc_tsfb.c
 
 JASPER_CFLAGS_INTERNAL = -Wno-type-limits
+JASPER_CFLAGS_INTERNAL += -Wno-shift-negative-value -Wno-sign-compare -Wno-tautological-compare
 
 ifneq ($(CLANG),y)
 ifneq ($(TARGET),CYGWIN)

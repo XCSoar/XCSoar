@@ -1,0 +1,23 @@
+This is required for ABI compatibility with older libstdc++ versions
+(e. g. from the arm-linux-gnueabihf GCC 5 toolchain in Ubuntu 16.04).
+
+Adapted from this patch:
+https://github.com/luckboy/toyroot/blob/master/patch/musl-1.0.4-__sprintf_chk.patch
+
+diff -Nuar musl-1.1.16.orig/src/stdio/__sprintf_chk.c musl-1.1.16/src/stdio/__sprintf_chk.c
+--- musl-1.1.16.orig/src/stdio/__sprintf_chk.c	1970-01-01 01:00:00.000000000 +0100
++++ musl-1.1.16/src/stdio/__sprintf_chk.c	2017-10-01 14:58:28.226941584 +0200
+@@ -0,0 +1,13 @@
++#include <stdarg.h>
++#include <stdio.h>
++#include "atomic.h"
++
++int __sprintf_chk(char *s, int flag, size_t slen, const char *fmt, ...)
++{
++	va_list ap;
++	va_start(ap, fmt);
++	int ret = vsnprintf(s, slen, fmt, ap);
++	if(ret >= 0 && (size_t) ret >= slen) a_crash();
++	va_end(ap);
++	return ret;
++}

@@ -224,6 +224,9 @@ LoadJPG2000(jas_stream_t *in, void *loader)
   opts.maxlyrs = JPC_MAXLYRS;
   opts.maxpkts = -1;
 
+  /* allow really large maps, but specify a reasonable limit */
+  opts.max_samples = size_t(1) << 31;
+
   jpc_initluts();
 
   const auto dec = jpc_dec_create(&opts, in);

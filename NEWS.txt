@@ -4,6 +4,7 @@ Version 7.0 - not yet released
   - screen layout with 12 infoboxes on the left, vario+3 infoboxes on right
 * data files
   - optimise the terrain loader
+  - support runway width in CUP files
 * devices
   - parse wind from standard NMEA sentence WMV
   - driver for XC Tracer Vario
@@ -55,8 +56,17 @@ Version 7.0 - not yet released
 * Kobo
   - support Kobo Glo HD
 
-Version 6.8.9 - not yet released
+Version 6.8.10 - 2017/10/07
+* terrain
+  - fix crash bug (6.8.9 regression)
+
+Version 6.8.9 - 2017/10/05
+* terrain
+  - fix several crash bugs
 * fix two crash bugs
+* Kobo
+  - fix internet access (#3869)
+  - support for Kobo Glo HD Refurbished
 
 Version 6.8.8 - 2017/09/09
 * data files

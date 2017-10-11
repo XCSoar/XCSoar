@@ -58,7 +58,8 @@ The following command installs these on Debian:
 sudo apt-get install make \
   librsvg2-bin xsltproc \
   imagemagick gettext ffmpeg \
-  git quilt zip
+  git quilt zip \
+  m4 automake
 \end{verbatim*}
 
 \section{Target-specific Build Instructions}
@@ -98,7 +99,7 @@ sudo apt-get install make g++ \
   libasound2-dev \
   librsvg2-bin xsltproc \
   imagemagick gettext \
-  libegl1-mesa-dev \
+  mesa-common-dev libgl1-mesa-dev libegl1-mesa-dev \
   fonts-dejavu
 \end{verbatim*}
 
@@ -127,8 +128,8 @@ You may specify one of the following targets with \texttt{TARGET=x}:
 For Android, you need:
 
 \begin{itemize}
-\item \href{http://developer.android.com/sdk/}{Android SDK level 22}
-\item \href{http://developer.android.com/sdk/ndk/}{Android NDK r14b}
+\item \href{http://developer.android.com/sdk/}{Android SDK}
+\item \href{http://developer.android.com/sdk/ndk/}{Android NDK r15c}
 \item \href{http://www.vorbis.com/}{Ogg Vorbis}
 \item {Java JDK 
 \begin{verbatim*}
@@ -136,16 +137,24 @@ sudo apt-get install default-jdk-headless ant vorbis-tools
 \end{verbatim*}}
 \end{itemize}
 
-The \texttt{Makefile} assumes that the Android SDK is installed in
-\verb|~/opt/android-sdk-linux| and the NDK is installed in
-\verb|~/opt/android-ndk-r14b|.  You can use the options
-\verb|ANDROID_SDK| and \verb|ANDROID_NDK| to override these paths.
-
-After installing Java you will have to install at least one Android Platform SDK using the Android SDK Manager:
+The required Android SDK components are:
+\begin{itemize}
+\item Android SDK Build-Tools 26.0.0
+\item SDK Platform 22
+\end{itemize}
+These can be installed from the Android Studio SDK Manager, or using the SDK
+command line tools:
 
 \begin{verbatim*}
-~/opt/android-sdk-linux/tools/android
+tools/bin/sdkmanager \
+  "build-tools;26.0.0" \
+  "platforms;android-22"
 \end{verbatim*}
+
+The \texttt{Makefile} assumes that the Android SDK is installed in
+\verb|~/opt/android-sdk-linux| and the NDK is installed in
+\verb|~/opt/android-ndk-r15c|.  You can use the options
+\verb|ANDROID_SDK| and \verb|ANDROID_NDK| to override these paths.
 
 Load/update the IOIO source code:
 
@@ -180,16 +189,18 @@ extension \\
 
 \end{tabularx}
 
-It is possible that problems occur on 64bit OS (which is now required for Android SDK) when you try to run the cross-compiler toolchain which contains 32 bit components. In some distributions this can be fixed by using the \emph{ia32-libs}, newer distributions (Ubuntu 16.04 for example) might require a different approach (e.g. \emph{lib32z1}).
-
 \subsection{Compiling for Windows}
 
-To cross-compile to (desktop) Windows, you need the mingw-w64 version
-of gcc:
+To cross-compile to (desktop) Windows, you need
+\href{http://mingw-w64.org}{Mingw-w64}.
 
- http://mingw-w64.sourceforge.net/
+The following command installs it on Debian:
 
-To compile, run one of the following:
+\begin{verbatim*}
+sudo apt-get install g++-mingw-w64
+\end{verbatim*}
+
+To compile for 32 bit Windows, run:
 
 \begin{verbatim*}
 make TARGET=PC
@@ -240,17 +251,17 @@ make TARGET=OSX64 dmg
 \subsection{Compiling for the Raspberry Pi}
 
 You need an ARM toolchain.  For example, you can use the Debian
-package \verb|g++-5-arm-linux-gnueabihf|:
+package \verb|g++-arm-linux-gnueabihf|:
 
 \begin{verbatim*}
-make TARGET=PI TCSUFFIX=-5
+make TARGET=PI
 \end{verbatim*}
 
 To optimize for the Raspberry Pi 2 (which has an ARMv7 with NEON
 instead of an ARMv6):
 
 \begin{verbatim*}
-make TARGET=PI2 TCSUFFIX=-5
+make TARGET=PI2
 \end{verbatim*}
 
 These targets are only used for cross-compiling on a (desktop)
@@ -273,12 +284,12 @@ the Cubieboard.
 \subsection{Compiling for Kobo E-book Readers}
 
 You need an ARM toolchain.  For example, you can use the Debian
-package \verb|g++-5-arm-linux-gnueabihf|.
+package \verb|g++-arm-linux-gnueabihf|.
 
 To compile XCSoar, run:
 
 \begin{verbatim*}
-make TARGET=KOBO TCSUFFIX=-5
+make TARGET=KOBO
 \end{verbatim*}
 
 To build the kobo install file \texttt{KoboRoot.tgz}, you need the
@@ -291,7 +302,7 @@ sudo apt-get install fakeroot ttf-bitstream-vera
 Then compile using this command:
 
 \begin{verbatim*}
-make TARGET=KOBO TCSUFFIX=-5 output/KOBO/KoboRoot.tgz
+make TARGET=KOBO output/KOBO/KoboRoot.tgz
 \end{verbatim*}
 
 For this, you need the Debian package \verb|libc6-armhf-cross|.

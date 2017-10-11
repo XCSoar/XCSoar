@@ -43,8 +43,16 @@ class DownloadUtil extends BroadcastReceiver {
 
   static void Deinitialise(Context context) {
     if (instance != null) {
-      context.unregisterReceiver(instance);
-      instance = null;
+      try {
+        context.unregisterReceiver(instance);
+      } catch (IllegalArgumentException e) {
+        /* according to Google Play crash reports, this exception gets
+           thrown spuriously with an empty message, and I have no idea
+           how this can happen and how to dig deeper; to avoid
+           spamming the crash reports, let's just ignore it */
+      } finally {
+        instance = null;
+      }
     }
   }
 

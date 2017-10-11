@@ -196,17 +196,30 @@ static const jp2_boxinfo_t jp2_boxinfo_unk = {
 * Box constructor.
 \******************************************************************************/
 
+static jp2_box_t *jp2_box_create0(void)
+{
+	jp2_box_t *box;
+	if (!(box = jas_malloc(sizeof(jp2_box_t)))) {
+		return 0;
+	}
+	memset(box, 0, sizeof(jp2_box_t));
+	box->type = 0;
+	box->len = 0;
+	// Mark the box data as never having been constructed
+	// so that we will not errantly attempt to destroy it later.
+	box->ops = &jp2_boxinfo_unk.ops;
+	return box;
+}
+
 #ifdef ENABLE_JASPER_ENCODE
 
 jp2_box_t *jp2_box_create(int type)
 {
 	jp2_box_t *box;
 	jp2_boxinfo_t *boxinfo;
-
-	if (!(box = jas_malloc(sizeof(jp2_box_t)))) {
+	if (!(box = jp2_box_create0())) {
 		return 0;
 	}
-	memset(box, 0, sizeof(jp2_box_t));
 	box->type = type;
 	box->len = 0;
 	if (!(boxinfo = jp2_boxinfolookup(type))) {
@@ -267,18 +280,22 @@ jp2_box_t *jp2_box_get(jas_stream_t *in)
 	box = 0;
 	tmpstream = 0;
 
-	if (!(box = jas_malloc(sizeof(jp2_box_t)))) {
+	if (!(box = jp2_box_create0())) {
 		goto error;
 	}
-	box->ops = &jp2_boxinfo_unk.ops;
 	if (jp2_getuint32(in, &len) || jp2_getuint32(in, &box->type)) {
 		goto error;
 	}
 	boxinfo = jp2_boxinfolookup(box->type);
 	box->info = boxinfo;
-	box->ops = &boxinfo->ops;
 	box->len = len;
+	JAS_DBGLOG(10, (
+	  "preliminary processing of JP2 box: "
+	  "type=%c%s%c (0x%08x); length=%"PRIuFAST32"\n",
+	  '"', boxinfo->name, '"', box->type, box->len
+	  ));
 	if (box->len == 1) {
+		JAS_DBGLOG(10, ("big length\n"));
 		if (jp2_getuint64(in, &extlen)) {
 			goto error;
 		}
@@ -307,6 +324,10 @@ jp2_box_t *jp2_box_get(jas_stream_t *in)
 		}
 		jas_stream_rewind(tmpstream);
 
+		// From here onwards, the box data will need to be destroyed.
+		// So, initialize the box operations.
+		box->ops = &boxinfo->ops;
+
 		if (box->ops->getdata) {
 			if ((*box->ops->getdata)(box, tmpstream)) {
 				jas_eprintf("cannot parse box data\n");
@@ -321,7 +342,6 @@ jp2_box_t *jp2_box_get(jas_stream_t *in)
 	}
 
 	return box;
-	abort();
 
 error:
 	if (box) {
@@ -341,8 +361,8 @@ void jp2_box_dump(jp2_box_t *box, FILE *out)
 	assert(boxinfo);
 
 	fprintf(out, "JP2 box: ");
-	fprintf(out, "type=%c%s%c (0x%08x); length=%d\n", '"', boxinfo->name,
-	  '"', box->type, box->len);
+	fprintf(out, "type=%c%s%c (0x%08"PRIxFAST32"); length=%"PRIuFAST32"\n", '"',
+	  boxinfo->name, '"', box->type, box->len);
 	if (box->ops->dumpdata) {
 		(*box->ops->dumpdata)(box, out);
 	}
@@ -394,6 +414,7 @@ static int jp2_bpcc_getdata(jp2_box_t *box, jas_stream_t *in)
 {
 	jp2_bpcc_t *bpcc = &box->data.bpcc;
 	unsigned int i;
+	bpcc->bpcs = 0;
 	bpcc->numcmpts = box->datalen;
 	if (!(bpcc->bpcs = jas_alloc2(bpcc->numcmpts, sizeof(uint_fast8_t)))) {
 		return -1;
@@ -449,6 +470,7 @@ static int jp2_cdef_getdata(jp2_box_t *box, jas_stream_t *in)
 	jp2_cdef_t *cdef = &box->data.cdef;
 	jp2_cdefchan_t *chan;
 	unsigned int channo;
+	cdef->ents = 0;
 	if (jp2_getuint16(in, &cdef->numchans)) {
 		return -1;
 	}
@@ -483,7 +505,9 @@ int jp2_box_put(jp2_box_t *box, jas_stream_t *out)
 	dataflag = !(box->info->flags & (JP2_BOX_SUPER | JP2_BOX_NODATA));
 
 	if (dataflag) {
-		tmpstream = jas_stream_memopen(0, 0);
+		if (!(tmpstream = jas_stream_memopen(0, 0))) {
+			goto error;
+		}
 		if (box->ops->putdata) {
 			if ((*box->ops->putdata)(box, tmpstream)) {
 				goto error;
@@ -511,14 +535,15 @@ int jp2_box_put(jp2_box_t *box, jas_stream_t *out)
 	}
 
 	if (dataflag) {
-		if (jas_stream_copy(out, tmpstream, box->len - JP2_BOX_HDRLEN(false))) {
+		if (jas_stream_copy(out, tmpstream, box->len -
+		  JP2_BOX_HDRLEN(false))) {
+			jas_eprintf("cannot copy box data\n");
 			goto error;
 		}
 		jas_stream_close(tmpstream);
 	}
 
 	return 0;
-	abort();
 
 error:
 
@@ -780,6 +805,7 @@ static int jp2_cmap_getdata(jp2_box_t *box, jas_stream_t *in)
 	jp2_cmap_t *cmap = &box->data.cmap;
 	jp2_cmapent_t *ent;
 	unsigned int i;
+	cmap->ents = 0;
 
 	cmap->numchans = (box->datalen) / 4;
 	if (!(cmap->ents = jas_alloc2(cmap->numchans, sizeof(jp2_cmapent_t)))) {
@@ -827,6 +853,7 @@ static int jp2_pclr_getdata(jp2_box_t *box, jas_stream_t *in)
 	int_fast32_t x;
 
 	pclr->lutdata = 0;
+	pclr->bpc = 0;
 
 	if (jp2_getuint16(in, &pclr->numlutents) ||
 	  jp2_getuint8(in, &pclr->numchans)) {
@@ -862,9 +889,9 @@ static int jp2_pclr_putdata(jp2_box_t *box, jas_stream_t *out)
 #if 0
 	jp2_pclr_t *pclr = &box->data.pclr;
 #endif
-/* Eliminate warning about unused variable. */
-box = 0;
-out = 0;
+	/* Eliminate warning about unused variable. */
+	box = 0;
+	out = 0;
 	return -1;
 }
 #endif /* JASPER_DISABLED */
@@ -878,7 +905,8 @@ static void jp2_pclr_dumpdata(jp2_box_t *box, FILE *out)
 	  (int) pclr->numchans);
 	for (i = 0; i < pclr->numlutents; ++i) {
 		for (j = 0; j < pclr->numchans; ++j) {
-			fprintf(out, "LUT[%d][%d]=%d\n", i, j, pclr->lutdata[i * pclr->numchans + j]);
+			fprintf(out, "LUT[%d][%d]=%"PRIiFAST32"\n", i, j,
+			  pclr->lutdata[i * pclr->numchans + j]);
 		}
 	}
 }

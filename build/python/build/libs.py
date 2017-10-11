@@ -4,7 +4,9 @@ from build.zlib import ZlibProject
 from build.autotools import AutotoolsProject
 from build.openssl import OpenSSLProject
 from build.freetype import FreeTypeProject
+from build.curl import CurlProject
 from build.libpng import LibPNGProject
+from build.libstdcxxmuslheaders import LibstdcxxMuslHeadersProject
 from build.sdl2 import SDL2Project
 from build.lua import LuaProject
 
@@ -14,13 +16,41 @@ glibc = AutotoolsProject(
     '456995968f3acadbed39f5eba31678df',
     'include/unistd.h',
     [
-        '--enable-static-nss',
         '--enable-kernel=2.6.35',
         '--disable-werror',
         '--disable-build-nscd',
         '--disable-nscd',
     ],
+    patches=abspath('lib/glibc/patches'),
     shared=True,
+
+    # This is needed so glibc can find its NSS modules
+    make_args=['default-rpath=/opt/xcsoar/lib'],
+)
+
+musl = AutotoolsProject(
+    'https://www.musl-libc.org/releases/musl-1.1.16.tar.gz',
+    'https://fossies.org/linux/misc/musl-1.1.16.tar.gz',
+    '937185a5e5d721050306cf106507a006c3f1f86d86cd550024ea7be909071011',
+    'include/unistd.h',
+    [
+        '--disable-shared',
+    ],
+    patches=abspath('lib/musl/patches'),
+)
+
+libstdcxx_musl_headers = LibstdcxxMuslHeadersProject(
+    'https://ftp.gnu.org/gnu/gcc/gcc-6.4.0/gcc-6.4.0.tar.xz',
+    'http://mirrors.ibiblio.org/gnu/ftp/gnu/gcc/gcc-6.4.0/gcc-6.4.0.tar.xz',
+    '850bf21eafdfe5cd5f6827148184c08c4a0852a37ccf36ce69855334d2c914d4',
+    'include/libstdc++/algorithm',
+    [
+        '--enable-clocale=generic',
+        '--disable-shared',
+        '--disable-multilib',
+    ],
+    config_script='libstdc++-v3/configure',
+    use_actual_arch=True,
 )
 
 openssl = OpenSSLProject(
@@ -78,7 +108,7 @@ freetype = FreeTypeProject(
     ],
 )
 
-curl = AutotoolsProject(
+curl = CurlProject(
     'http://curl.haxx.se/download/curl-7.55.1.tar.xz',
     'https://github.com/curl/curl/releases/download/curl-7_55_1/curl-7.55.1.tar.bz2',
     '3eafca6e84ecb4af5f35795dee84e643d5428287e88c041122bb8dac18676bb7',
@@ -100,7 +130,6 @@ curl = AutotoolsProject(
         '--without-ssl', '--without-gnutls', '--without-nss', '--without-libssh2',
     ],
     patches=abspath('lib/curl/patches'),
-    use_clang=True,
 )
 
 proj = AutotoolsProject(
@@ -136,6 +165,25 @@ libjpeg = AutotoolsProject(
     ]
 )
 
+libusb = AutotoolsProject(
+    'https://github.com//libusb/libusb/releases/download/v1.0.21/libusb-1.0.21.tar.bz2',
+    'http://sourceforge.net/projects/libusb/files/libusb-1.0/libusb-1.0.21/libusb-1.0.21.tar.bz2',
+    '7dce9cce9a81194b7065ee912bcd55eeffebab694ea403ffb91b67db66b1824b',
+    'lib/libusb-1.0.a',
+    [
+        '--disable-shared', '--enable-static',
+        '--disable-udev',
+    ]
+)
+
+simple_usbmodeswitch = AutotoolsProject(
+    'https://github.com/felixhaedicke/simple_usbmodeswitch/releases/download/v1.0/simple_usbmodeswitch-1.0.tar.bz2',
+    'http://s15356785.onlinehome-server.info/~felix/simple_usbmodeswitch/simple_usbmodeswitch-1.0.tar.bz2',
+    '35e8a6ed8551ef419baf7310e54d6d1a81e18bf44e111b07d74285001f18e98d',
+    'bin/simple_usbmodeswitch',
+    ldflags='-pthread',
+)
+
 libtiff = AutotoolsProject(
     'http://download.osgeo.org/libtiff/tiff-4.0.8.tar.gz',
     'http://ftp.lfs-matrix.net/pub/blfs/conglomeration/tiff/tiff-4.0.8.tar.gz',
@@ -160,7 +208,6 @@ libtiff = AutotoolsProject(
         '--disable-strip-chopping',
         '--disable-extrasample-as-alpha',
     ],
-    base='tiff-4.0.8',
     patches=abspath('lib/libtiff/patches'),
     autogen=True,
 )
