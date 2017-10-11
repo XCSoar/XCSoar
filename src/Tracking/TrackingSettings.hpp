@@ -30,48 +30,19 @@ Copyright_License {
 
 #include "Tracking/SkyLines/Features.hpp"
 #include "Tracking/SkyLines/Settings.hpp"
+#include "Tracking/LiveTrack24/Settings.hpp"
 
 #include "Util/StaticString.hxx"
 
-#ifdef HAVE_LIVETRACK24
-
-struct LiveTrack24Settings {
-  bool enabled;
-  StaticString<64> server;
-  StaticString<64> username;
-  StaticString<64> password;
-
-  void SetDefaults();
-};
-
-#endif
 
 struct TrackingSettings {
-#ifdef HAVE_LIVETRACK24
-  enum class VehicleType {
-    GLIDER = 0,
-    PARAGLIDER = 1,
-    POWERED_AIRCRAFT = 2,
-    HOT_AIR_BALLOON = 3,
-    HANGGLIDER_FLEX = 4,
-    HANGGLIDER_RIGID = 5,
-  };
-
-  /** Minimum time between two position updates (in seconds) */
-  unsigned interval;
-  VehicleType vehicleType;
-  StaticString<64> vehicle_name;
-#endif
-
-#ifdef HAVE_SKYLINES_TRACKING
   SkyLinesTracking::Settings skylines;
-#endif
+  LiveTrack24::Settings livetrack24;
 
-#ifdef HAVE_LIVETRACK24
-  LiveTrack24Settings livetrack24;
-#endif
-
-  void SetDefaults();
+  void SetDefaults() {
+    skylines.SetDefaults();
+    livetrack24.SetDefaults();
+  }
 };
 
 #endif /* HAVE_TRACKING */

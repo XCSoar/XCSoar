@@ -30,7 +30,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 
 static LiveTrack24::VehicleType
-MapVehicleTypeToLivetrack24(TrackingSettings::VehicleType vt)
+MapVehicleTypeToLivetrack24(LiveTrack24::Settings::VehicleType vt)
 {
   static constexpr LiveTrack24::VehicleType vehicleTypeMap[] = {
     LiveTrack24::VehicleType::GLIDER,
@@ -53,7 +53,7 @@ TrackingGlue::TrackingGlue(boost::asio::io_service &io_service)
    skylines(io_service, this)
 {
   settings.SetDefaults();
-  LiveTrack24::SetServer(settings.livetrack24.server);
+  livetrack24.SetServer(settings.livetrack24.server);
 }
 
 void
@@ -83,8 +83,8 @@ TrackingGlue::SetSettings(const TrackingSettings &_settings)
 
     /* now it's safe to access these variables without a lock */
     settings = _settings;
-    state.ResetSession();
-    LiveTrack24::SetServer(_settings.livetrack24.server);
+    livetrack24.ResetSession();
+    livetrack24.SetServer(_settings.livetrack24.server);
   } else {
     /* no fundamental setting changes; the write needs to be protected
        by the mutex, because another job may be running already */
@@ -113,7 +113,7 @@ TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
     /* can't track without a valid GPS fix */
     return;
 
-  if (!clock.CheckUpdate(settings.interval * 1000))
+  if (!clock.CheckUpdate(settings.livetrack24.interval * 1000))
     /* later */
     return;
 
@@ -152,8 +152,7 @@ TrackingGlue::Tick()
     /* settings have been cleared meanwhile, bail out */
     return;
 
-  unsigned tracking_interval = settings.interval;
-  LiveTrack24Settings copy = this->settings.livetrack24;
+  LiveTrack24::Settings copy = this->settings.livetrack24;
 
   const ScopeUnlock unlock(mutex);
 
@@ -161,10 +160,10 @@ TrackingGlue::Tick()
 
   try {
     if (!flying) {
-      if (last_flying && state.HasSession()) {
+      if (last_flying && livetrack24.HasSession()) {
         /* landing: end tracking session */
-        LiveTrack24::EndTracking(state.session_id, state.packet_id, env);
-        state.ResetSession();
+        livetrack24.EndTracking(env);
+        livetrack24.ResetSession();
         last_timestamp = 0;
       }
 
@@ -174,43 +173,34 @@ TrackingGlue::Tick()
 
     const int64_t current_timestamp = date_time.ToUnixTimeUTC();
 
-    if (state.HasSession() && current_timestamp + 60 < last_timestamp) {
+    if (livetrack24.HasSession() && current_timestamp + 60 < last_timestamp) {
       /* time warp: create a new session */
-      LiveTrack24::EndTracking(state.session_id, state.packet_id, env);
-      state.ResetSession();
+      livetrack24.EndTracking(env);
+      livetrack24.ResetSession();
     }
 
     last_timestamp = current_timestamp;
 
-    if (!state.HasSession()) {
-      LiveTrack24::UserID user_id = 0;
+    if (!livetrack24.HasSession()) {
+      bool success = false;
       if (!copy.username.empty() && !copy.password.empty())
-        user_id = LiveTrack24::GetUserID(copy.username, copy.password, env);
+        success = livetrack24.GenerateSessionID(copy.username, copy.password, env);
 
-      if (user_id == 0) {
+      if (!success) {
         copy.username.clear();
         copy.password.clear();
-        state.session_id = LiveTrack24::GenerateSessionID();
-      } else {
-        state.session_id = LiveTrack24::GenerateSessionID(user_id);
+        livetrack24.GenerateSessionID();
       }
 
-      if (!LiveTrack24::StartTracking(state.session_id, copy.username,
-                                      copy.password, tracking_interval,
-                                      MapVehicleTypeToLivetrack24(settings.vehicleType),
-                                      settings.vehicle_name,
-                                      env)) {
-        state.ResetSession();
+      if (!livetrack24.StartTracking(MapVehicleTypeToLivetrack24(settings.livetrack24.vehicleType),
+                                    settings.livetrack24.vehicle_name, env)) {
+        livetrack24.ResetSession();
         return;
       }
-
-      state.packet_id = 2;
     }
 
-    LiveTrack24::SendPosition(state.session_id, state.packet_id++,
-                              location, altitude, ground_speed, track,
-                              current_timestamp,
-                              env);
+    livetrack24.SendPosition(location, altitude, ground_speed, track,
+                             current_timestamp, env);
   } catch (const std::exception &exception) {
     LogError("LiveTrack24 error", exception);
   }

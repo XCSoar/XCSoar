@@ -21,40 +21,50 @@ Copyright_License {
 }
 */
 
-#include "TrackingSettings.hpp"
+#ifndef XCSOAR_TRACKING_LIVETRACK24_SETTINGS_HPP
+#define XCSOAR_TRACKING_LIVETRACK24_SETTINGS_HPP
 
-#ifdef HAVE_TRACKING
-
-#ifdef HAVE_LIVETRACK24
+#include "Util/StaticString.hxx"
 
 #include <tchar.h>
 
-void
-LiveTrack24Settings::SetDefaults()
-{
-  enabled = false;
-  server = _T("www.livetrack24.com");
-  username.clear();
-  password.clear();
-}
+namespace LiveTrack24 {
+
+struct Settings {
+  enum class VehicleType {
+    GLIDER = 0,
+    PARAGLIDER = 1,
+    POWERED_AIRCRAFT = 2,
+    HOT_AIR_BALLOON = 3,
+    HANGGLIDER_FLEX = 4,
+    HANGGLIDER_RIGID = 5,
+  };
+
+  bool enabled;
+  StaticString<64> server;
+  StaticString<64> username;
+  StaticString<64> password;
+
+  /**
+   * Tracking interval in seconds.
+   */
+  unsigned interval;
+
+  VehicleType vehicleType;
+  StaticString<64> vehicle_name;
+
+  void SetDefaults() {
+    enabled = false;
+    server = _T("www.livetrack24.com");
+    username.clear();
+    password.clear();
+
+    interval = 60;
+
+    vehicleType = VehicleType::GLIDER;
+  }
+};
+
+} /* namespace LiveTrack24 */
 
 #endif
-
-void
-TrackingSettings::SetDefaults()
-{
-#ifdef HAVE_LIVETRACK24
-  interval = 60;
-  vehicleType = VehicleType::GLIDER;
-#endif
-
-#ifdef HAVE_SKYLINES_TRACKING
-  skylines.SetDefaults();
-#endif
-
-#ifdef HAVE_LIVETRACK24
-  livetrack24.SetDefaults();
-#endif
-}
-
-#endif /* HAVE_TRACKING */

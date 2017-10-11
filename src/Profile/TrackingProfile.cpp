@@ -29,43 +29,37 @@ Copyright_License {
 
 #ifdef HAVE_TRACKING
 
-#ifdef HAVE_SKYLINES_TRACKING
 namespace Profile {
-  static void Load(const ProfileMap &map,
-                   SkyLinesTracking::CloudSettings &settings) {
-    bool bvalue;
-    settings.enabled = map.Get(ProfileKeys::CloudEnabled, bvalue)
-      ? (bvalue ? TriState::TRUE : TriState::FALSE)
-      : TriState::UNKNOWN;
+static void Load(const ProfileMap &map,
+                 SkyLinesTracking::CloudSettings &settings) {
+  bool bvalue;
+  settings.enabled = map.Get(ProfileKeys::CloudEnabled, bvalue)
+    ? (bvalue ? TriState::TRUE : TriState::FALSE)
+    : TriState::UNKNOWN;
 
-    map.Get(ProfileKeys::CloudShowThermals, settings.show_thermals);
+  map.Get(ProfileKeys::CloudShowThermals, settings.show_thermals);
 
-    const char *key = map.Get(ProfileKeys::CloudKey);
-    if (key != nullptr)
-      settings.key = ParseUint64(key, nullptr, 16);
-  }
-
-  static void Load(const ProfileMap &map,
-                   SkyLinesTracking::Settings &settings) {
-    map.Get(ProfileKeys::SkyLinesTrackingEnabled, settings.enabled);
-    map.Get(ProfileKeys::SkyLinesRoaming, settings.roaming);
-    map.Get(ProfileKeys::SkyLinesTrackingInterval, settings.interval);
-    map.Get(ProfileKeys::SkyLinesTrafficEnabled, settings.traffic_enabled);
-
-    const char *key = map.Get(ProfileKeys::SkyLinesTrackingKey);
-    if (key != NULL)
-      settings.key = ParseUint64(key, NULL, 16);
-
-    Load(map, settings.cloud);
-  }
+  const char *key = map.Get(ProfileKeys::CloudKey);
+  if (key != nullptr)
+    settings.key = ParseUint64(key, nullptr, 16);
 }
-#endif
 
-#ifdef HAVE_LIVETRACK24
+static void Load(const ProfileMap &map,
+                 SkyLinesTracking::Settings &settings) {
+  map.Get(ProfileKeys::SkyLinesTrackingEnabled, settings.enabled);
+  map.Get(ProfileKeys::SkyLinesRoaming, settings.roaming);
+  map.Get(ProfileKeys::SkyLinesTrackingInterval, settings.interval);
+  map.Get(ProfileKeys::SkyLinesTrafficEnabled, settings.traffic_enabled);
 
-void
-Profile::Load(const ProfileMap &map, LiveTrack24Settings &settings)
-{
+  const char *key = map.Get(ProfileKeys::SkyLinesTrackingKey);
+  if (key != NULL)
+    settings.key = ParseUint64(key, NULL, 16);
+
+  Load(map, settings.cloud);
+}
+
+static void Load(const ProfileMap &map,
+                 LiveTrack24::Settings &settings) {
   map.Get(ProfileKeys::LiveTrack24Enabled, settings.enabled);
 
   if (!map.Get(ProfileKeys::LiveTrack24Server, settings.server))
@@ -77,24 +71,18 @@ Profile::Load(const ProfileMap &map, LiveTrack24Settings &settings)
 
   map.Get(ProfileKeys::LiveTrack24Username, settings.username);
   map.Get(ProfileKeys::LiveTrack24Password, settings.password);
-}
 
-#endif
+  map.Get(ProfileKeys::LiveTrack24TrackingInterval, settings.interval);
+  map.GetEnum(ProfileKeys::LiveTrack24TrackingVehicleType, settings.vehicleType);
+  map.Get(ProfileKeys::LiveTrack24TrackingVehicleName, settings.vehicle_name);
+}
+}
 
 void
 Profile::Load(const ProfileMap &map, TrackingSettings &settings)
 {
-#ifdef HAVE_LIVETRACK24
-  map.Get(ProfileKeys::TrackingInterval, settings.interval);
-  map.GetEnum(ProfileKeys::TrackingVehicleType, settings.vehicleType);
-  map.Get(ProfileKeys::TrackingVehicleName, settings.vehicle_name);
-#endif
-#ifdef HAVE_SKYLINES_TRACKING
   Load(map, settings.skylines);
-#endif
-#ifdef HAVE_LIVETRACK24
   Load(map, settings.livetrack24);
-#endif
 }
 
 #endif /* HAVE_TRACKING */

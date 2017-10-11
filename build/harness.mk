@@ -14,7 +14,6 @@ HARNESS_SOURCES = \
 	$(SRC)/Computer/Wind/Settings.cpp \
 	$(SRC)/TeamCode/Settings.cpp \
 	$(SRC)/Logger/Settings.cpp \
-	$(SRC)/Tracking/TrackingSettings.cpp \
 	$(SRC)/Computer/TraceComputer.cpp \
 	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
