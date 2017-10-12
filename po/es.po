@@ -8,15 +8,17 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2017-02-11 13:43+0000\n"
-"Last-Translator: Sergio Solfa <ssolfa@gmail.com>\n"
-"Language-Team: Spanish <es@li.org>\n"
+"PO-Revision-Date: 2017-10-13 21:48+0000\n"
+"Last-Translator: enrique <aeropasion@gmail.com>\n"
+"Language-Team: Spanish "
+"<https://hosted.weblate.org/projects/xcsoar/translations/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2.17\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
-"X-Generator: Launchpad (build 18329)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -1152,7 +1154,7 @@ msgstr "Duración última térmica"
 #: src/InfoBoxes/Content/Factory.cpp:210
 #, no-c-format
 msgid "TL duration"
-msgstr ""
+msgstr "TL duración"
 
 #: src/InfoBoxes/Content/Factory.cpp:211
 #, no-c-format
@@ -2750,6 +2752,10 @@ msgid ""
 "value estimates your cruise efficiency according to the current flight "
 "history with the set MC value.  Calculation begins after task is started."
 msgstr ""
+"Eficiencia del crucero. 100 indica el rendimiento perfecto de MacCready. "
+"Este valor calcula su eficiencia de crucero de acuerdo con la historia de "
+"vuelo actual con el valor de MC establecido. El cálculo comienza después de "
+"iniciar la tarea."
 
 #: src/InfoBoxes/Content/Factory.cpp:937
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:183
@@ -2943,7 +2949,7 @@ msgstr "Veloccidad de acuerdo la las reglas de la OLC"
 #: src/InfoBoxes/Content/Factory.cpp:1019
 #, no-c-format
 msgid "Final MC0 altitude difference"
-msgstr ""
+msgstr "Diferencia de altitud MC0 final"
 
 #: src/InfoBoxes/Content/Factory.cpp:1020
 #, no-c-format
@@ -2956,6 +2962,8 @@ msgid ""
 "Arrival altitude at the final waypoint with MC 0 setting relative to the "
 "safety arrival height."
 msgstr ""
+"Altitud de llegada en el waypoint final con ajuste de MC 0 en relación con "
+"la altura de llegada de seguridad."
 
 #: src/InfoBoxes/Content/Factory.cpp:1027
 #: src/InfoBoxes/Content/Factory.cpp:1028 src/InfoBoxes/Content/Task.cpp:904
@@ -2971,11 +2979,15 @@ msgid ""
 "of the active waypoint in the current task, the center of a selected goto "
 "waypoint or the target within the AAT sector for AAT tasks."
 msgstr ""
+"Flecha que señala el waypoint actualmente seleccionado. También se muestra "
+"el nombre del waypoint y la distancia. La posición utilizada es la posición "
+"optimizada del waypoint activo en la tarea actual, el centro de un waypoint "
+"goto seleccionado o el objetivo dentro del sector AAT para tareas AAT."
 
 #: src/InfoBoxes/Content/Factory.cpp:1039
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next waypoint arrival time (ground speed)"
-msgstr "Next time to go (ground speed)"
+msgstr "Hora de llegada siguiente del waypoint (velocidad del suelo)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1040
 #, fuzzy, no-c-format
@@ -2983,17 +2995,18 @@ msgid "WP ETA VMG"
 msgstr "WP ETE VMG"
 
 #: src/InfoBoxes/Content/Factory.cpp:1041
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Estimated arrival time at next waypoint, assuming current ground speed is "
 "maintained."
 msgstr ""
-"Tiempo estimado para llegar al siguiente WP, si se mantiene la ground speed."
+"Tiempo estimado para llegar al siguiente WP, si se mantiene la velocidad "
+"sobre el terreno."
 
 #: src/InfoBoxes/Content/Factory.cpp:1048
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Percentage non-circling climb"
-msgstr "Porcentaje ascendido"
+msgstr "Porcentaje de ascenso no circular"
 
 #: src/InfoBoxes/Content/Factory.cpp:1049
 #, fuzzy, no-c-format
