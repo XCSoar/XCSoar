@@ -18,6 +18,12 @@ class ZlibProject(MakeProject):
             'libz.a'
         ]
 
+    def get_make_install_args(self, toolchain):
+        return [
+            'RANLIB=' + toolchain.ranlib,
+            self.install_target
+        ]
+
     def build(self, toolchain):
         src = self.unpack(toolchain, out_of_tree=False)
 
