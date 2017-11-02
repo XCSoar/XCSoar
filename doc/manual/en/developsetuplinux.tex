@@ -66,6 +66,7 @@ First of all, we need Java to work with Android. We use OpenJDK 8 in this exampl
 \begin{verbatim}
 sudo apt-get install openjdk-8-jdk ant
 sudo apt-get install vorbis-tools automake
+sudo apt-get install adb
 \end{verbatim}
 
 \subsection{Install Android SDK and NDK}
@@ -114,15 +115,6 @@ libgcc1:i386
 Now, you should start the Android manager with the \texttt{android} command and install the required packages.
 Use the GUI to select and install SDK 22 and the (preselected) newest tools.
 Be warned, these will need many GB of space on your harddisk (approximately 15 GB for typical defaults)!
-
-Finally, for the \texttt{adb} debugger interface to work via USB, most distributions require manual fixing of the \texttt{udev} rules.
-Create the file \texttt{/etc/udev/rules.d/99-android.rules} and set unix permissions:
-
-\begin{verbatim}
-cd xcsoar
-sudo cp doc/manual/51-android.rules /etc/udev/rules.d/
-sudo chmod a+r /etc/udev/rules.d/51-android.rules
-\end{verbatim}
 
 \section{Optional: Eclipse IDE}
 One of the most widespread IDEs is eclipse. It is not limited to Android, and can be used for all targets. It is not required for \xc, but its installation is described here as an example. Eclipse is quite heavyweight, and many developers prefer other IDEs for \xc development.
