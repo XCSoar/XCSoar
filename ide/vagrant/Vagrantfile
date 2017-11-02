@@ -14,6 +14,11 @@ sudo /xcsoar-host-src/ide/provisioning/install-debian-packages.sh
 
 sudo apt-get clean
 
+cd
+git clone -o host /xcsoar-host-src
+cd xcsoar-src
+git remote add master https://github.com/XCSoar/XCSoar.git
+
 SCRIPT
 
 Vagrant.configure("2") do |config|
