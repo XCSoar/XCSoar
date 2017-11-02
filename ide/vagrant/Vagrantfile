@@ -5,64 +5,14 @@ set -e
 cat >> ~/.profile << EOF
 export LANG=C
 export LC_CTYPE=C
-export USE_CCACHE=y
-export CCACHE_DIR=/vagrant/tmp/.ccache
 EOF
 
-# set ANDROID variables
-export ANDROID_API_LEVEL=22
-export ANDROID_SDK_VERSION=24.0.2
-export ANDROID_NDK_VERSION=10e
-export ANDROID_BUILD_TOOLS_VERSION=20.0.0
-
-# update Apt repository
 sudo apt-get update
 
-# install add-apt-repository helper
-sudo apt-get install -y python-software-properties
+sudo /xcsoar-host-src/ide/provisioning/install-debian-packages.sh
+/xcsoar-host-src/ide/provisioning/install-android-tools.sh
 
-# add ppa:ubuntu-toolchain-r/test repository for GCC 4.9
-sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-
-# update Apt repository
-sudo apt-get update
-
-# install base dependencies
-sudo apt-get install -y make g++-4.9 libsdl-image1.2-dev zlib1g-dev \
-    libsdl1.2-dev libfreetype6-dev libpng-dev libjpeg-dev libegl1-mesa-dev \
-    libcurl4-openssl-dev libxml-parser-perl librsvg2-bin xsltproc \
-    imagemagick gettext ttf-dejavu ccache zip p7zip-full git upx-ucl
-
-sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 49
-
-mkdir -p ~/opt
-
-# install PC/WIN64 dependencies
-sudo apt-get install -y binutils-mingw-w64-i686 gcc-mingw-w64-i686 g++-mingw-w64-i686
-sudo apt-get install -y binutils-mingw-w64-x86-64 gcc-mingw-w64-x86-64 g++-mingw-w64-x86-64
-
-# install ANDROID dependencies (incl. 64bit support)
-sudo apt-get install -y openjdk-7-jre-headless openjdk-7-jdk ant vorbis-tools
-sudo apt-get install -y libncurses5:i386 libstdc++6:i386 zlib1g:i386
-
-wget -N -nv http://dl.google.com/android/android-sdk_r$ANDROID_SDK_VERSION-linux.tgz -P /vagrant/tmp
-wget -N -nv http://dl.google.com/android/ndk/android-ndk-r$ANDROID_NDK_VERSION-linux-x86_64.bin -P /vagrant/tmp
-
-tar -xf /vagrant/tmp/android-sdk_r$ANDROID_SDK_VERSION-linux.tgz -C ~/opt
-7z x -o$HOME/opt /vagrant/tmp/android-ndk-r$ANDROID_NDK_VERSION-linux-x86_64.bin
-
-echo 'y' | ~/opt/android-sdk-linux/tools/android update sdk --no-ui --all --filter platform-tools
-echo 'y' | ~/opt/android-sdk-linux/tools/android update sdk --no-ui --all --filter build-tools-$ANDROID_BUILD_TOOLS_VERSION,android-$ANDROID_API_LEVEL
-
-# install Windows Mobile dependencies
-wget -N -nv http://spekje.snt.utwente.nl/~roel/cegcc/mingw32ce-mk-2013-04-03-amd64.tar.xz -P /vagrant/tmp
-tar -xf /vagrant/tmp/mingw32ce-mk-2013-04-03-amd64.tar.xz -C ~/opt
-echo "PATH=\"\$HOME/opt/mingw32ce-mk-2013-04-03-amd64/bin:\$PATH\"" >> ~/.profile
-
-# install Manual dependencies
-sudo apt-get install --no-install-recommends -y \
-    texlive texlive-latex-extra latex-xcolor pgf liblocale-po-perl \
-    texlive-lang-ukenglish texlive-lang-german texlive-lang-french
+sudo apt-get clean
 
 SCRIPT
 
