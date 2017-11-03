@@ -29,9 +29,9 @@ glibc = AutotoolsProject(
 )
 
 musl = AutotoolsProject(
-    'https://www.musl-libc.org/releases/musl-1.1.16.tar.gz',
-    'https://fossies.org/linux/misc/musl-1.1.16.tar.gz',
-    '937185a5e5d721050306cf106507a006c3f1f86d86cd550024ea7be909071011',
+    'https://www.musl-libc.org/releases/musl-1.1.18.tar.gz',
+    'https://fossies.org/linux/misc/musl-1.1.18.tar.gz',
+    'd017ee5d01aec0c522a1330fdff06b1e428cb409e1db819cc4935d5da4a5a118',
     'include/unistd.h',
     [
         '--disable-shared',
