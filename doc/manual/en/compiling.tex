@@ -476,12 +476,13 @@ vagrant ssh
 \end{verbatim*}
 
 The XCSoar source directory on the host is automatically mounted as a shared
-folder at \texttt{/xcsoar-src} in the VM. For performance reasons, it is not
-recommended to compile directly in this folder. A git clone of this directory is
-automatically created in the home directory (\texttt{~/xcsoar-src}), which
-should be used instead. In this git clone, the XSoar source directory on the
-host is preconfigured as a git remote named "host", and the XCSoar master
-directory is preconfigured as a remote named "master".
+folder at \texttt{/xcsoar-host-src} in the VM. For performance reasons, it is
+not recommended to compile directly in this folder. A git clone of this
+directory is automatically created in the home directory
+(\texttt{~/xcsoar-src}), which should be used instead. In this git clone, the
+XSoar source directory on the host is preconfigured as a git remote named
+"host", and the XCSoar master directory is preconfigured as a remote named
+"master".
 
 To shutdown the VM, type:
 
