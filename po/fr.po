@@ -8,15 +8,17 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2016-09-03 21:36+0000\n"
-"Last-Translator: I know I can fly <Unknown>\n"
-"Language-Team: French <fr@li.org>\n"
+"PO-Revision-Date: 2017-11-06 21:46+0000\n"
+"Last-Translator: LL <lu.lecocq@free.fr>\n"
+"Language-Team: French "
+"<https://hosted.weblate.org/projects/xcsoar/translations/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.18-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
-"X-Generator: Launchpad (build 18329)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -422,7 +424,7 @@ msgstr "Circuit vide"
 #: src/Task/ValidationErrorStrings.cpp:41
 #, no-c-format
 msgid "non-FAI turn points"
-msgstr "Points de virage non-FAI."
+msgstr "Points de virage non-FAI"
 
 #: src/Task/ValidationErrorStrings.cpp:42
 #, no-c-format
@@ -594,11 +596,11 @@ msgstr "Impossible de télécharger la liste de vol."
 #: src/Logger/ExternalLogger.cpp:270 src/Logger/ExternalLogger.cpp:281
 #: src/Logger/ExternalLogger.cpp:302 src/Logger/ExternalLogger.cpp:325
 msgid "Download flight"
-msgstr "Téléchargement du vol."
+msgstr "Téléchargement du vol"
 
 #: src/Logger/ExternalLogger.cpp:280
 msgid "Logger is empty."
-msgstr "Aucun enregistrement"
+msgstr "Aucun enregistrement."
 
 #: src/Logger/ExternalLogger.cpp:301
 msgid "Failed to download flight."
