@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2017-11-01 11:49+0000\n"
+"PO-Revision-Date: 2017-11-10 15:49+0000\n"
 "Last-Translator: Peter Brtko <peter.brtko@gmail.com>\n"
 "Language-Team: Slovak "
 "<https://hosted.weblate.org/projects/xcsoar/translations/sk/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 2.17\n"
+"X-Generator: Weblate 2.18-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -3485,7 +3485,6 @@ msgid "Topography/Terrain"
 msgstr "Topografia/Terén"
 
 #: src/Input/InputEventsLua.cpp:60
-#, fuzzy
 msgid "Not found"
 msgstr "Nenájdené"
 
@@ -3676,11 +3675,19 @@ msgid ""
 "the maximum thermalling height may instead be limited by the cloud base.  "
 "Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
 msgstr ""
+"Tento parameter odhaduje výšku nad zemou v ktorej sila priemerného suchého "
+"stupáku padne pod 1.14 m/s. Pravdepodobne dosahuje lepšie výsledky pre výšku "
+"suchého stúpania ako výška Kv, obzvlášť ak je premiešavanie atmosféry "
+"výsledkom skôr vertikálneho strihu vetra ako termikou. (Poznámka: tieto "
+"predpoklady inklinujú k podhodnoteniu maximálnej termickej výšky pre suché "
+"podmienky.) Za prítomnosti mrakov bude maximálna využiteľná výška limitovaná "
+"základňou mraku. Pre suché stupáky tento parameter zanedbáva efekt \"sania "
+"mraku\"."
 
 #: src/Weather/Rasp/RaspStore.cpp:73
 #, no-c-format
 msgid "bl cloud"
-msgstr "bl cloud"
+msgstr "Kv mrak"
 
 #: src/Weather/Rasp/RaspStore.cpp:74
 #, no-c-format
@@ -3692,11 +3699,17 @@ msgid ""
 "humidity within the BL.  The cloud base height is not predicted, but is "
 "expected to be below the BL Top height."
 msgstr ""
+"Tento parameter poskytuje prídavnú možnosť zhodnotenia tvorby mrakov vrámci "
+"konvekčnej vrstvy (Kv). Môže byť použitý spolu s ostatnými parametrami pre "
+"predpoveď mrakov alebo namiesto nich. Predpokladá jednoduchú súvislosť medzi "
+"percentom oblačnosti a maximálnou relatívnou vlhkosťou vrámci Kv. Výška "
+"základní mrakov nieje predpovedaná, ale je očakávané že bude pod hraničnou "
+"výškou Kv."
 
 #: src/Weather/Rasp/RaspStore.cpp:78
 #, no-c-format
 msgid "Sfc temp"
-msgstr "Sfc temp"
+msgstr "pov tepl"
 
 #: src/Weather/Rasp/RaspStore.cpp:79
 #, no-c-format
@@ -3715,7 +3728,7 @@ msgstr ""
 #: src/Weather/Rasp/RaspStore.cpp:83
 #, no-c-format
 msgid "hwcrit"
-msgstr "hwcrit"
+msgstr "vwcrit"
 
 #: src/Weather/Rasp/RaspStore.cpp:84
 #, no-c-format
@@ -3729,6 +3742,13 @@ msgid ""
 "maximum thermalling height may instead be limited by the cloud base.  Being "
 "for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
 msgstr ""
+"Tento parameter odhaduje výšku v ktorej sila priemerného suchého stupáku "
+"padne pod 1.14 m/s. Pravdepodobne dosahuje lepšie výsledky pre výšku suchého "
+"stúpania ako výška Kv, obzvlášť ak je premiešavanie atmosféry výsledkom skôr "
+"vertikálneho strihu vetra ako termikou. (Poznámka: tieto predpoklady "
+"inklinujú k podhodnoteniu maximálnej termickej výšky pre suché podmienky.) "
+"Za prítomnosti mrakov bude maximálna využiteľná výška limitovaná základňou "
+"mraku. Pre suché stupáky tento parameter zanedbáva efekt \"sania mraku\"."
 
 #: src/Weather/Rasp/RaspStore.cpp:88
 #, no-c-format
@@ -3744,6 +3764,11 @@ msgid ""
 "(divergence) produces subsiding vertical motion, creating low-level "
 "inversions which limit thermalling heights."
 msgstr ""
+"Maximum priemerného pohybu hore alebo dole vrámci Kv získaného z veľkého "
+"rastra (sieťová plocha) tvorené horizontálnou konvergenciou. Pozitívna "
+"konvergencia je asociovaná s miestnymi malými konvergentnými líniami. "
+"Negatívna konvergencia (divergencia) vytvára zostupný vertikálny pohyb, "
+"spôsobujúc nízke inverzie ktoré obmedzujú výšku termiky."
 
 #: src/Weather/Rasp/RaspStore.cpp:93
 #, no-c-format
@@ -3834,11 +3859,11 @@ msgstr "Základňa mrakov"
 
 #: src/Renderer/MacCreadyRenderer.cpp:51 src/Renderer/TaskSpeedRenderer.cpp:49
 msgid "Vave"
-msgstr ""
+msgstr "Rpriem"
 
 #: src/Renderer/TaskSpeedRenderer.cpp:52
 msgid "Vest"
-msgstr ""
+msgstr "Rodh"
 
 #: src/UIActions.cpp:52
 msgid "Quit program?"
