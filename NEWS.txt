@@ -1,6 +1,8 @@
 Version 6.8.11 - not yet releases
 * terrain
   - fix yet another crash bug (libJasper)
+* Android
+  - fix crash on Android 8 due to overzealous seccomp filter
 
 Version 6.8.10 - 2017/10/07
 * terrain
