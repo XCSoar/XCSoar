@@ -30,7 +30,7 @@
 #ifndef THREAD_UTIL_HXX
 #define THREAD_UTIL_HXX
 
-#ifdef __linux__
+#if defined(__linux__) && !defined(ANDROID)
 #include <sched.h>
 #include <sys/syscall.h>
 #include <unistd.h>
@@ -38,7 +38,7 @@
 #include <windows.h>
 #endif
 
-#ifdef __linux__
+#if defined(__linux__) && !defined(ANDROID)
 
 static int
 ioprio_set(int which, int who, int ioprio)
@@ -78,7 +78,11 @@ SetThreadIdlePriority()
   sched_setscheduler(0, SCHED_IDLE, &sched_param);
 #endif
 
+#ifndef ANDROID
+  /* this system call is forbidden via seccomp on Android 8 and leads
+     to crash (SIGSYS) */
   ioprio_set_idle();
+#endif
 
 #elif defined(WIN32)
   SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_IDLE);
