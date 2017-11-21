@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2017-11-17 15:49+0000\n"
+"PO-Revision-Date: 2017-11-22 10:50+0000\n"
 "Last-Translator: Peter Brtko <peter.brtko@gmail.com>\n"
 "Language-Team: Slovak "
 "<https://hosted.weblate.org/projects/xcsoar/translations/sk/>\n"
@@ -7260,7 +7260,7 @@ msgstr "Ako prebieha výpočet doletu klzáku s ohľadom na terén."
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:148
 #, no-c-format
 msgid "Uses task glide polar."
-msgstr ""
+msgstr "Použije poláru z úlohy."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:149
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:105
@@ -7271,22 +7271,24 @@ msgstr "Bezpečné MC"
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:150
 #, no-c-format
 msgid "Uses safety MacCready value"
-msgstr ""
+msgstr "Použije bezpečnú MacCready hodnotu."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:154
 msgid "Reach polar"
-msgstr ""
+msgstr "Doletová polára"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:155
 msgid ""
 "This determines the glide performance used in reach, landable arrival, abort "
 "and alternate calculations."
 msgstr ""
+"Toto určuje kĺzavý výkon použitý pre výpočet doletu, dosahu na pristávacie "
+"plochy, ukončenie a alternatívne plochy."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:161
 #, no-c-format
 msgid "Disables the reach display."
-msgstr ""
+msgstr "Deaktivuje zobrazenie doletu."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:162
 #, no-c-format
@@ -7296,7 +7298,7 @@ msgstr "Súbor s terénom"
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:163
 #, no-c-format
 msgid "Draws a dashed line at the terrain glide reach."
-msgstr ""
+msgstr "Vykreslí čiarkovanú líniu na hranici doklzu."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:164
 #, no-c-format
@@ -7326,21 +7328,23 @@ msgstr "Pracovná línia, terénna línia"
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:169
 #, no-c-format
 msgid "Draws a dashed line at the working and terrain glide reaches."
-msgstr ""
+msgstr "Vykreslí čiarkovanú líniu na hranici doklzu pracovnej výšky a terénu."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:170
 #, no-c-format
 msgid "Working line, terrain shade"
-msgstr ""
+msgstr "Pracovná línia, terén tieňovaný"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:171
 #, no-c-format
 msgid "Draws a dashed line at working, and shade terrain, glide reaches."
 msgstr ""
+"Vykreslí čiarkovanú líniu na hranici doklzu v pracovnej výške, stmavý terén "
+"mimo doklzu."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:175
 msgid "Reach display"
-msgstr ""
+msgstr "Zobrazenie doletu"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:65
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:124
@@ -7351,6 +7355,7 @@ msgstr "Príletová výška"
 msgid ""
 "The height above terrain that the glider should arrive at for a safe landing."
 msgstr ""
+"Minimálna výška nad terénom, ktorú musí mať klzák na bezpečné pristátie."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:71
 msgid "Terrain height"
