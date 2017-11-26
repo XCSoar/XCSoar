@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2017-11-26 15:40+0000\n"
-"Last-Translator: anonymous <>\n"
+"PO-Revision-Date: 2017-11-27 16:47+0000\n"
+"Last-Translator: Helmut Rohs <helmut.rohs@gmail.com>\n"
 "Language-Team: German "
 "<https://hosted.weblate.org/projects/xcsoar/translations/de/>\n"
 "Language: de\n"
@@ -1901,9 +1901,9 @@ msgid ""
 msgstr ""
 "Vorhergesagte Temperatur am Boden des Heimatflugplatzes, berechnet aus "
 "erwarteter Konvektionshöhe und Wolkenbasis in Verbindung mit der "
-"Außentemperatur und relativen Feuchte.\r\n"
+"Außentemperatur und relativen Feuchte.\n"
 "Drücke die Hoch/Runter-Pfeiltaste, um diese vorhergesagte Temperatur zu "
-"verändern. (nur Touchscreen/PC)"
+"verändern (nur Touchscreen/PC)."
 
 #: src/InfoBoxes/Content/Factory.cpp:554
 #, no-c-format
@@ -2746,7 +2746,7 @@ msgstr "Vorflugeffizienz"
 #: src/InfoBoxes/Content/Factory.cpp:929
 #, no-c-format
 msgid "Cruise Eff"
-msgstr "Vorflug Eff."
+msgstr "Vorflug eff."
 
 #: src/InfoBoxes/Content/Factory.cpp:930
 #, no-c-format
@@ -2933,7 +2933,7 @@ msgstr "Abflugdistanz"
 #: src/InfoBoxes/Content/Factory.cpp:1006
 #, no-c-format
 msgid "Distance to where take-off was detected."
-msgstr "Distanz von detektiertem Abflug"
+msgstr "Distanz von detektiertem Abflug."
 
 #: src/InfoBoxes/Content/Factory.cpp:1012
 #, no-c-format
@@ -2974,9 +2974,9 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1027
 #: src/InfoBoxes/Content/Factory.cpp:1028 src/InfoBoxes/Content/Task.cpp:904
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Next arrow"
-msgstr "Nächster Pfeil"
+msgstr "Nächster WP - Pfeil"
 
 #: src/InfoBoxes/Content/Factory.cpp:1029
 #, no-c-format
@@ -3030,7 +3030,7 @@ msgstr ""
 "wird beim Start der Aufgabe zurückgesetzt."
 
 #: src/InfoBoxes/Content/Factory.cpp:1056
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Percentage climb chart"
 msgstr "Steigfluganteil Diagramm"
 
@@ -3049,9 +3049,9 @@ msgstr ""
 "Geradeausflug."
 
 #: src/InfoBoxes/Content/Factory.cpp:1064
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Number of used satellites"
-msgstr "Anzahl der zur Positionsbestimmung genutzten GPS-Satelliten"
+msgstr "Anzahl der genutzten GPS-Satelliten"
 
 #: src/InfoBoxes/Content/Factory.cpp:1065
 #, no-c-format
@@ -3495,7 +3495,7 @@ msgstr "Ballast %"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:182
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:226
 msgid "Failed to save file."
-msgstr "Speichern der Datei fehlgeschlagen"
+msgstr "Speichern der Datei fehlgeschlagen."
 
 #: src/Input/InputEventsSettings.cpp:336
 msgid "Waypoint labels"
@@ -3530,7 +3530,7 @@ msgstr "Info ausblenden"
 
 #: src/PageSettings.cpp:82
 msgid "Map (Full screen)"
-msgstr "Ganzer Bildsch."
+msgstr "Karte (Ganzer Bildsch.)"
 
 #: src/Renderer/MapItemListRenderer.cpp:79
 #: src/Renderer/MapItemListRenderer.cpp:83
@@ -3568,7 +3568,7 @@ msgstr "um Gelände herum"
 
 #: src/Renderer/MapItemListRenderer.cpp:183
 msgid "Unreachable due to terrain."
-msgstr "Unerreichbar wegen Terrain"
+msgstr "Unerreichbar wegen Gelände."
 
 #: src/Renderer/MapItemListRenderer.cpp:188
 msgid "Arrival altitude"
@@ -3887,9 +3887,8 @@ msgid "Vave"
 msgstr "Vdurchschnit"
 
 #: src/Renderer/TaskSpeedRenderer.cpp:52
-#, fuzzy
 msgid "Vest"
-msgstr "Vgesch."
+msgstr "Vest"
 
 #: src/UIActions.cpp:52
 msgid "Quit program?"
@@ -4255,7 +4254,7 @@ msgid ""
 "connected."
 msgstr ""
 "Mit dieser Option kannst du einstellen, ob am Gerät ein weiteres Gerät "
-"angeschlossen ist, das Daten empfangen soll"
+"angeschlossen ist, das Daten empfangen soll."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:654
 msgid "Second Driver"
@@ -5015,7 +5014,7 @@ msgstr "Lässt beide Berechnungsmethoden zu."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:63
 msgid "Auto wind"
-msgstr "Windberech."
+msgstr "Wind berech."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:64
 msgid "This allows switching on or off the automatic wind algorithm."
@@ -5108,8 +5107,8 @@ msgid ""
 "Set to forecast ground temperature.  Used by convection estimator "
 "(temperature trace page of Analysis dialog)"
 msgstr ""
-"Setze die vorhergesagt maximale Bodentemperatur. Sie wird für die "
-"Konvektionsabschätzung verwendet (Auf der Seite Temperaturverlauf unter "
+"Setze die vorhergesagt Bodentemperatur. Sie wird für die "
+"Konvektionsabschätzung verwendet (auf der Seite Temperaturverlauf unter "
 "Analyse)."
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:361
@@ -5206,7 +5205,7 @@ msgid "Tracking"
 msgstr "Verfolgung"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:154
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Audio"
 msgstr "Audio"
 
@@ -5389,7 +5388,6 @@ msgid "Thermal Band"
 msgstr "Thermikprofil"
 
 #: src/Dialogs/dlgAnalysis.cpp:502
-#, fuzzy
 msgid "Vario Histogram"
 msgstr "Vario Histogramm"
 
@@ -5465,7 +5463,7 @@ msgstr "Profilname"
 
 #: src/Dialogs/ProfileListDialog.cpp:215 src/Dialogs/ProfileListDialog.cpp:283
 msgid "File exists already."
-msgstr "Datei existiert bereits"
+msgstr "Datei existiert bereits."
 
 #: src/Dialogs/ProfileListDialog.cpp:307
 #, c-format
@@ -5664,7 +5662,7 @@ msgstr "Geben Sie Ihr Passwort ein"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:88
 msgid "Wrong password."
-msgstr "Falsches Passwort"
+msgstr "Falsches Passwort."
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:103
 msgid "Enter a new password"
@@ -6130,7 +6128,7 @@ msgstr "Keine Füllung"
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:77
 #, no-c-format
 msgid "Don't fill the airspace area."
-msgstr "Lufträume nicht ausfüllen"
+msgstr "Lufträume nicht ausfüllen."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:83
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:151
@@ -6305,7 +6303,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:88
 msgid "Auto close FLARM"
-msgstr "Schließe FLARM automatisch."
+msgstr "Schließe FLARM automatisch"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:89
 msgid ""
@@ -7069,7 +7067,7 @@ msgstr "Keine Anpassung."
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:60
 #, no-c-format
 msgid "Use a recent average of the ground track as basis."
-msgstr "Nehme einen aktuellen mitteleren Kurs über Grund als Basis"
+msgstr "Nehme einen aktuellen mitteleren Kurs über Grund als Basis."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:61
 #: src/Dialogs/Task/TargetDialog.cpp:792 Data/Input/default.xci:425
@@ -7148,7 +7146,7 @@ msgstr "Eigenständiger Seitenzoom"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:147
 msgid "Maintain one map zoom level on each page."
-msgstr "Behalte einen Zoom bei auf jeder Seite"
+msgstr "Behalte den Zoomlevel pro Seite."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:171
 msgid "Main area"
@@ -7351,7 +7349,7 @@ msgid "Disables the reach display."
 msgstr "Keine Gleitbereich Darstellung."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:162
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terrain line"
 msgstr "Geländelinie"
 
@@ -7371,7 +7369,7 @@ msgid "Shades terrain outside glide reach."
 msgstr "Verdunkelt das Gelände außerhalb des Gleitflugbereichs."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:166
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Working line"
 msgstr "Arbeitsbereich"
 
@@ -7383,24 +7381,26 @@ msgstr ""
 "Arbeitshöhe erreicht werden kann."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:168
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Working line, terrain line"
 msgstr "Arbeitsbereich, Gleitbereich"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:169
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Draws a dashed line at the working and terrain glide reaches."
-msgstr "Zeichnet eine gestrichelte Linie um den Gleitbereich."
+msgstr "Zeichnet eine gestrichelte Linie um den Arbeitsbereich u. Gleitbereich."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:170
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Working line, terrain shade"
-msgstr ""
+msgstr "Arbeitsbereichlinie, Geländeschattierung"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:171
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Draws a dashed line at working, and shade terrain, glide reaches."
-msgstr "Zeichnet eine gestrichelte Linie um den Gleitbereich."
+msgstr ""
+"Zeichnet eine gestrichelte Linie um den Arbeitsbereich und schattiert den "
+"Gleitbereich."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:175
 msgid "Reach display"
@@ -7717,7 +7717,7 @@ msgstr "Hängegleiter"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:125
 #, no-c-format
 msgid "Simplified hang glider as line graphics, white with black contours."
-msgstr "Vereinfachter Hängegleiter als Strichgrafik, weiß mit schwarzer Kontur"
+msgstr "Vereinfachter Hängegleiter als Strichgrafik, weiß mit schwarzer Kontur."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:126
 #, no-c-format
@@ -7727,7 +7727,7 @@ msgstr "Paraglider"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:127
 #, no-c-format
 msgid "Simplified para glider as line graphics, white with black contours."
-msgstr "Vereinfachter Paraglider als Strichgrafik, weiß mit schwarzer Kontur"
+msgstr "Vereinfachter Paraglider als Strichgrafik, weiß mit schwarzer Kontur."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:132
 #, no-c-format
@@ -8045,8 +8045,8 @@ msgid ""
 "PG online contest with different track values: Free flight - 1 km = 1.0 "
 "point; flat trianlge - 1 km = 1.2 p; FAI triangle - 1 km = 1.4 p."
 msgstr ""
-"Gleitschirm-OLC  mit anderer Wertung pro 1 km: freier Flug = 1 Punkt; "
-"Dreieck = 1.2 Punkte; FAI Dreieck = 1,4 Punkte"
+"Gleitschirm-OLC  mit anderer Wertung pro 1 km: Freier Flug = 1 Punkt; "
+"Dreieck = 1.2 Punkte; FAI Dreieck = 1,4 Punkte."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:110
 #, no-c-format
@@ -8055,8 +8055,8 @@ msgid ""
 "the XContest rules, but with different track values: 1 km = 1.5 points, 1.75 "
 "p and 2.0 p for FAI triangles respectively."
 msgstr ""
-"DHV-XC -OLC mit folgender Wertung pro 1 km: freie Strecke - 1.5 Punkte, "
-"flaches Dreieck - 1,75 Punkte, FAI -Dreieck 2 Punkte"
+"DHV-XC -OLC mit folgender Wertung pro 1 km: Freie Strecke - 1.5 Punkte, "
+"flaches Dreieck - 1,75 Punkte, FAI -Dreieck 2 Punkte."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:113
 #, no-c-format
@@ -8104,7 +8104,7 @@ msgstr "FAI-Dreieck Gebiete"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:133
 msgid "Show FAI triangle areas on the map."
-msgstr "Zeige FAI-Dreieck Gebiete auf der Karte"
+msgstr "Zeige FAI-Dreieck Gebiete auf der Karte."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:137
 msgid "FAI triangle threshold"
@@ -8112,7 +8112,7 @@ msgstr "FAI Dreieck - Grenzwert"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:138
 msgid "Specifies which threshold is used for \"large\" FAI triangles."
-msgstr "Grenzwert für große FAI Dreiecke"
+msgstr "Grenzwert für große FAI Dreiecke."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:197
 msgid "Terrain display"
@@ -8326,7 +8326,7 @@ msgid "feet"
 msgstr "Fuß (Höhe)"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:181
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "meters"
 msgstr "Meter"
 
@@ -8352,11 +8352,11 @@ msgstr "Einheiten für Drücke."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:227
 msgid "Units used for mass."
-msgstr "Maßeinheiten für Gewichte"
+msgstr "Maßeinheiten für Masse."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:237
 msgid "Units used for wing loading."
-msgstr "Maßeinheiten für Flächenbelastung"
+msgstr "Maßeinheiten für Flächenbelastung."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:253
 msgid "Lat./Lon."
@@ -8680,7 +8680,7 @@ msgstr "Zeige nahen Verkehr"
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:214
 msgid ""
 "Download the position of your nearby traffic live from the SkyLines server."
-msgstr "Donwload der Position von nahem Verkehr live von SkyLines"
+msgstr "Donwload der Position von nahem Verkehr live von SkyLines."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:234
 msgid "Vehicle Type"
@@ -9308,7 +9308,7 @@ msgstr "Diesen Wegpunkt hinzufügen?"
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:225
 #, fuzzy
 msgid "Use"
-msgstr "Benutzer angemeldet"
+msgstr "Nimm"
 
 #: src/Renderer/NOAAListRenderer.cpp:45
 msgid "No METAR available"
@@ -10134,7 +10134,7 @@ msgstr "Beschleunigen"
 
 #: Data/Input/default.xci:646
 msgid "Lua"
-msgstr ""
+msgstr "Lua"
 
 #: Data/Input/default.xci:957
 msgid "AVG/ALT"
