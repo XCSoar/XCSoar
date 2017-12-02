@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2017-11-27 16:47+0000\n"
-"Last-Translator: Helmut Rohs <helmut.rohs@gmail.com>\n"
+"PO-Revision-Date: 2017-12-02 15:25+0000\n"
+"Last-Translator: Carsten Sonyi <carsten.sonyi@yahoo.de>\n"
 "Language-Team: German "
 "<https://hosted.weblate.org/projects/xcsoar/translations/de/>\n"
 "Language: de\n"
@@ -4244,9 +4244,8 @@ msgstr "Treiber"
 
 #. for a passthrough device, offer additional driver
 #: src/Dialogs/Device/DeviceEditWidget.cpp:642
-#, fuzzy
 msgid "Passthrough device"
-msgstr "nenne einen zusätzlichen Treiber für ein Weiterleitungs Gerät"
+msgstr "zusätzlich angeschlossenes Gerät"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:643
 msgid ""
@@ -9306,9 +9305,8 @@ msgid "Add this turn point?"
 msgstr "Diesen Wegpunkt hinzufügen?"
 
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:225
-#, fuzzy
 msgid "Use"
-msgstr "Nimm"
+msgstr "Nutzen"
 
 #: src/Renderer/NOAAListRenderer.cpp:45
 msgid "No METAR available"
