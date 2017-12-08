@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2017-11-22 10:50+0000\n"
+"PO-Revision-Date: 2017-12-09 12:51+0000\n"
 "Last-Translator: Peter Brtko <peter.brtko@gmail.com>\n"
 "Language-Team: Slovak "
 "<https://hosted.weblate.org/projects/xcsoar/translations/sk/>\n"
@@ -7378,11 +7378,13 @@ msgid ""
 "The alternates will only be sorted by waypoint type (airport/outlanding "
 "field) and arrival height."
 msgstr ""
+"Alternatívy budú usporiadané iba podla typu (letisko/náhradná plocha) a "
+"výšky príletu."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:81
 #, no-c-format
 msgid "The sorting will also take the current task direction into account."
-msgstr ""
+msgstr "Usporiadanie zohľadní aj aktuálny smer v úlohe."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:82
 #, no-c-format
@@ -7395,19 +7397,23 @@ msgid ""
 "The sorting will try to find landing options in the current direction to the "
 "configured home waypoint."
 msgstr ""
+"Usporiadanie sa pokúsi nájsť možnosti na pristátie v aktuálnom smere k "
+"nastavenému domovskému bodu."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:87
 msgid "Alternates mode"
-msgstr ""
+msgstr "Režim alternatív"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:88
 msgid ""
 "Determines sorting of alternates in the alternates dialog and in abort mode."
 msgstr ""
+"Určuje spôsob triedenia alternatív v okne alternatív a v režime prerušenia "
+"úlohy."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:91
 msgid "Polar degradation"
-msgstr ""
+msgstr "Degradácia poláry"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:92
 #, no-c-format
@@ -7415,16 +7421,18 @@ msgid ""
 "A permanent polar degradation. 0% means no degradation, 50% indicates the "
 "glider's sink rate is doubled."
 msgstr ""
+"Permanentná degradácia poláry. 0% znamená žiadna degradácia, 50% znamená "
+"zdvojnásobené opadanie klzáku."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:100
 msgid "Auto bugs"
-msgstr ""
+msgstr "Muchy automaticky"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:101
 #, no-c-format
 msgid ""
 "If enabled, adds 1% to the bugs setting after each full hour while flying."
-msgstr ""
+msgstr "Ak aktivované, pridá 1% k nastaveniu múch každú hodinu letu."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:106
 msgid ""
@@ -7432,6 +7440,8 @@ msgid ""
 "calculations, in task abort mode and for determining arrival altitude at "
 "airfields."
 msgstr ""
+"MacCready nastavenie použité ak je zapnuté bezpečné MC pre výpočty doletu, v "
+"režime prerušenia úlohy a pre určenie doletovej výšky na letiská."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:114
 msgid "STF risk factor"
@@ -7444,6 +7454,11 @@ msgid ""
 "no compensation, 1.0 scales MC linearly with current height (with reference "
 "to height of the maximum climb). If considered, 0.3 is recommended."
 msgstr ""
+"STF faktor risku znižuje nastavenú hodnotu MacCready použitú na výpočet "
+"preskokovej rýchlosti ak sa klzák dostane nízko, aby kompenzoval zvýšené "
+"riziko. Nastav 0.0 pre žiadnu kompenzáciu, 1.0 znižuje lineárne s aktuálnou "
+"výškou (referenčne s maximálnou nastúpanou výškou).  0.3 je odporúčané "
+"nastavenie pre STF."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:67
 msgid "Map database"
