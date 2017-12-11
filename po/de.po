@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2017-12-11 20:24+0000\n"
+"PO-Revision-Date: 2017-12-12 20:47+0000\n"
 "Last-Translator: Andreas Kleinert <Andy.Kleinert@gmail.com>\n"
 "Language-Team: German "
 "<https://hosted.weblate.org/projects/xcsoar/translations/de/>\n"
@@ -1889,7 +1889,7 @@ msgstr "Temperaturprognose"
 #: src/InfoBoxes/Content/Factory.cpp:547
 #, no-c-format
 msgid "Max Temp"
-msgstr "Max Temp"
+msgstr "Max. Temp."
 
 #: src/InfoBoxes/Content/Factory.cpp:548
 #, no-c-format
