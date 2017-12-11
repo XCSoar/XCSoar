@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2017-12-03 15:48+0000\n"
-"Last-Translator: Carsten Sonyi <carsten.sonyi@yahoo.de>\n"
+"PO-Revision-Date: 2017-12-11 20:24+0000\n"
+"Last-Translator: Andreas Kleinert <Andy.Kleinert@gmail.com>\n"
 "Language-Team: German "
 "<https://hosted.weblate.org/projects/xcsoar/translations/de/>\n"
 "Language: de\n"
@@ -2974,9 +2974,9 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1027
 #: src/InfoBoxes/Content/Factory.cpp:1028 src/InfoBoxes/Content/Task.cpp:904
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next arrow"
-msgstr "Nächster WP - Pfeil"
+msgstr "Nächster WP-Pfeil"
 
 #: src/InfoBoxes/Content/Factory.cpp:1029
 #, no-c-format
@@ -7390,7 +7390,7 @@ msgid "Draws a dashed line at the working and terrain glide reaches."
 msgstr "Zeichnet eine gestrichelte Linie um den Arbeitsbereich u. Gleitbereich."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:170
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Working line, terrain shade"
 msgstr "Arbeitsbereichlinie, Geländeschattierung"
 
