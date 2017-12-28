@@ -8,15 +8,18 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2014-03-11 14:09+0000\n"
-"Last-Translator: Iurii <yprymak@gmail.com>\n"
-"Language-Team: Ukrainian <uk@li.org>\n"
+"PO-Revision-Date: 2018-01-24 12:35+0000\n"
+"Last-Translator: Yura <skayt55@gmail.com>\n"
+"Language-Team: Ukrainian "
+"<https://hosted.weblate.org/projects/xcsoar/translations/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
+"4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 2.19-dev\n"
 "X-Launchpad-Export-Date: 2014-03-11 22:21+0000\n"
-"X-Generator: Launchpad (build 16948)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -589,7 +592,7 @@ msgstr "Завантажити політ"
 
 #: src/Logger/ExternalLogger.cpp:280
 msgid "Logger is empty."
-msgstr "Логгер порожній"
+msgstr "Логгер порожній."
 
 #: src/Logger/ExternalLogger.cpp:301
 msgid "Failed to download flight."
@@ -605,9 +608,8 @@ msgid "Loading Waypoints..."
 msgstr "Завантаження шляхових точок ..."
 
 #: src/CrossSection/CrossSectionRenderer.cpp:67
-#, fuzzy
 msgid "Not moving"
-msgstr "Немає спіралі"
+msgstr "Не рухається"
 
 #: src/Gauge/ThermalAssistantRenderer.cpp:193
 msgid "Not Circling"
@@ -1150,12 +1152,12 @@ msgstr "Загальний набір/втрата висоти в останн�
 #: src/InfoBoxes/Content/Factory.cpp:209
 #, fuzzy, no-c-format
 msgid "Last thermal duration"
-msgstr "Виграш висоти в останньому терміку"
+msgstr "Остання теплова тривалість"
 
 #: src/InfoBoxes/Content/Factory.cpp:210
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "TL duration"
-msgstr "Трив польоту"
+msgstr "Значення осі часу"
 
 #: src/InfoBoxes/Content/Factory.cpp:211
 #, no-c-format
@@ -1187,12 +1189,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:225
 #, no-c-format
 msgid "Next distance"
-msgstr "Відстань до наступн."
+msgstr "Наступна дистанція"
 
 #: src/InfoBoxes/Content/Factory.cpp:226 src/InfoBoxes/Content/Task.cpp:182
 #, no-c-format
 msgid "WP Dist"
-msgstr "WP Dist"
+msgstr "WP дистанція"
 
 #: src/InfoBoxes/Content/Factory.cpp:227
 #, no-c-format
@@ -1503,12 +1505,12 @@ msgstr "ААТ: мінімальна можлива відстань для ре
 #: src/InfoBoxes/Content/Factory.cpp:382
 #, no-c-format
 msgid "AAT speed max. distance"
-msgstr "ААТ швид. макс. відст."
+msgstr "Скорость максимального расстояния ААТ"
 
 #: src/InfoBoxes/Content/Factory.cpp:383
 #, no-c-format
 msgid "AAT Vmax"
-msgstr "AAT Vmax"
+msgstr "Швидкість максимальної відстані ААТ"
 
 #: src/InfoBoxes/Content/Factory.cpp:384
 #, no-c-format
@@ -1520,12 +1522,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:390
 #, no-c-format
 msgid "AAT speed min. distance"
-msgstr "ААТ швид. мін. відст."
+msgstr "Швидкість мінімальної відстані ААТ"
 
 #: src/InfoBoxes/Content/Factory.cpp:391
 #, no-c-format
 msgid "AAT Vmin"
-msgstr "AAT Vmin"
+msgstr "Швидкість мінімальної відстані ААТ"
 
 #: src/InfoBoxes/Content/Factory.cpp:392
 #, no-c-format
@@ -1677,7 +1679,7 @@ msgstr "Час місц"
 #: src/InfoBoxes/Content/Factory.cpp:458
 #, no-c-format
 msgid "GPS time expressed in local time zone."
-msgstr "Час GPS, приведений до місцевого часового поясу"
+msgstr "Час GPS, приведений до місцевого часового поясу."
 
 #: src/InfoBoxes/Content/Factory.cpp:464 src/InfoBoxes/Content/Factory.cpp:465
 #, no-c-format
@@ -1687,7 +1689,7 @@ msgstr "Час UTC"
 #: src/InfoBoxes/Content/Factory.cpp:466
 #, no-c-format
 msgid "GPS time expressed in UTC."
-msgstr "Час GPS, приведений до UTC"
+msgstr "Час GPS, приведений до UTC."
 
 #: src/InfoBoxes/Content/Factory.cpp:472
 #, no-c-format
@@ -1735,7 +1737,7 @@ msgstr "Швидкість при польоті \"дельфіном\""
 #: src/InfoBoxes/Content/Factory.cpp:490 src/Renderer/MacCreadyRenderer.cpp:48
 #, no-c-format
 msgid "Vopt"
-msgstr "Vopt"
+msgstr "V оптим"
 
 #: src/InfoBoxes/Content/Factory.cpp:491
 #, no-c-format
@@ -1788,7 +1790,7 @@ msgstr "Час завершення завдання"
 #: src/InfoBoxes/Content/Factory.cpp:506
 #, no-c-format
 msgid "Fin ETA"
-msgstr "Fin ETA"
+msgstr "Кін. ETA"
 
 #: src/InfoBoxes/Content/Factory.cpp:507
 #, no-c-format
@@ -2066,7 +2068,7 @@ msgid ""
 "altitude. Equivalent to instantaneous Pirker cross-country speed."
 msgstr ""
 "Поточна швидкість на маршруті для даного завдання, з урахуванням висотної "
-"компенсації. Еквівалент поточної швидкості Піркера на маршруті"
+"компенсації. Еквівалент поточної швидкості Піркера на маршруті."
 
 #: src/InfoBoxes/Content/Factory.cpp:626
 #, no-c-format
@@ -2081,7 +2083,7 @@ msgstr "Відст Додому"
 #: src/InfoBoxes/Content/Factory.cpp:628
 #, no-c-format
 msgid "Distance to home waypoint (if defined)."
-msgstr "Відстань до \"домашнього\" ППМ (якщо призначено)"
+msgstr "Відстань до \"домашнього\" ППМ (якщо призначено)."
 
 #: src/InfoBoxes/Content/Factory.cpp:634
 #, no-c-format
@@ -2133,12 +2135,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:652
 #, no-c-format
 msgid "Time-average climb rate in all thermals."
-msgstr "Середня за часом швидкість набору в усіх терміках"
+msgstr "Середня за часом швидкість набору в усіх терміках."
 
 #: src/InfoBoxes/Content/Factory.cpp:658
 #, no-c-format
 msgid "Task req. total height trend"
-msgstr "Тенденція щодо загальної висоти, необхідної для виконання завдання."
+msgstr "Тенденція щодо загальної висоти, необхідної для виконання завдання"
 
 #: src/InfoBoxes/Content/Factory.cpp:659
 #, no-c-format
@@ -2181,7 +2183,7 @@ msgstr "Фінал GR"
 #: src/InfoBoxes/Content/Factory.cpp:675
 #, no-c-format
 msgid "Fin GR"
-msgstr "Fin GR"
+msgstr "Кін. GR"
 
 #: src/InfoBoxes/Content/Factory.cpp:676
 #, no-c-format
@@ -2249,7 +2251,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:706
 #, no-c-format
 msgid "Height above take-off"
-msgstr "Висота над точкою старту."
+msgstr "Висота над точкою старту"
 
 #: src/InfoBoxes/Content/Factory.cpp:707
 #, no-c-format
@@ -2745,7 +2747,7 @@ msgstr "Ефективність на переході для завдання"
 #: src/InfoBoxes/Content/Factory.cpp:929
 #, no-c-format
 msgid "Cruise Eff"
-msgstr "Ефективн. Перех."
+msgstr "Ефективн. польоту"
 
 #: src/InfoBoxes/Content/Factory.cpp:930
 #, no-c-format
@@ -2810,7 +2812,7 @@ msgstr "Відкриття старту"
 #: src/InfoBoxes/Content/Factory.cpp:953
 #, no-c-format
 msgid "Shows the time left until the start point opens or closes."
-msgstr "Показує час, що лишився до відкриття або закриття старту"
+msgstr "Показує час, що лишився до відкриття або закриття старту."
 
 #: src/InfoBoxes/Content/Factory.cpp:958
 #, no-c-format
@@ -2951,9 +2953,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1019
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Final MC0 altitude difference"
-msgstr "Запас висоти на фініші"
+msgstr "Остаточна різниця висот MC0"
 
 #: src/InfoBoxes/Content/Factory.cpp:1020
 #, no-c-format
@@ -2961,7 +2963,7 @@ msgid "Fin MC0 AltD"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1021
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the final waypoint with MC 0 setting relative to the "
 "safety arrival height."
@@ -2969,9 +2971,9 @@ msgstr "Висота прибуття на фінішний ППМ віднос�
 
 #: src/InfoBoxes/Content/Factory.cpp:1027
 #: src/InfoBoxes/Content/Factory.cpp:1028 src/InfoBoxes/Content/Task.cpp:904
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next arrow"
-msgstr "Наступне місце старту"
+msgstr "Наступна стрілка"
 
 #: src/InfoBoxes/Content/Factory.cpp:1029
 #, no-c-format
@@ -2983,12 +2985,12 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1039
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next waypoint arrival time (ground speed)"
-msgstr "Залишок часу до взяття наступного ППМ (швидкість відносно землі)"
+msgstr "Час прибуття до наступного ППМ (швидкість відносно землі)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1040
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "WP ETA VMG"
 msgstr "ППМ ЕТА"
 
@@ -4411,11 +4413,11 @@ msgstr "Пісочний"
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:41
 #: src/Dialogs/ProfileListDialog.cpp:235 src/Dialogs/ProfileListDialog.cpp:264
 msgid "Failed to load file."
-msgstr "Помилка при завантаженні файлу"
+msgstr "Помилка при завантаженні файлу."
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:46
 msgid "Too many waypoints."
-msgstr "Забагато маршрутних точок"
+msgstr "Забагато маршрутних точок."
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:50
 msgid "Uploading Waypoints"
@@ -4487,7 +4489,7 @@ msgstr "Швидкість передачі даних КПК"
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:97
 msgid "Auto off"
-msgstr "Авто викл."
+msgstr "Авто вимкнено"
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:100
 msgid "Auto finish flight"
@@ -4931,7 +4933,7 @@ msgstr ""
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:55
 #, no-c-format
 msgid "Requires only a GPS source."
-msgstr "Потребує лише джерела даних GPS"
+msgstr "Потребує лише джерела даних GPS."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:56
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:213
@@ -4944,7 +4946,7 @@ msgstr "ЗигЗаг"
 msgid "Requires GPS and an intelligent vario with airspeed output."
 msgstr ""
 "Потребує даних GPS  і інтелектуального варіометра з вихідними даними "
-"повітряної швидкості"
+"повітряної швидкості."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:58
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:67
@@ -5449,7 +5451,7 @@ msgstr "Помилка активації профілю ПС  \"%s\" !"
 #: src/Dialogs/Plane/PlaneListDialog.cpp:248
 #: src/Dialogs/Plane/PlaneListDialog.cpp:293
 msgid "Please enter the registration of the plane!"
-msgstr "Прохання ввести реєстраційний номер ПС"
+msgstr "Прохання ввести реєстраційний номер ПС!"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:260
 #: src/Dialogs/Plane/PlaneListDialog.cpp:307
@@ -5780,7 +5782,7 @@ msgstr "Час старту"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:103
 msgid "Start alt."
-msgstr "Вис. старту"
+msgstr "Висота старту."
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:104
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:143
@@ -5889,7 +5891,7 @@ msgstr "Завдання не буде дійсним після заміни."
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:120
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:160
 msgid "Created Goto Task."
-msgstr "Створено завдання до ППМ"
+msgstr "Створено завдання до ППМ."
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:120
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:125
