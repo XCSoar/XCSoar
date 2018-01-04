@@ -7,7 +7,8 @@ apt-get --assume-yes install make \
   librsvg2-bin xsltproc \
   imagemagick gettext ffmpeg \
   git quilt zip \
-  m4 automake wget
+  m4 automake wget \
+  ttf-bitstream-vera fakeroot
 echo
 
 echo Installing Manual dependencies...
