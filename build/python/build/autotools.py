@@ -10,7 +10,6 @@ class AutotoolsProject(MakeProject):
                  libs='',
                  shared=False,
                  install_prefix=None,
-                 install_target='install',
                  use_destdir=False,
                  make_args=[],
                  config_script='configure',
