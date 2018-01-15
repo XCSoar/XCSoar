@@ -184,7 +184,10 @@ endif
 ifeq ($(TARGET),PI)
   override TARGET = UNIX
   TCPREFIX := arm-linux-gnueabihf-
-  PI ?= /opt/pi/root
+  ifeq ($(HOST_IS_PI),n)
+    PI ?= /opt/pi/root
+  endif
+  TARGET_IS_LINUX = y
   TARGET_IS_PI = y
   TARGET_IS_ARM = y
   TARGET_IS_ARMHF = y
@@ -193,7 +196,9 @@ endif
 
 ifeq ($(TARGET),PI2)
   override TARGET = NEON
-  PI ?= /opt/pi/root
+  ifeq ($(HOST_IS_PI),n)
+    PI ?= /opt/pi/root
+  endif
   TARGET_IS_PI = y
 endif
 
@@ -211,17 +216,18 @@ ifeq ($(TARGET),KOBO)
 endif
 
 ifeq ($(TARGET),NEON)
-  # Experimental target for generic ARMv7 with NEON
+  # Experimental target for generic ARMv7 with NEON on Linux
   override TARGET = UNIX
   ifeq ($(USE_CROSSTOOL_NG),y)
-    HOST_TRIPLET = arm-unknown-linux-gnueabihf
+    HOST_TRIPLET ?= arm-unknown-linux-gnueabihf
   else
-    HOST_TRIPLET = arm-linux-gnueabihf
+    HOST_TRIPLET ?= arm-linux-gnueabihf
   endif
-  TCPREFIX = $(HOST_TRIPLET)-
-  ifneq ($(CLANG),y)
+  TCPREFIX ?= $(HOST_TRIPLET)-
+  ifeq ($(CLANG),n)
     TARGET_ARCH += -mcpu=cortex-a8
   endif
+  TARGET_IS_LINUX = y
   TARGET_IS_ARM = y
   TARGET_IS_ARMHF = y
   ARMV7 := y
@@ -244,12 +250,11 @@ ifeq ($(TARGET),IOS32)
   override TARGET = UNIX
   TARGET_IS_DARWIN = y
   TARGET_IS_IOS = y
-  IOS_MIN_SUPPORTED_VERSION = 5.1
+  IOS_MIN_SUPPORTED_VERSION = 7.0
   HOST_TRIPLET = armv7-apple-darwin
   LLVM_TARGET = $(HOST_TRIPLET)
   ifeq ($(HOST_IS_DARWIN),y)
-    DARWIN_SDK_VERSION = 9.3
-    DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS${DARWIN_SDK_VERSION}.sdk
+    DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk
   endif
   LIBCXX = y
   CLANG = y
@@ -264,8 +269,7 @@ ifeq ($(TARGET),IOS64)
   HOST_TRIPLET = aarch64-apple-darwin
   LLVM_TARGET = $(HOST_TRIPLET)
   ifeq ($(HOST_IS_DARWIN),y)
-    DARWIN_SDK_VERSION = 9.1
-    DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS${DARWIN_SDK_VERSION}.sdk
+    DARWIN_SDK ?= /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk
   endif
   LIBCXX = y
   CLANG = y
@@ -277,12 +281,7 @@ ifeq ($(TARGET),UNIX)
   ifeq ($(HOST_IS_LINUX)$(TARGET_IS_DARWIN),yn)
     TARGET_IS_LINUX := y
   endif
-  ifeq ($(HOST_IS_DARWIN),y)
-    TARGET_IS_DARWIN := y
-  endif
-endif
 
-ifeq ($(TARGET),UNIX)
   HAVE_POSIX := y
   HAVE_WIN32 := n
   HAVE_MSVCRT := n
@@ -317,15 +316,15 @@ ifeq ($(TARGET),UNIX)
 
   ifeq ($(TARGET_IS_ARM)$(TARGET_IS_LINUX),yy)
     ifeq ($(TARGET_IS_ARMHF),y)
-      LLVM_TARGET = arm-linux-gnueabihf
+      LLVM_TARGET ?= arm-linux-gnueabihf
     else
-      LLVM_TARGET = arm-linux-gnueabi
+      LLVM_TARGET ?= arm-linux-gnueabi
     endif
   endif
 endif
 
 ifeq ($(TARGET),ANDROID)
-  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r13b
+  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r15c
 
   ANDROID_SDK_PLATFORM = android-22
   ANDROID_NDK_PLATFORM = android-19
@@ -505,8 +504,10 @@ ifeq ($(HAVE_WIN32),n)
   TARGET_INCLUDES += -I$(SRC)/unix
 endif
 
-ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)
-  TARGET_CPPFLAGS += --sysroot=$(PI) -isystem $(PI)/usr/include/arm-linux-gnueabihf -isystem $(PI)/usr/include
+ifeq ($(TARGET_IS_PI),y)
+  ifneq ($(PI),)
+    TARGET_CPPFLAGS += --sysroot=$(PI) -isystem $(PI)/usr/include/arm-linux-gnueabihf -isystem $(PI)/usr/include
+  endif
 endif
 
 ifeq ($(HOST_IS_ARM)$(TARGET_HAS_MALI),ny)
@@ -517,6 +518,46 @@ endif
 
 ifeq ($(TARGET_IS_KOBO),y)
   TARGET_CPPFLAGS += -DKOBO
+
+  # Use Thumb instructions (which is the default in Debian's arm-linux-gnueabihf
+  # toolchain, but this might be different when using another toolchain, or
+  # Clang instead of GCC).
+  TARGET_ARCH += -mthumb
+
+  # At least in Debian's arm-linux-gnueabihf GCC, PIE is enabled by default.
+  # PIE brings no benefit for us, and we can get smaller binaries when disabling
+  # it.
+  TARGET_ARCH += -fno-PIE
+
+  ifeq ($(CLANG),y)
+    # Always use -fomit-frame-pointer for now, to circumvent Clang bug #34165.
+    # https://bugs.llvm.org/show_bug.cgi?id=34165
+    # http://www.openwall.com/lists/musl/2017/10/07/3
+    TARGET_ARCH += -fomit-frame-pointer
+  endif
+
+  # We are using a GNU toolchain (triplet arm-linux-gnueabihf) by default, but
+  # the actual host triplet is different.
+  ACTUAL_HOST_TRIPLET = armv7a-a8neon-linux-musleabihf
+
+  ifeq ($(USE_CROSSTOOL_NG),y)
+    HOST_TRIPLET = $(ACTUAL_HOST_TRIPLET)
+    LLVM_TARGET = $(ACTUAL_HOST_TRIPLET)
+    KOBO_TOOLCHAIN = $(HOME)/x-tools/$(HOST_TRIPLET)
+    KOBO_SYSROOT = $(KOBO_TOOLCHAIN)/$(HOST_TRIPLET)/sysroot
+    TCPREFIX = $(KOBO_TOOLCHAIN)/bin/$(HOST_TRIPLET)-
+
+    ifeq ($(CLANG),y)
+      TARGET_CPPFLAGS += -B$(KOBO_TOOLCHAIN)
+      TARGET_CPPFLAGS += --sysroot=$(KOBO_SYSROOT)
+    endif
+  else
+    LIBSTDCXX_HEADERS_DIR = $(abspath $(THIRDPARTY_LIBS_ROOT)/include/libstdc++)
+    TARGET_CXXFLAGS += \
+      -nostdinc++ \
+      -isystem $(LIBSTDCXX_HEADERS_DIR) \
+      -isystem $(LIBSTDCXX_HEADERS_DIR)/$(ACTUAL_HOST_TRIPLET)
+  endif
 endif
 
 ifeq ($(TARGET),ANDROID)
@@ -597,12 +638,16 @@ ifeq ($(HOST_IS_ARM)$(TARGET_HAS_MALI),ny)
 endif
 
 ifeq ($(TARGET_IS_KOBO),y)
-  TARGET_LDFLAGS += -static-libstdc++
-
-  # use our glibc version and its ld.so on the Kobo, not the one from
-  # the stock Kobo firmware, as it may be incompatible
-  TARGET_LDFLAGS += -Wl,--dynamic-linker=/opt/xcsoar/lib/ld-linux-armhf.so.3
-  TARGET_LDFLAGS += -Wl,--rpath=/opt/xcsoar/lib
+  TARGET_LDFLAGS += --static
+  ifeq ($(USE_CROSSTOOL_NG),y)
+    ifeq ($(CLANG),y)
+     TARGET_LDFLAGS += -B$(KOBO_TOOLCHAIN)
+     TARGET_LDFLAGS += -B$(KOBO_TOOLCHAIN)/bin
+     TARGET_LDFLAGS += --sysroot=$(KOBO_SYSROOT)
+    endif
+  else
+    TARGET_LDFLAGS += -specs=$(abspath $(THIRDPARTY_LIBS_ROOT)/lib/musl-gcc.specs)
+  endif
 endif
 
 ifeq ($(TARGET),ANDROID)

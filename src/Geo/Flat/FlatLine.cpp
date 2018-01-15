@@ -42,6 +42,7 @@ bool
 FlatLine::IntersectOriginCircle(const double r,
                                 FlatPoint &i1, FlatPoint &i2) const
 {
+  // http://mathworld.wolfram.com/Circle-LineIntersection.html
   const auto d = GetVector();
   const auto dr = GetSquaredDistance();
   const auto D = CrossProduct();
@@ -53,8 +54,9 @@ FlatLine::IntersectOriginCircle(const double r,
 
   det = sqrt(det);
   const auto inv_dr = 1. / dr;
-  i1.x = (D * d.y + copysign(d.x, d.y) * det) * inv_dr;
-  i2.x = (D * d.y - copysign(d.x, d.y) * det) * inv_dr;
+  const auto sign_dx = (d.y < 0) ? -d.x : d.x;
+  i1.x = (D * d.y + sign_dx * det) * inv_dr;
+  i2.x = (D * d.y - sign_dx * det) * inv_dr;
   i1.y = (-D * d.x + fabs(d.y) * det) * inv_dr;
   i2.y = (-D * d.x - fabs(d.y) * det) * inv_dr;
   return true;

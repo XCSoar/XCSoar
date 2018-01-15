@@ -4,6 +4,7 @@ Version 7.0 - not yet released
   - screen layout with 12 infoboxes on the left, vario+3 infoboxes on right
 * data files
   - optimise the terrain loader
+  - support runway width in CUP files
 * devices
   - parse wind from standard NMEA sentence WMV
   - driver for XC Tracer Vario
@@ -42,6 +43,7 @@ Version 7.0 - not yet released
   - new infobox: % climb chart showing proportions of time spent circling climb (gray), cruise,
       climbing cruise (green), circling non-climb (orange)
   - improved auto-scaling of vario-like graphical infoboxes
+  - new infobox: "Number Of Satellites"
 * Windows
   - drop support for Windows CE
   - require Windows Vista or later
@@ -54,11 +56,36 @@ Version 7.0 - not yet released
 * Kobo
   - support Kobo Glo HD
 
-Version 6.8.8 - not yet released
+Version 6.8.10 - 2017/10/07
+* terrain
+  - fix crash bug (6.8.9 regression)
+
+Version 6.8.9 - 2017/10/05
+* terrain
+  - fix several crash bugs
+* fix two crash bugs
+* Kobo
+  - fix internet access (#3869)
+  - support for Kobo Glo HD Refurbished
+
+Version 6.8.8 - 2017/09/09
+* data files
+  - support "GSEC" in OpenAir files
 * weather
   - update source URLs for METARs and TAFs
+* devices
+  - CAI302: fix waypoint download (#3830)
+  - IMI: fix PGRMZ parsing (was interpreted as altitude, now is pressure altitude)
+  - LX: fix Nano 3 task declaration (#3858)
 * Kobo
   - support for Kobo Aura Edition 2
+  - support for Kobo Glo Refurbished
+  - fix Wi-Fi on recent Kobo firmware releases (#3850)
+  - fix USB storage compatibility with Windows 10
+* Raspberry Pi
+  - fix Raspbian Stretch compatibility
+* Raspberry Pi / Cubieboard
+  - fix for freeze on shutdown (#3679)
 
 Version 6.8.7 - 2016/08/12
 * data files

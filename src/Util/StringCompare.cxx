@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2015 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2013-2017 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,18 +28,9 @@
  */
 
 #include "StringCompare.hxx"
-#include "StringAPI.hxx"
-
-#include <string.h>
 
 bool
-StringStartsWith(const char *haystack, const char *needle)
-{
-	return memcmp(haystack, needle, StringLength(needle) * sizeof(needle[0])) == 0;
-}
-
-bool
-StringEndsWith(const char *haystack, const char *needle)
+StringEndsWith(const char *haystack, const char *needle) noexcept
 {
 	const size_t haystack_length = StringLength(haystack);
 	const size_t needle_length = StringLength(needle);
@@ -49,7 +40,7 @@ StringEndsWith(const char *haystack, const char *needle)
 }
 
 bool
-StringEndsWithIgnoreCase(const char *haystack, const char *needle)
+StringEndsWithIgnoreCase(const char *haystack, const char *needle) noexcept
 {
 	const size_t haystack_length = StringLength(haystack);
 	const size_t needle_length = StringLength(needle);
@@ -60,26 +51,16 @@ StringEndsWithIgnoreCase(const char *haystack, const char *needle)
 }
 
 const char *
-StringAfterPrefix(const char *string, const char *prefix)
+FindStringSuffix(const char *p, const char *suffix) noexcept
 {
-	size_t prefix_length = strlen(prefix);
-	return StringIsEqual(string, prefix, prefix_length)
-		? string + prefix_length
-		: nullptr;
-}
+	const size_t p_length = StringLength(p);
+	const size_t suffix_length = StringLength(suffix);
 
-const char *
-StringAfterPrefixCI(const char *string, const char *prefix)
-{
-	size_t prefix_length = StringLength(prefix);
-	return strncasecmp(string, prefix, prefix_length) == 0
-		? string + prefix_length
-		: nullptr;
-}
+	if (p_length < suffix_length)
+		return nullptr;
 
-bool
-StringStartsWithIgnoreCase(const char *haystack, const char *needle)
-{
-	return StringIsEqualIgnoreCase(haystack, needle,
-				       StringLength(needle) * sizeof(needle[0]));
+	const char *q = p + p_length - suffix_length;
+	return memcmp(q, suffix, suffix_length) == 0
+		? q
+		: nullptr;
 }

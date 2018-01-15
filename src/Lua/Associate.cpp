@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Associate.hpp"
+#include "Util.hxx"
 
 extern "C" {
 #include <lua.h>
@@ -39,13 +40,11 @@ Lua::AssociatePointer(lua_State *L, const char *table,
                       void *p, int value_idx)
 {
   lua_getfield(L, LUA_REGISTRYINDEX, table);
-  lua_pushlightuserdata(L, p);
 
   if (value_idx < 0)
     value_idx -= 2;
 
-  lua_pushvalue(L, value_idx);
-  lua_settable(L, -3);
+  SetTable(L, -3, LightUserData(p), StackIndex(value_idx));
   lua_pop(L, 1);
 }
 
@@ -53,9 +52,7 @@ void
 Lua::DisassociatePointer(lua_State *L, const char *table, void *p)
 {
   lua_getfield(L, LUA_REGISTRYINDEX, table);
-  lua_pushlightuserdata(L, p);
-  lua_pushnil(L);
-  lua_settable(L, -3);
+  SetTable(L, -3, LightUserData(p), nullptr);
   lua_pop(L, 1);
 }
 
@@ -63,8 +60,7 @@ void
 Lua::LookupPointer(lua_State *L, const char *table, void *p)
 {
   lua_getfield(L, LUA_REGISTRYINDEX, table);
-  lua_pushlightuserdata(L, p);
-  lua_gettable(L, -2);
+  GetTable(L, -2, LightUserData(p));
   lua_remove(L, -2); // pop the registry table
 }
 

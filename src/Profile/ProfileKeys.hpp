@@ -28,6 +28,7 @@ namespace ProfileKeys {
 
 extern const char ShowMenuButton[];
 extern const char UIScale[];
+extern const char CustomDPI[];
 extern const char Password[];
 extern const char SpeedUnitsValue[];
 extern const char DistanceUnitsValue[];
@@ -231,9 +232,6 @@ extern const char AircraftSymbol[];
 
 extern const char FlarmLocation[];
 
-extern const char TrackingInterval[];
-extern const char TrackingVehicleType[];
-extern const char TrackingVehicleName[];
 extern const char SkyLinesTrackingEnabled[];
 extern const char SkyLinesRoaming[];
 extern const char SkyLinesTrackingInterval[];
@@ -249,6 +247,9 @@ extern const char LiveTrack24Enabled[];
 extern const char LiveTrack24Server[];
 extern const char LiveTrack24Username[];
 extern const char LiveTrack24Password[];
+extern const char LiveTrack24TrackingInterval[];
+extern const char LiveTrack24TrackingVehicleType[];
+extern const char LiveTrack24TrackingVehicleName[];
 
 extern const char PCMetUsername[];
 extern const char PCMetPassword[];

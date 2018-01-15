@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Geo.hpp"
-#include "Util.hpp"
+#include "Util.hxx"
 #include "Geo/GeoPoint.hpp"
 #include "Formatter/GeoPointFormatter.hpp"
 #include "Util/ConvertString.hpp"

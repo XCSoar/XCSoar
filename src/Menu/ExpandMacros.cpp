@@ -39,59 +39,16 @@ Copyright_License {
 #include "Weather/Rasp/RaspStore.hpp"
 #include "Device/device.hpp"
 #include "PageActions.hpp"
-#include "Util/TruncateString.hpp"
+#include "Util/DollarExpand.hpp"
 #include "Util/Macros.hpp"
 #include "Net/HTTP/Features.hpp"
 #include "UIState.hpp"
 
 #include <stdlib.h>
 
-#include <windef.h> /* for MAX_PATH */
-
-/**
- * Replaces ToReplace with ReplaceWith in String
- * @param String Buffer string
- * @param ToReplace The string that will be replaced
- * @param ReplaceWith The replacement
- * @param Size (?)
- */
-static void
-ReplaceInString(TCHAR *String, const TCHAR *ToReplace,
-                const TCHAR *ReplaceWith, size_t Size)
-{
-  TCHAR TmpBuf[MAX_PATH];
-  size_t iR = _tcslen(ToReplace);
-  TCHAR *pC;
-
-  while ((pC = _tcsstr(String, ToReplace)) != nullptr) {
-    _tcscpy(TmpBuf, pC + iR);
-    _tcscpy(pC, ReplaceWith);
-    _tcscat(pC, TmpBuf);
-  }
-}
-
-/**
- * If Condition is true, Macro in Buffer will be replaced by TrueText,
- * otherwise by FalseText.
- * @param Condition Condition to be checked
- * @param Buffer Buffer string
- * @param Macro The string that will be replaced
- * @param TrueText The replacement if Condition is true
- * @param FalseText The replacement if Condition is false
- * @param Size (?)
- */
-static void
-CondReplaceInString(bool Condition, TCHAR *Buffer, const TCHAR *Macro,
-                    const TCHAR *TrueText, const TCHAR *FalseText, size_t Size)
-{
-  if (Condition)
-    ReplaceInString(Buffer, Macro, TrueText, Size);
-  else
-    ReplaceInString(Buffer, Macro, FalseText, Size);
-}
-
-static bool
-ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
+static const TCHAR *
+ExpandTaskMacros(const TCHAR *name,
+                 bool &invalid,
                  const DerivedInfo &calculated,
                  const ComputerSettings &settings_computer)
 {
@@ -99,25 +56,20 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
   const TaskStats &ordered_task_stats = calculated.ordered_task_stats;
   const CommonStats &common_stats = calculated.common_stats;
 
-  bool invalid = false;
-
-  if (_tcsstr(OutBuffer, _T("$(CheckTaskResumed)"))) {
+  if (StringIsEqual(name, _T("CheckTaskResumed"))) {
     // TODO code: check, does this need to be set with temporary task?
-    if (common_stats.task_type == TaskType::ABORT ||
-        common_stats.task_type == TaskType::GOTO)
-      invalid = true;
-    ReplaceInString(OutBuffer, _T("$(CheckTaskResumed)"), _T(""), Size);
+    invalid |= common_stats.task_type == TaskType::ABORT ||
+      common_stats.task_type == TaskType::GOTO;
+    return _T("");
+  } else if (StringIsEqual(name, _T("CheckTask"))) {
+    invalid |= !task_stats.task_valid;
+    return _T("");
   }
 
-  if (_tcsstr(OutBuffer, _T("$(CheckTask)"))) {
-    if (!task_stats.task_valid)
-      invalid = true;
-
-    ReplaceInString(OutBuffer, _T("$(CheckTask)"), _T(""), Size);
+  if (protected_task_manager == nullptr) {
+    invalid = true;
+    return nullptr;
   }
-
-  if (protected_task_manager == nullptr)
-    return true;
 
   ProtectedTaskManager::Lease task_manager(*protected_task_manager);
 
@@ -125,68 +77,29 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
   if (task == nullptr || !task_stats.task_valid ||
       common_stats.task_type == TaskType::GOTO) {
 
-    if (_tcsstr(OutBuffer, _T("$(WaypointNext)"))) {
+    if (StringIsEqual(name, _T("WaypointNext")) ||
+        StringIsEqual(name, _T("WaypointNextArm"))) {
       invalid = true;
-      ReplaceInString(OutBuffer, _T("$(WaypointNext)"),
-          _("Next Turnpoint"), Size);
-
-    } else if (_tcsstr(OutBuffer, _T("$(WaypointPrevious)"))) {
+      return _("Next Turnpoint");
+    } else if (StringIsEqual(name, _T("WaypointPrevious")) ||
+               StringIsEqual(name, _T("WaypointPreviousArm"))) {
       invalid = true;
-      ReplaceInString(OutBuffer, _T("$(WaypointPrevious)"),
-          _("Previous Turnpoint"), Size);
-
-    } else if (_tcsstr(OutBuffer, _T("$(WaypointNextArm)"))) {
-      invalid = true;
-      ReplaceInString(OutBuffer, _T("$(WaypointNextArm)"),
-          _("Next Turnpoint"), Size);
-
-    } else if (_tcsstr(OutBuffer, _T("$(WaypointPreviousArm)"))) {
-      invalid = true;
-      ReplaceInString(OutBuffer, _T("$(WaypointPreviousArm)"),
-          _("Previous Turnpoint"), Size);
+      return _("Previous Turnpoint");
     }
-
   } else if (common_stats.task_type == TaskType::ABORT) {
+    if (StringIsEqual(name, _T("WaypointNext")) ||
+        StringIsEqual(name, _T("WaypointNextArm"))) {
+      invalid |= !common_stats.active_has_next;
+      return common_stats.next_is_last
+        ? _("Furthest Landpoint")
+        : _("Next Landpoint");
+    } else if (StringIsEqual(name, _T("WaypointPrevious")) ||
+               StringIsEqual(name, _T("WaypointPreviousArm"))) {
+      invalid |= !common_stats.active_has_previous;
 
-    if (_tcsstr(OutBuffer, _T("$(WaypointNext)"))) {
-      if (!common_stats.active_has_next)
-        invalid = true;
-
-      CondReplaceInString(common_stats.next_is_last,
-                          OutBuffer,
-                          _T("$(WaypointNext)"),
-                          _("Furthest Landpoint"),
-                          _("Next Landpoint"), Size);
-
-    } else if (_tcsstr(OutBuffer, _T("$(WaypointPrevious)"))) {
-      if (!common_stats.active_has_previous)
-        invalid = true;
-
-      CondReplaceInString(common_stats.previous_is_first,
-                          OutBuffer,
-                          _T("$(WaypointPrevious)"),
-                          _("Closest Landpoint"),
-                          _("Previous Landpoint"), Size);
-
-    } else if (_tcsstr(OutBuffer, _T("$(WaypointNextArm)"))) {
-      if (!common_stats.active_has_next)
-        invalid = true;
-
-      CondReplaceInString(common_stats.next_is_last,
-                          OutBuffer,
-                          _T("$(WaypointNextArm)"),
-                          _("Furthest Landpoint"),
-                          _("Next Landpoint"), Size);
-
-    } else if (_tcsstr(OutBuffer, _T("$(WaypointPreviousArm)"))) {
-      if (!common_stats.active_has_previous)
-        invalid = true;
-
-      CondReplaceInString(common_stats.previous_is_first,
-                          OutBuffer,
-                          _T("$(WaypointPreviousArm)"),
-                          _("Closest Landpoint"),
-                          _("Previous Landpoint"), Size);
+      return common_stats.previous_is_first
+        ? _("Closest Landpoint")
+        : _("Previous Landpoint");
     }
 
   } else { // ordered task mode
@@ -195,34 +108,23 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
     const bool previous_is_start = common_stats.previous_is_first;
     const bool has_optional_starts = ordered_task_stats.has_optional_starts;
 
-    if (_tcsstr(OutBuffer, _T("$(WaypointNext)"))) {
+    if (StringIsEqual(name, _T("WaypointNext"))) {
       // Waypoint\nNext
-      if (!common_stats.active_has_next)
-        invalid = true;
-
-      CondReplaceInString(next_is_final,
-                          OutBuffer,
-                          _T("$(WaypointNext)"),
-                          _("Finish Turnpoint"),
-                          _("Next Turnpoint"), Size);
-
-    } else if (_tcsstr(OutBuffer, _T("$(WaypointPrevious)"))) {
-
+      invalid |= !common_stats.active_has_next;
+      return next_is_final
+        ? _("Finish Turnpoint")
+        : _("Next Turnpoint");
+    } else if (StringIsEqual(name, _T("WaypointPrevious"))) {
       if (has_optional_starts && !common_stats.active_has_previous) {
-        ReplaceInString(OutBuffer, _T("$(WaypointPrevious)"), _("Next Startpoint"), Size);
+        return _("Next Startpoint");
       } else {
-
-        CondReplaceInString(previous_is_start,
-                            OutBuffer,
-                            _T("$(WaypointPrevious)"),
-                            _("Start Turnpoint"),
-                            _("Previous Turnpoint"), Size);
-
-        if (!common_stats.active_has_previous)
-          invalid = true;
+        invalid |= !common_stats.active_has_previous;
+        return previous_is_start
+          ? _("Start Turnpoint")
+          : _("Previous Turnpoint");
       }
 
-    } else if (_tcsstr(OutBuffer, _T("$(WaypointNextArm)"))) {
+    } else if (StringIsEqual(name, _T("WaypointNextArm"))) {
       // Waypoint\nNext
 
       switch (task_manager->GetOrderedTask().GetTaskAdvance().GetState()) {
@@ -230,23 +132,19 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       case TaskAdvance::AUTO:
       case TaskAdvance::START_ARMED:
       case TaskAdvance::TURN_ARMED:
-        CondReplaceInString(next_is_final,
-                            OutBuffer,
-                            _T("$(WaypointNextArm)"),
-                            _("Finish Turnpoint"),
-                            _("Next Turnpoint"), Size);
-        if (!common_stats.active_has_next)
-          invalid = true;
-        break;
+        invalid |= !common_stats.active_has_next;
+        return next_is_final
+          ? _("Finish Turnpoint")
+          : _("Next Turnpoint");
+
       case TaskAdvance::START_DISARMED:
-        ReplaceInString(OutBuffer, _T("$(WaypointNextArm)"), _("Arm start"), Size);
-        break;
+        return _("Arm start");
+
       case TaskAdvance::TURN_DISARMED:
-        ReplaceInString(OutBuffer, _T("$(WaypointNextArm)"), _("Arm turn"), Size);
-        break;
+        return _("Arm turn");
       }
 
-    } else if (_tcsstr(OutBuffer, _T("$(WaypointPreviousArm)"))) {
+    } else if (StringIsEqual(name, _T("WaypointPreviousArm"))) {
 
       switch (task_manager->GetOrderedTask().GetTaskAdvance().GetState()) {
       case TaskAdvance::MANUAL:
@@ -255,109 +153,82 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       case TaskAdvance::TURN_DISARMED:
 
         if (has_optional_starts && !common_stats.active_has_previous) {
-          ReplaceInString(OutBuffer, _T("$(WaypointPreviousArm)"), _("Next Startpoint"), Size);
+          return _("Next Startpoint");
         } else {
-
-          CondReplaceInString(previous_is_start,
-                              OutBuffer,
-                              _T("$(WaypointPreviousArm)"),
-                              _("Start Turnpoint"),
-                              _("Previous Turnpoint"), Size);
-
-          if (!common_stats.active_has_previous)
-            invalid = true;
+          invalid |= !common_stats.active_has_previous;
+          return previous_is_start
+            ? _("Start Turnpoint")
+            : _("Previous Turnpoint");
         }
 
-        break;
       case TaskAdvance::START_ARMED:
-        ReplaceInString(OutBuffer, _T("$(WaypointPreviousArm)"), _("Disarm start"), Size);
-        break;
+        return _("Disarm start");
+
       case TaskAdvance::TURN_ARMED:
-        ReplaceInString(OutBuffer, _T("$(WaypointPreviousArm)"), _("Disarm turn"), Size);
-        break;
+        return _("Disarm turn");
       }
     }
   }
 
-  if (_tcsstr(OutBuffer, _T("$(AdvanceArmed)"))) {
+  if (StringIsEqual(name, _T("AdvanceArmed"))) {
     switch (task_manager->GetOrderedTask().GetTaskAdvance().GetState()) {
     case TaskAdvance::MANUAL:
-      ReplaceInString(OutBuffer, _T("$(AdvanceArmed)"),
-                      _("Advance\n(manual)"), Size);
       invalid = true;
-      break;
+      return _("Advance\n(manual)");
+
     case TaskAdvance::AUTO:
-      ReplaceInString(OutBuffer, _T("$(AdvanceArmed)"),
-                      _("Advance\n(auto)"), Size);
       invalid = true;
-      break;
+      return _("Advance\n(auto)");
+
     case TaskAdvance::START_ARMED:
-      ReplaceInString(OutBuffer, _T("$(AdvanceArmed)"),
-                      _("Abort\nStart"), Size);
-      invalid = false;
-      break;
+      return _("Abort\nStart");
+
     case TaskAdvance::START_DISARMED:
-      ReplaceInString(OutBuffer, _T("$(AdvanceArmed)"),
-                      _("Arm\nStart"), Size);
-      invalid = false;
-      break;
+      return _("Arm\nStart");
+
     case TaskAdvance::TURN_ARMED:
-      ReplaceInString(OutBuffer, _T("$(AdvanceArmed)"),
-                      _("Abort\nTurn"), Size);
-      invalid = false;
-      break;
+      return _("Abort\nTurn");
+
     case TaskAdvance::TURN_DISARMED:
-      ReplaceInString(OutBuffer, _T("$(AdvanceArmed)"),
-                      _("Arm\nTurn"), Size);
-      invalid = false;
-      break;
+      return _("Arm\nTurn");
     }
+  } else if (StringIsEqual(name, _T("CheckAutoMc"))) {
+    invalid |= !task_stats.task_valid &&
+      settings_computer.task.IsAutoMCFinalGlideEnabled();
+    return _T("");
+  } else if (StringIsEqual(name, _T("TaskAbortToggleActionName"))) {
+    if (common_stats.task_type == TaskType::GOTO)
+      return ordered_task_stats.task_valid
+        ? _("Resume")
+        : _("Abort");
+    else
+      return common_stats.task_type == TaskType::ABORT
+        ? _("Resume")
+        : _("Abort");
+  } else if (StringIsEqual(name, _T("CheckTaskRestart"))) {
+    invalid |= !(common_stats.task_type == TaskType::ORDERED &&
+                 task_stats.start.task_started);
+    return _T("");
   }
 
-  if (_tcsstr(OutBuffer, _T("$(CheckAutoMc)"))) {
-    if (!task_stats.task_valid
-        && settings_computer.task.IsAutoMCFinalGlideEnabled())
-      invalid = true;
-
-    ReplaceInString(OutBuffer, _T("$(CheckAutoMc)"), _T(""), Size);
-  }
-
-  if (_tcsstr(OutBuffer, _T("$(TaskAbortToggleActionName)"))) {
-    if (common_stats.task_type == TaskType::GOTO) {
-      CondReplaceInString(ordered_task_stats.task_valid,
-                          OutBuffer, _T("$(TaskAbortToggleActionName)"),
-                          _("Resume"), _("Abort"), Size);
-    } else
-      CondReplaceInString(common_stats.task_type == TaskType::ABORT,
-                          OutBuffer, _T("$(TaskAbortToggleActionName)"),
-                          _("Resume"), _("Abort"), Size);
-  }
-
-  if (_tcsstr(OutBuffer, _T("$(CheckTaskRestart)"))) {
-    if (!(common_stats.task_type == TaskType::ORDERED &&
-          task_stats.start.task_started))
-      invalid = true;
-
-    ReplaceInString(OutBuffer, _T("$(CheckTaskRestart)"), _T(""), Size);
-  }
-
-  return invalid;
+  return nullptr;
 }
 
-static void
-ExpandTrafficMacros(TCHAR *buffer, size_t size)
+gcc_pure
+static const TCHAR *
+ExpandTrafficMacros(const TCHAR *name)
 {
   TrafficWidget *widget = (TrafficWidget *)
     CommonInterface::main_window->GetFlavourWidget(_T("Traffic"));
   if (widget == nullptr)
-    return;
+    return nullptr;
 
-  CondReplaceInString(widget->GetAutoZoom(), buffer,
-                      _T("$(TrafficZoomAutoToggleActionName)"),
-                      _("Manual"), _("Auto"), size);
-  CondReplaceInString(widget->GetNorthUp(), buffer,
-                      _T("$(TrafficNorthUpToggleActionName)"),
-                      _("Track up"), _("North up"), size);
+  if (StringIsEqual(name, _T("TrafficZoomAutoToggleActionName")))
+    return widget->GetAutoZoom() ? _("Manual") : _("Auto");
+  else if (StringIsEqual(name, _T("TrafficNorthUpToggleActionName")))
+    return widget->GetNorthUp() ? _("Track up") : _("North up");
+  else
+    return nullptr;
 }
 
 static const NMEAInfo &
@@ -390,186 +261,110 @@ GetUIState()
   return CommonInterface::GetUIState();
 }
 
-bool
-ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
+static const TCHAR *
+LookupMacro(const TCHAR *name, bool &invalid)
 {
-  // ToDo, check Buffer Size
-  bool invalid = false;
-  CopyTruncateString(OutBuffer, Size, In);
-
-  if (_tcsstr(OutBuffer, _T("$(")) == nullptr)
-    return false;
-
-  if (_tcsstr(OutBuffer, _T("$(CheckAirspace)"))) {
-    if (airspace_database.IsEmpty())
-      invalid = true;
-
-    ReplaceInString(OutBuffer, _T("$(CheckAirspace)"), _T(""), Size);
+  if (StringIsEqual(name, _T("CheckAirspace"))) {
+    invalid |= airspace_database.IsEmpty();
+    return nullptr;
   }
 
-  invalid |= ExpandTaskMacros(OutBuffer, Size,
-                              Calculated(), GetComputerSettings());
+  const TCHAR *value = ExpandTaskMacros(name, invalid,
+                                        Calculated(), GetComputerSettings());
+  if (value != nullptr)
+    return value;
 
-  ExpandTrafficMacros(OutBuffer, Size);
+  value = ExpandTrafficMacros(name);
+  if (value != nullptr)
+    return value;
 
-  if (_tcsstr(OutBuffer, _T("$(CheckFLARM)"))) {
-    if (!Basic().flarm.status.available)
-      invalid = true;
-    ReplaceInString(OutBuffer, _T("$(CheckFLARM)"), _T(""), Size);
-  }
-
-  if (_tcsstr(OutBuffer, _T("$(CheckWeather)"))) {
+  if (StringIsEqual(name, _T("CheckFLARM"))) {
+    invalid |= !Basic().flarm.status.available;
+    return nullptr;
+  } else if (StringIsEqual(name, _T("CheckWeather"))) {
     const auto rasp = DataGlobals::GetRasp();
-    if (rasp == nullptr || rasp->GetItemCount() == 0)
-      invalid = true;
-    ReplaceInString(OutBuffer, _T("$(CheckWeather)"), _T(""), Size);
-  }
-
-  if (_tcsstr(OutBuffer, _T("$(CheckCircling)"))) {
-    if (!Calculated().circling)
-      invalid = true;
-    ReplaceInString(OutBuffer, _T("$(CheckCircling)"), _T(""), Size);
-  }
-
-  if (_tcsstr(OutBuffer, _T("$(CheckVega)"))) {
-    if (devVarioFindVega() == nullptr)
-      invalid = true;
-    ReplaceInString(OutBuffer, _T("$(CheckVega)"), _T(""), Size);
-  }
-
-  if (_tcsstr(OutBuffer, _T("$(CheckReplay)"))) {
-    if (CommonInterface::MovementDetected())
-      invalid = true;
-
-    ReplaceInString(OutBuffer, _T("$(CheckReplay)"), _T(""), Size);
-  }
-
-  if (_tcsstr(OutBuffer, _T("$(CheckWaypointFile)"))) {
+    invalid |= rasp == nullptr || rasp->GetItemCount() == 0;
+    return nullptr;
+  } else if (StringIsEqual(name, _T("CheckCircling"))) {
+    invalid |= !Calculated().circling;
+    return nullptr;
+  } else if (StringIsEqual(name, _T("CheckVega"))) {
+    invalid |= devVarioFindVega() == nullptr;
+    return nullptr;
+  } else if (StringIsEqual(name, _T("CheckReplay"))) {
+    invalid |= CommonInterface::MovementDetected();
+    return nullptr;
+  } else if (StringIsEqual(name, _T("CheckWaypointFile"))) {
     invalid |= way_points.IsEmpty();
-    ReplaceInString(OutBuffer, _T("$(CheckWaypointFile)"), _T(""), Size);
-  }
-
-  if (_tcsstr(OutBuffer, _T("$(CheckLogger)"))) {
+    return nullptr;
+  } else if (StringIsEqual(name, _T("CheckLogger"))) {
     invalid |= Basic().gps.replay;
-    ReplaceInString(OutBuffer, _T("$(CheckLogger)"), _T(""), Size);
-  }
-
-  if (_tcsstr(OutBuffer, _T("$(CheckNet)"))) {
+    return nullptr;
+  } else if (StringIsEqual(name, _T("CheckNet"))) {
 #ifndef HAVE_HTTP
     invalid = true;
 #endif
-
-    ReplaceInString(OutBuffer, _T("$(CheckNet)"), _T(""), Size);
-  }
-  if (_tcsstr(OutBuffer, _T("$(CheckTerrain)"))) {
-    if (!Calculated().terrain_valid)
-      invalid = true;
-
-    ReplaceInString(OutBuffer, _T("$(CheckTerrain)"), _T(""), Size);
-  }
-
-  CondReplaceInString(logger != nullptr && logger->IsLoggerActive(), OutBuffer,
-                      _T("$(LoggerActive)"), _("Stop"),
-                      _("Start"), Size);
-
-  if (_tcsstr(OutBuffer, _T("$(SnailTrailToggleName)"))) {
+    return nullptr;
+  } else if (StringIsEqual(name, _T("CheckTerrain"))) {
+    invalid |= !Calculated().terrain_valid;
+    return nullptr;
+  } else if (StringIsEqual(name, _T("LoggerActive"))) {
+    return logger != nullptr && logger->IsLoggerActive()
+      ? _("Stop")
+      : _("Start");
+  } else if (StringIsEqual(name, _T("SnailTrailToggleName"))) {
     switch (GetMapSettings().trail.length) {
     case TrailSettings::Length::OFF:
-      ReplaceInString(OutBuffer, _T("$(SnailTrailToggleName)"),
-                      _("Long"), Size);
-      break;
+      return _("Long");
+
     case TrailSettings::Length::LONG:
-      ReplaceInString(OutBuffer, _T("$(SnailTrailToggleName)"),
-                      _("Short"), Size);
-      break;
+      return _("Short");
+
     case TrailSettings::Length::SHORT:
-      ReplaceInString(OutBuffer, _T("$(SnailTrailToggleName)"),
-                      _("Full"), Size);
-      break;
+      return _("Full");
+
     case TrailSettings::Length::FULL:
-      ReplaceInString(OutBuffer, _T("$(SnailTrailToggleName)"),
-                      _("Off"), Size);
-      break;
+      return _("Off");
     }
-  }
 
-  if (_tcsstr(OutBuffer, _T("$(AirSpaceToggleName)"))) {
-    ReplaceInString(OutBuffer, _T("$(AirSpaceToggleName)"),
-                    GetMapSettings().airspace.enable ? _("Off") : _("On"), Size);
-  }
-
-  if (_tcsstr(OutBuffer, _T("$(TerrainTopologyToggleName)"))) {
+    return nullptr;
+  } else if (StringIsEqual(name, _T("AirSpaceToggleName"))) {
+    return GetMapSettings().airspace.enable ? _("Off") : _("On");
+  } else if (StringIsEqual(name, _T("TerrainTopologyToggleName")) ||
+             StringIsEqual(name, _T("TerrainTopographyToggleName"))) {
     char val = 0;
     if (GetMapSettings().topography_enabled)
       val++;
     if (GetMapSettings().terrain.enable)
       val += (char)2;
+
     switch (val) {
     case 0:
-      ReplaceInString(OutBuffer, _T("$(TerrainTopologyToggleName)"),
-                      _("Topography On"), Size);
-      break;
+      return _("Topography On");
+
     case 1:
-      ReplaceInString(OutBuffer, _T("$(TerrainTopologyToggleName)"),
-                      _("Terrain On"), Size);
-      break;
+      return _("Terrain On");
+
     case 2:
-      ReplaceInString(OutBuffer, _T("$(TerrainTopologyToggleName)"),
-                      _("Terrain + Topography"), Size);
-      break;
+      return _("Terrain + Topography");
+
     case 3:
-      ReplaceInString(OutBuffer, _T("$(TerrainTopologyToggleName)"),
-                      _("Terrain Off"), Size);
-      break;
+      return _("Terrain Off");
     }
-  }
 
-  if (_tcsstr(OutBuffer, _T("$(TerrainTopographyToggleName)"))) {
-    char val = 0;
-    if (GetMapSettings().topography_enabled)
-      val++;
-    if (GetMapSettings().terrain.enable)
-      val += (char)2;
-    switch (val) {
-    case 0:
-      ReplaceInString(OutBuffer, _T("$(TerrainTopographyToggleName)"),
-                      _("Topography On"), Size);
-      break;
-    case 1:
-      ReplaceInString(OutBuffer, _T("$(TerrainTopographyToggleName)"),
-                      _("Terrain On"), Size);
-      break;
-    case 2:
-      ReplaceInString(OutBuffer, _T("$(TerrainTopographyToggleName)"),
-                      _("Terrain + Topography"), Size);
-      break;
-    case 3:
-      ReplaceInString(OutBuffer, _T("$(TerrainTopographyToggleName)"),
-                      _("Terrain Off"), Size);
-      break;
-    }
-  }
-
-  CondReplaceInString(CommonInterface::main_window->GetFullScreen(), OutBuffer,
-                      _T("$(FullScreenToggleActionName)"),
-                      _("Off"), _("On"), Size);
-  CondReplaceInString(GetMapSettings().auto_zoom_enabled, OutBuffer,
-                      _T("$(ZoomAutoToggleActionName)"),
-                      _("Manual"), _("Auto"), Size);
-  CondReplaceInString(GetMapSettings().topography_enabled, OutBuffer,
-                      _T("$(TopologyToggleActionName)"),
-                      _("Off"), _("On"), Size);
-  CondReplaceInString(GetMapSettings().topography_enabled, OutBuffer,
-                      _T("$(TopographyToggleActionName)"),
-                      _("Off"), _("On"), Size);
-  CondReplaceInString(GetMapSettings().terrain.enable, OutBuffer,
-                      _T("$(TerrainToggleActionName)"),
-                      _("Off"), _("On"), Size);
-  CondReplaceInString(GetMapSettings().airspace.enable, OutBuffer,
-                      _T("$(AirspaceToggleActionName)"),
-                      _("Off"), _("On"), Size);
-
-  if (_tcsstr(OutBuffer, _T("$(MapLabelsToggleActionName)"))) {
+    return nullptr;
+  } else if (StringIsEqual(name, _T("FullScreenToggleActionName"))) {
+    return CommonInterface::main_window->GetFullScreen() ? _("Off") : _("On");
+  } else if (StringIsEqual(name, _T("ZoomAutoToggleActionName"))) {
+    return GetMapSettings().auto_zoom_enabled ? _("Manual") : _("Auto");
+  } else if (StringIsEqual(name, _T("TopologyToggleActionName")) ||
+             StringIsEqual(name, _T("TopographyToggleActionName"))) {
+    return GetMapSettings().topography_enabled ? _("Off") : _("On");
+  } else if (StringIsEqual(name, _T("TerrainToggleActionName"))) {
+    return GetMapSettings().terrain.enable ? _("Off") : _("On");
+  } else if (StringIsEqual(name, _T("AirspaceToggleActionName"))) {
+    return GetMapSettings().airspace.enable ? _("Off") : _("On");
+  } else if (StringIsEqual(name, _T("MapLabelsToggleActionName"))) {
     static const TCHAR *const labels[] = {
       N_("All"),
       N_("Task & Landables"),
@@ -580,81 +375,79 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
 
     static constexpr unsigned int n = ARRAY_SIZE(labels);
     unsigned int i = (unsigned)GetMapSettings().waypoint.label_selection;
-    ReplaceInString(OutBuffer, _T("$(MapLabelsToggleActionName)"),
-                    gettext(labels[(i + 1) % n]), Size);
-  }
-
-  CondReplaceInString(GetComputerSettings().task.auto_mc,
-                      OutBuffer, _T("$(MacCreadyToggleActionName)"),
-                      _("Manual"), _("Auto"), Size);
-  CondReplaceInString(GetUIState().auxiliary_enabled,
-                      OutBuffer, _T("$(AuxInfoToggleActionName)"),
-                      _("Off"), _("On"), Size);
-
-  CondReplaceInString(GetUIState().force_display_mode == DisplayMode::CIRCLING,
-                      OutBuffer, _T("$(DispModeClimbShortIndicator)"),
-                      _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetUIState().force_display_mode == DisplayMode::CRUISE,
-                      OutBuffer, _T("$(DispModeCruiseShortIndicator)"),
-                      _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetUIState().force_display_mode == DisplayMode::NONE,
-                      OutBuffer, _T("$(DispModeAutoShortIndicator)"),
-                      _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetUIState().force_display_mode == DisplayMode::FINAL_GLIDE,
-                      OutBuffer, _T("$(DispModeFinalShortIndicator)"),
-                      _T("(*)"), _T(""), Size);
-
-  CondReplaceInString(GetMapSettings().airspace.altitude_mode == AirspaceDisplayMode::ALLON,
-                      OutBuffer, _T("$(AirspaceModeAllShortIndicator)"),
-                      _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetMapSettings().airspace.altitude_mode == AirspaceDisplayMode::CLIP,
-                      OutBuffer, _T("$(AirspaceModeClipShortIndicator)"),
-                      _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetMapSettings().airspace.altitude_mode == AirspaceDisplayMode::AUTO,
-                      OutBuffer, _T("$(AirspaceModeAutoShortIndicator)"),
-                      _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetMapSettings().airspace.altitude_mode == AirspaceDisplayMode::ALLBELOW,
-                      OutBuffer, _T("$(AirspaceModeBelowShortIndicator)"),
-                      _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetMapSettings().airspace.altitude_mode == AirspaceDisplayMode::ALLOFF,
-                      OutBuffer, _T("$(AirspaceModeAllOffIndicator)"),
-                      _T("(*)"), _T(""), Size);
-
-  CondReplaceInString(GetMapSettings().trail.length == TrailSettings::Length::OFF,
-                      OutBuffer, _T("$(SnailTrailOffShortIndicator)"),
-                      _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetMapSettings().trail.length == TrailSettings::Length::SHORT,
-                      OutBuffer, _T("$(SnailTrailShortShortIndicator)"),
-                      _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetMapSettings().trail.length == TrailSettings::Length::LONG,
-                      OutBuffer, _T("$(SnailTrailLongShortIndicator)"),
-                      _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetMapSettings().trail.length == TrailSettings::Length::FULL,
-                      OutBuffer, _T("$(SnailTrailFullShortIndicator)"),
-                      _T("(*)"), _T(""), Size);
-
-  CondReplaceInString(!GetMapSettings().airspace.enable,
-                      OutBuffer, _T("$(AirSpaceOffShortIndicator)"),
-                      _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetMapSettings().airspace.enable,
-                      OutBuffer, _T("$(AirSpaceOnShortIndicator)"),
-                      _T("(*)"), _T(""), Size);
-
-  CondReplaceInString(CommonInterface::GetUISettings().traffic.enable_gauge,
-                      OutBuffer, _T("$(FlarmDispToggleActionName)"),
-                      _("Off"), _("On"), Size);
-
-  CondReplaceInString(GetMapSettings().auto_zoom_enabled, OutBuffer,
-                      _T("$(ZoomAutoToggleActionName)"),
-                      _("Manual"), _("Auto"), Size);
-
-  if (_tcsstr(OutBuffer, _T("$(NextPageName)"))) {
-    TCHAR label[30];
+    return gettext(labels[(i + 1) % n]);
+  } else if (StringIsEqual(name, _T("MacCreadyToggleActionName"))) {
+    return GetComputerSettings().task.auto_mc ? _("Manual") : _("Auto");
+  } else if (StringIsEqual(name, _T("AuxInfoToggleActionName"))) {
+    return GetUIState().auxiliary_enabled ? _("Off") : _("On");
+  } else if (StringIsEqual(name, _T("DispModeClimbShortIndicator"))) {
+    return GetUIState().force_display_mode == DisplayMode::CIRCLING
+      ? _T("*") : _T("");
+  } else if (StringIsEqual(name, _T("DispModeCruiseShortIndicator"))) {
+    return GetUIState().force_display_mode == DisplayMode::CRUISE
+      ? _T("*") : _T("");
+  } else if (StringIsEqual(name, _T("DispModeAutoShortIndicator"))) {
+    return GetUIState().force_display_mode == DisplayMode::NONE
+      ? _T("*") : _T("");
+  } else if (StringIsEqual(name, _T("DispModeFinalShortIndicator"))) {
+    return GetUIState().force_display_mode == DisplayMode::FINAL_GLIDE
+      ? _T("*") : _T("");
+  } else if (StringIsEqual(name, _T("AirspaceModeAllShortIndicator"))) {
+    return GetMapSettings().airspace.altitude_mode == AirspaceDisplayMode::ALLON
+      ? _T("*") : _T("");
+  } else if (StringIsEqual(name, _T("AirspaceModeClipShortIndicator"))) {
+    return GetMapSettings().airspace.altitude_mode == AirspaceDisplayMode::CLIP
+      ? _T("*") : _T("");
+  } else if (StringIsEqual(name, _T("AirspaceModeAutoShortIndicator"))) {
+    return GetMapSettings().airspace.altitude_mode == AirspaceDisplayMode::AUTO
+      ? _T("*") : _T("");
+  } else if (StringIsEqual(name, _T("AirspaceModeBelowShortIndicator"))) {
+    return GetMapSettings().airspace.altitude_mode == AirspaceDisplayMode::ALLBELOW
+      ? _T("*") : _T("");
+  } else if (StringIsEqual(name, _T("AirspaceModeAllOffIndicator"))) {
+    return GetMapSettings().airspace.altitude_mode == AirspaceDisplayMode::ALLOFF
+      ? _T("*") : _T("");
+  } else if (StringIsEqual(name, _T("SnailTrailOffShortIndicator"))) {
+    return GetMapSettings().trail.length == TrailSettings::Length::OFF
+      ? _T("*") : _T("");
+  } else if (StringIsEqual(name, _T("SnailTrailShortShortIndicator"))) {
+    return GetMapSettings().trail.length == TrailSettings::Length::SHORT
+      ? _T("*") : _T("");
+  } else if (StringIsEqual(name, _T("SnailTrailLongShortIndicator"))) {
+    return GetMapSettings().trail.length == TrailSettings::Length::LONG
+      ? _T("*") : _T("");
+  } else if (StringIsEqual(name, _T("SnailTrailFullShortIndicator"))) {
+    return GetMapSettings().trail.length == TrailSettings::Length::FULL
+      ? _T("*") : _T("");
+  } else if (StringIsEqual(name, _T("AirSpaceOffShortIndicator"))) {
+    return !GetMapSettings().airspace.enable ? _T("*") : _T("");
+  } else if (StringIsEqual(name, _T("AirSpaceOnShortIndicator"))) {
+    return GetMapSettings().airspace.enable ? _T("*") : _T("");
+  } else if (StringIsEqual(name, _T("FlarmDispToggleActionName"))) {
+    return CommonInterface::GetUISettings().traffic.enable_gauge
+      ? _("Off") : _("On");
+  } else if (StringIsEqual(name, _T("ZoomAutoToggleActionName"))) {
+    return GetMapSettings().auto_zoom_enabled ? _("Manual") : _("Auto");
+  } else if (StringIsEqual(name, _T("NextPageName"))) {
+    static TCHAR label[30]; // TODO: oh no, a static string buffer!
     const PageLayout &page =
       CommonInterface::GetUISettings().pages.pages[PageActions::NextIndex()];
     page.MakeTitle(CommonInterface::GetUISettings().info_boxes, label, true);
-    ReplaceInString(OutBuffer, _T("$(NextPageName)"), label, Size);
-  }
+    return label;
+  } else
+    return nullptr;
+}
+
+bool
+ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
+{
+  // ToDo, check Buffer Size
+  bool invalid = false;
+
+  DollarExpand(In, OutBuffer, Size,
+               [&invalid](const TCHAR *name){
+                 return LookupMacro(name, invalid);
+               });
 
   return invalid;
 }

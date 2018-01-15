@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Device/Driver/BlueFlyVario.hpp"
 #include "Internal.hpp"
+#include "Util/IterableSplitString.hxx"
 
 bool
 BlueFlyDevice::ParseBAT(const char *content, NMEAInfo &info)
@@ -147,14 +148,13 @@ BlueFlyDevice::ParseSET(const char *content, NMEAInfo &info)
 {
   // e.g. SET 0 100 20 1 1 1 180 1000 100 400 100 20 5 5 100 50 0 10 21325 207 1 0 1 34
 
-  const char *values, *token;
+  const char *values;
   unsigned long value;
 
   if (!settings.version || !settings_keys)
     /* we did not receive the previous BFV and BST, abort */
     return true;
 
-  token = StringToken(settings_keys, " ");
   values = content;
 
   /* the first value should be ignored */
@@ -162,9 +162,11 @@ BlueFlyDevice::ParseSET(const char *content, NMEAInfo &info)
     return true;
 
   mutex_settings.Lock();
-  while (token && ParseUlong(&values, value)) {
+  for (const auto token : IterableSplitString(settings_keys, ' ')) {
+    if (!ParseUlong(&values, value))
+      break;
+
     settings.Parse(token, value);
-    token = StringToken(nullptr, " ");
   }
   settings_ready = true;
   settings_cond.broadcast();

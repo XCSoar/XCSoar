@@ -1,5 +1,6 @@
-BOOST_URL = http://downloads.sourceforge.net/project/boost/boost/1.63.0/boost_1_63_0.tar.bz2
-BOOST_MD5 = beae2529f759f6b3bf3f4969a19c2e9d6f0c503edcb2de4a61d1428519fcb3b0
+BOOST_URL = http://downloads.sourceforge.net/project/boost/boost/1.65.1/boost_1_65_1.tar.bz2
+BOOST_ALTERNATIVE_URL = https://fossies.org/linux/misc/boost_1_65_1.tar.bz2
+BOOST_MD5 = 9807a5d16566c57fd74fb522764e0b134a8bbe6b6e8967b83afefd30dcd3be81
 
 BOOST_TARBALL_NAME = $(notdir $(BOOST_URL))
 BOOST_TARBALL = $(DOWNLOAD_DIR)/$(BOOST_TARBALL_NAME)
@@ -10,7 +11,7 @@ BOOST_PATCHES = $(addprefix $(BOOST_PATCHES_DIR)/,$(shell cat $(BOOST_PATCHES_DI
 
 $(BOOST_TARBALL): | $(DOWNLOAD_DIR)/dirstamp
 	@$(NQ)echo "  GET     $@"
-	$(Q)./build/download.py $(BOOST_URL) $(BOOST_MD5) $(DOWNLOAD_DIR)
+	$(Q)./build/download.py $(BOOST_URL) $(BOOST_ALTERNATIVE_URL) $(BOOST_MD5) $(DOWNLOAD_DIR)
 
 BOOST_UNTAR_STAMP = $(OUT)/src/stamp-$(BOOST_BASE_NAME)
 $(BOOST_UNTAR_STAMP): $(BOOST_TARBALL) $(BOOST_PATCHES_DIR)/series $(BOOST_PATCHES) | $(OUT)/src/dirstamp

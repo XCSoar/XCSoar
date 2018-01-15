@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2015 Max Kellermann <max@duempel.org>,
+ * Copyright (C) 2011-2015 Max Kellermann <max.kellermann@gmail.com>,
  *                    Tobias Bieniek <Tobias.Bieniek@gmx.de>
  *
  * Redistribution and use in source and binary forms, with or without
@@ -320,5 +320,47 @@ ReadUnalignedBE32(const uint32_t *p)
   return c[3] | (c[2] << 8) | (c[1] << 16) | (c[0] << 24);
 #endif
 }
+
+/**
+ * A packed big-endian 16 bit integer.
+ */
+class PackedBE16 {
+	uint8_t hi, lo;
+
+public:
+	constexpr operator uint16_t() const {
+		return (hi << 8) | lo;
+	}
+
+	PackedBE16 &operator=(uint16_t new_value) {
+		lo = uint8_t(new_value);
+		hi = uint8_t(new_value >> 8);
+		return *this;
+	}
+};
+
+static_assert(sizeof(PackedBE16) == sizeof(uint16_t), "Wrong size");
+static_assert(alignof(PackedBE16) == 1, "Wrong alignment");
+
+/**
+ * A packed little-endian 16 bit integer.
+ */
+class PackedLE16 {
+	uint8_t lo, hi;
+
+public:
+	constexpr operator uint16_t() const {
+		return (hi << 8) | lo;
+	}
+
+	PackedLE16 &operator=(uint16_t new_value) {
+		lo = uint8_t(new_value);
+		hi = uint8_t(new_value >> 8);
+		return *this;
+	}
+};
+
+static_assert(sizeof(PackedLE16) == sizeof(uint16_t), "Wrong size");
+static_assert(alignof(PackedLE16) == 1, "Wrong alignment");
 
 #endif

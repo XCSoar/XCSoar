@@ -80,10 +80,10 @@ RenderShadowedText(Canvas &canvas, const TCHAR *text,
 
   canvas.SetTextColor(inverted ? COLOR_BLACK : COLOR_WHITE);
   const int offset = canvas.GetFontHeight() / 12u;
-  canvas.DrawText(x + offset, y, text);
-  canvas.DrawText(x - offset, y, text);
-  canvas.DrawText(x, y + offset, text);
-  canvas.DrawText(x, y - offset, text);
+  canvas.DrawText(x + offset, y + offset, text);
+  canvas.DrawText(x - offset, y + offset, text);
+  canvas.DrawText(x + offset, y - offset, text);
+  canvas.DrawText(x - offset, y - offset, text);
 
   canvas.SetTextColor(inverted ? COLOR_WHITE : COLOR_BLACK);
   canvas.DrawText(x, y, text);

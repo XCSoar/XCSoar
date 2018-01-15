@@ -76,7 +76,7 @@ IsSmallScreen(PixelSize size,
 }
 
 void
-Layout::Initialize(PixelSize new_size, unsigned ui_scale)
+Layout::Initialize(PixelSize new_size, unsigned ui_scale, unsigned custom_dpi)
 {
   const unsigned width = new_size.cx, height = new_size.cy;
 
@@ -87,8 +87,8 @@ Layout::Initialize(PixelSize new_size, unsigned ui_scale)
   if (!ScaleSupported())
     return;
 
-  const unsigned x_dpi = Display::GetXDPI();
-  const unsigned y_dpi = Display::GetYDPI();
+  const unsigned x_dpi = Display::GetXDPI(custom_dpi);
+  const unsigned y_dpi = Display::GetYDPI(custom_dpi);
   const bool is_small_screen = IsSmallScreen(Display::GetSize(new_size),
                                              x_dpi, y_dpi);
 

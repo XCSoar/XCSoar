@@ -33,7 +33,7 @@ Copyright_License {
 #include "Tracking/SkyLines/Glue.hpp"
 #include "Tracking/SkyLines/Data.hpp"
 #include "Thread/StandbyThread.hpp"
-#include "Tracking/LiveTrack24.hpp"
+#include "Tracking/LiveTrack24/Client.hpp"
 #include "Time/PeriodClock.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Time/BrokenDateTime.hpp"
@@ -45,20 +45,6 @@ class TrackingGlue final
   : protected StandbyThread,
     private SkyLinesTracking::Handler
 {
-  struct LiveTrack24State
-  {
-    LiveTrack24::SessionID session_id;
-    unsigned packet_id;
-
-    void ResetSession() {
-      session_id = 0;
-    }
-
-    bool HasSession() {
-      return session_id != 0;
-    }
-  };
-
   PeriodClock clock;
 
   TrackingSettings settings;
@@ -67,7 +53,7 @@ class TrackingGlue final
 
   SkyLinesTracking::Data skylines_data;
 
-  LiveTrack24State state;
+  LiveTrack24::Client livetrack24;
 
   /**
    * The Unix UTC time stamp that was last submitted to the tracking

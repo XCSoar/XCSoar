@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2016 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2015-2016 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -41,5 +41,17 @@ PrintException(const std::exception &e)
 		PrintException(nested);
 	} catch (...) {
 		fprintf(stderr, "Unrecognized nested exception\n");
+	}
+}
+
+void
+PrintException(const std::exception_ptr &ep)
+{
+	try {
+		std::rethrow_exception(ep);
+	} catch (const std::exception &e) {
+		PrintException(e);
+	} catch (...) {
+		fprintf(stderr, "Unrecognized exception\n");
 	}
 }

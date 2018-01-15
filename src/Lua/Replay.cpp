@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Replay.hpp"
-#include "Util.hpp"
+#include "Util.hxx"
 #include "OS/Path.hpp"
 #include "Components.hpp"
 #include "Replay/Replay.hpp"

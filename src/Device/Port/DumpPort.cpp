@@ -28,6 +28,11 @@ Copyright_License {
 #include <stdint.h>
 #include <stdio.h>
 
+#ifdef __clang__
+/* true, the nullptr cast below is a bad kludge */
+#pragma GCC diagnostic ignored "-Wnull-dereference"
+#endif
+
 DumpPort::DumpPort(Port *_port)
   :Port(nullptr, *(DataHandler *)nullptr), port(_port),
    until_ms(-1) {}

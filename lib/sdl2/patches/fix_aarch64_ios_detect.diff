@@ -1,0 +1,29 @@
+diff -Nuar SDL2-2.0.5.orig/configure SDL2-2.0.5/configure
+--- SDL2-2.0.5.orig/configure	2017-07-04 23:25:23.000000000 +0200
++++ SDL2-2.0.5/configure	2017-07-04 23:27:17.000000000 +0200
+@@ -23546,7 +23546,7 @@
+         SOURCES="$srcdir/src/main/haiku/*.cc $SOURCES"
+         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -lroot -lbe -lmedia -lgame -ldevice -ltextencoding"
+         ;;
+-    arm*-apple-darwin*)
++    a*-apple-darwin*)
+         # iOS - We are not writing anything to confdefs.h because you have to replace
+         # SDL_config.h for SDL_config_iphoneos.h anyway
+         ARCH=ios
+@@ -26553,4 +26553,3 @@
+   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: unrecognized options: $ac_unrecognized_opts" >&5
+ $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
+ fi
+-
+diff -Nuar SDL2-2.0.5.orig/configure.in SDL2-2.0.5/configure.in
+--- SDL2-2.0.5.orig/configure.in	2017-07-04 23:25:23.000000000 +0200
++++ SDL2-2.0.5/configure.in	2017-07-04 23:32:04.000000000 +0200
+@@ -3273,7 +3273,7 @@
+         SOURCES="$srcdir/src/main/haiku/*.cc $SOURCES"
+         EXTRA_LDFLAGS="$EXTRA_LDFLAGS -lroot -lbe -lmedia -lgame -ldevice -ltextencoding"
+         ;;
+-    arm*-apple-darwin*)
++    a*-apple-darwin*)
+         # iOS - We are not writing anything to confdefs.h because you have to replace
+         # SDL_config.h for SDL_config_iphoneos.h anyway
+         ARCH=ios

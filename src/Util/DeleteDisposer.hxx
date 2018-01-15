@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2015 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -34,7 +34,8 @@
  * A disposer for boost::intrusive that invokes the "delete" operator
  * on the given pointer.
  */
-struct DeleteDisposer {
+class DeleteDisposer {
+public:
 	template<typename T>
 	void operator()(T *t) {
 		delete t;

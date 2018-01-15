@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2015 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2013-2017 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,19 +28,11 @@
  */
 
 #include "WStringCompare.hxx"
-#include "WStringAPI.hxx"
 
 #include <assert.h>
-#include <string.h>
 
 bool
-StringStartsWith(const wchar_t *haystack, const wchar_t *needle)
-{
-	return memcmp(haystack, needle, StringLength(needle) * sizeof(needle[0])) == 0;
-}
-
-bool
-StringEndsWith(const wchar_t *haystack, const wchar_t *needle)
+StringEndsWith(const wchar_t *haystack, const wchar_t *needle) noexcept
 {
 	const size_t haystack_length = StringLength(haystack);
 	const size_t needle_length = StringLength(needle);
@@ -50,7 +42,8 @@ StringEndsWith(const wchar_t *haystack, const wchar_t *needle)
 }
 
 bool
-StringEndsWithIgnoreCase(const wchar_t *haystack, const wchar_t *needle)
+StringEndsWithIgnoreCase(const wchar_t *haystack,
+			 const wchar_t *needle) noexcept
 {
 	const size_t haystack_length = StringLength(haystack);
 	const size_t needle_length = StringLength(needle);
@@ -61,32 +54,16 @@ StringEndsWithIgnoreCase(const wchar_t *haystack, const wchar_t *needle)
 }
 
 const wchar_t *
-StringAfterPrefix(const wchar_t *string, const wchar_t *prefix)
+FindStringSuffix(const wchar_t *p, const wchar_t *suffix) noexcept
 {
-	assert(string != nullptr);
-	assert(prefix != nullptr);
+	const size_t p_length = StringLength(p);
+	const size_t suffix_length = StringLength(suffix);
 
-	size_t prefix_length = StringLength(prefix);
-	return StringIsEqual(string, prefix, prefix_length)
-		? string + prefix_length
+	if (p_length < suffix_length)
+		return nullptr;
+
+	const auto *q = p + p_length - suffix_length;
+	return memcmp(q, suffix, suffix_length * sizeof(*suffix)) == 0
+		? q
 		: nullptr;
-}
-
-const wchar_t *
-StringAfterPrefixCI(const wchar_t *string, const wchar_t *prefix)
-{
-	assert(string != nullptr);
-	assert(prefix != nullptr);
-
-	size_t prefix_length = StringLength(prefix);
-	return StringIsEqual(string, prefix, prefix_length)
-		? string + prefix_length
-		: nullptr;
-}
-
-bool
-StringStartsWithIgnoreCase(const wchar_t *haystack, const wchar_t *needle)
-{
-	return StringIsEqualIgnoreCase(haystack, needle,
-				       StringLength(needle));
 }

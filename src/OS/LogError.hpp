@@ -37,17 +37,4 @@ LogLastError(const TCHAR *fmt, ...);
 
 #endif
 
-#ifdef HAVE_POSIX
-
-#include <tchar.h>
-
-/**
- * Logs a message followed by the error message described by
- * errno.
- */
-void
-LogErrno(const TCHAR *fmt, ...);
-
-#endif
-
 #endif

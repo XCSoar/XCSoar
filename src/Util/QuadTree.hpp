@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2011 Max Kellermann <max.kellermann@gmail.com>
  *               2012 Tobias Bieniek <tobias.bieniek@gmx.de>
  *
  * Redistribution and use in source and binary forms, with or without

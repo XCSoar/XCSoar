@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2015 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2012-2017 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef STATIC_SOCKET_ADDRESS_HPP
-#define STATIC_SOCKET_ADDRESS_HPP
+#ifndef STATIC_SOCKET_ADDRESS_HXX
+#define STATIC_SOCKET_ADDRESS_HXX
 
 #include "SocketAddress.hxx"
 #include "Compiler.h"
@@ -39,6 +39,8 @@
  * An OO wrapper for struct sockaddr_storage.
  */
 class StaticSocketAddress {
+	friend class SocketDescriptor;
+
 public:
 	typedef SocketAddress::size_type size_type;
 
@@ -49,58 +51,88 @@ private:
 public:
 	StaticSocketAddress() = default;
 
-	StaticSocketAddress &operator=(SocketAddress other);
+	StaticSocketAddress &operator=(SocketAddress other) noexcept;
 
-	operator SocketAddress() const {
+	operator SocketAddress() const noexcept {
 		return SocketAddress(reinterpret_cast<const struct sockaddr *>(&address),
 				     size);
 	}
 
-	struct sockaddr *GetAddress() {
+	operator struct sockaddr *() noexcept {
 		return reinterpret_cast<struct sockaddr *>(&address);
 	}
 
-	const struct sockaddr *GetAddress() const {
+	operator const struct sockaddr *() const noexcept {
 		return reinterpret_cast<const struct sockaddr *>(&address);
 	}
 
-	constexpr size_type GetCapacity() const {
+	struct sockaddr *GetAddress() noexcept {
+		return reinterpret_cast<struct sockaddr *>(&address);
+	}
+
+	const struct sockaddr *GetAddress() const noexcept {
+		return reinterpret_cast<const struct sockaddr *>(&address);
+	}
+
+	constexpr size_type GetCapacity() const noexcept {
 		return sizeof(address);
 	}
 
-	size_type GetSize() const {
+	size_type GetSize() const noexcept {
 		return size;
 	}
 
-	void SetSize(size_type _size) {
+	void SetSize(size_type _size) noexcept {
 		assert(_size > 0);
 		assert(size_t(_size) <= sizeof(address));
 
 		size = _size;
 	}
 
-	int GetFamily() const {
+	/**
+	 * Set the size to the maximum value for this class.
+	 */
+	void SetMaxSize() {
+		SetSize(GetCapacity());
+	}
+
+	int GetFamily() const noexcept {
 		return address.ss_family;
 	}
 
-	bool IsDefined() const {
+	bool IsDefined() const noexcept {
 		return GetFamily() != AF_UNSPEC;
 	}
 
-	void Clear() {
+	void Clear() noexcept {
+		size = sizeof(address.ss_family);
 		address.ss_family = AF_UNSPEC;
 	}
 
+#ifdef HAVE_TCP
+	/**
+	 * Extract the port number.  Returns 0 if not applicable.
+	 */
 	gcc_pure
-	bool operator==(SocketAddress other) const {
+	unsigned GetPort() const noexcept {
+		return ((SocketAddress)*this).GetPort();
+	}
+
+	/**
+	 * @return true on success, false if this address cannot have
+	 * a port number
+	 */
+	bool SetPort(unsigned port) noexcept;
+#endif
+
+	gcc_pure
+	bool operator==(SocketAddress other) const noexcept {
 		return (SocketAddress)*this == other;
 	}
 
-	bool operator!=(SocketAddress &other) const {
+	bool operator!=(SocketAddress other) const noexcept {
 		return !(*this == other);
 	}
-
-	bool Lookup(const char *host, const char *service, int socktype);
 };
 
 #endif

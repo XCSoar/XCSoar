@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2015 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2013-2017 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,36 +30,62 @@
 #ifndef WSTRING_COMPARE_HXX
 #define WSTRING_COMPARE_HXX
 
+#include "WStringView.hxx"
+#include "WStringAPI.hxx"
 #include "Compiler.h"
 
 #include <wchar.h>
 
 static inline bool
-StringIsEmpty(const wchar_t *string)
+StringIsEmpty(const wchar_t *string) noexcept
 {
 	return *string == 0;
 }
 
-gcc_pure
-bool
-StringStartsWith(const wchar_t *haystack, const wchar_t *needle);
+gcc_pure gcc_nonnull_all
+static inline bool
+StringStartsWith(const wchar_t *haystack, WStringView needle) noexcept
+{
+	return StringIsEqual(haystack, needle.data, needle.size);
+}
 
 gcc_pure
 bool
-StringEndsWith(const wchar_t *haystack, const wchar_t *needle);
+StringEndsWith(const wchar_t *haystack, const wchar_t *needle) noexcept;
 
 gcc_pure
 bool
-StringEndsWithIgnoreCase(const wchar_t *haystack, const wchar_t *needle);
+StringEndsWithIgnoreCase(const wchar_t *haystack,
+			 const wchar_t *needle) noexcept;
 
 /**
  * Returns the portion of the string after a prefix.  If the string
  * does not begin with the specified prefix, this function returns
  * nullptr.
  */
-gcc_nonnull_all
-const wchar_t *
-StringAfterPrefix(const wchar_t *string, const wchar_t *prefix);
+gcc_pure gcc_nonnull_all
+static inline const wchar_t *
+StringAfterPrefix(const wchar_t *haystack, WStringView needle) noexcept
+{
+	return StringStartsWith(haystack, needle)
+		? haystack + needle.size
+		: nullptr;
+}
+
+inline wchar_t *
+StringAfterPrefix(wchar_t *haystack, WStringView needle) noexcept
+{
+	return const_cast<wchar_t *>(StringAfterPrefix((const wchar_t *)haystack,
+						       needle));
+}
+
+gcc_pure
+static inline bool
+StringStartsWithIgnoreCase(const wchar_t *haystack,
+			   WStringView needle) noexcept
+{
+	return StringIsEqualIgnoreCase(haystack, needle.data, needle.size);
+}
 
 /**
  * Returns the portion of the string after a prefix.  If the string
@@ -67,12 +93,21 @@ StringAfterPrefix(const wchar_t *string, const wchar_t *prefix);
  * nullptr.
  * This function is case-independent.
  */
-gcc_nonnull_all
-const wchar_t *
-StringAfterPrefixCI(const wchar_t *string, const wchar_t *prefix);
+gcc_pure gcc_nonnull_all
+static inline const wchar_t *
+StringAfterPrefixCI(const wchar_t *string, WStringView needle) noexcept
+{
+	return StringIsEqualIgnoreCase(string, needle.data, needle.size)
+		? string + needle.size
+		: nullptr;
+}
 
+/**
+ * Check if the given string ends with the specified suffix.  If yes,
+ * returns the position of the suffix, and nullptr otherwise.
+ */
 gcc_pure
-bool
-StringStartsWithIgnoreCase(const wchar_t *haystack, const wchar_t *needle);
+const wchar_t *
+FindStringSuffix(const wchar_t *p, const wchar_t *suffix) noexcept;
 
 #endif

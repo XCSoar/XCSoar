@@ -48,7 +48,7 @@ BufferCanvas::Create(PixelSize new_size)
   assert(!active);
 
   Destroy();
-  texture = new GLTexture(new_size);
+  texture = new GLTexture(new_size, true);
 
   if (OpenGL::frame_buffer_object && OpenGL::render_buffer_stencil) {
     frame_buffer = new GLFrameBuffer();
@@ -250,7 +250,7 @@ BufferCanvas::CopyTo(Canvas &other)
 #endif
 
   texture->Bind();
-  texture->DrawFlipped(other.GetRect(), GetRect());
+  texture->Draw(other.GetRect(), GetRect());
 }
 
 void

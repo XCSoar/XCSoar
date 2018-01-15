@@ -100,7 +100,8 @@ public:
   }
 
   Serialiser &operator<<(std::chrono::steady_clock::time_point t) {
-    const auto delta = steady_now - t;
+    const auto _delta = steady_now - t;
+    const auto delta = std::chrono::duration_cast<std::chrono::system_clock::duration>(_delta);
     const auto u = system_now - delta;
     return *this << u;
   }

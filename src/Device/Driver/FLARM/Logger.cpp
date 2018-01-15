@@ -243,7 +243,7 @@ FlarmDevice::ReadFlightInfo(RecordedFlightInfo &flight,
   AllocatedArray<uint8_t> data;
   uint16_t length;
   uint8_t ack_result =
-    WaitForACKOrNACK(header.GetSequenceNumber(), data, length, env, 1000);
+    WaitForACKOrNACK(header.sequence_number, data, length, env, 1000);
 
   // If neither ACK nor NACK was received
   if (ack_result != FLARM::MT_ACK || length <= 2)
@@ -268,7 +268,7 @@ FlarmDevice::SelectFlight(uint8_t record_number, OperationEnvironment &env)
     return FLARM::MT_ERROR;
 
   // Wait for an answer
-  return WaitForACKOrNACK(header.GetSequenceNumber(), env, 1000);
+  return WaitForACKOrNACK(header.sequence_number, env, 1000);
 }
 
 bool
@@ -324,7 +324,7 @@ FlarmDevice::DownloadFlight(Path path, OperationEnvironment &env)
     // Wait for an answer and save the payload for further processing
     AllocatedArray<uint8_t> data;
     uint16_t length;
-    bool ack = WaitForACKOrNACK(header.GetSequenceNumber(), data,
+    bool ack = WaitForACKOrNACK(header.sequence_number, data,
                                 length, env, 10000) == FLARM::MT_ACK;
 
     // If no ACK was received

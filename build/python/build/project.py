@@ -6,10 +6,9 @@ from build.tar import untar
 from build.quilt import push_all
 
 class Project:
-    def __init__(self, url, md5, installed, name=None, version=None,
+    def __init__(self, url, alternative_url, md5, installed, name=None, version=None,
                  base=None,
-                 patches=None,
-                 use_cxx=False, use_clang=False):
+                 patches=None):
         if base is None:
             basename = os.path.basename(url)
             m = re.match(r'^(.+)\.(tar(\.(gz|bz2|xz|lzma))?|zip)$', basename)
@@ -27,16 +26,14 @@ class Project:
         self.version = version
 
         self.url = url
+        self.alternative_url = alternative_url
         self.md5 = md5
         self.installed = installed
 
         self.patches = patches
 
-        self.use_cxx = use_cxx
-        self.use_clang = use_clang
-
     def download(self, toolchain):
-        return download_and_verify(self.url, self.md5, toolchain.tarball_path)
+        return download_and_verify(self.url, self.alternative_url, self.md5, toolchain.tarball_path)
 
     def is_installed(self, toolchain):
         tarball = self.download(toolchain)

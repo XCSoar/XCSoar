@@ -276,7 +276,7 @@ RoutePolars::ReachIntercept(const int index, const AFlatGeoPoint &flat_origin,
 
   if (delta1.y * delta2.y < 0)
     /* intersection is on the wrong vertical side */
-    fp.x = flat_origin.y;
+    fp.y = flat_origin.y;
 
   return fp;
 }

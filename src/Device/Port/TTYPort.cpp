@@ -29,6 +29,7 @@ Copyright_License {
 #include "Util/StringFormat.hpp"
 
 #include <system_error>
+#include <boost/system/system_error.hpp>
 
 #include <sys/stat.h>
 #include <termios.h>
@@ -85,7 +86,7 @@ IsCharDev(const char *path)
 }
 
 bool
-TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
+TTYPort::Open(const TCHAR *path, unsigned baud_rate)
 {
   if (IsAndroid() && IsCharDev(path)) {
     /* attempt to give the XCSoar process permissions to access the
@@ -95,14 +96,63 @@ TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
     system(command);
   }
 
-  FileDescriptor fd;
-  if (!fd.OpenNonBlocking(path))
-    throw FormatErrno("Failed to open %s", path);
+  boost::system::error_code ec;
+  serial_port.open(path, ec);
+  if (ec) {
+    char error_msg[MAX_PATH + 16];
+    StringFormat(error_msg, sizeof(error_msg), "Failed to open %s", path);
+    throw boost::system::system_error(ec);
+  }
 
-  serial_port.assign(fd.Get());
-
-  baud_rate = _baud_rate;
   if (!SetBaudrate(baud_rate))
+    return false;
+
+  serial_port.set_option(boost::asio::serial_port_base::parity(
+                             boost::asio::serial_port_base::parity::none),
+                         ec);
+  if (ec)
+    return false;
+
+  serial_port.set_option(boost::asio::serial_port_base::character_size(
+                             boost::asio::serial_port_base::character_size(8)),
+                         ec);
+  if (ec)
+    return false;
+
+  serial_port.set_option(boost::asio::serial_port_base::stop_bits(
+                             boost::asio::serial_port_base::stop_bits::one),
+                         ec);
+  if (ec)
+    return false;
+
+  serial_port.set_option(boost::asio::serial_port_base::flow_control(
+                             boost::asio::serial_port_base::flow_control::none),
+                         ec);
+  if (ec)
+    return false;
+
+  class
+  {
+  public:
+    boost::system::error_code store(
+        termios& attr, boost::system::error_code& ec) const {
+      /* The IGNBRK flag is explicitly cleared by boost::asio::serial_port, and
+         it offers no built-in option to change this.
+         This flag is needed for some setups, to avoid receiving unwanted '\0'
+         charachters, which cannot be detected by weak checksum algorithms. */
+      attr.c_iflag |= IGNBRK;
+
+      /* boost::asio::serial_port leaves the VMIN and VTIME parameters
+         unintialised, which can lead to undesired behaviour. */
+      attr.c_cc[VMIN] = 1;
+      attr.c_cc[VTIME] = 0;
+
+      ec = boost::system::error_code();
+      return ec;
+    }
+  } custom_options;
+  serial_port.set_option(custom_options, ec);
+  if (ec)
     return false;
 
   valid.store(true, std::memory_order_relaxed);
@@ -197,7 +247,7 @@ TTYPort::GetBaudrate() const
 }
 
 bool
-TTYPort::SetBaudrate(unsigned BaudRate)
+TTYPort::SetBaudrate(unsigned baud_rate)
 {
   assert(serial_port.is_open());
 

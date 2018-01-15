@@ -112,7 +112,7 @@ namespace Profile {
 
   template<size_t max>
   static inline bool
-  Get(const char *key, StringBuffer<TCHAR, max> &value)
+  Get(const char *key, BasicStringBuffer<TCHAR, max> &value)
   {
     return Get(key, value.data(), value.capacity());
   }

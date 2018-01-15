@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Tracking/LiveTrack24.hpp"
+#include "Tracking/LiveTrack24/Client.hpp"
 #include "Net/HTTP/Init.hpp"
 #include "Time/BrokenDateTime.hpp"
 #include "Units/System.hpp"
@@ -43,30 +43,35 @@ TestTracking(int argc, char *argv[])
 
   ConsoleOperationEnvironment env;
 
-  bool has_user_id;
-  UserID user_id;
   tstring username, password;
+  bool has_user_id;
+
+  LiveTrack24::Client client;
+
+  client.SetServer(_T("test.livetrack24.com"));
+
   if (args.IsEmpty()) {
     username = _T("");
     password = _T("");
     has_user_id = false;
+    client.GenerateSessionID();
   } else {
     username = args.ExpectNextT();
     password = args.IsEmpty() ? _T("") : args.ExpectNextT();
 
-    user_id = LiveTrack24::GetUserID(username.c_str(), password.c_str(), env);
-    has_user_id = (user_id != 0);
+
+    has_user_id = client.GenerateSessionID(username.c_str(), password.c_str(), env);
+    if(!has_user_id) {
+      client.GenerateSessionID();
+    }
   }
 
-  SessionID session = has_user_id ?
-                      GenerateSessionID(user_id) : GenerateSessionID();
-  printf("Generated session id: %u\n", session);
+  printf("Generated session id: %u\n", client.GetSessionID());
 
 
   printf("Starting tracking ... ");
-  bool result = StartTracking(session, username.c_str(), password.c_str(), 10,
-                              VehicleType::GLIDER, _T("Hornet"),
-                              env);
+  bool result = client.StartTracking(VehicleType::GLIDER, _T("Hornet"), env);
+
   printf(result ? "done\n" : "failed\n");
   if (!result)
     return false;
@@ -74,9 +79,8 @@ TestTracking(int argc, char *argv[])
   BrokenDate now = BrokenDate::TodayUTC();
 
   printf("Sending positions ");
-  unsigned package_id = 2;
   while (replay->Next()) {
-    if (package_id % 10 == 0) {
+    if (client.GetPacketID() % 10 == 0) {
       putchar('.');
       fflush(stdout);
     }
@@ -86,21 +90,18 @@ TestTracking(int argc, char *argv[])
     BrokenDateTime datetime(now.year, now.month, now.day, time.hour,
                             time.minute, time.second);
 
-    result = SendPosition(
-        session, package_id, basic.location, (unsigned)basic.nav_altitude,
+    result = client.SendPosition(basic.location, (unsigned)basic.nav_altitude,
         (unsigned)Units::ToUserUnit(basic.ground_speed, Unit::KILOMETER_PER_HOUR),
         basic.track, datetime.ToUnixTimeUTC(),
         env);
 
     if (!result)
       break;
-
-    package_id++;
   }
   printf(result ? "done\n" : "failed\n");
 
   printf("Stopping tracking ... ");
-  result = EndTracking(session, package_id, env);
+  result = client.EndTracking(env);
   printf(result ? "done\n" : "failed\n");
 
   return true;
@@ -111,7 +112,6 @@ main(int argc, char *argv[])
 {
   Net::Initialise();
 
-  LiveTrack24::SetServer(_T("test.livetrack24.com"));
   bool result = TestTracking(argc, argv);
 
   Net::Deinitialise();

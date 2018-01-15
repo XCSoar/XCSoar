@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Catch.hpp"
-#include "Util.hpp"
+#include "Util.hxx"
 
 extern "C" {
 #include <lua.h>

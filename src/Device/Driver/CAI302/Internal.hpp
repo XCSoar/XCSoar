@@ -142,6 +142,8 @@ public:
 
   bool WriteNavpoint(unsigned id, const Waypoint &wp,
                      OperationEnvironment &env);
+
+  bool CloseNavpoints(OperationEnvironment &env);
 };
 
 #endif

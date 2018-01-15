@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2015 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -32,17 +32,16 @@
 
 template<>
 AllocatedString<char>
-AllocatedString<char>::Duplicate(const_pointer src)
+AllocatedString<char>::Duplicate(const_pointer_type src)
 {
 	return Duplicate(src, StringLength(src));
 }
 
 #ifdef _UNICODE
-#include <tchar.h>
 
 template<>
-AllocatedString<TCHAR>
-AllocatedString<TCHAR>::Duplicate(const_pointer src)
+AllocatedString<wchar_t>
+AllocatedString<wchar_t>::Duplicate(const_pointer_type src)
 {
 	return Duplicate(src, StringLength(src));
 }

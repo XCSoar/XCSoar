@@ -27,7 +27,7 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "Units/System.hpp"
 #include "Language/Language.hpp"
-#include "Util/CharUtil.hpp"
+#include "Util/CharUtil.hxx"
 #include "Util/StringAPI.hxx"
 #include "Util/StringParser.hxx"
 #include "Util/Macros.hpp"
@@ -77,6 +77,7 @@ static constexpr AirspaceClassStringCouple airspace_class_strings[] = {
   { _T("G"), CLASSG },
   { _T("RMZ"), RMZ },
   { _T("MATZ"), MATZ },
+  { _T("GSEC"), WAVE },
 };
 
 static constexpr AirspaceClassCharCouple airspace_tnp_class_chars[] = {

@@ -83,6 +83,36 @@ MakeOverlayLabel(PCMet::OverlayInfo &info)
   info.label = label;
 }
 
+static void
+FindLatestOverlay(PCMet::OverlayInfo &info)
+{
+  struct Visitor : public File::Visitor {
+    PCMet::OverlayInfo &info;
+    uint64_t latest_modification;
+    uint64_t now;
+
+    explicit Visitor(PCMet::OverlayInfo &_info)
+      :info(_info), latest_modification(0), now(File::Now()) {}
+
+    void Visit(Path path, Path) override {
+      uint64_t last_modification = File::GetLastModification(path);
+      if (last_modification > latest_modification &&
+          last_modification <= now) {
+        latest_modification = last_modification;
+        info.path = path;
+      }
+    }
+  } visitor(info);
+
+  const auto cache_path = MakeLocalPath(_T("pc_met"));
+  StaticString<256> pattern;
+  pattern.Format(_T("%s_%s_lv_%06u_p_%03u_*.tiff"),
+                 type_names[unsigned(info.type)],
+                 area_names[unsigned(info.area)],
+                 info.level, info.step);
+  Directory::VisitSpecificFiles(cache_path, pattern, visitor);
+}
+
 std::list<PCMet::OverlayInfo>
 PCMet::CollectOverlays()
 {
@@ -96,6 +126,7 @@ PCMet::CollectOverlays()
       info.level = 3000;
       info.step = step;
       MakeOverlayLabel(info);
+      FindLatestOverlay(info);
       list.emplace_back(std::move(info));
     }
   }
@@ -120,8 +151,6 @@ PCMet::DownloadOverlay(const OverlayInfo &info, BrokenDateTime now_utc,
   const auto cache_path = MakeLocalPath(_T("pc_met"));
   auto path = AllocatedPath::Build(cache_path,
                                    UTF8ToWideConverter(url.c_str() + sizeof(PCMET_FTP)));
-
-  /* TODO: what if file exists already?  Reuse? */
 
   {
     const WideToUTF8Converter username(settings.ftp_credentials.username);

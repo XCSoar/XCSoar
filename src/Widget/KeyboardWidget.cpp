@@ -25,7 +25,7 @@ Copyright_License {
 #include "Renderer/SymbolButtonRenderer.hpp"
 #include "Util/StringAPI.hxx"
 #include "Util/StringCompare.hxx"
-#include "Util/CharUtil.hpp"
+#include "Util/CharUtil.hxx"
 #include "Screen/Layout.hpp"
 
 #include <assert.h>

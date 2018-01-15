@@ -1058,6 +1058,15 @@ static constexpr MetaData meta_data[] = {
     N_("Pie chart of time circling and climbing, circling and descending, and climbing non-circling."),
     IBFHelper<InfoBoxContentClimbPercent>::Create,
   },
+
+  // NbrSat
+  {
+    N_("Number of used satellites"),
+    N_("Satellites"),
+    N_("The number of actually used (seen) satellites by GPS module. If this information is unavailable, the displayed value is '---'."),
+    UpdateInfoBoxNbrSat,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,

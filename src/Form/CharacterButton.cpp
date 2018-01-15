@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Form/CharacterButton.hpp"
-#include "Util/CharUtil.hpp"
+#include "Util/CharUtil.hxx"
 
 #ifndef _UNICODE
 #include "Util/UTF8.hpp"

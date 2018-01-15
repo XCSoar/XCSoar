@@ -26,7 +26,7 @@
 
 IncrementalSpeedComputer::IncrementalSpeedComputer(const bool _is_positive)
   :df(0),
-   v_lpf(400 / N_AV, false),
+   v_lpf(400. / N_AV, false),
    is_positive(_is_positive) {}
 
 void

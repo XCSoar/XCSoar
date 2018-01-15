@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Util.hpp"
-#include "Util/CharUtil.hpp"
+#include "Util/CharUtil.hxx"
 
 #include <algorithm>
 

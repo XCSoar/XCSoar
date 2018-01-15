@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2015 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2012-2015 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -35,11 +35,11 @@
 #include <assert.h>
 #include <string.h>
 
-#ifdef HAVE_POSIX
+#ifndef _WIN32
 #include <arpa/inet.h>
 #endif
 
-#if defined(__GLIBC__) || defined(__APPLE__)
+#if !defined(WIN32) && !defined(__BIONIC__)
 #include <ifaddrs.h>
 #endif
 
@@ -56,7 +56,7 @@ CastToIPv4(const struct sockaddr *p)
 IPv4Address::IPv4Address(SocketAddress src)
 	:address(*CastToIPv4(src.GetAddress())) {}
 
-#if defined(__GLIBC__) || defined(__APPLE__)
+#if !defined(WIN32) && !defined(__BIONIC__)
 
 /**
  * helper to iterate over available devices, locate the

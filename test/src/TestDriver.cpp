@@ -1481,6 +1481,10 @@ TestXCTracer()
   delete device;
 }
 
+#ifdef __clang__
+/* true, the nullptr cast below is a bad kludge */
+#pragma GCC diagnostic ignored "-Wnull-dereference"
+#endif
 
 static void
 TestDeclare(const struct DeviceRegister &driver)

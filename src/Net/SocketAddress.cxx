@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2015 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2012-2017 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,11 +28,47 @@
  */
 
 #include "SocketAddress.hxx"
+#include "IPv4Address.hxx"
+#include "IPv6Address.hxx"
 
 #include <string.h>
 
 bool
-SocketAddress::operator==(SocketAddress other) const
+SocketAddress::operator==(SocketAddress other) const noexcept
 {
 	return size == other.size && memcmp(address, other.address, size) == 0;
 }
+
+#ifdef HAVE_TCP
+
+bool
+SocketAddress::IsV6Any() const noexcept
+{
+    return GetFamily() == AF_INET6 && IPv6Address(*this).IsAny();
+}
+
+bool
+SocketAddress::IsV4Mapped() const noexcept
+{
+	return GetFamily() == AF_INET6 && IPv6Address(*this).IsV4Mapped();
+}
+
+unsigned
+SocketAddress::GetPort() const noexcept
+{
+	if (IsNull())
+		return 0;
+
+	switch (GetFamily()) {
+	case AF_INET:
+		return IPv4Address(*this).GetPort();
+
+	case AF_INET6:
+		return IPv6Address(*this).GetPort();
+
+	default:
+		return 0;
+	}
+}
+
+#endif

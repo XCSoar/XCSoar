@@ -144,6 +144,7 @@ Run(IGCWriter &writer)
 
   writer.Flush();
   writer.Sign();
+  writer.Flush();
 }
 
 static void

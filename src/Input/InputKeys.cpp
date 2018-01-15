@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "InputKeys.hpp"
 #include "Event/KeyCode.hpp"
-#include "Util/CharUtil.hpp"
+#include "Util/CharUtil.hxx"
 #include "Util/StringAPI.hxx"
 
 struct string_to_key {

@@ -25,7 +25,7 @@ Copyright_License {
 #include "FlarmNetRecord.hpp"
 #include "FlarmNetDatabase.hpp"
 #include "Util/StringUtil.hpp"
-#include "Util/CharUtil.hpp"
+#include "Util/CharUtil.hxx"
 #include "IO/LineReader.hpp"
 #include "IO/FileLineReader.hpp"
 
@@ -148,5 +148,5 @@ try {
   FileLineReaderA file(path);
   return LoadFile(file, database);
 } catch (const std::runtime_error &e) {
-  return 0;;
+  return 0;
 }

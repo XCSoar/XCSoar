@@ -61,7 +61,7 @@ ImportTexture(const UncompressedImage &image)
 
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
   return new GLTexture(internal_format, image.GetSize(),
-                       format, type, image.GetData());
+                       format, type, image.GetData(), image.IsFlipped());
 }
 
 GLTexture *
@@ -74,5 +74,5 @@ ImportAlphaTexture(const UncompressedImage &image)
 
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
   return new GLTexture(internal_format, image.GetSize(),
-                       format, type, image.GetData());
+                       format, type, image.GetData(), image.IsFlipped());
 }

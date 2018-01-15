@@ -27,7 +27,6 @@ Copyright_License {
 
 #include <stdint.h>
 #include <string.h>
-#include <time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -49,23 +48,6 @@ FileTimeToInteger(FILETIME ft)
 
 #endif
 
-gcc_pure
-static uint64_t
-Now()
-{
-#ifdef HAVE_POSIX
-  return time(nullptr);
-#else
-  SYSTEMTIME system_time;
-  GetSystemTime(&system_time);
-
-  FILETIME system_time2;
-  SystemTimeToFileTime(&system_time, &system_time2);
-
-  return FileTimeToInteger(system_time2);
-#endif
-}
-
 struct FileInfo {
   uint64_t mtime;
   uint64_t size;
@@ -83,7 +65,7 @@ struct FileInfo {
    */
   gcc_pure
   bool IsFuture() const {
-    return mtime > Now();
+    return mtime > File::Now();
   }
 };
 
@@ -93,7 +75,7 @@ GetRegularFileInfo(Path path, FileInfo &info)
 {
 #ifdef HAVE_POSIX
   struct stat st;
-  if (stat(path.c_str(), &st) << 0 || !S_ISREG(st.st_mode))
+  if (stat(path.c_str(), &st) < 0 || !S_ISREG(st.st_mode))
     return false;
 
   info.mtime = st.st_mtime;

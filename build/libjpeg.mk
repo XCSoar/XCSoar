@@ -1,5 +1,5 @@
 LIBJPEG ?= n
 
 ifeq ($(LIBJPEG),y)
-LIBJPEG_LDLIBS = -ljpeg
+$(eval $(call pkg-config-library,LIBJPEG,libjpeg))
 endif

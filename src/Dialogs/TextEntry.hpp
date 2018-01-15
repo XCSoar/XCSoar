@@ -40,7 +40,7 @@ TextEntryDialog(TCHAR *text, size_t size,
 
 template<size_t N>
 static inline bool
-TextEntryDialog(StringBuffer<TCHAR, N> &text,
+TextEntryDialog(BasicStringBuffer<TCHAR, N> &text,
                 const TCHAR *caption=NULL,
                 AllowedCharacters accb=AllowedCharacters(),
                 bool default_shift_state = true)
@@ -51,7 +51,7 @@ TextEntryDialog(StringBuffer<TCHAR, N> &text,
 
 template<size_t N>
 static inline bool
-TextEntryDialog(StringBuffer<TCHAR, N> &text,
+TextEntryDialog(BasicStringBuffer<TCHAR, N> &text,
                 const TCHAR *caption,
                 bool default_shift_state)
 {

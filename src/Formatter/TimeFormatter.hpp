@@ -59,10 +59,10 @@ FormatTimeLong(TCHAR *buffer, double time);
 void FormatSignedTimeHHMM(TCHAR* buffer, int time);
 
 gcc_const
-static inline StringBuffer<TCHAR, 8>
+static inline BasicStringBuffer<TCHAR, 8>
 FormatSignedTimeHHMM(int time)
 {
-  StringBuffer<TCHAR, 8> buffer;
+  BasicStringBuffer<TCHAR, 8> buffer;
   FormatSignedTimeHHMM(buffer.data(), time);
   return buffer;
 }
@@ -80,11 +80,11 @@ void FormatTimespanSmart(TCHAR *buffer, int timespan,
                          const TCHAR *separator = _T(" "));
 
 gcc_const
-static inline StringBuffer<TCHAR, 64>
+static inline BasicStringBuffer<TCHAR, 64>
 FormatTimespanSmart(int timespan, unsigned max_tokens = 1,
                     const TCHAR *separator = _T(" "))
 {
-  StringBuffer<TCHAR, 64> buffer;
+  BasicStringBuffer<TCHAR, 64> buffer;
   FormatTimespanSmart(buffer.data(), timespan, max_tokens, separator);
   return buffer;
 }

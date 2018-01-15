@@ -51,12 +51,18 @@ OPENGL_CPPFLAGS += -DHAVE_GLES -DHAVE_GLES2
 OPENGL_CPPFLAGS += $(GLM_CPPFLAGS)
 ifeq ($(TARGET_IS_IOS),y)
 OPENGL_LDLIBS = -framework OpenGLES
+else ifeq ($(TARGET_IS_PI),y)
+OPENGL_LDLIBS = -lbrcmGLESv2 -ldl
 else
 OPENGL_LDLIBS = -lGLESv2 -ldl
 endif
 else ifeq ($(GLES),y)
 OPENGL_CPPFLAGS += -DHAVE_GLES -DHAVE_GLES1
+ifeq ($(TARGET_IS_PI),y)
+OPENGL_LDLIBS = -lbrcmGLESv2 -ldl
+else
 OPENGL_LDLIBS = -lGLESv1_CM -ldl
+endif
 else ifeq ($(TARGET_IS_DARWIN),y)
 OPENGL_LDLIBS = -framework OpenGL
 else

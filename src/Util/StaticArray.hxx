@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2015 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2010-2015 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -50,7 +50,7 @@ public:
 		:TrivialArray<T, max>(_begin, _end) {}
 
 	template<typename U>
-	StaticArray(std::initializer_list<U> l):TrivialArray<T, max>(l) {}
+	StaticArray(std::initializer_list<U> init):TrivialArray<T, max>(init) {}
 };
 
 #endif

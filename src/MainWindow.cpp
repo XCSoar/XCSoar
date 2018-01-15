@@ -189,7 +189,8 @@ void
 MainWindow::Initialise()
 {
   Layout::Initialize(GetSize(),
-                     CommonInterface::GetUISettings().GetPercentScale());
+                     CommonInterface::GetUISettings().GetPercentScale(),
+                     CommonInterface::GetUISettings().custom_dpi);
 
   LogFormat("Initialise fonts");
   if (!Fonts::Initialize()) {
@@ -381,7 +382,8 @@ MainWindow::ReinitialiseLayout()
 }
 
 void 
-MainWindow::ReinitialiseLayout_flarm(PixelRect rc, const InfoBoxLayout::Layout ib_layout)
+MainWindow::ReinitialiseLayout_flarm(PixelRect rc,
+                                     const InfoBoxLayout::Layout &ib_layout)
 {
   TrafficSettings::GaugeLocation val =
     CommonInterface::GetUISettings().traffic.gauge_location;
@@ -512,7 +514,8 @@ void
 MainWindow::OnResize(PixelSize new_size)
 {
   Layout::Initialize(new_size,
-                     CommonInterface::GetUISettings().GetPercentScale());
+                     CommonInterface::GetUISettings().GetPercentScale(),
+                     CommonInterface::GetUISettings().custom_dpi);
 
   SingleWindow::OnResize(new_size);
 

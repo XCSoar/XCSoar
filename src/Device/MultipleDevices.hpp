@@ -81,7 +81,7 @@ public:
    */
   void Tick();
 
-  void AutoReopen(OperationEnvironment &env);;
+  void AutoReopen(OperationEnvironment &env);
   void PutMacCready(double mac_cready, OperationEnvironment &env);
   void PutBugs(double bugs, OperationEnvironment &env);
   void PutBallast(double fraction, double overload, OperationEnvironment &env);

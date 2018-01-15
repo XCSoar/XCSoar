@@ -27,6 +27,7 @@ Copyright_License {
 #include "Java/Object.hxx"
 #include "Java/Class.hxx"
 #include "Java/String.hxx"
+#include "OS/Path.hpp"
 
 #ifndef NO_SCREEN
 #include "Screen/Point.hpp"
@@ -53,6 +54,11 @@ class NativeView {
   static jmethodID open_file_method;
   static jmethodID getNetState_method;
 
+  static Java::TrivialClass clsBitmap;
+  static jmethodID createBitmap_method;
+
+  static Java::TrivialClass clsBitmapConfig;
+  static jmethodID bitmapConfigValueOf_method;
 public:
   /**
    * @see http://developer.android.com/reference/android/R.attr.html#screenOrientation
@@ -131,10 +137,9 @@ public:
     return env->CallObjectMethod(obj, loadResourceBitmap_method, name2.Get());
   }
 
-  jobject loadFileBitmap(const char *path) {
-    Java::String path2(env, path);
-    return env->CallObjectMethod(obj, loadFileBitmap_method, path2.Get());
-  }
+  jobject loadFileTiff(Path path);
+
+  jobject loadFileBitmap(Path path);
 
   bool bitmapToTexture(jobject bmp, bool alpha, jint *result) {
     jintArray result2 = env->NewIntArray(5);

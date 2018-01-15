@@ -64,7 +64,17 @@ Thread::Start()
   creating = true;
 #endif
 
+#if defined(__GLIBC__) || defined(__BIONIC__) || defined(__APPLE__)
   defined = pthread_create(&handle, nullptr, ThreadProc, this) == 0;
+#else
+  /* In other libc implementations, the default stack size for created threads
+     might not be large enough (e. g. 80 KB on musl libc).
+     640 KB ought to be enough for anybody. */
+  pthread_attr_t attr;
+  defined = (pthread_attr_init(&attr) == 0) &&
+            (pthread_attr_setstacksize(&attr, 640 * 1024) == 0) &&
+            (pthread_create(&handle, &attr, ThreadProc, this) == 0);
+#endif
 
 #ifndef NDEBUG
   creating = false;

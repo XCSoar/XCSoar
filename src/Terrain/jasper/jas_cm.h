@@ -68,7 +68,9 @@
 #ifndef JAS_CM_H
 #define JAS_CM_H
 
+/* The configuration header file should be included first. */
 #include <jasper/jas_config.h>
+
 #include <jasper/jas_icc.h>
 
 #ifdef __cplusplus
@@ -221,11 +223,6 @@ typedef struct {
 	jas_cmpxformseq_t *pxformseqs[JAS_CMPROF_NUMPXFORMSEQS];
 } jas_cmprof_t;
 
-/* Create a profile. */
-
-/* Destroy a profile. */
-void jas_cmprof_destroy(jas_cmprof_t *prof);
-
 #if 0
 typedef int_fast32_t jas_cmattrname_t;
 typedef int_fast32_t jas_cmattrval_t;
@@ -251,13 +248,18 @@ int jas_cmxform_apply(jas_cmxform_t *xform, jas_cmpixmap_t *in,
 
 int jas_cxform_optimize(jas_cmxform_t *xform, int optimize);
 
+/* Create a profile. */
+JAS_DLLEXPORT jas_cmprof_t *jas_cmprof_createfromiccprof(jas_iccprof_t *iccprof);
+JAS_DLLEXPORT jas_cmprof_t *jas_cmprof_createfromclrspc(int clrspc);
+
+/* Destroy a profile. */
+JAS_DLLEXPORT void jas_cmprof_destroy(jas_cmprof_t *prof);
+
 int jas_clrspc_numchans(int clrspc);
-jas_cmprof_t *jas_cmprof_createfromiccprof(jas_iccprof_t *iccprof);
-jas_cmprof_t *jas_cmprof_createfromclrspc(int clrspc);
-jas_iccprof_t *jas_iccprof_createfromcmprof(jas_cmprof_t *prof);
+JAS_DLLEXPORT jas_iccprof_t *jas_iccprof_createfromcmprof(jas_cmprof_t *prof);
 
 #define	jas_cmprof_clrspc(prof) ((prof)->clrspc)
-jas_cmprof_t *jas_cmprof_copy(jas_cmprof_t *prof);
+JAS_DLLEXPORT jas_cmprof_t *jas_cmprof_copy(jas_cmprof_t *prof);
 
 #ifdef __cplusplus
 }

@@ -70,7 +70,9 @@ ScreenGlobalInit::ScreenGlobalInit()
   OpenGL::Initialise();
 #endif
 
+#ifdef USE_FREETYPE
   Font::Initialise();
+#endif
 
   event_queue = new EventQueue();
 
@@ -86,7 +88,9 @@ ScreenGlobalInit::~ScreenGlobalInit()
   OpenGL::Deinitialise();
 #endif
 
+#ifdef USE_FREETYPE
   Font::Deinitialise();
+#endif
 
   ::SDL_Quit();
 

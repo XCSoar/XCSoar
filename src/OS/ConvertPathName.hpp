@@ -31,7 +31,7 @@ Copyright_License {
 #include "Util/ConvertString.hpp"
 #include "Util/LightString.hxx"
 
-#include <tchar.h>
+#include <wchar.h>
 #else
 #include "Util/StringPointer.hxx"
 #endif
@@ -44,7 +44,7 @@ Copyright_License {
  */
 class PathName {
 #ifdef _UNICODE
-  typedef LightString<TCHAR> Value;
+  typedef LightString<wchar_t> Value;
 #else
   typedef StringPointer<> Value;
 #endif
@@ -52,7 +52,7 @@ class PathName {
   Value value;
 
 public:
-  explicit PathName(Value::const_pointer _value)
+  explicit PathName(Value::const_pointer_type _value)
     :value(_value) {}
 
 #ifdef _UNICODE
@@ -98,7 +98,7 @@ public:
     return !value.IsNull();
   }
 
-  operator Value::const_pointer() const {
+  operator Value::const_pointer_type() const {
     return value.c_str();
   }
 };

@@ -113,6 +113,8 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
           bool fai_sectors,
           int highlight_index)
 {
+  assert(!task.IsEmpty());
+
   BackgroundRenderer background;
   background.SetTerrain(terrain);
   background.Draw(canvas, projection, settings_map.terrain);
@@ -202,8 +204,12 @@ PaintTask(Canvas &canvas, const PixelRect &rc, const OrderedTask &task,
           bool fai_sectors,
           int highlight_index)
 {
-  /* TODO: check location_available in ChartProjection */
-  ChartProjection projection(rc, task, location);
+  if (task.IsEmpty()) {
+    canvas.ClearWhite();
+    return;
+  }
+
+  ChartProjection projection(rc, task);
   PaintTask(canvas, projection, task, location,
             settings_map,
             task_look, airspace_look, terrain, airspaces,
@@ -222,8 +228,7 @@ PaintTaskPoint(Canvas &canvas, const PixelRect &rc,
                const RasterTerrain *terrain, const Airspaces *airspaces,
                int highlight_index)
 {
-  /* TODO: check location_available in ChartProjection */
-  ChartProjection projection(rc, point, point.GetLocation());
+  ChartProjection projection(rc, point);
   PaintTask(canvas, projection, task, location,
             settings_map,
             task_look, airspace_look, terrain, airspaces,

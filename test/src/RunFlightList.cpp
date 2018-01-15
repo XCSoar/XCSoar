@@ -41,6 +41,11 @@ Copyright_License {
 
 #include <stdio.h>
 
+#ifdef __clang__
+/* true, the nullptr cast below is a bad kludge */
+#pragma GCC diagnostic ignored "-Wnull-dereference"
+#endif
+
 bool
 NMEAParser::ReadGeoPoint(NMEAInputLine &line, GeoPoint &value_r)
 {

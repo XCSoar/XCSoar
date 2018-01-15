@@ -28,6 +28,8 @@
 #include "Util/StaticString.hxx"
 #include "Util/PrintException.hxx"
 
+#include <stdlib.h>
+
 static void
 TestMap()
 {

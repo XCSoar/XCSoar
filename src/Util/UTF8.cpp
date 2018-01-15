@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "Util/UTF8.hpp"
-#include "Util/CharUtil.hpp"
+#include "UTF8.hpp"
+#include "CharUtil.hxx"
 
 #include <algorithm>
 

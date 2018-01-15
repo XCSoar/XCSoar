@@ -24,7 +24,7 @@ Copyright_License {
 #include "Cache.hpp"
 #include "Screen/Point.hpp"
 #include "Screen/Font.hpp"
-#include "Util/Cache.hpp"
+#include "Util/Cache.hxx"
 #include "Util/StringCompare.hxx"
 #include "Util/StringAPI.hxx"
 
@@ -132,7 +132,7 @@ struct RenderedText {
     other.texture = nullptr;
   }
 
-#ifdef USE_FREETYPE
+#if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
   RenderedText(unsigned width, unsigned height, const uint8_t *buffer) {
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     texture = new GLTexture(GL_ALPHA, PixelSize(width, height),
@@ -193,8 +193,8 @@ struct RenderedText {
 static Mutex text_cache_mutex;
 #endif
 
-static Cache<TextCacheKey, PixelSize, 1024u, TextCacheKey::Hash> size_cache;
-static Cache<TextCacheKey, RenderedText, 256u, TextCacheKey::Hash> text_cache;
+static Cache<TextCacheKey, PixelSize, 1024u, 701u, TextCacheKey::Hash> size_cache;
+static Cache<TextCacheKey, RenderedText, 256u, 211u, TextCacheKey::Hash> text_cache;
 
 PixelSize
 TextCache::GetSize(const Font &font, const char *text)
@@ -274,8 +274,8 @@ TextCache::Get(const Font &font, const char *text)
 
   /* render the text into a OpenGL texture */
 
-#ifdef USE_FREETYPE
-#if defined(USE_FREETYPE) && defined(UNICODE)
+#if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
+#ifdef UNICODE
   UTF8ToWideConverter text2(text);
 #else
   const TCHAR* text2 = text;

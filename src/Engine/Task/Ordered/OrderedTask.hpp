@@ -351,11 +351,15 @@ public:
   /**
    * Accessor for task projection, for use when creating task points
    *
+   * This object is only valid if the task is not empty (see IsEmpty()).
+   *
    * @return Task global projection
    */
   gcc_pure
   const TaskProjection&
   GetTaskProjection() const {
+    assert(!IsEmpty());
+
     return task_projection;
   }
 
@@ -567,6 +571,16 @@ protected:
   void PropagateOrderedTaskSettings();
 
 public:
+  /**
+   * Check whether the task is empty.
+   *
+   * Note that even if the task is non-empty, it does not imply that
+   * the task is "valid".
+   */
+  bool IsEmpty() const noexcept {
+    return task_points.empty();
+  }
+
   ConstTaskPointList GetPoints() const {
     return task_points;
   }
@@ -622,7 +636,10 @@ public:
    * @return Location of center of task or GeoPoint::Invalid()
    */
   gcc_pure
-  GeoPoint GetTaskCenter() const;
+  GeoPoint GetTaskCenter() const noexcept {
+    assert(!IsEmpty());
+    return task_projection.GetCenter();
+  }
 
   /**
    * Find approximate radius of task from center to edge (for rendering purposes)
@@ -630,7 +647,10 @@ public:
    * @return Radius (m) from center to edge of task
    */
   gcc_pure
-  double GetTaskRadius() const;
+  double GetTaskRadius() const noexcept {
+    assert(!IsEmpty());
+    return task_projection.ApproxRadius();
+  }
 
   /**
    * returns the index of the highest intermediate TP that has been entered.

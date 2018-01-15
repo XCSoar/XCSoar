@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2015 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2012-2015 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef IPV4_ADDRESS_HPP
-#define IPV4_ADDRESS_HPP
+#ifndef IPV4_ADDRESS_HXX
+#define IPV4_ADDRESS_HXX
 
 #include "SocketAddress.hxx"
 #include "OS/ByteOrder.hpp"
@@ -36,11 +36,11 @@
 
 #include <stdint.h>
 
-#ifdef HAVE_POSIX
-#include <netinet/in.h>
-#else
+#ifdef _WIN32
 #include <winsock2.h>
 #include <ws2tcpip.h>
+#else
+#include <netinet/in.h>
 #endif
 
 /**
@@ -79,25 +79,36 @@ class IPv4Address {
 	}
 #endif
 
+	static constexpr struct sockaddr_in Construct(struct in_addr address,
+						      uint16_t port) {
+		return {
+#if defined(__APPLE__)
+			sizeof(struct sockaddr_in),
+#endif
+			AF_INET,
+			ToBE16(port),
+			address,
+			{},
+		};
+	}
+
+	static constexpr struct sockaddr_in Construct(uint32_t address,
+						      uint16_t port) {
+		return Construct(ConstructInAddr(address), port);
+	}
+
 public:
 	IPv4Address() = default;
 
+	constexpr IPv4Address(struct in_addr _address, uint16_t port)
+		:address(Construct(_address, port)) {}
+
 	constexpr IPv4Address(uint8_t a, uint8_t b, uint8_t c,
 			      uint8_t d, uint16_t port)
-#if defined(__APPLE__)
-	:address{sizeof(struct sockaddr_in), AF_INET, ToBE16(port),
-			ConstructInAddr(a, b, c, d), {}} {}
-#else
-	:address{AF_INET, ToBE16(port), ConstructInAddr(a, b, c, d), {}} {}
-#endif
+		:IPv4Address(ConstructInAddr(a, b, c, d), port) {}
 
 	constexpr explicit IPv4Address(uint16_t port)
-#if defined(__APPLE__)
-	:address{sizeof(struct sockaddr_in), AF_INET, ToBE16(port),
-			ConstructInAddr(INADDR_ANY), {}} {}
-#else
-	:address{AF_INET, ToBE16(port), ConstructInAddr(INADDR_ANY), {}} {}
-#endif
+		:IPv4Address(ConstructInAddr(INADDR_ANY), port) {}
 
 	/**
 	 * Convert a #SocketAddress to a #IPv4Address.  Its address family must be AF_INET.
@@ -117,7 +128,19 @@ public:
 		return address.sin_family != AF_UNSPEC;
 	}
 
-#if defined(__GLIBC__) || defined(__APPLE__)
+	constexpr uint16_t GetPort() const {
+		return FromBE16(address.sin_port);
+	}
+
+	void SetPort(uint16_t port) {
+		address.sin_port = ToBE16(port);
+	}
+
+	constexpr const struct in_addr &GetAddress() const {
+		return address.sin_addr;
+	}
+
+#if !defined(WIN32) && !defined(__BIONIC__)
 	/**
 	 * Returns a StaticSocketAddress for the specified device. Caller
 	 * should check for validity of returned StaticSocketAddress.

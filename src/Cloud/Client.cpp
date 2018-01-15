@@ -28,6 +28,9 @@ Copyright_License {
 #include "Tracking/SkyLines/Assemble.hpp"
 #include "Tracking/SkyLines/Import.hpp"
 
+#include <boost/geometry/algorithms/intersection.hpp>
+#include <boost/geometry/strategies/strategies.hpp>
+
 CloudClientContainer::CloudClientContainer()
   :key_set(typename KeySet::bucket_traits(key_buckets, N_KEY_BUCKETS)) {}
 

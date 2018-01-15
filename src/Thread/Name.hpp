@@ -25,13 +25,24 @@ Copyright_License {
 #define XCSOAR_THREAD_NAME_HPP
 
 #ifdef HAVE_POSIX
+
+#ifdef __APPLE__
+#define HAVE_PTHREAD_SETNAME_NP
+#else
+
+#include <features.h>
+#ifdef __GLIBC__
+#define HAVE_PTHREAD_SETNAME_NP
+#endif
+
+#endif
+
 #ifdef __BIONIC__
 /* Bionic supports pthread_setname_np() since API level 9, but since
    we build with API level 8, we fall back to prctl(PR_SET_NAME) */
 #define HAVE_PR_SET_NAME
-#else
-#define HAVE_PTHREAD_SETNAME_NP
 #endif
+
 #endif
 
 #ifdef HAVE_PR_SET_NAME

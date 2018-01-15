@@ -21,10 +21,20 @@ endif
 
 ifeq ($(USE_THIRDPARTY_LIBS),y)
 
+# In most cases, the ACTUAL_HOST_TRIPLET is not explicitly set. Set it to the
+# value of HOST_TRIPLET in this case.
+# This is for targets for which a toolchain is used, which was originally
+# intended for another target ABI, e. g. when the arm-linux-gnueabihf toolchain
+# used to compile for musl instead of glibc, and so the actual triplet is
+# something like arm-linux-musleabihf.
+ifeq ($(ACTUAL_HOST_TRIPLET),)
+  ACTUAL_HOST_TRIPLET = $(HOST_TRIPLET)
+endif
+
 # -Wl,--gc-sections breaks the (Kobo) glibc build
 THIRDPARTY_LDFLAGS_FILTER_OUT = -L% -Wl,--gc-sections
 
-THIRDPARTY_LIBS_DIR = $(TARGET_OUTPUT_DIR)/lib/$(HOST_TRIPLET)
+THIRDPARTY_LIBS_DIR = $(TARGET_OUTPUT_DIR)/lib/$(ACTUAL_HOST_TRIPLET)
 THIRDPARTY_LIBS_ROOT = $(THIRDPARTY_LIBS_DIR)/root
 
 .PHONY: libs
@@ -32,7 +42,7 @@ libs: $(THIRDPARTY_LIBS_DIR)/stamp
 
 compile-depends += $(THIRDPARTY_LIBS_DIR)/stamp
 $(THIRDPARTY_LIBS_DIR)/stamp:
-	./build/thirdparty.py $(TARGET_OUTPUT_DIR) $(TARGET) $(HOST_TRIPLET) "$(TARGET_ARCH)" "$(TARGET_CPPFLAGS)" "$(filter-out $(THIRDPARTY_LDFLAGS_FILTER_OUT),$(TARGET_LDFLAGS))" $(CC) $(CXX) $(AR) $(RANLIB) $(STRIP)
+	./build/thirdparty.py $(TARGET_OUTPUT_DIR) $(TARGET) $(HOST_TRIPLET) $(ACTUAL_HOST_TRIPLET) "$(TARGET_ARCH)" "$(TARGET_CPPFLAGS)" "$(filter-out $(THIRDPARTY_LDFLAGS_FILTER_OUT),$(TARGET_LDFLAGS))" $(CC) $(CXX) $(AR) "$(ARFLAGS)" $(RANLIB) $(STRIP)
 	touch $@
 
 TARGET_CPPFLAGS += -isystem $(THIRDPARTY_LIBS_ROOT)/include

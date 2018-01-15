@@ -63,10 +63,10 @@ FormatUserAltitude(double value, TCHAR *buffer,
                    bool include_unit = true);
 
 gcc_const
-static inline StringBuffer<TCHAR, 32>
+static inline BasicStringBuffer<TCHAR, 32>
 FormatUserAltitude(double value)
 {
-  StringBuffer<TCHAR, 32> buffer;
+  BasicStringBuffer<TCHAR, 32> buffer;
   FormatUserAltitude(value, buffer.data());
   return buffer;
 }
@@ -130,10 +130,10 @@ FormatUserDistanceSmart(double value, TCHAR *buffer,
                         double precision_threshold = 100);
 
 gcc_const
-static inline StringBuffer<TCHAR, 32>
+static inline BasicStringBuffer<TCHAR, 32>
 FormatUserDistanceSmart(double value)
 {
-  StringBuffer<TCHAR, 32> buffer;
+  BasicStringBuffer<TCHAR, 32> buffer;
   FormatUserDistanceSmart(value, buffer.data());
   return buffer;
 }
@@ -154,10 +154,10 @@ FormatUserSpeed(double value, TCHAR *buffer,
                 bool include_unit = true, bool Precision = true);
 
 gcc_const
-static inline StringBuffer<TCHAR, 32>
+static inline BasicStringBuffer<TCHAR, 32>
 FormatUserSpeed(double value, bool precision=true)
 {
-  StringBuffer<TCHAR, 32> buffer;
+  BasicStringBuffer<TCHAR, 32> buffer;
   FormatUserSpeed(value, buffer.data(), true, precision);
   return buffer;
 }
@@ -184,10 +184,10 @@ FormatUserTaskSpeed(double value, TCHAR *buffer,
                     bool include_unit=true, bool precision=true);
 
 gcc_const
-static inline StringBuffer<TCHAR, 32>
+static inline BasicStringBuffer<TCHAR, 32>
 FormatUserTaskSpeed(double value, bool precision=true)
 {
-  StringBuffer<TCHAR, 32> buffer;
+  BasicStringBuffer<TCHAR, 32> buffer;
   FormatUserTaskSpeed(value, buffer.data(), true, precision);
   return buffer;
 }

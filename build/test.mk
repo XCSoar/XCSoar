@@ -1015,7 +1015,7 @@ $(eval $(call link-program,RunSkyLinesTracking,RUN_SL_TRACKING))
 
 RUN_LIVETRACK24_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
-	$(SRC)/Tracking/LiveTrack24.cpp \
+	$(SRC)/Tracking/LiveTrack24/Client.cpp \
 	$(SRC)/Version.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
@@ -1849,7 +1849,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Computer/Wind/Settings.cpp \
 	$(SRC)/TeamCode/Settings.cpp \
 	$(SRC)/Logger/Settings.cpp \
-	$(SRC)/Tracking/TrackingSettings.cpp \
 	$(SRC)/Computer/TraceComputer.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/Task/ProtectedRoutePlanner.cpp \
@@ -2329,7 +2328,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/TeamCode/TeamCode.cpp \
 	$(SRC)/TeamCode/Settings.cpp \
 	$(SRC)/Logger/Settings.cpp \
-	$(SRC)/Tracking/TrackingSettings.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/MapSettings.cpp \
 	$(SRC)/Blackboard/InterfaceBlackboard.cpp \

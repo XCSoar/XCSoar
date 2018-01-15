@@ -16,7 +16,7 @@
     <key>CFBundleShortVersionString</key>
     <string>VERSION_PLACEHOLDER</string>
     <key>CFBundleIconFile</key>
-    <string>logo_128</string>
+    <string>logo_1024</string>
     <key>NSHighResolutionCapable</key>
     <true/>
   </dict>

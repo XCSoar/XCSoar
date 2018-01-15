@@ -62,6 +62,7 @@
 #ifndef JAS_INIT_H
 #define JAS_INIT_H
 
+/* The configuration header file should be included first. */
 #include <jasper/jas_config.h>
 
 #ifdef __cplusplus
@@ -72,9 +73,9 @@ extern "C" {
 * Functions.
 \******************************************************************************/
 
-int jas_init(void);
+JAS_DLLEXPORT int jas_init(void);
 
-void jas_cleanup(void);
+JAS_DLLEXPORT void jas_cleanup(void);
 
 #ifdef __cplusplus
 }

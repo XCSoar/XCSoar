@@ -4,7 +4,7 @@ from build.autotools import AutotoolsProject
 
 class SDL2Project(AutotoolsProject):
     def configure(self, toolchain):
-        if re.match('(arm.*|aarch64)-apple-darwin', toolchain.arch) is not None:
+        if re.match('(arm.*|aarch64)-apple-darwin', toolchain.actual_arch) is not None:
             # for building SDL2 with autotools, several workarounds are
             # required:
             # * out-of-tree build is not supported
@@ -23,7 +23,7 @@ class SDL2Project(AutotoolsProject):
                 'LIBS=' + toolchain.libs,
                 'AR=' + toolchain.ar,
                 'STRIP=' + toolchain.strip,
-                '--host=' + toolchain.arch,
+                '--host=' + toolchain.toolchain_arch,
                 '--prefix=' + toolchain.install_prefix,
             ] + self.configure_args
 

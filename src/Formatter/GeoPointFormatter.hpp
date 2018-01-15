@@ -59,11 +59,11 @@ TCHAR *FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size,
                       CoordinateFormat format, TCHAR separator = _T(' '));
 
 gcc_pure
-static inline StringBuffer<TCHAR, 32>
+static inline BasicStringBuffer<TCHAR, 32>
 FormatGeoPoint(const GeoPoint &location, CoordinateFormat format,
                TCHAR separator = _T(' '))
 {
-  StringBuffer<TCHAR, 32> buffer;
+  BasicStringBuffer<TCHAR, 32> buffer;
   auto result = FormatGeoPoint(location, buffer.data(), buffer.capacity(),
                                format, separator);
   if (result == nullptr)

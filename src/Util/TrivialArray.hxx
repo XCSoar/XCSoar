@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2015 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2010-2017 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -79,8 +79,11 @@ public:
 	}
 
 	template<typename U>
-	TrivialArray(std::initializer_list<U> l):the_size(l.size()) {
-		std::move(l.begin(), l.end(), data.begin());
+	TrivialArray(std::initializer_list<U> init)
+		:the_size(init.size()) {
+		assert(init.size() <= max);
+
+		std::move(init.begin(), init.end(), data.begin());
 	}
 
 	constexpr
@@ -150,19 +153,19 @@ public:
 		return data[i];
 	}
 
-	iterator begin() {
+	constexpr iterator begin() {
 		return data.begin();
 	}
 
-	const_iterator begin() const {
+	constexpr const_iterator begin() const {
 		return data.begin();
 	}
 
-	iterator end() {
+	constexpr iterator end() {
 		return std::next(data.begin(), the_size);
 	}
 
-	const_iterator end() const {
+	constexpr const_iterator end() const {
 		return std::next(data.begin(), the_size);
 	}
 
@@ -246,10 +249,28 @@ public:
 		--the_size;
 	}
 
+	template<typename I>
+	void insert(size_type i, I _begin, I _end) {
+		size_type n = std::distance(_begin, _end);
+		assert(the_size + n < capacity());
+
+		auto dest_begin = std::next(begin(), i);
+		auto dest_end = end();
+		the_size += n;
+
+		std::move_backward(dest_begin, dest_end, end());
+		std::copy(_begin, _end, dest_begin);
+	}
+
 	/* STL API emulation */
 
 	void push_back(const T &value) {
 		append(value);
+	}
+
+	template<typename... Args>
+	void emplace_back(Args&&... args) {
+		append() = T(std::forward<Args>(args)...);
 	}
 
 	T &front() {

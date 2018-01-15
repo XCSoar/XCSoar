@@ -135,7 +135,7 @@ CommandLine::Parse(Args &args)
       if (x_dpi < 32 || x_dpi > 512 || y_dpi < 32 || y_dpi > 512)
         args.UsageError();
 
-      Display::SetDPI(x_dpi, y_dpi);
+      Display::SetForcedDPI(x_dpi, y_dpi);
 #endif
 #ifdef __APPLE__
     } else if (StringStartsWith(s, "-psn")) {

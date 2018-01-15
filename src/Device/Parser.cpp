@@ -24,13 +24,13 @@ Copyright_License {
 */
 
 #include "Device/Parser.hpp"
-#include "Util/CharUtil.hpp"
 #include "Geo/Geoid.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Units/System.hpp"
 #include "Driver/FLARM/StaticParser.hpp"
+#include "Util/CharUtil.hxx"
 
 NMEAParser::NMEAParser()
 {

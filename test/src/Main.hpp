@@ -34,7 +34,7 @@
 #include "Screen/SingleWindow.hpp"
 #include "Form/ActionListener.hpp"
 #include "UIGlobals.hpp"
-#include "Util/CharUtil.hpp"
+#include "Util/CharUtil.hxx"
 #include "Util/NumberParser.hpp"
 #define ENABLE_SCREEN
 #endif

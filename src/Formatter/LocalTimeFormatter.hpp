@@ -42,10 +42,10 @@ void
 FormatLocalTimeHHMM(TCHAR *buffer, int time, RoughTimeDelta utc_offset);
 
 gcc_const
-static inline StringBuffer<TCHAR, 8>
+static inline BasicStringBuffer<TCHAR, 8>
 FormatLocalTimeHHMM(int time, RoughTimeDelta utc_offset)
 {
-  StringBuffer<TCHAR, 8> buffer;
+  BasicStringBuffer<TCHAR, 8> buffer;
   FormatLocalTimeHHMM(buffer.data(), time, utc_offset);
   return buffer;
 }

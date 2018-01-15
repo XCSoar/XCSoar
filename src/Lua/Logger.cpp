@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Logger.hpp"
-#include "Util.hpp"
+#include "Util.hxx"
 #include "Interface.hpp"
 
 extern "C" {

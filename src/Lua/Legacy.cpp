@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Legacy.hpp"
-#include "Util.hpp"
+#include "Util.hxx"
 #include "Input/InputLookup.hpp"
 #include "Util/ConvertString.hpp"
 

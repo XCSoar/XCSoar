@@ -25,6 +25,7 @@
 #include "Device/Port/Port.hpp"
 #include "NMEA/Checksum.hpp"
 #include "Time/TimeoutClock.hpp"
+#include "Util/StringCompare.hxx"
 
 #include <algorithm>
 
@@ -108,16 +109,16 @@ PortNMEAReader::ReadLine(TimeoutClock timeout)
 }
 
 char *
-PortNMEAReader::ExpectLine(const char *prefix, TimeoutClock timeout)
+PortNMEAReader::ExpectLine(const char *_prefix, TimeoutClock timeout)
 {
-  const size_t prefix_length = strlen(prefix);
+  const StringView prefix(_prefix);
 
   while (true) {
     char *line = ReadLine(timeout);
     if (line == nullptr)
       return nullptr;
 
-    if (memcmp(line, prefix, prefix_length) == 0)
-      return line + prefix_length;
+    if (StringStartsWith(line, prefix))
+      return line + prefix.size;
   }
 }

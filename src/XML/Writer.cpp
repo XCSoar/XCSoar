@@ -28,7 +28,7 @@
 
 #include "Node.hpp"
 #include "IO/BufferedOutputStream.hxx"
-#include "Util/CharUtil.hpp"
+#include "Util/CharUtil.hxx"
 
 #define INDENTCHAR '\t'
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2015 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2013-2015 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -35,9 +35,12 @@
 #include <system_error>
 #include <utility>
 
+#include <stdio.h>
+
 template<typename... Args>
 static inline std::system_error
-FormatSystemError(std::error_code code, const char *fmt, Args&&... args)
+FormatSystemError(std::error_code code, const char *fmt,
+		  Args&&... args) noexcept
 {
 	char buffer[1024];
 	snprintf(buffer, sizeof(buffer), fmt, std::forward<Args>(args)...);
@@ -49,21 +52,21 @@ FormatSystemError(std::error_code code, const char *fmt, Args&&... args)
 #include <windows.h>
 
 static inline std::system_error
-MakeLastError(DWORD code, const char *msg)
+MakeLastError(DWORD code, const char *msg) noexcept
 {
 	return std::system_error(std::error_code(code, std::system_category()),
 				 msg);
 }
 
 static inline std::system_error
-MakeLastError(const char *msg)
+MakeLastError(const char *msg) noexcept
 {
 	return MakeLastError(GetLastError(), msg);
 }
 
 template<typename... Args>
 static inline std::system_error
-FormatLastError(DWORD code, const char *fmt, Args&&... args)
+FormatLastError(DWORD code, const char *fmt, Args&&... args) noexcept
 {
 	char buffer[512];
 	const auto end = buffer + sizeof(buffer);
@@ -81,33 +84,55 @@ FormatLastError(DWORD code, const char *fmt, Args&&... args)
 
 template<typename... Args>
 static inline std::system_error
-FormatLastError(const char *fmt, Args&&... args)
+FormatLastError(const char *fmt, Args&&... args) noexcept
 {
 	return FormatLastError(GetLastError(), fmt,
 			       std::forward<Args>(args)...);
 }
 
-#else
+#endif /* WIN32 */
 
 #include <errno.h>
 #include <string.h>
 
-static inline std::system_error
-MakeErrno(int code, const char *msg)
+/**
+ * Returns the error_category to be used to wrap errno values.  The
+ * C++ standard does not define this well, so this code is based on
+ * observations what C++ standard library implementations actually
+ * use.
+ *
+ * @see https://stackoverflow.com/questions/28746372/system-error-categories-and-standard-system-error-codes
+ */
+static inline const std::error_category &
+ErrnoCategory() noexcept
 {
-	return std::system_error(std::error_code(code, std::system_category()),
+#ifdef WIN32
+	/* on Windows, the generic_category() is used for errno
+	   values */
+	return std::generic_category();
+#else
+	/* on POSIX, system_category() appears to be the best
+	   choice */
+	return std::system_category();
+#endif
+}
+
+static inline std::system_error
+MakeErrno(int code, const char *msg) noexcept
+{
+	return std::system_error(std::error_code(code, ErrnoCategory()),
 				 msg);
 }
 
 static inline std::system_error
-MakeErrno(const char *msg)
+MakeErrno(const char *msg) noexcept
 {
 	return MakeErrno(errno, msg);
 }
 
 template<typename... Args>
 static inline std::system_error
-FormatErrno(int code, const char *fmt, Args&&... args)
+FormatErrno(int code, const char *fmt, Args&&... args) noexcept
 {
 	char buffer[512];
 	snprintf(buffer, sizeof(buffer),
@@ -117,35 +142,46 @@ FormatErrno(int code, const char *fmt, Args&&... args)
 
 template<typename... Args>
 static inline std::system_error
-FormatErrno(const char *fmt, Args&&... args)
+FormatErrno(const char *fmt, Args&&... args) noexcept
 {
 	return FormatErrno(errno, fmt, std::forward<Args>(args)...);
 }
 
-#endif
-
 gcc_pure
 static inline bool
-IsFileNotFound(const std::system_error &e)
+IsFileNotFound(const std::system_error &e) noexcept
 {
 #ifdef WIN32
 	return e.code().category() == std::system_category() &&
 		e.code().value() == ERROR_FILE_NOT_FOUND;
 #else
-	return e.code().category() == std::system_category() &&
+	return e.code().category() == ErrnoCategory() &&
 		e.code().value() == ENOENT;
 #endif
 }
 
 gcc_pure
 static inline bool
-IsAccessDenied(const std::system_error &e)
+IsPathNotFound(const std::system_error &e) noexcept
+{
+#ifdef WIN32
+	return e.code().category() == std::system_category() &&
+		e.code().value() == ERROR_PATH_NOT_FOUND;
+#else
+	return e.code().category() == ErrnoCategory() &&
+		e.code().value() == ENOTDIR;
+#endif
+}
+
+gcc_pure
+static inline bool
+IsAccessDenied(const std::system_error &e) noexcept
 {
 #ifdef WIN32
 	return e.code().category() == std::system_category() &&
 		e.code().value() == ERROR_ACCESS_DENIED;
 #else
-	return e.code().category() == std::system_category() &&
+	return e.code().category() == ErrnoCategory() &&
 		e.code().value() == EACCES;
 #endif
 }

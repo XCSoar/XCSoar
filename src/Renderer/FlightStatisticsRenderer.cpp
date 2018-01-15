@@ -265,7 +265,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
       return;
     }
 
-    proj.Set(rc_chart, task, nmea_info.location);
+    proj.Set(rc_chart, task);
 
     OZRenderer ozv(map_look.task, map_look.airspace, settings_map.airspace);
     TaskPointRenderer tpv(canvas, proj, map_look.task,

@@ -24,7 +24,7 @@ Copyright_License {
 #include "Wind.hpp"
 #include "Geo.hpp"
 #include "Math/Angle.hpp"
-#include "Util.hpp"
+#include "Util.hxx"
 #include "Util/StringAPI.hxx"
 #include "Interface.hpp"
 

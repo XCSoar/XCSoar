@@ -132,7 +132,8 @@ KoboExportUSBStorage()
   case KoboModel::GLO: // TODO: is this correct?
     InsMod("/drivers/ntx508/usb/gadget/arcotg_udc.ko");
     result = InsMod("/drivers/ntx508/usb/gadget/g_file_storage.ko",
-                    "file=/dev/mmcblk0p3", "stall=0");
+                    "file=/dev/mmcblk0p3", "stall=0", "removable=1",
+                    "product_id=Kobo");
     break;
 
   case KoboModel::TOUCH2:
@@ -140,7 +141,8 @@ KoboExportUSBStorage()
   case KoboModel::AURA2:
     InsMod("/drivers/mx6sl-ntx/usb/gadget/arcotg_udc.ko");
     result = InsMod("/drivers/mx6sl-ntx/usb/gadget/g_file_storage.ko",
-                    "file=/dev/mmcblk0p3", "stall=0");
+                    "file=/dev/mmcblk0p3", "stall=0", "removable=1",
+                    "product_id=Kobo");
     break;
   }
   return result;
@@ -204,7 +206,7 @@ KoboWifiOn()
   Run("/bin/wlarm_le", "-i", "eth0", "up");
   Run("/bin/wpa_supplicant", "-i", "eth0",
       "-c", "/etc/wpa_supplicant/wpa_supplicant.conf",
-      "-C", "/var/run/wpa_supplicant", "-B");
+      "-C", "/var/run/wpa_supplicant", "-B", "-D", "wext");
 
   Sleep(2000);
 

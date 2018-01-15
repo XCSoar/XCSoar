@@ -99,8 +99,8 @@ LoadTextureAutoAlign(GLint internal_format, PixelSize size,
   }
 }
 
-GLTexture::GLTexture(PixelSize _size)
-  :size(_size), allocated_size(ValidateTextureSize(_size))
+GLTexture::GLTexture(PixelSize _size, bool _flipped)
+  :size(_size), allocated_size(ValidateTextureSize(_size)), flipped(_flipped)
 {
   Initialise();
 
@@ -110,8 +110,9 @@ GLTexture::GLTexture(PixelSize _size)
 }
 
 GLTexture::GLTexture(GLint internal_format, PixelSize _size,
-                     GLenum format, GLenum type, const GLvoid *data)
-  :size(_size), allocated_size(ValidateTextureSize(_size))
+                     GLenum format, GLenum type, const GLvoid *data,
+                     bool _flipped)
+  :size(_size), allocated_size(ValidateTextureSize(_size)), flipped(_flipped)
 {
   Initialise();
   LoadTextureAutoAlign(internal_format, size, format, type, data);
@@ -176,9 +177,10 @@ inline void
 GLTexture::DrawOES(PixelRect dest, PixelRect src) const
 {
   const GLint rect[4] = {
-    src.left, int(src.bottom), int(src.GetWidth()),
-    /* negative height to flip the texture */
-    -(int)src.GetHeight()
+    src.left,
+    flipped ? src.top : src.bottom,
+    GLint(src.GetWidth()),
+    flipped ? (GLint)src.GetHeight() : -(GLint)src.GetHeight()
   };
 
   glTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_CROP_RECT_OES, rect);
@@ -218,79 +220,10 @@ GLTexture::Draw(PixelRect dest, PixelRect src) const
   GLfloat y1 = (GLfloat)src.bottom / allocated.cy;
 
   const GLfloat coord[] = {
-    x0, y0,
-    x1, y0,
-    x0, y1,
-    x1, y1,
-  };
-
-#ifdef USE_GLSL
-  glEnableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
-  glVertexAttribPointer(OpenGL::Attribute::TEXCOORD, 2, GL_FLOAT, GL_FALSE,
-                        0, coord);
-#else
-  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-  glTexCoordPointer(2, GL_FLOAT, 0, coord);
-#endif
-
-  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
-#ifdef USE_GLSL
-  glDisableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
-  OpenGL::solid_shader->Use();
-#else
-  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-#endif
-}
-
-#ifdef HAVE_OES_DRAW_TEXTURE
-
-inline void
-GLTexture::DrawFlippedOES(PixelRect dest, PixelRect src) const
-{
-  const GLint rect[4] = { src.left, src.top,
-                          (GLint)src.GetWidth(), (GLint)src.GetHeight() };
-  glTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_CROP_RECT_OES, rect);
-
-  /* glDrawTexiOES() circumvents the projection settings, thus we must
-     roll our own translation */
-  glDrawTexiOES(OpenGL::translate.x + dest.left,
-                OpenGL::viewport_size.y - OpenGL::translate.y - dest.bottom,
-                0, dest.GetWidth(), dest.GetHeight());
-}
-
-#endif
-
-void
-GLTexture::DrawFlipped(PixelRect dest, PixelRect src) const
-{
-#ifdef HAVE_OES_DRAW_TEXTURE
-  if (OpenGL::oes_draw_texture) {
-    DrawFlippedOES(dest, src);
-    return;
-  }
-#endif
-
-  const BulkPixelPoint vertices[] = {
-    dest.GetTopLeft(),
-    dest.GetTopRight(),
-    dest.GetBottomLeft(),
-    dest.GetBottomRight(),
-  };
-
-  const ScopeVertexPointer vp(vertices);
-
-  const PixelSize allocated = GetAllocatedSize();
-  GLfloat x0 = (GLfloat)src.left / allocated.cx;
-  GLfloat y0 = (GLfloat)src.top / allocated.cy;
-  GLfloat x1 = (GLfloat)src.right / allocated.cx;
-  GLfloat y1 = (GLfloat)src.bottom / allocated.cy;
-
-  const GLfloat coord[] = {
-    x0, y1,
-    x1, y1,
-    x0, y0,
-    x1, y0,
+    x0, flipped ? y1 : y0,
+    x1, flipped ? y1 : y0,
+    x0, flipped ? y0 : y1,
+    x1, flipped ? y0 : y1,
   };
 
 #ifdef USE_GLSL

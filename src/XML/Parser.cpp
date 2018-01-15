@@ -28,7 +28,7 @@
 
 #include "Parser.hpp"
 #include "Node.hpp"
-#include "Util/CharUtil.hpp"
+#include "Util/CharUtil.hxx"
 #include "Util/StringAPI.hxx"
 #include "Util/StringUtil.hpp"
 #include "Util/NumberParser.hpp"
