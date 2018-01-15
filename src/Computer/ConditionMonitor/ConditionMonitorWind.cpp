@@ -26,7 +26,7 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "Language/Language.hpp"
 #include "Message.hpp"
-#include "Input/InputQueue.hpp
+#include "Input/InputQueue.hpp"
 
 bool
 ConditionMonitorWind::CheckCondition(const NMEAInfo &basic,
