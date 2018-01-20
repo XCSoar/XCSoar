@@ -190,13 +190,6 @@ AirspaceWarningMonitor::Check()
     if (w != lease->end() && w->IsAckExpired()) {
       airspace = &w->GetAirspace();
       state = w->GetWarningState();
-      if(airspace->IsActive())
-        {
-          if(state==AirspaceWarning::WARNING_INSIDE)
-            InputEvents::processGlideComputer(GCE_AIRSPACE_INSIDE);
-          else if(state==AirspaceWarning::WARNING_FILTER)
-            InputEvents::processGlideComputer(GCE_AIRSPACE_NEAR);
-        }
       solution = w->GetSolution();
     }
   }
@@ -218,6 +211,13 @@ AirspaceWarningMonitor::Check()
     widget = new AirspaceWarningWidget(*this, *airspace_warnings,
                                        *airspace, state, solution);
     PageActions::SetCustomBottom(widget);
+      if(airspace->IsActive())
+        {
+          if(state==AirspaceWarning::WARNING_INSIDE)
+            InputEvents::processGlideComputer(GCE_AIRSPACE_INSIDE);
+          else if(state==AirspaceWarning::WARNING_FILTER)
+            InputEvents::processGlideComputer(GCE_AIRSPACE_NEAR);
+        }
   }
 
   // un-blank the display, play a sound
