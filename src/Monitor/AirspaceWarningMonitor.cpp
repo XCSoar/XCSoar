@@ -215,7 +215,7 @@ AirspaceWarningMonitor::Check()
         {
           if(state==AirspaceWarning::WARNING_INSIDE)
             InputEvents::processGlideComputer(GCE_AIRSPACE_INSIDE);
-          else if(state==AirspaceWarning::WARNING_FILTER)
+          else if(state==AirspaceWarning::WARNING_FILTER || state==AirspaceWarning::WARNING_GLIDE)
             InputEvents::processGlideComputer(GCE_AIRSPACE_NEAR);
         }
   }
