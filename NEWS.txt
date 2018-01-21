@@ -1,4 +1,6 @@
 Version 6.8.11 - not yet releases
+* GCE-events
+  - added GCE_AIRSPACE_INSIDE- GCE_AIRSPACE_NEAR-, GCE_WIND_CHANGE-events
 * terrain
   - fix yet another crash bug (libJasper)
 * Android
