@@ -39,7 +39,7 @@ namespace Layout
   unsigned vpt_scale = 1024;
   unsigned font_scale = 1024;
   unsigned text_padding = 2;
-  unsigned minimum_control_height = 20, maximum_control_height = 44;
+  unsigned minimum_control_height = 30, maximum_control_height = 44;
   unsigned hit_radius = 10;
 }
 

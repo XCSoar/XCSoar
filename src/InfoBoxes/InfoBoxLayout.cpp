@@ -400,7 +400,7 @@ CalculateInfoBoxRowHeight(unsigned screen_height, unsigned control_width)
 static constexpr unsigned
 CalculateInfoBoxColumnWidth(unsigned screen_width, unsigned control_height)
 {
-  return Clamp(unsigned(screen_width / CONTROLHEIGHTRATIO * 1.3),
+  return Clamp(unsigned(screen_width / CONTROLHEIGHTRATIO * 1),
                control_height,
                control_height * 7 / 5);
 }
