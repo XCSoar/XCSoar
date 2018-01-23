@@ -205,7 +205,7 @@ AirspaceWarningListWidget::Prepare(ContainerWindow &parent,
 
   const unsigned padding = Layout::GetTextPadding();
   const unsigned font_height = look.list.font->GetHeight();
-  const unsigned row_height = 3 * padding + 2 * font_height;
+  const unsigned row_height = 5 * padding + 4 * font_height;
 
   CreateList(parent, look, rc,
              std::max(Layout::GetMaximumControlHeight(), row_height));

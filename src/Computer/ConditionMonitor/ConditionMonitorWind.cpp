@@ -26,6 +26,7 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "Language/Language.hpp"
 #include "Message.hpp"
+#include "Input/InputQueue.hpp"
 
 bool
 ConditionMonitorWind::CheckCondition(const NMEAInfo &basic,
@@ -52,6 +53,7 @@ ConditionMonitorWind::CheckCondition(const NMEAInfo &basic,
 void
 ConditionMonitorWind::Notify()
 {
+  InputEvents::processGlideComputer(GCE_WIND_CHANGE);
   Message::AddMessage(_("Significant wind change"));
 }
 

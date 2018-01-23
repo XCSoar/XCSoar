@@ -37,6 +37,7 @@ Copyright_License {
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Formatter/TimeFormatter.hpp"
+#include "Input/InputQueue.hpp"
 
 class AirspaceWarningWidget final
   : public QuestionWidget, private ActionListener {
@@ -210,6 +211,13 @@ AirspaceWarningMonitor::Check()
     widget = new AirspaceWarningWidget(*this, *airspace_warnings,
                                        *airspace, state, solution);
     PageActions::SetCustomBottom(widget);
+      if(airspace->IsActive())
+        {
+          if(state==AirspaceWarning::WARNING_INSIDE)
+            InputEvents::processGlideComputer(GCE_AIRSPACE_INSIDE);
+          else if(state==AirspaceWarning::WARNING_FILTER || state==AirspaceWarning::WARNING_GLIDE)
+            InputEvents::processGlideComputer(GCE_AIRSPACE_NEAR);
+        }
   }
 
   // un-blank the display, play a sound
