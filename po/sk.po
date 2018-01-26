@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2018-01-24 12:28+0000\n"
+"PO-Revision-Date: 2018-01-27 12:40+0000\n"
 "Last-Translator: Peter Brtko <peter.brtko@gmail.com>\n"
 "Language-Team: Slovak "
 "<https://hosted.weblate.org/projects/xcsoar/translations/sk/>\n"
@@ -6128,7 +6128,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:193
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:155
 msgid "Label visibility"
-msgstr "Viditeľnosť štítka"
+msgstr "Viditeľnosť menovky"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:194
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:156
@@ -8257,7 +8257,7 @@ msgstr "Jednotky pre vertikálne rýchlosti (váriometer)."
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:180
 #, no-c-format
 msgid "feet"
-msgstr ""
+msgstr "stopy (výška)"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:181
 #, no-c-format
@@ -8282,15 +8282,15 @@ msgstr "Jednotky použité pre rýchlosti úlohy."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:217
 msgid "Units used for pressures."
-msgstr ""
+msgstr "Jednotky použité pre tlaky."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:227
 msgid "Units used for mass."
-msgstr ""
+msgstr "Jednotky použité pre hmotnosť."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:237
 msgid "Units used for wing loading."
-msgstr ""
+msgstr "Jednotky použité pre zaťaženie krídel."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:253
 msgid "Lat./Lon."
@@ -8327,6 +8327,9 @@ msgid ""
 "battery backup or your computer frequently runs out of battery power or "
 "otherwise loses time."
 msgstr ""
+"Ak je povolené, nastaví hodiny zariadenia podľa GPS času po získaní pozície. "
+"Toto je potrebné iba v prípade ak vaše zariadenie nemá modul reálneho času "
+"zálohovaný batériou alebo sa často stráca napájanie, alebo ináč stráca čas."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:86
 #, no-c-format
@@ -8366,7 +8369,7 @@ msgstr "Prvých 5 písmen"
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:96
 #, no-c-format
 msgid "The first 5 letters of the waypoint name are displayed."
-msgstr "Zobrazia sa prvých päť písmen z názvu otočného bodu."
+msgstr "Zobrazí sa prvých päť písmen z názvu otočného bodu."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:98
 #, no-c-format
@@ -8375,11 +8378,11 @@ msgstr "Nezobrazia sa žiadne názvy otočnćh bodov."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:101
 msgid "Label format"
-msgstr ""
+msgstr "Formát menoviek"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:101
 msgid "Determines how labels are displayed with each waypoint"
-msgstr ""
+msgstr "Určuje ako sa zobrazia menovky otočných bodov"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:107
 #, no-c-format
@@ -8389,17 +8392,17 @@ msgstr "Nezobrazí sa príetová výška."
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:109
 #, no-c-format
 msgid "Straight glide"
-msgstr ""
+msgstr "Priamy doklz"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:110
 #, no-c-format
 msgid "Straight glide arrival height (no terrain is considered)."
-msgstr ""
+msgstr "Výška príletu pri priamom doklze (bez ohľadu na terén)."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:112
 #, no-c-format
 msgid "Terrain avoidance glide"
-msgstr ""
+msgstr "Doklz okolo prekážok"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:113
 #, no-c-format
@@ -8407,11 +8410,14 @@ msgid ""
 "Arrival height considering terrain avoidance. Requires \"Reach mode: Turning"
 "\" in \"Glide Computer > Route\" settings."
 msgstr ""
+"Príletová výška s prihliadnutím na manévrovanie pre terénne prekážky. "
+"Vyžaduje \"Doletový režim: Obchádzka\" v nastaveniach \"Doklzový počítač > "
+"Trasa\"."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:116
 #, no-c-format
 msgid "Straight & terrain glide"
-msgstr ""
+msgstr "Priamy doklz a okolo prekážok"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:117
 #, no-c-format
@@ -8419,59 +8425,61 @@ msgid ""
 "Both arrival heights are displayed. Requires \"Reach mode: Turning\" in "
 "\"Glide Computer > Route\" settings."
 msgstr ""
+"Obe príletové výšky sú zobrazené. Vyžaduje \"Doletový režim: Obchádzka\" v "
+"nastaveniach \"Doklzový počítač > Trasa\"."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:124
 msgid "Determines how arrival height is displayed in waypoint labels"
-msgstr ""
+msgstr "Určuje, ako bude zobrazená príletová výška na menovke otočného bodu"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:129
 #, no-c-format
 msgid "Rounded rectangle"
-msgstr ""
+msgstr "Zaoblený obdĺžnik"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:130
 #, no-c-format
 msgid "Outlined"
-msgstr ""
+msgstr "S obrysovou čiarou"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:134
 msgid "Label style"
-msgstr ""
+msgstr "Štýl menovky"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:142
 #, no-c-format
 msgid "Task waypoints & airfields"
-msgstr ""
+msgstr "Otočné body úlohy a letiská"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:143
 #, no-c-format
 msgid "All waypoints part of a task and all airfields will be displayed."
-msgstr ""
+msgstr "Zobrazia sa všetky otočné body z úlohy a všetky letiská."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:145
 #, no-c-format
 msgid "Task waypoints & landables"
-msgstr ""
+msgstr "Otočné body úlohy a pristávacie plochy"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:146
 #, no-c-format
 msgid "All waypoints part of a task and all landables will be displayed."
-msgstr ""
+msgstr "Zobrazia sa všetky otočné body z úlohy a všetky pristávacie plochy."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:148
 #, no-c-format
 msgid "Task waypoints"
-msgstr ""
+msgstr "Otočné body úlohy"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:149
 #, no-c-format
 msgid "All waypoints part of a task will be displayed."
-msgstr ""
+msgstr "Zobrazia sa všetky otočné body z úlohy."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:162
 #, no-c-format
 msgid "Purple circle"
-msgstr ""
+msgstr "Fialový kruh"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:163
 #, no-c-format
@@ -8481,6 +8489,9 @@ msgid ""
 "If the waypoint is blocked by a mountain the green circle will be red "
 "instead."
 msgstr ""
+"Letiská a pristávacie plochy sú zobrazené ako fialové kruhy. Ak je plocha v "
+"dolete, väčší zelený kruh sa zobrazí za fialovým. Ak je plocha blokovaná "
+"horou bude namiesto zeleného kruhu zobrazený červený kruh."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:167
 #, no-c-format
@@ -8494,11 +8505,14 @@ msgid ""
 "is reachable the color is changed to green. If the waypoint is blocked by a "
 "mountain the color is changed to red instead."
 msgstr ""
+"Letiská a pristávacie plochy sú zobrazené bielo/šedo. Ak je plocha v dolete "
+"farba sa zmení na zelenú. Ak je plocha blokovaná horou bude namiesto zelenej "
+"farby použitá červená."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:172
 #, no-c-format
 msgid "Traffic lights"
-msgstr ""
+msgstr "Semafóry"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:173
 #, no-c-format
@@ -8507,10 +8521,12 @@ msgid ""
 "light. Green if reachable, Orange if blocked by mountain and red if not "
 "reachable at all."
 msgstr ""
+"Letiská a pristávacie plochy sú zobrazené vo farbách semafóra. Zelená je v "
+"dolete, oranžová znamená blokované horou a červená mimo doletu."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:177
 msgid "Landable symbols"
-msgstr ""
+msgstr "Symboly plôch"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:178
 msgid ""
@@ -8518,62 +8534,70 @@ msgid ""
 "(monochrome) style, or orange. The rendering differs for landable field and "
 "airport. All styles mark the waypoints within reach green."
 msgstr ""
+"K dispozícii sú tri štýly: Fialové krúžky (štýl WinPilot), štýl s vysokým "
+"kontrastom (čiernobiele), alebo oranžové. Vykreslenie je rozdielne pre "
+"plochy a letiská. Všetky štýly označujú plochy v dolete na zeleno."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:183
 msgid "Detailed landables"
-msgstr ""
+msgstr "Plochy s detailami"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:184
 msgid ""
 "[Off] Display fixed icons for landables.\n"
 "[On] Show landables with variable information like runway length and heading."
 msgstr ""
+"[Vypnuté] Zobrazí rovnaké ikony pre pristávacie plochy.\n"
+"[Zapnuté] Zobrazí pristávacie plochy s dodatočnými informáciami, ako dĺžka a "
+"smer dráhy."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:189
 msgid "Landable size"
-msgstr ""
+msgstr "Veľkosť ikon pre plochy"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:190
 msgid "A percentage to select the size landables are displayed on the map."
-msgstr ""
+msgstr "Určuje veľkosť zobrazených ikon pre plochy na mape v percentách."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:194
 msgid "Scale runway length"
-msgstr ""
+msgstr "Dĺžka dráhy v mierke"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:195
 msgid ""
 "[Off] Display fixed length for runways.\n"
 "[On] Scale displayed runway length based on real length."
 msgstr ""
+"[Vypnuté] Zobrazí jednotnú dĺžku pre všetky dráhy.\n"
+"[Zapnuté] Zobrazí dĺžku dráhy v mierke podľa skutočnej dĺžky."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:185
 #, no-c-format
 msgid "Hot-air balloon"
-msgstr ""
+msgstr "Teplovzdušný balón"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:186
 #, no-c-format
 msgid "Hangglider (Flex/FAI1)"
-msgstr ""
+msgstr "Závesný klzák (Flex/FAI1)"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:187
 #, no-c-format
 msgid "Hangglider (Rigid/FAI5)"
-msgstr ""
+msgstr "Závesný klzák (Rigid/FAI5)"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:206
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:232
 msgid "Tracking Interval"
-msgstr ""
+msgstr "Sledovací interval"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:209
 msgid "Track friends"
-msgstr ""
+msgstr "Sleduj priateľov"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:210
 msgid "Download the position of your friends live from the SkyLines server."
-msgstr ""
+msgstr "Sťahuj pozíciu priateľov živo zo serveru SkyLines."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:213
 msgid "Show nearby traffic"
@@ -8736,11 +8760,11 @@ msgstr "Minimálna AAT doba v minútach."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:218
 msgid "Arm start manually"
-msgstr ""
+msgstr "Aktivuj štart ručne"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:219
 msgid "Configure whether the start must be armed manually or automatically."
-msgstr ""
+msgstr "Nastaví či má byť štart aktivovaný ručne alebo automaticky."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:224
 msgid "Start open time"
@@ -8767,15 +8791,15 @@ msgstr "Úloha nebola uložená"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:81
 msgid "Create new task?"
-msgstr ""
+msgstr "Vytvoriť novú úlohu?"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:81
 msgid "Task New"
-msgstr ""
+msgstr "Nová úloha"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:115
 msgid "New Task"
-msgstr ""
+msgstr "Nová úloha"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:116
 msgid "Declare"
@@ -8797,7 +8821,7 @@ msgstr "Premenovať"
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:343
 #: src/Monitor/AirspaceWarningMonitor.cpp:82
 msgid "More"
-msgstr ""
+msgstr "Viac"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:241
 msgid "Load the selected task?"
@@ -8810,7 +8834,7 @@ msgstr "Prechádzať úlohy"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:271
 msgid "Can't delete .CUP files"
-msgstr ""
+msgstr "Nemôžem zmazať súbory .CUP"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:279
 msgid "Delete the selected task?"
@@ -8818,7 +8842,7 @@ msgstr "Zmazať zvolenú úlohu?"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:317
 msgid "Can't rename .CUP files"
-msgstr ""
+msgstr "Nemôžem premenovať súbory .CUP"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:317
 msgid "Rename Error"
@@ -8826,7 +8850,7 @@ msgstr "Chyba pri premenovaní"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:343
 msgid "Less"
-msgstr ""
+msgstr "Menej"
 
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:60
 #: src/Dialogs/Task/TaskPointDialog.cpp:274
