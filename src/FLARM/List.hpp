@@ -65,8 +65,12 @@ struct TrafficList {
    * this one.
    */
   void Complement(const TrafficList &add) {
-    if (IsEmpty() && !add.IsEmpty())
-      *this = add;
+    // Add unique traffic from 'add' list
+    for (auto &traffic : add.list) {
+      if (FindTraffic(traffic.id) == NULL) {
+        list.append(traffic);
+      }
+    }
   }
 
   void Expire(double clock) {
