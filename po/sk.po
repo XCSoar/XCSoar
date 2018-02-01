@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2018-01-27 12:40+0000\n"
+"PO-Revision-Date: 2018-02-01 09:37+0000\n"
 "Last-Translator: Peter Brtko <peter.brtko@gmail.com>\n"
 "Language-Team: Slovak "
 "<https://hosted.weblate.org/projects/xcsoar/translations/sk/>\n"
@@ -743,11 +743,11 @@ msgstr "Štartový otočný bod"
 
 #: src/Menu/ExpandMacros.cpp:141
 msgid "Arm start"
-msgstr "Pripravený na štart"
+msgstr "Aktivovať štart"
 
 #: src/Menu/ExpandMacros.cpp:144
 msgid "Arm turn"
-msgstr "Pripravený na otočenie"
+msgstr "Aktivovať otočenie"
 
 #: src/Menu/ExpandMacros.cpp:165
 msgid "Disarm start"
@@ -789,7 +789,7 @@ msgid ""
 "Start"
 msgstr ""
 "Aktivuj\n"
-"pásku (štart)"
+"štart"
 
 #: src/Menu/ExpandMacros.cpp:190
 msgid ""
@@ -8655,29 +8655,29 @@ msgstr "Polomer sektoru pozorovacej oblasti."
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:56
 msgid "Start radial"
-msgstr ""
+msgstr "Štartová radiála"
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:56
 msgid "Start radial of the OZ area"
-msgstr "Počiatočná radiála pozorovacej oblasti"
+msgstr "Štartová radiála pozorovacej oblasti"
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:60
 msgid "Finish radial"
-msgstr "Polomer cieľu"
+msgstr "Cieľová radiála"
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:60
 msgid "Finish radial of the OZ area"
-msgstr ""
+msgstr "Cieľová radiála pozorovacej oblasti"
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:68
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:48
 msgid "Inner radius"
-msgstr ""
+msgstr "Vnútorný polomer"
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:68
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:48
 msgid "Inner radius of the OZ sector."
-msgstr ""
+msgstr "Vnútorný polomer pozorovacej oblasti."
 
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:54
 msgid "Angle"
@@ -8696,7 +8696,7 @@ msgstr "Správca úlohy"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:235
 msgid "Validation Errors"
-msgstr "Chyba validácie"
+msgstr "Chyby validácie"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:237
 msgid ""
@@ -8768,15 +8768,15 @@ msgstr "Nastaví či má byť štart aktivovaný ručne alebo automaticky."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:224
 msgid "Start open time"
-msgstr ""
+msgstr "Čas otvorenia pásky"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:226
 msgid "Start close time"
-msgstr ""
+msgstr "Čas zatvorenia pásky"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:260
 msgid "FAI start / finish rules"
-msgstr ""
+msgstr "FAI štartové / cieľové pravidlá"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:261
 msgid ""
@@ -8784,6 +8784,8 @@ msgid ""
 "minimum height above ground for finish to be greater than 1000m below the "
 "start height."
 msgstr ""
+"Ak povolené, tak vyžaduje aby minimálna výška nad zemou pre preťatie cieľa "
+"bola maximálne o 1000m pod štartovou výškou."
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:66
 msgid "Task not saved"
@@ -8871,29 +8873,29 @@ msgstr "Alternatívne štartové body"
 #: src/Dialogs/Task/TaskPointDialog.cpp:239
 #: src/Dialogs/Task/TaskPointDialog.cpp:284
 msgid "Change Type"
-msgstr ""
+msgstr "Zmeniť typ"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:292
 #: src/Dialogs/Task/TaskPointDialog.cpp:392
 msgid "Enable Alternate Starts"
-msgstr ""
+msgstr "Povoliť alternatívne štarty"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:295
 msgid "Score exit"
-msgstr ""
+msgstr "Aktuálne skóre"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:395
 msgid "Edit Alternates"
-msgstr ""
+msgstr "Upraviť alternatívy"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:416
 #: src/Dialogs/Task/TaskPointDialog.cpp:487
 msgid "Task point"
-msgstr ""
+msgstr "Bod úlohy"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:421
 msgid "Assigned area point"
-msgstr ""
+msgstr "AAT bod"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:487
 msgid "Remove task point?"
@@ -8913,20 +8915,20 @@ msgstr "Návratová"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:75
 msgid "Two legs"
-msgstr ""
+msgstr "Dve ramená"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:80
 msgid "Three legs"
-msgstr ""
+msgstr "Tri ramená"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:86
 msgid "non-FAI triangle"
-msgstr ""
+msgstr "nie - FAI trojuholník"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:90
 #, c-format
 msgid "%d legs"
-msgstr ""
+msgstr "%d 1 ramien"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:121
 #, c-format
@@ -8943,7 +8945,7 @@ msgstr "min."
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:143
 msgid "dist."
-msgstr ""
+msgstr "vzdial."
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:186
 msgid "Sector"
@@ -8959,7 +8961,7 @@ msgstr "Cylinder"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:204
 msgid "MAT cylinder"
-msgstr ""
+msgstr "MAT valec"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:208
 msgid "Keyhole"
@@ -8967,23 +8969,23 @@ msgstr "Kľúčová dierka"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:214
 msgid "DAeC Keyhole"
-msgstr ""
+msgstr "DAeC kľúčová dierka"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:218
 msgid "BGA Fixed Course"
-msgstr ""
+msgstr "BGA fixný kurz"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:222
 msgid "BGA Enhanced Option"
-msgstr ""
+msgstr "BGA rozšírená možnosť"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:226
 msgid "BGA Start Sector"
-msgstr ""
+msgstr "BGA štartový sektor"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:242
 msgid "Enter a task name"
-msgstr ""
+msgstr "Zadaj meno úlohy"
 
 #: src/Dialogs/Task/TargetDialog.cpp:433
 msgid ""
@@ -8992,6 +8994,10 @@ msgid ""
 "task distances, smaller values move the target points to produce smaller "
 "task distances."
 msgstr ""
+"Pre úlohy typu AAT je možné toto nastavenie použiť k prispôsobeniu cieľových "
+"bodov vrámci určenej oblasti. Väčšie hodnoty posúvajú otočné body pre "
+"dosiahnutie väčšej vzdialenosti úlohy, menšie hodnoty posúvajú otočné body "
+"na dosiahnutie menšej vzdialenosti úlohy."
 
 #: src/Dialogs/Task/TargetDialog.cpp:439
 msgid ""
@@ -8999,21 +9005,21 @@ msgid ""
 "the AAT sectors.  Positive values rotate the range line clockwise, negative "
 "values rotate the range line counterclockwise."
 msgstr ""
-"Pre úlohy typu AAT je možné toto nastavenie použiť k prispôsobeniu cieľového "
-"bodu vrámci určenej oblasti. Kladné hodnoty otáčajú líniou vzdialenosti v "
+"Pre úlohy typu AAT je možné toto nastavenie použiť k prispôsobeniu cieľových "
+"bodov vrámci určenej oblasti. Kladné hodnoty otáčajú líniou vzdialenosti v "
 "smere hodinových ručičiek, záporné hodnoty v protismere."
 
 #: src/Dialogs/Task/TargetDialog.cpp:444
 msgid "ETE"
-msgstr "ETE"
+msgstr "oČas ďAAob"
 
 #: src/Dialogs/Task/TargetDialog.cpp:446
 msgid "Estimated time en-route to the next AAT target."
-msgstr ""
+msgstr "Odhadovaný čas k ďalšiemu AAT bodu."
 
 #: src/Dialogs/Task/TargetDialog.cpp:448
 msgid "Delta T"
-msgstr "delta T"
+msgstr "Nadčas"
 
 #: src/Dialogs/Task/TargetDialog.cpp:450
 msgid ""
@@ -9022,24 +9028,30 @@ msgid ""
 "sector and can turn now with estimated arrival time greater than AAT time "
 "plus 5 minutes."
 msgstr ""
+"AAT nadčas - Rozdiel medzi predpokladaným časom úlohy a minimálnym AAT "
+"časom. Zafarbený na červeno ak negatívny (predpokladaný prílet moc skoro), "
+"alebo modro ak v ste v sektore AAT a môžete teraz otočiť s predpokladaným "
+"časom príletu väčším ako AAT čas plus 5 minút."
 
 #: src/Dialogs/Task/TargetDialog.cpp:452
 msgid "V rem."
-msgstr ""
+msgstr "R zostáv."
 
 #: src/Dialogs/Task/TargetDialog.cpp:456
 msgid "V ach"
-msgstr ""
+msgstr "R dosiah."
 
 #: src/Dialogs/Task/TargetDialog.cpp:458
 msgid ""
 "AA Speed - Assigned Area Task average speed achievable around target points "
 "remaining in minimum AAT time."
 msgstr ""
+"AA rýchlosť - AAT priemerná rýchlosť dosiahnuteľná okolo zostávajúcich "
+"zadaných bodov v minimálnom AAT čase."
 
 #: src/Dialogs/Task/TargetDialog.cpp:463
 msgid "Optimized"
-msgstr ""
+msgstr "Optimalizované"
 
 #: src/Dialogs/Tracking/CloudEnableDialog.cpp:71
 msgid ""
@@ -9050,10 +9062,16 @@ msgid ""
 "test server. You can disable it at any time in the \"Tracking\" settings.\n"
 "Please help us improve XCSoar!"
 msgstr ""
+"Projekt XCSoar v súčastnosti vyvíja revolučnú službu ktorá umožňuje "
+"zdieľanie pozícií stupákov / vĺn a iného s ostatnými pilotmi.\n"
+"Chceš sa zúčastniť jeho testovania? To znamená že tvoja pozícia, pozície "
+"stupákov / vĺn a iné dáta o počasí budú posielané na náš testovací server. "
+"Môžeš to hocikedy vypnúť v nastaveniach \"Sledovanie\".\n"
+"Pomôž nám zlepšiť XCSoar, prosím!"
 
 #: src/Dialogs/TimeEntry.cpp:73 src/Dialogs/Weather/RASPDialog.cpp:131
 msgid "Now"
-msgstr ""
+msgstr "Teraz"
 
 #: src/Dialogs/Weather/WeatherDialog.cpp:43
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:336
@@ -9066,7 +9084,7 @@ msgstr "Počasie"
 #: src/Dialogs/Weather/NOAADetails.cpp:86
 #: src/Dialogs/Weather/NOAADetails.cpp:151
 msgid "METAR and TAF"
-msgstr ""
+msgstr "METAR a TAF"
 
 #: src/Dialogs/Weather/RASPDialog.cpp:216
 msgid "Field"
@@ -9074,7 +9092,7 @@ msgstr "Snímok"
 
 #: src/Dialogs/dlgCredits.cpp:132 Data/Input/default.xci:852
 msgid "Credits"
-msgstr ""
+msgstr "Poďakovanie"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:70
 msgid "Audio vario"
@@ -9082,17 +9100,17 @@ msgstr "Audio vário"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:71
 msgid "Emulate the sound of an electronic vario."
-msgstr ""
+msgstr "Napodobňuje zvuk elektronického vária."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:77
 msgid "Enable Deadband"
-msgstr ""
+msgstr "Aktivuj mŕtve pásmo"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:78
 msgid ""
 "Mute the audio output in when the current lift is in a certain range around "
 "zero"
-msgstr ""
+msgstr "Stlmiť zvuk ak je aktuálne stúpanie v určitom rozmedzí okolo nuly."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:84
 msgid "Min. Frequency"
@@ -9100,7 +9118,7 @@ msgstr "Min. frekvencia"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:85
 msgid "The tone frequency that is played at maximum sink rate."
-msgstr ""
+msgstr "Zvuková frekvencia ktorá je použitá pre maximálne klesanie."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:90
 msgid "Zero Frequency"
@@ -9108,7 +9126,7 @@ msgstr "Nulová frekvencia"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:91
 msgid "The tone frequency that is played at zero climb rate."
-msgstr ""
+msgstr "Zvuková frekvencia ktorá je použitá pre nulové stúpanie."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:96
 msgid "Max. Frequency"
@@ -9116,27 +9134,31 @@ msgstr "Maximálna frekvencia"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:97
 msgid "The tone frequency that is played at maximum climb rate."
-msgstr ""
+msgstr "Zvuková frekvencia ktorá je použitá pre maximálne stúpanie."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:105
 msgid "Deadband min. lift"
-msgstr ""
+msgstr "Mŕtve pásmo - min. stúpanie"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:106
 msgid ""
 "Below this lift threshold the vario will start to play sounds if the "
 "'Deadband' feature is enabled."
 msgstr ""
+"Pod touto hraničnou hodnotou stúpania bude vário vydávať zvuky ak je funkcia "
+"'Mŕtve pásmo' aktivovaná."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:115
 msgid "Deadband max. lift"
-msgstr ""
+msgstr "Mŕtve pásmo - max. stúpanie"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:116
 msgid ""
 "Above this lift threshold the vario will start to play sounds if the "
 "'Deadband' feature is enabled."
 msgstr ""
+"Nad touto hraničnou hodnotou stúpania bude vário vydávať zvuky ak je funkcia "
+"'Mŕtve pásmo' aktivovaná."
 
 #: src/Dialogs/Settings/Panels/AudioConfigPanel.cpp:60
 msgid "Master Volume"
@@ -9144,63 +9166,65 @@ msgstr "Hlavná hlasitosť"
 
 #: src/Dialogs/Weather/PCMetDialog.cpp:68
 msgid "Failed to download file."
-msgstr "Chyba pri nahraní súboru."
+msgstr "Chyba pri nahrávaní súboru."
 
 #: src/Dialogs/Weather/NOAAList.cpp:121 src/Dialogs/Weather/NOAADetails.cpp:72
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:227
 msgid "Update"
-msgstr ""
+msgstr "Aktualizovať"
 
 #: src/Dialogs/Weather/NOAAList.cpp:181
 msgid "Airport ICAO code"
-msgstr ""
+msgstr "Kód letiska ICAO"
 
 #: src/Dialogs/Weather/NOAAList.cpp:185
 msgid "Please enter the FOUR letter code of the desired station."
-msgstr ""
+msgstr "Prosím zadajte ŠTVOR písmenný kód požadovanej stanice."
 
 #: src/Dialogs/Weather/NOAAList.cpp:191
 msgid ""
 "Please don't use special characters in the four letter code of the desired "
 "station."
 msgstr ""
+"Prosím nepoužívajte špeciálne znaky v štvorpísmennom kóde požadovanej "
+"stanice."
 
 #: src/Dialogs/Weather/NOAAList.cpp:225 src/Dialogs/Weather/NOAADetails.cpp:112
 #, c-format
 msgid "Do you want to remove station %s?"
-msgstr ""
+msgstr "Chceš zmazať stanicu %s?"
 
 #: src/Dialogs/Weather/NOAADetails.cpp:165
 msgid "This function is not available on your platform yet."
-msgstr ""
+msgstr "Táto funkcia zatiaľ nieje dostupná pre vašu platformu."
 
 #: src/Monitor/AirspaceWarningMonitor.cpp:62
 msgid "Inside airspace"
-msgstr ""
+msgstr "V priestore"
 
 #: src/Monitor/AirspaceWarningMonitor.cpp:64
 msgid "Near airspace"
-msgstr ""
+msgstr "Blízko priestoru"
 
 #: src/Monitor/TaskConstraintsMonitor.cpp:57
 msgid "Maximum start speed exceeded"
-msgstr ""
+msgstr "Maximálna štartová rýchlosť prekročená"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:46
 msgid "In sector, arm advance when ready"
-msgstr "Si v sektore, povol postup v úlohe (štart) ak si pripravený"
+msgstr "Si v sektore, povoľ postup v úlohe ak si pripravený"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:48
 msgid "Arm"
-msgstr ""
+msgstr "Aktivuj"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:49 src/Monitor/MatTaskMonitor.cpp:64
 msgid "Dismiss"
-msgstr ""
+msgstr "Zrušiť"
 
 #: src/Monitor/MatTaskMonitor.cpp:55
 msgid "Add this turn point?"
-msgstr ""
+msgstr "Pridať tento otočný bod?"
 
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:225
 msgid "Use"
@@ -9208,11 +9232,11 @@ msgstr "Použitie"
 
 #: src/Renderer/NOAAListRenderer.cpp:45
 msgid "No METAR available"
-msgstr ""
+msgstr "METAR nedostupný"
 
 #: src/Weather/NOAAFormatter.cpp:133 src/Weather/NOAAFormatter.cpp:140
 msgid "Dew Point"
-msgstr ""
+msgstr "Rosný bod"
 
 #: src/Weather/NOAAFormatter.cpp:167
 msgid "Visibility"
@@ -9225,30 +9249,30 @@ msgstr "viac ako %s"
 
 #: src/Weather/NOAAFormatter.cpp:184
 msgid "Sky Conditions"
-msgstr ""
+msgstr "Podmienky na oblohe"
 
 #: src/Weather/NOAAFormatter.cpp:247
 #, c-format
 msgid "METAR for %s:"
-msgstr ""
+msgstr "METAR pre %s:"
 
 #: src/Weather/NOAAFormatter.cpp:273
 msgid "No METAR available!"
-msgstr ""
+msgstr "METAR nieje dostupný!"
 
 #: src/Weather/NOAAFormatter.cpp:287
 msgid "No TAF available!"
-msgstr ""
+msgstr "TAF nedostupný!"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:33
 #, no-c-format
 msgid "Gear on delay"
-msgstr ""
+msgstr "Oneskorenie pri zasunutí podvozku"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:36
 #, no-c-format
 msgid "Gear off delay"
-msgstr ""
+msgstr "Oneskorenie pri vysunutí podvozku"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:39
 #, no-c-format
@@ -9258,22 +9282,22 @@ msgstr "Interval; podvozok"
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:42
 #, no-c-format
 msgid "Radio com. max. delay"
-msgstr "Max. odmlka rádiokomunikácie"
+msgstr "Max. oneskorenie rádiokomunikácie"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:45
 #, no-c-format
 msgid "Battery low delay"
-msgstr "Oneskorenie oznamu nízkeho napätia"
+msgstr "Nízke napätie oneskorenie"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:48
 #, no-c-format
 msgid "Battery empty delay"
-msgstr ""
+msgstr "Batéria prázdna oneskorenie"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:51
 #, no-c-format
 msgid "Interval; battery"
-msgstr "Interval; baterka"
+msgstr "Interval; batéria"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:32
 #, no-c-format
@@ -9283,7 +9307,7 @@ msgstr "Krok"
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:33
 #, no-c-format
 msgid "Ramp"
-msgstr ""
+msgstr "Sklon"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:40
 #, no-c-format
@@ -9298,57 +9322,57 @@ msgstr "Druh mŕtveho pásma v móde stúpania."
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:45
 #, no-c-format
 msgid "Circling hi cutoff"
-msgstr ""
+msgstr "Krúženie hor. prah"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:46
 #, no-c-format
 msgid "High limit of circling dead band"
-msgstr ""
+msgstr "Horný limit mŕtveho pásma v krúžení"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:50
 #, no-c-format
 msgid "Circling low cutoff"
-msgstr ""
+msgstr "Krúženie dol. prah"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:51
 #, no-c-format
 msgid "Low limit of circling dead band"
-msgstr ""
+msgstr "Dolný limit mŕtveho pásma v krúžení"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:56
 #, no-c-format
 msgid "Cruise deadband type"
-msgstr ""
+msgstr "Typ mŕtveho pásma pre preskok"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:57
 #, no-c-format
 msgid "Type of dead band used in cruise mode."
-msgstr ""
+msgstr "Typ mŕtveho pásma použitý v režime preskoku."
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:61
 #, no-c-format
 msgid "Cruise hi cutoff"
-msgstr ""
+msgstr "Preskok hor. prah"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:62
 #, no-c-format
 msgid "High limit of cruise dead band"
-msgstr ""
+msgstr "Horný limit mŕtveho pásma použitý v režime preskoku"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:66
 #, no-c-format
 msgid "Cruise low cutoff"
-msgstr ""
+msgstr "Preskok dol. prah"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:67
 #, no-c-format
 msgid "Low limit of cruise dead band"
-msgstr ""
+msgstr "Dolný limit mŕtveho pásma použitý v režime preskoku"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:72
 #, no-c-format
 msgid "Climb fast trigger"
-msgstr "Rýchle stúpanie-spúštač"
+msgstr "Rýchle stúpanie -spúštač"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:73
 #, no-c-format
@@ -9359,11 +9383,17 @@ msgid ""
 "[AVERAGE]: State HIGH if gross vario value is greater than average gross "
 "vario value."
 msgstr ""
+"Metóda na detekciu sily stúpania (SILNÉ/SLABÉ).\n"
+"[ŽIADNA]: Stav SLABÉ deaktivovaný\n"
+"[MACCREADY]: Stav SILNÉ ak je hodnota brutto vária väčšia ako nastavenie "
+"MacCready. \n"
+"[PRIEMER]: Stav SILNÉ ak je hodnota brutto vária väčšia ako priemer brutto "
+"vária."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:77
 #, no-c-format
 msgid "Cruise lift trigger"
-msgstr ""
+msgstr "Stúpanie na preskoku -spúštač"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:78
 #, no-c-format
@@ -9376,11 +9406,21 @@ msgid ""
 "[RELATIVE MC/2] LIFT tone when relative vario greater than half MC.\n"
 "[NET MC/2] LIFT tone when airmass velocity greater than half MC."
 msgstr ""
+"Porovnávacia metóda na detekciu stavov na preskoku pre prepínanie zvukov "
+"stúpania počas preskoku.\n"
+"[ŽIADNA]: Zvuk STÚPANIA deaktivovaný na preskoku. \n"
+"[RELATÍVNE NULA]: Zvuk STÚPANIA ak relatívne vário vykazuje kladné hodnoty. "
+"\n"
+"[BRUTTO NULA]: Zvuk STÚPANIA ak vetroň stúpa.\n"
+"[RELATÍVNE MC/2]: Zvuk STÚPANIA ak relatívne vário vário vykazuje hodnoty "
+"väčšie ako polovica MC. \n"
+"[NETTO MC/2]: Zvuk STÚPANIA ak je hodnota stúpania vzdušnej masy väčšia ako "
+"polovica MC."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:82
 #, no-c-format
 msgid "Climb averager scale"
-msgstr "Stupnica integrátora stúpania"
+msgstr "Nastavenie spriemerovania stúpania"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:82
 #, no-c-format
@@ -9390,12 +9430,12 @@ msgstr "Časová konštanta pre priemerné vário."
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:86
 #, no-c-format
 msgid "Cruise averager scale"
-msgstr ""
+msgstr "Nastavenie spriemerovania preskoku"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:87
 #, no-c-format
 msgid "Time scale used for cruise speed command averager."
-msgstr ""
+msgstr "Časová konštanta pre spriemerovanie preskokového rýchlostného vária."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:91
 #, no-c-format
@@ -9405,7 +9445,7 @@ msgstr "Hlasitosť v krúžení"
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:92
 #, no-c-format
 msgid "Mean volume level in circling modes."
-msgstr ""
+msgstr "Stredná hlasitosť v režimoch krúženia."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:96
 #, no-c-format
@@ -9428,37 +9468,37 @@ msgstr "Základná frekvencia"
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:102
 #, no-c-format
 msgid "Adjustment to base frequency of tones in all modes."
-msgstr ""
+msgstr "Nastavenie základnej frekvencie tónov vo všetkých režimoch."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:106
 #, no-c-format
 msgid "Filter circling"
-msgstr "Filtruj krúženie"
+msgstr "Filter pre krúženie"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:107
 #, no-c-format
 msgid "Variometer low pass filter time constant in circling mode."
-msgstr ""
+msgstr "Variometer dolný filter časová konštanta v režime krúženia."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:111
 #, no-c-format
 msgid "Filter cruise"
-msgstr "Filtruj preskok"
+msgstr "Filter pre preskok"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:112
 #, no-c-format
 msgid "Variometer low pass filter time constant in cruise mode."
-msgstr ""
+msgstr "Variometer dolný filter časová konštanta v režime preskoku."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:116
 #, no-c-format
 msgid "Tone pitch scale"
-msgstr ""
+msgstr "Stupnica tónov"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:117
 #, no-c-format
 msgid "Adjustment to base pitch scale of tones in all modes."
-msgstr ""
+msgstr "Nastavenie základnej stupnice tónov vo všetkých režimoch."
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:105
 msgid "Beep type"
@@ -9466,19 +9506,19 @@ msgstr "Typ pípnutia"
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:108
 msgid "Pitch scheme"
-msgstr ""
+msgstr "Výška tónu - osnova"
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:111
 msgid "Pitch scale"
-msgstr ""
+msgstr "Výška tónu - rozsah"
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:114
 msgid "Period scheme"
-msgstr ""
+msgstr "Perióda - osnova"
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:117
 msgid "Period scale"
-msgstr ""
+msgstr "Perióda - rozsah"
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:33
 #, no-c-format
@@ -9491,11 +9531,13 @@ msgid ""
 "Proportion of TE probe value used in total energy mixing with pitot/static "
 "total energy."
 msgstr ""
+"Pomer hodnoty TE sondy použitý na zmiešaný výpočet pitot/static totálnej "
+"energie."
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:38
 #, no-c-format
 msgid "ASI cal."
-msgstr ""
+msgstr "IAS kalibrácia"
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:39
 #, no-c-format
@@ -9508,7 +9550,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:43
 #, no-c-format
 msgid "TE static cal."
-msgstr "TE statická kalibrácia"
+msgstr "TE stat. kalibrácia"
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:44
 #, no-c-format
@@ -9521,7 +9563,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:48
 #, no-c-format
 msgid "TE dynamic cal."
-msgstr "TE dynamická kalibrácia"
+msgstr "TE dyn. kalibrácia"
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:49
 #, no-c-format
@@ -9535,7 +9577,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/DisplayParameters.hpp:40
 #, no-c-format
 msgid "Needle gauge type"
-msgstr ""
+msgstr "Typ ručičkového ukazovateľa"
 
 #: src/Dialogs/Device/Vega/DisplayParameters.hpp:42
 #, no-c-format
@@ -9550,7 +9592,7 @@ msgstr "Max. hlásených objektov"
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:44
 #, no-c-format
 msgid "Max. reported"
-msgstr ""
+msgstr "Max. hlasených"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:46
 #, no-c-format
@@ -9560,12 +9602,12 @@ msgstr "Rozhranie Flarmu"
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:48
 #, no-c-format
 msgid "Disable circling"
-msgstr ""
+msgstr "Vypnúť krúženie"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:50
 #, no-c-format
 msgid "No mode reports"
-msgstr ""
+msgstr "Žiadne hlásenia módu"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:52
 #, no-c-format
@@ -9600,27 +9642,27 @@ msgstr "Interval; Varovanie"
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:52
 #, no-c-format
 msgid "TE port"
-msgstr "TE port"
+msgstr "TE pripojenie"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:52
 #, no-c-format
 msgid "Whether the Total Energy port is connected."
-msgstr ""
+msgstr "Či je pripojený TE tlak."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:55
 #, no-c-format
 msgid "Pitot port"
-msgstr "Pitot port"
+msgstr "Pitot pripojenie"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:55
 #, no-c-format
 msgid "Whether the Pitot port is connected."
-msgstr ""
+msgstr "Či je pripojenie na tlak z pitotovej trubice."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:58
 #, no-c-format
 msgid "Static port"
-msgstr "Statický port"
+msgstr "Statika pripojenie"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:58
 #, no-c-format
@@ -9630,12 +9672,12 @@ msgstr "Či je pripojený statický tlak."
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:61
 #, no-c-format
 msgid "Stall port"
-msgstr "Port varovania pádu"
+msgstr "Varovanie pádu pripojenie"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:61
 #, no-c-format
 msgid "Whether the Stall pressure port is connected."
-msgstr ""
+msgstr "Či je pripojený tlakový senzor pádu (pretiahnutia)."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:64
 #, no-c-format
@@ -9660,6 +9702,8 @@ msgid ""
 "disable, 255 to enable auto-detect; otherwise the 1Wire device ID can be "
 "specified."
 msgstr ""
+"Či je inštalovaný senzor teploty a vlhkosti. Nastav na 0 pre vypnuté, 255 "
+"povolí autodetekciu, ináč môže byť nastavené 1Wire device ID."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:73
 #, no-c-format
@@ -9674,10 +9718,10 @@ msgid ""
 "connected the baud rate will be fixed at 38400.  For OzFLARM, the value can "
 "be set to 19200."
 msgstr ""
-"Prenosová rýchlosť seriálového zariadenia pripojeného k Vega X1 portu. "
-"Použite toto nastavenie podľa potreby ak používate GPS prijímač alebo logger "
-"iný než FLARM. Ak máte pripojený FLARM, prenosová rýchlosť bude 38400. Ak "
-"používate OzFLARM, rýchlosť môže byť nastavená na 19200."
+"Prenosová rýchlosť sériového zariadenia pripojeného k Vega X1 portu. Použite "
+"toto nastavenie podľa potreby ak používate GPS prijímač alebo logger iný než "
+"FLARM. Ak máte pripojený FLARM, prenosová rýchlosť bude 38400. Ak používate "
+"OzFLARM, rýchlosť môže byť nastavená na 19200."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:78
 #, no-c-format
@@ -9716,7 +9760,7 @@ msgstr "VNE"
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:34
 #, no-c-format
 msgid "V terrain"
-msgstr ""
+msgstr "V terén"
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:36
 #, no-c-format
@@ -9736,7 +9780,7 @@ msgstr "Rýchlosť na brzdách"
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:42
 #, no-c-format
 msgid "V flap"
-msgstr ""
+msgstr "Rýchlosť na klapkách"
 
 #: src/Dialogs/Device/Vega/LoggerParameters.hpp:37
 #, no-c-format
@@ -9756,22 +9800,22 @@ msgstr "Ztlm vário pri rádiopríjme"
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:34
 #, no-c-format
 msgid "Vario muting"
-msgstr ""
+msgstr "Stlmenie vária"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:36
 #, no-c-format
 msgid "Voice muting"
-msgstr "Stlmenie hlasitosti"
+msgstr "Stlmenie pri hlase"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:38
 #, no-c-format
 msgid "Speaker threshold"
-msgstr ""
+msgstr "Reproduktor prah. hodnota"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:40
 #, no-c-format
 msgid "Headset threshold"
-msgstr ""
+msgstr "Sluchátka prah. hodnota"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:42
 #, no-c-format
@@ -9780,7 +9824,7 @@ msgstr "Súrna hlasitosť - minimum"
 
 #: Data/Input/default.xci:833 Data/Input/default.xci:1206
 msgid "Thermal Assistant"
-msgstr "Pomocník ustreď."
+msgstr "Pomocník ustreďovania"
 
 #: Data/Input/default.xci:459 Data/Input/default.xci:943
 #: Data/Input/default.xci:1032
@@ -9789,17 +9833,19 @@ msgstr "Priblíženie"
 
 #: Data/Input/default.xci:711
 msgid "Vario ASI zeroed"
-msgstr ""
+msgstr "Vário IAS vynulované"
 
 #: Data/Input/default.xci:1174
 msgid ""
 "Nearest\n"
 "Airspace"
-msgstr "Najbližší vzduš. priestor"
+msgstr ""
+"Najbližší vzduš. \n"
+"priestor"
 
 #: Data/Input/default.xci:638 Data/Input/default.xci:1135
 msgid "Raw Logger"
-msgstr "Logovať NMEA dáta"
+msgstr "Surový logger"
 
 #: Data/Input/default.xci:531 Data/Input/default.xci:581
 #: Data/Input/default.xci:623 Data/Input/default.xci:892
@@ -9823,20 +9869,24 @@ msgid ""
 "Manual\n"
 "Demo"
 msgstr ""
+"Manuál\n"
+"Demo"
 
 #: Data/Input/default.xci:142 Data/Input/default.xci:775
 msgid ""
 "What's\n"
 "here?"
 msgstr ""
+"Čo je \n"
+"tu?"
 
 #: Data/Input/default.xci:825
 msgid "Traffic List"
-msgstr ""
+msgstr "Zoznam prevádzky"
 
 #: Data/Input/default.xci:514 Data/Input/default.xci:1079
 msgid "Topo."
-msgstr ""
+msgstr "Topo."
 
 #: Data/Input/default.xci:64
 msgid "Below final glide"
@@ -9845,25 +9895,31 @@ msgstr "Ste pod doklzovou výškou"
 #: Data/Input/default.xci:350 Data/Input/default.xci:399
 #: Data/Input/default.xci:878
 msgid "Nav"
-msgstr "Navigačné menu"
+msgstr "Nav"
 
 #: Data/Input/default.xci:734
 msgid ""
 "Cruise\n"
 "Demo"
 msgstr ""
+"Preskok\n"
+"Demo"
 
 #: Data/Input/default.xci:686
 msgid ""
 "Setup\n"
 "Stall"
 msgstr ""
+"Nastavenie\n"
+"Pád"
 
 #: Data/Input/default.xci:719
 msgid ""
 "Accel\n"
 "Zero"
 msgstr ""
+"Akcel\n"
+"Nula"
 
 #: Data/Input/default.xci:1096
 msgid ""
@@ -9889,17 +9945,21 @@ msgstr "FLARM Radar"
 msgid ""
 "Settings\n"
 "Airspace"
-msgstr "Nastavenie vzduš. priestorov"
+msgstr ""
+"Nastavenie  \n"
+"Priestory"
 
 #: Data/Input/default.xci:417 Data/Input/default.xci:1042
 msgid ""
 "Mark\n"
 "Drop"
-msgstr "Vytvor značku na mape"
+msgstr ""
+"Vytvor\n"
+"Značku"
 
 #: Data/Input/default.xci:718
 msgid "Accelerometer leveled"
-msgstr ""
+msgstr "Akcelerometer vynulovaný"
 
 #: Data/Input/default.xci:500 Data/Input/default.xci:1065
 msgid "Trail"
@@ -9914,12 +9974,16 @@ msgid ""
 "ASI\n"
 "Zero"
 msgstr ""
+"IAS\n"
+"Nula"
 
 #: Data/Input/default.xci:672
 msgid ""
 "Airframe\n"
 "Switches"
 msgstr ""
+"Palubné\n"
+"Prepínače"
 
 #: Data/Input/default.xci:1104
 msgid ""
@@ -9970,7 +10034,7 @@ msgstr "Popisky"
 
 #: Data/Input/default.xci:414 Data/Input/default.xci:1039
 msgid "Dropped marker"
-msgstr ""
+msgstr "Značka vytvorená"
 
 #: Data/Input/default.xci:135 Data/Input/default.xci:451
 #: Data/Input/default.xci:936
@@ -9981,11 +10045,11 @@ msgstr "Oddiaľ"
 
 #: Data/Input/default.xci:1151
 msgid "Setup Plane"
-msgstr ""
+msgstr "Nastavenie lietadla"
 
 #: Data/Input/default.xci:693
 msgid "Accel"
-msgstr ""
+msgstr "Akcel"
 
 #: Data/Input/default.xci:646
 msgid "Lua"
@@ -9993,11 +10057,11 @@ msgstr "Lua"
 
 #: Data/Input/default.xci:957
 msgid "AVG/ALT"
-msgstr ""
+msgstr "AVG/ALT"
 
 #: Data/Input/default.xci:69
 msgid "Final glide through terrain"
-msgstr "Doklz skrz terén"
+msgstr "Doklz cez terén"
 
 #: Data/Input/default.xci:653 Data/Input/default.xci:664
 #: Data/Input/default.xci:704
@@ -10022,13 +10086,15 @@ msgstr ""
 
 #: Data/Input/default.xci:726
 msgid "Stored to EEPROM"
-msgstr ""
+msgstr "Uložiť do EEPROM"
 
 #: Data/Input/default.xci:741
 msgid ""
 "Climb\n"
 "Demo"
 msgstr ""
+"Stúpanie\n"
+"Demo"
 
 #~ msgid "Battery voltage"
 #~ msgstr "Napätie batérie"
