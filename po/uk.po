@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2018-01-24 12:35+0000\n"
-"Last-Translator: Yura <skayt55@gmail.com>\n"
+"PO-Revision-Date: 2018-02-05 10:44+0000\n"
+"Last-Translator: Марс Ямбар <mjambarmeta@gmail.com>\n"
 "Language-Team: Ukrainian "
 "<https://hosted.weblate.org/projects/xcsoar/translations/uk/>\n"
 "Language: uk\n"
@@ -9900,7 +9900,7 @@ msgstr ""
 
 #: Data/Input/default.xci:825
 msgid "Traffic List"
-msgstr ""
+msgstr "Список трафіку"
 
 #: Data/Input/default.xci:514 Data/Input/default.xci:1079
 msgid "Topo."
@@ -9913,7 +9913,7 @@ msgstr "Нижче глісади дольоту"
 #: Data/Input/default.xci:350 Data/Input/default.xci:399
 #: Data/Input/default.xci:878
 msgid "Nav"
-msgstr ""
+msgstr "Навігація"
 
 #: Data/Input/default.xci:734
 msgid ""
@@ -10078,7 +10078,7 @@ msgstr "Доліт над ландшафтом"
 #: Data/Input/default.xci:653 Data/Input/default.xci:664
 #: Data/Input/default.xci:704
 msgid "Vega"
-msgstr ""
+msgstr "Вега"
 
 #: Data/Input/default.xci:867
 msgid ""
