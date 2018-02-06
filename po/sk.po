@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2018-02-01 09:37+0000\n"
+"PO-Revision-Date: 2018-02-07 15:39+0000\n"
 "Last-Translator: Peter Brtko <peter.brtko@gmail.com>\n"
 "Language-Team: Slovak "
 "<https://hosted.weblate.org/projects/xcsoar/translations/sk/>\n"
@@ -3394,7 +3394,7 @@ msgstr "Žiadna trať"
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:184
 #, no-c-format
 msgid "Altitude"
-msgstr "Nadmor. výška"
+msgstr "Výška"
 
 #: src/Input/InputEventsTask.cpp:324
 #: src/Renderer/FlightStatisticsRenderer.cpp:195
@@ -3824,7 +3824,7 @@ msgstr "Trend základní"
 #: src/Renderer/ClimbChartRenderer.cpp:47
 #: src/Renderer/ClimbChartRenderer.cpp:52
 msgid "Avg. climb"
-msgstr "P. stúpanie"
+msgstr "Pr. stúpanie"
 
 #: src/Renderer/ClimbChartRenderer.cpp:55
 msgid "Climb trend"
@@ -3971,7 +3971,7 @@ msgstr "Sťahujem záznam letu"
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:40
 #, no-c-format
 msgid "Disabled"
-msgstr "Zakázané"
+msgstr "Vypnuté"
 
 #: src/Device/Config.cpp:221 src/Dialogs/Device/DeviceEditWidget.cpp:69
 #, no-c-format
@@ -4040,7 +4040,7 @@ msgstr "Ignorovať"
 
 #: src/Dialogs/ListPicker.cpp:187 src/Dialogs/HelpDialog.cpp:37
 msgid "Help"
-msgstr "Nápoveda"
+msgstr "Pomoc"
 
 #: src/Dialogs/ListPicker.cpp:190 src/Dialogs/Traffic/TrafficList.cpp:798
 #: src/Dialogs/ProfileListDialog.cpp:387
