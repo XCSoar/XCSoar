@@ -34,6 +34,11 @@
 #include "Engine/Contest/ContestResult.hpp"
 #include "FlightPhaseDetector.hpp"
 
+#if PY_MAJOR_VERSION >= 3
+    #define PyInt_FromLong PyLong_FromLong
+    #define PyInt_AsLong PyLong_AsLong
+#endif
+
 PyObject* Python::BrokenDateTimeToPy(const BrokenDateTime &datetime) {
   PyDateTime_IMPORT;
 
