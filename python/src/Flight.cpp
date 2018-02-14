@@ -95,7 +95,7 @@ void xcsoar_Flight_dealloc(Pyxcsoar_Flight *self) {
     delete[] self->filename;
 
   delete self->flight;
-  self->ob_type->tp_free((Pyxcsoar_Flight*)self);
+  Py_TYPE(self)->tp_free((Pyxcsoar_Flight*)self);
 }
 
 PyObject* xcsoar_Flight_setQNH(Pyxcsoar_Flight *self, PyObject *args) {
@@ -475,8 +475,7 @@ PyMemberDef xcsoar_Flight_members[] = {
 };
 
 PyTypeObject xcsoar_Flight_Type = {
-  PyObject_HEAD_INIT(&PyType_Type)
-  0,                     /* obj_size */
+  PyVarObject_HEAD_INIT(&PyType_Type, 0 /* obj_size */)
   "xcsoar",         /* char *tp_name; */
   sizeof(Pyxcsoar_Flight), /* int tp_basicsize; */
   0,                     /* int tp_itemsize; not used much */
