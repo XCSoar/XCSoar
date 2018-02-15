@@ -232,7 +232,7 @@ PyObject* xcsoar_Airspaces_findIntrusions(Pyxcsoar_Airspaces *self, PyObject *ar
     );
 
     for (auto it = airspaces.begin(); it != airspaces.end(); it++) {
-      PyObject *py_name = PyString_FromString((*it).GetAirspace().GetName());
+      PyObject *py_name = PyUnicode_FromString((*it).GetAirspace().GetName());
       PyObject *py_airspace = nullptr,
                *py_period = nullptr;
 

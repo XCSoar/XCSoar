@@ -53,11 +53,24 @@ PyObject* xcsoar_Flight_new(PyTypeObject *type, PyObject *args, PyObject *kwargs
   self = (Pyxcsoar_Flight *)type->tp_alloc(type, 0);
   self->filename = nullptr;
 
+#if PY_MAJOR_VERSION >= 3
+  if (PyUnicode_Check(py_input_data)) {
+    Py_ssize_t length;
+    char *ptr = PyUnicode_AsUTF8AndSize(py_input_data, &length);
+    if (!ptr) {
+        return NULL;
+    }
+
+    // add one char for \0
+    self->filename = new char[length + 1];
+    strncpy(self->filename, ptr, length + 1);
+#else
   if (PyString_Check(py_input_data) || PyUnicode_Check(py_input_data)) {
     Py_ssize_t length = PyString_Size(py_input_data);
     // add one char for \0
     self->filename = new char[length + 1];
     strncpy(self->filename, PyString_AsString(py_input_data), length + 1);
+#endif
 
     Py_BEGIN_ALLOW_THREADS
     self->flight = new Flight(self->filename, keep);
