@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2018-02-07 15:39+0000\n"
+"PO-Revision-Date: 2018-02-27 14:41+0000\n"
 "Last-Translator: Peter Brtko <peter.brtko@gmail.com>\n"
 "Language-Team: Slovak "
 "<https://hosted.weblate.org/projects/xcsoar/translations/sk/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 2.19-dev\n"
+"X-Generator: Weblate 2.20-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -4709,7 +4709,7 @@ msgstr "Rogalo"
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:183
 #, no-c-format
 msgid "Paraglider"
-msgstr "Paraglider"
+msgstr "Padákový klzák"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:132
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:184
@@ -5806,7 +5806,7 @@ msgstr "Rýchlosť pri štarte"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:106
 msgid "Finish min. alt."
-msgstr "Cieľ min. výška"
+msgstr "Cieľ výška min."
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:107
 msgid "Valid finish"
@@ -8957,7 +8957,7 @@ msgstr "Čiara"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:198
 msgid "Cylinder"
-msgstr "Cylinder"
+msgstr "Válec"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:204
 msgid "MAT cylinder"
