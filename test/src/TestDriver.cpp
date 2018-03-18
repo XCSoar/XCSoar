@@ -1215,6 +1215,11 @@ TestOpenVario()
              Temperature::FromCelsius(23.52).ToKelvin()));
   nmea_info.Reset();
 
+  // Relative humidity is read
+  ok1(device->ParseNMEA("$POV,H,58.42*24", nmea_info));
+  ok1(nmea_info.humidity_available);
+  ok1(equals(nmea_info.humidity, 58.42));
+
   delete device;
 }
 
@@ -1555,7 +1560,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(811);
+  plan_tests(814);
 
   TestGeneric();
   TestTasman();
