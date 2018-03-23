@@ -89,6 +89,10 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include <tchar.h>
 #include <algorithm>
 
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#endif
+
 /**
  * Determine the reference location of the current map display.
  */
@@ -565,9 +569,9 @@ InputEvents::eventRun(const TCHAR *misc)
   ::CloseHandle(pi.hProcess);
   ::CloseHandle(pi.hThread);
 
-  #else /* !WIN32 */
+  #elif !defined(__APPLE__) || !TARGET_OS_IPHONE
   system(misc);
-  #endif /* !WIN32 */
+  #endif
 }
 
 void
