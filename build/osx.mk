@@ -1,6 +1,6 @@
 ifeq ($(TARGET_IS_OSX),y)
 
-TARGET_LDLIBS += -framework AppKit
+TARGET_LDLIBS += -framework AppKit -framework CoreServices
 
 # WORKAROUND: Apple's "AssertMacros.h" header (at least in SDK 10.12) declares a
 # check() method, which conflicts with our code (and boost).
