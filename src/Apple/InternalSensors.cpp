@@ -58,7 +58,7 @@ Copyright_License {
 - (void) locationManager:(CLLocationManager *)manager
     didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 {
-  if ((status == kCLAuthorizationStatusAuthorized)
+  if ((status == kCLAuthorizationStatusAuthorizedAlways)
       || (status == kCLAuthorizationStatusAuthorizedWhenInUse)) {
     [manager startUpdatingLocation];
   }
@@ -177,7 +177,7 @@ void InternalSensors::Init()
   if ([location_manager
       respondsToSelector: @selector(requestWhenInUseAuthorization)]) {
     CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
-    if ((status == kCLAuthorizationStatusAuthorized)
+    if ((status == kCLAuthorizationStatusAuthorizedAlways)
         || (status == kCLAuthorizationStatusAuthorizedWhenInUse)) {
       [location_manager startUpdatingLocation];
     } else {
