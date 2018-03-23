@@ -77,6 +77,7 @@ TTYPort::Drain()
 #endif
 }
 
+#ifndef __APPLE__
 gcc_pure
 static bool
 IsCharDev(const char *path)
@@ -84,10 +85,12 @@ IsCharDev(const char *path)
   struct stat st;
   return stat(path, &st) == 0 && S_ISCHR(st.st_mode);
 }
+#endif
 
 bool
 TTYPort::Open(const TCHAR *path, unsigned baud_rate)
 {
+#ifndef __APPLE__
   if (IsAndroid() && IsCharDev(path)) {
     /* attempt to give the XCSoar process permissions to access the
        USB serial adapter; this is mostly relevant to the Nook */
@@ -95,6 +98,7 @@ TTYPort::Open(const TCHAR *path, unsigned baud_rate)
     StringFormat(command, MAX_PATH, "su -c 'chmod 666 %s'", path);
     system(command);
   }
+#endif
 
   boost::system::error_code ec;
   serial_port.open(path, ec);
