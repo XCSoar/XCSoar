@@ -53,11 +53,24 @@ PyObject* xcsoar_Flight_new(PyTypeObject *type, PyObject *args, PyObject *kwargs
   self = (Pyxcsoar_Flight *)type->tp_alloc(type, 0);
   self->filename = nullptr;
 
+#if PY_MAJOR_VERSION >= 3
+  if (PyUnicode_Check(py_input_data)) {
+    Py_ssize_t length;
+    char *ptr = PyUnicode_AsUTF8AndSize(py_input_data, &length);
+    if (!ptr) {
+        return NULL;
+    }
+
+    // add one char for \0
+    self->filename = new char[length + 1];
+    strncpy(self->filename, ptr, length + 1);
+#else
   if (PyString_Check(py_input_data) || PyUnicode_Check(py_input_data)) {
     Py_ssize_t length = PyString_Size(py_input_data);
     // add one char for \0
     self->filename = new char[length + 1];
     strncpy(self->filename, PyString_AsString(py_input_data), length + 1);
+#endif
 
     Py_BEGIN_ALLOW_THREADS
     self->flight = new Flight(self->filename, keep);
@@ -95,7 +108,7 @@ void xcsoar_Flight_dealloc(Pyxcsoar_Flight *self) {
     delete[] self->filename;
 
   delete self->flight;
-  self->ob_type->tp_free((Pyxcsoar_Flight*)self);
+  Py_TYPE(self)->tp_free((Pyxcsoar_Flight*)self);
 }
 
 PyObject* xcsoar_Flight_setQNH(Pyxcsoar_Flight *self, PyObject *args) {
@@ -475,8 +488,7 @@ PyMemberDef xcsoar_Flight_members[] = {
 };
 
 PyTypeObject xcsoar_Flight_Type = {
-  PyObject_HEAD_INIT(&PyType_Type)
-  0,                     /* obj_size */
+  PyVarObject_HEAD_INIT(&PyType_Type, 0 /* obj_size */)
   "xcsoar",         /* char *tp_name; */
   sizeof(Pyxcsoar_Flight), /* int tp_basicsize; */
   0,                     /* int tp_itemsize; not used much */

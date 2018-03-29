@@ -25,6 +25,10 @@
 
 #include <Python.h>
 
-PyMODINIT_FUNC initxcsoar();
+#if PY_MAJOR_VERSION >= 3
+  PyMODINIT_FUNC PyInit_xcsoar();
+#else
+  PyMODINIT_FUNC initxcsoar();
+#endif
 
 #endif /* PYTHON_PYTHONGLUE_HPP */
