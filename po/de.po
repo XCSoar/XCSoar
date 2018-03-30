@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2017-12-12 20:47+0000\n"
-"Last-Translator: Andreas Kleinert <Andy.Kleinert@gmail.com>\n"
-"Language-Team: German "
-"<https://hosted.weblate.org/projects/xcsoar/translations/de/>\n"
+"PO-Revision-Date: 2018-03-31 21:37+0000\n"
+"Last-Translator: Helmut Rohs <helmut.rohs@gmail.com>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/xcsoar/"
+"translations/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.18-dev\n"
+"X-Generator: Weblate 2.20-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -69,7 +69,7 @@ msgstr "AAT"
 #: src/Task/TypeStrings.cpp:37
 #, no-c-format
 msgid "Modified area task (MAT)"
-msgstr "Modifizierte Area-Task (MAT)"
+msgstr "Modifizierter Area-Task (MAT)"
 
 #: src/Task/TypeStrings.cpp:38
 #, no-c-format
@@ -87,8 +87,8 @@ msgid ""
 "FAI rules, allows only FAI start, finish and turn point types, for badges "
 "and records.  Enables FAI finish height for final glide calculation."
 msgstr ""
-"FAI Regeln, erlaubt nur den FAI Start-, Ziel- und Wendepunkttyp, für "
-"Abzeichen/Rekorde. Aktiviert die FAI Höhe für die Endanflugsberechnung."
+"FAI Regeln, erlaubt nur FAI Start-, Ziel- und Wendepunkttypen, für Abzeichen "
+"und Rekorde. Aktiviert die FAI Höhe für die Endanflugsberechnung."
 
 #: src/Task/TypeStrings.cpp:54
 #, no-c-format
