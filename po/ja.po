@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2017-09-24 22:46+0000\n"
+"PO-Revision-Date: 2018-04-02 22:38+0000\n"
 "Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
-"Language-Team: Japanese "
-"<https://hosted.weblate.org/projects/xcsoar/translations/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/xcsoar/"
+"translations/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2.17-dev\n"
+"X-Generator: Weblate 2.20-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -8197,12 +8197,12 @@ msgstr "リフト"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:174
 msgid "Units used for vertical speeds (variometer)."
-msgstr "昇降速度の単位　（バリオメーター）"
+msgstr "昇降速度の単位（バリオメーター）"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:180
 #, no-c-format
 msgid "feet"
-msgstr "フィート"
+msgstr "フｨート"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:181
 #, no-c-format
@@ -8227,11 +8227,11 @@ msgstr "タスク速度の単位"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:217
 msgid "Units used for pressures."
-msgstr "圧力単位"
+msgstr "気圧の単位"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:227
 msgid "Units used for mass."
-msgstr "表示単位"
+msgstr "重さの単位"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:237
 msgid "Units used for wing loading."
@@ -8262,7 +8262,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:90
 msgid "Use GPS time"
-msgstr "GPS時刻を使用する"
+msgstr "GPS時間を使用する"
 
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:91
 msgid ""
@@ -8287,7 +8287,7 @@ msgstr "ウエイポイントの　フルネームが表示される"
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:89
 #, no-c-format
 msgid "First word of name"
-msgstr "最初の名前"
+msgstr "名前のイニシャル"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:90
 #, no-c-format
