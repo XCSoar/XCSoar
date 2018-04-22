@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2018-01-24 12:18+0000\n"
-"Last-Translator: Davide Neri <davnerix@gmail.com>\n"
-"Language-Team: Italian "
-"<https://hosted.weblate.org/projects/xcsoar/translations/it/>\n"
+"PO-Revision-Date: 2018-04-23 14:38+0000\n"
+"Last-Translator: Ale-Ma <alemassimiani@gmail.com>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/xcsoar/"
+"translations/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.19-dev\n"
+"X-Generator: Weblate 3.0-dev\n"
 "X-Launchpad-Export-Date: 2015-09-08 16:12+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -3086,12 +3086,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1064
 #, no-c-format
 msgid "Number of used satellites"
-msgstr ""
+msgstr "Numero di satelliti usati"
 
 #: src/InfoBoxes/Content/Factory.cpp:1065
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Satellites"
-msgstr "Satelliti in vista"
+msgstr "Satelliti"
 
 #: src/InfoBoxes/Content/Factory.cpp:1066
 #, no-c-format
@@ -3099,6 +3099,8 @@ msgid ""
 "The number of actually used (seen) satellites by GPS module. If this "
 "information is unavailable, the displayed value is '---'."
 msgstr ""
+"Numero di satelliti effettivamente usati (in vista) dal modulo GPS. Se "
+"questa informazione non è disponibile, il valore mostrato è '---'."
 
 #: src/InfoBoxes/Content/Alternate.cpp:49
 #: src/Dialogs/Task/AlternatesListDialog.cpp:162 Data/Input/default.xci:388
@@ -3192,9 +3194,8 @@ msgid "3D fix"
 msgstr "Fix 3D"
 
 #: src/InfoBoxes/Content/Other.cpp:195
-#, fuzzy
 msgid "No GPS"
-msgstr "H GPS"
+msgstr "No GPS"
 
 #: src/InfoBoxes/Content/Speed.cpp:120
 msgid "BLOCK"
@@ -6653,7 +6654,7 @@ msgstr "Automatico"
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:107
 #, c-format
 msgid "%d dpi"
-msgstr ""
+msgstr "%d dpi"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:115
 msgid "Events"
@@ -8399,12 +8400,12 @@ msgstr "Le unità di misura utilizzate per la velocità verticale (variometro)."
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:180
 #, no-c-format
 msgid "feet"
-msgstr ""
+msgstr "piedi"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:181
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "meters"
-msgstr "metro"
+msgstr "metri"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:184
 msgid "Units used for altitude and heights."
