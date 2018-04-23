@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2017-10-13 21:48+0000\n"
-"Last-Translator: enrique <aeropasion@gmail.com>\n"
-"Language-Team: Spanish "
-"<https://hosted.weblate.org/projects/xcsoar/translations/es/>\n"
+"PO-Revision-Date: 2018-04-24 18:41+0000\n"
+"Last-Translator: ejoseca <joseca.izq@gmail.com>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/xcsoar/"
+"translations/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.17\n"
+"X-Generator: Weblate 3.0-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -2121,7 +2121,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:650
 #, no-c-format
 msgid "Thermal average over all"
-msgstr "Promedio termico total"
+msgstr "Promedio térmico total"
 
 #: src/InfoBoxes/Content/Factory.cpp:651
 #, no-c-format
@@ -2131,7 +2131,7 @@ msgstr "T Prom."
 #: src/InfoBoxes/Content/Factory.cpp:652
 #, no-c-format
 msgid "Time-average climb rate in all thermals."
-msgstr "Tiempo promedio de ascenso en termicas"
+msgstr "Tiempo promedio de ascenso en térmicas"
 
 #: src/InfoBoxes/Content/Factory.cpp:658
 #, no-c-format
@@ -2446,7 +2446,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:805
 #, no-c-format
 msgid "Thermal climb trace"
-msgstr "Rastro del viraje en termica"
+msgstr "Rastro del viraje en térmica"
 
 #: src/InfoBoxes/Content/Factory.cpp:806
 #, no-c-format
@@ -2778,13 +2778,13 @@ msgstr "Viento"
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:342
 #, no-c-format
 msgid "Thermal assistant"
-msgstr "Asistente de Ternica"
+msgstr "Asistente de térmica"
 
 #: src/InfoBoxes/Content/Factory.cpp:945
 #: src/Renderer/MapItemListRenderer.cpp:267
 #, no-c-format
 msgid "Thermal"
-msgstr "Termica"
+msgstr "Térmica"
 
 #: src/InfoBoxes/Content/Factory.cpp:946
 #, no-c-format
@@ -2792,8 +2792,8 @@ msgid ""
 "A circular thermal assistant that shows the lift distribution over each part "
 "of the circle."
 msgstr ""
-"Asistente de termica que muestra la distribucion de la ascendencia en cada "
-"parte del circulo"
+"Asistente de térmica que muestra la distribución de la ascendencia en cada "
+"parte del círculo"
 
 #: src/InfoBoxes/Content/Factory.cpp:951
 #, no-c-format
@@ -2907,12 +2907,14 @@ msgid "Circle D"
 msgstr "Circle D"
 
 #: src/InfoBoxes/Content/Factory.cpp:999
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "Circle diameter. Displays estimated circle diameter and full circle flight "
 "time. Useful for evaluating best thermalling mode with a glider at different "
 "wing loading."
-msgstr "Muestra el diametro aprox. del virage."
+msgstr ""
+"Diámetro del círculo. Muestra el diámetro estimado del viraje y el tiempo de "
+"vuelo de un círculo completo."
 
 #: src/InfoBoxes/Content/Factory.cpp:1004
 #, no-c-format
@@ -3815,7 +3817,7 @@ msgstr "Caraga alar"
 
 #: src/Renderer/CuRenderer.cpp:144
 msgid "Thermal height"
-msgstr "Altura de Terma"
+msgstr "Altura de térmica"
 
 #: src/Renderer/CuRenderer.cpp:147
 msgid "Cloud base"
@@ -5297,7 +5299,7 @@ msgstr "Calc. de Manga"
 
 #: src/Dialogs/dlgAnalysis.cpp:493
 msgid "Thermal Band"
-msgstr "Banda termica"
+msgstr "Banda térmica"
 
 #: src/Dialogs/dlgAnalysis.cpp:502
 #, fuzzy
@@ -6210,7 +6212,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:97
 msgid "Thermal band"
-msgstr ""
+msgstr "Banda térmica"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:98
 msgid ""
@@ -8380,6 +8382,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/CloudConfigPanel.cpp:88
 msgid "Obtain and show thermal locations reported by others."
 msgstr ""
+"Obtiene y muestra la localización de térmicas reportadas por otros usuarios."
 
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:42
 msgid "Radius of the OZ cylinder."
