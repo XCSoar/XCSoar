@@ -43,6 +43,11 @@
 
 #include <stdlib.h>
 
+// debug
+#include <iostream>
+#include <fstream>
+// ~debug
+
 struct SeeYouTaskInformation {
   /** True = RT, False = AAT */
   bool wp_dis;
@@ -390,8 +395,29 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
     const Angle RadialStart = (A12adj - turnpoint_infos.angle1).AsBearing();
     const Angle RadialEnd = (A12adj + turnpoint_infos.angle1).AsBearing();
 
+// debug
+    std::fstream db_flag;
+    db_flag.open("/home/pfb/XCSoarData/TaskFileSeeYou", std::ios_base::in);
+    if (db_flag.is_open())
+      {
+      std::cout << "A12adj:  " << A12adj.AsBearing().Degrees() << std::endl
+                << "RadialStart: " << RadialStart.AsBearing().Degrees() << std::endl
+                << "RadialEnd:   " << RadialEnd.AsBearing().Degrees() << std::endl
+                << "radius1: " << turnpoint_infos.radius1 << std::endl
+                << "angle1:  " << turnpoint_infos.angle1.AsBearing().Degrees() << std::endl
+                << "radius2: " << turnpoint_infos.radius2 << std::endl
+                << "angle2:  " << turnpoint_infos.angle2.AsBearing().Degrees() << std::endl;
+      db_flag.close();
+      }
+// ~debug
+
+    /**
+     * TODO
+     * \todo Make a number of wimp and annular OZs and discover how CU
+     * differentiates the two.
+     */
     if (turnpoint_infos.radius2 > 0 &&
-        (turnpoint_infos.angle2.AsBearing().Degrees()) < 1) {
+        (turnpoint_infos.angle2.AsBearing().Degrees()) != 0) {
       oz = new AnnularSectorZone(wp->location,
                                  turnpoint_infos.radius1,
                                  RadialStart,
@@ -404,7 +430,6 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
                                     RadialStart,
                                     RadialEnd);
     }
-
   } else { // catch-all
     oz = new CylinderZone(wp->location, turnpoint_infos.radius1);
   }
