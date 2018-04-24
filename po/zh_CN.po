@@ -456,12 +456,12 @@ msgstr ""
 #: src/FLARM/Error.cpp:50
 #, no-c-format
 msgid "GPS communication"
-msgstr ""
+msgstr "GPS通讯"
 
 #: src/FLARM/Error.cpp:51
 #, no-c-format
 msgid "GPS configuration"
-msgstr ""
+msgstr "GPS配置"
 
 #: src/FLARM/Error.cpp:52
 #, no-c-format
@@ -476,7 +476,7 @@ msgstr ""
 #: src/FLARM/Error.cpp:54
 #, no-c-format
 msgid "Flash memory"
-msgstr ""
+msgstr "闪存"
 
 #: src/FLARM/Error.cpp:55
 #, no-c-format
@@ -501,7 +501,7 @@ msgstr ""
 #: src/FLARM/Error.cpp:60
 #, no-c-format
 msgid "Other"
-msgstr ""
+msgstr "其他"
 
 #: src/Logger/Logger.cpp:112 src/Dialogs/Device/ManageCAI302Dialog.cpp:69
 msgid "Start Logger"
