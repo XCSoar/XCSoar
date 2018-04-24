@@ -65,7 +65,7 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:37
 #, no-c-format
 msgid "Modified area task (MAT)"
-msgstr ""
+msgstr "修改区域任务（MAT）"
 
 #: src/Task/TypeStrings.cpp:38
 #, no-c-format
@@ -97,7 +97,7 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:56
 #, no-c-format
 msgid "FAI rules, path from start to a goal destination."
-msgstr ""
+msgstr "FAI规则，从开始到目的地的路径。"
 
 #: src/Task/TypeStrings.cpp:57
 #, no-c-format
@@ -456,12 +456,12 @@ msgstr ""
 #: src/FLARM/Error.cpp:50
 #, no-c-format
 msgid "GPS communication"
-msgstr ""
+msgstr "GPS通讯"
 
 #: src/FLARM/Error.cpp:51
 #, no-c-format
 msgid "GPS configuration"
-msgstr ""
+msgstr "GPS配置"
 
 #: src/FLARM/Error.cpp:52
 #, no-c-format
@@ -476,7 +476,7 @@ msgstr ""
 #: src/FLARM/Error.cpp:54
 #, no-c-format
 msgid "Flash memory"
-msgstr ""
+msgstr "闪存"
 
 #: src/FLARM/Error.cpp:55
 #, no-c-format
@@ -501,7 +501,7 @@ msgstr ""
 #: src/FLARM/Error.cpp:60
 #, no-c-format
 msgid "Other"
-msgstr ""
+msgstr "其他"
 
 #: src/Logger/Logger.cpp:112 src/Dialogs/Device/ManageCAI302Dialog.cpp:69
 msgid "Start Logger"
@@ -8166,23 +8166,23 @@ msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:179
 msgid "Clear All"
-msgstr ""
+msgstr "清除所有"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:354
 msgid "Clear all points?"
-msgstr ""
+msgstr "清除所有航点"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:354
 msgid "Task edit"
-msgstr ""
+msgstr "编辑任务"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:407
 msgid "Add Turnpoint"
-msgstr ""
+msgstr "增加转弯点"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:213
 msgid "Task type"
-msgstr ""
+msgstr "任务类型"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:213
 msgid "Sets the behaviour for the current task."
@@ -8221,11 +8221,11 @@ msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:66
 msgid "Task not saved"
-msgstr ""
+msgstr "任务未保存"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:81
 msgid "Create new task?"
-msgstr ""
+msgstr "创建新任务"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:81
 msgid "Task New"
@@ -8233,7 +8233,7 @@ msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:115
 msgid "New Task"
-msgstr ""
+msgstr "新任务"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:116
 msgid "Declare"
@@ -8245,11 +8245,11 @@ msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:100
 msgid "Load"
-msgstr ""
+msgstr "加载"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:101
 msgid "Rename"
-msgstr ""
+msgstr "重命名"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:103
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:343
@@ -8369,11 +8369,11 @@ msgstr ""
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:131
 msgid "max."
-msgstr ""
+msgstr "最大"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:135
 msgid "min."
-msgstr ""
+msgstr "最小"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:143
 msgid "dist."
@@ -8470,7 +8470,7 @@ msgstr ""
 
 #: src/Dialogs/Task/TargetDialog.cpp:463
 msgid "Optimized"
-msgstr ""
+msgstr "优化"
 
 #: src/Dialogs/Tracking/CloudEnableDialog.cpp:71
 msgid ""
@@ -8484,14 +8484,14 @@ msgstr ""
 
 #: src/Dialogs/TimeEntry.cpp:73 src/Dialogs/Weather/RASPDialog.cpp:131
 msgid "Now"
-msgstr ""
+msgstr "现在"
 
 #: src/Dialogs/Weather/WeatherDialog.cpp:43
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:336
 #: src/Weather/NOAAFormatter.cpp:198 Data/Input/default.xci:767
 #: Data/Input/default.xci:1166
 msgid "Weather"
-msgstr ""
+msgstr "天气"
 
 #: src/Dialogs/Weather/WeatherDialog.cpp:73
 #: src/Dialogs/Weather/NOAADetails.cpp:86
@@ -8509,7 +8509,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:70
 msgid "Audio vario"
-msgstr ""
+msgstr "高度表声音"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:71
 msgid "Emulate the sound of an electronic vario."
@@ -8575,12 +8575,12 @@ msgstr ""
 
 #: src/Dialogs/Weather/PCMetDialog.cpp:68
 msgid "Failed to download file."
-msgstr ""
+msgstr "下载文件失败"
 
 #: src/Dialogs/Weather/NOAAList.cpp:121 src/Dialogs/Weather/NOAADetails.cpp:72
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:227
 msgid "Update"
-msgstr ""
+msgstr "更新"
 
 #: src/Dialogs/Weather/NOAAList.cpp:181
 msgid "Airport ICAO code"
@@ -8607,11 +8607,11 @@ msgstr ""
 
 #: src/Monitor/AirspaceWarningMonitor.cpp:62
 msgid "Inside airspace"
-msgstr ""
+msgstr "进入空域"
 
 #: src/Monitor/AirspaceWarningMonitor.cpp:64
 msgid "Near airspace"
-msgstr ""
+msgstr "靠近空域"
 
 #: src/Monitor/TaskConstraintsMonitor.cpp:57
 msgid "Maximum start speed exceeded"
@@ -8631,7 +8631,7 @@ msgstr ""
 
 #: src/Monitor/MatTaskMonitor.cpp:55
 msgid "Add this turn point?"
-msgstr ""
+msgstr "增加这个转弯点"
 
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:225
 msgid "Use"
@@ -8831,7 +8831,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:91
 #, no-c-format
 msgid "Circling volume"
-msgstr ""
+msgstr "盘转音量"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:92
 #, no-c-format
@@ -8841,7 +8841,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:96
 #, no-c-format
 msgid "Cruise volume"
-msgstr ""
+msgstr "巡航音量"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:97
 #, no-c-format
@@ -8852,7 +8852,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:101
 #, no-c-format
 msgid "Base frequency"
-msgstr ""
+msgstr "基本频率"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:102
 #, no-c-format
@@ -8891,7 +8891,7 @@ msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:105
 msgid "Beep type"
-msgstr ""
+msgstr "哔哔声类型"
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:108
 msgid "Pitch scheme"
@@ -8984,7 +8984,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:48
 #, no-c-format
 msgid "Disable circling"
-msgstr ""
+msgstr "关闭盘转"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:50
 #, no-c-format
@@ -8994,17 +8994,17 @@ msgstr ""
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:52
 #, no-c-format
 msgid "No aircraft type"
-msgstr ""
+msgstr "无飞行器类型"
 
 #: src/Dialogs/Device/Vega/FlarmIdentificationParameters.hpp:52
 #, no-c-format
 msgid "Privacy"
-msgstr ""
+msgstr "隐私"
 
 #: src/Dialogs/Device/Vega/FlarmIdentificationParameters.hpp:54
 #, no-c-format
 msgid "Aircraft type"
-msgstr ""
+msgstr "飞行器类型"
 
 #: src/Dialogs/Device/Vega/FlarmRepeatParameters.hpp:33
 #, no-c-format
@@ -9044,7 +9044,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:58
 #, no-c-format
 msgid "Static port"
-msgstr ""
+msgstr "静态端口"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:58
 #, no-c-format
@@ -9054,7 +9054,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:61
 #, no-c-format
 msgid "Stall port"
-msgstr ""
+msgstr "失速端口"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:61
 #, no-c-format
@@ -9064,7 +9064,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:64
 #, no-c-format
 msgid "Accelerometer"
-msgstr ""
+msgstr "加速计"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:65
 #, no-c-format
@@ -9099,7 +9099,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:78
 #, no-c-format
 msgid "FLARM connected"
-msgstr ""
+msgstr "FLAM已连接"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:79
 #, no-c-format
@@ -9111,7 +9111,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:82
 #, no-c-format
 msgid "PDA power"
-msgstr ""
+msgstr "PDA电源"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:83
 #, no-c-format
@@ -9133,7 +9133,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:36
 #, no-c-format
 msgid "Height terrain"
-msgstr ""
+msgstr "地形高度"
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:38
 #, no-c-format
@@ -9153,7 +9153,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/LoggerParameters.hpp:37
 #, no-c-format
 msgid "IGC logging"
-msgstr ""
+msgstr "IGC记录中"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:32
 #, no-c-format
@@ -9168,12 +9168,12 @@ msgstr ""
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:34
 #, no-c-format
 msgid "Vario muting"
-msgstr ""
+msgstr "高度表静音"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:36
 #, no-c-format
 msgid "Voice muting"
-msgstr ""
+msgstr "静音"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:38
 #, no-c-format
@@ -9192,12 +9192,12 @@ msgstr ""
 
 #: Data/Input/default.xci:833 Data/Input/default.xci:1206
 msgid "Thermal Assistant"
-msgstr ""
+msgstr "热气流助理"
 
 #: Data/Input/default.xci:459 Data/Input/default.xci:943
 #: Data/Input/default.xci:1032
 msgid "Zoom"
-msgstr ""
+msgstr "缩放"
 
 #: Data/Input/default.xci:711
 msgid "Vario ASI zeroed"
@@ -9208,25 +9208,29 @@ msgid ""
 "Nearest\n"
 "Airspace"
 msgstr ""
+"最近的\n"
+"空域"
 
 #: Data/Input/default.xci:638 Data/Input/default.xci:1135
 msgid "Raw Logger"
-msgstr ""
+msgstr "原始记录器"
 
 #: Data/Input/default.xci:531 Data/Input/default.xci:581
 #: Data/Input/default.xci:623 Data/Input/default.xci:892
 msgid "Config"
-msgstr ""
+msgstr "配置"
 
 #: Data/Input/default.xci:380 Data/Input/default.xci:991
 msgid ""
 "Waypoint\n"
 "List"
 msgstr ""
+"航点\n"
+"表"
 
 #: Data/Input/default.xci:48
 msgid "Takeoff"
-msgstr ""
+msgstr "起飞"
 
 #: Data/Input/default.xci:679
 msgid ""
@@ -9255,7 +9259,7 @@ msgstr ""
 #: Data/Input/default.xci:350 Data/Input/default.xci:399
 #: Data/Input/default.xci:878
 msgid "Nav"
-msgstr ""
+msgstr "导航"
 
 #: Data/Input/default.xci:734
 msgid ""
@@ -9268,6 +9272,8 @@ msgid ""
 "Setup\n"
 "Stall"
 msgstr ""
+"设置\n"
+"失速"
 
 #: Data/Input/default.xci:719
 msgid ""
@@ -9280,6 +9286,8 @@ msgid ""
 "Flight\n"
 "Setup"
 msgstr ""
+"飞行\n"
+"设置"
 
 #: Data/Input/default.xci:473 Data/Input/default.xci:1049
 msgid ""
@@ -9296,6 +9304,8 @@ msgid ""
 "Settings\n"
 "Airspace"
 msgstr ""
+"设置\n"
+"空域"
 
 #: Data/Input/default.xci:417 Data/Input/default.xci:1042
 msgid ""
@@ -9331,11 +9341,11 @@ msgstr ""
 msgid ""
 "Setup\n"
 "Wind"
-msgstr ""
+msgstr "设置风"
 
 #: Data/Input/default.xci:727
 msgid "Store"
-msgstr ""
+msgstr "存储"
 
 #: Data/Input/default.xci:817
 msgid ""
@@ -9355,16 +9365,20 @@ msgid ""
 "Zoom\n"
 "In"
 msgstr ""
+"放\n"
+"大"
 
 #: Data/Input/default.xci:783 Data/Input/default.xci:1182
 msgid ""
 "Check\n"
 "list"
 msgstr ""
+"检查\n"
+"表"
 
 #: Data/Input/default.xci:492 Data/Input/default.xci:1057
 msgid "Labels"
-msgstr ""
+msgstr "标签"
 
 #: Data/Input/default.xci:414 Data/Input/default.xci:1039
 msgid "Dropped marker"
@@ -9376,6 +9390,8 @@ msgid ""
 "Zoom\n"
 "Out"
 msgstr ""
+"缩\n"
+"小"
 
 #: Data/Input/default.xci:1151
 msgid "Setup Plane"
@@ -9383,7 +9399,7 @@ msgstr ""
 
 #: Data/Input/default.xci:693
 msgid "Accel"
-msgstr ""
+msgstr "加速"
 
 #: Data/Input/default.xci:646
 msgid "Lua"
@@ -9395,31 +9411,37 @@ msgstr ""
 
 #: Data/Input/default.xci:69
 msgid "Final glide through terrain"
-msgstr ""
+msgstr "通过地形最后的滑翔"
 
 #: Data/Input/default.xci:653 Data/Input/default.xci:664
 #: Data/Input/default.xci:704
 msgid "Vega"
-msgstr ""
+msgstr "Vega"
 
 #: Data/Input/default.xci:867
 msgid ""
 "Message\n"
 "Repeat"
 msgstr ""
+"信息\n"
+"重复"
 
 #: Data/Input/default.xci:1112
 msgid ""
 "Setup\n"
 "System"
 msgstr ""
+"设置\n"
+"系统"
 
 #: Data/Input/default.xci:726
 msgid "Stored to EEPROM"
-msgstr ""
+msgstr "存储到EEPROM中"
 
 #: Data/Input/default.xci:741
 msgid ""
 "Climb\n"
 "Demo"
 msgstr ""
+"爬升\n"
+"演示"
