@@ -65,7 +65,7 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddFloat(_("Arrival height"),
            _("The height above terrain that the glider should arrive at for a safe landing."),
            _T("%.0f %s"), _T("%.0f"),
-           0, 1000, 10, false,
+           0, 2000, 10, false,
            UnitGroup::ALTITUDE, task_behaviour.safety_height_arrival);
 
   AddFloat(_("Terrain height"),
