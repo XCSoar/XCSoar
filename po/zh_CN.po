@@ -11,7 +11,7 @@ msgstr ""
 "PO-Revision-Date: 2016-02-22 15:34+0000\n"
 "Last-Translator: Wang Zhe <216188@qq.com>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
-"Language: \n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1001,6 +1001,8 @@ msgid ""
 "indicate climbing cruise. If the vertical speed is close to zero, the "
 "displayed value is '---'."
 msgstr ""
+"在地面上的瞬时滑翔比，由地面速度除以过去20秒内的垂直速度（GPS速度）。"
+"负值表示爬升巡航。如果垂直速度接近于零，显示值是‘---’。"
 
 #: src/InfoBoxes/Content/Factory.cpp:177
 #, no-c-format
@@ -1020,6 +1022,9 @@ msgid ""
 "(height gain since leaving the last thermal). If the vertical speed is close "
 "to zero, the displayed value is '---'."
 msgstr ""
+"距离最后一次热气流顶端的距离，除以自从最后一个热 气流顶部的高度损失。"
+"负值表示爬升巡航（离开最后一次热气流后的获得高度）。"
+"如果垂直速度接近到0，显示的值是‘---’。"
 
 #: src/InfoBoxes/Content/Factory.cpp:185
 #, no-c-format
@@ -1038,6 +1043,8 @@ msgid ""
 "mode, pressing the up and down arrows adjusts the speed, and left and right "
 "turn the glider."
 msgstr ""
+"地速由GPS测量。如果这个信息框在模拟中是活跃的模式，"
+"按上下箭头调整速度，左右移动转动滑翔机。"
 
 #: src/InfoBoxes/Content/Factory.cpp:193
 #, no-c-format
@@ -1055,6 +1062,7 @@ msgid ""
 "Total altitude gain/loss in the last thermal divided by the time spent "
 "circling."
 msgstr ""
+"最后一次热气流的总高度增益/损失除以盘旋所花费的时间"
 
 #: src/InfoBoxes/Content/Factory.cpp:201
 #, no-c-format
@@ -1069,32 +1077,32 @@ msgstr "上一热气流获取高度"
 #: src/InfoBoxes/Content/Factory.cpp:203
 #, no-c-format
 msgid "Total altitude gain/loss in the last thermal."
-msgstr ""
+msgstr "在最后一次热气流中的总高度增益/损耗。"
 
 #: src/InfoBoxes/Content/Factory.cpp:209
 #, no-c-format
 msgid "Last thermal duration"
-msgstr ""
+msgstr "上一热气流持续时间"
 
 #: src/InfoBoxes/Content/Factory.cpp:210
 #, no-c-format
 msgid "TL duration"
-msgstr ""
+msgstr "上一热气流持续时间"
 
 #: src/InfoBoxes/Content/Factory.cpp:211
 #, no-c-format
 msgid "Time spent circling in the last thermal."
-msgstr ""
+msgstr "上一热气流盘转所花时间"
 
 #: src/InfoBoxes/Content/Factory.cpp:217
 #, no-c-format
 msgid "MacCready setting"
-msgstr ""
+msgstr "MacCready设置"
 
 #: src/InfoBoxes/Content/Factory.cpp:218
 #, no-c-format
 msgid "MC"
-msgstr ""
+msgstr "MacCready"
 
 #: src/InfoBoxes/Content/Factory.cpp:219
 #, no-c-format
@@ -1103,16 +1111,18 @@ msgid ""
 "auto). (Touch-screen/PC only) Also used to adjust the MacCready setting if "
 "the InfoBox is active, by using the up/down cursor keys."
 msgstr ""
+"当前MacCready设置和当前MacCready模式（手动或自动)。"
+"如果信息框是活跃的，使用上/下光标键（触摸屏/仅PC）也用于调整MacCready设置，"
 
 #: src/InfoBoxes/Content/Factory.cpp:225
 #, no-c-format
 msgid "Next distance"
-msgstr ""
+msgstr "下一目标距离"
 
 #: src/InfoBoxes/Content/Factory.cpp:226 src/InfoBoxes/Content/Task.cpp:182
 #, no-c-format
 msgid "WP Dist"
-msgstr ""
+msgstr "航点距离"
 
 #: src/InfoBoxes/Content/Factory.cpp:227
 #, no-c-format
@@ -1120,16 +1130,18 @@ msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the target within the AAT sector."
 msgstr ""
+"与当前选定航点的距离。对于AAT任务，"
+"这是AAT扇区内目标的距离。"
 
 #: src/InfoBoxes/Content/Factory.cpp:234
 #, no-c-format
 msgid "Next altitude difference"
-msgstr ""
+msgstr "下一目标高度差"
 
 #: src/InfoBoxes/Content/Factory.cpp:235
 #, no-c-format
 msgid "WP AltD"
-msgstr ""
+msgstr "航点高差"
 
 #: src/InfoBoxes/Content/Factory.cpp:236
 #, no-c-format
@@ -1137,16 +1149,18 @@ msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival height. "
 "For AAT tasks, the target within the AAT sector is used."
 msgstr ""
+"相对安全抵达高度到达下一个航点的高度。"
+"对于AAT任务，使用AAT扇区内的目标。"
 
 #: src/InfoBoxes/Content/Factory.cpp:243
 #, no-c-format
 msgid "Next altitude required"
-msgstr ""
+msgstr "抵达下一目标所需高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:244
 #, no-c-format
 msgid "WP AltR"
-msgstr ""
+msgstr "抵达下一航点所需高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:245
 #, no-c-format
@@ -1154,16 +1168,18 @@ msgid ""
 "Additional altitude required to reach the next turn point. For AAT tasks, "
 "the target within the AAT sector is used."
 msgstr ""
+"到达下一个转弯点所需的附加高度。"
+"对于AAT任务，使用AAT扇区内的目标。"
 
 #: src/InfoBoxes/Content/Factory.cpp:252
 #, no-c-format
 msgid "Next waypoint"
-msgstr ""
+msgstr "下一航点"
 
 #: src/InfoBoxes/Content/Factory.cpp:253
 #, no-c-format
 msgid "Next WP"
-msgstr ""
+msgstr "下一航点"
 
 #: src/InfoBoxes/Content/Factory.cpp:254
 #, no-c-format
@@ -1173,16 +1189,19 @@ msgid ""
 "task. (Touch-screen/PC only) Pressing the enter cursor key brings up the "
 "waypoint details."
 msgstr ""
+"当前选定的转弯点的名称。当这个信息框活跃时，"
+"使用上/下游标键选择任务的下一个/上一个的航点。"
+"（触摸屏/仅PC）按下输入光标键提出航点详情"
 
 #: src/InfoBoxes/Content/Factory.cpp:260
 #, no-c-format
 msgid "Final altitude difference"
-msgstr ""
+msgstr "最终滑翔高度差"
 
 #: src/InfoBoxes/Content/Factory.cpp:261
 #, no-c-format
 msgid "Fin AltD"
-msgstr ""
+msgstr "最终滑翔高度差"
 
 #: src/InfoBoxes/Content/Factory.cpp:262
 #, no-c-format
@@ -1190,31 +1209,32 @@ msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
 "height."
 msgstr ""
+"相对于安全到达的高度到达任务的最后转弯点的高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:268
 #, no-c-format
 msgid "Final altitude required"
-msgstr ""
+msgstr "最终滑翔所需高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:269
 #, no-c-format
 msgid "Fin AltR"
-msgstr ""
+msgstr "最终滑翔所需高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:270
 #, no-c-format
 msgid "Additional altitude required to finish the task."
-msgstr ""
+msgstr "完成任务所需的附加高度。"
 
 #: src/InfoBoxes/Content/Factory.cpp:276
 #, no-c-format
 msgid "Speed task average"
-msgstr ""
+msgstr "任务平均速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:277
 #, no-c-format
 msgid "V Task Avg"
-msgstr ""
+msgstr "任务平均速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:278
 #, no-c-format
@@ -1222,31 +1242,32 @@ msgid ""
 "Average cross country speed while on current task, not compensated for "
 "altitude."
 msgstr ""
+"当前任务的平均越野速度，未补偿高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:284
 #, no-c-format
 msgid "Final distance"
-msgstr ""
+msgstr "终点距离"
 
 #: src/InfoBoxes/Content/Factory.cpp:285
 #, no-c-format
 msgid "Fin Dist"
-msgstr ""
+msgstr "终点距离"
 
 #: src/InfoBoxes/Content/Factory.cpp:286
 #, no-c-format
 msgid "Distance to finish around remaining turn points."
-msgstr ""
+msgstr "完成在剩余转弯点的距离。"
 
 #: src/InfoBoxes/Content/Factory.cpp:300
 #, no-c-format
 msgid "Terrain elevation"
-msgstr ""
+msgstr "地形高程"
 
 #: src/InfoBoxes/Content/Factory.cpp:301
 #, no-c-format
 msgid "Terr Elev"
-msgstr ""
+msgstr "地形高程"
 
 #: src/InfoBoxes/Content/Factory.cpp:302
 #, no-c-format
@@ -1254,16 +1275,17 @@ msgid ""
 "This is the elevation of the terrain above mean sea level, obtained from the "
 "terrain file at the current GPS location."
 msgstr ""
+"这是高于平均海面的地形高程，从当前GPS位置处地形文件中获得。"
 
 #: src/InfoBoxes/Content/Factory.cpp:308
 #, no-c-format
 msgid "Thermal average"
-msgstr ""
+msgstr "热气流平均值"
 
 #: src/InfoBoxes/Content/Factory.cpp:309
 #, no-c-format
 msgid "TC Avg"
-msgstr ""
+msgstr "热气流平均值"
 
 #: src/InfoBoxes/Content/Factory.cpp:310
 #, no-c-format
@@ -1271,27 +1293,28 @@ msgid ""
 "Altitude gained/lost in the current thermal, divided by time spent "
 "thermalling."
 msgstr ""
+"在当前热气流中获得/损失的高度，除以在热气流中的耗时。"
 
 #: src/InfoBoxes/Content/Factory.cpp:316
 #, no-c-format
 msgid "Thermal gain"
-msgstr ""
+msgstr "热气流获得高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:317
 #, no-c-format
 msgid "TC Gain"
-msgstr ""
+msgstr "热气流获得高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:318
 #, no-c-format
 msgid "The altitude gained/lost in the current thermal."
-msgstr ""
+msgstr "在当前热气流中获得/损失的高度。"
 
 #: src/InfoBoxes/Content/Factory.cpp:324 src/InfoBoxes/Content/Factory.cpp:325
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:59
 #, no-c-format
 msgid "Track"
-msgstr ""
+msgstr "轨迹"
 
 #: src/InfoBoxes/Content/Factory.cpp:326
 #, no-c-format
@@ -1300,6 +1323,8 @@ msgid ""
 "is active in simulation mode, pressing the up and down  arrows adjusts the "
 "track."
 msgstr ""
+"由GPS生成的轨迹。（触摸屏/仅PC）如果这个信息框"
+"在模拟模式下激活，按上下箭头调整轨迹。"
 
 #: src/InfoBoxes/Content/Factory.cpp:334
 #, no-c-format
@@ -1307,16 +1332,17 @@ msgid ""
 "Instantaneous vertical speed, as reported by the GPS, or the intelligent "
 "vario total energy vario value if connected to one."
 msgstr ""
+"瞬时垂直速度，如GPS报告的，如果连接一个智能高度表是总能量的值。"
 
 #: src/InfoBoxes/Content/Factory.cpp:340
 #, no-c-format
 msgid "Wind speed"
-msgstr ""
+msgstr "风速"
 
 #: src/InfoBoxes/Content/Factory.cpp:341
 #, no-c-format
 msgid "Wind V"
-msgstr ""
+msgstr "风速"
 
 #: src/InfoBoxes/Content/Factory.cpp:342 src/InfoBoxes/Content/Factory.cpp:939
 #, no-c-format
@@ -1325,16 +1351,18 @@ msgid ""
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
 msgstr ""
+"风速由XCSOAR估算。可以手动调整信息对话框。"
+"通过按上/下光标键循环设置，用左/右光标键调整值。"
 
 #: src/InfoBoxes/Content/Factory.cpp:349
 #, no-c-format
 msgid "Wind bearing"
-msgstr ""
+msgstr "风向"
 
 #: src/InfoBoxes/Content/Factory.cpp:350
 #, no-c-format
 msgid "Wind Brng"
-msgstr ""
+msgstr "风向"
 
 #: src/InfoBoxes/Content/Factory.cpp:351
 #, no-c-format
@@ -1343,62 +1371,65 @@ msgid ""
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
 msgstr ""
+"由XCSOAR估算的风向。可以手动调整信息对话框。"
+"通过按上/下光标键循环设置，用左/右光标键调整值。"
 
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
 msgid "AAT time"
-msgstr ""
+msgstr "指定区域任务剩余时间"
 
 #: src/InfoBoxes/Content/Factory.cpp:359
 #, no-c-format
 msgid "AAT Time"
-msgstr ""
+msgstr "指定区域任务剩余时间"
 
 #: src/InfoBoxes/Content/Factory.cpp:360
 #, no-c-format
 msgid ""
 "Assigned Area Task time remaining. Goes red when time remaining has expired."
 msgstr ""
+"指定区域任务剩余时间。剩余时间过期时变红。"
 
 #: src/InfoBoxes/Content/Factory.cpp:366
 #, no-c-format
 msgid "AAT max. distance "
-msgstr ""
+msgstr "指定区域任务最大距离"
 
 #: src/InfoBoxes/Content/Factory.cpp:367
 #, no-c-format
 msgid "AAT Dmax"
-msgstr ""
+msgstr "指定区域任务最大距离"
 
 #: src/InfoBoxes/Content/Factory.cpp:368
 #, no-c-format
 msgid "Assigned Area Task maximum distance possible for remainder of task."
-msgstr ""
+msgstr "指定区域剩余任务的最大可能距离"
 
 #: src/InfoBoxes/Content/Factory.cpp:374
 #, no-c-format
 msgid "AAT min. distance"
-msgstr ""
+msgstr "指定区域任务最小距离"
 
 #: src/InfoBoxes/Content/Factory.cpp:375
 #, no-c-format
 msgid "AAT Dmin"
-msgstr ""
+msgstr "指定区域任务最小距离"
 
 #: src/InfoBoxes/Content/Factory.cpp:376
 #, no-c-format
 msgid "Assigned Area Task minimum distance possible for remainder of task."
-msgstr ""
+msgstr "指定区域剩余任务的最小可能距离"
 
 #: src/InfoBoxes/Content/Factory.cpp:382
 #, no-c-format
 msgid "AAT speed max. distance"
-msgstr ""
+msgstr "指定区域任务飞最大距离的速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:383
 #, no-c-format
 msgid "AAT Vmax"
-msgstr ""
+msgstr "指定区域任务飞最大距离的速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:384
 #, no-c-format
@@ -1406,16 +1437,17 @@ msgid ""
 "Assigned Area Task average speed achievable if flying maximum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
+"如果在指定区域剩余最小完成时间下可完成飞行的最大可能距离的平均速度。"
 
 #: src/InfoBoxes/Content/Factory.cpp:390
 #, no-c-format
 msgid "AAT speed min. distance"
-msgstr ""
+msgstr "如果在指定区域剩余最小完成时间下可完成飞行的最大可能距离的平均速度。"
 
 #: src/InfoBoxes/Content/Factory.cpp:391
 #, no-c-format
 msgid "AAT Vmin"
-msgstr ""
+msgstr "指定区域任务最小速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:392
 #, no-c-format
@@ -1423,32 +1455,33 @@ msgid ""
 "Assigned Area Task average speed achievable if flying minimum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
+"如果在剩余最小AAT时间飞行最小可能距离的指定区域任务平均速度。"
 
 #: src/InfoBoxes/Content/Factory.cpp:398
 #, no-c-format
 msgid "Airspeed IAS"
-msgstr ""
+msgstr "指示空速"
 
 #: src/InfoBoxes/Content/Factory.cpp:399
 #, no-c-format
 msgid "V IAS"
-msgstr ""
+msgstr "指示空速"
 
 #: src/InfoBoxes/Content/Factory.cpp:400
 #, no-c-format
 msgid "Indicated Airspeed reported by a supported external intelligent vario."
-msgstr ""
+msgstr "由支持的外部智能高度表报告的指示空速"
 
 #: src/InfoBoxes/Content/Factory.cpp:406
 #, no-c-format
 msgid "Barometric altitude"
-msgstr ""
+msgstr "气压高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:407
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:84
 #, no-c-format
 msgid "Alt Baro"
-msgstr ""
+msgstr "气压高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:408
 #, no-c-format
@@ -1456,16 +1489,17 @@ msgid ""
 "This is the barometric altitude obtained from a device equipped with a "
 "pressure sensor."
 msgstr ""
+"这是由一个装备有压力传感器的装置获得的气压高度。"
 
 #: src/InfoBoxes/Content/Factory.cpp:415
 #, no-c-format
 msgid "Speed MacCready"
-msgstr ""
+msgstr "MacCready速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:416
 #, no-c-format
 msgid "V MC"
-msgstr ""
+msgstr "MacCready速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:417
 #, no-c-format
@@ -1474,16 +1508,19 @@ msgid ""
 "cruise flight mode, this speed-to-fly is calculated for maintaining "
 "altitude. In final glide mode, this speed-to-fly is calculated for descent."
 msgstr ""
+"MacCready是到下一个航点的最佳飞行速度。在巡航飞行模式，"
+"这个计算出来的飞行速度是为了维持高度。"
+"在最后的滑翔模式中，这个飞行速度是为下降而计算的。"
 
 #: src/InfoBoxes/Content/Factory.cpp:423
 #, no-c-format
 msgid "Percentage climb"
-msgstr ""
+msgstr "爬升百分率"
 
 #: src/InfoBoxes/Content/Factory.cpp:424
 #, no-c-format
 msgid "% Climb"
-msgstr ""
+msgstr "爬升百分率"
 
 #: src/InfoBoxes/Content/Factory.cpp:425
 #, no-c-format
@@ -1491,31 +1528,32 @@ msgid ""
 "Percentage of time spent in climb mode. These statistics are reset upon "
 "starting the task."
 msgstr ""
+"爬升模式花费的时间百分比。这些统计数据在任务开始时重置。"
 
 #: src/InfoBoxes/Content/Factory.cpp:431
 #, no-c-format
 msgid "Flight duration"
-msgstr ""
+msgstr "飞行时间"
 
 #: src/InfoBoxes/Content/Factory.cpp:432
 #, no-c-format
 msgid "Flt Duration"
-msgstr ""
+msgstr "飞行时间"
 
 #: src/InfoBoxes/Content/Factory.cpp:433
 #, no-c-format
 msgid "Time elapsed since takeoff was detected."
-msgstr ""
+msgstr "从起飞后被检测到的时间。"
 
 #: src/InfoBoxes/Content/Factory.cpp:439
 #, no-c-format
 msgid "G load"
-msgstr ""
+msgstr "重力过载"
 
 #: src/InfoBoxes/Content/Factory.cpp:440
 #, no-c-format
 msgid "G"
-msgstr ""
+msgstr "重力"
 
 #: src/InfoBoxes/Content/Factory.cpp:441
 #, no-c-format
@@ -1527,12 +1565,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:447
 #, no-c-format
 msgid "Next GR"
-msgstr ""
+msgstr "下一目标滑翔比"
 
 #: src/InfoBoxes/Content/Factory.cpp:448
 #, no-c-format
 msgid "WP GR"
-msgstr ""
+msgstr "航点滑翔比"
 
 #: src/InfoBoxes/Content/Factory.cpp:449
 #, no-c-format
@@ -1541,36 +1579,37 @@ msgid ""
 "the distance to next waypoint divided by the height required to arrive at "
 "the safety arrival height."
 msgstr ""
+"到达下一个航点所需的比，由到下一个航点的距离除以到达所需的安全到达高度。"
 
 #: src/InfoBoxes/Content/Factory.cpp:456
 #, no-c-format
 msgid "Time local"
-msgstr ""
+msgstr "当地时间"
 
 #: src/InfoBoxes/Content/Factory.cpp:457
 #, no-c-format
 msgid "Time loc"
-msgstr ""
+msgstr "当地时间"
 
 #: src/InfoBoxes/Content/Factory.cpp:458
 #, no-c-format
 msgid "GPS time expressed in local time zone."
-msgstr ""
+msgstr "在本地时区显示的GPS时间。"
 
 #: src/InfoBoxes/Content/Factory.cpp:464 src/InfoBoxes/Content/Factory.cpp:465
 #, no-c-format
 msgid "Time UTC"
-msgstr ""
+msgstr "世界协调时"
 
 #: src/InfoBoxes/Content/Factory.cpp:466
 #, no-c-format
 msgid "GPS time expressed in UTC."
-msgstr ""
+msgstr "在世界协调时显示的GPS时间"
 
 #: src/InfoBoxes/Content/Factory.cpp:472
 #, no-c-format
 msgid "Task time to go"
-msgstr ""
+msgstr "任务时间到"
 
 #: src/InfoBoxes/Content/Factory.cpp:473
 #, no-c-format
