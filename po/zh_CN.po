@@ -4723,7 +4723,7 @@ msgstr ""
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:72
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:156
 msgid "Trail drift"
-msgstr ""
+msgstr "尾迹漂移"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:73
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:157
@@ -4732,35 +4732,37 @@ msgid ""
 "in circling mode. Switched Off, the snail trail stays uncompensated for wind "
 "drift."
 msgstr ""
+"确定踪迹显示时是否随风漂移"
+"在盘旋模式下。关闭，踪迹不被补偿风漂移。"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:83
 msgid "Source"
-msgstr ""
+msgstr "来源"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:86
 msgid "Manual adjustment of wind speed."
-msgstr ""
+msgstr "手动调节风速。"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:98
 msgid "Manual adjustment of wind direction."
-msgstr ""
+msgstr "手动调节风向。"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:217
 msgid "External"
-msgstr ""
+msgstr "外部的"
 
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:35
 msgid "Wind Settings"
-msgstr ""
+msgstr "设置风"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:141
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:367
 msgid "Dump"
-msgstr ""
+msgstr "转储"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:282
 msgid "Ballast"
-msgstr ""
+msgstr "配重"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:283
 msgid ""
@@ -4769,10 +4771,12 @@ msgid ""
 "75kg).  Press ENTER on this field to toggle count-down of the ballast volume "
 "according to the dump rate specified in the configuration settings."
 msgstr ""
+"滑翔机的配重。如果飞行员/驾驶舱负荷大于滑翔机极曲线参考重量，则增加这个值。"
+"（通常为75公斤）。滑翔机的镇流器。如果飞行员/驾驶舱负荷增加，则增加这个值。"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:295
 msgid "Bugs"
-msgstr ""
+msgstr "虫子"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:296
 #, no-c-format
@@ -4780,262 +4784,266 @@ msgid ""
 "How clean the glider is. Set to 0% for clean, larger numbers as the wings "
 "pick up bugs or gets wet.  50% indicates the glider's sink rate is doubled."
 msgstr ""
+"滑翔机干净程度！设置0%为清洁，机翼有虫子货淋湿设置更大数字。"
+"50%表示滑翔机的下沉率增加了一倍。"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:320
 msgid "Max. temp."
-msgstr ""
+msgstr "最高温度"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:321
 msgid ""
 "Set to forecast ground temperature.  Used by convection estimator "
 "(temperature trace page of Analysis dialog)"
 msgstr ""
+"设定为预报地温。对流估算器使用"
+"(温度跟踪页的分析对话框）"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:361
 msgid "Flight Setup"
-msgstr ""
+msgstr "飞行设置"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:94
 #: src/Dialogs/Settings/dlgConfiguration.cpp:160
 #, no-c-format
 msgid "Site Files"
-msgstr ""
+msgstr "场地文件"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:99
 #, no-c-format
 msgid "Orientation"
-msgstr ""
+msgstr "方向"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:100
 #, no-c-format
 msgid "Elements"
-msgstr ""
+msgstr "元素"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:108
 #, no-c-format
 msgid "Safety Factors"
-msgstr ""
+msgstr "安全因素"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:109
 #: src/Dialogs/Settings/dlgConfiguration.cpp:162
 #, no-c-format
 msgid "Glide Computer"
-msgstr ""
+msgstr "滑翔计算机"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:111
 #, no-c-format
 msgid "Route"
-msgstr ""
+msgstr "路线"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:112
 #, no-c-format
 msgid "Scoring"
-msgstr ""
+msgstr "得分"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:117
 #, no-c-format
 msgid "FLARM, Other"
-msgstr ""
+msgstr "FLARM, 其它"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:120
 #, no-c-format
 msgid "Audio Vario"
-msgstr ""
+msgstr "高度表音频"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:126
 #, no-c-format
 msgid "Task Rules"
-msgstr ""
+msgstr "任务规则"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:127
 #, no-c-format
 msgid "Turnpoint Types"
-msgstr ""
+msgstr "转弯点类型"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:132
 #, no-c-format
 msgid "Language, Input"
-msgstr ""
+msgstr "语言，输入"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:133
 #, no-c-format
 msgid "Screen Layout"
-msgstr ""
+msgstr "屏幕布局"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:134
 #, no-c-format
 msgid "Pages"
-msgstr ""
+msgstr "页"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:135
 #, no-c-format
 msgid "InfoBox Sets"
-msgstr ""
+msgstr "信息框设置"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:140
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:134
 #: Data/Input/default.xci:631 Data/Input/default.xci:1128
 #, no-c-format
 msgid "Logger"
-msgstr ""
+msgstr "记录器"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:147
 #, no-c-format
 msgid "Tracking"
-msgstr ""
+msgstr "跟踪"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:154
 #, no-c-format
 msgid "Audio"
-msgstr ""
+msgstr "音频"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:161
 #, no-c-format
 msgid "Map Display"
-msgstr ""
+msgstr "地图显示"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:163
 #, no-c-format
 msgid "Gauges"
-msgstr ""
+msgstr "规格"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:164
 #, no-c-format
 msgid "Task Defaults"
-msgstr ""
+msgstr "缺省任务"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:165
 #, no-c-format
 msgid "Look"
-msgstr ""
+msgstr "看"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:229
 msgid "Expert"
-msgstr ""
+msgstr "专家"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:337
 #: src/Dialogs/Settings/dlgConfiguration.cpp:368
 msgid "Configuration"
-msgstr ""
+msgstr "配置"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:385
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
-msgstr ""
+msgstr "保存更改配置。重新启动XCSOAR以应用更改。"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:276
 msgid "Content"
-msgstr ""
+msgstr "内容"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:286
 #: src/Dialogs/ProfileListDialog.cpp:190
 msgid "Copy"
-msgstr ""
+msgstr "复制"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:288
 msgid "Paste"
-msgstr ""
+msgstr "粘贴"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:353
 msgid "Overwrite?"
-msgstr ""
+msgstr "重写？"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:353
 msgid "InfoBox paste"
-msgstr ""
+msgstr "信息框粘贴"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:422
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:116
 msgid "Invalid"
-msgstr ""
+msgstr "无效"
 
 #: src/Dialogs/Traffic/TrafficList.cpp:340
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:330
 msgid "Competition ID"
-msgstr ""
+msgstr "竞赛ID"
 
 #: src/Dialogs/Traffic/TrafficList.cpp:359
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:165
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:334
 #, no-c-format
 msgid "Map"
-msgstr ""
+msgstr "地图"
 
 #: src/Dialogs/Traffic/TrafficList.cpp:781
 msgid "Traffic"
-msgstr ""
+msgstr "交通"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:138
 msgid "Team"
-msgstr ""
+msgstr "团队"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:145
 msgid "Callsign"
-msgstr ""
+msgstr "呼号"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:146
 msgid "Change callsign"
-msgstr ""
+msgstr "更改呼号"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:152
 msgid "Pilot"
-msgstr ""
+msgstr "飞行员"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:153
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:70
 #, no-c-format
 msgid "Airport"
-msgstr ""
+msgstr "机场"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:154
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:113
 msgid "Radio frequency"
-msgstr ""
+msgstr "无线电频率"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:155 Data/Input/default.xci:547
 msgid "Plane"
-msgstr ""
+msgstr "飞机"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:243
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:390
 msgid "FLARM Traffic Details"
-msgstr ""
+msgstr "FLARM交通细节"
 
 #. Ask for confirmation
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:312
 msgid "Do you want to set this FLARM contact as your new teammate?"
-msgstr ""
+msgstr "你想设置这个FLARM联系人作为你的新队友吗？"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:313
 msgid "New Teammate"
-msgstr ""
+msgstr "新队友"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:92
 msgid "Set code"
-msgstr ""
+msgstr "设置代码"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:93
 msgid "Set WP"
-msgstr ""
+msgstr "设置航点"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:94
 msgid "Flarm Lock"
-msgstr ""
+msgstr "Flarm锁定"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:101
 msgid "Own code"
-msgstr ""
+msgstr "自身代码"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:102
 msgid "Mate code"
-msgstr ""
+msgstr "配对代码"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:105
 msgid "Rel. bearing"
-msgstr ""
+msgstr "相对方向"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:106
 msgid "Flarm lock"
-msgstr ""
+msgstr "Flarm锁定"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:214
 msgid "Unknown Competition Number"
