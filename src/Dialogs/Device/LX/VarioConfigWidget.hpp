@@ -21,14 +21,30 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MANAGE_V7_DIALOG_HPP
-#define XCSOAR_MANAGE_V7_DIALOG_HPP
+#ifndef XCSOAR_VARIO_CONFIG_WIDGET_HPP
+#define XCSOAR_VARIO_CONFIG_WIDGET_HPP
 
-class Device;
-struct DeviceInfo;
+#include "Widget/RowFormWidget.hpp"
 
-void
-ManageV7Dialog(Device &device, const DeviceInfo &info,
-               const DeviceInfo &secondary_info);
+class LXDevice;
+
+class VarioConfigWidget final : public RowFormWidget {
+  enum Controls {
+    BRGPS,
+    BRPDA
+  };
+
+  LXDevice &device;
+
+  unsigned brgps, brpda;
+
+public:
+  VarioConfigWidget(const DialogLook &look, LXDevice &_device)
+    :RowFormWidget(look), device(_device) {}
+
+  /* virtual methods from Widget */
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed) override;
+};
 
 #endif

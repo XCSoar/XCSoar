@@ -194,7 +194,7 @@ LXWP3(NMEAInputLine &line, NMEAInfo &info)
 }
 
 /**
- * Parse the $PLXV0 sentence (LXNav V7).
+ * Parse the $PLXV0 sentence (LXNAV sVarios (including V7)).
  */
 static bool
 PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings)
@@ -218,7 +218,7 @@ PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings)
 }
 
 static void
-ParseNanoInfo(NMEAInputLine &line, DeviceInfo &device)
+ParseNanoVarioInfo(NMEAInputLine &line, DeviceInfo &device)
 {
   ReadString(line, device.product);
   ReadString(line, device.software_version);
@@ -227,7 +227,7 @@ ParseNanoInfo(NMEAInputLine &line, DeviceInfo &device)
 }
 
 /**
- * Parse the $PLXVC sentence (LXNAV Nano).
+ * Parse the $PLXVC sentence (LXNAV Nano and sVarios).
  *
  * $PLXVC,<key>,<type>,<values>*<checksum><cr><lf>
  */
@@ -252,7 +252,7 @@ PLXVC(NMEAInputLine &line, DeviceInfo &device,
       settings.Unlock();
     }
   } else if (StringIsEqual(key, "INFO") && type[0] == 'A') {
-    ParseNanoInfo(line, device);
+    ParseNanoVarioInfo(line, device);
   } else if (StringIsEqual(key, "GPSINFO") && type[0] == 'A') {
     /* the LXNAV V7 (firmware >= 2.01) forwards the Nano's INFO
        sentence with the "GPS" prefix */
@@ -265,13 +265,13 @@ PLXVC(NMEAInputLine &line, DeviceInfo &device,
     } else if (StringIsEqual(name, "INFO")) {
       line.Read(type, ARRAY_SIZE(type));
       if (type[0] == 'A')
-        ParseNanoInfo(line, secondary_device);
+        ParseNanoVarioInfo(line, secondary_device);
     }
   }
 }
 
 /**
- * Parse the $PLXVF sentence (LXNav V7).
+ * Parse the $PLXVF sentence (LXNAV sVarios (including V7)).
  *
  * $PLXVF,time ,AccX,AccY,AccZ,Vario,IAS,PressAlt*CS<CR><LF>
  *
@@ -303,7 +303,7 @@ PLXVF(NMEAInputLine &line, NMEAInfo &info)
 }
 
 /**
- * Parse the $PLXVS sentence (LXNav V7).
+ * Parse the $PLXVS sentence (LXNAV sVarios (including V7)).
  *
  * $PLXVS,OAT,mode,voltage *CS<CR><LF>
  *
@@ -359,9 +359,11 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
       : info.device;
     LXWP1(line, device_info);
 
+    const bool saw_sVario = device_info.product.equals("NINC");
     const bool saw_v7 = device_info.product.equals("V7");
     const bool saw_nano = device_info.product.equals("NANO") ||
-                            device_info.product.equals("NANO3");
+                            device_info.product.equals("NANO3") ||
+                            device_info.product.equals("NANO4");
     const bool saw_lx16xx = device_info.product.equals("1606") ||
                              device_info.product.equals("1600");
 
@@ -370,16 +372,18 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
          because the V7 is still there, even though it's "hidden"
          currently */
       is_v7 |= saw_v7;
+      is_sVario |= saw_sVario;
       is_nano |= saw_nano;
       is_lx16xx |= saw_lx16xx;
       is_forwarded_nano = saw_nano;
     } else {
       is_v7 = saw_v7;
+      is_sVario = saw_sVario;
       is_nano = saw_nano;
       is_lx16xx = saw_lx16xx;
     }
 
-    if (saw_v7 || saw_nano || saw_lx16xx)
+    if (saw_v7 || saw_nano || saw_lx16xx || saw_sVario)
       is_colibri = false;
 
     return true;
@@ -392,28 +396,28 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
     return LXWP3(line, info);
 
   if (StringIsEqual(type, "$PLXV0")) {
-    is_v7 = true;
     is_colibri = false;
-    return PLXV0(line, v7_settings);
+    return PLXV0(line, vario_settings);
   }
 
   if (StringIsEqual(type, "$PLXVC")) {
-    is_nano = true;
     is_colibri = false;
     PLXVC(line, info.device, info.secondary_device, nano_settings);
     is_forwarded_nano = info.secondary_device.product.equals("NANO") ||
-                          info.secondary_device.product.equals("NANO3");
+                          info.secondary_device.product.equals("NANO3")||
+                          info.secondary_device.product.equals("NANO4");
+
+    LXDevice::IdDeviceByName(info.device.product);
+
     return true;
   }
 
   if (StringIsEqual(type, "$PLXVF")) {
-    is_v7 = true;
     is_colibri = false;
     return PLXVF(line, info);
   }
 
   if (StringIsEqual(type, "$PLXVS")) {
-    is_v7 = true;
     is_colibri = false;
     return PLXVS(line, info);
   }

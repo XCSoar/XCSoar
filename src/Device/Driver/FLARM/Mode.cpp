@@ -70,7 +70,7 @@ FlarmDevice::EnableNMEA(OperationEnvironment &env)
 bool
 FlarmDevice::BinaryMode(OperationEnvironment &env)
 {
-  if (mode == Mode::BINARY)
+  if (BinaryPing(env, 500))
     return true;
 
   port.StopRxThread();

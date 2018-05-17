@@ -25,20 +25,20 @@ Copyright_License {
 #include "Device/Port/Port.hpp"
 #include "Device/Util/NMEAWriter.hpp"
 #include "LX1600.hpp"
-#include "V7.hpp"
+#include "Vario.hpp"
 
 #include <cstdio>
 
 bool
-LXDevice::SendV7Setting(const char *name, const char *value,
+LXDevice::SendVarioSetting(const char *name, const char *value,
                         OperationEnvironment &env)
 {
   if (!EnableNMEA(env))
     return false;
 
-  v7_settings.Lock();
-  v7_settings.MarkOld(name);
-  v7_settings.Unlock();
+  vario_settings.Lock();
+  vario_settings.MarkOld(name);
+  vario_settings.Unlock();
 
   char buffer[256];
   sprintf(buffer, "PLXV0,%s,W,%s", name, value);
@@ -46,14 +46,14 @@ LXDevice::SendV7Setting(const char *name, const char *value,
 }
 
 bool
-LXDevice::RequestV7Setting(const char *name, OperationEnvironment &env)
+LXDevice::RequestVarioSetting(const char *name, OperationEnvironment &env)
 {
   if (!EnableNMEA(env))
     return false;
 
-  v7_settings.Lock();
-  v7_settings.MarkOld(name);
-  v7_settings.Unlock();
+  vario_settings.Lock();
+  vario_settings.MarkOld(name);
+  vario_settings.Unlock();
 
   char buffer[256];
   sprintf(buffer, "PLXV0,%s,R", name);
@@ -61,23 +61,23 @@ LXDevice::RequestV7Setting(const char *name, OperationEnvironment &env)
 }
 
 std::string
-LXDevice::WaitV7Setting(const char *name, OperationEnvironment &env,
+LXDevice::WaitVarioSetting(const char *name, OperationEnvironment &env,
                         unsigned timeout_ms)
 {
-  ScopeLock protect(v7_settings);
-  auto i = v7_settings.Wait(name, env, timeout_ms);
-  if (i == v7_settings.end())
+  ScopeLock protect(vario_settings);
+  auto i = vario_settings.Wait(name, env, timeout_ms);
+  if (i == vario_settings.end())
     return std::string();
 
   return *i;
 }
 
 std::string
-LXDevice::GetV7Setting(const char *name) const
+LXDevice::GetVarioSetting(const char *name) const
 {
-  ScopeLock protect(v7_settings);
-  auto i = v7_settings.find(name);
-  if (i == v7_settings.end())
+  ScopeLock protect(vario_settings);
+  auto i = vario_settings.find(name);
+  if (i == vario_settings.end())
     return std::string();
 
   return *i;
@@ -87,7 +87,7 @@ bool
 LXDevice::SendNanoSetting(const char *name, const char *value,
                         OperationEnvironment &env)
 {
-  if (!EnableNanoNMEA(env))
+  if (!EnableProperNMEA(env))
     return false;
 
   nano_settings.Lock();
@@ -102,7 +102,7 @@ LXDevice::SendNanoSetting(const char *name, const char *value,
 bool
 LXDevice::RequestNanoSetting(const char *name, OperationEnvironment &env)
 {
-  if (!EnableNanoNMEA(env))
+  if (!EnableProperNMEA(env))
     return false;
 
   nano_settings.Lock();
@@ -144,8 +144,8 @@ LXDevice::PutBallast(gcc_unused fixed fraction, fixed overload,
   if (!EnableNMEA(env))
     return false;
 
-  if (IsV7())
-    return V7::SetBallast(port, env, overload);
+  if (IsV7() || IsSVario())
+    return Vario::SetBallast(port, env, overload);
   else
     return LX1600::SetBallast(port, env, overload);
 }
@@ -158,8 +158,8 @@ LXDevice::PutBugs(fixed bugs, OperationEnvironment &env)
 
   int transformed_bugs_value = 100 - (int)(bugs*100);
 
-  if (IsV7())
-    return V7::SetBugs(port, env, transformed_bugs_value);
+  if (IsV7() || IsSVario())
+    return Vario::SetBugs(port, env, transformed_bugs_value);
   else
     return LX1600::SetBugs(port, env, transformed_bugs_value);
 }
@@ -170,8 +170,8 @@ LXDevice::PutMacCready(fixed mac_cready, OperationEnvironment &env)
   if (!EnableNMEA(env))
     return false;
 
-  if (IsV7())
-    return V7::SetMacCready(port, env, mac_cready);
+  if (IsV7() || IsSVario())
+    return Vario::SetMacCready(port, env, mac_cready);
   else
     return LX1600::SetMacCready(port, env, mac_cready);
 }
@@ -182,8 +182,8 @@ LXDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
   if (!EnableNMEA(env))
     return false;
 
-  if (IsV7())
-    return V7::SetQNH(port, env, pres);
+  if (IsV7() || IsSVario())
+    return Vario::SetQNH(port, env, pres);
   else
     return LX1600::SetQNH(port, env, pres);
 }

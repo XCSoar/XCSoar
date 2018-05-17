@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Internal.hpp"
-#include "V7.hpp"
+#include "Vario.hpp"
 #include "LX1600.hpp"
 #include "NanoProtocol.hpp"
 #include "Device/Port/Port.hpp"
@@ -37,9 +37,9 @@ LXDevice::LinkTimeout()
 
   ResetDeviceDetection();
 
-  v7_settings.Lock();
-  v7_settings.clear();
-  v7_settings.Unlock();
+  vario_settings.Lock();
+  vario_settings.clear();
+  vario_settings.Unlock();
 
   nano_settings.Lock();
   nano_settings.clear();
@@ -73,10 +73,10 @@ LXDevice::EnableNMEA(OperationEnvironment &env)
   }
 
   /* just in case the V7 is still in pass-through mode: */
-  V7::ModeVSeven(port, env);
+  Vario::ModeNormal(port, env);
 
-  V7::SetupNMEA(port, env);
-  if (!is_v7)
+  Vario::SetupNMEA(port, env);
+  if(!is_v7 && !is_sVario)
     LX1600::SetupNMEA(port, env);
 
   if (old_baud_rate != 0)
@@ -85,7 +85,8 @@ LXDevice::EnableNMEA(OperationEnvironment &env)
   port.Flush();
 
   Nano::RequestForwardedInfo(port, env);
-  if (!is_v7)
+
+  if(!is_v7 && !is_sVario)
     Nano::RequestInfo(port, env);
 
   return true;
@@ -109,8 +110,8 @@ LXDevice::EnablePassThrough(OperationEnvironment &env)
   if (mode == Mode::PASS_THROUGH)
     return true;
 
-  if (is_v7) {
-    if (!V7::ModeDirect(port, env))
+  if (is_v7 || use_pass_through) {
+    if (!Vario::ModeDirect(port, env))
       return false;
   }
 
@@ -119,11 +120,11 @@ LXDevice::EnablePassThrough(OperationEnvironment &env)
 }
 
 bool
-LXDevice::EnableNanoNMEA(OperationEnvironment &env)
+LXDevice::EnableProperNMEA(OperationEnvironment &env)
 {
-  return IsV7()
+  return IsV7() || UsePassThrough()
     ? EnablePassThrough(env)
-    : true;
+    : Vario::ModeNormal(port, env);
 }
 
 bool

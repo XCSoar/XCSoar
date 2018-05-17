@@ -27,7 +27,7 @@ Copyright_License {
 #include "BlueFly/BlueFlyDialogs.hpp"
 #include "ManageCAI302Dialog.hpp"
 #include "ManageFlarmDialog.hpp"
-#include "LX/ManageV7Dialog.hpp"
+#include "LX/ManageVarioDialog.hpp"
 #include "LX/ManageNanoDialog.hpp"
 #include "LX/ManageLX16xxDialog.hpp"
 #include "PortMonitor.hpp"
@@ -593,8 +593,8 @@ DeviceListWidget::ManageCurrent()
     device_blackboard->mutex.Unlock();
 
     LXDevice &lx_device = *(LXDevice *)device;
-    if (lx_device.IsV7())
-      ManageV7Dialog(lx_device, info, secondary_info);
+    if (lx_device.IsV7() || lx_device.IsSVario())
+      ManageVarioDialog(lx_device, info, secondary_info); //Added
     else if (lx_device.IsNano())
       ManageNanoDialog(lx_device, info);
     else if (lx_device.IsLX16xx())

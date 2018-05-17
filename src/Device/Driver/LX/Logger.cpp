@@ -139,9 +139,9 @@ ReadFlightListInner(Port &port, RecordedFlightList &flight_list,
 bool
 LXDevice::ReadFlightList(RecordedFlightList &flight_list,
                          OperationEnvironment &env)
-{
-  if (IsNano()) {
-    if (!EnableNanoNMEA(env))
+{ // varios different from the V7 use the Nano logger
+  if (IsNano() || IsSVario()) {
+    if (!EnableProperNMEA(env))
       return false;
 
     assert(!busy);

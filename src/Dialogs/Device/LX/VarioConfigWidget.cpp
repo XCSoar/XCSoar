@@ -21,13 +21,14 @@ Copyright_License {
 }
 */
 
-#include "V7ConfigWidget.hpp"
+#include "VarioConfigWidget.hpp"
+
 #include "Device/Driver/LX/Internal.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
 
-static const char *const v7_setting_names[] = {
+static const char *const vario_setting_names[] = {
   "BRGPS",
   "BRPDA",
   NULL
@@ -38,8 +39,8 @@ RequestAllSettings(LXDevice &device)
 {
   PopupOperationEnvironment env;
 
-  for (auto i = v7_setting_names; *i != NULL; ++i)
-    if (!device.RequestV7Setting(*i, env))
+  for (auto i = vario_setting_names; *i != NULL; ++i)
+    if (!device.RequestVarioSetting(*i, env))
       return false;
 
   return true;
@@ -50,7 +51,7 @@ WaitUnsignedValue(LXDevice &device, const char *name,
                   unsigned default_value)
 {
   PopupOperationEnvironment env;
-  const auto x = device.WaitV7Setting(name, env, 500);
+  const auto x = device.WaitVarioSetting(name, env, 500);
   if (!x.empty()) {
     char *endptr;
     unsigned long y = strtoul(x.c_str(), &endptr, 10);
@@ -62,7 +63,7 @@ WaitUnsignedValue(LXDevice &device, const char *name,
 }
 
 void
-V7ConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+VarioConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   RequestAllSettings(device);
 
@@ -89,7 +90,7 @@ V7ConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-V7ConfigWidget::Save(bool &_changed)
+VarioConfigWidget::Save(bool &_changed)
 {
   PopupOperationEnvironment env;
   bool changed = false;
@@ -97,13 +98,13 @@ V7ConfigWidget::Save(bool &_changed)
 
   if (SaveValue(BRGPS, brgps)) {
     buffer.UnsafeFormat("%u", brgps);
-    device.SendV7Setting("BRGPS", buffer, env);
+    device.SendVarioSetting("BRGPS", buffer, env);
     changed = true;
   }
 
   if (SaveValue(BRPDA, brpda)) {
     buffer.UnsafeFormat("%u", brpda);
-    device.SendV7Setting("BRPDA", buffer, env);
+    device.SendVarioSetting("BRPDA", buffer, env);
     changed = true;
   }
 

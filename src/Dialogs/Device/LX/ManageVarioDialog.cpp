@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#include "ManageV7Dialog.hpp"
-#include "V7ConfigWidget.hpp"
+#include "ManageVarioDialog.hpp"
 #include "ManageNanoDialog.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/RowFormWidget.hpp"
@@ -31,8 +30,9 @@ Copyright_License {
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Device/Driver/LX/Internal.hpp"
 #include "NMEA/DeviceInfo.hpp"
+#include "VarioConfigWidget.hpp"
 
-class ManageV7Widget final
+class ManageVarioWidget final
   : public RowFormWidget, private ActionListener {
   enum Controls {
     SETUP,
@@ -44,7 +44,7 @@ class ManageV7Widget final
   const DeviceInfo secondary_info;
 
 public:
-  ManageV7Widget(const DialogLook &look, LXDevice &_device,
+  ManageVarioWidget(const DialogLook &look, LXDevice &_device,
                  const DeviceInfo &info,
                  const DeviceInfo &secondary_info)
     :RowFormWidget(look), device(_device), info(info),
@@ -59,7 +59,7 @@ private:
 };
 
 void
-ManageV7Widget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+ManageVarioWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   StaticString<64> buffer;
 
@@ -94,16 +94,16 @@ ManageV7Widget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-ManageV7Widget::OnAction(int id)
+ManageVarioWidget::OnAction(int id)
 {
   MessageOperationEnvironment env;
 
   switch (id) {
   case SETUP:
     {
-      V7ConfigWidget widget(GetLook(), device);
+      VarioConfigWidget widget(GetLook(), device);
       DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(),
-                          _T("LXNAV V7"), widget);
+                          _T("LXNAV Vario"), widget);
     }
     break;
 
@@ -118,12 +118,12 @@ ManageV7Widget::OnAction(int id)
 }
 
 void
-ManageV7Dialog(Device &device, const DeviceInfo &info,
+ManageVarioDialog(Device &device, const DeviceInfo &info,
                const DeviceInfo &secondary_info)
 {
   WidgetDialog dialog(UIGlobals::GetDialogLook());
-  dialog.CreateAuto(UIGlobals::GetMainWindow(), _T("LXNAV V7"),
-                    new ManageV7Widget(UIGlobals::GetDialogLook(),
+  dialog.CreateAuto(UIGlobals::GetMainWindow(), _T("LXNAV Vario"),
+                    new ManageVarioWidget(UIGlobals::GetDialogLook(),
                                        (LXDevice &)device, info,
                                        secondary_info));
   dialog.AddButton(_("Close"), mrCancel);
