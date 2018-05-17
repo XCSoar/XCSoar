@@ -32,6 +32,7 @@ Copyright_License {
 
 #include <atomic>
 #include <stdint.h>
+#include <string.h>
 
 class LXDevice: public AbstractDevice
 {
@@ -146,12 +147,12 @@ public:
     is_v7 = is_sVario = is_nano = is_lx16xx = is_forwarded_nano = false;
   }
 
-  void IdDeviceByName(const NarrowString<16> productName)
+  void IdDeviceByName(const char* productName)
   {
-    is_v7 = productName.equals("V7");
-    is_sVario = productName.equals("NINC");
-    is_nano = productName.equals("NANO") || productName.equals("NANO3") || productName.equals("NANO4");
-    is_lx16xx = productName.equals("1606") || productName.equals("1600");
+    is_v7 = strcmp(productName, "V7");
+    is_sVario = strcmp(productName, "NINC");
+    is_nano = strcmp(productName, "NANO") || strcmp(productName, "NANO3") || strcmp(productName, "NANO4");
+    is_lx16xx = strcmp(productName, "1606") || strcmp(productName, "1600");
   }
 
   bool UsePassThrough() {

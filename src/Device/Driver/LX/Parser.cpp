@@ -358,7 +358,7 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
       : info.device;
     LXWP1(line, device_info);
 
-    const bool saw_sVario = device_info.product.equals("NINC");
+    const bool saw_sVario = device_info.product.equals("NINC") || device_info.product.equals("S8x");
     const bool saw_v7 = device_info.product.equals("V7");
     const bool saw_nano = device_info.product.equals("NANO") ||
                             device_info.product.equals("NANO3") ||
