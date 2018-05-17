@@ -627,7 +627,7 @@ bool
 DeviceDescriptor::EnableNMEA(OperationEnvironment &env)
 {
   if (device == nullptr)
-    return false;
+    return true;
 
   bool success = device->EnableNMEA(env);
 
