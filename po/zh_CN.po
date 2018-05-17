@@ -3647,21 +3647,21 @@ msgstr ""
 
 #: src/Polar/PolarGlue.cpp:109
 msgid "Warning"
-msgstr ""
+msgstr "告警"
 
 #. TODO feature: Show the user what the batt status is.
 #: src/BatteryTimer.cpp:61
 msgid "Battery low"
-msgstr ""
+msgstr "电池电量低"
 
 #: src/Startup.cpp:263
 msgid "Initialising"
-msgstr ""
+msgstr "初始化"
 
 #. Start the device thread(s)
 #: src/Startup.cpp:383
 msgid "Starting devices"
-msgstr ""
+msgstr "设备启动中"
 
 #.
 #. -- Reset polar in case devices need the data
@@ -3671,64 +3671,64 @@ msgstr ""
 #.
 #: src/Startup.cpp:393
 msgid "Initialising display"
-msgstr ""
+msgstr "初始化显示中"
 
 #. Show progress dialog
 #: src/Startup.cpp:490 src/Startup.cpp:532 src/Startup.cpp:597
 msgid "Shutdown, please wait..."
-msgstr ""
+msgstr "关机，请等待。。。"
 
 #. Stop logger and save igc file
 #: src/Startup.cpp:510
 msgid "Shutdown, saving logs..."
-msgstr ""
+msgstr "关机，保存记录。。。"
 
 #. Save settings to profile
 #: src/Startup.cpp:529
 msgid "Shutdown, saving profile..."
-msgstr ""
+msgstr "关机，保存配置文件。。。"
 
 #. Save the task for the next time
 #: src/Startup.cpp:583
 msgid "Shutdown, saving task..."
-msgstr ""
+msgstr "关机，保存任务。。。"
 
 #: src/Device/Descriptor.cpp:458 src/Device/Descriptor.cpp:470
 msgid "Unable to open port"
-msgstr ""
+msgstr "端口不能打开"
 
 #: src/Device/Descriptor.cpp:990 src/Device/Descriptor.cpp:996
 msgid "Sending declaration"
-msgstr ""
+msgstr "发送申报中"
 
 #: src/Device/Descriptor.cpp:1043 src/Device/Descriptor.cpp:1050
 msgid "Reading flight list"
-msgstr ""
+msgstr "读取飞行列表中"
 
 #: src/Device/Descriptor.cpp:1074 src/Device/Descriptor.cpp:1081
 msgid "Downloading flight log"
-msgstr ""
+msgstr "下载飞行记录中"
 
 #: src/Device/Config.cpp:202 src/Dialogs/Device/DeviceEditWidget.cpp:64
 #: src/Dialogs/Device/DeviceListDialog.cpp:395
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:40
 #, no-c-format
 msgid "Disabled"
-msgstr ""
+msgstr "禁用"
 
 #: src/Device/Config.cpp:221 src/Dialogs/Device/DeviceEditWidget.cpp:69
 #, no-c-format
 msgid "Bluetooth server"
-msgstr ""
+msgstr "蓝牙服务器"
 
 #: src/Device/Config.cpp:240
 msgid "GPS Intermediate Driver"
-msgstr ""
+msgstr "GPS中间驱动程序"
 
 #: src/Device/Config.cpp:243 src/Dialogs/Device/DeviceEditWidget.cpp:66
 #, no-c-format
 msgid "Built-in GPS & sensors"
-msgstr ""
+msgstr "内置GPS和传感器"
 
 #. create buttons
 #: src/Dialogs/Message.cpp:99 src/Dialogs/WidgetDialog.cpp:250
@@ -3743,20 +3743,20 @@ msgstr ""
 #: src/Dialogs/TouchTextEntry.cpp:205 src/Dialogs/TimeEntry.cpp:65
 #: src/Dialogs/GeoPointEntry.cpp:76
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: src/Dialogs/Message.cpp:105 src/Dialogs/StatusPanels/RulesStatusPanel.cpp:59
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:62
 msgid "Yes"
-msgstr ""
+msgstr "是"
 
 #: src/Dialogs/Message.cpp:109
 msgid "No"
-msgstr ""
+msgstr "不"
 
 #: src/Dialogs/Message.cpp:116
 msgid "Retry"
-msgstr ""
+msgstr "重试"
 
 #: src/Dialogs/Message.cpp:123 src/Dialogs/ListPicker.cpp:195
 #: src/Dialogs/ProgressDialog.cpp:55 src/Dialogs/WidgetDialog.cpp:251
@@ -3775,21 +3775,21 @@ msgstr ""
 #: src/Dialogs/GeoPointEntry.cpp:77 src/Dialogs/DownloadFilePicker.cpp:382
 #: Data/Input/default.xci:906
 msgid "Cancel"
-msgstr ""
+msgstr "取消"
 
 #: src/Dialogs/Message.cpp:132
 msgid "Ignore"
-msgstr ""
+msgstr "忽略"
 
 #: src/Dialogs/ListPicker.cpp:187 src/Dialogs/HelpDialog.cpp:37
 msgid "Help"
-msgstr ""
+msgstr "帮助"
 
 #: src/Dialogs/ListPicker.cpp:190 src/Dialogs/Traffic/TrafficList.cpp:798
 #: src/Dialogs/ProfileListDialog.cpp:387
 #: src/Dialogs/Waypoint/WaypointList.cpp:239
 msgid "Select"
-msgstr ""
+msgstr "选择"
 
 #: src/Dialogs/FileManager.cpp:404 src/Dialogs/FilePicker.cpp:48
 #: src/Dialogs/Weather/RASPDialog.cpp:178
@@ -3803,21 +3803,21 @@ msgstr ""
 #: src/Dialogs/DownloadFilePicker.cpp:282
 #: src/Dialogs/DownloadFilePicker.cpp:380
 msgid "Download"
-msgstr ""
+msgstr "下载"
 
 #: src/Dialogs/FileManager.cpp:405
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:117
 #: src/Dialogs/Weather/NOAAList.cpp:120 src/Monitor/MatTaskMonitor.cpp:63
 msgid "Add"
-msgstr ""
+msgstr "加"
 
 #: src/Dialogs/FileManager.cpp:439
 msgid "Queued"
-msgstr ""
+msgstr "队列"
 
 #: src/Dialogs/FileManager.cpp:441 src/Dialogs/FileManager.cpp:447
 msgid "Downloading"
-msgstr ""
+msgstr "下载中"
 
 #: src/Dialogs/FileManager.cpp:452 src/Dialogs/FileManager.cpp:690
 #: src/Dialogs/Device/DeviceListDialog.cpp:417
@@ -3837,16 +3837,16 @@ msgstr ""
 #: src/Dialogs/Weather/NOAADetails.cpp:166
 #: src/Dialogs/DownloadFilePicker.cpp:362
 msgid "Error"
-msgstr ""
+msgstr "错误"
 
 #: src/Dialogs/FileManager.cpp:689 src/Dialogs/DownloadFilePicker.cpp:361
 msgid "Failed to download the repository index."
-msgstr ""
+msgstr "下载存储库索引失败。"
 
 #: src/Dialogs/FileManager.cpp:698 src/Dialogs/FileManager.cpp:727
 #: src/Dialogs/DownloadFilePicker.cpp:374 Data/Input/default.xci:605
 msgid "File Manager"
-msgstr ""
+msgstr "此设备上没有文件管理器。"
 
 #: src/Dialogs/FileManager.cpp:721 src/Dialogs/DownloadFilePicker.cpp:373
 msgid "The file manager is not available on this device."
@@ -3854,27 +3854,27 @@ msgstr ""
 
 #: src/Dialogs/FileManager.cpp:724
 msgid "The file manager requires Android 2.3."
-msgstr ""
+msgstr "文件管理器需要Android 2.3。"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:72
 #, no-c-format
 msgid "IOIO switches and Nunchuk"
-msgstr ""
+msgstr "IOIO 交换机和Nunchuk"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:74
 #, no-c-format
 msgid "IOIO i2c pressure sensor"
-msgstr ""
+msgstr "IOIO i2c压力传感器"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:75
 #, no-c-format
 msgid "IOIO voltage sensor"
-msgstr ""
+msgstr "IOIO电压传感器"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:78
 #, no-c-format
 msgid "TCP client"
-msgstr ""
+msgstr "TCP客户端"
 
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
@@ -3882,52 +3882,53 @@ msgstr ""
 #: src/Dialogs/Device/DeviceEditWidget.cpp:606
 #, no-c-format
 msgid "TCP Port"
-msgstr ""
+msgstr "TCP端口"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:83
 #, no-c-format
 msgid "UDP Port"
-msgstr ""
+msgstr "UDP端口"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:355
 msgid "Bluetooth LE"
-msgstr ""
+msgstr "低功耗蓝牙"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:583
 msgid "Port"
-msgstr ""
+msgstr "端口"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:589
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:94
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:117
 msgid "Baud rate"
-msgstr ""
+msgstr "波特率"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:595
 msgid "Bulk baud rate"
-msgstr ""
+msgstr "批量波特率"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:596
 msgid ""
 "The baud rate used for bulk transfers, such as task declaration or flight "
 "download."
 msgstr ""
+"用于批量传输的波特率，如任务申报或下载飞行。"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:601
 msgid "IP Address"
-msgstr ""
+msgstr "IP地址"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:611
 msgid "I2C Bus"
-msgstr ""
+msgstr "I2C总线"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:611
 msgid "Select the description or bus number that matches your configuration."
-msgstr ""
+msgstr "选择与您的配置相匹配的说明或总线号。"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid "I2C Addr"
-msgstr ""
+msgstr "I2C地址"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid ""
@@ -3936,10 +3937,12 @@ msgid ""
 "not understand the previous sentence you may assume that this field is not "
 "used."
 msgstr ""
+"I2C地址要匹配您的配置。当您选择的I2C总线字段不是I2C总线号是不能被使用。"
+"万一你不理解前面的句子这样做,你可以假设这个字段没被用过。"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:625
 msgid "Pressure use"
-msgstr ""
+msgstr "使用压力"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:625
 msgid ""
@@ -3947,53 +3950,58 @@ msgid ""
 "pressure. Here you tell the system what pressure this is and what its should "
 "be used for."
 msgstr ""
+"选择此压力传感器的用途。这个传感器测量一些压力。"
+"这里告诉系统这是什么压力以及它应该被怎么使用。"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:639
 msgid "Driver"
-msgstr ""
+msgstr "驱动程序"
 
 #. for a passthrough device, offer additional driver
 #: src/Dialogs/Device/DeviceEditWidget.cpp:642
 msgid "Passthrough device"
-msgstr ""
+msgstr "设备通过"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:643
 msgid ""
 "This option lets you configure if this device has a passed  through device "
 "connected."
 msgstr ""
+"此选项允许您配置此设备是否通过此设备连接。"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:654
 msgid "Second Driver"
-msgstr ""
+msgstr "第二个驱动程序"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:656
 msgid "Sync. from device"
-msgstr ""
+msgstr "从设备同步"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:657
 msgid ""
 "This option lets you configure if XCSoar should use settings like the "
 "MacCready value, bugs and ballast from the device."
 msgstr ""
+"此选项允许您配置XCSoar是否应该从设备使用类似MacCready值、缺陷、配重的设置。"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:662
 msgid "Sync. to device"
-msgstr ""
+msgstr "同步到设备"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:663
 msgid ""
 "This option lets you configure if XCSoar should send settings like the "
 "MacCready value, bugs and ballast to the device."
 msgstr ""
+"此选项允许您配置XCSoar是否应该发送类似MacCready值、缺陷、配重的设置到设备。"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:669
 msgid "Enable this if you use a K6Bt to connect the device."
-msgstr ""
+msgstr "如果您使用K6BT连接该设备，请启用此操作。"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:283
 msgid "Flight download"
-msgstr ""
+msgstr "下载飞行"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:284
 #: src/Dialogs/Device/DeviceListDialog.cpp:510
@@ -4003,37 +4011,37 @@ msgstr ""
 #: src/Dialogs/Device/PortMonitor.cpp:159
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:141
 msgid "Manage"
-msgstr ""
+msgstr "管理"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:285
 msgid "Monitor"
-msgstr ""
+msgstr "监测器"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:286
 #: src/Dialogs/Device/DeviceListDialog.cpp:479
 #: src/Dialogs/Device/DeviceListDialog.cpp:487
 #: src/Dialogs/Device/PortMonitor.cpp:151
 msgid "Reconnect"
-msgstr ""
+msgstr "重新连接"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:287
 #: src/Dialogs/Device/DeviceListDialog.cpp:301
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:226
 msgid "Disable"
-msgstr ""
+msgstr "禁用"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:288
 #: src/Dialogs/Device/DeviceListDialog.cpp:390
 #: src/Dialogs/Device/DeviceListDialog.cpp:403
 #: src/Dialogs/Device/DeviceListDialog.cpp:651
 msgid "Debug"
-msgstr ""
+msgstr "调试"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:301
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:116
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:107
 msgid "Enable"
-msgstr ""
+msgstr "准许"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:348
 #, c-format
@@ -4649,25 +4657,25 @@ msgstr "填充模式"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:106
 msgid "Defines how the airspace is filled with the configured color."
-msgstr ""
+msgstr "定义空域如何填充配置的颜色。"
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:105
 #: src/Monitor/AirspaceWarningMonitor.cpp:80
 msgid "ACK"
-msgstr ""
+msgstr "ACK"
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:106
 #: src/Monitor/AirspaceWarningMonitor.cpp:81
 msgid "ACK Day"
-msgstr ""
+msgstr "ACK Day"
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:325
 msgid "No Warnings"
-msgstr ""
+msgstr "无告警"
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:549
 msgid "Airspace Warnings"
-msgstr ""
+msgstr "空域告警"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:53
 #, no-c-format
@@ -4675,50 +4683,51 @@ msgid ""
 "When the algorithm is switched off, the pilot is responsible for setting the "
 "wind estimate."
 msgstr ""
+"当算法被关闭时，飞行员负责设置风况估算。"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:55
 #, no-c-format
 msgid "Requires only a GPS source."
-msgstr ""
+msgstr "仅需要GPS源数据"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:56
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:213
 #, no-c-format
 msgid "ZigZag"
-msgstr ""
+msgstr "之字"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:57
 #, no-c-format
 msgid "Requires GPS and an intelligent vario with airspeed output."
-msgstr ""
+msgstr "需要GPS和智能高度表的空速输出。"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:58
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:67
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:108
 #, no-c-format
 msgid "Both"
-msgstr ""
+msgstr "两个都"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:59
 #, no-c-format
 msgid "Use ZigZag and circling."
-msgstr ""
+msgstr "使用之字和盘旋算法"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:63
 msgid "Auto wind"
-msgstr ""
+msgstr "风况自动算法"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:64
 msgid "This allows switching on or off the automatic wind algorithm."
-msgstr ""
+msgstr "允许打开或关闭自动风况算法。"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:67
 msgid "External wind"
-msgstr ""
+msgstr "外面的风"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:68
 msgid "Should XCSoar accept wind estimates from other instruments?"
-msgstr ""
+msgstr "XCSOAR是否接受其他仪器对风的估算？"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:72
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:156
