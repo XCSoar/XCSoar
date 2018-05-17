@@ -20,10 +20,10 @@
 
 #include "Time/BrokenDateTime.hpp"
 
+#include <vector>
+
 #include <stdio.h>
 #include <stdint.h>
-#include <time.h>
-#include <vector>
 
 /* Untertypen des Haupttyps Variabel */
 #define FLDPLT	     0x01
@@ -68,7 +68,6 @@ convert_gcs
   function:
     converts a given flight log from VOLKSLOGGER binary to IGC-format
   input values:
-    converter version
     output stream handle
     pointer to binary file buffer
     OO-fillin
@@ -79,7 +78,7 @@ convert_gcs
  * @return the length of the output file or 0 on error
  */
 size_t
-convert_gcs(int igcfile_version, FILE *Ausgabedatei,
+convert_gcs(FILE *Ausgabedatei,
             const uint8_t *const bin_puffer, size_t length,
             bool oo_fillin);
 

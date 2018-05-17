@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,50 +30,34 @@ void
 ThermalBandComputer::Reset()
 {
   last_vario_available.Clear();
+  in_encounter = false;
 }
 
 void
 ThermalBandComputer::Compute(const MoreData &basic,
                              const DerivedInfo &calculated,
-                             ThermalBandInfo &tbi,
+                             ThermalEncounterBand &teb,
+                             ThermalEncounterCollection &tec,
                              const ComputerSettings &settings)
 {
   if (!basic.NavAltitudeAvailable())
     return;
 
-  const fixed h_safety =
-    settings.task.route_planner.safety_height_terrain +
-    calculated.GetTerrainBaseFallback();
-
-  tbi.working_band_height = basic.TE_altitude - h_safety;
-  if (negative(tbi.working_band_height)) {
-    tbi.working_band_fraction = fixed(0);
-    return;
-  }
-
-  const fixed max_height = tbi.max_thermal_height;
-  if (positive(max_height))
-    tbi.working_band_fraction = tbi.working_band_height / max_height;
-  else
-    tbi.working_band_fraction = fixed(1);
-
-  tbi.working_band_ceiling = std::max(max_height + h_safety,
-                                      basic.TE_altitude);
-
+  const auto h_thermal = basic.nav_altitude;
 
   last_vario_available.FixTimeWarp(basic.brutto_vario_available);
+
   if (basic.brutto_vario_available.Modified(last_vario_available)) {
     last_vario_available = basic.brutto_vario_available;
 
-    // JMW TODO accuracy: Should really work out dt here,
-    //           but i'm assuming constant time steps
-
-    if (tbi.max_thermal_height == fixed(0))
-      tbi.max_thermal_height = tbi.working_band_height;
-
-    // only do this if in thermal and have been climbing
-    if (calculated.circling && calculated.turning &&
-        positive(calculated.average))
-      tbi.Add(tbi.working_band_height, basic.brutto_vario);
+    // only do this if in circling mode
+    if (calculated.circling) {
+      teb.AddSample(basic.time, h_thermal);
+      in_encounter = true;
+    } else if (in_encounter) {
+      tec.Merge(teb);
+      teb.Reset();
+      in_encounter = false;
+    }
   }
 }

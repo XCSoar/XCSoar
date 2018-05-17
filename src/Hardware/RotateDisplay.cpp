@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -48,77 +48,21 @@ Copyright_License {
 #include <string.h>
 #endif
 
-#if defined(DM_DISPLAYORIENTATION) && defined(_WIN32_WCE) && _WIN32_WCE >= 0x400
-/* on PPC2000, ChangeDisplaySettingsEx() crashes silently */
-#define ROTATE_SUPPORTED
-#endif
-
-#ifdef ROTATE_SUPPORTED
-namespace Display {
-  bool native_landscape = false;
-  DWORD initial_orientation;
-}
-#endif
-
 void
 Display::RotateInitialize()
 {
-#ifdef ROTATE_SUPPORTED
-  DEVMODE DeviceMode;
-  memset(&DeviceMode, 0, sizeof(DeviceMode));
-  DeviceMode.dmSize = sizeof(DeviceMode);
-  DeviceMode.dmFields = DM_DISPLAYORIENTATION;
-
-  // get current rotation
-  if (ChangeDisplaySettingsEx(nullptr, &DeviceMode, nullptr,
-                              CDS_TEST, nullptr) == DISP_CHANGE_SUCCESSFUL)
-    initial_orientation = DeviceMode.dmDisplayOrientation;
-  else
-    initial_orientation = DMDO_0;
-
-  // determine current screen dimensions
-  bool landscape = GetSystemMetrics(SM_CXSCREEN) > GetSystemMetrics(SM_CYSCREEN);
-
-  switch (initial_orientation) {
-  case DMDO_90:
-  case DMDO_270:
-    native_landscape = !landscape;
-    break;
-
-  case DMDO_0:
-  case DMDO_180:
-  default:
-    native_landscape = landscape;
-    break;
-  }
-#endif
 }
 
 bool
 Display::RotateSupported()
 {
-#ifdef ROTATE_SUPPORTED
-  if (GetSystemMetrics(SM_CXSCREEN) == GetSystemMetrics(SM_CYSCREEN))
-    /* cannot rotate a square display */
-    return false;
-
-  DEVMODE dm;
-  memset(&dm, 0, sizeof(dm));
-  dm.dmSize = sizeof(dm);
-  dm.dmFields = DM_DISPLAYQUERYORIENTATION;
-
-  if (ChangeDisplaySettingsEx(nullptr, &dm, nullptr, CDS_TEST, nullptr) !=
-      DISP_CHANGE_SUCCESSFUL)
-    return false;
-
-  return dm.dmDisplayOrientation != DMDO_0;
-#elif defined(ANDROID) || defined(KOBO)
+#if defined(ANDROID) || defined(KOBO)
   return true;
 #elif defined(SOFTWARE_ROTATE_DISPLAY)
   /* rotate supported via glRotatef() (OpenGL projection matrix) */
 
   /* we need FBO so BufferCanvas can avoid using Canvas::CopyToTexture() */
-  return OpenGL::frame_buffer_object && OpenGL::render_buffer_stencil;
+  return true;
 #else
   return false;
 #endif
@@ -133,44 +77,7 @@ Display::Rotate(DisplayOrientation orientation)
     return true;
 #endif
 
-#ifdef ROTATE_SUPPORTED
-  DEVMODE DeviceMode;
-  memset(&DeviceMode, 0, sizeof(DeviceMode));
-  DeviceMode.dmSize = sizeof(DeviceMode);
-  DeviceMode.dmFields = DM_DISPLAYORIENTATION;
-
-  /* determine the new rotation */
-
-  switch (orientation) {
-  case DisplayOrientation::PORTRAIT:
-    DeviceMode.dmDisplayOrientation = native_landscape
-      ? DMDO_90
-      : initial_orientation;
-    break;
-
-  case DisplayOrientation::LANDSCAPE:
-    DeviceMode.dmDisplayOrientation = native_landscape
-      ? initial_orientation
-      : DMDO_270;
-    break;
-
-  case DisplayOrientation::REVERSE_PORTRAIT:
-    DeviceMode.dmDisplayOrientation = (native_landscape ? DMDO_270 : DMDO_180);
-    break;
-
-  case DisplayOrientation::REVERSE_LANDSCAPE:
-    DeviceMode.dmDisplayOrientation = (native_landscape ? DMDO_180 : DMDO_90);
-    break;
-
-  default:
-    return false;
-  }
-
-  /* apply the new rotation */
-
-  return ChangeDisplaySettingsEx(nullptr, &DeviceMode, nullptr,
-                                 CDS_RESET, nullptr) == DISP_CHANGE_SUCCESSFUL;
-#elif defined(ANDROID)
+#if defined(ANDROID)
   if (native_view == nullptr)
     return false;
 
@@ -222,7 +129,7 @@ Display::Rotate(DisplayOrientation orientation)
     break;
   };
 
-  return File::WriteExisting("/sys/class/graphics/fb0/rotate", rotate);
+  return File::WriteExisting(Path("/sys/class/graphics/fb0/rotate"), rotate);
 #elif defined(SOFTWARE_ROTATE_DISPLAY)
   if (!RotateSupported())
     return false;
@@ -237,16 +144,7 @@ Display::Rotate(DisplayOrientation orientation)
 bool
 Display::RotateRestore()
 {
-#ifdef ROTATE_SUPPORTED
-  DEVMODE dm;
-  memset(&dm, 0, sizeof(dm));
-  dm.dmSize = sizeof(dm);
-  dm.dmFields = DM_DISPLAYORIENTATION;
-  dm.dmDisplayOrientation = initial_orientation;
-
-  return ChangeDisplaySettingsEx(nullptr, &dm, nullptr,
-                                 CDS_RESET, nullptr) == DISP_CHANGE_SUCCESSFUL;
-#elif defined(ANDROID)
+#if defined(ANDROID)
   return native_view->setRequestedOrientation(NativeView::ScreenOrientation::SENSOR);
 #elif defined(KOBO)
   return Rotate(DisplayOrientation::DEFAULT);

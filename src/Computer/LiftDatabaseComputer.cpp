@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -102,10 +102,10 @@ LiftDatabaseComputer::Compute(LiftDatabase &lift_database,
   //
   // The loop condition stops until the current heading is reached.
   // Depending on the circling direction the current heading will be
-  // smaller or bigger then the last one, because of that negative() is
+  // smaller or bigger then the last one, because of that IsNegative() is
   // tested against the left variable.
   for (Angle h = last_heading;
-       left == negative((heading - h).AsDelta().Degrees());
+       left == (heading - h).AsDelta().IsNegative();
        h += heading_step) {
     unsigned index = heading_to_index(h);
     lift_database[index] = basic.brutto_vario;
@@ -113,11 +113,11 @@ LiftDatabaseComputer::Compute(LiftDatabase &lift_database,
 
   // detect zero crossing
   if ((heading < Angle::QuarterCircle() &&
-       last_heading.Degrees() > fixed(270)) ||
+       last_heading.Degrees() > 270) ||
       (last_heading < Angle::QuarterCircle() &&
-       heading.Degrees() > fixed(270))) {
+       heading.Degrees() > 270)) {
 
-    fixed h_av = fixed(0);
+    double h_av = 0;
     for (auto i : lift_database)
       h_av += i;
 

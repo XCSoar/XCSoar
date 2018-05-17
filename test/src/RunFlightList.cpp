@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -34,8 +34,10 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "OS/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
-#include "IO/Async/GlobalIOThread.hpp"
+#include "IO/Async/GlobalAsioThread.hpp"
+#include "IO/Async/AsioThread.hpp"
 #include "Util/ConvertString.hpp"
+#include "Util/PrintException.hxx"
 
 #include <stdio.h>
 
@@ -58,13 +60,14 @@ NMEAParser::ReadDate(NMEAInputLine &line, BrokenDate &date)
 
 bool
 NMEAParser::ReadTime(NMEAInputLine &line, BrokenTime &broken_time,
-                     fixed &time_of_day_s)
+                     double &time_of_day_s)
 {
   return false;
 }
 
 bool
-NMEAParser::TimeHasAdvanced(fixed this_time, fixed &last_time, NMEAInfo &info)
+NMEAParser::TimeHasAdvanced(double this_time, double &last_time,
+                            NMEAInfo &info)
 {
   return false;
 }
@@ -73,8 +76,9 @@ NMEAParser::TimeHasAdvanced(fixed this_time, fixed &last_time, NMEAInfo &info)
  * The actual code.
  */
 
-int main(int argc, char **argv)
-{
+int
+main(int argc, char **argv)
+try {
   NarrowString<1024> usage;
   usage = "DRIVER PORT BAUD\n\n"
           "Where DRIVER is one of:";
@@ -90,7 +94,7 @@ int main(int argc, char **argv)
 
   Args args(argc, argv, usage);
   tstring driver_name = args.ExpectNextT();
-  const DeviceConfig config = ParsePortArgs(args);
+  DebugPort debug_port(args);
   args.ExpectEnd();
 
   ConsoleOperationEnvironment env;
@@ -108,22 +112,16 @@ int main(int argc, char **argv)
 
   assert(driver->CreateOnPort != NULL);
 
-  InitialiseIOThread();
+  ScopeGlobalAsioThread global_asio_thread;
 
-  Port *port = OpenPort(config, nullptr, *(DataHandler *)nullptr);
-  if (port == NULL) {
-    fprintf(stderr, "Failed to open COM port\n");
-    return EXIT_FAILURE;
-  }
+  auto port = debug_port.Open(*asio_thread, *(DataHandler *)nullptr);
 
   if (!port->WaitConnected(env)) {
-    delete port;
-    DeinitialiseIOThread();
     fprintf(stderr, "Failed to connect the port\n");
     return EXIT_FAILURE;
   }
 
-  Device *device = driver->CreateOnPort(config, *port);
+  Device *device = driver->CreateOnPort(debug_port.GetConfig(), *port);
   assert(device != NULL);
 
   if (!device->ReadFlightList(flight_list, env)) {
@@ -133,8 +131,6 @@ int main(int argc, char **argv)
   }
 
   delete device;
-  delete port;
-  DeinitialiseIOThread();
 
   for (auto i = flight_list.begin(); i != flight_list.end(); ++i) {
     const RecordedFlightInfo &flight = *i;
@@ -143,4 +139,7 @@ int main(int argc, char **argv)
            flight.start_time.hour, flight.start_time.minute,
            flight.end_time.hour, flight.end_time.minute);
   }
+} catch (const std::exception &exception) {
+  PrintException(exception);
+  return EXIT_FAILURE;
 }

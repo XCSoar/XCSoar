@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -50,7 +50,7 @@ FlyNetDevice::ParseBAT(const char *content, NMEAInfo &info)
   char *endptr;
   long value = strtol(content, &endptr, 16);
   if (endptr != content) {
-    info.battery_level = fixed(value) * 10;
+    info.battery_level = value * 10.;
     info.battery_level_available.Update(info.clock);
   }
 
@@ -63,25 +63,25 @@ FlyNetDevice::ParsePRS(const char *content, NMEAInfo &info)
   // e.g. _PRS 00017CBA
 
   // The frequency at which the device sends _PRS sentences
-  static constexpr fixed frequency = fixed(1 / 0.048);
+  static constexpr double frequency = 1 / 0.048;
 
   char *endptr;
   long value = strtol(content, &endptr, 16);
   if (endptr != content) {
-    auto pressure = AtmosphericPressure::Pascal(fixed(value));
+    auto pressure = AtmosphericPressure::Pascal(value);
 
     if (info.static_pressure_available) {
       // Calculate non-compensated vario value
 
       auto last_pressure = info.static_pressure;
 
-      fixed alt = AtmosphericPressure::StaticPressureToPressureAltitude(pressure);
-      fixed last_alt = AtmosphericPressure::StaticPressureToPressureAltitude(last_pressure);
+      auto alt = AtmosphericPressure::StaticPressureToPressureAltitude(pressure);
+      auto last_alt = AtmosphericPressure::StaticPressureToPressureAltitude(last_pressure);
 
-      fixed vario = (alt - last_alt) * frequency;
+      auto vario = (alt - last_alt) * frequency;
       vario_filter.Update(vario);
 
-      fixed vario_filtered = vario_filter.Average();
+      auto vario_filtered = vario_filter.Average();
 
       info.ProvideNoncompVario(vario_filtered);
     } else {

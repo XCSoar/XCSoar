@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,9 +22,13 @@
 
 #include "Profile/Profile.hpp"
 #include "IO/FileLineReader.hpp"
+#include "OS/Path.hpp"
 #include "TestUtil.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "Util/StaticString.hxx"
+#include "Util/PrintException.hxx"
+
+#include <stdlib.h>
 
 static void
 TestMap()
@@ -69,9 +73,9 @@ TestMap()
   }
 
   {
-    fixed value;
+    double value;
     ok1(!Profile::Get("key5", value));
-    Profile::Set("key5", fixed(1.337));
+    Profile::Set("key5", 1.337);
     ok1(Profile::Get("key5", value));
     ok1(equals(value, 1.337));
   }
@@ -84,13 +88,9 @@ TestWriter()
   Profile::Set("key1", 4);
   Profile::Set("key2", "value2");
 
-  Profile::SaveFile(_T("output/TestProfileWriter.prf"));
+  Profile::SaveFile(Path(_T("output/TestProfileWriter.prf")));
 
-  FileLineReader reader(_T("output/TestProfileWriter.prf"));
-  if (reader.error()) {
-    skip(3, 0, "read error");
-    return;
-  }
+  FileLineReader reader(Path(_T("output/TestProfileWriter.prf")));
 
   unsigned count = 0;
   bool found1 = false, found2 = false;
@@ -114,7 +114,7 @@ static void
 TestReader()
 {
   Profile::Clear();
-  Profile::LoadFile(_T("test/data/TestProfileReader.prf"));
+  Profile::LoadFile(Path(_T("test/data/TestProfileReader.prf")));
 
   {
     int value;
@@ -139,7 +139,7 @@ TestReader()
 }
 
 int main(int argc, char **argv)
-{
+try {
   plan_tests(31);
 
   TestMap();
@@ -147,4 +147,7 @@ int main(int argc, char **argv)
   TestReader();
 
   return exit_status();
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

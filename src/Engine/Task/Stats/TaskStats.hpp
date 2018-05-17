@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,7 +25,6 @@
 #include "ElementStat.hpp"
 #include "StartStats.hpp"
 #include "WindowStats.hpp"
-#include "Task/Computer/WindowStatsComputer.hpp"
 
 #include <type_traits>
 
@@ -41,22 +40,28 @@ public:
   ElementStat current_leg;
 
   /** Calculated glide angle required */
-  fixed glide_required;
+  double glide_required;
   /** Calculated cruise efficiency ratio */
-  fixed cruise_efficiency;
+  double cruise_efficiency;
   /** Calculated effective MC (m/s) */
-  fixed effective_mc;
+  double effective_mc;
   /** Best MacCready setting calculated for final glide (m/s) */
-  fixed mc_best;
+  double mc_best;
 
   /** Nominal task distance (m) */
-  fixed distance_nominal;
+  double distance_nominal;
   /** Maximum achievable task distance (m) */
-  fixed distance_max;
+  double distance_max;
   /** Minimum achievable task distance (m) */
-  fixed distance_min;
+  double distance_min;
   /** Scored distance (m) */
-  fixed distance_scored;
+  double distance_scored;
+
+  /**
+   * Calculated instantaneous speed (m/s).  Negative if unknown.
+   */
+  double inst_speed_slow;
+  double inst_speed_fast;
 
   /**
    * Index of the active task point.
@@ -98,20 +103,8 @@ public:
 
   WindowStats last_hour;
 
-  fixed GetEstimatedTotalTime() const {
+  double GetEstimatedTotalTime() const {
     return total.time_elapsed + total.time_remaining_start;
-  }
-
-  /**
-   * Check whether get_pirker_speed() is available.
-   */
-  bool IsPirkerSpeedAvailable() const {
-    return total.pirker.IsDefined();
-  }
-
-  /** Incremental task speed adjusted for mc, target changes */
-  fixed get_pirker_speed() const {
-    return total.pirker.GetSpeedIncremental();
   }
 
   /** Reset each element (for incremental speeds). */

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,18 +23,15 @@ Copyright_License {
 
 #include "ArrowPagerWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #include "Language/Language.hpp"
 #include "Form/Form.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
 
-#include <assert.h>
-
 ArrowPagerWidget::Layout::Layout(PixelRect rc, const Widget *extra_widget)
   :main(rc)
 {
-  const unsigned width = rc.right - rc.left;
-  const unsigned height = rc.bottom - rc.top;
+  const unsigned width = rc.GetWidth(), height = rc.GetHeight();
   const unsigned button_height = ::Layout::GetMaximumControlHeight();
 
   main = rc;
@@ -217,16 +214,10 @@ ArrowPagerWidget::KeyPress(unsigned key_code)
 
   switch (key_code) {
   case KEY_LEFT:
-#ifdef GNAV
-  case '6':
-#endif
     Previous(true);
     return true;
 
   case KEY_RIGHT:
-#ifdef GNAV
-  case '7':
-#endif
     Next(true);
     return true;
 

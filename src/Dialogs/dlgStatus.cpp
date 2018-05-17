@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -55,10 +55,6 @@ dlgStatusShowModal(int start_page)
   const DialogLook &look = UIGlobals::GetDialogLook();
   WidgetDialog dialog(look);
 
-  WindowStyle button_style;
-  button_style.Hide();
-  button_style.TabStop();
-
   auto *close_button = new ButtonWidget(look.button, _("Close"),
                                         dialog, mrOK);
 
@@ -71,8 +67,8 @@ dlgStatusShowModal(int start_page)
   dialog.PrepareWidget();
 
   const NMEAInfo &basic = CommonInterface::Basic();
-  const Waypoint *nearest_waypoint = basic.location_available
-    ? way_points.GetNearest(CommonInterface::Basic().location, fixed(100000))
+  auto nearest_waypoint = basic.location_available
+    ? way_points.GetNearest(CommonInterface::Basic().location, 100000)
     : nullptr;
 
   /* setup tabs */
@@ -88,7 +84,8 @@ dlgStatusShowModal(int start_page)
   const auto *RulesIcon = enable_icons ? &icons.hBmpTabRules : nullptr;
   const auto *TimesIcon = enable_icons ? &icons.hBmpTabTimes : nullptr;
 
-  Widget *flight_panel = new FlightStatusPanel(look, nearest_waypoint);
+  Widget *flight_panel = new FlightStatusPanel(look,
+                                               std::move(nearest_waypoint));
   widget.AddTab(flight_panel, _("Flight"), FlightIcon);
 
   Widget *system_panel = new SystemStatusPanel(look);

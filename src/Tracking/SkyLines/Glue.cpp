@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,30 +28,17 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "Net/State.hpp"
-#include "Net/IPv4Address.hxx"
-
-#ifdef HAVE_POSIX
-#include "IO/Async/GlobalIOThread.hpp"
-#endif
+#include "OS/ByteOrder.hpp"
 
 #include <assert.h>
 
-static constexpr fixed CLOUD_INTERVAL = fixed(60);
+static constexpr double CLOUD_INTERVAL = 60;
 
-SkyLinesTracking::Glue::Glue()
-  :interval(0),
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-   traffic_enabled(false),
-   near_traffic_enabled(false),
-#endif
-   roaming(true),
-   queue(nullptr),
-   last_climb_time(-1)
+SkyLinesTracking::Glue::Glue(boost::asio::io_service &io_service,
+                             Handler *_handler)
+  :client(io_service, _handler),
+   cloud_client(io_service, _handler)
 {
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  assert(io_thread != nullptr);
-  client.SetIOThread(io_thread);
-#endif
 }
 
 SkyLinesTracking::Glue::~Glue()
@@ -85,7 +72,7 @@ SkyLinesTracking::Glue::IsConnected() const
 inline void
 SkyLinesTracking::Glue::SendFixes(const NMEAInfo &basic)
 {
-  assert(client.IsDefined());
+  assert(client.IsConnected());
 
   if (!basic.time_available) {
     clock.Reset();
@@ -93,7 +80,7 @@ SkyLinesTracking::Glue::SendFixes(const NMEAInfo &basic)
   }
 
   if (!IsConnected()) {
-    if (clock.CheckAdvance(basic.time, fixed(interval))) {
+    if (clock.CheckAdvance(basic.time, interval)) {
       /* queue the packet, send it later */
       if (queue == nullptr)
         queue = new Queue();
@@ -108,8 +95,7 @@ SkyLinesTracking::Glue::SendFixes(const NMEAInfo &basic)
     unsigned n = 8;
     while (n-- > 0) {
       const auto &packet = queue->Peek();
-      if (!client.SendPacket(packet))
-        break;
+      client.SendPacket(packet);
 
       queue->Pop();
       if (queue->IsEmpty()) {
@@ -120,7 +106,7 @@ SkyLinesTracking::Glue::SendFixes(const NMEAInfo &basic)
     }
 
     return;
-  } else if (clock.CheckAdvance(basic.time, fixed(interval)))
+  } else if (clock.CheckAdvance(basic.time, interval))
     client.SendFix(basic);
 }
 
@@ -128,7 +114,7 @@ void
 SkyLinesTracking::Glue::SendCloudFix(const NMEAInfo &basic,
                                      const DerivedInfo &calculated)
 {
-  assert(cloud_client.IsDefined());
+  assert(cloud_client.IsConnected());
 
   if (!basic.time_available) {
     cloud_clock.Reset();
@@ -146,12 +132,12 @@ SkyLinesTracking::Glue::SendCloudFix(const NMEAInfo &basic,
 
   if (last_climb_time > basic.time)
     /* recover from time warp */
-    last_climb_time = fixed(-1);
+    last_climb_time = -1;
 
-  constexpr fixed min_climb_duration(30);
-  constexpr fixed min_height_gain(100);
+  constexpr double min_climb_duration = 30;
+  constexpr double min_height_gain = 100;
   if (!calculated.circling &&
-      calculated.climb_start_time >= fixed(0) &&
+      calculated.climb_start_time >= 0 &&
       calculated.climb_start_time > last_climb_time &&
       calculated.cruise_start_time > calculated.climb_start_time + min_climb_duration &&
       calculated.cruise_start_altitude > calculated.climb_start_altitude + min_height_gain &&
@@ -161,9 +147,9 @@ SkyLinesTracking::Glue::SendCloudFix(const NMEAInfo &basic,
     // TODO: use TE altitude?
     last_climb_time = calculated.cruise_start_time;
 
-    fixed duration = calculated.cruise_start_time - calculated.climb_start_time;
-    fixed height_gain = calculated.cruise_start_altitude - calculated.climb_start_altitude;
-    fixed lift = height_gain / duration;
+    double duration = calculated.cruise_start_time - calculated.climb_start_time;
+    double height_gain = calculated.cruise_start_altitude - calculated.climb_start_altitude;
+    double lift = height_gain / duration;
 
     cloud_client.SendThermal(ToBE32(uint32_t(basic.time * 1000)),
                              calculated.climb_start_location,
@@ -182,28 +168,34 @@ SkyLinesTracking::Glue::Tick(const NMEAInfo &basic,
     /* disable in simulator/replay */
     return;
 
-  if (client.IsDefined()) {
+  if (client.IsConnected()) {
     SendFixes(basic);
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-    if (traffic_enabled && traffic_clock.CheckAdvance(basic.clock, fixed(60)))
+    if (traffic_enabled && traffic_clock.CheckAdvance(basic.clock, 60))
       client.SendTrafficRequest(true, true, near_traffic_enabled);
-#endif
   }
 
-  if (cloud_client.IsDefined())
+  if (cloud_client.IsConnected()) {
     SendCloudFix(basic, calculated);
+
+    if (thermal_enabled && thermal_clock.CheckAdvance(basic.clock, 60))
+      cloud_client.SendThermalRequest();
+  }
 }
 
 void
 SkyLinesTracking::Glue::SetSettings(const Settings &settings)
 {
-  if (settings.cloud_enabled == TriState::TRUE && settings.cloud_key != 0) {
-    cloud_client.SetKey(settings.cloud_key);
-    if (!cloud_client.IsDefined())
-      // TODO: change hard-coded IP address to "cloud.xcsoar.net"
-      cloud_client.Open(IPv4Address(138, 201, 185, 127,
-                                    Client::GetDefaultPort()));
+  thermal_enabled = settings.cloud.show_thermals;
+
+  if (settings.cloud.enabled == TriState::TRUE && settings.cloud.key != 0) {
+    cloud_client.SetKey(settings.cloud.key);
+    if (!cloud_client.IsDefined()) {
+      const boost::asio::ip::udp::resolver::query query(boost::asio::ip::udp::v4(),
+                                                        "cloud.xcsoar.net",
+                                                        Client::GetDefaultPortString());
+      cloud_client.Open(query);
+    }
   } else
     cloud_client.Close();
 
@@ -218,14 +210,17 @@ SkyLinesTracking::Glue::SetSettings(const Settings &settings)
 
   interval = settings.interval;
 
-  if (!client.IsDefined())
-    // TODO: fix hard-coded IP address:
-    client.Open(IPv4Address(95, 128, 34, 172, Client::GetDefaultPort()));
+  if (!client.IsDefined()) {
+    /* IPv4 only for now, because the official SkyLines tracking server
+       doesn't support IPv6 yet */
+    const boost::asio::ip::udp::resolver::query query(boost::asio::ip::udp::v4(),
+                                                      "tracking.skylines.aero",
+                                                      Client::GetDefaultPortString());
+    client.Open(query);
+  }
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
   traffic_enabled = settings.traffic_enabled;
   near_traffic_enabled = settings.near_traffic_enabled;
-#endif
 
   roaming = settings.roaming;
 }

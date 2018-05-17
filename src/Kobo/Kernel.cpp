@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,10 +23,13 @@ Copyright_License {
 
 #include "Kernel.hpp"
 
+#include <stdexcept>
+
 #ifdef KOBO
 
-#include "IO/FileSource.hpp"
-#include "IO/InflateLineReader.hpp"
+#include "IO/FileReader.hxx"
+#include "IO/GunzipReader.hxx"
+#include "IO/BufferedReader.hxx"
 
 #include <fcntl.h>
 #include <string.h>
@@ -104,15 +107,11 @@ KoboInstallKernel(const char *uimage_path)
 
 bool
 IsKoboOTGKernel()
-{
+try {
 #ifdef KOBO
-  FileSource file("/proc/config.gz");
-  if (file.error())
-    return false;
-
-  InflateLineReader reader(file);
-  if (reader.HasFailed())
-    return false;
+  FileReader file(Path("/proc/config.gz"));
+  GunzipReader gunzip(file);
+  BufferedReader reader(gunzip);
 
   char *line;
   while ((line = reader.ReadLine()) != nullptr)
@@ -120,5 +119,7 @@ IsKoboOTGKernel()
       return true;
 #endif
 
+  return false;
+} catch (const std::runtime_error &e) {
   return false;
 }

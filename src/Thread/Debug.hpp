@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -33,11 +33,6 @@ InitThreadDebug()
 }
 #endif
 
-static inline void
-AssertNoneLocked()
-{
-}
-
 #ifdef ENABLE_OPENGL
 
 static inline void
@@ -58,13 +53,6 @@ LeaveDrawThread()
 void
 InitThreadDebug();
 #endif
-
-/**
- * Abort the program if the current thread holds at least one mutex.
- * Add a call to this function before invoking blocking system calls.
- */
-void
-AssertNoneLocked();
 
 bool
 InMainThread();

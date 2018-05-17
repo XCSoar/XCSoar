@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_ROUGH_ALTITUDE_HPP
 #define XCSOAR_ROUGH_ALTITUDE_HPP
 
-#include "Math/fixed.hpp"
+#include "Math/Util.hpp"
 #include "Compiler.h"
 
 #include <type_traits>
@@ -48,7 +48,7 @@ public:
   explicit constexpr
   RoughAltitude(int _value):value((short)_value) {}
 
-  RoughAltitude(fixed _value) {
+  RoughAltitude(double _value) {
     value = iround(_value);
   }
 
@@ -70,8 +70,8 @@ public:
     return *this;
   }
 
-  RoughAltitude &operator=(fixed other) {
-    value = (short)iround(other);
+  RoughAltitude &operator=(double other) {
+    value = iround(other);
     return *this;
   }
 
@@ -86,8 +86,8 @@ public:
   }
 
   constexpr
-  operator fixed() const {
-    return fixed(value);
+  operator double() const {
+    return double(value);
   }
 
   constexpr
@@ -141,18 +141,18 @@ public:
   }
 
   gcc_pure
-  fixed operator*(const fixed other) const {
+  double operator*(const double other) const {
     return value * other;
   }
 
   gcc_pure
-  fixed operator/(const fixed other) const {
-    return fixed(value) / other;
+  double operator/(const double other) const {
+    return double(value) / other;
   }
 
   gcc_pure
-  fixed operator/(const RoughAltitude other) const {
-    return fixed(value) / other.value;
+  double operator/(const RoughAltitude other) const {
+    return double(value) / other.value;
   }
 
   RoughAltitude &operator+=(const RoughAltitude other) {
@@ -168,7 +168,7 @@ public:
 
 gcc_pure
 static inline
-fixed operator*(const fixed a, const RoughAltitude b) {
+double operator*(const double a, const RoughAltitude b) {
   return b * a;
 }
 

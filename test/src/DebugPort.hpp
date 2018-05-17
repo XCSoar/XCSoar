@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,10 +24,44 @@ Copyright_License {
 #ifndef XCSOAR_DEBUG_PORT_HPP
 #define XCSOAR_DEBUG_PORT_HPP
 
+#include "Device/Config.hpp"
+#include "Device/Port/Listener.hpp"
+
+#include <memory>
+
 class Args;
+class Port;
+class DataHandler;
 struct DeviceConfig;
+namespace boost { namespace asio { class io_service; }}
 
 DeviceConfig
 ParsePortArgs(Args &args);
+
+class DebugPort final : PortListener {
+  DeviceConfig config;
+
+  PortListener *listener = nullptr;
+
+public:
+  explicit DebugPort(Args &args)
+    :config(ParsePortArgs(args)) {}
+
+  const DeviceConfig &GetConfig() const {
+    return config;
+  }
+
+  std::unique_ptr<Port> Open(boost::asio::io_service &io_service,
+                             DataHandler &handler);
+
+  void SetListener(PortListener &_listener) {
+    listener = &_listener;
+  }
+
+private:
+  /* virtual methods from class PortListener */
+  void PortStateChanged() override;
+  void PortError(const char *msg) override;
+};
 
 #endif

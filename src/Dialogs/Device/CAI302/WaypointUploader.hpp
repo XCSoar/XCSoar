@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,17 +25,16 @@ Copyright_License {
 #define XCSOAR_CAI302_WAYPOINT_UPLOADER_HPP
 
 #include "Job/Job.hpp"
-
-#include <tchar.h>
+#include "OS/Path.hpp"
 
 class CAI302Device;
 
 class CAI302WaypointUploader : public Job {
-  const TCHAR *const path;
+  const Path path;
   CAI302Device &device;
 
 public:
-  CAI302WaypointUploader(const TCHAR *_path, CAI302Device &_device)
+  CAI302WaypointUploader(Path _path, CAI302Device &_device)
     :path(_path), device(_device) {}
 
   virtual void Run(OperationEnvironment &env);

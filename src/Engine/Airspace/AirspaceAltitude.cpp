@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,31 +24,29 @@
 #include "Atmosphere/Pressure.hpp"
 #include "Navigation/Aircraft.hpp"
 
-#include <stdio.h>
-
 void
 AirspaceAltitude::SetFlightLevel(const AtmosphericPressure &press)
 {
-  static constexpr fixed fl_feet_to_m(30.48);
+  static constexpr double fl_feet_to_m(30.48);
   if (reference == AltitudeReference::STD)
     altitude = press.PressureAltitudeToQNHAltitude(flight_level * fl_feet_to_m);
 }
 
 void
-AirspaceAltitude::SetGroundLevel(const fixed alt)
+AirspaceAltitude::SetGroundLevel(const double alt)
 {
   if (reference == AltitudeReference::AGL)
     altitude = altitude_above_terrain + alt;
 }
 
 bool
-AirspaceAltitude::IsAbove(const AltitudeState &state, const fixed margin) const
+AirspaceAltitude::IsAbove(const AltitudeState &state, const double margin) const
 {
   return GetAltitude(state) >= state.altitude - margin;
 }
 
 bool
-AirspaceAltitude::IsBelow(const AltitudeState &state, const fixed margin) const
+AirspaceAltitude::IsBelow(const AltitudeState &state, const double margin) const
 {
   return GetAltitude(state) <= state.altitude + margin ||
     /* special case: GND is always "below" the aircraft, even if the
@@ -57,7 +55,7 @@ AirspaceAltitude::IsBelow(const AltitudeState &state, const fixed margin) const
     IsTerrain();
 }
 
-fixed
+double
 AirspaceAltitude::GetAltitude(const AltitudeState &state) const
 {
   // TODO: check if state.altitude_agl is valid

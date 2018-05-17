@@ -28,11 +28,13 @@
 
 #include "Parser.hpp"
 #include "Node.hpp"
-#include "Util/CharUtil.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/CharUtil.hxx"
+#include "Util/StringAPI.hxx"
 #include "Util/StringUtil.hpp"
 #include "Util/NumberParser.hpp"
 #include "IO/FileLineReader.hpp"
+
+#include <stdexcept>
 
 #include <assert.h>
 
@@ -681,11 +683,7 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
           // If we are a declaration element '<?' then we need
           // to remove extra closing '?' if it exists
           if (node.IsDeclaration() && attribute_name.back() == _T('?')) {
-#if GCC_VERSION >= 40700
             attribute_name.pop_back();
-#else
-            attribute_name.erase(std::prev(attribute_name.end()));
-#endif
           }
 
           if (!attribute_name.empty())
@@ -895,13 +893,11 @@ XML::ParseString(const TCHAR *xml_string, Results *pResults)
 }
 
 static bool
-ReadTextFile(const TCHAR *path, tstring &buffer)
-{
+ReadTextFile(Path path, tstring &buffer)
+try {
   /* auto-detect the character encoding, to be able to parse XCSoar
      6.0 task files */
   FileLineReader reader(path, Charset::AUTO);
-  if (reader.error())
-    return false;
 
   long size = reader.GetSize();
   if (size > 65536)
@@ -922,6 +918,8 @@ ReadTextFile(const TCHAR *path, tstring &buffer)
   }
 
   return true;
+} catch (const std::runtime_error &) {
+  return false;
 }
 
 /**
@@ -933,7 +931,7 @@ ReadTextFile(const TCHAR *path, tstring &buffer)
  * @return The main XMLNode or an empty node on error
  */
 XMLNode *
-XML::ParseFile(const TCHAR *filename, Results *pResults)
+XML::ParseFile(Path filename, Results *pResults)
 {
   // Open the file for reading
   tstring buffer;

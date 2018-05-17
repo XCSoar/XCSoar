@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,9 +25,9 @@ Copyright_License {
 #define XCSOAR_LOGGER_HPP
 
 #include "LoggerImpl.hpp"
+#include "Thread/SharedMutex.hpp"
 
 #include <tchar.h>
-#include "Poco/RWLock.h"
 
 struct NMEAInfo;
 struct ComputerSettings;
@@ -35,9 +35,9 @@ struct ComputerSettings;
 class ProtectedTaskManager;
 
 class Logger {
-private:
   LoggerImpl logger;
-  mutable Poco::RWLock lock;
+  mutable SharedMutex lock;
+
   void LogEvent(const NMEAInfo &gps_info, const char*);
 
 public:

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "VarioSynthesiser.hpp"
-#include "Math/FastMath.h"
+#include "Math/FastMath.hpp"
 #include "Util/Clamp.hpp"
 
 #include <algorithm>
@@ -42,7 +42,7 @@ VarioSynthesiser::VarioToFrequency(int ivario)
 }
 
 void
-VarioSynthesiser::SetVario(unsigned sample_rate, fixed vario)
+VarioSynthesiser::SetVario(double vario)
 {
   const ScopeLock protect(mutex);
 
@@ -55,7 +55,7 @@ VarioSynthesiser::SetVario(unsigned sample_rate, fixed vario)
   }
 
   /* update the ToneSynthesiser base class */
-  SetTone(sample_rate, VarioToFrequency(ivario));
+  SetTone(VarioToFrequency(ivario));
 
   if (ivario > 0) {
     /* while climbing, the vario sound gets interrupted by silence

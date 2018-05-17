@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "ToneSynthesiser.hpp"
 #include "Thread/Mutex.hpp"
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 /**
@@ -91,8 +90,9 @@ class VarioSynthesiser final : public ToneSynthesiser {
   int min_dead, max_dead;
 
 public:
-  VarioSynthesiser()
-    :audible_count(0), silence_count(1),
+  explicit VarioSynthesiser(unsigned sample_rate)
+    :ToneSynthesiser(sample_rate),
+     audible_count(0), silence_count(1),
      audible_remaining(0), silence_remaining(0),
      dead_band_enabled(false),
      min_frequency(200), zero_frequency(500), max_frequency(1500),
@@ -105,7 +105,7 @@ public:
    *
    * @param vario the current vario value [m/s]
    */
-  void SetVario(unsigned sample_rate, fixed vario);
+  void SetVario(double vario);
 
   /**
    * Produce silence from now on.
@@ -139,7 +139,7 @@ public:
   /**
    * Set the vario range of the "dead band" during which no sound is emitted
    */
-  void SetDeadBandRange(fixed min, fixed max) {
+  void SetDeadBandRange(double min, double max) {
     min_dead = (int)(min * 100);
     max_dead = (int)(max * 100);
   }

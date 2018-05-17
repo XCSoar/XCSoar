@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,25 +29,94 @@ Copyright_License {
 #include "Event/Queue.hpp"
 #include "Screen/Custom/TopCanvas.hpp"
 #include "Util/ConvertString.hpp"
-
-#if SDL_MAJOR_VERSION >= 2
 #include "Util/UTF8.hpp"
+
+#ifdef UNICODE
+#include "Util/ConvertString.hpp"
+#endif
 
 #if defined(__MACOSX__) && __MACOSX__
 #include <SDL_syswm.h>
 #import <AppKit/AppKit.h>
-#endif
+#include <alloca.h>
 #endif
 
-#if SDL_MAJOR_VERSION < 2
-void
-TopWindow::SetCaption(const TCHAR *caption)
+gcc_const
+static Uint32
+MakeSDLFlags(bool full_screen, bool resizable)
 {
-  WideToUTF8Converter caption2(caption);
-  if (caption2.IsValid())
-    ::SDL_WM_SetCaption(caption2, nullptr);
-}
+  Uint32 flags = 0;
+
+#ifdef ENABLE_OPENGL
+  flags |= SDL_WINDOW_OPENGL;
+#else /* !ENABLE_OPENGL */
+  flags |= SDL_SWSURFACE;
+#endif /* !ENABLE_OPENGL */
+
+#if !defined(__MACOSX__) || !(__MACOSX__)
+  if (full_screen)
+    flags |= SDL_WINDOW_FULLSCREEN;
 #endif
+
+  if (resizable)
+    flags |= SDL_WINDOW_RESIZABLE;
+
+#if defined(__IPHONEOS__) && __IPHONEOS__
+  /* Hide status bar on iOS devices */
+  flags |= SDL_WINDOW_BORDERLESS;
+#endif
+
+#ifdef HAVE_HIGHDPI_SUPPORT
+  flags |= SDL_WINDOW_ALLOW_HIGHDPI;
+#endif
+
+  return flags;
+}
+
+void
+TopWindow::CreateNative(const TCHAR *_text, PixelSize new_size,
+                        TopWindowStyle style)
+{
+#ifdef UNICODE
+  const WideToUTF8Converter text(_text);
+#else
+  const char *text = _text;
+#endif
+
+  const bool full_screen = style.GetFullScreen();
+  const bool resizable = style.GetResizable();
+  const Uint32 flags = MakeSDLFlags(full_screen, resizable);
+
+  window = ::SDL_CreateWindow(text, SDL_WINDOWPOS_UNDEFINED,
+                              SDL_WINDOWPOS_UNDEFINED, new_size.cx,
+                              new_size.cy, flags);
+  if (window == nullptr) {
+    fprintf(stderr,
+            "SDL_CreateWindow(%s, %u, %u, %u, %u, %#x) has failed: %s\n",
+            text, (unsigned) SDL_WINDOWPOS_UNDEFINED,
+            (unsigned) SDL_WINDOWPOS_UNDEFINED, (unsigned) new_size.cx,
+            (unsigned) new_size.cy, (unsigned)flags,
+            ::SDL_GetError());
+    return;
+  }
+
+#if defined(__MACOSX__) && __MACOSX__
+  SDL_SysWMinfo *wm_info =
+      reinterpret_cast<SDL_SysWMinfo *>(alloca(sizeof(SDL_SysWMinfo)));
+  SDL_VERSION(&wm_info->version);
+  if ((SDL_GetWindowWMInfo(window, wm_info)) &&
+      (wm_info->subsystem == SDL_SYSWM_COCOA)) {
+    if (resizable) {
+      [wm_info->info.cocoa.window
+          setCollectionBehavior: NSWindowCollectionBehaviorFullScreenPrimary];
+    }
+    if (full_screen) {
+      [wm_info->info.cocoa.window toggleFullScreen: nil];
+    }
+  }
+#endif
+
+}
 
 void
 TopWindow::Invalidate()
@@ -61,13 +130,6 @@ TopWindow::OnEvent(const SDL_Event &event)
   switch (event.type) {
     Window *w;
 
-#if SDL_MAJOR_VERSION < 2
-  case SDL_VIDEOEXPOSE:
-    invalidated = false;
-    Expose();
-    return true;
-#endif
-
   case SDL_KEYDOWN:
     w = GetFocusedWindow();
     if (w == nullptr)
@@ -76,15 +138,8 @@ TopWindow::OnEvent(const SDL_Event &event)
     if (!w->IsEnabled())
       return false;
 
-#if SDL_MAJOR_VERSION >= 2
     return w->OnKeyDown(event.key.keysym.sym);
-#else
-    return w->OnKeyDown(event.key.keysym.sym) ||
-      (event.key.keysym.unicode != 0 &&
-       w->OnCharacter(event.key.keysym.unicode));
-#endif
 
-#if SDL_MAJOR_VERSION >= 2
   case SDL_TEXTINPUT:
     w = GetFocusedWindow();
     if (w == nullptr)
@@ -103,7 +158,6 @@ TopWindow::OnEvent(const SDL_Event &event)
       return handled;
     } else
       return false;
-#endif
 
   case SDL_KEYUP:
     w = GetFocusedWindow();
@@ -131,83 +185,35 @@ TopWindow::OnEvent(const SDL_Event &event)
 
   case SDL_MOUSEMOTION:
     // XXX keys
-#ifdef HAVE_HIGHDPI_SUPPORT
-    {
-      auto x = event.motion.x;
-      auto y = event.motion.y;
-      PointToReal(x, y);
-      return OnMouseMove(x, y, 0);
-    }
-#else
-    return OnMouseMove(event.motion.x, event.motion.y, 0);
-#endif
+    return OnMouseMove(PointToReal(PixelPoint(event.motion.x, event.motion.y)),
+                       0);
 
   case SDL_MOUSEBUTTONDOWN:
     {
-#if SDL_MAJOR_VERSION < 2
-      if (event.button.button == SDL_BUTTON_WHEELUP)
-        return OnMouseWheel(event.button.x, event.button.y, 1);
-      else if (event.button.button == SDL_BUTTON_WHEELDOWN)
-        return OnMouseWheel(event.button.x, event.button.y, -1);
-#endif
-
-#ifdef HAVE_HIGHDPI_SUPPORT
-      auto x = event.button.x;
-      auto y = event.button.y;
-      PointToReal(x, y);
-
-      return double_click.Check(RasterPoint(x, y))
-        ? OnMouseDouble(x, y)
-        : OnMouseDown(x, y);
-#else
-      return double_click.Check(RasterPoint(event.button.x, event.button.y))
-        ? OnMouseDouble(event.button.x, event.button.y)
-        : OnMouseDown(event.button.x, event.button.y);
-#endif
+      const auto p = PointToReal(PixelPoint(event.button.x, event.button.y));
+      return double_click.Check(p)
+        ? OnMouseDouble(p)
+        : OnMouseDown(p);
     }
 
   case SDL_MOUSEBUTTONUP:
     {
-#if SDL_MAJOR_VERSION < 2
-      if (event.button.button == SDL_BUTTON_WHEELUP ||
-          event.button.button == SDL_BUTTON_WHEELDOWN)
-        /* the wheel has already been handled in SDL_MOUSEBUTTONDOWN */
-        return false;
-#endif
-
-#ifdef HAVE_HIGHDPI_SUPPORT
-      auto x = event.button.x;
-      auto y = event.button.y;
-      PointToReal(x, y);
-
-      double_click.Moved(RasterPoint(x, y));
-
-      return OnMouseUp(x, y);
-#else
-      double_click.Moved(RasterPoint(event.button.x, event.button.y));
-
-      return OnMouseUp(event.button.x, event.button.y);
-#endif
+      const auto p = PointToReal(PixelPoint(event.button.x, event.button.y));
+      double_click.Moved(p);
+      return OnMouseUp(p);
     }
 
   case SDL_QUIT:
     return OnClose();
 
-#if SDL_MAJOR_VERSION < 2
-  case SDL_VIDEORESIZE:
-    Resize(event.resize.w, event.resize.h);
-    return true;
-#endif
-
-#if SDL_MAJOR_VERSION >= 2
   case SDL_MOUSEWHEEL:
     {
-      int x, y;
-      SDL_GetMouseState(&x, &y);
+      PixelPoint p;
+      SDL_GetMouseState(&p.x, &p.y);
 #ifdef HAVE_HIGHDPI_SUPPORT
-      PointToReal(x, y);
+      p = PointToReal(p);
 #endif
-      return OnMouseWheel(x, y, event.wheel.y);
+      return OnMouseWheel(p, event.wheel.y);
     }
 
   case SDL_WINDOWEVENT:
@@ -215,7 +221,12 @@ TopWindow::OnEvent(const SDL_Event &event)
 
     case SDL_WINDOWEVENT_RESIZED:
 #ifndef HAVE_HIGHDPI_SUPPORT
+#ifdef ENABLE_OPENGL
+      if (screen->CheckResize(PixelSize(event.window.data1, event.window.data2)))
+        Resize(screen->GetSize());
+#else
       Resize(event.window.data1, event.window.data2);
+#endif
       return true;
 #endif
     case SDL_WINDOWEVENT_RESTORED:
@@ -235,18 +246,26 @@ TopWindow::OnEvent(const SDL_Event &event)
                               static_cast<float>(w);
             point_to_real_y = static_cast<float>(real_h) /
                               static_cast<float>(h);
-            Resize(real_w, real_h);
+            w = real_w;
+            h = real_h;
+#endif
+#ifdef ENABLE_OPENGL
+            if (screen->CheckResize(PixelSize(w, h)))
+              Resize(screen->GetSize());
 #else
             Resize(w, h);
 #endif
           }
 
 #if defined(__MACOSX__) && __MACOSX__
-          SDL_SysWMinfo wm_info;
-          SDL_VERSION(&wm_info.version);
-          if ((SDL_GetWindowWMInfo(event_window, &wm_info)) &&
-              (wm_info.subsystem == SDL_SYSWM_COCOA)) {
-            [wm_info.info.cocoa.window setCollectionBehavior: NSWindowCollectionBehaviorFullScreenPrimary];
+          SDL_SysWMinfo *wm_info =
+              reinterpret_cast<SDL_SysWMinfo *>(alloca(sizeof(SDL_SysWMinfo)));
+          SDL_VERSION(&wm_info->version);
+          if ((SDL_GetWindowWMInfo(event_window, wm_info)) &&
+              (wm_info->subsystem == SDL_SYSWM_COCOA)) {
+            [wm_info->info.cocoa.window
+                setCollectionBehavior:
+                    NSWindowCollectionBehaviorFullScreenPrimary];
           }
           Invalidate();
 #endif
@@ -259,7 +278,6 @@ TopWindow::OnEvent(const SDL_Event &event)
       Expose();
       return true;
     }
-#endif
   }
 
   return false;
@@ -289,6 +307,7 @@ TopWindow::OnResize(PixelSize new_size)
 {
   ContainerWindow::OnResize(new_size);
 
+#ifdef USE_MEMORY_CANVAS
   screen->OnResize(new_size);
+#endif
 }
-

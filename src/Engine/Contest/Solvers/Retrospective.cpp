@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,8 +23,10 @@
 #include "Retrospective.hpp"
 #include "Waypoint/Waypoints.hpp"
 
-Retrospective::Retrospective(const Waypoints &wps):
-  waypoints(wps),search_range(fixed(15000)),angle_tolerance(Angle::Degrees(fixed(25)))
+Retrospective::Retrospective(const Waypoints &wps)
+  :waypoints(wps),
+   search_range(15000),
+   angle_tolerance(Angle::Degrees(25))
 {
 }
 
@@ -42,8 +44,8 @@ Retrospective::PruneCandidates()
   auto it_best = candidate_list.end();
   bool erase = false;
 
-  auto it1 = ++candidate_list.begin();
-  auto it2 = it1; it2++;
+  auto it1 = std::next(candidate_list.begin());
+  auto it2 = std::next(it1);
   for (; it2 != candidate_list.end(); ++it1, ++it2) {
     if (it1->bearing.CompareRoughly(it2->bearing, angle_tolerance)) {
       it_best = it1;
@@ -58,11 +60,11 @@ Retrospective::PruneCandidates()
 }
 
 void
-Retrospective::CalcDistances(fixed& d_ach, fixed& d_can)
+Retrospective::CalcDistances(double &d_ach, double &d_can)
 {
-  d_ach = fixed(0);
-  d_can = fixed(0);  
-  for (auto it0 = ++candidate_list.begin(); it0 != candidate_list.end(); ++it0) {
+  d_ach = 0;
+  d_can = 0;
+  for (auto it0 = std::next(candidate_list.begin()); it0 != candidate_list.end(); ++it0) {
     d_ach += it0->actual_in;
     d_can += it0->leg_in;
   }
@@ -70,7 +72,7 @@ Retrospective::CalcDistances(fixed& d_ach, fixed& d_can)
 }
 
 
-bool 
+bool
 Retrospective::UpdateSample(const GeoPoint &aircraft_location)
 {
   assert(aircraft_location.IsValid());
@@ -78,12 +80,11 @@ Retrospective::UpdateSample(const GeoPoint &aircraft_location)
   // TODO:
   // - look for trivial loops e.g. A-B-A-B-C?
   // - only add candidate if greater distance to previous than tolerance radius
-  // - 
+  // -
 
   // retrospective task
 
-  const Waypoint *waypoint;
-  waypoint = waypoints.LookupLocation(aircraft_location, search_range);
+  auto waypoint = waypoints.LookupLocation(aircraft_location, search_range);
   // TODO actually need to find *all* in search range!
 
   // ignore if none found in search box
@@ -96,7 +97,7 @@ Retrospective::UpdateSample(const GeoPoint &aircraft_location)
 
   // initialise with first point found
   if (candidate_list.empty()) {
-    candidate_list.push_back(NearWaypoint(*waypoint, aircraft_location));
+    candidate_list.emplace_back(std::move(waypoint), aircraft_location);
     return true;
   }
 
@@ -107,36 +108,37 @@ Retrospective::UpdateSample(const GeoPoint &aircraft_location)
   // update current task point if improved
   changed |= back.update_location(aircraft_location);
 
-  if (back.waypoint.id != waypoint->id) {
+  if (back.waypoint->id != waypoint->id) {
 
     // printf("closest to %s\n", waypoint->name.c_str());
     // near new waypoint
 
     // first check if it's outside range
-    fixed dist_wpwp = waypoint->location.Distance(back.location);
+    auto dist_wpwp = waypoint->location.Distance(back.location);
 
     if ((dist_wpwp <= search_range) && (candidate_list.size()>1)) {
       // if we have a previous, we can see if this one is a better replacement
       // (replacing it makes a linear collapse of the intermediate point)
 
-      auto previous = ++candidate_list.rbegin();
-	
+      auto previous = std::next(candidate_list.rbegin());
+
       // distance previous
-      fixed d_prev_back = previous->location.Distance(back.location);
-      fixed d_prev_candidate = previous->location.Distance(waypoint->location);
-	
+      auto d_prev_back = previous->location.Distance(back.location);
+      auto d_prev_candidate = previous->location.Distance(waypoint->location);
+
       if (d_prev_candidate > d_prev_back) {
-	// replace back with new point
-	back = NearWaypoint(*waypoint, aircraft_location, *previous);
-	changed = true;
+        // replace back with new point
+        auto wp2 = waypoint;
+        back = NearWaypoint(std::move(wp2), aircraft_location, *previous);
+        changed = true;
       }
 
     }
 
-    if ((dist_wpwp > search_range) && (back.waypoint.id != waypoint->id)) {
+    if (dist_wpwp > search_range && back.waypoint->id != waypoint->id) {
       // - far enough away (not overlapping) that can consider this a new point
-      candidate_list.push_back (NearWaypoint(*waypoint, aircraft_location, 
-					     candidate_list.back()));
+      candidate_list.emplace_back(std::move(waypoint), aircraft_location,
+                                  candidate_list.back());
       changed = true;
     }
 
@@ -149,8 +151,8 @@ Retrospective::UpdateSample(const GeoPoint &aircraft_location)
   }
 
   if (changed) {
-    fixed d_ach = fixed(0);
-    fixed d_can = fixed(0);
+    double d_ach = 0;
+    double d_can = 0;
     CalcDistances(d_ach, d_can);
   }
   return changed;

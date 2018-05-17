@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -70,7 +70,7 @@ public:
   void SetAsInteger(int value) override;
   void SetAsString(const TCHAR *value) override;
   ComboList CreateComboList(const TCHAR *reference) const override;
-  void SetFromCombo(int iDataFieldIndex, TCHAR *sValue) override;
+  void SetFromCombo(int iDataFieldIndex, const TCHAR *sValue) override;
 
 protected:
   void AppendComboValue(ComboList &combo_list, int value) const;

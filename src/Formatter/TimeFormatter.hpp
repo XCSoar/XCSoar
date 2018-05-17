@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_TIME_FORMATTER_HPP
 #define XCSOAR_TIME_FORMATTER_HPP
 
-#include "Math/fixed.hpp"
 #include "Util/StringBuffer.hxx"
+#include "Compiler.h"
 
 #include <tchar.h>
 
@@ -45,8 +45,11 @@ void
 FormatISO8601(TCHAR *buffer, const BrokenDateTime &stamp);
 #endif
 
-void FormatTime(TCHAR* buffer, fixed time);
-void FormatTimeLong(TCHAR* buffer, fixed time);
+void
+FormatTime(TCHAR *buffer, double time);
+
+void
+FormatTimeLong(TCHAR *buffer, double time);
 
 /**
  * precedes with "-" if time is negative
@@ -56,10 +59,10 @@ void FormatTimeLong(TCHAR* buffer, fixed time);
 void FormatSignedTimeHHMM(TCHAR* buffer, int time);
 
 gcc_const
-static inline StringBuffer<TCHAR, 8>
+static inline BasicStringBuffer<TCHAR, 8>
 FormatSignedTimeHHMM(int time)
 {
-  StringBuffer<TCHAR, 8> buffer;
+  BasicStringBuffer<TCHAR, 8> buffer;
   FormatSignedTimeHHMM(buffer.data(), time);
   return buffer;
 }
@@ -77,11 +80,11 @@ void FormatTimespanSmart(TCHAR *buffer, int timespan,
                          const TCHAR *separator = _T(" "));
 
 gcc_const
-static inline StringBuffer<TCHAR, 64>
+static inline BasicStringBuffer<TCHAR, 64>
 FormatTimespanSmart(int timespan, unsigned max_tokens = 1,
                     const TCHAR *separator = _T(" "))
 {
-  StringBuffer<TCHAR, 64> buffer;
+  BasicStringBuffer<TCHAR, 64> buffer;
   FormatTimespanSmart(buffer.data(), timespan, max_tokens, separator);
   return buffer;
 }

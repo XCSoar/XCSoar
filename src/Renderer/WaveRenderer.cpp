@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,10 +23,30 @@ Copyright_License {
 
 #include "WaveRenderer.hpp"
 #include "Computer/WaveResult.hpp"
+#include "Tracking/Features.hpp"
+#include "Tracking/SkyLines/Data.hpp"
 #include "Look/WaveLook.hpp"
 #include "Screen/Canvas.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Geo/GeoClip.hpp"
+
+void
+WaveRenderer::Draw(Canvas &canvas, const WindowProjection &projection,
+                   const GeoClip &clip, GeoPoint ga, GeoPoint gb) const
+{
+  assert(ga.IsValid());
+  assert(gb.IsValid());
+
+  if (!clip.ClipLine(ga, gb))
+    /* outside of the visible map area */
+    return;
+
+  const PixelPoint sa(projection.GeoToScreen(ga));
+  const PixelPoint sb(projection.GeoToScreen(gb));
+
+  canvas.Select(look.pen);
+  canvas.DrawLine(sa, sb);
+}
 
 void
 WaveRenderer::Draw(Canvas &canvas, const WindowProjection &projection,
@@ -35,23 +55,14 @@ WaveRenderer::Draw(Canvas &canvas, const WindowProjection &projection,
 {
   assert(wave.IsDefined());
 
-  GeoPoint ga(wave.a), gb(wave.b);
-  if (!clip.ClipLine(ga, gb))
-    /* outside of the visible map area */
-    return;
-
-  const RasterPoint sa(projection.GeoToScreen(ga));
-  const RasterPoint sb(projection.GeoToScreen(gb));
-
-  canvas.Select(look.pen);
-  canvas.DrawLine(sa, sb);
+  Draw(canvas, projection, clip, wave.a, wave.b);
 }
 
 void
 WaveRenderer::Draw(Canvas &canvas, const WindowProjection &projection,
                    const WaveInfo &wave) const
 {
-  const GeoClip clip(projection.GetScreenBounds().Scale(fixed(1.1)));
+  const GeoClip clip(projection.GetScreenBounds().Scale(1.1));
   Draw(canvas, projection, clip, wave);
 }
 
@@ -62,7 +73,23 @@ WaveRenderer::Draw(Canvas &canvas, const WindowProjection &projection,
   if (result.waves.empty())
     return;
 
-  const GeoClip clip(projection.GetScreenBounds().Scale(fixed(1.1)));
+  const GeoClip clip(projection.GetScreenBounds().Scale(1.1));
   for (const auto &wave : result.waves)
     Draw(canvas, projection, clip, wave);
 }
+
+#ifdef HAVE_SKYLINES_TRACKING
+
+void
+WaveRenderer::Draw(Canvas &canvas, const WindowProjection &projection,
+                   const SkyLinesTracking::Data &data) const
+{
+  if (data.waves.empty())
+    return;
+
+  const GeoClip clip(projection.GetScreenBounds().Scale(1.1));
+  for (const auto &i : data.waves)
+    Draw(canvas, projection, clip, i.a, i.b);
+}
+
+#endif

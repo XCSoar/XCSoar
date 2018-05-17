@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,6 +26,7 @@
 #include "TestUtil.hpp"
 #include "Route/TerrainRoute.hpp"
 #include "Terrain/RasterMap.hpp"
+#include "Terrain/Loader.hpp"
 #include "OS/ConvertPathName.hpp"
 #include "Compatibility/path.h"
 #include "GlideSolvers/GlideSettings.hpp"
@@ -35,60 +36,63 @@
 #include "Operation/Operation.hpp"
 #include "OS/FileUtil.hpp"
 
+#include <zzip/zzip.h>
+
 #include <string.h>
 
 static void
-test_troute(const RasterMap& map, fixed mwind, fixed mc, RoughAltitude ceiling)
+test_troute(const RasterMap &map, double mwind, double mc, int ceiling)
 {
   GlideSettings settings;
   settings.SetDefaults();
+  RoutePlannerConfig config;
+  config.mode = RoutePlannerConfig::Mode::BOTH;
+
   GlidePolar polar(mc);
   SpeedVector wind(Angle::Degrees(0), mwind);
   TerrainRoute route;
-  route.UpdatePolar(settings, polar, polar, wind);
+  route.UpdatePolar(settings, config, polar, polar, wind);
   route.SetTerrain(&map);
 
   GeoPoint origin(map.GetMapCenter());
 
-  fixed pd = map.PixelDistance(origin, 1);
+  auto pd = map.PixelDistance(origin, 1);
   printf("# pixel size %g\n", (double)pd);
 
   bool retval= true;
 
   {
-    Directory::Create(_T("output/results"));
+    Directory::Create(Path(_T("output/results")));
     std::ofstream fout ("output/results/terrain.txt");
     unsigned nx = 100;
     unsigned ny = 100;
     for (unsigned i=0; i< nx; ++i) {
       for (unsigned j=0; j< ny; ++j) {
-        fixed fx = (fixed)i / (nx - 1) * 2 - fixed(1);
-        fixed fy = (fixed)j / (ny - 1) * 2 - fixed(1);
-        GeoPoint x(origin.longitude + Angle::Degrees(fixed(0.6) * fx),
-                   origin.latitude + Angle::Degrees(fixed(0.4) * fy));
-        short h = map.GetInterpolatedHeight(x);
-        fout << x.longitude.Degrees() << " " << x.latitude.Degrees() << " " << h << "\n";
+        auto fx = (double)i / (nx - 1) * 2 - 1;
+        auto fy = (double)j / (ny - 1) * 2 - 1;
+        GeoPoint x(origin.longitude + Angle::Degrees(0.6 * fx),
+                   origin.latitude + Angle::Degrees(0.4 * fy));
+        TerrainHeight h = map.GetInterpolatedHeight(x);
+        fout << x.longitude.Degrees() << " " << x.latitude.Degrees()
+             << " " << h.GetValue() << "\n";
       }
       fout << "\n";
     }
     fout << "\n";
   }
 
-  RoutePlannerConfig config;
-  config.mode = RoutePlannerConfig::Mode::BOTH;
-
   unsigned i=0;
-  for (fixed ang = fixed(0); ang < fixed_two_pi; ang += fixed(M_PI / 8)) {
-    GeoPoint dest = GeoVector(fixed(40000.0), Angle::Radians(ang)).EndPoint(origin);
+  for (double ang = 0; ang < M_2PI; ang += M_PI / 8) {
+    GeoPoint dest = GeoVector(40000.0, Angle::Radians(ang)).EndPoint(origin);
 
-    short hdest = map.GetHeight(dest)+100;
+    int hdest = map.GetHeight(dest).GetValueOr0() + 100;
 
     retval = route.Solve(AGeoPoint(origin,
-                                   RoughAltitude(map.GetHeight(origin) + 100)),
+                                   map.GetHeight(origin).GetValueOr0() + 100),
                          AGeoPoint(dest,
-                                   RoughAltitude(positive(mc)
-                                                 ? hdest
-                                                 : std::max(hdest, (short)3200))),
+                                   mc > 0
+                                   ? hdest
+                                   : std::max(hdest, 3200)),
                          config, ceiling);
     char buffer[128];
     sprintf(buffer,"terrain route solve, dir=%g, wind=%g, mc=%g ceiling=%d",
@@ -98,13 +102,12 @@ test_troute(const RasterMap& map, fixed mwind, fixed mc, RoughAltitude ceiling)
     i++;
   }
 
-  // polar.SetMC(fixed(0));
+  // polar.SetMC(0);
   // route.UpdatePolar(polar, wind);
 }
 
 int main(int argc, char** argv) {
-
-  const char hc_path[] = "tmp/terrain";
+  static const char hc_path[] = "tmp/map.xcm";
   const char *map_path;
   if ((argc<2) || !strlen(argv[0])) {
     map_path = hc_path;
@@ -112,30 +115,36 @@ int main(int argc, char** argv) {
     map_path = argv[0];
   }
 
-  TCHAR jp2_path[4096];
-  _tcscpy(jp2_path, PathName(map_path));
-  _tcscat(jp2_path, _T(DIR_SEPARATOR_S) _T("terrain.jp2"));
-
-  TCHAR j2w_path[4096];
-  _tcscpy(j2w_path, PathName(map_path));
-  _tcscat(j2w_path, _T(DIR_SEPARATOR_S) _T("terrain.j2w"));
-
-  RasterMap map(jp2_path);
-
-  NullOperationEnvironment operation;
-  if (!map.Load(jp2_path, j2w_path, operation)) {
-    fprintf(stderr, "failed to load map\n");
+  ZZIP_DIR *dir = zzip_dir_open(map_path, nullptr);
+  if (dir == nullptr) {
+    fprintf(stderr, "Failed to open %s\n", map_path);
     return EXIT_FAILURE;
   }
 
+  RasterMap map;
+
+  NullOperationEnvironment operation;
+  if (!LoadTerrainOverview(dir, map.GetTileCache(),
+                           operation)) {
+    fprintf(stderr, "failed to load map\n");
+    zzip_dir_close(dir);
+    return EXIT_FAILURE;
+  }
+
+  map.UpdateProjection();
+
+  SharedMutex mutex;
   do {
-    map.SetViewCenter(map.GetMapCenter(), fixed(100000));
+    UpdateTerrainTiles(dir, map.GetTileCache(), mutex,
+                       map.GetProjection(),
+                       map.GetMapCenter(), 100000);
   } while (map.IsDirty());
+  zzip_dir_close(dir);
 
   plan_tests(16*3);
-  test_troute(map, fixed(0), fixed(0.1), RoughAltitude(10000));
-  test_troute(map, fixed(0), fixed(0), RoughAltitude(10000));
-  test_troute(map, fixed(5.0), fixed(1), RoughAltitude(10000));
+  test_troute(map, 0, 0.1, 10000);
+  test_troute(map, 0, 0, 10000);
+  test_troute(map, 5.0, 1, 10000);
 
   return exit_status();
 }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,6 +27,7 @@ Copyright_License {
 #include "Util/NumberParser.hpp"
 
 #include <algorithm>
+#include <stdexcept>
 
 static constexpr bool
 IsNearZero(double value)
@@ -82,17 +83,20 @@ ReadWorldFile(NLineReader &reader, WorldFileData &data)
 }
 
 static bool
-ReadWorldFile(const TCHAR *path, WorldFileData &data)
-{
-  ZipLineReaderA reader(path);
-  return !reader.error() && ReadWorldFile(reader, data);
+ReadWorldFile(struct zzip_dir *dir, const char *path, WorldFileData &data)
+try {
+  ZipLineReaderA reader(dir, path);
+  return ReadWorldFile(reader, data);
+} catch (const std::runtime_error &e) {
+  return false;
 }
 
 GeoBounds
-LoadWorldFile(const TCHAR *path, unsigned width, unsigned height)
+LoadWorldFile(struct zzip_dir *dir, const char *path,
+              unsigned width, unsigned height)
 {
   WorldFileData data;
-  if (!ReadWorldFile(path, data) ||
+  if (!ReadWorldFile(dir, path, data) ||
       /* we don't support rotation */
       data.IsRotated())
     return GeoBounds::Invalid();

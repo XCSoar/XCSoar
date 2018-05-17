@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,18 +29,21 @@ Copyright_License {
 #include "Asset.hpp"
 #include "LocalPath.hpp"
 #include "Util/StringUtil.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringCompare.hxx"
+#include "Util/StringAPI.hxx"
+#include "Util/tstring.hpp"
 #include "OS/FileUtil.hpp"
-#include "OS/PathName.hpp"
+#include "OS/Path.hpp"
 
 #include <windef.h> /* for MAX_PATH */
+#include <assert.h>
 
 #define XCSPROFILE "default.prf"
 #define OLDXCSPROFILE "xcsoar-registry.prf"
 
-static TCHAR startProfileFile[MAX_PATH];
+static AllocatedPath startProfileFile = nullptr;
 
-const TCHAR *
+Path
 Profile::GetPath()
 {
   return startProfileFile;
@@ -49,19 +52,22 @@ Profile::GetPath()
 void
 Profile::Load()
 {
+  assert(!startProfileFile.IsNull());
+
   LogFormat("Loading profiles");
   LoadFile(startProfileFile);
   SetModified(false);
 }
 
 void
-Profile::LoadFile(const TCHAR *szFile)
+Profile::LoadFile(Path path)
 {
-  if (StringIsEmpty(szFile))
-    return;
-
-  if (LoadFile(map, szFile))
-    LogFormat(_T("Loaded profile from %s"), szFile);
+  try {
+    LoadFile(map, path);
+    LogFormat(_T("Loaded profile from %s"), path.c_str());
+  } catch (const std::runtime_error &e) {
+    LogError("Failed to load profile", e);
+  }
 }
 
 void
@@ -71,64 +77,59 @@ Profile::Save()
     return;
 
   LogFormat("Saving profiles");
-  if (StringIsEmpty(startProfileFile))
-    SetFiles(_T(""));
+  if (startProfileFile.IsNull())
+    SetFiles(nullptr);
+
+  assert(!startProfileFile.IsNull());
   SaveFile(startProfileFile);
 }
 
 void
-Profile::SaveFile(const TCHAR *szFile)
+Profile::SaveFile(Path path)
 {
-  if (StringIsEmpty(szFile))
-    return;
-
-  LogFormat(_T("Saving profile to %s"), szFile);
-  SaveFile(map, szFile);
+  LogFormat(_T("Saving profile to %s"), path.c_str());
+  SaveFile(map, path);
 }
 
 void
-Profile::SetFiles(const TCHAR *override_path)
+Profile::SetFiles(Path override_path)
 {
   /* set the "modified" flag, because we are potentially saving to a
      new file now */
   SetModified(true);
 
-  if (!StringIsEmpty(override_path)) {
-    if (IsBaseName(override_path)) {
-      LocalPath(startProfileFile, override_path);
-
-      if (StringFind(override_path, '.') == nullptr)
-        _tcscat(startProfileFile, _T(".prf"));
+  if (!override_path.IsNull()) {
+    if (override_path.IsBase()) {
+      if (StringFind(override_path.c_str(), '.') != nullptr)
+        startProfileFile = LocalPath(override_path);
+      else {
+        tstring t(override_path.c_str());
+        t += _T(".prf");
+        startProfileFile = LocalPath(t.c_str());
+      }
     } else
-      CopyString(startProfileFile, override_path, MAX_PATH);
+      startProfileFile = Path(override_path);
     return;
   }
 
   // Set the default profile file
-  LocalPath(startProfileFile, _T(XCSPROFILE));
-
-  if (IsAltair() && !File::Exists(startProfileFile)) {
-    /* backwards compatibility with old Altair firmware */
-    LocalPath(startProfileFile, _T("config/") _T(OLDXCSPROFILE));
-    if (!File::Exists(startProfileFile))
-      LocalPath(startProfileFile, _T(XCSPROFILE));
-  }
+  startProfileFile = LocalPath(_T(XCSPROFILE));
 }
 
-bool
-Profile::GetPath(const char *key, TCHAR *value)
+AllocatedPath
+Profile::GetPath(const char *key)
 {
-  return map.GetPath(key, value);
+  return map.GetPath(key);
 }
 
 bool
-Profile::GetPathIsEqual(const char *key, const TCHAR *value)
+Profile::GetPathIsEqual(const char *key, Path value)
 {
   return map.GetPathIsEqual(key, value);
 }
 
 void
-Profile::SetPath(const char *key, const TCHAR *value)
+Profile::SetPath(const char *key, Path value)
 {
   map.SetPath(key, value);
 }

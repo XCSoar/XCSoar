@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "ActionListener.hpp"
 #include "Screen/ContainerWindow.hpp"
+#include "Screen/SolidContainerWindow.hpp"
 #include "Util/StaticString.hxx"
 
 #include <functional>
@@ -48,21 +49,6 @@ enum ModalResult {
 class WndForm : public ContainerWindow,
                 public ActionListener
 {
-  class ClientAreaWindow : public ContainerWindow {
-    const DialogLook &look;
-
-  public:
-    ClientAreaWindow(const DialogLook &_look)
-      :look(_look) {}
-
-  protected:
-#ifdef USE_GDI
-    const Brush *OnChildColor(Window &window, Canvas &canvas) override;
-#endif
-
-    void OnPaint(Canvas &canvas) override;
-  };
-
 public:
   typedef std::function<bool(unsigned)> KeyDownFunction;
   typedef std::function<bool(unsigned)> CharacterFunction;
@@ -70,24 +56,24 @@ public:
 protected:
   const DialogLook &look;
 
-  int modal_result;
+  int modal_result = 0;
 
   /**
    * The dialog stays open as long as this flag is set, even if
    * SetModalResult has been called.
    */
-  bool force;
+  bool force = false;
 
   /**
    * Show in modeless mode.  Close if screen is clicked
    * outside dialog
    */
-  bool modeless;
+  bool modeless = false;
 
-  bool dragging;
+  bool dragging = false;
 
   /** The ClientWindow */
-  ClientAreaWindow client_area;
+  SolidContainerWindow client_area;
   /** Coordinates of the ClientWindow */
   PixelRect client_rect;
   /** Coordinates of the titlebar */
@@ -96,7 +82,7 @@ protected:
   KeyDownFunction key_down_function;
   CharacterFunction character_function;
 
-  RasterPoint last_drag;
+  PixelPoint last_drag;
 
   /**
    * The OnPaint event is called when the button needs to be drawn
@@ -153,7 +139,7 @@ public:
   }
 
   unsigned GetTitleHeight() const {
-    return title_rect.bottom - title_rect.top;
+    return title_rect.GetHeight();
   }
 
   void SetForceOpen(bool _force) {
@@ -191,9 +177,9 @@ public:
   void OnResize(PixelSize new_size) override;
   void OnDestroy() override;
 
-  bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
-  bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  bool OnMouseUp(PixelScalar x, PixelScalar y) override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) override;
+  bool OnMouseDown(PixelPoint p) override;
+  bool OnMouseUp(PixelPoint p) override;
   void OnCancelMode() override;
 
 #ifdef WIN32

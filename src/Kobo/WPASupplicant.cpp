@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,39 +23,30 @@ Copyright_License {
 
 #include "WPASupplicant.hpp"
 #include "Net/AllocatedSocketAddress.hxx"
-#include "OS/FileUtil.hpp"
 #include "Util/NumberParser.hpp"
 #include "Util/StaticString.hxx"
+#include "Util/StringCompare.hxx"
 
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <time.h>
 
 bool
 WPASupplicant::Connect(const char *path)
 {
   Close();
 
-  strcpy(local_path, "/tmp/xcsoar.XXXXXX");
-
-  AllocatedSocketAddress local_address;
-  local_address.SetLocal(mktemp(local_path));
-
   AllocatedSocketAddress peer_address;
   peer_address.SetLocal(path);
 
   return fd.Create(AF_LOCAL, SOCK_DGRAM, 0) &&
-    fd.Bind(local_address) && fd.Connect(peer_address);
+    fd.AutoBind() && fd.Connect(peer_address);
 }
 
 void
 WPASupplicant::Close()
 {
-  if (!StringIsEmpty(local_path)) {
-    File::Delete(local_path);
-    local_path[0] = 0;
-  }
-
   if (fd.IsDefined())
     fd.Close();
 }

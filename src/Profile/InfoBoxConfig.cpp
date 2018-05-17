@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -105,6 +105,7 @@ Profile::Load(const ProfileMap &map, InfoBoxSettings &settings)
 
   case InfoBoxSettings::Geometry::TOP_LEFT_12:
   case InfoBoxSettings::Geometry::LEFT_6_RIGHT_3_VARIO:
+  case InfoBoxSettings::Geometry::LEFT_12_RIGHT_3_VARIO:
   case InfoBoxSettings::Geometry::BOTTOM_8_VARIO:
   case InfoBoxSettings::Geometry::TOP_LEFT_4:
   case InfoBoxSettings::Geometry::BOTTOM_RIGHT_4:

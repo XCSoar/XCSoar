@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -32,17 +32,28 @@ Copyright_License {
 
 struct ChartLook {
   enum Style {
-    STYLE_BLUETHIN,
-    STYLE_REDTHICK,
-    STYLE_DASHGREEN,
-    STYLE_MEDIUMBLACK,
-    STYLE_THINDASHPAPER,
+    STYLE_BLUETHINDASH,
+    STYLE_BLUEDASH,
+    STYLE_BLUE,
+    STYLE_REDTHICKDASH,
+    STYLE_RED,
+    STYLE_GREENDASH,
+    STYLE_GREEN,
+    STYLE_BLACK,
+    STYLE_WHITE,
+    STYLE_GRID,
+    STYLE_GRIDMINOR,
+    STYLE_GRIDZERO,
     STYLE_COUNT
   };
 
   Pen pens[STYLE_COUNT];
 
   Brush bar_brush;
+  Brush neg_brush;
+  Brush blank_brush;
+  Brush label_blank_brush;
+  Brush black_brush;
 
   /**
    * Font for miscellaneous labels in the chart.
@@ -58,6 +69,9 @@ struct ChartLook {
    * Font for tick values along the axis.
    */
   Font axis_value_font;
+
+  Color color_positive;
+  Color color_negative;
 
   void Initialise();
 

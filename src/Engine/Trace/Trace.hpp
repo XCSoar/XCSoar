@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -317,11 +317,11 @@ public:
    */
   void clear();
 
-  void EraseEarlierThan(fixed time) {
+  void EraseEarlierThan(double time) {
     EraseEarlierThan((unsigned)time);
   }
 
-  void EraseLaterThan(fixed time) {
+  void EraseLaterThan(double time) {
     EraseLaterThan((unsigned)time);
   }
 
@@ -395,7 +395,7 @@ public:
    * resolution #min_distance.
    */
   void GetPoints(TracePointVector &v, unsigned min_time,
-                 const GeoPoint &location, fixed resolution) const;
+                 const GeoPoint &location, double resolution) const;
 
   const TracePoint &front() const {
     assert(!empty());
@@ -519,7 +519,7 @@ public:
   }
 
   gcc_pure
-  unsigned ProjectRange(const GeoPoint &location, fixed distance) const {
+  unsigned ProjectRange(const GeoPoint &location, double distance) const {
     return task_projection.ProjectRangeInteger(location, distance);
   }
 };

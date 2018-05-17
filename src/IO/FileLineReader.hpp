@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,40 +24,31 @@ Copyright_License {
 #ifndef XCSOAR_IO_FILE_LINE_READER_HPP
 #define XCSOAR_IO_FILE_LINE_READER_HPP
 
-#include "FileSource.hpp"
-#include "LineSplitter.hpp"
+#include "FileReader.hxx"
+#include "BufferedReader.hxx"
 #include "ConvertLineReader.hpp"
 
 /**
- * Glue class which combines FileSource and LineSplitter, and provides
+ * Glue class which combines FileReader and BufferedReader, and provides
  * a public NLineReader interface.
  */
 class FileLineReaderA : public NLineReader {
-protected:
-  FileSource file;
-  LineSplitter splitter;
+  FileReader file;
+  BufferedReader buffered;
 
 public:
-  FileLineReaderA(const char *path)
-    :file(path), splitter(file) {}
-#ifdef _UNICODE
-  FileLineReaderA(const TCHAR *path)
-    :file(path), splitter(file) {}
-#endif
-
-  bool error() const {
-    return file.error();
-  }
+  /**
+   * Throws std::runtime_errror on error.
+   */
+  explicit FileLineReaderA(Path path)
+    :file(path), buffered(file) {}
 
   /**
    * Rewind the file to the beginning.
    */
-  bool Rewind() {
-    if (!file.Rewind())
-      return false;
-
-    splitter.ResetBuffer();
-    return true;
+  void Rewind() {
+    file.Rewind();
+    buffered.Reset();
   }
 
 public:
@@ -67,47 +58,20 @@ public:
   long Tell() const override;
 };
 
-/**
- * Glue class which combines FileSource, LineSplitter and
- * ConvertLineReader, and provides a public TLineReader interface.
- */
-class FileLineReader : public TLineReader {
-protected:
-  FileSource file;
-  LineSplitter splitter;
-  ConvertLineReader convert;
-
+class FileLineReader : public ConvertLineReader {
 public:
-  FileLineReader(const char *path,
-                 Charset cs=Charset::UTF8)
-    :file(path), splitter(file), convert(splitter, cs) {}
-
-#ifdef _UNICODE
-  FileLineReader(const TCHAR *path,
-                 Charset cs=Charset::UTF8)
-    :file(path), splitter(file), convert(splitter, cs) {}
-#endif
-
-  bool error() const {
-    return file.error();
-  }
+  /**
+   * Throws std::runtime_errror on error.
+   */
+  FileLineReader(Path path, Charset cs=Charset::UTF8)
+    :ConvertLineReader(std::make_unique<FileLineReaderA>(path), cs) {}
 
   /**
    * Rewind the file to the beginning.
    */
-  bool Rewind() {
-    if (!file.Rewind())
-      return false;
-
-    splitter.ResetBuffer();
-    return true;
+  void Rewind() {
+    ((FileLineReaderA &)GetSource()).Rewind();
   }
-
-public:
-  /* virtual methods from class TLineReader */
-  TCHAR *ReadLine() override;
-  long GetSize() const override;
-  long Tell() const override;
 };
 
 #endif

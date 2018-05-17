@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,10 +22,12 @@ Copyright_License {
 */
 
 #include "LocalPath.hpp"
+#include "OS/Path.hpp"
 #include "Compatibility/path.h"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 #include "Util/StringFormat.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
+#include "Util/StringBuilder.hxx"
 #include "Asset.hpp"
 
 #include "OS/FileUtil.hpp"
@@ -36,10 +38,13 @@ Copyright_License {
 
 #ifdef WIN32
 #include "OS/PathName.hpp"
+#else
+#include "Util/tstring.hpp"
 #endif
 
+#include <algorithm>
+
 #include <assert.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <windef.h> // for MAX_PATH
 #ifdef WIN32
@@ -48,10 +53,6 @@ Copyright_License {
 #else
 #include <shlobj.h>
 #endif
-#endif
-
-#ifdef _WIN32_WCE
-#include "OS/FlashCardEnumerator.hpp"
 #endif
 
 #ifdef ANDROID
@@ -82,120 +83,104 @@ Copyright_License {
 /**
  * The absolute location of the XCSoarData directory.
  */
-static TCHAR *gcc_restrict data_path;
-static size_t data_path_length;
+static AllocatedPath data_path = AllocatedPath(nullptr);
 
-const TCHAR *
+Path
 GetPrimaryDataPath()
 {
-  assert(data_path != nullptr);
+  assert(!data_path.IsNull());
 
   return data_path;
 }
 
 void
-SetPrimaryDataPath(const TCHAR *path)
+SetPrimaryDataPath(Path path)
 {
-  assert(path != nullptr);
-  assert(!StringIsEmpty(path));
+  assert(!path.IsNull());
+  assert(!path.IsEmpty());
 
-  free(data_path);
-  data_path = DuplicateString(path);
-  data_path_length = StringLength(data_path);
+  data_path = path;
 }
 
-void
-LocalPath(TCHAR *gcc_restrict buffer, const TCHAR *gcc_restrict file)
+AllocatedPath
+LocalPath(Path file)
 {
-  assert(data_path != nullptr);
+  assert(!data_path.IsNull());
+  assert(!file.IsNull());
 
-  memcpy(buffer, data_path, data_path_length * sizeof(data_path[0]));
-  buffer[data_path_length] = _T(DIR_SEPARATOR);
-  _tcscpy(buffer + data_path_length + 1, file);
+  return AllocatedPath::Build(data_path, file);
 }
 
-TCHAR *
-LocalPath(TCHAR *gcc_restrict buffer, const TCHAR *gcc_restrict subdir,
-          const TCHAR *gcc_restrict name)
+AllocatedPath
+LocalPath(const TCHAR *file)
 {
-  assert(data_path != nullptr);
-  assert(subdir != nullptr);
-  assert(!StringIsEmpty(subdir));
-  assert(name != nullptr);
-  assert(!StringIsEmpty(name));
-
-  memcpy(buffer, data_path, data_path_length * sizeof(data_path[0]));
-  buffer[data_path_length] = _T(DIR_SEPARATOR);
-  _tcscpy(buffer + data_path_length + 1, subdir);
-  _tcscat(buffer + data_path_length + 1, _T(DIR_SEPARATOR_S));
-  _tcscat(buffer + data_path_length + 1, name);
-
-  return buffer;
+  return LocalPath(Path(file));
 }
 
-const TCHAR *
-RelativePath(const TCHAR *path)
+AllocatedPath
+MakeLocalPath(const TCHAR *name)
 {
-  assert(data_path != nullptr);
-
-  const TCHAR *p = StringAfterPrefix(path, data_path);
-  return p != nullptr && IsDirSeparator(*p)
-    ? p + 1
-    : nullptr;
+  auto path = LocalPath(name);
+  Directory::Create(path);
+  return path;
 }
 
-/**
- * Convert backslashes to slashes on platforms where it matters.
- * @param p Pointer to the string to normalize
- */
-static void
-NormalizeBackslashes(TCHAR *p)
+Path
+RelativePath(Path path)
 {
-#if !defined(_WIN32) || defined(__WINE__)
-  while ((p = StringFind(p, '\\')) != nullptr)
-    *p++ = '/';
-#endif
+  assert(!data_path.IsNull());
+
+  return path.RelativeTo(data_path);
 }
 
 static constexpr TCHAR local_path_code[] = _T("%LOCAL_PATH%\\");
 
-void
-ExpandLocalPath(TCHAR *dest, const TCHAR *src)
+gcc_pure
+static const TCHAR *
+AfterLocalPathCode(const TCHAR *p)
 {
-  // Get the relative file name and location (ptr)
-  const TCHAR *ptr = StringAfterPrefix(src, local_path_code);
-  if (ptr == nullptr) {
-    _tcscpy(dest, src);
-    return;
-  }
+  p = StringAfterPrefix(p, local_path_code);
+  if (p == nullptr)
+    return nullptr;
 
-  while (*ptr == _T('/') || *ptr == _T('\\'))
-    ++ptr;
+  while (*p == _T('/') || *p == _T('\\'))
+    ++p;
 
-  if (StringIsEmpty(ptr))
-    return;
+  if (StringIsEmpty(p))
+    return nullptr;
 
-  // Replace the code "%LOCAL_PATH%\\" by the full local path (output)
-  LocalPath(dest, ptr);
-
-  // Normalize the backslashes (if necessary)
-  NormalizeBackslashes(dest);
+  return p;
 }
 
-void
-ContractLocalPath(TCHAR* filein)
+AllocatedPath
+ExpandLocalPath(Path src)
 {
-  TCHAR output[MAX_PATH];
-
   // Get the relative file name and location (ptr)
-  const TCHAR *relative = RelativePath(filein);
-  if (relative == nullptr)
-    return;
+  const TCHAR *ptr = AfterLocalPathCode(src.c_str());
+  if (ptr == nullptr)
+    return Path(src);
+
+#ifndef WIN32
+  // Convert backslashes to slashes on platforms where it matters
+  tstring src2(src.c_str());
+  std::replace(src2.begin(), src2.end(), '\\', '/');
+  src = Path(src2.c_str());
+#endif
+
+  // Replace the code "%LOCAL_PATH%\\" by the full local path (output)
+  return LocalPath(ptr);
+}
+
+AllocatedPath
+ContractLocalPath(Path src)
+{
+  // Get the relative file name and location (ptr)
+  const Path relative = RelativePath(src);
+  if (relative.IsNull())
+    return nullptr;
 
   // Replace the full local path by the code "%LOCAL_PATH%\\" (output)
-  StringFormatUnsafe(output, _T("%s%s"), local_path_code, relative);
-  // ... and copy it to the buffer (filein)
-  _tcscpy(filein, output);
+  return Path(local_path_code) + relative.c_str();
 }
 
 #ifdef WIN32
@@ -203,85 +188,22 @@ ContractLocalPath(TCHAR* filein)
 /**
  * Find a XCSoarData folder in the same location as the executable.
  */
-static const TCHAR *
-FindDataPathAtModule(HMODULE hModule, TCHAR *buffer)
+static AllocatedPath
+FindDataPathAtModule(HMODULE hModule)
 {
+  TCHAR buffer[MAX_PATH];
   if (GetModuleFileName(hModule, buffer, MAX_PATH) <= 0)
     return nullptr;
 
   ReplaceBaseName(buffer, _T(XCSDATADIR));
-  return Directory::Exists(buffer)
-    ? buffer
+  return Directory::Exists(Path(buffer))
+    ? AllocatedPath(buffer)
     : nullptr;
 }
 
 #endif
 
-#ifdef _WIN32_WCE
-
-static bool
-InFlashNamed(const TCHAR *path, const TCHAR *name)
-{
-  size_t name_length = StringLength(name);
-
-  return IsDirSeparator(path[0]) &&
-    memcmp(path + 1, name, name_length * sizeof(name[0])) == 0 &&
-    IsDirSeparator(path[1 + name_length]);
-}
-
-/**
- * Determine whether the specified path is on a flash disk.  If yes,
- * it returns the absolute root path of the disk.
- */
-static const TCHAR *
-InFlash(const TCHAR *path, TCHAR *buffer)
-{
-  assert(path != nullptr);
-  assert(buffer != nullptr);
-
-  FlashCardEnumerator enumerator;
-  const TCHAR *name;
-  while ((name = enumerator.Next()) != nullptr) {
-    if (InFlashNamed(path, name)) {
-      buffer[0] = DIR_SEPARATOR;
-      StringFormatUnsafe(buffer, _T(DIR_SEPARATOR_S"%s"), name);
-      return buffer;
-    }
-  }
-
-  return nullptr;
-}
-
-static const TCHAR *
-ModuleInFlash(HMODULE hModule, TCHAR *buffer)
-{
-  if (GetModuleFileName(hModule, buffer, MAX_PATH) <= 0)
-    return nullptr;
-
-  return InFlash(buffer, buffer);
-}
-
-/**
- * Looks for a directory called "XCSoarData" on all flash disks.
- */
-static const TCHAR *
-ExistingDataOnFlash(TCHAR *buffer)
-{
-  assert(buffer != nullptr);
-
-  FlashCardEnumerator enumerator;
-  const TCHAR *name;
-  while ((name = enumerator.Next()) != nullptr) {
-    StringFormatUnsafe(buffer, _T(DIR_SEPARATOR_S "%s" DIR_SEPARATOR_S XCSDATADIR),
-                       name);
-    if (Directory::Exists(buffer))
-      return buffer;
-  }
-
-  return nullptr;
-}
-
-#elif defined(WIN32)
+#ifdef WIN32
 
 static const TCHAR *
 ModuleInFlash(HMODULE module, TCHAR *buffer)
@@ -333,20 +255,20 @@ fgrep(const char *fname, const char *string, const char *string2 = nullptr)
  * XCSoarData.  If so, it returns an allocated absolute path to that
  * XCSoarData directory.
  */
-static TCHAR *
+static AllocatedPath
 TryMountPoint(const TCHAR *mnt)
 {
-  TCHAR buffer[MAX_PATH];
-  _tcscpy(buffer, mnt);
-  _tcscat(buffer, _T(DIR_SEPARATOR_S XCSDATADIR));
+  auto path = AllocatedPath::Build(mnt, _T(XCSDATADIR));
 
   __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
                       "Try '%s' exists=%d access=%d",
-                      buffer, Directory::Exists(buffer), access(buffer, W_OK));
+                      path.c_str(), Directory::Exists(path),
+                      access(path.c_str(), W_OK));
 
-  return Directory::Exists(buffer) && access(buffer, W_OK) == 0
-    ? DuplicateString(buffer)
-    : nullptr;
+  if (Directory::Exists(path) && access(path.c_str(), W_OK) == 0)
+    return path;
+
+  return nullptr;
 }
 
 #endif /* ANDROID */
@@ -357,84 +279,69 @@ TryMountPoint(const TCHAR *mnt)
  * @param create true creates the path if it does not exist
  * @return a buffer which may be used to build the path
  */
-static const TCHAR *
-GetHomeDataPath(TCHAR *gcc_restrict buffer, bool create=false)
+static AllocatedPath
+GetHomeDataPath(bool create=false)
 {
   if (IsAndroid() || IsKobo())
     /* hard-coded path for Android */
     return nullptr;
 
 #ifdef HAVE_POSIX
-  /* on Unix or WINE, use ~/.xcsoar */
+  /* on Unix, use ~/.xcsoar */
   const TCHAR *home = getenv("HOME");
   if (home != nullptr) {
-    _tcscpy(buffer, home);
+    return AllocatedPath::Build(Path(home),
 #ifdef __APPLE__
     /* Mac OS X users are not used to dot-files in their home
        directory - make it a little bit easier for them to find the
-       files */
-    _tcscat(buffer, _T("/XCSoarData"));
+       files.
+       If target is an iOS device, use the already existing "Documents" folder
+       inside the application's sandbox.
+       This folder can also be accessed via iTunes, if UIFileSharingEnabled is set
+       to YES in Info.plist
+    */
+#if (TARGET_OS_IPHONE)
+    _T("Documents")
 #else
-    _tcscat(buffer, _T("/.xcsoar"));
+    _T(XCSDATADIR)
 #endif
-    return buffer;
-  } else
-    return _T("/etc/xcsoar");
 #else
-  if (IsWindowsCE())
-    /* clear the buffer, just in case we evaluate it after
-       SHGetSpecialFolderPath() failure, see below */
-    buffer[0] = _T('\0');
+                                _T("/.xcsoar")
+#endif
+                                );
+  } else
+    return Path("/etc/xcsoar");
+#else
 
+  TCHAR buffer[MAX_PATH];
   bool success = SHGetSpecialFolderPath(nullptr, buffer, CSIDL_PERSONAL,
                                         create);
-  if (IsWindowsCE() && !success && !StringIsEmpty(buffer))
-    /* MSDN: "If you are using the AYGShell extensions, then this
-       function returns FALSE even if successful. If the folder
-       represented by the CSIDL does not exist and is not created, a
-       nullptr string is returned indicating that the directory does not
-       exist." */
-    success = true;
   if (!success)
     return nullptr;
 
-  _tcscat(buffer, _T(DIR_SEPARATOR_S));
-  _tcscat(buffer, _T(XCSDATADIR));
-  return buffer;
+  return AllocatedPath::Build(buffer, _T(XCSDATADIR));
 #endif
 }
 
-static TCHAR *
+static AllocatedPath
 FindDataPath()
 {
-  if (IsAltair() && IsEmbedded()) {
-    /* if XCSoarData exists on USB drive, use that, because the
-       internal memory is extremely small */
-    const TCHAR *usb = _T("\\USB HD\\" XCSDATADIR);
-    if (Directory::Exists(usb))
-      return DuplicateString(usb);
-
-    /* hard-coded path for Altair */
-    return DuplicateString(_T("\\NOR Flash"));
-  }
-
 #ifdef WIN32
   {
-    TCHAR buffer[MAX_PATH];
-    const TCHAR *path = FindDataPathAtModule(nullptr, buffer);
+    auto path = FindDataPathAtModule(nullptr);
     if (path != nullptr)
-      return DuplicateString(path);
+      return path;
   }
 #endif
 
   if (IsKobo())
-    return DuplicateString(_T(KOBO_USER_DATA DIR_SEPARATOR_S XCSDATADIR));
+    return Path(Path(_T(KOBO_USER_DATA DIR_SEPARATOR_S XCSDATADIR)));
 
   if (IsAndroid()) {
 #ifdef ANDROID
     /* on Samsung Galaxy S4 (and others), the "external" SD card is
        mounted here */
-    char *result = TryMountPoint("/mnt/extSdCard");
+    auto result = TryMountPoint("/mnt/extSdCard");
     if (result != nullptr)
       /* found writable XCSoarData: use this SD card */
       return result;
@@ -448,7 +355,7 @@ FindDataPath()
       __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
                           "Enable Samsung hack, " XCSDATADIR " in "
                           ANDROID_SAMSUNG_EXTERNAL_SD);
-      return strdup(ANDROID_SAMSUNG_EXTERNAL_SD "/" XCSDATADIR);
+      return Path(ANDROID_SAMSUNG_EXTERNAL_SD "/" XCSDATADIR);
     }
 
     /* try Context.getExternalStoragePublicDirectory() */
@@ -458,7 +365,7 @@ FindDataPath()
       __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
                           "Environment.getExternalStoragePublicDirectory()='%s'",
                           buffer);
-      return strdup(buffer);
+      return Path(buffer);
     }
 
     /* now try Context.getExternalStorageDirectory(), because
@@ -469,15 +376,14 @@ FindDataPath()
                           "Environment.getExternalStorageDirectory()='%s'",
                           buffer);
 
-      strcat(buffer, "/" XCSDATADIR);
-      return strdup(buffer);
+      return AllocatedPath::Build(buffer, XCSDATADIR);
     }
 
     /* hard-coded path for Android */
     __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
                         "Fallback " XCSDATADIR " in " ANDROID_SDCARD);
 #endif
-    return DuplicateString(_T(ANDROID_SDCARD "/" XCSDATADIR));
+    return Path(_T(ANDROID_SDCARD "/" XCSDATADIR));
   }
 
 #ifdef WIN32
@@ -488,23 +394,16 @@ FindDataPath()
     if (ModuleInFlash(nullptr, buffer) != nullptr) {
       _tcscat(buffer, _T(DIR_SEPARATOR_S));
       _tcscat(buffer, _T(XCSDATADIR));
-      if (Directory::Exists(buffer))
-        return DuplicateString(buffer);
+      if (Directory::Exists(Path(buffer)))
+        return Path(buffer);
     }
-
-#ifdef _WIN32_WCE
-    /* if a flash disk with XCSoarData exists, use it */
-    if (ExistingDataOnFlash(buffer) != nullptr)
-      return DuplicateString(buffer);
-#endif
   }
 #endif
 
   {
-    TCHAR buffer[MAX_PATH];
-    const TCHAR *path = GetHomeDataPath(buffer, true);
+    auto path = GetHomeDataPath(true);
     if (path != nullptr)
-      return DuplicateString(path);
+      return path;
   }
 
   return nullptr;
@@ -513,30 +412,14 @@ FindDataPath()
 void
 VisitDataFiles(const TCHAR* filter, File::Visitor &visitor)
 {
-  const TCHAR *data_path = GetPrimaryDataPath();
+  const auto data_path = GetPrimaryDataPath();
   Directory::VisitSpecificFiles(data_path, filter, visitor, true);
 
   {
-    TCHAR buffer[MAX_PATH];
-    const TCHAR *home_path = GetHomeDataPath(buffer);
-    if (home_path != nullptr && !StringIsEqual(data_path, home_path))
+    const auto home_path = GetHomeDataPath();
+    if (home_path != nullptr && data_path != home_path)
       Directory::VisitSpecificFiles(home_path, filter, visitor, true);
   }
-
-#if defined(_WIN32_WCE) && !defined(GNAV)
-  TCHAR flash_path[MAX_PATH];
-  FlashCardEnumerator enumerator;
-  const TCHAR *flash_name;
-  while ((flash_name = enumerator.Next()) != nullptr) {
-    StringFormatUnsafe(flash_path, _T(DIR_SEPARATOR_S "%s" DIR_SEPARATOR_S XCSDATADIR),
-                       flash_name);
-    if (StringIsEqual(data_path, flash_path))
-      /* don't scan primary data path twice */
-      continue;
-
-    Directory::VisitSpecificFiles(flash_path, filter, visitor, true);
-  }
-#endif /* _WIN32_WCE && !GNAV*/
 }
 
 #ifdef ANDROID
@@ -545,16 +428,12 @@ VisitDataFiles(const TCHAR* filter, File::Visitor &visitor)
  * returns a newly allocated string.  The specified string is freed by
  * this function.
  */
-static char *
-RealPath(char *path)
+static AllocatedPath
+RealPath(Path path)
 {
   char buffer[4096];
-  char *result = realpath(path, buffer);
-  if (result == nullptr)
-    return path;
-
-  free(path);
-  return strdup(result);
+  char *result = realpath(path.c_str(), buffer);
+  return AllocatedPath(result);
 }
 #endif
 
@@ -571,17 +450,18 @@ InitialiseDataPath()
      DownloadManager does not allow destination paths pointing inside
      these symlinks; to avoid problems with this restriction, all
      symlinks on the way must be resolved by RealPath(): */
-  data_path = RealPath(data_path);
+  auto rp = RealPath(data_path);
+  if (rp != nullptr)
+    data_path = std::move(rp);
 #endif
 
-  data_path_length = StringLength(data_path);
   return true;
 }
 
 void
 DeinitialiseDataPath()
 {
-  free(data_path);
+  data_path = nullptr;
 }
 
 void

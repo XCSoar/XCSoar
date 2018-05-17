@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,29 +23,26 @@ Copyright_License {
 
 #include "Math/Screen.hpp"
 #include "Math/Angle.hpp"
-#include "Math/FastMath.h"
+#include "Math/FastMath.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Point.hpp"
+#include "Screen/BulkPoint.hpp"
 #include "Util/Clamp.hpp"
 
 #include <algorithm>
 
-void
-ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
-                   const RasterPoint &p3, RasterPoint *p4, int offset)
+PixelPoint
+ScreenClosestPoint(const PixelPoint &p1, const PixelPoint &p2,
+                   const PixelPoint &p3, int offset)
 {
-  int v12x, v12y, v13x, v13y;
+  const PixelPoint v12 = p2 - p1;
+  const PixelPoint v13 = p3 - p1;
 
-  v12x = p2.x - p1.x;
-  v12y = p2.y - p1.y;
-  v13x = p3.x - p1.x;
-  v13y = p3.y - p1.y;
-
-  const int mag = v12x * v12x + v12y * v12y;
+  const int mag = v12.MagnitudeSquared();
   if (mag > 1) {
     const int mag12 = isqrt4(mag);
     // projection of v13 along v12 = v12.v13/|v12|
-    int proj = (v12x * v13x + v12y * v13y) / mag12;
+    int proj = DotProduct(v12, v13) / mag12;
     // fractional distance
     if (offset > 0) {
       if (offset * 2 < mag12) {
@@ -56,13 +53,12 @@ ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
       }
     }
 
-    const fixed f = Clamp(fixed(proj) / mag12, fixed(0), fixed(1));
+    const auto f = Clamp(double(proj) / mag12, 0., 1.);
     // location of 'closest' point
-    p4->x = iround(v12x * f) + p1.x;
-    p4->y = iround(v12y * f) + p1.y;
+    return PixelPoint(lround(v12.x * f) + p1.x,
+                      lround(v12.y * f) + p1.y);
   } else {
-    p4->x = p1.x;
-    p4->y = p1.y;
+    return p1;
   }
 }
 
@@ -81,9 +77,9 @@ roundshift(int x)
 }
 
 void
-PolygonRotateShift(RasterPoint *poly,
+PolygonRotateShift(BulkPixelPoint *poly,
                    const int n,
-                   const RasterPoint shift,
+                   const PixelPoint shift,
                    Angle angle,
                    int scale,
                    const bool use_fast_scale)
@@ -106,8 +102,8 @@ PolygonRotateShift(RasterPoint *poly,
   const int cost = angle.ifastcosine() * scale / 25;
   const int sint = angle.ifastsine() * scale / 25;
 
-  RasterPoint *p = poly;
-  const RasterPoint *pe = poly + n;
+  BulkPixelPoint *p = poly;
+  const BulkPixelPoint *pe = poly + n;
 
   while (p < pe) {
     int x = p->x;

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,7 +26,6 @@ Copyright_License {
 #include "InfoBoxes/Panel/WindEdit.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
-#include "Util/Macros.hpp"
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
 #include "Formatter/UserUnits.hpp"
@@ -61,8 +60,7 @@ UpdateInfoBoxTemperature(InfoBoxData &data)
   }
 
   // Set Value
-  data.SetValue(_T("%2.1f"),
-                    Units::ToUserTemperature(basic.temperature));
+  data.SetValue(_T("%2.1f"), basic.temperature.ToUser());
 
   data.SetValueUnit(Units::current.temperature_unit);
 }
@@ -70,9 +68,8 @@ UpdateInfoBoxTemperature(InfoBoxData &data)
 void
 InfoBoxContentTemperatureForecast::Update(InfoBoxData &data)
 {
-  fixed temperature = CommonInterface::GetComputerSettings().forecast_temperature;
-  data.SetValue(_T("%2.1f"),
-                    Units::ToUserTemperature(temperature));
+  auto temperature = CommonInterface::GetComputerSettings().forecast_temperature;
+  data.SetValue(_T("%2.1f"), temperature.ToUser());
 
   data.SetValueUnit(Units::current.temperature_unit);
 }
@@ -82,11 +79,11 @@ InfoBoxContentTemperatureForecast::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch(keycode) {
   case ibkUp:
-    CommonInterface::SetComputerSettings().forecast_temperature += fixed(0.5);
+    CommonInterface::SetComputerSettings().forecast_temperature += Temperature::FromKelvin(0.5);
     return true;
 
   case ibkDown:
-    CommonInterface::SetComputerSettings().forecast_temperature -= fixed(0.5);
+    CommonInterface::SetComputerSettings().forecast_temperature -= Temperature::FromKelvin(0.5);
     return true;
 
   default:
@@ -177,7 +174,7 @@ UpdateInfoBoxHeadWindSimplified(InfoBoxData &data)
     return;
   }
 
-  fixed value = basic.true_airspeed - basic.ground_speed;
+  auto value = basic.true_airspeed - basic.ground_speed;
 
   // Set Value
   data.SetValue(_T("%2.0f"), Units::ToUserWindSpeed(value));
@@ -212,10 +209,10 @@ InfoBoxContentWindArrow::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
 {
   const auto &info = CommonInterface::Calculated();
 
-  const RasterPoint pt = rc.GetCenter();
+  const auto pt = rc.GetCenter();
 
   const unsigned padding = Layout::FastScale(10u);
-  unsigned size = std::min(rc.right - rc.left, rc.bottom - rc.top);
+  unsigned size = std::min(rc.GetWidth(), rc.GetHeight());
 
   if (size > padding)
     size -= padding;
@@ -227,7 +224,7 @@ InfoBoxContentWindArrow::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
   auto angle = info.wind.bearing - CommonInterface::Basic().attitude.heading;
 
   const int length =
-    std::min(size, std::max(10u, uround(Quadruple(info.wind.norm))));
+    std::min(size, std::max(10u, uround(4 * info.wind.norm)));
 
   const int offset = -length / 2;
 

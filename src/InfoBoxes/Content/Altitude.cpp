@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,16 +30,13 @@ Copyright_License {
 #include "InfoBoxes/Panel/AltitudeSetup.hpp"
 #include "Units/Units.hpp"
 #include "Interface.hpp"
-#include "Components.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Language/Language.hpp"
-#include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "Simulator.hpp"
 
 #include <tchar.h>
-#include <stdio.h>
 
 /*
  * Subpart callback function pointers
@@ -101,50 +98,6 @@ InfoBoxContentAltitudeGPS::Update(InfoBoxData &data)
   data.SetCommentFromAlternateAltitude(basic.gps_altitude);
 }
 
-static void
-ChangeAltitude(const fixed step)
-{
-  const NMEAInfo &basic = CommonInterface::Basic();
-
-  device_blackboard->SetAltitude(basic.gps_altitude +
-                                 (fixed)Units::ToSysAltitude(step));
-}
-
-bool
-InfoBoxContentAltitudeGPS::HandleKey(const InfoBoxKeyCodes keycode)
-{
-  const NMEAInfo &basic = CommonInterface::Basic();
-
-  if (!is_simulator())
-    return false;
-  if (!basic.gps.simulator)
-    return false;
-
-  const Angle a5 = Angle::Degrees(5);
-
-  switch (keycode) {
-  case ibkUp:
-    ChangeAltitude(fixed(+100));
-    return true;
-
-  case ibkDown:
-    ChangeAltitude(fixed(-100));
-    return true;
-
-  case ibkLeft:
-    device_blackboard->SetTrack(
-        basic.track - a5);
-    return true;
-
-  case ibkRight:
-    device_blackboard->SetTrack(
-        basic.track + a5);
-    return true;
-  }
-
-  return false;
-}
-
 void
 UpdateInfoBoxAltitudeAGL(InfoBoxData &data)
 {
@@ -191,9 +144,9 @@ UpdateInfoBoxAltitudeQFE(InfoBoxData &data)
     return;
   }
 
-  fixed Value = basic.gps_altitude;
+  auto Value = basic.gps_altitude;
 
-  const Waypoint *home_waypoint = way_points.GetHome();
+  const auto home_waypoint = way_points.GetHome();
   if (home_waypoint)
     Value -= home_waypoint->elevation;
 
@@ -209,7 +162,7 @@ UpdateInfoBoxAltitudeFlightLevel(InfoBoxData &data)
     CommonInterface::GetComputerSettings();
 
   if (basic.pressure_altitude_available) {
-    fixed Altitude = Units::ToUserUnit(basic.pressure_altitude, Unit::FEET);
+    auto Altitude = Units::ToUserUnit(basic.pressure_altitude, Unit::FEET);
 
     // Title color black
     data.SetTitleColor(0);
@@ -224,7 +177,7 @@ UpdateInfoBoxAltitudeFlightLevel(InfoBoxData &data)
              settings_computer.pressure_available) {
     // Take gps altitude as baro altitude. This is inaccurate but still fits our needs.
     const AtmosphericPressure &qnh = settings_computer.pressure;
-    fixed Altitude = Units::ToUserUnit(qnh.QNHAltitudeToPressureAltitude(basic.gps_altitude), Unit::FEET);
+    auto Altitude = Units::ToUserUnit(qnh.QNHAltitudeToPressureAltitude(basic.gps_altitude), Unit::FEET);
 
     // Title color red
     data.SetTitleColor(1);

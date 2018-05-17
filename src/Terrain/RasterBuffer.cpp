@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Terrain/RasterBuffer.hpp"
-#include "Math/FastMath.h"
+#include "Math/FastMath.hpp"
 
 #include <algorithm>
 #include <assert.h>
@@ -36,7 +36,7 @@ RasterBuffer::Resize(unsigned _width, unsigned _height)
   data.GrowDiscard(_width, _height);
 }
 
-short
+TerrainHeight
 RasterBuffer::GetInterpolated(unsigned lx, unsigned ly,
                                unsigned ix, unsigned iy) const
 {
@@ -49,30 +49,33 @@ RasterBuffer::GetInterpolated(unsigned lx, unsigned ly,
   // perform piecewise linear interpolation
   const unsigned int dx = (lx == GetWidth() - 1) ? 0 : 1;
   const unsigned int dy = (ly == GetHeight() - 1) ? 0 : GetWidth();
-  const short *tm = GetDataAt(lx, ly);
+  const TerrainHeight *tm = GetDataAt(lx, ly);
 
-  if (IsSpecial(*tm) || IsSpecial(tm[dx]) ||
-      IsSpecial(tm[dy]) || IsSpecial(tm[dx + dy]))
+  if (tm->IsSpecial() || tm[dx].IsSpecial() ||
+      tm[dy].IsSpecial() || tm[dx + dy].IsSpecial())
     return *tm;
 
   unsigned kx = 0x100 - ix;
   unsigned ky = 0x100 - iy;
 
-  return (*tm * kx * ky + tm[dx] * ix * ky + tm[dy] * kx * iy + tm[dx + dy] * ix * iy) >> 16;
+  return TerrainHeight((tm->GetValue() * kx * ky
+                        + tm[dx].GetValue() * ix * ky
+                        + tm[dy].GetValue() * kx * iy
+                        + tm[dx + dy].GetValue() * ix * iy) >> 16);
 }
 
-short
+TerrainHeight
 RasterBuffer::GetInterpolated(unsigned lx, unsigned ly) const
 {
   // check x in range, and decompose fraction part
   const unsigned int ix = CombinedDivAndMod(lx);
   if (lx >= GetWidth())
-    return TERRAIN_INVALID;
+    return TerrainHeight::Invalid();
 
   // check y in range, and decompose fraction part
   const unsigned int iy = CombinedDivAndMod(ly);
   if (ly >= GetHeight())
-    return TERRAIN_INVALID;
+    return TerrainHeight::Invalid();
 
   return GetInterpolated(lx, ly, ix, iy);
 }
@@ -116,7 +119,7 @@ public:
 
 void
 RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
-                                 short *gcc_restrict buffer, unsigned size,
+                                 TerrainHeight *gcc_restrict buffer, unsigned size,
                                  bool interpolate) const
 {
   assert(ax < GetFineWidth());
@@ -126,7 +129,8 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
   assert(size > 0);
 
   if (size == 1) {
-    *buffer = Get(ax >> 8, y >> 8);
+    *buffer = Get(ax >> RasterTraits::SUBPIXEL_BITS,
+                  y >> RasterTraits::SUBPIXEL_BITS);
     return;
   }
 
@@ -135,7 +139,8 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
      pixels in our buffer; the factor of two should account for the Y
      axis, which can have a different scale, making the factor some
      sort of ugly kludge to avoid horizontal shading stripes */
-  if (interpolate && (unsigned)abs(dx) < (2 * size << 8u)) {
+  if (interpolate &&
+      (unsigned)abs(dx) < (2 * size << RasterTraits::SUBPIXEL_BITS)) {
     /* interpolate */
 
     unsigned cy = y;
@@ -151,10 +156,12 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
   } else if (gcc_likely(dx > 0)) {
     /* no interpolation needed, forward scan */
 
-    const short *gcc_restrict src = GetDataAt(ax >> 8, y >> 8);
+    const TerrainHeight *gcc_restrict src =
+      GetDataAt(ax >> RasterTraits::SUBPIXEL_BITS,
+                y >> RasterTraits::SUBPIXEL_BITS);
 
-    PixelIterator iterator(dx >> 8, size);
-    short *gcc_restrict end = buffer + size;
+    PixelIterator iterator(dx >> RasterTraits::SUBPIXEL_BITS, size);
+    TerrainHeight *gcc_restrict end = buffer + size;
     while (true) {
       *buffer++ = *src;
       if (buffer >= end)
@@ -164,20 +171,21 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
   } else {
     /* no interpolation needed */
 
-    const short *gcc_restrict src = GetDataAt(0, y >> 8);
+    const TerrainHeight *gcc_restrict src =
+      GetDataAt(0, y >> RasterTraits::SUBPIXEL_BITS);
 
     --size;
     for (int i = 0; (unsigned)i <= size; ++i) {
       unsigned cx = ax + (i * dx) / (int)size;
 
-      *buffer++ = src[cx >> 8];
+      *buffer++ = src[cx >> RasterTraits::SUBPIXEL_BITS];
     }
   }
 }
 
 void
 RasterBuffer::ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
-                       short *gcc_restrict buffer,
+                       TerrainHeight *gcc_restrict buffer,
                        unsigned size, bool interpolate) const
 {
   assert(ax < GetFineWidth());
@@ -193,7 +201,8 @@ RasterBuffer::ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
   }
 
   if (size == 1) {
-    *buffer = Get(ax >> 8, ay >> 8);
+    *buffer = Get(ax >> RasterTraits::SUBPIXEL_BITS,
+                  ay >> RasterTraits::SUBPIXEL_BITS);
     return;
   }
 
@@ -203,7 +212,8 @@ RasterBuffer::ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
      pixels in our buffer; the factor of two should account for the Y
      axis, which can have a different scale, making the factor some
      sort of ugly kludge to avoid horizontal shading stripes */
-  if (interpolate && (unsigned)(abs(dx) + abs(dy)) < (2 * size << 8u)) {
+  if (interpolate &&
+      (unsigned)(abs(dx) + abs(dy)) < (2 * size << RasterTraits::SUBPIXEL_BITS)) {
     /* interpolate */
 
     for (int i = 0; (unsigned)i <= size; ++i) {
@@ -222,7 +232,8 @@ RasterBuffer::ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
       unsigned cx = ax + (i * dx) / (int)size;
       unsigned cy = ay + (i * dy) / (int)size;
 
-      *buffer++ = Get(cx >> 8, cy >> 8);
+      *buffer++ = Get(cx >> RasterTraits::SUBPIXEL_BITS,
+                      cy >> RasterTraits::SUBPIXEL_BITS);
     }
   }
 }
@@ -230,7 +241,7 @@ RasterBuffer::ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
 void
 RasterBuffer::ScanLineChecked(unsigned ax, unsigned ay,
                               unsigned bx, unsigned by,
-                              short *buffer, unsigned size,
+                              TerrainHeight *buffer, unsigned size,
                               bool interpolate) const
 {
   if (ax >= GetFineWidth())
@@ -248,8 +259,13 @@ RasterBuffer::ScanLineChecked(unsigned ax, unsigned ay,
   ScanLine(ax, ay, bx, by, buffer, size, interpolate);
 }
 
-short
+TerrainHeight
 RasterBuffer::GetMaximum() const
 {
-  return IsDefined() ? *std::max_element(data.begin(), data.end()) : 0;
+  return IsDefined()
+    ? *std::max_element(data.begin(), data.end(),
+                        [](TerrainHeight a, TerrainHeight b) {
+                          return a.GetValue() < b.GetValue();
+                        })
+    : TerrainHeight(0);
 }

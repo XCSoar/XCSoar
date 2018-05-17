@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -63,8 +63,8 @@ LoadFiles(Airspaces &airspace_database)
 {
   NullOperationEnvironment operation;
 
-  std::unique_ptr<TLineReader> reader(OpenConfiguredTextFile(ProfileKeys::AirspaceFile,
-                                                             Charset::AUTO));
+  auto reader = OpenConfiguredTextFile(ProfileKeys::AirspaceFile,
+                                       Charset::AUTO);
   if (reader) {
     AirspaceParser parser(airspace_database);
     parser.Parse(*reader, operation);
@@ -76,15 +76,21 @@ static void
 Main()
 {
   Airspaces airspace_database;
-  AirspaceWarningManager airspace_warning(airspace_database);
+
+  AirspaceWarningConfig airspace_warning_config;
+  airspace_warning_config.SetDefaults();
+
+  AirspaceWarningManager airspace_warning(airspace_warning_config,
+                                          airspace_database);
   airspace_warnings = new ProtectedAirspaceWarningManager(airspace_warning);
 
   LoadFiles(airspace_database);
 
-  Airspaces::AirspaceTree::const_iterator it = airspace_database.begin();
+  const auto range = airspace_database.QueryAll();
+  auto it = range.begin();
 
   AirspaceInterceptSolution ais;
-  for (unsigned i = 0; i < 5 && it != airspace_database.end(); ++i, ++it)
+  for (unsigned i = 0; i < 5 && it != range.end(); ++i, ++it)
     airspace_warning.GetWarning(it->GetAirspace())
       .UpdateSolution((AirspaceWarning::State)i, ais);
 

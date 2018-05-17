@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -48,10 +48,18 @@ Copyright_License {
 #ifndef _LEASTSQS_H
 #define _LEASTSQS_H
 
-#include "Util/TrivialArray.hpp"
-#include "Math/fixed.hpp"
+#include "XYDataStore.hpp"
+#include "Angle.hpp"
 
-#include <type_traits>
+#include <assert.h>
+
+struct ErrorEllipse {
+  double x;
+  double y;
+  double halfmajor;
+  double halfminor;
+  Angle angle;
+};
 
 /**
  * A solver for least squares problems
@@ -74,11 +82,9 @@ Copyright_License {
  *     (y_i - \hat{y}_i)^2
  * \f]
  */
-class LeastSquares
+class LeastSquares: public XYDataStore
 {
-  fixed sum_xi, sum_yi, sum_xi_2, sum_xi_yi;
-
-  unsigned sum_n;
+  double sum_xxw, sum_xyw;
 
   /**
   * \f[
@@ -86,105 +92,83 @@ class LeastSquares
   *              {n*\sum_0^{i-1} x_i^2 - (\sum_0^{i-1} x_i)^2}
   * \f]
   */
-  fixed m;
+  double m;
   /**
   * \f[
   *     b = \frac{\sum_0^{i-1} y_i}{n} - b_1 * \frac{\sum_0^{i-1} x_i}{n}
   * \f]
   */
-  fixed b;
-  fixed sum_error;
+  double b;
 
-  fixed rms_error;
-  fixed max_error;
-  fixed sum_weights;
-  fixed y_max;
-  fixed y_min;
-  fixed x_min;
-  fixed x_max;
+  double sum_error;
+  double rms_error;
+  double max_error;
 
-  fixed y_ave;
+  double y_ave;
 
-  struct Slot {
-    fixed x, y;
-
-#ifdef LEASTSQS_WEIGHT_STORE
-    fixed weight;
-#endif
-
-    Slot() = default;
-
-    constexpr
-    Slot(fixed _x, fixed _y, fixed _weight)
-      :x(_x), y(_y)
-#ifdef LEASTSQS_WEIGHT_STORE
-      , weight(_weight)
-#endif
-    {}
-  };
-
-  TrivialArray<Slot, 1000> slots;
+  double x_mean, y_mean, x_S, y_S, xy_C;
+  double x_var, y_var, xy_var;
 
 public:
-  bool IsEmpty() const {
-    return sum_n == 0;
-  }
-
-  bool HasResult() const {
-    return sum_n >= 2;
-  }
-
-  unsigned GetCount() const {
-    return sum_n;
-  }
-
   /**
    * Reset the LeastSquares calculator.
    */
   void Reset();
 
-  fixed GetGradient() const {
+  double GetGradient() const {
+    assert(!IsEmpty());
+
     return m;
   }
 
-  fixed GetMinX() const {
-    return x_min;
-  }
+  double GetAverageY() const {
+    assert(!IsEmpty());
 
-  fixed GetMaxX() const {
-    return x_max;
-  }
-
-  fixed GetMiddleX() const {
-    return Half(x_min + x_max);
-  }
-
-  fixed GetMinY() const {
-    return y_min;
-  }
-
-  fixed GetMaxY() const {
-    return y_max;
-  }
-
-  fixed GetAverageY() const {
     return y_ave;
   }
 
-  fixed GetYAt(fixed x) const {
+  double GetYAt(double x) const {
+    assert(!IsEmpty());
+
     return x * m + b;
   }
 
-  fixed GetYAtMinX() const {
+  double GetYAtMinX() const {
     return GetYAt(GetMinX());
   }
 
-  fixed GetYAtMaxX() const {
+  double GetYAtMaxX() const {
     return GetYAt(GetMaxX());
   }
 
-  const TrivialArray<Slot, 1000> &GetSlots() const {
-    return slots;
+  double GetMeanY() const {
+    assert(!IsEmpty());
+
+    return y_mean;
+  }
+
+  double GetMeanX() const {
+    assert(!IsEmpty());
+
+    return x_mean;
+  }
+
+  double GetVarX() const {
+    assert(!IsEmpty());
+
+    return x_var;
+  }
+
+  double GetVarY() const {
+    assert(!IsEmpty());
+
+    return y_var;
+  }
+
+  double GetCovXY() const {
+    assert(!IsEmpty());
+
+    return xy_var;
   }
 
   /**
@@ -193,7 +177,7 @@ public:
    *
    * @param y y-Value of the new data point
    */
-  void Update(fixed y);
+  void Update(double y);
 
   /**
    * Add a new data point to the values and calculate least squares
@@ -203,9 +187,14 @@ public:
    * @param y y-Value of the new data point
    * @param weight Weight of the new data point (optional)
    */
-  void Update(fixed x, fixed y, fixed weight = fixed(1));
+  void Update(double x, double y, double weight=1);
 
-private:
+  /**
+   * Calculate the 1 std error ellipse fitting the data
+   */
+  ErrorEllipse GetErrorEllipse() const;
+
+protected:
   /**
    * Calculate the least squares average.
    */
@@ -223,7 +212,15 @@ private:
    * @param y y-Value of the new data point
    * @param weight Weight of the new data point (optional)
    */
-  void Add(fixed x, fixed y, fixed weight = fixed(1));
+  void Add(double x, double y, double weight=1);
+
+  /**
+   * Remove data point to the values.
+   * This updates the least squares statistics but not x/y min/max.
+   * If weights aren't stored, this assumes weight = 1
+   */
+  void Remove(const unsigned i);
+
 };
 
 static_assert(std::is_trivial<LeastSquares>::value, "type is not trivial");

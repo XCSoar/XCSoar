@@ -7,10 +7,10 @@ int
 main(int argc, char **argv)
 {
   Args args(argc, argv, "FILE.tsk|cup|igc");
-  tstring path = args.ExpectNextT();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
-  std::unique_ptr<TaskFile> file(TaskFile::Create(path.c_str()));
+  std::unique_ptr<TaskFile> file(TaskFile::Create(path));
   if (!file) {
     fprintf(stderr, "TaskFile::Create() failed\n");
     return EXIT_FAILURE;

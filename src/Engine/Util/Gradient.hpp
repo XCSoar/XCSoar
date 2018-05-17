@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,7 +22,6 @@
 #ifndef GRADIENT_HPP
 #define GRADIENT_HPP
 
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 /** 
@@ -35,8 +34,8 @@
  * @return Gradient equivalent to angle
  */
 gcc_const
-fixed
-AngleToGradient(const fixed d);
+double
+AngleToGradient(const double d);
 
 /**
  * Determines whether gradient is error value (999)
@@ -47,6 +46,6 @@ AngleToGradient(const fixed d);
  */
 gcc_const
 bool
-GradientValid(const fixed d);
+GradientValid(const double d);
 
 #endif

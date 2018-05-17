@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,15 +22,10 @@ Copyright_License {
 */
 
 #include "Device/Driver/Leonardo.hpp"
-#include "Device/Parser.hpp"
 #include "Device/Driver.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Units/System.hpp"
-#include "Atmosphere/Temperature.hpp"
-
-#include <stdlib.h>
-#include <math.h>
 
 class LeonardoDevice : public AbstractDevice {
 public:
@@ -41,7 +36,7 @@ public:
 static bool
 ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 {
-  fixed norm, bearing;
+  double norm, bearing;
 
   bool norm_valid = line.ReadChecked(norm);
   bool bearing_valid = line.ReadChecked(bearing);
@@ -62,7 +57,7 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 static bool
 LeonardoParseC(NMEAInputLine &line, NMEAInfo &info)
 {
-  fixed value;
+  double value;
 
   // 0 = altitude [m]
   if (line.ReadChecked(value))
@@ -86,10 +81,10 @@ LeonardoParseC(NMEAInputLine &line, NMEAInfo &info)
     info.ProvideNettoVario(value / 10);
 
   // 4 = temperature [deg C]
-  fixed oat;
+  double oat;
   info.temperature_available = line.ReadChecked(oat);
   if (info.temperature_available)
-    info.temperature = CelsiusToKelvin(oat);
+    info.temperature = Temperature::FromCelsius(oat);
 
   line.Skip(5);
 
@@ -110,7 +105,7 @@ LeonardoParseC(NMEAInputLine &line, NMEAInfo &info)
 static bool
 LeonardoParseD(NMEAInputLine &line, NMEAInfo &info)
 {
-  fixed value;
+  double value;
 
   // 0 = vario [dm/s]
   if (line.ReadChecked(value))
@@ -134,10 +129,10 @@ LeonardoParseD(NMEAInputLine &line, NMEAInfo &info)
     info.ProvideTrueAirspeed(Units::ToSysUnit(value, Unit::KILOMETER_PER_HOUR));
 
   // 4 = temperature [deg C]
-  fixed oat;
+  double oat;
   info.temperature_available = line.ReadChecked(oat);
   if (info.temperature_available)
-    info.temperature = CelsiusToKelvin(oat);
+    info.temperature = Temperature::FromCelsius(oat);
 
   // 5 = compass [degrees]
   /* XXX unsupported by XCSoar */
@@ -163,7 +158,7 @@ LeonardoParseD(NMEAInputLine &line, NMEAInfo &info)
 static bool
 PDGFTL1(NMEAInputLine &line, NMEAInfo &info)
 {
-  fixed value;
+  double value;
 
   //  Baro Altitude QNE(1013.25)     2025     meter        2025 mt
   if (line.ReadChecked(value))

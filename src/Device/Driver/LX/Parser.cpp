@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,13 +27,13 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "Geo/SpeedVector.hpp"
 #include "Units/System.hpp"
-#include "Atmosphere/Temperature.hpp"
 #include "Util/Macros.hpp"
+#include "Util/StringCompare.hxx"
 
 static bool
 ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 {
-  fixed bearing, norm;
+  double bearing, norm;
 
   bool bearing_valid = line.ReadChecked(bearing);
   bool norm_valid = line.ReadChecked(norm);
@@ -63,13 +63,12 @@ LXWP0(NMEAInputLine &line, NMEAInfo &info)
 
   line.Skip();
 
-  fixed airspeed;
+  double airspeed;
   bool tas_available = line.ReadChecked(airspeed);
-  if (tas_available && (airspeed < fixed(-50) || airspeed > fixed(250)))
+  if (tas_available && (airspeed < -50 || airspeed > 250))
     /* implausible */
     return false;
-
-  fixed value;
+  double value;
   if (line.ReadChecked(value))
     /* a dump on a LX7007 has confirmed that the LX sends uncorrected
        altitude above 1013.25hPa here */
@@ -133,7 +132,7 @@ LXWP2(NMEAInputLine &line, NMEAInfo &info)
    * audio volume
    */
 
-  fixed value;
+  double value;
   // MacCready value
   if (line.ReadChecked(value))
     info.settings.ProvideMacCready(value, info.clock);
@@ -144,12 +143,12 @@ LXWP2(NMEAInputLine &line, NMEAInfo &info)
 
   // Bugs
   if (line.ReadChecked(value)) {
-    if (value <= fixed(1.5) && value >= fixed(1.0))
+    if (value <= 1.5 && value >= 1.0)
       // LX160 (sw 3.04) reports bugs as 1.00, 1.05 or 1.10 (#2167)
-      info.settings.ProvideBugs(fixed(2) - value, info.clock);
+      info.settings.ProvideBugs(2 - value, info.clock);
     else
       // All other known LX devices report bugs as 0, 5, 10, 15, ...
-      info.settings.ProvideBugs((fixed(100) - value) / 100, info.clock);
+      info.settings.ProvideBugs((100 - value) / 100., info.clock);
   }
 
   line.Skip(3);
@@ -181,7 +180,7 @@ LXWP3(NMEAInputLine &line, NMEAInfo &info)
    * time offset
    */
 
-  fixed value;
+  double value;
 
   // Altitude offset -> QNH
   if (line.ReadChecked(value)) {
@@ -284,14 +283,14 @@ PLXVF(NMEAInputLine &line, NMEAInfo &info)
 {
   line.Skip(4);
 
-  fixed vario;
+  double vario;
   if (line.ReadChecked(vario))
     info.ProvideNettoVario(vario);
 
-  fixed ias;
+  double ias;
   bool have_ias = line.ReadChecked(ias);
 
-  fixed altitude;
+  double altitude;
   if (line.ReadChecked(altitude)) {
     info.ProvidePressureAltitude(altitude);
 
@@ -314,9 +313,9 @@ PLXVF(NMEAInputLine &line, NMEAInfo &info)
 static bool
 PLXVS(NMEAInputLine &line, NMEAInfo &info)
 {
-  fixed temperature;
+  double temperature;
   if (line.ReadChecked(temperature)) {
-    info.temperature = CelsiusToKelvin(temperature);
+    info.temperature = Temperature::FromCelsius(temperature);
     info.temperature_available = true;
   }
 
@@ -329,7 +328,7 @@ PLXVS(NMEAInputLine &line, NMEAInfo &info)
       info.switch_state.flight_mode = SwitchState::FlightMode::CRUISE;
   }
 
-  fixed voltage;
+  double voltage;
   if (line.ReadChecked(voltage)) {
     info.voltage = voltage;
     info.voltage_available.Update(info.clock);

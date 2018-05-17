@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Screen/ContainerWindow.hpp"
 #include "Canvas.hpp"
-#include "Asset.hpp"
 
 bool
 ContainerWindow::FocusFirstControl()
@@ -43,12 +42,6 @@ ContainerWindow::FocusNextControl()
   if (hControl == nullptr)
     return false;
 
-  if (IsAltair()) { // detect and block wraparound 
-    HWND hControl_first = ::GetNextDlgTabItem(hWnd, nullptr, false);
-    if (hControl == hControl_first)
-      return false;
-  }
-
   ::SetFocus(hControl);
   return true;
 }
@@ -58,12 +51,6 @@ ContainerWindow::FocusPreviousControl()
 {
   HWND hFocus = ::GetFocus();
 
-  if (IsAltair()) { // detect and block wraparound 
-    HWND hControl_first = ::GetNextDlgTabItem(hWnd, nullptr, false);
-    if (hFocus == hControl_first) 
-      return false;
-  }
-
   HWND hControl = ::GetNextDlgTabItem(hWnd, hFocus, true);
   if (hControl == nullptr)
     return false;
@@ -71,34 +58,3 @@ ContainerWindow::FocusPreviousControl()
   ::SetFocus(hControl);
   return true;
 }
-
-const Brush *
-ContainerWindow::OnChildColor(Window &window, Canvas &canvas)
-{
-  return nullptr;
-}
-
-LRESULT
-ContainerWindow::OnMessage(HWND hWnd, UINT message,
-                            WPARAM wParam, LPARAM lParam)
-{
-  switch (message) {
-  case WM_CTLCOLORSTATIC:
-  case WM_CTLCOLORBTN:
-    {
-      Window *window = Window::GetChecked((HWND)lParam);
-      if (window == nullptr)
-        break;
-
-      Canvas canvas((HDC)wParam, {1, 1});
-      const Brush *brush = OnChildColor(*window, canvas);
-      if (brush == nullptr)
-        break;
-
-      return (LRESULT)brush->Native();
-    }
-  };
-
-  return PaintWindow::OnMessage(hWnd, message, wParam, lParam);
-}
-

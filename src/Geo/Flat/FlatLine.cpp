@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,104 +21,57 @@
  */
 
 #include "FlatLine.hpp"
-
-static constexpr fixed
-sgn(fixed x, fixed y)
-{
-  return negative(x) ? -y : y;
-}
-
-fixed
-FlatLine::cross() const
-{
-  return p1.CrossProduct(p2);
-}
-
-void
-FlatLine::mul_y(const fixed a)
-{
-  p1.MultiplyY(a);
-  p2.MultiplyY(a);
-}
-
-fixed
-FlatLine::d() const
-{
-  return sqrt(dsq());
-}
-
-fixed
-FlatLine::dsq() const
-{
-  return sqr(dx()) + sqr(dy());
-}
-
-void
-FlatLine::sub(const FlatPoint&p)
-{
-  p1 -= p;
-  p2 -= p;
-}
-
-void
-FlatLine::add(const FlatPoint&p)
-{
-  p1 += p;
-  p2 += p;
-}
+#include "Math/Util.hpp"
+#include "Math/Angle.hpp"
 
 Angle
-FlatLine::angle() const
+FlatLine::GetAngle() const
 {
-  return Angle::FromXY(dx(), dy());
+  const auto v = GetVector();
+  return Angle::FromXY(v.x, v.y);
 }
 
 void
-FlatLine::rotate(const Angle theta)
+FlatLine::Rotate(const Angle theta)
 {
-  p1.Rotate(theta);
-  p2.Rotate(theta);
+  a.Rotate(theta);
+  b.Rotate(theta);
 }
 
 bool
-FlatLine::intersect_czero(const fixed r, FlatPoint &i1, FlatPoint &i2) const
+FlatLine::IntersectOriginCircle(const double r,
+                                FlatPoint &i1, FlatPoint &i2) const
 {
-  const fixed _dx = dx();
-  const fixed _dy = dy();
-  const fixed dr = dsq();
-  const fixed D = cross();
+  // http://mathworld.wolfram.com/Circle-LineIntersection.html
+  const auto d = GetVector();
+  const auto dr = GetSquaredDistance();
+  const auto D = CrossProduct();
 
-  fixed det = sqr(r) * dr - sqr(D);
-  if (negative(det))
+  auto det = Square(r) * dr - Square(D);
+  if (det < 0)
     // no solution
     return false;
 
   det = sqrt(det);
-  const fixed inv_dr = fixed(1) / dr;
-  i1.x = (D * _dy + sgn(_dy, _dx) * det) * inv_dr;
-  i2.x = (D * _dy - sgn(_dy, _dx) * det) * inv_dr;
-  i1.y = (-D * _dx + fabs(_dy) * det) * inv_dr;
-  i2.y = (-D * _dx - fabs(_dy) * det) * inv_dr;
+  const auto inv_dr = 1. / dr;
+  const auto sign_dx = (d.y < 0) ? -d.x : d.x;
+  i1.x = (D * d.y + sign_dx * det) * inv_dr;
+  i2.x = (D * d.y - sign_dx * det) * inv_dr;
+  i1.y = (-D * d.x + fabs(d.y) * det) * inv_dr;
+  i2.y = (-D * d.x - fabs(d.y) * det) * inv_dr;
   return true;
 }
 
 bool
-FlatLine::intersect_circle(const fixed r, const FlatPoint c,
-                           FlatPoint &i1, FlatPoint &i2) const
+FlatLine::IntersectCircle(const double r, const FlatPoint c,
+                          FlatPoint &i1, FlatPoint &i2) const
 {
-  FlatLine that = *this;
-  that.sub(c);
-  if (that.intersect_czero(r, i1, i2)) {
+  const FlatLine that = *this - c;
+  if (that.IntersectOriginCircle(r, i1, i2)) {
     i1 = i1 + c;
     i2 = i2 + c;
     return true;
   }
 
   return false;
-}
-
-fixed
-FlatLine::dot(const FlatLine& that) const
-{
-  return (p2 - p1).DotProduct(that.p2 - that.p1);
 }

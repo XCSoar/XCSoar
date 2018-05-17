@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,18 +29,17 @@
 #include "Task/ObservationZones/Boundary.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "Geo/Flat/FlatProjection.hpp"
-#include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Geo/Math.hpp"
 
 #include <assert.h>
 
 OrderedTaskPoint::OrderedTaskPoint(TaskPointType _type,
                                    ObservationZonePoint *_oz,
-                                   const Waypoint &wp,
+                                   WaypointPtr &&wp,
                                    const bool b_scored)
   :TaskLeg(*this),
-   TaskWaypoint(_type, wp),
-   ScoredTaskPoint(wp.location, b_scored),
+   TaskWaypoint(_type, std::move(wp)),
+   ScoredTaskPoint(GetLocation(), b_scored),
    ObservationZoneClient(_oz),
    tp_next(NULL), tp_previous(NULL),
    flat_bb(FlatGeoPoint(0,0),0) // empty, not initialised!
@@ -126,7 +125,7 @@ OrderedTaskPoint::CheckEnterTransition(const AircraftState &ref_now,
     TransitionConstraint(ref_now.location, ref_last.location);
 }
 
-fixed
+double
 OrderedTaskPoint::DoubleLegDistance(const GeoPoint &ref) const
 {
   assert(tp_previous);
@@ -148,33 +147,33 @@ OrderedTaskPoint::Equals(const OrderedTaskPoint &other) const
 OrderedTaskPoint *
 OrderedTaskPoint::Clone(const TaskBehaviour &task_behaviour,
                         const OrderedTaskSettings &ordered_task_settings,
-                        const Waypoint *waypoint) const
+                        WaypointPtr &&waypoint) const
 {
-  if (waypoint == NULL)
-    waypoint = &GetWaypoint();
+  if (!waypoint)
+    waypoint = GetWaypointPtr();
 
   switch (GetType()) {
   case TaskPointType::START:
     return new StartPoint(GetObservationZone().Clone(waypoint->location),
-                          *waypoint, task_behaviour,
+                          std::move(waypoint), task_behaviour,
                           ordered_task_settings.start_constraints);
 
   case TaskPointType::AST: {
     const ASTPoint &src = *(const ASTPoint *)this;
     ASTPoint *dest =
       new ASTPoint(GetObservationZone().Clone(waypoint->location),
-                   *waypoint, task_behaviour, IsBoundaryScored());
+                   std::move(waypoint), task_behaviour, IsBoundaryScored());
     dest->SetScoreExit(src.GetScoreExit());
     return dest;
   }
 
   case TaskPointType::AAT:
     return new AATPoint(GetObservationZone().Clone(waypoint->location),
-                        *waypoint, task_behaviour);
+                        std::move(waypoint), task_behaviour);
 
   case TaskPointType::FINISH:
     return new FinishPoint(GetObservationZone().Clone(waypoint->location),
-                           *waypoint, task_behaviour,
+                           std::move(waypoint), task_behaviour,
                            ordered_task_settings.finish_constraints,
                            IsBoundaryScored());
 

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,7 +25,9 @@
 
 #include "Config.hpp"
 #include "RoutePolar.hpp"
-#include "Rough/RoughAltitude.hpp"
+#include "Point.hpp"
+
+#include <limits.h>
 
 class GlidePolar;
 struct GlideSettings;
@@ -49,15 +51,18 @@ class RoutePolars
   RoutePolar polar_cruise;
 
   /** Reciprocal of MacCready value (s/m) */
-  fixed inv_mc;
+  double inv_mc;
+
+  /** Minimum working height (m) */
+  int height_min_working;
 
   RoutePlannerConfig config;
 
 public:
   /** Altitude (m) above which climbs become slow */
-  RoughAltitude cruise_altitude;
+  int cruise_altitude;
   /** Altitude (m) above which the aircraft cannot climb */
-  RoughAltitude climb_ceiling;
+  int climb_ceiling;
 
   /**
    * Re-initialise performance tables when polar or wind changes
@@ -66,7 +71,8 @@ public:
    * @param wind Wind condition
    */
   void Initialise(const GlideSettings &settings, const GlidePolar& polar,
-                  const SpeedVector& wind);
+                  const SpeedVector& wind,
+                  const int _height_min_working=0);
 
   /**
    * Calculate the time required to fly the link.  Returns UINT_MAX
@@ -129,7 +135,7 @@ public:
    *
    * @return Height of glide (m)
    */
-  RoughAltitude CalcVHeight(const RouteLink& link) const;
+  double CalcVHeight(const RouteLink &link) const;
 
   /**
    * Generate a link from the destination imposing constraints on the origin
@@ -169,8 +175,8 @@ public:
    * @param _ceiling_alt Ceiling altitude (m)
    */
   void SetConfig(const RoutePlannerConfig &_config,
-                 const RoughAltitude _cruise_alt = RoughAltitude::Max(),
-                 const RoughAltitude _ceiling_alt = RoughAltitude::Max());
+                 int _cruise_alt = INT_MAX,
+                 int _ceiling_alt = INT_MAX);
 
   /**
    * Check whether the configuration requires intersection tests with airspace.
@@ -213,32 +219,41 @@ public:
    * @param destination Target
    * @param map RasterMap of terrain.
    * @param proj Task projection
-   * @param intx First intercept point (output)
    *
-   * @return true if terrain intersects
+   * @return location of intersection, or GeoPoint::Invalid() if none
+   * was found
    */
-  bool Intersection(const AGeoPoint& origin, const AGeoPoint& destination,
-                    const RasterMap* map, const FlatProjection &proj,
-                    GeoPoint& intx) const;
+  gcc_pure
+  GeoPoint Intersection(const AGeoPoint &origin, const AGeoPoint &destination,
+                        const RasterMap *map,
+                        const FlatProjection &proj) const;
 
   /**
    * Calculate height of arrival at destination starting from origin
    */
-  RoughAltitude CalcGlideArrival(const AFlatGeoPoint& origin,
-                                 const FlatGeoPoint& dest,
-                                 const FlatProjection &proj) const;
+  int CalcGlideArrival(const AFlatGeoPoint& origin,
+                       const FlatGeoPoint& dest,
+                       const FlatProjection &proj) const;
 
-  RoughAltitude GetSafetyHeight() const {
-    return RoughAltitude(config.safety_height_terrain);
+  int GetSafetyHeight() const {
+    return config.safety_height_terrain;
   }
 
-  FlatGeoPoint ReachIntercept(const int index, const AGeoPoint& p,
+  int GetFloor() const {
+    return height_min_working;
+  }
+
+  gcc_pure
+  FlatGeoPoint ReachIntercept(int index, const AFlatGeoPoint &flat_origin,
+                              const GeoPoint &origin,
                               const RasterMap* map,
                               const FlatProjection &proj) const;
 
 private:
-  GeoPoint MSLIntercept(const int index, const AGeoPoint &p,
-                        const FlatProjection &proj) const;
+  gcc_pure
+  FlatGeoPoint MSLIntercept(const int index, const FlatGeoPoint &p,
+                            double altitude,
+                            const FlatProjection &proj) const;
 };
 
 #endif

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,9 +26,12 @@
 #include "IO/FileLineReader.hpp"
 #include "OS/FileUtil.hpp"
 #include "Util/StaticString.hxx"
+#include "Util/PrintException.hxx"
 #include "Compiler.h"
 
 #include <cstdio>
+
+#include <stdlib.h>
 
 class FlightCheck {
   StaticString<64> name;
@@ -70,9 +73,9 @@ FlightCheck::fix(const IGCFix &fix)
     return;
 
   if (previous_valid && fix.time > previous.time) {
-    fixed distance = fix.location.Distance(previous.location);
-    fixed speed = distance / (fix.time.GetSecondOfDay() - previous.time.GetSecondOfDay());
-    if (speed > fixed(15)) {
+    auto distance = fix.location.Distance(previous.location);
+    auto speed = distance / (fix.time.GetSecondOfDay() - previous.time.GetSecondOfDay());
+    if (speed > 15) {
       if (fast_count == 0)
         fast = fix;
 
@@ -80,7 +83,7 @@ FlightCheck::fix(const IGCFix &fix)
     } else
       fast_count = 0;
 
-    if (speed < fixed(5)) {
+    if (speed < 5) {
       if (slow_count == 0)
         slow = fix;
       ++slow_count;
@@ -119,22 +122,18 @@ FlightCheck::finish()
 }
 
 class IGCFileVisitor : public File::Visitor {
-  virtual void Visit(const TCHAR *path, const TCHAR *filename);
+  void Visit(Path path, Path filename) override;
 };
 
 void
-IGCFileVisitor::Visit(const TCHAR *path, const TCHAR *filename)
+IGCFileVisitor::Visit(Path path, Path filename)
 {
   FileLineReaderA reader(path);
-  if (reader.error()) {
-    _ftprintf(stderr, _T("Failed to open %s\n"), path);
-    return;
-  }
 
   IGCExtensions extensions;
   extensions.clear();
 
-  FlightCheck flight(filename);
+  FlightCheck flight(filename.c_str());
   char *line;
   while ((line = reader.ReadLine()) != NULL) {
     unsigned day, month, year;
@@ -157,8 +156,11 @@ IGCFileVisitor::Visit(const TCHAR *path, const TCHAR *filename)
 }
 
 int main(gcc_unused int argc, gcc_unused char **argv)
-{
+try {
   IGCFileVisitor visitor;
-  Directory::VisitSpecificFiles(_T("."), _T("*.igc"), visitor);
+  Directory::VisitSpecificFiles(Path(_T(".")), _T("*.igc"), visitor);
   return 0;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

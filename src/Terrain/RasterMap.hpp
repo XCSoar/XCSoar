@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,23 +27,23 @@ Copyright_License {
 #include "RasterProjection.hpp"
 #include "RasterTileCache.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Util/AllocatedString.hxx"
 #include "Compiler.h"
-
-#include <tchar.h>
 
 class OperationEnvironment;
 
 class RasterMap {
-  AllocatedString<TCHAR> path;
   RasterTileCache raster_tile_cache;
   RasterProjection projection;
 
 public:
-  RasterMap(const TCHAR *path);
+  RasterMap() = default;
 
   RasterMap(const RasterMap &) = delete;
   RasterMap &operator=(const RasterMap &) = delete;
+
+  RasterTileCache &GetTileCache() {
+    return raster_tile_cache;
+  }
 
   void UpdateProjection();
 
@@ -52,9 +52,6 @@ public:
   }
 
   bool LoadCache(FILE *file);
-
-  bool Load(const TCHAR *_path, const TCHAR *world_file,
-            OperationEnvironment &operation);
 
   bool IsDefined() const {
     return raster_tile_cache.IsValid();
@@ -74,11 +71,9 @@ public:
     return GetBounds().GetCenter();
   }
 
-  void SetViewCenter(const GeoPoint &location, fixed radius);
-
   /**
-   * Determines if SetViewCenter() should be called again to continue
-   * loading.
+   * Determines if UpdateTerrainTiles() should be called again to
+   * continue loading.
    */
   gcc_pure
   bool IsDirty() const {
@@ -89,13 +84,17 @@ public:
     return raster_tile_cache.GetSerial();
   }
 
+  const RasterProjection &GetProjection() const {
+    return projection;
+  }
+
   /**
    * The geographical distance in meters of the given amount
    * of pixels multiplied by 256.
    *
    * @see RasterProjection::CoarsePixelDistance()
    */
-  gcc_pure fixed
+  gcc_pure double
   PixelDistance(const GeoPoint &location, unsigned pixels) const {
     return projection.CoarsePixelDistance(location, pixels);
   }
@@ -104,20 +103,20 @@ public:
    * Determine the non-interpolated height at the specified location.
    */
   gcc_pure
-  short GetHeight(const GeoPoint &location) const;
+  TerrainHeight GetHeight(const GeoPoint &location) const;
 
   /**
    * Determine the interpolated height at the specified location.
    */
   gcc_pure
-  short GetInterpolatedHeight(const GeoPoint &location) const;
+  TerrainHeight GetInterpolatedHeight(const GeoPoint &location) const;
 
   /**
    * Scan a straight line and fill the buffer with the specified
    * number of samples along the line.
    */
   void ScanLine(const GeoPoint &start, const GeoPoint &end,
-                short *buffer, unsigned size, bool interpolate) const;
+                TerrainHeight *buffer, unsigned size, bool interpolate) const;
 
   gcc_pure
   bool FirstIntersection(const GeoPoint &origin, int h_origin,
@@ -126,7 +125,7 @@ public:
                          GeoPoint& intx, int &h) const;
 
   /**
-   * Find location where aircraft hits the ground
+   * Find location where aircraft hits the ground or height_floor
    * @todo margin
    * If the search goes outside the terrain area, will return the destination location
    *
@@ -134,13 +133,16 @@ public:
    * @param h_origin Height of aircraft (m)
    * @param h_glide Height to be glided (m)
    * @param destination Location of aircraft at MSL
+   * @param height_floor: minimum height to search
    *
-   * @return Location of intersection, or if none, destination
+   * @return location of intersection, or GeoPoint::Invalid() if none
+   * was found
    */
   gcc_pure
   GeoPoint Intersection(const GeoPoint& origin,
                         int h_origin, int h_glide,
-                        const GeoPoint& destination) const;
+                        const GeoPoint& destination,
+                        const int height_floor) const;
 
 };
 

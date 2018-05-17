@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,15 +25,18 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 #include "Device/Port/Port.hpp"
-#include "Device/Declaration.hpp"
 #include "Device/RecordedFlight.hpp"
 #include "Time/TimeoutClock.hpp"
 #include "Util/Macros.hpp"
-#include "IO/TextWriter.hpp"
+#include "OS/Path.hpp"
+#include "IO/FileOutputStream.hxx"
+#include "IO/BufferedOutputStream.hxx"
 #include "Operation/Operation.hpp"
 #include "IGC/IGCParser.hpp"
+#include "Util/StringCompare.hxx"
 
 #include <stdlib.h>
+#include <string.h>
 
 static bool
 ExpectXOff(Port &port, OperationEnvironment &env, unsigned timeout_ms)
@@ -249,7 +252,7 @@ FlytecDevice::ReadFlightList(RecordedFlightList &flight_list,
 
 bool
 FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
-                             const TCHAR *path, OperationEnvironment &env)
+                             Path path, OperationEnvironment &env)
 {
   port.StopRxThread();
 
@@ -267,9 +270,8 @@ FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
     return false;
 
   // Open file writer
-  FileHandle writer(path, _T("wb"));
-  if (!writer.IsOpen())
-    return false;
+  FileOutputStream fos(path);
+  BufferedOutputStream os(fos);
 
   unsigned start_sec = flight.start_time.GetSecondOfDay();
   unsigned end_sec = flight.end_time.GetSecondOfDay();
@@ -314,8 +316,11 @@ FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
     }
 
     // Write line to the file
-    writer.Write(buffer);
+    os.Write(buffer);
   }
+
+  os.Flush();
+  fos.Commit();
 
   return true;
 }

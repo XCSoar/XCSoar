@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,16 +27,11 @@
 #include "Geo/GeoBounds.hpp"
 #include "Geo/FAISphere.hpp"
 
-#include <algorithm>
 #include <cassert>
 
 // scaling for flat earth integer representation, gives approximately 50m resolution
-#ifdef RADIANS
 static constexpr int fixed_scale = 57296;
-#else
-static constexpr int fixed_scale = 1000;
-#endif
-static constexpr fixed inv_scale(1.0/fixed_scale);
+static constexpr double inv_scale(1.0/fixed_scale);
 
 void
 FlatProjection::SetCenter(const GeoPoint &_center)
@@ -46,7 +41,7 @@ FlatProjection::SetCenter(const GeoPoint &_center)
   center = _center;
 
   cos = center.latitude.fastcosine() * fixed_scale;
-  r_cos = fixed(1) / cos;
+  r_cos = 1. / cos;
   approx_scale = Unproject(FlatGeoPoint(0,-1)).DistanceS(Unproject(FlatGeoPoint(0,1))) / 2;
 }
 
@@ -86,15 +81,15 @@ FlatProjection::Unproject(const FlatGeoPoint &fp) const
 {
   assert(IsValid());
 
-  return GeoPoint(Angle::Native(fp.longitude * r_cos)
+  return GeoPoint(Angle::Native(fp.x * r_cos)
                   + center.longitude,
-                  Angle::Native(fp.latitude * inv_scale)
+                  Angle::Native(fp.y * inv_scale)
                   + center.latitude);
 }
 
-fixed
+double
 FlatProjection::ProjectRangeFloat(const GeoPoint &tp,
-                                  const fixed range) const
+                                  const double range) const
 {
   assert(IsValid());
 
@@ -103,7 +98,7 @@ FlatProjection::ProjectRangeFloat(const GeoPoint &tp,
 
 unsigned
 FlatProjection::ProjectRangeInteger(const GeoPoint &tp,
-                                    const fixed range) const
+                                    const double range) const
 {
   assert(IsValid());
 
@@ -115,10 +110,7 @@ FlatProjection::Unproject(const FlatBoundingBox &bb) const
 {
   assert(IsValid());
 
-  return GeoBounds(Unproject(FlatGeoPoint(bb.GetLowerLeft().longitude,
-                                          bb.GetUpperRight().latitude)),
-                   Unproject(FlatGeoPoint(bb.GetUpperRight().longitude,
-                                          bb.GetLowerLeft().latitude)));
+  return GeoBounds(Unproject(bb.GetTopLeft()), Unproject(bb.GetBottomRight()));
 }
 
 FlatBoundingBox
@@ -130,5 +122,13 @@ FlatProjection::Project(const GeoBounds &bb) const
                      ProjectInteger(bb.GetNorthEast()));
   fb.ExpandByOne(); // prevent rounding
   return fb;
+}
+
+FlatBoundingBox
+FlatProjection::ProjectSquare(const GeoPoint center, double radius) const
+{
+  FlatGeoPoint flat_center = ProjectInteger(center);
+  int flat_radius = ProjectRangeInteger(center, radius);
+  return FlatBoundingBox(flat_center, flat_radius);
 }
 

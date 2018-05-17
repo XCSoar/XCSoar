@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,11 +25,10 @@ Copyright_License {
 #include "Protocol.hpp"
 #include "Device/RecordedFlight.hpp"
 #include "Device/Port/Port.hpp"
+#include "OS/Path.hpp"
 #include "Operation/Operation.hpp"
 #include "vlconv.h"
 #include "grecord.h"
-
-#include <algorithm>
 
 /**
  * Sizes of VL memory regions
@@ -99,7 +98,7 @@ ReadFlightListInner(Port &port,
 static bool
 DownloadFlightInner(Port &port, unsigned bulkrate,
                     const RecordedFlightInfo &flight,
-                    const TCHAR *path,
+                    Path path,
                     OperationEnvironment &env)
 {
   if (!Volkslogger::ConnectAndFlush(port, env, 20000))
@@ -113,11 +112,11 @@ DownloadFlightInner(Port &port, unsigned bulkrate,
   if (length == 0)
     return false;
 
-  FILE *outfile = _tfopen(path, _T("wt"));
+  FILE *outfile = _tfopen(path.c_str(), _T("wt"));
   if (outfile == nullptr)
     return false;
 
-  size_t r = convert_gcs(0, outfile, logbuffer, length, true);
+  size_t r = convert_gcs(outfile, logbuffer, length, true);
   if (r == 0) {
     fclose(outfile);
     return false;
@@ -155,7 +154,7 @@ VolksloggerDevice::ReadFlightList(RecordedFlightList &flight_list,
 
 bool
 VolksloggerDevice::DownloadFlight(const RecordedFlightInfo &flight,
-                                  const TCHAR *path,
+                                  Path path,
                                   OperationEnvironment &env)
 {
   port.StopRxThread();

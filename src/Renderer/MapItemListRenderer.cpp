@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,6 +25,8 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "MapWindow/Items/MapItem.hpp"
+#include "MapWindow/Items/OverlayMapItem.hpp"
+#include "MapWindow/Items/RaspMapItem.hpp"
 #include "Look/DialogLook.hpp"
 #include "Look/MapLook.hpp"
 #include "Renderer/AircraftRenderer.hpp"
@@ -39,13 +41,11 @@ Copyright_License {
 #include "Dialogs/Task/dlgTaskHelpers.hpp"
 #include "Renderer/OZPreviewRenderer.hpp"
 #include "Language/Language.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 #include "Util/Macros.hpp"
 #include "Util/StaticString.hxx"
-#include "Terrain/RasterBuffer.hpp"
 #include "MapSettings.hpp"
 #include "Math/Screen.hpp"
-#include "Look/TrafficLook.hpp"
 #include "Look/FinalGlideBarLook.hpp"
 #include "Renderer/TrafficRenderer.hpp"
 #include "FLARM/FlarmDetails.hpp"
@@ -58,8 +58,6 @@ Copyright_License {
 #ifdef HAVE_NOAA
 #include "Renderer/NOAAListRenderer.hpp"
 #endif
-
-#include <cstdio>
 
 unsigned
 MapItemListRenderer::CalculateLayout(const DialogLook &dialog_look)
@@ -87,9 +85,9 @@ Draw(Canvas &canvas, const PixelRect rc,
   row_renderer.DrawFirstRow(canvas, rc, info_buffer);
 
   StringFormatUnsafe(info_buffer, _T("%s: %s"), _("Elevation"),
-                     RasterBuffer::IsSpecial(item.elevation)
-                     ? _T("???")
-                     : FormatUserAltitude(fixed(item.elevation)).c_str());
+                     item.HasElevation()
+                     ? FormatUserAltitude(item.elevation).c_str()
+                     : _T("???"));
   row_renderer.DrawSecondRow(canvas, rc, info_buffer);
 }
 
@@ -99,29 +97,26 @@ Draw(Canvas &canvas, PixelRect rc,
      const TwoTextRowsRenderer &row_renderer,
      const FinalGlideBarLook &look)
 {
-  const unsigned line_height = rc.bottom - rc.top;
-
-  bool elevation_available =
-      !RasterBuffer::IsSpecial((short)item.elevation);
+  const unsigned line_height = rc.GetHeight();
 
   bool reach_relevant = item.reach.IsReachRelevant();
 
-  RoughAltitude arrival_altitude =
+  int arrival_altitude =
     item.reach.terrain_valid == ReachResult::Validity::VALID
     ? item.reach.terrain
     : item.reach.direct;
-  if (elevation_available)
+  if (item.HasElevation())
     arrival_altitude -= item.elevation;
 
   bool reachable =
     item.reach.terrain_valid != ReachResult::Validity::UNREACHABLE &&
-    arrival_altitude.IsPositive();
+    arrival_altitude >= item.safety_height;
 
   // Draw final glide arrow icon
 
-  const RasterPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
+  const PixelPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
 
-  RasterPoint arrow[] = {
+  BulkPixelPoint arrow[] = {
       { -7, -3 }, { 0, 4 }, { 7, -3 }
   };
 
@@ -146,18 +141,18 @@ Draw(Canvas &canvas, PixelRect rc,
   StaticString<256> buffer;
   buffer.clear();
 
-  if (elevation_available) {
-    RoughAltitude relative_arrival_altitude =
+  if (item.HasElevation()) {
+    int relative_arrival_altitude =
       item.reach.direct - item.elevation;
 
-    FormatRelativeUserAltitude(fixed((short)relative_arrival_altitude),
+    FormatRelativeUserAltitude(relative_arrival_altitude,
                                altitude_buffer, ARRAY_SIZE(altitude_buffer));
 
     buffer.AppendFormat(_T("%s %s, "), altitude_buffer, _("AGL"));
   }
 
   buffer.AppendFormat(_T("%s %s"),
-                      FormatUserAltitude(fixed(item.reach.direct)).c_str(),
+                      FormatUserAltitude(item.reach.direct).c_str(),
                       _("MSL"));
 
   // Draw title row
@@ -169,28 +164,28 @@ Draw(Canvas &canvas, PixelRect rc,
   if (reach_relevant) {
     buffer.Format(_T("%s: "), _("around terrain"));
 
-    if (elevation_available) {
-      RoughAltitude relative_arrival_altitude =
+    if (item.HasElevation()) {
+      int relative_arrival_altitude =
           item.reach.terrain - item.elevation;
 
-      FormatRelativeUserAltitude(fixed((short)relative_arrival_altitude),
+      FormatRelativeUserAltitude(relative_arrival_altitude,
                                  altitude_buffer, ARRAY_SIZE(altitude_buffer));
 
      buffer.AppendFormat(_T("%s %s, "), altitude_buffer, _("AGL"));
     }
 
     buffer.AppendFormat(_T("%s %s, "),
-                        FormatUserAltitude(fixed(item.reach.terrain)).c_str(),
+                        FormatUserAltitude(item.reach.terrain).c_str(),
                         _("MSL"));
-  } else if (elevation_available &&
-             (int)item.reach.direct >= (int)item.elevation &&
+  } else if (item.HasElevation() &&
+             item.reach.direct >= item.elevation + item.safety_height &&
              item.reach.terrain_valid == ReachResult::Validity::UNREACHABLE) {
     buffer.UnsafeFormat(_T("%s "), _("Unreachable due to terrain."));
   } else {
     buffer.clear();
   }
 
-  buffer += _("Arrival altitude incl. safety height");
+  buffer += _("Arrival altitude");
 
   // Draw comment row
 
@@ -204,10 +199,10 @@ Draw(Canvas &canvas, PixelRect rc,
      const AircraftLook &look,
      const MapSettings &settings)
 {
-  const unsigned line_height = rc.bottom - rc.top;
+  const unsigned line_height = rc.GetHeight();
   const unsigned text_padding = Layout::GetTextPadding();
 
-  const RasterPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
+  const PixelPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
   AircraftRenderer::Draw(canvas, settings, look, item.bearing, pt);
 
   rc.left += line_height + text_padding;
@@ -234,7 +229,7 @@ Draw(Canvas &canvas, const PixelRect rc,
      const WaypointLook &look,
      const WaypointRendererSettings &renderer_settings)
 {
-  WaypointListRenderer::Draw(canvas, rc, item.waypoint,
+  WaypointListRenderer::Draw(canvas, rc, *item.waypoint,
                              row_renderer, look, renderer_settings);
 }
 
@@ -257,13 +252,13 @@ Draw(Canvas &canvas, PixelRect rc,
      const TwoTextRowsRenderer &row_renderer,
      const MapLook &look)
 {
-  const unsigned line_height = rc.bottom - rc.top;
+  const unsigned line_height = rc.GetHeight();
   const unsigned text_padding = Layout::GetTextPadding();
 
   const ThermalSource &thermal = item.thermal;
 
-  const RasterPoint pt(rc.left + line_height / 2,
-                       rc.top + line_height / 2);
+  const PixelPoint pt(rc.left + line_height / 2,
+                      rc.top + line_height / 2);
 
   look.thermal_source_icon.Draw(canvas, pt);
 
@@ -293,14 +288,14 @@ Draw(Canvas &canvas, PixelRect rc,
      const TaskLook &look, const AirspaceLook &airspace_look,
      const AirspaceRendererSettings &airspace_settings)
 {
-  const unsigned line_height = rc.bottom - rc.top;
+  const unsigned line_height = rc.GetHeight();
   const unsigned text_padding = Layout::GetTextPadding();
 
   const ObservationZonePoint &oz = *item.oz;
-  const Waypoint &waypoint = item.waypoint;
+  const Waypoint &waypoint = *item.waypoint;
 
-  const RasterPoint pt(rc.left + line_height / 2,
-                       rc.top + line_height / 2);
+  const PixelPoint pt(rc.left + line_height / 2,
+                      rc.top + line_height / 2);
   const unsigned radius = line_height / 2 - text_padding;
   OZPreviewRenderer::Draw(canvas, oz, pt, radius, look,
                           airspace_settings, airspace_look);
@@ -327,14 +322,14 @@ Draw(Canvas &canvas, PixelRect rc,
      const TrafficLook &traffic_look,
      const TrafficList *traffic_list)
 {
-  const unsigned line_height = rc.bottom - rc.top;
+  const unsigned line_height = rc.GetHeight();
   const unsigned text_padding = Layout::GetTextPadding();
 
   const FlarmTraffic *traffic = traffic_list == nullptr
     ? nullptr
     : traffic_list->FindTraffic(item.id);
 
-  const RasterPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
+  const PixelPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
 
   // Render the representation of the traffic icon
   if (traffic != nullptr)
@@ -385,14 +380,14 @@ Draw(Canvas &canvas, PixelRect rc,
   row_renderer.DrawSecondRow(canvas, rc, info_string);
 }
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
 
 /**
  * Calculate how many minutes have passed since #past_ms.
  */
 gcc_const
 static unsigned
-SinceInMinutes(fixed now_s, uint32_t past_ms)
+SinceInMinutes(double now_s, uint32_t past_ms)
 {
   const unsigned day_minutes = 24 * 60;
   unsigned now_minutes = uint32_t(now_s / 60) % day_minutes;
@@ -415,17 +410,8 @@ Draw(Canvas &canvas, PixelRect rc,
      const SkyLinesTrafficMapItem &item,
      const TwoTextRowsRenderer &row_renderer)
 {
-  const unsigned padding = Layout::GetTextPadding();
-
-  {
-    canvas.Select(row_renderer.GetSecondFont());
-    const auto altitude = FormatUserAltitude(fixed(item.altitude));
-    const int x = rc.right - canvas.CalcTextWidth(altitude) - padding;
-    canvas.DrawText(x, rc.top + row_renderer.GetFirstY(), altitude);
-    rc.right = x - padding;
-  }
-
-  canvas.Select(row_renderer.GetFirstFont());
+  rc.right = row_renderer.DrawRightFirstRow(canvas, rc,
+                                            FormatUserAltitude(item.altitude));
 
   row_renderer.DrawFirstRow(canvas, rc, item.name);
 
@@ -438,7 +424,23 @@ Draw(Canvas &canvas, PixelRect rc,
   }
 }
 
-#endif /* HAVE_SKYLINES_TRACKING_HANDLER */
+#endif /* HAVE_SKYLINES_TRACKING */
+
+static void
+Draw(Canvas &canvas, PixelRect rc,
+     const OverlayMapItem &item,
+     const TwoTextRowsRenderer &row_renderer)
+{
+  row_renderer.DrawFirstRow(canvas, rc, item.label.c_str());
+}
+
+static void
+Draw(Canvas &canvas, PixelRect rc,
+     const RaspMapItem &item,
+     const TwoTextRowsRenderer &row_renderer)
+{
+  row_renderer.DrawFirstRow(canvas, rc, item.label.c_str());
+}
 
 void
 MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
@@ -485,7 +487,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
            row_renderer, traffic_look, traffic_list);
     break;
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
   case MapItem::SKYLINES_TRAFFIC:
     ::Draw(canvas, rc, (const SkyLinesTrafficMapItem &)item, row_renderer);
     break;
@@ -494,6 +496,14 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   case MapItem::THERMAL:
     ::Draw(canvas, rc, (const ThermalMapItem &)item, utc_offset,
            row_renderer, look);
+    break;
+
+  case MapItem::OVERLAY:
+    ::Draw(canvas, rc, (const OverlayMapItem &)item, row_renderer);
+    break;
+
+  case MapItem::RASP:
+    ::Draw(canvas, rc, (const RaspMapItem &)item, row_renderer);
     break;
   }
 }

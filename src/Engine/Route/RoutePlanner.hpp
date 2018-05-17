@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -32,8 +32,9 @@
 #include "ReachFan.hpp"
 
 #include <utility>
-#include <algorithm>
 #include <unordered_set>
+
+#include <limits.h>
 
 class GlidePolar;
 
@@ -84,7 +85,7 @@ class RoutePlanner {
   struct RoutePointHasher : std::unary_function<RoutePoint, size_t> {
     gcc_const
     result_type operator()(const argument_type p) const {
-      return p.longitude * result_type(104729) + p.latitude;
+      return p.x * result_type(104729) + p.y;
     }
   };
 
@@ -103,16 +104,18 @@ protected:
   bool dirty;
   /** Task projection used for flat-earth representation */
   FlatProjection projection;
-  /** Aircraft performance model */
+  /** Aircraft performance model for route calculations */
   RoutePolars rpolars_route;
-  /** Aircraft performance model */
+  /** Aircraft performance model for reach to terrain */
   RoutePolars rpolars_reach;
+  /** Aircraft performance model for reach to working floor */
+  RoutePolars rpolars_reach_working;
   /** Terrain raster */
   const RasterMap *terrain;
   /** Minimum height scanned during solution (m) */
-  RoughAltitude h_min;
+  int h_min;
   /** Maxmimum height scanned during solution (m) */
-  RoughAltitude h_max;
+  int h_max;
 
 private:
   /** A* search algorithm */
@@ -140,7 +143,8 @@ private:
   /** Destination at last call to solve() */
   AFlatGeoPoint destination_last;
 
-  ReachFan reach;
+  ReachFan reach_terrain;
+  ReachFan reach_working;
 
   RoutePlannerConfig::Polar reach_polar_mode;
 
@@ -171,8 +175,8 @@ public:
     terrain = _terrain;
   }
 
-  bool IsReachEmpty() const {
-    return reach.IsEmpty();
+  bool IsTerrainReachEmpty() const {
+    return reach_terrain.IsEmpty();
   }
 
   /**
@@ -194,24 +198,38 @@ public:
    */
   bool Solve(const AGeoPoint &origin, const AGeoPoint &destination,
              const RoutePlannerConfig &config,
-             const RoughAltitude h_ceiling = RoughAltitude::Max());
+             int h_ceiling = INT_MAX);
 
   /**
-   * Solve reach footprint
+   * Solve reach footprint to terrain
    *
    * @param origin The start of the search (current aircraft location)
    * @param do_solve actually solve or just perform minimal calculations
    *
    * @return True if reach was scanned
    */
-  bool SolveReach(const AGeoPoint &origin, const RoutePlannerConfig &config,
-                  RoughAltitude h_ceiling, bool do_solve=true);
+  bool SolveReachTerrain(const AGeoPoint &origin, const RoutePlannerConfig &config,
+                         int h_ceiling, bool do_solve=true);
 
-  /** Visit reach */
-  void AcceptInRange(const GeoBounds &bounds,
-                     TriangleFanVisitor &visitor) const {
-    reach.AcceptInRange(bounds, visitor);
+  /**
+   * Solve reach footprint to working height
+   *
+   * @param origin The start of the search (current aircraft location)
+   * @param do_solve actually solve or just perform minimal calculations
+   *
+   * @return True if reach was scanned
+   */
+  bool SolveReachWorking(const AGeoPoint &origin, const RoutePlannerConfig &config,
+                         int h_ceiling, bool do_solve=true);
+
+  const FlatProjection &GetTerrainReachProjection() const {
+    return reach_terrain.GetProjection();
   }
+
+  /** Visit reach (working or terrain reach) */
+  void AcceptInRange(const GeoBounds &bounds,
+                     FlatTriangleFanVisitor &visitor,
+                     bool working) const;
 
   /**
    * Retrieve current solution.  If solver failed previously,
@@ -227,10 +245,13 @@ public:
    * @param polar Glide performance model used for route planning
    * @param polar Glide performance model used for reach planning
    * @param wind Wind estimate
+   * @param height_min_working Minimum working height (m)
    */
   void UpdatePolar(const GlideSettings &settings,
+                   const RoutePlannerConfig &config,
                    const GlidePolar &polar, const GlidePolar &safety_polar,
-                   const SpeedVector &wind);
+                   const SpeedVector &wind,
+                   const int height_min_working=0);
 
   /** Reset the optimiser as if never flown and clear temporary buffers. */
   virtual void Reset();
@@ -243,10 +264,12 @@ public:
    * @param destination Target
    * @param intx First intercept point
    *
-   * @return true if terrain intersects
+   * @return location of intersection, or GeoPoint::Invalid() if none
+   * was found
    */
-  bool Intersection(const AGeoPoint& origin, const AGeoPoint& destination,
-                    GeoPoint& intx) const;
+  gcc_pure
+  GeoPoint Intersection(const AGeoPoint &origin,
+                        const AGeoPoint &destination) const;
 
   /**
    * Find arrival height at destination.
@@ -261,11 +284,11 @@ public:
    */
   bool FindPositiveArrival(const AGeoPoint &dest,
                            ReachResult &result_r) const {
-    return reach.FindPositiveArrival(dest, rpolars_reach, result_r);
+    return reach_terrain.FindPositiveArrival(dest, rpolars_reach, result_r);
   }
 
-  RoughAltitude GetTerrainBase() const {
-    return reach.GetTerrainBase();
+  int GetTerrainBase() const {
+    return reach_terrain.GetTerrainBase();
   }
 
 protected:

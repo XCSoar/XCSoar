@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,10 +23,9 @@ Copyright_License {
 
 #include "FlightStatisticsRenderer.hpp"
 #include "ChartRenderer.hpp"
-#include "Util/Macros.hpp"
-#include "Util/StringUtil.hpp"
 #include "Look/MapLook.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
@@ -43,12 +42,11 @@ Copyright_License {
 #include "Renderer/TaskPointRenderer.hpp"
 #include "Renderer/OZRenderer.hpp"
 #include "Renderer/AircraftRenderer.hpp"
+#include "Renderer/MapScaleRenderer.hpp"
 #include "Engine/Contest/Solvers/Retrospective.hpp"
 #include "Computer/Settings.hpp"
 
 #include <algorithm>
-
-#include <stdio.h>
 
 using std::max;
 
@@ -95,12 +93,13 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
                                     const TraceComputer &trace_computer,
                                     const Retrospective &retrospective) const
 {
+  ChartRenderer chart(chart_look, canvas, rc);
   if (!trail_renderer.LoadTrace(trace_computer)) {
-    ChartRenderer chart(chart_look, canvas, rc);
     chart.DrawNoData();
     return;
   }
 
+  const PixelRect &rc_chart = chart.GetChartRect();
   GeoBounds bounds(nmea_info.location);
   trail_renderer.ScanBounds(bounds);
 
@@ -113,7 +112,7 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
     }
   }
 
-  const ChartProjection proj(rc, TaskProjection(bounds));
+  const ChartProjection proj(rc_chart, TaskProjection(bounds));
 
   {
     // draw place names found in the retrospective task
@@ -122,14 +121,14 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
     canvas.SetBackgroundTransparent();
 
     for (const auto &i : retrospective.getNearWaypointList()) {
-      RasterPoint wp_pos = proj.GeoToScreen(i.waypoint.location);
+      auto wp_pos = proj.GeoToScreen(i.waypoint->location);
       canvas.DrawText(wp_pos.x,
                       wp_pos.y,
-                      i.waypoint.name.c_str());
+                      i.waypoint->name.c_str());
     }
   }
 
-  RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.location);
+  auto aircraft_pos = proj.GeoToScreen(nmea_info.location);
   AircraftRenderer::Draw(canvas, settings_map, map_look.aircraft,
                          nmea_info.attitude.heading, aircraft_pos);
 
@@ -164,6 +163,8 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
     DrawContestTriangle(canvas, proj, contest, 1);
     break;
   }
+
+  RenderMapScale(canvas, proj, rc_chart, map_look.overlay);
 }
 
 void
@@ -253,6 +254,8 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
 
   ChartProjection proj;
 
+  const PixelRect &rc_chart = chart.GetChartRect();
+
   {
     ProtectedTaskManager::Lease task_manager(_task_manager);
     const OrderedTask &task = task_manager->GetOrderedTask();
@@ -262,7 +265,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
       return;
     }
 
-    proj.Set(rc, task);
+    proj.Set(rc_chart, task);
 
     OZRenderer ozv(map_look.task, map_look.airspace, settings_map.airspace);
     TaskPointRenderer tpv(canvas, proj, map_look.task,
@@ -278,10 +281,12 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
     trail_renderer.Draw(canvas, *trace_computer, proj, 0);
 
   if (nmea_info.location_available) {
-    RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.location);
+    auto aircraft_pos = proj.GeoToScreen(nmea_info.location);
     AircraftRenderer::Draw(canvas, settings_map, map_look.aircraft,
                            nmea_info.attitude.heading, aircraft_pos);
   }
+
+  RenderMapScale(canvas, proj, rc_chart, map_look.overlay);
 }
 
 void
@@ -294,7 +299,7 @@ FlightStatisticsRenderer::CaptionTask(TCHAR *sTmp, const DerivedInfo &derived)
       !derived.task_stats.total.remaining.IsDefined()) {
     _tcscpy(sTmp, _("No task"));
   } else {
-    const fixed d_remaining = derived.task_stats.total.remaining.GetDistance();
+    const auto d_remaining = derived.task_stats.total.remaining.GetDistance();
     if (task_stats.has_targets) {
       const auto timetext1 = FormatSignedTimeHHMM((int)task_stats.total.time_remaining_start);
       const auto timetext2 = FormatSignedTimeHHMM((int)common.aat_time_remaining);

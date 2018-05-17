@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -34,7 +34,6 @@ Copyright_License {
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
 #include "UIGlobals.hpp"
-#include "Util/TrivialArray.hpp"
 #include "Util/StaticString.hxx"
 #include "Util/Macros.hpp"
 #include "Device/MultipleDevices.hpp"
@@ -76,7 +75,7 @@ class DeviceListWidget final
 
   const DialogLook &look;
 
-  UPixelScalar font_height;
+  unsigned font_height;
 
   struct Flags {
     bool duplicate:1;
@@ -159,6 +158,7 @@ class DeviceListWidget final
   static_assert(sizeof(Item) == 2, "wrong size");
 
   Item items[NUMDEV];
+  tstring error_messages[NUMDEV];
 
   Button *disable_button;
   Button *reconnect_button, *flight_button;
@@ -237,7 +237,7 @@ void
 DeviceListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  const UPixelScalar margin = Layout::GetTextPadding();
+  const unsigned margin = Layout::GetTextPadding();
   font_height = look.list.font->GetHeight();
   CreateList(parent, look, rc, 3 * margin + font_height +
              look.small_font.GetHeight()).SetLength(NUMDEV);
@@ -261,6 +261,12 @@ DeviceListWidget::RefreshList()
 
     if (n != item) {
       item = n;
+      modified = true;
+    }
+
+    auto error_message = (*devices)[i].GetErrorMessage();
+    if (error_message != error_messages[i]) {
+      error_messages[i] = std::move(error_message);
       modified = true;
     }
   }
@@ -327,7 +333,7 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
     CommonInterface::SetSystemSettings().devices[idx];
   const Flags flags(*items[idx]);
 
-  const UPixelScalar margin = Layout::GetTextPadding();
+  const unsigned margin = Layout::GetTextPadding();
 
   TCHAR port_name_buffer[128];
   const TCHAR *port_name =
@@ -407,7 +413,10 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
   } else if (flags.duplicate) {
     status = _("Duplicate");
   } else if (flags.error) {
-    status = _("Error");
+    if (error_messages[idx].empty())
+      status = _("Error");
+    else
+      status = error_messages[idx].c_str();
   } else {
     status = _("Not connected");
   }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,62 +26,60 @@ Copyright_License {
 #include "Generator.hpp"
 #include "NMEA/Info.hpp"
 #include "Version.hpp"
+#include "OS/Path.hpp"
 
 #include <assert.h>
 
-IGCWriter::IGCWriter(const TCHAR *path)
-  :file(path)
+IGCWriter::IGCWriter(Path path)
+  :file(path,
+        /* we use CREATE_VISIBLE here so the user can recover partial
+           IGC files after a crash/battery failure/etc. */
+        FileOutputStream::Mode::CREATE_VISIBLE),
+   buffered(file)
 {
   fix.Clear();
 
   grecord.Initialize();
 }
 
-bool
+void
 IGCWriter::CommitLine(char *line)
 {
-  if (!file.WriteLine(line))
-    return false;
+  buffered.Write(line);
+  buffered.Write('\n');
 
   grecord.AppendRecordToBuffer(line);
-  return true;
 }
 
-bool
+void
 IGCWriter::WriteLine(const char *line)
 {
   assert(strchr(line, '\r') == NULL);
   assert(strchr(line, '\n') == NULL);
 
   char *const dest = BeginLine();
-  if (dest == nullptr)
-    return false;
-
   char *const end = dest + MAX_IGC_BUFF - 1;
 
   char *p = CopyIGCString(dest, end, line);
   *p = '\0';
 
-  return CommitLine(dest);
+  CommitLine(dest);
 }
 
-bool
+void
 IGCWriter::WriteLine(const char *a, const TCHAR *b)
 {
   size_t a_length = strlen(a);
   assert(a_length < MAX_IGC_BUFF);
 
   char *const dest = BeginLine();
-  if (dest == nullptr)
-    return false;
-
   char *const end = dest + MAX_IGC_BUFF - 1, *p = dest;
 
   p = std::copy_n(a, a_length, p);
   p = CopyIGCString(p, end, b);
   *p = '\0';
 
-  return CommitLine(dest);
+  CommitLine(dest);
 }
 
 void
@@ -274,8 +272,6 @@ IGCWriter::LogFRecord(const BrokenTime &time, const int *satellite_ids)
 void
 IGCWriter::Sign()
 {
-  assert(file.IsOpen());
-
   grecord.FinalizeBuffer();
-  grecord.WriteTo(file);
+  grecord.WriteTo(buffered);
 }

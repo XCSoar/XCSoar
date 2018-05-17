@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,61 +28,61 @@ class ZeroFinderTest: public ZeroFinder
   unsigned func;
 
 public:
-  ZeroFinderTest(fixed x_min, fixed x_max, unsigned _func = 0) :
-    ZeroFinder(x_min, x_max, fixed(0.0001)), func(_func) {}
+  ZeroFinderTest(double x_min, double x_max, unsigned _func = 0) :
+    ZeroFinder(x_min, x_max, 0.0001), func(_func) {}
 
-  fixed f(const fixed x);
+  double f(const double x);
 };
 
-fixed
-ZeroFinderTest::f(const fixed x)
+double
+ZeroFinderTest::f(const double x)
 {
   if (func == 0)
-    return fixed(2) * x * x - fixed(3) * x - fixed(5);
+    return 2 * x * x - 3 * x - 5;
 
   if (func == 1)
-    return pow(fixed(2), x) - fixed(3);
+    return pow(2, x) - 3;
 
   if (func == 2)
     return cos(x);
 
   gcc_unreachable();
   assert(false);
-  return fixed(0);
+  return 0;
 }
 
 int main(int argc, char **argv)
 {
   plan_tests(18);
 
-  ZeroFinderTest zf(fixed(-100), fixed(100), 0);
-  ok1(equals(zf.find_zero(fixed(-150)), fixed(-1)));
-  ok1(equals(zf.find_zero(fixed(0)), fixed(-1)));
-  // ok1(equals(zf.find_zero(fixed(140)), fixed(2.5))); ???
-  ok1(equals(zf.find_zero(fixed(140)), fixed(-1)));
+  ZeroFinderTest zf(-100, 100, 0);
+  ok1(equals(zf.find_zero(-150), -1));
+  ok1(equals(zf.find_zero(0), -1));
+  // ok1(equals(zf.find_zero(140), 2.5)); ???
+  ok1(equals(zf.find_zero(140), -1));
 
-  ok1(equals(zf.find_min(fixed(-150)), fixed(0.75)));
-  ok1(equals(zf.find_min(fixed(0)), fixed(0.75)));
-  ok1(equals(zf.find_min(fixed(150)), fixed(0.75)));
+  ok1(equals(zf.find_min(-150), 0.75));
+  ok1(equals(zf.find_min(0), 0.75));
+  ok1(equals(zf.find_min(150), 0.75));
 
-  ZeroFinderTest zf2(fixed(0), fixed(100), 0);
-  ok1(equals(zf2.find_zero(fixed(-150)), fixed(2.5)));
-  ok1(equals(zf2.find_zero(fixed(0)), fixed(2.5)));
-  ok1(equals(zf2.find_zero(fixed(140)), fixed(2.5)));
+  ZeroFinderTest zf2(0, 100, 0);
+  ok1(equals(zf2.find_zero(-150), 2.5));
+  ok1(equals(zf2.find_zero(0), 2.5));
+  ok1(equals(zf2.find_zero(140), 2.5));
 
-  ZeroFinderTest zf3(fixed(0), fixed(10), 1);
-  ok1(equals(zf3.find_zero(fixed(-150)), fixed(1.584963)));
-  ok1(equals(zf3.find_zero(fixed(1)), fixed(1.584963)));
-  ok1(equals(zf3.find_zero(fixed(140)), fixed(1.584963)));
+  ZeroFinderTest zf3(0, 10, 1);
+  ok1(equals(zf3.find_zero(-150), 1.584963));
+  ok1(equals(zf3.find_zero(1), 1.584963));
+  ok1(equals(zf3.find_zero(140), 1.584963));
 
-  ZeroFinderTest zf4(fixed(0), fixed_pi + fixed(1), 2);
-  ok1(equals(zf4.find_zero(fixed(-150)), fixed_half_pi));
-  ok1(equals(zf4.find_zero(fixed(1)), fixed_half_pi));
-  ok1(equals(zf4.find_zero(fixed(140)), fixed_half_pi));
+  ZeroFinderTest zf4(0, M_PI + 1, 2);
+  ok1(equals(zf4.find_zero(-150), M_PI_2));
+  ok1(equals(zf4.find_zero(1), M_PI_2));
+  ok1(equals(zf4.find_zero(140), M_PI_2));
 
-  ok1(equals(zf4.find_min(fixed(-150)), fixed_pi));
-  ok1(equals(zf4.find_min(fixed(1)), fixed_pi));
-  ok1(equals(zf4.find_min(fixed(140)), fixed_pi));
+  ok1(equals(zf4.find_min(-150), M_PI));
+  ok1(equals(zf4.find_min(1), M_PI));
+  ok1(equals(zf4.find_min(140), M_PI));
 
   return exit_status();
 }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,16 +27,17 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Atmosphere/Pressure.hpp"
+#include "Atmosphere/Temperature.hpp"
 #include "Engine/Contest/Settings.hpp"
 #include "Task/TaskBehaviour.hpp"
 #include "Tracking/TrackingSettings.hpp"
+#include "Weather/Settings.hpp"
 #include "NMEA/Validity.hpp"
 #include "Logger/Settings.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"
 #include "TeamCode/Settings.hpp"
 #include "Plane/Plane.hpp"
 #include "Wind/Settings.hpp"
-#include "Audio/VegaVoiceSettings.hpp"
 #include "WaveSettings.hpp"
 
 #include <type_traits>
@@ -60,7 +61,7 @@ struct PolarSettings {
    * When you modify this, you should update glide_polar_task and send
    * the new GlidePolar to the TaskManager.
    */
-  fixed degradation_factor;
+  double degradation_factor;
 
   /**
    * Bugs ratio applied to polar.  Range is 0..1, where 1 means
@@ -70,7 +71,7 @@ struct PolarSettings {
    * When you modify this, you should update glide_polar_task and send
    * the new GlidePolar to the TaskManager.
    */
-  fixed bugs;
+  double bugs;
 
   /** Glide polar used for task calculations */
   GlidePolar glide_polar_task;
@@ -85,12 +86,12 @@ struct PolarSettings {
 
   void SetDefaults();
 
-  void SetDegradationFactor(fixed _degradation_factor) {
+  void SetDegradationFactor(double _degradation_factor) {
     degradation_factor = _degradation_factor;
     glide_polar_task.SetBugs(degradation_factor * bugs);
   }
 
-  void SetBugs(fixed _bugs) {
+  void SetBugs(double _bugs) {
     bugs = _bugs;
     glide_polar_task.SetBugs(degradation_factor * bugs);
   }
@@ -129,8 +130,11 @@ struct FeaturesSettings {
   /** Calculate final glide over terrain */
   enum class FinalGlideTerrain : uint8_t {
     OFF,
-    LINE,
-    SHADE,
+    TERRAIN_LINE,
+    TERRAIN_SHADE,
+    WORKING,
+    WORKING_TERRAIN_LINE,
+    WORKING_TERRAIN_SHADE,
   } final_glide_terrain;
 
   /** block speed to fly instead of dolphin */
@@ -166,8 +170,6 @@ struct ComputerSettings {
 
   TeamCodeSettings team_code;
 
-  VoiceSettings voice;
-
   PlacesOfInterestSettings poi;
 
   FeaturesSettings features;
@@ -187,7 +189,7 @@ struct ComputerSettings {
   /**
    * The forecasted maximum ground temperature [Kelvin].
    */
-  fixed forecast_temperature;
+  Temperature forecast_temperature;
 
   /**
    * Troposhere atmosphere model for QNH correction
@@ -207,6 +209,8 @@ struct ComputerSettings {
 #ifdef HAVE_TRACKING
   TrackingSettings tracking;
 #endif
+
+  WeatherSettings weather;
 
   void SetDefaults();
 };

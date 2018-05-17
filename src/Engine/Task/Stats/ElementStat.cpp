@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,6 @@
  */
 
 #include "ElementStat.hpp"
-#include "Navigation/Aircraft.hpp"
-#include <algorithm>
 
 void
 ElementStat::Reset()
@@ -31,9 +29,9 @@ ElementStat::Reset()
   vector_remaining = GeoVector::Invalid();
   next_leg_vector = GeoVector::Invalid();
 
-  time_started = fixed(-1);
-  time_elapsed = time_remaining_now = time_remaining_start = time_planned = fixed(0);
-  gradient = fixed(0);
+  time_started = -1;
+  time_elapsed = time_remaining_now = time_remaining_start = time_planned = 0;
+  gradient = 0;
 
   remaining_effective.Reset();
   remaining.Reset();
@@ -50,23 +48,22 @@ ElementStat::Reset()
 }
 
 void
-ElementStat::SetTimes(const fixed until_start_s, const fixed ts,
-                      const fixed time)
+ElementStat::SetTimes(const double until_start_s, const double ts,
+                      const double time)
 {
   time_started = ts;
 
-  if (negative(time_started) || negative(time))
+  if (time_started < 0 || time < 0)
     /* not yet started */
-    time_elapsed = fixed(0);
+    time_elapsed = 0;
   else
-    time_elapsed = std::max(time - fixed(ts), fixed(0));
+    time_elapsed = fdim(time, ts);
 
   if (solution_remaining.IsOk()) {
     time_remaining_now = solution_remaining.time_elapsed;
-    time_remaining_start = std::max(time_remaining_now - until_start_s,
-                                    fixed(0));
+    time_remaining_start = fdim(time_remaining_now, until_start_s);
     time_planned = time_elapsed + time_remaining_start;
   } else {
-    time_remaining_now = time_remaining_start = time_planned = fixed(0);
+    time_remaining_now = time_remaining_start = time_planned = 0;
   }
 }

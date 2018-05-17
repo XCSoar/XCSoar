@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,44 +23,44 @@ Copyright_License {
 
 #include "Map.hpp"
 #include "LocalPath.hpp"
-#include "OS/PathName.hpp"
+#include "OS/Path.hpp"
 #include "Compatibility/path.h"
-#include "Util/StringAPI.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringAPI.hxx"
+#include "Util/StringCompare.hxx"
 #include "Util/StringPointer.hxx"
-#include "Util/AllocatedString.hxx"
 #include "Util/Macros.hpp"
+
+#ifdef _UNICODE
+#include "Util/AllocatedString.hxx"
+#endif
 
 #include <windef.h> /* for MAX_PATH */
 
-#include <algorithm>
-
-bool
-ProfileMap::GetPath(const char *key, TCHAR *value) const
+AllocatedPath
+ProfileMap::GetPath(const char *key) const
 {
   TCHAR buffer[MAX_PATH];
   if (!Get(key, buffer, ARRAY_SIZE(buffer)))
-      return false;
+      return nullptr;
 
   if (StringIsEmpty(buffer))
-    return false;
+    return nullptr;
 
-  ExpandLocalPath(value, buffer);
-  return true;
+  return ExpandLocalPath(Path(buffer));
 }
 
 bool
-ProfileMap::GetPathIsEqual(const char *key, const TCHAR *value) const
+ProfileMap::GetPathIsEqual(const char *key, Path value) const
 {
-  TCHAR saved[MAX_PATH];
-  if (!GetPath(key, saved))
+  const auto saved_value = GetPath(key);
+  if (saved_value.IsNull())
     return false;
 
-  return StringIsEqual(saved, value);
+  return saved_value == value;
 }
 
 gcc_pure
-static const TCHAR *
+static Path
 BackslashBaseName(const TCHAR *p)
 {
   if (DIR_SEPARATOR != '\\') {
@@ -69,7 +69,7 @@ BackslashBaseName(const TCHAR *p)
       p = backslash + 1;
   }
 
-  return BaseName(p);
+  return Path(p).GetBase();
 }
 
 #ifdef _UNICODE
@@ -81,7 +81,7 @@ ProfileMap::GetPathBase(const char *key) const
   if (!Get(key, buffer, ARRAY_SIZE(buffer)))
       return nullptr;
 
-  const TCHAR *base = BackslashBaseName(buffer);
+  const TCHAR *base = BackslashBaseName(buffer).c_str();
   if (base == nullptr)
     return nullptr;
 
@@ -95,7 +95,7 @@ ProfileMap::GetPathBase(const char *key) const
 {
   const auto *path = Get(key);
   if (path != nullptr)
-    path = BackslashBaseName(path);
+    path = BackslashBaseName(path).c_str();
 
   return path;
 }
@@ -103,16 +103,15 @@ ProfileMap::GetPathBase(const char *key) const
 #endif
 
 void
-ProfileMap::SetPath(const char *key, const TCHAR *value)
+ProfileMap::SetPath(const char *key, Path value)
 {
-  TCHAR path[MAX_PATH];
-
-  if (StringIsEmpty(value))
-    path[0] = '\0';
+  if (value.IsNull() || StringIsEmpty(value.c_str()))
+    Set(key, _T(""));
   else {
-    CopyString(path, value, MAX_PATH);
-    ContractLocalPath(path);
-  }
+    const auto contracted = ContractLocalPath(value);
+    if (contracted != nullptr)
+      value = contracted;
 
-  Set(key, path);
+    Set(key, value.c_str());
+  }
 }

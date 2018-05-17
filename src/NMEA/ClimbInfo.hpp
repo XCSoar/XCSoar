@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,35 +24,36 @@ Copyright_License {
 #ifndef XCSOAR_CLIMB_INFO_HPP
 #define XCSOAR_CLIMB_INFO_HPP
 
-#include "Math/fixed.hpp"
-
 #include <type_traits>
 
 /** Information about one thermal that was or is being climbed. */
 struct OneClimbInfo
 {
   /** Time when circling started. */
-  fixed start_time;
+  double start_time;
 
   /**
    * Time when circling ended
    * (or current time stamp if circling has not ended yet).
    */
-  fixed end_time;
+  double end_time;
 
   /** Time spent in this thermal [s]. */
-  fixed duration;
+  double duration;
 
   /** Altitude gained while in the thermal [m]. May be negative. */
-  fixed gain;
+  double gain;
+
+  /** Start altitude [m] */
+  double start_altitude;
 
   /** Average vertical speed in the thermal [m/s]. May be negative. */
-  fixed lift_rate;
+  double lift_rate;
 
   void Clear();
 
   bool IsDefined() const {
-    return positive(duration);
+    return duration > 0;
   }
 
   void CalculateDuration() {
@@ -60,9 +61,9 @@ struct OneClimbInfo
   }
 
   void CalculateLiftRate() {
-    lift_rate = positive(duration)
+    lift_rate = IsDefined()
       ? gain / duration
-      : fixed(0);
+      : 0.;
   }
 
   void CalculateAll() {
@@ -79,7 +80,7 @@ struct ClimbInfo
   OneClimbInfo last_thermal;
 
   /** Average vertical speed in the last thermals smoothed by low-pass-filter */
-  fixed last_thermal_average_smooth;
+  double last_thermal_average_smooth;
 
   void Clear();
 };

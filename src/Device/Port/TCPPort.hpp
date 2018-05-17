@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,24 +24,19 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_TCP_PORT_HPP
 #define XCSOAR_DEVICE_TCP_PORT_HPP
 
-#include "SocketPort.hpp"
+#include "BufferedPort.hpp"
 
-#ifndef HAVE_POSIX
-#include "Thread/Trigger.hpp"
-#endif
+#include <boost/asio/ip/tcp.hpp>
 
 /**
  * A TCP listener port class.
  */
-class TCPPort : public SocketPort
+class TCPPort final : public BufferedPort
 {
-  SocketDescriptor listener;
+  boost::asio::ip::tcp::acceptor acceptor;
+  boost::asio::ip::tcp::socket connection;
 
-#ifndef HAVE_POSIX
-  SocketThread thread;
-
-  Trigger closed_trigger;
-#endif
+  char input[4096];
 
 public:
   /**
@@ -50,31 +45,50 @@ public:
    * @param handler the callback object for input received on the
    * port
    */
-  TCPPort(PortListener *_listener, DataHandler &_handler)
-    :SocketPort(_listener, _handler),
-     listener(SocketDescriptor::Undefined())
-#ifndef HAVE_POSIX
-    , thread(*this)
-#endif
-  {}
+  TCPPort(boost::asio::io_service &io_service,
+          unsigned port,
+          PortListener *_listener, DataHandler &_handler);
 
   /**
    * Closes the serial port (Destructor)
    */
   virtual ~TCPPort();
 
-  /**
-   * Opens the serial port
-   * @return True on success, False on failure
-   */
-  bool Open(unsigned port);
+  /* virtual methods from class Port */
+  PortState GetState() const override;
 
-  /* overrided virtual methods from SocketPort */
-  virtual PortState GetState() const override;
+  bool Drain() override {
+    /* writes are synchronous */
+    return true;
+  }
+
+  bool SetBaudrate(unsigned baud_rate) override {
+    return true;
+  }
+
+  unsigned GetBaudrate() const override {
+    return 0;
+  }
+
+  size_t Write(const void *data, size_t length) override;
 
 protected:
-  /* virtual methods from class SocketEventHandler */
-  bool OnSocketEvent(SocketDescriptor s, unsigned mask) override;
+  void AsyncAccept() {
+    acceptor.async_accept(connection,
+                          std::bind(&TCPPort::OnAccept, this,
+                                    std::placeholders::_1));
+  }
+
+  void OnAccept(const boost::system::error_code &ec);
+
+  void AsyncRead() {
+    connection.async_receive(boost::asio::buffer(input, sizeof(input)),
+                             std::bind(&TCPPort::OnRead, this,
+                                       std::placeholders::_1,
+                                       std::placeholders::_2));
+  }
+
+  void OnRead(const boost::system::error_code &ec, size_t nbytes);
 };
 
 #endif

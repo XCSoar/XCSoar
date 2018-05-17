@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,20 +21,13 @@
  */
 
 #include "FlatGeoPoint.hpp"
-#include "Math/FastMath.h"
+#include "Math/FastMath.hpp"
 
 unsigned
 FlatGeoPoint::Distance(const FlatGeoPoint &sp) const
 {
   const FlatGeoPoint delta = *this - sp;
-  return ihypot(delta.longitude, delta.latitude);
-}
-
-unsigned
-FlatGeoPoint::ShiftedDistance(const FlatGeoPoint &sp, unsigned bits) const
-{
-  const FlatGeoPoint delta = *this - sp;
-  return ShiftedIntegerHypot(delta.longitude, delta.latitude, bits);
+  return ihypot(delta.x, delta.y);
 }
 
 unsigned

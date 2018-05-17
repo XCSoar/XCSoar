@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,9 +25,9 @@ Copyright_License {
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Widget/ListWidget.hpp"
-#include "Screen/Font.hpp"
 #include "Look/DialogLook.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Unordered/AlternateList.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
@@ -83,7 +83,7 @@ public:
     assert(index < alternates.size());
 
     const ComputerSettings &settings = CommonInterface::GetComputerSettings();
-    const Waypoint &waypoint = alternates[index].waypoint;
+    const Waypoint &waypoint = *alternates[index].waypoint;
     const GlideResult& solution = alternates[index].solution;
 
     WaypointListRenderer::Draw(canvas, rc, waypoint, solution.vector.distance,

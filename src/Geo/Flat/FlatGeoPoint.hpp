@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,8 +23,8 @@
 #ifndef FlatGeoPoint_HPP
 #define FlatGeoPoint_HPP
 
-#include "Math/fixed.hpp"
-#include "Rough/RoughAltitude.hpp"
+#include "Math/Util.hpp"
+#include "Math/Point2D.hpp"
 #include "Compiler.h"
 
 #include <type_traits>
@@ -32,13 +32,7 @@
 /**
  * Integer projected (flat-earth) version of Geodetic coordinates
  */
-struct FlatGeoPoint {
-  /** Projected x (Longitude) value [undefined units] */
-  int longitude;
-
-  /** Projected y (Latitude) value [undefined units] */
-  int latitude;
-
+struct FlatGeoPoint : IntPoint2D {
   /**
    * Non-initialising constructor.
    */
@@ -53,8 +47,7 @@ struct FlatGeoPoint {
    * @return Initialised object at origin
    */
   constexpr
-  FlatGeoPoint(const int x, const int y)
-    :longitude(x), latitude(y) {};
+  FlatGeoPoint(const int _x, const int _y):IntPoint2D(_x, _y) {}
 
   /**
    * Find distance from one point to another
@@ -67,14 +60,6 @@ struct FlatGeoPoint {
   unsigned Distance(const FlatGeoPoint &sp) const;
 
   /**
-   * Like Distance(), but shift the distance left by the specified
-   * number of bits.  This method can be used to avoid integer
-   * truncation errors.  Use only when you know what you're doing!
-   */
-  gcc_pure
-  unsigned ShiftedDistance(const FlatGeoPoint &sp, unsigned bits) const;
-
-  /**
    * Find squared distance from one point to another
    *
    * @param sp That point
@@ -85,32 +70,6 @@ struct FlatGeoPoint {
   unsigned DistanceSquared(const FlatGeoPoint &sp) const;
 
   /**
-   * Add one point to another
-   *
-   * @param p2 Point to add
-   *
-   * @return Added value
-   */
-  constexpr
-  FlatGeoPoint operator+(const FlatGeoPoint other) const {
-    return FlatGeoPoint(longitude + other.longitude,
-                        latitude + other.latitude);
-  }
-
-  /**
-   * Subtract one point from another
-   *
-   * @param p2 Point to subtract
-   *
-   * @return Subtracted value
-   */
-  constexpr
-  FlatGeoPoint operator-(const FlatGeoPoint other) const {
-    return FlatGeoPoint(longitude - other.longitude,
-                        latitude - other.latitude);
-  }
-
-  /**
    * Multiply point by a constant
    *
    * @param t Value to multiply
@@ -118,9 +77,8 @@ struct FlatGeoPoint {
    * @return Scaled value
    */
   gcc_pure
-  FlatGeoPoint operator* (const fixed t) const {
-    return FlatGeoPoint(iround(longitude * t),
-                        iround(latitude * t));
+  FlatGeoPoint operator*(const double t) const {
+    return FlatGeoPoint(iround(x * t), iround(y * t));
   }
 
   /**
@@ -131,7 +89,7 @@ struct FlatGeoPoint {
    * @return Cross product
    */
   constexpr int CrossProduct(FlatGeoPoint other) const {
-    return longitude * other.latitude - latitude * other.longitude;
+    return ::CrossProduct(*this, other);
   }
 
   /**
@@ -142,7 +100,7 @@ struct FlatGeoPoint {
    * @return Dot product
    */
   constexpr int DotProduct(FlatGeoPoint other) const {
-    return longitude * other.longitude + latitude * other.latitude;
+    return ::DotProduct(*this, other);
   }
 
   /**
@@ -154,25 +112,20 @@ struct FlatGeoPoint {
    */
   constexpr
   bool operator==(const FlatGeoPoint other) const {
-    return FlatGeoPoint::Equals(other);
+    return IntPoint2D::operator==(other);
   };
 
   constexpr
   bool operator!=(const FlatGeoPoint other) const {
-    return !FlatGeoPoint::Equals(other);
+    return IntPoint2D::operator!=(other);
   };
-
-  constexpr
-  bool Equals(const FlatGeoPoint sp) const {
-    return longitude == sp.longitude && latitude == sp.latitude;
-  }
 
   gcc_pure
   bool Sort(const FlatGeoPoint& sp) const {
-    if (longitude < sp.longitude)
+    if (x < sp.x)
       return false;
-    else if (longitude == sp.longitude)
-      return latitude > sp.latitude;
+    else if (x == sp.x)
+      return y > sp.y;
     else
       return true;
   }
@@ -185,14 +138,14 @@ static_assert(std::is_trivial<FlatGeoPoint>::value, "type is not trivial");
  */
 struct AFlatGeoPoint : public FlatGeoPoint {
   /** Nav reference altitude (m) */
-  RoughAltitude altitude;
+  int altitude;
 
   constexpr
-  AFlatGeoPoint(const int x, const int y, const RoughAltitude alt):
+  AFlatGeoPoint(const int x, const int y, const int alt):
     FlatGeoPoint(x,y),altitude(alt) {};
 
   constexpr
-  AFlatGeoPoint(const FlatGeoPoint p, const RoughAltitude alt)
+  AFlatGeoPoint(const FlatGeoPoint p, const int alt)
     :FlatGeoPoint(p), altitude(alt) {};
 
   constexpr
@@ -201,8 +154,8 @@ struct AFlatGeoPoint : public FlatGeoPoint {
   /** Rounds location to reduce state space */
   void RoundLocation() {
     // round point to correspond roughly with terrain step size
-    longitude = (longitude >> 2) << 2;
-    latitude = (latitude >> 2) << 2;
+    x = (x >> 2) << 2;
+    y = (y >> 2) << 2;
   }
 
   /**
@@ -214,7 +167,7 @@ struct AFlatGeoPoint : public FlatGeoPoint {
    */
   constexpr
   bool operator==(const AFlatGeoPoint other) const {
-    return FlatGeoPoint::Equals(other) && (altitude == other.altitude);
+    return FlatGeoPoint::operator==(other) && (altitude == other.altitude);
   };
 
   /**
@@ -228,7 +181,7 @@ struct AFlatGeoPoint : public FlatGeoPoint {
   bool Sort(const AFlatGeoPoint &sp) const {
     if (!FlatGeoPoint::Sort(sp))
       return false;
-    else if (FlatGeoPoint::Equals(sp))
+    else if (FlatGeoPoint::operator==(sp))
       return altitude > sp.altitude;
     else
       return true;

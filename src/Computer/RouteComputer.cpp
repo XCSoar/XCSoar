@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -58,8 +58,10 @@ RouteComputer::ProcessRoute(const MoreData &basic, DerivedInfo &calculated,
   if (!basic.location_available || !basic.NavAltitudeAvailable())
     return;
 
-  protected_route_planner.SetPolars(settings, glide_polar, safety_polar,
-                                    calculated.GetWindOrZero());
+  protected_route_planner.SetPolars(settings, config,
+                                    glide_polar, safety_polar,
+                                    calculated.GetWindOrZero(),
+                                    calculated.common_stats.height_min_working);
 
   Reach(basic, calculated, config);
   TerrainWarning(basic, calculated, config);
@@ -74,20 +76,20 @@ RouteComputer::TerrainWarning(const MoreData &basic,
 
   const GlideResult& sol = calculated.task_stats.current_leg.solution_remaining;
   if (!sol.IsDefined()) {
-    calculated.terrain_warning = false;
+    calculated.terrain_warning_location.SetInvalid();
     return;
   }
 
   const AGeoPoint start (as.location, as.altitude);
   const RoughAltitude h_ceiling(std::max((int)basic.nav_altitude+500,
-                                         (int)calculated.thermal_band.working_band_ceiling));
+                                         (int)calculated.common_stats.height_max_working));
   // allow at least 500m of climb above current altitude as ceiling, in case
   // there are no actual working band stats.
   GeoVector v = sol.vector;
-  if (v.distance > fixed(200000))
+  if (v.distance > 200000)
     /* limit to reasonable distances (200km max.) to avoid overflow in
        GeoVector::EndPoint() */
-    v.distance = fixed(200000);
+    v.distance = 200000;
 
   if (terrain) {
     if (sol.IsDefined()) {
@@ -111,9 +113,8 @@ RouteComputer::TerrainWarning(const MoreData &basic,
         protected_route_planner.SolveRoute(dest, start, config, h_ceiling);
         calculated.planned_route = route_planner.GetSolution();
 
-        calculated.terrain_warning =
-          route_planner.Intersection(start, dest,
-                                     calculated.terrain_warning_location);
+        calculated.terrain_warning_location =
+          route_planner.Intersection(start, dest);
       }
       return;
     } else {
@@ -121,7 +122,7 @@ RouteComputer::TerrainWarning(const MoreData &basic,
       calculated.planned_route = route_planner.GetSolution();
     }
   }
-  calculated.terrain_warning = false;
+  calculated.terrain_warning_location.SetInvalid();
 }
 
 inline void
@@ -140,8 +141,8 @@ RouteComputer::Reach(const MoreData &basic, DerivedInfo &calculated,
 
   const AircraftState state = ToAircraftState(basic, calculated);
   const AGeoPoint start (state.location, state.altitude);
-  const RoughAltitude h_ceiling((short)std::max((int)basic.nav_altitude + 500,
-                                                (int)calculated.thermal_band.working_band_ceiling));
+  const int h_ceiling(std::max((int)basic.nav_altitude + 500,
+                               (int)calculated.common_stats.height_max_working));
 
   if (reach_clock.CheckAdvance(basic.time, PERIOD)) {
     protected_route_planner.SolveReach(start, config, h_ceiling, do_solve);

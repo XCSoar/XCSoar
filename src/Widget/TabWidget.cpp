@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "TabWidget.hpp"
 #include "Form/TabDisplay.hpp"
-#include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
 #include "Asset.hpp"
 
@@ -39,7 +38,7 @@ TabWidget::Layout::Layout(Orientation orientation, PixelRect rc,
     if (e != nullptr) {
       auto max_size = e->GetMaximumSize();
       unsigned extra_height = max_size.cy;
-      unsigned max_height = unsigned(rc.bottom - rc.top) / 2;
+      unsigned max_height = rc.GetHeight() / 2;
       if (extra_height > max_height)
         extra_height = max_height;
 
@@ -52,7 +51,7 @@ TabWidget::Layout::Layout(Orientation orientation, PixelRect rc,
     if (e != nullptr) {
       auto max_size = e->GetMaximumSize();
       unsigned extra_width = max_size.cx;
-      unsigned max_width = unsigned(rc.right - rc.left) / 3;
+      unsigned max_width = rc.GetWidth() / 3;
       if (extra_width > max_width)
         extra_width = max_width;
 
@@ -113,7 +112,8 @@ TabWidget::ClickPage(unsigned i)
     return false;
 
   /* switching to a new page by mouse click focuses the first control
-     of the page, which is important for Altair hot keys */
+     of the page, which is important for devices without touch
+     screen */
   PagerWidget::SetFocus();
   return true;
 }

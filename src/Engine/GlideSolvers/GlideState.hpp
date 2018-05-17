@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -40,21 +40,21 @@ struct GlideState {
    * The minimum altitude for arrival at the target (i.e. target
    * altitude plus safety margin).
    */
-  fixed min_arrival_altitude;
+  double min_arrival_altitude;
 
   /** Wind vector (deg True) */
   SpeedVector wind;
   /** Aircraft height less target height */
-  fixed altitude_difference;
+  double altitude_difference;
 
   /** (internal use) */
   Angle effective_wind_angle;
   /** headwind component (m/s) in cruise */
-  fixed head_wind;
+  double head_wind;
 
 private:
   /** (internal use) */
-  fixed wind_speed_squared;
+  double wind_speed_squared;
 
 public:
   /**
@@ -69,13 +69,13 @@ public:
    *
    * @return Initialised glide task
    */
-  GlideState(const GeoVector &vector, const fixed htarget,
-             fixed altitude, const SpeedVector wind);
+  GlideState(const GeoVector &vector, const double htarget,
+             double altitude, const SpeedVector wind);
 
   gcc_pure
   static GlideState Remaining(const TaskPoint &tp,
                               const AircraftState &aircraft,
-                              const fixed min_h);
+                              double min_h);
 
   /**
    * Calculate internal quantities to reduce computation time
@@ -94,7 +94,7 @@ public:
    * @return Average cross-country speed (m/s)
    */
   gcc_pure
-  fixed CalcAverageSpeed(const fixed v_eff) const;
+  double CalcAverageSpeed(double v_eff) const;
 
   /**
    * Calculate distance a circling aircraft will drift
@@ -105,7 +105,7 @@ public:
    * @return Distance (m) of drift
    */
   gcc_pure
-  fixed DriftedDistance(const fixed climb_time) const;
+  double DriftedDistance(double climb_time) const;
 };
 
 #endif

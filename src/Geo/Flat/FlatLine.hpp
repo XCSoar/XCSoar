@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,16 +24,16 @@
 #define FLATLINE_HPP
 
 #include "FlatPoint.hpp"
+#include "Math/Line2D.hpp"
 #include "Compiler.h"
 
 /**
  * Defines an infinite line in real-valued cartesian coordinates,
  * with intersection methods.
  */
-class FlatLine 
+class FlatLine : public Line2D<FlatPoint>
 {
-  FlatPoint p1;
-  FlatPoint p2;
+  typedef Line2D<FlatPoint> Base;
 
 public:
   /**
@@ -45,7 +45,7 @@ public:
    * @return Initialised object
    */
   constexpr
-  FlatLine(const FlatPoint _p1, const FlatPoint _p2):p1(_p1),p2(_p2) {}
+  FlatLine(const FlatPoint _p1, const FlatPoint _p2):Base(_p1, _p2) {}
 
   /**
    * Constructor default
@@ -64,7 +64,7 @@ public:
    * 
    * @return True if more than one intersection is found
    */
-  bool intersect_czero(const fixed r, FlatPoint &i1, FlatPoint &i2) const;
+  bool IntersectOriginCircle(double r, FlatPoint &i1, FlatPoint &i2) const;
 
   /** 
    * Calculate intersections between this line
@@ -77,17 +77,10 @@ public:
    * 
    * @return True if more than one intersection is found
    */
-  bool intersect_circle(const fixed r, const FlatPoint c,
-                        FlatPoint &i1, FlatPoint &i2) const;
+  bool IntersectCircle(double r, FlatPoint c,
+                       FlatPoint &i1, FlatPoint &i2) const;
 
-  /**
-   * Find center point of this line
-   *
-   * @return Center point
-   */
-  constexpr FlatPoint ave() const {
-    return (p1 + p2).Half();
-  }
+  using Base::GetMiddle;
 
   /**
    * Find angle of this line starting from the x-axis counter-clockwise
@@ -95,15 +88,9 @@ public:
    * @return Angle (deg)
    */
   gcc_pure
-  Angle angle() const;
+  Angle GetAngle() const;
 
-  /**
-   * Calculate squared length of line
-   *
-   * @return Squared length
-   */
-  gcc_pure
-  fixed dsq() const;
+  using Base::GetSquaredDistance;
 
   /**
    * Calculate length of line
@@ -111,55 +98,34 @@ public:
    * @return Length
    */
   gcc_pure
-  fixed d() const;
+  double GetDistance() const {
+    return a.Distance(b);
+  }
 
-  /**
-   * Subtract a delta from the line (both start and end points)
-   *
-   * @param p Point to subtract
-   */
-  void sub(const FlatPoint&p);
+  constexpr FlatLine operator+(FlatPoint delta) const {
+    return {a + delta, b + delta};
+  }
 
-  /**
-   * Add a delta to the line (both start and end points)
-   *
-   * @param p Point to add
-   */
-  void add(const FlatPoint&p);
+  constexpr FlatLine operator-(FlatPoint delta) const {
+    return {a - delta, b - delta};
+  }
 
   /**
    * Rotate line clockwise around origin
    *
    * @param angle Angle (deg) to rotate line clockwise
    */
-  void rotate(const Angle angle);
+  void Rotate(const Angle angle);
 
   /**
    * Scale line in Y direction
-   *
-   * @param a Scale ratio
    */
-  void mul_y(const fixed a);
-
-  /**
-   * Return dot product of two lines (vectors)
-   * @param that other line to take dot product of
-   * @return Dot product
-   */
-  gcc_pure
-  fixed dot(const FlatLine& that) const;
-
-private:
-  constexpr fixed dx() const {
-    return p2.x - p1.x;
+  void MultiplyY(const double factor) {
+    a.MultiplyY(factor);
+    b.MultiplyY(factor);
   }
 
-  constexpr fixed dy() const {
-    return p2.y - p1.y;
-  }
-
-  gcc_pure
-  fixed cross() const;
+  using Base::DotProduct;
 };
 
 #endif

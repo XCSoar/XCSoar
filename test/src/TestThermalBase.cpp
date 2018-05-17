@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,12 +29,12 @@ int main(int argc, char **argv)
   plan_tests(3);
 
   GeoPoint location(Angle::Degrees(7), Angle::Degrees(45));
-  fixed altitude(1300);
-  fixed average(2.5);
-  SpeedVector wind(Angle::Degrees(60), fixed(20));
+  double altitude(1300);
+  double average(2.5);
+  SpeedVector wind(Angle::Degrees(60), 20);
 
   GeoPoint ground_location(Angle::Zero(), Angle::Zero());
-  fixed ground_alt;
+  double ground_alt;
 
   EstimateThermalBase(nullptr, location, altitude, average, wind,
                       ground_location, ground_alt);

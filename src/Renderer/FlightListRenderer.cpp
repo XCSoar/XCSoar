@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -40,14 +40,14 @@ FlightListRenderer::Draw(Canvas &canvas, PixelRect rc)
   canvas.SetBackgroundTransparent();
 
   if (flights.empty()) {
-    RasterPoint center = rc.GetCenter();
+    auto center = rc.GetCenter();
     const TCHAR *text = _T("No flights");
     PixelSize size = canvas.CalcTextSize(text);
     canvas.DrawText(center.x - size.cx / 2, center.y - size.cy / 2, text);
     return;
   }
 
-  const unsigned height = rc.bottom - rc.top;
+  const unsigned height = rc.GetHeight();
 
   const unsigned padding = Layout::GetTextPadding();
   const unsigned font_height = font.GetHeight();

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -32,8 +32,8 @@
  */
 class TaskSolveTravelled : protected ZeroFinder {
   const AircraftState &aircraft;
-  fixed inv_dt;
-  fixed dt;
+  double inv_dt;
+  double dt;
 
 protected:
   TaskMacCreadyTravelled tm; /**< Travelled calculator */
@@ -50,11 +50,11 @@ public:
    * @param xmax Max value of search parameter
    */
   TaskSolveTravelled(const std::vector<OrderedTaskPoint *> &tps,
-                     const unsigned activeTaskPoint,
+                     unsigned activeTaskPoint,
                      const AircraftState &_aircraft,
                      const GlideSettings &settings, const GlidePolar &gp,
-                     const fixed xmin,
-                     const fixed xmax);
+                     double xmin,
+                     double xmax);
 
 protected:
   /**
@@ -62,7 +62,7 @@ protected:
    *
    * @return Time error
    */
-  fixed time_error();
+  double time_error();
 
 public:
   /**
@@ -72,7 +72,7 @@ public:
    *
    * @return Value producing same travelled time
    */
-  fixed search(const fixed ce);
+  double search(double ce);
 };
 
 #endif

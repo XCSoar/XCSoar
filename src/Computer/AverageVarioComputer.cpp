@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -38,15 +38,15 @@ AverageVarioComputer::Compute(const MoreData &basic,
                               bool circling, bool last_circling,
                               VarioInfo &vario_info)
 {
-  const fixed dt = delta_time.Update(basic.time, fixed(1), fixed(0));
-  if (negative(dt) || circling != last_circling) {
+  const auto dt = delta_time.Update(basic.time, 1, 0);
+  if (dt < 0 || circling != last_circling) {
     Reset();
     vario_info.average = basic.brutto_vario;
     vario_info.netto_average = basic.netto_vario;
     return;
   }
 
-  if (!positive(dt))
+  if (dt <= 0)
     return;
 
   const unsigned Elapsed = uround(dt);

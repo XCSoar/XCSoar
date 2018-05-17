@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_PAGE_STATE_HPP
 
 #include "PageSettings.hpp"
-#include "Math/fixed.hpp"
 
 #include <array>
 #include <type_traits>
@@ -39,7 +38,7 @@ struct PageState {
    * This attribute is only used if PageSettings::distinct_zoom is
    * enabled.
    */
-  fixed cruise_scale;
+  double cruise_scale;
 
   /**
    * The last map scale on this page while circling.  Negative means
@@ -47,11 +46,11 @@ struct PageState {
    * PageSettings::distinct_zoom and MapSettings::circle_zoom_enabled
    * are both enabled.
    */
-  fixed circling_scale;
+  double circling_scale;
 
   void Clear() {
-    cruise_scale = fixed(-1);
-    circling_scale = fixed(-1);
+    cruise_scale = -1;
+    circling_scale = -1;
   }
 };
 

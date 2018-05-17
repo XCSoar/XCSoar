@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,12 +24,11 @@ Copyright_License {
 #include "Dialogs/MapItemListDialog.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Layout.hpp"
 #include "Dialogs/Airspace/Airspace.hpp"
 #include "Dialogs/Task/TaskDialogs.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Dialogs/Traffic/TrafficDialogs.hpp"
-#include "Look/DialogLook.hpp"
+#include "Dialogs/Weather/WeatherDialog.hpp"
 #include "Language/Language.hpp"
 #include "MapSettings.hpp"
 #include "MapWindow/Items/MapItem.hpp"
@@ -45,7 +44,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 
 #ifdef HAVE_NOAA
-#include "Dialogs/Weather/WeatherDialogs.hpp"
+#include "Dialogs/Weather/NOAADetails.hpp"
 #endif
 
 static bool
@@ -56,7 +55,7 @@ HasDetails(const MapItem &item)
   case MapItem::ARRIVAL_ALTITUDE:
   case MapItem::SELF:
   case MapItem::THERMAL:
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
   case MapItem::SKYLINES_TRAFFIC:
 #endif
     return false;
@@ -68,6 +67,8 @@ HasDetails(const MapItem &item)
 #ifdef HAVE_NOAA
   case MapItem::WEATHER:
 #endif
+  case MapItem::OVERLAY:
+  case MapItem::RASP:
     return true;
   }
 
@@ -230,8 +231,8 @@ MapItemListWidget::OnGotoClicked()
 
   assert(item.type == MapItem::WAYPOINT);
 
-  auto const &waypoint = ((const WaypointMapItem &)item).waypoint;
-  protected_task_manager->DoGoto(waypoint);
+  auto waypoint = ((const WaypointMapItem &)item).waypoint;
+  protected_task_manager->DoGoto(std::move(waypoint));
   cancel_button->Click();
 }
 
@@ -294,7 +295,7 @@ ShowMapItemDialog(const MapItem &item,
   case MapItem::ARRIVAL_ALTITUDE:
   case MapItem::SELF:
   case MapItem::THERMAL:
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
   case MapItem::SKYLINES_TRAFFIC:
 #endif
     break;
@@ -319,6 +320,14 @@ ShowMapItemDialog(const MapItem &item,
     dlgNOAADetailsShowModal(((const WeatherStationMapItem &)item).station);
     break;
 #endif
+
+  case MapItem::OVERLAY:
+    ShowWeatherDialog(_T("overlay"));
+    break;
+
+  case MapItem::RASP:
+    ShowWeatherDialog(_T("rasp"));
+    break;
   }
 }
 

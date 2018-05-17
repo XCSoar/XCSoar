@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -41,19 +41,19 @@ extern "C" {
 #undef fail
 
 static inline bool
-is_zero(const fixed value, const int accuracy=ACCURACY)
+is_zero(const double value, const int accuracy=ACCURACY)
 {
   return (long)(fabs(value) * accuracy) == 0;
 }
 
 static inline bool
-is_one(const fixed value, const int accuracy=ACCURACY)
+is_one(const double value, const int accuracy=ACCURACY)
 {
-  return is_zero(value - fixed(1), accuracy);
+  return is_zero(value - 1, accuracy);
 }
 
 static inline bool
-equals(const fixed a, const fixed b, const int accuracy=ACCURACY)
+equals(const double a, const double b, const int accuracy=ACCURACY)
 {
   if (is_zero(a, accuracy) || is_zero(b, accuracy))
     return is_zero(a, accuracy) && is_zero(b, accuracy);
@@ -61,54 +61,28 @@ equals(const fixed a, const fixed b, const int accuracy=ACCURACY)
   return is_one(a / b, accuracy);
 }
 
-#ifdef FIXED_MATH
 static inline bool
-equals(const fixed a, double b)
+equals(const double a, int b)
 {
-  return equals(a, fixed(b));
-}
-#endif
-
-static inline bool
-equals(const fixed a, int b)
-{
-  return equals(a, fixed(b));
+  return equals(a, double(b));
 }
 
-#ifdef FIXED_MATH
 static inline bool
 between(double x, double a, double b)
 {
   return x >= a && x <= b;
 }
-#endif
-
-static inline bool
-between(fixed x, fixed a, fixed b)
-{
-  return x >= a && x <= b;
-}
-
-#ifdef FIXED_MATH
-
-static inline bool
-between(fixed x, double a, double b)
-{
-  return between(x, fixed(a), fixed(b));
-}
-
-#endif
 
 static inline bool
 equals(const Angle a, int b)
 {
-  return equals(a.Degrees(), fixed(b));
+  return equals(a.Degrees(), double(b));
 }
 
 static inline bool
 equals(const Angle a, double b)
 {
-  return equals(a.Degrees(), fixed(b));
+  return equals(a.Degrees(), b);
 }
 
 static inline bool

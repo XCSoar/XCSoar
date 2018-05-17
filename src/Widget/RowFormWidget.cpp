@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -32,7 +32,6 @@ Copyright_License {
 #include "Screen/LargeTextWindow.hpp"
 #include "Screen/Font.hpp"
 
-#include <windef.h> /* for MAX_PATH */
 #include <assert.h>
 
 gcc_pure
@@ -243,7 +242,7 @@ void
 RowFormWidget::Add(Row::Type type, Window *window)
 {
   assert(IsDefined());
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   assert(window->GetParent() == &GetWindow());
 #endif
   assert(window->IsVisible());
@@ -346,8 +345,8 @@ void
 RowFormWidget::UpdateLayout()
 {
   PixelRect current_rect = GetWindow().GetClientRect();
-  const unsigned total_width = current_rect.right - current_rect.left;
-  const unsigned total_height = current_rect.bottom - current_rect.top;
+  const unsigned total_width = current_rect.GetWidth();
+  const unsigned total_height = current_rect.GetHeight();
   current_rect.bottom = current_rect.top;
 
   const bool expert = UIGlobals::GetDialogSettings().expert;

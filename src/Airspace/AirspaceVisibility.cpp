@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -47,14 +47,14 @@ IsAirspaceAltitudeVisible(const AbstractAirspace &airspace,
     return true;
 
   case AirspaceDisplayMode::CLIP:
-    return airspace.GetBase().GetAltitude(state) <= fixed(renderer_settings.clip_altitude);
+    return airspace.GetBase().GetAltitude(state) <= renderer_settings.clip_altitude;
 
   case AirspaceDisplayMode::AUTO:
-    return airspace.GetBase().IsBelow(state, fixed(computer_settings.warnings.altitude_warning_margin))
-      && airspace.GetTop().IsAbove(state, fixed(computer_settings.warnings.altitude_warning_margin));
+    return airspace.GetBase().IsBelow(state, computer_settings.warnings.altitude_warning_margin)
+      && airspace.GetTop().IsAbove(state, computer_settings.warnings.altitude_warning_margin);
 
   case AirspaceDisplayMode::ALLBELOW:
-    return airspace.GetBase().IsBelow(state, fixed(computer_settings.warnings.altitude_warning_margin));
+    return airspace.GetBase().IsBelow(state, computer_settings.warnings.altitude_warning_margin);
 
   case AirspaceDisplayMode::INSIDE:
     return (airspace.GetBase().IsBelow(state) && airspace.GetTop().IsAbove(state));

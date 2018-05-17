@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -41,7 +41,7 @@ LineSectorZoneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddFloat(_("Gate width"), _("Width of the start/finish gate."),
            _T("%.1f %s"), _T("%.1f"),
-           fixed(0.1), fixed(200), fixed(1), true,
+           0.1, 200, 1, true,
            UnitGroup::DISTANCE, GetObject().GetLength(),
            this);
   SetRowEnabled(LENGTH, length_editable);
@@ -53,7 +53,7 @@ LineSectorZoneEditWidget::Save(bool &_changed)
   bool changed = false;
 
   if (length_editable) {
-    fixed length = GetObject().GetLength();
+    auto length = GetObject().GetLength();
     if (SaveValue(LENGTH, UnitGroup::DISTANCE, length)) {
       GetObject().SetLength(length);
       changed = true;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2010-2011 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,6 +29,7 @@
 
 #include "String.hxx"
 #include "Util/TruncateString.hpp"
+#include "Util/ScopeExit.hxx"
 
 char *
 Java::String::CopyTo(JNIEnv *env, jstring value,
@@ -41,4 +42,21 @@ Java::String::CopyTo(JNIEnv *env, jstring value,
 	char *result = CopyTruncateString(buffer, max_size, p);
 	env->ReleaseStringUTFChars(value, p);
 	return result;
+}
+
+std::string
+Java::String::ToString(JNIEnv *env, jstring s)
+{
+	assert(env != nullptr);
+	assert(s != nullptr);
+
+	const char *p = env->GetStringUTFChars(s, nullptr);
+	if (p == nullptr)
+		return std::string();
+
+	AtScopeExit(env, s, p) {
+		env->ReleaseStringUTFChars(s, p);
+	};
+
+	return std::string(p);
 }

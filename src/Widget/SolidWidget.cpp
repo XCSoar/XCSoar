@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -48,9 +48,7 @@ constexpr
 static PixelRect
 ToOrigin(PixelRect rc)
 {
-  return {
-    0, 0, PixelScalar(rc.right - rc.left), PixelScalar(rc.bottom - rc.top)
-  };
+  return PixelRect(PixelPoint(0, 0), rc.GetSize());
 }
 
 void

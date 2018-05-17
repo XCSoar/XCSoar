@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,7 +26,8 @@ Copyright_License {
 
 #include "CirclingWind.hpp"
 #include "NMEA/MoreData.hpp"
-#include "NMEA/Derived.hpp"
+#include "NMEA/CirclingInfo.hpp"
+#include "Math/Util.hpp"
 
 #include <algorithm>
 
@@ -145,24 +146,24 @@ CirclingWind::CalcWind()
   assert(!samples.empty());
 
   // reject if average time step greater than 2.0 seconds
-  if ((samples.back().time - samples[0].time) / (samples.size() - 1) > fixed(2))
+  if ((samples.back().time - samples[0].time) / (samples.size() - 1) > 2)
     return Result(0);
 
   // find average
-  fixed av = fixed(0);
+  double av = 0;
   for (unsigned i = 0; i < samples.size(); i++)
     av += samples[i].vector.norm;
 
   av /= samples.size();
 
   // find zero time for times above average
-  fixed rthismax = fixed(0);
-  fixed rthismin = fixed(0);
+  double rthismax = 0;
+  double rthismin = 0;
   int jmax = -1;
   int jmin = -1;
 
   for (unsigned j = 0; j < samples.size(); j++) {
-    fixed rthisp = fixed(0);
+    double rthisp = 0;
 
     for (unsigned i = 1; i < samples.size(); i++) {
       const unsigned ithis = (i + j) % samples.size();
@@ -186,20 +187,20 @@ CirclingWind::CalcWind()
   }
 
   // attempt to fit cycloid
-  const fixed mag = Half(samples[jmax].vector.norm - samples[jmin].vector.norm);
-  if (mag >= fixed(30))
+  const auto mag = (samples[jmax].vector.norm - samples[jmin].vector.norm) / 2;
+  if (mag >= 30)
     // limit to reasonable values (60 knots), reject otherwise
     return Result(0);
 
-  fixed rthis = fixed(0);
+  double rthis = 0;
 
   for (const Sample &sample : samples) {
     const auto sc = sample.vector.bearing.SinCos();
-    fixed wx = sc.second, wy = sc.first;
+    auto wx = sc.second, wy = sc.first;
     wx = wx * av + mag;
     wy *= av;
-    fixed cmag = SmallHypot(wx, wy) - sample.vector.norm;
-    rthis += sqr(cmag);
+    auto cmag = hypot(wx, wy) - sample.vector.norm;
+    rthis += Square(cmag);
   }
 
   rthis /= samples.size();
@@ -207,7 +208,7 @@ CirclingWind::CalcWind()
 
   int quality;
 
-  if (mag > fixed(1))
+  if (mag > 1)
     quality = 5 - iround(rthis / mag * 3);
   else
     quality = 5 - iround(rthis);

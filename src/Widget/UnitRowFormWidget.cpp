@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,20 +26,21 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Units/Units.hpp"
 #include "Units/Descriptor.hpp"
+#include "Math/Util.hpp"
 
 #include <assert.h>
 
 void
 RowFormWidget::AddReadOnly(const TCHAR *label, const TCHAR *help,
                            const TCHAR *display_format,
-                           UnitGroup unit_group, fixed value)
+                           UnitGroup unit_group, double value)
 {
   WndProperty *edit = Add(label, help, true);
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
   value = Units::ToUserUnit(value, unit);
   DataFieldFloat *df = new DataFieldFloat(display_format, display_format,
-                                          fixed(0), fixed(0),
-                                          value, fixed(1), false);
+                                          0, 0,
+                                          value, 1, false);
   df->SetUnits(Units::GetUnitName(unit));
   edit->SetDataField(df);
 }
@@ -48,9 +49,9 @@ WndProperty *
 RowFormWidget::AddFloat(const TCHAR *label, const TCHAR *help,
                         const TCHAR *display_format,
                         const TCHAR *edit_format,
-                        fixed min_value, fixed max_value,
-                        fixed step, bool fine,
-                        UnitGroup unit_group, fixed value,
+                        double min_value, double max_value,
+                        double step, bool fine,
+                        UnitGroup unit_group, double value,
                         DataFieldListener *listener)
 {
   WndProperty *edit = Add(label, help);
@@ -65,7 +66,7 @@ RowFormWidget::AddFloat(const TCHAR *label, const TCHAR *help,
 }
 
 void
-RowFormWidget::LoadValue(unsigned i, fixed value, UnitGroup unit_group)
+RowFormWidget::LoadValue(unsigned i, double value, UnitGroup unit_group)
 {
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
   WndProperty &control = GetControl(i);
@@ -77,15 +78,15 @@ RowFormWidget::LoadValue(unsigned i, fixed value, UnitGroup unit_group)
 }
 
 bool
-RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group, fixed &value) const
+RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group, double &value) const
 {
   const DataFieldFloat &df =
     (const DataFieldFloat &)GetDataField(i);
   assert(df.GetType() == DataField::Type::REAL);
 
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
-  fixed new_value = df.GetAsFixed();
-  fixed old_value = Units::ToUserUnit(value, unit);
+  auto new_value = df.GetAsFixed();
+  auto old_value = Units::ToUserUnit(value, unit);
 
   if (fabs(new_value - old_value) < df.GetStep() / 100)
     return false;
@@ -96,15 +97,15 @@ RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group, fixed &value) const
 
 bool
 RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
-                         const char *registry_key, fixed &value) const
+                         const char *registry_key, double &value) const
 {
   const DataFieldFloat &df =
     (const DataFieldFloat &)GetDataField(i);
   assert(df.GetType() == DataField::Type::REAL);
 
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
-  fixed new_value = df.GetAsFixed();
-  fixed old_value = Units::ToUserUnit(value, unit);
+  auto new_value = df.GetAsFixed();
+  auto old_value = Units::ToUserUnit(value, unit);
 
   if (fabs(new_value - old_value) < df.GetStep() / 100)
     return false;
@@ -124,8 +125,8 @@ RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
          df.GetType() == DataField::Type::REAL);
 
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
-  fixed new_value = df.GetAsFixed();
-  fixed old_value = Units::ToUserUnit(fixed(value), unit);
+  auto new_value = df.GetAsFixed();
+  auto old_value = Units::ToUserUnit(value, unit);
 
   if (fabs(new_value - old_value) < df.GetStep() / 100)
     return false;

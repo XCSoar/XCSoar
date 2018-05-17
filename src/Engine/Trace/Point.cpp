@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@ Copyright_License {
 #include "Point.hpp"
 #include "NMEA/MoreData.hpp"
 #include "Navigation/Aircraft.hpp"
+#include "Math/Util.hpp"
 
 TracePoint::TracePoint(const MoreData &basic)
   :SearchPoint(basic.location),
@@ -33,7 +34,7 @@ TracePoint::TracePoint(const MoreData &basic)
    engine_noise_level(basic.engine_noise_level_available
                       ? basic.engine_noise_level
                       : 0u),
-   drift_factor(sigmoid(basic.nav_altitude / 100) * 256)
+   drift_factor(Sigmoid(basic.nav_altitude / 100) * 256)
 {
 }
 
@@ -43,6 +44,6 @@ TracePoint::TracePoint(const AircraftState &state):
   altitude(state.altitude),
   vario(state.netto_vario),
   engine_noise_level(0),
-  drift_factor(sigmoid(state.altitude_agl / 100) * 256)
+  drift_factor(Sigmoid(state.altitude_agl / 100) * 256)
 {
 }

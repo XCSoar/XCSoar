@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,18 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_POLL_INPUT_QUEUE_HPP
 #define XCSOAR_EVENT_POLL_INPUT_QUEUE_HPP
 
-#ifdef USE_LIBINPUT
-#include "LibInput/LibInputHandler.hpp"
-#else
-#include "Linux/MergeMouse.hpp"
 #ifdef KOBO
+#include "Linux/MergeMouse.hpp"
 #include "Linux/Input.hpp"
-#elif defined(USE_LINUX_INPUT)
-#include "Linux/AllInput.hpp"
 #else
-#include "Linux/TTYKeyboard.hpp"
-#include "Linux/Mouse.hpp"
-#endif
+#include "LibInput/LibInputHandler.hpp"
 #endif
 
 #include "Screen/Point.hpp"
@@ -43,28 +36,20 @@ Copyright_License {
 #include <stdint.h>
 
 enum class DisplayOrientation : uint8_t;
-class IOLoop;
 class EventQueue;
 struct Event;
 
 class InputEventQueue final {
-#ifdef USE_LIBINPUT
-  LibInputHandler libinput_handler;
-#else /* !USE_LIBINPUT */
-  MergeMouse merge_mouse;
 #ifdef KOBO
+  MergeMouse merge_mouse;
   LinuxInputDevice keyboard;
   LinuxInputDevice mouse;
-#elif defined(USE_LINUX_INPUT)
-  AllLinuxInputDevices all_input;
 #else
-  TTYKeyboard keyboard;
-  LinuxMouse mouse;
-#endif
+  LibInputHandler libinput_handler;
 #endif /* !USE_LIBINPUT */
 
 public:
-  InputEventQueue(IOLoop &io_loop, EventQueue &queue);
+  InputEventQueue(boost::asio::io_service &io_service, EventQueue &queue);
   ~InputEventQueue();
 
   void SetScreenSize(unsigned width, unsigned height) {
@@ -76,12 +61,9 @@ public:
   }
 
 #ifndef USE_LIBINPUT
-  void SetMouseRotation(bool swap, bool invert_x, bool invert_y) {
-    merge_mouse.SetSwap(swap);
-    merge_mouse.SetInvert(invert_x, invert_y);
+  void SetDisplayOrientation(DisplayOrientation orientation) {
+    merge_mouse.SetDisplayOrientation(orientation);
   }
-
-  void SetMouseRotation(DisplayOrientation orientation);
 #endif
 
   bool HasPointer() const {
@@ -102,11 +84,11 @@ public:
   }
 #endif
 
-  RasterPoint GetMousePosition() const {
+  PixelPoint GetMousePosition() const {
 #ifdef USE_LIBINPUT
-    return { int(libinput_handler.GetX()), int(libinput_handler.GetY()) };
+    return PixelPoint(libinput_handler.GetX(), libinput_handler.GetY());
 #else
-    return { int(merge_mouse.GetX()), int(merge_mouse.GetY()) };
+    return merge_mouse.GetPosition();
 #endif
   }
 

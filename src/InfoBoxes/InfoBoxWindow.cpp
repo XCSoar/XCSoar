@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,33 +25,24 @@ Copyright_License {
 #include "InfoBoxSettings.hpp"
 #include "Border.hpp"
 #include "Look/InfoBoxLook.hpp"
-#include "Look/UnitsLook.hpp"
 #include "Input/InputEvents.hpp"
 #include "Renderer/GlassRenderer.hpp"
 #include "Renderer/UnitSymbolRenderer.hpp"
-#include "Screen/UnitSymbol.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/BufferCanvas.hpp"
-#include "Screen/Key.h"
+#include "Screen/Canvas.hpp"
+#include "Event/KeyCode.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 
-#ifdef ENABLE_OPENGL
-#include "Screen/SubCanvas.hpp"
-#endif
-
 #include <algorithm>
-
-using std::max;
 
 InfoBoxWindow::InfoBoxWindow(ContainerWindow &parent, PixelRect rc,
                              unsigned border_flags,
                              const InfoBoxSettings &_settings,
                              const InfoBoxLook &_look,
-                             const UnitsLook &_units_look,
                              unsigned _id,
                              WindowStyle style)
   :content(NULL),
-   settings(_settings), look(_look), units_look(_units_look),
+   settings(_settings), look(_look),
    border_kind(border_flags),
    id(_id),
    dragging(false), pressed(false),
@@ -60,7 +51,6 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &parent, PixelRect rc,
 {
   data.Clear();
 
-  style.EnableDoubleClicks();
   Create(parent, rc, style);
 }
 
@@ -93,32 +83,35 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
 
   PixelSize tsize = canvas.CalcTextSize(data.title);
 
-  PixelScalar halftextwidth = (title_rect.left + title_rect.right - tsize.cx) / 2;
-  PixelScalar x = std::max(PixelScalar(1),
-                           PixelScalar(title_rect.left + halftextwidth));
-  PixelScalar y = title_rect.top;
+  int halftextwidth = (title_rect.left + title_rect.right - tsize.cx) / 2;
+  int x = std::max(1, title_rect.left + halftextwidth);
+  int y = title_rect.top;
 
   canvas.TextAutoClipped(x, y, data.title);
 
   if (settings.border_style == InfoBoxSettings::BorderStyle::TAB &&
       halftextwidth > Layout::Scale(3)) {
-    PixelScalar ytop = title_rect.top + font.GetCapitalHeight() / 2;
-    PixelScalar ytopedge = ytop + Layout::GetTextPadding();
-    PixelScalar ybottom = title_rect.top + Layout::Scale(6)
+
+    const auto pad = Layout::Scale(2);
+    const auto text_pad = Layout::GetTextPadding()*2;
+
+    int ytop = title_rect.top + font.GetCapitalHeight() / 2;
+    int ytopedge = ytop + pad;
+    int ybottom = title_rect.top + Layout::Scale(6)
       + font.GetCapitalHeight();
 
     canvas.Select(look.border_pen);
 
-    RasterPoint tab[8];
+    BulkPixelPoint tab[8];
     tab[0].x = tab[1].x = title_rect.left;
     tab[0].y = tab[7].y = ybottom;
-    tab[2].x = title_rect.left + Layout::GetTextPadding();
+    tab[2].x = title_rect.left + pad;
     tab[2].y = tab[5].y = tab[3].y = tab[4].y = ytop;
     tab[1].y = tab[6].y = ytopedge;
-    tab[5].x = title_rect.right - Layout::GetTextPadding();
+    tab[5].x = title_rect.right - pad;
     tab[6].x = tab[7].x = title_rect.right;
-    tab[3].x = title_rect.left + halftextwidth - Layout::Scale(1);
-    tab[4].x = title_rect.right - halftextwidth + Layout::Scale(1);
+    tab[3].x = title_rect.left + halftextwidth - text_pad;
+    tab[4].x = title_rect.right - halftextwidth + text_pad;
 
     canvas.DrawPolyline(tab, 4);
     canvas.DrawPolyline(tab + 4, 4);
@@ -133,87 +126,37 @@ InfoBoxWindow::PaintValue(Canvas &canvas, Color background_color)
 
   canvas.SetTextColor(look.GetValueColor(data.value_color));
 
-#ifndef GNAV
-  // Do text-based unit rendering on higher resolutions
-  if (look.unit_font.IsDefined()) {
-    canvas.Select(look.unit_font);
-    PixelScalar unit_width =
-        UnitSymbolRenderer::GetSize(canvas, data.value_unit).cx;
-
-    canvas.Select(look.value_font);
-    int ascent_height = look.value_font.GetAscentHeight();
-
-    PixelSize value_size = canvas.CalcTextSize(data.value);
-    if (value_size.cx + unit_width > value_rect.right - value_rect.left) {
-      canvas.Select(look.small_value_font);
-      ascent_height = look.small_value_font.GetAscentHeight();
-      value_size = canvas.CalcTextSize(data.value);
-    }
-
-    PixelScalar x = std::max(PixelScalar(0),
-                             PixelScalar((value_rect.left + value_rect.right
-                                          - value_size.cx - unit_width) / 2));
-
-    PixelScalar y = (value_rect.top + value_rect.bottom - value_size.cy) / 2;
-
-    canvas.TextAutoClipped(x, y, data.value);
-
-    if (unit_width != 0) {
-      const int unit_height =
-        UnitSymbolRenderer::GetAscentHeight(look.unit_font, data.value_unit);
-
-      canvas.Select(look.unit_font);
-      UnitSymbolRenderer::Draw(canvas,
-                               { x + value_size.cx,
-                                 y + ascent_height - unit_height },
-                               data.value_unit, look.unit_fraction_pen);
-    }
-    return;
-  }
-#endif
+  canvas.Select(look.unit_font);
+  int unit_width =
+    UnitSymbolRenderer::GetSize(canvas, data.value_unit).cx;
 
   canvas.Select(look.value_font);
-  UPixelScalar ascent_height = look.value_font.GetAscentHeight();
-  UPixelScalar capital_height = look.value_font.GetCapitalHeight();
-
-  PixelSize unit_size;
-  const UnitSymbol *unit_symbol = units_look.GetSymbol(data.value_unit);
-  if (unit_symbol != NULL) {
-    unit_size = unit_symbol->GetSize();
-  } else {
-    unit_size.cx = 0;
-    unit_size.cy = 0;
-  }
+  int ascent_height = look.value_font.GetAscentHeight();
 
   PixelSize value_size = canvas.CalcTextSize(data.value);
-  if (value_size.cx + unit_size.cx > value_rect.right - value_rect.left) {
+  if (unsigned(value_size.cx + unit_width) > value_rect.GetWidth()) {
     canvas.Select(look.small_value_font);
     ascent_height = look.small_value_font.GetAscentHeight();
-    capital_height = look.small_value_font.GetCapitalHeight();
     value_size = canvas.CalcTextSize(data.value);
   }
 
-  PixelScalar x = std::max(PixelScalar(1),
-                           PixelScalar((value_rect.left + value_rect.right
-                                        - value_size.cx
-                                        - Layout::FastScale(unit_size.cx)) / 2));
+  int x = std::max(0,
+                   (value_rect.left + value_rect.right
+                    - value_size.cx - unit_width) / 2);
 
-  PixelScalar y = value_rect.top + 1 - ascent_height +
-    (value_rect.bottom - value_rect.top + capital_height) / 2;
+  int y = (value_rect.top + value_rect.bottom - value_size.cy) / 2;
 
   canvas.TextAutoClipped(x, y, data.value);
 
-  if (unit_symbol != NULL) {
-#ifndef HAVE_CLIPPING
-    /* sort-of clipping */
-    if (x + value_size.cx >= (int)canvas.GetWidth())
-      return;
-#endif
+  if (unit_width != 0) {
+    const int unit_height =
+      UnitSymbolRenderer::GetAscentHeight(look.unit_font, data.value_unit);
 
-    unit_symbol->Draw(canvas, x + value_size.cx,
-                      y + ascent_height - unit_symbol->GetScreenSize().cy,
-                      background_color,
-                      look.GetValueColor(data.value_color));
+    canvas.Select(look.unit_font);
+    UnitSymbolRenderer::Draw(canvas,
+                             { x + value_size.cx,
+                                 y + ascent_height - unit_height },
+                             data.value_unit, look.unit_fraction_pen);
   }
 }
 
@@ -230,10 +173,9 @@ InfoBoxWindow::PaintComment(Canvas &canvas)
 
   PixelSize tsize = canvas.CalcTextSize(data.comment);
 
-  PixelScalar x = std::max(PixelScalar(1),
-                           PixelScalar((comment_rect.left + comment_rect.right
-                                        - tsize.cx) / 2));
-  PixelScalar y = comment_rect.top;
+  int x = std::max(1,
+                   (comment_rect.left + comment_rect.right - tsize.cx) / 2);
+  int y = comment_rect.top;
 
   canvas.TextAutoClipped(x, y, data.comment);
 }
@@ -269,7 +211,7 @@ InfoBoxWindow::Paint(Canvas &canvas)
   if (border_kind != 0) {
     canvas.Select(look.border_pen);
 
-    const UPixelScalar width = canvas.GetWidth(),
+    const unsigned width = canvas.GetWidth(),
       height = canvas.GetHeight();
 
     if (border_kind & BORDERTOP) {
@@ -288,22 +230,6 @@ InfoBoxWindow::Paint(Canvas &canvas)
       canvas.DrawExactLine(0, 0, 0, height - 1);
     }
   }
-}
-
-void
-InfoBoxWindow::PaintInto(Canvas &dest, PixelScalar xoff, PixelScalar yoff,
-                         UPixelScalar width, UPixelScalar height)
-{
-#ifdef ENABLE_OPENGL
-  SubCanvas canvas(dest, RasterPoint(xoff, yoff), PixelSize(width, height));
-  Paint(canvas);
-#else
-  const PixelSize size = GetSize();
-  BufferCanvas buffer(dest, size);
-
-  Paint(buffer);
-  dest.Stretch(xoff, yoff, width, height, buffer, 0, 0, size.cx, size.cy);
-#endif
 }
 
 void
@@ -405,7 +331,9 @@ InfoBoxWindow::OnResize(PixelSize new_size)
   title_rect.bottom = rc.top + look.title_font.GetHeight();
 
   comment_rect = rc;
-  comment_rect.top = comment_rect.bottom - (look.title_font.GetHeight() + 2);
+  comment_rect.bottom -= Layout::Scale(2);
+  comment_rect.top = comment_rect.bottom - (look.title_font.GetHeight() + Layout::Scale(2));
+
   value_rect = rc;
   value_rect.top = title_rect.bottom;
   value_rect.bottom = comment_rect.top;
@@ -457,7 +385,7 @@ InfoBoxWindow::OnKeyDown(unsigned key_code)
 }
 
 bool
-InfoBoxWindow::OnMouseDown(PixelScalar x, PixelScalar y)
+InfoBoxWindow::OnMouseDown(PixelPoint p)
 {
   dialog_timer.Cancel();
 
@@ -476,7 +404,7 @@ InfoBoxWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 }
 
 bool
-InfoBoxWindow::OnMouseUp(PixelScalar x, PixelScalar y)
+InfoBoxWindow::OnMouseUp(PixelPoint p)
 {
   dialog_timer.Cancel();
 
@@ -504,21 +432,18 @@ InfoBoxWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 }
 
 bool
-InfoBoxWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
+InfoBoxWindow::OnMouseDouble(PixelPoint p)
 {
   dialog_timer.Cancel();
-
-  if (!IsAltair())
-    InputEvents::ShowMenu();
-
+  InputEvents::ShowMenu();
   return true;
 }
 
 bool
-InfoBoxWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+InfoBoxWindow::OnMouseMove(PixelPoint p, unsigned keys)
 {
   if (dragging) {
-    SetPressed(IsInside(x, y));
+    SetPressed(IsInside(p));
     if (!pressed)
       dialog_timer.Cancel();
     return true;

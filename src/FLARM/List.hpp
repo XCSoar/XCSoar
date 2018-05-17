@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Traffic.hpp"
 #include "NMEA/Validity.hpp"
-#include "Util/TrivialArray.hpp"
+#include "Util/TrivialArray.hxx"
 
 #include <type_traits>
 
@@ -69,9 +69,9 @@ struct TrafficList {
       *this = add;
   }
 
-  void Expire(fixed clock) {
-    modified.Expire(clock, fixed(300));
-    new_traffic.Expire(clock, fixed(60));
+  void Expire(double clock) {
+    modified.Expire(clock, 300);
+    new_traffic.Expire(clock, 60);
 
     for (unsigned i = list.size(); i-- > 0;)
       if (!list[i].Refresh(clock))

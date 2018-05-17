@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,13 +23,9 @@ Copyright_License {
 
 #include "Screen/OpenGL/Globals.hpp"
 #include "Screen/OpenGL/Debug.hpp"
-#include "Point.hpp"
+#include "Screen/Point.hpp"
 
 namespace OpenGL {
-#ifdef HAVE_DYNAMIC_EGL
-  bool egl;
-#endif
-
   bool texture_non_power_of_two;
 
 #ifdef HAVE_OES_DRAW_TEXTURE
@@ -48,13 +44,13 @@ namespace OpenGL {
 
   GLenum render_buffer_depth_stencil, render_buffer_stencil;
 
-  Point2D<unsigned> window_size, viewport_size;
+  UnsignedPoint2D window_size, viewport_size;
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
   DisplayOrientation display_orientation;
 #endif
 
-  RasterPoint translate;
+  PixelPoint translate;
 
 #ifdef USE_GLSL
   glm::mat4 projection_matrix;

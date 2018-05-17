@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -18,7 +18,7 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-  }
+}
 */
 
 #include "NanoLogger.hpp"
@@ -27,6 +27,7 @@
 #include "Device/Util/NMEAWriter.hpp"
 #include "Device/Util/NMEAReader.hpp"
 #include "Operation/Operation.hpp"
+#include "OS/Path.hpp"
 #include "Time/TimeoutClock.hpp"
 #include "NMEA/InputLine.hpp"
 
@@ -355,11 +356,11 @@ DownloadFlightInner(Port &port, const char *filename, FILE *file,
 
 bool
 Nano::DownloadFlight(Port &port, const RecordedFlightInfo &flight,
-                     const TCHAR *path, OperationEnvironment &env)
+                     Path path, OperationEnvironment &env)
 {
   port.StopRxThread();
 
-  FILE *file = _tfopen(path, _T("wb"));
+  FILE *file = _tfopen(path.c_str(), _T("wb"));
   if (file == nullptr)
     return false;
 

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@
 #include "harness_task.hpp"
 #include "harness_flight.hpp"
 #include "Contest/Solvers/ContestDijkstra.hpp"
+#include "OS/ConvertPathName.hpp"
 #include "test_debug.hpp"
 
 #include <stdlib.h>
@@ -37,17 +38,10 @@ int output_skip = 5;
 AutopilotParameters autopilot_parms;
 
 int terrain_height = 1;
-std::string replay_file = "test/data/0asljd01.igc";
-std::string waypoint_file = "test/data/waypoints_geo.wpt";
-std::string task_file = "";
-fixed range_threshold = fixed(15000);
-
-#ifdef INSTRUMENT_TASK
-extern long count_mc;
-long count_intersections;
-extern unsigned n_queries;
-extern unsigned count_distbearing;
-#endif
+AllocatedPath replay_file = Path(_T("test/data/0asljd01.igc"));
+AllocatedPath waypoint_file = Path(_T("test/data/waypoints_geo.wpt"));
+AllocatedPath task_file = nullptr;
+double range_threshold = 15000;
 
 #ifdef INSTRUMENT_ZERO
 extern unsigned long zero_skipped;
@@ -57,14 +51,6 @@ extern unsigned long zero_total;
 void PrintDistanceCounts() {
   if (n_samples) {
     printf("# Instrumentation\n");
-#ifdef INSTRUMENT_TASK
-    printf("#     dist+bearing calcs/c %d\n",count_distbearing/n_samples); 
-    printf("#     mc calcs/c %d\n",(int)(count_mc/n_samples));
-    if (n_queries>0) {
-      printf("#     intersection tests/q %d\n",(unsigned)(count_intersections/n_queries));
-      printf("#    (total queries %d)\n\n",n_queries);
-    }
-#endif
     printf("#    (total cycles %d)\n#\n",n_samples);
 #ifdef INSTRUMENT_ZERO
     if (zero_total) {
@@ -74,25 +60,9 @@ void PrintDistanceCounts() {
 #endif
   }
   n_samples = 0;
-#ifdef INSTRUMENT_TASK
-  count_intersections = 0;
-  n_queries = 0;
-  count_distbearing = 0;
-  count_mc = 0;
-#endif
 #ifdef INSTRUMENT_ZERO
   zero_skipped = 0;
   zero_total = 0;
-#endif
-}
-
-void PrintQueries(unsigned n, std::ostream &fout) {
-#ifdef INSTRUMENT_TASK
-  if (n_queries>0) {
-    fout << n << " " << count_intersections/n_queries << "\n";
-  }
-  count_intersections = 0;
-  n_queries = 0;
 #endif
 }
 
@@ -155,19 +125,19 @@ ParseArgs(int argc, char** argv)
       printf ("\n");
       break;
     case 'f':
-      replay_file = optarg;
+      replay_file = PathName(optarg);
       break;
     case 'w':
-      waypoint_file = optarg;
+      waypoint_file = PathName(optarg);
       break;
     case 'x':
-      task_file = optarg;
+      task_file = PathName(optarg);
       break;
     case 'd':
-      range_threshold = (fixed)atof(optarg);
+      range_threshold = atof(optarg);
       break;
     case 'a':
-      autopilot_parms.start_alt = (fixed)atof(optarg);
+      autopilot_parms.start_alt = atof(optarg);
       break;
     case 's':
       output_skip = atoi(optarg);
@@ -180,13 +150,13 @@ ParseArgs(int argc, char** argv)
       }
       break;
     case 'n':
-      autopilot_parms.bearing_noise = (fixed)atof(optarg);
+      autopilot_parms.bearing_noise = atof(optarg);
       break;
     case 't':
-      autopilot_parms.target_noise = (fixed)atof(optarg);
+      autopilot_parms.target_noise = atof(optarg);
       break;
     case 'r':
-      autopilot_parms.turn_speed = (fixed)atof(optarg);
+      autopilot_parms.turn_speed = atof(optarg);
       break;
     case 'i':
       if (optarg) {

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,11 +23,13 @@
 #ifndef TASK_SAVE_FILE_HPP
 #define TASK_SAVE_FILE_HPP
 
-#include <tchar.h>
-
+class Path;
 class OrderedTask;
 
-bool
-SaveTask(const TCHAR *path, const OrderedTask &task);
+/**
+ * Throws std::runtime_error on error.
+ */
+void
+SaveTask(Path path, const OrderedTask &task);
 
 #endif

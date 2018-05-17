@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -64,8 +64,7 @@ inline bool
 AutoQNH::CalculateQNH(const NMEAInfo &basic, DerivedInfo &calculated,
                       const Waypoints &way_points)
 {
-  const Waypoint *next_wp;
-  next_wp = way_points.LookupLocation(basic.location, fixed(1000));
+  const auto next_wp = way_points.LookupLocation(basic.location, 1000);
 
   if (next_wp && next_wp->IsAirport())
     CalculateQNH(basic, calculated, next_wp->elevation);
@@ -79,7 +78,7 @@ AutoQNH::CalculateQNH(const NMEAInfo &basic, DerivedInfo &calculated,
 
 inline void
 AutoQNH::CalculateQNH(const NMEAInfo &basic, DerivedInfo &calculated,
-                      fixed altitude)
+                      double altitude)
 {
   calculated.pressure = AtmosphericPressure::FindQNHFromPressure(basic.static_pressure, altitude);
   calculated.pressure_available.Update(basic.clock);

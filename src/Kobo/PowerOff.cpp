@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -39,6 +39,8 @@ Copyright_License {
 #include "Model.hpp"
 
 #include <algorithm>
+#include <stdexcept>
+
 #include <stdio.h>
 
 static void
@@ -92,10 +94,8 @@ DrawBanner(Canvas &canvas, PixelRect &rc)
 
 static void
 DrawFlights(Canvas &canvas, const PixelRect &rc)
-{
-  FileLineReaderA file("/mnt/onboard/XCSoarData/flights.log");
-  if (file.error())
-    return;
+try {
+  FileLineReaderA file(Path("/mnt/onboard/XCSoarData/flights.log"));
 
   FlightListRenderer renderer(normal_font, bold_font);
 
@@ -105,6 +105,7 @@ DrawFlights(Canvas &canvas, const PixelRect &rc)
     renderer.AddFlight(flight);
 
   renderer.Draw(canvas, rc);
+} catch (const std::runtime_error &e) {
 }
 
 static void

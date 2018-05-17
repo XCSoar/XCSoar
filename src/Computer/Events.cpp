@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -87,12 +87,12 @@ GlideComputerEvents::OnCalculatedUpdate(const MoreData &basic,
   if (enable_team) {
     // Hysteresis for GlideComputerEvent
     // If (closer than 100m to the teammates last position and "event" not reset)
-    if (calculated.teammate_vector.distance < fixed(100) &&
+    if (calculated.teammate_vector.distance < 100 &&
         !last_teammate_in_sector) {
       last_teammate_in_sector = true;
       // Raise GCE_TEAM_POS_REACHED event
       InputEvents::processGlideComputer(GCE_TEAM_POS_REACHED);
-    } else if (calculated.teammate_vector.distance > fixed(300)) {
+    } else if (calculated.teammate_vector.distance > 300) {
       // Reset "event" when distance is greater than 300m again
       last_teammate_in_sector = false;
     }

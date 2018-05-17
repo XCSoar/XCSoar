@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,6 +27,10 @@ Copyright_License {
 #include "Screen/Point.hpp"
 #include "Compiler.h"
 
+#if defined(USE_APPKIT) || defined(USE_UIKIT)
+#import <Foundation/Foundation.h>
+#endif
+
 #ifdef USE_FREETYPE
 typedef struct FT_FaceRec_ *FT_Face;
 #endif
@@ -46,13 +50,15 @@ class TextUtil;
 class Font {
 protected:
 #ifdef USE_FREETYPE
-  FT_Face face;
+  FT_Face face = nullptr;
 #elif defined(ANDROID)
-  TextUtil *text_util_object;
+  TextUtil *text_util_object = nullptr;
 
   unsigned line_spacing;
 #elif defined(USE_GDI)
-  HFONT font;
+  HFONT font = nullptr;
+#elif defined(USE_APPKIT) || defined(USE_UIKIT)
+  NSDictionary *draw_attributes = nil;
 #else
 #error No font renderer
 #endif
@@ -62,15 +68,11 @@ protected:
   void CalculateHeights();
 
 public:
-#ifdef USE_FREETYPE
-  Font():face(nullptr) {}
-#elif defined(ANDROID)
-  Font():text_util_object(nullptr) {}
-#else
-  Font():font(nullptr) {}
-#endif
+  Font() = default;
 
+#if !defined(USE_APPKIT) && !defined(USE_UIKIT)
   ~Font() { Destroy(); }
+#endif
 
   Font(const Font &other) = delete;
   Font &operator=(const Font &other) = delete;
@@ -88,6 +90,8 @@ public:
   IsDefined() const {
 #ifdef USE_FREETYPE
     return face != nullptr;
+#elif defined(USE_APPKIT) || defined(USE_UIKIT)
+    return nil != draw_attributes;
 #elif defined(ANDROID)
     return text_util_object != nullptr;
     #else
@@ -101,12 +105,17 @@ public:
 #endif
 
   bool Load(const FontDescription &d);
+
+#if defined(USE_APPKIT) || defined(USE_UIKIT)
+  void Destroy() {}
+#else
   void Destroy();
+#endif
 
   gcc_pure
   PixelSize TextSize(const TCHAR *text) const;
 
-#ifdef USE_FREETYPE
+#if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
   gcc_const
   static size_t BufferSize(const PixelSize size) {
     return size.cx * size.cy;
@@ -132,7 +141,7 @@ public:
     return capital_height;
   }
 
-#ifdef USE_FREETYPE
+#if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
   unsigned GetLineSpacing() const {
     return height;
   }

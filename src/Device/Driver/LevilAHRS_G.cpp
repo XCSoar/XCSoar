@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,7 +27,6 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Units/Units.hpp"
-#include <stdint.h>
 
 static bool error_reported = false;
 
@@ -93,15 +92,15 @@ ParseRPYL(NMEAInputLine &line, NMEAInfo &info)
   }
 
   info.attitude.bank_angle_available.Update(info.clock);
-  info.attitude.bank_angle = Angle::Degrees(fixed(roll) / 10);
+  info.attitude.bank_angle = Angle::Degrees(roll / 10.);
 
   info.attitude.pitch_angle_available.Update(info.clock);
-  info.attitude.pitch_angle = Angle::Degrees(fixed(pitch) / 10);
+  info.attitude.pitch_angle = Angle::Degrees(pitch / 10.);
 
   info.attitude.heading_available.Update(info.clock);
-  info.attitude.heading = Angle::Degrees(fixed(heading) / 10);
+  info.attitude.heading = Angle::Degrees(heading / 10.);
 
-  info.acceleration.ProvideGLoad(fixed(G) / 1000, true);
+  info.acceleration.ProvideGLoad(G / 1000., true);
 
   return true;
 }
@@ -125,9 +124,10 @@ ParseAPENV1(NMEAInputLine &line, NMEAInfo &info)
   int vs;
   if (!line.ReadChecked(vs)) return false;
 
-  fixed sys_alt = Units::ToSysUnit(fixed(altitude), Unit::FEET);
+  auto sys_alt = Units::ToSysUnit(altitude, Unit::FEET);
   info.ProvidePressureAltitude(sys_alt);
-  info.ProvideIndicatedAirspeedWithAltitude(Units::ToSysUnit(fixed(ias), Unit::KNOTS), sys_alt);
+  info.ProvideIndicatedAirspeedWithAltitude(Units::ToSysUnit(ias, Unit::KNOTS),
+                                            sys_alt);
 
   return true;
 }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,33 +21,30 @@ Copyright_License {
 }
 */
 
-#include "IO/InflateLineReader.hpp"
-#include "IO/FileSource.hpp"
+#include "IO/FileReader.hxx"
+#include "IO/GunzipReader.hxx"
+#include "IO/BufferedReader.hxx"
 #include "OS/Args.hpp"
+#include "Util/PrintException.hxx"
 
 #include <stdio.h>
 
 int main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "FILE");
-  const char *path = args.ExpectNext();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
-  FileSource file(path);
-  if (file.error()) {
-    fprintf(stderr, "Failed to open %s\n", path);
-    return EXIT_FAILURE;
-  }
-
-  InflateLineReader reader(file);
-  if (reader.HasFailed()) {
-    fprintf(stderr, "Failed to inflate %s\n", path);
-    return EXIT_FAILURE;
-  }
+  FileReader file(path);
+  GunzipReader gunzip(file);
+  BufferedReader reader(gunzip);
 
   char *line;
   while ((line = reader.ReadLine()) != nullptr)
     puts(line);
 
   return EXIT_SUCCESS;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,7 +25,6 @@ Copyright_License {
 #include "TwoTextRowsRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Look/DialogLook.hpp"
 #include "Renderer/WaypointIconRenderer.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Geo/GeoVector.hpp"
@@ -34,8 +33,6 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Util/StaticString.hxx"
 #include "Util/Macros.hpp"
-
-#include <cstdio>
 
 typedef StaticString<256u> Buffer;
 
@@ -64,10 +61,10 @@ Draw(Canvas &canvas, PixelRect rc,
      const WaypointRendererSettings &settings)
 {
   const unsigned padding = Layout::GetTextPadding();
-  const unsigned line_height = rc.bottom - rc.top;
+  const unsigned line_height = rc.GetHeight();
 
   // Draw icon
-  const RasterPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
+  const PixelPoint pt(rc.left + line_height / 2, rc.top + line_height / 2);
   WaypointIconRenderer wir(settings, look, canvas);
   wir.Draw(waypoint, pt);
 
@@ -76,20 +73,15 @@ Draw(Canvas &canvas, PixelRect rc,
   Buffer buffer;
 
   if (vector) {
-    // Use small font for details
-    canvas.Select(row_renderer.GetSecondFont());
-
     // Draw leg distance
     FormatUserDistanceSmart(vector->distance, buffer.buffer(), true);
-    const int distance_x = rc.right - canvas.CalcTextWidth(buffer) - padding;
-    canvas.DrawText(distance_x, rc.top + row_renderer.GetFirstY(), buffer);
+    const int distance_x = row_renderer.DrawRightFirstRow(canvas, rc, buffer);
 
     // Draw leg bearing
     FormatBearing(buffer.buffer(), buffer.capacity(), vector->bearing);
-    const int bearing_x = rc.right - canvas.CalcTextWidth(buffer) - padding;
-    canvas.DrawText(bearing_x, rc.top + row_renderer.GetSecondY(), buffer);
+    const int bearing_x = row_renderer.DrawRightSecondRow(canvas, rc, buffer);
 
-    rc.right = std::min(distance_x, bearing_x) - padding;
+    rc.right = std::min(distance_x, bearing_x);
   }
 
   // Draw details line
@@ -122,22 +114,22 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
 void
 WaypointListRenderer::Draw(Canvas &canvas, PixelRect rc,
-                           const Waypoint &waypoint, fixed distance,
-                           fixed arrival_altitude,
+                           const Waypoint &waypoint, double distance,
+                           double arrival_altitude,
                            const TwoTextRowsRenderer &row_renderer,
                            const WaypointLook &look,
                            const WaypointRendererSettings &settings)
 {
   const unsigned padding = Layout::GetTextPadding();
-  const unsigned line_height = rc.bottom - rc.top;
+  const unsigned line_height = rc.GetHeight();
 
   // Draw icon
-  const RasterPoint pt(rc.left + line_height / 2,
-                       rc.top + line_height / 2);
+  const PixelPoint pt(rc.left + line_height / 2,
+                      rc.top + line_height / 2);
 
-  WaypointIconRenderer::Reachability reachable =
-      positive(arrival_altitude) ?
-      WaypointIconRenderer::ReachableTerrain : WaypointIconRenderer::Unreachable;
+  WaypointIconRenderer::Reachability reachable = arrival_altitude > 0
+    ? WaypointIconRenderer::ReachableTerrain
+    : WaypointIconRenderer::Unreachable;
 
   WaypointIconRenderer wir(settings, look, canvas);
   wir.Draw(waypoint, pt, reachable);

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,6 @@
 #define DISTANCE_MEMENTO_HPP
 
 #include "Geo/GeoPoint.hpp"
-#include "Geo/GeoVector.hpp"
 #include "Compiler.h"
 
 /** Memento object to store results of previous distance calculations. */
@@ -37,7 +36,7 @@ class DistanceMemento
   mutable GeoPoint destination;
 
   /** Distance in meters saved from previous query */
-  mutable fixed value;
+  mutable double value;
 
 public:
   /** Constructor, initialises to trigger update on first call. */
@@ -48,7 +47,7 @@ public:
    * from previously saved value if input arguments are identical. 
    */
   gcc_pure
-  fixed Distance(const GeoPoint& _origin, const GeoPoint& _destination) const;
+  double Distance(const GeoPoint& _origin, const GeoPoint& _destination) const;
 };
 
 #endif

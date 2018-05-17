@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Base.hpp"
 #include "Time/PeriodClock.hpp"
-#include "Math/fixed.hpp"
 
 class DataFieldTime final : public DataField {
 private:
@@ -97,7 +96,7 @@ public:
   }
 
   ComboList CreateComboList(const TCHAR *reference) const override;
-  void SetFromCombo(int data_field_index, TCHAR *value_string) override;
+  void SetFromCombo(int data_field_index, const TCHAR *value_string) override;
 
 protected:
   void AppendComboValue(ComboList &combo_list, int value) const;

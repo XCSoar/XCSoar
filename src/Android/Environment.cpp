@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -85,7 +85,7 @@ Environment::getExternalStorageDirectory(char *buffer, size_t max_size)
     return nullptr;
 
   Java::String value2(env, value);
-  value2.CopyTo(env, buffer, max_size);
+  value2.CopyTo(buffer, max_size);
   return buffer;
 }
 
@@ -113,6 +113,6 @@ Environment::getExternalStoragePublicDirectory(char *buffer, size_t max_size,
     return nullptr;
 
   Java::String path2(env, path);
-  path2.CopyTo(env, buffer, max_size);
+  path2.CopyTo(buffer, max_size);
   return buffer;
 }

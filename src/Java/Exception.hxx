@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2012 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2010-2015 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,9 +30,22 @@
 #ifndef JAVA_EXCEPTION_HXX
 #define JAVA_EXCEPTION_HXX
 
+#include <stdexcept>
+
 #include <jni.h>
 
 namespace Java {
+	class Exception : public std::runtime_error {
+	public:
+		explicit Exception(JNIEnv *env, jthrowable e);
+	};
+
+	/**
+	 * Check if a Java exception has occurred, and if yes, convert
+	 * it to a C++ #Exception and throw that.
+	 */
+	void RethrowException(JNIEnv *env);
+
 	/**
 	 * Check if an exception has occurred, and discard it.
 	 *

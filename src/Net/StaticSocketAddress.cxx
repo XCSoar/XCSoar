@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2015 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2012-2017 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -37,38 +37,39 @@
 #ifdef WIN32
 #include <ws2tcpip.h>
 #else
-#include <netdb.h>
+#include <netinet/in.h>
 #endif
 
 StaticSocketAddress &
-StaticSocketAddress::operator=(SocketAddress other)
+StaticSocketAddress::operator=(SocketAddress other) noexcept
 {
 	size = std::min(other.GetSize(), GetCapacity());
 	memcpy(&address, other.GetAddress(), size);
 	return *this;
 }
 
-#ifndef _WIN32_WCE
+#ifdef HAVE_TCP
 
 bool
-StaticSocketAddress::Lookup(const char *host, const char *service, int socktype)
+StaticSocketAddress::SetPort(unsigned port) noexcept
 {
-	struct addrinfo hints;
-	memset(&hints, 0, sizeof(hints));
-	hints.ai_family = AF_UNSPEC;
-	hints.ai_socktype = socktype;
+	switch (GetFamily()) {
+	case AF_INET:
+		{
+			auto &a = (struct sockaddr_in &)address;
+			a.sin_port = htons(port);
+			return true;
+		}
 
-	struct addrinfo *ai;
-	if (getaddrinfo(host, service, &hints, &ai) != 0)
-		return false;
+	case AF_INET6:
+		{
+			auto &a = (struct sockaddr_in6 &)address;
+			a.sin6_port = htons(port);
+			return true;
+		}
+	}
 
-	size = ai->ai_addrlen;
-	assert(size_t(size) <= sizeof(address));
-
-	memcpy(reinterpret_cast<void *>(&address),
-	       reinterpret_cast<void *>(ai->ai_addr), size);
-	freeaddrinfo(ai);
-	return true;
+	return false;
 }
 
 #endif

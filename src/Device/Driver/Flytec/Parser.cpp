@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,7 +27,6 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 #include "Units/System.hpp"
-#include "Atmosphere/Temperature.hpp"
 
 /**
  * Parse a "$BRSF" sentence.
@@ -37,7 +36,7 @@ Copyright_License {
 static bool
 FlytecParseBRSF(NMEAInputLine &line, NMEAInfo &info)
 {
-  fixed value;
+  double value;
 
   // 0 = indicated or true airspeed [km/h]
   if (line.ReadChecked(value))
@@ -63,7 +62,7 @@ FlytecParseBRSF(NMEAInputLine &line, NMEAInfo &info)
 static bool
 FlytecParseVMVABD(NMEAInputLine &line, NMEAInfo &info)
 {
-  fixed value;
+  double value;
 
   // 0,1 = GPS altitude, unit
   if (line.ReadCheckedCompare(info.gps_altitude, "M"))
@@ -85,7 +84,7 @@ FlytecParseVMVABD(NMEAInputLine &line, NMEAInfo &info)
   info.temperature_available =
     line.ReadCheckedCompare(value, "C");
   if (info.temperature_available)
-    info.temperature = CelsiusToKelvin(value);
+    info.temperature = Temperature::FromCelsius(value);
 
   return true;
 }
@@ -123,7 +122,7 @@ FlytecDevice::ParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
 
   //  Time(hhmmss),   6 Digits
 
-  fixed time;
+  double time;
   if (NMEAParser::ReadTime(line, info.date_time_utc, time) &&
       !NMEAParser::TimeHasAdvanced(time, last_time, info))
     return true;
@@ -145,21 +144,21 @@ FlytecDevice::ParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
     }
 
     //  Track (xxx Deg),   3 Digits
-    fixed track;
+    double track;
     if (line.ReadChecked(track)) {
       info.track = Angle::Degrees(track);
       info.track_available.Update(info.clock);
     }
 
     //  Speed over Ground (xxxxx dm/s), 5 Digits
-    fixed ground_speed;
+    double ground_speed;
     if (line.ReadChecked(ground_speed)) {
       info.ground_speed = ground_speed / 10;
       info.ground_speed_available.Update(info.clock);
     }
 
     //  GPS altitude (xxxxx meter),           5 Digits
-    fixed gps_altitude;
+    double gps_altitude;
     if (line.ReadChecked(gps_altitude)) {
       info.gps_altitude = gps_altitude;
       info.gps_altitude_available.Update(info.clock);
@@ -177,22 +176,22 @@ FlytecDevice::ParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
   }
 
   //  Raw pressure (xxxxxx Pa),  6 Digits
-  fixed pressure;
+  double pressure;
   if (line.ReadChecked(pressure))
     info.ProvideStaticPressure(AtmosphericPressure::Pascal(pressure));
 
   //  Baro Altitude (xxxxx meter),          5 Digits (-xxxx to xxxxx) (Based on 1013.25hPa)
-  fixed baro_altitude;
+  double baro_altitude;
   if (line.ReadChecked(baro_altitude))
     info.ProvidePressureAltitude(baro_altitude);
 
   //  Variometer (xxxx cm/s),   4 or 5 Digits (-9999 to 9999)
-  fixed vario;
+  double vario;
   if (line.ReadChecked(vario))
     info.ProvideTotalEnergyVario(vario / 100);
 
   //  True airspeed (xxxxx dm/s), 5 Digits
-  fixed tas;
+  double tas;
   if (line.ReadChecked(tas))
     info.ProvideTrueAirspeed(tas / 10);
 
@@ -200,27 +199,27 @@ FlytecDevice::ParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
   line.Skip();
 
   //  Temp. PCB (xxx °C),   3 Digits
-  fixed pcb_temperature;
+  double pcb_temperature;
   bool pcb_temperature_available = line.ReadChecked(pcb_temperature);
 
   //  Temp. Balloon Envelope (xxx °C),      3 Digits
-  fixed balloon_temperature;
+  double balloon_temperature;
   bool balloon_temperature_available = line.ReadChecked(balloon_temperature);
 
   if (balloon_temperature_available) {
-    info.temperature = CelsiusToKelvin(balloon_temperature);
+    info.temperature = Temperature::FromCelsius(balloon_temperature);
     info.temperature_available = true;
   } else if (pcb_temperature_available) {
-    info.temperature = CelsiusToKelvin(pcb_temperature);
+    info.temperature = Temperature::FromCelsius(pcb_temperature);
     info.temperature_available = true;
   }
 
   //  Battery Capacity Bank 1 (0 to 100%)   3 Digits
-  fixed battery_level_1;
+  double battery_level_1;
   bool battery_level_1_available = line.ReadChecked(battery_level_1);
 
   //  Battery Capacity Bank 2 (0 to 100%)   3 Digits
-  fixed battery_level_2;
+  double battery_level_2;
   bool battery_level_2_available = line.ReadChecked(battery_level_2);
 
   if (battery_level_1_available) {

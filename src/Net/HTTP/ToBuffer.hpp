@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -37,18 +37,27 @@ namespace Net {
    * Download a URL into the specified buffer.  If the response is too
    * long, it is truncated.
    *
-   * @return the number of bytes written, or -1 on error
+   * @return the number of bytes written
    */
-  int DownloadToBuffer(Session &session, const char *url,
-                       void *buffer, size_t max_length,
-                       OperationEnvironment &env);
+  size_t DownloadToBuffer(Session &session, const char *url,
+                          const char *username, const char *password,
+                          void *buffer, size_t max_length,
+                          OperationEnvironment &env);
+
+  static inline size_t DownloadToBuffer(Session &session, const char *url,
+                                        void *buffer, size_t max_length,
+                                        OperationEnvironment &env) {
+    return DownloadToBuffer(session, url, nullptr, nullptr,
+                            buffer, max_length, env);
+  }
 
   class DownloadToBufferJob : public Job {
     Session &session;
     const char *url;
+    const char *username = nullptr, *password = nullptr;
     void *buffer;
     size_t max_length;
-    int length;
+    size_t length;
 
   public:
     DownloadToBufferJob(Session &_session, const char *_url,
@@ -57,7 +66,12 @@ namespace Net {
        buffer(_buffer), max_length(_max_length),
        length(-1) {}
 
-    int GetLength() const {
+    void SetBasicAuth(const char *_username, const char *_password) {
+      username = _username;
+      password = _password;
+    }
+
+    size_t GetLength() const {
       return length;
     }
 

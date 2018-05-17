@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -60,7 +60,7 @@ Copyright_License {
 #endif
 #endif
 
-#if !defined(ANDROID) && !defined(_WIN32_WCE)
+#ifndef ANDROID
   static unsigned forced_x_dpi = 0;
   static unsigned forced_y_dpi = 0;
 #endif
@@ -110,21 +110,24 @@ GetDPI()
 #endif
 
 void
-Display::SetDPI(unsigned x_dpi, unsigned y_dpi)
+Display::SetForcedDPI(unsigned x_dpi, unsigned y_dpi)
 {
-#if !defined(ANDROID) && !defined(_WIN32_WCE)
+#ifndef ANDROID
   forced_x_dpi = x_dpi;
   forced_y_dpi = y_dpi;
 #endif
 }
 
 unsigned
-Display::GetXDPI()
+Display::GetXDPI(unsigned custom_dpi)
 {
-#if !defined(ANDROID) && !defined(_WIN32_WCE)
+#ifndef ANDROID
   if (forced_x_dpi > 0)
     return forced_x_dpi;
 #endif
+
+  if (custom_dpi)
+    return custom_dpi;
 
 #ifdef WIN32
   RootDC dc;
@@ -144,12 +147,15 @@ Display::GetXDPI()
 }
 
 unsigned
-Display::GetYDPI()
+Display::GetYDPI(unsigned custom_dpi)
 {
-#if !defined(ANDROID) && !defined(_WIN32_WCE)
+#ifndef ANDROID
   if (forced_y_dpi > 0)
     return forced_y_dpi;
 #endif
+
+  if (custom_dpi)
+    return custom_dpi;
 
 #ifdef WIN32
   RootDC dc;

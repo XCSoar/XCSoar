@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -36,7 +36,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Menu/ShowMenuButton.hpp"
 
-#ifdef KOBO
+#ifdef USE_POLL_EVENT
 #include "Event/Globals.hpp"
 #include "Event/Queue.hpp"
 #endif
@@ -84,6 +84,8 @@ static constexpr StaticEnumChoice info_box_geometry_list[] = {
     N_("9 Right + Vario (Landscape)") },
   { (unsigned)InfoBoxSettings::Geometry::LEFT_6_RIGHT_3_VARIO,
     N_("9 Left + Right + Vario (Landscape)") },
+  { (unsigned)InfoBoxSettings::Geometry::LEFT_12_RIGHT_3_VARIO,
+    N_("12 Left + 3 Right Vario (Landscape)") },
   { (unsigned)InfoBoxSettings::Geometry::RIGHT_5,
     N_("5 Right (Square)") },
   { (unsigned)InfoBoxSettings::Geometry::BOTTOM_RIGHT_12,
@@ -273,8 +275,8 @@ LayoutConfigPanel::Save(bool &_changed)
         LogFormat("Display rotation failed");
     }
 
-#ifdef KOBO
-    event_queue->SetMouseRotation(ui_settings.display.orientation);
+#ifdef USE_POLL_EVENT
+    event_queue->SetDisplayOrientation(ui_settings.display.orientation);
 #endif
 
     CommonInterface::main_window->CheckResize();

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -32,11 +32,9 @@ Window::Create(ContainerWindow *parent, PixelRect rc,
 {
   assert(IsScreenInitialized());
   assert(rc.left <= rc.right);
-  assert(rc.right - rc.left < 0x8000);
+  assert(rc.GetWidth() < 0x8000);
   assert(rc.top <= rc.bottom);
-  assert(rc.bottom - rc.top < 0x8000);
-
-  double_clicks = window_style.double_clicks;
+  assert(rc.GetHeight() < 0x8000);
 
   this->parent = parent;
   position = rc.GetOrigin();
@@ -149,7 +147,6 @@ Window::FocusParent()
 void
 Window::SetCapture()
 {
-  AssertNoneLocked();
   AssertThread();
 
   if (parent != nullptr)
@@ -163,7 +160,6 @@ Window::SetCapture()
 void
 Window::ReleaseCapture()
 {
-  AssertNoneLocked();
   AssertThread();
 
   capture = false;
@@ -217,7 +213,6 @@ Window::Hide()
 void
 Window::BringToTop()
 {
-  AssertNoneLocked();
   AssertThread();
 
   parent->BringChildToTop(*this);
@@ -226,7 +221,6 @@ Window::BringToTop()
 void
 Window::BringToBottom()
 {
-  AssertNoneLocked();
   AssertThread();
 
   parent->BringChildToBottom(*this);

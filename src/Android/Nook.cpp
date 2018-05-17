@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2012 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -34,19 +34,19 @@ static char cmd_set_charge_100[] = "su -c 'echo 100000 > /sys/class/regulator/re
 bool
 Nook::EnterFastMode()
 {
-  File::WriteExisting("/sys/class/graphics/fb0/epd_refresh", "0");
+  File::WriteExisting(Path("/sys/class/graphics/fb0/epd_refresh"), "0");
   Sleep(1000);
-  File::WriteExisting("/sys/class/graphics/fb0/epd_refresh", "1");
-  return File::WriteExisting("/sys/class/graphics/fb0/fmode", "1");
+  File::WriteExisting(Path("/sys/class/graphics/fb0/epd_refresh"), "1");
+  return File::WriteExisting(Path("/sys/class/graphics/fb0/fmode"), "1");
 }
 
 void
 Nook::ExitFastMode()
 {
-  File::WriteExisting("/sys/class/graphics/fb0/fmode", "0");
-  File::WriteExisting("/sys/class/graphics/fb0/epd_refresh", "0");
+  File::WriteExisting(Path("/sys/class/graphics/fb0/fmode"), "0");
+  File::WriteExisting(Path("/sys/class/graphics/fb0/epd_refresh"), "0");
   Sleep(500);
-  File::WriteExisting("/sys/class/graphics/fb0/epd_refresh", "1");
+  File::WriteExisting(Path("/sys/class/graphics/fb0/epd_refresh"), "1");
 }
 
 void

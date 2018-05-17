@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,11 +28,11 @@
 #include "Device/Register.hpp"
 #include "Device/Config.hpp"
 #include "NMEA/Info.hpp"
+#include "Util/StringCompare.hxx"
 
-#include <string.h>
-
-NmeaReplay::NmeaReplay(NLineReader *_reader, const DeviceConfig &config)
-  :reader(_reader),
+NmeaReplay::NmeaReplay(std::unique_ptr<NLineReader> &&_reader,
+                       const DeviceConfig &config)
+  :reader(std::move(_reader)),
    parser(new NMEAParser()),
    device(nullptr)
 {
@@ -53,13 +53,12 @@ NmeaReplay::~NmeaReplay()
 {
   delete device;
   delete parser;
-  delete reader;
 }
 
 bool
 NmeaReplay::ParseLine(const char *line, NMEAInfo &data)
 {
-  data.clock = clock.NextClock(data.time_available ? data.time : fixed(-1));
+  data.clock = clock.NextClock(data.time_available ? data.time : -1);
 
   if ((device != nullptr && device->ParseNMEA(line, data)) ||
       (parser != nullptr && parser->ParseLine(line, data))) {

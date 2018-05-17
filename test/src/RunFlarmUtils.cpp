@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -32,8 +32,10 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/ConvertString.hpp"
+#include "Util/PrintException.hxx"
 #include "Operation/ConsoleOperationEnvironment.hpp"
-#include "IO/Async/GlobalIOThread.hpp"
+#include "IO/Async/GlobalAsioThread.hpp"
+#include "IO/Async/AsioThread.hpp"
 
 #include <stdio.h>
 
@@ -399,24 +401,18 @@ RunUI(FlarmDevice &flarm, OperationEnvironment &env)
 
 int
 main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "PORT BAUD");
-  const DeviceConfig config = ParsePortArgs(args);
+  DebugPort debug_port(args);
   args.ExpectEnd();
 
-  InitialiseIOThread();
+  ScopeGlobalAsioThread global_asio_thread;
 
-  Port *port = OpenPort(config, nullptr, *(DataHandler *)nullptr);
-  if (port == NULL) {
-    fprintf(stderr, "Failed to open COM port\n");
-    return EXIT_FAILURE;
-  }
+  auto port = debug_port.Open(*asio_thread, *(DataHandler *)nullptr);
 
   ConsoleOperationEnvironment env;
 
   if (!port->WaitConnected(env)) {
-    delete port;
-    DeinitialiseIOThread();
     fprintf(stderr, "Failed to connect the port\n");
     return EXIT_FAILURE;
   }
@@ -424,8 +420,8 @@ main(int argc, char **argv)
   FlarmDevice flarm(*port);
   RunUI(flarm, env);
 
-  delete port;
-  DeinitialiseIOThread();
-
   return EXIT_SUCCESS;
+} catch (const std::exception &exception) {
+  PrintException(exception);
+  return EXIT_FAILURE;
 }

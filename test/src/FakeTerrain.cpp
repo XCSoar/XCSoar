@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,17 +23,18 @@ Copyright_License {
 
 #include "Terrain/RasterTerrain.hpp"
 
-short
+TerrainHeight
 RasterMap::GetHeight(const GeoPoint &location) const
 {
-  return RasterBuffer::TERRAIN_INVALID;
+  return TerrainHeight::Invalid();
 }
 
 GeoPoint
 RasterMap::Intersection(const GeoPoint& origin,
                         const int h_origin,
                         const int h_glide,
-                        const GeoPoint& destination) const
+                        const GeoPoint& destination,
+                        const int height_floor) const
 {
   return GeoPoint(Angle::Zero(), Angle::Zero());
 }

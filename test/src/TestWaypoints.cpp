@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,11 +20,10 @@
 }
 */
 
-#include "test_debug.hpp"
-
 #include "Waypoint/WaypointVisitor.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Geo/GeoVector.hpp"
+#include "test_debug.hpp"
 
 #include <functional>
 
@@ -44,8 +43,8 @@ public:
   WaypointPredicateCounter(const Predicate &_predicate)
     :predicate(_predicate), count(0) {}
 
-  virtual void Visit(const Waypoint &wp) {
-    if (predicate(wp))
+  void Visit(const WaypointPtr &wp) override {
+    if (predicate(*wp))
       count++;
   }
 
@@ -60,11 +59,11 @@ AddSpiralWaypoints(Waypoints &waypoints,
                                                      Angle::Degrees(7.85)),
                    Angle angle_start = Angle::Degrees(0),
                    Angle angle_step = Angle::Degrees(15),
-                   fixed distance_start = fixed(0),
-                   fixed distance_step = fixed(1000),
-                   fixed distance_max = fixed(150000))
+                   double distance_start = 0,
+                   double distance_step = 1000,
+                   double distance_max = 150000)
 {
-  assert(positive(distance_step));
+  assert(distance_step > 0);
 
   for (unsigned i = 0;; ++i) {
     GeoVector vector;
@@ -77,7 +76,7 @@ AddSpiralWaypoints(Waypoints &waypoints,
     Waypoint waypoint;
     waypoint.location = vector.EndPoint(center);
     waypoint.original_id = i;
-    waypoint.elevation = fixed(i * 10 - 500);
+    waypoint.elevation = i * 10 - 500;
 
     StaticString<256> buffer;
 
@@ -102,7 +101,7 @@ AddSpiralWaypoints(Waypoints &waypoints,
 static void
 TestLookups(const Waypoints &waypoints, const GeoPoint &center)
 {
-  const Waypoint *waypoint;
+  WaypointPtr waypoint;
 
   ok1((waypoint = waypoints.LookupId(0)) == NULL);
   ok1((waypoint = waypoints.LookupId(1)) != NULL);
@@ -112,13 +111,13 @@ TestLookups(const Waypoints &waypoints, const GeoPoint &center)
   ok1((waypoint = waypoints.LookupId(152)) == NULL);
   ok1((waypoint = waypoints.LookupId(160)) == NULL);
 
-  ok1((waypoint = waypoints.LookupLocation(center, fixed(0))) != NULL);
+  ok1((waypoint = waypoints.LookupLocation(center, 0)) != NULL);
   ok1(waypoint->original_id == 0);
 
   ok1((waypoint = waypoints.LookupName(_T("Waypoint #5"))) != NULL);
   ok1(waypoint->original_id == 4);
 
-  ok1((waypoint = waypoints.LookupLocation(waypoint->location, fixed(10000))) != NULL);
+  ok1((waypoint = waypoints.LookupLocation(waypoint->location, 10000)) != NULL);
   ok1(waypoint->original_id == 4);
 }
 
@@ -157,11 +156,11 @@ TestNamePrefixVisitor(const Waypoints &waypoints)
 
 class CloserThan
 {
-  fixed distance;
+  double distance;
   GeoPoint location;
 
 public:
-  CloserThan(fixed _distance, const GeoPoint &_location)
+  CloserThan(double _distance, const GeoPoint &_location)
     :distance(_distance), location(_location) {}
 
   bool operator()(const Waypoint &waypoint) {
@@ -171,7 +170,7 @@ public:
 
 static void
 TestRangeVisitor(const Waypoints &waypoints, const GeoPoint &location,
-                      fixed distance, unsigned expected_results)
+                 double distance, unsigned expected_results)
 {
   WaypointPredicateCounter::Predicate predicate = CloserThan(distance, location);
   WaypointPredicateCounter distance_counter(predicate);
@@ -182,11 +181,11 @@ TestRangeVisitor(const Waypoints &waypoints, const GeoPoint &location,
 static void
 TestRangeVisitor(const Waypoints &waypoints, const GeoPoint &center)
 {
-  TestRangeVisitor(waypoints, center, fixed(1), 1);
-  TestRangeVisitor(waypoints, center, fixed(999), 1);
-  TestRangeVisitor(waypoints, center, fixed(1300), 2);
-  TestRangeVisitor(waypoints, center, fixed(10500), 11);
-  TestRangeVisitor(waypoints, center, fixed(1000000), 151);
+  TestRangeVisitor(waypoints, center, 1, 1);
+  TestRangeVisitor(waypoints, center, 999, 1);
+  TestRangeVisitor(waypoints, center, 1300, 2);
+  TestRangeVisitor(waypoints, center, 10500, 11);
+  TestRangeVisitor(waypoints, center, 1000000, 151);
 }
 
 static bool
@@ -197,41 +196,41 @@ OriginalIDAbove5(const Waypoint &waypoint) {
 static void
 TestGetNearest(const Waypoints &waypoints, const GeoPoint &center)
 {
-  const Waypoint *waypoint;
-  GeoPoint near = GeoVector(fixed(250), Angle::Degrees(15)).EndPoint(center);
-  GeoPoint far = GeoVector(fixed(750), Angle::Degrees(15)).EndPoint(center);
-  GeoPoint further = GeoVector(fixed(4200), Angle::Degrees(48)).EndPoint(center);
+  WaypointPtr waypoint;
+  GeoPoint near = GeoVector(250, Angle::Degrees(15)).EndPoint(center);
+  GeoPoint far = GeoVector(750, Angle::Degrees(15)).EndPoint(center);
+  GeoPoint further = GeoVector(4200, Angle::Degrees(48)).EndPoint(center);
 
-  ok1((waypoint = waypoints.GetNearest(center, fixed(1))) != NULL);
+  ok1((waypoint = waypoints.GetNearest(center, 1)) != NULL);
   ok1(waypoint->original_id == 0);
 
-  ok1((waypoint = waypoints.GetNearest(center, fixed(10000))) != NULL);
+  ok1((waypoint = waypoints.GetNearest(center, 10000)) != NULL);
   ok1(waypoint->original_id == 0);
 
-  ok1((waypoint = waypoints.GetNearest(near, fixed(1))) == NULL);
+  ok1((waypoint = waypoints.GetNearest(near, 1)) == NULL);
 
-  ok1((waypoint = waypoints.GetNearest(near, fixed(10000))) != NULL);
+  ok1((waypoint = waypoints.GetNearest(near, 10000)) != NULL);
   ok1(waypoint->original_id == 0);
 
-  ok1((waypoint = waypoints.GetNearest(far, fixed(1))) == NULL);
+  ok1((waypoint = waypoints.GetNearest(far, 1)) == NULL);
 
-  ok1((waypoint = waypoints.GetNearest(far, fixed(10000))) != NULL);
+  ok1((waypoint = waypoints.GetNearest(far, 10000)) != NULL);
   ok1(waypoint->original_id == 1);
 
-  ok1((waypoint = waypoints.GetNearestLandable(center, fixed(1))) != NULL);
+  ok1((waypoint = waypoints.GetNearestLandable(center, 1)) != NULL);
   ok1(waypoint->original_id == 0);
 
-  ok1((waypoint = waypoints.GetNearestLandable(center, fixed(10000))) != NULL);
+  ok1((waypoint = waypoints.GetNearestLandable(center, 10000)) != NULL);
   ok1(waypoint->original_id == 0);
 
-  ok1((waypoint = waypoints.GetNearestLandable(further, fixed(1))) == NULL);
+  ok1((waypoint = waypoints.GetNearestLandable(further, 1)) == NULL);
 
-  ok1((waypoint = waypoints.GetNearestLandable(further, fixed(10000))) != NULL);
+  ok1((waypoint = waypoints.GetNearestLandable(further, 10000)) != NULL);
   ok1(waypoint->original_id == 3);
 
-  ok1((waypoint = waypoints.GetNearestIf(center, fixed(1), OriginalIDAbove5)) == NULL);
+  ok1((waypoint = waypoints.GetNearestIf(center, 1, OriginalIDAbove5)) == NULL);
 
-  ok1((waypoint = waypoints.GetNearestIf(center, fixed(10000), OriginalIDAbove5)) != NULL);
+  ok1((waypoint = waypoints.GetNearestIf(center, 10000, OriginalIDAbove5)) != NULL);
   ok1(waypoint->original_id == 6);
 }
 
@@ -239,8 +238,10 @@ static void
 TestIterator(const Waypoints &waypoints)
 {
   unsigned count = 0;
-  for (auto it = waypoints.begin(), end = waypoints.end(); it != end; ++it)
+  for (const auto &i : waypoints) {
     count++;
+    (void)i;
+  }
 
   ok1(count == 151);
 }
@@ -248,7 +249,7 @@ TestIterator(const Waypoints &waypoints)
 static unsigned
 TestCopy(Waypoints& waypoints)
 {
-  const Waypoint *wp = waypoints.LookupId(5);
+  const WaypointPtr wp = waypoints.LookupId(5);
   if (!wp)
     return false;
 
@@ -265,12 +266,11 @@ static bool
 TestErase(Waypoints& waypoints, unsigned id)
 {
   waypoints.Optimise();
-  const Waypoint* wp;
-  wp = waypoints.LookupId(id);
+  auto wp = waypoints.LookupId(id);
   if (wp == NULL)
     return false;
 
-  waypoints.Erase(*wp);
+  waypoints.Erase(std::move(wp));
   waypoints.Optimise();
 
   wp = waypoints.LookupId(id);
@@ -280,8 +280,7 @@ TestErase(Waypoints& waypoints, unsigned id)
 static bool
 TestReplace(Waypoints& waypoints, unsigned id)
 {
-  const Waypoint* wp;
-  wp = waypoints.LookupId(id);
+  auto wp = waypoints.LookupId(id);
   if (wp == NULL)
     return false;
 
@@ -289,7 +288,7 @@ TestReplace(Waypoints& waypoints, unsigned id)
 
   Waypoint copy = *wp;
   copy.name = _T("Fred");
-  waypoints.Replace(*wp, copy);
+  waypoints.Replace(wp, std::move(copy));
   waypoints.Optimise();
 
   wp = waypoints.LookupId(id);

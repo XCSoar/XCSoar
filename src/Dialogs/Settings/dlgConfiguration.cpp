@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -34,7 +34,6 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Form/LambdaActionListener.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Key.h"
 #include "Profile/Profile.hpp"
 #include "LogFile.hpp"
 #include "Util/Macros.hpp"
@@ -70,12 +69,18 @@ Copyright_License {
 #include "Panels/AudioVarioConfigPanel.hpp"
 #endif
 
+#ifdef HAVE_VOLUME_CONTROLLER
+#include "Panels/AudioConfigPanel.hpp"
+#endif
+
 #ifdef HAVE_TRACKING
 #include "Panels/TrackingConfigPanel.hpp"
 #endif
 
-#ifdef HAVE_MODEL_TYPE
-#include "Panels/ExperimentalConfigPanel.hpp"
+#include "Panels/CloudConfigPanel.hpp"
+
+#ifdef HAVE_PCMET
+#include "Panels/WeatherConfigPanel.hpp"
 #endif
 
 #include <assert.h>
@@ -141,8 +146,12 @@ static constexpr TabMenuPage setup_pages[] = {
 #ifdef HAVE_TRACKING
   { N_("Tracking"), CreateTrackingConfigPanel },
 #endif
-#ifdef HAVE_MODEL_TYPE
-  { N_("Experimental Features"), CreateExperimentalConfigPanel, },
+  { _T("XCSoar Cloud"), CreateCloudConfigPanel },
+#ifdef HAVE_PCMET
+  { _T("Weather"), CreateWeatherConfigPanel },
+#endif
+#ifdef HAVE_VOLUME_CONTROLLER
+  { N_("Audio"), CreateAudioConfigPanel },
 #endif
   { nullptr, nullptr }
 };
@@ -167,7 +176,7 @@ class ConfigurationExtraButtons final
     PixelRect expert, button2, button1;
 
     Layout(const PixelRect &rc):expert(rc), button2(rc), button1(rc) {
-      const unsigned height = rc.bottom - rc.top;
+      const unsigned height = rc.GetHeight();
       const unsigned max_control_height = ::Layout::GetMaximumControlHeight();
 
       if (height >= 3 * max_control_height) {

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Timer.hpp"
-#include "InfoBoxes/InfoBoxLayout.hpp"
 #include "BatteryTimer.hpp"
 #include "Widget/ManagedWidget.hpp"
 #include "UIUtil/GestureManager.hpp"
@@ -49,6 +48,7 @@ class RasterTerrain;
 class TopographyStore;
 class MapWindowProjection;
 class PopupMessage;
+namespace InfoBoxLayout { struct Layout; }
 
 /**
  * The XCSoar main window.
@@ -128,12 +128,6 @@ private:
 public:
   MainWindow();
   virtual ~MainWindow();
-
-#ifdef USE_GDI
-  static bool Find() {
-    return SingleWindow::Find(title);
-  }
-#endif
 
 protected:
   /**
@@ -356,11 +350,10 @@ protected:
   virtual void OnResize(PixelSize new_size) override;
   virtual void OnSetFocus() override;
   virtual void OnCancelMode() override;
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
-                           unsigned keys) override;
-  virtual bool OnMouseDouble(PixelScalar x, PixelScalar y) override;
+  bool OnMouseDown(PixelPoint p) override;
+  bool OnMouseUp(PixelPoint p) override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) override;
+  bool OnMouseDouble(PixelPoint p) override;
   virtual bool OnKeyDown(unsigned key_code) override;
   virtual bool OnUser(unsigned id) override;
   virtual bool OnTimer(WindowTimer &timer) override;
@@ -368,10 +361,6 @@ protected:
 
   /* virtual methods from class TopWindow */
   virtual bool OnClose() override;
-
-#ifdef USE_GDI
-  virtual bool OnActivate() override;
-#endif
 
 #ifdef ANDROID
   virtual void OnPause() override;

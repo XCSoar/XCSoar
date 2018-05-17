@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -32,7 +32,7 @@
 
 static TaskBehaviour task_behaviour;
 static OrderedTaskSettings ordered_task_settings;
-static GlidePolar glide_polar(fixed(0));
+static GlidePolar glide_polar(0);
 
 static GeoPoint
 MakeGeoPoint(double longitude, double latitude)
@@ -44,7 +44,7 @@ MakeGeoPoint(double longitude, double latitude)
 static Waypoint
 MakeWaypoint(Waypoint wp, double altitude)
 {
-  wp.elevation = fixed(altitude);
+  wp.elevation = altitude;
   return wp;
 }
 
@@ -54,20 +54,30 @@ MakeWaypoint(double longitude, double latitude, double altitude)
   return MakeWaypoint(Waypoint(MakeGeoPoint(longitude, latitude)), altitude);
 }
 
-static const Waypoint wp1 = MakeWaypoint(0, 45, 50);
-static const Waypoint wp2 = MakeWaypoint(0, 45.3, 50);
-static const Waypoint wp3 = MakeWaypoint(0, 46, 50);
+template<typename... Args>
+static WaypointPtr
+MakeWaypointPtr(Args&&... args)
+{
+  return WaypointPtr(new Waypoint(MakeWaypoint(std::forward<Args>(args)...)));
+}
+
+static const auto wp1 = MakeWaypointPtr(0, 45, 50);
+static const auto wp2 = MakeWaypointPtr(0, 45.3, 50);
+static const auto wp3 = MakeWaypointPtr(0, 46, 50);
 
 static void
 TestAATPoint()
 {
   OrderedTask task(task_behaviour);
-  task.Append(StartPoint(new CylinderZone(wp1.location, fixed(500)), wp1,
+  task.Append(StartPoint(new CylinderZone(wp1->location, 500),
+                         WaypointPtr(wp1),
                          task_behaviour,
                          ordered_task_settings.start_constraints));
-  task.Append(AATPoint(new CylinderZone(wp2.location, fixed(10000)), wp2,
+  task.Append(AATPoint(new CylinderZone(wp2->location, 10000),
+                       WaypointPtr(wp2),
                        task_behaviour));
-  task.Append(FinishPoint(new CylinderZone(wp3.location, fixed(500)), wp3,
+  task.Append(FinishPoint(new CylinderZone(wp3->location, 500),
+                          WaypointPtr(wp3),
                           task_behaviour,
                           ordered_task_settings.finish_constraints));
   task.SetActiveTaskPoint(1);
@@ -77,57 +87,49 @@ TestAATPoint()
   AATPoint &ap = (AATPoint &)task.GetPoint(1);
 
   ok1(!ap.IsTargetLocked());
-  ok1(equals(ap.GetTargetLocation(), wp2.location));
+  ok1(equals(ap.GetTargetLocation(), wp2->location));
   ap.LockTarget(true);
   ok1(ap.IsTargetLocked());
-  ok1(equals(ap.GetTargetLocation(), wp2.location));
+  ok1(equals(ap.GetTargetLocation(), wp2->location));
 
   GeoPoint target = MakeGeoPoint(0, 45.31);
   ap.SetTarget(target);
   ok1(ap.IsTargetLocked());
-  ok1(equals(ap.GetTargetLocation(), wp2.location));
+  ok1(equals(ap.GetTargetLocation(), wp2->location));
 
   ap.SetTarget(target, true);
   ok1(ap.IsTargetLocked());
   ok1(equals(ap.GetTargetLocation(), target));
 
   RangeAndRadial rar = ap.GetTargetRangeRadial();
-  ok1(equals(rar.range, fixed(0.1112), 1000));
-  ok1(equals(rar.radial.Degrees(), fixed(0), 200));
+  ok1(equals(rar.range, 0.1112, 1000));
+  ok1(equals(rar.radial.Degrees(), 0, 200));
 
   target = MakeGeoPoint(0, 45.29);
   ap.SetTarget(target, true);
   rar = ap.GetTargetRangeRadial();
-  ok1(equals(rar.range, fixed(-0.1112), 1000));
-  ok1(equals(rar.radial.Degrees(), fixed(180), 200) ||
-      equals(rar.radial.Degrees(), fixed(-180), 200));
+  ok1(equals(rar.range, -0.1112, 1000));
+  ok1(equals(rar.radial.Degrees(), 180, 200) ||
+      equals(rar.radial.Degrees(), -180, 200));
 
   target = MakeGeoPoint(-0.05, 45.3);
   ap.SetTarget(target, true);
   rar = ap.GetTargetRangeRadial();
-#ifdef USE_WGS84
   ok1(equals(rar.range, 0.39217));
-#else
-  ok1(equals(rar.range, 0.39107));
-#endif
   ok1(equals(rar.radial.Degrees(), -89.98));
 
   target = MakeGeoPoint(0.05, 45.3);
   ap.SetTarget(target, true);
   rar = ap.GetTargetRangeRadial();
-#ifdef USE_WGS84
   ok1(equals(rar.range, 0.39217));
-#else
-  ok1(equals(rar.range, 0.39107));
-#endif
   ok1(equals(rar.radial.Degrees(), 89.98));
 
   for (int radial = -170; radial <= 170; radial += 10) {
     const Angle radial2 = Angle::Degrees(radial);
 
     for (int range = 10; range <= 100; range += 10) {
-      const fixed range2(fixed(radial >= -90 && radial <= 90
-                               ? range : -range) / 100);
+      const double range2((radial >= -90 && radial <= 90
+                           ? range : -range) / 100.);
 
       ap.SetTarget(RangeAndRadial{range2, radial2}, task.GetTaskProjection());
       rar = ap.GetTargetRangeRadial();

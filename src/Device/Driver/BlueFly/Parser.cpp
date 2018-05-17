@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Device/Driver/BlueFlyVario.hpp"
 #include "Internal.hpp"
+#include "Util/IterableSplitString.hxx"
 
 bool
 BlueFlyDevice::ParseBAT(const char *content, NMEAInfo &info)
@@ -37,35 +38,36 @@ BlueFlyDevice::ParseBAT(const char *content, NMEAInfo &info)
   do {
     // piecewise linear approximation
     if (mV > 3900) {
-      info.battery_level = fixed(70 + (mV - 3900)/10);
+      info.battery_level = 70 + (mV - 3900) / 10.;
       break;
     }
     if (mV > 3700) {
-      info.battery_level = fixed(4 + (mV - 3700)/3);
+      info.battery_level = 4 + (mV - 3700) / 3.;
       break;
     }
     if (mV > 3600) {
-      info.battery_level = fixed(0.04) * (mV - 3600);
+      info.battery_level = 0.04 * (mV - 3600);
       break;
     }
     // considered empty ...
-    info.battery_level = fixed(0);
+    info.battery_level = 0;
     break;
   }  while (0);
 
-  if (info.battery_level > fixed(100)) info.battery_level = fixed(100);
+  if (info.battery_level > 100)
+    info.battery_level = 100;
   info.battery_level_available.Update(info.clock);
 
   return true;
 }
 
 gcc_pure
-static inline
-fixed ComputeNoncompVario(const fixed pressure, const fixed d_pressure)
+static inline double
+ComputeNoncompVario(const double pressure, const double d_pressure)
 {
-  static constexpr fixed FACTOR(-2260.389548275485);
-  static constexpr fixed EXPONENT(-0.8097374740609689);
-  return fixed(FACTOR * pow(pressure, EXPONENT) * d_pressure);
+  static constexpr double FACTOR(-2260.389548275485);
+  static constexpr double EXPONENT(-0.8097374740609689);
+  return FACTOR * pow(pressure, EXPONENT) * d_pressure;
 }
 
 bool
@@ -76,9 +78,9 @@ BlueFlyDevice::ParsePRS(const char *content, NMEAInfo &info)
   char *endptr;
   long value = strtol(content, &endptr, 16);
   if (endptr != content) {
-    AtmosphericPressure pressure = AtmosphericPressure::Pascal(fixed(value));
+    AtmosphericPressure pressure = AtmosphericPressure::Pascal(value);
 
-    kalman_filter.Update(pressure.GetHectoPascal(), fixed(0.25), fixed(0.02));
+    kalman_filter.Update(pressure.GetHectoPascal(), 0.25, 0.02);
 
     info.ProvideNoncompVario(ComputeNoncompVario(kalman_filter.GetXAbs(),
                                                  kalman_filter.GetXVel()));
@@ -146,14 +148,13 @@ BlueFlyDevice::ParseSET(const char *content, NMEAInfo &info)
 {
   // e.g. SET 0 100 20 1 1 1 180 1000 100 400 100 20 5 5 100 50 0 10 21325 207 1 0 1 34
 
-  const char *values, *token;
+  const char *values;
   unsigned long value;
 
   if (!settings.version || !settings_keys)
     /* we did not receive the previous BFV and BST, abort */
     return true;
 
-  token = StringToken(settings_keys, " ");
   values = content;
 
   /* the first value should be ignored */
@@ -161,13 +162,15 @@ BlueFlyDevice::ParseSET(const char *content, NMEAInfo &info)
     return true;
 
   mutex_settings.Lock();
-  while (token && ParseUlong(&values, value)) {
-    settings.Parse(token, value);
-    token = StringToken(nullptr, " ");
-  }
-  mutex_settings.Unlock();
+  for (const auto token : IterableSplitString(settings_keys, ' ')) {
+    if (!ParseUlong(&values, value))
+      break;
 
-  trigger_settings_ready.Signal();
+    settings.Parse(token, value);
+  }
+  settings_ready = true;
+  settings_cond.broadcast();
+  mutex_settings.Unlock();
 
   return true;
 }

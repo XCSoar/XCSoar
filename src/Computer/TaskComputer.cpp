@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@ Copyright_License {
 
 #include "TaskComputer.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "NMEA/MoreData.hpp"
@@ -83,10 +84,10 @@ TaskComputer::ProcessBasicTask(const MoreData &basic,
     last_state = current_as;
     valid_last_state = true;
 
-    const fixed fallback_mc = calculated.last_thermal.IsDefined() &&
-      positive(calculated.last_thermal_average_smooth)
+    const auto fallback_mc = calculated.last_thermal.IsDefined() &&
+      calculated.last_thermal_average_smooth > 0
       ? calculated.last_thermal_average_smooth
-      : fixed(0);
+      : 0;
     if (_task->UpdateAutoMC(current_as, fallback_mc))
       calculated.ProvideAutoMacCready(basic.clock,
                                       _task->GetGlidePolar().GetMC());
@@ -141,7 +142,7 @@ Predicted(const ContestSettings &settings,
   return TracePoint(current_leg.location_remaining,
                     unsigned(basic.time + current_leg.time_remaining_now),
                     current_leg.solution_remaining.min_arrival_altitude,
-                    fixed(0), 0);
+                    0, 0);
 }
 
 void
@@ -180,8 +181,7 @@ TaskComputer::ProcessAutoTask(const NMEAInfo &basic,
 
   last_flying = true;
 
-  if (calculated.altitude_agl_valid &&
-      calculated.altitude_agl > fixed(500))
+  if (calculated.altitude_agl_valid && calculated.altitude_agl > 500)
     return;
 
   ProtectedTaskManager::ExclusiveLease _task(task);

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@
 #ifndef TASK_SOLUTION_HPP
 #define TASK_SOLUTION_HPP
 
-#include "Math/fixed.hpp"
+#include "Compiler.h"
 
 struct GlideSettings;
 struct GlideResult;
@@ -54,13 +54,13 @@ namespace TaskSolution
                                      const AircraftState &state,
                                      const GlideSettings &settings,
                                      const GlidePolar &polar,
-                                     const fixed min_h = fixed(0));
+                                     const double min_h = 0);
 
   gcc_pure
   GlideResult GlideSolutionRemaining(const GeoPoint &location,
                                      const GeoPoint &target,
-                                     const fixed target_elevation,
-                                     const fixed altitude,
+                                     const double target_elevation,
+                                     const double altitude,
                                      const SpeedVector &wind,
                                      const GlideSettings &settings,
                                      const GlidePolar &polar);
@@ -81,7 +81,7 @@ namespace TaskSolution
                                 const AircraftState &state,
                                 const GlideSettings &settings,
                                 const GlidePolar &polar,
-                                const fixed s);
+                                const double s);
 
   /**
    * Compute optimal glide solution from previous point to aircraft towards destination.
@@ -98,7 +98,7 @@ namespace TaskSolution
                                      const AircraftState &state,
                                      const GlideSettings &settings,
                                      const GlidePolar &polar,
-                                     const fixed min_h = fixed(0));
+                                     const double min_h = 0);
 
   /**
    * Compute optimal glide solution from aircraft to destination, or modified
@@ -115,7 +115,7 @@ namespace TaskSolution
                                    const AircraftState &state,
                                    const GlideSettings &settings,
                                    const GlidePolar &polar,
-                                   const fixed min_h = fixed(0));
+                                   const double min_h = 0);
 };
 
 #endif

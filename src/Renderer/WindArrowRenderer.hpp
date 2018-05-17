@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ Copyright_License {
 
 class Canvas;
 class Angle;
-struct RasterPoint;
+struct PixelPoint;
 struct PixelRect;
 struct WindArrowLook;
 struct SpeedVector;
@@ -40,14 +40,14 @@ class WindArrowRenderer {
 public:
   WindArrowRenderer(const WindArrowLook &_look):look(_look) {}
 
-  void Draw(Canvas &canvas, const Angle screen_angle, const SpeedVector wind,
-            const RasterPoint pos, const PixelRect rc, WindArrowStyle arrow_style);
+  void Draw(Canvas &canvas, Angle screen_angle, SpeedVector wind,
+            PixelPoint pos, const PixelRect rc, WindArrowStyle arrow_style);
 
-  void Draw(Canvas &canvas, const Angle screen_angle, const RasterPoint pos,
-            const PixelRect rc, const DerivedInfo &calculated,
+  void Draw(Canvas &canvas, Angle screen_angle, PixelPoint pos,
+            PixelRect rc, const DerivedInfo &calculated,
             const MapSettings &settings);
 
-  void DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
+  void DrawArrow(Canvas &canvas, PixelPoint pos, Angle angle,
                  unsigned length, WindArrowStyle arrow_style,
                  int offset = 23);
 };

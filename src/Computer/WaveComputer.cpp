@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2014 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,6 +27,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/FlyingState.hpp"
 #include "Geo/Flat/FlatPoint.hpp"
+#include "Geo/Flat/FlatLine.hpp"
 
 void
 WaveComputer::Initialise()
@@ -82,7 +83,8 @@ GetNettoVarioAvailable(const NMEAInfo &basic)
  */
 gcc_pure
 static WaveInfo
-GetWaveInfo(const LeastSquares &ls, const FlatProjection &projection)
+GetWaveInfo(const LeastSquares &ls, const FlatProjection &projection,
+            double time)
 {
   if (!ls.HasResult())
     return WaveInfo::Undefined();
@@ -98,7 +100,181 @@ GetWaveInfo(const LeastSquares &ls, const FlatProjection &projection)
   Angle bearing = a.Bearing(b);
   Angle normal = (bearing + Angle::QuarterCircle()).AsBearing();
 
-  return {location, a, b, normal};
+  return {location, a, b, normal, time};
+}
+
+void
+WaveComputer::Decay(double min_time)
+{
+  for (auto i = waves.begin(), end = waves.end(); i != end;) {
+    if (i->time < min_time)
+      i = waves.erase(i);
+    else
+      ++i;
+  }
+}
+
+/**
+ * Is this line ratio in range to allow merging two lines?  This
+ * hard-codes the allowed distance to be 10% of the smaller line
+ * length.
+ */
+static constexpr bool
+IsRatioInRange(double ratio)
+{
+  return ratio > -0.1 && ratio < 1.1;
+}
+
+/**
+ * Wrapper for FlatLine::Interpolate() which will clip the ratio to
+ * [0..1] so the result stays within the [a..b] bounds.
+ */
+static constexpr FlatPoint
+InterpolateClip(const FlatLine line, double ratio)
+{
+  return ratio <= 0
+    ? line.a
+    : (ratio >= 1
+       ? line.b
+       : line.Interpolate(ratio));
+}
+
+struct RatioAndDistance {
+  double ratio, squared_distance;
+};
+
+gcc_pure
+static RatioAndDistance
+CalcRatioAndDistance(const FlatLine line, const FlatPoint point)
+{
+  RatioAndDistance result;
+  result.ratio = line.ProjectedRatio(point);
+  FlatPoint projected = InterpolateClip(line, result.ratio);
+  result.squared_distance = (point - projected).MagnitudeSquared();
+  return result;
+}
+
+/**
+ * Check if the two wave lines match, and attempt to merge them.
+ *
+ * TODO: this is clumsy and unoptimised code; please improve!
+ *
+ * @return true if the lines have been merged into #a
+ */
+static bool
+MergeLines(FlatLine &a, const FlatLine b)
+{
+  const double a_sq = a.GetSquaredDistance();
+  const double b_sq = b.GetSquaredDistance();
+
+  const double max_sq_distance =
+    (std::max(a_sq, b_sq) + 2 * std::min(a_sq, b_sq)) / 250;
+
+  const RatioAndDistance results[] = {
+    CalcRatioAndDistance(a, b.a),
+    CalcRatioAndDistance(a, b.b),
+    CalcRatioAndDistance(b, a.a),
+    CalcRatioAndDistance(b, a.b),
+  };
+
+  /* if two out of 4 line endpoints must be near the other line */
+  unsigned n_distance_ok = 0;
+  for (auto i : results)
+    if (i.squared_distance <= max_sq_distance)
+      ++n_distance_ok;
+
+  if (n_distance_ok < 2)
+    return false;
+
+  /* the ratio of at least one point must be in range */
+  unsigned n_ratio_ok = 0;
+  for (auto i : results)
+    if (IsRatioInRange(i.ratio))
+      ++n_ratio_ok;
+
+  if (n_ratio_ok == 0)
+    return false;
+
+  /* we can merge!  now check if we should extend the original (old)
+     line because the new one exceeds it */
+
+  if (results[0].ratio < 0)
+    a.a = b.a;
+
+  if (results[1].ratio > 1)
+    a.b = b.b;
+
+  return true;
+}
+
+/**
+ * Check if the two wave lines match, and attempt to merge them.
+ *
+ * TODO: this is clumsy and unoptimised code; please improve!
+ *
+ * @return true if the lines have been merged into #i
+ */
+static bool
+MergeLines(WaveInfo &i, const WaveInfo &new_wave, double new_length,
+           FlatLine new_line, const FlatProjection &projection)
+{
+  Angle delta_angle = (new_wave.normal - i.normal).AsDelta();
+  if (delta_angle > Angle::QuarterCircle())
+    delta_angle -= Angle::HalfCircle();
+  else if (delta_angle < -Angle::QuarterCircle())
+    delta_angle += Angle::HalfCircle();
+
+  /* basic direction check */
+  constexpr Angle max_delta_angle = Angle::Degrees(20);
+  if (delta_angle > max_delta_angle || delta_angle < -max_delta_angle)
+    return false;
+
+  /* basic range check */
+  const double max_distance = std::max(new_length, i.GetLength());
+  if (i.a.DistanceS(new_wave.a) > max_distance &&
+      i.b.DistanceS(new_wave.a) > max_distance &&
+      i.a.DistanceS(new_wave.b) > max_distance &&
+      i.a.DistanceS(new_wave.b) > max_distance)
+    return false;
+
+  FlatLine other_line(projection.ProjectFloat(i.a),
+                      projection.ProjectFloat(i.b));
+  if (other_line.a.x > other_line.b.x)
+    /* rearrange a and b to get well-defined order */
+    std::swap(other_line.a, other_line.b);
+
+  if (!MergeLines(other_line, new_line))
+    return false;
+
+  i.a = projection.Unproject(other_line.a);
+  i.b = projection.Unproject(other_line.b);
+  Angle bearing = i.a.Bearing(i.b);
+  i.normal = (bearing + Angle::QuarterCircle()).AsBearing();
+  i.time = new_wave.time;
+
+  return true;
+}
+
+inline void
+WaveComputer::FoundWave(const WaveInfo &new_wave)
+{
+  /* check if we can merge the new wave with an existing one to
+     unclutter the screen */
+
+  FlatProjection projection(new_wave.location);
+  const double new_length = new_wave.GetLength();
+
+  FlatLine new_line(projection.ProjectFloat(new_wave.a),
+                    projection.ProjectFloat(new_wave.b));
+  if (new_line.a.x > new_line.b.x)
+    /* rearrange a and b to get well-defined order */
+    std::swap(new_line.a, new_line.b);
+
+  for (auto &i : waves)
+    if (MergeLines(i, new_wave, new_length, new_line, projection))
+      return;
+
+  waves.push_front(new_wave);
 }
 
 void
@@ -139,18 +315,18 @@ WaveComputer::Compute(const NMEAInfo &basic,
        and a vario value */
     return;
 
-  const fixed dt = delta_time.Update(basic.time, fixed(0.5), fixed(20));
-  if (negative(dt))
+  const auto dt = delta_time.Update(basic.time, 0.5, 20);
+  if (dt < 0)
     /* time warp */
     Reset();
 
-  if (!positive(dt))
+  if (dt <= 0)
     /* throttle */
     return;
 
-  const fixed vario = basic.netto_vario;
+  const auto vario = basic.netto_vario;
 
-  constexpr fixed threshold(0.5);
+  constexpr double threshold(0.5);
   if (vario > threshold) {
     /* positive vario value - feed it to the #LeastSquares instance */
 
@@ -160,30 +336,35 @@ WaveComputer::Compute(const NMEAInfo &basic,
       projection.SetCenter(basic.location);
 
     auto flat = projection.ProjectFloat(basic.location);
-    ls.Update(flat.x, flat.y, vario - Half(threshold));
+    ls.Update(flat.x, flat.y, vario - threshold / 2);
   }
 
-  if (negative(vario))
+  if (vario < 0)
     sinking_clock.Add(dt);
   else
     sinking_clock.Subtract(dt);
 
-  const bool sinking = sinking_clock >= dt + fixed(1);
+  const bool sinking = sinking_clock >= dt + 1;
   if (sinking) {
     /* we've been sinking; stop calculating the current wave; prepare
        to flush the #LeastSquares instance */
     if (ls.GetCount() > 30) {
       /* we've been lifting in the wave for some time; see if we
          really spotted a wave */
-      const WaveInfo wave = GetWaveInfo(ls, projection);
+      const WaveInfo wave = GetWaveInfo(ls, projection,
+                                        basic.time_available ? basic.time : 0);
       if (wave.IsDefined())
         /* yes, spotted a wave: copy it from the #LeastSquares
            instance to the list of waves */
-        waves.push_front(wave);
+        FoundWave(wave);
     }
 
     ls.Reset();
   }
+
+  if (basic.time_available)
+    /* forget all waves which are older than 8 hours */
+    Decay(basic.time - 8 * 3600);
 
   /* fill the #WaveResult */
 
@@ -191,7 +372,8 @@ WaveComputer::Compute(const NMEAInfo &basic,
 
   /* first copy the wave that is currently being calculated (partial
      data) */
-  WaveInfo wave = GetWaveInfo(ls, projection);
+  WaveInfo wave = GetWaveInfo(ls, projection,
+                              basic.time_available ? basic.time : 0);
   if (wave.IsDefined())
     result.waves.push_back(wave);
 

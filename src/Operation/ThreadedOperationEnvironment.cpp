@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,21 +31,25 @@ ThreadedOperationEnvironment::ThreadedOperationEnvironment(OperationEnvironment 
 bool
 ThreadedOperationEnvironment::IsCancelled() const
 {
-  return cancelled.Test();
+  const ScopeLock lock(mutex);
+  return cancel_flag;
 }
 
 void
 ThreadedOperationEnvironment::Sleep(unsigned ms)
 {
-  cancelled.Wait(ms);
+  const ScopeLock lock(mutex);
+  if (!cancel_flag)
+    cancel_cond.timed_wait(mutex, ms);
 }
 
 void
 ThreadedOperationEnvironment::SetErrorMessage(const TCHAR *_error)
 {
-  mutex.Lock();
-  data.SetErrorMessage(_error);
-  mutex.Unlock();
+  {
+    const ScopeLock lock(mutex);
+    data.SetErrorMessage(_error);
+  }
 
   SendNotification();
 }
@@ -53,9 +57,10 @@ ThreadedOperationEnvironment::SetErrorMessage(const TCHAR *_error)
 void
 ThreadedOperationEnvironment::SetText(const TCHAR *_text)
 {
-  mutex.Lock();
-  data.SetText(_text);
-  mutex.Unlock();
+  {
+    const ScopeLock lock(mutex);
+    data.SetText(_text);
+  }
 
   SendNotification();
 }
@@ -63,32 +68,21 @@ ThreadedOperationEnvironment::SetText(const TCHAR *_text)
 void
 ThreadedOperationEnvironment::SetProgressRange(unsigned range)
 {
-  mutex.Lock();
-  bool modified = data.SetProgressRange(range);
-  mutex.Unlock();
-
-  if (modified)
+  if (LockSetProgressRange(range))
     SendNotification();
 }
 
 void
 ThreadedOperationEnvironment::SetProgressPosition(unsigned position)
 {
-  mutex.Lock();
-  bool modified = data.SetProgressPosition(position);
-  mutex.Unlock();
-
-  if (modified)
+  if (LockSetProgressPosition(position))
     SendNotification();
 }
 
 void
 ThreadedOperationEnvironment::OnNotification()
 {
-  mutex.Lock();
-  Data new_data = data;
-  data.ClearUpdate();
-  mutex.Unlock();
+  const Data new_data = LockReceiveData();
 
   /* forward the method calls to the other OperationEnvironment */
 

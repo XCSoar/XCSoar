@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #include "InputKeys.hpp"
-#include "Screen/Key.h"
-#include "Util/CharUtil.hpp"
-#include "Util/StringAPI.hpp"
+#include "Event/KeyCode.hpp"
+#include "Util/CharUtil.hxx"
+#include "Util/StringAPI.hxx"
 
 struct string_to_key {
   const TCHAR *name;
@@ -50,7 +50,7 @@ static constexpr struct string_to_key string_to_key[] = {
   { _T("F10"), KEY_F10 },
   { _T("F11"), KEY_F11 },
   { _T("F12"), KEY_F12 },
-#ifdef USE_GDI
+#ifdef USE_WINUSER
   /* These Keys are used for the Triadis-RemoteStick, as well as for
      expanded Keyboard-Events */
   { _T("F13"), KEY_F13 },

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,9 +28,11 @@ Copyright_License {
 #include "PortBridge.hpp"
 #include "Java/String.hxx"
 #include "Java/Class.hxx"
+#include "Java/Exception.hxx"
 
 #include <map>
 #include <string>
+#include <stdexcept>
 
 namespace BluetoothHelper {
   static Java::TrivialClass cls;
@@ -108,11 +110,10 @@ BluetoothHelper::GetNameFromAddress(JNIEnv *env, const char *address)
   if (j_name == nullptr)
     return nullptr;
 
-  char name[256];
-  Java::String::CopyTo(env, j_name, name, sizeof(name));
-  env->DeleteLocalRef(j_name);
+  std::string name = Java::String(env, j_name).ToString();
 
-  auto j = address_to_name.insert(std::make_pair(x_address, name));
+  auto j = address_to_name.insert(std::make_pair(std::move(x_address),
+                                                 std::move(name)));
   return j.first->second.c_str();
 }
 
@@ -166,13 +167,14 @@ PortBridge *
 BluetoothHelper::connect(JNIEnv *env, const char *address)
 {
   if (!cls.IsDefined())
-    return nullptr;
+    throw std::runtime_error("Bluetooth not available");
 
   /* call BluetoothHelper.connect() */
 
   const Java::String address2(env, address);
   jobject obj = env->CallStaticObjectMethod(cls, connect_method,
                                             context->Get(), address2.Get());
+  Java::RethrowException(env);
   if (obj == nullptr)
     return nullptr;
 
@@ -186,9 +188,10 @@ PortBridge *
 BluetoothHelper::createServer(JNIEnv *env)
 {
   if (!cls.IsDefined())
-    return nullptr;
+    throw std::runtime_error("Bluetooth not available");
 
   jobject obj = env->CallStaticObjectMethod(cls, createServer_method);
+  Java::RethrowException(env);
   if (obj == nullptr)
     return nullptr;
 

@@ -11,7 +11,7 @@ HI_RES_AWARE CEUX {1}
 #define BITMAP(name, path)
 #endif
 
-#if defined(WIN32) || defined(__WINE__)
+#ifdef WIN32
 #define BITMAP_BITMAP(name, file) BITMAP(name, "bitmaps/" file ".bmp")
 #define BITMAP_ICON(name, file) BITMAP(name, "../output/data/icons/" file ".bmp")
 #define BITMAP_GRAPHIC(name, file) BITMAP(name, "../output/data/graphics/" file ".bmp")
@@ -33,7 +33,14 @@ HI_RES_AWARE CEUX {1}
 #define HATCH_BITMAP(name, file)
 #endif
 
+#ifdef WIN32
 #define SOUND(name, file) name WAVE DISCARDABLE "sound/" file ".wav"
+#elif defined(ANDROID)
+/* included as Android resources */
+#define SOUND(name, file)
+#else
+#define SOUND(name, file) name WAVE DISCARDABLE "../output/data/sound/" file ".raw"
+#endif
 
 // --- Icons ---
 
@@ -185,20 +192,6 @@ BITMAP_ICON(IDB_POWER_PLANT, "map_power_plant")
 BITMAP_ICON(IDB_POWER_PLANT_HD, "map_power_plant_160")
 BITMAP_ICON(IDB_THERMAL_HOTSPOT, "map_thermal_hotspot")
 BITMAP_ICON(IDB_THERMAL_HOTSPOT_HD, "map_thermal_hotspot_160")
-BITMAP_BITMAP(IDB_UNIT_KM, "unit_km")
-BITMAP_BITMAP(IDB_UNIT_SM, "unit_sm")
-BITMAP_BITMAP(IDB_UNIT_NM, "unit_nm")
-BITMAP_BITMAP(IDB_UNIT_M, "unit_m")
-BITMAP_BITMAP(IDB_UNIT_FT, "unit_ft")
-BITMAP_BITMAP(IDB_UNIT_MS, "unit_ms")
-BITMAP_BITMAP(IDB_UNIT_KT, "unit_kt")
-BITMAP_BITMAP(IDB_UNIT_FL, "unit_fl")
-BITMAP_BITMAP(IDB_UNIT_DegK, "unit_deg_kelvin")
-BITMAP_BITMAP(IDB_UNIT_DegC, "unit_deg_celsius")
-BITMAP_BITMAP(IDB_UNIT_DegF, "unit_deg_fahrenheit")
-BITMAP_BITMAP(IDB_UNIT_FPM, "unit_fpm")
-BITMAP_BITMAP(IDB_UNIT_KMH, "unit_kmh")
-BITMAP_BITMAP(IDB_UNIT_MPH, "unit_mph")
 BITMAP_BITMAP(IDB_VARIOSCALEA, "vario_scale_b")
 BITMAP_BITMAP(IDB_VARIOSCALEC, "vario_scale_c")
 #ifdef TESTING
@@ -216,8 +209,6 @@ SOUND(IDR_FAIL, "fail")
 SOUND(IDR_INSERT, "insert")
 SOUND(IDR_REMOVE, "remove")
 
-#ifndef GNAV
 SOUND(IDR_WAV_BEEPBWEEP, "beep_bweep")
 SOUND(IDR_WAV_CLEAR, "beep_clear")
 SOUND(IDR_WAV_DRIP, "beep_drip")
-#endif

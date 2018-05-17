@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,6 +29,7 @@
 #include "Stats/CommonStats.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "TaskBehaviour.hpp"
+#include "Waypoint/Ptr.hpp"
 
 class AbstractTaskFactory;
 class TaskEvents;
@@ -41,7 +42,6 @@ class AlternateTask;
 class AlternateList;
 class TaskWaypoint;
 class AbortIntersectionTest;
-struct Waypoint;
 struct RangeAndRadial;
 
 /**
@@ -132,7 +132,7 @@ public:
    * @return Location of point
    */
   GeoPoint RandomPointInTask(const unsigned index,
-                             const fixed mag = fixed(1)) const;
+                             double mag = 1) const;
 
   /**
    * Retrieve a copy of the task alternates
@@ -166,7 +166,7 @@ public:
    * @param wp Waypoint to go to
    * @return True if successful
    */
-  bool DoGoto(const Waypoint & wp);
+  bool DoGoto(WaypointPtr &&wp);
 
   /**
    * Updates internal state of task given new aircraft.
@@ -200,7 +200,7 @@ public:
    * 
    * @return True if MC updated
    */
-  bool UpdateAutoMC(const AircraftState& state_now, const fixed fallback_mc);
+  bool UpdateAutoMC(const AircraftState& state_now, double fallback_mc);
 
   /**
    * Accessor for statistics of active task
@@ -447,9 +447,11 @@ public:
    * Caller is responsible for ensuring the waypoint database already has an
    * appropriate waypoint within 1000m of the takeoff location.
    */
-  void TakeoffAutotask(const GeoPoint &ref, const fixed terrain_alt);
+  void TakeoffAutotask(const GeoPoint &ref, double terrain_alt);
 
   void UpdateCommonStatsTask();
+
+  void ResetTask();
 
 private:
   TaskType SetMode(const TaskType mode);

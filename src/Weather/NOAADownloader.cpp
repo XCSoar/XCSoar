@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,9 +24,7 @@ Copyright_License {
 #include "NOAADownloader.hpp"
 #include "METAR.hpp"
 #include "TAF.hpp"
-#include "Net/HTTP/Session.hpp"
 #include "Net/HTTP/ToBuffer.hpp"
-#include "OS/PathName.hpp"
 #include "Util/StringUtil.hpp"
 #include "Job/Runner.hpp"
 
@@ -142,7 +140,7 @@ NOAADownloader::ParseDecodedDateTime(const char *buffer, BrokenDateTime &dest)
 
 bool
 NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
-                              JobRunner &runner)
+                              Net::Session &session, JobRunner &runner)
 {
 #ifndef NDEBUG
   assert(strlen(code) == 4);
@@ -152,20 +150,15 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
 #endif
 
   // Build file url
-  char url[256] = "http://tgftp.nws.noaa.gov/data/observations/metar/decoded/";
-
-  strcat(url, code);
-  strcat(url, ".TXT");
-
-  // Open download session
-  Net::Session session;
-  if (session.Error())
-    return false;
+  char url[256];
+  snprintf(url, sizeof(url),
+           "http://tgftp.nws.noaa.gov/data/observations/metar/decoded/%s.TXT",
+           code);
 
   // Request the file
   char buffer[4096];
   Net::DownloadToBufferJob job(session, url, buffer, sizeof(buffer) - 1);
-  if (!runner.Run(job) || job.GetLength() < 0)
+  if (!runner.Run(job))
     return false;
 
   buffer[job.GetLength()] = 0;
@@ -241,7 +234,7 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
 
 bool
 NOAADownloader::DownloadTAF(const char *code, TAF &taf,
-                            JobRunner &runner)
+                            Net::Session &session, JobRunner &runner)
 {
 #ifndef NDEBUG
   assert(strlen(code) == 4);
@@ -251,19 +244,15 @@ NOAADownloader::DownloadTAF(const char *code, TAF &taf,
 #endif
 
   // Build file url
-  char url[256] = "http://tgftp.nws.noaa.gov/data/forecasts/taf/stations/";
-  strcat(url, code);
-  strcat(url, ".TXT");
-
-  // Open download session
-  Net::Session session;
-  if (session.Error())
-    return false;
+  char url[256];
+  snprintf(url, sizeof(url),
+           "http://tgftp.nws.noaa.gov/data/forecasts/taf/stations/%s.TXT",
+           code);
 
   // Request the file
   char buffer[4096];
   Net::DownloadToBufferJob job(session, url, buffer, sizeof(buffer) - 1);
-  if (!runner.Run(job) || job.GetLength() < 0)
+  if (!runner.Run(job))
     return false;
 
   buffer[job.GetLength()] = 0;

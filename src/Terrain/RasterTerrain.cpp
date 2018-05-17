@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,24 +21,19 @@ Copyright_License {
 }
 */
 
-#include "Terrain/RasterTerrain.hpp"
+#include "RasterTerrain.hpp"
+#include "Loader.hpp"
 #include "Profile/Profile.hpp"
+#include "IO/ZipArchive.hpp"
 #include "IO/FileCache.hpp"
+#include "OS/ConvertPathName.hpp"
+#include "Operation/Operation.hpp"
+#include "Util/ConvertString.hpp"
 
-#include <windef.h> /* for MAX_PATH */
-
-#include <string.h>
-
-/* use separate cache files for FIXED=y and FIXED=n because the file
-   format is different */
-#ifdef FIXED_MATH
-static const TCHAR *const terrain_cache_name = _T("terrain_fixed");
-#else
 static const TCHAR *const terrain_cache_name = _T("terrain");
-#endif
 
 inline bool
-RasterTerrain::LoadCache(FileCache &cache, const TCHAR *path)
+RasterTerrain::LoadCache(FileCache &cache, Path path)
 {
   bool success = false;
 
@@ -52,7 +47,7 @@ RasterTerrain::LoadCache(FileCache &cache, const TCHAR *path)
 }
 
 inline bool
-RasterTerrain::SaveCache(FileCache &cache, const TCHAR *path) const
+RasterTerrain::SaveCache(FileCache &cache, Path path) const
 {
   bool success = false;
 
@@ -69,14 +64,16 @@ RasterTerrain::SaveCache(FileCache &cache, const TCHAR *path) const
 }
 
 inline bool
-RasterTerrain::Load(const TCHAR *path, const TCHAR *world_file,
-                    FileCache *cache, OperationEnvironment &operation)
+RasterTerrain::Load(Path path, FileCache *cache,
+                    OperationEnvironment &operation)
 {
   if (LoadCache(cache, path))
     return true;
 
-  if (!map.Load(path, world_file, operation))
+  if (!LoadTerrainOverview(archive.get(), map.GetTileCache(), operation))
     return false;
+
+  map.UpdateProjection();
 
   if (cache != nullptr)
     SaveCache(*cache, path);
@@ -86,24 +83,31 @@ RasterTerrain::Load(const TCHAR *path, const TCHAR *world_file,
 
 RasterTerrain *
 RasterTerrain::OpenTerrain(FileCache *cache, OperationEnvironment &operation)
-{
-  TCHAR path[MAX_PATH], world_file_buffer[MAX_PATH];
-  const TCHAR *world_file;
-
-  if (Profile::GetPath(ProfileKeys::MapFile, path)) {
-    _tcscpy(world_file_buffer, path);
-    _tcscat(world_file_buffer, _T("/terrain.j2w"));
-    world_file = world_file_buffer;
-
-    _tcscat(path, _T("/terrain.jp2"));
-  } else
+try {
+  const auto path = Profile::GetPath(ProfileKeys::MapFile);
+  if (path.IsNull())
     return nullptr;
 
-  RasterTerrain *rt = new RasterTerrain(path);
-  if (!rt->Load(path, world_file, cache, operation)) {
+  RasterTerrain *rt = new RasterTerrain(ZipArchive(path));
+  if (!rt->Load(path, cache, operation)) {
     delete rt;
     return nullptr;
   }
 
   return rt;
+} catch (const std::runtime_error &e) {
+  operation.SetErrorMessage(UTF8ToWideConverter(e.what()));
+  return nullptr;
+}
+
+bool
+RasterTerrain::UpdateTiles(const GeoPoint &location, double radius)
+{
+  auto &tile_cache = map.GetTileCache();
+  if (!tile_cache.IsValid())
+    return false;
+
+  UpdateTerrainTiles(archive.get(), tile_cache, mutex,
+                     map.GetProjection(), location, radius);
+  return map.IsDirty();
 }

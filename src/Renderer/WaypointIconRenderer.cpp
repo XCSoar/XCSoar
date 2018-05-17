@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -69,14 +69,14 @@ GetWaypointIcon(const WaypointLook &look, const Waypoint &wp,
 }
 
 static void
-DrawLandableBase(Canvas &canvas, const RasterPoint& pt, bool airport,
-                 const fixed radius)
+DrawLandableBase(Canvas &canvas, const PixelPoint &pt, bool airport,
+                 const double radius)
 {
   int iradius = iround(radius);
   if (airport)
     canvas.DrawCircle(pt.x, pt.y, iradius);
   else {
-    RasterPoint diamond[4];
+    BulkPixelPoint diamond[4];
     diamond[0].x = pt.x + 0;
     diamond[0].y = pt.y - iradius;
     diamond[1].x = pt.x + iradius;
@@ -90,20 +90,20 @@ DrawLandableBase(Canvas &canvas, const RasterPoint& pt, bool airport,
 }
 
 static void
-DrawLandableRunway(Canvas &canvas, const RasterPoint &pt,
-                   const Angle angle, fixed radius, fixed width)
+DrawLandableRunway(Canvas &canvas, const PixelPoint &pt,
+                   const Angle angle, double radius, double width)
 {
-  if (!positive(radius))
+  if (radius <= 0)
     return;
 
   const auto sc = angle.SinCos();
-  const fixed x = sc.first, y = sc.second;
-  int lx = iround(Double(x * radius)) & ~0x1;  // make it a even number
-  int ly = iround(Double(y * radius)) & ~0x1;
+  const auto x = sc.first, y = sc.second;
+  int lx = iround(2 * x * radius) & ~0x1;  // make it a even number
+  int ly = iround(2 * y * radius) & ~0x1;
   int wx = iround(-y * width);
   int wy = iround(x * width);
 
-  RasterPoint runway[4];
+  BulkPixelPoint runway[4];
   runway[0].x = pt.x        - (lx / 2) + (wx / 2);
   runway[0].y = pt.y        + (ly / 2) - (wy / 2);
   runway[1].x = runway[0].x            - wx;
@@ -118,7 +118,7 @@ DrawLandableRunway(Canvas &canvas, const RasterPoint &pt,
 
 void
 WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
-                                   const RasterPoint &point,
+                                   const PixelPoint &point,
                                    Reachability reachable)
 {
 
@@ -143,9 +143,9 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
   }
 
   // SW rendering of landables
-  fixed scale = fixed(std::max(Layout::VptScale(settings.landable_rendering_scale),
-                               110u)) / 177;
-  fixed radius = 10 * scale;
+  double scale = std::max(Layout::VptScale(settings.landable_rendering_scale),
+                          110u) / 177.;
+  double radius = 10 * scale;
 
   canvas.SelectBlackPen();
 
@@ -158,8 +158,7 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
       canvas.Select(reachable == ReachableTerrain
                     ? look.reachable_brush
                     : look.terrain_unreachable_brush);
-      DrawLandableBase(canvas, point, waypoint.IsAirport(),
-                       radius + Half(radius));
+      DrawLandableBase(canvas, point, waypoint.IsAirport(), 1.5 * radius);
     }
     canvas.Select(look.magenta_brush);
     break;
@@ -190,21 +189,21 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
   // Render runway indication
   const Runway &runway = waypoint.runway;
   if (runway.IsDirectionDefined()) {
-    fixed len;
+    double len;
     if (settings.scale_runway_length && runway.IsLengthDefined())
-      len = Half(radius) +
-        (((int) runway.GetLength() - 500) / 500) * Quarter(radius);
+      len = radius / 2. +
+        (((int) runway.GetLength() - 500) / 500) * radius / 4.;
     else
       len = radius;
-    len += Double(scale);
+    len += 2 * scale;
     Angle runwayDrawingAngle = runway.GetDirection() - screen_rotation;
     canvas.Select(look.white_brush);
-    DrawLandableRunway(canvas, point, runwayDrawingAngle, len, fixed(5) * scale);
+    DrawLandableRunway(canvas, point, runwayDrawingAngle, len, 5 * scale);
   }
 }
 
 void
-WaypointIconRenderer::Draw(const Waypoint &waypoint, const RasterPoint &point,
+WaypointIconRenderer::Draw(const Waypoint &waypoint, const PixelPoint &point,
                            Reachability reachable, bool in_task)
 {
   if (waypoint.IsLandable())

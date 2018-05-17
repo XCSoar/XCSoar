@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -67,14 +67,14 @@ int main(int argc, char **argv)
   ok1(!b.IsInside(Angle::Degrees(7), Angle::Degrees(1)));
   ok1(!b.IsInside(Angle::Degrees(9), Angle::Degrees(1)));
 
-  b = b.Scale(fixed(2));
+  b = b.Scale(2);
 
   ok1(equals(b.GetEast(), 11));
   ok1(equals(b.GetWest(), -1));
   ok1(equals(b.GetNorth(), 7));
   ok1(equals(b.GetSouth(), 3));
 
-  b = b.Scale(fixed(0.5));
+  b = b.Scale(0.5);
 
   ok1(equals(b.GetEast(), 8));
   ok1(equals(b.GetWest(), 2));

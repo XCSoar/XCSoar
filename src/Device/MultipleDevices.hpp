@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,7 +30,6 @@ Copyright_License {
 #define XCSOAR_DEVICE_LIST_HPP
 
 #include "Features.hpp"
-#include "Math/fixed.hpp"
 #include "Device/Port/Listener.hpp"
 #include "Thread/Mutex.hpp"
 
@@ -38,6 +37,8 @@ Copyright_License {
 #include <list>
 
 #include <tchar.h>
+
+namespace boost { namespace asio { class io_service; }}
 
 class DeviceDescriptor;
 class DeviceDispatcher;
@@ -58,7 +59,7 @@ class MultipleDevices final : PortListener {
   std::list<PortListener *> listeners;
 
 public:
-  MultipleDevices();
+  MultipleDevices(boost::asio::io_service &io_service);
   ~MultipleDevices();
 
   DeviceDescriptor &operator[](unsigned i) const {
@@ -80,10 +81,10 @@ public:
    */
   void Tick();
 
-  void AutoReopen(OperationEnvironment &env);;
-  void PutMacCready(fixed mac_cready, OperationEnvironment &env);
-  void PutBugs(fixed bugs, OperationEnvironment &env);
-  void PutBallast(fixed fraction, fixed overload, OperationEnvironment &env);
+  void AutoReopen(OperationEnvironment &env);
+  void PutMacCready(double mac_cready, OperationEnvironment &env);
+  void PutBugs(double bugs, OperationEnvironment &env);
+  void PutBallast(double fraction, double overload, OperationEnvironment &env);
   void PutVolume(unsigned volume, OperationEnvironment &env);
   void PutActiveFrequency(RadioFrequency frequency, const TCHAR *name,
                           OperationEnvironment &env);
@@ -100,6 +101,7 @@ public:
 private:
   /* virtual methods from class PortListener */
   void PortStateChanged() override;
+  void PortError(const char *msg) override;
 };
 
 #endif

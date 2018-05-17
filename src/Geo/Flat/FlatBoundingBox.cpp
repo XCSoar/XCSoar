@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,21 +22,39 @@
 
 #include "FlatBoundingBox.hpp"
 #include "FlatRay.hpp"
-#include "Math/fixed.hpp"
-#include "Math/FastMath.h"
+#include "Math/FastMath.hpp"
+#include "Math/Util.hpp"
 
 #include <algorithm>
+
+static constexpr inline unsigned
+Distance1D(int a1, int a2, int b1, int b2)
+{
+  return a2 < b1
+    ? b1 - a2 /* A is left of B */
+    : (a1 >= b2
+       ? a1 - b2 /* A is right of B */
+       : 0); /* A and B overlap */
+}
+
+unsigned
+FlatBoundingBox::SquareDistanceTo(FlatGeoPoint p) const
+{
+  if (IsInside(p))
+    return 0;
+
+  unsigned dx = Distance1D(lower_left.x, upper_right.x, p.x, p.x);
+  unsigned dy = Distance1D(lower_left.y, upper_right.y, p.y, p.y);
+  return Square(dx) + Square(dy);
+}
 
 unsigned
 FlatBoundingBox::Distance(const FlatBoundingBox &f) const
 {
-  if (Overlaps(f))
-    return 0;
-
-  int dx = std::max(0, std::min(f.bb_ll.longitude - bb_ur.longitude,
-                                bb_ll.longitude - f.bb_ur.longitude));
-  int dy = std::max(0, std::min(f.bb_ll.latitude - bb_ur.latitude,
-                                bb_ll.latitude - f.bb_ur.latitude));
+  unsigned dx = Distance1D(lower_left.x, upper_right.x,
+                           f.lower_left.x, f.upper_right.x);
+  unsigned dy = Distance1D(lower_left.y, upper_right.y,
+                           f.lower_left.y, f.upper_right.y);
 
   return ihypot(dx, dy);
 }
@@ -44,19 +62,17 @@ FlatBoundingBox::Distance(const FlatBoundingBox &f) const
 bool
 FlatBoundingBox::Intersects(const FlatRay& ray) const
 {
-  fixed tmin = fixed(0);
-  fixed tmax = fixed(1);
-  
-  // Longitude
-  if (ray.vector.longitude == 0) {
+  double tmin = 0, tmax = 1;
+
+  // X
+  if (ray.vector.x == 0) {
     // ray is parallel to slab. No hit if origin not within slab
-    if (ray.point.longitude < bb_ll.longitude ||
-        ray.point.longitude > bb_ur.longitude)
+    if (ray.point.x < lower_left.x || ray.point.x > upper_right.x)
       return false;
   } else {
     // compute intersection t value of ray with near/far plane of slab
-    fixed t1 = (bb_ll.longitude - ray.point.longitude) * ray.fx;
-    fixed t2 = (bb_ur.longitude - ray.point.longitude) * ray.fx;
+    auto t1 = (lower_left.x - ray.point.x) * ray.fx;
+    auto t2 = (upper_right.x - ray.point.x) * ray.fx;
     // make t1 be intersection with near plane, t2 with far plane
     if (t1 > t2)
       std::swap(t1, t2);
@@ -68,17 +84,15 @@ FlatBoundingBox::Intersects(const FlatRay& ray) const
       return false;
   }
 
-  // Latitude
-  // Longitude
-  if (ray.vector.latitude == 0) {
+  // Y
+  if (ray.vector.y == 0) {
     // ray is parallel to slab. No hit if origin not within slab
-    if (ray.point.latitude < bb_ll.latitude ||
-        ray.point.latitude > bb_ur.latitude)
+    if (ray.point.y < lower_left.y || ray.point.y > upper_right.y)
       return false;
   } else {
     // compute intersection t value of ray with near/far plane of slab
-    fixed t1 = (bb_ll.latitude - ray.point.latitude) * ray.fy;
-    fixed t2 = (bb_ur.latitude - ray.point.latitude) * ray.fy;
+    auto t1 = (lower_left.y - ray.point.y) * ray.fy;
+    auto t2 = (upper_right.y - ray.point.y) * ray.fy;
     // make t1 be intersection with near plane, t2 with far plane
     if (t1 > t2)
       std::swap(t1, t2);
@@ -96,20 +110,20 @@ FlatGeoPoint
 FlatBoundingBox::GetCenter() const
 {
   /// @todo This will break if overlaps 360/0
-  return FlatGeoPoint((bb_ll.longitude + bb_ur.longitude) / 2,
-                      (bb_ll.latitude + bb_ur.latitude) / 2);
+  return FlatGeoPoint((lower_left.x + upper_right.x) / 2,
+                      (lower_left.y + upper_right.y) / 2);
 }
 
 bool
 FlatBoundingBox::Overlaps(const FlatBoundingBox& other) const
 {
-  if (bb_ll.longitude > other.bb_ur.longitude)
+  if (lower_left.x > other.upper_right.x)
     return false;
-  if (bb_ur.longitude < other.bb_ll.longitude)
+  if (upper_right.x < other.lower_left.x)
     return false;
-  if (bb_ll.latitude > other.bb_ur.latitude)
+  if (lower_left.y > other.upper_right.y)
     return false;
-  if (bb_ur.latitude < other.bb_ll.latitude)
+  if (upper_right.y < other.lower_left.y)
     return false;
 
   return true;
@@ -118,13 +132,13 @@ FlatBoundingBox::Overlaps(const FlatBoundingBox& other) const
 bool
 FlatBoundingBox::IsInside(const FlatGeoPoint& loc) const
 {
-  if (loc.longitude < bb_ll.longitude)
+  if (loc.x < lower_left.x)
     return false;
-  if (loc.longitude > bb_ur.longitude)
+  if (loc.x > upper_right.x)
     return false;
-  if (loc.latitude < bb_ll.latitude)
+  if (loc.y < lower_left.y)
     return false;
-  if (loc.latitude > bb_ur.latitude)
+  if (loc.y > upper_right.y)
     return false;
 
   return true;

@@ -4,6 +4,8 @@
  *
  */
 
+#include "Util/PrintException.hxx"
+
 #if defined(ENABLE_CMDLINE) || defined(ENABLE_MAIN_WINDOW)
 #include "OS/Args.hpp"
 #endif
@@ -32,7 +34,7 @@
 #include "Screen/SingleWindow.hpp"
 #include "Form/ActionListener.hpp"
 #include "UIGlobals.hpp"
-#include "Util/CharUtil.hpp"
+#include "Util/CharUtil.hxx"
 #include "Util/NumberParser.hpp"
 #define ENABLE_SCREEN
 #endif
@@ -72,6 +74,10 @@
 #ifdef WIN32
 #include <windows.h>
 #endif
+
+#include <stdexcept>
+
+#include <stdio.h>
 
 #ifdef ENABLE_CMDLINE
 static void
@@ -190,11 +196,7 @@ int main(int argc, char **argv)
 #else
 int WINAPI
 WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-#ifdef _WIN32_WCE
-        LPWSTR lpCmdLine,
-#else
         LPSTR lpCmdLine2,
-#endif
         int nCmdShow)
 #endif
 {
@@ -271,7 +273,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
 #ifdef ENABLE_PROFILE
-  Profile::SetFiles(_T(""));
+  Profile::SetFiles(nullptr);
   Profile::Load();
 #endif
 
@@ -280,7 +282,13 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   main_window.Show();
 #endif
 
-  Main();
+  int result = EXIT_SUCCESS;
+  try {
+    Main();
+  } catch (const std::exception &e) {
+    PrintException(e);
+    result = EXIT_FAILURE;
+  }
 
 #ifdef ENABLE_MAIN_WINDOW
   main_window.Destroy();
@@ -302,5 +310,5 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   DeinitialiseFonts();
 #endif
 
-  return 0;
+  return result;
 }

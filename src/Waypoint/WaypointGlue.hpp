@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,9 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_WAY_POINT_GLUE_HPP
 #define XCSOAR_WAY_POINT_GLUE_HPP
 
-#include "Engine/Waypoint/Origin.hpp"
+#include "Engine/Waypoint/Ptr.hpp"
 
-struct Waypoint;
 class Waypoints;
 class RasterTerrain;
 class OperationEnvironment;
@@ -48,8 +47,8 @@ namespace WaypointGlue {
    *
    * @return the home #Waypoint, or nullptr if it not found
    */
-  const Waypoint *FindHomeId(Waypoints &waypoints,
-                             PlacesOfInterestSettings &settings);
+  WaypointPtr FindHomeId(Waypoints &waypoints,
+                         PlacesOfInterestSettings &settings);
 
   /**
    * Find the configured home by id (in #PlacesOfInterestSettings) in
@@ -59,8 +58,8 @@ namespace WaypointGlue {
    *
    * @return the home #Waypoint, or nullptr if it not found
    */
-  const Waypoint *FindHomeLocation(Waypoints &waypoints,
-                                   PlacesOfInterestSettings &settings);
+  WaypointPtr FindHomeLocation(Waypoints &waypoints,
+                               PlacesOfInterestSettings &settings);
 
   /**
    * Find the waypoint flagged as "home" in the #Waypoints database,
@@ -69,8 +68,8 @@ namespace WaypointGlue {
    *
    * @return the home #Waypoint, or nullptr if it not found
    */
-  const Waypoint *FindFlaggedHome(Waypoints &waypoints,
-                                  PlacesOfInterestSettings &settings);
+  WaypointPtr FindFlaggedHome(Waypoints &waypoints,
+                              PlacesOfInterestSettings &settings);
 
   /**
    * This functions checks if the home and teamcode waypoint
@@ -107,12 +106,19 @@ namespace WaypointGlue {
                      const RasterTerrain *terrain,
                      OperationEnvironment &operation);
 
-  bool SaveWaypoints(const Waypoints &way_points);
+  /**
+   * Append one waypoint to the file "user.cup".
+   *
+   * Throws std::runtime_error on error;
+   */
+  void SaveWaypoints(const Waypoints &way_points);
 
   /**
    * Append one waypoint to the file "user.cup".
+   *
+   * Throws std::runtime_error on error;
    */
-  bool SaveWaypoint(const Waypoint &wp);
+  void SaveWaypoint(const Waypoint &wp);
 };
 
 #endif

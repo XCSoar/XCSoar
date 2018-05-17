@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,7 +25,6 @@ Copyright_License {
 #include "Polar/Polar.hpp"
 #include "Units/System.hpp"
 #include "Util/Macros.hpp"
-#include "Compiler.h"
 
 #include <assert.h>
 
@@ -34,12 +33,12 @@ PolarStore::Item::ToPolarShape() const
 {
   PolarShape shape;
 
-  shape[0].v = Units::ToSysUnit(fixed(v1), Unit::KILOMETER_PER_HOUR);
-  shape[0].w = fixed(w1);
-  shape[1].v = Units::ToSysUnit(fixed(v2), Unit::KILOMETER_PER_HOUR);
-  shape[1].w = fixed(w2);
-  shape[2].v = Units::ToSysUnit(fixed(v3), Unit::KILOMETER_PER_HOUR);
-  shape[2].w = fixed(w3);
+  shape[0].v = Units::ToSysUnit(v1, Unit::KILOMETER_PER_HOUR);
+  shape[0].w = w1;
+  shape[1].v = Units::ToSysUnit(v2, Unit::KILOMETER_PER_HOUR);
+  shape[1].w = w2;
+  shape[2].v = Units::ToSysUnit(v3, Unit::KILOMETER_PER_HOUR);
+  shape[2].w = w3;
 
   return shape;
 }
@@ -49,11 +48,11 @@ PolarStore::Item::ToPolarInfo() const
 {
   PolarInfo polar;
 
-  polar.reference_mass = fixed(reference_mass);
-  polar.max_ballast = fixed(max_ballast);
+  polar.reference_mass = reference_mass;
+  polar.max_ballast = max_ballast;
   polar.shape = ToPolarShape();
-  polar.wing_area = fixed(wing_area);
-  polar.v_no = fixed(v_no);
+  polar.wing_area = wing_area;
+  polar.v_no = v_no;
 
   return polar;
 }

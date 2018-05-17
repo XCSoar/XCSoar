@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -42,11 +42,11 @@ main(int argc, char **argv)
 
   const unsigned sample_rate = 44100;
 
-  VarioSynthesiser synthesiser;
+  VarioSynthesiser synthesiser(sample_rate);
 
   while (replay->Next()) {
-    fixed vario = replay->Basic().brutto_vario;
-    synthesiser.SetVario(sample_rate, vario);
+    auto vario = replay->Basic().brutto_vario;
+    synthesiser.SetVario(vario);
 
     static int16_t buffer[sample_rate];
     synthesiser.Synthesise(buffer, ARRAY_SIZE(buffer));

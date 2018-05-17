@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,6 +28,7 @@ namespace ProfileKeys {
 
 extern const char ShowMenuButton[];
 extern const char UIScale[];
+extern const char CustomDPI[];
 extern const char Password[];
 extern const char SpeedUnitsValue[];
 extern const char DistanceUnitsValue[];
@@ -103,7 +104,6 @@ extern const char SoundAudioVario[];
 extern const char SoundTask[];
 extern const char SoundModes[];
 extern const char NettoSpeed[];
-extern const char AutoBlank[];
 extern const char AverEffTime[]; // VENTA6
 extern const char VarioGauge[];
 extern const char AppIndLandable[];
@@ -124,7 +124,6 @@ extern const char HapticFeedback[];
 extern const char AppDialogTabStyle[];
 extern const char AppDialogStyle[];
 extern const char AppInfoBoxBorder[];
-extern const char AppInfoBoxModel[]; // VENTA-ADDON MODEL CHANGE
 extern const char AppAveNeedle[];
 extern const char AutoAdvance[];
 extern const char UTCOffset[];
@@ -145,15 +144,6 @@ extern const char DetourCostMarker[];
 extern const char DisplayTrackBearing[];
 extern const char GliderScreenPosition[];
 extern const char SetSystemTimeFromGPS[];
-
-extern const char VoiceClimbRate[];
-extern const char VoiceTerrain[];
-extern const char VoiceWaypointDistance[];
-extern const char VoiceTaskAltitudeDifference[];
-extern const char VoiceMacCready[];
-extern const char VoiceNewWaypoint[];
-extern const char VoiceInSector[];
-extern const char VoiceAirspace[];
 
 extern const char FinishMinHeight[];
 extern const char FinishHeightRef[];
@@ -242,9 +232,6 @@ extern const char AircraftSymbol[];
 
 extern const char FlarmLocation[];
 
-extern const char TrackingInterval[];
-extern const char TrackingVehicleType[];
-extern const char TrackingVehicleName[];
 extern const char SkyLinesTrackingEnabled[];
 extern const char SkyLinesRoaming[];
 extern const char SkyLinesTrackingInterval[];
@@ -253,12 +240,21 @@ extern const char SkyLinesNearTrafficEnabled[];
 extern const char SkyLinesTrackingKey[];
 
 extern const char CloudEnabled[];
+extern const char CloudShowThermals[];
 extern const char CloudKey[];
 
 extern const char LiveTrack24Enabled[];
 extern const char LiveTrack24Server[];
 extern const char LiveTrack24Username[];
 extern const char LiveTrack24Password[];
+extern const char LiveTrack24TrackingInterval[];
+extern const char LiveTrack24TrackingVehicleType[];
+extern const char LiveTrack24TrackingVehicleName[];
+
+extern const char PCMetUsername[];
+extern const char PCMetPassword[];
+extern const char PCMetFtpUsername[];
+extern const char PCMetFtpPassword[];
 
 extern const char EnableLocationMapItem[];
 extern const char EnableArrivalAltitudeMapItem[];
@@ -275,6 +271,8 @@ extern const char VarioDeadBandMax[];
 extern const char PagesDistinctZoom[];
 
 extern const char WaveAssistant[];
+
+extern const char MasterAudioVolume[];
 
 }
 

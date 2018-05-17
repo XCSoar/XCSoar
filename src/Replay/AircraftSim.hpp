@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -38,22 +38,22 @@ public:
     return state;
   }
 
-  void SetWind(const fixed speed, const Angle direction);
+  void SetWind(double speed, Angle direction);
 
   void Start(const GeoPoint& location_start,
              const GeoPoint& location_last,
-             fixed altitude);
+             double altitude);
 
-  bool Update(const Angle heading, const fixed timestep=fixed(1));
+  bool Update(const Angle heading, const double timestep=1);
 
-  fixed GetTime() const {
+  double GetTime() const {
     return state.time;
   }
 
 private:
-  void Integrate(const Angle heading, const fixed timestep);
+  void Integrate(Angle heading, double timestep);
 
-  GeoPoint GetEndPoint(const Angle heading, const fixed timestep) const;
+  GeoPoint GetEndPoint(Angle heading, double timestep) const;
 };
 
 #endif

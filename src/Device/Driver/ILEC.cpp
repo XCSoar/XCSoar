@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,15 +22,11 @@ Copyright_License {
 */
 
 #include "Device/Driver/ILEC.hpp"
-#include "Device/Parser.hpp"
 #include "Device/Driver.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Units/System.hpp"
-
-#include <stdlib.h>
-#include <math.h>
 
 class ILECDevice : public AbstractDevice {
 public:
@@ -41,7 +37,7 @@ public:
 static bool
 ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 {
-  fixed norm, bearing;
+  double norm, bearing;
 
   bool bearing_valid = line.ReadChecked(bearing);
   bool norm_valid = line.ReadChecked(norm);
@@ -62,12 +58,12 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 static bool
 ParsePDA1(NMEAInputLine &line, NMEAInfo &info)
 {
-  fixed value;
+  double value;
 
   // altitude [m]
   int altitude;
   if (line.ReadChecked(altitude))
-    info.ProvideBaroAltitudeTrue(fixed(altitude));
+    info.ProvideBaroAltitudeTrue(altitude);
 
   // total energy vario [m/s]
   if (line.ReadChecked(value))

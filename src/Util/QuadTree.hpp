@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2011 Max Kellermann <max.kellermann@gmail.com>
  *               2012 Tobias Bieniek <tobias.bieniek@gmx.de>
  *
  * Redistribution and use in source and binary forms, with or without
@@ -967,6 +967,15 @@ public:
     assert(IsFlat());
 
     bounds.Clear();
+  }
+
+  /**
+   * Is the specified point within the current bounds?  If yes, then
+   * it may be added without a rescan.
+   */
+  constexpr
+  bool IsWithinBounds(Point position) const {
+    return bounds.IsInside(position);
   }
 
   /**

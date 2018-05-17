@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -33,15 +33,9 @@ class BigThermalAssistantWindow : public ThermalAssistantWindow {
 
 public:
   BigThermalAssistantWindow(const ThermalAssistantLook &look,
-                            UPixelScalar padding)
+                            unsigned padding)
     :ThermalAssistantWindow(look, padding, false),
      dragging(false) {}
-
-  void Create(ContainerWindow &parent, PixelRect rc,
-           WindowStyle window_style=WindowStyle()) {
-    window_style.EnableDoubleClicks();
-    ThermalAssistantWindow::Create(parent, rc, window_style);
-  }
 
 private:
   void StopDragging() {
@@ -53,11 +47,10 @@ private:
   }
 
 protected:
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
-                           unsigned keys) override;
-  virtual bool OnMouseDouble(PixelScalar x, PixelScalar y) override;
+  bool OnMouseDown(PixelPoint p) override;
+  bool OnMouseUp(PixelPoint p) override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) override;
+  bool OnMouseDouble(PixelPoint p) override;
   virtual bool OnKeyDown(unsigned key_code) override;
   virtual void OnCancelMode() override;
 };

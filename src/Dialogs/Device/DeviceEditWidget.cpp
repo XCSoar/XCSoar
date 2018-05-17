@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,7 +26,6 @@
 #include "UIGlobals.hpp"
 #include "Compiler.h"
 #include "Util/Macros.hpp"
-#include "Util/StringUtil.hpp"
 #include "Util/NumberParser.hpp"
 #include "Language/Language.hpp"
 #include "Form/DataField/Enum.hpp"
@@ -36,12 +35,7 @@
 #include "Device/Register.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Features.hpp"
-#include "Blackboard/DeviceBlackboard.hpp"
 #include "Interface.hpp"
-
-#ifdef _WIN32_WCE
-#include "Device/Windows/Enumerator.hpp"
-#endif
 
 #ifdef HAVE_POSIX
 #include "Device/Port/TTYEnumerator.hpp"
@@ -68,9 +62,6 @@ static constexpr struct {
   const TCHAR *label;
 } port_types[] = {
   { DeviceConfig::PortType::DISABLED, N_("Disabled") },
-#ifdef _WIN32_WCE
-  { DeviceConfig::PortType::AUTO, N_("GPS Intermediate Driver") },
-#endif
 #ifdef HAVE_INTERNAL_GPS
   { DeviceConfig::PortType::INTERNAL, N_("Built-in GPS & sensors") },
 #endif
@@ -112,9 +103,6 @@ AddPort(DataFieldEnum &df, DeviceConfig::PortType type,
 
 #if defined(HAVE_POSIX)
 
-#include <dirent.h>
-#include <unistd.h>
-
 static bool
 DetectSerialPorts(DataFieldEnum &df)
 {
@@ -132,43 +120,6 @@ DetectSerialPorts(DataFieldEnum &df)
       display_string = path + 5;
 
     AddPort(df, DeviceConfig::PortType::SERIAL, path, display_string);
-    found = true;
-  }
-
-  if (found)
-    df.Sort(sort_start);
-
-  return found;
-}
-
-#endif
-
-#ifdef GNAV
-
-static bool
-DetectSerialPorts(DataFieldEnum &df)
-{
-  AddPort(df, DeviceConfig::PortType::SERIAL, _T("COM1:"), _T("Vario (COM1)"));
-  AddPort(df, DeviceConfig::PortType::SERIAL, _T("COM2:"), _T("Radio (COM2)"));
-  AddPort(df, DeviceConfig::PortType::SERIAL, _T("COM3:"), _T("Internal (COM3)"));
-  return true;
-}
-
-#elif defined(_WIN32_WCE)
-
-static bool
-DetectSerialPorts(DataFieldEnum &df)
-{
-  PortEnumerator enumerator;
-  if (enumerator.Error())
-    return false;
-
-  unsigned sort_start = df.Count();
-
-  bool found = false;
-  while (enumerator.Next()) {
-    AddPort(df, DeviceConfig::PortType::SERIAL, enumerator.GetName(),
-            enumerator.GetDisplayName());
     found = true;
   }
 
@@ -221,10 +172,7 @@ FillSerialPorts(DataFieldEnum &df, const DeviceConfig &config)
 #if defined(HAVE_POSIX)
   DetectSerialPorts(df);
 #elif defined(WIN32)
-#ifdef _WIN32_WCE
-  if (!DetectSerialPorts(df))
-#endif
-    FillDefaultSerialPorts(df);
+  FillDefaultSerialPorts(df);
 #endif
 
   if (config.port_type == DeviceConfig::PortType::SERIAL)
@@ -424,7 +372,7 @@ EditPortCallback(const TCHAR *caption, DataField &_df,
   }
 #endif
 
-  df.SetFromCombo(item.int_value, item.string_value);
+  df.SetFromCombo(item.int_value, item.string_value.c_str());
   return true;
 }
 
@@ -832,7 +780,7 @@ DeviceEditWidget::Save(bool &_changed)
     if (CanPassThrough(GetDataField(Driver))) {
       changed |= SaveValue(UseSecondDriver, config.use_second_device);
       changed |= SaveValue(SecondDriver, config.driver2_name.buffer(),
-                           config.driver2_name.CAPACITY);
+                           config.driver2_name.capacity());
     }
   }
 

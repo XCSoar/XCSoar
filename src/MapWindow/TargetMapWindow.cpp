@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,9 +27,11 @@ Copyright_License {
 #include "Renderer/TaskPointRenderer.hpp"
 #include "Renderer/OZRenderer.hpp"
 #include "Renderer/AircraftRenderer.hpp"
+#include "Renderer/MapScaleRenderer.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Interface.hpp"
 #include "Computer/GlideComputer.hpp"
+#include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Engine/Task/ObservationZones/ObservationZonePoint.hpp"
@@ -73,15 +75,15 @@ TargetMapWindow::TargetMapWindow(const WaypointLook &waypoint_look,
                                  const TrailLook &_trail_look,
                                  const TaskLook &_task_look,
                                  const AircraftLook &_aircraft_look,
-                                 const TopographyLook &_topography_look)
+                                 const TopographyLook &_topography_look,
+                                 const OverlayLook &_overlay_look)
   :task_look(_task_look),
    aircraft_look(_aircraft_look),
    topography_look(_topography_look),
-   topography_renderer(nullptr),
+   overlay_look(_overlay_look),
    airspace_renderer(_airspace_look),
    way_point_renderer(nullptr, waypoint_look),
-   trail_renderer(_trail_look),
-   task(nullptr)
+   trail_renderer(_trail_look)
 {
 }
 
@@ -96,7 +98,7 @@ void
 TargetMapWindow::Create(ContainerWindow &parent, PixelRect rc,
                         WindowStyle style)
 {
-  projection.SetScale(fixed(0.01));
+  projection.SetScale(0.01);
 
   BufferWindow::Create(parent, rc, style);
 }
@@ -197,7 +199,7 @@ TargetMapWindow::OnPaintBuffer(Canvas &canvas)
 #endif
 
   // Calculate screen position of the aircraft
-  const RasterPoint aircraft_pos = projection.GeoToScreen(Basic().location);
+  const auto aircraft_pos = projection.GeoToScreen(Basic().location);
 
   // reset label over-write preventer
   label_block.reset();
@@ -229,6 +231,8 @@ TargetMapWindow::OnPaintBuffer(Canvas &canvas)
     AircraftRenderer::Draw(canvas, GetMapSettings(), aircraft_look,
                            Basic().attitude.heading - projection.GetScreenAngle(),
                            aircraft_pos);
+
+  RenderMapScale(canvas, projection, GetClientRect(), overlay_look);
 }
 
 void
@@ -263,7 +267,8 @@ TargetMapWindow::SetTopograpgy(TopographyStore *topography)
     : nullptr;
 }
 
-static fixed
+gcc_pure
+static double
 GetRadius(const ObservationZonePoint &oz)
 {
   switch (oz.GetShape()) {
@@ -283,10 +288,11 @@ GetRadius(const ObservationZonePoint &oz)
     return cz.GetRadius();
   }
 
-  return fixed(1);
+  return 1;
 }
 
-static fixed
+gcc_pure
+static double
 GetRadius(const OrderedTaskPoint &tp)
 {
   return GetRadius(tp.GetObservationZone());
@@ -296,7 +302,7 @@ void
 TargetMapWindow::SetTarget(unsigned index)
 {
   GeoPoint location;
-  fixed radius;
+  double radius;
 
   {
     ProtectedTaskManager::Lease lease(*task);
@@ -306,7 +312,7 @@ TargetMapWindow::SetTarget(unsigned index)
 
     const OrderedTaskPoint &tp = o_task.GetTaskPoint(index);
     location = tp.GetLocation();
-    radius = std::max(GetRadius(tp) * fixed(1.3), fixed(2000));
+    radius = std::max(GetRadius(tp) * 1.3, 2000.);
   }
 
   projection.SetGeoLocation(location);

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,9 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_FLIGHT_LOGGER_HPP
 #define XCSOAR_FLIGHT_LOGGER_HPP
 
-#include "Math/fixed.hpp"
 #include "Time/BrokenDateTime.hpp"
-#include "Util/tstring.hpp"
+#include "OS/Path.hpp"
 
 struct MoreData;
 struct DerivedInfo;
@@ -41,9 +40,9 @@ struct DerivedInfo;
  * Depends on #FlyingComputer.
  */
 class FlightLogger {
-  tstring path;
+  AllocatedPath path = nullptr;
 
-  fixed last_time;
+  double last_time;
   bool seen_on_ground, seen_flying;
 
   /**
@@ -62,7 +61,7 @@ public:
   /**
    * Call this before Tick().
    */
-  void SetPath(tstring::const_pointer _path) {
+  void SetPath(Path _path) {
     path = _path;
   }
 

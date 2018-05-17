@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,9 +30,21 @@ sortleft
   return sp1.Sort(sp2);
 }
 
+gcc_const
+static int
+Sign(double value, double tolerance)
+{
+  if (value > tolerance)
+    return 1;
+  if (value < -tolerance)
+    return -1;
+
+  return 0;
+}
+
 static int
 Direction(const GeoPoint &p0, const GeoPoint &p1, const GeoPoint &p2,
-          fixed tolerance)
+          double tolerance)
 {
   //
   // In this program we frequently want to look at three consecutive
@@ -45,17 +57,20 @@ Direction(const GeoPoint &p0, const GeoPoint &p1, const GeoPoint &p2,
   // is on a straight line.
   //
 
-  const Angle a = (p0.longitude - p1.longitude) * (p2.latitude - p1.latitude);
-  const Angle b = (p2.longitude - p1.longitude) * (p0.latitude - p1.latitude);
+  const auto delta_a = p0 - p1;
+  const auto delta_b = p2 - p1;
 
-  if (negative(tolerance))
+  const auto a = delta_a.longitude.Native() * delta_b.latitude.Native();
+  const auto b = delta_b.longitude.Native() * delta_a.latitude.Native();
+
+  if (tolerance < 0)
     /* auto-tolerance - this has been verified by experiment */
-    tolerance = std::max(fabs(a.Native()), fabs(b.Native())) / 10;
+    tolerance = std::max(fabs(a), fabs(b)) / 10;
 
-  return (a - b).Sign(tolerance);
+  return Sign(a - b, tolerance);
 }
 
-GrahamScan::GrahamScan(SearchPointVector& sps, const fixed sign_tolerance):
+GrahamScan::GrahamScan(SearchPointVector& sps, const double sign_tolerance):
   raw_points(sps.begin(), sps.end()), raw_vector(sps), size(sps.size()),
   tolerance(sign_tolerance)
 {

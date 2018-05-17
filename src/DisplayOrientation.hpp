@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -33,5 +33,40 @@ enum class DisplayOrientation : uint8_t {
   REVERSE_PORTRAIT,
   REVERSE_LANDSCAPE,
 };
+
+#ifdef KOBO
+/* Kobo defaults to portrait */
+static constexpr DisplayOrientation DEFAULT_DISPLAY_ORIENTATION =
+  DisplayOrientation::PORTRAIT;
+#else
+/* everything else defaults to landscape */
+static constexpr DisplayOrientation DEFAULT_DISPLAY_ORIENTATION =
+  DisplayOrientation::LANDSCAPE;
+#endif
+
+static constexpr inline DisplayOrientation
+TranslateDefaultDisplayOrientation(DisplayOrientation orientation)
+{
+  return orientation == DisplayOrientation::DEFAULT
+    ? DEFAULT_DISPLAY_ORIENTATION
+    : orientation;
+}
+
+static inline bool
+AreAxesSwapped(DisplayOrientation orientation)
+{
+  switch (TranslateDefaultDisplayOrientation(orientation)) {
+  case DisplayOrientation::DEFAULT:
+  case DisplayOrientation::LANDSCAPE:
+  case DisplayOrientation::REVERSE_LANDSCAPE:
+    break;
+
+  case DisplayOrientation::PORTRAIT:
+  case DisplayOrientation::REVERSE_PORTRAIT:
+    return true;
+  }
+
+  return false;
+}
 
 #endif

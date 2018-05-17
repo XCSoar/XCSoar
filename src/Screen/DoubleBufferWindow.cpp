@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -60,9 +60,10 @@ void
 DoubleBufferWindow::Flip()
 {
   /* enable the drawing buffer */
-  mutex.Lock();
-  current ^= 1;
-  mutex.Unlock();
+  {
+    const ScopeLock lock(mutex);
+    current ^= 1;
+  }
 
   /* commit the finished buffer to the screen (asynchronously) */
   SendUser(INVALIDATE);

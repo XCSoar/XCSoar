@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -20,34 +20,34 @@
 }
  */
 #include "ZeroFinder.hpp"
-#include <math.h>
-#include <assert.h>
-#include <algorithm>
+
 #include <limits>
 
-#ifdef FIXED_MATH
-static constexpr fixed epsilon(fixed::internal(), 2);
-static const fixed sqrt_epsilon = sqrt(epsilon);
-#else
+#include <math.h>
+
 /** machine tolerance */
-static constexpr fixed epsilon(std::numeric_limits<fixed>::epsilon());
+static constexpr double epsilon = std::numeric_limits<double>::epsilon();
 /** sqrt of machine tolerance */
-static const fixed sqrt_epsilon = sqrt(epsilon);
-#endif
-static const fixed r((3. - sqrt(5.0)) / 2); /* Gold section ratio */
+static const double sqrt_epsilon = sqrt(epsilon);
+static const double r((3. - sqrt(5.0)) / 2); /* Gold section ratio */
 
-#define fixed_threequaters fixed(0.75)
-
-inline fixed
-ZeroFinder::tolerance_actual_min(const fixed x) const
+static inline void
+limit_tolerance(double &f, const double tol_act)
 {
-  return sqrt_epsilon * fabs(x) + tolerance * fixed_third;
+  if (fabs(f) < tol_act)
+    f = f > 0 ? tol_act : -tol_act;
 }
 
-inline fixed
-ZeroFinder::tolerance_actual_zero(const fixed x) const
+inline double
+ZeroFinder::tolerance_actual_min(const double x) const
 {
-  return Double(epsilon * fabs(x)) + Half(tolerance);
+  return sqrt_epsilon * fabs(x) + tolerance / 3;
+}
+
+inline double
+ZeroFinder::tolerance_actual_zero(const double x) const
+{
+  return 2 * epsilon * fabs(x) + tolerance / 2;
 }
 
 //#define INSTRUMENT_ZERO
@@ -57,19 +57,19 @@ unsigned long zero_total = 0;
 #endif
 
 inline bool
-ZeroFinder::solution_within_tolerance(const fixed x,
-                                      const fixed tol_act)
+ZeroFinder::solution_within_tolerance(const double x,
+                                      const double tol_act)
 {
 
   // are we away from the edges? if so, check improved solution
-  const fixed x_minus = x-tol_act;
+  const auto x_minus = x-tol_act;
   if (xmin >= x_minus)
     return false;
-  const fixed x_plus = x+tol_act;
+  const auto x_plus = x+tol_act;
   if (x_plus >= xmax)
     return false;
 
-  const fixed fx = f(x);
+  const auto fx = f(x);
   if (f(x_plus)<fx)
     return false;
   if (f(x_minus)<fx)
@@ -90,12 +90,12 @@ ZeroFinder::solution_within_tolerance(const fixed x,
  * function ZEROIN - obtain a function zero within the given range
  *
  * Input
- *	fixed zeroin(ax,bx,f,tol)
- *	fixed ax; 			Root will be seeked for within
- *	fixed bx;  			a range [ax,bx]
- *	fixed (*f)(fixed x);		Name of the function whose zero
+ *	double zeroin(ax,bx,f,tol)
+ *	double ax; 			Root will be seeked for within
+ *	double bx;  			a range [ax,bx]
+ *	double (*f)(double x);		Name of the function whose zero
  *					will be seeked for
- *	fixed tol;			Acceptable tolerance for the root
+ *	double tol;			Acceptable tolerance for the root
  *					value.
  *					May be specified as 0.0 to cause
  *					the program to find the root as
@@ -131,7 +131,9 @@ ZeroFinder::solution_within_tolerance(const fixed x,
  ************************************************************************
  */
 
-fixed ZeroFinder::find_zero(const fixed xstart) {
+double
+ZeroFinder::find_zero(const double xstart)
+{
 #ifdef INSTRUMENT_ZERO
   zero_total++;
 #endif
@@ -144,13 +146,13 @@ fixed ZeroFinder::find_zero(const fixed xstart) {
   return xstart;
 }
 
-inline fixed
-ZeroFinder::find_zero_actual(const fixed xstart)
+inline double
+ZeroFinder::find_zero_actual(const double xstart)
 {
-  fixed a, b, c; // Abscissae, descr. see above
-  fixed fa; // f(a)
-  fixed fb; // f(b)
-  fixed fc; // f(c)
+  double a, b, c; // Abscissae, descr. see above
+  double fa; // f(a)
+  double fb; // f(b)
+  double fc; // f(c)
 
   bool b_best = true; // b is best and last called
 
@@ -163,7 +165,7 @@ ZeroFinder::find_zero_actual(const fixed xstart)
   // Main iteration loop
   for (;;) {
     // Distance from the last but one to the last approximation
-    fixed prev_step = b - a;
+    auto prev_step = b - a;
    
     if (fabs(fc) < fabs(fb)) {
       // Swap data for b to be the best approximation
@@ -181,10 +183,10 @@ ZeroFinder::find_zero_actual(const fixed xstart)
     }
 
     // Actual tolerance
-    const fixed tol_act = tolerance_actual_zero(b);
+    const auto tol_act = tolerance_actual_zero(b);
 
     // Step at this iteration
-    fixed new_step = Half(c - b);
+    auto new_step = (c - b) / 2;
 
     if (fabs(new_step) <= tol_act || fabs(fb) < sqrt_epsilon) {
       if (!b_best)
@@ -202,28 +204,28 @@ ZeroFinder::find_zero_actual(const fixed xstart)
     if (fabs(prev_step) >= tol_act && fabs(fa) > fabs(fb)) {
       // Interpolation step is calculated in the form p/q;
       // division operations is delayed until the last moment
-      fixed p;
-      fixed q;
+      double p;
+      double q;
 
-      const fixed cb = c - b;
+      const auto cb = c - b;
       // If we have only two distinct points
       // -> linear interpolation can only be applied
       if (a == c) {
-        const fixed t1 = fb / fa;
+        const auto t1 = fb / fa;
         p = cb * t1;
-        q = fixed(1) - t1;
+        q = 1. - t1;
       } else {
         // Quadric inverse interpolation
         q = fa / fc;
-        const fixed t1 = fb / fc;
-        const fixed t2 = fb / fa;
-        p = t2 * (cb * q * (q - t1) - (b - a) * (t1 - fixed(1)));
-        q = (q - fixed(1)) * (t1 - fixed(1)) * (t2 - fixed(1));
+        const auto t1 = fb / fc;
+        const auto t2 = fb / fa;
+        p = t2 * (cb * q * (q - t1) - (b - a) * (t1 - 1.));
+        q = (q - 1.) * (t1 - 1.) * (t2 - 1.);
       }
 
       // p was calculated with the opposite sign;
       // make p positive and assign possible minus to q
-      if (positive(p))
+      if (p > 0)
         q = -q;
       else
         p = -p;
@@ -231,8 +233,8 @@ ZeroFinder::find_zero_actual(const fixed xstart)
       // If b+p/q falls in [b,c] and isn't too large it is accepted
       // If p/q is too large then the bissection procedure can
       // reduce [b,c] range to more extent
-      if (p < (fixed_threequaters * cb * q - Half(fabs(tol_act * q)))
-          && p < fabs(Half(prev_step * q)))
+      if (p < (0.75 * cb * q - fabs(tol_act * q)/ 2)
+          && p < fabs(prev_step * q / 2))
         new_step = p / q;
     }
 
@@ -248,7 +250,7 @@ ZeroFinder::find_zero_actual(const fixed xstart)
     fb = f(b);
 
     // Adjust c for it to have a sign opposite to that of b
-    if ((positive(fb) && positive(fc)) || (negative(fb) && negative(fc))) {
+    if ((fb > 0 && fc > 0) || (fb < 0 && fc < 0)) {
       c = a;
       fc = fa;
     }
@@ -266,12 +268,12 @@ ZeroFinder::find_zero_actual(const fixed xstart)
  *			  over the given range
  *
  * Input
- *	fixed fminbr(a,b,f,tolerance)
- *	fixed a; 			Minimum will be seeked for over
- *	fixed b;  			a range [a,b], a being < b.
- *	fixed (*f)(fixed x);		Name of the function whose minimum
+ *	double fminbr(a,b,f,tolerance)
+ *	double a; 			Minimum will be seeked for over
+ *	double b;  			a range [a,b], a being < b.
+ *	double (*f)(double x);		Name of the function whose minimum
  *					will be seeked for
- *	fixed tolerance;			Acceptable tolerance for the minimum
+ *	double tolerance;			Acceptable tolerance for the minimum
  *					location. It have to be positive
  *					(e.g. may be specified as epsilon)
  *
@@ -310,7 +312,9 @@ ZeroFinder::find_zero_actual(const fixed xstart)
  ************************************************************************
  */
 
-fixed ZeroFinder::find_min(const fixed xstart) {
+double
+ZeroFinder::find_min(const double xstart)
+{
 #ifdef INSTRUMENT_ZERO
   zero_total++;
 #endif
@@ -322,18 +326,18 @@ fixed ZeroFinder::find_min(const fixed xstart) {
   return xstart;
 }
 
-inline fixed
-ZeroFinder::find_min_actual(const fixed xstart)
+inline double
+ZeroFinder::find_min_actual(const double xstart)
 {
-  fixed x, v, w; // Abscissae, descr. see above
-  fixed fx; // f(x)
-  fixed fv; // f(v)
-  fixed fw; // f(w)
-  fixed a = xmin;
-  fixed b = xmax;
+  double x, v, w; // Abscissae, descr. see above
+  double fx; // f(x)
+  double fv; // f(v)
+  double fw; // f(w)
+  double a = xmin;
+  double b = xmax;
   bool x_best = true;
 
-  assert(positive(tolerance) && b > a);
+  assert(tolerance > 0 && b > a);
 
   /* First step - always gold section*/
   x = w = v = a + r * (b - a);
@@ -342,14 +346,14 @@ ZeroFinder::find_min_actual(const fixed xstart)
   // Main iteration loop
   for (;;) {
     // Range over which the minimum is seeked for
-    const fixed range = b - a;
-    const fixed middle_range = Half(a + b);
+    const auto range = b - a;
+    const auto middle_range = (a + b) / 2;
 
     // Actual tolerance
-    const fixed tol_act = tolerance_actual_min(x);
-    const fixed double_tol_act = Double(tol_act);
+    const auto tol_act = tolerance_actual_min(x);
+    const auto double_tol_act = 2 * tol_act;
 
-    if (fabs(x-middle_range) + Half(range) <= double_tol_act) {
+    if (fabs(x-middle_range) + range / 2 <= double_tol_act) {
       if (!x_best)
         // call once more
         f(x);
@@ -360,7 +364,7 @@ ZeroFinder::find_min_actual(const fixed xstart)
 
     // Step at this iteration
     // Obtain the gold section step
-    fixed new_step = r * (x < middle_range ? b - x : a - x);
+    auto new_step = r * (x < middle_range ? b - x : a - x);
 
     // Decide if the interpolation can be tried
 
@@ -369,17 +373,17 @@ ZeroFinder::find_min_actual(const fixed xstart)
     if (fabs(x - w) >= tol_act) {
       // Interpolation step is calculated as p/q;
       // division operation is delayed until last moment
-      fixed p;
-      fixed q;
+      double p;
+      double q;
 
-      const fixed t = (x - w) * (fx - fv);
+      const auto t = (x - w) * (fx - fv);
       q = (x - v) * (fx - fw);
       p = (x - v) * q - (x - w) * t;
-      q = Double(q - t);
+      q = 2 * (q - t);
 
       // q was calculated with the opposite sign;
       // make q positive and assign possible minus to p
-      if (positive(q))
+      if (q > 0)
         p = -p;
       else
         q = -q;
@@ -399,8 +403,8 @@ ZeroFinder::find_min_actual(const fixed xstart)
     // Obtain the next approximation to min and reduce the enveloping range
     {
       // Tentative point for the min
-      const fixed t = x + new_step;
-      const fixed ft = f(t);
+      const auto t = x + new_step;
+      const auto ft = f(t);
       // t is a better approximation
       if (ft <= fx) {
         // Reduce the range so that t would fall within it

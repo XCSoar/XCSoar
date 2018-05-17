@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -38,7 +38,7 @@ struct GeoPoint;
  */
 struct GeoVector {
   /** Distance in meters */
-  fixed distance;
+  double distance;
 
   /** Bearing (true north) */
   Angle bearing;
@@ -48,7 +48,7 @@ struct GeoVector {
 
   /** Constructor given supplied distance/bearing */
   constexpr
-  GeoVector(fixed _distance, Angle _bearing)
+  GeoVector(double _distance, Angle _bearing)
     :distance(_distance), bearing(_bearing) {}
 
   /**
@@ -61,7 +61,7 @@ struct GeoVector {
    * Create the zero vector: zero distance, undefined bearing.
    */
   constexpr static GeoVector Zero() {
-    return GeoVector(fixed(0), Angle::Zero());
+    return GeoVector(0, Angle::Zero());
   }
 
   /**
@@ -69,7 +69,7 @@ struct GeoVector {
    */
   constexpr
   static GeoVector Invalid() {
-    return GeoVector(fixed(-1), Angle::Zero());
+    return GeoVector(-1, Angle::Zero());
   }
 
   /**
@@ -88,24 +88,13 @@ struct GeoVector {
    */
   GeoPoint MidPoint(const GeoPoint &source) const;
 
-  /**
-   * Minimum distance from a point on the vector to the reference
-   *
-   * @param source Start of vector
-   * @param ref Point to test
-   *
-   * @return Distance (m)
-   */
-  gcc_pure
-  fixed MinimumDistance(const GeoPoint &source, const GeoPoint &ref) const;
-
   constexpr
   inline bool IsValid() const {
-    return !negative(distance);
+    return distance >= 0;
   }
 
   void SetInvalid() {
-    distance = fixed(-1);
+    distance = -1;
   }
 };
 

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,34 +24,41 @@ Copyright_License {
 #ifndef XCSOAR_TERRAIN_LOADER_HPP
 #define XCSOAR_TERRAIN_LOADER_HPP
 
-#include "Math/fixed.hpp"
+#include "Thread/SharedMutex.hpp"
 
-#include <tchar.h>
-
+struct zzip_dir;
 struct GeoPoint;
 class RasterTileCache;
 class RasterProjection;
 class OperationEnvironment;
 
 class TerrainLoader {
+  SharedMutex &mutex;
+
   RasterTileCache &raster_tile_cache;
 
-  const bool scan_overview;
+  const bool scan_overview, scan_tiles;
 
   OperationEnvironment &env;
 
   /**
    * The number of remaining segments after the current one.
    */
-  mutable unsigned remaining_segments;
+  mutable unsigned remaining_segments = 0;
 
 public:
-  TerrainLoader(RasterTileCache &_rtc, bool _scan_overview,
+  TerrainLoader(SharedMutex &_mutex, RasterTileCache &_rtc,
+                bool _scan_overview, bool _scan_all,
                 OperationEnvironment &_env)
-    :raster_tile_cache(_rtc), scan_overview(_scan_overview), env(_env), remaining_segments(0) {}
+    :mutex(_mutex), raster_tile_cache(_rtc),
+     scan_overview(_scan_overview),
+     scan_tiles(!_scan_overview || _scan_all),
+     env(_env) {}
 
-  bool LoadOverview(const TCHAR *path, const TCHAR *world_file);
-  bool UpdateTiles(const TCHAR *path, int x, int y, unsigned radius);
+  bool LoadOverview(struct zzip_dir *dir,
+                    const char *path, const char *world_file);
+  bool UpdateTiles(struct zzip_dir *dir, const char *path,
+                   int x, int y, unsigned radius);
 
   /* callback methods for libjasper (via jas_rtc.cpp) */
 
@@ -72,24 +79,59 @@ public:
                    const struct jas_matrix &m);
 
 private:
-  bool LoadJPG2000(const TCHAR *path);
+  bool LoadJPG2000(struct zzip_dir *dir, const char *path);
   void ParseBounds(const char *data);
 };
 
+/**
+ * @param all load not only overview, but all tiles?  On large files,
+ * this is a very expensive operation.  This option was designed for
+ * small RASP files only.
+ */
 bool
-LoadTerrainOverview(const TCHAR *path, const TCHAR *world_file,
+LoadTerrainOverview(struct zzip_dir *dir,
+                    const char *path, const char *world_file,
                     RasterTileCache &raster_tile_cache,
+                    bool all,
                     OperationEnvironment &env);
 
-bool
-UpdateTerrainTiles(const TCHAR *path,
-                   RasterTileCache &raster_tile_cache,
-                   int x, int y, unsigned radius);
+static inline bool
+LoadTerrainOverview(struct zzip_dir *dir,
+                    RasterTileCache &tile_cache,
+                    OperationEnvironment &env)
+{
+  return LoadTerrainOverview(dir, "terrain.jp2", "terrain.j2w",
+                             tile_cache, false, env);
+}
 
 bool
-UpdateTerrainTiles(const TCHAR *path,
-                   RasterTileCache &raster_tile_cache,
+UpdateTerrainTiles(struct zzip_dir *dir, const char *path,
+                   RasterTileCache &raster_tile_cache, SharedMutex &mutex,
+                   int x, int y, unsigned radius);
+
+static inline bool
+UpdateTerrainTiles(struct zzip_dir *dir,
+                   RasterTileCache &tile_cache, SharedMutex &mutex,
+                   int x, int y, unsigned radius)
+{
+  return UpdateTerrainTiles(dir, "terrain.jp2", tile_cache, mutex,
+                            x, y, radius);
+}
+
+bool
+UpdateTerrainTiles(struct zzip_dir *dir, const char *path,
+                   RasterTileCache &raster_tile_cache, SharedMutex &mutex,
                    const RasterProjection &projection,
-                   const GeoPoint &location, fixed radius);
+                   const GeoPoint &location, double radius);
+
+static inline bool
+UpdateTerrainTiles(struct zzip_dir *dir,
+                   RasterTileCache &tile_cache, SharedMutex &mutex,
+                   const RasterProjection &projection,
+                   const GeoPoint &location, double radius)
+{
+  return UpdateTerrainTiles(dir, "terrain.jp2", tile_cache, mutex,
+                            projection, location, radius);
+}
 
 #endif

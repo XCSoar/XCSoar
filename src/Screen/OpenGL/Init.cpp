@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,6 +27,7 @@ Copyright_License {
 #include "Screen/OpenGL/Extension.hpp"
 #include "Screen/OpenGL/Features.hpp"
 #include "Screen/OpenGL/Shapes.hpp"
+#include "Function.hpp"
 #include "Dynamic.hpp"
 #include "FBO.hpp"
 #include "Screen/Custom/Cache.hpp"
@@ -47,10 +48,6 @@ Copyright_License {
 #include "Android/NativeView.hpp"
 #endif
 
-#if defined(HAVE_DYNAMIC_EGL)
-#include "EGL.hpp"
-#endif
-
 #ifdef USE_GLSL
 #include <glm/gtc/matrix_transform.hpp>
 #endif
@@ -59,7 +56,6 @@ Copyright_License {
 
 #include <assert.h>
 #include <string.h>
-#include <dlfcn.h>
 
 #ifdef __APPLE__
 #include <TargetConditionals.h>
@@ -239,10 +235,6 @@ CheckStencil()
 void
 OpenGL::SetupContext()
 {
-#if defined(HAVE_DYNAMIC_EGL)
-  egl = EGLInit();
-#endif
-
   texture_non_power_of_two = SupportsNonPowerOfTwoTextures();
 
 #ifdef HAVE_OES_DRAW_TEXTURE
@@ -262,9 +254,9 @@ OpenGL::SetupContext()
 #ifdef HAVE_DYNAMIC_MAPBUFFER
   if (mapbuffer) {
     GLExt::map_buffer = (PFNGLMAPBUFFEROESPROC)
-      eglGetProcAddress("glMapBufferOES");
+      GetProcAddress("glMapBufferOES");
     GLExt::unmap_buffer = (PFNGLUNMAPBUFFEROESPROC)
-      eglGetProcAddress("glUnmapBufferOES");
+      GetProcAddress("glUnmapBufferOES");
     if (GLExt::map_buffer == nullptr || GLExt::unmap_buffer == nullptr)
       mapbuffer = false;
   }
@@ -273,9 +265,9 @@ OpenGL::SetupContext()
 #ifdef HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
   if (IsExtensionSupported("GL_EXT_multi_draw_arrays")) {
     GLExt::multi_draw_arrays = (PFNGLMULTIDRAWARRAYSEXTPROC)
-      dlsym(RTLD_DEFAULT, "glMultiDrawArraysEXT");
+      GetProcAddress("glMultiDrawArraysEXT");
     GLExt::multi_draw_elements = (PFNGLMULTIDRAWELEMENTSEXTPROC)
-      dlsym(RTLD_DEFAULT, "glMultiDrawElementsEXT");
+      GetProcAddress("glMultiDrawElementsEXT");
   } else {
     GLExt::multi_draw_arrays = nullptr;
     GLExt::multi_draw_elements = nullptr;
@@ -309,30 +301,7 @@ OpenGL::SetupContext()
 #endif
 }
 
-void
-OpenGL::SetupViewport(Point2D<unsigned> size)
-{
-  window_size = size;
-  viewport_size = size;
-
-  glViewport(0, 0, size.x, size.y);
-
-#ifdef USE_GLSL
-  projection_matrix = glm::ortho<float>(0, size.x, size.y, 0, -1, 1);
-  UpdateShaderProjectionMatrix();
-#else
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-#ifdef HAVE_GLES
-  glOrthox(0, size.x << 16, size.y << 16, 0, -(1<<16), 1<<16);
-#else
-  glOrtho(0, size.x, size.y, 0, -1, 1);
-#endif
-
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-#endif
-}
+#ifdef SOFTWARE_ROTATE_DISPLAY
 
 /**
  * Determine the projection rotation angle (in degrees) of the
@@ -365,40 +334,37 @@ OrientationToRotation(DisplayOrientation orientation)
  * Swap x and y if the given orientation specifies it.
  */
 static void
-OrientationSwap(Point2D<unsigned> &p, DisplayOrientation orientation)
+OrientationSwap(UnsignedPoint2D &p, DisplayOrientation orientation)
 {
-  switch (orientation) {
-  case DisplayOrientation::DEFAULT:
-  case DisplayOrientation::LANDSCAPE:
-  case DisplayOrientation::REVERSE_LANDSCAPE:
-    break;
-
-  case DisplayOrientation::PORTRAIT:
-  case DisplayOrientation::REVERSE_PORTRAIT:
+  if (AreAxesSwapped(orientation))
     std::swap(p.x, p.y);
-    break;
-  }
 }
 
-void
-OpenGL::SetupViewport(Point2D<unsigned> &size, DisplayOrientation orientation)
+#endif /* SOFTWARE_ROTATE_DISPLAY */
+
+UnsignedPoint2D
+OpenGL::SetupViewport(UnsignedPoint2D size)
 {
   window_size = size;
 
   glViewport(0, 0, size.x, size.y);
 
 #ifdef USE_GLSL
+#ifdef SOFTWARE_ROTATE_DISPLAY
   projection_matrix = glm::rotate(glm::mat4(),
-                                  OrientationToRotation(orientation),
+                                  OrientationToRotation(display_orientation),
                                   glm::vec3(0, 0, 1));
-  OrientationSwap(size, orientation);
+  OrientationSwap(size, display_orientation);
+#endif
   projection_matrix = glm::ortho<float>(0, size.x, size.y, 0, -1, 1);
   UpdateShaderProjectionMatrix();
 #else
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glRotatef(OrientationToRotation(orientation), 0, 0, 1);
-  OrientationSwap(size, orientation);
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  glRotatef(OrientationToRotation(display_orientation), 0, 0, 1);
+  OrientationSwap(size, display_orientation);
+#endif
 #ifdef HAVE_GLES
   glOrthox(0, size.x << 16, size.y << 16, 0, -(1<<16), 1<<16);
 #else
@@ -411,9 +377,7 @@ OpenGL::SetupViewport(Point2D<unsigned> &size, DisplayOrientation orientation)
 
   viewport_size = size;
 
-#ifdef SOFTWARE_ROTATE_DISPLAY
-  OpenGL::display_orientation = orientation;
-#endif
+  return size;
 }
 
 void

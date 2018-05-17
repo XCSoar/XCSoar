@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,6 +28,19 @@ Copyright_License {
 #include "Texture.hpp"
 #include "Debug.hpp"
 
+#ifndef ANDROID
+
+Bitmap::Bitmap(Bitmap &&src)
+  :texture(src.texture),
+   size(src.size),
+   interpolation(src.interpolation),
+   flipped(src.flipped)
+{
+  src.texture = nullptr;
+}
+
+#endif /* !ANDROID */
+
 void
 Bitmap::EnableInterpolation()
 {
@@ -38,12 +51,12 @@ Bitmap::EnableInterpolation()
   }
 }
 
-#ifndef ANDROID
-
 bool
-Bitmap::Load(const UncompressedImage &uncompressed, gcc_unused Type type)
+Bitmap::MakeTexture(const UncompressedImage &uncompressed, Type type)
 {
-  delete texture;
+  assert(IsScreenInitialized());
+  assert(uncompressed.IsDefined());
+
   texture = type == Type::MONO
     ? ImportAlphaTexture(uncompressed)
     : ImportTexture(uncompressed);
@@ -53,9 +66,44 @@ Bitmap::Load(const UncompressedImage &uncompressed, gcc_unused Type type)
   if (interpolation)
     texture->EnableInterpolation();
 
-  size = { uncompressed.GetWidth(), uncompressed.GetHeight() };
   return true;
 }
+
+bool
+Bitmap::Load(UncompressedImage &&_uncompressed, Type _type)
+{
+  assert(IsScreenInitialized());
+  assert(_uncompressed.IsDefined());
+
+  Reset();
+
+  size = { _uncompressed.GetWidth(), _uncompressed.GetHeight() };
+  flipped = _uncompressed.IsFlipped();
+
+#ifdef ANDROID
+  uncompressed = std::move(_uncompressed);
+  type = _type;
+
+  AddSurfaceListener(*this);
+
+  if (!surface_valid)
+    return true;
+
+  if (!MakeTexture(uncompressed, type)) {
+    Reset();
+    return false;
+  }
+#else
+  if (!MakeTexture(_uncompressed, _type)) {
+    Reset();
+    return false;
+  }
+#endif
+
+  return true;
+}
+
+#ifndef ANDROID
 
 void
 Bitmap::Reset()
@@ -68,11 +116,3 @@ Bitmap::Reset()
 }
 
 #endif /* !ANDROID */
-
-const PixelSize
-Bitmap::GetSize() const
-{
-  assert(IsDefined());
-
-  return size;
-}

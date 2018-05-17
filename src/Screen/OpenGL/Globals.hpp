@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -43,19 +43,10 @@ Copyright_License {
 enum class DisplayOrientation : uint8_t;
 #endif
 
-template<typename T> struct Point2D;
-struct RasterPoint;
+struct UnsignedPoint2D;
+struct PixelPoint;
 
 namespace OpenGL {
-#ifdef HAVE_DYNAMIC_EGL
-  /**
-   * Was EGL detected at runtime?  The EGL API has been supported
-   * since Android API level 9, but we require API level 4, so we need
-   * to detect at runtime.
-   */
-  extern bool egl;
-#endif
-
   /**
    * Is the extension ARB_texture_non_power_of_two present?  If yes,
    * then textures can have any size, not just power of two.
@@ -115,12 +106,12 @@ namespace OpenGL {
   /**
    * The dimensions of the OpenGL window in pixels.
    */
-  extern Point2D<unsigned> window_size;
+  extern UnsignedPoint2D window_size;
 
   /**
    * The dimensions of the OpenGL viewport in pixels.
    */
-  extern Point2D<unsigned> viewport_size;
+  extern UnsignedPoint2D viewport_size;
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
   extern DisplayOrientation display_orientation;
@@ -129,7 +120,7 @@ namespace OpenGL {
   /**
    * The current SubCanvas translation in pixels.
    */
-  extern RasterPoint translate;
+  extern PixelPoint translate;
 
 #ifdef USE_GLSL
   extern glm::mat4 projection_matrix;

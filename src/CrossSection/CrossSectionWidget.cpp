@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -44,8 +44,8 @@ CrossSectionWidget::Update(const MoreData &basic,
   if (basic.location_available && basic.track_available) {
     w.SetStart(basic.location);
     w.SetDirection(basic.track);
-    w.SetRange(Clamp(fixed(w.GetWidth()) / settings.cruise_scale,
-               fixed(5000), fixed(200000)));
+    w.SetRange(Clamp(double(w.GetWidth()) / settings.cruise_scale,
+                     5000., 200000.));
   } else
     w.SetInvalid();
 
@@ -62,7 +62,7 @@ CrossSectionWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   style.Disable();
 
   CrossSectionWindow *w =
-    new CrossSectionWindow(look.cross_section, look.map.airspace, look.chart);
+      new CrossSectionWindow(look.cross_section, look.map.airspace, look.chart, look.info_box);
   w->SetAirspaces(&airspace_database);
   w->SetTerrain(terrain);
   w->Create(parent, rc, style);

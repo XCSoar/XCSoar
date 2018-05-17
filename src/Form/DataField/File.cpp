@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,14 +24,8 @@ Copyright_License {
 #include "File.hpp"
 #include "ComboList.hpp"
 #include "LocalPath.hpp"
-#include "Util/StringUtil.hpp"
-#include "Util/StringAPI.hpp"
-#include "OS/PathName.hpp"
+#include "Util/StringAPI.hxx"
 #include "OS/FileUtil.hpp"
-
-#if defined(_WIN32_WCE) && !defined(GNAV)
-#include "OS/FlashCardEnumerator.hpp"
-#endif
 
 #include <algorithm>
 
@@ -75,25 +69,17 @@ private:
 public:
   FileVisitor(FileDataField &_datafield) : datafield(_datafield) {}
 
-  void
-  Visit(const TCHAR* path, const TCHAR* filename)
-  {
-    if (!IsInternalFile(filename))
-      datafield.AddFile(filename, path);
+  void Visit(Path path, Path filename) override {
+    if (!IsInternalFile(filename.c_str()))
+      datafield.AddFile(path);
   }
 };
 
-FileDataField::Item::~Item()
-{
-  free(path);
-}
-
 inline void
-FileDataField::Item::Set(const TCHAR *_path)
+FileDataField::Item::Set(Path _path)
 {
-  free(path);
-  path = _tcsdup(_path);
-  filename = BaseName(path);
+  path = _path;
+  filename = path.GetBase();
   if (filename == nullptr)
     filename = path;
 }
@@ -103,12 +89,12 @@ FileDataField::FileDataField(DataFieldListener *listener)
    // Set selection to zero
    current_index(0),
    loaded(false), postponed_sort(false),
-   postponed_value(_T("")) {}
+   postponed_value(nullptr) {}
 
 int
 FileDataField::GetAsInteger() const
 {
-  if (!postponed_value.empty())
+  if (!postponed_value.IsNull())
     EnsureLoadedDeconst();
 
   return current_index;
@@ -125,7 +111,7 @@ FileDataField::ScanDirectoryTop(const TCHAR *filter)
 {
   if (!loaded) {
     if (!postponed_patterns.full() &&
-        _tcslen(filter) < PatternList::value_type::CAPACITY) {
+        _tcslen(filter) < PatternList::value_type().capacity()) {
       postponed_patterns.append() = filter;
       return;
     } else
@@ -149,24 +135,21 @@ FileDataField::ScanMultiplePatterns(const TCHAR *patterns)
 }
 
 int
-FileDataField::Find(const TCHAR *text) const
+FileDataField::Find(Path path) const
 {
   for (unsigned i = 0, n = files.size(); i < n; i++)
-    if (StringIsEqual(text, files[i].path))
+    if (files[i].path == path)
       return i;
 
   return -1;
 }
 
 void
-FileDataField::Lookup(const TCHAR *text)
+FileDataField::Lookup(Path text)
 {
   if (!loaded) {
-    if (_tcslen(text) < postponed_value.capacity()) {
-      postponed_value = text;
-      return;
-    } else
-      EnsureLoaded();
+    postponed_value = text;
+    return;
   }
 
   auto i = Find(text);
@@ -175,7 +158,7 @@ FileDataField::Lookup(const TCHAR *text)
 }
 
 void
-FileDataField::ForceModify(const TCHAR *path)
+FileDataField::ForceModify(Path path)
 {
   EnsureLoaded();
 
@@ -201,22 +184,23 @@ FileDataField::GetNumFiles() const
   return files.size();
 }
 
-const TCHAR *
+Path
 FileDataField::GetPathFile() const
 {
-  if (!loaded)
+  if (!loaded && postponed_value != nullptr)
     return postponed_value;
 
   if (current_index >= files.size())
-    return _T("");
+    // TODO: return nullptr instead of empty string?
+    return Path(_T(""));
 
-  const TCHAR *path = files[current_index].path;
+  const Path path = files[current_index].path;
   assert(path != nullptr);
   return path;
 }
 
 void
-FileDataField::AddFile(const TCHAR *filename, const TCHAR *path)
+FileDataField::AddFile(Path path)
 {
   assert(loaded);
 
@@ -236,18 +220,18 @@ FileDataField::AddNull()
   assert(!files.full());
 
   Item &item = files.append();
-  item.filename = _T("");
-  item.path = _tcsdup(_T(""));
+  item.filename = Path(_T(""));
+  item.path = Path(_T(""));
 }
 
 const TCHAR *
 FileDataField::GetAsString() const
 {
-  if (!loaded)
-    return postponed_value;
+  if (!loaded && postponed_value != nullptr)
+    return postponed_value.c_str();
 
   if (current_index < files.size())
-    return files[current_index].path;
+    return files[current_index].path.c_str();
   else
     return _T("");
 }
@@ -255,17 +239,17 @@ FileDataField::GetAsString() const
 const TCHAR *
 FileDataField::GetAsDisplayString() const
 {
-  if (!loaded) {
+  if (!loaded && postponed_value != nullptr) {
     /* get basename from postponed_value */
-    const TCHAR *p = BaseName(postponed_value);
+    auto p = postponed_value.GetBase();
     if (p == nullptr)
       p = postponed_value;
 
-    return p;
+    return p.c_str();
   }
 
   if (current_index < files.size())
-    return files[current_index].filename;
+    return files[current_index].filename.c_str();
   else
     return _T("");
 }
@@ -276,7 +260,7 @@ FileDataField::Set(unsigned new_value)
   if (new_value > 0)
     EnsureLoaded();
   else
-    postponed_value.clear();
+    postponed_value = nullptr;
 
   if (new_value < files.size()) {
     current_index = new_value;
@@ -316,7 +300,7 @@ FileDataField::Sort()
   std::sort(files.begin(), files.end(), [](const Item &a,
                                            const Item &b) {
               // Compare by filename
-              return StringCollate(a.filename, b.filename) < 0;
+              return StringCollate(a.filename.c_str(), b.filename.c_str()) < 0;
             });
 }
 
@@ -333,7 +317,7 @@ FileDataField::CreateComboList(const TCHAR *reference) const
   TCHAR buffer[MAX_PATH];
 
   for (unsigned i = 0; i < files.size(); i++) {
-    const TCHAR *path = files[i].filename;
+    const Path path = files[i].filename;
     assert(path != nullptr);
 
     /* is a file with the same base name present in another data
@@ -341,23 +325,24 @@ FileDataField::CreateComboList(const TCHAR *reference) const
 
     bool found = false;
     for (unsigned j = 1; j < files.size(); j++) {
-      if (j != i && StringIsEqual(path, files[j].filename)) {
+      if (j != i && files[j].filename == path) {
         found = true;
         break;
       }
     }
 
+    const TCHAR *display_string = path.c_str();
     if (found) {
       /* yes - append the absolute path to allow the user to see the
          difference */
-      _tcscpy(buffer, path);
+      _tcscpy(buffer, path.c_str());
       _tcscat(buffer, _T(" ("));
-      _tcscat(buffer, files[i].path);
+      _tcscat(buffer, files[i].path.c_str());
       _tcscat(buffer, _T(")"));
-      path = buffer;
+      display_string = buffer;
     }
 
-    combo_list.Append(i, path);
+    combo_list.Append(display_string);
   }
 
   combo_list.current_index = current_index;
@@ -373,7 +358,7 @@ FileDataField::size() const
   return files.size();
 }
 
-const TCHAR *
+Path
 FileDataField::GetItem(unsigned index) const
 {
   EnsureLoadedDeconst();
@@ -396,6 +381,6 @@ FileDataField::EnsureLoaded()
   if (postponed_sort)
     Sort();
 
-  if (!StringIsEmpty(postponed_value))
+  if (!postponed_value.IsNull())
     Lookup(postponed_value);
 }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,6 +25,7 @@ Copyright_License {
 #include "Math/Angle.hpp"
 #include "Util/StringFormat.hpp"
 
+#include <assert.h>
 #include <string.h>
 
 void
@@ -43,7 +44,7 @@ FormatBearing(TCHAR *buffer, size_t size, unsigned value_degrees,
 void
 FormatBearing(TCHAR *buffer, size_t size, Angle value, const TCHAR *suffix)
 {
-  FormatBearing(buffer, size, uround(value.AsBearing().Degrees()), suffix);
+  FormatBearing(buffer, size, lround(value.AsBearing().Degrees()), suffix);
 }
 
 void
@@ -52,11 +53,11 @@ FormatAngleDelta(TCHAR *buffer, size_t size, Angle value)
   assert(buffer != NULL);
   assert(size >= 8);
 
-  int degrees = iround(value.AsDelta().Degrees());
+  auto degrees = lround(value.AsDelta().Degrees());
   if (degrees > 1)
-    StringFormat(buffer, size, _T("%u°»"), degrees);
+    StringFormat(buffer, size, _T("%u°»"), unsigned(degrees));
   else if (degrees < -1)
-    StringFormat(buffer, size, _T("«%u°"), -degrees);
+    StringFormat(buffer, size, _T("«%u°"), unsigned(-degrees));
   else
     _tcscpy(buffer, _T("«»"));
 }
@@ -67,9 +68,9 @@ FormatVerticalAngleDelta(TCHAR *buffer, size_t size, Angle value)
   assert(buffer != NULL);
   assert(size >= 8);
 
-  int degrees = iround(value.AsDelta().Degrees());
+  auto degrees = lround(value.AsDelta().Degrees());
   if (degrees < -1 || degrees > 1)
-    StringFormat(buffer, size, _T("%+d°"), degrees);
+    StringFormat(buffer, size, _T("%+d°"), int(degrees));
   else
     _tcscpy(buffer, _T("--"));
 }

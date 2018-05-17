@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,7 +28,9 @@ Copyright_License {
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Util/Gradient.hpp"
+#include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Unordered/AlternateList.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
 #include "Dialogs/Task/TaskDialogs.hpp"
 #include "Language/Language.hpp"
 #include "Widget/CallbackWidget.hpp"
@@ -76,7 +78,7 @@ InfoBoxContentAlternateName::Update(InfoBoxData &data)
     return;
   }
 
-  data.SetComment(alternate->waypoint.name.c_str());
+  data.SetComment(alternate->waypoint->name.c_str());
 
   // Set Value
   Angle Value = alternate->solution.vector.bearing -
@@ -86,24 +88,6 @@ InfoBoxContentAlternateName::Update(InfoBoxData &data)
 
   // Set Color (blue/black)
   data.SetValueColor(alternate->solution.IsFinalGlide() ? 2 : 0);
-}
-
-bool
-InfoBoxContentAlternateName::HandleKey(const InfoBoxKeyCodes keycode)
-{
-  switch (keycode) {
-  case ibkLeft:
-  case ibkUp:
-    if (index > 0)
-      index--;
-    break;
-  case ibkRight:
-  case ibkDown:
-    index++;
-    break;
-  }
-
-  return true;
 }
 
 const InfoBoxPanel *
@@ -140,12 +124,12 @@ InfoBoxContentAlternateGR::Update(InfoBoxData &data)
     return;
   }
 
-  data.SetComment(alternate->waypoint.name.c_str());
+  data.SetComment(alternate->waypoint->name.c_str());
 
-  fixed gradient =
+  double gradient =
     ::AngleToGradient(alternate->solution.DestinationAngleGround());
 
-  if (negative(gradient)) {
+  if (gradient < 0) {
     data.SetValueColor(0);
     data.SetValue(_T("+++"));
     return;
@@ -158,24 +142,6 @@ InfoBoxContentAlternateGR::Update(InfoBoxData &data)
 
   // Set Color (blue/black)
   data.SetValueColor(alternate->solution.IsFinalGlide() ? 2 : 0);
-}
-
-bool
-InfoBoxContentAlternateGR::HandleKey(const InfoBoxKeyCodes keycode)
-{
-  switch (keycode) {
-  case ibkLeft:
-  case ibkUp:
-    if (index > 0)
-      index--;
-    break;
-  case ibkRight:
-  case ibkDown:
-    index++;
-    break;
-  }
-
-  return true;
 }
 
 const InfoBoxPanel *

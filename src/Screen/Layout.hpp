@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -51,6 +51,7 @@ namespace Layout
   extern unsigned small_scale;
 
   extern unsigned pen_width_scale;
+  extern unsigned fine_pen_width_scale;
 
   /**
    * Fixed-point scaling factor to convert a point (1/72th inch) to
@@ -87,8 +88,10 @@ namespace Layout
    *
    * @param screen_size the size of the screen in pixels
    * @param ui_scale the UI scale setting in percent
+   * @param custom_dpi user defined DPI setting or 0 for system settings
    */
-  void Initialize(PixelSize screen_size, unsigned ui_scale=100);
+  void Initialize(PixelSize screen_size, unsigned ui_scale=100,
+                  unsigned custom_dpi=0);
 
   /**
    * Is scaling supported by this platform?
@@ -97,7 +100,7 @@ namespace Layout
   static inline bool
   ScaleSupported()
   {
-    return !IsAltair();
+    return true;
   }
 
   /**
@@ -130,21 +133,15 @@ namespace Layout
     return (x * scale_1024) >> 10;
   }
 
-#ifdef USE_GDI
   gcc_const
-  static inline int
-  Scale(PixelScalar x)
+  static inline long
+  Scale(long x)
   {
-    return Scale(int(x));
-  }
+    if (!ScaleSupported())
+      return x;
 
-  gcc_const
-  static inline int
-  Scale(UPixelScalar x)
-  {
-    return Scale(unsigned(x));
+    return (x * long(scale_1024)) >> 10;
   }
-#endif
 
   gcc_const
   static inline int
@@ -166,21 +163,15 @@ namespace Layout
     return x * scale;
   }
 
-#ifdef USE_GDI
   gcc_const
-  static inline int
-  FastScale(PixelScalar x)
+  static inline long
+  FastScale(long x)
   {
-    return FastScale(int(x));
-  }
+    if (!ScaleSupported())
+      return x;
 
-  gcc_const
-  static inline int
-  FastScale(UPixelScalar x)
-  {
-    return FastScale(unsigned(x));
+    return x * (long)scale;
   }
-#endif
 
   gcc_const
   static inline int
@@ -200,6 +191,16 @@ namespace Layout
       return width;
 
     return (width * pen_width_scale) >> 10;
+  }
+
+  gcc_const
+  static inline unsigned
+  ScaleFinePenWidth(unsigned width)
+  {
+    if (!ScaleSupported())
+      return width;
+
+    return (width * fine_pen_width_scale) >> 10;
   }
 
   /**
@@ -270,9 +271,6 @@ namespace Layout
   static inline unsigned
   GetMinimumControlHeight()
   {
-    if (IsAltair())
-      return 22;
-
     return minimum_control_height;
   }
 
@@ -283,9 +281,6 @@ namespace Layout
   static inline unsigned
   GetMaximumControlHeight()
   {
-    if (IsAltair())
-      return 22;
-
     return maximum_control_height;
   }
 

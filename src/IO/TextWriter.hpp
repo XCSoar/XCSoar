@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,17 +25,18 @@ Copyright_License {
 #define XCSOAR_IO_TEXT_WRITER_HPP
 
 #include "FileHandle.hpp"
-#include "Compiler.h"
-#include "Util/ReusableArray.hpp"
 
 #include <assert.h>
 #include <string.h>
 #include <stddef.h>
-#include <stdio.h>
 
 #ifdef _UNICODE
+#include "Util/ReusableArray.hpp"
+
 #include <tchar.h>
 #endif
+
+class Path;
 
 /**
  * Writer for an UTF-8 text file with native line endings.  All "const
@@ -59,11 +60,7 @@ public:
    * Creates a new text file.  Truncates the old file if it exists,
    * unless the parameter "append" is true.
    */
-  TextWriter(const char *path, bool append=false);
-
-#ifdef _UNICODE
-  TextWriter(const TCHAR *path, bool append=false);
-#endif
+  TextWriter(Path path, bool append=false);
 
   TextWriter(TextWriter &&other)
     :file(std::move(other.file))

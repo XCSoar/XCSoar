@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,10 +23,9 @@
 #ifndef XCSOAR_TASK_FILE_HPP
 #define XCSOAR_TASK_FILE_HPP
 
-#include "Util/StaticString.hxx"
-#include "Util/StaticArray.hpp"
+#include "OS/Path.hpp"
+#include "Util/StaticArray.hxx"
 
-#include <windef.h> // for MAX_PATH
 #include <tchar.h>
 
 struct TaskBehaviour;
@@ -36,11 +35,11 @@ class OrderedTask;
 class TaskFile
 {
 protected:
-  StaticString<MAX_PATH> path;
+  AllocatedPath path;
   StaticArray<TCHAR *, 64> namesuffixes;
 
 protected:
-  TaskFile(const TCHAR *_path)
+  TaskFile(Path _path)
     :path(_path) {}
 
 public:
@@ -51,9 +50,9 @@ public:
    * @param filename The filepath
    * @return TaskFile instance
    */
-  static TaskFile* Create(const TCHAR* path);
+  static TaskFile *Create(Path path);
 
-  static OrderedTask *GetTask(const TCHAR *path,
+  static OrderedTask *GetTask(Path path,
                               const TaskBehaviour &task_behaviour,
                               const Waypoints *waypoints,
                               unsigned index);

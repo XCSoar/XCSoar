@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,6 +29,7 @@ Copyright_License {
 #include "Screen/Font.hpp"
 #include "Screen/Pen.hpp"
 #include "Screen/Point.hpp"
+#include "Screen/BulkPoint.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -42,13 +43,13 @@ class Angle;
  */
 class Canvas {
 protected:
-  HDC dc, compatible_dc;
+  HDC dc = nullptr, compatible_dc = nullptr;
   PixelSize size;
 
 public:
-  Canvas():dc(nullptr), compatible_dc(nullptr) {}
+  Canvas() = default;
   Canvas(HDC _dc, PixelSize new_size)
-    :dc(_dc), compatible_dc(nullptr), size(new_size) {
+    :dc(_dc), size(new_size) {
     assert(dc != nullptr);
   }
 
@@ -116,7 +117,7 @@ public:
 
   gcc_pure
   PixelRect GetRect() const {
-    return PixelRect{RasterPoint{0, 0}, size};
+    return PixelRect{PixelPoint{0, 0}, size};
   }
 
   void Resize(PixelSize new_size) {
@@ -246,8 +247,10 @@ public:
     DrawFilledRectangle(left, top, right, bottom, map(color));
   }
 
-  void DrawFilledRectangle(const PixelRect &rc, const HWColor color) {
+  void DrawFilledRectangle(const PixelRect &_rc, const HWColor color) {
     assert(IsDefined());
+
+    const RECT rc = _rc;
 
     /* this hack allows filling a rectangle with a solid color,
        without the need to create a HBRUSH */
@@ -259,9 +262,10 @@ public:
     DrawFilledRectangle(rc, map(color));
   }
 
-  void DrawFilledRectangle(const PixelRect &rc, const Brush &brush) {
+  void DrawFilledRectangle(const PixelRect &_rc, const Brush &brush) {
     assert(IsDefined());
 
+    const RECT rc = _rc;
     ::FillRect(dc, &rc, brush.Native());
   }
 
@@ -275,12 +279,12 @@ public:
     DrawFilledRectangle(rc, brush);
   }
 
-  void InvertRectangle(const PixelRect &rc) {
-    ::InvertRect(dc, &rc);
+  void InvertRectangle(const RECT r) {
+    ::InvertRect(dc, &r);
   }
 
-  void InvertRectangle(int left, int top, int right, int bottom) {
-    InvertRectangle({left, top, right, bottom});
+  void InvertRectangle(const PixelRect &rc) {
+    InvertRectangle((RECT)rc);
   }
 
   void Clear() {
@@ -313,34 +317,36 @@ public:
     ::RoundRect(dc, left, top, right, bottom, ellipse_width, ellipse_height);
   }
 
-  void DrawRaisedEdge(PixelRect &rc) {
+  void DrawRaisedEdge(PixelRect &_rc) {
     assert(IsDefined());
 
+    RECT rc = _rc;
     ::DrawEdge(dc, &rc, EDGE_RAISED, BF_ADJUST | BF_RECT);
+    _rc = rc;
   }
 
-  void DrawPolyline(const RasterPoint *lppt, unsigned cPoints) {
+  void DrawPolyline(const BulkPixelPoint *lppt, unsigned cPoints) {
     assert(IsDefined());
 
     ::Polyline(dc, lppt, cPoints);
   }
 
-  void DrawPolygon(const RasterPoint *lppt, unsigned cPoints) {
+  void DrawPolygon(const BulkPixelPoint *lppt, unsigned cPoints) {
     assert(IsDefined());
 
     ::Polygon(dc, lppt, cPoints);
   }
 
-  void DrawTriangleFan(const RasterPoint *points, unsigned num_points) {
+  void DrawTriangleFan(const BulkPixelPoint *points, unsigned num_points) {
     DrawPolygon(points, num_points);
   }
 
   void DrawLine(int ax, int ay, int bx, int by);
-  void DrawLine(const RasterPoint a, const RasterPoint b) {
+  void DrawLine(const PixelPoint a, const PixelPoint b) {
     DrawLine(a.x, a.y, b.x, b.y);
   }
 
-  void DrawLinePiece(const RasterPoint a, const RasterPoint b) {
+  void DrawLinePiece(const PixelPoint a, const PixelPoint b) {
     DrawLine(a, b);
   }
 
@@ -348,13 +354,13 @@ public:
     DrawLine(ax, ay, bx, by);
   }
 
-  void DrawExactLine(const RasterPoint a, const RasterPoint b) {
+  void DrawExactLine(const PixelPoint a, const PixelPoint b) {
     DrawLine(a, b);
   }
 
   void DrawTwoLines(int ax, int ay, int bx, int by, int cx, int cy);
-  void DrawTwoLines(const RasterPoint a, const RasterPoint b,
-                    const RasterPoint c) {
+  void DrawTwoLines(const PixelPoint a, const PixelPoint b,
+                    const PixelPoint c) {
     DrawTwoLines(a.x, a.y, b.x, b.y, c.x, c.y);
   }
 
@@ -368,18 +374,22 @@ public:
     ::Ellipse(dc, x - radius, y - radius, x + radius, y + radius);
   }
 
-  void DrawSegment(int x, int y, unsigned radius,
+  void DrawSegment(PixelPoint center, unsigned radius,
                    Angle start, Angle end, bool horizon = false);
 
-  void DrawAnnulus(int x, int y, unsigned small_radius,
+  void DrawAnnulus(PixelPoint center, unsigned small_radius,
                    unsigned big_radius, Angle start, Angle end);
 
-  void DrawKeyhole(int x, int y, unsigned small_radius,
+  void DrawKeyhole(PixelPoint center, unsigned small_radius,
                    unsigned big_radius, Angle start, Angle end);
 
-  void DrawFocusRectangle(const PixelRect &rc) {
+  void DrawArc(PixelPoint center, unsigned radius,
+               Angle start, Angle end);
+
+  void DrawFocusRectangle(const PixelRect &_rc) {
     assert(IsDefined());
 
+    const RECT rc = _rc;
     ::DrawFocusRect(dc, &rc);
   }
 
@@ -414,8 +424,10 @@ public:
     DrawText(x, y, t);
   }
 
-  void DrawFormattedText(RECT *rc, const TCHAR *text, unsigned format) {
-    ::DrawText(dc, text, -1, rc, format);
+  unsigned DrawFormattedText(RECT rc, const TCHAR *text, unsigned format) {
+    format |= DT_NOPREFIX | DT_WORDBREAK;
+    ::DrawText(dc, text, -1, &rc, format);
+    return rc.bottom - rc.top;
   }
 
   void Copy(int dest_x, int dest_y, unsigned dest_width, unsigned dest_height,

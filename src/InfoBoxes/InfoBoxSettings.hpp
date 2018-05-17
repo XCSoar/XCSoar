@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -79,7 +79,7 @@ struct InfoBoxSettings {
     /** @see #BOTTOM_RIGHT_8 */
     OBSOLETE_BOTTOM_RIGHT_8 = 5,
 
-    /** infoboxes GNAV (9 right + vario) */
+    /** 9 right + vario */
     RIGHT_9_VARIO = 6,
 
     /** infoboxes (5) along right side (square screen) */
@@ -113,6 +113,7 @@ struct InfoBoxSettings {
 
     /** 16 infoboxes along right side (2x8) */
     RIGHT_16 = 19,
+    LEFT_12_RIGHT_3_VARIO = 20,
 
   } geometry;
 

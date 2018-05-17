@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,6 +23,10 @@ Copyright_License {
 
 #ifndef XCSOAR_UNCOMPRESSED_IMAGE_HPP
 #define XCSOAR_UNCOMPRESSED_IMAGE_HPP
+
+#include "Screen/Point.hpp"
+
+#include <memory>
 
 #include <stdint.h>
 
@@ -50,47 +54,51 @@ public:
 private:
   Format format;
 
+  /**
+   * Flip up/down?  Some image formats (such as BMP and TIFF) store
+   * the bottom-most row first.
+   */
+  bool flipped;
+
   unsigned pitch, width, height;
 
-  uint8_t *data;
+  std::unique_ptr<uint8_t[]> data;
 
 public:
+  UncompressedImage() = default;
+
   UncompressedImage(Format _format, unsigned _pitch,
                     unsigned _width, unsigned _height,
-                    uint8_t *_data)
-    :format(_format),
+                    std::unique_ptr<uint8_t[]> &&_data,
+                    bool _flipped=false)
+    :format(_format), flipped(_flipped),
      pitch(_pitch), width(_width), height(_height),
-     data(_data) {}
+     data(std::move(_data)) {}
 
-  UncompressedImage(UncompressedImage &&other)
-    :format(other.format), pitch(other.pitch),
-     width(other.width), height(other.height),
-     data(other.data) {
-    other.data = nullptr;
-  }
-
+  UncompressedImage(UncompressedImage &&other) = default;
   UncompressedImage(const UncompressedImage &other) = delete;
 
-  ~UncompressedImage() {
-    delete[] data;
-  }
-
+  UncompressedImage &operator=(UncompressedImage &&src) = default;
   UncompressedImage &operator=(const UncompressedImage &other) = delete;
 
-  static UncompressedImage Invalid() {
-    return UncompressedImage(Format::INVALID, 0, 0, 0, nullptr);
-  }
-
-  bool IsVisible() const {
-    return format != Format::INVALID;
+  bool IsDefined() const {
+    return !!data;
   }
 
   Format GetFormat() const {
     return format;
   }
 
+  bool IsFlipped() const {
+    return flipped;
+  }
+
   unsigned GetPitch() const {
     return pitch;
+  }
+
+  PixelSize GetSize() const {
+    return {width, height};
   }
 
   unsigned GetWidth() const {
@@ -102,7 +110,7 @@ public:
   }
 
   const void *GetData() const {
-    return data;
+    return data.get();
   }
 };
 

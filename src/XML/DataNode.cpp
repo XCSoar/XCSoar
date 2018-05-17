@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@ ConstDataNode::~ConstDataNode()
 bool
 ConstDataNode::GetAttribute(const TCHAR *name, Angle &value) const
 {
-  fixed v;
+  double v;
   if (GetAttribute(name, v)) {
     value = Angle::Degrees(v);
     return true;
@@ -42,13 +42,13 @@ ConstDataNode::GetAttribute(const TCHAR *name, Angle &value) const
 }
 
 bool
-ConstDataNode::GetAttribute(const TCHAR *name, fixed &value) const
+ConstDataNode::GetAttribute(const TCHAR *name, double &value) const
 {
   const TCHAR *val = GetAttribute(name);
   if (val == nullptr)
     return false;
 
-  value = (fixed)ParseDouble(val);
+  value = ParseDouble(val);
   return true;
 }
 
@@ -124,7 +124,7 @@ WritableDataNode::SetAttribute(const TCHAR *name, Angle value)
 }
 
 void
-WritableDataNode::SetAttribute(const TCHAR *name, fixed value)
+WritableDataNode::SetAttribute(const TCHAR *name, double value)
 {
   StaticString<48> buf;
   buf.UnsafeFormat(_T("%g"), (double)value);

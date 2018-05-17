@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,11 +26,7 @@ Copyright_License {
 #include "Form/DataField/File.hpp"
 #include "Profile/Profile.hpp"
 #include "LocalPath.hpp"
-#include "Math/Angle.hpp"
 #include "Util/ConvertString.hpp"
-
-#include <windef.h> /* for MAX_PATH */
-#include <assert.h>
 
 WndProperty *
 RowFormWidget::AddFile(const TCHAR *label, const TCHAR *help,
@@ -49,8 +45,8 @@ RowFormWidget::AddFile(const TCHAR *label, const TCHAR *help,
   df->ScanMultiplePatterns(filters);
 
   if (registry_key != nullptr) {
-    TCHAR path[MAX_PATH];
-    if (Profile::GetPath(registry_key, path))
+    const auto path = Profile::GetPath(registry_key);
+    if (!path.IsNull())
       df->Lookup(path);
   }
 
@@ -116,7 +112,7 @@ RowFormWidget::SaveValue(unsigned i, const char *registry_key,
 
 bool
 RowFormWidget::SaveValue(unsigned i, const char *registry_key,
-                         fixed &value) const
+                         double &value) const
 {
   if (!SaveValue(i, value))
     return false;
@@ -129,11 +125,12 @@ bool
 RowFormWidget::SaveValueFileReader(unsigned i, const char *registry_key)
 {
   const auto *dfe = (const FileDataField *)GetControl(i).GetDataField();
-  TCHAR new_value[MAX_PATH];
-  _tcscpy(new_value, dfe->GetPathFile());
-  ContractLocalPath(new_value);
+  Path new_value = dfe->GetPathFile();
+  const auto contracted = ContractLocalPath(new_value);
+  if (contracted != nullptr)
+    new_value = contracted;
 
-  const WideToUTF8Converter new_value2(new_value);
+  const WideToUTF8Converter new_value2(new_value.c_str());
   if (!new_value2.IsValid())
     return false;
 

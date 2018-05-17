@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,11 +29,12 @@ Copyright_License {
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
+#include "Renderer/ClimbPercentRenderer.hpp"
 
 #include <tchar.h>
 
 static void
-SetVSpeed(InfoBoxData &data, fixed value)
+SetVSpeed(InfoBoxData &data, double value)
 {
   TCHAR buffer[32];
   FormatUserVerticalSpeed(value, buffer, false);
@@ -59,7 +60,7 @@ UpdateInfoBoxThermal30s(InfoBoxData &data)
   SetVSpeed(data, CommonInterface::Calculated().average);
 
   // Set Color (red/black)
-  data.SetValueColor(Double(CommonInterface::Calculated().average) <
+  data.SetValueColor(2 * CommonInterface::Calculated().average <
       CommonInterface::Calculated().common_stats.current_risk_mc ? 1 : 0);
 }
 
@@ -96,25 +97,19 @@ UpdateInfoBoxThermalLastTime(InfoBoxData &data)
     return;
   }
 
-  // Set Value
-
-  TCHAR value[32], comment[32];
-  FormatTimeTwoLines(value, comment, (int)thermal.duration);
-
-  data.SetValue(value);
-  data.SetComment(comment);
+  data.SetValueFromTimeTwoLines((int)thermal.duration);
 }
 
 void
 UpdateInfoBoxThermalAllAvg(InfoBoxData &data)
 {
-  if (!positive(CommonInterface::Calculated().time_climb)) {
+  if (CommonInterface::Calculated().time_circling <= 0) {
     data.SetInvalid();
     return;
   }
 
   SetVSpeed(data, CommonInterface::Calculated().total_height_gain /
-            CommonInterface::Calculated().time_climb);
+            CommonInterface::Calculated().time_circling);
 }
 
 void
@@ -129,7 +124,7 @@ UpdateInfoBoxThermalAvg(InfoBoxData &data)
   SetVSpeed(data, thermal.lift_rate);
 
   // Set Color (red/black)
-  data.SetValueColor(thermal.lift_rate * fixed(1.5) <
+  data.SetValueColor(thermal.lift_rate * 1.5 <
       CommonInterface::Calculated().common_stats.current_risk_mc ? 1 : 0);
 }
 
@@ -150,11 +145,23 @@ UpdateInfoBoxThermalRatio(InfoBoxData &data)
 {
   // Set Value
 
-  if (negative(CommonInterface::Calculated().circling_percentage))
+  if (CommonInterface::Calculated().circling_percentage < 0)
+    data.SetInvalid();
+  else {
+    data.SetValueFromPercent(CommonInterface::Calculated().circling_percentage);
+    data.SetCommentFromPercent(CommonInterface::Calculated().circling_climb_percentage);
+  }
+}
+
+void
+UpdateInfoBoxNonCirclingClimbRatio(InfoBoxData &data)
+{
+  // Set Value
+
+  if (CommonInterface::Calculated().noncircling_climb_percentage < 0)
     data.SetInvalid();
   else
-    data.SetValue(_T("%2.0f%%"),
-                  CommonInterface::Calculated().circling_percentage);
+    data.SetValueFromPercent(CommonInterface::Calculated().noncircling_climb_percentage);
 }
 
 void
@@ -169,16 +176,15 @@ UpdateInfoBoxVarioDistance(InfoBoxData &data)
             CommonInterface::Calculated().task_stats.total.vario.get_value());
 
   // Set Color (red/black)
-  data.SetValueColor(negative(
-      CommonInterface::Calculated().task_stats.total.vario.get_value()) ? 1 : 0);
+  data.SetValueColor(CommonInterface::Calculated().task_stats.total.vario.get_value() < 0 ? 1 : 0);
 }
 
 
 void
 UpdateInfoBoxNextLegEqThermal(InfoBoxData &data)
 {
-  const fixed next_leg_eq_thermal = CommonInterface::Calculated().next_leg_eq_thermal;
-  if (negative(next_leg_eq_thermal)) {
+  const auto next_leg_eq_thermal = CommonInterface::Calculated().next_leg_eq_thermal;
+  if (next_leg_eq_thermal < 0) {
     data.SetInvalid();
     return;
   }
@@ -203,11 +209,11 @@ UpdateInfoBoxCircleDiameter(InfoBoxData &data)
     return;
   }
 
-  const fixed circle_diameter = CommonInterface::Basic().true_airspeed
+  const auto circle_diameter = CommonInterface::Basic().true_airspeed
      / turn_rate.Radians()
-     * fixed(2); // convert turn rate to radians/s and double it to get estimated circle diameter
+     * 2; // convert turn rate to radians/s and double it to get estimated circle diameter
 
-  if (circle_diameter > fixed (2000)){ // arbitrary estimated that any diameter bigger than 2km will not be interesting
+  if (circle_diameter > 2000) { // arbitrary estimated that any diameter bigger than 2km will not be interesting
     data.SetInvalid();
     return;
   }
@@ -217,7 +223,7 @@ UpdateInfoBoxCircleDiameter(InfoBoxData &data)
   data.SetValue (buffer);
   data.SetValueUnit(unit);
 
-  const fixed circle_duration =
+  const auto circle_duration =
     Angle::FullCircle().Native() / turn_rate.Native();
 
   StaticString<16> duration_buffer;
@@ -250,4 +256,20 @@ InfoBoxContentThermalAssistant::OnCustomPaint(Canvas &canvas,
 {
   renderer.UpdateLayout(rc);
   renderer.Paint(canvas);
+}
+
+void
+InfoBoxContentClimbPercent::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
+{
+  const Look &look = UIGlobals::GetLook();
+  ClimbPercentRenderer renderer(look.circling_percent);
+  renderer.Draw(CommonInterface::Calculated(),
+                canvas, rc,
+                look.info_box.inverse);
+}
+
+void
+InfoBoxContentClimbPercent::Update(InfoBoxData &data)
+{
+  data.SetCustom();
 }

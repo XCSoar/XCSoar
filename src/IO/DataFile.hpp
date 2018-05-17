@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,52 +24,45 @@ Copyright_License {
 #ifndef XCSOAR_IO_DATA_FILE_HPP
 #define XCSOAR_IO_DATA_FILE_HPP
 
-#include "Source.hpp"
 #include "Charset.hpp"
+
+#include <memory>
 
 #include <tchar.h>
 
+class Reader;
 class TLineReader;
 class NLineReader;
-class TextWriter;
 
 /**
  * Opens a file from the data directory.
  *
+ * Throws exception on error.
+ *
  * @param name the file name relative to the data directory
- * @return a Source which must be deleted by the caller; nullptr if an
- * error occurred opening the file
  */
-Source<char> *
+std::unique_ptr<Reader>
 OpenDataFile(const TCHAR *name);
 
 /**
  * Opens a text file from the data directory.
  *
+ * Throws exception on error.
+ *
  * @param name the file name relative to the data directory
  * @param cs the character set of the input file
- * @return a TLineReader which must be deleted by the caller; nullptr if
- * an error occurred opening the file
  */
-TLineReader *
-OpenDataTextFile(const TCHAR *name,
-                 Charset cs=Charset::UTF8);
+std::unique_ptr<TLineReader>
+OpenDataTextFile(const TCHAR *name, Charset cs=Charset::UTF8);
 
 /**
  * Opens a text file from the data directory.
  *
+ * Throws exception on error.
+ *
  * @param name the file name relative to the data directory
- * @return a TLineReader which must be deleted by the caller; nullptr if
- * an error occurred opening the file
  */
-NLineReader *
+std::unique_ptr<NLineReader>
 OpenDataTextFileA(const TCHAR *name);
-
-/**
- * Creates a text file in the data directory.  If the file already
- * exists, it is truncated, unless "append" is true.
- */
-TextWriter *
-CreateDataTextFile(const TCHAR *name, bool append=false);
 
 #endif

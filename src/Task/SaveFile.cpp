@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,10 +23,15 @@
 #include "SaveFile.hpp"
 #include "Serialiser.hpp"
 #include "XML/DataNodeXML.hpp"
-#include "IO/TextWriter.hpp"
+#include "XML/Node.hpp"
+#include "IO/FileOutputStream.hxx"
+#include "IO/BufferedOutputStream.hxx"
+#include "OS/Path.hpp"
 
-bool
-SaveTask(const TCHAR *path, const OrderedTask &task)
+#include <tchar.h>
+
+void
+SaveTask(Path path, const OrderedTask &task)
 {
   XMLNode root_node = XMLNode::CreateRoot(_T("Task"));
 
@@ -35,10 +40,9 @@ SaveTask(const TCHAR *path, const OrderedTask &task)
     SaveTask(root, task);
   }
 
-  TextWriter writer(path);
-  if (!writer.IsOpen())
-    return false;
-
-  root_node.Serialise(writer, true);
-  return true;
+  FileOutputStream file(path);
+  BufferedOutputStream buffered(file);
+  root_node.Serialise(buffered, true);
+  buffered.Flush();
+  file.Commit();
 }

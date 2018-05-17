@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,9 +22,6 @@ Copyright_License {
 */
 
 #include "Math/FastRotation.hpp"
-#include "Math/FastMath.h"
-
-#include <math.h>
 
 void
 FastRotation::SetAngle(Angle _angle)
@@ -39,7 +36,7 @@ FastRotation::SetAngle(Angle _angle)
 }
 
 FastRotation::Point
-FastRotation::Rotate(fixed x, fixed y) const
+FastRotation::Rotate(double x, double y) const
 {
   return Point(x * cost - y * sint, y * cost + x * sint);
 }

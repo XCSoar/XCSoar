@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,29 +26,29 @@ Copyright_License {
 
 #include "Math/Angle.hpp"
 
+#include <memory>
+
 class Canvas;
 class WindowProjection;
 struct TerrainRendererSettings;
 class TerrainRenderer;
 class RasterTerrain;
-class RasterWeatherCache;
 struct DerivedInfo;
 
 /**
  * Utility class to draw terrain, topography (not implemented yet)
  */
 class BackgroundRenderer {
-  const RasterTerrain *terrain;
-  const RasterWeatherCache *weather;
-  TerrainRenderer *renderer;
-  Angle shading_angle;
+  static const Angle DEFAULT_SHADING_ANGLE;
+
+  const RasterTerrain *terrain = nullptr;
+  std::unique_ptr<TerrainRenderer> renderer;
+  Angle shading_angle = DEFAULT_SHADING_ANGLE;
 
 public:
   BackgroundRenderer();
 
-  ~BackgroundRenderer() {
-    Reset();
-  }
+  ~BackgroundRenderer();
 
   /**
    * Flush all caches.
@@ -62,9 +62,7 @@ public:
   void SetShadingAngle(const WindowProjection &projection,
                        const TerrainRendererSettings &settings,
                        const DerivedInfo &calculated);
-  void Reset();
   void SetTerrain(const RasterTerrain *terrain);
-  void SetWeather(const RasterWeatherCache *weather);
 
 private:
   void SetShadingAngle(const WindowProjection& proj, Angle angle);

@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,6 +30,7 @@
  */
 
 #include "TrafficDialogs.hpp"
+#include "Look/TrafficLook.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/WidgetDialog.hpp"
@@ -40,24 +41,18 @@
 #include "FLARM/Friends.hpp"
 #include "FLARM/Glue.hpp"
 #include "Renderer/ColorButtonRenderer.hpp"
-#include "Renderer/ColorButtonRenderer.hpp"
-#include "Screen/Layout.hpp"
-#include "Geo/Math.hpp"
 #include "UIGlobals.hpp"
 #include "Components.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "Util/StringBuilder.hxx"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 #include "Util/Macros.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
 #include "Blackboard/LiveBlackboard.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 #include "TeamActions.hpp"
-
-#include <math.h>
-#include <stdio.h>
 
 class FlarmTrafficDetailsWidget final
   : public RowFormWidget, ActionListener, NullBlackboardListener {
@@ -121,19 +116,23 @@ private:
 inline void
 FlarmTrafficDetailsWidget::CreateButtons(WidgetDialog &buttons)
 {
-  const ButtonLook &look = buttons.GetButtonLook();
+  const ButtonLook &button_look = buttons.GetButtonLook();
 
-  constexpr Color green(0x74, 0xff, 0x00);
-  buttons.AddButton(new ColorButtonRenderer(look, green), *this, GREEN);
+  buttons.AddButton(new ColorButtonRenderer(button_look,
+                                            TrafficLook::team_color_green),
+                    *this, GREEN);
 
-  constexpr Color blue(0x00, 0x90, 0xff);
-  buttons.AddButton(new ColorButtonRenderer(look, blue), *this, BLUE);
+  buttons.AddButton(new ColorButtonRenderer(button_look,
+                                            TrafficLook::team_color_blue),
+                    *this, BLUE);
 
-  constexpr Color yellow(0xff, 0xe8, 0x00);
-  buttons.AddButton(new ColorButtonRenderer(look, yellow), *this, YELLOW);
+  buttons.AddButton(new ColorButtonRenderer(button_look,
+                                            TrafficLook::team_color_yellow),
+                    *this, YELLOW);
 
-  constexpr Color magenta(0xff, 0x00, 0xcb);
-  buttons.AddButton(new ColorButtonRenderer(look, magenta), *this, MAGENTA);
+  buttons.AddButton(new ColorButtonRenderer(button_look,
+                                            TrafficLook::team_color_magenta),
+                    *this, MAGENTA);
 
   buttons.AddButton(_("Clear"), *this, CLEAR);
   buttons.AddButton(_("Team"), *this, TEAM);
@@ -190,7 +189,7 @@ FlarmTrafficDetailsWidget::UpdateChanging(const MoreData &basic)
 
   // Fill distance/direction field
   if (target_ok) {
-    FormatUserDistanceSmart(target->distance, tmp, 20, fixed(1000));
+    FormatUserDistanceSmart(target->distance, tmp, 20, 1000);
     TCHAR *p = tmp + _tcslen(tmp);
     *p++ = _T(' ');
     FormatAngleDelta(p, 20, target->Bearing() - basic.track);

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,12 +26,16 @@ Copyright_License {
 #ifndef XCSOAR_MATH_SCREEN_HPP
 #define XCSOAR_MATH_SCREEN_HPP
 
-struct RasterPoint;
+#include "Compiler.h"
+
+struct BulkPixelPoint;
+struct PixelPoint;
 class Angle;
 
-void
-ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
-                   const RasterPoint &p3, RasterPoint *p4, int offset);
+gcc_pure
+PixelPoint
+ScreenClosestPoint(const PixelPoint &p1, const PixelPoint &p2,
+                   const PixelPoint &p3, int offset);
 
 /**
  * Shifts, rotates and scales the given polygon.
@@ -50,7 +54,7 @@ ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
  *        compatibility as the use of FastScale() is deprecated.
  */
 void
-PolygonRotateShift(RasterPoint *poly, int n, RasterPoint shift,
+PolygonRotateShift(BulkPixelPoint *poly, int n, PixelPoint shift,
                    Angle angle, int scale = 100,
                    bool use_fast_scale = true);
 

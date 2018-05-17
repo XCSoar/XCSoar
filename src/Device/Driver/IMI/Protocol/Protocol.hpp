@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,10 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_IMI_DEVIMI_HPP
 #define XCSOAR_IMI_DEVIMI_HPP
 
-#include "Types.hpp"
-
-#include <tchar.h>
-
+class Path;
 class Port;
 struct Declaration;
 class RecordedFlightList;
@@ -67,7 +64,7 @@ namespace IMI
                       OperationEnvironment &env);
 
   bool FlightDownload(Port &port, const RecordedFlightInfo &flight,
-                      const TCHAR *path, OperationEnvironment &env);
+                      Path path, OperationEnvironment &env);
   /**
    * @brief Disconnects from the device
    *

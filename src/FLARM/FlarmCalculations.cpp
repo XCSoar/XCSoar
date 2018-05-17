@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,17 +23,17 @@ Copyright_License {
 
 #include "FLARM/FlarmCalculations.hpp"
 
-fixed
-FlarmCalculations::Average30s(FlarmId id, fixed time, fixed altitude)
+double
+FlarmCalculations::Average30s(FlarmId id, double time, double altitude)
 {
   ClimbAverageCalculator &item = averageCalculatorMap[id];
-  return item.GetAverage(time, altitude, fixed(30));
+  return item.GetAverage(time, altitude, 30);
 }
 
 void
-FlarmCalculations::CleanUp(fixed now)
+FlarmCalculations::CleanUp(double now)
 {
-  static constexpr fixed MAX_AGE = fixed(60);
+  static constexpr double MAX_AGE = 60;
 
   // Iterate through ClimbAverageCalculators and remove expired ones
   for (auto it = averageCalculatorMap.begin(),

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -52,7 +52,7 @@ IMI::ConvertToChar(const TCHAR* unicode, char* ascii, int outSize)
 
 IMI::AngleConverter::AngleConverter(Angle angle)
 {
-  sign = (angle.Sign() == -1) ? 1 : 0;
+  sign = angle.IsNegative();
   double mag(angle.AbsoluteDegrees());
   degrees = static_cast<IMIDWORD> (mag);
   milliminutes = static_cast<IMIDWORD> ((mag - degrees) * 60 * 1000);

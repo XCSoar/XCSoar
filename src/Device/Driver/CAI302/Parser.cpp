@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,12 +30,12 @@ Copyright_License {
 static bool
 ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 {
-  fixed bearing, norm;
+  double bearing, norm;
 
   bool bearing_valid = line.ReadChecked(bearing) &&
-    bearing > fixed(-1) && bearing < fixed(361);
+    bearing > -1 && bearing < 361;
   bool norm_valid = line.ReadChecked(norm) &&
-    !negative(norm) && norm < fixed(2000);
+    norm >= 0 && norm < 2000;
 
   if (bearing_valid && norm_valid) {
     value_r.bearing = Angle::Degrees(bearing);
@@ -70,7 +70,7 @@ cai_PCAID(NMEAInputLine &line, NMEAInfo &data)
 {
   line.Skip();
 
-  fixed value;
+  double value;
   if (line.ReadChecked(value))
     data.ProvidePressureAltitude(value);
 
@@ -109,9 +109,9 @@ cai_w(NMEAInputLine &line, NMEAInfo &info)
 
   line.Skip(2);
 
-  fixed value;
+  double value;
   if (line.ReadChecked(value))
-    info.ProvideBaroAltitudeTrue(value - fixed(1000));
+    info.ProvideBaroAltitudeTrue(value - 1000);
 
   if (line.ReadChecked(value))
     info.settings.ProvideQNH(AtmosphericPressure::HectoPascal(value),
@@ -121,7 +121,7 @@ cai_w(NMEAInputLine &line, NMEAInfo &info)
     info.ProvideTrueAirspeed(value / 100);
 
   if (line.ReadChecked(value))
-    info.ProvideTotalEnergyVario(Units::ToSysUnit((value - fixed(200)) / 10,
+    info.ProvideTotalEnergyVario(Units::ToSysUnit((value - 200) / 10.,
                                                   Unit::KNOTS));
 
   line.Skip(2);
@@ -129,14 +129,14 @@ cai_w(NMEAInputLine &line, NMEAInfo &info)
   int i;
 
   if (line.ReadChecked(i))
-    info.settings.ProvideMacCready(Units::ToSysUnit(fixed(i) / 10, Unit::KNOTS),
+    info.settings.ProvideMacCready(Units::ToSysUnit(i / 10., Unit::KNOTS),
                                    info.clock);
 
   if (line.ReadChecked(i))
-    info.settings.ProvideBallastFraction(fixed(i) / 100, info.clock);
+    info.settings.ProvideBallastFraction(i / 100., info.clock);
 
   if (line.ReadChecked(i))
-    info.settings.ProvideBugs(fixed(i) / 100, info.clock);
+    info.settings.ProvideBugs(i / 100., info.clock);
 
   return true;
 }

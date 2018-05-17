@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -64,14 +64,13 @@ CAI302WaypointUploader::Run(OperationEnvironment &env)
   }
 
   unsigned id = 1;
-  for (auto i = waypoints.begin(), end = waypoints.end();
-       i != end; ++i, ++id) {
+  for (const auto &i : waypoints) {
     if (env.IsCancelled())
       break;
 
     env.SetProgressPosition(id);
 
-    if (!device.WriteNavpoint(id, *i, env)) {
+    if (!device.WriteNavpoint(id++, *i, env)) {
       if (!env.IsCancelled())
         env.SetErrorMessage(_("Failed to write waypoint."));
       break;

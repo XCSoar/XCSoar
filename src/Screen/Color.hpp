@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_COLOR_HPP
 #define XCSOAR_SCREEN_COLOR_HPP
 
+// IWYU pragma: begin_exports
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Color.hpp"
 #elif defined(USE_MEMORY_CANVAS)
@@ -33,16 +34,7 @@ Copyright_License {
 #else
 #error No Color implementation
 #endif
-
-#ifdef TESTING
-static constexpr Color COLOR_XCSOAR_LIGHT = Color(0xed, 0x90, 0x90);
-static constexpr Color COLOR_XCSOAR = Color(0xd0, 0x17, 0x17);
-static constexpr Color COLOR_XCSOAR_DARK = Color(0x5d, 0x0a, 0x0a);
-#else
-static constexpr Color COLOR_XCSOAR_LIGHT = Color(0xaa, 0xc9, 0xe4);
-static constexpr Color COLOR_XCSOAR = Color(0x3f, 0x76, 0xa8);
-static constexpr Color COLOR_XCSOAR_DARK = Color(0x00, 0x31, 0x5e);
-#endif
+// IWYU pragma: end_exports
 
 static constexpr Color COLOR_WHITE = Color(0xff, 0xff, 0xff);
 static constexpr Color COLOR_BLACK = Color(0x00, 0x00, 0x00);
@@ -102,5 +94,15 @@ DarkColor(Color c)
 }
 
 Color Desaturate(Color c);
+
+static inline constexpr Color
+ColorWithAlpha(const Color &c, uint8_t a)
+{
+#ifdef ENABLE_OPENGL
+  return c.WithAlpha(a);
+#else
+  return c;
+#endif
+}
 
 #endif

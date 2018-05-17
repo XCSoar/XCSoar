@@ -142,7 +142,7 @@ char *strrstr(char *string, char *find)
  * Appends src to string dst of size siz (unlike strncat, siz is the
  * full size of dst, not space left).  At most siz-1 characters
  * will be copied.  Always NUL terminates (unless siz <= strlen(dst)).
- * Returns strlen(src) + MIN(siz, strlen(initial dst)).
+ * Returns strlen(src) + MS_MIN(siz, strlen(initial dst)).
  * If retval >= siz, truncation occurred.
  */
 size_t strlcat(char *dst, const char *src, size_t siz)
@@ -423,6 +423,51 @@ void msStringToLower(char *string)
   }
 }
 
+/**
+ * Force the first character to uppercase and the rest of the characters to
+ * lower case for EACH word in the string.
+ */
+void msStringInitCap(char *string)
+{
+  int i;
+  int start = 1; 
+  if (string != NULL) {
+    for (i = 0; i < (int)strlen(string); i++) {
+      if (string[i] == ' ')
+        start = 1;
+      else if (start) {
+        string[i] = toupper(string[i]);
+        start = 0;
+      }
+      else {
+        string[i] = tolower(string[i]);
+      }
+    }
+  }
+}
+
+/**
+ * Force the first character to uppercase for the FIRST word in the string
+ * and the rest of the characters to lower case.
+ */
+void msStringFirstCap(char *string)
+{
+  int i;
+  int start = 1; 
+  if (string != NULL) {
+    for (i = 0; i < (int)strlen(string); i++) {
+      if (string[i] != ' ') {
+        if (start) {
+          string[i] = toupper(string[i]);
+          start = 0;
+        }
+        else
+          string[i] = tolower(string[i]);
+      }
+    }
+  }
+}
+
 char *msStringChop(char *string)
 {
   int n;
@@ -692,8 +737,9 @@ char *msBuildPath(char *pszReturnPath, const char *abs_path, const char *path)
     abslen = strlen(abs_path);
 
   if((pathlen + abslen + 2) > MS_MAXPATHLEN) {
-    msSetError(MS_IOERR, "(%s%s): path is too long", "msBuildPath()",
-               abs_path, path);
+    msSetError(MS_IOERR, "Path is too long.  Check server logs.",
+               "msBuildPath()");
+    msDebug("msBuildPath(): (%s%s): path is too long.\n", abs_path, path);
     return NULL;
   }
 
@@ -1086,7 +1132,7 @@ char *msEncodeUrl(const char *data)
 
 char *msEncodeUrlExcept(const char *data, const char except)
 {
-  char *hex = "0123456789ABCDEF";
+  static const char *hex = "0123456789ABCDEF";
   const char *i;
   char  *j, *code;
   int   inc;
@@ -1099,9 +1145,7 @@ char *msEncodeUrlExcept(const char *data, const char except)
   code = (char*)msSmallMalloc(strlen(data)+inc+1);
 
   for (j=code, i=data; *i!='\0'; i++, j++) {
-    if (*i == ' ')
-      *j = '+';
-    else if ( except != '\0' && *i == except ) {
+    if ( except != '\0' && *i == except ) {
       *j = except;
     } else if (msEncodeChar(*i)) {
       ch = *i;
@@ -1114,6 +1158,77 @@ char *msEncodeUrlExcept(const char *data, const char except)
   *j = '\0';
 
   return code;
+}
+
+/************************************************************************/
+/*                            msEscapeJSonString()                      */
+/************************************************************************/
+
+/* The input (and output) string are not supposed to start/end with double */
+/* quote characters. It is the responsibility of the caller to do that. */
+char* msEscapeJSonString(const char* pszJSonString)
+{
+    /* Worst case is one character to become \uABCD so 6 characters */
+    char* pszRet;
+    int i = 0, j = 0;
+    static const char* pszHex = "0123456789ABCDEF";
+    
+    pszRet = (char*) msSmallMalloc(strlen(pszJSonString) * 6 + 1);
+    /* From http://www.json.org/ */
+    for(i = 0; pszJSonString[i] != '\0'; i++)
+    {
+        unsigned char ch = pszJSonString[i];
+        if( ch == '\b' )
+        {
+            pszRet[j++] = '\\';
+            pszRet[j++] = 'b';
+        }
+        else if( ch == '\f' )
+        {
+            pszRet[j++] = '\\';
+            pszRet[j++] = 'f';
+        }
+        else if( ch == '\n' )
+        {
+            pszRet[j++] = '\\';
+            pszRet[j++] = 'n';
+        }
+        else if( ch == '\r' )
+        {
+            pszRet[j++] = '\\';
+            pszRet[j++] = 'r';
+        }
+        else if( ch == '\t' )
+        {
+            pszRet[j++] = '\\';
+            pszRet[j++] = 't';
+        }
+        else if( ch < 32 )
+        {
+            pszRet[j++] = '\\';
+            pszRet[j++] = 'u';
+            pszRet[j++] = '0';
+            pszRet[j++] = '0';
+            pszRet[j++] = pszHex[ch / 16];
+            pszRet[j++] = pszHex[ch % 16];
+        }
+        else if( ch == '"' )
+        {
+            pszRet[j++] = '\\';
+            pszRet[j++] = '"';
+        }
+        else if( ch == '\\' )
+        {
+            pszRet[j++] = '\\';
+            pszRet[j++] = '\\';
+        }
+        else
+        {
+            pszRet[j++] = ch;
+        }
+    }
+    pszRet[j] = '\0';
+    return pszRet;
 }
 
 /* msEncodeHTMLEntities()
@@ -1420,14 +1535,15 @@ char *msCaseReplaceSubstring(char *str, const char *old, const char *new)
   size_t str_len, old_len, new_len, tmp_offset;
   char *tmp_ptr;
 
-  if(new == NULL)
-    new = "";
-
   /*
   ** If old is not found then leave str alone
   */
   if( (tmp_ptr = (char *) strcasestr(str, old)) == NULL)
     return(str);
+  
+  if(new == NULL)
+    new = "";
+
 
   /*
   ** Grab some info about incoming strings
@@ -1785,7 +1901,8 @@ char* msConvertWideStringToUTF8 (const wchar_t* string, const char* encoding)
 int msGetNextGlyph(const char **in_ptr, char *out_string)
 {
   unsigned char in;
-  int numbytes=0,unicode;
+  int numbytes=0;
+  unsigned int unicode;
   int i;
 
   in = (unsigned char)**in_ptr;
@@ -1912,7 +2029,7 @@ static int cmp_entities(const void *e1, const void *e2)
  * - if the string does start with such entity,it returns the number of
  * bytes occupied by said entity, and stores the unicode value in *unicode
  */
-int msGetUnicodeEntity(const char *inptr, int *unicode)
+int msGetUnicodeEntity(const char *inptr, unsigned int *unicode)
 {
   unsigned char *in = (unsigned char*)inptr;
   int l,val=0;
@@ -2082,6 +2199,62 @@ int msStringInArray( const char * pszString, char **array, int numelements)
       return MS_TRUE;
   }
   return MS_FALSE;
+}
+
+int msLayerEncodeShapeAttributes( layerObj *layer, shapeObj *shape) {
+
+#ifdef USE_ICONV
+  iconv_t cd = NULL;
+  const char *inp;
+  char *outp, *out = NULL;
+  size_t len, bufsize, bufleft, iconv_status;
+  int i;
+
+  if( !layer->encoding || !*layer->encoding || !strcasecmp(layer->encoding, "UTF-8"))
+    return MS_SUCCESS;
+
+  cd = iconv_open("UTF-8", layer->encoding);
+  if(cd == (iconv_t)-1) {
+    msSetError(MS_IDENTERR, "Encoding not supported by libiconv (%s).",
+               "msGetEncodedString()", layer->encoding);
+    return MS_FAILURE;
+  }
+
+  for(i=0;i <shape->numvalues; i++) {
+    if(!shape->values[i] || (len = strlen(shape->values[i]))==0) {
+      continue;    /* Nothing to do */
+    }
+
+    bufsize = len * 6 + 1; /* Each UTF-8 char can be up to 6 bytes */
+    inp = shape->values[i];
+    out = (char*) msSmallMalloc(bufsize);
+
+    strlcpy(out, shape->values[i], bufsize);
+    outp = out;
+
+    bufleft = bufsize;
+    iconv_status = -1;
+
+    while (len > 0) {
+      iconv_status = iconv(cd, (char**)&inp, &len, &outp, &bufleft);
+      if(iconv_status == -1) {
+        msFree(out);
+        continue; /* silently ignore failed conversions */
+      }
+    }
+    out[bufsize - bufleft] = '\0';
+    msFree(shape->values[i]);
+    shape->values[i] = out;
+  }
+  iconv_close(cd);
+
+  return MS_SUCCESS;
+#else
+  if( !layer->encoding || !*layer->encoding || !strcasecmp(layer->encoding, "UTF-8"))
+    return MS_SUCCESS;
+  msSetError(MS_MISCERR, "Not implemented since Iconv is not enabled.", "msGetEncodedString()");
+  return MS_FAILURE;
+#endif
 }
 
 #endif /* SHAPELIB_DISABLED */

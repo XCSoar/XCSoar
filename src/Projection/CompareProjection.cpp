@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,19 +25,19 @@ Copyright_License {
 #include "WindowProjection.hpp"
 
 CompareProjection::FourCorners::FourCorners(const WindowProjection &projection)
-  :top_left(projection.ScreenToGeo(0, 0)),
-   top_right(projection.ScreenToGeo(projection.GetScreenWidth(), 0)),
-   bottom_left(projection.ScreenToGeo(0, projection.GetScreenHeight())),
-   bottom_right(projection.ScreenToGeo(projection.GetScreenWidth(),
-                                       projection.GetScreenHeight())) {}
+  :GeoQuadrilateral{projection.ScreenToGeo(0, 0),
+    projection.ScreenToGeo(projection.GetScreenWidth(), 0),
+    projection.ScreenToGeo(0, projection.GetScreenHeight()),
+    projection.ScreenToGeo(projection.GetScreenWidth(),
+                           projection.GetScreenHeight())} {}
 
 gcc_pure
-static fixed
+static double
 SimpleDistance(const GeoPoint &a, const GeoPoint &b,
-               const fixed latitude_cos)
+               const double latitude_cos)
 {
-  return TinyHypot((a.longitude - b.longitude).AsDelta().Native(),
-                   (a.latitude - b.latitude).AsDelta().Native() * latitude_cos);
+  return hypot((a.longitude - b.longitude).AsDelta().Native(),
+               (a.latitude - b.latitude).AsDelta().Native() * latitude_cos);
 }
 
 CompareProjection::CompareProjection(const WindowProjection &projection)
@@ -52,7 +52,7 @@ CompareProjection::CompareProjection(const WindowProjection &projection)
 bool
 CompareProjection::Compare(const CompareProjection &other) const
 {
-  return positive(max_delta) &&
+  return max_delta > 0 &&
     SimpleDistance(corners.top_left, other.corners.top_left,
                    latitude_cos) <= max_delta &&
     SimpleDistance(corners.top_right, other.corners.top_right,

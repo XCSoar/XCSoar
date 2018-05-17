@@ -4,10 +4,9 @@
 #include <string>
 
 #ifdef _UNICODE
-#include <tchar.h>
-typedef std::wstring tstring;
+using tstring = std::wstring;
 #else
-typedef std::string tstring;
+using tstring = std::string;
 #endif
 
 tstring &

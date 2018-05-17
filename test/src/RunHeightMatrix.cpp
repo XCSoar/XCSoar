@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,12 +23,13 @@ Copyright_License {
 
 #include "Terrain/RasterMap.hpp"
 #include "Terrain/HeightMatrix.hpp"
+#include "Terrain/Loader.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Screen/Layout.hpp"
 #include "OS/Args.hpp"
-#include "OS/PathName.hpp"
-#include "Compatibility/path.h"
+#include "IO/ZipArchive.hpp"
 #include "Operation/Operation.hpp"
+#include "Util/PrintException.hxx"
 
 #include <stdio.h>
 #include <string.h>
@@ -37,32 +38,32 @@ Copyright_License {
 unsigned Layout::scale_1024 = 1024;
 
 int main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "PATH");
-  const tstring map_path = args.ExpectNextT();
+  const auto map_path = args.ExpectNextPath();
   args.ExpectEnd();
 
-  TCHAR jp2_path[4096];
-  _tcscpy(jp2_path, map_path.c_str());
-  _tcscat(jp2_path, _T(DIR_SEPARATOR_S) _T("terrain.jp2"));
+  ZipArchive archive(map_path);
 
-  TCHAR j2w_path[4096];
-  _tcscpy(j2w_path, map_path.c_str());
-  _tcscat(j2w_path, _T(DIR_SEPARATOR_S) _T("terrain.j2w"));
-
-  RasterMap map(jp2_path);
+  RasterMap map;
 
   NullOperationEnvironment operation;
-  if (!map.Load(jp2_path, j2w_path, operation)) {
+  if (!LoadTerrainOverview(archive.get(), map.GetTileCache(),
+                           operation)) {
     fprintf(stderr, "failed to load map\n");
     return EXIT_FAILURE;
   }
 
+  map.UpdateProjection();
+
+  SharedMutex mutex;
   do {
-    map.SetViewCenter(map.GetMapCenter(), fixed(50000));
+    UpdateTerrainTiles(archive.get(), map.GetTileCache(), mutex,
+                       map.GetProjection(),
+                       map.GetMapCenter(), 50000);
   } while (map.IsDirty());
 
-  fixed radius = fixed(50000);
+  double radius = 50000;
   WindowProjection projection;
   projection.SetScreenSize({640, 480});
   projection.SetScaleFromRadius(radius);
@@ -80,4 +81,7 @@ int main(int argc, char **argv)
 #endif
 
   return EXIT_SUCCESS;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2015 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2012-2017 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,15 +29,22 @@
 
 #include "AllocatedSocketAddress.hxx"
 
-#include <assert.h>
 #include <string.h>
 
 #ifdef HAVE_UN
 #include <sys/un.h>
 #endif
 
+#ifdef HAVE_TCP
+#ifdef WIN32
+#include <ws2tcpip.h>
+#else
+#include <netinet/in.h>
+#endif
+#endif
+
 AllocatedSocketAddress &
-AllocatedSocketAddress::operator=(SocketAddress src)
+AllocatedSocketAddress::operator=(SocketAddress src) noexcept
 {
 	if (src.IsNull()) {
 		Clear();
@@ -50,7 +57,7 @@ AllocatedSocketAddress::operator=(SocketAddress src)
 }
 
 void
-AllocatedSocketAddress::SetSize(size_type new_size)
+AllocatedSocketAddress::SetSize(size_type new_size) noexcept
 {
 	if (size == new_size)
 		return;
@@ -63,7 +70,7 @@ AllocatedSocketAddress::SetSize(size_type new_size)
 #ifdef HAVE_UN
 
 void
-AllocatedSocketAddress::SetLocal(const char *path)
+AllocatedSocketAddress::SetLocal(const char *path) noexcept
 {
 	const bool is_abstract = *path == '@';
 
@@ -74,11 +81,40 @@ AllocatedSocketAddress::SetLocal(const char *path)
 	struct sockaddr_un *sun;
 	SetSize(sizeof(*sun) - sizeof(sun->sun_path) + path_length);
 	sun = (struct sockaddr_un *)address;
-	sun->sun_family = AF_UNIX;
+	sun->sun_family = AF_LOCAL;
 	memcpy(sun->sun_path, path, path_length);
 
 	if (is_abstract)
 		sun->sun_path[0] = 0;
+}
+
+#endif
+
+#ifdef HAVE_TCP
+
+bool
+AllocatedSocketAddress::SetPort(unsigned port) noexcept
+{
+	if (IsNull())
+		return false;
+
+	switch (GetFamily()) {
+	case AF_INET:
+		{
+			auto *a = (struct sockaddr_in *)(void *)address;
+			a->sin_port = htons(port);
+			return true;
+		}
+
+	case AF_INET6:
+		{
+			auto *a = (struct sockaddr_in6 *)(void *)address;
+			a->sin6_port = htons(port);
+			return true;
+		}
+	}
+
+	return false;
 }
 
 #endif

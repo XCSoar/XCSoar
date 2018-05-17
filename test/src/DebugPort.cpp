@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,6 +24,8 @@ Copyright_License {
 #include "DebugPort.hpp"
 #include "OS/Args.hpp"
 #include "Device/Config.hpp"
+#include "Device/Port/Port.hpp"
+#include "Device/Port/ConfiguredPort.hpp"
 
 DeviceConfig
 ParsePortArgs(Args &args)
@@ -82,4 +84,31 @@ ParsePortArgs(Args &args)
   }
 
   return config;
+}
+
+std::unique_ptr<Port>
+DebugPort::Open(boost::asio::io_service &io_service,
+                DataHandler &handler)
+{
+  Port *port = OpenPort(io_service, config, this, handler);
+  if (port == nullptr)
+    throw std::runtime_error("Failed to open port");
+
+  return std::unique_ptr<Port>(port);
+}
+
+void
+DebugPort::PortStateChanged()
+{
+  if (listener != nullptr)
+    listener->PortStateChanged();
+}
+
+void
+DebugPort::PortError(const char *msg)
+{
+  fprintf(stderr, "Port error: %s\n", msg);
+
+  if (listener != nullptr)
+    listener->PortError(msg);
 }

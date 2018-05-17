@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,10 +26,11 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "Settings.hpp"
 #include "Atmosphere/AirDensity.hpp"
+#include "Geo/Gravity.hpp"
+#include "Math/Util.hpp"
 
-#define fixed_inv_g fixed(1.0/9.81)
-#define fixed_inv_2g fixed(1.0/(2.0*9.81))
-#define fixed_small fixed(0.001)
+static constexpr double INVERSE_G = 1. / GRAVITY;
+static constexpr double INVERSE_2G = INVERSE_G / 2.;
 
 /**
  * Fill vario values when they are provided by the external vario.
@@ -121,7 +122,7 @@ ComputeTrack(NMEAInfo &basic, const NMEAInfo &last)
     return;
 
   const GeoVector v = last.location.DistanceBearing(basic.location);
-  if (v.distance >= fixed(1)) {
+  if (v.distance >= 1) {
     basic.track = v.bearing;
     basic.track_available = basic.location_available;
   }
@@ -149,10 +150,10 @@ ComputeHeading(AttitudeState &attitude, const NMEAInfo &basic,
   }
 
   if (basic.ground_speed_available && calculated.wind_available &&
-      (positive(basic.ground_speed) || calculated.wind.IsNonZero()) &&
+      (basic.ground_speed > 0 || calculated.wind.IsNonZero()) &&
       calculated.flight.flying) {
-    fixed x0 = basic.track.fastsine() * basic.ground_speed;
-    fixed y0 = basic.track.fastcosine() * basic.ground_speed;
+    auto x0 = basic.track.fastsine() * basic.ground_speed;
+    auto y0 = basic.track.fastcosine() * basic.ground_speed;
     x0 += calculated.wind.bearing.fastsine() * calculated.wind.norm;
     y0 += calculated.wind.bearing.fastcosine() * calculated.wind.norm;
 
@@ -179,7 +180,7 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
   const auto any_altitude = basic.GetAnyAltitude();
 
   if (!basic.airspeed_available && any_altitude.first) {
-    fixed dyn; bool available = false;
+    double dyn; bool available = false;
     if (basic.dyn_pressure_available) {
       dyn = basic.dyn_pressure.GetHectoPascal();
       available = true;
@@ -188,7 +189,7 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
       available = true;
     }
     if (available) {
-      basic.indicated_airspeed = sqrt(fixed(163.2653061) * dyn);
+      basic.indicated_airspeed = sqrt(double(163.2653061) * dyn);
       basic.true_airspeed = basic.indicated_airspeed *
                             AirDensityRatio(any_altitude.second);
 
@@ -205,16 +206,16 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
     return;
   }
 
-  fixed TrueAirspeedEstimated = fixed(0);
+  double TrueAirspeedEstimated = 0;
 
   const SpeedVector wind = calculated.wind;
-  if (positive(basic.ground_speed) || wind.IsNonZero()) {
-    fixed x0 = basic.track.fastsine() * basic.ground_speed;
-    fixed y0 = basic.track.fastcosine() * basic.ground_speed;
+  if (basic.ground_speed > 0 || wind.IsNonZero()) {
+    auto x0 = basic.track.fastsine() * basic.ground_speed;
+    auto y0 = basic.track.fastcosine() * basic.ground_speed;
     x0 += wind.bearing.fastsine() * wind.norm;
     y0 += wind.bearing.fastcosine() * wind.norm;
 
-    TrueAirspeedEstimated = SmallHypot(x0, y0);
+    TrueAirspeedEstimated = hypot(x0, y0);
   }
 
   basic.true_airspeed = TrueAirspeedEstimated;
@@ -236,11 +237,11 @@ static void
 ComputeEnergyHeight(MoreData &basic)
 {
   if (basic.airspeed_available)
-    basic.energy_height = sqr(basic.true_airspeed) * fixed_inv_2g;
+    basic.energy_height = Square(basic.true_airspeed) * INVERSE_2G;
   else
     /* setting EnergyHeight to zero is the safe approach, as we don't know the kinetic energy
        of the glider for sure. */
-    basic.energy_height = fixed(0);
+    basic.energy_height = 0;
 
   basic.TE_altitude = basic.nav_altitude + basic.energy_height;
 }
@@ -261,13 +262,13 @@ ComputeGPSVario(MoreData &basic,
 
     /* use the "Validity" time stamp, because it reflects when this
        vertical speed was measured, and GPS time may not be available */
-    const fixed delta_t =
+    const auto delta_t =
       basic.noncomp_vario_available.GetTimeDifference(last.noncomp_vario_available);
 
-    if (positive(delta_t)) {
+    if (delta_t > 0) {
       /* only update when a new value was received */
 
-      fixed delta_e = basic.energy_height - last.energy_height;
+      auto delta_e = basic.energy_height - last.energy_height;
 
       basic.gps_vario = basic.noncomp_vario;
       basic.gps_vario_TE = basic.noncomp_vario + delta_e / delta_t;
@@ -278,14 +279,14 @@ ComputeGPSVario(MoreData &basic,
        even if navigate by GPS altitude is configured, because pressure
        altitude is expected to be more exact. */
 
-    const fixed delta_t =
+    const auto delta_t =
       basic.pressure_altitude_available.GetTimeDifference(last.pressure_altitude_available);
 
-    if (positive(delta_t)) {
+    if (delta_t > 0) {
       /* only update when a new value was received */
 
-      fixed delta_h = basic.pressure_altitude - last.pressure_altitude;
-      fixed delta_e = basic.energy_height - last.energy_height;
+      auto delta_h = basic.pressure_altitude - last.pressure_altitude;
+      auto delta_e = basic.energy_height - last.energy_height;
 
       basic.gps_vario = delta_h / delta_t;
       basic.gps_vario_TE = (delta_h + delta_e) / delta_t;
@@ -295,14 +296,14 @@ ComputeGPSVario(MoreData &basic,
     /* barometric altitude is also ok, but it's rare that it is
        available when pressure altitude is not */
 
-    const fixed delta_t =
+    const auto delta_t =
       basic.baro_altitude_available.GetTimeDifference(last.baro_altitude_available);
 
-    if (positive(delta_t)) {
+    if (delta_t > 0) {
       /* only update when a new value was received */
 
-      fixed delta_h = basic.baro_altitude - last.baro_altitude;
-      fixed delta_e = basic.energy_height - last.energy_height;
+      auto delta_h = basic.baro_altitude - last.baro_altitude;
+      auto delta_e = basic.energy_height - last.energy_height;
 
       basic.gps_vario = delta_h / delta_t;
       basic.gps_vario_TE = (delta_h + delta_e) / delta_t;
@@ -313,20 +314,20 @@ ComputeGPSVario(MoreData &basic,
     /* use the GPS time stamp, because it reflects when this altitude
        was measured by the GPS receiver; the Validity object just
        shows when this value was parsed by XCSoar */
-    const fixed delta_t = basic.time - last_gps.time;
+    const auto delta_t = basic.time - last_gps.time;
 
-    if (positive(delta_t)) {
+    if (delta_t > 0) {
       /* only update when a new value was received */
 
-      fixed delta_h = basic.gps_altitude - last_gps.gps_altitude;
-      fixed delta_e = basic.energy_height - last_gps.energy_height;
+      auto delta_h = basic.gps_altitude - last_gps.gps_altitude;
+      auto delta_e = basic.energy_height - last_gps.energy_height;
 
       basic.gps_vario = delta_h / delta_t;
       basic.gps_vario_TE = (delta_h + delta_e) / delta_t;
       basic.gps_vario_available = basic.gps_altitude_available;
     }
   } else {
-    basic.gps_vario = basic.gps_vario_TE = fixed(0);
+    basic.gps_vario = basic.gps_vario_TE = 0;
     basic.gps_vario_available.Clear();
   }
 }
@@ -365,7 +366,7 @@ ComputeDynamics(MoreData &basic, const DerivedInfo &calculated)
   if (!calculated.flight.flying)
     return;
 
-  if (!positive(basic.ground_speed) &&
+  if (basic.ground_speed <= 0 &&
       (!calculated.wind_available || calculated.wind.IsZero()))
     return;
 
@@ -373,8 +374,8 @@ ComputeDynamics(MoreData &basic, const DerivedInfo &calculated)
     return;
 
   // estimate bank angle (assuming balanced turn)
-  const fixed angle = atan((calculated.turn_rate_heading
-      * basic.true_airspeed * fixed_inv_g).Radians());
+  const auto angle = atan((calculated.turn_rate_heading
+      * basic.true_airspeed * INVERSE_G).Radians());
 
   if (!basic.attitude.bank_angle_available) {
     basic.attitude.bank_angle = Angle::Radians(angle);
@@ -389,7 +390,7 @@ ComputeDynamics(MoreData &basic, const DerivedInfo &calculated)
   }
 
   if (!basic.acceleration.available)
-    basic.acceleration.ProvideGLoad(fixed(1) / std::max(fixed_small, fabs(cos(angle))), false);
+    basic.acceleration.ProvideGLoad(1. / std::max(0.001, fabs(cos(angle))), false);
 }
 
 void

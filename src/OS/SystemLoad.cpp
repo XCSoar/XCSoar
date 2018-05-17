@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,8 +24,6 @@
 #include "SystemLoad.hpp"
 
 #ifdef WIN32
-
-#ifndef _WIN32_WCE
 
 #include <windows.h>
 #include <tlhelp32.h>
@@ -67,15 +65,6 @@ unsigned SystemLoadCPU()
   return retval;
 }
 
-#else /* WIN32_WCE */
-
-unsigned SystemLoadCPU()
-{
-  return (unsigned)-1;
-}
-
-#endif
-
 #elif defined(__linux__) || defined(ANDROID)
 
 #include "OS/FileUtil.hpp"
@@ -90,7 +79,7 @@ unsigned
 SystemLoadCPU()
 {
   char line[256];
-  if (!File::ReadString("/proc/stat", line, sizeof(line)))
+  if (!File::ReadString(Path("/proc/stat"), line, sizeof(line)))
     return (unsigned)-1;
 
   static constexpr unsigned HISTORY_LENGTH = 5;

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,19 +26,20 @@ Copyright_License {
 #include "Geo/FAISphere.hpp"
 
 #include <algorithm>
+#include <assert.h>
 
 void
 RasterProjection::Set(const GeoBounds &bounds,
                       unsigned width, unsigned height)
 {
-  x_scale = fixed(width) / bounds.GetWidth().Native();
-  left = int(bounds.GetWest().Native() * x_scale);
+  x_scale = double(width) / bounds.GetWidth().Native();
+  left = AngleToWidth(bounds.GetWest());
 
-  y_scale = fixed(height) / bounds.GetHeight().Native();
-  top = int(bounds.GetNorth().Native() * y_scale);
+  y_scale = double(height) / bounds.GetHeight().Native();
+  top = AngleToHeight(bounds.GetNorth());
 }
 
-fixed
+double
 RasterProjection::FinePixelDistance(const GeoPoint &location,
                                     unsigned pixels) const
 {
@@ -51,19 +52,23 @@ RasterProjection::FinePixelDistance(const GeoPoint &location,
     FACTOR = 256,
   };
 
-  Angle distance = WidthToAngle(fixed_sqrt_two * FACTOR * pixels);
-  GeoPoint p = GeoPoint(location.longitude + distance, location.latitude);
-  fixed x = location.DistanceS(p);
+  // must have called Set() first otherwise this is invalid
+  assert(x_scale != 0);
+  assert(y_scale != 0);
 
-  distance = HeightToAngle(fixed_sqrt_two * FACTOR * pixels);
+  Angle distance = WidthToAngle(M_SQRT2 * FACTOR * pixels);
+  GeoPoint p = GeoPoint(location.longitude + distance, location.latitude);
+  auto x = location.DistanceS(p);
+
+  distance = HeightToAngle(M_SQRT2 * FACTOR * pixels);
   p = GeoPoint(location.longitude, location.latitude + distance);
-  fixed y = location.DistanceS(p);
+  auto y = location.DistanceS(p);
 
   return std::max(x, y) / FACTOR;
 }
 
 unsigned
-RasterProjection::DistancePixelsFine(fixed distance) const
+RasterProjection::DistancePixelsFine(double distance) const
 {
   Angle angle = Angle::Radians(distance / FAISphere::REARTH);
   return AngleToHeight(angle);

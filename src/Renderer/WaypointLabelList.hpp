@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,11 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_WAYPOINT_LABEL_LIST_HPP
 #define XCSOAR_WAYPOINT_LABEL_LIST_HPP
 
-#include "Rough/RoughAltitude.hpp"
 #include "Renderer/TextInBox.hpp"
 #include "Screen/Point.hpp"
 #include "Util/NonCopyable.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 #include "Sizes.h" /* for NAME_SIZE */
 
 #include <tchar.h>
@@ -37,9 +36,9 @@ class WaypointLabelList : private NonCopyable {
 public:
   struct Label{
     TCHAR Name[NAME_SIZE+1];
-    RasterPoint Pos;
+    PixelPoint Pos;
     TextInBoxMode Mode;
-    RoughAltitude AltArivalAGL;
+    int AltArivalAGL;
     bool inTask;
     bool isLandable;
     bool isAirport;
@@ -48,18 +47,17 @@ public:
   };
 
 protected:
-  UPixelScalar width, height;
-  PixelRect bounds;
+  const unsigned width, height;
 
   StaticArray<Label, 256u> labels;
 
 public:
-  WaypointLabelList(UPixelScalar _width, UPixelScalar _height)
+  WaypointLabelList(unsigned _width, unsigned _height)
     :width(_width), height(_height) {}
 
-  void Add(const TCHAR *Name, PixelScalar X, PixelScalar Y,
+  void Add(const TCHAR *name, int x, int y,
            TextInBoxMode Mode, bool bold,
-           RoughAltitude AltArivalAGL,
+           int AltArivalAGL,
            bool inTask, bool isLandable, bool isAirport,
            bool isWatchedWaypoint);
   void Sort();
@@ -70,10 +68,6 @@ public:
 
   const Label *end() const {
     return labels.end();
-  }
-
-  const Label &operator[](unsigned i) const {
-    return labels[i];
   }
 };
 

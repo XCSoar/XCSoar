@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,27 +21,27 @@
 */
 
 #include "Logger/GRecord.hpp"
-#include "Util/Macros.hpp"
 #include "OS/Args.hpp"
+#include "Util/Macros.hpp"
+#include "Util/PrintException.hxx"
 
 #include <stdio.h>
 
 int
 main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "FILE.igc");
-  tstring path = args.ExpectNextT();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
   GRecord g;
   g.Initialize();
 
   char data[1024];
-  if (!g.ReadGRecordFromFile(path.c_str(), data, ARRAY_SIZE(data))) {
-    fprintf(stderr, "Error\n");
-    return 2;
-  }
-
+  g.ReadGRecordFromFile(path, data, ARRAY_SIZE(data));
   puts(data);
   return 0;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

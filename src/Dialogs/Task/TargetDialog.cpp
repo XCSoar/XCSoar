@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Language/Language.hpp"
@@ -60,9 +60,10 @@ public:
                         const TrailLook &trail_look,
                         const TaskLook &task_look,
                         const AircraftLook &aircraft_look,
-                        const TopographyLook &topography_look)
+                        const TopographyLook &topography_look,
+                        const OverlayLook &overlay_look)
     :TargetMapWindow(waypoint_look, airspace_look, trail_look,
-                     task_look, aircraft_look, topography_look),
+                     task_look, aircraft_look, topography_look, overlay_look),
      widget(_widget) {}
 
 protected:
@@ -74,10 +75,8 @@ class TargetWidget
     DataFieldListener,
     NullBlackboardListener {
   enum Buttons {
-#ifndef GNAV
     PREVIOUS,
     NEXT,
-#endif
     NAME,
     OPTIMIZED,
   };
@@ -86,9 +85,7 @@ class TargetWidget
     PixelRect map;
 
     PixelRect name_button;
-#ifndef GNAV
     PixelRect previous_button, next_button;
-#endif
     PixelRect range, radial, ete, delta_t, speed_remaining, speed_achieved;
     PixelRect optimized;
     PixelRect close_button;
@@ -103,10 +100,8 @@ class TargetWidget
   TargetDialogMapWindow map;
 
   Button name_button;
-#ifndef GNAV
   Button previous_button;
   Button next_button;
-#endif
 
   WndProperty range, radial, ete, delta_t, speed_remaining, speed_achieved;
 
@@ -129,7 +124,8 @@ public:
      map(*this,
          map_look.waypoint, map_look.airspace,
          map_look.trail, map_look.task, map_look.aircraft,
-         map_look.topography),
+         map_look.topography,
+         map_look.overlay),
      range(dialog_look),
      radial(dialog_look),
      ete(dialog_look),
@@ -188,8 +184,8 @@ public:
   void OnNameClicked();
   void OnOptimized();
 
-  void OnRangeModified(fixed new_value);
-  void OnRadialModified(fixed new_value);
+  void OnRangeModified(double new_value);
+  void OnRadialModified(double new_value);
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
@@ -199,10 +195,8 @@ public:
 
     map.MoveAndShow(layout.map);
     name_button.MoveAndShow(layout.name_button);
-#ifndef GNAV
     previous_button.MoveAndShow(layout.previous_button);
     next_button.MoveAndShow(layout.next_button);
-#endif
     range.MoveAndShow(layout.range);
     radial.MoveAndShow(layout.radial);
     ete.MoveAndShow(layout.ete);
@@ -223,10 +217,8 @@ public:
 
     map.Hide();
     name_button.Hide();
-#ifndef GNAV
     previous_button.Hide();
     next_button.Hide();
-#endif
     range.Hide();
     radial.Hide();
     ete.Hide();
@@ -242,10 +234,8 @@ public:
 
     map.Move(layout.map);
     name_button.Move(layout.name_button);
-#ifndef GNAV
     previous_button.Move(layout.previous_button);
     next_button.Move(layout.next_button);
-#endif
     range.Move(layout.range);
     radial.Move(layout.radial);
     ete.Move(layout.ete);
@@ -267,7 +257,6 @@ private:
   /* virtual methods from class ActionListener */
   void OnAction(int id) override {
     switch (id) {
-#ifndef GNAV
     case PREVIOUS:
       OnPrevClicked();
       break;
@@ -275,7 +264,6 @@ private:
     case NEXT:
       OnNextClicked();
       break;
-#endif
 
     case NAME:
       OnNameClicked();
@@ -336,8 +324,7 @@ SplitRow(PixelRect &left)
 
 TargetWidget::Layout::Layout(PixelRect rc)
 {
-  const unsigned width = rc.right - rc.left;
-  const unsigned height = rc.bottom - rc.top;
+  const unsigned width = rc.GetWidth(), height = rc.GetHeight();
   const unsigned min_control_height = ::Layout::GetMinimumControlHeight();
   const unsigned max_control_height = ::Layout::GetMaximumControlHeight();
 
@@ -349,11 +336,7 @@ TargetWidget::Layout::Layout(PixelRect rc)
     map.right -= ::Layout::Scale(120);
 
     constexpr unsigned n_static = 4;
-#ifndef GNAV
     constexpr unsigned n_elastic = 6;
-#else
-    constexpr unsigned n_elastic = 5;
-#endif
     constexpr unsigned n_rows = n_static + n_elastic;
 
     const unsigned control_height = n_rows * min_control_height >= height
@@ -364,11 +347,9 @@ TargetWidget::Layout::Layout(PixelRect rc)
     RowLayout rl(PixelRect(map.right, rc.top, rc.right, rc.bottom));
     name_button = rl.NextRow(control_height);
 
-#ifndef GNAV
     previous_button = next_button = rl.NextRow(control_height);
     previous_button.right = next_button.left =
       (previous_button.right + next_button.left) / 2;
-#endif
 
     range = rl.NextRow(control_height);
     radial = rl.NextRow(control_height);
@@ -385,13 +366,9 @@ TargetWidget::Layout::Layout(PixelRect rc)
 
     const unsigned control_height = min_control_height;
 
-#ifdef GNAV
-    name_button = rl.NextRow(control_height);
-#else
     previous_button = name_button = next_button = rl.NextRow(control_height);
     previous_button.right = name_button.left = previous_button.left + control_height;
     next_button.left = name_button.right = next_button.right - control_height;
-#endif
 
     range = rl.NextRow(control_height);
     radial = SplitRow(range);
@@ -442,7 +419,6 @@ TargetWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   name_button.Create(parent, button_look, _T(""), layout.name_button,
                      button_style, *this, NAME);
 
-#ifndef GNAV
   previous_button.Create(parent, layout.previous_button, button_style,
                          new SymbolButtonRenderer(button_look,
                                                   _T("<")),
@@ -450,21 +426,20 @@ TargetWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   next_button.Create(parent, layout.next_button, button_style,
                      new SymbolButtonRenderer(button_look, _T(">")),
                      *this, NEXT);
-#endif
 
   const unsigned caption_width = ::Layout::Scale(50);
 
   range.Create(parent, layout.range, _("Distance"), caption_width, style);
   range.SetHelpText(_("For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances."));
   range.SetDataField(new DataFieldFloat(_T("%.0f"), _T("%.0f %%"),
-                                        fixed(-100), fixed(100), fixed(0),
-                                        fixed(5), false, this));
+                                        -100, 100, 0,
+                                        5, false, this));
 
   radial.Create(parent, layout.radial, _("Radial"), caption_width, style);
   radial.SetHelpText(_("For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Positive values rotate the range line clockwise, negative values rotate the range line counterclockwise."));
   radial.SetDataField(new DataFieldFloat(_T("%.0f"), _T("%.0f" DEG),
-                                         fixed(-90), fixed(90), fixed(0),
-                                         fixed(5), false, this));
+                                         -90, 90, 0,
+                                         5, false, this));
 
   ete.Create(parent, layout.ete, _("ETE"), caption_width, style);
   ete.SetReadOnly();
@@ -523,7 +498,7 @@ TargetWidget::RefreshCalculator()
 {
   bool nodisplay = false;
   bool is_aat;
-  fixed aat_time;
+  double aat_time;
 
   {
     ProtectedTaskManager::Lease lease(*protected_task_manager);
@@ -557,7 +532,7 @@ TargetWidget::RefreshCalculator()
   // update outputs
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
-  const fixed aat_time_estimated = task_stats.GetEstimatedTotalTime();
+  const auto aat_time_estimated = task_stats.GetEstimatedTotalTime();
 
   ete.SetVisible(!nodisplay);
 
@@ -635,18 +610,18 @@ TargetWidget::OnPrevClicked()
 }
 
 void
-TargetWidget::OnRangeModified(fixed new_value)
+TargetWidget::OnRangeModified(double new_value)
 {
   if (target_point < initial_active_task_point)
     return;
 
-  const fixed new_range = new_value / fixed(100);
+  const auto new_range = new_value / 100.;
   if (new_range == range_and_radial.range)
     return;
 
-  if (negative(new_range) != negative(range_and_radial.range)) {
+  if ((new_range < 0) != (range_and_radial.range < 0)) {
     /* when the range gets flipped, flip the radial as well */
-    if (negative(range_and_radial.radial.Native()))
+    if (range_and_radial.radial.IsNegative())
       range_and_radial.radial += Angle::HalfCircle();
     else
       range_and_radial.radial -= Angle::HalfCircle();
@@ -670,7 +645,7 @@ TargetWidget::OnRangeModified(fixed new_value)
 }
 
 void
-TargetWidget::OnRadialModified(fixed new_value)
+TargetWidget::OnRadialModified(double new_value)
 {
   if (target_point < initial_active_task_point)
     return;
@@ -741,7 +716,7 @@ TargetWidget::RefreshTargetPoint()
 inline void
 TargetWidget::OnNameClicked()
 {
-  Waypoint waypoint;
+  WaypointPtr waypoint;
 
   {
     ProtectedTaskManager::Lease lease(*protected_task_manager);
@@ -750,7 +725,7 @@ TargetWidget::OnNameClicked()
       return;
 
     const OrderedTaskPoint &tp = task.GetTaskPoint(target_point);
-    waypoint = tp.GetWaypoint();
+    waypoint = tp.GetWaypointPtr();
   }
 
   dlgWaypointDetailsShowModal(waypoint, false);

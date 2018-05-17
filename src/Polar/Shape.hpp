@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_POLAR_SHAPE_HPP
 #define XCSOAR_POLAR_SHAPE_HPP
 
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 #include <array>
@@ -35,12 +34,12 @@ struct PolarPoint {
   /**
    * Speed of point [m/s].
    */
-  fixed v;
+  double v;
 
   /**
    * Sink rate of point [m/s].  Must be negative.
    */
-  fixed w;
+  double w;
 };
 
 struct PolarShape {

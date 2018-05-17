@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,6 +21,9 @@
  */
 
 #include "FlatTriangleFan.hpp"
+#include "Math/Line2D.hpp"
+
+#include <assert.h>
 
 void
 FlatTriangleFan::CalcBoundingBox()
@@ -33,31 +36,90 @@ FlatTriangleFan::CalcBoundingBox()
     bounding_box.Expand(*it);
 }
 
-void
-FlatTriangleFan::AddPoint(const FlatGeoPoint &p)
+static constexpr bool
+IsSpike(FlatGeoPoint a, FlatGeoPoint b, FlatGeoPoint c)
 {
+  return Line2D<FlatGeoPoint>(a, b).Contains(c);
+}
+
+void
+FlatTriangleFan::AddOrigin(const AFlatGeoPoint &origin, size_t reserve)
+{
+  assert(vs.empty());
+
+  height = origin.altitude;
+
+  vs.reserve(reserve + 1);
+  vs.push_back(origin);
+}
+
+void
+FlatTriangleFan::AddPoint(FlatGeoPoint p)
+{
+  assert(!vs.empty());
+
   // avoid duplicates
-  if (!vs.empty() && p == vs.back())
+  if (p == vs.back())
+    return;
+
+  if (vs.size() >= 2 && IsSpike(vs[vs.size() - 2], vs.back(), p))
+    /* avoid spikes */
     return;
 
   vs.push_back(p);
 }
 
+/**
+ * Is there a spike wrapping around beginning and end of the
+ * container?
+ */
+static bool
+IsWrappedSpike(ConstBuffer<FlatGeoPoint> hull)
+{
+  assert(hull.size > 3);
+
+  return IsSpike(hull[hull.size - 2], hull[hull.size - 1], hull[0]) ||
+    IsSpike(hull[hull.size - 1], hull[0], hull[1]);
+}
+
 bool
-FlatTriangleFan::IsInside(const FlatGeoPoint &p) const
+FlatTriangleFan::CommitPoints(bool closed)
+{
+  auto hull = GetHull(closed);
+
+  while (hull.size > 3) {
+    if (!IsWrappedSpike(hull))
+      /* no spikes left: success! */
+      return true;
+
+    /* erase this spike */
+    vs.pop_back();
+    hull.pop_back();
+
+    /* .. and continue searching */
+  }
+
+  /* not enough points: fail */
+  return false;
+}
+
+bool
+FlatTriangleFan::IsInside(FlatGeoPoint p, bool closed) const
 {
   if (!bounding_box.IsInside(p))
     return false;
 
   bool inside = false;
-  for (auto i = vs.begin(), j = vs.end() - 1, end = vs.end();
+  const auto hull = GetHull(closed);
+  for (auto i = hull.begin(), end = hull.end(), j = std::prev(end);
        i != end; j = i++) {
-    if ((i->latitude > p.latitude) == (j->latitude > p.latitude))
+    if ((i->y > p.y) == (j->y > p.y))
       continue;
 
-    if ((p.longitude < (j->longitude - i->longitude) *
-                       (p.latitude - i->latitude) /
-                       (j->latitude - i->latitude) + i->longitude))
+    const FlatGeoPoint ji = *j - *i;
+    const FlatGeoPoint pi = p - *i;
+
+    if (0 < ji.x * pi.y / ji.y - pi.x)
       inside = !inside;
   }
 

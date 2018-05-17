@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_GLIDECOMPUTER_HPP
 
 #include "GlideComputerBlackboard.hpp"
-#include "Audio/VegaVoice.hpp"
 #include "Time/PeriodClock.hpp"
 #include "Time/DeltaTime.hpp"
 #include "GlideComputerAirData.hpp"
@@ -63,7 +62,6 @@ class GlideComputer : public GlideComputerBlackboard
   GeoPoint team_code_ref_location;
 
   PeriodClock idle_clock;
-  VegaVoice vegavoice;
 
   /**
    * This object is used to check whether to update
@@ -72,7 +70,8 @@ class GlideComputer : public GlideComputerBlackboard
   DeltaTime trace_history_time;
 
 public:
-  GlideComputer(const Waypoints &_way_points,
+  GlideComputer(const ComputerSettings &_settings,
+                const Waypoints &_way_points,
                 Airspaces &_airspace_database,
                 ProtectedTaskManager& task,
                 GlideComputerTaskEvents& events);
@@ -83,7 +82,15 @@ public:
     log_computer.SetLogger(logger);
   }
 
+  /**
+   * Resets the GlideComputer data
+   * @param full Reset all data?
+   */
   void ResetFlight(const bool full=true);
+
+  /**
+   * Initializes the GlideComputer
+   */
   void Initialise();
 
   void Expire() {
@@ -91,10 +98,16 @@ public:
   }
 
   /**
+   * Is called by the CalculationThread and processes the received GPS
+   * data in Basic().
+   *
    * @param force forces calculation even if there was no new GPS fix
    */
   bool ProcessGPS(bool force=false); // returns true if idle needs processing
 
+  /**
+   * Process slow calculations. Called by the CalculationThread.
+   */
   void ProcessIdle(bool exhaustive=false);
 
   void ProcessExhaustive() {
@@ -170,7 +183,14 @@ private:
   bool DetermineTeamCodeRefLocation();
 
   void CalculateTeammateBearingRange();
+
+  /**
+   * Calculates the own TeamCode and saves it to Calculated
+   */
   void CalculateOwnTeamCode();
+
+  void CalculateWorkingBand();
+  void CalculateVarioScale();
 };
 
 #endif

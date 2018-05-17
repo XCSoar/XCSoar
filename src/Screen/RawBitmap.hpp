@@ -22,10 +22,11 @@
 #ifdef USE_GDI
 #include <windef.h>
 #include <wingdi.h>
+#else
+#include <memory>
 #endif
 
 #include <stdint.h>
-#include "Compiler.h"
 
 class Canvas;
 
@@ -34,23 +35,23 @@ class GLTexture;
 #endif
 
 /**
- * BGRColor structure encapsulates color information about one point. Color
- * order is Blue, Green, Red (not RGB).
+ * The RawColor structure encapsulates color information about one
+ * point in a #RawBitmap.
  */
-struct BGRColor
+struct RawColor
 {
-  BGRColor() = default;
+  RawColor() = default;
 
 #ifdef GREYSCALE
   Luminosity8 value;
 
-  constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
+  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B)
     :value(R, G, B) {}
 
 #elif defined(HAVE_GLES)
   RGB565Color value;
 
-  constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
+  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B)
     :value(R, G, B) {}
 
 #elif defined(USE_MEMORY_CANVAS) || defined(ENABLE_SDL) || defined(USE_EGL) || defined(USE_GLX)
@@ -60,31 +61,23 @@ struct BGRColor
   uint8_t dummy;
   RGB8Color value;
 
-  constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
+  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B)
     :dummy(), value(R, G, B) {}
 #else
   /* little-endian */
   BGR8Color value;
   uint8_t dummy;
 
-  constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
+  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B)
     :value(R, G, B), dummy() {}
 #endif
 
 #else /* !SDL */
 
-#ifdef _WIN32_WCE
-  RGB555Color value;
-
-  constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
-    :value(R, G, B) {}
-
-#else /* !_WIN32_WCE */
   BGR8Color value;
 
-  constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
+  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B)
     :value(R, G, B) {}
-#endif /* !_WIN32_WCE */
 
 #endif
 };
@@ -92,7 +85,7 @@ struct BGRColor
 /**
  * This class provides fast drawing methods and offscreen buffer.
  */
-class RawBitmap
+class RawBitmap final
 #ifdef ENABLE_OPENGL
   :private GLSurfaceListener
 #endif
@@ -101,7 +94,12 @@ protected:
   const unsigned width;
   const unsigned height;
   const unsigned corrected_width;
-  BGRColor *buffer;
+
+#ifdef USE_GDI
+  RawColor *buffer;
+#else
+  const std::unique_ptr<RawColor[]> buffer;
+#endif
 
 #ifdef ENABLE_OPENGL
   GLTexture *texture;
@@ -110,20 +108,11 @@ protected:
    * Has the buffer been modified, and needs to be copied into the
    * texture?
    */
-  mutable bool dirty;
+  mutable bool dirty = true;
 #elif defined(USE_GDI)
   BITMAPINFO bi;
-#ifdef _WIN32_WCE
-  /**
-   * Need RGB masks for BI_BITFIELDS (16 bit 5-5-5).  This attribute
-   * is not used explicitly, it is only here to reserve enough room
-   * after the BITMAPINFO attribute.
-   */
-  DWORD mask_buffer[3];
-#endif
-#if defined(_WIN32_WCE) && _WIN32_WCE < 0x0400
+
   HBITMAP bitmap;
-#endif
 #endif
 
 public:
@@ -136,35 +125,46 @@ public:
    */
   RawBitmap(unsigned width, unsigned height);
 
-#ifdef ENABLE_OPENGL
-  virtual
-#endif
+#if defined(ENABLE_OPENGL) || defined(USE_GDI)
   ~RawBitmap();
+#endif
 
   /**
    * Returns the Buffer
-   * @return The Buffer as BGRColor array
+   * @return The Buffer as RawColor array
    */
-  BGRColor *GetBuffer() {
+  RawColor *GetBuffer() {
+#ifdef USE_GDI
     return buffer;
+#else
+    return buffer.get();
+#endif
+  }
+
+  const RawColor *GetBuffer() const {
+#ifdef USE_GDI
+    return buffer;
+#else
+    return buffer.get();
+#endif
   }
 
   /**
    * Returns a pointer to the top-most row.
    */
-  BGRColor *GetTopRow() {
+  RawColor *GetTopRow() {
 #ifndef USE_GDI
-    return buffer;
+    return GetBuffer();
 #else
   /* in WIN32 bitmaps, the bottom-most row comes first */
-    return buffer + (height - 1) * corrected_width;
+    return GetBuffer() + (height - 1) * corrected_width;
 #endif
   }
 
   /**
    * Returns a pointer to the row below the current one.
    */
-  BGRColor *GetNextRow(BGRColor *row) {
+  RawColor *GetNextRow(RawColor *row) {
 #ifndef USE_GDI
     return row + corrected_width;
 #else
@@ -214,7 +214,8 @@ public:
 #endif
 
   void StretchTo(unsigned width, unsigned height, Canvas &dest_canvas,
-                 unsigned dest_width, unsigned dest_height) const;
+                 unsigned dest_width, unsigned dest_height,
+                 bool transparent_white=false) const;
 
 #ifdef ENABLE_OPENGL
 private:

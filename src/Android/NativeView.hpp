@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,6 +27,7 @@ Copyright_License {
 #include "Java/Object.hxx"
 #include "Java/Class.hxx"
 #include "Java/String.hxx"
+#include "OS/Path.hpp"
 
 #ifndef NO_SCREEN
 #include "Screen/Point.hpp"
@@ -36,7 +37,7 @@ Copyright_License {
 
 class NativeView {
   JNIEnv *env;
-  Java::Object obj;
+  Java::GlobalObject obj;
 
   unsigned width, height;
   unsigned xdpi, ydpi;
@@ -53,6 +54,11 @@ class NativeView {
   static jmethodID open_file_method;
   static jmethodID getNetState_method;
 
+  static Java::TrivialClass clsBitmap;
+  static jmethodID createBitmap_method;
+
+  static Java::TrivialClass clsBitmapConfig;
+  static jmethodID bitmapConfigValueOf_method;
 public:
   /**
    * @see http://developer.android.com/reference/android/R.attr.html#screenOrientation
@@ -86,9 +92,6 @@ public:
      xdpi(_xdpi), ydpi(_ydpi) {
     Java::String::CopyTo(env, _product, product, sizeof(product));
   }
-
-  unsigned GetWidth() const { return width; }
-  unsigned GetHeight() const { return height; }
 
 #ifndef NO_SCREEN
   PixelSize GetSize() const {
@@ -134,10 +137,9 @@ public:
     return env->CallObjectMethod(obj, loadResourceBitmap_method, name2.Get());
   }
 
-  jobject loadFileBitmap(const char *path) {
-    Java::String path2(env, path);
-    return env->CallObjectMethod(obj, loadFileBitmap_method, path2.Get());
-  }
+  jobject loadFileTiff(Path path);
+
+  jobject loadFileBitmap(Path path);
 
   bool bitmapToTexture(jobject bmp, bool alpha, jint *result) {
     jintArray result2 = env->NewIntArray(5);

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,7 +26,8 @@ Copyright_License {
 #include "Polar/Parser.hpp"
 #include "IO/KeyValueFileReader.hpp"
 #include "IO/KeyValueFileWriter.hpp"
-#include "IO/TextWriter.hpp"
+#include "IO/FileOutputStream.hxx"
+#include "IO/BufferedOutputStream.hxx"
 #include "IO/FileLineReader.hpp"
 #include "Util/NumberParser.hpp"
 #include "LogFile.hpp"
@@ -38,14 +39,14 @@ ReadPolar(const char *string, Plane &plane)
 }
 
 static bool
-ReadFixed(const char *string, fixed &out)
+ReadDouble(const char *string, double &out)
 {
   char *endptr;
   double tmp = ParseDouble(string, &endptr);
   if (endptr == string)
     return false;
 
-  out = fixed(tmp);
+  out = tmp;
   return true;
 }
 
@@ -96,17 +97,17 @@ PlaneGlue::Read(Plane &plane, KeyValueFileReader &reader)
     } else if (!has_polar && StringIsEqual(pair.key, "PolarInformation")) {
       has_polar = ReadPolar(pair.value, plane);
     } else if (!has_reference_mass && StringIsEqual(pair.key, "PolarReferenceMass")) {
-      has_reference_mass = ReadFixed(pair.value, plane.reference_mass);
+      has_reference_mass = ReadDouble(pair.value, plane.reference_mass);
     } else if (!has_dry_mass && StringIsEqual(pair.key, "PolarDryMass")) {
-      has_dry_mass = ReadFixed(pair.value, plane.dry_mass);
+      has_dry_mass = ReadDouble(pair.value, plane.dry_mass);
     } else if (!has_max_ballast && StringIsEqual(pair.key, "MaxBallast")) {
-      has_max_ballast = ReadFixed(pair.value, plane.max_ballast);
+      has_max_ballast = ReadDouble(pair.value, plane.max_ballast);
     } else if (!has_dump_time && StringIsEqual(pair.key, "DumpTime")) {
       has_dump_time = ReadUnsigned(pair.value, plane.dump_time);
     } else if (!has_max_speed && StringIsEqual(pair.key, "MaxSpeed")) {
-      has_max_speed = ReadFixed(pair.value, plane.max_speed);
+      has_max_speed = ReadDouble(pair.value, plane.max_speed);
     } else if (!has_wing_area && StringIsEqual(pair.key, "WingArea")) {
-      has_wing_area = ReadFixed(pair.value, plane.wing_area);
+      has_wing_area = ReadDouble(pair.value, plane.wing_area);
     }
   }
 
@@ -126,28 +127,26 @@ PlaneGlue::Read(Plane &plane, KeyValueFileReader &reader)
   if (!has_handicap)
     plane.handicap = 100;
   if (!has_max_ballast)
-    plane.max_ballast = fixed(0);
+    plane.max_ballast = 0;
   if (!has_dump_time)
     plane.dump_time = 0;
   if (!has_max_speed)
-    plane.max_speed = fixed(55.555);
+    plane.max_speed = 55.555;
   if (!has_wing_area)
-    plane.wing_area = fixed(0);
+    plane.wing_area = 0;
 
   return true;
 }
 
 bool
-PlaneGlue::ReadFile(Plane &plane, const TCHAR *path)
-{
+PlaneGlue::ReadFile(Plane &plane, Path path)
+try {
   FileLineReaderA reader(path);
-  if (reader.error()) {
-    LogFormat(_T("Failed to open plane file: %s"), path);
-    return false;
-  }
-
   KeyValueFileReader kvreader(reader);
   return Read(plane, kvreader);
+} catch (const std::runtime_error &e) {
+  LogError(e);
+  return false;
 }
 
 void
@@ -181,14 +180,13 @@ PlaneGlue::Write(const Plane &plane, KeyValueFileWriter &writer)
   writer.Write("WingArea", tmp);
 }
 
-bool
-PlaneGlue::WriteFile(const Plane &plane, const TCHAR *path)
+void
+PlaneGlue::WriteFile(const Plane &plane, Path path)
 {
-  TextWriter writer(path);
-  if (!writer.IsOpen())
-    return false;
-
-  KeyValueFileWriter kvwriter(writer);
+  FileOutputStream file(path);
+  BufferedOutputStream buffered(file);
+  KeyValueFileWriter kvwriter(buffered);
   Write(plane, kvwriter);
-  return true;
+  buffered.Flush();
+  file.Commit();
 }

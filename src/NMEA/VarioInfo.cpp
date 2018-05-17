@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,10 +27,10 @@ Copyright_License {
 void
 VarioInfo::Clear()
 {
-  sink_rate = fixed(0);
-  average = netto_average = fixed(0);
+  sink_rate = 0;
+  average = netto_average = 0;
   cruise_gr = INVALID_GR;
-  average_gr = fixed(0);
+  average_gr = 0;
   gr = INVALID_GR;
   ld_vario = INVALID_GR;
 

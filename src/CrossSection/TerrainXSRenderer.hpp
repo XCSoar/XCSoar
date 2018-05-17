@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,12 +24,12 @@
 #ifndef TERRAIN_CROSS_SECTION_RENDERER_HPP
 #define TERRAIN_CROSS_SECTION_RENDERER_HPP
 
-#include "Terrain/RasterBuffer.hpp"
+#include "Terrain/Height.hpp"
 
 class Canvas;
 class ChartRenderer;
 struct CrossSectionLook;
-struct RasterPoint;
+struct BulkPixelPoint;
 
 /**
  * A Window which renders a terrain and airspace cross-section
@@ -42,11 +42,11 @@ public:
   TerrainXSRenderer(const CrossSectionLook &_look): look(_look) {}
 
   void Draw(Canvas &canvas, const ChartRenderer &chart,
-            const short *elevations) const;
+            const TerrainHeight *elevations) const;
 
 private:
-  void DrawPolygon(Canvas &canvas, RasterBuffer::TerrainType type,
-                   const RasterPoint *points, unsigned num_points) const;
+  void DrawPolygon(Canvas &canvas, TerrainType type,
+                   const BulkPixelPoint *points, unsigned num_points) const;
 };
 
 #endif

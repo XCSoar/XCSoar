@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -38,18 +38,14 @@ class WndForm;
  * the process quits.
  */
 class SingleWindow : public TopWindow {
-#ifdef USE_GDI
+#ifdef USE_WINUSER
   static constexpr const TCHAR *class_name = _T("XCSoarMain");
 #endif
 
   std::list<WndForm *> dialogs;
 
 public:
-#ifdef USE_GDI
-  static bool Find(const TCHAR *text) {
-    return TopWindow::find(class_name, text);
-  }
-
+#ifdef USE_WINUSER
   /**
    * Register the WIN32 window class.
    */
@@ -58,7 +54,7 @@ public:
 
   void Create(const TCHAR *text, PixelSize size,
               TopWindowStyle style=TopWindowStyle()) {
-#ifdef USE_GDI
+#ifdef USE_WINUSER
     TopWindow::Create(class_name, text, size, style);
 #else
     TopWindow::Create(text, size, style);
@@ -94,10 +90,10 @@ public:
     return *dialogs.front();
   }
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
 protected:
   gcc_pure
-  bool FilterMouseEvent(RasterPoint pt, Window *allowed) const;
+  bool FilterMouseEvent(PixelPoint pt, Window *allowed) const;
 #endif
 
 public:

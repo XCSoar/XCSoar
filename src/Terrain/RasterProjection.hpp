@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_TERRAIN_RASTER_PROJECTION_HPP
 #define XCSOAR_TERRAIN_RASTER_PROJECTION_HPP
 
-#include "Terrain/RasterLocation.hpp"
+#include "RasterTraits.hpp"
+#include "RasterLocation.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 class GeoBounds;
@@ -37,7 +37,7 @@ class GeoBounds;
  */
 class RasterProjection {
   int left, top;
-  fixed x_scale, y_scale;
+  double x_scale, y_scale;
 
 public:
   /**
@@ -49,51 +49,42 @@ public:
    */
   void Set(const GeoBounds &bounds, unsigned width, unsigned height);
 
-  gcc_pure
-  Angle WidthToAngle(fixed pixels) const {
-    return Angle::Native(fixed(pixels) / x_scale);
+  constexpr Angle WidthToAngle(double pixels) const {
+    return Angle::Native(pixels / x_scale);
   }
 
-  gcc_pure
-  Angle HeightToAngle(fixed pixels) const {
-    return Angle::Native(fixed(pixels) / y_scale);
+  constexpr Angle HeightToAngle(double pixels) const {
+    return Angle::Native(pixels / y_scale);
   }
 
-  gcc_pure
-  int AngleToWidth(Angle angle) const {
+  constexpr int AngleToWidth(Angle angle) const {
     return (int)(angle.Native() * x_scale);
   }
 
-  gcc_pure
-  int AngleToHeight(Angle angle) const {
+  constexpr int AngleToHeight(Angle angle) const {
     return (int)(angle.Native() * y_scale);
   }
 
-  gcc_pure SignedRasterLocation
-  ProjectFine(const GeoPoint &location) const {
-    const int x = AngleToWidth(location.longitude) - left;
-    const int y = top - AngleToHeight(location.latitude);
-
-    return {x, y};
+  constexpr SignedRasterLocation ProjectFine(GeoPoint location) const {
+    return SignedRasterLocation(AngleToWidth(location.longitude) - left,
+                                top - AngleToHeight(location.latitude));
   }
 
-  gcc_pure
-  GeoPoint
-  UnprojectFine(SignedRasterLocation coords) const {
-    const Angle x = WidthToAngle(fixed((int)coords.x + left));
-    const Angle y = HeightToAngle(fixed(top - (int)coords.y));
-    return GeoPoint(x, y);
+  constexpr GeoPoint UnprojectFine(SignedRasterLocation coords) const {
+    return GeoPoint(WidthToAngle((int)coords.x + left),
+                    HeightToAngle(top - (int)coords.y));
   }
 
-  gcc_pure SignedRasterLocation
-  ProjectCoarse(const GeoPoint &location) const {
-    return ProjectFine(location) >> 8;
+  constexpr SignedRasterLocation ProjectCoarse(GeoPoint location) const {
+    return ProjectFine(location) >> RasterTraits::SUBPIXEL_BITS;
   }
 
-  gcc_pure
-  GeoPoint
-  UnprojectCoarse(SignedRasterLocation coords) const {
-    return UnprojectFine(coords << 8);
+  constexpr GeoPoint UnprojectCoarse(SignedRasterLocation coords) const {
+    return UnprojectFine(coords << RasterTraits::SUBPIXEL_BITS);
+  }
+
+  constexpr SignedRasterLocation ProjectCoarseRound(GeoPoint location) const {
+    return ProjectFine(location).RoundingRightShift(RasterTraits::SUBPIXEL_BITS);
   }
 
   /**
@@ -101,14 +92,14 @@ public:
    *
    * @param pixels the pixel distance between two pixels
    */
-  gcc_pure fixed
+  gcc_pure double
   FinePixelDistance(const GeoPoint &location, unsigned pixels) const;
 
   gcc_pure
-  fixed CoarsePixelDistance(const GeoPoint &location, unsigned pixels) const {
+  double CoarsePixelDistance(const GeoPoint &location, unsigned pixels) const {
     /* factor 256 because the caller should pass a physical pixel
        number, not interpolated */
-    return FinePixelDistance(location, pixels << 8);
+    return FinePixelDistance(location, pixels << RasterTraits::SUBPIXEL_BITS);
   }
 
   /**
@@ -117,10 +108,10 @@ public:
    * @param pixels the pixel distance between two pixels
    */
   gcc_pure unsigned
-  DistancePixelsFine(fixed distance) const;
+  DistancePixelsFine(double distance) const;
 
-  gcc_pure unsigned DistancePixelsCoarse(fixed distance) const {
-    return DistancePixelsFine(distance) >> 8;
+  gcc_pure unsigned DistancePixelsCoarse(double distance) const {
+    return DistancePixelsFine(distance) >> RasterTraits::SUBPIXEL_BITS;
   }
 };
 

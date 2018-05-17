@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,10 +26,10 @@ Copyright_License {
 
 #include "Util/NonCopyable.hpp"
 #include "Compiler.h"
-#include "Math/fixed.hpp"
 #include "TaskPointFactoryType.hpp"
 #include "ValidationError.hpp"
 #include "LegalPointSet.hpp"
+#include "Engine/Waypoint/Ptr.hpp"
 
 #include <stdint.h>
 
@@ -44,7 +44,6 @@ struct TaskBehaviour;
 struct OrderedTaskSettings;
 class OrderedTaskPoint;
 class ObservationZonePoint;
-struct Waypoint;
 
 /**
  * AbstractTaskFactory is a class used as a sort of wizard
@@ -165,7 +164,7 @@ public:
    *
    * @return True if operation successful
    */
-  bool AppendOptionalStart(const Waypoint& wp);
+  bool AppendOptionalStart(WaypointPtr wp);
 
   /**
    * Add optional start point to ordered task.  It is the
@@ -227,7 +226,7 @@ public:
    * @return New taskpoint (or old one if failed)
    */
   const OrderedTaskPoint &Relocate(const unsigned position,
-                                   const Waypoint& waypoint);
+                                   WaypointPtr &&waypoint);
 
   /**
    * Provide list of start types valid for later passing to createStart()
@@ -257,15 +256,15 @@ public:
   }
 
   /**
-   * @param start_radius: either fixed(-1) or a valid value
-   * @param turnpoint_radius: either fixed(-1) or a valid value
-   * @param finish_radius: either fixed(-1) or a valid value
+   * @param start_radius: either -1 or a valid value
+   * @param turnpoint_radius: either -1 or a valid value
+   * @param finish_radius: either -1 or a valid value
    *
    * sets radiuses to the correct default for that task type or general defaults
    */
   virtual void
-  GetPointDefaultSizes(const TaskPointFactoryType type, fixed &start_radius,
-                       fixed &turnpoint_radius, fixed &finish_radius) const;
+  GetPointDefaultSizes(const TaskPointFactoryType type, double &start_radius,
+                       double &turnpoint_radius, double &finish_radius) const;
 
   /** 
    * Create a point of supplied type using default sector sizes
@@ -277,7 +276,7 @@ public:
    */
   gcc_malloc
   OrderedTaskPoint* CreatePoint(const TaskPointFactoryType type,
-                                const Waypoint &wp) const;
+                                WaypointPtr wp) const;
 
   /**
    * Create a point of supplied type
@@ -292,10 +291,10 @@ public:
    */
   gcc_malloc
   OrderedTaskPoint* CreatePoint(const TaskPointFactoryType type,
-                                const Waypoint &wp,
-                                const fixed start_radius,
-                                const fixed turnpoint_radius,
-                                const fixed finish_radius) const;
+                                WaypointPtr wp,
+                                double start_radius,
+                                double turnpoint_radius,
+                                double finish_radius) const;
 
   /**
    * Create start point of specified type
@@ -306,7 +305,8 @@ public:
    * @return Initialised StartPoint if valid, otherwise NULL
    */
   gcc_malloc
-  StartPoint* CreateStart(const TaskPointFactoryType type, const Waypoint &wp) const;
+  StartPoint *CreateStart(const TaskPointFactoryType type,
+                          WaypointPtr wp) const;
 
   /**
    * Create intermediate point of specified type
@@ -318,7 +318,7 @@ public:
    */
   gcc_malloc
   IntermediateTaskPoint* CreateIntermediate(const TaskPointFactoryType type,
-                                            const Waypoint &wp) const;
+                                            WaypointPtr wp) const;
 
   /**
    * Create finish point of specified type
@@ -330,7 +330,7 @@ public:
    */
   gcc_malloc
   FinishPoint* CreateFinish(const TaskPointFactoryType type,
-                            const Waypoint &wp) const;
+                            WaypointPtr wp) const;
 
   /**
    * Create start point of default type
@@ -340,7 +340,7 @@ public:
    * @return Initialised StartPoint if valid, otherwise NULL
    */
   gcc_malloc
-  StartPoint* CreateStart(const Waypoint &wp) const;
+  StartPoint *CreateStart(WaypointPtr wp) const;
 
   /**
    * Create intermediate point of default type
@@ -350,7 +350,7 @@ public:
    * @return Initialised IntermediateTaskPoint if valid, otherwise NULL
    */
   gcc_malloc
-  IntermediateTaskPoint* CreateIntermediate(const Waypoint &wp) const;
+  IntermediateTaskPoint *CreateIntermediate(WaypointPtr wp) const;
 
   /**
    * Create finish point of default type
@@ -360,7 +360,7 @@ public:
    * @return Initialised FinishPoint if valid, otherwise NULL
    */
   gcc_malloc
-  FinishPoint* CreateFinish(const Waypoint &wp) const;
+  FinishPoint *CreateFinish(WaypointPtr wp) const;
 
   /**
    * Create start point given an OZ
@@ -371,7 +371,8 @@ public:
    * @return Initialised object.  Ownership is transferred to client.
    */
   gcc_malloc
-  StartPoint* CreateStart(ObservationZonePoint* pt, const Waypoint &wp) const;
+  StartPoint *CreateStart(ObservationZonePoint *pt,
+                          WaypointPtr wp) const;
 
   /**
    * Creates new OrderedTaskPoint of a different type with the
@@ -409,7 +410,7 @@ public:
    * @return Initialised object.  Ownership is transferred to client.
    */
   gcc_malloc
-  ASTPoint* CreateASTPoint(ObservationZonePoint* pt, const Waypoint &wp) const;
+  ASTPoint *CreateASTPoint(ObservationZonePoint *pt, WaypointPtr wp) const;
 
   /**
    * Create an AAT point given an OZ
@@ -420,7 +421,7 @@ public:
    * @return Initialised object.  Ownership is transferred to client.
    */
   gcc_malloc
-  AATPoint* CreateAATPoint(ObservationZonePoint* pt, const Waypoint &wp) const;
+  AATPoint *CreateAATPoint(ObservationZonePoint* pt, WaypointPtr wp) const;
 
   /**
    * Create a finish point given an OZ
@@ -431,7 +432,7 @@ public:
    * @return Initialised object.  Ownership is transferred to client.
    */
   gcc_malloc
-  FinishPoint* CreateFinish(ObservationZonePoint* pt, const Waypoint &wp) const;
+  FinishPoint *CreateFinish(ObservationZonePoint* pt, WaypointPtr wp) const;
 
   /**
    * Check whether task is complete and valid according to factory rules

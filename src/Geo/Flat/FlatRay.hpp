@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,9 +23,9 @@
 #define FLATRAY_HPP
 
 #include "FlatGeoPoint.hpp"
-#include "Math/fixed.hpp"
-#include <utility>
 #include "Compiler.h"
+
+#include <utility>
 
 /** Projected ray (a point and vector) in 2-d cartesian integer coordinates */
 class FlatRay {
@@ -35,9 +35,9 @@ public:
   /** Vector representing ray direction and length */
   FlatGeoPoint vector;
   /** speedups for box intersection test */
-  fixed fx;
+  double fx;
   /** speedups for box intersection test */
-  fixed fy;
+  double fy;
 
   /**
    * Constructor given start/end locations
@@ -47,8 +47,8 @@ public:
    */
   FlatRay(const FlatGeoPoint& from, const FlatGeoPoint& to)
     :point(from), vector(to - from),
-     fx(vector.longitude != 0 ? 1.0 / vector.longitude : 0),
-     fy(vector.latitude != 0 ? 1.0 / vector.latitude : 0) {}
+     fx(vector.x != 0 ? 1.0 / vector.x : 0),
+     fy(vector.y != 0 ? 1.0 / vector.y : 0) {}
 
   /**
    * Return the length of the ray.
@@ -64,7 +64,7 @@ public:
    * @return Parameter [0,1] of vector on this ray that intersection occurs (or -1 if fail)
    */
   gcc_pure
-  fixed Intersects(const FlatRay &that) const;
+  double Intersects(const FlatRay &that) const;
 
   /**
    * Parametric form of ray
@@ -74,7 +74,7 @@ public:
    * @return Location of end point
    */
   gcc_pure
-  FlatGeoPoint Parametric(const fixed t) const;
+  FlatGeoPoint Parametric(const double t) const;
 
   /**
    * Determine if two rays intersect away from their nodes
@@ -88,7 +88,7 @@ public:
    * intersect.
    */
   gcc_pure
-  fixed DistinctIntersection(const FlatRay& that) const;
+  double DistinctIntersection(const FlatRay& that) const;
 
 private:
   gcc_pure

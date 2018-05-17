@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,9 +23,12 @@ Copyright_License {
 
 #include "Net/HTTP/Session.hpp"
 #include "Net/HTTP/Request.hpp"
+#include "Net/HTTP/Handler.hpp"
 #include "Net/HTTP/Init.hpp"
 #include "OS/ConvertPathName.hpp"
+#include "Util/PrintException.hxx"
 
+#include <exception>
 #include <iostream>
 #include <stdio.h>
 
@@ -33,43 +36,41 @@ Copyright_License {
 
 using namespace std;
 
-static bool
-Download(const char *url, const TCHAR *path)
+class MyResponseHandler final : public Net::ResponseHandler {
+  FILE *const file;
+
+public:
+  explicit MyResponseHandler(FILE *_file):file(_file) {}
+
+  void ResponseReceived(int64_t content_length) override {
+  }
+
+  void DataReceived(const void *data, size_t length) override {
+    fwrite(data, 1, length, stdout);
+
+    if (file != nullptr)
+      fwrite(data, 1, length, file);
+  }
+};
+
+static void
+Download(const char *url, Path path)
 {
   cout << "Creating Session ... ";
   Net::Session session;
-  cout << (session.Error() ? "failed" : "done") << endl;
-  if (session.Error())
-    return false;
-
-  cout << "Creating Request ... ";
-  Net::Request request(session, url);
-  if (!request.Send()) {
-    cout << "failed" << endl;
-    return false;
-  }
-
   cout << "done" << endl;
 
-  cout << "Reading Response:" << endl;
-  cout << "-------------------------------------------------" << endl;
+  cout << "Creating Request ... ";
 
-  FILE *file = path ? _tfopen(path, _T("wb")) : NULL;
+  FILE *file = path != nullptr ? _tfopen(path.c_str(), _T("wb")) : nullptr;
+  MyResponseHandler handler(file);
+  Net::Request request(session, handler, url);
+  cout << "done" << endl;
 
-  char buffer[256];
-  while (request.Read(buffer, sizeof(buffer))) {
-    cout << buffer;
-
-    if (file != NULL)
-      fputs(buffer, file);
-  }
+  request.Send();
 
   if (file != NULL)
     fclose(file);
-
-  cout << "-------------------------------------------------" << endl;
-
-  return true;
 }
 
 int
@@ -83,12 +84,17 @@ main(int argc, char *argv[])
     return 1;
   }
 
-  Net::Initialise();
+  try {
+    Net::Initialise();
 
-  const char *url = argv[1];
-  Download(url, argc > 2 ? (const TCHAR *)PathName(argv[2]) : NULL);
+    const char *url = argv[1];
+    Download(url, argc > 2 ? (Path)PathName(argv[2]) : nullptr);
 
-  Net::Deinitialise();
+    Net::Deinitialise();
+  } catch (const std::exception &exception) {
+    PrintException(exception);
+    return EXIT_FAILURE;
+  }
 
   return 0;
 }

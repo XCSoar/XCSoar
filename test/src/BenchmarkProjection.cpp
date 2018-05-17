@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@ class TestProjection : public Projection {
 public:
   TestProjection() {
     SetScreenOrigin(0, 0);
-    SetScale(fixed(640) / (fixed(100) * 2));
+    SetScale(640. / (100 * 2));
     SetGeoLocation(GeoPoint(Angle::Degrees(7.7061111111111114),
                             Angle::Degrees(51.051944444444445)));
   }
@@ -44,7 +44,7 @@ int main(int argc, char **argv)
                          Angle::Degrees(51.051944444444445));
   long x = 0, y = 0;
   for (unsigned i = 64 * 1024 * 1024; i-- > 0;) {
-    RasterPoint rp = projection.GeoToScreen(gp);
+    auto rp = projection.GeoToScreen(gp);
 
     /* prevent gcc from optimizing this loop away */
     x += rp.x;

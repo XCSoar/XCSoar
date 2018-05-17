@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2010-2011 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -34,6 +34,8 @@
 
 #include <jni.h>
 
+#include <string>
+
 #include <stddef.h>
 
 namespace Java {
@@ -63,8 +65,14 @@ namespace Java {
 		 *
 		 * @return a pointer to the terminating null byte, nullptr on error
 		 */
-		char *CopyTo(JNIEnv *env, char *buffer, size_t max_size) {
-			return CopyTo(env, Get(), buffer, max_size);
+		char *CopyTo(char *buffer, size_t max_size) {
+			return CopyTo(GetEnv(), Get(), buffer, max_size);
+		}
+
+		static std::string ToString(JNIEnv *env, jstring s);
+
+		std::string ToString() const {
+			return ToString(GetEnv(), Get());
 		}
 	};
 }

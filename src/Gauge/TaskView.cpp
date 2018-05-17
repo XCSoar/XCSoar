@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,10 +30,12 @@
 #include "Renderer/TaskPointRenderer.hpp"
 #include "Renderer/TaskRenderer.hpp"
 #include "Renderer/FAITriangleAreaRenderer.hpp"
+#include "Renderer/MapScaleRenderer.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Look/TaskLook.hpp"
+#include "Look/MapLook.hpp"
 #include "MapSettings.hpp"
 
 #ifndef ENABLE_OPENGL
@@ -142,7 +144,7 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
     static constexpr Color fill_color = COLOR_YELLOW;
 #if defined(ENABLE_OPENGL) || defined(USE_MEMORY_CANVAS)
 #ifdef ENABLE_OPENGL
-    const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    const ScopeAlphaBlend alpha_blend;
 #endif
 
     canvas.Select(Brush(fill_color.WithAlpha(40)));
@@ -183,8 +185,8 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
      *       painting the task point with a different pen and brush,
      *       e.g. red, 4px wide
      */
-    RasterPoint pt = projection.GeoToScreen(task.GetPoint(highlight_index).
-                                            GetLocation());
+    auto pt = projection.GeoToScreen(task.GetPoint(highlight_index).
+                                     GetLocation());
     canvas.Select(task_look.highlight_pen);
     canvas.DrawLine(pt.x - 7, pt.y - 7, pt.x + 7, pt.y + 7);
     canvas.DrawLine(pt.x + 7, pt.y - 7, pt.x - 7, pt.y + 7);
@@ -197,6 +199,7 @@ PaintTask(Canvas &canvas, const PixelRect &rc, const OrderedTask &task,
           const MapSettings &settings_map,
           const TaskLook &task_look,
           const AirspaceLook &airspace_look,
+          const OverlayLook &overlay_look,
           const RasterTerrain *terrain, const Airspaces *airspaces,
           bool fai_sectors,
           int highlight_index)
@@ -211,6 +214,8 @@ PaintTask(Canvas &canvas, const PixelRect &rc, const OrderedTask &task,
             settings_map,
             task_look, airspace_look, terrain, airspaces,
             fai_sectors, highlight_index);
+
+  RenderMapScale(canvas, projection, rc, overlay_look);
 }
 
 void
@@ -219,6 +224,7 @@ PaintTaskPoint(Canvas &canvas, const PixelRect &rc,
                const GeoPoint &location,
                const MapSettings &settings_map, const TaskLook &task_look,
                const AirspaceLook &airspace_look,
+               const OverlayLook &overlay_look,
                const RasterTerrain *terrain, const Airspaces *airspaces,
                int highlight_index)
 {
@@ -227,4 +233,6 @@ PaintTaskPoint(Canvas &canvas, const PixelRect &rc,
             settings_map,
             task_look, airspace_look, terrain, airspaces,
             false, highlight_index);
+
+  RenderMapScale(canvas, projection, rc, overlay_look);
 }

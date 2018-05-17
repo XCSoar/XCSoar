@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -51,7 +51,7 @@ LogComputer::Run(const MoreData &basic, const DerivedInfo &calculated,
 {
   const bool location_jump = basic.location_available &&
     last_location.IsValid() &&
-    basic.location.DistanceS(last_location) > fixed(200);
+    basic.location.DistanceS(last_location) > 200;
 
   last_location = basic.location_available
     ? basic.location : GeoPoint::Invalid();

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,12 +22,12 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
+#include "OverlayBitmap.hpp"
 #include "Look/MapLook.hpp"
 #include "Topography/CachedTopographyRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "Terrain/RasterWeatherCache.hpp"
+#include "Weather/Rasp/RaspRenderer.hpp"
 #include "Computer/GlideComputer.hpp"
-#include "Operation/Operation.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scissor.hpp"
@@ -39,56 +39,28 @@ Copyright_License {
 MapWindow::MapWindow(const MapLook &_look,
                      const TrafficLook &_traffic_look)
   :look(_look),
-   follow_mode(FOLLOW_SELF),
-   waypoints(nullptr),
-   topography(nullptr), topography_renderer(nullptr),
-   terrain(nullptr),
-   terrain_radius(fixed(0)),
-   weather(nullptr),
    traffic_look(_traffic_look),
    waypoint_renderer(nullptr, look.waypoint),
    airspace_renderer(look.airspace),
    airspace_label_renderer(look.airspace),
-   trail_renderer(look.trail),
-   task(nullptr), route_planner(nullptr), glide_computer(nullptr),
-#ifdef HAVE_NOAA
-   noaa_store(nullptr),
-#endif
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-   skylines_data(nullptr),
-#endif
-   compass_visible(true)
-#ifndef ENABLE_OPENGL
-   , ui_generation(1), buffer_generation(0),
-   scale_buffer(0)
-#endif
-{}
+   trail_renderer(look.trail) {}
 
 MapWindow::~MapWindow()
 {
   Destroy();
 
   delete topography_renderer;
-  delete weather;
 }
+
+#ifdef ENABLE_OPENGL
 
 void
-MapWindow::Create(ContainerWindow &parent, const PixelRect &rc)
+MapWindow::SetOverlay(std::unique_ptr<MapOverlay> &&_overlay)
 {
-  WindowStyle style;
-  style.EnableDoubleClicks();
-  DoubleBufferWindow::Create(parent, rc, style);
-
-  // initialize other systems
-  visible_projection.SetMapScale(fixed(5000));
-  visible_projection.SetScreenOrigin((rc.left + rc.right) / 2,
-                                     (rc.bottom + rc.top) / 2);
-  visible_projection.UpdateScreenBounds();
-
-#ifndef ENABLE_OPENGL
-  buffer_projection = visible_projection;
-#endif
+  overlay = std::move(_overlay);
 }
+
+#endif
 
 void
 MapWindow::SetGlideComputer(GlideComputer *_gc)
@@ -103,6 +75,8 @@ void
 MapWindow::FlushCaches()
 {
   background.Flush();
+  if (rasp_renderer)
+    rasp_renderer->Flush();
   airspace_renderer.Flush();
 }
 
@@ -141,40 +115,11 @@ MapWindow::UpdateTerrain()
     return false;
 
   GeoPoint location = visible_projection.GetGeoScreenCenter();
-  fixed radius = visible_projection.GetScreenWidthMeters() / 2;
-  if (terrain_radius >= radius && terrain_center.IsValid() &&
-      terrain_center.DistanceS(location) < fixed(1000))
-    return false;
+  auto radius = visible_projection.GetScreenWidthMeters() / 2;
 
   // always service terrain even if it's not used by the map,
   // because it's used by other calculations
-  RasterTerrain::ExclusiveLease lease(*terrain);
-  lease->SetViewCenter(location, radius);
-  if (lease->IsDirty())
-    terrain_radius = fixed(0);
-  else {
-    terrain_radius = radius;
-    terrain_center = location;
-  }
-
-  return lease->IsDirty();
-}
-
-bool
-MapWindow::UpdateWeather()
-{
-  if (weather == nullptr || !Calculated().date_time_local.IsTimePlausible())
-    return false;
-
-  const WeatherUIState &state = GetUIState().weather;
-  weather->SetParameter(state.map);
-  weather->SetTime(state.time);
-
-  QuietOperationEnvironment operation;
-  weather->Reload(Calculated().date_time_local, operation);
-  weather->SetViewCenter(visible_projection.GetGeoScreenCenter(),
-                         visible_projection.GetScreenWidthMeters() / 2);
-  return weather->IsDirty();
+  return terrain->UpdateTiles(location, radius);
 }
 
 /**
@@ -218,22 +163,12 @@ void
 MapWindow::SetTerrain(RasterTerrain *_terrain)
 {
   terrain = _terrain;
-  terrain_center = GeoPoint::Invalid();
   background.SetTerrain(_terrain);
 }
 
 void
-MapWindow::SetWeather(const RasterWeatherStore *_weather)
+MapWindow::SetRasp(const std::shared_ptr<RaspStore> &_rasp_store)
 {
-  delete weather;
-  weather = _weather != nullptr
-    ? new RasterWeatherCache(*_weather)
-    : nullptr;
-  background.SetWeather(weather);
-}
-
-void
-MapWindow::SetMapScale(const fixed x)
-{
-  visible_projection.SetMapScale(x);
+  rasp_renderer.reset();
+  rasp_store = _rasp_store;
 }

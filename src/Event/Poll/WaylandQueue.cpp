@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,8 +24,7 @@ Copyright_License {
 #include "WaylandQueue.hpp"
 #include "Queue.hpp"
 #include "../Shared/Event.hpp"
-#include "IO/Async/IOLoop.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 #include <wayland-client.h>
 
@@ -73,8 +72,8 @@ WaylandPointerEnter(void *data, struct wl_pointer *wl_pointer, uint32_t serial,
 {
   auto &queue = *(WaylandEventQueue *)data;
 
-  queue.PointerMotion(Point2D<int>(wl_fixed_to_int(surface_x),
-                                   wl_fixed_to_int(surface_y)));
+  queue.PointerMotion(IntPoint2D(wl_fixed_to_int(surface_x),
+                                 wl_fixed_to_int(surface_y)));
 }
 
 static void
@@ -89,8 +88,8 @@ WaylandPointerMotion(void *data, struct wl_pointer *wl_pointer, uint32_t time,
 {
   auto &queue = *(WaylandEventQueue *)data;
 
-  queue.PointerMotion(Point2D<int>(wl_fixed_to_int(surface_x),
-                                   wl_fixed_to_int(surface_y)));
+  queue.PointerMotion(IntPoint2D(wl_fixed_to_int(surface_x),
+                                 wl_fixed_to_int(surface_y)));
 }
 
 static void
@@ -121,9 +120,10 @@ static constexpr struct wl_pointer_listener pointer_listener = {
   WaylandPointerAxis,
 };
 
-WaylandEventQueue::WaylandEventQueue(IOLoop &_io_loop, EventQueue &_queue)
-  :io_loop(_io_loop), queue(_queue),
-   display(wl_display_connect(nullptr))
+WaylandEventQueue::WaylandEventQueue(boost::asio::io_service &io_service,
+                                     EventQueue &_queue)
+  :queue(_queue),
+   display(wl_display_connect(nullptr)), fd(io_service)
 {
   if (display == nullptr) {
     fprintf(stderr, "wl_display_connect() failed\n");
@@ -151,12 +151,13 @@ WaylandEventQueue::WaylandEventQueue(IOLoop &_io_loop, EventQueue &_queue)
     exit(EXIT_FAILURE);
   }
 
-  io_loop.Add(FileDescriptor(wl_display_get_fd(display)), io_loop.READ, *this);
+  fd.assign(wl_display_get_fd(display));
+  AsyncRead();
 }
 
 WaylandEventQueue::~WaylandEventQueue()
 {
-  io_loop.Remove(FileDescriptor(wl_display_get_fd(display)));
+  fd.cancel();
   wl_display_disconnect(display);
 }
 
@@ -167,11 +168,14 @@ WaylandEventQueue::Generate(Event &event)
   return false;
 }
 
-bool
-WaylandEventQueue::OnFileEvent(FileDescriptor fd, unsigned mask)
+void
+WaylandEventQueue::OnReadReady(const boost::system::error_code &ec)
 {
+  if (ec)
+    return;
+
   wl_display_dispatch(display);
-  return true;
+  AsyncRead();
 }
 
 inline void
@@ -218,18 +222,19 @@ WaylandEventQueue::Push(const Event &event)
 }
 
 inline void
-WaylandEventQueue::PointerMotion(Point2D<int> new_pointer_position)
+WaylandEventQueue::PointerMotion(IntPoint2D new_pointer_position)
 {
   if (new_pointer_position == pointer_position)
     return;
 
   pointer_position = new_pointer_position;
-  Push(Event(Event::MOUSE_MOTION, pointer_position.x, pointer_position.y));
+  Push(Event(Event::MOUSE_MOTION,
+             PixelPoint(pointer_position.x, pointer_position.y)));
 }
 
 inline void
 WaylandEventQueue::PointerButton(bool pressed)
 {
   Push(Event(pressed ? Event::MOUSE_DOWN : Event::MOUSE_UP,
-             pointer_position.x, pointer_position.y));
+             PixelPoint(pointer_position.x, pointer_position.y)));
 }

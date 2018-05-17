@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@ Copyright_License {
 #include "Formatter/UserUnits.hpp"
 
 void
-InfoBoxData::SetValueFromDistance(fixed new_value)
+InfoBoxData::SetValueFromDistance(double new_value)
 {
   Unit distance_unit =
     FormatUserDistanceSmart(new_value, value.buffer(), false);
@@ -34,59 +34,59 @@ InfoBoxData::SetValueFromDistance(fixed new_value)
 }
 
 void
-InfoBoxData::SetValueFromAltitude(fixed new_value)
+InfoBoxData::SetValueFromAltitude(double new_value)
 {
   FormatUserAltitude(new_value, value.buffer(), false);
   SetValueUnit(Units::current.altitude_unit);
 }
 
 void
-InfoBoxData::SetValueFromArrival(fixed new_value)
+InfoBoxData::SetValueFromArrival(double new_value)
 {
   FormatRelativeUserAltitude(new_value, value.buffer(), false);
   SetValueUnit(Units::current.altitude_unit);
 }
 
 void
-InfoBoxData::SetValueFromSpeed(fixed new_value, bool precision)
+InfoBoxData::SetValueFromSpeed(double new_value, bool precision)
 {
   FormatUserSpeed(new_value, value.buffer(), false, precision);
   SetValueUnit(Units::current.speed_unit);
 }
 
 void
-InfoBoxData::SetValueFromTaskSpeed(fixed new_value, bool precision)
+InfoBoxData::SetValueFromTaskSpeed(double new_value, bool precision)
 {
   FormatUserTaskSpeed(new_value, value.buffer(), false, precision);
   SetValueUnit(Units::current.task_speed_unit);
 }
 
 void
-InfoBoxData::SetCommentFromDistance(fixed new_value)
+InfoBoxData::SetCommentFromDistance(double new_value)
 {
   FormatUserDistanceSmart(new_value, comment.buffer());
 }
 
 void
-InfoBoxData::SetCommentFromAlternateAltitude(fixed new_value)
+InfoBoxData::SetCommentFromAlternateAltitude(double new_value)
 {
   FormatAlternateUserAltitude(new_value, comment.buffer());
 }
 
 void
-InfoBoxData::SetCommentFromSpeed(fixed new_value, bool precision)
+InfoBoxData::SetCommentFromSpeed(double new_value, bool precision)
 {
   FormatUserSpeed(new_value, comment.buffer(), true, precision);
 }
 
 void
-InfoBoxData::SetCommentFromTaskSpeed(fixed new_value, bool precision)
+InfoBoxData::SetCommentFromTaskSpeed(double new_value, bool precision)
 {
   FormatUserTaskSpeed(new_value, comment.buffer(), true, precision);
 }
 
 void
-InfoBoxData::SetCommentFromVerticalSpeed(fixed new_value, bool include_sign)
+InfoBoxData::SetCommentFromVerticalSpeed(double new_value, bool include_sign)
 {
   FormatUserVerticalSpeed(new_value, comment.buffer(), true, include_sign);
 }

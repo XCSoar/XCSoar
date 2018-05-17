@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,11 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_FILE_TRANSACTION_HPP
 #define XCSOAR_FILE_TRANSACTION_HPP
 
-#include "Util/StaticString.hxx"
-#include "Compiler.h"
+#include "OS/Path.hpp"
 
-#include <windef.h> /* for MAX_PATH */
-#include <tchar.h>
+#include <utility>
 
 /**
  * Write to a temporary file, and then replace the old file
@@ -41,11 +39,11 @@ Copyright_License {
  * file if you decide not to call Commit().
  */
 class FileTransaction {
-  StaticString<MAX_PATH> final_path;
-  StaticString<MAX_PATH> temporary_path;
+  AllocatedPath final_path;
+  AllocatedPath temporary_path;
 
 public:
-  FileTransaction(const TCHAR *_path);
+  FileTransaction(Path _path);
 
   /**
    * The destructor auto-rolls back the transaction (i.e. deletes the
@@ -53,12 +51,17 @@ public:
    */
   ~FileTransaction();
 
+  template<typename P>
+  void SetPath(P &&_path) {
+    final_path = std::forward<P>(_path);
+  }
+
   /**
    * Returns the temporary path.  This is the path that shall be used
    * by the caller to write the file.
    */
-  const TCHAR *GetTemporaryPath() const {
-    return temporary_path.c_str();
+  Path GetTemporaryPath() const {
+    return temporary_path;
   }
 
   /**

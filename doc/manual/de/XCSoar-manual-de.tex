@@ -1,41 +1,28 @@
 \documentclass[german,a4paper,11pt]{refrep}
-\usepackage[utf8]{inputenc}
+\input{xcsoar.sty}
+
+\title{XCSoar-Handbuch}
+
 \usepackage[german]{babel}
 \usepackage[right]{eurosym}%EuroSymbol 
-\usepackage{booktabs}
-\usepackage{longtable}
+\usepackage{makeidx}\makeindex
 \usepackage{paralist}%		etwas geringere Abstände in der item und enumerate...}
 \usepackage{enumitem}%      Listen selber gestalten ... 
-\usepackage[colorlinks=true]{hyperref}
-\hypersetup{linkcolor=blue,%interne Links (ref, cite, etc)
-linktocpage=true,%nur Seitenzahlen nicht der Tex wird eingefärbt
-urlcolor=blue,%externe links 
+\hypersetup{
 pdftitle={XCSoar Deutsches Handuch},
-pdfauthor=Claus-W.Häbel,
-bookmarks=true,
-bookmarksnumbered=true,
-breaklinks=true%Umbruch von links erlaubt
+pdfauthor=Claus-W.Häbel
 }
 \makeatletter
-\title{Benutzerhandbuch}%	Titel der ersten Seite 
-\newcommand{\mycontent}[0]{%
-\begin{tabular}{l}\hspace*{-4cm}{\em XCSoar-Handbuch  } \vspace*{2pt}\end{tabular}}% Kopfzeile
+
+\input{xcsoar-headers.sty}
+\xcsoarheader{XCSoar-Handbuch}
+
 %
-%
-\input{xcsoar.sty}       % XCS-Sytelfile hier laden
 \input{title-xcsoar.sty} % XCS Titelseite hier laden
 \input{buttons-de.sty}   % Extras for de laden
 %
 %
-\newcommand\xc{\textsf{XCSoar }}%  ein paar Abkürzungen   
-\newcommand\fl{\textsf{Flarm }}
-\newcommand\al{\textsf{Altair }}
-\newcommand\trdvvs{Vega}
 \newcommand\p[1]{{\textit{#1}}}
-% mal die Helvetika wählen ..
-\usepackage{helvet}
-\renewcommand{\familydefault}{\sfdefault}
-\fontfamily{phv}\selectfont
 %
 %\renewcommand{\thepage}{\arabic{section}.\arabic{page}} % Der Trenner (der Punkt) muß im *.ist File dem makeindex mitgeteilt werden.
 \begin{filecontents}{\jobname.mst}
@@ -69,11 +56,7 @@ line_max 255
  
 %%%%%%%%%%%%%%%%%%%%%%
 % Table of contents
-\begingroup
-\setlength{\parskip}{0.1\baselineskip}
-\tableofcontents
-\endgroup
-
+\input{toc.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%
 \chapter*{Vorwort}
@@ -147,7 +130,7 @@ Dies Programm, alle dazugehörigen Dateien, Daten und Material wird verteilt "so
 \input{ch13_history.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%
-\pagestyle{empty}\hypersetup{linkcolor=orange}
+\pagestyle{empty}
 \printindex
 
 %%%%%%%%%%%%%%%%%%%%%%%

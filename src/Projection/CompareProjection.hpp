@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_COMPARE_PROJECTION_HPP
 #define XCSOAR_COMPARE_PROJECTION_HPP
 
-#include "Geo/GeoPoint.hpp"
+#include "Geo/Quadrilateral.hpp"
 
 class WindowProjection;
 
@@ -35,24 +35,22 @@ class WindowProjection;
  * they should be discarded.
  */
 class CompareProjection {
-  struct FourCorners {
-    GeoPoint top_left, top_right, bottom_left, bottom_right;
-
-    FourCorners() {}
+  struct FourCorners : GeoQuadrilateral {
+    FourCorners() = default;
     FourCorners(const WindowProjection &projection);
   };
 
   FourCorners corners;
 
-  fixed latitude_cos;
+  double latitude_cos;
 
-  fixed max_delta;
+  double max_delta;
 
 public:
   /**
    * Creates a "cleared" object, so that comparisons are always false.
    */
-  CompareProjection():max_delta(fixed(-1)) {}
+  CompareProjection():max_delta(-1) {}
 
   explicit CompareProjection(const WindowProjection &projection);
 
@@ -61,11 +59,11 @@ public:
    * to Invalidate a cache.
    */
   void Clear() {
-    max_delta = fixed(-1);
+    max_delta = -1;
   }
 
   bool IsDefined() const {
-    return positive(max_delta);
+    return max_delta > 0;
   }
 
   bool Compare(const CompareProjection &other) const;

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,17 +23,19 @@ Copyright_License {
 
 #include "GeoBounds.hpp"
 
-void
+bool
 GeoBounds::Extend(const GeoPoint pt)
 {
   if (!pt.IsValid())
-    return;
+    return false;
 
   if (IsValid()) {
-    longitude.Extend(pt.longitude);
-    latitude.Extend(pt.latitude);
+    bool a = longitude.Extend(pt.longitude);
+    bool b = latitude.Extend(pt.latitude);
+    return a || b;
   } else {
     *this = GeoBounds(pt);
+    return true;
   }
 }
 
@@ -54,15 +56,13 @@ GeoBounds::GetCenter() const
 }
 
 GeoBounds
-GeoBounds::Scale(fixed factor) const
+GeoBounds::Scale(double factor) const
 {
   if (!IsValid())
     return Invalid();
 
-  Angle diff_lat_half =
-    GetHeight() / 2 * (factor - fixed(1));
-  Angle diff_lon_half =
-    GetWidth() / 2 * (factor - fixed(1));
+  Angle diff_lat_half = GetHeight() / 2 * (factor - 1);
+  Angle diff_lon_half = GetWidth() / 2 * (factor - 1);
 
   GeoBounds br = *this;
   br.longitude.end += diff_lon_half;

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ Copyright_License {
 #include "Widget/RowFormWidget.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/Process.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 #include <vector>
 #include <windef.h> /* for MAX_PATH */
@@ -36,7 +36,10 @@ Copyright_License {
 struct ListItem
 {
   StaticString<32> name;
-  StaticString<MAX_PATH> path;
+  AllocatedPath path;
+
+  ListItem(const TCHAR *_name, Path _path)
+    :name(_name), path(_path) {}
 
   bool operator<(const ListItem &i2) const {
     return StringCollate(name, i2.name) < 0;
@@ -51,11 +54,8 @@ class ScriptFileVisitor: public File::Visitor
 public:
   ScriptFileVisitor(std::vector<ListItem> &_list):list(_list) {}
 
-  void Visit(const TCHAR* path, const TCHAR* filename) {
-    ListItem item;
-    item.name = filename;
-    item.path = path;
-    list.push_back(item);
+  void Visit(Path path, Path filename) override {
+    list.emplace_back(filename.c_str(), path);
   }
 };
 
@@ -85,7 +85,7 @@ void
 ToolsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   ScriptFileVisitor sfv(list);
-  Directory::VisitFiles(_T("/mnt/onboard/XCSoarData/kobo/scripts"), sfv);
+  Directory::VisitFiles(Path(_T("/mnt/onboard/XCSoarData/kobo/scripts")), sfv);
 
   unsigned len = list.size();
   if (len > 0)

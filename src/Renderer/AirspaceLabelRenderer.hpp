@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_AIRSPACE_LABEL_RENDERER_HPP
 #define XCSOAR_AIRSPACE_LABEL_RENDERER_HPP
 
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 #include "Geo/GeoPoint.hpp"
 
 #ifndef ENABLE_OPENGL
@@ -58,17 +58,11 @@ class AirspaceLabelRenderer
    * again and again each frame when nothing has changed.
    */
   TransparentRendererCache fill_cache;
-
-  unsigned last_warning_serial;
 #endif
 
 public:
   AirspaceLabelRenderer(const AirspaceLook &_look)
-    :look(_look), airspaces(nullptr), warning_manager(nullptr)
-#ifndef ENABLE_OPENGL
-    , last_warning_serial(0)
-#endif
-  {}
+    :look(_look), airspaces(nullptr), warning_manager(nullptr) {}
 
   const AirspaceLook &GetLook() const {
     return look;

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@ Copyright_License {
 #include "Form/DataField/Listener.hpp"
 #include "UIGlobals.hpp"
 #include "Waypoint/Waypoint.hpp"
-#include "Interface.hpp"
+#include "FormatSettings.hpp"
 #include "Language/Language.hpp"
 
 class WaypointEditWidget final : public RowFormWidget, DataFieldListener {
@@ -84,7 +84,7 @@ WaypointEditWidget::Prepare(gcc_unused ContainerWindow &parent,
                             this));
   AddFloat(_("Altitude"), nullptr,
            _T("%.0f %s"), _T("%.0f"),
-           fixed(0), fixed(30000), fixed(5), false,
+           0, 30000, 5, false,
            UnitGroup::ALTITUDE, value.elevation);
   AddEnum(_("Type"), nullptr, waypoint_types,
           value.IsAirport() ? 1u : (value.IsLandable() ? 2u : 0u),

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,15 +25,14 @@ Copyright_License {
 #define XCSOAR_FLIGHT_STATUS_PANEL_HPP
 
 #include "StatusPanel.hpp"
-
-struct Waypoint;
+#include "Engine/Waypoint/Ptr.hpp"
 
 class FlightStatusPanel : public StatusPanel {
-  const Waypoint *nearest_waypoint;
+  const WaypointPtr nearest_waypoint;
 
 public:
-  FlightStatusPanel(const DialogLook &look, const Waypoint *_waypoint)
-    :StatusPanel(look), nearest_waypoint(_waypoint) {}
+  FlightStatusPanel(const DialogLook &look, WaypointPtr &&_waypoint)
+    :StatusPanel(look), nearest_waypoint(std::move(_waypoint)) {}
 
   /* virtual methods from class StatusPanel */
   void Refresh() override;

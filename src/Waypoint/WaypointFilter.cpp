@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -85,13 +85,13 @@ inline bool
 WaypointFilter::CompareDirection(const Waypoint &waypoint, Angle angle,
                                      GeoPoint location)
 {
-  if (negative(angle.Native()))
+  if (angle.IsNegative())
     return true;
 
   auto bearing = location.Bearing(waypoint.location);
-  fixed direction_error = (bearing - angle).AsDelta().AbsoluteDegrees();
+  auto direction_error = (bearing - angle).AsDelta().AbsoluteDegrees();
 
-  return direction_error < fixed(18);
+  return direction_error < 18;
 }
 
 inline bool
@@ -118,6 +118,6 @@ WaypointFilter::Matches(const Waypoint &waypoint, GeoPoint location,
                         const FAITrianglePointValidator &triangle_validator) const
 {
   return CompareType(waypoint, triangle_validator) &&
-         (!positive(distance) || CompareName(waypoint)) &&
+         (distance <= 0 || CompareName(waypoint)) &&
          CompareDirection(waypoint, location);
 }

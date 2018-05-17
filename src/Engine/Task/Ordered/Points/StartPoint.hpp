@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -40,7 +40,7 @@
  * - enabled/disabled for multiple start points
  */
 class StartPoint final : public OrderedTaskPoint {
-  fixed safety_height;
+  double safety_height;
 
   TaskStartMargins margins;
 
@@ -63,7 +63,7 @@ public:
    * @return Partially-initialised object
    */
   StartPoint(ObservationZonePoint *_oz,
-             const Waypoint &wp,
+             WaypointPtr &&wp,
              const TaskBehaviour &tb,
              const StartConstraints &constraints);
 
@@ -84,7 +84,7 @@ public:
                        const FlatProjection &projection);
 
   /* virtual methods from class TaskPoint */
-  fixed GetElevation() const override;
+  double GetElevation() const override;
 
   /* virtual methods from class ScoredTaskPoint */
   bool CheckExitTransition(const AircraftState &ref_now,

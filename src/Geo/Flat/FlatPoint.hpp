@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,15 +22,15 @@
 #ifndef FLATPOINT_HPP
 #define FLATPOINT_HPP
 
-#include "Math/fixed.hpp"
-#include "Math/Angle.hpp"
 #include "Math/Point2D.hpp"
 #include "Compiler.h"
+
+class Angle;
 
 /**
  * 2-d Cartesian projected real-valued point
  */
-struct FlatPoint : Point2D<fixed>
+struct FlatPoint : DoublePoint2D
 {
   /**
    * Non-initialising default constructor.
@@ -46,7 +46,7 @@ struct FlatPoint : Point2D<fixed>
    * @return Initialised object
    */
   constexpr
-  FlatPoint(const fixed _x, const fixed _y):Point2D<fixed>(_x, _y) {}
+  FlatPoint(const double _x, const double _y):DoublePoint2D(_x, _y) {}
 
   /**
    * Calculate cross product of two points
@@ -55,8 +55,7 @@ struct FlatPoint : Point2D<fixed>
    *
    * @return Cross product
    */
-  gcc_pure
-  fixed CrossProduct(const FlatPoint &p2) const {
+  constexpr double CrossProduct(const FlatPoint &p2) const {
     return ::CrossProduct(*this, p2);
   }
 
@@ -65,7 +64,9 @@ struct FlatPoint : Point2D<fixed>
    *
    * @param a Value to multiply
    */
-  void MultiplyY(const fixed a);
+  void MultiplyY(const double a) {
+    y *= a;
+  }
 
   /**
    * Rotate point counter-clockwise around origin
@@ -82,21 +83,18 @@ struct FlatPoint : Point2D<fixed>
    * @return Distance
    */
   gcc_pure
-  fixed Distance(const FlatPoint &p) const;
-
-  /**
-   * Find dx * dx + dy * dy
-   * @return Magnitude squared
-   */
-  gcc_pure
-  fixed MagnitudeSquared() const;
+  double Distance(FlatPoint p) const {
+    return (*this - p).Magnitude();
+  }
 
   /**
    * Find sqrt(dx * dx + dy * dy)
    * @return Magnitude
    */
   gcc_pure
-  fixed Magnitude() const;
+  double Magnitude() const {
+    return hypot(x, y);
+  }
 
   /**
    * Calculate dot product of one point with another
@@ -105,8 +103,7 @@ struct FlatPoint : Point2D<fixed>
    *
    * @return Dot product
    */
-  gcc_pure
-  fixed DotProduct(FlatPoint other) const {
+  constexpr double DotProduct(FlatPoint other) const {
     return ::DotProduct(*this, other);
   }
 
@@ -117,39 +114,13 @@ struct FlatPoint : Point2D<fixed>
    *
    * @return Scaled point
    */
-  gcc_pure
-  FlatPoint operator*(fixed p) const
-  {
+  constexpr FlatPoint operator*(double p) const {
     return { x * p, y * p };
-  }
-
-  /**
-   * Add one point to another
-   *
-   * @param p2 Point to add
-   *
-   * @return Added value
-   */
-  constexpr FlatPoint operator+(FlatPoint other) const
-  {
-    return { x + other.x, y + other.y };
-  }
-
-  /**
-   * Subtract one point from another
-   *
-   * @param p2 Point to subtract
-   *
-   * @return Subtracted value
-   */
-  constexpr FlatPoint operator-(const FlatPoint other) const
-  {
-    return { x - other.x, y - other.y };
   }
 
   constexpr
   FlatPoint Half() const {
-    return FlatPoint(::Half(x), ::Half(y));
+    return FlatPoint(x / 2, y / 2);
   }
 };
 

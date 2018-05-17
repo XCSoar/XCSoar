@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@ Copyright_License {
 #include "Device/MultipleDevices.hpp"
 
 MergeThread::MergeThread(DeviceBlackboard &_device_blackboard)
-  :WorkerThread("MergeThread", 150, 50, 20),
+  :WorkerThread("MergeThread", 50, 20, 10),
    device_blackboard(_device_blackboard)
 {
   last_fix.Reset();
@@ -63,7 +63,7 @@ MergeThread::Tick()
 
 #ifdef HAVE_PCM_PLAYER
   bool vario_available;
-  fixed vario;
+  double vario;
 #endif
 
   {
@@ -88,7 +88,7 @@ MergeThread::Tick()
 
 #ifdef HAVE_PCM_PLAYER
     vario_available = basic.brutto_vario_available;
-    vario = vario_available ? basic.brutto_vario : fixed(0);
+    vario = vario_available ? basic.brutto_vario : 0;
 #endif
 
     /* update last_any in every iteration */

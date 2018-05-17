@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -48,17 +48,19 @@ Copyright_License {
 #include "Device/Driver/Westerboer.hpp"
 #include "Device/Driver/FLARM.hpp"
 #include "Device/Driver/FlyNet.hpp"
+#include "Device/Driver/ThermalExpress.hpp"
 #include "Device/Driver/CProbe.hpp"
 #include "Device/Driver/LevilAHRS_G.hpp"
 #include "Device/Driver/BlueFlyVario.hpp"
 #include "Device/Driver/OpenVario.hpp"
 #include "Device/Driver/Vaulter.hpp"
 #include "Device/Driver/ATR833.hpp"
+#include "Device/Driver/XCTracer.hpp"
+#include "Device/Driver/KRT2.hpp"
 #include "Util/Macros.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 #include <assert.h>
-#include <string.h>
 
 /** nullptr terminated array of available device drivers. */
 static const struct DeviceRegister *const driver_list[] = {
@@ -93,9 +95,10 @@ static const struct DeviceRegister *const driver_list[] = {
   &cai_lnav_driver,
   &open_vario_driver,
   &vaulter_driver,
-  /* disabled due to http://bugs.xcsoar.org/ticket/3585 and
-     http://bugs.xcsoar.org/ticket/3586 - scheduled for deletion */
+  &krt2_driver,
   &atr833_driver,
+  &xctracer_driver,
+  &thermalexpress_driver,
   nullptr
 };
 

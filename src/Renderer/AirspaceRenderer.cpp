@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -58,9 +58,9 @@ AirspaceRenderer::DrawIntersections(Canvas &canvas,
                                     const WindowProjection &projection) const
 {
   for (unsigned i = intersections.size(); i--;) {
-    RasterPoint sc;
+    PixelPoint sc;
     if (projection.GeoToScreenIfVisible(intersections[i], sc))
-      look.intercept_icon.Draw(canvas, sc.x, sc.y);
+      look.intercept_icon.Draw(canvas, sc);
   }
 }
 

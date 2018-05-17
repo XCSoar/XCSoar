@@ -10,9 +10,6 @@ GLX = n
 else ifeq ($(ENABLE_SDL),y)
 # no GLX if SDL was enabled explicitly
 GLX = n
-else ifeq ($(USE_SDL2),y)
-# no GLX if SDL was enabled explicitly
-GLX = n
 else ifneq ($(EGL),y)
 # default to GLX/X11
 GLX ?= y

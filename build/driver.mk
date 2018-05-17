@@ -11,7 +11,6 @@ VOLKSLOGGER_SOURCES = \
 	$(DRIVER_SRC_DIR)/Volkslogger/grecord.cpp \
 	$(DRIVER_SRC_DIR)/Volkslogger/vlapi2.cpp \
 	$(DRIVER_SRC_DIR)/Volkslogger/vlapihlp.cpp \
-	$(DRIVER_SRC_DIR)/Volkslogger/vlutils.cpp \
 	$(DRIVER_SRC_DIR)/Volkslogger/vlconv.cpp \
 	$(DRIVER_SRC_DIR)/Volkslogger/Logger.cpp
 
@@ -82,6 +81,13 @@ BLUEFLY_SOURCES = \
 	$(DRIVER_SRC_DIR)/BlueFly/Settings.cpp \
 	$(DRIVER_SRC_DIR)/BlueFly/Register.cpp
 
+XCTRACER_SOURCES = \
+	$(DRIVER_SRC_DIR)/XCTracer/Parser.cpp \
+	$(DRIVER_SRC_DIR)/XCTracer/Register.cpp
+
+THERMALEXPRESS_SOURCES = \
+	$(DRIVER_SRC_DIR)/ThermalExpress/Driver.cpp
+ 
 DRIVER_SOURCES = \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
@@ -93,6 +99,8 @@ DRIVER_SOURCES = \
 	$(FLYTEC_SOURCES) \
 	$(VEGA_SOURCES) \
 	$(BLUEFLY_SOURCES) \
+	$(XCTRACER_SOURCES) \
+	$(THERMALEXPRESS_SOURCES) \
 	$(DRIVER_SRC_DIR)/AltairPro.cpp \
 	$(DRIVER_SRC_DIR)/BorgeltB50.cpp \
 	$(DRIVER_SRC_DIR)/CaiGpsNav.cpp \
@@ -115,6 +123,7 @@ DRIVER_SOURCES = \
 	$(DRIVER_SRC_DIR)/Westerboer.cpp \
 	$(DRIVER_SRC_DIR)/Zander.cpp \
 	$(DRIVER_SRC_DIR)/Vaulter.cpp \
+	$(DRIVER_SRC_DIR)/KRT2.cpp \
 	$(DRIVER_SRC_DIR)/ATR833.cpp
 
 $(eval $(call link-library,driver,DRIVER))

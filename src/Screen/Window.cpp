@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -47,7 +47,7 @@ Window::AssertThread() const
 
 #ifdef ENABLE_OPENGL
   assert(pthread_equal(pthread_self(), OpenGL::thread));
-#elif defined(USE_GDI)
+#elif defined(USE_WINUSER)
   assert(hWnd != nullptr);
   assert(!::IsWindow(hWnd) ||
          ::GetWindowThreadProcessId(hWnd, nullptr) == ::GetCurrentThreadId());
@@ -59,7 +59,7 @@ Window::AssertThreadOrUndefined() const
 {
 #ifdef ENABLE_OPENGL
   assert(pthread_equal(pthread_self(), OpenGL::thread));
-#elif defined(USE_GDI)
+#elif defined(USE_WINUSER)
   assert(hWnd == nullptr || !::IsWindow(hWnd) ||
          ::GetWindowThreadProcessId(hWnd, nullptr) == ::GetCurrentThreadId());
 #endif
@@ -76,20 +76,14 @@ Window::Destroy()
   assert(IsScreenInitialized());
   AssertThread();
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   OnDestroy();
 
   size = {0, 0};
-#else /* USE_GDI */
+#else /* USE_WINUSER */
   ::DestroyWindow(hWnd);
-
-  /* the OnDestroy() method must have cleared the variable by
-     now */
-  assert(prev_wndproc == nullptr || hWnd == nullptr);
-
   hWnd = nullptr;
-  prev_wndproc = nullptr;
-#endif /* USE_GDI */
+#endif /* USE_WINUSER */
 }
 
 ContainerWindow *
@@ -97,7 +91,7 @@ Window::GetRootOwner()
 {
   assert(IsDefined());
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   if (parent == nullptr)
     /* no parent?  We must be a ContainerWindow instance */
     return (ContainerWindow *)this;
@@ -107,25 +101,15 @@ Window::GetRootOwner()
     root = root->parent;
 
   return root;
-#else /* USE_GDI */
-#ifndef _WIN32_WCE
+#else /* USE_WINUSER */
   HWND hRoot = ::GetAncestor(hWnd, GA_ROOTOWNER);
   if (hRoot == nullptr)
     return nullptr;
-#else
-  HWND hRoot = hWnd;
-  while (true) {
-    HWND hParent = ::GetParent(hRoot);
-    if (hParent == nullptr)
-      break;
-    hRoot = hParent;
-  }
-#endif
 
   /* can't use the "checked" method get() because hRoot may be a
      dialog, and uses Dialog::DlgProc() */
   return (ContainerWindow *)GetUnchecked(hRoot);
-#endif /* USE_GDI */
+#endif /* USE_WINUSER */
 }
 
 void
@@ -136,7 +120,7 @@ Window::OnCreate()
 void
 Window::OnDestroy()
 {
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   visible = false;
 
   if (capture)
@@ -148,11 +132,11 @@ Window::OnDestroy()
   }
 
   event_queue->Purge(*this);
-#else /* USE_GDI */
+#else /* USE_WINUSER */
   assert(hWnd != nullptr);
 
   hWnd = nullptr;
-#endif /* USE_GDI */
+#endif /* USE_WINUSER */
 }
 
 void
@@ -161,37 +145,34 @@ Window::OnResize(PixelSize new_size)
 }
 
 bool
-Window::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+Window::OnMouseMove(PixelPoint p, unsigned keys)
 {
   /* not handled here */
   return false;
 }
 
 bool
-Window::OnMouseDown(PixelScalar x, PixelScalar y)
+Window::OnMouseDown(PixelPoint p)
 {
   return false;
 }
 
 bool
-Window::OnMouseUp(PixelScalar x, PixelScalar y)
+Window::OnMouseUp(PixelPoint p)
 {
   return false;
 }
 
 bool
-Window::OnMouseDouble(PixelScalar x, PixelScalar y)
+Window::OnMouseDouble(PixelPoint p)
 {
-#ifndef USE_GDI
-  if (!double_clicks)
-    return OnMouseDown(x, y);
-#endif
-
-  return false;
+  /* fall back to OnMouseDown() if the class didn't override
+     OnMouseDouble() */
+  return OnMouseDown(p);
 }
 
 bool
-Window::OnMouseWheel(PixelScalar x, PixelScalar y, int delta)
+Window::OnMouseWheel(PixelPoint p, int delta)
 {
   return false;
 }
@@ -239,7 +220,7 @@ Window::OnCharacter(unsigned ch)
 void
 Window::OnCancelMode()
 {
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   ReleaseCapture();
 #endif
 }
@@ -247,23 +228,23 @@ Window::OnCancelMode()
 void
 Window::OnSetFocus()
 {
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   assert(!focused);
 
   focused = true;
-#endif /* USE_GDI */
+#endif /* USE_WINUSER */
 }
 
 void
 Window::OnKillFocus()
 {
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   assert(focused);
 
   ReleaseCapture();
 
   focused = false;
-#endif /* USE_GDI */
+#endif /* USE_WINUSER */
 }
 
 bool

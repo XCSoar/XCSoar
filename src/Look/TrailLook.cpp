@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -32,9 +32,9 @@
 static RGB8Color
 GetVario1Color(short ramp_h) {
   static constexpr ColorRamp snail_colors_vario[] = {
-    {0,   0xc4, 0x80, 0x1e}, // sinkColor
-    {100, 0xa0, 0xa0, 0xa0},
-    {200, 0x1e, 0xf1, 0x73} // liftColor
+    {  0, { 0xc4, 0x80, 0x1e }}, // sinkColor
+    {100, { 0xa0, 0xa0, 0xa0 }},
+    {200, { 0x1e, 0xf1, 0x73 }} // liftColor
   };
 
   return ColorRampLookup(ramp_h, snail_colors_vario,
@@ -44,10 +44,10 @@ GetVario1Color(short ramp_h) {
 static RGB8Color
 GetVario2Color(short ramp_h) {
   static constexpr ColorRamp snail_colors_vario2[] = {
-    {0,   0x00, 0x00, 0xff},
-    {99,  0x00, 0xff, 0xff},
-    {100, 0xff, 0xff, 0x00},
-    {200, 0xff, 0x00, 0x00}
+    {  0, { 0x00, 0x00, 0xff }},
+    { 99, { 0x00, 0xff, 0xff }},
+    {100, { 0xff, 0xff, 0x00 }},
+    {200, { 0xff, 0x00, 0x00 }}
   };
 
   return ColorRampLookup(ramp_h, snail_colors_vario2,
@@ -57,11 +57,11 @@ GetVario2Color(short ramp_h) {
 static RGB8Color
 GetAltitudeColor(short ramp_h) {
   static constexpr ColorRamp snail_colors_alt[] = {
-    {0,   0xff, 0x00, 0x00},
-    {50,  0xff, 0xff, 0x00},
-    {100, 0x00, 0xff, 0x00},
-    {150, 0x00, 0xff, 0xff},
-    {200, 0x00, 0x00, 0xff},
+    {  0, { 0xff, 0x00, 0x00 }},
+    { 50, { 0xff, 0xff, 0x00 }},
+    {100, { 0x00, 0xff, 0x00 }},
+    {150, { 0x00, 0xff, 0xff }},
+    {200, { 0x00, 0x00, 0xff }},
   };
 
   return ColorRampLookup(ramp_h, snail_colors_alt,
@@ -94,8 +94,8 @@ GetColor(TrailSettings::Type type, short ramp_h)
 void
 TrailLook::Initialise(const TrailSettings &settings)
 {
-  UPixelScalar iwidth;
-  UPixelScalar minwidth = Layout::ScalePenWidth(2);
+  unsigned iwidth;
+  unsigned minwidth = Layout::ScalePenWidth(2);
 
   for (unsigned i = 0; i < NUMSNAILCOLORS; ++i) {
     short ih = i * 200 / (NUMSNAILCOLORS - 1);
@@ -106,8 +106,8 @@ TrailLook::Initialise(const TrailSettings &settings)
       iwidth = minwidth;
     else
       iwidth = std::max(minwidth,
-                        UPixelScalar((i - NUMSNAILCOLORS / 2) *
-                                     Layout::ScalePenWidth(16) / NUMSNAILCOLORS));
+                        (i - NUMSNAILCOLORS / 2) *
+                        Layout::ScalePenWidth(16u) / NUMSNAILCOLORS);
 
     trail_widths[i] = iwidth;
     trail_brushes[i].Create(color);
@@ -115,5 +115,5 @@ TrailLook::Initialise(const TrailSettings &settings)
     scaled_trail_pens[i].Create(iwidth, color);
   }
 
-  trace_pen.Create(2, Color(50, 243, 45));
+  trace_pen.Create(minwidth, Color(50, 243, 45));
 }

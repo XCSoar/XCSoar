@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -99,7 +99,7 @@ public:
     delete oz;
     oz = NULL;
 
-    fixed radius(10000);
+    double radius(10000);
 
     switch (shape) {
     case ObservationZone::Shape::LINE:
@@ -122,7 +122,7 @@ public:
     case ObservationZone::Shape::ANNULAR_SECTOR:
       oz = new AnnularSectorZone(location, radius,
                                  Angle::Degrees(0), Angle::Degrees(70),
-                                 Half(radius));
+                                 radius / 2.);
       break;
 
     case ObservationZone::Shape::FAI_SECTOR:
@@ -130,7 +130,7 @@ public:
       break;
 
     case ObservationZone::Shape::CUSTOM_KEYHOLE:
-      oz = KeyholeZone::CreateCustomKeyholeZone(location, fixed(10000),
+      oz = KeyholeZone::CreateCustomKeyholeZone(location, 10000,
                                                 Angle::QuarterCircle());
       break;
 
@@ -167,7 +167,7 @@ protected:
 
   virtual void OnResize(PixelSize new_size) override {
     PaintWindow::OnResize(new_size);
-    projection.SetScale(fixed(new_size.cx) / 21000);
+    projection.SetScale(new_size.cx / 21000.);
     projection.SetScreenOrigin(new_size.cx / 2, new_size.cy / 2);
   }
 };
@@ -190,7 +190,7 @@ OZWindow::OnPaint(Canvas &canvas)
   canvas.Select(pen);
   const OZBoundary boundary = oz->GetBoundary();
   for (auto i = boundary.begin(), end = boundary.end(); i != end; ++i) {
-    RasterPoint p = projection.GeoToScreen(*i);
+    auto p = projection.GeoToScreen(*i);
     canvas.DrawLine(p.x - 3, p.y - 3, p.x + 3, p.y + 3);
     canvas.DrawLine(p.x + 3, p.y - 3, p.x - 3, p.y + 3);
   }

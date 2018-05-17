@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -40,9 +40,8 @@ Copyright_License {
 #include "Math/Angle.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/UTM.hpp"
-#include "Util/StringUtil.hpp"
 #include "Util/StringFormat.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 bool
 FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,
@@ -51,7 +50,7 @@ FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,
   int dd, mm, ss;
 
   // Calculate Longitude sign
-  TCHAR sign = negative(longitude.Native()) ? _T('W') : _T('E');
+  TCHAR sign = longitude.IsNegative() ? _T('W') : _T('E');
 
   double mlong(longitude.AbsoluteDegrees());
 
@@ -120,7 +119,7 @@ FormatLatitude(Angle latitude, TCHAR *buffer, size_t size,
   int dd, mm, ss;
 
   // Calculate Latitude sign
-  TCHAR sign = negative(latitude.Native()) ? _T('S') : _T('N');
+  TCHAR sign = latitude.IsNegative() ? _T('S') : _T('N');
 
   double mlat(latitude.AbsoluteDegrees());
 

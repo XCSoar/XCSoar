@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,15 +24,13 @@
 #include "LoadFile.hpp"
 #include "LocalPath.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
-
-#include <windef.h> // for MAX_PATH
+#include "OS/Path.hpp"
 
 OrderedTask *
 LoadDefaultTask(const TaskBehaviour &task_behaviour,
                 const Waypoints *waypoints)
 {
-  TCHAR path[MAX_PATH];
-  LocalPath(path, default_task_path);
+  const auto path = LocalPath(default_task_path);
   OrderedTask *task = LoadTask(path, task_behaviour, waypoints);
   if (!task) {
     task = new OrderedTask(task_behaviour);

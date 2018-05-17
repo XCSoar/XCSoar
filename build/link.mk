@@ -37,14 +37,6 @@ define link-program
 
 $(2)_BIN = $$(TARGET_BIN_DIR)/$(1)$$(TARGET_EXEEXT)
 
-# Disabline stripping on WINE, because winegcc generates a wrapper
-# script that cannot be stripped, and since WINE is just an
-# experimental target and no binaries will ever be distributed, it
-# doesn't matter anyway.
-ifeq ($$(TARGET),WINE)
-$(2)_STRIP := n
-endif
-
 # Disable stripping on UNIX, because that should usually be done
 # during installation (the Debian package is explicitly stripped), and
 # we often need the debug symbols while developing.
@@ -93,13 +85,13 @@ $$($(2)_NOSTRIP).o: $$($(2)_NOSTRIP).s
 # Link the unstripped binary
 $$($(2)_NOSTRIP): $$($(2)_NOSTRIP).o $$(TARGET_LDADD)
 	@$$(NQ)echo "  CLANG   $$@"
-	$$(Q)$$(LINK) $$(ld-flags) -o $$@ $$^ $$(ld-libs) $$($(2)_LDLIBS)
+	$$(Q)$$(LINK) $$(ld-flags) -o $$@ $$^ $$($(2)_LDLIBS) $$(ld-libs)
 else
 
 # Link the unstripped binary
 $$($(2)_NOSTRIP): $$($(2)_OBJS) $$($(2)_LDADD) $$(TARGET_LDADD) | $$(TARGET_BIN_DIR)/dirstamp
 	@$$(NQ)echo "  LINK    $$@"
-	$$(Q)$$(LINK) $$(ld-flags) -o $$@ $$^ $$(ld-libs) $$($(2)_LDLIBS)
+	$$(Q)$$(LINK) $$(ld-flags) -o $$@ $$^ $$($(2)_LDLIBS) $$(ld-libs)
 
 endif
 
@@ -176,7 +168,7 @@ endif
 
 $$($(2)_NOSTRIP): $$($(2)_OBJS) $$($(2)_LDADD) $$(TARGET_LDADD) | $$(ABI_BIN_DIR)/dirstamp
 	@$$(NQ)echo "  LINK    $$@"
-	$$(Q)$$(LINK) $$(ld-flags) -o $$@ $$^ $$(ld-libs) $$($(2)_LDLIBS)
+	$$(Q)$$(LINK) $$(ld-flags) -o $$@ $$^ $$($(2)_LDLIBS) $$(ld-libs)
 
 # Strip the binary (optional)
 ifeq ($$($(2)_STRIP),y)

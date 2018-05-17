@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -54,7 +54,7 @@ MapWindow::DrawContest(Canvas &canvas)
     static constexpr Color fill_color = COLOR_YELLOW;
 #if defined(ENABLE_OPENGL) || defined(USE_MEMORY_CANVAS)
 #ifdef ENABLE_OPENGL
-    const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    const ScopeAlphaBlend alpha_blend;
 #endif
     canvas.Select(Brush(fill_color.WithAlpha(60)));
     canvas.Select(Pen(1, COLOR_BLACK.WithAlpha(90)));

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "Terrain/RasterWeatherStore.hpp"
+#include "Weather/Rasp/RaspStore.hpp"
 #include "Input/InputEvents.hpp"
 #include "Input/InputQueue.hpp"
 #include "Dialogs/StartupDialog.hpp"
@@ -52,7 +52,10 @@ Copyright_License {
 #include "Device/MultipleDevices.hpp"
 #include "Topography/TopographyStore.hpp"
 #include "Topography/TopographyGlue.hpp"
+#include "Audio/Features.hpp"
+#include "Audio/GlobalVolumeController.hpp"
 #include "Audio/VarioGlue.hpp"
+#include "Audio/VolumeController.hpp"
 #include "Screen/Busy.hpp"
 #include "CommandLine.hpp"
 #include "MainWindow.hpp"
@@ -65,8 +68,9 @@ Copyright_License {
 #include "Replay/Replay.hpp"
 #include "LocalPath.hpp"
 #include "IO/FileCache.hpp"
+#include "IO/Async/AsioThread.hpp"
+#include "IO/Async/GlobalAsioThread.hpp"
 #include "Net/HTTP/DownloadManager.hpp"
-#include "Hardware/AltairControl.hpp"
 #include "Hardware/DisplayDPI.hpp"
 #include "Hardware/DisplayGlue.hpp"
 #include "Compiler.h"
@@ -95,6 +99,9 @@ Copyright_License {
 #include "Formatter/UserGeoPointFormatter.hpp"
 #include "Thread/Debug.hpp"
 
+#include "Lua/StartFile.hpp"
+#include "Lua/Background.hpp"
+
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Globals.hpp"
 #include "Screen/OpenGL/Dynamic.hpp"
@@ -110,7 +117,7 @@ static GlideComputerTaskEvents *task_events;
 static bool
 LoadProfile()
 {
-  if (StringIsEmpty(Profile::GetPath()) &&
+  if (Profile::GetPath().IsNull() &&
       !dlgStartupShowModal())
     return false;
 
@@ -120,10 +127,6 @@ LoadProfile()
   Units::SetConfig(CommonInterface::GetUISettings().format.units);
   SetUserCoordinateFormat(CommonInterface::GetUISettings().format.coordinate_format);
 
-#ifdef HAVE_MODEL_TYPE
-  global_model_type = CommonInterface::GetSystemSettings().model_type;
-#endif
-
   return true;
 }
 
@@ -131,6 +134,13 @@ static void
 AfterStartup()
 {
   StartupLogFreeRamAndStorage();
+
+  try {
+    const auto lua_path = LocalPath(_T("lua"));
+    Lua::StartFile(AllocatedPath::Build(lua_path, _T("init.lua")));
+  } catch (const std::runtime_error &e) {
+      LogError(e);
+  }
 
   if (is_simulator()) {
     InputEvents::processGlideComputer(GCE_STARTUP_SIMULATOR);
@@ -153,10 +163,6 @@ AfterStartup()
 
   task_manager->Resume();
 
-#ifdef USE_GDI
-  CommonInterface::main_window->Fullscreen();
-#endif
-
   InfoBoxManager::SetDirty();
 
   ForceCalculation();
@@ -173,12 +179,6 @@ Startup()
 {
   VerboseOperationEnvironment operation;
 
-#ifdef USE_GDI
-  //If "XCSoar" is already running, stop this instance
-  if (MainWindow::Find())
-    return false;
-#endif
-
 #ifdef HAVE_DOWNLOAD_MANAGER
   Net::DownloadManager::Initialise();
 #endif
@@ -191,8 +191,7 @@ Startup()
   if (CommandLine::full_screen)
     style.FullScreen();
 
-  if (!IsWindowsCE())
-    style.Resizable();
+  style.Resizable();
 
   MainWindow *const main_window = CommonInterface::main_window =
     new MainWindow();
@@ -202,8 +201,12 @@ Startup()
 
 #ifdef ENABLE_OPENGL
   LogFormat("OpenGL: "
-#ifdef HAVE_DYNAMIC_EGL
-            "egl=%d "
+#ifdef ANDROID
+#ifdef USE_EGL
+            "egl=native "
+#else
+            "egl=no "
+#endif
 #endif
 #ifdef HAVE_OES_DRAW_TEXTURE
             "oesdt=%d "
@@ -212,9 +215,6 @@ Startup()
             "mda=%d "
 #endif
             "npot=%d vbo=%d fbo=%d stencil=%#x",
-#ifdef HAVE_DYNAMIC_EGL
-             OpenGL::egl,
-#endif
 #ifdef HAVE_OES_DRAW_TEXTURE
             OpenGL::oes_draw_texture,
 #endif
@@ -270,9 +270,9 @@ Startup()
 
   main_window->InitialiseConfigured();
 
-  TCHAR path[MAX_PATH];
-  LocalPath(path, _T("cache"));
-  file_cache = new FileCache(path);
+  {
+    file_cache = new FileCache(LocalPath(_T("cache")));
+  }
 
   ReadLanguageFile();
 
@@ -280,23 +280,8 @@ Startup()
 
   // Initialize DeviceBlackboard
   device_blackboard = new DeviceBlackboard();
-  devices = new MultipleDevices();
+  devices = new MultipleDevices(*asio_thread);
   device_blackboard->SetDevices(*devices);
-
-#ifdef HAVE_AYGSHELL_DLL
-  const AYGShellDLL &ayg = main_window->ayg_shell_dll;
-  ayg.SHSetAppKeyWndAssoc(VK_APP1, *main_window);
-  ayg.SHSetAppKeyWndAssoc(VK_APP2, *main_window);
-  ayg.SHSetAppKeyWndAssoc(VK_APP3, *main_window);
-  ayg.SHSetAppKeyWndAssoc(VK_APP4, *main_window);
-  // Typical Record Button
-  //	Why you can't always get this to work
-  //	http://forums.devbuzz.com/m_1185/mpage_1/key_/tm.htm
-  //	To do with the fact it is a global hotkey, but you can with code above
-  //	Also APPA is record key on some systems
-  ayg.SHSetAppKeyWndAssoc(VK_APP5, *main_window);
-  ayg.SHSetAppKeyWndAssoc(VK_APP6, *main_window);
-#endif
 
   // Initialize main blackboard data
   task_events = new GlideComputerTaskEvents();
@@ -314,10 +299,10 @@ Startup()
 
   logger = new Logger();
 
-  glide_computer = new GlideComputer(way_points, airspace_database,
+  glide_computer = new GlideComputer(computer_settings,
+                                     way_points, airspace_database,
                                      *protected_task_manager,
                                      *task_events);
-  glide_computer->ReadComputerSettings(computer_settings);
   glide_computer->SetTerrain(terrain);
   glide_computer->SetLogger(logger);
   glide_computer->Initialise();
@@ -325,13 +310,18 @@ Startup()
   replay = new Replay(logger, *protected_task_manager);
 
 #ifdef HAVE_CMDLINE_REPLAY
-  if (CommandLine::replay_path != nullptr)
-    replay->Start(CommandLine::replay_path);
+  if (CommandLine::replay_path != nullptr) {
+    try {
+      replay->Start(Path(CommandLine::replay_path));
+    } catch (const std::runtime_error &e) {
+      LogError(e);
+    }
+  }
 #endif
 
 
   GlidePolar &gp = CommonInterface::SetComputerSettings().polar.glide_polar_task;
-  gp = GlidePolar(fixed(0));
+  gp = GlidePolar(0);
   gp.SetMC(computer_settings.task.safety_mc);
   gp.SetBugs(computer_settings.polar.degradation_factor);
   PlaneGlue::FromProfile(CommonInterface::SetComputerSettings().plane,
@@ -362,8 +352,8 @@ Startup()
 
   // Scan for weather forecast
   LogFormat("RASP load");
-  rasp = new RasterWeatherStore();
-  rasp->ScanAll(CommonInterface::Basic().location, operation);
+  auto rasp = std::make_shared<RaspStore>(LocalPath(_T(RASP_FILENAME)));
+  rasp->ScanAll();
 
   // Reads the airspace files
   ReadAirspace(airspace_database, terrain, computer_settings.pressure,
@@ -380,6 +370,10 @@ Startup()
 #ifdef HAVE_NOAA
   noaa_store = new NOAAStore();
   noaa_store->LoadFromProfile();
+#endif
+
+#ifdef HAVE_VOLUME_CONTROLLER
+  volume_controller->SetVolume(ui_settings.sound.master_volume);
 #endif
 
   AudioVarioGlue::Initialise();
@@ -408,7 +402,7 @@ Startup()
 
     map_window->SetTopography(topography);
     map_window->SetTerrain(terrain);
-    map_window->SetWeather(rasp);
+    map_window->SetRasp(rasp);
 
 #ifdef HAVE_NOAA
     map_window->SetNOAAStore(noaa_store);
@@ -444,8 +438,7 @@ Startup()
 
   if (!is_simulator() && computer_settings.logger.enable_flight_logger) {
     flight_logger = new GlueFlightLogger(live_blackboard);
-    LocalPath(path, _T("flights.log"));
-    flight_logger->SetPath(path);
+    flight_logger->SetPath(LocalPath(_T("flights.log")));
   }
 
   if (computer_settings.logger.enable_nmea_logger)
@@ -463,10 +456,10 @@ Startup()
   PageActions::Update();
 
 #ifdef HAVE_TRACKING
-  tracking = new TrackingGlue();
+  tracking = new TrackingGlue(*asio_thread);
   tracking->SetSettings(computer_settings.tracking);
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
   if (map_window != nullptr)
     map_window->SetSkyLinesData(&tracking->GetSkyLinesData());
 #endif
@@ -502,6 +495,8 @@ Shutdown()
   main_window->BeginShutdown();
 
   StartupLogFreeRamAndStorage();
+
+  Lua::StopAllBackground();
 
   // Turn off all displays
   global_running = false;
@@ -588,17 +583,18 @@ Shutdown()
   operation.SetText(_("Shutdown, saving task..."));
 
   LogFormat("Save default task");
-  if (protected_task_manager != nullptr)
-    protected_task_manager->TaskSaveDefault();
+  if (protected_task_manager != nullptr) {
+    try {
+      protected_task_manager->TaskSaveDefault();
+    } catch (const std::runtime_error &e) {
+      LogError(e);
+    }
+  }
 
   // Clear waypoint database
   way_points.Clear();
 
   operation.SetText(_("Shutdown, please wait..."));
-
-  // Clear weather database
-  delete rasp;
-  rasp = nullptr;
 
   // Clear terrain database
 

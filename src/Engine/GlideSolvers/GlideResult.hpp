@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,7 +30,9 @@
 
 #include <stdint.h>
 
+struct AircraftState;
 struct GlideState;
+class GlidePolar;
 
 /**
  * Class used to represent a solution to a glide task
@@ -55,12 +57,12 @@ struct GlideResult {
   /**
    * Head wind component [m/s] in cruise.  Immutable input value.
    */
-  fixed head_wind;
+  double head_wind;
 
   /**
    * Optimal speed to fly in cruise [m/s].  Immutable input value.
    */
-  fixed v_opt;
+  double v_opt;
 
 #ifndef NDEBUG
   /**
@@ -70,14 +72,14 @@ struct GlideResult {
    * This attribute shall aid debugging, and will be removed once we
    * are certain the MacCready code is stable.
    */
-  fixed start_altitude;
+  double start_altitude;
 #endif
 
   /**
    * The minimum altitude for arrival at the target (i.e. target
    * altitude plus safety margin).  Immutable input value.
    */
-  fixed min_arrival_altitude;
+  double min_arrival_altitude;
 
   /**
    * Cruise vector of this result.  Usually, this equals the remaining
@@ -92,7 +94,7 @@ struct GlideResult {
    * usually the same as #min_arrival_altitude, but may differ on
    * multi-leg calculations when there is an obstacle.
    */
-  fixed pure_glide_min_arrival_altitude;
+  double pure_glide_min_arrival_altitude;
 
   /**
    * The total height that would be glided straight along the vector
@@ -103,12 +105,12 @@ struct GlideResult {
    *
    * This attribute is only valid when validity==OK.
    */
-  fixed pure_glide_height;
+  double pure_glide_height;
 
   /**
    * The height above/below final glide, assuming pure glide.
    */
-  fixed pure_glide_altitude_difference;
+  double pure_glide_altitude_difference;
 
   /**
    * Track bearing in cruise for optimal drift compensation.
@@ -120,25 +122,25 @@ struct GlideResult {
   /**
    * Total height to be climbed [m relative].
    */
-  fixed height_climb;
+  double height_climb;
 
   /**
    * Total height that will lost during straight glide along this
    * solution.
    */
-  fixed height_glide;
+  double height_glide;
 
   /** Time to complete task (s) */
-  fixed time_elapsed;
+  double time_elapsed;
   /** Equivalent time to recover glided height (s) at MC */
-  fixed time_virtual;
+  double time_virtual;
 
   /**
    * Height above/below final glide for this task [m relative].
    */
-  fixed altitude_difference;
+  double altitude_difference;
 
-  fixed effective_wind_speed;
+  double effective_wind_speed;
   Angle effective_wind_angle;
 
   /** Solution validity */
@@ -158,7 +160,7 @@ struct GlideResult {
    *
    * @return Blank glide result
    */
-  GlideResult(const GlideState &task, const fixed V);
+  GlideResult(const GlideState &task, double V);
 
   bool IsDefined() const {
     return validity != Validity::NO_SOLUTION;
@@ -206,7 +208,7 @@ struct GlideResult {
    * pure glide [m MSL].
    */
   gcc_pure
-  fixed GetRequiredAltitude() const {
+  double GetRequiredAltitude() const {
     return pure_glide_min_arrival_altitude + pure_glide_height;
   }
 
@@ -216,7 +218,7 @@ struct GlideResult {
    * parameters.
    */
   gcc_pure
-  fixed GetStartAltitude() const {
+  double GetStartAltitude() const {
     return GetRequiredAltitude() + altitude_difference;
   }
 
@@ -228,7 +230,7 @@ struct GlideResult {
    * @param start_altitude the current aircraft altitude
    */
   gcc_pure
-  fixed GetArrivalAltitude(fixed start_altitude) const {
+  double GetArrivalAltitude(double start_altitude) const {
     return start_altitude - pure_glide_height;
   }
 
@@ -238,7 +240,7 @@ struct GlideResult {
    * safety altitude or even below terrain.
    */
   gcc_pure
-  fixed GetArrivalAltitude() const {
+  double GetArrivalAltitude() const {
     return GetArrivalAltitude(GetStartAltitude());
   }
 
@@ -248,7 +250,7 @@ struct GlideResult {
    * because this altitude will probably never actually be reached.
    */
   gcc_pure
-  fixed GetRequiredAltitudeWithDrift() const {
+  double GetRequiredAltitudeWithDrift() const {
     return min_arrival_altitude + height_glide;
   }
 
@@ -259,7 +261,7 @@ struct GlideResult {
    * @param start_altitude the current aircraft altitude
    */
   gcc_pure
-  fixed GetArrivalAltitudeWithDrift(fixed start_altitude) const {
+  double GetArrivalAltitudeWithDrift(double start_altitude) const {
     return start_altitude - height_glide;
   }
 
@@ -270,12 +272,12 @@ struct GlideResult {
    * @param start_altitude the current aircraft altitude
    */
   gcc_pure
-  fixed GetPureGlideAltitudeDifference(fixed start_altitude) const {
+  double GetPureGlideAltitudeDifference(double start_altitude) const {
     return start_altitude - GetRequiredAltitude();
   }
 
   gcc_pure
-  fixed SelectAltitudeDifference(const GlideSettings &settings) const {
+  double SelectAltitudeDifference(const GlideSettings &settings) const {
     return settings.predict_wind_drift
       ? altitude_difference
       : pure_glide_altitude_difference;
@@ -297,7 +299,7 @@ struct GlideResult {
    * @return Glide gradient (positive down), or inf if no distance to travel.
    */
   gcc_pure
-  fixed GlideAngleGround() const;
+  double GlideAngleGround() const;
 
   /**
    * Find the gradient of the target relative to ground
@@ -306,10 +308,20 @@ struct GlideResult {
    * @return Glide gradient (positive down), or inf if no distance to travel.
    */
   gcc_pure
-  fixed DestinationAngleGround() const;
+  double DestinationAngleGround() const;
 
   /** Reset/clear the solution */
   void Reset();
+
+  /**
+   * Calculate instantaneous task speed according to enhanced Pirker
+   * algorithm using ground speed along track and vario value.  See
+   * code in InstantSpeed.cpp for algorithm details.
+   *
+   * @return instantaneous speed (m/s)
+   */
+  double InstantSpeed(const AircraftState &aircraft, const GlideResult& leg,
+                      const GlidePolar& glide_polar);
 
 private:
   /**

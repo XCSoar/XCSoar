@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,17 +29,15 @@ Copyright_License {
 #include "WaypointReaderOzi.hpp"
 #include "WaypointReaderCompeGPS.hpp"
 #include "WaypointFileType.hpp"
-#include "OS/FileUtil.hpp"
-#include "IO/ZipSource.hpp"
-#include "IO/TextFile.hpp"
-#include "IO/LineReader.hpp"
+#include "IO/ZipLineReader.hpp"
+#include "IO/FileLineReader.hpp"
 
-#include <string.h>
+#include <memory>
 
 static WaypointReaderBase *
-CreateWaypointReader(const TCHAR *path, WaypointFactory factory)
+CreateWaypointReader(WaypointFileType type, WaypointFactory factory)
 {
-  switch (DetermineWaypointFileType(path)) {
+  switch (type) {
   case WaypointFileType::UNKNOWN:
     break;
 
@@ -66,22 +64,43 @@ CreateWaypointReader(const TCHAR *path, WaypointFactory factory)
 }
 
 bool
-ReadWaypointFile(const TCHAR *path, Waypoints &way_points,
+ReadWaypointFile(Path path, WaypointFileType file_type,
+                 Waypoints &way_points,
                  WaypointFactory factory, OperationEnvironment &operation)
-{
-  auto *reader = CreateWaypointReader(path, factory);
-  if (reader == nullptr)
+try {
+  std::unique_ptr<WaypointReaderBase> reader(CreateWaypointReader(file_type,
+                                                                  factory));
+  if (!reader)
     return false;
 
-  bool success = false;
+  FileLineReader line_reader(path, Charset::AUTO);
+  reader->Parse(way_points, line_reader, operation);
+  return true;
+} catch (const std::runtime_error &) {
+  return false;
+}
 
-  auto *line_reader = OpenTextFile(path, Charset::AUTO);
-  if (line_reader != nullptr) {
-    reader->Parse(way_points, *line_reader, operation);
-    delete line_reader;
-    success = true;
-  }
+bool
+ReadWaypointFile(Path path, Waypoints &way_points,
+                 WaypointFactory factory, OperationEnvironment &operation)
+{
+  return ReadWaypointFile(path, DetermineWaypointFileType(path),
+                          way_points, factory, operation);
+}
 
-  delete reader;
-  return success;
+bool
+ReadWaypointFile(struct zzip_dir *dir, const char *path,
+                 WaypointFileType file_type, Waypoints &way_points,
+                 WaypointFactory factory, OperationEnvironment &operation)
+try {
+  std::unique_ptr<WaypointReaderBase> reader(CreateWaypointReader(file_type,
+                                                                  factory));
+  if (!reader)
+    return false;
+
+  ZipLineReader line_reader(dir, path, Charset::AUTO);
+  reader->Parse(way_points, line_reader, operation);
+  return true;
+} catch (const std::runtime_error &e) {
+  return false;
 }

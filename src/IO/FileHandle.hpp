@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,30 +24,24 @@ Copyright_License {
 #ifndef XCSOAR_IO_FILE_HANDLE_HPP
 #define XCSOAR_IO_FILE_HANDLE_HPP
 
+#include "OS/Path.hpp"
+
 #include <algorithm>
 
 #include <assert.h>
 #include <stddef.h>
 #include <stdio.h>
 
-#ifdef _UNICODE
 #include <tchar.h>
-#endif
 
 class FileHandle {
 private:
   FILE *file;
 
 public:
-  FileHandle(const char *path, const char *mode) {
-    file = fopen(path, mode);
+  FileHandle(Path path, const TCHAR *mode) {
+    file = _tfopen(path.c_str(), mode);
   }
-
-#ifdef _UNICODE
-  FileHandle(const TCHAR *path, const TCHAR *mode) {
-    file = _tfopen(path, mode);
-  }
-#endif
 
   FileHandle(const FileHandle &other) = delete;
 
@@ -114,14 +108,6 @@ public:
     return fputs(s, file);
   }
 
-#ifdef _UNICODE
-  int Write(const TCHAR *s) {
-    assert(s != nullptr);
-    assert(file != nullptr);
-    return _fputts(s, file);
-  }
-#endif
-
   /** Writes a block of data to the file */
   size_t Write(const void *s, size_t size, size_t length) {
     assert(s != nullptr);
@@ -136,16 +122,6 @@ public:
 
     ::fprintf(file, format, args...);
   }
-
-#ifdef _UNICODE
-  template<typename... Args>
-  void WriteFormatted(const TCHAR *format, Args&&... args) {
-    assert(format != nullptr);
-    assert(file != nullptr);
-
-    ::_ftprintf(file, format, args...);
-  }
-#endif
 };
 
 #endif

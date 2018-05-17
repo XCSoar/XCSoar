@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -51,7 +51,7 @@ public:
    * @return True if more than one intersection pair
    */
   bool SetIntersections(AirspaceIntersectionVector &&p) {
-    intersections.swap(p);
+    intersections = std::move(p);
     return !intersections.empty();
   }
 
@@ -65,6 +65,7 @@ protected:
    *
    * @return Solution if any
    */
+  gcc_pure
   AirspaceInterceptSolution Intercept(const AbstractAirspace &as,
                                       const AircraftState &state,
                                       const AirspaceAircraftPerformance &perf) const;

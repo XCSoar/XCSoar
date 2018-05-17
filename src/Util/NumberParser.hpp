@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@ Copyright_License {
 #include <assert.h>
 
 #ifdef _UNICODE
-#include <tchar.h>
+#include <wchar.h>
 #endif
 
 static inline double
@@ -42,14 +42,14 @@ ParseDouble(const char *p, char **endptr=nullptr)
 
 #ifdef _UNICODE
 static inline double
-ParseDouble(const TCHAR *p, TCHAR **endptr)
+ParseDouble(const wchar_t *p, wchar_t **endptr)
 {
   assert(p != nullptr);
 
   return (double)wcstod(p, endptr);
 }
 
-#if defined(WIN32) && !defined(_WIN32_WCE)
+#ifdef WIN32
 #include <windef.h>
 #ifdef __MINGW64_VERSION_MAJOR
 #if __MINGW64_VERSION_MAJOR == 3 && __MINGW64_VERSION_MINOR == 1
@@ -59,13 +59,13 @@ ParseDouble(const TCHAR *p, TCHAR **endptr)
 #endif
 
 static inline double
-ParseDouble(const TCHAR *p)
+ParseDouble(const wchar_t *p)
 {
   assert(p != nullptr);
 
 #ifdef BUGGY_WCSTOD
   /* workaround for mingw64 3.1 bug to avoid nullptr dereference */
-  TCHAR *dummy;
+  wchar_t *dummy;
   return ParseDouble(p, &dummy);
 #else
   return ParseDouble(p, nullptr);
@@ -84,7 +84,7 @@ ParseUnsigned(const char *p, char **endptr=nullptr, int base=10)
 
 #ifdef _UNICODE
 static inline unsigned
-ParseUnsigned(const TCHAR *p, TCHAR **endptr=nullptr, int base=10)
+ParseUnsigned(const wchar_t *p, wchar_t **endptr=nullptr, int base=10)
 {
   assert(p != nullptr);
 
@@ -102,7 +102,7 @@ ParseInt(const char *p, char **endptr=nullptr, int base=10)
 
 #ifdef _UNICODE
 static inline int
-ParseInt(const TCHAR *p, TCHAR **endptr=nullptr, int base=10)
+ParseInt(const wchar_t *p, wchar_t **endptr=nullptr, int base=10)
 {
   assert(p != nullptr);
 
@@ -120,7 +120,7 @@ ParseUint64(const char *p, char **endptr=nullptr, int base=10)
 
 #ifdef _UNICODE
 static inline uint64_t
-ParseUint64(const TCHAR *p, TCHAR **endptr=nullptr, int base=10)
+ParseUint64(const wchar_t *p, wchar_t **endptr=nullptr, int base=10)
 {
   assert(p != nullptr);
 
@@ -138,7 +138,7 @@ ParseInt64(const char *p, char **endptr=nullptr, int base=10)
 
 #ifdef _UNICODE
 static inline int64_t
-ParseInt64(const TCHAR *p, TCHAR **endptr=nullptr, int base=10)
+ParseInt64(const wchar_t *p, wchar_t **endptr=nullptr, int base=10)
 {
   assert(p != nullptr);
 

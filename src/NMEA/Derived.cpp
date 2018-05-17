@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,12 +27,13 @@ void
 TerrainInfo::Clear()
 {
   terrain_valid = false;
-  terrain_warning = false;
 
   terrain_base_valid = false;
 
   altitude_agl_valid = false;
-  altitude_agl = fixed(0);
+  altitude_agl = 0;
+
+  terrain_warning_location.SetInvalid();
 }
 
 void
@@ -80,7 +81,10 @@ DerivedInfo::Reset()
   contest_stats.Reset();
 
   flight.Reset();
-  thermal_band.Clear();
+
+  thermal_encounter_band.Reset();
+  thermal_encounter_collection.Reset();
+
   thermal_locator.Clear();
 
   trace_history.clear();
@@ -95,7 +99,7 @@ DerivedInfo::Reset()
 }
 
 void
-DerivedInfo::Expire(fixed Time)
+DerivedInfo::Expire(double Time)
 {
   // NOTE: wind_available is deliberately not expired. Expiry happens automatically
   // due to the expiration of the real wind source. If wind_available would be
@@ -104,10 +108,23 @@ DerivedInfo::Expire(fixed Time)
   // Invalidated shortly after the copy here).
 
   /* the estimated wind remains valid for an hour */
-  estimated_wind_available.Expire(Time, fixed(3600));
+  estimated_wind_available.Expire(Time, 3600);
 
-  head_wind_available.Expire(Time, fixed(3));
+  head_wind_available.Expire(Time, 3);
 
-  auto_mac_cready_available.Expire(Time, fixed(3600));
-  sun_data_available.Expire(Time, fixed(3600));
+  auto_mac_cready_available.Expire(Time, 3600);
+  sun_data_available.Expire(Time, 3600);
+}
+
+
+double
+DerivedInfo::CalculateWorkingFraction(const double h, const double safety_height) const
+{
+  const double h_floor = GetTerrainBaseFallback() + safety_height;
+  const double h_band = (common_stats.height_max_working - h_floor);
+  if (h_band>0) {
+    const double h_actual = h - h_floor;
+    return h_actual / h_band;
+  } else
+    return 1;
 }

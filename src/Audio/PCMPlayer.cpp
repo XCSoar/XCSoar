@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,322 +21,28 @@ Copyright_License {
 }
 */
 
+#if !defined(ANDROID) && !defined(WIN32)
+
 #include "PCMPlayer.hpp"
-#include "PCMSynthesiser.hpp"
-#include "Util/Macros.hpp"
-#include "LogFile.hpp"
 
-#ifdef ANDROID
-#include "SLES/Init.hpp"
-#include "SLES/Engine.hpp"
-
-#include <SLES/OpenSLES_Android.h>
-#elif defined(WIN32)
-#else
-#include <SDL_audio.h>
-#endif
+#include "PCMDataSource.hpp"
+#include "AudioAlgorithms.hpp"
 
 #include <assert.h>
 
-PCMPlayer::PCMPlayer():sample_rate(0), synthesiser(nullptr) {}
+#include <algorithm>
 
-PCMPlayer::~PCMPlayer()
+size_t
+PCMPlayer::FillPCMBuffer(int16_t *buffer, size_t n)
 {
-  Stop();
-}
-
-#ifdef ANDROID
-
-/**
- * OpenSL/ES callback which gets invoked when a buffer has been
- * consumed.  It synthesises and enqueues the next buffer.
- */
-static void
-PlayedCallback(SLAndroidSimpleBufferQueueItf caller, void *pContext)
-{
-  PCMPlayer *player = (PCMPlayer *)pContext;
-
-  player->Enqueue();
-}
-
-#elif defined(WIN32)
-#else
-
-static void
-Synthesise(void *udata, Uint8 *stream, int len)
-{
-  PCMPlayer &player = *(PCMPlayer *)udata;
-
-  const size_t num_frames = len / 4;
-  int16_t *stereo = (int16_t *)(void *)stream;
-  int16_t *mono = stereo + num_frames, *end = mono + num_frames;
-
-  player.Synthesise(mono, num_frames);
-
-  while (mono != end) {
-    int16_t sample = *mono++;
-    *stereo++ = sample;
-    *stereo++ = sample;
-  }
-}
-
-#endif
-
-bool
-PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
-{
-#ifdef ANDROID
-
-  /* why, oh why is OpenSL/ES so complicated? */
-
-  SLObjectItf _object;
-  SLresult result = SLES::CreateEngine(&_object, 0, nullptr,
-                                       0, nullptr, nullptr);
-  if (result != SL_RESULT_SUCCESS) {
-    LogFormat("PCMPlayer: slCreateEngine() result=%#x", (int)result);
-    return false;
-  }
-
-  engine_object = SLES::Object(_object);
-
-  result = engine_object.Realize(false);
-  if (result != SL_RESULT_SUCCESS) {
-    LogFormat("PCMPlayer: Engine.Realize() result=%#x", (int)result);
-    engine_object.Destroy();
-    return false;
-  }
-
-  SLEngineItf _engine;
-  result = engine_object.GetInterface(*SLES::IID_ENGINE, &_engine);
-  if (result != SL_RESULT_SUCCESS) {
-    LogFormat("PCMPlayer: Engine.GetInterface(IID_ENGINE) result=%#x",
-               (int)result);
-    engine_object.Destroy();
-    return false;
-  }
-
-  SLES::Engine engine(_engine);
-
-  result = engine.CreateOutputMix(&_object, 0, nullptr, nullptr);
-  if (result != SL_RESULT_SUCCESS) {
-    LogFormat("PCMPlayer: CreateOutputMix() result=%#x", (int)result);
-    engine_object.Destroy();
-    return false;
-  }
-
-  mix_object = SLES::Object(_object);
-
-  result = mix_object.Realize(false);
-  if (result != SL_RESULT_SUCCESS) {
-    LogFormat("PCMPlayer: Mix.Realize() result=%#x", (int)result);
-    mix_object.Destroy();
-    engine_object.Destroy();
-    return false;
-  }
-
-  SLDataLocator_AndroidSimpleBufferQueue loc_bufq = {
-    SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE,
-    ARRAY_SIZE(buffers) - 1,
-  };
-
-  SLDataFormat_PCM format_pcm;
-  format_pcm.formatType = SL_DATAFORMAT_PCM;
-  format_pcm.numChannels = 1;
-  /* from the Android NDK docs: "Note that the field samplesPerSec is
-     actually in units of milliHz, despite the misleading name." */
-  format_pcm.samplesPerSec = _sample_rate * 1000;
-  format_pcm.bitsPerSample = SL_PCMSAMPLEFORMAT_FIXED_16;
-  format_pcm.containerSize = SL_PCMSAMPLEFORMAT_FIXED_16;
-  format_pcm.channelMask = SL_SPEAKER_FRONT_CENTER;
-  format_pcm.endianness = SL_BYTEORDER_LITTLEENDIAN; // XXX
-
-  SLDataSource audioSrc = { &loc_bufq, &format_pcm };
-
-  SLDataLocator_OutputMix loc_outmix = {
-    SL_DATALOCATOR_OUTPUTMIX,
-    mix_object,
-  };
-
-  SLDataSink audioSnk = {
-    &loc_outmix,
-    nullptr,
-  };
-
-  const SLInterfaceID ids2[] = {
-    *SLES::IID_PLAY,
-    *SLES::IID_ANDROIDSIMPLEBUFFERQUEUE,
-  };
-  static constexpr SLboolean req2[] = {
-    SL_BOOLEAN_TRUE,
-    SL_BOOLEAN_TRUE,
-  };
-  result = engine.CreateAudioPlayer(&_object, &audioSrc, &audioSnk,
-                                    ARRAY_SIZE(ids2), ids2, req2);
-  if (result != SL_RESULT_SUCCESS) {
-    LogFormat("PCMPlayer: CreateAudioPlayer() result=%#x", (int)result);
-    mix_object.Destroy();
-    engine_object.Destroy();
-    return false;
-  }
-
-  play_object = SLES::Object(_object);
-
-  result = play_object.Realize(false);
-
-  if (result != SL_RESULT_SUCCESS) {
-    LogFormat("PCMPlayer: Play.Realize() result=%#x", (int)result);
-    play_object.Destroy();
-    mix_object.Destroy();
-    engine_object.Destroy();
-    return false;
-  }
-
-  SLPlayItf _play;
-  result = play_object.GetInterface(*SLES::IID_PLAY, &_play);
-  if (result != SL_RESULT_SUCCESS) {
-    LogFormat("PCMPlayer: Play.GetInterface(IID_PLAY) result=%#x",
-               (int)result);
-    play_object.Destroy();
-    mix_object.Destroy();
-    engine_object.Destroy();
-    return false;
-  }
-
-  play = SLES::Play(_play);
-
-  SLAndroidSimpleBufferQueueItf _queue;
-  result = play_object.GetInterface(*SLES::IID_ANDROIDSIMPLEBUFFERQUEUE,
-                                    &_queue);
-  if (result != SL_RESULT_SUCCESS) {
-    LogFormat("PCMPlayer: Play.GetInterface(IID_ANDROIDSIMPLEBUFFERQUEUE) result=%#x",
-               (int)result);
-    play_object.Destroy();
-    mix_object.Destroy();
-    engine_object.Destroy();
-    return false;
-  }
-
-  queue = SLES::AndroidSimpleBufferQueue(_queue);
-  result = queue.RegisterCallback(PlayedCallback, (void *)this);
-  if (result != SL_RESULT_SUCCESS) {
-    LogFormat("PCMPlayer: Play.RegisterCallback() result=%#x", (int)result);
-    play_object.Destroy();
-    mix_object.Destroy();
-    engine_object.Destroy();
-    return false;
-  }
-
-  synthesiser = &_synthesiser;
-
-  result = play.SetPlayState(SL_PLAYSTATE_PLAYING);
-  if (result != SL_RESULT_SUCCESS) {
-    LogFormat("PCMPlayer: Play.SetPlayState(PLAYING) result=%#x",
-               (int)result);
-    play_object.Destroy();
-    mix_object.Destroy();
-    engine_object.Destroy();
-    synthesiser = nullptr;
-    return false;
-  }
-
-  next = 0;
-  filled = false;
-  for (unsigned i = 0; i < ARRAY_SIZE(buffers) - 1; ++i)
-    Enqueue();
-
-  return true;
-#elif defined(WIN32)
-#else
-  if (synthesiser != nullptr) {
-    if (_sample_rate == sample_rate) {
-      /* already open, just change the synthesiser */
-      SDL_LockAudio();
-      synthesiser = &_synthesiser;
-      SDL_UnlockAudio();
-      return true;
-    }
-
-    Stop();
-  }
-
-  sample_rate = _sample_rate;
-
-  SDL_AudioSpec spec;
-  spec.freq = sample_rate;
-  spec.format = AUDIO_S16SYS;
-  spec.channels = 2;
-  spec.samples = 4096;
-  spec.callback = ::Synthesise;
-  spec.userdata = this;
-
-  if (SDL_OpenAudio(&spec, nullptr) < 0)
-    return false;
-
-  synthesiser = &_synthesiser;
-  SDL_PauseAudio(0);
-
-  return true;
-#endif
-}
-
-void
-PCMPlayer::Stop()
-{
-#ifdef ANDROID
-  if (synthesiser == nullptr)
-    return;
-
-  play.SetPlayState(SL_PLAYSTATE_PAUSED);
-  play_object.Destroy();
-  mix_object.Destroy();
-  engine_object.Destroy();
-
-  sample_rate = 0;
-  synthesiser = nullptr;
-#elif defined(WIN32)
-#else
-  if (synthesiser == nullptr)
-    return;
-
-  SDL_CloseAudio();
-  sample_rate = 0;
-  synthesiser = nullptr;
-#endif
-}
-
-#ifdef ANDROID
-
-void
-PCMPlayer::Enqueue()
-{
-  assert(synthesiser != nullptr);
-
-  ScopeLock protect(mutex);
-
-  if (!filled) {
-    filled = true;
-    synthesiser->Synthesise(buffers[next], ARRAY_SIZE(buffers[next]));
-  }
-
-  SLresult result = queue.Enqueue(buffers[next], sizeof(buffers[next]));
-  if (result == SL_RESULT_SUCCESS) {
-    next = (next + 1) % ARRAY_SIZE(buffers);
-    filled = false;
-  }
-
-  if (result != SL_RESULT_SUCCESS)
-    LogFormat("PCMPlayer: Enqueue() result=%#x", (int)result);
-}
-
-#elif defined(WIN32)
-#else
-
-void
-PCMPlayer::Synthesise(void *buffer, size_t n)
-{
-  assert(synthesiser != nullptr);
-
-  synthesiser->Synthesise((int16_t *)buffer, n);
+  assert(n > 0);
+  assert(nullptr != source);
+  const size_t n_read = source->GetData(buffer, n);
+  if (n_read > 0)
+    UpmixMonoPCM(buffer, n_read, channels);
+  if (n_read < n)
+    std::fill(buffer + n_read * channels, buffer + n * channels, 0);
+  return n_read;
 }
 
 #endif

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,6 +27,9 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <tchar.h>
+
+class Path;
+class AllocatedPath;
 
 namespace File {
   class Visitor;
@@ -56,12 +59,12 @@ CreateDataPath();
  * Overrides the detected primary data path.
  */
 void
-SetPrimaryDataPath(const TCHAR *path);
+SetPrimaryDataPath(Path path);
 
 /**
  * Returns the absolute path of the primary data directory.
  */
-const TCHAR *
+Path
 GetPrimaryDataPath();
 
 /**
@@ -70,10 +73,17 @@ GetPrimaryDataPath();
  * @param buffer Output buffer
  * @param file optional filename to include in the output
  */
-void LocalPath(TCHAR* buf, const TCHAR *file);
+AllocatedPath
+LocalPath(Path file);
 
-TCHAR *
-LocalPath(TCHAR *buffer, const TCHAR *subdir, const TCHAR *name);
+AllocatedPath
+LocalPath(const TCHAR *file);
+
+/**
+ * Create a subdirectory of XCSoarData and return its absolute path.
+ */
+AllocatedPath
+MakeLocalPath(const TCHAR *name);
 
 /**
  * Return the portion of the specified path that is relative to the
@@ -81,23 +91,27 @@ LocalPath(TCHAR *buffer, const TCHAR *subdir, const TCHAR *name);
  * inside the primary data path).
  */
 gcc_pure
-const TCHAR *
-RelativePath(const TCHAR *path);
+Path
+RelativePath(Path path);
 
 /**
  * Converts a file path by replacing %LOCAL_PATH% with the full pathname to
  * the XCSoarData folder
  * @param filein Pointer to the string to convert
  */
-void
-ExpandLocalPath(TCHAR *dest, const TCHAR *src);
+gcc_pure
+AllocatedPath
+ExpandLocalPath(Path src);
 
 /**
  * Converts a file path from full pathname to a shorter version with the
  * XCSoarData folder replaced by %LOCAL_PATH%
  * @param filein Pointer to the string to convert
+ * @return the new path or nullptr if the given path cannot be contracted
  */
-void ContractLocalPath(TCHAR* filein);
+gcc_pure
+AllocatedPath
+ContractLocalPath(Path src);
 
 void VisitDataFiles(const TCHAR* filter, File::Visitor &visitor);
 

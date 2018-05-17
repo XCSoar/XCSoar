@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -35,7 +35,7 @@ Copyright_License {
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
-#include "Util/TrivialArray.hpp"
+#include "Util/TrivialArray.hxx"
 #include "Util/Macros.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
@@ -45,7 +45,6 @@ Copyright_License {
 #include "Audio/Sound.hpp"
 
 #include <assert.h>
-#include <stdlib.h>
 #include <stdio.h>
 
 struct WarningItem
@@ -104,13 +103,8 @@ public:
 
   void CreateButtons(WidgetDialog &buttons) {
     ack_button = buttons.AddButton(_("ACK"), *this, ACK);
-    buttons.AddAltairButtonKey('6');
-
     ack_day_button = buttons.AddButton(_("ACK Day"), *this, ACK_DAY);
-    buttons.AddAltairButtonKey('8');
-
     enable_button = buttons.AddButton(_("Enable"), *this, ENABLE);
-    buttons.AddAltairButtonKey('9');
   }
 
   void CopyList();
@@ -382,7 +376,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
     _stprintf(buffer, _T("%d secs"),
               (int)solution.elapsed_time);
 
-    if (positive(solution.distance))
+    if (solution.distance > 0)
       _stprintf(buffer + _tcslen(buffer), _T(" dist %d m"),
                 (int)solution.distance);
     else {
@@ -390,7 +384,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
          distance */
       _tcscat(buffer, _T(" vertical "));
 
-      fixed delta = solution.altitude - CommonInterface::Basic().nav_altitude;
+      auto delta = solution.altitude - CommonInterface::Basic().nav_altitude;
       FormatRelativeUserAltitude(delta, buffer + _tcslen(buffer), true);
     }
 

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -54,7 +54,7 @@ Run(DebugReplay &replay, FlightPhaseDetector &flight_phase_detector,
   CirclingComputer circling_computer;
   circling_computer.Reset();
 
-  GlidePolar glide_polar(fixed(0));
+  GlidePolar glide_polar(0);
 
   WindSettings wind_settings;
   wind_settings.SetDefaults();

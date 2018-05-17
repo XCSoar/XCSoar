@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,8 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/Canvas.hpp"
-#include "Asset.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 #ifndef NDEBUG
 #include "Util/UTF8.hpp"
@@ -52,8 +51,9 @@ Canvas::CalcTextSize(const TCHAR *text, size_t length) const
   return size;
 }
 
-void
-Canvas::DrawFormattedText(PixelRect *rc, const TCHAR *text, unsigned format)
+unsigned
+Canvas::DrawFormattedText(const PixelRect r, const TCHAR *text,
+                          unsigned format)
 {
   assert(text != nullptr);
 #ifndef UNICODE
@@ -61,11 +61,11 @@ Canvas::DrawFormattedText(PixelRect *rc, const TCHAR *text, unsigned format)
 #endif
 
   if (font == nullptr)
-    return;
+    return 0;
 
   unsigned skip = font->GetLineSpacing();
   unsigned max_lines = (format & DT_CALCRECT) ? -1 :
-                       (rc->bottom - rc->top + skip - 1) / skip;
+    (r.GetHeight() + skip - 1) / skip;
 
   size_t len = _tcslen(text);
   TCHAR *duplicated = new TCHAR[len + 1], *p = duplicated;
@@ -94,47 +94,45 @@ Canvas::DrawFormattedText(PixelRect *rc, const TCHAR *text, unsigned format)
 
   // simple wordbreak algorithm. looks for single spaces only, no tabs,
   // no grouping of multiple spaces
-  if (format & DT_WORDBREAK) {
-    for (size_t i = 0; i < len; i += _tcslen(duplicated + i) + 1) {
-      PixelSize sz = CalcTextSize(duplicated + i);
-      TCHAR *prev_p = nullptr;
+  for (size_t i = 0; i < len; i += _tcslen(duplicated + i) + 1) {
+    PixelSize sz = CalcTextSize(duplicated + i);
+    TCHAR *prev_p = nullptr;
 
-      // remove words from behind till line fits or no more space is found
-      while (sz.cx > rc->right - rc->left &&
-             (p = StringFindLast(duplicated + i, _T(' '))) != nullptr) {
-        if (prev_p)
-          *prev_p = _T(' ');
-        *p = _T('\0');
-        prev_p = p;
-        sz = CalcTextSize(duplicated + i);
-      }
+    // remove words from behind till line fits or no more space is found
+    while (unsigned(sz.cx) > r.GetWidth() &&
+           (p = StringFindLast(duplicated + i, _T(' '))) != nullptr) {
+      if (prev_p)
+        *prev_p = _T(' ');
+      *p = _T('\0');
+      prev_p = p;
+      sz = CalcTextSize(duplicated + i);
+    }
 
-      if (prev_p) {
-        lines++;
-        if (lines >= max_lines)
-          break;
-      }
+    if (prev_p) {
+      lines++;
+      if (lines >= max_lines)
+        break;
     }
   }
 
   if (format & DT_CALCRECT) {
-    rc->bottom = rc->top + lines * skip;
     delete[] duplicated;
-    return;
+    return lines * skip;
   }
 
   int y = (format & DT_VCENTER) && lines < max_lines
-    ? (rc->top + rc->bottom - lines * skip) / 2
-    : rc->top;
+    ? (r.top + r.bottom - lines * skip) / 2
+    : r.top;
   for (size_t i = 0; i < len; i += _tcslen(duplicated + i) + 1) {
     if (duplicated[i] != _T('\0')) {
       int x;
       if (format & (DT_RIGHT | DT_CENTER)) {
         PixelSize sz = CalcTextSize(duplicated + i);
-        x = (format & DT_CENTER) ? (rc->left + rc->right - sz.cx)/2 :
-                                    rc->right - sz.cx;  // DT_RIGHT
+        x = (format & DT_CENTER)
+          ? (r.left + r.right - sz.cx) / 2
+          : r.right - sz.cx;  // DT_RIGHT
       } else {  // default is DT_LEFT
-        x = rc->left;
+        x = r.left;
       }
 
       TextAutoClipped(x, y, duplicated + i);
@@ -144,11 +142,12 @@ Canvas::DrawFormattedText(PixelRect *rc, const TCHAR *text, unsigned format)
                   y + font->GetAscentHeight() + 1, text_color);
     }
     y += skip;
-    if (y >= rc->bottom)
+    if (y >= r.bottom)
       break;
   }
 
   delete[] duplicated;
+  return lines * skip;
 }
 
 void

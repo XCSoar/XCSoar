@@ -1,24 +1,15 @@
 \documentclass[a4paper,11pt]{refrep}
+\input{xcsoar.sty}
 
 % Set the title
 \title{User Manual}
 
-% Font selection
-\usepackage{helvet}
-\renewcommand{\familydefault}{\sfdefault}
-\fontfamily{phv}\selectfont
-
 % Set the page title
-\newcommand{\mycontent}[0]{
-\begin{tabular}{l}
-\hspace*{-6cm} \em XCSoar User Manual \vspace*{2pt}
-\end{tabular}}
+\input{xcsoar-headers.sty}
+\xcsoarheader{XCSoar User Manual}
 
-% Define some xc doc styles
-\input{xcsoar.sty}
 \input{title-xcsoar.sty}
-\usepackage[utf8]{inputenc}
-\DeclareUnicodeCharacter{00B0}{$^{\circ}$}
+\usepackage{makeidx}\makeindex
 
 \begin{document}
 
@@ -26,17 +17,9 @@
 % Front page
 \maketitle
 
- 
 %%%%%%%%%%%%%%%%%%%%%%
 % Table of contents
-\begingroup
-\fontfamily{ptm}
-\normalsize
-\fontseries{c}\selectfont
-\setlength{\parskip}{0.05\baselineskip}
-\tableofcontents
-\endgroup
-
+\input{toc.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%
 \chapter*{Preface}
@@ -126,7 +109,7 @@ furnishing, performance, or use of this material.
 \input{ch13_history.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%
-\pagestyle{empty}\hypersetup{linkcolor=orange}
+\pagestyle{empty}
 \printindex
 
 %%%%%%%%%%%%%%%%%%%%%%%

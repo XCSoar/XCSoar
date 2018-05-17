@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,18 +26,24 @@ Copyright_License {
 
 #include "Features.hpp"
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-
 #include <stdint.h>
 #include <tchar.h>
 
 struct GeoPoint;
 struct AGeoPoint;
+namespace std { class exception; }
 
 namespace SkyLinesTracking {
 
 class Handler {
 public:
+  /**
+   * Called as soon as the UDP socket has been created and is
+   * available for I/O.  This does not imply that the SkyLines
+   * server is really available.
+   */
+  virtual void OnSkyLinesReady() {}
+
   virtual void OnAck(unsigned id) {}
   virtual void OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
                          const ::GeoPoint &location, int altitude) {}
@@ -47,10 +53,15 @@ public:
   virtual void OnThermal(unsigned time_of_day_ms,
                          const AGeoPoint &bottom, const AGeoPoint &top,
                          double lift) {}
+
+  /**
+   * An error has occurred, and the SkyLines tracking client is
+   * defunct.  To make restore its function, call Client::Open()
+   * again.
+   */
+  virtual void OnSkyLinesError(const std::exception &e) = 0;
 };
 
 } /* namespace SkyLinesTracking */
-
-#endif
 
 #endif

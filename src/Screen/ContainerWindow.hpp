@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,11 +26,11 @@ Copyright_License {
 
 #include "Screen/PaintWindow.hpp"
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
 #include "Screen/Custom/WList.hpp"
 #endif
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
 class Brush;
 #else
 class WindowReference;
@@ -43,7 +43,7 @@ class WindowReference;
  */
 class ContainerWindow : public PaintWindow {
 protected:
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   friend class WindowList;
   WindowList children;
 
@@ -52,27 +52,26 @@ protected:
    * this attribute is nullptr, then the focused window is not an
    * (indirect) child window of this one.
    */
-  Window *active_child;
+  Window *active_child = nullptr;
 
   /**
    * The child window which captures the mouse.
    */
-  Window *capture_child;
+  Window *capture_child = nullptr;
 
 public:
-  ContainerWindow();
   virtual ~ContainerWindow();
-#endif /* !USE_GDI */
+#endif /* !USE_WINUSER */
 
 protected:
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   void OnDestroy() override;
   void OnCancelMode() override;
-  bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
-  bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  bool OnMouseUp(PixelScalar x, PixelScalar y) override;
-  bool OnMouseDouble(PixelScalar x, PixelScalar y) override;
-  bool OnMouseWheel(PixelScalar x, PixelScalar y, int delta) override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) override;
+  bool OnMouseDown(PixelPoint p) override;
+  bool OnMouseUp(PixelPoint p) override;
+  bool OnMouseDouble(PixelPoint p) override;
+  bool OnMouseWheel(PixelPoint p, int delta) override;
 
 #ifdef HAVE_MULTI_TOUCH
   bool OnMultiTouchDown() override;
@@ -80,17 +79,12 @@ protected:
 #endif
 
   void OnPaint(Canvas &canvas) override;
-#else /* USE_GDI */
-  virtual const Brush *OnChildColor(Window &window, Canvas &canvas);
-
-  LRESULT OnMessage(HWND hWnd, UINT message,
-                    WPARAM wParam, LPARAM lParam) override;
-
+#else /* USE_WINUSER */
   virtual void OnPaint(gcc_unused Canvas &canvas) {}
 #endif
 
 public:
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   void AddChild(Window &child);
   void RemoveChild(Window &child);
 
@@ -119,8 +113,8 @@ public:
    * Locate a child window by its relative coordinates.
    */
   gcc_pure
-  Window *ChildAt(PixelScalar x, PixelScalar y) {
-    return children.FindAt(x, y);
+  Window *ChildAt(PixelPoint p) {
+    return children.FindAt(p);
   }
 
   /**
@@ -128,7 +122,7 @@ public:
    * captured child.
    */
   gcc_pure
-  Window *EventChildAt(PixelScalar x, PixelScalar y);
+  Window *EventChildAt(PixelPoint p);
 
   void SetActiveChild(Window &child);
   void SetFocus() override;
@@ -156,7 +150,7 @@ protected:
   Window *FindPreviousControl(Window *reference);
 
 public:
-#endif /* !USE_GDI */
+#endif /* !USE_WINUSER */
 
   /**
    * Sets the keyboard focus on the first descendant window which has

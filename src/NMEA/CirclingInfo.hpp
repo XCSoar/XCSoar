@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_CIRCLING_INFO_HPP
 
 #include "Geo/GeoPoint.hpp"
-#include "Math/fixed.hpp"
 
 #include <type_traits>
 
@@ -64,24 +63,24 @@ struct CirclingInfo
   /**
    * Start altitude of the current/last climb.
    */
-  fixed climb_start_altitude;
+  double climb_start_altitude;
 
   /**
    * Start altitude of the current/last climb (total energy).
    */
-  fixed climb_start_altitude_te;
+  double climb_start_altitude_te;
 
   /** StartTime of the current/last climb */
-  fixed climb_start_time;
+  double climb_start_time;
 
   /** StartLocation of the current/last cruise */
   GeoPoint cruise_start_location;
   /** StartAltitude of the current/last cruise */
-  fixed cruise_start_altitude;
+  double cruise_start_altitude;
   /** StartAltitude of the current/last cruise (total energy) */
-  fixed cruise_start_altitude_te;
+  double cruise_start_altitude_te;
   /** StartTime of the current/last cruise */
-  fixed cruise_start_time;
+  double cruise_start_time;
 
   /** Current TurnMode (Cruise, Climb or somewhere between) */
   CirclingMode turn_mode;
@@ -95,26 +94,42 @@ struct CirclingInfo
   bool circling;
 
   /**
-   * Circling/Cruise ratio in percent.  Negative value means
+   * Circling/total time ratio in percent.  Negative value means
    * "unknown".
    */
-  fixed circling_percentage;
+  double circling_percentage;
+
+  /**
+   * Time spent climbing and circling, ratio in percent.  Negative value means
+   * "unknown".
+   */
+  double circling_climb_percentage;
+
+  /**
+   * Time spent climbing and not circling, ratio in percent.  Negative value means
+   * "unknown".
+   */
+  double noncircling_climb_percentage;
 
   /** Time spent in cruise mode */
-  fixed time_cruise;
+  double time_cruise;
   /** Time spent in circling mode */
-  fixed time_climb;
+  double time_circling;
+  /** Time spent in circling mode and climbing */
+  double time_climb_circling;
+  /** Time spent in non-circling climb */
+  double time_climb_noncircling;
 
   /** Maximum height gain (from MinAltitude) during task */
-  fixed max_height_gain;
+  double max_height_gain;
 
   /** Total height climbed during task */
-  fixed total_height_gain;
+  double total_height_gain;
 
   void Clear();
 
   bool TurningLeft() const {
-    return negative(turn_rate_smoothed.Native());
+    return turn_rate_smoothed.IsNegative();
   }
 };
 

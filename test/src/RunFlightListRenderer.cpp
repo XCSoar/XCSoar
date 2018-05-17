@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -105,7 +105,7 @@ protected:
     return true;
   }
 
-  bool OnMouseUp(PixelScalar x, PixelScalar y) override {
+  bool OnMouseUp(PixelPoint p) override {
     Close();
     return true;
   }
@@ -123,13 +123,8 @@ protected:
 static void
 ParseCommandLine(Args &args)
 {
-  tstring path = args.ExpectNextT();
-  FileLineReaderA file(path.c_str());
-  if (file.error()) {
-    _ftprintf(stderr, _T("Failed to open %s\n"), path.c_str());
-    return;
-  }
-
+  const auto path = args.ExpectNextPath();
+  FileLineReaderA file(path);
   FlightParser parser(file);
   FlightInfo flight;
   while (parser.Read(flight))

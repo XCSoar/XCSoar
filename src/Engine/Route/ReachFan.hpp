@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,7 +25,6 @@
 
 #include "Geo/Flat/FlatProjection.hpp"
 #include "FlatTriangleFanTree.hpp"
-#include "Rough/RoughAltitude.hpp"
 
 class RoutePolars;
 class RasterMap;
@@ -36,7 +35,7 @@ class ReachFan
 {
   FlatProjection projection;
   FlatTriangleFanTree root;
-  RoughAltitude terrain_base;
+  int terrain_base;
 
 public:
   ReachFan():terrain_base(0) {}
@@ -47,6 +46,10 @@ public:
     return root.IsEmpty();
   }
 
+  const FlatProjection &GetProjection() const {
+    return projection;
+  }
+
   void Reset();
 
   bool Solve(const AGeoPoint origin, const RoutePolars &rpolars,
@@ -55,12 +58,10 @@ public:
   bool FindPositiveArrival(const AGeoPoint dest, const RoutePolars &rpolars,
                            ReachResult &result_r) const;
 
-  bool IsInside(const GeoPoint origin, const bool turning = true) const;
+  void AcceptInRange(const GeoBounds &bounds,
+                     FlatTriangleFanVisitor &visitor) const;
 
-  void AcceptInRange(const GeoBounds& bounds,
-                     TriangleFanVisitor& visitor) const;
-
-  RoughAltitude GetTerrainBase() const {
+  int GetTerrainBase() const {
     return terrain_base;
   }
 };

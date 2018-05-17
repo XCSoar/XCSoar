@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,16 +28,18 @@ Copyright_License {
 #include "Math/KalmanFilter1d.hpp"
 #include "NMEA/Info.hpp"
 #include "Thread/Mutex.hpp"
-#include "Thread/Trigger.hpp"
+#include "Thread/Cond.hxx"
 
 #include <assert.h>
+
+struct StringView;
 
 class BlueFlyDevice : public AbstractDevice {
 public:
   struct BlueFlySettings {
     unsigned version;
 
-    fixed volume;
+    double volume;
     static const char VOLUME_NAME[];
     static constexpr unsigned VOLUME_MAX = 1000;
     static constexpr unsigned VOLUME_MULTIPLIER = 1000;
@@ -47,8 +49,8 @@ public:
     static constexpr unsigned OUTPUT_MODE_MAX = 3;
 
     gcc_const
-    static unsigned ExportVolume(fixed value) {
-      assert(!negative(value));
+    static unsigned ExportVolume(double value) {
+      assert(value >= 0);
       unsigned v = unsigned(value * VOLUME_MULTIPLIER);
 
       assert(v <= VOLUME_MAX);
@@ -69,13 +71,14 @@ public:
       return ExportOutputMode(output_mode);
     }
 
-    void Parse(const char *name, unsigned long value);
+    void Parse(StringView name, unsigned long value);
 };
 
 private:
   Port &port;
   Mutex mutex_settings;
-  Trigger trigger_settings_ready;
+  Cond settings_cond;
+  bool settings_ready;
   BlueFlySettings settings;
   char *settings_keys;
 

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,15 +27,17 @@
 #include "AirspaceIntersectionVisitor.hpp"
 #include "AirspaceAircraftPerformance.hpp"
 #include "Task/Stats/TaskStats.hpp"
-#include "Predicate/AirspacePredicateAircraftInside.hpp"
 
-#define CRUISE_FILTER_FACT fixed(0.5)
+#define CRUISE_FILTER_FACT 0.5
 
-AirspaceWarningManager::AirspaceWarningManager(const Airspaces &_airspaces)
+AirspaceWarningManager::AirspaceWarningManager(const AirspaceWarningConfig &_config,
+                                               const Airspaces &_airspaces)
   :airspaces(_airspaces), serial(0)
 {
   /* force filter initialisation in the first SetConfig() call */
   config.warning_time = -1;
+
+  SetConfig(_config);
 }
 
 const FlatProjection &
@@ -53,8 +55,8 @@ AirspaceWarningManager::SetConfig(const AirspaceWarningConfig &_config)
   config = _config;
 
   if (modified_warning_time) {
-    SetPredictionTimeGlide(fixed(config.warning_time));
-    SetPredictionTimeFilter(fixed(config.warning_time));
+    SetPredictionTimeGlide(config.warning_time);
+    SetPredictionTimeFilter(config.warning_time);
   }
 }
 
@@ -68,18 +70,18 @@ AirspaceWarningManager::Reset(const AircraftState &state)
 }
 
 void 
-AirspaceWarningManager::SetPredictionTimeGlide(fixed time)
+AirspaceWarningManager::SetPredictionTimeGlide(double time)
 {
   prediction_time_glide = time;
 }
 
 void 
-AirspaceWarningManager::SetPredictionTimeFilter(fixed time)
+AirspaceWarningManager::SetPredictionTimeFilter(double time)
 {
   prediction_time_filter = time;
-  cruise_filter.Design(std::max(fixed(10),
+  cruise_filter.Design(std::max(10.,
                                 prediction_time_filter * CRUISE_FILTER_FACT));
-  circling_filter.Design(std::max(fixed(10), prediction_time_filter));
+  circling_filter.Design(std::max(10., prediction_time_filter));
 }
 
 AirspaceWarning& 
@@ -169,9 +171,9 @@ class AirspaceIntersectionWarningVisitor final
   const AirspaceAircraftPerformance &perf;
   AirspaceWarningManager &warning_manager;
   const AirspaceWarning::State warning_state;
-  const fixed max_time;
+  const double max_time;
   bool found;
-  const fixed max_alt;
+  const double max_alt;
   bool mode_inside;
 
 public:
@@ -191,8 +193,8 @@ public:
                                      const AirspaceAircraftPerformance &_perf,
                                      AirspaceWarningManager &_warning_manager,
                                      const AirspaceWarning::State _warning_state,
-                                     const fixed _max_time,
-                                     const fixed _max_alt = fixed(-1)):
+                                     const double _max_time,
+                                     const double _max_alt = -1):
     state(_state),
     perf(_perf),
     warning_manager(_warning_manager),
@@ -223,7 +225,8 @@ public:
       AirspaceInterceptSolution solution;
 
       if (mode_inside) {
-        airspace.Intercept(state, perf, solution, state.location, state.location);
+        solution = airspace.Intercept(state, perf,
+                                      state.location, state.location);
       } else {
         solution = Intercept(airspace, state, perf);
       }
@@ -244,10 +247,6 @@ public:
     Intersection(as);
   }
 
-  void Visit(const Airspace& a) {
-    AirspaceVisitor::Visit(a);
-  }
-
   /**
    * Determine whether intersections for this type were found (new or modified)
    *
@@ -263,7 +262,7 @@ public:
 
 private:
   bool ExcludeAltitude(const AbstractAirspace& airspace) {
-    if (!positive(max_alt))
+    if (max_alt <= 0)
       return false;
 
     return (airspace.GetBaseAltitude(state) > max_alt);
@@ -276,13 +275,13 @@ AirspaceWarningManager::UpdatePredicted(const AircraftState& state,
                                          const GeoPoint &location_predicted,
                                          const AirspaceAircraftPerformance &perf,
                                          const AirspaceWarning::State warning_state,
-                                         const fixed max_time) 
+                                        const double max_time)
 {
   // this is the time limit of intrusions, beyond which we are not interested.
   // it can be the minimum of the user set warning time, or the time of the 
   // task segment
 
-  const fixed max_time_limit = std::min(fixed(config.warning_time), max_time);
+  const auto max_time_limit = std::min(double(config.warning_time), max_time);
 
   // the ceiling is the max height for predicted intrusions, given
   // that you may be climbing.  the ceiling is nominally set at 1000m
@@ -292,8 +291,8 @@ AirspaceWarningManager::UpdatePredicted(const AircraftState& state,
   // collected for it.  It is very unlikely users will have more than 1000m
   // in AltWarningMargin anyway.
 
-  const fixed ceiling = state.altitude
-    + fixed(std::max((unsigned)1000, config.altitude_warning_margin));
+  const auto ceiling = state.altitude
+    + std::max((unsigned)1000, config.altitude_warning_margin);
 
   AirspaceIntersectionWarningVisitor visitor(state, perf, 
                                              *this, 
@@ -303,7 +302,11 @@ AirspaceWarningManager::UpdatePredicted(const AircraftState& state,
   airspaces.VisitIntersecting(state.location, location_predicted, visitor);
 
   visitor.SetMode(true);
-  airspaces.VisitInside(state.location, visitor);
+
+  for (const auto &i : airspaces.QueryInside(state.location)) {
+    const AbstractAirspace &airspace = i.GetAirspace();
+    visitor.Visit(airspace);
+  }
 
   return visitor.Found();
 }
@@ -330,10 +333,10 @@ AirspaceWarningManager::UpdateTask(const AircraftState &state,
   const AirspaceAircraftPerformance perf_task(glide_polar,
                                               current_leg.solution_remaining);
   GeoPoint location_tp = current_leg.location_remaining;
-  const fixed time_remaining = solution.time_elapsed;
+  const auto time_remaining = solution.time_elapsed;
 
   const GeoVector vector(state.location, location_tp);
-  fixed max_distance = config.warning_time * glide_polar.GetVMax();
+  auto max_distance = config.warning_time * glide_polar.GetVMax();
   if (vector.distance > max_distance)
     /* limit the distance to what our glider can actually fly within
        the configured warning time */
@@ -382,8 +385,7 @@ AirspaceWarningManager::UpdateGlide(const AircraftState &state,
                           AirspaceWarning::WARNING_GLIDE, prediction_time_glide);
 }
 
-
-bool 
+bool
 AirspaceWarningManager::UpdateInside(const AircraftState& state,
                                      const GlidePolar &glide_polar)
 {
@@ -392,16 +394,14 @@ AirspaceWarningManager::UpdateInside(const AircraftState& state,
 
   bool found = false;
 
-  AirspacePredicateAircraftInside condition(state);
-
-  Airspaces::AirspaceVector results = airspaces.FindInside(state, condition);
-  for (const auto &i : results) {
+  for (const auto &i : airspaces.QueryInside(state.location)) {
     const AbstractAirspace &airspace = i.GetAirspace();
 
-    if (!airspace.IsActive())
-      continue; // ignore inactive airspaces
-
-    if (!config.IsClassEnabled(airspace.GetType()))
+    const AltitudeState &altitude = state;
+    if (// ignore inactive airspaces
+        !airspace.IsActive() ||
+        !config.IsClassEnabled(airspace.GetType()) ||
+        !airspace.Inside(altitude))
       continue;
 
     AirspaceWarning *warning = GetWarningPtr(airspace);
@@ -410,8 +410,8 @@ AirspaceWarningManager::UpdateInside(const AircraftState& state,
         warning->IsStateAccepted(AirspaceWarning::WARNING_INSIDE)) {
       GeoPoint c = airspace.ClosestPoint(state.location, GetProjection());
       const AirspaceAircraftPerformance perf_glide(glide_polar);
-      AirspaceInterceptSolution solution;
-      airspace.Intercept(state, c, GetProjection(), perf_glide, solution);
+      const AirspaceInterceptSolution solution =
+        airspace.Intercept(state, c, GetProjection(), perf_glide);
 
       if (warning == nullptr)
         warning = GetNewWarningPtr(airspace);

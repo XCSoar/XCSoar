@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -68,9 +68,22 @@ class NativeView extends SurfaceView
   final boolean hasKeyboard;
 
   EGL10 egl;
-  EGLDisplay display;
-  EGLSurface surface;
-  EGLContext context;
+  EGLDisplay display = EGL10.EGL_NO_DISPLAY;
+  EGLConfig config;
+  EGLContext context = EGL10.EGL_NO_CONTEXT;
+  EGLSurface surface = EGL10.EGL_NO_SURFACE;
+
+  /**
+   * A 1x1 pbuffer surface that is used to activate the EGLContext
+   * while we have no real surface.
+   */
+  EGLSurface dummySurface = EGL10.EGL_NO_SURFACE;
+
+  /**
+   * Is the EGLSurface currently valid?  This is modified by
+   * SurfaceHolder.Callback methods.
+   */
+  boolean haveSurface = false;
 
   /**
    * Is the extension ARB_texture_non_power_of_two present?  If yes,
@@ -104,27 +117,8 @@ class NativeView extends SurfaceView
     thread.start();
   }
 
-  private void initGL(SurfaceHolder holder) throws EGLException {
-    /* initialize display */
-
-    egl = (EGL10)EGLContext.getEGL();
-    display = egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
-    if (display == EGL10.EGL_NO_DISPLAY)
-      throw new EGLException("eglGetDisplay() failed");
-
-    int[] version = new int[2];
-    if (!egl.eglInitialize(display, version))
-      throw new EGLException("eglInitialize() failed: " + egl.eglGetError());
-
-    Log.d(TAG, "EGL vendor: " +
-          egl.eglQueryString(display, EGL10.EGL_VENDOR));
-    Log.d(TAG, "EGL version: " +
-          egl.eglQueryString(display, EGL10.EGL_VERSION));
-    Log.d(TAG, "EGL extensions: " +
-          egl.eglQueryString(display, EGL10.EGL_EXTENSIONS));
-
-    /* choose a configuration */
-
+  private static EGLConfig chooseEglConfig(EGL10 egl, EGLDisplay display)
+    throws EGLException {
     int[] num_config = new int[1];
     int[] configSpec = new int[]{
       EGL10.EGL_STENCIL_SIZE, 1,  /* Don't change this position in array! */
@@ -149,56 +143,66 @@ class NativeView extends SurfaceView
                              configs, numConfigs, num_config))
       throw new EGLException("eglChooseConfig() failed: " + egl.eglGetError());
 
-    EGLConfig closestConfig = null;
-    int closestDistance = 1000;
-    for (EGLConfig config : configs) {
-      int r = findConfigAttrib(config, EGL10.EGL_RED_SIZE, 0);
-      int g = findConfigAttrib(config, EGL10.EGL_GREEN_SIZE, 0);
-      int b = findConfigAttrib(config, EGL10.EGL_BLUE_SIZE, 0);
-      int a = findConfigAttrib(config, EGL10.EGL_ALPHA_SIZE, 0);
-      int d = findConfigAttrib(config, EGL10.EGL_DEPTH_SIZE, 0);
-      int s = findConfigAttrib(config, EGL10.EGL_STENCIL_SIZE, 0);
-      int distance = Math.abs(r - 5) + Math.abs(g - 6) + Math.abs(b - 5) +
-        Math.abs(a - 0) + Math.abs(d - 0) + Math.abs(s - 8);
-      if (distance < closestDistance) {
-        closestDistance = distance;
-        closestConfig = config;
-      }
-    }
-
+    EGLConfig closestConfig = EGLUtil.findClosestConfig(egl, display, configs,
+                                                        4, 4, 4, 0, 0, 8);
     if (closestConfig == null)
       throw new EGLException("eglChooseConfig() failed");
 
-    Log.d(TAG, "EGLConfig: red="+
-          findConfigAttrib(closestConfig, EGL10.EGL_RED_SIZE, 0) +
-          " green=" + findConfigAttrib(closestConfig, EGL10.EGL_GREEN_SIZE, 0) +
-          " blue=" + findConfigAttrib(closestConfig, EGL10.EGL_BLUE_SIZE, 0) +
-          " alpha=" + findConfigAttrib(closestConfig, EGL10.EGL_ALPHA_SIZE, 0) +
-          " depth=" + findConfigAttrib(closestConfig, EGL10.EGL_DEPTH_SIZE, 0) +
-          " stencil=" + findConfigAttrib(closestConfig, EGL10.EGL_STENCIL_SIZE, 0));
+    return closestConfig;
+  }
+
+  private void initGL(SurfaceHolder holder) throws EGLException {
+    /* initialize display */
+
+    if (display == EGL10.EGL_NO_DISPLAY) {
+      egl = (EGL10)EGLContext.getEGL();
+      display = egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
+      if (display == EGL10.EGL_NO_DISPLAY)
+        throw new EGLException("eglGetDisplay() failed");
+
+      int[] version = new int[2];
+      if (!egl.eglInitialize(display, version))
+        throw new EGLException("eglInitialize() failed: " + egl.eglGetError());
+
+      Log.d(TAG, "EGL vendor: " +
+            egl.eglQueryString(display, EGL10.EGL_VENDOR));
+      Log.d(TAG, "EGL version: " +
+            egl.eglQueryString(display, EGL10.EGL_VERSION));
+      Log.d(TAG, "EGL extensions: " +
+            egl.eglQueryString(display, EGL10.EGL_EXTENSIONS));
+    }
+
+    /* choose a configuration */
+
+    if (config == null) {
+      config = chooseEglConfig(egl, display);
+      Log.d(TAG, "EGLConfig = " + EGLUtil.toString(egl, display, config));
+    }
 
     /* initialize context and surface */
 
-    final int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
-    final int contextClientVersion = getEglContextClientVersion();
-    int[] contextAttribList = null;
-    if (contextClientVersion != 1)
-      /* the default EGL_CONTEXT_CLIENT_VERSION is 1, so we need to
-       * specify this only if using GLES2; some old Androids (e.g. HTC
-       * Magic) will fail eglCreateContext() with EGL_BAD_ATTRIBUTE if
-       * EGL_CONTEXT_CLIENT_VERSION is specified */
-      contextAttribList = new int[]{
-        EGL_CONTEXT_CLIENT_VERSION, getEglContextClientVersion(),
-        EGL10.EGL_NONE
-      };
+    if (context == EGL10.EGL_NO_CONTEXT) {
+      final int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
+      final int contextClientVersion = getEglContextClientVersion();
+      int[] contextAttribList = null;
+      if (contextClientVersion != 1)
+        /* the default EGL_CONTEXT_CLIENT_VERSION is 1, so we need to
+         * specify this only if using GLES2; some old Androids (e.g. HTC
+         * Magic) will fail eglCreateContext() with EGL_BAD_ATTRIBUTE if
+         * EGL_CONTEXT_CLIENT_VERSION is specified */
+        contextAttribList = new int[]{
+          EGL_CONTEXT_CLIENT_VERSION, getEglContextClientVersion(),
+          EGL10.EGL_NONE
+        };
 
-    context = egl.eglCreateContext(display, closestConfig,
-                                   EGL10.EGL_NO_CONTEXT, contextAttribList);
-    if (context == EGL10.EGL_NO_CONTEXT)
-      throw new EGLException("eglCreateContext() failed: " +
-                             egl.eglGetError());
+      context = egl.eglCreateContext(display, config,
+                                     EGL10.EGL_NO_CONTEXT, contextAttribList);
+      if (context == EGL10.EGL_NO_CONTEXT)
+        throw new EGLException("eglCreateContext() failed: " +
+                               egl.eglGetError());
+    }
 
-    surface = egl.eglCreateWindowSurface(display, closestConfig,
+    surface = egl.eglCreateWindowSurface(display, config,
                                          holder, null);
     if (surface == EGL10.EGL_NO_SURFACE)
       throw new EGLException("eglCreateWindowSurface() failed: " +
@@ -218,6 +222,13 @@ class NativeView extends SurfaceView
    * Initializes the OpenGL surface.  Called by the native code.
    */
   private boolean initSurface() {
+    if (!haveSurface)
+      /* this is futile, and will only result in
+         "java.lang.IllegalArgumentException: Make sure the
+         SurfaceView or associated SurfaceHolder has a valid
+         Surface" */
+      return false;
+
     try {
       initGL(getHolder());
       return true;
@@ -232,22 +243,38 @@ class NativeView extends SurfaceView
    * Deinitializes the OpenGL surface.
    */
   private void deinitSurface() {
-    if (surface != null) {
-      egl.eglMakeCurrent(display, EGL10.EGL_NO_SURFACE,
-                         EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT);
+    if (surface != EGL10.EGL_NO_SURFACE) {
+      if (dummySurface == EGL10.EGL_NO_SURFACE) {
+        int pbufferAttribs[] = {
+          EGL10.EGL_WIDTH, 1,
+          EGL10.EGL_HEIGHT, 1,
+          EGL10.EGL_NONE
+        };
+
+        dummySurface = egl.eglCreatePbufferSurface(display, config,
+                                                   pbufferAttribs);
+      }
+
+      egl.eglMakeCurrent(display, dummySurface, dummySurface, context);
       egl.eglDestroySurface(display, surface);
-      surface = null;
+      surface = EGL10.EGL_NO_SURFACE;
     }
+  }
 
-    if (context != null) {
+  private void deinitEGL() {
+    deinitSurface();
+
+    if (context != EGL10.EGL_NO_CONTEXT) {
       egl.eglDestroyContext(display, context);
-      context = null;
+      context = EGL10.EGL_NO_CONTEXT;
     }
 
-    if (display != null) {
+    if (display != EGL10.EGL_NO_DISPLAY) {
       egl.eglTerminate(display);
-      display = null;
+      display = EGL10.EGL_NO_DISPLAY;
     }
+
+    config = null;
   }
 
   private boolean setRequestedOrientation(int requestedOrientation) {
@@ -256,10 +283,13 @@ class NativeView extends SurfaceView
   }
 
   @Override public void surfaceCreated(SurfaceHolder holder) {
+    haveSurface = true;
   }
 
   @Override public void surfaceChanged(SurfaceHolder holder, int format,
                                        int width, int height) {
+    haveSurface = true;
+
     if (thread == null || !thread.isAlive())
       start();
     else
@@ -267,6 +297,7 @@ class NativeView extends SurfaceView
   }
 
   @Override public void surfaceDestroyed(SurfaceHolder holder) {
+    haveSurface = false;
   }
 
   @Override public void run() {
@@ -275,7 +306,7 @@ class NativeView extends SurfaceView
     } catch (Exception e) {
       Log.e(TAG, "initGL error", e);
       errorHandler.sendMessage(errorHandler.obtainMessage(0, e));
-      deinitSurface();
+      deinitEGL();
       return;
     }
 
@@ -312,10 +343,8 @@ class NativeView extends SurfaceView
 
   private int findConfigAttrib(EGLConfig config, int attribute,
                                int defaultValue) {
-    int[] mValue = new int[1];
-    return egl.eglGetConfigAttrib(display, config, attribute, mValue)
-      ? mValue[0]
-      : defaultValue;
+    return EGLUtil.getConfigAttrib(egl, display, config,
+                                   attribute, defaultValue);
   }
 
   /**
@@ -406,7 +435,8 @@ class NativeView extends SurfaceView
   }
 
   private void swap() {
-    egl.eglSwapBuffers(display, surface);
+    if (!egl.eglSwapBuffers(display, surface))
+      Log.e(TAG, "eglSwapBuffers() failed: " + egl.eglGetError());
   }
 
   @Override public boolean onTouchEvent(final MotionEvent event)

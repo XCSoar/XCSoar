@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,94 +25,75 @@ Copyright_License {
 #define XCSOAR_AUDIO_PCM_PLAYER_HPP
 
 #ifdef ANDROID
-#include "Thread/Mutex.hpp"
-#include "SLES/Object.hpp"
-#include "SLES/Play.hpp"
-#include "SLES/AndroidSimpleBufferQueue.hpp"
-
-#include <stdint.h>
+#define PCMPLAYER_SYNTHESISER_ONLY
 #endif
 
-#include <stddef.h>
+#if !defined(ANDROID) && !defined(WIN32)
 
+#include "Compiler.h"
+
+#include <stddef.h>
+#include <stdint.h>
+
+#endif
+
+#ifdef PCMPLAYER_SYNTHESISER_ONLY
 class PCMSynthesiser;
+#else
+class PCMDataSource;
+#endif
 
 /**
- * An audio player that plays synthesized 16 bit mono PCM data.  It is
- * being fed by a #PCMSynthesiser object that gets called when more
+ * Abstract base class for audio players that play 16 bit mono PCM data.  It is
+ * being fed by a #PCMDataSource object that gets called when more
  * PCM samples are needed.
  */
 class PCMPlayer {
-  unsigned sample_rate;
-
-  PCMSynthesiser *synthesiser;
-
-#ifdef ANDROID
-
-  SLES::Object engine_object;
-
-  SLES::Object mix_object;
-
-  SLES::Object play_object;
-  SLES::Play play;
-  SLES::AndroidSimpleBufferQueue queue;
-
-  /**
-   * This mutex protects the attributes "next" and "filled".  It is
-   * only needed while playback is launched, when the initial buffers
-   * are being enqueued in the caller thread, while another thread may
-   * invoke the registered callback.
-   */
-  Mutex mutex;
-
-  /**
-   * The index of the next buffer to be enqueued.
-   */
-  unsigned next;
-
-  /**
-   * Does the "next" buffer already contain synthesised samples?  This
-   * can happen when PCMSynthesiser::Synthesise() has been called, but
-   * the OpenSL/ES buffer queue was full.  The buffer will then be
-   * postponed.
-   */
-  bool filled;
-
-  /**
-   * An array of buffers.  It's one more than being managed by
-   * OpenSL/ES, and the one not enqueued (see attribute #next) will be
-   * written to.
-   */
-  int16_t buffers[3][4096];
-
-#elif defined(WIN32)
-#else
-#endif
-
 public:
-  PCMPlayer();
-  ~PCMPlayer();
-
   /**
    * Start playback.
    *
-   * @param synthesiser a PCMSynthesiser instance that will be used to
-   * generate sound; the caller is responsible for releasing it (not
+   * @param source a PCMDataSource instance that will be used to
+   * read sound; the caller is responsible for releasing it (not
    * before playback is stopped)
    */
-  bool Start(PCMSynthesiser &synthesiser, unsigned sample_rate);
+#ifdef PCMPLAYER_SYNTHESISER_ONLY
+  virtual bool Start(PCMSynthesiser &source) = 0;
+#else
+  virtual bool Start(PCMDataSource &source) = 0;
+#endif
 
   /**
    * Stop playback and close the audio device.  This method is
    * synchronous.
    */
-  void Stop();
+  virtual void Stop() = 0;
 
-#ifdef ANDROID
-  void Enqueue();
-#elif defined(WIN32)
+  virtual ~PCMPlayer() {}
+
+protected:
+#ifdef PCMPLAYER_SYNTHESISER_ONLY
+  PCMSynthesiser *source = nullptr;
 #else
-  void Synthesise(void *buffer, size_t n);
+  PCMDataSource *source = nullptr;
+#endif
+
+#if !defined(ANDROID) && !defined(WIN32)
+  unsigned channels;
+
+  /**
+   * Fill a buffer with data from the player's data source.
+   * Then perform upmixing if necessary.
+   * If the buffer could not be filled with the requested amount of frames
+   * completely, the rest of the frames is filled with silence (zeros).
+   * @param buffer The buffer which is filled. Must be at least n * channels
+   * elements long.
+   * @param n The number of mono frames which should be read.
+   * @return The number of read frames (an upmixed mono frame counts as one),
+   * not including the silence frames.
+   */
+  gcc_nonnull_all
+  size_t FillPCMBuffer(int16_t *buffer, size_t n);
 #endif
 };
 

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,13 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_BMP085_LISTENER_HPP
 #define XCSOAR_ANDROID_BMP085_LISTENER_HPP
 
-#include "Math/fixed.hpp"
-
 class AtmosphericPressure;
 
 class BMP085Listener {
 public:
-  virtual void onBMP085Values(fixed temperature,
+  virtual void onBMP085Values(double temperature,
                               AtmosphericPressure pressure) = 0;
   virtual void onBMP085Error() = 0;
 };

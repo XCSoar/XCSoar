@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -39,24 +39,24 @@ CorrectedWidth(unsigned nWidth)
 RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
   :width(nWidth), height(nHeight),
    corrected_width(CorrectedWidth(nWidth)),
-   buffer(new BGRColor[corrected_width * height])
+   buffer(new RawColor[corrected_width * height])
 {
-}
-
-RawBitmap::~RawBitmap()
-{
-  delete[] buffer;
 }
 
 void
 RawBitmap::StretchTo(unsigned width, unsigned height,
                      Canvas &dest_canvas,
-                     unsigned dest_width, unsigned dest_height) const
+                     unsigned dest_width, unsigned dest_height,
+                     bool transparent_white) const
 {
-  ConstImageBuffer<ActivePixelTraits> src(ActivePixelTraits::const_pointer_type(buffer),
-                                          corrected_width * sizeof(*buffer),
+  ConstImageBuffer<ActivePixelTraits> src(ActivePixelTraits::const_pointer_type(GetBuffer()),
+                                          corrected_width * sizeof(*GetBuffer()),
                                           width, height);
 
-  dest_canvas.Stretch(0, 0, dest_width, dest_height,
-                      src, 0, 0, width, height);
+  if (transparent_white)
+    dest_canvas.StretchTransparentWhite(0, 0, dest_width, dest_height,
+                                        src, 0, 0, width, height);
+  else
+    dest_canvas.Stretch(0, 0, dest_width, dest_height,
+                        src, 0, 0, width, height);
 }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,6 +27,7 @@ Copyright_License {
 #include "Compiler.h"
 #include "Util/tstring.hpp"
 #include "Util/NumberParser.hpp"
+#include "OS/Path.hpp"
 
 #ifdef _UNICODE
 #include "OS/ConvertPathName.hpp"
@@ -104,12 +105,10 @@ public:
         *d = *s;
         if (option == d) {
           // first quoted blank or non blank character of new option
-#ifndef _WIN32_WCE
           // program name is not included in command line on CE
           if (name == nullptr)
             name = option;
           else
-#endif
             args.push_back(option);
         }
         d++;
@@ -122,7 +121,7 @@ public:
 
 #ifdef _UNICODE
   void ParseCommandLine(const TCHAR *_cmdline) {
-    NarrowPathName convert(_cmdline);
+    WideToACPConverter convert(_cmdline);
     ParseCommandLine(convert);
   }
 #endif
@@ -196,11 +195,27 @@ public:
 
 #ifdef _UNICODE
     PathName convert(p);
-    return tstring(convert);
+    return tstring(((Path)convert).c_str());
 #else
     return tstring(p);
 #endif
   }
+
+#ifdef _UNICODE
+  AllocatedPath ExpectNextPath() {
+    const char *p = ExpectNext();
+    assert(p != nullptr);
+
+    return AllocatedPath(PathName(p));
+  }
+#else
+  Path ExpectNextPath() {
+    const char *p = ExpectNext();
+    assert(p != nullptr);
+
+    return Path(p);
+  }
+#endif
 
   void ExpectEnd() {
     if (!IsEmpty())

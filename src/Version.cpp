@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,9 +29,7 @@ Copyright_License {
 
 #define VERSION XCSOAR_VERSION
 
-#ifdef GNAV
-  #define TARGET "Altair"
-#elif defined(ANDROID)
+#if defined(ANDROID)
   #define TARGET "Android"
 #elif defined(KOBO)
   #define TARGET "Kobo"
@@ -42,27 +40,12 @@ Copyright_License {
   #if TARGET_OS_IPHONE
     #define TARGET "iOS"
   #else
-    #define TARGET "MacOSX"
+    #define TARGET "macOS"
   #endif
 #elif !defined(WIN32)
   #define TARGET "UNIX"
-#elif !defined(_WIN32_WCE)
-  #define TARGET "PC"
 #else
-
-  #ifdef __XSCALE__
-    #define CPU_SUFFIX "X"
-  #else
-    #define CPU_SUFFIX
-  #endif
-
-  #if _WIN32_WCE >= 0x0500
-    #define TARGET "WM5" CPU_SUFFIX
-  #elif _WIN32_WCE >= 0x0400
-    #define TARGET "PPC2003" CPU_SUFFIX
-  #else
-    #define TARGET "PPC2000" CPU_SUFFIX
-  #endif
+  #define TARGET "PC"
 #endif
 
 #define VERSION_SUFFIX ""

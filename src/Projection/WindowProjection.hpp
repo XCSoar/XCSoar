@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -40,7 +40,7 @@ class WindowProjection:
   bool screen_size_initialised;
 #endif
 
-  Point2D<unsigned> screen_size;
+  UnsignedPoint2D screen_size;
 
   /**
    * Geographical representation of the screen boundaries.
@@ -62,7 +62,7 @@ public:
    * @param sc Screen coordinate (output)
    * @return True if the location is within the bounds
    */
-  bool GeoToScreenIfVisible(const GeoPoint &loc, RasterPoint &sc) const;
+  bool GeoToScreenIfVisible(const GeoPoint &loc, PixelPoint &sc) const;
 
   /**
    * Checks whether a geographical location is within the visible bounds
@@ -78,7 +78,7 @@ public:
    * @return True if the screen coordinate is within the bounds
    */
   gcc_pure
-  bool ScreenVisible(const RasterPoint &P) const;
+  bool ScreenVisible(const PixelPoint &P) const;
 
   void SetScreenSize(PixelSize new_size) {
     assert(new_size.cx > 0);
@@ -97,13 +97,13 @@ public:
   }
 
   gcc_pure
-  fixed GetMapScale() const;
+  double GetMapScale() const;
 
   /**
    * Configure the scale so a centered circle with the specified
    * radius is visible.
    */
-  void SetScaleFromRadius(fixed radius);
+  void SetScaleFromRadius(double radius);
 
   /**
    * Returns the width of the map area in pixels.
@@ -129,8 +129,8 @@ public:
    * Returns the raster coordinates at the center of the map.
    */
   gcc_pure
-  RasterPoint GetScreenCenter() const {
-    RasterPoint pt;
+  PixelPoint GetScreenCenter() const {
+    PixelPoint pt;
     pt.x = GetScreenWidth() / 2;
     pt.y = GetScreenHeight() / 2;
     return pt;
@@ -139,7 +139,7 @@ public:
   /**
    * Returns the width of the map area in meters.
    */
-  fixed GetScreenWidthMeters() const {
+  double GetScreenWidthMeters() const {
     return DistancePixelsToMeters(GetScreenWidth());
   }
 
@@ -160,7 +160,7 @@ public:
   }
 
   gcc_pure
-  fixed GetScreenDistanceMeters() const;
+  double GetScreenDistanceMeters() const;
 
   /**
    * Returns the GeoPoint at the center of the screen.

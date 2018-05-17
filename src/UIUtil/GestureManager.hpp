@@ -42,7 +42,7 @@
 class GestureManager
 {
   /** Position of the last mouse_move event */
-  RasterPoint drag_last;
+  PixelPoint drag_last;
   /** The gesture string */
   StaticString<11> gesture;
 
@@ -72,13 +72,13 @@ public:
   /**
    * Starts the GestureManager at the given coordinates
    */
-  void Start(PixelScalar x, PixelScalar y, int _threshold);
+  void Start(PixelPoint p, int _threshold);
 
   /**
    * Adds new coordinates to the GestureManager
    * @return True if the threshold was reached, False otherwise
    */
-  bool Update(PixelScalar x, PixelScalar y);
+  bool Update(PixelPoint p);
 };
 
 #endif

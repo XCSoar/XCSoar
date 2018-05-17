@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -79,8 +79,7 @@ DisplayParsedMETAR(const NOAAStore::Item &station)
     if (parsed.visibility >= 9999)
       _tcscpy(buffer, _T("unlimited"));
     else {
-      fixed visibility(parsed.visibility);
-      FormatUserDistanceSmart(visibility, buffer, ARRAY_SIZE(buffer));
+      FormatUserDistanceSmart(parsed.visibility, buffer, ARRAY_SIZE(buffer));
     }
     _tprintf(_T("Visibility: %s\n"), buffer);
   }

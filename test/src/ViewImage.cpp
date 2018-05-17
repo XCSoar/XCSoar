@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -34,7 +34,7 @@ class TestWindow : public SingleWindow {
   Bitmap bitmap;
 
 public:
-  bool LoadFile(const TCHAR *path) {
+  bool LoadFile(Path path) {
     Invalidate();
     return bitmap.LoadFile(path);
   }
@@ -48,12 +48,12 @@ protected:
   }
 };
 
-static tstring path;
+static AllocatedPath path = nullptr;
 
 static void
 ParseCommandLine(Args &args)
 {
-  path = args.ExpectNextT();
+  path = args.ExpectNextPath();
 }
 
 static void
@@ -61,8 +61,10 @@ Main()
 {
   TestWindow window;
   window.Create(_T("ViewImage"), {640, 480});
-  if (window.LoadFile(path.c_str()))
-    window.RunEventLoop();
-  else
+  if (!window.LoadFile(path)) {
     fprintf(stderr, "Failed to load file\n");
+    exit(EXIT_FAILURE);
+  }
+
+  window.RunEventLoop();
 }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "MainWindow.hpp"
 
-#ifdef KOBO
+#ifdef USE_POLL_EVENT
 #include "Event/Globals.hpp"
 #include "Event/Queue.hpp"
 #endif
@@ -56,8 +56,8 @@ Display::LoadOrientation(VerboseOperationEnvironment &env)
     return;
   }
 
-#ifdef KOBO
-  event_queue->SetMouseRotation(orientation);
+#ifdef USE_POLL_EVENT
+  event_queue->SetDisplayOrientation(orientation);
 #endif
 
   LogFormat("Display rotated");
@@ -83,7 +83,7 @@ Display::RestoreOrientation()
 
   Display::RotateRestore();
 
-#ifdef KOBO
-  event_queue->SetMouseRotation(DisplayOrientation::DEFAULT);
+#ifdef USE_POLL_EVENT
+  event_queue->SetDisplayOrientation(DisplayOrientation::DEFAULT);
 #endif
 }

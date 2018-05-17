@@ -42,8 +42,9 @@ CloudEnableDialog()
     /* currently only enabled on Android */
     return;
 
-  auto &settings = CommonInterface::SetComputerSettings().tracking.skylines;
-  if (settings.cloud_enabled != TriState::UNKNOWN)
+  auto &settings =
+    CommonInterface::SetComputerSettings().tracking.skylines.cloud;
+  if (settings.enabled != TriState::UNKNOWN)
     /* explicitly enabled or disabled - don't ask further questions */
     return;
 
@@ -76,15 +77,15 @@ CloudEnableDialog()
 
   switch (result) {
   case IDYES:
-    settings.cloud_enabled = TriState::TRUE;
+    settings.enabled = TriState::TRUE;
     Profile::Set(ProfileKeys::CloudEnabled, true);
 
-    if (settings.cloud_key == 0) {
-      settings.cloud_key = SkyLinesTracking::GenerateKey();
+    if (settings.key == 0) {
+      settings.key = SkyLinesTracking::GenerateKey();
 
       char s[64];
       snprintf(s, sizeof(s), "%llx",
-               (unsigned long long)settings.cloud_key);
+               (unsigned long long)settings.key);
       Profile::Set(ProfileKeys::CloudKey, s);
     }
 
@@ -92,7 +93,7 @@ CloudEnableDialog()
     break;
 
   case IDNO:
-    settings.cloud_enabled = TriState::FALSE;
+    settings.enabled = TriState::FALSE;
     Profile::Set(ProfileKeys::CloudEnabled, false);
     Profile::Save();
     break;
@@ -100,7 +101,7 @@ CloudEnableDialog()
   default:
     /* prevent further dialogs during this XCSoar run, but ask again
        later (don't save to profile) */
-    settings.cloud_enabled = TriState::FALSE;
+    settings.enabled = TriState::FALSE;
   }
 #endif
 }

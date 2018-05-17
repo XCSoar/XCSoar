@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -290,14 +290,14 @@ Profile::SetDeviceConfig(ProfileMap &map,
   map.SetEnum(buffer, config.press_use);
 
   MakeDeviceSettingName(buffer, "Port", n, "SensorOffset");
-  fixed offset = DeviceConfig::UsesCalibration(config.port_type) ? config.sensor_offset : fixed(0);
+  auto offset = DeviceConfig::UsesCalibration(config.port_type) ? config.sensor_offset : 0;
   // Has new calibration data been delivered ?
   if (CommonInterface::Basic().sensor_calibration_available)
     offset = CommonInterface::Basic().sensor_calibration_offset;
   map.Set(buffer, offset);
 
   MakeDeviceSettingName(buffer, "Port", n, "SensorFactor");
-  fixed factor = DeviceConfig::UsesCalibration(config.port_type) ? config.sensor_factor : fixed(0);
+  auto factor = DeviceConfig::UsesCalibration(config.port_type) ? config.sensor_factor : 0;
   // Has new calibration data been delivered ?
   if (CommonInterface::Basic().sensor_calibration_available)
     factor = CommonInterface::Basic().sensor_calibration_factor;

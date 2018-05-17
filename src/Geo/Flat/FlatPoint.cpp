@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -19,40 +19,17 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#include "FlatPoint.hpp"
-#include <algorithm>
-#include <math.h>
 
-void
-FlatPoint::MultiplyY(const fixed a)
-{
-  y *= a;
-}
+#include "FlatPoint.hpp"
+#include "Math/Angle.hpp"
 
 void
 FlatPoint::Rotate(const Angle angle)
 {
-  const fixed _x = x;
-  const fixed _y = y;
+  const auto _x = x;
+  const auto _y = y;
   const auto sc = angle.SinCos();
-  const fixed sa = sc.first, ca = sc.second;
+  const auto sa = sc.first, ca = sc.second;
   x = _x * ca - _y * sa;
   y = _x * sa + _y * ca;
-}
-
-fixed
-FlatPoint::Distance(const FlatPoint &p) const
-{
-  return MediumHypot(p.x - x, p.y - y);
-}
-
-fixed
-FlatPoint::MagnitudeSquared() const {
-  return sqr(x)+sqr(y);
-}
-
-fixed
-FlatPoint::Magnitude() const
-{
-  return MediumHypot(x, y);
 }

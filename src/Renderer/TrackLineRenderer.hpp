@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TRACK_LINE_RENDERER_HPP
 #define XCSOAR_TRACK_LINE_RENDERER_HPP
 
-struct RasterPoint;
+struct PixelPoint;
 class Canvas;
 class Angle;
 class WindowProjection;
@@ -33,6 +33,11 @@ struct NMEAInfo;
 struct DerivedInfo;
 struct MapSettings;
 
+/**
+ * Renderer for the track line
+ * Renders line forward along the current ground track (not heading) in straight flight
+ * or curve using current rate of curve when curving / circling.
+ */
 class TrackLineRenderer {
   const MapLook &look;
 
@@ -40,11 +45,11 @@ public:
   TrackLineRenderer(const MapLook &_look):look(_look) {}
 
   void Draw(Canvas &canvas, const Angle screen_angle, const Angle track_angle,
-            const RasterPoint pos);
+            PixelPoint pos);
 
   void Draw(Canvas &canvas,
             const WindowProjection &projection,
-            const RasterPoint pos, const NMEAInfo &basic,
+            PixelPoint pos, const NMEAInfo &basic,
             const DerivedInfo &calculated, const MapSettings &settings,
             bool wind_relative);
 

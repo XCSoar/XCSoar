@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,14 +23,10 @@ Copyright_License {
 
 #include "BlueFlyDialogs.hpp"
 #include "Device/Driver/BlueFly/Internal.hpp"
-#include "Compiler.h"
 #include "Dialogs/WidgetDialog.hpp"
-#include "Dialogs/Message.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
-#include "Look/DialogLook.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
-#include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
 #include "Widget/RowFormWidget.hpp"
 
@@ -57,7 +53,7 @@ public:
       AddFloat(N_("Volume"), nullptr,
              _T("%.2f"),
              _T("%.2f"),
-               fixed(0), fixed(1.0), fixed(0.1), true, fixed(0));
+               0, 1.0, 0.1, true, 0);
 
       static constexpr StaticEnumChoice modes[] = {
         { 0, _T("BlueFlyVario") },

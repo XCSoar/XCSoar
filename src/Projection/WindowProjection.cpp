@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@ WindowProjection::GeoVisible(const GeoPoint &loc) const
 }
 
 bool
-WindowProjection::GeoToScreenIfVisible(const GeoPoint &loc, RasterPoint &sc) const
+WindowProjection::GeoToScreenIfVisible(const GeoPoint &loc, PixelPoint &sc) const
 {
   if (GeoVisible(loc)) {
     sc = GeoToScreen(loc);
@@ -41,7 +41,7 @@ WindowProjection::GeoToScreenIfVisible(const GeoPoint &loc, RasterPoint &sc) con
 }
 
 bool
-WindowProjection::ScreenVisible(const RasterPoint &P) const
+WindowProjection::ScreenVisible(const PixelPoint &P) const
 {
   assert(screen_size_initialised);
 
@@ -50,18 +50,18 @@ WindowProjection::ScreenVisible(const RasterPoint &P) const
 }
 
 void
-WindowProjection::SetScaleFromRadius(fixed radius)
+WindowProjection::SetScaleFromRadius(double radius)
 {
-  SetScale(fixed(GetMinScreenDistance()) / (radius * 2));
+  SetScale(double(GetMinScreenDistance()) / (radius * 2));
 }
 
-fixed
+double
 WindowProjection::GetMapScale() const
 {
   return DistancePixelsToMeters(GetMapResolutionFactor());
 }
 
-fixed
+double
 WindowProjection::GetScreenDistanceMeters() const
 {
   return DistancePixelsToMeters(GetScreenDistance());

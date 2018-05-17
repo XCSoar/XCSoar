@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,6 +25,7 @@ Copyright_License {
 #include "AirspaceConfig.hpp"
 #include "TaskProfile.hpp"
 #include "TrackingProfile.hpp"
+#include "WeatherProfile.hpp"
 #include "ProfileKeys.hpp"
 #include "ContestProfile.hpp"
 #include "Map.hpp"
@@ -35,7 +36,6 @@ namespace Profile {
   static void Load(const ProfileMap &map, PolarSettings &settings);
   static void Load(const ProfileMap &map, LoggerSettings &settings);
   static void Load(const ProfileMap &map, TeamCodeSettings &settings);
-  static void Load(const ProfileMap &map, VoiceSettings &settings);
   static void Load(const ProfileMap &map, PlacesOfInterestSettings &settings);
   static void Load(const ProfileMap &map, FeaturesSettings &settings);
   static void Load(const ProfileMap &map, CirclingSettings &settings);
@@ -55,9 +55,9 @@ Profile::Load(const ProfileMap &map, WindSettings &settings)
 void
 Profile::Load(const ProfileMap &map, PolarSettings &settings)
 {
-  fixed degradation;
+  double degradation;
   if (map.Get(ProfileKeys::PolarDegradation, degradation) &&
-      degradation >= fixed(0.5) && degradation <= fixed(1))
+      degradation >= 0.5 && degradation <= 1)
     settings.SetDegradationFactor(degradation);
 
   map.Get(ProfileKeys::AutoBugs, settings.auto_bugs);
@@ -88,21 +88,6 @@ void
 Profile::Load(const ProfileMap &map, TeamCodeSettings &settings)
 {
   map.Get(ProfileKeys::TeamcodeRefWaypoint, settings.team_code_reference_waypoint);
-}
-
-void
-Profile::Load(const ProfileMap &map, VoiceSettings &settings)
-{
-  map.Get(ProfileKeys::VoiceClimbRate, settings.voice_climb_rate_enabled);
-  map.Get(ProfileKeys::VoiceTerrain, settings.voice_terrain_enabled);
-  map.Get(ProfileKeys::VoiceWaypointDistance,
-          settings.voice_waypoint_distance_enabled);
-  map.Get(ProfileKeys::VoiceTaskAltitudeDifference,
-          settings.voice_task_altitude_difference_enabled);
-  map.Get(ProfileKeys::VoiceMacCready, settings.voice_mac_cready_enabled);
-  map.Get(ProfileKeys::VoiceNewWaypoint, settings.voice_new_waypoint_enabled);
-  map.Get(ProfileKeys::VoiceInSector, settings.voice_in_sector_enabled);
-  map.Get(ProfileKeys::VoiceAirspace, settings.voice_airspace_enabled);
 }
 
 void
@@ -164,7 +149,6 @@ Profile::Load(const ProfileMap &map, ComputerSettings &settings)
   Load(map, settings.wind);
   Load(map, settings.polar);
   Load(map, settings.team_code);
-  Load(map, settings.voice);
   Load(map, settings.poi);
   Load(map, settings.features);
   Load(map, settings.airspace);
@@ -184,4 +168,6 @@ Profile::Load(const ProfileMap &map, ComputerSettings &settings)
 #ifdef HAVE_TRACKING
   Load(map, settings.tracking);
 #endif
+
+  Load(map, settings.weather);
 }

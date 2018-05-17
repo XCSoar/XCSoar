@@ -1,6 +1,36 @@
-\section{Topography layer description file (topology.tpl)}
+\section{Map Data file formats}
+The map data is typically downloaded from the map generator server and consists of a single \texttt{.xcm} file.
+It is a zip file which contains several separate files for terrain, topography and waypoint data:
+\begin{itemize}
+\item[\texttt{info.txt}] General map information
+\item[\texttt{terrain.jp2}] Terrain (elevation) data, georeferenced in \texttt{terrain.j2w}
+\item[\texttt{waypoints.cup}] Waypoint data
+\item[\texttt{topology.tpl}] Topography data file index
+\item[\texttt{*.shp} / \texttt{*.dbf} / \texttt{*.shx}] A set of ESRI format shape file sets with actual topography voctor data information, as listed and defined in \texttt{topology.tpl} (Coasts, rivers, roads, cities etc.)
+\end{itemize}
+\subsection{Map information}
+\texttt{info.txt}
+Contains information about the map as a whole, such as creator, creation time, and lat/lon range.
 
-Each line of the topography layer description file (topology.tpl) contains
+\subsection{Terrain data files}
+The map cointains a digital elevation model of the map area. It is stored as an JPEG2000 compressed image in the file \texttt{terrain.jp2}. The projection information (lat/lon boundaries) of the DEM file are contained in the text file \texttt{terrain.j2w}, in decimal degree latitude/longitude format.
+Water is defined as elevation lower than \texttt{TERRAIN\_WATER\_THRESHOLD=-30000}, therefore care has to be taken that JPEG compression parameters and algorithms  are used which do not generate artefacts at the coastlines due to the potentially big jump in elevation value.
+\subsection{Waypoints}
+A map database file can contain waypoints. They reside in the \texttt{waypoints.cup} file, which has regular \texttt{.CUP} format.
+
+\subsection{Topography data}
+\subsubsection{Shape files}
+Non-elevation topography data is stored in standard ESRI shape files. For each type of topographic shape (road, river, city outline, etc.) there is one shape filein \texttt{.shp}, which containes all shapes of this type. For each \texttt{.shp} file, there has to be an associated \texttt{.dbf} file containing shape metadata (such as the name of the city) in dBASE format, and an index file of \texttt{.shx} file type which contains the index that relates the metadata to the shapes. 
+
+All of this is defined in the ESRI shape file standard. The official definition of the standard can be found at\\ \href{http://www.esri.com/library/whitepapers/pdfs/shapefile.pdf}{http://www.esri.com/library/whitepapers/pdfs/shapefile.pdf}, but there are more compact descriptions available on the web, see for example wikipedia info and links at \\ \href{http://en.wikipedia.org/wiki/Shapefile}{http://en.wikipedia.org/wiki/Shapefile}.
+
+There can be more files associated with each shape file, such as \texttt{.prj}, \texttt{.qix}, \texttt{.atx}, which are not used by XCSoar.
+
+The set of shapefiles actually used by XCSoar and the attributes of each file are defined in the topography layer description file \texttt{topology.tpl}. All shape files used by the map must be listed there.
+
+\subsubsection{Topography layer description file (topology.tpl) format}
+
+Each line of the topography layer description file (\texttt{topology.tpl}) contains
 a comma separated list (CSV) of information needed for rendering of an
 individual topography layer. Lines starting with '*' are ignored.
 
@@ -50,7 +80,7 @@ Only used by XCSoar v6.7 and later.
 \texttt{Versions of XCSoar running on Windows and WinCE ignore any item where transparency is specified.}
 
 \end{description}
-\subsection{Point Features}
+\subsubsection{Point Features}
 Prior to XCSoar v6.6, this could contain the value 219 to display an icon for a town
 From XCSoar v6.6, a user can put an optional string into the icon column in topology.tpl in the .XCM file (e.g.)
 \begin{itemize}
@@ -108,7 +138,7 @@ it is envisaged that in future these will be names of icon files. Available icon
 \item outfield\_unreachable \includegraphics[angle=0,width=8pt,keepaspectratio='true']{icons/alt_landable_field.pdf}
 \item outfield\_marginal \includegraphics[angle=0,width=8pt,keepaspectratio='true']{icons/alt_marginal_field.pdf}
 \end{itemize}
-\subsection{Adding new Icons}
+\subsubsection{Adding new Icons}
 At the moment, adding new icons requires a rebuild of the XCSoar application.It is envisaged that, in future, 
 this process won't be required... users will include icon files in their .XCM map container files, and refer to them 
 by name. However, that has not yet been implemented. 

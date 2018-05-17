@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -41,7 +41,7 @@ TaskPointRenderer::TaskPointRenderer(Canvas &_canvas,
                                      const GeoPoint &_location)
   :canvas(_canvas), m_proj(_projection),
    map_canvas(_canvas, _projection,
-              _projection.GetScreenBounds().Scale(fixed(1.1))),
+              _projection.GetScreenBounds().Scale(1.1)),
    task_look(_task_look),
    flat_projection(_flat_projection),
    draw_bearing(_draw_bearing),
@@ -127,9 +127,9 @@ TaskPointRenderer::DrawTarget(const TaskPoint &tp)
   if (!IsTargetVisible(tp))
     return;
 
-  RasterPoint sc;
+  PixelPoint sc;
   if (m_proj.GeoToScreenIfVisible(tp.GetLocationRemaining(), sc))
-    task_look.target_icon.Draw(canvas, sc.x, sc.y);
+    task_look.target_icon.Draw(canvas, sc);
 }
 
 void
@@ -142,21 +142,22 @@ TaskPointRenderer::DrawTaskLine(const GeoPoint &start, const GeoPoint &end)
   canvas.SetBackgroundOpaque();
 
   // draw small arrow along task direction
-  RasterPoint p_p;
-  RasterPoint Arrow[3] = { {6,6}, {-6,6}, {0,0} };
+  BulkPixelPoint Arrow[3] = { {6,6}, {-6,6}, {0,0} };
 
-  const RasterPoint p_start = m_proj.GeoToScreen(start);
-  const RasterPoint p_end = m_proj.GeoToScreen(end);
+  const auto p_start = m_proj.GeoToScreen(start);
+  const auto p_end = m_proj.GeoToScreen(end);
 
-  const Angle ang = Angle::FromXY(fixed(p_start.y - p_end.y),
-                                  fixed(p_end.x - p_start.x)).AsBearing();
+  const Angle ang = Angle::FromXY(p_start.y - p_end.y,
+                                  p_end.x - p_start.x).AsBearing();
 
-  ScreenClosestPoint(p_start, p_end, m_proj.GetScreenOrigin(), &p_p, Layout::Scale(25));
+  const auto p_p = ScreenClosestPoint(p_start, p_end, m_proj.GetScreenOrigin(),
+                                      Layout::Scale(25));
   PolygonRotateShift(Arrow, 2, p_p, ang);
   Arrow[2] = Arrow[1];
   Arrow[1] = p_p;
 
-  canvas.Select(task_look.arrow_pen);
+  canvas.Select(LegActive() ? task_look.arrow_active_pen :
+                              task_look.arrow_inactive_pen);
   canvas.DrawPolyline(Arrow, 3);
 }
 
@@ -170,20 +171,19 @@ TaskPointRenderer::DrawIsoline(const AATPoint &tp)
   if (!seg.IsValid())
     return;
 
-  #define fixed_twentieth fixed(1.0 / 20.0)
-
-  GeoPoint start = seg.Parametric(fixed(0));
-  GeoPoint end = seg.Parametric(fixed(1));
+  GeoPoint start = seg.Parametric(0);
+  GeoPoint end = seg.Parametric(1);
 
   if (m_proj.GeoToScreenDistance(start.DistanceS(end)) <= 2)
     return;
 
-  RasterPoint screen[21];
+  BulkPixelPoint screen[21];
   screen[0] = m_proj.GeoToScreen(start);
   screen[20] = m_proj.GeoToScreen(end);
 
   for (unsigned i = 1; i < 20; ++i) {
-    fixed t = i * fixed_twentieth;
+    constexpr double twentieth = 1.0 / 20.0;
+    auto t = i * twentieth;
     GeoPoint ga = seg.Parametric(t);
     screen[i] = m_proj.GeoToScreen(ga);
   }

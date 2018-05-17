@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@ GroundSpeedComputer::Compute(NMEAInfo &basic)
   if (basic.ground_speed_available ||
       !basic.time_available || !basic.location_available) {
     if (!basic.ground_speed_available)
-      basic.ground_speed = fixed(0);
+      basic.ground_speed = 0;
 
     delta_time.Reset();
     last_location_available.Clear();
@@ -38,11 +38,11 @@ GroundSpeedComputer::Compute(NMEAInfo &basic)
   }
 
   if (!last_location_available)
-    delta_time.Update(basic.time, fixed(0), fixed(0));
+    delta_time.Update(basic.time, 0, 0);
   else if (basic.location_available.Modified(last_location_available)) {
-    const fixed dt = delta_time.Update(basic.time, fixed(0.2), fixed(5));
-    if (positive(dt)) {
-      fixed distance = basic.location.DistanceS(last_location);
+    const auto dt = delta_time.Update(basic.time, 0.2, 5);
+    if (dt > 0) {
+      auto distance = basic.location.DistanceS(last_location);
       basic.ground_speed = distance / dt;
       basic.ground_speed_available = basic.location_available;
     }

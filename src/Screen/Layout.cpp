@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -35,6 +35,7 @@ namespace Layout
   unsigned scale_1024 = 1024;
   unsigned small_scale = 1024;
   unsigned pen_width_scale = 1024;
+  unsigned fine_pen_width_scale = 1024;
   unsigned pt_scale = 1024;
   unsigned vpt_scale = 1024;
   unsigned font_scale = 1024;
@@ -75,7 +76,7 @@ IsSmallScreen(PixelSize size,
 }
 
 void
-Layout::Initialize(PixelSize new_size, unsigned ui_scale)
+Layout::Initialize(PixelSize new_size, unsigned ui_scale, unsigned custom_dpi)
 {
   const unsigned width = new_size.cx, height = new_size.cy;
 
@@ -86,8 +87,8 @@ Layout::Initialize(PixelSize new_size, unsigned ui_scale)
   if (!ScaleSupported())
     return;
 
-  const unsigned x_dpi = Display::GetXDPI();
-  const unsigned y_dpi = Display::GetYDPI();
+  const unsigned x_dpi = Display::GetXDPI(custom_dpi);
+  const unsigned y_dpi = Display::GetYDPI(custom_dpi);
   const bool is_small_screen = IsSmallScreen(Display::GetSize(new_size),
                                              x_dpi, y_dpi);
 
@@ -99,6 +100,7 @@ Layout::Initialize(PixelSize new_size, unsigned ui_scale)
   small_scale = (scale_1024 - 1024) / 2 + 1024;
 
   pen_width_scale = std::max(1024u, x_dpi * 1024u / 80u);
+  fine_pen_width_scale = std::max(1024u, x_dpi * 1024u / 160u);
 
   pt_scale = 1024 * y_dpi / 72;
 

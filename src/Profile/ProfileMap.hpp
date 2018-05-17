@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_PROFILE_MAP_HPP
 
 #include "Util/StringBuffer.hxx"
-#include "Math/fixed.hpp"
+#include "Compiler.h"
 
 #include <tchar.h>
 #include <stdint.h>
@@ -81,7 +81,7 @@ namespace Profile {
   bool Get(const char *key, unsigned &value);
   bool Get(const char *key, uint16_t &value);
   bool Get(const char *key, uint8_t &value);
-  bool Get(const char *key, fixed &value);
+  bool Get(const char *key, double &value);
 
   template<typename T>
   static inline bool GetEnum(const char *key, T &value)
@@ -102,7 +102,7 @@ namespace Profile {
   void Set(const char *key, int value);
   void Set(const char *key, long value);
   void Set(const char *key, unsigned value);
-  void Set(const char *key, fixed value);
+  void Set(const char *key, double value);
 
   template<typename T>
   static inline void SetEnum(const char *key, T value)
@@ -112,7 +112,7 @@ namespace Profile {
 
   template<size_t max>
   static inline bool
-  Get(const char *key, StringBuffer<TCHAR, max> &value)
+  Get(const char *key, BasicStringBuffer<TCHAR, max> &value)
   {
     return Get(key, value.data(), value.capacity());
   }

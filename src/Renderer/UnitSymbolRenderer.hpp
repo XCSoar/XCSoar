@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,9 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_UNIT_SYMBOL_RENDERER_HPP
 #define XCSOAR_UNIT_SYMBOL_RENDERER_HPP
 
-#include "Screen/Point.hpp"
 #include "Units/Units.hpp"
 
+struct PixelPoint;
+struct PixelSize;
 class Canvas;
 class Font;
 class Pen;
@@ -34,8 +35,8 @@ class Pen;
 namespace UnitSymbolRenderer
 {
   PixelSize GetSize(const Canvas &canvas, const Unit unit);
-  UPixelScalar GetAscentHeight(const Font &font, const Unit unit);
-  void Draw(Canvas &canvas, const RasterPoint pos, const Unit unit,
+  unsigned GetAscentHeight(const Font &font, const Unit unit);
+  void Draw(Canvas &canvas, PixelPoint pos, Unit unit,
             const Pen &unit_fraction_pen);
 }
 

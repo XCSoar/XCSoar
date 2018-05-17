@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -48,12 +48,21 @@ public:
     ::glBlendFunc(sfactor, dfactor);
   }
 
-#ifndef HAVE_GLES
+#ifndef HAVE_GLES1
   GLBlend(GLclampf alpha) {
     ::glBlendFunc(GL_CONSTANT_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA);
     ::glBlendColor(0, 0, 0, alpha);
   }
 #endif
+};
+
+/**
+ * Enable alpha blending with source's alpha value (the most common
+ * variant of GL_BLEND).
+ */
+class ScopeAlphaBlend : GLBlend {
+public:
+  ScopeAlphaBlend():GLBlend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) {}
 };
 
 class GLScissor : public GLEnable<GL_SCISSOR_TEST> {

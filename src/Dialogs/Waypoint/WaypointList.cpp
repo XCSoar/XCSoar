@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@ Copyright_License {
 #include "Widget/ListWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
 #include "Widget/RowFormWidget.hpp"
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #include "Form/Edit.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Form/DataField/Prefix.hpp"
@@ -39,9 +39,7 @@ Copyright_License {
 #include "Waypoint/WaypointFilter.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Components.hpp"
-#include "Compiler.h"
 #include "Form/DataField/Enum.hpp"
-#include "Util/StringUtil.hpp"
 #include "Util/StringPointer.hxx"
 #include "Util/AllocatedString.hxx"
 #include "UIGlobals.hpp"
@@ -61,7 +59,6 @@ Copyright_License {
 #include <list>
 
 #include <assert.h>
-#include <stdlib.h>
 #include <stdio.h>
 
 enum Controls {
@@ -113,19 +110,17 @@ struct WaypointListDialogState
   void ToFilter(WaypointFilter &filter, Angle heading) const {
     filter.name = name;
     filter.distance =
-      Units::ToSysDistance(fixed(distance_filter_items[distance_index]));
+      Units::ToSysDistance(distance_filter_items[distance_index]);
     filter.type_index = type_index;
 
     if (direction_index != 1)
-      filter.direction = Angle::Degrees(
-          fixed(direction_filter_items[direction_index]));
+      filter.direction = Angle::Degrees(direction_filter_items[direction_index]);
     else
       filter.direction = heading;
   }
 };
 
 class WaypointFilterWidget;
-class WaypointListButtons;
 
 class WaypointListWidget final
   : public ListWidget, public DataFieldListener,
@@ -160,7 +155,7 @@ public:
 
   void OnWaypointListEnter();
 
-  const Waypoint *GetCursorObject() const {
+  WaypointPtr GetCursorObject() const {
     return items.empty()
       ? nullptr
       : items[GetList().GetCursorIndex()].waypoint;
@@ -225,9 +220,6 @@ public:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
-#ifdef GNAV
-  bool KeyPress(unsigned key_code) override;
-#endif
 };
 
 class WaypointListButtons : public RowFormWidget {
@@ -296,7 +288,7 @@ FillList(WaypointList &list, const Waypoints &src,
                               ordered_task, ordered_task_index);
   builder.Visit(src);
 
-  if (positive(filter.distance) || !negative(filter.direction.Native()))
+  if (filter.distance > 0 || !filter.direction.IsNegative())
     list.SortByDistance(location);
 }
 
@@ -306,11 +298,11 @@ FillLastUsedList(WaypointList &list,
                  const Waypoints &waypoints)
 {
   for (auto it = last_used_ids.rbegin(); it != last_used_ids.rend(); it++) {
-    const Waypoint* waypoint = waypoints.LookupId(*it);
+    auto waypoint = waypoints.LookupId(*it);
     if (waypoint == nullptr)
       continue;
 
-    list.emplace_back(*waypoint);
+    list.emplace_back(std::move(waypoint));
   }
 }
 
@@ -365,7 +357,7 @@ CreateDistanceDataField(DataFieldListener *listener)
 
   TCHAR buffer[15];
   for (unsigned i = 1; i < ARRAY_SIZE(distance_filter_items); i++) {
-    FormatUserDistance(Units::ToSysDistance(fixed(distance_filter_items[i])),
+    FormatUserDistance(Units::ToSysDistance(distance_filter_items[i]),
                        buffer);
     df->addEnumText(buffer);
   }
@@ -509,7 +501,7 @@ WaypointListWidget::OnGPSUpdate(const MoreData &basic)
       !CommonInterface::Calculated().circling) {
     const Angle heading = basic.attitude.heading;
     Angle a = last_heading - heading;
-    if (a.AsDelta().AbsoluteDegrees() >= fixed(60)) {
+    if (a.AsDelta().AbsoluteDegrees() >= 60) {
       last_heading = heading;
       filter_widget.Update(last_heading);
       UpdateList();
@@ -517,32 +509,7 @@ WaypointListWidget::OnGPSUpdate(const MoreData &basic)
   }
 }
 
-#ifdef GNAV
-
-bool
-WaypointFilterWidget::KeyPress(unsigned key_code)
-{
-  switch (key_code) {
-  case KEY_APP1:
-    LoadValueEnum(TYPE, TypeFilter::ALL);
-    return true;
-
-  case KEY_APP2:
-    LoadValueEnum(TYPE, TypeFilter::LANDABLE);
-    return true;
-
-  case KEY_APP3:
-    LoadValueEnum(TYPE, TypeFilter::TURNPOINT);
-    return true;
-
-  default:
-    return false;
-  }
-}
-
-#endif /* GNAV */
-
-const Waypoint*
+WaypointPtr
 ShowWaypointListDialog(const GeoPoint &_location,
                        OrderedTask *_ordered_task, unsigned _ordered_task_index)
 {

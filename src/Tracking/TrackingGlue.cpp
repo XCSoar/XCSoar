@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,12 +25,12 @@ Copyright_License {
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Units/System.hpp"
+#include "Operation/Operation.hpp"
+#include "LogFile.hpp"
 #include "Util/Macros.hpp"
 
-#ifdef HAVE_LIVETRACK24
-
 static LiveTrack24::VehicleType
-MapVehicleTypeToLivetrack24(TrackingSettings::VehicleType vt)
+MapVehicleTypeToLivetrack24(LiveTrack24::Settings::VehicleType vt)
 {
   static constexpr LiveTrack24::VehicleType vehicleTypeMap[] = {
     LiveTrack24::VehicleType::GLIDER,
@@ -48,26 +48,13 @@ MapVehicleTypeToLivetrack24(TrackingSettings::VehicleType vt)
   return vehicleTypeMap[vti];
 }
 
-#endif
-
-TrackingGlue::TrackingGlue()
-#ifdef HAVE_LIVETRACK24
+TrackingGlue::TrackingGlue(boost::asio::io_service &io_service)
   :StandbyThread("Tracking"),
-   last_timestamp(0),
-   flying(false)
-#endif
+   skylines(io_service, this)
 {
   settings.SetDefaults();
-#ifdef HAVE_LIVETRACK24
-  LiveTrack24::SetServer(settings.livetrack24.server);
-#endif
-
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  skylines.SetHandler(this);
-#endif
+  livetrack24.SetServer(settings.livetrack24.server);
 }
-
-#ifdef HAVE_LIVETRACK24
 
 void
 TrackingGlue::StopAsync()
@@ -83,16 +70,11 @@ TrackingGlue::WaitStopped()
   StandbyThread::WaitStopped();
 }
 
-#endif
-
 void
 TrackingGlue::SetSettings(const TrackingSettings &_settings)
 {
-#ifdef HAVE_SKYLINES_TRACKING
   skylines.SetSettings(_settings.skylines);
-#endif
 
-#ifdef HAVE_LIVETRACK24
   if (_settings.livetrack24.server != settings.livetrack24.server ||
       _settings.livetrack24.username != settings.livetrack24.username ||
       _settings.livetrack24.password != settings.livetrack24.password) {
@@ -101,25 +83,25 @@ TrackingGlue::SetSettings(const TrackingSettings &_settings)
 
     /* now it's safe to access these variables without a lock */
     settings = _settings;
-    state.ResetSession();
-    LiveTrack24::SetServer(_settings.livetrack24.server);
+    livetrack24.ResetSession();
+    livetrack24.SetServer(_settings.livetrack24.server);
   } else {
     /* no fundamental setting changes; the write needs to be protected
        by the mutex, because another job may be running already */
     ScopeLock protect(mutex);
     settings = _settings;
   }
-#endif
 }
 
 void
 TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
 {
-#ifdef HAVE_SKYLINES_TRACKING
-  skylines.Tick(basic, calculated);
-#endif
+  try {
+    skylines.Tick(basic, calculated);
+  } catch (const std::runtime_error &e) {
+    LogError("SkyLines error", e);
+  }
 
-#ifdef HAVE_LIVETRACK24
   if (!settings.livetrack24.enabled)
     /* disabled by configuration */
     /* note that we are allowed to read "settings" without locking the
@@ -131,7 +113,7 @@ TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
     /* can't track without a valid GPS fix */
     return;
 
-  if (!clock.CheckUpdate(settings.interval * 1000))
+  if (!clock.CheckUpdate(settings.livetrack24.interval * 1000))
     /* later */
     return;
 
@@ -147,7 +129,7 @@ TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
 
   location = basic.location;
   /* XXX use nav_altitude? */
-  altitude = basic.NavAltitudeAvailable() && positive(basic.nav_altitude)
+  altitude = basic.NavAltitudeAvailable() && basic.nav_altitude > 0
     ? (unsigned)basic.nav_altitude
     : 0u;
   ground_speed = basic.ground_speed_available
@@ -161,10 +143,7 @@ TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
   flying = calculated.flight.flying;
 
   Trigger();
-#endif
 }
-
-#ifdef HAVE_LIVETRACK24
 
 void
 TrackingGlue::Tick()
@@ -173,69 +152,59 @@ TrackingGlue::Tick()
     /* settings have been cleared meanwhile, bail out */
     return;
 
-  unsigned tracking_interval = settings.interval;
-  LiveTrack24Settings copy = this->settings.livetrack24;
+  LiveTrack24::Settings copy = this->settings.livetrack24;
 
-  mutex.Unlock();
+  const ScopeUnlock unlock(mutex);
 
-  if (!flying) {
-    if (last_flying && state.HasSession()) {
-      /* landing: end tracking session */
-      LiveTrack24::EndTracking(state.session_id, state.packet_id);
-      state.ResetSession();
-      last_timestamp = 0;
-    }
+  QuietOperationEnvironment env;
 
-    /* don't track if not flying */
-    mutex.Lock();
-    return;
-  }
+  try {
+    if (!flying) {
+      if (last_flying && livetrack24.HasSession()) {
+        /* landing: end tracking session */
+        livetrack24.EndTracking(env);
+        livetrack24.ResetSession();
+        last_timestamp = 0;
+      }
 
-  const int64_t current_timestamp = date_time.ToUnixTimeUTC();
-
-  if (state.HasSession() && current_timestamp + 60 < last_timestamp) {
-    /* time warp: create a new session */
-    LiveTrack24::EndTracking(state.session_id, state.packet_id);
-    state.ResetSession();
-  }
-
-  last_timestamp = current_timestamp;
-
-  if (!state.HasSession()) {
-    LiveTrack24::UserID user_id = 0;
-    if (!copy.username.empty() && !copy.password.empty())
-      user_id = LiveTrack24::GetUserID(copy.username, copy.password);
-
-    if (user_id == 0) {
-      copy.username.clear();
-      copy.password.clear();
-      state.session_id = LiveTrack24::GenerateSessionID();
-    } else {
-      state.session_id = LiveTrack24::GenerateSessionID(user_id);
-    }
-
-    if (!LiveTrack24::StartTracking(state.session_id, copy.username,
-                                    copy.password, tracking_interval,
-                                    MapVehicleTypeToLivetrack24(settings.vehicleType),
-                                    settings.vehicle_name)) {
-      state.ResetSession();
-      mutex.Lock();
+      /* don't track if not flying */
       return;
     }
 
-    state.packet_id = 2;
+    const int64_t current_timestamp = date_time.ToUnixTimeUTC();
+
+    if (livetrack24.HasSession() && current_timestamp + 60 < last_timestamp) {
+      /* time warp: create a new session */
+      livetrack24.EndTracking(env);
+      livetrack24.ResetSession();
+    }
+
+    last_timestamp = current_timestamp;
+
+    if (!livetrack24.HasSession()) {
+      bool success = false;
+      if (!copy.username.empty() && !copy.password.empty())
+        success = livetrack24.GenerateSessionID(copy.username, copy.password, env);
+
+      if (!success) {
+        copy.username.clear();
+        copy.password.clear();
+        livetrack24.GenerateSessionID();
+      }
+
+      if (!livetrack24.StartTracking(MapVehicleTypeToLivetrack24(settings.livetrack24.vehicleType),
+                                    settings.livetrack24.vehicle_name, env)) {
+        livetrack24.ResetSession();
+        return;
+      }
+    }
+
+    livetrack24.SendPosition(location, altitude, ground_speed, track,
+                             current_timestamp, env);
+  } catch (const std::exception &exception) {
+    LogError("LiveTrack24 error", exception);
   }
-
-  LiveTrack24::SendPosition(state.session_id, state.packet_id++,
-                            location, altitude, ground_speed, track,
-                            current_timestamp);
-
-  mutex.Lock();
 }
-
-#endif
-
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
 
 void
 TrackingGlue::OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
@@ -280,4 +249,24 @@ TrackingGlue::OnWave(unsigned time_of_day_ms,
   skylines_data.waves.emplace_back(time_of_day_ms, a, b);
 }
 
-#endif
+void
+TrackingGlue::OnThermal(unsigned time_of_day_ms,
+                        const AGeoPoint &bottom, const AGeoPoint &top,
+                        double lift)
+{
+  const ScopeLock protect(skylines_data.mutex);
+
+  /* garbage collection - hard-coded upper limit */
+  auto n = skylines_data.thermals.size();
+  while (n-- >= 64)
+    skylines_data.thermals.pop_front();
+
+  // TODO: replace existing item?
+  skylines_data.thermals.emplace_back(bottom, top, lift);
+}
+
+void
+TrackingGlue::OnSkyLinesError(const std::exception &e)
+{
+  LogError("SkyLines error", e);
+}

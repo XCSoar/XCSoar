@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -32,8 +32,8 @@
 #include "Renderer/AirspacePreviewRenderer.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Navigation/Aircraft.hpp"
-#include "Util/StringUtil.hpp"
 #include "Geo/GeoVector.hpp"
+#include "Util/StringCompare.hxx"
 
 /**
  * Local visitor class used for rendering airspaces in the CrossSectionRenderer
@@ -103,16 +103,16 @@ AirspaceIntersectionVisitorSlice::RenderBox(const PixelRect rc,
     const auto &class_settings = settings.classes[type];
 
     // Draw thick brushed outlines
-    const int border_width = class_settings.fill_mode ==
+    const unsigned border_width = class_settings.fill_mode ==
       AirspaceClassRendererSettings::FillMode::PADDING
       ? Layout::ScalePenWidth(10)
       : 0;
 
     if (border_width > 0 &&
-        (rc.right - rc.left) > border_width * 2 &&
-        (rc.bottom - rc.top) > border_width * 2) {
+        rc.GetWidth() > border_width * 2 &&
+        rc.GetHeight() > border_width * 2) {
       PixelRect border = rc;
-      border.Grow(-border_width);
+      border.Grow(-(int)border_width);
 
       // Left border
       canvas.Rectangle(rc.left, rc.top, border.left, rc.bottom);
@@ -155,7 +155,7 @@ AirspaceIntersectionVisitorSlice::Render(const AbstractAirspace &as) const
   // Calculate top and bottom coordinate
   rcd.top = chart.ScreenY(as.GetTopAltitude(state));
   if (as.IsBaseTerrain())
-    rcd.bottom = chart.ScreenY(fixed(0));
+    rcd.bottom = chart.ScreenY(0);
   else
     rcd.bottom = chart.ScreenY(as.GetBaseAltitude(state));
 

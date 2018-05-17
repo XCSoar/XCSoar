@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,10 +24,13 @@
 #include "Logger/MD5.hpp"
 #include "IGC/IGCString.hpp"
 #include "IO/FileLineReader.hpp"
-#include "IO/TextWriter.hpp"
+#include "IO/FileOutputStream.hxx"
+#include "IO/BufferedOutputStream.hxx"
+#include "OS/Path.hpp"
 #include "Util/Macros.hpp"
 
-#include <tchar.h>
+#include <stdexcept>
+
 #include <string.h>
 
 /**
@@ -129,23 +132,18 @@ GRecord::IncludeRecordInGCalc(const char *in)
   return valid;
 }
 
-bool
-GRecord::LoadFileToBuffer(const TCHAR *filename)
+void
+GRecord::LoadFileToBuffer(Path path)
 {
-  FileLineReaderA reader(filename);
-  if (reader.error())
-    return false;
+  FileLineReaderA reader(path);
 
   char *line;
-
   while ((line = reader.ReadLine()) != nullptr)
     AppendRecordToBuffer(line);
-
-  return true;
 }
 
 void
-GRecord::WriteTo(TextWriter &writer) const
+GRecord::WriteTo(BufferedOutputStream &writer) const
 {
   char digest[DIGEST_LENGTH + 1];
   GetDigest(digest);
@@ -157,28 +155,25 @@ GRecord::WriteTo(TextWriter &writer) const
        i != end; i += chars_per_line) {
     writer.Write('G');
     writer.Write(i, chars_per_line);
-    writer.NewLine();
+    writer.Write('\n');
   }
 }
 
-bool
-GRecord::AppendGRecordToFile(const TCHAR *filename)
+void
+GRecord::AppendGRecordToFile(Path path)
 {
-  TextWriter writer(filename, true);
-  if (!writer.IsOpen())
-    return false;
-
+  FileOutputStream file(path, FileOutputStream::Mode::APPEND_EXISTING);
+  BufferedOutputStream writer(file);
   WriteTo(writer);
-  return true;
+  writer.Flush();
+  file.Commit();
 }
 
-bool
-GRecord::ReadGRecordFromFile(const TCHAR *filename,
+void
+GRecord::ReadGRecordFromFile(Path path,
                              char *output, size_t max_length)
 {
-  FileLineReaderA reader(filename);
-  if (reader.error())
-    return false;
+  FileLineReaderA reader(path);
 
   unsigned int digest_length = 0;
   char *data;
@@ -189,17 +184,15 @@ GRecord::ReadGRecordFromFile(const TCHAR *filename,
     for (const char *p = data + 1; *p != '\0'; ++p) {
       output[digest_length++] = *p;
       if (digest_length >= max_length)
-        /* G record too large */
-        return false;
+        throw std::runtime_error("G record too large");
     }
   }
 
   output[digest_length] = '\0';
-  return true;
 }
 
-bool
-GRecord::VerifyGRecordInFile(const TCHAR *path)
+void
+GRecord::VerifyGRecordInFile(Path path)
 {
   // assumes FileName member is set
   // Load File into Buffer (assume name is already set)
@@ -207,8 +200,7 @@ GRecord::VerifyGRecordInFile(const TCHAR *path)
 
   // load Existing Digest "old"
   char old_g_record[DIGEST_LENGTH + 1];
-  if (!ReadGRecordFromFile(path, old_g_record, ARRAY_SIZE(old_g_record)))
-    return false;
+  ReadGRecordFromFile(path, old_g_record, ARRAY_SIZE(old_g_record));
 
   // recalculate digest from buffer
   FinalizeBuffer();
@@ -216,5 +208,6 @@ GRecord::VerifyGRecordInFile(const TCHAR *path)
   char new_g_record[DIGEST_LENGTH + 1];
   GetDigest(new_g_record);
 
-  return strcmp(old_g_record, new_g_record) == 0;
+  if (strcmp(old_g_record, new_g_record) != 0)
+    throw std::runtime_error("Invalid G record");
 }

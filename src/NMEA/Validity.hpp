@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,11 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_VALIDITY_HPP
 #define XCSOAR_VALIDITY_HPP
 
-#include "Math/fixed.hpp"
+#include "Compiler.h"
 
 #include <type_traits>
 
+#include <assert.h>
 #include <stdint.h>
+#include <math.h>
 
 /**
  * This keeps track when a value was last changed, to check if it was
@@ -40,12 +42,15 @@ class Validity {
 
   uint32_t last;
 
-  constexpr
-  static uint32_t Import(fixed time) {
-#ifdef FIXED_MATH
-    return (uint32_t)(time << BITS);
+  gcc_const
+  static uint32_t Import(double time) {
+#ifdef __BIONIC__
+    /* ldexp() is utterly broken on Bionic, but ldexpf() works - which
+       is good enough here */
+    // https://code.google.com/p/android/issues/detail?id=203996
+    return (uint32_t)ldexpf(time, BITS);
 #else
-    return (uint32_t)(time * (1 << BITS));
+    return (uint32_t)ldexp(time, BITS);
 #endif
   }
 
@@ -54,12 +59,15 @@ class Validity {
     return (uint32_t)(time << BITS);
   }
 
-  constexpr
-  static fixed Export(uint32_t i) {
-#ifdef FIXED_MATH
-    return fixed(i) >> BITS;
+  gcc_const
+  static double Export(uint32_t i) {
+#ifdef __BIONIC__
+    /* ldexp() is utterly broken on Bionic, but ldexpf() works - which
+       is good enough here */
+    // https://code.google.com/p/android/issues/detail?id=203996
+    return ldexpf(i, -BITS);
 #else
-    return fixed(i) / (1 << BITS);
+    return ldexp(i, -BITS);
 #endif
   }
 
@@ -72,7 +80,7 @@ public:
   /**
    * Initialize the object with the specified timestamp.
    */
-  explicit constexpr Validity(fixed _last):last(Import(_last)) {}
+  explicit Validity(double _last):last(Import(_last)) {}
 
 public:
   /**
@@ -88,7 +96,7 @@ public:
    *
    * @param now the current time stamp in seconds
    */
-  void Update(fixed now) {
+  void Update(double now) {
     last = Import(now);
   }
 
@@ -99,7 +107,7 @@ public:
    * @param max_age the maximum age in seconds
    * @return true if the value is expired
    */
-  bool Expire(fixed _now, fixed _max_age) {
+  bool Expire(double _now, double _max_age) {
     const uint32_t now = Import(_now);
     const uint32_t max_age = Import(_max_age);
 
@@ -120,7 +128,7 @@ public:
    * @param max_age the maximum age in seconds
    * @return true if the value is expired
    */
-  bool IsOlderThan(fixed _now, fixed _max_age) const {
+  bool IsOlderThan(double _now, double _max_age) const {
     if (!IsValid())
       return true;
 
@@ -140,7 +148,7 @@ public:
    * @param other The second Validity object
    * @return The time difference in seconds
    */
-  fixed GetTimeDifference(const Validity &other) const {
+  double GetTimeDifference(const Validity &other) const {
     assert(IsValid());
     assert(other.IsValid());
 

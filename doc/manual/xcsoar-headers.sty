@@ -1,11 +1,16 @@
+\usepackage{calc}
+\usepackage{fancyhdr}
 
-% Add XCSoar User Manual title to the header
-\settototalheight\headheight{\mycontent}
-\fancyhead[L]{{\mycontent}}
+\newcommand{\xcsoarheader}[1]{
+  \pagestyle{fancy}
 
-% Add page number to the footer (centered)
-\fancyfoot{}
-\fancyfoot[R]{\thepage}
+  % Add XCSoar User Manual title to the header
+  \fancyhead[L]{\hspace*{-\marginparsep}\hspace*{-\marginparwidth}\em#1}
+
+  % Add page number to the footer (centered)
+  \fancyfoot{}
+  \fancyfoot[R]{\thepage}
+}
 
 % No line between content and header
 \renewcommand{\headrulewidth}{0pt}

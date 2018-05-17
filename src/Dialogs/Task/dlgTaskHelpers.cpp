@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "dlgTaskHelpers.hpp"
 #include "Dialogs/TextEntry.hpp"
-#include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
 #include "Task/TypeStrings.hpp"
@@ -38,11 +37,9 @@ Copyright_License {
 #include "Engine/Task/Points/Type.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "LocalPath.hpp"
-#include "OS/FileUtil.hpp"
+#include "OS/Path.hpp"
 
 #include <assert.h>
-#include <stdio.h>
-#include <windef.h> /* for MAX_PATH */
 
 /**
  *
@@ -245,13 +242,10 @@ OrderedTaskSave(OrderedTask &task)
   if (!TextEntryDialog(fname, 64, _("Enter a task name")))
     return false;
 
-  TCHAR path[MAX_PATH];
-  LocalPath(path, _T("tasks"));
-  Directory::Create(path);
+  const auto tasks_path = MakeLocalPath(_T("tasks"));
 
   _tcscat(fname, _T(".tsk"));
   task.SetName(StaticString<64>(fname));
-  LocalPath(path, _T("tasks"), fname);
-  SaveTask(path, task);
+  SaveTask(AllocatedPath::Build(tasks_path, fname), task);
   return true;
 }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,12 +30,10 @@ Copyright_License {
 #include "Components.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceVisibility.hpp"
-#include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AirspaceAircraftPerformance.hpp"
 #include "Engine/Airspace/SoonestAirspace.hpp"
 #include "Dialogs/Airspace/Airspace.hpp"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
-#include "MainWindow.hpp"
 #include "NMEA/Aircraft.hpp"
 
 /*
@@ -114,11 +112,11 @@ InputEvents::eventNearestAirspaceDetails(gcc_unused const TCHAR *misc)
                           CommonInterface::GetMapSettings().airspace,
                           aircraft_state);
   GlidePolar polar = settings_computer.polar.glide_polar_task;
-  polar.SetMC(std::max(polar.GetMC(), fixed(1)));
+  polar.SetMC(std::max(polar.GetMC(), 1.));
   const AirspaceAircraftPerformance perf(polar);
 
   const auto *as = FindSoonestAirspace(airspace_database, aircraft_state, perf,
-                                       visible, fixed(1800));
+                                       visible, 1800);
   if (!as) {
     return;
   } 

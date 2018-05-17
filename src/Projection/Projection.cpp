@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ Projection::Projection()
   :geo_location(GeoPoint::Invalid()),
    screen_rotation(Angle::Zero())
 {
-  SetScale(fixed(1));
+  SetScale(1);
   screen_origin.x = 0;
   screen_origin.y = 0;
 }
@@ -59,7 +59,7 @@ Projection::ScreenToGeo(int x, int y) const
   return g;
 }
 
-RasterPoint
+PixelPoint
 Projection::GeoToScreen(const GeoPoint &g) const
 {
   assert(IsValid());
@@ -67,23 +67,23 @@ Projection::GeoToScreen(const GeoPoint &g) const
   const GeoPoint d = geo_location-g;
 
   const auto p =
-    screen_rotation.Rotate((int)fast_mult(g.latitude.fastcosine(),
-                                         AngleToPixels(d.longitude), 16),
+    screen_rotation.Rotate(int(g.latitude.fastcosine() *
+                               AngleToPixels(d.longitude)),
                           (int)AngleToPixels(d.latitude));
 
-  RasterPoint sc;
+  PixelPoint sc;
   sc.x = screen_origin.x - p.x;
   sc.y = screen_origin.y + p.y;
   return sc;
 }
 
 void 
-Projection::SetScale(const fixed _scale)
+Projection::SetScale(const double _scale)
 {
   scale = _scale;
 
   // Calculate earth radius in pixels
   draw_scale = FAISphere::REARTH * scale;
   // Save inverted value for faster calculations
-  inv_draw_scale = fixed(1) / draw_scale;
+  inv_draw_scale = 1. / draw_scale;
 }

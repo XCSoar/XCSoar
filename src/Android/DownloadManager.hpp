@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,6 +29,7 @@ Copyright_License {
 
 #include <list>
 
+class Path;
 class Context;
 
 namespace Net {
@@ -36,7 +37,7 @@ namespace Net {
 }
 
 class AndroidDownloadManager {
-  Java::Object object;
+  Java::GlobalObject object;
 
   /**
    * Protects the #listeners attribute.
@@ -58,11 +59,11 @@ public:
 
   void AddListener(Net::DownloadListener &listener);
   void RemoveListener(Net::DownloadListener &listener);
-  void OnDownloadComplete(const char *path_relative, bool success);
+  void OnDownloadComplete(Path path_relative, bool success);
 
   void Enumerate(JNIEnv *env, Net::DownloadListener &listener);
-  void Enqueue(JNIEnv *env, const char *uri, const char *path_relative);
-  void Cancel(JNIEnv *env, const char *path_relative);
+  void Enqueue(JNIEnv *env, const char *uri, Path path_relative);
+  void Cancel(JNIEnv *env, Path path_relative);
 };
 
 #endif

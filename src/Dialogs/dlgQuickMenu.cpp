@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -32,14 +32,12 @@ Copyright_License {
 #include "Input/InputEvents.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Key.h"
-#include "Util/TrivialArray.hpp"
+#include "Event/KeyCode.hpp"
+#include "Util/StaticArray.hxx"
 #include "Util/Macros.hpp"
 #include "Menu/ButtonLabel.hpp"
 #include "Menu/MenuData.hpp"
 #include "UIGlobals.hpp"
-
-#include <winuser.h> /* for DT_xxx */
 
 #include <stdio.h>
 
@@ -133,10 +131,10 @@ QuickMenu::Prepare(ContainerWindow &parent, const PixelRect &rc)
   grid_view_style.ControlParent();
   grid_view_style.Hide();
 
-  const DialogLook &dialog_look = UIGlobals::GetDialogLook();
+  const auto &dialog_look = UIGlobals::GetDialogLook();
 
-  const Font &font = *dialog_look.button.font;
-  const unsigned column_width = Layout::Scale(78);
+  const auto &font = *dialog_look.button.font;
+  const unsigned column_width = Layout::Scale(78u);
   const unsigned row_height =
     std::max(2 * (Layout::GetTextPadding() + font.GetHeight()),
              Layout::GetMaximumControlHeight());
@@ -152,12 +150,12 @@ QuickMenu::Prepare(ContainerWindow &parent, const PixelRect &rc)
     if (buttons.full())
       continue;
 
-    const MenuItem &menuItem = menu[i];
+    const auto &menuItem = menu[i];
     if (!menuItem.IsDefined())
       continue;
 
     TCHAR buffer[100];
-    ButtonLabel::Expanded expanded =
+    const auto expanded =
       ButtonLabel::Expand(menuItem.label, buffer, ARRAY_SIZE(buffer));
     if (!expanded.visible)
       continue;
@@ -249,29 +247,6 @@ QuickMenu::KeyPress(unsigned key_code)
     SetFocus();
     break;
 
-#ifdef GNAV
-  // Altair RemoteStick
-  case KEY_F11:
-    grid_view.MoveFocus(GridView::Direction::UP);
-    break;
-
-  case KEY_F12:
-    grid_view.MoveFocus(GridView::Direction::DOWN);
-    break;
-
-  case KEY_F13:
-    grid_view.MoveFocus(GridView::Direction::RIGHT);
-    break;
-
-  case KEY_F14:
-    grid_view.MoveFocus(GridView::Direction::LEFT);
-    break;
-
-  case KEY_F15:
-    dialog.SetModalResult(mrCancel);
-  break;
-#endif
-
   default:
     return false;
   }
@@ -290,18 +265,18 @@ QuickMenu::OnAction(int id)
 void
 dlgQuickMenuShowModal(SingleWindow &parent)
 {
-  const Menu *menu = InputEvents::GetMenu(_T("RemoteStick"));
-  if (menu == NULL)
+  const auto *menu = InputEvents::GetMenu(_T("RemoteStick"));
+  if (menu == nullptr)
     return;
 
-  const DialogLook &dialog_look = UIGlobals::GetDialogLook();
+  const auto &dialog_look = UIGlobals::GetDialogLook();
 
   WidgetDialog dialog(dialog_look);
   QuickMenu quick_menu(dialog, *menu);
 
   dialog.CreateFull(UIGlobals::GetMainWindow(), _T(""), &quick_menu);
 
-  const int result = dialog.ShowModal();
+  const auto result = dialog.ShowModal();
   dialog.StealWidget();
 
   if (result == mrOK)

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,17 +22,16 @@ Copyright_License {
 */
 
 #include "TabMenuDisplay.hpp"
+#include "TabMenuData.hpp"
 #include "Widget/PagerWidget.hpp"
-#include "Look/DialogLook.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #include "Screen/Canvas.hpp"
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
 #include "Util/StringFormat.hpp"
 
 #include <assert.h>
-#include <winuser.h>
 
 TabMenuDisplay::TabMenuDisplay(PagerWidget &_pager,
                                const DialogLook &_look)
@@ -163,11 +162,11 @@ TabMenuDisplay::GetButtonPosition(MenuTabIndex i) const
 }
 
 TabMenuDisplay::MenuTabIndex
-TabMenuDisplay::IsPointOverButton(RasterPoint Pos, unsigned mainIndex) const
+TabMenuDisplay::IsPointOverButton(PixelPoint Pos, unsigned mainIndex) const
 {
   // scan main menu buttons
   for (unsigned i = 0; i < GetNumMainMenuItems(); i++)
-    if (GetMainMenuButtonSize(i).IsInside(Pos))
+    if (GetMainMenuButtonSize(i).Contains(Pos))
       return MenuTabIndex(i);
 
 
@@ -176,7 +175,7 @@ TabMenuDisplay::IsPointOverButton(RasterPoint Pos, unsigned mainIndex) const
     const MainMenuButton &main_button = GetMainMenuButton(mainIndex);
     for (unsigned i = main_button.first_page_index;
          i <= main_button.last_page_index; ++i) {
-      if (GetSubMenuButtonSize(i).IsInside(Pos))
+      if (GetSubMenuButtonSize(i).Contains(Pos))
         return MenuTabIndex(mainIndex, i - main_button.first_page_index);
     }
   }
@@ -265,16 +264,10 @@ TabMenuDisplay::OnKeyDown(unsigned key_code)
     return true;
 
   case KEY_RIGHT:
-#ifdef GNAV
-  case '7':
-#endif
     HighlightNext();
     return true;
 
   case KEY_LEFT:
-#ifdef GNAV
-  case '6':
-#endif
     HighlightPrevious();
     return true;
 
@@ -284,12 +277,9 @@ TabMenuDisplay::OnKeyDown(unsigned key_code)
 }
 
 bool
-TabMenuDisplay::OnMouseDown(PixelScalar x, PixelScalar y)
+TabMenuDisplay::OnMouseDown(PixelPoint Pos)
 {
   DragEnd();
-  RasterPoint Pos;
-  Pos.x = x;
-  Pos.y = y;
 
   // If possible -> Give focus to the Control
   SetFocus();
@@ -303,16 +293,12 @@ TabMenuDisplay::OnMouseDown(PixelScalar x, PixelScalar y)
     InvalidateButton(down_index);
     return true;
   }
-  return PaintWindow::OnMouseDown(x, y);
+  return PaintWindow::OnMouseDown(Pos);
 }
 
 bool
-TabMenuDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
+TabMenuDisplay::OnMouseUp(PixelPoint Pos)
 {
-  RasterPoint Pos;
-  Pos.x = x;
-  Pos.y = y;
-
   if (dragging) {
     DragEnd();
 
@@ -338,18 +324,18 @@ TabMenuDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
 
     return true;
   } else {
-    return PaintWindow::OnMouseUp(x, y);
+    return PaintWindow::OnMouseUp(Pos);
   }
 }
 
 bool
-TabMenuDisplay::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+TabMenuDisplay::OnMouseMove(PixelPoint p, unsigned keys)
 {
   if (down_index.IsNone())
     return false;
 
   const PixelRect &rc = GetButtonPosition(down_index);
-  const bool tmp = !rc.IsInside({x, y});
+  const bool tmp = !rc.Contains(p);
   if (drag_off_button != tmp) {
     drag_off_button = tmp;
     Invalidate(rc);

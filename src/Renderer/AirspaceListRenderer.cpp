@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,7 +25,6 @@ Copyright_License {
 #include "TwoTextRowsRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Look/DialogLook.hpp"
 #include "Airspace/AbstractAirspace.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
 #include "Formatter/AngleFormatter.hpp"
@@ -33,7 +32,6 @@ Copyright_License {
 #include "Renderer/AirspacePreviewRenderer.hpp"
 #include "Geo/GeoVector.hpp"
 #include "Util/StaticString.hxx"
-#include "Util/Macros.hpp"
 
 static void
 Draw(Canvas &canvas, PixelRect rc,
@@ -44,32 +42,26 @@ Draw(Canvas &canvas, PixelRect rc,
      const AirspaceRendererSettings &renderer_settings)
 {
   const unsigned padding = Layout::GetTextPadding();
-  const unsigned line_height = rc.bottom - rc.top;
+  const unsigned line_height = rc.GetHeight();
 
-  const RasterPoint pt(rc.left + line_height / 2,
-                       rc.top + line_height / 2);
+  const PixelPoint pt(rc.left + line_height / 2,
+                      rc.top + line_height / 2);
   const unsigned radius = line_height / 2 - padding;
   AirspacePreviewRenderer::Draw(canvas, airspace, pt, radius,
                                 renderer_settings, look);
 
   rc.left += line_height + padding;
 
-  canvas.Select(row_renderer.GetSecondFont());
-
   // Draw upper airspace altitude limit
   TCHAR buffer[40];
   AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetTop());
-  const int top_x = rc.right - canvas.CalcTextWidth(buffer) - padding;
-  canvas.DrawClippedText(top_x, rc.top + row_renderer.GetFirstY(),
-                         rc, buffer);
+  const int top_x = row_renderer.DrawRightFirstRow(canvas, rc, buffer);
 
   // Draw lower airspace altitude limit
   AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetBase());
-  const int bottom_x = rc.right - canvas.CalcTextWidth(buffer) - padding;
-  canvas.DrawClippedText(bottom_x, rc.top + row_renderer.GetSecondY(),
-                         rc, buffer);
+  const int bottom_x = row_renderer.DrawRightSecondRow(canvas, rc, buffer);
 
-  rc.right = std::min(top_x, bottom_x) - padding;
+  rc.right = std::min(top_x, bottom_x);
 
   // Draw comment line
   row_renderer.DrawSecondRow(canvas, rc, comment);

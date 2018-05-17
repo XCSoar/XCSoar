@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,10 +29,10 @@
 #include <assert.h>
 
 StartPoint::StartPoint(ObservationZonePoint *_oz,
-                       const Waypoint &wp,
+                       WaypointPtr &&wp,
                        const TaskBehaviour &tb,
                        const StartConstraints &_constraints)
-  :OrderedTaskPoint(TaskPointType::START, _oz, wp, false),
+  :OrderedTaskPoint(TaskPointType::START, _oz, std::move(wp), false),
    safety_height(tb.safety_height_arrival),
    margins(tb.start_margins),
    constraints(_constraints)
@@ -46,7 +46,7 @@ StartPoint::SetTaskBehaviour(const TaskBehaviour &tb)
   margins = tb.start_margins;
 }
 
-fixed
+double
 StartPoint::GetElevation() const
 {
   return GetBaseElevation() + safety_height;
@@ -86,10 +86,10 @@ StartPoint::find_best_start(const AircraftState &state,
   const GeoPoint &next_location = next.GetLocationRemaining();
 
   GeoPoint best_location = *i;
-  fixed best_distance = ::DoubleDistance(state.location, *i, next_location);
+  auto best_distance = ::DoubleDistance(state.location, *i, next_location);
 
   for (++i; i != end; ++i) {
-    fixed distance = ::DoubleDistance(state.location, *i, next_location);
+    auto distance = ::DoubleDistance(state.location, *i, next_location);
     if (distance < best_distance) {
       best_location = *i;
       best_distance = distance;

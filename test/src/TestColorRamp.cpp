@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,14 +27,14 @@
 int main(int argc, char **argv)
 {
   const ColorRamp ramp[] = {
-    {0,    0xff, 0x80, 0x00},
-    {1000, 0x00, 0x40, 0xcc},
+    {   0, { 0xff, 0x80, 0x00 }},
+    {1000, { 0x00, 0x40, 0xcc }},
   };
   const ColorRamp ramp2[] = {
-    {-1000, 0x00, 0x00, 0xff},
-    {   -1, 0x00, 0xff, 0xff},
-    {    0, 0xff, 0xff, 0x00},
-    { 1000, 0xff, 0x00, 0x00},
+    {-1000, { 0x00, 0x00, 0xff }},
+    {   -1, { 0x00, 0xff, 0xff }},
+    {    0, { 0xff, 0xff, 0x00 }},
+    { 1000, { 0xff, 0x00, 0x00 }},
   };
   RGB8Color color;
 

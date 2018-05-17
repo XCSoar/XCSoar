@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@ Copyright_License {
 #include "Tracking/SkyLines/Glue.hpp"
 #include "Tracking/SkyLines/Data.hpp"
 #include "Thread/StandbyThread.hpp"
-#include "Tracking/LiveTrack24.hpp"
+#include "Tracking/LiveTrack24/Client.hpp"
 #include "Time/PeriodClock.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Time/BrokenDateTime.hpp"
@@ -42,82 +42,44 @@ struct MoreData;
 struct DerivedInfo;
 
 class TrackingGlue final
-#if defined(HAVE_LIVETRACK24) || defined(HAVE_SKYLINES_TRACKING_HANDLER)
-  :
-#endif
-#ifdef HAVE_LIVETRACK24
-  protected StandbyThread
-#endif
-#if defined(HAVE_LIVETRACK24) && defined(HAVE_SKYLINES_TRACKING_HANDLER)
-  ,
-#endif
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  private SkyLinesTracking::Handler
-#endif
+  : protected StandbyThread,
+    private SkyLinesTracking::Handler
 {
-  struct LiveTrack24State
-  {
-    LiveTrack24::SessionID session_id;
-    unsigned packet_id;
-
-    void ResetSession() {
-      session_id = 0;
-    }
-
-    bool HasSession() {
-      return session_id != 0;
-    }
-  };
-
   PeriodClock clock;
 
   TrackingSettings settings;
 
-#ifdef HAVE_SKYLINES_TRACKING
   SkyLinesTracking::Glue skylines;
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
   SkyLinesTracking::Data skylines_data;
-#endif
-#endif
 
-#ifdef HAVE_LIVETRACK24
-  LiveTrack24State state;
+  LiveTrack24::Client livetrack24;
 
   /**
    * The Unix UTC time stamp that was last submitted to the tracking
    * server.  This attribute is used to detect time warps.
    */
-  int64_t last_timestamp;
+  int64_t last_timestamp = 0;
 
   BrokenDateTime date_time;
   GeoPoint location;
   unsigned altitude;
   unsigned ground_speed;
   Angle track;
-  bool flying, last_flying;
-#endif
+  bool flying = false, last_flying;
 
 public:
-  TrackingGlue();
+  explicit TrackingGlue(boost::asio::io_service &io_service);
 
-#ifdef HAVE_LIVETRACK24
   void StopAsync();
   void WaitStopped();
-#else
-  void StopAsync() {}
-  void WaitStopped() {}
-#endif
 
   void SetSettings(const TrackingSettings &_settings);
   void OnTimer(const MoreData &basic, const DerivedInfo &calculated);
 
-#ifdef HAVE_LIVETRACK24
 protected:
   void Tick() override;
-#endif
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
 private:
   /* virtual methods from SkyLinesTracking::Handler */
   virtual void OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
@@ -125,12 +87,15 @@ private:
     virtual void OnUserName(uint32_t user_id, const TCHAR *name) override;
   void OnWave(unsigned time_of_day_ms,
               const GeoPoint &a, const GeoPoint &b) override;
+  void OnThermal(unsigned time_of_day_ms,
+                 const AGeoPoint &bottom, const AGeoPoint &top,
+                 double lift) override;
+  void OnSkyLinesError(const std::exception &e) override;
 
 public:
   const SkyLinesTracking::Data &GetSkyLinesData() const {
     return skylines_data;
   }
-#endif
 };
 
 #endif /* HAVE_TRACKING */

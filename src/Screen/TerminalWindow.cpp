@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@ Copyright_License {
 #include "TerminalWindow.hpp"
 #include "Screen/Canvas.hpp"
 #include "Look/TerminalLook.hpp"
-#include "Util/CharUtil.hpp"
+#include "Util/CharUtil.hxx"
 
 void
 TerminalWindow::Write(const char *p, size_t length)
@@ -134,14 +134,14 @@ TerminalWindow::OnPaint(Canvas &canvas, const PixelRect &p_dirty)
   const PixelRect cell_dirty = {
     p_dirty.left / cell_size.cx,
     p_dirty.top / cell_size.cy,
-    std::min(PixelScalar(p_dirty.right / cell_size.cx + 1),
-             PixelScalar(data.GetWidth())),
-    std::min(PixelScalar(p_dirty.bottom / cell_size.cy + 1),
-             PixelScalar(data.GetHeight())),
+    std::min(p_dirty.right / cell_size.cx + 1,
+             int(data.GetWidth())),
+    std::min(p_dirty.bottom / cell_size.cy + 1,
+             int(data.GetHeight())),
   };
 
-  const PixelScalar x(cell_dirty.left * cell_size.cx);
-  const size_t length = cell_dirty.right - cell_dirty.left;
+  const int x(cell_dirty.left * cell_size.cx);
+  const size_t length = cell_dirty.GetWidth();
 
   auto text = data.GetPointerAt(cell_dirty.left, cell_dirty.top);
   for (int cell_y = cell_dirty.top, p_y = cell_y * cell_size.cy;
@@ -153,7 +153,7 @@ TerminalWindow::OnPaint(Canvas &canvas, const PixelRect &p_dirty)
     canvas.DrawText(x, p_y, text, length);
   }
 
-  PixelScalar cell_bottom_y(cell_dirty.bottom * cell_size.cy);
+  int cell_bottom_y(cell_dirty.bottom * cell_size.cy);
   if (cell_bottom_y < p_dirty.bottom)
     canvas.DrawFilledRectangle(p_dirty.left, cell_bottom_y,
                           p_dirty.right, p_dirty.bottom,

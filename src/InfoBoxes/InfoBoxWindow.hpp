@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,7 +31,6 @@ Copyright_License {
 
 struct InfoBoxSettings;
 struct InfoBoxLook;
-struct UnitsLook;
 class Color;
 
 class InfoBoxWindow : public LazyPaintWindow
@@ -44,7 +43,6 @@ private:
 
   const InfoBoxSettings &settings;
   const InfoBoxLook &look;
-  const UnitsLook &units_look;
 
   const unsigned border_kind;
 
@@ -100,8 +98,8 @@ private:
   void Paint(Canvas &canvas);
 
 public:
-  void PaintInto(Canvas &dest, PixelScalar xoff, PixelScalar yoff,
-                 UPixelScalar width, UPixelScalar height);
+  void PaintInto(Canvas &dest, int xoff, int yoff,
+                 unsigned width, unsigned height);
 
   /**
    * Sets the InfoBox title to the given Value
@@ -119,7 +117,6 @@ public:
    */
   InfoBoxWindow(ContainerWindow &parent, PixelRect rc, unsigned border_flags,
                 const InfoBoxSettings &settings, const InfoBoxLook &_look,
-                const UnitsLook &units_look,
                 unsigned id,
                 WindowStyle style=WindowStyle());
 
@@ -167,11 +164,10 @@ protected:
 
   virtual bool OnKeyDown(unsigned key_code) override;
 
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseDouble(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
-                           unsigned keys) override;
+  bool OnMouseDown(PixelPoint p) override;
+  bool OnMouseUp(PixelPoint p) override;
+  bool OnMouseDouble(PixelPoint p) override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) override;
 
   /* virtual methods from class LazyPaintWindow */
   void OnPaintBuffer(Canvas &canvas) override;

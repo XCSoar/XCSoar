@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,9 +28,7 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "Units/System.hpp"
 #include "Atmosphere/Pressure.hpp"
-#include "Atmosphere/Temperature.hpp"
-
-#include <stdlib.h>
+#include "Math/Util.hpp"
 
 class EyeDevice : public AbstractDevice {
 public:
@@ -66,7 +64,7 @@ EyeDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 bool
 EyeDevice::PEYA(NMEAInputLine &line, NMEAInfo &info)
 {
-  fixed value;
+  double value;
 
   // Static pressure from aircraft pneumatic system [hPa] (i.e. 1015.5)
   if (line.ReadChecked(value))
@@ -100,7 +98,7 @@ EyeDevice::PEYA(NMEAInputLine &line, NMEAInfo &info)
 
   // Outside Air Temperature (?C) (i.e. +15.2)
   if (line.ReadChecked(value)) {
-    info.temperature = CelsiusToKelvin(value);
+    info.temperature = Temperature::FromCelsius(value);
     info.temperature_available = true;
   }
 
@@ -120,7 +118,7 @@ EyeDevice::PEYA(NMEAInputLine &line, NMEAInfo &info)
 bool
 EyeDevice::PEYI(NMEAInputLine &line, NMEAInfo &info)
 {
-  fixed value;
+  double value;
 
   // Roll respect to Earth system - Phi [°] (i.e. +110)
   if (line.ReadChecked(value)) {
@@ -162,7 +160,7 @@ EyeDevice::PEYI(NMEAInputLine &line, NMEAInfo &info)
 bool
 EyeDevice::ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 {
-  fixed bearing, norm;
+  double bearing, norm;
 
   bool bearing_valid = line.ReadChecked(bearing);
   bool norm_valid = line.ReadChecked(norm);
@@ -178,7 +176,7 @@ EyeDevice::ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 bool
 EyeDevice::ReadAcceleration(NMEAInputLine &line, AccelerationState &value_r)
 {
-  fixed x, y, z;
+  double x, y, z;
 
   bool x_valid = line.ReadChecked(x);
   bool y_valid = line.ReadChecked(y);
@@ -187,7 +185,7 @@ EyeDevice::ReadAcceleration(NMEAInputLine &line, AccelerationState &value_r)
   if (!x_valid || !y_valid || !z_valid)
     return false;
 
-  value_r.ProvideGLoad(sqrt(sqr(x) + sqr(y) + sqr(z)), true);
+  value_r.ProvideGLoad(SpaceDiagonal(x, y, z), true);
   return true;
 }
 

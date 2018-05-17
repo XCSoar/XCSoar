@@ -76,9 +76,8 @@ TEX_INCLUDES_PT_BR = $(wildcard $(DOC)/manual/pt_BR/*.sty)
 FIGURES_PT_BR = $(wildcard $(DOC)/manual/pt_BR/figures/*.png)
 
 TEX_VARS = TEXINPUTS="$(<D):$(DOC)/manual:$(MANUAL_OUTPUT_DIR):.:$(DOC)/manual/en:"
-TEX_FLAGS = -halt-on-error -interaction=nonstopmode
-TEX_RUN = $(TEX_VARS) pdflatex $(TEX_FLAGS) -output-directory $(@D)
-XETEX_RUN = $(TEX_VARS) xetex $(TEX_FLAGS) -no-pdf -output-directory $(@D)
+TEX_FLAGS = --interaction=nonstopmode --no-shell-escape --output-format=pdf
+TEX_RUN = $(TEX_VARS) lualatex $(TEX_FLAGS) --output-directory=$(@D)
 IDX_RUN = makeindex -q 
 
 LATEX2HTML = latex2html
@@ -102,18 +101,26 @@ manual: $(MANUAL_PDF)
 Handbuch: \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-de.pdf
 
+manuel-fr:\
+	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-fr.pdf
+
+priseenmain: \
+	$(MANUAL_OUTPUT_DIR)/XCSoar-Prise-en-main.pdf
+
 # Generate a redistributable ZIP file that allows manual editors
 # without the full XCSoar development chain to compile the XCSoar
 # manual.  It contains all generated files.
 manual-dev-dist: $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip
 
 
+.DELETE_ON_ERROR: $(MANUAL_OUTPUT_DIR)/XCSoar-in-a-flash.pdf
 $(MANUAL_OUTPUT_DIR)/XCSoar-in-a-flash.pdf: $(DOC)/manual/en/XCSoar-in-a-flash.tex \
 	$(TEX_INCLUDES) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 	# run TeX twice to make sure that all references are resolved
 	$(TEX_RUN) $<
 	$(TEX_RUN) $<
 
+.DELETE_ON_ERROR: $(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf: $(DOC)/manual/en/XCSoar-manual.tex \
 	$(TEX_FILES_EN) $(TEX_INCLUDES_EN) $(TEX_INCLUDES) \
 	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
@@ -122,11 +129,13 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf: $(DOC)/manual/en/XCSoar-manual.tex \
 	$(TEX_RUN) $<
 
 # Generate a HTML version of the manual with latex2html
+.DELETE_ON_ERROR: $(MANUAL_OUTPUT_DIR)/html/en/index.html
 $(MANUAL_OUTPUT_DIR)/html/en/index.html: $(DOC)/manual/en/XCSoar-manual.tex \
 	$(TEX_FILES_EN) $(TEX_INCLUDES_EN) $(TEX_INCLUDES) \
 	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/html/en/dirstamp
 	$(LATEX2HTML_RUN) -dir $(@D) $<
 
+.DELETE_ON_ERROR: $(MANUAL_OUTPUT_DIR)/XCSoar-developer-manual.pdf
 $(MANUAL_OUTPUT_DIR)/XCSoar-developer-manual.pdf: $(DOC)/manual/en/XCSoar-developer-manual.tex $(DOC)/manual/en/tpl_format.tex \
 	$(TEX_FILES_EN) $(TEX_INCLUDES_EN) $(TEX_INCLUDES) \
 	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
@@ -134,17 +143,20 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-developer-manual.pdf: $(DOC)/manual/en/XCSoar-develo
 	$(TEX_RUN) $<
 	$(TEX_RUN) $<
 
+.DELETE_ON_ERROR: $(MANUAL_OUTPUT_DIR)/html/developer/index.html
 $(MANUAL_OUTPUT_DIR)/html/developer/index.html: $(DOC)/manual/en/XCSoar-developer-manual.tex \
 	$(TEX_FILES_EN) $(TEX_INCLUDES_EN) $(TEX_INCLUDES) \
 	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/html/developer/dirstamp
 	$(LATEX2HTML_RUN) -dir $(@D) $<
 
+.DELETE_ON_ERROR: $(MANUAL_OUTPUT_DIR)/XCSoar-Blitzeinstieg.pdf
 $(MANUAL_OUTPUT_DIR)/XCSoar-Blitzeinstieg.pdf: $(DOC)/manual/de/XCSoar-Blitzeinstieg.tex \
 	$(TEX_INCLUDES_DE) $(FIGURES_DE) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 	# run TeX twice to make sure that all references are resolved
 	$(TEX_RUN) $<
 	$(TEX_RUN) $<
 
+.DELETE_ON_ERROR: $(MANUAL_OUTPUT_DIR)/XCSoar-manual-de.pdf
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual-de.pdf: $(DOC)/manual/de/XCSoar-manual-de.tex \
 	$(TEX_FILES_DE) $(TEX_INCLUDES_DE) $(TEX_INCLUDES) \
 	$(FIGURES_DE) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_TRANSLATE_DE) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
@@ -154,12 +166,14 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-de.pdf: $(DOC)/manual/de/XCSoar-manual-de.tex
 	$(IDX_RUN) $(@:.pdf=.idx)
 	$(TEX_RUN) $<
 
+.DELETE_ON_ERROR: $(MANUAL_OUTPUT_DIR)/XCSoar-Prise-en-main.pdf
 $(MANUAL_OUTPUT_DIR)/XCSoar-Prise-en-main.pdf: $(DOC)/manual/fr/XCSoar-Prise-en-main.tex $(TEX_INCLUDES_FR) $(TEX_INCLUDES) \
 	$(FIGURES_FR) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 	# run TeX twice to make sure that all references are resolved
 	$(TEX_RUN) $<
 	$(TEX_RUN) $<
 
+.DELETE_ON_ERROR: $(MANUAL_OUTPUT_DIR)/XCSoar-manual-fr.pdf
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual-fr.pdf: $(DOC)/manual/fr/XCSoar-manual-fr.tex \
 	$(TEX_FILES_FR) $(TEX_INCLUDES_FR) $(TEX_INCLUDES) \
 	$(FIGURES_FR) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_TRANSLATE_FR) $(SVG_GRAPHICS) $(SVG_LOGOS)| $(MANUAL_OUTPUT_DIR)/dirstamp
@@ -167,6 +181,7 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-fr.pdf: $(DOC)/manual/fr/XCSoar-manual-fr.tex
 	$(TEX_RUN) $<
 	$(TEX_RUN) $<
 
+.DELETE_ON_ERROR: $(MANUAL_OUTPUT_DIR)/XCSoar-manual-pl.pdf
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual-pl.pdf: $(DOC)/manual/pl/XCSoar-manual-pl.tex \
 	$(TEX_FILES_PL) $(TEX_INCLUDES_PL) $(TEX_INCLUDES) \
 	$(FIGURES_PL) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS)| $(MANUAL_OUTPUT_DIR)/dirstamp
@@ -174,12 +189,14 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-pl.pdf: $(DOC)/manual/pl/XCSoar-manual-pl.tex
 	$(TEX_RUN) $<
 	$(TEX_RUN) $<
 
+.DELETE_ON_ERROR: $(MANUAL_OUTPUT_DIR)/XCSoar-in-a-flash-pt_BR.pdf
 $(MANUAL_OUTPUT_DIR)/XCSoar-in-a-flash-pt_BR.pdf: $(DOC)/manual/pt_BR/XCSoar-in-a-flash-pt_BR.tex \
 	$(TEX_INCLUDES) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 	# run TeX twice to make sure that all references are resolved
 	$(TEX_RUN) $<
 	$(TEX_RUN) $<
 
+.DELETE_ON_ERROR: $(MANUAL_OUTPUT_DIR)/XCSoar-manual-pt_BR.pdf
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual-pt_BR.pdf: $(DOC)/manual/pt_BR/XCSoar-manual-pt_BR.tex \
 	$(TEX_FILES_PT_BR) $(TEX_INCLUDES_PT_BR) $(TEX_INCLUDES) \
 	$(FIGURES_PT_BR) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_TRANSLATE_PT_BR) $(SVG_GRAPHICS) $(SVG_LOGOS)| $(MANUAL_OUTPUT_DIR)/dirstamp

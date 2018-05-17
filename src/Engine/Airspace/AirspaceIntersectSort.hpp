@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,6 @@
 #ifndef AIRSPACE_INTERSECT_SORT_HPP
 #define AIRSPACE_INTERSECT_SORT_HPP
 
-#include "Math/fixed.hpp"
 #include "Geo/GeoPoint.hpp"
 
 #include <queue>
@@ -35,7 +34,7 @@ class AirspaceIntersectionVector;
  * Utility class to sort airspaces in ascending order of vector parameter (0,1)
  */
 class AirspaceIntersectSort {
-  typedef std::pair<fixed,GeoPoint> Intersection;
+  typedef std::pair<double, GeoPoint> Intersection;
 
   /**
    * Function object used to rank intercepts by vector parameter t(0,1)
@@ -68,7 +67,7 @@ public:
    * @param t Ray parameter [0,1]
    * @param p Point of intersection
    */
-  void add(const fixed t, const GeoPoint &p);
+  void add(const double t, const GeoPoint &p);
 
   /**
    * Determine if no points are found

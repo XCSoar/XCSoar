@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -39,6 +39,7 @@
 #include "Blackboard/BlackboardListener.hpp"
 #include "Language/Language.hpp"
 #include "TeamActions.hpp"
+#include "Util/StringCompare.hxx"
 #include "Util/TruncateString.hpp"
 #include "Util/Macros.hpp"
 
@@ -158,7 +159,7 @@ TeamCodeWidget::OnCalculatedUpdate(const MoreData &basic,
 inline void
 TeamCodeWidget::OnSetWaypointClicked()
 {
-  const Waypoint* wp =
+  const auto wp =
     ShowWaypointListDialog(CommonInterface::Basic().location);
   if (wp != nullptr) {
     CommonInterface::SetComputerSettings().team_code.team_code_reference_waypoint = wp->id;

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,7 +28,6 @@ Copyright_License {
 
 #include <assert.h>
 
-class IOLoop;
 struct Event;
 
 /**
@@ -39,28 +38,24 @@ struct Event;
 class MergeMouse final {
   RotatePointer rotate;
 
-  unsigned x, y;
+  unsigned x = 0, y = 0;
 
   /**
    * Relative mouse wheel movement since last Generate() call.
    */
-  int wheel;
+  int wheel = 0;
 
-  bool down;
+  bool down = false;
 
-  bool moved, pressed, released;
+  bool moved = false, pressed = false, released = false;
 
   /**
    * The number of pointer input devices.
    */
-  unsigned n_pointers;
+  unsigned n_pointers = 0;
 
 public:
-  MergeMouse()
-    :x(0), y(0), wheel(0),
-     down(false), moved(false), pressed(false), released(false),
-     n_pointers(0) {}
-
+  MergeMouse() = default;
   MergeMouse(const MergeMouse &) = delete;
 
   ~MergeMouse() {
@@ -69,12 +64,8 @@ public:
 
   void SetScreenSize(unsigned width, unsigned height);
 
-  void SetSwap(bool _swap) {
-    rotate.SetSwap(_swap);
-  }
-
-  void SetInvert(bool _invert_x, bool _invert_y) {
-    rotate.SetInvert(_invert_x, _invert_y);
+  void SetDisplayOrientation(DisplayOrientation orientation) {
+    rotate.SetDisplayOrientation(orientation);
   }
 
   void AddPointer() {
@@ -92,21 +83,17 @@ public:
   }
 
   void SetDown(bool new_down);
-  void MoveAbsolute(int new_x, int new_y);
+  void MoveAbsolute(PixelPoint p);
   void MoveAbsolute(int new_x, int new_y,
                     int min_x, int max_x, int min_y, int max_y);
-  void MoveRelative(int dx, int dy);
+  void MoveRelative(PixelPoint d);
 
   void MoveWheel(int d) {
     wheel += d;
   }
 
-  unsigned GetX() const {
-    return x;
-  }
-
-  unsigned GetY() const {
-    return y;
+  PixelPoint GetPosition() const {
+    return PixelPoint(x, y);
   }
 
   Event Generate();

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -66,7 +66,7 @@ AirspacePolygon::GetCenter() const
 {
   assert(m_border.size() >= 3);
 
-  fixed lat(0), lon(0);
+  double lat(0), lon(0);
 
   for (const auto &pt : m_border) {
     lat += pt.GetLocation().latitude.Native();
@@ -97,8 +97,8 @@ AirspacePolygon::Intersects(const GeoPoint &start, const GeoPoint &end,
   for (auto it = m_border.begin(); it + 1 != m_border.end(); ++it) {
 
     const FlatRay r_seg(it->GetFlatLocation(), (it + 1)->GetFlatLocation());
-    fixed t = ray.DistinctIntersection(r_seg);
-    if (!negative(t))
+    auto t = ray.DistinctIntersection(r_seg);
+    if (t >= 0)
       sorter.add(t, projection.Unproject(ray.Parametric(t)));
   }
 
@@ -109,7 +109,7 @@ GeoPoint
 AirspacePolygon::ClosestPoint(const GeoPoint &loc,
                               const FlatProjection &projection) const
 {
-  const FlatGeoPoint p = projection.ProjectInteger(loc);
-  const FlatGeoPoint pb = m_border.NearestPoint(p);
+  const auto p = projection.ProjectInteger(loc);
+  const auto pb = m_border.NearestPoint(p);
   return projection.Unproject(pb);
 }

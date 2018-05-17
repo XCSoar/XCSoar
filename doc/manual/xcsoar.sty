@@ -1,4 +1,5 @@
-\usepackage{color}
+\usepackage[utf8]{luainputenc}
+\usepackage{xcolor}
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{tabularx}
@@ -6,48 +7,43 @@
 \usepackage{multicol}
 \usepackage{multirow}
 \usepackage[disable]{todonotes}
-\usepackage[colorlinks=true]{hyperref}
+\usepackage{hyperref}
 \usepackage{gensymb}
-\usepackage{makeidx}\makeindex
 \makeatletter
-\def\trdvvs{Vega}
-\usepackage{fancyhdr}
-\pagestyle{fancy}
+
+% Font selection
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\fontfamily{phv}\selectfont
 
 % Reference colors
-\hypersetup{linkcolor=blue,     % internal links
-linktocpage=true,               % only page numbers
-urlcolor=blue,                  % external links 
-bookmarks=true,
-bookmarksnumbered=true,
-breaklinks=true                 % wrap links is Ok
+\hypersetup{
+  unicode=true,
+  linkcolor=blue, % internal links
+  linktocpage=true, % only page numbers
+  urlcolor=blue, % external links
+  citecolor=green,
+  filecolor=magenta,
+  bookmarks=true,
+  bookmarksnumbered=true,
+  breaklinks=true, % wrap links is Ok
+  colorlinks=true,
+  pdftoolbar=true,
+  pdfmenubar=true,
+  pdfnewwindow=true
 }
 
 % Some shortcuts
-\newcommand\xc{\textsf{XCSoar }}   
+\newcommand\xc{\textsf{XCSoar }}
 \newcommand\fl{\textsf{Flarm }}
 \newcommand\al{\textsf{Altair }}
 
 % Define command to insert XCSoar website
 \newcommand{\xcsoarwebsite}[1]{\url{http://www.xcsoar.org#1}}
 
-\newcommand{\tip}[0]{\marginlabel{\parbox{1.1cm}{\includegraphics[width=0.7cm]{figures/reminder.pdf}}}}
+\input{figures.tex}
 
-% Define command to insert gesture image
-\newcommand{\gesture}[1]{\marginlabel{{\it#1
-}\parbox{1.3cm}{\includegraphics[width=0.7cm]{figures/gesture.pdf}}}}
-
-% Define command to insert specific gesture image
-\newcommand{\gesturespec}[1]{\marginlabel{\parbox{1.3cm}{\includegraphics[width=0.9cm]{figures/#1.png}}}}
-
-% Define command to insert warning image
-\newcommand{\warning}[0]{\marginlabel{\parbox{1.3cm}{\includegraphics[width=0.9cm]{figures/warning.pdf}}}}
-
-% Define command to reference a configuration item
-\newcommand{\config}[1]{\marginlabel{\ref{conf:#1}
-\parbox{1.3cm}{\includegraphics[width=0.8cm]{figures/config.pdf}}}}
-
-% Potentially overdue ``InfoBox'' style macro 
+% Potentially overdue ``InfoBox'' style macro
 \newcommand{\InfoBox}[0]{{InfoBox}}
 
 % Enumerated todo's for the todonotes package
@@ -57,17 +53,12 @@ breaklinks=true                 % wrap links is Ok
 \maxipagerulefalse
 
 % Include XCSoar header and footer settings
-\input{xcsoar-headers.sty}
 \input{buttons.sty}
 \widowpenalty=1000
 \clubpenalty=1000
 
 % the command \version prints the XCSoar version number
 \newcommand{\version}{\begingroup\catcode`\_=\active\input{VERSION.txt}\endgroup}
-
-% Define command to draw a sketch on the margin
-\newcommand{\sketch}[1]{\marginpar{\parbox{4.0cm}{\includegraphics[angle=0,width=1.0\linewidth,keepaspectratio='true']{#1}}}}
-\newcommand{\smallsketch}[1]{\marginpar{\includegraphics[angle=0,keepaspectratio='true']{#1}}}
 
 % Define command to put a menu label on the margin
 % aligned left
@@ -78,6 +69,3 @@ breaklinks=true                 % wrap links is Ok
 % Define some colors
 \definecolor{AirspaceYellow}{rgb}{.99,.99,.19}
 \definecolor{AirspaceRed}{rgb}{.99,.19,.19}
-
-
-

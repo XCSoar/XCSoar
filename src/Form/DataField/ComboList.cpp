@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,59 +22,29 @@ Copyright_License {
 */
 
 #include "ComboList.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 #include <algorithm>
-
-#include <stdlib.h>
 
 ComboList::Item::Item(int _int_value,
                       const TCHAR *_string_value,
                       const TCHAR *_display_string,
                       const TCHAR *_help_text)
   :int_value(_int_value),
-   string_value(_tcsdup(_string_value)),
-   display_string(_tcsdup(_display_string)),
-   help_text(_help_text ? _tcsdup(_help_text) : nullptr)
+   string_value(AllocatedString<TCHAR>::Duplicate(_string_value)),
+   display_string(AllocatedString<TCHAR>::Duplicate(_display_string)),
+   help_text(_help_text != nullptr
+             ? AllocatedString<TCHAR>::Duplicate(_help_text)
+             : nullptr)
 {
-}
-
-ComboList::Item::~Item()
-{
-  free(string_value);
-  free(display_string);
-  free(help_text);
-}
-
-ComboList::ComboList(ComboList &&other)
-  :current_index(other.current_index),
-   items(other.items)
-{
-  std::fill(other.items.begin(), other.items.end(), nullptr);
-}
-
-void
-ComboList::Clear()
-{
-  for (auto i : items)
-    delete i;
-
-  items.clear();
-}
-
-unsigned
-ComboList::Append(ComboList::Item *item)
-{
-  unsigned i = items.size();
-  items.append(item);
-  return i;
 }
 
 void
 ComboList::Sort()
 {
-  std::sort(items.begin(), items.end(), [](const Item *a, const Item *b){
-      return StringCollate(a->display_string, b->display_string) < 0;
+  std::sort(items.begin(), items.end(), [](const Item &a, const Item &b){
+      return StringCollate(a.display_string.c_str(),
+                           b.display_string.c_str()) < 0;
     });
 }
 
@@ -82,7 +52,7 @@ unsigned
 ComboList::LookUp(int int_value)
 {
   for (unsigned i = 0; i < items.size(); i++)
-    if (items[i]->int_value == int_value)
+    if (items[i].int_value == int_value)
       return i;
 
   return 0;

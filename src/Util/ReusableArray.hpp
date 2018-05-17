@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2010 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,7 +30,7 @@
 #ifndef REUSABLE_ARRAY_HPP
 #define REUSABLE_ARRAY_HPP
 
-#include "Util/AllocatedArray.hpp"
+#include "Util/AllocatedArray.hxx"
 
 template<class T>
 class ReusableArray {

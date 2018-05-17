@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,6 +26,7 @@
 #include "Geo/Flat/TaskProjection.hpp"
 #include "Task/AbstractTask.hpp"
 #include "SmartTaskAdvance.hpp"
+#include "Waypoint/Ptr.hpp"
 #include "Util/DereferenceIterator.hpp"
 #include "Util/StaticString.hxx"
 
@@ -40,10 +41,9 @@ class FinishPoint;
 class AbstractTaskFactory;
 class TaskDijkstraMin;
 class TaskDijkstraMax;
-struct Waypoint;
 class Waypoints;
 class AATPoint;
-class FlatBoundingBox;
+struct FlatBoundingBox;
 class GeoBounds;
 struct TaskSummary;
 struct TaskFactoryConstraints;
@@ -311,7 +311,7 @@ public:
    * @param waypoint
    * @return true if succeeded
    */
-  bool RelocateOptionalStart(const unsigned position, const Waypoint& waypoint);
+  bool RelocateOptionalStart(const unsigned position, WaypointPtr &&waypoint);
 
   /**
    * Relocate a task point to a new location
@@ -321,7 +321,7 @@ public:
    *
    * @return True on success
    */
-  bool Relocate(const unsigned position, const Waypoint& waypoint);
+  bool Relocate(const unsigned position, WaypointPtr &&waypoint);
 
  /**
   * returns pointer to AATPoint accessed via TPIndex if exist
@@ -381,13 +381,6 @@ public:
   void UpdateGeometry();
 
   /**
-   * Convert a GeoBounds into a flat bounding box projected
-   * according to the task projection.
-   */
-  gcc_pure
-  FlatBoundingBox GetBoundingBox(const GeoBounds &bounds) const;
-
-  /**
    * Update summary task statistics (progress along path)
    */
   void UpdateSummary(TaskSummary &summary) const;
@@ -444,14 +437,14 @@ private:
   bool RunDijsktraMin(const GeoPoint &location);
 
 
-  fixed ScanDistanceMin(const GeoPoint &ref, bool full);
+  double ScanDistanceMin(const GeoPoint &ref, bool full);
 
   /**
    * @return true if a solution was found (and applied)
    */
   bool RunDijsktraMax();
 
-  fixed ScanDistanceMax();
+  double ScanDistanceMax();
 
   /**
    * Optimise target ranges (for adjustable tasks) to produce an estimated
@@ -462,9 +455,9 @@ private:
    *
    * @return Target range parameter (0-1)
    */
-  fixed CalcMinTarget(const AircraftState &state_now,
-                      const GlidePolar &glide_polar,
-                      const fixed t_target);
+  double CalcMinTarget(const AircraftState &state_now,
+                       const GlidePolar &glide_polar,
+                       const double t_target);
 
   /**
    * Sets previous/next taskpoint pointers for task point at specified
@@ -654,7 +647,7 @@ public:
    * @return Radius (m) from center to edge of task
    */
   gcc_pure
-  fixed GetTaskRadius() const noexcept {
+  double GetTaskRadius() const noexcept {
     assert(!IsEmpty());
     return task_projection.ApproxRadius();
   }
@@ -707,25 +700,25 @@ protected:
                         const AircraftState &state_last) override;
   bool CalcBestMC(const AircraftState &state_now,
                   const GlidePolar &glide_polar,
-                  fixed& best) const override;
-  fixed CalcRequiredGlide(const AircraftState &state_now,
-                          const GlidePolar &glide_polar) const override;
+                  double &best) const override;
+  double CalcRequiredGlide(const AircraftState &state_now,
+                           const GlidePolar &glide_polar) const override;
   bool CalcCruiseEfficiency(const AircraftState &state_now,
                             const GlidePolar &glide_polar,
-                            fixed &value) const override;
+                            double &value) const override;
   bool CalcEffectiveMC(const AircraftState &state_now,
                        const GlidePolar &glide_polar,
-                       fixed &value) const override;
-  fixed CalcGradient(const AircraftState &state_now) const override;
-  fixed ScanTotalStartTime() override;
-  fixed ScanLegStartTime() override;
-  fixed ScanDistanceNominal() override;
-  fixed ScanDistancePlanned() override;
-  fixed ScanDistanceRemaining(const GeoPoint &ref) override;
-  fixed ScanDistanceScored(const GeoPoint &ref) override;
-  fixed ScanDistanceTravelled(const GeoPoint &ref) override;
+                       double &value) const override;
+  double CalcGradient(const AircraftState &state_now) const override;
+  double ScanTotalStartTime() override;
+  double ScanLegStartTime() override;
+  double ScanDistanceNominal() override;
+  double ScanDistancePlanned() override;
+  double ScanDistanceRemaining(const GeoPoint &ref) override;
+  double ScanDistanceScored(const GeoPoint &ref) override;
+  double ScanDistanceTravelled(const GeoPoint &ref) override;
   void ScanDistanceMinMax(const GeoPoint &ref, bool full,
-                          fixed *dmin, fixed *dmax) override;
+                          double *dmin, double *dmax) override;
   void GlideSolutionRemaining(const AircraftState &state_now,
                               const GlidePolar &polar,
                               GlideResult &total, GlideResult &leg) override;

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,6 +25,7 @@ Copyright_License {
 #include "Engine/Airspace/AirspaceAltitude.hpp"
 #include "Units/Units.hpp"
 #include "Units/Descriptor.hpp"
+#include "Math/Util.hpp"
 #include "Util/StringFormat.hpp"
 
 #include <string.h>
@@ -36,7 +37,7 @@ AirspaceFormatter::FormatAltitudeShort(TCHAR *buffer,
 {
   switch (altitude.reference) {
   case AltitudeReference::AGL:
-    if (!positive(altitude.altitude_above_terrain))
+    if (altitude.altitude_above_terrain <= 0)
       _tcscpy(buffer, _T("GND"));
     else
       if (include_unit)
@@ -84,7 +85,7 @@ AirspaceFormatter::FormatAltitude(TCHAR *buffer,
                        Units::GetUnitName(Unit::FEET));
 
   if (altitude.reference != AltitudeReference::MSL &&
-      positive(altitude.altitude))
+      altitude.altitude > 0)
     StringFormatUnsafe(buffer + _tcslen(buffer), _T(" %d %s"),
                        iround(Units::ToUserAltitude(altitude.altitude)),
                        Units::GetAltitudeName());

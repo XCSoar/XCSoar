@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,16 +22,14 @@
 */
 
 #include "IGCFileCleanup.hpp"
-
 #include "Util/StaticString.hxx"
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
-#include "OS/PathName.hpp"
+#include "OS/Path.hpp"
 #include "UtilsSystem.hpp"
 
 #include <tchar.h>
 #include <time.h>
-#include <stdio.h>
 #include <windef.h>
 
 // JMW note: we want to clear up enough space to save the persistent
@@ -120,16 +118,16 @@ public:
     oldest_path.clear();
   }
 
-  virtual void Visit(const TCHAR* path, const TCHAR* filename) {
-    time_t this_time = LogFileDate(current_year, filename);
+  void Visit(Path path, Path filename) override {
+    time_t this_time = LogFileDate(current_year, filename.c_str());
     if (oldest_path.empty() || oldest_time > this_time) {
       oldest_time = this_time;
-      oldest_path = path;
+      oldest_path = path.c_str();
     }
   }
 
-  const TCHAR *GetOldestIGCFile() const {
-    return oldest_path.c_str();
+  Path GetOldestIGCFile() const {
+    return Path(oldest_path.c_str());
   }
 };
 
@@ -140,12 +138,12 @@ public:
  * @return True if a file was found and deleted, False otherwise
  */
 static bool
-DeleteOldestIGCFile(unsigned current_year, const TCHAR *pathname)
+DeleteOldestIGCFile(unsigned current_year, Path pathname)
 {
   OldIGCFileFinder visitor(current_year);
   Directory::VisitSpecificFiles(pathname, _T("*.igc"), visitor, true);
 
-  if (StringIsEmpty(visitor.GetOldestIGCFile()))
+  if (visitor.GetOldestIGCFile().IsEmpty())
     return false;
 
   // now, delete the file...
@@ -156,12 +154,12 @@ DeleteOldestIGCFile(unsigned current_year, const TCHAR *pathname)
 bool
 IGCFileCleanup(unsigned current_year)
 {
-  const TCHAR *pathname = GetPrimaryDataPath();
+  const auto pathname = GetPrimaryDataPath();
 
   int numtries = 0;
   do {
     // Find out how much space is available
-    unsigned long kbfree = FindFreeSpace(pathname);
+    unsigned long kbfree = FindFreeSpace(pathname.c_str());
     if (kbfree >= LOGGER_MINFREESTORAGE) {
       // if enough space is available we return happily
       return true;

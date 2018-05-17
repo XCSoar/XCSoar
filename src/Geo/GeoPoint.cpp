@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,18 +26,18 @@
 #include "SimplifiedMath.hpp"
 
 GeoPoint 
-GeoPoint::Parametric(const GeoPoint &delta, const fixed t) const
+GeoPoint::Parametric(const GeoPoint &delta, const double t) const
 {
   return (*this) + delta * t;
 }
 
 GeoPoint 
-GeoPoint::Interpolate(const GeoPoint &end, const fixed t) const
+GeoPoint::Interpolate(const GeoPoint &end, const double t) const
 {
   return (*this) + (end - (*this)) * t;
 }
 
-fixed
+double
 GeoPoint::Distance(const GeoPoint &other) const
 {
   return ::Distance(*this, other);
@@ -57,15 +57,31 @@ GeoPoint::DistanceBearing(const GeoPoint &other) const
   return gv;
 }
 
-fixed
+double
 GeoPoint::DistanceS(const GeoPoint &other) const
 {
-  fixed distance;
+  double distance;
   ::DistanceBearingS(*this, other, &distance, nullptr);
   return distance;
 }
 
-fixed 
+Angle
+GeoPoint::BearingS(const GeoPoint &other) const
+{
+  Angle angle;
+  ::DistanceBearingS(*this, other, (Angle *)nullptr, &angle);
+  return angle;
+}
+
+GeoVector
+GeoPoint::DistanceBearingS(const GeoPoint &other) const
+{
+  GeoVector gv;
+  ::DistanceBearingS(*this, other, &gv.distance, &gv.bearing);
+  return gv;
+}
+
+double 
 GeoPoint::ProjectedDistance(const GeoPoint &from,
                              const GeoPoint &to) const
 {
@@ -91,7 +107,7 @@ GeoPoint::Sort(const GeoPoint &sp) const
 
 GeoPoint 
 GeoPoint::IntermediatePoint(const GeoPoint &destination, 
-                             const fixed distance) const
+                            const double distance) const
 {
   return ::IntermediatePoint(*this, destination, distance);
 }

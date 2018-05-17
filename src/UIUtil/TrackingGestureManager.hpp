@@ -44,7 +44,7 @@
 class TrackingGestureManager: public GestureManager
 {
 public:
-  typedef std::vector<RasterPoint> PointVector;
+  typedef std::vector<PixelPoint> PointVector;
 
 private:
   PointVector points;
@@ -59,13 +59,13 @@ public:
   /**
    * Starts the GestureManager at the given coordinates
    */
-  void Start(PixelScalar x, PixelScalar y, int threshold);
+  void Start(PixelPoint p, int threshold);
 
   /**
    * Adds new coordinates to the GestureManager
    * @return True if the threshold was reached, False otherwise
    */
-  bool Update(PixelScalar x, PixelScalar y);
+  bool Update(PixelPoint p);
 
   /**
    * Returns if there are at least two points for trail rendering

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,12 +27,10 @@ Copyright_License {
 #include "Engine/Airspace/AirspaceAltitude.hpp"
 #include "Engine/Airspace/AirspaceClass.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Screen/Point.hpp"
 #include "Util/NonCopyable.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 
 struct AirspaceWarningConfig;
-class AbstractAirspace;
 
 class AirspaceLabelList : private NonCopyable {
 public:

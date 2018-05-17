@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,10 +22,10 @@
 #ifndef WAYPOINTS_HPP
 #define WAYPOINTS_HPP
 
-#include "Util/SliceAllocator.hpp"
 #include "Util/RadixTree.hpp"
 #include "Util/QuadTree.hpp"
 #include "Util/Serial.hpp"
+#include "Ptr.hpp"
 #include "Waypoint.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
 
@@ -41,31 +41,30 @@ class Waypoints {
    * QuadTree.
    */
   struct WaypointAccessor {
-    constexpr
-    int GetX(const Waypoint &wp) const {
-      return wp.flat_location.longitude;
+    gcc_pure
+    int GetX(const WaypointPtr &wp) const {
+      return wp->flat_location.x;
     }
 
-    constexpr
-    int GetY(const Waypoint &wp) const {
-      return wp.flat_location.latitude;
+    gcc_pure
+    int GetY(const WaypointPtr &wp) const {
+      return wp->flat_location.y;
     }
   };
 
   /**
    * Type of KD-tree data structure for waypoint container
    */
-  typedef QuadTree<Waypoint, WaypointAccessor,
-                   SliceAllocator<Waypoint, 512u> > WaypointTree;
+  typedef QuadTree<WaypointPtr, WaypointAccessor> WaypointTree;
 
-  class WaypointNameTree : public RadixTree<const Waypoint *> {
+  class WaypointNameTree : public RadixTree<WaypointPtr> {
   public:
-    const Waypoint *Get(const TCHAR *name) const;
+    WaypointPtr Get(const TCHAR *name) const;
     void VisitNormalisedPrefix(const TCHAR *prefix, WaypointVisitor &visitor) const;
     TCHAR *SuggestNormalisedPrefix(const TCHAR *prefix,
                                    TCHAR *dest, size_t max_length) const;
-    void Add(const Waypoint &wp);
-    void Remove(const Waypoint &wp);
+    void Add(WaypointPtr wp);
+    void Remove(const WaypointPtr &wp);
   };
 
   /**
@@ -79,7 +78,7 @@ class Waypoints {
   WaypointNameTree name_tree;
   TaskProjection task_projection;
 
-  const Waypoint *home;
+  WaypointPtr home;
 
 public:
   typedef WaypointTree::const_iterator const_iterator;
@@ -101,13 +100,26 @@ public:
   }
 
   /**
+   * Add this waypoint to internal store.
+   * Optimise() must be called after inserting waypoints prior to
+   * performing any queries, but can be done in batches.
+   *
+   * @param wp Waypoint to add to internal store
+   */
+  void Append(WaypointPtr wp);
+
+  /**
    * Add waypoint to internal store.  Internal copy is made.
    * Optimise() must be called after inserting waypoints prior to
    * performing any queries, but can be done in batches.
    *
    * @param wp Waypoint to add to internal store
    */
-  const Waypoint &Append(Waypoint &&wp);
+  WaypointPtr Append(Waypoint &&wp) {
+    WaypointPtr ptr(new Waypoint(std::move(wp)));
+    Append(ptr);
+    return ptr;
+  }
 
   /**
    * Erase waypoint from the internal store.  Requires Optimise() to
@@ -115,7 +127,7 @@ public:
    *
    * @param wp Waypoint to erase from internal store
    */
-  void Erase(const Waypoint& wp);
+  void Erase(WaypointPtr &&wp);
 
   /**
    * Erase all waypoints with origin==WaypointOrigin::USER &&
@@ -130,7 +142,7 @@ public:
    * @param orig Waypoint that will be replaced
    * @param replacement New waypoint
    */
-  void Replace(const Waypoint &orig, const Waypoint &replacement);
+  void Replace(const WaypointPtr &orig, Waypoint &&replacement);
 
   /**
    * Create new waypoint (without appending it to the store),
@@ -193,20 +205,20 @@ public:
    * @return waypoint copy
    */
   Waypoint GenerateTakeoffPoint(const GeoPoint& location,
-                                const fixed terrain_alt) const;
+                                double terrain_alt) const;
 
   /**
    * Create a takeoff point or replaces previous.
    * This modifies the waypoint database.
    */
   void AddTakeoffPoint(const GeoPoint& location,
-                         const fixed terrain_alt);
+                       double terrain_alt);
 
   /**
    * Return the current home waypoint.  May be nullptr if none is
    * configured.
    */
-  const Waypoint *GetHome() const {
+  WaypointPtr GetHome() const {
     return home;
   }
 
@@ -216,7 +228,7 @@ public:
    * @return Pointer to waypoint if found (or nullptr if not)
    */
   gcc_pure
-  const Waypoint *FindHome();
+  WaypointPtr FindHome();
 
   /**
    * Set single home waypoint (clearing all others as home)
@@ -234,7 +246,7 @@ public:
    * @return Pointer to waypoint if found (or nullptr if not)
    */
   gcc_pure
-  const Waypoint *LookupId(const unsigned id) const;
+  WaypointPtr LookupId(const unsigned id) const;
 
   /**
    * Look up closest waypoint by location within range
@@ -245,8 +257,8 @@ public:
    * @return Pointer to waypoint if found (or nullptr if none found)
    */
   gcc_pure
-  const Waypoint *LookupLocation(const GeoPoint &loc,
-                                 const fixed range = fixed(0)) const;
+  WaypointPtr LookupLocation(const GeoPoint &loc,
+                             const double range = 0) const;
 
   /**
    * Look up waypoint by name (returns first match)
@@ -256,10 +268,10 @@ public:
    * @return Pointer to waypoint if found (or nullptr if not)
    */
   gcc_pure
-  const Waypoint *LookupName(const TCHAR *name) const;
+  WaypointPtr LookupName(const TCHAR *name) const;
 
   gcc_pure
-  const Waypoint *LookupName(const tstring &name) const {
+  WaypointPtr LookupName(const tstring &name) const {
     return LookupName(name.c_str());
   }
 
@@ -271,7 +283,7 @@ public:
    *
    * @return reference to waypoint in tree (either existing or appended)
    */
-  const Waypoint &CheckExistsOrAppend(const Waypoint &waypoint);
+  WaypointPtr CheckExistsOrAppend(WaypointPtr waypoint);
 
   /**
    * Call visitor function on waypoints within approximate range
@@ -282,8 +294,8 @@ public:
    * @param range Distance in meters of search radius
    * @param visitor Visitor to be called on waypoints within range
    */
-  void VisitWithinRange(const GeoPoint &loc, const fixed range,
-                          WaypointVisitor& visitor) const;
+  void VisitWithinRange(const GeoPoint &loc, double range,
+                        WaypointVisitor &visitor) const;
 
   /**
    * Call visitor function on waypoints with the specified name
@@ -311,7 +323,7 @@ public:
    * @return Null if none found, otherwise pointer to nearest
    */
   gcc_pure
-  const Waypoint *GetNearest(const GeoPoint &loc, fixed range) const;
+  WaypointPtr GetNearest(const GeoPoint &loc, double range) const;
 
   /**
    * Looks up nearest landable waypoint to the
@@ -324,7 +336,7 @@ public:
    * @return Null if none found, otherwise pointer to nearest
    */
   gcc_pure
-  const Waypoint *GetNearestLandable(const GeoPoint &loc, fixed range) const;
+  WaypointPtr GetNearestLandable(const GeoPoint &loc, double range) const;
 
   /**
    * Looks up nearest waypoint to the search location.
@@ -338,8 +350,8 @@ public:
    * @return Null if none found, otherwise pointer to nearest
    */
   gcc_pure
-  const Waypoint *GetNearestIf(const GeoPoint &loc, fixed range,
-                               bool (*predicate)(const Waypoint &)) const;
+  WaypointPtr GetNearestIf(const GeoPoint &loc, double range,
+                           bool (*predicate)(const Waypoint &)) const;
 
   /**
    * Access first waypoint in store, for use in iterators.

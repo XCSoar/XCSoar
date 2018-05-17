@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -35,7 +35,7 @@ BlueFlyDevice::BlueFlyDevice(Port &_port)
      settings({0}),
      settings_keys(nullptr)
 {
-  kalman_filter.SetAccelerationVariance(fixed(0.3));
+  kalman_filter.SetAccelerationVariance(0.3);
 }
 
 BlueFlyDevice::~BlueFlyDevice()

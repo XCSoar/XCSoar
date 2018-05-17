@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,6 +25,7 @@ Copyright_License {
 #include "IO/FileLineReader.hpp"
 #include "Logger/FlightParser.hpp"
 #include "FlightInfo.hpp"
+#include "Util/PrintException.hxx"
 
 static void
 Print(const FlightInfo &flight)
@@ -50,21 +51,19 @@ Print(const FlightInfo &flight)
 
 int
 main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "PATH");
-  const tstring path = args.ExpectNextT();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
-  FileLineReaderA file(path.c_str());
-  if (file.error()) {
-    _ftprintf(stderr, _T("Failed to open %s\n"), path.c_str());
-    return EXIT_FAILURE;
-  }
-
+  FileLineReaderA file(path);
   FlightParser parser(file);
   FlightInfo flight;
   while (parser.Read(flight))
     Print(flight);
 
   return EXIT_SUCCESS;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

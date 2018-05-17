@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,23 +23,15 @@ Copyright_License {
 
 #include "Screen/Init.hpp"
 #include "Screen/Debug.hpp"
-#include "Screen/GDI/AlphaBlend.hpp"
 #include "Screen/PaintWindow.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Event/Globals.hpp"
 #include "Event/Queue.hpp"
 
 #include <windows.h>
-#include <commctrl.h>
 
 ScreenGlobalInit::ScreenGlobalInit()
 {
-  InitCommonControls();
-
-#ifdef HAVE_DYNAMIC_ALPHA_BLEND
-  AlphaBlendInit();
-#endif
-
   event_queue = new EventQueue();
 
   HINSTANCE hInstance = ::GetModuleHandle(nullptr);
@@ -53,10 +45,6 @@ ScreenGlobalInit::~ScreenGlobalInit()
 {
   delete event_queue;
   event_queue = nullptr;
-
-#ifdef HAVE_DYNAMIC_ALPHA_BLEND
-  AlphaBlendDeinit();
-#endif
 
   ScreenDeinitialized();
 }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,20 +24,24 @@ Copyright_License {
 #ifndef XCSOAR_ATMOSPHERE_AIRDENSITY_H
 #define XCSOAR_ATMOSPHERE_AIRDENSITY_H
 
-#include "Math/fixed.hpp"
+#include "Compiler.h"
 
 /**
  * Calculates the air density from a given QNH-based altitude
  * @param altitude QNH-based altitude (m)
  * @return Air density (kg/m^3)
  */
-fixed AirDensity(const fixed altitude);
+gcc_const
+double
+AirDensity(double altitude);
 
 /**
  * Divide TAS by this number to get IAS
  * @param altitude QNH-based altitude (m)
  * @return Ratio of TAS to IAS
  */
-fixed AirDensityRatio(const fixed altitude);
+gcc_const
+double
+AirDensityRatio(double altitude);
 
 #endif

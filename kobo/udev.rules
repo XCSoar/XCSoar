@@ -1,0 +1,15 @@
+# After plugging in a Huawei Hi-Link USB stick, it presents itself as a
+# storage device, with product id 1f01, and a helper program needs to send an
+# obscure USB command to the device, to make the device switch to network device
+# mode.
+ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="12d1", ATTRS{idProduct}=="1f01", RUN+="/opt/xcsoar/bin/simple_usbmodeswitch"
+
+# In KoboMenu, we assume that the network device "eth0" is always the integrated
+# Wi-Fi device. However, some USB network devices present also get a network
+# device name with "eth" prefix. Therefore call ifrename to rename usb network
+# devices with other prefixes to a name with usb prefix.
+ACTION=="add", SUBSYSTEM=="net", SUBSYSTEMS=="usb", KERNEL!="usb*", RUN+="/sbin/ifrename -c /dev/null -i $env{INTERFACE} -n usb*"
+
+# If a USB network device is plugged in (and we made sure that its name prefix
+# is "usb"), configure this device automatically via DHCP.
+ACTION=="add|move", SUBSYSTEM=="net", SUBSYSTEMS=="usb", KERNEL=="usb*", RUN+="/sbin/ifconfig $env{INTERFACE} up", RUN+="/sbin/udhcpc -S -i $env{INTERFACE} -s /etc/udhcpc.d/default.script -t3 -T3 -A3 -f -q"

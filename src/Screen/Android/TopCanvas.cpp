@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,36 +23,30 @@ Copyright_License {
 
 #include "Screen/Custom/TopCanvas.hpp"
 #include "Screen/OpenGL/Init.hpp"
-#include "Screen/OpenGL/EGL.hpp"
 #include "Screen/OpenGL/Globals.hpp"
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
+#include "LogFile.hpp"
 
 void
 TopCanvas::Create(PixelSize new_size, bool full_screen, bool resizable)
 {
+#ifdef USE_EGL
+  display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+  surface = eglGetCurrentSurface(EGL_DRAW);
+#endif
+
   OpenGL::SetupContext();
-  OpenGL::SetupViewport(Point2D<unsigned>(new_size.cx, new_size.cy));
-  Canvas::Create(new_size);
-}
-
-void
-TopCanvas::OnResize(PixelSize new_size)
-{
-  if (new_size == GetSize())
-    return;
-
-  OpenGL::SetupViewport(Point2D<unsigned>(new_size.cx, new_size.cy));
-  Canvas::Create(new_size);
+  SetupViewport(new_size);
 }
 
 void
 TopCanvas::Flip()
 {
-  if (OpenGL::egl)
-    /* if native EGL support was detected, we can circumvent the JNI
-       call */
-    EGLSwapBuffers();
-  else
-    native_view->swap();
+#ifdef USE_EGL
+  if (!eglSwapBuffers(display, surface))
+    LogFormat("eglSwapBuffers() failed: 0x%x", eglGetError());
+#else
+  native_view->swap();
+#endif
 }

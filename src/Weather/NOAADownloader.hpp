@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,6 +28,10 @@ struct METAR;
 struct TAF;
 class JobRunner;
 
+namespace Net {
+  class Session;
+}
+
 namespace NOAADownloader
 {
   /**
@@ -38,7 +42,7 @@ namespace NOAADownloader
    * otherwise False
    */
   bool DownloadMETAR(const char *code, METAR &metar,
-                     JobRunner &runner);
+                     Net::Session &session, JobRunner &runner);
 
   /**
    * Downloads a METAR from the NOAA server
@@ -48,7 +52,7 @@ namespace NOAADownloader
    * otherwise False
    */
   bool DownloadTAF(const char *code, TAF &taf,
-                   JobRunner &runner);
+                   Net::Session &session, JobRunner &runner);
 };
 
 #endif

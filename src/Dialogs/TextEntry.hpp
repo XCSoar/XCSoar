@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -40,7 +40,7 @@ TextEntryDialog(TCHAR *text, size_t size,
 
 template<size_t N>
 static inline bool
-TextEntryDialog(StringBuffer<TCHAR, N> &text,
+TextEntryDialog(BasicStringBuffer<TCHAR, N> &text,
                 const TCHAR *caption=NULL,
                 AllowedCharacters accb=AllowedCharacters(),
                 bool default_shift_state = true)
@@ -51,7 +51,7 @@ TextEntryDialog(StringBuffer<TCHAR, N> &text,
 
 template<size_t N>
 static inline bool
-TextEntryDialog(StringBuffer<TCHAR, N> &text,
+TextEntryDialog(BasicStringBuffer<TCHAR, N> &text,
                 const TCHAR *caption,
                 bool default_shift_state)
 {

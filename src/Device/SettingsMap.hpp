@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,13 +27,8 @@ Copyright_License {
 #include "Util/Serial.hpp"
 #include "Time/TimeoutClock.hpp"
 #include "Thread/Mutex.hpp"
+#include "Thread/Cond.hxx"
 #include "Operation/Operation.hpp"
-
-#ifdef HAVE_POSIX
-#include "Thread/Cond.hpp"
-#else
-#include "OS/Sleep.h"
-#endif
 
 #include <map>
 #include <string>
@@ -50,9 +45,7 @@ Copyright_License {
 template<typename V>
 class DeviceSettingsMap {
   Mutex mutex;
-#ifdef HAVE_POSIX
   Cond cond;
-#endif
 
   struct Item {
     V value;
@@ -124,13 +117,7 @@ public:
       if (remaining <= 0)
         return end();
 
-#ifdef HAVE_POSIX
-      cond.Wait(*this, remaining);
-#else
-      /* Windows doesn't have condition objects, sorry for this ugly
-         kludge :-( */
-      Sleep(std::min(remaining, 250));
-#endif
+      cond.timed_wait(*this, remaining);
     }
   }
 
@@ -160,9 +147,7 @@ public:
     if (!i.second)
       item.value = value;
 
-#ifdef HAVE_POSIX
-    cond.Broadcast();
-#endif
+    cond.broadcast();
   }
 
   template<typename K>

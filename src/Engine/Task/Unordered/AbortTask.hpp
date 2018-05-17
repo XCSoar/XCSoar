@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,7 +25,6 @@
 
 #include "UnorderedTask.hpp"
 #include "UnorderedTaskPoint.hpp"
-#include "GlideSolvers/GlidePolar.hpp"
 
 #include <vector>
 
@@ -61,9 +60,9 @@ protected:
     UnorderedTaskPoint point;
     GlideResult solution;
 
-    AlternateTaskPoint(const Waypoint &waypoint, const TaskBehaviour &tb,
+    AlternateTaskPoint(WaypointPtr &&waypoint, const TaskBehaviour &tb,
                        const GlideResult &_solution)
-      :point(waypoint, tb), solution(_solution) {}
+      :point(std::move(waypoint), tb), solution(_solution) {}
   };
 
   typedef std::vector<AlternateTaskPoint> AlternateTaskVector;
@@ -128,7 +127,7 @@ public:
    * @return Vector to home waypoint
    */
   GeoVector GetHomeVector(const AircraftState &state) const;
-  const Waypoint *GetHome() const;
+  WaypointPtr GetHome() const;
 
 protected:
   /**
@@ -152,8 +151,8 @@ protected:
    * @return Distance (m) of approximate glide range of aircraft
    */
   gcc_pure
-  fixed GetAbortRange(const AircraftState &state_now,
-                      const GlidePolar &glide_polar) const;
+  double GetAbortRange(const AircraftState &state_now,
+                       const GlidePolar &glide_polar) const;
 
   /**
    * Fill abort task list with candidate waypoints given a list of

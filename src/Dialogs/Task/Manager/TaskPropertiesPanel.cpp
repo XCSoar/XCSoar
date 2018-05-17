@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,16 +23,13 @@ Copyright_License {
 
 #include "TaskPropertiesPanel.hpp"
 #include "Internal.hpp"
-#include "Screen/Layout.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Boolean.hpp"
-#include "Form/DataField/Float.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Task/TypeStrings.hpp"
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
-#include "Components.hpp"
 #include "Interface.hpp"
 
 enum Controls {
@@ -79,14 +76,14 @@ TaskPropertiesPanel::RefreshView()
             UnitGroup::HORIZONTAL_SPEED);
 
   SetRowVisible(START_MAX_HEIGHT, !fai_start_finish);
-  LoadValue(START_MAX_HEIGHT, fixed(p.start_constraints.max_height),
+  LoadValue(START_MAX_HEIGHT, double(p.start_constraints.max_height),
             UnitGroup::ALTITUDE);
 
   SetRowVisible(START_HEIGHT_REF, !fai_start_finish);
   LoadValueEnum(START_HEIGHT_REF, p.start_constraints.max_height_ref);
 
   SetRowVisible(FINISH_MIN_HEIGHT, !fai_start_finish);
-  LoadValue(FINISH_MIN_HEIGHT, fixed(p.finish_constraints.min_height),
+  LoadValue(FINISH_MIN_HEIGHT, double(p.finish_constraints.min_height),
             UnitGroup::ALTITUDE);
 
   SetRowVisible(FINISH_HEIGHT_REF, !fai_start_finish);
@@ -99,7 +96,7 @@ TaskPropertiesPanel::RefreshView()
 
   dialog.InvalidateTaskView();
 
-  // fixed aat_min_time
+  // aat_min_time
   // finish_min_height
 }
 
@@ -114,7 +111,7 @@ TaskPropertiesPanel::ReadValues()
 
   int min_time = GetValueInteger(MIN_TIME);
   if (min_time != (int)p.aat_min_time) {
-    p.aat_min_time = fixed(min_time);
+    p.aat_min_time = min_time;
     changed = true;
   }
 
@@ -130,7 +127,7 @@ TaskPropertiesPanel::ReadValues()
     changed = true;
   }
 
-  fixed max_speed = Units::ToSysSpeed(GetValueFloat(START_MAX_SPEED));
+  auto max_speed = Units::ToSysSpeed(GetValueFloat(START_MAX_SPEED));
   if (max_speed != p.start_constraints.max_speed) {
     p.start_constraints.max_speed = max_speed;
     changed = true;
@@ -232,12 +229,12 @@ TaskPropertiesPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddFloat(_("Start max. speed"),
            _("Maximum speed allowed in start observation zone.  Set to 0 for no limit."),
            _T("%.0f %s"), _T("%.0f"),
-           fixed(0), fixed(300), fixed(5), false, fixed(0));
+           0, 300, 5, false, 0);
 
   AddFloat(_("Start max. height"),
            _("Maximum height based on start height reference (AGL or MSL) while starting the task.  Set to 0 for no limit."),
            _T("%.0f %s"), _T("%.0f"),
-           fixed(0), fixed(10000), fixed(25), false, fixed(0));
+           0, 10000, 25, false, 0);
 
   static constexpr StaticEnumChoice altitude_reference_list[] = {
     { (unsigned)AltitudeReference::AGL, N_("AGL"),
@@ -254,7 +251,7 @@ TaskPropertiesPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddFloat(_("Finish min. height"),
            _("Minimum height based on finish height reference (AGL or MSL) while finishing the task.  Set to 0 for no limit."),
            _T("%.0f %s"), _T("%.0f"),
-           fixed(0), fixed(10000), fixed(25), false, fixed(0));
+           0, 10000, 25, false, 0);
 
   AddEnum(_("Finish height ref."),
           _("Reference used for finish min height rule."),

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,6 @@ Copyright_License {
 #include "Loop.hpp"
 #include "Queue.hpp"
 #include "../Shared/Event.hpp"
-#include "../Timer.hpp"
 #include "Screen/TopWindow.hpp"
 
 bool
@@ -58,9 +57,6 @@ EventLoop::Dispatch(const Event &event)
   if (event.type == Event::USER) {
     Window *window = (Window *)event.ptr;
     window->OnUser(event.param);
-  } else if (event.type == Event::TIMER) {
-    Timer *timer = (Timer *)event.ptr;
-    timer->Invoke();
   } else if (event.type == Event::CALLBACK) {
     event.callback(event.ptr);
   } else if (top_window != nullptr && event.type != Event::NOP) {

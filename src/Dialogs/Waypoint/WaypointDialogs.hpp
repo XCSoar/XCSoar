@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,12 +24,14 @@ Copyright_License {
 #ifndef XCSOAR_DIALOGS_WAYPOINT_HPP
 #define XCSOAR_DIALOGS_WAYPOINT_HPP
 
+#include "Engine/Waypoint/Ptr.hpp"
+
 struct GeoPoint;
 struct Waypoint;
 class Waypoints;
 class OrderedTask;
 
-const Waypoint *
+WaypointPtr
 ShowWaypointListDialog(const GeoPoint &location,
                        OrderedTask *ordered_task = nullptr,
                        unsigned ordered_task_index = 0);
@@ -44,7 +46,7 @@ bool
 dlgWaypointEditShowModal(Waypoint &way_point);
 
 void
-dlgWaypointDetailsShowModal(const Waypoint& waypoint,
+dlgWaypointDetailsShowModal(WaypointPtr waypoint,
                             bool allow_navigation = true,
                             bool allow_edit = false);
 

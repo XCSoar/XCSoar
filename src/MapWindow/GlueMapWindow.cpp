@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,23 +30,13 @@ Copyright_License {
 #include "Time/PeriodClock.hpp"
 #include "Event/Idle.hpp"
 #include "Topography/Thread.hpp"
+#include "Terrain/Thread.hpp"
 
 GlueMapWindow::GlueMapWindow(const Look &look)
   :MapWindow(look.map, look.traffic),
-   topography_thread(nullptr),
 #ifdef ENABLE_OPENGL
-   data_timer(*this),
-#endif
-   drag_mode(DRAG_NONE),
-   ignore_single_click(false),
-   skip_idle(true),
-#ifdef ENABLE_OPENGL
-   kinetic_x(700),
-   kinetic_y(700),
    kinetic_timer(*this),
 #endif
-   arm_mapitem_list(false),
-   last_display_mode(DisplayMode::NONE),
    thermal_band_renderer(look.thermal_band, look.chart),
    final_glide_bar_renderer(look.final_glide_bar, look.map.task),
    vario_bar_renderer(look.vario_bar),
@@ -80,11 +70,22 @@ GlueMapWindow::SetTopography(TopographyStore *_topography)
 }
 
 void
-GlueMapWindow::Create(ContainerWindow &parent, const PixelRect &rc)
+GlueMapWindow::SetTerrain(RasterTerrain *_terrain)
 {
-  MapWindow::Create(parent, rc);
+  if (terrain_thread != nullptr) {
+    terrain_thread->LockStop();
+    delete terrain_thread;
+    terrain_thread = nullptr;
+  }
 
-  visible_projection.SetScale(CommonInterface::GetMapSettings().cruise_scale);
+  MapWindow::SetTerrain(_terrain);
+
+  if (_terrain != nullptr)
+    terrain_thread =
+      new TerrainThread(*_terrain,
+                        [this](){
+                          SendUser(unsigned(Command::INVALIDATE));
+                        });
 }
 
 void
@@ -131,16 +132,19 @@ GlueMapWindow::ExchangeBlackboard()
 {
   /* copy device_blackboard to MapWindow */
 
-  device_blackboard->mutex.Lock();
-  ReadBlackboard(device_blackboard->Basic(), device_blackboard->Calculated());
-  device_blackboard->mutex.Unlock();
+  {
+    const ScopeLock lock(device_blackboard->mutex);
+    ReadBlackboard(device_blackboard->Basic(),
+                   device_blackboard->Calculated());
+  }
 
 #ifndef ENABLE_OPENGL
-  next_mutex.Lock();
-  ReadMapSettings(next_settings_map);
-  ReadComputerSettings(next_settings_computer);
-  ReadUIState(next_ui_state);
-  next_mutex.Unlock();
+  {
+    const ScopeLock lock(next_mutex);
+    ReadMapSettings(next_settings_map);
+    ReadComputerSettings(next_settings_computer);
+    ReadUIState(next_ui_state);
+  }
 #endif
 }
 
@@ -203,49 +207,6 @@ GlueMapWindow::QuickRedraw()
      trigger that now */
   draw_thread->TriggerRedraw();
 #endif
-}
-
-/**
- * This idle function allows progressive scanning of visibility etc
- */
-bool
-GlueMapWindow::Idle()
-{
-  if (!render_projection.IsValid())
-    return false;
-
-  if (skip_idle) {
-    /* draw the first frame as quickly as possible, so the user can
-       start interacting with XCSoar immediately */
-    skip_idle = false;
-    return true;
-  }
-
-  /* hack: update RASP weather maps as quickly as possible; they only
-     ever need to be updated after the user has selected a new map, so
-     this is not a UI latency problem (quite contrary, don't let the
-     user wait until he sees the new map) */
-  UpdateWeather();
-
-  if (!IsUserIdle(2500))
-    /* don't hold back the UI thread while the user is interacting */
-    return true;
-
-  PeriodClock clock;
-  clock.Update();
-
-  bool still_dirty;
-
-  do {
-    still_dirty = UpdateWeather() || UpdateTerrain();
-  } while (!clock.Check(700) && /* stop after 700ms */
-#ifndef ENABLE_OPENGL
-           !draw_thread->IsTriggered() &&
-#endif
-           IsUserIdle(2500) &&
-           still_dirty);
-
-  return still_dirty;
 }
 
 bool

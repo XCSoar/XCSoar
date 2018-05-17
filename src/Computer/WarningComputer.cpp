@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,9 +29,10 @@ Copyright_License {
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 
-WarningComputer::WarningComputer(Airspaces &_airspaces)
+WarningComputer::WarningComputer(const AirspaceWarningConfig &_config,
+                                 Airspaces &_airspaces)
   :airspaces(_airspaces),
-   manager(airspaces),
+   manager(_config, airspaces),
    protected_manager(manager)
 {
 }
@@ -45,12 +46,12 @@ WarningComputer::Update(const ComputerSettings &settings_computer,
   if (!basic.time_available)
     return;
 
-  const fixed dt = delta_time.Update(basic.time, fixed(1), fixed(20));
-  if (negative(dt))
+  const auto dt = delta_time.Update(basic.time, 1, 20);
+  if (dt < 0)
     /* time warp */
     Reset();
 
-  if (!positive(dt))
+  if (dt <= 0)
     return;
 
   airspaces.SetFlightLevels(settings_computer.pressure);

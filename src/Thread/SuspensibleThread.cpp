@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,19 +28,9 @@ Copyright_License {
 bool
 SuspensibleThread::Start(bool _suspended)
 {
-#ifdef HAVE_POSIX
   stop_received = false;
   suspend_received = _suspended;
   suspended = false;
-#else
-  if (_suspended)
-    suspend_trigger.Signal();
-  else
-    suspend_trigger.Reset();
-  stop_trigger.Reset();
-  command_trigger.Reset();
-  suspended.Reset();
-#endif
 
   return Thread::Start();
 }
@@ -48,15 +38,19 @@ SuspensibleThread::Start(bool _suspended)
 void
 SuspensibleThread::BeginStop()
 {
-#ifdef HAVE_POSIX
-  mutex.Lock();
+  assert(!Thread::IsInside());
+
+  const ScopeLock lock(mutex);
+  _BeginStop();
+}
+
+void
+SuspensibleThread::_BeginStop()
+{
+  assert(!Thread::IsInside());
+
   stop_received = true;
-  command_trigger.Signal();
-  mutex.Unlock();
-#else
-  stop_trigger.Signal();
-  command_trigger.Signal();
-#endif
+  command_trigger.signal();
 }
 
 void
@@ -65,15 +59,18 @@ SuspensibleThread::BeginSuspend()
   assert(!Thread::IsInside());
   assert(Thread::IsDefined());
 
-#ifdef HAVE_POSIX
-  mutex.Lock();
+  const ScopeLock lock(mutex);
+  _BeginSuspend();
+}
+
+void
+SuspensibleThread::_BeginSuspend()
+{
+  assert(!Thread::IsInside());
+  assert(Thread::IsDefined());
+
   suspend_received = true;
-  command_trigger.Signal();
-  mutex.Unlock();
-#else
-  suspend_trigger.Signal();
-  command_trigger.Signal();
-#endif
+  command_trigger.signal();
 }
 
 void
@@ -82,23 +79,26 @@ SuspensibleThread::WaitUntilSuspended()
   assert(!Thread::IsInside());
   assert(Thread::IsDefined());
 
-#ifdef HAVE_POSIX
-  mutex.Lock();
+  const ScopeLock lock(mutex);
+  _WaitUntilSuspended();
+}
+
+void
+SuspensibleThread::_WaitUntilSuspended()
+{
+  assert(!Thread::IsInside());
+  assert(Thread::IsDefined());
   assert(suspend_received);
 
   while (!suspended)
-    client_trigger.Wait(mutex);
-  mutex.Unlock();
-#else
-  assert(suspend_trigger.Test());
-
-  suspended.Wait();
-#endif
+    client_trigger.wait(mutex);
 }
 
 void
 SuspensibleThread::Suspend()
 {
+  assert(!Thread::IsInside());
+
   BeginSuspend();
   WaitUntilSuspended();
 }
@@ -106,15 +106,20 @@ SuspensibleThread::Suspend()
 void
 SuspensibleThread::Resume()
 {
-#ifdef HAVE_POSIX
-  mutex.Lock();
+  assert(!Thread::IsInside());
+
+  const ScopeLock lock(mutex);
   suspend_received = false;
-  command_trigger.Signal();
-  mutex.Unlock();
-#else
-  suspend_trigger.Reset();
-  command_trigger.Signal();
-#endif
+  command_trigger.signal();
+}
+
+bool
+SuspensibleThread::_IsCommandPending() const
+{
+  assert(Thread::IsInside());
+  assert(mutex.IsLockedByCurrent());
+
+  return stop_received || suspend_received;
 }
 
 bool
@@ -122,14 +127,27 @@ SuspensibleThread::IsCommandPending()
 {
   assert(Thread::IsInside());
 
-#ifdef HAVE_POSIX
-  mutex.Lock();
-  bool result = stop_received || suspend_received;
-  mutex.Unlock();
-  return result;
-#else
-  return stop_trigger.Test() || suspend_trigger.Test();
-#endif
+  const ScopeLock lock(mutex);
+  return _IsCommandPending();
+}
+
+bool
+SuspensibleThread::_CheckStoppedOrSuspended()
+{
+  assert(Thread::IsInside());
+  assert(mutex.IsLockedByCurrent());
+
+  assert(!suspended);
+
+  if (!stop_received && suspend_received) {
+    suspended = true;
+    client_trigger.signal();
+    while (!stop_received && suspend_received)
+      command_trigger.wait(mutex);
+    suspended = false;
+  }
+
+  return stop_received;
 }
 
 bool
@@ -137,36 +155,30 @@ SuspensibleThread::CheckStoppedOrSuspended()
 {
   assert(Thread::IsInside());
 
-#ifdef HAVE_POSIX
-  mutex.Lock();
+  const ScopeLock lock(mutex);
+  return _CheckStoppedOrSuspended();
+}
+
+bool
+SuspensibleThread::_WaitForStopped(unsigned timeout_ms)
+{
+  assert(Thread::IsInside());
+  assert(mutex.IsLockedByCurrent());
 
   assert(!suspended);
+  suspended = true;
+
+  if (!stop_received)
+    command_trigger.timed_wait(mutex, timeout_ms);
 
   if (!stop_received && suspend_received) {
-    suspended = true;
-    client_trigger.Signal();
+    client_trigger.signal();
     while (!stop_received && suspend_received)
-      command_trigger.Wait(mutex);
-    suspended = false;
+      command_trigger.wait(mutex);
   }
 
-  bool stop = stop_received;
-  mutex.Unlock();
-  return stop;
-#else
-  if (stop_trigger.Test())
-    return true;
-
-  if (suspend_trigger.Test()) {
-    suspended.Signal();
-    while (suspend_trigger.Test() && !stop_trigger.Test())
-      command_trigger.WaitAndReset();
-
-    suspended.Reset();
-  }
-
-  return stop_trigger.Test();
-#endif
+  suspended = false;
+  return stop_received;
 }
 
 bool
@@ -174,37 +186,6 @@ SuspensibleThread::WaitForStopped(unsigned timeout_ms)
 {
   assert(Thread::IsInside());
 
-#ifdef HAVE_POSIX
-  mutex.Lock();
-
-  assert(!suspended);
-  suspended = true;
-
-  if (!stop_received)
-    command_trigger.Wait(mutex, timeout_ms);
-
-  if (!stop_received && suspend_received) {
-    client_trigger.Signal();
-    while (!stop_received && suspend_received)
-      command_trigger.Wait(mutex);
-  }
-
-  suspended = false;
-  bool stop = stop_received;
-  mutex.Unlock();
-  return stop;
-#else
-  if (stop_trigger.Test())
-    return true;
-
-  suspended.Signal();
-
-  command_trigger.WaitAndReset(timeout_ms);
-  while (suspend_trigger.Test() && !stop_trigger.Test())
-    command_trigger.WaitAndReset();
-
-  suspended.Reset();
-
-  return stop_trigger.Test();
-#endif
+  const ScopeLock lock(mutex);
+  return _WaitForStopped(timeout_ms);
 }

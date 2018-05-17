@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,17 +24,28 @@ Copyright_License {
 #include "ProfilePasswordDialog.hpp"
 #include "TextEntry.hpp"
 #include "Message.hpp"
+#include "Error.hpp"
 #include "Profile/Map.hpp"
 #include "Profile/File.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Language/Language.hpp"
-#include "Util/StringAPI.hpp"
+#include "OS/Path.hpp"
+#include "Util/StringAPI.hxx"
 
-bool
-ProfileFileHasPassword(const TCHAR *path)
+TriState
+ProfileFileHasPassword(Path path)
 {
   ProfileMap map;
-  return Profile::LoadFile(map, path) && map.Exists(ProfileKeys::Password);
+
+  try {
+    Profile::LoadFile(map, path);
+  } catch (const std::runtime_error &) {
+    return TriState::UNKNOWN;
+  }
+
+  return map.Exists(ProfileKeys::Password)
+    ? TriState::TRUE
+    : TriState::FALSE;
 }
 
 ProfilePasswordResult
@@ -42,12 +53,12 @@ CheckProfilePassword(const ProfileMap &map)
 {
   /* oh no, profile passwords are not truly secure! */
 
-  StringBuffer<TCHAR, 80> profile_password;
+  BasicStringBuffer<TCHAR, 80> profile_password;
   if (!map.Get(ProfileKeys::Password, profile_password))
       /* not password protected */
       return ProfilePasswordResult::UNPROTECTED;
 
-  StringBuffer<TCHAR, 80> user_password;
+  BasicStringBuffer<TCHAR, 80> user_password;
   user_password.clear();
   if (!TextEntryDialog(user_password, _("Enter your password")))
     return ProfilePasswordResult::CANCEL;
@@ -58,12 +69,10 @@ CheckProfilePassword(const ProfileMap &map)
 }
 
 ProfilePasswordResult
-CheckProfileFilePassword(const TCHAR *path)
+CheckProfileFilePassword(Path path)
 {
   ProfileMap map;
-  if (!Profile::LoadFile(map, path))
-    return ProfilePasswordResult::UNPROTECTED;
-
+  Profile::LoadFile(map, path);
   return CheckProfilePassword(map);
 }
 
@@ -89,7 +98,7 @@ CheckProfilePasswordResult(ProfilePasswordResult result)
 bool
 SetProfilePasswordDialog(ProfileMap &map)
 {
-  StringBuffer<TCHAR, 80> new_password;
+  BasicStringBuffer<TCHAR, 80> new_password;
   new_password.clear();
   if (!TextEntryDialog(new_password, _("Enter a new password")))
     return false;

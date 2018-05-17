@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2015 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2010-2015 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,16 +31,17 @@
 #define STATIC_STRING_HPP
 
 #include "StringBuffer.hxx"
-#include "StringAPI.hpp"
+#include "StringAPI.hxx"
 #include "StringUtil.hpp"
 #include "StringFormat.hpp"
 #include "UTF8.hpp"
+#include "ASCII.hxx"
 
 #include <assert.h>
 #include <stddef.h>
 
 #ifdef _UNICODE
-#include <tchar.h>
+#include <wchar.h>
 #endif
 
 bool
@@ -48,31 +49,32 @@ CopyUTF8(char *dest, size_t dest_size, const char *src);
 
 #ifdef _UNICODE
 bool
-CopyUTF8(TCHAR *dest, size_t dest_size, const char *src);
+CopyUTF8(wchar_t *dest, size_t dest_size, const char *src);
 #endif
 
 /**
  * A string with a maximum size known at compile time.
  */
 template<typename T, size_t max>
-class StaticStringBase : public StringBuffer<T, max> {
-	typedef StringBuffer<T, max> Base;
+class StaticStringBase : public BasicStringBuffer<T, max> {
+	typedef BasicStringBuffer<T, max> Base;
 
 public:
-	typedef typename Base::value_type value_type;
-	typedef typename Base::reference reference;
-	typedef typename Base::pointer pointer;
-	typedef typename Base::const_pointer const_pointer;
-	typedef typename Base::const_iterator const_iterator;
-	typedef typename Base::size_type size_type;
+	using typename Base::value_type;
+	using typename Base::reference;
+	using typename Base::pointer;
+	using typename Base::const_pointer;
+	using typename Base::const_iterator;
+	using typename Base::size_type;
 
-	static constexpr size_type CAPACITY = Base::CAPACITY;
 	static constexpr value_type SENTINEL = Base::SENTINEL;
 
 	StaticStringBase() = default;
 	explicit StaticStringBase(const_pointer value) {
 		assign(value);
 	}
+
+	using Base::capacity;
 
 	size_type length() const {
 		return StringLength(c_str());
@@ -81,7 +83,7 @@ public:
 	using Base::empty;
 
 	bool full() const {
-		return length() >= CAPACITY - 1;
+		return length() >= capacity() - 1;
 	}
 
 	/**
@@ -97,7 +99,7 @@ public:
 	}
 
 	void SetASCII(const char *src, const char *src_end) {
-		pointer end = ::CopyASCII(data(), CAPACITY - 1, src, src_end);
+		pointer end = ::CopyASCII(data(), capacity() - 1, src, src_end);
 		*end = SENTINEL;
 	}
 
@@ -106,12 +108,12 @@ public:
 	}
 
 #ifdef _UNICODE
-	void SetASCII(const TCHAR *src, const TCHAR *src_end) {
-		pointer end = ::CopyASCII(data(), CAPACITY - 1, src, src_end);
+	void SetASCII(const wchar_t *src, const wchar_t *src_end) {
+		pointer end = ::CopyASCII(data(), capacity() - 1, src, src_end);
 		*end = SENTINEL;
 	}
 
-	void SetASCII(const TCHAR *src) {
+	void SetASCII(const wchar_t *src) {
 		SetASCII(src, src + StringLength(src));
 	}
 #endif
@@ -129,7 +131,7 @@ public:
 	 * @return false if #src was invalid UTF-8
 	 */
 	bool SetUTF8(const char *src) {
-		return ::CopyUTF8(data(), CAPACITY, src);
+		return ::CopyUTF8(data(), capacity(), src);
 	}
 
 	bool equals(const_pointer other) const {
@@ -190,14 +192,14 @@ public:
 	void assign(const_pointer new_value) {
 		assert(new_value != nullptr);
 
-		CopyString(data(), new_value, CAPACITY);
+		CopyString(data(), new_value, capacity());
 	}
 
 	void assign(const_pointer new_value, size_type length) {
 		assert(new_value != nullptr);
 
-		size_type max_length = length + 1 > CAPACITY
-			? CAPACITY
+		size_type max_length = length + 1 > capacity()
+			? capacity()
 			: length + 1;
 		CopyString(data(), new_value, max_length);
 	}
@@ -206,21 +208,21 @@ public:
 		assert(new_value != nullptr);
 
 		size_type len = length();
-		CopyString(data() + len, new_value, CAPACITY - len);
+		CopyString(data() + len, new_value, capacity() - len);
 	}
 
 	void append(const_pointer new_value, size_type _length) {
 		assert(new_value != nullptr);
 
 		size_type len = length();
-		size_type max_length = (CAPACITY - len < _length + 1) ?
-			CAPACITY - len : _length + 1;
+		size_type max_length = (capacity() - len < _length + 1) ?
+			capacity() - len : _length + 1;
 		CopyString(data() + len, new_value, max_length);
 	}
 
 	bool push_back(value_type ch) {
 		size_t l = length();
-		if (l >= CAPACITY - 1)
+		if (l >= capacity() - 1)
 			return false;
 
 		auto *p = data() + l;
@@ -267,26 +269,12 @@ public:
 	}
 
 	/**
-	 * Don't use - not thread safe.
-	 */
-	pointer first_token(const_pointer delim) {
-		return StringToken(data(), delim);
-	}
-
-	/**
-	 * Don't use - not thread safe.
-	 */
-	pointer next_token(const_pointer delim) {
-		return StringToken(nullptr, delim);
-	}
-
-	/**
 	 * Use snprintf() to set the value of this string.  The value
 	 * is truncated if it is too long for the buffer.
 	 */
 	template<typename... Args>
 	void Format(const_pointer fmt, Args&&... args) {
-		StringFormat(data(), CAPACITY, fmt, args...);
+		StringFormat(data(), capacity(), fmt, args...);
 	}
 
 	/**
@@ -296,7 +284,7 @@ public:
 	template<typename... Args>
 	void AppendFormat(const_pointer fmt, Args&&... args) {
 		size_t l = length();
-		StringFormat(data() + l, CAPACITY - l, fmt, args...);
+		StringFormat(data() + l, capacity() - l, fmt, args...);
 	}
 
 	/**
@@ -321,12 +309,12 @@ class NarrowString: public StaticStringBase<char, max>
 	typedef StaticStringBase<char, max> Base;
 
 public:
-	typedef typename Base::value_type value_type;
-	typedef typename Base::reference reference;
-	typedef typename Base::pointer pointer;
-	typedef typename Base::const_pointer const_pointer;
-	typedef typename Base::const_iterator const_iterator;
-	typedef typename Base::size_type size_type;
+	using typename Base::value_type;
+	using typename Base::reference;
+	using typename Base::pointer;
+	using typename Base::const_pointer;
+	using typename Base::const_iterator;
+	using typename Base::size_type;
 
 	NarrowString() = default;
 	explicit NarrowString(const_pointer value):Base(value) {}
@@ -355,17 +343,17 @@ public:
  * This is the TCHAR-based sister of the NarrowString class.
  */
 template<size_t max>
-class StaticString: public StaticStringBase<TCHAR, max>
+class StaticString: public StaticStringBase<wchar_t, max>
 {
-	typedef StaticStringBase<TCHAR, max> Base;
+	typedef StaticStringBase<wchar_t, max> Base;
 
 public:
-	typedef typename Base::value_type value_type;
-	typedef typename Base::reference reference;
-	typedef typename Base::pointer pointer;
-	typedef typename Base::const_pointer const_pointer;
-	typedef typename Base::const_iterator const_iterator;
-	typedef typename Base::size_type size_type;
+	using typename Base::value_type;
+	using typename Base::reference;
+	using typename Base::pointer;
+	using typename Base::const_pointer;
+	using typename Base::const_iterator;
+	using typename Base::size_type;
 
 	StaticString() = default;
 	explicit StaticString(const_pointer value):Base(value) {}
@@ -383,7 +371,7 @@ public:
 	}
 
 	void CropIncompleteUTF8() {
-		/* this is a TCHAR string, it's not multi-byte,
+		/* this is a wchar_t string, it's not multi-byte,
 		   therefore we have no incomplete sequences */
 	}
 };

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Screen/Custom/TopCanvas.hpp"
 #include "Screen/OpenGL/Init.hpp"
-#include "Screen/OpenGL/EGL.hpp"
 #include "Screen/OpenGL/Globals.hpp"
 #include "Screen/OpenGL/Features.hpp"
 
@@ -248,14 +247,11 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
     exit(EXIT_FAILURE);
   }
 
-  GLint egl_width, egl_height;
-  if (!eglQuerySurface(display, surface, EGL_WIDTH, &egl_width) ||
-      !eglQuerySurface(display, surface, EGL_HEIGHT, &egl_height)) {
-    fprintf(stderr, "eglQuerySurface()\n");
+  const PixelSize effective_size = GetNativeSize();
+  if (effective_size.cx <= 0 || effective_size.cy <= 0) {
+    fprintf(stderr, "eglQuerySurface() failed\n");
     exit(EXIT_FAILURE);
   }
-
-  const PixelSize effective_size = { egl_width, egl_height };
 
 #ifdef HAVE_GLES2
   static constexpr EGLint context_attributes[] = {
@@ -275,9 +271,7 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
   }
 
   OpenGL::SetupContext();
-  OpenGL::SetupViewport(Point2D<unsigned>(effective_size.cx,
-                                          effective_size.cy));
-  Canvas::Create(effective_size);
+  SetupViewport(effective_size);
 }
 
 void
@@ -303,34 +297,23 @@ TopCanvas::Destroy()
 #endif
 }
 
-void
-TopCanvas::OnResize(PixelSize new_size)
+PixelSize
+TopCanvas::GetNativeSize() const
 {
-  if (new_size == size)
-    return;
+  GLint w, h;
+  if (!eglQuerySurface(display, surface, EGL_WIDTH, &w) ||
+      !eglQuerySurface(display, surface, EGL_HEIGHT, &h) ||
+      w <= 0 || h <= 0)
+    return PixelSize(0, 0);
 
-  OpenGL::SetupViewport(Point2D<unsigned>(new_size.cx, new_size.cy));
-  Canvas::Create(new_size);
-}
-
-void
-TopCanvas::SetDisplayOrientation(DisplayOrientation orientation)
-{
-  GLint egl_width, egl_height;
-  if (!eglQuerySurface(display, surface, EGL_WIDTH, &egl_width) ||
-      !eglQuerySurface(display, surface, EGL_HEIGHT, &egl_height))
-    return;
-
-  Point2D<unsigned> new_size(egl_width, egl_height);
-  OpenGL::SetupViewport(new_size, orientation);
-  Canvas::Create(PixelSize(new_size.x, new_size.y));
+  return PixelSize(w, h);
 }
 
 void
 TopCanvas::Flip()
 {
   if (!eglSwapBuffers(display, surface)) {
-    fprintf(stderr, "eglSwapBuffers() failed\n");
+    fprintf(stderr, "eglSwapBuffers() failed: 0x%x\n", eglGetError());
     exit(EXIT_FAILURE);
   }
 

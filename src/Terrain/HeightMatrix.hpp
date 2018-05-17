@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_TERRAIN_HEIGHT_MATRIX_HPP
 #define XCSOAR_TERRAIN_HEIGHT_MATRIX_HPP
 
-#include "Util/AllocatedArray.hpp"
-#include "Compiler.h"
+#include "Height.hpp"
+#include "Util/AllocatedArray.hxx"
 
 class RasterMap;
 
@@ -36,7 +36,7 @@ class WindowProjection;
 #endif
 
 class HeightMatrix {
-  AllocatedArray<short> data;
+  AllocatedArray<TerrainHeight> data;
   unsigned width, height;
 
 public:
@@ -73,15 +73,15 @@ public:
     return height;
   }
 
-  const short *GetData() const {
+  const TerrainHeight *GetData() const {
     return data.begin();
   }
 
-  const short *GetRow(unsigned y) const {
+  const TerrainHeight *GetRow(unsigned y) const {
     return data.begin() + y * width;
   }
 
-  const short *GetDataEnd() const {
+  const TerrainHeight *GetDataEnd() const {
     return GetRow(height);
   }
 };

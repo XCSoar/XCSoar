@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -64,8 +64,9 @@ CreateVoltageDevice(JNIEnv *env, jobject holder,
 }
 
 VoltageDevice::VoltageDevice(unsigned _index,
-                           JNIEnv *env, jobject holder,
-                           fixed _offset, fixed _factor, unsigned sample_rate)
+                             JNIEnv *env, jobject holder,
+                             double _offset, double _factor,
+                             unsigned sample_rate)
   :index(_index),
    obj(env, CreateVoltageDevice(env, holder,
                                sample_rate,
@@ -90,17 +91,18 @@ VoltageDevice::onVoltageValues(int temp_adc, int voltage_index, int volt_adc)
   basic.alive.Update(basic.clock);
 
   // When no calibration data present, use defaults
-  if (factor == fixed(0)) {
+  if (factor == 0) {
     // Set default for temp sensor only when sensor present.
-    if (temp_adc >= 0 && offset == fixed(0)) offset = fixed(-130);
-    factor = fixed(0.01599561738);
+    if (temp_adc >= 0 && offset == 0)
+      offset = -130;
+    factor = 0.01599561738;
     basic.ProvideSensorCalibration(factor, offset);
   }
 
   if (temp_adc >= 0) {
-    fixed v = CelsiusToKelvin(offset + fixed(temp_adc));
-    if (temperature_filter.Update(v))
-      v = temperature_filter.Average();
+    auto v = Temperature::FromCelsius(offset + temp_adc);
+    if (temperature_filter.Update(v.ToNative()))
+      v = Temperature::FromNative(temperature_filter.Average());
     basic.temperature = v;
     basic.temperature_available = true;
   } else {
@@ -108,7 +110,7 @@ VoltageDevice::onVoltageValues(int temp_adc, int voltage_index, int volt_adc)
   }
 
   if ((unsigned)voltage_index < NUMBER_OF_VOLTAGES) {
-    fixed v = factor * volt_adc;
+    auto v = factor * volt_adc;
     if (voltage_filter[voltage_index].Update(v))
       v = voltage_filter[voltage_index].Average();
     basic.voltage = v;

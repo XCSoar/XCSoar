@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,65 +26,66 @@
 #include "Renderer/ChartRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Look/CrossSectionLook.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 
 void
-TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart, const short *elevations) const
+TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart,
+                        const TerrainHeight *elevations) const
 {
-  const fixed max_distance = chart.GetXMax();
+  const auto max_distance = chart.GetXMax();
 
-  StaticArray<RasterPoint, CrossSectionRenderer::NUM_SLICES + 2> points;
+  StaticArray<BulkPixelPoint, CrossSectionRenderer::NUM_SLICES + 2> points;
 
   canvas.SelectNullPen();
 
-  RasterBuffer::TerrainType last_type = RasterBuffer::TerrainType::UNKNOWN;
-  fixed last_distance = fixed(0);
+  TerrainType last_type = TerrainType::UNKNOWN;
+  double last_distance = 0;
+  const double hmin = chart.GetYMin();
 
   for (unsigned j = 0; j < CrossSectionRenderer::NUM_SLICES; ++j) {
-    const fixed distance_factor =
-        fixed(j) / (CrossSectionRenderer::NUM_SLICES - 1);
-    const fixed distance = distance_factor * max_distance;
+    const auto distance_factor =
+        double(j) / (CrossSectionRenderer::NUM_SLICES - 1);
+    const auto distance = distance_factor * max_distance;
 
-    short h = elevations[j];
-    RasterBuffer::TerrainType type = RasterBuffer::GetTerrainType(h);
-
-    if (type == RasterBuffer::TerrainType::WATER)
-      h = 0;
+    const TerrainHeight e = elevations[j];
+    const TerrainType type = e.GetType();
 
     // Close and paint polygon
     if (j != 0 &&
         type != last_type &&
-        last_type != RasterBuffer::TerrainType::UNKNOWN) {
-      const fixed center_distance = (distance + last_distance) / 2;
-      points.append() = chart.ToScreen(center_distance, fixed(0));
-      points.append() = chart.ToScreen(center_distance, fixed(-500));
+        last_type != TerrainType::UNKNOWN) {
+      const auto center_distance = (distance + last_distance) / 2;
+      points.append() = chart.ToScreen(center_distance, hmin);
+      points.append() = chart.ToScreen(center_distance, hmin);
 
       DrawPolygon(canvas, last_type, points.begin(), points.size());
     }
 
-    if (type != RasterBuffer::TerrainType::UNKNOWN) {
+    if (type != TerrainType::UNKNOWN) {
+      const double h = std::max((double)e.GetValueOr0(), hmin);
+
       if (j == 0) {
         // Start first polygon
-        points.append() = chart.ToScreen(distance, fixed(-500));
-        points.append() = chart.ToScreen(distance, fixed(h));
+        points.append() = chart.ToScreen(distance, hmin);
+        points.append() = chart.ToScreen(distance, h);
       } else if (type != last_type) {
         // Start new polygon
         points.clear();
 
-        const fixed center_distance = (distance + last_distance) / 2;
-        points.append() = chart.ToScreen(center_distance, fixed(-500));
-        points.append() = chart.ToScreen(center_distance, fixed(0));
+        const auto center_distance = (distance + last_distance) / 2;
+        points.append() = chart.ToScreen(center_distance, hmin);
+        points.append() = chart.ToScreen(center_distance, hmin);
       }
 
       if (j + 1 == CrossSectionRenderer::NUM_SLICES) {
         // Close and paint last polygon
-        points.append() = chart.ToScreen(distance, fixed(h));
-        points.append() = chart.ToScreen(distance, fixed(-500));
+        points.append() = chart.ToScreen(distance, h);
+        points.append() = chart.ToScreen(distance, hmin);
 
         DrawPolygon(canvas, type, points.begin(), points.size());
       } else if (type == last_type && j != 0) {
         // Add single point to polygon
-        points.append() = chart.ToScreen(distance, fixed(h));
+        points.append() = chart.ToScreen(distance, h);
       }
     }
 
@@ -94,13 +95,13 @@ TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart, const short 
 }
 
 void
-TerrainXSRenderer::DrawPolygon(Canvas &canvas, RasterBuffer::TerrainType type,
-                               const RasterPoint *points,
+TerrainXSRenderer::DrawPolygon(Canvas &canvas, TerrainType type,
+                               const BulkPixelPoint *points,
                                unsigned num_points) const
 {
-  assert(type != RasterBuffer::TerrainType::UNKNOWN);
+  assert(type != TerrainType::UNKNOWN);
 
-  canvas.Select(type == RasterBuffer::TerrainType::WATER ?
+  canvas.Select(type == TerrainType::WATER ?
                 look.sea_brush : look.terrain_brush);
   canvas.DrawPolygon(points, num_points);
 }

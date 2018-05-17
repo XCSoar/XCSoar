@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -33,14 +33,14 @@ Copyright_License {
  */
 class FastRotation {
   Angle angle;
-  fixed cost, sint;
+  double cost, sint;
 
 public:
-  typedef Point2D<fixed> Point;
+  typedef DoublePoint2D Point;
 
   FastRotation()
     :angle(Angle::Zero()), cost(1), sint(0) {}
-  FastRotation(Angle _angle):angle(Angle::Radians(-fixed(9999))) { SetAngle(_angle); }
+  FastRotation(Angle _angle):angle(Angle::Radians(-9999)) { SetAngle(_angle); }
 
   Angle GetAngle() const {
     return angle;
@@ -66,7 +66,7 @@ public:
    * @return the rotated coordinates
    */
   gcc_pure
-  Point Rotate(fixed x, fixed y) const;
+  Point Rotate(double x, double y) const;
 
   gcc_pure
   Point Rotate(Point p) const {
@@ -84,11 +84,11 @@ class FastIntegerRotation {
   friend class FastRowRotation;
 
 public:
-  typedef Point2D<int> Point;
+  typedef IntPoint2D Point;
 
   FastIntegerRotation()
  :angle(Angle::Zero()), cost(1024), sint(0) {}
-  FastIntegerRotation(Angle _angle):angle(Angle::Radians(-fixed(9999))) { SetAngle(_angle); }
+  FastIntegerRotation(Angle _angle):angle(Angle::Radians(-9999)) { SetAngle(_angle); }
 
   Angle GetAngle() const {
     return angle;
@@ -125,7 +125,7 @@ class FastRowRotation {
   const int cost, sint, y_cost, y_sint;
 
 public:
-  typedef Point2D<int> Point;
+  typedef IntPoint2D Point;
 
   FastRowRotation(const FastIntegerRotation &fir, int y)
     :cost(fir.cost), sint(fir.sint),

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,17 +24,22 @@
 #include "Task/Stats/TaskStats.hpp"
 
 void
-TaskStatsComputer::reset(TaskStats &data)
+TaskStatsComputer::Reset(TaskStats &data)
 {
   total.Reset(data.total);
   current_leg.Reset(data.current_leg);
 
   data.last_hour.Reset();
   window.Reset();
+
+  inst_speed_slow.Design(180, false);
+  inst_speed_fast.Design(15, false);
+  inst_speed_slow.Reset(0);
+  inst_speed_fast.Reset(0);
 }
 
 void
-TaskStatsComputer::ComputeWindow(fixed time, TaskStats &data)
+TaskStatsComputer::ComputeWindow(double time, TaskStats &data)
 {
   window.Compute(time, data, data.last_hour);
 }

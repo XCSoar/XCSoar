@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,7 +28,6 @@ Copyright_License {
 #ifndef XCSOAR_GEO_FAI_SPHERE_HPP
 #define XCSOAR_GEO_FAI_SPHERE_HPP
 
-#include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
 #include "Compiler.h"
 
@@ -41,7 +40,7 @@ namespace FAISphere {
    */
   constexpr
   static inline Angle
-  EarthDistanceToAngle(fixed distance)
+  EarthDistanceToAngle(double distance)
   {
     return Angle::Radians(distance / REARTH);
   }
@@ -51,7 +50,7 @@ namespace FAISphere {
    * assuming the earth is a sphere.
    */
   constexpr
-  static inline fixed
+  static inline double
   AngleToEarthDistance(Angle angle)
   {
     return angle.Radians() * REARTH;

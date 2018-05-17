@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,11 +26,9 @@
 #include "Geo/GeoPoint.hpp"
 #include "Compiler.h"
 
-#include <assert.h>
-
 struct FlatPoint;
 struct FlatGeoPoint;
-class FlatBoundingBox;
+struct FlatBoundingBox;
 class GeoBounds;
 
 /**
@@ -49,15 +47,15 @@ class FlatProjection {
   /**
    * Cosine of the #center location.
    */
-  fixed cos;
+  double cos;
 
   /**
    * Reciprocal of cosine of the #center location.
    */
-  fixed r_cos;
+  double r_cos;
 
   /**< Approximate scale (m) of grid spacing at center */
-  fixed approx_scale;
+  double approx_scale;
 
 public:
   FlatProjection() = default;
@@ -105,6 +103,12 @@ public:
    */
   gcc_pure
   FlatBoundingBox Project(const GeoBounds &bb) const;
+
+  /**
+   * Project a square defined by its center and a radius.
+   */
+  gcc_pure
+  FlatBoundingBox ProjectSquare(const GeoPoint center, double radius) const;
 
   /**
    * Projects an integer 2-d representation to a Geodetic point
@@ -156,7 +160,7 @@ public:
    * @return Distance in flat earth projected units
    */
   gcc_pure
-  unsigned ProjectRangeInteger(const GeoPoint &tp, const fixed range) const;
+  unsigned ProjectRangeInteger(const GeoPoint &tp, double range) const;
 
   /**
    * Calculates the floating point flat earth distance from an actual distance
@@ -168,7 +172,7 @@ public:
    * @return Distance in flat earth projected units
    */
   gcc_pure
-  fixed ProjectRangeFloat(const GeoPoint &tp, const fixed range) const;
+  double ProjectRangeFloat(const GeoPoint &tp, double range) const;
 
   /** 
    * Return center point (projection reference)
@@ -184,7 +188,7 @@ public:
    * Return approximate grid to flat earth scale in meters
    */
   gcc_pure
-  fixed GetApproximateScale() const {
+  double GetApproximateScale() const {
     return approx_scale;
   }
 };

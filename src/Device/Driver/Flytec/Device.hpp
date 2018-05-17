@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -37,10 +37,10 @@ class NMEAInputLine;
 class FlytecDevice : public AbstractDevice
 {
   Port &port;
-  fixed last_time;
+  double last_time;
 
 public:
-  FlytecDevice(Port &_port):port(_port), last_time(fixed(0)) {}
+  FlytecDevice(Port &_port):port(_port), last_time(0) {}
 
   /* virtual methods from class Device */
   bool ParseNMEA(const char *line, NMEAInfo &info) override;
@@ -48,7 +48,7 @@ public:
   bool ReadFlightList(RecordedFlightList &flight_list,
                       OperationEnvironment &env) override;
 
-  bool DownloadFlight(const RecordedFlightInfo &flight, const TCHAR *path,
+  bool DownloadFlight(const RecordedFlightInfo &flight, Path path,
                       OperationEnvironment &env) override;
 
 private:

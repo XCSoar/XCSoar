@@ -1,0 +1,26 @@
+Index: libgeotiff-1.4.1/libxtiff/Makefile.am
+===================================================================
+--- libgeotiff-1.4.1.orig/libxtiff/Makefile.am
++++ libgeotiff-1.4.1/libxtiff/Makefile.am
+@@ -4,7 +4,7 @@ if TIFF_IS_CONFIG
+ TIFF_CFLAGS = @TIFF_INC@ -DHAVE_TIFF=1
+ endif
+ 
+-AM_CFLAGS = -I../ $(TIFF_CFLAGS) 
++AM_CFLAGS = -I$(top_srcdir) $(TIFF_CFLAGS) 
+ 
+ libxtiff_la_SOURCES = xtiff.c
+ 
+Index: libgeotiff-1.4.1/Makefile.am
+===================================================================
+--- libgeotiff-1.4.1.orig/Makefile.am
++++ libgeotiff-1.4.1/Makefile.am
+@@ -18,7 +18,7 @@ if TIFF_IS_CONFIG
+ TIFF_CFLAGS = @TIFF_INC@ -DHAVE_TIFF=1
+ endif
+ 
+-AM_CFLAGS = -I./libxtiff $(PROJ_CFLAGS) $(TIFF_CFLAGS) \
++AM_CFLAGS = -I$(srcdir)/libxtiff $(PROJ_CFLAGS) $(TIFF_CFLAGS) \
+ 			-DCSV_DATA_DIR=\"$(datadir)/epsg_csv\"
+ 
+ csvdir = $(datadir)/epsg_csv

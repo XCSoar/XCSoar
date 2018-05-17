@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,8 +24,6 @@ Copyright_License {
 #include "ProfileMap.hpp"
 #include "Current.hpp"
 #include "Map.hpp"
-#include "IO/KeyValueFileWriter.hpp"
-#include "Util/StringUtil.hpp"
 
 bool
 Profile::IsModified()
@@ -88,7 +86,7 @@ Profile::Get(const char *key, uint8_t &value)
 }
 
 bool
-Profile::Get(const char *key, fixed &value)
+Profile::Get(const char *key, double &value)
 {
   return map.Get(key, value);
 }
@@ -128,7 +126,7 @@ Profile::Set(const char *key, unsigned value)
 }
 
 void
-Profile::Set(const char *key, fixed value)
+Profile::Set(const char *key, double value)
 {
   map.Set(key, value);
 }

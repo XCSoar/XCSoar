@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,89 +23,19 @@ Copyright_License {
 
 #include "Screen/Bitmap.hpp"
 #include "Screen/Debug.hpp"
-
-#ifdef HAVE_AYGSHELL_DLL
-#include "OS/AYGShellDLL.hpp"
-#endif
-
-#ifdef HAVE_IMGDECMP_DLL
-#include "RootDC.hpp"
-#include "OS/ImgDeCmpDLL.hpp"
-#endif
+#include "OS/Path.hpp"
 
 #include <assert.h>
 
-#ifdef HAVE_IMGDECMP_DLL
-
-static DWORD CALLBACK
-imgdecmp_get_data(LPSTR szBuffer, DWORD dwBufferMax, LPARAM lParam)
+Bitmap::Bitmap(Bitmap &&src)
+  :bitmap(src.bitmap)
 {
-  HANDLE file = (HANDLE)lParam;
-  DWORD nbytes = 0;
-  return ReadFile(file, szBuffer, dwBufferMax, &nbytes, nullptr)
-    ? nbytes
-    : 0;
+  src.bitmap = nullptr;
 }
-
-static HBITMAP
-load_imgdecmp_file(const TCHAR *path)
-{
-  ImgDeCmpDLL imgdecmp_dll;
-  if (!imgdecmp_dll.IsDefined())
-    return nullptr;
-
-  HANDLE file = ::CreateFile(path, GENERIC_READ, FILE_SHARE_READ, nullptr,
-                             OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
-  if (file == INVALID_HANDLE_VALUE)
-    return nullptr;
-
-  BYTE buffer[1024];
-  HBITMAP bitmap;
-  RootDC dc;
-
-  DecompressImageInfo dii;
-  dii.dwSize = sizeof(dii);
-  dii.pbBuffer = buffer;
-  dii.dwBufferMax = sizeof(buffer);
-  dii.dwBufferCurrent = 0;
-  dii.phBM = &bitmap;
-  dii.ppImageRender = nullptr;
-  dii.iBitDepth = GetDeviceCaps(dc, BITSPIXEL);
-  dii.lParam = (LPARAM)file;
-  dii.hdc = dc;
-  dii.iScale = 100;
-  dii.iMaxWidth = 10000;
-  dii.iMaxHeight = 10000;
-  dii.pfnGetData = imgdecmp_get_data;
-  dii.pfnImageProgress = nullptr;
-  dii.crTransparentOverride = (UINT)-1;
-
-  HRESULT result = imgdecmp_dll.DecompressImageIndirect(&dii);
-  ::CloseHandle(file);
-
-  return SUCCEEDED(result)
-    ? bitmap
-    : nullptr;
-}
-
-#endif /* HAVE_IMGDECMP_DLL */
 
 bool
-Bitmap::LoadFile(const TCHAR *path)
+Bitmap::LoadFile(Path path)
 {
-#ifdef HAVE_AYGSHELL_DLL
-  AYGShellDLL ayg;
-  bitmap = ayg.SHLoadImageFile(path);
-  if (bitmap != nullptr)
-    return true;
-#endif
-
-#ifdef HAVE_IMGDECMP_DLL
-  bitmap = load_imgdecmp_file(path);
-  if (bitmap != nullptr)
-    return true;
-#endif
-
   return false;
 }
 
@@ -125,7 +55,7 @@ Bitmap::Reset()
   }
 }
 
-const PixelSize
+PixelSize
 Bitmap::GetSize() const
 {
   assert(IsDefined());

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -40,24 +40,24 @@ int main(int argc, char **argv)
   Validity v;
   v.Clear();
   ok1(!v.IsValid());
-  v.Update(fixed(100));
+  v.Update(100);
   ok1(v.IsValid());
-  v.Expire(fixed(101), fixed(5));
+  v.Expire(101, 5);
   ok1(v.IsValid());
-  v.Expire(fixed(105), fixed(5));
+  v.Expire(105, 5);
   ok1(v.IsValid());
-  v.Expire(fixed(106), fixed(5));
+  v.Expire(106, 5);
   ok1(!v.IsValid());
 
-  v.Update(fixed(100));
-  ok1(v.Modified(Validity(fixed(99))));
-  ok1(!v.Modified(Validity(fixed(100))));
-  ok1(!v.Modified(Validity(fixed(101))));
-  ok1(!v.Complement(Validity(fixed(1))));
+  v.Update(100);
+  ok1(v.Modified(Validity(99)));
+  ok1(!v.Modified(Validity(100)));
+  ok1(!v.Modified(Validity(101)));
+  ok1(!v.Complement(Validity(1)));
 
   v.Clear();
   ok1(!v.Complement(invalid()));
-  ok1(v.Complement(Validity(fixed(1))));
+  ok1(v.Complement(Validity(1)));
 
   return exit_status();
 }

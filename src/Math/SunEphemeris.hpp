@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,9 +24,7 @@ Copyright_License {
 #ifndef SUN_EPHEMERIS_HPP
 #define SUN_EPHEMERIS_HPP
 
-#include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
-#include "Compiler.h"
 
 struct GeoPoint;
 struct BrokenDateTime;
@@ -39,8 +37,8 @@ class RoughTimeDelta;
 namespace SunEphemeris
 {
   struct Result {
-    fixed day_length, morning_twilight, evening_twilight;
-    fixed time_of_noon, time_of_sunset, time_of_sunrise;
+    double day_length, morning_twilight, evening_twilight;
+    double time_of_noon, time_of_sunset, time_of_sunrise;
     Angle azimuth;
   };
 

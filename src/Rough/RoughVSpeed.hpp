@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,9 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_ROUGH_VSPEED_HPP
 #define XCSOAR_ROUGH_VSPEED_HPP
 
-#include "Math/fixed.hpp"
-#include "Compiler.h"
-
 #include <type_traits>
 
 #include <stdint.h>
@@ -41,28 +38,28 @@ class RoughVSpeed {
   int16_t value;
 
   constexpr
-  static int16_t Import(fixed x) {
+  static int16_t Import(double x) {
     return (int16_t)(x * 256);
   }
 
   constexpr
-  static fixed Export(int16_t x) {
-    return fixed(x) / 256;
+  static double Export(int16_t x) {
+    return x / 256.;
   }
 
 public:
   RoughVSpeed() = default;
 
   constexpr
-  RoughVSpeed(fixed _value):value(Import(_value)) {}
+  RoughVSpeed(double _value):value(Import(_value)) {}
 
-  RoughVSpeed &operator=(fixed other) {
+  RoughVSpeed &operator=(double other) {
     value = Import(other);
     return *this;
   }
 
   constexpr
-  operator fixed() const {
+  operator double() const {
     return Export(value);
   }
 };

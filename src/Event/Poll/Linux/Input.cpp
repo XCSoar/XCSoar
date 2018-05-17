@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@ Copyright_License {
 #include "MergeMouse.hpp"
 #include "Event/Shared/Event.hpp"
 #include "Event/Queue.hpp"
-#include "IO/Async/IOLoop.hpp"
+#include "OS/FileDescriptor.hxx"
 #include "Asset.hpp"
 #include "Translate.hpp"
 
@@ -74,15 +74,17 @@ IsPointerDevice(int fd)
 bool
 LinuxInputDevice::Open(const char *path)
 {
-  if (!fd.OpenReadOnly(path))
+  FileDescriptor _fd;
+  if (!_fd.OpenReadOnly(path))
     return false;
 
-  fd.SetNonBlocking();
-  io_loop.Add(fd, io_loop.READ, *this);
+  _fd.SetNonBlocking();
+  fd.assign(_fd.Get());
+  AsyncRead();
 
   min_x = max_x = min_y = max_y = 0;
 
-  is_pointer = IsPointerDevice(fd.Get());
+  is_pointer = IsPointerDevice(fd.native_handle());
   if (is_pointer) {
     merge.AddPointer();
 
@@ -92,12 +94,12 @@ LinuxInputDevice::Open(const char *path)
          screen is well-calibrated */
 
       input_absinfo abs;
-      if (ioctl(fd.Get(), EVIOCGABS(ABS_X), &abs) == 0) {
+      if (ioctl(fd.native_handle(), EVIOCGABS(ABS_X), &abs) == 0) {
         min_x = abs.minimum;
         max_x = abs.maximum;
       }
 
-      if (ioctl(fd.Get(), EVIOCGABS(ABS_Y), &abs) == 0) {
+      if (ioctl(fd.native_handle(), EVIOCGABS(ABS_Y), &abs) == 0) {
         min_y = abs.minimum;
         max_y = abs.maximum;
       }
@@ -119,18 +121,22 @@ LinuxInputDevice::Close()
   if (is_pointer)
     merge.RemovePointer();
 
-  io_loop.Remove(fd);
-  fd.Close();
+  fd.cancel();
+  fd.close();
 }
 
 inline void
 LinuxInputDevice::Read()
 {
   struct input_event buffer[64];
-  const ssize_t nbytes = fd.Read(buffer, sizeof(buffer));
-  if (nbytes < 0) {
+  boost::system::error_code ec;
+  const size_t nbytes = fd.read_some(boost::asio::buffer(buffer,
+                                                         sizeof(buffer)),
+                                     ec);
+  if (ec) {
     /* device has failed or was unplugged - bail out */
-    if (errno != EAGAIN && errno != EINTR)
+    if (errno != boost::asio::error::try_again &&
+        errno != boost::asio::error::interrupted)
       Close();
     return;
   }
@@ -169,7 +175,7 @@ LinuxInputDevice::Read()
           merge.MoveAbsolute(public_position.x, public_position.y,
                              min_x, max_x, min_y, max_y);
         } else if (rel_x != 0 || rel_y != 0) {
-          merge.MoveRelative(rel_x, rel_y);
+          merge.MoveRelative(PixelPoint(rel_x, rel_y));
           rel_x = rel_y = 0;
         }
 
@@ -196,8 +202,11 @@ LinuxInputDevice::Read()
          * on the executing shell. This fixes #3403. */
         tcflush(STDIN_FILENO, TCIFLUSH);
 
-        queue.Push(Event(e.value ? Event::KEY_DOWN : Event::KEY_UP,
-                         TranslateKeyCode(e.code)));
+        bool is_char;
+        Event ev(e.value ? Event::KEY_DOWN : Event::KEY_UP,
+                 TranslateKeyCode(e.code, is_char));
+        ev.is_char = is_char;
+        queue.Push(ev);
       }
 
       break;
@@ -245,10 +254,14 @@ LinuxInputDevice::Read()
   }
 }
 
-bool
-LinuxInputDevice::OnFileEvent(FileDescriptor fd, unsigned mask)
+void
+LinuxInputDevice::OnReadReady(const boost::system::error_code &ec)
 {
+  if (ec)
+    return;
+
   Read();
 
-  return true;
+  if (fd.is_open())
+    AsyncRead();
 }

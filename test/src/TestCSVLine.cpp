@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -76,10 +76,10 @@ Test2()
   ok1(line.ReadHex(-1) == 160);
 
   // Test read(double)
-  ok1(equals(fixed(line.Read(0.0)), 4.5555));
+  ok1(equals(line.Read(0.0), 4.5555));
 
   // Test read(fixed)
-  ok1(equals(line.Read(fixed(0)), 4.5555));
+  ok1(equals(line.Read(0.0), 4.5555));
 
   // Test read(bool)
   ok1(line.Read(false) == true);
@@ -87,9 +87,9 @@ Test2()
 
   // Test read_checked()
   double temp_double;
-  ok1(line.ReadChecked(temp_double) && equals(fixed(temp_double), 1.337));
+  ok1(line.ReadChecked(temp_double) && equals(temp_double, 1.337));
 
-  fixed temp_fixed;
+  double temp_fixed;
   ok1(line.ReadChecked(temp_fixed) && equals(temp_fixed, 42.42));
 
   int temp_int;

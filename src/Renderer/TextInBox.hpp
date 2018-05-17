@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,11 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_TEXT_IN_BOX_HPP
 #define XCSOAR_SCREEN_TEXT_IN_BOX_HPP
 
-#include "Screen/Point.hpp"
 #include "LabelShape.hpp"
 
 #include <tchar.h>
 
+struct PixelRect;
 class Canvas;
 class LabelBlock;
 
@@ -45,27 +45,22 @@ struct TextInBoxMode {
     BELOW,
   };
 
-  LabelShape shape;
-  Alignment align;
-  VerticalPosition vertical_position;
-  bool move_in_view;
-
-  constexpr TextInBoxMode()
-    :shape(LabelShape::SIMPLE), align(Alignment::LEFT),
-     vertical_position(VerticalPosition::BELOW),
-     move_in_view(false) {}
+  LabelShape shape = LabelShape::SIMPLE;
+  Alignment align = Alignment::LEFT;
+  VerticalPosition vertical_position = VerticalPosition::BELOW;
+  bool move_in_view = false;
 };
 
 bool
 TextInBox(Canvas &canvas, const TCHAR *value,
-          PixelScalar x, PixelScalar y,
+          int x, int y,
           TextInBoxMode mode, const PixelRect &map_rc,
           LabelBlock *label_block=nullptr);
 
 bool
-TextInBox(Canvas &canvas, const TCHAR *value, PixelScalar x, PixelScalar y,
+TextInBox(Canvas &canvas, const TCHAR *value, int x, int y,
           TextInBoxMode mode,
-          UPixelScalar screen_width, UPixelScalar screen_height,
+          unsigned screen_width, unsigned screen_height,
           LabelBlock *label_block=nullptr);
 
 #endif

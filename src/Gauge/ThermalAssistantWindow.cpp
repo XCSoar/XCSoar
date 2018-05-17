@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -66,7 +66,7 @@ ThermalAssistantWindow::OnPaintBuffer(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
   if (transparent) {
-    const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    const ScopeAlphaBlend alpha_blend;
 
     canvas.SelectBlackPen();
     canvas.Select(Brush(COLOR_WHITE.WithAlpha(0xd0)));

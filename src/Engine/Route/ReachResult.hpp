@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_REACH_RESULT_HPP
 #define XCSOAR_REACH_RESULT_HPP
 
-#include "Rough/RoughAltitude.hpp"
-
 #include <stdint.h>
 #include <stdlib.h>
 
@@ -43,14 +41,14 @@ struct ReachResult {
    * The arrival altitude for straight glide, ignoring terrain
    * obstacles.
    */
-  RoughAltitude direct;
+  int direct;
 
   /**
    * The arrival altitude considering detour to avoid terrain
    * obstacles.  This attribute may only be used if #terrain_valid is
    * #VALID.
    */
-  RoughAltitude terrain;
+  int terrain;
 
   /**
    * This attribute describes whether the #terrain attribute is valid.
@@ -58,36 +56,35 @@ struct ReachResult {
   Validity terrain_valid;
 
   void Clear() {
-    direct = terrain = -1;
     terrain_valid = Validity::INVALID;
   }
 
   bool IsReachableDirect() const {
-    return direct.IsPositive();
+    return direct >= 0;
   }
 
   bool IsReachableTerrain() const {
-    return terrain_valid == Validity::VALID && terrain.IsPositive();
+    return terrain_valid == Validity::VALID && terrain >= 0;
   }
 
   bool IsDeltaConsiderable() const {
     if (terrain_valid != Validity::VALID)
       return false;
 
-    const int delta = abs((int)direct - (int)terrain);
-    return delta >= 10 && delta * 100 / (int)direct > 5;
+    const int delta = abs(direct - terrain);
+    return delta >= 10 && delta * 100 / direct > 5;
   }
 
   bool IsReachRelevant() const {
     return terrain_valid == Validity::VALID && terrain != direct;
   }
 
-  void Add(RoughAltitude delta) {
+  void Add(int delta) {
     direct += delta;
     terrain += delta;
   }
 
-  void Subtract(RoughAltitude delta) {
+  void Subtract(int delta) {
     direct -= delta;
     terrain -= delta;
   }

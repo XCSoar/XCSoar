@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -49,32 +49,32 @@ MergeMouse::SetDown(bool new_down)
 }
 
 void
-MergeMouse::MoveAbsolute(int new_x, int new_y)
+MergeMouse::MoveAbsolute(PixelPoint p)
 {
-  rotate.DoAbsolute(new_x, new_y);
+  p = rotate.DoAbsolute(p);
 
   const unsigned screen_width = rotate.GetWidth();
   if (screen_width > 0) {
-    if (new_x < 0)
-      new_x = 0;
-    else if (unsigned(new_x) > screen_width)
-      new_x = screen_width - 1;
+    if (p.x < 0)
+      p.x = 0;
+    else if (unsigned(p.x) > screen_width)
+      p.x = screen_width - 1;
 
-    if (unsigned(new_x) != x) {
-      x = new_x;
+    if (unsigned(p.x) != x) {
+      x = p.x;
       moved = true;
     }
   }
 
   const unsigned screen_height = rotate.GetHeight();
   if (screen_height > 0) {
-    if (new_y < 0)
-      new_y = 0;
-    else if (unsigned(new_y) > screen_height)
-      new_y = screen_height - 1;
+    if (p.y < 0)
+      p.y = 0;
+    else if (unsigned(p.y) > screen_height)
+      p.y = screen_height - 1;
 
-    if (unsigned(new_y) != y) {
-      y = new_y;
+    if (unsigned(p.y) != y) {
+      y = p.y;
       moved = true;
     }
   }
@@ -97,15 +97,13 @@ MergeMouse::MoveAbsolute(int new_x, int new_y,
     new_y = new_y * int(rotate.GetHeight()) / (max_y - min_y);
 
   /* now call the "real" MoveAbsolute() */
-  MoveAbsolute(new_x, new_y);
+  MoveAbsolute(PixelPoint(new_x, new_y));
 }
 
 void
-MergeMouse::MoveRelative(int dx, int dy)
+MergeMouse::MoveRelative(PixelPoint d)
 {
-  rotate.DoRelative(dx, dy);
-
-  MoveAbsolute(x + dx, y + dy);
+  MoveAbsolute(GetPosition() + rotate.DoRelative(d));
 }
 
 Event
@@ -113,21 +111,21 @@ MergeMouse::Generate()
 {
   if (moved) {
     moved = false;
-    return Event(Event::MOUSE_MOTION, x, y);
+    return Event(Event::MOUSE_MOTION, PixelPoint(x, y));
   }
 
   if (pressed) {
     pressed = false;
-    return Event(Event::MOUSE_DOWN, x, y);
+    return Event(Event::MOUSE_DOWN, PixelPoint(x, y));
   }
 
   if (released) {
     released = false;
-    return Event(Event::MOUSE_UP, x, y);
+    return Event(Event::MOUSE_UP, PixelPoint(x, y));
   }
 
   if (wheel != 0) {
-    Event event(Event::MOUSE_WHEEL, x, y);
+    Event event(Event::MOUSE_WHEEL, PixelPoint(x, y));
     event.param = unsigned(wheel);
     wheel = 0;
     return event;

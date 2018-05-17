@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,13 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_FORM_TABMENU_DISPLAY_HPP
 #define XCSOAR_FORM_TABMENU_DISPLAY_HPP
 
-#include "TabMenuData.hpp"
 #include "Screen/PaintWindow.hpp"
 #include "Renderer/TabRenderer.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 
+struct TabMenuGroup;
 struct DialogLook;
-class ContainerWindow;
 class PagerWidget;
 
 class TabMenuDisplay final : public PaintWindow
@@ -280,17 +279,16 @@ private:
    * @return MenuTabIndex w/ location of item
    */
   gcc_pure
-  MenuTabIndex IsPointOverButton(RasterPoint Pos, unsigned mainIndex) const;
+  MenuTabIndex IsPointOverButton(PixelPoint Pos, unsigned mainIndex) const;
 
   void DragEnd();
 
 protected:
   void OnResize(PixelSize new_size) override;
 
-  bool OnMouseMove(PixelScalar x, PixelScalar y,
-                   unsigned keys) override;
-  bool OnMouseUp(PixelScalar x, PixelScalar y) override;
-  bool OnMouseDown(PixelScalar x, PixelScalar y) override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) override;
+  bool OnMouseUp(PixelPoint p) override;
+  bool OnMouseDown(PixelPoint p) override;
   bool OnKeyCheck(unsigned key_code) const override;
   bool OnKeyDown(unsigned key_code) override;
 

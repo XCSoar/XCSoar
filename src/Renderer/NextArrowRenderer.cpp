@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -59,7 +59,7 @@ NextArrowRenderer::DrawArrow(Canvas &canvas, const PixelRect &rc,
   static constexpr auto tail_len = head_len - tail_width / 2;
 
   // An array of the arrow corner coordinates.
-  RasterPoint arrow[] = {
+  BulkPixelPoint arrow[] = {
     { 0, -head_len },
     { head_width, -head_base },
     { tail_width, -head_base },
@@ -77,7 +77,7 @@ NextArrowRenderer::DrawArrow(Canvas &canvas, const PixelRect &rc,
    * in the range -50 to +50 to fill a square with the size of the 'scale'
    * argument.
    */
-  const auto size = std::min(rc.right - rc.left, rc.bottom - rc.top);
+  const auto size = std::min(rc.GetWidth(), rc.GetHeight());
   PolygonRotateShift(arrow, ARRAY_SIZE(arrow),
                      rc.GetCenter(), angle,
                      size, false);

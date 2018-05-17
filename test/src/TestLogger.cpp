@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,15 +25,15 @@
 #include "NMEA/Info.hpp"
 #include "IO/FileLineReader.hpp"
 #include "TestUtil.hpp"
+#include "Util/PrintException.hxx"
 
 #include <assert.h>
 #include <cstdio>
 
 static void
-CheckTextFile(const TCHAR *path, const char *const* expect)
+CheckTextFile(Path path, const char *const* expect)
 {
   FileLineReaderA reader(path);
-  ok1(!reader.error());
 
   const char *line;
   while ((line = reader.ReadLine()) != NULL) {
@@ -94,8 +94,8 @@ Run(IGCWriter &writer)
                            Angle::Degrees(50.6322));
 
   static NMEAInfo i;
-  i.clock = fixed(1);
-  i.time = fixed(1);
+  i.clock = 1;
+  i.time = 1;
   i.time_available.Update(i.clock);
   i.date_time_utc.year = 2010;
   i.date_time_utc.month = 9;
@@ -105,10 +105,10 @@ Run(IGCWriter &writer)
   i.date_time_utc.second = 33;
   i.location = home;
   i.location_available.Update(i.clock);
-  i.gps_altitude = fixed(487);
+  i.gps_altitude = 487;
   i.gps_altitude_available.Update(i.clock);
-  i.ProvidePressureAltitude(fixed(490));
-  i.ProvideBaroAltitudeTrue(fixed(400));
+  i.ProvidePressureAltitude(490);
+  i.ProvideBaroAltitudeTrue(400);
 
   writer.WriteHeader(i.date_time_utc, _T("Pilot Name"), _T("ASK-21"),
                      _T("D-1234"), _T("34"), "FOO", _T("bar"), false);
@@ -144,20 +144,21 @@ Run(IGCWriter &writer)
 
   writer.Flush();
   writer.Sign();
+  writer.Flush();
 }
 
 static void
-Run(const TCHAR *path)
+Run(Path path)
 {
   IGCWriter writer(path);
   Run(writer);
 }
 
 int main(int argc, char **argv)
-{
-  plan_tests(51);
+try {
+  plan_tests(49);
 
-  const TCHAR *path = _T("output/test/test.igc");
+  const Path path(_T("output/test/test.igc"));
   File::Delete(path);
 
   Run(path);
@@ -166,7 +167,10 @@ int main(int argc, char **argv)
 
   GRecord grecord;
   grecord.Initialize();
-  ok1(grecord.VerifyGRecordInFile(path));
+  grecord.VerifyGRecordInFile(path);
 
   return exit_status();
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

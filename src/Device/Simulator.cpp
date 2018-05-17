@@ -3,7 +3,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,8 +28,6 @@ Copyright_License {
 #include "../Simulator.hpp"
 #include "Geo/Math.hpp"
 
-#include <stdio.h>
-
 void
 Simulator::Init(NMEAInfo &basic)
 {
@@ -39,8 +37,8 @@ Simulator::Init(NMEAInfo &basic)
 
   basic.location = GeoPoint::Zero();
   basic.track = Angle::Zero();
-  basic.ground_speed = fixed(0);
-  basic.gps_altitude = fixed(0);
+  basic.ground_speed = 0;
+  basic.gps_altitude = 0;
 }
 
 void
@@ -59,7 +57,7 @@ Simulator::Touch(NMEAInfo &basic)
   basic.gps_altitude_available.Update(basic.clock);
 
   basic.time_available.Update(basic.clock);
-  basic.time += fixed(1);
+  basic.time += 1;
   basic.date_time_utc = basic.date_time_utc + 1;
 }
 

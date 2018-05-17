@@ -2,15 +2,13 @@
 
 ASYNC_SRC_DIR = $(SRC)/IO/Async
 
-ifeq ($(HAVE_POSIX),y)
+ASYNC_SOURCES = \
+	$(SRC)/IO/Async/AsioThread.cpp \
+	$(SRC)/IO/Async/GlobalAsioThread.cpp
+
+ifeq ($(TARGET_IS_LINUX)$(TARGET_IS_ANDROID),yn)
 ASYNC_SOURCES += \
-	$(SRC)/IO/Async/DiscardFileEventHandler.cpp \
-	$(SRC)/IO/Async/IOLoop.cpp \
-	$(SRC)/IO/Async/IOThread.cpp \
-	$(SRC)/IO/Async/GlobalIOThread.cpp
-else
-ASYNC_SOURCES += \
-	$(SRC)/IO/Async/SocketThread.cpp
+	$(SRC)/IO/Async/SignalListener.cpp
 endif
 
 $(eval $(call link-library,async,ASYNC))

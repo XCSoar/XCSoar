@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Language/Language.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "Util/Macros.hpp"
 
 #include <algorithm>
@@ -172,9 +172,9 @@ FormatDecodedMETARLine(const TCHAR *line, unsigned length,
     } else {
       if (parsed.visibility >= 9999)
         buffer.AppendFormat(_("more than %s"),
-                            FormatUserDistanceSmart(fixed(10000)).c_str());
+                            FormatUserDistanceSmart(10000).c_str());
       else
-        buffer +=  FormatUserDistanceSmart(fixed(parsed.visibility));
+        buffer += FormatUserDistanceSmart(parsed.visibility);
     }
     output += buffer;
     output += '\n';

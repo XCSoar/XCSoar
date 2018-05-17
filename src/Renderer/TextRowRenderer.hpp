@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_TEXT_ROW_RENDERER_HPP
 #define XCSOAR_TEXT_ROW_RENDERER_HPP
 
+#include "Compiler.h"
+
 #include <tchar.h>
 
 struct PixelRect;
@@ -44,6 +46,35 @@ public:
 
   void DrawTextRow(Canvas &canvas, const PixelRect &rc,
                    const TCHAR *text) const;
+
+  /**
+   * Returns the minimum X coordinate of the column after the given
+   * text.
+   */
+  gcc_pure
+  int NextColumn(Canvas &canvas, const PixelRect &rc,
+                 const TCHAR *text) const;
+
+  /**
+   * Combine DrawTextRow() and NextColumn().
+   */
+  int DrawColumn(Canvas &canvas, const PixelRect &rc,
+                 const TCHAR *text) const;
+
+  /**
+   * Returns the maximum X coordinate of the column before the given
+   * text.
+   */
+  gcc_pure
+  int PreviousRightColumn(Canvas &canvas, const PixelRect &rc,
+                          const TCHAR *text) const;
+
+  /**
+   * Draws a right-aligned column and returns the new "right"
+   * coordinate.
+   */
+  int DrawRightColumn(Canvas &canvas, const PixelRect &rc,
+                      const TCHAR *text) const;
 };
 
 #endif

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -32,8 +32,8 @@ TaskBestMc::TaskBestMc(const std::vector<OrderedTaskPoint *> &tps,
                        const unsigned activeTaskPoint,
                        const AircraftState &_aircraft,
                        const GlideSettings &settings, const GlidePolar &_gp,
-                       const fixed _mc_min)
-  :ZeroFinder(_mc_min, fixed(10.0), fixed(TOLERANCE_BEST_MC)),
+                       const double _mc_min)
+  :ZeroFinder(_mc_min, 10.0, TOLERANCE_BEST_MC),
    tm(tps.cbegin(), tps.cend(), activeTaskPoint, settings, _gp),
    aircraft(_aircraft)
 {
@@ -42,37 +42,37 @@ TaskBestMc::TaskBestMc(const std::vector<OrderedTaskPoint *> &tps,
 TaskBestMc::TaskBestMc(TaskPoint *tp,
                        const AircraftState &_aircraft,
                        const GlideSettings &settings, const GlidePolar &_gp)
-  :ZeroFinder(fixed(0.1), fixed(10.0), fixed(TOLERANCE_BEST_MC)),
+  :ZeroFinder(0.1, 10.0, TOLERANCE_BEST_MC),
    tm(tp, settings, _gp),
    aircraft(_aircraft)
 {
 }
 
-#define fixed_tiny fixed(0.001)
+#define TINY 0.001
 
-fixed
-TaskBestMc::f(const fixed mc)
+double
+TaskBestMc::f(const double mc)
 {
-  tm.set_mc(std::max(fixed_tiny, mc));
+  tm.set_mc(std::max(TINY, mc));
   res = tm.glide_solution(aircraft);
 
   return res.altitude_difference;
 }
 
 bool
-TaskBestMc::valid(const fixed mc) const
+TaskBestMc::valid(const double mc) const
 {
   return res.IsOk() &&
-    res.altitude_difference >= Double(-tolerance) * res.vector.distance;
+    res.altitude_difference >= -2 * tolerance * res.vector.distance;
 }
 
-fixed
-TaskBestMc::search(const fixed mc)
+double
+TaskBestMc::search(const double mc)
 {
   // only search if mc zero is valid
-  f(fixed(0));
-  if (valid(fixed(0))) {
-    fixed a = find_zero(mc);
+  f(0);
+  if (valid(0)) {
+    auto a = find_zero(mc);
     if (valid(a))
       return a;
   }
@@ -80,12 +80,12 @@ TaskBestMc::search(const fixed mc)
 }
 
 bool
-TaskBestMc::search(const fixed mc, fixed &result)
+TaskBestMc::search(const double mc, double &result)
 {
   // only search if mc zero is valid
-  f(fixed(0));
-  if (valid(fixed(0))) {
-    fixed a = find_zero(mc);
+  f(0);
+  if (valid(0)) {
+    auto a = find_zero(mc);
     if (valid(a)) {
       result = a;
       return true;

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,8 +24,6 @@
 #include "Cast.hpp"
 #include "Trace/Trace.hpp"
 #include "Util/QuadTree.hpp"
-
-#include <limits>
 
 /*
  @todo potential to use 3d convex hull to speed search
@@ -55,7 +53,7 @@
  * now, we allow up to 5 km until this library has been implemented
  * properly.
  */
-static constexpr fixed max_distance(1000);
+static constexpr double max_distance(1000);
 
 OLCTriangle::OLCTriangle(const Trace &_trace,
                          const bool _is_fai, bool _predict,
@@ -96,7 +94,7 @@ OLCTriangle::ResetBranchAndBound()
 }
 
 gcc_pure
-static fixed
+static double
 CalcLegDistance(const ContestTraceVector &solution, const unsigned index)
 {
   // leg 0: 1-2
@@ -321,7 +319,7 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
   // Assume a maximum speed of 100 m/s
   const unsigned fastskiprange = GetPoint(to).DeltaTime(GetPoint(from)) * 100;
   const unsigned fastskiprange_flat =
-    trace_master.ProjectRange(GetPoint(from).GetLocation(), fixed(fastskiprange));
+    trace_master.ProjectRange(GetPoint(from).GetLocation(), fastskiprange);
 
   if (fastskiprange_flat < worst_d)
     return std::tuple<unsigned, unsigned, unsigned, unsigned>(0, 0, 0, 0);
@@ -336,14 +334,14 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
   // note: this is _not_ the breakepoint between small and large triangles,
   // but a slightly lower value used for relaxed large triangle checking.
   const unsigned large_triangle_check =
-    trace_master.ProjectRange(GetPoint(from).GetLocation(), fixed(500000)) * 0.99;
+    trace_master.ProjectRange(GetPoint(from).GetLocation(), 500000) * 0.99;
 
   if (!running) {
     // initiate algorithm. otherwise continue unfinished run
     running = true;
 
     // initialize bound-and-branch tree with root node (note: Candidate set interval is [min, max))
-    CandidateSet root_candidates(this, from, to + 1);
+    CandidateSet root_candidates(*this, from, to + 1);
     if (root_candidates.IsFeasible(is_fai, large_triangle_check) &&
         root_candidates.df_max >= worst_d)
       branch_and_bound.insert(std::pair<unsigned, CandidateSet>(root_candidates.df_max, root_candidates));
@@ -388,7 +386,7 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
     }
 
     if (node->second.df_min >= worst_d &&
-        node->second.IsIntegral(this, is_fai, large_triangle_check)) {
+        node->second.IsIntegral(*this, is_fai, large_triangle_check)) {
       // node is integral feasible -> a possible solution
 
       worst_d = node->second.df_min;
@@ -419,10 +417,10 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
         if (split <= node->second.tp2.index_max) {
           add = true;
 
-          left = CandidateSet(TurnPointRange(this, node->second.tp1.index_min, split),
+          left = CandidateSet(TurnPointRange(*this, node->second.tp1.index_min, split),
                               node->second.tp2, node->second.tp3);
 
-          right = CandidateSet(TurnPointRange(this, split, node->second.tp1.index_max),
+          right = CandidateSet(TurnPointRange(*this, split, node->second.tp1.index_max),
                                node->second.tp2, node->second.tp3);
         }
       } else if (tp2_diag == max_diag && node->second.tp2.GetSize() != 1) {
@@ -433,11 +431,11 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
           add = true;
 
           left = CandidateSet(node->second.tp1,
-                              TurnPointRange(this, node->second.tp2.index_min, split),
+                              TurnPointRange(*this, node->second.tp2.index_min, split),
                               node->second.tp3);
 
           right = CandidateSet(node->second.tp1,
-                               TurnPointRange(this, split, node->second.tp2.index_max),
+                               TurnPointRange(*this, split, node->second.tp2.index_max),
                                node->second.tp3);
         }
       } else if (node->second.tp3.GetSize() != 1) {
@@ -448,10 +446,10 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
           add = true;
 
           left = CandidateSet(node->second.tp1, node->second.tp2,
-                              TurnPointRange(this, node->second.tp3.index_min, split));
+                              TurnPointRange(*this, node->second.tp3.index_min, split));
 
           right = CandidateSet(node->second.tp1, node->second.tp2,
-                               TurnPointRange(this, split, node->second.tp3.index_max));
+                               TurnPointRange(*this, split, node->second.tp3.index_max));
         }
       }
 
@@ -493,19 +491,19 @@ OLCTriangle::CalculateResult() const
 {
   ContestResult result;
   result.time = (is_complete && is_closed)
-    ? fixed(solution[4].DeltaTime(solution[0]))
-    : fixed(0);
+    ? solution[4].DeltaTime(solution[0])
+    : 0.;
   result.distance = (is_complete && is_closed)
     ? CalcLegDistance(solution, 0) + CalcLegDistance(solution, 1) + CalcLegDistance(solution, 2)
-    : fixed(0);
-  result.score = ApplyHandicap(result.distance * fixed(0.001));
+    : 0.;
+  result.score = ApplyHandicap(result.distance * 0.001);
   return result;
 }
 
 gcc_pure
 static bool
 IsInRange(const SearchPoint &a, const SearchPoint &b,
-          unsigned half_max_range_sq, fixed max_distance)
+          unsigned half_max_range_sq, double max_distance)
 {
   /* optimisation: if the flat distance is much smaller than the
      maximum range, we don't need to call the method
@@ -529,12 +527,12 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
   struct TracePointNodeAccessor {
     gcc_pure
     int GetX(const TracePointNode &node) const {
-      return node.point->GetFlatLocation().longitude;
+      return node.point->GetFlatLocation().x;
     }
 
     gcc_pure
     int GetY(const TracePointNode &node) const {
-      return node.point->GetFlatLocation().latitude;
+      return node.point->GetFlatLocation().y;
     }
   };
 

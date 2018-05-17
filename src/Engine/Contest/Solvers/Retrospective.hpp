@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -19,52 +19,56 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#ifndef RETROSPECTIVE_H
-#define RETROSPECTIVE_H
 
-class Waypoints;
+#ifndef RETROSPECTIVE_HPP
+#define RETROSPECTIVE_HPP
 
 #include "Geo/GeoPoint.hpp"
-#include "Waypoint/Waypoint.hpp"
-#include <list>
+#include "Engine/Waypoint/Ptr.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
 #include "Math/Angle.hpp"
+
+#include <list>
+
+class Waypoints;
 
 class Retrospective {
 public:
   Retrospective(const Waypoints &wps);
 
   struct NearWaypoint {
-    Waypoint waypoint;
+    WaypointPtr waypoint;
     GeoPoint location;
-    fixed range;
-    fixed leg_in;
-    fixed actual_in;
+    double range;
+    double leg_in;
+    double actual_in;
     Angle bearing;
 
-    NearWaypoint(const Waypoint &_waypoint, const GeoPoint& _location)
-      :waypoint(_waypoint), location(_location), leg_in(0), actual_in(0) {
-      range = location.Distance(waypoint.location);
+    NearWaypoint(WaypointPtr &&_waypoint, const GeoPoint& _location)
+      :waypoint(std::move(_waypoint)),
+       location(_location), leg_in(0), actual_in(0) {
+      range = location.Distance(waypoint->location);
     }
 
-    NearWaypoint(const Waypoint &_waypoint, const GeoPoint& _location,
-		 const NearWaypoint& previous):
-      waypoint(_waypoint), location(_location) {
-      range = location.Distance(waypoint.location);
+    NearWaypoint(WaypointPtr &&_waypoint, const GeoPoint& _location,
+                 const NearWaypoint& previous)
+      :waypoint(std::move(_waypoint)), location(_location) {
+      range = location.Distance(waypoint->location);
       update_leg(previous);
     }
 
     bool update_location(const GeoPoint &location_now) {
-      fixed range_now = location_now.Distance(waypoint.location);
+      auto range_now = location_now.Distance(waypoint->location);
       if (range_now < range) {
-	range = range_now;
-	location = location_now;
-	return true;
+        range = range_now;
+        location = location_now;
+        return true;
       }
       return false;
       // TODO: or if distance from previous tp to here is greater than leg (and wasnt previously)
     }
     void update_leg(const NearWaypoint& previous) {
-      leg_in = previous.waypoint.location.Distance(waypoint.location);
+      leg_in = previous.waypoint->location.Distance(waypoint->location);
       actual_in = previous.location.Distance(location);
       bearing = previous.location.Bearing(location);
     }
@@ -86,14 +90,14 @@ public:
 
   bool UpdateSample(const GeoPoint &aircraft_location);
   void Clear();
-  void Reset() { 
+  void Reset() {
     Clear();
   }
 
-  void CalcDistances(fixed& d_ach, fixed& d_can);
+  void CalcDistances(double &d_ach, double &d_can);
 
-/** search range in m */
-  fixed search_range;
+  /** search range in m */
+  double search_range;
   Angle angle_tolerance;
 };
 

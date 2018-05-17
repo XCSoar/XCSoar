@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -37,12 +37,12 @@ static constexpr Angle MIN_RATE = Angle::Degrees(1.0); // degrees/s
 
 void
 TrackLineRenderer::Draw(Canvas &canvas, const Angle screen_angle,
-                        const Angle track_angle, const RasterPoint pos)
+                        const Angle track_angle, const PixelPoint pos)
 {
   const auto sc = (track_angle - screen_angle).SinCos();
-  const fixed x = sc.first, y = sc.second;
+  const auto x = sc.first, y = sc.second;
 
-  RasterPoint end;
+  PixelPoint end;
   end.x = pos.x + iround(x * 400);
   end.y = pos.y - iround(y * 400);
 
@@ -53,7 +53,7 @@ TrackLineRenderer::Draw(Canvas &canvas, const Angle screen_angle,
 void
 TrackLineRenderer::Draw(Canvas &canvas,
                         const WindowProjection &projection,
-                        const RasterPoint pos, const NMEAInfo &basic,
+                        const PixelPoint pos, const NMEAInfo &basic,
                         const DerivedInfo &calculated,
                         const MapSettings &settings,
                         bool wind_relative)
@@ -72,7 +72,7 @@ TrackLineRenderer::Draw(Canvas &canvas,
     return;
 
   if (settings.display_ground_track == DisplayGroundTrack::AUTO &&
-      (basic.track - basic.attitude.heading).AsDelta().AbsoluteDegrees() < fixed(5))
+      (basic.track - basic.attitude.heading).AsDelta().AbsoluteDegrees() < 5)
     return;
 
   TrackLineRenderer::Draw(canvas, projection.GetScreenAngle(), basic.track, pos);
@@ -86,7 +86,7 @@ TrackLineRenderer::DrawProjected(Canvas &canvas,
                                  const MapSettings &settings,
                                  bool wind_relative)
 {
-  // projection.GetMapScale() <= fixed(6000);
+  // projection.GetMapScale() <= 6000;
 
   GeoPoint traildrift;
 
@@ -96,16 +96,16 @@ TrackLineRenderer::DrawProjected(Canvas &canvas,
                                          calculated.wind.norm);
     traildrift = basic.location - tp1;
   } else {
-    traildrift = GeoPoint(Angle::Native(fixed(0)),Angle::Native(fixed(0)));
+    traildrift = GeoPoint(Angle::Zero(), Angle::Zero());
   }
 
-  fixed dt = ARC_SWEEP/ARC_STEPS/
+  auto dt = ARC_SWEEP/ARC_STEPS/
     std::max(MIN_RATE,calculated.turn_rate_heading_smoothed.Absolute());
 
   Angle heading = basic.attitude.heading;
   GeoPoint loc = basic.location;
 
-  RasterPoint pts[ARC_STEPS+1];
+  BulkPixelPoint pts[ARC_STEPS+1];
   pts[0] = projection.GeoToScreen(loc);
   int i = 1;
 

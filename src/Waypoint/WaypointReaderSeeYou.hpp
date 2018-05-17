@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -33,14 +33,18 @@ Copyright_License {
  * @see http://data.naviter.si/docs/cup_format.pdf
  */
 class WaypointReaderSeeYou final : public WaypointReaderBase {
-  bool first;
+  bool first = true;
 
-  bool ignore_following;
+  bool ignore_following = false;
+
+private:
+  /* field positions for typical SeeYou *.cup waypoint file */
+  unsigned iFrequency = 9;
+  unsigned iDescription = 10;
 
 public:
   explicit WaypointReaderSeeYou(WaypointFactory _factory)
-    :WaypointReaderBase(_factory),
-     first(true), ignore_following(false) {}
+    :WaypointReaderBase(_factory) {}
 
 protected:
   /* virtual methods from class WaypointReaderBase */

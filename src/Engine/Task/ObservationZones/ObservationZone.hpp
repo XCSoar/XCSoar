@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,6 @@
 #ifndef OBSERVATIONZONE_HPP
 #define OBSERVATIONZONE_HPP
 
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 #include <stdint.h>
@@ -126,7 +125,7 @@ public:
    * @return Distance (m) to subtract from score
    */
   gcc_pure
-  virtual fixed ScoreAdjustment() const = 0;
+  virtual double ScoreAdjustment() const = 0;
 };
 
 #endif

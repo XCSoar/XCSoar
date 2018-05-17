@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/Pen.hpp"
 #include "Screen/Point.hpp"
 #include "Util/NonCopyable.hpp"
-#include "Util/AllocatedArray.hpp"
+#include "Util/AllocatedArray.hxx"
 #include "Screen/Canvas.hpp"
 #include "Screen/Brush.hpp"
 
@@ -37,7 +37,7 @@ Copyright_License {
  * A helper class optimized for doing bulk draws on OpenGL.
  */
 class ShapeRenderer : private NonCopyable {
-  AllocatedArray<RasterPoint> points;
+  AllocatedArray<BulkPixelPoint> points;
   unsigned num_points;
 
   const Pen *pen;
@@ -60,7 +60,7 @@ public:
     points.GrowDiscard(((n - 1) | 0x3ff) + 1);
   }
 
-  void AddPoint(RasterPoint pt) {
+  void AddPoint(PixelPoint pt) {
     assert(num_points < points.size());
 
     points[num_points++] = pt;
@@ -70,10 +70,10 @@ public:
    * Adds the point only if it a few pixels distant from the previous
    * one.  Useful to reduce the complexity of small figures.
    */
-   void AddPointIfDistant(RasterPoint pt) {
+   void AddPointIfDistant(PixelPoint pt) {
     assert(num_points < points.size());
 
-    if (num_points == 0 || manhattan_distance(points[num_points - 1], pt) >= 8)
+    if (num_points == 0 || ManhattanDistance((PixelPoint)points[num_points - 1], pt) >= 8)
       AddPoint(pt);
   }
 

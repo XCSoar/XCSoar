@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -127,12 +127,12 @@ public:
     return time - previous.time;
   }
 
-  fixed CalculateDrift(fixed now) const {
-    const fixed dt = now - fixed(time);
+  double CalculateDrift(double now) const {
+    const double dt = now - time;
     return dt * drift_factor / 256;
   }
 
-  fixed GetAltitude() const {
+  double GetAltitude() const {
     return altitude;
   }
 
@@ -148,7 +148,7 @@ public:
     return (int)altitude;
   }
 
-  fixed GetVario() const {
+  double GetVario() const {
     return vario;
   }
 };

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -53,9 +53,9 @@ TimesStatusPanel::Refresh()
                                  settings.utc_offset);
 
     const unsigned sunrisehours = (int)sun.time_of_sunrise;
-    const unsigned sunrisemins = (int)((sun.time_of_sunrise - fixed(sunrisehours)) * 60);
+    const unsigned sunrisemins = (int)((sun.time_of_sunrise - double(sunrisehours)) * 60);
     const unsigned sunsethours = (int)sun.time_of_sunset;
-    const unsigned sunsetmins = (int)((sun.time_of_sunset - fixed(sunsethours)) * 60);
+    const unsigned sunsetmins = (int)((sun.time_of_sunset - double(sunsethours)) * 60);
 
     temp.Format(_T("%02u:%02u - %02u:%02u"), sunrisehours, sunrisemins, sunsethours, sunsetmins);
     SetText(Daylight, temp);
@@ -80,7 +80,7 @@ TimesStatusPanel::Refresh()
     ClearText(UTCDate);
   }
 
-  if (!negative(flight.takeoff_time)) {
+  if (flight.takeoff_time >= 0) {
     SetText(TakeoffTime,
             FormatLocalTimeHHMM((int)flight.takeoff_time,
                                 settings.utc_offset));
@@ -88,7 +88,7 @@ TimesStatusPanel::Refresh()
     ClearText(TakeoffTime);
   }
 
-  if (!negative(flight.landing_time)) {
+  if (flight.landing_time >= 0) {
     SetText(LandingTime,
             FormatLocalTimeHHMM(int(flight.landing_time),
                                 settings.utc_offset));
@@ -96,7 +96,7 @@ TimesStatusPanel::Refresh()
     ClearText(LandingTime);
   }
 
-  if (positive(flight.flight_time)) {
+  if (flight.flight_time > 0) {
     SetText(FlightTime, FormatSignedTimeHHMM((int)flight.flight_time));
   } else {
     ClearText(FlightTime);

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2013 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef SOONEST_AIRSPACE_HPP
 #define SOONEST_AIRSPACE_HPP
 
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 class AbstractAirspace;
@@ -39,6 +38,6 @@ FindSoonestAirspace(const Airspaces &airspaces,
                     const AircraftState &state,
                     const AirspaceAircraftPerformance &perf,
                     const AirspacePredicate &predicate,
-                    const fixed max_time = fixed(1.0e6));
+                    const double max_time = 1.0e6);
 
 #endif

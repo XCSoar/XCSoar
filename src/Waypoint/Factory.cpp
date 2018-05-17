@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,9 +28,9 @@ WaypointFactory::FallbackElevation(Waypoint &waypoint) const
 {
   if (terrain != nullptr) {
     // Load waypoint altitude from terrain
-    const short t_alt = terrain->GetTerrainHeight(waypoint.location);
-    if (!RasterBuffer::IsSpecial(t_alt)) {
-      waypoint.elevation = (fixed)t_alt;
+    const auto h = terrain->GetTerrainHeight(waypoint.location);
+    if (!h.IsSpecial()) {
+      waypoint.elevation = h.GetValue();
       return true;
     }
   }

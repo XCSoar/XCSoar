@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -35,7 +35,6 @@ public:
   DistanceStatComputer remaining;
   DistanceStatComputer planned;
   DistanceStatComputer travelled;
-  DistanceStatComputer pirker;
   TaskVarioComputer vario;
 
 private:
@@ -50,7 +49,7 @@ public:
    *
    * @param time monotonic time of day in seconds
    */
-  void CalcSpeeds(ElementStat &data, fixed time);
+  void CalcSpeeds(ElementStat &data, double time);
 
   /**
    * Reset to uninitialised state, to supress calculation

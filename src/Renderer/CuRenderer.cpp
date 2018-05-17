@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@ Copyright_License {
 #include "CuRenderer.hpp"
 #include "ChartRenderer.hpp"
 #include "Atmosphere/CuSonde.hpp"
+#include "Atmosphere/Temperature.hpp"
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
 #include "Util/StringFormat.hpp"
@@ -42,8 +43,8 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
 
   int hmin = 10000;
   int hmax = -10000;
-  fixed tmin = cu_sonde.maxGroundTemperature;
-  fixed tmax = cu_sonde.maxGroundTemperature;
+  auto tmin = cu_sonde.max_ground_temperature;
+  auto tmax = cu_sonde.max_ground_temperature;
 
   // find range for scaling of graph
   for (unsigned i = 0; i < cu_sonde.NUM_LEVELS - 1u; i++) {
@@ -53,12 +54,17 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
     hmin = min(hmin, (int)i);
     hmax = max(hmax, (int)i);
 
-    tmin = min(tmin, min(cu_sonde.cslevels[i].tempDry,
-                         min(cu_sonde.cslevels[i].airTemp,
-                             cu_sonde.cslevels[i].dewpoint)));
-    tmax = max(tmax, max(cu_sonde.cslevels[i].tempDry,
-                         max(cu_sonde.cslevels[i].airTemp,
-                             cu_sonde.cslevels[i].dewpoint)));
+    auto dry_temperature = cu_sonde.cslevels[i].dry_temperature;
+    auto air_temperature = cu_sonde.cslevels[i].air_temperature;
+
+    tmin = min(tmin, min(dry_temperature, air_temperature));
+    tmax = max(tmax, max(dry_temperature, air_temperature));
+
+    if (!cu_sonde.cslevels[i].dewpoint_empty()) {
+      auto dewpoint = cu_sonde.cslevels[i].dewpoint;
+      tmin = min(tmin, dewpoint);
+      tmax = max(tmax, dewpoint);
+    }
   }
 
   if (hmin >= hmax) {
@@ -66,10 +72,14 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
     return;
   }
 
-  chart.ScaleYFromValue(fixed(hmin));
-  chart.ScaleYFromValue(fixed(hmax));
-  chart.ScaleXFromValue(tmin);
-  chart.ScaleXFromValue(tmax);
+  chart.ScaleYFromValue(hmin * CuSonde::HEIGHT_STEP);
+  chart.ScaleYFromValue(0);
+  chart.ScaleYFromValue(hmax * CuSonde::HEIGHT_STEP);
+  chart.ScaleXFromValue(tmin.ToUser());
+  chart.ScaleXFromValue(tmax.ToUser());
+
+  chart.DrawXGrid(5, 5, ChartRenderer::UnitFormat::NUMERIC);
+  chart.DrawYGrid(Units::ToSysAltitude(500), 500, ChartRenderer::UnitFormat::NUMERIC);
 
   bool labelDry = false;
   bool labelAir = false;
@@ -78,43 +88,53 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
   int ipos = 0;
 
   for (unsigned i = 0; i < cu_sonde.NUM_LEVELS - 1u; i++) {
+    bool has_dewpoint = false;
+
     if (cu_sonde.cslevels[i].empty() ||
         cu_sonde.cslevels[i + 1].empty())
       continue;
 
+    auto alt = i * CuSonde::HEIGHT_STEP;
+    auto next_alt = (i + 1) * CuSonde::HEIGHT_STEP;
+
     ipos++;
 
-    chart.DrawLine(cu_sonde.cslevels[i].tempDry, fixed(i),
-                   cu_sonde.cslevels[i + 1].tempDry, fixed(i + 1),
-                   ChartLook::STYLE_REDTHICK);
+    chart.DrawLine(cu_sonde.cslevels[i].dry_temperature.ToUser(), alt,
+                   cu_sonde.cslevels[i + 1].dry_temperature.ToUser(), next_alt,
+                   ChartLook::STYLE_REDTHICKDASH);
 
-    chart.DrawLine(cu_sonde.cslevels[i].airTemp, fixed(i),
-                   cu_sonde.cslevels[i + 1].airTemp, fixed(i + 1),
-                   ChartLook::STYLE_MEDIUMBLACK);
+    chart.DrawLine(cu_sonde.cslevels[i].air_temperature.ToUser(), alt,
+                   cu_sonde.cslevels[i + 1].air_temperature.ToUser(), next_alt,
+                   ChartLook::STYLE_BLACK);
 
-    chart.DrawLine(cu_sonde.cslevels[i].dewpoint, fixed(i),
-                   cu_sonde.cslevels[i + 1].dewpoint, fixed(i + 1),
-                   ChartLook::STYLE_BLUETHIN);
+    if (!cu_sonde.cslevels[i].dewpoint_empty() &&
+        !cu_sonde.cslevels[i + 1].dewpoint_empty()) {
+      chart.DrawLine(cu_sonde.cslevels[i].dewpoint.ToUser(), alt,
+                     cu_sonde.cslevels[i + 1].dewpoint.ToUser(), next_alt,
+                     ChartLook::STYLE_BLUETHINDASH);
+               
+      has_dewpoint = true;
+    }      
 
     if (ipos > 2) {
       if (!labelDry) {
         chart.DrawLabel(_T("DALR"),
-                        cu_sonde.cslevels[i + 1].tempDry, fixed(i));
+                        cu_sonde.cslevels[i + 1].dry_temperature.ToUser(), alt);
         labelDry = true;
       } else if (!labelAir) {
         chart.DrawLabel(_T("Air"),
-                        cu_sonde.cslevels[i + 1].airTemp, fixed(i));
+                        cu_sonde.cslevels[i + 1].air_temperature.ToUser(), alt);
         labelAir = true;
-      } else if (!labelDew) {
+      } else if (!labelDew && has_dewpoint) {
         chart.DrawLabel(_T("Dew"),
-                        cu_sonde.cslevels[i + 1].dewpoint, fixed(i));
+                        cu_sonde.cslevels[i + 1].dewpoint.ToUser(), alt);
         labelDew = true;
       }
     }
   }
 
-  chart.DrawXLabel(_T("T"), _T(DEG "C"));
-  chart.DrawYLabel(_T("h"));
+  chart.DrawXLabel(_T("T"), Units::GetTemperatureName());
+  chart.DrawYLabel(_T("h"), Units::GetAltitudeName());
 }
 
 void
@@ -122,9 +142,9 @@ TemperatureChartCaption(TCHAR *sTmp, const CuSonde &cu_sonde)
 {
   StringFormatUnsafe(sTmp, _T("%s:\r\n  %5.0f %s\r\n\r\n%s:\r\n  %5.0f %s\r\n"),
                      _("Thermal height"),
-                     (double)Units::ToUserAltitude(cu_sonde.thermalHeight),
+                     (double)Units::ToUserAltitude(cu_sonde.thermal_height),
                      Units::GetAltitudeName(),
                      _("Cloud base"),
-                     (double)Units::ToUserAltitude(cu_sonde.cloudBase),
+                     (double)Units::ToUserAltitude(cu_sonde.cloud_base),
                      Units::GetAltitudeName());
 }

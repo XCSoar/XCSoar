@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,8 +28,10 @@
 #include "OS/ConvertPathName.hpp"
 #include "Logger/GRecord.hpp"
 #include "Version.hpp"
+#include "Util/PrintException.hxx"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <tchar.h>
 
@@ -38,7 +40,6 @@
 #endif
 
 enum STATUS_t {
-  eValidationFailed,
   eValidationPassed,
   eValidationFileNotFound,
   eValidationFileRead,
@@ -49,36 +50,28 @@ static const char szFail[] = "Validation check failed.  G Record is invalid";
 static const char szNoFile[] = "Validation check failed.  File not found";
 
 static STATUS_t
-ValidateXCS(const TCHAR *FileName, GRecord &oGRecord)
+ValidateXCS(Path path, GRecord &oGRecord)
 {
   STATUS_t eStatus = eValidationFileNotFound;
 
   FILE *inFile = nullptr;
-  inFile = _tfopen(FileName, _T("r"));
+  inFile = _tfopen(path.c_str(), _T("r"));
   if (inFile == nullptr)
     return eStatus;
 
   fclose(inFile);
 
-  eStatus = eValidationFailed;
-
   oGRecord.Initialize();
-  if (oGRecord.VerifyGRecordInFile(FileName))
-    eStatus = eValidationPassed;
-
-  return eStatus;
+  oGRecord.VerifyGRecordInFile(path);
+  return eValidationPassed;
 }
 
 static int
-RunValidate(const TCHAR *path)
+RunValidate(Path path)
 {
   GRecord oGRecord;
   STATUS_t eStatus = ValidateXCS(path, oGRecord);
   switch (eStatus) {
-  case eValidationFailed:
-    puts(szFail);
-    return 0;
-
   case eValidationPassed:
     puts(szPass);
     return 0; // success
@@ -94,7 +87,7 @@ RunValidate(const TCHAR *path)
 }
 
 int main(int argc, char* argv[])
-{
+try {
   printf("Vali XCS for the XCSoar Flight Computer Version "
 #ifdef _UNICODE
          "%S\n",
@@ -108,4 +101,7 @@ int main(int argc, char* argv[])
     return RunValidate(path);
   } else
     return 0;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

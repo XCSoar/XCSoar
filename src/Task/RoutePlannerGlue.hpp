@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,7 +26,6 @@
 #include "Route/AirspaceRoute.hpp"
 
 struct GlideSettings;
-class RoughAltitude;
 class RasterTerrain;
 class ProtectedAirspaceWarningManager;
 
@@ -40,10 +39,13 @@ public:
   void SetTerrain(const RasterTerrain *terrain);
 
   void UpdatePolar(const GlideSettings &settings,
+                   const RoutePlannerConfig &config,
                    const GlidePolar &polar,
                    const GlidePolar &safety_polar,
-                   const SpeedVector &wind) {
-    planner.UpdatePolar(settings, polar, safety_polar, wind);
+                   const SpeedVector &wind,
+                   const int height_min_working) {
+    planner.UpdatePolar(settings, config, polar, safety_polar,
+                        wind, height_min_working);
   }
 
   void Synchronise(const Airspaces &master,
@@ -51,8 +53,8 @@ public:
                    const AGeoPoint &origin,
                    const AGeoPoint &destination);
 
-  bool IsReachEmpty() const {
-    return planner.IsReachEmpty();
+  bool IsTerrainReachEmpty() const {
+    return planner.IsTerrainReachEmpty();
   }
 
   void ClearReach() {
@@ -65,23 +67,32 @@ public:
 
   bool Solve(const AGeoPoint &origin, const AGeoPoint &destination,
              const RoutePlannerConfig &config,
-             const RoughAltitude h_ceiling);
+             int h_ceiling);
 
   const Route &GetSolution() const {
     return planner.GetSolution();
   }
 
   void SolveReach(const AGeoPoint &origin, const RoutePlannerConfig &config,
-                  RoughAltitude h_ceiling, bool do_solve);
+                  int h_ceiling, bool do_solve);
 
   bool FindPositiveArrival(const AGeoPoint &dest, ReachResult &result_r) const;
 
-  void AcceptInRange(const GeoBounds &bounds, TriangleFanVisitor &visitor) const;
+  const FlatProjection &GetTerrainReachProjection() const {
+    return planner.GetTerrainReachProjection();
+  }
 
-  bool Intersection(const AGeoPoint &origin, const AGeoPoint &destination,
-                    GeoPoint &intx) const;
+  void AcceptInRange(const GeoBounds &bounds,
+                     FlatTriangleFanVisitor &visitor,
+                     bool working) const {
+    planner.AcceptInRange(bounds, visitor, working);
+  }
 
-  RoughAltitude GetTerrainBase() const;
+  gcc_pure
+  GeoPoint Intersection(const AGeoPoint &origin,
+                        const AGeoPoint &destination) const;
+
+  int GetTerrainBase() const;
 };
 
 #endif

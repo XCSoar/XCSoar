@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,7 +21,8 @@ Copyright_License {
 }
 */
 
-#include "Util/tstring.hpp"
+class Path;
+class AllocatedPath;
 
 void
 ProfileListDialog();
@@ -31,5 +32,5 @@ ProfileListDialog();
  * the selected file or an empty string if the user has cancelled the
  * dialog.
  */
-tstring
-SelectProfileDialog(tstring::const_pointer selected_path);
+AllocatedPath
+SelectProfileDialog(Path selected_path);

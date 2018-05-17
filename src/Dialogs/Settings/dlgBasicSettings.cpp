@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -41,7 +41,6 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Event/Timer.hpp"
-#include "Compiler.h"
 
 #include <math.h>
 
@@ -66,7 +65,7 @@ class FlightSetupPanel final
 
   PolarSettings &polar_settings;
 
-  fixed last_altitude;
+  double last_altitude;
 
 public:
   FlightSetupPanel()
@@ -90,16 +89,16 @@ public:
       protected_task_manager->SetGlidePolar(polar_settings.glide_polar_task);
   }
 
-  void SetBallastLitres(fixed ballast_litres) {
+  void SetBallastLitres(double ballast_litres) {
     polar_settings.glide_polar_task.SetBallastLitres(ballast_litres);
     PublishPolarSettings();
     SetButtons();
     SetBallast();
   }
 
-  void ShowAltitude(fixed altitude);
+  void ShowAltitude(double altitude);
   void RefreshAltitudeControl();
-  void SetBugs(fixed bugs);
+  void SetBugs(double bugs);
   void SetQNH(AtmosphericPressure qnh);
 
   /* virtual methods from Widget */
@@ -150,16 +149,16 @@ FlightSetupPanel::SetBallast()
   if (ballastable)
     LoadValue(Ballast, polar_settings.glide_polar_task.GetBallastLitres());
 
-  const fixed wl = polar_settings.glide_polar_task.GetWingLoading();
-  SetRowVisible(WingLoading, positive(wl));
-  if (positive(wl))
+  const auto wl = polar_settings.glide_polar_task.GetWingLoading();
+  SetRowVisible(WingLoading, wl > 0);
+  if (wl > 0)
     LoadValue(WingLoading, wl, UnitGroup::WING_LOADING);
 
   if (device_blackboard != NULL) {
     const Plane &plane = CommonInterface::GetComputerSettings().plane;
-    if (positive(plane.dry_mass)) {
-      fixed fraction = polar_settings.glide_polar_task.GetBallast();
-      fixed overload = (plane.dry_mass + fraction * plane.max_ballast) /
+    if (plane.dry_mass > 0) {
+      auto fraction = polar_settings.glide_polar_task.GetBallast();
+      auto overload = (plane.dry_mass + fraction * plane.max_ballast) /
         plane.dry_mass;
 
       MessageOperationEnvironment env;
@@ -190,9 +189,9 @@ FlightSetupPanel::FlipBallastTimer()
 }
 
 void
-FlightSetupPanel::ShowAltitude(fixed altitude)
+FlightSetupPanel::ShowAltitude(double altitude)
 {
-  if (fabs(altitude - last_altitude) >= fixed(1)) {
+  if (fabs(altitude - last_altitude) >= 1) {
     last_altitude = altitude;
     LoadValue(Altitude, altitude, UnitGroup::ALTITUDE);
   }
@@ -216,7 +215,7 @@ FlightSetupPanel::RefreshAltitudeControl()
 }
 
 void
-FlightSetupPanel::SetBugs(fixed bugs) {
+FlightSetupPanel::SetBugs(double bugs) {
   polar_settings.SetBugs(bugs);
   PublishPolarSettings();
 
@@ -264,7 +263,7 @@ FlightSetupPanel::OnModified(DataField &df)
     SetBallastLitres(dff.GetAsFixed());
   } else if (IsDataField(Bugs, df)) {
     const DataFieldFloat &dff = (const DataFieldFloat &)df;
-    SetBugs(fixed(1) - (dff.GetAsFixed() / 100));
+    SetBugs(1 - (dff.GetAsFixed() / 100));
   } else if (IsDataField(QNH, df)) {
     const DataFieldFloat &dff = (const DataFieldFloat &)df;
     SetQNH(Units::FromUserPressure(dff.GetAsFixed()));
@@ -277,35 +276,36 @@ FlightSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   RowFormWidget::Prepare(parent, rc);
 
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
+  const Plane &plane = CommonInterface::GetComputerSettings().plane;
 
+  const double db = 5;
   AddFloat(_("Ballast"),
            _("Ballast of the glider.  Increase this value if the pilot/cockpit load is greater than the reference pilot weight of the glide polar (typically 75kg).  Press ENTER on this field to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."),
            _T("%.0f l"), _T("%.0f"),
-           fixed(0), fixed(500), fixed(5), false,
-           fixed(0),
+           0, db*ceil(plane.max_ballast/db), db, false, 0,
            this);
 
   WndProperty *wing_loading = AddFloat(_("Wing loading"), nullptr,
-                                       _T("%.1f %s"), _T("%.0f"), fixed(0),
-                                       fixed(300), fixed(5),
+                                       _T("%.1f %s"), _T("%.0f"), 0,
+                                       300, 5,
                                        false, UnitGroup::WING_LOADING,
-                                       fixed(0));
+                                       0);
   wing_loading->SetReadOnly(true);
 
   AddFloat(_("Bugs"), /* xgettext:no-c-format */
            _("How clean the glider is. Set to 0% for clean, larger numbers as the wings "
                "pick up bugs or gets wet.  50% indicates the glider's sink rate is doubled."),
            _T("%.0f %%"), _T("%.0f"),
-           fixed(0), fixed(50), fixed(1), false,
-           (fixed(1) - polar_settings.bugs) * 100,
+           0, 50, 1, false,
+           (1 - polar_settings.bugs) * 100,
            this);
 
   WndProperty *wp;
   wp = AddFloat(_("QNH"),
                 _("Area pressure for barometric altimeter calibration.  This is set automatically if Vega connected."),
                 GetUserPressureFormat(true), GetUserPressureFormat(),
-                Units::ToUserPressure(Units::ToSysUnit(fixed(850), Unit::HECTOPASCAL)),
-                Units::ToUserPressure(Units::ToSysUnit(fixed(1300), Unit::HECTOPASCAL)),
+                Units::ToUserPressure(Units::ToSysUnit(850, Unit::HECTOPASCAL)),
+                Units::ToUserPressure(Units::ToSysUnit(1300, Unit::HECTOPASCAL)),
                 GetUserPressureStep(), false,
                 Units::ToUserPressure(settings.pressure), this);
   {
@@ -315,15 +315,15 @@ FlightSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   }
 
   AddReadOnly(_("Altitude"), NULL, _T("%.0f %s"),
-              UnitGroup::ALTITUDE, fixed(0));
+              UnitGroup::ALTITUDE, 0);
 
   wp = AddFloat(_("Max. temp."),
                 _("Set to forecast ground temperature.  Used by convection estimator (temperature trace page of Analysis dialog)"),
                 _T("%.0f %s"), _T("%.0f"),
-                Units::ToUserTemperature(CelsiusToKelvin(fixed(-50))),
-                Units::ToUserTemperature(CelsiusToKelvin(fixed(60))),
-                fixed(1), false,
-                Units::ToUserTemperature(settings.forecast_temperature));
+                Temperature::FromCelsius(-50).ToUser(),
+                Temperature::FromCelsius(60).ToUser(),
+                1, false,
+                settings.forecast_temperature.ToUser());
   {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetUnits(Units::GetTemperatureName());
@@ -336,8 +336,11 @@ FlightSetupPanel::Save(bool &changed)
 {
   ComputerSettings &settings = CommonInterface::SetComputerSettings();
 
-  changed |= SaveValue(Temperature, UnitGroup::TEMPERATURE,
-                       settings.forecast_temperature);
+  double forecast_temperature = settings.forecast_temperature.ToKelvin();
+  if (SaveValue(Temperature, UnitGroup::TEMPERATURE, forecast_temperature)) {
+    settings.forecast_temperature = Temperature::FromKelvin(forecast_temperature);
+    changed = true;
+  }
 
   return true;
 }

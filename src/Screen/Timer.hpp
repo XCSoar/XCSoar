@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_TIMER_HXX
 #define XCSOAR_SCREEN_TIMER_HXX
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
 #include <windows.h>
 #else
 #include "Event/Timer.hpp"
@@ -47,26 +47,21 @@ class Window;
  * from the main thread.
  */
 class WindowTimer
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   : private Timer
 #endif
 {
   Window &window;
-#ifdef USE_GDI
-  UINT_PTR id;
+#ifdef USE_WINUSER
+  UINT_PTR id = 0;
 #endif
 
 public:
   /**
    * Construct a Timer object that is not set initially.
    */
-#ifdef USE_GDI
-  WindowTimer(Window &_window)
-    :window(_window), id(0) {}
-#else
-  WindowTimer(Window &_window)
+  explicit WindowTimer(Window &_window)
     :window(_window) {}
-#endif
 
   WindowTimer(const WindowTimer &other) = delete;
 
@@ -80,7 +75,7 @@ public:
    * end?
    */
   bool IsActive() const {
-#ifdef USE_GDI
+#ifdef USE_WINUSER
     return id != 0;
 #else
     return Timer::IsActive();
@@ -95,7 +90,7 @@ public:
     return !(*this == other);
   }
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
   /**
    * Schedule the timer.  Cancels the previous setting if there was
    * one.

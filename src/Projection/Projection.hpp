@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Geo/GeoPoint.hpp"
 #include "Math/FastRotation.hpp"
+#include "Math/Util.hpp"
 #include "Screen/Point.hpp"
 #include "Compiler.h"
 
@@ -62,7 +63,7 @@ class Projection
    * This is the point that the ScreenRotation will rotate around.
    * It is also the point that the GeoLocation points to.
    */
-  RasterPoint screen_origin;
+  PixelPoint screen_origin;
 
   /**
    * FastIntegerRotation instance for fast
@@ -71,12 +72,12 @@ class Projection
   FastIntegerRotation screen_rotation;
 
   /** The earth's radius in screen coordinates (px) */
-  fixed draw_scale;
+  double draw_scale;
   /** Inverted value of DrawScale for faster calculations */
-  fixed inv_draw_scale;
+  double inv_draw_scale;
 
   /** This is the scaling factor in px/m */
-  fixed scale;
+  double scale;
 
 public:
   Projection();
@@ -86,7 +87,7 @@ public:
   }
 
   gcc_pure
-  fixed GetScale() const {
+  double GetScale() const {
     return scale;
   }
 
@@ -94,18 +95,18 @@ public:
    * Sets the scaling factor
    * @param _scale New scale in px/m
    */
-  void SetScale(const fixed _scale);
+  void SetScale(const double _scale);
 
   /**
    * Convert a pixel distance to a physical length in meters.
    */
   gcc_pure
-  fixed DistancePixelsToMeters(const int x) const {
-    return fixed(x) / GetScale();
+  double DistancePixelsToMeters(const int x) const {
+    return double(x) / GetScale();
   }
 
   gcc_pure
-  fixed DistanceMetersToPixels(const fixed distance) const {
+  double DistanceMetersToPixels(const double distance) const {
     return distance * GetScale();
   }
 
@@ -121,8 +122,8 @@ public:
    * Convert a an angle on Earth's surface to a pixel distance.
    */
   gcc_pure
-  fixed AngleToPixels(Angle angle) const {
-    return fast_mult(angle.Radians(), draw_scale, 12);
+  double AngleToPixels(Angle angle) const {
+    return angle.Radians() * draw_scale;
   }
 
   /**
@@ -139,7 +140,7 @@ public:
    * @param y y-Coordinate on the screen
    */
   gcc_pure
-  GeoPoint ScreenToGeo(const RasterPoint &pt) const {
+  GeoPoint ScreenToGeo(const PixelPoint &pt) const {
     return ScreenToGeo(pt.x, pt.y);
   }
 
@@ -148,13 +149,13 @@ public:
    * @param g GeoPoint to convert
    */
   gcc_pure
-  RasterPoint GeoToScreen(const GeoPoint &g) const;
+  PixelPoint GeoToScreen(const GeoPoint &g) const;
 
   /**
    * Returns the origin/rotation center in screen coordinates
    * @return The origin/rotation center in screen coordinates
    */
-  const RasterPoint &GetScreenOrigin() const {
+  const PixelPoint &GetScreenOrigin() const {
     return screen_origin;
   }
 
@@ -172,7 +173,7 @@ public:
    * Set the origin/rotation center to the given screen coordinates
    * @param pt Screen coordinate
    */
-  void SetScreenOrigin(RasterPoint pt) {
+  void SetScreenOrigin(PixelPoint pt) {
     screen_origin = pt;
   }
 
@@ -200,8 +201,8 @@ public:
    * @param x A geographical distance (m)
    * @return The converted distance in px
    */
-  unsigned GeoToScreenDistance(const fixed x) const {
-    return iround(scale * x);
+  unsigned GeoToScreenDistance(const double x) const {
+    return uround(scale * x);
   }
 
   /**

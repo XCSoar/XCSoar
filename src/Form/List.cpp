@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,14 +24,12 @@ Copyright_License {
 #include "Form/List.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/ContainerWindow.hpp"
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #include "Screen/Point.hpp"
 #include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scissor.hpp"
-#include "Screen/OpenGL/Globals.hpp"
 #elif defined(USE_GDI)
 #include "Screen/WindowCanvas.hpp"
 #endif
@@ -59,26 +57,22 @@ ListControl::ListControl(const DialogLook &_look)
    origin(0), pixel_pan(0),
    cursor(0),
    drag_mode(DragMode::NONE),
-   item_renderer(nullptr), cursor_handler(nullptr)
-#ifndef _WIN32_WCE
-  , kinetic_timer(*this)
-#endif
+   item_renderer(nullptr), cursor_handler(nullptr),
+   kinetic_timer(*this)
 {
 }
 
 ListControl::ListControl(ContainerWindow &parent, const DialogLook &_look,
                          PixelRect rc, const WindowStyle style,
-                         UPixelScalar _item_height)
+                         unsigned _item_height)
   :look(_look),
    scroll_bar(look.button),
    length(0),
    origin(0), pixel_pan(0),
    cursor(0),
    drag_mode(DragMode::NONE),
-   item_renderer(nullptr), cursor_handler(nullptr)
-#ifndef _WIN32_WCE
-   , kinetic_timer(*this)
-#endif
+   item_renderer(nullptr), cursor_handler(nullptr),
+   kinetic_timer(*this)
 {
   Create(parent, rc, style, _item_height);
 }
@@ -205,7 +199,7 @@ ListControl::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
     if (focused && selected)
       canvas.DrawFocusRectangle(rc);
 
-    rc.Offset(0, rc.bottom - rc.top);
+    rc.Offset(0, rc.GetHeight());
   }
 
   /* paint the bottom part below the last item */
@@ -247,7 +241,7 @@ ListControl::DrawScrollBar(Canvas &canvas) {
 }
 
 void
-ListControl::SetItemHeight(UPixelScalar _item_height)
+ListControl::SetItemHeight(unsigned _item_height)
 {
   item_height = _item_height;
   items_visible = GetHeight() / item_height;
@@ -343,7 +337,7 @@ ListControl::MoveCursor(int delta)
 }
 
 void
-ListControl::SetPixelPan(UPixelScalar _pixel_pan)
+ListControl::SetPixelPan(unsigned _pixel_pan)
 {
   if (pixel_pan == _pixel_pan)
     return;
@@ -372,7 +366,7 @@ ListControl::SetOrigin(int i)
 
   origin = i;
 
-#ifdef USE_GDI
+#ifdef USE_WINUSER
   if ((unsigned)abs(delta) < items_visible) {
     PixelRect rc = GetClientRect();
     rc.right = scroll_bar.GetLeft(GetSize());
@@ -439,16 +433,9 @@ bool
 ListControl::OnKeyDown(unsigned key_code)
 {
   scroll_bar.DragEnd(this);
-
-#ifndef _WIN32_WCE
   kinetic_timer.Cancel();
-#endif
 
   switch (key_code) {
-#ifdef GNAV
-  // JMW added this to make data entry easier
-  case KEY_APP4:
-#endif
   case KEY_RETURN:
     if (CanActivateItem())
       ActivateItem();
@@ -502,7 +489,7 @@ ListControl::OnKeyDown(unsigned key_code)
 }
 
 bool
-ListControl::OnMouseUp(PixelScalar x, PixelScalar y)
+ListControl::OnMouseUp(PixelPoint p)
 {
   if (scroll_bar.IsDragging()) {
     scroll_bar.DragEnd(this);
@@ -510,29 +497,25 @@ ListControl::OnMouseUp(PixelScalar x, PixelScalar y)
   }
 
   if (drag_mode == DragMode::CURSOR &&
-      x >= 0 && x <= ((PixelScalar)GetWidth() - scroll_bar.GetWidth())) {
+      p.x >= 0 && p.x <= ((int)GetWidth() - scroll_bar.GetWidth())) {
     drag_end();
     ActivateItem();
     return true;
   }
 
   if (drag_mode == DragMode::SCROLL || drag_mode == DragMode::CURSOR) {
-#ifndef _WIN32_WCE
     const bool enable_kinetic = UsePixelPan() && drag_mode == DragMode::SCROLL;
-#endif
 
     drag_end();
 
-#ifndef _WIN32_WCE
     if (enable_kinetic) {
       kinetic.MouseUp(GetPixelOrigin());
       kinetic_timer.Schedule(30);
     }
-#endif
 
     return true;
   } else
-    return PaintWindow::OnMouseUp(x, y);
+    return PaintWindow::OnMouseUp(p);
 }
 
 void
@@ -548,19 +531,20 @@ ListControl::drag_end()
 }
 
 bool
-ListControl::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+ListControl::OnMouseMove(PixelPoint p, unsigned keys)
 {
   // If we are currently dragging the ScrollBar slider
   if (scroll_bar.IsDragging()) {
     // -> Update ListBox origin
     if (UsePixelPan())
-      SetPixelOrigin(scroll_bar.DragMove(length * item_height, GetHeight(), y));
+      SetPixelOrigin(scroll_bar.DragMove(length * item_height, GetHeight(),
+                                         p.y));
     else
-      SetOrigin(scroll_bar.DragMove(length, items_visible, y));
+      SetOrigin(scroll_bar.DragMove(length, items_visible, p.y));
 
     return true;
   } else if (drag_mode == DragMode::CURSOR) {
-    if (abs(y - drag_y_window) > ((int)item_height / 5)) {
+    if (abs(p.y - drag_y_window) > ((int)item_height / 5)) {
       drag_mode = DragMode::SCROLL;
       Invalidate_item(cursor);
     } else
@@ -568,32 +552,24 @@ ListControl::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
   }
 
   if (drag_mode == DragMode::SCROLL) {
-    int new_origin = drag_y - y;
+    int new_origin = drag_y - p.y;
     SetPixelOrigin(new_origin);
-#ifndef _WIN32_WCE
     if (UsePixelPan())
       kinetic.MouseMove(GetPixelOrigin());
-#endif
     return true;
   }
 
-  return PaintWindow::OnMouseMove(x, y, keys);
+  return PaintWindow::OnMouseMove(p, keys);
 }
 
 bool
-ListControl::OnMouseDown(PixelScalar x, PixelScalar y)
+ListControl::OnMouseDown(PixelPoint Pos)
 {
   // End any previous drag
   scroll_bar.DragEnd(this);
   drag_end();
 
-#ifndef _WIN32_WCE
   kinetic_timer.Cancel();
-#endif
-
-  RasterPoint Pos;
-  Pos.x = x;
-  Pos.y = y;
 
   // If possible -> Give focus to the Control
   const bool had_focus = !HasCursorKeys() || HasFocus();
@@ -622,13 +598,13 @@ ListControl::OnMouseDown(PixelScalar x, PixelScalar y)
     // if click in ListBox area
     // -> select appropriate item
 
-    int index = ItemIndexAt(y);
+    int index = ItemIndexAt(Pos.y);
     // If mouse was clicked outside the list items -> cancel
     if (index < 0)
       return false;
 
-    drag_y = GetPixelOrigin() + y;
-    drag_y_window = y;
+    drag_y = GetPixelOrigin() + Pos.y;
+    drag_y_window = Pos.y;
 
     if (had_focus && (unsigned)index == GetCursorIndex() &&
         CanActivateItem()) {
@@ -640,10 +616,8 @@ ListControl::OnMouseDown(PixelScalar x, PixelScalar y)
       SetCursorIndex(index);
       drag_mode = DragMode::SCROLL;
     }
-#ifndef _WIN32_WCE
     if (UsePixelPan())
       kinetic.MouseDown(GetPixelOrigin());
-#endif
     SetCapture();
   }
 
@@ -651,14 +625,12 @@ ListControl::OnMouseDown(PixelScalar x, PixelScalar y)
 }
 
 bool
-ListControl::OnMouseWheel(PixelScalar x, PixelScalar y, int delta)
+ListControl::OnMouseWheel(PixelPoint p, int delta)
 {
   scroll_bar.DragEnd(this);
   drag_end();
 
-#ifndef _WIN32_WCE
   kinetic_timer.Cancel();
-#endif
 
   if (delta > 0) {
     // scroll up
@@ -679,12 +651,8 @@ ListControl::OnCancelMode()
   scroll_bar.DragEnd(this);
   drag_end();
 
-#ifndef _WIN32_WCE
   kinetic_timer.Cancel();
-#endif
 }
-
-#ifndef _WIN32_WCE
 
 bool
 ListControl::OnTimer(WindowTimer &timer)
@@ -710,5 +678,3 @@ ListControl::OnDestroy()
 
   PaintWindow::OnDestroy();
 }
-
-#endif

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,13 +24,12 @@
 #include "Geo/GeoVector.hpp"
 #include "Geo/Math.hpp"
 #include "Math/Angle.hpp"
-#include "Math/fixed.hpp"
 
 #include "TestUtil.hpp"
 
 int main(int argc, char **argv)
 {
-  plan_tests(72);
+  plan_tests(92);
 
   // test constructor
   GeoPoint p1(Angle::Degrees(345.32), Angle::Degrees(-6.332));
@@ -44,22 +43,22 @@ int main(int argc, char **argv)
 
   // test parametric()
   GeoPoint p2(Angle::Degrees(2), Angle::Degrees(1));
-  GeoPoint p3 = p1.Parametric(p2, fixed(5));
+  GeoPoint p3 = p1.Parametric(p2, 5);
   ok1(p2.IsValid());
   ok1(p3.IsValid());
   ok1(equals(p3, -1.332, -4.68));
 
   // test interpolate
-  GeoPoint p4 = p1.Interpolate(p3, fixed(0.5));
+  GeoPoint p4 = p1.Interpolate(p3, 0.5);
   ok1(p4.IsValid());
   ok1(equals(p4, -3.832, -9.68));
 
-  GeoPoint p5 = p1.Interpolate(p3, fixed(0.25));
+  GeoPoint p5 = p1.Interpolate(p3, 0.25);
   ok1(p5.IsValid());
   ok1(equals(p5, -5.082, -12.18));
 
   // test *
-  GeoPoint p6 = p2 * fixed(3.5);
+  GeoPoint p6 = p2 * 3.5;
   ok1(p6.IsValid());
   ok1(equals(p6, 3.5, 7));
 
@@ -110,36 +109,29 @@ int main(int argc, char **argv)
   // note: distance between p1 and p4 and between p3 and p4 is not
   // the same due to linear interpolation instead of real geographic
   // intermediate point calculation
-#ifdef USE_WGS84
   ok1(equals(p2.Distance(p6), 869146.334126));
   ok1(equals(p6.Distance(p2), 869146.334126));
   ok1(equals(p1.Distance(p5), 309506.275043));
   ok1(equals(p1.Distance(p4), 619486.719361));
   ok1(equals(p1.Distance(p3), 1240403.22926));
   ok1(equals(p3.Distance(p4), 620924.169000));
-#ifdef FIXED_MATH
-  ok1(equals(p1.Distance(p11), 1.493101));
-#else
   ok1(equals(p1.Distance(p11), 1.561761));
-#endif
   ok1(equals(p1.Distance(p12), 18599361.600));
-#else
-  ok1(equals(p2.Distance(p6), 869326.653160));
-  ok1(equals(p6.Distance(p2), 869326.653160));
-  ok1(equals(p1.Distance(p5), 309562.219016));
-  ok1(equals(p1.Distance(p4), 619603.149273));
-  ok1(equals(p1.Distance(p3), 1240649.267606));
-  ok1(equals(p3.Distance(p4), 621053.760625));
-  ok1(equals(p1.Distance(p11), 1.568588));
-  ok1(equals(p1.Distance(p12), 18602548.701));
-#endif
+
+  ok1(equals(p2.DistanceS(p6), 869326.653160));
+  ok1(equals(p6.DistanceS(p2), 869326.653160));
+  ok1(equals(p1.DistanceS(p5), 309562.219016));
+  ok1(equals(p1.DistanceS(p4), 619603.149273));
+  ok1(equals(p1.DistanceS(p3), 1240649.267606));
+  ok1(equals(p3.DistanceS(p4), 621053.760625));
+  ok1(equals(p1.DistanceS(p11), 1.568588));
+  ok1(equals(p1.DistanceS(p12), 18602548.701));
 
   // test bearing()
   //
   // note: the bearings p1 -> p5, p5 -> p4 and so on are not the same due to
   // linear interpolation instead of real geographic intermediate point
   // calculation
-#ifdef USE_WGS84
   ok1(equals(p2.Bearing(p6), 63.425773));
   ok1(equals(p6.Bearing(p2), 243.762198));
   ok1(equals(p1.Bearing(p5), 63.601900));
@@ -150,55 +142,43 @@ int main(int argc, char **argv)
   ok1(equals(p4.Bearing(p3), 63.694155));
   ok1(equals(p5.Bearing(p6), 66.126880));
   ok1(equals(p2.Bearing(p3), 250.886912));
-#else
-  ok1(equals(p2.Bearing(p6), 63.272424));
-  ok1(equals(p6.Bearing(p2), 243.608847));
-  ok1(equals(p1.Bearing(p5), 63.449343));
-  ok1(equals(p1.Bearing(p4), 63.582620));
-  ok1(equals(p1.Bearing(p3), 63.784526));
-  ok1(equals(p5.Bearing(p4), 63.466726));
-  ok1(equals(p5.Bearing(p3), 63.646072));
-  ok1(equals(p4.Bearing(p3), 63.540756));
-  ok1(equals(p5.Bearing(p6), 65.982854));
-  ok1(equals(p2.Bearing(p3), 250.786774));
-#endif
+
+  ok1(equals(p2.BearingS(p6), 63.272424));
+  ok1(equals(p6.BearingS(p2), 243.608847));
+  ok1(equals(p1.BearingS(p5), 63.449343));
+  ok1(equals(p1.BearingS(p4), 63.582620));
+  ok1(equals(p1.BearingS(p3), 63.784526));
+  ok1(equals(p5.BearingS(p4), 63.466726));
+  ok1(equals(p5.BearingS(p3), 63.646072));
+  ok1(equals(p4.BearingS(p3), 63.540756));
+  ok1(equals(p5.BearingS(p6), 65.982854));
+  ok1(equals(p2.BearingS(p3), 250.786774));
 
   // test distance_bearing()
   // note: should be the same output as bearing() and distance()
   GeoVector v = p2.DistanceBearing(p6);
-#ifdef USE_WGS84
   ok1(equals(v.distance, 869146.334126));
   ok1(equals(v.bearing, 63.425773));
-#else
+
+  v = p2.DistanceBearingS(p6);
   ok1(equals(v.distance, 869326.653160));
   ok1(equals(v.bearing, 63.272424));
-#endif
 
   // test intermediate_point()
   GeoPoint p7(Angle::Zero(), Angle::Zero());
   ok1(p7.IsValid());
-  GeoPoint p8 = p7.IntermediatePoint(p2, fixed(100000));
+  GeoPoint p8 = p7.IntermediatePoint(p2, 100000);
   ok1(p8.IsValid());
-#ifdef USE_WGS84
   ok1(equals(p8, 0.402361, 0.804516));
-#else
-  ok1(equals(p8, 0.402274, 0.804342));
-#endif
   ok1(equals(p8.Distance(p7), 100000));
-  GeoPoint p9 = p7.IntermediatePoint(p2, fixed(100000000));
+  GeoPoint p9 = p7.IntermediatePoint(p2, 100000000);
   ok1(p9.IsValid());
   ok1(equals(p9, p2));
 
   // test projected_distance()
-#ifdef USE_WGS84
   ok1(equals(p8.ProjectedDistance(p7, p2), 100000));
   ok1(equals(p4.ProjectedDistance(p1, p3), 619494.517917));
-  ok1(equals((p2 * fixed(2)).ProjectedDistance(p2, p6), 248511.833322));
-#else
-  ok1(equals(p8.ProjectedDistance(p7, p2), 100000));
-  ok1(equals(p4.ProjectedDistance(p1, p3), 619599.304393));
-  ok1(equals((p2 * fixed(2)).ProjectedDistance(p2, p6), 248567.832772));
-#endif
+  ok1(equals((p2 * 2).ProjectedDistance(p2, p6), 248511.833322));
 
   // Tests moved here from test_fixed.cpp
   GeoPoint l1(Angle::Zero(), Angle::Zero());
@@ -215,7 +195,7 @@ int main(int argc, char **argv)
   bool find_lat_lon_okay = true;
   for (Angle bearing = Angle::Zero(); bearing < Angle::FullCircle();
       bearing += Angle::Degrees(5)) {
-    GeoPoint p_test = FindLatitudeLongitude(p1, bearing, fixed(50000));
+    GeoPoint p_test = FindLatitudeLongitude(p1, bearing, 50000);
     find_lat_lon_okay = equals(p_test.Distance(p1), 50000) && find_lat_lon_okay;
   }
   ok1(find_lat_lon_okay);
@@ -224,7 +204,7 @@ int main(int argc, char **argv)
   // 116090 @ 343
 
   v = l1.DistanceBearing(l3);
-  ok(positive(v.distance) && v.distance < fixed(2), "earth distance short", 0);
+  ok(v.distance > 0 && v.distance < 2, "earth distance short", 0);
 
   GeoPoint p10(GeoPoint::Invalid());
   ok1(!p10.IsValid());

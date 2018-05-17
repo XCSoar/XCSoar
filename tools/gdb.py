@@ -128,7 +128,7 @@ class StaticStringPrinter:
         self.value = value
 
     def to_string(self):
-        return self.value['data'].cast(string_type)
+        return self.value['the_data'].cast(string_type)
 
 class BrokenDatePrinter:
     def __init__(self, value):

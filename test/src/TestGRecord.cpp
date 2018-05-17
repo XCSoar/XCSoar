@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,17 +22,23 @@
 
 #include "Logger/GRecord.hpp"
 #include "TestUtil.hpp"
+#include "OS/Path.hpp"
+#include "Util/PrintException.hxx"
+
+#include <tchar.h>
+#include <stdlib.h>
 
 static void
 CheckGRecord(const TCHAR *path)
 {
   GRecord grecord;
   grecord.Initialize();
-  ok1(grecord.VerifyGRecordInFile(path));
+  grecord.VerifyGRecordInFile(Path(path));
+  ok1(true);
 }
 
 int main(int argc, char **argv)
-{
+try {
   plan_tests(4);
 
   CheckGRecord(_T("test/data/grecord64a.igc"));
@@ -41,4 +47,7 @@ int main(int argc, char **argv)
   CheckGRecord(_T("test/data/grecord65b.igc"));
 
   return exit_status();
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

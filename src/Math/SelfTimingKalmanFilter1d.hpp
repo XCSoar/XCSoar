@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,6 +25,8 @@
 
 #include "KalmanFilter1d.hpp"
 
+#include <stdint.h>
+
 /**
  * Wraps KalmanFilter1d and does its own internal time bookkeeping so
  * that updates need provide only measurement information.
@@ -37,12 +39,12 @@ class SelfTimingKalmanFilter1d {
   /**
    * Reset if updates are less frequent than this.
    */
-  unsigned int max_dt_ms_;
+  uint64_t max_dt_us_;
 
   /**
    * Time of last update.
    */
-  unsigned int t_last_update_ms_;
+  uint64_t t_last_update_us_ = 0;
 
 public:
   /**
@@ -55,13 +57,13 @@ public:
    *
    * Or you can just punt and set it to, like, a minute.
    */
-  SelfTimingKalmanFilter1d(const fixed max_dt, const fixed var_x_accel);
-  SelfTimingKalmanFilter1d(const fixed max_dt);
+  SelfTimingKalmanFilter1d(double max_dt, double var_x_accel);
+  SelfTimingKalmanFilter1d(double max_dt);
 
   // Get and set the maximum update interval as desired. See note above
   // constructors for details on update intervals.
-  void SetMaxDt(const fixed max_dt);
-  fixed GetMaxDt() const;
+  void SetMaxDt(double max_dt);
+  double GetMaxDt() const;
 
   /**
    * Updates state given a direct sensor measurement of the absolute
@@ -70,7 +72,7 @@ public:
    * filter resetting automatically for updates separated by large
    * time intervals as described above.
    */
-  void Update(const fixed z_abs, const fixed var_z_abs);
+  void Update(double z_abs, double var_z_abs);
 
   // Remaining methods are identical to their counterparts in KalmanFilter1d.
 
@@ -78,23 +80,23 @@ public:
     filter_.Reset();
   }
 
-  void Reset(const fixed x_abs_value) {
+  void Reset(const double x_abs_value) {
     filter_.Reset(x_abs_value);
   }
 
-  void Reset(const fixed x_abs_value, const fixed x_vel_value) {
+  void Reset(const double x_abs_value, const double x_vel_value) {
     filter_.Reset(x_abs_value, x_vel_value);
   }
 
-  void SetAccelerationVariance(const fixed var_x_accel) {
+  void SetAccelerationVariance(const double var_x_accel) {
     filter_.SetAccelerationVariance(var_x_accel);
   }
 
-  fixed GetXAbs() const { return filter_.GetXAbs(); }
-  fixed GetXVel() const { return filter_.GetXVel(); }
-  fixed GetCovAbsAbs() const { return filter_.GetCovAbsAbs(); }
-  fixed GetCovAbsVel() const { return filter_.GetCovAbsVel(); }
-  fixed GetCovVelVel() const { return filter_.GetCovVelVel(); }
+  double GetXAbs() const { return filter_.GetXAbs(); }
+  double GetXVel() const { return filter_.GetXVel(); }
+  double GetCovAbsAbs() const { return filter_.GetCovAbsAbs(); }
+  double GetCovAbsVel() const { return filter_.GetCovAbsVel(); }
+  double GetCovVelVel() const { return filter_.GetCovVelVel(); }
 };
 
 #endif

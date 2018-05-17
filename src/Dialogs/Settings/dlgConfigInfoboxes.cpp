@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,19 +30,15 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/SingleWindow.hpp"
-#include "Screen/Key.h"
 #include "Form/DataField/Enum.hpp"
-#include "Form/DataField/String.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
 #include "Look/InfoBoxLook.hpp"
 #include "Language/Language.hpp"
-#include "Util/StringAPI.hpp"
-#include "Util/StaticArray.hpp"
-#include "Compiler.h"
+#include "Util/StringAPI.hxx"
+#include "Util/StaticArray.hxx"
 
 #include <assert.h>
 
@@ -63,8 +59,8 @@ public:
 
 protected:
   /* virtual methods from class Window */
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseDouble(PixelScalar x, PixelScalar y) override;
+  bool OnMouseDown(PixelPoint p) override;
+  bool OnMouseDouble(PixelPoint p) override;
 
   /* virtual methods from class PaintWindow */
   virtual void OnPaint(Canvas &canvas) override;
@@ -196,10 +192,6 @@ public:
     return true;
   }
 
-#ifdef GNAV
-  bool KeyPress(unsigned key_code) override;
-#endif
-
 private:
   /* virtual methods from class DataFieldListener */
 
@@ -299,7 +291,6 @@ InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
                       button_style, dialog, mrOK);
 
   WindowStyle preview_style;
-  preview_style.EnableDoubleClicks();
   preview_style.Hide();
 
   previews.resize(layout.info_boxes.count);
@@ -396,14 +387,14 @@ InfoBoxesConfigWidget::SetCurrentInfoBox(unsigned _current_preview)
 }
 
 bool
-InfoBoxPreview::OnMouseDown(PixelScalar x, PixelScalar y)
+InfoBoxPreview::OnMouseDown(PixelPoint p)
 {
   parent->SetCurrentInfoBox(i);
   return true;
 }
 
 bool
-InfoBoxPreview::OnMouseDouble(PixelScalar x, PixelScalar y)
+InfoBoxPreview::OnMouseDouble(PixelPoint p)
 {
   parent->BeginEditing();
   return true;
@@ -437,56 +428,6 @@ InfoBoxPreview::OnPaint(Canvas &canvas)
   canvas.SetTextColor(is_current ? COLOR_WHITE : COLOR_BLACK);
   canvas.DrawText(2, 2, caption);
 }
-
-#ifdef GNAV
-
-bool
-InfoBoxesConfigWidget::KeyPress(unsigned key_code)
-{
-  /* map the Altair hardware buttons */
-  switch (key_code){
-  case KEY_UP:
-    ((DataFieldEnum &)GetDataField(INFOBOX)).Dec();
-    GetControl(INFOBOX).RefreshDisplay();
-    return true;
-
-  case KEY_DOWN:
-    ((DataFieldEnum &)GetDataField(INFOBOX)).Inc();
-    GetControl(INFOBOX).RefreshDisplay();
-    return true;
-
-  case KEY_LEFT:
-    ((DataFieldEnum &)GetDataField(CONTENT)).Dec();
-    GetControl(CONTENT).RefreshDisplay();
-    return true;
-
-  case KEY_RIGHT:
-    ((DataFieldEnum &)GetDataField(CONTENT)).Inc();
-    GetControl(CONTENT).RefreshDisplay();
-    return true;
-
-  case KEY_APP1:
-    GetControl(NAME).BeginEditing();
-    return true;
-
-  case '6':
-    dialog.OnAction(mrOK);
-    return true;
-
-  case '7':
-    OnCopy();
-    return true;
-
-  case '8':
-    OnPaste();
-    return true;
-
-  default:
-    return false;
-  }
-}
-
-#endif
 
 bool
 dlgConfigInfoboxesShowModal(SingleWindow &parent,

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,13 +26,14 @@
 #include "Computer/CirclingComputer.hpp"
 #include "DebugReplay.hpp"
 #include "Util/Macros.hpp"
-#include "IO/TextWriter.hpp"
+#include "IO/StdioOutputStream.hxx"
 #include "Formatter/TimeFormatter.hpp"
 #include "JSON/Writer.hpp"
 #include "JSON/GeoWriter.hpp"
 #include "FlightPhaseDetector.hpp"
 #include "FlightPhaseJSON.hpp"
 #include "Computer/Settings.hpp"
+#include "Util/StringCompare.hxx"
 
 struct Result {
   BrokenDateTime takeoff_time, release_time, landing_time;
@@ -71,7 +72,7 @@ Update(const MoreData &basic, const FlyingState &state,
     result.landing_location = state.landing_location;
   }
 
-  if (!negative(state.release_time) && !result.release_time.IsPlausible()) {
+  if (state.release_time >= 0 && !result.release_time.IsPlausible()) {
     result.release_time = basic.GetDateTimeAt(state.release_time);
     result.release_location = state.release_location;
   }
@@ -147,7 +148,7 @@ Run(DebugReplay &replay, Result &result,
 
     last_location = basic.location;
 
-    if (!released && !negative(replay.Calculated().flight.release_time)) {
+    if (!released && replay.Calculated().flight.release_time >= 0) {
       released = true;
 
       full_trace.EraseEarlierThan(replay.Calculated().flight.release_time);
@@ -183,7 +184,7 @@ SolveContest(Contest contest,
 }
 
 static void
-WriteEventAttributes(TextWriter &writer,
+WriteEventAttributes(BufferedOutputStream &writer,
                      const BrokenDateTime &time, const GeoPoint &location)
 {
   JSON::ObjectWriter object(writer);
@@ -207,7 +208,7 @@ WriteEvent(JSON::ObjectWriter &object, const char *name,
 }
 
 static void
-WriteEvents(TextWriter &writer, const Result &result)
+WriteEvents(BufferedOutputStream &writer, const Result &result)
 {
   JSON::ObjectWriter object(writer);
 
@@ -223,7 +224,7 @@ WriteResult(JSON::ObjectWriter &root, const Result &result)
 }
 
 static void
-WritePoint(TextWriter &writer, const ContestTracePoint &point,
+WritePoint(BufferedOutputStream &writer, const ContestTracePoint &point,
            const ContestTracePoint *previous)
 {
   JSON::ObjectWriter object(writer);
@@ -232,7 +233,7 @@ WritePoint(TextWriter &writer, const ContestTracePoint &point,
   JSON::WriteGeoPointAttributes(object, point.GetLocation());
 
   if (previous != NULL) {
-    fixed distance = point.DistanceTo(previous->GetLocation());
+    auto distance = point.DistanceTo(previous->GetLocation());
     object.WriteElement("distance", JSON::WriteUnsigned, uround(distance));
 
     unsigned duration =
@@ -240,14 +241,14 @@ WritePoint(TextWriter &writer, const ContestTracePoint &point,
     object.WriteElement("duration", JSON::WriteUnsigned, duration);
 
     if (duration > 0) {
-      fixed speed = distance / duration;
-      object.WriteElement("speed", JSON::WriteFixed, speed);
+      auto speed = distance / duration;
+      object.WriteElement("speed", JSON::WriteDouble, speed);
     }
   }
 }
 
 static void
-WriteTrace(TextWriter &writer, const ContestTraceVector &trace)
+WriteTrace(BufferedOutputStream &writer, const ContestTraceVector &trace)
 {
   JSON::ArrayWriter array(writer);
 
@@ -259,21 +260,21 @@ WriteTrace(TextWriter &writer, const ContestTraceVector &trace)
 }
 
 static void
-WriteContest(TextWriter &writer,
+WriteContest(BufferedOutputStream &writer,
              const ContestResult &result, const ContestTraceVector &trace)
 {
   JSON::ObjectWriter object(writer);
 
-  object.WriteElement("score", JSON::WriteFixed, result.score);
-  object.WriteElement("distance", JSON::WriteFixed, result.distance);
+  object.WriteElement("score", JSON::WriteDouble, result.score);
+  object.WriteElement("distance", JSON::WriteDouble, result.distance);
   object.WriteElement("duration", JSON::WriteUnsigned, (unsigned)result.time);
-  object.WriteElement("speed", JSON::WriteFixed, result.GetSpeed());
+  object.WriteElement("speed", JSON::WriteDouble, result.GetSpeed());
 
   object.WriteElement("turnpoints", WriteTrace, trace);
 }
 
 static void
-WriteOLCPlus(TextWriter &writer, const ContestStatistics &stats)
+WriteOLCPlus(BufferedOutputStream &writer, const ContestStatistics &stats)
 {
   JSON::ObjectWriter object(writer);
 
@@ -286,7 +287,7 @@ WriteOLCPlus(TextWriter &writer, const ContestStatistics &stats)
 }
 
 static void
-WriteDMSt(TextWriter &writer, const ContestStatistics &stats)
+WriteDMSt(BufferedOutputStream &writer, const ContestStatistics &stats)
 {
   JSON::ObjectWriter object(writer);
 
@@ -295,7 +296,7 @@ WriteDMSt(TextWriter &writer, const ContestStatistics &stats)
 }
 
 static void
-WriteContests(TextWriter &writer, const ContestStatistics &olc_plus,
+WriteContests(BufferedOutputStream &writer, const ContestStatistics &olc_plus,
               const ContestStatistics &dmst)
 {
   JSON::ObjectWriter object(writer);
@@ -371,7 +372,8 @@ int main(int argc, char **argv)
   const ContestStatistics olc_plus = SolveContest(Contest::OLC_PLUS, full_trace, triangle_trace, sprint_trace);
   const ContestStatistics dmst = SolveContest(Contest::DMST, full_trace, triangle_trace, sprint_trace);
 
-  TextWriter writer("/dev/stdout", true);
+  StdioOutputStream os(stdout);
+  BufferedOutputStream writer(os);
 
   {
     JSON::ObjectWriter root(writer);
@@ -383,4 +385,6 @@ int main(int argc, char **argv)
                       flight_phase_detector.GetTotals());
     root.WriteElement("contests", WriteContests, olc_plus, dmst);
   }
+
+  writer.Flush();
 }

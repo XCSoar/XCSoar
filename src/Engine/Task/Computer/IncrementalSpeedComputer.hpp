@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,6 @@
 #ifndef XCSOAR_INCREMENTAL_SPEED_COMPUTER_HPP
 #define XCSOAR_INCREMENTAL_SPEED_COMPUTER_HPP
 
-#include "Math/fixed.hpp"
 #include "Math/Filter.hpp"
 #include "Math/AvFilter.hpp"
 #include "Math/DiffFilter.hpp"
@@ -41,7 +40,7 @@ class IncrementalSpeedComputer {
   Filter v_lpf;
   const bool is_positive;
 
-  fixed last_time;
+  double last_time;
 
 public:
   /** Constructor; initialises all to zero */
@@ -53,7 +52,7 @@ public:
    *
    * @param time monotonic time of day in seconds
    */
-  void Compute(DistanceStat &data, const fixed time);
+  void Compute(DistanceStat &data, double time);
 
   void Reset(DistanceStat &data);
 };

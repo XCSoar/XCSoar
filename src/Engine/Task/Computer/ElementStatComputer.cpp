@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,7 +28,6 @@ ElementStatComputer::ElementStatComputer()
    remaining(),
    planned(),
    travelled(false),
-   pirker(false),
    vario(),
    initialised(false) {}
 
@@ -37,21 +36,20 @@ ElementStatComputer::Reset(ElementStat &data)
 {
   initialised = false;
 
-  CalcSpeeds(data, fixed(-1));
+  CalcSpeeds(data, -1);
 }
 
 void 
-ElementStatComputer::CalcSpeeds(ElementStat &data, const fixed time)
+ElementStatComputer::CalcSpeeds(ElementStat &data, const double time)
 {
   remaining_effective.CalcSpeed(data.remaining_effective,
                                 data.time_remaining_start);
   remaining.CalcSpeed(data.remaining, data.time_remaining_now);
   planned.CalcSpeed(data.planned, data.time_planned);
   travelled.CalcSpeed(data.travelled, data.time_elapsed);
-  pirker.CalcSpeed(data.pirker, data.time_elapsed);
 
   if (!initialised) {
-    if (data.time_elapsed > fixed(15))
+    if (data.time_elapsed > 15)
       initialised = true;
 
     vario.reset(data.vario, data.solution_remaining);
@@ -59,7 +57,6 @@ ElementStatComputer::CalcSpeeds(ElementStat &data, const fixed time)
     remaining.ResetIncrementalSpeed(data.remaining);
     planned.ResetIncrementalSpeed(data.planned);
     travelled.ResetIncrementalSpeed(data.travelled);
-    pirker.ResetIncrementalSpeed(data.pirker);
     return;
   }
 
@@ -69,11 +66,9 @@ ElementStatComputer::CalcSpeeds(ElementStat &data, const fixed time)
 
   if (data.solution_remaining.IsOk()) {
     remaining_effective.CalcIncrementalSpeed(data.remaining_effective, time);
-    pirker.CalcIncrementalSpeed(data.pirker, time);
     vario.update(data.vario, data.solution_remaining);
   } else {
     remaining_effective.ResetIncrementalSpeed(data.remaining_effective);
-    pirker.ResetIncrementalSpeed(data.pirker);
     vario.reset(data.vario, data.solution_remaining);
   }
 }

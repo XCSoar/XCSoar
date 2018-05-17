@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,18 +24,18 @@ Copyright_License {
 #ifndef XCSOAR_POLAR_FILE_GLUE_HPP
 #define XCSOAR_POLAR_FILE_GLUE_HPP
 
-#include <tchar.h>
-
 struct PolarInfo;
+class Path;
 class NLineReader;
-class TextWriter;
+class BufferedOutputStream;
+class Error;
 
 namespace PolarGlue
 {
-  bool LoadFromFile(PolarInfo &polar, const TCHAR* path);
-  bool SaveToFile(const PolarInfo &polar, const TCHAR* path);
+  void LoadFromFile(PolarInfo &polar, Path path);
+  void SaveToFile(const PolarInfo &polar, Path path);
   bool LoadFromFile(PolarInfo &polar, NLineReader &reader);
-  bool SaveToFile(const PolarInfo &polar, TextWriter &writer);
+  void SaveToFile(const PolarInfo &polar, BufferedOutputStream &writer);
 }
 
 #endif

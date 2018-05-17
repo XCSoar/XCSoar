@@ -1,0 +1,182 @@
+Index: boost_1_61_0/boost/asio/detail/impl/win_thread.ipp
+===================================================================
+--- boost_1_61_0.orig/boost/asio/detail/impl/win_thread.ipp
++++ boost_1_61_0/boost/asio/detail/impl/win_thread.ipp
+@@ -43,7 +43,7 @@ win_thread::~win_thread()
+ void win_thread::join()
+ {
+   HANDLE handles[2] = { exit_event_, thread_ };
+-  ::WaitForMultipleObjects(2, handles, FALSE, INFINITE);
++  ::WaitForMultipleObjects(2, handles, false, INFINITE);
+   ::CloseHandle(exit_event_);
+   if (terminate_threads())
+   {
+@@ -121,7 +121,7 @@ unsigned int __stdcall win_thread_functi
+   delete func.ptr;
+   func.ptr = 0;
+   ::SetEvent(exit_event);
+-  ::SleepEx(INFINITE, TRUE);
++  ::SleepEx(INFINITE, true);
+ 
+   return 0;
+ }
+Index: boost_1_61_0/boost/asio/detail/impl/win_iocp_io_service.ipp
+===================================================================
+--- boost_1_61_0.orig/boost/asio/detail/impl/win_iocp_io_service.ipp
++++ boost_1_61_0/boost/asio/detail/impl/win_iocp_io_service.ipp
+@@ -96,7 +96,7 @@ void win_iocp_io_service::shutdown_servi
+   {
+     LARGE_INTEGER timeout;
+     timeout.QuadPart = 1;
+-    ::SetWaitableTimer(waitable_timer_.handle, &timeout, 1, 0, 0, FALSE);
++    ::SetWaitableTimer(waitable_timer_.handle, &timeout, 1, 0, 0, false);
+   }
+ 
+   while (::InterlockedExchangeAdd(&outstanding_work_, 0) > 0)
+@@ -480,7 +480,7 @@ void win_iocp_io_service::do_add_timer_q
+ 
+   if (!waitable_timer_.handle)
+   {
+-    waitable_timer_.handle = ::CreateWaitableTimer(0, FALSE, 0);
++    waitable_timer_.handle = ::CreateWaitableTimer(0, false, 0);
+     if (waitable_timer_.handle == 0)
+     {
+       DWORD last_error = ::GetLastError();
+@@ -493,7 +493,7 @@ void win_iocp_io_service::do_add_timer_q
+     timeout.QuadPart = -max_timeout_usec;
+     timeout.QuadPart *= 10;
+     ::SetWaitableTimer(waitable_timer_.handle,
+-        &timeout, max_timeout_msec, 0, 0, FALSE);
++        &timeout, max_timeout_msec, 0, 0, false);
+   }
+ 
+   if (!timer_thread_.get())
+@@ -524,7 +524,7 @@ void win_iocp_io_service::update_timeout
+       timeout.QuadPart = -timeout_usec;
+       timeout.QuadPart *= 10;
+       ::SetWaitableTimer(waitable_timer_.handle,
+-          &timeout, max_timeout_msec, 0, 0, FALSE);
++          &timeout, max_timeout_msec, 0, 0, false);
+     }
+   }
+ }
+Index: boost_1_61_0/boost/asio/detail/impl/win_iocp_handle_service.ipp
+===================================================================
+--- boost_1_61_0.orig/boost/asio/detail/impl/win_iocp_handle_service.ipp
++++ boost_1_61_0/boost/asio/detail/impl/win_iocp_handle_service.ipp
+@@ -40,7 +40,7 @@ public:
+     OffsetHigh = 0;
+ 
+     // Create a non-signalled manual-reset event, for GetOverlappedResult.
+-    hEvent = ::CreateEventW(0, TRUE, FALSE, 0);
++    hEvent = ::CreateEventW(0, true, false, 0);
+     if (hEvent)
+     {
+       // As documented in GetQueuedCompletionStatus, setting the low order
+@@ -336,7 +336,7 @@ size_t win_iocp_handle_service::do_write
+   // Wait for the operation to complete.
+   DWORD bytes_transferred = 0;
+   ok = ::GetOverlappedResult(impl.handle_,
+-      &overlapped, &bytes_transferred, TRUE);
++      &overlapped, &bytes_transferred, true);
+   if (!ok)
+   {
+     DWORD last_error = ::GetLastError();
+@@ -437,7 +437,7 @@ size_t win_iocp_handle_service::do_read(
+   // Wait for the operation to complete.
+   DWORD bytes_transferred = 0;
+   ok = ::GetOverlappedResult(impl.handle_,
+-      &overlapped, &bytes_transferred, TRUE);
++      &overlapped, &bytes_transferred, true);
+   if (!ok)
+   {
+     DWORD last_error = ::GetLastError();
+Index: boost_1_61_0/boost/asio/detail/impl/win_iocp_serial_port_service.ipp
+===================================================================
+--- boost_1_61_0.orig/boost/asio/detail/impl/win_iocp_serial_port_service.ipp
++++ boost_1_61_0/boost/asio/detail/impl/win_iocp_serial_port_service.ipp
+@@ -80,10 +80,10 @@ boost::system::error_code win_iocp_seria
+ 
+   // Set some default serial port parameters. This implementation does not
+   // support changing these, so they might as well be in a known state.
+-  dcb.fBinary = TRUE; // Win32 only supports binary mode.
+-  dcb.fDsrSensitivity = FALSE;
+-  dcb.fNull = FALSE; // Do not ignore NULL characters.
+-  dcb.fAbortOnError = FALSE; // Ignore serial framing errors.
++  dcb.fBinary = true; // Win32 only supports binary mode.
++  dcb.fDsrSensitivity = false;
++  dcb.fNull = false; // Do not ignore NULL characters.
++  dcb.fAbortOnError = false; // Ignore serial framing errors.
+   if (!::SetCommState(handle, &dcb))
+   {
+     DWORD last_error = ::GetLastError();
+Index: boost_1_61_0/boost/asio/detail/impl/win_static_mutex.ipp
+===================================================================
+--- boost_1_61_0.orig/boost/asio/detail/impl/win_static_mutex.ipp
++++ boost_1_61_0/boost/asio/detail/impl/win_static_mutex.ipp
+@@ -53,7 +53,7 @@ int win_static_mutex::do_init()
+ #if defined(BOOST_ASIO_WINDOWS_APP)
+   HANDLE mutex = ::CreateMutexExW(0, mutex_name, CREATE_MUTEX_INITIAL_OWNER, 0);
+ #else // defined(BOOST_ASIO_WINDOWS_APP)
+-  HANDLE mutex = ::CreateMutexW(0, TRUE, mutex_name);
++  HANDLE mutex = ::CreateMutexW(0, true, mutex_name);
+ #endif // defined(BOOST_ASIO_WINDOWS_APP)
+   DWORD last_error = ::GetLastError();
+   if (mutex == 0)
+Index: boost_1_61_0/boost/asio/impl/serial_port_base.ipp
+===================================================================
+--- boost_1_61_0.orig/boost/asio/impl/serial_port_base.ipp
++++ boost_1_61_0/boost/asio/impl/serial_port_base.ipp
+@@ -222,24 +222,24 @@ boost::system::error_code serial_port_ba
+     BOOST_ASIO_OPTION_STORAGE& storage, boost::system::error_code& ec) const
+ {
+ #if defined(BOOST_ASIO_WINDOWS) || defined(__CYGWIN__)
+-  storage.fOutxCtsFlow = FALSE;
+-  storage.fOutxDsrFlow = FALSE;
+-  storage.fTXContinueOnXoff = TRUE;
++  storage.fOutxCtsFlow = false;
++  storage.fOutxDsrFlow = false;
++  storage.fTXContinueOnXoff = true;
+   storage.fDtrControl = DTR_CONTROL_ENABLE;
+-  storage.fDsrSensitivity = FALSE;
+-  storage.fOutX = FALSE;
+-  storage.fInX = FALSE;
++  storage.fDsrSensitivity = false;
++  storage.fOutX = false;
++  storage.fInX = false;
+   storage.fRtsControl = RTS_CONTROL_ENABLE;
+   switch (value_)
+   {
+   case none:
+     break;
+   case software:
+-    storage.fOutX = TRUE;
+-    storage.fInX = TRUE;
++    storage.fOutX = true;
++    storage.fInX = true;
+     break;
+   case hardware:
+-    storage.fOutxCtsFlow = TRUE;
++    storage.fOutxCtsFlow = true;
+     storage.fRtsControl = RTS_CONTROL_HANDSHAKE;
+     break;
+   default:
+@@ -343,15 +343,15 @@ boost::system::error_code serial_port_ba
+   switch (value_)
+   {
+   case none:
+-    storage.fParity = FALSE;
++    storage.fParity = false;
+     storage.Parity = NOPARITY;
+     break;
+   case odd:
+-    storage.fParity = TRUE;
++    storage.fParity = true;
+     storage.Parity = ODDPARITY;
+     break;
+   case even:
+-    storage.fParity = TRUE;
++    storage.fParity = true;
+     storage.Parity = EVENPARITY;
+     break;
+   default:

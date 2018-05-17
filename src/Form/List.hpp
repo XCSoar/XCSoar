@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,13 +25,10 @@ Copyright_License {
 #define XCSOAR_FORM_LIST_HPP
 
 #include "Screen/PaintWindow.hpp"
-#include "Form/ScrollBar.hpp"
-#include "Compiler.h"
-
-#ifndef _WIN32_WCE
 #include "Screen/Timer.hpp"
+#include "Form/ScrollBar.hpp"
 #include "UIUtil/KineticManager.hpp"
-#endif
+#include "Compiler.h"
 
 struct DialogLook;
 class ContainerWindow;
@@ -101,7 +98,7 @@ protected:
   ScrollBar scroll_bar;
 
   /** The height of one item on the screen, in pixels. */
-  UPixelScalar item_height;
+  unsigned item_height;
   /** The number of items in the list. */
   unsigned length;
   /** The index of the topmost item currently being displayed. */
@@ -111,7 +108,7 @@ protected:
    * Which pixel row of the "origin" item is being displayed at the
    * top of the Window?
    */
-  UPixelScalar pixel_pan;
+  unsigned pixel_pan;
 
   /** The number of items visible at a time. */
   unsigned items_visible;
@@ -156,10 +153,8 @@ protected:
   ListItemRenderer *item_renderer;
   ListCursorHandler *cursor_handler;
 
-#ifndef _WIN32_WCE
   KineticManager kinetic;
   WindowTimer kinetic_timer;
-#endif
 
 public:
   ListControl(const DialogLook &_look);
@@ -170,7 +165,7 @@ public:
    */
   ListControl(ContainerWindow &parent, const DialogLook &look,
               PixelRect rc, const WindowStyle style,
-              UPixelScalar _item_height);
+              unsigned _item_height);
 
   virtual ~ListControl();
 
@@ -200,7 +195,7 @@ public:
     return item_height;
   }
 
-  void SetItemHeight(UPixelScalar _item_height);
+  void SetItemHeight(unsigned _item_height);
 
   bool IsEmpty() const {
     return length == 0;
@@ -220,7 +215,7 @@ public:
   /**
    * Check whether the length of the list is below a certain
    * threshold.  Small lists may have different behaviour on some
-   * platforms (e.g. Altair).
+   * platforms.
    */
   bool IsShort() const {
     return length <= 8 || length <= items_visible;
@@ -251,7 +246,7 @@ public:
   /**
    * Pan the "origin item" to the specified pixel position.
    */
-  void SetPixelPan(UPixelScalar _pixel_pan);
+  void SetPixelPan(unsigned _pixel_pan);
 
   /**
    * Scrolls to the specified index.
@@ -315,20 +310,18 @@ protected:
   /** Draws the ScrollBar */
   void DrawScrollBar(Canvas &canvas);
 
-#ifndef _WIN32_WCE
   bool OnTimer(WindowTimer &timer) override;
   void OnDestroy() override;
-#endif
 
   void OnResize(PixelSize new_size) override;
 
   void OnSetFocus() override;
   void OnKillFocus() override;
 
-  bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  bool OnMouseUp(PixelScalar x, PixelScalar y) override;
-  bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
-  bool OnMouseWheel(PixelScalar x, PixelScalar y, int delta) override;
+  bool OnMouseDown(PixelPoint p) override;
+  bool OnMouseUp(PixelPoint p) override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) override;
+  bool OnMouseWheel(PixelPoint p, int delta) override;
 
   bool OnKeyCheck(unsigned key_code) const override;
   bool OnKeyDown(unsigned key_code) override;

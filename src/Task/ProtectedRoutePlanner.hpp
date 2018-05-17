@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -60,30 +60,32 @@ public:
   }
 
   gcc_pure
-  bool IsReachEmpty() const {
+  bool IsTerrainReachEmpty() const {
     Lease lease(*this);
-    return lease->IsReachEmpty();
+    return lease->IsTerrainReachEmpty();
   }
 
   void SetTerrain(const RasterTerrain *terrain);
 
   void SetPolars(const GlideSettings &settings,
+                 const RoutePlannerConfig &config,
                  const GlidePolar &glide_polar, const GlidePolar &safety_polar,
-                 const SpeedVector &wind);
+                 const SpeedVector &wind,
+                 const int height_min_working);
 
   void SolveRoute(const AGeoPoint &dest, const AGeoPoint &start,
                   const RoutePlannerConfig &config,
-                  const RoughAltitude h_ceiling);
+                  const int h_ceiling);
 
-  bool Intersection(const AGeoPoint &origin,
-                    const AGeoPoint &destination,
-                    GeoPoint &intx) const;
+  gcc_pure
+  GeoPoint Intersection(const AGeoPoint &origin,
+                        const AGeoPoint &destination) const;
 
   void SolveReach(const AGeoPoint &origin, const RoutePlannerConfig &config,
-                  RoughAltitude h_ceiling, bool do_solve);
+                  int h_ceiling, bool do_solve);
 
-  void AcceptInRange(const GeoBounds &bounds,
-                     TriangleFanVisitor &visitor) const;
+  gcc_pure
+  const FlatProjection GetTerrainReachProjection() const;
 };
 
 #endif

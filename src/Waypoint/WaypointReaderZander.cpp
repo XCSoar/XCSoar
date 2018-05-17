@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -66,7 +66,7 @@ ParseAngle(const TCHAR* src, Angle& dest, const bool lat)
   // Limit angle to +/- 90 degrees for Latitude or +/- 180 degrees for Longitude
   deg = std::min(deg, lat ? 90L : 180L);
 
-  fixed value = fixed(deg) + fixed(min) / 60 + fixed(sec) / 3600;
+  auto value = deg + min / 60. + sec / 3600.;
 
   TCHAR sign = *endptr;
   if (sign == 'W' || sign == 'w' || sign == 'S' || sign == 's')
@@ -78,7 +78,7 @@ ParseAngle(const TCHAR* src, Angle& dest, const bool lat)
 }
 
 static bool
-ParseAltitude(const TCHAR* src, fixed& dest)
+ParseAltitude(const TCHAR *src, double &dest)
 {
   // Parse string
   TCHAR *endptr;
@@ -87,7 +87,7 @@ ParseAltitude(const TCHAR* src, fixed& dest)
     return false;
 
   // Save altitude
-  dest = (fixed)val;
+  dest = val;
   return true;
 }
 

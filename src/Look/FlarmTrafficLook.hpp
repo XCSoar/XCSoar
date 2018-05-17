@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -56,6 +56,7 @@ struct FlarmTrafficLook {
   Pen default_pen;
   Pen passive_pen;
   Pen selection_pen;
+
   Pen team_pen_green;
   Pen team_pen_blue;
   Pen team_pen_yellow;

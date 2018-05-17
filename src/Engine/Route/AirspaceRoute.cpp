@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,6 +25,7 @@
 #include "Airspace/AirspaceIntersectionVisitor.hpp"
 #include "Airspace/AbstractAirspace.hpp"
 #include "Airspace/Predicate/AirspacePredicateHeightRange.hpp"
+#include "Airspace/Predicate/AirspacePredicate.hpp"
 #include "Geo/Flat/FlatRay.hpp"
 
 // Airspace query helpers
@@ -38,7 +39,7 @@ public:
 
 private:
   const RouteLink &link;
-  fixed min_distance;
+  double min_distance;
   const FlatProjection &proj;
   const RoutePolars &rpolar;
   AIVResult nearest;
@@ -64,11 +65,11 @@ public:
                                              link.second.altitude),
                                   proj);
 
-    if (l.second.altitude < RoughAltitude(as.GetBase().altitude) ||
-        l.second.altitude > RoughAltitude(as.GetTop().altitude))
+    if (l.second.altitude < as.GetBase().altitude ||
+        l.second.altitude > as.GetTop().altitude)
       return;
 
-    if (negative(min_distance) || (l.d < min_distance)) {
+    if (min_distance < 0 || l.d < min_distance) {
       min_distance = l.d;
       nearest = std::make_pair(&as, l.second);
     }
@@ -76,23 +77,6 @@ public:
 
   AIVResult GetNearest() const {
     return nearest;
-  }
-};
-
-
-class AirspaceInsideOtherVisitor final : public AirspaceVisitor {
-  const AbstractAirspace *m_found;
-
-public:
-  AirspaceInsideOtherVisitor():m_found(nullptr) {};
-
-  const AbstractAirspace *GetFound() const {
-    return m_found;
-  }
-
-protected:
-  void Visit(const AbstractAirspace &as) override {
-    m_found = &as;
   }
 };
 
@@ -111,10 +95,12 @@ AirspaceRoute::FirstIntersecting(const RouteLink &e) const
 const AbstractAirspace *
 AirspaceRoute::InsideOthers(const AGeoPoint &origin) const
 {
-  AirspaceInsideOtherVisitor visitor;
-  m_airspaces.VisitWithinRange(origin, fixed(1), visitor);
   ++count_airspace;
-  return visitor.GetFound();
+
+  for (const auto &i : m_airspaces.QueryWithinRange(origin, 1))
+    return &i.GetAirspace();
+
+  return nullptr;
 }
 
 
@@ -221,17 +207,19 @@ AirspaceRoute::Synchronise(const Airspaces &master,
 {
   // @todo: also synchronise with AirspaceWarningManager to filter out items that are
   // acknowledged.
-  h_min = std::min(origin.altitude, std::min(destination.altitude, h_min));
-  h_max = std::max(origin.altitude, std::max(destination.altitude, h_max));
+  h_min = std::min((int)origin.altitude, std::min((int)destination.altitude, h_min));
+  h_max = std::max((int)origin.altitude, std::max((int)destination.altitude, h_max));
 
   // @todo: have margin for h_max to allow for climb
   AirspacePredicateHeightRangeExcludeTwo h_condition(h_min, h_max, origin, destination);
 
-  AndAirspacePredicate condition(h_condition, _condition);
+  const auto and_condition = MakeAndPredicate(h_condition,
+                                              AirspacePredicateRef(_condition));
+  const auto predicate = WrapAirspacePredicate(and_condition);
 
   if (m_airspaces.SynchroniseInRange(master, origin.Middle(destination),
-                                     Half(origin.Distance(destination)),
-                                     condition)) {
+                                     0.5 * origin.Distance(destination),
+                                     predicate)) {
     if (!m_airspaces.IsEmpty())
       dirty = true;
   }

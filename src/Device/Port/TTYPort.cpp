@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,16 +23,14 @@ Copyright_License {
 
 #include "TTYPort.hpp"
 #include "Asset.hpp"
-#include "OS/LogError.hpp"
-#include "OS/Sleep.h"
-#include "IO/Async/GlobalIOThread.hpp"
-#include "Util/StringAPI.hpp"
+#include "OS/FileDescriptor.hxx"
+#include "OS/Error.hxx"
+#include "IO/Async/AsioUtil.hpp"
 #include "Util/StringFormat.hpp"
 
-#include <time.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <sys/poll.h>
+#include <system_error>
+#include <boost/system/system_error.hpp>
+
 #include <sys/stat.h>
 #include <termios.h>
 
@@ -43,12 +41,19 @@ Copyright_License {
 #include <errno.h>
 #include <windef.h> // for MAX_PATH
 
+TTYPort::TTYPort(boost::asio::io_service &io_service,
+                 PortListener *_listener, DataHandler &_handler)
+  :BufferedPort(_listener, _handler),
+   serial_port(io_service)
+{
+}
+
 TTYPort::~TTYPort()
 {
   BufferedPort::BeginClose();
 
-  if (tty.IsDefined())
-    io_thread->LockRemove(tty.ToFileDescriptor());
+  if (serial_port.is_open())
+    CancelWait(serial_port);
 
   BufferedPort::EndClose();
 }
@@ -64,9 +69,15 @@ TTYPort::GetState() const
 bool
 TTYPort::Drain()
 {
-  return tty.Drain();
+#ifdef __BIONIC__
+  /* bionic doesn't have tcdrain() */
+  return true;
+#else
+  return tcdrain(serial_port.native_handle()) == 0;
+#endif
 }
 
+#ifndef __APPLE__
 gcc_pure
 static bool
 IsCharDev(const char *path)
@@ -74,10 +85,12 @@ IsCharDev(const char *path)
   struct stat st;
   return stat(path, &st) == 0 && S_ISCHR(st.st_mode);
 }
+#endif
 
 bool
-TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
+TTYPort::Open(const TCHAR *path, unsigned baud_rate)
 {
+#ifndef __APPLE__
   if (IsAndroid() && IsCharDev(path)) {
     /* attempt to give the XCSoar process permissions to access the
        USB serial adapter; this is mostly relevant to the Nook */
@@ -85,18 +98,71 @@ TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
     StringFormat(command, MAX_PATH, "su -c 'chmod 666 %s'", path);
     system(command);
   }
+#endif
 
-  if (!tty.OpenNonBlocking(path)) {
-    LogErrno(_T("Failed to open port '%s'"), path);
-    return false;
+  boost::system::error_code ec;
+  serial_port.open(path, ec);
+  if (ec) {
+    char error_msg[MAX_PATH + 16];
+    StringFormat(error_msg, sizeof(error_msg), "Failed to open %s", path);
+    throw boost::system::system_error(ec);
   }
 
-  baud_rate = _baud_rate;
   if (!SetBaudrate(baud_rate))
     return false;
 
+  serial_port.set_option(boost::asio::serial_port_base::parity(
+                             boost::asio::serial_port_base::parity::none),
+                         ec);
+  if (ec)
+    return false;
+
+  serial_port.set_option(boost::asio::serial_port_base::character_size(
+                             boost::asio::serial_port_base::character_size(8)),
+                         ec);
+  if (ec)
+    return false;
+
+  serial_port.set_option(boost::asio::serial_port_base::stop_bits(
+                             boost::asio::serial_port_base::stop_bits::one),
+                         ec);
+  if (ec)
+    return false;
+
+  serial_port.set_option(boost::asio::serial_port_base::flow_control(
+                             boost::asio::serial_port_base::flow_control::none),
+                         ec);
+  if (ec)
+    return false;
+
+  class
+  {
+  public:
+    boost::system::error_code store(
+        termios& attr, boost::system::error_code& ec) const {
+      /* The IGNBRK flag is explicitly cleared by boost::asio::serial_port, and
+         it offers no built-in option to change this.
+         This flag is needed for some setups, to avoid receiving unwanted '\0'
+         charachters, which cannot be detected by weak checksum algorithms. */
+      attr.c_iflag |= IGNBRK;
+
+      /* boost::asio::serial_port leaves the VMIN and VTIME parameters
+         unintialised, which can lead to undesired behaviour. */
+      attr.c_cc[VMIN] = 1;
+      attr.c_cc[VTIME] = 0;
+
+      ec = boost::system::error_code();
+      return ec;
+    }
+  } custom_options;
+  serial_port.set_option(custom_options, ec);
+  if (ec)
+    return false;
+
   valid.store(true, std::memory_order_relaxed);
-  io_thread->LockAdd(tty.ToFileDescriptor(), Poll::READ, *this);
+
+  AsyncRead();
+
   StateChanged();
   return true;
 }
@@ -104,13 +170,23 @@ TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
 const char *
 TTYPort::OpenPseudo()
 {
-  if (!tty.OpenNonBlocking("/dev/ptmx") || !tty.Unlock())
-    return nullptr;
+  const char *path = "/dev/ptmx";
+
+  FileDescriptor fd;
+  if (!fd.OpenNonBlocking(path))
+    throw FormatErrno("Failed to open %s", path);
+
+  serial_port.assign(fd.Get());
+
+  if (unlockpt(serial_port.native_handle()) < 0)
+    throw FormatErrno("unlockpt('%s') failed", path);
 
   valid.store(true, std::memory_order_relaxed);
-  io_thread->LockAdd(tty.ToFileDescriptor(), Poll::READ, *this);
+
+  AsyncRead();
+
   StateChanged();
-  return tty.GetSlaveName();
+  return ptsname(serial_port.native_handle());
 }
 
 void
@@ -119,19 +195,20 @@ TTYPort::Flush()
   if (!valid.load(std::memory_order_relaxed))
     return;
 
-  tty.FlushInput();
+  tcflush(serial_port.native_handle(), TCIFLUSH);
   BufferedPort::Flush();
 }
 
 Port::WaitResult
 TTYPort::WaitWrite(unsigned timeout_ms)
 {
-  assert(tty.IsDefined());
+  assert(serial_port.is_open());
 
   if (!valid.load(std::memory_order_relaxed))
     return WaitResult::FAILED;
 
-  int ret = tty.WaitWritable(timeout_ms);
+  const FileDescriptor fd(serial_port.native_handle());
+  int ret = fd.WaitWritable(timeout_ms);
   if (ret > 0)
     return WaitResult::READY;
   else if (ret == 0)
@@ -143,151 +220,77 @@ TTYPort::WaitWrite(unsigned timeout_ms)
 size_t
 TTYPort::Write(const void *data, size_t length)
 {
-  assert(tty.IsDefined());
+  assert(serial_port.is_open());
 
   if (!valid.load(std::memory_order_relaxed))
     return 0;
 
-  ssize_t nbytes = tty.Write(data, length);
-  if (nbytes < 0 && errno == EAGAIN) {
+  boost::system::error_code ec;
+  auto nbytes = serial_port.write_some(boost::asio::buffer(data, length), ec);
+  if (ec == boost::asio::error::try_again) {
     /* the output fifo is full; wait until we can write (or until the
        timeout expires) */
     if (WaitWrite(5000) != Port::WaitResult::READY)
       return 0;
 
-    nbytes = tty.Write(data, length);
+    nbytes = serial_port.write_some(boost::asio::buffer(data, length), ec);
   }
 
-  return nbytes < 0 ? 0 : nbytes;
-}
-
-static unsigned
-speed_t_to_baud_rate(speed_t speed)
-{
-  switch (speed) {
-  case B1200:
-    return 1200;
-
-  case B2400:
-    return 2400;
-
-  case B4800:
-    return 4800;
-
-  case B9600:
-    return 9600;
-
-  case B19200:
-    return 19200;
-
-  case B38400:
-    return 38400;
-
-  case B57600:
-    return 57600;
-
-  case B115200:
-    return 115200;
-
-  default:
-    return 0;
-  }
+  return nbytes;
 }
 
 unsigned
 TTYPort::GetBaudrate() const
 {
-  assert(tty.IsDefined());
+  assert(serial_port.is_open());
 
-  struct termios attr;
-  if (!tty.GetAttr(attr))
-    return 0;
-
-  return speed_t_to_baud_rate(cfgetispeed(&attr));
-}
-
-/**
- * Convert a numeric baud rate to a termios.h constant (B*).  Returns
- * B0 on error.
- */
-static speed_t
-baud_rate_to_speed_t(unsigned baud_rate)
-{
-  switch (baud_rate) {
-  case 1200:
-    return B1200;
-
-  case 2400:
-    return B2400;
-
-  case 4800:
-    return B4800;
-
-  case 9600:
-    return B9600;
-
-  case 19200:
-    return B19200;
-
-  case 38400:
-    return B38400;
-
-  case 57600:
-    return B57600;
-
-  case 115200:
-    return B115200;
-
-  default:
-    return B0;
-  }
+  boost::asio::serial_port_base::baud_rate baud_rate;
+  boost::system::error_code ec;
+  const_cast<boost::asio::serial_port &>(serial_port).get_option(baud_rate, ec);
+  return ec ? 0 : baud_rate.value();
 }
 
 bool
-TTYPort::SetBaudrate(unsigned BaudRate)
+TTYPort::SetBaudrate(unsigned baud_rate)
 {
-  assert(tty.IsDefined());
+  assert(serial_port.is_open());
 
-  speed_t speed = baud_rate_to_speed_t(BaudRate);
-  if (speed == B0)
-    /* not supported */
-    return false;
-
-  struct termios attr;
-  if (!tty.GetAttr(attr))
-    return false;
-
-  attr.c_iflag &= ~(BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
-  attr.c_iflag |= (IGNPAR | IGNBRK);
-  attr.c_oflag &= ~OPOST;
-  attr.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
-  attr.c_cflag &= ~(CSIZE | PARENB | CRTSCTS);
-  attr.c_cflag |= (CS8 | CLOCAL);
-  attr.c_cc[VMIN] = 0;
-  attr.c_cc[VTIME] = 1;
-  cfsetospeed(&attr, speed);
-  cfsetispeed(&attr, speed);
-  if (!tty.SetAttr(TCSANOW, attr))
-    return false;
-
-  baud_rate = BaudRate;
-  return true;
+  boost::system::error_code ec;
+  serial_port.set_option(boost::asio::serial_port_base::baud_rate(baud_rate),
+                         ec);
+  return !ec;
 }
 
-bool
-TTYPort::OnFileEvent(gcc_unused FileDescriptor fd, unsigned mask)
+void
+TTYPort::OnReadReady(const boost::system::error_code &ec)
 {
-  char buffer[1024];
+  if (ec == boost::asio::error::operation_aborted)
+    /* this object has already been deleted; bail out quickly without
+       touching anything */
+    return;
 
-  ssize_t nbytes = tty.Read(buffer, sizeof(buffer));
-  if (nbytes == 0 || (nbytes < 0 && errno != EAGAIN && errno != EINTR)) {
+  if (ec) {
     valid.store(false, std::memory_order_relaxed);
     StateChanged();
-    return false;
+    Error(ec.message().c_str());
+    return;
+  }
+
+  char buffer[1024];
+
+  boost::system::error_code ec2;
+  auto nbytes = serial_port.read_some(boost::asio::buffer(buffer,
+                                                          sizeof(buffer)),
+                                      ec2);
+  if (nbytes == 0 || (ec2 && ec2 != boost::asio::error::try_again &&
+                      ec2 != boost::asio::error::interrupted)) {
+    valid.store(false, std::memory_order_relaxed);
+    StateChanged();
+    return;
   }
 
   if (nbytes > 0)
     BufferedPort::DataReceived(buffer, nbytes);
 
-  return true;
+  AsyncRead();
 }

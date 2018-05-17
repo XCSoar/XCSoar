@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,16 +24,15 @@ Copyright_License {
 #ifndef XCSOAR_TRACKING_SKYLINES_CLIENT_HPP
 #define XCSOAR_TRACKING_SKYLINES_CLIENT_HPP
 
-#include "Handler.hpp"
-#include "Net/AllocatedSocketAddress.hxx"
-#include "Net/SocketDescriptor.hpp"
-#include "IO/Async/SocketEventHandler.hpp"
+#include "Thread/Mutex.hpp"
+#include "Compiler.h"
+
+#include <boost/asio/ip/udp.hpp>
 
 #include <stdint.h>
 
 struct NMEAInfo;
 struct GeoPoint;
-class IOThread;
 
 namespace SkyLinesTracking {
 
@@ -41,30 +40,31 @@ struct TrafficResponsePacket;
 struct UserNameResponsePacket;
 struct WaveResponsePacket;
 struct ThermalResponsePacket;
+class Handler;
 
-class Client
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  : private SocketEventHandler
-#endif
-{
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  IOThread *io_thread;
-  Handler *handler;
-#endif
+class Client {
+  Handler *const handler;
 
-  uint64_t key;
+  /**
+   * Protects #resolving, #resolver, #socket.
+   */
+  mutable Mutex mutex;
 
-  AllocatedSocketAddress address;
-  SocketDescriptor socket;
+  uint64_t key = 0;
+
+  bool resolving = false;
+
+  boost::asio::ip::udp::resolver resolver;
+  boost::asio::ip::udp::endpoint endpoint;
+  boost::asio::ip::udp::socket socket;
+
+  uint8_t buffer[4096];
+  boost::asio::ip::udp::endpoint sender_endpoint;
 
 public:
-  Client()
-    :
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-    io_thread(nullptr), handler(nullptr),
-#endif
-    key(0),
-    socket(SocketDescriptor::Undefined()) {}
+  explicit Client(boost::asio::io_service &io_service,
+                  Handler *_handler=nullptr)
+    :handler(_handler), resolver(io_service), socket(io_service) {}
   ~Client() { Close(); }
 
   constexpr
@@ -72,13 +72,31 @@ public:
     return 5597;
   }
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  void SetIOThread(IOThread *io_thread);
-  void SetHandler(Handler *handler);
-#endif
+  constexpr
+  static const char *GetDefaultPortString() {
+    return "5597";
+  }
+
+  boost::asio::io_service &get_io_service() {
+    return socket.get_io_service();
+  }
+
+  /**
+   * Is SkyLines tracking enabled in configuration?
+   */
+  bool IsEnabled() const {
+    return key != 0;
+  }
 
   bool IsDefined() const {
-    return socket.IsDefined();
+    const ScopeLock protect(mutex);
+    return resolving || socket.is_open();
+  }
+
+  gcc_pure
+  bool IsConnected() const {
+    const ScopeLock protect(mutex);
+    return socket.is_open();
   }
 
   uint64_t GetKey() const {
@@ -89,25 +107,28 @@ public:
     key = _key;
   }
 
-  bool Open(SocketAddress _address);
+  void Open(boost::asio::ip::udp::resolver::query query);
+  bool Open(boost::asio::ip::udp::endpoint _endpoint);
   void Close();
 
   template<typename P>
-  bool SendPacket(const P &packet) {
-    return socket.Write(&packet, sizeof(packet), address) == sizeof(packet);
+  void SendPacket(const P &packet) {
+    const ScopeLock protect(mutex);
+    socket.send_to(boost::asio::buffer(&packet, sizeof(packet)),
+                   endpoint, 0);
   }
 
-  bool SendFix(const NMEAInfo &basic);
-  bool SendPing(uint16_t id);
+  void SendFix(const NMEAInfo &basic);
+  void SendPing(uint16_t id);
 
-  bool SendThermal(uint32_t time,
+  void SendThermal(uint32_t time,
                    ::GeoPoint bottom_location, int bottom_altitude,
                    ::GeoPoint top_location, int top_altitude,
                    double lift);
+  void SendThermalRequest();
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  bool SendTrafficRequest(bool followees, bool club, bool near);
-  bool SendUserNameRequest(uint32_t user_id);
+  void SendTrafficRequest(bool followees, bool club, bool near_);
+  void SendUserNameRequest(uint32_t user_id);
 
 private:
   void OnTrafficReceived(const TrafficResponsePacket &packet, size_t length);
@@ -117,9 +138,11 @@ private:
   void OnThermalReceived(const ThermalResponsePacket &packet, size_t length);
   void OnDatagramReceived(void *data, size_t length);
 
-  /* virtual methods from SocketEventHandler */
-  bool OnSocketEvent(SocketDescriptor s, unsigned mask) override;
-#endif
+  void OnReceive(const boost::system::error_code &ec, size_t size);
+  void AsyncReceive();
+
+  void OnResolved(const boost::system::error_code &ec,
+                  boost::asio::ip::udp::resolver::iterator i);
 };
 
 } /* namespace SkyLinesTracking */

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,9 +26,10 @@ Copyright_License {
 void
 OneClimbInfo::Clear()
 {
-  duration = fixed(0);
-  gain = fixed(0);
-  lift_rate = fixed(0);
+  duration = 0;
+  gain = 0;
+  lift_rate = 0;
+  start_altitude = 0;
 }
 
 void

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -58,19 +58,19 @@ int main(int argc, char **argv)
   ok1(p3.Sort(p2));
 
   // test * (and ==)
-  ok1(p1 * fixed(2) == FlatGeoPoint(2, 2));
-  ok1(p2 * fixed(2) == FlatGeoPoint(2, 4));
-  ok1(p3 * fixed(2) == FlatGeoPoint(6, 20));
+  ok1(p1 * 2 == FlatGeoPoint(2, 2));
+  ok1(p2 * 2 == FlatGeoPoint(2, 4));
+  ok1(p3 * 2 == FlatGeoPoint(6, 20));
 
   // test +
   p2 = p2 + p1;
-  ok1(p2.longitude == 2);
-  ok1(p2.latitude == 3);
+  ok1(p2.x == 2);
+  ok1(p2.y == 3);
 
   // test -
   p2 = p2 - p1;
-  ok1(p2.longitude == 1);
-  ok1(p2.latitude == 2);
+  ok1(p2.x == 1);
+  ok1(p2.y == 2);
 
   // test distance_sq_to()
   ok1(p1.DistanceSquared(p2) == 1);

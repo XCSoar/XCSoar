@@ -3,12 +3,7 @@
  *      Guido Draheim <guidod@gmx.de>
  *      Tomi Ollila <Tomi.Ollila@iki.fi>
  *
- * Copyright (c) 1999,2000,2001,2002,2003 Guido Draheim
- *          All rights reserved
- *          use under the restrictions of the
- *          Lesser GNU General Public License
- *          or alternatively the restrictions 
- *          of the Mozilla Public License 1.1
+ * Copyright (c) Guido Draheim, use under copyleft (LGPL,MPL)
  *
  * This is the private header containing definitions that are not
  * use by a libzzip user application. Writing an extension lib that
@@ -70,12 +65,7 @@ struct zzip_dir
     zzip_plugin_io_t io;          /* vtable for io routines */
 }; 
 
-#ifdef _WIN32_WCE
-/* smaller buffer on weak Windows CE hardware */
-#define ZZIP_32K 8192
-#else
 #define ZZIP_32K 32768
-#endif
 
 /* try to open a zip-basename with default_fileext */
 int      __zzip_try_open (zzip_char_t* filename, int filemode,

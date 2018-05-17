@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@
 #include "Math/Screen.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #include "Form/Button.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
 #include "UIState.hpp"
@@ -90,7 +90,7 @@ public:
 
   void SetZoom(unsigned _zoom) {
     zoom = _zoom;
-    SetDistance(fixed(GetZoomDistance(_zoom)));
+    SetDistance(GetZoomDistance(_zoom));
   }
 
   void SetAutoZoom(bool enabled);
@@ -115,10 +115,10 @@ public:
 
 protected:
   void PaintTrafficInfo(Canvas &canvas) const;
-  void PaintClimbRate(Canvas &canvas, PixelRect rc, fixed climb_rate) const;
-  void PaintDistance(Canvas &canvas, PixelRect rc, fixed distance) const;
+  void PaintClimbRate(Canvas &canvas, PixelRect rc, double climb_rate) const;
+  void PaintDistance(Canvas &canvas, PixelRect rc, double distance) const;
   void PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
-                             fixed relative_altitude) const;
+                             double relative_altitude) const;
   void PaintID(Canvas &canvas, PixelRect rc, const FlarmTraffic &traffic) const;
   void PaintTaskDirection(Canvas &canvas) const;
 
@@ -135,10 +135,10 @@ protected:
 
   /* virtual methods from class Window */
   virtual void OnCreate() override;
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseDouble(PixelScalar x, PixelScalar y) override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) override;
+  bool OnMouseDown(PixelPoint p) override;
+  bool OnMouseUp(PixelPoint p) override;
+  bool OnMouseDouble(PixelPoint p) override;
   virtual bool OnKeyDown(unsigned key_code) override;
   virtual void OnCancelMode() override;
 
@@ -198,7 +198,7 @@ void
 FlarmTrafficControl::CalcAutoZoom()
 {
   bool warning_mode = WarningMode();
-  RoughDistance zoom_dist = fixed(0);
+  RoughDistance zoom_dist = 0;
 
   for (auto it = data.list.begin(), end = data.list.end();
       it != end; ++it) {
@@ -208,9 +208,9 @@ FlarmTrafficControl::CalcAutoZoom()
     zoom_dist = std::max(it->distance, zoom_dist);
   }
 
-  fixed zoom_dist2 = zoom_dist;
+  double zoom_dist2 = zoom_dist;
   for (unsigned i = 0; i <= 4; i++) {
-    if (i == 4 || fixed(GetZoomDistance(i)) >= zoom_dist2) {
+    if (i == 4 || GetZoomDistance(i) >= zoom_dist2) {
       SetZoom(i);
       break;
     }
@@ -273,13 +273,13 @@ FlarmTrafficControl::ZoomIn()
 void
 FlarmTrafficControl::PaintTaskDirection(Canvas &canvas) const
 {
-  if (negative(task_direction.Degrees()))
+  if (task_direction.IsNegative())
     return;
 
   canvas.Select(look.radar_pen);
   canvas.SelectHollowBrush();
 
-  RasterPoint triangle[4];
+  BulkPixelPoint triangle[4];
   triangle[0].x = 0;
   triangle[0].y = -radius / Layout::FastScale(1) + 15;
   triangle[1].x = 7;
@@ -299,7 +299,7 @@ FlarmTrafficControl::PaintTaskDirection(Canvas &canvas) const
 
 void
 FlarmTrafficControl::PaintClimbRate(Canvas &canvas, PixelRect rc,
-                                    fixed climb_rate) const
+                                    double climb_rate) const
 {
   // Paint label
   canvas.Select(look.info_labels_font);
@@ -317,7 +317,7 @@ FlarmTrafficControl::PaintClimbRate(Canvas &canvas, PixelRect rc,
   const unsigned unit_height =
       UnitSymbolRenderer::GetAscentHeight(look.info_units_font, unit);
 
-  UPixelScalar space_width = unit_width / 3;
+  unsigned space_width = unit_width / 3;
 
   // Calculate value size
   canvas.Select(look.info_values_font);
@@ -336,17 +336,17 @@ FlarmTrafficControl::PaintClimbRate(Canvas &canvas, PixelRect rc,
   // Paint unit
   canvas.Select(look.info_units_font);
   UnitSymbolRenderer::Draw(canvas,
-                           RasterPoint(rc.right - unit_width, y - unit_height),
+                           PixelPoint(rc.right - unit_width, y - unit_height),
                            unit, look.unit_fraction_pen);
 }
 
 void
 FlarmTrafficControl::PaintDistance(Canvas &canvas, PixelRect rc,
-                                   fixed distance) const
+                                   double distance) const
 {
   // Format distance
   TCHAR buffer[20];
-  Unit unit = FormatUserDistanceSmart(distance, buffer, false, fixed(1000));
+  Unit unit = FormatUserDistanceSmart(distance, buffer, false, 1000);
 
   // Calculate unit size
   canvas.Select(look.info_units_font);
@@ -370,8 +370,8 @@ FlarmTrafficControl::PaintDistance(Canvas &canvas, PixelRect rc,
   // Paint unit
   canvas.Select(look.info_units_font);
   UnitSymbolRenderer::Draw(canvas,
-                           RasterPoint(rc.left + value_width + space_width,
-                                       rc.bottom - unit_height),
+                           PixelPoint(rc.left + value_width + space_width,
+                                      rc.bottom - unit_height),
                            unit, look.unit_fraction_pen);
 
 
@@ -384,7 +384,7 @@ FlarmTrafficControl::PaintDistance(Canvas &canvas, PixelRect rc,
 
 void
 FlarmTrafficControl::PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
-                                           fixed relative_altitude) const
+                                           double relative_altitude) const
 {
   // Format relative altitude
   TCHAR buffer[20];
@@ -415,8 +415,8 @@ FlarmTrafficControl::PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
   // Paint unit
   canvas.Select(look.info_units_font);
   UnitSymbolRenderer::Draw(canvas,
-                           RasterPoint(rc.right - unit_width,
-                                       rc.bottom - unit_height),
+                           PixelPoint(rc.right - unit_width,
+                                      rc.bottom - unit_height),
                            unit, look.unit_fraction_pen);
 
 
@@ -679,29 +679,28 @@ TrafficWidget::Update()
 }
 
 bool
-FlarmTrafficControl::OnMouseMove(PixelScalar x, PixelScalar y,
-                                 gcc_unused unsigned keys)
+FlarmTrafficControl::OnMouseMove(PixelPoint p, gcc_unused unsigned keys)
 {
   if (dragging)
-    gestures.Update(x, y);
+    gestures.Update(p);
 
   return true;
 }
 
 bool
-FlarmTrafficControl::OnMouseDown(PixelScalar x, PixelScalar y)
+FlarmTrafficControl::OnMouseDown(PixelPoint p)
 {
   if (!dragging) {
     dragging = true;
     SetCapture();
-    gestures.Start(x, y, Layout::Scale(20));
+    gestures.Start(p, Layout::Scale(20));
   }
 
   return true;
 }
 
 bool
-FlarmTrafficControl::OnMouseUp(PixelScalar x, PixelScalar y)
+FlarmTrafficControl::OnMouseUp(PixelPoint p)
 {
   if (dragging) {
     StopDragging();
@@ -712,13 +711,13 @@ FlarmTrafficControl::OnMouseUp(PixelScalar x, PixelScalar y)
   }
 
   if (!WarningMode())
-    SelectNearTarget(x, y, Layout::Scale(15));
+    SelectNearTarget(p, Layout::Scale(15));
 
   return true;
 }
 
 bool
-FlarmTrafficControl::OnMouseDouble(PixelScalar x, PixelScalar y)
+FlarmTrafficControl::OnMouseDouble(PixelPoint p)
 {
   StopDragging();
   InputEvents::ShowMenu();
@@ -776,16 +775,6 @@ FlarmTrafficControl::OnKeyDown(unsigned key_code)
 
     ZoomOut();
     return true;
-
-#ifdef GNAV
-  case '6':
-    PrevTarget();
-    return true;
-
-  case '7':
-    NextTarget();
-    return true;
-#endif
   }
 
   return FlarmTrafficWindow::OnKeyDown(key_code) ||
@@ -798,15 +787,14 @@ TrafficWidget::UpdateLayout()
   const PixelRect rc = GetContainer().GetClientRect();
   view->Move(rc);
 
-#ifndef GNAV
   const unsigned margin = Layout::Scale(1);
   const unsigned button_height = Layout::GetMinimumControlHeight();
   const unsigned button_width = std::max(unsigned(rc.right / 6),
                                          button_height);
 
-  const PixelScalar x1 = rc.right / 2;
-  const PixelScalar x0 = x1 - button_width;
-  const PixelScalar x2 = x1 + button_width;
+  const int x1 = rc.right / 2;
+  const int x0 = x1 - button_width;
+  const int x2 = x1 + button_width;
 
   const int y0 = margin;
   const int y1 = y0 + button_height;
@@ -844,13 +832,11 @@ TrafficWidget::UpdateLayout()
   button_rc.right = rc.right - margin;
   button_rc.left = button_rc.right - Layout::Scale(50);
   close_button->Move(button_rc);
-#endif
 }
 
 void
 TrafficWidget::UpdateButtons()
 {
-#ifndef GNAV
   const bool unlocked = !view->WarningMode();
   const TrafficList &traffic = CommonInterface::Basic().flarm.traffic;
   const bool not_empty = !traffic.IsEmpty();
@@ -861,10 +847,7 @@ TrafficWidget::UpdateButtons()
   previous_item_button->SetEnabled(unlocked && two_or_more);
   next_item_button->SetEnabled(unlocked && two_or_more);
   details_button->SetEnabled(unlocked && not_empty);
-#endif
 }
-
-#ifndef GNAV
 
 static Button *
 NewSymbolButton(ContainerWindow &parent, const ButtonLook &look,
@@ -877,8 +860,6 @@ NewSymbolButton(ContainerWindow &parent, const ButtonLook &look,
                     listener, id);
 }
 
-#endif
-
 void
 TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
 {
@@ -888,7 +869,6 @@ TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
 
   const PixelRect rc = GetContainer().GetClientRect();
 
-#ifndef GNAV
   zoom_in_button = NewSymbolButton(GetContainer(), look.dialog.button,
                                    _T("+"), rc, *this, ZOOM_IN);
   zoom_out_button = NewSymbolButton(GetContainer(), look.dialog.button,
@@ -903,13 +883,9 @@ TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
   close_button = new Button(GetContainer(), look.dialog.button,
                             _("Close"), rc, WindowStyle(),
                             *this, CLOSE);
-#endif
-
-  WindowStyle style;
-  style.EnableDoubleClicks();
 
   view = new FlarmTrafficControl(look.flarm_dialog);
-  view->Create(GetContainer(), rc, style);
+  view->Create(GetContainer(), rc);
 
   UpdateLayout();
 }
@@ -917,14 +893,12 @@ TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
 void
 TrafficWidget::Unprepare()
 {
-#ifndef GNAV
   delete zoom_in_button;
   delete zoom_out_button;
   delete previous_item_button;
   delete next_item_button;
   delete details_button;
   delete close_button;
-#endif
 
   delete view;
 
@@ -940,10 +914,8 @@ TrafficWidget::Show(const PixelRect &rc)
   ContainerWidget::Show(rc);
   UpdateLayout();
 
-#ifndef GNAV
   /* show the "Close" button only if this is a "special" page */
   close_button->SetVisible(CommonInterface::GetUIState().pages.special_page.IsDefined());
-#endif
 
   CommonInterface::GetLiveBlackboard().AddListener(*this);
 }
@@ -970,8 +942,6 @@ TrafficWidget::SetFocus()
   view->SetFocus();
   return true;
 }
-
-#ifndef GNAV
 
 void
 TrafficWidget::OnAction(int id)
@@ -1002,8 +972,6 @@ TrafficWidget::OnAction(int id)
     break;
   }
 }
-
-#endif
 
 void
 TrafficWidget::OnGPSUpdate(const MoreData &basic)

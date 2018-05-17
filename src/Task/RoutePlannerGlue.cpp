@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,6 +23,7 @@
 #include "RoutePlannerGlue.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Airspace/ActivePredicate.hpp"
+#include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
 
 void
 RoutePlannerGlue::SetTerrain(const RasterTerrain *_terrain)
@@ -45,7 +46,8 @@ RoutePlannerGlue::Synchronise(const Airspaces &master,
                               const AGeoPoint &destination)
 {
   /* ignore acked airspaces (if we have an AirspaceWarningManager) */
-  WrapAirspacePredicate<ActiveAirspacePredicate> predicate(warnings);
+  const auto predicate =
+    WrapAirspacePredicate(ActiveAirspacePredicate(warnings));
 
   planner.Synchronise(master, predicate, origin, destination);
 }
@@ -54,7 +56,7 @@ bool
 RoutePlannerGlue::Solve(const AGeoPoint &origin,
                         const AGeoPoint &destination,
                         const RoutePlannerConfig &config,
-                        const RoughAltitude h_ceiling)
+                        const int h_ceiling)
 {
   RasterTerrain::Lease lease(*terrain);
   return planner.Solve(origin, destination, config, h_ceiling);
@@ -63,13 +65,15 @@ RoutePlannerGlue::Solve(const AGeoPoint &origin,
 void
 RoutePlannerGlue::SolveReach(const AGeoPoint &origin,
                               const RoutePlannerConfig &config,
-                              const RoughAltitude h_ceiling, const bool do_solve)
+                              const int h_ceiling, const bool do_solve)
 {
   if (terrain) {
     RasterTerrain::Lease lease(*terrain);
-    planner.SolveReach(origin, config, h_ceiling, do_solve);
+    planner.SolveReachTerrain(origin, config, h_ceiling, do_solve);
+    planner.SolveReachWorking(origin, config, h_ceiling, do_solve);
   } else {
-    planner.SolveReach(origin, config, h_ceiling, do_solve);
+    planner.SolveReachTerrain(origin, config, h_ceiling, do_solve);
+    planner.SolveReachWorking(origin, config, h_ceiling, do_solve);
   }
 }
 
@@ -80,23 +84,15 @@ RoutePlannerGlue::FindPositiveArrival(const AGeoPoint &dest,
   return planner.FindPositiveArrival(dest, result_r);
 }
 
-void
-RoutePlannerGlue::AcceptInRange(const GeoBounds &bounds,
-                                  TriangleFanVisitor &visitor) const
-{
-  planner.AcceptInRange(bounds, visitor);
-}
-
-bool
+GeoPoint
 RoutePlannerGlue::Intersection(const AGeoPoint &origin,
-                               const AGeoPoint &destination,
-                               GeoPoint &intx) const
+                               const AGeoPoint &destination) const
 {
   RasterTerrain::Lease lease(*terrain);
-  return planner.Intersection(origin, destination, intx);
+  return planner.Intersection(origin, destination);
 }
 
-RoughAltitude
+int
 RoutePlannerGlue::GetTerrainBase() const
 {
   return planner.GetTerrainBase();

@@ -18,7 +18,7 @@ and should contain a fuse and a manual isolation switch.
 
 The greatest cause of power drain by the PDA is the LCD back-light,
 however domestic PDAs are not particularly bright so they may need to
-have the back-light up full. However, for EFIS systems such as Altair,
+have the back-light up full. However, for EFIS systems,
 it is recommended to use the lowest back-light settings that are
 comfortable.
 
@@ -33,9 +33,6 @@ is issued by the system, the screen becomes activated.
 Another way to help conserve battery power is to reduce the
 computational load by turning off certain features.  Drawing terrain
 and long snail trails contribute significantly to the CPU load.
-
-For Altair/Vega systems, the external supply voltage is displayed on
-the system status dialogue (see Section~\ref{sec:system-status}).
 
 For other embedded platforms, a \infobox{Battery} InfoBox is available that 
 displays the available battery life remaining, as well as the charge state 
@@ -100,9 +97,6 @@ sensors:
  triadis engineering's Vega have multiple airframe switches
  and pass this information on to the PDA or EFIS as special
  NMEA sentences.
-\item[1-Wire device]  triadis engineering's Altair glide computer
- and Vega variometer provide a 1-Wire peripheral bus to which
- various digital and analog sensors can be attached.
 \item[Bluetooth device]  Many Pocket PC devices support wireless
  connection to a Bluetooth Game-Pad device that has several buttons.
  This is more suited to user-interface input devices than airframe
@@ -146,12 +140,12 @@ inspection tests or before takeoff.
 \section{Slave mode}
 
 A device type in the configuration settings, ``NMEA Out'' is defined
-for use in joining two Altair or PDA systems in a master-slave mode.
+for use in joining two systems in a master-slave mode.
 In the master, the second com device can be set to NMEA Out, and all
 data received in the first com device (as well as outgoing data) will
 be sent to the slave.  
 
-As an example where two Altairs are being connected together, in the
+As an example where two devices are being connected together, in the
 slave, the first com device can then be set to ``Vega'' or ``Altair
 Pro'' and this system receives all data as if it came from the
 Master's GPS and connected instruments (Vega, FLARM etc).

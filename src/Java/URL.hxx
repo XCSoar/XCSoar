@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2012 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2010-2015 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -55,6 +55,8 @@ namespace Java {
 			return env->NewObject(cls, ctor, url);
 		}
 
+		static jobject Create(JNIEnv *env, const char *url);
+
 		static jobject openConnection(JNIEnv *env, jobject url) {
 			assert(env != nullptr);
 			assert(url != nullptr);
@@ -62,6 +64,8 @@ namespace Java {
 
 			return env->CallObjectMethod(url, openConnection_method);
 		}
+
+		static jobject openConnection(JNIEnv *env, const char *url);
 	};
 
 	/**
@@ -70,6 +74,7 @@ namespace Java {
 	class URLConnection {
 		static jmethodID setConnectTimeout_method;
 		static jmethodID setReadTimeout_method;
+		static jmethodID addRequestProperty_method;
 		static jmethodID getContentLength_method;
 		static jmethodID getInputStream_method;
 
@@ -94,6 +99,17 @@ namespace Java {
 
 			env->CallVoidMethod(connection, setReadTimeout_method,
 					    timeout);
+		}
+
+		static void addRequestProperty(JNIEnv *env, jobject connection,
+					       jstring field, jstring value) {
+			assert(env != nullptr);
+			assert(connection != nullptr);
+			assert(setReadTimeout_method != nullptr);
+
+			env->CallVoidMethod(connection,
+					    addRequestProperty_method,
+					    field, value);
 		}
 
 		static int getContentLength(JNIEnv *env, jobject connection) {

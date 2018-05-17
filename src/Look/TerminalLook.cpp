@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,18 +23,12 @@ Copyright_License {
 
 #include "TerminalLook.hpp"
 #include "FontDescription.hpp"
-#include "StandardFonts.hpp"
 #include "Screen/Layout.hpp"
 
 void
 TerminalLook::Initialise()
 {
-#ifdef GNAV
-  font.Load(FontDescription(GetStandardMonospaceFontFace(),
-                            12, false, false, true));
-#else
   font.Load(FontDescription(Layout::FontScale(11), false, false, true));
-#endif
 
   background_color = COLOR_BLACK;
   text_color = COLOR_WHITE;

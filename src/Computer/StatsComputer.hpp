@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -37,8 +37,8 @@ class StatsComputer {
 
   GeoPoint last_location;
 
-  fixed last_climb_start_time, last_cruise_start_time;
-  fixed last_thermal_end_time;
+  double last_climb_start_time, last_cruise_start_time;
+  double last_thermal_end_time;
 
   FlightStatistics flightstats;
   GPSClock stats_clock;
@@ -53,7 +53,7 @@ public:
   bool DoLogging(const MoreData &basic, const DerivedInfo &calculated);
 
 private:
-  void OnClimbBase(const DerivedInfo &calculated, fixed StartAlt);
+  void OnClimbBase(const DerivedInfo &calculated);
   void OnClimbCeiling(const DerivedInfo &calculated);
   void OnDepartedThermal(const DerivedInfo &calculated);
 

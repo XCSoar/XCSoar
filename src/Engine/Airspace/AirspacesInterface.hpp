@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,13 +22,11 @@
 #ifndef AIRSPACESINTERFACE_HPP
 #define AIRSPACESINTERFACE_HPP
 
-#include "Util/SliceAllocator.hpp"
 #include "Airspace.hpp"
-#include "Geo/Flat/BoundingBoxDistance.hpp"
+#include "Geo/Flat/BoostFlatBoundingBox.hpp"
 
-#include <kdtree++/kdtree.hpp>
-
-#include <assert.h>
+#include <boost/geometry/index/rtree.hpp>
+#include <boost/range/iterator_range_core.hpp>
 
 /**
  * Abstract class for interface to #Airspaces database.
@@ -36,58 +34,11 @@
  * facade protected class where locking is required.
  */
 class AirspacesInterface {
-  /** Function object used by kd-tree to index coordinates */
-  struct kd_get_bounds
-  {
-    /** Used by kd-tree */
-    typedef int result_type;
+  struct AirspaceIndexable {
+    typedef FlatBoundingBox result_type;
 
-    /**
-     * Retrieve coordinate value given coordinate index and object
-     *
-     * @param d Object being stored in kd-tree
-     * @param k Index of coordinate
-     *
-     * @return Coordinate value
-     */
-    int operator()(const FlatBoundingBox &d, const unsigned k) const {
-      switch(k) {
-      case 0:
-        return d.GetLowerLeft().longitude;
-      case 1:
-        return d.GetLowerLeft().latitude;
-      case 2:
-        return d.GetUpperRight().longitude;
-      case 3:
-        return d.GetUpperRight().latitude;
-      default:
-        assert(false);
-        gcc_unreachable();
-      };
-    };
-  };
-
-  /**
-   * Distance metric function object used by kd-tree.  This specialisation
-   * allows for overlap; distance is zero with overlap, otherwise the minimum
-   * distance between two regions.
-   */
-  struct kd_distance
-  {
-    /** Distance operator for overlap functionality */
-    typedef BBDist distance_type;
-
-    /**
-     * \todo document this!
-     *
-     * @param a
-     * @param b
-     * @param dim
-     *
-     * @return Distance on axis
-     */
-    distance_type operator()(const int a, const int b, const size_t dim) const {
-      return BBDist(dim, std::max((dim < 2) ? (b - a) : (a - b), 0));
+    result_type operator()(const Airspace &airspace) const {
+      return airspace;
     }
   };
 
@@ -97,12 +48,12 @@ public:
   /**
    * Type of KD-tree data structure for airspace container
    */
-  typedef KDTree::KDTree<4, 
-                         Airspace, 
-                         kd_get_bounds, kd_distance,
-                         std::less<kd_get_bounds::result_type>,
-                         SliceAllocator<KDTree::_Node<Airspace>, 256>
-                         > AirspaceTree;
+  typedef boost::geometry::index::rtree<Airspace, boost::geometry::index::rstar<16>,
+                                        AirspaceIndexable> AirspaceTree;
+
+  typedef AirspaceTree::const_query_iterator const_iterator;
+
+  typedef boost::iterator_range<const_iterator> const_iterator_range;
 };
 
 #endif

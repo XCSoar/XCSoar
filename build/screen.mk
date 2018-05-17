@@ -19,9 +19,9 @@ SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/SingleWindow.cpp
 
 SCREEN_CUSTOM_SOURCES = \
+	$(SCREEN_SRC_DIR)/Custom/GeoBitmap.cpp \
 	$(SCREEN_SRC_DIR)/Custom/Pen.cpp \
 	$(SCREEN_SRC_DIR)/Custom/Timer.cpp \
-	$(SCREEN_SRC_DIR)/Custom/TextWindow.cpp \
 	$(SCREEN_SRC_DIR)/Custom/LargeTextWindow.cpp \
 	$(SCREEN_SRC_DIR)/Custom/Window.cpp \
 	$(SCREEN_SRC_DIR)/Custom/WList.cpp \
@@ -32,23 +32,33 @@ SCREEN_CUSTOM_SOURCES = \
 
 ifeq ($(COREGRAPHICS),y)
 SCREEN_CUSTOM_SOURCES_IMG = \
-	$(SCREEN_SRC_DIR)/Custom/CoreGraphics.cpp 
-else
-SCREEN_CUSTOM_SOURCES_IMG += \
-	$(SCREEN_SRC_DIR)/Custom/LibPNG.cpp \
-	$(SCREEN_SRC_DIR)/Custom/LibJPEG.cpp 
+	$(SCREEN_SRC_DIR)/Apple/ImageDecoder.cpp
+endif
+
+ifeq ($(LIBPNG),y)
+SCREEN_CUSTOM_SOURCES_IMG += $(SCREEN_SRC_DIR)/Custom/LibPNG.cpp
+endif
+
+ifeq ($(LIBJPEG),y)
+SCREEN_CUSTOM_SOURCES_IMG += $(SCREEN_SRC_DIR)/Custom/LibJPEG.cpp
+endif
+
+ifeq ($(TIFF),y)
+SCREEN_CUSTOM_SOURCES_IMG += $(SCREEN_SRC_DIR)/Custom/LibTiff.cpp
 endif
 
 ifeq ($(TARGET),ANDROID)
 SCREEN_SOURCES += \
 	$(SCREEN_CUSTOM_SOURCES) \
-	$(SCREEN_SRC_DIR)/OpenGL/EGL.cpp \
 	$(SCREEN_SRC_DIR)/Android/Window.cpp \
 	$(SCREEN_SRC_DIR)/Android/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/Android/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/Android/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/Android/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/Android/Font.cpp
+ifeq ($(TIFF),y)
+SCREEN_SOURCES += $(SCREEN_SRC_DIR)/Custom/LibTiff.cpp
+endif
 endif
 
 ifeq ($(DITHER),y)
@@ -60,6 +70,10 @@ ifeq ($(FREETYPE),y)
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/FreeType/Font.cpp \
 	$(SCREEN_SRC_DIR)/FreeType/Init.cpp
+endif
+
+ifeq ($(call bool_or,$(APPKIT),$(UIKIT)),y)
+SCREEN_SOURCES += $(SCREEN_SRC_DIR)/Apple/Font.cpp
 endif
 
 ifeq ($(USE_X11),y)
@@ -83,6 +97,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/OpenGL/Extension.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/FBO.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/VertexArray.cpp \
+	$(SCREEN_SRC_DIR)/OpenGL/ConstantAlpha.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/RawBitmap.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Canvas.cpp \
@@ -117,7 +132,7 @@ SCREEN_SOURCES += \
 ifeq ($(OPENGL),n)
 USE_MEMORY_CANVAS = y
 endif
-else ifeq ($(EGL),y)
+else ifeq ($(EGL)$(TARGET_IS_ANDROID),yn)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
 SCREEN_SOURCES += \
 	$(SCREEN_CUSTOM_SOURCES) \
@@ -162,6 +177,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/Custom/Files.cpp \
 	$(SCREEN_SRC_DIR)/Custom/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/Custom/ResourceBitmap.cpp \
+	$(SCREEN_SRC_DIR)/Memory/Export.cpp \
 	$(SCREEN_SRC_DIR)/TTY/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/FB/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/FB/TopCanvas.cpp \
@@ -175,12 +191,10 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/GDI/VirtualCanvas.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Init.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Font.cpp \
-	$(SCREEN_SRC_DIR)/GDI/AlphaBlend.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Timer.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Window.cpp \
 	$(SCREEN_SRC_DIR)/GDI/PaintWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/ContainerWindow.cpp \
-	$(SCREEN_SRC_DIR)/GDI/TextWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/LargeTextWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/TopWindow.cpp \
@@ -193,12 +207,8 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/GDI/BufferCanvas.cpp \
 	$(SCREEN_SRC_DIR)/GDI/PaintCanvas.cpp
 GDI_CPPFLAGS = -DUSE_GDI
-
-ifeq ($(HAVE_CE),y)
-GDI_LDLIBS = -lcommctrl
-else
-GDI_LDLIBS = -lcomctl32 -luser32 -lgdi32 -lmsimg32
-endif
+GDI_CPPFLAGS += -DUSE_WINUSER
+GDI_LDLIBS = -luser32 -lgdi32 -lmsimg32
 
 ifeq ($(TARGET),PC)
 GDI_LDLIBS += -Wl,-subsystem,windows
@@ -217,18 +227,25 @@ MEMORY_CANVAS_CPPFLAGS = -DUSE_MEMORY_CANVAS
 endif
 
 SCREEN_CPPFLAGS_INTERNAL = \
-	$(LIBPNG_CPPFLAGS) $(LIBJPEG_CPPFLAGS) $(COREGRAPHICS_CPPFLAGS)
+	$(FREETYPE_CPPFLAGS) \
+	$(LIBPNG_CPPFLAGS) \
+	$(LIBJPEG_CPPFLAGS) \
+	$(LIBTIFF_CPPFLAGS) \
+	$(COREGRAPHICS_CPPFLAGS)
 
 SCREEN_CPPFLAGS = \
 	$(LINUX_INPUT_CPPFLAGS) \
 	$(LIBINPUT_CPPFLAGS) \
 	$(SDL_CPPFLAGS) \
 	$(GDI_CPPFLAGS) \
-	$(FREETYPE_CPPFLAGS) \
+	$(FREETYPE_FEATURE_CPPFLAGS) \
+	$(APPKIT_CPPFLAGS) \
+	$(UIKIT_CPPFLAGS) \
 	$(MEMORY_CANVAS_CPPFLAGS) \
 	$(OPENGL_CPPFLAGS) \
 	$(WAYLAND_CPPFLAGS) \
 	$(EGL_CPPFLAGS) \
+	$(EGL_FEATURE_CPPFLAGS) \
 	$(GLX_CPPFLAGS) \
 	$(POLL_EVENT_CPPFLAGS) \
 	$(CONSOLE_CPPFLAGS) $(FB_CPPFLAGS) $(VFB_CPPFLAGS)
@@ -239,10 +256,14 @@ SCREEN_LDLIBS = \
 	$(OPENGL_LDLIBS) \
 	$(FREETYPE_LDLIBS) \
 	$(LIBPNG_LDLIBS) $(LIBJPEG_LDLIBS) \
+	$(LIBTIFF_LDLIBS) \
 	$(WAYLAND_LDLIBS) \
 	$(EGL_LDLIBS) \
 	$(GLX_LDLIBS) \
-	$(FB_LDLIBS)
+	$(FB_LDLIBS) \
+	$(COREGRAPHICS_LDLIBS) \
+	$(APPKIT_LDLIBS) \
+	$(UIKIT_LDLIBS)
 
 $(eval $(call link-library,screen,SCREEN))
 

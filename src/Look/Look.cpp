@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -42,7 +42,6 @@ Look::InitialiseConfigured(const UISettings &settings,
 {
   dialog.Initialise();
   terminal.Initialise();
-  units.Initialise();
   cross_section.Initialise(map_font);
   horizon.Initialise();
   thermal_band.Initialise(settings.info_boxes.inverse,
@@ -57,10 +56,11 @@ Look::InitialiseConfigured(const UISettings &settings,
   wind_arrow_info_box.Initialise(map_bold_font, settings.info_boxes.inverse);
   flarm_gauge.Initialise(traffic, true, settings.info_boxes.inverse);
   thermal_assistant_gauge.Initialise(true, settings.info_boxes.inverse);
-  final_glide_bar.Initialise(map_font);
-  vario_bar.Initialise(map_font);
+  final_glide_bar.Initialise(map_bold_font);
+  vario_bar.Initialise(map_bold_font);
   map.Initialise(settings.map, map_font, map_bold_font);
   icon.Initialise();
+  circling_percent.Initialise();
 }
 
 void

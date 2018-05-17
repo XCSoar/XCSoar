@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,16 +26,17 @@
 #include "Navigation/Aircraft.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Task/Solvers/TaskSolution.hpp"
+#include "GlideSolvers/GlidePolar.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointVisitor.hpp"
 #include "Util/ReservablePriorityQueue.hpp"
 #include "Util/Clamp.hpp"
 
 /** min search range in m */
-static constexpr fixed min_search_range = fixed(50000);
+static constexpr double min_search_range = 50000;
 
 /** max search range in m */
-static constexpr fixed max_search_range = fixed(100000);
+static constexpr double max_search_range = 100000;
 
 AbortTask::AbortTask(const TaskBehaviour &_task_behaviour,
                      const Waypoints &wps)
@@ -100,7 +101,7 @@ AbortTask::Clear()
   reachable_landable = false;
 }
 
-fixed
+double
 AbortTask::GetAbortRange(const AircraftState &state,
                          const GlidePolar &glide_polar) const
 {
@@ -151,12 +152,13 @@ AbortTask::FillReachable(const AircraftState &state,
   q.reserve(32);
 
   for (auto v = approx_waypoints.begin(); v != approx_waypoints.end();) {
-    if (only_airfield && !v->waypoint.IsAirport()) {
+    if (only_airfield && !v->waypoint->IsAirport()) {
       ++v;
       continue;
     }
 
-    UnorderedTaskPoint t(v->waypoint, task_behaviour);
+    auto wp = v->waypoint;
+    UnorderedTaskPoint t(std::move(wp), task_behaviour);
     GlideResult result =
         TaskSolution::GlideSolutionRemaining(t, state,
                                              task_behaviour.glide, polar);
@@ -167,10 +169,11 @@ AbortTask::FillReachable(const AircraftState &state,
 
       if (intersection_test && final_glide && is_reachable_final)
         intersects = intersection_test->Intersects(
-            AGeoPoint(v->waypoint.location, result.min_arrival_altitude));
+            AGeoPoint(v->waypoint->location, result.min_arrival_altitude));
 
       if (!intersects) {
-        q.push(AlternatePoint(v->waypoint, result));
+        wp = v->waypoint;
+        q.push(AlternatePoint(std::move(wp), result));
         // remove it since it's already in the list now      
         v = approx_waypoints.erase(v);
 
@@ -185,8 +188,9 @@ AbortTask::FillReachable(const AircraftState &state,
   }
 
   while (!q.empty() && !IsTaskFull()) {
-    const AlternatePoint top = q.top();
-    task_points.emplace_back(top.waypoint, task_behaviour, top.solution);
+    auto top = q.top();
+    task_points.emplace_back(std::move(top.waypoint), task_behaviour,
+                             top.solution);
 
     const int i = task_points.size() - 1;
     if (task_points[i].point.GetWaypoint().id == active_waypoint)
@@ -202,7 +206,7 @@ AbortTask::FillReachable(const AircraftState &state,
  * Class to build vector from visited waypoints.
  * Intended to be used temporarily.
  */
-class WaypointVisitorVector: public WaypointVisitor
+class WaypointVisitorVector final : public WaypointVisitor
 {
   AlternateList &vector;
 
@@ -221,8 +225,8 @@ public:
    *
    * @param wp Waypoint that is visited
    */
-  void Visit(const Waypoint& wp) {
-    if (wp.IsLandable())
+  void Visit(const WaypointPtr &wp) override {
+    if (wp->IsLandable())
       vector.emplace_back(wp);
   }
 };
@@ -311,7 +315,7 @@ AbortTask::Reset()
   UnorderedTask::Reset();
 }
 
-const Waypoint *
+WaypointPtr
 AbortTask::GetHome() const
 {
   return waypoints.GetHome();
@@ -320,7 +324,7 @@ AbortTask::GetHome() const
 GeoVector 
 AbortTask::GetHomeVector(const AircraftState &state) const
 {
-  const Waypoint *home_waypoint = GetHome();
+  const auto home_waypoint = GetHome();
   if (home_waypoint)
     return GeoVector(state.location, home_waypoint->location);
 

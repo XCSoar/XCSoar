@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,13 +28,18 @@ Copyright_License {
 #endif
 
 #include "Audio/PCMPlayer.hpp"
+#include "Audio/PCMPlayerFactory.hpp"
 #include "Audio/ToneSynthesiser.hpp"
 #include "Screen/Init.hpp"
 #include "OS/Args.hpp"
-#include "OS/Sleep.h"
+
+#include <boost/asio/io_service.hpp>
+#include <boost/asio/steady_timer.hpp>
 
 #include <stdio.h>
 #include <stdlib.h>
+
+#include <memory>
 
 int
 main(int argc, char **argv)
@@ -51,18 +56,27 @@ main(int argc, char **argv)
 
   ScreenGlobalInit screen;
 
-  PCMPlayer player;
+  boost::asio::io_service io_service;
+
+  std::unique_ptr<PCMPlayer> player(
+      PCMPlayerFactory::CreateInstanceForDirectAccess(io_service));
 
   const unsigned sample_rate = 44100;
 
-  ToneSynthesiser tone;
-  tone.SetTone(sample_rate, freq);
+  ToneSynthesiser tone(sample_rate);
+  tone.SetTone(freq);
 
-  if (!player.Start(tone, sample_rate)) {
+  if (!player->Start(tone)) {
     fprintf(stderr, "Failed to start PCMPlayer\n");
     return EXIT_FAILURE;
   }
 
-  Sleep(1000);
+  boost::asio::steady_timer stop_timer(io_service, std::chrono::seconds(1));
+  stop_timer.async_wait([&](const boost::system::error_code &ec){
+      player->Stop();
+    });
+
+  io_service.run();
+
   return EXIT_SUCCESS;
 }

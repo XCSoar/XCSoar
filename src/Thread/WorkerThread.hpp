@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,15 +25,15 @@ Copyright_License {
 #define XCSOAR_THREAD_WORKER_THREAD_HPP
 
 #include "Thread/SuspensibleThread.hpp"
-#include "Thread/Trigger.hpp"
 
 /**
  * A thread which performs regular work in background.
  */
 class WorkerThread : public SuspensibleThread {
-  ::Trigger event_trigger;
+  Cond trigger_cond;
+  bool trigger_flag = false;
 
-  unsigned period_min, idle_min, delay;
+  const unsigned period_min, idle_min, delay;
 
 public:
   /**
@@ -54,20 +54,33 @@ public:
    * Wakes up the thread to do work, calls tick().
    */
   void Trigger() {
-    event_trigger.Signal();
+    const ScopeLock lock(mutex);
+    if (!trigger_flag) {
+      trigger_flag = true;
+      trigger_cond.signal();
+    }
   }
 
   /**
    * Suspend execution until Resume() is called.
    */
   void BeginSuspend() {
-    SuspensibleThread::BeginSuspend();
-    Trigger();
+    const ScopeLock lock(mutex);
+    _BeginSuspend();
+  }
+
+  /**
+   * Like BeginSuspend(), but expects the mutex to be locked already.
+   */
+  void _BeginSuspend() {
+    SuspensibleThread::_BeginSuspend();
+    trigger_cond.signal();
   }
 
   void Suspend() {
-    BeginSuspend();
-    WaitUntilSuspended();
+    const ScopeLock lock(mutex);
+    _BeginSuspend();
+    _WaitUntilSuspended();
   }
 
   /**
@@ -75,8 +88,9 @@ public:
    * synchronously for the thread to exit.
    */
   void BeginStop() {
-    SuspensibleThread::BeginStop();
-    Trigger();
+    const ScopeLock lock(mutex);
+    SuspensibleThread::_BeginStop();
+    trigger_cond.signal();
   }
 
 protected:

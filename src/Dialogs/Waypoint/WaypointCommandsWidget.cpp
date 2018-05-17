@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,13 +24,13 @@ Copyright_License {
 #include "WaypointCommandsWidget.hpp"
 #include "WaypointDialogs.hpp"
 #include "Dialogs/Message.hpp"
+#include "Dialogs/Error.hpp"
 #include "Form/Form.hpp"
 #include "Language/Language.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/MapTaskManager.hpp"
-#include "MapWindow/GlueMapWindow.hpp"
 #include "Interface.hpp"
 #include "Protection.hpp"
 #include "Components.hpp"
@@ -54,11 +54,17 @@ enum Commands {
 
 static bool
 ReplaceInTask(ProtectedTaskManager &task_manager,
-              const Waypoint &waypoint)
+              WaypointPtr waypoint)
 {
-  switch (MapTaskManager::ReplaceInTask(waypoint)) {
+  switch (MapTaskManager::ReplaceInTask(std::move(waypoint))) {
   case MapTaskManager::SUCCESS:
-    task_manager.TaskSaveDefault();
+    try {
+      task_manager.TaskSaveDefault();
+    } catch (const std::runtime_error &e) {
+      ShowError(e, _("Failed to save file."));
+      return false;
+    }
+
     return true;
 
   case MapTaskManager::NOTASK:
@@ -86,11 +92,17 @@ ReplaceInTask(ProtectedTaskManager &task_manager,
 
 static bool
 InsertInTask(ProtectedTaskManager &task_manager,
-             const Waypoint &waypoint)
+             WaypointPtr waypoint)
 {
-  switch (MapTaskManager::InsertInTask(waypoint)) {
+  switch (MapTaskManager::InsertInTask(std::move(waypoint))) {
   case MapTaskManager::SUCCESS:
-    task_manager.TaskSaveDefault();
+    try {
+      task_manager.TaskSaveDefault();
+    } catch (const std::runtime_error &e) {
+      ShowError(e, _("Failed to save file."));
+      return false;
+    }
+
     return true;
 
   case MapTaskManager::NOTASK:
@@ -120,11 +132,17 @@ InsertInTask(ProtectedTaskManager &task_manager,
 
 static bool
 AppendToTask(ProtectedTaskManager &task_manager,
-             const Waypoint &waypoint)
+             WaypointPtr waypoint)
 {
-  switch (MapTaskManager::AppendToTask(waypoint)) {
+  switch (MapTaskManager::AppendToTask(std::move(waypoint))) {
   case MapTaskManager::SUCCESS:
-    task_manager.TaskSaveDefault();
+    try {
+      task_manager.TaskSaveDefault();
+    } catch (const std::runtime_error &e) {
+      ShowError(e, _("Failed to save file."));
+      return false;
+    }
+
     return true;
 
   case MapTaskManager::NOTASK:
@@ -158,7 +176,13 @@ RemoveFromTask(ProtectedTaskManager &task_manager,
 {
   switch (MapTaskManager::RemoveFromTask(waypoint)) {
   case MapTaskManager::SUCCESS:
-    task_manager.TaskSaveDefault();
+    try {
+      task_manager.TaskSaveDefault();
+    } catch (const std::runtime_error &e) {
+      ShowError(e, _("Failed to save file."));
+      return false;
+    }
+
     return true;
 
   case MapTaskManager::NOTASK:
@@ -228,34 +252,34 @@ WaypointCommandsWidget::OnAction(int id)
     break;
 
   case REMOVE_FROM_TASK:
-    if (RemoveFromTask(*task_manager, waypoint) && form != nullptr)
+    if (RemoveFromTask(*task_manager, *waypoint) && form != nullptr)
       form->SetModalResult(mrOK);
     break;
 
   case SET_HOME:
-    SetHome(waypoint);
+    SetHome(*waypoint);
     if (form != nullptr)
       form->SetModalResult(mrOK);
     break;
 
   case PAN:
-    if (ActivatePan(waypoint) && form != nullptr)
+    if (ActivatePan(*waypoint) && form != nullptr)
       form->SetModalResult(mrOK);
     break;
 
   case SET_ACTIVE_FREQUENCY:
-    device_blackboard->SetActiveFrequency(waypoint.radio_frequency,
-                                          waypoint.name.c_str(), env);
+    device_blackboard->SetActiveFrequency(waypoint->radio_frequency,
+                                          waypoint->name.c_str(), env);
     break;
 
   case SET_STANDBY_FREQUENCY:
-    device_blackboard->SetStandbyFrequency(waypoint.radio_frequency,
-                                           waypoint.name.c_str(), env);
+    device_blackboard->SetStandbyFrequency(waypoint->radio_frequency,
+                                           waypoint->name.c_str(), env);
     break;
 
   case EDIT:
     {
-      Waypoint wp_copy = waypoint;
+      Waypoint wp_copy = *waypoint;
 
       /* move to user.cup */
       wp_copy.origin = WaypointOrigin::USER;
@@ -266,12 +290,15 @@ WaypointCommandsWidget::OnAction(int id)
 
         {
           ScopeSuspendAllThreads suspend;
-          way_points.Replace(waypoint, wp_copy);
+          way_points.Replace(waypoint, std::move(wp_copy));
           way_points.Optimise();
         }
 
-        if (!WaypointGlue::SaveWaypoints(way_points))
-          ShowMessageBox(_("Failed to save waypoints"), _("Error"), MB_OK);
+        try {
+          WaypointGlue::SaveWaypoints(way_points);
+        } catch (const std::runtime_error &e) {
+          ShowError(e, _("Failed to save waypoints"));
+        }
       }
     }
     break;
@@ -288,7 +315,7 @@ WaypointCommandsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     AddButton(_("Insert in Task"), *this, INSERT_IN_TASK);
     AddButton(_("Append to Task"), *this, APPEND_TO_TASK);
 
-    if (MapTaskManager::GetIndexInTask(waypoint) >= 0)
+    if (MapTaskManager::GetIndexInTask(*waypoint) >= 0)
       AddButton(_("Remove from Task"), *this, REMOVE_FROM_TASK);
   }
 

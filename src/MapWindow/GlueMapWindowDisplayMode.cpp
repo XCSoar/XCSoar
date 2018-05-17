@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@ Copyright_License {
 #include "GlueMapWindow.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Topography/Thread.hpp"
+#include "Terrain/Thread.hpp"
 #include "Interface.hpp"
 #include "Profile/Profile.hpp"
 #include "Screen/Layout.hpp"
@@ -32,17 +33,17 @@ Copyright_License {
 void
 OffsetHistory::Reset()
 {
-  offsets.fill(RasterPoint{0, 0});
+  offsets.fill(PixelPoint{0, 0});
 }
 
 inline void
-OffsetHistory::Add(RasterPoint p)
+OffsetHistory::Add(PixelPoint p)
 {
   offsets[pos] = p;
   pos = (pos + 1) % offsets.size();
 }
 
-inline RasterPoint
+inline PixelPoint
 OffsetHistory::GetAverage() const
 {
   int x = 0;
@@ -53,7 +54,7 @@ OffsetHistory::GetAverage() const
     y += i->y;
   }
 
-  RasterPoint avg;
+  PixelPoint avg;
   avg.x = x / (int) offsets.size();
   avg.y = y / (int) offsets.size();
 
@@ -116,10 +117,17 @@ GlueMapWindow::UpdateScreenBounds()
       visible_projection.IsValid() &&
       CommonInterface::GetMapSettings().topography_enabled)
     topography_thread->Trigger(visible_projection);
+
+  /* always service terrain even if it's not used by the map, because
+     it's used by other calculations, therefore don't check if terrain
+     display is enabled */
+  if (terrain_thread != nullptr &&
+      visible_projection.IsValid())
+    terrain_thread->Trigger(visible_projection);
 }
 
 void
-GlueMapWindow::SetMapScale(fixed scale)
+GlueMapWindow::SetMapScale(double scale)
 {
   MapWindow::SetMapScale(scale);
   OnProjectionModified();
@@ -213,7 +221,7 @@ GlueMapWindow::UpdateScreenAngle()
     visible_projection.SetScreenAngle(Angle::Zero());
   else if (orientation == MapOrientation::WIND_UP &&
            calculated.wind_available &&
-           calculated.wind.norm >= fixed(0.5))
+           calculated.wind.norm >= 0.5)
     visible_projection.SetScreenAngle(calculated.wind.bearing);
   else
     // normal, glider forward
@@ -241,8 +249,8 @@ GlueMapWindow::UpdateMapScale()
   if (!IsNearSelf())
     return;
 
-  fixed distance = calculated.auto_zoom_distance;
-  if (settings.auto_zoom_enabled && positive(distance)) {
+  auto distance = calculated.auto_zoom_distance;
+  if (settings.auto_zoom_enabled && distance > 0) {
     // Calculate distance percentage between plane symbol and map edge
     // 50: centered  100: at edge of map
     int auto_zoom_factor = circling
@@ -254,11 +262,11 @@ GlueMapWindow::UpdateMapScale()
     // Adjust to account for map scale units
     auto_zoom_factor *= 8;
 
-    distance /= fixed(auto_zoom_factor) / 100;
+    distance /= auto_zoom_factor / 100.;
 
     // Clip map auto zoom range to reasonable values
-    distance = Clamp(distance, fixed(525),
-                     settings.max_auto_zoom_distance / 10);
+    distance = Clamp(distance, 525.,
+                     settings.max_auto_zoom_distance / 10.);
 
     visible_projection.SetFreeMapScale(distance);
     settings.cruise_scale = visible_projection.GetScale();
@@ -282,11 +290,11 @@ GlueMapWindow::SetLocationLazy(const GeoPoint location)
     return;
   }
 
-  const fixed distance_meters =
+  const auto distance_meters =
     visible_projection.GetGeoLocation().DistanceS(location);
-  const fixed distance_pixels =
+  const auto distance_pixels =
     visible_projection.DistanceMetersToPixels(distance_meters);
-  if (distance_pixels > fixed(0.5))
+  if (distance_pixels > 0.5)
     SetLocation(location);
 }
 
@@ -303,22 +311,21 @@ GlueMapWindow::UpdateProjection()
   const bool circling =
     CommonInterface::GetUIState().display_mode == DisplayMode::CIRCLING;
 
-  const RasterPoint center = rc.GetCenter();
+  const auto center = rc.GetCenter();
 
   if (circling || !IsNearSelf())
     visible_projection.SetScreenOrigin(center.x, center.y);
   else if (settings_map.cruise_orientation == MapOrientation::NORTH_UP ||
            settings_map.cruise_orientation == MapOrientation::WIND_UP) {
-    RasterPoint offset{0, 0};
+    PixelPoint offset{0, 0};
     if (settings_map.glider_screen_position != 50 &&
         settings_map.map_shift_bias != MapShiftBias::NONE) {
-      fixed x = fixed(0);
-      fixed y = fixed(0);
+      double x = 0, y = 0;
       if (settings_map.map_shift_bias == MapShiftBias::TRACK) {
         if (basic.track_available &&
             basic.ground_speed_available &&
              /* 8 m/s ~ 30 km/h */
-            basic.ground_speed > fixed(8)) {
+            basic.ground_speed > 8) {
           auto angle = basic.track.Reciprocal() - visible_projection.GetScreenAngle();
 
           const auto sc = angle.SinCos();
@@ -335,9 +342,9 @@ GlueMapWindow::UpdateProjection()
           y = sc.second;
         }
       }
-      fixed position_factor = fixed(50 - settings_map.glider_screen_position) / 100;
-      offset.x = PixelScalar(x * (rc.right - rc.left) * position_factor);
-      offset.y = PixelScalar(y * (rc.top - rc.bottom) * position_factor);
+      double position_factor = (50. - settings_map.glider_screen_position) / 100.;
+      offset.x = int(x * rc.GetWidth() * position_factor);
+      offset.y = int(-y * rc.GetHeight() * position_factor);
       offset_history.Add(offset);
       offset = offset_history.GetAverage();
     }
@@ -349,12 +356,12 @@ GlueMapWindow::UpdateProjection()
   if (!IsNearSelf()) {
     /* no-op - the Projection's location is updated manually */
   } else if (circling && calculated.thermal_locator.estimate_valid) {
-    const fixed d_t = calculated.thermal_locator.estimate_location.DistanceS(basic.location);
-    if (!positive(d_t)) {
+    const auto d_t = calculated.thermal_locator.estimate_location.DistanceS(basic.location);
+    if (d_t <= 0) {
       SetLocationLazy(basic.location);
     } else {
-      const fixed d_max = Double(visible_projection.GetMapScale());
-      const fixed t = std::min(d_t, d_max)/d_t;
+      const auto d_max = 2 * visible_projection.GetMapScale();
+      const auto t = std::min(d_t, d_max)/d_t;
       SetLocation(basic.location.Interpolate(calculated.thermal_locator.estimate_location,
                                                t));
     }

@@ -2,114 +2,117 @@ ifeq ($(TARGET_IS_IOS),y)
 
 TARGET_LDLIBS += -framework UIKit
 
-DEB_TMPDIR = $(TARGET_OUTPUT_DIR)/deb
-
-IOS_DEB_VERSION = $(shell echo $(VERSION) | sed -e 's/_/-/g')
+IPA_TMPDIR = $(TARGET_OUTPUT_DIR)/ipa
 
 ifeq ($(TESTING),y)
-CYDIA_DEB_NAME = xcsoar-testing.deb
-IOS_LOGO_SVG = $(topdir)/Data/graphics/logo_red.svg
-IOS_ICON_SVG = $(topdir)/Data/iOS/iOS-Icon_red.svg
+IPA_NAME = xcsoar-testing.ipa
 IOS_APP_DIR_NAME = XCSoar.testing.app
 IOS_APP_BUNDLE_INENTIFIER = XCSoar-testing
 IOS_APP_DISPLAY_NAME = XCSoar Testing
+IOS_ICON_SVG = $(topdir)/Data/iOS/iOS-Icon_red.svg
+IOS_SPLASH_BASE_IMG=$(DATA)/graphics/logo_red_320.png
+IOS_GRAPHICS_DIR=$(DATA)/ios-graphics-testing
 else
-CYDIA_DEB_NAME = xcsoar.deb
-IOS_LOGO_SVG = $(topdir)/Data/graphics/logo.svg
-IOS_ICON_SVG = $(topdir)/Data/iOS/iOS-Icon.svg
+IPA_NAME = xcsoar.ipa
 IOS_APP_DIR_NAME = XCSoar.app
 IOS_APP_BUNDLE_INENTIFIER = XCSoar
 IOS_APP_DISPLAY_NAME = XCSoar
+IOS_ICON_SVG = $(topdir)/Data/iOS/iOS-Icon.svg
+IOS_SPLASH_BASE_IMG=$(DATA)/graphics/logo_320.png
+IOS_GRAPHICS_DIR=$(DATA)/ios-graphics
 endif
 
-$(TARGET_OUTPUT_DIR)/$(CYDIA_DEB_NAME): $(TARGET_BIN_DIR)/xcsoar $(IOS_LOGO_SVG) $(topdir)/Data/iOS/Info.plist.in.xml $(topdir)/Data/iOS/cydia-deb-control.in
-	@$(NQ)echo "  DEB     $@"
-	$(Q)rm -rf $(DEB_TMPDIR)
-	$(Q)$(MKDIR) -p $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)
-	$(Q)rsvg-convert $(IOS_LOGO_SVG) -w 320 -h 320 -a \
-		-o $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default.png
-	$(Q)$(IM_PREFIX)convert $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default.png \
-		-resize 320x480 -background white -gravity center -extent 320x480 \
-		$(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default.png
-	$(Q)rsvg-convert $(IOS_LOGO_SVG) -w 640 -h 640 -a \
-		-o $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default@2x.png
-	$(Q)$(IM_PREFIX)convert $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default@2x.png \
-		-resize 640x960 -background white -gravity center -extent 640x960 \
-		$(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default@2x.png
-	$(Q)rsvg-convert $(IOS_LOGO_SVG) -w 640 -h 640 -a \
-		-o $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-568h@2x.png
-	$(Q)$(IM_PREFIX)convert $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-568h@2x.png \
-		-resize 640x1136 -background white -gravity center -extent 640x1136 \
-		$(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-568h@2x.png
-	$(Q)rsvg-convert $(IOS_LOGO_SVG) -w 750 -h 750 -a \
-		-o $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-667h@2x.png
-	$(Q)$(IM_PREFIX)convert $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-667h@2x.png \
-		-resize 750x1334 -background white -gravity center -extent 750x1334 \
-		$(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-667h@2x.png
-	$(Q)rsvg-convert $(IOS_LOGO_SVG) -w 1242 -h 1242 -a \
-		-o $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-736h@3x.png
-	$(Q)$(IM_PREFIX)convert $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-736h@3x.png \
-		-resize 1242x2208 -background white -gravity center -extent 1242x2208 \
-		$(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-736h@3x.png
-	$(Q)rsvg-convert $(IOS_LOGO_SVG) -w 768 -h 768 -a \
-		-o $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Portrait.png
-	$(Q)$(IM_PREFIX)convert $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Portrait.png \
-		-resize 768x1004 -background white -gravity center -extent 768x1004 \
-		$(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Portrait.png
-	$(Q)rsvg-convert $(IOS_LOGO_SVG) -w 748 -h 748 -a \
-		-o $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Landscape.png
-	$(Q)$(IM_PREFIX)convert $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Landscape.png \
-		-resize 1024x748 -background white -gravity center -extent 1024x748 \
-		$(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Landscape.png
-	$(Q)rsvg-convert $(IOS_LOGO_SVG) -w 1536 -h 1536 -a \
-		-o $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Portrait@2x.png
-	$(Q)$(IM_PREFIX)convert $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Portrait@2x.png \
-		-resize 1536x2008 -background white -gravity center -extent 1536x2008 \
-		$(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Portrait@2x.png
-	$(Q)rsvg-convert $(IOS_LOGO_SVG) -w 1496 -h 1496 -a \
-		-o $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Landscape@2x.png
-	$(Q)$(IM_PREFIX)convert $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Landscape@2x.png \
-		-resize 2048x1496 -background white -gravity center -extent 2048x1496 \
-		$(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Landscape@2x.png
-	$(Q)rsvg-convert $(IOS_LOGO_SVG) -w 750 -h 750 -a \
-		-o $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Landscape-667h@2x.png
-	$(Q)$(IM_PREFIX)convert $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Landscape-667h@2x.png \
-		-resize 1334x750 -background white -gravity center -extent 1334x750 \
-		$(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Landscape-667h@2x.png
-	$(Q)rsvg-convert $(IOS_LOGO_SVG) -w 1242 -h 1242 -a \
-		-o $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Landscape-736h@3x.png
-	$(Q)$(IM_PREFIX)convert $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Landscape-736h@3x.png \
-		-resize 2208x1242 -background white -gravity center -extent 2208x1242 \
-		$(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Default-Landscape-736h@3x.png
-	$(Q)rsvg-convert $(IOS_ICON_SVG) -w 57 -h 57 -a \
-		-o $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Icon.png
-	$(Q)rsvg-convert $(IOS_ICON_SVG) -w 72 -h 72 -a \
-		-o $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Icon-72.png
-	$(Q)rsvg-convert $(IOS_ICON_SVG) -w 114 -h 114 -a \
-		-o $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Icon@2x.png
+ifeq ($(findstring aarch64,$(HOST_TRIPLET)),aarch64)
+IOS_INFO_PLIST_ARCH_PLACEHOLDER = arm64
+else ifeq ($(findstring armv7,$(HOST_TRIPLET)),armv7)
+IOS_INFO_PLIST_ARCH_PLACEHOLDER = armv7
+else
+$(error Could not determine correct architecture identifier for Info.plist)
+endif
+
+IOS_GRAPHICS = \
+	$(IOS_GRAPHICS_DIR)/Default.png \
+	$(IOS_GRAPHICS_DIR)/Default@2x.png \
+	$(IOS_GRAPHICS_DIR)/Default-568h@2x.png \
+	$(IOS_GRAPHICS_DIR)/Default-667h@2x.png \
+	$(IOS_GRAPHICS_DIR)/Default-736h@3x.png \
+	$(IOS_GRAPHICS_DIR)/Default-Portrait.png \
+	$(IOS_GRAPHICS_DIR)/Default-Landscape.png \
+	$(IOS_GRAPHICS_DIR)/Default-Portrait@2x.png \
+	$(IOS_GRAPHICS_DIR)/Default-Landscape@2x.png \
+	$(IOS_GRAPHICS_DIR)/Default-Landscape-667h@2x.png \
+	$(IOS_GRAPHICS_DIR)/Default-Landscape-736h@3x.png \
+	$(IOS_GRAPHICS_DIR)/Icon.png \
+	$(IOS_GRAPHICS_DIR)/Icon-72.png \
+	$(IOS_GRAPHICS_DIR)/Icon@2x.png
+
+$(IOS_GRAPHICS_DIR)/Default.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
+	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 320x480 $@
+
+$(IOS_GRAPHICS_DIR)/Default@2x.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
+	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 640x960 $@
+
+$(IOS_GRAPHICS_DIR)/Default-568h@2x.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
+	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 640x1136 $@
+
+$(IOS_GRAPHICS_DIR)/Default-667h@2x.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
+	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 750x1334 $@
+
+$(IOS_GRAPHICS_DIR)/Default-736h@3x.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
+	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 1242x2208 $@
+
+$(IOS_GRAPHICS_DIR)/Default-Portrait.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
+	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 768x1004 $@
+
+$(IOS_GRAPHICS_DIR)/Default-Landscape.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
+	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 1024x748 $@
+
+$(IOS_GRAPHICS_DIR)/Default-Portrait@2x.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
+	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 1536x2008 $@
+
+$(IOS_GRAPHICS_DIR)/Default-Landscape@2x.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
+	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 2048x1496 $@
+
+$(IOS_GRAPHICS_DIR)/Default-Landscape-667h@2x.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
+	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 1334x750 $@
+
+$(IOS_GRAPHICS_DIR)/Default-Landscape-736h@3x.png: $(IOS_SPLASH_BASE_IMG) | $(IOS_GRAPHICS_DIR)/dirstamp
+	$(Q)$(IM_PREFIX)convert $(IOS_SPLASH_BASE_IMG) -background white -gravity center -extent 2208x1242 $@
+
+$(IOS_GRAPHICS_DIR)/Icon.png: $(IOS_ICON_SVG) | $(IOS_GRAPHICS_DIR)/dirstamp
+	$(Q)rsvg-convert $< -w 57 -h 57 -a -o $@
+
+$(IOS_GRAPHICS_DIR)/Icon-72.png: $(IOS_ICON_SVG) | $(IOS_GRAPHICS_DIR)/dirstamp
+	$(Q)rsvg-convert $< -w 72 -h 72 -a -o $@
+
+$(IOS_GRAPHICS_DIR)/Icon@2x.png: $(IOS_ICON_SVG) | $(IOS_GRAPHICS_DIR)/dirstamp
+	$(Q)rsvg-convert $< -w 114 -h 114 -a -o $@
+
+
+$(TARGET_OUTPUT_DIR)/Info.plist.xml: $(topdir)/Data/iOS/Info.plist.in.xml | $(TARGET_OUTPUT_DIR)/dirstamp
 	$(Q)sed -e 's/IOS_APP_DISPLAY_NAME_PLACEHOLDER/$(IOS_APP_DISPLAY_NAME)/g' \
 		-e 's/IOS_APP_BUNDLE_INENTIFIER_PLACEHOLDER/$(IOS_APP_BUNDLE_INENTIFIER)/g' \
 		-e 's/VERSION_PLACEHOLDER/$(IOS_APP_VERSION)/g' \
-		$(topdir)/Data/iOS/Info.plist.in.xml \
-		> $(TARGET_OUTPUT_DIR)/Info.plist.xml	
+		-e 's/IOS_ARCH_PLACEHOLDER/$(IOS_INFO_PLIST_ARCH_PLACEHOLDER)/g' \
+		$< > $@
+
+$(TARGET_OUTPUT_DIR)/Info.plist: $(TARGET_OUTPUT_DIR)/Info.plist.xml
 ifeq ($(HOST_IS_DARWIN),y)
-	$(Q)plutil -convert binary1 \
-	    -o $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Info.plist \
-		$(TARGET_OUTPUT_DIR)/Info.plist.xml
+	$(Q)plutil -convert binary1 -o $@ $<
 else
-	$(Q)plistutil -i $(TARGET_OUTPUT_DIR)/Info.plist.xml \
-		-o $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/Info.plist
-endif
-	$(Q)$(MKDIR) $(DEB_TMPDIR)/DEBIAN
-	$(Q)sed -e 's/IOS_APP_DISPLAY_NAME_PLACEHOLDER/$(IOS_APP_DISPLAY_NAME)/g' \
-		-e 's/IOS_APP_BUNDLE_INENTIFIER_PLACEHOLDER/$(IOS_APP_BUNDLE_INENTIFIER)/g' \
-		-e 's/VERSION_PLACEHOLDER/$(IOS_DEB_VERSION)/g' \
-		$(topdir)/Data/iOS/cydia-deb-control.in \
-		> $(DEB_TMPDIR)/DEBIAN/control
-	$(Q)cp $(TARGET_BIN_DIR)/xcsoar $(DEB_TMPDIR)/Applications/$(IOS_APP_DIR_NAME)/XCSoar
-	$(Q)dpkg-deb --deb-format=2.0 -Zgzip -b $(TARGET_OUTPUT_DIR)/deb $@ >$(NUL)
-	
-cydia-deb: $(TARGET_OUTPUT_DIR)/$(CYDIA_DEB_NAME)
-
+	$(Q)plistutil -i $< -o $@
 endif
 
+
+$(TARGET_OUTPUT_DIR)/$(IPA_NAME): $(TARGET_BIN_DIR)/xcsoar $(TARGET_OUTPUT_DIR)/Info.plist  $(IOS_GRAPHICS)
+	@$(NQ)echo "  IPA     $@"
+	$(Q)rm -rf $(IPA_TMPDIR)
+	$(Q)$(MKDIR) -p $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)
+	$(Q)cp $(TARGET_BIN_DIR)/xcsoar $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)/XCSoar
+	$(Q)cp $(TARGET_OUTPUT_DIR)/Info.plist $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)
+	$(Q)cp $(IOS_GRAPHICS) $(IPA_TMPDIR)/Payload/$(IOS_APP_DIR_NAME)
+	$(Q)cd $(IPA_TMPDIR) && zip -r -q ../$(IPA_NAME) ./*
+
+ipa: $(TARGET_OUTPUT_DIR)/$(IPA_NAME)
+
+endif

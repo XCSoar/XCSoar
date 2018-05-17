@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Protocol.hpp"
-#include "Checksum.hpp"
 #include "Conversion.hpp"
 #include "IGC.hpp"
 #include "Communication.hpp"
@@ -31,8 +30,8 @@ Copyright_License {
 #include "Device/RecordedFlight.hpp"
 #include "MessageParser.hpp"
 #include "Device/Port/Port.hpp"
-#include "OS/Clock.hpp"
 #include "OS/FileUtil.hpp"
+#include "OS/Path.hpp"
 #include "Time/BrokenDateTime.hpp"
 
 #include <cstdio>
@@ -190,7 +189,7 @@ IMI::ReadFlightList(Port &port, RecordedFlightList &flight_list,
 
 bool
 IMI::FlightDownload(Port &port, const RecordedFlightInfo &flight_info,
-                    const TCHAR *path, OperationEnvironment &env)
+                    Path path, OperationEnvironment &env)
 {
   if (!_connected)
     return false;
@@ -201,7 +200,7 @@ IMI::FlightDownload(Port &port, const RecordedFlightInfo &flight_info,
   if (!FlashRead(port, &flight, flight_info.internal.imi, sizeof(flight), env))
     return false;
 
-  FILE *fileIGC = _tfopen(path, _T("w+b"));
+  FILE *fileIGC = _tfopen(path.c_str(), _T("w+b"));
   if (fileIGC == nullptr)
     return false;
 
@@ -251,7 +250,7 @@ IMI::FlightDownload(Port &port, const RecordedFlightInfo &flight_info,
   fclose(fileIGC);
 
   if (!ok)
-    File::Delete(path);
+    File::Delete(Path(path));
 
   return ok;
 }

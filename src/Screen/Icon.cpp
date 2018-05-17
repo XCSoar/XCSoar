@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -107,9 +107,11 @@ MaskedIcon::LoadResource(ResourceId id, ResourceId big_id, bool center)
 }
 
 void
-MaskedIcon::Draw(Canvas &canvas, PixelScalar x, PixelScalar y) const
+MaskedIcon::Draw(Canvas &canvas, PixelPoint p) const
 {
   assert(IsDefined());
+
+  p -= origin;
 
 #ifdef ENABLE_OPENGL
 #ifdef USE_GLSL
@@ -119,12 +121,11 @@ MaskedIcon::Draw(Canvas &canvas, PixelScalar x, PixelScalar y) const
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 #endif
 
-  const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  const ScopeAlphaBlend alpha_blend;
 
   GLTexture &texture = *bitmap.GetNative();
   texture.Bind();
-  texture.Draw(x - origin.x, y - origin.y, size.cx, size.cy,
-               0, 0, texture.GetWidth(), texture.GetHeight());
+  texture.Draw(PixelRect(p, size), texture.GetRect());
 #else
 
 #ifdef USE_GDI
@@ -134,9 +135,9 @@ MaskedIcon::Draw(Canvas &canvas, PixelScalar x, PixelScalar y) const
   canvas.SetBackgroundColor(COLOR_WHITE);
 #endif
 
-  canvas.CopyOr(x - origin.x, y - origin.y, size.cx, size.cy,
+  canvas.CopyOr(p.x, p.y, size.cx, size.cy,
                  bitmap, 0, 0);
-  canvas.CopyAnd(x - origin.x, y - origin.y, size.cx, size.cy,
+  canvas.CopyAnd(p.x, p.y, size.cx, size.cy,
                   bitmap, size.cx, 0);
 #endif
 }
@@ -144,8 +145,7 @@ MaskedIcon::Draw(Canvas &canvas, PixelScalar x, PixelScalar y) const
 void
 MaskedIcon::Draw(Canvas &canvas, const PixelRect &rc, bool inverse) const
 {
-  const int offsetx = (rc.right - rc.left - size.cx) / 2;
-  const int offsety = (rc.bottom - rc.top - size.cy) / 2;
+  const PixelPoint position = rc.CenteredTopLeft(size);
 
 #ifdef ENABLE_OPENGL
 #ifdef USE_GLSL
@@ -173,19 +173,18 @@ MaskedIcon::Draw(Canvas &canvas, const PixelRect &rc, bool inverse) const
     OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 #endif
 
-  const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  const ScopeAlphaBlend alpha_blend;
 
   GLTexture &texture = *bitmap.GetNative();
   texture.Bind();
-  texture.Draw(rc.left + offsetx, rc.top + offsety, size.cx, size.cy,
-               0, 0, texture.GetWidth(), texture.GetHeight());
+  texture.Draw(PixelRect(position, size), texture.GetRect());
 #else
   if (inverse) // black background
-    canvas.CopyNotOr(rc.left + offsetx, rc.top + offsety, size.cx, size.cy,
+    canvas.CopyNotOr(position.x, position.y, size.cx, size.cy,
                      bitmap, size.cx, 0);
 
   else
-    canvas.CopyAnd(rc.left + offsetx, rc.top + offsety, size.cx, size.cy,
+    canvas.CopyAnd(position.x, position.y, size.cx, size.cy,
                    bitmap, size.cx, 0);
 #endif
 

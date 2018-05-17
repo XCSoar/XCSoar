@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,7 +26,6 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Float.hpp"
-#include "Form/DataField/Boolean.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
@@ -86,10 +85,10 @@ WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     WndProperty *wp =
       AddFloat(_("Speed"), _("Manual adjustment of wind speed."),
                _T("%.0f %s"), _T("%.0f"),
-               fixed(0),
-               Units::ToUserWindSpeed(Units::ToSysUnit(fixed(200),
+               0,
+               Units::ToUserWindSpeed(Units::ToSysUnit(200,
                                                        Unit::KILOMETER_PER_HOUR)),
-               fixed(1), false,
+               1, false,
                Units::ToUserWindSpeed(manual_wind.norm),
                this);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();

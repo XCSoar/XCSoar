@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,6 +25,7 @@ Copyright_License {
 #include "TaskEventObserver.hpp"
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Unordered/AlternateList.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
 #include "InputQueue.hpp"
 
 static unsigned
@@ -33,7 +34,7 @@ GetBestAlternateID(const TaskManager &tm)
   const auto &alternates = tm.GetAlternates();
   return alternates.empty()
     ? unsigned(-1)
-    : alternates.front().waypoint.id;
+    : alternates.front().waypoint->id;
 }
 
 void

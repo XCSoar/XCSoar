@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@
 #include "Waypoint/Waypoint.hpp"
 
 /** min distance for any FAI Leg -- derived from circular FAI sector radius */
-static constexpr fixed min_fai_leg(2000);
+static constexpr double min_fai_leg(2000);
 
 /** min angle allowable in a FAI Triangle 31.5 degrees */
 static constexpr Angle min_fai_angle = Angle::Degrees(31.5);
@@ -42,11 +42,11 @@ FAITrianglePointValidator::FAITrianglePointValidator(
   if (task != nullptr) {
     t_size = task->TaskSize();
     leg1 = t_size > 1
-      ? task->GetTaskPoint(1).GetVectorPlanned().distance : fixed(0);
+      ? task->GetTaskPoint(1).GetVectorPlanned().distance : 0;
     leg2 = t_size > 2
-      ? task->GetTaskPoint(2).GetVectorPlanned().distance : fixed(0);
+      ? task->GetTaskPoint(2).GetVectorPlanned().distance : 0;
     leg3 = t_size > 3
-      ? task->GetTaskPoint(3).GetVectorPlanned().distance : fixed(0);
+      ? task->GetTaskPoint(3).GetVectorPlanned().distance : 0;
   }
 
   fai_triangle_point_invalid = t_size > 4 || t_index > 3;
@@ -54,8 +54,8 @@ FAITrianglePointValidator::FAITrianglePointValidator(
 
 
 inline bool
-FAITrianglePointValidator::TestFAITriangle(const fixed d1, const fixed d2,
-                                           const fixed d3,
+FAITrianglePointValidator::TestFAITriangle(const double d1, const double d2,
+                                           const double d3,
                                            const FAITriangleSettings &settings)
 {
   if ((d1 < min_fai_leg) || (d2 < min_fai_leg) || (d3 < min_fai_leg))

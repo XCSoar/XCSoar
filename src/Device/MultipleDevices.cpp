@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,13 +25,13 @@ Copyright_License {
 #include "Descriptor.hpp"
 #include "Dispatcher.hpp"
 
-MultipleDevices::MultipleDevices()
+MultipleDevices::MultipleDevices(boost::asio::io_service &io_service)
 {
   for (unsigned i = 0; i < NUMDEV; ++i) {
     DeviceDispatcher *dispatcher = dispatchers[i] =
       new DeviceDispatcher(*this, i);
 
-    devices[i] = new DeviceDescriptor(i, this);
+    devices[i] = new DeviceDescriptor(io_service, i, this);
     devices[i]->SetDispatcher(dispatcher);
   }
 }
@@ -60,21 +60,21 @@ MultipleDevices::AutoReopen(OperationEnvironment &env)
 }
 
 void
-MultipleDevices::PutMacCready(fixed mac_cready, OperationEnvironment &env)
+MultipleDevices::PutMacCready(double mac_cready, OperationEnvironment &env)
 {
   for (DeviceDescriptor *i : devices)
     i->PutMacCready(mac_cready, env);
 }
 
 void
-MultipleDevices::PutBugs(fixed bugs, OperationEnvironment &env)
+MultipleDevices::PutBugs(double bugs, OperationEnvironment &env)
 {
   for (DeviceDescriptor *i : devices)
     i->PutBugs(bugs, env);
 }
 
 void
-MultipleDevices::PutBallast(fixed fraction, fixed overload,
+MultipleDevices::PutBallast(double fraction, double overload,
                             OperationEnvironment &env)
 {
   for (DeviceDescriptor *i : devices)
@@ -154,4 +154,13 @@ MultipleDevices::PortStateChanged()
 
   for (auto *listener : listeners)
     listener->PortStateChanged();
+}
+
+void
+MultipleDevices::PortError(const char *msg)
+{
+  const ScopeLock protect(listeners_mutex);
+
+  for (auto *listener : listeners)
+    listener->PortError(msg);
 }

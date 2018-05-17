@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,6 +27,7 @@
 
 #include <iostream>
 
+class Path;
 class TaskManager;
 class AbortTask;
 class GotoTask;
@@ -50,11 +51,7 @@ class FlatTriangleFan;
 struct Waypoint;
 struct AirspaceAltitude;
 
-#ifdef FIXED_MATH
-#include "Math/fixed.hpp"
-std::ostream& operator<<(std::ostream& os, fixed value);
-#endif
-
+std::ostream &operator<<(std::ostream &f, Path path);
 std::ostream &operator<< (std::ostream &f, const Waypoint &wp);
 
 class PrintHelper {
@@ -91,7 +88,8 @@ public:
   static void trace_print(const Trace& trace, const GeoPoint &loc);
   static void print(const ContestResult& result);
   static void print_route(RoutePlanner& r);
-  static void print_reach_tree(const RoutePlanner& r);
+  static void print_reach_terrain_tree(const RoutePlanner& r);
+  static void print_reach_working_tree(const RoutePlanner& r);
   static void print(const ReachFan& r);
   static void print(const FlatTriangleFanTree& r);
   static void print(const FlatTriangleFan& r, const unsigned depth);

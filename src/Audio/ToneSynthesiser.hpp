@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,11 +31,15 @@ Copyright_License {
  * This class generates tones with a sine wave.
  */
 class ToneSynthesiser : public PCMSynthesiser {
-  unsigned volume, angle, increment;
+  unsigned volume = 100, angle = 0, increment = 0;
 
 public:
-  constexpr
-  ToneSynthesiser():volume(100), angle(0), increment(0) {}
+  explicit ToneSynthesiser(unsigned _sample_rate) : sample_rate(_sample_rate) {
+  }
+
+  unsigned GetSampleRate() const {
+    return sample_rate;
+  }
 
   /**
    * Set the (software) volume of the generated tone.
@@ -47,12 +51,14 @@ public:
     volume = _volume;
   }
 
-  void SetTone(unsigned sample_rate, unsigned tone_hz);
+  void SetTone(unsigned tone_hz);
 
   /* methods from class PCMSynthesiser */
   virtual void Synthesise(int16_t *buffer, size_t n);
 
 protected:
+  const unsigned sample_rate;
+
   /**
    * Returns the number of samples until the sample value gets close
    * to zero.

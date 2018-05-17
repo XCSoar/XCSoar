@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -64,32 +64,6 @@ public:
            const FlatProjection &projection);
 
   /**
-   * Constructor for virtual airspaces for use in range-based
-   * intersection queries
-   *
-   * @param loc Location about which to create a virtual airspace envelope
-   * @param projection projection to be used for flat-earth representation
-   * @param range range in meters of virtual bounding box
-   *
-   * @return dummy airspace envelope
-   */
-  Airspace(const GeoPoint&loc, const FlatProjection &projection,
-           const fixed range=fixed(0));
-
-  /**
-   * Constructor for virtual airspaces for use in bounding-box
-   * specified intersection queries
-   *
-   * @param ll Lower left corner of bounding box
-   * @param ur Upper right corner of bounding box
-   * @param projection projection to be used for flat-earth representation
-   *
-   * @return dummy airspace envelope
-   */
-  Airspace(const GeoPoint &ll, const GeoPoint &ur,
-           const FlatProjection &projection);
-
-  /**
    * Checks whether an aircraft is inside the airspace.
    *
    * @param loc Location to check for enclosure
@@ -108,17 +82,6 @@ public:
    */
   gcc_pure
   bool IsInside(const GeoPoint &loc) const;
-
-  /**
-   * Checks whether a flat-earth ray intersects with the airspace
-   * bounding box.
-   *
-   * @param ray Flat-earth ray to check for intersection
-   *
-   * @return true if ray intersects or wholly enclosed by airspace
-   */
-  gcc_pure
-  bool Intersects(const FlatRay &ray) const;
 
   /**
    * Checks whether a line intersects with the airspace, by directing
@@ -157,7 +120,7 @@ public:
    *
    * @param alt Height above MSL of terrain (m) at center
    */
-  void SetGroundLevel(const fixed alt) const;
+  void SetGroundLevel(double alt) const;
 
   /**
    * Is it necessary to call SetGroundLevel() for this AbstractAirspace?

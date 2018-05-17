@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -63,7 +63,7 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
 
   if (!basic.track_available || !basic.ground_speed_available ||
       !basic.airspeed_available || !basic.airspeed_real ||
-      basic.true_airspeed < fixed(1)) {
+      basic.true_airspeed < 1) {
     ResetBlackout();
     return Result(0);
   }
@@ -91,7 +91,7 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
   if (derived.turn_rate.Absolute() > Angle::Degrees(20) ||
       (basic.acceleration.available &&
        basic.acceleration.real &&
-       fabs(basic.acceleration.g_load - fixed(1)) > fixed(0.3))) {
+       fabs(basic.acceleration.g_load - 1) > 0.3)) {
 
     SetBlackout(time);
     return Result(0);
@@ -103,10 +103,10 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
   // clear blackout
   ResetBlackout();
 
-  fixed V = basic.true_airspeed;
+  auto V = basic.true_airspeed;
   float gps_vel[2];
   const auto sc = basic.track.SinCos();
-  const fixed gps_east = sc.first, gps_north = sc.second;
+  const auto gps_east = sc.first, gps_north = sc.second;
   gps_vel[0] = (float)(gps_east * basic.ground_speed);
   gps_vel[1] = (float)(gps_north * basic.ground_speed);
 
@@ -126,7 +126,7 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
 
   Result res;
   res.quality = CounterToQuality(i);
-  res.wind = SpeedVector(fixed(-x[0]), fixed(-x[1]));
+  res.wind = SpeedVector(-x[0], -x[1]);
 
   return res;
 }

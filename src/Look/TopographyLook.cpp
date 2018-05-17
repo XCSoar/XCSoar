@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,11 +28,6 @@ Copyright_License {
 void
 TopographyLook::Initialise()
 {
-#ifdef GNAV
-  regular_label_font.Load(FontDescription(_T("RasterGothicTwelveCond"), 13));
-  important_label_font.Load(FontDescription(_T("RasterGothicTwelveCond"), 13));
-#else
   regular_label_font.Load(FontDescription(Layout::FontScale(8), false, true));
   important_label_font.Load(FontDescription(Layout::FontScale(8), true, true));
-#endif
 }

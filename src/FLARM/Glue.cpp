@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,9 +28,11 @@ Copyright_License {
 #include "NameFile.hpp"
 #include "Components.hpp"
 #include "MergeThread.hpp"
+#include "LocalPath.hpp"
 #include "IO/DataFile.hpp"
 #include "IO/LineReader.hpp"
-#include "IO/TextWriter.hpp"
+#include "IO/FileOutputStream.hxx"
+#include "IO/BufferedOutputStream.hxx"
 #include "Profile/FlarmProfile.hpp"
 #include "Profile/Current.hpp"
 #include "LogFile.hpp"
@@ -40,16 +42,14 @@ Copyright_License {
  */
 static void
 LoadFLARMnet(FlarmNetDatabase &db)
-{
-  NLineReader *reader = OpenDataTextFileA(_T("data.fln"));
-  if (reader == NULL)
-    return;
+try {
+  auto reader = OpenDataTextFileA(_T("data.fln"));
 
   unsigned num_records = FlarmNetReader::LoadFile(*reader, db);
-  delete reader;
-
   if (num_records > 0)
     LogFormat("%u FLARMnet ids found", num_records);
+} catch (const std::runtime_error &e) {
+  LogError(e);
 }
 
 /**
@@ -59,14 +59,13 @@ LoadFLARMnet(FlarmNetDatabase &db)
  */
 static void
 LoadSecondary(FlarmNameDatabase &db)
-{
+try {
   LogFormat("OpenFLARMDetails");
 
-  TLineReader *reader = OpenDataTextFile(_T("xcsoar-flarm.txt"));
-  if (reader != NULL) {
-    LoadFlarmNameFile(*reader, db);
-    delete reader;
-  }
+  auto reader = OpenDataTextFile(_T("xcsoar-flarm.txt"));
+  LoadFlarmNameFile(*reader, db);
+} catch (const std::runtime_error &e) {
+  LogError(e);
 }
 
 void
@@ -101,13 +100,14 @@ SaveFlarmColors()
    */
 static void
 SaveSecondary(FlarmNameDatabase &flarm_names)
-{
-  TextWriter *writer = CreateDataTextFile(_T("xcsoar-flarm.txt"));
-  if (writer == NULL)
-    return;
-
-  SaveFlarmNameFile(*writer, flarm_names);
-  delete writer;
+try {
+  FileOutputStream fos(LocalPath(_T("xcsoar-flarm.txt")));
+  BufferedOutputStream bos(fos);
+  SaveFlarmNameFile(bos, flarm_names);
+  bos.Flush();
+  fos.Commit();
+} catch (const std::runtime_error &e) {
+  LogError(e);
 }
 
 void

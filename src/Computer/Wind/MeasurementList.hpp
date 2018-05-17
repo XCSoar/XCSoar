@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_WIND_MEASUREMENT_LIST_HPP
 #define XCSOAR_WIND_MEASUREMENT_LIST_HPP
 
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 #include "Math/Vector.hpp"
 
 /**
@@ -41,7 +41,7 @@ struct WindMeasurement
    * Time of fix.
    */
   unsigned time;
-  fixed altitude;               /**< Altitude of fix */
+  double altitude;               /**< Altitude of fix */
 
   gcc_pure
   unsigned Score(unsigned _time) const {
@@ -69,11 +69,11 @@ public:
    * too low quality data).
    */
   gcc_pure
-  const Vector getWind(unsigned now, fixed alt, bool &found) const;
+  const Vector getWind(unsigned now, double alt, bool &found) const;
 
   /** Adds the windvector vector with quality quality to the list. */
   void addMeasurement(unsigned time, const SpeedVector &vector,
-                      fixed alt, unsigned quality);
+                      double alt, unsigned quality);
 
   void Reset();
 

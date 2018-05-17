@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,12 +27,10 @@ Copyright_License {
 #include "../dlgTaskHelpers.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
-#include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Interface.hpp"
-#include "Screen/SingleWindow.hpp"
 #include "Form/Button.hpp"
 #include "Form/List.hpp"
 #include "Widget/ListWidget.hpp"
@@ -41,8 +39,6 @@ Copyright_License {
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "Look/DialogLook.hpp"
-#include "Look/TaskLook.hpp"
-#include "Look/AirspaceLook.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/StartPoint.hpp"
 #include "Engine/Task/Ordered/Points/IntermediatePoint.hpp"
@@ -51,10 +47,10 @@ Copyright_License {
 #include "Renderer/OZPreviewRenderer.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
 #include "Util/Macros.hpp"
+#include "Util/StringCompare.hxx"
 #include "UIGlobals.hpp"
 
 #include <assert.h>
-#include <stdio.h>
 
 enum Buttons {
   EDIT = 100,
@@ -119,7 +115,7 @@ private:
   }
 
   Layout CalculateLayout(const PixelRect &rc) const {
-    const PixelScalar dx = (rc.right - rc.left) / 5;
+    const int dx = rc.GetWidth() / 5;
 
     return {
       { rc.left         , rc.top, rc.left +     dx, rc.bottom },
@@ -261,7 +257,6 @@ public:
 
   void ReClick() override;
   void Show(const PixelRect &rc) override;
-  bool KeyPress(unsigned key_code) override;
 
 protected:
   void RefreshView();
@@ -321,13 +316,13 @@ void TaskEditPanel::ReverseTask()
 
   const unsigned start_index = 0;
   const unsigned finish_index = ordered_task->TaskSize() - 1;
-  const Waypoint start_wp = ordered_task->GetTaskPoint(start_index).GetWaypoint();
-  const Waypoint finish_wp = ordered_task->GetTaskPoint(finish_index).GetWaypoint();
+  auto start_wp = ordered_task->GetTaskPoint(start_index).GetWaypointPtr();
+  auto finish_wp = ordered_task->GetTaskPoint(finish_index).GetWaypointPtr();
 
-  if (start_wp.location != finish_wp.location) {
+  if (start_wp->location != finish_wp->location) {
     // swap start/finish TP if at different location but leave OZ type intact
-    ordered_task->Relocate(start_index, finish_wp);
-    ordered_task->Relocate(finish_index, start_wp);
+    ordered_task->Relocate(start_index, std::move(finish_wp));
+    ordered_task->Relocate(finish_index, std::move(start_wp));
 
     // remove optional start points
     while (ordered_task->HasOptionalStarts())
@@ -403,7 +398,7 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
   assert(DrawListIndex <= ordered_task->TaskSize());
 
   const unsigned padding = Layout::GetTextPadding();
-  const unsigned line_height = rc.bottom - rc.top;
+  const unsigned line_height = rc.GetHeight();
 
   TCHAR buffer[120];
 
@@ -415,28 +410,21 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   const OrderedTaskPoint &tp = ordered_task->GetTaskPoint(DrawListIndex);
   GeoVector leg = tp.GetNominalLegVector();
-  bool show_leg_info = leg.distance > fixed(0.01);
+  bool show_leg_info = leg.distance > 0.01;
 
   PixelRect text_rc = rc;
   text_rc.left += line_height + padding;
 
   if (show_leg_info) {
-    // Use small font for details
-    canvas.Select(row_renderer.GetSecondFont());
-
     // Draw leg distance
     FormatUserDistanceSmart(leg.distance, buffer, true);
-    unsigned width = canvas.CalcTextWidth(buffer);
-    const int x1 = rc.right - padding - width;
-    canvas.DrawText(x1, rc.top + row_renderer.GetFirstY(), buffer);
+    const int x1 = row_renderer.DrawRightFirstRow(canvas, rc, buffer);
 
     // Draw leg bearing
     FormatBearing(buffer, ARRAY_SIZE(buffer), leg.bearing);
-    width = canvas.CalcTextWidth(buffer);
-    const int x2 = rc.right - padding - width;
-    canvas.DrawText(x2, rc.top + row_renderer.GetSecondY(), buffer);
+    const int x2 = row_renderer.DrawRightSecondRow(canvas, rc, buffer);
 
-    text_rc.right = std::min(x1, x2) - padding;
+    text_rc.right = std::min(x1, x2);
   }
 
   // Draw details line
@@ -445,13 +433,13 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
     row_renderer.DrawSecondRow(canvas, text_rc, buffer);
 
   // Draw turnpoint name
-  OrderedTaskPointLabel(tp.GetType(), tp.GetWaypoint().name.c_str(),
+  OrderedTaskPointLabel(tp.GetType(), tp.GetWaypointPtr()->name.c_str(),
                         DrawListIndex, buffer);
   row_renderer.DrawFirstRow(canvas, text_rc, buffer);
 
   // Draw icon
-  const RasterPoint pt(rc.left + line_height / 2,
-                       rc.top + line_height / 2);
+  const PixelPoint pt(rc.left + line_height / 2,
+                      rc.top + line_height / 2);
 
   const unsigned radius = line_height / 2 - padding;
   OZPreviewRenderer::Draw(canvas, tp.GetObservationZone(),
@@ -486,7 +474,7 @@ TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
 
     OrderedTaskPoint* point = nullptr;
     AbstractTaskFactory &factory = ordered_task->GetFactory();
-    const Waypoint* way_point =
+    auto way_point =
       ShowWaypointListDialog(ordered_task->TaskSize() > 0
                              ? ordered_task->GetPoint(ordered_task->TaskSize() - 1).GetLocation()
                              : CommonInterface::Basic().location,
@@ -495,9 +483,9 @@ TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
       return;
 
     if (ItemIndex == 0) {
-      point = factory.CreateStart(*way_point);
+      point = factory.CreateStart(std::move(way_point));
     } else {
-      point = factory.CreateIntermediate(*way_point);
+      point = factory.CreateIntermediate(std::move(way_point));
      }
     if (point == nullptr)
       return;
@@ -569,36 +557,6 @@ TaskEditPanel::MoveDown()
 
   ordered_task->UpdateGeometry();
   RefreshView();
-}
-
-bool
-TaskEditPanel::KeyPress(unsigned key_code)
-{
-  switch (key_code){
-  case KEY_ESCAPE:
-    if (IsAltair() && GetList().HasFocus()){
-       dialog.FocusFirstControl();
-      return true;
-    }
-    return false;
-
-  case '6': /* F5 */
-    if (IsAltair()) {
-      MoveUp();
-      return true;
-    } else
-      return false;
-
-  case '7': /* F6 */
-    if (IsAltair()) {
-      MoveDown();
-      return true;
-    } else
-      return false;
-
-  default:
-    return false;
-  }
 }
 
 void

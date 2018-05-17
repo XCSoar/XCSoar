@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,6 +25,8 @@ Copyright_License {
 #define XCSOAR_EVENT_ROTATE_POINTER_HPP
 
 #include "Screen/Point.hpp"
+#include "DisplayOrientation.hpp"
+#include "Compiler.h"
 
 #include <algorithm>
 
@@ -36,23 +38,19 @@ class RotatePointer {
   /**
    * Swap x and y?
    */
-  bool swap;
+  bool swap = false;
 
   /**
    * Invert x or y?
    */
-  bool invert_x, invert_y;
+  bool invert_x = false, invert_y = false;
 
   /**
    * Screen dimensions in pixels.
    */
-  unsigned width, height;
+  unsigned width = 0, height = 0;
 
 public:
-  constexpr RotatePointer()
-    :swap(false), invert_x(false), invert_y(false),
-     width(0), height(0) {}
-
   constexpr unsigned GetWidth() const {
     return width;
   }
@@ -75,30 +73,48 @@ public:
     invert_y = _invert_y;
   }
 
-  void DoRelative(int &x, int &y) {
-    if (swap)
-      std::swap(x, y);
+  void SetDisplayOrientation(DisplayOrientation orientation) {
+    SetSwap(AreAxesSwapped(orientation));
+
+    switch (TranslateDefaultDisplayOrientation(orientation)) {
+    case DisplayOrientation::DEFAULT:
+    case DisplayOrientation::PORTRAIT:
+      SetInvert(true, false);
+      break;
+
+    case DisplayOrientation::LANDSCAPE:
+      SetInvert(false, false);
+      break;
+
+    case DisplayOrientation::REVERSE_PORTRAIT:
+      SetInvert(false, true);
+      break;
+
+    case DisplayOrientation::REVERSE_LANDSCAPE:
+      SetInvert(true, true);
+      break;
+    }
   }
 
-  void DoAbsolute(int &x, int &y) {
-    DoRelative(x, y);
-
-    if (invert_x)
-      x = width - x;
-
-    if (invert_y)
-      y = height - y;
-  }
-
-  void Do(RasterPoint &p) {
+  gcc_pure
+  PixelPoint DoRelative(PixelPoint p) const {
     if (swap)
       std::swap(p.x, p.y);
+
+    return p;
+  }
+
+  gcc_pure
+  PixelPoint DoAbsolute(PixelPoint p) const {
+    p = DoRelative(p);
 
     if (invert_x)
       p.x = width - p.x;
 
     if (invert_y)
       p.y = height - p.y;
+
+    return p;
   }
 };
 

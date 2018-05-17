@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -59,7 +59,8 @@ Copyright_License {
 #include "Java/URL.hxx"
 #include "Compiler.h"
 #include "org_xcsoar_NativeView.h"
-#include "IO/Async/GlobalIOThread.hpp"
+#include "IO/Async/GlobalAsioThread.hpp"
+#include "IO/Async/AsioThread.hpp"
 #include "Thread/Debug.hpp"
 
 #include "IOIOHelper.hpp"
@@ -121,9 +122,10 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
 
   InitThreadDebug();
 
-  InitialiseIOThread();
+  InitialiseAsioThread();
 
   Java::Init(env);
+  Java::Object::Initialise(env);
   Java::File::Initialise(env);
   Java::InputStream::Initialise(env);
   Java::URL::Initialise(env);
@@ -138,7 +140,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   PortBridge::Initialise(env);
   BluetoothHelper::Initialise(env);
   NativeLeScanCallback::Initialise(env);
-  IOIOHelper::Initialise(env);
+  const bool have_ioio = IOIOHelper::Initialise(env);
   NativeBMP085Listener::Initialise(env);
   BMP085Device::Initialise(env);
   NativeI2CbaroListener::Initialise(env);
@@ -170,7 +172,8 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   Vibrator::Initialise(env);
   vibrator = Vibrator::Create(env, *context);
 
-  ioio_helper = new IOIOHelper(env);
+  if (have_ioio)
+    ioio_helper = new IOIOHelper(env);
 
 #ifdef __arm__
   if (IsNookSimpleTouch()) {
@@ -258,7 +261,7 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   NativeView::Deinitialise(env);
   Java::URL::Deinitialise(env);
 
-  DeinitialiseIOThread();
+  DeinitialiseAsioThread();
 }
 
 gcc_visibility_default
@@ -270,11 +273,11 @@ Java_org_xcsoar_NativeView_resizedNative(JNIEnv *env, jobject obj,
     return;
 
   if (CommonInterface::main_window != nullptr)
-    CommonInterface::main_window->AnnounceResize(width, height);
+    CommonInterface::main_window->AnnounceResize({width, height});
 
   event_queue->Purge(Event::RESIZE);
 
-  Event event(Event::RESIZE, width, height);
+  Event event(Event::RESIZE, PixelPoint(width, height));
   event_queue->Push(event);
 }
 

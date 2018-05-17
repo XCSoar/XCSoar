@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -34,12 +34,12 @@ Copyright_License {
 #include "Port/DumpPort.hpp"
 #include "NMEA/Info.hpp"
 #include "Thread/Mutex.hpp"
-#include "Util/StringUtil.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
+#include "Util/ConvertString.hpp"
 #include "Logger/NMEALogger.hpp"
 #include "Language/Language.hpp"
 #include "Operation/Operation.hpp"
-#include "OS/Clock.hpp"
+#include "OS/Path.hpp"
 #include "../Simulator.hpp"
 #include "Input/InputQueue.hpp"
 #include "LogFile.hpp"
@@ -61,6 +61,8 @@ Copyright_License {
 #ifdef __APPLE__
 #include "Apple/InternalSensors.hpp"
 #endif
+
+#include <stdexcept>
 
 #include <assert.h>
 
@@ -96,9 +98,10 @@ public:
   };
 };
 
-DeviceDescriptor::DeviceDescriptor(unsigned _index,
+DeviceDescriptor::DeviceDescriptor(boost::asio::io_service &_io_service,
+                                   unsigned _index,
                                    PortListener *_port_listener)
-  :index(_index),
+  :io_service(_io_service), index(_index),
    port_listener(_port_listener),
    open_job(nullptr),
    port(nullptr), monitor(nullptr), dispatcher(nullptr),
@@ -217,7 +220,12 @@ DeviceDescriptor::CancelAsync()
   assert(open_job != nullptr);
 
   async.Cancel();
-  async.Wait();
+
+  try {
+    async.Wait();
+  } catch (const std::runtime_error &e) {
+    LogError(e);
+  }
 
   delete open_job;
   open_job = nullptr;
@@ -226,10 +234,6 @@ DeviceDescriptor::CancelAsync()
 bool
 DeviceDescriptor::OpenOnPort(DumpPort *_port, OperationEnvironment &env)
 {
-#if !CLANG_CHECK_VERSION(3,6)
-  /* disabled on clang due to -Wtautological-pointer-compare */
-  assert(_port != nullptr);
-#endif
   assert(port == nullptr);
   assert(device == nullptr);
   assert(second_device == nullptr);
@@ -239,10 +243,11 @@ DeviceDescriptor::OpenOnPort(DumpPort *_port, OperationEnvironment &env)
 
   reopen_clock.Update();
 
-  device_blackboard->mutex.Lock();
-  device_blackboard->SetRealState(index).Reset();
-  device_blackboard->ScheduleMerge();
-  device_blackboard->mutex.Unlock();
+  {
+    const ScopeLock lock(device_blackboard->mutex);
+    device_blackboard->SetRealState(index).Reset();
+    device_blackboard->ScheduleMerge();
+  }
 
   settings_sent.Clear();
   settings_received.Clear();
@@ -326,8 +331,9 @@ DeviceDescriptor::OpenDroidSoarV2()
     i2cbaro[1] = new I2CbaroDevice(GetIndex(), Java::GetEnv(),
                        ioio_helper->GetHolder(),
                        // needs calibration ?
-                       (config.sensor_factor == fixed(0)) ? DeviceConfig::PressureUse::PITOT_ZERO :
-                                                            DeviceConfig::PressureUse::PITOT,
+                       config.sensor_factor == 0
+                       ? DeviceConfig::PressureUse::PITOT_ZERO
+                       : DeviceConfig::PressureUse::PITOT,
                        config.sensor_offset, 1 + (0x77 << 8) + (46 << 16), 0 ,
                        5,
                        0);
@@ -352,9 +358,9 @@ DeviceDescriptor::OpenI2Cbaro()
       i2cbaro[i] = new I2CbaroDevice(GetIndex(), Java::GetEnv(),
                        ioio_helper->GetHolder(),
                        // needs calibration ?
-                       (config.sensor_factor == fixed(0) && config.press_use == DeviceConfig::PressureUse::PITOT) ?
-                                          DeviceConfig::PressureUse::PITOT_ZERO :
-                                          config.press_use,
+                       config.sensor_factor == 0 && config.press_use == DeviceConfig::PressureUse::PITOT
+                       ? DeviceConfig::PressureUse::PITOT_ZERO
+                       : config.press_use,
                        config.sensor_offset,
                        config.i2c_bus, config.i2c_addr,
                        config.press_use == DeviceConfig::PressureUse::TEK_PRESSURE ? 20 : 5,
@@ -410,6 +416,11 @@ DeviceDescriptor::DoOpen(OperationEnvironment &env)
 {
   assert(config.IsAvailable());
 
+  {
+    ScopeLock protect(mutex);
+    error_message.clear();
+  }
+
   if (config.port_type == DeviceConfig::PortType::INTERNAL)
     return OpenInternalSensors();
 
@@ -427,7 +438,30 @@ DeviceDescriptor::DoOpen(OperationEnvironment &env)
 
   reopen_clock.Update();
 
-  Port *port = OpenPort(config, port_listener, *this);
+  Port *port;
+  try {
+    port = OpenPort(io_service, config, this, *this);
+  } catch (const std::runtime_error &e) {
+    TCHAR name_buffer[64];
+    const TCHAR *name = config.GetPortName(name_buffer, 64);
+
+    LogError(WideToUTF8Converter(name), e);
+
+    StaticString<256> msg;
+
+    const UTF8ToWideConverter what(e.what());
+    if (what.IsValid()) {
+      ScopeLock protect(mutex);
+      error_message = what;
+    }
+
+    msg.Format(_T("%s: %s (%s)"), _("Unable to open port"), name,
+               (const TCHAR *)what);
+
+    env.SetErrorMessage(msg);
+    return false;
+  }
+
   if (port == nullptr) {
     TCHAR name_buffer[64];
     const TCHAR *name = config.GetPortName(name_buffer, 64);
@@ -529,10 +563,11 @@ DeviceDescriptor::Close()
 
   ticker = false;
 
-  device_blackboard->mutex.Lock();
-  device_blackboard->SetRealState(index).Reset();
-  device_blackboard->ScheduleMerge();
-  device_blackboard->mutex.Unlock();
+  {
+    const ScopeLock lock(device_blackboard->mutex);
+    device_blackboard->SetRealState(index).Reset();
+    device_blackboard->ScheduleMerge();
+  }
 
   settings_sent.Clear();
   settings_received.Clear();
@@ -768,7 +803,7 @@ DeviceDescriptor::WriteNMEA(const TCHAR *line, OperationEnvironment &env)
 #endif
 
 bool
-DeviceDescriptor::PutMacCready(fixed value, OperationEnvironment &env)
+DeviceDescriptor::PutMacCready(double value, OperationEnvironment &env)
 {
   assert(InMainThread());
 
@@ -793,7 +828,7 @@ DeviceDescriptor::PutMacCready(fixed value, OperationEnvironment &env)
 }
 
 bool
-DeviceDescriptor::PutBugs(fixed value, OperationEnvironment &env)
+DeviceDescriptor::PutBugs(double value, OperationEnvironment &env)
 {
   assert(InMainThread());
 
@@ -818,7 +853,7 @@ DeviceDescriptor::PutBugs(fixed value, OperationEnvironment &env)
 }
 
 bool
-DeviceDescriptor::PutBallast(fixed fraction, fixed overload,
+DeviceDescriptor::PutBallast(double fraction, double overload,
                              OperationEnvironment &env)
 {
   assert(InMainThread());
@@ -1021,7 +1056,7 @@ DeviceDescriptor::ReadFlightList(RecordedFlightList &flight_list,
 
 bool
 DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
-                                 const TCHAR *path,
+                                 Path path,
                                  OperationEnvironment &env)
 {
   assert(borrowed);
@@ -1120,10 +1155,42 @@ DeviceDescriptor::OnNotification()
   assert(InMainThread());
   assert(open_job != nullptr);
 
-  async.Wait();
+  try {
+    async.Wait();
+  } catch (const std::runtime_error &e) {
+    LogError(e);
+  }
 
   delete open_job;
   open_job = nullptr;
+}
+
+void
+DeviceDescriptor::PortStateChanged()
+{
+  if (port_listener != nullptr)
+    port_listener->PortStateChanged();
+}
+
+void
+DeviceDescriptor::PortError(const char *msg)
+{
+  {
+    TCHAR buffer[64];
+    LogFormat(_T("Error on device %s: %s"),
+              config.GetPortName(buffer, 64), msg);
+  }
+
+  {
+    const UTF8ToWideConverter tmsg(msg);
+    if (tmsg.IsValid()) {
+      ScopeLock protect(mutex);
+      error_message = tmsg;
+    }
+  }
+
+  if (port_listener != nullptr)
+    port_listener->PortError(msg);
 }
 
 void

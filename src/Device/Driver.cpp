@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Device/Driver.hpp"
 #include "RadioFrequency.hpp"
+#include "OS/Path.hpp"
 
 Device::~Device() {}
 
@@ -44,19 +45,19 @@ AbstractDevice::ParseNMEA(const char *line, struct NMEAInfo &info)
 }
 
 bool
-AbstractDevice::PutMacCready(fixed MacCready, OperationEnvironment &env)
+AbstractDevice::PutMacCready(double MacCready, OperationEnvironment &env)
 {
   return true;
 }
 
 bool
-AbstractDevice::PutBugs(fixed bugs, OperationEnvironment &env)
+AbstractDevice::PutBugs(double bugs, OperationEnvironment &env)
 {
   return true;
 }
 
 bool
-AbstractDevice::PutBallast(fixed fraction, fixed overload,
+AbstractDevice::PutBallast(double fraction, double overload,
                            OperationEnvironment &env)
 {
   return true;
@@ -118,7 +119,7 @@ AbstractDevice::ReadFlightList(RecordedFlightList &flight_list,
 
 bool
 AbstractDevice::DownloadFlight(const RecordedFlightInfo &flight,
-                               const TCHAR *path, OperationEnvironment &env)
+                               Path path, OperationEnvironment &env)
 {
   return false;
 }

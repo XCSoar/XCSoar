@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,8 +24,7 @@ Copyright_License {
 #ifndef PLANE_FILE_GLUE_HPP
 #define PLANE_FILE_GLUE_HPP
 
-#include <tchar.h>
-
+class Path;
 struct Plane;
 class KeyValueFileReader;
 class KeyValueFileWriter;
@@ -33,9 +32,13 @@ class KeyValueFileWriter;
 namespace PlaneGlue
 {
   bool Read(Plane &plane, KeyValueFileReader &reader);
-  bool ReadFile(Plane &plane, const TCHAR *path);
+  bool ReadFile(Plane &plane, Path path);
   void Write(const Plane &plane, KeyValueFileWriter &writer);
-  bool WriteFile(const Plane &plane, const TCHAR *path);
+
+/**
+ * Throws exception on error.
+ */
+void WriteFile(const Plane &plane, Path path);
 }
 
 #endif

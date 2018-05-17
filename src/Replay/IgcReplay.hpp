@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,19 +26,20 @@ Copyright_License {
 
 #include "AbstractReplay.hpp"
 #include "IGC/IGCExtensions.hpp"
-#include "Compiler.h"
+
+#include <memory>
 
 class NLineReader;
 struct IGCFix;
 
 class IgcReplay: public AbstractReplay
 {
-  NLineReader *reader;
+  std::unique_ptr<NLineReader> reader;
 
   IGCExtensions extensions;
 
 public:
-  IgcReplay(NLineReader *reader);
+  IgcReplay(std::unique_ptr<NLineReader> &&_reader);
   ~IgcReplay() override;
 
   bool Update(NMEAInfo &data) override;

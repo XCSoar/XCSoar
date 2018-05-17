@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,12 +26,10 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Widget/WindowWidget.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Key.h"
-#include "Form/Button.hpp"
-#include "Asset.hpp"
-#include "Util/CharUtil.hpp"
+#include "Event/KeyCode.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
+#include "Util/CharUtil.hxx"
 #include "Util/Macros.hpp"
 #include "Util/TruncateString.hpp"
 
@@ -161,9 +159,9 @@ KnobTextEntryWindow::OnPaint(Canvas &canvas)
   PixelSize tsizec = canvas.CalcTextSize(buffer, cursor);
   PixelSize tsizea = canvas.CalcTextSize(buffer, cursor + 1);
 
-  RasterPoint p[5];
+  BulkPixelPoint p[5];
   p[0].x = 10;
-  p[0].y = (rc.bottom - rc.top - tsize.cy - 5) / 2;
+  p[0].y = (rc.GetHeight() - tsize.cy - 5) / 2;
 
   p[2].x = p[0].x + tsizec.cx;
   p[2].y = p[0].y + tsize.cy + 5;
@@ -239,16 +237,16 @@ inline void
 KnobTextEntryWidget::CreateButtons(WidgetDialog &dialog)
 {
   dialog.AddButton(_T("A+"), window, DOWN);
-  dialog.AddButtonKey(IsAltair() ? KEY_LEFT : KEY_UP);
+  dialog.AddButtonKey(KEY_UP);
 
   dialog.AddButton(_T("A-"), window, UP);
-  dialog.AddButtonKey(IsAltair() ? KEY_RIGHT : KEY_DOWN);
+  dialog.AddButtonKey(KEY_DOWN);
 
   dialog.AddSymbolButton(_T("<"), window, LEFT);
-  dialog.AddButtonKey(IsAltair() ? KEY_UP : KEY_LEFT);
+  dialog.AddButtonKey(KEY_LEFT);
 
   dialog.AddSymbolButton(_T(">"), window, RIGHT);
-  dialog.AddButtonKey(IsAltair() ? KEY_DOWN : KEY_RIGHT);
+  dialog.AddButtonKey(KEY_RIGHT);
 }
 
 void

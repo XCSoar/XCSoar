@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -32,7 +32,6 @@ Copyright_License {
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Units/Units.hpp"
 #include "UIState.hpp"
-#include "Asset.hpp"
 #include "Pan.hpp"
 #include "PageActions.hpp"
 #include "Util/Clamp.hpp"
@@ -104,7 +103,7 @@ InputEvents::eventZoom(const TCHAR* misc)
     if (endptr == misc)
       return;
 
-    sub_SetZoom(Units::ToSysDistance(fixed(zoom)));
+    sub_SetZoom(Units::ToSysDistance(zoom));
   }
 
   XCSoarInterface::SendMapSettings(true);
@@ -137,18 +136,10 @@ InputEvents::eventPan(const TCHAR *misc)
     LeavePan();
 
   else if (StringIsEqual(misc, _T("up")))
-    if (IsHP31X())
-      // Scroll wheel on the HP31x series should zoom in pan mode
-      sub_ScaleZoom(1);
-    else
-      sub_PanCursor(0, 1);
+    sub_PanCursor(0, 1);
 
   else if (StringIsEqual(misc, _T("down")))
-    if (IsHP31X())
-      // Scroll wheel on the HP31x series should zoom in pan mode
-      sub_ScaleZoom(-1);
-    else
-      sub_PanCursor(0, -1);
+    sub_PanCursor(0, -1);
 
   else if (StringIsEqual(misc, _T("left")))
     sub_PanCursor(1, 0);
@@ -170,7 +161,7 @@ InputEvents::sub_PanCursor(int dx, int dy)
   if (!projection.IsValid())
     return;
 
-  RasterPoint pt = projection.GetScreenOrigin();
+  auto pt = projection.GetScreenOrigin();
   pt.x -= dx * int(projection.GetScreenWidth()) / 4;
   pt.y -= dy * int(projection.GetScreenHeight()) / 4;
   map_window->SetLocation(projection.ScreenToGeo(pt));
@@ -199,7 +190,7 @@ InputEvents::sub_AutoZoom(int vswitch)
 }
 
 void
-InputEvents::sub_SetZoom(fixed value)
+InputEvents::sub_SetZoom(double value)
 {
   MapSettings &settings_map = CommonInterface::SetMapSettings();
   GlueMapWindow *map_window = PageActions::ShowMap();
@@ -215,11 +206,11 @@ InputEvents::sub_SetZoom(fixed value)
     Message::AddMessage(_("Auto. zoom off"));
   }
 
-  fixed vmin = CommonInterface::GetComputerSettings().polar.glide_polar_task.GetVMin();
-  fixed scale_2min_distance = vmin * 12;
-  const fixed scale_100m = fixed(10);
-  const fixed scale_1600km = fixed(1600*100);
-  fixed minreasonable = displayMode == DisplayMode::CIRCLING
+  auto vmin = CommonInterface::GetComputerSettings().polar.glide_polar_task.GetVMin();
+  auto scale_2min_distance = vmin * 12;
+  const double scale_100m = 10;
+  const double scale_1600km = 1600*100;
+  auto minreasonable = displayMode == DisplayMode::CIRCLING
     ? scale_100m
     : std::max(scale_100m, scale_2min_distance);
 
@@ -240,17 +231,17 @@ InputEvents::sub_ScaleZoom(int vswitch)
   if (!projection.IsValid())
     return;
 
-  fixed value = projection.GetMapScale();
+  auto value = projection.GetMapScale();
 
   if (projection.HaveScaleList()) {
     value = projection.StepMapScale(value, -vswitch);
   } else {
     if (vswitch == 1)
       // zoom in a little
-      value /= fixed_sqrt_two;
+      value /= M_SQRT2;
     else if (vswitch == -1)
       // zoom out a little
-      value *= fixed_sqrt_two;
+      value *= M_SQRT2;
     else if (vswitch == 2)
       // zoom in a lot
       value /= 2;

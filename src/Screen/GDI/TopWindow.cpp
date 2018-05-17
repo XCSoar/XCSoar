@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,33 +23,9 @@ Copyright_License {
 
 #include "Screen/TopWindow.hpp"
 #include "Event/Globals.hpp"
-#include "Event/GDI/Event.hpp"
-#include "Event/GDI/Loop.hpp"
+#include "Event/Windows/Event.hpp"
+#include "Event/Windows/Loop.hpp"
 #include "Event/Queue.hpp"
-
-#include <string.h>
-
-bool
-TopWindow::find(const TCHAR *cls, const TCHAR *text)
-{
-  HWND h = FindWindow(cls, text);
-  if (h != nullptr) {
-#ifdef _WIN32_WCE
-    /* restore and reactivate the last active child window */
-    /* On MSDN, this flag is only documented on Windows CE, and not in
-       all versions of the SetForegroundWindow() documentation.  The
-       cast below is copied from MSDN example code, but it's wrong:
-       casting a pointer to ULONG doesn't work on 64 bit platforms.
-       There is no 64 bit flavour of Windows CE, so that's good enough
-       for us. */
-    h = (HWND)((ULONG) h | 0x00000001);
-#endif
-
-    SetForegroundWindow(h);
-  }
-
-  return h != nullptr;
-}
 
 void
 TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelSize size,
@@ -57,40 +33,9 @@ TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelSize size,
 {
   hSavedFocus = nullptr;
 
-#ifdef _WIN32_WCE
-  task_bar = nullptr;
-#endif
-
-#ifdef HAVE_AYGSHELL_DLL
-  memset(&s_sai, 0, sizeof(s_sai));
-  s_sai.cbSize = sizeof(s_sai);
-#endif
-
-#ifdef _WIN32_WCE
-  /* full-screen on Windows CE */
-  const RasterPoint position(0, 0);
-#else
-  const RasterPoint position(CW_USEDEFAULT, CW_USEDEFAULT);
-#endif
-
+  const PixelPoint position(CW_USEDEFAULT, CW_USEDEFAULT);
   Window::Create(nullptr, cls, text, PixelRect(position, size), style);
 }
-
-#ifdef _WIN32_WCE
-
-void
-TopWindow::Destroy()
-{
-  ContainerWindow::Destroy();
-
-  if (task_bar != nullptr) {
-    /* restore the task bar */
-    ::ShowWindow(task_bar, SW_SHOW);
-    task_bar = nullptr;
-  }
-}
-
-#endif
 
 void
 TopWindow::CancelMode()
@@ -100,38 +45,6 @@ TopWindow::CancelMode()
     ::SendMessage(focus, WM_CANCELMODE, 0, 0);
 }
 
-
-void
-TopWindow::Fullscreen()
-{
-  ::SetForegroundWindow(hWnd);
-#ifndef _WIN32_WCE
-  ShowOnTop();
-#else
-
-  bool success = false;
-#ifdef HAVE_AYGSHELL_DLL
-  success = ayg_shell_dll.SHFullScreen(hWnd, SHFS_HIDETASKBAR|
-                                       SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
-#endif
-  if (!success) {
-    /* hack: on Windows CE Core, there is no aygshell.dll; try to
-       manually hide the task bar window */
-    task_bar = ::FindWindow(_T("HHTaskBar"), _T(""));
-    if (task_bar != nullptr) {
-      if (::IsWindowVisible(task_bar))
-        ::ShowWindow(task_bar, SW_HIDE);
-      else
-        task_bar = nullptr;
-    }
-  }
-
-  ::SetWindowPos(hWnd, HWND_TOP, 0, 0,
-                 GetSystemMetrics(SM_CXSCREEN),
-                 GetSystemMetrics(SM_CYSCREEN),
-                 SWP_SHOWWINDOW|SWP_NOOWNERZORDER);
-#endif
-}
 
 void
 TopWindow::Refresh()
@@ -182,20 +95,10 @@ TopWindow::OnMessage(HWND _hWnd, UINT message,
     break;
 
   case WM_ACTIVATE:
-#ifdef HAVE_AYGSHELL_DLL
-    ayg_shell_dll.SHHandleWMActivate(_hWnd, wParam, lParam, &s_sai, FALSE);
-#endif
-
     if (wParam == WA_INACTIVE ? OnDeactivate() : OnActivate())
       return true;
     break;
-
-  case WM_SETTINGCHANGE:
-#ifdef HAVE_AYGSHELL_DLL
-    ayg_shell_dll.SHHandleWMSettingChange(_hWnd, wParam, lParam, &s_sai);
-#endif
-    break;
-  };
+  }
   return ContainerWindow::OnMessage(_hWnd, message, wParam, lParam);
 }
 

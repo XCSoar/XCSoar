@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,19 +23,21 @@ Copyright_License {
 
 #include "AirDensity.hpp"
 
-#define isa_sea_level_density fixed(1.225)
-#define k4 fixed(44330.8)
-#define k6 fixed(1.0 / 42266.5)
-#define k7 fixed(1.0 / 0.234969)
+#include <math.h>
 
-fixed
-AirDensity(const fixed altitude)
+#define isa_sea_level_density 1.225
+#define k4 44330.8
+#define k6 1.0 / 42266.5
+#define k7 1.0 / 0.234969
+
+double
+AirDensity(const double altitude)
 {
-  return fixed(pow((k4 - altitude) * k6, k7));
+  return pow((k4 - altitude) * k6, k7);
 }
 
-fixed
-AirDensityRatio(const fixed altitude)
+double
+AirDensityRatio(const double altitude)
 {
   return sqrt(isa_sea_level_density / AirDensity(altitude));
 }

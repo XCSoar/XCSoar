@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -44,17 +44,17 @@ protected:
   /**
    * The distance of the biggest circle in meters.
    */
-  fixed distance;
+  double distance;
 
   int selection;
   int warning;
-  RasterPoint radar_mid;
+  PixelPoint radar_mid;
 
   /**
    * The minimum distance between the window boundary and the biggest
    * circle in pixels.
    */
-  const UPixelScalar h_padding, v_padding;
+  const unsigned h_padding, v_padding;
 
   /**
    * The radius of the biggest circle in pixels.
@@ -63,7 +63,7 @@ protected:
 
   bool small;
 
-  RasterPoint sc[TrafficList::MAX_COUNT];
+  PixelPoint sc[TrafficList::MAX_COUNT];
 
   bool enable_north_up;
   Angle heading;
@@ -105,9 +105,9 @@ public:
 
   void NextTarget();
   void PrevTarget();
-  bool SelectNearTarget(int x, int y, int max_distance);
+  bool SelectNearTarget(PixelPoint p, int max_distance);
 
-  void SetDistance(fixed _distance) {
+  void SetDistance(double _distance) {
     distance = _distance;
     Invalidate();
   }
@@ -115,9 +115,9 @@ public:
   void Paint(Canvas &canvas);
 
 protected:
-  fixed RangeScale(fixed d) const;
+  double RangeScale(double d) const;
 
-  void UpdateSelector(const FlarmId id, const RasterPoint pt);
+  void UpdateSelector(FlarmId id, PixelPoint pt);
   void UpdateWarnings();
   void Update(Angle new_direction, const TrafficList &new_data,
               const TeamCodeSettings &new_settings);

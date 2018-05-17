@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,31 +27,28 @@ Copyright_License {
  */
 
 #include "Terrain/RasterTileCache.hpp"
+#include "Terrain/Loader.hpp"
 #include "OS/Args.hpp"
 #include "OS/ConvertPathName.hpp"
+#include "IO/ZipArchive.hpp"
 #include "Operation/Operation.hpp"
+#include "Util/PrintException.hxx"
 
 #include <stdio.h>
 #include <string.h>
 #include <tchar.h>
 
 int main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "PATH");
-  const auto map_path = args.ExpectNextT();
+  const auto map_path = args.ExpectNextPath();
   args.ExpectEnd();
 
-  TCHAR jp2_path[4096];
-  _tcscpy(jp2_path, map_path.c_str());
-  _tcscat(jp2_path, _T("/terrain.jp2"));
-
-  TCHAR j2w_path[4096];
-  _tcscpy(j2w_path, map_path.c_str());
-  _tcscat(j2w_path, _T("/terrain.j2w"));
+  ZipArchive archive(map_path);
 
   NullOperationEnvironment operation;
   RasterTileCache rtc;
-  if (!rtc.LoadOverview(jp2_path, j2w_path, operation)) {
+  if (!LoadTerrainOverview(archive.get(), rtc, operation)) {
     fprintf(stderr, "LoadOverview failed\n");
     return EXIT_FAILURE;
   }
@@ -63,10 +60,14 @@ int main(int argc, char **argv)
          (double)bounds.GetEast().Degrees(),
          (double)bounds.GetSouth().Degrees());
 
+  SharedMutex mutex;
   do {
-    rtc.UpdateTiles(jp2_path, rtc.GetWidth() / 2, rtc.GetHeight() / 2,
-                    1000);
+    UpdateTerrainTiles(archive.get(), rtc, mutex,
+                       rtc.GetWidth() / 2, rtc.GetHeight() / 2, 1000);
   } while (rtc.IsDirty());
 
   return EXIT_SUCCESS;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

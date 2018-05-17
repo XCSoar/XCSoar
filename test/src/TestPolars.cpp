@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@
 
 #include "GlideSolvers/GlidePolar.hpp"
 #include "IO/ConfiguredFile.hpp"
+#include "OS/Path.hpp"
 #include "Profile/Profile.hpp"
 #include "Polar/Polar.hpp"
 #include "Polar/Parser.hpp"
@@ -31,14 +32,11 @@
 #include "Polar/PolarStore.hpp"
 #include "Util/ConvertString.hpp"
 #include "Util/Macros.hpp"
+#include "Util/PrintException.hxx"
 
+#include <stdlib.h>
 #include <stdio.h>
-
-TLineReader*
-OpenConfiguredTextFile(const char *profile_key, Charset cs)
-{
-  return NULL;
-}
+#include <string.h>
 
 static void
 TestBasic()
@@ -46,26 +44,26 @@ TestBasic()
   // Test ReadString()
   PolarInfo polar;
   ParsePolar(polar, "318, 100, 80, -0.606, 120, -0.99, 160, -1.918");
-  ok1(equals(fixed(polar.reference_mass), 318));
-  ok1(equals(fixed(polar.max_ballast), 100));
-  ok1(equals(fixed(polar.shape[0].v), 22.2222222));
-  ok1(equals(fixed(polar.shape[0].w), -0.606));
-  ok1(equals(fixed(polar.shape[1].v), 33.3333333));
-  ok1(equals(fixed(polar.shape[1].w), -0.99));
-  ok1(equals(fixed(polar.shape[2].v), 44.4444444));
-  ok1(equals(fixed(polar.shape[2].w), -1.918));
-  ok1(equals(fixed(polar.wing_area), 0.0));
+  ok1(equals(polar.reference_mass, 318));
+  ok1(equals(polar.max_ballast, 100));
+  ok1(equals(polar.shape[0].v, 22.2222222));
+  ok1(equals(polar.shape[0].w, -0.606));
+  ok1(equals(polar.shape[1].v, 33.3333333));
+  ok1(equals(polar.shape[1].w, -0.99));
+  ok1(equals(polar.shape[2].v, 44.4444444));
+  ok1(equals(polar.shape[2].w, -1.918));
+  ok1(equals(polar.wing_area, 0.0));
 
   ParsePolar(polar, "318, 100, 80, -0.606, 120, -0.99, 160, -1.918, 9.8");
-  ok1(equals(fixed(polar.reference_mass), 318));
-  ok1(equals(fixed(polar.max_ballast), 100));
-  ok1(equals(fixed(polar.shape[0].v), 22.2222222));
-  ok1(equals(fixed(polar.shape[0].w), -0.606));
-  ok1(equals(fixed(polar.shape[1].v), 33.3333333));
-  ok1(equals(fixed(polar.shape[1].w), -0.99));
-  ok1(equals(fixed(polar.shape[2].v), 44.4444444));
-  ok1(equals(fixed(polar.shape[2].w), -1.918));
-  ok1(equals(fixed(polar.wing_area), 9.8));
+  ok1(equals(polar.reference_mass, 318));
+  ok1(equals(polar.max_ballast, 100));
+  ok1(equals(polar.shape[0].v, 22.2222222));
+  ok1(equals(polar.shape[0].w, -0.606));
+  ok1(equals(polar.shape[1].v, 33.3333333));
+  ok1(equals(polar.shape[1].w, -0.99));
+  ok1(equals(polar.shape[2].v, 44.4444444));
+  ok1(equals(polar.shape[2].w, -1.918));
+  ok1(equals(polar.wing_area, 9.8));
 
   // Test GetString()
   char polar_string[255];
@@ -79,16 +77,16 @@ TestFileImport()
 {
   // Test LoadFromFile()
   PolarInfo polar;
-  PolarGlue::LoadFromFile(polar, _T("test/data/test.plr"));
-  ok1(equals(fixed(polar.reference_mass), 318));
-  ok1(equals(fixed(polar.max_ballast), 100));
-  ok1(equals(fixed(polar.shape[0].v), 22.2222222));
-  ok1(equals(fixed(polar.shape[0].w), -0.606));
-  ok1(equals(fixed(polar.shape[1].v), 33.3333333));
-  ok1(equals(fixed(polar.shape[1].w), -0.99));
-  ok1(equals(fixed(polar.shape[2].v), 44.4444444));
-  ok1(equals(fixed(polar.shape[2].w), -1.918));
-  ok1(equals(fixed(polar.wing_area), 9.8));
+  PolarGlue::LoadFromFile(polar, Path(_T("test/data/test.plr")));
+  ok1(equals(polar.reference_mass, 318));
+  ok1(equals(polar.max_ballast, 100));
+  ok1(equals(polar.shape[0].v, 22.2222222));
+  ok1(equals(polar.shape[0].w, -0.606));
+  ok1(equals(polar.shape[1].v, 33.3333333));
+  ok1(equals(polar.shape[1].w, -0.99));
+  ok1(equals(polar.shape[2].v, 44.4444444));
+  ok1(equals(polar.shape[2].w, -1.918));
+  ok1(equals(polar.wing_area, 9.8));
 }
 
 static void
@@ -106,38 +104,38 @@ TestBuiltInPolars()
 struct PerformanceItem {
   unsigned storeIndex;
   bool check_best_LD;
-  fixed best_LD;
+  double best_LD;
   bool check_best_LD_speed;
-  fixed best_LD_speed;       // km/h
+  double best_LD_speed;       // km/h
   bool check_min_sink;
-  fixed min_sink;            // m/s
+  double min_sink;            // m/s
   bool check_min_sink_speed;
-  fixed min_sink_speed;      // km/h
+  double min_sink_speed;      // km/h
 };
 
 static const PerformanceItem performanceData[] = {
   /* 206 Hornet         */
-  {   0, true, fixed(38),   true,  fixed(103), true,  fixed(0.6),  true,  fixed( 74) },
+  {   0, true, 38,   true,  103, true,  0.6,  true,   74 },
   /* Discus             */
-  {  30, true, fixed(43),   false, fixed(  0), true,  fixed(0.59), false, fixed(  0) },
+  {  30, true, 43,   false,   0, true,  0.59, false,   0 },
   /* G-103 TWIN II (PIL)*/
-  {  37, true, fixed(38.5), true,  fixed( 95), true,  fixed(0.64), true,  fixed( 80) },
+  {  37, true, 38.5, true,   95, true,  0.64, true,   80 },
   /* H-201 Std. Libelle */
-  {  41, true, fixed(38),   true,  fixed( 90), true,  fixed(0.6),  true,  fixed( 75) },
+  {  41, true, 38,   true,   90, true,  0.6,  true,   75 },
   /* Ka6 CR             */
-  {  45, true, fixed(30),   true,  fixed( 85), true,  fixed(0.65), true,  fixed( 72) },
+  {  45, true, 30,   true,   85, true,  0.65, true,   72 },
   /* K8                 */
-  {  46, true, fixed(25),   true,  fixed( 75), false, fixed(0),    true,  fixed( 62) },
+  {  46, true, 25,   true,   75, false, 0,    true,   62 },
   /* LS-4               */
-  {  52, true, fixed(40.5), false, fixed(  0), true,  fixed(0.60), false, fixed(  0) },
+  {  52, true, 40.5, false,   0, true,  0.60, false,   0 },
   /* Std. Cirrus        */
-  {  79, true, fixed(38.5), false, fixed(  0), true,  fixed(0.6),  false, fixed(  0) },
+  {  79, true, 38.5, false,   0, true,  0.6,  false,   0 },
   /* LS-1f              */
-  { 157, true, fixed(38.2), false, fixed(  0), true,  fixed(0.64), false, fixed(  0) },
+  { 157, true, 38.2, false,   0, true,  0.64, false,   0 },
 };
 
 static bool
-ValuePlausible(fixed ref, fixed used, fixed threshold = fixed(0.05))
+ValuePlausible(double ref, double used, double threshold = 0.05)
 {
   fprintf(stderr, "%.2f %.2f %.2f %.2f -- ", (double) ref, (double) used,
           (double) fabs(ref - used), (double) (ref * threshold));
@@ -157,7 +155,7 @@ TestBuiltInPolarsPlausibility()
 
     ok(pc.IsValid(), polarName);
 
-    GlidePolar gp(fixed(0));
+    GlidePolar gp(0);
     gp.SetCoefficients(pc, false);
 
     // Glider empty weight
@@ -173,7 +171,7 @@ TestBuiltInPolarsPlausibility()
       polarName);
     fprintf(stderr, "VLD: ");
     ok(!performanceData[i].check_best_LD_speed ||
-       ValuePlausible(performanceData[i].best_LD_speed, gp.GetVBestLD() * fixed(3.6)),
+       ValuePlausible(performanceData[i].best_LD_speed, gp.GetVBestLD() * 3.6),
        polarName);
     fprintf(stderr, " MS: ");
     ok(!performanceData[i].check_min_sink ||
@@ -181,13 +179,13 @@ TestBuiltInPolarsPlausibility()
        polarName);
     fprintf(stderr, "VMS: ");
     ok(!performanceData[i].check_min_sink_speed ||
-       ValuePlausible(performanceData[i].min_sink_speed, gp.GetVMin() * fixed(3.6)),
+       ValuePlausible(performanceData[i].min_sink_speed, gp.GetVMin() * 3.6),
        polarName);
   }
 }
 
 int main(int argc, char **argv)
-{
+try {
   unsigned num_tests = 19 + 9 + PolarStore::Count();
 
   // NOTE: Plausibility tests disabled for now since many fail
@@ -205,4 +203,7 @@ int main(int argc, char **argv)
     TestBuiltInPolarsPlausibility();
 
   return exit_status();
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

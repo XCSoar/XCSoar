@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,9 +23,7 @@
 #ifndef AIRSPACE_PREDICATE_HEIGHT_RANGE_HPP
 #define AIRSPACE_PREDICATE_HEIGHT_RANGE_HPP
 
-#include "AirspacePredicate.hpp"
 #include "OutsideAirspacePredicate.hpp"
-#include "Rough/RoughAltitude.hpp"
 
 class AbstractAirspace;
 
@@ -34,8 +32,8 @@ class AbstractAirspace;
  */
 class AirspacePredicateHeightRange
 {
-  const RoughAltitude h_min;
-  const RoughAltitude h_max;
+  const double h_min;
+  const double h_max;
 
 public:
   /**
@@ -47,8 +45,8 @@ public:
    * @return Initialised object
    */
   constexpr
-  AirspacePredicateHeightRange(const RoughAltitude _h_min,
-                               const RoughAltitude _h_max)
+  AirspacePredicateHeightRange(const double _h_min,
+                               const double _h_max)
     :h_min(_h_min), h_max(_h_max) {}
 
   gcc_pure
@@ -59,7 +57,7 @@ public:
  * Convenience predicate for height within a specified range, excluding
  * airspaces enclosing two points
  */
-class AirspacePredicateHeightRangeExcludeTwo : public AirspacePredicate
+class AirspacePredicateHeightRangeExcludeTwo
 {
   const AirspacePredicateHeightRange height_range;
   const OutsideAirspacePredicate outside1, outside2;
@@ -73,8 +71,8 @@ public:
    *
    * @return Initialised object
    */
-  AirspacePredicateHeightRangeExcludeTwo(const RoughAltitude _h_min,
-                                         const RoughAltitude _h_max,
+  AirspacePredicateHeightRangeExcludeTwo(const double _h_min,
+                                         const double _h_max,
                                          const AGeoPoint& _p1,
                                          const AGeoPoint& _p2)
     :height_range(_h_min, _h_max),

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,13 +25,24 @@ Copyright_License {
 #define XCSOAR_THREAD_NAME_HPP
 
 #ifdef HAVE_POSIX
+
+#ifdef __APPLE__
+#define HAVE_PTHREAD_SETNAME_NP
+#else
+
+#include <features.h>
+#ifdef __GLIBC__
+#define HAVE_PTHREAD_SETNAME_NP
+#endif
+
+#endif
+
 #ifdef __BIONIC__
 /* Bionic supports pthread_setname_np() since API level 9, but since
    we build with API level 8, we fall back to prctl(PR_SET_NAME) */
 #define HAVE_PR_SET_NAME
-#else
-#define HAVE_PTHREAD_SETNAME_NP
 #endif
+
 #endif
 
 #ifdef HAVE_PR_SET_NAME

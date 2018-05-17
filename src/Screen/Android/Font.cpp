@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,6 +28,7 @@ Copyright_License {
 #include "Java/Class.hxx"
 #include "Java/String.hxx"
 #include "Android/TextUtil.hpp"
+#include "Util/StringCompare.hxx"
 
 #include <assert.h>
 
@@ -50,7 +51,7 @@ Font::Load(const FontDescription &d)
   capital_height = text_util_object->get_capital_height();
   line_spacing = text_util_object->GetLineSpacing();
 
-  return text_util_object != nullptr;
+  return true;
 }
 
 void
@@ -80,7 +81,7 @@ Font::TextTextureGL(const TCHAR *text, PixelSize &size,
   if (!text_util_object)
     return 0;
 
-  if (*text == _T('\0'))
+  if (StringIsEmpty(text))
     return 0;
 
   const TextUtil::Texture texture =

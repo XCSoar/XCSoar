@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,28 +26,35 @@ Copyright_License {
 
 #include <assert.h>
 
+static constexpr RGB8Color
+Interpolate(RGB8Color c1, RGB8Color c2,
+            unsigned f, unsigned of,
+            unsigned interp_levels)
+{
+  return RGB8Color((f * c2.Red() + of * c1.Red()) >> interp_levels,
+                   (f * c2.Green() + of * c1.Green()) >> interp_levels,
+                   (f * c2.Blue() + of * c1.Blue()) >> interp_levels);
+}
+
 static RGB8Color
-Interpolate(short h, const ColorRamp *c1, const ColorRamp *c2,
-            unsigned char interp_levels)
+Interpolate(int h, const ColorRamp *c1, const ColorRamp *c2,
+            unsigned interp_levels)
 {
   if (interp_levels == 0)
-    return c1->ToRGB8Color();
+    return c1->color;
 
-  unsigned short is =  1 << interp_levels;
-  unsigned short f = (unsigned short)(h - c1->h) * is
-                   / (unsigned short)(c2->h - c1->h);
-  unsigned short of = is - f;
+  unsigned is = 1u << interp_levels;
+  unsigned f = unsigned(h - c1->h) * is / unsigned(c2->h - c1->h);
+  unsigned of = is - f;
 
-  return RGB8Color((f * c2->r + of * c1->r) >> interp_levels,
-                   (f * c2->g + of * c1->g) >> interp_levels,
-                   (f * c2->b + of * c1->b) >> interp_levels);
+  return Interpolate(c1->color, c2->color, f, of, interp_levels);
 }
 
 RGB8Color
-ColorRampLookup(const short h,
+ColorRampLookup(const int h,
                 const ColorRamp* ramp_colors,
-                const int numramp,
-                const unsigned char interp_levels)
+                const unsigned numramp,
+                const unsigned interp_levels)
 {
   assert(ramp_colors != nullptr);
   assert(numramp >= 2);
@@ -55,7 +62,7 @@ ColorRampLookup(const short h,
   // Check if "h" is above the defined range
   ColorRamp last = ramp_colors[numramp - 1];
   if (h >= last.h)
-    return last.ToRGB8Color();
+    return last.color;
 
   // Iterate over color ramp control points and find the
   // point above and below "h"
@@ -75,11 +82,5 @@ ColorRampLookup(const short h,
   // Check if "h" is below the defined range
   ColorRamp first = ramp_colors[0];
   assert(h <= first.h);
-  return first.ToRGB8Color();
-}
-
-RGB8Color
-ColorRamp::ToRGB8Color() const
-{
-  return RGB8Color(r, g, b);
+  return first.color;
 }

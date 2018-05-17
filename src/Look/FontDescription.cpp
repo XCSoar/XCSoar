@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,14 +26,6 @@ Copyright_License {
 #ifdef USE_GDI
 #include "StandardFonts.hpp"
 #include "Asset.hpp"
-
-FontDescription::FontDescription(const TCHAR *face,
-                                 unsigned height,
-                                 bool bold, bool italic,
-                                 bool monospace)
-{
-  Init(face, height, bold, italic, monospace);
-}
 
 FontDescription::FontDescription(unsigned height,
                                  bool bold, bool italic,
@@ -60,11 +52,7 @@ FontDescription::Init(const TCHAR *face,
   logfont.lfCharSet = ANSI_CHARSET;
   logfont.lfOutPrecision = OUT_DEFAULT_PRECIS;
   logfont.lfClipPrecision = CLIP_DEFAULT_PRECIS;
-
-  if (IsAltair())
-    logfont.lfQuality = NONANTIALIASED_QUALITY;
-  else
-    logfont.lfQuality = ANTIALIASED_QUALITY;
+  logfont.lfQuality = ANTIALIASED_QUALITY;
 
   logfont.lfPitchAndFamily = (monospace ? FIXED_PITCH : VARIABLE_PITCH)
     | FF_DONTCARE;

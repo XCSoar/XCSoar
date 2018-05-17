@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -39,14 +39,13 @@ ConditionMonitorWind::CheckCondition(const NMEAInfo &basic,
     return false;
   }
 
-  fixed mag_change = fabs(wind.norm - last_wind.norm);
-  fixed dir_change = (wind.bearing - last_wind.bearing).AsDelta().AbsoluteDegrees();
+  auto mag_change = fabs(wind.norm - last_wind.norm);
+  auto dir_change = (wind.bearing - last_wind.bearing).AsDelta().AbsoluteDegrees();
 
-  if (mag_change > fixed(2.5))
+  if (mag_change > 2.5)
     return true;
 
-  return wind.norm > fixed(5) &&
-         dir_change > fixed(45);
+  return wind.norm > 5 && dir_change > 45;
 }
 
 void

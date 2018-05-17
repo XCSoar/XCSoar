@@ -3,7 +3,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -34,7 +34,6 @@ Copyright_License {
 #include "OS/Clock.hpp"
 
 #include <tchar.h>
-#include <stdio.h>
 #include <algorithm>
 
 using std::min;
@@ -109,7 +108,7 @@ PopupMessage::Create(const PixelRect _rc)
   rc = _rc;
 
   WindowStyle style;
-#ifdef USE_GDI
+#ifdef USE_WINUSER
   style.Border();
 #endif
   style.Hide();
@@ -118,7 +117,7 @@ PopupMessage::Create(const PixelRect _rc)
 }
 
 bool
-PopupMessage::OnMouseDown(PixelScalar x, PixelScalar y)
+PopupMessage::OnMouseDown(PixelPoint p)
 {
   // acknowledge with click/touch
   Acknowledge(MSG_UNKNOWN);
@@ -132,7 +131,7 @@ PopupMessage::OnPaint(Canvas &canvas)
   canvas.ClearWhite();
 
   auto rc = GetClientRect();
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   canvas.DrawOutlineRectangle(rc.left, rc.top, rc.right, rc.bottom,
                               COLOR_BLACK);
 #endif
@@ -154,7 +153,7 @@ PopupMessage::CalculateWidth() const
     // TODO code: this shouldn't be hard-coded
     return Layout::FastScale(206);
   else
-    return unsigned((rc.right - rc.left) * 0.9);
+    return unsigned(rc.GetWidth() * 0.9);
 }
 
 PixelRect

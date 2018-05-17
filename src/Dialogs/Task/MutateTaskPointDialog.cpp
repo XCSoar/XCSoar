@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -32,8 +32,7 @@ Copyright_License {
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Language/Language.hpp"
-#include "Util/StaticString.hxx"
-#include "Util/TrivialArray.hpp"
+#include "Util/TrivialArray.hxx"
 
 #include <assert.h>
 
@@ -62,21 +61,16 @@ public:
 };
 
 void
-MutateTaskPointRenderer::OnPaintItem(Canvas &canvas, const PixelRect rc,
+MutateTaskPointRenderer::OnPaintItem(Canvas &canvas, PixelRect rc,
                                      unsigned DrawListIndex)
 {
   assert(DrawListIndex < point_types.size());
 
-  StaticString<120> buffer;
-
-  const TCHAR* text = OrderedTaskPointName(point_types[DrawListIndex]);
-
   if (point_types[DrawListIndex] == current_type)
-    buffer.Format(_T("*%s"), text);
-  else
-    buffer.Format(_T(" %s"), text);
+    rc.left = row_renderer.DrawColumn(canvas, rc, _T("*"));
 
-  row_renderer.DrawTextRow(canvas, rc, buffer);
+  row_renderer.DrawTextRow(canvas, rc,
+                           OrderedTaskPointName(point_types[DrawListIndex]));
 }
 
 /**

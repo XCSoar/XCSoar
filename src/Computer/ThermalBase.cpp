@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,45 +28,41 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "Geo/SpeedVector.hpp"
 
-static fixed
+static double
 GetElevation(RasterTerrain::Lease &map, const GeoPoint loc)
 {
-  short hground = map->GetHeight(loc);
-  if (RasterBuffer::IsSpecial(hground))
-    hground = 0;
-
-  return fixed(hground);
+  return (double)map->GetHeight(loc).GetValueOr0();
 }
 
 void
 EstimateThermalBase(const RasterTerrain *terrain,
-                    const GeoPoint location, const fixed altitude,
-                    const fixed average, const SpeedVector wind,
-                    GeoPoint &ground_location, fixed &ground_alt)
+                    const GeoPoint location, const double altitude,
+                    const double average, const SpeedVector wind,
+                    GeoPoint &ground_location, double &ground_alt)
 {
-  if (!positive(average) || !positive(altitude)) {    
+  if (average <= 0 || altitude <= 0) {
     ground_location = location;
-    ground_alt = fixed(0);
+    ground_alt = 0;
     return;
   }
 
   // Max time the thermal could have risen for if ground
   // elevation is zero
-  const fixed Tmax = altitude / average;
+  const auto Tmax = altitude / average;
 
   // Shortcut if no terrain available
   if (terrain == NULL) {
     ground_location = FindLatitudeLongitude(location, 
                                             wind.bearing,
                                             wind.norm * Tmax);
-    ground_alt = fixed(0);
+    ground_alt = 0;
     return;
   }
 
   RasterTerrain::Lease map(*terrain);
 
   // Height step of the 10 calculation intervals
-  const fixed dh = altitude / 10;
+  const auto dh = altitude / 10;
 
   // Iterate over 10 altitude-based calculation intervals
   // We do this because the terrain elevation may shift
@@ -74,24 +70,24 @@ EstimateThermalBase(const RasterTerrain *terrain,
 
   GeoPoint loc = location;
 
-  for (fixed h = altitude; !negative(h); h -= dh) {
+  for (auto h = altitude; h >= 0; h -= dh) {
     // Time to descend to this height
-    fixed t = (altitude-h)/average;
+    auto t = (altitude - h) / average;
 
     // Calculate position
     loc = FindLatitudeLongitude(location, wind.bearing, 
                                 wind.norm * t);
 
     // Calculate altitude above ground
-    fixed dh = h - GetElevation(map, loc);
+    auto dh = h - GetElevation(map, loc);
 
     // At or below ground level, use linear interpolation
     // to estimate intersection
-    if (!positive(dh)) {
+    if (dh <= 0) {
       // Calculate time when we passed the ground level
       t += dh / average;
 
-      if (!positive(t))
+      if (t <= 0)
         /* can happen when the terrain at this location is higher than
            the aircraft's current altitude; bail out */
         break;

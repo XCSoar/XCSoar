@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "WaypointGlue.hpp"
 #include "Factory.hpp"
+#include "WaypointFileType.hpp"
 #include "Profile/Profile.hpp"
 #include "LogFile.hpp"
 #include "Waypoint/Waypoints.hpp"
@@ -30,17 +31,51 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "Operation/Operation.hpp"
-
-#include <windef.h> /* for MAX_PATH */
+#include "OS/Path.hpp"
+#include "IO/MapFile.hpp"
+#include "IO/ZipArchive.hpp"
 
 static bool
-LoadWaypointFile(Waypoints &waypoints, const TCHAR *path,
+LoadWaypointFile(Waypoints &waypoints, Path path,
+                 WaypointFileType file_type,
                  WaypointOrigin origin,
                  const RasterTerrain *terrain, OperationEnvironment &operation)
 {
-  if (!ReadWaypointFile(path, waypoints, WaypointFactory(origin, terrain),
+  if (!ReadWaypointFile(path, file_type, waypoints,
+                        WaypointFactory(origin, terrain),
                         operation)) {
-    LogFormat(_T("Failed to read waypoint file: %s"), path);
+    LogFormat(_T("Failed to read waypoint file: %s"), path.c_str());
+    return false;
+  }
+
+  return true;
+}
+
+static bool
+LoadWaypointFile(Waypoints &waypoints, Path path,
+                 WaypointOrigin origin,
+                 const RasterTerrain *terrain, OperationEnvironment &operation)
+{
+  if (!ReadWaypointFile(path, waypoints,
+                        WaypointFactory(origin, terrain),
+                        operation)) {
+    LogFormat(_T("Failed to read waypoint file: %s"), path.c_str());
+    return false;
+  }
+
+  return true;
+}
+
+static bool
+LoadWaypointFile(Waypoints &waypoints, struct zzip_dir *dir, const char *path,
+                 WaypointFileType file_type,
+                 WaypointOrigin origin,
+                 const RasterTerrain *terrain, OperationEnvironment &operation)
+{
+  if (!ReadWaypointFile(dir, path, file_type, waypoints,
+                        WaypointFactory(origin, terrain),
+                        operation)) {
+    LogFormat("Failed to read waypoint file: %s", path);
     return false;
   }
 
@@ -60,39 +95,44 @@ WaypointGlue::LoadWaypoints(Waypoints &way_points,
   // Delete old waypoints
   way_points.Clear();
 
-  TCHAR path[MAX_PATH];
-
-  LocalPath(path, _T("user.cup"));
-  LoadWaypointFile(way_points, path, WaypointOrigin::USER, terrain, operation);
+  LoadWaypointFile(way_points, LocalPath(_T("user.cup")),
+                   WaypointFileType::SEEYOU,
+                   WaypointOrigin::USER, terrain, operation);
 
   // ### FIRST FILE ###
-  if (Profile::GetPath(ProfileKeys::WaypointFile, path))
+  auto path = Profile::GetPath(ProfileKeys::WaypointFile);
+  if (!path.IsNull())
     found |= LoadWaypointFile(way_points, path, WaypointOrigin::PRIMARY,
                               terrain, operation);
 
   // ### SECOND FILE ###
-  if (Profile::GetPath(ProfileKeys::AdditionalWaypointFile, path))
+  path = Profile::GetPath(ProfileKeys::AdditionalWaypointFile);
+  if (!path.IsNull())
     found |= LoadWaypointFile(way_points, path, WaypointOrigin::ADDITIONAL,
                               terrain, operation);
 
   // ### WATCHED WAYPOINT/THIRD FILE ###
-  if (Profile::GetPath(ProfileKeys::WatchedWaypointFile, path))
+  path = Profile::GetPath(ProfileKeys::WatchedWaypointFile);
+  if (!path.IsNull())
     found |= LoadWaypointFile(way_points, path, WaypointOrigin::WATCHED,
                               terrain, operation);
 
   // ### MAP/FOURTH FILE ###
 
   // If no waypoint file found yet
-  if (!found && Profile::GetPath(ProfileKeys::MapFile, path)) {
-    TCHAR *tail = path + _tcslen(path);
+  if (!found) {
+    auto archive = OpenMapFile();
+    if (archive) {
+      found |= LoadWaypointFile(way_points, archive->get(), "waypoints.xcw",
+                                WaypointFileType::WINPILOT,
+                                WaypointOrigin::MAP,
+                                terrain, operation);
 
-    _tcscpy(tail, _T("/waypoints.xcw"));
-    found |= LoadWaypointFile(way_points, path, WaypointOrigin::MAP,
-                              terrain, operation);
-
-    _tcscpy(tail, _T("/waypoints.cup"));
-    found |= LoadWaypointFile(way_points, path, WaypointOrigin::MAP,
-                              terrain, operation);
+      found |= LoadWaypointFile(way_points, archive->get(), "waypoints.cup",
+                                WaypointFileType::SEEYOU,
+                                WaypointOrigin::MAP,
+                                terrain, operation);
+    }
   }
 
   // Optimise the waypoint list after attaching new waypoints

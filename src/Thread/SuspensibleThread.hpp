@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,29 +26,21 @@ Copyright_License {
 
 #include "Compiler.h"
 #include "Thread/Thread.hpp"
-
-#ifdef HAVE_POSIX
-#include "Thread/PosixMutex.hpp"
-#include "Thread/Cond.hpp"
-#else
-#include "Thread/CriticalSection.hpp"
-#include "Thread/Trigger.hpp"
-#endif
+#include "Mutex.hpp"
+#include "Cond.hxx"
 
 /**
  * A thread which can be suspended and stopped from the outside.
  * Implementers must check CheckStopped().
  */
 class SuspensibleThread : public Thread {
-#ifdef HAVE_POSIX
-  PosixMutex mutex;
+protected:
+  Mutex mutex;
+
   Cond command_trigger, client_trigger;
 
+private:
   bool stop_received, suspend_received, suspended;
-#else
-  CriticalSection mutex;
-  Trigger command_trigger, stop_trigger, suspend_trigger, suspended;
-#endif
 
 public:
   SuspensibleThread(const char *_name):Thread(_name) {}
@@ -71,10 +63,35 @@ public:
 
 protected:
   /**
+   * Like BeginStop(), but expects the mutex to be locked
+   * already.
+   */
+  void _BeginStop();
+
+  /**
+   * Like BeginSuspend(), but expects the mutex to be locked
+   * already.
+   */
+  void _BeginSuspend();
+
+  /**
+   * Like WaitUntilSuspended(), but expects the mutex to be locked
+   * already.
+   */
+  void _WaitUntilSuspended();
+
+  /**
    * Has a suspend or stop command been received?
    */
   gcc_pure
   bool IsCommandPending();
+
+  /**
+   * Like IsCommandPending(), but expects the mutex to be locked
+   * already.
+   */
+  gcc_pure
+  bool _IsCommandPending() const;
 
   /**
    * Handles the "suspend" and "stop" commands.
@@ -83,7 +100,19 @@ protected:
    */
   bool CheckStoppedOrSuspended();
 
+  /**
+   * Like CheckStoppedOrSuspended(), but expects the mutex to be
+   * locked already.
+   */
+  bool _CheckStoppedOrSuspended();
+
   bool WaitForStopped(unsigned timeout_ms);
+
+  /**
+   * Like WaitForStopped(), but expects the mutex to be locked
+   * already.
+   */
+  bool _WaitForStopped(unsigned timeout_ms);
 };
 
 #endif

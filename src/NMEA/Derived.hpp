@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_NMEA_DERIVED_H
 #define XCSOAR_NMEA_DERIVED_H
 
-#include "Math/fixed.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/SpeedVector.hpp"
 #include "Task/Stats/TaskStats.hpp"
@@ -34,7 +33,8 @@ Copyright_License {
 #include "NMEA/VarioInfo.hpp"
 #include "NMEA/ClimbInfo.hpp"
 #include "NMEA/CirclingInfo.hpp"
-#include "NMEA/ThermalBand.hpp"
+#include "Engine/ThermalBand/ThermalEncounterBand.hpp"
+#include "Engine/ThermalBand/ThermalEncounterCollection.hpp"
 #include "NMEA/ThermalLocator.hpp"
 #include "NMEA/Validity.hpp"
 #include "NMEA/ClimbHistory.hpp"
@@ -59,17 +59,20 @@ struct TerrainInfo
   /** Does the attribute #AltitudeAGL have a valid value? */
   bool altitude_agl_valid;
 
-  bool terrain_warning;
-
   /** Terrain altitude */
-  fixed terrain_altitude;
+  double terrain_altitude;
 
   /** Lowest height within glide range */
-  fixed terrain_base;
+  double terrain_base;
 
   /** Altitude over terrain */
-  fixed altitude_agl;
+  double altitude_agl;
 
+  /**
+   * Location of terrain warning.
+   *
+   * Check GeoPoint::IsValid().
+   */
   GeoPoint terrain_warning_location;
 
   void Clear();
@@ -78,7 +81,7 @@ struct TerrainInfo
    * Returns the terrain base, and falls back for terrain altitude if
    * the base is not known.
    */
-  fixed GetTerrainBaseFallback() const {
+  double GetTerrainBaseFallback() const {
     return terrain_base_valid
       ? terrain_base
       : terrain_altitude;
@@ -148,7 +151,7 @@ struct DerivedInfo:
   BrokenDateTime date_time_local;
 
   /** Speed to fly block/dolphin (m/s) */
-  fixed V_stf;
+  double V_stf;
 
   /** Auto QNH calculation result. */
   AtmosphericPressure pressure;
@@ -205,10 +208,10 @@ struct DerivedInfo:
   } wind_source;
 
   Validity head_wind_available;
-  fixed head_wind;
+  double head_wind;
 
   /** Distance to zoom to for autozoom */
-  fixed auto_zoom_distance;
+  double auto_zoom_distance;
 
   Validity sun_data_available;
   /** Sun's azimuth at the current location and time */
@@ -227,7 +230,8 @@ struct DerivedInfo:
 
   FlyingState flight;
 
-  ThermalBandInfo thermal_band;
+  ThermalEncounterBand thermal_encounter_band;
+  ThermalEncounterCollection thermal_encounter_collection;
 
   ThermalLocatorInfo thermal_locator;
 
@@ -235,7 +239,7 @@ struct DerivedInfo:
   TraceHistory trace_history;
 
   Validity auto_mac_cready_available;
-  fixed auto_mac_cready;
+  double auto_mac_cready;
 
   /** Glide polar used for safety calculations */
   GlidePolar glide_polar_safety;
@@ -250,14 +254,14 @@ struct DerivedInfo:
    * speed) to the current MacCready setting. A negative value should be
    * treated as invalid.
    */
-  fixed next_leg_eq_thermal;
+  double next_leg_eq_thermal;
 
   /**
    * @todo Reset to cleared state
    */
   void Reset();
 
-  void Expire(fixed Time);
+  void Expire(double Time);
 
   /**
    * Return the current wind vector, or the null vector if no wind is
@@ -270,15 +274,18 @@ struct DerivedInfo:
       : SpeedVector::Zero();
   }
 
-  void ProvideAutoMacCready(fixed clock, fixed mc) {
+  void ProvideAutoMacCready(double clock, double mc) {
     if (auto_mac_cready_available &&
-        fabs(auto_mac_cready - mc) < fixed(0.05))
+        fabs(auto_mac_cready - mc) < 0.05)
       /* change is too small, ignore the new value to limit the rate */
       return;
 
     auto_mac_cready = mc;
     auto_mac_cready_available.Update(clock);
   }
+
+  // utility function
+  double CalculateWorkingFraction(const double h, const double safety_height) const;
 };
 
 static_assert(is_trivial_ndebug<DerivedInfo>::value, "type is not trivial");

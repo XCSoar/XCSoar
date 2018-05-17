@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,9 +31,9 @@
 #include "OS/FileUtil.hpp"
 #include "Formatter/IGCFilenameFormatter.hpp"
 #include "Interface.hpp"
-#include "Util/CharUtil.hpp"
 #include "IGCFileCleanup.hpp"
 #include "IGC/IGCWriter.hpp"
+#include "Util/CharUtil.hxx"
 
 #include <tchar.h>
 #include <algorithm>
@@ -77,9 +77,8 @@ LoggerImpl::PreTakeoffBuffer::operator=(const NMEAInfo &src)
 }
 
 LoggerImpl::LoggerImpl()
-  :writer(nullptr)
+  :filename(nullptr), writer(nullptr)
 {
-  filename[0] = 0;
 }
 
 LoggerImpl::~LoggerImpl()
@@ -99,7 +98,9 @@ LoggerImpl::StopLogger(const NMEAInfo &gps_info)
   if (!simulator)
     writer->Sign();
 
-  LogFormat(_T("Logger stopped: %s"), filename);
+  writer->Flush();
+
+  LogFormat(_T("Logger stopped: %s"), filename.c_str());
 
   // Logger off
   delete writer;
@@ -156,7 +157,7 @@ LoggerImpl::LogPoint(const NMEAInfo &gps_info)
 
     // NOTE: clock is only used to set the validity of valid objects to true
     //       for which "1" is sufficient. This kludge needs to be rewritten.
-    tmp_info.clock = fixed(1);
+    tmp_info.clock = 1;
 
     tmp_info.alive.Update(tmp_info.clock);
 
@@ -234,8 +235,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
 
   assert(writer == nullptr);
 
-  LocalPath(filename, _T("logs"));
-  Directory::Create(filename);
+  const auto logs_path = MakeLocalPath(_T("logs"));
 
   const BrokenDate today = gps_info.date_time_utc.IsDatePlausible()
     ? (const BrokenDate &)gps_info.date_time_utc
@@ -245,21 +245,21 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
   for (int i = 1; i < 99; i++) {
     FormatIGCFilenameLong(name.buffer(), today, "XCS", logger_id, i);
 
-    LocalPath(filename, _T("logs"), name);
+    filename = AllocatedPath::Build(logs_path, name);
     if (!File::Exists(filename))
       break;  // file not exist, we'll use this name
   }
 
   frecord.Reset();
-  writer = new IGCWriter(filename);
-  if (!writer->IsOpen()) {
-    LogFormat(_T("Failed to create file %s"), filename);
-    delete writer;
-    writer = nullptr;
+
+  try {
+    writer = new IGCWriter(filename);
+  } catch (const std::runtime_error &e) {
+    LogError(e);
     return false;
   }
 
-  LogFormat(_T("Logger Started: %s"), filename);
+  LogFormat(_T("Logger Started: %s"), filename.c_str());
   return true;
 }
 

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,17 +29,17 @@ FlyingState::Reset()
   flying = false;
   on_ground = false;
   powered = false;
-  flight_time = fixed(0);
-  takeoff_time = fixed(-1);
+  flight_time = 0;
+  takeoff_time = -1;
   takeoff_location.SetInvalid();
-  release_time = fixed(-1);
+  release_time = -1;
   release_location.SetInvalid();
-  power_on_time = fixed(-1);
+  power_on_time = -1;
   power_on_location.SetInvalid();
-  power_off_time = fixed(-1);
+  power_off_time = -1;
   power_off_location.SetInvalid();
   far_location.SetInvalid();
-  far_distance = fixed(-1);
-  landing_time = fixed(-1);
+  far_distance = -1;
+  landing_time = -1;
   landing_location.SetInvalid();
 }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2012 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -36,7 +36,7 @@ DrawVerticalGradient(Canvas &canvas, const PixelRect &rc,
                      Color top_color, Color bottom_color, Color fallback_color)
 {
 #if defined(EYE_CANDY) && defined(ENABLE_OPENGL)
-  const RasterPoint vertices[] = {
+  const BulkPixelPoint vertices[] = {
     rc.GetTopLeft(),
     rc.GetTopRight(),
     rc.GetBottomLeft(),

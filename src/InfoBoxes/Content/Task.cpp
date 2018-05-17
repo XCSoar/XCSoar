@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -39,7 +39,6 @@ Copyright_License {
 #include "Look/Look.hpp"
 
 #include <tchar.h>
-#include <stdio.h>
 
 static void
 ShowNextWaypointDetails()
@@ -47,11 +46,11 @@ ShowNextWaypointDetails()
   if (protected_task_manager == nullptr)
     return;
 
-  const Waypoint *wp = protected_task_manager->GetActiveWaypoint();
+  auto wp = protected_task_manager->GetActiveWaypoint();
   if (wp == nullptr)
     return;
 
-  dlgWaypointDetailsShowModal(*wp, false);
+  dlgWaypointDetailsShowModal(std::move(wp), false);
 }
 
 static Widget *
@@ -75,7 +74,7 @@ UpdateInfoBoxBearing(InfoBoxData &data)
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
   if (!task_stats.task_valid || !vector_remaining.IsValid() ||
-      vector_remaining.distance <= fixed(10)) {
+      vector_remaining.distance <= 10) {
     data.SetInvalid();
     return;
   }
@@ -92,7 +91,7 @@ UpdateInfoBoxBearingDiff(InfoBoxData &data)
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
   if (!basic.track_available || !task_stats.task_valid ||
-      !vector_remaining.IsValid() || vector_remaining.distance <= fixed(10)) {
+      !vector_remaining.IsValid() || vector_remaining.distance <= 10) {
     data.SetInvalid();
     return;
   }
@@ -108,7 +107,7 @@ UpdateInfoBoxRadial(InfoBoxData &data)
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
   if (!task_stats.task_valid || !vector_remaining.IsValid() ||
-      vector_remaining.distance <= fixed(10)) {
+      vector_remaining.distance <= 10) {
     data.SetInvalid();
     return;
   }
@@ -125,9 +124,9 @@ InfoBoxContentNextWaypoint::Update(InfoBoxData &data)
 {
   // use proper non-terminal next task stats
 
-  const Waypoint* way_point = protected_task_manager != NULL
+  const auto way_point = protected_task_manager != nullptr
     ? protected_task_manager->GetActiveWaypoint()
-    : NULL;
+    : nullptr;
 
   if (!way_point) {
     data.SetTitle(_("Next"));
@@ -165,27 +164,6 @@ InfoBoxContentNextWaypoint::Update(InfoBoxData &data)
   data.SetValueColor(solution_remaining.IsFinalGlide() ? 2 : 0);
 }
 
-bool
-InfoBoxContentNextWaypoint::HandleKey(const InfoBoxKeyCodes keycode)
-{
-  if (protected_task_manager == NULL)
-    return false;
-
-  switch (keycode) {
-  case ibkRight:
-  case ibkUp:
-    protected_task_manager->IncrementActiveTaskPoint(1);
-    return true;
-
-  case ibkLeft:
-  case ibkDown:
-    protected_task_manager->IncrementActiveTaskPoint(-1);
-    return true;
-  }
-
-  return false;
-}
-
 const InfoBoxPanel *
 InfoBoxContentNextWaypoint::GetDialogContent()
 {
@@ -195,9 +173,9 @@ InfoBoxContentNextWaypoint::GetDialogContent()
 void
 UpdateInfoBoxNextDistance(InfoBoxData &data)
 {
-  const Waypoint* way_point = protected_task_manager != NULL
+  const auto way_point = protected_task_manager != nullptr
     ? protected_task_manager->GetActiveWaypoint()
-    : NULL;
+    : nullptr;
 
   // Set title
   if (!way_point)
@@ -229,9 +207,9 @@ UpdateInfoBoxNextDistance(InfoBoxData &data)
 void
 UpdateInfoBoxNextDistanceNominal(InfoBoxData &data)
 {
-  const Waypoint* way_point = protected_task_manager != NULL
+  const auto way_point = protected_task_manager != nullptr
     ? protected_task_manager->GetActiveWaypoint()
-    : NULL;
+    : nullptr;
 
   if (!way_point) {
     data.SetInvalid();
@@ -270,15 +248,9 @@ UpdateInfoBoxNextETE(InfoBoxData &data)
     return;
   }
 
-  assert(!negative(task_stats.current_leg.time_remaining_now));
+  assert(task_stats.current_leg.time_remaining_now >= 0);
 
-  TCHAR value[32];
-  TCHAR comment[32];
-  const int dd = (int)task_stats.current_leg.time_remaining_now;
-  FormatTimeTwoLines(value, comment, dd);
-
-  data.SetValue(value);
-  data.SetComment(comment);
+  data.SetValueFromTimeTwoLines((int)task_stats.current_leg.time_remaining_now);
 }
 
 void
@@ -286,7 +258,7 @@ UpdateInfoBoxNextETA(InfoBoxData &data)
 {
   // use proper non-terminal next task stats
 
-  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+  const auto &task_stats = CommonInterface::Calculated().task_stats;
   const BrokenTime &now_local = CommonInterface::Calculated().date_time_local;
 
   if (!task_stats.task_valid || !task_stats.current_leg.IsAchievable() ||
@@ -314,8 +286,8 @@ SetValueFromAltDiff(InfoBoxData &data, const TaskStats &task_stats,
     return;
   }
 
-  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
-  fixed altitude_difference =
+  const auto &settings = CommonInterface::GetComputerSettings();
+  auto altitude_difference =
     solution.SelectAltitudeDifference(settings.task.glide);
   data.SetValueFromArrival(altitude_difference);
 }
@@ -325,8 +297,8 @@ UpdateInfoBoxNextAltitudeDiff(InfoBoxData &data)
 {
   // pilots want this to be assuming terminal flight to this wp
 
-  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-  const GlideResult &next_solution = task_stats.current_leg.solution_remaining;
+  const auto &task_stats = CommonInterface::Calculated().task_stats;
+  const auto &next_solution = task_stats.current_leg.solution_remaining;
 
   SetValueFromAltDiff(data, task_stats, next_solution);
 }
@@ -345,8 +317,8 @@ UpdateInfoBoxNextAltitudeRequire(InfoBoxData &data)
 {
   // pilots want this to be assuming terminal flight to this wp
 
-  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-  const GlideResult &next_solution = task_stats.current_leg.solution_remaining;
+  const auto &task_stats = CommonInterface::Calculated().task_stats;
+  const auto &next_solution = task_stats.current_leg.solution_remaining;
   if (!task_stats.task_valid || !next_solution.IsAchievable()) {
     data.SetInvalid();
     return;
@@ -360,9 +332,9 @@ UpdateInfoBoxNextAltitudeArrival(InfoBoxData &data)
 {
   // pilots want this to be assuming terminal flight to this wp
 
-  const MoreData &basic = CommonInterface::Basic();
-  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-  const GlideResult next_solution = task_stats.current_leg.solution_remaining;
+  const auto &basic = CommonInterface::Basic();
+  const auto &task_stats = CommonInterface::Calculated().task_stats;
+  const auto next_solution = task_stats.current_leg.solution_remaining;
   if (!basic.NavAltitudeAvailable() ||
       !task_stats.task_valid || !next_solution.IsAchievable()) {
     data.SetInvalid();
@@ -384,9 +356,9 @@ UpdateInfoBoxNextGR(InfoBoxData &data)
     return;
   }
 
-  fixed gradient = CommonInterface::Calculated().task_stats.current_leg.gradient;
+  auto gradient = CommonInterface::Calculated().task_stats.current_leg.gradient;
 
-  if (!positive(gradient)) {
+  if (gradient <= 0) {
     data.SetValue(_T("+++"));
     return;
   }
@@ -426,15 +398,9 @@ UpdateInfoBoxFinalETE(InfoBoxData &data)
     return;
   }
 
-  assert(!negative(task_stats.total.time_remaining_now));
+  assert(task_stats.total.time_remaining_now >= 0);
 
-  TCHAR value[32];
-  TCHAR comment[32];
-  const int dd = abs((int)task_stats.total.time_remaining_now);
-  FormatTimeTwoLines(value, comment, dd);
-
-  data.SetValue(value);
-  data.SetComment(comment);
+  data.SetValueFromTimeTwoLines((int)task_stats.total.time_remaining_now);
 }
 
 void
@@ -520,13 +486,17 @@ void
 UpdateInfoBoxTaskSpeedInstant(InfoBoxData &data)
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-  if (!task_stats.task_valid || !task_stats.IsPirkerSpeedAvailable()) {
+  if (!task_stats.task_valid || task_stats.inst_speed_fast < 0 ||
+      task_stats.inst_speed_slow < 0) {
     data.SetInvalid();
     return;
   }
 
   // Set Value
-  data.SetValueFromTaskSpeed(task_stats.get_pirker_speed());
+  data.SetValueFromTaskSpeed(task_stats.inst_speed_fast);
+
+  // Add slow filtered task speed as comment item
+  data.SetCommentFromTaskSpeed(task_stats.inst_speed_slow, false);
 }
 
 void
@@ -534,7 +504,7 @@ UpdateInfoBoxTaskSpeedHour(InfoBoxData &data)
 {
   const WindowStats &window =
     CommonInterface::Calculated().task_stats.last_hour;
-  if (negative(window.duration)) {
+  if (window.duration < 0) {
     data.SetInvalid();
     return;
   }
@@ -552,9 +522,9 @@ UpdateInfoBoxFinalGR(InfoBoxData &data)
     return;
   }
 
-  fixed gradient = task_stats.total.gradient;
+  auto gradient = task_stats.total.gradient;
 
-  if (!positive(gradient)) {
+  if (gradient <= 0) {
     data.SetValue(_T("+++"));
     return;
   }
@@ -577,16 +547,8 @@ UpdateInfoBoxTaskAATime(InfoBoxData &data)
     return;
   }
 
-  TCHAR value[32];
-  TCHAR comment[32];
-  FormatTimeTwoLines(value, comment,
-                         abs((int) common_stats.aat_time_remaining));
-
-  data.UnsafeFormatValue(negative(common_stats.aat_time_remaining) ?
-                            _T("-%s") : _T("%s"), value);
-  data.SetValueColor(negative(common_stats.aat_time_remaining) ? 1 : 0);
-
-  data.SetComment(comment);
+  data.SetValueFromTimeTwoLines(common_stats.aat_time_remaining);
+  data.SetValueColor(common_stats.aat_time_remaining < 0 ? 1 : 0);
 }
 
 void
@@ -602,24 +564,16 @@ UpdateInfoBoxTaskAATimeDelta(InfoBoxData &data)
     return;
   }
 
-  assert(!negative(task_stats.total.time_remaining_start));
+  assert(task_stats.total.time_remaining_start >= 0);
 
-  fixed diff = task_stats.total.time_remaining_start -
+  auto diff = task_stats.total.time_remaining_start -
     common_stats.aat_time_remaining;
 
-  TCHAR value[32];
-  TCHAR comment[32];
-  const int dd = abs((int)diff);
-  FormatTimeTwoLines(value, comment, dd);
-
-  data.UnsafeFormatValue(negative(diff) ? _T("-%s") : _T("%s"), value);
-
-  data.SetComment(comment);
-
+  data.SetValueFromTimeTwoLines(diff);
   // Set Color (red/blue/black)
-  data.SetValueColor(negative(diff) ? 1 :
+  data.SetValueColor(diff < 0 ? 1 :
                    task_stats.total.time_remaining_start >
-                       common_stats.aat_time_remaining + fixed(5*60) ? 2 : 0);
+                       common_stats.aat_time_remaining + 5*60 ? 2 : 0);
 }
 
 void
@@ -675,7 +629,7 @@ UpdateInfoBoxTaskAASpeed(InfoBoxData &data)
   const TaskStats &task_stats = calculated.ordered_task_stats;
   const CommonStats &common_stats = calculated.common_stats;
 
-  if (!task_stats.has_targets || !positive(common_stats.aat_speed_target)) {
+  if (!task_stats.has_targets || common_stats.aat_speed_target <= 0) {
     data.SetInvalid();
     return;
   }
@@ -691,7 +645,7 @@ UpdateInfoBoxTaskAASpeedMax(InfoBoxData &data)
   const TaskStats &task_stats = calculated.ordered_task_stats;
   const CommonStats &common_stats = calculated.common_stats;
 
-  if (!task_stats.has_targets || !positive(common_stats.aat_speed_max)) {
+  if (!task_stats.has_targets || common_stats.aat_speed_max <= 0) {
     data.SetInvalid();
     return;
   }
@@ -708,7 +662,7 @@ UpdateInfoBoxTaskAASpeedMin(InfoBoxData &data)
   const CommonStats &common_stats = calculated.common_stats;
 
   if (!task_stats.has_targets ||
-      !task_stats.task_valid || !positive(common_stats.aat_speed_min)) {
+      !task_stats.task_valid || common_stats.aat_speed_min <= 0) {
     data.SetInvalid();
     return;
   }
@@ -721,26 +675,19 @@ void
 UpdateInfoBoxTaskTimeUnderMaxHeight(InfoBoxData &data)
 {
   const auto &calculated = CommonInterface::Calculated();
-  const TaskStats &task_stats = calculated.ordered_task_stats;
-  const CommonStats &common_stats = calculated.common_stats;
-  const fixed maxheight = fixed(protected_task_manager->
-                                GetOrderedTaskSettings().start_constraints.max_height);
+  const auto &task_stats = calculated.ordered_task_stats;
+  const auto &common_stats = calculated.common_stats;
+  const double maxheight = protected_task_manager->GetOrderedTaskSettings().start_constraints.max_height;
 
-  if (!task_stats.task_valid || !positive(maxheight)
+  if (!task_stats.task_valid || maxheight <= 0
       || !protected_task_manager
-      || !positive(common_stats.TimeUnderStartMaxHeight)) {
+      || common_stats.TimeUnderStartMaxHeight <= 0) {
     data.SetInvalid();
     return;
   }
 
-  const int dd = (int)(CommonInterface::Basic().time -
-      common_stats.TimeUnderStartMaxHeight);
-
-  TCHAR value[32];
-  TCHAR comment[32];
-  FormatTimeTwoLines(value, comment, dd);
-
-  data.SetValue(value);
+  data.SetValueFromTimeTwoLines((int)(CommonInterface::Basic().time -
+                                      common_stats.TimeUnderStartMaxHeight));
   data.SetComment(_("Time Below"));
 }
 
@@ -756,22 +703,47 @@ UpdateInfoBoxNextETEVMG(InfoBoxData &data)
     return;
   }
 
-  const fixed d = task_stats.current_leg.remaining.GetDistance();
-  const fixed v = basic.ground_speed;
+  const auto d = task_stats.current_leg.remaining.GetDistance();
+  const auto v = basic.ground_speed;
 
   if (!task_stats.task_valid ||
-      !positive(v)) {
+      v <= 0) {
     data.SetInvalid();
     return;
   }
 
-  TCHAR value[32];
-  TCHAR comment[32];
-  const int dd = (int)(d/v);
-  FormatTimeTwoLines(value, comment, dd);
+  data.SetValueFromTimeTwoLines((int)(d/v));
+}
 
-  data.SetValue(value);
-  data.SetComment(comment);
+void
+UpdateInfoBoxNextETAVMG(InfoBoxData &data)
+{
+  const NMEAInfo &basic = CommonInterface::Basic();
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+
+  if (!basic.ground_speed_available || !task_stats.task_valid ||
+      !task_stats.current_leg.remaining.IsDefined()) {
+    data.SetInvalid();
+    return;
+  }
+
+  const auto d = task_stats.current_leg.remaining.GetDistance();
+  const auto v = basic.ground_speed;
+
+  if (!task_stats.task_valid ||
+      v <= 0) {
+    data.SetInvalid();
+    return;
+  }
+
+  const int dd = (int)(d/v);
+  const BrokenTime &now_local = CommonInterface::Calculated().date_time_local;
+  if (now_local.IsPlausible()) {
+    const BrokenTime t = now_local + dd;
+    data.UnsafeFormatValue(_T("%02u:%02u"), t.hour, t.minute);
+    data.UnsafeFormatComment(_T("%02u"), t.second);
+  }
+
 }
 
 void
@@ -786,22 +758,16 @@ UpdateInfoBoxFinalETEVMG(InfoBoxData &data)
     return;
   }
 
-  const fixed d = task_stats.total.remaining.GetDistance();
-  const fixed v = basic.ground_speed;
+  const auto d = task_stats.total.remaining.GetDistance();
+  const auto v = basic.ground_speed;
 
   if (!task_stats.task_valid ||
-      !positive(v)) {
+      v <= 0) {
     data.SetInvalid();
     return;
   }
 
-  TCHAR value[32];
-  TCHAR comment[32];
-  const int dd = (int)(d/v);
-  FormatTimeTwoLines(value, comment, dd);
-
-  data.SetValue(value);
-  data.SetComment(comment);
+  data.SetValueFromTimeTwoLines((int)(d/v));
 }
 
 void
@@ -813,7 +779,7 @@ UpdateInfoBoxCruiseEfficiency(InfoBoxData &data)
     return;
   }
 
-  data.UnsafeFormatValue(_T("%d"), (int) (task_stats.cruise_efficiency * 100));
+  data.SetValueFromPercent(task_stats.cruise_efficiency*100);
   data.SetCommentFromVerticalSpeed(task_stats.effective_mc, false);
 }
 
@@ -931,7 +897,7 @@ InfoBoxContentNextArrow::Update(InfoBoxData &data)
   bool angle_valid = distance_valid && basic.track_available;
 
   // Set title. Use waypoint name if available.
-  const Waypoint *way_point = protected_task_manager != nullptr
+  const auto way_point = protected_task_manager != nullptr
     ? protected_task_manager->GetActiveWaypoint()
     : nullptr;
   if (!way_point)

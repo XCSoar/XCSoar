@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,7 +21,7 @@
  */
 
 #include "FlatRay.hpp"
-#include "Math/FastMath.h"
+#include "Math/FastMath.hpp"
 
 #include <stdlib.h>
 
@@ -30,7 +30,7 @@
 int
 FlatRay::Magnitude() const
 {
-  return ihypot(vector.longitude, vector.latitude);
+  return ihypot(vector.x, vector.y);
 }
 
 /*
@@ -67,21 +67,21 @@ FlatRay::IntersectsRatio(const FlatRay &that) const
 }
 
 FlatGeoPoint
-FlatRay::Parametric(const fixed t) const
+FlatRay::Parametric(const double t) const
 {
   FlatGeoPoint p = point;
-  p.longitude += iround(vector.longitude * t);
-  p.latitude += iround(vector.latitude * t);
+  p.x += iround(vector.x * t);
+  p.y += iround(vector.y * t);
   return p;
 }
 
-fixed
+double
 FlatRay::Intersects(const FlatRay &that) const
 {
   std::pair<int, int> r = IntersectsRatio(that);
   if (r.second == 0)
-    return fixed(-1);
-  return ((fixed)r.first) / r.second;
+    return -1;
+  return double(r.first) / double(r.second);
 }
 
 bool
@@ -93,15 +93,15 @@ FlatRay::IntersectsDistinct(const FlatRay& that) const
          (abs(r.first) < abs(r.second));
 }
 
-fixed
+double
 FlatRay::DistinctIntersection(const FlatRay& that) const
 {
   std::pair<int, int> r = IntersectsRatio(that);
   if (r.second != 0 &&
       sgn(r.second) * r.first > 0 &&
       abs(r.first) < abs(r.second)) {
-    return fixed(r.first) / r.second;
+    return double(r.first) / double(r.second);
   }
 
-  return fixed(-1);
+  return -1;
 }

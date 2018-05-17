@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -48,8 +48,8 @@ CorrectedWidth(unsigned nWidth)
 RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
   :width(nWidth), height(nHeight),
    corrected_width(CorrectedWidth(nWidth)),
-   texture(new GLTexture(CorrectedWidth(nWidth), nHeight)),
-   dirty(true)
+   buffer(new RawColor[corrected_width * height]),
+   texture(new GLTexture(PixelSize(corrected_width, nHeight)))
 {
   assert(nWidth > 0);
   assert(nHeight > 0);
@@ -57,8 +57,6 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
   texture->EnableInterpolation();
 
   AddSurfaceListener(*this);
-
-  buffer = new BGRColor[corrected_width * height];
 }
 
 RawBitmap::~RawBitmap()
@@ -66,14 +64,13 @@ RawBitmap::~RawBitmap()
   RemoveSurfaceListener(*this);
 
   delete texture;
-  delete[] buffer;
 }
 
 void
 RawBitmap::SurfaceCreated()
 {
   if (texture == nullptr) {
-    texture = new GLTexture(corrected_width, height);
+    texture = new GLTexture(PixelSize(corrected_width, height));
     texture->EnableInterpolation();
   }
 }
@@ -96,11 +93,11 @@ RawBitmap::BindAndGetTexture() const
 #ifdef HAVE_GLES
     /* 16 bit 5/6/5 on Android */
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, corrected_width, this->height,
-                    GL_RGB, GL_UNSIGNED_SHORT_5_6_5, buffer);
+                    GL_RGB, GL_UNSIGNED_SHORT_5_6_5, GetBuffer());
 #else
     /* 32 bit R/G/B/A on full OpenGL */
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, corrected_width, this->height,
-                    GL_BGRA, GL_UNSIGNED_BYTE, buffer);
+                    GL_BGRA, GL_UNSIGNED_BYTE, GetBuffer());
 #endif
 
     dirty = false;
@@ -112,7 +109,8 @@ RawBitmap::BindAndGetTexture() const
 void
 RawBitmap::StretchTo(unsigned width, unsigned height,
                      Canvas &dest_canvas,
-                     unsigned dest_width, unsigned dest_height) const
+                     unsigned dest_width, unsigned dest_height,
+                     gcc_unused bool transparent_white) const
 {
   GLTexture &texture = BindAndGetTexture();
 
@@ -123,5 +121,6 @@ RawBitmap::StretchTo(unsigned width, unsigned height,
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 #endif
 
-  texture.Draw(0, 0, dest_width, dest_height, 0, 0, width, height);
+  texture.Draw(PixelRect(0, 0, dest_width, dest_height),
+               PixelRect(0, 0, width, height));
 }

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -39,7 +39,7 @@ class SearchPoint
   FlatGeoPoint flat_location;
 
 #ifndef NDEBUG
-  bool projected;
+  bool projected = false;
 #endif
 
 public:
@@ -48,11 +48,7 @@ public:
    * 
    * @return Null object
    */
-#ifdef NDEBUG
   SearchPoint() = default;
-#else
-  SearchPoint():projected(false) {}
-#endif
 
   /**
    * Constructor.  The flat location is not initialized here; the
@@ -63,9 +59,6 @@ public:
    */
   SearchPoint(const GeoPoint &loc)
     :location(loc)
-#ifndef NDEBUG
-    , projected(false)
-#endif
   {}
 
   SearchPoint(const GeoPoint &_location, const FlatGeoPoint &_flat)
@@ -183,7 +176,7 @@ public:
   /**
    * distance from this to the reference
    */
-  fixed DistanceTo(const GeoPoint &ref) const {
+  double DistanceTo(const GeoPoint &ref) const {
     return location.Distance(ref);
   }
 };

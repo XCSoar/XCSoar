@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -55,10 +55,10 @@ NOAAListRenderer::Draw(Canvas &canvas, PixelRect rc,
                        const NOAALook &look,
                        const TwoTextRowsRenderer &row_renderer)
 {
-  const PixelScalar line_height = rc.bottom - rc.top;
+  const unsigned line_height = rc.GetHeight();
 
-  const RasterPoint pt(rc.left + line_height / 2,
-                       rc.top + line_height / 2);
+  const PixelPoint pt(rc.left + line_height / 2,
+                      rc.top + line_height / 2);
   look.icon.Draw(canvas, pt);
 
   rc.left += line_height;

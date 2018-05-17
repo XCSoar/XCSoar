@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -36,10 +36,10 @@
 #include "Screen/OpenGL/Scope.hpp"
 #endif
 
-RasterPoint
+PixelPoint
 ThermalAssistantRenderer::LiftPoints::GetAverage() const
 {
-  RasterPoint avg = { 0, 0 };
+  PixelPoint avg(0, 0);
 
   for (auto it = begin(), it_end = end(); it != it_end; ++it) {
     avg.x += it->x;
@@ -68,24 +68,24 @@ ThermalAssistantRenderer::Update(const AttitudeState &attitude,
   vario = (VarioInfo)derived;
 }
 
-fixed
+double
 ThermalAssistantRenderer::CalculateMaxLift() const
 {
-  return std::max(fixed(1),
+  return std::max(1.,
                   *std::max_element(vario.lift_database.begin(),
                                     vario.lift_database.end()));
 }
 
 void
 ThermalAssistantRenderer::CalculateLiftPoints(LiftPoints &lift_points,
-                                            fixed max_lift) const
+                                              double max_lift) const
 {
   Angle angle = -direction;
   constexpr Angle delta = Angle::FullCircle() / unsigned(std::tuple_size<LiftDatabase>());
 
   for (unsigned i = 0; i < lift_points.size(); i++, angle += delta) {
     auto sincos = angle.SinCos();
-    auto scale = NormalizeLift(vario.lift_database[i], max_lift) * fixed(radius);
+    double scale = NormalizeLift(vario.lift_database[i], max_lift) * radius;
 
     lift_points[i].x = (int)(sincos.second * scale);
     lift_points[i].y = (int)(sincos.first * scale);
@@ -100,11 +100,11 @@ ThermalAssistantRenderer::CalculateLiftPoints(LiftPoints &lift_points,
   }
 }
 
-fixed
-ThermalAssistantRenderer::NormalizeLift(fixed lift, fixed max_lift)
+double
+ThermalAssistantRenderer::NormalizeLift(double lift, double max_lift)
 {
-  lift = (lift + max_lift) / Double(max_lift);
-  return Clamp(lift, fixed(0), fixed(1));
+  lift = (lift + max_lift) / (2 * max_lift);
+  return Clamp(lift, 0., 1.);
 }
 
 void
@@ -112,7 +112,7 @@ ThermalAssistantRenderer::PaintRadarPlane(Canvas &canvas) const
 {
   canvas.Select(look.plane_pen);
 
-  PixelScalar x = mid.x + (circling.TurningLeft() ? radius : -radius);
+  int x = mid.x + (circling.TurningLeft() ? radius : -radius);
 
   canvas.DrawLine(x + Layout::FastScale(small ? 5 : 10),
               mid.y - Layout::FastScale(small ? 1 : 2),
@@ -129,7 +129,7 @@ ThermalAssistantRenderer::PaintRadarPlane(Canvas &canvas) const
 }
 
 void
-ThermalAssistantRenderer::PaintRadarBackground(Canvas &canvas, fixed max_lift) const
+ThermalAssistantRenderer::PaintRadarBackground(Canvas &canvas, double max_lift) const
 {
   canvas.SelectHollowBrush();
 
@@ -153,7 +153,7 @@ ThermalAssistantRenderer::PaintRadarBackground(Canvas &canvas, fixed max_lift) c
                   mid.y + radius - s.cy * 0.75,
                   lift_string);
 
-  FormatUserVerticalSpeed(fixed(0), lift_string, ARRAY_SIZE(lift_string));
+  FormatUserVerticalSpeed(0, lift_string, ARRAY_SIZE(lift_string));
   s = canvas.CalcTextSize(lift_string);
   canvas.DrawText(mid.x - s.cx / 2,
                   mid.y + radius / 2 - s.cy * 0.75,
@@ -167,7 +167,7 @@ ThermalAssistantRenderer::PaintPoints(Canvas &canvas,
                                     const LiftPoints &lift_points) const
 {
 #ifdef ENABLE_OPENGL
-  GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  const ScopeAlphaBlend alpha_blend;
 #elif defined(USE_GDI)
   canvas.SetMixMask();
 #endif /* GDI */
@@ -200,14 +200,14 @@ ThermalAssistantRenderer::PaintNotCircling(Canvas &canvas) const
 void
 ThermalAssistantRenderer::UpdateLayout(const PixelRect &rc)
 {
-  radius = std::min(rc.right - rc.left, rc.bottom - rc.top) / 2 - padding;
+  radius = std::min(rc.GetWidth(), rc.GetHeight()) / 2 - padding;
   mid = rc.GetCenter();
 }
 
 void
 ThermalAssistantRenderer::Paint(Canvas &canvas)
 {
-  fixed max_lift = ceil(CalculateMaxLift());
+  double max_lift = ceil(CalculateMaxLift());
 
   PaintRadarBackground(canvas, max_lift);
   if (!circling.circling) {

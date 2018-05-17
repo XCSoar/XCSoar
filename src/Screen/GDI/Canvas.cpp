@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,6 +27,7 @@ Copyright_License {
 #include "Compatibility/gdi.h"
 #include "Asset.hpp" /* for needclipping */
 #include "AlphaBlend.hpp"
+#include "Math/Angle.hpp"
 
 #include <algorithm>
 
@@ -39,7 +40,7 @@ Canvas::DrawLine(int ax, int ay, int bx, int by)
   ::MoveToEx(dc, ax, ay, nullptr);
   ::LineTo(dc, bx, by);
 #else
-  RasterPoint p[2] = {{ax, ay}, {bx, by}};
+  BulkPixelPoint p[2] = {{ax, ay}, {bx, by}};
   DrawPolyline(p, 2);
 #endif
 }
@@ -54,7 +55,7 @@ Canvas::DrawTwoLines(int ax, int ay, int bx, int by, int cx, int cy)
   ::LineTo(dc, bx, by);
   ::LineTo(dc, cx, cy);
 #else
-  RasterPoint p[2];
+  BulkPixelPoint p[2];
 
   p[0].x = ax;
   p[0].y = ay;
@@ -69,32 +70,41 @@ Canvas::DrawTwoLines(int ax, int ay, int bx, int by, int cx, int cy)
 }
 
 void
-Canvas::DrawSegment(int x, int y, unsigned radius,
+Canvas::DrawSegment(PixelPoint center, unsigned radius,
                     Angle start, Angle end, bool horizon)
 {
   assert(IsDefined());
 
-  ::Segment(*this, x, y, radius, start, end, horizon);
+  ::Segment(*this, center, radius, start, end, horizon);
 }
 
 void
-Canvas::DrawAnnulus(int x, int y,
+Canvas::DrawAnnulus(PixelPoint center,
                     unsigned small_radius, unsigned big_radius,
                     Angle start, Angle end)
 {
   assert(IsDefined());
 
-  ::Annulus(*this, x, y, big_radius, start, end, small_radius);
+  ::Annulus(*this, center, big_radius, start, end, small_radius);
 }
 
 void
-Canvas::DrawKeyhole(int x, int y,
+Canvas::DrawKeyhole(PixelPoint center,
                     unsigned small_radius, unsigned big_radius,
                     Angle start, Angle end)
 {
   assert(IsDefined());
 
-  ::KeyHole(*this, x, y, big_radius, start, end, small_radius);
+  ::KeyHole(*this, center, big_radius, start, end, small_radius);
+}
+
+void
+Canvas::DrawArc(PixelPoint center, unsigned radius,
+                Angle start, Angle end)
+{
+  assert(IsDefined());
+
+  ::Arc(*this, center, radius, start, end);
 }
 
 const PixelSize
@@ -102,9 +112,9 @@ Canvas::CalcTextSize(const TCHAR *text, size_t length) const
 {
   assert(IsDefined());
 
-  PixelSize size;
+  SIZE size;
   ::GetTextExtentPoint(dc, text, length, &size);
-  return size;
+  return PixelSize(size.cx, size.cy);
 }
 
 const PixelSize
@@ -141,20 +151,22 @@ Canvas::DrawText(int x, int y,
 }
 
 void
-Canvas::DrawOpaqueText(int x, int y, const PixelRect &rc,
+Canvas::DrawOpaqueText(int x, int y, const PixelRect &_rc,
                        const TCHAR *text)
 {
   assert(IsDefined());
 
+  RECT rc = _rc;
   ::ExtTextOut(dc, x, y, ETO_OPAQUE, &rc, text, _tcslen(text), nullptr);
 }
 
 void
-Canvas::DrawClippedText(int x, int y, const PixelRect &rc,
+Canvas::DrawClippedText(int x, int y, const PixelRect &_rc,
                         const TCHAR *text)
 {
   assert(IsDefined());
 
+  RECT rc = _rc;
   ::ExtTextOut(dc, x, y, ETO_CLIPPED, &rc, text, _tcslen(text), nullptr);
 }
 
@@ -164,9 +176,9 @@ Canvas::DrawClippedText(int x, int y, unsigned width,
 {
   const PixelSize size = CalcTextSize(text);
 
-  PixelRect rc;
+  RECT rc;
   ::SetRect(&rc, x, y, x + std::min(width, unsigned(size.cx)), y + size.cy);
-  DrawClippedText(x, y, rc, text);
+  ::ExtTextOut(dc, x, y, ETO_CLIPPED, &rc, text, _tcslen(text), nullptr);
 }
 
 void
@@ -224,15 +236,9 @@ Canvas::CopyTransparentWhite(int dest_x, int dest_y,
   assert(IsDefined());
   assert(src.IsDefined());
 
-#ifdef _WIN32_WCE
-  ::TransparentImage(dc, dest_x, dest_y, dest_width, dest_height,
-                     src.dc, src_x, src_y, dest_width, dest_height,
-                     COLOR_WHITE);
-#else
   ::TransparentBlt(dc, dest_x, dest_y, dest_width, dest_height,
                    src.dc, src_x, src_y, dest_width, dest_height,
                    COLOR_WHITE);
-#endif
 }
 
 void
@@ -324,7 +330,6 @@ Canvas::StretchMono(int dest_x, int dest_y,
   assert(IsDefined());
   assert(src.IsDefined());
 
-#ifndef _WIN32_WCE
   if (bg_color == COLOR_BLACK && (src_width != dest_width ||
                                   src_height != dest_height)) {
     /* workaround for a WINE bug: stretching a mono bitmap ignores the
@@ -336,7 +341,6 @@ Canvas::StretchMono(int dest_x, int dest_y,
             MERGEPAINT);
     return;
   }
-#endif
 
   /* on GDI, monochrome bitmaps are special: they are painted with the
      destination HDC's current colors */
@@ -357,17 +361,15 @@ Canvas::AlphaBlend(int dest_x, int dest_y,
                    unsigned src_width, unsigned src_height,
                    uint8_t alpha)
 {
-  assert(AlphaBlendAvailable());
-
   BLENDFUNCTION fn;
   fn.BlendOp = AC_SRC_OVER;
   fn.BlendFlags = 0;
   fn.SourceConstantAlpha = alpha;
   fn.AlphaFormat = 0;
 
-  ::AlphaBlendInvoke(dc, dest_x, dest_y, dest_width, dest_height,
-                     src, src_x, src_y, src_width, src_height,
-                     fn);
+  ::AlphaBlend(dc, dest_x, dest_y, dest_width, dest_height,
+               src, src_x, src_y, src_width, src_height,
+               fn);
 }
 
 #endif

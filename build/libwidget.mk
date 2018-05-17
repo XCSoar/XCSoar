@@ -5,6 +5,7 @@ WIDGET_SOURCES = \
 	$(SRC)/Widget/WindowWidget.cpp \
 	$(SRC)/Widget/CreateWindowWidget.cpp \
 	$(SRC)/Widget/ListWidget.cpp \
+	$(SRC)/Widget/TextListWidget.cpp \
 	$(SRC)/Widget/ContainerWidget.cpp \
 	$(SRC)/Widget/SolidWidget.cpp \
 	$(SRC)/Widget/PanelWidget.cpp \
@@ -25,6 +26,7 @@ WIDGET_SOURCES = \
 	$(SRC)/Widget/ButtonWidget.cpp \
 	$(SRC)/Widget/QuestionWidget.cpp \
 	$(SRC)/Widget/KeyboardWidget.cpp \
+	$(SRC)/Widget/ViewImageWidget.cpp \
 	$(SRC)/Widget/DockWindow.cpp
 
 WIDGET_CPPFLAGS_INTERNAL = $(SCREEN_CPPFLAGS)

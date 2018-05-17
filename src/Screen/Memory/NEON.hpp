@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -180,16 +180,12 @@ public:
  */
 struct NEONBytesTwice {
   static void Copy16(uint8_t *gcc_restrict p, const uint8_t *gcc_restrict q) {
-    const uint8x8_t a1 = vld1_u8(q);
-    const uint8x8x2_t a2 = {{ a1, a1 }};
-
-    const uint8x8_t b1 = vld1_u8(q + 8);
-    const uint8x8x2_t b2 = {{ b1, b1 }};
+    const uint8x16_t a1 = vld1q_u8(q);
+    const uint8x16x2_t a2 = {{ a1, a1 }};
 
     /* vst2 interleaves the two parts, which is exactly what we need
        here */
-    vst2_u8(p, a2);
-    vst2_u8(p + 16, b2);
+    vst2q_u8(p, a2);
   }
 
   gcc_flatten

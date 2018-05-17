@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,31 +28,50 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "Language/Language.hpp"
 #include "LogFile.hpp"
-#include "IO/TextFile.hpp"
-#include "IO/LineReader.hpp"
+#include "OS/Path.hpp"
+#include "IO/FileLineReader.hpp"
+#include "IO/ZipArchive.hpp"
+#include "IO/ZipLineReader.hpp"
+#include "IO/MapFile.hpp"
 #include "Profile/Profile.hpp"
-
-#include <windef.h> /* for MAX_PATH */
-#include <memory>
 
 #include <string.h>
 
 static bool
-ParseAirspaceFile(AirspaceParser &parser, const TCHAR *path,
+ParseAirspaceFile(AirspaceParser &parser, Path path,
                   OperationEnvironment &operation)
-{
-  std::unique_ptr<TLineReader> reader(OpenTextFile(path, Charset::AUTO));
-  if (!reader) {
-    LogFormat(_T("Failed to open airspace file: %s"), path);
-    return false;
-  }
+try {
+  FileLineReader reader(path, Charset::AUTO);
 
-  if (!parser.Parse(*reader, operation)) {
-    LogFormat(_T("Failed to parse airspace file: %s"), path);
+  if (!parser.Parse(reader, operation)) {
+    LogFormat(_T("Failed to parse airspace file: %s"), path.c_str());
     return false;
   }
 
   return true;
+} catch (const std::runtime_error &e) {
+  LogFormat(_T("Failed to parse airspace file: %s"), path.c_str());
+  LogError(e);
+  return false;
+}
+
+static bool
+ParseAirspaceFile(AirspaceParser &parser,
+                  struct zzip_dir *dir, const char *path,
+                  OperationEnvironment &operation)
+try {
+  ZipLineReader reader(dir, path, Charset::AUTO);
+
+  if (!parser.Parse(reader, operation)) {
+    LogFormat("Failed to parse airspace file: %s", path);
+    return false;
+  }
+
+  return true;
+} catch (const std::runtime_error &e) {
+  LogFormat("Failed to parse airspace file: %s", path);
+  LogError(e);
+  return false;
 }
 
 void
@@ -69,17 +88,18 @@ ReadAirspace(Airspaces &airspaces,
   AirspaceParser parser(airspaces);
 
   // Read the airspace filenames from the registry
-  TCHAR path[MAX_PATH];
-  if (Profile::GetPath(ProfileKeys::AirspaceFile, path))
+  auto path = Profile::GetPath(ProfileKeys::AirspaceFile);
+  if (!path.IsNull())
     airspace_ok |= ParseAirspaceFile(parser, path, operation);
 
-  if (Profile::GetPath(ProfileKeys::AdditionalAirspaceFile, path))
+  path = Profile::GetPath(ProfileKeys::AdditionalAirspaceFile);
+  if (!path.IsNull())
     airspace_ok |= ParseAirspaceFile(parser, path, operation);
 
-  if (Profile::GetPath(ProfileKeys::MapFile, path)) {
-    _tcscat(path, _T("/airspace.txt"));
-    airspace_ok |= ParseAirspaceFile(parser, path, operation);
-  }
+  auto archive = OpenMapFile();
+  if (archive)
+    airspace_ok |= ParseAirspaceFile(parser, archive->get(), "airspace.txt",
+                                     operation);
 
   if (airspace_ok) {
     airspaces.Optimise();

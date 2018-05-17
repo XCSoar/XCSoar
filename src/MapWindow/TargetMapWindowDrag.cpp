@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,6 +25,7 @@ Copyright_License {
 #include "Look/TaskLook.hpp"
 #include "Screen/Icon.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/AATPoint.hpp"
 #include "Engine/Task/ObservationZones/ObservationZonePoint.hpp"
@@ -37,17 +38,17 @@ TargetMapWindow::OnTaskModified()
 }
 
 void
-TargetMapWindow::TargetPaintDrag(Canvas &canvas, const RasterPoint drag_last)
+TargetMapWindow::TargetPaintDrag(Canvas &canvas, const PixelPoint drag_last)
 {
-  task_look.target_icon.Draw(canvas, drag_last.x, drag_last.y);
+  task_look.target_icon.Draw(canvas, drag_last);
 }
 
 bool
-TargetMapWindow::TargetDragged(const int x, const int y)
+TargetMapWindow::TargetDragged(PixelPoint p)
 {
   assert(task != nullptr);
 
-  GeoPoint gp = projection.ScreenToGeo(x, y);
+  GeoPoint gp = projection.ScreenToGeo(p);
 
   {
     ProtectedTaskManager::ExclusiveLease task_manager(*task);
@@ -62,7 +63,7 @@ TargetMapWindow::TargetDragged(const int x, const int y)
 }
 
 bool
-TargetMapWindow::isClickOnTarget(const RasterPoint pc) const
+TargetMapWindow::isClickOnTarget(const PixelPoint pc) const
 {
   if (task == nullptr)
     return false;
@@ -80,11 +81,11 @@ TargetMapWindow::isClickOnTarget(const RasterPoint pc) const
 }
 
 bool
-TargetMapWindow::isInSector(const int x, const int y)
+TargetMapWindow::isInSector(PixelPoint pt)
 {
   assert(task != nullptr);
 
-  GeoPoint gp = projection.ScreenToGeo(x, y);
+  GeoPoint gp = projection.ScreenToGeo(pt);
 
   ProtectedTaskManager::Lease lease(*task);
   AATPoint *p = lease->GetOrderedTask().GetAATTaskPoint(target_index);

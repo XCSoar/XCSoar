@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,6 +27,7 @@
 #include "NMEA/CirclingInfo.hpp"
 #include "NMEA/VarioInfo.hpp"
 #include "Screen/Point.hpp"
+#include "Screen/BulkPoint.hpp"
 
 #include <array>
 
@@ -37,17 +38,17 @@ class Canvas;
 
 class ThermalAssistantRenderer
 {
-  class LiftPoints: public std::array<RasterPoint,
+  class LiftPoints: public std::array<BulkPixelPoint,
                                       std::tuple_size<LiftDatabase>::value>
   {
   public:
-    RasterPoint GetAverage() const;
+    PixelPoint GetAverage() const;
   };
 
 protected:
   const ThermalAssistantLook &look;
 
-  RasterPoint mid;
+  PixelPoint mid;
 
   /**
    * The minimum distance between the window boundary and the biggest
@@ -71,7 +72,7 @@ public:
                            unsigned _padding, bool _small = false);
 
 public:
-  const RasterPoint &GetMiddle() const {
+  const PixelPoint &GetMiddle() const {
     return mid;
   }
 
@@ -95,12 +96,12 @@ protected:
    * 0.5: lift = zero lift
    * 1.0: lift = max_lift
    */
-  static fixed NormalizeLift(fixed lift, fixed max_lift);
+  static double NormalizeLift(double lift, double max_lift);
 
-  void CalculateLiftPoints(LiftPoints &lift_points, fixed max_lift) const;
-  fixed CalculateMaxLift() const;
+  void CalculateLiftPoints(LiftPoints &lift_points, double max_lift) const;
+  double CalculateMaxLift() const;
   void PaintRadarPlane(Canvas &canvas) const;
-  void PaintRadarBackground(Canvas &canvas, fixed max_lift) const;
+  void PaintRadarBackground(Canvas &canvas, double max_lift) const;
   void PaintPoints(Canvas &canvas, const LiftPoints &lift_points) const;
   void PaintAdvisor(Canvas &canvas, const LiftPoints &lift_points) const;
   void PaintNotCircling(Canvas &canvas) const;

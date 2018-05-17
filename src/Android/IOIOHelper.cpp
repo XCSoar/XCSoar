@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@ Copyright_License {
 #include "IOIOHelper.hpp"
 #include "PortBridge.hpp"
 #include "Java/Class.hxx"
+#include "Java/Exception.hxx"
 
 Java::TrivialClass IOIOHelper::cls;
 jmethodID IOIOHelper::ctor,
@@ -57,6 +58,7 @@ PortBridge *
 IOIOHelper::openUart(JNIEnv *env, unsigned ID, unsigned baud)
 {
   jobject obj = env->CallObjectMethod(Get(), openUart_method, ID, (int)baud);
+  Java::RethrowException(env);
   if (obj == nullptr)
     return nullptr;
 

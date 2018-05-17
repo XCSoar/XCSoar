@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,6 @@ Copyright_License {
 #include "WaypointDialogs.hpp"
 #include "WaypointInfoWidget.hpp"
 #include "WaypointCommandsWidget.hpp"
-#include "Dialogs/Message.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
@@ -40,12 +39,11 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #include "Screen/LargeTextWindow.hpp"
 #include "MainWindow.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
-#include "Task/TaskManager.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Compiler.h"
 #include "Language/Language.hpp"
@@ -54,22 +52,23 @@ Copyright_License {
 #include "Profile/Map.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "OS/RunFile.hpp"
+#include "OS/Path.hpp"
+#include "OS/ConvertPathName.hpp"
+#include "LogFile.hpp"
 #include "Util/StringPointer.hxx"
 #include "Util/AllocatedString.hxx"
 
 #include <assert.h>
-#include <stdio.h>
-#include <windef.h> /* for MAX_PATH */
 
 #ifdef HAVE_RUN_FILE
 
 class WaypointExternalFileListHandler final
   : public ListItemRenderer, public ListCursorHandler {
-  const Waypoint &waypoint;
+  const WaypointPtr waypoint;
 
 public:
-  explicit WaypointExternalFileListHandler(const Waypoint &_waypoint)
-    :waypoint(_waypoint) {}
+  explicit WaypointExternalFileListHandler(WaypointPtr _waypoint)
+    :waypoint(std::move(_waypoint)) {}
 
   /* virtual methods from class ListItemRenderer */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
@@ -85,13 +84,10 @@ public:
 void
 WaypointExternalFileListHandler::OnActivateItem(unsigned i)
 {
-  auto file = waypoint.files_external.begin();
+  auto file = waypoint->files_external.begin();
   std::advance(file, i);
 
-  TCHAR path[MAX_PATH];
-  LocalPath(path, file->c_str());
-
-  RunFile(path);
+  RunFile(LocalPath(file->c_str()).c_str());
 }
 
 void
@@ -99,7 +95,7 @@ WaypointExternalFileListHandler::OnPaintItem(Canvas &canvas,
                                              const PixelRect paint_rc,
                                              unsigned i)
 {
-  auto file = waypoint.files_external.begin();
+  auto file = waypoint->files_external.begin();
   std::advance(file, i);
   canvas.DrawText(paint_rc.left + Layout::GetTextPadding(),
                   paint_rc.top + Layout::GetTextPadding(),
@@ -136,7 +132,7 @@ class WaypointDetailsWidget final
   WidgetDialog &dialog;
   const DialogLook &look;
 
-  const Waypoint &waypoint;
+  const WaypointPtr waypoint;
 
   ProtectedTaskManager *const task_manager;
 
@@ -165,16 +161,16 @@ class WaypointDetailsWidget final
   int zoom;
 
 public:
-  WaypointDetailsWidget(WidgetDialog &_dialog, const Waypoint &_waypoint,
+  WaypointDetailsWidget(WidgetDialog &_dialog, WaypointPtr _waypoint,
                         ProtectedTaskManager *_task_manager, bool allow_edit)
     :dialog(_dialog), look(dialog.GetLook()),
-     waypoint(_waypoint),
+     waypoint(std::move(_waypoint)),
      task_manager(_task_manager),
      page(0), last_page(0),
-     info_widget(look, _waypoint),
-     commands_widget(look, &_dialog, _waypoint, task_manager, allow_edit),
+     info_widget(look, waypoint),
+     commands_widget(look, &_dialog, waypoint, _task_manager, allow_edit),
 #ifdef HAVE_RUN_FILE
-     file_list(look), file_list_handler(_waypoint),
+     file_list(look), file_list_handler(waypoint),
 #endif
      zoom(0) {}
 
@@ -203,7 +199,7 @@ public:
   void Unprepare() override;
 
   void Show(const PixelRect &rc) override {
-    const Layout layout(rc, waypoint);
+    const Layout layout(rc, *waypoint);
 
     if (task_manager != nullptr)
       goto_button.MoveAndShow(layout.goto_button);
@@ -222,7 +218,7 @@ public:
     details_panel.Move(layout.main);
     details_text.Move(layout.details_text);
 #ifdef HAVE_RUN_FILE
-    if (!waypoint.files_external.empty())
+    if (!waypoint->files_external.empty())
       file_list.Move(layout.file_list);
 #endif
 
@@ -257,7 +253,7 @@ public:
   }
 
   void Move(const PixelRect &rc) override {
-    const Layout layout(rc, waypoint);
+    const Layout layout(rc, *waypoint);
 
     if (task_manager != nullptr)
       goto_button.Move(layout.goto_button);
@@ -276,7 +272,7 @@ public:
     details_panel.Move(layout.main);
     details_text.Move(layout.details_text);
 #ifdef HAVE_RUN_FILE
-    if (!waypoint.files_external.empty())
+    if (!waypoint->files_external.empty())
       file_list.Move(layout.file_list);
 #endif
     commands_dock.Move(layout.main);
@@ -325,8 +321,7 @@ private:
 WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
                                       const Waypoint &waypoint)
 {
-  const unsigned width = rc.right - rc.left;
-  const unsigned height = rc.bottom - rc.top;
+  const unsigned width = rc.GetWidth(), height = rc.GetHeight();
   const unsigned button_height = ::Layout::GetMaximumControlHeight();
 
   main = rc;
@@ -390,8 +385,8 @@ WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
 
   details_text.left = 0;
   details_text.top = 0;
-  details_text.right = main.right - main.left;
-  details_text.bottom = main.bottom - main.top;
+  details_text.right = main.GetWidth();
+  details_text.bottom = main.GetHeight();
 
 #ifdef HAVE_RUN_FILE
   const unsigned num_files = std::distance(waypoint.files_external.begin(),
@@ -409,17 +404,22 @@ WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
 void
 WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  for (const auto &i : waypoint.files_embed) {
+  for (const auto &i : waypoint->files_embed) {
     if (images.full())
       break;
 
-    TCHAR path[MAX_PATH];
-    LocalPath(path, i.c_str());
-    if (!images.append().LoadFile(path))
+    try {
+      if (!images.append().LoadFile(LocalPath(i.c_str())))
+        images.shrink(images.size() - 1);
+    } catch (const std::exception &e) {
+      LogFormat("Failed to load %s: %s",
+                (const char *)NarrowPathName(Path(i.c_str())),
+                e.what());
       images.shrink(images.size() - 1);
+    }
   }
 
-  const Layout layout(rc, waypoint);
+  const Layout layout(rc, *waypoint);
 
   WindowStyle dock_style;
   dock_style.Hide();
@@ -458,11 +458,11 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   details_panel.Create(parent, look, layout.main, dock_style);
   details_text.Create(details_panel, layout.details_text);
   details_text.SetFont(look.text_font);
-  details_text.SetText(waypoint.details.c_str());
+  details_text.SetText(waypoint->details.c_str());
 
 #ifdef HAVE_RUN_FILE
-  const unsigned num_files = std::distance(waypoint.files_external.begin(),
-                                           waypoint.files_external.end());
+  const unsigned num_files = std::distance(waypoint->files_external.begin(),
+                                           waypoint->files_external.end());
   if (num_files > 0) {
     file_list.Create(details_panel, layout.file_list,
                      WindowStyle(), layout.file_list_item_height);
@@ -527,9 +527,9 @@ WaypointDetailsWidget::NextPage(int step)
     // skip wDetails frame, if there are no details
   } while (page == 1 &&
 #ifdef HAVE_RUN_FILE
-           waypoint.files_external.empty() &&
+           waypoint->files_external.empty() &&
 #endif
-           waypoint.details.empty());
+           waypoint->details.empty());
 
   UpdatePage();
 
@@ -566,17 +566,11 @@ WaypointDetailsWidget::KeyPress(unsigned key_code)
 {
   switch (key_code) {
   case KEY_LEFT:
-#ifdef GNAV
-  case '6':
-#endif
     previous_button.SetFocus();
     NextPage(-1);
     return true;
 
   case KEY_RIGHT:
-#ifdef GNAV
-  case '7':
-#endif
     next_button.SetFocus();
     NextPage(+1);
     return true;
@@ -606,34 +600,34 @@ WaypointDetailsWidget::OnImagePaint(gcc_unused Canvas &canvas,
   if (page >= 3 && page < 3 + (int)images.size()) {
     Bitmap &img = images[page-3];
     static constexpr int zoom_factors[] = { 1, 2, 4, 8, 16, 32 };
-    RasterPoint img_pos, screen_pos;
+    PixelPoint img_pos, screen_pos;
     PixelSize screen_size;
     PixelSize img_size = img.GetSize();
-    fixed scale = std::min((fixed)canvas.GetWidth() / (fixed)img_size.cx,
-                           (fixed)canvas.GetHeight() / (fixed)img_size.cy) *
-                  zoom_factors[zoom];
+    double scale = std::min((double)canvas.GetWidth() / img_size.cx,
+                            (double)canvas.GetHeight() / img_size.cy) *
+      zoom_factors[zoom];
 
     // centered image and optionally zoomed into the center of the image
-    fixed scaled_size = img_size.cx * scale;
-    if (scaled_size <= (fixed)canvas.GetWidth()) {
+    double scaled_size = img_size.cx * scale;
+    if (scaled_size <= canvas.GetWidth()) {
       img_pos.x = 0;
-      screen_pos.x = (int) (((fixed)canvas.GetWidth() - scaled_size) / 2);
+      screen_pos.x = (int) ((canvas.GetWidth() - scaled_size) / 2);
       screen_size.cx = (int) scaled_size;
     } else {
-      scaled_size = (fixed)canvas.GetWidth() / scale;
-      img_pos.x = (int) (((fixed)img_size.cx - scaled_size) / 2);
+      scaled_size = canvas.GetWidth() / scale;
+      img_pos.x = (int) ((img_size.cx - scaled_size) / 2);
       img_size.cx = (int) scaled_size;
       screen_pos.x = 0;
       screen_size.cx = canvas.GetWidth();
     }
     scaled_size = img_size.cy * scale;
-    if (scaled_size <= (fixed)canvas.GetHeight()) {
+    if (scaled_size <= canvas.GetHeight()) {
       img_pos.y = 0;
-      screen_pos.y = (int) (((fixed)canvas.GetHeight() - scaled_size) / 2);
+      screen_pos.y = (int) ((canvas.GetHeight() - scaled_size) / 2);
       screen_size.cy = (int) scaled_size;
     } else {
-      scaled_size = (fixed)canvas.GetHeight() / scale;
-      img_pos.y = (int) (((fixed)img_size.cy - scaled_size) / 2);
+      scaled_size = canvas.GetHeight() / scale;
+      img_pos.y = (int) ((img_size.cy - scaled_size) / 2);
       img_size.cy = (int) scaled_size;
       screen_pos.y = 0;
       screen_size.cy = canvas.GetHeight();
@@ -644,15 +638,15 @@ WaypointDetailsWidget::OnImagePaint(gcc_unused Canvas &canvas,
 }
 
 static void
-UpdateCaption(WndForm *form, const Waypoint *waypoint)
+UpdateCaption(WndForm *form, const Waypoint &waypoint)
 {
   StaticString<256> buffer;
-  buffer.Format(_T("%s: %s"), _("Waypoint"), waypoint->name.c_str());
+  buffer.Format(_T("%s: %s"), _("Waypoint"), waypoint.name.c_str());
 
   const char *key = nullptr;
   const TCHAR *name = nullptr;
 
-  switch (waypoint->origin) {
+  switch (waypoint.origin) {
   case WaypointOrigin::NONE:
     break;
 
@@ -688,10 +682,10 @@ UpdateCaption(WndForm *form, const Waypoint *waypoint)
 }
 
 void 
-dlgWaypointDetailsShowModal(const Waypoint &_waypoint,
+dlgWaypointDetailsShowModal(WaypointPtr _waypoint,
                             bool allow_navigation, bool allow_edit)
 {
-  LastUsedWaypoints::Add(_waypoint);
+  LastUsedWaypoints::Add(*_waypoint);
 
   const DialogLook &look = UIGlobals::GetDialogLook();
   WidgetDialog dialog(look);
@@ -700,7 +694,7 @@ dlgWaypointDetailsShowModal(const Waypoint &_waypoint,
                                allow_edit);
   dialog.CreateFull(UIGlobals::GetMainWindow(), _T(""), &widget);
 
-  UpdateCaption(&dialog, &_waypoint);
+  UpdateCaption(&dialog, *_waypoint);
 
   dialog.ShowModal();
   dialog.StealWidget();

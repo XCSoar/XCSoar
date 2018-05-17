@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@
 #define TASK_MACCREADY_HPP
 
 #include "Util/NonCopyable.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideSolvers/GlideResult.hpp"
 
@@ -128,15 +128,14 @@ public:
    * @return Glide result for entire task with virtual sink rate
    */
   gcc_pure
-  GlideResult glide_sink(const AircraftState &aircraft,
-                         const fixed S) const;
+  GlideResult glide_sink(const AircraftState &aircraft, double S) const;
 
   /**
    * Adjust MacCready value of internal glide polar
    *
    * @param mc MacCready value (m/s)
    */
-  void set_mc(fixed mc) {
+  void set_mc(double mc) {
     glide_polar.SetMC(mc);
   };
 
@@ -145,7 +144,7 @@ public:
    *
    * @param ce Cruise efficiency
    */
-  void set_cruise_efficiency(fixed ce) {
+  void set_cruise_efficiency(double ce) {
     glide_polar.SetCruiseEfficiency(ce);
   };
 
@@ -174,7 +173,7 @@ private:
    * @return Min height (m) of entire task
    */
   gcc_pure
-  virtual fixed get_min_height(const AircraftState &state) const = 0;
+  virtual double get_min_height(const AircraftState &state) const = 0;
 
   /**
    * Pure virtual method to calculate glide solution for specified point, given
@@ -190,7 +189,7 @@ private:
   gcc_pure
   virtual GlideResult SolvePoint(const TaskPoint &tp,
                                  const AircraftState &state,
-                                 fixed minH) const = 0;
+                                 double minH) const = 0;
 
   /**
    * Pure virtual method to obtain aircraft state at start of task.

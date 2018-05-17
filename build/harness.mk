@@ -12,10 +12,8 @@ HARNESS_SOURCES = \
 	$(SRC)/Replay/AircraftSim.cpp \
 	$(SRC)/Computer/Settings.cpp \
 	$(SRC)/Computer/Wind/Settings.cpp \
-	$(SRC)/Audio/VegaVoiceSettings.cpp \
 	$(SRC)/TeamCode/Settings.cpp \
 	$(SRC)/Logger/Settings.cpp \
-	$(SRC)/Tracking/TrackingSettings.cpp \
 	$(SRC)/Computer/TraceComputer.cpp \
 	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
 	$(SRC)/Units/Descriptor.cpp \

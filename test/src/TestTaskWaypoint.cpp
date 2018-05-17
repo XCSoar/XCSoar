@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,15 +29,15 @@ class DummyTaskWaypoint: public TaskWaypoint
 public:
   friend class TaskWaypointTest;
 
-  DummyTaskWaypoint(TaskPointType _type, const Waypoint & wp)
-    :TaskWaypoint(_type, wp) {}
+  DummyTaskWaypoint(TaskPointType _type, WaypointPtr &&wp)
+    :TaskWaypoint(_type, std::move(wp)) {}
 
-  virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const {
+  GeoVector GetVectorRemaining(const GeoPoint &reference) const override {
     return GeoVector();
   }
 
-  virtual fixed GetElevation() const {
-    return fixed(0);
+  double GetElevation() const override {
+    return 0;
   }
 };
 
@@ -53,9 +53,9 @@ TaskWaypointTest::Run()
   GeoPoint gp(Angle::Degrees(20), Angle::Degrees(50));
   Waypoint wp(gp);
   wp.name = _T("Test");
-  wp.elevation = fixed(42);
+  wp.elevation = 42;
 
-  DummyTaskWaypoint tw(TaskPointType::AST, wp);
+  DummyTaskWaypoint tw(TaskPointType::AST, WaypointPtr(new Waypoint(wp)));
 
   const Waypoint &wp2 = tw.GetWaypoint();
   ok1(wp2.name == _T("Test"));

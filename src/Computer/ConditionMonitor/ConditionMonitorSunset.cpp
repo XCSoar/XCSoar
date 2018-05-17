@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -51,9 +51,9 @@ ConditionMonitorSunset::CheckCondition(const NMEAInfo &basic,
     SunEphemeris::CalcSunTimes(basic.location, basic.date_time_utc,
                                settings.utc_offset);
 
-  const fixed time_local = basic.time + fixed(settings.utc_offset.AsSeconds());
-  fixed d1((time_local + res.time_elapsed) / 3600);
-  fixed d0(time_local / 3600);
+  const auto time_local = basic.time + settings.utc_offset.AsSeconds();
+  const auto d1 = (time_local + res.time_elapsed) / 3600;
+  const auto d0 = time_local / 3600;
 
   bool past_sunset = (d1 > sun.time_of_sunset) && (d0 < sun.time_of_sunset);
   return past_sunset;

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,12 +25,13 @@ Copyright_License {
 #define XCSOAR_IGC_WRITER_HPP
 
 #include "Logger/GRecord.hpp"
-#include "Math/fixed.hpp"
 #include "IGCFix.hpp"
-#include "IO/TextWriter.hpp"
+#include "IO/FileOutputStream.hxx"
+#include "IO/BufferedOutputStream.hxx"
 
 #include <tchar.h>
 
+class Path;
 struct GPSState;
 struct BrokenDateTime;
 struct NMEAInfo;
@@ -41,7 +42,8 @@ class IGCWriter {
     MAX_IGC_BUFF = 255,
   };
 
-  TextWriter file;
+  FileOutputStream file;
+  BufferedOutputStream buffered;
 
   GRecord grecord;
 
@@ -53,14 +55,10 @@ public:
   /**
    * Create a new IGC file.  The caller must check IsOpen().
    */
-  IGCWriter(const TCHAR *path);
+  explicit IGCWriter(Path path);
 
-  bool IsOpen() const {
-    return file.IsOpen();
-  }
-
-  bool Flush() {
-    return file.Flush();
+  void Flush() {
+    buffered.Flush();
   }
 
   void Sign();
@@ -80,16 +78,15 @@ private:
    * Finish writing the line.
    *
    * @param line the buffer obtained with BeginLine()
-   * @return true on success
    */
-  bool CommitLine(char *line);
+  void CommitLine(char *line);
 
-  bool WriteLine(const char *line);
-  bool WriteLine(const char *a, const TCHAR *b);
+  void WriteLine(const char *line);
+  void WriteLine(const char *a, const TCHAR *b);
 
   static const char *GetHFFXARecord();
   static const char *GetIRecord();
-  static fixed GetEPE(const GPSState &gps);
+  static double GetEPE(const GPSState &gps);
   /** Satellites in use if logger fix quality is a valid gps */
   static int GetSIU(const GPSState &gps);
 

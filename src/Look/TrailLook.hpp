@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,6 @@
 #ifndef XCSOAR_TRAIL_LOOK_HPP
 #define XCSOAR_TRAIL_LOOK_HPP
 
-#include "Screen/Point.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/Pen.hpp"
 
@@ -33,7 +32,7 @@ struct TrailSettings;
 struct TrailLook {
   static constexpr unsigned NUMSNAILCOLORS = 15;
 
-  UPixelScalar trail_widths[NUMSNAILCOLORS];
+  unsigned trail_widths[NUMSNAILCOLORS];
   Brush trail_brushes[NUMSNAILCOLORS];
   Pen trail_pens[NUMSNAILCOLORS];
   Pen scaled_trail_pens[NUMSNAILCOLORS];

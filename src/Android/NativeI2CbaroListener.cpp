@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -45,7 +45,7 @@ Java_org_xcsoar_NativeI2CbaroListener_onI2CbaroValues(JNIEnv *env, jobject obj,
     return;
 
   I2CbaroListener &listener = *(I2CbaroListener *)(void *)ptr;
-  listener.onI2CbaroValues(sensor, AtmosphericPressure::Pascal(fixed(pressure)));
+  listener.onI2CbaroValues(sensor, AtmosphericPressure::Pascal(pressure));
 }
 
 JNIEXPORT void JNICALL

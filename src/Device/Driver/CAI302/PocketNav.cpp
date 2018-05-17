@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,11 +24,12 @@ Copyright_License {
 #include "PocketNav.hpp"
 #include "Device/Port/Port.hpp"
 #include "Units/System.hpp"
+#include "Math/Util.hpp"
 
 #include <stdio.h>
 
 bool
-CAI302::PutMacCready(Port &port, fixed mc, OperationEnvironment &env)
+CAI302::PutMacCready(Port &port, double mc, OperationEnvironment &env)
 {
   unsigned mac_cready = uround(Units::ToUserUnit(mc * 10, Unit::KNOTS));
 
@@ -38,7 +39,7 @@ CAI302::PutMacCready(Port &port, fixed mc, OperationEnvironment &env)
 }
 
 bool
-CAI302::PutBugs(Port &port, fixed bugs, OperationEnvironment &env)
+CAI302::PutBugs(Port &port, double bugs, OperationEnvironment &env)
 {
   unsigned bugs2 = uround(bugs * 100);
 
@@ -48,7 +49,7 @@ CAI302::PutBugs(Port &port, fixed bugs, OperationEnvironment &env)
 }
 
 bool
-CAI302::PutBallast(Port &port, fixed fraction, OperationEnvironment &env)
+CAI302::PutBallast(Port &port, double fraction, OperationEnvironment &env)
 {
   unsigned ballast = uround(fraction * 10);
 

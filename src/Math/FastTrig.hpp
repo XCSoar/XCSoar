@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,85 +24,95 @@ Copyright_License {
 #ifndef XCSOAR_MATH_FAST_TRIG_HPP
 #define XCSOAR_MATH_FAST_TRIG_HPP
 
-#include "Math/fixed.hpp"
-#include "Math/Constants.h"
+#include "Constants.hpp"
 #include "Compiler.h"
 
-#ifdef FIXED_MATH
-extern const int SINETABLE[4096];
-extern const fixed::value_t INVCOSINETABLE[4096];
-#else
-extern const fixed SINETABLE[4096];
-extern const fixed INVCOSINETABLE[4096];
-#endif
+static constexpr unsigned INT_ANGLE_RANGE = 4096;
+static constexpr unsigned INT_ANGLE_MASK = INT_ANGLE_RANGE - 1;
+static constexpr unsigned INT_QUARTER_CIRCLE = INT_ANGLE_RANGE / 4;
 
-extern const short ISINETABLE[4096];
+static constexpr double INT_ANGLE_MULT = INT_ANGLE_RANGE / M_2PI;
 
-#ifdef RADIANS
-#define INT_ANGLE_MULT fixed(4096.0 / M_2PI)
-#else
-#define INT_ANGLE_MULT fixed(4096.0 / 360)
-#endif
+extern const double SINETABLE[INT_ANGLE_RANGE];
+extern const double INVCOSINETABLE[INT_ANGLE_RANGE];
 
-gcc_const
-static inline int
-NATIVE_TO_INT(fixed x)
+extern const short ISINETABLE[INT_ANGLE_RANGE];
+
+static constexpr inline unsigned
+NormalizeIntAngle(unsigned angle)
 {
-  return iround(fast_mult(INT_ANGLE_MULT, 8, x, 2)) & 0xfff;
+  return angle & INT_ANGLE_MASK;
+}
+
+static constexpr inline unsigned
+IntAngleForCos(unsigned angle)
+{
+  return NormalizeIntAngle(angle + INT_QUARTER_CIRCLE);
+}
+
+static inline constexpr unsigned
+UnsafeRadiansToIntAngle(double radians)
+{
+  /* add INT_ANGLE_RANGE to ensure that the result is not negative
+     (assuming the parameter is "sane"); the caller will normalise the
+     result using NormalizeIntAngle() */
+  /* add 0.5 for rounding; by definition, casting to integer rounds
+     towards zero, and adding 0.5 will apply correct rounding for
+     non-negative values */
+  return unsigned(radians * INT_ANGLE_MULT + (10 * INT_ANGLE_RANGE + 0.5));
+}
+
+static inline constexpr unsigned
+NATIVE_TO_INT(double x)
+{
+  return NormalizeIntAngle(UnsafeRadiansToIntAngle(x));
+}
+
+static inline constexpr unsigned
+NATIVE_TO_INT_COS(double x)
+{
+  return IntAngleForCos(UnsafeRadiansToIntAngle(x));
+}
+
+static inline constexpr double
+IntAngleToRadians(unsigned angle)
+{
+  return angle / INT_ANGLE_MULT;
 }
 
 gcc_const
-static inline int
-NATIVE_TO_INT_COS(fixed x)
+static inline double
+invfastcosine(double x)
 {
-  return (iround(fast_mult(INT_ANGLE_MULT, 8, x, 2)) + 1024) & 0xfff;
-}
-
-gcc_const
-static inline fixed
-invfastcosine(fixed x)
-{
-#ifdef FIXED_MATH
-  return fixed(fixed::internal(), INVCOSINETABLE[NATIVE_TO_INT(x)]);
-#else
   return INVCOSINETABLE[NATIVE_TO_INT(x)];
-#endif
 }
 
 gcc_const
 static inline int
-ifastsine(fixed x)
+ifastsine(double x)
 {
   return ISINETABLE[NATIVE_TO_INT(x)];
 }
 
 gcc_const
 static inline int
-ifastcosine(fixed x)
+ifastcosine(double x)
 {
   return ISINETABLE[NATIVE_TO_INT_COS(x)];
 }
 
 gcc_const
-static inline fixed
-fastsine(fixed x)
+static inline double
+fastsine(double x)
 {
-#ifdef FIXED_MATH
-  return fixed(fixed::internal(), SINETABLE[NATIVE_TO_INT(x)]);
-#else
   return SINETABLE[NATIVE_TO_INT(x)];
-#endif
 }
 
 gcc_const
-static inline fixed
-fastcosine(fixed x)
+static inline double
+fastcosine(double x)
 {
-#ifdef FIXED_MATH
-  return fixed(fixed::internal(), SINETABLE[NATIVE_TO_INT_COS(x)]);
-#else
   return SINETABLE[NATIVE_TO_INT_COS(x)];
-#endif
 }
 
 #endif

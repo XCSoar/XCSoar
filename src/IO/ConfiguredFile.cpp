@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,86 +22,85 @@ Copyright_License {
 */
 
 #include "ConfiguredFile.hpp"
+#include "MapFile.hpp"
 #include "FileLineReader.hpp"
+#include "ZipArchive.hpp"
 #include "ZipLineReader.hpp"
+#include "ConvertLineReader.hpp"
 #include "Profile/Profile.hpp"
+#include "LogFile.hpp"
+#include "OS/Path.hpp"
+
+#include <zzip/zzip.h>
+
+#include <stdexcept>
 
 #include <assert.h>
 #include <string.h>
-#include <windef.h> /* for MAX_PATH */
 
-NLineReader *
+std::unique_ptr<NLineReader>
 OpenConfiguredTextFileA(const char *profile_key)
-{
+try {
   assert(profile_key != nullptr);
 
-  TCHAR path[MAX_PATH];
-  if (!Profile::GetPath(profile_key, path))
+  const auto path = Profile::GetPath(profile_key);
+  if (path.IsNull())
     return nullptr;
 
-  FileLineReaderA *reader = new FileLineReaderA(path);
-  if (reader->error()) {
-    delete reader;
-    return nullptr;
-  }
-
-  return reader;
+  return std::make_unique<FileLineReaderA>(path);
+} catch (const std::runtime_error &e) {
+  LogError(e);
+  return nullptr;
 }
 
-TLineReader *
+std::unique_ptr<TLineReader>
 OpenConfiguredTextFile(const char *profile_key, Charset cs)
 {
   assert(profile_key != nullptr);
 
-  TCHAR path[MAX_PATH];
-  if (!Profile::GetPath(profile_key, path))
+  auto reader = OpenConfiguredTextFileA(profile_key);
+  if (!reader)
     return nullptr;
 
-  FileLineReader *reader = new FileLineReader(path, cs);
-  if (reader == nullptr)
-    return nullptr;
-
-  if (reader->error()) {
-    delete reader;
-    return nullptr;
-  }
-
-  return reader;
+  return std::make_unique<ConvertLineReader>(std::move(reader), cs);
 }
 
-static TLineReader *
-OpenMapTextFile(const TCHAR *in_map_file, Charset cs)
+static std::unique_ptr<NLineReader>
+OpenMapTextFileA(const char *in_map_file)
+try {
+  assert(in_map_file != nullptr);
+
+  auto archive = OpenMapFile();
+  if (!archive)
+    return nullptr;
+
+  return std::make_unique<ZipLineReaderA>(archive->get(), in_map_file);
+} catch (const std::runtime_error &e) {
+  LogError(e);
+  return nullptr;
+}
+
+static std::unique_ptr<TLineReader>
+OpenMapTextFile(const char *in_map_file, Charset cs)
 {
   assert(in_map_file != nullptr);
 
-  TCHAR path[MAX_PATH];
-  if (!Profile::GetPath(ProfileKeys::MapFile, path))
+  auto reader = OpenMapTextFileA(in_map_file);
+  if (!reader)
     return nullptr;
 
-  _tcscat(path, _T("/"));
-  _tcscat(path, in_map_file);
-
-  ZipLineReader *reader = new ZipLineReader(path, cs);
-  if (reader == nullptr)
-    return nullptr;
-
-  if (reader->error()) {
-    delete reader;
-    return nullptr;
-  }
-
-  return reader;
+  return std::make_unique<ConvertLineReader>(std::move(reader), cs);
 }
 
-TLineReader *
-OpenConfiguredTextFile(const char *profile_key, const TCHAR *in_map_file,
+std::unique_ptr<TLineReader>
+OpenConfiguredTextFile(const char *profile_key, const char *in_map_file,
                        Charset cs)
 {
   assert(profile_key != nullptr);
   assert(in_map_file != nullptr);
 
-  TLineReader *reader = OpenConfiguredTextFile(profile_key, cs);
-  if (reader == nullptr)
+  auto reader = OpenConfiguredTextFile(profile_key, cs);
+  if (!reader)
     reader = OpenMapTextFile(in_map_file, cs);
 
   return reader;

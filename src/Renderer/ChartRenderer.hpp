@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,8 +25,8 @@ Copyright_License {
 #define XCSOAR_CHART_RENDERER_HPP
 
 #include "Util/ReusableArray.hpp"
-#include "Math/fixed.hpp"
 #include "Screen/Point.hpp"
+#include "Screen/BulkPoint.hpp"
 #include "Look/ChartLook.hpp"
 #include "Language/Language.hpp"
 #include "Compiler.h"
@@ -34,6 +34,7 @@ Copyright_License {
 #include <tchar.h>
 #include <vector>
 
+class XYDataStore;
 class LeastSquares;
 class Canvas;
 class Brush;
@@ -45,59 +46,70 @@ class ChartRenderer
 
   Canvas &canvas;
   PixelRect rc;
+  PixelRect rc_chart;
+  int minor_tick_size;
 
-  ReusableArray<RasterPoint> point_buffer;
+  ReusableArray<BulkPixelPoint> point_buffer;
 
   struct Axis {
-    fixed scale, min, max;
+    double scale, min, max;
     bool unscaled;
 
     void Reset();
 
-    int ToScreen(fixed value) const;
+    int ToScreen(double value) const;
   } x, y;
 
+  void SetPadding(bool do_pad);
+
 public:
-  int padding_left;
-  int padding_bottom;
+  int padding_text;
+  const PixelRect GetChartRect() const {
+    return rc_chart;
+  }
+
+  enum UnitFormat {
+    NONE,
+    NUMERIC,
+    TIME
+  };
 
 public:
   ChartRenderer(const ChartLook &look, Canvas &the_canvas,
-                const PixelRect the_rc);
+                const PixelRect the_rc,
+                const bool has_padding=true);
 
-  void DrawBarChart(const LeastSquares &lsdata);
-  void DrawFilledLineGraph(const LeastSquares &lsdata);
-  void DrawLineGraph(const LeastSquares &lsdata, const Pen &pen);
-  void DrawLineGraph(const LeastSquares &lsdata, ChartLook::Style style);
+  void DrawBarChart(const XYDataStore &lsdata);
+  void DrawFilledLineGraph(const XYDataStore &lsdata, bool swap=false);
+  void DrawLineGraph(const XYDataStore &lsdata, const Pen &pen, bool swap=false);
+  void DrawLineGraph(const XYDataStore &lsdata, ChartLook::Style style, bool swap=false);
   void DrawTrend(const LeastSquares &lsdata, ChartLook::Style style);
   void DrawTrendN(const LeastSquares &lsdata, ChartLook::Style style);
-  void DrawLine(const fixed xmin, const fixed ymin,
-                const fixed xmax, const fixed ymax, const Pen &pen);
-  void DrawLine(const fixed xmin, const fixed ymin,
-                const fixed xmax, const fixed ymax, ChartLook::Style style);
-  void DrawFilledLine(const fixed xmin, const fixed ymin,
-                      const fixed xmax, const fixed ymax,
+  void DrawLine(double xmin, double ymin,
+                double xmax, double ymax, const Pen &pen);
+  void DrawLine(double xmin, double ymin,
+                double xmax, double ymax, ChartLook::Style style);
+  void DrawFilledLine(double xmin, double ymin,
+                      double xmax, double ymax,
                       const Brush &brush);
-  void DrawFilledY(const std::vector< std::pair<fixed, fixed> > &vals, const Brush &brush,
+  void DrawFilledY(const std::vector<std::pair<double, double>> &vals, const Brush &brush,
                    const Pen *pen=nullptr);
-  void DrawDot(const fixed x, const fixed y, const unsigned width);
+  void DrawDot(double x, double y, const unsigned width);
+  void DrawImpulseGraph(const XYDataStore &lsdata, const Pen &pen);
+  void DrawImpulseGraph(const XYDataStore &lsdata, ChartLook::Style style);
+  void DrawWeightBarGraph(const XYDataStore &lsdata);
 
   void ScaleYFromData(const LeastSquares &lsdata);
   void ScaleXFromData(const LeastSquares &lsdata);
-  void ScaleYFromValue(const fixed val);
-  void ScaleXFromValue(const fixed val);
+  void ScaleYFromValue(double val);
+  void ScaleXFromValue(double val);
 
   void ResetScale();
 
-  static void FormatTicText(TCHAR *text, const fixed val, const fixed step);
-  void DrawXGrid(fixed tic_step, const Pen &pen,
-                 fixed unit_step, bool draw_units = false);
-  void DrawXGrid(const fixed tic_step, ChartLook::Style style,
-                 const fixed unit_step, bool draw_units = false);
-  void DrawYGrid(fixed tic_step, const Pen &pen,
-                 fixed unit_step, bool draw_units = false);
-  void DrawYGrid(const fixed tic_step, ChartLook::Style style,
-                 const fixed unit_step, bool draw_units = false);
+  static void FormatTicText(TCHAR *text, double val, double step, UnitFormat units);
+
+  void DrawXGrid(double tic_step, double unit_step, UnitFormat units = UnitFormat::NONE);
+  void DrawYGrid(double tic_step, double unit_step, UnitFormat units = UnitFormat::NONE);
 
   void DrawXLabel(const TCHAR *text);
   void DrawXLabel(const TCHAR *text, const TCHAR *unit);
@@ -105,23 +117,26 @@ public:
   void DrawYLabel(const TCHAR *text);
   void DrawYLabel(const TCHAR *text, const TCHAR *unit);
 
-  void DrawLabel(const TCHAR *text, const fixed xv, const fixed yv);
+  void DrawLabel(const TCHAR *text, double xv, double yv);
   void DrawNoData(const TCHAR *text = _("No data"));
 
-  fixed GetYMin() const { return y.min; }
-  fixed GetYMax() const { return y.max; }
-  fixed GetXMin() const { return x.min; }
-  fixed GetXMax() const { return x.max; }
+  void DrawBlankRectangle(double x_min, double y_min,
+                          double x_max, double y_max);
+
+  double GetYMin() const { return y.min; }
+  double GetYMax() const { return y.max; }
+  double GetXMin() const { return x.min; }
+  double GetXMax() const { return x.max; }
 
   gcc_pure
-  int ScreenX(fixed x) const;
+  int ScreenX(double x) const;
 
   gcc_pure
-  int ScreenY(fixed y) const;
+  int ScreenY(double y) const;
 
   gcc_pure
-  RasterPoint ToScreen(fixed x, fixed y) const {
-    return RasterPoint{ ScreenX(x), ScreenY(y) };
+  PixelPoint ToScreen(double x, double y) const {
+    return PixelPoint{ ScreenX(x), ScreenY(y) };
   }
 
   Canvas& GetCanvas() { return canvas; }

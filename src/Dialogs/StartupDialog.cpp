@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #include "StartupDialog.hpp"
+#include "Error.hpp"
 #include "ProfilePasswordDialog.hpp"
 #include "ProfileListDialog.hpp"
-#include "Message.hpp"
 #include "WidgetDialog.hpp"
 #include "Widget/TwoWidgets.hpp"
 #include "Widget/RowFormWidget.hpp"
@@ -39,13 +39,8 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Gauge/LogoView.hpp"
 #include "LogFile.hpp"
-#include "Util/StringUtil.hpp"
 #include "LocalPath.hpp"
-#include "OS/PathName.hpp"
 #include "OS/FileUtil.hpp"
-#include "Compiler.h"
-
-#include <windef.h> /* for MAX_PATH */
 
 class LogoWindow final : public PaintWindow {
   LogoView logo;
@@ -154,10 +149,10 @@ SelectProfileCallback(const TCHAR *caption, DataField &_df,
   FileDataField &df = (FileDataField &)_df;
 
   const auto path = SelectProfileDialog(df.GetPathFile());
-  if (path.empty())
+  if (path.IsNull())
     return false;
 
-  df.ForceModify(path.c_str());
+  df.ForceModify(path);
   return true;
 }
 
@@ -172,22 +167,22 @@ StartupWidget::Prepare(ContainerWindow &parent,
 }
 
 static bool
-SelectProfile(const TCHAR *path)
+SelectProfile(Path path)
 {
-  if (StringIsEmpty(path))
-    return true;
-
-  if (!CheckProfilePasswordResult(CheckProfileFilePassword(path)))
+  try {
+    if (!CheckProfilePasswordResult(CheckProfileFilePassword(path)))
+      return false;
+  } catch (const std::runtime_error &e) {
+    ShowError(e, _("Password"));
     return false;
+  }
 
   Profile::SetFiles(path);
 
-  if (RelativePath(path) == nullptr) {
+  if (RelativePath(path) == nullptr)
     /* When a profile from a secondary data path is used, this path
        becomes the primary data path */
-    TCHAR temp[MAX_PATH];
-    SetPrimaryDataPath(DirName(path, temp));
-  }
+    SetPrimaryDataPath(path.GetParent());
 
   File::Touch(path);
   return true;
@@ -214,14 +209,18 @@ dlgStartupShowModal()
   auto *dff = new FileDataField();
   dff->ScanDirectoryTop(_T("*.prf"));
 
-  /* skip this dialog if there is only one (or none) */
-  if (dff->GetNumFiles() <= 1) {
-    const TCHAR *path = dff->GetPathFile();
-    if (!ProfileFileHasPassword(path)) {
-      SelectProfile(path);
+  if (dff->GetNumFiles() == 1) {
+    /* skip this dialog if there is only one */
+    const auto path = dff->GetPathFile();
+    if (ProfileFileHasPassword(path) == TriState::FALSE &&
+        SelectProfile(path)) {
       delete dff;
       return true;
     }
+  } else if (dff->GetNumFiles() == 0) {
+    /* no profile exists yet: create default profile */
+    Profile::SetFiles(nullptr);
+    return true;
   }
 
   /* preselect the most recently used profile */
@@ -230,7 +229,7 @@ dlgStartupShowModal()
   unsigned length = dff->size();
 
   for (unsigned i = 0; i < length; ++i) {
-    const TCHAR *path = dff->GetItem(i);
+    const auto path = dff->GetItem(i);
     uint64_t timestamp = File::GetLastModification(path);
     if (timestamp > best_timestamp) {
       best_timestamp = timestamp;

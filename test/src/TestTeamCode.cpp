@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,6 +22,7 @@
 
 #include "TeamCode/TeamCode.hpp"
 #include "TestUtil.hpp"
+#include "Math/Util.hpp"
 #include "Util/StringUtil.hpp"
 
 int main(int argc, char **argv)
@@ -30,26 +31,26 @@ int main(int argc, char **argv)
 
   TeamCode tc;
 
-  tc.Update(Angle::Degrees(90), fixed(5000));
+  tc.Update(Angle::Degrees(90), 5000);
 
   ok1(StringIsEqual(tc.GetCode(), _T("901E")));
   ok1(iround(tc.GetBearing().Degrees()) == 90);
-  ok1(equals(tc.GetRange(), fixed(5000)));
+  ok1(equals(tc.GetRange(), 5000));
 
-  tc.Update(Angle::Degrees(359), fixed(25000));
+  tc.Update(Angle::Degrees(359), 25000);
   ok1(StringIsEqual(tc.GetCode(), _T("ZW6Y")));
   ok1(iround(tc.GetBearing().Degrees()) == 359);
-  ok1(equals(tc.GetRange(), fixed(25000)));
+  ok1(equals(tc.GetRange(), 25000));
 
-  tc.Update(Angle::Degrees(180), fixed(800000));
+  tc.Update(Angle::Degrees(180), 800000);
   ok1(StringIsEqual(tc.GetCode(), _T("I0668")));
   ok1(iround(tc.GetBearing().Degrees()) == 180);
-  ok1(equals(tc.GetRange(), fixed(800000)));
+  ok1(equals(tc.GetRange(), 800000));
 
-  tc.Update(Angle::Degrees(270), fixed(100));
+  tc.Update(Angle::Degrees(270), 100);
   ok1(StringIsEqual(tc.GetCode(), _T("R01")));
   ok1(iround(tc.GetBearing().Degrees()) == 270);
-  ok1(equals(tc.GetRange(), fixed(100)));
+  ok1(equals(tc.GetRange(), 100));
 
   return exit_status();
 }

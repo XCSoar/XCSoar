@@ -2,14 +2,13 @@
 #define AIRSPACE_SORTER_HPP
 
 #include "Geo/GeoVector.hpp"
-#include "Geo/GeoPoint.hpp"
 #include "Airspace/AirspaceClass.hpp"
-#include "Predicate/AirspacePredicate.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>
 #include <vector>
 
+struct GeoPoint;
 class AbstractAirspace;
 class Airspaces;
 class FlatProjection;
@@ -63,13 +62,13 @@ struct AirspaceFilterData {
    * Show only airspaces less than this number of meters from the
    * aircraft.  A negative value disables this filter.
    */
-  fixed distance;
+  double distance;
 
   void Clear() {
     cls = AirspaceClass::AIRSPACECLASSCOUNT;
     name_prefix = nullptr;
-    direction = Angle::Native(fixed(-1));
-    distance = fixed(-1);
+    direction = Angle::Native(-1);
+    distance = -1;
   }
 
   gcc_pure

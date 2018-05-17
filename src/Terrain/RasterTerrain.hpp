@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,9 +27,9 @@ Copyright_License {
 #include "RasterMap.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Thread/Guard.hpp"
+#include "OS/Path.hpp"
+#include "IO/ZipArchive.hpp"
 #include "Compiler.h"
-
-#include <tchar.h>
 
 class FileCache;
 class OperationEnvironment;
@@ -44,19 +44,19 @@ public:
   friend class ProtectedTaskManager; // for intersection
   friend class WaypointVisitorMap; // for intersection rendering
 
-  /** invalid value for terrain */
-  static constexpr short TERRAIN_INVALID = RasterBuffer::TERRAIN_INVALID;
+private:
+  ZipArchive archive;
 
-protected:
   RasterMap map;
 
-public:
+private:
   /**
    * Constructor.  Returns uninitialised object.
    */
-  RasterTerrain(const TCHAR *path)
-    :Guard<RasterMap>(map), map(path) {}
+  explicit RasterTerrain(ZipArchive &&_archive)
+    :Guard<RasterMap>(map), archive(std::move(_archive)) {}
 
+public:
   const Serial &GetSerial() const {
     return map.GetSerial();
   }
@@ -68,43 +68,30 @@ public:
                                     OperationEnvironment &operation);
 
   gcc_pure
-  short GetTerrainHeight(const GeoPoint location) const {
+  TerrainHeight GetTerrainHeight(const GeoPoint location) const {
     Lease lease(*this);
     return lease->GetHeight(location);
-  }
-
-  /**
-   * Wrapper for GetTerrainHeight() that replaces "special" values
-   * with 0.  This is used when we need some "valid" value (and not
-   * some "magic" special value).  Sometimes, 0 is the best we can do.
-   *
-   * Use this function with care.  "0" is just a random value like any
-   * other.  Don't use it for calculations where the altitude matters
-   * (e.g. glide path calculations).
-   */
-  gcc_pure
-  short GetTerrainHeightOr0(const GeoPoint location) const {
-    short h = GetTerrainHeight(location);
-    if (RasterBuffer::IsSpecial(h))
-      /* apply fallback */
-      h = 0;
-    return h;
   }
 
   GeoPoint GetTerrainCenter() const {
     return map.GetMapCenter();
   }
 
-private:
-  bool LoadCache(FileCache &cache, const TCHAR *path);
+  /**
+   * @return true if the method shall be called again
+   */
+  bool UpdateTiles(const GeoPoint &location, double radius);
 
-  bool LoadCache(FileCache *cache, const TCHAR *path) {
+private:
+  bool LoadCache(FileCache &cache, Path path);
+
+  bool LoadCache(FileCache *cache, Path path) {
     return cache != nullptr && LoadCache(*cache, path);
   }
 
-  bool SaveCache(FileCache &cache, const TCHAR *path) const;
+  bool SaveCache(FileCache &cache, Path path) const;
 
-  bool Load(const TCHAR *path, const TCHAR *world_file, FileCache *cache,
+  bool Load(Path path, FileCache *cache,
             OperationEnvironment &operation);
 };
 

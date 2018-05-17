@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Widget.hpp"
 #include "Form/ActionListener.hpp"
-#include "Math/fixed.hpp"
 
 #include <tchar.h>
 
@@ -40,12 +39,12 @@ class Button;
 class OffsetButtonsWidget : public NullWidget, private ActionListener {
   const ButtonLook &look;
   const TCHAR *const format;
-  const fixed offsets[4];
+  const double offsets[4];
   Button *buttons[4];
 
 public:
   OffsetButtonsWidget(const ButtonLook &_look, const TCHAR *_format,
-                      fixed small_offset, fixed large_offset)
+                      double small_offset, double large_offset)
     :look(_look), format(_format),
      offsets{-large_offset, -small_offset, small_offset, large_offset} {}
 
@@ -61,7 +60,7 @@ public:
   bool SetFocus() override;
 
 protected:
-  virtual void OnOffset(fixed offset) = 0;
+  virtual void OnOffset(double offset) = 0;
 
 private:
   /* virtual methods from ActionListener */

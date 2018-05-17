@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,23 +28,21 @@
 #include "Language/Language.hpp"
 #include "Device/Descriptor.hpp"
 #include "Device/MultipleDevices.hpp"
-#include "Device/Driver.hpp"
 #include "Device/RecordedFlight.hpp"
 #include "Components.hpp"
 #include "LocalPath.hpp"
+#include "LogFile.hpp"
 #include "UIGlobals.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Dialogs/JobDialog.hpp"
 #include "Job/TriStateJob.hpp"
-#include "OS/FileUtil.hpp"
+#include "OS/Path.hpp"
 #include "IO/FileLineReader.hpp"
+#include "IO/FileTransaction.hpp"
 #include "IGC/IGCParser.hpp"
 #include "IGC/IGCHeader.hpp"
 #include "Formatter/IGCFilenameFormatter.hpp"
 #include "Time/BrokenDate.hpp"
-#include "Util/StringUtil.hpp"
-
-#include <windef.h> /* for MAX_PATH */
 
 class DeclareJob {
   DeviceDescriptor &device;
@@ -66,11 +64,14 @@ public:
 static TriStateJobResult
 DoDeviceDeclare(DeviceDescriptor &device, const Declaration &declaration,
                 const Waypoint *home)
-{
+try {
   TriStateJob<DeclareJob> job(device, declaration, home);
   JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
             _T(""), job, true);
   return job.GetResult();
+} catch (const std::runtime_error &e) {
+  LogError(e);
+  return TriStateJobResult::ERROR;
 }
 
 static bool
@@ -147,21 +148,24 @@ public:
 
 static TriStateJobResult
 DoReadFlightList(DeviceDescriptor &device, RecordedFlightList &flight_list)
-{
+try {
   TriStateJob<ReadFlightListJob> job(device, flight_list);
   JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
             _T(""), job, true);
   return job.GetResult();
+} catch (const std::runtime_error &e) {
+  LogError(e);
+  return TriStateJobResult::ERROR;
 }
 
 class DownloadFlightJob {
   DeviceDescriptor &device;
   const RecordedFlightInfo &flight;
-  const TCHAR *path;
+  const Path path;
 
 public:
   DownloadFlightJob(DeviceDescriptor &_device,
-                    const RecordedFlightInfo &_flight, const TCHAR *_path)
+                    const RecordedFlightInfo &_flight, const Path _path)
     :device(_device), flight(_flight), path(_path) {}
 
   bool Run(OperationEnvironment &env) {
@@ -171,26 +175,25 @@ public:
 
 static TriStateJobResult
 DoDownloadFlight(DeviceDescriptor &device,
-                 const RecordedFlightInfo &flight, const TCHAR *path)
-{
+                 const RecordedFlightInfo &flight, Path path)
+try {
   TriStateJob<DownloadFlightJob> job(device, flight, path);
   JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
             _T(""), job, true);
   return job.GetResult();
+} catch (const std::runtime_error &e) {
+  LogError(e);
+  return TriStateJobResult::ERROR;
 }
 
 static void
-ReadIGCMetaData(const TCHAR *path, IGCHeader &header, BrokenDate &date)
-{
+ReadIGCMetaData(Path path, IGCHeader &header, BrokenDate &date)
+try {
   strcpy(header.manufacturer, "XXX");
   strcpy(header.id, "000");
   header.flight = 0;
 
   FileLineReaderA reader(path);
-  if (reader.error()) {
-    date = BrokenDate::TodayUTC();
-    return;
-  }
 
   char *line = reader.ReadLine();
   if (line != nullptr)
@@ -199,6 +202,8 @@ ReadIGCMetaData(const TCHAR *path, IGCHeader &header, BrokenDate &date)
   line = reader.ReadLine();
   if (line == nullptr || !IGCParseDateRecord(line, date))
     date = BrokenDate::TodayUTC();
+} catch (const std::runtime_error &e) {
+  date = BrokenDate::TodayUTC();
 }
 
 /**
@@ -277,11 +282,7 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     return;
   }
 
-  {
-    TCHAR path[MAX_PATH];
-    LocalPath(path, _T("logs"));
-    Directory::Create(path);
-  }
+  const auto logs_path = MakeLocalPath(_T("logs"));
 
   while (true) {
     // Show list of the flights
@@ -290,25 +291,18 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
       break;
 
     // Download chosen IGC file into temporary file
-    TCHAR path[MAX_PATH];
-    LocalPath(path, _T("logs"));
-    Directory::Create(path);
-
-    LocalPath(path, _T("logs"), _T("temp.igc"));
-    switch (DoDownloadFlight(device, *flight, path)) {
+    FileTransaction transaction(AllocatedPath::Build(logs_path,
+                                                     _T("temp.igc")));
+    switch (DoDownloadFlight(device, *flight, transaction.GetTemporaryPath())) {
     case TriStateJobResult::SUCCESS:
       break;
 
     case TriStateJobResult::ERROR:
-      // Delete temporary file
-      File::Delete(path);
       ShowMessageBox(_("Failed to download flight."),
                   _("Download flight"), MB_OK | MB_ICONERROR);
       continue;
 
     case TriStateJobResult::CANCELLED:
-      // Delete temporary file
-      File::Delete(path);
       continue;
     }
 
@@ -316,7 +310,7 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
 
     IGCHeader header;
     BrokenDate date;
-    ReadIGCMetaData(path, header, date);
+    ReadIGCMetaData(transaction.GetTemporaryPath(), header, date);
     if (header.flight == 0)
       header.flight = GetFlightNumber(flight_list, *flight);
 
@@ -324,15 +318,8 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     FormatIGCFilenameLong(name, date, header.manufacturer, header.id,
                           header.flight);
 
-    TCHAR final_path[MAX_PATH];
-    LocalPath(final_path, _T("logs"), name);
-
-    // Remove a file with the same name if it exists
-    if (File::Exists(final_path))
-      File::Delete(final_path);
-
-    // Rename the temporary file to the actual filename
-    File::Rename(path, final_path);
+    transaction.SetPath(AllocatedPath::Build(logs_path, name));
+    transaction.Commit();
 
     if (ShowMessageBox(_("Do you want to download another flight?"),
                     _("Download flight"), MB_YESNO | MB_ICONQUESTION) != IDYES)

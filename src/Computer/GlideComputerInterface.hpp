@@ -2,7 +2,6 @@
 #define GLIDE_COMPUTER_INTERFACE_HPP
 
 #include "Task/TaskEvents.hpp"
-#include "Compiler.h"
 
 class GlideComputer;
 

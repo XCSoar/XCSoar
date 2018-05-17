@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,13 +29,10 @@ Copyright_License {
 #include "Startup.hpp"
 #include "LocalPath.hpp"
 #include "Version.hpp"
-#include "Protection.hpp"
-#include "Components.hpp"
 #include "LogFile.hpp"
 #include "CommandLine.hpp"
 #include "MainWindow.hpp"
 #include "Interface.hpp"
-#include "Compiler.h"
 #include "Look/GlobalFonts.hpp"
 #include "Screen/Init.hpp"
 #include "Net/HTTP/Init.hpp"
@@ -44,8 +41,11 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Language/LanguageGlue.hpp"
 #include "Simulator.hpp"
+#include "Audio/GlobalPCMMixer.hpp"
+#include "Audio/GlobalPCMResourcePlayer.hpp"
+#include "Audio/GlobalVolumeController.hpp"
 #include "OS/Args.hpp"
-#include "IO/Async/GlobalIOThread.hpp"
+#include "IO/Async/GlobalAsioThread.hpp"
 
 #ifndef NDEBUG
 #include "Thread/Thread.hpp"
@@ -73,13 +73,11 @@ static const char *const Usage = "\n"
   "  -fly            bypass startup-screen, use fly mode directly\n"
 #endif
   "  -profile=fname  load profile from file fname\n"
-#if !defined(_WIN32_WCE)
   "  -WIDTHxHEIGHT   use screen resolution WIDTH x HEIGHT\n"
   "  -portrait       use a 480x640 screen resolution\n"
   "  -square         use a 480x480 screen resolution\n"
   "  -small          use a 320x240 screen resolution\n"
-#endif
-#if !defined(ANDROID) && !defined(_WIN32_WCE)
+#if !defined(ANDROID)
   "  -dpi=DPI        force usage of DPI for pixel density\n"
   "  -dpi=XDPIxYDPI  force usage of XDPI and YDPI for pixel density\n"
 #endif
@@ -89,10 +87,51 @@ static const char *const Usage = "\n"
 #ifdef HAVE_CMDLINE_RESIZABLE
   "  -resizable      resizable window\n"
 #endif
-#if defined(_WIN32) && !defined(_WIN32_WCE)&& !defined(__WINE__)
+#ifdef WIN32
   "  -console        open debug output console\n"
 #endif
   ;
+
+static int
+Main()
+{
+  ScreenGlobalInit screen_init;
+
+#if defined(__APPLE__) && !TARGET_OS_IPHONE
+  // We do not want the ugly non-localized main menu which SDL creates
+  [NSApp setMainMenu: [[NSMenu alloc] init]];
+#endif
+
+#ifdef WIN32
+  /* try to make the UI most responsive */
+  SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL);
+#endif
+
+  AllowLanguage();
+  InitLanguage();
+
+  ScopeGlobalAsioThread global_asio_thread;
+
+  ScopeGlobalPCMMixer global_pcm_mixer;
+  ScopeGlobalPCMResourcePlayer global_pcm_resouce_player;
+  ScopeGlobalVolumeController global_volume_controller;
+
+  // Perform application initialization and run loop
+  int ret = EXIT_FAILURE;
+  if (Startup())
+    ret = CommonInterface::main_window->RunEventLoop();
+
+  Shutdown();
+
+  DisallowLanguage();
+
+  Fonts::Deinitialize();
+
+  DeinitialiseDataPath();
+  Net::Deinitialise();
+
+  return ret;
+}
 
 /**
  * Main entry point for the whole XCSoar application
@@ -102,11 +141,7 @@ int main(int argc, char **argv)
 #else
 int WINAPI
 WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-#ifdef _WIN32_WCE
-        gcc_unused LPWSTR lpCmdLine,
-#else
         gcc_unused LPSTR lpCmdLine2,
-#endif
         int nCmdShow)
 #endif
 {
@@ -132,38 +167,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     CommandLine::Parse(args);
   }
 
-  ScreenGlobalInit screen_init;
-
-#if defined(__APPLE__) && !TARGET_OS_IPHONE
-  // We do not want the ugly non-localized main menu which SDL creates
-  [NSApp setMainMenu: [[NSMenu alloc] init]];
-#endif
-
-#ifdef WIN32
-  /* try to make the UI most responsive */
-  SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL);
-#endif
-
-  AllowLanguage();
-  InitLanguage();
-
-  InitialiseIOThread();
-
-  // Perform application initialization and run loop
-  int ret = EXIT_FAILURE;
-  if (Startup())
-    ret = CommonInterface::main_window->RunEventLoop();
-
-  Shutdown();
-
-  DeinitialiseIOThread();
-
-  DisallowLanguage();
-
-  Fonts::Deinitialize();
-
-  DeinitialiseDataPath();
-  Net::Deinitialise();
+  int ret = Main();
 
   assert(!ExistsAnyThread());
 

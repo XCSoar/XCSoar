@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -35,8 +35,6 @@ Copyright_License {
 #include <signal.h>
 #endif
 
-#include "LogFile.hpp"
-
 #ifndef NDEBUG
 #include "FastMutex.hpp"
 static FastMutex all_threads_mutex;
@@ -66,7 +64,17 @@ Thread::Start()
   creating = true;
 #endif
 
+#if defined(__GLIBC__) || defined(__BIONIC__) || defined(__APPLE__)
   defined = pthread_create(&handle, nullptr, ThreadProc, this) == 0;
+#else
+  /* In other libc implementations, the default stack size for created threads
+     might not be large enough (e. g. 80 KB on musl libc).
+     640 KB ought to be enough for anybody. */
+  pthread_attr_t attr;
+  defined = (pthread_attr_init(&attr) == 0) &&
+            (pthread_attr_setstacksize(&attr, 640 * 1024) == 0) &&
+            (pthread_create(&handle, &attr, ThreadProc, this) == 0);
+#endif
 
 #ifndef NDEBUG
   creating = false;
@@ -81,9 +89,9 @@ Thread::Start()
 
 #ifndef NDEBUG
   if (success) {
-    all_threads_mutex.Lock();
+    all_threads_mutex.lock();
     all_threads.push_back(*this);
-    all_threads_mutex.Unlock();
+    all_threads_mutex.unlock();
   }
 #endif
 
@@ -106,9 +114,9 @@ Thread::Join()
 #endif
 
 #ifndef NDEBUG
-  all_threads_mutex.Lock();
+  all_threads_mutex.lock();
   all_threads.erase(all_threads.iterator_to(*this));
-  all_threads_mutex.Unlock();
+  all_threads_mutex.unlock();
 #endif
 }
 
@@ -126,9 +134,9 @@ Thread::Join(unsigned timeout_ms)
 
 #ifndef NDEBUG
     {
-      all_threads_mutex.Lock();
+      all_threads_mutex.lock();
       all_threads.erase(all_threads.iterator_to(*this));
-      all_threads_mutex.Unlock();
+      all_threads_mutex.unlock();
     }
 #endif
   }
@@ -182,9 +190,9 @@ Thread::ThreadProc(LPVOID lpParameter)
 bool
 ExistsAnyThread()
 {
-  all_threads_mutex.Lock();
+  all_threads_mutex.lock();
   bool result = !all_threads.empty();
-  all_threads_mutex.Unlock();
+  all_threads_mutex.unlock();
   return result;
 }
 

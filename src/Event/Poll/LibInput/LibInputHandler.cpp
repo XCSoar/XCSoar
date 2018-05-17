@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -42,7 +42,7 @@ LibInputHandler::Open()
   if ((nullptr != udev_context)
       || (nullptr != li_if)
       || (nullptr != li)
-      || fd.IsDefined())
+      || fd.is_open())
     return false;
 
   if (nullptr == udev_context) {
@@ -71,20 +71,21 @@ LibInputHandler::Open()
   if (0 != assign_seat_ret)
     return false;
 
-  fd.Set(libinput_get_fd(li));
-  if (!fd.IsDefined())
+  int _fd = libinput_get_fd(li);
+  if (_fd < 0)
     return false;
-  io_loop.Add(fd, io_loop.READ, *this);
 
+  fd.assign(_fd);
+  AsyncRead();
   return true;
 }
 
 void
 LibInputHandler::Close()
 {
-  if (fd.IsDefined()) {
-    io_loop.Remove(fd);
-    fd.SetUndefined();
+  if (fd.is_open()) {
+    fd.cancel();
+    fd.release();
   }
 
   if (nullptr != li)
@@ -151,10 +152,12 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event)
       uint32_t key_code = libinput_event_keyboard_get_key(kb_li_event);
       libinput_key_state key_state =
         libinput_event_keyboard_get_key_state(kb_li_event);
-      queue.Push(Event(key_state == LIBINPUT_KEY_STATE_PRESSED
-                       ? Event::KEY_DOWN
-                       : Event::KEY_UP,
-                       TranslateKeyCode(key_code)));
+      bool is_char;
+      Event e(key_state == LIBINPUT_KEY_STATE_PRESSED
+                  ? Event::KEY_DOWN : Event::KEY_UP,
+              TranslateKeyCode(key_code, is_char));
+      e.is_char = is_char;
+      queue.Push(e);
     }
     break;
   case LIBINPUT_EVENT_POINTER_MOTION:
@@ -169,7 +172,8 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event)
       x = Clamp<double>(x, 0, width);
       y += libinput_event_pointer_get_dy(ptr_li_event);
       y = Clamp<double>(y, 0, height);
-      queue.Push(Event(Event::MOUSE_MOTION, (unsigned) x, (unsigned) y));
+      queue.Push(Event(Event::MOUSE_MOTION,
+                       PixelPoint((unsigned)x, (unsigned)y)));
     }
     break;
   case LIBINPUT_EVENT_POINTER_MOTION_ABSOLUTE:
@@ -180,7 +184,8 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event)
                                                             width);
       y = libinput_event_pointer_get_absolute_y_transformed(ptr_li_event,
                                                             height);
-      queue.Push(Event(Event::MOUSE_MOTION, (unsigned) x, (unsigned) y));
+      queue.Push(Event(Event::MOUSE_MOTION,
+                       PixelPoint((unsigned)x, (unsigned)y)));
     }
     break;
   case LIBINPUT_EVENT_POINTER_BUTTON:
@@ -192,7 +197,7 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event)
       queue.Push(Event(btn_state == LIBINPUT_BUTTON_STATE_PRESSED
                        ? Event::MOUSE_DOWN
                        : Event::MOUSE_UP,
-                       (unsigned) x, (unsigned) y));
+                       PixelPoint((unsigned)x, (unsigned)y)));
     }
     break;
   case LIBINPUT_EVENT_POINTER_AXIS:
@@ -207,7 +212,8 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event)
           ptr_li_event, LIBINPUT_POINTER_AXIS_SCROLL_VERTICAL);
 #endif
       if (0 != axis_value) {
-        Event event(Event::MOUSE_WHEEL, (unsigned) x, (unsigned) y);
+        Event event(Event::MOUSE_WHEEL,
+                    PixelPoint((unsigned)x, (unsigned)y));
         event.param = unsigned((int) axis_value);
         queue.Push(event);
       }
@@ -219,12 +225,14 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event)
         libinput_event_get_touch_event(li_event);
       x = libinput_event_touch_get_x_transformed(touch_li_event, width);
       y = libinput_event_touch_get_y_transformed(touch_li_event, height);
-      queue.Push(Event(Event::MOUSE_DOWN, (unsigned) x, (unsigned) y));
+      queue.Push(Event(Event::MOUSE_DOWN,
+                       PixelPoint((unsigned)x, (unsigned)y)));
     }
     break;
   case LIBINPUT_EVENT_TOUCH_UP:
     {
-      queue.Push(Event(Event::MOUSE_UP, (unsigned) x, (unsigned) y));
+      queue.Push(Event(Event::MOUSE_UP,
+                       PixelPoint((unsigned)x, (unsigned)y)));
     }
     break;
   case LIBINPUT_EVENT_TOUCH_MOTION:
@@ -233,7 +241,8 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event)
         libinput_event_get_touch_event(li_event);
       x = libinput_event_touch_get_x_transformed(touch_li_event, width);
       y = libinput_event_touch_get_y_transformed(touch_li_event, height);
-      queue.Push(Event(Event::MOUSE_MOTION, (unsigned) x, (unsigned) y));
+      queue.Push(Event(Event::MOUSE_MOTION,
+                       PixelPoint((unsigned)x, (unsigned)y)));
     }
     break;
   }
@@ -249,10 +258,12 @@ LibInputHandler::HandlePendingEvents()
     HandleEvent(li_event);
 }
 
-bool
-LibInputHandler::OnFileEvent(FileDescriptor fd, unsigned mask)
+void
+LibInputHandler::OnReadReady(const boost::system::error_code &ec)
 {
-  HandlePendingEvents();
+  if (ec)
+    return;
 
-  return true;
+  HandlePendingEvents();
+  AsyncRead();
 }

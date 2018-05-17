@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -44,7 +44,7 @@ public:
 private:
   void Scissor(PixelRect rc) {
     OpenGL::ToViewport(rc);
-    ::glScissor(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+    ::glScissor(rc.left, rc.top, rc.GetWidth(), rc.GetHeight());
   }
 };
 
@@ -60,7 +60,7 @@ public:
   explicit GLCanvasScissor(PixelRect rc)
     :GLScissor(OpenGL::translate.x + rc.left,
                OpenGL::viewport_size.y - OpenGL::translate.y - rc.bottom,
-               rc.right - rc.top, rc.bottom - rc.top) {}
+               rc.GetWidth(), rc.GetHeight()) {}
 };
 
 #endif

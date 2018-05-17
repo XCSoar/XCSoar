@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,22 +24,26 @@
 // Circle radius r at (0,0)
 
 #include "FlatEllipse.hpp"
+#include "FlatLine.hpp"
+#include "Math/Util.hpp"
 
 #include <algorithm>
+
+#include <assert.h>
 
 FlatEllipse::FlatEllipse(const FlatPoint &_f1, const FlatPoint &_f2,
                          const FlatPoint &_ap)
   :f1(_f1),f2(_f2),ap(_ap)
 {
   const FlatLine f12(f1, f2);
-  p = f12.ave();
-  theta = f12.angle();
-  const fixed csq = f12.dsq();
+  p = f12.GetMiddle();
+  theta = f12.GetAngle();
+  const auto csq = f12.GetSquaredDistance();
   a = (f1.Distance(ap) + f2.Distance(ap));
 
-  assert(sqr(a) >= csq);
-  b = Half(sqrt(sqr(a) - csq));
-  a = Half(a);
+  assert(Square(a) >= csq);
+  b = sqrt(Square(a) - csq) / 2;
+  a /= 2;
 
   // a.sin(t) = ap.x
   // b.cos(t) = ap.y
@@ -50,25 +54,13 @@ FlatEllipse::FlatEllipse(const FlatPoint &_f1, const FlatPoint &_f2,
   theta_initial = Angle::FromXY(op.x * b, op.y * a).AsDelta();
 }
 
-fixed
-FlatEllipse::ab() const
-{
-  return a / b;
-}
-
-fixed
-FlatEllipse::ba() const
-{
-  return b / a;
-}
-
 FlatPoint
-FlatEllipse::Parametric(const fixed t) const
+FlatEllipse::Parametric(const double t) const
 {
   const Angle at = (Angle::FullCircle() * t + theta_initial).AsDelta();
 
   const auto sc = at.SinCos();
-  fixed sat = sc.first, cat = sc.second;
+  double sat = sc.first, cat = sc.second;
 
   FlatPoint res(a * cat, b * sat);
   res.Rotate(theta);
@@ -77,18 +69,16 @@ FlatEllipse::Parametric(const fixed t) const
 }
 
 bool 
-
 FlatEllipse::Intersect(const FlatLine &line, FlatPoint &i1, FlatPoint &i2) const
 {
-  const fixed er = ab();
-  const fixed ier = ba();
-  FlatLine s_line = line;
+  const double er = ab();
+  const double ier = ba();
+  FlatLine s_line = line - p;
 
-  s_line.sub(p);
-  s_line.rotate(theta.Reciprocal());
-  s_line.mul_y(er);
+  s_line.Rotate(theta.Reciprocal());
+  s_line.MultiplyY(er);
 
-  if (s_line.intersect_czero(a, i1, i2)) {
+  if (s_line.IntersectOriginCircle(a, i1, i2)) {
     i1.MultiplyY(ier);
     i1.Rotate(theta);
     i1 += p;
@@ -109,12 +99,12 @@ FlatEllipse::IntersectExtended(const FlatPoint &pe, FlatPoint &i1,
 {
   const FlatLine l_f1p(f1, pe);
   const FlatLine l_pf2(pe, f2);
-  const Angle ang = l_f1p.angle();
+  const Angle ang = l_f1p.GetAngle();
 
-  const fixed d = l_pf2.d() + std::max(a, b); // max line length
+  const double d = l_pf2.GetDistance() + std::max(a, b); // max line length
 
   const auto sc = ang.SinCos();
-  fixed san = sc.first, can = sc.second;
+  double san = sc.first, can = sc.second;
 
   FlatLine e_l(pe, FlatPoint(pe.x + d * can, pe.y + d * san));
   // e_l is the line extended from p in direction of f1-p 
@@ -128,8 +118,8 @@ FlatEllipse::IntersectExtended(const FlatPoint &pe, FlatPoint &i1,
 // r1+r2 = 2.a
 // 
 
-// e = sqrt(1.0-sqr(b/a)) = c/a
-// .: c = a. sqrt(1.0-sqr(b/a))
+// e = sqrt(1.0-Square(b/a)) = c/a
+// .: c = a. sqrt(1.0-Square(b/a))
 //    c = sqrt(a*a-b*b)
 //    c^2 = a*a-b*b
 

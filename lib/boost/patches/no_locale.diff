@@ -1,0 +1,42 @@
+Index: boost_1_59_0/boost/geometry/strategies/cartesian/buffer_end_round.hpp
+===================================================================
+--- boost_1_59_0.orig/boost/geometry/strategies/cartesian/buffer_end_round.hpp
++++ boost_1_59_0/boost/geometry/strategies/cartesian/buffer_end_round.hpp
+@@ -22,7 +22,7 @@
+ #include <boost/geometry/strategies/buffer.hpp>
+ 
+ 
+-#include <boost/geometry/io/wkt/wkt.hpp>
++//#include <boost/geometry/io/wkt/wkt.hpp>
+ 
+ namespace boost { namespace geometry
+ {
+Index: boost_1_59_0/boost/math/constants/calculate_constants.hpp
+===================================================================
+--- boost_1_59_0.orig/boost/math/constants/calculate_constants.hpp
++++ boost_1_59_0/boost/math/constants/calculate_constants.hpp
+@@ -8,7 +8,7 @@
+ #ifndef BOOST_MATH_CALCULATE_CONSTANTS_CONSTANTS_INCLUDED
+ #define BOOST_MATH_CALCULATE_CONSTANTS_CONSTANTS_INCLUDED
+ 
+-#include <boost/math/special_functions/trunc.hpp>
++//#include <boost/math/special_functions/trunc.hpp>
+ 
+ namespace boost{ namespace math{ namespace constants{ namespace detail{
+ 
+@@ -782,6 +782,7 @@ inline T constant_extreme_value_skewness
+   return ev;
+ }
+ 
++#if 0
+ namespace detail{
+ //
+ // Calculation of the Glaisher constant depends upon calculating the
+@@ -904,6 +905,7 @@ inline T constant_glaisher<T>::compute(B
+   return g;
+   */
+ }
++#endif
+ 
+ template <class T>
+ template<int N>

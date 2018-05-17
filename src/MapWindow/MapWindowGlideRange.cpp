@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -33,9 +33,9 @@ Copyright_License {
 #endif
 
 #include <stdio.h>
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 
-typedef std::vector<RasterPoint> RasterPointVector;
+typedef std::vector<BulkPixelPoint> BulkPixelPointVector;
 
 struct ProjectedFan {
   /**
@@ -51,7 +51,7 @@ struct ProjectedFan {
   }
 
 #ifdef ENABLE_OPENGL
-  void DrawFill(const RasterPoint *points, unsigned start) const {
+  void DrawFill(const BulkPixelPoint *points, unsigned start) const {
     /* triangulate the polygon */
     AllocatedArray<GLushort> triangle_buffer;
 
@@ -72,11 +72,11 @@ struct ProjectedFan {
     glDrawArrays(GL_LINE_LOOP, start, size);
   }
 #else
-  void DrawFill(Canvas &canvas, const RasterPoint *points) const {
+  void DrawFill(Canvas &canvas, const BulkPixelPoint *points) const {
     canvas.DrawPolygon(&points[0], size);
   }
 
-  void DrawOutline(Canvas &canvas, const RasterPoint *points) const {
+  void DrawOutline(Canvas &canvas, const BulkPixelPoint *points) const {
     canvas.DrawPolygon(&points[0], size);
   }
 #endif
@@ -92,7 +92,7 @@ struct ProjectedFans {
    * points[0], followed by the second one at points[fans[0].size],
    * etc.
    */
-  RasterPointVector points;
+  BulkPixelPointVector points;
 
 #ifndef NDEBUG
   unsigned remaining;
@@ -131,7 +131,7 @@ struct ProjectedFans {
     return fans.back();
   }
 
-  void Append(const RasterPoint &pt) {
+  void Append(const PixelPoint &pt) {
 #ifndef NDEBUG
     assert(remaining > 0);
     --remaining;
@@ -145,13 +145,13 @@ struct ProjectedFans {
 
 #ifdef ENABLE_OPENGL
     unsigned start = 0;
-    const RasterPoint *points = &this->points[0];
+    const auto *points = &this->points[0];
     for (auto i = fans.begin(), end = fans.end(); i != end; ++i) {
       i->DrawFill(points, start);
       start += i->size;
     }
 #else
-    const RasterPoint *points = &this->points[0];
+    const auto *points = &this->points[0];
     for (auto i = fans.begin(), end = fans.end(); i != end; ++i) {
       i->DrawFill(canvas, points);
       points += i->size;
@@ -169,7 +169,7 @@ struct ProjectedFans {
       start += i->size;
     }
 #else
-    const RasterPoint *points = &this->points[0];
+    const auto *points = &this->points[0];
     for (auto i = fans.begin(), end = fans.end(); i != end; ++i) {
       i->DrawOutline(canvas, points);
       points += i->size;
@@ -180,12 +180,13 @@ struct ProjectedFans {
 
 typedef StaticArray<ProjectedFan, FlatTriangleFanTree::REACH_MAX_FANS> ProjectedFanVector;
 
-class TriangleCompound: public TriangleFanVisitor {
-  /** Temporary container for TriangleFan processing */
-  StaticArray<GeoPoint, ROUTEPOLAR_POINTS+2> g;
-  /** Temporary container for TriangleFan clipping */
-  GeoPoint clipped[(ROUTEPOLAR_POINTS+2) * 3];
-  /** Projection to use for GeoPoint -> RasterPoint conversion */
+class TriangleCompound final : public FlatTriangleFanVisitor {
+  /**
+   * A copy of ReachFan::projection.
+   */
+  const FlatProjection flat_projection;
+
+  /** Projection to use for GeoPoint -> PixelPoint conversion */
   const MapWindowProjection &proj;
   /** GeoClip instance used for TriangleFan clipping */
   const GeoClip clip;
@@ -194,59 +195,40 @@ public:
   /** STL-Container of rasterized polygons */
   ProjectedFans fans;
 
-  TriangleCompound(const MapWindowProjection& _proj)
-    :proj(_proj),
-     clip(_proj.GetScreenBounds().Scale(fixed(1.1)))
+  TriangleCompound(const FlatProjection &_flat_projection,
+                   const MapWindowProjection& _proj)
+    :flat_projection(_flat_projection), proj(_proj),
+     clip(_proj.GetScreenBounds().Scale(1.1))
   {
   }
 
-  /* virtual methods from class TriangleFanVisitor */
+  /* virtual methods from class FlatTriangleFanVisitor */
 
-  void StartFan() override {
-    // Clear the GeoPointVector for the next TriangleFan
-    g.clear();
-  }
+  void VisitFan(FlatGeoPoint origin, ConstBuffer<FlatGeoPoint> fan) override {
 
-  void AddPoint(const GeoPoint& p) override {
-    // Add a new GeoPoint to the current TriangleFan
-    g.append(p);
-  }
-
-  void EndFan() override {
-    if (fans.full())
+    if (fan.size < 3 || fans.full())
       return;
 
-    // remove unnecessary inclusion of origin if next and last points are identical
-    unsigned start = 0;
-    const size_t gsize = g.size();
-    if (gsize > 2 && g[gsize - 1] == g[1])
-      start = 1;
+    GeoPoint g[ROUTEPOLAR_POINTS + 2];
+    for (size_t i = 0; i < fan.size; ++i)
+      g[i] = flat_projection.Unproject(fan[i]);
 
-    if (gsize < start + 3)
-      return;
-
-    // Perform clipping on the GeoPointVector (Result: clipped)
-    unsigned size = clip.ClipPolygon(clipped, g.raw() + start, gsize - start);
+    // Perform clipping on the GeoPointVector
+    GeoPoint clipped[(ROUTEPOLAR_POINTS + 2) * 3];
+    unsigned size = clip.ClipPolygon(clipped, g, fan.size);
     // With less than three points we can't draw a polygon
     if (size < 3)
       return;
 
-    // Work directly on the RasterPoints in the fans vector
+    // Work directly on the PixelPoints in the fans vector
     fans.Append(size);
 
-    // Convert GeoPoints to RasterPoints
+    // Convert GeoPoints to PixelPoints
     for (unsigned i = 0; i < size; ++i)
       fans.Append(proj.GeoToScreen(clipped[i]));
   }
 };
 
-/**
- * Draw the final glide groundline (and shading) to the buffer
- * and copy the transparent buffer to the canvas
- * @param canvas The drawing canvas
- * @param rc The area to draw in
- * @param buffer The drawing buffer
- */
 void
 MapWindow::DrawTerrainAbove(Canvas &canvas)
 {
@@ -257,27 +239,56 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   // .. feature inaccessible
   if (!Basic().location_available
       || !Calculated().flight.flying
-      || GetComputerSettings().features.final_glide_terrain == FeaturesSettings::FinalGlideTerrain::OFF
       || route_planner == nullptr)
     return;
 
+  if ((GetComputerSettings().features.final_glide_terrain == FeaturesSettings::FinalGlideTerrain::WORKING) ||
+      (GetComputerSettings().features.final_glide_terrain == FeaturesSettings::FinalGlideTerrain::WORKING_TERRAIN_LINE) ||
+      (GetComputerSettings().features.final_glide_terrain == FeaturesSettings::FinalGlideTerrain::WORKING_TERRAIN_SHADE)) {
+    RenderTerrainAbove(canvas, true);
+  }
+
+  if ((GetComputerSettings().features.final_glide_terrain != FeaturesSettings::FinalGlideTerrain::OFF) &&
+      (GetComputerSettings().features.final_glide_terrain != FeaturesSettings::FinalGlideTerrain::WORKING)) {
+    RenderTerrainAbove(canvas, false);
+  }
+}
+
+/**
+ * Draw the final glide groundline (and shading) to the buffer
+ * and copy the transparent buffer to the canvas
+ * @param canvas The drawing canvas
+ * @param rc The area to draw in
+ * @param buffer The drawing buffer
+ */
+void
+MapWindow::RenderTerrainAbove(Canvas &canvas, bool working)
+{
   // Create a visitor for the Reach code
-  TriangleCompound visitor(render_projection);
+  TriangleCompound visitor(route_planner->GetTerrainReachProjection(),
+                           render_projection);
 
   // Fill the TriangleCompound with all TriangleFans in range
-  route_planner->AcceptInRange(render_projection.GetScreenBounds(), visitor);
+  {
+    const ProtectedRoutePlanner::Lease lease(*route_planner);
+    lease->AcceptInRange(render_projection.GetScreenBounds(), visitor, working);
+  }
 
   // Exit early if not fans found
   if (visitor.fans.empty())
     return;
 
+  const Pen& reach_pen = working? look.reach_working_pen : look.reach_terrain_pen;
+  const Pen& reach_pen_thick = working? look.reach_working_pen_thick : look.reach_terrain_pen_thick;
   // @todo: update this rendering
 
   // Don't draw shade if
   // .. shade feature disabled
   // .. pan mode activated
-  if (GetComputerSettings().features.final_glide_terrain == FeaturesSettings::FinalGlideTerrain::SHADE &&
-      IsNearSelf()) {
+  // .. working reach (rather than terrain reach)
+  if (IsNearSelf() && !working &&
+      ((GetComputerSettings().features.final_glide_terrain == FeaturesSettings::FinalGlideTerrain::TERRAIN_SHADE) ||
+       (GetComputerSettings().features.final_glide_terrain == FeaturesSettings::FinalGlideTerrain::WORKING_TERRAIN_SHADE))) {
 
 #ifdef ENABLE_OPENGL
 
@@ -298,7 +309,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     glStencilFunc(GL_NOTEQUAL, 1, 1);
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
-    const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    const ScopeAlphaBlend alpha_blend;
 
     canvas.Clear(Color(255, 255, 255, 77));
 
@@ -317,7 +328,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
     // Select the TerrainLine pen
     buffer.SelectHollowBrush();
-    buffer.Select(look.reach_pen_thick);
+    buffer.Select(reach_pen_thick);
     buffer.SetBackgroundColor(Color(0xf0, 0xf0, 0xf0));
 
     // Draw the TerrainLine polygons
@@ -350,11 +361,11 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
 #ifdef ENABLE_OPENGL
     const ScopeVertexPointer vp(&visitor.fans.points[0]);
-    look.reach_pen.Bind();
+    reach_pen.Bind();
 #else
     // Select the TerrainLine pen
     canvas.SelectHollowBrush();
-    canvas.Select(look.reach_pen);
+    canvas.Select(reach_pen);
     canvas.SetBackgroundOpaque();
     canvas.SetBackgroundColor(COLOR_WHITE);
 
@@ -366,7 +377,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     visitor.fans.DrawOutline(canvas);
 
 #ifdef ENABLE_OPENGL
-    look.reach_pen.Unbind();
+    reach_pen.Unbind();
 #endif
   } else {
     /* more than one fan (turning reach enabled): we have to use a
@@ -390,9 +401,9 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   glStencilFunc(GL_NOTEQUAL, 1, 1);
   glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
-  look.reach_pen_thick.Bind();
+  reach_pen_thick.Bind();
   visitor.fans.DrawOutline(canvas);
-  look.reach_pen_thick.Unbind();
+  reach_pen_thick.Unbind();
 
   glDisable(GL_STENCIL_TEST);
 
@@ -406,7 +417,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
   // Select the TerrainLine pen
   buffer.SelectHollowBrush();
-  buffer.Select(look.reach_pen_thick);
+  buffer.Select(reach_pen_thick);
   buffer.SetBackgroundOpaque();
   buffer.SetBackgroundColor(Color(0xf0, 0xf0, 0xf0));
 
@@ -438,13 +449,13 @@ void
 MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
 {
   if (!Calculated().flight.flying ||
-      !Calculated().terrain_warning ||
-      Calculated().terrain_warning_location.DistanceS(Basic().location) < fixed(500.0))
+      !Calculated().terrain_warning_location.IsValid() ||
+      Calculated().terrain_warning_location.DistanceS(Basic().location) < 500)
     return;
 
-  RasterPoint sc;
+  PixelPoint sc;
   if (render_projection.GeoToScreenIfVisible(Calculated().terrain_warning_location,
                                              sc))
-    look.terrain_warning_icon.Draw(canvas, sc.x, sc.y);
+    look.terrain_warning_icon.Draw(canvas, sc);
 }
 

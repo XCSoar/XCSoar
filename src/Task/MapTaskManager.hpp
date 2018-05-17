@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@
 #ifndef MAPTASKMANAGER_H
 #define MAPTASKMANAGER_H
 
-struct Waypoint;
+#include "Engine/Waypoint/Ptr.hpp"
 
 /**
  * Appends wp to current Ordered task and activates the ordered task if
@@ -44,10 +44,10 @@ namespace MapTaskManager
     MUTATED_FROM_GOTO,
   };
 
-  TaskEditResult AppendToTask(const Waypoint &wp);
-  TaskEditResult InsertInTask(const Waypoint &wp);
+  TaskEditResult AppendToTask(WaypointPtr &&wp);
+  TaskEditResult InsertInTask(WaypointPtr &&wp);
 
-  TaskEditResult ReplaceInTask(const Waypoint &wp);
+  TaskEditResult ReplaceInTask(WaypointPtr &&wp);
   TaskEditResult RemoveFromTask(const Waypoint &wp);
 
   /**

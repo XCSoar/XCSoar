@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -73,8 +73,8 @@ AltitudeSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   wp = AddFloat(_("QNH"),
                 _("Area pressure for barometric altimeter calibration.  This is set automatically if Vega connected."),
                 GetUserPressureFormat(), GetUserPressureFormat(),
-                Units::ToUserPressure(Units::ToSysUnit(fixed(850), Unit::HECTOPASCAL)),
-                Units::ToUserPressure(Units::ToSysUnit(fixed(1300), Unit::HECTOPASCAL)),
+                Units::ToUserPressure(Units::ToSysUnit(850, Unit::HECTOPASCAL)),
+                Units::ToUserPressure(Units::ToSysUnit(1300, Unit::HECTOPASCAL)),
                 GetUserPressureStep(), false,
                 Units::ToUserPressure(settings.pressure), this);
   {

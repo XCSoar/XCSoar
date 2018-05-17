@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -37,14 +37,10 @@ Copyright_License {
 #include "Components.hpp"
 #include "Units/Units.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
-#include "Engine/Task/Ordered/Points/StartPoint.hpp"
-#include "Engine/Task/Ordered/Points/FinishPoint.hpp"
 #include "Engine/Task/Ordered/Points/ASTPoint.hpp"
-#include "Engine/Task/Ordered/Points/AATPoint.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
-#include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Task/TypeStrings.hpp"
 #include "Gauge/TaskView.hpp"
@@ -210,8 +206,8 @@ TaskPointWidget::Layout::Layout(PixelRect rc, const DialogLook &look)
     + font_height + button_height;
 
   const PixelRect waypoint_rc(padding, padding,
-                              waypoint_panel.right - waypoint_panel.left - padding,
-                              waypoint_panel.bottom - waypoint_panel.top - padding);
+                              waypoint_panel.GetWidth() - padding,
+                              waypoint_panel.GetHeight() - padding);
 
   waypoint_name = waypoint_rc;
   waypoint_name.bottom = waypoint_name.top + font_height + 2 * padding;
@@ -232,8 +228,8 @@ TaskPointWidget::Layout::Layout(PixelRect rc, const DialogLook &look)
   tp_panel.bottom -= padding;
 
   const PixelRect tp_rc(padding, padding,
-                        tp_panel.right - tp_panel.left - padding,
-                        tp_panel.bottom - tp_panel.top - padding);
+                        tp_panel.GetWidth() - padding,
+                        tp_panel.GetHeight() - padding);
 
   PixelRect type_rc = tp_rc;
   type_rc.bottom = type_rc.top + button_height;
@@ -481,7 +477,7 @@ TaskPointWidget::PaintMap(Canvas &canvas, const PixelRect &rc)
                  basic.location_available
                  ? basic.location : GeoPoint::Invalid(),
                  CommonInterface::GetMapSettings(),
-                 look.task, look.airspace,
+                 look.task, look.airspace, look.overlay,
                  terrain, &airspace_database);
 }
 
@@ -505,7 +501,7 @@ inline void
 TaskPointWidget::OnDetailsClicked()
 {
   const OrderedTaskPoint &task_point = ordered_task.GetPoint(active_index);
-  dlgWaypointDetailsShowModal(task_point.GetWaypoint(), false);
+  dlgWaypointDetailsShowModal(task_point.GetWaypointPtr(), false);
 }
 
 inline void
@@ -515,12 +511,11 @@ TaskPointWidget::OnRelocateClicked()
     ? ordered_task.GetPoint(active_index - 1).GetLocation()
     : CommonInterface::Basic().location;
 
-  const Waypoint *wp = ShowWaypointListDialog(gpBearing,
-                                              &ordered_task, active_index);
+  auto wp = ShowWaypointListDialog(gpBearing, &ordered_task, active_index);
   if (wp == nullptr)
     return;
 
-  ordered_task.GetFactory().Relocate(active_index, *wp);
+  ordered_task.GetFactory().Relocate(active_index, std::move(wp));
   ordered_task.ClearName();
   ordered_task.UpdateGeometry();
   task_modified = true;

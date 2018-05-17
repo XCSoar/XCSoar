@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,15 +22,12 @@ Copyright_License {
 */
 
 #include "UnitsConfigPanel.hpp"
-#include "UIGlobals.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
-#include "Form/Frame.hpp"
 #include "Units/Units.hpp"
 #include "Units/UnitsStore.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Interface.hpp"
-#include "Asset.hpp"
 #include "Language/Language.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
@@ -180,8 +177,8 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   SetExpertRow(UnitsLift);
 
   static constexpr StaticEnumChoice units_altitude_list[] = {
-    { (unsigned)Unit::FEET,  N_("foot") },
-    { (unsigned)Unit::METER, N_("meter") },
+    { (unsigned)Unit::FEET,  N_("feet") },
+    { (unsigned)Unit::METER, N_("meters") },
     { 0 }
   };
   AddEnum(_("Altitude"), _("Units used for altitude and heights."),

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,64 +22,14 @@ Copyright_License {
 */
 
 #include "WStringUtil.hpp"
-#include "WStringAPI.hpp"
-#include "WCharUtil.hpp"
+#include "WStringAPI.hxx"
+#include "WStringCompare.hxx"
+#include "WCharUtil.hxx"
 
 #include <algorithm>
 
 #include <string.h>
 #include <stdlib.h>
-
-bool
-StringStartsWith(const wchar_t *haystack, const wchar_t *needle)
-{
-  return memcmp(haystack, needle, StringLength(needle) * sizeof(needle[0])) == 0;
-}
-
-bool
-StringEndsWith(const wchar_t *haystack, const wchar_t *needle)
-{
-  const size_t haystack_length = StringLength(haystack);
-  const size_t needle_length = StringLength(needle);
-
-  return haystack_length >= needle_length &&
-    StringIsEqual(haystack + haystack_length - needle_length, needle);
-}
-
-bool
-StringEndsWithIgnoreCase(const wchar_t *haystack, const wchar_t *needle)
-{
-  const size_t haystack_length = StringLength(haystack);
-  const size_t needle_length = StringLength(needle);
-
-  return haystack_length >= needle_length &&
-    StringIsEqualIgnoreCase(haystack + haystack_length - needle_length,
-                            needle);
-}
-
-const wchar_t *
-StringAfterPrefix(const wchar_t *string, const wchar_t *prefix)
-{
-  assert(string != nullptr);
-  assert(prefix != nullptr);
-
-  size_t prefix_length = StringLength(prefix);
-  return StringIsEqual(string, prefix, prefix_length)
-    ? string + prefix_length
-    : nullptr;
-}
-
-const wchar_t *
-StringAfterPrefixCI(const wchar_t *string, const wchar_t *prefix)
-{
-  assert(string != nullptr);
-  assert(prefix != nullptr);
-
-  size_t prefix_length = StringLength(prefix);
-  return StringIsEqual(string, prefix, prefix_length)
-    ? string + prefix_length
-    : nullptr;
-}
 
 wchar_t *
 CopyString(wchar_t *gcc_restrict dest, const wchar_t *gcc_restrict src,
@@ -92,87 +42,6 @@ CopyString(wchar_t *gcc_restrict dest, const wchar_t *gcc_restrict src,
   wchar_t *p = std::copy_n(src, length, dest);
   *p = L'\0';
   return p;
-}
-
-void
-CopyASCII(wchar_t *dest, const wchar_t *src)
-{
-  do {
-    if (IsASCII(*src))
-      *dest++ = *src;
-  } while (*src++ != L'\0');
-}
-
-wchar_t *
-CopyASCII(wchar_t *dest, size_t dest_size,
-          const wchar_t *src, const wchar_t *src_end)
-{
-  assert(dest != nullptr);
-  assert(dest_size > 0);
-  assert(src != nullptr);
-  assert(src_end != nullptr);
-  assert(src_end >= src);
-
-  const wchar_t *const dest_end = dest + dest_size;
-  for (; dest != dest_end && src != src_end; ++src)
-    if (IsASCII(*src))
-      *dest++ = *src;
-
-  return dest;
-}
-
-void
-CopyASCII(wchar_t *dest, const char *src)
-{
-  do {
-    if (IsASCII(*src))
-      *dest++ = (wchar_t)*src;
-  } while (*src++ != '\0');
-}
-
-template<typename D, typename S>
-static D *
-TemplateCopyASCII(D *dest, size_t dest_size, const S *src, const S *src_end)
-{
-  assert(dest != nullptr);
-  assert(dest_size > 0);
-  assert(src != nullptr);
-  assert(src_end != nullptr);
-  assert(src_end >= src);
-
-  const D *const dest_end = dest + dest_size;
-  for (; dest != dest_end && src != src_end; ++src)
-    if (IsASCII(*src))
-      *dest++ = *src;
-
-  return dest;
-}
-
-wchar_t *
-CopyASCII(wchar_t *dest, size_t dest_size, const char *src, const char *src_end)
-{
-  return TemplateCopyASCII(dest, dest_size, src, src_end);
-}
-
-char *
-CopyASCII(char *dest, size_t dest_size, const wchar_t *src, const wchar_t *src_end)
-{
-  return TemplateCopyASCII(dest, dest_size, src, src_end);
-}
-
-void
-CopyASCIIUpper(char *dest, const wchar_t *src)
-{
-  do {
-    wchar_t t = *src;
-    if (IsASCII(t)) {
-      char ch = (char)t;
-      if (IsLowerAlphaASCII(ch))
-        ch -= 'a' - 'A';
-
-      *dest++ = ch;
-    }
-  } while (*src++ != '\0');
 }
 
 const wchar_t *
@@ -222,20 +91,4 @@ NormalizeSearchString(wchar_t *gcc_restrict dest,
   *dest = L'\0';
 
   return retval;
-}
-
-bool
-StringStartsWithIgnoreCase(const wchar_t *haystack, const wchar_t *needle)
-{
-  return StringIsEqualIgnoreCase(haystack, needle,
-                                 StringLength(needle));
-}
-
-wchar_t *
-DuplicateString(const wchar_t *p, size_t length)
-{
-  wchar_t *q = (wchar_t *)malloc((length + 1) * sizeof(*p));
-  if (q != nullptr)
-    *std::copy_n(p, length, q) = L'\0';
-  return q;
 }

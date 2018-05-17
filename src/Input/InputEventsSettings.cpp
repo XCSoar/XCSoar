@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "InputEvents.hpp"
+#include "Dialogs/Error.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
 #include "ActionInterface.hpp"
@@ -38,6 +39,8 @@ Copyright_License {
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Audio/VarioGlue.hpp"
+#include "OS/Path.hpp"
+#include "Util/StringCompare.hxx"
 
 void
 InputEvents::eventSounds(const TCHAR *misc)
@@ -179,21 +182,21 @@ InputEvents::eventBugs(const TCHAR *misc)
     return;
 
   PolarSettings &settings = CommonInterface::SetComputerSettings().polar;
-  fixed BUGS = settings.bugs;
-  fixed oldBugs = BUGS;
+  auto BUGS = settings.bugs;
+  auto oldBugs = BUGS;
 
   if (StringIsEqual(misc, _T("up"))) {
-    BUGS += fixed(1) / 10;
-    if (BUGS > fixed(1))
-      BUGS = fixed(1);
+    BUGS += 1 / 10.;
+    if (BUGS > 1)
+      BUGS = 1;
   } else if (StringIsEqual(misc, _T("down"))) {
-    BUGS -= fixed(1) / 10;
-    if (BUGS < fixed(0.5))
-      BUGS = fixed(0.5);
+    BUGS -= 1 / 10.;
+    if (BUGS < 0.5)
+      BUGS = 0.5;
   } else if (StringIsEqual(misc, _T("max")))
-    BUGS = fixed(1);
+    BUGS = 1;
   else if (StringIsEqual(misc, _T("min")))
-    BUGS = fixed(0.5);
+    BUGS = 0.5;
   else if (StringIsEqual(misc, _T("show"))) {
     TCHAR Temp[100];
     _stprintf(Temp, _T("%d"), (int)(BUGS * 100));
@@ -221,21 +224,21 @@ InputEvents::eventBallast(const TCHAR *misc)
 
   GlidePolar &polar =
     CommonInterface::SetComputerSettings().polar.glide_polar_task;
-  fixed BALLAST = polar.GetBallast();
-  fixed oldBallast = BALLAST;
+  auto BALLAST = polar.GetBallast();
+  auto oldBallast = BALLAST;
 
   if (StringIsEqual(misc, _T("up"))) {
-    BALLAST += fixed(1) / 10;
-    if (BALLAST >= fixed(1))
-      BALLAST = fixed(1);
+    BALLAST += 1 / 10.;
+    if (BALLAST >= 1)
+      BALLAST = 1;
   } else if (StringIsEqual(misc, _T("down"))) {
-    BALLAST -= fixed(1) / 10;
-    if (BALLAST < fixed(0))
-      BALLAST = fixed(0);
+    BALLAST -= 1 / 10.;
+    if (BALLAST < 0)
+      BALLAST = 0;
   } else if (StringIsEqual(misc, _T("max")))
-    BALLAST = fixed(1);
+    BALLAST = 1;
   else if (StringIsEqual(misc, _T("min")))
-    BALLAST = fixed(0);
+    BALLAST = 0;
   else if (StringIsEqual(misc, _T("show"))) {
     TCHAR Temp[100];
     _stprintf(Temp, _T("%d"), (int)(BALLAST * 100));
@@ -244,7 +247,7 @@ InputEvents::eventBallast(const TCHAR *misc)
   }
 
   if (BALLAST != oldBallast) {
-    polar.SetBallast(fixed(BALLAST));
+    polar.SetBallast(BALLAST);
     protected_task_manager->SetGlidePolar(polar);
   }
 }
@@ -255,7 +258,7 @@ void
 InputEvents::eventProfileLoad(const TCHAR *misc)
 {
   if (!StringIsEmpty(misc)) {
-    Profile::LoadFile(misc);
+    Profile::LoadFile(Path(misc));
 
     MapFileChanged = true;
     WaypointFileChanged = true;
@@ -272,8 +275,14 @@ InputEvents::eventProfileLoad(const TCHAR *misc)
 void
 InputEvents::eventProfileSave(const TCHAR *misc)
 {
-  if (!StringIsEmpty(misc))
-    Profile::SaveFile(misc);
+  if (!StringIsEmpty(misc)) {
+      try {
+        Profile::SaveFile(Path(misc));
+      } catch (const std::runtime_error &e) {
+        ShowError(e, _("Failed to save file."));
+        return;
+      }
+  }
 }
 
 // AdjustForecastTemperature
@@ -285,15 +294,14 @@ void
 InputEvents::eventAdjustForecastTemperature(const TCHAR *misc)
 {
   if (StringIsEqual(misc, _T("+")))
-    CommonInterface::SetComputerSettings().forecast_temperature += fixed(1);
+    CommonInterface::SetComputerSettings().forecast_temperature += Temperature::FromKelvin(1);
   else if (StringIsEqual(misc, _T("-")))
-    CommonInterface::SetComputerSettings().forecast_temperature -= fixed(1);
+    CommonInterface::SetComputerSettings().forecast_temperature -= Temperature::FromKelvin(1);
   else if (StringIsEqual(misc, _T("show"))) {
-    fixed temperature =
+    auto temperature =
       CommonInterface::GetComputerSettings().forecast_temperature;
     TCHAR Temp[100];
-    _stprintf(Temp, _T("%f"),
-              (double)Units::ToUserTemperature(temperature));
+    _stprintf(Temp, _T("%f"), temperature.ToUser());
     Message::AddMessage(_("Forecast temperature"), Temp);
   }
 }

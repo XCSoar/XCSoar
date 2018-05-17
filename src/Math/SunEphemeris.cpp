@@ -7,7 +7,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,10 +31,11 @@ Copyright_License {
 #include "Time/BrokenDateTime.hpp"
 #include "Time/RoughTime.hpp"
 
-// Sun radius in degrees (?)
-#define SUN_DIAMETER fixed(0.53)
+/** Sun radius in degrees (?) */
+static constexpr double SUN_DIAMETER = 0.53;
+
 // Atmospheric refraction degrees
-#define AIR_REFRACTION fixed(34.0/60.0)
+static constexpr double AIR_REFRACTION = 34.0 / 60.0;
 
 namespace SunEphemeris
 {
@@ -48,7 +49,7 @@ namespace SunEphemeris
    * @return days to J2000
    */
   gcc_const
-  fixed FNday(const BrokenDateTime &date_time);
+  double FNday(const BrokenDateTime &date_time);
 
   /**
    * Calculating the hourangle
@@ -73,13 +74,13 @@ namespace SunEphemeris
    * @return The ecliptic longitude of the Sun
    */
   gcc_pure
-  Angle GetEclipticLongitude(fixed d, Angle l);
+  Angle GetEclipticLongitude(double d, Angle l);
 
   gcc_pure
-  Angle GetMeanSunLongitude(fixed d);
+  Angle GetMeanSunLongitude(double d);
 }
 
-fixed
+double
 SunEphemeris::FNday(const BrokenDateTime &date_time)
 {
   assert(date_time.IsPlausible());
@@ -88,7 +89,7 @@ SunEphemeris::FNday(const BrokenDateTime &date_time)
                   275 * date_time.month / 9 + date_time.day +
                   (long int)date_time.year * 367;
 
-  return fixed(luku) - fixed(730531.5) + fixed(date_time.hour % 24) / 24;
+  return double(luku) - 730531.5 + (date_time.hour % 24) / 24.;
 }
 
 Angle
@@ -97,10 +98,10 @@ SunEphemeris::GetHourAngle(Angle lat, Angle declin)
   Angle dfo = Angle::Degrees(SUN_DIAMETER / 2 + AIR_REFRACTION);
 
   // Correction: different sign at southern hemisphere
-  if (negative(lat.Degrees()))
+  if (lat.IsNegative())
     dfo.Flip();
 
-  fixed fo = (declin + dfo).tan() * lat.tan();
+  auto fo = (declin + dfo).tan() * lat.tan();
   return Angle::asin(fo) + Angle::QuarterCircle();
 }
 
@@ -110,18 +111,18 @@ SunEphemeris::GetHourAngleTwilight(Angle lat, Angle declin)
   Angle df1 = Angle::Degrees(6);
 
   // Correction: different sign at southern hemisphere
-  if (negative(lat.Degrees()))
+  if (lat.IsNegative())
     df1.Flip();
 
-  fixed fi = (declin + df1).tan() * lat.tan();
+  auto fi = (declin + df1).tan() * lat.tan();
   return Angle::asin(fi) + Angle::QuarterCircle();
 }
 
 Angle
-SunEphemeris::GetEclipticLongitude(fixed d, Angle L)
+SunEphemeris::GetEclipticLongitude(double d, Angle L)
 {
   //   mean anomaly of the Sun
-  Angle g = Angle::Degrees(fixed(357.528) + fixed(.9856003) * d).AsBearing();
+  Angle g = Angle::Degrees(357.528 + .9856003 * d).AsBearing();
 
   //   Ecliptic longitude of the Sun
   return (Angle::Degrees(1.915) * g.sin() + L +
@@ -129,10 +130,10 @@ SunEphemeris::GetEclipticLongitude(fixed d, Angle L)
 }
 
 Angle
-SunEphemeris::GetMeanSunLongitude(fixed d)
+SunEphemeris::GetMeanSunLongitude(double d)
 {
   // mean longitude of the Sun
-  return Angle::Degrees(fixed(280.461) + fixed(.9856474) * d).AsBearing();
+  return Angle::Degrees(280.461 + .9856474 * d).AsBearing();
 }
 
 /**
@@ -149,8 +150,8 @@ CalculateAzimuth(const GeoPoint &Location, const BrokenTime &time,
 {
   assert(time.IsPlausible());
 
-  fixed T = fixed(time.GetSecondOfDay()) / 3600 - fixed(12)
-    + fixed(time_zone.AsMinutes()) / 60;
+  auto T = time.GetSecondOfDay() / 3600. - 12.
+    + time_zone.AsMinutes() / 60.;
   Angle t = Angle::Degrees(15) * T;
 
   return -Angle::FromXY(Location.latitude.cos() * dec.sin() -
@@ -167,7 +168,7 @@ SunEphemeris::CalcSunTimes(const GeoPoint &location,
 
   assert(date_time.IsPlausible());
 
-  fixed days_to_j2000 = FNday(date_time);
+  auto days_to_j2000 = FNday(date_time);
 
   Angle l = GetMeanSunLongitude(days_to_j2000);
 
@@ -175,7 +176,7 @@ SunEphemeris::CalcSunTimes(const GeoPoint &location,
   Angle lambda = GetEclipticLongitude(days_to_j2000, l);
 
   // Obliquity of the ecliptic
-  Angle obliquity = Angle::Degrees(fixed(23.439) - fixed(.0000004) * days_to_j2000);
+  Angle obliquity = Angle::Degrees(23.439 - .0000004 * days_to_j2000);
 
   // Find the RA and DEC of the Sun
   Angle alpha = Angle::FromXY(lambda.cos(), obliquity.cos() * lambda.sin());
@@ -183,11 +184,11 @@ SunEphemeris::CalcSunTimes(const GeoPoint &location,
 
   // Find the Equation of Time in minutes
   // Correction suggested by David Smith
-  fixed ll = (l - alpha).Radians();
-  if (l.Radians() < fixed_pi)
-    ll += fixed_two_pi;
+  Angle ll = l - alpha;
+  if (l < Angle::HalfCircle())
+    ll += Angle::FullCircle();
 
-  fixed equation = fixed(1440) * (fixed(1) - ll / fixed_two_pi);
+  auto equation = 1440 * (1 - ll / Angle::FullCircle());
 
   Angle hour_angle = GetHourAngle(location.latitude, delta);
   Angle hour_angle_twilight = GetHourAngleTwilight(location.latitude, delta);
@@ -195,21 +196,21 @@ SunEphemeris::CalcSunTimes(const GeoPoint &location,
   result.azimuth = CalculateAzimuth(location, date_time, time_zone, delta);
 
   // length of twilight in hours
-  fixed twilight_hours = (hour_angle_twilight - hour_angle).Hours();
+  auto twilight_hours = (hour_angle_twilight - hour_angle).Hours();
 
   // Conversion of angle to hours and minutes
-  result.day_length = Double(hour_angle.Hours());
+  result.day_length = 2 * hour_angle.Hours();
 
-  if (result.day_length < fixed(0.0001))
+  if (result.day_length < 0.0001)
     // arctic winter
-    result.day_length = fixed(0);
+    result.day_length = 0;
 
-  result.time_of_sunrise = fixed(12) - hour_angle.Hours()
-    + fixed(time_zone.AsMinutes()) / 60
-    - location.longitude.Degrees() / 15 + equation / 60;
+  result.time_of_sunrise = 12. - hour_angle.Hours()
+    + time_zone.AsMinutes() / 60.
+    - location.longitude.Degrees() / 15. + equation / 60.;
 
-  if (result.time_of_sunrise > fixed(24))
-    result.time_of_sunrise -= fixed(24);
+  if (result.time_of_sunrise > 24)
+    result.time_of_sunrise -= 24;
 
   result.time_of_sunset = result.time_of_sunrise + result.day_length;
   result.time_of_noon = result.time_of_sunrise + hour_angle.Hours();
@@ -229,7 +230,7 @@ SunEphemeris::CalcAzimuth(const GeoPoint &location,
 {
   assert(date_time.IsPlausible());
 
-  fixed days_to_j2000 = FNday(date_time);
+  auto days_to_j2000 = FNday(date_time);
 
   Angle l = GetMeanSunLongitude(days_to_j2000);
 
@@ -237,7 +238,7 @@ SunEphemeris::CalcAzimuth(const GeoPoint &location,
   Angle lambda = GetEclipticLongitude(days_to_j2000, l);
 
   // Obliquity of the ecliptic
-  Angle obliquity = Angle::Degrees(fixed(23.439) - fixed(.0000004) * days_to_j2000);
+  Angle obliquity = Angle::Degrees(23.439 - .0000004 * days_to_j2000);
 
   // Find the DEC of the Sun
   Angle delta = Angle::asin(obliquity.sin() * lambda.sin());

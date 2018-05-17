@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -61,7 +61,7 @@ struct ContestStatistics
       return solution_index;
 
     // Search for best solution by score
-    fixed best = fixed(0);
+    double best = 0;
     int i_best = 0;
     for (int i = 0; i < 3; ++i) {
       if (result[i].IsDefined() && (result[i].score > best)) {

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,27 +23,25 @@
 #ifndef XCSOAR_WINDOW_STATS_HPP
 #define XCSOAR_WINDOW_STATS_HPP
 
-#include "Math/fixed.hpp"
-
 struct WindowStats {
   /**
    * The duration of this window [seconds].  A negative value means
    * this object is undefined.
    */
-  fixed duration;
+  double duration;
 
   /**
    * The distance travelled in this window.
    */
-  fixed distance;
+  double distance;
 
   /**
    * The quotient of distance and duration.
    */
-  fixed speed;
+  double speed;
 
   void Reset() {
-    duration = fixed(-1);
+    duration = -1;
   }
 };
 

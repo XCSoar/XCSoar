@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@
 #ifndef QUADRATIC_HPP
 #define QUADRATIC_HPP
 
-#include "Math/fixed.hpp"
+#include "Util.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -32,9 +32,9 @@
  * Utility class for efficient solution of quadratic equations
  */
 class Quadratic {
-  const fixed da;
-  const fixed b;
-  const fixed denom;
+  const double da;
+  const double b;
+  const double denom;
 
 public:
   /**
@@ -43,8 +43,8 @@ public:
    * @param _b Value of b
    * @param _c Value of c
    */
-  Quadratic(const fixed _b, const fixed _c)
-    :da(2), b(_b), denom(sqr(b) - Quadruple(_c))
+  Quadratic(const double _b, const double _c)
+    :da(2), b(_b), denom(Square(b) - 4 * _c)
   {
   }
 
@@ -55,8 +55,8 @@ public:
    * @param _b Value of b
    * @param _c Value of c
    */
-  Quadratic(const fixed _a, const fixed _b, const fixed _c)
-    :da(Double(_a)), b(_b), denom(sqr(b) - Double(da * _c))
+  Quadratic(const double _a, const double _b, const double _c)
+    :da(2 * _a), b(_b), denom(Square(b) - 2 * da * _c)
   {
   }
 
@@ -67,10 +67,10 @@ public:
    */
   gcc_pure
   bool Check() const {
-    if (negative(denom))
+    if (denom < 0)
       return false;
 
-    if (da == fixed(0))
+    if (da == 0)
       return false;
 
     return true;
@@ -82,9 +82,9 @@ public:
    * @return greater x value of solutions
    */
   gcc_pure
-  fixed SolutionMax() const {
+  double SolutionMax() const {
     assert(Check());
-    return positive(da) ? Solution(true) : Solution(false);
+    return Solution(da > 0);
   }
 
   /**
@@ -93,9 +93,9 @@ public:
    * @return smallest x value of solutions
    */
   gcc_pure
-  fixed SolutionMin() const {
+  double SolutionMin() const {
     assert(Check());
-    return positive(da) ? Solution(false) : Solution(true);
+    return Solution(da <= 0);
   }
 
 private:
@@ -108,7 +108,7 @@ private:
    * @return x value of solution
    */
   gcc_pure
-  fixed Solution(const bool positive) const {
+  double Solution(const bool positive) const {
     assert(Check());
     return (-b + (positive ? sqrt(denom) : -sqrt(denom))) / da;
   }

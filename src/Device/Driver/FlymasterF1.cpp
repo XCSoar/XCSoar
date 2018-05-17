@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,15 +23,10 @@ Copyright_License {
 
 #include "Device/Driver/FlymasterF1.hpp"
 #include "Device/Driver.hpp"
-#include "Device/Parser.hpp"
 #include "Device/Util/NMEAWriter.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
-#include "Atmosphere/Temperature.hpp"
-
-#include <stdlib.h>
-#include <math.h>
 
 class FlymasterF1Device : public AbstractDevice {
   Port &port;
@@ -64,7 +59,7 @@ VARIO(NMEAInputLine &line, NMEAInfo &info)
   // TempSensor1 = temperature in ºC of external wireless sensor 1
   // TempSensor2 = temperature in ºC of external wireless sensor 2
 
-  fixed value;
+  double value;
   if (line.ReadChecked(value))
     info.ProvideStaticPressure(AtmosphericPressure::HectoPascal(value));
 
@@ -72,7 +67,7 @@ VARIO(NMEAInputLine &line, NMEAInfo &info)
     info.ProvideTotalEnergyVario(value / 10);
 
   unsigned battery_bank;
-  fixed voltage[2];
+  double voltage[2];
   if (line.ReadChecked(voltage[0]) &&
       line.ReadChecked(voltage[1]) &&
       line.ReadChecked(battery_bank) &&
@@ -83,7 +78,7 @@ VARIO(NMEAInputLine &line, NMEAInfo &info)
   }
 
   if (line.ReadChecked(value)) {
-    info.temperature = CelsiusToKelvin(value);
+    info.temperature = Temperature::FromCelsius(value);
     info.temperature_available = true;
   }
 

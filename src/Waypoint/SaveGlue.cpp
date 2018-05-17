@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,41 +24,37 @@ Copyright_License {
 #include "WaypointGlue.hpp"
 #include "CupWriter.hpp"
 #include "LogFile.hpp"
-#include "IO/TextWriter.hpp"
+#include "OS/Path.hpp"
+#include "IO/FileOutputStream.hxx"
+#include "IO/BufferedOutputStream.hxx"
 #include "LocalPath.hpp"
 
-#include <windef.h> /* for MAX_PATH */
-
-bool
+void
 WaypointGlue::SaveWaypoints(const Waypoints &way_points)
 {
-  TCHAR path[MAX_PATH];
-  LocalPath(path, _T("user.cup"));
+  const auto path = LocalPath(_T("user.cup"));
 
-  TextWriter writer(path);
-  if (!writer.IsOpen()) {
-    LogFormat(_T("Waypoint file '%s' can not be written"), path);
-    return false;
-  }
+  FileOutputStream file(path);
+  BufferedOutputStream writer(file);
 
   WriteCup(writer, way_points, WaypointOrigin::USER);
 
-  LogFormat(_T("Waypoint file '%s' saved"), path);
-  return true;
+  writer.Flush();
+  file.Commit();
+
+  LogFormat(_T("Waypoint file '%s' saved"), path.c_str());
 }
 
-bool
+void
 WaypointGlue::SaveWaypoint(const Waypoint &wp)
 {
-  TCHAR path[MAX_PATH];
-  LocalPath(path, _T("user.cup"));
+  const auto path = LocalPath(_T("user.cup"));
 
-  TextWriter writer(path, true);
-  if (!writer.IsOpen()) {
-    LogFormat(_T("Waypoint file '%s' can not be written"), path);
-    return false;
-  }
+  FileOutputStream file(path, FileOutputStream::Mode::APPEND_OR_CREATE);
+  BufferedOutputStream writer(file);
 
   WriteCup(writer, wp);
-  return true;
+
+  writer.Flush();
+  file.Commit();
 }

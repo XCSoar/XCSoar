@@ -31,7 +31,6 @@
 #define KINETIC_MANAGER_HPP
 
 #include "Time/PeriodClock.hpp"
-#include "Math/fixed.hpp"
 
 /**
  * A manager class that can be used for kinetic scrolling
@@ -51,7 +50,7 @@ class KineticManager
   int end;
 
   /** Speed at the end of the manual movement */
-  fixed v;
+  double v;
 
   /** Clock that is used for the kinetic movement */
   PeriodClock clock;

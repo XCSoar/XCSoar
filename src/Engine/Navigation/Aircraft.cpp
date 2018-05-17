@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@
 #include "Geo/GeoVector.hpp"
 
 AircraftState 
-AircraftState::GetPredictedState(fixed in_time) const
+AircraftState::GetPredictedState(double in_time) const
 {
   AircraftState state_next = *this;
   GeoVector vec(ground_speed * in_time, track);
@@ -37,8 +37,13 @@ void
 AircraftState::Reset()
 {
   AltitudeState::Reset();
+  SpeedState::Reset();
+  VarioState::Reset();
 
-  g_load = fixed(1);
+  time = -1;
+  location.SetInvalid();
+  track = Angle::Zero();
+  g_load = 1;
   wind = SpeedVector::Zero();
   flying = false;
 }
@@ -46,7 +51,7 @@ AircraftState::Reset()
 void
 AltitudeState::Reset()
 {
-  altitude = fixed(0);
-  working_band_fraction = fixed(0);
-  altitude_agl = fixed(0);
+  altitude = 0;
+  working_band_fraction = 0;
+  altitude_agl = 0;
 }

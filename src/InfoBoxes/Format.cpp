@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,10 +24,11 @@ Copyright_License {
 #include "Data.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "Formatter/GlideRatioFormatter.hpp"
+#include "Formatter/TimeFormatter.hpp"
 #include "Math/Angle.hpp"
 
 void
-InfoBoxData::SetValue(const TCHAR *format, fixed value)
+InfoBoxData::SetValue(const TCHAR *format, double value)
 {
   UnsafeFormatValue(format, (double)value);
 }
@@ -47,9 +48,10 @@ InfoBoxData::SetValueFromBearingDifference(Angle delta)
 }
 
 void
-InfoBoxData::SetValueFromGlideRatio(fixed gr)
+InfoBoxData::SetValueFromGlideRatio(double gr)
 {
   FormatGlideRatio(value.buffer(), value.capacity(), gr);
+  SetValueUnit(Unit::GRADIENT);
 }
 
 void
@@ -64,4 +66,30 @@ void
 InfoBoxData::SetCommentFromBearingDifference(Angle delta)
 {
   FormatAngleDelta(comment.buffer(), comment.capacity(), delta);
+}
+
+void
+InfoBoxData::SetValueFromTimeTwoLines(int dd)
+{
+  FormatTimeTwoLines(value.buffer(), comment.buffer(), dd);
+}
+
+void
+InfoBoxData::SetValueFromPercent(double dd)
+{
+  UnsafeFormatValue(_T("%d"), (int)(dd));
+  SetValueUnit(Unit::PERCENT);
+}
+
+void
+InfoBoxData::SetCommentFromPercent(double dd)
+{
+  UnsafeFormatComment(_T("%d %%"), (int)(dd));
+}
+
+void
+InfoBoxData::SetValueFromVoltage(double dd)
+{
+  UnsafeFormatValue(_T("%2.1f"), dd);
+  SetValueUnit(Unit::VOLT);
 }

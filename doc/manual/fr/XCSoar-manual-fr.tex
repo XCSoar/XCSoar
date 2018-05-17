@@ -1,17 +1,14 @@
 \documentclass[a4paper,12pt,twoside]{refrep}
+\input{xcsoar.sty}
+
 \title{Manuel de l'utilisateur}
 
 
 % Set the page title
-\newcommand{\mycontent}[0]{
-\begin{tabular}{l}
-\hspace*{-4cm} \em XCSoar: Manuel de l'utilisateur \vspace*{2pt}
-\end{tabular}}
+\input{xcsoar-headers.sty}
+\xcsoarheader{XCSoar: Manuel de l'utilisateur}
 
-\input{xcsoar.sty}
 \input{title-xcsoar.sty}
-\usepackage[utf8]{inputenc}
-\DeclareUnicodeCharacter{00B0}{$^{\circ}$}
 \usepackage{xkeyval}
 \usepackage{frenchle}
 \begin{document}
@@ -36,10 +33,7 @@ POUR SIGNALER CE GENRE DE CHOSES... VOUS POUVEZ CONTACTER Daniel: osteocool@yaho
 
 MERCI
 %%%%%%%%%%%%%%%%%%%%%%
-\begingroup
-\setlength{\parskip}{0.1\baselineskip}
-\tableofcontents
-\endgroup
+\input{toc.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%
 \chapter*{Préface}

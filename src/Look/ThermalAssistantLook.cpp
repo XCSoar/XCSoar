@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -40,14 +40,14 @@ ThermalAssistantLook::Initialise(bool small, bool inverse)
   polygon_brush.Create(polygon_fill_color);
 #endif /* !OPENGL */
 
-  UPixelScalar width = Layout::FastScale(small ? 1 : 2);
+  unsigned width = Layout::FastScale(small ? 1u : 2u);
 #ifdef ENABLE_OPENGL
   polygon_pen.Create(width, polygon_border_color.WithAlpha(128));
 #else /* !OPENGL */
   polygon_pen.Create(width, polygon_border_color);
 #endif /* !OPENGL */
   inner_circle_pen.Create(1, circle_color);
-  outer_circle_pen.Create(Pen::DASH, 1, circle_color);
+  outer_circle_pen.Create(Pen::DASH2, 1, circle_color);
   plane_pen.Create(width, inverse ? COLOR_WHITE : COLOR_BLACK);
 
   overlay_font.Load(FontDescription(Layout::FontScale(22)));

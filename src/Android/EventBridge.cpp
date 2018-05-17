@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -107,7 +107,7 @@ Java_org_xcsoar_EventBridge_onMouseDown(JNIEnv *env, jclass cls,
     /* XCSoar not yet initialised */
     return;
 
-  event_queue->Push(Event(Event::MOUSE_DOWN, x, y));
+  event_queue->Push(Event(Event::MOUSE_DOWN, PixelPoint(x, y)));
   ResetUserIdle();
 }
 
@@ -120,7 +120,7 @@ Java_org_xcsoar_EventBridge_onMouseUp(JNIEnv *env, jclass cls,
     /* XCSoar not yet initialised */
     return;
 
-  event_queue->Push(Event(Event::MOUSE_UP, x, y));
+  event_queue->Push(Event(Event::MOUSE_UP, PixelPoint(x, y)));
   ResetUserIdle();
 }
 
@@ -134,7 +134,7 @@ Java_org_xcsoar_EventBridge_onMouseMove(JNIEnv *env, jclass cls,
     return;
 
   event_queue->Purge(Event::MOUSE_MOTION);
-  event_queue->Push(Event(Event::MOUSE_MOTION, x, y));
+  event_queue->Push(Event(Event::MOUSE_MOTION, PixelPoint(x, y)));
   ResetUserIdle();
 }
 

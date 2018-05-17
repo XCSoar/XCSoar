@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -115,16 +115,16 @@ struct FlarmTraffic {
   RoughAltitude relative_altitude;
 
   /** Turnrate of the FLARM target */
-  fixed turn_rate;
+  double turn_rate;
 
   /** Climbrate of the FLARM target */
-  fixed climb_rate;
+  double climb_rate;
 
   /** Latitude-based distance of the FLARM target */
-  fixed relative_north;
+  double relative_north;
 
   /** Longitude-based distance of the FLARM target */
-  fixed relative_east;
+  double relative_east;
 
   /** FLARM id of the FLARM target */
   FlarmId id;
@@ -138,7 +138,7 @@ struct FlarmTraffic {
   AircraftType type;
 
   /** Average climb rate over 30s */
-  fixed climb_rate_avg30s;
+  double climb_rate_avg30s;
 
   bool IsDefined() const {
     return valid;
@@ -172,7 +172,7 @@ struct FlarmTraffic {
   }
 
   bool IsPassive() const {
-    return IsPowered() || speed < fixed(4);
+    return IsPowered() || speed < 4;
   }
 
   /**
@@ -180,8 +180,8 @@ struct FlarmTraffic {
    *
    * @return true if the object is still valid
    */
-  bool Refresh(fixed Time) {
-    valid.Expire(Time, fixed(2));
+  bool Refresh(double Time) {
+    valid.Expire(Time, 2);
     return valid;
   }
 

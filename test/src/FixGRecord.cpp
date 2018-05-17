@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,14 +24,16 @@
 #include "OS/Args.hpp"
 #include "IO/FileTransaction.hpp"
 #include "IO/FileLineReader.hpp"
-#include "IO/TextWriter.hpp"
+#include "IO/FileOutputStream.hxx"
+#include "IO/BufferedOutputStream.hxx"
+#include "Util/PrintException.hxx"
 
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-static bool
-FixGRecord(NLineReader &reader, TextWriter &writer)
+static void
+FixGRecord(NLineReader &reader, BufferedOutputStream &writer)
 {
   GRecord grecord;
   grecord.Initialize();
@@ -64,54 +66,45 @@ FixGRecord(NLineReader &reader, TextWriter &writer)
 
     grecord.AppendRecordToBuffer(line);
 
-    if (!writer.WriteLine(line))
-      return false;
+    writer.Write(line);
+    writer.Write('\n');
   }
 
   grecord.FinalizeBuffer();
   grecord.WriteTo(writer);
-  return true;
 }
 
-static bool
-FixGRecord(NLineReader &reader, const TCHAR *dest_path)
+static void
+FixGRecord(NLineReader &reader, Path dest_path)
 {
-  TextWriter writer(dest_path);
-  return writer.IsOpen() && FixGRecord(reader, writer) && writer.Flush();
+  FileOutputStream file(dest_path);
+  BufferedOutputStream writer(file);
+  FixGRecord(reader, writer);
+  writer.Flush();
+  file.Commit();
 }
 
 int
 main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "FILE.igc");
-  tstring path = args.ExpectNextT();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
   {
     GRecord grecord;
     grecord.Initialize();
-
-    if (!grecord.VerifyGRecordInFile(path.c_str())) {
-      fprintf(stderr, "Invalid G record\n");
-      return EXIT_FAILURE;
-    }
+    grecord.VerifyGRecordInFile(path);
   }
 
   printf("Valid G record found\n");
 
-  FileTransaction transaction(path.c_str());
+  FileTransaction transaction(path);
 
   {
-    FileLineReaderA reader(path.c_str());
-    if (reader.error()) {
-      fprintf(stderr, "Failed to open input file\n");
-      return EXIT_FAILURE;
-    }
+    FileLineReaderA reader(path);
 
-    if (!FixGRecord(reader, transaction.GetTemporaryPath())) {
-      fprintf(stderr, "Failed to write output file\n");
-      return EXIT_FAILURE;
-    }
+    FixGRecord(reader, transaction.GetTemporaryPath());
   }
 
   if (!transaction.Commit()) {
@@ -121,4 +114,7 @@ main(int argc, char **argv)
 
   printf("New G record written\n");
   return EXIT_SUCCESS;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

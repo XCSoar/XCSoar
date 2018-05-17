@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -34,7 +34,7 @@ TaskOptTarget::TaskOptTarget(const std::vector<OrderedTaskPoint*>& tps,
                              AATPoint &_tp_current,
                              const FlatProjection &projection,
                              StartPoint *_ts)
-  :ZeroFinder(fixed(0.02), fixed(0.98), fixed(TOLERANCE_OPT_TARGET)),
+  :ZeroFinder(0.02, 0.98, TOLERANCE_OPT_TARGET),
    tm(tps.cbegin(), tps.cend(), activeTaskPoint, settings, _gp,
       /* ignore the travel to the start point */
       false),
@@ -45,8 +45,8 @@ TaskOptTarget::TaskOptTarget(const std::vector<OrderedTaskPoint*>& tps,
 {
 }
 
-fixed
-TaskOptTarget::f(const fixed p)
+double
+TaskOptTarget::f(const double p)
 {
   // set task targets
   SetTarget(p);
@@ -57,36 +57,36 @@ TaskOptTarget::f(const fixed p)
 }
 
 bool
-TaskOptTarget::valid(const fixed tp)
+TaskOptTarget::valid(const double tp)
 {
   f(tp);
   return res.IsOk();
 }
 
-fixed
-TaskOptTarget::search(const fixed tp)
+double
+TaskOptTarget::search(const double tp)
 {
   if (tp_current.IsTargetLocked()) {
     // can't move, don't bother
-    return fixed(-1);
+    return -1;
   }
   if (iso.IsValid()) {
     tm.target_save();
-    const fixed t = find_min(tp);
+    const auto t = find_min(tp);
     if (!valid(t)) {
       // invalid, so restore old value
       tm.target_restore();
-      return fixed(-1);
+      return -1;
     } else {
       return t;
     }
   } else {
-    return fixed(-1);
+    return -1;
   }
 }
 
 void
-TaskOptTarget::SetTarget(const fixed p)
+TaskOptTarget::SetTarget(const double p)
 {
   const GeoPoint loc = iso.Parametric(Clamp(p, xmin, xmax));
   tp_current.SetTarget(loc);

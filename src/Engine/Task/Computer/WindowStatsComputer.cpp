@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,10 +24,10 @@
 #include "Task/Stats/TaskStats.hpp"
 
 void
-WindowStatsComputer::Compute(fixed time, const TaskStats &task_stats,
+WindowStatsComputer::Compute(double time, const TaskStats &task_stats,
                              WindowStats &stats)
 {
-  if (negative(time))
+  if (time < 0)
     return;
 
   if (!task_stats.task_valid || !task_stats.start.task_started ||
@@ -40,20 +40,20 @@ WindowStatsComputer::Compute(fixed time, const TaskStats &task_stats,
   if (task_stats.task_finished)
     return;
 
-  const fixed dt = minute_clock.Update(time, fixed(59), fixed(180));
-  if (negative(dt)) {
+  const auto dt = minute_clock.Update(time, 59, 180);
+  if (dt < 0) {
     Reset();
     stats.Reset();
     return;
   }
 
-  if (!positive(dt))
+  if (dt <= 0)
     return;
 
   travelled_distance.Push(time, task_stats.total.travelled.GetDistance());
 
   stats.duration = travelled_distance.GetDeltaXChecked();
-  if (positive(stats.duration)) {
+  if (stats.duration > 0) {
     stats.distance = travelled_distance.GetDeltaY();
     stats.speed = stats.distance / stats.duration;
   }

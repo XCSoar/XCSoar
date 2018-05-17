@@ -32,14 +32,10 @@
 #include "vlconv.h"
 #include "vlapihlp.h"
 
-// redeclaration of itoa()
-#include "utils.h"
-
 // C-Includes
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
-#include <memory.h>
 #include <assert.h>
 
 // Conversion-Constants
@@ -260,28 +256,6 @@ public:
     }
   }
 
-  /*
-  // Initialisierung der Membervariablen
-  void
-  init(void)
-  {
-    int i;
-    NTP = 0;
-    TID = 0;
-    memset(&T_FDT, 0, sizeof T_FDT);
-    zz_min = 0;
-    memset(&TDECL, 0, sizeof TDECL);
-    strcpy(sTDECL, "            ");
-    memset(FDT, 0, sizeof FDT);
-    TKF.init();
-    STA.init();
-    FIN.init();
-    LDG.init();
-    for (i = 0; i < 12; i++)
-      TP[i].init();
-  }
-  */
-
   C_RECORD()
   {
     NTP = 0;
@@ -291,7 +265,6 @@ public:
     TDECL = BrokenDateTime::Invalid();
     strcpy(sTDECL, "            ");
     memset(FDT, 0, sizeof FDT);
-    //init();
   }
 };
 
@@ -302,24 +275,6 @@ struct IGCHEADER
 {
   char A[10], DTE[10], FXA[10], PLT[80], GTY[50], GID[50], RFW[10], RHW[10],
        FTY[50], DTM[10], CID[50], CCL[50], TZN[20];
-
-  FILE *ausgabe;
-
-  // Initialisierungsroutine
-  //void init(void) {
-  //  DTE[0] = 0;
-  //  FXA[0] = 0;
-  //  PLT[0] = 0;
-  //  GTY[0] = 0;
-  //  GID[0] = 0;
-  //  RFW[0] = 0;
-  //  RHW[0] = 0;
-  //  FTY[0] = 0;
-  //  DTM[0] = 0;
-  //  CID[0] = 0;
-  //  CCL[0] = 0;
-  //  TZN[0] = 0;
-  //}
 
   /** Constructor */
   IGCHEADER(void)
@@ -337,15 +292,6 @@ struct IGCHEADER
     CID[0] = 0;
     CCL[0] = 0;
     TZN[0] = 0;
-    //init();
-    ausgabe = stderr;
-  }
-
-  /** Setting the output stream for IGC files */
-  void
-  redirect(FILE *opf)
-  {
-    ausgabe = opf;
   }
 
   /**
@@ -353,7 +299,7 @@ struct IGCHEADER
    * Unused field will be prepared as HO fields.
    */
   void
-  output(int version, bool oo_fillin)
+  output(FILE *ausgabe, int version, bool oo_fillin)
   {
     igc_filter(PLT);
     igc_filter(GTY);
@@ -508,10 +454,10 @@ Parameter
     Position, an der die Signatur in der Binärdatei liegt
 */
 
-const int actual_conv_version = 424;
+static constexpr int igcfile_version = 424;
 
 size_t
-convert_gcs(int igcfile_version, FILE *Ausgabedatei,
+convert_gcs(FILE *Ausgabedatei,
             const uint8_t *const bin_puffer, size_t length,
             bool oo_fillin)
 {
@@ -558,15 +504,9 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
 
   // long ggtz = timezone;
 
-  if (igcfile_version == 0)
-    igcfile_version = actual_conv_version;
-
   igcfix.lat = 0;
   igcfix.lon = 0;
 
-  //igcfile_version = 0;
-  igcheader.redirect(Ausgabedatei);
-  //task.init();
   decl_time = -1;
 
   ende = 0;
@@ -924,7 +864,7 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
 
   snprintf(igcheader.DTE, sizeof(igcheader.DTE), "%02u%02u%02u",
            firsttime.day, firsttime.month, firsttime.year % 100);
-  igcheader.output(igcfile_version, oo_fillin);
+  igcheader.output(Ausgabedatei, igcfile_version, oo_fillin);
 
   if (igcfile_version >= 414 || (task.STA.koord.lat != 0)
       || (task.STA.koord.lon != 0)) {

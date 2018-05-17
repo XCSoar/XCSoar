@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -117,7 +117,7 @@ ProfileMap::Get(const char *key, uint8_t &value) const
 }
 
 bool
-ProfileMap::Get(const char *key, fixed &value) const
+ProfileMap::Get(const char *key, double &value) const
 {
   // Try to read the profile map
   const char *str = Get(key);
@@ -131,7 +131,7 @@ ProfileMap::Get(const char *key, fixed &value) const
     return false;
 
   // Save parsed value to output parameter value and return success
-  value = fixed(tmp);
+  value = tmp;
   return true;
 }
 
@@ -160,9 +160,9 @@ ProfileMap::Set(const char *key, unsigned value)
 }
 
 void
-ProfileMap::Set(const char *key, fixed value)
+ProfileMap::Set(const char *key, double value)
 {
   char tmp[50];
-  sprintf(tmp, "%f", (double)value);
+  sprintf(tmp, "%f", value);
   Set(key, tmp);
 }

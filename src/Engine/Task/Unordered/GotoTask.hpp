@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,9 +24,8 @@
 #define GOTOTASK_H
 
 #include "UnorderedTask.hpp"
-#include "Compiler.h"
+#include "Engine/Waypoint/Ptr.hpp"
 
-struct Waypoint;
 class Waypoints;
 class UnorderedTaskPoint;
 
@@ -62,7 +61,7 @@ public:
  * @param wp Waypoint to Go To
  * @return True if successful
  */
-  bool DoGoto(const Waypoint& wp);
+  bool DoGoto(WaypointPtr &&wp);
 
   /**
    * When called on takeoff, creates a default goto task
@@ -72,7 +71,7 @@ public:
    *
    * @return True if default task was created
    */
-  bool TakeoffAutotask(const GeoPoint& loc, const fixed terrain_alt);
+  bool TakeoffAutotask(const GeoPoint &loc, double terrain_alt);
 
 public:
   /* virtual methods from class TaskInterface */

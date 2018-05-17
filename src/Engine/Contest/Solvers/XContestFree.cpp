@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@ XContestFree::CalculateResult() const
   ContestResult result = ContestDijkstra::CalculateResult();
   // DHV-XC: 1.5 points per km
   // XContest: 1.0 points per km
-  const fixed score_factor = is_dhv ? fixed(0.0015) : fixed(0.0010);
+  const auto score_factor = is_dhv ? 0.0015 : 0.0010;
   result.score = ApplyHandicap(result.distance * score_factor);
   return result;
 }

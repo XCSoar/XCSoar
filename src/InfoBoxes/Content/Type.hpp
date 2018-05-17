@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -156,6 +156,13 @@ namespace InfoBoxFactory
 
     /* 110..119 */
     NEXT_ARROW,
+    e_WP_ETA_VMG, /* Estimated arrival time at next waypoint assuming current speed is maintained*/
+
+    e_NonCircling_Climb_Perc,
+
+    e_Climb_Perc_Chart,
+
+    e_NbrSat, /* Number of used Sat by GPS module */
 
     e_NUM_TYPES /* Last item */
   };

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,16 +24,17 @@ Copyright_License {
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
-#include "Math/fixed.hpp"
 #include "Point2D.hpp"
 #include "Geo/SpeedVector.hpp"
 
-struct Vector : Point2D<fixed> {
+#include <math.h>
+
+struct Vector : DoublePoint2D {
   Vector() = default;
 
-  constexpr Vector(fixed _x, fixed _y):Point2D<fixed>(_x, _y) {}
+  constexpr Vector(double _x, double _y):DoublePoint2D(_x, _y) {}
 
-  Vector(Angle bearing, fixed norm) {
+  Vector(Angle bearing, double norm) {
     auto sc = bearing.SinCos();
     x = sc.second * norm;
     y = sc.first * norm;
@@ -43,16 +44,6 @@ struct Vector : Point2D<fixed> {
     auto sc = speed.bearing.SinCos();
     x = sc.second * speed.norm;
     y = sc.first * speed.norm;
-  }
-
-  gcc_pure
-  fixed SquareMagnitude() const {
-    return sqr(x) + sqr(y);
-  }
-
-  gcc_pure
-  fixed Magnitude() const {
-    return MediumHypot(x, y);
   }
 };
 

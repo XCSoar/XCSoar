@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,24 +22,24 @@
 
 #include "Logger/GRecord.hpp"
 #include "OS/Args.hpp"
+#include "Util/PrintException.hxx"
 
 #include <stdio.h>
 
 int
 main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "FILE.igc");
-  tstring path = args.ExpectNextT();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
   GRecord g;
   g.Initialize();
 
-  if (g.VerifyGRecordInFile(path.c_str())) {
-    fprintf(stderr, "G record is ok\n");
-    return 0;
-  } else {
-    fprintf(stderr, "G record is NOT ok\n");
-    return 2;
-  }
+  g.VerifyGRecordInFile(path);
+  fprintf(stderr, "G record is ok\n");
+  return EXIT_SUCCESS;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

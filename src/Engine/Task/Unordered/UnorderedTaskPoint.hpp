@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -34,7 +34,7 @@ struct TaskBehaviour;
  *
  */
 class UnorderedTaskPoint final : public TaskWaypoint {
-  fixed safety_height_arrival;
+  double safety_height_arrival;
 
 public:
   /**
@@ -43,14 +43,14 @@ public:
    * @param wp Waypoint to be used as task point origin
    * @param tb Task Behaviour defining options (esp safety heights)
    */
-  UnorderedTaskPoint(const Waypoint & wp,
+  UnorderedTaskPoint(WaypointPtr &&wp,
                      const TaskBehaviour &tb);
 
   void SetTaskBehaviour(const TaskBehaviour &tb);
 
   /* virtual methods from class TaskPoint */
   virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const override;
-  virtual fixed GetElevation() const override;
+  virtual double GetElevation() const override;
 };
 
 #endif

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -32,48 +32,49 @@ ProtectedRoutePlanner::SetTerrain(const RasterTerrain *terrain)
 
 void
 ProtectedRoutePlanner::SetPolars(const GlideSettings &settings,
+                                 const RoutePlannerConfig &config,
                                  const GlidePolar &glide_polar,
                                  const GlidePolar &safety_polar,
-                                 const SpeedVector &wind)
+                                 const SpeedVector &wind,
+                                 const int height_min_working)
 {
   ExclusiveLease lease(*this);
-  lease->UpdatePolar(settings, glide_polar, safety_polar, wind);
+  lease->UpdatePolar(settings, config, glide_polar, safety_polar,
+                     wind, height_min_working);
 }
 
 void
 ProtectedRoutePlanner::SolveRoute(const AGeoPoint &dest,
                                   const AGeoPoint &start,
                                   const RoutePlannerConfig &config,
-                                  const RoughAltitude h_ceiling)
+                                  const int h_ceiling)
 {
   ExclusiveLease lease(*this);
   lease->Synchronise(airspaces, warnings, dest, start);
   lease->Solve(dest, start, config, h_ceiling);
 }
 
-bool
+GeoPoint
 ProtectedRoutePlanner::Intersection(const AGeoPoint &origin,
-                                    const AGeoPoint &destination,
-                                    GeoPoint &intx) const
+                                    const AGeoPoint &destination) const
 {
   Lease lease(*this);
-  return lease->Intersection(origin, destination, intx);
+  return lease->Intersection(origin, destination);
 }
 
 void
 ProtectedRoutePlanner::SolveReach(const AGeoPoint &origin,
                                   const RoutePlannerConfig &config,
-                                  const RoughAltitude h_ceiling,
+                                  const int h_ceiling,
                                   const bool do_solve)
 {
   ExclusiveLease lease(*this);
   lease->SolveReach(origin, config, h_ceiling, do_solve);
 }
 
-void
-ProtectedRoutePlanner::AcceptInRange(const GeoBounds &bounds,
-                                     TriangleFanVisitor &visitor) const
+const FlatProjection
+ProtectedRoutePlanner::GetTerrainReachProjection() const
 {
   Lease lease(*this);
-  lease->AcceptInRange(bounds, visitor);
+  return lease->GetTerrainReachProjection();
 }

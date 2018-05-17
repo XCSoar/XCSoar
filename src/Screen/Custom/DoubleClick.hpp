@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -45,7 +45,7 @@ class DoubleClick {
 
   PeriodClock clock;
 
-  RasterPoint location;
+  PixelPoint location;
 
 public:
   /**
@@ -60,9 +60,9 @@ public:
    * Call this in the "mouse up" handler.  It will take care for
    * resetting this object when the mouse/finger has moved too much.
    */
-  void Moved(RasterPoint _location) {
+  void Moved(PixelPoint _location) {
     if (clock.IsDefined() &&
-        manhattan_distance(location, _location) > MAX_DISTANCE_PX)
+        (unsigned)ManhattanDistance(location, _location) > MAX_DISTANCE_PX)
       Reset();
   }
 
@@ -71,9 +71,9 @@ public:
    *
    * @return true if a double click was detected
    */
-  bool Check(RasterPoint _location) {
+  bool Check(PixelPoint _location) {
     const bool result = !clock.CheckAlwaysUpdate(INTERVAL_MS) &&
-      manhattan_distance(location, _location) <= MAX_DISTANCE_PX;
+      (unsigned)ManhattanDistance(location, _location) <= MAX_DISTANCE_PX;
 
     location = _location;
     return result;

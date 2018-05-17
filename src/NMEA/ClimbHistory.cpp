@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,12 +29,12 @@ Copyright_License {
 void
 ClimbHistory::Clear()
 {
-  std::fill_n(vario, ARRAY_SIZE(vario), fixed(0));
+  std::fill_n(vario, ARRAY_SIZE(vario), 0);
   std::fill_n(count, ARRAY_SIZE(count), 0);
 }
 
 void
-ClimbHistory::Add(unsigned speed, fixed _vario)
+ClimbHistory::Add(unsigned speed, double _vario)
 {
   if (speed >= SIZE)
     return;

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,12 +29,14 @@ Copyright_License {
 #include "Gauge/BigTrafficWidget.hpp"
 #include "Computer/Settings.hpp"
 #include "Components.hpp"
+#include "DataGlobals.hpp"
 #include "MapSettings.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
-#include "Terrain/RasterWeatherStore.hpp"
+#include "Weather/Rasp/RaspStore.hpp"
 #include "Device/device.hpp"
 #include "PageActions.hpp"
 #include "Util/DollarExpand.hpp"
@@ -203,6 +205,10 @@ ExpandTaskMacros(const TCHAR *name,
       return common_stats.task_type == TaskType::ABORT
         ? _("Resume")
         : _("Abort");
+  } else if (StringIsEqual(name, _T("CheckTaskRestart"))) {
+    invalid |= !(common_stats.task_type == TaskType::ORDERED &&
+                 task_stats.start.task_started);
+    return _T("");
   }
 
   return nullptr;
@@ -276,6 +282,7 @@ LookupMacro(const TCHAR *name, bool &invalid)
     invalid |= !Basic().flarm.status.available;
     return nullptr;
   } else if (StringIsEqual(name, _T("CheckWeather"))) {
+    const auto rasp = DataGlobals::GetRasp();
     invalid |= rasp == nullptr || rasp->GetItemCount() == 0;
     return nullptr;
   } else if (StringIsEqual(name, _T("CheckCircling"))) {

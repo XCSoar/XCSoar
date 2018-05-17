@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,14 +24,12 @@ Copyright_License {
 #include "Settings.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "OS/Clock.hpp"
-#include "Asset.hpp"
-#include "Atmosphere/Temperature.hpp"
 
 void
 PolarSettings::SetDefaults()
 {
-  degradation_factor = fixed(1);
-  bugs = fixed(1);
+  degradation_factor = 1;
+  bugs = 1;
   glide_polar_task = GlidePolar::Invalid();
   ballast_timer_active = false;
   auto_bugs = false;
@@ -55,7 +53,7 @@ PlacesOfInterestSettings::SetHome(const Waypoint &wp)
 void
 FeaturesSettings::SetDefaults()
 {
-  final_glide_terrain = FinalGlideTerrain::LINE;
+  final_glide_terrain = FinalGlideTerrain::TERRAIN_LINE;
   block_stf_enabled = false;
   nav_baro_altitude_enabled = true;
 }
@@ -66,16 +64,15 @@ ComputerSettings::SetDefaults()
   wind.SetDefaults();
   polar.SetDefaults();
   team_code.SetDefaults();
-  voice.SetDefaults();
   poi.SetDefaults();
   features.SetDefaults();
   circling.SetDefaults();
   wave.SetDefaults();
 
   average_eff_time = ae30seconds;
-  set_system_time_from_gps = IsAltair() && IsEmbedded();
+  set_system_time_from_gps = false;
   utc_offset = RoughTimeDelta::FromSeconds(GetSystemUTCOffset());
-  forecast_temperature = CelsiusToKelvin(fixed(25));
+  forecast_temperature = Temperature::FromCelsius(25);
   pressure = AtmosphericPressure::Standard();
   pressure_available.Clear();
   airspace.SetDefaults();
@@ -86,4 +83,5 @@ ComputerSettings::SetDefaults()
 #ifdef HAVE_TRACKING
   tracking.SetDefaults();
 #endif
+  weather.SetDefaults();
 }

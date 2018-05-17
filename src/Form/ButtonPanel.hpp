@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FORM_BUTTON_PANEL_HPP
 #define XCSOAR_FORM_BUTTON_PANEL_HPP
 
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 #include "Form/Button.hpp"
 
 #include <assert.h>
@@ -91,16 +91,6 @@ public:
    * Assign a hot key to the most recently added button.
    */
   void AddKey(unsigned key_code);
-
-  /**
-   * Wrapper for AddKey() which is Altair specific; it a no-op on all
-   * other platforms.
-   */
-  void AddAltairKey(gcc_unused unsigned key_code) {
-#ifdef GNAV
-    AddKey(key_code);
-#endif
-  }
 
   /**
    * Call this after all buttons have been added or after the parent

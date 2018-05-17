@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,20 +22,14 @@ Copyright_License {
 */
 
 #include "Components.hpp"
-#include "Terrain/RasterWeatherStore.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Thread/Debug.hpp"
 
-#ifdef GNAV
-#include "Hardware/AltairControl.hpp"
-#endif
-
 FileCache *file_cache;
 TopographyStore *topography;
 RasterTerrain *terrain;
-RasterWeatherStore *rasp;
 
 #ifndef ENABLE_OPENGL
 DrawThread *draw_thread;
@@ -62,10 +56,6 @@ ProtectedTaskManager *protected_task_manager;
 Airspaces airspace_database;
 
 GlideComputer *glide_computer;
-
-#ifdef GNAV
-AltairControl altair_control;
-#endif
 
 ProtectedAirspaceWarningManager *
 GetAirspaceWarnings()

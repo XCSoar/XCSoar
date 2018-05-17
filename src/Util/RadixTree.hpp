@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2010 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,7 +31,7 @@
 #define RADIX_TREE_HPP
 
 #include "Util/StaticString.hxx"
-#include "StringUtil.hpp"
+#include "StringCompare.hxx"
 #include "tstring.hpp"
 
 #include <algorithm>
@@ -210,10 +210,10 @@ class RadixTree {
      */
     Node *CreateLeaf(const TCHAR *label, const T &value) const {
       Node *top = new Node(label), *bottom = top;
-      while (_tcslen(label) >= Node::label.CAPACITY) {
+      while (_tcslen(label) >= Node::label.capacity()) {
         /* label too long for the Node's StaticString, create another
            child Node */
-        label += Node::label.CAPACITY - 1;
+        label += Node::label.capacity() - 1;
         Node *node = new Node(label);
         bottom->children = node;
         bottom = node;

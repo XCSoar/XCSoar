@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef DOLLAR_EXPAND_HPP
 #define DOLLAR_EXPAND_HPP
 
-#include "StringAPI.hpp"
+#include "StringAPI.hxx"
 #include "TruncateString.hpp"
 
 #include <tchar.h>

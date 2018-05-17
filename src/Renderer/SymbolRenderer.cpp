@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -32,9 +32,9 @@ SymbolRenderer::DrawArrow(Canvas &canvas, PixelRect rc, Direction direction)
   assert(direction == UP || direction == DOWN ||
          direction == LEFT || direction == RIGHT);
 
-  PixelScalar size = std::min(rc.right - rc.left, rc.bottom - rc.top) / 5;
-  RasterPoint center = rc.GetCenter();
-  RasterPoint arrow[3];
+  auto size = std::min(rc.GetWidth(), rc.GetHeight()) / 5;
+  auto center = rc.GetCenter();
+  BulkPixelPoint arrow[3];
 
   if (direction == LEFT || direction == RIGHT) {
     arrow[0].x = center.x + (direction == LEFT ? size : -size);
@@ -58,8 +58,8 @@ SymbolRenderer::DrawArrow(Canvas &canvas, PixelRect rc, Direction direction)
 void
 SymbolRenderer::DrawSign(Canvas &canvas, PixelRect rc, bool plus)
 {
-  PixelScalar size = std::min(rc.right - rc.left, rc.bottom - rc.top) / 5;
-  RasterPoint center = rc.GetCenter();
+  unsigned size = std::min(rc.GetWidth(), rc.GetHeight()) / 5;
+  auto center = rc.GetCenter();
 
   // Draw horizontal bar
   canvas.Rectangle(center.x - size, center.y - size / 3,

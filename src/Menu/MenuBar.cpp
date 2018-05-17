@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "MenuBar.hpp"
 #include "Screen/ContainerWindow.hpp"
-#include "Screen/Layout.hpp"
 #include "Input/InputEvents.hpp"
 
 #include <assert.h>
@@ -32,8 +31,7 @@ gcc_pure
 static PixelRect
 GetButtonPosition(unsigned i, PixelRect rc)
 {
-  UPixelScalar hwidth = rc.right - rc.left;
-  UPixelScalar hheight = rc.bottom - rc.top;
+  unsigned hwidth = rc.GetWidth(), hheight = rc.GetHeight();
 
   if (hheight > hwidth) {
     // portrait
@@ -52,14 +50,7 @@ GetButtonPosition(unsigned i, PixelRect rc)
       hwidth /= 3;
 
       rc.left = rc.right - hwidth;
-
-      if (IsAltair()) {
-        PixelScalar k = rc.bottom - rc.top;
-        // JMW need upside down button order for rotated Altair
-        rc.top = rc.bottom - (i - 5) * k / 5 - hheight - Layout::Scale(20);
-      } else {
-        rc.top += (i - 5) * hheight;
-      }
+      rc.top += (i - 5) * hheight;
     }
 
     rc.right = rc.left + hwidth;

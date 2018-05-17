@@ -91,18 +91,10 @@ discover/manual.html}.
 XCSoar runs on the following platforms:
 
 \begin{itemize}
-\item PDAs with Pocket PC 2003, 2002, 2003 \\
-  Example: iPaq 3800, iPaq 3900
-\item PDAs with Windows Mobile \\
-  Example: Paq hx4700, Dell Axim x51v
-\item PNAs with Windows CE 3.0 or newer \\
-  Example: HP314, Mio400
 \item Android mobile phones and tablets with Android 1.6 or newer \\
   Example: Dell Streak, Samsung Galaxy S II, HTC Desire HD,
   Motorola Xoom
 \item eReader Kobo (experimental, Dec. 2013)
-\item Triadis Altair
-\item LX MiniMap
 \item Windows 2000 or newer
 \item Linux
 \item Mac OS X (outdated)
@@ -208,31 +200,6 @@ you know what you're doing, you can use this script to do things
 before \texttt{Nickel} is fully started, for example send commands
 to your attached vario (to shut it down, to cut the volume, etc...).
 
-\subsection*{On a PDA (Windows Mobile, PocketPC)}
-
-Choose one of the targets:
-
-\begin{description}
-\item[\texttt{PPC2003}] Pocket PC 2003, Windows CE 4.0
-\item[\texttt{WM5}] Windows Mobile 5 or newer
-\item[\texttt{WM5X}] Windows Mobile 5 or newer with XScale CPU or
-  better (e.g. hx4700)
-\end{description}
-
-Download the program file \verb|XCSoar.exe| to a SD card.  You can
-launch it with the File Explorer.
-\sketch{figures/XCS_Today.png}
-Another method to install XCSoar on a PDA is the CAB file.  Download
-it to the SD card.  Use the File Explorer to install it.  After the
-installation, the XCSoar `FLY' and `SIM' launcher icons will be
-visible on the Today screen.
-
-
-\subsection*{On a PNA (Windows CE)}
-
-Download the program file \verb|XCSoar.exe| (target ``WM5'') to a SD
-card.  You can launch it with the File Explorer.
-
 \subsection*{On a Windows PC}
 
 Download the program file \verb|XCSoar.exe| (target ``PC'') to your
@@ -298,9 +265,6 @@ XCSoar looks for it in \texttt{My Documents}.
 The directory is called \verb|.xcsoar| in the user's home directory.
 \item[Android Devices]
 \texttt{XCSoarData} is on the SD card.
-\item[Altair]
-If XCSoarData exists on an USB drive, that one is used, otherwise the
-internal storage is used.
 \end{description}
 
 
@@ -329,21 +293,6 @@ Two modes are available inside the XCSoar application:
 \item[SIM] This starts XCSoar in simulator mode, no serial communications
   are attempted.
 \end{description}
-
-\subsection*{Altair version}
-XCSoar starts up automatically when Altair is powered on.
-The PWR/ESC button (top left) has multiple functions:
-\begin{description}
-\item[Powering on]  Press and hold the PWR/ESC button for one second.
-  The LED in the button will light up, and XCSoar will start after
-  Altair has booted.
-\item[Powering off]  Press and hold the PWR/ESC button for 3 seconds.
-  Altair will switch off.
-\item[Escape] Pressing the PWR/ESC button quickly acts as an
-Escape key, typically used to close dialog pages or as a cancel function.
-\end{description}
-
-The Altair version of XCSoar does not include a simulator mode.
 
 \subsection*{XCSoar PC version}
 The program can be run by opening the explorer window, finding the directory
@@ -464,6 +413,3 @@ opened by double-clicking on the map or the \InfoBox es.
 
 For PC versions, XCSoar can also be shut down by clicking the close icon
 on the XCSoar window.
-
-For Altair, XCSoar is shut down by holding the PWR button for two seconds or
-more.

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -34,17 +34,18 @@ AbstractTask::AbstractTask(TaskType _type,
    task_events(NULL),
    task_behaviour(tb),
    force_full_update(true),
-   mc_lpf(fixed(8)),
-   ce_lpf(fixed(60)),
-   em_lpf(fixed(60)),
+   mc_lpf(8),
+   ce_lpf(60),
+   em_lpf(60),
    mc_lpf_valid(false)
 {
    stats.reset();
+   stats_computer.Reset(stats);
 }
 
 bool 
 AbstractTask::UpdateAutoMC(GlidePolar &glide_polar,
-                           const AircraftState& state, fixed fallback_mc)
+                           const AircraftState& state, double fallback_mc)
 {
   if (!task_behaviour.auto_mc) {
     /* AutoMC disabled in configuration */
@@ -52,7 +53,7 @@ AbstractTask::UpdateAutoMC(GlidePolar &glide_polar,
     return false;
   }
 
-  fixed mc_found;
+  double mc_found;
   if (task_behaviour.IsAutoMCFinalGlideEnabled() &&
       TaskStarted(true) && stats.flight_mode_final_glide) {
     /* calculate final glide MacCready */
@@ -60,21 +61,21 @@ AbstractTask::UpdateAutoMC(GlidePolar &glide_polar,
     if (CalcBestMC(state, glide_polar, mc_found)) {
       /* final glide MacCready found */
       if (mc_lpf_valid)
-        stats.mc_best = std::max(mc_lpf.Update(mc_found), fixed(0));
+        stats.mc_best = std::max(mc_lpf.Update(mc_found), 0.);
       else {
-        stats.mc_best = std::max(mc_lpf.Reset(mc_found), fixed(0));
+        stats.mc_best = std::max(mc_lpf.Reset(mc_found), 0.);
         mc_lpf_valid = true;
       }
     } else
       /* below final glide, but above margin */
-      stats.mc_best = fixed(0);
+      stats.mc_best = 0;
 
     glide_polar.SetMC(stats.mc_best);
     return true;
   } else if (task_behaviour.IsAutoMCCruiseEnabled()) {
     /* cruise: set MacCready to recent climb average */
 
-    if (!positive(fallback_mc)) {
+    if (fallback_mc <= 0) {
       /* no climb average calculated yet */
       ResetAutoMC();
       return false;
@@ -87,11 +88,11 @@ AbstractTask::UpdateAutoMC(GlidePolar &glide_polar,
     /* no solution, but forced final glide AutoMacCready - converge to
        zero */
 
-    mc_found = fixed(0);
+    mc_found = 0;
     if (mc_lpf_valid)
-      stats.mc_best = std::max(mc_lpf.Update(mc_found), fixed(0));
+      stats.mc_best = std::max(mc_lpf.Update(mc_found), 0.);
     else {
-      stats.mc_best = std::max(mc_lpf.Reset(mc_found), fixed(0));
+      stats.mc_best = std::max(mc_lpf.Reset(mc_found), 0.);
       mc_lpf_valid = true;
     }
 
@@ -111,18 +112,18 @@ AbstractTask::UpdateIdle(const AircraftState &state,
 
   if (stats.start.task_started && task_behaviour.calc_cruise_efficiency &&
       valid) {
-    fixed val = fixed(1);
+    double val = 1;
     if (CalcCruiseEfficiency(state, glide_polar, val))
-      stats.cruise_efficiency = std::max(ce_lpf.Update(val), fixed(0));
+      stats.cruise_efficiency = std::max(ce_lpf.Update(val), 0.);
   } else {
-    stats.cruise_efficiency = ce_lpf.Reset(fixed(1));
+    stats.cruise_efficiency = ce_lpf.Reset(1);
   }
 
   if (stats.start.task_started && task_behaviour.calc_effective_mc &&
       valid) {
-    fixed val = glide_polar.GetMC();
+    auto val = glide_polar.GetMC();
     if (CalcEffectiveMC(state, glide_polar, val))
-      stats.effective_mc = std::max(em_lpf.Update(val), fixed(0));
+      stats.effective_mc = std::max(em_lpf.Update(val), 0.);
   } else {
     stats.effective_mc = em_lpf.Reset(glide_polar.GetMC());
   }
@@ -130,7 +131,7 @@ AbstractTask::UpdateIdle(const AircraftState &state,
   if (task_behaviour.calc_glide_required && valid)
     UpdateStatsGlide(state, glide_polar);
   else
-    stats.glide_required = fixed(0); // error
+    stats.glide_required = 0; // error
 
   return false;
 }
@@ -163,11 +164,11 @@ AbstractTask::UpdateStatsDistances(const GeoPoint &location,
 
   if (IsScored()) {
     if (!stats.start.task_started)
-      stats.distance_scored = fixed(0);
+      stats.distance_scored = 0;
     else if (!stats.task_finished)
       stats.distance_scored = ScanDistanceScored(location);
   } else
-    stats.distance_scored = fixed(0);
+    stats.distance_scored = 0;
 }
 
 static void
@@ -179,16 +180,6 @@ Copy(DistanceStat &stat, const GlideResult &solution)
     stat.Reset();
 }
 
-static void
-CalculatePirker(DistanceStat &pirker, const DistanceStat &planned,
-                const DistanceStat &remaining_effective)
-{
-  if (planned.IsDefined() && remaining_effective.IsDefined())
-    pirker.SetDistance(planned.GetDistance() -
-                        remaining_effective.GetDistance());
-  else
-    pirker.Reset();
-}
 
 void
 AbstractTask::UpdateGlideSolutions(const AircraftState &state,
@@ -197,9 +188,9 @@ AbstractTask::UpdateGlideSolutions(const AircraftState &state,
   GlideSolutionRemaining(state, glide_polar, stats.total.solution_remaining,
                            stats.current_leg.solution_remaining);
 
-  if (positive(glide_polar.GetMC())) {
+  if (glide_polar.GetMC() > 0) {
     GlidePolar polar_mc0 = glide_polar;
-    polar_mc0.SetMC(fixed(0)); 
+    polar_mc0.SetMC(0); 
     
     GlideSolutionRemaining(state, polar_mc0, stats.total.solution_mc0,
                              stats.current_leg.solution_mc0);
@@ -207,6 +198,20 @@ AbstractTask::UpdateGlideSolutions(const AircraftState &state,
     // no need to re-calculate, just copy
     stats.total.solution_mc0 = stats.total.solution_remaining;
     stats.current_leg.solution_mc0 = stats.current_leg.solution_remaining;
+  }
+
+  // instantaneous speed
+  if (stats.total.solution_remaining.IsDefined() &&
+      stats.current_leg.solution_remaining.IsDefined()) {
+    const double ss = stats.total.solution_remaining.InstantSpeed(
+        state,
+        stats.current_leg.solution_remaining,
+        glide_polar);
+
+    stats.inst_speed_fast = stats_computer.inst_speed_fast.Update(ss);
+    stats.inst_speed_slow = stats_computer.inst_speed_slow.Update(ss);
+  } else {
+    stats.inst_speed_fast = stats.inst_speed_slow = -1;
   }
 
   GlideSolutionTravelled(state, glide_polar,
@@ -220,12 +225,6 @@ AbstractTask::UpdateGlideSolutions(const AircraftState &state,
                          stats.current_leg.remaining_effective,
                          stats.total.solution_remaining,
                          stats.current_leg.solution_remaining);
-
-  CalculatePirker(stats.total.pirker, stats.total.planned,
-                  stats.total.remaining_effective);
-
-  CalculatePirker(stats.current_leg.pirker, stats.current_leg.planned,
-                  stats.current_leg.remaining_effective);
 
   Copy(stats.current_leg.remaining, stats.current_leg.solution_remaining);
   Copy(stats.current_leg.travelled, stats.current_leg.solution_travelled);
@@ -265,7 +264,7 @@ AbstractTask::Update(const AircraftState &state,
 }
 
 void
-AbstractTask::UpdateStatsSpeeds(const fixed time)
+AbstractTask::UpdateStatsSpeeds(const double time)
 {
   if (!stats.task_finished) {
     stats_computer.total.CalcSpeeds(stats.total, time);
@@ -284,19 +283,19 @@ AbstractTask::UpdateStatsGlide(const AircraftState &state,
 }
 
 void
-AbstractTask::UpdateStatsTimes(const fixed time)
+AbstractTask::UpdateStatsTimes(const double time)
 {
   if (!stats.task_finished) {
-    stats.current_leg.SetTimes(fixed(0), ScanLegStartTime(), time);
+    stats.current_leg.SetTimes(0, ScanLegStartTime(), time);
 
-    const fixed until_start_s = GetType() == TaskType::ORDERED &&
+    const auto until_start_s = GetType() == TaskType::ORDERED &&
       GetActiveTaskPointIndex() == 0
       /* flying towards the start point in an ordered task: pass
          current_leg.time_remaining, which is the estimated time to
          reach the start point */
       ? stats.current_leg.time_remaining_now
       /* already beyond the start point (or no start point) */
-      : fixed(0);
+      : 0;
 
     stats.total.SetTimes(until_start_s, ScanTotalStartTime(), time);
   }
@@ -312,23 +311,24 @@ void
 AbstractTask::Reset()
 {
   ResetAutoMC();
-  ce_lpf.Reset(fixed(1));
+  ce_lpf.Reset(1);
   stats.reset();
+  stats_computer.Reset(stats);
   force_full_update = true;
 }
 
-fixed
+double
 AbstractTask::CalcLegGradient(const AircraftState &aircraft) const
 {
   // Get next turnpoint
   const TaskWaypoint *tp = GetActiveTaskPoint();
   if (!tp)
-    return fixed(0);
+    return 0;
 
   // Get the distance to the next turnpoint
-  const fixed d = tp->GetVectorRemaining(aircraft.location).distance;
-  if (!positive(d))
-    return fixed(0);
+  const auto d = tp->GetVectorRemaining(aircraft.location).distance;
+  if (d <= 0)
+    return 0;
 
   // Calculate the geometric gradient (height divided by distance)
   return (aircraft.altitude - tp->GetElevation()) / d;
@@ -337,7 +337,7 @@ AbstractTask::CalcLegGradient(const AircraftState &aircraft) const
 bool 
 AbstractTask::CalcEffectiveMC(const AircraftState &state_now,
                               const GlidePolar &glide_polar,
-                              fixed &val) const
+                              double &val) const
 {
   val = glide_polar.GetMC();
   return true;

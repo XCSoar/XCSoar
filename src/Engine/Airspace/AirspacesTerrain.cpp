@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,14 +26,14 @@
 void 
 Airspaces::SetGroundLevels(const RasterTerrain &terrain)
 {
-  for (auto &v : airspace_tree) {
+  for (auto &v : QueryAll()) {
     // If we don't need the ground level we don't have to calculate it
     if (!v.NeedGroundLevel())
       continue;
 
     FlatGeoPoint c_flat = v.GetCenter();
     GeoPoint g = task_projection.Unproject(c_flat);
-    v.SetGroundLevel(fixed(terrain.GetTerrainHeightOr0(g)));
+    v.SetGroundLevel(terrain.GetTerrainHeight(g).GetValueOr0());
   }
 }
 

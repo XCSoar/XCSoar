@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,42 +22,39 @@ Copyright_License {
 */
 
 #include "Tracking/SkyLines/Client.hpp"
+#include "Tracking/SkyLines/Handler.hpp"
 #include "NMEA/Info.hpp"
 #include "OS/Args.hpp"
 #include "Util/NumberParser.hpp"
 #include "Util/StringUtil.hpp"
 #include "DebugReplay.hpp"
-#include "Net/IPv4Address.hxx"
-#include "Net/StaticSocketAddress.hxx"
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-#include "IO/Async/GlobalIOThread.hpp"
+#include <boost/asio/steady_timer.hpp>
+
+#include <memory>
 
 class Handler : public SkyLinesTracking::Handler {
-  Mutex mutex;
-  Cond cond;
+  Args &args;
 
-  bool done;
+  SkyLinesTracking::Client client;
 
-public:
-  Handler():done(false) {}
+  boost::asio::steady_timer timer;
 
-  bool Wait(unsigned timeout_ms=5000) {
-    const ScopeLock protect(mutex);
-    return done || (cond.Wait(mutex, timeout_ms) && done);
-  }
-
-protected:
-  void Done() {
-    const ScopeLock protect(mutex);
-    done = true;
-    cond.Broadcast();
-  }
+  std::unique_ptr<DebugReplay> replay;
 
 public:
+  explicit Handler(Args &_args, boost::asio::io_service &io_service)
+    :args(_args), client(io_service, this), timer(io_service) {}
+
+  SkyLinesTracking::Client &GetClient() {
+    return client;
+  }
+
+  void OnSkyLinesReady() override;
+
   virtual void OnAck(unsigned id) override {
     printf("received ack %u\n", id);
-    Done();
+    timer.get_io_service().stop();
   }
 
   virtual void OnTraffic(unsigned pilot_id, unsigned time_of_day_ms,
@@ -69,82 +66,92 @@ public:
            (double)location.longitude.Degrees(),
            (double)location.latitude.Degrees(),
            altitude);
-    Done();
+
+    ScheduleStop(std::chrono::seconds(1));
+  }
+
+  void OnSkyLinesError(const std::exception &e) override {
+    fprintf(stderr, "Error: %s\n", e.what());
+
+    timer.cancel();
+  }
+
+private:
+  void ScheduleStop(boost::asio::steady_timer::duration d) {
+    timer.expires_from_now(d);
+    timer.async_wait([this](const boost::system::error_code &ec){
+        if (!ec)
+          timer.get_io_service().stop();
+      });
+  }
+
+  void NextReplay(const boost::system::error_code &ec) {
+    if (ec)
+      return;
+
+    if (replay->Next()) {
+      client.SendFix(replay->Basic());
+      ScheduleNextReplay(std::chrono::milliseconds(100));
+    } else
+      timer.get_io_service().stop();
+  }
+
+  void ScheduleNextReplay(boost::asio::steady_timer::duration d) {
+    timer.expires_from_now(d);
+    timer.async_wait(std::bind(&Handler::NextReplay, this,
+                               std::placeholders::_1));
   }
 };
 
-#endif
-
-int
-main(int argc, char *argv[])
+void
+Handler::OnSkyLinesReady()
 {
-  Args args(argc, argv, "HOST KEY");
-  const char *host = args.ExpectNext();
-  const char *key = args.ExpectNext();
-
-  StaticSocketAddress address;
-  if (!address.Lookup(host, "5597", SOCK_DGRAM)) {
-    fprintf(stderr, "Failed to look up: %s\n", host);
-    return EXIT_FAILURE;
-  }
-
-  if (address.GetFamily() != AF_INET) {
-    fprintf(stderr, "Not an IPv4 address: %s\n", host);
-    return EXIT_FAILURE;
-  }
-
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  InitialiseIOThread();
-#endif
-
-  SkyLinesTracking::Client client;
-
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  client.SetIOThread(io_thread);
-
-  Handler handler;
-  client.SetHandler(&handler);
-#endif
-
-  client.SetKey(ParseUint64(key, NULL, 16));
-  if (!client.Open(address)) {
-    fprintf(stderr, "Failed to create client\n");
-    return EXIT_FAILURE;
-  }
-
   if (args.IsEmpty() || StringIsEqual(args.PeekNext(), "fix")) {
     NMEAInfo basic;
     basic.Reset();
     basic.UpdateClock();
-    basic.time = fixed(1);
+    basic.time = 1;
     basic.time_available.Update(basic.clock);
 
-    return client.SendFix(basic) ? EXIT_SUCCESS : EXIT_FAILURE;
+    client.SendFix(basic);
   } else if (StringIsEqual(args.PeekNext(), "ping")) {
     client.SendPing(1);
-
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-    handler.Wait();
   } else if (StringIsEqual(args.PeekNext(), "traffic")) {
     client.SendTrafficRequest(true, true, true);
-
-    handler.Wait();
-#endif
   } else {
-    DebugReplay *replay = CreateDebugReplay(args);
-    if (replay == NULL)
-      return EXIT_FAILURE;
+    replay.reset(CreateDebugReplay(args));
+    if (replay == nullptr)
+      throw std::runtime_error("CreateDebugReplay() failed");
 
-    while (replay->Next()) {
-      client.SendFix(replay->Basic());
-      usleep(100000);
-    }
+    ScheduleNextReplay(std::chrono::seconds(0));
   }
+}
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  client.Close();
-  DeinitialiseIOThread();
-#endif
+int
+main(int argc, char *argv[])
+try {
+  Args args(argc, argv, "HOST KEY");
+  const char *host = args.ExpectNext();
+  const char *key = args.ExpectNext();
+
+  boost::asio::io_service io_service;
+
+  /* IPv4 only for now, because the official SkyLines tracking server
+     doesn't support IPv6 yet */
+  const boost::asio::ip::udp::resolver::query query(boost::asio::ip::udp::v4(),
+                                                    host,
+                                                    SkyLinesTracking::Client::GetDefaultPortString());
+
+  Handler handler(args, io_service);
+
+  auto &client = handler.GetClient();
+  client.SetKey(ParseUint64(key, NULL, 16));
+  client.Open(query);
+
+  io_service.run();
 
   return EXIT_SUCCESS;
+} catch (const std::exception &e) {
+  fprintf(stderr, "%s\n", e.what());
+  return EXIT_FAILURE;
 }

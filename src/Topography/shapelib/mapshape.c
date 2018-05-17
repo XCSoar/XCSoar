@@ -45,6 +45,9 @@
 #include <stdbool.h>
 #include <math.h>
 #include "mapserver.h"
+#ifdef SHAPELIB_DISABLED
+#include "mapows.h"
+#endif
 #include "maptree.h"
 
 #if defined(USE_GDAL) || defined(USE_OGR)
@@ -288,6 +291,7 @@ SHPHandle msSHPOpen(struct zzip_dir *zdir, const char * pszLayer, const char * p
     psSHP->fpSHX = zzip_open_rb(zdir, pszFullname);
   }
   if( psSHP->fpSHX == NULL ) {
+    zzip_file_close(psSHP->fpSHP);
     msFree(pszBasename);
     msFree(pszFullname);
     msFree(psSHP);
@@ -302,8 +306,8 @@ SHPHandle msSHPOpen(struct zzip_dir *zdir, const char * pszLayer, const char * p
   /* -------------------------------------------------------------------- */
   pabyBuf = (uchar *) msSmallMalloc(100);
   if(1 != zzip_fread( pabyBuf, 100, 1, psSHP->fpSHP )) {
-    zzip_fclose( psSHP->fpSHP );
-    zzip_fclose( psSHP->fpSHX );
+    zzip_file_close( psSHP->fpSHP );
+    zzip_file_close( psSHP->fpSHX );
     free( psSHP );
     free(pabyBuf);
     return( NULL );
@@ -319,8 +323,8 @@ SHPHandle msSHPOpen(struct zzip_dir *zdir, const char * pszLayer, const char * p
   /* -------------------------------------------------------------------- */
   if(1 != zzip_fread( pabyBuf, 100, 1, psSHP->fpSHX )) {
     msSetError(MS_SHPERR, "Corrupted .shx file", "msSHPOpen()");
-    zzip_fclose( psSHP->fpSHP );
-    zzip_fclose( psSHP->fpSHX );
+    zzip_file_close( psSHP->fpSHP );
+    zzip_file_close( psSHP->fpSHX );
     free( psSHP );
     free(pabyBuf);
     return( NULL );
@@ -328,8 +332,8 @@ SHPHandle msSHPOpen(struct zzip_dir *zdir, const char * pszLayer, const char * p
 
   if( pabyBuf[0] != 0 || pabyBuf[1] != 0 || pabyBuf[2] != 0x27  || (pabyBuf[3] != 0x0a && pabyBuf[3] != 0x0d) ) {
     msSetError(MS_SHPERR, "Corrupted .shp file", "msSHPOpen()");
-    zzip_fclose( psSHP->fpSHP );
-    zzip_fclose( psSHP->fpSHX );
+    zzip_file_close( psSHP->fpSHP );
+    zzip_file_close( psSHP->fpSHX );
     free( psSHP );
     free(pabyBuf);
 
@@ -343,8 +347,8 @@ SHPHandle msSHPOpen(struct zzip_dir *zdir, const char * pszLayer, const char * p
   if( psSHP->nRecords < 0 || psSHP->nRecords > 256000000 ) {
     msSetError(MS_SHPERR, "Corrupted .shp file : nRecords = %d.", "msSHPOpen()",
                psSHP->nRecords);
-    zzip_fclose( psSHP->fpSHP );
-    zzip_fclose( psSHP->fpSHX );
+    zzip_file_close( psSHP->fpSHP );
+    zzip_file_close( psSHP->fpSHX );
     free( psSHP );
     free(pabyBuf);
     return( NULL );
@@ -407,8 +411,8 @@ SHPHandle msSHPOpen(struct zzip_dir *zdir, const char * pszLayer, const char * p
     free(psSHP->panRecOffset);
     free(psSHP->panRecSize);
     free(psSHP->panRecLoaded);
-    zzip_fclose( psSHP->fpSHP );
-    zzip_fclose( psSHP->fpSHX );
+    zzip_file_close( psSHP->fpSHP );
+    zzip_file_close( psSHP->fpSHX );
     free( psSHP );
     msSetError(MS_MEMERR, "Out of memory", "msSHPOpen()");
     return( NULL );
@@ -445,9 +449,9 @@ void msSHPClose(SHPHandle psSHP )
   free(psSHP->panParts);
 
   if (psSHP->fpSHX)
-    zzip_fclose( psSHP->fpSHX );
+    zzip_file_close( psSHP->fpSHX );
   if (psSHP->fpSHP)
-    zzip_fclose( psSHP->fpSHP );
+    zzip_file_close( psSHP->fpSHP );
 
   free( psSHP );
 }
@@ -1960,6 +1964,10 @@ int msTiledSHPOpenFile(layerObj *layer)
 
   msTiledSHPLayerInfo *tSHP=NULL;
 
+  if (layer->layerinfo != NULL) {
+    return MS_SUCCESS;  // Nothing to do... layer is already opened
+  }
+
   if ( msCheckParentPointer(layer->map,"map")==MS_FAILURE )
     return MS_FAILURE;
 
@@ -1987,7 +1995,7 @@ int msTiledSHPOpenFile(layerObj *layer)
     tlp = (GET_LAYER(layer->map, tSHP->tilelayerindex));
 
     if(tlp->connectiontype != MS_SHAPEFILE) {
-      msSetError(MS_SDEERR, "Tileindex layer must be a shapefile.", "msTiledSHPOpenFile()");
+      msSetError(MS_SHPERR, "Tileindex layer must be a shapefile.", "msTiledSHPOpenFile()");
       return(MS_FAILURE);
     }
 
@@ -2232,6 +2240,7 @@ int msTiledSHPNextShape(layerObj *layer, shapeObj *shape)
             continue;
           } else if(status != MS_SUCCESS) {
             msShapefileClose(tSHP->shpfile);
+            tSHP->tileshpfile->lastshape = -1;
             return(MS_FAILURE);
           }
 
@@ -2240,7 +2249,10 @@ int msTiledSHPNextShape(layerObj *layer, shapeObj *shape)
           break;
         }
 
-        if(status == MS_DONE) return(MS_DONE); /* no more tiles */
+        if(status == MS_DONE) {
+            tSHP->tileshpfile->lastshape = -1;
+            return(MS_DONE); /* no more tiles */
+        }
         else {
           msFreeShape(&tshape);
           continue; /* we've got shapes */
@@ -2274,6 +2286,7 @@ int msTiledSHPNextShape(layerObj *layer, shapeObj *shape)
               continue;
             } else if(status != MS_SUCCESS) {
               msShapefileClose(tSHP->shpfile);
+              tSHP->tileshpfile->lastshape = -1;
               return(MS_FAILURE);
             }
 
@@ -2282,7 +2295,10 @@ int msTiledSHPNextShape(layerObj *layer, shapeObj *shape)
           }
         } /* end for loop */
 
-        if(i == tSHP->tileshpfile->numshapes) return(MS_DONE); /* no more tiles */
+        if(i == tSHP->tileshpfile->numshapes) {
+            tSHP->tileshpfile->lastshape = -1;
+            return(MS_DONE); /* no more tiles */
+        }
         else continue; /* we've got shapes */
       }
     }
@@ -2330,6 +2346,8 @@ int msTiledSHPGetShape(layerObj *layer, shapeObj *shape, resultObj *record)
     return(MS_FAILURE);
   }
 
+  msTileIndexAbsoluteDir(tiFileAbsDir, layer);
+
   if((tileindex < 0) || (tileindex >= tSHP->tileshpfile->numshapes)) return(MS_FAILURE); /* invalid tile id */
 
   if(tileindex != tSHP->tileshpfile->lastshape) { /* correct tile is not currenly open so open the correct tile */
@@ -2358,6 +2376,7 @@ int msTiledSHPGetShape(layerObj *layer, shapeObj *shape, resultObj *record)
 
   msSHPReadShape(tSHP->shpfile->hSHP, shapeindex, shape);
   tSHP->shpfile->lastshape = shapeindex;
+  tSHP->tileshpfile->lastshape = tileindex;
 
   if(layer->numitems > 0 && layer->iteminfo) {
     shape->numvalues = layer->numitems;
@@ -2650,8 +2669,8 @@ int msSHPLayerOpen(layerObj *layer)
             }
             OSRDestroySpatialReference(hSRS);
         }
+      fclose(fp);
     }
-    fclose(fp);
 
     if( bOK != MS_TRUE )
     {
@@ -2660,7 +2679,7 @@ int msSHPLayerOpen(layerObj *layer)
         }
     }
 #else /* !(defined(USE_GDAL) || defined(USE_OGR)) */
-    if( layer->debug layer->map->debug ) {
+    if( layer->debug || layer->map->debug ) {
         msDebug( "Unable to get SRS from shapefile '%s' for layer '%s'. GDAL or OGR support needed\n", szPath, layer->name );
     }
 #endif /* defined(USE_GDAL) || defined(USE_OGR) */
@@ -2699,7 +2718,7 @@ int msSHPLayerWhichShapes(layerObj *layer, rectObj rect, int isQuery)
 
 int msSHPLayerNextShape(layerObj *layer, shapeObj *shape)
 {
-  int i, filter_passed=MS_FALSE;
+  int i;
   shapefileObj *shpfile;
 
   shpfile = layer->layerinfo;
@@ -2709,29 +2728,18 @@ int msSHPLayerNextShape(layerObj *layer, shapeObj *shape)
     return MS_FAILURE;
   }
 
-  do {
-    i = msGetNextBit(shpfile->status, shpfile->lastshape + 1, shpfile->numshapes);
-    shpfile->lastshape = i;
-    if(i == -1) return(MS_DONE); /* nothing else to read */
+  i = msGetNextBit(shpfile->status, shpfile->lastshape + 1, shpfile->numshapes);
+  shpfile->lastshape = i;
+  if(i == -1) return(MS_DONE); /* nothing else to read */
 
-    msSHPReadShape(shpfile->hSHP, i, shape);
-    if(shape->type == MS_SHAPE_NULL) {
-      msFreeShape(shape);
-      continue; /* skip NULL shapes */
-    }
-    shape->numvalues = layer->numitems;
-    shape->values = msDBFGetValueList(shpfile->hDBF, i, layer->iteminfo, layer->numitems);
-    if(!shape->values) {
-      shape->numvalues = 0;
-    }
-
-    filter_passed = MS_TRUE;  /* By default accept ANY shape */
-    if(layer->numitems > 0 && layer->iteminfo) {
-      filter_passed = msEvalExpression(layer, shape, &(layer->filter), layer->filteritemindex);
-    }
-
-    if(!filter_passed) msFreeShape(shape);
-  } while(!filter_passed);  /* Loop until both spatial and attribute filters match */
+  msSHPReadShape(shpfile->hSHP, i, shape);
+  if(shape->type == MS_SHAPE_NULL) {
+    msFreeShape(shape);
+    return msSHPLayerNextShape(layer, shape); /* skip NULL shapes */
+  }
+  shape->numvalues = layer->numitems;
+  shape->values = msDBFGetValueList(shpfile->hDBF, i, layer->iteminfo, layer->numitems);
+  if(!shape->values) shape->numvalues = 0;
 
   return MS_SUCCESS;
 }
@@ -2838,6 +2846,7 @@ int msSHPLayerInitializeVirtualTable(layerObj *layer)
   /* layer->vtable->LayerGetAutoStyle, use default */
   /* layer->vtable->LayerCloseConnection, use default */
   layer->vtable->LayerSetTimeFilter = msLayerMakeBackticsTimeFilter;
+  /* layer->vtable->LayerTranslateFilter, use default */
   /* layer->vtable->LayerApplyFilterToLayer, use default */
   /* layer->vtable->LayerCreateItems, use default */
   /* layer->vtable->LayerGetNumFeatures, use default */

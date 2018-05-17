@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,6 @@
 #ifndef XCSOAR_ORDERED_TASK_SETTINGS_HPP
 #define XCSOAR_ORDERED_TASK_SETTINGS_HPP
 
-#include "Math/fixed.hpp"
 #include "StartConstraints.hpp"
 #include "FinishConstraints.hpp"
 #include "Task/Shapes/FAITriangleSettings.hpp"
@@ -34,7 +33,7 @@
  */
 struct OrderedTaskSettings {
   /** Desired AAT minimum task time (s) */
-  fixed aat_min_time;
+  double aat_min_time;
 
   StartConstraints start_constraints;
   FinishConstraints finish_constraints;

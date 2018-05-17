@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,11 +30,10 @@ Copyright_License {
 #include "Topography/TopographyFile.hpp"
 #include "Topography/XShape.hpp"
 #include "OS/Args.hpp"
-#include "OS/PathName.hpp"
+#include "IO/ZipArchive.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "Operation/Operation.hpp"
-
-#include <zzip/zzip.h>
+#include "Util/PrintException.hxx"
 
 #include <stdio.h>
 #include <tchar.h>
@@ -50,7 +49,7 @@ TriangulateAll(const TopographyFile &file)
   for (const XShape &shape : file)
     if (shape.get_type() == MS_SHAPE_POLYGON)
       for (unsigned i = 0; i < 4; ++i)
-        shape.get_indices(i, 1, count);
+        shape.GetIndices(i, 1, count);
 }
 
 static void
@@ -63,27 +62,18 @@ TriangulateAll(const TopographyStore &store)
 #endif
 
 int main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "PATH");
-  const char *path = args.ExpectNext();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
-  ZZIP_DIR *dir = zzip_dir_open(path, NULL);
-  if (dir == NULL) {
-    fprintf(stderr, "Failed to open %s\n", (const char *)path);
-    return EXIT_FAILURE;
-  }
+  ZipArchive archive(path);
 
-  ZipLineReaderA reader(dir, "topology.tpl");
-  if (reader.error()) {
-    fprintf(stderr, "Failed to open %s\n", (const char *)path);
-    return EXIT_FAILURE;
-  }
+  ZipLineReaderA reader(archive.get(), "topology.tpl");
 
   TopographyStore topography;
   NullOperationEnvironment operation;
-  topography.Load(operation, reader, NULL, dir);
-  zzip_dir_close(dir);
+  topography.Load(operation, reader, NULL, archive.get());
 
   topography.LoadAll();
 
@@ -92,4 +82,7 @@ int main(int argc, char **argv)
 #endif
 
   return EXIT_SUCCESS;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

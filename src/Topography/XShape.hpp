@@ -3,7 +3,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,6 +26,7 @@ Copyright_License {
 #define TOPOGRAPHY_XSHAPE_HPP
 
 #include "Util/ConstBuffer.hxx"
+#include "Util/AllocatedString.hxx"
 #include "Geo/GeoBounds.hpp"
 #include "shapelib/mapserver.h"
 #include "shapelib/mapshape.h"
@@ -34,6 +35,7 @@ Copyright_License {
 #endif
 
 #include <tchar.h>
+#include <stdint.h>
 
 struct GeoPoint;
 
@@ -45,19 +47,19 @@ class XShape {
 
   GeoBounds bounds;
 
-  unsigned char type;
+  uint8_t type;
 
   /**
    * The number of elements in the "lines" array.
    */
-  unsigned char num_lines;
+  uint8_t num_lines;
 
   /**
    * An array which stores the number of points of each line.  This is
    * a fixed-size array to reduce the number of allocations at
    * runtime.
    */
-  unsigned short lines[MAX_LINES];
+  uint16_t lines[MAX_LINES];
 
   /**
    * All points of all lines.
@@ -68,7 +70,7 @@ class XShape {
   /**
    * Indices of polygon triangles or lines with reduced number of vertices.
    */
-  unsigned short *indices[THINNING_LEVELS];
+  uint16_t *indices[THINNING_LEVELS];
 
   /**
    * For polygons this will contain the total number of triangle vertices
@@ -76,7 +78,7 @@ class XShape {
    * For lines there will be an array of size num_lines for each thinning
    * level, which contains the number of points for each line.
    */
-  unsigned short *index_count[THINNING_LEVELS];
+  uint16_t *index_count[THINNING_LEVELS];
 
   /**
    * The start offset in the #GLArrayBuffer (vertex buffer object).
@@ -87,7 +89,7 @@ class XShape {
   GeoPoint *points;
 #endif
 
-  TCHAR *label;
+  AllocatedString<TCHAR> label;
 
 public:
   XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
@@ -110,9 +112,9 @@ protected:
   bool BuildIndices(unsigned thinning_level, ShapeScalar min_distance);
 
 public:
-  const unsigned short *get_indices(int thinning_level,
-                                    ShapeScalar min_distance,
-                                    const unsigned short *&count) const;
+  const uint16_t *GetIndices(int thinning_level,
+                             ShapeScalar min_distance,
+                             const uint16_t *&count) const;
 #endif
 
   const GeoBounds &get_bounds() const {
@@ -123,20 +125,20 @@ public:
     return (MS_SHAPE_TYPE)type;
   }
 
-  ConstBuffer<unsigned short> GetLines() const {
+  ConstBuffer<uint16_t> GetLines() const {
     return { lines, num_lines };
   }
 
 #ifdef ENABLE_OPENGL
-  const ShapePoint *get_points() const {
+  const ShapePoint *GetPoints() const {
 #else
-  const GeoPoint *get_points() const {
+  const GeoPoint *GetPoints() const {
 #endif
     return points;
   }
 
-  const TCHAR *get_label() const {
-    return label;
+  const TCHAR *GetLabel() const {
+    return label.c_str();
   }
 };
 

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ Copyright_License {
 #include "Screen/Features.hpp"
 #include "Screen/Layout.hpp"
 #include "shapelib/mapserver.h"
-#include "Util/AllocatedArray.hpp"
+#include "Util/AllocatedArray.hxx"
 #include "Util/tstring.hpp"
 #include "Geo/GeoClip.hpp"
 #include "Geo/FAISphere.hpp"
@@ -57,7 +57,7 @@ Copyright_License {
 TopographyFileRenderer::TopographyFileRenderer(const TopographyFile &_file,
                                                const TopographyLook &_look)
   :file(_file), look(_look),
-   pen(file.GetPenWidth(), file.GetColor()),
+   pen(Layout::ScaleFinePenWidth(file.GetPenWidth()), file.GetColor()),
 #ifdef ENABLE_OPENGL
    array_buffer(nullptr)
 #else
@@ -87,12 +87,12 @@ TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection)
 {
   if (file.GetSerial() == visible_serial &&
       visible_bounds.IsInside(projection.GetScreenBounds()) &&
-      projection.GetScreenBounds().Scale(fixed(2)).IsInside(visible_bounds))
+      projection.GetScreenBounds().Scale(2).IsInside(visible_bounds))
     /* cache is clean */
     return;
 
   visible_serial = file.GetSerial();
-  visible_bounds = projection.GetScreenBounds().Scale(fixed(1.2));
+  visible_bounds = projection.GetScreenBounds().Scale(1.2);
   visible_shapes.clear();
   visible_labels.clear();
 
@@ -103,7 +103,7 @@ TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection)
     if (shape.get_type() != MS_SHAPE_NULL)
       visible_shapes.push_back(&shape);
 
-    if (shape.get_label() != nullptr)
+    if (shape.GetLabel() != nullptr)
       visible_labels.push_back(&shape);
   }
 }
@@ -134,7 +134,7 @@ TopographyFileRenderer::UpdateArrayBuffer()
 
   for (const auto &shape : file) {
     const auto lines = shape.GetLines();
-    const ShapePoint *src = shape.get_points();
+    const ShapePoint *src = shape.GetPoints();
     for (const auto n_points : lines) {
       p = std::copy_n(src, n_points, p);
       src += n_points;
@@ -155,8 +155,8 @@ TopographyFileRenderer::PaintPoint(Canvas &canvas,
 
   // TODO: for now i assume there is only one point for point-XShapes
 
-  RasterPoint sc;
-  if (!projection.GeoToScreenIfVisible(file.ToGeoPoint(shape.get_points()[0]),
+  PixelPoint sc;
+  if (!projection.GeoToScreenIfVisible(file.ToGeoPoint(shape.GetPoints()[0]),
                                        sc))
     return;
 
@@ -165,7 +165,7 @@ TopographyFileRenderer::PaintPoint(Canvas &canvas,
   glLoadMatrixf(opengl_matrix);
 #endif
 
-  icon.Draw(canvas, sc.x, sc.y);
+  icon.Draw(canvas, sc);
 #ifndef HAVE_GLES
   glPopMatrix();
 #endif
@@ -186,9 +186,9 @@ TopographyFileRenderer::PaintPoint(Canvas &canvas,
   for (; lines < end_lines; ++lines) {
     const GeoPoint *end = points + *lines;
     for (; points < end; ++points) {
-      RasterPoint sc;
+      PixelPoint sc;
       if (projection.GeoToScreenIfVisible(*points, sc))
-        icon.Draw(canvas, sc.x, sc.y);
+        icon.Draw(canvas, sc);
     }
   }
 }
@@ -204,7 +204,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   if (file.IsEmpty())
     return;
 
-  fixed map_scale = projection.GetMapScale();
+  const auto map_scale = projection.GetMapScale();
   if (!file.IsVisible(map_scale))
     return;
 
@@ -255,7 +255,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   ApplyProjection(projection, file.GetCenter());
 #endif /* !USE_GLSL */
 #else // !ENABLE_OPENGL
-  const GeoClip clip(projection.GetScreenBounds().Scale(fixed(1.1)));
+  const GeoClip clip(projection.GetScreenBounds().Scale(1.1));
   AllocatedArray<GeoPoint> geo_points;
 
   int iskip = file.GetSkipSteps(map_scale);
@@ -277,7 +277,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #ifdef ENABLE_OPENGL
     const ShapePoint *points = buffer + shape.GetOffset();
 #else // !ENABLE_OPENGL
-    const GeoPoint *points = shape.get_points();
+    const GeoPoint *points = shape.GetPoints();
 #endif
 
     switch (shape.get_type()) {
@@ -311,7 +311,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
         const GLushort *indices, *count;
         if (level == 0 ||
-            (indices = shape.get_indices(level, min_distance, count)) == nullptr) {
+            (indices = shape.GetIndices(level, min_distance, count)) == nullptr) {
           unsigned offset = 0;
           for (unsigned n : lines) {
             glDrawArrays(GL_LINE_STRIP, offset, n);
@@ -344,8 +344,8 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #ifdef ENABLE_OPENGL
       {
         const GLushort *index_count;
-        const GLushort *triangles = shape.get_indices(level, min_distance,
-                                                        index_count);
+        const GLushort *triangles = shape.GetIndices(level, min_distance,
+                                                     index_count);
         const unsigned n = *index_count;
 
 #ifdef GL_EXT_multi_draw_arrays
@@ -373,7 +373,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
           unsigned msize = n / iskip;
 
           /* copy all polygon points into the geo_points array and
-             clip them, to avoid integer overflows (as RasterPoint may
+             clip them, to avoid integer overflows (as PixelPoint may
              store only 16 bit integers on some platforms) */
 
           geo_points.GrowDiscard(msize * 3);
@@ -450,7 +450,7 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
   if (file.IsEmpty())
     return;
 
-  fixed map_scale = projection.GetMapScale();
+  const auto map_scale = projection.GetMapScale();
   if (!file.IsVisible(map_scale) || !file.IsLabelVisible(map_scale))
     return;
 
@@ -477,14 +477,14 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
     const XShape &shape = *shape_p;
 
     // Skip shapes without a label
-    const TCHAR *label = shape.get_label();
+    const TCHAR *label = shape.GetLabel();
     assert(label != nullptr);
 
     const auto lines = shape.GetLines();
 #ifdef ENABLE_OPENGL
-    const ShapePoint *points = shape.get_points();
+    const ShapePoint *points = shape.GetPoints();
 #else
-    const GeoPoint *points = shape.get_points();
+    const GeoPoint *points = shape.GetPoints();
 #endif
 
     for (const unsigned n : lines) {
@@ -498,9 +498,9 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
 #endif
       for (; points < end; points += iskip) {
 #ifdef ENABLE_OPENGL
-        RasterPoint pt = projection.GeoToScreen(file.ToGeoPoint(*points));
+        auto pt = projection.GeoToScreen(file.ToGeoPoint(*points));
 #else
-        RasterPoint pt = projection.GeoToScreen(*points);
+        auto pt = projection.GeoToScreen(*points);
 #endif
 
         if (pt.x <= minx) {

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "WaypointDialogs.hpp"
 #include "Dialogs/Message.hpp"
+#include "Dialogs/Error.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Renderer/WaypointListRenderer.hpp"
@@ -32,7 +33,6 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Protection.hpp"
 #include "UtilsSettings.hpp"
-#include "Screen/Layout.hpp"
 #include "Components.hpp"
 #include "Waypoint/WaypointList.hpp"
 #include "Waypoint/WaypointListBuilder.hpp"
@@ -207,7 +207,7 @@ WaypointManagerWidget::OnWaypointNewClicked()
 inline void
 WaypointManagerWidget::OnWaypointImportClicked()
 {
-  const Waypoint *way_point =
+  const auto way_point =
     ShowWaypointListDialog(CommonInterface::Basic().location);
   if (way_point) {
     Waypoint wp_copy = *way_point;
@@ -220,7 +220,7 @@ WaypointManagerWidget::OnWaypointImportClicked()
 
       {
         ScopeSuspendAllThreads suspend;
-        way_points.Replace(*way_point, wp_copy);
+        way_points.Replace(way_point, std::move(wp_copy));
         way_points.Optimise();
       }
 
@@ -232,13 +232,13 @@ WaypointManagerWidget::OnWaypointImportClicked()
 inline void
 WaypointManagerWidget::OnWaypointEditClicked(unsigned i)
 {
-  const Waypoint &wp = *items[i].waypoint;
-  Waypoint wp_copy = wp;
+  const WaypointPtr &wp = items[i].waypoint;
+  Waypoint wp_copy = *wp;
   if (dlgWaypointEditShowModal(wp_copy)) {
     modified = true;
 
     ScopeSuspendAllThreads suspend;
-    way_points.Replace(wp, wp_copy);
+    way_points.Replace(wp, std::move(wp_copy));
     way_points.Optimise();
   }
 }
@@ -246,10 +246,12 @@ WaypointManagerWidget::OnWaypointEditClicked(unsigned i)
 void
 WaypointManagerWidget::SaveWaypoints()
 {
-  if (!WaypointGlue::SaveWaypoints(way_points))
-    ShowMessageBox(_("Failed to save waypoints"), _("Error"), MB_OK);
-  else
+  try {
+    WaypointGlue::SaveWaypoints(way_points);
     WaypointFileChanged = true;
+  } catch (const std::runtime_error &e) {
+    ShowError(e, _("Failed to save waypoints"));
+  }
 
   modified = false;
 }
@@ -263,15 +265,15 @@ WaypointManagerWidget::OnWaypointSaveClicked()
 inline void
 WaypointManagerWidget::OnWaypointDeleteClicked(unsigned i)
 {
-  const Waypoint &wp = *items[i].waypoint;
+  WaypointPtr &&wp = std::move(items[i].waypoint);
 
-  if (ShowMessageBox(wp.name.c_str(), _("Delete waypoint?"),
+  if (ShowMessageBox(wp->name.c_str(), _("Delete waypoint?"),
                      MB_YESNO | MB_ICONQUESTION) == IDYES) {
     modified = true;
 
     {
       ScopeSuspendAllThreads suspend;
-      way_points.Erase(wp);
+      way_points.Erase(std::move(wp));
       way_points.Optimise();
     }
 

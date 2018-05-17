@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,22 +24,22 @@ Copyright_License {
 #include "NOAAUpdater.hpp"
 #include "NOAADownloader.hpp"
 #include "METARParser.hpp"
+#include "Net/HTTP/Session.hpp"
+#include "LogFile.hpp"
 
-bool
-NOAAUpdater::Update(NOAAStore &store, JobRunner &runner)
-{
-  bool result = true;
-  for (auto i = store.begin(), e = store.end(); i != e; ++i)
-    result = Update(*i, runner) && result;
+#include <exception>
 
-  return result;
+namespace NOAAUpdater {
+  static bool Update(NOAAStore::Item &item,
+                     Net::Session &session, JobRunner &runner);
 }
 
 bool
-NOAAUpdater::Update(NOAAStore::Item &item, JobRunner &runner)
+NOAAUpdater::Update(NOAAStore::Item &item,
+                    Net::Session &session, JobRunner &runner)
 {
   bool metar_downloaded = NOAADownloader::DownloadMETAR(item.code, item.metar,
-                                                        runner);
+                                                        session, runner);
   if (metar_downloaded) {
     item.metar_available = true;
 
@@ -47,9 +47,45 @@ NOAAUpdater::Update(NOAAStore::Item &item, JobRunner &runner)
       item.parsed_metar_available = true;
   }
 
-  bool taf_downloaded = NOAADownloader::DownloadTAF(item.code, item.taf, runner);
+  bool taf_downloaded = NOAADownloader::DownloadTAF(item.code, item.taf,
+                                                    session, runner);
   if (taf_downloaded)
     item.taf_available = true;
 
   return metar_downloaded && taf_downloaded;
+}
+
+bool
+NOAAUpdater::Update(NOAAStore &store, JobRunner &runner)
+{
+  try {
+    Net::Session session;
+
+    bool result = true;
+    for (auto &i : store) {
+      try {
+        result = Update(i, session, runner) && result;
+      } catch (const std::exception &exception) {
+        LogError(exception);
+        result = false;
+      }
+    }
+
+    return result;
+  } catch (const std::exception &exception) {
+    LogError(exception);
+    return false;
+  }
+}
+
+bool
+NOAAUpdater::Update(NOAAStore::Item &item, JobRunner &runner)
+{
+  try {
+    Net::Session session;
+    return Update(item, session, runner);
+  } catch (const std::exception &exception) {
+    LogError(exception);
+    return false;
+  }
 }

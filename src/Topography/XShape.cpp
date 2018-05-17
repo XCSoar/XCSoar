@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,26 +23,26 @@ Copyright_License {
 
 #include "Topography/XShape.hpp"
 #include "Convert.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "Util/UTF8.hpp"
+#include "Util/StringUtil.hpp"
+#include "Util/ScopeExit.hxx"
+
 #ifdef ENABLE_OPENGL
 #include "Projection/Projection.hpp"
 #include "Screen/OpenGL/Triangulate.hpp"
-#include "Geo/Math.hpp"
 #endif
-
-#include "Util/StringUtil.hpp"
-#include <algorithm>
-#include <tchar.h>
-#include <string.h>
-#include <stdio.h>
 
 #ifdef _UNICODE
-#include <windows.h>
+#include "Util/ConvertString.hpp"
 #endif
 
-static TCHAR *
-import_label(const char *src)
+#include <algorithm>
+
+#include <tchar.h>
+
+static AllocatedString<TCHAR>
+ImportLabel(const char *src)
 {
   if (src == nullptr)
     return nullptr;
@@ -54,19 +54,12 @@ import_label(const char *src)
     return nullptr;
 
 #ifdef _UNICODE
-  size_t length = strlen(src);
-  TCHAR *dest = new TCHAR[length + 1];
-  if (::MultiByteToWideChar(CP_UTF8, 0, src, -1, dest, length + 1) <= 0) {
-    delete[] dest;
-    return nullptr;
-  }
-
-  return dest;
+  return AllocatedString<TCHAR>::Donate(ConvertUTF8ToWide(src));
 #else
   if (!ValidateUTF8(src))
     return nullptr;
 
-  return strdup(src);
+  return AllocatedString<TCHAR>::Duplicate(src);
 #endif
 }
 
@@ -76,7 +69,7 @@ import_label(const char *src)
  */
 gcc_const
 static unsigned
-min_points_for_type(int shapelib_type)
+GetMinPointsForShapeType(int shapelib_type)
 {
   switch (shapelib_type) {
   case MS_SHAPE_POINT:
@@ -105,13 +98,13 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
 
   shapeObj shape;
   msInitShape(&shape);
+  AtScopeExit(&shape) { msFreeShape(&shape); };
   msSHPReadShape(shpfile->hSHP, i, &shape);
 
   bounds = ImportRect(shape.bounds);
   if (!bounds.Check()) {
     /* malformed bounds */
     points = nullptr;
-    msFreeShape(&shape);
     return;
   }
 
@@ -119,11 +112,10 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
 
   num_lines = 0;
 
-  const int min_points = min_points_for_type(shape.type);
+  const int min_points = GetMinPointsForShapeType(shape.type);
   if (min_points < 0) {
     /* not supported, leave an empty XShape object */
     points = nullptr;
-    msFreeShape(&shape);
     return;
   }
 
@@ -163,23 +155,20 @@ XShape::XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,
       *p++ = ShapePoint(ShapeScalar(relative.longitude.Native()),
                         ShapeScalar(relative.latitude.Native()));
 #else
-      *p++ = GeoPoint(Angle::Degrees(fixed(src->x)),
-                      Angle::Degrees(fixed(src->y)));
+      *p++ = GeoPoint(Angle::Degrees(src->x),
+                      Angle::Degrees(src->y));
 #endif
     }
   }
 
   if (label_field >= 0) {
     const char *src = msDBFReadStringAttribute(shpfile->hDBF, i, label_field);
-    label = import_label(src);
+    label = ImportLabel(src);
   }
-
-  msFreeShape(&shape);
 }
 
 XShape::~XShape()
 {
-  free(label);
   delete[] points;
 #ifdef ENABLE_OPENGL
   // Note: index_count and indices share one buffer
@@ -195,7 +184,7 @@ XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance)
 {
   assert(indices[thinning_level] == nullptr);
 
-  unsigned short *idx, *idx_count;
+  uint16_t *idx, *idx_count;
   unsigned num_points = 0;
 
   for (unsigned i=0; i < num_lines; i++)
@@ -208,16 +197,16 @@ XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance)
       new GLushort[num_lines + num_points];
     indices[thinning_level] = idx = idx_count + num_lines;
 
-    const unsigned short *end_l = lines + num_lines;
+    const uint16_t *end_l = lines + num_lines;
     const ShapePoint *p = points;
     unsigned i = 0;
-    for (const unsigned short *l = lines; l < end_l; l++) {
+    for (const uint16_t *l = lines; l < end_l; l++) {
       assert(*l >= 2);
       const ShapePoint *end_p = p + *l - 1;
       // always add first point
       *idx++ = i;
       p++; i++;
-      const unsigned short *after_first_idx = idx;
+      const uint16_t *after_first_idx = idx;
       // add points if they are not too close to the previous point
       for (; p < end_p; p++, i++)
         if (ManhattanDistance(points[idx[-1]], *p) >= min_distance)
@@ -260,9 +249,9 @@ XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance)
   }
 }
 
-const unsigned short *
-XShape::get_indices(int thinning_level, ShapeScalar min_distance,
-                    const unsigned short *&count) const
+const uint16_t *
+XShape::GetIndices(int thinning_level, ShapeScalar min_distance,
+                   const uint16_t *&count) const
 {
   if (indices[thinning_level] == nullptr) {
     XShape &deconst = const_cast<XShape &>(*this);

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,10 +29,6 @@ Copyright_License {
 #include "Screen/Memory/Canvas.hpp"
 #endif
 
-#if defined(UNICODE) && SDL_MAJOR_VERSION >= 2
-#include "Util/ConvertString.hpp"
-#endif
-
 TopWindow::~TopWindow()
 {
   delete screen;
@@ -44,20 +40,15 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
 {
   invalidated = true;
 
-#if defined(USE_X11) || defined(USE_WAYLAND)
+#if defined(USE_X11) || defined(USE_WAYLAND) || defined(ENABLE_SDL)
   CreateNative(text, size, style);
 #endif
 
   delete screen;
   screen = new TopCanvas();
 
-#if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2)
-#ifdef UNICODE
-  const WideToUTF8Converter text2(text);
-#else
-  const char* text2 = text;
-#endif
-  screen->Create(text2, size, style.GetFullScreen(), style.GetResizable());
+#ifdef ENABLE_SDL
+  screen->Create(window, size);
 #elif defined(USE_GLX)
   screen->Create(x_display, x_window, fb_cfg);
 #elif defined(USE_X11)
@@ -75,10 +66,6 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
   }
 
   ContainerWindow::Create(nullptr, screen->GetRect(), style);
-
-#if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION < 2)
-  SetCaption(text);
-#endif
 }
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
@@ -90,7 +77,7 @@ TopWindow::SetDisplayOrientation(DisplayOrientation orientation)
   assert(screen->IsDefined());
 
   screen->SetDisplayOrientation(orientation);
-  Resize(screen->GetWidth(), screen->GetHeight());
+  Resize(screen->GetSize());
 }
 
 #endif

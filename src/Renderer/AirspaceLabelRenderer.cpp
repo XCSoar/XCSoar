@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,11 +29,7 @@ Copyright_License {
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"
 #include "Airspace/AirspaceVisibility.hpp"
-#include "Airspace/AirspaceVisitor.hpp"
-#include "Airspace/AirspaceWarning.hpp"
-#include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceWarningCopy.hpp"
-#include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "Screen/Canvas.hpp"
@@ -57,22 +53,6 @@ public:
     return visible_predicate(airspace) ||
       warnings.IsInside(airspace) ||
       warnings.HasWarning(airspace);
-  }
-};
-
-class AirspaceVisitorLabel final
-  : public AirspaceVisitor
-{
-  AirspaceLabelList &labels;
-
-public:
-  AirspaceVisitorLabel(AirspaceLabelList &_labels)
-    :labels(_labels) {}
-
-protected:
-  virtual void Visit(const AbstractAirspace &airspace) override {
-    labels.Add(airspace.GetCenter(), airspace.GetType(), airspace.GetBase(),
-               airspace.GetTop());
   }
 };
 
@@ -116,10 +96,13 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
                                     const AirspaceWarningConfig &config)
 {
   AirspaceLabelList labels;
-  AirspaceVisitorLabel visitor(labels);
-  airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),
-                              projection.GetScreenDistanceMeters(),
-                              visitor, visible);
+  for (const auto &i : airspaces->QueryWithinRange(projection.GetGeoScreenCenter(),
+                                                   projection.GetScreenDistanceMeters())) {
+    const AbstractAirspace &airspace = i.GetAirspace();
+    if (visible(airspace))
+      labels.Add(airspace.GetCenter(), airspace.GetType(), airspace.GetBase(),
+                 airspace.GetTop());
+  }
 
   if(settings.label_selection == AirspaceRendererSettings::LabelSelection::ALL)
   {
@@ -147,7 +130,7 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
       int labelHeight = topSize.cy + baseSize.cy;
 
       // box
-      RasterPoint pos = projection.GeoToScreen(label.pos);
+      const auto pos = projection.GeoToScreen(label.pos);
       PixelRect rect;
       rect.left = pos.x - labelWidth / 2;
       rect.top = pos.y;

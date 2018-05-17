@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,6 @@
 #ifndef ABSTRACT_CONTEST_HPP
 #define ABSTRACT_CONTEST_HPP
 
-#include "Math/fixed.hpp"
 #include "../ContestResult.hpp"
 #include "../ContestTrace.hpp"
 #include "Trace/Point.hpp"
@@ -142,7 +141,7 @@ protected:
    * @return Handicap adjusted score
    */
   gcc_pure
-  fixed ApplyHandicap(fixed unhandicapped_score) const {
+  double ApplyHandicap(double unhandicapped_score) const {
     assert(handicap != 0);
 
     return 100 * unhandicapped_score / handicap;
@@ -153,7 +152,7 @@ protected:
    * rules.
    */
   gcc_pure
-  fixed ApplyShiftedHandicap(const fixed unhandicapped_score) const {
+  double ApplyShiftedHandicap(const double unhandicapped_score) const {
     assert(handicap != 0);
 
     return 400 * unhandicapped_score / (3 * handicap + 100);

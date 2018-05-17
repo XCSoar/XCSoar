@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,12 +27,12 @@
 
 #include <fstream>
 
-#ifdef FIXED_MATH
-std::ostream& operator<<(std::ostream& os, fixed value)
+std::ostream &
+operator<<(std::ostream &f, Path path)
 {
-  return os<<value.as_double();
+  f << path.c_str();
+  return f;
 }
-#endif
 
 std::ostream &
 operator<< (std::ostream& f, const Waypoint& wp)
@@ -98,7 +98,7 @@ PrintTracePoint(const TracePoint &point, std::ofstream& fs)
 void
 PrintHelper::trace_print(const Trace& trace, const GeoPoint &loc)
 {
-  Directory::Create(_T("output/results"));
+  Directory::Create(Path(_T("output/results")));
   std::ofstream fs("output/results/res-trace.txt");
 
   for (auto it = trace.begin(); it != trace.end(); ++it)
@@ -144,9 +144,15 @@ void PrintHelper::print_route(RoutePlanner& r)
 #include "Route/ReachFan.hpp"
 
 void
-PrintHelper::print_reach_tree(const RoutePlanner& r)
+PrintHelper::print_reach_terrain_tree(const RoutePlanner& r)
 {
-  print(r.reach);
+  print(r.reach_terrain);
+}
+
+void
+PrintHelper::print_reach_working_tree(const RoutePlanner& r)
+{
+  print(r.reach_working);
 }
 
 void
@@ -170,14 +176,14 @@ PrintHelper::print(const FlatTriangleFan& r, const unsigned depth) {
     return;
 
   if (depth) {
-    printf("%d %d # fcorner\n", r.vs[0].longitude, r.vs[0].latitude);
+    printf("%d %d # fcorner\n", r.vs[0].x, r.vs[0].y);
   }
 
   for (auto it = r.vs.begin(); it != r.vs.end(); ++it) {
     const FlatGeoPoint p = (*it);
-    printf("%d %d # ftri\n", p.longitude, p.latitude);
+    printf("%d %d # ftri\n", p.x, p.y);
   }
-  printf("%d %d # ftri\n", r.vs[0].longitude, r.vs[0].latitude);
+  printf("%d %d # ftri\n", r.vs[0].x, r.vs[0].y);
   printf("# ftri\n");
 }
 

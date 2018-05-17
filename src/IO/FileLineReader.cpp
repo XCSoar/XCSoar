@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,35 +26,17 @@ Copyright_License {
 char *
 FileLineReaderA::ReadLine()
 {
-  return splitter.ReadLine();
+  return buffered.ReadLine();
 }
 
 long
 FileLineReaderA::GetSize() const
 {
-  return splitter.GetSize();
+  return file.GetSize();
 }
 
 long
 FileLineReaderA::Tell() const
 {
-  return splitter.Tell();
-}
-
-TCHAR *
-FileLineReader::ReadLine()
-{
-  return convert.ReadLine();
-}
-
-long
-FileLineReader::GetSize() const
-{
-  return convert.GetSize();
-}
-
-long
-FileLineReader::Tell() const
-{
-  return convert.Tell();
+  return file.GetPosition();
 }

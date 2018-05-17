@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -103,7 +103,7 @@ struct Waypoint {
 #endif
 
   /** Height AMSL (m) of waypoint terrain */
-  fixed elevation;
+  double elevation;
 
   /** Main runway */
   Runway runway;
@@ -251,7 +251,7 @@ struct Waypoint {
    * @return True if close to reference location
    */
   bool
-  IsCloseTo(const GeoPoint &_location, const fixed range) const;
+  IsCloseTo(const GeoPoint &_location, double range) const;
 };
 
 #endif

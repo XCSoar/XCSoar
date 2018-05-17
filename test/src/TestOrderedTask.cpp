@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,17 +29,13 @@
 #include "Engine/Task/Ordered/Points/ASTPoint.hpp"
 #include "Engine/Task/ObservationZones/LineSectorZone.hpp"
 
-#ifdef FIXED_MATH
-#define ACCURACY 100
-#else
 #define ACCURACY 500
-#endif
 
 #include "TestUtil.hpp"
 
 static TaskBehaviour task_behaviour;
 static OrderedTaskSettings ordered_task_settings;
-static GlidePolar glide_polar(fixed(0));
+static GlidePolar glide_polar(0);
 
 static GeoPoint
 MakeGeoPoint(double longitude, double latitude)
@@ -51,7 +47,7 @@ MakeGeoPoint(double longitude, double latitude)
 static Waypoint
 MakeWaypoint(Waypoint wp, double altitude)
 {
-  wp.elevation = fixed(altitude);
+  wp.elevation = altitude;
   return wp;
 }
 
@@ -61,13 +57,20 @@ MakeWaypoint(double longitude, double latitude, double altitude)
   return MakeWaypoint(Waypoint(MakeGeoPoint(longitude, latitude)), altitude);
 }
 
-static const Waypoint wp1 = MakeWaypoint(0, 45, 50);
-static const Waypoint wp2 = MakeWaypoint(0, 45.3, 50);
-static const Waypoint wp3 = MakeWaypoint(0, 46, 50);
-static const Waypoint wp4 = MakeWaypoint(1, 46, 50);
-static const Waypoint wp5 = MakeWaypoint(0.3, 46, 50);
+template<typename... Args>
+static WaypointPtr
+MakeWaypointPtr(Args&&... args)
+{
+  return WaypointPtr(new Waypoint(MakeWaypoint(std::forward<Args>(args)...)));
+}
 
-static fixed
+static const auto wp1 = MakeWaypointPtr(0, 45, 50);
+static const auto wp2 = MakeWaypointPtr(0, 45.3, 50);
+static const auto wp3 = MakeWaypointPtr(0, 46, 50);
+static const auto wp4 = MakeWaypointPtr(1, 46, 50);
+static const auto wp5 = MakeWaypointPtr(0.3, 46, 50);
+
+static double
 GetSafetyHeight(const TaskPoint &tp)
 {
   return task_behaviour.safety_height_arrival;
@@ -77,15 +80,15 @@ static void
 CheckLeg(const TaskWaypoint &tp, const AircraftState &aircraft,
          const TaskStats &stats)
 {
-  const GeoPoint destination = tp.GetWaypoint().location;
-  const fixed safety_height = GetSafetyHeight(tp);
-  const fixed min_arrival_alt = tp.GetWaypoint().elevation + safety_height;
-  const GeoVector vector = aircraft.location.DistanceBearing(destination);
-  const fixed ld = glide_polar.GetBestLD();
-  const fixed height_above_min = aircraft.altitude - min_arrival_alt;
-  const fixed height_consumption = vector.distance / ld;
-  const ElementStat &leg = stats.current_leg;
-  const GlideResult &solution_remaining = leg.solution_remaining;
+  const auto destination = tp.GetWaypoint().location;
+  const auto safety_height = GetSafetyHeight(tp);
+  const auto min_arrival_alt = tp.GetWaypoint().elevation + safety_height;
+  const auto vector = aircraft.location.DistanceBearing(destination);
+  const auto ld = glide_polar.GetBestLD();
+  const auto height_above_min = aircraft.altitude - min_arrival_alt;
+  const auto height_consumption = vector.distance / ld;
+  const auto &leg = stats.current_leg;
+  const auto &solution_remaining = leg.solution_remaining;
 
   ok1(leg.vector_remaining.IsValid());
   ok1(equals(leg.vector_remaining.distance, vector.distance));
@@ -104,7 +107,7 @@ CheckLeg(const TaskWaypoint &tp, const AircraftState &aircraft,
   if (height_above_min >= height_consumption) {
     /* straight glide */
     ok1(equals(solution_remaining.height_climb, 0));
-  } else if (positive(glide_polar.GetMC())) {
+  } else if (glide_polar.GetMC() > 0) {
     /* climb required */
     ok1(equals(solution_remaining.height_climb,
                height_consumption - height_above_min));
@@ -119,25 +122,25 @@ CheckTotal(const AircraftState &aircraft, const TaskStats &stats,
            const TaskWaypoint &start, const TaskWaypoint &tp1,
            const TaskWaypoint &finish)
 {
-  const fixed min_arrival_alt1 = tp1.GetWaypoint().elevation +
+  const auto min_arrival_alt1 = tp1.GetWaypoint().elevation +
     task_behaviour.safety_height_arrival;
-  const fixed min_arrival_alt2 = finish.GetWaypoint().elevation +
+  const auto min_arrival_alt2 = finish.GetWaypoint().elevation +
     task_behaviour.safety_height_arrival;
-  const GeoVector vector0 =
+  const auto vector0 =
     start.GetWaypoint().location.DistanceBearing(tp1.GetWaypoint().location);
-  const GeoVector vector1 =
+  const auto vector1 =
     aircraft.location.DistanceBearing(tp1.GetWaypoint().location);
-  const GeoVector vector2 =
+  const auto vector2 =
     tp1.GetWaypoint().location.DistanceBearing(finish.GetWaypoint().location);
-  const fixed ld = glide_polar.GetBestLD();
-  const fixed height_consumption1 = vector1.distance / ld;
+  const auto ld = glide_polar.GetBestLD();
+  const auto height_consumption1 = vector1.distance / ld;
 
-  const fixed height_consumption2 = vector2.distance / ld;
+  const auto height_consumption2 = vector2.distance / ld;
 
-  const ElementStat &total = stats.total;
-  const GlideResult &solution_remaining = total.solution_remaining;
-  const fixed distance_nominal = vector0.distance + vector2.distance;
-  const fixed distance_ahead = vector1.distance + vector2.distance;
+  const auto &total = stats.total;
+  const auto &solution_remaining = total.solution_remaining;
+  const auto distance_nominal = vector0.distance + vector2.distance;
+  const auto distance_ahead = vector1.distance + vector2.distance;
 
   ok1(equals(stats.distance_nominal, distance_nominal));
   ok1(equals(stats.distance_min, distance_nominal));
@@ -149,17 +152,17 @@ CheckTotal(const AircraftState &aircraft, const TaskStats &stats,
   ok1(equals(solution_remaining.vector.distance, distance_ahead));
   ok1(equals(solution_remaining.height_glide, distance_ahead / ld));
 
-  fixed alt_required_at_1 = std::max(min_arrival_alt1,
-                                     min_arrival_alt2 + height_consumption2);
-  fixed alt_required_at_aircraft = alt_required_at_1 + height_consumption1;
+  auto alt_required_at_1 = std::max(min_arrival_alt1,
+                                    min_arrival_alt2 + height_consumption2);
+  auto alt_required_at_aircraft = alt_required_at_1 + height_consumption1;
   ok1(equals(solution_remaining.GetRequiredAltitudeWithDrift(),
              alt_required_at_aircraft));
   ok1(equals(solution_remaining.altitude_difference,
              aircraft.altitude - alt_required_at_aircraft));
   ok1(equals(solution_remaining.height_climb,
-             positive(glide_polar.GetMC())
+             glide_polar.GetMC() > 0
              ? alt_required_at_aircraft - aircraft.altitude
-             : fixed(0)));
+             : 0));
 }
 
 static void
@@ -173,15 +176,15 @@ CheckLegEqualsTotal(const GlideResult &leg, const GlideResult &total)
 }
 
 static void
-TestFlightToFinish(fixed aircraft_altitude)
+TestFlightToFinish(double aircraft_altitude)
 {
   OrderedTask task(task_behaviour);
-  const StartPoint tp1(new LineSectorZone(wp1.location),
-                       wp1, task_behaviour,
+  const StartPoint tp1(new LineSectorZone(wp1->location),
+                       WaypointPtr(wp1), task_behaviour,
                        ordered_task_settings.start_constraints);
   task.Append(tp1);
-  const FinishPoint tp2(new LineSectorZone(wp2.location),
-                        wp2, task_behaviour,
+  const FinishPoint tp2(new LineSectorZone(wp2->location),
+                        WaypointPtr(wp2), task_behaviour,
                         ordered_task_settings.finish_constraints, false);
   task.Append(tp2);
   task.SetActiveTaskPoint(1);
@@ -191,17 +194,17 @@ TestFlightToFinish(fixed aircraft_altitude)
 
   AircraftState aircraft;
   aircraft.Reset();
-  aircraft.location = wp1.location;
+  aircraft.location = wp1->location;
   aircraft.altitude = aircraft_altitude;
   task.Update(aircraft, aircraft, glide_polar);
 
-  const GeoVector vector = wp1.location.DistanceBearing(wp2.location);
+  const GeoVector vector = wp1->location.DistanceBearing(wp2->location);
 
   const TaskStats &stats = task.GetStats();
   ok1(stats.task_valid);
   ok1(!stats.start.task_started);
   ok1(!stats.task_finished);
-  ok1(stats.flight_mode_final_glide == !negative(stats.total.solution_remaining.altitude_difference));
+  ok1(stats.flight_mode_final_glide == (stats.total.solution_remaining.altitude_difference >= 0));
   ok1(equals(stats.distance_nominal, vector.distance));
   ok1(equals(stats.distance_min, vector.distance));
   ok1(equals(stats.distance_max, vector.distance));
@@ -217,12 +220,12 @@ static void
 TestSimpleTask()
 {
   OrderedTask task(task_behaviour);
-  const StartPoint tp1(new LineSectorZone(wp1.location),
-                       wp1, task_behaviour,
+  const StartPoint tp1(new LineSectorZone(wp1->location),
+                       WaypointPtr(wp1), task_behaviour,
                        ordered_task_settings.start_constraints);
   task.Append(tp1);
-  const FinishPoint tp2(new LineSectorZone(wp3.location),
-                        wp3, task_behaviour,
+  const FinishPoint tp2(new LineSectorZone(wp3->location),
+                        WaypointPtr(wp3), task_behaviour,
                         ordered_task_settings.finish_constraints, false);
   task.Append(tp2);
   task.UpdateGeometry();
@@ -232,10 +235,10 @@ TestSimpleTask()
   AircraftState aircraft;
   aircraft.Reset();
   aircraft.location = MakeGeoPoint(0, 44.5);
-  aircraft.altitude = fixed(1700);
+  aircraft.altitude = 1700;
   task.Update(aircraft, aircraft, glide_polar);
 
-  const GeoVector tp1_to_tp2 = wp1.location.DistanceBearing(wp3.location);
+  const GeoVector tp1_to_tp2 = wp1->location.DistanceBearing(wp3->location);
 
   const TaskStats &stats = task.GetStats();
   ok1(stats.task_valid);
@@ -254,14 +257,14 @@ static void
 TestHighFinish()
 {
   OrderedTask task(task_behaviour);
-  const StartPoint tp1(new LineSectorZone(wp1.location),
-                       wp1, task_behaviour,
+  const StartPoint tp1(new LineSectorZone(wp1->location),
+                       WaypointPtr(wp1), task_behaviour,
                        ordered_task_settings.start_constraints);
   task.Append(tp1);
-  Waypoint wp2b(wp2);
-  wp2b.elevation = fixed(1000);
+  Waypoint wp2b(*wp2);
+  wp2b.elevation = 1000;
   const FinishPoint tp2(new LineSectorZone(wp2b.location),
-                        wp2b, task_behaviour,
+                        WaypointPtr(new Waypoint(wp2b)), task_behaviour,
                         ordered_task_settings.finish_constraints, false);
   task.Append(tp2);
   task.SetActiveTaskPoint(1);
@@ -271,11 +274,11 @@ TestHighFinish()
 
   AircraftState aircraft;
   aircraft.Reset();
-  aircraft.location = wp1.location;
-  aircraft.altitude = fixed(1000);
+  aircraft.location = wp1->location;
+  aircraft.altitude = 1000;
   task.Update(aircraft, aircraft, glide_polar);
 
-  const GeoVector vector = wp1.location.DistanceBearing(wp2.location);
+  const GeoVector vector = wp1->location.DistanceBearing(wp2->location);
 
   const TaskStats &stats = task.GetStats();
   ok1(stats.task_valid);
@@ -296,19 +299,17 @@ TestHighFinish()
 static void
 TestHighTP()
 {
-  const fixed width(1);
+  const double width(1);
   OrderedTask task(task_behaviour);
-  const StartPoint tp1(new LineSectorZone(wp1.location, width),
-                       wp1, task_behaviour,
+  const StartPoint tp1(new LineSectorZone(wp1->location, width),
+                       WaypointPtr(wp1), task_behaviour,
                        ordered_task_settings.start_constraints);
   task.Append(tp1);
-  const Waypoint wp3b = MakeWaypoint(wp3, 1500);
-  const ASTPoint tp2(new LineSectorZone(wp3b.location, width),
-                     wp3b, task_behaviour);
+  const ASTPoint tp2(new LineSectorZone(wp3->location, width),
+                     MakeWaypointPtr(*wp3, 1500), task_behaviour);
   task.Append(tp2);
-  const Waypoint wp4b = MakeWaypoint(wp4, 100);
-  const FinishPoint tp3(new LineSectorZone(wp4b.location, width),
-                        wp4b, task_behaviour,
+  const FinishPoint tp3(new LineSectorZone(wp4->location, width),
+                        MakeWaypointPtr(*wp4, 100), task_behaviour,
                         ordered_task_settings.finish_constraints, false);
   task.Append(tp3);
   task.SetActiveTaskPoint(1);
@@ -318,8 +319,8 @@ TestHighTP()
 
   AircraftState aircraft;
   aircraft.Reset();
-  aircraft.location = wp1.location;
-  aircraft.altitude = fixed(2000);
+  aircraft.location = wp1->location;
+  aircraft.altitude = 2000;
   task.Update(aircraft, aircraft, glide_polar);
 
   const TaskStats &stats = task.GetStats();
@@ -335,19 +336,17 @@ TestHighTP()
 static void
 TestHighTPFinal()
 {
-  const fixed width(1);
+  const double width(1);
   OrderedTask task(task_behaviour);
-  const StartPoint tp1(new LineSectorZone(wp1.location, width),
-                       wp1, task_behaviour,
+  const StartPoint tp1(new LineSectorZone(wp1->location, width),
+                       WaypointPtr(wp1), task_behaviour,
                        ordered_task_settings.start_constraints);
   task.Append(tp1);
-  const Waypoint wp3b = MakeWaypoint(wp3, 1500);
-  const ASTPoint tp2(new LineSectorZone(wp3b.location, width),
-                     wp3b, task_behaviour);
+  const ASTPoint tp2(new LineSectorZone(wp3->location, width),
+                     MakeWaypointPtr(*wp3, 1500), task_behaviour);
   task.Append(tp2);
-  const Waypoint wp5b = MakeWaypoint(wp5, 200);
-  const FinishPoint tp3(new LineSectorZone(wp5b.location, width),
-                        wp5b, task_behaviour,
+  const FinishPoint tp3(new LineSectorZone(wp5->location, width),
+                        MakeWaypointPtr(*wp5, 200), task_behaviour,
                         ordered_task_settings.finish_constraints, false);
   task.Append(tp3);
   task.SetActiveTaskPoint(1);
@@ -357,8 +356,8 @@ TestHighTPFinal()
 
   AircraftState aircraft;
   aircraft.Reset();
-  aircraft.location = wp1.location;
-  aircraft.altitude = fixed(1200);
+  aircraft.location = wp1->location;
+  aircraft.altitude = 1200;
   task.Update(aircraft, aircraft, glide_polar);
 
   const TaskStats &stats = task.GetStats();
@@ -374,18 +373,17 @@ TestHighTPFinal()
 static void
 TestLowTPFinal()
 {
-  const fixed width(1);
+  const double width(1);
   OrderedTask task(task_behaviour);
-  const Waypoint wp1b = MakeWaypoint(wp1, 1500);
-  const StartPoint tp1(new LineSectorZone(wp1b.location, width),
-                       wp1b, task_behaviour,
+  const StartPoint tp1(new LineSectorZone(wp1->location, width),
+                       MakeWaypointPtr(*wp1, 1500), task_behaviour,
                        ordered_task_settings.start_constraints);
   task.Append(tp1);
-  const ASTPoint tp2(new LineSectorZone(wp2.location, width),
-                     wp2, task_behaviour);
+  const ASTPoint tp2(new LineSectorZone(wp2->location, width),
+                     WaypointPtr(wp2), task_behaviour);
   task.Append(tp2);
-  const FinishPoint tp3(new LineSectorZone(wp3.location, width),
-                        wp3, task_behaviour,
+  const FinishPoint tp3(new LineSectorZone(wp3->location, width),
+                        WaypointPtr(wp3), task_behaviour,
                         ordered_task_settings.finish_constraints, false);
   task.Append(tp3);
   task.SetActiveTaskPoint(1);
@@ -395,8 +393,8 @@ TestLowTPFinal()
 
   AircraftState aircraft;
   aircraft.Reset();
-  aircraft.location = wp1.location;
-  aircraft.altitude = fixed(2500);
+  aircraft.location = wp1->location;
+  aircraft.altitude = 2500;
   task.Update(aircraft, aircraft, glide_polar);
 
   const TaskStats &stats = task.GetStats();
@@ -412,8 +410,8 @@ TestLowTPFinal()
 static void
 TestAll()
 {
-  TestFlightToFinish(fixed(2000));
-  TestFlightToFinish(fixed(1000));
+  TestFlightToFinish(2000);
+  TestFlightToFinish(1000);
   TestSimpleTask();
   TestHighFinish();
   TestHighTP();
@@ -429,13 +427,13 @@ int main(int argc, char **argv)
 
   TestAll();
 
-  glide_polar.SetMC(fixed(1));
+  glide_polar.SetMC(1);
   TestAll();
 
-  glide_polar.SetMC(fixed(2));
+  glide_polar.SetMC(2);
   TestAll();
 
-  glide_polar.SetMC(fixed(4));
+  glide_polar.SetMC(4);
   TestAll();
 
   return exit_status();

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,10 +26,9 @@ Copyright_License {
 
 #include "NativeWindow.hpp"
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
+#include "Renderer/TextRenderer.hpp"
 #include "Util/tstring.hpp"
-
-#include <winuser.h>
 #endif
 
 #include <tchar.h>
@@ -38,14 +37,14 @@ class LargeTextWindowStyle : public WindowStyle {
 public:
   LargeTextWindowStyle() {
     VerticalScroll();
-#ifdef USE_GDI
+#ifdef USE_WINUSER
     style |= ES_LEFT | ES_MULTILINE | ES_READONLY;
 #endif
   }
 
   LargeTextWindowStyle(const WindowStyle other):WindowStyle(other) {
     VerticalScroll();
-#ifdef USE_GDI
+#ifdef USE_WINUSER
     style |= ES_LEFT | ES_MULTILINE | ES_READONLY;
 #endif
   }
@@ -55,8 +54,8 @@ public:
  * A window showing large multi-line text.
  */
 class LargeTextWindow : public NativeWindow {
-#ifndef USE_GDI
-  const Font *font;
+#ifndef USE_WINUSER
+  const Font *font = nullptr;
 
   tstring value;
 
@@ -64,19 +63,16 @@ class LargeTextWindow : public NativeWindow {
    * The first visible line.
    */
   unsigned origin;
+
+  TextRenderer renderer;
 #endif
 
 public:
-#if !defined(USE_GDI) && !defined(NDEBUG)
-  LargeTextWindow():font(nullptr) {}
-#endif
-
   void Create(ContainerWindow &parent, PixelRect rc,
               const LargeTextWindowStyle style=LargeTextWindowStyle());
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   void SetFont(const Font &_font) {
-    AssertNoneLocked();
     AssertThread();
 
     font = &_font;
@@ -97,7 +93,6 @@ public:
 #else
   gcc_pure
   unsigned GetRowCount() const {
-    AssertNoneLocked();
 
     return ::SendMessage(hWnd, EM_GETLINECOUNT, 0, 0);
   }
@@ -111,13 +106,13 @@ public:
    */
   void ScrollVertically(int delta_lines);
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
 protected:
   void OnResize(PixelSize new_size) override;
   void OnPaint(Canvas &canvas) override;
   bool OnKeyCheck(unsigned key_code) const override;
   bool OnKeyDown(unsigned key_code) override;
-#endif /* !USE_GDI */
+#endif /* !USE_WINUSER */
 };
 
 #endif

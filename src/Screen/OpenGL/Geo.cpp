@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -34,15 +34,15 @@ Copyright_License {
 glm::mat4
 ToGLM(const WindowProjection &projection, const GeoPoint &reference)
 {
-  fixed angle = projection.GetScreenAngle().Degrees();
-  fixed scale = projection.GetScale();
-  const RasterPoint &screen_origin = projection.GetScreenOrigin();
+  auto angle = projection.GetScreenAngle().Degrees();
+  auto scale = projection.GetScale();
+  const PixelPoint &screen_origin = projection.GetScreenOrigin();
   const GeoPoint &screen_location = projection.GetGeoLocation();
   const GeoPoint projection_delta = reference - screen_location;
 
-  const fixed scale_r = scale * FAISphere::REARTH;
-  const fixed scale_x = scale_r * screen_location.latitude.fastcosine();
-  const fixed scale_y = -scale_r;
+  const auto scale_r = scale * FAISphere::REARTH;
+  const auto scale_x = scale_r * screen_location.latitude.fastcosine();
+  const auto scale_y = -scale_r;
 
   const glm::vec3 scale_vec(GLfloat(scale_x), GLfloat(scale_y), 1);
 
@@ -65,22 +65,18 @@ ToGLM(const WindowProjection &projection, const GeoPoint &reference)
 void
 ApplyProjection(const WindowProjection &projection, const GeoPoint &reference)
 {
-  fixed angle = projection.GetScreenAngle().Degrees();
-  fixed scale = projection.GetScale();
-  const RasterPoint &screen_origin = projection.GetScreenOrigin();
+  auto angle = projection.GetScreenAngle().Degrees();
+  auto scale = projection.GetScale();
+  const PixelPoint &screen_origin = projection.GetScreenOrigin();
   const GeoPoint &screen_location = projection.GetGeoLocation();
   const GeoPoint projection_delta = reference - screen_location;
 
-  const fixed scale_r = scale * FAISphere::REARTH;
-  const fixed scale_x = scale_r * screen_location.latitude.fastcosine();
-  const fixed scale_y = -scale_r;
+  const auto scale_r = scale * FAISphere::REARTH;
+  const auto scale_x = scale_r * screen_location.latitude.fastcosine();
+  const auto scale_y = -scale_r;
 
 #ifdef HAVE_GLES
-#ifdef FIXED_MATH
-  GLfixed fixed_angle = angle.as_glfixed();
-#else
   GLfixed fixed_angle = angle * (1<<16);
-#endif
   glTranslatex((int)screen_origin.x << 16, (int)screen_origin.y << 16, 0);
   glRotatex(fixed_angle, 0, 0, -(1<<16));
 #else

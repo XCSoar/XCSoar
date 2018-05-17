@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,11 +25,10 @@
 
 #include "Logger/MD5.hpp"
 
-#include <tchar.h>
-
 #define XCSOAR_IGC_CODE "XCS"
 
-class TextWriter;
+class Path;
+class BufferedOutputStream;
 
 class GRecord
 {
@@ -74,21 +73,32 @@ public:
    */
   void GetDigest(char *buffer) const;
 
-  /** loads a file into the data buffer */
-  bool LoadFileToBuffer(const TCHAR *path);
+  /**
+   * Loads a file into the data buffer.
+   *
+   * Throws std::runtime_errror on error.
+   */
+  void LoadFileToBuffer(Path path);
 
-  void WriteTo(TextWriter &writer) const;
-
-  bool AppendGRecordToFile(const TCHAR *path);
+  void WriteTo(BufferedOutputStream &writer) const;
 
   /**
+   * Throws std::runtime_errror on error.
+   */
+  void AppendGRecordToFile(Path path);
+
+  /**
+   * Throws std::runtime_errror on error.
+   *
    * returns in szOutput the G Record from the file
    */
-  static bool ReadGRecordFromFile(const TCHAR *path,
+  static void ReadGRecordFromFile(Path path,
                                   char *buffer, size_t max_length);
 
-  /// returns 0 if false, 1 if true
-  bool VerifyGRecordInFile(const TCHAR *path);
+  /**
+   * Throws std::runtime_errror on error.
+   */
+  void VerifyGRecordInFile(Path path);
 
 private:
   void AppendStringToBuffer(const char *szIn);

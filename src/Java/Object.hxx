@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2010-2015 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -34,21 +34,42 @@
 
 #include <jni.h>
 
+#include <assert.h>
+
 namespace Java {
 	/**
 	 * Wrapper for a local "jobject" reference.
 	 */
 	typedef LocalRef<jobject> LocalObject;
 
-	class Object : public GlobalRef<jobject> {
+	class GlobalObject : public GlobalRef<jobject> {
 	public:
 		/**
 		 * Constructs an uninitialized object.  The method set() must be
 		 * called before it is destructed.
 		 */
-		Object() = default;
+		GlobalObject() = default;
 
-		Object(JNIEnv *env, jobject obj):GlobalRef<jobject>(env, obj) {}
+		GlobalObject(JNIEnv *env, jobject obj)
+			:GlobalRef<jobject>(env, obj) {}
+	};
+
+	/**
+	 * Utilities for java.net.Object.
+	 */
+	class Object {
+		static jmethodID toString_method;
+
+	public:
+		static void Initialise(JNIEnv *env);
+
+		static jstring toString(JNIEnv *env, jobject o) {
+			assert(env != nullptr);
+			assert(o != nullptr);
+			assert(toString_method != nullptr);
+
+			return (jstring)env->CallObjectMethod(o, toString_method);
+		}
 	};
 }
 

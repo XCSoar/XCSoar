@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,12 +23,9 @@
 #ifndef ROUTELINK_HPP
 #define ROUTELINK_HPP
 
-#include "Math/fixed.hpp"
-#include "Geo/Flat/FlatGeoPoint.hpp"
+#include "Point.hpp"
 
 class FlatProjection;
-
-typedef AFlatGeoPoint RoutePoint;
 
 /**
  * Class used for primitive 3d navigation links.
@@ -43,7 +40,7 @@ struct RouteLinkBase {
   /** Origin location */
   RoutePoint second;
 
-  RouteLinkBase(const RoutePoint& _dest, const RoutePoint& _origin)
+  constexpr RouteLinkBase(const RoutePoint _dest, const RoutePoint _origin)
     :first(_dest), second(_origin) {}
 
   /**
@@ -53,8 +50,7 @@ struct RouteLinkBase {
    *
    * @return true if origins and destinations are equal
    */
-  gcc_pure
-  bool operator==(const RouteLinkBase &o) const {
+  constexpr bool operator==(const RouteLinkBase o) const {
     return (first == o.first) && (second == o.second);
   }
 
@@ -85,9 +81,8 @@ struct RouteLinkBase {
    *
    * @return dot product of this object with second object
    */
-  gcc_pure
-  int DotProduct(const RouteLinkBase& o) const {
-    return (o.second-o.first).DotProduct(second-first);
+  constexpr int DotProduct(const RouteLinkBase& o) const {
+    return o.GetDelta().DotProduct(GetDelta());
   }
 
   /**
@@ -98,9 +93,13 @@ struct RouteLinkBase {
    *
    * @return cross product of this object with second object
    */
-  gcc_pure
-  int CrossProduct(const RouteLinkBase& o) const {
-    return (o.second - o.first).CrossProduct(second - first);
+  constexpr int CrossProduct(const RouteLinkBase& o) const {
+    return o.GetDelta().CrossProduct(GetDelta());
+  }
+
+private:
+  constexpr FlatGeoPoint GetDelta() const {
+    return FlatGeoPoint(second) - FlatGeoPoint(first);
   }
 };
 
@@ -112,9 +111,9 @@ struct RouteLinkBase {
 struct RouteLink: public RouteLinkBase {
 public:
   /** Distance (m) */
-  fixed d;
+  double d;
   /** Reciprocal of Distance (1/m) */
-  fixed inv_d;
+  double inv_d;
   /** Direction index to be used for RoutePolar lookups */
   unsigned polar_index;
 
@@ -128,6 +127,7 @@ public:
    *
    * @return link equivalent to this link flattened
    */
+  gcc_pure
   RouteLink Flat() const;
 
 private:

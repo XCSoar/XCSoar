@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "Event/DelayedNotify.hpp"
 #include "Thread/Mutex.hpp"
-#include "Thread/Trigger.hpp"
+#include "Thread/Cond.hxx"
 #include "Util/StaticString.hxx"
 
 /**
@@ -91,17 +91,39 @@ class ThreadedOperationEnvironment
 
   OperationEnvironment &other;
 
-  Mutex mutex;
+  mutable Mutex mutex;
+  Cond cancel_cond;
+  bool cancel_flag = false;
 
   Data data;
-
-  Trigger cancelled;
 
 public:
   explicit ThreadedOperationEnvironment(OperationEnvironment &_other);
 
   void Cancel() {
-    cancelled.Signal();
+    const ScopeLock lock(mutex);
+    if (!cancel_flag) {
+      cancel_flag = true;
+      cancel_cond.signal();
+    }
+  }
+
+private:
+  bool LockSetProgressRange(unsigned range) {
+    const ScopeLock lock(mutex);
+    return data.SetProgressRange(range);
+  }
+
+  bool LockSetProgressPosition(unsigned position) {
+    const ScopeLock lock(mutex);
+    return data.SetProgressPosition(position);
+  }
+
+  Data LockReceiveData() {
+    const ScopeLock lock(mutex);
+    Data new_data = data;
+    data.ClearUpdate();
+    return new_data;
   }
 
 public:

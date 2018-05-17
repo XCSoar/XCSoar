@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef TRACE_HISTORY_RENDERER_HPP
 #define TRACE_HISTORY_RENDERER_HPP
 
-#include "Math/fixed.hpp"
-
 struct PixelRect;
 struct TraceHistoryLook;
 struct VarioLook;
@@ -34,6 +32,10 @@ class ChartRenderer;
 class Canvas;
 class TraceVariableHistory;
 
+/**
+ * (Vario) Trace History Renderer
+ * renders the variometer history graph for the vario trace Infobox
+ */
 class TraceHistoryRenderer {
   const TraceHistoryLook &look;
   const VarioLook &vario_look;
@@ -48,12 +50,16 @@ public:
   void RenderVario(Canvas& canvas,
                    const PixelRect rc,
                    const TraceVariableHistory& var,
-                   const bool centered = false,
-                   const fixed mc=fixed(0)) const;
+                   const bool centered,
+                   const double mc,
+                   const double max,
+                   const double min) const;
 
 private:
   void ScaleChart(ChartRenderer &chart,
                    const TraceVariableHistory& var,
+                  const double max,
+                  const double min,
                    const bool centered) const;
 
   void RenderAxis(ChartRenderer &chart,

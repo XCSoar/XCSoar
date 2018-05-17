@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -150,7 +150,7 @@ FlarmTrafficWindow::PrevTarget()
  * to select the next one
  */
 void
-FlarmTrafficWindow::UpdateSelector(const FlarmId id, const RasterPoint pt)
+FlarmTrafficWindow::UpdateSelector(const FlarmId id, const PixelPoint pt)
 {
   // Update #selection
   if (!id.IsDefined())
@@ -159,11 +159,11 @@ FlarmTrafficWindow::UpdateSelector(const FlarmId id, const RasterPoint pt)
     SetTarget(id);
 
   // If we don't have a valid selection and we can't find
-  // a target close to to the RasterPoint we select the next one
+  // a target close to to the PixelPoint we select the next one
   // on the internal list
   if (selection < 0 && (
       pt.x < 0 || pt.y < 0 ||
-      !SelectNearTarget(pt.x, pt.y, radius * 2)) )
+      !SelectNearTarget(pt, radius * 2)) )
     NextTarget();
 }
 
@@ -194,7 +194,7 @@ FlarmTrafficWindow::Update(Angle new_direction, const TrafficList &new_data,
     return;
 
   FlarmId selection_id;
-  RasterPoint pt;
+  PixelPoint pt;
   if (!small && selection >= 0) {
     selection_id = data.list[selection].id;
     pt = sc[selection];
@@ -221,11 +221,11 @@ FlarmTrafficWindow::Update(Angle new_direction, const TrafficList &new_data,
  * Returns the distance to the own plane in pixels
  * @param d Distance in meters to the own plane
  */
-fixed
-FlarmTrafficWindow::RangeScale(fixed d) const
+double
+FlarmTrafficWindow::RangeScale(double d) const
 {
-  d = d / distance;
-  return std::min(d, fixed(1)) * radius;
+  d /= distance;
+  return std::min(d, 1.) * radius;
 }
 
 /**
@@ -283,14 +283,13 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
                                      unsigned i)
 {
   // Save relative East/North
-  Point2D<fixed> p(traffic.relative_east,
-                   -traffic.relative_north);
+  DoublePoint2D p(traffic.relative_east, -traffic.relative_north);
 
   // Calculate the distance in pixels
-  fixed scale = RangeScale(traffic.distance);
+  double scale = RangeScale(traffic.distance);
 
   // Don't display distracting, far away targets in WarningMode
-  if (WarningMode() && !traffic.HasAlarm() && scale == fixed(radius))
+  if (WarningMode() && !traffic.HasAlarm() && scale == radius)
     return;
 
   // x and y are not between 0 and 1 (distance will be handled via scale)
@@ -298,8 +297,8 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     p.x /= traffic.distance;
     p.y /= traffic.distance;
   } else {
-    p.x = fixed(0);
-    p.y = fixed(0);
+    p.x = 0;
+    p.y = 0;
   }
 
   if (!enable_north_up) {
@@ -384,7 +383,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   }
 
   // Create an arrow polygon
-  RasterPoint Arrow[5];
+  BulkPixelPoint Arrow[5];
   if (small) {
     Arrow[0].x = -3;
     Arrow[0].y = 4;
@@ -438,7 +437,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   // if vertical speed to small or negative -> skip this one
   if (side_display_type == SIDE_INFO_VARIO &&
       (!traffic.climb_rate_avg30s_available ||
-       traffic.climb_rate_avg30s < fixed(0.5) ||
+       traffic.climb_rate_avg30s < 0.5 ||
        traffic.IsPowered()))
       return;
 
@@ -494,7 +493,7 @@ FlarmTrafficWindow::PaintTargetInfoSmall(
   // Calculate size of the output string
   PixelSize tsize = canvas.CalcTextSize(buffer);
 
-  UPixelScalar dist = Layout::FastScale(traffic.HasAlarm() ? 12 : 8);
+  unsigned dist = Layout::FastScale(traffic.HasAlarm() ? 12 : 8);
 
   // Draw string
   canvas.DrawText(sc[i].x + dist, sc[i].y - tsize.cy / 2, buffer);
@@ -504,7 +503,7 @@ FlarmTrafficWindow::PaintTargetInfoSmall(
   canvas.SelectNullPen();
 
   // Prepare the triangular polygon
-  RasterPoint triangle[4];
+  BulkPixelPoint triangle[4];
   triangle[0].x = 0;
   triangle[0].y = -4;
   triangle[1].x = 3;
@@ -582,9 +581,9 @@ FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
 {
   canvas.Select(look.plane_pen);
 
-  Point2D<int> p1(Layout::FastScale(small ? 5 : 10),
-                  -Layout::FastScale(small ? 1 : 2));
-  Point2D<int> p2(-p1.x, p1.y);
+  IntPoint2D p1(Layout::FastScale(small ? 5 : 10),
+                -Layout::FastScale(small ? 1 : 2));
+  IntPoint2D p2(-p1.x, p1.y);
 
   if (enable_north_up) {
     p1 = fir.Rotate(p1);
@@ -625,7 +624,7 @@ FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
 void
 FlarmTrafficWindow::PaintNorth(Canvas &canvas) const
 {
-  Point2D<fixed> p(fixed(0), fixed(-1));
+  DoublePoint2D p(0, -1);
   if (!enable_north_up) {
     p = fr.Rotate(p);
   }
@@ -670,13 +669,13 @@ FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
 
   TCHAR distance_string[10];
   FormatUserDistanceSmart(distance, distance_string,
-                          ARRAY_SIZE(distance_string), fixed(1000));
+                          ARRAY_SIZE(distance_string), 1000);
   PixelSize s = canvas.CalcTextSize(distance_string);
   canvas.DrawText(radar_mid.x - s.cx / 2,
                   radar_mid.y + radius - s.cy * 0.75, distance_string);
 
   FormatUserDistanceSmart(distance / 2, distance_string,
-                          ARRAY_SIZE(distance_string), fixed(1000));
+                          ARRAY_SIZE(distance_string), 1000);
   s = canvas.CalcTextSize(distance_string);
   canvas.DrawText(radar_mid.x - s.cx / 2,
                   radar_mid.y + radius / 2 - s.cy * 0.75, distance_string);
@@ -712,7 +711,7 @@ FlarmTrafficWindow::OnPaint(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
   if (small) {
-    const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    const ScopeAlphaBlend alpha_blend;
 
     canvas.SelectBlackPen();
     canvas.Select(Brush(look.background_color.WithAlpha(0xd0)));
@@ -726,7 +725,7 @@ FlarmTrafficWindow::OnPaint(Canvas &canvas)
 }
 
 bool
-FlarmTrafficWindow::SelectNearTarget(int x, int y, int max_distance)
+FlarmTrafficWindow::SelectNearTarget(PixelPoint p, int max_distance)
 {
   int min_distance = 99999;
   int min_id = -1;
@@ -736,8 +735,7 @@ FlarmTrafficWindow::SelectNearTarget(int x, int y, int max_distance)
     if (!data.list[i].IsDefined())
       continue;
 
-    int distance_sq = (x - sc[i].x) * (x - sc[i].x) +
-                      (y - sc[i].y) * (y - sc[i].y);
+    int distance_sq = (p - sc[i]).MagnitudeSquared();
 
     if (distance_sq > min_distance
         || distance_sq > max_distance * max_distance)

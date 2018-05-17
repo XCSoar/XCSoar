@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -40,7 +40,7 @@ class ListPickerWidget : public ListWidget, public ActionListener,
                          private Timer {
   unsigned num_items;
   unsigned initial_value;
-  UPixelScalar row_height;
+  unsigned row_height;
 
   bool visible;
 
@@ -54,7 +54,7 @@ class ListPickerWidget : public ListWidget, public ActionListener,
 
 public:
   ListPickerWidget(unsigned _num_items, unsigned _initial_value,
-                   UPixelScalar _row_height,
+                   unsigned _row_height,
                    ListItemRenderer &_item_renderer,
                    ActionListener &_action_listener,
                    const TCHAR *_caption, const TCHAR *_help_text)

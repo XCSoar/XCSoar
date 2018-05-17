@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,29 +30,23 @@ Copyright_License {
 
 static PeriodClock last_team_code_update;
 
-/**
- * Constructor of the GlideComputer class
- * @return
- */
-GlideComputer::GlideComputer(const Waypoints &_way_points,
+GlideComputer::GlideComputer(const ComputerSettings &_settings,
+                             const Waypoints &_way_points,
                              Airspaces &_airspace_database,
                              ProtectedTaskManager &task,
-                             GlideComputerTaskEvents& events):
-  air_data_computer(_way_points),
-  warning_computer(_airspace_database),
-  task_computer(task, _airspace_database, &warning_computer.GetManager()),
-  waypoints(_way_points),
-  retrospective(_way_points),
-  team_code_ref_id(-1)
+                             GlideComputerTaskEvents& events)
+  :air_data_computer(_way_points),
+   warning_computer(_settings.airspace.warnings, _airspace_database),
+   task_computer(task, _airspace_database, &warning_computer.GetManager()),
+   waypoints(_way_points),
+   retrospective(_way_points),
+   team_code_ref_id(-1)
 {
+  ReadComputerSettings(_settings);
   events.SetComputer(*this);
   idle_clock.Update();
 }
 
-/**
- * Resets the GlideComputer data
- * @param full Reset all data?
- */
 void
 GlideComputer::ResetFlight(const bool full)
 {
@@ -69,18 +63,12 @@ GlideComputer::ResetFlight(const bool full)
   trace_history_time.Reset();
 }
 
-/**
- * Initializes the GlideComputer
- */
 void
 GlideComputer::Initialise()
 {
   ResetFlight(true);
 }
 
-/**
- * Is called by the CalculationThread and processes the received GPS data in Basic()
- */
 bool
 GlideComputer::ProcessGPS(bool force)
 {
@@ -109,23 +97,26 @@ GlideComputer::ProcessGPS(bool force)
 
   // Process basic information
   air_data_computer.ProcessBasic(Basic(), SetCalculated(),
-                                 GetComputerSettings());
+                                 settings);
 
   // Process basic task information
   const bool last_finished = calculated.ordered_task_stats.task_finished;
 
   task_computer.ProcessBasicTask(basic,
                                  calculated,
-                                 GetComputerSettings(),
+                                 settings,
                                  force);
-  task_computer.ProcessMoreTask(basic, calculated, GetComputerSettings());
+
+  CalculateWorkingBand();
+
+  task_computer.ProcessMoreTask(basic, calculated, settings);
 
   if (!last_finished && calculated.ordered_task_stats.task_finished)
     OnFinishTask();
 
   // Check if everything is okay with the gps time and process it
   air_data_computer.FlightTimes(Basic(), SetCalculated(),
-                                GetComputerSettings());
+                                settings);
 
   TakeoffLanding(last_flying);
 
@@ -134,7 +125,7 @@ GlideComputer::ProcessGPS(bool force)
   // Process extended information
   air_data_computer.ProcessVertical(Basic(),
                                     SetCalculated(),
-                                    GetComputerSettings());
+                                    settings);
 
   stats_computer.ProcessClimbEvents(calculated);
 
@@ -146,18 +137,17 @@ GlideComputer::ProcessGPS(bool force)
   // Calculate the bearing and range of the teammate
   CalculateTeammateBearingRange();
 
-  vegavoice.Update(basic, Calculated(), GetComputerSettings().voice);
-
   // update basic trace history
   if (basic.time_available) {
-    const fixed dt = trace_history_time.Update(basic.time, fixed(0.5),
-                                               fixed(30));
-    if (positive(dt))
+    const auto dt = trace_history_time.Update(basic.time, 0.5, 30);
+    if (dt > 0)
       calculated.trace_history.append(basic);
-    else if (negative(dt))
+    else if (dt < 0)
       /* time warp */
       calculated.trace_history.clear();
   }
+
+  CalculateVarioScale();
 
   // Update the ConditionMonitors
   ConditionMonitorsUpdate(Basic(), Calculated(), settings);
@@ -165,9 +155,6 @@ GlideComputer::ProcessGPS(bool force)
   return idle_clock.CheckUpdate(500);
 }
 
-/**
- * Process slow calculations. Called by the CalculationThread.
- */
 void
 GlideComputer::ProcessIdle(bool exhaustive)
 {
@@ -202,7 +189,7 @@ GlideComputer::DetermineTeamCodeRefLocation()
     return team_code_ref_found;
 
   team_code_ref_id = settings.team_code_reference_waypoint;
-  const Waypoint *wp = waypoints.LookupId(team_code_ref_id);
+  const auto wp = waypoints.LookupId(team_code_ref_id);
   if (wp == NULL)
     return team_code_ref_found = false;
 
@@ -210,9 +197,6 @@ GlideComputer::DetermineTeamCodeRefLocation()
   return team_code_ref_found = true;
 }
 
-/**
- * Calculates the own TeamCode and saves it to Calculated
- */
 inline void
 GlideComputer::CalculateOwnTeamCode()
 {
@@ -324,7 +308,7 @@ GlideComputer::TakeoffLanding(bool last_flying)
     OnLanding();
 }
 
-void 
+void
 GlideComputer::OnStartTask()
 {
   GlideComputerBlackboard::StartTask();
@@ -333,7 +317,7 @@ GlideComputer::OnStartTask()
   log_computer.StartTask(Basic());
 }
 
-void 
+void
 GlideComputer::OnFinishTask()
 {
   SaveFinish();
@@ -351,4 +335,43 @@ GlideComputer::SetTerrain(RasterTerrain* _terrain)
 {
   air_data_computer.SetTerrain(_terrain);
   task_computer.SetTerrain(_terrain);
+}
+
+void
+GlideComputer::CalculateWorkingBand()
+{
+  const MoreData &basic = Basic();
+  DerivedInfo &calculated = SetCalculated();
+  const ComputerSettings &settings = GetComputerSettings();
+
+  calculated.common_stats.height_min_working = stats_computer.GetFlightStats().GetMinWorkingHeight();
+  if (calculated.terrain_base_valid) {
+    calculated.common_stats.height_min_working = std::max(calculated.common_stats.height_min_working,
+                                                          calculated.GetTerrainBaseFallback()+settings.task.safety_height_arrival);
+  }
+  calculated.common_stats.height_max_working = std::max(calculated.common_stats.height_min_working,
+                                                        stats_computer.GetFlightStats().GetMaxWorkingHeight());
+
+  calculated.common_stats.height_fraction_working = 1; // fallback;
+
+  if (basic.NavAltitudeAvailable()) {
+    calculated.common_stats.height_max_working = std::max(calculated.common_stats.height_max_working,
+                                                          basic.nav_altitude);
+    calculated.common_stats.height_fraction_working =
+        calculated.CalculateWorkingFraction(basic.nav_altitude,
+                                            settings.task.safety_height_arrival);
+  }
+}
+
+void
+GlideComputer::CalculateVarioScale()
+{
+  DerivedInfo &calculated = SetCalculated();
+  const GlidePolar &glide_polar = GetComputerSettings().polar.glide_polar_task;
+  calculated.common_stats.vario_scale_positive =
+      std::max(stats_computer.GetFlightStats().GetVarioScalePositive(),
+               glide_polar.GetMC());
+  calculated.common_stats.vario_scale_negative =
+      std::min(stats_computer.GetFlightStats().GetVarioScaleNegative(),
+               -glide_polar.GetSBestLD());
 }

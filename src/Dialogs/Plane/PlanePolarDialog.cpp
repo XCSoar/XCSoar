@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@ Copyright_License {
 #include "PlaneDialogs.hpp"
 #include "PolarShapeEditWidget.hpp"
 #include "Dialogs/ComboPicker.hpp"
+#include "Dialogs/FilePicker.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Form/DataField/ComboList.hpp"
 #include "Form/DataField/Listener.hpp"
@@ -34,11 +35,9 @@ Copyright_License {
 #include "Polar/PolarStore.hpp"
 #include "Polar/PolarFileGlue.hpp"
 #include "Plane/Plane.hpp"
-#include "OS/FileUtil.hpp"
-#include "LocalPath.hpp"
+#include "OS/Path.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
-#include "Units/Units.hpp"
 
 class PlanePolarWidget final
   : public RowFormWidget, DataFieldListener, ActionListener {
@@ -141,12 +140,12 @@ PlanePolarWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddFloat(_("Reference Mass"), _("Reference mass of the polar"),
            _T("%.0f %s"), _T("%.0f"),
-           fixed(0), fixed(1000), fixed(5), false,
+           0, 1000, 5, false,
            UnitGroup::MASS, plane.reference_mass);
 
   AddFloat(_("Dry Mass"), _("Dry all-up flying mass of your plane"),
            _T("%.0f %s"), _T("%.0f"),
-           fixed(0), fixed(1000), fixed(5), false,
+           0, 1000, 5, false,
            UnitGroup::MASS, plane.dry_mass);
 }
 
@@ -194,19 +193,19 @@ PlanePolarWidget::ListClicked()
 
   const PolarStore::Item &item = PolarStore::GetItem(list[result].int_value);
 
-  plane.reference_mass = fixed(item.reference_mass);
-  plane.dry_mass = fixed(item.reference_mass);
-  plane.max_ballast = fixed(item.max_ballast);
+  plane.reference_mass = item.reference_mass;
+  plane.dry_mass = item.reference_mass;
+  plane.max_ballast = item.max_ballast;
 
   if (item.wing_area > 0.0)
-    plane.wing_area = fixed(item.wing_area);
+    plane.wing_area = item.wing_area;
 
   if (item.v_no > 0.0)
-    plane.max_speed = fixed(item.v_no);
+    plane.max_speed = item.v_no;
 
   plane.polar_shape = item.ToPolarShape();
 
-  plane.polar_name = list[result].string_value;
+  plane.polar_name = list[result].string_value.c_str();
 
   if (item.contest_handicap > 0)
     plane.handicap = item.contest_handicap;
@@ -214,54 +213,33 @@ PlanePolarWidget::ListClicked()
   Update();
 }
 
-class PolarFileVisitor: public File::Visitor
-{
-private:
-  ComboList &list;
-
-public:
-  PolarFileVisitor(ComboList &_list): list(_list) {}
-
-  void Visit(const TCHAR* path, const TCHAR* filename) {
-    list.Append(0, path, filename);
-  }
-};
-
 inline void
 PlanePolarWidget::ImportClicked()
 {
-  ComboList list;
-  PolarFileVisitor fv(list);
-
-  // Fill list
-  VisitDataFiles(_T("*.plr"), fv);
-
-  list.Sort();
-
   // let the user select
-  int result = ComboPicker(_("Load Polar From File"), list, NULL);
-  if (result < 0)
+  const auto path = FilePicker(_("Load Polar From File"), _T("*.plr\0"));
+  if (path == nullptr)
     return;
 
-  assert((unsigned)result < list.size());
-
   PolarInfo polar;
-  const TCHAR* path = list[result].string_value;
-  PolarGlue::LoadFromFile(polar, path);
+  try {
+    PolarGlue::LoadFromFile(polar, path);
+  } catch (const std::runtime_error &) {
+  }
 
   plane.reference_mass = polar.reference_mass;
   plane.dry_mass = polar.reference_mass;
   plane.max_ballast = polar.max_ballast;
 
-  if (positive(polar.wing_area))
+  if (polar.wing_area > 0)
     plane.wing_area = polar.wing_area;
 
-  if (positive(polar.v_no))
+  if (polar.v_no > 0)
     plane.max_speed = polar.v_no;
 
   plane.polar_shape = polar.shape;
 
-  plane.polar_name = list[result].display_string;
+  plane.polar_name = path.GetBase().c_str();
 
   Update();
 }
@@ -310,4 +288,3 @@ dlgPlanePolarShowModal(Plane &_plane)
   _plane = widget.GetValue();
   return true;
 }
-

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,18 +23,13 @@ Copyright_License {
 
 #include "FileCache.hpp"
 #include "OS/FileUtil.hpp"
-#include "OS/PathName.hpp"
-#include "Compatibility/path.h"
 #include "Compiler.h"
 
 #include <stdint.h>
 #include <string.h>
-#include <stdlib.h>
-#include <time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <windef.h> /* for MAX_PATH */
 
 #ifndef HAVE_POSIX
 #include <windows.h>
@@ -53,23 +48,6 @@ FileTimeToInteger(FILETIME ft)
 
 #endif
 
-gcc_pure
-static uint64_t
-Now()
-{
-#ifdef HAVE_POSIX
-  return time(nullptr);
-#else
-  SYSTEMTIME system_time;
-  GetSystemTime(&system_time);
-
-  FILETIME system_time2;
-  SystemTimeToFileTime(&system_time, &system_time2);
-
-  return FileTimeToInteger(system_time2);
-#endif
-}
-
 struct FileInfo {
   uint64_t mtime;
   uint64_t size;
@@ -87,23 +65,17 @@ struct FileInfo {
    */
   gcc_pure
   bool IsFuture() const {
-    return mtime > Now();
+    return mtime > File::Now();
   }
 };
 
 gcc_pure
 static inline bool
-GetRegularFileInfo(const TCHAR *path, FileInfo &info)
+GetRegularFileInfo(Path path, FileInfo &info)
 {
-  TCHAR buffer[MAX_PATH];
-  if (!File::Exists(path))
-    // XXX hack: get parent file's info, just in case this is a
-    // virtual file inside a ZIP archive
-    path = DirName(path, buffer);
-
 #ifdef HAVE_POSIX
   struct stat st;
-  if (stat(path, &st) < 0 || !S_ISREG(st.st_mode))
+  if (stat(path.c_str(), &st) < 0 || !S_ISREG(st.st_mode))
     return false;
 
   info.mtime = st.st_mtime;
@@ -111,7 +83,7 @@ GetRegularFileInfo(const TCHAR *path, FileInfo &info)
   return true;
 #else
   WIN32_FILE_ATTRIBUTE_DATA data;
-  if (!GetFileAttributesEx(path, GetFileExInfoStandard, &data) ||
+  if (!GetFileAttributesEx(path.c_str(), GetFileExInfoStandard, &data) ||
       (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
     return false;
 
@@ -122,44 +94,23 @@ GetRegularFileInfo(const TCHAR *path, FileInfo &info)
 #endif
 }
 
-FileCache::FileCache(const TCHAR *_cache_path)
-  :cache_path(_tcsdup(_cache_path)), cache_path_length(_tcslen(_cache_path)) {}
-
-FileCache::~FileCache() {
-  free(cache_path);
-}
-
-inline size_t
-FileCache::PathBufferSize(const TCHAR *name) const
-{
-  return cache_path_length + _tcslen(name) + 2;
-}
-
-const TCHAR *
-FileCache::MakeCachePath(TCHAR *buffer, const TCHAR *name) const
-{
-  _tcscpy(buffer, cache_path);
-  buffer[cache_path_length] = _T(DIR_SEPARATOR);
-  _tcscpy(buffer + cache_path_length + 1, name);
-  return buffer;
-}
+FileCache::FileCache(AllocatedPath &&_cache_path)
+  :cache_path(std::move(_cache_path)) {}
 
 void
 FileCache::Flush(const TCHAR *name)
 {
-  TCHAR buffer[PathBufferSize(name)];
-  File::Delete(MakeCachePath(buffer, name));
+  File::Delete(MakeCachePath(name));
 }
 
 FILE *
-FileCache::Load(const TCHAR *name, const TCHAR *original_path)
+FileCache::Load(const TCHAR *name, Path original_path)
 {
   FileInfo original_info;
   if (!GetRegularFileInfo(original_path, original_info))
     return nullptr;
 
-  TCHAR path[PathBufferSize(name)];
-  MakeCachePath(path, name);
+  const auto path = MakeCachePath(name);
 
   FileInfo cached_info;
   if (!GetRegularFileInfo(path, cached_info))
@@ -173,7 +124,7 @@ FileCache::Load(const TCHAR *name, const TCHAR *original_path)
     return nullptr;
   }
 
-  FILE *file = _tfopen(path, _T("rb"));
+  FILE *file = _tfopen(path.c_str(), _T("rb"));
   if (file == nullptr)
     return nullptr;
 
@@ -192,7 +143,7 @@ FileCache::Load(const TCHAR *name, const TCHAR *original_path)
 }
 
 FILE *
-FileCache::Save(const TCHAR *name, const TCHAR *original_path)
+FileCache::Save(const TCHAR *name, Path original_path)
 {
   FileInfo original_info;
   if (!GetRegularFileInfo(original_path, original_info))
@@ -200,11 +151,10 @@ FileCache::Save(const TCHAR *name, const TCHAR *original_path)
 
   Directory::Create(cache_path);
 
-  TCHAR path[PathBufferSize(name)];
-  MakeCachePath(path, name);
+  const auto path = MakeCachePath(name);
 
   File::Delete(path);
-  FILE *file = _tfopen(path, _T("wb"));
+  FILE *file = _tfopen(path.c_str(), _T("wb"));
   if (file == nullptr)
     return nullptr;
 
@@ -222,8 +172,7 @@ bool
 FileCache::Commit(const TCHAR *name, FILE *file)
 {
   if (fclose(file) != 0) {
-    TCHAR path[PathBufferSize(name)];
-    File::Delete(MakeCachePath(path, name));
+    File::Delete(MakeCachePath(name));
     return false;
   }
 
@@ -235,6 +184,5 @@ FileCache::Cancel(const TCHAR *name, FILE *file)
 {
   fclose(file);
 
-  TCHAR path[PathBufferSize(name)];
-  File::Delete(MakeCachePath(path, name));
+  File::Delete(MakeCachePath(name));
 }

@@ -12,9 +12,9 @@
 /* #undef HAVE_ALIGNED_ACCESS_REQUIRED */
 
 /* Define to 1 if you have the <byteswap.h> header file. */
-#ifdef __GLIBC__
-#ifndef ZZIP_HAVE_BYTESWAP_H 
-#define ZZIP_HAVE_BYTESWAP_H  1 
+#if !defined(__APPLE__) && !defined(WIN32)
+#ifndef ZZIP_HAVE_BYTESWAP_H
+#define ZZIP_HAVE_BYTESWAP_H  1
 #endif
 #endif
 

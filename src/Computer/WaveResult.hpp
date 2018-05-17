@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2014 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,13 +26,22 @@ Copyright_License {
 
 #include "Math/Angle.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Util/TrivialArray.hpp"
+#include "Util/TrivialArray.hxx"
 
 struct WaveInfo {
   GeoPoint location;
 
   GeoPoint a, b;
   Angle normal;
+
+  /**
+   * The time (see NMEAInfo::time) when this wave was calculated.
+   * This is used to decay old waves.
+   *
+   * A negative value means a wallclock was not available at the time
+   * this wave was calculated.
+   */
+  double time;
 
   static WaveInfo Undefined() {
     WaveInfo result;
@@ -42,6 +51,10 @@ struct WaveInfo {
 
   bool IsDefined() const {
     return location.IsValid();
+  }
+
+  double GetLength() const {
+    return a.DistanceS(b);
   }
 };
 

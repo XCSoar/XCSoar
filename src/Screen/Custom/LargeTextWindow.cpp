@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,12 +23,9 @@ Copyright_License {
 
 #include "Screen/LargeTextWindow.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Features.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Key.h"
-#include "Util/StringAPI.hpp"
-
-#include <string.h>
+#include "Event/KeyCode.hpp"
+#include "Util/StringAPI.hxx"
 
 void
 LargeTextWindow::Create(ContainerWindow &parent, PixelRect rc,
@@ -42,14 +39,12 @@ LargeTextWindow::Create(ContainerWindow &parent, PixelRect rc,
 unsigned
 LargeTextWindow::GetVisibleRows() const
 {
-  return GetHeight() / GetFont().GetHeight();
+  return GetHeight() / GetFont().GetLineSpacing();
 }
 
 unsigned
 LargeTextWindow::GetRowCount() const
 {
-  AssertNoneLocked();
-
   const TCHAR *str = value.c_str();
   unsigned row_count = 1;
   while ((str = StringFind(str, _T('\n'))) != nullptr) {
@@ -63,8 +58,6 @@ LargeTextWindow::GetRowCount() const
 void
 LargeTextWindow::ScrollVertically(int delta_lines)
 {
-  AssertNoneLocked();
-
   const unsigned visible_rows = GetVisibleRows();
   const unsigned row_count = GetRowCount();
 
@@ -113,7 +106,7 @@ LargeTextWindow::OnPaint(Canvas &canvas)
   if (value.empty())
     return;
 
-  const PixelScalar padding = Layout::GetTextPadding();
+  const int padding = Layout::GetTextPadding();
   rc.Grow(-padding);
 
   canvas.SetBackgroundTransparent();
@@ -121,10 +114,8 @@ LargeTextWindow::OnPaint(Canvas &canvas)
 
   rc.top -= origin * GetFont().GetHeight();
 
-#ifndef USE_GDI
   canvas.Select(GetFont());
-#endif
-  canvas.DrawFormattedText(&rc, value.c_str(), DT_LEFT | DT_WORDBREAK);
+  renderer.Draw(canvas, rc, value.c_str());
 }
 
 bool
@@ -161,8 +152,6 @@ LargeTextWindow::OnKeyDown(unsigned key_code)
 void
 LargeTextWindow::SetText(const TCHAR *text)
 {
-  AssertNoneLocked();
-
   if (text != nullptr)
     value = text;
   else

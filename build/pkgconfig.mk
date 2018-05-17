@@ -12,7 +12,7 @@ ifeq ($(TARGET_IS_DARWIN),y)
   endif
 endif
 
-ifeq ($(HOST_IS_WIN32)$(HAVE_WIN32)$(HAVE_CE)$(call string_equals,WINE,$(TARGET)),nynn)
+ifeq ($(HOST_IS_WIN32)$(HAVE_WIN32)$(HAVE_CE),nyn)
   PKG_CONFIG := PKG_CONFIG_LIBDIR=/usr/local/i686-w64-mingw32/lib/pkgconfig $(PKG_CONFIG)
 endif
 
@@ -23,6 +23,15 @@ endif
 ifeq ($(HOST_IS_ARM)$(TARGET_HAS_MALI),ny)
   PKG_CONFIG := PKG_CONFIG_LIBDIR=$(CUBIE)/usr/lib/arm-linux-gnueabihf/pkgconfig $(PKG_CONFIG) --define-variable=prefix=$(CUBIE)/usr
 endif
+
+call-pkg-config = $(shell $(PKG_CONFIG) --$(2) $(1) || echo ERROR)
+
+define assign-check-error
+$(1) = $$($(2))$$(if $$(filter ERROR,$$($(2))),$$(error $(3)))
+endef
+
+pkg-config-cppflags-filter = $(patsubst -I%,-isystem %,$(1))
+pkg-config-ldlibs-filter = $(1)
 
 # Generates a pkg-config lookup for a library.
 #
@@ -38,12 +47,11 @@ endif
 #
 define pkg-config-library
 
-ifneq ($$(shell $$(PKG_CONFIG) --exists $(2) && echo ok),ok)
-$$(error library not found: $(2))
-endif
+$(1)_CPPFLAGS_RAW_GEN = $$(call pkg-config-cppflags-filter,$$(call call-pkg-config,$(2),cflags))
+$(1)_LDLIBS_RAW_GEN = $$(call pkg-config-ldlibs-filter,$$(call call-pkg-config,$(2),libs))
+$(1)_MODVERSION_RAW_GEN = $$(call call-pkg-config,$(2),modversion)
 
-$(1)_CPPFLAGS := $$(shell $$(PKG_CONFIG) --cflags $(2))
-$(1)_LDLIBS := $$(shell $$(PKG_CONFIG) --libs $(2))
-$(1)_MODVERSION := $$(shell $$(PKG_CONFIG) --modversion $(2))
+$$(foreach i,CPPFLAGS LDLIBS MODVERSION,$$(call DEF_THUNK,$(1)_$$(i)_RAW))
+$$(foreach i,CPPFLAGS LDLIBS MODVERSION,$$(eval $$(call assign-check-error,$(1)_$$(i),$(1)_$$(i)_RAW,library not found: $(2))))
 
 endef

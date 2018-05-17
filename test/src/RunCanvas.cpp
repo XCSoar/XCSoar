@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -100,18 +100,18 @@ private:
     Brush red_brush(COLOR_RED);
 
     const PixelRect rc = GetClientRect();
-    const int width = rc.right - rc.left;
-    const int height = rc.bottom - rc.top;
+    const int width = rc.GetWidth(), height = rc.GetHeight();
     const int hmiddle = (rc.left + rc.right) / 2;
     const int vmiddle = (rc.top + rc.bottom) / 2;
+    const PixelPoint center(hmiddle, vmiddle);
 
-    RasterPoint p1[3] = {
+    BulkPixelPoint p1[3] = {
       { -100, vmiddle },
       { (width * 2) / 3, -100 },
       { hmiddle, height * 2 },
     };
 
-    RasterPoint p2[3] = {
+    BulkPixelPoint p2[3] = {
       { -2000, vmiddle },
       { width * 10, -3000 },
       { width * 5, 3000 },
@@ -120,7 +120,7 @@ private:
     const TCHAR *label;
     switch (page) {
     case 0:
-      canvas.DrawSegment(hmiddle, vmiddle,
+      canvas.DrawSegment(center,
                          std::min(width, height) / 3,
                      Angle::Zero(), Angle::Degrees(90),
                      false);
@@ -128,7 +128,7 @@ private:
       break;
 
     case 1:
-      canvas.DrawSegment(hmiddle, vmiddle,
+      canvas.DrawSegment(center,
                          std::min(width, height) / 3,
                      Angle::Degrees(45), Angle::Degrees(180),
                      true);
@@ -190,8 +190,8 @@ private:
   }
 
 protected:
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override {
-    if (SingleWindow::OnMouseDown(x, y))
+  bool OnMouseDown(PixelPoint p) override {
+    if (SingleWindow::OnMouseDown(p))
       return true;
 
     page = (page + 1) % 7;

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -34,12 +34,7 @@ Copyright_License {
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Device/Driver/CAI302/Internal.hpp"
 #include "Device/Driver/CAI302/Protocol.hpp"
-#include "Util/Macros.hpp"
-#include "OS/ByteOrder.hpp"
 #include "Waypoint/Patterns.hpp"
-
-#include <vector>
-#include <windef.h> /* for MAX_PATH */
 
 class ManageCAI302Widget final
   : public RowFormWidget, private ActionListener {
@@ -98,8 +93,8 @@ EditUnits(const DialogLook &look, CAI302Device &device)
 static void
 UploadWaypoints(const DialogLook &look, CAI302Device &device)
 {
-  TCHAR path[MAX_PATH];
-  if (!FilePicker(_("Waypoints"), WAYPOINT_FILE_PATTERNS, path))
+  const auto path = FilePicker(_("Waypoints"), WAYPOINT_FILE_PATTERNS);
+  if (path == nullptr)
     return;
 
   CAI302WaypointUploader job(path, device);

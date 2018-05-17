@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -36,69 +36,28 @@ DrawThread::Run()
 {
   SetLowPriority();
 
-  // bounds_dirty maintains the status of whether the map
-  // bounds have changed and there are pending idle calls
-  // to be run in the map.
-
-  // wait until the startup is finished
-  if (CheckStoppedOrSuspended())
-    return;
-
-  /* trigger the first draw immediately */
-  trigger.Signal();
-
-  bool bounds_dirty = true;
+  const ScopeLock lock(mutex);
 
   // circle until application is closed
-  while (true) {
-    if (!bounds_dirty)
-      trigger.Wait();
-
-    if (!bounds_dirty || trigger.Wait(MIN_WAIT_TIME)) {
-      /* got the "stop" trigger? */
-      if (CheckStoppedOrSuspended())
-        break;
-
-      trigger.Reset();
-
-      if (IsCommandPending()) {
-        /* just in case we got another suspend/stop command after
-           CheckStoppedOrSuspended() returned and before the trigger
-           got reset: restore the trigger and skip this iteration, to
-           fix the race condition */
-        trigger.Signal();
-        continue;
-      }
-
-#ifdef HAVE_CPU_FREQUENCY
-      const ScopeLockCPU cpu;
-#endif
-
-      // Get data from the DeviceBlackboard
-      map.ExchangeBlackboard();
-
-      // Draw the moving map
-      map.Repaint();
-
-      if (trigger.Test()) {
-        // interrupt re-calculation of bounds if there was a 
-        // request made.  Since we will re-enter, we know the remainder
-        // of this code will be called anyway.
-        continue;
-      }
-
-      bounds_dirty = map.Idle();
-    } else if (bounds_dirty) {
-      /* got the "stop" trigger? */
-      if (CheckStoppedOrSuspended())
-        break;
-
-#ifdef HAVE_CPU_FREQUENCY
-      const ScopeLockCPU cpu;
-#endif
-
-      bounds_dirty = map.Idle();
+  while (!_CheckStoppedOrSuspended()) {
+    if (!pending) {
+      command_trigger.wait(mutex);
+      continue;
     }
+
+    pending = false;
+
+    const ScopeUnlock unlock(mutex);
+
+#ifdef HAVE_CPU_FREQUENCY
+    const ScopeLockCPU cpu;
+#endif
+
+    // Get data from the DeviceBlackboard
+    map.ExchangeBlackboard();
+
+    // Draw the moving map
+    map.Repaint();
   }
 }
 

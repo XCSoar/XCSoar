@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -41,7 +41,7 @@ GlideRatioComputer::Compute(const MoreData &basic,
   if (!basic.NavAltitudeAvailable()) {
     Reset();
     vario_info.gr = INVALID_GR;
-    vario_info.average_gr = fixed(0);
+    vario_info.average_gr = 0;
     return;
   }
 
@@ -50,7 +50,7 @@ GlideRatioComputer::Compute(const MoreData &basic,
        wasn't valid, skip this iteration and try the next one */
     Reset();
     vario_info.gr = INVALID_GR;
-    vario_info.average_gr = fixed(0);
+    vario_info.average_gr = 0;
 
     last_location = basic.location;
     last_location_available = basic.location_available;
@@ -61,12 +61,12 @@ GlideRatioComputer::Compute(const MoreData &basic,
   if (!basic.location_available.Modified(last_location_available))
     return;
 
-  fixed DistanceFlown = basic.location.DistanceS(last_location);
+  auto DistanceFlown = basic.location.DistanceS(last_location);
 
   // Glide ratio over ground
   vario_info.gr =
     UpdateGR(vario_info.gr, DistanceFlown,
-             last_altitude - basic.nav_altitude, fixed(0.1));
+             last_altitude - basic.nav_altitude, 0.1);
 
   if (calculated.flight.flying && !calculated.circling) {
     if (!gr_calculator_initialised) {

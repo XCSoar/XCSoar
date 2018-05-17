@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -36,11 +36,11 @@ class AlternateTask final : public AbortTask
 {
 public:
   struct Divert : public AlternatePoint {
-    fixed delta;
+    double delta;
 
-    Divert(const Waypoint &_waypoint, const GlideResult &_solution,
-           fixed _delta)
-      :AlternatePoint(_waypoint, _solution), delta(_delta) {}
+    Divert(WaypointPtr &&_waypoint, const GlideResult &_solution,
+           double _delta)
+      :AlternatePoint(std::move(_waypoint), _solution), delta(_delta) {}
   };
 
   typedef std::vector<Divert> DivertVector;

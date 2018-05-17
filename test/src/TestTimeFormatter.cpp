@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@
 
 #include "Formatter/TimeFormatter.hpp"
 #include "Util/Macros.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "TestUtil.hpp"
 
 static void
@@ -30,37 +30,37 @@ TestFormat()
 {
   TCHAR buffer[256];
 
-  FormatTime(buffer, fixed(0));
+  FormatTime(buffer, 0);
   ok1(StringIsEqual(buffer, _T("00:00:00")));
 
-  FormatTime(buffer, fixed(1));
+  FormatTime(buffer, 1);
   ok1(StringIsEqual(buffer, _T("00:00:01")));
 
-  FormatTime(buffer, fixed(59));
+  FormatTime(buffer, 59);
   ok1(StringIsEqual(buffer, _T("00:00:59")));
 
-  FormatTime(buffer, fixed(60));
+  FormatTime(buffer, 60);
   ok1(StringIsEqual(buffer, _T("00:01:00")));
 
-  FormatTime(buffer, fixed(60 * 5));
+  FormatTime(buffer, 60 * 5);
   ok1(StringIsEqual(buffer, _T("00:05:00")));
 
-  FormatTime(buffer, fixed(60 * 59));
+  FormatTime(buffer, 60 * 59);
   ok1(StringIsEqual(buffer, _T("00:59:00")));
 
-  FormatTime(buffer, fixed(60 * 60));
+  FormatTime(buffer, 60 * 60);
   ok1(StringIsEqual(buffer, _T("01:00:00")));
 
-  FormatTime(buffer, fixed(60 * 60 * 3 + 60 * 25));
+  FormatTime(buffer, 60 * 60 * 3 + 60 * 25);
   ok1(StringIsEqual(buffer, _T("03:25:00")));
 
-  FormatTime(buffer, fixed(60 * 60 * 19 + 60 * 47 + 43));
+  FormatTime(buffer, 60 * 60 * 19 + 60 * 47 + 43);
   ok1(StringIsEqual(buffer, _T("19:47:43")));
 
-  FormatTime(buffer, fixed(-(60 * 59)));
+  FormatTime(buffer, -(60 * 59));
   ok1(StringIsEqual(buffer, _T("-00:59:00")));
 
-  FormatTime(buffer, fixed(-(60 * 60 * 19 + 60 * 47 + 43)));
+  FormatTime(buffer, -(60 * 60 * 19 + 60 * 47 + 43));
   ok1(StringIsEqual(buffer, _T("-19:47:43")));
 }
 
@@ -69,37 +69,37 @@ TestFormatLong()
 {
   TCHAR buffer[256];
 
-  FormatTimeLong(buffer, fixed(0));
+  FormatTimeLong(buffer, 0);
   ok1(StringIsEqual(buffer, _T("00:00:00.000")));
 
-  FormatTimeLong(buffer, fixed(1.123));
+  FormatTimeLong(buffer, 1.123);
   ok1(StringIsEqual(buffer, _T("00:00:01.123")));
 
-  FormatTimeLong(buffer, fixed(59));
+  FormatTimeLong(buffer, 59);
   ok1(StringIsEqual(buffer, _T("00:00:59.000")));
 
-  FormatTimeLong(buffer, fixed(60.001));
+  FormatTimeLong(buffer, 60.001);
   ok1(StringIsEqual(buffer, _T("00:01:00.001")));
 
-  FormatTimeLong(buffer, fixed(60 * 5));
+  FormatTimeLong(buffer, 60 * 5);
   ok1(StringIsEqual(buffer, _T("00:05:00.000")));
 
-  FormatTimeLong(buffer, fixed(60 * 59));
+  FormatTimeLong(buffer, 60 * 59);
   ok1(StringIsEqual(buffer, _T("00:59:00.000")));
 
-  FormatTimeLong(buffer, fixed(60 * 60));
+  FormatTimeLong(buffer, 60 * 60);
   ok1(StringIsEqual(buffer, _T("01:00:00.000")));
 
-  FormatTimeLong(buffer, fixed(60 * 60 * 3 + 60 * 25));
+  FormatTimeLong(buffer, 60 * 60 * 3 + 60 * 25);
   ok1(StringIsEqual(buffer, _T("03:25:00.000")));
 
-  FormatTimeLong(buffer, fixed(60 * 60 * 19 + 60 * 47 + 43.765));
+  FormatTimeLong(buffer, 60 * 60 * 19 + 60 * 47 + 43.765);
   ok1(StringIsEqual(buffer, _T("19:47:43.765")));
 
-  FormatTimeLong(buffer, fixed(-(60 * 59)));
+  FormatTimeLong(buffer, -(60 * 59));
   ok1(StringIsEqual(buffer, _T("-00:59:00.000")));
 
-  FormatTimeLong(buffer, fixed(-(60 * 60 * 19 + 60 * 47 + 43.765)));
+  FormatTimeLong(buffer, -(60 * 60 * 19 + 60 * 47 + 43.765));
   ok1(StringIsEqual(buffer, _T("-19:47:43.765")));
 }
 
@@ -141,6 +141,8 @@ TestHHMM()
   FormatSignedTimeHHMM(buffer, -(60 * 60 * 19 + 60 * 47));
   ok1(StringIsEqual(buffer, _T("-19:47")));
 }
+
+#include <stdio.h>
 
 static void
 TestTwoLines()
@@ -184,11 +186,11 @@ TestTwoLines()
   ok1(StringIsEqual(buffer2, _T("28")));
 
   FormatTimeTwoLines(buffer, buffer2, -(60 * 59));
-  ok1(StringIsEqual(buffer, _T("59'00")));
+  ok1(StringIsEqual(buffer, _T("-59'00")));
   ok1(StringIsEqual(buffer2, _T("")));
 
   FormatTimeTwoLines(buffer, buffer2, -(60 * 60 * 19 + 60 * 47 + 28));
-  ok1(StringIsEqual(buffer, _T("19:47")));
+  ok1(StringIsEqual(buffer, _T("-19:47")));
   ok1(StringIsEqual(buffer2, _T("28")));
 }
 

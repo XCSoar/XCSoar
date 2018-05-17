@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,17 +31,21 @@ CirclingInfo::Clear()
 
   turn_rate = turn_rate_heading = Angle::Zero();
 
-  time_cruise = fixed(0);
-  time_climb = fixed(0);
-  total_height_gain = fixed(0);
+  time_cruise = 0;
+  time_circling = 0;
+  time_climb_noncircling = 0;
+  time_climb_circling = 0;
+  total_height_gain = 0;
 
-  cruise_start_time = fixed(-1);
-  climb_start_time = fixed(-1);
+  cruise_start_time = -1;
+  climb_start_time = -1;
 
-  max_height_gain = fixed(0);
+  max_height_gain = 0;
 
   turn_rate_smoothed = turn_rate_heading_smoothed = Angle::Zero();
   turn_mode = CirclingMode::CRUISE;
 
-  circling_percentage = fixed(-1);
+  circling_percentage = -1;
+  noncircling_climb_percentage = -1;
+  circling_climb_percentage = -1;
 }

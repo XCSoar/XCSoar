@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,21 +26,18 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Operation/Operation.hpp"
+#include "Util/PrintException.hxx"
 
 #include <stdio.h>
 #include <tchar.h>
 
 int main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "PATH");
-  const char *path = args.ExpectNext();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
   FileLineReader reader(path, Charset::AUTO);
-  if (reader.error()) {
-    fprintf(stderr, "Failed to open input file\n");
-    return 1;
-  }
 
   Airspaces airspaces;
   AirspaceParser parser(airspaces);
@@ -55,5 +52,8 @@ int main(int argc, char **argv)
 
   printf("OK\n");
 
-  return 0;
+  return EXIT_SUCCESS;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

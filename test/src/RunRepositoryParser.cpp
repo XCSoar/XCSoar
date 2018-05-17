@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,22 +25,19 @@ Copyright_License {
 #include "Repository/FileRepository.hpp"
 #include "IO/FileLineReader.hpp"
 #include "OS/Args.hpp"
+#include "Util/PrintException.hxx"
 
 #include <stdio.h>
 #include <stdlib.h>
 
 int
 main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "PATH");
-  const char *path = args.ExpectNext();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
   FileLineReaderA reader(path);
-  if (reader.error()) {
-    fprintf(stderr, "Failed to open file\n");
-    return EXIT_FAILURE;
-  }
 
   FileRepository repository;
 
@@ -57,4 +54,7 @@ main(int argc, char **argv)
   }
 
   return EXIT_SUCCESS;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

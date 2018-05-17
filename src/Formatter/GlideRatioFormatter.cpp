@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,12 +24,15 @@ Copyright_License {
 #include "GlideRatioFormatter.hpp"
 #include "Util/StringFormat.hpp"
 
+#include <assert.h>
+#include <math.h>
+
 void
-FormatGlideRatio(TCHAR *buffer, size_t size, fixed gr)
+FormatGlideRatio(TCHAR *buffer, size_t size, double gr)
 {
   assert(buffer != NULL);
   assert(size >= 8);
 
   StringFormat(buffer, size,
-             fabs(gr) < fixed(100) ? _T("%.1f") : _T("%.0f"), (double) gr);
+             fabs(gr) < 100 ? _T("%.1f") : _T("%.0f"), (double) gr);
 }

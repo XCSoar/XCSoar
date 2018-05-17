@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -42,7 +42,7 @@ Update(const MoreData &basic, const FlyingState &state,
     result.landing_location = state.landing_location;
   }
 
-  if (!negative(state.release_time) && !result.release_time.IsPlausible()) {
+  if (state.release_time >= 0 && !result.release_time.IsPlausible()) {
     result.release_time = basic.GetDateTimeAt(state.release_time);
     result.release_location = state.release_location;
   }
@@ -103,7 +103,7 @@ Run(DebugReplay &replay, FlightTimeResult &result)
 
     last_location = basic.location;
 
-    if (!released && !negative(replay.Calculated().flight.release_time)) {
+    if (!released && replay.Calculated().flight.release_time >= 0) {
       released = true;
     }
 

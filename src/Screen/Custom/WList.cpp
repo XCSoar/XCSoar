@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/SubCanvas.hpp"
 
-#include <algorithm>
+#include <iterator>
 
 void
 WindowList::Clear()
@@ -68,10 +68,7 @@ WindowList::IsCovered(const Window &w) const
       return false;
 
     if (child.IsVisible() && !child.IsTransparent() &&
-        child.GetLeft() <= rc.left &&
-        child.GetRight() >= rc.right &&
-        child.GetTop() <= rc.top &&
-        child.GetBottom() >= rc.bottom)
+        child.GetPosition().Contains(rc))
       /* this sibling covers the specified window completely */
       return true;
   }
@@ -97,18 +94,16 @@ WindowList::BringToBottom(Window &w)
 
 gcc_pure
 static bool
-IsAt(Window &w, PixelScalar x, PixelScalar y)
+IsAt(Window &w, PixelPoint p)
 {
-  return w.IsVisible() &&
-    x >= w.GetLeft() && x < w.GetRight() &&
-    y >= w.GetTop() && y < w.GetBottom();
+  return w.IsVisible() && w.GetPosition().Contains(p);
 }
 
 Window *
-WindowList::FindAt(PixelScalar x, PixelScalar y)
+WindowList::FindAt(PixelPoint p)
 {
   for (Window &w : list)
-    if (w.IsEnabled() && IsAt(w, x, y))
+    if (w.IsEnabled() && IsAt(w, p))
       return &w;
 
   return nullptr;
@@ -205,8 +200,7 @@ static bool
 IsFullWindow(const Window &w, int width, int height)
 {
   return w.IsVisible() &&
-    w.GetLeft() <= 0 && w.GetRight() >= (int)width &&
-    w.GetTop() <= 0 && w.GetBottom() >= (int)height;
+    w.GetPosition().Contains(PixelRect(0, 0, width, height));
 }
 
 void
@@ -228,7 +222,7 @@ WindowList::Paint(Canvas &canvas)
     if (!child.IsVisible())
       continue;
 
-    SubCanvas sub_canvas(canvas, { child.GetLeft(), child.GetTop() },
+    SubCanvas sub_canvas(canvas, child.GetTopLeft(),
                          child.GetSize());
 #ifdef USE_MEMORY_CANVAS
     if (sub_canvas.GetWidth() == 0 || sub_canvas.GetHeight() == 0)

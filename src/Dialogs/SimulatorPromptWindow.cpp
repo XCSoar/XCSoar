@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,7 +27,6 @@ Copyright_License {
 
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
-#include "UIGlobals.hpp"
 #include "Screen/Canvas.hpp"
 #include "Gauge/LogoView.hpp"
 #include "Screen/Layout.hpp"

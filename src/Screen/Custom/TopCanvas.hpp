@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,6 +30,7 @@ Copyright_License {
 #include "Screen/Memory/PixelTraits.hpp"
 #include "Screen/Memory/ActivePixelTraits.hpp"
 #include "Screen/Memory/Buffer.hpp"
+#include "Screen/Point.hpp"
 #else
 #include "Screen/Canvas.hpp"
 #endif
@@ -68,10 +69,6 @@ struct _XDisplay;
 #endif
 
 #include <stdint.h>
-
-#ifdef ENABLE_SDL
-#include <SDL_version.h>
-#endif
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
 enum class DisplayOrientation : uint8_t;
@@ -124,7 +121,9 @@ class TopCanvas
 #endif
 
   EGLDisplay display;
+#ifndef ANDROID
   EGLContext context;
+#endif
   EGLSurface surface;
 #endif
 
@@ -135,17 +134,11 @@ class TopCanvas
 #endif
 
 #ifdef ENABLE_SDL
-#if SDL_MAJOR_VERSION >= 2
   SDL_Window *window;
-#endif
 
 #ifdef USE_MEMORY_CANVAS
-#if SDL_MAJOR_VERSION >= 2
   SDL_Renderer *renderer;
   SDL_Texture *texture;
-#else
-  SDL_Surface *surface;
-#endif
 #endif
 #endif
 
@@ -222,11 +215,7 @@ public:
 #ifdef USE_MEMORY_CANVAS
   bool IsDefined() const {
 #ifdef ENABLE_SDL
-#if SDL_MAJOR_VERSION >= 2
     return window != nullptr;
-#else
-    return surface != nullptr;
-#endif
 #elif defined(USE_VFB)
     return true;
 #else
@@ -238,9 +227,8 @@ public:
   PixelRect GetRect() const;
 #endif
 
-#if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2)
-  void Create(const char *text, PixelSize new_size,
-              bool full_screen, bool resizable);
+#ifdef ENABLE_SDL
+  void Create(SDL_Window *_window, PixelSize new_size);
 #elif defined(USE_GLX)
   void Create(_XDisplay *x_display,
               X11Window x_window,
@@ -257,6 +245,26 @@ public:
               bool full_screen, bool resizable);
 #endif
 
+#if defined(USE_FB) || (defined(ENABLE_OPENGL) && (defined(USE_EGL) || defined(USE_GLX) || defined(ENABLE_SDL)))
+  /**
+   * Obtain the native (non-software-rotated) size of the OpenGL
+   * drawable.
+   */
+  gcc_pure
+  PixelSize GetNativeSize() const;
+#endif
+
+#if defined(USE_MEMORY_CANVAS) || defined(ENABLE_OPENGL)
+  /**
+   * Check if the screen has been resized.
+   *
+   * @param new_native_size the new screen size reported by the
+   * windowing system library
+   * @return true if the screen has been resized
+   */
+  bool CheckResize(PixelSize new_native_size);
+#endif
+
 #ifdef USE_FB
   /**
    * Check if the screen has been resized.
@@ -264,16 +272,6 @@ public:
    * @return true if the screen has been resized
    */
   bool CheckResize();
-
-  gcc_pure
-  unsigned GetWidth() const {
-    return buffer.width;
-  }
-
-  gcc_pure
-  unsigned GetHeight() const {
-    return buffer.height;
-  }
 #endif
 
 #ifdef ENABLE_OPENGL
@@ -283,9 +281,15 @@ public:
   void Resume();
 #endif
 
+#if defined(ENABLE_SDL) && defined(USE_MEMORY_CANVAS)
   void OnResize(PixelSize new_size);
+#endif
 
 #ifdef USE_MEMORY_CANVAS
+  PixelSize GetSize() const {
+    return PixelSize(buffer.width, buffer.height);
+  }
+
   Canvas Lock();
   void Unlock();
 #endif
@@ -308,6 +312,10 @@ public:
 #endif
 
 private:
+#ifdef ENABLE_OPENGL
+  void SetupViewport(PixelSize native_size);
+#endif
+
 #ifdef USE_GLX
   void InitGLX(_XDisplay *x_display);
   void CreateGLX(_XDisplay *x_display,

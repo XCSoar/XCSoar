@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,20 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_NET_FEATURES_HPP
 #define XCSOAR_NET_FEATURES_HPP
 
-#if defined(WIN32) && !defined(_WIN32_WCE)
 #define HAVE_HTTP
-#define HAVE_WININET
-#endif
-
-#if !defined(WIN32) && defined(HAVE_POSIX) && !defined(ANDROID)
-#define HAVE_HTTP
-#define HAVE_CURL
-#endif
-
-#ifdef ANDROID
-#define HAVE_HTTP
-#define HAVE_JAVA_NET
-#endif
 
 #ifdef HAVE_HTTP
 #define HAVE_DOWNLOAD_MANAGER

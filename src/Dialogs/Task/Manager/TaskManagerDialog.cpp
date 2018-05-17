@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -34,28 +34,21 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
-#include "Widget/ButtonWidget.hpp"
+#include "Dialogs/Error.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "Task/TaskStore.hpp"
 #include "Task/ValidationErrorStrings.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
-#include "LocalPath.hpp"
-#include "OS/FileUtil.hpp"
-#include "Logger/Logger.hpp"
 #include "Protection.hpp"
-#include "Form/Button.hpp"
 #include "Widget/ButtonWidget.hpp"
 #include "Widget/TabWidget.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-
-#include <assert.h>
 
 enum Buttons {
   MAP = 100,
@@ -226,7 +219,13 @@ TaskManagerDialog::Commit()
     }
 
     protected_task_manager->TaskCommit(*task);
-    protected_task_manager->TaskSaveDefault();
+
+    try {
+      protected_task_manager->TaskSaveDefault();
+    } catch (const std::runtime_error &e) {
+      ShowError(e, _("Failed to save file."));
+      return false;
+    }
 
     modified = false;
     return true;

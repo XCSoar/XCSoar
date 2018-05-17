@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -67,7 +67,7 @@ public:
 
   gcc_const
   static unsigned Import(Angle value) {
-    return uround(value.AsBearing().Degrees()) % 360u;
+    return lround(value.AsBearing().Degrees()) % 360u;
   }
 
   Angle GetValue() const {
@@ -107,7 +107,7 @@ public:
   void Dec() override;
 
   ComboList CreateComboList(const TCHAR *reference) const override;
-  void SetFromCombo(int i, TCHAR *s) override;
+  void SetFromCombo(int i, const TCHAR *s) override;
 };
 
 #endif

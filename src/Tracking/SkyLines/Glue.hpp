@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -36,43 +36,37 @@ class Queue;
 
 class Glue {
   Client client;
-  unsigned interval;
+  unsigned interval = 0;
   GPSClock clock;
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
   GPSClock traffic_clock;
-  bool traffic_enabled;
-  bool near_traffic_enabled;
-#endif
+  GPSClock thermal_clock;
 
-  bool roaming;
+  bool traffic_enabled = false;
+  bool near_traffic_enabled = false;
 
-  Queue *queue;
+  bool thermal_enabled = false;
+
+  bool roaming = true;
+
+  Queue *queue = nullptr;
 
   Client cloud_client;
   GPSClock cloud_clock;
 
-  fixed last_climb_time;
+  double last_climb_time = -1;
 
 public:
-  Glue();
+  Glue(boost::asio::io_service &io_service, Handler *_handler);
   ~Glue();
-
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  void SetHandler(Handler *handler) {
-    client.SetHandler(handler);
-  }
-#endif
 
   void SetSettings(const Settings &settings);
 
   void Tick(const NMEAInfo &basic, const DerivedInfo &calculated);
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
   void RequestUserName(uint32_t user_id) {
     client.SendUserNameRequest(user_id);
   }
-#endif
 
 private:
   gcc_pure

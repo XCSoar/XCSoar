@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,8 +26,8 @@ Copyright_License {
 
 #include "System.hpp"
 
-struct RasterPoint;
-struct FloatPoint;
+struct BulkPixelPoint;
+struct FloatPoint2D;
 template<class T> class AllocatedArray;
 
 /**
@@ -44,11 +44,11 @@ template<class T> class AllocatedArray;
  *         3 to 3*(num_points-2): success
  */
 unsigned
-PolygonToTriangles(const RasterPoint *points, unsigned num_points,
+PolygonToTriangles(const BulkPixelPoint *points, unsigned num_points,
                    AllocatedArray<GLushort> &triangles,
                    unsigned min_distance=1);
 unsigned
-PolygonToTriangles(const FloatPoint *points, unsigned num_points,
+PolygonToTriangles(const FloatPoint2D *points, unsigned num_points,
                    GLushort *triangles, float min_distance=1);
 
 /**
@@ -84,8 +84,8 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
  * @return Returns the number of triangle coordinates or 0 for failure
  */
 unsigned
-LineToTriangles(const RasterPoint *points, unsigned num_points,
-                AllocatedArray<RasterPoint> &strip,
+LineToTriangles(const BulkPixelPoint *points, unsigned num_points,
+                AllocatedArray<BulkPixelPoint> &strip,
                 unsigned line_width, bool loop=false, bool tcap=false);
 
 #endif

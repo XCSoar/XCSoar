@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_INFO_BOX_MANAGER_HPP
 
 struct InfoBoxLook;
-struct UnitsLook;
 class ContainerWindow;
 
 namespace InfoBoxLayout {
@@ -36,14 +35,11 @@ namespace InfoBoxManager
 {
   extern InfoBoxLayout::Layout layout;
 
-  void Event_Select(int i);
-  void Event_Change(int i);
-
   void ProcessTimer();
   void SetDirty();
 
   void Create(ContainerWindow &parent, const InfoBoxLayout::Layout &layout,
-              const InfoBoxLook &look, const UnitsLook &units_look);
+              const InfoBoxLook &look);
   void Destroy();
   void Show();
   void Hide();

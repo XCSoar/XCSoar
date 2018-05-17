@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "TextRenderer.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Layout.hpp"
 #include "Screen/AnyCanvas.hpp"
 #include "Asset.hpp"
 
@@ -33,9 +32,7 @@ unsigned
 TextRenderer::GetHeight(Canvas &canvas, PixelRect rc,
                         const TCHAR *text) const
 {
-  canvas.DrawFormattedText(&rc, text,
-                           DT_NOPREFIX | DT_WORDBREAK | DT_CALCRECT);
-  return rc.bottom - rc.top;
+  return canvas.DrawFormattedText(rc, text, DT_CALCRECT);
 }
 
 unsigned
@@ -55,23 +52,17 @@ TextRenderer::GetHeight(const Font &font, unsigned width,
 }
 
 void
-TextRenderer::Draw(Canvas &canvas, const PixelRect &_rc,
+TextRenderer::Draw(Canvas &canvas, PixelRect rc,
                    const TCHAR *text) const
 {
-  PixelRect rc = _rc;
-
-  unsigned format = DT_WORDBREAK | (center ? DT_CENTER : DT_LEFT);
+  unsigned format = (center ? DT_CENTER : DT_LEFT);
 
 #ifdef USE_GDI
-  format |= DT_NOPREFIX | DT_NOCLIP;
-
   if (vcenter) {
-    canvas.DrawFormattedText(&rc, text, format | DT_CALCRECT);
-    rc.right = _rc.right;
-
-    int offset = _rc.bottom - rc.bottom;
-    if (offset > 0)
-      rc.top += offset / 2;
+    const unsigned height = GetHeight(canvas, rc, text);
+    int top = (rc.top + rc.bottom - height) / 2;
+    if (top > rc.top)
+      rc.top = top;
   }
 #else
   if (vcenter)
@@ -82,5 +73,5 @@ TextRenderer::Draw(Canvas &canvas, const PixelRect &_rc,
     format |= DT_UNDERLINE;
 #endif
 
-  canvas.DrawFormattedText(&rc, text, format);
+  canvas.DrawFormattedText(rc, text, format);
 }

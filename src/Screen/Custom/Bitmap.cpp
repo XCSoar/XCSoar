@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,27 +23,25 @@ Copyright_License {
 
 #include "Screen/Bitmap.hpp"
 #include "Screen/Debug.hpp"
+#include "OS/Path.hpp"
 
 #ifdef ENABLE_COREGRAPHICS
-#include "CoreGraphics.hpp"
+#include "Screen/Apple/ImageDecoder.hpp"
 #else
 #include "LibPNG.hpp"
 #include "LibJPEG.hpp"
 #endif
 
+#ifdef USE_LIBTIFF
+#include "LibTiff.hpp"
+#endif
+
 #include "UncompressedImage.hpp"
 #include "Util/ConstBuffer.hxx"
 
+#include <tchar.h>
+
 Bitmap::Bitmap(ConstBuffer<void> _buffer)
-  :
-#ifdef ENABLE_OPENGL
-#ifdef ANDROID
-  id(0),
-#endif
-  texture(nullptr), interpolation(false)
-#else
-  buffer(WritableImageBuffer<BitmapPixelTraits>::Empty())
-#endif
 {
   Load(_buffer);
 }
@@ -51,13 +49,27 @@ Bitmap::Bitmap(ConstBuffer<void> _buffer)
 bool
 Bitmap::Load(ConstBuffer<void> buffer, Type type)
 {
-  const UncompressedImage uncompressed = LoadPNG(buffer.data, buffer.size);
-  return Load(uncompressed, type);
+  auto uncompressed = LoadPNG(buffer.data, buffer.size);
+  return uncompressed.IsDefined() && Load(std::move(uncompressed), type);
+}
+
+static UncompressedImage
+DecompressImageFile(Path path)
+{
+#ifdef USE_LIBTIFF
+  if (path.MatchesExtension(_T(".tif")) || path.MatchesExtension(_T(".tiff")))
+    return LoadTiff(path);
+#endif
+
+  if (path.MatchesExtension(_T(".png")))
+    return LoadPNG(path);
+
+  return LoadJPEGFile(path);
 }
 
 bool
-Bitmap::LoadFile(const TCHAR *path)
+Bitmap::LoadFile(Path path)
 {
-  const UncompressedImage uncompressed = LoadJPEGFile(path);
-  return Load(uncompressed);
+  auto uncompressed = DecompressImageFile(path);
+  return uncompressed.IsDefined() && Load(std::move(uncompressed));
 }

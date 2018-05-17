@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -42,24 +42,13 @@ Copyright_License {
 
 #include <assert.h>
 
-BufferCanvas::BufferCanvas(const Canvas &canvas,
-                           UPixelScalar _width, UPixelScalar _height)
-  :Canvas({_width, _height}),
-   texture(new GLTexture(_width, _height))
-#ifndef NDEBUG
-  , active(false)
-#endif
-{
-  assert(canvas.IsDefined());
-}
-
 void
 BufferCanvas::Create(PixelSize new_size)
 {
   assert(!active);
 
   Destroy();
-  texture = new GLTexture(new_size.cx, new_size.cy);
+  texture = new GLTexture(new_size, true);
 
   if (OpenGL::frame_buffer_object && OpenGL::render_buffer_stencil) {
     frame_buffer = new GLFrameBuffer();
@@ -201,7 +190,7 @@ BufferCanvas::Commit(Canvas &other)
 
     /* restore the old viewport */
 
-    assert(OpenGL::translate == RasterPoint(0, 0));
+    assert(OpenGL::translate == PixelPoint(0, 0));
 
 #ifdef HAVE_GLES
     /* there's no glPopAttrib() on GL/ES; emulate it */
@@ -261,7 +250,7 @@ BufferCanvas::CopyTo(Canvas &other)
 #endif
 
   texture->Bind();
-  texture->DrawFlipped(other.GetRect(), GetRect());
+  texture->Draw(other.GetRect(), GetRect());
 }
 
 void

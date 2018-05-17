@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@
 static bool
 test_abort(int n_wind)
 {
-  GlidePolar glide_polar(fixed(2));
+  GlidePolar glide_polar(2);
   Waypoints waypoints;
   SetupWaypoints(waypoints);
 
@@ -58,7 +58,7 @@ test_abort(int n_wind)
 static bool
 test_goto(int n_wind, unsigned id, bool auto_mc)
 {
-  GlidePolar glide_polar(fixed(2));
+  GlidePolar glide_polar(2);
   Waypoints waypoints;
   SetupWaypoints(waypoints);
 
@@ -79,7 +79,7 @@ test_goto(int n_wind, unsigned id, bool auto_mc)
 
   test_task(task_manager, waypoints, 1);
 
-  task_manager.DoGoto(*waypoints.LookupId(id));
+  task_manager.DoGoto(waypoints.LookupId(id));
   task_report(task_manager, "goto");
 
   waypoints.Clear(); // clear waypoints so abort wont do anything
@@ -91,7 +91,7 @@ test_goto(int n_wind, unsigned id, bool auto_mc)
 static bool
 test_null()
 {
-  GlidePolar glide_polar(fixed(2));
+  GlidePolar glide_polar(2);
   Waypoints waypoints;
   SetupWaypoints(waypoints);
 

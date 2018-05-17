@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,14 +24,18 @@
 #include "Task/Ordered/Settings.hpp"
 #include "Task/Ordered/OrderedTask.hpp"
 #include "Task/Ordered/Points/ASTPoint.hpp"
+#include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
+#include "Task/ObservationZones/SymmetricSectorZone.hpp"
 #include "XML/DataNode.hpp"
 #include "Compiler.h"
 
-#include <assert.h>
 #include <memory>
+
+#include <assert.h>
+#include <tchar.h>
 
 gcc_const
 static const TCHAR *

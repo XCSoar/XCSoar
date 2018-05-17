@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -18,13 +18,14 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-  }
+}
 */
 
 #include "Device.hpp"
 #include "Device/RecordedFlight.hpp"
-#include "IO/BinaryWriter.hpp"
-#include "OS/FileUtil.hpp"
+#include "IO/FileOutputStream.hxx"
+#include "IO/BufferedOutputStream.hxx"
+#include "OS/Path.hpp"
 #include "Operation/Operation.hpp"
 
 #include <cstdlib>
@@ -301,10 +302,12 @@ FlarmDevice::ReadFlightList(RecordedFlightList &flight_list,
 }
 
 bool
-FlarmDevice::DownloadFlight(const TCHAR *path, OperationEnvironment &env)
+FlarmDevice::DownloadFlight(Path path, OperationEnvironment &env)
 {
-  BinaryWriter writer(path);
-  if (writer.HasError() || env.IsCancelled())
+  FileOutputStream fos(path);
+  BufferedOutputStream os(fos);
+
+  if (env.IsCancelled())
     return false;
 
   env.SetProgressRange(100);
@@ -341,11 +344,14 @@ FlarmDevice::DownloadFlight(const TCHAR *path, OperationEnvironment &env)
 
     // Read IGC data
     const char *igc_data = (const char *)data.begin() + 3;
-    writer.Write(igc_data, sizeof(igc_data[0]), length);
+    os.Write(igc_data, length);
 
     if (is_last_packet)
       break;
   }
+
+  os.Flush();
+  fos.Commit();
 
   return true;
 }
@@ -353,7 +359,7 @@ FlarmDevice::DownloadFlight(const TCHAR *path, OperationEnvironment &env)
 
 bool
 FlarmDevice::DownloadFlight(const RecordedFlightInfo &flight,
-                            const TCHAR *path, OperationEnvironment &env)
+                            Path path, OperationEnvironment &env)
 {
   if (!BinaryMode(env))
     return false;
@@ -364,11 +370,15 @@ FlarmDevice::DownloadFlight(const RecordedFlightInfo &flight,
   if (ack_result != FLARM::MT_ACK || env.IsCancelled())
     return false;
 
-  if (DownloadFlight(path, env))
-    return true;
+  try {
+    if (DownloadFlight(path, env))
+      return true;
+  } catch (...) {
+    mode = Mode::UNKNOWN;
+    throw;
+  }
 
   mode = Mode::UNKNOWN;
-  File::Delete(path);
 
   return false;
 }

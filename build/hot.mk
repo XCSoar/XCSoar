@@ -5,8 +5,8 @@ ifeq ($(DEBUG)$(CLANG),nn)
 HOT_SOURCES = \
 	$(MATH_SOURCES) \
 	$(GEO_SOURCES) \
-	$(ZLIB_SOURCES) \
-	$(JASPER) \
+	$(JASPER_SOURCES) \
+	$(SRC)/MapWindow/OverlayBitmap.cpp \
 	$(SRC)/Topography/TopographyFileRenderer.cpp \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
@@ -17,7 +17,9 @@ HOT_SOURCES = \
 	$(SRC)/Terrain/Intersection.cpp \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Screen/Memory/Canvas.cpp \
-	$(ENGINE_SRC_DIR)/Task/Shapes/FAITriangleSector.cpp \
+	$(ENGINE_SRC_DIR)/Waypoints/Waypoints.cpp \
+	$(ENGINE_SRC_DIR)/Airspace/Airspaces.cpp \
+	$(ENGINE_SRC_DIR)/Task/Shapes/FAITriangleArea.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/MacCready.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlidePolar.cpp \
 	$(ENGINE_SRC_DIR)/Route/FlatTriangleFan.cpp \

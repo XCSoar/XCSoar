@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Internal.hpp"
 #include "Device/Util/NMEAWriter.hpp"
-#include "NMEA/Derived.hpp"
+#include "Util/StringView.hxx"
 
 #include <stdio.h>
 
@@ -34,13 +34,13 @@ const char BlueFlyDevice::BlueFlySettings::OUTPUT_MODE_NAME[] = "BOM";
  * Parse the given BlueFly Vario setting identified by its name.
  */
 void
-BlueFlyDevice::BlueFlySettings::Parse(const char *name, unsigned long value)
+BlueFlyDevice::BlueFlySettings::Parse(StringView name, unsigned long value)
 {
   assert(value <= UINT_MAX);
 
-  if (StringIsEqual(name, VOLUME_NAME))
-    volume = (fixed)value / VOLUME_MULTIPLIER;
-  else if (StringIsEqual(name, OUTPUT_MODE_NAME))
+  if (name.Equals(VOLUME_NAME))
+    volume = double(value) / VOLUME_MULTIPLIER;
+  else if (name.Equals(OUTPUT_MODE_NAME))
     output_mode = value;
 }
 
@@ -59,14 +59,21 @@ BlueFlyDevice::WriteDeviceSetting(const char *name, int value,
 bool
 BlueFlyDevice::RequestSettings(OperationEnvironment &env)
 {
-  trigger_settings_ready.Reset();
+  {
+    const ScopeLock lock(mutex_settings);
+    settings_ready = false;
+  }
+
   return PortWriteNMEA(port, "BST", env);
 }
 
 bool
 BlueFlyDevice::WaitForSettings(unsigned int timeout)
 {
-  return trigger_settings_ready.Wait(timeout);
+  const ScopeLock lock(mutex_settings);
+  if (!settings_ready)
+    settings_cond.timed_wait(mutex_settings, timeout);
+  return settings_ready;
 }
 
 void

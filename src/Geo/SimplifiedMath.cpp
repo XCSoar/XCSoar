@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,53 +24,17 @@ Copyright_License {
 #include "SimplifiedMath.hpp"
 #include "FAISphere.hpp"
 #include "GeoPoint.hpp"
+#include "Math/Util.hpp"
 
-#ifdef FIXED_MATH
-
-static inline Angle
-EarthASin(const fixed a)
-{
-  return Angle::asin(a);
-}
-
-#endif
+#include <assert.h>
 
 static inline Angle
-EarthDistance(const fixed a)
+EarthDistance(const double a)
 {
-  if (!positive(a))
+  if (a <= 0)
     return Angle::Zero();
 
-#ifdef FIXED_MATH
-  // acos(1-x) = 2*asin(sqrt(x/2))
-  // acos(1-2*x) = 2*asin(sqrt(x))
-  //    = 2*atan2(sqrt(x), sqrt(fixed(1)-x));
-  return EarthASin(sqrt(a) >> fixed::accurate_cordic_shift) * 2;
-#else
-  return Angle::acos(fixed(1) - Double(a));
-#endif
-}
-
-/**
- * Multiply two very small values (less than 4).  This is an optimised
- * fast path for fixed-point.
- */
-constexpr
-static inline fixed
-SmallMult(fixed a, fixed b)
-{
-  return fast_mult(a, b, 0);
-}
-
-/**
- * Multiply three very small values (less than 2).  This is an
- * optimised fast path for fixed-point.
- */
-constexpr
-static inline fixed
-SmallMult(fixed a, fixed b, fixed c)
-{
-  return SmallMult(SmallMult(a, b), c);
+  return Angle::acos(1 - 2 * a);
 }
 
 void
@@ -81,44 +45,38 @@ DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
   assert(loc2.IsValid());
 
   const auto sc1 = loc1.latitude.SinCos();
-  fixed sin_lat1 = sc1.first, cos_lat1 = sc1.second;
+  auto sin_lat1 = sc1.first, cos_lat1 = sc1.second;
   const auto sc2 = loc2.latitude.SinCos();
-  fixed sin_lat2 = sc2.first, cos_lat2 = sc2.second;
+  auto sin_lat2 = sc2.first, cos_lat2 = sc2.second;
 
   const Angle dlon = loc2.longitude - loc1.longitude;
 
   if (distance) {
-    const fixed s1 = (loc2.latitude - loc1.latitude).accurate_half_sin();
-    const fixed s2 = dlon.accurate_half_sin();
-    const fixed a = sqr(s1) + SmallMult(cos_lat1, cos_lat2) * sqr(s2);
+    const auto s1 = (loc2.latitude - loc1.latitude).accurate_half_sin();
+    const auto s2 = dlon.accurate_half_sin();
+    const auto a = Square(s1) + cos_lat1 * cos_lat2 * Square(s2);
 
     Angle distance2 = EarthDistance(a);
-    assert(!negative(distance2.Native()));
+    assert(!distance2.IsNegative());
     *distance = distance2;
   }
 
   if (bearing) {
-    // speedup for fixed since this is one call
     const auto sc = dlon.SinCos();
-    const fixed sin_dlon = sc.first, cos_dlon = sc.second;
+    const auto sin_dlon = sc.first, cos_dlon = sc.second;
 
-    const fixed y = SmallMult(sin_dlon, cos_lat2);
-    const fixed x = SmallMult(cos_lat1, sin_lat2)
-      - SmallMult(sin_lat1, cos_lat2, cos_dlon);
+    const auto y = sin_dlon * cos_lat2;
+    const auto x = cos_lat1 * sin_lat2 - sin_lat1 * cos_lat2 * cos_dlon;
 
-    *bearing = (x == fixed(0) && y == fixed(0))
+    *bearing = (x == 0 && y == 0)
       ? Angle::Zero()
       : Angle::FromXY(x, y).AsBearing();
   }
-
-#ifdef INSTRUMENT_TASK
-  count_distbearing++;
-#endif
 }
 
 void
 DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
-                 fixed *distance, Angle *bearing)
+                 double *distance, Angle *bearing)
 {
   if (distance != nullptr) {
     Angle distance_angle;
@@ -126,4 +84,73 @@ DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
     *distance = FAISphere::AngleToEarthDistance(distance_angle);
   } else
     DistanceBearingS(loc1, loc2, (Angle *)nullptr, bearing);
+}
+
+GeoPoint
+FindLatitudeLongitudeS(const GeoPoint &loc, const Angle bearing,
+                       double distance)
+{
+  assert(loc.IsValid());
+  assert(distance >= 0);
+
+  if (distance <= 0)
+    return loc;
+
+  const Angle distance_angle = FAISphere::EarthDistanceToAngle(distance);
+
+  const auto scd = distance_angle.SinCos();
+  const auto sin_distance = scd.first, cos_distance = scd.second;
+
+  const auto scb = bearing.SinCos();
+  const auto sin_bearing = scb.first, cos_bearing = scb.second;
+
+  const auto scl = loc.latitude.SinCos();
+  const auto sin_latitude = scl.first, cos_latitude = scl.second;
+
+  GeoPoint loc_out;
+  loc_out.latitude = Angle::asin(sin_latitude * cos_distance
+                                 + cos_latitude * sin_distance * cos_bearing);
+
+  loc_out.longitude = loc.longitude +
+    Angle::FromXY(cos_distance - sin_latitude * loc_out.latitude.sin(),
+                  sin_bearing * sin_distance * cos_latitude);
+
+  loc_out.Normalize(); // ensure longitude is within -180:180
+
+  return loc_out;
+}
+
+double
+ProjectedDistanceS(const GeoPoint &loc1, const GeoPoint &loc2,
+                   const GeoPoint &loc3)
+{
+  Angle dist_AD, crs_AD;
+  DistanceBearingS(loc1, loc3, &dist_AD, &crs_AD);
+  if (!dist_AD.IsPositive())
+    /* workaround: new sine implementation may return small non-zero
+       values for sin(0) */
+    return 0;
+
+  Angle dist_AB, crs_AB;
+  DistanceBearingS(loc1, loc2, &dist_AB, &crs_AB);
+  if (!dist_AB.IsPositive())
+    /* workaround: new sine implementation may return small non-zero
+       values for sin(0) */
+    return 0;
+
+  // The "along track distance", along_track_distance, the distance from A along the
+  // course towards B to the point abeam D
+
+  const auto sindist_AD = dist_AD.sin();
+  const auto cross_track_distance =
+    Angle::asin(sindist_AD * (crs_AD - crs_AB).sin());
+
+  const auto sc = cross_track_distance.SinCos();
+  const auto sinXTD = sc.first, cosXTD = sc.second;
+
+  // along track distance
+  const Angle along_track_distance =
+    Angle::asin(Cathetus(sindist_AD, sinXTD) / cosXTD);
+
+  return FAISphere::AngleToEarthDistance(along_track_distance);
 }

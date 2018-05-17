@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -42,19 +42,19 @@ FormatBearing(TCHAR *buffer, size_t size, Angle value,
               const TCHAR *suffix = NULL);
 
 gcc_const
-static inline StringBuffer<TCHAR, 16>
+static inline BasicStringBuffer<TCHAR, 16>
 FormatBearing(unsigned degrees_value)
 {
-  StringBuffer<TCHAR, 16> buffer;
+  BasicStringBuffer<TCHAR, 16> buffer;
   FormatBearing(buffer.data(), buffer.capacity(), degrees_value);
   return buffer;
 }
 
 gcc_const
-static inline StringBuffer<TCHAR, 16>
+static inline BasicStringBuffer<TCHAR, 16>
 FormatBearing(Angle value)
 {
-  StringBuffer<TCHAR, 16> buffer;
+  BasicStringBuffer<TCHAR, 16> buffer;
   FormatBearing(buffer.data(), buffer.capacity(), value);
   return buffer;
 }
@@ -63,10 +63,10 @@ void
 FormatAngleDelta(TCHAR *buffer, size_t size, Angle value);
 
 gcc_const
-static inline StringBuffer<TCHAR, 16>
+static inline BasicStringBuffer<TCHAR, 16>
 FormatAngleDelta(Angle value)
 {
-  StringBuffer<TCHAR, 16> buffer;
+  BasicStringBuffer<TCHAR, 16> buffer;
   FormatAngleDelta(buffer.data(), buffer.capacity(), value);
   return buffer;
 }

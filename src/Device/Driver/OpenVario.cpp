@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2013 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,7 +27,6 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Units/System.hpp"
-#include "Atmosphere/Temperature.hpp"
 
 class OpenVarioDevice : public AbstractDevice {
 public:
@@ -57,6 +56,7 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
    * Type definitions:
    *
    * E: TE vario in m/s
+   * H: relative humidity in %
    * P: static pressure in hPa
    * Q: dynamic pressure in Pa
    * R: total pressure in hPa
@@ -69,7 +69,7 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
     if (type == '\0')
       break;
 
-    fixed value;
+    double value;
     if (!line.ReadChecked(value))
       break;
 
@@ -77,6 +77,11 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
       case 'E': {
         info.ProvideTotalEnergyVario(value);
         break;
+      }
+      case 'H': {
+          info.humidity_available = true;
+          info.humidity = value;
+          break;
       }
       case 'P': {
         AtmosphericPressure pressure = AtmosphericPressure::HectoPascal(value);
@@ -99,7 +104,7 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
         break;
       }
       case 'T': {
-        info.temperature = CelsiusToKelvin(value);
+        info.temperature = Temperature::FromCelsius(value);
         info.temperature_available = true;
         break;
       }

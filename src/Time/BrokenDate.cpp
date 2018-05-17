@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -57,6 +57,25 @@ BrokenDate::IncrementDay()
     ++day_of_week;
     if (day_of_week >= 7)
       day_of_week = 0;
+  }
+}
+
+void
+BrokenDate::DecrementDay()
+{
+  assert(IsPlausible());
+
+  --day;
+
+  if (day < 1) {
+    --month;
+
+    if (month < 1) {
+      --year;
+      month = 12;
+    }
+
+    day = DaysInMonth(month, year);
   }
 }
 

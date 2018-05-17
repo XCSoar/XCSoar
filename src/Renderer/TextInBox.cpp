@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,17 +30,15 @@ Copyright_License {
 #include "Screen/OpenGL/Scope.hpp"
 #endif
 
-static RasterPoint
+static PixelPoint
 TextInBoxMoveInView(PixelRect &rc, const PixelRect &map_rc)
 {
-  RasterPoint offset;
-  offset.x = 0;
-  offset.y = 0;
+  PixelPoint offset(0, 0);
 
   // If label is above maprect
   if (map_rc.top > rc.top) {
     // Move label down into maprect
-    UPixelScalar d = map_rc.top - rc.top;
+    unsigned d = map_rc.top - rc.top;
     rc.top += d;
     rc.bottom += d;
     offset.y += d;
@@ -48,7 +46,7 @@ TextInBoxMoveInView(PixelRect &rc, const PixelRect &map_rc)
 
   // If label is right of maprect
   if (map_rc.right < rc.right) {
-    UPixelScalar d = map_rc.right - rc.right;
+    unsigned d = map_rc.right - rc.right;
     rc.right += d;
     rc.left += d;
     offset.x += d;
@@ -56,7 +54,7 @@ TextInBoxMoveInView(PixelRect &rc, const PixelRect &map_rc)
 
   // If label is below maprect
   if (map_rc.bottom < rc.bottom) {
-    UPixelScalar d = map_rc.bottom - rc.bottom;
+    unsigned d = map_rc.bottom - rc.bottom;
     rc.top += d;
     rc.bottom += d;
     offset.y += d;
@@ -64,7 +62,7 @@ TextInBoxMoveInView(PixelRect &rc, const PixelRect &map_rc)
 
   // If label is left of maprect
   if (map_rc.left > rc.left) {
-    UPixelScalar d = map_rc.left - rc.left;
+    unsigned d = map_rc.left - rc.left;
     rc.right += d;
     rc.left += d;
     offset.x += d;
@@ -75,17 +73,17 @@ TextInBoxMoveInView(PixelRect &rc, const PixelRect &map_rc)
 
 static void
 RenderShadowedText(Canvas &canvas, const TCHAR *text,
-                   PixelScalar x, PixelScalar y,
+                   int x, int y,
                    bool inverted)
 {
   canvas.SetBackgroundTransparent();
 
   canvas.SetTextColor(inverted ? COLOR_BLACK : COLOR_WHITE);
   const int offset = canvas.GetFontHeight() / 12u;
-  canvas.DrawText(x + offset, y, text);
-  canvas.DrawText(x - offset, y, text);
-  canvas.DrawText(x, y + offset, text);
-  canvas.DrawText(x, y - offset, text);
+  canvas.DrawText(x + offset, y + offset, text);
+  canvas.DrawText(x - offset, y + offset, text);
+  canvas.DrawText(x + offset, y - offset, text);
+  canvas.DrawText(x - offset, y - offset, text);
 
   canvas.SetTextColor(inverted ? COLOR_WHITE : COLOR_BLACK);
   canvas.DrawText(x, y, text);
@@ -93,7 +91,7 @@ RenderShadowedText(Canvas &canvas, const TCHAR *text,
 
 // returns true if really wrote something
 bool
-TextInBox(Canvas &canvas, const TCHAR *text, PixelScalar x, PixelScalar y,
+TextInBox(Canvas &canvas, const TCHAR *text, int x, int y,
           TextInBoxMode mode, const PixelRect &map_rc, LabelBlock *label_block)
 {
   // landable waypoint label inside white box
@@ -118,7 +116,7 @@ TextInBox(Canvas &canvas, const TCHAR *text, PixelScalar x, PixelScalar y,
   rc.bottom = y + tsize.cy + 1;
 
   if (mode.move_in_view) {
-    RasterPoint offset = TextInBoxMoveInView(rc, map_rc);
+    auto offset = TextInBoxMoveInView(rc, map_rc);
     x += offset.x;
     y += offset.y;
   }
@@ -135,7 +133,7 @@ TextInBox(Canvas &canvas, const TCHAR *text, PixelScalar x, PixelScalar y,
 
     {
 #ifdef ENABLE_OPENGL
-      const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      const ScopeAlphaBlend alpha_blend;
       canvas.Select(Brush(COLOR_WHITE.WithAlpha(0xa0)));
 #else
       canvas.SelectWhiteBrush();
@@ -166,9 +164,9 @@ TextInBox(Canvas &canvas, const TCHAR *text, PixelScalar x, PixelScalar y,
 }
 
 bool
-TextInBox(Canvas &canvas, const TCHAR *text, PixelScalar x, PixelScalar y,
+TextInBox(Canvas &canvas, const TCHAR *text, int x, int y,
           TextInBoxMode mode,
-          UPixelScalar screen_width, UPixelScalar screen_height,
+          unsigned screen_width, unsigned screen_height,
           LabelBlock *label_block)
 {
   PixelRect rc;

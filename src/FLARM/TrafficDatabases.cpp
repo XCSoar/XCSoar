@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "TrafficDatabases.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 
 const TCHAR *
 TrafficDatabases::FindNameById(FlarmId id) const
@@ -43,10 +43,6 @@ TrafficDatabases::FindNameById(FlarmId id) const
 FlarmId
 TrafficDatabases::FindIdByName(const TCHAR *name) const
 {
-#if !CLANG_CHECK_VERSION(3,6)
-  /* disabled on clang due to -Wtautological-pointer-compare */
-  assert(name != nullptr);
-#endif
   assert(!StringIsEmpty(name));
 
   // try to find flarm from userFile
@@ -66,11 +62,6 @@ unsigned
 TrafficDatabases::FindIdsByName(const TCHAR *name,
                                 FlarmId *buffer, unsigned max) const
 {
-#if !CLANG_CHECK_VERSION(3,6)
-  /* disabled on clang due to -Wtautological-pointer-compare */
-  assert(name != nullptr);
-  assert(buffer != nullptr);
-#endif
   assert(!StringIsEmpty(name));
 
   unsigned n = flarm_names.Get(name, buffer, max);

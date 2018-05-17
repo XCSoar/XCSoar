@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TRACKING_SKYLINES_SETTINGS_HPP
 #define XCSOAR_TRACKING_SKYLINES_SETTINGS_HPP
 
+#include "CloudSettings.hpp"
 #include "Features.hpp"
 #include "Util/TriState.hpp"
 
@@ -52,30 +53,22 @@ struct Settings {
   bool near_traffic_enabled;
 
   /**
-   * Is submitting data to the (experimental) XCSoar Cloud enabled?
-   * TriState::UNKNOWN means the user has not yet been asked about
-   * it.
-   */
-  TriState cloud_enabled;
-
-  /**
    * Tracking interval in seconds.
    */
   unsigned interval;
 
   uint64_t key;
 
-  uint64_t cloud_key;
+  CloudSettings cloud;
 
   void SetDefaults() {
     enabled = false;
     roaming = true;
     traffic_enabled = false;
     near_traffic_enabled = false;
-    cloud_enabled = TriState::UNKNOWN;
     interval = 5;
     key = 0;
-    cloud_key = 0;
+    cloud.SetDefaults();
   }
 };
 

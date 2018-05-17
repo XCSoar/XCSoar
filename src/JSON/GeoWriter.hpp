@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,14 +29,14 @@ Copyright_License {
 
 namespace JSON {
   /**
-   * Writer for a JSON floating/fixed point value.
+   * Writer for a JSON floating point value.
    */
-  static inline void WriteFixed(TextWriter &writer, fixed value) {
+  static inline void WriteDouble(BufferedOutputStream &writer, double value) {
     writer.Format("%f", (double)value);
   }
 
-  static inline void WriteAngle(TextWriter &writer, Angle value) {
-    WriteFixed(writer, value.Degrees());
+  static inline void WriteAngle(BufferedOutputStream &writer, Angle value) {
+    WriteDouble(writer, value.Degrees());
   }
 
   static inline void WriteGeoPointAttributes(JSON::ObjectWriter &object,
@@ -45,7 +45,7 @@ namespace JSON {
     object.WriteElement("latitude", WriteAngle, value.latitude);
   }
 
-  static inline void WriteGeoPoint(TextWriter &writer,
+  static inline void WriteGeoPoint(BufferedOutputStream &writer,
                                    const ::GeoPoint &value) {
     ObjectWriter object(writer);
     WriteGeoPointAttributes(object, value);

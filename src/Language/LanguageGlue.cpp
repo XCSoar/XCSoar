@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,18 +25,14 @@ Copyright_License {
 #include "LanguageGlue.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
-#include "OS/PathName.hpp"
+#include "OS/Path.hpp"
 #include "LogFile.hpp"
 #include "Profile/Profile.hpp"
-#include "Util/StringUtil.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringCompare.hxx"
+#include "Util/StringAPI.hxx"
 
 #ifdef HAVE_NATIVE_GETTEXT
 #include <locale.h>
-#endif
-
-#ifdef _WIN32_WCE
-#include "OS/DynamicLibrary.hpp"
 #endif
 
 #ifdef ANDROID
@@ -294,25 +290,6 @@ DetectLanguage()
 
 #elif defined(WIN32)
 
-#if defined(_WIN32_WCE)
-  /* the GetUserDefaultUILanguage() prototype is missing on
-     mingw32ce, we have to look it up dynamically */
-  DynamicLibrary coreloc_dll(_T("coredll"));
-  if (!coreloc_dll.IsDefined()) {
-    LogFormat("Language: coredll.dll not found");
-    return NULL;
-  }
-
-  typedef LANGID WINAPI (*GetUserDefaultUILanguage_t)();
-  GetUserDefaultUILanguage_t GetUserDefaultUILanguage =
-    (GetUserDefaultUILanguage_t)
-    coreloc_dll.Lookup(_T("GetUserDefaultUILanguage"));
-  if (GetUserDefaultUILanguage == NULL) {
-    LogFormat("Language: GetUserDefaultUILanguage() not available");
-    return NULL;
-  }
-#endif
-
   // Retrieve the default user language identifier from the OS
   LANGID lang_id = GetUserDefaultUILanguage();
   LogFormat("Language: GetUserDefaultUILanguage()=0x%x", (int)lang_id);
@@ -419,20 +396,20 @@ AutoDetectLanguage()
 }
 
 static bool
-LoadLanguageFile(const TCHAR *path)
+LoadLanguageFile(Path path)
 {
-  LogFormat(_T("Language: loading file '%s'"), path);
+  LogFormat(_T("Language: loading file '%s'"), path.c_str());
 
   delete mo_loader;
   mo_loader = new MOLoader(path);
   if (mo_loader->error()) {
-    LogFormat(_T("Language: could not load file '%s'"), path);
+    LogFormat(_T("Language: could not load file '%s'"), path.c_str());
     delete mo_loader;
     mo_loader = NULL;
     return false;
   }
 
-  LogFormat(_T("Loaded translations from file '%s'"), path);
+  LogFormat(_T("Loaded translations from file '%s'"), path.c_str());
 
   mo_file = &mo_loader->get();
   return true;
@@ -471,28 +448,30 @@ ReadLanguageFile()
 
   LogFormat("Loading language file");
 
-  TCHAR buffer[MAX_PATH], second_buffer[MAX_PATH];
-  const TCHAR *value = Profile::GetPath(ProfileKeys::LanguageFile, buffer)
-    ? buffer : _T("");
+  auto value = Profile::GetPath(ProfileKeys::LanguageFile);
 
-  if (StringIsEqual(value, _T("none")))
-    return;
-
-  if (StringIsEmpty(value) || StringIsEqual(value, _T("auto"))) {
+  if (value == nullptr || value.IsEmpty() || value == Path(_T("auto"))) {
     AutoDetectLanguage();
     return;
   }
 
-  const TCHAR *base = BaseName(value);
-  if (base == NULL)
+  if (value == Path(_T("none")))
+    return;
+
+  Path base = value.GetBase();
+  if (base == nullptr)
     base = value;
 
   if (base == value) {
-    LocalPath(second_buffer, value);
-    value = second_buffer;
+    value = LocalPath(value);
+
+    /* need to refresh "base" because the allocated string returned by
+       Profile::Path() has just been freed */
+    base = value.GetBase();
+    assert(base != nullptr);
   }
 
-  if (!LoadLanguageFile(value) && !ReadResourceLanguageFile(base))
+  if (!LoadLanguageFile(value) && !ReadResourceLanguageFile(base.c_str()))
     AutoDetectLanguage();
 #endif
 }

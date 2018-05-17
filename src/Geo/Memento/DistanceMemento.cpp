@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,11 +22,11 @@
 
 #include "DistanceMemento.hpp"
 
-fixed 
+double 
 DistanceMemento::Distance(const GeoPoint& _origin,
                           const GeoPoint& _destination) const
 {
-  if (negative(value) || _origin != origin || _destination != destination) {
+  if (value < 0 || _origin != origin || _destination != destination) {
     origin = _origin;
     destination = _destination;
     value = origin.Distance(destination);

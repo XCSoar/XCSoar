@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -71,9 +71,9 @@ public:
 };
 
 static bool
-ReadAltitude(NMEAInputLine &line, fixed &value_r)
+ReadAltitude(NMEAInputLine &line, double &value_r)
 {
-  fixed value;
+  double value;
   bool available = line.ReadChecked(value);
   char unit = line.ReadFirstChar();
   if (!available)
@@ -108,7 +108,7 @@ PTFRS(NMEAInputLine &line, NMEAInfo &info)
 
   unsigned supply_voltage;
   if (line.ReadChecked(supply_voltage) && supply_voltage != 0) {
-    info.voltage = fixed(supply_voltage) / 1000;
+    info.voltage = supply_voltage / 1000.;
     info.voltage_available.Update(info.clock);
   }
 
@@ -128,7 +128,7 @@ AltairProDevice::ParseNMEA(const char *String, NMEAInfo &info)
   // no propriatary sentence
 
   if (StringIsEqual(type, "$PGRMZ")) {
-    fixed value;
+    double value;
     if (ReadAltitude(line, value))
       info.ProvidePressureAltitude(value);
 

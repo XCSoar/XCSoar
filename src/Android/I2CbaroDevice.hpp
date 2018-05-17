@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -34,9 +34,9 @@ Copyright_License {
 
 class I2CbaroDevice final : private I2CbaroListener {
   unsigned index;
-  Java::Object obj;
+  Java::GlobalObject obj;
   DeviceConfig::PressureUse press_use;
-  fixed pitot_offset;
+  double pitot_offset;
   /**
    * This Kalman filter is used to smooth the pressure input.
    */
@@ -49,7 +49,7 @@ public:
   I2CbaroDevice(unsigned index,
                JNIEnv *env, jobject holder,
                DeviceConfig::PressureUse press_use,
-               fixed pitot_offset,
+               double pitot_offset,
                unsigned twi_num, unsigned i2c_addr, unsigned sample_rate, unsigned flags);
 
   ~I2CbaroDevice();

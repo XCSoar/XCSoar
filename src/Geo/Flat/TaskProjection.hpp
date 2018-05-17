@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,9 +24,10 @@
 #define TASKPROJECTION_H
 
 #include "FlatProjection.hpp"
-#include "Geo/GeoPoint.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "Compiler.h"
+
+struct GeoPoint;
 
 /**
  * Class for performing Lambert Conformal Conic projections from
@@ -59,9 +60,10 @@ public:
    * This does not update the projection itself.
    *
    * @param ref Point to check against bounds
+   * @return true if the bounds have been modified
    */
-  void Scan(const GeoPoint &ref) {
-    bounds.Extend(ref);
+  bool Scan(const GeoPoint &ref) {
+    return bounds.Extend(ref);
   }
 
   /**
@@ -80,7 +82,7 @@ public:
    * @return Radius (m) from center to edge
    */
   gcc_pure
-  fixed ApproxRadius() const; 
+  double ApproxRadius() const;
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, 

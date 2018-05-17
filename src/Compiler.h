@@ -62,12 +62,12 @@ Copyright_License {
    GCC_VERSION < GCC_MAKE_VERSION(major, minor, 0))
 
 #ifdef __clang__
-#  if __clang_major__ < 3
-#    error Sorry, your clang version is too old.  You need at least version 3.1.
+#  if CLANG_VERSION < GCC_MAKE_VERSION(3,8,0)
+#    error Sorry, your clang version is too old.  You need at least version 3.8.
 #  endif
 #elif defined(__GNUC__)
-#  if GCC_OLDER_THAN(4,6)
-#    error Sorry, your gcc version is too old.  You need at least version 4.6.
+#  if GCC_OLDER_THAN(5,0)
+#    error Sorry, your gcc version is too old.  You need at least version 5.
 #  endif
 #else
 #  warning Untested compiler.  Use at your own risk!
@@ -166,24 +166,6 @@ Copyright_License {
 #else
 /* disable it on other compilers */
 #define gcc_restrict
-#endif
-
-/* C++11 features */
-
-#if defined(__cplusplus)
-
-/* support for C++11 "override" was added in gcc 4.7 */
-#if GCC_OLDER_THAN(4,7)
-#define override
-#define final
-#endif
-
-#if CLANG_OR_GCC_VERSION(4,8)
-#define gcc_alignas(T, fallback) alignas(T)
-#else
-#define gcc_alignas(T, fallback) gcc_aligned(fallback)
-#endif
-
 #endif
 
 #ifndef __has_feature

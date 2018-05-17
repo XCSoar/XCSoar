@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2011 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -41,26 +41,9 @@
 template<typename T>
 struct has_trivial_copy_and_destructor
   : public std::integral_constant<bool,
-#if defined(_LIBCPP_VERSION) || GCC_CHECK_VERSION(5,0)
                                   std::is_trivially_copy_constructible<T>::value &&
-#else
-                                  std::has_trivial_copy_constructor<T>::value &&
-#endif
-#if defined(_LIBCPP_VERSION) || GCC_CHECK_VERSION(5,0)
                                   std::is_trivially_copy_assignable<T>::value &&
                                   std::is_trivially_destructible<T>::value>
-#else
-#if !defined(__GLIBCXX__) || (defined(__clang__) ? __GLIBCXX__ >= 20120106 : GCC_VERSION >= 40600)
-                                  std::has_trivial_copy_assign<T>::value &&
-#else
-                                  std::has_trivial_assign<T>::value &&
-#endif
-#if !defined(__GLIBCXX__) || (defined(__clang__) ? __GLIBCXX__ >= 20130322 : GCC_VERSION >= 40800)
-                                  std::is_trivially_destructible<T>::value>
-#else
-                                  std::has_trivial_destructor<T>::value>
-#endif
-#endif
 {
 };
 

@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,16 +26,13 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
-#include "Task/TaskManager.hpp"
 #include "NMEA/Info.hpp"
-
-#define fixed_300 fixed(300)
 
 DemoReplayGlue::DemoReplayGlue(ProtectedTaskManager &_task_manager)
   :task_manager(&_task_manager)
 {
   ProtectedTaskManager::ExclusiveLease protected_task_manager(*task_manager);
-  const TaskAccessor ta(protected_task_manager, fixed(0));
+  const TaskAccessor ta(protected_task_manager, 0);
   parms.SetRealistic();
   parms.start_alt = device_blackboard->Basic().nav_altitude;
   DemoReplay::Start(ta, device_blackboard->Basic().location);
@@ -47,7 +44,7 @@ DemoReplayGlue::DemoReplayGlue(ProtectedTaskManager &_task_manager)
 bool
 DemoReplayGlue::Update(NMEAInfo &data)
 {
-  fixed floor_alt = fixed_300;
+  double floor_alt = 300;
   if (device_blackboard->Calculated().terrain_valid) {
     floor_alt += device_blackboard->Calculated().terrain_altitude;
   }
@@ -57,7 +54,7 @@ DemoReplayGlue::Update(NMEAInfo &data)
   {
     ProtectedTaskManager::ExclusiveLease protected_task_manager(*task_manager);
     TaskAccessor ta(protected_task_manager, floor_alt);
-    retval = DemoReplay::Update(fixed(1), ta);
+    retval = DemoReplay::Update(1, ta);
   }
 
   const AircraftState &s = aircraft.GetState();

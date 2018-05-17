@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -72,7 +72,7 @@ public:
    * @param tp Range parameter [0,1]
    * @param force_current If true, will force active AAT point (even if inside) to move
    */
-  void set_range(const fixed tp, const bool force_current);
+  void set_range(double tp, const bool force_current);
 
   /**
    * Determine if any of the remaining TaskPoints have an adjustable target
@@ -93,13 +93,13 @@ public:
 
 private:
   /* virtual methods from class TaskMacCready */
-  fixed get_min_height(gcc_unused const AircraftState &aircraft) const override {
-    return fixed(0);
+  double get_min_height(gcc_unused const AircraftState &aircraft) const override {
+    return 0;
   }
 
   GlideResult SolvePoint(const TaskPoint &tp,
                          const AircraftState &aircraft,
-                         fixed minH) const override;
+                         double minH) const override;
 
   AircraftState get_aircraft_start(const AircraftState &aircraft) const override;
 };

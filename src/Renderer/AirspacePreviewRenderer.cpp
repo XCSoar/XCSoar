@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -34,23 +34,23 @@ Copyright_License {
 #include <vector>
 
 static void
-GetPolygonPoints(std::vector<RasterPoint> &pts,
+GetPolygonPoints(std::vector<BulkPixelPoint> &pts,
                  const AirspacePolygon &airspace,
-                 const RasterPoint pt, unsigned radius)
+                 const PixelPoint pt, unsigned radius)
 {
   GeoBounds bounds = airspace.GetGeoBounds();
   GeoPoint center = bounds.GetCenter();
 
-  fixed geo_heigth = bounds.GetGeoHeight();
-  fixed geo_width = bounds.GetGeoWidth();
+  auto geo_heigth = bounds.GetGeoHeight();
+  auto geo_width = bounds.GetGeoWidth();
 
-  fixed geo_size = std::max(geo_heigth, geo_width);
+  auto geo_size = std::max(geo_heigth, geo_width);
 
   WindowProjection projection;
   projection.SetScreenSize({radius * 2, radius * 2});
   projection.SetScreenOrigin(pt.x, pt.y);
   projection.SetGeoLocation(center);
-  projection.SetScale(fixed(radius * 2) / geo_size);
+  projection.SetScale(radius * 2 / geo_size);
   projection.SetScreenAngle(Angle::Zero());
   projection.UpdateScreenBounds();
 
@@ -130,8 +130,8 @@ AirspacePreviewRenderer::PrepareOutline(
 }
 
 static void
-DrawShape(Canvas &canvas, AbstractAirspace::Shape shape, const RasterPoint pt,
-          unsigned radius, const std::vector<RasterPoint> &pts)
+DrawShape(Canvas &canvas, AbstractAirspace::Shape shape, const PixelPoint pt,
+          unsigned radius, const std::vector<BulkPixelPoint> &pts)
 {
   if (shape == AbstractAirspace::Shape::CIRCLE)
     canvas.DrawCircle(pt.x, pt.y, radius);
@@ -144,7 +144,7 @@ DrawShape(Canvas &canvas, AbstractAirspace::Shape shape, const RasterPoint pt,
 
 void
 AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
-                              const RasterPoint pt, unsigned radius,
+                              const PixelPoint pt, unsigned radius,
                               const AirspaceRendererSettings &settings,
                               const AirspaceLook &look)
 {
@@ -152,7 +152,7 @@ AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
   AirspaceClass type = airspace.GetType();
 
   // Container for storing the points of a polygon airspace
-  std::vector<RasterPoint> pts;
+  std::vector<BulkPixelPoint> pts;
   if (shape == AbstractAirspace::Shape::POLYGON && !IsAncientHardware())
     GetPolygonPoints(pts, (const AirspacePolygon &)airspace, pt, radius);
 

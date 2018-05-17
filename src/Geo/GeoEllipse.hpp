@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -57,7 +57,7 @@ public:
    * @return Location of point on ellipse
    */
   gcc_pure
-  GeoPoint Parametric(const fixed t) const;
+  GeoPoint Parametric(double t) const;
 
   /**
    * Calculate where a line from the first focus through a point p

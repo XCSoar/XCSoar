@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,8 +25,6 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "IO/LineReader.hpp"
 #include "Geo/UTM.hpp"
-
-#include <stdlib.h>
 
 static bool
 ParseAngle(const TCHAR *&src, Angle &angle)
@@ -116,7 +114,7 @@ ParseLocationUTM(const TCHAR *&src, GeoPoint &p)
   if (endptr == src || *endptr != _T(' '))
     return false;
 
-  UTM u(zone_number, zone_letter, fixed(easting), fixed(northing));
+  UTM u(zone_number, zone_letter, easting, northing);
   p = u.ToGeoPoint();
 
   // ensure longitude is within -180:180
@@ -128,14 +126,14 @@ ParseLocationUTM(const TCHAR *&src, GeoPoint &p)
 }
 
 static bool
-ParseAltitude(const TCHAR *&src, fixed &dest)
+ParseAltitude(const TCHAR *&src, double &dest)
 {
   TCHAR *endptr;
   double value = _tcstod(src, &endptr);
   if (endptr == src)
     return false;
 
-  dest = fixed(value);
+  dest = value;
   src = endptr;
   return true;
 }

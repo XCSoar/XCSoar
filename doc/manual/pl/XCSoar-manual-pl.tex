@@ -1,27 +1,18 @@
 \documentclass[a4paper,11pt]{refrep}
+\input{xcsoar.sty}
 
 % Set the title
 \title{Podręcznik}
 
-% Font selection
-\usepackage{helvet}
-\renewcommand{\familydefault}{\sfdefault}
-\fontfamily{phv}\selectfont
-
 % Set the page title
-\newcommand{\mycontent}[0]{
-\begin{tabular}{l}
-\hspace*{-6cm} \em Podręcznik dla XCSoar\vspace*{2pt}
-\end{tabular}}
+\input{xcsoar-headers.sty}
+\xcsoarheader{Podręcznik dla XCSoar}
 
 % Define some xc doc styles
-\input{xcsoar.sty}
 \input{title-xcsoar.sty}
 
 % Select the right encoding and language package
-\usepackage[utf8]{inputenc}
 \usepackage[polish]{babel}
-\DeclareUnicodeCharacter{00B0}{$^{\circ}$}
 \begin{document}
 
 %%%%%%%%%%%%%%%%%%%%%%
@@ -34,13 +25,7 @@
  
 %%%%%%%%%%%%%%%%%%%%%%
 % Table of contents
-\begingroup
-\fontfamily{ptm}
-\normalsize
-\fontseries{c}\selectfont
-\setlength{\parskip}{0.05\baselineskip}
-\tableofcontents
-\endgroup
+\input{toc.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%
 \chapter*{Preface}

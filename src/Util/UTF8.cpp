@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "Util/UTF8.hpp"
-#include "Util/CharUtil.hpp"
+#include "UTF8.hpp"
+#include "CharUtil.hxx"
 
 #include <algorithm>
 
@@ -386,11 +386,6 @@ FindLeading(gcc_unused char *const begin, char *i)
 char *
 CropIncompleteUTF8(char *const p)
 {
-#if !CLANG_CHECK_VERSION(3,6)
-  /* disabled on clang due to -Wtautological-pointer-compare */
-  assert(p != nullptr);
-#endif
-
   char *const end = FindTerminator(p);
   if (end == p)
     return end;
@@ -487,11 +482,6 @@ CopyTruncateStringUTF8(char *dest, size_t dest_size,
 std::pair<unsigned, const char *>
 NextUTF8(const char *p)
 {
-#if !CLANG_CHECK_VERSION(3,6)
-  /* disabled on clang due to -Wtautological-pointer-compare */
-  assert(p != nullptr);
-#endif
-
   unsigned char a = *p++;
   if (a == 0)
     return std::make_pair(0u, nullptr);

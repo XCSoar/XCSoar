@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,11 +22,8 @@ Copyright_License {
 */
 
 #include "Device.hpp"
-#include "TextProtocol.hpp"
-#include "Device/Port/Port.hpp"
 #include "Device/Declaration.hpp"
 #include "Operation/Operation.hpp"
-#include "Util/ConvertString.hpp"
 
 bool
 FlarmDevice::Declare(const Declaration &declaration,
@@ -85,28 +82,28 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
 
   for (unsigned i = 0; i < size; ++i) {
     int DegLat, DegLon;
-    fixed tmp, MinLat, MinLon;
+    double tmp, MinLat, MinLon;
     char NoS, EoW;
 
     tmp = declaration.GetLocation(i).latitude.Degrees();
-    if (negative(tmp)) {
+    if (tmp < 0) {
       NoS = 'S';
       tmp = -tmp;
     } else {
       NoS = 'N';
     }
     DegLat = (int)tmp;
-    MinLat = (tmp - fixed(DegLat)) * 60 * 1000;
+    MinLat = (tmp - DegLat) * 60 * 1000;
 
     tmp = declaration.GetLocation(i).longitude.Degrees();
-    if (negative(tmp)) {
+    if (tmp < 0) {
       EoW = 'W';
       tmp = -tmp;
     } else {
       EoW = 'E';
     }
     DegLon = (int)tmp;
-    MinLon = (tmp - fixed(DegLon)) * 60 * 1000;
+    MinLon = (tmp - DegLon) * 60 * 1000;
 
     /*
      * We use the waypoint index here as name to get around the 192 byte

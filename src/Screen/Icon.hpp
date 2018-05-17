@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -39,7 +39,7 @@ protected:
 
   PixelSize size;
 
-  RasterPoint origin;
+  PixelPoint origin;
 
 public:
   const PixelSize &GetSize() const {
@@ -57,10 +57,7 @@ public:
     bitmap.Reset();
   }
 
-  void Draw(Canvas &canvas, PixelScalar x, PixelScalar y) const;
-  void Draw(Canvas &canvas, RasterPoint pt) const {
-    Draw(canvas, pt.x, pt.y);
-  }
+  void Draw(Canvas &canvas, PixelPoint p) const;
 
   void Draw(Canvas &canvas, const PixelRect &rc, bool inverse) const;
 };

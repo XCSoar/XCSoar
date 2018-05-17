@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,11 +31,10 @@ Copyright_License {
 #include "Form/List.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Layout.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
-#include "OS/PathName.hpp"
+#include "OS/Path.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Formatter/ByteSizeFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
@@ -65,17 +64,15 @@ Copyright_License {
 #endif
 
 #include <assert.h>
-#include <windef.h> /* for MAX_PATH */
 
-static bool
-LocalPath(TCHAR *buffer, const AvailableFile &file)
+static AllocatedPath
+LocalPath(const AvailableFile &file)
 {
   const UTF8ToWideConverter base(file.GetName());
   if (!base.IsValid())
-    return false;
+    return nullptr;
 
-  ::LocalPath(buffer, base);
-  return true;
+  return LocalPath(base);
 }
 
 #ifdef HAVE_DOWNLOAD_MANAGER
@@ -138,8 +135,7 @@ class ManagedFileListWidget
              bool _failed) {
       name = _name;
 
-      TCHAR path[MAX_PATH];
-      LocalPath(path, name);
+      const auto path = LocalPath(name);
 
       if (File::Exists(path)) {
         FormatByteSize(size.buffer(), size.capacity(),
@@ -288,9 +284,9 @@ public:
   virtual void OnTimer() override;
 
   /* virtual methods from class Net::DownloadListener */
-  virtual void OnDownloadAdded(const TCHAR *path_relative,
+  virtual void OnDownloadAdded(Path path_relative,
                                int64_t size, int64_t position) override;
-  virtual void OnDownloadComplete(const TCHAR *path_relative,
+  virtual void OnDownloadComplete(Path path_relative,
                                   bool success) override;
 
   /* virtual methods from class Notify */
@@ -348,7 +344,7 @@ ManagedFileListWidget::FindItem(const TCHAR *name) const
 
 void
 ManagedFileListWidget::LoadRepositoryFile()
-{
+try {
 #ifdef HAVE_DOWNLOAD_MANAGER
   mutex.Lock();
   repository_modified = false;
@@ -358,13 +354,10 @@ ManagedFileListWidget::LoadRepositoryFile()
 
   repository.Clear();
 
-  TCHAR path[MAX_PATH];
-  LocalPath(path, _T("repository"));
+  const auto path = LocalPath(_T("repository"));
   FileLineReaderA reader(path);
-  if (reader.error())
-    return;
-
   ParseFileRepository(repository, reader);
+} catch (const std::runtime_error &e) {
 }
 
 void
@@ -378,11 +371,16 @@ ManagedFileListWidget::RefreshList()
     DownloadStatus download_status;
     const bool is_downloading = IsDownloading(remote_file, download_status);
 
-    TCHAR path[MAX_PATH];
-    if (LocalPath(path, remote_file) &&
+    const auto path = LocalPath(remote_file);
+    if (!path.IsNull() &&
         (is_downloading || File::Exists(path))) {
       download_active |= is_downloading;
-      items.append().Set(BaseName(path),
+
+      const Path base = path.GetBase();
+      if (base.IsNull())
+        continue;
+
+      items.append().Set(base.c_str(),
                          is_downloading ? &download_status : nullptr,
                          HasFailed(remote_file));
     }
@@ -430,8 +428,6 @@ ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 {
   const FileItem &file = items[i];
 
-  const unsigned margin = Layout::GetTextPadding();
-
   canvas.Select(row_renderer.GetFirstFont());
   row_renderer.DrawFirstRow(canvas, rc, file.name.c_str());
 
@@ -451,23 +447,15 @@ ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       text.Format(_T("%s (%s)"), _("Downloading"), size);
     }
 
-    const unsigned width = canvas.CalcTextWidth(text);
-    canvas.DrawText(rc.right - width - margin,
-                    rc.top + row_renderer.GetFirstY(),
-                    text);
+    row_renderer.DrawRightFirstRow(canvas, rc, text);
   } else if (file.failed) {
     const TCHAR *text = _("Error");
-    const unsigned width = canvas.CalcTextWidth(text);
-    canvas.DrawText(rc.right - width - margin,
-                    rc.top + row_renderer.GetFirstY(),
-                    text);
+    row_renderer.DrawRightFirstRow(canvas, rc, text);
   }
 
-  row_renderer.DrawSecondRow(canvas, rc, file.size.c_str());
+  row_renderer.DrawRightSecondRow(canvas, rc, file.last_modified.c_str());
 
-  canvas.DrawText((rc.left + rc.right) / 2,
-                  rc.top + row_renderer.GetSecondY(),
-                  file.last_modified.c_str());
+  row_renderer.DrawSecondRow(canvas, rc, file.size.c_str());
 }
 
 void
@@ -498,7 +486,7 @@ ManagedFileListWidget::Download()
   if (!base.IsValid())
     return;
 
-  Net::DownloadManager::Enqueue(remote_file.uri.c_str(), base);
+  Net::DownloadManager::Enqueue(remote_file.uri.c_str(), Path(base));
 #endif
 }
 
@@ -573,7 +561,7 @@ ManagedFileListWidget::Add()
   if (!base.IsValid())
     return;
 
-  Net::DownloadManager::Enqueue(remote_file.GetURI(), base);
+  Net::DownloadManager::Enqueue(remote_file.GetURI(), Path(base));
 #endif
 }
 
@@ -590,7 +578,7 @@ ManagedFileListWidget::Cancel()
   assert(current < items.size());
 
   const FileItem &item = items[current];
-  Net::DownloadManager::Cancel(item.name);
+  Net::DownloadManager::Cancel(Path(item.name));
 #endif
 }
 
@@ -630,14 +618,14 @@ ManagedFileListWidget::OnTimer()
 }
 
 void
-ManagedFileListWidget::OnDownloadAdded(const TCHAR *path_relative,
+ManagedFileListWidget::OnDownloadAdded(Path path_relative,
                                        int64_t size, int64_t position)
 {
-  const TCHAR *name = BaseName(path_relative);
+  const auto name = path_relative.GetBase();
   if (name == nullptr)
     return;
 
-  const WideToUTF8Converter name2(name);
+  const WideToUTF8Converter name2(name.c_str());
   if (!name2.IsValid())
     return;
 
@@ -652,14 +640,14 @@ ManagedFileListWidget::OnDownloadAdded(const TCHAR *path_relative,
 }
 
 void
-ManagedFileListWidget::OnDownloadComplete(const TCHAR *path_relative,
+ManagedFileListWidget::OnDownloadComplete(Path path_relative,
                                           bool success)
 {
-  const TCHAR *name = BaseName(path_relative);
+  const auto name = path_relative.GetBase();
   if (name == nullptr)
     return;
 
-  const WideToUTF8Converter name2(name);
+  const WideToUTF8Converter name2(name.c_str());
   if (!name2.IsValid())
     return;
 

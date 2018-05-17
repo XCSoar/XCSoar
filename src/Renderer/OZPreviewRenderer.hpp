@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_OZ_PREVIEW_RENDERER_HPP
 #define XCSOAR_OZ_PREVIEW_RENDERER_HPP
 
-struct RasterPoint;
+struct PixelPoint;
 class Canvas;
 class ObservationZonePoint;
 struct TaskLook;
@@ -35,7 +35,7 @@ namespace OZPreviewRenderer
 {
   /** Draw a scaled preview of the given airspace */
   void Draw(Canvas &canvas, const ObservationZonePoint &oz,
-            const RasterPoint pt, unsigned radius,
+            PixelPoint pt, unsigned radius,
             const TaskLook &look,
             const AirspaceRendererSettings &airspace_settings,
             const AirspaceLook &airspace_look);

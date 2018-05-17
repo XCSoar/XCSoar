@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -52,7 +52,7 @@ ParseAngle(const TCHAR* src, Angle& dest, const bool lat)
   if (endptr != src + 3 || l < 0 || l >= 1000)
     return false;
 
-  fixed value = fixed(deg) + fixed(min) / 60 + fixed(l) / 60000;
+  auto value = deg + min / 60. + l / 60000.;
 
   TCHAR sign = *endptr;
   if (sign == 'W' || sign == 'w' || sign == 'S' || sign == 's')
@@ -64,7 +64,7 @@ ParseAngle(const TCHAR* src, Angle& dest, const bool lat)
 }
 
 static bool
-ParseAltitude(const TCHAR* src, fixed& dest)
+ParseAltitude(const TCHAR *src, double &dest)
 {
   // Parse string
   TCHAR *endptr;
@@ -72,7 +72,7 @@ ParseAltitude(const TCHAR* src, fixed& dest)
   if (endptr == src)
     return false;
 
-  dest = fixed(value);
+  dest = value;
 
   // Convert to system unit if necessary
   TCHAR unit = *endptr;
@@ -84,7 +84,7 @@ ParseAltitude(const TCHAR* src, fixed& dest)
 }
 
 static bool
-ParseDistance(const TCHAR* src, fixed& dest)
+ParseDistance(const TCHAR *src, double &dest)
 {
   // Parse string
   TCHAR *endptr;
@@ -92,7 +92,7 @@ ParseDistance(const TCHAR* src, fixed& dest)
   if (endptr == src)
     return false;
 
-  dest = fixed(value);
+  dest = value;
 
   // Convert to system unit if necessary, assume m as default
   TCHAR* unit = endptr;
@@ -170,18 +170,7 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
     iStyle = 6,
     iRWDir = 7,
     iRWLen = 8,
-    iFrequency = 9,
-    iDescription = 10,
   };
-
-  if (first) {
-    first = false;
-
-    /* skip first line if it doesn't begin with a quotation character
-       (usually the field order line) */
-    if (line[0] != _T('\"'))
-      return true;
-  }
 
   // If (end-of-file or comment)
   if (StringIsEmpty(line) ||
@@ -204,6 +193,28 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
   const TCHAR *params[20];
   size_t n_params = ExtractParameters(line, ctemp, params,
                                       ARRAY_SIZE(params), true, _T('"'));
+
+  if (first) {
+    first = false;
+    if (line[0] != _T('\"')) {
+      /*
+       * If the first line doesn't begin with a quotation mark, it
+       * doesn't describe a waypoint. It probably contains field names.
+       */
+      if (StringIsEqual(params[9], _T("rwwidth"))) {
+        /*
+         * The name of the 10th field is "rwwidth" (runway width).
+         * This field doesn't exist in "typical" SeeYou (*.cup) waypoint
+         * files but is in files saved by at least some versions of
+         * SeeYou Mobile. If the rwwidth field exists, the frequency and
+         * description fields are shifted one position to the right.
+         */
+        iFrequency = 10;
+        iDescription = 11;
+      }
+      return true;
+    }
+  }
 
   // Check if the basic fields are provided
   if (iName >= n_params ||
@@ -250,16 +261,16 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, Waypoints &waypoints)
       new_waypoint.radio_frequency = RadioFrequency::Parse(params[iFrequency]);
 
     // Runway length (e.g. 546.0m)
-    fixed rwlen = fixed(-1);
+    double rwlen = -1;
     if (iRWLen < n_params && ParseDistance(params[iRWLen], rwlen) &&
-        positive(rwlen))
+        rwlen > 0)
       new_waypoint.runway.SetLength(uround(rwlen));
 
     if (iRWDir < n_params && *params[iRWDir]) {
       TCHAR *end;
       int direction =_tcstol(params[iRWDir], &end, 10);
       if (end == params[iRWDir] || direction < 0 || direction > 360 ||
-          (direction == 0 && !positive(rwlen)))
+          (direction == 0 && rwlen <= 0))
         direction = -1;
       else if (direction == 360)
         direction = 0;

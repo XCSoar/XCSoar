@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,16 +26,16 @@ Copyright_License {
 void
 MoreData::Reset()
 {
-  nav_altitude = fixed(0);
-  energy_height = fixed(0);
-  TE_altitude = fixed(0);
+  nav_altitude = 0;
+  energy_height = 0;
+  TE_altitude = 0;
 
-  gps_vario = gps_vario_TE = fixed(0);
+  gps_vario = gps_vario_TE = 0;
   gps_vario_available.Clear();
 
-  netto_vario = fixed(0);
+  netto_vario = 0;
 
-  brutto_vario = fixed(0);
+  brutto_vario = 0;
   brutto_vario_available.Clear();
 
   NMEAInfo::Reset();

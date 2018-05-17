@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,22 +24,19 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Math/KalmanFilter1d.hpp"
+#include "Util/PrintException.hxx"
 
 #include <stdio.h>
 
 int main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "FILE");
-  tstring path = args.ExpectNextT();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
-  FileLineReaderA reader(path.c_str());
-  if (reader.error()) {
-    _ftprintf(stderr, _T("Failed to open %s\n"), path.c_str());
-    return EXIT_FAILURE;
-  }
+  FileLineReaderA reader(path);
 
-  KalmanFilter1d kalman_filter(fixed(0.0075));
+  KalmanFilter1d kalman_filter(0.0075);
 
   unsigned last_t = 0;
   double last_value;
@@ -62,13 +59,13 @@ int main(int argc, char **argv)
     }
 
     if (last_t > 0 && t > last_t) {
-      fixed dt = fixed(t - last_t) / 1000;
+      auto dt = (t - last_t) / 1000.;
 
-      kalman_filter.Update(fixed(value), fixed(0.05), dt);
+      kalman_filter.Update(value, 0.05, dt);
 
       printf("%u %f %f %f %f\n", t,
-             value, double(fixed(value - last_value) / dt),
-             (double)kalman_filter.GetXAbs(), (double)kalman_filter.GetXVel());
+             value, (value - last_value) / dt,
+             kalman_filter.GetXAbs(), kalman_filter.GetXVel());
     }
 
     last_t = t;
@@ -76,5 +73,7 @@ int main(int argc, char **argv)
   }
 
   return EXIT_SUCCESS;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }
-

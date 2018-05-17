@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,7 +31,6 @@ Copyright_License {
 struct WaypointFilter;
 class WaypointList;
 class Waypoints;
-struct Waypoint;
 
 class WaypointListBuilder final : public WaypointVisitor {
   const WaypointFilter &filter;
@@ -49,7 +48,7 @@ public:
   void Visit(const Waypoints &waypoints);
 
   /* virtual methods from class WaypointVisitor */
-  void Visit(const Waypoint &waypoint) override;
+  void Visit(const WaypointPtr &waypoint) override;
 };
 
 

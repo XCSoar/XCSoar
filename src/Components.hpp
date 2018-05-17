@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,7 +29,6 @@ Copyright_License {
 class FileCache;
 class TopographyStore;
 class RasterTerrain;
-class RasterWeatherStore;
 class GlideComputer;
 class DrawThread;
 class MultipleDevices;
@@ -41,7 +40,6 @@ class Airspaces;
 class ProtectedAirspaceWarningManager;
 class ProtectedTaskManager;
 class Replay;
-class AltairControl;
 class Logger;
 class GlueFlightLogger;
 class TrackingGlue;
@@ -54,7 +52,6 @@ extern ProtectedTaskManager *protected_task_manager;
 extern Replay *replay;
 extern TopographyStore *topography;
 extern RasterTerrain *terrain;
-extern RasterWeatherStore *rasp;
 extern GlideComputer *glide_computer;
 #ifndef ENABLE_OPENGL
 extern DrawThread *draw_thread;
@@ -68,10 +65,6 @@ extern Logger *logger;
 extern GlueFlightLogger *flight_logger;
 
 extern TrackingGlue *tracking;
-
-#ifdef GNAV
-extern AltairControl altair_control;
-#endif
 
 /**
  * Returns the global ProtectedAirspaceWarningManager instance.  May

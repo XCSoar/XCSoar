@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,65 +26,40 @@ Copyright_License {
 #include "Look/FontDescription.hpp"
 #include "Resources.hpp"
 
-#ifdef USE_GDI
-#include "Screen/VirtualCanvas.hpp"
+#ifdef USE_WINUSER
+#include "Screen/AnyCanvas.hpp"
 #else
 #include "Screen/Canvas.hpp"
 #endif
 
 ProgressWindow::ProgressWindow(ContainerWindow &parent)
-  :background_color(COLOR_WHITE),
-   background_brush(background_color),
-   position(0)
+  :background_color(COLOR_WHITE)
 {
+  message.clear();
+
   PixelRect rc = parent.GetClientRect();
   WindowStyle style;
   style.Hide();
   Create(parent, rc, style);
 
-  const unsigned width = rc.right - rc.left, height = rc.bottom - rc.top;
-
   // Load progress bar background
   bitmap_progress_border.Load(IDB_PROGRESSBORDER);
 
   // Determine text height
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   font.Load(FontDescription(Layout::FontScale(10)));
   text_height = font.GetHeight();
 #else
-  VirtualCanvas canvas({1, 1});
-  text_height = canvas.GetFontHeight();
+  {
+    AnyCanvas canvas;
+    text_height = canvas.GetFontHeight();
+  }
 #endif
 
-  // Make progress bar height proportional to window height
-  const unsigned progress_height = height / 20;
-  const unsigned progress_horizontal_border = progress_height / 2;
-  progress_border_height = progress_height * 2;
-
-  // Initialize message text field
-  PixelRect message_rc = rc;
-  message_rc.bottom -= progress_border_height + height / 48;
-  message_rc.top = message_rc.bottom - text_height;
-  TextWindowStyle message_style;
-  message_style.center();
-  message.Create(*this, nullptr, message_rc, message_style);
-
-#ifndef USE_GDI
-  message.SetFont(font);
-#endif
+  UpdateLayout(rc);
 
   // Initialize progress bar
-  PixelRect pb_rc;
-  pb_rc.left = progress_horizontal_border;
-  pb_rc.right = pb_rc.left + width - progress_height;
-  pb_rc.top = height - progress_border_height + progress_horizontal_border;
-  pb_rc.bottom = pb_rc.top + progress_height;
-  ProgressBarStyle pb_style;
-  progress_bar.Create(*this, pb_rc, pb_style);
-
-#ifdef USE_GDI
-  message.InstallWndProc(); // needed for OnChildColor()
-#endif
+  progress_bar.Create(*this, progress_bar_position);
 
   // Set progress bar step size and range
   SetRange(0, 1000);
@@ -95,12 +70,41 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 }
 
 void
+ProgressWindow::UpdateLayout(PixelRect rc)
+{
+  const unsigned height = rc.GetHeight();
+
+  // Make progress bar height proportional to window height
+  const unsigned progress_height = height / 20;
+  const unsigned progress_horizontal_border = progress_height / 2;
+  const unsigned progress_border_height = progress_height * 2;
+
+  logo_position = rc;
+  logo_position.bottom -= progress_border_height;
+
+  message_position = rc;
+  message_position.bottom -= progress_border_height + height / 48;
+  message_position.top = message_position.bottom - text_height;
+
+  bottom_position = rc;
+  bottom_position.top = bottom_position.bottom - progress_border_height;
+
+  progress_bar_position.left = bottom_position.left + progress_horizontal_border;
+  progress_bar_position.right = bottom_position.right - progress_horizontal_border;
+  progress_bar_position.top = bottom_position.top + progress_horizontal_border;
+  progress_bar_position.bottom = bottom_position.bottom - progress_horizontal_border;
+}
+
+void
 ProgressWindow::SetMessage(const TCHAR *text)
 {
-  AssertNoneLocked();
   AssertThread();
 
-  message.set_text(text);
+  if (text == nullptr)
+    text = _T("");
+
+  message = text;
+  Invalidate(message_position);
 }
 
 void
@@ -118,13 +122,8 @@ ProgressWindow::SetStep(unsigned size)
 void
 ProgressWindow::SetValue(unsigned value)
 {
-  AssertNoneLocked();
   AssertThread();
 
-  if (value == position)
-    return;
-
-  position = value;
   progress_bar.SetValue(value);
 }
 
@@ -139,21 +138,10 @@ ProgressWindow::OnResize(PixelSize new_size)
 {
   ContainerWindow::OnResize(new_size);
 
-  // Make progress bar height proportional to window height
-  const unsigned progress_height = new_size.cy / 20;
-  const unsigned progress_horizontal_border = progress_height / 2;
-  progress_border_height = progress_height * 2;
-
-  if (message.IsDefined())
-    message.Move(0,
-                 new_size.cy - progress_border_height - text_height - (new_size.cy / 48),
-                 new_size.cx, text_height);
+  UpdateLayout(GetClientRect());
 
   if (progress_bar.IsDefined())
-    progress_bar.Move(progress_horizontal_border,
-                      new_size.cy - progress_border_height + progress_horizontal_border,
-                      new_size.cx - progress_height,
-                      progress_height);
+    progress_bar.Move(progress_bar_position);
 
   Invalidate();
 }
@@ -163,33 +151,23 @@ ProgressWindow::OnPaint(Canvas &canvas)
 {
   canvas.Clear(background_color);
 
-  // Determine window size
-  const unsigned window_width = canvas.GetWidth();
-  const unsigned window_height = canvas.GetHeight();
-
-  PixelRect logo_rect;
-  logo_rect.left = 0;
-  logo_rect.top = 0;
-  logo_rect.right = window_width;
-  logo_rect.bottom = window_height - progress_border_height;
-  logo.draw(canvas, logo_rect);
+  logo.draw(canvas, logo_position);
 
   // Draw progress bar background
-  canvas.Stretch(0, (window_height - progress_border_height),
-                 window_width, progress_border_height,
+  canvas.Stretch(bottom_position.left, bottom_position.top,
+                 bottom_position.GetWidth(),
+                 bottom_position.GetHeight(),
                  bitmap_progress_border);
+
+#ifndef USE_WINUSER
+  canvas.Select(font);
+#endif
+  canvas.SetBackgroundTransparent();
+  canvas.SetTextColor(COLOR_BLACK);
+  canvas.DrawText((message_position.left + message_position.right
+                   - canvas.CalcTextWidth(message.c_str())) / 2,
+                  message_position.top,
+                  message.c_str());
 
   ContainerWindow::OnPaint(canvas);
 }
-
-#ifdef USE_GDI
-
-const Brush *
-ProgressWindow::OnChildColor(Window &window, Canvas &canvas)
-{
-  canvas.SetTextColor(COLOR_BLACK);
-  canvas.SetBackgroundColor(background_color);
-  return &background_brush;
-}
-
-#endif

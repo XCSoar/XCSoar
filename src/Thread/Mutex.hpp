@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -42,8 +42,6 @@ Copyright_License {
 
 #ifndef NDEBUG
 #include "Thread/Handle.hpp"
-#include "Thread/Local.hpp"
-extern ThreadLocalInteger thread_locks_held;
 #endif
 
 /**
@@ -63,14 +61,18 @@ class Mutex {
   ThreadHandle owner;
 #endif
 
-  friend class Cond;
+#ifdef HAVE_POSIX
+  friend class PosixCond;
+#else
+  friend class WindowsCond;
+#endif
   friend class TemporaryUnlock;
 
 public:
   /**
    * Initializes the Mutex
    */
-#if defined(HAVE_POSIX) && defined(NDEBUG) && (!defined(__BIONIC__) || !defined(__clang__))
+#if defined(HAVE_POSIX) && defined(NDEBUG) && defined(__GLIBC__)
   constexpr
 #endif
   Mutex()
@@ -98,9 +100,9 @@ public:
    */
   gcc_pure
   bool IsLockedByCurrent() const {
-    debug_mutex.Lock();
+    debug_mutex.lock();
     bool result = locked && owner.IsInside();
-    debug_mutex.Unlock();
+    debug_mutex.unlock();
     return result;
   }
 #endif
@@ -110,25 +112,23 @@ public:
    */
   void Lock() {
 #ifdef NDEBUG
-    mutex.Lock();
+    mutex.lock();
 #else
-    if (!mutex.TryLock()) {
+    if (!mutex.try_lock()) {
       /* locking has failed - at this point, "locked" and "owner" are
          either not yet update, or "owner" is set to another thread */
       assert(!IsLockedByCurrent());
 
-      mutex.Lock();
+      mutex.lock();
     }
 
     /* we have just obtained the mutex; the "locked" flag must not be
        set */
-    debug_mutex.Lock();
+    debug_mutex.lock();
     assert(!locked);
     locked = true;
     owner = ThreadHandle::GetCurrent();
-    debug_mutex.Unlock();
-
-    ++thread_locks_held;
+    debug_mutex.unlock();
 #endif
   };
 
@@ -136,7 +136,7 @@ public:
    * Tries to lock the Mutex
    */
   bool TryLock() {
-    if (!mutex.TryLock()) {
+    if (!mutex.try_lock()) {
 #ifndef NDEBUG
       assert(!IsLockedByCurrent());
 #endif
@@ -144,13 +144,11 @@ public:
     }
 
 #ifndef NDEBUG
-    debug_mutex.Lock();
+    debug_mutex.lock();
     assert(!locked);
     locked = true;
     owner = ThreadHandle::GetCurrent();
-    debug_mutex.Unlock();
-
-    ++thread_locks_held;
+    debug_mutex.unlock();
 #endif
     return true;
   };
@@ -160,18 +158,14 @@ public:
    */
   void Unlock() {
 #ifndef NDEBUG
-    debug_mutex.Lock();
+    debug_mutex.lock();
     assert(locked);
     assert(owner.IsInside());
     locked = false;
-    debug_mutex.Unlock();
+    debug_mutex.unlock();
 #endif
 
-    mutex.Unlock();
-
-#ifndef NDEBUG
-    --thread_locks_held;
-#endif
+    mutex.unlock();
   }
 };
 
@@ -193,12 +187,33 @@ public:
   ScopeLock(Mutex& the_mutex):scope_mutex(the_mutex) {
     scope_mutex.Lock();
   };
+
   ~ScopeLock() {
     scope_mutex.Unlock();
   }
 
   ScopeLock(const ScopeLock &other) = delete;
   ScopeLock &operator=(const ScopeLock &other) = delete;
+};
+
+/**
+ * Within the scope of an instance, this class will keep a #Mutex
+ * unlocked.
+ */
+class ScopeUnlock {
+  Mutex &mutex;
+
+public:
+  explicit ScopeUnlock(Mutex &_mutex):mutex(_mutex) {
+    mutex.Unlock();
+  };
+
+  ~ScopeUnlock() {
+    mutex.Lock();
+  }
+
+  ScopeUnlock(const ScopeUnlock &other) = delete;
+  ScopeUnlock &operator=(const ScopeUnlock &other) = delete;
 };
 
 /**
@@ -213,19 +228,19 @@ class TemporaryUnlock {
 
 public:
   TemporaryUnlock(Mutex &_mutex):mutex(_mutex) {
-    mutex.debug_mutex.Lock();
+    mutex.debug_mutex.lock();
     assert(mutex.locked);
     assert(mutex.owner.IsInside());
     mutex.locked = false;
-    mutex.debug_mutex.Unlock();
+    mutex.debug_mutex.unlock();
   }
 
   ~TemporaryUnlock() {
-    mutex.debug_mutex.Lock();
+    mutex.debug_mutex.lock();
     assert(!mutex.locked);
     mutex.owner = ThreadHandle::GetCurrent();
     mutex.locked = true;
-    mutex.debug_mutex.Unlock();
+    mutex.debug_mutex.unlock();
   }
 #else
 public:

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -19,7 +19,15 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "PolygonInterior.hpp"
+#include "Math/Line2D.hpp"
+
+static constexpr Point2D<double>
+GeoTo2D(GeoPoint p)
+{
+  return {p.longitude.Native(), p.latitude.Native()};
+}
 
 // Copyright 2001, softSurfer (www.softsurfer.com)
 // This code may be freely used and modified for any purpose
@@ -37,25 +45,16 @@
 //            =0 for P2 on the line
 //            <0 for P2 right of the line
 //    See: the January 2001 Algorithm "Area of 2D and 3D Triangles and Polygons"
-inline static int
+inline static double
 isLeft( const GeoPoint &P0, const GeoPoint &P1, const GeoPoint &P2 )
 {
-    return ( (P1.longitude - P0.longitude) * (P2.latitude - P0.latitude)
-             - (P2.longitude - P0.longitude) * (P1.latitude - P0.latitude) ).Sign();
+  return Line2D<Point2D<double>>(GeoTo2D(P0), GeoTo2D(P1)).LocatePoint(GeoTo2D(P2));
 }
 
 inline static int
 isLeft( const FlatGeoPoint &P0, const FlatGeoPoint &P1, const FlatGeoPoint &P2 )
 {
-  int p = (P1.longitude - P0.longitude) * (P2.latitude - P0.latitude)
-    - (P2.longitude - P0.longitude) * (P1.latitude - P0.latitude);
-  if (p>0) {
-    return 1;
-  }
-  if (p<0) {
-    return -1;
-  }
-  return 0;
+  return Line2D<FlatGeoPoint>(P0, P1).LocatePoint(P2);
 }
 
 //===================================================================
@@ -117,18 +116,18 @@ PolygonInterior(const FlatGeoPoint &P,
   for (auto i = begin, next = std::next(i); next != end;
        i = next, next = std::next(i)) {
     // edge from current to next
-    if (i->GetFlatLocation().latitude <= P.latitude) {
-      // start y <= P.latitude
-      if (next->GetFlatLocation().latitude > P.latitude)
+    if (i->GetFlatLocation().y <= P.y) {
+      // start y <= P.y
+      if (next->GetFlatLocation().y > P.y)
         // an upward crossing
         if (isLeft(i->GetFlatLocation(), next->GetFlatLocation(), P) > 0)
           // P left of edge
           // have a valid up intersect
           ++wn;
     } else {
-      // start y > P.latitude (no test needed)
+      // start y > P.y (no test needed)
 
-      if (next->GetFlatLocation().latitude <= P.latitude)
+      if (next->GetFlatLocation().y <= P.y)
         // a downward crossing
         if (isLeft(i->GetFlatLocation(), next->GetFlatLocation(), P) < 0)
           // P right of edge

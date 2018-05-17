@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,16 +28,14 @@ Copyright_License {
 #include "Menu/MenuData.hpp"
 #include "Util/RadixTree.hpp"
 #include "Util/StaticString.hxx"
-#include "Util/TrivialArray.hpp"
+#include "Util/TrivialArray.hxx"
+#include "Util/TStringView.hxx"
 
 #include <assert.h>
 #include <tchar.h>
 
 #ifdef ENABLE_SDL
-#include <SDL_version.h>
-#if SDL_MAJOR_VERSION >= 2
 #include <SDL_keycode.h>
-#endif
 #endif
 
 struct InputConfig {
@@ -73,7 +71,7 @@ struct InputConfig {
 
   // Key map to Event - Keys (per mode) mapped to events
   unsigned short Key2Event[MAX_MODE][MAX_KEY];		// Points to Events location
-#if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2)
+#ifdef ENABLE_SDL
   /* In SDL2, keycodes without character representations are large values,
   AND-ed with SDLK_SCANCODE_MASK (0x40000000). A seperate array is therefore
   used here and the keycode is stored here with an index without
@@ -103,24 +101,24 @@ struct InputConfig {
   void SetDefaults();
 
   gcc_pure
-  int LookupMode(const TCHAR *name) const {
+  int LookupMode(TStringView name) const noexcept {
     for (unsigned i = 0, size = modes.size(); i < size; ++i)
-      if (modes[i] == name)
+      if (name.Equals(modes[i].c_str()))
         return i;
 
     return -1;
   }
 
-  int AppendMode(const TCHAR *name) {
+  int AppendMode(TStringView name) {
     if (modes.full())
       return -1;
 
-    modes.append() = name;
+    modes.append().assign(name.data, name.size);
     return modes.size() - 1;
   }
 
   gcc_pure
-  int MakeMode(const TCHAR *name) {
+  int MakeMode(TStringView name) {
     int mode = LookupMode(name);
     if (mode < 0)
       mode = AppendMode(name);
@@ -154,7 +152,7 @@ struct InputConfig {
 
     unsigned key_code_idx = key_code;
     auto key_2_event = Key2Event;
-#if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2)
+#ifdef ENABLE_SDL
     if (key_code & SDLK_SCANCODE_MASK) {
       key_code_idx = key_code & ~SDLK_SCANCODE_MASK;
       key_2_event = Key2EventNonChar;
@@ -182,7 +180,7 @@ struct InputConfig {
     assert(mode < MAX_MODE);
 
     auto key_2_event = Key2Event;
-#if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2)
+#ifdef ENABLE_SDL
     if (key_code & SDLK_SCANCODE_MASK) {
       key_2_event = Key2EventNonChar;
       key_code &= ~SDLK_SCANCODE_MASK;

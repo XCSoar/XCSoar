@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ static constexpr unsigned full_trace_size =
   HasLittleMemory() ? 512 : 1024;
 
 static constexpr unsigned contest_trace_size =
-  HasLittleMemory() || IsWindowsCE() ? 128 : 256;
+  HasLittleMemory() ? 128 : 256;
 
 static constexpr unsigned sprint_trace_size =
   IsAncientHardware() ? 96 : 128;
@@ -49,9 +49,10 @@ TraceComputer::TraceComputer()
 void
 TraceComputer::Reset()
 {
-  mutex.Lock();
-  full.clear();
-  mutex.Unlock();
+  {
+    const ScopeLock lock(mutex);
+    full.clear();
+  }
 
   contest.clear();
   sprint.clear();
@@ -60,19 +61,17 @@ TraceComputer::Reset()
 void
 TraceComputer::LockedCopyTo(TracePointVector &v) const
 {
-  mutex.Lock();
+  const ScopeLock lock(mutex);
   full.GetPoints(v);
-  mutex.Unlock();
 }
 
 void
 TraceComputer::LockedCopyTo(TracePointVector &v, unsigned min_time,
                             const GeoPoint &location,
-                            fixed resolution) const
+                            double resolution) const
 {
-  mutex.Lock();
+  const ScopeLock lock(mutex);
   full.GetPoints(v, min_time, location, resolution);
-  mutex.Unlock();
 }
 
 void
@@ -88,9 +87,10 @@ TraceComputer::Update(const ComputerSettings &settings_computer,
 
   const TracePoint point(basic);
 
-  mutex.Lock();
-  full.push_back(point);
-  mutex.Unlock();
+  {
+    const ScopeLock lock(mutex);
+    full.push_back(point);
+  }
 
   // only olc requires trace_sprint
   if (settings_computer.contest.enable) {

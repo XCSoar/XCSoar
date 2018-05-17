@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,7 +25,6 @@
 
 #include "AirspacesInterface.hpp"
 #include "AirspaceActivity.hpp"
-#include "Predicate/AirspacePredicate.hpp"
 #include "Util/Serial.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
 #include "Atmosphere/Pressure.hpp"
@@ -34,34 +33,13 @@
 #include <deque>
 
 class RasterTerrain;
-class AirspaceVisitor;
 class AirspaceIntersectionVisitor;
+class AirspacePredicate;
 
 /**
  * Container for airspaces using kd-tree representation internally for
  * fast geospatial lookups.
- *
- * Complexity analysis (with kdtree):
- *
- *    Find within range (k points found):
- *     O(n^(3/4) + k)
- *
- *    Find intersecting:
- *     O(n^(3/4) + k)
- *
- *    Find nearest:
- *     O(log(n))
- *
- *  Without kd-tree:
- *
- *    Find within range:
- *     O(n)
- *    Find intersecting:
- *     O(n)
- *    Find nearest:
- *     O(n)
  */
-
 class Airspaces : public AirspacesInterface {
   AtmosphericPressure qnh;
   AirspaceActivity activity_mask;
@@ -166,18 +144,31 @@ public:
    */
   void SetActivity(const AirspaceActivity mask);
 
+  gcc_pure
+  const_iterator_range QueryAll() const {
+    auto predicate = boost::geometry::index::satisfies([](const Airspace &){
+        return true;
+      });
+    return {airspace_tree.qbegin(predicate), airspace_tree.qend()};
+  }
+
   /**
-   * Call visitor class on airspaces within range of location.
-   * Note that the visitor is not instantiated separately for each match
+   * Query airspaces within range of location.
    *
    * @param loc location of origin of search
    * @param range distance in meters of search radius
-   * @param visitor visitor class to call on airspaces within range
    */
-  void VisitWithinRange(const GeoPoint &location, fixed range,
-                        AirspaceVisitor &visitor,
-                        const AirspacePredicate &predicate =
-                              AirspacePredicate::always_true) const;
+  gcc_pure
+  const_iterator_range QueryWithinRange(const GeoPoint &location,
+                                        double range) const;
+
+  /**
+   * Query airspaces intersecting the vector (bounding box check
+   * only).  The result is in no specific order.
+   */
+  gcc_pure
+  const_iterator_range QueryIntersecting(const GeoPoint &a,
+                                         const GeoPoint &b) const;
 
   /**
    * Call visitor class on airspaces intersected by vector.
@@ -199,60 +190,21 @@ public:
   }
 
   /**
-   * Call visitor class on airspaces this location is inside
-   * Note that the visitor is not instantiated separately for each match
+   * Query airspaces this location is inside.
    *
    * @param loc location of origin of search
-   * @param visitor visitor class to call on airspaces
-   */
-  void VisitInside(const GeoPoint &location, AirspaceVisitor &visitor) const;
-
-  /**
-   * Search for airspaces within range of the aircraft.
-   *
-   * @param location location of aircraft, from which to search
-   * @param range distance in meters of search radius
-   * @param condition condition to be applied to matches
-   *
-   * @return vector of airspaces intersecting search radius
    */
   gcc_pure
-  const AirspaceVector ScanRange(const GeoPoint &location, fixed range,
-                                 const AirspacePredicate &condition =
-                                       AirspacePredicate::always_true) const;
+  const_iterator_range QueryInside(const GeoPoint &location) const;
 
   /**
-   * Find airspaces the aircraft is inside (taking altitude into account)
+   * Query airspaces the aircraft is inside (taking altitude into
+   * account).
    *
-   * @param state state of aircraft for which to search
-   * @param condition condition to be applied to matches
-   *
-   * @return airspaces enclosing the aircraft
+   * @param loc location of origin of search
    */
   gcc_pure
-  const AirspaceVector FindInside(const AircraftState &state,
-                                  const AirspacePredicate &condition =
-                                        AirspacePredicate::always_true) const;
-
-  /**
-   * Access first airspace in store, for use in iterators.
-   *
-   * @return First airspace in store
-   */
-  gcc_pure
-  AirspaceTree::const_iterator begin() const {
-    return airspace_tree.begin();
-  }
-
-  /**
-   * Access end airspace in store, for use in iterators as end point.
-   *
-   * @return End airspace in store
-   */
-  gcc_pure
-  AirspaceTree::const_iterator end() const {
-    return airspace_tree.end();
-  }
+  const_iterator_range QueryInside(const AircraftState &aircraft) const;
 
   const FlatProjection &GetProjection() const {
     return task_projection;
@@ -274,9 +226,12 @@ public:
    * @return True on change
    */
   bool SynchroniseInRange(const Airspaces &master,
-                          const GeoPoint &location, fixed range,
-                          const AirspacePredicate &condition =
-                                AirspacePredicate::always_true);
+                          const GeoPoint &location, double range,
+                          const AirspacePredicate &condition);
+
+private:
+  gcc_pure
+  AirspaceVector AsVector() const;
 };
 
 #endif

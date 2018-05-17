@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,9 +30,9 @@ void
 StatsComputer::ResetFlight(const bool full)
 {
   last_location = GeoPoint::Invalid();
-  last_climb_start_time = fixed(-1);
-  last_cruise_start_time = fixed(-1);
-  last_thermal_end_time = fixed(-1);
+  last_climb_start_time = -1;
+  last_cruise_start_time = -1;
+  last_thermal_end_time = -1;
 
   if (full)
     flightstats.Reset();
@@ -54,7 +54,7 @@ StatsComputer::DoLogging(const MoreData &basic,
 {
   /// @todo consider putting this sanity check inside Parser
   bool location_jump = basic.location_available && last_location.IsValid() &&
-    basic.location.DistanceS(last_location) > fixed(200);
+    basic.location.DistanceS(last_location) > 200;
 
   last_location = basic.location_available
     ? basic.location : GeoPoint::Invalid();
@@ -70,29 +70,34 @@ StatsComputer::DoLogging(const MoreData &basic,
 
     if (basic.NavAltitudeAvailable())
       flightstats.AddAltitude(calculated.flight.flight_time,
-                              basic.nav_altitude);
+                              basic.nav_altitude,
+                              calculated.task_stats.flight_mode_final_glide);
 
-    if (calculated.task_stats.IsPirkerSpeedAvailable())
+    if (calculated.task_stats.task_valid &&
+        calculated.task_stats.inst_speed_slow >= 0)
       flightstats.AddTaskSpeed(calculated.flight.flight_time,
-                               calculated.task_stats.get_pirker_speed());
+                               calculated.task_stats.inst_speed_slow);
+  }
+
+  if (calculated.flight.flying) {
+    flightstats.AddClimbRate(calculated.flight.flight_time,
+                             calculated.average,
+                             calculated.turn_mode == CirclingMode::CLIMB);
   }
 
   return true;
 }
 
 void
-StatsComputer::OnClimbBase(const DerivedInfo &calculated, fixed StartAlt)
+StatsComputer::OnClimbBase(const DerivedInfo &calculated)
 {
-  flightstats.AddClimbBase(calculated.climb_start_time -
-                           calculated.flight.takeoff_time, StartAlt);
+  // nothing to do here now
 }
 
 void
 StatsComputer::OnClimbCeiling(const DerivedInfo &calculated)
 {
-  flightstats.AddClimbCeiling(calculated.cruise_start_time -
-                              calculated.flight.takeoff_time,
-                              calculated.cruise_start_altitude);
+  // nothing to do here now
 }
 
 /**
@@ -104,7 +109,20 @@ StatsComputer::OnDepartedThermal(const DerivedInfo &calculated)
 {
   assert(calculated.last_thermal.IsDefined());
 
-  flightstats.AddThermalAverage(calculated.last_thermal.lift_rate);
+  auto t_start = calculated.last_thermal.start_time - calculated.flight.takeoff_time;
+  auto t_end = calculated.last_thermal.end_time - calculated.flight.takeoff_time;
+
+  flightstats.AddThermalAverage(t_start, t_end, calculated.last_thermal.lift_rate);
+
+  // ignore failed climbs
+  if (calculated.last_thermal.gain<= 0)
+    return;
+
+  flightstats.AddClimbCeiling(t_end,
+                              calculated.last_thermal.gain
+                              + calculated.last_thermal.start_altitude);
+
+  flightstats.AddClimbBase(t_start, calculated.last_thermal.start_altitude);
 }
 
 void
@@ -114,7 +132,7 @@ StatsComputer::ProcessClimbEvents(const DerivedInfo &calculated)
   case CirclingMode::CLIMB:
     if (calculated.climb_start_time > last_climb_start_time)
       // set altitude for start of circling (as base of climb)
-      OnClimbBase(calculated, calculated.climb_start_altitude);
+      OnClimbBase(calculated);
     break;
 
   case CirclingMode::CRUISE:
@@ -127,12 +145,13 @@ StatsComputer::ProcessClimbEvents(const DerivedInfo &calculated)
   }
 
   if (calculated.last_thermal.IsDefined() &&
-      (negative(last_thermal_end_time) ||
+      (last_thermal_end_time < 0 ||
        calculated.last_thermal.end_time > last_thermal_end_time))
     OnDepartedThermal(calculated);
 
   last_climb_start_time = calculated.climb_start_time;
   last_cruise_start_time = calculated.cruise_start_time;
   last_thermal_end_time = calculated.last_thermal.IsDefined()
-    ? calculated.last_thermal.end_time : fixed(-1);
+    ? calculated.last_thermal.end_time
+    : -1.;
 }

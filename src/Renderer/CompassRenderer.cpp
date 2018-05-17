@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,25 +29,31 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "Util/Macros.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scope.hpp"
+#endif
+
 void
 CompassRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                       const PixelRect rc)
 {
-  RasterPoint pos;
-  pos.y = Layout::Scale(19) + rc.top;
-  pos.x = rc.right - Layout::Scale(19);
-
+  PixelPoint pos(rc.right - Layout::Scale(19),
+                 Layout::Scale(19) + rc.top);
   Draw(canvas, screen_angle, pos);
 }
 
 void
 CompassRenderer::Draw(Canvas &canvas, const Angle screen_angle,
-                      const RasterPoint pos)
+                      const PixelPoint pos)
 {
-  RasterPoint arrow[5] = { { 0, -13 }, { -6, 10 }, { 0, 4 }, { 6, 10 }, { 0, -13 } };
+  BulkPixelPoint arrow[5] = { { 0, -13 }, { -6, 10 }, { 0, 4 }, { 6, 10 }, { 0, -13 } };
 
   canvas.Select(look.compass_pen);
   canvas.Select(look.compass_brush);
+
+#ifdef ENABLE_OPENGL
+  const ScopeAlphaBlend alpha_blend;
+#endif
 
   // North arrow
   PolygonRotateShift(arrow, ARRAY_SIZE(arrow), pos, -screen_angle);
@@ -56,7 +62,7 @@ CompassRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   canvas.Select(look.compass_triangle_pen);
   canvas.Select(look.compass_triangle_brush);
 
-  RasterPoint black_triangle[4] = { { 0, -13 }, { 6, 10}, { 0, 4}, { 0, -13 } };
+  BulkPixelPoint black_triangle[4] = { { 0, -13 }, { 6, 10}, { 0, 4}, { 0, -13 } };
   PolygonRotateShift(black_triangle, ARRAY_SIZE(black_triangle),
                      pos, -screen_angle);
   canvas.DrawPolygon(black_triangle, ARRAY_SIZE(black_triangle));

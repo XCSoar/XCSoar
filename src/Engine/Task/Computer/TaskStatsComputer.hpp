@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,6 +25,7 @@
 
 #include "ElementStatComputer.hpp"
 #include "WindowStatsComputer.hpp"
+#include "Math/Filter.hpp"
 
 class TaskStats;
 
@@ -34,11 +35,14 @@ public:
   ElementStatComputer current_leg;
   WindowStatsComputer window;
 
+  Filter inst_speed_slow;
+  Filter inst_speed_fast;
+
 public:
   /** Reset each element (for incremental speeds). */
-  void reset(TaskStats &data);
+  void Reset(TaskStats &data);
 
-  void ComputeWindow(fixed time, TaskStats &data);
+  void ComputeWindow(double time, TaskStats &data);
 };
 
 #endif

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "ZzipStream.hpp"
 
-#include <zzip/lib.h>
+#include <zzip/util.h>
 
 static int
 jas_zzip_read(jas_stream_obj_t *obj, char *buf, int cnt)
@@ -52,7 +52,7 @@ jas_zzip_close(jas_stream_obj_t *obj)
 {
   const auto f = (struct zzip_file *)obj;
 
-  return zzip_fclose(f);
+  return zzip_file_close(f);
 }
 
 static constexpr jas_stream_ops_t zzip_stream_ops = {
@@ -63,15 +63,15 @@ static constexpr jas_stream_ops_t zzip_stream_ops = {
 };
 
 jas_stream_t *
-OpenJasperZzipStream(const char *path)
+OpenJasperZzipStream(struct zzip_dir *dir, const char *path)
 {
-  const auto f = zzip_fopen(path, "rb");
+  const auto f = zzip_open_rb(dir, path);
   if (f == nullptr)
     return nullptr;
 
   jas_stream_t *stream = jas_stream_create();
   if (stream == nullptr) {
-    zzip_fclose(f);
+    zzip_file_close(f);
     return nullptr;
   }
 

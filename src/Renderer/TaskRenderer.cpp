@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "TaskRenderer.hpp"
-#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Unordered/GotoTask.hpp"
 #include "Engine/Task/Unordered/AbortTask.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
@@ -49,7 +48,7 @@ TaskRenderer::Draw(const AbortTask &task)
 void 
 TaskRenderer::Draw(const OrderedTask &task)
 {
-  tpv.SetBoundingBox(task.GetBoundingBox(screen_bounds));
+  tpv.SetBoundingBox(task.GetTaskProjection().Project(screen_bounds));
   tpv.SetActiveIndex(task.GetActiveIndex());
   for (unsigned i = 0; i < 4; i++) {
     tpv.ResetIndex();

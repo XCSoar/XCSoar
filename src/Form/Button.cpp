@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -18,13 +18,12 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-  }
+}
 */
 
 #include "Form/Button.hpp"
 #include "Form/ActionListener.hpp"
-#include "Look/ButtonLook.hpp"
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #include "Asset.hpp"
 #include "Renderer/TextButtonRenderer.hpp"
 #include "Hardware/Vibrator.hpp"
@@ -162,11 +161,6 @@ bool
 Button::OnKeyDown(unsigned key_code)
 {
   switch (key_code) {
-#ifdef GNAV
-  case VK_F4:
-    // using F16 also as Enter-Key. This allows to use the RemoteStick of Altair to do a "click" on the focused button
-  case VK_F16:
-#endif
   case KEY_RETURN:
   case KEY_SPACE:
     Click();
@@ -178,17 +172,17 @@ Button::OnKeyDown(unsigned key_code)
 }
 
 bool
-Button::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+Button::OnMouseMove(PixelPoint p, unsigned keys)
 {
   if (dragging) {
-    SetDown(IsInside(x, y));
+    SetDown(IsInside(p));
     return true;
   } else
-    return PaintWindow::OnMouseMove(x, y, keys);
+    return PaintWindow::OnMouseMove(p, keys);
 }
 
 bool
-Button::OnMouseDown(PixelScalar x, PixelScalar y)
+Button::OnMouseDown(PixelPoint p)
 {
   if (IsTabStop())
     SetFocus();
@@ -200,7 +194,7 @@ Button::OnMouseDown(PixelScalar x, PixelScalar y)
 }
 
 bool
-Button::OnMouseUp(PixelScalar x, PixelScalar y)
+Button::OnMouseUp(PixelPoint p)
 {
   if (!dragging)
     return true;

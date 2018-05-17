@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -45,7 +45,7 @@ Copyright_License {
 class CanvasRotateShift
 {
 public:
-  CanvasRotateShift(const RasterPoint pos, Angle angle,
+  CanvasRotateShift(const PixelPoint pos, Angle angle,
                     const int scale = 100) {
 #ifdef USE_GLSL
     glm::mat4 matrix = glm::rotate(glm::translate(glm::mat4(),
@@ -63,11 +63,7 @@ public:
 
 #ifdef HAVE_GLES
     glTranslatex((GLfixed)pos.x << 16, (GLfixed)pos.y << 16, 0);
-#ifdef FIXED_MATH
-    GLfixed fixed_angle = angle.Degrees().as_glfixed();
-#else
     GLfixed fixed_angle = angle.Degrees() * (1<<16);
-#endif
     glRotatex(fixed_angle, 0, 0, 1<<16);
 #else
     glTranslatef(pos.x, pos.y, 0.);

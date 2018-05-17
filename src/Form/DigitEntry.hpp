@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2011 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Screen/PaintWindow.hpp"
 #include "Renderer/ButtonRenderer.hpp"
-#include "Math/fixed.hpp"
 
 #include <assert.h>
 #include <stdint.h>
@@ -40,8 +39,7 @@ struct DialogLook;
 
 /**
  * A control that allows entering numbers or other data types digit by
- * digit.  It aims to be usable for both touch screens and knob-only
- * (e.g. Altair).
+ * digit.  It aims to be usable for both touch screens and knob-only.
  */
 class DigitEntry : public PaintWindow {
   static constexpr unsigned MAX_LENGTH = 16;
@@ -189,7 +187,7 @@ public:
 
   void SetValue(int value);
   void SetValue(unsigned value);
-  void SetValue(fixed value);
+  void SetValue(double value);
   void SetValue(RoughTime value);
   void SetValue(Angle value);
 
@@ -200,7 +198,7 @@ public:
   unsigned GetUnsignedValue() const;
 
   gcc_pure
-  fixed GetFixedValue() const;
+  double GetDoubleValue() const;
 
   gcc_pure
   RoughTime GetTimeValue() const;
@@ -259,7 +257,7 @@ protected:
   unsigned GetPositiveInteger() const;
 
   gcc_pure
-  fixed GetPositiveFractional() const;
+  double GetPositiveFractional() const;
 
   void IncrementColumn(unsigned i);
   void DecrementColumn(unsigned i);
@@ -268,12 +266,12 @@ protected:
   int FindColumnAt(unsigned x) const;
 
 private:
-  void SetDigits(fixed degrees, CoordinateFormat format, bool isLatitude);
+  void SetDigits(double degrees, CoordinateFormat format, bool isLatitude);
 
 protected:
   void OnSetFocus() override;
   void OnKillFocus() override;
-  bool OnMouseDown(PixelScalar x, PixelScalar y) override;
+  bool OnMouseDown(PixelPoint p) override;
   bool OnKeyCheck(unsigned key_code) const override;
   bool OnKeyDown(unsigned key_code) override;
   void OnPaint(Canvas &canvas) override;

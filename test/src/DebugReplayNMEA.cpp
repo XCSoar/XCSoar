@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -43,7 +43,8 @@ DebugReplayNMEA::DebugReplayNMEA(FileLineReaderA *_reader,
 }
 
 DebugReplay*
-DebugReplayNMEA::Create(const char *input_file, const tstring &driver_name) {
+DebugReplayNMEA::Create(Path input_file, const tstring &driver_name)
+{
   const struct DeviceRegister *driver = FindDriverByName(driver_name.c_str());
   if (driver == NULL) {
     _ftprintf(stderr, _T("No such driver: %s\n"), driver_name.c_str());
@@ -51,12 +52,6 @@ DebugReplayNMEA::Create(const char *input_file, const tstring &driver_name) {
   }
 
   FileLineReaderA *reader = new FileLineReaderA(input_file);
-  if (reader->error()) {
-    delete reader;
-    fprintf(stderr, "Failed to open %s\n", input_file);
-    return nullptr;
-  }
-
   return new DebugReplayNMEA(reader, driver);
 }
 
@@ -70,7 +65,7 @@ DebugReplayNMEA::Next()
   while ((line = reader->ReadLine()) != NULL) {
     raw_basic.clock = clock.NextClock(raw_basic.time_available
                                       ? raw_basic.time
-                                      : fixed(-1));
+                                      : -1.);
 
     if (!device || !device->ParseNMEA(line, raw_basic))
       parser.ParseLine(line, raw_basic);

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,7 +27,11 @@ Copyright_License {
 #include "IO/TextWriter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Time/BrokenDateTime.hpp"
+#include "OS/Path.hpp"
 #include "OS/FileUtil.hpp"
+#include "OS/UniqueFileDescriptor.hxx"
+
+#include <exception>
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -42,33 +46,27 @@ static TextWriter
 OpenLog()
 {
   static bool initialised = false;
-  static TCHAR path[MAX_PATH];
+  static AllocatedPath path = nullptr;
 
   const bool append = initialised;
   if (!initialised) {
     initialised = true;
 
     /* delete the obsolete log file */
-    LocalPath(path, _T("xcsoar-startup.log"));
-    File::Delete(path);
+    File::Delete(LocalPath(_T("xcsoar-startup.log")));
 
-    LocalPath(path, _T("xcsoar.log"));
+    path = LocalPath(_T("xcsoar.log"));
 
-    {
-      TCHAR old_path[MAX_PATH];
-      LocalPath(old_path, _T("xcsoar-old.log"));
-      File::Replace(path, old_path);
-    }
+    File::Replace(path, LocalPath(_T("xcsoar-old.log")));
 
 #ifdef ANDROID
     /* redirect stdout/stderr to xcsoar-startup.log on Android so we
        get debug logs from libraries and output from child processes
        there */
-    int fd = open(path, O_APPEND|O_CREAT|O_WRONLY, 0666);
-    if (fd >= 0) {
-      dup2(fd, 1);
-      dup2(fd, 2);
-      close(fd);
+    UniqueFileDescriptor fd;
+    if (fd.Open(path.c_str(), O_APPEND|O_CREAT|O_WRONLY, 0666)) {
+      fd.CheckDuplicate(STDOUT_FILENO);
+      fd.CheckDuplicate(STDERR_FILENO);
     }
 #endif
   }
@@ -135,3 +133,29 @@ LogFormat(const TCHAR *Str, ...)
 }
 
 #endif
+
+static void
+LogNestedError(const std::exception &exception)
+{
+  try {
+    std::rethrow_if_nested(exception);
+  } catch (const std::exception &nested) {
+    LogError(nested);
+  } catch (...) {
+    LogString("Unrecognized nested exception");
+  }
+}
+
+void
+LogError(const std::exception &exception)
+{
+  LogString(exception.what());
+  LogNestedError(exception);
+}
+
+void
+LogError(const char *msg, const std::exception &exception)
+{
+  LogFormat("%s: %s", msg, exception.what());
+  LogNestedError(exception);
+}

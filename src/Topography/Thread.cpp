@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2014 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,13 +23,12 @@ Copyright_License {
 
 #include "Thread.hpp"
 #include "TopographyStore.hpp"
-#include "Thread/Util.hpp"
 
 TopographyThread::TopographyThread(TopographyStore &_store,
                                    std::function<void()> &&_callback)
   :StandbyThread("Topography"),
    store(_store),
-   callback(_callback),
+   callback(std::move(_callback)),
    last_bounds(GeoBounds::Invalid()) {}
 
 TopographyThread::~TopographyThread()
@@ -47,13 +46,13 @@ TopographyThread::Trigger(const WindowProjection &_projection)
        threshold for at least one file, which would mean we have to
        update a file which was not updated for the current cache
        bounds */
-    if (negative(scale_threshold) ||
+    if (scale_threshold < 0 ||
         _projection.GetMapScale() >= scale_threshold)
       /* the cache is still fresh */
       return;
   }
 
-  last_bounds = new_bounds.Scale(fixed(1.1));
+  last_bounds = new_bounds.Scale(1.1);
   scale_threshold = store.GetNextScaleThreshold(_projection.GetMapScale());
 
   {
@@ -73,15 +72,13 @@ TopographyThread::Tick()
   while (next_projection.IsValid() && again && !IsStopped()) {
     const WindowProjection projection = next_projection;
 
-    mutex.Unlock();
+    const ScopeUnlock unlock(mutex);
     again = store.ScanVisibility(projection, 1) > 0;
-    mutex.Lock();
   }
 
   /* notify the client that we have updated the topography cache */
   if (callback) {
-    mutex.Unlock();
+    const ScopeUnlock unlock(mutex);
     callback();
-    mutex.Lock();
   }
 }

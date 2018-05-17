@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -59,11 +59,11 @@ TCHAR *FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size,
                       CoordinateFormat format, TCHAR separator = _T(' '));
 
 gcc_pure
-static inline StringBuffer<TCHAR, 32>
+static inline BasicStringBuffer<TCHAR, 32>
 FormatGeoPoint(const GeoPoint &location, CoordinateFormat format,
                TCHAR separator = _T(' '))
 {
-  StringBuffer<TCHAR, 32> buffer;
+  BasicStringBuffer<TCHAR, 32> buffer;
   auto result = FormatGeoPoint(location, buffer.data(), buffer.capacity(),
                                format, separator);
   if (result == nullptr)

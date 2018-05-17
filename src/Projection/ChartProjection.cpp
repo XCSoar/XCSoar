@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,18 +28,18 @@ Copyright_License {
 void
 ChartProjection::Set(const PixelRect &rc,
                      const TaskProjection &task_projection,
-                     fixed radius_factor)
+                     double radius_factor)
 {
   const GeoPoint center = task_projection.GetCenter();
-  const fixed radius = std::max(fixed(10000),
-                                task_projection.ApproxRadius() * radius_factor);
+  const auto radius = std::max(double(10000),
+                               task_projection.ApproxRadius() * radius_factor);
   Set(rc, center, radius);
 }
 
 void
 ChartProjection::Set(const PixelRect &rc, const OrderedTask &task)
 {
-  const fixed radius = std::max(fixed(10000), task.GetTaskRadius());
+  const auto radius = std::max(double(10000), task.GetTaskRadius());
   Set(rc, task.GetTaskCenter(), radius);
 }
 
@@ -49,12 +49,12 @@ ChartProjection::Set(const PixelRect &rc, const OrderedTaskPoint &point)
   GeoBounds bounds = GeoBounds::Invalid();
   point.ScanBounds(bounds);
 
-  Set(rc, TaskProjection(bounds), fixed(1.3));
+  Set(rc, TaskProjection(bounds), 1.3);
 }
 
 void
 ChartProjection::Set(const PixelRect &rc, const GeoPoint &center,
-                     const fixed radius)
+                     const double radius)
 {
   SetMapRect(rc);
   SetScaleFromRadius(radius);

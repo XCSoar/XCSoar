@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@ Copyright_License {
 #include "DataField/Base.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #include "Screen/Features.hpp"
 #include "Dialogs/DataField.hpp"
 
@@ -104,7 +104,7 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
 {
   Create(parent, rc, Caption, CaptionWidth, style);
 
-#if defined(USE_GDI) && !defined(NDEBUG)
+#if defined(USE_WINUSER) && !defined(NDEBUG)
   ::SetWindowText(hWnd, Caption);
 #endif
 }
@@ -198,7 +198,7 @@ WndProperty::OnResize(PixelSize new_size)
 }
 
 bool
-WndProperty::OnMouseDown(PixelScalar x, PixelScalar y)
+WndProperty::OnMouseDown(PixelPoint p)
 {
   if (!IsReadOnly() || HasHelp()) {
     dragging = true;
@@ -212,7 +212,7 @@ WndProperty::OnMouseDown(PixelScalar x, PixelScalar y)
 }
 
 bool
-WndProperty::OnMouseUp(PixelScalar x, PixelScalar y)
+WndProperty::OnMouseUp(PixelPoint p)
 {
   if (dragging) {
     dragging = false;
@@ -231,10 +231,10 @@ WndProperty::OnMouseUp(PixelScalar x, PixelScalar y)
 }
 
 bool
-WndProperty::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+WndProperty::OnMouseMove(PixelPoint p, unsigned keys)
 {
   if (dragging) {
-    const bool inside = IsInside(x, y);
+    const bool inside = IsInside(p);
     if (inside != pressed) {
       pressed = inside;
       Invalidate();
@@ -305,7 +305,7 @@ WndProperty::OnPaint(Canvas &canvas)
 
     PixelSize tsize = canvas.CalcTextSize(caption.c_str());
 
-    RasterPoint org;
+    PixelPoint org;
     if (caption_width < 0) {
       org.x = edit_rc.left;
       org.y = edit_rc.top - tsize.cy;
@@ -352,7 +352,7 @@ WndProperty::OnPaint(Canvas &canvas)
     canvas.Select(look.text_font);
 
     const int x = edit_rc.left + Layout::GetTextPadding();
-    const int canvas_height = edit_rc.bottom - edit_rc.top;
+    const int canvas_height = edit_rc.GetHeight();
     const int text_height = canvas.GetFontHeight();
     const int y = edit_rc.top + (canvas_height - text_height) / 2;
 

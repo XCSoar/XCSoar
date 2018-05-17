@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -47,7 +47,7 @@ ScrollBar::SetSize(const PixelSize size)
     /* with a mouse, the scroll bar can be smaller */
     width = Layout::GetMinimumControlHeight();
   else
-    // thin for ALTAIR b/c no touch screen
+    // thin for devices without touch screen
     width = Layout::SmallScale(12);
 
   // Update the coordinates of the scrollbar
@@ -153,7 +153,7 @@ ScrollBar::Paint(Canvas &canvas) const
   canvas.SelectNullPen();
   canvas.SelectBlackBrush();
 
-  const RasterPoint up_arrow[3] = {
+  const BulkPixelPoint up_arrow[3] = {
     { (up_arrow_rect.left + rc.right) / 2,
       up_arrow_rect.top + arrow_padding },
     { up_arrow_rect.left + arrow_padding,
@@ -163,7 +163,7 @@ ScrollBar::Paint(Canvas &canvas) const
   };
   canvas.DrawTriangleFan(up_arrow, ARRAY_SIZE(up_arrow));
 
-  const RasterPoint down_arrow[3] = {
+  const BulkPixelPoint down_arrow[3] = {
     { (down_arrow_rect.left + rc.right) / 2,
       down_arrow_rect.bottom - arrow_padding },
     { down_arrow_rect.left + arrow_padding,

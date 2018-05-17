@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,11 +23,10 @@ Copyright_License {
 
 #include "Topography/TopographyStore.hpp"
 #include "Topography/TopographyFile.hpp"
-#include "Util/StringAPI.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringAPI.hxx"
+#include "Util/StringCompare.hxx"
 #include "Util/ConvertString.hpp"
 #include "IO/LineReader.hpp"
-#include "OS/PathName.hpp"
 #include "Operation/Operation.hpp"
 #include "Compatibility/path.h"
 #include "Asset.hpp"
@@ -93,12 +92,12 @@ static constexpr LOOKUP_ICON icon_list[] = {
   { nullptr, ResourceId::Null(), ResourceId::Null() }
 };
 
-fixed
-TopographyStore::GetNextScaleThreshold(fixed map_scale) const
+double
+TopographyStore::GetNextScaleThreshold(double map_scale) const
 {
-  fixed result(-1);
+  double result(-1);
   for (auto *file : files) {
-    fixed threshold = file->GetNextScaleThreshold(map_scale);
+    double threshold = file->GetNextScaleThreshold(map_scale);
     if (threshold > result)
       result = threshold;
   }
@@ -201,7 +200,7 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
     strcpy(shape_filename_end + (p - line), ".shp");
 
     // Parse shape range
-    fixed shape_range = fixed(strtod(p + 1, &p)) * 1000;
+    auto shape_range = strtod(p + 1, &p) * 1000;
     if (*p != _T(','))
       continue;
 
@@ -255,14 +254,14 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
     }
 
     // Parse range for displaying labels
-    fixed label_range = shape_range;
+    auto label_range = shape_range;
     if (*p == _T(','))
-      label_range = fixed(strtod(p + 1, &p)) * 1000;
+      label_range = strtod(p + 1, &p) * 1000;
 
     // Parse range for displaying labels with "important" rendering style
-    fixed labelImportantRange = fixed(0);
+    double labelImportantRange = 0;
     if (*p == _T(','))
-      labelImportantRange = fixed(strtod(p + 1, &p)) * 1000;
+      labelImportantRange = strtod(p + 1, &p) * 1000;
 
     // Handle alpha component
     // If not present at all (i.e. v6.6 or earlier file), default to 100% opaque

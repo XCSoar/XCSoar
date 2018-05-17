@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_RASTERTILE_HPP
 #define XCSOAR_RASTERTILE_HPP
 
-#include "Terrain/RasterBuffer.hpp"
+#include "RasterTraits.hpp"
+#include "RasterBuffer.hpp"
 
 #include <stdio.h>
 
@@ -36,8 +37,8 @@ class RasterTile {
   };
 
 public:
-  unsigned int xstart, ystart, xend, yend;
-  unsigned int width, height;
+  unsigned xstart = 0, ystart = 0, xend = 0, yend = 0;
+  unsigned width = 0, height = 0;
 
   /**
    * The distance of this tile to the center of the screen.  This
@@ -50,9 +51,7 @@ public:
   RasterBuffer buffer;
 
 public:
-  RasterTile()
-    :xstart(0), ystart(0), xend(0), yend(0),
-     width(0), height(0) {}
+  RasterTile() = default;
 
   RasterTile(const RasterTile &) = delete;
   RasterTile &operator=(const RasterTile &) = delete;
@@ -124,7 +123,7 @@ public:
    * @param y the pixel row within the tile; may be out of range
    */
   gcc_pure
-  short GetHeight(unsigned x, unsigned y) const;
+  TerrainHeight GetHeight(unsigned x, unsigned y) const;
 
   /**
    * Determine the interpolated height at the specified sub-pixel
@@ -136,15 +135,17 @@ public:
    * @param iy the sub-pixel row for interpolation (0..255)
    */
   gcc_pure
-  short GetInterpolatedHeight(unsigned x, unsigned y,
-                              unsigned ix, unsigned iy) const;
+  TerrainHeight GetInterpolatedHeight(unsigned x, unsigned y,
+                                      unsigned ix, unsigned iy) const;
 
   bool VisibilityChanged(int view_x, int view_y, unsigned view_radius);
 
   void ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
-                short *dest, unsigned size, bool interpolate) const {
-    buffer.ScanLine(ax - (xstart << 8), ay - (ystart << 8),
-                    bx - (xstart << 8), by - (ystart << 8),
+                TerrainHeight *dest, unsigned size, bool interpolate) const {
+    buffer.ScanLine(ax - (xstart << RasterTraits::SUBPIXEL_BITS),
+                    ay - (ystart << RasterTraits::SUBPIXEL_BITS),
+                    bx - (xstart << RasterTraits::SUBPIXEL_BITS),
+                    by - (ystart << RasterTraits::SUBPIXEL_BITS),
                     dest, size, interpolate);
   }
 };

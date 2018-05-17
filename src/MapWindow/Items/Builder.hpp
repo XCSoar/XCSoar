@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -47,15 +47,15 @@ class MapItemListBuilder
 {
   MapItemList &list;
   GeoPoint location;
-  fixed range;
+  double range;
 
 public:
-  MapItemListBuilder(MapItemList &_list, GeoPoint _location, fixed _range)
+  MapItemListBuilder(MapItemList &_list, GeoPoint _location, double _range)
     :list(_list), location(_location), range(_range) {}
 
   void AddLocation(const NMEAInfo &basic, const RasterTerrain *terrain);
   void AddArrivalAltitudes(const ProtectedRoutePlanner &route_planner,
-                     const RasterTerrain *terrain, fixed safety_height);
+                     const RasterTerrain *terrain, double safety_height);
   void AddSelfIfNear(const GeoPoint &self, Angle bearing);
   void AddWaypoints(const Waypoints &waypoints);
   void AddVisibleAirspace(const Airspaces &airspaces,

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2013 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,34 +25,26 @@ Copyright_License {
 #define AIRSPACE_MINIMUM_HPP
 
 #include "Airspaces.hpp"
-#include "AirspaceVisitor.hpp"
 
 template<class Func,
          typename Result=decltype(((Func *)nullptr)->operator()(*(const AbstractAirspace *)nullptr)),
          class Cmp=std::less<Result>>
 gcc_pure
 static inline Result
-FindMinimum(const Airspaces &airspaces, const GeoPoint &location, fixed range,
+FindMinimum(const Airspaces &airspaces, const GeoPoint &location, double range,
             const AirspacePredicate &predicate,
             Func &&func,
             Cmp &&cmp=Cmp())
 {
-  struct FindMinimumVisitor final : AirspaceVisitor, Func, Cmp {
-    Result minimum;
+  Result minimum;
+  for (const auto &i : airspaces.QueryWithinRange(location, range)) {
+    const AbstractAirspace &aa = i.GetAirspace();
+    Result result = func(aa);
+    if (cmp(result, minimum))
+      minimum = result;
+  }
 
-    FindMinimumVisitor(Func &&_func, Cmp &&_cmp)
-      :Func(std::move(_func)), Cmp(std::move(_cmp)) {}
-
-    void Visit(const AbstractAirspace &aa) override {
-      Result result = Func::operator()(aa);
-      if (Cmp::operator()(result, minimum))
-        minimum = result;
-    }
-  };
-
-  FindMinimumVisitor visitor(std::move(func), std::move(cmp));
-  airspaces.VisitWithinRange(location, range, visitor, predicate);
-  return visitor.minimum;
+  return minimum;
 }
 
 #endif

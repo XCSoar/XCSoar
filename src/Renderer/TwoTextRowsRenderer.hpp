@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -69,6 +69,22 @@ public:
 
   void DrawSecondRow(Canvas &canvas, const PixelRect &rc,
                      const TCHAR *text) const;
+
+  /**
+   * Draws a right-aligned column in the first row (but with the
+   * second font which is usually smaller) and returns the new "right"
+   * coordinate.
+   */
+  int DrawRightFirstRow(Canvas &canvas, const PixelRect &rc,
+                        const TCHAR *text) const;
+
+  /**
+   * Draws a right-aligned column in the second row and returns the
+   * new "right" coordinate.
+   */
+  int DrawRightSecondRow(Canvas &canvas, const PixelRect &rc,
+                         const TCHAR *text) const;
+
 };
 
 #endif

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,13 +27,16 @@
 #include "IO/KeyValueFileWriter.hpp"
 #include "Units/System.hpp"
 #include "TestUtil.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
+#include "Util/PrintException.hxx"
+
+#include <stdlib.h>
 
 static void
 TestReader()
 {
   Plane plane;
-  PlaneGlue::ReadFile(plane, _T("test/data/D-4449.xcp"));
+  PlaneGlue::ReadFile(plane, Path(_T("test/data/D-4449.xcp")));
 
   ok1(plane.registration == _T("D-4449"));
   ok1(plane.competition_id == _T("TH"));
@@ -41,11 +44,11 @@ TestReader()
   ok1(plane.handicap == 100);
   ok1(plane.polar_name == _T("Hornet"));
   ok1(equals(plane.polar_shape[0].v,
-             Units::ToSysUnit(fixed(80), Unit::KILOMETER_PER_HOUR)));
+             Units::ToSysUnit(80, Unit::KILOMETER_PER_HOUR)));
   ok1(equals(plane.polar_shape[1].v,
-             Units::ToSysUnit(fixed(120), Unit::KILOMETER_PER_HOUR)));
+             Units::ToSysUnit(120, Unit::KILOMETER_PER_HOUR)));
   ok1(equals(plane.polar_shape[2].v,
-             Units::ToSysUnit(fixed(160), Unit::KILOMETER_PER_HOUR)));
+             Units::ToSysUnit(160, Unit::KILOMETER_PER_HOUR)));
   ok1(equals(plane.polar_shape[0].w, -0.606));
   ok1(equals(plane.polar_shape[1].w, -0.99));
   ok1(equals(plane.polar_shape[2].w, -1.918));
@@ -66,24 +69,22 @@ TestWriter()
   plane.type = _T("Hornet");
   plane.handicap = 100;
   plane.polar_name = _T("Hornet");
-  plane.polar_shape[0].v = Units::ToSysUnit(fixed(80), Unit::KILOMETER_PER_HOUR);
-  plane.polar_shape[1].v = Units::ToSysUnit(fixed(120), Unit::KILOMETER_PER_HOUR);
-  plane.polar_shape[2].v = Units::ToSysUnit(fixed(160), Unit::KILOMETER_PER_HOUR);
-  plane.polar_shape[0].w = fixed(-0.606);
-  plane.polar_shape[1].w = fixed(-0.99);
-  plane.polar_shape[2].w = fixed(-1.918);
-  plane.reference_mass = fixed(318);
-  plane.dry_mass = fixed(302);
-  plane.max_ballast = fixed(100);
+  plane.polar_shape[0].v = Units::ToSysUnit(80, Unit::KILOMETER_PER_HOUR);
+  plane.polar_shape[1].v = Units::ToSysUnit(120, Unit::KILOMETER_PER_HOUR);
+  plane.polar_shape[2].v = Units::ToSysUnit(160, Unit::KILOMETER_PER_HOUR);
+  plane.polar_shape[0].w = -0.606;
+  plane.polar_shape[1].w = -0.99;
+  plane.polar_shape[2].w = -1.918;
+  plane.reference_mass = 318;
+  plane.dry_mass = 302;
+  plane.max_ballast = 100;
   plane.dump_time = 90;
-  plane.max_speed = fixed(41.666);
-  plane.wing_area = fixed(9.8);
+  plane.max_speed = 41.666;
+  plane.wing_area = 9.8;
 
-  PlaneGlue::WriteFile(plane, _T("output/D-4449.xcp"));
+  PlaneGlue::WriteFile(plane, Path(_T("output/D-4449.xcp")));
 
-  FileLineReader reader(_T("output/D-4449.xcp"));
-  if (reader.error())
-    return;
+  FileLineReader reader(Path(_T("output/D-4449.xcp")));
 
   unsigned count = 0;
   bool found1 = false, found2 = false, found3 = false, found4 = false;
@@ -136,11 +137,14 @@ TestWriter()
 }
 
 int main(int argc, char **argv)
-{
+try {
   plan_tests(30);
 
   TestReader();
   TestWriter();
 
   return exit_status();
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

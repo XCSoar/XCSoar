@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,12 +28,12 @@ TaskCruiseEfficiency::TaskCruiseEfficiency(const std::vector<OrderedTaskPoint *>
                                            const GlideSettings &settings,
                                            const GlidePolar &gp):
   TaskSolveTravelled(tps, activeTaskPoint, _aircraft,
-                     settings, gp, fixed(0.1), fixed(2.0))
+                     settings, gp, 0.1, 2.0)
 {
 }
 
-fixed
-TaskCruiseEfficiency::f(const fixed ce)
+double
+TaskCruiseEfficiency::f(const double ce)
 {
   tm.set_cruise_efficiency(ce);
   return time_error();

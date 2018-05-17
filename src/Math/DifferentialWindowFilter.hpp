@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@
 #define XCSOAR_DERIVE_WINDOW_FILTER_HPP
 
 #include "Util/OverwritingRingBuffer.hpp"
-#include "fixed.hpp"
+#include "Compiler.h"
 
 /**
  * A filter that stores a certain amount of samples and calculates the
@@ -35,7 +35,7 @@
 template<unsigned N>
 class DifferentialWindowFilter {
   struct Sample {
-    fixed x, y;
+    double x, y;
   };
 
   OverwritingRingBuffer<Sample, N> buffer;
@@ -49,11 +49,11 @@ public:
     return buffer.empty();
   }
 
-  fixed GetFirstX() const {
+  double GetFirstX() const {
     return buffer.peek().x;
   }
 
-  fixed GetLastX() const {
+  double GetLastX() const {
     return buffer.last().x;
   }
 
@@ -61,25 +61,25 @@ public:
    * Returns the difference between the first and the last X sample.
    * Must not be called on an empty object.
    */
-  fixed GetDeltaX() const {
+  double GetDeltaX() const {
     return GetLastX() - GetFirstX();
   }
 
   /**
    * Same as GetDeltaX(), but returns -1 if the object is empty.
    */
-  fixed GetDeltaXChecked() const {
-    return IsEmpty() ? fixed(-1) : GetDeltaX();
+  double GetDeltaXChecked() const {
+    return IsEmpty() ? -1. : GetDeltaX();
   }
 
-  fixed GetDeltaY() const {
+  double GetDeltaY() const {
     return buffer.last().y - buffer.peek().y;
   }
 
   /**
    * Add a new sample.
    */
-  void Push(fixed x, fixed y) {
+  void Push(double x, double y) {
     buffer.push({x, y});
   }
 
@@ -88,7 +88,7 @@ public:
    * at least the specified delta?
    */
   gcc_pure
-  bool HasEnoughData(fixed min_delta_x) const {
+  bool HasEnoughData(double min_delta_x) const {
     return !IsEmpty() && GetDeltaX() >= min_delta_x;
   }
 
@@ -97,9 +97,9 @@ public:
    * be called after HasEnoughData() has returned true.
    */
   gcc_pure
-  fixed DeriveAverage() const {
-    const fixed delta_x = GetDeltaX();
-    const fixed delta_y = GetDeltaY();
+  double DeriveAverage() const {
+    auto delta_x = GetDeltaX();
+    auto delta_y = GetDeltaY();
     return delta_y / delta_x;
   }
 };

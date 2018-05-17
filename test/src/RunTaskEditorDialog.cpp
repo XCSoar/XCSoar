@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -140,11 +140,7 @@ int main(int argc, char **argv)
 #else
 int WINAPI
 WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-#ifdef _WIN32_WCE
-        LPWSTR lpCmdLine,
-#else
         LPSTR lpCmdLine2,
-#endif
         int nCmdShow)
 #endif
 {
@@ -158,7 +154,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   SingleWindow main_window;
   main_window.set(_T("STATIC"), _T("RunTaskEditorDialog"),
                   0, 0, 640, 480);
-  ((Window &)main_window).InstallWndProc();
   main_window.Show();
 
   Fonts::Initialize();

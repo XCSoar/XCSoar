@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,10 +26,6 @@ Copyright_License {
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "Resources.hpp"
 #include "Util/Macros.hpp"
-
-#ifdef USE_GDI
-#include "Screen/GDI/AlphaBlend.hpp"
-#endif
 
 const RGB8Color AirspaceLook::preset_colors[] = {
   RGB8_RED,
@@ -55,11 +51,8 @@ AirspaceClassLook::Initialise(const AirspaceClassRendererSettings &settings)
 {
   fill_color = Color(settings.fill_color);
 
-#ifdef HAVE_ALPHA_BLEND
-  if (AlphaBlendAvailable())
-#endif
 #if defined(HAVE_ALPHA_BLEND) || !defined(HAVE_HATCHED_BRUSH)
-    solid_brush.Create(fill_color);
+  solid_brush.Create(fill_color);
 #endif
 
   if (settings.border_width != 0)

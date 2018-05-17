@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_ATMOSPHERE_CUSONDE_HPP
 #define XCSOAR_ATMOSPHERE_CUSONDE_HPP
 
-#include "Math/fixed.hpp"
+#include "Atmosphere/Temperature.hpp"
 
 struct NMEAInfo;
 struct DerivedInfo;
@@ -41,53 +41,60 @@ public:
   static constexpr unsigned NUM_LEVELS = 100;
 
   struct Level {
-    /** Environmental temperature in degrees C */
-    fixed airTemp;
-    /** DewPoint in degrees C */
-    fixed dewpoint;
-    /** Dry temperature in degrees C */
-    fixed tempDry;
-    /** ThermalIndex in degrees C */
-    fixed thermalIndex;
+    /** Environmental temperature in K */
+    Temperature air_temperature;
+    /** DewPoint in K */
+    Temperature dewpoint;
+    /** Dry temperature in K */
+    Temperature dry_temperature;
+    /** ThermalIndex in K */
+    Temperature thermal_index;
 
-    void UpdateTemps(fixed humidity, fixed temperature);
-    void UpdateThermalIndex(fixed h_agl, fixed max_ground_temperature);
+    void UpdateTemps(bool humidity_valid, double humidity, Temperature temperature);
+    void UpdateThermalIndex(double h_agl, Temperature max_ground_temperature);
 
-    /** Number of measurements */
-    unsigned nmeasurements;
+    /** Has any data */
+    bool has_data;
+    /** Has dewpoint data */
+    bool has_dewpoint;
 
     /** Estimated ThermalHeight with data of this level */
-    fixed thermalHeight;
+    double thermal_height;
     /** Estimated CloudBase with data of this level */
-    fixed cloudBase;
+    double cloud_base;
 
     bool empty() const {
-      return nmeasurements == 0;
+      return !has_data;
+    }
+
+    bool dewpoint_empty() const {
+      return !has_dewpoint;
     }
 
     void Reset() {
-      nmeasurements = 0;
+      has_data = false;
+      has_dewpoint = false;
     }
   };
 
   /** Expected temperature maximum on the ground */
-  fixed maxGroundTemperature;
+  Temperature max_ground_temperature;
   /** Height of ground above MSL */
-  fixed hGround;
+  double ground_height;
   unsigned short last_level;
   Level cslevels[NUM_LEVELS];
 
   /** Estimated ThermailHeight */
-  fixed thermalHeight;
+  double thermal_height;
   /** Estimated CloudBase */
-  fixed cloudBase;
+  double cloud_base;
 
   void Reset();
 
   void UpdateMeasurements(const NMEAInfo &basic, const DerivedInfo &calculated);
   void FindCloudBase(unsigned short level);
   void FindThermalHeight(unsigned short level);
-  void SetForecastTemperature(fixed val);
+  void SetForecastTemperature(Temperature temperature);
 };
 
 #endif

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,8 @@ Copyright_License {
 #include "Polar/PolarFileGlue.hpp"
 #include "Parser.hpp"
 #include "IO/FileLineReader.hpp"
-#include "IO/TextWriter.hpp"
+#include "IO/FileOutputStream.hxx"
+#include "IO/BufferedOutputStream.hxx"
 
 bool
 PolarGlue::LoadFromFile(PolarInfo &polar, NLineReader &reader)
@@ -37,37 +38,28 @@ PolarGlue::LoadFromFile(PolarInfo &polar, NLineReader &reader)
   return false;
 }
 
-bool
-PolarGlue::LoadFromFile(PolarInfo &polar, const TCHAR* path)
+void
+PolarGlue::LoadFromFile(PolarInfo &polar, Path path)
 {
-  FileLineReaderA *reader = new FileLineReaderA(path);
-  if (reader == nullptr)
-    return false;
-
-  if (reader->error()) {
-    delete reader;
-    return false;
-  }
-
-  LoadFromFile(polar, *reader);
-  delete reader;
-  return true;
+  FileLineReaderA reader(path);
+  LoadFromFile(polar, reader);
 }
 
-bool
-PolarGlue::SaveToFile(const PolarInfo &polar, TextWriter &writer)
+void
+PolarGlue::SaveToFile(const PolarInfo &polar, BufferedOutputStream &writer)
 {
   char buffer[256];
   FormatPolar(polar, buffer, 256);
-  return writer.WriteLine(buffer);
+  writer.Write(buffer);
+  writer.Write('\n');
 }
 
-bool
-PolarGlue::SaveToFile(const PolarInfo &polar, const TCHAR* path)
+void
+PolarGlue::SaveToFile(const PolarInfo &polar, Path path)
 {
-  TextWriter writer(path);
-  if (!writer.IsOpen())
-    return false;
-
-  return SaveToFile(polar, writer);
+  FileOutputStream file(path);
+  BufferedOutputStream writer(file);
+  SaveToFile(polar, writer);
+  writer.Flush();
+  file.Commit();
 }

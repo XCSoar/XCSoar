@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_INPUT_EVENTS_HPP
 #define XCSOAR_INPUT_EVENTS_HPP
 
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>
@@ -110,7 +109,7 @@ namespace InputEvents
   void sub_PanCursor(int dx, int dy);
   void sub_AutoZoom(int vswitch);
   void sub_ScaleZoom(int vswitch);
-  void sub_SetZoom(fixed value);
+  void sub_SetZoom(double value);
 
   // -------
 
@@ -124,7 +123,6 @@ namespace InputEvents
   void eventBallast(const TCHAR *misc);
   void eventBugs(const TCHAR *misc);
   void eventCalculator(const TCHAR *misc);
-  void eventChangeInfoBoxType(const TCHAR *misc);
   void eventChecklist(const TCHAR *misc);
   void eventClearAirspaceWarnings(const TCHAR *misc);
   void eventClearStatusMessages(const TCHAR *misc);
@@ -145,7 +143,6 @@ namespace InputEvents
   void eventRepeatStatusMessage(const TCHAR *misc);
   void eventRun(const TCHAR *misc);
   void eventScreenModes(const TCHAR *misc);
-  void eventSelectInfoBox(const TCHAR *misc);
   void eventDevice(const TCHAR *misc);
   void eventSendNMEA(const TCHAR *misc);
   void eventSendNMEAPort1(const TCHAR *misc);
@@ -183,6 +180,8 @@ namespace InputEvents
   void eventWeather(const TCHAR *misc);
   void eventQuickMenu(const TCHAR *misc);
   void eventFileManager(const TCHAR *misc);
+  void eventRunLuaFile(const TCHAR *misc);
+  void eventResetTask(const TCHAR *misc);
 
   // -------
 };

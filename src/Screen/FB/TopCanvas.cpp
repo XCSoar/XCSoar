@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,8 +24,8 @@ Copyright_License {
 #include "Screen/Custom/TopCanvas.hpp"
 #include "Screen/Canvas.hpp"
 
-#ifdef DITHER
-#include "../Memory/Dither.hpp"
+#ifdef USE_FB
+#include "Screen/Memory/Export.hpp"
 #endif
 
 #if defined(KOBO) && defined(USE_FB)
@@ -69,6 +69,12 @@ static unsigned
 GetHeight(const struct fb_var_screeninfo &vinfo)
 {
   return TranslateDimension(vinfo.yres);
+}
+
+static PixelSize
+GetSize(const struct fb_var_screeninfo &vinfo)
+{
+  return PixelSize(GetWidth(vinfo), GetHeight(vinfo));
 }
 
 #endif
@@ -216,47 +222,54 @@ TopCanvas::Create(PixelSize new_size,
   };
 #endif
 
-  const auto width = ::GetWidth(vinfo), height = ::GetHeight(vinfo);
+  new_size = ::GetSize(vinfo);
 #elif defined(USE_VFB)
-  const unsigned width = new_size.cx, height = new_size.cy;
+  /* allocate buffer as requested by caller */
 #else
 #error No implementation
 #endif
 
-  buffer.Allocate(width, height);
+  buffer.Allocate(new_size.cx, new_size.cy);
 }
 
 #ifdef USE_FB
 
+inline PixelSize
+TopCanvas::GetNativeSize() const
+{
+  struct fb_var_screeninfo vinfo;
+  ioctl(fd, FBIOGET_VSCREENINFO, &vinfo);
+  return ::GetSize(vinfo);
+}
+
 bool
 TopCanvas::CheckResize()
 {
-  /* get new frame buffer dimensions and check if they have changed */
-  struct fb_var_screeninfo vinfo;
-  ioctl(fd, FBIOGET_VSCREENINFO, &vinfo);
-
-  const auto new_width = ::GetWidth(vinfo), new_height = ::GetHeight(vinfo);
-  if (new_width == buffer.width && new_height == buffer.height)
-    return false;
-
-  /* yes, they did change: update the size and allocate a new buffer */
-
-  struct fb_fix_screeninfo finfo;
-  ioctl(fd, FBIOGET_FSCREENINFO, &finfo);
-
-  map_pitch = finfo.line_length;
-
-  buffer.Free();
-  buffer.Allocate(new_width, new_height);
-  return true;
+  return CheckResize(GetNativeSize());
 }
 
 #endif
 
-void
-TopCanvas::OnResize(PixelSize new_size)
+bool
+TopCanvas::CheckResize(const PixelSize new_native_size)
 {
-  // TODO: is this even possible?
+  const PixelSize new_size = new_native_size;
+  if (new_size == GetSize())
+    /* no change */
+    return false;
+
+  /* changed: update the size and allocate a new buffer */
+
+#ifdef USE_FB
+  struct fb_fix_screeninfo finfo;
+  ioctl(fd, FBIOGET_FSCREENINFO, &finfo);
+
+  map_pitch = finfo.line_length;
+#endif
+
+  buffer.Free();
+  buffer.Allocate(new_size.cx, new_size.cy);
+  return true;
 }
 
 Canvas
@@ -269,176 +282,6 @@ void
 TopCanvas::Unlock()
 {
 }
-
-#ifdef USE_FB
-
-#ifdef GREYSCALE
-
-#ifdef DITHER
-
-#else
-
-static uint32_t
-GreyscaleToRGB8(Luminosity8 luminosity)
-{
-  const unsigned value = luminosity.GetLuminosity();
-
-  return value | (value << 8) | (value << 16) | (value << 24);
-}
-
-static void
-CopyGreyscaleToRGB8(uint32_t *gcc_restrict dest,
-                     const Luminosity8 *gcc_restrict src,
-                     unsigned width)
-{
-  for (unsigned i = 0; i < width; ++i)
-    *dest++ = GreyscaleToRGB8(*src++);
-}
-
-static RGB565Color
-GreyscaleToRGB565(Luminosity8 luminosity)
-{
-  const unsigned value = luminosity.GetLuminosity();
-
-  return RGB565Color(value, value, value);
-}
-
-static void
-CopyGreyscaleToRGB565(RGB565Color *gcc_restrict dest,
-                      const Luminosity8 *gcc_restrict src,
-                      unsigned width)
-{
-  for (unsigned i = 0; i < width; ++i)
-    *dest++ = GreyscaleToRGB565(*src++);
-}
-
-#endif
-
-#ifdef KOBO
-
-static void
-CopyGreyscale(uint8_t *dest_pixels, unsigned dest_pitch,
-              const uint8_t *src_pixels, unsigned src_pitch,
-              unsigned width, unsigned height)
-{
-  for (unsigned y = 0; y < height;
-       ++y, dest_pixels += dest_pitch, src_pixels += src_pitch)
-    std::copy_n(src_pixels, width, dest_pixels);
-}
-
-#endif
-
-static void
-CopyFromGreyscale(
-#ifdef DITHER
-                  Dither &dither,
-#endif
-#ifdef KOBO
-                  bool enable_dither,
-#endif
-                  void *dest_pixels, unsigned dest_pitch, unsigned dest_bpp,
-                  ConstImageBuffer<GreyscalePixelTraits> src)
-{
-  const uint8_t *src_pixels = reinterpret_cast<const uint8_t *>(src.data);
-
-  const unsigned width = src.width, height = src.height;
-
-#ifdef KOBO
-  if (!enable_dither) {
-    CopyGreyscale((uint8_t *)dest_pixels, dest_pitch,
-                  src_pixels, src.pitch,
-                  width, height);
-    return;
-  }
-#endif
-
-#ifdef DITHER
-
-  dither.DitherGreyscale(src_pixels, src.pitch,
-                         (uint8_t *)dest_pixels,
-                         dest_pitch,
-                         width, height);
-
-#ifndef KOBO
-  if (dest_bpp == 4) {
-    const unsigned n_pixels = (dest_pitch / dest_bpp)
-      * height;
-    int32_t *d = (int32_t *)dest_pixels + n_pixels;
-    const int8_t *end = (int8_t *)dest_pixels;
-    const int8_t *s = end + n_pixels;
-
-    while (s != end)
-      *--d = *--s;
-  }
-#endif
-
-#else
-
-  const unsigned src_pitch = src.pitch;
-
-  if (dest_bpp == 2) {
-    for (unsigned row = height; row > 0;
-         --row, src_pixels += src_pitch, dest_pixels += dest_pitch)
-      CopyGreyscaleToRGB565((RGB565Color *)dest_pixels,
-                            (const Luminosity8 *)src_pixels, width);
-  } else {
-    for (unsigned row = height; row > 0;
-         --row, src_pixels += src_pitch, dest_pixels += dest_pitch)
-      CopyGreyscaleToRGB8((uint32_t *)dest_pixels,
-                           (const Luminosity8 *)src_pixels, width);
-  }
-
-#endif
-}
-
-#else
-
-static RGB565Color
-ToRGB565(BGRA8Color c)
-{
-  return RGB565Color(c.Red(), c.Green(), c.Blue());
-}
-
-static void
-BGRAToRGB565(RGB565Color *dest, const BGRA8Color *src, unsigned n)
-{
-  for (unsigned i = 0; i < n; ++i)
-    dest[i] = ToRGB565(src[i]);
-}
-
-static void
-CopyFromBGRA(void *_dest_pixels, unsigned _dest_pitch, unsigned dest_bpp,
-             ConstImageBuffer<BGRAPixelTraits> src)
-{
-  assert(dest_bpp == 4 || dest_bpp == 2);
-
-  const uint32_t dest_pitch = _dest_pitch / dest_bpp;
-  const uint32_t src_pitch = src.pitch / sizeof(*src.data);
-
-  if (dest_bpp == 2) {
-    /* convert to RGB565 */
-
-    RGB565Color *dest_pixels = reinterpret_cast<RGB565Color *>(_dest_pixels);
-    const BGRA8Color *src_pixels = src.data;
-
-    for (unsigned row = src.height; row > 0;
-         --row, src_pixels += src_pitch, dest_pixels += dest_pitch)
-      BGRAToRGB565((RGB565Color *)dest_pixels,
-                   (const BGRA8Color *)src_pixels,
-                   src.width);
-  } else {
-    uint32_t *dest_pixels = reinterpret_cast<uint32_t *>(_dest_pixels);
-    const uint32_t *src_pixels = reinterpret_cast<const uint32_t *>(src.data);
-
-    for (unsigned row = src.height; row > 0;
-         --row, src_pixels += src_pitch, dest_pixels += dest_pitch)
-      std::copy_n(src_pixels, src.width, dest_pixels);
-  }
-}
-
-#endif
-
-#endif /* USE_FB */
 
 void
 TopCanvas::Flip()

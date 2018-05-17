@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -78,17 +78,17 @@ AlternateTask::ClientUpdate(const AircraftState &state_now,
   reservable_priority_queue<Divert, DivertVector, AlternateRank> q;
   q.reserve(task_points.size());
 
-  const fixed straight_distance = state_now.location.Distance(destination);
+  const auto straight_distance = state_now.location.Distance(destination);
 
   for (auto i = task_points.begin(), end = task_points.end(); i != end; ++i) {
     const TaskWaypoint &tp = i->point;
-    const Waypoint &wp = tp.GetWaypoint();
+    auto wp = tp.GetWaypointPtr();
 
-    const fixed diversion_distance =
-        ::DoubleDistance(state_now.location, wp.location, destination);
-    const fixed delta = straight_distance - diversion_distance;
+    const auto diversion_distance =
+        ::DoubleDistance(state_now.location, wp->location, destination);
+    const auto delta = straight_distance - diversion_distance;
 
-    q.push(Divert(wp, i->solution, delta));
+    q.push(Divert(std::move(wp), i->solution, delta));
   }
 
   // now push results onto the list, best first.
@@ -97,7 +97,7 @@ AlternateTask::ClientUpdate(const AircraftState &state_now,
 
     // only add if not already in the list (from previous stage in two
     // stage process)
-    if (!IsWaypointInAlternates(top.waypoint))
+    if (!IsWaypointInAlternates(*top.waypoint))
       alternates.push_back(top);
 
     q.pop();
@@ -114,7 +114,7 @@ bool
 AlternateTask::IsWaypointInAlternates(const Waypoint& waypoint) const
 {
   for (auto it = alternates.begin(), end = alternates.end(); it != end; ++it)
-    if (it->waypoint == waypoint)
+    if (*it->waypoint == waypoint)
       return true;
 
   return false;

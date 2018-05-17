@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,6 +29,7 @@ Copyright_License {
 
 #include "Geoid.hpp"
 #include "Geo/GeoPoint.hpp"
+#include "Math/Util.hpp"
 
 #include <stdint.h>
 
@@ -36,7 +37,7 @@ Copyright_License {
 
 extern "C" const uint8_t egm96s_dem[];
 
-fixed
+double
 EGM96::LookupSeparation(const GeoPoint &pt)
 {
   int ilat, ilon;
@@ -45,9 +46,9 @@ EGM96::LookupSeparation(const GeoPoint &pt)
 
   int offset = ilat * 180 + ilon;
   if (offset >= EGM96SIZE)
-    return fixed(0);
+    return 0;
   if (offset < 0)
-    return fixed(0);
+    return 0;
 
-  return fixed((int)egm96s_dem[offset] - 127);
+  return (int)egm96s_dem[offset] - 127;
 }

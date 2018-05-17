@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2012 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,8 +31,6 @@
 #define XCSOAR_EVENT_PIPE_HPP
 
 #include "UniqueFileDescriptor.hxx"
-
-#include <assert.h>
 
 /**
  * This class can be used to wake up a thread idling in select() or

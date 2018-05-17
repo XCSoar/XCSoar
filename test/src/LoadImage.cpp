@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -33,10 +33,10 @@ Copyright_License {
 #include "Main.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Util/NumberParser.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 #include "ResourceId.hpp"
 
-static tstring path;
+static AllocatedPath path = nullptr;
 
 #ifdef USE_GDI
 static ResourceId id = ResourceId::Null();
@@ -45,7 +45,7 @@ static ResourceId id = ResourceId::Null();
 static void
 ParseCommandLine(Args &args)
 {
-  path = args.ExpectNextT();
+  path = args.ExpectNextPath();
 
 #ifdef USE_GDI
   TCHAR *endptr;
@@ -65,7 +65,7 @@ Main()
     ? bitmap.Load(id)
     :
 #endif
-    bitmap.LoadFile(path.c_str());
+    bitmap.LoadFile(path);
   if (!success)
     fprintf(stderr, "Failed to load image\n");
 }

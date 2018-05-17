@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,9 +27,11 @@ Copyright_License {
 #include "Device/Port/ConfiguredPort.hpp"
 #include "Device/Config.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
-#include "IO/Async/GlobalIOThread.hpp"
+#include "IO/Async/GlobalAsioThread.hpp"
+#include "IO/Async/AsioThread.hpp"
 #include "Util/StaticString.hxx"
-#include "Math/fixed.hpp"
+#include "Util/PrintException.hxx"
+#include "Math/Util.hpp"
 #include "Time/PeriodClock.hpp"
 
 #include <stdio.h>
@@ -41,25 +43,18 @@ Copyright_License {
 #endif
 
 int main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "PORT");
-  const DeviceConfig config = ParsePortArgs(args);
+  DebugPort debug_port(args);
   args.ExpectEnd();
 
-  InitialiseIOThread();
+  ScopeGlobalAsioThread global_asio_thread;
 
-  Port *port = OpenPort(config, nullptr, *(DataHandler *)nullptr);
-  if (port == nullptr) {
-    DeinitialiseIOThread();
-    fprintf(stderr, "Failed to open port\n");
-    return EXIT_FAILURE;
-  }
+  auto port = debug_port.Open(*asio_thread, *(DataHandler *)nullptr);
 
   ConsoleOperationEnvironment env;
 
   if (!port->WaitConnected(env)) {
-    delete port;
-    DeinitialiseIOThread();
     fprintf(stderr, "Failed to connect the port\n");
     return EXIT_FAILURE;
   }
@@ -70,19 +65,19 @@ int main(int argc, char **argv)
   PeriodClock pressure_clock;
   PeriodClock battery_clock;
 
-  fixed pressure = fixed(101300);
+  double pressure = 101300;
   unsigned battery_level = 11;
   while (true) {
     if (pressure_clock.CheckUpdate(48)) {
       NarrowString<16> sentence;
 
       int elapsed_ms = start_clock.Elapsed();
-      fixed elapsed = fixed(elapsed_ms) / 1000;
-      fixed vario = sin(elapsed / 3) * cos(elapsed / 10) *
-        cos(elapsed / 20 + fixed(2)) * 3;
+      auto elapsed = elapsed_ms / 1000.;
+      auto vario = sin(elapsed / 3) * cos(elapsed / 10) *
+        cos(elapsed / 20 + 2) * 3;
 
-      fixed pressure_vario = -vario * fixed(12.5);
-      fixed delta_pressure = pressure_vario * 48 / 1000;
+      auto pressure_vario = -vario * 12.5;
+      auto delta_pressure = pressure_vario * 48 / 1000;
       pressure += delta_pressure;
 
       sentence = "_PRS ";
@@ -110,4 +105,7 @@ int main(int argc, char **argv)
         battery_level--;
     }
   }
+} catch (const std::exception &exception) {
+  PrintException(exception);
+  return EXIT_FAILURE;
 }

@@ -1,5 +1,4 @@
-CXX_FEATURES = -fno-exceptions -fno-rtti
-CXX_FEATURES += -std=gnu++0x
+CXX_FEATURES = -std=gnu++14
 CXX_FEATURES += -fno-threadsafe-statics
 CXX_FEATURES += -fmerge-all-constants
 
@@ -7,19 +6,17 @@ ifeq ($(CLANG),n)
 CXX_FEATURES += -fconserve-space -fno-operator-names
 endif
 
-ifneq ($(TARGET),WINE)
 C_FEATURES = -std=gnu99
-else
-# libwine fails with -std=gnu99 due to funny "extern inline" tricks in
-# winnt.h
-C_FEATURES =
-endif
 
 # produce position independent code when compiling the python library
 ifeq ($(MAKECMDGOALS),python)
 CXX_FEATURES += -fPIC
 C_FEATURES += -fPIC
 LDFLAGS += -fPIC -shared
+endif
+
+ifneq ($(USE_LD),)
+LDFLAGS += -fuse-ld=$(USE_LD)
 endif
 
 ifeq ($(HAVE_WIN32),n)
@@ -37,5 +34,5 @@ ALL_CPPFLAGS = $(TARGET_INCLUDES) $(INCLUDES) $(TARGET_CPPFLAGS) $(CPPFLAGS) $(E
 ALL_CXXFLAGS = $(OPTIMIZE) $(FLAGS_PROFILE) $(SANITIZE_FLAGS) $(CXX_FEATURES) $(TARGET_CXXFLAGS) $(CXXFLAGS) $(EXTRA_CXXFLAGS)
 ALL_CFLAGS = $(OPTIMIZE) $(FLAGS_PROFILE) $(SANITIZE_FLAGS) $(C_FEATURES) $(CFLAGS) $(EXTRA_CFLAGS)
 
-ALL_LDFLAGS = $(filter-out -emit-llvm,$(OPTIMIZE)) $(TARGET_LDFLAGS) $(FLAGS_PROFILE) $(SANITIZE_FLAGS) $(LDFLAGS) $(EXTRA_LDFLAGS)
+ALL_LDFLAGS = $(OPTIMIZE_LDFLAGS) $(TARGET_LDFLAGS) $(FLAGS_PROFILE) $(SANITIZE_FLAGS) $(LDFLAGS) $(EXTRA_LDFLAGS)
 ALL_LDLIBS = $(TARGET_LDLIBS) $(COVERAGE_LDLIBS) $(LDLIBS) $(EXTRA_LDLIBS)

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,44 +24,55 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_TCP_CLIENT_PORT_HPP
 #define XCSOAR_DEVICE_TCP_CLIENT_PORT_HPP
 
-#include "SocketPort.hpp"
+#include "BufferedPort.hpp"
+
+#include <boost/asio/ip/tcp.hpp>
 
 /**
  * A #Port implementation that connects to a TCP port.
  */
 class TCPClientPort final
-  : public SocketPort
+  : public BufferedPort
 {
-#ifdef HAVE_POSIX
-  /**
-   * The unconnected socket.  This will be moved to SocketPort::socket
-   * as soon as the connection has been established.
-   */
-  SocketDescriptor connecting;
-#endif
+  boost::asio::ip::tcp::resolver resolver;
+  boost::asio::ip::tcp::socket socket;
+
+  char input[4096];
+
+  PortState state = PortState::LIMBO;
 
 public:
-  TCPClientPort(PortListener *_listener, DataHandler &_handler)
-    :SocketPort(_listener, _handler)
-#ifdef HAVE_POSIX
-    , connecting(SocketDescriptor::Undefined())
-#endif
-  {}
-
-#ifdef HAVE_POSIX
+  TCPClientPort(boost::asio::io_service &io_service,
+                PortListener *_listener, DataHandler &_handler);
   virtual ~TCPClientPort();
-#endif
 
   bool Connect(const char *host, unsigned port);
 
-#ifdef HAVE_POSIX
   /* virtual methods from class Port */
-  virtual PortState GetState() const override;
+  PortState GetState() const override {
+    return state;
+  }
 
-protected:
-  /* virtual methods from class SocketEventHandler */
-  bool OnSocketEvent(SocketDescriptor s, unsigned mask) override;
-#endif
+  bool Drain() override {
+    /* writes are synchronous */
+    return true;
+  }
+
+  bool SetBaudrate(unsigned baud_rate) override {
+    return true;
+  }
+
+  unsigned GetBaudrate() const override {
+    return 0;
+  }
+
+  size_t Write(const void *data, size_t length) override;
+
+private:
+  void OnResolved(const boost::system::error_code &ec,
+                  boost::asio::ip::tcp::resolver::iterator i);
+  void OnConnect(const boost::system::error_code &ec);
+  void OnRead(const boost::system::error_code &ec, size_t nbytes);
 };
 
 #endif

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,7 +21,8 @@ Copyright_License {
 }
 */
 
-#include "WeatherDialogs.hpp"
+#include "NOAAList.hpp"
+#include "NOAADetails.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/JobDialog.hpp"
 #include "Language/Language.hpp"
@@ -31,30 +32,20 @@ Copyright_License {
 
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
-#include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Form/Button.hpp"
+#include "Form/ButtonPanel.hpp"
+#include "Form/ActionListener.hpp"
 #include "Widget/ListWidget.hpp"
+#include "Widget/ButtonPanelWidget.hpp"
 #include "Weather/NOAAGlue.hpp"
 #include "Weather/NOAAStore.hpp"
 #include "Weather/NOAAUpdater.hpp"
-#include "Weather/METAR.hpp"
-#include "Util/TrivialArray.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/TrivialArray.hxx"
+#include "Util/StringAPI.hxx"
 #include "Compiler.h"
 #include "Renderer/NOAAListRenderer.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
-
-struct NOAAListItem
-{
-  StaticString<5> code;
-  NOAAStore::iterator iterator;
-
-  gcc_pure
-  bool operator<(const NOAAListItem &i2) const {
-    return StringCollate(code, i2.code) < 0;
-  }
-};
 
 class NOAAListWidget final
   : public ListWidget, private ActionListener {
@@ -65,14 +56,30 @@ class NOAAListWidget final
     REMOVE,
   };
 
+  ButtonPanelWidget *buttons_widget;
+
   Button *details_button, *add_button, *update_button, *remove_button;
 
-  TrivialArray<NOAAListItem, 20> stations;
+  struct ListItem {
+    StaticString<5> code;
+    NOAAStore::iterator iterator;
+
+    gcc_pure
+    bool operator<(const ListItem &i2) const {
+      return StringCollate(code, i2.code) < 0;
+    }
+  };
+
+  TrivialArray<ListItem, 20> stations;
 
   TwoTextRowsRenderer row_renderer;
 
 public:
-  void CreateButtons(WidgetDialog &dialog);
+  void SetButtonPanel(ButtonPanelWidget &_buttons) {
+    buttons_widget = &_buttons;
+  }
+
+  void CreateButtons(ButtonPanel &buttons);
 
 private:
   void UpdateList();
@@ -107,17 +114,19 @@ private:
 };
 
 void
-NOAAListWidget::CreateButtons(WidgetDialog &dialog)
+NOAAListWidget::CreateButtons(ButtonPanel &buttons)
 {
-  details_button = dialog.AddButton(_("Details"), *this, DETAILS);
-  add_button = dialog.AddButton(_("Add"), *this, ADD);
-  update_button = dialog.AddButton(_("Update"), *this, UPDATE);
-  remove_button = dialog.AddButton(_("Remove"), *this, REMOVE);
+  details_button = buttons.Add(_("Details"), *this, DETAILS);
+  add_button = buttons.Add(_("Add"), *this, ADD);
+  update_button = buttons.Add(_("Update"), *this, UPDATE);
+  remove_button = buttons.Add(_("Remove"), *this, REMOVE);
 }
 
 void
 NOAAListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
+  CreateButtons(buttons_widget->GetButtonPanel());
+
   const DialogLook &look = UIGlobals::GetDialogLook();
   CreateList(parent, look, rc,
              row_renderer.CalculateLayout(*look.list.font_bold,
@@ -137,7 +146,7 @@ NOAAListWidget::UpdateList()
   stations.clear();
 
   for (auto i = noaa_store->begin(), end = noaa_store->end(); i != end; ++i) {
-    NOAAListItem item;
+    ListItem item;
     item.code = i->GetCodeT();
     item.iterator = i;
     stations.push_back(item);
@@ -268,25 +277,14 @@ NOAAListWidget::OnAction(int id)
   }
 }
 
-void
-dlgNOAAListShowModal()
+Widget *
+CreateNOAAListWidget()
 {
-  NOAAListWidget widget;
-  WidgetDialog dialog(UIGlobals::GetDialogLook());
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _("METAR and TAF"), &widget);
-  dialog.AddButton(_("Close"), mrOK);
-  widget.CreateButtons(dialog);
-  dialog.EnableCursorSelection();
-
-  dialog.ShowModal();
-  dialog.StealWidget();
+  NOAAListWidget *list = new NOAAListWidget();
+  ButtonPanelWidget *buttons =
+    new ButtonPanelWidget(list, ButtonPanelWidget::Alignment::BOTTOM);
+  list->SetButtonPanel(*buttons);
+  return buttons;
 }
 
-#else
-void
-dlgNOAAListShowModal()
-{
-  ShowMessageBox(_("This function is not available on your platform yet."),
-              _("Error"), MB_OK);
-}
 #endif

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,13 +27,31 @@ Copyright_License {
 #include "Android/Bitmap.hpp"
 #include "Android/NativeView.hpp"
 #include "Android/Main.hpp"
+#include "OS/Path.hpp"
 #include "ResourceId.hpp"
 #include "android_drawable.h"
 
 Bitmap::Bitmap(ResourceId id)
-  :bmp(nullptr), texture(nullptr), interpolation(false)
 {
   Load(id);
+}
+
+Bitmap::Bitmap(Bitmap &&src)
+  :bmp(src.bmp),
+   uncompressed(std::move(src.uncompressed)),
+   type(src.type),
+   texture(src.texture),
+   size(src.size),
+   interpolation(src.interpolation),
+   flipped(src.flipped)
+{
+  src.bmp = nullptr;
+  src.texture = nullptr;
+
+  if (IsDefined()) {
+    RemoveSurfaceListener(src);
+    AddSurfaceListener(*this);
+  }
 }
 
 static const char *
@@ -57,7 +75,7 @@ LoadResourceBitmap(ResourceId id)
 }
 
 bool
-Bitmap::Set(JNIEnv *env, jobject _bmp, Type _type)
+Bitmap::Set(JNIEnv *env, jobject _bmp, Type _type, bool flipped)
 {
   assert(bmp == nullptr);
   assert(_bmp != nullptr);
@@ -72,7 +90,7 @@ Bitmap::Set(JNIEnv *env, jobject _bmp, Type _type)
 
   AddSurfaceListener(*this);
 
-  if (surface_valid && !MakeTexture()) {
+  if (surface_valid && !MakeTexture(bmp, type, flipped)) {
     Reset();
     return false;
   }
@@ -81,15 +99,16 @@ Bitmap::Set(JNIEnv *env, jobject _bmp, Type _type)
 }
 
 bool
-Bitmap::MakeTexture()
+Bitmap::MakeTexture(jobject _bmp, Type _type, bool flipped)
 {
-  assert(bmp != nullptr);
+  assert(_bmp != nullptr);
 
   jint result[5];
-  if (!native_view->bitmapToTexture(bmp, type == Bitmap::Type::MONO, result))
+  if (!native_view->bitmapToTexture(_bmp, _type == Bitmap::Type::MONO, result))
     return false;
 
-  texture = new GLTexture(result[0], result[1], result[2], result[3], result[4]);
+  texture = new GLTexture(result[0], PixelSize(result[1], result[2]),
+                          PixelSize(result[3], result[4]), flipped);
   if (interpolation) {
     texture->Bind();
     texture->EnableInterpolation();
@@ -113,26 +132,24 @@ Bitmap::Load(ResourceId id, Type _type)
 }
 
 bool
-Bitmap::LoadStretch(ResourceId id, unsigned zoom)
+Bitmap::LoadFile(Path path)
 {
-  assert(zoom > 0);
-
-  // XXX
-  return Load(id);
-}
-
-bool
-Bitmap::LoadFile(const TCHAR *path)
-{
-  assert(path != nullptr && *path != _T('\0'));
+  assert(path != nullptr && !path.IsEmpty());
 
   Reset();
 
-  auto *new_bmp = native_view->loadFileBitmap(path);
+  jobject new_bmp;
+  bool flipped = false;
+  if (path.MatchesExtension(_T(".tif")) || path.MatchesExtension(_T(".tiff"))) {
+    new_bmp = native_view->loadFileTiff(path);
+    flipped = true;
+  } else {
+    new_bmp = native_view->loadFileBitmap(path);
+  }
   if (new_bmp == nullptr)
     return false;
 
-  return Set(Java::GetEnv(), new_bmp, Type::STANDARD);
+  return Set(Java::GetEnv(), new_bmp, Type::STANDARD, flipped);
 }
 
 void
@@ -145,6 +162,9 @@ Bitmap::Reset()
     bmp = nullptr;
 
     RemoveSurfaceListener(*this);
+  } else if (uncompressed.IsDefined()) {
+    uncompressed = UncompressedImage();
+    RemoveSurfaceListener(*this);
   }
 
   delete texture;
@@ -154,15 +174,18 @@ Bitmap::Reset()
 void
 Bitmap::SurfaceCreated()
 {
-  assert(bmp != nullptr);
+  assert(bmp != nullptr || uncompressed.IsDefined());
 
-  MakeTexture();
+  if (bmp != nullptr)
+    MakeTexture(bmp, type);
+  else if (uncompressed.IsDefined())
+    MakeTexture(uncompressed, type);
 }
 
 void
 Bitmap::SurfaceDestroyed()
 {
-  assert(bmp != nullptr);
+  assert(bmp != nullptr || uncompressed.IsDefined());
 
   delete texture;
   texture = nullptr;

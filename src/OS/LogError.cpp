@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -51,27 +51,6 @@ LogLastError(const TCHAR *fmt, ...)
   StripRight(msg);
 
   LogFormat(_T("%s: %s"), buffer, msg);
-}
-
-#endif
-
-#ifdef HAVE_POSIX
-
-#include <string.h>
-#include <errno.h>
-
-void
-LogErrno(const TCHAR *fmt, ...)
-{
-  const int error = errno;
-
-  TCHAR buffer[1024];
-  va_list ap;
-  va_start(ap, fmt);
-  _vsntprintf(buffer, ARRAY_SIZE(buffer), fmt, ap);
-  va_end(ap);
-
-  LogFormat(_T("%s: %s"), buffer, strerror(error));
 }
 
 #endif

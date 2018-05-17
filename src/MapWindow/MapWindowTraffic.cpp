@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,6 +30,7 @@ Copyright_License {
 #include "Renderer/TrafficRenderer.hpp"
 #include "FLARM/Friends.hpp"
 #include "Tracking/SkyLines/Data.hpp"
+#include "Util/StringCompare.hxx"
 
 /**
  * Draws the FLARM traffic icons onto the given canvas
@@ -37,7 +38,7 @@ Copyright_License {
  */
 void
 MapWindow::DrawFLARMTraffic(Canvas &canvas,
-                            const RasterPoint aircraft_pos) const
+                            const PixelPoint aircraft_pos) const
 {
   // Return if FLARM icons on moving map are disabled
   if (!GetMapSettings().show_flarm_on_map)
@@ -53,7 +54,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
   // if zoomed in too far out, dont draw traffic since it will be too close to
   // the glider and so will be meaningless (serves only to clutter, cant help
   // the pilot)
-  if (projection.GetMapScale() > fixed(7300))
+  if (projection.GetMapScale() > 7300)
     return;
 
   canvas.Select(*traffic_look.font);
@@ -70,7 +71,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     GeoPoint target_loc = traffic.location;
 
     // Points for the screen coordinates for the icon, name and average climb
-    RasterPoint sc, sc_name, sc_av;
+    PixelPoint sc, sc_name, sc_av;
 
     // If FLARM target not on the screen, move to the next one
     if (!projection.GeoToScreenIfVisible(target_loc, sc))
@@ -99,7 +100,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
         TextInBox(canvas, traffic.name, sc_name.x, sc_name.y,
                   mode, GetClientRect());
 
-      if (traffic.climb_rate_avg30s >= fixed(0.1)) {
+      if (traffic.climb_rate_avg30s >= 0.1) {
         // If average climb data available draw it to the canvas
         TCHAR label_avg[100];
         FormatUserVerticalSpeed(traffic.climb_rate_avg30s,
@@ -125,14 +126,14 @@ MapWindow::DrawTeammate(Canvas &canvas) const
   const TeamInfo &teamcode_info = Calculated();
 
   if (teamcode_info.teammate_available) {
-    RasterPoint sc;
+    PixelPoint sc;
     if (render_projection.GeoToScreenIfVisible(teamcode_info.teammate_location,
                                                  sc))
       traffic_look.teammate_icon.Draw(canvas, sc);
   }
 }
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
 
 void
 MapWindow::DrawSkyLinesTraffic(Canvas &canvas) const
@@ -144,7 +145,7 @@ MapWindow::DrawSkyLinesTraffic(Canvas &canvas) const
 
   ScopeLock protect(skylines_data->mutex);
   for (auto &i : skylines_data->traffic) {
-    RasterPoint pt;
+    PixelPoint pt;
     if (render_projection.GeoToScreenIfVisible(i.second.location, pt)) {
       traffic_look.teammate_icon.Draw(canvas, pt);
     }

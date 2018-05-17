@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,15 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_CAI302_POCKET_NAV_HPP
 #define XCSOAR_CAI302_POCKET_NAV_HPP
 
-#include "Math/fixed.hpp"
-
 class Port;
 class OperationEnvironment;
 
 namespace CAI302 {
-  bool PutMacCready(Port &port, fixed mc, OperationEnvironment &env);
-  bool PutBugs(Port &port, fixed bugs, OperationEnvironment &env);
-  bool PutBallast(Port &port, fixed fraction, OperationEnvironment &env);
+  bool PutMacCready(Port &port, double mc, OperationEnvironment &env);
+  bool PutBugs(Port &port, double bugs, OperationEnvironment &env);
+  bool PutBallast(Port &port, double fraction, OperationEnvironment &env);
 }
 
 #endif

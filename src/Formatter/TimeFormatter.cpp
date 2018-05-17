@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,8 @@ Copyright_License {
 
 #include "TimeFormatter.hpp"
 #include "Time/BrokenDateTime.hpp"
-#include "Util/StringUtil.hpp"
+#include "Math/Util.hpp"
+#include "Util/StringCompare.hxx"
 #include "Util/StaticString.hxx"
 
 #include <stdio.h>
@@ -48,9 +49,9 @@ FormatISO8601(TCHAR *buffer, const BrokenDateTime &stamp)
 #endif
 
 void
-FormatTime(TCHAR* buffer, fixed _time)
+FormatTime(TCHAR* buffer, double _time)
 {
-  if (negative(_time)) {
+  if (_time < 0) {
     *buffer++ = _T('-');
     _time = -_time;
   }
@@ -61,15 +62,15 @@ FormatTime(TCHAR* buffer, fixed _time)
 }
 
 void
-FormatTimeLong(TCHAR* buffer, fixed _time)
+FormatTimeLong(TCHAR* buffer, double _time)
 {
-  if (negative(_time)) {
+  if (_time < 0) {
     *buffer++ = _T('-');
     _time = -_time;
   }
 
   const BrokenTime time = BrokenTime::FromSecondOfDayChecked((unsigned)_time);
-  _time -= fixed((int)_time);
+  _time -= double((int)_time);
   unsigned millisecond = uround(_time * 1000);
 
   _stprintf(buffer, _T("%02u:%02u:%02u.%03u"),
@@ -91,20 +92,28 @@ FormatSignedTimeHHMM(TCHAR* buffer, int _time)
 void
 FormatTimeTwoLines(TCHAR *buffer1, TCHAR *buffer2, int _time)
 {
-  if ((unsigned)abs(_time) >= 24u * 3600u) {
+  if (_time >= 24 * 3600) {
     _tcscpy(buffer1, _T(">24h"));
     buffer2[0] = '\0';
     return;
   }
+  if (_time <= -24 * 3600) {
+    _tcscpy(buffer1, _T("<-24h"));
+    buffer2[0] = '\0';
+    return;
+  }
+  if (_time < 0) {
+    *buffer1++ = _T('-');
+    _time = -_time;
+  }
 
-  const BrokenTime time = BrokenTime::FromSecondOfDay(abs(_time));
+  const BrokenTime time = BrokenTime::FromSecondOfDay(_time);
 
   if (time.hour > 0) { // hh:mm, ss
     // Set Value
     _stprintf(buffer1, _T("%02u:%02u"), time.hour, time.minute);
     _stprintf(buffer2, _T("%02u"), time.second);
-
-  } else { // mm:ss
+  } else { // mm'ss
     _stprintf(buffer1, _T("%02u'%02u"), time.minute, time.second);
     buffer2[0] = '\0';
   }

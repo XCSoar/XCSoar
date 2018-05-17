@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Screen/Init.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #include "../test/src/Fonts.hpp"
 #include "Language/Language.hpp"
 #include "Form/ActionListener.hpp"
@@ -124,7 +124,7 @@ bool
 KoboMenuWidget::KeyPress(unsigned key_code)
 {
   switch (key_code) {
-#ifdef USE_LINUX_INPUT
+#ifdef KOBO
   case KEY_POWER:
     dialog.OnAction(POWEROFF);
     return true;

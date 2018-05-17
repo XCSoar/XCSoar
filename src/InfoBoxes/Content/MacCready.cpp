@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,16 +27,14 @@ Copyright_License {
 #include "InfoBoxes/Panel/MacCreadyEdit.hpp"
 #include "InfoBoxes/Panel/MacCreadySetup.hpp"
 #include "Interface.hpp"
-#include "ActionInterface.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Language/Language.hpp"
-#include "Profile/Profile.hpp"
 
 #include <tchar.h>
 
 static void
-SetVSpeed(InfoBoxData &data, fixed value)
+SetVSpeed(InfoBoxData &data, double value)
 {
   TCHAR buffer[32];
   FormatUserVerticalSpeed(value, buffer, false);
@@ -75,32 +73,4 @@ InfoBoxContentMacCready::Update(InfoBoxData &data)
 
   const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
   data.SetCommentFromSpeed(common_stats.V_block, false);
-}
-
-bool
-InfoBoxContentMacCready::HandleKey(const InfoBoxKeyCodes keycode)
-{
-  const fixed step = Units::ToSysVSpeed(GetUserVerticalSpeedStep());
-  TaskBehaviour &task_behaviour = CommonInterface::SetComputerSettings().task;
-
-  switch (keycode) {
-  case ibkUp:
-    ActionInterface::OffsetManualMacCready(step);
-    return true;
-
-  case ibkDown:
-    ActionInterface::OffsetManualMacCready(-step);
-    return true;
-
-  case ibkLeft:
-    task_behaviour.auto_mc = false;
-    Profile::Set(ProfileKeys::AutoMc, false);
-    return true;
-
-  case ibkRight:
-    task_behaviour.auto_mc = true;
-    Profile::Set(ProfileKeys::AutoMc, true);
-    return true;
-  }
-  return false;
 }

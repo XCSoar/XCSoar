@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,8 +28,8 @@ Copyright_License {
 #include "IGCDeclaration.hpp"
 #include "Time/BrokenDate.hpp"
 #include "Time/BrokenTime.hpp"
-#include "Util/CharUtil.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/CharUtil.hxx"
+#include "Util/StringAPI.hxx"
 
 #include <stdlib.h>
 
@@ -307,13 +307,13 @@ IGCParseLocation(const char *buffer, GeoPoint &location)
       (lon_char != 'E' && lon_char != 'W'))
     return false;
 
-  location.latitude = Angle::Degrees(fixed(lat_degrees) +
-                                     fixed(lat_minutes) / 60000);
+  location.latitude = Angle::Degrees(lat_degrees +
+                                     lat_minutes / 60000.);
   if (lat_char == 'S')
     location.latitude.Flip();
 
-  location.longitude = Angle::Degrees(fixed(lon_degrees) +
-                                      fixed(lon_minutes) / 60000);
+  location.longitude = Angle::Degrees(lon_degrees +
+                                      lon_minutes / 60000.);
   if (lon_char == 'W')
     location.longitude.Flip();
 

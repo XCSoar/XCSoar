@@ -1,29 +1,29 @@
 /*
  Copyright_License {
 
- XCSoar Glide Computer - http://www.xcsoar.org/
- Copyright (C) 2000-2015 The XCSoar Project
- A detailed list of copyright holders can be found in the file "AUTHORS".
+  XCSoar Glide Computer - http://www.xcsoar.org/
+  Copyright (C) 2000-2016 The XCSoar Project
+  A detailed list of copyright holders can be found in the file "AUTHORS".
 
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- as published by the Free Software Foundation; either version 2
- of the License, or (at your option) any later version.
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
 
- You should have received a copy of the GNU General Public License
- along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- }
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+}
  */
 
 #include "Task/TaskFileSeeYou.hpp"
 #include "Util/ExtractParameters.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include "Util/Macros.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
@@ -46,12 +46,12 @@ struct SeeYouTaskInformation {
   /** True = RT, False = AAT */
   bool wp_dis;
   /** AAT task time in seconds */
-  fixed task_time;
+  double task_time;
   /** MaxAltStart in meters */
-  fixed max_start_altitude;
+  double max_start_altitude;
 
   SeeYouTaskInformation():
-    wp_dis(true), task_time(fixed(0)), max_start_altitude(fixed(0)) {}
+    wp_dis(true), task_time(0), max_start_altitude(0) {}
 };
 
 struct SeeYouTurnpointInformation {
@@ -69,19 +69,19 @@ struct SeeYouTurnpointInformation {
   bool is_line;
   bool reduce;
 
-  fixed radius1, radius2, max_altitude;
+  double radius1, radius2, max_altitude;
   Angle angle1, angle2, angle12;
 
   SeeYouTurnpointInformation():
     valid(false), style(SYMMETRICAL), is_line(false), reduce(false),
-    radius1(fixed(500)), radius2(fixed(500)),
-    max_altitude(fixed(0)),
+    radius1(500), radius2(500),
+    max_altitude(0),
     angle1(Angle::Zero()),
     angle2(Angle::Zero()),
     angle12(Angle::Zero()) {}
 };
 
-static fixed
+static double
 ParseTaskTime(const TCHAR* str)
 {
   int hh = 0, mm = 0, ss = 0;
@@ -92,7 +92,7 @@ ParseTaskTime(const TCHAR* str)
     if (str != end && _tcslen(str + 3) > 3 && str[5] == _T(':'))
       ss = _tcstol(str + 6, nullptr, 10);
   }
-  return fixed(ss + mm * 60 + hh * 3600);
+  return ss + mm * 60 + hh * 3600;
 }
 
 static SeeYouTurnpointInformation::Style
@@ -119,7 +119,7 @@ ParseAngle(const TCHAR* str)
   return Angle::Degrees(angle);
 }
 
-static fixed
+static double
 ParseRadius(const TCHAR* str)
 {
   int radius = 500;
@@ -128,17 +128,17 @@ ParseRadius(const TCHAR* str)
   if (str == end)
     radius = 500;
 
-  return fixed(radius);
+  return radius;
 }
 
-static fixed
+static double
 ParseMaxAlt(const TCHAR* str)
 {
-  fixed maxalt = fixed(0);
+  double maxalt = 0;
   TCHAR* end;
-  maxalt = fixed(_tcstod(str, &end));
+  maxalt = _tcstod(str, &end);
   if (str == end)
-    return fixed(0);
+    return 0;
 
   if (_tcslen(end) >= 2 && end[0] == _T('f') && end[1] == _T('t'))
     maxalt = Units::ToSysUnit(maxalt, Unit::FEET);
@@ -233,7 +233,7 @@ ParseOZs(SeeYouTurnpointInformation turnpoint_infos[], const TCHAR *params[],
  * @param turnpoint_infos Loads this with CU task tp info
  */
 static void
-ParseCUTaskDetails(FileLineReader &reader, SeeYouTaskInformation *task_info,
+ParseCUTaskDetails(TLineReader &reader, SeeYouTaskInformation *task_info,
                    SeeYouTurnpointInformation turnpoint_infos[])
 {
   // Read options/observation zones
@@ -265,27 +265,27 @@ ParseCUTaskDetails(FileLineReader &reader, SeeYouTaskInformation *task_info,
 
 static bool isKeyhole(const SeeYouTurnpointInformation &turnpoint_infos)
 {
-  return (fabs(turnpoint_infos.angle1.Degrees() - fixed(45)) < fixed(2) &&
-          fabs(turnpoint_infos.radius1 - fixed(10000)) < fixed(2) &&
-          fabs(turnpoint_infos.angle2.Degrees() - fixed(180)) < fixed(2) &&
-          fabs(turnpoint_infos.radius2 - fixed(500)) < fixed(2));
+  return (fabs(turnpoint_infos.angle1.Degrees() - 45) < 2 &&
+          fabs(turnpoint_infos.radius1 - 10000) < 2 &&
+          fabs(turnpoint_infos.angle2.Degrees() - 180) < 2 &&
+          fabs(turnpoint_infos.radius2 - 500) < 2);
 }
 
 static bool isBGAFixedCourseZone(const SeeYouTurnpointInformation &turnpoint_infos)
 {
-  return (fabs(turnpoint_infos.angle1.Degrees() - fixed(45)) < fixed(2) &&
-          fabs(turnpoint_infos.radius1 - fixed(20000)) < fixed(2) &&
-          fabs(turnpoint_infos.angle2.Degrees() - fixed(180)) < fixed(2) &&
-          fabs(turnpoint_infos.radius2 - fixed(500)) < fixed(2));
+  return (fabs(turnpoint_infos.angle1.Degrees() - 45) < 2 &&
+          fabs(turnpoint_infos.radius1 - 20000) < 2 &&
+          fabs(turnpoint_infos.angle2.Degrees() - 180) < 2 &&
+          fabs(turnpoint_infos.radius2 - 500) < 2);
 }
 
 static bool isBGAEnhancedOptionZone(const SeeYouTurnpointInformation
                                     &turnpoint_infos)
 {
-  return (fabs(turnpoint_infos.angle1.Degrees() - fixed(90)) < fixed(2) &&
-          fabs(turnpoint_infos.radius1 - fixed(10000)) < fixed(2) &&
-          fabs(turnpoint_infos.angle2.Degrees() - fixed(180)) < fixed(2) &&
-          fabs(turnpoint_infos.radius2 - fixed(500)) < fixed(2));
+  return (fabs(turnpoint_infos.angle1.Degrees() - 90) < 2 &&
+          fabs(turnpoint_infos.radius1 - 10000) < 2 &&
+          fabs(turnpoint_infos.angle2.Degrees() - 180) < 2 &&
+          fabs(turnpoint_infos.radius2 - 500) < 2);
 }
 
 gcc_pure
@@ -334,12 +334,12 @@ CalcIntermediateAngle(const SeeYouTurnpointInformation &turnpoint_infos,
  */
 static ObservationZonePoint*
 CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
-         unsigned pos, unsigned size, const Waypoint *wps[],
+         unsigned pos, unsigned size, const WaypointPtr wps[],
          TaskFactoryType factType)
 {
   ObservationZonePoint* oz = nullptr;
   const bool is_intermediate = (pos > 0) && (pos < (size - 1));
-  const Waypoint *wp = wps[pos];
+  const Waypoint *wp = &*wps[pos];
 
   if (!turnpoint_infos.valid)
     return nullptr;
@@ -360,7 +360,7 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
     oz = new LineSectorZone(wp->location, turnpoint_infos.radius1);
 
   // special case "Cylinder"
-  else if (fabs(turnpoint_infos.angle1.Degrees() - fixed(180)) < fixed(1) )
+  else if (fabs(turnpoint_infos.angle1.Degrees() - 180) < 1 )
     oz = new CylinderZone(wp->location, turnpoint_infos.radius1);
 
   else if (factType == TaskFactoryType::RACING) {
@@ -385,8 +385,8 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
     const Angle RadialStart = (A12adj - turnpoint_infos.angle1).AsBearing();
     const Angle RadialEnd = (A12adj + turnpoint_infos.angle1).AsBearing();
 
-    if (turnpoint_infos.radius2 > fixed(0) &&
-        (turnpoint_infos.angle2.AsBearing().Degrees()) < fixed(1)) {
+    if (turnpoint_infos.radius2 > 0 &&
+        (turnpoint_infos.angle2.AsBearing().Degrees()) < 1) {
       oz = new AnnularSectorZone(wp->location, turnpoint_infos.radius1,
           RadialStart, RadialEnd, turnpoint_infos.radius2);
     } else {
@@ -412,29 +412,37 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
  * @return The point
  */
 static OrderedTaskPoint*
-CreatePoint(unsigned pos, unsigned n_waypoints, const Waypoint *wp,
+CreatePoint(unsigned pos, unsigned n_waypoints, WaypointPtr &&wp,
     AbstractTaskFactory& fact, ObservationZonePoint* oz,
     const TaskFactoryType factType)
 {
   OrderedTaskPoint *pt = nullptr;
 
   if (pos == 0)
-    pt = (oz ? fact.CreateStart(oz, *wp) : fact.CreateStart(*wp));
+    pt = oz
+      ? fact.CreateStart(oz, std::move(wp))
+      : fact.CreateStart(std::move(wp));
 
   else if (pos == n_waypoints - 1)
-    pt = (oz ? fact.CreateFinish(oz, *wp) : fact.CreateFinish(*wp));
+    pt = oz
+      ? fact.CreateFinish(oz, std::move(wp))
+      : fact.CreateFinish(std::move(wp));
 
   else if (factType == TaskFactoryType::RACING)
-    pt = (oz ? fact.CreateASTPoint(oz, *wp) : fact.CreateIntermediate(*wp));
+    pt = oz
+      ? fact.CreateASTPoint(oz, std::move(wp))
+      : fact.CreateIntermediate(std::move(wp));
 
   else
-    pt = (oz ? fact.CreateAATPoint(oz, *wp) : fact.CreateIntermediate(*wp));
+    pt = oz
+      ? fact.CreateAATPoint(oz, std::move(wp))
+      : fact.CreateIntermediate(std::move(wp));
 
   return pt;
 }
 
 static TCHAR *
-AdvanceReaderToTask(FileLineReader &reader, const unsigned index)
+AdvanceReaderToTask(TLineReader &reader, const unsigned index)
 {
   // Skip lines until n-th task
   unsigned count = 0;
@@ -458,11 +466,9 @@ AdvanceReaderToTask(FileLineReader &reader, const unsigned index)
 OrderedTask*
 TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
                         const Waypoints *waypoints, unsigned index) const
-{
+try {
   // Create FileReader for reading the task
   FileLineReader reader(path, Charset::AUTO);
-  if (reader.error())
-    return nullptr;
 
   // Read waypoints from the CUP file
   Waypoints file_waypoints;
@@ -474,8 +480,7 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
   }
   file_waypoints.Optimise();
 
-  if (!reader.Rewind())
-    return nullptr;
+  reader.Rewind();
 
   TCHAR *line = AdvanceReaderToTask(reader, index);
   if (line == nullptr)
@@ -503,7 +508,7 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
 
   SeeYouTaskInformation task_info;
   SeeYouTurnpointInformation turnpoint_infos[30];
-  const Waypoint *waypoints_in_task[30];
+  WaypointPtr waypoints_in_task[30];
 
   ParseCUTaskDetails(reader, &task_info, turnpoint_infos);
 
@@ -526,27 +531,27 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
 
   // mark task waypoints.  Skip takeoff and landing point
   for (unsigned i = 0; i < n_waypoints; i++) {
-    const Waypoint* file_wp = file_waypoints.LookupName(wps[i + 2]);
+    auto file_wp = file_waypoints.LookupName(wps[i + 2]);
     if (file_wp == nullptr)
       return nullptr;
 
     // Try to find waypoint by name
-    const Waypoint* wp = waypoints->LookupName(file_wp->name);
+    auto wp = waypoints->LookupName(file_wp->name);
 
     // If waypoint by name found and closer than 10m to the original
     if (wp != nullptr &&
-        wp->location.DistanceS(file_wp->location) <= fixed(10)) {
+        wp->location.DistanceS(file_wp->location) <= 10) {
       // Use this waypoint for the task
       waypoints_in_task[i] = wp;
       continue;
     }
 
     // Try finding the closest waypoint to the original one
-    wp = waypoints->GetNearest(file_wp->location, fixed(10));
+    wp = waypoints->GetNearest(file_wp->location, 10);
 
     // If closest waypoint found and closer than 10m to the original
     if (wp != nullptr &&
-        wp->location.DistanceS(file_wp->location) <= fixed(10)) {
+        wp->location.DistanceS(file_wp->location) <= 10) {
       // Use this waypoint for the task
       waypoints_in_task[i] = wp;
       continue;
@@ -562,7 +567,8 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
     ObservationZonePoint* oz = CreateOZ(turnpoint_infos[i], i, n_waypoints,
                                         waypoints_in_task, factType);
     assert(waypoints_in_task[i]);
-    OrderedTaskPoint *pt = CreatePoint(i, n_waypoints, waypoints_in_task[i],
+    OrderedTaskPoint *pt = CreatePoint(i, n_waypoints,
+                                       WaypointPtr(waypoints_in_task[i]),
                                        fact, oz, factType);
 
     if (pt != nullptr)
@@ -571,18 +577,18 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
     delete pt;
   }
   return task;
+} catch (const std::runtime_error &e) {
+  return nullptr;
 }
 
 unsigned
 TaskFileSeeYou::Count()
-{
+try {
   // Reset internal task name memory
   namesuffixes.clear();
 
   // Open the CUP file
   FileLineReader reader(path, Charset::AUTO);
-  if (reader.error())
-    return 0;
 
   unsigned count = 0;
   bool in_task_section = false;
@@ -629,4 +635,6 @@ TaskFileSeeYou::Count()
 
   // Return number of tasks found in the CUP file
   return count;
+} catch (const std::runtime_error &e) {
+  return 0;
 }

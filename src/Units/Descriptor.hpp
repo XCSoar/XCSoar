@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,15 +25,15 @@ Copyright_License {
 #define XCSOAR_UNITS_DESCRIPTOR_HPP
 
 #include "Unit.hpp"
-#include "Math/fixed.hpp"
+#include "Compiler.h"
 
 #include <tchar.h>
 
 struct UnitDescriptor
 {
   const TCHAR *name;
-  fixed factor_to_user;
-  fixed offset_to_user;
+  double factor_to_user;
+  double offset_to_user;
 };
 
 /**

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -71,15 +71,9 @@ UpdateInfoBoxTimeFlight(InfoBoxData &data)
 {
   const FlyingState &flight = CommonInterface::Calculated().flight;
 
-  if (!positive(flight.flight_time)) {
+  if (flight.flight_time <= 0) {
     data.SetInvalid();
     return;
   }
-
-  // Set Value
-  TCHAR value[32], comment[32];
-  FormatTimeTwoLines(value, comment, (int)flight.flight_time);
-
-  data.SetValue(value);
-  data.SetComment(comment);
+  data.SetValueFromTimeTwoLines((int)flight.flight_time);
 }

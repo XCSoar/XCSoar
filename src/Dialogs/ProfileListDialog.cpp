@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,26 +23,23 @@ Copyright_License {
 
 #include "ProfileListDialog.hpp"
 #include "ProfilePasswordDialog.hpp"
+#include "Dialogs/Error.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/WidgetDialog.hpp"
-#include "Widget/ListWidget.hpp"
-#include "Renderer/TextRowRenderer.hpp"
+#include "Widget/TextListWidget.hpp"
 #include "Form/Button.hpp"
-#include "Screen/Canvas.hpp"
-#include "Screen/Layout.hpp"
 #include "OS/FileUtil.hpp"
+#include "OS/Path.hpp"
 #include "LocalPath.hpp"
 #include "Profile/Map.hpp"
 #include "Profile/File.hpp"
 #include "UIGlobals.hpp"
-#include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
 
 #include <vector>
 
 #include <assert.h>
-#include <windef.h> /* for MAX_PATH */
 
 /* this macro exists in the WIN32 API */
 #ifdef DELETE
@@ -50,13 +47,13 @@ Copyright_License {
 #endif
 
 class ProfileListWidget final
-  : public ListWidget, private ActionListener {
+  : public TextListWidget, private ActionListener {
 
   struct ListItem {
     StaticString<32> name;
-    StaticString<MAX_PATH> path;
+    AllocatedPath path;
 
-    ListItem(const TCHAR *_name, const TCHAR *_path)
+    ListItem(const TCHAR *_name, Path _path)
       :name(_name), path(_path) {}
 
     bool operator<(const ListItem &i2) const {
@@ -71,8 +68,8 @@ class ProfileListWidget final
   public:
     ProfileFileVisitor(std::vector<ListItem> &_list):list(_list) {}
 
-    void Visit(const TCHAR* path, const TCHAR* filename) {
-      list.emplace_back(filename, path);
+    void Visit(Path path, Path filename) override {
+      list.emplace_back(filename.c_str(), path);
     }
   };
 
@@ -91,28 +88,26 @@ class ProfileListWidget final
 
   std::vector<ListItem> list;
 
-  TextRowRenderer row_renderer;
-
 public:
   ProfileListWidget(bool _select=false):select(_select) {}
 
   void CreateButtons(WidgetDialog &dialog);
 
   gcc_pure
-  tstring::const_pointer GetSelectedPath() const {
+  Path GetSelectedPath() const {
     if (list.empty())
       return nullptr;
 
     return list[GetList().GetCursorIndex()].path;
   }
 
-  void SelectPath(const TCHAR *path);
+  void SelectPath(Path path);
 
 private:
   void UpdateList();
 
   gcc_pure
-  int FindPath(const TCHAR *path) const;
+  int FindPath(Path path) const;
 
   void NewClicked();
   void PasswordClicked();
@@ -123,12 +118,12 @@ public:
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
-  virtual void Unprepare() override;
 
 protected:
-  /* virtual methods from ListItemRenderer */
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) override;
+  /* virtual methods from TextListWidget */
+  const TCHAR *GetRowText(unsigned i) const override {
+    return list[i].name;
+  }
 
   /* virtual methods from ListCursorHandler */
   virtual bool CanActivateItem(unsigned index) const override {
@@ -168,17 +163,17 @@ ProfileListWidget::UpdateList()
 }
 
 int
-ProfileListWidget::FindPath(const TCHAR *path) const
+ProfileListWidget::FindPath(Path path) const
 {
   for (unsigned n = list.size(), i = 0u; i < n; ++i)
-    if (StringIsEqual(path, list[i].path))
+    if (path == list[i].path)
       return i;
 
   return -1;
 }
 
 void
-ProfileListWidget::SelectPath(const TCHAR *path)
+ProfileListWidget::SelectPath(Path path)
 {
   auto i = FindPath(path);
   if (i >= 0)
@@ -199,24 +194,8 @@ ProfileListWidget::CreateButtons(WidgetDialog &dialog)
 void
 ProfileListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  const DialogLook &look = UIGlobals::GetDialogLook();
-  CreateList(parent, look, rc,
-             row_renderer.CalculateLayout(*look.list.font));
+  TextListWidget::Prepare(parent, rc);
   UpdateList();
-}
-
-void
-ProfileListWidget::Unprepare()
-{
-  DeleteWindow();
-}
-
-void
-ProfileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
-{
-  assert(i < list.size());
-
-  row_renderer.DrawTextRow(canvas, rc, list[i].name);
 }
 
 inline void
@@ -231,9 +210,7 @@ ProfileListWidget::NewClicked()
   filename = name;
   filename += _T(".prf");
 
-  StaticString<MAX_PATH> path;
-  LocalPath(path.buffer(), filename);
-
+  const auto path = LocalPath(filename);
   if (!File::CreateExclusive(path)) {
     ShowMessageBox(name, _("File exists already."), MB_OK|MB_ICONEXCLAMATION);
     return;
@@ -251,9 +228,11 @@ ProfileListWidget::PasswordClicked()
   const auto &item = list[GetList().GetCursorIndex()];
 
   ProfileMap data;
-  if (!Profile::LoadFile(data, item.path)) {
-    ShowMessageBox(item.name, _("Failed to load file."),
-                   MB_OK|MB_ICONEXCLAMATION);
+
+  try {
+    Profile::LoadFile(data, item.path);
+  } catch (const std::runtime_error &e) {
+    ShowError(e, _("Failed to load file."));
     return;
   }
 
@@ -261,9 +240,12 @@ ProfileListWidget::PasswordClicked()
       !SetProfilePasswordDialog(data))
     return;
 
-  if (!Profile::SaveFile(data, item.path))
-    ShowMessageBox(item.name, _("Failed to save file."),
-                   MB_OK|MB_ICONEXCLAMATION);
+  try {
+    Profile::SaveFile(data, item.path);
+  } catch (const std::runtime_error &e) {
+    ShowError(e, _("Failed to save file."));
+    return;
+  }
 }
 
 inline void
@@ -272,13 +254,14 @@ ProfileListWidget::CopyClicked()
   assert(GetList().GetCursorIndex() < list.size());
 
   const auto &item = list[GetList().GetCursorIndex()];
-  const TCHAR *old_path = item.path;
-  const TCHAR *old_filename = item.name;
+  const Path old_path = item.path;
 
   ProfileMap data;
-  if (!Profile::LoadFile(data, old_path)) {
-    ShowMessageBox(old_filename, _("Failed to load file."),
-                   MB_OK|MB_ICONEXCLAMATION);
+
+  try {
+    Profile::LoadFile(data, old_path);
+  } catch (const std::runtime_error &e) {
+    ShowError(e, _("Failed to load file."));
     return;
   }
 
@@ -294,8 +277,7 @@ ProfileListWidget::CopyClicked()
   new_filename = new_name;
   new_filename += _T(".prf");
 
-  StaticString<MAX_PATH> new_path;
-  LocalPath(new_path.buffer(), new_filename);
+  const auto new_path = LocalPath(new_filename);
 
   if (File::ExistsAny(new_path)) {
     ShowMessageBox(new_name, _("File exists already."),
@@ -303,9 +285,10 @@ ProfileListWidget::CopyClicked()
     return;
   }
 
-  if (!Profile::SaveFile(data, new_path)) {
-    ShowMessageBox(new_name, _("Failed to save file."),
-                   MB_OK|MB_ICONEXCLAMATION);
+  try {
+    Profile::SaveFile(data, item.path);
+  } catch (const std::runtime_error &e) {
+    ShowError(e, _("Failed to save file."));
     return;
   }
 
@@ -333,20 +316,25 @@ ProfileListWidget::DeleteClicked()
 
   const auto &item = list[GetList().GetCursorIndex()];
 
-  const auto password_result = CheckProfileFilePassword(item.path);
-  switch (password_result) {
-  case ProfilePasswordResult::UNPROTECTED:
-    if (!ConfirmDeleteProfile(item.name))
+  try {
+    const auto password_result = CheckProfileFilePassword(item.path);
+    switch (password_result) {
+    case ProfilePasswordResult::UNPROTECTED:
+      if (!ConfirmDeleteProfile(item.name))
+        return;
+
+      break;
+
+    case ProfilePasswordResult::MATCH:
+      break;
+
+    case ProfilePasswordResult::MISMATCH:
+    case ProfilePasswordResult::CANCEL:
+      CheckProfilePasswordResult(password_result);
       return;
-
-    break;
-
-  case ProfilePasswordResult::MATCH:
-    break;
-
-  case ProfilePasswordResult::MISMATCH:
-  case ProfilePasswordResult::CANCEL:
-    CheckProfilePasswordResult(password_result);
+    }
+  } catch (const std::runtime_error &e) {
+    ShowError(e, _("Password"));
     return;
   }
 
@@ -390,8 +378,8 @@ ProfileListDialog()
   dialog.StealWidget();
 }
 
-tstring
-SelectProfileDialog(tstring::const_pointer selected_path)
+AllocatedPath
+SelectProfileDialog(Path selected_path)
 {
   ProfileListWidget widget(true);
   WidgetDialog dialog(UIGlobals::GetDialogLook());
@@ -401,7 +389,7 @@ SelectProfileDialog(tstring::const_pointer selected_path)
   dialog.AddButton(_("Cancel"), mrCancel);
   dialog.EnableCursorSelection();
 
-  if (selected_path != nullptr) {
+  if (!selected_path.IsNull()) {
     dialog.PrepareWidget();
     widget.SelectPath(selected_path);
   }
@@ -412,9 +400,6 @@ SelectProfileDialog(tstring::const_pointer selected_path)
     ? widget.GetSelectedPath()
     : nullptr;
   dialog.StealWidget();
-
-  if (selected_path == nullptr)
-    return tstring();
 
   return selected_path;
 }

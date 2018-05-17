@@ -379,7 +379,7 @@ trends in the soaring conditions.
 
 If the hardware hosting XCSoar is able to connect to the internet, weather 
 reports and forecasts can be downloaded. \menulabelr{\bmenug{Info}\blink
-\bmenug{METAR TAF}} Present actual informations available are depicted by a 
+\bmenug{Weather}} Present actual informations available are depicted by a 
 little flag, pinned to the waypoint of the reporting station. 
 \menulabelr{\includegraphics[width=0.6cm]{icons/map_weather_station.pdf}} To 
 set up reports and forecasts, invoke the METAR and TAF dialogue. With 
@@ -409,8 +409,8 @@ into the XCSoarData directory.  As is with February 2014, download of
 rasp forecasts are displayed as colour-coded terrain overlays on the map. \\ \\
 Make sure, terrain display is set to on. \tip{} \\ \\
 The RASP-forecast overlays are invoked via menu 
-\menulabelr{\bmenug{Info 2/3}\blink\bmenug{Weather}}
-\bmenug{Info 2/3}.
+\menulabelr{\bmenug{Info}\blink\bmenug{Weather}}
+\bmenug{Info}.
 
 The Field setting determines which data field is displayed on the map.
 The Time setting determines at which forecast time the data field will
@@ -530,3 +530,23 @@ in the table below.
 \end{longtable}
 \end{maxipage}
 
+\section{pc\_met, Deutscher Wetterdienst}\label{sec:pcmet}
+
+German weather service ``Deutscher Wetterdienst'' provides several
+useful meteorological images for XCSoar users.  To use it, you need a
+(paid) account with their \emph{pc\_met} product.
+
+Note that this feature requires and uses an internet connection.  This
+may be expensive, depending on your mobile data plan.
+
+To enable the feature, enter your \emph{pc\_met} credentials in
+XCSoar's system configuration.  There are two username/password pairs:
+the first is for DWD's web services (on \texttt{www.flugwetter.de}),
+and the other is the FTP password (on \texttt{ftp.pcmet.de}).
+
+During preflight check and during the flight, you can check weather
+forecasts and live weather data in the
+\menulabelr{\bmenug{Info}\blink\bmenug{Weather}} \bmenug{Info} menu.
+Below ``Overlay'', you can choose layers for the map window.
+``pc\_met'' is a collection of live images which are usually displayed
+on the DWD web site \texttt{www.flugwetter.de}.

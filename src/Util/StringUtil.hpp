@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -32,42 +32,6 @@ Copyright_License {
 #include "WStringUtil.hpp"
 #endif
 
-static inline bool
-StringIsEmpty(const char *string)
-{
-  return *string == 0;
-}
-
-gcc_pure
-bool
-StringStartsWith(const char *haystack, const char *needle);
-
-bool
-StringEndsWith(const char *haystack, const char *needle);
-
-gcc_pure
-bool
-StringEndsWithIgnoreCase(const char *haystack, const char *needle);
-
-/**
- * Returns the portion of the string after a prefix.  If the string
- * does not begin with the specified prefix, this function returns
- * nullptr.
- */
-gcc_nonnull_all
-const char *
-StringAfterPrefix(const char *string, const char *prefix);
-
-/**
- * Returns the portion of the string after a prefix.  If the string
- * does not begin with the specified prefix, this function returns
- * nullptr.
- * This function is case-independent.
- */
-gcc_nonnull_all
-const char *
-StringAfterPrefixCI(const char *string, const char *prefix);
-
 /**
  * Copy a string.  If the buffer is too small, then the string is
  * truncated.  This is a safer version of strncpy().
@@ -79,36 +43,6 @@ StringAfterPrefixCI(const char *string, const char *prefix);
 gcc_nonnull_all
 char *
 CopyString(char *dest, const char *src, size_t size);
-
-/**
- * Copy all ASCII characters to the destination string
- * (i.e. 0x01..0x7f), ignoring the others.  In the worst case, the
- * destination buffer must be as large as the source buffer.  Can be
- * used for in-place operation.
- */
-gcc_nonnull_all
-void
-CopyASCII(char *dest, const char *src);
-
-/**
- * Copy all ASCII characters to the destination string
- * (i.e. 0x01..0x7f), ignoring the others.
- *
- * This function does not null-terminate the destination buffer.
- *
- * @param dest_size the size of the destination buffer
- * @return a pointer to the written end of the destination buffer
- */
-gcc_nonnull_all
-char *
-CopyASCII(char *dest, size_t dest_size, const char *src, const char *src_end);
-
-/**
- * Like CopyUpper(), but convert all letters to upper-case.
- */
-gcc_nonnull_all
-void
-CopyASCIIUpper(char *dest, const char *src);
 
 /**
  * Skips whitespace at the beginning of the string, and returns the
@@ -166,19 +100,5 @@ StripRight(char *p);
 gcc_nonnull_all
 char *
 NormalizeSearchString(char *dest, const char *src);
-
-gcc_pure
-bool
-StringStartsWithIgnoreCase(const char *haystack, const char *needle);
-
-/**
- * Copy a portion of the string to a new allocation.  The given length
- * must not be smaller than the actual length of the null-terminated
- * string.  The return value will be null-terminated and must be freed
- * with free().
- */
-gcc_malloc gcc_nonnull_all
-char *
-DuplicateString(const char *p, size_t length);
 
 #endif

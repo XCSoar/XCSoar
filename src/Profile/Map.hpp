@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_PROFILE_MAP2_HPP
 #define XCSOAR_PROFILE_MAP2_HPP
 
-#include "Math/fixed.hpp"
 #include "Util/StringBuffer.hxx"
 #include "Compiler.h"
 
@@ -36,6 +35,8 @@ Copyright_License {
 
 struct GeoPoint;
 class RGB8Color;
+class Path;
+class AllocatedPath;
 template<typename T> class StringPointer;
 template<typename T> class AllocatedString;
 
@@ -98,7 +99,7 @@ public:
   bool Get(const char *key, TCHAR *value, size_t max_size) const;
 
   template<size_t max>
-  bool Get(const char *key, StringBuffer<TCHAR, max> &value) const {
+  bool Get(const char *key, BasicStringBuffer<TCHAR, max> &value) const {
     return Get(key, value.data(), value.capacity());
   }
 
@@ -114,7 +115,7 @@ public:
   bool Get(const char *key, unsigned &value) const;
   bool Get(const char *key, uint16_t &value) const;
   bool Get(const char *key, uint8_t &value) const;
-  bool Get(const char *key, fixed &value) const;
+  bool Get(const char *key, double &value) const;
 
   void Set(const char *key, bool value) {
     Set(key, value ? "1" : "0");
@@ -123,7 +124,7 @@ public:
   void Set(const char *key, int value);
   void Set(const char *key, long value);
   void Set(const char *key, unsigned value);
-  void Set(const char *key, fixed value);
+  void Set(const char *key, double value);
 
   // enum values
 
@@ -143,10 +144,10 @@ public:
 
   // path values
 
-  bool GetPath(const char *key, TCHAR *value) const;
+  AllocatedPath GetPath(const char *key) const;
 
   gcc_pure
-  bool GetPathIsEqual(const char *key, const TCHAR *value) const;
+  bool GetPathIsEqual(const char *key, Path value) const;
 
   /**
    * Gets a path from the profile and return its base name only.
@@ -158,7 +159,7 @@ public:
   StringPointer<TCHAR> GetPathBase(const char *key) const;
 #endif
 
-  void SetPath(const char *key, const TCHAR *value);
+  void SetPath(const char *key, Path value);
 
   // geo value
 

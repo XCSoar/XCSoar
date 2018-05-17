@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,12 +22,12 @@ Copyright_License {
 */
 
 #include "WaypointLabelList.hpp"
-
-#include <string.h>
+#include "Util/StringUtil.hpp"
+#include "Util/Macros.hpp"
 
 #include <algorithm>
 
-static constexpr PixelScalar WPCIRCLESIZE = 2;
+static constexpr int WPCIRCLESIZE = 2;
 
 gcc_pure
 static bool
@@ -68,15 +68,13 @@ MapWaypointLabelListCompare(const WaypointLabelList::Label &e1,
 }
 
 void
-WaypointLabelList::Add(const TCHAR *Name, PixelScalar X, PixelScalar Y,
+WaypointLabelList::Add(const TCHAR *Name, int X, int Y,
                        TextInBoxMode Mode, bool bold,
-                       RoughAltitude AltArivalAGL, bool inTask,
+                       int AltArivalAGL, bool inTask,
                        bool isLandable, bool isAirport, bool isWatchedWaypoint)
 {
-  if ((X < - WPCIRCLESIZE)
-      || X > PixelScalar(width + (WPCIRCLESIZE * 3))
-      || (Y < - WPCIRCLESIZE)
-      || Y > PixelScalar(height + WPCIRCLESIZE))
+  if (X < - WPCIRCLESIZE || X > (int)width + WPCIRCLESIZE * 3 ||
+      Y < - WPCIRCLESIZE || Y > (int)height + WPCIRCLESIZE)
     return;
 
   if (labels.full())
@@ -84,7 +82,7 @@ WaypointLabelList::Add(const TCHAR *Name, PixelScalar X, PixelScalar Y,
 
   auto &l = labels.append();
 
-  _tcscpy(l.Name, Name);
+  CopyString(l.Name, Name, ARRAY_SIZE(l.Name));
   l.Pos.x = X;
   l.Pos.y = Y;
   l.Mode = Mode;

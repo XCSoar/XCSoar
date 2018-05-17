@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -52,10 +52,10 @@ VegaDevice::OnCalculatedUpdate(const MoreData &basic,
   char tbuf[100];
   sprintf(tbuf, "PTLOC,%d,%3.5f,%3.5f,%g,%g",
           (int)(t.estimate_valid),
-          (double)t.estimate_location.Longitude.Degrees(),
-          (double)t.estimate_location.Latitude.Degrees(),
-          (double)fixed(0),
-          (double)fixed(0));
+          t.estimate_location.Longitude.Degrees(),
+          t.estimate_location.Latitude.Degrees(),
+          0.,
+          0.);
 
   PortWriteNMEA(port, tbuf);
 #endif

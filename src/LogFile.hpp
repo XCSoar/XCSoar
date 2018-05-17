@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,6 +30,10 @@ Copyright_License {
 #include <tchar.h>
 #endif
 
+namespace std {
+  class exception;
+}
+
 /**
  * Write a formatted line to the log file.
  *
@@ -45,7 +49,7 @@ void
 LogFormat(const TCHAR *fmt, ...);
 #endif
 
-#if !defined(NDEBUG) && !defined(GNAV)
+#if !defined(NDEBUG)
 
 #define LogDebug(...) LogFormat(__VA_ARGS__)
 
@@ -56,5 +60,11 @@ LogFormat(const TCHAR *fmt, ...);
 #define LogDebug(...)
 
 #endif /* NDEBUG */
+
+void
+LogError(const std::exception &exception);
+
+void
+LogError(const char *msg, const std::exception &exception);
 
 #endif

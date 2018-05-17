@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -33,11 +33,9 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #endif
 
-#ifdef KOBO
-#include "Screen/Memory/Canvas.hpp"
-#endif
-
 #ifdef USE_FB
+
+#include "Screen/Memory/Canvas.hpp"
 
 void
 TopWindow::CheckResize()
@@ -45,7 +43,7 @@ TopWindow::CheckResize()
   assert(screen != nullptr);
 
   if (screen->CheckResize())
-    Resize(screen->GetWidth(), screen->GetHeight());
+    Resize(screen->GetSize());
 }
 
 #endif
@@ -79,11 +77,8 @@ TopWindow::OnDestroy()
 void
 TopWindow::OnResize(PixelSize new_size)
 {
-#if !defined(NON_INTERACTIVE) && !defined(USE_X11) && !defined(USE_WAYLAND)
   event_queue->SetScreenSize(new_size.cx, new_size.cy);
-#endif
 
-  screen->OnResize(new_size);
   ContainerWindow::OnResize(new_size);
 }
 
@@ -95,8 +90,8 @@ TopWindow::OnPaint(Canvas &canvas)
 
   /* draw the mouse cursor */
 
-  const RasterPoint m = event_queue->GetMousePosition();
-  const RasterPoint p[] = {
+  const auto m = event_queue->GetMousePosition();
+  const BulkPixelPoint p[] = {
     { m.x, m.y },
     { m.x + Layout::Scale(4), m.y + Layout::Scale(4) },
     { m.x, m.y + Layout::Scale(6) },
@@ -117,7 +112,6 @@ TopWindow::OnEvent(const Event &event)
     Window *w;
 
   case Event::NOP:
-  case Event::TIMER:
   case Event::USER:
   case Event::CALLBACK:
     break;
@@ -147,29 +141,25 @@ TopWindow::OnEvent(const Event &event)
 #endif
 
     // XXX keys
-    return OnMouseMove(event.point.x, event.point.y, 0);
+    return OnMouseMove(event.point, 0);
 
   case Event::MOUSE_DOWN:
     return double_click.Check(event.point)
-      ? OnMouseDouble(event.point.x, event.point.y)
-      : OnMouseDown(event.point.x, event.point.y);
+      ? OnMouseDouble(event.point)
+      : OnMouseDown(event.point);
 
   case Event::MOUSE_UP:
     double_click.Moved(event.point);
 
-    return OnMouseUp(event.point.x, event.point.y);
+    return OnMouseUp(event.point);
 
   case Event::MOUSE_WHEEL:
-    return OnMouseWheel(event.point.x, event.point.y, (int)event.param);
+    return OnMouseWheel(event.point, (int)event.param);
 
 #ifdef USE_X11
   case Event::RESIZE:
-    if (unsigned(event.point.x) == GetWidth() &&
-        unsigned(event.point.y) == GetHeight())
-      /* no-op */
-      return true;
-
-    Resize(event.point.x, event.point.y);
+    if (screen->CheckResize(PixelSize(event.point.x, event.point.y)))
+      Resize(screen->GetSize());
     return true;
 
   case Event::EXPOSE:

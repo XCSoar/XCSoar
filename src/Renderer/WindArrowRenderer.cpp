@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,8 +25,8 @@ Copyright_License {
 #include "TextInBox.hpp"
 #include "Look/WindArrowLook.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Layout.hpp"
 #include "Math/Angle.hpp"
+#include "Math/Util.hpp"
 #include "Math/Screen.hpp"
 #include "NMEA/Derived.hpp"
 #include "Units/Units.hpp"
@@ -34,14 +34,18 @@ Copyright_License {
 
 #include <tchar.h>
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scope.hpp"
+#endif
+
 void
-WindArrowRenderer::DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
+WindArrowRenderer::DrawArrow(Canvas &canvas, PixelPoint pos, Angle angle,
                              unsigned length, WindArrowStyle arrow_style,
                              int offset)
 {
   // Draw arrow
 
-  RasterPoint arrow[] = {
+  BulkPixelPoint arrow[] = {
     { 0, -offset + 3 },
     { -6, -offset - 3 - int(length) },
     { 0, -offset + 3 - int(length) },
@@ -53,12 +57,17 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
 
   canvas.Select(look.arrow_pen);
   canvas.Select(look.arrow_brush);
-  canvas.DrawPolygon(arrow, ARRAY_SIZE(arrow));
+  {
+#ifdef ENABLE_OPENGL
+    const ScopeAlphaBlend alpha_blend;
+#endif
+    canvas.DrawPolygon(arrow, ARRAY_SIZE(arrow));
+  }
 
   // Draw arrow tail
 
   if (arrow_style == WindArrowStyle::FULL_ARROW) {
-    RasterPoint tail[] = {
+    BulkPixelPoint tail[] = {
       { 0, -offset + 3 },
       { 0, -offset - 3 - int(std::min(20u, length) * 3u) },
     };
@@ -73,12 +82,12 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
 
 void
 WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
-                        const SpeedVector wind, const RasterPoint pos,
+                        const SpeedVector wind, const PixelPoint pos,
                         const PixelRect rc, WindArrowStyle arrow_style)
 {
   // Draw arrow (and tail)
 
-  const unsigned length = uround(Quadruple(wind.norm));
+  const unsigned length = uround(4 * wind.norm);
   DrawArrow(canvas, pos, wind.bearing - screen_angle, length, arrow_style);
 
   // Draw wind speed label
@@ -89,8 +98,8 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   canvas.SetTextColor(COLOR_BLACK);
   canvas.Select(*look.font);
 
-  const unsigned offset = uround(fixed_sqrt_two * wind.norm);
-  RasterPoint label[] = {
+  const unsigned offset = uround(M_SQRT2 * wind.norm);
+  BulkPixelPoint label[] = {
     { 18, -26 - int(offset) },
   };
   PolygonRotateShift(label, ARRAY_SIZE(label),
@@ -106,7 +115,7 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
 
 void
 WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
-                        const RasterPoint pos, const PixelRect rc,
+                        const PixelPoint pos, const PixelRect rc,
                         const DerivedInfo &calculated,
                         const MapSettings &settings)
 {
@@ -115,7 +124,7 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
     return;
 
   // don't bother drawing it if not significant
-  if (calculated.wind.norm < fixed(1))
+  if (calculated.wind.norm < 1)
     return;
 
   WindArrowRenderer::Draw(canvas, screen_angle, calculated.wind, pos, rc,

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,34 +25,34 @@ Copyright_License {
 #define XCSOAR_SCREEN_PROGRESS_WINDOW_HXX
 
 #include "Screen/ContainerWindow.hpp"
-#include "Screen/TextWindow.hpp"
 #include "Screen/ProgressBar.hpp"
 #include "Screen/Bitmap.hpp"
-#include "Screen/Brush.hpp"
+#include "Screen/Color.hpp"
 #include "Gauge/LogoView.hpp"
+#include "Util/StaticString.hxx"
 
 /**
  * The XCSoar splash screen with a progress bar.
  */
 class ProgressWindow : public ContainerWindow {
   Color background_color;
-  Brush background_brush;
 
   Bitmap bitmap_progress_border;
 
-#ifndef USE_GDI
+#ifndef USE_WINUSER
   Font font;
 #endif
 
   LogoView logo;
 
-  TextWindow message;
+  StaticString<128> message;
 
   ProgressBar progress_bar;
-  unsigned position;
 
   unsigned text_height;
-  unsigned progress_border_height;
+
+  PixelRect logo_position, message_position;
+  PixelRect bottom_position, progress_bar_position;
 
 public:
   explicit ProgressWindow(ContainerWindow &parent);
@@ -64,14 +64,12 @@ public:
   void SetValue(unsigned value);
   void Step();
 
+private:
+  void UpdateLayout(PixelRect rc);
+
 protected:
   virtual void OnResize(PixelSize new_size) override;
   virtual void OnPaint(Canvas &canvas) override;
-
-#ifdef USE_GDI
-  virtual const Brush *OnChildColor(Window &window,
-                                    Canvas &canvas) override;
-#endif
 };
 
 #endif

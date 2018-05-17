@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,9 +28,8 @@ Copyright_License {
 #include "Hardware/DisplayDPI.hpp"
 #include "Simulator.hpp"
 #include "LocalPath.hpp"
-#include "Util/CharUtil.hpp"
-#include "Util/StringUtil.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringCompare.hxx"
+#include "Util/StringAPI.hxx"
 #include "Util/NumberParser.hpp"
 #include "Asset.hpp"
 
@@ -39,10 +38,8 @@ Copyright_License {
 #endif
 
 namespace CommandLine {
-#if !defined(_WIN32_WCE)
   unsigned width = IsKobo() ? 600 : 640;
   unsigned height = IsKobo() ? 800 : 480;
-#endif
 
 #ifdef HAVE_CMDLINE_FULLSCREEN
   bool full_screen = false;
@@ -73,6 +70,10 @@ CommandLine::Parse(Args &args)
 
     if (StringIsEqual(s, "-profile=", 9)) {
       s += 9;
+
+      if (StringIsEmpty(s))
+        args.UsageError();
+
       PathName convert(s);
       Profile::SetFiles(convert);
     } else if (StringIsEqual(s, "-datapath=", 10)) {
@@ -91,7 +92,6 @@ CommandLine::Parse(Args &args)
       global_simulator_flag=false;
       sim_set_in_cmd_line_flag=true;
 #endif
-#if !defined(_WIN32_WCE)
     } else if (isdigit(s[1])) {
       char *p;
       width = ParseUnsigned(s + 1, &p);
@@ -110,17 +110,16 @@ CommandLine::Parse(Args &args)
     } else if (StringIsEqual(s, "-small")) {
       width = 320;
       height = 240;
-#endif
 #ifdef HAVE_CMDLINE_FULLSCREEN
     } else if (StringIsEqual(s, "-fullscreen")) {
       full_screen = true;
 #endif
-#if defined(_WIN32) && !defined(_WIN32_WCE) && !defined(__WINE__)
+#ifdef WIN32
     } else if (StringIsEqual(s, "-console")) {
       AllocConsole();
       freopen("CONOUT$", "wb", stdout);
 #endif
-#if !defined(ANDROID) && !defined(_WIN32_WCE)
+#if !defined(ANDROID)
     } else if (StringIsEqual(s, "-dpi=", 5)) {
       unsigned x_dpi, y_dpi;
       char *p;
@@ -136,7 +135,7 @@ CommandLine::Parse(Args &args)
       if (x_dpi < 32 || x_dpi > 512 || y_dpi < 32 || y_dpi > 512)
         args.UsageError();
 
-      Display::SetDPI(x_dpi, y_dpi);
+      Display::SetForcedDPI(x_dpi, y_dpi);
 #endif
 #ifdef __APPLE__
     } else if (StringStartsWith(s, "-psn")) {
@@ -151,9 +150,7 @@ CommandLine::Parse(Args &args)
     }
   }
 
-#if !defined(_WIN32_WCE)
   if (width < 240 || width > 4096 ||
       height < 240 || height > 4096)
     args.UsageError();
-#endif
 }

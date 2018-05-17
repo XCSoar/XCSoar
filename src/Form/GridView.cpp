@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -38,8 +38,7 @@ void
 GridView::RefreshLayout()
 {
   const PixelRect rc = GetClientRect();
-  const unsigned width = rc.right - rc.left;
-  const unsigned height = rc.bottom - rc.top;
+  const unsigned width = rc.GetWidth(), height = rc.GetHeight();
 
   constexpr unsigned horizontal_spacing = 0;
   constexpr unsigned vertical_spacing = 0;
@@ -158,13 +157,13 @@ GridView::ShowNextPage(Direction direction)
         items[newPos]->SetFocus();
       }
     } else if (focusPos != -1) {
-#ifdef USE_GDI
+#ifdef USE_WINUSER
       HWND oldFocusHwnd = ::GetFocus();
       if (oldFocusHwnd != nullptr)
         ::SendMessage(oldFocusHwnd, WM_CANCELMODE, 0, 0);
 #else
       items[focusPos]->ClearFocus();
-#endif /* USE_GDI */
+#endif /* USE_WINUSER */
     }
 
     RefreshLayout();

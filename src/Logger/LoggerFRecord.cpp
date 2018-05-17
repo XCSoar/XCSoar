@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -64,12 +64,12 @@ LoggerFRecord::CheckSatellitesChanged(const GPSState &gps) const
 }
 
 bool
-LoggerFRecord::Update(const GPSState &gps, fixed time, bool nav_warning)
+LoggerFRecord::Update(const GPSState &gps, double time, bool nav_warning)
 {
   // Accelerate to 30 seconds if bad signal
-  const fixed period = IsBadSignal(gps) || nav_warning
-    ? fixed(ACCELERATED_UPDATE_TIME)
-    : fixed(DEFAULT_UPDATE_TIME);
+  const double period = IsBadSignal(gps) || nav_warning
+    ? ACCELERATED_UPDATE_TIME
+    : DEFAULT_UPDATE_TIME;
 
   // We need an update if
   // 1) the satellite information availability changed or

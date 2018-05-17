@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -49,13 +49,13 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "UIState.hpp"
 #include "Computer/Settings.hpp"
 #include "Dialogs/Dialogs.h"
-#include "Dialogs/Device/Vega/VoiceSettingsDialog.hpp"
+#include "Dialogs/Error.hpp"
 #include "Dialogs/Device/Vega/SwitchesDialog.hpp"
 #include "Dialogs/Airspace/Airspace.hpp"
 #include "Dialogs/Task/TaskDialogs.hpp"
 #include "Dialogs/Traffic/TrafficDialogs.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
-#include "Dialogs/Weather/WeatherDialogs.hpp"
+#include "Dialogs/Weather/WeatherDialog.hpp"
 #include "Dialogs/Plane/PlaneDialogs.hpp"
 #include "Dialogs/ProfileListDialog.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
@@ -63,13 +63,9 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Dialogs/ReplayDialog.hpp"
 #include "Message.hpp"
 #include "Markers/Markers.hpp"
-#include "InfoBoxes/InfoBoxLayout.hpp"
 #include "MainWindow.hpp"
 #include "PopupMessage.hpp"
 #include "Projection/MapWindowProjection.hpp"
-#include "Profile/Profile.hpp"
-#include "Profile/ProfileKeys.hpp"
-#include "Util/StringUtil.hpp"
 #include "Audio/Sound.hpp"
 #include "UIActions.hpp"
 #include "Interface.hpp"
@@ -84,9 +80,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Task/ProtectedTaskManager.hpp"
 #include "UtilsSettings.hpp"
 #include "PageActions.hpp"
-#include "Hardware/AltairControl.hpp"
 #include "Compiler.h"
-#include "Weather/Features.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Simulator.hpp"
 #include "Formatter/TimeFormatter.hpp"
@@ -94,6 +88,10 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include <assert.h>
 #include <tchar.h>
 #include <algorithm>
+
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#endif
 
 /**
  * Determine the reference location of the current map display.
@@ -129,21 +127,27 @@ trigger_redraw()
  *
  * @return a reference to the #Waypoint stored in #Waypoints
  */
-static const Waypoint &
+static WaypointPtr
 SuspendAppendWaypoint(Waypoint &&wp)
 {
   ScopeSuspendAllThreads suspend;
-  auto &result = way_points.Append(std::move(wp));
+  auto ptr = way_points.Append(std::move(wp));
   way_points.Optimise();
-  return result;
+  return ptr;
 }
 
-static const Waypoint &
+static WaypointPtr
 SuspendAppendSaveWaypoint(Waypoint &&wp)
 {
-  auto &wp2 = SuspendAppendWaypoint(std::move(wp));
-  WaypointGlue::SaveWaypoint(wp2);
-  return wp2;
+  auto ptr = SuspendAppendWaypoint(std::move(wp));
+
+  try {
+    WaypointGlue::SaveWaypoint(*ptr);
+  } catch (const std::runtime_error &e) {
+    ShowError(e, _("Failed to save waypoints"));
+  }
+
+  return ptr;
 }
 
 // -----------------------------------------------------------------------
@@ -316,7 +320,7 @@ void
 InputEvents::eventWaypointDetails(const TCHAR *misc)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
-  const Waypoint* wp = NULL;
+  WaypointPtr wp;
 
   bool allow_navigation = true;
   bool allow_edit = true;
@@ -341,7 +345,8 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
     wp = ShowWaypointListDialog(basic.location);
   }
   if (wp)
-    dlgWaypointDetailsShowModal(*wp, allow_navigation, allow_edit);
+    dlgWaypointDetailsShowModal(std::move(wp),
+                                allow_navigation, allow_edit);
 }
 
 void
@@ -494,9 +499,7 @@ InputEvents::eventNull(gcc_unused const TCHAR *misc)
 void
 InputEvents::eventBeep(gcc_unused const TCHAR *misc)
 {
-  #if defined(GNAV)
-  altair_control.ShortBeep();
-#elif defined(WIN32)
+#ifdef WIN32
   MessageBeep(MB_ICONEXCLAMATION);
 #else
   PlayResource(_T("IDR_WAV_CLEAR"));
@@ -524,14 +527,12 @@ InputEvents::eventSetup(const TCHAR *misc)
   else if (StringIsEqual(misc, _T("Airspace")))
     dlgAirspaceShowModal(false);
   else if (StringIsEqual(misc, _T("Weather")))
-    dlgWeatherShowModal();
+    ShowWeatherDialog(_T("rasp"));
   else if (StringIsEqual(misc, _T("Replay"))) {
     if (!CommonInterface::MovementDetected())
       ShowReplayDialog();
   } else if (StringIsEqual(misc, _T("Switches")))
     dlgSwitchesShowModal();
-  else if (StringIsEqual(misc, _T("Voice")))
-    dlgVoiceShowModal();
   else if (StringIsEqual(misc, _T("Teamcode")))
     dlgTeamCodeShowModal();
   else if (StringIsEqual(misc, _T("Target")))
@@ -568,15 +569,15 @@ InputEvents::eventRun(const TCHAR *misc)
   ::CloseHandle(pi.hProcess);
   ::CloseHandle(pi.hThread);
 
-  #else /* !WIN32 */
+  #elif !defined(__APPLE__) || !TARGET_OS_IPHONE
   system(misc);
-  #endif /* !WIN32 */
+  #endif
 }
 
 void
 InputEvents::eventBrightness(gcc_unused const TCHAR *misc)
 {
-  dlgBrightnessShowModal();
+  // not implemented (was only implemented on Altair)
 }
 
 void
@@ -673,10 +674,7 @@ eventSounds			- Include Task and Modes sounds along with Vario
 void
 InputEvents::eventWeather(const TCHAR *misc)
 {
-#ifdef HAVE_NOAA
-  if (StringIsEqual(misc, _T("list")))
-    dlgNOAAListShowModal();
-#endif
+  ShowWeatherDialog(misc);
 }
 
 void

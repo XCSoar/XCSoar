@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,6 +28,7 @@ Copyright_License {
 #include "Device/Util/NMEAWriter.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Units/System.hpp"
+#include "Math/Util.hpp"
 
 /**
  * Code specific to LXNav varios (e.g. V7).
@@ -75,10 +76,10 @@ namespace Vario {
    * @param mc in m/s
    */
   static inline bool
-  SetMacCready(Port &port, OperationEnvironment &env, fixed mc)
+  SetMacCready(Port &port, OperationEnvironment &env, double mc)
   {
     char buffer[32];
-    sprintf(buffer, "PLXV0,MC,W,%.1f", (double)mc);
+    sprintf(buffer, "PLXV0,MC,W,%.1f", mc);
     return PortWriteNMEA(port, buffer, env);
   }
 
@@ -87,10 +88,10 @@ namespace Vario {
    * @param overload 1.0 - 1.4 (100 - 140%)
    */
   static inline bool
-  SetBallast(Port &port, OperationEnvironment &env, fixed overload)
+  SetBallast(Port &port, OperationEnvironment &env, double overload)
   {
     char buffer[100];
-    sprintf(buffer, "PLXV0,BAL,W,%.2f", (double)overload);
+    sprintf(buffer, "PLXV0,BAL,W,%.2f", overload);
     return PortWriteNMEA(port, buffer, env);
   }
 

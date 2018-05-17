@@ -1,9 +1,9 @@
 SHPSRC = $(SRC)/Topography/shapelib
 
 SHAPELIB_SOURCES = \
+	$(SHPSRC)/mapalloc.c \
 	$(SHPSRC)/mapstring.c \
 	$(SHPSRC)/mapbits.c 	\
-	$(SHPSRC)/mapfile.c \
 	$(SHPSRC)/mapprimitive.c 	\
 	$(SHPSRC)/mapsearch.c 	\
 	$(SHPSRC)/mapshape.c 	\

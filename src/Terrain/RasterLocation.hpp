@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,26 +24,16 @@ Copyright_License {
 #ifndef XCSOAR_TERRAIN_RASTER_LOCATION_HPP
 #define XCSOAR_TERRAIN_RASTER_LOCATION_HPP
 
-#include "Compiler.h"
-
-#include <cstdlib>
+#include "Math/Point2D.hpp"
+#include "Math/Shift.hpp"
 
 /**
  * A point within a RasterMap.
  */
-struct RasterLocation {
-  unsigned x, y;
-
-  RasterLocation() = default;
-  constexpr RasterLocation(unsigned _x, unsigned _y):x(_x), y(_y) {}
-
-  constexpr bool operator==(const RasterLocation &other) const {
-    return x == other.x && y == other.y;
-  }
-
-  constexpr bool operator!=(const RasterLocation &other) const {
-    return !(*this == other);
-  }
+struct RasterLocation : Point2D<unsigned> {
+  template<typename... Args>
+  constexpr RasterLocation(Args&&... args)
+    :Point2D(args...) {}
 
   constexpr RasterLocation operator>>(unsigned bits) const {
     return RasterLocation(x >> bits, y >> bits);
@@ -53,32 +43,22 @@ struct RasterLocation {
     return RasterLocation(x << bits, y << bits);
   }
 
-  gcc_pure
-  unsigned ManhattanDistance(const RasterLocation &other) const {
-    return std::abs((int)x - (int)other.x) +
-      std::abs((int)y - (int)other.y);
+  constexpr RasterLocation RoundingRightShift(unsigned bits) const {
+    return RasterLocation(::RoundingRightShift(x, bits),
+                          ::RoundingRightShift(y, bits));
   }
 };
 
-struct SignedRasterLocation {
-  int x, y;
-
-  SignedRasterLocation() = default;
-  constexpr SignedRasterLocation(int _x, int _y):x(_x), y(_y) {}
+struct SignedRasterLocation : Point2D<int> {
+  template<typename... Args>
+  constexpr SignedRasterLocation(Args&&... args)
+    :Point2D(args...) {}
 
   constexpr SignedRasterLocation(RasterLocation other)
-    :x(other.x), y(other.y) {}
+    :Point2D(other.x, other.y) {}
 
   constexpr operator RasterLocation() const {
     return RasterLocation(x, y);
-  }
-
-  constexpr bool operator==(SignedRasterLocation other) const {
-    return x == other.x && y == other.y;
-  }
-
-  constexpr bool operator!=(SignedRasterLocation other) const {
-    return !(*this == other);
   }
 
   constexpr SignedRasterLocation operator>>(int bits) const {
@@ -89,9 +69,9 @@ struct SignedRasterLocation {
     return SignedRasterLocation(x << bits, y << bits);
   }
 
-  gcc_pure
-  unsigned ManhattanDistance(SignedRasterLocation other) const {
-    return std::abs(x - other.x) + std::abs(y - other.y);
+  constexpr SignedRasterLocation RoundingRightShift(unsigned bits) const {
+    return SignedRasterLocation(::RoundingRightShift(x, bits),
+                                ::RoundingRightShift(y, bits));
   }
 };
 

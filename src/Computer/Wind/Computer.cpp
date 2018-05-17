@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -36,14 +36,14 @@ WindComputer::Reset()
 }
 
 gcc_pure
-static fixed
+static double
 GetVTakeoffFallback(const GlidePolar &glide_polar)
 {
   return glide_polar.IsValid()
     ? glide_polar.GetVTakeoff()
     /* if there's no valid polar, assume 10 m/s (36 km/h); that's an
        arbitrary value, but better than nothing */
-    : fixed(10);
+    : 10.;
 }
 
 void

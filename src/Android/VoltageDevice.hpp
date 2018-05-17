@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,7 +27,6 @@ Copyright_License {
 #include "VoltageListener.hpp"
 #include "Java/Object.hxx"
 #include "Compiler.h"
-#include "Math/fixed.hpp"
 #include "Math/WindowFilter.hpp"
 
 #include <jni.h>
@@ -36,9 +35,9 @@ Copyright_License {
 
 class VoltageDevice final : private VoltageListener {
   unsigned index;
-  Java::Object obj;
-  fixed offset;
-  fixed factor;
+  Java::GlobalObject obj;
+  double offset;
+  double factor;
   WindowFilter<16> voltage_filter[NUMBER_OF_VOLTAGES];
   WindowFilter<64> temperature_filter;
 
@@ -48,7 +47,7 @@ public:
 
   VoltageDevice(unsigned index,
                JNIEnv *env, jobject holder,
-               fixed _offset, fixed _factor, unsigned sample_rate);
+               double _offset, double _factor, unsigned sample_rate);
 
   ~VoltageDevice();
 

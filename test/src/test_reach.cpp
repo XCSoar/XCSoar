@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,6 +27,7 @@
 #include "Route/TerrainRoute.hpp"
 #include "Engine/Route/ReachResult.hpp"
 #include "Terrain/RasterMap.hpp"
+#include "Terrain/Loader.hpp"
 #include "OS/ConvertPathName.hpp"
 #include "Compatibility/path.h"
 #include "GlideSolvers/GlideSettings.hpp"
@@ -35,57 +36,57 @@
 #include "Operation/Operation.hpp"
 #include "OS/FileUtil.hpp"
 
+#include <zzip/zzip.h>
+
 #include <string.h>
 
-static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
+static void
+test_reach(const RasterMap &map, double mwind, double mc, double height_min_working)
 {
   GlideSettings settings;
   settings.SetDefaults();
+  RoutePlannerConfig config;
+  config.SetDefaults();
+
   GlidePolar polar(mc);
   SpeedVector wind(Angle::Degrees(0), mwind);
   TerrainRoute route;
-  route.UpdatePolar(settings, polar, polar, wind);
+  route.UpdatePolar(settings, config, polar, polar, wind, height_min_working);
   route.SetTerrain(&map);
 
   GeoPoint origin(map.GetMapCenter());
 
-  fixed pd = map.PixelDistance(origin, 1);
-  printf("# pixel size %g\n", (double)pd);
-
   bool retval= true;
 
-  short horigin = map.GetHeight(origin)+1000;
-  AGeoPoint aorigin(origin, RoughAltitude(horigin));
+  int horigin = map.GetHeight(origin).GetValueOr0() + 1000;
+  AGeoPoint aorigin(origin, horigin);
 
-  RoutePlannerConfig config;
-  config.SetDefaults();
-  retval = route.SolveReach(aorigin, config, RoughAltitude::Max());
+  retval = route.SolveReachTerrain(aorigin, config, INT_MAX);
+  ok(retval, "reach terrain", 0);
+  PrintHelper::print_reach_terrain_tree(route);
 
-  ok(retval, "reach solve", 0);
-
-  PrintHelper::print_reach_tree(route);
-
-  GeoPoint dest(origin.longitude-Angle::Degrees(0.02),
-                origin.latitude-Angle::Degrees(0.02));
+  retval = route.SolveReachWorking(aorigin, config, INT_MAX);
+  ok(retval, "reach working", 0);
+  PrintHelper::print_reach_working_tree(route);
 
   {
-    Directory::Create(_T("output/results"));
+    Directory::Create(Path(_T("output/results")));
     std::ofstream fout("output/results/terrain.txt");
     unsigned nx = 100;
     unsigned ny = 100;
     for (unsigned i=0; i< nx; ++i) {
       for (unsigned j=0; j< ny; ++j) {
-        fixed fx = (fixed)i / (nx - 1) * 2 - fixed(1);
-        fixed fy = (fixed)j / (ny - 1) * 2 - fixed(1);
-        GeoPoint x(origin.longitude + Angle::Degrees(fixed(0.6) * fx),
-                   origin.latitude + Angle::Degrees(fixed(0.6) * fy));
-        short h = map.GetInterpolatedHeight(x);
-        AGeoPoint adest(x, RoughAltitude(h));
+        double fx = (double)i / (nx - 1) * 2 - 1;
+        double fy = (double)j / (ny - 1) * 2 - 1;
+        GeoPoint x(origin.longitude + Angle::Degrees(0.6 * fx),
+                   origin.latitude + Angle::Degrees(0.6 * fy));
+        int h = map.GetInterpolatedHeight(x).GetValueOr0();
+        AGeoPoint adest(x, h);
         ReachResult reach;
         route.FindPositiveArrival(adest, reach);
         if ((i % 5 == 0) && (j % 5 == 0)) {
-          AGeoPoint ao2(x, RoughAltitude(h + 1000));
-          route.SolveReach(ao2, config, RoughAltitude::Max());
+          AGeoPoint ao2(x, h + 1000);
+          route.SolveReachTerrain(ao2, config, INT_MAX);
         }
         fout << x.longitude.Degrees() << " "
              << x.latitude.Degrees() << " "
@@ -95,11 +96,13 @@ static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
     }
     fout << "\n";
   }
+
+  //  double pd = map.PixelDistance(origin, 1);
+  //  printf("# pixel size %g\n", (double)pd);
 }
 
 int main(int argc, char** argv) {
-
-  const char hc_path[] = "tmp/terrain";
+  static const char hc_path[] = "tmp/map.xcm";
   const char *map_path;
   if ((argc<2) || !strlen(argv[1])) {
     map_path = hc_path;
@@ -107,28 +110,36 @@ int main(int argc, char** argv) {
     map_path = argv[1];
   }
 
-  TCHAR jp2_path[4096];
-  _tcscpy(jp2_path, PathName(map_path));
-  _tcscat(jp2_path, _T(DIR_SEPARATOR_S) _T("terrain.jp2"));
+  ZZIP_DIR *dir = zzip_dir_open(map_path, nullptr);
+  if (dir == nullptr) {
+    fprintf(stderr, "Failed to open %s\n", map_path);
+    return EXIT_FAILURE;
+  }
 
-  TCHAR j2w_path[4096];
-  _tcscpy(j2w_path, PathName(map_path));
-  _tcscat(j2w_path, _T(DIR_SEPARATOR_S) _T("terrain.j2w"));
-
-  RasterMap map(jp2_path);
+  RasterMap map;
 
   NullOperationEnvironment operation;
-  if (!map.Load(jp2_path, j2w_path, operation)) {
+  if (!LoadTerrainOverview(dir, map.GetTileCache(),
+                           operation)) {
     fprintf(stderr, "failed to load map\n");
     return EXIT_FAILURE;
   }
 
-  do {
-    map.SetViewCenter(map.GetMapCenter(), fixed(100000));
-  } while (map.IsDirty());
+  map.UpdateProjection();
 
-  plan_tests(1);
-  test_reach(map, fixed(0), fixed(0.1));
+  SharedMutex mutex;
+  do {
+    UpdateTerrainTiles(dir, map.GetTileCache(), mutex,
+                       map.GetProjection(),
+                       map.GetMapCenter(), 50000);
+  } while (map.IsDirty());
+  zzip_dir_close(dir);
+
+  plan_tests(8);
+  test_reach(map, 0, 0.1, 0);
+  test_reach(map, 0, 0.1, 750);
+  test_reach(map, 0, 0.1, 500);
+  test_reach(map, 0, 0.1, 250);
 
   return exit_status();
 }

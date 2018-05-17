@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,82 +22,9 @@ Copyright_License {
 */
 
 #include "Battery.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 #ifdef HAVE_BATTERY
-
-#if (defined(_WIN32_WCE) && !defined(GNAV))
-#include <windows.h>
-
-namespace Power
-{
-  namespace Battery{
-    unsigned Temperature = 0;
-    unsigned RemainingPercent = 0;
-    bool RemainingPercentValid = false;
-    batterystatus Status = UNKNOWN;
-  };
-
-  namespace External{
-    externalstatus Status = UNKNOWN;
-  };
-};
-
-void
-UpdateBatteryInfo()
-{
-  SYSTEM_POWER_STATUS_EX2 sps;
-
-  // request the power status
-  DWORD result = GetSystemPowerStatusEx2(&sps, sizeof(sps), TRUE);
-  if (result >= sizeof(sps)) {
-    if (sps.BatteryLifePercent != BATTERY_PERCENTAGE_UNKNOWN){
-      Power::Battery::RemainingPercent = sps.BatteryLifePercent;
-      Power::Battery::RemainingPercentValid = true;
-    }
-    else
-      Power::Battery::RemainingPercentValid = false;
-
-    switch (sps.BatteryFlag) {
-      case BATTERY_FLAG_HIGH:
-        Power::Battery::Status = Power::Battery::HIGH;
-        break;
-      case BATTERY_FLAG_LOW:
-        Power::Battery::Status = Power::Battery::LOW;
-        break;
-      case BATTERY_FLAG_CRITICAL:
-        Power::Battery::Status = Power::Battery::CRITICAL;
-        break;
-      case BATTERY_FLAG_CHARGING:
-        Power::Battery::Status = Power::Battery::CHARGING;
-        break;
-      case BATTERY_FLAG_NO_BATTERY:
-        Power::Battery::Status = Power::Battery::NOBATTERY;
-        break;
-      case BATTERY_FLAG_UNKNOWN:
-      default:
-        Power::Battery::Status = Power::Battery::UNKNOWN;
-    }
-
-    switch (sps.ACLineStatus) {
-      case AC_LINE_OFFLINE:
-        Power::External::Status = Power::External::OFF;
-        break;
-      case AC_LINE_BACKUP_POWER:
-      case AC_LINE_ONLINE:
-        Power::External::Status = Power::External::ON;
-        break;
-      case AC_LINE_UNKNOWN:
-      default: 
-        Power::External::Status = Power::External::UNKNOWN;
-    }
-  } else {
-    Power::Battery::Status = Power::Battery::UNKNOWN;
-    Power::External::Status = Power::External::UNKNOWN;
-  }
-}
-
-#endif
 
 #ifdef KOBO
 
@@ -131,8 +58,8 @@ UpdateBatteryInfo()
   char line[256];
 
   if (DetectKoboModel() == KoboModel::GLO_HD) {
-    if (File::ReadString("/sys/class/power_supply/mc13892_bat/status",
-                            line, sizeof(line))) {
+    if (File::ReadString(Path("/sys/class/power_supply/mc13892_bat/status"),
+                         line, sizeof(line))) {
       if (StringIsEqual(line,"Not charging\n") ||
           StringIsEqual(line,"Charging\n"))
         Power::External::Status = Power::External::ON;
@@ -140,15 +67,15 @@ UpdateBatteryInfo()
         Power::External::Status = Power::External::OFF;
     }
 
-    if (File::ReadString("/sys/class/power_supply/mc13892_bat/capacity",
-                          line, sizeof(line))) {
+    if (File::ReadString(Path("/sys/class/power_supply/mc13892_bat/capacity"),
+                         line, sizeof(line))) {
       int rem = atoi(line);
       Power::Battery::RemainingPercentValid = true;
       Power::Battery::RemainingPercent = rem;
     }
   } else {
     // code shamelessly copied from OS/SystemLoad.cpp
-    if (!File::ReadString("/sys/class/power_supply/mc13892_bat/uevent",
+    if (!File::ReadString(Path("/sys/class/power_supply/mc13892_bat/uevent"),
                           line, sizeof(line)))
       return;
 
@@ -187,7 +114,7 @@ UpdateBatteryInfo()
 
 #endif
 
-#if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION >= 2)
+#ifdef ENABLE_SDL
 
 #include <SDL_power.h>
 

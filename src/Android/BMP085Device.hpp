@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@ Copyright_License {
 
 class BMP085Device final : private BMP085Listener {
   unsigned index;
-  Java::Object obj;
+  Java::GlobalObject obj;
 
   /**
    * This Kalman filter is used to smooth the pressure input.
@@ -53,7 +53,7 @@ public:
 
 private:
   /* virtual methods from class BMP085Listener */
-  virtual void onBMP085Values(fixed temperature,
+  virtual void onBMP085Values(double temperature,
                               AtmosphericPressure pressure) override;
   virtual void onBMP085Error() override;
 };

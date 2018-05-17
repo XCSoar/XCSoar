@@ -1,16 +1,6 @@
-RADIANS ?= y
 LLVM ?= n
 CLANG ?= $(LLVM)
 IWYU ?= n
-
-FIXED ?= $(call bool_not,$(HAVE_FPU))
-ifeq ($(FIXED),y)
-TARGET_CPPFLAGS += -DFIXED_MATH
-endif
-
-ifeq ($(RADIANS),y)
-TARGET_CPPFLAGS += -DRADIANS
-endif
 
 # shall we paint with some eye candy?
 EYE_CANDY ?= $(call bool_not,$(TARGET_IS_KOBO))
@@ -53,12 +43,8 @@ endif
 # a red Activity icon, to allow simultaneous installation of "stable"
 # and "testing".
 # In the stable branch, this should default to "n".
-TESTING = n
+TESTING = y
 
 ifeq ($(TESTING),y)
   TARGET_CPPFLAGS += -DTESTING
-endif
-
-ifneq ($(WGS84),n)
-TARGET_CPPFLAGS += -DUSE_WGS84
 endif

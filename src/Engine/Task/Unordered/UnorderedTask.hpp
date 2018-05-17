@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -44,19 +44,19 @@ public:
                                 const AircraftState &state_last) override;
   virtual bool CalcBestMC(const AircraftState &state_now,
                           const GlidePolar &glide_polar,
-                          fixed& best) const override;
-  virtual fixed CalcRequiredGlide(const AircraftState &state_now,
-                                  const GlidePolar &glide_polar) const override;
-  virtual fixed CalcGradient(const AircraftState &state_now) const override;
-  virtual fixed ScanTotalStartTime() override;
-  virtual fixed ScanLegStartTime() override;
-  virtual fixed ScanDistanceNominal() override;
-  virtual fixed ScanDistancePlanned() override;
-  virtual fixed ScanDistanceRemaining(const GeoPoint &ref) override;
-  virtual fixed ScanDistanceScored(const GeoPoint &ref) override;
-  virtual fixed ScanDistanceTravelled(const GeoPoint &ref) override;
+                          double& best) const override;
+  virtual double CalcRequiredGlide(const AircraftState &state_now,
+                                   const GlidePolar &glide_polar) const override;
+  virtual double CalcGradient(const AircraftState &state_now) const override;
+  virtual double ScanTotalStartTime() override;
+  virtual double ScanLegStartTime() override;
+  virtual double ScanDistanceNominal() override;
+  virtual double ScanDistancePlanned() override;
+  virtual double ScanDistanceRemaining(const GeoPoint &ref) override;
+  virtual double ScanDistanceScored(const GeoPoint &ref) override;
+  virtual double ScanDistanceTravelled(const GeoPoint &ref) override;
   virtual void ScanDistanceMinMax(const GeoPoint &ref, bool full,
-                                  fixed *dmin, fixed *dmax) override;
+                                  double *dmin, double *dmax) override;
   virtual void GlideSolutionRemaining(const AircraftState &state_now,
                                       const GlidePolar &polar,
                                       GlideResult &total, GlideResult &leg) override;

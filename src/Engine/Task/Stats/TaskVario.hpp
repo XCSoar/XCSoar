@@ -1,8 +1,6 @@
 #ifndef TASK_VARIO_HPP
 #define TASK_VARIO_HPP
 
-#include "Math/fixed.hpp"
-
 #include <type_traits>
 
 /**
@@ -13,11 +11,11 @@ class TaskVario
 {
   friend class TaskVarioComputer;
 
-  fixed value;
+  double value;
 
 public:
   void Reset() {
-    value = fixed(0);
+    value = 0;
   }
 
 /** 
@@ -25,7 +23,7 @@ public:
  * 
  * @return Current vario value (m/s, positive up)
  */
-  fixed get_value() const {
+  double get_value() const {
     return value;
   }
 };

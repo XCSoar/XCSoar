@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,24 +23,14 @@ Copyright_License {
 
 #include "FinalGlideBarLook.hpp"
 #include "Screen/Layout.hpp"
-
-static Color
-ColorWithAlpha(const Color &c, uint8_t a)
-{
-#ifdef ENABLE_OPENGL
-  return c.WithAlpha(a);
-#else
-  return c;
-#endif
-}
-
+#include "Look/Colors.hpp"
 
 void
 FinalGlideBarLook::Initialise(const Font &_font)
 {
-  const uint8_t alpha = 0xA0;
+  const uint8_t alpha = ALPHA_OVERLAY;
 
-  brush_below.Create(ColorWithAlpha(COLOR_RED, alpha));
+  brush_below.Create(ColorWithAlpha(COLOR_RED, ALPHA_OVERLAY));
   brush_below_mc0.Create(ColorWithAlpha(LightColor(COLOR_RED), alpha));
   pen_below.Create(Layout::ScalePenWidth(1),
                    HasColors()? DarkColor(COLOR_RED) : COLOR_BLACK);

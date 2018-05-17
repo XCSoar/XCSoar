@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,26 +21,32 @@ Copyright_License {
 }
 */
 
+#include "IO/ZipArchive.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "OS/Args.hpp"
+#include "Util/PrintException.hxx"
+
+#include <zzip/zzip.h>
 
 #include <stdio.h>
 
 int main(int argc, char **argv)
-{
-  Args args(argc, argv, "FILE");
-  const char *path = args.ExpectNext();
+try {
+  Args args(argc, argv, "ZIPFILE FILENAME");
+  const auto zip_path = args.ExpectNextPath();
+  const char *filename = args.ExpectNext();
   args.ExpectEnd();
 
-  ZipLineReader reader(path);
-  if (reader.error()) {
-    fprintf(stderr, "Failed to open %s\n", path);
-    return 1;
-  }
+  ZipArchive archive(zip_path);
+
+  ZipLineReader reader(archive.get(), filename);
 
   TCHAR *line;
   while ((line = reader.ReadLine()) != NULL)
     _putts(line);
 
   return EXIT_SUCCESS;
+} catch (const std::runtime_error &e) {
+  PrintException(e);
+  return EXIT_FAILURE;
 }

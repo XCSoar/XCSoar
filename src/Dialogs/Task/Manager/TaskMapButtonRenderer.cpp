@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ Copyright_License {
 #include "Components.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scissor.hpp"
+#include "Screen/OpenGL/Scope.hpp"
 #endif
 
 static void
@@ -39,7 +39,7 @@ DrawTask(Canvas &canvas, const PixelRect rc,
   PaintTask(canvas, rc, task,
             basic.location_available ? basic.location : GeoPoint::Invalid(),
             CommonInterface::GetMapSettings(),
-            look.task, look.airspace,
+            look.task, look.airspace, look.overlay,
             terrain, &airspace_database,
             true);
 }
@@ -55,8 +55,7 @@ TaskMapButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
     return;
   }
 
-  const PixelSize new_size(rc.right - rc.left,
-                           rc.bottom - rc.top);
+  const PixelSize new_size = rc.GetSize();
   if (!IsBufferValid(new_size)) {
     if (!buffer.IsDefined()) {
 #ifdef ENABLE_OPENGL
@@ -91,7 +90,7 @@ TaskMapButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
 
   if (pressed) {
 #ifdef ENABLE_OPENGL
-    const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    const ScopeAlphaBlend alpha_blend;
     canvas.DrawFilledRectangle(rc, COLOR_YELLOW.WithAlpha(80));
 #else
     canvas.InvertRectangle(rc);

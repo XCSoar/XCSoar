@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,6 +27,7 @@ Copyright_License {
 #include "Form/ActionListener.hpp"
 #include "Language/Language.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/IntermediatePoint.hpp"
@@ -45,7 +46,7 @@ class MatTaskAddWidget final
     ADD,
   };
 
-  Waypoint waypoint;
+  const WaypointPtr waypoint;
 
   StaticString<256> buffer;
 
@@ -56,9 +57,9 @@ class MatTaskAddWidget final
   }
 
 public:
-  MatTaskAddWidget(MatTaskMonitor &_monitor, const Waypoint &_waypoint)
-    :QuestionWidget(MakeMessage(_waypoint), *this),
-     monitor(_monitor), waypoint(_waypoint) {
+  MatTaskAddWidget(MatTaskMonitor &_monitor, WaypointPtr &&_waypoint)
+    :QuestionWidget(MakeMessage(*_waypoint), *this),
+     monitor(_monitor), waypoint(std::move(_waypoint)) {
     AddButton(_("Add"), ADD);
     AddButton(_("Dismiss"), DISMISS);
   }
@@ -83,8 +84,10 @@ MatTaskAddWidget::OnAdd()
   const unsigned idx = task.TaskSize() - 1;
   AbstractTaskFactory &factory = task_manager->GetFactory();
 
+  auto wp = waypoint;
   IntermediateTaskPoint *tp =
-    factory.CreateIntermediate(TaskPointFactoryType::MAT_CYLINDER, waypoint);
+    factory.CreateIntermediate(TaskPointFactoryType::MAT_CYLINDER,
+                               std::move(wp));
   if (tp != nullptr) {
     factory.Insert(*tp, idx, false);
     delete tp;
@@ -115,7 +118,7 @@ static bool
 IsInTask(const OrderedTask &task, const Waypoint &wp)
 {
   for (unsigned i = 0, n = task.TaskSize(); i < n; ++i)
-    if (task.GetTaskPoint(i).GetWaypoint().id == wp.id)
+    if (task.GetTaskPoint(i).GetWaypoint() == wp)
       return true;
 
   return false;
@@ -148,7 +151,7 @@ FinishIsCurrent(const ProtectedTaskManager &task_manager)
 }
 
 gcc_pure
-static const Waypoint *
+static WaypointPtr
 FindMatTurnpoint()
 {
   const NMEAInfo &basic = CommonInterface::Basic();
@@ -176,9 +179,9 @@ FindMatTurnpoint()
     return wp.IsTurnpoint();
   };
 
-  const Waypoint *wp = way_points.GetNearestIf(basic.location,
-                                               fixed(CylinderZone::MAT_RADIUS),
-                                               turnpoint_predicate);
+  auto wp = way_points.GetNearestIf(basic.location,
+                                    CylinderZone::MAT_RADIUS,
+                                    turnpoint_predicate);
 
   if (wp == nullptr)
     /* no nearby turn point */
@@ -194,16 +197,17 @@ FindMatTurnpoint()
 void
 MatTaskMonitor::Check()
 {
-  const Waypoint *wp = FindMatTurnpoint();
+  auto wp = FindMatTurnpoint();
   if (wp != nullptr) {
     /* found a turn point: open a QuestionWidget (unless one already
        exists) */
+    const auto id = wp->id;
     if (widget == nullptr && wp->id != last_id) {
-      widget = new MatTaskAddWidget(*this, *wp);
+      widget = new MatTaskAddWidget(*this, std::move(wp));
       PageActions::SetCustomBottom(widget);
     }
 
-    last_id = wp->id;
+    last_id = id;
   } else {
     /* no nearby turn point: close the QuestionWidget */
     if (widget != nullptr)

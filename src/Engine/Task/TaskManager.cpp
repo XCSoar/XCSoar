@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -156,39 +156,39 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
       ordered_task->GetOrderedTaskSettings().aat_min_time -
       task_stats.total.time_elapsed;
 
-    fixed aat_time = ordered_task->GetOrderedTaskSettings().aat_min_time +
-      fixed(task_behaviour.optimise_targets_margin);
+    auto aat_time = ordered_task->GetOrderedTaskSettings().aat_min_time +
+      task_behaviour.optimise_targets_margin;
 
-    if (positive(aat_time)) {
+    if (aat_time > 0) {
       common_stats.aat_speed_max = task_stats.distance_max / aat_time;
       common_stats.aat_speed_min = task_stats.distance_min / aat_time;
       common_stats.aat_speed_target =
         task_stats.total.planned.GetDistance() / aat_time;
     } else {
-      common_stats.aat_speed_max = fixed(-1);
-      common_stats.aat_speed_min = fixed(-1);
-      common_stats.aat_speed_target = fixed(-1);
+      common_stats.aat_speed_max = -1;
+      common_stats.aat_speed_min = -1;
+      common_stats.aat_speed_target = -1;
     }
 
     const StartConstraints &start_constraints =
       ordered_task->GetOrderedTaskSettings().start_constraints;
     common_stats.start_open_time_span = start_constraints.open_time_span;
-    const fixed start_max_height =
-      fixed(start_constraints.max_height) +
+    const auto start_max_height =
+      start_constraints.max_height +
       (start_constraints.max_height_ref == AltitudeReference::MSL
-       ? fixed(0)
+       ? 0
        : ordered_task->GetPoint(0).GetElevation());
-    if (positive(start_max_height) &&
+    if (start_max_height > 0 &&
         state.location.IsValid() && state.flying) {
-      if (!positive(common_stats.TimeUnderStartMaxHeight) &&
+      if (common_stats.TimeUnderStartMaxHeight <= 0 &&
           state.altitude < start_max_height) {
         common_stats.TimeUnderStartMaxHeight = state.time;
       }
       if (state.altitude > start_max_height) {
-          common_stats.TimeUnderStartMaxHeight = fixed(-1);
+          common_stats.TimeUnderStartMaxHeight = -1;
       }
     } else {
-      common_stats.TimeUnderStartMaxHeight = fixed(-1);
+      common_stats.TimeUnderStartMaxHeight = -1;
     }
 
     ordered_task->UpdateSummary(common_stats.ordered_summary);
@@ -276,7 +276,7 @@ TaskManager::Update(const AircraftState &state,
 
   bool retval = false;
 
-  if (!negative(state_last.time) && !negative(state.time) &&
+  if (state_last.time >= 0 && state.time >= 0 &&
       state_last.time > state.time)
     /* time warp */
     Reset();
@@ -293,7 +293,7 @@ TaskManager::Update(const AircraftState &state,
   const GeoPoint *destination = &state.location;
 
   if (task_behaviour.abort_task_mode == AbortTaskMode::HOME) {
-    const Waypoint *home = abort_task->GetHome();
+    const auto home = abort_task->GetHome();
     if (home)
       destination = &home->location;
   } else if (task_behaviour.abort_task_mode == AbortTaskMode::TASK) {
@@ -343,9 +343,9 @@ TaskManager::GetStats() const
 }
 
 bool
-TaskManager::DoGoto(const Waypoint &wp)
+TaskManager::DoGoto(WaypointPtr &&wp)
 {
-  if (goto_task->DoGoto(wp)) {
+  if (goto_task->DoGoto(std::move(wp))) {
     SetMode(TaskType::GOTO);
     return true;
   }
@@ -399,7 +399,7 @@ TaskManager::Reset()
   goto_task->Reset();
   abort_task->Reset();
   common_stats.Reset();
-  glide_polar.SetCruiseEfficiency(fixed(1));
+  glide_polar.SetCruiseEfficiency(1);
 }
 
 unsigned
@@ -412,7 +412,7 @@ TaskManager::TaskSize() const
 }
 
 GeoPoint
-TaskManager::RandomPointInTask(const unsigned index, const fixed mag) const
+TaskManager::RandomPointInTask(const unsigned index, const double mag) const
 {
   if (active_task == ordered_task && ordered_task->IsValidIndex(index))
     return ordered_task->GetTaskPoint(index).GetRandomPointInSector(mag);
@@ -434,7 +434,7 @@ TaskManager::SetGlidePolar(const GlidePolar &_glide_polar)
 
 bool
 TaskManager::UpdateAutoMC(const AircraftState &state_now,
-                          const fixed fallback_mc)
+                          const double fallback_mc)
 {
   if (!state_now.location.IsValid())
     return false;
@@ -446,7 +446,7 @@ TaskManager::UpdateAutoMC(const AircraftState &state_now,
   if (!task_behaviour.IsAutoMCCruiseEnabled())
     return false;
 
-  if (positive(fallback_mc)) {
+  if (fallback_mc > 0) {
     glide_polar.SetMC(fallback_mc);
     return true;
   }
@@ -556,9 +556,18 @@ TaskManager::SetIntersectionTest(AbortIntersectionTest *test)
 }
 
 void
-TaskManager::TakeoffAutotask(const GeoPoint &loc, const fixed terrain_alt)
+TaskManager::TakeoffAutotask(const GeoPoint &loc, const double terrain_alt)
 {
   // create a goto task on takeoff
   if (!active_task && goto_task->TakeoffAutotask(loc, terrain_alt))
     SetMode(TaskType::GOTO);
+}
+
+void
+TaskManager::ResetTask()
+{
+  if (active_task != nullptr) {
+    active_task->Reset();
+    UpdateCommonStatsTask();
+  }
 }

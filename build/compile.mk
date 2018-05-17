@@ -41,18 +41,18 @@ DLLTOOL = $(TCPREFIX)dlltool$(EXE)
 SIZE = $(TCPREFIX)size$(EXE)
 STRIP = $(TCPREFIX)strip$(EXE)
 WINDRES = $(TCPREFIX)windres$(EXE)
-ARFLAGS = -rcs
-
-ifeq ($(TARGET),WINE)
-AR = ar$(EXE)
-LD = ld$(EXE) -m elf_i386
-STRIP = strip$(EXE)
-WINDRES = wrc$(EXE)
-endif
+ARFLAGS = rcs
 
 ifeq ($(CLANG)$(TARGET_IS_DARWIN)$(LTO),nny)
 # use gcc's "ar" wrapper which takes care for loading the LTO plugin
-AR = $(LLVM_PREFIX)gcc-ar$(LLVM_SUFFIX)$(EXE)
+AR = $(TCPREFIX)gcc-ar$(TCSUFFIX)$(EXE)
+endif
+
+ifeq ($(CLANG)$(TARGET_IS_DARWIN)$(LTO),yny)
+AR = $(LLVM_PREFIX)llvm-ar$(LLVM_SUFFIX)$(EXE)
+# ranlib has nothing to do for LLVM bytecode which is emitted in Clang's LTO
+# mode. Use "true" command as dummy.
+RANLIB = true
 endif
 
 CXX_VERSION := $(shell $(CXX) -dumpversion)
@@ -75,9 +75,6 @@ DEPFILE = $(@:$(OBJ_SUFFIX)=.d)
 DEPFLAGS = -Wp,-MD,$(DEPFILE),-MT,$@
 cc-flags = $(DEPFLAGS) $(ALL_CFLAGS) $(ALL_CPPFLAGS) $(TARGET_ARCH) $(FLAGS_COVERAGE)
 cxx-flags = $(DEPFLAGS) $(ALL_CXXFLAGS) $(ALL_CPPFLAGS) $(TARGET_ARCH) $(FLAGS_COVERAGE)
-
-cc-flags-filter = $(filter-out $(FILTER_FLAGS),$(cc-flags))
-cxx-flags-filter = $(filter-out $(FILTER_FLAGS),$(cxx-flags))
 
 #
 # Useful debugging targets - make preprocessed versions of the source

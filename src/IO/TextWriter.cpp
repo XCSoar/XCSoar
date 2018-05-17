@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,21 +22,17 @@ Copyright_License {
 */
 
 #include "TextWriter.hpp"
+#include "OS/Path.hpp"
 
 #ifdef _UNICODE
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 #include <windows.h>
 #endif
 
-TextWriter::TextWriter(const char *path, bool append)
-  :file(path, append ? "ab" : "wb") {}
+#include <tchar.h>
 
-#ifdef _UNICODE
-
-TextWriter::TextWriter(const TCHAR *path, bool append)
+TextWriter::TextWriter(Path path, bool append)
   :file(path, append ? _T("ab") : _T("wb")) {}
-
-#endif
 
 #ifdef _UNICODE
 

@@ -4,12 +4,7 @@
  *      Guido Draheim <guidod@gmx.de>
  *      Tomi Ollila <too@iki.fi>
  *
- * Copyright (c) 1999,2000,2001,2002,2003 Guido Draheim
- *          All rights reserved,
- *          use under the restrictions of the
- *          Lesser GNU General Public License
- *          or alternatively the restrictions
- *          of the Mozilla Public License 1.1
+ * Copyright (c) Guido Draheim, use under copyleft (LGPL,MPL)
  */
 
 #include <zzip/lib.h>           /* archive handling */
@@ -418,7 +413,7 @@ __zzip_parse_root_directory(int fd,
     zzip_off64_t zz_rootseek = _disk_trailer_rootseek(trailer);
     __correct_rootseek(zz_rootseek, zz_rootsize, trailer);
 
-    hdr0 = (struct zzip_dir_hdr *) malloc((unsigned int)zz_rootsize);
+    hdr0 = (struct zzip_dir_hdr *) malloc((size_t)zz_rootsize);
     if (! hdr0)
         return ZZIP_DIRSIZE;
     hdr = hdr0;
@@ -464,7 +459,7 @@ __zzip_parse_root_directory(int fd,
             { d = (void*)(fd_map+zz_fd_gap+zz_offset); } /* fd_map+fd_gap==u_rootseek */
         else
         {
-            if (io->fd.seeks(fd, (long)(zz_rootseek+zz_offset), SEEK_SET) < 0)
+            if (io->fd.seeks(fd, (zzip_off_t)(zz_rootseek + zz_offset), SEEK_SET) < 0)
                 return ZZIP_DIR_SEEK;
             if (io->fd.read(fd, &dirent, sizeof(dirent)) < __sizeof(dirent))
                 return ZZIP_DIR_READ;
@@ -590,8 +585,6 @@ zzip_get_default_ext(void)
     static zzip_strings_t ext[] = {
 	/* *INDENT-OFF* */
        ".zip", ".ZIP", /* common extension */
-       ".xcm", ".XCM", // XCSoar map files
-       "", // JMW, allow paths like fred.zip/FOO
 #     ifdef ZZIP_USE_ZIPLIKES
        ".pk3", ".PK3", /* ID Software's Quake3 zipfiles */
        ".jar", ".JAR", /* Java zipfiles */

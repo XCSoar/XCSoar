@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,11 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_LINUX_INPUT_HPP
 #define XCSOAR_EVENT_LINUX_INPUT_HPP
 
-#include "OS/FileDescriptor.hxx"
-#include "IO/Async/FileEventHandler.hpp"
 #include "Math/Point2D.hpp"
 
-class IOLoop;
+#include <boost/asio/posix/stream_descriptor.hpp>
+
 class EventQueue;
 class MergeMouse;
 struct Event;
@@ -36,10 +35,8 @@ struct Event;
 /**
  * A driver for Linux input devices (/dev/input/event*).
  */
-class LinuxInputDevice final : private FileEventHandler {
-  typedef Point2D<int> Position;
-
-  IOLoop &io_loop;
+class LinuxInputDevice final {
+  typedef IntPoint2D Position;
 
   EventQueue &queue;
 
@@ -75,14 +72,15 @@ class LinuxInputDevice final : private FileEventHandler {
 
   bool is_pointer;
 
-  FileDescriptor fd;
+  boost::asio::posix::stream_descriptor fd;
 
 public:
-  explicit LinuxInputDevice(IOLoop &_io_loop, EventQueue &_queue,
+  explicit LinuxInputDevice(boost::asio::io_service &io_service,
+                            EventQueue &_queue,
                             MergeMouse &_merge)
-    :io_loop(_io_loop), queue(_queue), merge(_merge),
+    :queue(_queue), merge(_merge),
      edit_position(0, 0), public_position(0, 0),
-     fd(FileDescriptor::Undefined()) {}
+     fd(io_service) {}
 
   ~LinuxInputDevice() {
     Close();
@@ -92,14 +90,19 @@ public:
   void Close();
 
   bool IsOpen() const {
-    return fd.IsDefined();
+    return fd.is_open();
   }
 
 private:
   void Read();
 
-  /* virtual methods from FileEventHandler */
-  bool OnFileEvent(FileDescriptor fd, unsigned mask) override;
+  void AsyncRead() {
+    fd.async_read_some(boost::asio::null_buffers(),
+                       std::bind(&LinuxInputDevice::OnReadReady,
+                                 this, std::placeholders::_1));
+  }
+
+  void OnReadReady(const boost::system::error_code &ec);
 };
 
 #endif

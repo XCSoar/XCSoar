@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@ Copyright_License {
 #include "Geo/Math.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Math/Angle.hpp"
-#include "Util/StringUtil.hpp"
+#include "Math/Util.hpp"
 
 static constexpr unsigned BASE = 36;
 static constexpr unsigned TEAMCODE_COMBINATIONS = BASE * BASE;
@@ -124,16 +124,16 @@ TeamCode::GetBearing() const
   return (ANGLE_FACTOR * value).AsBearing();
 }
 
-fixed
+double
 TeamCode::GetRange() const
 {
   // Get last three values from teamcode (3-5)
   unsigned value = GetValueFromTeamCode(code.begin() + 2, 3);
-  return fixed(value * 100);
+  return value * 100;
 }
 
 void
-TeamCode::Update(Angle bearing, fixed range)
+TeamCode::Update(Angle bearing, double range)
 {
   // Calculate bearing part of the teamcode
   ConvertBearingToTeamCode(bearing, code.buffer());
@@ -150,8 +150,8 @@ TeamCode::Update(const TCHAR* _code)
 GeoPoint
 TeamCode::GetLocation(const GeoPoint ref) const
 {
-  Angle bearing = GetBearing();
-  fixed distance = GetRange();
+  auto bearing = GetBearing();
+  auto distance = GetRange();
 
   return FindLatitudeLongitude(ref, bearing, distance);
 }

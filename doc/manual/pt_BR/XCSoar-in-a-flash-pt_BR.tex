@@ -1,56 +1,25 @@
-\documentclass[a4paper,12pt,utf8]{scrreprt}
+\documentclass[a4paper,12pt]{refrep}
+\settextfraction{1}
+\input{xcsoar.sty}
 \usepackage[portuguese]{babel}
-\usepackage[utf8]{inputenc}
-\usepackage[off]{flippdf}    % mirrored pages (even images ..) -> Default OFF..
-\usepackage{supertabular}
-\usepackage{array}
 \usepackage{wasysym}
-\usepackage{hhline}
-\usepackage{framed}          % colour support
-\usepackage[rgb]{xcolor}     % colour support, rgb = definite colour space
 \usepackage{graphicx}        % -> includegraphics
-\usepackage{wrapfig}
-\usepackage{fancyhdr}
-\usepackage{fancybox}
-\usepackage{booktabs}
 \usepackage{paralist}
-\usepackage{fancyhdr}
-\usepackage{url}
-\usepackage[colorlinks]{hyperref}
 \hypersetup{
-    %bookmarks=true,
-    unicode=true,
-    %pagebackref=true,
-    pdftoolbar=true,
-    pdfmenubar=true,
-    pdffitwindow=false,
-    pdfstartview={FitH},
     pdftitle={XCSoar in a Flash},
     pdfauthor={WZ},
     pdfsubject={Quickstart},
-    pdfcreator={PDFlatex},
     pdfproducer={xcsoar.org},
     pdfkeywords={XCSoar}{Quickstart}{Soaring}{Final Glide},
-    pdfnewwindow=true,
-    colorlinks=true,
-    linkcolor=black,
-    citecolor=green,
-    filecolor=magenta,
-    urlcolor=blue
 }
 \parindent0mm                %no indent
 \textwidth=170mm             %match print and screen
-\oddsidemargin=-5mm          %match print and screen
-\setlength{\headheight}{33pt}%increasing headheight for logo
 \setlength{\baselineskip}{1em}
-% Font selection
-\usepackage{helvet}
-\renewcommand{\familydefault}{\sfdefault}
-\fontfamily{phv}\selectfont
-%
-%##############  Include the XC commons ##############
-%
-\input{buttons.sty}
+
+% Set the page title
+\input{xcsoar-headers.sty}
+\xcsoarheader{XCSoar em um flash}
+
 %
 %##############  Colour, Background, Border ##############
 %
@@ -62,7 +31,7 @@
 %
 \newcommand{\nav}[3]{\bmenut{Nav}{#1/2}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%NavMenu
 \newcommand{\display}[3]{\bmenut{Mostrar}{#1/2}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%DisplayMenu
-\newcommand{\config}[3]{\bmenut{Config}{#1/3}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%ConfigNavMenu
+\renewcommand{\config}[3]{\bmenut{Config}{#1/3}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%ConfigNavMenu
 \newcommand{\info}[3]{\bmenut{Info}{#1/3}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%InfoMenu
 %
 %
@@ -104,7 +73,7 @@
 %
 %
 %##############  Titlepage of flash ##############
-\pagestyle{empty}
+\thispagestyle{empty}
 \begin{center}
 \fontsize{34}{0}
 \selectfont\textbf{XCSoar em um flash}
@@ -123,8 +92,6 @@
 
 %##############  XCSoar Checklist of flash ##############
 \newpage
-\fancyhead[R]{\includegraphics[angle=0,width={1cm},keepaspectratio='true']{graphics/logo.png}}
-\pagestyle{fancy}
 %%%%%--------------------------------------------------------------------%%%%%
 %%%%%--------------------------------------------------------------------%%%%%
 %%%%%--------------------------------------------------------------------%%%%%
@@ -197,7 +164,7 @@
 %  \end{flushright}
 %\end{wrapfigure}
 
-Identifique a versão apropriada do XCSoar para seu hardware e sistema operacional \textsf{(Android, PC, Windows Mobile, PPC2003, Linux)} 
+Identifique a versão apropriada do XCSoar para seu hardware e sistema operacional \textsf{(Android, PC, Linux)}
 em \url{http://www.xcsoar.org}.
 No caso de escolher um diretório de instalação diferente do padrão, tenha certeza que os direitos de acesso estão ajustados para completo/todos.  Crie um subdiretório \texttt{XCSoarData} e coloque todos os arquivos de dados nele, que são as configurações, espaço aéreo, waypoints e os arquivos XCM de terreno.
 
@@ -576,9 +543,7 @@ Obrigado pelo seu tempo e
 \section*{Sempre tenha bons pousos}%no section at all, formatting reasons
 
 %##############  Indexes of flash ##############
-\normalsize
-\tableofcontents
-
+\input{toc.tex}
 
 %##############  Closing page of flash ##############
 \newpage

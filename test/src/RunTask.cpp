@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -105,21 +105,21 @@ Run(DebugReplay &replay, OrderedTask &task, const GlidePolar &glide_polar)
 
   printf("task elapsed %ds\n", (int)task_stats.total.time_elapsed);
   printf("task speed %1.2f kph\n",
-         double(task_stats.total.travelled.GetSpeed() * fixed(3.6)));
+         double(task_stats.total.travelled.GetSpeed() * 3.6));
   printf("travelled distance %1.3f km\n",
          double(task_stats.total.travelled.GetDistance() / 1000));
   printf("scored distance %1.3f km\n",
          double(task_stats.distance_scored / 1000));
-  if (positive(task_stats.total.time_elapsed))
+  if (task_stats.total.time_elapsed > 0)
     printf("scored speed %1.2f kph\n",
            double(task_stats.distance_scored
-                  / task_stats.total.time_elapsed * fixed(3.6)));
+                  / task_stats.total.time_elapsed * 3.6));
 }
 
 int main(int argc, char **argv)
 {
   Args args(argc, argv, "TASKFILE REPLAYFILE");
-  tstring task_path = args.ExpectNextT();
+  const auto task_path = args.ExpectNextPath();
   DebugReplay *replay = CreateDebugReplay(args);
   if (replay == NULL)
     return EXIT_FAILURE;
@@ -129,7 +129,7 @@ int main(int argc, char **argv)
   TaskBehaviour task_behaviour;
   task_behaviour.SetDefaults();
 
-  OrderedTask *task = TaskFile::GetTask(task_path.c_str(), task_behaviour,
+  OrderedTask *task = TaskFile::GetTask(task_path, task_behaviour,
                                         NULL, 0);
   if (task == NULL) {
     fprintf(stderr, "Failed to load task\n");
@@ -138,7 +138,7 @@ int main(int argc, char **argv)
 
   task->UpdateGeometry();
 
-  const GlidePolar glide_polar(fixed(1));
+  const GlidePolar glide_polar(1);
 
   Run(*replay, *task, glide_polar);
   delete task;

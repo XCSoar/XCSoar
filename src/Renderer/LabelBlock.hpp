@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,18 +25,14 @@ Copyright_License {
 #define SCREEN_LABELBLOCK_HPP
 
 #include "Screen/Point.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/StaticArray.hxx"
 #include "Compiler.h"
 
 /**
  * Simple code to prevent text writing over map city names.
  */
 class LabelBlock {
-#if defined(_WIN32_WCE) && _WIN32_WCE < 0x400
-  /* PPC2000 (ancient hardware, expect small screens) */
-  static constexpr unsigned SCREEN_HEIGHT = 1024;
-  static constexpr unsigned BUCKET_SIZE = 32;
-#elif defined(_WIN32_WCE) || defined(HAVE_GLES)
+#if defined(HAVE_GLES)
   /* embedded (Android or Windows CE) */
   static constexpr unsigned SCREEN_HEIGHT = 2048;
   static constexpr unsigned BUCKET_SIZE = 64;

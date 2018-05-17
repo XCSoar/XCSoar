@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -125,9 +125,9 @@ WidgetDialog::AutoSize()
   max_size.cy += GetTitleHeight();
 
   // Calculate sizes with one button row at the bottom
-  const PixelScalar min_height_with_buttons =
+  const int min_height_with_buttons =
     min_size.cy + Layout::GetMaximumControlHeight();
-  const PixelScalar max_height_with_buttons =
+  const int max_height_with_buttons =
     max_size.cy + Layout::GetMaximumControlHeight();
 
   if (/* need full dialog height even for minimum widget height? */

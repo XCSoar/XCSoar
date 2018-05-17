@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_COMPASS_RENDERER_HPP
 #define XCSOAR_COMPASS_RENDERER_HPP
 
-struct RasterPoint;
+struct PixelPoint;
 struct PixelRect;
 struct MapLook;
 class Canvas;
@@ -36,8 +36,8 @@ class CompassRenderer {
 public:
   CompassRenderer(const MapLook &_look):look(_look) {}
 
-  void Draw(Canvas &canvas, const Angle screen_angle, const RasterPoint pos);
-  void Draw(Canvas &canvas, const Angle screen_angle, const PixelRect rc);
+  void Draw(Canvas &canvas, Angle screen_angle, PixelPoint pos);
+  void Draw(Canvas &canvas, Angle screen_angle, PixelRect rc);
 };
 
 #endif

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,94 +22,37 @@ Copyright_License {
 */
 
 #include "DataFile.hpp"
+#include "FileReader.hxx"
 #include "FileLineReader.hpp"
-#include "TextWriter.hpp"
-#include "Util/StringUtil.hpp"
+#include "ConvertLineReader.hpp"
 #include "LocalPath.hpp"
+#include "OS/Path.hpp"
+#include "Util/StringCompare.hxx"
 
 #include <assert.h>
-#include <windef.h> // for MAX_PATH
 
-Source<char> *
+std::unique_ptr<Reader>
 OpenDataFile(const TCHAR *name)
 {
   assert(name != nullptr);
   assert(!StringIsEmpty(name));
 
-  TCHAR path[MAX_PATH];
-  LocalPath(path, name);
-
-  FileSource *source = new FileSource(path);
-  if (source == nullptr)
-    return nullptr;
-
-  if (source->error()) {
-    delete source;
-    return nullptr;
-  }
-
-  return source;
+  const auto path = LocalPath(name);
+  return std::make_unique<FileReader>(path);
 }
 
-TLineReader *
+std::unique_ptr<TLineReader>
 OpenDataTextFile(const TCHAR *name, Charset cs)
 {
-  assert(name != nullptr);
-  assert(!StringIsEmpty(name));
-
-  TCHAR path[MAX_PATH];
-  LocalPath(path, name);
-
-  FileLineReader *reader = new FileLineReader(path, cs);
-  if (reader == nullptr)
-    return nullptr;
-
-  if (reader->error()) {
-    delete reader;
-    return nullptr;
-  }
-
-  return reader;
+  return std::make_unique<ConvertLineReader>(OpenDataTextFileA(name), cs);
 }
 
-NLineReader *
+std::unique_ptr<NLineReader>
 OpenDataTextFileA(const TCHAR *name)
 {
   assert(name != nullptr);
   assert(!StringIsEmpty(name));
 
-  TCHAR path[MAX_PATH];
-  LocalPath(path, name);
-
-  FileLineReaderA *reader = new FileLineReaderA(path);
-  if (reader == nullptr)
-    return nullptr;
-
-  if (reader->error()) {
-    delete reader;
-    return nullptr;
-  }
-
-  return reader;
-}
-
-TextWriter *
-CreateDataTextFile(const TCHAR *name, bool append)
-{
-  assert(name != nullptr);
-  assert(!StringIsEmpty(name));
-
-  TCHAR path[MAX_PATH];
-  LocalPath(path, name);
-
-  TextWriter *writer = new TextWriter(path, append);
-  if (writer == nullptr)
-    return nullptr;
-
-  if (!writer->IsOpen()) {
-    delete writer;
-    return nullptr;
-  }
-
-  return writer;
+  const auto path = LocalPath(name);
+  return std::make_unique<FileLineReaderA>(path);
 }

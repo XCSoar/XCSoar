@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Thread/WorkerThread.hpp"
-#include "Thread/Trigger.hpp"
 #include "Time/PeriodClock.hpp"
 
 WorkerThread::WorkerThread(const char *_name,
@@ -37,35 +36,41 @@ WorkerThread::Run()
 {
   PeriodClock clock;
 
+  const ScopeLock lock(mutex);
+
   while (true) {
     /* wait for work */
-    event_trigger.Wait();
+    if (!trigger_flag) {
+      if (_CheckStoppedOrSuspended())
+        break;
+
+      /* check trigger_flag again to avoid a race condition, because
+         _CheckStoppedOrSuspended() may have unlocked the mutex while
+         we were suspended */
+      if (!trigger_flag)
+        trigger_cond.wait(mutex);
+    }
 
     /* got the "stop" trigger? */
     if (delay > 0
-        ? WaitForStopped(delay)
-        : CheckStoppedOrSuspended())
+        ? _WaitForStopped(delay)
+        : _CheckStoppedOrSuspended())
       break;
 
-    /* reset the trigger here, because our client might have called
-       Trigger() a few more times while we were suspended in
-       CheckStoppedOrSuspended() */
-    event_trigger.Reset();
-
-    if (IsCommandPending()) {
-      /* just in case we got another suspend/stop command after
-         CheckStoppedOrSuspended() returned and before the trigger got
-         reset: restore the trigger and skip this iteration, to fix
-         the race condition */
-      event_trigger.Signal();
+    if (!trigger_flag)
       continue;
+
+    trigger_flag = false;
+
+    {
+      const ScopeUnlock unlock(mutex);
+
+      /* do the actual work */
+      if (period_min > 0)
+        clock.Update();
+
+      Tick();
     }
-
-    /* do the actual work */
-    if (period_min > 0)
-      clock.Update();
-
-    Tick();
 
     unsigned idle = idle_min;
     if (period_min > 0) {
@@ -74,7 +79,7 @@ WorkerThread::Run()
         idle = period_min - elapsed;
     }
 
-    if (idle > 0 && WaitForStopped(idle))
+    if (idle > 0 && _WaitForStopped(idle))
       break;
   }
 }

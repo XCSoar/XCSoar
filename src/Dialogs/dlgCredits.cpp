@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,11 +28,11 @@ Copyright_License {
 #include "Widget/LargeTextWidget.hpp"
 #include "Look/FontDescription.hpp"
 #include "Look/DialogLook.hpp"
+#include "Look/Colors.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Font.hpp"
-#include "Screen/Key.h"
 #include "Version.hpp"
 #include "Inflate.hpp"
 #include "Util/ConvertString.hpp"
@@ -51,7 +51,7 @@ LogoPageWindow::OnPaint(Canvas &canvas)
 {
   const PixelRect rc = GetClientRect();
 
-  const unsigned width = rc.right - rc.left;
+  const unsigned width = rc.GetWidth();
   int x = rc.left + Layout::FastScale(10);
   int y = rc.top + Layout::FastScale(10);
 

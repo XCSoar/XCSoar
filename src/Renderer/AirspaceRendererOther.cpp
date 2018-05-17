@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,19 +27,16 @@ Copyright_License {
 #include "AirspaceRendererSettings.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Screen/Canvas.hpp"
+#include "Screen/Features.hpp"
 #include "MapWindow/MapCanvas.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
-#include "Airspace/AirspaceVisitor.hpp"
 #include "Airspace/AirspaceWarningCopy.hpp"
+#include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
 #include "MapWindow/StencilMapCanvas.hpp"
 #include "Asset.hpp"
-
-#ifdef USE_GDI
-#include "Screen/GDI/AlphaBlend.hpp"
-#endif
 
 /**
  * Class to render airspaces onto map in two passes,
@@ -49,7 +46,7 @@ Copyright_License {
  * of code overhead.
  */
 class AirspaceVisitorMap final
-  : public AirspaceVisitor, public StencilMapCanvas
+  : public StencilMapCanvas
 {
   const AirspaceLook &look;
   const AirspaceWarningCopy &warnings;
@@ -77,7 +74,7 @@ public:
 
 private:
   void VisitCircle(const AirspaceCircle &airspace) {
-    RasterPoint center = proj.GeoToScreen(airspace.GetReferenceLocation());
+    auto center = proj.GeoToScreen(airspace.GetReferenceLocation());
     unsigned radius = proj.GeoToScreenDistance(airspace.GetRadius());
     DrawCircle(center, radius);
   }
@@ -86,8 +83,8 @@ private:
     DrawSearchPointVector(airspace.GetPoints());
   }
 
-protected:
-  virtual void Visit(const AbstractAirspace &airspace) override {
+public:
+  void Visit(const AbstractAirspace &airspace) {
     if (warnings.IsAcked(airspace))
       return;
 
@@ -120,7 +117,7 @@ private:
 #else /* HAVE_HATCHED_BRUSH */
 
 #ifdef HAVE_ALPHA_BLEND
-    if (settings.transparency && AlphaBlendAvailable()) {
+    if (settings.transparency) {
       buffer.Select(look.classes[airspace_class].solid_brush);
     } else {
 #endif
@@ -154,7 +151,7 @@ private:
 };
 
 class AirspaceOutlineRenderer final
-  : public AirspaceVisitor, protected MapCanvas
+  : protected MapCanvas
 {
   const AirspaceLook &look;
   const AirspaceRendererSettings &settings;
@@ -164,7 +161,7 @@ public:
                           const AirspaceLook &_look,
                           const AirspaceRendererSettings &_settings)
     :MapCanvas(_canvas, _projection,
-               _projection.GetScreenBounds().Scale(fixed(1.1))),
+               _projection.GetScreenBounds().Scale(1.1)),
      look(_look), settings(_settings)
   {
     if (settings.black_outline)
@@ -197,7 +194,7 @@ private:
   }
 
 public:
-  virtual void Visit(const AbstractAirspace &airspace) override {
+  void Visit(const AbstractAirspace &airspace) {
     if (!SetupCanvas(airspace))
       return;
 
@@ -228,9 +225,14 @@ AirspaceRenderer::DrawFill(Canvas &buffer_canvas, Canvas &stencil_canvas,
   // JMW TODO wasteful to draw twice, can't it be drawn once?
   // we are using two draws so borders go on top of everything
 
-  airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),
-                                        projection.GetScreenDistanceMeters(),
-                                        v, visible);
+  const auto range =
+    airspaces->QueryWithinRange(projection.GetGeoScreenCenter(),
+                                projection.GetScreenDistanceMeters());
+  for (const auto &i : range) {
+    const AbstractAirspace &airspace = i.GetAirspace();
+    if (visible(airspace))
+      v.Visit(airspace);
+  }
 
   return v.Commit();
 }
@@ -256,7 +258,7 @@ AirspaceRenderer::DrawFillCached(Canvas &canvas, Canvas &stencil_canvas,
 
 #ifdef HAVE_ALPHA_BLEND
 #ifdef HAVE_HATCHED_BRUSH
-  if (settings.transparency && AlphaBlendAvailable())
+  if (settings.transparency)
 #endif
     fill_cache.AlphaBlendTo(canvas, projection, 60);
 #ifdef HAVE_HATCHED_BRUSH
@@ -274,10 +276,16 @@ AirspaceRenderer::DrawOutline(Canvas &canvas,
                               const AirspaceRendererSettings &settings,
                               const AirspacePredicate &visible) const
 {
+  const auto range =
+    airspaces->QueryWithinRange(projection.GetGeoScreenCenter(),
+                                projection.GetScreenDistanceMeters());
+
   AirspaceOutlineRenderer outline_renderer(canvas, projection, look, settings);
-  airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),
-                                        projection.GetScreenDistanceMeters(),
-                                        outline_renderer, visible);
+  for (const auto &i : range) {
+    const AbstractAirspace &airspace = i.GetAirspace();
+    if (visible(airspace))
+      outline_renderer.Visit(airspace);
+  }
 }
 
 void

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,20 +23,12 @@ Copyright_License {
 
 #include "Float.hpp"
 #include "ComboList.hpp"
-#include "Asset.hpp"
+#include "Math/Util.hpp"
 #include "Util/NumberParser.hpp"
 
-#include <stdlib.h>
 #include <stdio.h>
 
 static bool DataFieldKeyUp = false;
-
-gcc_pure
-static fixed
-ParseString(const TCHAR *s)
-{
-  return fixed(ParseDouble(s));
-}
 
 int
 DataFieldFloat::GetAsInteger() const
@@ -61,11 +53,11 @@ DataFieldFloat::GetAsDisplayString() const
 void
 DataFieldFloat::SetAsInteger(int Value)
 {
-  SetAsFloat(fixed(Value));
+  SetAsFloat(Value);
 }
 
 void
-DataFieldFloat::SetAsFloat(fixed Value)
+DataFieldFloat::SetAsFloat(double Value)
 {
   if (Value < mMin)
     Value = mMin;
@@ -80,83 +72,80 @@ DataFieldFloat::SetAsFloat(fixed Value)
 void
 DataFieldFloat::SetAsString(const TCHAR *Value)
 {
-  SetAsFloat(ParseString(Value));
+  SetAsFloat(ParseDouble(Value));
 }
 
 void
 DataFieldFloat::Inc()
 {
   // no keypad, allow user to scroll small values
-  if (mFine && mValue < fixed(0.95) && mStep >= fixed(0.5) &&
-      mMin >= fixed(0))
-    SetAsFloat(mValue + fixed(1) / 10);
+  if (mFine && mValue < 0.95 && mStep >= 0.5 &&
+      mMin >= 0)
+    SetAsFloat(mValue + 0.1);
   else
-    SetAsFloat(fixed(mValue + mStep * SpeedUp(true)));
+    SetAsFloat(mValue + mStep * SpeedUp(true));
 }
 
 void
 DataFieldFloat::Dec()
 {
   // no keypad, allow user to scroll small values
-  if (mFine && mValue <= fixed(1) && mStep >= fixed(0.5) &&
-      mMin >= fixed(0))
-    SetAsFloat(mValue - fixed(1) / 10);
+  if (mFine && mValue <= 1 && mStep >= 0.5 &&
+      mMin >= 0)
+    SetAsFloat(mValue - 0.1);
   else
-    SetAsFloat(fixed(mValue - mStep * SpeedUp(false)));
+    SetAsFloat(mValue - mStep * SpeedUp(false));
 }
 
-fixed
+double
 DataFieldFloat::SpeedUp(bool keyup)
 {
-  if (IsAltair())
-    return fixed(1);
-
   if (keyup != DataFieldKeyUp) {
     mSpeedup = 0;
     DataFieldKeyUp = keyup;
     last_step.Update();
-    return fixed(1);
+    return 1;
   }
 
   if (!last_step.Check(200)) {
     mSpeedup++;
     if (mSpeedup > 5) {
       last_step.UpdateWithOffset(350);
-      return fixed(10);
+      return 10;
     }
   } else
     mSpeedup = 0;
 
   last_step.Update();
 
-  return fixed(1);
+  return 1;
 }
 
 void
-DataFieldFloat::SetFromCombo(int iDataFieldIndex, TCHAR *sValue)
+DataFieldFloat::SetFromCombo(int iDataFieldIndex, const TCHAR *sValue)
 {
   SetAsString(sValue);
 }
 
 void
-DataFieldFloat::AppendComboValue(ComboList &combo_list, fixed value) const
+DataFieldFloat::AppendComboValue(ComboList &combo_list, double value) const
 {
   TCHAR a[edit_format.capacity()], b[display_format.capacity()];
   _stprintf(a, edit_format, (double)value);
   _stprintf(b, display_format, (double)value, unit.c_str());
-  combo_list.Append(combo_list.size(), a, b);
+  combo_list.Append(a, b);
 }
 
 ComboList
 DataFieldFloat::CreateComboList(const TCHAR *reference_string) const
 {
-  const fixed reference = reference_string != nullptr
-    ? ParseString(reference_string)
+  const auto reference = reference_string != nullptr
+    ? ParseDouble(reference_string)
     : mValue;
 
   ComboList combo_list;
-  const fixed epsilon = mStep / 1000;
-  const fixed fine_step = mStep / 10;
+  const auto epsilon = mStep / 1000;
+  const auto fine_step = mStep / 10;
 
   /* how many items before and after the current value? */
   unsigned surrounding_items = ComboList::MAX_SIZE / 2 - 2;
@@ -164,21 +153,21 @@ DataFieldFloat::CreateComboList(const TCHAR *reference_string) const
     surrounding_items -= 20;
 
   /* the value aligned to mStep */
-  fixed corrected_value = int((reference - mMin) / mStep) * mStep + mMin;
+  auto corrected_value = int((reference - mMin) / mStep) * mStep + mMin;
 
-  fixed first = corrected_value - surrounding_items * mStep;
+  auto first = corrected_value - surrounding_items * mStep;
   if (first > mMin + epsilon)
     /* there are values before "first" - give the user a choice */
     combo_list.Append(ComboList::Item::PREVIOUS_PAGE, _T("<<More Items>>"));
   else if (first < mMin - epsilon)
     first = int(mMin / mStep) * mStep;
 
-  fixed last = std::min(first + surrounding_items * mStep * 2, mMax);
+  auto last = std::min(first + surrounding_items * mStep * 2, mMax);
 
   bool found_current = false;
-  fixed step = mStep;
+  auto step = mStep;
   bool inFineSteps = false;
-  for (fixed i = first; i <= last + epsilon; i += step) {
+  for (auto i = first; i <= last + epsilon; i += step) {
 
     // Skip over the items which fall below the beginning of the valid range.
     // e.g. first may be 0.0 for values with valid range 0.1 - 10.0 and step 1.0

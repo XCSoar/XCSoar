@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,7 +28,8 @@ Copyright_License {
 #include "Screen/Font.hpp"
 #include "Screen/Pen.hpp"
 #include "Color.hpp"
-#include "Point.hpp"
+#include "Screen/Point.hpp"
+#include "BulkPoint.hpp"
 #include "PixelTraits.hpp"
 #include "Buffer.hpp"
 #include "ActivePixelTraits.hpp"
@@ -60,20 +61,18 @@ protected:
 
   Pen pen;
   Brush brush;
-  const Font *font;
+  const Font *font = nullptr;
   Color text_color, background_color;
   enum {
     OPAQUE, TRANSPARENT
-  } background_mode;
+  } background_mode = OPAQUE;
 
 public:
   Canvas()
-    :buffer(WritableImageBuffer<ActivePixelTraits>::Empty()),
-     font(nullptr), background_mode(OPAQUE) {}
+    :buffer(WritableImageBuffer<ActivePixelTraits>::Empty()) {}
 
   explicit Canvas(WritableImageBuffer<ActivePixelTraits> _buffer)
-    :buffer(_buffer),
-     font(nullptr), background_mode(OPAQUE) {}
+    :buffer(_buffer) {}
 
   void Create(WritableImageBuffer<ActivePixelTraits> _buffer) {
     buffer = _buffer;
@@ -201,11 +200,7 @@ public:
     DrawFilledRectangle(rc.left, rc.top, rc.right, rc.bottom, brush);
   }
 
-  void InvertRectangle(int left, int top, int right, int bottom);
-
-  void InvertRectangle(const PixelRect &rc) {
-    InvertRectangle(rc.left, rc.top, rc.right, rc.bottom);
-  }
+  void InvertRectangle(PixelRect r);
 
   void Clear() {
     Rectangle(0, 0, GetWidth(), GetHeight());
@@ -243,10 +238,10 @@ public:
     --rc.bottom;
   }
 
-  void DrawPolyline(const RasterPoint *points, unsigned num_points);
-  void DrawPolygon(const RasterPoint *points, unsigned num_points);
+  void DrawPolyline(const BulkPixelPoint *points, unsigned num_points);
+  void DrawPolygon(const BulkPixelPoint *points, unsigned num_points);
 
-  void DrawTriangleFan(const RasterPoint *points, unsigned num_points) {
+  void DrawTriangleFan(const BulkPixelPoint *points, unsigned num_points) {
     DrawPolygon(points, num_points);
   }
 
@@ -257,7 +252,7 @@ public:
 
   void DrawLine(int ax, int ay, int bx, int by);
 
-  void DrawLine(const RasterPoint a, const RasterPoint b) {
+  void DrawLine(const PixelPoint a, const PixelPoint b) {
     DrawLine(a.x, a.y, b.x, b.y);
   }
 
@@ -265,11 +260,11 @@ public:
     DrawLine(ax, ay, bx, by);
   }
 
-  void DrawExactLine(const RasterPoint a, const RasterPoint b) {
+  void DrawExactLine(const PixelPoint a, const PixelPoint b) {
     DrawLine(a, b);
   }
 
-  void DrawLinePiece(const RasterPoint a, const RasterPoint b) {
+  void DrawLinePiece(const PixelPoint a, const PixelPoint b) {
     DrawLine(a, b);
   }
 
@@ -279,8 +274,8 @@ public:
     DrawLine(bx, by, cx, cy);
   }
 
-  void DrawTwoLines(const RasterPoint a, const RasterPoint b,
-                 const RasterPoint c) {
+  void DrawTwoLines(const PixelPoint a, const PixelPoint b,
+                    const PixelPoint c) {
     DrawTwoLines(a.x, a.y, b.x, b.y, c.x, c.y);
   }
 
@@ -290,15 +285,19 @@ public:
 
   void DrawCircle(int x, int y, unsigned radius);
 
-  void DrawSegment(int x, int y, unsigned radius,
+  void DrawSegment(PixelPoint center, unsigned radius,
                    Angle start, Angle end, bool horizon=false);
 
-  void DrawAnnulus(int x, int y, unsigned small_radius, unsigned big_radius,
+  void DrawAnnulus(PixelPoint center, unsigned small_radius,
+                   unsigned big_radius,
                    Angle start, Angle end);
 
-  void DrawKeyhole(int x, int y,
-                   unsigned small_radius, unsigned big_radius,
+  void DrawKeyhole(PixelPoint center, unsigned small_radius,
+                   unsigned big_radius,
                    Angle start, Angle end);
+
+  void DrawArc(PixelPoint center, unsigned radius,
+               Angle start, Angle end);
 
   void DrawFocusRectangle(const PixelRect &rc) {
     DrawOutlineRectangle(rc.left, rc.top, rc.right, rc.bottom,
@@ -339,7 +338,12 @@ public:
     DrawText(x, y, t);
   }
 
-  void DrawFormattedText(PixelRect *rc, const TCHAR *text, unsigned format);
+  /**
+   * Render multi-line text.
+   *
+   * @return the resulting text height
+   */
+  unsigned DrawFormattedText(PixelRect r, const TCHAR *text, unsigned format);
 
   void Copy(int dest_x, int dest_y,
             unsigned dest_width, unsigned dest_height,
@@ -365,6 +369,11 @@ public:
   void CopyTransparentWhite(int dest_x, int dest_y,
                             unsigned dest_width, unsigned dest_height,
                             const Canvas &src, int src_x, int src_y);
+
+  void StretchTransparentWhite(int dest_x, int dest_y,
+                               unsigned dest_width, unsigned dest_height,
+                               ConstImageBuffer src, int src_x, int src_y,
+                               unsigned src_width, unsigned src_height);
 
   void StretchNot(const Bitmap &src);
 

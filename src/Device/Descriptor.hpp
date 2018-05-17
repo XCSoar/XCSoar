@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,9 +26,9 @@ Copyright_License {
 
 #include "Features.hpp"
 #include "Config.hpp"
-#include "IO/DataHandler.hpp"
 #include "Device/Util/LineSplitter.hpp"
 #include "Port/State.hpp"
+#include "Port/Listener.hpp"
 #include "Device/Parser.hpp"
 #include "RadioFrequency.hpp"
 #include "NMEA/ExternalSettings.hpp"
@@ -37,16 +37,21 @@ Copyright_License {
 #include "Event/Notify.hpp"
 #include "Thread/Mutex.hpp"
 #include "Thread/Debug.hpp"
+#include "Util/tstring.hpp"
+#include "Util/StaticFifoBuffer.hxx"
 
 #include <assert.h>
 #include <tchar.h>
 #include <stdio.h>
+
+namespace boost { namespace asio { class io_service; }}
 
 struct NMEAInfo;
 struct MoreData;
 struct DerivedInfo;
 struct Declaration;
 struct Waypoint;
+class Path;
 class Port;
 class DumpPort;
 class Device;
@@ -61,15 +66,19 @@ class RecordedFlightList;
 struct RecordedFlightInfo;
 class OperationEnvironment;
 class OpenDeviceJob;
-class PortListener;
 
-class DeviceDescriptor final : private Notify, private PortLineSplitter {
+class DeviceDescriptor final : Notify, PortListener, PortLineSplitter {
+  /**
+   * The io_service instance used by Port instances.
+   */
+  boost::asio::io_service &io_service;
+
   /**
    * This mutex protects modifications of the attribute "device".  If
    * you use the attribute "device" from a thread other than the main
    * thread, you must hold this mutex.
    */
-  Mutex mutex;
+  mutable Mutex mutex;
 
   /** the index of this device in the global list */
   const unsigned index;
@@ -187,6 +196,12 @@ class DeviceDescriptor final : private Notify, private PortLineSplitter {
   ExternalSettings settings_received;
 
   /**
+   * If this device has failed, then this attribute may contain an
+   * error message.
+   */
+  tstring error_message;
+
+  /**
    * Number of port failures since the device was last reset.
    *
    * @param see ResetFailureCounter()
@@ -215,7 +230,8 @@ class DeviceDescriptor final : private Notify, private PortLineSplitter {
   bool borrowed;
 
 public:
-  DeviceDescriptor(unsigned index, PortListener *port_listener);
+  DeviceDescriptor(boost::asio::io_service &_io_service,
+                   unsigned index, PortListener *port_listener);
   ~DeviceDescriptor() {
     assert(!IsOccupied());
   }
@@ -237,6 +253,11 @@ public:
 
   gcc_pure
   PortState GetState() const;
+
+  tstring GetErrorMessage() const {
+    const ScopeLock protect(mutex);
+    return error_message;
+  }
 
   /**
    * Was there a failure on the #Port object?
@@ -457,9 +478,9 @@ public:
   bool WriteNMEA(const TCHAR *line, OperationEnvironment &env);
 #endif
 
-  bool PutMacCready(fixed mac_cready, OperationEnvironment &env);
-  bool PutBugs(fixed bugs, OperationEnvironment &env);
-  bool PutBallast(fixed fraction, fixed overload,
+  bool PutMacCready(double mac_cready, OperationEnvironment &env);
+  bool PutBugs(double bugs, OperationEnvironment &env);
+  bool PutBallast(double fraction, double overload,
                   OperationEnvironment &env);
   bool PutVolume(unsigned volume, OperationEnvironment &env);
   bool PutActiveFrequency(RadioFrequency frequency,
@@ -485,7 +506,7 @@ public:
   /**
    * Caller is responsible for calling Borrow() and Return().
    */
-  bool DownloadFlight(const RecordedFlightInfo &flight, const TCHAR *path,
+  bool DownloadFlight(const RecordedFlightInfo &flight, Path path,
                       OperationEnvironment &env);
 
   void OnSysTicker();
@@ -506,6 +527,10 @@ private:
 
   /* virtual methods from class Notify */
   void OnNotification() override;
+
+  /* virtual methods from class PortListener */
+  void PortStateChanged() override;
+  void PortError(const char *msg) override;
 
   /* virtual methods from DataHandler  */
   void DataReceived(const void *data, size_t length) override;

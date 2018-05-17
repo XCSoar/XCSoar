@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -35,6 +35,8 @@ struct SoundSettings {
   bool sound_task_enabled;
   bool sound_modes_enabled;
   uint8_t sound_deadband;
+
+  uint8_t master_volume;
 
   VarioSoundSettings vario;
 

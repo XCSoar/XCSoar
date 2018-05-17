@@ -180,7 +180,7 @@ int msPointInPolygon(pointObj *p, lineObj *c)
 ** cases. In due time... -SDL-
 */
 
-int msIntersectSegments(pointObj *a, pointObj *b, pointObj *c, pointObj *d)   /* from comp.graphics.alogorithms FAQ */
+int msIntersectSegments(const pointObj *a, const pointObj *b, const pointObj *c, const pointObj *d)   /* from comp.graphics.alogorithms FAQ */
 {
 
   double r, s;

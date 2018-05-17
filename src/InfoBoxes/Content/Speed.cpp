@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -51,17 +51,18 @@ InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode)
   if (!CommonInterface::Basic().gps.simulator)
     return false;
 
-  fixed fixed_step = (fixed)Units::ToSysSpeed(fixed(10));
-  const Angle a5 = Angle::Degrees(5);
+  const double step = Units::ToSysSpeed(10);
+  const auto a5 = Angle::Degrees(5);
 
   switch (keycode) {
   case ibkUp:
     device_blackboard->SetSpeed(
-        CommonInterface::Basic().ground_speed + fixed_step);
+        CommonInterface::Basic().ground_speed + step);
     return true;
 
   case ibkDown:
-    device_blackboard->SetSpeed(std::max(fixed(0), CommonInterface::Basic().ground_speed - fixed_step));
+    device_blackboard->SetSpeed(fdim(CommonInterface::Basic().ground_speed,
+                                     step));
     return true;
 
   case ibkLeft:

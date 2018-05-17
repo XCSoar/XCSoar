@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,13 +31,12 @@ Copyright_License {
  * Waypoint file read/writer for WinPilot format
  */
 class WaypointReaderWinPilot final : public WaypointReaderBase {
-  bool first;
-  bool welt2000_format;
+  bool first = true;
+  bool welt2000_format = false;
 
 public:
   explicit WaypointReaderWinPilot(WaypointFactory _factory)
-    :WaypointReaderBase(_factory),
-     first(true), welt2000_format(false) {}
+    :WaypointReaderBase(_factory) {}
 
 protected:
   /* virtual methods from class WaypointReaderBase */

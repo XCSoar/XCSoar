@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_CONDITION_MONITOR_HPP
 #define XCSOAR_CONDITION_MONITOR_HPP
 
-#include "Math/fixed.hpp"
-
 struct NMEAInfo;
 struct DerivedInfo;
 struct ComputerSettings;
@@ -37,10 +35,10 @@ struct ComputerSettings;
 class ConditionMonitor
 {
 protected:
-  fixed LastTime_Notification;
-  fixed LastTime_Check;
-  fixed Interval_Notification;
-  fixed Interval_Check;
+  double LastTime_Notification;
+  double LastTime_Check;
+  double Interval_Notification;
+  double Interval_Check;
 
 public:
   constexpr ConditionMonitor(unsigned _interval_notification,
@@ -59,8 +57,8 @@ private:
   virtual void Notify() = 0;
   virtual void SaveLast() = 0;
 
-  bool Ready_Time_Notification(fixed T);
-  bool Ready_Time_Check(fixed T, bool *restart);
+  bool Ready_Time_Notification(double T);
+  bool Ready_Time_Check(double T, bool *restart);
 };
 
 #endif

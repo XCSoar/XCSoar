@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "ProtectedTaskManager.hpp"
 #include "Task/RoutePlannerGlue.hpp"
+#include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Points/TaskWaypoint.hpp"
 #include "Engine/Route/ReachResult.hpp"
@@ -53,13 +54,13 @@ ProtectedTaskManager::GetOrderedTaskSettings() const
   return lease->GetOrderedTask().GetOrderedTaskSettings();
 }
 
-const Waypoint* 
+WaypointPtr
 ProtectedTaskManager::GetActiveWaypoint() const
 {
   Lease lease(*this);
   const TaskWaypoint *tp = lease->GetActiveTaskPoint();
   if (tp)
-    return &tp->GetWaypoint();
+    return tp->GetWaypointPtr();
 
   return nullptr;
 }
@@ -109,10 +110,10 @@ ProtectedTaskManager::IncrementActiveTaskPointArm(int offset)
 }
 
 bool 
-ProtectedTaskManager::DoGoto(const Waypoint &wp)
+ProtectedTaskManager::DoGoto(WaypointPtr &&wp)
 {
   ExclusiveLease lease(*this);
-  return lease->DoGoto(wp);
+  return lease->DoGoto(std::move(wp));
 }
 
 OrderedTask*
@@ -159,4 +160,11 @@ ReachIntersectionTest::Intersects(const AGeoPoint& destination)
   return result.terrain_valid == ReachResult::Validity::UNREACHABLE ||
     (result.terrain_valid == ReachResult::Validity::VALID &&
      result.terrain < destination.altitude);
+}
+
+void
+ProtectedTaskManager::ResetTask()
+{
+  ExclusiveLease lease(*this);
+  lease->ResetTask();
 }

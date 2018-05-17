@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -36,7 +36,7 @@ int main(int argc, char **argv)
   if (replay == NULL)
     return EXIT_FAILURE;
 
-  const char *output_file = args.ExpectNext();
+  const auto output_file = args.ExpectNextPath();
   args.ExpectEnd();
 
   while (!replay->Basic().time_available)
@@ -45,15 +45,14 @@ int main(int argc, char **argv)
 
   const TCHAR *driver_name = _T("Unknown");
 
-  PathName igc_path(output_file);
-  IGCWriter writer(igc_path);
+  IGCWriter writer(output_file);
   writer.WriteHeader(replay->Basic().date_time_utc, _T("Manfred Mustermann"),
                      _T("Ventus"), _T("D-1234"),
                      _T("MM"), "FOO", driver_name, true);
 
   GPSClock log_clock;
   while (replay->Next())
-    if (log_clock.CheckAdvance(replay->Basic().time, fixed(1)))
+    if (log_clock.CheckAdvance(replay->Basic().time, 1))
       writer.LogPoint(replay->Basic());
 
   writer.Flush();

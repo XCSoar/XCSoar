@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -18,7 +18,7 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-  }
+}
 */
 
 #include "Internal.hpp"
@@ -29,6 +29,7 @@
 #include "Device/RecordedFlight.hpp"
 #include "Operation/Operation.hpp"
 #include "OS/ByteOrder.hpp"
+#include "OS/Path.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -219,7 +220,7 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
 
 bool
 LXDevice::DownloadFlight(const RecordedFlightInfo &flight,
-                         const TCHAR *path,
+                         Path path,
                          OperationEnvironment &env)
 {
   if (flight.internal.lx.nano_filename[0] != 0) {
@@ -234,7 +235,7 @@ LXDevice::DownloadFlight(const RecordedFlightInfo &flight,
   if (!EnableCommandMode(env))
     return false;
 
-  FILE *file = _tfopen(path, _T("wb"));
+  FILE *file = _tfopen(path.c_str(), _T("wb"));
   if (file == nullptr)
     return false;
 

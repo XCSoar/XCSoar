@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,7 +27,8 @@ Copyright_License {
 #include "Buffer.hpp"
 #include "Bresenham.hpp"
 #include "Murphy.hpp"
-#include "Util/AllocatedArray.hpp"
+#include "Screen/Point.hpp"
+#include "Util/AllocatedArray.hxx"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -57,14 +58,6 @@ class RasterCanvas : private PixelTraits {
 
 public:
   using typename PixelTraits::color_type;
-
-  struct Point {
-    int x, y;
-
-    Point() = default;
-    constexpr Point(int _x, int _y):x(_x), y(_y) {}
-    constexpr Point(unsigned _x, unsigned _y):x(_x), y(_y) {}
-  };
 
 private:
   WritableImageBuffer<PixelTraits> buffer;
@@ -354,7 +347,7 @@ public:
 
   void DrawLineDirect(const int x1, const int y1, const int x2, const int y2,
                       color_type c,
-                      unsigned line_mask=-1) {
+                      unsigned line_mask, unsigned &line_mask_position) {
     /* optimised Bresenham algorithm */
 
     int dx = x2 - x1;
@@ -375,8 +368,10 @@ public:
       std::swap(pixx, pixy);
     }
 
+    unsigned lmp = line_mask_position;
+
     for (int x = 0, y = 0; x < dx; x++, p = PixelTraits::NextByte(p, pixx)) {
-      if ((x | line_mask) == unsigned(-1))
+      if ((lmp++ | line_mask) == unsigned(-1))
         PixelTraits::WritePixel(p, c);
 
       y += dy;
@@ -385,6 +380,8 @@ public:
         p = PixelTraits::NextByte(p, pixy);
       }
     }
+
+    line_mask_position = lmp;
   }
 
   void DrawLine(int x1, int y1, int x2, int y2, color_type c,
@@ -394,12 +391,13 @@ public:
     if (!ClipLine(x1, y1, x2, y2))
       return;
 
-    DrawLineDirect(x1, y1, x2, y2, c, line_mask);
+    unsigned line_mask_position = 0;
+    DrawLineDirect(x1, y1, x2, y2, c, line_mask, line_mask_position);
   }
 
   void DrawThickLine(int x1, int y1, int x2, int y2,
                      unsigned thickness, color_type c,
-                     unsigned line_mask=-1) {
+                     unsigned line_mask, unsigned &line_mask_position) {
     if (thickness == 0)
       return;
 
@@ -410,23 +408,29 @@ public:
       return;
     }
 
-    MurphyIterator<RasterCanvas<PixelTraits>> murphy(*this, c, line_mask);
+    MurphyIterator<RasterCanvas<PixelTraits>> murphy(*this, c, line_mask,
+                                                     line_mask_position);
     murphy.Wideline(x1, y1, x2, y2, thickness, 0);
     murphy.Wideline(x1, y1, x2, y2, thickness, 1);
+    line_mask_position = murphy.GetLineMaskPosition();
   }
 
-  void DrawPolyline(const Point *points, unsigned n, bool loop,
+  void DrawPolyline(const PixelPoint *points, unsigned n, bool loop,
                     color_type color,
                     unsigned thickness,
                     unsigned line_mask=-1) {
 
-    Point p_last = points[loop? n-1 : 0];
+    auto p_last = points[loop? n-1 : 0];
     unsigned code2_orig;
     unsigned code2;
     bool last_visible = false;
 
+    /* this variable keeps track of the position on the line mask
+       across all line segments, for continuity */
+    unsigned line_mask_position = 0;
+
     for (unsigned i= loop? 0: 1; i<n; ++i) {
-      Point p_this = points[i];
+      auto p_this = points[i];
       if (!last_visible) {
         // don't have a start point yet
         code2_orig = ClipEncode(p_last.x, p_last.y);
@@ -444,9 +448,11 @@ public:
       unsigned code1 = code1_orig;
       if (ClipIncremental(p_this.x, p_this.y, p_last.x, p_last.y, code1, code2)) {
         if (thickness > 1)
-          DrawThickLine(p_this.x, p_this.y, p_last.x, p_last.y, thickness, color, line_mask);
+          DrawThickLine(p_this.x, p_this.y, p_last.x, p_last.y, thickness, color,
+                        line_mask, line_mask_position);
         else
-          DrawLineDirect(p_this.x, p_this.y, p_last.x, p_last.y, color, line_mask);
+          DrawLineDirect(p_this.x, p_this.y, p_last.x, p_last.y, color,
+                         line_mask, line_mask_position);
         if (code1 == code1_orig) {
           last_visible = true;
           p_last = p_this;
@@ -465,7 +471,7 @@ public:
   }
 
   template<typename PixelOperations>
-  void FillPolygonFast(const Point *points, unsigned n, color_type color,
+  void FillPolygonFast(const PixelPoint *points, unsigned n, color_type color,
                        PixelOperations operations) {
 
     assert(points != nullptr);
@@ -479,8 +485,8 @@ public:
     int miny = points[0].y;
     int maxy = points[0].y;
 
-    const Point* p_1 = points;
-    const Point* p_0 = points+n-1;
+    const auto *p_1 = points;
+    const auto *p_0 = points + n - 1;
     int n_edges = 0;
 
     while (p_1 < points+n) {
@@ -564,7 +570,7 @@ public:
   }
 
   template<typename PixelOperations>
-  void FillPolygon(const Point *points, unsigned n, color_type color,
+  void FillPolygon(const PixelPoint *points, unsigned n, color_type color,
                    PixelOperations operations) {
     assert(points != nullptr);
 
@@ -631,7 +637,7 @@ public:
     }
   }
 
-  void FillPolygon(const Point *points, unsigned n, color_type color) {
+  void FillPolygon(const PixelPoint *points, unsigned n, color_type color) {
     FillPolygonFast(points, n, color,
                     GetPixelTraits());
 //    FillPolygon(points, n, color,

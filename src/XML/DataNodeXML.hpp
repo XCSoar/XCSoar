@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,8 @@
 #define DATANODE_XML_HPP
 
 #include "DataNode.hpp"
-#include "XML/Node.hpp"
+
+class XMLNode;
 
 /**
  * ConstDataNode implementation for XML files
@@ -67,15 +68,6 @@ public:
    */
   explicit WritableDataNodeXML(XMLNode &_node)
     :node(_node) {}
-
-  /**
-   * Save tree canonically to file
-   *
-   * @param path Path of file to save to
-   *
-   * @return True on success
-   */
-  bool Save(const TCHAR* path);
 
   /* virtual methods from WritableDataNode */
   WritableDataNode *AppendChild(const TCHAR *name) override;

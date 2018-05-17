@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -69,19 +69,19 @@ ShowMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
   canvas.DrawRoundRectangle(rc.left, rc.top, rc.right - 1, rc.bottom - 1,
                             Layout::VptScale(8), Layout::VptScale(8));
 
-  const RasterPoint m[] = {
-    RasterPoint(rc.left + padding, rc.bottom - padding),
-    RasterPoint(rc.left + padding, rc.top + padding),
-    RasterPoint((rc.left + rc.right) / 2, rc.bottom - 2 * padding),
-    RasterPoint(rc.right - padding, rc.top + padding),
-    RasterPoint(rc.right - padding, rc.bottom - padding),
+  const BulkPixelPoint m[] = {
+    BulkPixelPoint(rc.left + padding, rc.bottom - padding),
+    BulkPixelPoint(rc.left + padding, rc.top + padding),
+    BulkPixelPoint((rc.left + rc.right) / 2, rc.bottom - 2 * padding),
+    BulkPixelPoint(rc.right - padding, rc.top + padding),
+    BulkPixelPoint(rc.right - padding, rc.bottom - padding),
   };
 
   canvas.DrawPolyline(m, ARRAY_SIZE(m));
 
   if (pressed) {
 #ifdef ENABLE_OPENGL
-    const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    const ScopeAlphaBlend alpha_blend;
     canvas.DrawFilledRectangle(rc, COLOR_YELLOW.WithAlpha(80));
 #else
     canvas.InvertRectangle(rc);

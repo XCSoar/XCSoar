@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,35 +25,33 @@ Copyright_License {
 #define REPLAY_HPP
 
 #include "Event/Timer.hpp"
-#include "Math/fixed.hpp"
 #include "NMEA/Info.hpp"
 #include "Time/PeriodClock.hpp"
-
-#include <tchar.h>
-#include <windef.h> /* for MAX_PATH */
+#include "OS/Path.hpp"
 
 class Logger;
 class ProtectedTaskManager;
 class AbstractReplay;
 class CatmullRomInterpolator;
+class Error;
 
 class Replay final
   : private Timer
 {
-  fixed time_scale;
+  double time_scale;
 
   AbstractReplay *replay;
 
   Logger *logger;
   ProtectedTaskManager &task_manager;
 
-  TCHAR path[MAX_PATH];
+  AllocatedPath path = nullptr;
 
   /**
    * The time of day according to replay input.  This is negative if
    * unknown.
    */
-  fixed virtual_time;
+  double virtual_time;
 
   /**
    * If this value is not negative, then we're in fast-forward mode:
@@ -62,7 +60,7 @@ class Replay final
    * #virtual_time is negative, then this is the duration, and
    * #virtual_time will be added as soon as it is known.
    */
-  fixed fast_forward;
+  double fast_forward;
 
   /**
    * Keeps track of the wall-clock time between two Update() calls.
@@ -79,9 +77,8 @@ class Replay final
 
 public:
   Replay(Logger *_logger, ProtectedTaskManager &_task_manager)
-    :time_scale(fixed(1)), replay(nullptr),
+    :time_scale(1), replay(nullptr),
      logger(_logger), task_manager(_task_manager), cli(nullptr) {
-    path[0] = _T('\0');
   }
 
   ~Replay() {
@@ -97,32 +94,44 @@ private:
 
 public:
   void Stop();
-  bool Start(const TCHAR *_path);
 
-  const TCHAR *GetFilename() const {
+  /**
+   * Throws std::runtime_errror on error.
+   */
+  void Start(Path _path);
+
+  Path GetFilename() const {
     return path;
   }
 
-  fixed GetTimeScale() const {
+  double GetTimeScale() const {
     return time_scale;
   }
 
-  void SetTimeScale(const fixed _time_scale) {
+  void SetTimeScale(const double _time_scale) {
     time_scale = _time_scale;
   }
 
   /**
    * Start fast-forwarding the replay by the specified number of
    * seconds.  This replays the given amount of time from the input
-   * time as quickly as possible.
+   * time as quickly as possible.  Returns false if unable to fast forward.
    */
-  void FastForward(fixed delta_s) {
+  bool FastForward(double delta_s) {
     if (!IsActive())
-      return;
+      return false;
 
     fast_forward = delta_s;
-    if (!negative(virtual_time))
+    if (virtual_time >= 0) {
       fast_forward += virtual_time;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  double GetVirtualTime() const {
+    return virtual_time;
   }
 
 private:

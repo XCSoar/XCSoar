@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -36,9 +36,9 @@ private:
   AverageCalculatorMap averageCalculatorMap;
 
 public:
-  fixed Average30s(FlarmId flarmId, fixed curTime, fixed curAltitude);
+  double Average30s(FlarmId flarmId, double curTime, double curAltitude);
 
-  void CleanUp(fixed now);
+  void CleanUp(double now);
 };
 
 #endif

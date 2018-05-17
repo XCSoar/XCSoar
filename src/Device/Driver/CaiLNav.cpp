@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,14 +29,12 @@ Copyright_License {
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Units/Units.hpp"
-#include "Units/Unit.hpp"
-#include "LogFile.hpp"
 
 static void
 FormatLatitude(char *buffer, size_t buffer_size, Angle latitude )
 {
   // Calculate Latitude sign
-  char sign = negative(latitude.Native()) ? 'S' : 'N';
+  char sign = latitude.IsNegative() ? 'S' : 'N';
 
   double mlat(latitude.AbsoluteDegrees());
 
@@ -52,7 +50,7 @@ static void
 FormatLongitude(char *buffer, size_t buffer_size, Angle longitude)
 {
   // Calculate Longitude sign
-  char sign = negative(longitude.Native()) ? 'W' : 'E';
+  char sign = longitude.IsNegative() ? 'W' : 'E';
 
   double mlong(longitude.AbsoluteDegrees());
 
@@ -142,7 +140,7 @@ FormatGPRMB(char *buffer, size_t buffer_size, const GeoPoint& here,
     return false;
 
   const GeoVector vector(here, destination);
-  const bool has_arrived = vector.distance < fixed(1000); // < 1km ?
+  const bool has_arrived = vector.distance < 1000; // < 1km ?
 
   snprintf(buffer, buffer_size, "GPRMB,%c,,,,,,,,,%06.1f,%04.1f,%c",
            here.IsValid() ? 'A' : 'V',

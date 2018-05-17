@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ void
 StartConstraints::SetDefaults()
 {
   open_time_span = RoughTimeSpan::Invalid();
-  max_speed = fixed(0);
+  max_speed = 0;
   max_height = 0;
   max_height_ref = AltitudeReference::AGL;
   require_arm = false;
@@ -36,25 +36,25 @@ StartConstraints::SetDefaults()
 }
 
 bool
-StartConstraints::CheckSpeed(fixed ground_speed,
+StartConstraints::CheckSpeed(double ground_speed,
                              const TaskStartMargins *margins) const
 {
-  if (max_speed == fixed(0))
+  if (max_speed == 0)
     return true;
 
   if (fai_finish)
     return true;
 
-  const fixed margin = margins != nullptr
+  const auto margin = margins != nullptr
     ? margins->max_speed_margin
-    : fixed(0);
+    : 0;
 
   return ground_speed <= max_speed + margin;
 }
 
 bool
 StartConstraints::CheckHeight(const AircraftState &state,
-                              const fixed start_elevation,
+                              const double start_elevation,
                               const TaskStartMargins *margins) const
 {
   if (max_height == 0)
@@ -68,7 +68,7 @@ StartConstraints::CheckHeight(const AircraftState &state,
     : 0u;
 
   if (max_height_ref == AltitudeReference::MSL)
-    return state.altitude <= fixed(max_height + margin);
+    return state.altitude <= max_height + margin;
   else
-    return state.altitude <= (fixed(max_height + margin) + start_elevation);
+    return state.altitude <= max_height + margin + start_elevation;
 }

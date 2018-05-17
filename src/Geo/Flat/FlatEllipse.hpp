@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,8 +24,10 @@
 #define FLATELLIPSE_HPP
 
 #include "FlatPoint.hpp"
-#include "FlatLine.hpp"
+#include "Math/Angle.hpp"
 #include "Compiler.h"
+
+class FlatLine;
 
 /**
  * 2-d ellipse in real-valued projected coordinates, with methods for
@@ -35,8 +37,8 @@ class FlatEllipse
 {
   FlatPoint f1, f2, ap;
   FlatPoint p;
-  fixed a;
-  fixed b;
+  double a;
+  double b;
   Angle theta;
 
   Angle theta_initial;
@@ -61,7 +63,7 @@ public:
    * @return Location on ellipse
    */
   gcc_pure
-  FlatPoint Parametric(const fixed t) const;
+  FlatPoint Parametric(double t) const;
 
   /**
    * Find intersection of line from focus 1 to p, through the ellipse
@@ -76,10 +78,14 @@ public:
 
 private:
   gcc_pure
-  fixed ab() const;
+  double ab() const {
+    return a / b;
+  }
 
   gcc_pure
-  fixed ba() const;
+  double ba() const {
+    return b / a;
+  }
 
   bool Intersect(const FlatLine &line, FlatPoint &i1, FlatPoint &i2) const;
 };

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -34,12 +34,11 @@ Copyright_License {
 #include <tchar.h>
 
 static bool
-LoadWaypoints(const char *_path, Waypoints &waypoints)
+LoadWaypoints(Path path, Waypoints &waypoints)
 {
-  PathName path(_path);
-
   NullOperationEnvironment operation;
-  if (!ReadWaypointFile(path, waypoints, WaypointFactory(WaypointOrigin::NONE),
+  if (!ReadWaypointFile(path, waypoints,
+                        WaypointFactory(WaypointOrigin::NONE),
                         operation)) {
     fprintf(stderr, "ReadWaypointFile() failed\n");
     return false;
@@ -95,9 +94,9 @@ IsAirport(const Waypoint &waypoint)
   return waypoint.IsAirport();
 }
 
-static const Waypoint *
+static WaypointPtr
 GetNearestWaypoint(const GeoPoint &location, const Waypoints &waypoints,
-                   fixed range, WaypointType type)
+                   double range, WaypointType type)
 {
   bool (*predicate)(const Waypoint &);
   switch (type) {
@@ -131,7 +130,7 @@ PrintWaypoint(const Waypoint *waypoint)
 int main(int argc, char **argv)
 {
   WaypointType type = WaypointType::ALL;
-  fixed range = fixed(100000);
+  double range = 100000;
 
   Args args(argc, argv,
             "PATH\n\nPATH is expected to be any compatible waypoint file.\n"
@@ -151,7 +150,7 @@ int main(int argc, char **argv)
     if ((value = StringAfterPrefix(arg, "--range=")) != NULL) {
       double _range = strtod(value, NULL);
       if (_range > 0)
-        range = fixed(_range);
+        range = _range;
     } else if (StringStartsWith(arg, "--airports-only")) {
       type = WaypointType::AIRPORT;
     } else if (StringStartsWith(arg, "--landables-only")) {
@@ -161,7 +160,7 @@ int main(int argc, char **argv)
     }
   }
 
-  const char *path = args.ExpectNext();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
   Waypoints waypoints;
@@ -175,9 +174,9 @@ int main(int argc, char **argv)
     if (!ParseGeopoint(line, location))
       continue;
 
-    const Waypoint *waypoint = GetNearestWaypoint(location, waypoints,
-                                                  range, type);
-    PrintWaypoint(waypoint);
+    const auto waypoint = GetNearestWaypoint(location, waypoints,
+                                             range, type);
+    PrintWaypoint(waypoint.get());
   }
 
   return EXIT_SUCCESS;

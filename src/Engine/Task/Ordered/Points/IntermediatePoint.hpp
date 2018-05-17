@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -36,7 +36,7 @@
 class IntermediateTaskPoint: 
   public OrderedTaskPoint 
 {
-  fixed safety_height;
+  double safety_height;
 
 public:    
   /**
@@ -50,7 +50,7 @@ public:
    * @return Partially-initialised object
    */
   IntermediateTaskPoint(TaskPointType _type, ObservationZonePoint *_oz,
-                        const Waypoint &wp,
+                        WaypointPtr &&wp,
                         const TaskBehaviour &tb,
                         const bool b_scored = false);
 
@@ -60,7 +60,7 @@ public:
   }
 
   /* virtual methods from class TaskPoint */
-  fixed GetElevation() const override;
+  double GetElevation() const override;
 
   /* virtual methods from class OrderedTaskPoint */
   void SetTaskBehaviour(const TaskBehaviour &tb) override;

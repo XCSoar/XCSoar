@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,103 +22,60 @@ Copyright_License {
 */
 
 #include "ProgressBar.hpp"
+#include "Canvas.hpp"
+#include "Features.hpp"
+#include "Look/Colors.hpp"
 #include "Thread/Debug.hpp"
 #include "Asset.hpp"
-
-#ifdef USE_GDI
-#include <commctrl.h>
-#else
-#include "Screen/Canvas.hpp"
-#endif
-
-void
-ProgressBarStyle::Vertical()
-{
-#ifdef USE_GDI
-  style |= PBS_VERTICAL;
-#endif
-}
-
-void
-ProgressBarStyle::Smooth()
-{
-#ifdef USE_GDI
-  style |= PBS_SMOOTH;
-#endif
-}
-
-void
-ProgressBar::Create(ContainerWindow &parent, PixelRect rc,
-                    const ProgressBarStyle style)
-{
-  Window::Create(&parent,
-#ifdef USE_GDI
-                 PROGRESS_CLASS, nullptr,
-#endif
-                 rc, style);
-}
 
 void
 ProgressBar::SetRange(unsigned min_value, unsigned max_value)
 {
-  AssertNoneLocked();
   AssertThread();
 
-#ifndef USE_GDI
   this->min_value = min_value;
   this->max_value = max_value;
   value = 0;
   step_size = 1;
   Invalidate();
-#else
-  ::SendMessage(hWnd, PBM_SETRANGE, (WPARAM)0,
-                (LPARAM)MAKELPARAM(min_value, max_value));
-#endif
 }
 
 void
 ProgressBar::SetValue(unsigned value)
 {
-  AssertNoneLocked();
   AssertThread();
 
-#ifndef USE_GDI
+  if (value == this->value)
+    return;
+
   this->value = value;
   Invalidate();
-#else
-  ::SendMessage(hWnd, PBM_SETPOS, value, 0);
-#endif
 }
 
 void
 ProgressBar::SetStep(unsigned size)
 {
-  AssertNoneLocked();
   AssertThread();
 
-#ifndef USE_GDI
   step_size = size;
   Invalidate();
-#else
-  ::SendMessage(hWnd, PBM_SETSTEP, (WPARAM)size, (LPARAM)0);
-#endif
 }
 
 void
 ProgressBar::Step()
 {
-  AssertNoneLocked();
   AssertThread();
 
-#ifndef USE_GDI
   value += step_size;
   Invalidate();
-#else
-  ::SendMessage(hWnd, PBM_STEPIT, (WPARAM)0, (LPARAM)0);
-#endif
 }
 
-#ifndef USE_GDI
+#if defined(EYE_CANDY) && !defined(HAVE_CLIPPING)
+/* when the Canvas is clipped, we can't render rounded corners,
+   because the parent's background would not be left visible then */
+#define ROUND_PROGRESS_BAR
+#endif
+
 void
 ProgressBar::OnPaint(Canvas &canvas)
 {
@@ -129,7 +86,7 @@ ProgressBar::OnPaint(Canvas &canvas)
       value = min_value;
     else if (value > max_value)
       value = max_value;
-#ifdef EYE_CANDY
+#ifdef ROUND_PROGRESS_BAR
     position = (value - min_value) * (GetWidth() - GetHeight()) /
                (max_value - min_value);
 #else
@@ -137,9 +94,7 @@ ProgressBar::OnPaint(Canvas &canvas)
 #endif
   }
 
-#ifdef EYE_CANDY
-  unsigned margin = GetHeight() / 9;
-
+#ifdef ROUND_PROGRESS_BAR
   canvas.SelectNullPen();
   canvas.SelectWhiteBrush();
   canvas.DrawRoundRectangle(0, 0, GetWidth(), GetHeight(),
@@ -147,12 +102,23 @@ ProgressBar::OnPaint(Canvas &canvas)
 
   Brush progress_brush(IsDithered() ? COLOR_BLACK : COLOR_XCSOAR_LIGHT);
   canvas.Select(progress_brush);
-  canvas.DrawRoundRectangle(margin, margin, margin + position,
-                            GetHeight() - margin, GetHeight(), GetHeight());
+  unsigned margin = GetHeight() / 9;
+  unsigned top, bottom;
+  if (position <= GetHeight() - 2 * margin) {
+    // Use a centered "circle" for small position values. This keeps the progress
+    // bar inside the background.
+    unsigned center_y = GetHeight() / 2;
+    top = center_y - position / 2;
+    bottom = center_y + position / 2;
+  } else {
+    top = margin;
+    bottom = GetHeight() - margin;
+  }
+  canvas.DrawRoundRectangle(margin, top, margin + position, bottom,
+                            GetHeight(), GetHeight());
 #else
   canvas.DrawFilledRectangle(0, 0, position, GetHeight(),
                              IsDithered() ? COLOR_BLACK : COLOR_GREEN);
   canvas.DrawFilledRectangle(position, 0, GetWidth(), GetHeight(), COLOR_WHITE);
 #endif
 }
-#endif

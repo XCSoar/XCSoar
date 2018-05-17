@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -47,7 +47,7 @@ RenderFAISectorDots(Canvas &canvas, const WindowProjection &projection,
   canvas.SelectHollowBrush();
 
   for (auto *i = geo_points; i != geo_end; ++i) {
-    RasterPoint p;
+    PixelPoint p;
     if (projection.GeoToScreenIfVisible(*i, p))
       canvas.DrawCircle(p.x, p.y, 2);
   }
@@ -80,15 +80,15 @@ protected:
     projection.SetScreenOrigin(new_size.cx / 2, new_size.cy / 2);
     projection.SetGeoLocation(a.Middle(b));
     projection.SetScreenSize(new_size);
-    projection.SetScaleFromRadius(fixed(400000));
+    projection.SetScaleFromRadius(400000);
     projection.UpdateScreenBounds();
   }
 
-  bool OnMouseDown(PixelScalar x, PixelScalar y) override {
+  bool OnMouseDown(PixelPoint p) override {
     if (drag_mode != DragMode::NONE)
       return false;
 
-    const GeoPoint gp = projection.ScreenToGeo(x, y);
+    const GeoPoint gp = projection.ScreenToGeo(p);
 
     if (projection.GeoToScreenDistance(gp.Distance(a)) < Layout::GetHitRadius()) {
       drag_mode = DragMode::A;
@@ -105,7 +105,7 @@ protected:
     return false;
   }
 
-  bool OnMouseUp(PixelScalar x, PixelScalar y) override {
+  bool OnMouseUp(PixelPoint p) override {
     if (drag_mode != DragMode::NONE) {
       drag_mode = DragMode::NONE;
       ReleaseCapture();
@@ -115,8 +115,8 @@ protected:
     return false;
   }
 
-  bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override {
-    const GeoPoint gp = projection.ScreenToGeo(x, y);
+  bool OnMouseMove(PixelPoint p, unsigned keys) override {
+    const GeoPoint gp = projection.ScreenToGeo(p);
     switch (drag_mode) {
     case DragMode::NONE:
       return false;
@@ -141,10 +141,10 @@ protected:
     canvas.SelectBlackPen();
     canvas.SelectHollowBrush();
 
-    RasterPoint pa = projection.GeoToScreen(a);
+    auto pa = projection.GeoToScreen(a);
     canvas.DrawCircle(pa.x, pa.y, 4);
 
-    RasterPoint pb = projection.GeoToScreen(b);
+    auto pb = projection.GeoToScreen(b);
     canvas.DrawCircle(pb.x, pb.y, 4);
 
     RenderFAISector(canvas, projection, a, b, false, settings);

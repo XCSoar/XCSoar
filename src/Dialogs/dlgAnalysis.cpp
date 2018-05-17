@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -34,13 +34,9 @@ Copyright_License {
 #include "Computer/Settings.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #include "Look/Look.hpp"
 #include "Computer/GlideComputer.hpp"
-#include "Protection.hpp"
-#include "Util/StringUtil.hpp"
-#include "Compiler.h"
-#include "Formatter/Units.hpp"
 #include "Renderer/FlightStatisticsRenderer.hpp"
 #include "Renderer/GlidePolarRenderer.hpp"
 #include "Renderer/BarographRenderer.hpp"
@@ -48,11 +44,15 @@ Copyright_License {
 #include "Renderer/ThermalBandRenderer.hpp"
 #include "Renderer/WindChartRenderer.hpp"
 #include "Renderer/CuRenderer.hpp"
+#include "Renderer/MacCreadyRenderer.hpp"
+#include "Renderer/VarioHistogramRenderer.hpp"
+#include "Renderer/TaskSpeedRenderer.hpp"
 #include "UIUtil/GestureManager.hpp"
 #include "Blackboard/FullBlackboard.hpp"
 #include "Language/Language.hpp"
 #include "Engine/Contest/Solvers/Contests.hpp"
 #include "Event/Timer.hpp"
+#include "Util/StringCompare.hxx"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scissor.hpp"
@@ -96,7 +96,7 @@ public:
      cross_section_look(_cross_section_look),
      thermal_band_renderer(_thermal_band_look, chart_look),
      fs_renderer(chart_look, map_look),
-     cross_section_renderer(cross_section_look, airspace_look, chart_look),
+     cross_section_renderer(cross_section_look, airspace_look, chart_look, false),
      dragging(false),
      blackboard(_blackboard), glide_computer(_glide_computer) {
     cross_section_renderer.SetAirspaces(airspaces);
@@ -111,9 +111,9 @@ public:
 
 protected:
   /* virtual methods from class Window */
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) override;
+  bool OnMouseDown(PixelPoint p) override;
+  bool OnMouseUp(PixelPoint p) override;
 
   void OnCancelMode() override {
     PaintWindow::OnCancelMode();
@@ -247,8 +247,7 @@ private:
 
 AnalysisWidget::Layout::Layout(const PixelRect rc)
 {
-  const unsigned width = rc.right - rc.left;
-  const unsigned height = rc.bottom - rc.top;
+  const unsigned width = rc.GetWidth(), height = rc.GetHeight();
   const unsigned button_height = ::Layout::GetMaximumControlHeight();
 
   main = rc;
@@ -348,7 +347,6 @@ ChartControl::OnPaint(Canvas &canvas)
   GLCanvasScissor scissor(canvas);
 #endif
 
-  canvas.Clear(COLOR_WHITE);
   canvas.SetTextColor(COLOR_BLACK);
 
   PixelRect rcgfx = GetClientRect();
@@ -362,9 +360,18 @@ ChartControl::OnPaint(Canvas &canvas)
                     basic, calculated, protected_task_manager);
     break;
   case AnalysisPage::CLIMB:
-    RenderClimbChart(canvas, rcgfx, chart_look,
-                     glide_computer.GetFlightStats(),
-                     settings_computer.polar.glide_polar_task);
+    if (protected_task_manager != NULL) {
+      ProtectedTaskManager::Lease task(*protected_task_manager);
+      RenderClimbChart(canvas, rcgfx, chart_look,
+                       glide_computer.GetFlightStats(),
+                       settings_computer.polar.glide_polar_task,
+                       basic, calculated, task);
+    }
+    break;
+  case AnalysisPage::VARIO_HISTOGRAM:
+    RenderVarioHistogram(canvas, rcgfx, chart_look,
+                         glide_computer.GetFlightStats(),
+                         settings_computer.polar.glide_polar_task);
     break;
   case AnalysisPage::THERMAL_BAND:
   {
@@ -392,6 +399,10 @@ ChartControl::OnPaint(Canvas &canvas)
                      calculated.climb_history,
                      settings_computer.polar.glide_polar_task);
     break;
+    case AnalysisPage::MACCREADY:
+      RenderMacCready(canvas, rcgfx, chart_look,
+                      settings_computer.polar.glide_polar_task);
+    break;
   case AnalysisPage::TEMPTRACE:
     RenderTemperatureChart(canvas, rcgfx, chart_look,
                            glide_computer.GetCuSonde());
@@ -418,7 +429,8 @@ ChartControl::OnPaint(Canvas &canvas)
       ProtectedTaskManager::Lease task(*protected_task_manager);
       RenderSpeed(canvas, rcgfx, chart_look,
                   glide_computer.GetFlightStats(),
-                  basic, calculated, task);
+                  basic, calculated, task,
+                  settings_computer.polar.glide_polar_task);
     }
     break;
 
@@ -485,6 +497,14 @@ AnalysisWidget::Update()
     SetCalcCaption(_T(""));
     break;
 
+  case AnalysisPage::VARIO_HISTOGRAM:
+    StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
+                       _("Vario Histogram"));
+    dialog.SetCaption(sTmp);
+    info.SetText(_T(""));
+    SetCalcCaption(_T(""));
+    break;
+
   case AnalysisPage::WIND:
     StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
                        _("Wind at Altitude"));
@@ -503,9 +523,18 @@ AnalysisWidget::Update()
     SetCalcCaption(_("Settings"));
     break;
 
+  case AnalysisPage::MACCREADY:
+    StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
+                       _("MacCready Speeds"));
+    dialog.SetCaption(sTmp);
+    MacCreadyCaption(sTmp, settings_computer.polar.glide_polar_task);
+    info.SetText(sTmp);
+    SetCalcCaption(_("Settings"));
+    break;
+
   case AnalysisPage::TEMPTRACE:
     StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
-                       _("Temp Trace"));
+                       _("Temperature Trace"));
     dialog.SetCaption(sTmp);
     TemperatureChartCaption(sTmp, glide_computer.GetCuSonde());
     info.SetText(sTmp);
@@ -516,7 +545,9 @@ AnalysisWidget::Update()
     StringFormatUnsafe(sTmp, _T("%s: %s"), _("Analysis"),
                        _("Task Speed"));
     dialog.SetCaption(sTmp);
-    info.SetText(_T(""));
+    TaskSpeedCaption(sTmp, glide_computer.GetFlightStats(),
+                     settings_computer.polar.glide_polar_task);
+    info.SetText(sTmp);
     SetCalcCaption(_("Task Calc"));
     break;
 
@@ -585,24 +616,24 @@ AnalysisWidget::OnGesture(const TCHAR *gesture)
 }
 
 bool
-ChartControl::OnMouseDown(PixelScalar x, PixelScalar y)
+ChartControl::OnMouseDown(PixelPoint p)
 {
   dragging = true;
   SetCapture();
-  gestures.Start(x, y, Layout::Scale(20));
+  gestures.Start(p, Layout::Scale(20));
   return true;
 }
 
 bool
-ChartControl::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+ChartControl::OnMouseMove(PixelPoint p, unsigned keys)
 {
   if (dragging)
-    gestures.Update(x, y);
+    gestures.Update(p);
   return true;
 }
 
 bool
-ChartControl::OnMouseUp(PixelScalar x, PixelScalar y)
+ChartControl::OnMouseUp(PixelPoint p)
 {
   if (dragging) {
     dragging = false;
@@ -621,21 +652,11 @@ AnalysisWidget::KeyPress(unsigned key_code)
 {
   switch (key_code) {
   case KEY_LEFT:
-#ifdef GNAV
-  case '6':
-    // Key F14 added in order to control the Analysis-Pages with the Altair RemoteStick
-  case KEY_F14:
-#endif
     previous_button.SetFocus();
     NextPage(-1);
     return true;
 
   case KEY_RIGHT:
-#ifdef GNAV
-  case '7':
-    // Key F13 added in order to control the Analysis-Pages with the Altair RemoteStick
-  case KEY_F13:
-#endif
     next_button.SetFocus();
     NextPage(+1);
     return true;
@@ -671,11 +692,16 @@ AnalysisWidget::OnCalcClicked()
     dlgBasicSettingsShowModal();
     break;
 
+  case AnalysisPage::MACCREADY:
+    dlgBasicSettingsShowModal();
+    break;
+
   case AnalysisPage::AIRSPACE:
     dlgAirspaceWarningsShowModal(glide_computer.GetAirspaceWarnings());
     break;
 
   case AnalysisPage::THERMAL_BAND:
+  case AnalysisPage::VARIO_HISTOGRAM:
   case AnalysisPage::OLC:
   case AnalysisPage::COUNT:
     break;

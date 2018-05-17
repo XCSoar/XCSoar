@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2011 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,12 +26,13 @@ Copyright_License {
 #include "Screen/Font.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Point.hpp"
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #include "Screen/Canvas.hpp"
 #include "Look/DialogLook.hpp"
 #include "Units/Descriptor.hpp"
 #include "Time/RoughTime.hpp"
 #include "Math/Angle.hpp"
+#include "Math/Util.hpp"
 #include "Renderer/SymbolRenderer.hpp"
 #include "Geo/CoordinateFormat.hpp"
 
@@ -68,7 +69,7 @@ DigitEntry::Create(ContainerWindow &parent, const PixelRect &rc,
     digit.value = 0;
   }
 
-  max_width = rc.right - rc.left;
+  max_width = rc.GetWidth();
 
   CalculateLayout();
 
@@ -248,7 +249,7 @@ DigitEntry::CalculateLayout()
 
   PixelSize digit_size = look.text_font.TextSize(_T("8"));
   digit_size.cy += 2 * padding;
-  if (digit_size.cy < (PixelScalar)min_value_height)
+  if (digit_size.cy < (int)min_value_height)
     digit_size.cy = min_value_height;
 
   top = control_height;
@@ -385,7 +386,7 @@ DigitEntry::SetValue(unsigned value)
 }
 
 void
-DigitEntry::SetValue(fixed value)
+DigitEntry::SetValue(double value)
 {
   // XXX implement
   SetValue((int)value);
@@ -452,14 +453,14 @@ DigitEntry::GetPositiveInteger() const
   return value;
 }
 
-fixed
+double
 DigitEntry::GetPositiveFractional() const
 {
   const int dp = FindDecimalPoint();
   if (dp < 0)
-    return fixed(0);
+    return 0;
 
-  fixed value = fixed(0);
+  double value = 0;
   unsigned factor = 10;
 
   for (unsigned i = dp + 1; i < length; ++i) {
@@ -468,7 +469,7 @@ DigitEntry::GetPositiveFractional() const
       continue;
 
     assert(c.value < 10);
-    value += fixed(c.value) / factor;
+    value += double(c.value) / factor;
     factor *= 10;
   }
 
@@ -492,25 +493,25 @@ DigitEntry::GetTimeValue() const
 }
 
 void
-DigitEntry::SetDigits(fixed degrees, CoordinateFormat format, bool isLatitude)
+DigitEntry::SetDigits(double degrees, CoordinateFormat format, bool isLatitude)
 {
   // Calculate half the last digit so that we round to the nearest
-  fixed roundingAdjustment = fixed(0);
+  double roundingAdjustment = 0;
   switch (format) {
   case CoordinateFormat::DD_DDDDD:
-    roundingAdjustment = fixed(0.5 * (1.0 / 100000));
+    roundingAdjustment = 0.5 * (1.0 / 100000);
     break;
 
   case CoordinateFormat::DDMM_MMM:
-    roundingAdjustment = fixed(0.5 * ( (1.0/60) / 1000));
+    roundingAdjustment = 0.5 * ( (1.0/60) / 1000);
     break;
 
   case CoordinateFormat::DDMMSS_S:
-    roundingAdjustment = fixed(0.5 * ( (1.0/3600) / 10));
+    roundingAdjustment = 0.5 * ( (1.0/3600) / 10);
     break;
 
   case CoordinateFormat::DDMMSS:
-    roundingAdjustment = fixed(0.5 * ( (1.0/3600) / 1));
+    roundingAdjustment = 0.5 * ( (1.0/3600) / 1);
     break;
 
   default:
@@ -613,13 +614,13 @@ DigitEntry::SetLatitude(Angle value, CoordinateFormat format)
 {
   // Latitude in floating point degrees
   value = value.AsDelta();
-  const fixed degrees = fabs(value.Degrees());
+  const auto degrees = fabs(value.Degrees());
 
   // Check the first three columns
   assert(columns[0].type == Column::Type::NORTH_SOUTH);
   assert(columns[1].type == Column::Type::DIGIT);
   assert(columns[2].type == Column::Type::DIGIT);
-  columns[0].value = negative(value.Native());
+  columns[0].value = value.IsNegative();
 
   // Set up and check the remaining digits
   SetDigits(degrees, format, true);
@@ -632,13 +633,13 @@ DigitEntry::SetLongitude(Angle value, CoordinateFormat format)
 {
   // Longitude in floating point degrees
   value = value.AsDelta();
-  const fixed degrees = fabs(value.Degrees());
+  const auto degrees = fabs(value.Degrees());
 
   // Check the first three columns here
   assert(columns[0].type == Column::Type::EAST_WEST);
   assert(columns[1].type == Column::Type::DIGIT19);
   assert(columns[2].type == Column::Type::DIGIT);
-  columns[0].value = negative(value.Native());
+  columns[0].value = value.IsNegative();
 
   // Set up and check the remaining digits
   SetDigits(degrees, format, false);
@@ -660,7 +661,7 @@ DigitEntry::GetGeoAngle(CoordinateFormat format) const
   assert(columns[1].type == Column::Type::DIGIT ||
          columns[1].type == Column::Type::DIGIT19);
   assert(columns[2].type == Column::Type::DIGIT);
-  fixed degrees = fixed(columns[1].value * 10 + columns[2].value);
+  double degrees = columns[1].value * 10 + columns[2].value;
 
   // Read columns according to specified format
   /// \todo support UTM format
@@ -678,7 +679,7 @@ DigitEntry::GetGeoAngle(CoordinateFormat format) const
                 columns[5].value * 1000 +
                 columns[6].value * 100 +
                 columns[7].value * 10  +
-                columns[8].value        ) * fixed(1 / 100000.);
+                columns[8].value        ) / 100000.;
     break;
 
   case CoordinateFormat::DDMM_MMM:
@@ -690,10 +691,10 @@ DigitEntry::GetGeoAngle(CoordinateFormat format) const
     assert(columns[8].type == Column::Type::DIGIT);
     assert(columns[9].type == Column::Type::DIGIT);
     // Read minute columns
-    degrees += (columns[4].value * 10 + columns[5].value) * fixed(1 / 60.)
+    degrees += (columns[4].value * 10 + columns[5].value) / 60.
       +  (columns[7].value * 100 +
           columns[8].value * 10  +
-          columns[9].value        ) * fixed(1 / 60000.);
+          columns[9].value        ) / 60000.;
     break;
 
   case CoordinateFormat::DDMMSS_S:
@@ -705,9 +706,9 @@ DigitEntry::GetGeoAngle(CoordinateFormat format) const
     assert(columns[8].type == Column::Type::DIGIT);
     assert(columns[10].type == Column::Type::DIGIT);
     // Read minute and decimal second columns
-    degrees += (columns[4].value * 10 + columns[5].value) * fixed(1 / 60.)
-      +  (columns[7].value * 10 + columns[8].value) * fixed(1 / 3600.)
-      +  (columns[10].value                       ) * fixed(1 / 36000.);
+    degrees += (columns[4].value * 10 + columns[5].value) / 60.
+      +  (columns[7].value * 10 + columns[8].value) / 3600.
+      +  (columns[10].value                       ) / 36000.;
     break;
 
   case CoordinateFormat::UTM: /// \todo support UTM format
@@ -719,8 +720,8 @@ DigitEntry::GetGeoAngle(CoordinateFormat format) const
     assert(columns[7].type == Column::Type::DIGIT6);
     assert(columns[8].type == Column::Type::DIGIT);
     // Read minute and second columns
-    degrees += (columns[4].value * 10 + columns[5].value) * fixed(1 / 60.)
-      +  (columns[7].value * 10 + columns[8].value) * fixed(1 / 3600.);
+    degrees += (columns[4].value * 10 + columns[5].value) / 60.
+      +  (columns[7].value * 10 + columns[8].value) / 3600.;
     break;
   }
 
@@ -828,36 +829,36 @@ DigitEntry::GetUnsignedValue() const
   return GetPositiveInteger();
 }
 
-fixed
-DigitEntry::GetFixedValue() const
+double
+DigitEntry::GetDoubleValue() const
 {
-  fixed value = fixed(GetPositiveInteger()) + GetPositiveFractional();
+  double value = GetPositiveInteger() + GetPositiveFractional();
   return IsNegative() ? -value : value;
 }
 
 Angle
 DigitEntry::GetAngleValue() const
 {
-  return Angle::Degrees(GetFixedValue());
+  return Angle::Degrees(GetDoubleValue());
 }
 
 bool
-DigitEntry::OnMouseDown(PixelScalar x, PixelScalar y)
+DigitEntry::OnMouseDown(PixelPoint p)
 {
-  int i = FindColumnAt(x);
+  int i = FindColumnAt(p.x);
   if (i >= 0 && columns[i].IsEditable()) {
     SetCursor(i);
     SetFocus();
 
-    if (y < int(top))
+    if (p.y < int(top))
       IncrementColumn(i);
-    else if (unsigned(y) > bottom)
+    else if (unsigned(p.y) > bottom)
       DecrementColumn(i);
 
     return true;
   }
 
-  return PaintWindow::OnMouseDown(x, y);
+  return PaintWindow::OnMouseDown(p);
 }
 
 bool

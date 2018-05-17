@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,7 +28,6 @@ Copyright_License {
 
 #include <algorithm>
 #include <assert.h>
-#include <limits.h>
 
 // set size of reserved queue elements (may differ from Dijkstra default)
 static constexpr unsigned CONTEST_QUEUE_SIZE = 5000;
@@ -178,8 +177,8 @@ ContestDijkstra::CalculateResult(const ContestTraceVector &solution) const
   assert(num_stages <= MAX_STAGES);
 
   ContestResult result;
-  result.time = fixed(solution[num_stages - 1].DeltaTime(solution[0]));
-  result.distance = result.score = fixed(0);
+  result.time = solution[num_stages - 1].DeltaTime(solution[0]);
+  result.distance = result.score = 0;
 
   GeoPoint previous = solution[0].GetLocation();
   for (unsigned i = 1; i < num_stages; ++i) {
@@ -189,8 +188,8 @@ ContestDijkstra::CalculateResult(const ContestTraceVector &solution) const
     previous = current;
   }
 
-  #define fixed_fifth fixed(0.0002)
-  result.score *= fixed_fifth;
+  #define FIFTH 0.0002
+  result.score *= FIFTH;
   result.score = ApplyHandicap(result.score);
 
   return result;

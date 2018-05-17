@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -41,12 +41,11 @@ PopupNearestWaypointDetails(const Waypoints &way_points,
                             const GeoPoint &location,
                             double range)
 {
-  const Waypoint *way_point;
-  way_point = way_points.LookupLocation(location, fixed(range));
+  auto way_point = way_points.LookupLocation(location, range);
 
   if (way_point) {
     LastUsedWaypoints::Add(*way_point);
-    dlgWaypointDetailsShowModal(*way_point, true, true);
+    dlgWaypointDetailsShowModal(way_point, true, true);
     return true;
   }
   return false;

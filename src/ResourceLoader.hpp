@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,8 +31,6 @@ Copyright_License {
 #endif
 
 #include <tchar.h>
-#include <stddef.h>
-#include <utility>
 
 class ResourceId;
 
@@ -55,14 +53,6 @@ namespace ResourceLoader {
 #ifdef WIN32
   HBITMAP
   LoadBitmap2(ResourceId id);
-#endif
-
-#ifdef HAVE_AYGSHELL_DLL
-  /**
-   * Load an image resource using aygshell.dll.
-   */
-  HBITMAP
-  SHLoadImageResource(ResourceId id);
 #endif
 }
 

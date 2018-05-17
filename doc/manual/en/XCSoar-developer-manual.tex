@@ -1,15 +1,13 @@
 \documentclass[a4paper,12pt]{refrep}
+\input{xcsoar.sty}
+
 \title{Developer Manual}
 
-% Set the page title
-\newcommand{\mycontent}[0]{
-\begin{tabular}{l}
-\hspace*{-4cm} \em XCSoar Developer Manual \vspace*{2pt}
-\end{tabular}}
+\input{xcsoar-headers.sty}
+\xcsoarheader{XCSoar Developer Manual}
 
-\input{xcsoar.sty}
 \input{title-xcsoar.sty}
-\usepackage{scrextend}     % only needed here
+\usepackage{listings}
 
 \usepackage{tikz}
 \usetikzlibrary{arrows,shapes,fit,decorations,decorations.pathmorphing,decorations.pathreplacing,calc}
@@ -20,10 +18,7 @@
 \begin{document}
 \maketitle
 
-\begingroup
-\setlength{\parskip}{0.1\baselineskip}
-\tableofcontents
-\endgroup
+\input{toc.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%
 
@@ -108,6 +103,8 @@ git diff > patch
 \section{Code Style}
 
 79 columns, reasonable exceptions allowed.  Indent 2 spaces, no tabs.
+No indent for \verb|namespace| blocks (a compromise to avoid excessive
+indentation).
 
 \emph{Comments:} write enough code comments (in English).  All
 workarounds must be documented.  Everybody must be able to understand
@@ -200,42 +197,10 @@ FooBar(int a_parameter, unsigned another_parameter,
 
 \section{C++}
 
-\subsection{Features}
+XCSoar is written in C++14.
 
-C++ is a complex language with many features, but some of them come at
-a cost (XCSoar runs on weak embedded devices), and others are not
-supported well by compilers.  Adopting a new compiler version is
-difficult, because the new version may not be available on all
-platforms.  This section describes the C++ language features that are
-allowed to be used.
-
-XCSoar's standard compiler is \texttt{gcc}.  We need to stay
-compatible with version 4.6, because that is what \texttt{cegcc} is
-based on.
-
-The following C++ features must \emph{not} be used:
-
-\begin{itemize}
-\item RTTI
-\item exceptions
-\end{itemize}
-
-\subsubsection{C++11}
-
-The XCSoar code base is currently migrating to the new standard
-C++11.  The following C++11 features are safe to use:
-
-\begin{itemize}
-\item \verb|auto|-typed variables
-\item Rvalue references
-\item Explicit conversion operators
-\item Strongly-typed enums
-\item Defaulted and deleted functions
-\item Generalized constant expressions (\verb|constexpr|)
-\item \verb|override| and \verb|final|
-\item Range-based \verb|for|
-\item \verb|nullptr|
-\end{itemize}
+XCSoar's standard compilers are \texttt{gcc} (at least version 5) and
+\texttt{clang} (at least version 3.8).
 
 \subsection{Other rules}
 
@@ -838,6 +803,9 @@ to the air-referenced glide ratio when flying at constant speed.
 If usage spans both air-referenced and ground-referenced glide ratios, the 
 non-specific term 'glide ratio' / 'GR' should be used. 'Lift/drag ratio' should 
 never be used to refer to ground-referenced glide ratios.
+
+\chapter{Lua Scripting}\label{cha:lua}
+\input{lua.tex}
 
 \chapter{File formats}\label{cha:file_formats}
 

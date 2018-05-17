@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -94,10 +94,10 @@ Profile::Load(const ProfileMap &map, TaskBehaviour &settings)
 
   unsigned Temp;
   if (map.Get(ProfileKeys::RiskGamma, Temp))
-    settings.risk_gamma = fixed(Temp) / 10;
+    settings.risk_gamma = Temp / 10.;
 
   if (map.Get(ProfileKeys::SafetyMacCready, Temp))
-    settings.safety_mc = fixed(Temp) / 10;
+    settings.safety_mc = Temp / 10.;
 
   map.Get(ProfileKeys::SafetyAltitudeArrival, settings.safety_height_arrival);
   map.GetEnum(ProfileKeys::TaskType, settings.task_type_default);

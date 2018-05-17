@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -34,11 +34,7 @@ MapCanvas::DrawLine(GeoPoint a, GeoPoint b)
   if (!clip.ClipLine(a, b))
     return;
 
-  RasterPoint pts[2];
-  pts[0] = projection.GeoToScreen(a);
-  pts[1] = projection.GeoToScreen(b);
-
-  canvas.DrawLine(pts[0], pts[1]);
+  canvas.DrawLine(projection.GeoToScreen(a), projection.GeoToScreen(b));
 }
 
 void
@@ -47,25 +43,25 @@ MapCanvas::DrawLineWithOffset(GeoPoint a, GeoPoint b)
   if (!clip.ClipLine(a, b))
     return;
 
-  RasterPoint pts[3];
+  PixelPoint pts[3];
   pts[0] = projection.GeoToScreen(a);
   pts[1] = projection.GeoToScreen(b);
-  ScreenClosestPoint(pts[0], pts[1], pts[0], &pts[2], Layout::Scale(20));
+  pts[2] = ScreenClosestPoint(pts[0], pts[1], pts[0], Layout::Scale(20));
   canvas.DrawLine(pts[2], pts[1]);
 }
 
 
 void
-MapCanvas::DrawCircle(const GeoPoint &center, fixed radius)
+MapCanvas::DrawCircle(const GeoPoint &center, double radius)
 {
-  RasterPoint screen_center = projection.GeoToScreen(center);
+  auto screen_center = projection.GeoToScreen(center);
   unsigned screen_radius = projection.GeoToScreenDistance(radius);
   canvas.DrawCircle(screen_center.x, screen_center.y, screen_radius);
 }
 
 void
 MapCanvas::Project(const Projection &projection,
-                   const SearchPointVector &points, RasterPoint *screen)
+                   const SearchPointVector &points, BulkPixelPoint *screen)
 {
   for (auto it = points.begin(); it != points.end(); ++it)
     *screen++ = projection.GeoToScreen(it->GetLocation());

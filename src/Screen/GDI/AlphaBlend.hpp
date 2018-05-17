@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,51 +25,5 @@ Copyright_License {
 #define XCSOAR_SCREEN_GDI_ALPHA_BLEND_HPP
 
 #include "Screen/GDI/Features.hpp"
-
-#ifdef HAVE_ALPHA_BLEND
-
-#include <windows.h>
-
-#ifdef HAVE_DYNAMIC_ALPHA_BLEND
-
-typedef BOOL (*AlphaBlend_t)(HDC hdcDest,
-                             int xoriginDest, int yoriginDest,
-                             int wDest, int hDest,
-                             HDC hdcSrc,
-                             int xoriginSrc, int yoriginSrc,
-                             int wSrc, int hSrc,
-                             BLENDFUNCTION ftn);
-
-extern AlphaBlend_t alpha_blend_pointer;
-
-void
-AlphaBlendInit();
-
-void
-AlphaBlendDeinit();
-
-static inline bool
-AlphaBlendAvailable()
-{
-  return alpha_blend_pointer != nullptr;
-}
-
-#define AlphaBlendInvoke alpha_blend_pointer
-
-#elif defined(HAVE_BUILTIN_ALPHA_BLEND)
-
-static constexpr inline bool
-AlphaBlendAvailable()
-{
-  return true;
-}
-
-#define AlphaBlendInvoke AlphaBlend
-
-#else
-#error No alpha blending
-#endif
-
-#endif /* HAVE_ALPHA_BLEND */
 
 #endif

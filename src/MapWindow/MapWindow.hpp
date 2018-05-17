@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -41,19 +41,23 @@ Copyright_License {
 #include "Weather/Features.hpp"
 #include "Tracking/SkyLines/Features.hpp"
 
+#include <memory>
+
 struct MapLook;
 struct TrafficLook;
 class TopographyStore;
 class CachedTopographyRenderer;
 class RasterTerrain;
-class RasterWeatherStore;
-class RasterWeatherCache;
+class RaspStore;
+class RaspRenderer;
+class MapOverlay;
 class Waypoints;
 class Airspaces;
 class ProtectedTaskManager;
 class GlideComputer;
 class ContainerWindow;
 class NOAAStore;
+class MapOverlay;
 
 namespace SkyLinesTracking {
   struct Data;
@@ -89,7 +93,7 @@ protected:
     FOLLOW_PAN,
   };
 
-  FollowMode follow_mode;
+  FollowMode follow_mode = FOLLOW_SELF;
 
   /**
    * The projection as currently visible on the screen.  This object
@@ -113,15 +117,24 @@ protected:
    */
   MapWindowProjection render_projection;
 
-  const Waypoints *waypoints;
-  TopographyStore *topography;
-  CachedTopographyRenderer *topography_renderer;
+  const Waypoints *waypoints = nullptr;
+  TopographyStore *topography = nullptr;
+  CachedTopographyRenderer *topography_renderer = nullptr;
 
-  RasterTerrain *terrain;
-  GeoPoint terrain_center;
-  fixed terrain_radius;
+  RasterTerrain *terrain = nullptr;
 
-  RasterWeatherCache *weather;
+  std::shared_ptr<RaspStore> rasp_store;
+
+  /**
+   * The current RASP renderer.  Modifications to this pointer (but
+   * not to the #RaspRenderer instance) are protected by
+   * #DoubleBufferWindow::mutex.
+   */
+  std::unique_ptr<RaspRenderer> rasp_renderer;
+
+#ifdef ENABLE_OPENGL
+  std::unique_ptr<MapOverlay> overlay;
+#endif
 
   const TrafficLook &traffic_look;
 
@@ -133,19 +146,19 @@ protected:
 
   TrailRenderer trail_renderer;
 
-  ProtectedTaskManager *task;
-  const ProtectedRoutePlanner *route_planner;
-  GlideComputer *glide_computer;
+  ProtectedTaskManager *task = nullptr;
+  const ProtectedRoutePlanner *route_planner = nullptr;
+  GlideComputer *glide_computer = nullptr;
 
 #ifdef HAVE_NOAA
-  NOAAStore *noaa_store;
+  NOAAStore *noaa_store = nullptr;
 #endif
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  const SkyLinesTracking::Data *skylines_data;
+#ifdef HAVE_SKYLINES_TRACKING
+  const SkyLinesTracking::Data *skylines_data = nullptr;
 #endif
 
-  bool compass_visible;
+  bool compass_visible = true;
 
 #ifndef ENABLE_OPENGL
   /**
@@ -153,14 +166,14 @@ protected:
    * those attributes to prevent showing invalid data on the map, when
    * the user switches quickly to or from full-screen mode.
    */
-  unsigned ui_generation, buffer_generation;
+  unsigned ui_generation = 1, buffer_generation = 0;
 
   /**
    * If non-zero, then the buffer will be scaled to the new
    * projection, and this variable is decremented.  This is used while
    * zooming and panning, to give instant visual feedback.
    */
-  unsigned scale_buffer;
+  unsigned scale_buffer = 0;
 #endif
 
   /**
@@ -187,8 +200,6 @@ public:
     return follow_mode == FOLLOW_PAN;
   }
 
-  void Create(ContainerWindow &parent, const PixelRect &rc);
-
   void SetWaypoints(const Waypoints *_waypoints) {
     waypoints = _waypoints;
     waypoint_renderer.set_way_points(waypoints);
@@ -211,7 +222,20 @@ public:
 
   void SetTopography(TopographyStore *_topography);
   void SetTerrain(RasterTerrain *_terrain);
-  void SetWeather(const RasterWeatherStore *_weather);
+
+  const std::shared_ptr<RaspStore> &GetRasp() const {
+    return rasp_store;
+  }
+
+  void SetRasp(const std::shared_ptr<RaspStore> &_rasp_store);
+
+#ifdef ENABLE_OPENGL
+  void SetOverlay(std::unique_ptr<MapOverlay> &&_overlay);
+
+  const MapOverlay *GetOverlay() const {
+    return overlay.get();
+  }
+#endif
 
 #ifdef HAVE_NOAA
   void SetNOAAStore(NOAAStore *_noaa_store) {
@@ -219,7 +243,7 @@ public:
   }
 #endif
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
   void SetSkyLinesData(const SkyLinesTracking::Data *_data) {
     skylines_data = _data;
   }
@@ -254,21 +278,20 @@ public:
   }
 
 protected:
-  void DrawBestCruiseTrack(Canvas &canvas,
-                           const RasterPoint aircraft_pos) const;
+  void DrawBestCruiseTrack(Canvas &canvas, PixelPoint aircraft_pos) const;
   void DrawTrackBearing(Canvas &canvas,
-                        const RasterPoint aircraft_pos, bool circling) const;
+                        PixelPoint aircraft_pos, bool circling) const;
   void DrawCompass(Canvas &canvas, const PixelRect &rc) const;
-  void DrawWind(Canvas &canvas, const RasterPoint &Orig,
+  void DrawWind(Canvas &canvas, const PixelPoint &Orig,
                            const PixelRect &rc) const;
   void DrawWaypoints(Canvas &canvas);
 
-  void DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
+  void DrawTrail(Canvas &canvas, PixelPoint aircraft_pos,
                  unsigned min_time, bool enable_traildrift = false);
-  virtual void RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos);
-  virtual void RenderTrackBearing(Canvas &canvas, const RasterPoint aircraft_pos);
+  virtual void RenderTrail(Canvas &canvas, PixelPoint aircraft_pos);
+  virtual void RenderTrackBearing(Canvas &canvas, PixelPoint aircraft_pos);
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
   void DrawSkyLinesTraffic(Canvas &canvas) const;
 #endif
 
@@ -282,7 +305,7 @@ protected:
 
   void DrawGlideThroughTerrain(Canvas &canvas) const;
   void DrawTerrainAbove(Canvas &canvas);
-  void DrawFLARMTraffic(Canvas &canvas, const RasterPoint aircraft_pos) const;
+  void DrawFLARMTraffic(Canvas &canvas, PixelPoint aircraft_pos) const;
 
   // thread, main functions
   /**
@@ -299,15 +322,9 @@ protected:
    */
   bool UpdateTerrain();
 
-  /**
-   * @return true if UpdateWeather() should be called again
-   */
-  bool UpdateWeather();
-
   void UpdateAll() {
     UpdateTopography();
     UpdateTerrain();
-    UpdateWeather();
   }
 
 protected:
@@ -326,6 +343,11 @@ private:
    * @param canvas The drawing canvas
    */
   void RenderTerrain(Canvas &canvas);
+
+  void RenderRasp(Canvas &canvas);
+
+  void RenderTerrainAbove(Canvas &canvas, bool working);
+
   /**
    * Renders the topography
    * @param canvas The drawing canvas
@@ -336,6 +358,9 @@ private:
    * @param canvas The drawing canvas
    */
   void RenderTopographyLabels(Canvas &canvas);
+
+  void RenderOverlays(Canvas &canvas);
+
   /**
    * Renders the final glide shading
    * @param canvas The drawing canvas
@@ -359,7 +384,9 @@ private:
   void RenderGlide(Canvas &canvas);
 
 public:
-  void SetMapScale(const fixed x);
+  void SetMapScale(const double x) {
+    visible_projection.SetMapScale(x);
+  }
 };
 
 #endif

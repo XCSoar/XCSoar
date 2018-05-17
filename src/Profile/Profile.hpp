@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,15 +24,15 @@ Copyright_License {
 #ifndef XCSOAR_PROFILE_HPP
 #define XCSOAR_PROFILE_HPP
 
+// IWYU pragma: begin_exports
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/ProfileMap.hpp"
+// IWYU pragma: end_exports
 
-#include <stddef.h>
-#include <tchar.h>
+#include "Compiler.h"
 
-struct GeoPoint;
-template<typename T> class StringPointer;
-template<typename T> class AllocatedString;
+class Path;
+class AllocatedPath;
 
 namespace Profile
 {
@@ -40,7 +40,7 @@ namespace Profile
    * Returns the absolute path of the current profile file.
    */
   gcc_pure
-  const TCHAR *GetPath();
+  Path GetPath();
 
   /**
    * Loads the profile files
@@ -49,7 +49,7 @@ namespace Profile
   /**
    * Loads the given profile file
    */
-  void LoadFile(const TCHAR *szFile);
+  void LoadFile(Path path);
 
   /**
    * Saves the profile into the profile files
@@ -58,13 +58,13 @@ namespace Profile
   /**
    * Saves the profile into the given profile file
    */
-  void SaveFile(const TCHAR *szFile);
+  void SaveFile(Path path);
 
   /**
    * Sets the profile files to load when calling Load()
-   * @param override NULL or file to load when calling Load()
+   * @param override nullptr or file to load when calling Load()
    */
-  void SetFiles(const TCHAR *override_path);
+  void SetFiles(Path override_path);
 
   /**
    * Reads a configured path from the profile, and expands it with
@@ -73,9 +73,13 @@ namespace Profile
    * @param value a buffer which can store at least MAX_PATH
    * characters
    */
-  bool GetPath(const char *key, TCHAR *value);
-  void SetPath(const char *key, const TCHAR *value);
-  bool GetPathIsEqual(const char *key, const TCHAR *value);
+  gcc_pure
+  AllocatedPath GetPath(const char *key);
+
+  void SetPath(const char *key, Path value);
+
+  gcc_pure
+  bool GetPathIsEqual(const char *key, Path value);
 };
 
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2013 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2010-2013 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -47,7 +47,7 @@ CopyUTF8(char *dest, size_t dest_size, const char *src)
 #ifdef _UNICODE
 
 bool
-CopyUTF8(TCHAR *dest, size_t dest_size, const char *src)
+CopyUTF8(wchar_t *dest, size_t dest_size, const char *src)
 {
 	int result = MultiByteToWideChar(CP_UTF8, 0, src, -1, dest, dest_size);
 	return result > 0;

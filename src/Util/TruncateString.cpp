@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "TruncateString.hpp"
-#include "StringAPI.hpp"
+#include "StringAPI.hxx"
 #include "UTF8.hpp"
 
 #include <algorithm>

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@ Copyright_License {
 #include "TaskLook.hpp"
 #include "Screen/Layout.hpp"
 #include "Resources.hpp"
+#include "Colors.hpp"
 
 void
 TaskLook::Initialise()
@@ -38,15 +39,16 @@ TaskLook::Initialise()
   oz_inactive_pen.Create(Pen::SOLID, Layout::ScalePenWidth(1),
                       DarkColor(task_color));
 
-  leg_active_pen.Create(Pen::DASH, Layout::ScalePenWidth(2), task_color);
-  leg_inactive_pen.Create(Pen::DASH, Layout::ScalePenWidth(1), task_color);
-  arrow_pen.Create(Layout::ScalePenWidth(1), task_color);
+  leg_active_pen.Create(Pen::DASH2, Layout::ScalePenWidth(2), task_color);
+  leg_inactive_pen.Create(Pen::DASH2, Layout::ScalePenWidth(1), task_color);
+  arrow_active_pen.Create(Layout::ScalePenWidth(2), task_color);
+  arrow_inactive_pen.Create(Layout::ScalePenWidth(1), task_color);
 
-  isoline_pen.Create(Pen::DASH, Layout::ScalePenWidth(1), isoline_color);
+  isoline_pen.Create(Pen::DASH2, Layout::ScalePenWidth(1), isoline_color);
 
   bearing_pen.Create(Layout::ScalePenWidth(2),
                   HasColors() ? bearing_color : COLOR_BLACK);
-  best_cruise_track_brush.Create(bearing_color);
+  best_cruise_track_brush.Create(ColorWithAlpha(bearing_color, ALPHA_OVERLAY));
   best_cruise_track_pen.Create(Layout::ScalePenWidth(1),
                                HasColors()
                                ? DarkColor(bearing_color)

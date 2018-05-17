@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,35 +28,35 @@ using namespace FAITriangleRules;
 
 gcc_const
 static bool
-IsSmallFAITriangle(const fixed d_total,
-                   const fixed d1, const fixed d2, const fixed d3)
+IsSmallFAITriangle(const double d_total,
+                   const double d1, const double d2, const double d3)
 {
-  const fixed d_min = d_total * SMALL_MIN_LEG;
+  const auto d_min = d_total * SMALL_MIN_LEG;
   return d1 >= d_min && d2 >= d_min && d3 >= d_min;
 }
 
 gcc_const
 static bool
-IsLargeFAITriangle(const fixed d_total,
-                   const fixed d1, const fixed d2, const fixed d3,
-                   const fixed large_threshold)
+IsLargeFAITriangle(const double d_total,
+                   const double d1, const double d2, const double d3,
+                   const double large_threshold)
 {
   if (d_total < large_threshold)
     return false;
 
-  const fixed d_min = LargeMinLeg(d_total);
+  const auto d_min = LargeMinLeg(d_total);
   if (d1 < d_min || d2 < d_min || d3 < d_min)
     return false;
 
-  const fixed d_max = d_total * LARGE_MAX_LEG;
+  const auto d_max = d_total * LARGE_MAX_LEG;
   return d1 <= d_max && d2 <= d_max && d3 <= d_max;
 }
 
 bool
-FAITriangleRules::TestDistances(const fixed d1, const fixed d2, const fixed d3,
+FAITriangleRules::TestDistances(const double d1, const double d2, const double d3,
                                 const FAITriangleSettings &settings)
 {
-  const fixed d_wp = d1 + d2 + d3;
+  const auto d_wp = d1 + d2 + d3;
 
   /*
    * A triangle is a valid FAI-triangle, if no side is less than

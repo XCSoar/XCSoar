@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -58,7 +58,7 @@ struct AngleRange {
    */
   gcc_pure
   Angle GetMiddle() const {
-    return start.Fraction(end, fixed(0.5));
+    return start.Fraction(end, 0.5);
   }
 
   /**
@@ -87,8 +87,10 @@ struct AngleRange {
 
   /**
    * Extend this range so the specified value is deemed inside.
+   *
+   * @return true if the range has been modified
    */
-  void Extend(Angle value);
+  bool Extend(Angle value);
 
   /**
    * Set this object to the intersection of this and the other object.

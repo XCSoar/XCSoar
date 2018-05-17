@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -48,11 +48,8 @@ class CrossSectionRenderer :
   public BaseBlackboard
 {
 public:
-#ifdef _WIN32_WCE
-  static constexpr unsigned NUM_SLICES = 16;
-#else
   static constexpr unsigned NUM_SLICES = 64;
-#endif
+  const bool inverse;
 
 protected:
   const CrossSectionLook &look;
@@ -81,7 +78,8 @@ public:
    */
   CrossSectionRenderer(const CrossSectionLook &look,
                        const AirspaceLook &airspace_look,
-                       const ChartLook &chart_look);
+                       const ChartLook &chart_look,
+                       const bool &_inverse);
 
   void ReadBlackboard(const MoreData &_gps_info,
                       const DerivedInfo &_calculated_info,
@@ -116,7 +114,7 @@ public:
    * Set CrossSection range
    * @param range Range to draw [m]
    */
-  void SetRange(fixed range) {
+  void SetRange(double range) {
     vec.distance = range;
   }
 
@@ -142,12 +140,13 @@ public:
   }
 
 protected:
-  void UpdateTerrain(short *elevations) const;
+  void UpdateTerrain(TerrainHeight *elevations) const;
 
   void PaintGlide(ChartRenderer &chart) const;
   void PaintAircraft(Canvas &canvas, const ChartRenderer &chart,
                      const PixelRect rc) const;
   void PaintGrid(Canvas &canvas, ChartRenderer &chart) const;
+  void PaintWorking(ChartRenderer &chart) const;
 };
 
 #endif

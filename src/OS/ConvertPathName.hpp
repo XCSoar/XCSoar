@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,13 +24,14 @@ Copyright_License {
 #ifndef OS_CONVERT_PATH_NAME_HPP
 #define OS_CONVERT_PATH_NAME_HPP
 
+#include "Path.hpp"
 #include "Compiler.h"
 
 #ifdef _UNICODE
 #include "Util/ConvertString.hpp"
 #include "Util/LightString.hxx"
 
-#include <tchar.h>
+#include <wchar.h>
 #else
 #include "Util/StringPointer.hxx"
 #endif
@@ -43,7 +44,7 @@ Copyright_License {
  */
 class PathName {
 #ifdef _UNICODE
-  typedef LightString<TCHAR> Value;
+  typedef LightString<wchar_t> Value;
 #else
   typedef StringPointer<> Value;
 #endif
@@ -51,7 +52,7 @@ class PathName {
   Value value;
 
 public:
-  explicit PathName(Value::const_pointer _value)
+  explicit PathName(Value::const_pointer_type _value)
     :value(_value) {}
 
 #ifdef _UNICODE
@@ -64,8 +65,8 @@ public:
     return !value.IsNull();
   }
 
-  operator Value::const_pointer() const {
-    return value.c_str();
+  operator Path() const {
+    return Path(value.c_str());
   }
 };
 
@@ -84,12 +85,12 @@ class NarrowPathName {
   Value value;
 
 public:
-  explicit NarrowPathName(Value::const_pointer _value)
-    :value(_value) {}
-
 #ifdef _UNICODE
-  explicit NarrowPathName(const TCHAR *_value)
-    :value(Value::Donate(ConvertWideToACP(_value))) {}
+  explicit NarrowPathName(Path _value)
+    :value(Value::Donate(ConvertWideToACP(_value.c_str()))) {}
+#else
+  explicit NarrowPathName(Path _value)
+    :value(_value.c_str()) {}
 #endif
 
 public:
@@ -97,7 +98,7 @@ public:
     return !value.IsNull();
   }
 
-  operator Value::const_pointer() const {
+  operator Value::const_pointer_type() const {
     return value.c_str();
   }
 };

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -47,23 +47,22 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "InputEvents.hpp"
 #include "InputConfig.hpp"
 #include "InputParser.hpp"
-#include "UIActions.hpp"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
 #include "Protection.hpp"
 #include "LogFile.hpp"
 #include "Menu/ButtonLabel.hpp"
 #include "Profile/ProfileKeys.hpp"
-#include "Asset.hpp"
 #include "Menu/MenuData.hpp"
 #include "IO/ConfiguredFile.hpp"
 #include "IO/LineReader.hpp"
-#include "InfoBoxes/InfoBoxManager.hpp"
 #include "Pan.hpp"
 
 #ifdef KOBO
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #endif
+
+#include "Lua/InputEvent.hpp"
 
 #include <assert.h>
 #include <tchar.h>
@@ -117,7 +116,7 @@ InputEvents::readFile()
   LoadDefaults(input_config);
 
   // Read in user defined configuration file
-  std::unique_ptr<TLineReader> reader(OpenConfiguredTextFile(ProfileKeys::InputFile));
+  auto reader = OpenConfiguredTextFile(ProfileKeys::InputFile);
   if (reader)
     ::ParseInputFile(input_config, *reader);
 }
@@ -220,7 +219,7 @@ InputEvents::UpdateOverlayMode()
                 flavour);
 
     /* see if it exists */
-    int new_mode = input_config.LookupMode(name);
+    int new_mode = input_config.LookupMode(name.c_str());
     if (new_mode >= 0)
       /* yep, it does */
       overlay_mode = (Mode)new_mode;
@@ -303,11 +302,6 @@ key_to_event(InputEvents::Mode mode, InputEvents::Mode overlay_mode,
 bool
 InputEvents::ProcessKey(Mode mode, unsigned key_code)
 {
-  if (IsAltair() && key_code == 0xF5) {
-    UIActions::SignalShutdown(false);
-    return true;
-  }
-
   if (!global_running)
     return false;
 
@@ -320,6 +314,10 @@ InputEvents::ProcessKey(Mode mode, unsigned key_code)
   // TODO: check the console key code
 #endif
 #endif
+
+  if (Lua::FireKey(key_code)) {
+    //    return true;
+  }
 
   // Which key - can be defined locally or at default (fall back to default)
   unsigned event_id = key_to_event(mode, overlay_mode, key_code);
@@ -351,7 +349,7 @@ InputEvents::gesture_to_event(const TCHAR *data)
 bool
 InputEvents::IsGesture(const TCHAR *data)
 {
-  return gesture_to_event(data) != 0;
+  return (Lua::IsGesture(data)) || (gesture_to_event(data) != 0);
 }
 
 bool
@@ -364,7 +362,7 @@ InputEvents::processGesture(const TCHAR *data)
     InputEvents::processGo(event_id);
     return true;
   }
-  return false;
+  return Lua::FireGesture(data);
 }
 
 /*
@@ -389,8 +387,7 @@ InputEvents::processNmea_real(unsigned ne_id)
     InputEvents::processGo(event_id);
     return true;
   }
-
-  return false;
+  return Lua::FireNMEAEvent(ne_id);
 }
 
 /*
@@ -416,7 +413,7 @@ InputEvents::processGlideComputer_real(unsigned gce_id)
     return true;
   }
 
-  return false;
+  return Lua::FireGlideComputerEvent(gce_id);
 }
 
 // EXECUTE an Event - lookup event handler and call back - no return

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,7 +31,6 @@ Copyright_License {
 #include "Renderer/WaypointRendererSettings.hpp"
 #include "Engine/Task/Shapes/FAITriangleSettings.hpp"
 #include "Terrain/TerrainSettings.hpp"
-#include "Math/fixed.hpp"
 
 #include <type_traits>
 
@@ -126,7 +125,7 @@ struct MapSettings {
   /** Map zooms in on circling */
   bool circle_zoom_enabled;
   /** Maximum distance limit for AutoZoom */
-  fixed max_auto_zoom_distance;
+  double max_auto_zoom_distance;
   /** Map will show topography */
   bool topography_enabled;
 
@@ -152,9 +151,9 @@ struct MapSettings {
   MapOrientation circling_orientation;
 
   /** Map scale in cruise mode [px/m] */
-  fixed cruise_scale;
+  double cruise_scale;
   /** Map scale in circling mode [px/m] */
-  fixed circling_scale;
+  double circling_scale;
 
   /** The bias for map shifting (Heading, Target, etc.) */
   MapShiftBias map_shift_bias;

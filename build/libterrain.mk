@@ -10,12 +10,10 @@ TERRAIN_SOURCES = \
 	$(SRC)/Terrain/Intersection.cpp \
 	$(SRC)/Terrain/ScanLine.cpp \
 	$(SRC)/Terrain/RasterTerrain.cpp \
-	$(SRC)/Terrain/RasterWeatherStore.cpp \
-	$(SRC)/Terrain/RasterWeatherCache.cpp \
+	$(SRC)/Terrain/Thread.cpp \
 	$(SRC)/Terrain/HeightMatrix.cpp \
 	$(SRC)/Terrain/RasterRenderer.cpp \
 	$(SRC)/Terrain/TerrainRenderer.cpp \
-	$(SRC)/Terrain/WeatherTerrainRenderer.cpp \
 	$(SRC)/Terrain/TerrainSettings.cpp
 
 TERRAIN_CXXFLAGS_INTERNAL = -Wno-shift-negative-value

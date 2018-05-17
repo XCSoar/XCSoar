@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -57,7 +57,7 @@ FormatCirclingDirection(Phase::CirclingDirection circling_direction)
 }
 
 static void
-WritePhase(TextWriter &writer, Phase &phase)
+WritePhase(BufferedOutputStream &writer, Phase &phase)
 {
   JSON::ObjectWriter object(writer);
   NarrowString<64> buffer;
@@ -74,39 +74,43 @@ WritePhase(TextWriter &writer, Phase &phase)
   object.WriteElement("circling_direction", JSON::WriteString,
                       FormatCirclingDirection(phase.circling_direction));
   object.WriteElement("alt_diff", JSON::WriteInteger, (int)phase.alt_diff);
+  object.WriteElement("start_alt", JSON::WriteDouble, phase.start_alt);
+  object.WriteElement("end_alt", JSON::WriteDouble, phase.end_alt);
   object.WriteElement("distance", JSON::WriteInteger, (int)phase.distance);
-  object.WriteElement("speed", JSON::WriteFixed, phase.GetSpeed());
-  object.WriteElement("vario", JSON::WriteFixed, phase.GetVario());
-  object.WriteElement("glide_rate", JSON::WriteFixed, phase.GetGlideRate());
+  object.WriteElement("speed", JSON::WriteDouble, phase.GetSpeed());
+  object.WriteElement("vario", JSON::WriteDouble, phase.GetVario());
+  object.WriteElement("glide_rate", JSON::WriteDouble, phase.GetGlideRate());
 }
 
 static void
-WriteCirclingStats(TextWriter &writer, const Phase &stats)
+WriteCirclingStats(BufferedOutputStream &writer, const Phase &stats)
 {
   JSON::ObjectWriter object(writer);
   object.WriteElement("alt_diff", JSON::WriteInteger, (int)stats.alt_diff);
   object.WriteElement("duration", JSON::WriteInteger, (int)stats.duration);
-  object.WriteElement("fraction", JSON::WriteFixed, stats.fraction);
-  object.WriteElement("vario", JSON::WriteFixed, stats.GetVario());
+  object.WriteElement("fraction", JSON::WriteDouble, stats.fraction);
+  object.WriteElement("vario", JSON::WriteDouble, stats.GetVario());
   object.WriteElement("count", JSON::WriteInteger, stats.merges);
 }
 
 static void
-WriteCruiseStats(TextWriter &writer, const Phase &stats)
+WriteCruiseStats(BufferedOutputStream &writer, const Phase &stats)
 {
   JSON::ObjectWriter object(writer);
   object.WriteElement("alt_diff", JSON::WriteInteger, (int)stats.alt_diff);
   object.WriteElement("duration", JSON::WriteInteger, (int)stats.duration);
-  object.WriteElement("fraction", JSON::WriteFixed, stats.fraction);
+  object.WriteElement("fraction", JSON::WriteDouble, stats.fraction);
   object.WriteElement("distance", JSON::WriteInteger, (int)stats.distance);
-  object.WriteElement("speed", JSON::WriteFixed, stats.GetSpeed());
-  object.WriteElement("vario", JSON::WriteFixed, stats.GetVario());
-  object.WriteElement("glide_rate", JSON::WriteFixed, stats.GetGlideRate());
+  object.WriteElement("speed", JSON::WriteDouble, stats.GetSpeed());
+  object.WriteElement("vario", JSON::WriteDouble, stats.GetVario());
+  object.WriteElement("glide_rate", JSON::WriteDouble, stats.GetGlideRate());
+  object.WriteElement("start_alt", JSON::WriteDouble, stats.start_alt);
+  object.WriteElement("end_alt", JSON::WriteDouble, stats.end_alt);
   object.WriteElement("count", JSON::WriteInteger, stats.merges);
 }
 
 void
-WritePerformanceStats(TextWriter &writer, const PhaseTotals &totals)
+WritePerformanceStats(BufferedOutputStream &writer, const PhaseTotals &totals)
 {
   JSON::ObjectWriter object(writer);
   object.WriteElement("circling_total", WriteCirclingStats,
@@ -122,7 +126,7 @@ WritePerformanceStats(TextWriter &writer, const PhaseTotals &totals)
 }
 
 void
-WritePhaseList(TextWriter &writer, const PhaseList &phases)
+WritePhaseList(BufferedOutputStream &writer, const PhaseList &phases)
 {
   JSON::ArrayWriter array(writer);
   for (Phase phase : phases) {

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,6 +26,7 @@
 #include "test_debug.hpp"
 #include "Airspace/AirspaceIntersectionVisitor.hpp"
 #include "Airspace/SoonestAirspace.hpp"
+#include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
 #include "Geo/GeoVector.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
 #include "OS/FileUtil.hpp"
@@ -40,8 +41,8 @@ airspace_random_properties(AbstractAirspace& as)
   AirspaceClass Type = (AirspaceClass)(rand()%14);
   AirspaceAltitude base;
   AirspaceAltitude top;
-  base.altitude = fixed(rand()%4000);
-  top.altitude = base.altitude+fixed(rand()%3000);
+  base.altitude = rand()%4000;
+  top.altitude = base.altitude+rand()%3000;
   as.SetProperties(_T("hello"), Type, base, top);
 }
 
@@ -64,7 +65,7 @@ void setup_airspaces(Airspaces& airspaces, const GeoPoint& center, const unsigne
   std::ofstream *fin = NULL;
 
   if (verbose) {
-    Directory::Create(_T("output/results"));
+    Directory::Create(Path(_T("output/results")));
     fin = new std::ofstream("output/results/res-bb-in.txt");
   }
 
@@ -72,9 +73,9 @@ void setup_airspaces(Airspaces& airspaces, const GeoPoint& center, const unsigne
     AbstractAirspace* as;
     if (rand()%4!=0) {
       GeoPoint c;
-      c.longitude = Angle::Degrees(fixed((rand()%1200-600)/1000.0))+center.longitude;
-      c.latitude = Angle::Degrees(fixed((rand()%1200-600)/1000.0))+center.latitude;
-      fixed radius(10000.0*(0.2+(rand()%12)/12.0));
+      c.longitude = Angle::Degrees(((rand()%1200-600)/1000.0))+center.longitude;
+      c.latitude = Angle::Degrees(((rand()%1200-600)/1000.0))+center.latitude;
+      double radius(10000.0*(0.2+(rand()%12)/12.0));
       as = new AirspaceCircle(c,radius);
     } else {
 
@@ -82,14 +83,14 @@ void setup_airspaces(Airspaces& airspaces, const GeoPoint& center, const unsigne
       // random points
       const unsigned num = rand()%10+5;
       GeoPoint c;
-      c.longitude = Angle::Degrees(fixed((rand()%1200-600)/1000.0))+center.longitude;
-      c.latitude = Angle::Degrees(fixed((rand()%1200-600)/1000.0))+center.latitude;
+      c.longitude = Angle::Degrees(((rand()%1200-600)/1000.0))+center.longitude;
+      c.latitude = Angle::Degrees(((rand()%1200-600)/1000.0))+center.latitude;
 
       std::vector<GeoPoint> pts;
       for (unsigned j=0; j<num; j++) {
         GeoPoint p=c;
-        p.longitude += Angle::Degrees(fixed((rand()%200)/1000.0));
-        p.latitude += Angle::Degrees(fixed((rand()%200)/1000.0));
+        p.longitude += Angle::Degrees(((rand()%200)/1000.0));
+        p.latitude += Angle::Degrees(((rand()%200)/1000.0));
         pts.push_back(p);
       }
       as = new AirspacePolygon(pts,true);
@@ -110,7 +111,7 @@ void setup_airspaces(Airspaces& airspaces, const GeoPoint& center, const unsigne
 }
 
 
-class AirspaceVisitorPrint final : public AirspaceVisitor {
+class AirspaceVisitorPrint {
   std::ofstream *fout;
   const bool do_report;
 
@@ -129,7 +130,7 @@ public:
     }
   }
 
-  virtual void Visit(const AbstractAirspace &as) override {
+  void Visit(const AbstractAirspace &as) {
     if (do_report) {
       *fout << as;
       *fout << "# Name: " << as.GetName()
@@ -201,7 +202,7 @@ public:
 };
 
 
-class AirspaceVisitorClosest final : public AirspaceVisitor {
+class AirspaceVisitorClosest {
   std::ofstream *fout;
   const FlatProjection &projection;
   const AircraftState& state;
@@ -232,33 +233,19 @@ public:
       *fout << c.longitude << " " << c.latitude << " " << "\n";
       *fout << state.location.longitude << " " << state.location.latitude << " " << "\n\n";
     }
-    AirspaceInterceptSolution solution;
     GeoVector vec(state.location, c);
-    vec.distance = fixed(20000); // set big distance (for testing)
-    if (as.Intercept(state, vec.EndPoint(state.location), projection, m_perf, solution)) {
+    vec.distance = 20000; // set big distance (for testing)
+    const AirspaceInterceptSolution solution =
+      as.Intercept(state, vec.EndPoint(state.location), projection, m_perf);
+    if (solution.IsValid()) {
       if (fout) {
         *fout << "# intercept in " << solution.elapsed_time << " h " << solution.altitude << "\n";
       }
     }
   }
 
-  virtual void Visit(const AbstractAirspace &as) override {
+  void Visit(const AbstractAirspace &as) {
     closest(as);
-  }
-};
-
-/**
- * Adapter between an AirspaceVisitor and a function class.
- */
-template<typename V>
-struct CallVisitor {
-  V &visitor;
-
-  CallVisitor(V &_visitor):visitor(_visitor) {}
-
-  template<typename T>
-  void operator()(const T &t) {
-    return visitor.Visit(t);
   }
 };
 
@@ -268,27 +255,33 @@ void scan_airspaces(const AircraftState state,
                     bool do_report,
                     const GeoPoint &target) 
 {
-  const fixed range(20000.0);
+  const double range(20000.0);
 
-  Directory::Create(_T("output/results"));
+  Directory::Create(Path(_T("output/results")));
 
   {
     AirspaceVisitorPrint pvisitor("output/results/res-bb-range.txt",
                                   do_report);
-    airspaces.VisitWithinRange(state.location, range, pvisitor);
+    for (const auto &i : airspaces.QueryWithinRange(state.location, range)) {
+      const AbstractAirspace &airspace = i.GetAirspace();
+      pvisitor.Visit(airspace);
+    }
   }
 
   {
     AirspaceVisitorClosest pvisitor("output/results/res-bb-closest.txt",
                                     airspaces.GetProjection(), state, perf);
-    airspaces.VisitWithinRange(state.location, range, pvisitor);
+    for (const auto &i : airspaces.QueryWithinRange(state.location, range)) {
+      const AbstractAirspace &airspace = i.GetAirspace();
+      pvisitor.Visit(airspace);
+    }
   }
 
   {
-    const std::vector<Airspace> vi = airspaces.FindInside(state);
     AirspaceVisitorPrint pvi("output/results/res-bb-inside.txt",
                              do_report);
-    std::for_each(vi.begin(), vi.end(), CallVisitor<AirspaceVisitor>(pvi));
+    for (const auto &a : airspaces.QueryInside(state))
+      pvi.Visit(a.GetAirspace());
   }
   
   {

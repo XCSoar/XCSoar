@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "KeyValueFileWriter.hpp"
-#include "TextWriter.hpp"
+#include "BufferedOutputStream.hxx"
 #include "Util/Macros.hpp"
 
 #include <assert.h>
@@ -44,7 +44,7 @@ KeyValueFileWriter::Write(const char *key, const char *value)
     value = "";
 
   // write the value to the output file
-  writer.FormatLine("%s=\"%s\"", key, value);
+  os.Format("%s=\"%s\"\n", key, value);
 }
 
 #ifdef _UNICODE

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,8 @@ Copyright_License {
 #include "Generator.hpp"
 #include "Time/BrokenDateTime.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Util/StringUtil.hpp"
+#include "Math/Util.hpp"
+#include "Util/ASCII.hxx"
 
 #include <assert.h>
 #include <string.h>
@@ -50,13 +51,11 @@ FormatIGCTaskTimestamp(char *buffer, const BrokenDateTime &date_time,
 char *
 FormatIGCLocation(char *buffer, const GeoPoint &location)
 {
-  char latitude_suffix = negative(location.latitude.Native())
-    ? 'S' : 'N';
+  char latitude_suffix = location.latitude.IsNegative() ? 'S' : 'N';
   unsigned latitude =
     (unsigned)uround(fabs(location.latitude.Degrees() * 60000));
 
-  char longitude_suffix = negative(location.longitude.Native())
-    ? 'W' : 'E';
+  char longitude_suffix = location.longitude.IsNegative() ? 'W' : 'E';
   unsigned longitude =
     (unsigned)uround(fabs(location.longitude.Degrees() * 60000));
 

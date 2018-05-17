@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +23,6 @@
 #include "Airspace.hpp"
 #include "AbstractAirspace.hpp"
 #include "AirspaceIntersectionVector.hpp"
-#include "Geo/Flat/FlatProjection.hpp"
 
 void
 Airspace::Destroy()
@@ -35,22 +34,6 @@ Airspace::Airspace(AbstractAirspace &airspace,
                    const FlatProjection &tp)
   :FlatBoundingBox(airspace.GetBoundingBox(tp)),
    airspace(&airspace)
-{
-}
-
-Airspace::Airspace(const GeoPoint &loc, const FlatProjection &task_projection,
-                   const fixed range)
-  :FlatBoundingBox(task_projection.ProjectInteger(loc),
-                   task_projection.ProjectRangeInteger(loc, range)),
-   airspace(nullptr)
-{
-}
-
-Airspace::Airspace(const GeoPoint &ll, const GeoPoint &ur,
-                   const FlatProjection &task_projection)
-  :FlatBoundingBox(task_projection.ProjectInteger(ll),
-                   task_projection.ProjectInteger(ur)),
-   airspace(nullptr)
 {
 }
 
@@ -69,13 +52,6 @@ Airspace::IsInside(const GeoPoint &loc) const
   return airspace->Inside(loc);
 }
 
-bool
-Airspace::Intersects(const FlatRay &ray) const
-{
-  return FlatBoundingBox::Intersects(ray);
-}
-
-
 AirspaceIntersectionVector
 Airspace::Intersects(const GeoPoint &g1, const GeoPoint &end,
                      const FlatProjection &projection) const
@@ -85,7 +61,7 @@ Airspace::Intersects(const GeoPoint &g1, const GeoPoint &end,
 }
 
 void
-Airspace::SetGroundLevel(const fixed alt) const
+Airspace::SetGroundLevel(const double alt) const
 {
   assert(airspace != nullptr);
   airspace->SetGroundLevel(alt);

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -30,12 +30,12 @@ Copyright_License {
 int main(int argc, char **argv)
 {
   Args args(argc, argv, "FILE");
-  const char *path = args.ExpectNext();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
   TextWriter writer(path);
   if (!writer.IsOpen()) {
-    fprintf(stderr, "Failed to open %s\n", path);
+    fprintf(stderr, "Failed to open file\n");
     return 1;
   }
 

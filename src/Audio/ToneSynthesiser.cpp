@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,8 +25,10 @@ Copyright_License {
 #include "Math/FastTrig.hpp"
 #include "Util/Macros.hpp"
 
+#include <assert.h>
+
 void
-ToneSynthesiser::SetTone(unsigned sample_rate, unsigned tone_hz)
+ToneSynthesiser::SetTone(unsigned tone_hz)
 {
   increment = ARRAY_SIZE(ISINETABLE) * tone_hz / sample_rate;
 }

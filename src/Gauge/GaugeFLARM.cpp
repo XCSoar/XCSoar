@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -54,10 +54,9 @@ private:
 
 protected:
   virtual void OnCancelMode() override;
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
-                           unsigned keys) override;
+  bool OnMouseDown(PixelPoint p) override;
+  bool OnMouseUp(PixelPoint p) override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) override;
   virtual void OnPaint(Canvas &canvas) override;
 };
 
@@ -92,7 +91,7 @@ SmallTrafficWindow::OnCancelMode()
 }
 
 bool
-SmallTrafficWindow::OnMouseDown(PixelScalar x, PixelScalar y)
+SmallTrafficWindow::OnMouseDown(PixelPoint p)
 {
   if (!dragging) {
     dragging = true;
@@ -106,7 +105,7 @@ SmallTrafficWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 }
 
 bool
-SmallTrafficWindow::OnMouseUp(PixelScalar x, PixelScalar y)
+SmallTrafficWindow::OnMouseUp(PixelPoint p)
 {
   if (dragging) {
     const bool was_pressed = pressed;
@@ -127,10 +126,10 @@ SmallTrafficWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 }
 
 bool
-SmallTrafficWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+SmallTrafficWindow::OnMouseMove(PixelPoint p, unsigned keys)
 {
   if (dragging) {
-    SetPressed(IsInside(x, y));
+    SetPressed(IsInside(p));
     return true;
   }
 
@@ -144,7 +143,7 @@ SmallTrafficWindow::OnPaint(Canvas &canvas)
 
   if (pressed) {
 #ifdef ENABLE_OPENGL
-    const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    const ScopeAlphaBlend alpha_blend;
     canvas.DrawFilledRectangle(0, 0, canvas.GetWidth(), canvas.GetHeight(),
                                COLOR_YELLOW.WithAlpha(80));
 #else

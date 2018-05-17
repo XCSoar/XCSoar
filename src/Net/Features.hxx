@@ -24,8 +24,14 @@ Copyright_License {
 #ifndef XCSOAR_NET_FEATURES_HXX
 #define XCSOAR_NET_FEATURES_HXX
 
+#define HAVE_TCP
+
 #ifdef HAVE_POSIX
 #define HAVE_UN
+#endif
+
+#if defined(__linux__) && !defined(__BIONIC__) && !defined(KOBO)
+#define HAVE_ACCEPT4
 #endif
 
 #endif

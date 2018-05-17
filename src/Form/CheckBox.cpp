@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@ Copyright_License {
 #include "Form/ActionListener.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Key.h"
+#include "Event/KeyCode.hpp"
 #include "Asset.hpp"
 #include "Util/Macros.hpp"
 
@@ -92,10 +92,6 @@ bool
 CheckBoxControl::OnKeyDown(unsigned key_code)
 {
   switch (key_code) {
-#ifdef GNAV
-  // JMW added this to make data entry easier
-  case KEY_APP4:
-#endif
   case KEY_RETURN:
   case KEY_SPACE:
     SetState(!GetState());
@@ -107,17 +103,17 @@ CheckBoxControl::OnKeyDown(unsigned key_code)
 }
 
 bool
-CheckBoxControl::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+CheckBoxControl::OnMouseMove(PixelPoint p, unsigned keys)
 {
   if (dragging) {
-    SetPressed(IsInside(x, y));
+    SetPressed(IsInside(p));
     return true;
   } else
-    return PaintWindow::OnMouseMove(x, y, keys);
+    return PaintWindow::OnMouseMove(p, keys);
 }
 
 bool
-CheckBoxControl::OnMouseDown(PixelScalar x, PixelScalar y)
+CheckBoxControl::OnMouseDown(PixelPoint p)
 {
   if (IsTabStop())
     SetFocus();
@@ -129,7 +125,7 @@ CheckBoxControl::OnMouseDown(PixelScalar x, PixelScalar y)
 }
 
 bool
-CheckBoxControl::OnMouseUp(PixelScalar x, PixelScalar y)
+CheckBoxControl::OnMouseUp(PixelPoint p)
 {
   if (!dragging)
     return true;
@@ -199,7 +195,7 @@ CheckBoxControl::OnPaint(Canvas &canvas)
     canvas.Select(state_look.check_brush);
     canvas.SelectNullPen();
 
-    RasterPoint check_mark[] = {
+    BulkPixelPoint check_mark[] = {
       {-8, -2},
       {-3, 6},
       {7, -9},

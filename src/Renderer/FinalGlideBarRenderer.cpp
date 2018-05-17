@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -41,19 +41,19 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
                             const bool final_glide_bar_mc0_enabled) const
 {
 #ifdef ENABLE_OPENGL
-  const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  const ScopeAlphaBlend alpha_blend;
 #endif
 
-  RasterPoint GlideBar[6] = {
+  BulkPixelPoint GlideBar[6] = {
       { 0, 0 }, { 9, -9 }, { 18, 0 }, { 18, 0 }, { 9, 0 }, { 0, 0 }
   };
-  RasterPoint GlideBar0[4] = {
+  BulkPixelPoint GlideBar0[4] = {
       { 0, 0 }, { 9, -9 }, { 9, 0 }, { 0, 0 }
   };
-  RasterPoint clipping_arrow[6] = {
+  BulkPixelPoint clipping_arrow[6] = {
       { 0, 0 }, { 9, 9 }, { 18, 0 }, { 18, 6 }, { 9, 15 }, { 0, 6 }
   };
-  RasterPoint clipping_arrow0[4] = {
+  BulkPixelPoint clipping_arrow0[4] = {
       { 0, 0 }, { 9, 9 }, { 9, 15 }, { 0, 6 }
   };
 
@@ -76,18 +76,18 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
    * area). size_divisor is used to introduce a screen size dependent scaling.
    * That workaround is an ugly hack and needs a rework. */
   const int size_divisor =
-    std::max((int) Layout::Scale(3000 / (rc.bottom - rc.top)), 4);
+    std::max(Layout::Scale(3000u / rc.GetHeight()), 4u);
 
-  PixelScalar dy_glidebar = 0;
-  PixelScalar dy_glidebar0 = 0;
+  int dy_glidebar = 0;
+  int dy_glidebar0 = 0;
 
   FormatUserAltitude(solution.SelectAltitudeDifference(glide_settings),
                             Value, false);
   canvas.Select(*look.font);
   const PixelSize text_size = canvas.CalcTextSize(Value);
 
-  PixelScalar clipping_arrow_offset = Layout::Scale(4);
-  PixelScalar clipping_arrow0_offset = Layout::Scale(4);
+  int clipping_arrow_offset = Layout::Scale(4);
+  int clipping_arrow0_offset = Layout::Scale(4);
 
   // 468 meters is it's size. Will be divided by 9 to fit screen resolution.
   int altitude_difference = (int)
@@ -225,7 +225,8 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   if (!total.IsAchievable())
     cross_sign = 1;
-  if (calculated.terrain_warning && (altitude_difference>0))
+  if (calculated.terrain_warning_location.IsValid() &&
+      altitude_difference > 0 )
     cross_sign = -1;
 
   if (cross_sign != 0) {

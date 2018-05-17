@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2012 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,10 +25,7 @@ Copyright_License {
 
 #ifndef ENABLE_OPENGL
 #include "Projection/WindowProjection.hpp"
-
-#ifdef USE_GDI
-#include "Screen/GDI/AlphaBlend.hpp"
-#endif
+#include "Screen/Features.hpp"
 
 bool
 TransparentRendererCache::Check(const WindowProjection &projection) const
@@ -104,7 +101,6 @@ TransparentRendererCache::AlphaBlendTo(Canvas &canvas,
                                        const WindowProjection &projection,
                                        uint8_t alpha) const
 {
-  assert(AlphaBlendAvailable());
   assert(canvas.IsDefined());
   assert(buffer.IsDefined());
   assert(projection.IsValid());

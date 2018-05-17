@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,28 +26,21 @@ Copyright_License {
 #include "Widget/RowFormWidget.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Dialogs/Dialogs.h"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 #include "Interface.hpp"
 #include "Language/LanguageGlue.hpp"
 #include "Asset.hpp"
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
-#include "OS/PathName.hpp"
+#include "OS/Path.hpp"
 #include "UtilsSettings.hpp"
-#include "ConfigPanel.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Hardware/Vibrator.hpp"
 
-#include <windef.h> /* for MAX_PATH */
-
 enum ControlIndex {
-#ifndef GNAV
   UIScale,
-#endif
-#ifdef HAVE_BLANK
-  AutoBlank,
-#endif
+  CustomDPI,
   InputFile,
 #ifndef HAVE_NATIVE_GETTEXT
   LanguageFile,
@@ -77,11 +70,9 @@ private:
 public:
   LanguageFileVisitor(DataFieldEnum &_df): df(_df) {}
 
-  void
-  Visit(const TCHAR *path, const TCHAR *filename)
-  {
-    if (filename != nullptr && !df.Exists(filename))
-      df.addEnumText(filename);
+  void Visit(Path path, Path filename) override {
+    if (!df.Exists(filename.c_str()))
+      df.addEnumText(filename.c_str());
   }
 };
 
@@ -94,19 +85,32 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   RowFormWidget::Prepare(parent, rc);
 
-#ifndef GNAV
   AddInteger(_("Text size"),
              nullptr,
              _T("%d %%"), _T("%d"), 75, 200, 5,
              settings.scale);
-#endif
 
-#ifdef HAVE_BLANK
-  AddBoolean(_("Auto. blank"),
-             _("This determines whether to blank the display after a long period of inactivity "
-                 "when operating on internal battery power."),
-             settings.display.enable_auto_blank);
-#endif
+  WndProperty *wp_dpi = AddEnum(_("Display Resolution"),
+                                _("The display resolution is used to adapt line widths, "
+                                  "font size, landable size and more."));
+  if (wp_dpi != nullptr) {
+    static constexpr unsigned dpi_choices[] = {
+      120, 160, 240, 260, 280, 300, 340, 360, 400, 420, 520,
+    };
+    const unsigned *dpi_choices_end =
+      dpi_choices + sizeof(dpi_choices) / sizeof(dpi_choices[0]);
+
+    DataFieldEnum &df = *(DataFieldEnum *)wp_dpi->GetDataField();
+    df.AddChoice(0, _("Automatic"));
+    for (const unsigned *dpi = dpi_choices; dpi != dpi_choices_end; ++dpi) {
+      TCHAR buffer[20];
+      _stprintf(buffer, _("%d dpi"), *dpi);
+      df.AddChoice(*dpi, buffer);
+    }
+    df.Set(settings.custom_dpi);
+    wp_dpi->RefreshDisplay();
+  }
+  SetExpertRow(CustomDPI);
 
   AddFile(_("Events"),
           _("The Input Events file defines the menu system and how XCSoar responds to "
@@ -139,16 +143,17 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
     df.Sort(2);
 
-    TCHAR value[MAX_PATH];
-    if (!Profile::GetPath(ProfileKeys::LanguageFile, value))
-      value[0] = _T('\0');
+    auto value_buffer = Profile::GetPath(ProfileKeys::LanguageFile);
+    Path value = value_buffer;
+    if (value.IsNull())
+      value = Path(_T(""));
 
-    if (StringIsEqual(value, _T("none")))
+    if (value == Path(_T("none")))
       df.Set(1);
-    else if (!StringIsEmpty(value) && !StringIsEqual(value, _T("auto"))) {
-      const TCHAR *base = BaseName(value);
+    else if (!value.IsEmpty() && value != Path(_T("auto"))) {
+      const Path base = value.GetBase();
       if (base != nullptr)
-        df.Set(base);
+        df.Set(base.c_str());
     }
     wp->RefreshDisplay();
   }
@@ -174,7 +179,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   SetExpertRow(TextInput);
 
   /* on-screen keyboard doesn't work without a pointing device
-     (mouse or touch screen), hide the option on Altair */
+     (mouse or touch screen) */
   SetRowVisible(TextInput, HasPointer());
 
 #ifdef HAVE_VIBRATOR
@@ -196,18 +201,15 @@ bool
 InterfaceConfigPanel::Save(bool &_changed)
 {
   UISettings &settings = CommonInterface::SetUISettings();
-  bool changed = false;;
+  bool changed = false;
 
-#ifndef GNAV
   if (SaveValueEnum(UIScale, ProfileKeys::UIScale,
                     settings.scale))
     require_restart = changed = true;
-#endif
 
-#ifdef HAVE_BLANK
-  changed |= SaveValue(AutoBlank, ProfileKeys::AutoBlank,
-                       settings.display.enable_auto_blank);
-#endif
+  if (SaveValueEnum(CustomDPI, ProfileKeys::CustomDPI,
+                    settings.custom_dpi))
+    require_restart = changed = true;
 
   if (SaveValueFileReader(InputFile, ProfileKeys::InputFile))
     require_restart = changed = true;
@@ -217,15 +219,16 @@ InterfaceConfigPanel::Save(bool &_changed)
   if (wp != nullptr) {
     DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
 
-    TCHAR old_value[MAX_PATH];
-    if (!Profile::GetPath(ProfileKeys::LanguageFile, old_value))
-      old_value[0] = _T('\0');
+    const auto old_value_buffer = Profile::GetPath(ProfileKeys::LanguageFile);
+    Path old_value = old_value_buffer;
+    if (old_value == nullptr)
+      old_value = Path(_T(""));
 
-    const TCHAR *old_base = BaseName(old_value);
+    auto old_base = old_value.GetBase();
     if (old_base == nullptr)
       old_base = old_value;
 
-    TCHAR buffer[MAX_PATH];
+    AllocatedPath buffer = nullptr;
     const TCHAR *new_value, *new_base;
 
     switch (df.GetValue()) {
@@ -238,17 +241,18 @@ InterfaceConfigPanel::Save(bool &_changed)
       break;
 
     default:
-      _tcscpy(buffer, df.GetAsString());
-      ContractLocalPath(buffer);
-      new_value = buffer;
-      new_base = BaseName(new_value);
+      new_value = df.GetAsString();
+      buffer = ContractLocalPath(Path(new_value));
+      if (!buffer.IsNull())
+        new_value = buffer.c_str();
+      new_base = Path(new_value).GetBase().c_str();
       if (new_base == nullptr)
         new_base = new_value;
       break;
     }
 
-    if (!StringIsEqual(old_value, new_value) &&
-        !StringIsEqual(old_base, new_base)) {
+    if (old_value != Path(new_value) &&
+        old_base != Path(new_base)) {
       Profile::Set(ProfileKeys::LanguageFile, new_value);
       LanguageChanged = changed = true;
     }

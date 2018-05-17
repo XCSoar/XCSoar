@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,6 +24,8 @@ Copyright_License {
 #include "GlueMapWindow.hpp"
 #include "Items/List.hpp"
 #include "Items/Builder.hpp"
+#include "Items/OverlayMapItem.hpp"
+#include "Items/RaspMapItem.hpp"
 #include "Dialogs/MapItemListDialog.hpp"
 #include "UIGlobals.hpp"
 #include "Screen/Layout.hpp"
@@ -31,7 +33,9 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
 #include "Weather/Features.hpp"
+#include "Weather/Rasp/RaspRenderer.hpp"
 #include "Interface.hpp"
+#include "Overlay.hpp"
 
 bool
 GlueMapWindow::ShowMapItems(const GeoPoint &location,
@@ -45,7 +49,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   const MoreData &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
-  fixed range = visible_projection.DistancePixelsToMeters(Layout::GetHitRadius());
+  auto range = visible_projection.DistancePixelsToMeters(Layout::GetHitRadius());
 
   MapItemList list;
   MapItemListBuilder builder(list, location, range);
@@ -71,7 +75,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
                                settings.airspace, basic,
                                calculated);
 
-  if (visible_projection.GetMapScale() <= fixed(4000))
+  if (visible_projection.GetMapScale() <= 4000)
     builder.AddThermals(calculated.thermal_locator, basic, calculated);
 
   if (waypoints)
@@ -84,9 +88,23 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
 
   builder.AddTraffic(basic.flarm.traffic);
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#ifdef HAVE_SKYLINES_TRACKING
   builder.AddSkyLinesTraffic();
 #endif
+
+#ifdef ENABLE_OPENGL
+  if (!list.full() && overlay && overlay->IsInside(location))
+    list.push_back(new OverlayMapItem(*overlay));
+#endif
+
+  if (!list.full()) {
+#ifndef ENABLE_OPENGL
+    const ScopeLock protect(mutex);
+#endif
+
+    if (rasp_renderer && rasp_renderer->IsInside(location))
+      list.push_back(new RaspMapItem(rasp_renderer->GetLabel()));
+  }
 
   // Sort the list of map items
   list.Sort();

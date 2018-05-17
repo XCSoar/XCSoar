@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -35,7 +35,9 @@ Copyright_License {
 #include "Device/Declaration.hpp"
 #include "Device/Config.hpp"
 #include "DebugPort.hpp"
-#include "IO/Async/GlobalIOThread.hpp"
+#include "IO/Async/GlobalAsioThread.hpp"
+#include "IO/Async/AsioThread.hpp"
+#include "Util/PrintException.hxx"
 
 #define MORE_USAGE
 #include "OS/Args.hpp"
@@ -73,13 +75,13 @@ NMEAParser::ReadDate(NMEAInputLine &line, BrokenDate &date)
 
 bool
 NMEAParser::ReadTime(NMEAInputLine &line, BrokenTime &broken_time,
-                     fixed &time_of_day_s)
+                     double &time_of_day_s)
 {
   return false;
 }
 
 bool
-NMEAParser::TimeHasAdvanced(fixed this_time, fixed &last_time, NMEAInfo &info)
+NMEAParser::TimeHasAdvanced(double this_time, double &last_time, NMEAInfo &info)
 {
   return false;
 }
@@ -91,7 +93,7 @@ MakeWaypoint(const TCHAR *name, int altitude,
   Waypoint wp(GeoPoint(Angle::Degrees(longitude),
                        Angle::Degrees(latitude)));
   wp.name = name;
-  wp.elevation = fixed(altitude);
+  wp.elevation = altitude;
   return wp;
 }
 
@@ -101,7 +103,7 @@ MakeWaypoint(const TCHAR *name, int altitude,
 #endif
 
 int main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "[--through DRIVER0] DRIVER PORT BAUD");
 
   tstring _through_name;
@@ -119,22 +121,16 @@ int main(int argc, char **argv)
 
   tstring _driver_name = args.ExpectNextT();
   const TCHAR *driver_name = _driver_name.c_str();
-  const DeviceConfig config = ParsePortArgs(args);
+  DebugPort debug_port(args);
   args.ExpectEnd();
 
-  InitialiseIOThread();
+  ScopeGlobalAsioThread global_asio_thread;
 
-  Port *port = OpenPort(config, nullptr, *(DataHandler *)nullptr);
-  if (port == NULL) {
-    fprintf(stderr, "Failed to open COM port\n");
-    return EXIT_FAILURE;
-  }
+  auto port = debug_port.Open(*asio_thread, *(DataHandler *)nullptr);
 
   ConsoleOperationEnvironment env;
 
   if (!port->WaitConnected(env)) {
-    delete port;
-    DeinitialiseIOThread();
     fprintf(stderr, "Failed to connect the port\n");
     return EXIT_FAILURE;
   }
@@ -170,7 +166,8 @@ int main(int argc, char **argv)
     }
 
     assert(through_driver->CreateOnPort != NULL);
-    through_device = through_driver->CreateOnPort(config, *port);
+    through_device = through_driver->CreateOnPort(debug_port.GetConfig(),
+                                                  *port);
     assert(through_device != NULL);
   }
 
@@ -186,7 +183,7 @@ int main(int argc, char **argv)
   }
 
   assert(driver->CreateOnPort != NULL);
-  Device *device = driver->CreateOnPort(config, *port);
+  Device *device = driver->CreateOnPort(debug_port.GetConfig(), *port);
   assert(device != NULL);
 
   if (through_device != NULL && !through_device->EnablePassThrough(env)) {
@@ -202,8 +199,9 @@ int main(int argc, char **argv)
 
   delete through_device;
   delete device;
-  delete port;
-  DeinitialiseIOThread();
 
   return EXIT_SUCCESS;
+} catch (const std::exception &exception) {
+  PrintException(exception);
+  return EXIT_FAILURE;
 }

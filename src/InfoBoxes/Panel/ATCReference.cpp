@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -62,8 +62,8 @@ ATCReferencePanel::UpdateValues()
   const GeoPoint &location =
     CommonInterface::GetComputerSettings().poi.atc_reference;
 
-  const Waypoint *waypoint = location.IsValid()
-    ? way_points.GetNearest(location, fixed(100))
+  const auto waypoint = location.IsValid()
+    ? way_points.GetNearest(location, 100)
     : nullptr;
 
   SetText(WAYPOINT, waypoint != nullptr ? waypoint->name.c_str() : _T("---"));
@@ -100,15 +100,14 @@ ATCReferencePanel::OnAction(int id)
   GeoPoint &location =
     CommonInterface::SetComputerSettings().poi.atc_reference;
 
-  const Waypoint *waypoint;
-
   switch (id) {
-  case RELOCATE:
-    waypoint = ShowWaypointListDialog(CommonInterface::Basic().location);
+  case RELOCATE: {
+    auto waypoint = ShowWaypointListDialog(CommonInterface::Basic().location);
     if (waypoint != nullptr) {
       location = waypoint->location;
       UpdateValues();
     }
+  }
     break;
 
   case CLEAR:

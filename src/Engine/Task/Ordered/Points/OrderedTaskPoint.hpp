@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -86,7 +86,7 @@ public:
    * @return Partially initialised object
    */
   OrderedTaskPoint(TaskPointType _type, ObservationZonePoint *_oz,
-                   const Waypoint &wp,
+                   WaypointPtr &&wp,
                    const bool b_scored);
 
   virtual ~OrderedTaskPoint() {}
@@ -105,7 +105,7 @@ public:
   gcc_malloc
   OrderedTaskPoint *Clone(const TaskBehaviour &task_behaviour,
                           const OrderedTaskSettings &ordered_task_settings,
-                          const Waypoint* waypoint=NULL) const;
+                          WaypointPtr &&waypoint=WaypointPtr()) const;
 
   /**
    * Update observation zone geometry (or other internal data) when
@@ -284,7 +284,7 @@ protected:
    * @return Distance (m)
    */
   gcc_pure
-  fixed DoubleLegDistance(const GeoPoint &ref) const;
+  double DoubleLegDistance(const GeoPoint &ref) const;
 
 public:
   /* virtual methods from class TaskPoint */

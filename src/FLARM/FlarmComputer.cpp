@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -38,8 +38,8 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
   if (!flarm.IsDetected())
     return;
 
-  fixed north_to_latitude(0);
-  fixed east_to_longitude(0);
+  double north_to_latitude(0);
+  double east_to_longitude(0);
 
   if (basic.location_available) {
     // Precalculate relative east and north projection to lat/lon
@@ -52,10 +52,10 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
     GeoPoint plon = basic.location;
     plon.longitude += delta_lon;
 
-    fixed dlat = basic.location.DistanceS(plat);
-    fixed dlon = basic.location.DistanceS(plon);
+    double dlat = basic.location.DistanceS(plat);
+    double dlon = basic.location.DistanceS(plon);
 
-    if (positive(fabs(dlat)) && positive(fabs(dlon))) {
+    if (fabs(dlat) > 0 && fabs(dlon) > 0) {
       north_to_latitude = delta_lat.Degrees() / dlat;
       east_to_longitude = delta_lon.Degrees() / dlon;
     }
@@ -72,8 +72,7 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
     }
 
     // Calculate distance
-    traffic.distance = SmallHypot(traffic.relative_north,
-                                  traffic.relative_east);
+    traffic.distance = hypot(traffic.relative_north, traffic.relative_east);
 
     // Calculate Location
     traffic.location_available = basic.location_available;
@@ -111,8 +110,8 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
       continue;
 
     // Calculate the time difference between now and the last contact
-    fixed dt = traffic.valid.GetTimeDifference(last_traffic->valid);
-    if (positive(dt)) {
+    double dt = traffic.valid.GetTimeDifference(last_traffic->valid);
+    if (dt > 0) {
       // Calculate the immediate climb rate
       if (!traffic.climb_rate_received)
         traffic.climb_rate =
@@ -124,7 +123,7 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
         traffic.climb_rate = last_traffic->climb_rate;
     }
 
-    if (positive(dt) &&
+    if (dt > 0 &&
         traffic.location_available &&
         last_traffic->location_available) {
       // Calculate the GeoVector between now and the last contact

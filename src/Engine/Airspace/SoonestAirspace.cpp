@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2013 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,12 +29,12 @@ Copyright_License {
 #include "Navigation/Aircraft.hpp"
 
 struct SoonestAirspace {
-  const AbstractAirspace *airspace;
-  fixed time;
+  const AbstractAirspace *airspace = nullptr;
+  double time = -1;
 
-  SoonestAirspace():airspace(nullptr) {}
+  SoonestAirspace() = default;
   SoonestAirspace(const AbstractAirspace &_airspace,
-                  fixed _time)
+                  double _time)
     :airspace(&_airspace), time(_time) {}
 
 
@@ -48,15 +48,15 @@ __attribute__((always_inline))
 static inline SoonestAirspace
 CalculateSoonestAirspace(const AircraftState &state,
                          const AirspaceAircraftPerformance &perf,
-                         const fixed max_time,
+                         const double max_time,
                          const FlatProjection &projection,
                          const AbstractAirspace &airspace)
 {
   const auto closest = airspace.ClosestPoint(state.location, projection);
   assert(closest.IsValid());
 
-  auto solution = AirspaceInterceptSolution::Invalid();
-  if (!airspace.Intercept(state, perf, solution, closest, closest) ||
+  const auto solution = airspace.Intercept(state, perf, closest, closest);
+  if (!solution.IsValid() ||
       solution.elapsed_time > max_time)
     return SoonestAirspace();
 
@@ -75,10 +75,10 @@ FindSoonestAirspace(const Airspaces &airspaces,
                     const AircraftState &state,
                     const AirspaceAircraftPerformance &perf,
                     const AirspacePredicate &predicate,
-                    const fixed max_time)
+                    const double max_time)
 {
   const auto &projection = airspaces.GetProjection();
-  const fixed range = perf.GetMaxSpeed() * max_time;
+  const auto range = perf.GetMaxSpeed() * max_time;
   return FindMinimum(airspaces, state.location, range, predicate,
                      [&state, &perf, max_time,
                       &projection](const AbstractAirspace &airspace){

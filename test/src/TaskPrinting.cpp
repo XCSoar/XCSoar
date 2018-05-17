@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -53,7 +53,7 @@ operator<<(std::ostream &f, const GlideResult &gl)
   f << "#    HeightGlide         " <<  gl.height_glide << " (m)\n";
   f << "#    TimeElapsed         " <<  gl.time_elapsed << " (s)\n";
   f << "#    TimeVirtual         " <<  gl.time_virtual << " (s)\n";
-  if (positive(gl.time_elapsed)) {
+  if (gl.time_elapsed > 0) {
     f << "#    Vave remaining      " <<  gl.vector.distance/gl.time_elapsed << " (m/s)\n";
   }
   f << "#    EffectiveWindSpeed  " <<  gl.effective_wind_speed << " (m/s)\n";
@@ -148,16 +148,14 @@ PrintHelper::aatpoint_print(std::ostream& f,
       // prev max or target changes
 
       AATIsolineSegment seg(tp, projection);
-      fixed tdist = tp.GetPrevious()->GetLocationRemaining().Distance(
-        tp.GetLocationMin());
-      fixed rdist = tp.GetPrevious()->GetLocationRemaining().Distance(
-        tp.GetTargetLocation());
+      auto tdist = tp.GetPrevious()->GetLocationRemaining().Distance(tp.GetLocationMin());
+      auto rdist = tp.GetPrevious()->GetLocationRemaining().Distance(tp.GetTargetLocation());
 
       bool filter_backtrack = true;
       if (seg.IsValid()) {
         for (double t = 0.0; t<=1.0; t+= 1.0/20) {
-          GeoPoint ga = seg.Parametric(fixed(t));
-          fixed dthis = tp.GetPrevious()->GetLocationRemaining().Distance(ga);
+          GeoPoint ga = seg.Parametric(t);
+          double dthis = tp.GetPrevious()->GetLocationRemaining().Distance(ga);
           if (!filter_backtrack 
               || (dthis>=tdist)
               || (dthis>=rdist)) {
@@ -166,7 +164,7 @@ PrintHelper::aatpoint_print(std::ostream& f,
           }
         }
       } else {
-        GeoPoint ga = seg.Parametric(fixed(0));
+        GeoPoint ga = seg.Parametric(0);
         f << ga.longitude << " " << ga.latitude << "\n";
       }
       f << "\n";
@@ -239,7 +237,7 @@ void
 PrintHelper::abstracttask_print(const AbstractTask &task,
                                 const AircraftState &state)
 {
-  Directory::Create(_T("output/results"));
+  Directory::Create(Path(_T("output/results")));
   std::ofstream fs("output/results/res-stats-all.txt");
 
   const auto &stats = task.GetStats();
@@ -261,22 +259,22 @@ PrintHelper::abstracttask_print(const AbstractTask &task,
      << " " << stats.mc_best
      << " " << (stats.total.remaining_effective.IsDefined()
                 ? stats.total.remaining_effective.GetDistance()
-                : fixed(0))
+                : 0)
      << " " << stats.total.remaining.GetDistance()
      << " " << stats.cruise_efficiency
      << " " << stats.total.remaining.GetSpeed()
      << " " << stats.total.remaining.GetSpeedIncremental()
      << " " << (stats.total.remaining_effective.IsDefined()
                 ? stats.total.remaining_effective.GetSpeed()
-                : fixed(0))
+                : 0)
      << " " << (stats.total.remaining_effective.IsDefined()
                 ? stats.total.remaining_effective.GetSpeedIncremental()
-                : fixed(0))
+                : 0)
      << " " << stats.total.vario.get_value()
      << " " << stats.effective_mc
-     << " " << (stats.total.pirker.IsDefined()
-                ? stats.get_pirker_speed()
-                : fixed(0))
+     << " " << (stats.task_valid
+                ? stats.inst_speed_slow
+                : -1)
      << " " << stats.total.solution_remaining.altitude_difference
      << "\n";
   f6.flush();

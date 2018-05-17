@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,11 +27,6 @@ Copyright_License {
 
 #include <algorithm>
 #include <assert.h>
-
-ContainerWindow::ContainerWindow()
-  :active_child(nullptr), capture_child(nullptr)
-{
-}
 
 ContainerWindow::~ContainerWindow()
 {
@@ -148,54 +143,53 @@ ContainerWindow::OnCancelMode()
 }
 
 bool
-ContainerWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+ContainerWindow::OnMouseMove(PixelPoint p, unsigned keys)
 {
-  Window *child = EventChildAt(x, y);
+  Window *child = EventChildAt(p);
   if (child != nullptr)
-    return child->OnMouseMove(x - child->GetLeft(), y - child->GetTop(), keys);
+    return child->OnMouseMove(p - child->GetTopLeft(), keys);
 
-  return PaintWindow::OnMouseMove(x, y, keys);
+  return PaintWindow::OnMouseMove(p, keys);
 }
 
 bool
-ContainerWindow::OnMouseDown(PixelScalar x, PixelScalar y)
+ContainerWindow::OnMouseDown(PixelPoint p)
 {
-  Window *child = EventChildAt(x, y);
+  Window *child = EventChildAt(p);
   if (child != nullptr)
-    return child->OnMouseDown(x - child->GetLeft(), y - child->GetTop());
+    return child->OnMouseDown(p - child->GetTopLeft());
 
-  return PaintWindow::OnMouseDown(x, y);
+  return PaintWindow::OnMouseDown(p);
 }
 
 bool
-ContainerWindow::OnMouseUp(PixelScalar x, PixelScalar y)
+ContainerWindow::OnMouseUp(PixelPoint p)
 {
-  Window *child = EventChildAt(x, y);
+  Window *child = EventChildAt(p);
   if (child != nullptr)
-    return child->OnMouseUp(x - child->GetLeft(), y - child->GetTop());
+    return child->OnMouseUp(p - child->GetTopLeft());
 
-  return PaintWindow::OnMouseUp(x, y);
+  return PaintWindow::OnMouseUp(p);
 }
 
 bool
-ContainerWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
+ContainerWindow::OnMouseDouble(PixelPoint p)
 {
-  Window *child = EventChildAt(x, y);
+  Window *child = EventChildAt(p);
   if (child != nullptr)
-    return child->OnMouseDouble(x - child->GetLeft(), y - child->GetTop());
+    return child->OnMouseDouble(p - child->GetTopLeft());
 
-  return PaintWindow::OnMouseDouble(x, y);
+  return PaintWindow::OnMouseDouble(p);
 }
 
 bool
-ContainerWindow::OnMouseWheel(PixelScalar x, PixelScalar y, int delta)
+ContainerWindow::OnMouseWheel(PixelPoint p, int delta)
 {
-  Window *child = EventChildAt(x, y);
+  Window *child = EventChildAt(p);
   if (child != nullptr)
-    return child->OnMouseWheel(x - child->GetLeft(), y - child->GetTop(),
-                               delta);
+    return child->OnMouseWheel(p - child->GetTopLeft(), delta);
 
-  return PaintWindow::OnMouseWheel(x, y, delta);
+  return PaintWindow::OnMouseWheel(p, delta);
 }
 
 #ifdef HAVE_MULTI_TOUCH
@@ -248,7 +242,7 @@ ContainerWindow::RemoveChild(Window &child) {
 }
 
 Window *
-ContainerWindow::EventChildAt(PixelScalar x, PixelScalar y)
+ContainerWindow::EventChildAt(PixelPoint p)
 {
   if (capture)
     /* if this window is capturing the mouse, events must go exactly
@@ -259,7 +253,7 @@ ContainerWindow::EventChildAt(PixelScalar x, PixelScalar y)
     return capture_child;
   else
     /* find the child window at the specified position */
-    return ChildAt(x, y);
+    return ChildAt(p);
 }
 
 void

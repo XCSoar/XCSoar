@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -46,6 +46,7 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Operation/VerboseOperationEnvironment.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Waypoint/WaypointGlue.hpp"
 #include "Computer/GlideComputer.hpp"
@@ -53,7 +54,10 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Formatter/UserGeoPointFormatter.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
+#include "Audio/Features.hpp"
+#include "Audio/GlobalVolumeController.hpp"
 #include "Audio/VarioGlue.hpp"
+#include "Audio/VolumeController.hpp"
 #include "PageActions.hpp"
 
 #if defined(__BORLANDC__)  // due to compiler bug
@@ -209,6 +213,10 @@ SettingsLeave(const UISettings &old_ui_settings)
   // allow map and calculations threads to continue
 
   ActionInterface::SendMapSettings(true);
+
+#ifdef HAVE_VOLUME_CONTROLLER
+  volume_controller->SetVolume(ui_settings.sound.master_volume);
+#endif
 
   AudioVarioGlue::Configure(CommonInterface::GetUISettings().sound.vario);
 

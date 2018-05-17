@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,10 +27,6 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Blackboard/LiveBlackboard.hpp"
 #include "Input/InputEvents.hpp"
-
-#ifdef USE_GDI
-#include "Screen/Canvas.hpp"
-#endif
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scope.hpp"
@@ -61,10 +57,9 @@ private:
 
 protected:
   virtual void OnCancelMode() override;
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
-                           unsigned keys) override;
+  bool OnMouseDown(PixelPoint p) override;
+  bool OnMouseUp(PixelPoint p) override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) override;
   virtual void OnPaint(Canvas &canvas) override;
 };
 
@@ -82,7 +77,7 @@ GaugeThermalAssistantWindow::OnCancelMode()
 }
 
 bool
-GaugeThermalAssistantWindow::OnMouseDown(PixelScalar x, PixelScalar y)
+GaugeThermalAssistantWindow::OnMouseDown(PixelPoint p)
 {
   if (!dragging) {
     dragging = true;
@@ -96,7 +91,7 @@ GaugeThermalAssistantWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 }
 
 bool
-GaugeThermalAssistantWindow::OnMouseUp(PixelScalar x, PixelScalar y)
+GaugeThermalAssistantWindow::OnMouseUp(PixelPoint p)
 {
   if (dragging) {
     const bool was_pressed = pressed;
@@ -117,11 +112,10 @@ GaugeThermalAssistantWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 }
 
 bool
-GaugeThermalAssistantWindow::OnMouseMove(PixelScalar x, PixelScalar y,
-                                         unsigned keys)
+GaugeThermalAssistantWindow::OnMouseMove(PixelPoint p, unsigned keys)
 {
   if (dragging) {
-    SetPressed(IsInside(x, y));
+    SetPressed(IsInside(p));
     return true;
   }
 
@@ -135,7 +129,7 @@ GaugeThermalAssistantWindow::OnPaint(Canvas &canvas)
 
   if (pressed) {
 #ifdef ENABLE_OPENGL
-    const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    const ScopeAlphaBlend alpha_blend;
 
     canvas.SelectNullPen();
     canvas.Select(Brush(COLOR_YELLOW.WithAlpha(80)));

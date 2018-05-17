@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,26 +29,41 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "Util/Macros.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scope.hpp"
+#endif
+
 void
 BestCruiseArrowRenderer::Draw(Canvas &canvas, const TaskLook &look,
                               const Angle screen_angle,
                               const Angle best_cruise_angle,
-                              const RasterPoint pos)
+                              const PixelPoint pos)
 {
   canvas.Select(look.best_cruise_track_pen);
   canvas.Select(look.best_cruise_track_brush);
 
-  RasterPoint arrow[] = { { -1, -40 }, { -1, -62 }, { -6, -62 }, {  0, -70 },
-                          {  6, -62 }, {  1, -62 }, {  1, -40 }, { -1, -40 } };
+  BulkPixelPoint arrow[] = {
+    { -1, -40 },
+    { -1, -62 },
+    { -6, -62 },
+    {  0, -70 },
+    {  6, -62 },
+    {  1, -62 },
+    {  1, -40 },
+    { -1, -40 },
+  };
 
   PolygonRotateShift(arrow, ARRAY_SIZE(arrow), pos,
                      best_cruise_angle - screen_angle);
+#ifdef ENABLE_OPENGL
+  const ScopeAlphaBlend alpha_blend;
+#endif
   canvas.DrawPolygon(arrow, ARRAY_SIZE(arrow));
 }
 
 void
 BestCruiseArrowRenderer::Draw(Canvas &canvas, const TaskLook &look,
-                              const Angle screen_angle, const RasterPoint pos,
+                              const Angle screen_angle, const PixelPoint pos,
                               const DerivedInfo &calculated)
 {
   if (calculated.turn_mode == CirclingMode::CLIMB ||
@@ -58,8 +73,7 @@ BestCruiseArrowRenderer::Draw(Canvas &canvas, const TaskLook &look,
   const GlideResult &solution =
       calculated.task_stats.current_leg.solution_remaining;
 
-  if (!solution.IsOk() ||
-      solution.vector.distance < fixed(0.010))
+  if (!solution.IsOk() || solution.vector.distance < 0.01)
     return;
 
   BestCruiseArrowRenderer::Draw(canvas, look, screen_angle,

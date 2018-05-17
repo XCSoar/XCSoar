@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -34,7 +34,7 @@ ConditionMonitor::Update(const NMEAInfo &basic, const DerivedInfo &calculated,
     return;
 
   bool restart = false;
-  const fixed Time = basic.time;
+  const auto Time = basic.time;
   if (Ready_Time_Check(Time, &restart)) {
     LastTime_Check = Time;
     if (CheckCondition(basic, calculated, settings)) {
@@ -51,12 +51,12 @@ ConditionMonitor::Update(const NMEAInfo &basic, const DerivedInfo &calculated,
 }
 
 bool
-ConditionMonitor::Ready_Time_Notification(fixed T)
+ConditionMonitor::Ready_Time_Notification(double T)
 {
-  if (!positive(T))
+  if (T <= 0)
     return false;
 
-  if (negative(LastTime_Notification) || T < LastTime_Notification)
+  if (LastTime_Notification < 0 || T < LastTime_Notification)
     return true;
 
   if (T >= LastTime_Notification + Interval_Notification)
@@ -66,13 +66,13 @@ ConditionMonitor::Ready_Time_Notification(fixed T)
 }
 
 bool
-ConditionMonitor::Ready_Time_Check(fixed T, bool *restart)
+ConditionMonitor::Ready_Time_Check(double T, bool *restart)
 {
-  if (!positive(T))
+  if (T <= 0)
     return false;
 
-  if (negative(LastTime_Check) || T < LastTime_Check) {
-    LastTime_Notification = fixed(-1);
+  if (LastTime_Check < 0 || T < LastTime_Check) {
+    LastTime_Notification = -1;
     *restart = true;
     return true;
   }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -33,7 +33,6 @@ Copyright_License {
 #ifndef XCSOAR_GEO_SIMPLIFIED_MATH_HPP
 #define XCSOAR_GEO_SIMPLIFIED_MATH_HPP
 
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 struct GeoPoint;
@@ -52,6 +51,21 @@ DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
 
 void
 DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
-                 fixed *distance, Angle *bearing);
+                 double *distance, Angle *bearing);
+
+/**
+ * @see FindLatitudeLongitude()
+ */
+gcc_pure
+GeoPoint
+FindLatitudeLongitudeS(const GeoPoint &loc, Angle bearing, double distance);
+
+/**
+ * @see ProjectedDistance()
+ */
+gcc_pure
+double
+ProjectedDistanceS(const GeoPoint &loc1, const GeoPoint &loc2,
+                   const GeoPoint &loc3);
 
 #endif

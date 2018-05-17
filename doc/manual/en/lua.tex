@@ -1,0 +1,930 @@
+\lstnewenvironment{lua}
+{\lstset{language=[5.0]Lua}}
+{}
+
+Starting with version 7.0, \xc can be extended using
+\href{http://www.lua.org/}{Lua} scripts.
+
+Lua is a language that is easy to learn, powerful enough for XCSoar
+and light: the interpreter library weighs just 200 kB.  Lua is a
+common language choice for integrated scripting languages.
+
+\section{Learning Lua}
+
+\begin{lua}
+print("Hello World")
+\end{lua}
+
+This manual will not attempt to teach you basic Lua.  There are enough
+resources on the internet, for example:
+
+\begin{itemize}
+\item \href{http://www.lua.org/manual/5.3/}{Lua 5.3 Reference Manual}
+\item \href{http://www.lua.org/pil/contents.html}{Programming in
+  Lua}, a book on Lua
+\item \href{http://lua-users.org/wiki/TutorialDirectory}{Tutorial
+  Directory} on the lua-users wiki
+\item \href{https://en.wikipedia.org/wiki/Lua_%28programming_language%29}{Wikipedia}
+\end{itemize}
+
+Just to get you started from here, here's some more example code:
+
+\begin{lua}
+-- comment starts with a double hyphen
+
+--[[
+multi
+line
+comment
+]]--
+
+i = 42
+if i > 1 then
+   print("i=" .. i)
+elseif i == 0 then
+   print("zero")
+else
+   error("negative")
+end
+
+a = {1, 'a', 3.14}
+print(a[2])
+
+function f(a, b)
+   return a * b
+end
+print(f(2, 3))
+\end{lua}
+
+\section{Running Lua}
+
+The directory \texttt{XCSoarData/lua/} may contain Lua scripts
+(\texttt{*.lua}).  The directory \texttt{XCSoarData/lua/lib/} may
+contain Lua libraries to be loaded with \texttt{require}.
+
+After startup, \xc starts the script \texttt{init.lua} (if it
+exists).
+
+The \emph{InputEvent} ``\texttt{RunLuaFile}'' can be used to start
+additional scripts.  If no parameter is given, the user is asked to
+choose a file.  Note that the \emph{InputEvent} subsystem is
+deprecated and will be removed once Lua support is complete.
+
+As long as a Lua script runs, the \xc user interface is blocked.
+Be careful not to write scripts that loop forever.
+
+Once the Lua script finishes, the Lua interpreter is shut down --
+unless the script has registered a callback (e.g. a \verb|timer|).  In
+that case, the Lua script stays resident until it unregisters all
+callbacks (or until \xc quits or the user stops the script
+explicitly).
+
+\section{Lua Standard Libraries}
+
+\xc enables the following Lua standard libraries:
+
+\begin{itemize}
+\item \verb|package|
+\item \verb|table|
+\item \verb|string|
+\item \verb|math|
+\end{itemize}
+
+Lua's \verb|print()| function writes to the \xc log file
+(\texttt{XCSoarData/xcsoar.log}).
+
+The \verb|error()| function aborts the Lua script and reports the
+specified error message to the user.
+
+\xc adds another function to the root namespace: \verb|alert()|.
+It shows a dialog with the specified message, and returns as soon as
+the user has closed the dialog.  This function is experimental, and
+may disappear or be renamed at any time.  Most importantly: do not
+abuse it, as it may annoy the user.
+
+\section{\xc's Lua API}
+
+The package/namespace \verb|xcsoar| provides access to \xc.  It
+contains the following names:
+
+\begin{maxipage}
+\begin{tabularx}{1.9\textwidth}{l|X}
+  Name & Description \\
+  \hline
+  \hline
+
+  \verb|VERSION| & The \xc version number, for example
+  ``\texttt{7.0}''. \\
+  \hline
+  \verb|blackboard| & Access to sensor data. \\
+  \hline
+  \verb|map| & The map view. \\
+  \hline
+  \verb|airspace| & Access to airspace data. \\
+  \hline
+  \verb|wind| & Access to wind data and settings. \\
+  \hline
+  \verb|logger| & Access to logger settings. \\
+  \hline
+  \verb|replay| & Access to replay system. \\
+  \hline
+  \verb|tracking| & Access to tracking settings. \\
+  \hline
+  \verb|timer| & Class for scheduling periodic callbacks. \\
+\end{tabularx}
+\end{maxipage}
+
+\subsection{The Blackboard}
+
+The blackboard provides access to sensor data, such as GPS location.
+
+The following attributes are provided by \verb|xcsoar.blackboard|:
+
+\begin{maxipage}
+\begin{tabularx}{1.9\textwidth}{l|X}
+Name & Description \\
+\hline\hline
+
+\verb|location| & The current location (table with
+keys \verb|longitude| and \verb|latitude| in degrees) according to
+GPS. \\
+
+\hline
+
+\verb|altitude| & The current altitude $[m]$ above MSL. \\
+
+\hline
+
+\verb|track| & The current flying direction above ground in degrees. \\
+
+\hline
+
+\verb|ground_speed| & The aircraft speed relative to the ground
+$[{m \over s}]$. \\
+
+\hline
+
+\verb|air_speed| & The true airspeed
+$[{m \over s}]$. \\
+
+\hline
+
+\verb|bank_angle| & The bank angle in degrees. \\
+
+\hline
+
+\verb|pitch_angle| & The pitch angle in degrees. \\
+
+\hline
+
+\verb|heading| & The current magnetic heading in degrees. \\
+
+\hline
+
+\verb|g_load| & The current g-load. \\
+
+\hline
+
+\verb|static_pressure| & The static pressure
+$[{Pa}]$. \\
+
+\hline
+
+\verb|pitot_pressure| & The pitot pressure
+$[{Pa}]$. \\
+
+\hline
+
+\verb|dynamic_pressure| & The dynamic pressure
+$[{Pa}]$. \\
+
+\hline
+
+\verb|temperature| & The current temperature. \\
+
+\hline
+
+\verb|humidity| & The current humidity \\
+
+\hline
+
+\verb|voltage| & The external battery voltage
+$[{V}]$. \\
+
+\hline
+
+\verb|battery_level| & The internal battery-level in percent. \\
+
+\hline
+
+\verb|noncomp_vario| & The non-compensated vertical speed
+$[{m \over s}]$. \\
+
+\hline
+
+\verb|total_energy_vario| & The total-energy-compensated vertical speed
+$[{m \over s}]$. \\
+
+\hline
+
+\verb|netto_vario| & The netto variometer value
+$[{m \over s}]$. \\
+
+\end{tabularx}
+\end{maxipage}
+
+Any of these may be \verb|nil| if its value is not known, e.g. if
+there is no GPS fix.
+
+\subsection{The Map}
+
+The map provides access to XCSoar's map view.
+
+The following attributes are provided by \verb|xcsoar.map|:
+
+\begin{maxipage}
+\begin{tabularx}{1.9\textwidth}{l|X}
+Name & Description \\
+\hline\hline
+
+\verb|location| & The current reference location (may be aircraft location or
+pan location). \\
+
+\hline
+
+\verb|is_panning| & Gives back if the panning mode is active at the moment.\\
+
+\hline
+
+\verb|enterpan()| & Activates the panning mode.\\
+
+\hline
+
+\verb|disablepan()| & Disables the panning mode.\\
+
+\hline
+
+\verb|leavepan()| & Leaves the panning mode.\\
+
+\hline
+
+\verb|panto(float latitude, float longitude)| & Pans to the given location.\\
+
+\hline
+
+\verb|pancursor(int dx, int dy)| & Pans the cursor by dx and dy. \\
+
+\hline
+
+\verb|zoom(int factor)| & Zooms the map, factor -2 to 2.\\
+
+\hline
+
+\verb|next()| & Opens the next Page.\\
+
+\hline
+
+\verb|prev()| & Opens the previous Page.\\
+
+\hline
+
+\verb|show()| & Show the map; disable thermal assistant or other
+widgets replacing the map view. \\
+
+\end{tabularx}
+\end{maxipage}
+
+\subsection{Airspace}
+
+The Airspace provides access to airspace data, such as name / distance
+to the next airspace.
+
+The following attributes are provided by \verb|xcsoar.airspace|:
+
+\begin{maxipage}
+\begin{tabularx}{1.9\textwidth}{l|X}
+Name & Description \\
+\hline\hline
+
+\verb|nearest_vertical_distance| & The vertical distance to the next airspace
+$[{m}]$.\\
+
+\hline
+
+\verb|nearest_vertical_name| & The name of the next vertical airspace. \\
+
+\hline
+
+\verb|nearest_horizontal_distance| & The horizontal distance to the next airspace 
+$[{m}]$. \\
+
+\hline
+
+\verb|nearest_horizontal_name| & The name of the next horizontal airspace. \\
+
+\end{tabularx}
+\end{maxipage}
+
+\subsection{Task}
+
+The Task provides access to task data such as distances / bearing to the 
+next waypoint.
+
+The following attributes are provided by \verb|xcsoar.task|:
+
+\begin{maxipage}
+\begin{tabularx}{1.9\textwidth}{l|X}
+Name & Description \\
+\hline\hline
+
+\verb|bearing| & The true bearing to the next waypoint. 
+For AAT tasks, this is the true \newline bearing 
+to the target within the AAT sector. $[{degrees}]$\\
+
+\hline
+
+\verb|bearing_diff| & The difference between the glider's track bearing, 
+to the bearing of \newline the next waypoint, or for AAT tasks, to the bearing 
+to the target within \newline the AAT sector $[{degrees}]$.\\
+
+\hline
+
+\verb|radial| & The true bearing from the next waypoint 
+to your position. $[{degrees}]$. \\
+
+\hline
+
+\verb|next_distance| & The distance to the currently selected waypoint. 
+For AAT tasks, this \newline is the distance to the target within the AAT sector.
+$[{m}]$ \\
+
+\hline
+
+\verb|next_distance_nominal| & The distance to the currently selected waypoint. 
+For AAT tasks, this \newline is the distance to the origin of the AAT sector.
+$[{m}]$ \\
+
+\hline
+
+\verb|next_ete| &  Estimated time required to reach next waypoint, 
+assuming \newline performance of ideal MacCready cruise/climb cycle.\\
+
+\hline
+
+\verb|next_eta| & Estimated arrival local time at next waypoint, 
+assuming performance \newline of ideal MacCready cruise/climb cycle. \\
+
+\hline
+
+\verb|next_altitude_diff| & Arrival altitude at the next waypoint relative 
+to the safety arrival height. \\
+
+\hline
+
+\verb|nextmc0_altitude_diff| & Arrival altitude at the next waypoint with 
+MC 0 setting, relative to the \newline safety arrival height. \\
+
+\hline
+
+\verb|next_altitude_require| & Additional altitude required to reach the next
+turnpoint. \\
+
+\hline
+
+\verb|next_altitude_arrival| & Absolute arrival height at the next waypoint in 
+final glide. \\
+
+\hline
+
+\verb|next_gr| & The required glide ratio over ground to reach the next waypoint, 
+\newline given by the distance to the next waypoint divided by the height 
+\newline required to arrive at the safety arrival height. \\
+
+\hline
+
+\verb|final_distance| & Distance to finish around remaining turn points. \\
+
+\hline
+
+\verb|final_ete| & Estimated time required to complete task, 
+assuming performance \newline of ideal MacCready cruise/climb cycle. \\
+
+\hline
+
+\verb|final_eta| & Estimated arrival local time at task completion, 
+assuming performance \newline of ideal MacCready cruise/climb cycle. \\
+
+\hline
+
+\verb|final_altitude_diff| & Arrival altitude at the final task turn point
+relative to the safety arrival \newline height. \\
+
+\hline
+
+\verb|finalmc0_altitude_diff| & Arrival altitude at the final task turn point
+, with MC 0 setting, relative \newline to the safety arrival height. \\
+
+\hline
+
+\verb|final_altitude_require| & Additional altitude required to finish 
+the task. \\
+
+\hline
+
+\verb|task_speed| & Average cross country speed while on the current 
+task, \newline not compensated for altitude. \\
+
+\hline
+
+\verb|task_speed_achieved| & Achieved cross country speed while on the 
+current task, \newline compensated for altitude. Equivalent to 
+Pirker cross country \newline speed remaining. \\
+
+\hline
+
+\verb|task_speed_instant| & Instantaneous cross country speed while 
+on the current task, \newline  compensated for altitude. Equivalent 
+to instantaneous Pirker cross \newline country speed. \\
+
+\hline
+
+\verb|task_speed_hour| & Average cross country speed while on the 
+current task \newline over the last hour, not compensated for altitude. \\
+
+\end{tabularx}
+\end{maxipage}
+
+\begin{maxipage}
+\begin{tabularx}{1.9\textwidth}{l|X}
+Name & Description \\
+\hline\hline
+
+\verb|final_gr| & The required glide ratio over the ground to finish 
+the task, given by \newline the distance to go divided by the height 
+required to arrive at the safety \newline arrival height. \\
+
+\hline
+
+\verb|aat_time| & Assigned Area Task time remaining. \\
+
+\hline
+
+\verb|aat_time_delta| & Difference between estimated task time and 
+AAT miminum time.\\
+
+\hline
+
+\verb|aat_distance| & Assigned Area Task distance around target points 
+for remainder of \newline task. \\
+
+\hline
+
+\verb|aat_distance_max| & Assigned Area Task maximum distance possible 
+for remainder of \newline task. \\
+
+\hline
+
+\verb|aat_distance_min| & Assigned Area Task minimum distance possible 
+for remainder of  \newline task\\
+
+\hline
+
+\verb|aat_speed| & Assigned Area Task average speed achievable around 
+target points \newline remaining in minimum AAT time. \\
+
+\hline
+
+\verb|aat_speed_max| & Assigned Area Task average speed achievable 
+if flying maximum \newline possible distance remaining in minimum 
+AAT time. \\
+
+\hline
+
+\verb|aat_speed_min| & Assigned Area Task average spped achievable 
+if flying minimum \newline possible distance remaining in minimum 
+AAT time.  \\
+
+\hline
+
+\verb|time_under_max_height| & The contiguous period the plane has 
+been below the task \newline start max. height. \\
+
+\hline
+
+\verb|next_etevmg| & Estimated time required to reach next waypoint, 
+assuming current \newline ground speed is maintained. \\
+
+\hline
+
+\verb|final_etevmg| & Estimated time required to complete task, 
+assuming current ground \newline speed is maintained. \\
+
+\hline
+
+\verb|cruise_efficiency| & Efficiency of cruse, 1 indicates perfect 
+MacCready performance \\
+
+
+\end{tabularx}
+\end{maxipage}
+
+\subsection{Settings}
+
+The Settings provides access to xcsoar settings, such as MC value.
+
+The following attributes are provided by \verb|xcsoar.settings|:
+
+\begin{maxipage}
+\begin{tabularx}{1.9\textwidth}{l|X}
+Name & Description \\
+\hline\hline
+
+\verb|mc| & The current set MacCready Value
+$[{m/s}]$.\\
+
+\hline
+
+\verb|bugs| & The current used bug settings in terms of polar degradation.\\
+
+\hline
+
+\verb|wingload| & The current wingload.\\
+
+\hline
+
+\verb|ballast| & Ballast of the glider. 0 means no ballst, 0.3 means 30\% of
+the maximum \newline  ballast the glider can carry.\\
+
+\hline
+
+\verb|qnh| & Area pressure for barometric altimeter calibration
+$[{Pa}]$.\\
+
+\hline
+
+\verb|max_temp| & The forecast ground temperature
+$[{K}]$.\\
+
+\hline
+
+\verb|safetymc| & The MacCready setting used, when safety MC is enabled 
+for reach \newline calculations, in task abort mode and for determining arrival altitude 
+at \newline airfields.\\
+
+\hline
+
+\verb|riskfactor| & The STF risk factor reduces the MacCready setting used to 
+calculate \newline speed to fly as the glider gets low, in order to  compensate for risk.\\
+
+\hline
+
+\verb|polardegradation| & A permanent polar degradation, 1 means no degradation,
+0.5 indicates the \newline glider's sink rate is doubled.\\
+
+\hline
+
+\verb|arrivalheight| & The height above terrain that the glider should arrive
+at for a safe landing.\\
+
+\hline
+
+\verb|terrainheight| & The height above trerrain that the glider must clear during
+final glide.\\
+
+\hline
+
+\verb|setmc(float value)| &  Sets the MacCready value\\
+
+\hline
+
+\verb|setbugs(float value)| & Sets the bugs, 1.0 means no bugs, 0.5 means 50\% polar
+degradation.\\
+
+\hline
+
+\verb|setqnh(float value)| & Sets the QNH $[{Pa}]$\\
+
+\hline
+
+\verb|setballast(float value)| & Sets the ballst, 0 means no ballst, 0.5 means 50\%
+of the maximum \newline ballst the glider can carry.\\
+
+\hline
+
+\verb|setmaxtemp(float value)| & Sets the maximum temperature $[{K}]$.\\
+
+\hline
+
+\end{tabularx}
+\end{maxipage}
+
+\subsection{Wind}
+
+The Settings provides access to xcsoar wind data and settings.
+
+The following attributes are provided by \verb|xcsoar.wind|:
+
+\begin{maxipage}
+\begin{tabularx}{1.9\textwidth}{l|X}
+Name & Description \\
+\hline\hline
+
+\verb|wind_mode| & Wind mode, 0: Manual, 1: Circling, 2: ZigZag, 3: Both.\\
+
+\hline
+
+\verb|setwindmode(int value)| & Sets wind mode $[0-3]$.\\
+
+\hline
+
+\verb|tail_drift| & Determines whether the snail trail is drifted with the 
+wind \newline when displayed in circling mode, 0: Off, 1: On. \\
+
+\hline
+
+\verb|settaildrift(bool value)| & Turns Taildrift Off / On $[{0,1}]$.\\
+
+\hline
+
+\verb|wind_source| & The Source of the current wind, 0: None, 1: Manual,
+\newline 2: Circling, 3: Both, 4: External.\\
+
+\hline
+
+\verb|wind_speed| & The current wind speed 
+$[{m/s}]$.\\
+
+\hline
+
+\verb|setwindspeed(float value)| & Sets manual the wind speed $[{m/s}]$.\\
+
+\hline
+
+\verb|wind_bearing| & The current wind bearing 
+$[{degrees}]$.\\
+
+\hline
+
+\verb|setwindbearing(float value)| & Sets manual the wind bearing $[{degrees}]$.\\
+
+\hline
+
+\verb|clear()| & Clears the wind settings and calculations.\\
+
+\hline
+
+\end{tabularx}
+\end{maxipage}
+
+\subsection{Logger}
+
+The Settings provides access to xcsoar Logger data and settings.
+
+The following attributes are provided by \verb|xcsoar.logger|:
+
+\begin{maxipage}
+\begin{tabularx}{1.9\textwidth}{l|X}
+Name & Description \\
+\hline\hline
+
+\verb|pilot_name| & Gives back the set pilot name.\\
+
+\hline
+
+\verb|set_pilot_name(char* name)| &  Sets the pilot name.\\
+
+\hline
+
+\verb|time_step_cruise| & The time interval between logged 
+points when not circling. $[s]$.\\
+
+\hline
+
+\verb|set_time_step_cruise(int time)| &  Sets time interval between logged 
+points when not circling $[s]$.\\
+
+\hline
+
+\verb|time_step_circling| &  The time interval between logged 
+points when circling $[s]$.\\
+
+\hline
+
+\verb|set_time_step_circling(int time)| &  Sets time interval between logged 
+points when circling $[s]$.\\
+
+\hline
+
+\verb|auto_logger| &  Status of the auto-logger, 0: On, 1: Take off only
+2: Off.\\
+
+\hline
+
+\verb|set_autologger(int mode)| &  Sets the Autologger mode, 0: On,
+1: Take off only, 2: Off.\\
+
+\hline
+
+\verb|nmea_logger| &  Status of the NMEA-Logger, 0: Off, 1: On.\\
+
+\hline
+
+\verb|enable_nmea()| &  Enables the NMEA-Logger.\\
+
+\hline
+
+\verb|disable_nmea()| &  Disables the NMEA-Logger.\\
+
+\hline
+
+\verb|log_book| &  Status of the log-book, 0: Off, 1: On.\\
+
+\hline
+
+\verb|enable_logbook()| &  Enables the logbook.\\
+
+\hline
+
+\verb|disable_logbook()| &  Disables the logbook.\\
+
+\hline
+
+\verb|logger_id| &  The current set logger-id.\\
+
+\hline
+
+\verb|set_logger_id(char* id)| &  Sets the logger-id.\\
+
+\end{tabularx}
+\end{maxipage}
+
+\subsection{Tracking}
+
+The Settings provides access to xcsoar Tracking settings.
+
+The following attributes are provided by \verb|xcsoar.tracking|:
+
+\begin{maxipage}
+\begin{tabularx}{1.9\textwidth}{l|X}
+Name & Description \\
+\hline\hline
+
+\verb|skylines_enabled| & States if skylines tracking is enabled.\\
+
+\hline
+
+\verb|enable_skylines()| & Enables skylines tracking.\\
+
+\hline
+
+\verb|disable_skylines()| & Disables skylines tracking.\\
+
+\hline
+
+\verb|skylines_roaming| & States if skylines roaming is enabled.\\
+
+\hline
+
+\verb|skylines_interval| & The skylines tracking interval $[s]$.\\
+
+\hline
+
+\verb|set_skylines_interval(int interval)| & Sets the tracking interval $[s]$.\\
+
+\hline
+
+\verb|skylines_traffic_enabled| & If enabled shows friends on the map,
+download the position \newline of your friends live from the SkyLines server.\\
+
+\hline
+
+\verb|enable_skylines_traffic()| & Enables the display of friends on the map.\\
+
+\hline
+
+\verb|disable_skylines_traffic()| & Disables the display of friends on the map.\\
+
+\hline
+
+\verb|skylines_near_traffic_enabled| & If enabled shows nearby traffic.\\
+
+\hline
+
+\verb|enable_skylines_near_traffic()| & Enables the display of nearby traffic on the map.\\
+
+\hline
+
+\verb|disable_skylines_near_traffic()| & Disables the display of nearby traffic on the map.\\
+
+\hline
+
+\verb|livetrack24_enabled| & States if livetrack24 is enabled.\\
+
+\hline
+
+\verb|enable_livetrack24()| & Enables livetrack24.\\
+
+\hline
+
+\verb|disable_livetrack24()| & Disables livetrack24.\\
+
+\hline
+
+\verb|livetrack24_interval| & Livetrack24 tracking interval $[s]$.\\
+
+\hline
+
+\verb|set_livetrack24_interval(int interval)| & Sets the tracking interval $[s]$.\\
+
+\hline
+
+\verb|livetrack24_vehicle_name| & Get current vehicle name.\\
+
+\hline
+
+\verb|set_livetrack24_vehiclename(char* name)| & Sets the livetrack24 vehiclename.\\
+
+\end{tabularx}
+\end{maxipage}
+
+\subsection{Replay}
+
+The Settings provides access to xcsoar Replay system.
+
+The following attributes are provided by \verb|xcsoar.replay|:
+
+\begin{maxipage}
+\begin{tabularx}{1.9\textwidth}{l|X}
+Name & Description \\
+\hline\hline
+
+\verb|start(path)| & Starts replay from file \verb|path|\\
+
+\hline
+
+\verb|stop())| & Stops replay\\
+
+\hline
+
+\verb|fast_forward(dt))| & Fast forwards \verb|dt| seconds\\
+
+\hline
+
+\verb|set_time_scale(r))| & Sets replay clock rate to \verb|r|\\
+
+\hline
+
+\verb|time_scale| & Gets replay clock rate $s$\\
+
+\hline
+
+\verb|virtual_time| & Gets replay virtual time $s$\\
+
+\end{tabularx}
+\end{maxipage}
+
+\subsection{Timers}
+
+The class \verb|xcsoar.timer| implements a timer that calls a given
+Lua function periodically.
+
+\begin{lua}
+xcsoar.timer.new(60, function(t)
+  print("A minute has passed")
+  t:cancel()
+end)
+\end{lua}
+
+The following methods are available in \verb|xcsoar.timer|:
+
+\begin{maxipage}
+\begin{tabularx}{1.9\textwidth}{l|X}
+Method & Description \\
+\hline\hline
+
+\verb|new(period, function)| & Create a new instance and schedule
+it.  The period is a numeric value in seconds. \\
+
+\hline
+
+\verb|cancel()| & Cancel the timer. \\
+
+\hline
+
+\verb|schedule(period)| & Reschedule the timer. \\
+
+\end{tabularx}
+\end{maxipage}
+
+\subsection{Legacy}
+
+Before version 7.0, \xc was adapted using the \emph{InputEvent}
+subsystem (see Appendix~\ref{cha:file_formats}).  During the Lua
+transition, Lua scripts can invoke InputEvents, for example:
+
+\begin{lua}
+xcsoar.fire_legacy_event("Setup", "basic")
+xcsoar.fire_legacy_event("Zoom", "basic")
+\end{lua}
+
+This function will be removed before the final 7.0 release.

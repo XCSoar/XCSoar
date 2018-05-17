@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,14 +26,13 @@
 #include <stdlib.h>
 #include <assert.h>
 
-FinishPoint::FinishPoint(ObservationZonePoint* _oz, const Waypoint & wp,
+FinishPoint::FinishPoint(ObservationZonePoint* _oz, WaypointPtr && wp,
                          const TaskBehaviour& tb,
                          const FinishConstraints &_constraints,
                          bool boundary_scored)
-  :OrderedTaskPoint(TaskPointType::FINISH, _oz, wp, boundary_scored),
+  :OrderedTaskPoint(TaskPointType::FINISH, _oz, std::move(wp), boundary_scored),
    safety_height(tb.safety_height_arrival),
-   constraints(_constraints),
-   fai_finish_height(fixed(0))
+   constraints(_constraints)
 {
 }
 
@@ -47,7 +46,7 @@ void
 FinishPoint::Reset()
 {
   OrderedTaskPoint::Reset();
-  fai_finish_height = fixed(0);
+  fai_finish_height = 0;
 }
 
 bool
@@ -56,18 +55,18 @@ FinishPoint::EntryPrecondition() const
   return GetPrevious() != NULL && GetPrevious()->HasEntered();
 }
 
-fixed
+double
 FinishPoint::GetElevation() const
 {
-  const fixed nominal_elevation = GetBaseElevation() + safety_height;
+  const auto nominal_elevation = GetBaseElevation() + safety_height;
 
   if (constraints.fai_finish) {
     return std::max(nominal_elevation, fai_finish_height);
   } else {
     return std::max(nominal_elevation,
-                    fixed(constraints.min_height) +
+                    constraints.min_height +
                     (constraints.min_height_ref == AltitudeReference::AGL
-                     ? GetBaseElevation() : fixed(0)));
+                     ? GetBaseElevation() : 0));
   }
 }
 
@@ -87,9 +86,9 @@ FinishPoint::SetNeighbours(OrderedTaskPoint *_prev, OrderedTaskPoint *_next)
 }
 
 void
-FinishPoint::set_fai_finish_height(const fixed height)
+FinishPoint::SetFaiFinishHeight(const double height)
 {
-  fai_finish_height = std::max(fixed(0), height);
+  fai_finish_height = std::max(0., height);
 }
 
 bool
@@ -98,11 +97,11 @@ FinishPoint::IsInSector(const AircraftState &state) const
   if (!OrderedTaskPoint::IsInSector(state))
     return false;
 
-  return is_in_height_limit(state);
+  return InInHeightLimit(state);
 }
 
 bool
-FinishPoint::is_in_height_limit(const AircraftState &state) const
+FinishPoint::InInHeightLimit(const AircraftState &state) const
 {
   if (!constraints.CheckHeight(state, GetBaseElevation()))
     return false;
@@ -117,8 +116,8 @@ bool
 FinishPoint::CheckEnterTransition(const AircraftState &ref_now,
                                   const AircraftState &ref_last) const
 {
-  const bool now_in_height = is_in_height_limit(ref_now);
-  const bool last_in_height = is_in_height_limit(ref_last);
+  const bool now_in_height = InInHeightLimit(ref_now);
+  const bool last_in_height = InInHeightLimit(ref_last);
 
   if (now_in_height && last_in_height)
     // both within height limit, so use normal location checks

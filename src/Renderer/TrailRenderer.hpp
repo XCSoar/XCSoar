@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,11 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_TRAIL_RENDERER_HPP
 #define XCSOAR_TRAIL_RENDERER_HPP
 
-#include "Util/AllocatedArray.hpp"
+#include "Util/AllocatedArray.hxx"
 #include "Engine/Trace/Point.hpp"
 #include "Engine/Trace/Vector.hpp"
 
-struct RasterPoint;
+struct PixelPoint;
+struct BulkPixelPoint;
 class Canvas;
 class TraceComputer;
 class Projection;
@@ -40,11 +41,16 @@ struct NMEAInfo;
 struct DerivedInfo;
 struct TrailSettings;
 
+/**
+ * Trail renderer
+ * renders the trail of past position fixes on the map
+ * includes filter for coarse-graining trail in LoadTrace
+ */
 class TrailRenderer {
   const TrailLook &look;
 
   TracePointVector trace;
-  AllocatedArray<RasterPoint> points;
+  AllocatedArray<BulkPixelPoint> points;
 
 public:
   TrailRenderer(const TrailLook &_look):look(_look) {}
@@ -66,7 +72,7 @@ public:
 
   void Draw(Canvas &canvas, const TraceComputer &trace_computer,
             const WindowProjection &projection, unsigned min_time,
-            bool enable_traildrift, const RasterPoint pos, const NMEAInfo &basic,
+            bool enable_traildrift, PixelPoint pos, const NMEAInfo &basic,
             const DerivedInfo &calculated, const TrailSettings &settings);
 
   /**
@@ -78,7 +84,7 @@ public:
             const WindowProjection &projection, unsigned min_time);
 
   gcc_malloc
-  RasterPoint *Prepare(unsigned n);
+  BulkPixelPoint *Prepare(unsigned n);
 
   void DrawPreparedPolyline(Canvas &canvas, unsigned n);
   void DrawPreparedPolygon(Canvas &canvas, unsigned n);

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,8 +24,7 @@ Copyright_License {
 #include "Thread/StandbyThread.hpp"
 
 StandbyThread::StandbyThread(const char *_name)
-  :Thread(_name),
-   alive(false), pending(false), busy(false), stop(false) {}
+  :Thread(_name) {}
 
 StandbyThread::~StandbyThread()
 {
@@ -69,16 +68,8 @@ StandbyThread::WaitDone()
   assert(!IsInside());
   assert(mutex.IsLockedByCurrent());
 
-  while (alive && IsBusy()) {
-#ifdef HAVE_POSIX
-    cond.Wait(mutex);
-#else
-    done_trigger.Reset();
-    mutex.Unlock();
-    done_trigger.Wait();
-    mutex.Lock();
-#endif
-  }
+  while (alive && IsBusy())
+    cond.wait(mutex);
 }
 
 void
@@ -93,9 +84,8 @@ StandbyThread::WaitStopped()
     return;
 
   /* mutex must be unlocked because Thread::Join() blocks */
-  mutex.Unlock();
+  const ScopeUnlock unlock(mutex);
   Thread::Join();
-  mutex.Lock();
 }
 
 void
@@ -104,7 +94,8 @@ StandbyThread::Run()
   assert(!mutex.IsLockedByCurrent());
   assert(!busy);
 
-  mutex.Lock();
+  const ScopeLock lock(mutex);
+
   alive = true;
 
   while (!stop) {
@@ -112,14 +103,7 @@ StandbyThread::Run()
 
     if (!pending) {
       /* wait for a command */
-#ifdef HAVE_POSIX
-      cond.Wait(mutex);
-#else
-      command_trigger.Reset();
-      mutex.Unlock();
-      command_trigger.Wait();
-      mutex.Lock();
-#endif
+      cond.wait(mutex);
     }
 
     assert(!busy);
@@ -136,6 +120,5 @@ StandbyThread::Run()
 
   alive = false;
   TriggerDone();
-  mutex.Unlock();
 }
 

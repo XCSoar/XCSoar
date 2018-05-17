@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,51 +24,15 @@ Copyright_License {
 #ifndef XCSOAR_RASTER_BUFFER_HPP
 #define XCSOAR_RASTER_BUFFER_HPP
 
-#include "Util/AllocatedGrid.hpp"
+#include "RasterTraits.hpp"
+#include "Height.hpp"
+#include "Util/AllocatedGrid.hxx"
 #include "Compiler.h"
-
-#include <cstddef>
 
 #include <stdint.h>
 
 class RasterBuffer {
-public:
-  /** invalid value for terrain */
-  static constexpr short TERRAIN_INVALID = -32768;
-  static constexpr short TERRAIN_WATER_THRESHOLD = -30000;
-
-  enum class TerrainType: uint8_t {
-    UNKNOWN, GROUND, WATER
-  };
-
-  constexpr
-  static bool IsInvalid(short h) {
-    return h == TERRAIN_INVALID;
-  }
-
-  constexpr
-  static bool IsWater(short h) {
-    return h <= TERRAIN_WATER_THRESHOLD && !IsInvalid(h);
-  }
-
-  constexpr
-  static bool IsSpecial(short h) {
-    return h <= TERRAIN_WATER_THRESHOLD;
-  }
-
-  gcc_const
-  static TerrainType GetTerrainType(short h) {
-    if (!RasterBuffer::IsSpecial(h))
-      return TerrainType::GROUND;
-
-    if (RasterBuffer::IsWater(h))
-      return TerrainType::WATER;
-
-    return TerrainType::UNKNOWN;
-  }
-
-private:
-  AllocatedGrid<short> data;
+  AllocatedGrid<TerrainHeight> data;
 
 public:
   RasterBuffer() = default;
@@ -91,22 +55,22 @@ public:
   }
 
   unsigned GetFineWidth() const {
-    return GetWidth() << 8;
+    return GetWidth() << RasterTraits::SUBPIXEL_BITS;
   }
 
   unsigned GetFineHeight() const {
-    return GetHeight() << 8;
+    return GetHeight() << RasterTraits::SUBPIXEL_BITS;
   }
 
-  short *GetData() {
+  TerrainHeight *GetData() {
     return data.begin();
   }
 
-  const short *GetData() const {
+  const TerrainHeight *GetData() const {
     return data.begin();
   }
 
-  const short *GetDataAt(unsigned x, unsigned y) const {
+  const TerrainHeight *GetDataAt(unsigned x, unsigned y) const {
     return data.GetPointerAt(x, y);
   }
 
@@ -117,14 +81,14 @@ public:
   void Resize(unsigned _width, unsigned _height);
 
   gcc_pure
-  short GetInterpolated(unsigned lx, unsigned ly,
-                        unsigned ix, unsigned iy) const;
+  TerrainHeight GetInterpolated(unsigned lx, unsigned ly,
+                                unsigned ix, unsigned iy) const;
 
   gcc_pure
-  short GetInterpolated(unsigned lx, unsigned ly) const;
+  TerrainHeight GetInterpolated(unsigned lx, unsigned ly) const;
 
   gcc_pure
-  short Get(unsigned x, unsigned y) const {
+  TerrainHeight Get(unsigned x, unsigned y) const {
     return *GetDataAt(x, y);
   }
 
@@ -133,22 +97,23 @@ protected:
    * Special optimized case for ScanLine(), for NorthUp rendering.
    */
   void ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
-                          short *buffer, unsigned size,
+                          TerrainHeight *buffer, unsigned size,
                           bool interpolate) const;
 
 
 public:
   void ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
-                short *buffer, unsigned size, bool interpolate) const;
+                TerrainHeight *buffer, unsigned size, bool interpolate) const;
 
   /**
    * Wrapper for ScanLine() with basic range checks.
    */
   void ScanLineChecked(unsigned ax, unsigned ay, unsigned bx, unsigned by,
-                       short *buffer, unsigned size, bool interpolate) const;
+                       TerrainHeight *buffer, unsigned size,
+                       bool interpolate) const;
 
   gcc_pure
-  short GetMaximum() const;
+  TerrainHeight GetMaximum() const;
 };
 
 #endif

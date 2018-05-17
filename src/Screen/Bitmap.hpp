@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_BITMAP_HPP
 
 #include "Screen/Point.hpp"
+#include "Compiler.h"
 
 #ifdef USE_MEMORY_CANVAS
 #include "Screen/Memory/Buffer.hpp"
@@ -32,6 +33,7 @@ Copyright_License {
 #endif
 
 #ifdef ANDROID
+#include "Screen/Custom/UncompressedImage.hpp"
 #include "Screen/OpenGL/Surface.hpp"
 #include <jni.h>
 #endif
@@ -41,10 +43,11 @@ Copyright_License {
 #endif
 
 #include <assert.h>
-#include <tchar.h>
 
+class Path;
 class ResourceId;
 class UncompressedImage;
+struct GeoQuadrilateral;
 template<typename T> struct ConstBuffer;
 
 #ifdef ENABLE_OPENGL
@@ -81,40 +84,42 @@ public:
 
 protected:
 #ifdef ANDROID
-  jobject bmp;
+  jobject bmp = nullptr;
+
+  UncompressedImage uncompressed;
 
   Type type;
 #endif
 
 #ifdef ENABLE_OPENGL
-  GLTexture *texture;
+  GLTexture *texture = nullptr;
   PixelSize size;
 
-  bool interpolation;
+  bool interpolation = false;
+
+  /**
+   * Flip up/down?  Some image formats (such as BMP and TIFF) store
+   * the bottom-most row first.
+   */
+  bool flipped = false;
 #elif defined(USE_MEMORY_CANVAS)
-  WritableImageBuffer<BitmapPixelTraits> buffer;
+  WritableImageBuffer<BitmapPixelTraits> buffer = WritableImageBuffer<BitmapPixelTraits>::Empty();
 #else
-  HBITMAP bitmap;
+  HBITMAP bitmap = nullptr;
 #endif
 
 public:
-#ifdef ENABLE_OPENGL
-  Bitmap()
-    :
-#ifdef ANDROID
-    bmp(nullptr),
-#endif
-    texture(nullptr), interpolation(false) {}
-#elif defined(USE_MEMORY_CANVAS)
-  constexpr Bitmap():buffer(WritableImageBuffer<BitmapPixelTraits>::Empty()) {}
-#else
-  Bitmap():bitmap(nullptr) {}
-#endif
-
+  Bitmap() = default;
   explicit Bitmap(ResourceId id);
 
 #if !defined(USE_GDI) && !defined(ANDROID)
   Bitmap(ConstBuffer<void> buffer);
+#endif
+
+#ifdef USE_MEMORY_CANVAS
+  Bitmap(Bitmap &&src) = default;
+#else
+  Bitmap(Bitmap &&src);
 #endif
 
   ~Bitmap() {
@@ -126,7 +131,7 @@ public:
 public:
   bool IsDefined() const {
 #ifdef ANDROID
-    return bmp != nullptr;
+    return bmp != nullptr || uncompressed.IsDefined();
 #elif defined(ENABLE_OPENGL)
     return texture != nullptr;
 #elif defined(USE_MEMORY_CANVAS)
@@ -137,6 +142,10 @@ public:
   }
 
 #ifdef ENABLE_OPENGL
+  const PixelSize &GetSize() const {
+    return size;
+  }
+
   unsigned GetWidth() const {
     return size.cx;
   }
@@ -144,7 +153,15 @@ public:
   unsigned GetHeight() const {
     return size.cy;
   }
+
+  bool IsFlipped() const {
+    return flipped;
+  }
 #elif defined(USE_MEMORY_CANVAS)
+  PixelSize GetSize() const {
+    return { buffer.width, buffer.height };
+  }
+
   unsigned GetWidth() const {
     return buffer.width;
   }
@@ -153,6 +170,9 @@ public:
     return buffer.height;
   }
 #else
+  gcc_pure
+  PixelSize GetSize() const;
+
   unsigned GetWidth() const {
     return GetSize().cx;
   }
@@ -168,24 +188,31 @@ public:
   void EnableInterpolation() {}
 #endif
 
-#if !defined(USE_GDI) && !defined(ANDROID)
-  bool Load(const UncompressedImage &uncompressed, Type type=Type::STANDARD);
+#ifndef USE_GDI
+  bool Load(UncompressedImage &&uncompressed, Type type=Type::STANDARD);
+#ifndef ANDROID
   bool Load(ConstBuffer<void> buffer, Type type=Type::STANDARD);
+#endif
 #endif
 
   bool Load(ResourceId id, Type type=Type::STANDARD);
 
+#ifndef ENABLE_OPENGL
   /**
    * Load a bitmap and stretch it by the specified zoom factor.
    */
   bool LoadStretch(ResourceId id, unsigned zoom);
+#endif
 
-  bool LoadFile(const TCHAR *path);
+  bool LoadFile(Path path);
+
+  /**
+   * Load a georeferenced image (e.g. GeoTIFF) and return its bounds.
+   * Throws a std::runtime_error on error.
+   */
+  GeoQuadrilateral LoadGeoFile(Path path);
 
   void Reset();
-
-  gcc_pure
-  const PixelSize GetSize() const;
 
 #ifdef ENABLE_OPENGL
   GLTexture *GetNative() const {
@@ -203,14 +230,18 @@ public:
   }
 #endif
 
-#ifdef ANDROID
+#ifdef ENABLE_OPENGL
 private:
-  bool Set(JNIEnv *env, jobject _bmp, Type _type);
-  bool MakeTexture();
+  bool MakeTexture(const UncompressedImage &uncompressed, Type type);
+
+#ifdef ANDROID
+  bool Set(JNIEnv *env, jobject _bmp, Type _type, bool flipped = false);
+  bool MakeTexture(jobject _bmp, Type _type, bool flipped = false);
 
   /* from GLSurfaceListener */
   virtual void SurfaceCreated() override;
   virtual void SurfaceDestroyed() override;
+#endif
 #endif
 };
 

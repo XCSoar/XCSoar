@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@ Copyright_License {
 #if defined(HAVE_POSIX) && !defined(ANDROID) && !defined(KOBO) && !defined(__APPLE__)
 #define USE_LIBINTL
 
-#include <libintl.h>
+#include <libintl.h> // IWYU pragma: export
 
 #define _(x) gettext(x)
 
@@ -65,10 +65,6 @@ const TCHAR* gettext(const TCHAR* text);
  */
 #define _(x) gettext(_T(x))
 #define N_(x) _T(x)
-
-#if !defined(_WIN32_WCE) && !defined(NDEBUG) && defined(_MSC_VER)
-#pragma warning( disable : 4786 )
-#endif
 
 void reset_gettext_cache();
 

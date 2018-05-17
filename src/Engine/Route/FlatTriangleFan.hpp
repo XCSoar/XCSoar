@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,30 +25,45 @@
 
 #include "Geo/Flat/FlatGeoPoint.hpp"
 #include "Geo/Flat/FlatBoundingBox.hpp"
+#include "Util/ConstBuffer.hxx"
 
 #include <vector>
 
 class FlatTriangleFan {
-public:
   typedef std::vector<FlatGeoPoint> VertexVector;
 
 protected:
   VertexVector vs;
   FlatBoundingBox bounding_box;
-  RoughAltitude height;
+  int height;
 
 public:
-  FlatTriangleFan()
-    :bounding_box(FlatGeoPoint(0, 0)), height(0) {}
-
   friend class PrintHelper;
 
   void CalcBoundingBox();
 
-  void AddPoint(const FlatGeoPoint &p);
+  /**
+   * Add the origin to an empty
+   */
+  void AddOrigin(const AFlatGeoPoint &origin, size_t reserve);
 
+  void AddPoint(FlatGeoPoint p);
+
+  /**
+   * Finish the point list.
+   *
+   * @param closed true if this is a closed circle and the origin is
+   * not part of the hull
+   * @return true if the fan is valid
+   */
+  bool CommitPoints(bool closed);
+
+  /**
+   * @param closed true if this is a closed shape and the origin is
+   * not part of the hull
+   */
   gcc_pure
-  bool IsInside(const FlatGeoPoint &p) const;
+  bool IsInside(FlatGeoPoint p, bool closed) const;
 
   void Clear() {
     vs.clear();
@@ -59,7 +74,27 @@ public:
     return vs.empty();
   }
 
-  RoughAltitude GetHeight() const {
+  AFlatGeoPoint GetOrigin() const {
+    return AFlatGeoPoint(vs.front(), height);
+  }
+
+  /**
+   * Returns a list of points describing the hull.
+   *
+   * @param closed true if this is a closed circle and the origin is
+   * not part of the hull
+   */
+  gcc_pure
+  ConstBuffer<FlatGeoPoint> GetHull(bool closed) const {
+    ConstBuffer<FlatGeoPoint> hull(&vs.front(), vs.size());
+    if (closed)
+      /* omit the origin, because it's not part of the hull in a
+         closed shape */
+      hull.pop_front();
+    return hull;
+  }
+
+  int GetHeight() const {
     return height;
   }
 };

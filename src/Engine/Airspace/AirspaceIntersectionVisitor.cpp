@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -32,9 +32,12 @@ AirspaceIntersectionVisitor::Intercept(const AbstractAirspace &as,
   if (intersections.empty())
     return AirspaceInterceptSolution::Invalid();
 
-  AirspaceInterceptSolution solution;
-  for (const auto &i : intersections)
-    as.Intercept(state, perf, solution, i.first, i.second);
+  AirspaceInterceptSolution solution = AirspaceInterceptSolution::Invalid();
+  for (const auto &i : intersections) {
+    auto new_solution = as.Intercept(state, perf, i.first, i.second);
+    if (new_solution.IsEarlierThan(solution))
+      solution = new_solution;
+  }
 
   return solution;
 }

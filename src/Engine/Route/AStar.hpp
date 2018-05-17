@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -28,10 +28,6 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <unordered_map>
-
-#ifdef INSTRUMENT_TASK
-extern long count_astar_links;
-#endif
 
 struct AStarPriorityValue
 {
@@ -218,9 +214,6 @@ public:
    */
   void Link(const Node &node, const Node &parent,
             const AStarPriorityValue &edge_value) {
-#ifdef INSTRUMENT_TASK
-    count_astar_links++;
-#endif
     Push(node, parent, GetNodeValue(parent) + edge_value.Adjust<m_min>());
     // note order of + here is important!
   }

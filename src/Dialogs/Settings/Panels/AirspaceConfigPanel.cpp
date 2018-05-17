@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -36,10 +36,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 #include "UtilsSettings.hpp"
-
-#ifdef USE_GDI
-#include "Screen/GDI/AlphaBlend.hpp"
-#endif
+#include "Screen/Features.hpp"
 
 enum ControlIndex {
   AirspaceDisplay,
@@ -200,11 +197,13 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddFloat(_("Clip altitude"),
            _("For clip airspace mode, this is the altitude below which airspace is displayed."),
-           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(20000), fixed(100), false, UnitGroup::ALTITUDE, fixed(renderer.clip_altitude));
+           _T("%.0f %s"), _T("%.0f"), 0, 20000, 100, false,
+           UnitGroup::ALTITUDE, renderer.clip_altitude);
 
   AddFloat(_("Margin"),
            _("For auto and all below airspace mode, this is the altitude above/below which airspace is included."),
-           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(10000), fixed(100), false, UnitGroup::ALTITUDE, fixed(computer.warnings.altitude_warning_margin));
+           _T("%.0f %s"), _T("%.0f"), 0, 10000, 100, false,
+           UnitGroup::ALTITUDE, computer.warnings.altitude_warning_margin);
 
   AddBoolean(_("Warnings"), _("Enable/disable all airspace warnings."),
              computer.enable_warnings, this);
@@ -240,11 +239,9 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   SetExpertRow(AirspaceFillMode);
 
 #if defined(HAVE_HATCHED_BRUSH) && defined(HAVE_ALPHA_BLEND)
-  if (AlphaBlendAvailable()) {
-    AddBoolean(_("Airspace transparency"), _("If enabled, then airspaces are filled transparently."),
-               renderer.transparency);
-    SetExpertRow(AirspaceTransparency);
-  }
+  AddBoolean(_("Airspace transparency"), _("If enabled, then airspaces are filled transparently."),
+             renderer.transparency);
+  SetExpertRow(AirspaceTransparency);
 #endif
 
   ShowDisplayControls(renderer.altitude_mode); // TODO make this work the first time
@@ -295,9 +292,8 @@ AirspaceConfigPanel::Save(bool &_changed)
   changed |= SaveValueEnum(AirspaceFillMode, ProfileKeys::AirspaceFillMode, renderer.fill_mode);
 
 #if defined(HAVE_HATCHED_BRUSH) && defined(HAVE_ALPHA_BLEND)
-  if (AlphaBlendAvailable())
-    changed |= SaveValue(AirspaceTransparency, ProfileKeys::AirspaceTransparency,
-                         renderer.transparency);
+  changed |= SaveValue(AirspaceTransparency, ProfileKeys::AirspaceTransparency,
+                       renderer.transparency);
 #endif
 
   _changed |= changed;

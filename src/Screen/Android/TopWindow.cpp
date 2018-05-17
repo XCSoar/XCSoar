@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -39,12 +39,11 @@ TopWindow::Invalidate()
 }
 
 void
-TopWindow::AnnounceResize(UPixelScalar width, UPixelScalar height)
+TopWindow::AnnounceResize(PixelSize _new_size)
 {
   ScopeLock protect(paused_mutex);
   resized = true;
-  new_width = width;
-  new_height = height;
+  new_size = _new_size;
 }
 
 bool
@@ -82,7 +81,7 @@ TopWindow::CheckResumeSurface()
 void
 TopWindow::RefreshSize()
 {
-  UPixelScalar width, height;
+  PixelSize new_size_copy;
 
   {
     ScopeLock protect(paused_mutex);
@@ -90,20 +89,18 @@ TopWindow::RefreshSize()
       return;
 
     resized = false;
-    width = new_width;
-    height = new_height;
+    new_size_copy = new_size;
   }
 
-  Resize(width, height);
+  if (screen->CheckResize(new_size_copy))
+    Resize(new_size_copy);
 }
 
 void
 TopWindow::OnResize(PixelSize new_size)
 {
-  if (native_view != nullptr) {
+  if (native_view != nullptr)
     native_view->SetSize(new_size.cx, new_size.cy);
-    screen->OnResize(new_size);
-  }
 
   ContainerWindow::OnResize(new_size);
 }
@@ -121,11 +118,10 @@ TopWindow::OnPause()
 
   native_view->deinitSurface();
 
-  paused_mutex.Lock();
+  const ScopeLock lock(paused_mutex);
   paused = true;
   resumed = false;
-  paused_cond.Signal();
-  paused_mutex.Unlock();
+  paused_cond.signal();
 }
 
 void
@@ -153,10 +149,9 @@ TopWindow::Pause()
   event_queue->Purge(match_pause_and_resume, nullptr);
   event_queue->Push(Event::PAUSE);
 
-  paused_mutex.Lock();
+  const ScopeLock lock(paused_mutex);
   while (!paused)
-    paused_cond.Wait(paused_mutex);
-  paused_mutex.Unlock();
+    paused_cond.wait(paused_mutex);
 }
 
 void
@@ -194,20 +189,20 @@ TopWindow::OnEvent(const Event &event)
 
   case Event::MOUSE_MOTION:
     // XXX keys
-    return OnMouseMove(event.point.x, event.point.y, 0);
+    return OnMouseMove(event.point, 0);
 
   case Event::MOUSE_DOWN:
     return double_click.Check(event.point)
-      ? OnMouseDouble(event.point.x, event.point.y)
-      : OnMouseDown(event.point.x, event.point.y);
+      ? OnMouseDouble(event.point)
+      : OnMouseDown(event.point);
 
   case Event::MOUSE_UP:
     double_click.Moved(event.point);
 
-    return OnMouseUp(event.point.x, event.point.y);
+    return OnMouseUp(event.point);
 
   case Event::MOUSE_WHEEL:
-    return OnMouseWheel(event.point.x, event.point.y, (int)event.param);
+    return OnMouseWheel(event.point, (int)event.param);
 
   case Event::POINTER_DOWN:
     return OnMultiTouchDown();
@@ -222,18 +217,14 @@ TopWindow::OnEvent(const Event &event)
          resumed */
       return true;
 
-    if (unsigned(event.point.x) == GetWidth() &&
-        unsigned(event.point.y) == GetHeight())
-      /* no-op */
-      return true;
+    if (screen->CheckResize(PixelSize(event.point.x, event.point.y)))
+      Resize(screen->GetSize());
 
     /* it seems the first page flip after a display orientation change
        is ignored on Android (tested on a Dell Streak / Android
        2.2.2); let's do one dummy call before we really draw
        something */
     screen->Flip();
-
-    Resize(event.point.x, event.point.y);
     return true;
 
   case Event::PAUSE:

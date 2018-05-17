@@ -19,7 +19,7 @@
 
 #include "dbbconv.h"
 #include "OS/ByteOrder.hpp"
-#include "Util/CharUtil.hpp"
+#include "Util/CharUtil.hxx"
 
 #include <string.h>
 #include <assert.h>

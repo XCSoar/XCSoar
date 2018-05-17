@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,10 +26,6 @@ Copyright_License {
 #include "Formatter/TimeFormatter.hpp"
 #include "Util/StringFormat.hpp"
 #include "Util/NumberParser.hpp"
-#include "Asset.hpp"
-
-#include <stdlib.h>
-#include <stdio.h>
 
 static bool data_field_key_up = false;
 
@@ -62,9 +58,6 @@ DataFieldTime::Dec()
 int
 DataFieldTime::SpeedUp(bool key_up)
 {
-  if (IsAltair())
-    return 1;
-
   if (key_up != data_field_key_up) {
     speedup = 0;
     data_field_key_up = key_up;
@@ -87,7 +80,8 @@ DataFieldTime::SpeedUp(bool key_up)
 }
 
 void
-DataFieldTime::SetFromCombo(int data_field_index, TCHAR *value_string)
+DataFieldTime::SetFromCombo(int data_field_index,
+                            gcc_unused const TCHAR *value_string)
 {
   SetValue(data_field_index);
 }

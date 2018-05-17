@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,11 +27,7 @@ Copyright_License {
 #include "Compiler.h"
 #include "Thread/Thread.hpp"
 #include "Thread/Mutex.hpp"
-#ifdef HAVE_POSIX
-#include "Thread/Cond.hpp"
-#else
-#include "Thread/Trigger.hpp"
-#endif
+#include "Cond.hxx"
 
 /**
  * A thread which waits for work in background.  It is similar to
@@ -47,46 +43,32 @@ protected:
   Mutex mutex;
 
 private:
-#ifdef HAVE_POSIX
   Cond cond;
-
-#else
-  /**
-   * This trigger gets signalled when a command is sent to the thread.
-   */
-  ::Trigger command_trigger;
-
-  /**
-   * This trigger gets signalled when the thread has finished a
-   * command.
-   */
-  ::Trigger done_trigger;
-#endif
 
   /**
    * Is the thread alive?  Unlike Thread::IsDefined(), this one is
    * thread-safe.
    */
-  bool alive;
+  bool alive = false;
 
   /**
    * Is work pending?  This flag gets cleared by the thread as soon as
    * it starts working.
    */
-  bool pending;
+  bool pending = false;
 
   /**
    * Is the thread currently working, i.e. inside Tick()?
    */
-  bool busy;
+  bool busy = false;
 
   /**
    * This flag asks the thread to stop.
    */
-  bool stop;
+  bool stop = false;
 
 public:
-  StandbyThread(const char *_name);
+  explicit StandbyThread(const char *_name);
 
   /**
    * This destructor verifies that the thread has been stopped.
@@ -97,21 +79,13 @@ private:
   void TriggerCommand() {
     assert(mutex.IsLockedByCurrent());
 
-#ifdef HAVE_POSIX
-    cond.Signal();
-#else
-    command_trigger.Signal();
-#endif
+    cond.signal();
   }
 
   void TriggerDone() {
     assert(mutex.IsLockedByCurrent());
 
-#ifdef HAVE_POSIX
-    cond.Signal();
-#else
-    done_trigger.Signal();
-#endif
+    cond.signal();
   }
 
 protected:

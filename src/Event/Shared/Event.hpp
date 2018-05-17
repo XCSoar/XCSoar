@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -34,9 +34,10 @@ struct Event {
 
 #ifdef USE_POLL_EVENT
     CLOSE,
+#else
+    TIMER,
 #endif
 
-    TIMER,
     USER,
 
     CALLBACK,
@@ -99,10 +100,12 @@ struct Event {
 
   Callback callback;
 
-  RasterPoint point;
+  PixelPoint point;
 
 #ifdef USE_X11
   unsigned ch;
+#else
+  bool is_char;
 #endif
 
   Event() = default;
@@ -113,8 +116,8 @@ struct Event {
   Event(Type _type, void *_ptr):type(_type), ptr(_ptr) {}
   Event(Callback _callback, void *_ptr)
     :type(CALLBACK), ptr(_ptr), callback(_callback) {}
-  Event(Type _type, PixelScalar _x, PixelScalar _y)
-    :type(_type), point(_x, _y) {}
+  Event(Type _type, PixelPoint _point)
+    :type(_type), point(_point) {}
 
   bool IsKeyDown() const {
     return type == KEY_DOWN;
@@ -134,7 +137,7 @@ struct Event {
 #ifdef USE_X11
     return type == KEY_DOWN && ch != 0;
 #else
-    return 0;
+    return type == KEY_DOWN && is_char;
 #endif
   }
 
@@ -145,8 +148,9 @@ struct Event {
 
     return ch;
 #else
-    assert(false);
-    return 0;
+    assert(characterIdx == 0);
+    assert(1 == GetCharacterCount());
+    return param;
 #endif
   }
 

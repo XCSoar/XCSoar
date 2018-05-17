@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "PlaneDialogs.hpp"
+#include "Dialogs/Error.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/ListWidget.hpp"
@@ -31,8 +32,7 @@ Copyright_License {
 #include "Plane/PlaneGlue.hpp"
 #include "Plane/PlaneFileGlue.hpp"
 #include "OS/FileUtil.hpp"
-#include "OS/PathName.hpp"
-#include "Compatibility/path.h"
+#include "OS/Path.hpp"
 #include "LocalPath.hpp"
 #include "Components.hpp"
 #include "Profile/Profile.hpp"
@@ -41,11 +41,10 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "Util/StringAPI.hpp"
+#include "Util/StringAPI.hxx"
 
 #include <vector>
 #include <assert.h>
-#include <windef.h> /* for MAX_PATH */
 
 /* this macro exists in the WIN32 API */
 #ifdef DELETE
@@ -57,9 +56,9 @@ class PlaneListWidget final
 
   struct ListItem {
     StaticString<32> name;
-    StaticString<MAX_PATH> path;
+    AllocatedPath path;
 
-    ListItem(const TCHAR *_name, const TCHAR *_path)
+    ListItem(const TCHAR *_name, Path _path)
       :name(_name), path(_path) {}
 
     bool operator<(const ListItem &i2) const {
@@ -74,8 +73,8 @@ class PlaneListWidget final
   public:
     PlaneFileVisitor(std::vector<ListItem> &_list):list(_list) {}
 
-    void Visit(const TCHAR* path, const TCHAR* filename) {
-      list.emplace_back(filename, path);
+    void Visit(Path path, Path filename) override {
+      list.emplace_back(filename.c_str(), path);
     }
   };
 
@@ -189,11 +188,11 @@ PlaneListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
   } else
     row_renderer.DrawFirstRow(canvas, rc, list[i].name);
 
-  row_renderer.DrawSecondRow(canvas, rc, list[i].path);
+  row_renderer.DrawSecondRow(canvas, rc, list[i].path.c_str());
 }
 
 static bool
-LoadFile(const TCHAR *path)
+LoadFile(Path path)
 {
   ComputerSettings &settings = CommonInterface::SetComputerSettings();
 
@@ -254,8 +253,7 @@ PlaneListWidget::NewClicked()
     StaticString<42> filename(plane.registration);
     filename += _T(".xcp");
 
-    StaticString<MAX_PATH> path;
-    LocalPath(path.buffer(), filename);
+    const auto path = LocalPath(filename);
 
     if (File::Exists(path)) {
       StaticString<256> tmp;
@@ -266,7 +264,13 @@ PlaneListWidget::NewClicked()
         continue;
     }
 
-    PlaneGlue::WriteFile(plane, path);
+    try {
+      PlaneGlue::WriteFile(plane, path);
+    } catch (const std::runtime_error &e) {
+      ShowError(e, _("Failed to save file."));
+      return;
+    }
+
     UpdateList();
     break;
   }
@@ -278,7 +282,7 @@ PlaneListWidget::EditClicked()
   assert(GetList().GetCursorIndex() < list.size());
 
   const unsigned index = GetList().GetCursorIndex();
-  const TCHAR *old_path = list[index].path;
+  const Path old_path = list[index].path;
   const TCHAR *old_filename = list[index].name;
 
   Plane plane;
@@ -295,10 +299,8 @@ PlaneListWidget::EditClicked()
     filename += _T(".xcp");
 
     if (filename != old_filename) {
-      StaticString<MAX_PATH> path;
-      DirName(old_path, path.buffer());
-      path += _T(DIR_SEPARATOR_S);
-      path += filename;
+      const auto path = AllocatedPath::Build(old_path.GetParent(),
+                                             filename);
 
       if (File::Exists(path)) {
         StaticString<256> tmp;
@@ -310,14 +312,27 @@ PlaneListWidget::EditClicked()
       }
 
       File::Delete(old_path);
-      PlaneGlue::WriteFile(plane, path);
+
+      try {
+        PlaneGlue::WriteFile(plane, path);
+      } catch (const std::runtime_error &e) {
+        ShowError(e, _("Failed to save file."));
+        return;
+      }
+
       if (Profile::GetPathIsEqual("PlanePath", old_path)) {
-        list[index].path = path;
+        list[index].path = Path(path);
         list[index].name = filename;
         Load(index);
       }
     } else {
-      PlaneGlue::WriteFile(plane, old_path);
+      try {
+        PlaneGlue::WriteFile(plane, old_path);
+      } catch (const std::runtime_error &e) {
+        ShowError(e, _("Failed to save file."));
+        return;
+      }
+
       if (Profile::GetPathIsEqual("PlanePath", old_path))
         Load(index);
     }

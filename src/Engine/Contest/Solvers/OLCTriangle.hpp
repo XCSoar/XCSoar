@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,9 +26,9 @@
 #include "AbstractContest.hpp"
 #include "TraceManager.hpp"
 #include "Trace/Point.hpp"
+#include "Geo/Flat/FlatBoundingBox.hpp"
 
 #include <map>
-#include <cstdlib>
 
 /**
  * Specialisation of AbstractContest for OLC Triangle (triangle) rules
@@ -145,25 +145,15 @@ private:
    */
   struct TurnPointRange {
     unsigned index_min, index_max; // [index_min, index_max)
-    int lon_min, lon_max,
-        lat_min, lat_max;
 
-    TurnPointRange() :
-      index_min(0), index_max(0),
-      lon_min(0), lon_max(0),
-      lat_min(0), lat_max(0) {}
+    FlatBoundingBox bounding_box;
 
-    TurnPointRange(OLCTriangle *parent, unsigned min, unsigned max) {
+    TurnPointRange()
+      :index_min(0), index_max(0),
+       bounding_box(FlatGeoPoint(0, 0)) {}
+
+    TurnPointRange(const OLCTriangle &parent, unsigned min, unsigned max) {
       Update(parent, min, max);
-    }
-
-    TurnPointRange(const TurnPointRange &other) {
-      index_min = other.index_min;
-      index_max = other.index_max;
-      lon_min = other.lon_min;
-      lon_max = other.lon_max;
-      lat_min = other.lat_min;
-      lat_max = other.lat_max;
     }
 
     bool operator==(TurnPointRange other) const {
@@ -173,9 +163,7 @@ private:
     // returns the manhatten diagonal of the bounding box
     gcc_pure
     unsigned GetDiagnoal() const {
-      unsigned width = abs(lon_max - lon_min);
-      unsigned height = abs(lat_max - lat_min);
-      return width + height;
+      return bounding_box.GetWidth() + bounding_box.GetHeight();
     }
 
     // returns the number of points in this range
@@ -184,18 +172,11 @@ private:
     }
 
     // updates the bounding box by a given point range
-    void Update(OLCTriangle *parent, unsigned &_min, unsigned &_max) {
-      lon_min = parent->GetPoint(_min).GetFlatLocation().longitude;
-      lon_max = parent->GetPoint(_min).GetFlatLocation().longitude;
-      lat_min = parent->GetPoint(_min).GetFlatLocation().latitude;
-      lat_max = parent->GetPoint(_min).GetFlatLocation().latitude;
+    void Update(const OLCTriangle &parent, unsigned _min, unsigned _max) {
+      bounding_box = FlatBoundingBox(parent.GetPoint(_min).GetFlatLocation());
 
-      for (unsigned i = _min + 1; i < _max; ++i) {
-        lon_min = std::min(lon_min, parent->GetPoint(i).GetFlatLocation().longitude);
-        lon_max = std::max(lon_max, parent->GetPoint(i).GetFlatLocation().longitude);
-        lat_min = std::min(lat_min, parent->GetPoint(i).GetFlatLocation().latitude);
-        lat_max = std::max(lat_max, parent->GetPoint(i).GetFlatLocation().latitude);
-      }
+      for (unsigned i = _min + 1; i < _max; ++i)
+        bounding_box.Expand(parent.GetPoint(i).GetFlatLocation());
 
       index_min = _min;
       index_max = _max;
@@ -204,24 +185,18 @@ private:
     // calculate the minimal distance estimate between two TurnPointRanges
     gcc_pure
     unsigned GetMinDistance(const TurnPointRange &tp) const {
-      const unsigned d_lon = std::max(tp.lon_min - lon_max, lon_min - tp.lon_max) < 0 ?
-                       0 :
-                       std::min(abs(tp.lon_min - lon_max), abs(tp.lon_max - lon_min));
-
-      const unsigned d_lat = std::max(tp.lat_min - lat_max, lat_min - tp.lat_max) < 0 ?
-                       0 :
-                       std::min(abs(tp.lat_min - lat_max), abs(tp.lat_max - lat_min));
-
-      return sqrt(d_lon*d_lon + d_lat*d_lat);
+      return bounding_box.Distance(tp.bounding_box);
     }
 
     // calculate maximal distance estimate between two TurnPointRanges
     gcc_pure
     unsigned GetMaxDistance(const TurnPointRange &tp) const {
-      const unsigned d_lon = std::max(lon_max - tp.lon_min, tp.lon_max - lon_min);
-      const unsigned d_lat = std::max(lat_max - tp.lat_min, tp.lat_max - lat_min);
+      const unsigned d_lon = std::max(bounding_box.GetRight() - tp.bounding_box.GetLeft(),
+                                      tp.bounding_box.GetRight() - bounding_box.GetLeft());
+      const unsigned d_lat = std::max(bounding_box.GetTop() - tp.bounding_box.GetBottom(),
+                                      tp.bounding_box.GetTop() - bounding_box.GetBottom());
 
-      return sqrt(d_lon*d_lon + d_lat*d_lat);
+      return hypot(d_lon, d_lat);
     }
   };
 
@@ -237,19 +212,13 @@ private:
       df_min(0), df_max(0),
       shortest_max(0), longest_min(0), longest_max(0) {}
 
-    CandidateSet(OLCTriangle *parent, unsigned first, unsigned last) {
-      tp1.Update(parent, first, last);
-      tp2.Update(parent, first, last);
-      tp3.Update(parent, first, last);
-
+    CandidateSet(const OLCTriangle &parent, unsigned first, unsigned last)
+      :tp1(parent, first, last), tp2(tp1), tp3(tp1) {
       UpdateDistances();
     }
 
-    CandidateSet(TurnPointRange _tp1, TurnPointRange _tp2, TurnPointRange _tp3) {
-      tp1 = _tp1;
-      tp2 = _tp2;
-      tp3 = _tp3;
-
+    CandidateSet(TurnPointRange _tp1, TurnPointRange _tp2, TurnPointRange _tp3)
+      :tp1(_tp1), tp2(_tp2), tp3(_tp3) {
       UpdateDistances();
     }
 
@@ -305,7 +274,7 @@ private:
      * distances for certain checks, otherwise real distances for marginal fai triangles.
      */
     gcc_pure
-    bool IsIntegral(OLCTriangle *parent, const bool fai,
+    bool IsIntegral(OLCTriangle &parent, const bool fai,
                     const unsigned large_triangle_check) const {
       if (!(tp1.GetSize() == 1 && tp2.GetSize() == 1 && tp3.GetSize() == 1))
         return false;
@@ -332,9 +301,9 @@ private:
         return false;
 
       // detailed checks
-      auto geo_tp1 = parent->GetPoint(tp1.index_min).GetLocation();
-      auto geo_tp2 = parent->GetPoint(tp2.index_min).GetLocation();
-      auto geo_tp3 = parent->GetPoint(tp3.index_min).GetLocation();
+      auto geo_tp1 = parent.GetPoint(tp1.index_min).GetLocation();
+      auto geo_tp2 = parent.GetPoint(tp2.index_min).GetLocation();
+      auto geo_tp3 = parent.GetPoint(tp3.index_min).GetLocation();
 
       const unsigned d_12 = unsigned(geo_tp1.Distance(geo_tp2));
       const unsigned d_23 = unsigned(geo_tp2.Distance(geo_tp3));

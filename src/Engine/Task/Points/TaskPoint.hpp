@@ -2,7 +2,7 @@
   Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -102,12 +102,12 @@ public:
    * @return Minimum allowable elevation of task point
    */
   gcc_pure
-  virtual fixed GetElevation() const = 0;
+  virtual double GetElevation() const = 0;
 
   /**
    * distance from this to the reference
    */
-  fixed Distance(const GeoPoint &ref) const {
+  double Distance(const GeoPoint &ref) const {
     return location.Distance(ref);
   }
 

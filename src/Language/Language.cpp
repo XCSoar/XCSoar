@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,9 +23,8 @@ Copyright_License {
 */
 
 #include "Language/Language.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringCompare.hxx"
 #include "Util/UTF8.hpp"
-#include "Util/Macros.hpp"
 
 #include <assert.h>
 #include <string.h>
@@ -45,6 +44,7 @@ Copyright_License {
 const MOFile *mo_file;
 
 #ifdef _UNICODE
+#include "Util/Macros.hpp"
 #include "Util/tstring.hpp"
 #include <map>
 typedef std::map<tstring,tstring> translation_map;

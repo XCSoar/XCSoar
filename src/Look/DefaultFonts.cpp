@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,40 +24,11 @@ Copyright_License {
 #include "DefaultFonts.hpp"
 #include "GlobalFonts.hpp"
 #include "FontSettings.hpp"
-#include "Hardware/DisplayDPI.hpp"
-#include "Screen/Font.hpp"
 #include "Screen/Layout.hpp"
-
-#ifdef HAVE_TEXT_CACHE
-#include "Screen/Custom/Cache.hpp"
-#endif
-
-#include <algorithm>
-
-#include <string.h>
-
-#ifdef WIN32
-
-static void
-LoadAltairLogFonts(FontSettings &settings)
-{
-  settings.map = FontDescription(_T("RasterGothicFourteenCond"), 15);
-  settings.map_bold = FontDescription(_T("RasterGothicFourteenCond"),
-                                      15, true);
-}
-
-#endif
 
 static void
 InitialiseLogFonts(FontSettings &settings)
 {
-#ifdef WIN32
-  if (IsAltair()) {
-    LoadAltairLogFonts(settings);
-    return;
-  }
-#endif
-
   // new font for map labels
   settings.map = FontDescription(Layout::FontScale(10));
 

@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -25,22 +25,22 @@
 #include "GlideSolvers/GlideResult.hpp"
 
 TaskVarioComputer::TaskVarioComputer()
-  :df(fixed(0)),
-   v_lpf(fixed(120), false)
+  :df(0),
+   v_lpf(120, false)
 {
 }
 
 void 
 TaskVarioComputer::update(TaskVario &data, const GlideResult &solution)
 {
-  fixed v = df.Update(solution.altitude_difference);
+  auto v = df.Update(solution.altitude_difference);
   data.value = v_lpf.Update(v);
 }
 
 void 
 TaskVarioComputer::reset(TaskVario &data, const GlideResult& solution)
 {
-  v_lpf.Reset(fixed(0));
-  df.Reset(solution.altitude_difference, fixed(0));
+  v_lpf.Reset(0);
+  df.Reset(solution.altitude_difference, 0);
   data.Reset();
 }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,8 +23,6 @@ Copyright_License {
 
 #ifndef XCSOAR_ACCELERATION_HPP
 #define XCSOAR_ACCELERATION_HPP
-
-#include "Math/fixed.hpp"
 
 /**
  * State of acceleration of aircraft
@@ -48,13 +46,13 @@ struct AccelerationState
    * or estimated (assuming balanced turn) 
    * @see AccelerationAvailable
    */
-  fixed g_load;
+  double g_load;
 
   void Reset() {
     available = false;
   }
 
-  void ProvideGLoad(fixed _g_load, bool _real) {
+  void ProvideGLoad(double _g_load, bool _real) {
     g_load = _g_load;
     real = _real;
     available = true;

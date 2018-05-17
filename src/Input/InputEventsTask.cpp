@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -39,11 +39,11 @@ Copyright_License {
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/TaskFile.hpp"
+#include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
-
-#include <windef.h> /* for MAX_PATH */
+#include "OS/Path.hpp"
 
 static void
 trigger_redraw()
@@ -119,9 +119,9 @@ InputEvents::eventGotoLookup(gcc_unused const TCHAR *misc)
   if (protected_task_manager == NULL)
     return;
 
-  const Waypoint* wp = ShowWaypointListDialog(basic.location);
+  auto wp = ShowWaypointListDialog(basic.location);
   if (wp != NULL) {
-    protected_task_manager->DoGoto(*wp);
+    protected_task_manager->DoGoto(std::move(wp));
     trigger_redraw();
   }
 }
@@ -137,15 +137,15 @@ InputEvents::eventMacCready(const TCHAR *misc)
 
   const GlidePolar &polar =
     CommonInterface::GetComputerSettings().polar.glide_polar_task;
-  fixed mc = polar.GetMC();
+  auto mc = polar.GetMC();
 
   TaskBehaviour &task_behaviour = CommonInterface::SetComputerSettings().task;
 
   if (StringIsEqual(misc, _T("up"))) {
-    const fixed step = Units::ToSysVSpeed(GetUserVerticalSpeedStep());
+    const auto step = Units::ToSysVSpeed(GetUserVerticalSpeedStep());
     ActionInterface::OffsetManualMacCready(step);
   } else if (StringIsEqual(misc, _T("down"))) {
-    const fixed step = Units::ToSysVSpeed(GetUserVerticalSpeedStep());
+    const auto step = Units::ToSysVSpeed(GetUserVerticalSpeedStep());
     ActionInterface::OffsetManualMacCready(-step);
   } else if (StringIsEqual(misc, _T("auto toggle"))) {
     task_behaviour.auto_mc = !task_behaviour.auto_mc;
@@ -274,10 +274,7 @@ InputEvents::eventTaskLoad(const TCHAR *misc)
     return;
 
   if (!StringIsEmpty(misc)) {
-    TCHAR buffer[MAX_PATH];
-    LocalPath(buffer, misc);
-
-    OrderedTask *task = TaskFile::GetTask(buffer,
+    OrderedTask *task = TaskFile::GetTask(LocalPath(misc),
                                           CommonInterface::GetComputerSettings().task,
                                           &way_points, 0);
     if (task) {
@@ -304,9 +301,7 @@ InputEvents::eventTaskSave(const TCHAR *misc)
     return;
 
   if (!StringIsEmpty(misc)) {
-    TCHAR buffer[MAX_PATH];
-    LocalPath(buffer, misc);
-    protected_task_manager->TaskSave(buffer);
+    protected_task_manager->TaskSave(LocalPath(misc));
   }
 }
 
@@ -337,4 +332,13 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
   } else if (StringIsEqual(misc, _T("finish"))) {
     Message::AddMessage(_("Task finished"));
   }
+}
+
+void
+InputEvents::eventResetTask(const TCHAR *misc)
+{
+  if (protected_task_manager == nullptr)
+    return;
+
+  protected_task_manager->ResetTask();
 }

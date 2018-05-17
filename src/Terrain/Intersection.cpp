@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -24,7 +24,6 @@ Copyright_License {
 #include "RasterTileCache.hpp"
 #include "Terrain/RasterLocation.hpp"
 
-#include <string.h>
 #include <stdlib.h>
 #include <algorithm>
 
@@ -33,19 +32,9 @@ Copyright_License {
 #include <stdio.h>
 #endif
 
-/**
- * Replaces "water" samples with 0.
- */
-constexpr
-static int
-ReplaceWater0(short h)
-{
-  return RasterBuffer::IsWater(h) ? 0 : h;
-}
-
 bool
-RasterTileCache::FirstIntersection(const int x0, const int y0,
-                                   const int x1, const int y1,
+RasterTileCache::FirstIntersection(const SignedRasterLocation origin,
+                                   const SignedRasterLocation destination,
                                    int h_origin,
                                    int h_dest,
                                    const int slope_fact, const int h_ceiling,
@@ -53,29 +42,29 @@ RasterTileCache::FirstIntersection(const int x0, const int y0,
                                    RasterLocation &_location, int &_h,
                                    const bool can_climb) const
 {
-  RasterLocation location(x0, y0);
+  RasterLocation location = origin;
   if (!IsInside(location))
     // origin is outside overall bounds
     return false;
 
-  const short h_origin2 = GetFieldDirect(x0, y0).first;
-  if (RasterBuffer::IsInvalid(h_origin2)) {
+  const TerrainHeight h_origin2 = GetFieldDirect(origin.x, origin.y).first;
+  if (h_origin2.IsInvalid()) {
     _location = location;
     _h = h_origin;
     return true;
   }
 
-  if (!RasterBuffer::IsSpecial(h_origin2))
-    h_origin = std::max(h_origin, (int)h_origin2);
+  if (!h_origin2.IsSpecial())
+    h_origin = std::max(h_origin, (int)h_origin2.GetValue());
 
   h_dest = std::max(h_dest, h_origin);
 
   // line algorithm parameters
-  const int dx = abs(x1-x0);
-  const int dy = abs(y1-y0);
+  const int dx = abs(destination.x - origin.x);
+  const int dy = abs(destination.y - origin.y);
   int err = dx-dy;
-  const int sx = (x0 < x1)? 1: -1;
-  const int sy = (y0 < y1)? 1: -1;
+  const int sx = origin.x < destination.x ? 1 : -1;
+  const int sy = origin.y < destination.y ? 1 : -1;
 
   // max number of steps to walk
   const int max_steps = (dx+dy);
@@ -127,10 +116,10 @@ RasterTileCache::FirstIntersection(const int x0, const int y0,
         break; // outside bounds
 
       const auto field_direct = GetFieldDirect(location.x, location.y);
-      if (RasterBuffer::IsInvalid(field_direct.first))
+      if (field_direct.first.IsInvalid())
         break;
 
-      const int h_terrain = ReplaceWater0(field_direct.first) + h_safety;
+      const int h_terrain = field_direct.first.GetValueOr0() + h_safety;
       step_counter = field_direct.second ? step_fine : step_coarse;
 
       // calculate height of glide so far
@@ -235,7 +224,7 @@ RasterTileCache::FirstIntersection(const int x0, const int y0,
   return false;
 }
 
-inline std::pair<short, bool>
+inline std::pair<TerrainHeight, bool>
 RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py) const
 {
   assert(px < width);
@@ -263,23 +252,24 @@ RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py) const
 }
 
 SignedRasterLocation
-RasterTileCache::Intersection(const int x0, const int y0,
-                              const int x1, const int y1,
+RasterTileCache::Intersection(const SignedRasterLocation origin,
+                              const SignedRasterLocation destination,
                               const int h_origin,
-                              const int slope_fact) const
+                              const int slope_fact,
+                              const int height_floor) const
 {
-  SignedRasterLocation location(x0, y0);
+  SignedRasterLocation location = origin;
 
   if (!IsInside(location))
     // origin is outside overall bounds
-    return location;
+    return {-1, -1};
 
   // line algorithm parameters
-  const int dx = abs(x1-x0);
-  const int dy = abs(y1-y0);
+  const int dx = abs(destination.x - origin.x);
+  const int dy = abs(destination.y - origin.y);
   int err = dx-dy;
-  const int sx = (x0 < x1)? 1: -1;
-  const int sy = (y0 < y1)? 1: -1;
+  const int sx = origin.x < destination.x ? 1 : -1;
+  const int sy = origin.y < destination.y ? 1 : -1;
 
   // max number of steps to walk
   const int max_steps = (dx+dy);
@@ -312,13 +302,13 @@ RasterTileCache::Intersection(const int x0, const int y0,
     if (!step_counter) {
 
       if (!IsInside(location))
-        break; // outside bounds
-
-      const auto field_direct = GetFieldDirect(location.x, location.y);
-      if (RasterBuffer::IsInvalid(field_direct.first))
         break;
 
-      const int h_terrain = ReplaceWater0(field_direct.first);
+      const auto field_direct = GetFieldDirect(location.x, location.y);
+      if (field_direct.first.IsInvalid())
+        break;
+
+      const int h_terrain = field_direct.first.GetValueOr0();
       step_counter = field_direct.second ? step_fine : step_coarse;
 
       // calculate height of glide so far
@@ -327,16 +317,16 @@ RasterTileCache::Intersection(const int x0, const int y0,
       // current aircraft height
       const int h_int = h_origin - dh;
 
-      if (h_int < h_terrain) {
+      if (h_int < std::max(h_terrain, height_floor)) {
         if (refine_step<3) // can't refine any further
           return RasterLocation(last_clear_location.x, last_clear_location.y);
 
         // refine solution
-        return Intersection(last_clear_location.x, last_clear_location.y,
-                            location.x, location.y, last_clear_h, slope_fact);
+        return Intersection(last_clear_location, location,
+                            last_clear_h, slope_fact, height_floor);
       }
 
-      if (h_int <= 0) 
+      if (h_int <= 0)
         break; // reached max range
 
       last_clear_location = location;
@@ -364,5 +354,5 @@ RasterTileCache::Intersection(const int x0, const int y0,
   }
 
   // if we reached invalid terrain, assume we can hit MSL
-  return {x1, y1};
+  return {-1, -1};
 }

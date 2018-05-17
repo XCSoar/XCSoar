@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -26,11 +26,8 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Form/Frame.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/SingleWindow.hpp"
 #include "Screen/Font.hpp"
 #include "Look/DialogLook.hpp"
-#include "Task/ProtectedTaskManager.hpp"
-#include "Components.hpp"
 #include "Language/Language.hpp"
 
 TaskClosePanel::Layout::Layout(PixelRect rc, const DialogLook &look)

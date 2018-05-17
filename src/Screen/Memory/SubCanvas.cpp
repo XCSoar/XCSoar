@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ ClipMax(unsigned limit, int offset, unsigned size) {
                   unsigned(std::max(int(limit - offset), 0)));
 }
 
-SubCanvas::SubCanvas(Canvas &canvas, RasterPoint _offset, PixelSize _size)
+SubCanvas::SubCanvas(Canvas &canvas, PixelPoint _offset, PixelSize _size)
 {
   buffer = canvas.buffer;
   buffer.data = buffer.At(_offset.x, _offset.y);

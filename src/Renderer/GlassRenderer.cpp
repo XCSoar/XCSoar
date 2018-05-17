@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -48,10 +48,10 @@ DrawGlassBackground(Canvas &canvas, const PixelRect &rc, Color color)
 
   const Color shadow = color.Shadow();
 
-  const RasterPoint center = rc.GetCenter();
-  const int size = std::min(rc.right - rc.left, rc.bottom - rc.top) / 4;
+  const auto center = rc.GetCenter();
+  const int size = std::min(rc.GetWidth(), rc.GetHeight()) / 4;
 
-  const RasterPoint vertices[] = {
+  const BulkPixelPoint vertices[] = {
     { center.x + 1024, center.y - 1024 },
     { center.x + 1024 + size, center.y - 1024 + size },
     { center.x - 1024, center.y + 1024 },

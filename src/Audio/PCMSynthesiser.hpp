@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -27,21 +27,30 @@ Copyright_License {
 #include <stddef.h>
 #include <stdint.h>
 
-/**
- * This interface is used by PCMPlayer.
- */
-class PCMSynthesiser {
+#include "PCMDataSource.hpp"
+#include "OS/ByteOrder.hpp"
+
+class PCMSynthesiser : public PCMDataSource {
 public:
   /**
    * The caller requests to generate PCM samples.
-   *
-   * Note that this method may be called from any thread.  The
-   * PCMSynthesiser implementation must be thread-safe.
    *
    * @param buffer the destination buffer (host byte order)
    * @param n the number of 16 bit mono samples that shall be generated
    */
   virtual void Synthesise(int16_t *buffer, size_t n) = 0;
+
+  /* virtual methods from class PCMDataSource */
+
+  bool IsBigEndian() const {
+    /* Our PCM synthesisers always deliver data in host byte order */
+    return ::IsBigEndian();
+  }
+
+  size_t GetData(int16_t *buffer, size_t n) {
+    Synthesise(buffer, n);
+    return n;
+  }
 };
 
 #endif

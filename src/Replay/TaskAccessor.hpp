@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -29,10 +29,10 @@
 
 class TaskAccessor {
   TaskManager &task_manager;
-  const fixed floor_alt;
+  const double floor_alt;
 
 public:
-  TaskAccessor(TaskManager &_task_manager, fixed _floor_alt)
+  TaskAccessor(TaskManager &_task_manager, double _floor_alt)
     :task_manager(_task_manager), floor_alt(_floor_alt) {}
 
   gcc_pure
@@ -58,7 +58,7 @@ public:
   }
 
   gcc_pure
-  GeoPoint GetRandomOZPoint(unsigned index, const fixed noise) const {
+  GeoPoint GetRandomOZPoint(unsigned index, const double noise) const {
     return task_manager.RandomPointInTask(index, noise);
   }
 
@@ -89,7 +89,7 @@ public:
   }
 
   gcc_pure
-  fixed GetTargetHeight() const {
+  double GetTargetHeight() const {
     if (task_manager.GetActiveTaskPoint())
       return std::max(floor_alt,
                       task_manager.GetActiveTaskPoint()->GetElevation());
@@ -98,7 +98,7 @@ public:
   }
 
   gcc_pure
-  fixed GetRemainingAltitudeDifference() const {
+  double GetRemainingAltitudeDifference() const {
     return task_manager.GetStats().total.solution_remaining.altitude_difference;
   }
 
