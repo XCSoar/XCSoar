@@ -1561,16 +1561,18 @@ msgid ""
 "Magnitude of G loading reported by a supported external intelligent vario. "
 "This value is negative for pitch-down manoeuvres."
 msgstr ""
+"由支持的外部智能高度表报告的G过载量。"
+"这个值对于俯仰动作是负值。"
 
 #: src/InfoBoxes/Content/Factory.cpp:447
 #, no-c-format
 msgid "Next GR"
-msgstr "下一目标滑翔比"
+msgstr "下一目标所需滑翔比"
 
 #: src/InfoBoxes/Content/Factory.cpp:448
 #, no-c-format
 msgid "WP GR"
-msgstr "航点滑翔比"
+msgstr "航点所需滑翔比"
 
 #: src/InfoBoxes/Content/Factory.cpp:449
 #, no-c-format
@@ -1614,7 +1616,7 @@ msgstr "任务时间到"
 #: src/InfoBoxes/Content/Factory.cpp:473
 #, no-c-format
 msgid "Fin ETE"
-msgstr ""
+msgstr "到达终点估计需要时间"
 
 #: src/InfoBoxes/Content/Factory.cpp:474
 #, no-c-format
@@ -1622,16 +1624,17 @@ msgid ""
 "Estimated time required to complete task, assuming performance of ideal "
 "MacCready cruise/climb cycle."
 msgstr ""
+"完成任务估计所需时间，假设理想状态下MacCready巡航/爬升盘旋。"
 
 #: src/InfoBoxes/Content/Factory.cpp:480
 #, no-c-format
 msgid "Next time to go"
-msgstr ""
+msgstr "下次出发时间"
 
 #: src/InfoBoxes/Content/Factory.cpp:481
 #, no-c-format
 msgid "WP ETE"
-msgstr ""
+msgstr "到达航点估计所需时间"
 
 #: src/InfoBoxes/Content/Factory.cpp:482
 #, no-c-format
@@ -1639,16 +1642,17 @@ msgid ""
 "Estimated time required to reach next waypoint, assuming performance of "
 "ideal MacCready cruise/climb cycle."
 msgstr ""
+"到达下一航点估计所需时间，假设理想状态下MacCready巡航/爬升盘旋。"
 
 #: src/InfoBoxes/Content/Factory.cpp:489
 #, no-c-format
 msgid "Speed dolphin"
-msgstr ""
+msgstr "海豚模式飞行速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:490 src/Renderer/MacCreadyRenderer.cpp:48
 #, no-c-format
 msgid "Vopt"
-msgstr ""
+msgstr "优化速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:491
 #, no-c-format
@@ -1661,16 +1665,21 @@ msgid ""
 "the current load factor (if an accelerometer is connected). When Block mode "
 "speed to fly is selected, this InfoBox displays the MacCready speed."
 msgstr ""
+"瞬时MacCready速度飞行，利用netto高度表计算确定滑翔机当前航向的海豚模式巡航速度。"
+"在巡航飞行模式中，这个飞行速度被计算为保持高度。"
+"在最后的滑翔模式中，这个飞行速度为下降高度被计算出来。"
+"在爬升模式下，在当前负载系数（如果连接了加速度计）切换到最小下沉速度。"
+"当选择Block模式飞行速度，这个信息框显示MacCready速度。"
 
 #: src/InfoBoxes/Content/Factory.cpp:497
 #, no-c-format
 msgid "Netto vario"
-msgstr ""
+msgstr "Netto高度表"
 
 #: src/InfoBoxes/Content/Factory.cpp:498
 #, no-c-format
 msgid "Netto"
-msgstr ""
+msgstr "Netto"
 
 #: src/InfoBoxes/Content/Factory.cpp:499
 #, no-c-format
@@ -1680,16 +1689,18 @@ msgid ""
 "vario are connected, otherwise calculations are based on GPS measurements "
 "and wind estimates."
 msgstr ""
+"气团的瞬时垂直速度，等于高度表的值小于滑翔机估算的下沉率。"
+"最好连接使用空速、加速度计和高度计，否则计算是基于GPS测量和风况估算。"
 
 #: src/InfoBoxes/Content/Factory.cpp:505
 #, no-c-format
 msgid "Task arrival time"
-msgstr ""
+msgstr "任务抵达时间"
 
 #: src/InfoBoxes/Content/Factory.cpp:506
 #, no-c-format
 msgid "Fin ETA"
-msgstr ""
+msgstr "预计到达终点时间"
 
 #: src/InfoBoxes/Content/Factory.cpp:507
 #, no-c-format
@@ -1697,16 +1708,17 @@ msgid ""
 "Estimated arrival local time at task completion, assuming performance of "
 "ideal MacCready cruise/climb cycle."
 msgstr ""
+"预计到达任务完成时的本地时间，假设理想状态下MacCready巡航/爬升盘旋。"
 
 #: src/InfoBoxes/Content/Factory.cpp:513
 #, no-c-format
 msgid "Next arrival time"
-msgstr ""
+msgstr "到达下一点时间"
 
 #: src/InfoBoxes/Content/Factory.cpp:514
 #, no-c-format
 msgid "WP ETA"
-msgstr ""
+msgstr "预计到达下一航点时间"
 
 #: src/InfoBoxes/Content/Factory.cpp:515
 #, no-c-format
@@ -1714,16 +1726,17 @@ msgid ""
 "Estimated arrival local time at next waypoint, assuming performance of ideal "
 "MacCready cruise/climb cycle."
 msgstr ""
+"预计到达下一航点时的本地时间，假设理想状态下MacCready巡航/爬升盘旋。"
 
 #: src/InfoBoxes/Content/Factory.cpp:522
 #, no-c-format
 msgid "Bearing difference"
-msgstr ""
+msgstr "方位差"
 
 #: src/InfoBoxes/Content/Factory.cpp:523
 #, no-c-format
 msgid "Brng D"
-msgstr ""
+msgstr "方位差"
 
 #: src/InfoBoxes/Content/Factory.cpp:524
 #, no-c-format
@@ -1741,12 +1754,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:530
 #, no-c-format
 msgid "Outside air temperature"
-msgstr ""
+msgstr "外界空气温度"
 
 #: src/InfoBoxes/Content/Factory.cpp:531
 #, no-c-format
 msgid "OAT"
-msgstr ""
+msgstr "外界空气温度"
 
 #: src/InfoBoxes/Content/Factory.cpp:532
 #, no-c-format
@@ -1758,12 +1771,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:538
 #, no-c-format
 msgid "Relative humidity"
-msgstr ""
+msgstr "相对湿度"
 
 #: src/InfoBoxes/Content/Factory.cpp:539
 #, no-c-format
 msgid "Rel Hum"
-msgstr ""
+msgstr "相对湿度"
 
 #: src/InfoBoxes/Content/Factory.cpp:540
 #, no-c-format
@@ -1775,12 +1788,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:546 src/Input/InputEventsSettings.cpp:305
 #, no-c-format
 msgid "Forecast temperature"
-msgstr ""
+msgstr "预报温度"
 
 #: src/InfoBoxes/Content/Factory.cpp:547
 #, no-c-format
 msgid "Max Temp"
-msgstr ""
+msgstr "最高温度"
 
 #: src/InfoBoxes/Content/Factory.cpp:548
 #, no-c-format
@@ -1845,28 +1858,28 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:578
 #, no-c-format
 msgid "Airspeed TAS"
-msgstr ""
+msgstr "真实空速"
 
 #: src/InfoBoxes/Content/Factory.cpp:579
 #, no-c-format
 msgid "V TAS"
-msgstr ""
+msgstr "真实空速"
 
 #: src/InfoBoxes/Content/Factory.cpp:580
 #, no-c-format
 msgid "True Airspeed reported by a supported external intelligent vario."
-msgstr ""
+msgstr "由支持的外部智能高度表报告的真实空速。"
 
 #: src/InfoBoxes/Content/Factory.cpp:586
 #, no-c-format
 msgid "Team code"
-msgstr ""
+msgstr "团队代码"
 
 #: src/InfoBoxes/Content/Factory.cpp:587 src/InfoBoxes/Content/Team.cpp:50
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:250
 #, no-c-format
 msgid "Team Code"
-msgstr ""
+msgstr "团队代码"
 
 #: src/InfoBoxes/Content/Factory.cpp:588
 #, no-c-format
@@ -1878,27 +1891,27 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:594
 #, no-c-format
 msgid "Team bearing"
-msgstr ""
+msgstr "团队方位"
 
 #: src/InfoBoxes/Content/Factory.cpp:595
 #, no-c-format
 msgid "Team Brng"
-msgstr ""
+msgstr "团队方位"
 
 #: src/InfoBoxes/Content/Factory.cpp:596
 #, no-c-format
 msgid "The bearing to the team aircraft location at the last team code report."
-msgstr ""
+msgstr "在最后一次团队代码报告位置到机队的方位。"
 
 #: src/InfoBoxes/Content/Factory.cpp:602
 #, no-c-format
 msgid "Team bearing difference"
-msgstr ""
+msgstr "团队方位差"
 
 #: src/InfoBoxes/Content/Factory.cpp:603
 #, no-c-format
 msgid "Team BrngD"
-msgstr ""
+msgstr "团队方位差"
 
 #: src/InfoBoxes/Content/Factory.cpp:604
 #, no-c-format
@@ -1910,12 +1923,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:610
 #, no-c-format
 msgid "Team range"
-msgstr ""
+msgstr "团队范围"
 
 #: src/InfoBoxes/Content/Factory.cpp:611
 #, no-c-format
 msgid "Team Dist"
-msgstr ""
+msgstr "团队距离"
 
 #: src/InfoBoxes/Content/Factory.cpp:612
 #, no-c-format
@@ -1925,12 +1938,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:618
 #, no-c-format
 msgid "Speed task instantaneous"
-msgstr ""
+msgstr "任务瞬时速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:619
 #, no-c-format
 msgid "V Task Inst"
-msgstr ""
+msgstr "任务瞬时速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:620
 #, no-c-format
@@ -1942,27 +1955,27 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:626
 #, no-c-format
 msgid "Distance home"
-msgstr ""
+msgstr "终点距离"
 
 #: src/InfoBoxes/Content/Factory.cpp:627
 #, no-c-format
 msgid "Home Dist"
-msgstr ""
+msgstr "终点距离"
 
 #: src/InfoBoxes/Content/Factory.cpp:628
 #, no-c-format
 msgid "Distance to home waypoint (if defined)."
-msgstr ""
+msgstr "最终航点距离"
 
 #: src/InfoBoxes/Content/Factory.cpp:634
 #, no-c-format
 msgid "Speed task achieved"
-msgstr ""
+msgstr "完成任务速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:635
 #, no-c-format
 msgid "V Task Ach"
-msgstr ""
+msgstr "完成任务速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:636
 #, no-c-format
@@ -1992,12 +2005,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:650
 #, no-c-format
 msgid "Thermal average over all"
-msgstr ""
+msgstr "所有热气流平均值"
 
 #: src/InfoBoxes/Content/Factory.cpp:651
 #, no-c-format
 msgid "T Avg"
-msgstr ""
+msgstr "热气流平均值"
 
 #: src/InfoBoxes/Content/Factory.cpp:652
 #, no-c-format
@@ -2024,12 +2037,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:666
 #, no-c-format
 msgid "Battery percent"
-msgstr ""
+msgstr "电量百分比"
 
 #: src/InfoBoxes/Content/Factory.cpp:667
 #, no-c-format
 msgid "Battery"
-msgstr ""
+msgstr "电量"
 
 #: src/InfoBoxes/Content/Factory.cpp:668
 #, no-c-format
@@ -2041,12 +2054,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:674
 #, no-c-format
 msgid "Final GR"
-msgstr ""
+msgstr "终点所需滑翔比"
 
 #: src/InfoBoxes/Content/Factory.cpp:675
 #, no-c-format
 msgid "Fin GR"
-msgstr ""
+msgstr "终点所需滑翔比"
 
 #: src/InfoBoxes/Content/Factory.cpp:676
 #, no-c-format
@@ -2059,12 +2072,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:682
 #, no-c-format
 msgid "Alternate 1"
-msgstr ""
+msgstr "交替1"
 
 #: src/InfoBoxes/Content/Factory.cpp:683
 #, no-c-format
 msgid "Altn 1"
-msgstr ""
+msgstr "交替1"
 
 #: src/InfoBoxes/Content/Factory.cpp:684
 #, no-c-format
@@ -2074,12 +2087,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:690
 #, no-c-format
 msgid "Alternate 2"
-msgstr ""
+msgstr "交替2"
 
 #: src/InfoBoxes/Content/Factory.cpp:691
 #, no-c-format
 msgid "Altn 2"
-msgstr ""
+msgstr "交替2"
 
 #: src/InfoBoxes/Content/Factory.cpp:692
 #, no-c-format
@@ -2106,13 +2119,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:706
 #, no-c-format
 msgid "Height above take-off"
-msgstr ""
+msgstr "高于起飞高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:707
 #, no-c-format
 msgid "H T/O"
-msgstr ""
-
+msgstr "起飞高度"
 #: src/InfoBoxes/Content/Factory.cpp:708
 #, no-c-format
 msgid ""
@@ -3503,7 +3515,7 @@ msgstr ""
 #: src/Weather/Rasp/RaspStore.cpp:88
 #, no-c-format
 msgid "wblmaxmin"
-msgstr ""
+msgstr "wblmaxmin"
 
 #: src/Weather/Rasp/RaspStore.cpp:89
 #, no-c-format
@@ -3518,132 +3530,134 @@ msgstr ""
 #: src/Weather/Rasp/RaspStore.cpp:93
 #, no-c-format
 msgid "blcwbase"
-msgstr ""
+msgstr "blcwbase"
 
 #: src/Topography/TopographyGlue.cpp:59
 msgid "Loading Topography File..."
-msgstr ""
+msgstr "加载地貌文件。。。"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:192
 #: src/Renderer/FlightStatisticsRenderer.cpp:211
 #: src/Renderer/FlightStatisticsRenderer.cpp:237
 msgid "Score"
-msgstr ""
+msgstr "分数"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:192
 #: src/Renderer/FlightStatisticsRenderer.cpp:211
 #: src/Renderer/FlightStatisticsRenderer.cpp:237
 msgid "pts"
-msgstr ""
+msgstr "pts"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:310
 #: src/Renderer/FlightStatisticsRenderer.cpp:320
 #: src/Renderer/FlightStatisticsRenderer.cpp:331
 msgid "Task to go"
-msgstr ""
+msgstr "任务出发"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:311
 #: src/Renderer/FlightStatisticsRenderer.cpp:321
 msgid "AAT to go"
-msgstr ""
+msgstr "指定区域任务出发"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:312
 #: src/Renderer/FlightStatisticsRenderer.cpp:322
 #: src/Renderer/FlightStatisticsRenderer.cpp:333
 msgid "Distance to go"
-msgstr ""
+msgstr "距离"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:314
 #: src/Renderer/FlightStatisticsRenderer.cpp:325
 msgid "Target speed"
-msgstr ""
+msgstr "目标速度"
 
 #: src/Renderer/BarographRenderer.cpp:47 src/Renderer/BarographRenderer.cpp:53
 msgid "Working band"
-msgstr ""
+msgstr "工作波段"
 
 #: src/Renderer/BarographRenderer.cpp:57
 msgid "Ceiling trend"
-msgstr ""
+msgstr "上限趋势"
 
 #: src/Renderer/ClimbChartRenderer.cpp:47
 #: src/Renderer/ClimbChartRenderer.cpp:52
 msgid "Avg. climb"
-msgstr ""
+msgstr "平均爬升率"
 
 #: src/Renderer/ClimbChartRenderer.cpp:55
 msgid "Climb trend"
-msgstr ""
+msgstr "爬升趋势"
 
 #: src/Renderer/GlidePolarRenderer.cpp:49
 msgid "L/D"
-msgstr ""
+msgstr "滑翔比"
 
 #: src/Renderer/GlidePolarRenderer.cpp:53
 msgid "Min. sink"
-msgstr ""
+msgstr "最小下沉率"
 
 #: src/Renderer/GlidePolarInfoRenderer.cpp:50 src/Dialogs/dlgAnalysis.cpp:518
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:227
 msgid "Mass"
-msgstr ""
+msgstr "质量"
 
 #: src/Renderer/GlidePolarInfoRenderer.cpp:59
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:288
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:237
 msgid "Wing loading"
-msgstr ""
+msgstr "伞翼负载"
 
 #: src/Renderer/CuRenderer.cpp:144
 msgid "Thermal height"
-msgstr ""
+msgstr "热气流高度"
 
 #: src/Renderer/CuRenderer.cpp:147
 msgid "Cloud base"
-msgstr ""
+msgstr "云底"
 
 #: src/Renderer/MacCreadyRenderer.cpp:51 src/Renderer/TaskSpeedRenderer.cpp:49
 msgid "Vave"
-msgstr ""
+msgstr "Vave"
 
 #: src/Renderer/TaskSpeedRenderer.cpp:52
 msgid "Vest"
-msgstr ""
+msgstr "Vest"
 
 #: src/UIActions.cpp:52
 msgid "Quit program?"
-msgstr ""
+msgstr "退出程序？"
 
 #: src/Units/UnitsStore.cpp:39
 #, no-c-format
 msgid "European"
-msgstr ""
+msgstr "欧洲"
 
 #: src/Units/UnitsStore.cpp:51
 #, no-c-format
 msgid "British"
-msgstr ""
+msgstr "英国"
 
 #: src/Units/UnitsStore.cpp:63
 #, no-c-format
 msgid "American"
-msgstr ""
+msgstr "美国"
 
 #: src/Units/UnitsStore.cpp:75
 #, no-c-format
 msgid "Australian"
-msgstr ""
+msgstr "澳大利亚"
 
 #. Read the terrain file
 #: src/UtilsSettings.cpp:121 src/Startup.cpp:296
 msgid "Loading Terrain File..."
-msgstr ""
+msgstr "加载地形文件"
 
 #: src/Polar/PolarGlue.cpp:108
 msgid ""
 "Polar has invalid coefficients.\n"
 "Using LS8 polar instead!"
 msgstr ""
+"极曲线系数无效。\n"
+"用LS8极曲线代替！"
 
 #: src/Polar/PolarGlue.cpp:109
 msgid "Warning"
