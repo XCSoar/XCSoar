@@ -2999,22 +2999,22 @@ msgstr ""
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:209
 #, no-c-format
 msgid "Circling"
-msgstr ""
+msgstr "盘转"
 
 #: src/InfoBoxes/InfoBoxSettings.cpp:80
 #, no-c-format
 msgid "Cruise"
-msgstr ""
+msgstr "巡航"
 
 #: src/InfoBoxes/InfoBoxSettings.cpp:81
 #, no-c-format
 msgid "FinalGlide"
-msgstr ""
+msgstr "最终滑翔"
 
 #: src/InfoBoxes/InfoBoxManager.cpp:208
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:263
 msgid "InfoBox"
-msgstr ""
+msgstr "信息框"
 
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:58
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:62
@@ -3022,7 +3022,7 @@ msgstr ""
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:70
 #: src/Dialogs/Device/DeviceListDialog.cpp:397
 msgid "N/A"
-msgstr ""
+msgstr "不适用"
 
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:86
 #: src/Dialogs/Settings/dlgConfiguration.cpp:102
@@ -3030,12 +3030,12 @@ msgstr ""
 #: Data/Input/default.xci:507 Data/Input/default.xci:1072
 #, no-c-format
 msgid "Terrain"
-msgstr ""
+msgstr "地形"
 
 #: src/InfoBoxes/Panel/AltitudeSetup.cpp:73
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:304
 msgid "QNH"
-msgstr ""
+msgstr "绝对高度"
 
 #: src/InfoBoxes/Panel/AltitudeSetup.cpp:74
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:305
@@ -3043,25 +3043,26 @@ msgid ""
 "Area pressure for barometric altimeter calibration.  This is set "
 "automatically if Vega connected."
 msgstr ""
+"气压高度表校准的面积压力。如果Vega连接，这将自动设置。"
 
 #: src/InfoBoxes/Panel/ATCReference.cpp:88
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:644
 #: src/Dialogs/Task/TaskPointDialog.cpp:587
 msgid "Waypoint"
-msgstr ""
+msgstr "航点"
 
 #: src/InfoBoxes/Panel/ATCReference.cpp:89
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:78
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:135
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:81
 msgid "Location"
-msgstr ""
+msgstr "定位"
 
 #: src/InfoBoxes/Panel/ATCReference.cpp:91
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:59
 #: src/Dialogs/Task/TaskPointDialog.cpp:277
 msgid "Relocate"
-msgstr ""
+msgstr "重定位"
 
 #: src/InfoBoxes/Panel/ATCReference.cpp:92
 #: src/Dialogs/Device/PortMonitor.cpp:150
@@ -3071,122 +3072,122 @@ msgstr ""
 #: src/Dialogs/TouchTextEntry.cpp:217 src/Dialogs/TimeEntry.cpp:79
 #: src/Dialogs/GeoPointEntry.cpp:85
 msgid "Clear"
-msgstr ""
+msgstr "清除"
 
 #: src/Input/InputEventsActions.cpp:143
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:300
 #: src/Dialogs/Waypoint/Manager.cpp:253
 msgid "Failed to save waypoints"
-msgstr ""
+msgstr "保存航点失败"
 
 #: src/Input/InputEventsActions.cpp:218
 msgid "Screen Mode Full"
-msgstr ""
+msgstr "全屏模式"
 
 #: src/Input/InputEventsActions.cpp:220
 msgid "Auxiliary InfoBoxes"
-msgstr ""
+msgstr "辅助信息框"
 
 #: src/Input/InputEventsActions.cpp:222
 msgid "Default InfoBoxes"
-msgstr ""
+msgstr "缺省信息框"
 
 #: src/Input/InputEventsActions.cpp:330
 msgid "No active waypoint!"
-msgstr ""
+msgstr "没有激活航点！"
 
 #: src/Input/InputEventsActions.cpp:434
 msgid "NMEA log on"
-msgstr ""
+msgstr "打开NMEA记录"
 
 #: src/Input/InputEventsActions.cpp:436
 msgid "NMEA log off"
-msgstr ""
+msgstr "关闭NMEA记录"
 
 #: src/Input/InputEventsActions.cpp:440
 msgid "Logger on"
-msgstr ""
+msgstr "打开记录器"
 
 #: src/Input/InputEventsActions.cpp:442
 msgid "Logger off"
-msgstr ""
+msgstr "关闭记录器"
 
 #: src/Input/InputEventsMap.cpp:70
 msgid "Auto. zoom on"
-msgstr ""
+msgstr "自动放大"
 
 #: src/Input/InputEventsMap.cpp:72 src/Input/InputEventsMap.cpp:206
 msgid "Auto. zoom off"
-msgstr ""
+msgstr "自动缩小"
 
 #: src/Input/InputEventsMap.cpp:97
 msgid "Circling zoom on"
-msgstr ""
+msgstr "盘转时放大"
 
 #: src/Input/InputEventsMap.cpp:99
 msgid "Circling zoom off"
-msgstr ""
+msgstr "盘转时缩小"
 
 #: src/Input/InputEventsAirspace.cpp:63
 msgid "Show airspace off"
-msgstr ""
+msgstr "关闭空域显示"
 
 #: src/Input/InputEventsAirspace.cpp:65
 msgid "Show airspace on"
-msgstr ""
+msgstr "打开空域显示"
 
 #: src/Input/InputEventsTask.cpp:80
 msgid "Advance manually"
-msgstr ""
+msgstr "手动提前"
 
 #: src/Input/InputEventsTask.cpp:83
 msgid "Advance automatically"
-msgstr ""
+msgstr "自动提前"
 
 #: src/Input/InputEventsTask.cpp:86
 msgid "Ready to start"
-msgstr ""
+msgstr "准备开始"
 
 #: src/Input/InputEventsTask.cpp:89
 msgid "Hold start"
-msgstr ""
+msgstr "保持起动"
 
 #: src/Input/InputEventsTask.cpp:92
 msgid "Ready to turn"
-msgstr ""
+msgstr "准备转弯"
 
 #: src/Input/InputEventsTask.cpp:95
 msgid "Hold turn"
-msgstr ""
+msgstr "保持转弯"
 
 #: src/Input/InputEventsTask.cpp:161
 msgid "Auto. MacCready on"
-msgstr ""
+msgstr "MacCready自动打开"
 
 #: src/Input/InputEventsTask.cpp:163
 msgid "Auto. MacCready off"
-msgstr ""
+msgstr "MacCready自动关闭"
 
 #: src/Input/InputEventsTask.cpp:168
 msgid "MacCready "
-msgstr ""
+msgstr "MacCready"
 
 #: src/Input/InputEventsTask.cpp:229
 msgid "Task aborted"
-msgstr ""
+msgstr "任务中止"
 
 #: src/Input/InputEventsTask.cpp:232
 msgid "Go to target"
-msgstr ""
+msgstr "进入目标"
 
 #: src/Input/InputEventsTask.cpp:235
 msgid "Ordered task"
-msgstr ""
+msgstr "安排好的任务"
 
 #: src/Input/InputEventsTask.cpp:238
 #: src/Renderer/FlightStatisticsRenderer.cpp:300
 msgid "No task"
-msgstr ""
+msgstr "没有任务"
 
 #: src/Input/InputEventsTask.cpp:322 src/Renderer/MapItemListRenderer.cpp:370
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:45
@@ -3198,7 +3199,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:184
 #, no-c-format
 msgid "Altitude"
-msgstr ""
+msgstr "高度"
 
 #: src/Input/InputEventsTask.cpp:324
 #: src/Renderer/FlightStatisticsRenderer.cpp:195
@@ -3207,7 +3208,7 @@ msgstr ""
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:79
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:86
 msgid "Speed"
-msgstr ""
+msgstr "速度"
 
 #. Important: all pages after Units in this list must not have data fields that are
 #. unit-dependent because they will be saved after their units may have changed.
@@ -3220,52 +3221,52 @@ msgstr ""
 #: src/Dialogs/Weather/RASPDialog.cpp:222
 #, no-c-format
 msgid "Time"
-msgstr ""
+msgstr "时间"
 
 #: src/Input/InputEventsTask.cpp:329
 msgid "Task start"
-msgstr ""
+msgstr "任务开始"
 
 #: src/Input/InputEventsTask.cpp:331
 msgid "Next turnpoint"
-msgstr ""
+msgstr "下一转弯点"
 
 #: src/Input/InputEventsTask.cpp:333
 msgid "Task finished"
-msgstr ""
+msgstr "完成任务"
 
 #: src/Input/InputEventsSettings.cpp:59
 msgid "Vario sounds on"
-msgstr ""
+msgstr "打开高度计声音"
 
 #: src/Input/InputEventsSettings.cpp:61
 msgid "Vario sounds off"
-msgstr ""
+msgstr "关闭高度计声音"
 
 #: src/Input/InputEventsSettings.cpp:89
 msgid "Snail trail off"
-msgstr ""
+msgstr "关闭尾迹"
 
 #: src/Input/InputEventsSettings.cpp:93
 msgid "Long snail trail"
-msgstr ""
+msgstr "长尾迹"
 
 #: src/Input/InputEventsSettings.cpp:97
 msgid "Short snail trail"
-msgstr ""
+msgstr "短尾迹"
 
 #: src/Input/InputEventsSettings.cpp:101
 msgid "Full snail trail"
-msgstr ""
+msgstr "全尾迹"
 
 #: src/Input/InputEventsSettings.cpp:203
 msgid "Bugs performance"
-msgstr ""
+msgstr "错误性能"
 
 #: src/Input/InputEventsSettings.cpp:246
 #, no-c-format
 msgid "Ballast %"
-msgstr ""
+msgstr "配重%"
 
 #: src/Input/InputEventsSettings.cpp:282 src/Dialogs/ProfileListDialog.cpp:246
 #: src/Dialogs/ProfileListDialog.cpp:291
@@ -3278,42 +3279,42 @@ msgstr ""
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:182
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:226
 msgid "Failed to save file."
-msgstr ""
+msgstr "保存文件失败"
 
 #: src/Input/InputEventsSettings.cpp:336
 msgid "Waypoint labels"
-msgstr ""
+msgstr "航点标识"
 
 #: src/Input/InputEventsSettings.cpp:463
 msgid "Topography/Terrain"
-msgstr ""
+msgstr "地貌/地形"
 
 #: src/Input/InputEventsLua.cpp:60
 msgid "Not found"
-msgstr ""
+msgstr "没有发现"
 
 #: src/Input/InputEventsLua.cpp:65 src/Dialogs/FileManager.cpp:550
 msgid "Select a file"
-msgstr ""
+msgstr "选择一个文件"
 
 #: src/PageSettings.cpp:44 src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:84
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:166
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:338
 #, no-c-format
 msgid "FLARM radar"
-msgstr ""
+msgstr "FLARM雷达"
 
 #: src/PageSettings.cpp:60
 msgid "Map and InfoBoxes"
-msgstr ""
+msgstr "地图和信息框"
 
 #: src/PageSettings.cpp:80
 msgid "Info Hide"
-msgstr ""
+msgstr "隐藏信息"
 
 #: src/PageSettings.cpp:82
 msgid "Map (Full screen)"
-msgstr ""
+msgstr "地图（全屏）"
 
 #: src/Renderer/MapItemListRenderer.cpp:79
 #: src/Renderer/MapItemListRenderer.cpp:83
@@ -3321,13 +3322,13 @@ msgstr ""
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:98
 #: src/Dialogs/Waypoint/WaypointList.cpp:414
 msgid "Direction"
-msgstr ""
+msgstr "方向"
 
 #: src/Renderer/MapItemListRenderer.cpp:87
 #: src/Renderer/WaypointListRenderer.cpp:42
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:137
 msgid "Elevation"
-msgstr ""
+msgstr "高程"
 
 #: src/Renderer/MapItemListRenderer.cpp:151
 #: src/Renderer/MapItemListRenderer.cpp:174
@@ -3335,7 +3336,7 @@ msgstr ""
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:240
 #, no-c-format
 msgid "AGL"
-msgstr ""
+msgstr "真实高度"
 
 #: src/Renderer/MapItemListRenderer.cpp:156
 #: src/Renderer/MapItemListRenderer.cpp:179
@@ -3343,67 +3344,67 @@ msgstr ""
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:242
 #, no-c-format
 msgid "MSL"
-msgstr ""
+msgstr "海平面"
 
 #: src/Renderer/MapItemListRenderer.cpp:165
 msgid "around terrain"
-msgstr ""
+msgstr "地形周围"
 
 #: src/Renderer/MapItemListRenderer.cpp:183
 msgid "Unreachable due to terrain."
-msgstr ""
+msgstr "由于地形无法到达。"
 
 #: src/Renderer/MapItemListRenderer.cpp:188
 msgid "Arrival altitude"
-msgstr ""
+msgstr "到达高度"
 
 #: src/Renderer/MapItemListRenderer.cpp:210
 msgid "Your Position"
-msgstr ""
+msgstr "你的位置"
 
 #: src/Renderer/MapItemListRenderer.cpp:278
 msgid "Avg. lift"
-msgstr ""
+msgstr "平均上升率"
 
 #: src/Renderer/MapItemListRenderer.cpp:348
 msgid "FLARM Traffic"
-msgstr ""
+msgstr "FLARM交通"
 
 #: src/Renderer/MapItemListRenderer.cpp:420
 #: src/Dialogs/Traffic/TrafficList.cpp:687
 #, c-format
 msgid "%u minutes ago"
-msgstr ""
+msgstr "%u 分钟前"
 
 #: src/Renderer/WaypointListRenderer.cpp:146
 msgid "Arrival Alt"
-msgstr ""
+msgstr "到达高度"
 
 #: src/MapWindow/GlueMapWindowItems.cpp:115
 msgid "There is nothing interesting near this location."
-msgstr ""
+msgstr "这个地方附近没有什么有趣的东西。"
 
 #: src/MapWindow/GlueMapWindowItems.cpp:116
 #: src/Dialogs/MapItemListDialog.cpp:277
 msgid "Map elements at this location"
-msgstr ""
+msgstr "在这个位置的地图要素"
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:114
 msgid "Elevation: "
-msgstr ""
+msgstr "高程"
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:156
 msgid "GPS not connected"
-msgstr ""
+msgstr "GPS未连接"
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:159
 msgid "GPS waiting for fix"
-msgstr ""
+msgstr "GPS等待定位"
 
 #: src/Weather/Rasp/RaspStore.cpp:48 src/Weather/Rasp/RaspStore.cpp:53
 #, no-c-format
 msgid "W*"
-msgstr ""
+msgstr "W*"
 
 #: src/Weather/Rasp/RaspStore.cpp:49 src/Weather/Rasp/RaspStore.cpp:54
 #, no-c-format
@@ -3414,11 +3415,14 @@ msgid ""
 "present, since cloud condensation adds buoyancy aloft (i.e. this neglects "
 "\"cloudsuck\").  W* depends upon both the surface heating and the BL depth."
 msgstr ""
+"干热气流平均上升强度接近中等BL高度。减去滑翔机下降率以获得无云热气流高度计平均读数。"
+"如果对流云存在，则上升气流强度将强于此预测，"
+"因为云凝结增加高空浮力（即忽略了“云吸”）。W*取决于表面加热和BL深度。"
 
 #: src/Weather/Rasp/RaspStore.cpp:58
 #, no-c-format
 msgid "BL Wind spd"
-msgstr ""
+msgstr "BL风速"
 
 #: src/Weather/Rasp/RaspStore.cpp:59
 #, no-c-format
@@ -3427,11 +3431,13 @@ msgid ""
 "prediction can be misleading if there is a large change in wind direction "
 "through the BL."
 msgstr ""
+"BL中的矢量平均风速的速度和方向。"
+"如果在BL中风向有很大的变化，则这种预测可能是误导性的。"
 
 #: src/Weather/Rasp/RaspStore.cpp:63
 #, no-c-format
 msgid "H bl"
-msgstr ""
+msgstr "bl高度"
 
 #: src/Weather/Rasp/RaspStore.cpp:64
 #, no-c-format
@@ -3445,11 +3451,16 @@ msgid ""
 "the mixing results from shear turbulence rather than thermal mixing this "
 "parameter is not useful for glider flying. "
 msgstr ""
+"混合层顶部的高度，用于热对流是干燥热气流的平均顶部高度。"
+"在平坦的地形上，由于滑翔机下降速率和其他因素，最大的热气流高度将较低。"
+"在云层的存在下（在高空释放额外的浮力，产生“云吸”），"
+"上升气流顶部将高于这个预测，但是最大的热气流高度将被云底所限制。"
+"此外，当混合来自剪切湍流而不是混合热气流时，该参数对于滑翔机飞行是不有用的。"
 
 #: src/Weather/Rasp/RaspStore.cpp:68
 #, no-c-format
 msgid "dwcrit"
-msgstr ""
+msgstr "dwcrit"
 
 #: src/Weather/Rasp/RaspStore.cpp:69
 #, no-c-format
@@ -3463,11 +3474,17 @@ msgid ""
 "the maximum thermalling height may instead be limited by the cloud base.  "
 "Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
 msgstr ""
+"这个参数估计地面上的平均干式上升气流强度下降到低于225英尺的高度，"
+"并期望比BL顶部高度提供更大的无云热气流高度的数量更好，"
+"特别是当混合结果是垂直风切变，而不是热气流时。"
+"（注：目前的假设往往低估了干式摩擦的最大热高度）。"
+"在云的存在下，热气流的最大高度可能被云底所限制。"
+"对于“干”的热气流，这个参数省略了“云吸”的影响。"
 
 #: src/Weather/Rasp/RaspStore.cpp:73
 #, no-c-format
 msgid "bl cloud"
-msgstr ""
+msgstr "bl云"
 
 #: src/Weather/Rasp/RaspStore.cpp:74
 #, no-c-format
@@ -3479,11 +3496,15 @@ msgid ""
 "humidity within the BL.  The cloud base height is not predicted, but is "
 "expected to be below the BL Top height."
 msgstr ""
+"该参数提供了一种评估BL内云的形成的附加手段，"
+"并且可以与其它云的预测参数结合使用或代替其它云的预测参数。"
+"它假定云覆盖率与BL内的最大相对湿度之间非常简单的关系。"
+"云底高度未被预测，但预计低于BL顶部高度。"
 
 #: src/Weather/Rasp/RaspStore.cpp:78
 #, no-c-format
 msgid "Sfc temp"
-msgstr ""
+msgstr "Sfc温度"
 
 #: src/Weather/Rasp/RaspStore.cpp:79
 #, no-c-format
@@ -3493,11 +3514,13 @@ msgid ""
 "accuracy; e.g. if observed surface temperatures are significantly below "
 "those forecast, then soaring conditions will be poorer than forecast."
 msgstr ""
+"地面2m以上的温度。这可以与观察到的表面温度作为指示模拟精度模型进行比较；"
+"例如，如果观察到的表面温度明显低于那些预测，那么翱翔的条件将比预测差。"
 
 #: src/Weather/Rasp/RaspStore.cpp:83
 #, no-c-format
 msgid "hwcrit"
-msgstr ""
+msgstr "hwcrit"
 
 #: src/Weather/Rasp/RaspStore.cpp:84
 #, no-c-format
@@ -3511,6 +3534,12 @@ msgid ""
 "maximum thermalling height may instead be limited by the cloud base.  Being "
 "for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
 msgstr ""
+"这个参数估计平均干式上升气流强度低于225fpm的高度，"
+"并预期比BL顶部高度给出最大无云热气流高度的数量更好。"
+"特别是当混合的结果来自垂直风切变，而不是热气流。"
+"（注：目前的假设往往低估了干式摩擦的最大热气流高度）。"
+"在云的存在下，最大的热气流高度可能被云底所限制。"
+"对于“干”的热气流，这个参数省略了“云吸”的影响。"
 
 #: src/Weather/Rasp/RaspStore.cpp:88
 #, no-c-format
@@ -3526,6 +3555,10 @@ msgid ""
 "(divergence) produces subsiding vertical motion, creating low-level "
 "inversions which limit thermalling heights."
 msgstr ""
+"最大平均网格面积由水平风辐合产生在BL内向上或向下运动"
+"正收敛是与当地小的辐合线有关。"
+"负收敛（发散）产生下限垂直运动，"
+"产生低高度逆温层限制热气流高度。"
 
 #: src/Weather/Rasp/RaspStore.cpp:93
 #, no-c-format
