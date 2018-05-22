@@ -2243,22 +2243,22 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:764 src/InfoBoxes/Content/Factory.cpp:765
 #, no-c-format
 msgid "Free RAM"
-msgstr ""
+msgstr "内存空闲"
 
 #: src/InfoBoxes/Content/Factory.cpp:766
 #, no-c-format
 msgid "Free RAM as reported by OS."
-msgstr ""
+msgstr "操作系统报告空闲内存空闲。"
 
 #: src/InfoBoxes/Content/Factory.cpp:772
 #, no-c-format
 msgid "Flight level"
-msgstr ""
+msgstr "飞行水平面"
 
 #: src/InfoBoxes/Content/Factory.cpp:773
 #, no-c-format
 msgid "FL"
-msgstr ""
+msgstr "飞行水平面"
 
 #: src/InfoBoxes/Content/Factory.cpp:774
 #, no-c-format
@@ -2266,26 +2266,27 @@ msgid ""
 "Pressure Altitude given as Flight Level. Only available if barometric "
 "altitude available and correct QNH set."
 msgstr ""
+"压力高度作为给定的飞行高度。只可用于气压高度和正确的QNH（绝对高度）设置。"
 
 #: src/InfoBoxes/Content/Factory.cpp:781 src/InfoBoxes/Content/Factory.cpp:782
 #, no-c-format
 msgid "Barogram"
-msgstr ""
+msgstr "气压图"
 
 #: src/InfoBoxes/Content/Factory.cpp:783
 #, no-c-format
 msgid "Trace of altitude during flight"
-msgstr ""
+msgstr "飞行高度轨迹"
 
 #: src/InfoBoxes/Content/Factory.cpp:789
 #, no-c-format
 msgid "Vario trace"
-msgstr ""
+msgstr "高度轨迹"
 
 #: src/InfoBoxes/Content/Factory.cpp:790
 #, no-c-format
 msgid "Vario Trace"
-msgstr ""
+msgstr "高度轨迹"
 
 #: src/InfoBoxes/Content/Factory.cpp:791
 #, no-c-format
@@ -2293,16 +2294,17 @@ msgid ""
 "Trace of vertical speed, as reported by the GPS, or the intelligent vario "
 "total energy vario value if connected to one."
 msgstr ""
+"GPS所报告的垂直速度轨迹，或如果连接到一个智能高度计的总能量高度值。"
 
 #: src/InfoBoxes/Content/Factory.cpp:797
 #, no-c-format
 msgid "Netto vario trace"
-msgstr ""
+msgstr "Netto高度轨迹"
 
 #: src/InfoBoxes/Content/Factory.cpp:798
 #, no-c-format
 msgid "Netto Trace"
-msgstr ""
+msgstr "Netto轨迹"
 
 #: src/InfoBoxes/Content/Factory.cpp:799
 #, no-c-format
@@ -2310,16 +2312,17 @@ msgid ""
 "Trace of vertical speed of air-mass, equal to vario value less the glider's "
 "estimated sink rate."
 msgstr ""
+"空气团的垂直速度轨迹，等于高度表的值小于滑翔机估算的下沉速率。"
 
 #: src/InfoBoxes/Content/Factory.cpp:805
 #, no-c-format
 msgid "Thermal climb trace"
-msgstr ""
+msgstr "热气流爬升轨迹"
 
 #: src/InfoBoxes/Content/Factory.cpp:806
 #, no-c-format
 msgid "TC Trace"
-msgstr ""
+msgstr "热气流爬升轨迹"
 
 #: src/InfoBoxes/Content/Factory.cpp:807
 #, no-c-format
@@ -2327,16 +2330,17 @@ msgid ""
 "Trace of average climb rate each turn in circling, based of the reported GPS "
 "altitude, or vario if available."
 msgstr ""
+"盘转中的平均爬升率轨迹基于GPS或高度表所报告的高度。"
 
 #: src/InfoBoxes/Content/Factory.cpp:813
 #, no-c-format
 msgid "Climb band"
-msgstr ""
+msgstr "爬升带"
 
 #: src/InfoBoxes/Content/Factory.cpp:814
 #, no-c-format
 msgid "Climb Band"
-msgstr ""
+msgstr "爬升带"
 
 #: src/InfoBoxes/Content/Factory.cpp:815
 #, no-c-format
@@ -2344,16 +2348,17 @@ msgid ""
 "Graph of average circling climb rate (horizontal axis) as a function of "
 "altitude (vertical axis)."
 msgstr ""
+"平均盘转爬升率（水平轴）高度（垂直轴）函数的曲线图。"
 
 #: src/InfoBoxes/Content/Factory.cpp:821
 #, no-c-format
 msgid "Task progress"
-msgstr ""
+msgstr "任务进程"
 
 #: src/InfoBoxes/Content/Factory.cpp:822
 #, no-c-format
 msgid "Progress"
-msgstr ""
+msgstr "进程"
 
 #: src/InfoBoxes/Content/Factory.cpp:823
 #, no-c-format
@@ -2361,32 +2366,34 @@ msgid ""
 "Clock-like display of distance remaining along task, showing achieved task "
 "points."
 msgstr ""
+"沿时钟显示剩余任务距离，显示完成的任务点。"
 
 #: src/InfoBoxes/Content/Factory.cpp:829
 #, no-c-format
 msgid "Time under max. start height"
-msgstr ""
+msgstr "最大开始高度下的时间"
 
 #: src/InfoBoxes/Content/Factory.cpp:830
 #, no-c-format
 msgid "Start Height"
-msgstr ""
+msgstr "开始高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:831
 #, no-c-format
 msgid ""
 "The contiguous period the ship has been below the task start max. height."
 msgstr ""
+"飞船在任务下方的连续周期开始最大高度。"
 
 #: src/InfoBoxes/Content/Factory.cpp:837
 #, no-c-format
 msgid "Task time to go (ground speed)"
-msgstr ""
+msgstr "任务时间（地速）"
 
 #: src/InfoBoxes/Content/Factory.cpp:838
 #, no-c-format
 msgid "Fin ETE VMG"
-msgstr ""
+msgstr "假定保持当前面速，估计完成任务所需的时间。"
 
 #: src/InfoBoxes/Content/Factory.cpp:839
 #, no-c-format
@@ -2394,16 +2401,17 @@ msgid ""
 "Estimated time required to complete task, assuming current ground speed is "
 "maintained."
 msgstr ""
+"假定保持当前面速，估计完成任务所需的时间。"
 
 #: src/InfoBoxes/Content/Factory.cpp:845
 #, no-c-format
 msgid "Next time to go (ground speed)"
-msgstr ""
+msgstr "下一航点时间（地速）"
 
 #: src/InfoBoxes/Content/Factory.cpp:846
 #, no-c-format
 msgid "WP ETE VMG"
-msgstr ""
+msgstr "假定保持当前面速，估计到达下一航点所需的时间。"
 
 #: src/InfoBoxes/Content/Factory.cpp:847
 #, no-c-format
@@ -2411,18 +2419,19 @@ msgid ""
 "Estimated time required to reach next waypoint, assuming current ground "
 "speed is maintained."
 msgstr ""
+"假定保持当前面速，估计到达下一航点所需的时间。"
 
 #: src/InfoBoxes/Content/Factory.cpp:854
 #, no-c-format
 msgid "Attitude indicator"
-msgstr ""
+msgstr "姿态指示器"
 
 #: src/InfoBoxes/Content/Factory.cpp:855 src/PageSettings.cpp:52
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:168
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:346
 #, no-c-format
 msgid "Horizon"
-msgstr ""
+msgstr "水平线"
 
 #: src/InfoBoxes/Content/Factory.cpp:856
 #, no-c-format
@@ -2430,31 +2439,32 @@ msgid ""
 "Attitude indicator (artificial horizon) display calculated from flight path, "
 "supplemented with acceleration and variometer data if available."
 msgstr ""
+"姿态指示器（陀螺地平仪）的显示由飞行路径计算得出，如果可用的话加上加速度和高度计数据。"
 
 #: src/InfoBoxes/Content/Factory.cpp:862
 #, no-c-format
 msgid "Nearest airspace horizontal"
-msgstr ""
+msgstr "最近水平空域"
 
 #: src/InfoBoxes/Content/Factory.cpp:863
 #, no-c-format
 msgid "Near AS H"
-msgstr ""
+msgstr "最近水平空域"
 
 #: src/InfoBoxes/Content/Factory.cpp:864
 #, no-c-format
 msgid "The horizontal distance to the nearest airspace."
-msgstr ""
+msgstr "到最近空域的水平距离。"
 
 #: src/InfoBoxes/Content/Factory.cpp:870
 #, no-c-format
 msgid "Nearest airspace vertical"
-msgstr ""
+msgstr "最近垂直空域"
 
 #: src/InfoBoxes/Content/Factory.cpp:871
 #, no-c-format
 msgid "Near AS V"
-msgstr ""
+msgstr "最近垂直空域"
 
 #: src/InfoBoxes/Content/Factory.cpp:872
 #, no-c-format
@@ -2462,16 +2472,17 @@ msgid ""
 "The vertical distance to the nearest airspace.  A positive value means the "
 "airspace is above you, and negative means the airspace is below you."
 msgstr ""
+"到最近空域的垂直距离。正值意味着空域高于你，而负值则意味着空域低于你。"
 
 #: src/InfoBoxes/Content/Factory.cpp:878
 #, no-c-format
 msgid "Next MC0 altitude difference"
-msgstr ""
+msgstr "到达下一航点高度同MC设置为0的安全到达高度的相对高差"
 
 #: src/InfoBoxes/Content/Factory.cpp:879
 #, no-c-format
 msgid "WP MC0 AltD"
-msgstr ""
+msgstr "到达下一航点高度同MC设置为0的安全到达高度的相对高差"
 
 #: src/InfoBoxes/Content/Factory.cpp:880
 #, no-c-format
@@ -2480,16 +2491,17 @@ msgid ""
 "safety arrival height.  For AAT tasks, the target within the AAT sector is "
 "used."
 msgstr ""
+"到达下一航点高度同MC设置为0的安全到达高度的相对高差。对于AAT任务，使用AAT扇区内的目标。"
 
 #: src/InfoBoxes/Content/Factory.cpp:887
 #, no-c-format
 msgid "Head wind component"
-msgstr ""
+msgstr "迎风分量"
 
 #: src/InfoBoxes/Content/Factory.cpp:888
 #, no-c-format
 msgid "Head Wind"
-msgstr ""
+msgstr "迎风"
 
 #: src/InfoBoxes/Content/Factory.cpp:889
 #, no-c-format
@@ -2498,16 +2510,17 @@ msgid ""
 "ground speed if airspeed is available from external device. Otherwise the "
 "estimated wind is used for the calculation."
 msgstr ""
+"当前的迎风分量。如果从外部设备获得空速，则从TAS和GPS地速计算迎风。否则，估算的风用于计算。"
 
 #: src/InfoBoxes/Content/Factory.cpp:896
 #, no-c-format
 msgid "Terrain collision"
-msgstr ""
+msgstr "地形碰撞"
 
 #: src/InfoBoxes/Content/Factory.cpp:897
 #, no-c-format
 msgid "Terr Coll"
-msgstr ""
+msgstr "地形碰撞"
 
 #: src/InfoBoxes/Content/Factory.cpp:898
 #, no-c-format
@@ -2516,16 +2529,17 @@ msgid ""
 "this location, the altitude will be below the configured terrain clearance "
 "altitude."
 msgstr ""
+"沿着当前任务进程的下一地形碰撞的距离。这个位置高度将低于配置的地形净空高度。"
 
 #: src/InfoBoxes/Content/Factory.cpp:903
 #, no-c-format
 msgid "Altitude (Auto)"
-msgstr ""
+msgstr "高度(自动)"
 
 #: src/InfoBoxes/Content/Factory.cpp:904
 #, no-c-format
 msgid "Alt Auto"
-msgstr ""
+msgstr "高度(自动)"
 
 #: src/InfoBoxes/Content/Factory.cpp:905
 #, no-c-format
@@ -2534,16 +2548,17 @@ msgid ""
 "pressure sensor or the GPS altitude if the barometric altitude is not "
 "available."
 msgstr ""
+"如果气压高度不可用从一个装备有压力传感器或GPS得到的一个气压高度。"
 
 #: src/InfoBoxes/Content/Factory.cpp:912
 #, no-c-format
 msgid "Thermal next leg equivalent"
-msgstr ""
+msgstr "下一赛程等量热气流"
 
 #: src/InfoBoxes/Content/Factory.cpp:913
 #, no-c-format
 msgid "T Next Leg"
-msgstr ""
+msgstr "下一赛程等量热气流"
 
 #: src/InfoBoxes/Content/Factory.cpp:914
 #, no-c-format
@@ -2551,16 +2566,17 @@ msgid ""
 "The thermal rate of climb on next leg which is equivalent to a thermal equal "
 "to the MacCready setting on current leg."
 msgstr ""
+"在下一赛程上爬升的热气流速率等于当前赛程上的MacCready设置。"
 
 #: src/InfoBoxes/Content/Factory.cpp:920
 #, no-c-format
 msgid "Head wind component (simplified)"
-msgstr ""
+msgstr "迎风分量（简化）"
 
 #: src/InfoBoxes/Content/Factory.cpp:921
 #, no-c-format
 msgid "Head Wind *"
-msgstr ""
+msgstr "迎风 *"
 
 #: src/InfoBoxes/Content/Factory.cpp:922
 #, no-c-format
@@ -2569,16 +2585,17 @@ msgid ""
 "subtracting GPS ground speed from the TAS if airspeed is available from "
 "external device."
 msgstr ""
+"当前的迎风分量。如果空速可从外部设备获得简化的迎风是通过从TAS减去GPS地速来计算的。"
 
 #: src/InfoBoxes/Content/Factory.cpp:928
 #, no-c-format
 msgid "Task cruise efficiency"
-msgstr ""
+msgstr "任务巡航效率"
 
 #: src/InfoBoxes/Content/Factory.cpp:929
 #, no-c-format
 msgid "Cruise Eff"
-msgstr ""
+msgstr "任务巡航效率"
 
 #: src/InfoBoxes/Content/Factory.cpp:930
 #, no-c-format
@@ -2587,12 +2604,14 @@ msgid ""
 "value estimates your cruise efficiency according to the current flight "
 "history with the set MC value.  Calculation begins after task is started."
 msgstr ""
+"巡航效率100表示完美的MacCready性能。"
+"此值根据当前飞行历史与设定的MC值估计巡航效率。计算在任务启动后开始。"
 
 #: src/InfoBoxes/Content/Factory.cpp:937
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:183
 #, no-c-format
 msgid "Wind arrow"
-msgstr ""
+msgstr "风向指针"
 
 #: src/InfoBoxes/Content/Factory.cpp:938
 #: src/Dialogs/Settings/dlgConfiguration.cpp:110
@@ -2601,7 +2620,7 @@ msgstr ""
 #: Data/Input/default.xci:571
 #, no-c-format
 msgid "Wind"
-msgstr ""
+msgstr "风"
 
 #: src/InfoBoxes/Content/Factory.cpp:944 src/PageSettings.cpp:48
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:93
@@ -2609,13 +2628,13 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:342
 #, no-c-format
 msgid "Thermal assistant"
-msgstr ""
+msgstr "热气流助手"
 
 #: src/InfoBoxes/Content/Factory.cpp:945
 #: src/Renderer/MapItemListRenderer.cpp:267
 #, no-c-format
 msgid "Thermal"
-msgstr ""
+msgstr "热气流"
 
 #: src/InfoBoxes/Content/Factory.cpp:946
 #, no-c-format
@@ -2623,31 +2642,32 @@ msgid ""
 "A circular thermal assistant that shows the lift distribution over each part "
 "of the circle."
 msgstr ""
+"一个圆形的气流助手装置显示了圆圈各部分的升力分布。"
 
 #: src/InfoBoxes/Content/Factory.cpp:951
 #, no-c-format
 msgid "Start open/close countdown"
-msgstr ""
+msgstr "开始打开/关闭倒计时"
 
 #: src/InfoBoxes/Content/Factory.cpp:952
 #, no-c-format
 msgid "Start open"
-msgstr ""
+msgstr "开始打开"
 
 #: src/InfoBoxes/Content/Factory.cpp:953
 #, no-c-format
 msgid "Shows the time left until the start point opens or closes."
-msgstr ""
+msgstr "显示离开时间知道开始点打开或关闭。"
 
 #: src/InfoBoxes/Content/Factory.cpp:958
 #, no-c-format
 msgid "Start open/close countdown at reaching"
-msgstr ""
+msgstr "在到达时开始打开/关闭倒计时"
 
 #: src/InfoBoxes/Content/Factory.cpp:959
 #, no-c-format
 msgid "Start reach"
-msgstr ""
+msgstr "到达开始"
 
 #: src/InfoBoxes/Content/Factory.cpp:960
 #, no-c-format
@@ -2655,26 +2675,27 @@ msgid ""
 "Shows the time left until the start point opens or closes, compared to the "
 "calculated time to reach it."
 msgstr ""
+"显示与开始计算的时间相比，直到开始点或关闭为止的时间。"
 
 #: src/InfoBoxes/Content/Factory.cpp:965
 #, no-c-format
 msgid "Next radial"
-msgstr ""
+msgstr "下一径向"
 
 #: src/InfoBoxes/Content/Factory.cpp:966 src/Dialogs/Task/TargetDialog.cpp:438
 #, no-c-format
 msgid "Radial"
-msgstr ""
+msgstr "径向"
 
 #: src/InfoBoxes/Content/Factory.cpp:967
 #, no-c-format
 msgid "True bearing from the next waypoint to your position."
-msgstr ""
+msgstr "从下一航点到你的位置的真实方位。"
 
 #: src/InfoBoxes/Content/Factory.cpp:973 src/InfoBoxes/Content/Factory.cpp:974
 #, no-c-format
 msgid "ATC radial"
-msgstr ""
+msgstr "ATC径向"
 
 #: src/InfoBoxes/Content/Factory.cpp:975
 #, no-c-format
