@@ -5152,23 +5152,23 @@ msgstr "Flarm锁定"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:214
 msgid "Unknown Competition Number"
-msgstr ""
+msgstr "未知竞赛数"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:215
 msgid "Not Found"
-msgstr ""
+msgstr "没有发现"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:219
 msgid "Set new teammate"
-msgstr ""
+msgstr "设置新队友"
 
 #: src/Dialogs/dlgAnalysis.cpp:475
 msgid "Barograph"
-msgstr ""
+msgstr "气压计"
 
 #: src/Dialogs/dlgAnalysis.cpp:484
 msgid "Climb"
-msgstr ""
+msgstr "爬升"
 
 #: src/Dialogs/dlgAnalysis.cpp:488 src/Dialogs/dlgAnalysis.cpp:551
 msgid "Task Calc"
@@ -5176,68 +5176,68 @@ msgstr ""
 
 #: src/Dialogs/dlgAnalysis.cpp:493
 msgid "Thermal Band"
-msgstr ""
+msgstr "热气流带"
 
 #: src/Dialogs/dlgAnalysis.cpp:502
 msgid "Vario Histogram"
-msgstr ""
+msgstr "高度直方图"
 
 #: src/Dialogs/dlgAnalysis.cpp:510
 msgid "Wind at Altitude"
-msgstr ""
+msgstr "此高度风况"
 
 #: src/Dialogs/dlgAnalysis.cpp:513
 msgid "Set Wind"
-msgstr ""
+msgstr "设置风况"
 
 #: src/Dialogs/dlgAnalysis.cpp:518
 msgid "Glide Polar"
-msgstr ""
+msgstr "滑翔极曲线"
 
 #: src/Dialogs/dlgAnalysis.cpp:528
 msgid "MacCready Speeds"
-msgstr ""
+msgstr "MacCready速度"
 
 #: src/Dialogs/dlgAnalysis.cpp:537
 msgid "Temperature Trace"
-msgstr ""
+msgstr "温度轨迹"
 
 #: src/Dialogs/dlgAnalysis.cpp:546
 msgid "Task Speed"
-msgstr ""
+msgstr "任务速度"
 
 #: src/Dialogs/dlgAnalysis.cpp:560
 msgid "Task calc"
-msgstr ""
+msgstr "任务计算器"
 
 #: src/Dialogs/dlgAnalysis.cpp:578
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:208
 msgid "Warnings"
-msgstr ""
+msgstr "告警"
 
 #: src/Dialogs/dlgChecklist.cpp:49 src/Dialogs/dlgChecklist.cpp:147
 msgid "Checklist"
-msgstr ""
+msgstr "检查表"
 
 #: src/Dialogs/dlgChecklist.cpp:134
 msgid "No checklist loaded"
-msgstr ""
+msgstr "未装载检查表"
 
 #: src/Dialogs/dlgChecklist.cpp:134
 msgid "Create xcsoar-checklist.txt"
-msgstr ""
+msgstr "创建xcsoar-checklist.txt"
 
 #: src/Dialogs/ProfileListDialog.cpp:188
 #: src/Dialogs/Plane/PlaneListDialog.cpp:157
 #: src/Dialogs/Waypoint/Manager.cpp:121
 msgid "New"
-msgstr ""
+msgstr "新建"
 
 #: src/Dialogs/ProfileListDialog.cpp:189 src/Dialogs/ProfileListDialog.cpp:337
 #: src/Dialogs/StartupDialog.cpp:176 src/Dialogs/ProfilePasswordDialog.cpp:88
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:244
 msgid "Password"
-msgstr ""
+msgstr "密码"
 
 #: src/Dialogs/ProfileListDialog.cpp:191 src/Dialogs/ProfileListDialog.cpp:309
 #: src/Dialogs/Plane/PlaneListDialog.cpp:159
@@ -5246,62 +5246,62 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:118
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:102
 msgid "Delete"
-msgstr ""
+msgstr "删除"
 
 #: src/Dialogs/ProfileListDialog.cpp:206 src/Dialogs/ProfileListDialog.cpp:273
 msgid "Profile name"
-msgstr ""
+msgstr "配置文件名"
 
 #: src/Dialogs/ProfileListDialog.cpp:215 src/Dialogs/ProfileListDialog.cpp:283
 msgid "File exists already."
-msgstr ""
+msgstr "文件已经存在"
 
 #: src/Dialogs/ProfileListDialog.cpp:307
 #, c-format
 msgid "Delete \"%s\"?"
-msgstr ""
+msgstr "删除 \"%s\"?"
 
 #: src/Dialogs/ProfileListDialog.cpp:372 Data/Input/default.xci:589
 msgid "Profiles"
-msgstr ""
+msgstr "配置文件"
 
 #: src/Dialogs/ProfileListDialog.cpp:386
 msgid "Select profile"
-msgstr ""
+msgstr "选择配置文件"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:160
 msgid "Activate"
-msgstr ""
+msgstr "激活"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:186
 msgid "Active"
-msgstr ""
+msgstr "激活"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:226
 #, c-format
 msgid "Activating plane \"%s\" failed."
-msgstr ""
+msgstr "激活飞机 \"%s\" 失败。"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:248
 #: src/Dialogs/Plane/PlaneListDialog.cpp:293
 msgid "Please enter the registration of the plane!"
-msgstr ""
+msgstr "请输入飞机注册信息！"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:260
 #: src/Dialogs/Plane/PlaneListDialog.cpp:307
 #, c-format
 msgid "Plane \"%s\" already exists. Overwrite it?"
-msgstr ""
+msgstr "飞机 \"%s\"已经存在。重写它？"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:263
 #: src/Dialogs/Plane/PlaneListDialog.cpp:310
 msgid "Overwrite"
-msgstr ""
+msgstr "重写"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:355
 #, c-format
 msgid "Delete plane \"%s\"?"
-msgstr ""
+msgstr "删除飞机 \"%s\"?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:392
 #, c-format
@@ -5310,238 +5310,241 @@ msgstr ""
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:404
 msgid "Planes"
-msgstr ""
+msgstr "飞机"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:83
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:192
 msgid "Plane Details"
-msgstr ""
+msgstr "飞机详细信息"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:90
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:113
 msgid "Polar"
-msgstr ""
+msgstr "极曲线"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:111
 msgid "Registration"
-msgstr ""
+msgstr "注册"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:112
 msgid "Comp. ID"
-msgstr ""
+msgstr "竞赛ID"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:115
 msgid "Handicap"
-msgstr ""
+msgstr "残障"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:119
 msgid "Wing Area"
-msgstr ""
+msgstr "翼面积"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:123
 msgid "Max. Ballast"
-msgstr ""
+msgstr "最大配重"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:127
 msgid "Dump Time"
-msgstr ""
+msgstr "转储时间"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:131
 msgid "Max. Cruise Speed"
-msgstr ""
+msgstr "最大巡航速度"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:68
 msgid "List"
-msgstr ""
+msgstr "列表"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:69
 #: src/Dialogs/Waypoint/Manager.cpp:122
 msgid "Import"
-msgstr ""
+msgstr "导入"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:141
 msgid "Reference Mass"
-msgstr ""
+msgstr "参考重量"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:141
 msgid "Reference mass of the polar"
-msgstr ""
+msgstr "极曲线参考重量"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:146
 msgid "Dry Mass"
-msgstr ""
+msgstr "净重"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:146
 msgid "Dry all-up flying mass of your plane"
-msgstr ""
+msgstr "你的飞机所有飞行净重"
 
 #. let the user select
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:188
 msgid "Load Polar"
-msgstr ""
+msgstr "极曲线负载"
 
 #. let the user select
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:220
 msgid "Load Polar From File"
-msgstr ""
+msgstr "从文件获得极曲线负载"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:273
 msgid "Plane Polar"
-msgstr ""
+msgstr "飞机极曲线"
 
 #: src/Dialogs/Plane/PolarShapeEditWidget.cpp:125
 msgid "Polar V"
-msgstr ""
+msgstr "极曲线 V"
 
 #: src/Dialogs/Plane/PolarShapeEditWidget.cpp:126
 msgid "Polar W"
-msgstr ""
+msgstr "极曲线 W"
 
 #: src/Dialogs/dlgInfoBoxAccess.cpp:94 src/Dialogs/dlgInfoBoxAccess.cpp:108
 msgid "Switch InfoBox"
-msgstr ""
+msgstr "变换信息框"
 
 #: src/Dialogs/ReplayDialog.cpp:82
 msgid "File"
-msgstr ""
+msgstr "文件"
 
 #: src/Dialogs/ReplayDialog.cpp:83
 msgid ""
 "Name of file to replay.  Can be an IGC file (.igc), a raw NMEA log file (."
 "nmea), or if blank, runs the demo."
 msgstr ""
+"要重放的文件名。可以是一个IGC文件（.IGC），"
+"一个原始NMEA日志文件（.NMEA），或者如果是空白的，运行演示。"
 
 #: src/Dialogs/ReplayDialog.cpp:90
 msgid "Rate"
-msgstr ""
+msgstr "比率"
 
 #: src/Dialogs/ReplayDialog.cpp:91
 msgid ""
 "Time acceleration of replay. Set to 0 for pause, 1 for normal real-time "
 "replay."
 msgstr ""
+"重放的时间加速。暂停设置为0，正常实时重放设置为1。"
 
 #: src/Dialogs/ReplayDialog.cpp:111 src/Dialogs/ReplayDialog.cpp:153
 #: Data/Input/default.xci:613
 msgid "Replay"
-msgstr ""
+msgstr "重放"
 
 #: src/Dialogs/SimulatorPromptWindow.cpp:60 src/Dialogs/StartupDialog.cpp:93
 #: Data/Input/default.xci:914
 msgid "Quit"
-msgstr ""
+msgstr "退出"
 
 #: src/Dialogs/SimulatorPromptWindow.cpp:113
 msgid "What do you want to do?"
-msgstr ""
+msgstr "你想做什么？"
 
 #: src/Dialogs/StartupDialog.cpp:163
 msgid "Profile"
-msgstr ""
+msgstr "简况"
 
 #: src/Dialogs/StartupDialog.cpp:166
 msgid "Continue"
-msgstr ""
+msgstr "继续"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:63
 msgid "Enter your password"
-msgstr ""
+msgstr "输入你的密码"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:88
 msgid "Wrong password."
-msgstr ""
+msgstr "密码错误"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:103
 msgid "Enter a new password"
-msgstr ""
+msgstr "输入新密码"
 
 #: src/Dialogs/dlgStatus.cpp:47 src/Dialogs/dlgStatus.cpp:66
 #: src/Dialogs/Weather/WeatherDialog.cpp:62 Data/Input/default.xci:809
 #: Data/Input/default.xci:1198
 msgid "Status"
-msgstr ""
+msgstr "状态"
 
 #: src/Dialogs/dlgStatus.cpp:89 Data/Input/default.xci:563
 msgid "Flight"
-msgstr ""
+msgstr "飞行"
 
 #: src/Dialogs/dlgStatus.cpp:92 Data/Input/default.xci:539
 msgid "System"
-msgstr ""
+msgstr "系统"
 
 #: src/Dialogs/dlgStatus.cpp:98
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:142
 msgid "Rules"
-msgstr ""
+msgstr "规则"
 
 #: src/Dialogs/dlgStatus.cpp:101
 msgid "Times"
-msgstr ""
+msgstr "时间"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:80
 msgid "Max. height gain"
-msgstr ""
+msgstr "最大获得高度"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:81
 msgid "Near"
-msgstr ""
+msgstr "靠近"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:60
 #, no-c-format
 msgid "Roaming"
-msgstr ""
+msgstr "漫游"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:130
 msgid "GPS lock"
-msgstr ""
+msgstr "GPS锁定"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:131
 msgid "Satellites in view"
-msgstr ""
+msgstr "视图中的卫星"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:132
 msgid "Variometer"
-msgstr ""
+msgstr "高度计"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:135
 msgid "Supply voltage"
-msgstr ""
+msgstr "电源电压"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:136
 msgid "Network"
-msgstr ""
+msgstr "网络"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:140
 msgid "Assigned task time"
-msgstr ""
+msgstr "指定任务时间"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:141
 msgid "Estimated task time"
-msgstr ""
+msgstr "估算任务时间"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:142
 msgid "Remaining time"
-msgstr ""
+msgstr "剩余时间"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:143
 msgid "Task distance"
-msgstr ""
+msgstr "任务距离"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:144
 msgid "Remaining distance"
-msgstr ""
+msgstr "剩余距离"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:145
 msgid "Speed estimated"
-msgstr ""
+msgstr "估算速度"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:146
 msgid "Speed average"
-msgstr ""
+msgstr "平均速度"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:148
 msgid "Set MacCready"
-msgstr ""
+msgstr "设置MacCready"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:149
 msgid ""
@@ -5553,7 +5556,7 @@ msgstr ""
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:159
 msgid "AAT range"
-msgstr ""
+msgstr "AAT区域"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:161
 #, no-c-format
@@ -5567,19 +5570,19 @@ msgstr ""
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:164
 #: src/Dialogs/Task/TargetDialog.cpp:454
 msgid "Speed remaining"
-msgstr ""
+msgstr "剩余速度"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:167
 msgid "Achieved MacCready"
-msgstr ""
+msgstr "完成MacCready"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:172
 msgid "Achieved speed"
-msgstr ""
+msgstr "完成速度"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:175
 msgid "Cruise efficiency"
-msgstr ""
+msgstr "巡航效率"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:176
 msgid ""
@@ -5590,274 +5593,277 @@ msgid ""
 "flight history with the set MC value.  Calculation begins after task is "
 "started."
 msgstr ""
+"巡航效率100表示完美的MacCready性能，大于100指示优于MacCready的性能是通过在云街上飞行来实现的。"
+"如果你飞得太远，不到100是合适的。此值根据当前飞行历史与设定的MC值估算巡航效率。计算在任务启动后开始。"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:101
 msgid "Valid start"
-msgstr ""
+msgstr "开始有效"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:102
 msgid "Start time"
-msgstr ""
+msgstr "开始时间"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:103
 msgid "Start alt."
-msgstr ""
+msgstr "开始高度"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:104
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:143
 #: src/Dialogs/Task/TaskPointDialog.cpp:411
 msgid "Start point"
-msgstr ""
+msgstr "开始点"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:105
 msgid "Start speed"
-msgstr ""
+msgstr "开始速度"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:106
 msgid "Finish min. alt."
-msgstr ""
+msgstr "完成最小高度"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:107
 msgid "Valid finish"
-msgstr ""
+msgstr "完成有效"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:109
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:87
 msgid "Local time"
-msgstr ""
+msgstr "本地时间"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:110
 msgid "UTC time"
-msgstr ""
+msgstr "UTC时间"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:111
 msgid "UTC date"
-msgstr ""
+msgstr "UTC日期"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:112
 msgid "Flight time"
-msgstr ""
+msgstr "飞行时间"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:113
 msgid "Takeoff time"
-msgstr ""
+msgstr "起飞时间"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:114
 msgid "Landing time"
-msgstr ""
+msgstr "降落时间"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:115
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:150
 msgid "Daylight time"
-msgstr ""
+msgstr "白昼时间"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:54
 msgid "Too much wind"
-msgstr ""
+msgstr "风太大"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:57
 msgid "No solution"
-msgstr ""
+msgstr "无解"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:131
 msgid "Runway"
-msgstr ""
+msgstr "跑道"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:162
 msgid "Bearing and Distance"
-msgstr ""
+msgstr "方位和距离"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:174
 msgid "Alt. diff. MC 0"
-msgstr ""
+msgstr "MC设置为0的高差"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:178
 msgid "Alt. diff. MC safety"
-msgstr ""
+msgstr "MC设置为安全高度的高车"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:183
 msgid "Alt. diff. MC current"
-msgstr ""
+msgstr "当前MC的高差"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:201
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:120
 #, no-c-format
 msgid "Required glide ratio"
-msgstr ""
+msgstr "所需滑翔比"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:71
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:109
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:149
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:189
 msgid "No task defined."
-msgstr ""
+msgstr "无定义任务"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:76
 msgid "No active task point."
-msgstr ""
+msgstr "无激活任务点"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:76
 msgid "Replace in task"
-msgstr ""
+msgstr "在任务中替换"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:81
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:115
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:155
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:199
 msgid "Task would not be valid after the change."
-msgstr ""
+msgstr "任务更改无效"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:120
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:160
 msgid "Created Goto Task."
-msgstr ""
+msgstr "创建GotO任务"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:120
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:125
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:160
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:165
 msgid "Success"
-msgstr ""
+msgstr "成功"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:125
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:165
 msgid "Created 2-point task from Goto Task."
-msgstr ""
+msgstr "从Goto任务创建2点任务"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:194
 msgid "Waypoint not in task."
-msgstr ""
+msgstr "航点不在任务中"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:194
 msgid "Remove from task"
-msgstr ""
+msgstr "从任务中移除"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:314
 msgid "Replace in Task"
-msgstr ""
+msgstr "在任务中替换"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:315
 msgid "Insert in Task"
-msgstr ""
+msgstr "插入任务中"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:316
 msgid "Append to Task"
-msgstr ""
+msgstr "附加到任务"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:319
 msgid "Remove from Task"
-msgstr ""
+msgstr "从任务中移除"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:322
 msgid "Set as New Home"
-msgstr ""
+msgstr "设置为新家"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:323
 msgid "Pan to Waypoint"
-msgstr ""
+msgstr "Pan to Waypoint"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:324
 msgid "Set Active Frequency"
-msgstr ""
+msgstr "设置有效频率"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:325
 msgid "Set Standby Frequency"
-msgstr ""
+msgstr "设置待机频率"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:433 Data/Input/default.xci:1015
 msgid "GoTo"
-msgstr ""
+msgstr "GoTo"
 
 #: src/Dialogs/Waypoint/Manager.cpp:270
 msgid "Delete waypoint?"
-msgstr ""
+msgstr "删除航点"
 
 #: src/Dialogs/Waypoint/Manager.cpp:316 Data/Input/default.xci:597
 msgid "Waypoints Editor"
-msgstr ""
+msgstr "航点编辑器"
 
 #: src/Dialogs/Waypoint/Manager.cpp:326
 msgid "Save changes to waypoint file?"
-msgstr ""
+msgstr "保存更改到航点文件？"
 
 #: src/Dialogs/Waypoint/Manager.cpp:326
 msgid "Waypoints edited"
-msgstr ""
+msgstr "编辑航点"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:69
 #, no-c-format
 msgid "Turnpoint"
-msgstr ""
+msgstr "转弯点"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:71
 #, no-c-format
 msgid "Landable"
-msgstr ""
+msgstr "可着陆"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:80
 msgid "Comment"
-msgstr ""
+msgstr "注释"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:129
 msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
 "format."
 msgstr ""
+"对不起，航点编辑器还不能提供UTM坐标格式。"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:130
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:137
 msgid "Waypoint Editor"
-msgstr ""
+msgstr "航点编辑器"
 
 #: src/Dialogs/Waypoint/WaypointList.cpp:456
 msgid "Choose a filter or click here"
-msgstr ""
+msgstr "选择一个过滤器或点击这里"
 
 #: src/Dialogs/Waypoint/WaypointList.cpp:541
 msgid "Select Waypoint"
-msgstr ""
+msgstr "选择航点"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:57
 #, no-c-format
 msgid "All on"
-msgstr ""
+msgstr "全部打开"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:58
 #, no-c-format
 msgid "All airspaces are displayed."
-msgstr ""
+msgstr "显示全部空域"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:59
 #, no-c-format
 msgid "Clip"
-msgstr ""
+msgstr "剪切"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:60
 #, no-c-format
 msgid "Display airspaces below the clip altitude."
-msgstr ""
+msgstr "显示剪辑高度以下的空域。"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:62
 #, no-c-format
 msgid "Display airspaces within a margin of the glider."
-msgstr ""
+msgstr "显示滑翔机边缘内的空域。"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:63
 #, no-c-format
 msgid "All below"
-msgstr ""
+msgstr "以下全部"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:64
 #, no-c-format
 msgid "Display airspaces below the glider or within a margin."
-msgstr ""
+msgstr "显示滑翔机下方或空隙内的空域。"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:69
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:169
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:60
 #, no-c-format
 msgid "Default"
-msgstr ""
+msgstr "缺省"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:70
 #, no-c-format
@@ -5865,61 +5871,63 @@ msgid ""
 "This selects the best performing option for your hardware. In fact it "
 "favours 'fill padding' except for PPC 2000 system."
 msgstr ""
+"这将为您的硬件选择最佳的执行选项。事实上，除了PPC 2000系统外，它有利于“填充衬垫”。"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:72
 #, no-c-format
 msgid "Fill all"
-msgstr ""
+msgstr "填满所有"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:73
 #, no-c-format
 msgid "Transparently fills the airspace colour over the whole area."
-msgstr ""
+msgstr "透明地填充整个区域的领空颜色。"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:74
 #, no-c-format
 msgid "Fill padding"
-msgstr ""
+msgstr "填充衬垫"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:75
 #, no-c-format
 msgid ""
 "Draws a solid outline with a half transparent border around the airspace."
 msgstr ""
+"在空域周围画一个半透明的边框。"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:76
 #, no-c-format
 msgid "No fill"
-msgstr ""
+msgstr "无填充"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:77
 #, no-c-format
 msgid "Don't fill the airspace area."
-msgstr ""
+msgstr "不要填满领空区域。"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:83
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:151
 #, no-c-format
 msgid "No labels will be displayed."
-msgstr ""
+msgstr "没有标签将被显示。"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:85
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:140
 #, no-c-format
 msgid "All labels will be displayed."
-msgstr ""
+msgstr "所有标签将被显示。"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:151
 msgid "Colours"
-msgstr ""
+msgstr "颜色"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:152
 msgid "Filter"
-msgstr ""
+msgstr "过滤器"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:189
 msgid "Airspace display"
-msgstr ""
+msgstr "显示空域"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:190
 msgid ""
@@ -5927,62 +5935,66 @@ msgid ""
 "filter button also allows filtering of display and warnings independently "
 "for each airspace class."
 msgstr ""
+"控制空域用于显示和警告的过滤。空域过滤器按钮还允许对每个空域类独立地显示和警告。"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:193
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:155
 msgid "Label visibility"
-msgstr ""
+msgstr "标签可见度"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:194
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:156
 msgid "Determines what labels are displayed."
-msgstr ""
+msgstr "确定显示哪些标签。"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:198
 msgid "Clip altitude"
-msgstr ""
+msgstr "剪辑高度"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:199
 msgid ""
 "For clip airspace mode, this is the altitude below which airspace is "
 "displayed."
 msgstr ""
+"对于剪辑空域模式，这个高度低于显示空域。"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:203
 msgid "Margin"
-msgstr ""
+msgstr "边缘"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:204
 msgid ""
 "For auto and all below airspace mode, this is the altitude above/below which "
 "airspace is included."
 msgstr ""
+"对于自动和所有低于空域模式，这个高度包含高于或低于空域。"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:208
 msgid "Enable/disable all airspace warnings."
-msgstr ""
+msgstr "启用/禁用所有空域警告。"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:211
 msgid "Warnings dialog"
-msgstr ""
+msgstr "警告对话框"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:212
 msgid "Enable/disable displaying airspaces warnings dialog."
-msgstr ""
+msgstr "启用/禁用显示空域警告对话框。"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:216
 msgid "Warning time"
-msgstr ""
+msgstr "警告时间"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:217
 msgid ""
 "This is the time before an airspace incursion is estimated at which the "
 "system will warn the pilot."
 msgstr ""
+"这是一个空域入侵之前估算系统将警告飞行员的时间。"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:221
 msgid "Repetitive sound"
-msgstr ""
+msgstr "重复声音"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:222
 msgid ""
