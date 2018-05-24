@@ -10,7 +10,7 @@ msgstr ""
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
 "PO-Revision-Date: 2016-02-22 15:34+0000\n"
 "Last-Translator: Wang Zhe <216188@qq.com>\n"
-"Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
+"Language-Team: Chinese (Simplified) <216188@qq.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6001,46 +6001,49 @@ msgid ""
 "Enable/disable repetitive warning sound when airspaces warnings dialog is "
 "displayed."
 msgstr ""
+"在显示空域警告对话框时启用/禁用重复警告声音。"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:226
 msgid "Acknowledge time"
-msgstr ""
+msgstr "确认时间"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:227
 msgid ""
 "This is the time period in which an acknowledged airspace warning will not "
 "be repeated."
 msgstr ""
+"这是一个不重复警告确认空域的时间段。"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:231
 msgid "Use black outline"
-msgstr ""
+msgstr "使用黑色轮廓"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:232
 msgid ""
 "Draw a black outline around each airspace rather than the airspace color."
 msgstr ""
+"在每个空域周围画一个黑色轮廓，而不是空域颜色。"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:236
 msgid "Airspace fill mode"
-msgstr ""
+msgstr "空域填充模式"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:237
 msgid "Specifies the mode for filling the airspace area."
-msgstr ""
+msgstr "填充空域区域的指定模式。"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:242
 msgid "Airspace transparency"
-msgstr ""
+msgstr "透明空域"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:242
 msgid "If enabled, then airspaces are filled transparently."
-msgstr ""
+msgstr "如果启用，则空域被透明填充。"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:45
 #, no-c-format
 msgid "Disable final glide bar."
-msgstr ""
+msgstr "禁用最终滑翔条。"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:47
 #, no-c-format
@@ -6050,7 +6053,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:49
 #, no-c-format
 msgid "Show final glide bar if approaching final glide range."
-msgstr ""
+msgstr "总是显示滑翔条。"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:85
 msgid ""
@@ -6060,62 +6063,69 @@ msgid ""
 "of the target relative to you. In all modes, the color of the target "
 "indicates the threat level."
 msgstr ""
+"这使得能够显示FLARM雷达测量仪。飞行器航迹方向相对于目标方向显示为箭头，"
+"三角形向上或向下显示目标相对于目标的相对高度。"
+"在所有模式中，目标的颜色指示威胁级别。"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:88
 msgid "Auto close FLARM"
-msgstr ""
+msgstr "自动关闭FLARM"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:89
 msgid ""
 "Setting this to \"On\" will automatically close the FLARM dialog if there is "
 "no traffic. \"Off\" will keep the dialog open even without current traffic."
 msgstr ""
+"如果没有流量，将此设置为“on”将自动关闭FLAM对话框。“关闭”将保持对话框打开，即使没有当前的流量。"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:94
 msgid "This enables the display of the thermal assistant gauge."
-msgstr ""
+msgstr "打开显示热气流辅助测量仪。"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:97
 msgid "Thermal band"
-msgstr ""
+msgstr "热气流带"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:98
 msgid ""
 "This enables the display of the thermal profile (climb band) display on the "
 "map."
 msgstr ""
+"在地图上打开显示热气流剖面（爬升带）。"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:101
 msgid "Final glide bar"
-msgstr ""
+msgstr "最终滑翔条"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:102
 msgid ""
 "If set to \"On\" the final glide will always be shown, if set to \"Auto\" it "
 "will be shown when approaching the final glide possibility."
 msgstr ""
+"如果设置为On，则最终滑翔将始终显示，如果设置为Auto，则将在可能接近最终滑翔时显示。"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:108
 msgid "Final glide bar MC0"
-msgstr ""
+msgstr "MC设置为0最终滑翔条"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:109
 msgid ""
 "If set to ON the final glide bar will show a second arrow indicating the "
 "required height to reach the final waypoint at MC zero."
 msgstr ""
+"如果设置ON最终滑翔条将显示第二个箭头，指示在MC设置为0时到达最终航路点所需的高度。"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:118
 msgid "Vario bar"
-msgstr ""
+msgstr "高度条"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:119
 msgid "If set to ON the vario bar will be shown"
-msgstr ""
+msgstr "如果设置ON将打开高度条"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:59
 msgid "Speed arrows"
-msgstr ""
+msgstr "速度箭头"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:60
 msgid ""
@@ -6123,52 +6133,55 @@ msgid ""
 "cruise mode, arrows point up to command slow down; arrows point down to "
 "command speed up."
 msgstr ""
+"是否在高度表上显示速度命令箭头。"
+"当显示时，在巡航模式下，箭头指向上命令减速，箭头指向下命令加速。"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:65
 msgid "Show average"
-msgstr ""
+msgstr "显示平均值"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:66
 msgid ""
 "Whether to show the average climb rate.  In cruise mode, this switches to "
 "showing the average netto airmass rate."
 msgstr ""
+"是否显示平均爬升率。在巡航模式下，切换到显示平均NETTO气团率。"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:71
 msgid "Show MacReady"
-msgstr ""
+msgstr "显示MacReady"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:71
 msgid "Whether to show the MacCready setting."
-msgstr ""
+msgstr "是否显示MacReady设置"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:74
 msgid "Show bugs"
-msgstr ""
+msgstr "显示错误"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:74
 msgid "Whether to show the bugs percentage."
-msgstr ""
+msgstr "是否显示错误百分比"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:77
 msgid "Show ballast"
-msgstr ""
+msgstr "显示配重"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:77
 msgid "Whether to show the ballast percentage."
-msgstr ""
+msgstr "是否显示配重百分比"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:80
 msgid "Show gross"
-msgstr ""
+msgstr "显示总额"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:80
 msgid "Whether to show the gross climb rate."
-msgstr ""
+msgstr "是否显示总爬升率。"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:83
 msgid "Averager needle"
-msgstr ""
+msgstr "平均指针"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:84
 msgid ""
@@ -6176,11 +6189,14 @@ msgid ""
 "cruise, this needle displays the average netto value.  During circling, this "
 "needle displays the average gross value."
 msgstr ""
+"如果是正值，高度表将显示空心平均指针。"
+"在巡航期间，该指针显示平均NETTO值。"
+"在盘转过程中，该指针显示平均总值。"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:62
 #, no-c-format
 msgid "Final glide"
-msgstr ""
+msgstr "最终滑翔"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:63
 #, no-c-format
@@ -6294,11 +6310,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:88
 msgid "Text size"
-msgstr ""
+msgstr "文本大小"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:93
 msgid "Display Resolution"
-msgstr ""
+msgstr "显示分辨率"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:94
 msgid ""
@@ -6309,12 +6325,12 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:104
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:129
 msgid "Automatic"
-msgstr ""
+msgstr "自动"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:107
 #, c-format
 msgid "%d dpi"
-msgstr ""
+msgstr "%d dpi"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:115
 msgid "Events"
@@ -6328,7 +6344,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:123
 msgid "Language"
-msgstr ""
+msgstr "语言"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:124
 msgid ""
@@ -6339,7 +6355,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:162
 msgid "Menu timeout"
-msgstr ""
+msgstr "菜单超时"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:163
 msgid ""
@@ -6350,7 +6366,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:170
 #, no-c-format
 msgid "Keyboard"
-msgstr ""
+msgstr "键盘"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:172
 #, no-c-format
@@ -6369,7 +6385,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:187
 #, no-c-format
 msgid "OS settings"
-msgstr ""
+msgstr "OS设置"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:193
 msgid "Haptic feedback"
@@ -7323,7 +7339,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:122
 #, no-c-format
 msgid "Detailed"
-msgstr ""
+msgstr "详情"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:123
 #, no-c-format
@@ -7333,7 +7349,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:124
 #, no-c-format
 msgid "HangGlider"
-msgstr ""
+msgstr "悬挂滑翔翼"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:125
 #, no-c-format
@@ -7343,7 +7359,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:126
 #, no-c-format
 msgid "ParaGlider"
-msgstr ""
+msgstr "滑翔伞"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:127
 #, no-c-format
@@ -7353,12 +7369,12 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:132
 #, no-c-format
 msgid "No wind arrow is drawn."
-msgstr ""
+msgstr "没有画出风向箭头。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:133
 #, no-c-format
 msgid "Arrow head"
-msgstr ""
+msgstr "箭头"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:133
 #, no-c-format
@@ -7393,7 +7409,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:150
 msgid "Trail length"
-msgstr ""
+msgstr "轨迹长度"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:151
 msgid ""
@@ -7402,7 +7418,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:163
 msgid "Trail type"
-msgstr ""
+msgstr "轨迹类型"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:164
 msgid "Sets the type of the snail trail display."
@@ -7410,7 +7426,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:167
 msgid "Trail scaled"
-msgstr ""
+msgstr "轨迹规模"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:168
 msgid ""
@@ -7431,7 +7447,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:179
 msgid "Aircraft symbol"
-msgstr ""
+msgstr "飞行器符号"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:183
 msgid "Determines the way the wind arrow is drawn on the map."
@@ -7440,7 +7456,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:62
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:229
 msgid "Start max. speed"
-msgstr ""
+msgstr "最大开始速度"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:62
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:230
@@ -7461,7 +7477,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:76
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:234
 msgid "Start max. height"
-msgstr ""
+msgstr "最大开始高度"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:77
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:235
@@ -7529,7 +7545,7 @@ msgstr ""
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:192
 #, no-c-format
 msgid "Gate width"
-msgstr ""
+msgstr "门宽度"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:80
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:42
@@ -7540,7 +7556,7 @@ msgstr ""
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:208
 #, no-c-format
 msgid "Radius"
-msgstr ""
+msgstr "半径"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:144
 msgid "Default start type for new tasks you create."
@@ -7553,7 +7569,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:155
 #: src/Dialogs/Task/TaskPointDialog.cpp:426
 msgid "Finish point"
-msgstr ""
+msgstr "终止点"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:156
 msgid "Default finish type for new tasks you create."
@@ -7565,7 +7581,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:167
 msgid "Turn point"
-msgstr ""
+msgstr "转弯点"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:167
 msgid "Default turn point type for new tasks you create."
@@ -7660,7 +7676,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:119
 msgid "On-Line Contest"
-msgstr ""
+msgstr "在线竞赛"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:120
 msgid ""
@@ -7670,7 +7686,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:124
 msgid "Predict Contest"
-msgstr ""
+msgstr "预测竞赛"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:125
 msgid ""
@@ -7680,15 +7696,15 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:132
 msgid "FAI triangle areas"
-msgstr ""
+msgstr "FAI三角区域"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:133
 msgid "Show FAI triangle areas on the map."
-msgstr ""
+msgstr "在地图上显示FAI三角区域"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:137
 msgid "FAI triangle threshold"
-msgstr ""
+msgstr "FAI三角航线阈值"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:138
 msgid "Specifies which threshold is used for \"large\" FAI triangles."
@@ -7696,7 +7712,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:197
 msgid "Terrain display"
-msgstr ""
+msgstr "显示地形"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:198
 msgid "Draw a digital elevation terrain on the map."
@@ -7704,7 +7720,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:202
 msgid "Topography display"
-msgstr ""
+msgstr "显示地貌"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:203
 msgid "Draw topographical features (roads, rivers, lakes etc.) on the map."
@@ -7713,99 +7729,99 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:207
 #, no-c-format
 msgid "Low lands"
-msgstr ""
+msgstr "低地"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:208
 #, no-c-format
 msgid "Mountainous"
-msgstr ""
+msgstr "山地"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:209
 #, no-c-format
 msgid "Imhof 7"
-msgstr ""
+msgstr "Imhof 7"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:210
 #, no-c-format
 msgid "Imhof 4"
-msgstr ""
+msgstr "Imhof 4"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:211
 #, no-c-format
 msgid "Imhof 12"
-msgstr ""
+msgstr "Imhof 12"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:212
 #, no-c-format
 msgid "Imhof Atlas"
-msgstr ""
+msgstr "Imhof地图"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:213
 #, no-c-format
 msgid "ICAO"
-msgstr ""
+msgstr "ICAO"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:214
 #, no-c-format
 msgid "Vibrant"
-msgstr ""
+msgstr "鲜艳的"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:215
 #, no-c-format
 msgid "Grey"
-msgstr ""
+msgstr "灰色"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:216
 #, no-c-format
 msgid "White"
-msgstr ""
+msgstr "白色"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:217
 #, no-c-format
 msgid "Sandstone"
-msgstr ""
+msgstr "砂岩"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:218
 #, no-c-format
 msgid "Pastel"
-msgstr ""
+msgstr "粉彩"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:219
 #, no-c-format
 msgid "Italian Avioportolano VFR Chart"
-msgstr ""
+msgstr "意大利航空VFR图"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:220
 #, no-c-format
 msgid "German DFS VFR Chart"
-msgstr ""
+msgstr "德国DFS VFR图"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:221
 #, no-c-format
 msgid "French SIA VFR Chart"
-msgstr ""
+msgstr "法国SIA VFR图"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:225
 msgid "Terrain colors"
-msgstr ""
+msgstr "地形样色"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:226
 msgid "Defines the color ramp used in terrain rendering."
-msgstr ""
+msgstr "定义在地形渲染中使用颜色渐变。"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:232
 #, no-c-format
 msgid "Fixed"
-msgstr ""
+msgstr "固定"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:233
 #, no-c-format
 msgid "Sun"
-msgstr ""
+msgstr "太阳"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:238
 msgid "Slope shading"
-msgstr ""
+msgstr "坡面阴影"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:239
 msgid ""
@@ -7815,7 +7831,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:244
 msgid "Terrain contrast"
-msgstr ""
+msgstr "地形对比度"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:245
 msgid ""
@@ -7826,7 +7842,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:251
 msgid "Terrain brightness"
-msgstr ""
+msgstr "地形亮度"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:252
 msgid ""
@@ -7836,38 +7852,38 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:266
 msgid "Contours"
-msgstr ""
+msgstr "等高线"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:267
 msgid "If enabled, draws contour lines on the terrain."
-msgstr ""
+msgstr "如果启用，绘制地形上的等高线。"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:127
 msgid "Preset"
-msgstr ""
+msgstr "预设"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:127
 msgid "Load a set of units."
-msgstr ""
+msgstr "加载单位设置"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:130
 msgid "Custom"
-msgstr ""
+msgstr "定制"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:130
 msgid "My individual set of units."
-msgstr ""
+msgstr "我个人设置的单位。"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:143
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:169
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:201
 #, no-c-format
 msgid "knots"
-msgstr ""
+msgstr "节"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:148
 msgid "Aircraft/Wind speed"
-msgstr ""
+msgstr "飞机/风速"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:149
 msgid ""
@@ -7882,21 +7898,21 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:174
 msgid "Lift"
-msgstr ""
+msgstr "升力"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:174
 msgid "Units used for vertical speeds (variometer)."
-msgstr ""
+msgstr "用于垂直速度的单位（高度表）"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:180
 #, no-c-format
 msgid "feet"
-msgstr ""
+msgstr "英尺"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:181
 #, no-c-format
 msgid "meters"
-msgstr ""
+msgstr "米"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:184
 msgid "Units used for altitude and heights."
@@ -7904,31 +7920,31 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:194
 msgid "Units used for temperature."
-msgstr ""
+msgstr "用于温度的单位"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:206
 msgid "Task speed"
-msgstr ""
+msgstr "任务速度"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:206
 msgid "Units used for task speeds."
-msgstr ""
+msgstr "用于任务速度的单位"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:217
 msgid "Units used for pressures."
-msgstr ""
+msgstr "用于压力的单位"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:227
 msgid "Units used for mass."
-msgstr ""
+msgstr "用于质量的单位。"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:237
 msgid "Units used for wing loading."
-msgstr ""
+msgstr "用于翼载荷的单位。"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:253
 msgid "Lat./Lon."
-msgstr ""
+msgstr "维度/经度"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:253
 msgid "Units used for latitude and longitude."
@@ -7938,7 +7954,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/LoggerParameters.hpp:33
 #, no-c-format
 msgid "UTC offset"
-msgstr ""
+msgstr "UTC偏移量"
 
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:81
 msgid ""
@@ -7949,7 +7965,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:90
 msgid "Use GPS time"
-msgstr ""
+msgstr "使用GPS时间"
 
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:91
 msgid ""
@@ -7962,17 +7978,17 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:86
 #, no-c-format
 msgid "Full name"
-msgstr ""
+msgstr "全名"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:87
 #, no-c-format
 msgid "The full name of each waypoint is displayed."
-msgstr ""
+msgstr "显示每个航点的全名"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:89
 #, no-c-format
 msgid "First word of name"
-msgstr ""
+msgstr "名字的第一个字母"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:90
 #, no-c-format
@@ -7982,7 +7998,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:92
 #, no-c-format
 msgid "First 3 letters"
-msgstr ""
+msgstr "前3个字母"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:93
 #, no-c-format
@@ -7992,7 +8008,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:95
 #, no-c-format
 msgid "First 5 letters"
-msgstr ""
+msgstr "前5个字母"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:96
 #, no-c-format
@@ -8002,11 +8018,11 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:98
 #, no-c-format
 msgid "No waypoint name is displayed."
-msgstr ""
+msgstr "不显示航点名称"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:101
 msgid "Label format"
-msgstr ""
+msgstr "标签格式"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:101
 msgid "Determines how labels are displayed with each waypoint"
@@ -8015,12 +8031,12 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:107
 #, no-c-format
 msgid "No arrival height is displayed."
-msgstr ""
+msgstr "不显示到达高度。"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:109
 #, no-c-format
 msgid "Straight glide"
-msgstr ""
+msgstr "直线滑翔"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:110
 #, no-c-format
@@ -8030,7 +8046,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:112
 #, no-c-format
 msgid "Terrain avoidance glide"
-msgstr ""
+msgstr "地形规避滑翔"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:113
 #, no-c-format
@@ -8042,7 +8058,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:116
 #, no-c-format
 msgid "Straight & terrain glide"
-msgstr ""
+msgstr "直线和地形滑翔"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:117
 #, no-c-format
@@ -8058,21 +8074,21 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:129
 #, no-c-format
 msgid "Rounded rectangle"
-msgstr ""
+msgstr "圆角矩形"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:130
 #, no-c-format
 msgid "Outlined"
-msgstr ""
+msgstr "概述"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:134
 msgid "Label style"
-msgstr ""
+msgstr "标签样式"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:142
 #, no-c-format
 msgid "Task waypoints & airfields"
-msgstr ""
+msgstr "任务航点和机场"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:143
 #, no-c-format
@@ -8082,7 +8098,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:145
 #, no-c-format
 msgid "Task waypoints & landables"
-msgstr ""
+msgstr "任务航点和可着陆区"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:146
 #, no-c-format
@@ -8092,7 +8108,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:148
 #, no-c-format
 msgid "Task waypoints"
-msgstr ""
+msgstr "任务航点"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:149
 #, no-c-format
@@ -8102,7 +8118,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:162
 #, no-c-format
 msgid "Purple circle"
-msgstr ""
+msgstr "紫色圈"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:163
 #, no-c-format
@@ -8116,7 +8132,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:167
 #, no-c-format
 msgid "B/W"
-msgstr ""
+msgstr "B/W"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:168
 #, no-c-format
@@ -8129,7 +8145,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:172
 #, no-c-format
 msgid "Traffic lights"
-msgstr ""
+msgstr "交通灯"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:173
 #, no-c-format
@@ -8141,7 +8157,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:177
 msgid "Landable symbols"
-msgstr ""
+msgstr "可着陆区符号"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:178
 msgid ""
@@ -8152,7 +8168,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:183
 msgid "Detailed landables"
-msgstr ""
+msgstr "可着陆区详情"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:184
 msgid ""
@@ -8162,7 +8178,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:189
 msgid "Landable size"
-msgstr ""
+msgstr "可着陆区大小"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:190
 msgid "A percentage to select the size landables are displayed on the map."
@@ -8170,7 +8186,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:194
 msgid "Scale runway length"
-msgstr ""
+msgstr "跑道长度"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:195
 msgid ""
@@ -8181,59 +8197,60 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:185
 #, no-c-format
 msgid "Hot-air balloon"
-msgstr ""
+msgstr "热气球"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:186
 #, no-c-format
 msgid "Hangglider (Flex/FAI1)"
-msgstr ""
+msgstr "悬挂滑翔翼(Flex/FAI1)"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:187
 #, no-c-format
 msgid "Hangglider (Rigid/FAI5)"
-msgstr ""
+msgstr "悬挂滑翔翼 (Rigid/FAI5)"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:206
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:232
 msgid "Tracking Interval"
-msgstr ""
+msgstr "跟踪间隔"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:209
 msgid "Track friends"
-msgstr ""
+msgstr "跟踪朋友"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:210
 msgid "Download the position of your friends live from the SkyLines server."
-msgstr ""
+msgstr "从SkyLines服务器下载你朋友的位置。"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:213
 msgid "Show nearby traffic"
-msgstr ""
+msgstr "显示附近的交通"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:214
 msgid ""
 "Download the position of your nearby traffic live from the SkyLines server."
 msgstr ""
+"从SkyLines服务器下载你位置附近的交通。"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:234
 msgid "Vehicle Type"
-msgstr ""
+msgstr "交通工具类型"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:234
 msgid "Type of vehicle used."
-msgstr ""
+msgstr "使用的交通工具类型"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:236
 msgid "Vehicle Name"
-msgstr ""
+msgstr "交通工具名称"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:239
 msgid "Server"
-msgstr ""
+msgstr "服务器"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:243
 msgid "Username"
-msgstr ""
+msgstr "用户名"
 
 #: src/Dialogs/Settings/Panels/CloudConfigPanel.cpp:83
 msgid ""
@@ -8247,16 +8264,16 @@ msgstr ""
 
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:42
 msgid "Radius of the OZ cylinder."
-msgstr ""
+msgstr "OZ圆筒半径"
 
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
 msgid "Width of the start/finish gate."
-msgstr ""
+msgstr "开始/结束门宽度"
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:46
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:42
 msgid "Radius of the OZ sector."
-msgstr ""
+msgstr "OZ扇区半径"
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:56
 msgid "Start radial"
@@ -8286,18 +8303,18 @@ msgstr ""
 
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:54
 msgid "Angle"
-msgstr ""
+msgstr "角度"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:140
 msgid "Turn Points"
-msgstr ""
+msgstr "转弯点"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:160
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:163
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:238
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:261
 msgid "Task Manager"
-msgstr ""
+msgstr "管理任务"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:235
 msgid "Validation Errors"
@@ -8315,15 +8332,15 @@ msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskClosePanel.cpp:65
 msgid "Task unchanged"
-msgstr ""
+msgstr "任务无更改"
 
 #: src/Dialogs/Task/Manager/TaskClosePanel.cpp:112
 msgid "Revert Changes"
-msgstr ""
+msgstr "恢复更改"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:164
 msgid "Edit Point"
-msgstr ""
+msgstr "编辑点"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:167
 msgid "Make Finish"
@@ -8331,7 +8348,7 @@ msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:176
 msgid "Reverse"
-msgstr ""
+msgstr "反向"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:179
 msgid "Clear All"
@@ -8398,7 +8415,7 @@ msgstr "创建新任务"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:81
 msgid "Task New"
-msgstr ""
+msgstr "新任务"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:115
 msgid "New Task"
@@ -8406,11 +8423,11 @@ msgstr "新任务"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:116
 msgid "Declare"
-msgstr ""
+msgstr "申报"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:117
 msgid "Browse"
-msgstr ""
+msgstr "浏览"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:100
 msgid "Load"
@@ -8424,36 +8441,36 @@ msgstr "重命名"
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:343
 #: src/Monitor/AirspaceWarningMonitor.cpp:82
 msgid "More"
-msgstr ""
+msgstr "更多"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:241
 msgid "Load the selected task?"
-msgstr ""
+msgstr "加载选择的任务"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:244
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:280
 msgid "Task Browser"
-msgstr ""
+msgstr "浏览任务"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:271
 msgid "Can't delete .CUP files"
-msgstr ""
+msgstr "不能删除.CUP文件"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:279
 msgid "Delete the selected task?"
-msgstr ""
+msgstr "删除选择的任务"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:317
 msgid "Can't rename .CUP files"
-msgstr ""
+msgstr "不能重命名.CUP文件"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:317
 msgid "Rename Error"
-msgstr ""
+msgstr "重命名错误"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:343
 msgid "Less"
-msgstr ""
+msgstr "较少"
 
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:60
 #: src/Dialogs/Task/TaskPointDialog.cpp:274
@@ -8461,54 +8478,54 @@ msgstr ""
 #: src/Dialogs/Weather/NOAADetails.cpp:73
 #: src/Dialogs/Weather/NOAADetails.cpp:115
 msgid "Remove"
-msgstr ""
+msgstr "移除"
 
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:140
 msgid "(Add Alternate Start)"
-msgstr ""
+msgstr "（添加备用开始）"
 
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:217
 msgid "Alternate Start Points"
-msgstr ""
+msgstr "备用开始点"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:239
 #: src/Dialogs/Task/TaskPointDialog.cpp:284
 msgid "Change Type"
-msgstr ""
+msgstr "更改类型"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:292
 #: src/Dialogs/Task/TaskPointDialog.cpp:392
 msgid "Enable Alternate Starts"
-msgstr ""
+msgstr "开始启用备用地"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:295
 msgid "Score exit"
-msgstr ""
+msgstr "得分退出"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:395
 msgid "Edit Alternates"
-msgstr ""
+msgstr "编辑备用地"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:416
 #: src/Dialogs/Task/TaskPointDialog.cpp:487
 msgid "Task point"
-msgstr ""
+msgstr "任务点"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:421
 msgid "Assigned area point"
-msgstr ""
+msgstr "指定区域点"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:487
 msgid "Remove task point?"
-msgstr ""
+msgstr "移除任务点？"
 
 #: src/Dialogs/Task/MutateTaskPointDialog.cpp:129
 msgid "Task Point Type"
-msgstr ""
+msgstr "任务点类型"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:64
 msgid "Goal"
-msgstr ""
+msgstr "目标"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:71
 msgid "Out and return"
@@ -8524,7 +8541,7 @@ msgstr ""
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:86
 msgid "non-FAI triangle"
-msgstr ""
+msgstr "非FAI三角航线"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:90
 #, c-format
@@ -8534,7 +8551,7 @@ msgstr ""
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:121
 #, c-format
 msgid "Task is empty (%s)"
-msgstr ""
+msgstr "空 (%s)任务"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:131
 msgid "max."
@@ -8546,47 +8563,47 @@ msgstr "最小"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:143
 msgid "dist."
-msgstr ""
+msgstr "距离"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:186
 msgid "Sector"
-msgstr ""
+msgstr "扇区"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:192
 msgid "Line"
-msgstr ""
+msgstr "线"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:198
 msgid "Cylinder"
-msgstr ""
+msgstr "圆筒"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:204
 msgid "MAT cylinder"
-msgstr ""
+msgstr "MAT圆筒"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:208
 msgid "Keyhole"
-msgstr ""
+msgstr "锁眼"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:214
 msgid "DAeC Keyhole"
-msgstr ""
+msgstr "DAeC锁眼"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:218
 msgid "BGA Fixed Course"
-msgstr ""
+msgstr "BGA固定航向"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:222
 msgid "BGA Enhanced Option"
-msgstr ""
+msgstr "BGA增强选项"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:226
 msgid "BGA Start Sector"
-msgstr ""
+msgstr "BGA开始扇区"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:242
 msgid "Enter a task name"
-msgstr ""
+msgstr "输入任务名称"
 
 #: src/Dialogs/Task/TargetDialog.cpp:433
 msgid ""
@@ -8666,15 +8683,15 @@ msgstr "天气"
 #: src/Dialogs/Weather/NOAADetails.cpp:86
 #: src/Dialogs/Weather/NOAADetails.cpp:151
 msgid "METAR and TAF"
-msgstr ""
+msgstr "METAR和TAF"
 
 #: src/Dialogs/Weather/RASPDialog.cpp:216
 msgid "Field"
-msgstr ""
+msgstr "字段"
 
 #: src/Dialogs/dlgCredits.cpp:132 Data/Input/default.xci:852
 msgid "Credits"
-msgstr ""
+msgstr "信用"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:70
 msgid "Audio vario"
@@ -8686,7 +8703,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:77
 msgid "Enable Deadband"
-msgstr ""
+msgstr "打开无控制作用区"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:78
 msgid ""
@@ -8696,7 +8713,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:84
 msgid "Min. Frequency"
-msgstr ""
+msgstr "最小频率"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:85
 msgid "The tone frequency that is played at maximum sink rate."
@@ -8704,7 +8721,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:90
 msgid "Zero Frequency"
-msgstr ""
+msgstr "零频率"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:91
 msgid "The tone frequency that is played at zero climb rate."
@@ -8712,7 +8729,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:96
 msgid "Max. Frequency"
-msgstr ""
+msgstr "最大频率"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:97
 msgid "The tone frequency that is played at maximum climb rate."
@@ -8740,7 +8757,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AudioConfigPanel.cpp:60
 msgid "Master Volume"
-msgstr ""
+msgstr "主音量"
 
 #: src/Dialogs/Weather/PCMetDialog.cpp:68
 msgid "Failed to download file."
@@ -8796,7 +8813,7 @@ msgstr ""
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:49 src/Monitor/MatTaskMonitor.cpp:64
 msgid "Dismiss"
-msgstr ""
+msgstr "解散"
 
 #: src/Monitor/MatTaskMonitor.cpp:55
 msgid "Add this turn point?"
@@ -8804,19 +8821,19 @@ msgstr "增加这个转弯点"
 
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:225
 msgid "Use"
-msgstr ""
+msgstr "使用"
 
 #: src/Renderer/NOAAListRenderer.cpp:45
 msgid "No METAR available"
-msgstr ""
+msgstr "无METAR可用"
 
 #: src/Weather/NOAAFormatter.cpp:133 src/Weather/NOAAFormatter.cpp:140
 msgid "Dew Point"
-msgstr ""
+msgstr "露点"
 
 #: src/Weather/NOAAFormatter.cpp:167
 msgid "Visibility"
-msgstr ""
+msgstr "能见度"
 
 #: src/Weather/NOAAFormatter.cpp:172
 #, c-format
@@ -8825,7 +8842,7 @@ msgstr ""
 
 #: src/Weather/NOAAFormatter.cpp:184
 msgid "Sky Conditions"
-msgstr ""
+msgstr "天空条件"
 
 #: src/Weather/NOAAFormatter.cpp:247
 #, c-format
@@ -8838,7 +8855,7 @@ msgstr ""
 
 #: src/Weather/NOAAFormatter.cpp:287
 msgid "No TAF available!"
-msgstr ""
+msgstr "无METAR可用！"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:33
 #, no-c-format
@@ -8863,27 +8880,27 @@ msgstr ""
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:45
 #, no-c-format
 msgid "Battery low delay"
-msgstr ""
+msgstr "电量低延迟"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:48
 #, no-c-format
 msgid "Battery empty delay"
-msgstr ""
+msgstr "电量空延时"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:51
 #, no-c-format
 msgid "Interval; battery"
-msgstr ""
+msgstr "间隔；电量"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:32
 #, no-c-format
 msgid "Step"
-msgstr ""
+msgstr "步骤"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:33
 #, no-c-format
 msgid "Ramp"
-msgstr ""
+msgstr "斜坡"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:40
 #, no-c-format
@@ -9031,7 +9048,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:106
 #, no-c-format
 msgid "Filter circling"
-msgstr ""
+msgstr "盘转过滤器"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:107
 #, no-c-format
@@ -9041,7 +9058,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:111
 #, no-c-format
 msgid "Filter cruise"
-msgstr ""
+msgstr "盘转过滤器"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:112
 #, no-c-format
@@ -9064,24 +9081,24 @@ msgstr "哔哔声类型"
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:108
 msgid "Pitch scheme"
-msgstr ""
+msgstr "俯仰方案"
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:111
 msgid "Pitch scale"
-msgstr ""
+msgstr "俯仰角度"
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:114
 msgid "Period scheme"
-msgstr ""
+msgstr "周期方案"
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:117
 msgid "Period scale"
-msgstr ""
+msgstr "周期尺度"
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:33
 #, no-c-format
 msgid "TE mixing"
-msgstr ""
+msgstr "TE混合"
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:34
 #, no-c-format
@@ -9133,22 +9150,22 @@ msgstr ""
 #: src/Dialogs/Device/Vega/DisplayParameters.hpp:42
 #, no-c-format
 msgid "LED bright"
-msgstr ""
+msgstr "LED亮度"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:42
 #, no-c-format
 msgid "Max. objects reported"
-msgstr ""
+msgstr "最大报告对象"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:44
 #, no-c-format
 msgid "Max. reported"
-msgstr ""
+msgstr "报告最大值"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:46
 #, no-c-format
 msgid "Flarm interface"
-msgstr ""
+msgstr "Flarm接口"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:48
 #, no-c-format
@@ -9158,7 +9175,7 @@ msgstr "关闭盘转"
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:50
 #, no-c-format
 msgid "No mode reports"
-msgstr ""
+msgstr "无模式报告"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:52
 #, no-c-format
@@ -9178,37 +9195,37 @@ msgstr "飞行器类型"
 #: src/Dialogs/Device/Vega/FlarmRepeatParameters.hpp:33
 #, no-c-format
 msgid "Interval; info"
-msgstr ""
+msgstr "信息；间隔"
 
 #: src/Dialogs/Device/Vega/FlarmRepeatParameters.hpp:36
 #, no-c-format
 msgid "Interval; caution"
-msgstr ""
+msgstr "告警；间隔"
 
 #: src/Dialogs/Device/Vega/FlarmRepeatParameters.hpp:39
 #, no-c-format
 msgid "Interval; warning"
-msgstr ""
+msgstr "告警；间隔"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:52
 #, no-c-format
 msgid "TE port"
-msgstr ""
+msgstr "TE端口"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:52
 #, no-c-format
 msgid "Whether the Total Energy port is connected."
-msgstr ""
+msgstr "总能量端口是否连接"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:55
 #, no-c-format
 msgid "Pitot port"
-msgstr ""
+msgstr "Pitot端口"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:55
 #, no-c-format
 msgid "Whether the Pitot port is connected."
-msgstr ""
+msgstr "Pitot端口是否连接"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:58
 #, no-c-format
@@ -9218,7 +9235,7 @@ msgstr "静态端口"
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:58
 #, no-c-format
 msgid "Whether the Static port is connected."
-msgstr ""
+msgstr "静态端口是否连接"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:61
 #, no-c-format
@@ -9254,7 +9271,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:73
 #, no-c-format
 msgid "Baud rate Vega"
-msgstr ""
+msgstr "Vega波特率"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:74
 #, no-c-format
@@ -9327,7 +9344,7 @@ msgstr "IGC记录中"
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:32
 #, no-c-format
 msgid "Mute vario on voice"
-msgstr ""
+msgstr "高度表静音"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:33
 #, no-c-format
@@ -9347,17 +9364,17 @@ msgstr "静音"
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:38
 #, no-c-format
 msgid "Speaker threshold"
-msgstr ""
+msgstr "扬声器阈值"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:40
 #, no-c-format
 msgid "Headset threshold"
-msgstr ""
+msgstr "耳机阈值"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:42
 #, no-c-format
 msgid "Urgent min. volume"
-msgstr ""
+msgstr "紧急最小音量"
 
 #: Data/Input/default.xci:833 Data/Input/default.xci:1206
 msgid "Thermal Assistant"
@@ -9419,7 +9436,7 @@ msgstr ""
 
 #: Data/Input/default.xci:514 Data/Input/default.xci:1079
 msgid "Topo."
-msgstr ""
+msgstr "地貌"
 
 #: Data/Input/default.xci:64
 msgid "Below final glide"
@@ -9435,6 +9452,8 @@ msgid ""
 "Cruise\n"
 "Demo"
 msgstr ""
+"巡航\n"
+"模拟"
 
 #: Data/Input/default.xci:686
 msgid ""
@@ -9449,6 +9468,8 @@ msgid ""
 "Accel\n"
 "Zero"
 msgstr ""
+"加速\n"
+"零"
 
 #: Data/Input/default.xci:1096
 msgid ""
@@ -9463,10 +9484,12 @@ msgid ""
 "Pan\n"
 "On"
 msgstr ""
+"Pan\n"
+"打开"
 
 #: Data/Input/default.xci:759 Data/Input/default.xci:1158
 msgid "FLARM Radar"
-msgstr ""
+msgstr "FLARM雷达"
 
 #: Data/Input/default.xci:1120
 msgid ""
