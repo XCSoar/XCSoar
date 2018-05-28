@@ -6999,147 +6999,150 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:131
 #, no-c-format
 msgid "Reach calculations disabled."
-msgstr ""
+msgstr "禁用到达计算。"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:132
 #, no-c-format
 msgid "Straight"
-msgstr ""
+msgstr "直线"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:133
 #, no-c-format
 msgid "The reach is from straight line paths from the glider."
-msgstr ""
+msgstr "到达距离是滑翔机的直线路径。"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:134
 #, no-c-format
 msgid "Turning"
-msgstr ""
+msgstr "转向"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:135
 #, no-c-format
 msgid "The reach is calculated allowing turns around terrain obstacles."
-msgstr ""
+msgstr "允许绕过地形障碍的到达计算。"
 
 #. Spacer
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:141
 msgid "Reach mode"
-msgstr ""
+msgstr "到达模式"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:142
 msgid ""
 "How calculations are performed of the reach of the glider with respect to "
 "terrain."
 msgstr ""
+"如何计算滑翔机到达地形的距离。"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:148
 #, no-c-format
 msgid "Uses task glide polar."
-msgstr ""
+msgstr "使用任务滑动极曲线。"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:149
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:105
 #, no-c-format
 msgid "Safety MC"
-msgstr ""
+msgstr "MC安全值"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:150
 #, no-c-format
 msgid "Uses safety MacCready value"
-msgstr ""
+msgstr "使用MacCready安全值"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:154
 msgid "Reach polar"
-msgstr ""
+msgstr "到达极曲线"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:155
 msgid ""
 "This determines the glide performance used in reach, landable arrival, abort "
 "and alternate calculations."
 msgstr ""
+"这决定了滑翔性能在到达、着陆、中止和备用计算中的应用。"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:161
 #, no-c-format
 msgid "Disables the reach display."
-msgstr ""
+msgstr "禁用到达显示"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:162
 #, fuzzy, no-c-format
 msgid "Terrain line"
-msgstr "终点线"
+msgstr "地形线"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:163
 #, no-c-format
 msgid "Draws a dashed line at the terrain glide reach."
-msgstr ""
+msgstr "在地形上绘制滑翔机可到达的虚线。"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:164
 #, no-c-format
 msgid "Terrain shade"
-msgstr ""
+msgstr "地形阴影"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:165
 #, no-c-format
 msgid "Shades terrain outside glide reach."
-msgstr ""
+msgstr "滑翔机可到达之外的地形阴影。"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:166
 #, fuzzy, no-c-format
 msgid "Working line"
-msgstr "终点线"
+msgstr "可到达线"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:167
 #, no-c-format
 msgid "Draws a dashed line at the working glide reach."
-msgstr ""
+msgstr "在滑翔机可到达处绘制虚线。"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:168
 #, no-c-format
 msgid "Working line, terrain line"
-msgstr ""
+msgstr "到达线，地形线"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:169
 #, no-c-format
 msgid "Draws a dashed line at the working and terrain glide reaches."
-msgstr ""
+msgstr "在滑翔机到达和地形处绘制虚线。"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:170
 #, no-c-format
 msgid "Working line, terrain shade"
-msgstr ""
+msgstr "可到达线，地形阴影"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:171
 #, no-c-format
 msgid "Draws a dashed line at working, and shade terrain, glide reaches."
-msgstr ""
+msgstr "在可到达、和地形阴影，滑翔机到达处绘制虚线。"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:175
 msgid "Reach display"
-msgstr ""
+msgstr "显示到达"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:65
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:124
 msgid "Arrival height"
-msgstr ""
+msgstr "到达高度"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:66
 msgid ""
 "The height above terrain that the glider should arrive at for a safe landing."
 msgstr ""
+"滑翔机到达安全着陆地以上的高度。"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:71
 msgid "Terrain height"
-msgstr ""
+msgstr "地形高度"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:72
 msgid "The height above terrain that the glider must clear during final glide."
-msgstr ""
+msgstr "滑翔机最后滑翔时必须清除的地形高度。"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:78
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:118
 #, no-c-format
 msgid "Simple"
-msgstr ""
+msgstr "简单"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:79
 #, no-c-format
@@ -7147,16 +7150,17 @@ msgid ""
 "The alternates will only be sorted by waypoint type (airport/outlanding "
 "field) and arrival height."
 msgstr ""
+"备用地将仅由航点类型（机场/外场着陆区域）和到达高度排序。"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:81
 #, no-c-format
 msgid "The sorting will also take the current task direction into account."
-msgstr ""
+msgstr "排序也将考虑当前的任务方向。"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:82
 #, no-c-format
 msgid "Home"
-msgstr ""
+msgstr "本场"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:83
 #, no-c-format
@@ -7164,19 +7168,21 @@ msgid ""
 "The sorting will try to find landing options in the current direction to the "
 "configured home waypoint."
 msgstr ""
+"排序将尝试寻找当前配置的本场航点方向的着陆选项。"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:87
 msgid "Alternates mode"
-msgstr ""
+msgstr "备用模式"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:88
 msgid ""
 "Determines sorting of alternates in the alternates dialog and in abort mode."
 msgstr ""
+"在备用地对话框和中止模式中确定备用地的排序。"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:91
 msgid "Polar degradation"
-msgstr ""
+msgstr "极曲线降级"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:92
 #, no-c-format
@@ -7184,10 +7190,11 @@ msgid ""
 "A permanent polar degradation. 0% means no degradation, 50% indicates the "
 "glider's sink rate is doubled."
 msgstr ""
+"极曲线永久性降级。0%意味着没有降级，50%表示滑翔机的下沉率增加了一倍。"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:100
 msgid "Auto bugs"
-msgstr ""
+msgstr "自动错误"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:101
 #, no-c-format
