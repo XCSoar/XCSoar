@@ -74,11 +74,59 @@ furnishing, performance, or use of this material.
 
 \chapter{Policy}\label{cha:policy}
 
+\section{Git Work Flow}
+
+\subsection{Version Numbering}
+
+Each release of XCSoar is denoted by a unique version number. A version
+number consists three sequential numerical fields separated a period and
+prefixed by a 'v'. The significance of the three fields are
+<major>.<minor>.<patch>. So, for instance, the version number 'v7.1.3'
+indicates XCSoar major version 7, minor version 1, and patch 3.
+
+Release versions are determined and maintained by the release manager.
+
+\subsection{Git Repository Enduring Branches}
+
+At any time the XCSoar contains two enduring branches. The principle
+enduring branch is 'master'. The lifetime of this branch is unbounded.
+The second enduring branch is the current minor version branch. The
+lifetime of this branch is the lifetime of the current minor version.
+The name of the minor version branch is in the form 'v<major>.<minor>.x'
+So, for instance, the current minor branch may be called 'v7.1.x'.
+
+With the commencement of a new minor version the release manager will
+create the required branch. The old minor branch will be retired.
+All XCSoar releases are made from the current minor branch.
+
+The master branch serves as the development branch for the next minor
+release (which may also be the first minor of the next major release).
+
+Developers should commit changes for the next minor release to the master
+branch. Bug fixes of the current minor release should be committed to
+the current minor branch, in preparation for the next patch release.
+
 \section{Writing Patches}
 
-Submit patches or \texttt{git pull} requests to the developer mailing
-list (\texttt{xcsoar-devel@lists.sourceforge.net}) or at
-\href{https://github.com/XCSoar/XCSoar}{our GitHub repository}.
+There are two methods to summit patches to the upstream XCSoar repository.
+
+The XCSoar repository is currently hosted at
+\href{https://github.com/XCSoar/XCSoar}{XCSoar GitHub repository}.
+GitHub provides a method for submitting patches using their Web interface.
+The easiest way to use this method is to make another XCSoar repository by
+ 'forkng' from 'XCSoar/XCSoar'. Make sure that your local repository
+is up to date with the upstream XCSoar/XCSoar repository. Then make a 
+feature branch from the master or current minor branch as appropriate for
+the change you are making and commit the changes to that branch. To make
+the upstream merge easier it is best to re base this feature branch with
+the appropriate upstream branch from time to time.
+
+When ready to submit the feature branch to the upstream push your local
+repository to your GitHub XCSoar repository and use the GitHub Web interface
+to make a 'pull request' of your feature branch to XCSoar/SCSoar.
+
+The second method is to submit patches or \texttt{git pull} requests to
+the developer mailing list (\texttt{xcsoar-devel@lists.sourceforge.net}).
 
 A patch should be self-explanatory, it needs a good description.  The
 subject line specifies the subsystem/library name and a brief
