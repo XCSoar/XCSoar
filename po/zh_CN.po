@@ -7201,6 +7201,7 @@ msgstr "自动错误"
 msgid ""
 "If enabled, adds 1% to the bugs setting after each full hour while flying."
 msgstr ""
+"如果启用，则在飞行的每一个小时后向bug设置增加1%。"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:106
 msgid ""
@@ -7208,10 +7209,11 @@ msgid ""
 "calculations, in task abort mode and for determining arrival altitude at "
 "airfields."
 msgstr ""
+"当启用MC安全到达计算时使用MacCready设置，在任务中止模式下用于确定机场的到达高度。"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:114
 msgid "STF risk factor"
-msgstr ""
+msgstr "STF风险因子。"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:115
 msgid ""
@@ -7220,36 +7222,43 @@ msgid ""
 "no compensation, 1.0 scales MC linearly with current height (with reference "
 "to height of the maximum climb). If considered, 0.3 is recommended."
 msgstr ""
+"当滑翔机高度低时STF风险因子减小了用于计算滑翔机飞行时飞行速度的MacCready设置，"
+"以补偿风险。设置为0，不补偿，1个刻度MC与高度线性（参照最大爬升高度）。"
+"如果慎重考虑，建议0.3。"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:67
 msgid "Map database"
-msgstr ""
+msgstr "地图数据库"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:68
 msgid ""
 "The name of the file (.xcm) containing terrain, topography, and optionally "
 "waypoints, their details and airspaces."
 msgstr ""
+"文件的名称（.xcm）包含地形、地貌和可选的航点、及它们的细节和空域。"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:73
 msgid ""
 "Primary waypoints file.  Supported file types are Cambridge/WinPilot files (."
 "dat), Zander files (.wpz) or SeeYou files (.cup)."
 msgstr ""
+"主航点文件。支持的文件类型是Cambridge/WinPilot文件（.dat）、"
+"Zander文件（.wpz）或SeeYou文件（.CUP）。"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:78
 msgid "More waypoints"
-msgstr ""
+msgstr "更多航点"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:79
 msgid ""
 "Secondary waypoints file.  This may be used to add waypoints for a "
 "competition."
 msgstr ""
+"次要航点文件。这可以用来增加比赛的航点。"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:84
 msgid "Watched waypoints"
-msgstr ""
+msgstr "注意航点"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:85
 msgid ""
@@ -7258,43 +7267,46 @@ msgid ""
 "for waypoints like known reliable thermal sources (e.g. powerplants) or "
 "mountain passes."
 msgstr ""
+"航点文件包含特殊的航点用于额外的计算，例如在总是在地图显示到达高度的计算。"
+"有用的航点，如已知可靠的热气流源（例如动力装置）或山路。"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:92
 #: Data/Input/default.xci:860
 msgid "Airspaces"
-msgstr ""
+msgstr "空域"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:92
 msgid "The file name of the primary airspace file."
-msgstr ""
+msgstr "主空域文件文件名"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:96
 msgid "More airspaces"
-msgstr ""
+msgstr "更多空域"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:96
 msgid "The file name of the secondary airspace file."
-msgstr ""
+msgstr "次要空域文件文件名"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:101
 msgid "Waypoint details"
-msgstr ""
+msgstr "航点详情"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:102
 msgid ""
 "The file may contain extracts from enroute supplements or other contributed "
 "information about individual waypoints and airfields."
 msgstr ""
+"该文件可包含来自航路补给物或其他有关航点和机场的其他信息摘录。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:83
 #, no-c-format
 msgid "Disable display of ground track line."
-msgstr ""
+msgstr "禁用显示地面轨迹线。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:84
 #, no-c-format
 msgid "Always display ground track line."
-msgstr ""
+msgstr "始终显示地面轨迹线。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:85
 #, no-c-format
@@ -7302,11 +7314,12 @@ msgid ""
 "Display ground track line if there is a significant difference to plane "
 "heading."
 msgstr ""
+"如果与飞机航向有显著差异，则显示地面轨迹线。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:98
 #, no-c-format
 msgid "Vario #1"
-msgstr ""
+msgstr "高度计 #1"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:98
 #, no-c-format
@@ -7314,11 +7327,12 @@ msgid ""
 "Within lift areas lines get displayed green and thicker, while sinking lines "
 "are shown brown and thin. Zero lift is presented as a grey line."
 msgstr ""
+"在升力区域线显示绿色和更深，而下沉线显示棕色和更浅。零升力以灰色线表示。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:101
 #, no-c-format
 msgid "Vario #1 (with dots)"
-msgstr ""
+msgstr "高度计 #1（点）"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:101
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:106
@@ -7326,11 +7340,12 @@ msgstr ""
 msgid ""
 "The same colour scheme as the previous, but with dotted lines while sinking."
 msgstr ""
+"与前一种颜色相同，但在下沉时有虚线。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:103
 #, no-c-format
 msgid "Vario #2"
-msgstr ""
+msgstr "高度计 #2"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:103
 #, no-c-format
@@ -7338,16 +7353,17 @@ msgid ""
 "The climb colour for this scheme is orange to red, sinking is displayed as "
 "light blue to dark blue. Zero lift is presented as a yellow line."
 msgstr ""
+"该方案的爬升颜色为橙色至红色，下沉显示为浅蓝色至深蓝色。零升力呈现为黄线。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:106
 #, no-c-format
 msgid "Vario #2 (with dots)"
-msgstr ""
+msgstr "高度计 #2（点）"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:109
 #, no-c-format
 msgid "Vario-scaled dots and lines"
-msgstr ""
+msgstr "高度计刻度的点和线"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:110
 #, no-c-format
@@ -7355,26 +7371,27 @@ msgid ""
 "Vario-scaled dots with lines. Orange to red = climb. Light blue to dark blue "
 "= sink. Zero lift is presented as a yellow line."
 msgstr ""
+"高度计刻度线条的点。橙色到红色=爬升。浅蓝色到深蓝色=下沉。零升力呈现为黄线。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:113
 #, no-c-format
 msgid "The colour scheme corresponds to the height."
-msgstr ""
+msgstr "配色和高度相一致。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:119
 #, no-c-format
 msgid "Simplified line graphics, black with white contours."
-msgstr ""
+msgstr "简化线图形，黑色带有白色轮廓。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:120
 #, no-c-format
 msgid "Simple (large)"
-msgstr ""
+msgstr 简化（大）""
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:121
 #, no-c-format
 msgid "Enlarged simple graphics."
-msgstr ""
+msgstr "放大的简单图形。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:122
 #, no-c-format
@@ -7384,7 +7401,7 @@ msgstr "详情"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:123
 #, no-c-format
 msgid "Detailed rendered aircraft graphics."
-msgstr ""
+msgstr "详细渲染飞机图形。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:124
 #, no-c-format
@@ -7394,7 +7411,7 @@ msgstr "悬挂滑翔翼"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:125
 #, no-c-format
 msgid "Simplified hang glider as line graphics, white with black contours."
-msgstr ""
+msgstr "简化的悬挂滑翔翼作为线条图形，白色带有黑色轮廓。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:126
 #, no-c-format
@@ -7404,7 +7421,7 @@ msgstr "滑翔伞"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:127
 #, no-c-format
 msgid "Simplified para glider as line graphics, white with black contours."
-msgstr ""
+msgstr "简化滑翔伞作为线条图形，白色与黑色轮廓。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:132
 #, no-c-format
@@ -7419,33 +7436,33 @@ msgstr "箭头"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:133
 #, no-c-format
 msgid "Draws an arrow head only."
-msgstr ""
+msgstr "只画一个箭头。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:134
 #, no-c-format
 msgid "Full arrow"
-msgstr ""
+msgstr "全箭头"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:134
 #, no-c-format
 msgid "Draws an arrow head with a dashed arrow line."
-msgstr ""
+msgstr "用虚线绘制箭头。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:143
 msgid "Ground track"
-msgstr ""
+msgstr "地面轨迹"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:144
 msgid "Display the ground track as a grey line on the map."
-msgstr ""
+msgstr "在地图上以灰色线显示地面轨迹。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:147
 msgid "FLARM traffic"
-msgstr ""
+msgstr "FLARM交通"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:147
 msgid "This enables the display of FLARM traffic on the map window."
-msgstr ""
+msgstr "这使得能够在地图窗口上显示FLARM交通。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:150
 msgid "Trail length"
@@ -7455,6 +7472,7 @@ msgstr "轨迹长度"
 msgid ""
 "Determines whether and how long a snail trail is drawn behind the glider."
 msgstr ""
+"确定滑翔机后面是否有多长的拖曳轨迹。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:163
 msgid "Trail type"
@@ -7462,7 +7480,7 @@ msgstr "轨迹类型"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:164
 msgid "Sets the type of the snail trail display."
-msgstr ""
+msgstr "设置拖拽轨迹显示的类型。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:167
 msgid "Trail scaled"
@@ -7472,10 +7490,11 @@ msgstr "轨迹规模"
 msgid ""
 "If set to ON the snail trail width is scaled according to the vario signal."
 msgstr ""
+"如果设置拖拽踪迹为ON，则宽度根据高度计信号进行缩放。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:172
 msgid "Detour cost markers"
-msgstr ""
+msgstr "绕行成本标志"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:173
 msgid ""
@@ -7484,6 +7503,8 @@ msgid ""
 "extra distance required to reach that point as a percentage of straight-line "
 "distance to the waypoint."
 msgstr ""
+"如果航向偏离当前航点，则在飞机前方的点上显示标记。"
+"每个标记的值是到达该点所需的额外距离，作为到航点的直线距离的百分比。"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:179
 msgid "Aircraft symbol"
@@ -7491,7 +7512,7 @@ msgstr "飞行器符号"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:183
 msgid "Determines the way the wind arrow is drawn on the map."
-msgstr ""
+msgstr "确定风况箭头绘制在地图上的方式。"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:62
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:229
@@ -7503,16 +7524,18 @@ msgstr "最大开始速度"
 msgid ""
 "Maximum speed allowed in start observation zone.  Set to 0 for no limit."
 msgstr ""
+"开始观测区域允许的最大速度。设置为0，无限制。"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:67
 msgid "Start max. speed margin"
-msgstr ""
+msgstr "开始最大边际速度"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:68
 msgid ""
 "Maximum speed above maximum start speed to tolerate.  Set to 0 for no "
 "tolerance."
 msgstr ""
+"最大速度大于最大容许开始速度。设置为0，没有公差。"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:76
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:234
@@ -7525,43 +7548,45 @@ msgid ""
 "Maximum height based on start height reference (AGL or MSL) while starting "
 "the task.  Set to 0 for no limit."
 msgstr ""
+"在任务开始时基于起始高度基准（AGL或MSL）的最大高度。设置为0，无限制。"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:83
 msgid "Start max. height margin"
-msgstr ""
+msgstr "最大边际高度"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:84
 msgid ""
 "Maximum height above maximum start height to tolerate.  Set to 0 for no "
 "tolerance."
 msgstr ""
+"最大高度以上最大允许高度。设置为0，没有公差。"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:91
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:241
 #, no-c-format
 msgid "Reference is the height above the task point."
-msgstr ""
+msgstr "参考高度高于任务点高度。"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:93
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:243
 #, no-c-format
 msgid "Reference is altitude above mean sea level."
-msgstr ""
+msgstr "参考海拔高于平均海平面。"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:97
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:247
 msgid "Start height ref."
-msgstr ""
+msgstr "开始参考高度"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:98
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:248
 msgid "Reference used for start max height rule."
-msgstr ""
+msgstr "参考用于开始的最大高度规则。"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:106
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:251
 msgid "Finish min. height"
-msgstr ""
+msgstr "最终滑翔最小高度"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:107
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:252
@@ -7569,16 +7594,17 @@ msgid ""
 "Minimum height based on finish height reference (AGL or MSL) while finishing "
 "the task.  Set to 0 for no limit."
 msgstr ""
+"完成任务时基于完成高度参考（AGL或MSL）的最小高度。设置为0，无限制。"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:113
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:256
 msgid "Finish height ref."
-msgstr ""
+msgstr "参考完成高度"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:114
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:257
 msgid "Reference used for finish min height rule."
-msgstr ""
+msgstr "参考用于完成任务的最小高度规则"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:79
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
@@ -7600,11 +7626,11 @@ msgstr "半径"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:144
 msgid "Default start type for new tasks you create."
-msgstr ""
+msgstr "创建新任务的默认开始类型。"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:149
 msgid "Default radius or gate width of the start zone for new tasks."
-msgstr ""
+msgstr "新任务的开始区域的默认半径或门宽度。"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:155
 #: src/Dialogs/Task/TaskPointDialog.cpp:426
@@ -7613,11 +7639,11 @@ msgstr "终止点"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:156
 msgid "Default finish type for new tasks you create."
-msgstr ""
+msgstr "创建新任务的默认完成类型。"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:161
 msgid "Default radius or gate width of the finish zone in new tasks."
-msgstr ""
+msgstr "在新任务中完成区域的默认半径或门宽度。"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:167
 msgid "Turn point"
@@ -7625,39 +7651,40 @@ msgstr "转弯点"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:167
 msgid "Default turn point type for new tasks you create."
-msgstr ""
+msgstr "创建新任务的默认转弯点类型。"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:171
 msgid "Default radius of turnpoint cylinders and sectors in new tasks."
-msgstr ""
+msgstr "新任务中的转弯点圆柱和扇区的默认半径。"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:177
 msgid "Default task type for new tasks you create."
-msgstr ""
+msgstr "创建新任务的默认任务类型。"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:194
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:215
 msgid "AAT min. time"
-msgstr ""
+msgstr "指定任务区域最小时间"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:194
 msgid "Default AAT min. time for new AAT tasks."
-msgstr ""
+msgstr "新AAT任务缺省AAT最小时间"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:197
 msgid "Optimisation margin"
-msgstr ""
+msgstr "优化边际"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:198
 msgid ""
 "Safety margin for AAT task optimisation.  Optimisation seeks to complete the "
 "task at the minimum time plus this margin time."
 msgstr ""
+"AAT任务优化的安全余量。优化试图完成任务在最小时间加上这个边际时间。"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:92
 #, no-c-format
 msgid "Disable OLC Calculations"
-msgstr ""
+msgstr "禁用OLC计算"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:94
 #, no-c-format
@@ -9321,6 +9348,8 @@ msgid ""
 "connected the baud rate will be fixed at 38400.  For OzFLARM, the value can "
 "be set to 19200."
 msgstr ""
+"连接到Vega端口X1的串行设备波特率。当使用第三方GPS或数据记录器而不是FLARM时，"
+"使用这一点是必要的。如果连接FLARM，波特率将固定在38400。对于OzFLARM，该值可以设置为19200。"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:78
 #, no-c-format
@@ -9333,6 +9362,7 @@ msgid ""
 "Enable detection of FLARM.  Disable only if FLARM is not used or "
 "disconnected."
 msgstr ""
+"启用对FLARM的检测。仅在不使用FLARM或断开连接时禁用。"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:82
 #, no-c-format
@@ -9345,16 +9375,17 @@ msgid ""
 "Enable output of +5V power supply for PDA etc. at Vega connector~X2.  If "
 "Vega is connected to Altair, this should be set to False."
 msgstr ""
+"在Vega连接器~X2上可为PDA等提供+5V电源输出。如果Vega连接到Altair，这应该设置为False。"
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:32
 #, no-c-format
 msgid "VNE"
-msgstr ""
+msgstr "VNE"
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:34
 #, no-c-format
 msgid "V terrain"
-msgstr ""
+msgstr "地形速度"
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:36
 #, no-c-format
@@ -9364,17 +9395,17 @@ msgstr "地形高度"
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:38
 #, no-c-format
 msgid "V manoeuvering"
-msgstr ""
+msgstr "机动速度"
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:40
 #, no-c-format
 msgid "V airbrake"
-msgstr ""
+msgstr "空刹速度"
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:42
 #, no-c-format
 msgid "V flap"
-msgstr ""
+msgstr "拉飘速度"
 
 #: src/Dialogs/Device/Vega/LoggerParameters.hpp:37
 #, no-c-format
@@ -9389,12 +9420,12 @@ msgstr "高度表静音"
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:33
 #, no-c-format
 msgid "Mute vario on radio"
-msgstr ""
+msgstr "高度表在无线电中静音"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:34
 #, no-c-format
 msgid "Vario muting"
-msgstr "高度表静音"
+msgstr "高度表静音中"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:36
 #, no-c-format
@@ -9427,7 +9458,7 @@ msgstr "缩放"
 
 #: Data/Input/default.xci:711
 msgid "Vario ASI zeroed"
-msgstr ""
+msgstr "高度表ASI零位"
 
 #: Data/Input/default.xci:1174
 msgid ""
@@ -9463,16 +9494,20 @@ msgid ""
 "Manual\n"
 "Demo"
 msgstr ""
+"演示\n"
+"手册"
 
 #: Data/Input/default.xci:142 Data/Input/default.xci:775
 msgid ""
 "What's\n"
 "here?"
 msgstr ""
+"这是\n"
+"什么?"
 
 #: Data/Input/default.xci:825
 msgid "Traffic List"
-msgstr ""
+msgstr "交通列表"
 
 #: Data/Input/default.xci:514 Data/Input/default.xci:1079
 msgid "Topo."
@@ -9480,7 +9515,7 @@ msgstr "地貌"
 
 #: Data/Input/default.xci:64
 msgid "Below final glide"
-msgstr ""
+msgstr "低于最终滑翔高度"
 
 #: Data/Input/default.xci:350 Data/Input/default.xci:399
 #: Data/Input/default.xci:878
@@ -9544,30 +9579,36 @@ msgid ""
 "Mark\n"
 "Drop"
 msgstr ""
+"标记\n"
+"落下"
 
 #: Data/Input/default.xci:718
 msgid "Accelerometer leveled"
-msgstr ""
+msgstr "加速度计水平仪"
 
 #: Data/Input/default.xci:500 Data/Input/default.xci:1065
 msgid "Trail"
-msgstr ""
+msgstr "轨迹"
 
 #: Data/Input/default.xci:59
 msgid "Above final glide"
-msgstr ""
+msgstr "最终滑翔高度之上"
 
 #: Data/Input/default.xci:712
 msgid ""
 "ASI\n"
 "Zero"
 msgstr ""
+"ASI\n"
+"零"
 
 #: Data/Input/default.xci:672
 msgid ""
 "Airframe\n"
 "Switches"
 msgstr ""
+"机身\n"
+"开关"
 
 #: Data/Input/default.xci:1104
 msgid ""
