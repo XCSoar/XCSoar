@@ -31,6 +31,13 @@ Copyright_License {
 void
 LoadFlarmDatabases();
 
+/**
+ * Same as LoadFlarmDatabases except that this method forces reload even if the database
+ * has been loaded previously.
+ */
+void
+ReloadFlarmDatabases();
+
 void
 SaveFlarmColors();
 

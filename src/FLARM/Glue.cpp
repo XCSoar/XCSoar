@@ -36,6 +36,8 @@ Copyright_License {
 #include "Profile/FlarmProfile.hpp"
 #include "Profile/Current.hpp"
 #include "LogFile.hpp"
+#include "Profile/Profile.hpp"
+#include "Profile/ProfileKeys.hpp"
 
 /**
  * Loads the FLARMnet file
@@ -43,9 +45,12 @@ Copyright_License {
 static void
 LoadFLARMnet(FlarmNetDatabase &db)
 try {
-  auto reader = OpenDataTextFileA(_T("data.fln"));
+  auto path = Profile::GetPath(ProfileKeys::FlarmFile);
+  if (path.IsNull()) {
+    return;
+  }
 
-  unsigned num_records = FlarmNetReader::LoadFile(*reader, db);
+  unsigned num_records = FlarmNetReader::LoadFile(path, db);
   if (num_records > 0)
     LogFormat("%u FLARMnet ids found", num_records);
 } catch (const std::runtime_error &e) {
@@ -74,6 +79,12 @@ LoadFlarmDatabases()
   if (traffic_databases != nullptr)
     return;
 
+  ReloadFlarmDatabases();
+}
+
+void
+ReloadFlarmDatabases()
+{
   traffic_databases = new TrafficDatabases();
 
   /* the MergeThread must be suspended, because it reads the FLARM
@@ -123,4 +134,3 @@ DeinitTrafficGlobals()
   delete traffic_databases;
   traffic_databases = nullptr;
 }
-

@@ -40,7 +40,8 @@ enum ControlIndex {
   WatchedWaypointFile,
   AirspaceFile,
   AdditionalAirspaceFile,
-  AirfieldFile
+  AirfieldFile,
+  FlarmFile
 };
 
 class SiteConfigPanel final : public RowFormWidget {
@@ -103,6 +104,11 @@ SiteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
             "information about individual waypoints and airfields."),
           ProfileKeys::AirfieldFile, _T("*.txt\0"));
   SetExpertRow(AirfieldFile);
+
+  AddFile(_("FLARM Device Database"),
+          _("The name of the file containing information about registered FLARM devices."),
+          ProfileKeys::FlarmFile, _T("*.fln\0"),
+          FileType::FLARMNET);
 }
 
 bool
@@ -120,10 +126,12 @@ SiteConfigPanel::Save(bool &_changed)
   AirspaceFileChanged = SaveValueFileReader(AirspaceFile, ProfileKeys::AirspaceFile);
   AirspaceFileChanged |= SaveValueFileReader(AdditionalAirspaceFile, ProfileKeys::AdditionalAirspaceFile);
 
+  FlarmFileChanged = SaveValueFileReader(FlarmFile, ProfileKeys::FlarmFile);
+
   AirfieldFileChanged = SaveValueFileReader(AirfieldFile, ProfileKeys::AirfieldFile);
 
 
-  changed = WaypointFileChanged || AirfieldFileChanged || MapFileChanged;
+  changed = WaypointFileChanged || AirfieldFileChanged || MapFileChanged || FlarmFileChanged;
 
   _changed |= changed;
 
