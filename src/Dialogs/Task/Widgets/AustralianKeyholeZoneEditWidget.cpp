@@ -48,9 +48,9 @@ AustralianKeyholeZoneEditWidget::Prepare(ContainerWindow &parent,
                  _("Radius of the OZ sector."),
                  _T("%.1f %s"),
                  _T("%.1f"),
-                 fixed(0.1),
-                 fixed(200),
-                 fixed(1),
+                 0.1,
+                 200,
+                 1,
                  true,
                  UnitGroup::DISTANCE,
                  GetObject().GetRadius(),
@@ -60,9 +60,9 @@ AustralianKeyholeZoneEditWidget::Prepare(ContainerWindow &parent,
                  _("Inner radius of the OZ sector."),
                  _T("%.1f %s"),
                  _T("%.1f"),
-                 fixed(0.1),
-                 fixed(100),
-                 fixed(1),
+                 0.1,
+                 100,
+                 1,
                  true,
                  UnitGroup::DISTANCE,
                  GetObject().GetInnerRadius(),
@@ -89,14 +89,14 @@ AustralianKeyholeZoneEditWidget::Save(bool &_changed)
   {
   bool changed = false;
 
-  fixed radius = GetObject().GetRadius();
+  auto radius = GetObject().GetRadius();
   if (SaveValue(RADIUS, UnitGroup::DISTANCE, radius))
     {
     this->GetObject().SetRadius(radius);
     changed = true;
     }
 
-  fixed inner_radius = GetObject().GetInnerRadius();
+  auto inner_radius = GetObject().GetInnerRadius();
   if (SaveValue(INNER_RADIUS, UnitGroup::DISTANCE, inner_radius))
     {
     this->GetObject().SetInnerRadius(inner_radius);

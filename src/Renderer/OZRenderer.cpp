@@ -173,8 +173,8 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
   case ObservationZone::Shape::AUSTRALIAN_KEYHOLE:
     {
     const AustralianKeyholeZone &oz = (const AustralianKeyholeZone &)_oz;
-    RasterPoint p_center = projection.GeoToScreen(oz.GetReference());
-    canvas.DrawKeyhole(p_center.x, p_center.y,
+    auto p_center = projection.GeoToScreen(oz.GetReference());
+    canvas.DrawKeyhole(p_center,
                        projection.GeoToScreenDistance(oz.GetInnerRadius()),
                        projection.GeoToScreenDistance(oz.GetRadius()),
                        oz.GetStartRadial() - projection.GetScreenAngle(),

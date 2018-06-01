@@ -37,7 +37,7 @@ AustralianKeyholeZone::GetBoundary() const
                                 this->GetStartRadial(),
                                 this->GetEndRadial());
 
-  const fixed small_radius = this->GetInnerRadius();
+  const auto small_radius = this->GetInnerRadius();
   GeoVector small_vector(small_radius, this->GetStartRadial());
   boundary.push_front(small_vector.EndPoint(this->GetReference()));
   small_vector.bearing = this->GetEndRadial();

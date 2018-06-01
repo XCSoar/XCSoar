@@ -129,6 +129,8 @@ DeserialiseOZ(const Waypoint &wp, const ConstDataNode &node, bool is_turnpoint)
     return CylinderZone::CreateMatCylinderZone(wp.location);
     }
 
+  else if (StringIsEqual(type, _T("Sector")))
+    {
     double radius, inner_radius;
     Angle start, end;
     SectorZone *ls;
@@ -169,10 +171,10 @@ DeserialiseOZ(const Waypoint &wp, const ConstDataNode &node, bool is_turnpoint)
     Angle start, end;
 
     AustralianKeyholeZone *z = AustralianKeyholeZone::New(wp.location);
-    if (node.GetAttribute(_T("radius"), radius) && positive(radius))
+    if (node.GetAttribute(_T("radius"), radius) && (radius >= 0))
       z->SetRadius(radius);
     if (node.GetAttribute(_T("inner_radius"), inner_radius) &&
-                          positive(inner_radius))
+                          (inner_radius >= 0))
       z->SetInnerRadius(inner_radius);
     if (node.GetAttribute(_T("start_radial"), start))
       z->SetStartRadial(start);

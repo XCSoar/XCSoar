@@ -39,7 +39,7 @@
 class AustralianKeyholeZone final : public SectorZone
   {
 private:
-  fixed inner_radius;
+  double inner_radius;
 
 protected:
   /**
@@ -64,10 +64,10 @@ protected:
                         bool  can_start_through_top,
                         bool  arc_boundary,
                         const GeoPoint &loc,
-                        const fixed radiusOuter = fixed(50000.0),
+                        const double radiusOuter = 10000.0,
                         const Angle startRadial = Angle::Zero(),
                         const Angle endRadial = Angle::FullCircle(),
-                        const fixed inner_radius = fixed(1000.0))
+                        const double inner_radius = 500.0)
     : SectorZone(shape,
                  can_start_through_top,
                  arc_boundary,
@@ -101,8 +101,8 @@ public:
    * @param end_radial The most CW radial.
    */
   static AustralianKeyholeZone *New(const GeoPoint &ref,
-                                    fixed radius,
-                                    fixed inner_radius,
+                                    double radius,
+                                    double inner_radius,
                                     Angle start_radial,
                                     Angle end_radial)
     {
@@ -134,7 +134,7 @@ public:
    * @param radius The radius of the sector portion of the zone.
    */
   static AustralianKeyholeZone *New(const GeoPoint &ref,
-                                    fixed radius)
+                                    double radius)
     {
     return new AustralianKeyholeZone(Shape::AUSTRALIAN_KEYHOLE,
                                      true,
@@ -146,12 +146,12 @@ public:
   /**
    * Returns the radius of the small cylinder [m].
    */
-  fixed GetInnerRadius() const
+  double GetInnerRadius() const
     {
     return this->inner_radius;
     }
 
-  void SetInnerRadius(fixed radius)
+  void SetInnerRadius(double radius)
     {
     this->inner_radius = radius;
     }
