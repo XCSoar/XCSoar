@@ -264,6 +264,7 @@ try {
 
   ParseFileRepository(repository, reader);
 
+  items.clear();
   for (auto &i : repository)
     if (i.type == file_type)
       items.emplace_back(std::move(i));
