@@ -173,7 +173,7 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
   case ObservationZone::Shape::VARIABLE_KEYHOLE:
     {
     const VariableKeyholeZone &oz = (const VariableKeyholeZone &)_oz;
-    RasterPoint p_center = projection.GeoToScreen(oz.GetReference());
+    auto p_center = projection.GeoToScreen(oz.GetReference());
     canvas.DrawKeyhole(p_center,
                        projection.GeoToScreenDistance(oz.GetInnerRadius()),
                        projection.GeoToScreenDistance(oz.GetRadius()),

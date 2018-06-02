@@ -384,10 +384,10 @@ AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
     return CreateAATPoint(new SectorZone(location, turnpoint_radius),
                           std::move(wp));
   case TaskPointFactoryType::AAT_ANNULAR_SECTOR:
-    return CreateAATPoint(new AnnularSectorZone(wp.location, turnpoint_radius),
-                          std::(wp));
+    return CreateAATPoint(new AnnularSectorZone(location, turnpoint_radius),
+                          std::move(wp));
   case TaskPointFactoryType::AAT_VARIABLE_KEYHOLE_SECTOR:
-    return CreateAATPoint(VariableKeyholeZone::New(wp.location,
+    return CreateAATPoint(VariableKeyholeZone::New(location,
                                                    turnpoint_radius),
                           std::move(wp));
   case TaskPointFactoryType::AAT_KEYHOLE:
