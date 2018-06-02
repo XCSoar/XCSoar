@@ -34,12 +34,12 @@ can download it on `the XCSoar website
 Submitting patches
 ------------------
 
-Subscribe to the `XCSoar developer mailing list
-<https://lists.sourceforge.net/lists/listinfo/xcsoar-devel>`__.
-
 Use this mailing list to submit patches or "git pull" requests.
 
 - patches should be self-contained
 - patches should be self-documenting (add a good description on what
   is changed, and why you are changing it)
 - write one patch for one change
+
+Refer to the current Developers' Manual for details of how to submit patches
+upstream.
