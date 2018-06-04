@@ -24,8 +24,10 @@ Copyright_License {
 package org.xcsoar;
 
 import java.util.HashMap;
+import java.io.File;
 import android.media.MediaPlayer;
 import android.content.Context;
+import android.net.Uri;
 
 public class SoundUtil {
   private static HashMap<String, Integer> resources = new HashMap();
@@ -44,9 +46,29 @@ public class SoundUtil {
     if (id == null)
       return false;
 
-    MediaPlayer mp = MediaPlayer.create(context, id);
-    if (mp == null)
+    return run(MediaPlayer.create(context, id));
+  }
+
+  public static boolean playExternal(Context context, String path) {
+    final File file = new File(path);
+    if (!file.exists()) {
       return false;
+    }
+
+    return run(MediaPlayer.create(context, Uri.fromFile(file)));
+  }
+
+  private static boolean run(final MediaPlayer mp) {
+    if (mp == null) {
+      return false;
+    }
+
+    mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+      @Override
+      public void onCompletion(MediaPlayer mediaPlayer) {
+        mp.release();
+      }
+    });
 
     mp.start();
     return true;
