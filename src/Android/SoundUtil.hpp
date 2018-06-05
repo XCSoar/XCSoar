@@ -31,6 +31,7 @@ namespace SoundUtil {
   void Deinitialise(JNIEnv *env);
 
   bool Play(JNIEnv *env, jobject context, const char *name);
+  bool PlayExternal(JNIEnv *env, jobject context, const char *path);
 };
 
 #endif

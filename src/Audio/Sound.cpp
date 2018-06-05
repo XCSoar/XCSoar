@@ -44,6 +44,8 @@ PlayResource(const TCHAR *resource_name)
 {
 #ifdef ANDROID
 
+  if (_tcsstr(resource_name, _T(".wav")))
+    return SoundUtil::PlayExternal(Java::GetEnv(), context->Get(), resource_name);
   return SoundUtil::Play(Java::GetEnv(), context->Get(), resource_name);
 
 #elif defined(WIN32)

@@ -24,10 +24,13 @@ Copyright_License {
 #include "SoundUtil.hpp"
 #include "Java/Class.hxx"
 #include "Java/String.hxx"
+#include "LocalPath.hpp"
+#include "OS/Path.hpp"
 
 namespace SoundUtil {
   static Java::TrivialClass cls;
   static jmethodID play_method;
+  static jmethodID playExternal_method;
 }
 
 void
@@ -40,6 +43,9 @@ SoundUtil::Initialise(JNIEnv *env)
   play_method = env->GetStaticMethodID(cls, "play",
                                        "(Landroid/content/Context;"
                                        "Ljava/lang/String;)Z");
+  playExternal_method = env->GetStaticMethodID(cls, "playExternal",
+                                               "(Landroid/content/Context;"
+                                               "Ljava/lang/String;)Z");
 }
 
 void
@@ -53,5 +59,14 @@ SoundUtil::Play(JNIEnv *env, jobject context, const char *name)
 {
   Java::String paramName(env, name);
   return env->CallStaticBooleanMethod(cls, play_method, context,
+                                      paramName.Get());
+}
+
+bool
+SoundUtil::PlayExternal(JNIEnv *env, jobject context, const char *path)
+{
+  AllocatedPath absolutePath = LocalPath(_T(path));
+  Java::String paramName(env, absolutePath.c_str());
+  return env->CallStaticBooleanMethod(cls, playExternal_method, context,
                                       paramName.Get());
 }
