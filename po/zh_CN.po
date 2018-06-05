@@ -8846,23 +8846,25 @@ msgstr "最大爬升率播放的音调频率。"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:105
 msgid "Deadband min. lift"
-msgstr ""
+msgstr "死区最小升力"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:106
 msgid ""
 "Below this lift threshold the vario will start to play sounds if the "
 "'Deadband' feature is enabled."
 msgstr ""
+"如果启用“死区”特性在低于这个升力阈值时高度表将开始播放声音。"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:115
 msgid "Deadband max. lift"
-msgstr ""
+msgstr "死区最大升力"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:116
 msgid ""
 "Above this lift threshold the vario will start to play sounds if the "
 "'Deadband' feature is enabled."
 msgstr ""
+"如果启用“死区”特性在高于这个升力阈值时高度表将开始播放声音。"
 
 #: src/Dialogs/Settings/Panels/AudioConfigPanel.cpp:60
 msgid "Master Volume"
@@ -8883,13 +8885,14 @@ msgstr "机场ICAO代码"
 
 #: src/Dialogs/Weather/NOAAList.cpp:185
 msgid "Please enter the FOUR letter code of the desired station."
-msgstr ""
+msgstr "请输入所需站点的四个字母代码。"
 
 #: src/Dialogs/Weather/NOAAList.cpp:191
 msgid ""
 "Please don't use special characters in the four letter code of the desired "
 "station."
 msgstr ""
+"请不要在期望站点的四个字母代码中使用特殊字符。"
 
 #: src/Dialogs/Weather/NOAAList.cpp:225 src/Dialogs/Weather/NOAADetails.cpp:112
 #, c-format
@@ -8898,7 +8901,7 @@ msgstr "您要删除站点 %s 吗？"
 
 #: src/Dialogs/Weather/NOAADetails.cpp:165
 msgid "This function is not available on your platform yet."
-msgstr ""
+msgstr "此功能在您的平台上尚未可用。"
 
 #: src/Monitor/AirspaceWarningMonitor.cpp:62
 msgid "Inside airspace"
@@ -8914,7 +8917,7 @@ msgstr "超过最大开始速度"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:46
 msgid "In sector, arm advance when ready"
-msgstr ""
+msgstr "在扇区，arm准备前进"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:48
 msgid "Arm"
@@ -8969,22 +8972,22 @@ msgstr "无METAR可用！"
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:33
 #, no-c-format
 msgid "Gear on delay"
-msgstr ""
+msgstr "设备打开延迟"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:36
 #, no-c-format
 msgid "Gear off delay"
-msgstr ""
+msgstr "设备断开延迟"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:39
 #, no-c-format
 msgid "Interval; gear"
-msgstr ""
+msgstr "间隔；设备"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:42
 #, no-c-format
 msgid "Radio com. max. delay"
-msgstr ""
+msgstr "无线电通信最大延迟"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:45
 #, no-c-format
@@ -9014,67 +9017,67 @@ msgstr "斜坡"
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:40
 #, no-c-format
 msgid "Circling deadband type"
-msgstr ""
+msgstr "盘转死区类型"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:41
 #, no-c-format
 msgid "Type of dead band used in circling mode."
-msgstr ""
+msgstr "盘转模式中使用的死区类型。"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:45
 #, no-c-format
 msgid "Circling hi cutoff"
-msgstr ""
+msgstr "盘转高截流"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:46
 #, no-c-format
 msgid "High limit of circling dead band"
-msgstr ""
+msgstr "盘转死区上限"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:50
 #, no-c-format
 msgid "Circling low cutoff"
-msgstr ""
+msgstr "盘转低截流"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:51
 #, no-c-format
 msgid "Low limit of circling dead band"
-msgstr ""
+msgstr "盘转死区下限"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:56
 #, no-c-format
 msgid "Cruise deadband type"
-msgstr ""
+msgstr "巡航死区类型"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:57
 #, no-c-format
 msgid "Type of dead band used in cruise mode."
-msgstr ""
+msgstr "巡航模式中使用的死区类型。"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:61
 #, no-c-format
 msgid "Cruise hi cutoff"
-msgstr ""
+msgstr "巡航高截流"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:62
 #, no-c-format
 msgid "High limit of cruise dead band"
-msgstr ""
+msgstr "巡航死区上限"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:66
 #, no-c-format
 msgid "Cruise low cutoff"
-msgstr ""
+msgstr "巡航低截流"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:67
 #, no-c-format
 msgid "Low limit of cruise dead band"
-msgstr ""
+msgstr "巡航死区下限"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:72
 #, no-c-format
 msgid "Climb fast trigger"
-msgstr ""
+msgstr "爬升快速触发器"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:73
 #, no-c-format
@@ -9085,11 +9088,15 @@ msgid ""
 "[AVERAGE]: State HIGH if gross vario value is greater than average gross "
 "vario value."
 msgstr ""
+"比较法用于检测爬升状态（高/低）。"
+"[无]：低状态禁用"
+"[MACCREADY]:如果总高度值大于MacCready设置，则状态为高。"
+"[平均值]：如果总值大于平均总值，则状态为高。"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:77
 #, no-c-format
 msgid "Cruise lift trigger"
-msgstr ""
+msgstr "巡航升力触发器"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:78
 #, no-c-format
@@ -9102,6 +9109,12 @@ msgid ""
 "[RELATIVE MC/2] LIFT tone when relative vario greater than half MC.\n"
 "[NET MC/2] LIFT tone when airmass velocity greater than half MC."
 msgstr ""
+"比较法用于检测巡航状态时为巡航时切换升力音调。"
+"[无]：在巡航中禁用提升音调"
+"[相对零]当相对变量大于0时提升音调。"
+"[升零]滑翔机爬升时提升音调。"
+"[相对MC/2 ]当相对变量大于MC.一半时提升音调"
+"[净MC/2]气团垂直速度大于半MC一半时提升音调。"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:82
 #, no-c-format
@@ -9131,7 +9144,7 @@ msgstr "盘转音量"
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:92
 #, no-c-format
 msgid "Mean volume level in circling modes."
-msgstr ""
+msgstr "盘转模式中的平均音量水平。"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:96
 #, no-c-format
@@ -9143,6 +9156,7 @@ msgstr "巡航音量"
 msgid ""
 "Mean volume level in cruise modes.  If set to zero, scales with airspeed."
 msgstr ""
+"巡航模式下的平均音量水平。如果设置为零，用空速刻度。"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:101
 #, no-c-format
@@ -9152,7 +9166,7 @@ msgstr "基本频率"
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:102
 #, no-c-format
 msgid "Adjustment to base frequency of tones in all modes."
-msgstr ""
+msgstr "调整所有模式音调的基频。"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:106
 #, no-c-format
@@ -9162,7 +9176,7 @@ msgstr "盘转过滤器"
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:107
 #, no-c-format
 msgid "Variometer low pass filter time constant in circling mode."
-msgstr ""
+msgstr "盘转模式高度表低通滤波器时间常数。"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:111
 #, no-c-format
@@ -9172,17 +9186,17 @@ msgstr "盘转过滤器"
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:112
 #, no-c-format
 msgid "Variometer low pass filter time constant in cruise mode."
-msgstr ""
+msgstr "巡航模式高度表低通滤波器时间常数。"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:116
 #, no-c-format
 msgid "Tone pitch scale"
-msgstr ""
+msgstr "音调音阶"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:117
 #, no-c-format
 msgid "Adjustment to base pitch scale of tones in all modes."
-msgstr ""
+msgstr "调整所有模式基音音调音阶。"
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:105
 msgid "Beep type"
@@ -9207,7 +9221,7 @@ msgstr "周期尺度"
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:33
 #, no-c-format
 msgid "TE mixing"
-msgstr "TE混合"
+msgstr "总能量混合"
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:34
 #, no-c-format
@@ -9215,22 +9229,24 @@ msgid ""
 "Proportion of TE probe value used in total energy mixing with pitot/static "
 "total energy."
 msgstr ""
+"总能量探测值用在总能量与pitot/静态总能量混合中所占的比例。"
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:38
 #, no-c-format
 msgid "ASI cal."
-msgstr ""
+msgstr "ASI计算"
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:39
 #, no-c-format
 msgid ""
 "Calibration factor applied to measured airspeed to obtain indicated airspeed."
 msgstr ""
+"校准因子应用于测量空速以获得指示空速。"
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:43
 #, no-c-format
 msgid "TE static cal."
-msgstr ""
+msgstr "总能量静态计算"
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:44
 #, no-c-format
@@ -9238,11 +9254,12 @@ msgid ""
 "Calibration factor applied to static pressure used in total energy "
 "calculation."
 msgstr ""
+"适用于总能量计算的静态压力校准因子。"
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:48
 #, no-c-format
 msgid "TE dynamic cal."
-msgstr ""
+msgstr "总能量动态计算"
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:49
 #, no-c-format
@@ -9250,6 +9267,7 @@ msgid ""
 "Calibration factor applied to dynamic pressure used in total energy "
 "calculation."
 msgstr ""
+"用于总能量计算的动态压力校准因子。"
 
 #: src/Dialogs/Device/Vega/DisplayParameters.hpp:40
 #, no-c-format
@@ -9354,7 +9372,7 @@ msgstr "失速端口"
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:61
 #, no-c-format
 msgid "Whether the Stall pressure port is connected."
-msgstr ""
+msgstr "失速压力端口是否连接。"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:64
 #, no-c-format
@@ -9368,6 +9386,7 @@ msgid ""
 "accelerometer has malfunctioned or the instrument cannot be installed with "
 "correct alignment."
 msgstr ""
+"是否使用内部加速度计。只有在加速度计发生故障或仪器不能正确安装的情况下才变更这一点。"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:69
 #, no-c-format
@@ -9376,6 +9395,7 @@ msgid ""
 "disable, 255 to enable auto-detect; otherwise the 1Wire device ID can be "
 "specified."
 msgstr ""
+"是否安装了温湿度传感器。设置为0禁用，255启用自动检测；否则，指定1Wire设备ID。"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:73
 #, no-c-format
