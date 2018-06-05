@@ -416,8 +416,8 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
      * \todo Make a number of wimp and annular OZs and discover how CU
      * differentiates the two.
      */
-    if (turnpoint_infos.radius2 > fixed(0) &&
-        (turnpoint_infos.angle2.AsBearing().Degrees()) != fixed(0)) {
+    if (turnpoint_infos.radius2 > 0.0 &&
+        (turnpoint_infos.angle2.AsBearing().Degrees()) != 0.0) {
       oz = VariableKeyholeZone::New(wp->location,
                                     turnpoint_infos.radius1,
                                     turnpoint_infos.radius2,
