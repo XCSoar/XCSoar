@@ -8720,6 +8720,9 @@ msgid ""
 "task distances, smaller values move the target points to produce smaller "
 "task distances."
 msgstr ""
+"对于AAT任务，此设置可用于调整AAT扇区内的目标点。"
+"较大的值移动目标点以产生较大的任务距离，"
+"较小的值移动目标点以产生较小的任务距离。"
 
 #: src/Dialogs/Task/TargetDialog.cpp:439
 msgid ""
@@ -8727,18 +8730,20 @@ msgid ""
 "the AAT sectors.  Positive values rotate the range line clockwise, negative "
 "values rotate the range line counterclockwise."
 msgstr ""
+"对于AAT任务，此设置可用于调整AAT扇区内的目标点。"
+"正值顺时针旋转范围线，负值逆时针旋转范围线。"
 
 #: src/Dialogs/Task/TargetDialog.cpp:444
 msgid "ETE"
-msgstr ""
+msgstr "估计在途时间"
 
 #: src/Dialogs/Task/TargetDialog.cpp:446
 msgid "Estimated time en-route to the next AAT target."
-msgstr ""
+msgstr 估计到下一个AAT目标的时间。""
 
 #: src/Dialogs/Task/TargetDialog.cpp:448
 msgid "Delta T"
-msgstr ""
+msgstr "Delta T"
 
 #: src/Dialogs/Task/TargetDialog.cpp:450
 msgid ""
@@ -8747,20 +8752,24 @@ msgid ""
 "sector and can turn now with estimated arrival time greater than AAT time "
 "plus 5 minutes."
 msgstr ""
+"AAT Delta时间---估计任务时间和AAT最小时间差。"
+"如果是负值为红色（预期到达太早），"
+"或如果在扇区估计到达时间大于AAT时间加上5分钟则变为蓝色。"
 
 #: src/Dialogs/Task/TargetDialog.cpp:452
 msgid "V rem."
-msgstr ""
+msgstr "剩余任务速度"
 
 #: src/Dialogs/Task/TargetDialog.cpp:456
 msgid "V ach"
-msgstr ""
+msgstr "完成任务速度"
 
 #: src/Dialogs/Task/TargetDialog.cpp:458
-msgid ""
+msgid "V ach"
 "AA Speed - Assigned Area Task average speed achievable around target points "
 "remaining in minimum AAT time."
 msgstr ""
+"AA速度---分配区域任务平均速度可在最小AAT时间保持在目标点附近。"
 
 #: src/Dialogs/Task/TargetDialog.cpp:463
 msgid "Optimized"
@@ -8775,6 +8784,9 @@ msgid ""
 "test server. You can disable it at any time in the \"Tracking\" settings.\n"
 "Please help us improve XCSoar!"
 msgstr ""
+"XCSOAR项目目前正在开发一种革命性的服务，允许与其他飞行员共享热/波状气流位置。"
+"你想参加现场测试吗？这意味着您的位置、热/波状气流位置和其他天气数据将被发送到我们的测试服务器。"
+"您可以在'跟踪'设置中的任何时候禁用它。请帮助我们改善XCSoar！"
 
 #: src/Dialogs/TimeEntry.cpp:73 src/Dialogs/Weather/RASPDialog.cpp:131
 msgid "Now"
