@@ -4,12 +4,8 @@ XCSoar
 XCSoar is a tactical glide computer for Android, Linux, Mac OS X,
 and Windows.
 
-This file is aimed at developers. Developers should read the manual which may
-be built by running in the XCSoar source base directory
-
-make manual
-
-The output will be found in output/manual/XCSoar-developer-manual.pdf
+This file is aimed at developers. Developers should read the manual which 
+can be found on the `XCSoar home page <http://www.xcsoar.org/>`__.
 
 Users can refer to the Users' Manual which, for the latest release, can be
 downloaded via the `XCSoar home page <https://xcsoar.org/>`__.
