@@ -6,16 +6,16 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2017-11-17 09:45+0000\n"
-"Last-Translator: Peter Brtko <peter.brtko@gmail.com>\n"
-"Language-Team: Czech "
-"<https://hosted.weblate.org/projects/xcsoar/translations/cs/>\n"
+"PO-Revision-Date: 2018-06-21 13:36+0000\n"
+"Last-Translator: Radoslav Pur <radekpur@gmail.com>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
+"translations/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 2.18-dev\n"
+"X-Generator: Weblate 3.1-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -412,7 +412,7 @@ msgstr "ne-FAI otočné body"
 #: src/Task/ValidationErrorStrings.cpp:42
 #, no-c-format
 msgid "non-MAT turn points"
-msgstr ""
+msgstr "ne-MAT otočné body"
 
 #: src/Airspace/AirspaceGlue.cpp:84
 msgid "Loading Airspace File..."
@@ -1139,7 +1139,7 @@ msgstr "Poslední stoupavý proud"
 #: src/InfoBoxes/Content/Factory.cpp:210
 #, no-c-format
 msgid "TL duration"
-msgstr ""
+msgstr "TL trvání"
 
 #: src/InfoBoxes/Content/Factory.cpp:211
 #, no-c-format
@@ -1213,7 +1213,7 @@ msgstr "Příští požadováná výška"
 #: src/InfoBoxes/Content/Factory.cpp:244
 #, no-c-format
 msgid "WP AltR"
-msgstr ""
+msgstr "WP AltR"
 
 #: src/InfoBoxes/Content/Factory.cpp:245
 #, no-c-format
@@ -1320,7 +1320,7 @@ msgstr "Výška terénu"
 #: src/InfoBoxes/Content/Factory.cpp:301
 #, no-c-format
 msgid "Terr Elev"
-msgstr ""
+msgstr "Výška terénu"
 
 #: src/InfoBoxes/Content/Factory.cpp:302
 #, no-c-format
@@ -1376,6 +1376,8 @@ msgid ""
 "is active in simulation mode, pressing the up and down  arrows adjusts the "
 "track."
 msgstr ""
+"Stopa získaná z GPS (Pro dotykové a PC). Pokud je tento InfoBox aktivní v "
+"simulačním režimu, stisk nahoru a dolu upravuje stopu."
 
 #: src/InfoBoxes/Content/Factory.cpp:334
 #, no-c-format
@@ -1623,12 +1625,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:447
 #, no-c-format
 msgid "Next GR"
-msgstr ""
+msgstr "Příští GR"
 
 #: src/InfoBoxes/Content/Factory.cpp:448
 #, no-c-format
 msgid "WP GR"
-msgstr ""
+msgstr "WP GR"
 
 #: src/InfoBoxes/Content/Factory.cpp:449
 #, no-c-format
@@ -1800,7 +1802,7 @@ msgstr "Rozdíl kurzů"
 #: src/InfoBoxes/Content/Factory.cpp:523
 #, no-c-format
 msgid "Brng D"
-msgstr ""
+msgstr "Rozdíl kurzů"
 
 #: src/InfoBoxes/Content/Factory.cpp:524
 #, no-c-format
@@ -1923,7 +1925,7 @@ msgstr "L/D vário"
 #: src/InfoBoxes/Content/Factory.cpp:571
 #, no-c-format
 msgid "L/D Vario"
-msgstr ""
+msgstr "L/D vário"
 
 #: src/InfoBoxes/Content/Factory.cpp:572
 #, no-c-format
@@ -1997,7 +1999,7 @@ msgstr "Rozdíl kurzů týmu"
 #: src/InfoBoxes/Content/Factory.cpp:603
 #, no-c-format
 msgid "Team BrngD"
-msgstr ""
+msgstr "Rozdíl kurzů týmu"
 
 #: src/InfoBoxes/Content/Factory.cpp:604
 #, no-c-format
@@ -2105,7 +2107,7 @@ msgstr "Teplotní průměr pro vše"
 #: src/InfoBoxes/Content/Factory.cpp:651
 #, no-c-format
 msgid "T Avg"
-msgstr ""
+msgstr "T Avg"
 
 #: src/InfoBoxes/Content/Factory.cpp:652
 #, no-c-format
