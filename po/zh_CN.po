@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2018-06-20 08:05+0000\n"
+"PO-Revision-Date: 2018-06-20 08:22+0000\n"
 "Last-Translator: flypluswangzhe <216188@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "xcsoar/translations/zh_Hans/>\n"
@@ -1430,7 +1430,7 @@ msgstr "如果在指定区域剩余最小完成时间下可完成飞行的最大
 #: src/InfoBoxes/Content/Factory.cpp:390
 #, no-c-format
 msgid "AAT speed min. distance"
-msgstr "如果在指定区域剩余最小完成时间下可完成飞行的最大可能距离的平均速度。"
+msgstr "指定区域任务剩余最小AAT时间可能飞行最远距离的平均速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:391
 #, no-c-format
@@ -1655,7 +1655,7 @@ msgstr "Netto高度表"
 #: src/InfoBoxes/Content/Factory.cpp:498
 #, no-c-format
 msgid "Netto"
-msgstr "Netto"
+msgstr "Netto高度表"
 
 #: src/InfoBoxes/Content/Factory.cpp:499
 #, no-c-format
@@ -2349,7 +2349,7 @@ msgstr "任务时间（地速）"
 #: src/InfoBoxes/Content/Factory.cpp:838
 #, no-c-format
 msgid "Fin ETE VMG"
-msgstr "假定保持当前面速，估计完成任务所需的时间。"
+msgstr "假定保持当前面速估计完成任务所需的时间"
 
 #: src/InfoBoxes/Content/Factory.cpp:839
 #, no-c-format
@@ -2366,7 +2366,7 @@ msgstr "下一航点时间（地速）"
 #: src/InfoBoxes/Content/Factory.cpp:846
 #, no-c-format
 msgid "WP ETE VMG"
-msgstr "假定保持当前面速，估计到达下一航点所需的时间。"
+msgstr "假定保持当前面速估计到达下一航点所需的时间"
 
 #: src/InfoBoxes/Content/Factory.cpp:847
 #, no-c-format
@@ -2738,7 +2738,7 @@ msgstr "最终滑翔高度和MC设置为0的相对安全到达高度的高度差
 #: src/InfoBoxes/Content/Factory.cpp:1020
 #, no-c-format
 msgid "Fin MC0 AltD"
-msgstr "到达终点的到达高度与MC设置为0的相对安全到达高度。"
+msgstr "到达终点的到达高度与MC设置为0的相对安全到达高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:1021
 #, no-c-format
@@ -2772,7 +2772,7 @@ msgstr "到达下一航点时间（地速）"
 #: src/InfoBoxes/Content/Factory.cpp:1040
 #, no-c-format
 msgid "WP ETA VMG"
-msgstr "假定当前地速保持在到达下一个航点的估计时间。"
+msgstr "假定当前地速保持在到达下一个航点的估计时间"
 
 #: src/InfoBoxes/Content/Factory.cpp:1041
 #, no-c-format
@@ -3149,7 +3149,7 @@ msgstr "MacCready自动关闭"
 
 #: src/Input/InputEventsTask.cpp:168
 msgid "MacCready "
-msgstr "MacCready "
+msgstr "MacCready参数 "
 
 #: src/Input/InputEventsTask.cpp:229
 msgid "Task aborted"
@@ -3434,7 +3434,7 @@ msgstr ""
 #: src/Weather/Rasp/RaspStore.cpp:68
 #, no-c-format
 msgid "dwcrit"
-msgstr "dwcrit"
+msgstr "dwcrit参数"
 
 #: src/Weather/Rasp/RaspStore.cpp:69
 #, no-c-format
@@ -3488,7 +3488,7 @@ msgstr ""
 #: src/Weather/Rasp/RaspStore.cpp:83
 #, no-c-format
 msgid "hwcrit"
-msgstr "hwcrit"
+msgstr "hwcrit参数"
 
 #: src/Weather/Rasp/RaspStore.cpp:84
 #, no-c-format
@@ -3509,7 +3509,7 @@ msgstr ""
 #: src/Weather/Rasp/RaspStore.cpp:88
 #, no-c-format
 msgid "wblmaxmin"
-msgstr "wblmaxmin"
+msgstr "wbl最大最小参数"
 
 #: src/Weather/Rasp/RaspStore.cpp:89
 #, no-c-format
@@ -3525,7 +3525,7 @@ msgstr ""
 #: src/Weather/Rasp/RaspStore.cpp:93
 #, no-c-format
 msgid "blcwbase"
-msgstr "blcwbase"
+msgstr "blcwbase参数"
 
 #: src/Topography/TopographyGlue.cpp:59
 msgid "Loading Topography File..."
@@ -3541,7 +3541,7 @@ msgstr "分数"
 #: src/Renderer/FlightStatisticsRenderer.cpp:211
 #: src/Renderer/FlightStatisticsRenderer.cpp:237
 msgid "pts"
-msgstr "pts"
+msgstr "pts参数"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:310
 #: src/Renderer/FlightStatisticsRenderer.cpp:320
@@ -3611,7 +3611,7 @@ msgstr "云底"
 
 #: src/Renderer/MacCreadyRenderer.cpp:51 src/Renderer/TaskSpeedRenderer.cpp:49
 msgid "Vave"
-msgstr "Vave"
+msgstr "Vave参数"
 
 #: src/Renderer/TaskSpeedRenderer.cpp:52
 msgid "Vest"
@@ -3855,7 +3855,7 @@ msgstr "下载存储库索引失败。"
 #: src/Dialogs/FileManager.cpp:698 src/Dialogs/FileManager.cpp:727
 #: src/Dialogs/DownloadFilePicker.cpp:374 Data/Input/default.xci:605
 msgid "File Manager"
-msgstr "此设备上没有文件管理器。"
+msgstr "此设备上没有文件管理器"
 
 #: src/Dialogs/FileManager.cpp:721 src/Dialogs/DownloadFilePicker.cpp:373
 msgid "The file manager is not available on this device."
@@ -4432,7 +4432,7 @@ msgstr "降落伞"
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:128
 #, no-c-format
 msgid "Drop plane"
-msgstr "Drop plane"
+msgstr "飞机下降"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:129
 #, no-c-format
@@ -5586,11 +5586,11 @@ msgstr "所需滑翔比"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:149
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:189
 msgid "No task defined."
-msgstr "无定义任务"
+msgstr "无定义任务。"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:76
 msgid "No active task point."
-msgstr "无激活任务点"
+msgstr "无激活任务点。"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:76
 msgid "Replace in task"
@@ -5650,7 +5650,7 @@ msgstr "设置为新家"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:323
 msgid "Pan to Waypoint"
-msgstr "Pan to Waypoint"
+msgstr "Pan to 航点"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:324
 msgid "Set Active Frequency"
@@ -5662,7 +5662,7 @@ msgstr "设置待机频率"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:433 Data/Input/default.xci:1015
 msgid "GoTo"
-msgstr "GoTo"
+msgstr "GoTo转到"
 
 #: src/Dialogs/Waypoint/Manager.cpp:270
 msgid "Delete waypoint?"
@@ -5721,7 +5721,7 @@ msgstr "全部打开"
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:58
 #, no-c-format
 msgid "All airspaces are displayed."
-msgstr "显示全部空域"
+msgstr "显示全部空域。"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:59
 #, no-c-format
@@ -6026,7 +6026,7 @@ msgstr "显示MacReady"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:71
 msgid "Whether to show the MacCready setting."
-msgstr "是否显示MacReady设置"
+msgstr "是否显示MacReady设置。"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:74
 msgid "Show bugs"
@@ -6034,7 +6034,7 @@ msgstr "显示错误"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:74
 msgid "Whether to show the bugs percentage."
-msgstr "是否显示错误百分比"
+msgstr "是否显示错误百分比。"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:77
 msgid "Show ballast"
@@ -6042,7 +6042,7 @@ msgstr "显示配重"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:77
 msgid "Whether to show the ballast percentage."
-msgstr "是否显示配重百分比"
+msgstr "是否显示配重百分比。"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:80
 msgid "Show gross"
@@ -6252,7 +6252,7 @@ msgstr "文本输入样式"
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:177
 msgid ""
 "Determines how the user is prompted for text input (filename, teamcode etc.)"
-msgstr "确定如何提示用户输入文本（文件名、团队代码等）。"
+msgstr "确定如何提示用户输入文本（文件名、团队代码等。）"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:187
 #, no-c-format
@@ -6673,7 +6673,7 @@ msgstr "盘转定向"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:118
 msgid "Determines how the screen is rotated with the glider while circling"
-msgstr "确定屏幕在滑翔机盘转时屏幕如何一起旋转。"
+msgstr "确定屏幕在滑翔机盘转时屏幕如何一起旋转"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:123
 msgid "Circling zoom"
@@ -6730,7 +6730,7 @@ msgstr "指定在主区域中应该显示的内容。"
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:177
 #, no-c-format
 msgid "Displays either the Circling, Cruise or Final glide infoxboxes"
-msgstr "显示盘转、巡航或最终滑翔任一信息框。"
+msgstr "显示盘转、巡航或最终滑翔任一信息框"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:178
 #, no-c-format
@@ -6751,7 +6751,7 @@ msgstr "指定应该在这个页面上显示哪些信息框。"
 msgid ""
 "For cruise mode.  Displayed when 'Auto' is selected and ship is below final "
 "glide altitude"
-msgstr "巡航模式。当自动被选中并且在最终滑翔高度以下时显示。"
+msgstr "巡航模式。 当自动被选中并且在最终滑翔高度以下时显示"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:188
 #, no-c-format
@@ -6803,12 +6803,12 @@ msgstr "航线将规避地形。"
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:107
 #, no-c-format
 msgid "Routes will avoid airspace."
-msgstr "航线将规避空域"
+msgstr "航线将规避空域。"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:109
 #, no-c-format
 msgid "Routes will avoid airspace and terrain."
-msgstr "航线将规避空域和地形"
+msgstr "航线将规避空域和地形。"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:113
 msgid "Route mode"
@@ -6900,7 +6900,7 @@ msgstr "这决定了滑翔性能在到达、着陆、中止和备用计算中的
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:161
 #, no-c-format
 msgid "Disables the reach display."
-msgstr "禁用到达显示"
+msgstr "禁用到达显示。"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:162
 #, no-c-format
@@ -7043,7 +7043,7 @@ msgstr "当启用MC安全到达计算时使用MacCready设置，在任务中止�
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:114
 msgid "STF risk factor"
-msgstr "STF风险因子。"
+msgstr "STF风险因子"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:115
 msgid ""
@@ -7100,7 +7100,7 @@ msgstr "空域"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:92
 msgid "The file name of the primary airspace file."
-msgstr "主空域文件文件名"
+msgstr "主空域文件文件名。"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:96
 msgid "More airspaces"
@@ -7108,7 +7108,7 @@ msgstr "更多空域"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:96
 msgid "The file name of the secondary airspace file."
-msgstr "次要空域文件文件名"
+msgstr "次要空域文件文件名。"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:101
 msgid "Waypoint details"
@@ -7385,7 +7385,7 @@ msgstr "参考海拔高于平均海平面。"
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:97
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:247
 msgid "Start height ref."
-msgstr "开始参考高度"
+msgstr "开始参考高度。"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:98
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:248
@@ -7407,12 +7407,12 @@ msgstr "完成任务时基于完成高度参考（AGL或MSL）的最小高度。
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:113
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:256
 msgid "Finish height ref."
-msgstr "参考完成高度"
+msgstr "参考完成高度。"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:114
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:257
 msgid "Reference used for finish min height rule."
-msgstr "参考用于完成任务的最小高度规则"
+msgstr "参考用于完成任务的最小高度规则。"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:79
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
@@ -7476,7 +7476,7 @@ msgstr "指定任务区域最小时间"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:194
 msgid "Default AAT min. time for new AAT tasks."
-msgstr "新AAT任务缺省AAT最小时间"
+msgstr "新AAT任务缺省AAT最小时间。"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:197
 msgid "Optimisation margin"
@@ -7574,7 +7574,7 @@ msgstr "FAI三角区域"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:133
 msgid "Show FAI triangle areas on the map."
-msgstr "在地图上显示FAI三角区域"
+msgstr "在地图上显示FAI三角区域。"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:137
 msgid "FAI triangle threshold"
@@ -7613,17 +7613,17 @@ msgstr "山地"
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:209
 #, no-c-format
 msgid "Imhof 7"
-msgstr "Imhof 7"
+msgstr "Imhof 7地图"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:210
 #, no-c-format
 msgid "Imhof 4"
-msgstr "Imhof 4"
+msgstr "Imhof 4地图"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:211
 #, no-c-format
 msgid "Imhof 12"
-msgstr "Imhof 12"
+msgstr "Imhof 12地图"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:212
 #, no-c-format
@@ -7738,7 +7738,7 @@ msgstr "预设"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:127
 msgid "Load a set of units."
-msgstr "加载单位设置"
+msgstr "加载单位设置。"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:130
 msgid "Custom"
@@ -7776,7 +7776,7 @@ msgstr "升力"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:174
 msgid "Units used for vertical speeds (variometer)."
-msgstr "用于垂直速度的单位（高度表）"
+msgstr "用于垂直速度的单位（高度表）。"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:180
 #, no-c-format
@@ -7794,7 +7794,7 @@ msgstr "用于海拔和高度的单位。"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:194
 msgid "Units used for temperature."
-msgstr "用于温度的单位"
+msgstr "用于温度的单位。"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:206
 msgid "Task speed"
@@ -7802,11 +7802,11 @@ msgstr "任务速度"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:206
 msgid "Units used for task speeds."
-msgstr "用于任务速度的单位"
+msgstr "用于任务速度的单位。"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:217
 msgid "Units used for pressures."
-msgstr "用于压力的单位"
+msgstr "用于压力的单位。"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:227
 msgid "Units used for mass."
@@ -7818,7 +7818,7 @@ msgstr "用于翼载荷的单位。"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:253
 msgid "Lat./Lon."
-msgstr "维度/经度"
+msgstr "维度/经度。"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:253
 msgid "Units used for latitude and longitude."
@@ -7858,7 +7858,7 @@ msgstr "全名"
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:87
 #, no-c-format
 msgid "The full name of each waypoint is displayed."
-msgstr "显示每个航点的全名"
+msgstr "显示每个航点的全名。"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:89
 #, no-c-format
@@ -7893,7 +7893,7 @@ msgstr "显示航点名称的前5个字母。"
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:98
 #, no-c-format
 msgid "No waypoint name is displayed."
-msgstr "不显示航点名称"
+msgstr "不显示航点名称。"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:101
 msgid "Label format"
@@ -7901,7 +7901,7 @@ msgstr "标签格式"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:101
 msgid "Determines how labels are displayed with each waypoint"
-msgstr "确定如何显示每个航点的标签。"
+msgstr "确定如何显示每个航点的标签"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:107
 #, no-c-format
@@ -7944,7 +7944,7 @@ msgstr "两个到达高度都显示出来。需要到达模式：在滑翔计算
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:124
 msgid "Determines how arrival height is displayed in waypoint labels"
-msgstr "确定到达高度在航点标签中显示的方式。"
+msgstr "确定到达高度在航点标签中显示的方式"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:129
 #, no-c-format
@@ -7988,7 +7988,7 @@ msgstr "任务航点"
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:149
 #, no-c-format
 msgid "All waypoints part of a task will be displayed."
-msgstr "任务的所有航点都会被显示"
+msgstr "任务的所有航点都会被显示。"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:162
 #, no-c-format
@@ -8112,7 +8112,7 @@ msgstr "交通工具类型"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:234
 msgid "Type of vehicle used."
-msgstr "使用的交通工具类型"
+msgstr "使用的交通工具类型。"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:236
 msgid "Vehicle Name"
@@ -8138,16 +8138,16 @@ msgstr "获取并显示其他人报告的热气流位置。"
 
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:42
 msgid "Radius of the OZ cylinder."
-msgstr "OZ圆筒半径"
+msgstr "OZ圆筒半径。"
 
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
 msgid "Width of the start/finish gate."
-msgstr "开始/结束门宽度"
+msgstr "开始/结束门宽度。"
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:46
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:42
 msgid "Radius of the OZ sector."
-msgstr "OZ扇区半径"
+msgstr "OZ扇区半径。"
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:56
 msgid "Start radial"
@@ -8173,7 +8173,7 @@ msgstr "内侧半径"
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:68
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:48
 msgid "Inner radius of the OZ sector."
-msgstr "OZ扇区的内侧半径"
+msgstr "OZ扇区的内侧半径。"
 
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:54
 msgid "Angle"
@@ -8437,7 +8437,7 @@ msgstr "最小"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:143
 msgid "dist."
-msgstr "距离"
+msgstr "距离。"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:186
 msgid "Sector"
@@ -8517,7 +8517,7 @@ msgstr ""
 
 #: src/Dialogs/Task/TargetDialog.cpp:452
 msgid "V rem."
-msgstr "V rem."
+msgstr "推荐速度。"
 
 #: src/Dialogs/Task/TargetDialog.cpp:456
 msgid "V ach"
@@ -8586,7 +8586,7 @@ msgstr "打开无控制作用区"
 msgid ""
 "Mute the audio output in when the current lift is in a certain range around "
 "zero"
-msgstr "当现在的升力在零下上一定范围内时，静音输出。"
+msgstr "当现在的升力在零下上一定范围内时静音输出"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:84
 msgid "Min. Frequency"
@@ -8638,7 +8638,7 @@ msgstr "主音量"
 
 #: src/Dialogs/Weather/PCMetDialog.cpp:68
 msgid "Failed to download file."
-msgstr "下载文件失败"
+msgstr "下载文件失败。"
 
 #: src/Dialogs/Weather/NOAAList.cpp:121 src/Dialogs/Weather/NOAADetails.cpp:72
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:227
@@ -8991,7 +8991,7 @@ msgstr "总能量探测值用在总能量与pitot/静态总能量混合中所占
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:38
 #, no-c-format
 msgid "ASI cal."
-msgstr "ASI计算"
+msgstr "ASI计算。"
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:39
 #, no-c-format
@@ -9002,7 +9002,7 @@ msgstr "校准因子应用于测量空速以获得指示空速。"
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:43
 #, no-c-format
 msgid "TE static cal."
-msgstr "总能量静态计算"
+msgstr "总能量静态计算。"
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:44
 #, no-c-format
@@ -9014,7 +9014,7 @@ msgstr "适用于总能量计算的静态压力校准因子。"
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:48
 #, no-c-format
 msgid "TE dynamic cal."
-msgstr "总能量动态计算"
+msgstr "总能量动态计算。"
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:49
 #, no-c-format
@@ -9096,7 +9096,7 @@ msgstr "TE端口"
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:52
 #, no-c-format
 msgid "Whether the Total Energy port is connected."
-msgstr "总能量端口是否连接"
+msgstr "总能量端口是否连接。"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:55
 #, no-c-format
@@ -9106,7 +9106,7 @@ msgstr "Pitot端口"
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:55
 #, no-c-format
 msgid "Whether the Pitot port is connected."
-msgstr "Pitot端口是否连接"
+msgstr "Pitot端口是否连接。"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:58
 #, no-c-format
@@ -9116,7 +9116,7 @@ msgstr "静态端口"
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:58
 #, no-c-format
 msgid "Whether the Static port is connected."
-msgstr "静态端口是否连接"
+msgstr "静态端口是否连接。"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:61
 #, no-c-format
@@ -9323,7 +9323,7 @@ msgstr "交通列表"
 
 #: Data/Input/default.xci:514 Data/Input/default.xci:1079
 msgid "Topo."
-msgstr "地貌"
+msgstr "地貌。"
 
 #: Data/Input/default.xci:64
 msgid "Below final glide"
