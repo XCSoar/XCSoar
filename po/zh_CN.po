@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
 "PO-Revision-Date: 2018-06-20 07:53+0000\n"
-"Last-Translator: flypluswangzhe <216188@qq.com>\n"
+"Last-Translator: sunjinge <443266271@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "xcsoar/translations/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -1722,6 +1722,8 @@ msgid ""
 "good is pointing directly at the next waypoint. This bearing takes into "
 "account the curvature of the Earth."
 msgstr ""
+"滑翔伞轨迹和下一个航点方位的、或者在AAT科目中，到AAT扇区内目标的方位之间的差别。GPS导航是基于横跨地面的轨迹方位，并且当有风时，该轨迹方位可能不同"
+"于滑翔伞的航向。滑翔伞需要改变”V”形箭头方向追逐修正方位的差别，也就是说这样会使滑翔伞的航向指向下一个航路点变好。这种方位考虑了地球的曲率。"
 
 #: src/InfoBoxes/Content/Factory.cpp:530
 #, no-c-format
