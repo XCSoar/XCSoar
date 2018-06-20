@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2018-06-20 07:53+0000\n"
+"PO-Revision-Date: 2018-06-20 07:54+0000\n"
 "Last-Translator: flypluswangzhe <216188@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "xcsoar/translations/zh_Hans/>\n"
@@ -4509,7 +4509,7 @@ msgstr "设置中"
 #: src/Dialogs/MapItemListDialog.cpp:176
 #: src/Dialogs/Task/AlternatesListDialog.cpp:109
 msgid "Goto"
-msgstr ""
+msgstr "Goto转到"
 
 #: src/Dialogs/MapItemListDialog.cpp:177
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:116
