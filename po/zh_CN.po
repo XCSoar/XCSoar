@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
 "PO-Revision-Date: 2018-06-20 07:53+0000\n"
-"Last-Translator: sunjinge <443266271@qq.com>\n"
+"Last-Translator: flypluswangzhe <216188@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "xcsoar/translations/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -4443,7 +4443,7 @@ msgstr "悬挂滑翔翼"
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:183
 #, no-c-format
 msgid "Paraglider"
-msgstr ""
+msgstr "滑翔伞"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:132
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:184
