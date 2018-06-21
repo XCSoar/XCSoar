@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2018-06-20 08:22+0000\n"
+"PO-Revision-Date: 2018-06-21 23:16+0000\n"
 "Last-Translator: flypluswangzhe <216188@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "xcsoar/translations/zh_Hans/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.0.1\n"
+"X-Generator: Weblate 3.1-dev\n"
 "X-Launchpad-Export-Date: 2016-03-01 23:01+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -7336,7 +7336,7 @@ msgstr "最大开始速度"
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:230
 msgid ""
 "Maximum speed allowed in start observation zone.  Set to 0 for no limit."
-msgstr "开始观测区域允许的最大速度。设置为0，无限制。"
+msgstr "开始观测区域允许的最大速度。  设置为0，无限制。"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:67
 msgid "Start max. speed margin"
