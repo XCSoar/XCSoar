@@ -86,18 +86,11 @@ LogoPageWindow::OnPaint(Canvas &canvas)
 #endif
   y += Layout::FastScale(37);
 
-  canvas.DrawText(x, y, _T("more information from"));
+  canvas.DrawText(x, y, _T("more information at"));
   y += Layout::FastScale(22);
 
   canvas.SetTextColor(COLOR_XCSOAR);
-  canvas.DrawText(x, y, _T("pfb@exadios.com"));
-  y += Layout::FastScale(37);
-
-  canvas.SetTextColor(COLOR_RED);
-  canvas.DrawText(x, y, _T("This version not to be used"));
-  y += Layout::FastScale(11);
-  canvas.DrawText(x, y, _T("for competition!"));
-
+  canvas.DrawText(x, y, _T("http://www.xcsoar.org"));
 }
 
 static Window *
