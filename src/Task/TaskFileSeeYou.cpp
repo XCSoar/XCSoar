@@ -44,8 +44,10 @@
 #include <stdlib.h>
 
 // debug
+#ifdef X11  // Use X11 as a proxy for the UNIX target.
 #include <iostream>
 #include <fstream>
+#endif  // X11
 // ~debug
 
 struct SeeYouTaskInformation {
@@ -396,6 +398,7 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
     const Angle RadialEnd = (A12adj + turnpoint_infos.angle1).AsBearing();
 
 // debug
+#ifdef X11  // Use X11 as a proxy for the UNIX target.
     std::fstream db_flag;
     db_flag.open("/home/pfb/XCSoarData/TaskFileSeeYou", std::ios_base::in);
     if (db_flag.is_open())
@@ -409,6 +412,7 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
                 << "angle2:  " << turnpoint_infos.angle2.AsBearing().Degrees() << std::endl;
       db_flag.close();
       }
+#endif  // X11
 // ~debug
 
     /**
