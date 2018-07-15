@@ -788,7 +788,6 @@ DEBUG_PROGRAM_NAMES = \
 	NearestWaypoints \
 	RunKalmanFilter1d \
 	ArcApprox \
-  CanvasKeyhole \
   VariableKeyholeZone
 
 ifeq ($(TARGET),UNIX)
