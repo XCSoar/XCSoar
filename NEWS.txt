@@ -1,4 +1,5 @@
 Version 7.0 - not yet released
+* Added new turn point type, 'Variable Sector', in AAT tasks.
 * LUA scripting
 * user interface
   - screen layout with 12 infoboxes on the left, vario+3 infoboxes on right
