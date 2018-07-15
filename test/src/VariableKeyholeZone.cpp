@@ -40,8 +40,8 @@ struct Args
   std::ofstream gnuplot;
 
   GeoPoint ref;
-  fixed outer_radius;
-  fixed inner_radius;
+  double outer_radius;
+  double inner_radius;
   Angle start_radial;
   Angle end_radial;
 
