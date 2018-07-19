@@ -473,6 +473,10 @@ static int jpc_siz_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate,
 		jas_eprintf("tile cannot have zero area\n");
 		goto error;
 	}
+	if (siz->tilewidth > 16384 || siz->tileheight > 16384) {
+		jas_eprintf("tile cannot have zero area\n");
+		goto error;
+	}
 	if (!siz->numcomps || siz->numcomps > 16384) {
 		jas_eprintf("number of components not in permissible range\n");
 		goto error;
