@@ -23,6 +23,7 @@ ifeq ($(HAVE_WIN32),n)
 CXX_FEATURES += -fvisibility=hidden
 C_FEATURES += -fvisibility=hidden
 endif
+endif
 
 ifeq ($(DEBUG)$(HAVE_WIN32)$(TARGET_IS_DARWIN),nnn)
 CXX_FEATURES += -ffunction-sections

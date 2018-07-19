@@ -263,7 +263,6 @@ try {
   FileLineReaderA reader(path);
 
   ParseFileRepository(repository, reader);
-
   items.clear();
   for (auto &i : repository)
     if (i.type == file_type)

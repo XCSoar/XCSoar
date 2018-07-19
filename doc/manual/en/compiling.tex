@@ -129,8 +129,8 @@ You may specify one of the following targets with \texttt{TARGET=x}:
 For Android, you need:
 
 \begin{itemize}
-\item \href{http://developer.android.com/sdk/}{Android SDK}
-\item \href{http://developer.android.com/sdk/ndk/}{Android NDK r15c}
+\item \href{http://developer.android.com/sdk/}{Android SDK level 22}
+\item \href{http://developer.android.com/sdk/ndk/}{Android NDK r16}
 \item \href{http://www.vorbis.com/}{Ogg Vorbis}
 \item {Java JDK 
 \begin{verbatim*}
@@ -145,6 +145,13 @@ The required Android SDK components are:
 \end{itemize}
 These can be installed from the Android Studio SDK Manager, or using the SDK
 command line tools:
+=======
+The \texttt{Makefile} assumes that the Android SDK is installed in
+\verb|~/opt/android-sdk-linux| and the NDK is installed in
+\verb|~/opt/android-ndk-r16|.  You can use the options
+\verb|ANDROID_SDK| and \verb|ANDROID_NDK| to override these paths.
+
+After installing Java you will have to install at least one Android Platform SDK using the Android SDK Manager:
 
 \begin{verbatim*}
 tools/bin/sdkmanager \
