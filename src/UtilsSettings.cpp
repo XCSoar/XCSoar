@@ -59,6 +59,7 @@ Copyright_License {
 #include "Audio/VarioGlue.hpp"
 #include "Audio/VolumeController.hpp"
 #include "PageActions.hpp"
+#include "FLARM/Glue.hpp"
 
 #if defined(__BORLANDC__)  // due to compiler bug
   #include "Waypoint/Waypoints.hpp"
@@ -69,6 +70,7 @@ bool MapFileChanged = false;
 bool AirspaceFileChanged = false;
 bool AirfieldFileChanged = false;
 bool WaypointFileChanged = false;
+bool FlarmFileChanged = false;
 bool InputFileChanged = false;
 bool LanguageChanged = false;
 bool require_restart;
@@ -85,6 +87,7 @@ SettingsEnter()
   AirspaceFileChanged = false;
   AirfieldFileChanged = false;
   WaypointFileChanged = false;
+  FlarmFileChanged = false;
   InputFileChanged = false;
   DevicePortChanged = false;
   LanguageChanged = false;
@@ -192,6 +195,10 @@ SettingsLeave(const UISettings &old_ui_settings)
 
   if (DevicePortChanged)
     devRestart();
+
+  if (FlarmFileChanged) {
+    ReloadFlarmDatabases();
+  }
 
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 

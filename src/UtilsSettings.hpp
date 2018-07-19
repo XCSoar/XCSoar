@@ -32,6 +32,7 @@ extern bool WaypointFileChanged;
 extern bool AirfieldFileChanged;
 extern bool InputFileChanged;
 extern bool MapFileChanged;
+extern bool FlarmFileChanged;
 extern bool LanguageChanged;
 extern bool require_restart;
 
