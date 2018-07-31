@@ -210,6 +210,9 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
   DrawSkyLinesTraffic(canvas);
 #endif
 
+  if (basic.location_available)
+      DrawGLinkTraffic(canvas, aircraft_pos);
+
   DrawTeammate(canvas);
 
   if (basic.location_available)

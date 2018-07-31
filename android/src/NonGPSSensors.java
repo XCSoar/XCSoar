@@ -37,15 +37,29 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 import android.os.SystemClock;
+import android.content.BroadcastReceiver;
+import android.content.Intent;
+import android.content.IntentFilter;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Code to support the growing suite of non-GPS sensors on Android platforms.
  */
 public class NonGPSSensors implements SensorEventListener, Runnable {
   private static final String TAG = "XCSoar";
+  
+  public static final String ACTION_TARGET_POSITION ="link.glider.gliderlink.target_position";
+ 
+  private BroadcastReceiver receiver;
+  private IntentFilter filter;
+  private Context context;
+  private boolean filterEnabled = false;
+  
 
   // Constant array saying whether we want to support certain sensors.
   // If modifying this array, make certain that the largest ID value inside
@@ -125,6 +139,7 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
   }
 
   NonGPSSensors(Context context, int _index) {
+    this.context = context;
     index = _index;
     default_sensors_ = new Sensor[SENSOR_TYPE_ID_UPPER_BOUND];
     enabled_sensors_ = new boolean[SENSOR_TYPE_ID_UPPER_BOUND];
@@ -152,6 +167,43 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
                    KF_PRESSURE_SENSOR_NOISE_VARIANCE_FALLBACK);
       }
     }
+
+    filterEnabled = true;
+    filter = new IntentFilter(ACTION_TARGET_POSITION);
+    receiver = new BroadcastReceiver() {
+      @Override
+      public void onReceive(final Context context, Intent intent) {
+        try {
+          JSONObject json = new JSONObject(intent.getStringExtra("json"));
+
+          JSONObject pos = json.getJSONObject("position");
+          
+          /* Sample data:
+                 {  
+                    "position":{  
+                       "gid":3333,
+                       "callsign":"4D",
+                       "senderTime":1527263825128,
+                       "receivedTime":1527263825128,
+                       "latitude":37.56716816,
+                       "longitude":-122.02447995000023,
+                       "altitude":1701,
+                       "bearing":270,
+                       "gspeed":30,
+                       "vspeed":3,
+                       "accuracy":0
+                    }
+                 }
+          */
+
+          setGliderLinkInfo(pos.getLong("gid"), pos.getString("callsign"), pos.getDouble("latitude"),
+              pos.getDouble("longitude"), pos.getDouble("altitude"), pos.getDouble("gspeed"), pos.getDouble("vspeed"),
+              pos.getInt("bearing"));
+        } catch (JSONException e) {
+          Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+      }
+    };
 
     updateSensorSubscriptions();
   }
@@ -249,6 +301,14 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
                                          sensor_manager_.SENSOR_DELAY_NORMAL);
       }
     }
+
+    if (filterEnabled) {
+      Log.d(TAG, "Registered intent receiver");
+      context.registerReceiver(receiver, filter);
+    } else {
+      context.unregisterReceiver(receiver);
+    }
+
     Log.d(TAG, "Done updating non-GPS sensor subscriptions...");
   }
 
@@ -286,4 +346,7 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
   private native void setRotation(float dtheta_x, float dtheta_y, float dtheta_z);
   private native void setMagneticField(float h_x, float h_y, float h_z);
   private native void setBarometricPressure(float pressure, float sensor_noise_variance);
+  private native void setGliderLinkInfo(long gid, String callsign, 
+		  double latitude, double longitude, double altitude, 
+		  double gspeed, double vspeed, int bearing);
 }

@@ -20,29 +20,26 @@
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  }
  */
+#ifndef XCSOAR_GLIDER_LINK_DATA_H
+#define XCSOAR_GLIDER_LINK_DATA_H
 
-#ifndef XCSOAR_TRAFFIC_RENDERER_HPP
-#define XCSOAR_TRAFFIC_RENDERER_HPP
+#include "GliderLink/List.hpp"
 
-#include "FLARM/Color.hpp"
+#include <type_traits>
 
-struct RasterPoint;
-class Canvas;
-struct TrafficLook;
-struct FlarmTraffic;
-struct GliderLinkTraffic;
-class Angle;
+/**
+ * A container for all data received by GliderLink.
+ */
+struct GliderLinkData {
+  GliderLinkTrafficList traffic;
 
-namespace TrafficRenderer
-{
-void
-Draw(Canvas &canvas, const TrafficLook &traffic_look,
-     const FlarmTraffic &traffic, Angle angle,
-     const FlarmColor color, const RasterPoint pt);
+  void Complement(const GliderLinkData &add) {
+    traffic.Replace(add.traffic);
+  }
 
-void
-Draw(Canvas &canvas, const TrafficLook &traffic_look,
-     const GliderLinkTraffic &traffic, Angle angle, const RasterPoint pt);
-}
+  void Expire(fixed clock) {
+    traffic.Expire(clock);
+  }
+};
 
 #endif

@@ -21,28 +21,30 @@
  }
  */
 
-#ifndef XCSOAR_TRAFFIC_RENDERER_HPP
-#define XCSOAR_TRAFFIC_RENDERER_HPP
+#ifndef XCSOAR_GLIDER_LINK_ID_HPP
+#define XCSOAR_GLIDER_LINK_ID_HPP
 
-#include "FLARM/Color.hpp"
+#include <stdint.h>
 
-struct RasterPoint;
-class Canvas;
-struct TrafficLook;
-struct FlarmTraffic;
-struct GliderLinkTraffic;
-class Angle;
+/**
+ * The identification number of a GLIDER_LINK traffic.
+ */
+class GliderLinkId {
+  uint32_t value;
 
-namespace TrafficRenderer
-{
-void
-Draw(Canvas &canvas, const TrafficLook &traffic_look,
-     const FlarmTraffic &traffic, Angle angle,
-     const FlarmColor color, const RasterPoint pt);
+public:
+  constexpr
+  GliderLinkId(uint32_t _value):value(_value) {}
 
-void
-Draw(Canvas &canvas, const TrafficLook &traffic_look,
-     const GliderLinkTraffic &traffic, Angle angle, const RasterPoint pt);
-}
+  GliderLinkId() = default;
+
+  bool operator==(GliderLinkId other) const {
+    return value == other.value;
+  }
+
+  bool operator<(GliderLinkId other) const {
+    return value < other.value;
+  }
+};
 
 #endif

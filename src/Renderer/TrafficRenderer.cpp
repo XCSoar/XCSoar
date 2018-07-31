@@ -26,6 +26,7 @@
 #include "Screen/Layout.hpp"
 #include "Look/TrafficLook.hpp"
 #include "FLARM/Traffic.hpp"
+#include "GliderLink/Traffic.hpp"
 #include "Math/Screen.hpp"
 #include "Util/Macros.hpp"
 
@@ -83,6 +84,53 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
   default:
     return;
   }
+
+  canvas.SelectHollowBrush();
+  canvas.DrawCircle(pt.x, pt.y, Layout::FastScale(11));
+}
+
+
+
+void
+TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
+                      const GliderLinkTraffic &traffic, const Angle angle, const RasterPoint pt)
+{
+  // Create point array that will form that arrow polygon
+  RasterPoint Arrow[8];
+
+  const unsigned arrow_size = 5;
+  // Fill the Arrow array with a normal arrow pointing north
+  // if powered, draw propeller on front of triangle
+  Arrow[0].x = 0;
+  Arrow[0].y = -8;
+  Arrow[1].x = 4;
+  Arrow[1].y = 6;
+  Arrow[2].x = 0;
+  Arrow[2].y = 3;
+  Arrow[3].x = -4;
+  Arrow[3].y = 6;
+  Arrow[4].x = 0;
+  Arrow[4].y = -8;
+  Arrow[5].x = 4;
+  Arrow[5].y = -8;
+  Arrow[6].x = -4;
+  Arrow[6].y = -8;
+  Arrow[7].x = 0;
+  Arrow[7].y = -8;
+
+  canvas.Select(traffic_look.safe_brush);
+
+  // Select black pen
+  if (IsDithered())
+    canvas.Select(Pen(Layout::FastScale(2), COLOR_BLACK));
+  else
+    canvas.SelectBlackPen();
+
+  // Rotate and shift the arrow to the right position and angle
+  PolygonRotateShift(Arrow, arrow_size, pt, angle);
+
+  // Draw the arrow
+  canvas.DrawPolygon(Arrow, arrow_size);
 
   canvas.SelectHollowBrush();
   canvas.DrawCircle(pt.x, pt.y, Layout::FastScale(11));
