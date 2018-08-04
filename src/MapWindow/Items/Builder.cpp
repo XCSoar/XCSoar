@@ -40,13 +40,46 @@ class WaypointListBuilderVisitor:
   public WaypointVisitor
 {
   MapItemList &list;
+  bool only_landable;
+  GeoPoint location;
+
+  // distance waypoint vector, for sorting on distance in destructor
+  std::vector<std::pair<double,std::shared_ptr<const Waypoint>> > tempMIvect;
 
 public:
-  WaypointListBuilderVisitor(MapItemList &_list):list(_list) {}
+  WaypointListBuilderVisitor(MapItemList &_list, bool _only_landable = false, GeoPoint _location = GeoPoint().Invalid() ):list(_list),only_landable(_only_landable),location(_location) {}
 
-  void Visit(const WaypointPtr &waypoint) override {
-    if (!list.full())
-      list.append(new WaypointMapItem(waypoint));
+  void Visit(const WaypointPtr & waypointptr) override {
+    if(location.IsValid()){
+      double distance = waypointptr->location.Distance( location ); // calculate distance
+      std::pair<double,std::shared_ptr<const Waypoint>> elemptr = std::make_pair(distance,waypointptr); // save pair distance and waypoint
+      tempMIvect.push_back(elemptr);
+    } else {
+      if (!list.full()){
+        if(only_landable){
+          if(waypointptr->IsLandable()) list.append(new WaypointMapItem(waypointptr));
+        }else{
+          list.append(new WaypointMapItem(waypointptr));
+        }
+      }
+    }
+  }
+
+  virtual ~WaypointListBuilderVisitor() {
+    if(location.IsValid()){ // sort on distance available
+      std::sort(tempMIvect.begin(),tempMIvect.end());
+      for(unsigned int i = 0; i < tempMIvect.size(); i++){
+        std::shared_ptr<const Waypoint> WPptr = tempMIvect[i].second;
+        if (!list.full()){
+          if(only_landable){
+            if((WPptr->IsLandable()) || (tempMIvect[i].first < 250.0)) list.append(new WaypointMapItem(WPptr)); // list also this item, it was clicked!!!
+          }else{
+            list.append(new WaypointMapItem(WPptr));
+          }
+        } else break;
+      }
+      tempMIvect.clear();
+    }
   }
 };
 
@@ -111,9 +144,9 @@ MapItemListBuilder::AddSelfIfNear(const GeoPoint &self, Angle bearing)
 }
 
 void
-MapItemListBuilder::AddWaypoints(const Waypoints &waypoints)
+MapItemListBuilder::AddWaypoints(const Waypoints &waypoints, bool only_landable)
 {
-  WaypointListBuilderVisitor waypoint_list_builder(list);
+  WaypointListBuilderVisitor waypoint_list_builder(list, only_landable, location );
   waypoints.VisitWithinRange(location, range, waypoint_list_builder);
 }
 

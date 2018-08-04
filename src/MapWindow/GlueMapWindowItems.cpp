@@ -49,7 +49,16 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   const MoreData &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
-  auto range = visible_projection.DistancePixelsToMeters(Layout::GetHitRadius());
+  bool only_landable = false;
+  int rangedisplaypercent = settings.item_list.range_of_nearest_map_items_in_percent_of_displaysize;
+  auto range = 0.0;
+  if(rangedisplaypercent == 0) range = visible_projection.DistancePixelsToMeters(Layout::GetHitRadius());
+  else {
+    range = visible_projection.DistancePixelsToMeters(Layout::min_screen_pixels/2*rangedisplaypercent/100);
+    range = std::max(250.0,range);     // minimal circle of 250m
+    range = std::min(50000.0,range);   // maximal circle of 50km, no sense to find whole Europe
+    only_landable = (range > settings.item_list.rangefilter_all_waypoint_up_to_km*1000.0); // list only landable mapitems
+  }
 
   MapItemList list;
   MapItemListBuilder builder(list, location, range);
@@ -67,26 +76,30 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   if (task)
     builder.AddTaskOZs(*task);
 
-  const Airspaces *airspace_database = airspace_renderer.GetAirspaces();
-  if (airspace_database)
-    builder.AddVisibleAirspace(*airspace_database,
-                               airspace_renderer.GetWarningManager(),
-                               computer_settings.airspace,
-                               settings.airspace, basic,
-                               calculated);
+  if(settings.item_list.add_airspace) {
+    const Airspaces *airspace_database = airspace_renderer.GetAirspaces();
+    if (airspace_database)
+      builder.AddVisibleAirspace(*airspace_database,
+                                 airspace_renderer.GetWarningManager(),
+                                 computer_settings.airspace,
+                                 settings.airspace, basic,
+                                 calculated);
+  }
 
   if (visible_projection.GetMapScale() <= 4000)
     builder.AddThermals(calculated.thermal_locator, basic, calculated);
 
+  // flarm-traffic could be more interested than waypoints...if no interest, disable it
+  if(settings.item_list.add_traffic)
+    builder.AddTraffic(basic.flarm.traffic);
+
   if (waypoints)
-    builder.AddWaypoints(*waypoints);
+    builder.AddWaypoints(*waypoints,only_landable);
 
 #ifdef HAVE_NOAA
   if (noaa_store)
     builder.AddWeatherStations(*noaa_store);
 #endif
-
-  builder.AddTraffic(basic.flarm.traffic);
 
 #ifdef HAVE_SKYLINES_TRACKING
   builder.AddSkyLinesTraffic();
@@ -107,7 +120,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   }
 
   // Sort the list of map items
-  list.Sort();
+  // Sortierung aufheben, es wird nach entfernung sortiert list.Sort();
 
   // Show the list dialog
   if (list.empty()) {

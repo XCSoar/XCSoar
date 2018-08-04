@@ -30,6 +30,10 @@ class MapItemListSettingsPanel final : public RowFormWidget {
   enum ControlIndex {
     AddLocation,
     AddArrivalAltitude,
+    AddAirspace,
+    AddTraffic,
+    RangeOfNearestMapItemsInPercentOfDisplaysize,
+    RangefilterAllWaypoint,
   };
 
 public:

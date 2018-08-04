@@ -162,4 +162,8 @@ Profile::Load(const ProfileMap &map, MapItemListSettings &settings)
 {
   map.Get(ProfileKeys::EnableLocationMapItem, settings.add_location);
   map.Get(ProfileKeys::EnableArrivalAltitudeMapItem, settings.add_arrival_altitude);
+  map.Get(ProfileKeys::EnableAirspaceMapItem, settings.add_airspace);
+  map.Get(ProfileKeys::EnableTrafficMapItem, settings.add_traffic);
+  map.Get(ProfileKeys::RangeOfNearestMapItemsInPercent, settings.range_of_nearest_map_items_in_percent_of_displaysize);
+  map.Get(ProfileKeys::RangefilterAllWaypointUpToKm, settings.rangefilter_all_waypoint_up_to_km);
 }

@@ -42,6 +42,7 @@ Copyright_License {
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
+#include "Profile/Profile.hpp"
 
 #ifdef HAVE_NOAA
 #include "Dialogs/Weather/NOAADetails.hpp"
@@ -251,6 +252,7 @@ MapItemListWidget::OnAction(int id)
   switch (id) {
   case SETTINGS:
     ShowMapItemListSettingsDialog();
+    Profile::Save();
     break;
   case GOTO:
     OnGotoClicked();
