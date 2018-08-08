@@ -100,6 +100,18 @@ WriteSeeYouFlags(BufferedOutputStream &writer, const Waypoint &wp)
     writer.Write("15");
     break;
 
+  case Waypoint::Type::VOR:
+    writer.Write("9");
+    break;
+
+  case Waypoint::Type::NDB:
+    writer.Write("10");
+    break;
+
+  case Waypoint::Type::VRP: // visual reporting point
+    writer.Write("20");
+    break;
+
   case Waypoint::Type::THERMAL_HOTSPOT:
     break;
   }

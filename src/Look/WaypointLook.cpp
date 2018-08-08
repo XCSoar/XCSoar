@@ -41,6 +41,10 @@ WaypointLook::Initialise(const WaypointRendererSettings &settings,
   power_plant_icon.LoadResource(IDB_POWER_PLANT, IDB_POWER_PLANT_HD);
   obstacle_icon.LoadResource(IDB_OBSTACLE, IDB_OBSTACLE_HD);
   thermal_hotspot_icon.LoadResource(IDB_THERMAL_HOTSPOT, IDB_THERMAL_HOTSPOT_HD);
+  vrp_icon.LoadResource(IDB_VRP, IDB_VRP_HD);
+  vor_icon.LoadResource(IDB_VOR, IDB_VOR_HD);
+  ndb_icon.LoadResource(IDB_NDB, IDB_NDB_HD);
+
   marker_icon.LoadResource(IDB_MARK, IDB_MARK_HD);
 
   reachable_brush.Create(COLOR_GREEN);

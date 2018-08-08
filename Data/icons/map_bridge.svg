@@ -10,10 +10,10 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
-   width="6"
-   height="6"
+   width="5"
+   height="5.0000005"
    id="svg2816"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.92.1 r15371"
    sodipodi:docname="map_bridge.svg">
   <metadata
      id="metadata9">
@@ -36,15 +36,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1432"
-     inkscape:window-height="988"
+     inkscape:window-width="1600"
+     inkscape:window-height="849"
      id="namedview7"
      showgrid="true"
      inkscape:zoom="33.552217"
-     inkscape:cx="-3.3795401"
-     inkscape:cy="0.43908607"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:cx="-8.7694411"
+     inkscape:cy="0.081434796"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer5">
     <inkscape:grid
@@ -53,29 +53,33 @@
        empspacing="5"
        visible="true"
        enabled="true"
-       snapvisiblegridlinesonly="true" />
+       snapvisiblegridlinesonly="true"
+       originx="2.9604645e-08"
+       originy="2.030281e-07"
+       spacingx="1.0666667"
+       spacingy="1.0666667" />
   </sodipodi:namedview>
   <defs
      id="defs2818" />
   <g
-     transform="translate(-6.9470643,-2.0097858)"
+     transform="translate(-7.4102019,-3.5437718)"
      id="layer1" />
   <g
      inkscape:groupmode="layer"
      id="layer5"
      inkscape:label="NOAA_Image"
-     transform="translate(0.05293565,-12.009785)">
+     transform="translate(0.05646472,-14.210437)">
     <path
-       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:square;stroke-linejoin:round;stroke-opacity:1"
-       d="m 2.4470643,2.509785 0,-0.5 2.5,-2.5 0.5,0"
+       style="fill:none;stroke:#000000;stroke-width:0.83333337px;stroke-linecap:square;stroke-linejoin:round;stroke-opacity:1"
+       d="M 2.0268686,18.793771 V 18.377105 L 4.1102019,16.293771 H 4.5268687"
        id="path2827"
        sodipodi:nodetypes="cccc"
-       transform="translate(0,15)" />
+       inkscape:connector-curvature="0" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:square;stroke-linejoin:round;stroke-opacity:1"
-       d="m 0.44706435,0.509785 0.5,0 2.49999995,-2.5 0,-0.5"
+       style="fill:none;stroke:#000000;stroke-width:0.83333337px;stroke-linecap:square;stroke-linejoin:round;stroke-opacity:1"
+       d="M 0.36020197,17.127105 H 0.77686868 L 2.860202,15.043771 v -0.416667"
        id="path2829"
        sodipodi:nodetypes="cccc"
-       transform="translate(0,15)" />
+       inkscape:connector-curvature="0" />
   </g>
 </svg>
