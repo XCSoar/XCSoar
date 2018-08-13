@@ -48,7 +48,7 @@ dlgWaypointEditShowModal(Waypoint &way_point);
 void
 dlgWaypointDetailsShowModal(WaypointPtr waypoint,
                             bool allow_navigation = true,
-                            bool allow_edit = false);
+                            bool allow_edit = false, bool only_taskedit = false);
 
 bool
 PopupNearestWaypointDetails(const Waypoints &way_points,

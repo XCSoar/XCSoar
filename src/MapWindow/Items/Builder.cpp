@@ -101,7 +101,7 @@ MapItemListBuilder::AddLocation(const NMEAInfo &basic,
     elevation = terrain->GetTerrainHeight(location)
       .ToDouble(LocationMapItem::UNKNOWN_ELEVATION);
 
-  list.append(new LocationMapItem(vector, elevation));
+  list.append(new LocationMapItem(vector, elevation, location));
 }
 
 void
@@ -133,7 +133,7 @@ MapItemListBuilder::AddArrivalAltitudes(
   if (!leased_route_planner->FindPositiveArrival(destination, reach))
     return;
 
-  list.append(new ArrivalAltitudeMapItem(elevation, reach, safety_height));
+  list.append(new ArrivalAltitudeMapItem(elevation, reach, safety_height, location));
 }
 
 void

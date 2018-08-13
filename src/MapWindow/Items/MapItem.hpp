@@ -50,7 +50,7 @@ struct MapItem
 {
   enum Type {
     LOCATION,
-    ARRIVAL_ALTITUDE,
+    ARRIVAL_ALTITUDE, // insert also a new or existing waypoint on this position before current target-waypoint
     SELF,
     TASK_OZ,
 #ifdef HAVE_NOAA
@@ -96,8 +96,11 @@ struct LocationMapItem: public MapItem
    */
   double elevation;
 
-  LocationMapItem(const GeoVector &_vector, double _elevation)
-    :MapItem(LOCATION), vector(_vector), elevation(_elevation) {}
+  /** relevant position */
+  GeoPoint location;
+
+  LocationMapItem(const GeoVector &_vector, double _elevation, GeoPoint &_location)
+    :MapItem(LOCATION), vector(_vector), elevation(_elevation), location(_location) {}
 
   bool HasElevation() const {
     return elevation > UNKNOWN_ELEVATION_THRESHOLD;
@@ -132,12 +135,15 @@ struct ArrivalAltitudeMapItem: public MapItem
   /** Safety height (m) */
   double safety_height;
 
+  /** relevant position */
+  GeoPoint location;
 
   ArrivalAltitudeMapItem(double _elevation,
                          ReachResult _reach,
-                         double _safety_height)
+                         double _safety_height,
+                         GeoPoint &_location)
     :MapItem(ARRIVAL_ALTITUDE),
-     elevation(_elevation), reach(_reach), safety_height(_safety_height) {}
+     elevation(_elevation), reach(_reach), safety_height(_safety_height), location(_location){}
 
   bool HasElevation() const {
     return elevation > UNKNOWN_ELEVATION_THRESHOLD;
