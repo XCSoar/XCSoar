@@ -149,6 +149,8 @@ UpdateBatteryInfo()
   case SDL_POWERSTATE_CHARGED:
     Power::External::Status = Power::External::ON;
     Power::Battery::Status = Power::Battery::CHARGING;
+    break;
+
   case SDL_POWERSTATE_ON_BATTERY:
     Power::External::Status = Power::External::OFF;
     if (remaining_percent >= 0) {
@@ -162,6 +164,8 @@ UpdateBatteryInfo()
     } else {
       Power::Battery::Status = Power::Battery::UNKNOWN;
     }
+    break;
+
   default:
     Power::External::Status = Power::External::UNKNOWN;
   }
