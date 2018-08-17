@@ -22,7 +22,6 @@
 
 #include "Reader.hxx"
 #include "Util/StaticFifoBuffer.hxx"
-#include "ZlibError.hxx"
 
 #include <zlib.h>
 
@@ -41,8 +40,10 @@ class GunzipReader final : public Reader {
 public:
 	/**
 	 * Construct the filter.
+	 *
+	 * Throws on error.
 	 */
-	GunzipReader(Reader &_next) throw(ZlibError);
+	GunzipReader(Reader &_next);
 
 	~GunzipReader() {
 		inflateEnd(&z);
