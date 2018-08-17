@@ -133,9 +133,9 @@ curl = CurlProject(
 )
 
 proj = AutotoolsProject(
-    'http://download.osgeo.org/proj/proj-4.9.3.tar.gz',
-    'https://fossies.org/linux/privat/proj-4.9.3.tar.gz',
-    'd598336ca834742735137c5674b214a1',
+    'http://download.osgeo.org/proj/proj-5.1.0.tar.gz',
+    'https://fossies.org/linux/privat/proj-5.1.0.tar.gz',
+    '6b1379a53317d9b5b8c723c1dc7bf2e3a8eb22ceb46b8807a1ce48ef65685bb3',
     'lib/libproj.a',
     [
         '--disable-shared', '--enable-static',
