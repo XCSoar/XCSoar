@@ -39,6 +39,8 @@ struct GeoPoint;
  */
 class MapOverlay {
 public:
+  virtual ~MapOverlay() noexcept = default;
+
   /**
    * Returns a human-readable name for this overlay.
    */
