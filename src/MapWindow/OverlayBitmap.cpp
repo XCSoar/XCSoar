@@ -49,7 +49,7 @@ using ClippedPolygon = boost::geometry::model::polygon<DoublePoint2D>;
 using ClippedMultiPolygon =
   boost::geometry::model::multi_polygon<ClippedPolygon>;
 
-MapOverlayBitmap::MapOverlayBitmap(Path path) throw(std::runtime_error)
+MapOverlayBitmap::MapOverlayBitmap(Path path)
   :label((path.GetBase() != nullptr ? path.GetBase() : path).c_str())
 {
   bounds = bitmap.LoadGeoFile(path);
