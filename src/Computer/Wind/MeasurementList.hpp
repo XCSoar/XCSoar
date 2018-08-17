@@ -43,8 +43,7 @@ struct WindMeasurement
   unsigned time;
   double altitude;               /**< Altitude of fix */
 
-  gcc_pure
-  unsigned Score(unsigned _time) const {
+  constexpr unsigned Score(unsigned _time) const {
     // Calculate the score of this item. The item with the highest
     // score is the least important one.  We may need to adjust the
     // proportion of the quality and the elapsed time. Currently, one
@@ -68,7 +67,6 @@ public:
    * if no valid vector could be calculated (for instance: too little or
    * too low quality data).
    */
-  gcc_pure
   const Vector getWind(unsigned now, double alt, bool &found) const;
 
   /** Adds the windvector vector with quality quality to the list. */
