@@ -68,7 +68,6 @@ public:
    * if no valid vector could be calculated (for instance: too little or
    * too low quality data).
    */
-  gcc_pure
   const Vector getWind(unsigned now, fixed alt, bool &found) const;
 
   /** Adds the windvector vector with quality quality to the list. */
