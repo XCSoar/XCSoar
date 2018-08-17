@@ -43,8 +43,7 @@ struct WindMeasurement
   unsigned time;
   fixed altitude;               /**< Altitude of fix */
 
-  gcc_pure
-  unsigned Score(unsigned _time) const {
+  constexpr unsigned Score(unsigned _time) const {
     // Calculate the score of this item. The item with the highest
     // score is the least important one.  We may need to adjust the
     // proportion of the quality and the elapsed time. Currently, one
