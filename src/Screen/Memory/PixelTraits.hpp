@@ -196,7 +196,7 @@ struct GreyscalePixelTraits {
    * Fill #n horizontal pixels with the given color.
    */
   static void FillPixels(pointer_type p, unsigned n, color_type c) {
-    memset(p, c.GetLuminosity(), n);
+    std::fill_n(p, n, c.GetLuminosity());
   }
 
   /**
@@ -204,7 +204,7 @@ struct GreyscalePixelTraits {
    */
   static void CopyPixels(rpointer_type p, const_rpointer_type src,
                          unsigned n) {
-    memcpy(p, src, n);
+    std::copy_n(src, n, p);
   }
 
   /**

@@ -107,7 +107,6 @@ public:
     return task_manager.GetGlidePolar();
   }
 
-  gcc_pure
   void SetActiveTaskPoint(unsigned index) {
     task_manager.SetActiveTaskPoint(index);
   }

@@ -158,7 +158,7 @@ int jpc_tsfb_analyze2(jpc_tsfb_t *tsfb, jpc_fix_t *a, int xstart, int ystart,
 
 int jpc_tsfb_synthesize(jpc_tsfb_t *tsfb, jas_seq2d_t *a)
 {
-	return (tsfb->numlvls > 0 && jas_seq2d_size(a)) ?
+	return (tsfb->numlvls > 0 && jas_seq2d_size(a) > 0) ?
 	  jpc_tsfb_synthesize2(tsfb,
 	  jas_seq2d_getref(a, jas_seq2d_xstart(a), jas_seq2d_ystart(a)),
 	  jas_seq2d_xstart(a), jas_seq2d_ystart(a), jas_seq2d_width(a),

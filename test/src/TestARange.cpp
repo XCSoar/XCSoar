@@ -128,9 +128,9 @@ int main(int argc, char **argv)
   ok1(equals(d.end, 20));
 
   AngleRange e(Angle::Degrees(20), Angle::Degrees(20));
-  d.Extend(Angle::Degrees(350));
-  ok1(equals(d.start, 350));
-  ok1(equals(d.end, 20));
+  e.Extend(Angle::Degrees(350));
+  ok1(equals(e.start, 350));
+  ok1(equals(e.end, 20));
 
   /* extend to wrap around 180/-180 */
   AngleRange f(Angle::Degrees(170), Angle::Degrees(170));

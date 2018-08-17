@@ -313,6 +313,7 @@ int jpc_getzcctxno(int f, int orient)
 		t = h;
 		h = v;
 		v = t;
+		/* fallthrough */
 	case JPC_TSFB_LL:
 	case JPC_TSFB_LH:
 		if (!h) {
