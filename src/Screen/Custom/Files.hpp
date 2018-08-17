@@ -28,23 +28,23 @@ Copyright_License {
 
 /* caller must free the return values with delete[] */
 
-gcc_const gcc_malloc
+gcc_const
 char *
 FindDefaultFont();
 
-gcc_const gcc_malloc
+gcc_const
 char *
 FindDefaultBoldFont();
 
-gcc_const gcc_malloc
+gcc_const
 char *
 FindDefaultItalicFont();
 
-gcc_const gcc_malloc
+gcc_const
 char *
 FindDefaultBoldItalicFont();
 
-gcc_const gcc_malloc
+gcc_const
 char *
 FindDefaultMonospaceFont();
 
