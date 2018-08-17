@@ -76,7 +76,7 @@ void xcsoar_Airspaces_dealloc(Pyxcsoar_Airspaces *self) {
   /* destructor */
   delete self->airspace_database;
 
-  self->ob_type->tp_free((Pyxcsoar_Airspaces*)self);
+  Py_TYPE(self)->tp_free((Pyxcsoar_Airspaces*)self);
 }
 
 PyObject* xcsoar_Airspaces_addPolygon(Pyxcsoar_Airspaces *self, PyObject *args) {
@@ -232,7 +232,7 @@ PyObject* xcsoar_Airspaces_findIntrusions(Pyxcsoar_Airspaces *self, PyObject *ar
                                                            replay->Calculated()));
     Airspaces::AirspaceVector airspaces(range.begin(), range.end());
     for (auto it = airspaces.begin(); it != airspaces.end(); it++) {
-      PyObject *py_name = PyString_FromString((*it).GetAirspace().GetName());
+      PyObject *py_name = PyUnicode_FromString((*it).GetAirspace().GetName());
       PyObject *py_airspace = nullptr,
                *py_period = nullptr;
 
@@ -287,8 +287,7 @@ PyMemberDef xcsoar_Airspaces_members[] = {
 };
 
 PyTypeObject xcsoar_Airspaces_Type = {
-  PyObject_HEAD_INIT(&PyType_Type)
-  0,                     /* obj_size */
+  PyVarObject_HEAD_INIT(&PyType_Type, 0 /* obj_size */)
   "xcsoar",         /* char *tp_name; */
   sizeof(Pyxcsoar_Airspaces), /* int tp_basicsize; */
   0,                     /* int tp_itemsize; not used much */

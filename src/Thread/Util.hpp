@@ -82,7 +82,7 @@ SetThreadIdlePriority()
   /* this system call is forbidden via seccomp on Android 8 and leads
    * to crash (SIGSYS) */
   ioprio_set_idle();
-#endif  
+#endif
 
 #elif defined(WIN32)
   SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_IDLE);

@@ -192,7 +192,7 @@ $(ANDROID_BUILD)/gen/org/xcsoar/R.java: $(ANDROID_BUILD)/resources.apk
 
 $(ANDROID_BUILD)/classes.dex: $(JAVA_SOURCES) $(ANDROID_BUILD)/gen/org/xcsoar/R.java | $(JAVA_CLASSFILES_DIR)/dirstamp
 	@$(NQ)echo "  JAVAC   $(JAVA_CLASSFILES_DIR)"
-	$(Q)$(JAVAC) -source 1.5 -target 1.5 -Xlint:-options \
+	$(Q)$(JAVAC) -source 1.6 -target 1.6 -Xlint:-options \
 		-cp $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(JAVA_CLASSFILES_DIR) \
 		-d $(JAVA_CLASSFILES_DIR) $(ANDROID_BUILD)/gen/org/xcsoar/R.java \
 		$(JAVA_SOURCES)
