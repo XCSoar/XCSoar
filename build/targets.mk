@@ -655,11 +655,12 @@ endif
 
 ifeq ($(TARGET),ANDROID)
   TARGET_LDFLAGS += -Wl,--no-undefined
-  TARGET_LDFLAGS += --sysroot=$(ANDROID_TARGET_ROOT)
   ifeq ($(call bool_or,$(X64),$(MIPS64)),y)
     TARGET_LDFLAGS += -L$(ANDROID_TARGET_ROOT)/usr/lib64
+    TARGET_LDFLAGS += -B$(ANDROID_TARGET_ROOT)/usr/lib64
   else
     TARGET_LDFLAGS += -L$(ANDROID_TARGET_ROOT)/usr/lib
+    TARGET_LDFLAGS += -B$(ANDROID_TARGET_ROOT)/usr/lib
   endif
 
   ifeq ($(ARMV7),y)
