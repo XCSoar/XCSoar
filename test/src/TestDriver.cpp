@@ -65,6 +65,7 @@
 #include "FaultInjectionPort.hpp"
 #include "TestUtil.hpp"
 #include "Units/System.hpp"
+#include "IO/NullDataHandler.hpp"
 
 #include <memory>
 
@@ -1486,15 +1487,11 @@ TestXCTracer()
   delete device;
 }
 
-#ifdef __clang__
-/* true, the nullptr cast below is a bad kludge */
-#pragma GCC diagnostic ignored "-Wnull-dereference"
-#endif
-
 static void
 TestDeclare(const struct DeviceRegister &driver)
 {
-  FaultInjectionPort port(nullptr, *(DataHandler *)nullptr);
+  NullDataHandler handler;
+  FaultInjectionPort port(nullptr, handler);
   Device *device = driver.CreateOnPort(dummy_config, port);
   ok1(device != NULL);
 
@@ -1536,7 +1533,8 @@ TestDeclare(const struct DeviceRegister &driver)
 static void
 TestFlightList(const struct DeviceRegister &driver)
 {
-  FaultInjectionPort port(nullptr, *(DataHandler *)nullptr);
+  NullDataHandler handler;
+  FaultInjectionPort port(nullptr, handler);
   Device *device = driver.CreateOnPort(dummy_config, port);
   ok1(device != NULL);
 

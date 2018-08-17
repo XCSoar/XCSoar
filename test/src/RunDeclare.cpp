@@ -37,6 +37,7 @@ Copyright_License {
 #include "DebugPort.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
 #include "IO/Async/AsioThread.hpp"
+#include "IO/NullDataHandler.hpp"
 #include "Util/PrintException.hxx"
 
 #define MORE_USAGE
@@ -97,11 +98,6 @@ MakeWaypoint(const TCHAR *name, int altitude,
   return wp;
 }
 
-#ifdef __clang__
-/* true, the nullptr cast below is a bad kludge */
-#pragma GCC diagnostic ignored "-Wnull-dereference"
-#endif
-
 int main(int argc, char **argv)
 try {
   Args args(argc, argv, "[--through DRIVER0] DRIVER PORT BAUD");
@@ -126,7 +122,8 @@ try {
 
   ScopeGlobalAsioThread global_asio_thread;
 
-  auto port = debug_port.Open(*asio_thread, *(DataHandler *)nullptr);
+  NullDataHandler handler;
+  auto port = debug_port.Open(*asio_thread, handler);
 
   ConsoleOperationEnvironment env;
 

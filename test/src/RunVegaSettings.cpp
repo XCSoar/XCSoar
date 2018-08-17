@@ -30,15 +30,11 @@ Copyright_License {
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
 #include "IO/Async/AsioThread.hpp"
+#include "IO/NullDataHandler.hpp"
 #include "Util/PrintException.hxx"
 
 #include <stdio.h>
 #include <string.h>
-
-#ifdef __clang__
-/* true, the nullptr cast below is a bad kludge */
-#pragma GCC diagnostic ignored "-Wnull-dereference"
-#endif
 
 int
 main(int argc, char **argv)
@@ -48,7 +44,8 @@ try {
 
   ScopeGlobalAsioThread global_asio_thread;
 
-  auto port = debug_port.Open(*asio_thread, *(DataHandler *)nullptr);
+  NullDataHandler handler;
+  auto port = debug_port.Open(*asio_thread, handler);
 
   ConsoleOperationEnvironment env;
 
