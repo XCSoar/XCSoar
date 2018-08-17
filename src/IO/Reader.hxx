@@ -36,6 +36,8 @@ public:
 	Reader() = default;
 	Reader(const Reader &) = delete;
 
+	virtual ~Reader() noexcept = default;
+
 	/**
 	 * Read data from the stream.
 	 *
