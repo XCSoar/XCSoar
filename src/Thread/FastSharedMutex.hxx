@@ -35,13 +35,6 @@
 #include "WindowsSharedMutex.hxx"
 using FastSharedMutex = WindowsSharedMutex;
 
-#elif defined(ANDROID) && ANDROID_MIN_SDK_VERSION < 9
-
-#include "FallbackSharedMutex.hxx"
-
-class FastSharedMutex : public FallbackSharedMutex {
-};
-
 #else
 
 #include "PosixSharedMutex.hxx"
