@@ -162,13 +162,13 @@ class WaypointDetailsWidget final
 
 public:
   WaypointDetailsWidget(WidgetDialog &_dialog, WaypointPtr _waypoint,
-                        ProtectedTaskManager *_task_manager, bool allow_edit)
+                        ProtectedTaskManager *_task_manager, bool allow_edit, bool only_taskedit = false)
     :dialog(_dialog), look(dialog.GetLook()),
      waypoint(std::move(_waypoint)),
      task_manager(_task_manager),
-     page(0), last_page(0),
+     page(only_taskedit ? 2 : 0), last_page(0),
      info_widget(look, waypoint),
-     commands_widget(look, &_dialog, waypoint, _task_manager, allow_edit),
+     commands_widget(look, &_dialog, waypoint, _task_manager, allow_edit, only_taskedit),
 #ifdef HAVE_RUN_FILE
      file_list(look), file_list_handler(waypoint),
 #endif
@@ -683,7 +683,7 @@ UpdateCaption(WndForm *form, const Waypoint &waypoint)
 
 void 
 dlgWaypointDetailsShowModal(WaypointPtr _waypoint,
-                            bool allow_navigation, bool allow_edit)
+                            bool allow_navigation, bool allow_edit, bool only_taskedit)
 {
   LastUsedWaypoints::Add(*_waypoint);
 
@@ -691,7 +691,7 @@ dlgWaypointDetailsShowModal(WaypointPtr _waypoint,
   WidgetDialog dialog(look);
   WaypointDetailsWidget widget(dialog, _waypoint,
                                allow_navigation ? protected_task_manager : nullptr,
-                               allow_edit);
+                               allow_edit,only_taskedit);
   dialog.CreateFull(UIGlobals::GetMainWindow(), _T(""), &widget);
 
   UpdateCaption(&dialog, *_waypoint);

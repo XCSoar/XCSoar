@@ -11,9 +11,9 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
    width="5"
-   height="6"
+   height="8"
    id="svg2816"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.92.1 r15371"
    sodipodi:docname="map_tower.svg">
   <metadata
      id="metadata9">
@@ -36,15 +36,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1432"
-     inkscape:window-height="988"
+     inkscape:window-width="1600"
+     inkscape:window-height="849"
      id="namedview7"
      showgrid="true"
      inkscape:zoom="47.45"
-     inkscape:cx="-0.11827763"
-     inkscape:cy="1.0989805"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:cx="2.9504739"
+     inkscape:cy="6.7310303"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer5">
     <inkscape:grid
@@ -53,32 +53,39 @@
        empspacing="5"
        visible="true"
        enabled="true"
-       snapvisiblegridlinesonly="true" />
+       snapvisiblegridlinesonly="true"
+       originx="-2.3320619e-08"
+       originy="-1.728688e-06"
+       spacingx="1.0666667"
+       spacingy="1.0666667" />
   </sodipodi:namedview>
   <defs
      id="defs2818" />
   <g
-     transform="translate(-6.9470643,-2.0097858)"
+     transform="translate(-7.4102019,-0.54377047)"
      id="layer1" />
   <g
      inkscape:groupmode="layer"
      id="layer5"
      inkscape:label="NOAA_Image"
-     transform="translate(0.05293565,-12.009785)">
+     transform="translate(0.05646466,-11.210436)">
     <path
-       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 1.4470643,17.50979 0,-3.300005 2,0 0,3.300005 -2,0 z"
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.14863217px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 1.4806934,18.63612 V 14.114214 H 3.4063773 V 18.63612 Z"
        id="path2827"
-       sodipodi:nodetypes="ccccc" />
+       sodipodi:nodetypes="ccccc"
+       inkscape:connector-curvature="0" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:square;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 0.44706435,12.509785 0,2 3.99999995,0 0,-2"
+       style="fill:none;stroke:#000000;stroke-width:1.14863217px;stroke-linecap:square;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 0.51785142,11.784752 v 2.740545 H 4.3692193 v -2.740545"
        id="path3605"
-       sodipodi:nodetypes="cccc" />
+       sodipodi:nodetypes="cccc"
+       inkscape:connector-curvature="0" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:square;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 2.4470643,12.509785 0,2"
+       style="fill:none;stroke:#000000;stroke-width:1.14863217px;stroke-linecap:square;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 2.4435352,11.784752 v 2.740545"
        id="path3607"
-       sodipodi:nodetypes="cc" />
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>

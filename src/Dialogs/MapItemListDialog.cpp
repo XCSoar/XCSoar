@@ -42,6 +42,13 @@ Copyright_License {
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
+#include "Profile/Profile.hpp"
+#include "Waypoint/Factory.hpp"
+#include "NMEA/Info.hpp"
+#include "Formatter/TimeFormatter.hpp"
+#include "Task/MapTaskManager.hpp"
+#include "Dialogs/Message.hpp"
+#include "Dialogs/Error.hpp"
 
 #ifdef HAVE_NOAA
 #include "Dialogs/Weather/NOAADetails.hpp"
@@ -51,8 +58,6 @@ static bool
 HasDetails(const MapItem &item)
 {
   switch (item.type) {
-  case MapItem::LOCATION:
-  case MapItem::ARRIVAL_ALTITUDE:
   case MapItem::SELF:
   case MapItem::THERMAL:
 #ifdef HAVE_SKYLINES_TRACKING
@@ -60,6 +65,8 @@ HasDetails(const MapItem &item)
 #endif
     return false;
 
+  case MapItem::LOCATION:
+  case MapItem::ARRIVAL_ALTITUDE:
   case MapItem::AIRSPACE:
   case MapItem::WAYPOINT:
   case MapItem::TASK_OZ:
@@ -74,6 +81,33 @@ HasDetails(const MapItem &item)
 
   return false;
 }
+
+static void MakeTempMarker(const MapItem &item, bool bShowDetail = false){
+
+  const NMEAInfo &basic = CommonInterface::Basic();
+  Waypoint * wpp = 0;
+  if(item.type == MapItem::LOCATION)
+    wpp = new Waypoint(((const LocationMapItem &)item).location);
+  if(item.type == MapItem::ARRIVAL_ALTITUDE)
+    wpp = new Waypoint(((const ArrivalAltitudeMapItem &)item).location);
+
+  TCHAR name[64] = _T("Marker");
+  if (basic.date_time_utc.IsPlausible()) {
+    auto *p = name + StringLength(name);
+    *p++ = _T(' ' );
+    FormatISO8601(p, basic.date_time_utc);
+  }
+
+  wpp->name = name;
+  wpp->type = Waypoint::Type::MARKER;
+
+  auto waypoint = (WaypointPtr) wpp;
+  if(bShowDetail){
+    dlgWaypointDetailsShowModal(waypoint, true, true, true);
+  }
+  else protected_task_manager->DoGoto(std::move(waypoint));
+}
+
 
 class MapItemListWidget final
   : public ListWidget, private ActionListener {
@@ -95,6 +129,7 @@ class MapItemListWidget final
 
 public:
   void CreateButtons(WidgetDialog &dialog);
+  bool bSettingDone = false; // signals the setting of MapItemList paramter
 
 public:
   MapItemListWidget(const MapItemList &_list,
@@ -148,7 +183,9 @@ public:
 
   static bool CanGotoItem(const MapItem &item) {
     return protected_task_manager != NULL &&
-      item.type == MapItem::WAYPOINT;
+      ((item.type == MapItem::WAYPOINT)
+          ||(item.type == MapItem::ARRIVAL_ALTITUDE)
+          ||(item.type == MapItem::LOCATION));
   }
 
   bool CanAckItem(unsigned index) const {
@@ -217,8 +254,16 @@ MapItemListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 void
 MapItemListWidget::OnActivateItem(unsigned index)
 {
-  details_button->Click();
+
+//  if((list[index]->type==MapItem::LOCATION)||(list[index]->type==MapItem::ARRIVAL_ALTITUDE)){
+//    MakeGotoMarker(*list[index], true);
+//    cancel_button->Click();
+//  }
+//  else
+    details_button->Click();
 }
+
+
 
 inline void
 MapItemListWidget::OnGotoClicked()
@@ -229,10 +274,17 @@ MapItemListWidget::OnGotoClicked()
   unsigned index = GetCursorIndex();
   auto const &item = *list[index];
 
-  assert(item.type == MapItem::WAYPOINT);
+  assert(item.type == MapItem::WAYPOINT
+      || item.type == MapItem::ARRIVAL_ALTITUDE
+      || item.type == MapItem::LOCATION );
 
-  auto waypoint = ((const WaypointMapItem &)item).waypoint;
-  protected_task_manager->DoGoto(std::move(waypoint));
+  if(item.type == MapItem::ARRIVAL_ALTITUDE|| item.type == MapItem::LOCATION){
+    MakeTempMarker(item, false);
+  }
+  else {
+    auto waypoint = ((const WaypointMapItem &)item).waypoint;
+    protected_task_manager->DoGoto(std::move(waypoint));
+  }
   cancel_button->Click();
 }
 
@@ -251,6 +303,9 @@ MapItemListWidget::OnAction(int id)
   switch (id) {
   case SETTINGS:
     ShowMapItemListSettingsDialog();
+    Profile::Save();
+    this->bSettingDone=true;
+    cancel_button->Click();
     break;
   case GOTO:
     OnGotoClicked();
@@ -283,8 +338,12 @@ ShowMapItemListDialog(const MapItemList &list,
     : -1;
   dialog.StealWidget();
 
+  if(widget.bSettingDone) return -2; // mapitemlist setting was done... => refresh
+
   return result;
 }
+
+
 
 static void
 ShowMapItemDialog(const MapItem &item,
@@ -293,13 +352,15 @@ ShowMapItemDialog(const MapItem &item,
   switch (item.type) {
   case MapItem::LOCATION:
   case MapItem::ARRIVAL_ALTITUDE:
+    MakeTempMarker(item, true);
+    break;
+
   case MapItem::SELF:
   case MapItem::THERMAL:
 #ifdef HAVE_SKYLINES_TRACKING
   case MapItem::SKYLINES_TRAFFIC:
 #endif
     break;
-
   case MapItem::AIRSPACE:
     dlgAirspaceDetails(*((const AirspaceMapItem &)item).airspace,
                        airspace_warnings);
@@ -331,7 +392,8 @@ ShowMapItemDialog(const MapItem &item,
   }
 }
 
-void
+/* return value signals the using of map item list settings => refresh map item list */
+bool
 ShowMapItemListDialog(const MapItemList &list,
                       const DialogLook &dialog_look,
                       const MapLook &look,
@@ -343,20 +405,27 @@ ShowMapItemListDialog(const MapItemList &list,
   switch (list.size()) {
   case 0:
     /* no map items in the list */
-    return;
+    return false;
 
   case 1:
     /* only one map item, show it */
     ShowMapItemDialog(*list[0], airspace_warnings);
-    break;
+    return false;
 
   default:
     /* more than one map item: show a list */
 
     int i = ShowMapItemListDialog(list, dialog_look, look,
                                   traffic_look, final_glide_look, settings);
-    assert(i >= -1 && i < (int)list.size());
+
+    assert(i >= -2 && i < (int)list.size());
+
     if (i >= 0)
       ShowMapItemDialog(*list[i], airspace_warnings);
+
+    /* setting of map item list was done */
+    if(i == -2) return true;
+
   }
+  return false;
 }

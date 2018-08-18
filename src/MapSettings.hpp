@@ -78,6 +78,18 @@ struct MapItemListSettings {
   /** Add an ArrivalAltitudeMapItem to the MapItemList? */
   bool add_arrival_altitude;
 
+  /** Add an Airspace to the MapItemList? */
+  bool add_airspace;
+
+  /** Add flarm-traffic to the MapItemList? */
+  bool add_traffic;
+
+  /* nearest map items: the range is a circle calculate in % of the smallest side of the display */
+  int range_of_nearest_map_items_in_percent_of_displaysize;
+
+  /* nearest map items: range-filter in km for only landable waypoints  0km only landable */
+  int rangefilter_all_waypoint_up_to_km;
+
   void SetDefaults();
 };
 

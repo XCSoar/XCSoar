@@ -58,6 +58,9 @@ struct Waypoint {
     OBSTACLE,
     THERMAL_HOTSPOT,
     MARKER,
+    VOR,
+    NDB,
+    VRP, // visualreportingpoint
   };
 
   /**

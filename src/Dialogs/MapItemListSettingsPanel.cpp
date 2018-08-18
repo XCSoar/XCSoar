@@ -37,15 +37,36 @@ MapItemListSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   const MapSettings &settings = CommonInterface::GetMapSettings();
 
-  AddBoolean(_("Show Location row"),
+  AddBoolean(_("Lists Location row"),
              _("If enabled a row at the top will be added showing you the "
                "distance and bearing to the location and the elevation."),
              settings.item_list.add_location);
 
-  AddBoolean(_("Show Arrival Altitude"),
+  AddBoolean(_("Lists Arrival Altitude"),
              _("If enabled a row at the top will be added showing you the "
                "arrival altitude at the location."),
              settings.item_list.add_arrival_altitude);
+
+  AddBoolean(_("Lists Airspace"),
+             _("Airspace are listed"),
+             settings.item_list.add_airspace);
+
+  AddBoolean(_("Lists Traffic"),
+             _("Flarm-traffic items are listed."),
+             settings.item_list.add_traffic);
+
+  AddInteger(_("Hit Range on the Screen"),
+             _("Lists more map items with a radius in% of screen width around the center of the screen. "
+                 "Useful for pure key control. 0% defines the default behavior, "
+                 "at 100% a radius is taken into account until the next screen edge. "
+                 "125% is to be used to list all displayed map items on the screen. "
+                 "A maximum radius of 50km radius is calculated. A mouse click determines the center point."),_("%d %%"),_("%d %%"),0,125,25,
+               settings.item_list.range_of_nearest_map_items_in_percent_of_displaysize );
+
+  AddInteger(_("Only Landable on Hit Range>"),
+             _("As the zoom level decreases, the calculated range of hits increases in kilometers. "
+                 "From this limit only landable will be listed."),_("%d km"),_("%d km"),0,50,10,
+               settings.item_list.rangefilter_all_waypoint_up_to_km );
 }
 
 bool
@@ -58,6 +79,18 @@ MapItemListSettingsPanel::Save(bool &changed)
 
   changed |= SaveValue(AddArrivalAltitude, ProfileKeys::EnableArrivalAltitudeMapItem,
                        settings.item_list.add_arrival_altitude);
+
+  changed |= SaveValue(AddAirspace, ProfileKeys::EnableAirspaceMapItem,
+                       settings.item_list.add_airspace);
+
+  changed |= SaveValue(AddTraffic, ProfileKeys::EnableTrafficMapItem,
+                       settings.item_list.add_traffic);
+
+  changed |= SaveValue(RangeOfNearestMapItemsInPercentOfDisplaysize, ProfileKeys::RangeOfNearestMapItemsInPercent,
+                       settings.item_list.range_of_nearest_map_items_in_percent_of_displaysize);
+
+  changed |= SaveValue(RangefilterAllWaypoint, ProfileKeys::RangefilterAllWaypointUpToKm,
+                       settings.item_list.rangefilter_all_waypoint_up_to_km);
 
   return true;
 }

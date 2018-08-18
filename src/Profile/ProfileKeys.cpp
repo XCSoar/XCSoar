@@ -261,6 +261,10 @@ const char PCMetFtpPassword[] = "PCMetFtpPassword";
 
 const char EnableLocationMapItem[] = "EnableLocationMapItem";
 const char EnableArrivalAltitudeMapItem[] = "EnableArrivalAltitudeMapItem";
+const char EnableAirspaceMapItem[] = "EnableAirspaceMapItem";
+const char EnableTrafficMapItem[] = "EnableTrafficMapItem";
+const char RangeOfNearestMapItemsInPercent[] = "RangeOfNearestMapItemsInPercent";
+const char RangefilterAllWaypointUpToKm[] = "RangefilterAllWaypointUpToKm";
 
 const char VarioMinFrequency[] = "VarioMinFrequency";
 const char VarioZeroFrequency[] = "VarioZeroFrequency";

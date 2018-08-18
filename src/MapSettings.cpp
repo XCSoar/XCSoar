@@ -28,6 +28,10 @@ MapItemListSettings::SetDefaults()
 {
   add_location = true;
   add_arrival_altitude = true;
+  add_airspace = true;
+  add_traffic = true;
+  range_of_nearest_map_items_in_percent_of_displaysize = 0; // 0% default behavior
+  rangefilter_all_waypoint_up_to_km = 100; // list all waypoints
 }
 
 void

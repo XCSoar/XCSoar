@@ -42,16 +42,16 @@ class WaypointCommandsWidget final
 
   ProtectedTaskManager *const task_manager;
 
-  const bool allow_edit;
+  const bool allow_edit, onlytaskedit;
 
 public:
   WaypointCommandsWidget(const DialogLook &look, WndForm *_form,
                          WaypointPtr _waypoint,
                          ProtectedTaskManager *_task_manager,
-                         bool _allow_edit)
+                         bool _allow_edit, bool _onlytaskedit=false)
     :RowFormWidget(look), form(_form),
      waypoint(std::move(_waypoint)), task_manager(_task_manager),
-     allow_edit(_allow_edit) {}
+     allow_edit(_allow_edit),onlytaskedit(_onlytaskedit) {}
 
   /* methods from ActionListener */
   void OnAction(int id) override;

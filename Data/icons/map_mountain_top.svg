@@ -10,10 +10,10 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
-   width="7"
-   height="4"
+   width="6.8129525"
+   height="4.3558531"
    id="svg2816"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.92.1 r15371"
    sodipodi:docname="map_mountain_top.svg">
   <metadata
      id="metadata9">
@@ -36,15 +36,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1432"
-     inkscape:window-height="988"
+     inkscape:window-width="1600"
+     inkscape:window-height="849"
      id="namedview7"
      showgrid="true"
-     inkscape:zoom="23.725"
-     inkscape:cx="-3.6289829"
-     inkscape:cy="2.0038773"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:zoom="141.16071"
+     inkscape:cx="2.396546"
+     inkscape:cy="6.7950169"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer5">
     <inkscape:grid
@@ -53,23 +53,31 @@
        empspacing="5"
        visible="true"
        enabled="true"
-       snapvisiblegridlinesonly="true" />
+       snapvisiblegridlinesonly="true"
+       originx="-0.09352357"
+       originy="5.1566731"
+       spacingx="1.0666667"
+       spacingy="1.0666667" />
   </sodipodi:namedview>
   <defs
      id="defs2818" />
   <g
-     transform="translate(-7,-5)"
+     transform="translate(-7.5601903,-10.40082)"
      id="layer1" />
   <g
      inkscape:groupmode="layer"
      id="layer5"
      inkscape:label="NOAA_Image"
-     transform="translate(0,-15)">
-    <path
-       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
-       d="m 0.5,4.5 3,-3 3,3 -6,0 z"
-       id="path2827"
-       transform="translate(0,14)"
-       sodipodi:nodetypes="cccc" />
+     transform="translate(-0.09352357,-21.067487)">
+    <g
+       id="g11"
+       transform="matrix(0.45419685,0,0,0.43558616,0.09352358,14.417529)">
+      <path
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccc"
+         id="path2827"
+         d="m 1.1622829,24.104254 6.3377172,-7.67522 6.3377169,7.67522 z"
+         style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2.32482672px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
+    </g>
   </g>
 </svg>
