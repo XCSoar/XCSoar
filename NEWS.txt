@@ -11,6 +11,8 @@ Version 7.0 - not yet released
   - driver for KRT2 radio
   - show detailed error message in device list
   - FLARM/OGN - make it possible to set/download registered device database
+  - device manager: show flag if device provides data from
+      environmental sensors (temperature, humidity)
 * weather
   - merge all weather data in one dialog
   - allow showing both terrain and RASP
