@@ -1,4 +1,4 @@
-Version 6.8.11 - not yet releases
+Version 6.8.11 - 2018/08/18
 * terrain
   - fix yet another crash bug (libJasper)
 * Android
