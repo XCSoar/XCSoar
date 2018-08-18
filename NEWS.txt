@@ -57,7 +57,7 @@ Version 7.0 - not yet released
 * Kobo
   - support Kobo Glo HD
 
-Version 6.8.11 - not yet releases
+Version 6.8.11 - 2018/08/18
 * terrain
   - fix yet another crash bug (libJasper)
 * Android
