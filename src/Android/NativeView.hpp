@@ -75,9 +75,6 @@ public:
     // see http://developer.android.com/reference/android/content/pm/ActivityInfo.html#SCREEN_ORIENTATION_REVERSE_LANDSCAPE
     REVERSE_LANDSCAPE = 8,
     REVERSE_PORTRAIT = 9,
-    // HACK for Galaxy Tab (FROYO = 2.2 = API level 8)
-    REVERSE_LANDSCAPE_GT = 7,
-    REVERSE_PORTRAIT_GT = 8,
   };
 
   static void Initialise(JNIEnv *env);

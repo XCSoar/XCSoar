@@ -27,7 +27,6 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.os.Build;
 import android.os.IBinder;
 import android.os.Binder;
 import android.util.Log;
@@ -80,8 +79,7 @@ public class MyService extends Service {
 
     notificationManager.notify(1, notification);
 
-    if (Build.VERSION.SDK_INT >= 5)
-      APILevel5.startForeground(this, 1, notification);
+    startForeground(1, notification);
   }
 
   @Override public void onStart(Intent intent, int startId) {

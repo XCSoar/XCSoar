@@ -65,7 +65,7 @@ final class BluetoothHelper {
   }
 
   public static void Initialize(Context context) {
-    hasLe = adapter != null && android.os.Build.VERSION.SDK_INT >= 18 &&
+    hasLe = adapter != null &&
       context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE);
   }
 

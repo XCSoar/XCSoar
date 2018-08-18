@@ -53,8 +53,7 @@ Java_org_xcsoar_NativeLeScanCallback_onLeScan(JNIEnv *env, jobject obj,
 void
 NativeLeScanCallback::Initialise(JNIEnv *env)
 {
-  if (android_api_level < 18 ||
-      !cls.FindOptional(env, "org/xcsoar/NativeLeScanCallback"))
+  if (!cls.FindOptional(env, "org/xcsoar/NativeLeScanCallback"))
     /* Bluetooth LE not supported on this Android version */
     return;
 

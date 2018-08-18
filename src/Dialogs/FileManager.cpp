@@ -45,10 +45,6 @@ Copyright_License {
 #include "Repository/FileRepository.hpp"
 #include "Repository/Parser.hpp"
 
-#ifdef ANDROID
-#include "Android/Main.hpp"
-#endif
-
 #ifdef HAVE_DOWNLOAD_MANAGER
 #include "Repository/Glue.hpp"
 #include "ListPicker.hpp"
@@ -719,10 +715,6 @@ ShowFileManager()
 
   const TCHAR *message =
     _("The file manager is not available on this device.");
-#ifdef ANDROID
-  if (android_api_level < 9)
-    message = _("The file manager requires Android 2.3.");
-#endif
 
   ShowMessageBox(message, _("File Manager"), MB_OK);
 }

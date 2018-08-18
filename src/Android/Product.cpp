@@ -22,26 +22,11 @@ Copyright_License {
 */
 
 #include "Product.hpp"
-#include "Main.hpp"
-#include "NativeView.hpp"
-#include "Util/StringAPI.hxx"
-
-#include <assert.h>
 
 bool has_cursor_keys;
 
 #ifdef __arm__
 
 bool is_nook, is_dithered;
-
-bool
-IsGalaxyTab22()
-{
-  assert(native_view);
-
-  return android_api_level == 8 &&
-    (StringIsEqual(native_view->GetProduct(), "GT-P1000") ||
-     StringIsEqual(native_view->GetProduct(), "GT-P1010"));
-}
 
 #endif

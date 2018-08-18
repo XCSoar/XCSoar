@@ -49,8 +49,7 @@ AndroidDownloadManager::Initialise(JNIEnv *env)
   assert(util_class == nullptr);
   assert(env != nullptr);
 
-  if (android_api_level < 9 ||
-      !util_class.FindOptional(env, "org/xcsoar/DownloadUtil"))
+  if (!util_class.FindOptional(env, "org/xcsoar/DownloadUtil"))
     return false;
 
   enumerate_method = env->GetStaticMethodID(util_class, "enumerate",

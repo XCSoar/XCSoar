@@ -51,8 +51,7 @@ BluetoothHelper::Initialise(JNIEnv *env)
   assert(!cls.IsDefined());
   assert(env != nullptr);
 
-  if (android_api_level < 5 ||
-      !cls.FindOptional(env, "org/xcsoar/BluetoothHelper"))
+  if (!cls.FindOptional(env, "org/xcsoar/BluetoothHelper"))
     /* Android < 2.0 doesn't have Bluetooth support */
     return false;
 
