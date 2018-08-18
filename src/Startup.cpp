@@ -201,13 +201,6 @@ Startup()
 
 #ifdef ENABLE_OPENGL
   LogFormat("OpenGL: "
-#ifdef ANDROID
-#ifdef USE_EGL
-            "egl=native "
-#else
-            "egl=no "
-#endif
-#endif
 #ifdef HAVE_OES_DRAW_TEXTURE
             "oesdt=%d "
 #endif

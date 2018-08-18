@@ -37,7 +37,7 @@ TopCanvas::SetupViewport(PixelSize native_size)
 void
 TopCanvas::Resume()
 {
-#if defined(ANDROID) && defined(USE_EGL)
+#ifdef ANDROID
   surface = eglGetCurrentSurface(EGL_DRAW);
 #endif
 

@@ -31,10 +31,8 @@ Copyright_License {
 void
 TopCanvas::Create(PixelSize new_size, bool full_screen, bool resizable)
 {
-#ifdef USE_EGL
   display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
   surface = eglGetCurrentSurface(EGL_DRAW);
-#endif
 
   OpenGL::SetupContext();
   SetupViewport(new_size);
@@ -43,10 +41,6 @@ TopCanvas::Create(PixelSize new_size, bool full_screen, bool resizable)
 void
 TopCanvas::Flip()
 {
-#ifdef USE_EGL
   if (!eglSwapBuffers(display, surface))
     LogFormat("eglSwapBuffers() failed: 0x%x", eglGetError());
-#else
-  native_view->swap();
-#endif
 }

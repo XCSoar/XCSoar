@@ -19,8 +19,8 @@ else ifeq ($(ENABLE_SDL),y)
 # no EGL if SDL was enabled explicitly
 EGL = n
 else ifeq ($(TARGET),ANDROID)
-# Android uses Java-EGL
-EGL ?= n
+# Android uses EGL
+EGL = y
 else ifeq ($(GLES),y)
 # use EGL if GLES1 was chosen explicitly
 EGL = y

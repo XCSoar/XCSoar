@@ -33,7 +33,6 @@ Java::TrivialClass NativeView::cls;
 jfieldID NativeView::textureNonPowerOfTwo_field;
 jmethodID NativeView::init_surface_method, NativeView::deinit_surface_method;
 jmethodID NativeView::setRequestedOrientationID;
-jmethodID NativeView::swap_method;
 jmethodID NativeView::loadResourceBitmap_method;
 jmethodID NativeView::loadFileBitmap_method;
 jmethodID NativeView::bitmapToTexture_method;
@@ -57,7 +56,6 @@ NativeView::Initialise(JNIEnv *env)
   deinit_surface_method = env->GetMethodID(cls, "deinitSurface", "()V");
   setRequestedOrientationID =
     env->GetMethodID(cls, "setRequestedOrientation", "(I)Z");
-  swap_method = env->GetMethodID(cls, "swap", "()V");
 
   loadResourceBitmap_method = env->GetMethodID(cls, "loadResourceBitmap",
                                                "(Ljava/lang/String;)Landroid/graphics/Bitmap;");
