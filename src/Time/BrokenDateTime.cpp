@@ -60,30 +60,6 @@ BrokenDateTime::FromUnixTimeUTC(int64_t _t)
   return ToBrokenDateTime(tm);
 }
 
-#if defined(ANDROID) && !defined(__LP64__)
-#include <stdlib.h>
-time_t
-timegm(struct tm *tm)
-{
-  /* Android's Bionic C library doesn't have the GNU extension
-     timegm(); this is the fallback implementation suggested by the
-     timegm() manpage */
-  time_t ret;
-  char *tz;
-
-  tz = getenv("TZ");
-  setenv("TZ", "", 1);
-  tzset();
-  ret = mktime(tm);
-  if (tz)
-    setenv("TZ", tz, 1);
-  else
-    unsetenv("TZ");
-  tzset();
-  return ret;
-}
-#endif
-
 #else /* !HAVE_POSIX */
 
 static const BrokenDateTime
