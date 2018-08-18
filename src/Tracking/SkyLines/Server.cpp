@@ -53,8 +53,8 @@ Server::SendBuffer(const boost::asio::ip::udp::endpoint &endpoint,
 
   try {
     socket.send_to(boost::asio::const_buffers_1(data), endpoint, 0);
-  } catch (std::runtime_error e) {
-    OnSendError(endpoint, std::move(e));
+  } catch (...) {
+    OnSendError(endpoint, std::current_exception());
   }
 }
 
@@ -180,7 +180,7 @@ Server::OnReceive(const boost::system::error_code &ec, size_t size)
 
     socket.close();
 
-    OnError(boost::system::system_error(ec));
+    OnError(std::make_exception_ptr(boost::system::system_error(ec)));
     return;
   }
 

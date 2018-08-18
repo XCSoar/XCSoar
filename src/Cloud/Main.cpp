@@ -31,6 +31,7 @@ Copyright_License {
 #include "IO/FileOutputStream.hxx"
 #include "IO/FileReader.hxx"
 #include "Util/PrintException.hxx"
+#include "Util/Exception.hxx"
 #include "Compiler.h"
 
 #ifdef __linux__
@@ -141,14 +142,14 @@ protected:
   void OnThermalRequest(const Client &client) override;
 
   void OnSendError(const boost::asio::ip::udp::endpoint &endpoint,
-                   std::exception &&e) override {
+                   std::exception_ptr e) override {
     cerr << "Failed to send to " << endpoint
-         << ": " << e.what()
+         << ": " << GetFullMessage(e)
          << endl;
   }
 
-  void OnError(std::exception &&e) override {
-    cerr << e.what() << endl;
+  void OnError(std::exception_ptr e) override {
+    cerr << GetFullMessage(e) << endl;
     get_io_service().stop();
   }
 

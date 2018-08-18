@@ -27,6 +27,7 @@ Copyright_License {
 #include <boost/asio/ip/udp.hpp>
 
 #include <chrono>
+#include <exception>
 
 #include <stdint.h>
 
@@ -123,13 +124,13 @@ protected:
    * error is non-fatal.
    */
   virtual void OnSendError(const boost::asio::ip::udp::endpoint &endpoint,
-                           std::exception &&e) {}
+                           std::exception_ptr e) {}
 
   /**
    * An error has occurred, and the SkyLines tracking server is
    * defunct.
    */
-  virtual void OnError(std::exception &&e) = 0;
+  virtual void OnError(std::exception_ptr e) = 0;
 };
 
 } /* namespace SkyLinesTracking */
