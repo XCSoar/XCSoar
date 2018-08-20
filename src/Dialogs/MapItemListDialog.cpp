@@ -96,6 +96,7 @@ class MapItemListWidget final
 
 public:
   void CreateButtons(WidgetDialog &dialog);
+  bool bSettingDone = false; // signals the setting of MapItemList paramter
 
 public:
   MapItemListWidget(const MapItemList &_list,
@@ -253,6 +254,8 @@ MapItemListWidget::OnAction(int id)
   case SETTINGS:
     ShowMapItemListSettingsDialog();
     Profile::Save();
+    this->bSettingDone=true;
+    cancel_button->Click();
     break;
   case GOTO:
     OnGotoClicked();
@@ -284,6 +287,8 @@ ShowMapItemListDialog(const MapItemList &list,
     ? (int)widget.GetCursorIndex()
     : -1;
   dialog.StealWidget();
+
+  if(widget.bSettingDone) return -2; // mapitemlist setting was done... => refresh
 
   return result;
 }
@@ -333,7 +338,8 @@ ShowMapItemDialog(const MapItem &item,
   }
 }
 
-void
+/* return value signals the using of map item list settings => refresh map item list */
+bool
 ShowMapItemListDialog(const MapItemList &list,
                       const DialogLook &dialog_look,
                       const MapLook &look,
@@ -345,20 +351,27 @@ ShowMapItemListDialog(const MapItemList &list,
   switch (list.size()) {
   case 0:
     /* no map items in the list */
-    return;
+    return false;
 
   case 1:
     /* only one map item, show it */
     ShowMapItemDialog(*list[0], airspace_warnings);
-    break;
+    return false;
 
   default:
     /* more than one map item: show a list */
 
     int i = ShowMapItemListDialog(list, dialog_look, look,
                                   traffic_look, final_glide_look, settings);
-    assert(i >= -1 && i < (int)list.size());
+
+    assert(i >= -2 && i < (int)list.size());
+
     if (i >= 0)
       ShowMapItemDialog(*list[i], airspace_warnings);
+
+    /* setting of map item list was done */
+    if(i == -2) return true;
+
   }
+  return false;
 }
