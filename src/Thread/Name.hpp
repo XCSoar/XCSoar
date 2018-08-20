@@ -31,22 +31,12 @@ Copyright_License {
 #else
 
 #include <features.h>
-#ifdef __GLIBC__
+#if defined(__GLIBC__) || defined(__BIONIC__)
 #define HAVE_PTHREAD_SETNAME_NP
 #endif
 
 #endif
 
-#ifdef __BIONIC__
-/* Bionic supports pthread_setname_np() since API level 9, but since
-   we build with API level 8, we fall back to prctl(PR_SET_NAME) */
-#define HAVE_PR_SET_NAME
-#endif
-
-#endif
-
-#ifdef HAVE_PR_SET_NAME
-#include <sys/prctl.h>
 #endif
 
 #ifdef HAVE_PTHREAD_SETNAME_NP
@@ -62,8 +52,6 @@ SetThreadName(const char *name)
 #else
   pthread_setname_np(pthread_self(), name);
 #endif
-#elif defined(HAVE_PR_SET_NAME)
-  prctl(PR_SET_NAME, (unsigned long)name, 0, 0, 0);
 #else
   (void)name;
 #endif
