@@ -49,6 +49,10 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   const MoreData &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
+  bool doRefreshMapList = false;
+
+  do{
+
   bool only_landable = false;
   int rangedisplaypercent = settings.item_list.range_of_nearest_map_items_in_percent_of_displaysize;
   auto range = 0.0;
@@ -131,10 +135,12 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
     return false;
   }
 
-  ShowMapItemListDialog(list,
+  doRefreshMapList = ShowMapItemListDialog(list,
                         UIGlobals::GetDialogLook(), look, traffic_look,
                         final_glide_bar_renderer.GetLook(), settings,
                         glide_computer != nullptr
                         ? &glide_computer->GetAirspaceWarnings() : nullptr);
+  }while(doRefreshMapList);
+
   return true;
 }
