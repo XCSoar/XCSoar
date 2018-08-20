@@ -69,7 +69,7 @@ void
 BufferedOutputStream::Format(const char *fmt, ...)
 {
 	auto r = buffer.Write();
-	if (r.IsEmpty()) {
+	if (r.empty()) {
 		Flush();
 		r = buffer.Write();
 	}
@@ -122,7 +122,7 @@ BufferedOutputStream::WriteWideToUTF8(const wchar_t *src, size_t src_length)
 		return;
 
 	auto r = buffer.Write();
-	if (r.IsEmpty()) {
+	if (r.empty()) {
 		Flush();
 		r = buffer.Write();
 	}
@@ -157,7 +157,7 @@ void
 BufferedOutputStream::Flush()
 {
 	auto r = buffer.Read();
-	if (r.IsEmpty())
+	if (r.empty())
 		return;
 
 	os.Write(r.data, r.size);

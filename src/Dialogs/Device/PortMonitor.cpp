@@ -78,7 +78,7 @@ private:
       {
         ScopeLock protect(mutex);
         auto range = buffer.Read();
-        if (range.IsEmpty())
+        if (range.empty())
           break;
 
         length = std::min(ARRAY_SIZE(data), size_t(range.size));

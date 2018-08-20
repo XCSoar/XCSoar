@@ -81,7 +81,7 @@ struct EventBuilder {
 
     // For each mode
     for (const auto token : TIterableSplitString(mode.c_str(), ' ')) {
-      if (token.IsEmpty())
+      if (token.empty())
         continue;
 
       // All modes are valid at this point
