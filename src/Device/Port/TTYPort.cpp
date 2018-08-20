@@ -69,12 +69,7 @@ TTYPort::GetState() const
 bool
 TTYPort::Drain()
 {
-#ifdef __BIONIC__
-  /* bionic doesn't have tcdrain() */
-  return true;
-#else
   return tcdrain(serial_port.native_handle()) == 0;
-#endif
 }
 
 #ifndef __APPLE__
