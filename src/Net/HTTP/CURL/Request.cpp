@@ -94,7 +94,7 @@ Net::Request::Send(unsigned _timeout_ms)
   const int timeout_ms = _timeout_ms == INFINITE ? -1 : _timeout_ms;
 
   CURLMcode mcode = CURLM_CALL_MULTI_PERFORM;
-  while (buffer.IsEmpty()) {
+  while (buffer.empty()) {
     CURLcode code = session.InfoRead(handle.GetHandle());
     if (code != CURLE_AGAIN)
       return code == CURLE_OK;
@@ -128,7 +128,7 @@ Net::Request::Read(void *_buffer, size_t buffer_size, unsigned _timeout_ms)
   CURLMcode mcode = CURLM_CALL_MULTI_PERFORM;
   while (true) {
     range = buffer.Read();
-    if (!range.IsEmpty())
+    if (!range.empty())
       break;
 
     CURLcode code = session.InfoRead(handle.GetHandle());

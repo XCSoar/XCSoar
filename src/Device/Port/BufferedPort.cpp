@@ -124,7 +124,7 @@ BufferedPort::WaitRead(unsigned timeout_ms)
   TimeoutClock timeout(timeout_ms);
   ScopeLock protect(mutex);
 
-  while (buffer.IsEmpty()) {
+  while (buffer.empty()) {
     if (running)
       return WaitResult::CANCELLED;
 

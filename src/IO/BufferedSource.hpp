@@ -43,7 +43,7 @@ public:
   typename Source<T>::Range Read() override {
     buffer.Shift();
     auto r = buffer.Write();
-    if (!r.IsEmpty()) {
+    if (!r.empty()) {
       unsigned n = Read(r.data, r.size);
       buffer.Append(n);
     }

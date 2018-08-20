@@ -48,12 +48,12 @@ LineSplitter::ReadLine()
   if (memchr(remaining.data, '\n', remaining.size) == nullptr) {
     /* no: read more data from the Source */
     remaining = source.Read();
-    if (remaining.IsEmpty())
+    if (remaining.empty())
       /* end of file */
       return nullptr;
   }
 
-  assert(!remaining.IsEmpty());
+  assert(!remaining.empty());
 
   auto range = remaining;
   std::pair<unsigned, unsigned> bounds =

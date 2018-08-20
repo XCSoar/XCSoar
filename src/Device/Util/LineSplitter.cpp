@@ -56,7 +56,7 @@ PortLineSplitter::DataReceived(const void *_data, size_t length)
   do {
     /* append new data to buffer, as much as fits there */
     auto range = buffer.Write();
-    if (range.IsEmpty()) {
+    if (range.empty()) {
       /* overflow: reset buffer to recover quickly */
       buffer.Clear();
       continue;

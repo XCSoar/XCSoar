@@ -51,7 +51,7 @@ InflateSource::Read(char *p, unsigned n)
 {
   while (true) {
     auto compressed = src.Read();
-    if (compressed.IsEmpty())
+    if (compressed.empty())
       return 0;
 
     /* we need the const_cast because Android NDK r10e contains ZLib

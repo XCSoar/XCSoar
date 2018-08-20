@@ -35,7 +35,7 @@ inline bool
 PortNMEAReader::Fill(TimeoutClock timeout)
 {
   const auto dest = buffer.Write();
-  if (dest.IsEmpty())
+  if (dest.empty())
     /* already full */
     return false;
 
