@@ -30,7 +30,7 @@ static const TCHAR *
 LastSeparator(const TCHAR *path)
 {
   const auto *p = StringFindLast(path, _T('/'));
-#ifdef WIN32
+#ifdef _WIN32
   const auto *backslash = StringFindLast(path, _T('\\'));
   if (p == nullptr || backslash > p)
     p = backslash;

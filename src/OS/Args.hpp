@@ -47,7 +47,7 @@ class Args {
   std::list<char *> args;
   const char *name, *usage;
 
-#ifdef WIN32
+#ifdef _WIN32
   char *cmdline;
 #endif
 
@@ -59,7 +59,7 @@ public:
 
     std::copy(argv + 1, argv + argc, std::back_inserter(args));
 
-#ifdef WIN32
+#ifdef _WIN32
     cmdline = nullptr;
 #endif
   }
@@ -68,12 +68,12 @@ public:
 
   Args(Args &&other):name(other.name), usage(other.usage) {
     std::swap(args, other.args);
-#ifdef WIN32
+#ifdef _WIN32
     std::swap(cmdline, other.cmdline);
 #endif
   }
 
-#ifdef WIN32
+#ifdef _WIN32
   Args(const TCHAR *_cmdline, const char *_usage)
     :usage(_usage) {
     ParseCommandLine(_cmdline);

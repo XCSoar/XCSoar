@@ -34,7 +34,7 @@
 #include <assert.h>
 #include <string.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <ws2tcpip.h>
 #else
 #include <netinet/in.h>

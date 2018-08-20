@@ -23,7 +23,7 @@
 
 #include "SystemLoad.hpp"
 
-#ifdef WIN32
+#ifdef _WIN32
 
 #include <windows.h>
 #include <tlhelp32.h>
@@ -114,7 +114,7 @@ SystemLoadCPU()
   return (unsigned)(diff.busy * 100 / total);
 }
 
-#else /* !WIN32 */
+#else /* !_WIN32 */
 
 ///@todo implement for non-win32
 unsigned SystemLoadCPU()
@@ -122,4 +122,4 @@ unsigned SystemLoadCPU()
   return (unsigned)-1;
 }
 
-#endif /* !WIN32 */
+#endif /* !_WIN32 */

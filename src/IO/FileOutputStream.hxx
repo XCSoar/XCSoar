@@ -24,14 +24,14 @@
 #include "OS/Path.hpp"
 #include "Compiler.h"
 
-#ifndef WIN32
+#ifndef _WIN32
 #include "OS/FileDescriptor.hxx"
 #endif
 
 #include <assert.h>
 #include <stdint.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -44,7 +44,7 @@ class Path;
 class FileOutputStream final : public OutputStream {
 	const AllocatedPath path;
 
-#ifdef WIN32
+#ifdef _WIN32
 	HANDLE handle = INVALID_HANDLE_VALUE;
 #else
 	FileDescriptor fd = FileDescriptor::Undefined();
@@ -119,7 +119,7 @@ private:
 	bool Close() {
 		assert(IsDefined());
 
-#ifdef WIN32
+#ifdef _WIN32
 		CloseHandle(handle);
 		handle = INVALID_HANDLE_VALUE;
 		return true;
@@ -128,7 +128,7 @@ private:
 #endif
 	}
 
-#ifdef WIN32
+#ifdef _WIN32
 	bool SeekEOF() {
 		return SetFilePointer(handle, 0, nullptr,
 				      FILE_END) != 0xffffffff;
@@ -136,7 +136,7 @@ private:
 #endif
 
 	bool IsDefined() const {
-#ifdef WIN32
+#ifdef _WIN32
 		return handle != INVALID_HANDLE_VALUE;
 #else
 		return fd.IsDefined();

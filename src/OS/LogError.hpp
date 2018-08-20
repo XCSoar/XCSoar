@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_LOG_ERROR_HPP
 #define XCSOAR_LOG_ERROR_HPP
 
-#ifdef WIN32
+#ifdef _WIN32
 
 #include <tchar.h>
 

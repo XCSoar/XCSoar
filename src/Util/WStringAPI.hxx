@@ -108,7 +108,7 @@ gcc_returns_nonnull  gcc_nonnull_all
 static inline wchar_t *
 UnsafeCopyStringP(wchar_t *dest, const wchar_t *src) noexcept
 {
-#ifdef WIN32
+#ifdef _WIN32
 	/* emulate wcpcpy() */
 	UnsafeCopyString(dest, src);
 	return dest + StringLength(dest);

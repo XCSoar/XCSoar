@@ -32,7 +32,7 @@
 
 #include "Compiler.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <winsock2.h>
 #else
 #include <errno.h>
@@ -42,7 +42,7 @@ gcc_pure
 static inline int
 GetSocketError()
 {
-#ifdef WIN32
+#ifdef _WIN32
   return WSAGetLastError();
 #else
   return errno;
@@ -53,7 +53,7 @@ gcc_const
 static inline bool
 IsSocketBlockingError(int e)
 {
-#ifdef WIN32
+#ifdef _WIN32
   return e == WSAEWOULDBLOCK;
 #else
   return e == EAGAIN;

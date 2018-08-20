@@ -108,7 +108,7 @@ namespace File
   gcc_pure
   bool Exists(Path path);
 
-#if defined(WIN32) && defined(UNICODE)
+#if defined(_WIN32) && defined(UNICODE)
   gcc_pure
   bool Exists(const char *path);
 #endif

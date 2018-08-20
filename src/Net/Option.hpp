@@ -29,14 +29,14 @@ Copyright_License {
  * which sets SO_SNDTIMEO.
  */
 class SendTimeoutS {
-#ifdef WIN32
+#ifdef _WIN32
   DWORD value;
 #else
   struct timeval value;
 #endif
 
 public:
-#ifdef WIN32
+#ifdef _WIN32
   explicit constexpr SendTimeoutS(unsigned _value_s):value(_value_s * 1000) {}
 #else
   explicit constexpr SendTimeoutS(unsigned _value_s):value{time_t(_value_s), 0} {}

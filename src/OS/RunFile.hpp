@@ -27,7 +27,7 @@ Copyright_License {
 #include <tchar.h>
 
 #if defined(ANDROID) || \
-  (defined(HAVE_POSIX) && !defined(WIN32) && !defined(KOBO))
+  (defined(HAVE_POSIX) && !defined(_WIN32) && !defined(KOBO))
 #define HAVE_RUN_FILE
 
 /**

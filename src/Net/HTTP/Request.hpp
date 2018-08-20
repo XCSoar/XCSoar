@@ -38,7 +38,7 @@ namespace Net {
   class MultiPartFormData;
 
   class Request {
-#ifndef WIN32
+#ifndef _WIN32
     static constexpr unsigned INFINITE = (unsigned)-1;
 #endif
 

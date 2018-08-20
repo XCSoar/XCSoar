@@ -29,7 +29,7 @@ Copyright_License {
 #include <stdio.h>
 #include <stdarg.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 
 #include <windows.h>
 

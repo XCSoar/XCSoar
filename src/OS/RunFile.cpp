@@ -36,7 +36,7 @@ RunFile(const TCHAR *path)
   return true;
 }
 
-#elif defined(HAVE_POSIX) && !defined(WIN32) && !defined(KOBO)
+#elif defined(HAVE_POSIX) && !defined(_WIN32) && !defined(KOBO)
 
 #include "Process.hpp"
 

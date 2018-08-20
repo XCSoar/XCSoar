@@ -49,7 +49,7 @@
 class IPv4Address {
 	struct sockaddr_in address;
 
-#ifdef WIN32
+#ifdef _WIN32
 	static constexpr struct in_addr ConstructInAddr(uint8_t a, uint8_t b,
 							uint8_t c, uint8_t d) {
 		return {{{ a, b, c, d }}};
@@ -140,7 +140,7 @@ public:
 		return address.sin_addr;
 	}
 
-#if !defined(WIN32) && !defined(__BIONIC__)
+#if !defined(_WIN32) && !defined(__BIONIC__)
 	/**
 	 * Returns a StaticSocketAddress for the specified device. Caller
 	 * should check for validity of returned StaticSocketAddress.

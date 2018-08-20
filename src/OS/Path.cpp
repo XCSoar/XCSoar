@@ -68,7 +68,7 @@ Path::operator+(const_pointer_type other) const
   return AllocatedPath::Donate(result);
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 
 gcc_pure gcc_nonnull_all
 static constexpr bool
@@ -84,7 +84,7 @@ Path::IsAbsolute() const
 {
   assert(!IsNull());
 
-#ifdef WIN32
+#ifdef _WIN32
   if (IsDrive(c_str()) && IsDirSeparator(c_str()[2]))
     return true;
 #endif
@@ -97,7 +97,7 @@ Path::IsBase() const
 {
   assert(!IsNull());
 
-#ifdef WIN32
+#ifdef _WIN32
   return _tcspbrk(c_str(), _T("/\\")) == nullptr;
 #else
   return StringFind(c_str(), _T('/')) == nullptr;
@@ -109,7 +109,7 @@ static Path::const_pointer_type
 LastSeparator(Path::const_pointer_type path)
 {
   const auto *p = StringFindLast(path, _T('/'));
-#ifdef WIN32
+#ifdef _WIN32
   const auto *backslash = StringFindLast(path, _T('\\'));
   if (p == nullptr || backslash > p)
     p = backslash;

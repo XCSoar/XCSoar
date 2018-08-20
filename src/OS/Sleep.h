@@ -23,11 +23,11 @@ Copyright_License {
 
 #ifndef XCSOAR_OS_SLEEP_H
 
-#ifdef WIN32
+#ifdef _WIN32
 
 #include <windows.h>
 
-#else /* !WIN32 */
+#else /* !_WIN32 */
 
 #include <time.h>
 
@@ -42,6 +42,6 @@ Sleep(unsigned ms)
   nanosleep(&ts, nullptr);
 }
 
-#endif /* !WIN32 */
+#endif /* !_WIN32 */
 
 #endif
