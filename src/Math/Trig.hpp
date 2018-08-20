@@ -34,9 +34,6 @@ gcc_const
 static inline std::pair<double, double>
 sin_cos(const double thetha)
 {
-#ifdef __BIONIC__
-  return std::make_pair(sin(thetha), cos(thetha));
-#else
   double s, c;
 #ifdef __APPLE__
   __sincos(thetha, &s, &c);
@@ -44,7 +41,6 @@ sin_cos(const double thetha)
   sincos(thetha, &s, &c);
 #endif
   return std::make_pair(s, c);
-#endif
 }
 
 #endif
