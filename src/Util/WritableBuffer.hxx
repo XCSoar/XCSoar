@@ -64,6 +64,14 @@ struct WritableBuffer<void> {
 		return data == nullptr;
 	}
 
+	constexpr bool operator==(std::nullptr_t) const {
+		return data == nullptr;
+	}
+
+	constexpr bool operator!=(std::nullptr_t) const {
+		return data != nullptr;
+	}
+
 	constexpr bool empty() const {
 		return size == 0;
 	}
@@ -127,6 +135,14 @@ struct WritableBuffer {
 
 	constexpr bool IsNull() const {
 		return data == nullptr;
+	}
+
+	constexpr bool operator==(std::nullptr_t) const {
+		return data == nullptr;
+	}
+
+	constexpr bool operator!=(std::nullptr_t) const {
+		return data != nullptr;
 	}
 
 	constexpr bool empty() const {

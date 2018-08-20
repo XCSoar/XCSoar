@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright (C) 2010-2016 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -98,6 +98,14 @@ public:
 
 	constexpr bool IsNull() const {
 		return buffer.IsNull();
+	}
+
+	constexpr bool operator==(std::nullptr_t) const {
+		return buffer == nullptr;
+	}
+
+	constexpr bool operator!=(std::nullptr_t) const {
+		return buffer != nullptr;
 	}
 
 	/**
