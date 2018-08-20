@@ -30,7 +30,7 @@ Copyright_License {
 #define HAVE_UN
 #endif
 
-#if defined(__linux__) && !defined(__BIONIC__) && !defined(KOBO)
+#if defined(__linux__) && !defined(KOBO)
 #define HAVE_ACCEPT4
 #endif
 
