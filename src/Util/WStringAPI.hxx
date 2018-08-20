@@ -110,7 +110,7 @@ UnsafeCopyString(wchar_t *dest, const wchar_t *src) noexcept
 	wcscpy(dest, src);
 }
 
-gcc_nonnull_all
+gcc_returns_nonnull  gcc_nonnull_all
 static inline wchar_t *
 UnsafeCopyStringP(wchar_t *dest, const wchar_t *src) noexcept
 {
@@ -180,7 +180,7 @@ StringCollate(const wchar_t *a, const wchar_t *b) noexcept
 #endif
 }
 
-gcc_malloc gcc_nonnull_all
+gcc_malloc gcc_returns_nonnull gcc_nonnull_all
 static inline wchar_t *
 DuplicateString(const wchar_t *p) noexcept
 {
