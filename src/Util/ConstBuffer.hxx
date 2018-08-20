@@ -72,6 +72,14 @@ struct ConstBuffer<void> {
 		return data == nullptr;
 	}
 
+	constexpr bool operator==(std::nullptr_t) const {
+		return data == nullptr;
+	}
+
+	constexpr bool operator!=(std::nullptr_t) const {
+		return data != nullptr;
+	}
+
 	constexpr bool empty() const {
 		return size == 0;
 	}
@@ -133,6 +141,14 @@ struct ConstBuffer {
 
 	constexpr bool IsNull() const {
 		return data == nullptr;
+	}
+
+	constexpr bool operator==(std::nullptr_t) const {
+		return data == nullptr;
+	}
+
+	constexpr bool operator!=(std::nullptr_t) const {
+		return data != nullptr;
 	}
 
 	constexpr bool empty() const {
