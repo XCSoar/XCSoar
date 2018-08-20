@@ -32,19 +32,15 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#ifdef __BIONIC__
-#include <sys/syscall.h>
-#endif
-
 #ifndef _WIN32
 #include <poll.h>
 #endif
 
-#if defined(HAVE_EVENTFD) && !defined(__BIONIC__)
+#ifdef HAVE_EVENTFD
 #include <sys/eventfd.h>
 #endif
 
-#if defined(HAVE_SIGNALFD) && !defined(__BIONIC__)
+#ifdef HAVE_SIGNALFD
 #include <sys/signalfd.h>
 #endif
 
@@ -109,13 +105,7 @@ FileDescriptor::CreatePipe(FileDescriptor &r, FileDescriptor &w) noexcept
 
 #ifdef __linux__
 	const int flags = O_CLOEXEC;
-#ifdef __BIONIC__
-	/* Bionic provides the pipe2() function only since Android 2.3,
-	   therefore we must roll our own system call here */
-	const int result = syscall(__NR_pipe2, fds, flags);
-#else
 	const int result = pipe2(fds, flags);
-#endif
 #elif defined(_WIN32)
 	const int result = _pipe(fds, 512, _O_BINARY);
 #else
@@ -140,13 +130,7 @@ FileDescriptor::CreatePipeNonBlock(FileDescriptor &r,
 
 #ifdef __linux__
 	const int flags = O_CLOEXEC|O_NONBLOCK;
-#ifdef __BIONIC__
-	/* Bionic provides the pipe2() function only since Android 2.3,
-	   therefore we must roll our own system call here */
-	const int result = syscall(__NR_pipe2, fds, flags);
-#else
 	const int result = pipe2(fds, flags);
-#endif
 #else
 	const int result = pipe(fds);
 #endif
@@ -218,13 +202,7 @@ FileDescriptor::CheckDuplicate(int new_fd) noexcept
 bool
 FileDescriptor::CreateEventFD(unsigned initval) noexcept
 {
-#ifdef __BIONIC__
-	/* Bionic provides the eventfd() function only since Android 2.3,
-	   therefore we must roll our own system call here */
-	fd = syscall(__NR_eventfd2, initval, O_NONBLOCK|O_CLOEXEC);
-#else
 	fd = ::eventfd(initval, EFD_NONBLOCK|EFD_CLOEXEC);
-#endif
 	return fd >= 0;
 }
 
@@ -235,12 +213,7 @@ FileDescriptor::CreateEventFD(unsigned initval) noexcept
 bool
 FileDescriptor::CreateSignalFD(const sigset_t *mask) noexcept
 {
-#ifdef __BIONIC__
-	int new_fd = syscall(__NR_signalfd4, fd, mask, sizeof(*mask),
-			     O_NONBLOCK|O_CLOEXEC);
-#else
 	int new_fd = ::signalfd(fd, mask, SFD_NONBLOCK|SFD_CLOEXEC);
-#endif
 	if (new_fd < 0)
 		return false;
 
@@ -255,18 +228,9 @@ FileDescriptor::CreateSignalFD(const sigset_t *mask) noexcept
 bool
 FileDescriptor::CreateInotify() noexcept
 {
-#ifdef __BIONIC__
-	/* Bionic doesn't have inotify_init1() */
-	int new_fd = inotify_init();
-#else
 	int new_fd = inotify_init1(IN_CLOEXEC|IN_NONBLOCK);
-#endif
 	if (new_fd < 0)
 		return false;
-
-#ifdef __BIONIC__
-	SetNonBlocking();
-#endif
 
 	fd = new_fd;
 	return true;
