@@ -39,7 +39,7 @@
 /**
  * An OO wrapper for a UNIX file descriptor.
  */
-class UniqueFileDescriptor : protected FileDescriptor {
+class UniqueFileDescriptor : public FileDescriptor {
 public:
 	UniqueFileDescriptor():FileDescriptor(FileDescriptor::Undefined()) {}
 
@@ -51,6 +51,8 @@ protected:
 public:
 	explicit UniqueFileDescriptor(FileDescriptor _fd)
 		:FileDescriptor(_fd) {}
+
+	UniqueFileDescriptor(const UniqueFileDescriptor &) = delete;
 
 	UniqueFileDescriptor(UniqueFileDescriptor &&other)
 		:FileDescriptor(other.Steal()) {}
@@ -64,20 +66,6 @@ public:
 		return *this;
 	}
 
-	/**
-	 * Convert this object to its #FileDescriptor base type.
-	 */
-	const FileDescriptor &ToFileDescriptor() const {
-		return *this;
-	}
-
-	using FileDescriptor::IsDefined;
-#ifndef _WIN32
-	using FileDescriptor::IsValid;
-#endif
-	using FileDescriptor::Get;
-	using FileDescriptor::Steal;
-
 protected:
 	void Set(int _fd) {
 		assert(!IsDefined());
@@ -87,50 +75,17 @@ protected:
 	}
 
 public:
-	using FileDescriptor::Open;
-	using FileDescriptor::OpenReadOnly;
-
 #ifndef _WIN32
-	using FileDescriptor::OpenNonBlocking;
-
 	static bool CreatePipe(UniqueFileDescriptor &r, UniqueFileDescriptor &w) {
 		return FileDescriptor::CreatePipe(r, w);
 	}
 
-	using FileDescriptor::SetNonBlocking;
-	using FileDescriptor::SetBlocking;
-	using FileDescriptor::EnableCloseOnExec;
-	using FileDescriptor::DisableCloseOnExec;
-	using FileDescriptor::Duplicate;
-	using FileDescriptor::CheckDuplicate;
-
 	static bool CreatePipe(FileDescriptor &r, FileDescriptor &w);
-#endif
-
-#ifdef __linux__
-	using FileDescriptor::CreateEventFD;
-	using FileDescriptor::CreateSignalFD;
-	using FileDescriptor::CreateInotify;
 #endif
 
 	bool Close() {
 		return IsDefined() && FileDescriptor::Close();
 	}
-
-	using FileDescriptor::Rewind;
-	using FileDescriptor::Seek;
-	using FileDescriptor::Skip;
-	using FileDescriptor::Tell;
-	using FileDescriptor::GetSize;
-	using FileDescriptor::Read;
-	using FileDescriptor::Write;
-
-#ifndef _WIN32
-	using FileDescriptor::Poll;
-	using FileDescriptor::WaitReadable;
-	using FileDescriptor::WaitWritable;
-	using FileDescriptor::IsReadyForWriting;
-#endif
 };
 
 #endif

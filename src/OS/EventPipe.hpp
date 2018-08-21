@@ -59,7 +59,7 @@ public:
    * Returns the file descriptor that should be polled on.
    */
   FileDescriptor GetReadFD() const {
-    return r.ToFileDescriptor();
+    return r;
   }
 
   /**
