@@ -77,7 +77,7 @@ public:
 		return address == nullptr;
 	}
 
-	const struct sockaddr *GetAddress() const noexcept {
+	constexpr const struct sockaddr *GetAddress() const noexcept {
 		return address;
 	}
 
@@ -93,7 +93,7 @@ public:
 	 * Does the object have a well-defined address?  Check !IsNull()
 	 * before calling this method.
 	 */
-	bool IsDefined() const noexcept {
+	constexpr bool IsDefined() const noexcept {
 		return GetFamily() != AF_UNSPEC;
 	}
 
