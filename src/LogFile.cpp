@@ -65,8 +65,8 @@ OpenLog()
        there */
     UniqueFileDescriptor fd;
     if (fd.Open(path.c_str(), O_APPEND|O_CREAT|O_WRONLY, 0666)) {
-      fd.CheckDuplicate(STDOUT_FILENO);
-      fd.CheckDuplicate(STDERR_FILENO);
+      fd.CheckDuplicate(FileDescriptor(STDOUT_FILENO));
+      fd.CheckDuplicate(FileDescriptor(STDERR_FILENO));
     }
 #endif
   }

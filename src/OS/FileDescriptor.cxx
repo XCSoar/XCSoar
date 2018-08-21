@@ -209,9 +209,9 @@ FileDescriptor::DisableCloseOnExec() noexcept
 }
 
 bool
-FileDescriptor::CheckDuplicate(int new_fd) noexcept
+FileDescriptor::CheckDuplicate(FileDescriptor new_fd) noexcept
 {
-	if (fd == new_fd) {
+	if (*this == new_fd) {
 		DisableCloseOnExec();
 		return true;
 	} else
