@@ -34,6 +34,8 @@
 
 #include <utility>
 
+#include <assert.h>
+
 /**
  * An OO wrapper for a UNIX file descriptor.
  */
