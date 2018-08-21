@@ -30,14 +30,41 @@
 #include "SocketAddress.hxx"
 #include "IPv4Address.hxx"
 #include "IPv6Address.hxx"
+#include "Util/StringView.hxx"
 
 #include <string.h>
+
+#ifdef HAVE_UN
+#include <sys/un.h>
+#endif
 
 bool
 SocketAddress::operator==(SocketAddress other) const noexcept
 {
 	return size == other.size && memcmp(address, other.address, size) == 0;
 }
+
+#ifdef HAVE_UN
+
+StringView
+SocketAddress::GetLocalRaw() const noexcept
+{
+	if (IsNull() || GetFamily() != AF_LOCAL)
+		/* not applicable */
+		return nullptr;
+
+	const auto sun = (const struct sockaddr_un *)GetAddress();
+	const auto start = (const char *)sun;
+	const auto path = sun->sun_path;
+	const size_t header_size = path - start;
+	if (size < size_type(header_size))
+		/* malformed address */
+		return nullptr;
+
+	return {path, size - header_size};
+}
+
+#endif
 
 #ifdef HAVE_TCP
 
