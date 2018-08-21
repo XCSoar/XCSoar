@@ -50,7 +50,7 @@ class IPv6Address {
 
 	static constexpr struct sockaddr_in6 Construct(struct in6_addr address,
 						       uint16_t port,
-						       uint32_t scope_id) {
+						       uint32_t scope_id) noexcept {
 		return {
 #if defined(__APPLE__)
 			sizeof(struct sockaddr_in6),
@@ -67,47 +67,47 @@ public:
 	IPv6Address() = default;
 
 	constexpr IPv6Address(struct in6_addr _address, uint16_t port,
-			      uint32_t scope_id=0)
+			      uint32_t scope_id=0) noexcept
 		:address(Construct(_address, port, scope_id)) {}
 
-	constexpr explicit IPv6Address(uint16_t port, uint32_t scope_id=0)
+	constexpr explicit IPv6Address(uint16_t port, uint32_t scope_id=0) noexcept
 		:IPv6Address(IN6ADDR_ANY_INIT, port, scope_id) {}
 
 	/**
 	 * Convert a #SocketAddress to a #IPv6Address.  Its address family must be AF_INET.
 	 */
-	explicit IPv6Address(SocketAddress src);
+	explicit IPv6Address(SocketAddress src) noexcept;
 
 	operator SocketAddress() const {
 		return SocketAddress(reinterpret_cast<const struct sockaddr *>(&address),
 				     sizeof(address));
 	}
 
-	SocketAddress::size_type GetSize() {
+	constexpr SocketAddress::size_type GetSize() const noexcept {
 		return sizeof(address);
 	}
 
-	constexpr bool IsDefined() const {
+	constexpr bool IsDefined() const noexcept {
 		return address.sin6_family != AF_UNSPEC;
 	}
 
-	constexpr bool IsValid() const {
+	constexpr bool IsValid() const noexcept {
 		return address.sin6_family == AF_INET6;
 	}
 
-	constexpr uint16_t GetPort() const {
+	constexpr uint16_t GetPort() const noexcept {
 		return FromBE16(address.sin6_port);
 	}
 
-	void SetPort(uint16_t port) {
+	void SetPort(uint16_t port) noexcept {
 		address.sin6_port = ToBE16(port);
 	}
 
-	constexpr const struct in6_addr &GetAddress() const {
+	constexpr const struct in6_addr &GetAddress() const noexcept {
 		return address.sin6_addr;
 	}
 
-	constexpr uint32_t GetScopeId() const {
+	constexpr uint32_t GetScopeId() const noexcept {
 		return address.sin6_scope_id;
 	}
 

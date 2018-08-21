@@ -33,7 +33,7 @@
 #include <string.h>
 
 static const struct sockaddr_in6 *
-CastToIPv6(const struct sockaddr *p)
+CastToIPv6(const struct sockaddr *p) noexcept
 {
 	assert(p->sa_family == AF_INET6);
 
@@ -42,7 +42,7 @@ CastToIPv6(const struct sockaddr *p)
 	return reinterpret_cast<const struct sockaddr_in6 *>(q);
 }
 
-IPv6Address::IPv6Address(SocketAddress src)
+IPv6Address::IPv6Address(SocketAddress src) noexcept
 	:address(*CastToIPv6(src.GetAddress())) {}
 
 bool
