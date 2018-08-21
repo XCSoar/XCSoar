@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2017 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2012-2018 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -39,9 +39,6 @@
 #include <sys/types.h>
 
 #ifdef __linux__
-#define HAVE_EVENTFD
-#define HAVE_SIGNALFD
-#define HAVE_INOTIFY
 #include <signal.h>
 #endif
 
@@ -159,15 +156,9 @@ public:
 	bool CheckDuplicate(int new_fd) noexcept;
 #endif
 
-#ifdef HAVE_EVENTFD
+#ifdef __linux__
 	bool CreateEventFD(unsigned initval=0) noexcept;
-#endif
-
-#ifdef HAVE_SIGNALFD
 	bool CreateSignalFD(const sigset_t *mask) noexcept;
-#endif
-
-#ifdef HAVE_INOTIFY
 	bool CreateInotify() noexcept;
 #endif
 

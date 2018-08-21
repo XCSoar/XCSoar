@@ -37,7 +37,7 @@ EventPipe::Create()
 {
   assert(!IsDefined());
 
-#ifdef HAVE_EVENTFD
+#ifdef __linux__
   return r.CreateEventFD();
 #else
   if (!UniqueFileDescriptor::CreatePipe(r, w))
@@ -53,7 +53,7 @@ EventPipe::Create()
 void
 EventPipe::Signal()
 {
-#ifdef HAVE_EVENTFD
+#ifdef __linux__
   static constexpr uint64_t value = 1;
   r.Write(&value, sizeof(value));
 #else
@@ -65,7 +65,7 @@ EventPipe::Signal()
 bool
 EventPipe::Read()
 {
-#ifdef HAVE_EVENTFD
+#ifdef __linux__
   uint64_t value;
   return r.Read(&value, sizeof(value)) > 0;
 #else

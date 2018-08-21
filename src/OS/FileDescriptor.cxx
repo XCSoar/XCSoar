@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2017 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2012-2018 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -36,15 +36,9 @@
 #include <poll.h>
 #endif
 
-#ifdef HAVE_EVENTFD
+#ifdef __linux__
 #include <sys/eventfd.h>
-#endif
-
-#ifdef HAVE_SIGNALFD
 #include <sys/signalfd.h>
-#endif
-
-#ifdef HAVE_INOTIFY
 #include <sys/inotify.h>
 #endif
 
@@ -197,7 +191,7 @@ FileDescriptor::CheckDuplicate(int new_fd) noexcept
 
 #endif
 
-#ifdef HAVE_EVENTFD
+#ifdef __linux__
 
 bool
 FileDescriptor::CreateEventFD(unsigned initval) noexcept
@@ -205,10 +199,6 @@ FileDescriptor::CreateEventFD(unsigned initval) noexcept
 	fd = ::eventfd(initval, EFD_NONBLOCK|EFD_CLOEXEC);
 	return fd >= 0;
 }
-
-#endif
-
-#ifdef HAVE_SIGNALFD
 
 bool
 FileDescriptor::CreateSignalFD(const sigset_t *mask) noexcept
@@ -220,10 +210,6 @@ FileDescriptor::CreateSignalFD(const sigset_t *mask) noexcept
 	fd = new_fd;
 	return true;
 }
-
-#endif
-
-#ifdef HAVE_INOTIFY
 
 bool
 FileDescriptor::CreateInotify() noexcept
