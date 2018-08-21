@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef MPD_FILE_OUTPUT_STREAM_HXX
-#define MPD_FILE_OUTPUT_STREAM_HXX
+#ifndef FILE_OUTPUT_STREAM_HXX
+#define FILE_OUTPUT_STREAM_HXX
 
 #include "OutputStream.hxx"
 #include "OS/Path.hpp"
@@ -103,30 +103,30 @@ private:
 public:
 	explicit FileOutputStream(Path _path, Mode _mode=Mode::CREATE);
 
-	~FileOutputStream() {
+	~FileOutputStream() noexcept {
 		if (IsDefined())
 			Cancel();
 	}
 
 public:
-	Path GetPath() const {
+	Path GetPath() const noexcept {
 		return path;
 	}
 
 	gcc_pure
-	uint64_t Tell() const;
+	uint64_t Tell() const noexcept;
 
 	/* virtual methods from class OutputStream */
 	void Write(const void *data, size_t size) override;
 
 	void Commit();
-	void Cancel();
+	void Cancel() noexcept;
 
 private:
 	void OpenCreate(bool visible);
 	void OpenAppend(bool create);
 
-	bool Close() {
+	bool Close() noexcept {
 		assert(IsDefined());
 
 #ifdef _WIN32
@@ -139,13 +139,13 @@ private:
 	}
 
 #ifdef _WIN32
-	bool SeekEOF() {
+	bool SeekEOF() noexcept {
 		return SetFilePointer(handle, 0, nullptr,
 				      FILE_END) != 0xffffffff;
 	}
 #endif
 
-	bool IsDefined() const {
+	bool IsDefined() const noexcept {
 #ifdef _WIN32
 		return handle != INVALID_HANDLE_VALUE;
 #else

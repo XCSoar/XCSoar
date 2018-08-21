@@ -87,7 +87,7 @@ FileOutputStream::OpenAppend(bool create)
 }
 
 uint64_t
-FileOutputStream::Tell() const
+FileOutputStream::Tell() const noexcept
 {
 	LONG high = 0;
 	DWORD low = SetFilePointer(handle, 0, &high, FILE_CURRENT);
@@ -121,7 +121,7 @@ FileOutputStream::Commit()
 }
 
 void
-FileOutputStream::Cancel()
+FileOutputStream::Cancel() noexcept
 {
 	assert(IsDefined());
 
@@ -148,7 +148,7 @@ FileOutputStream::Cancel()
  * Open a file using Linux's O_TMPFILE for writing the given file.
  */
 static bool
-OpenTempFile(FileDescriptor &fd, Path path)
+OpenTempFile(FileDescriptor &fd, Path path) noexcept
 {
 	const auto directory = path.GetParent();
 	if (directory.IsNull())
@@ -191,7 +191,7 @@ FileOutputStream::OpenAppend(bool create)
 }
 
 uint64_t
-FileOutputStream::Tell() const
+FileOutputStream::Tell() const noexcept
 {
 	return fd.Tell();
 }
@@ -240,7 +240,7 @@ FileOutputStream::Commit()
 }
 
 void
-FileOutputStream::Cancel()
+FileOutputStream::Cancel() noexcept
 {
 	assert(IsDefined());
 
