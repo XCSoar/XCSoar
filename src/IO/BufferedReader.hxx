@@ -1,5 +1,5 @@
 /*
- * Copyright 2003-2016 The Music Player Daemon Project
+ * Copyright 2003-2018 The Music Player Daemon Project
  * http://www.musicpd.org
  *
  * This program is free software; you can redistribute it and/or modify
@@ -39,14 +39,14 @@ class BufferedReader {
 	unsigned line_number = 0;
 
 public:
-	explicit BufferedReader(Reader &_reader)
+	explicit BufferedReader(Reader &_reader) noexcept
 		:reader(_reader), buffer(4096) {}
 
 	/**
 	 * Reset the internal state.  Should be called after rewinding
 	 * the underlying #Reader.
 	 */
-	void Reset() {
+	void Reset() noexcept {
 		buffer.Clear();
 		eof = false;
 		line_number = 0;
@@ -55,7 +55,7 @@ public:
 	bool Fill(bool need_more);
 
 	gcc_pure
-	WritableBuffer<void> Read() const {
+	WritableBuffer<void> Read() const noexcept {
 		return buffer.Read().ToVoid();
 	}
 
@@ -66,7 +66,7 @@ public:
 	 */
 	void *ReadFull(size_t size);
 
-	void Consume(size_t n) {
+	void Consume(size_t n) noexcept {
 		buffer.Consume(n);
 	}
 
@@ -74,7 +74,7 @@ public:
 	 * Read (and consume) data from the input buffer into the
 	 * given buffer.  Does not attempt to refill the buffer.
 	 */
-	size_t ReadFromBuffer(WritableBuffer<void> dest);
+	size_t ReadFromBuffer(WritableBuffer<void> dest) noexcept;
 
 	/**
 	 * Read data into the given buffer and consume it from our
@@ -85,7 +85,7 @@ public:
 
 	char *ReadLine();
 
-	unsigned GetLineNumber() const {
+	unsigned GetLineNumber() const noexcept {
 		return line_number;
 	}
 };
