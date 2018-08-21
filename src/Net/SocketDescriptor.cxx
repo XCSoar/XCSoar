@@ -53,7 +53,7 @@ SocketDescriptor::Close()
 SocketDescriptor
 SocketDescriptor::Accept()
 {
-#ifdef HAVE_ACCEPT4
+#ifdef __linux__
 	int connection_fd = ::accept4(Get(), nullptr, nullptr, SOCK_CLOEXEC);
 #else
 	int connection_fd = ::accept(Get(), nullptr, nullptr);
