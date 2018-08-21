@@ -42,7 +42,7 @@
 #ifdef _WIN32
 
 void
-SocketDescriptor::Close()
+SocketDescriptor::Close() noexcept
 {
 	if (IsDefined())
 		::closesocket(Steal());
@@ -51,7 +51,7 @@ SocketDescriptor::Close()
 #endif
 
 SocketDescriptor
-SocketDescriptor::Accept()
+SocketDescriptor::Accept() noexcept
 {
 #ifdef __linux__
 	int connection_fd = ::accept4(Get(), nullptr, nullptr, SOCK_CLOEXEC);
@@ -64,7 +64,7 @@ SocketDescriptor::Accept()
 }
 
 bool
-SocketDescriptor::Connect(SocketAddress address)
+SocketDescriptor::Connect(SocketAddress address) noexcept
 {
 	assert(address.IsDefined());
 
@@ -72,7 +72,7 @@ SocketDescriptor::Connect(SocketAddress address)
 }
 
 bool
-SocketDescriptor::Create(int domain, int type, int protocol)
+SocketDescriptor::Create(int domain, int type, int protocol) noexcept
 {
 #ifdef _WIN32
 	static bool initialised = false;
@@ -97,13 +97,13 @@ SocketDescriptor::Create(int domain, int type, int protocol)
 }
 
 bool
-SocketDescriptor::Bind(SocketAddress address)
+SocketDescriptor::Bind(SocketAddress address) noexcept
 {
 	return bind(Get(), address.GetAddress(), address.GetSize()) == 0;
 }
 
 bool
-SocketDescriptor::BindPort(unsigned port)
+SocketDescriptor::BindPort(unsigned port) noexcept
 {
 	return Bind(IPv4Address(port));
 }
@@ -111,7 +111,7 @@ SocketDescriptor::BindPort(unsigned port)
 #ifdef __linux__
 
 bool
-SocketDescriptor::AutoBind()
+SocketDescriptor::AutoBind() noexcept
 {
 	static constexpr sa_family_t family = AF_LOCAL;
 	return Bind(SocketAddress((const struct sockaddr *)&family,
@@ -121,7 +121,7 @@ SocketDescriptor::AutoBind()
 #endif
 
 StaticSocketAddress
-SocketDescriptor::GetLocalAddress() const
+SocketDescriptor::GetLocalAddress() const noexcept
 {
 	assert(IsDefined());
 
@@ -134,7 +134,7 @@ SocketDescriptor::GetLocalAddress() const
 }
 
 StaticSocketAddress
-SocketDescriptor::GetPeerAddress() const
+SocketDescriptor::GetPeerAddress() const noexcept
 {
 	assert(IsDefined());
 
@@ -147,7 +147,7 @@ SocketDescriptor::GetPeerAddress() const
 }
 
 ssize_t
-SocketDescriptor::Read(void *buffer, size_t length)
+SocketDescriptor::Read(void *buffer, size_t length) noexcept
 {
 	int flags = 0;
 #ifndef _WIN32
@@ -158,7 +158,7 @@ SocketDescriptor::Read(void *buffer, size_t length)
 }
 
 ssize_t
-SocketDescriptor::Write(const void *buffer, size_t length)
+SocketDescriptor::Write(const void *buffer, size_t length) noexcept
 {
 	int flags = 0;
 #ifdef __linux__
@@ -171,7 +171,7 @@ SocketDescriptor::Write(const void *buffer, size_t length)
 #ifdef _WIN32
 
 int
-SocketDescriptor::WaitReadable(int timeout_ms) const
+SocketDescriptor::WaitReadable(int timeout_ms) const noexcept
 {
 	assert(IsDefined());
 
@@ -190,7 +190,7 @@ SocketDescriptor::WaitReadable(int timeout_ms) const
 }
 
 int
-SocketDescriptor::WaitWritable(int timeout_ms) const
+SocketDescriptor::WaitWritable(int timeout_ms) const noexcept
 {
 	assert(IsDefined());
 
@@ -212,7 +212,7 @@ SocketDescriptor::WaitWritable(int timeout_ms) const
 
 ssize_t
 SocketDescriptor::Read(void *buffer, size_t length,
-		       StaticSocketAddress &address)
+		       StaticSocketAddress &address) noexcept
 {
 	int flags = 0;
 #ifndef _WIN32
@@ -230,7 +230,7 @@ SocketDescriptor::Read(void *buffer, size_t length,
 
 ssize_t
 SocketDescriptor::Write(const void *buffer, size_t length,
-			SocketAddress address)
+			SocketAddress address) noexcept
 {
 	int flags = 0;
 #ifndef _WIN32

@@ -42,16 +42,16 @@ class StaticSocketAddress;
  */
 class SocketDescriptor : protected FileDescriptor {
 protected:
-	explicit constexpr SocketDescriptor(int _fd)
+	explicit constexpr SocketDescriptor(int _fd) noexcept
 		:FileDescriptor(_fd) {}
 
-	explicit constexpr SocketDescriptor(FileDescriptor _fd)
+	explicit constexpr SocketDescriptor(FileDescriptor _fd) noexcept
 		:FileDescriptor(_fd) {}
 
 public:
 	SocketDescriptor() = default;
 
-	constexpr bool operator==(SocketDescriptor other) const {
+	constexpr bool operator==(SocketDescriptor other) const noexcept {
 		return fd == other.fd;
 	}
 
@@ -62,7 +62,7 @@ public:
 	 * same as file descriptors (i.e. not on Windows).  Use this only
 	 * when you know what you're doing.
 	 */
-	static constexpr SocketDescriptor FromFileDescriptor(FileDescriptor fd) {
+	static constexpr SocketDescriptor FromFileDescriptor(FileDescriptor fd) noexcept {
 		return SocketDescriptor(fd);
 	}
 
@@ -72,7 +72,7 @@ public:
 	 * same as file descriptors (i.e. not on Windows).  Use this only
 	 * when you know what you're doing.
 	 */
-	constexpr const FileDescriptor &ToFileDescriptor() const {
+	constexpr const FileDescriptor &ToFileDescriptor() const noexcept {
 		return *this;
 	}
 #endif
@@ -86,7 +86,7 @@ public:
 	using FileDescriptor::Steal;
 	using FileDescriptor::SetUndefined;
 
-	static constexpr SocketDescriptor Undefined() {
+	static constexpr SocketDescriptor Undefined() noexcept {
 		return SocketDescriptor(FileDescriptor::Undefined());
 	}
 
@@ -104,7 +104,7 @@ public:
 	 * careful when dealing with a FileDescriptor reference that is
 	 * really a SocketDescriptor.
 	 */
-	void Close();
+	void Close() noexcept;
 #endif
 
 	/**
@@ -116,40 +116,40 @@ public:
 	 * @return True on success, False on failure
 	 * See man 2 socket for detailed information
 	 */
-	bool Create(int domain, int type, int protocol);
+	bool Create(int domain, int type, int protocol) noexcept;
 
-	bool Bind(SocketAddress address);
+	bool Bind(SocketAddress address) noexcept;
 
 	/**
 	 * Binds the socket to the port on INADDR_ANY
 	 * @param port is the port to bound
 	 * @return True on success False on failure
 	 */
-	bool BindPort(unsigned port);
+	bool BindPort(unsigned port) noexcept;
 
 #ifdef __linux__
 	/**
 	 * Binds the socket to a unique abstract address.
 	 */
-	bool AutoBind();
+	bool AutoBind() noexcept;
 #endif
 
-	SocketDescriptor Accept();
+	SocketDescriptor Accept() noexcept;
 
-	bool Connect(SocketAddress address);
-
-	gcc_pure
-	StaticSocketAddress GetLocalAddress() const;
+	bool Connect(SocketAddress address) noexcept;
 
 	gcc_pure
-	StaticSocketAddress GetPeerAddress() const;
+	StaticSocketAddress GetLocalAddress() const noexcept;
 
-	ssize_t Read(void *buffer, size_t length);
-	ssize_t Write(const void *buffer, size_t length);
+	gcc_pure
+	StaticSocketAddress GetPeerAddress() const noexcept;
+
+	ssize_t Read(void *buffer, size_t length) noexcept;
+	ssize_t Write(const void *buffer, size_t length) noexcept;
 
 #ifdef _WIN32
-	int WaitReadable(int timeout_ms) const;
-	int WaitWritable(int timeout_ms) const;
+	int WaitReadable(int timeout_ms) const noexcept;
+	int WaitWritable(int timeout_ms) const noexcept;
 #else
 	using FileDescriptor::WaitReadable;
 	using FileDescriptor::WaitWritable;
@@ -160,13 +160,13 @@ public:
 	 * Receive a datagram and return the source address.
 	 */
 	ssize_t Read(void *buffer, size_t length,
-		     StaticSocketAddress &address);
+		     StaticSocketAddress &address) noexcept;
 
 	/**
 	 * Send a datagram to the specified address.
 	 */
 	ssize_t Write(const void *buffer, size_t length,
-		      SocketAddress address);
+		      SocketAddress address) noexcept;
 };
 
 static_assert(std::is_trivial<SocketDescriptor>::value, "type is not trivial");
