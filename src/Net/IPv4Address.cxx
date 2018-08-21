@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2015 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright (C) 2012-2017 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -44,7 +44,7 @@
 #endif
 
 static const struct sockaddr_in *
-CastToIPv4(const struct sockaddr *p)
+CastToIPv4(const struct sockaddr *p) noexcept
 {
 	assert(p->sa_family == AF_INET);
 
@@ -53,7 +53,7 @@ CastToIPv4(const struct sockaddr *p)
 	return reinterpret_cast<const struct sockaddr_in *>(q);
 }
 
-IPv4Address::IPv4Address(SocketAddress src)
+IPv4Address::IPv4Address(SocketAddress src) noexcept
 	:address(*CastToIPv4(src.GetAddress())) {}
 
 #if !defined(_WIN32) && !defined(__BIONIC__)
@@ -71,7 +71,7 @@ IPv4Address::IPv4Address(SocketAddress src)
  */
 gcc_pure
 static const struct sockaddr_in *
-GetIpAddressInner(const ifaddrs *ifaddr, const char *device)
+GetIpAddressInner(const ifaddrs *ifaddr, const char *device) noexcept
 {
 	/* iterate over all interfaces */
 	for (const ifaddrs *ifa = ifaddr; ifa != nullptr; ifa = ifa->ifa_next)
@@ -84,7 +84,7 @@ GetIpAddressInner(const ifaddrs *ifaddr, const char *device)
 }
 
 IPv4Address
-IPv4Address::GetDeviceAddress(const char *device)
+IPv4Address::GetDeviceAddress(const char *device) noexcept
 {
 	/* intialize result to undefined StaticSocketAddress */
 	IPv4Address address;
@@ -107,7 +107,7 @@ IPv4Address::GetDeviceAddress(const char *device)
 }
 
 const char *
-IPv4Address::ToString(char *buffer, size_t buffer_size) const
+IPv4Address::ToString(char *buffer, size_t buffer_size) const noexcept
 {
 	if (!IsDefined())
 		return nullptr;
