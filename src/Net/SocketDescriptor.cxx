@@ -115,6 +115,17 @@ SocketDescriptor::Create(int domain, int type, int protocol) noexcept
 	return true;
 }
 
+#ifdef _WIN32
+
+bool
+SocketDescriptor::SetNonBlocking() noexcept
+{
+	u_long val = 1;
+	return ioctlsocket(fd, FIONBIO, &val) == 0;
+}
+
+#endif
+
 bool
 SocketDescriptor::Bind(SocketAddress address) noexcept
 {
