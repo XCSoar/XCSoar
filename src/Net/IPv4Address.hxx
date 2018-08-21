@@ -55,6 +55,16 @@ class IPv4Address {
 		return {{{ a, b, c, d }}};
 	}
 
+	/**
+	 * @param x the 32 bit IP address in network byte order
+	 */
+	static constexpr struct in_addr ConstructInAddrBE(uint32_t x) noexcept {
+		return (struct in_addr){{.S_addr=x}};
+	}
+
+	/**
+	 * @param x the 32 bit IP address in host byte order
+	 */
 	static constexpr struct in_addr ConstructInAddr(uint32_t x) noexcept {
 		return ConstructInAddr(x >> 24, x >> 16, x >> 8, x);
 	}
@@ -69,8 +79,18 @@ class IPv4Address {
 		return ToBE32((a << 24) | (b << 16) | (c << 8) | d);
 	}
 
+	/**
+	 * @param x the 32 bit IP address in network byte order
+	 */
+	static constexpr struct in_addr ConstructInAddrBE(uint32_t x) noexcept {
+		return { x };
+	}
+
+	/**
+	 * @param x the 32 bit IP address in host byte order
+	 */
 	static constexpr struct in_addr ConstructInAddr(uint32_t x) noexcept {
-		return { ToBE32(x) };
+		return ConstructInAddrBE(ToBE32(x));
 	}
 
 	static constexpr struct in_addr ConstructInAddr(uint8_t a, uint8_t b,
@@ -79,10 +99,13 @@ class IPv4Address {
 	}
 #endif
 
+	/**
+	 * @param port the port number in host byte order
+	 */
 	static constexpr struct sockaddr_in Construct(struct in_addr address,
 						      uint16_t port) noexcept {
 		return {
-#if defined(__APPLE__)
+#ifdef HAVE_STRUCT_SOCKADDR_IN_SIN_LEN
 			sizeof(struct sockaddr_in),
 #endif
 			AF_INET,
@@ -92,6 +115,10 @@ class IPv4Address {
 		};
 	}
 
+	/**
+	 * @param x the 32 bit IP address in host byte order
+	 * @param port the port number in host byte order
+	 */
 	static constexpr struct sockaddr_in Construct(uint32_t address,
 						      uint16_t port) noexcept {
 		return Construct(ConstructInAddr(address), port);
@@ -100,23 +127,60 @@ class IPv4Address {
 public:
 	IPv4Address() = default;
 
-	constexpr IPv4Address(struct in_addr _address, uint16_t port) noexcept
-		:address(Construct(_address, port)) {}
+	constexpr IPv4Address(const struct sockaddr_in &_address) noexcept
+		:address(_address) {}
 
+	/**
+	 * @param port the port number in host byte order
+	 */
+	constexpr IPv4Address(struct in_addr _address, uint16_t port) noexcept
+		:IPv4Address(Construct(_address, port)) {}
+
+	/**
+	 * @param port the port number in host byte order
+	 */
 	constexpr IPv4Address(uint8_t a, uint8_t b, uint8_t c,
 			      uint8_t d, uint16_t port) noexcept
 		:IPv4Address(ConstructInAddr(a, b, c, d), port) {}
 
+	/**
+	 * @param port the port number in host byte order
+	 */
 	constexpr explicit IPv4Address(uint16_t port) noexcept
 		:IPv4Address(ConstructInAddr(INADDR_ANY), port) {}
 
 	/**
-	 * Convert a #SocketAddress to a #IPv4Address.  Its address family must be AF_INET.
+	 * Construct with data copied from a #SocketAddress.  Its
+	 * address family must be AF_INET.
 	 */
 	explicit IPv4Address(SocketAddress src) noexcept;
 
+	static constexpr struct in_addr Loopback() noexcept {
+		return ConstructInAddr(INADDR_LOOPBACK);
+	}
+
+	/**
+	 * Generate a (net-)mask with the specified prefix length.
+	 */
+	static constexpr IPv4Address MaskFromPrefix(unsigned prefix_length) noexcept {
+		return Construct(prefix_length == 0
+				 ? 0
+				 : (~uint32_t(0)) << (32 - prefix_length),
+				 ~uint16_t(0));
+	}
+
+	/**
+	 * Return a downcasted reference to the address.  This call is
+	 * only legal after verifying SocketAddress::GetFamily().
+	 */
+	static constexpr const IPv4Address &Cast(const SocketAddress &src) noexcept {
+		/* this reinterpret_cast works because this class is
+		   just a wrapper for struct sockaddr_in6 */
+		return *(const IPv4Address *)(const void *)src.GetAddress();
+	}
+
 	constexpr operator SocketAddress() const noexcept {
-		return SocketAddress(reinterpret_cast<const struct sockaddr *>(&address),
+		return SocketAddress((const struct sockaddr *)&address,
 				     sizeof(address));
 	}
 
@@ -128,16 +192,45 @@ public:
 		return address.sin_family != AF_UNSPEC;
 	}
 
+	/**
+	 * @return the port number in host byte order
+	 */
 	constexpr uint16_t GetPort() const noexcept {
 		return FromBE16(address.sin_port);
 	}
 
+	/**
+	 * @param port the port number in host byte order
+	 */
 	void SetPort(uint16_t port) noexcept {
 		address.sin_port = ToBE16(port);
 	}
 
 	constexpr const struct in_addr &GetAddress() const noexcept {
 		return address.sin_addr;
+	}
+
+	/**
+	 * @return the 32 bit IP address in network byte order
+	 */
+	constexpr uint32_t GetNumericAddressBE() const noexcept {
+		return GetAddress().s_addr;
+	}
+
+	/**
+	 * @return the 32 bit IP address in host byte order
+	 */
+	constexpr uint32_t GetNumericAddress() const noexcept {
+		return FromBE32(GetNumericAddressBE());
+	}
+
+	/**
+	 * Bit-wise AND of two addresses.  This is useful for netmask
+	 * calculations.
+	 */
+	constexpr IPv4Address operator&(const IPv4Address &other) const noexcept {
+		return IPv4Address(ConstructInAddrBE(GetNumericAddressBE() & other.GetNumericAddressBE()),
+				   GetPort() & other.GetPort());
 	}
 
 #if !defined(_WIN32) && !defined(__BIONIC__)
