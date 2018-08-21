@@ -42,14 +42,14 @@ class StaticSocketAddress;
  */
 class SocketDescriptor : protected FileDescriptor {
 protected:
-	explicit constexpr SocketDescriptor(int _fd) noexcept
-		:FileDescriptor(_fd) {}
-
 	explicit constexpr SocketDescriptor(FileDescriptor _fd) noexcept
 		:FileDescriptor(_fd) {}
 
 public:
 	SocketDescriptor() = default;
+
+	explicit constexpr SocketDescriptor(int _fd) noexcept
+		:FileDescriptor(_fd) {}
 
 	constexpr bool operator==(SocketDescriptor other) const noexcept {
 		return fd == other.fd;
