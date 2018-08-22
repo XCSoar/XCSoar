@@ -1,5 +1,8 @@
 /*
- * Copyright (C) 2015-2016 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2007-2017 Content Management AG
+ * All rights reserved.
+ *
+ * author: Max Kellermann <mk@cm4all.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -32,7 +35,7 @@
 #include <stdio.h>
 
 void
-PrintException(const std::exception &e)
+PrintException(const std::exception &e) noexcept
 {
 	fprintf(stderr, "%s\n", e.what());
 	try {
@@ -45,7 +48,7 @@ PrintException(const std::exception &e)
 }
 
 void
-PrintException(const std::exception_ptr &ep)
+PrintException(const std::exception_ptr &ep) noexcept
 {
 	try {
 		std::rethrow_exception(ep);
