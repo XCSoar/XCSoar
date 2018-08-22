@@ -1,9 +1,5 @@
 LINK = $(CXX)
 
-ifeq ($(ICF),y)
-LINK += -fuse-ld=gold -Wl,--icf=all
-endif
-
 ld-flags = $(ALL_LDFLAGS) $(TARGET_ARCH)
 ld-libs = $(ALL_LDLIBS)
 

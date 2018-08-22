@@ -15,6 +15,10 @@ C_FEATURES += -fPIC
 LDFLAGS += -fPIC -shared
 endif
 
+ifeq ($(ICF),y)
+LDFLAGS += -fuse-ld=gold -Wl,--icf=all
+endif
+
 ifneq ($(USE_LD),)
 LDFLAGS += -fuse-ld=$(USE_LD)
 endif
