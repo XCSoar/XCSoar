@@ -16,7 +16,8 @@ LDFLAGS += -fPIC -shared
 endif
 
 ifeq ($(ICF),y)
-LDFLAGS += -fuse-ld=gold -Wl,--icf=all
+LDFLAGS += -Wl,--icf=all
+USE_LD = gold
 endif
 
 ifneq ($(USE_LD),)
