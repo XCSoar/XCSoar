@@ -1,6 +1,5 @@
 ANT = ant
 JAVAC = javac
-JAVAH = javah
 JARSIGNER = jarsigner
 KEYTOOL = keytool
 

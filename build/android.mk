@@ -53,7 +53,8 @@ NATIVE_CLASSES := \
 	NativeNunchuckListener \
 	NativeVoltageListener
 NATIVE_SOURCES = $(patsubst %,android/src/%.java,$(NATIVE_CLASSES))
-NATIVE_PREFIX = $(TARGET_OUTPUT_DIR)/include/$(subst .,_,$(JAVA_PACKAGE))_
+NATIVE_INCLUDE = $(TARGET_OUTPUT_DIR)/include
+NATIVE_PREFIX = $(NATIVE_INCLUDE)/$(subst .,_,$(JAVA_PACKAGE))_
 NATIVE_HEADERS = $(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES))
 
 JAVA_SOURCES := \
@@ -195,6 +196,7 @@ $(ANDROID_BUILD)/classes.dex: $(JAVA_SOURCES) $(ANDROID_BUILD)/gen/org/xcsoar/R.
 	$(Q)$(JAVAC) -source 1.6 -target 1.6 -Xlint:-options \
 		-cp $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(JAVA_CLASSFILES_DIR) \
 		-d $(JAVA_CLASSFILES_DIR) $(ANDROID_BUILD)/gen/org/xcsoar/R.java \
+		-h $(NATIVE_INCLUDE) \
 		$(JAVA_SOURCES)
 	@$(NQ)echo "  DX      $@"
 	$(Q)$(DX) --dex --output $@ $(JAVA_CLASSFILES_DIR)
@@ -259,10 +261,7 @@ $(ANDROID_LIB_BUILD): $(ANDROID_ABI_DIR)/lib%.so: $(ABI_BIN_DIR)/lib%.so | $(AND
 endif # !FAT_BINARY
 
 
-$(NATIVE_HEADERS): $(NATIVE_PREFIX)%.h: $(ANDROID_BUILD)/classes.dex
-	@$(NQ)echo "  JAVAH   $@"
-	$(Q)$(JAVAH) -classpath $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(JAVA_CLASSFILES_DIR) -d $(@D) $(subst _,.,$(patsubst $(patsubst ./%,%,$(TARGET_OUTPUT_DIR))/include/%.h,%,$@))
-	@touch $@
+$(NATIVE_HEADERS): $(ANDROID_BUILD)/classes.dex
 
 .DELETE_ON_ERROR: $(ANDROID_BUILD)/unsigned.apk
 $(ANDROID_BUILD)/unsigned.apk: $(ANDROID_BUILD)/classes.dex $(ANDROID_BUILD)/resources.apk $(ANDROID_LIB_BUILD)
