@@ -648,7 +648,6 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/Look/FontDescription.cpp \
 	$(SRC)/Look/GlobalFonts.cpp \
-	$(SRC)/Look/AutoFont.cpp \
 	$(SRC)/Look/DefaultFonts.cpp \
 	\
 	$(SRC)/Polar/PolarGlue.cpp \
