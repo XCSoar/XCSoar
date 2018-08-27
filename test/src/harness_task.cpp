@@ -42,6 +42,7 @@ class SectorZone;
 class LineSectorZone;
 class KeyholeZone;
 class AnnularSectorZone;
+class VariableKeyholeZone;
 
 class ObservationZoneVisitorPrint
 {
@@ -65,6 +66,11 @@ public:
   void Visit(const SymmetricSectorZone &oz) {
     printf("# symmetric quadrant\n");
   }
+
+  void Visit(const VariableKeyholeZone &oz)
+    {
+    printf("# Variable keyhole\n");
+    }
 
   void Visit(const ObservationZonePoint &oz) {
     switch (oz.GetShape()) {
@@ -96,6 +102,10 @@ public:
 
     case ObservationZone::Shape::SYMMETRIC_QUADRANT:
       Visit((const SymmetricSectorZone &)oz);
+      break;
+
+    case ObservationZone::Shape::VARIABLE_KEYHOLE:
+      Visit((const VariableKeyholeZone &)oz);
       break;
     }
   }

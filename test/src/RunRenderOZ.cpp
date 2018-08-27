@@ -43,11 +43,12 @@ Copyright_License {
 #include "Engine/Task/ObservationZones/KeyholeZone.hpp"
 #include "Engine/Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Engine/Task/ObservationZones/Boundary.hpp"
+#include "Engine/Task/ObservationZones/VariableKeyholeZone.hpp"
 #include "Projection/Projection.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
 
 enum {
-  NUM_OZ_TYPES = 12,
+  NUM_OZ_TYPES = 13,
 };
 
 static const TCHAR *const oz_type_names[NUM_OZ_TYPES] = {
@@ -63,6 +64,7 @@ static const TCHAR *const oz_type_names[NUM_OZ_TYPES] = {
   _T("Annular sector"),
   _T("Symmetric quadrant"),
   _T("Custom Keyhole"),
+  _T("Variable Keyhole"),
 };
 
 static GeoPoint location(Angle::Degrees(7.7061111111111114),
@@ -152,6 +154,13 @@ public:
 
     case ObservationZone::Shape::SYMMETRIC_QUADRANT:
       oz = new SymmetricSectorZone(location);
+      break;
+    case ObservationZone::Shape::VARIABLE_KEYHOLE:
+      oz = VariableKeyholeZone::New(location,
+                                    radius,
+                                    radius / 10,
+                                    Angle::Degrees(350),
+                                    Angle::Degrees(10));
       break;
     }
 
