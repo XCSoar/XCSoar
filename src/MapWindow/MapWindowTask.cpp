@@ -60,13 +60,19 @@ MapWindow::DrawTask(Canvas &canvas)
     TaskPointRenderer::TargetVisibility target_visibility =
         IsNearSelf() ? TaskPointRenderer::ACTIVE : TaskPointRenderer::ALL;
 
+    /* the FlatProjection parameter is used by class TaskPointRenderer
+       only when drawing an OrderedTask, so it's okay to pass an
+       uninitialized dummy reference when this is not an
+       OrderedTask */
+    const FlatProjection dummy_flat_projection{};
+    const auto &flat_projection = task->GetType() == TaskType::ORDERED
+      ? ((const OrderedTask *)task)->GetTaskProjection()
+      : dummy_flat_projection;
+
     OZRenderer ozv(look.task, airspace_renderer.GetLook(),
                    GetMapSettings().airspace);
     TaskPointRenderer tpv(canvas, render_projection, look.task,
-                          /* we're accessing the OrderedTask here,
-                             which may be invalid at this point, but it
-                             will be used only if active, so it's ok */
-                          task_manager->GetOrderedTask().GetTaskProjection(),
+                          flat_projection,
                           ozv, draw_bearing, target_visibility,
                           Basic().location_available
                           ? Basic().location : GeoPoint::Invalid());
