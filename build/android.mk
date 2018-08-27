@@ -174,9 +174,9 @@ else
 MANIFEST = android/AndroidManifest.xml
 endif
 
-$(ANDROID_XML_RES_COPIES): $(ANDROID_XML_RES)
+$(ANDROID_XML_RES_COPIES): $(ANDROID_BUILD)/%: android/%
 	$(Q)-$(MKDIR) -p $(dir $@)
-	$(Q)cp $(patsubst $(ANDROID_BUILD)/%,android/%,$@) $@
+	$(Q)cp $< $@
 
 $(ANDROID_BUILD)/resources.apk: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_RES_COPIES) | $(ANDROID_BUILD)/gen/dirstamp
 	@$(NQ)echo "  AAPT"
