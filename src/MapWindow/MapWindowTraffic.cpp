@@ -132,19 +132,17 @@ MapWindow::DrawGLinkTraffic(Canvas &canvas,
   if (traffic.IsEmpty())
     return;
 
-  const MoreData basic = Basic();
+  const MoreData &basic = Basic();
 
   const WindowProjection &projection = render_projection;
 
   canvas.Select(*traffic_look.font);
 
   // Circle through the GliderLink targets
-  for (auto it = traffic.list.begin(), end = traffic.list.end();
-      it != end; ++it) {
-    const GliderLinkTraffic &traffic = *it;
+  for (const auto &traf : traffic.list) {
 
     // Save the location of the target
-    GeoPoint target_loc = traffic.location;
+    GeoPoint target_loc = traf.location;
 
     // Points for the screen coordinates for the icon, name and average climb
     RasterPoint sc, sc_name, sc_av, sc_alt;
@@ -173,34 +171,34 @@ MapWindow::DrawGLinkTraffic(Canvas &canvas,
     mode.align = TextInBoxMode::Alignment::RIGHT;
 
     // If callsign/name available draw it to the canvas
-    if (traffic.HasName() && !StringIsEmpty(traffic.name))
-      TextInBox(canvas, traffic.name, sc_name.x, sc_name.y,
+    if (traf.HasName() && !StringIsEmpty(traf.name))
+      TextInBox(canvas, traf.name, sc_name.x, sc_name.y,
                 mode, GetClientRect());
 
-    if (traffic.climb_rate_received) {
+    if (traf.climb_rate_received) {
 
       // If average climb data available draw it to the canvas
       TCHAR label_avg[100];
-      FormatUserVerticalSpeed(traffic.climb_rate,
+      FormatUserVerticalSpeed(traf.climb_rate,
                                      label_avg, false);
       mode.align = TextInBoxMode::Alignment::LEFT;
       TextInBox(canvas, label_avg, sc_av.x, sc_av.y, mode, GetClientRect());
     }
 
     // use GPS altitude to be consistent with GliderLink
-    if(basic.gps_altitude_available && traffic.altitude_available
-        && fabs(fixed(traffic.altitude) - basic.gps_altitude) >= fixed(100)) {
+    if(basic.gps_altitude_available && traf.altitude_available
+        && fabs(fixed(traf.altitude) - basic.gps_altitude) >= fixed(100)) {
       // If average climb data available draw it to the canvas
       TCHAR label_alt[100];
-      fixed alt = fixed((fixed(traffic.altitude) - basic.gps_altitude) / 100);
+      fixed alt = fixed((fixed(traf.altitude) - basic.gps_altitude) / 100);
       FormatRelativeUserAltitude(alt, label_alt, false);
 
       mode.align = TextInBoxMode::Alignment::RIGHT;
       TextInBox(canvas, label_alt, sc_alt.x, sc_alt.y, mode, GetClientRect());
     }
 
-    TrafficRenderer::Draw(canvas, traffic_look, traffic,
-                          traffic.track - projection.GetScreenAngle(), sc);
+    TrafficRenderer::Draw(canvas, traffic_look, traf,
+                          traf.track - projection.GetScreenAngle(), sc);
   }
 }
 

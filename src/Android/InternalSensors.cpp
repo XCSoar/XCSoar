@@ -289,20 +289,13 @@ Java_org_xcsoar_NonGPSSensors_setGliderLinkInfo(
   basic.UpdateClock();
   basic.alive.Update(basic.clock);
 
-  const char *nativeString = env->GetStringUTFChars(callsign, JNI_FALSE);
-
-  StaticString<10> name;
-  name.SetASCII(nativeString);
-
-  env->ReleaseStringUTFChars(callsign, nativeString);
-
-  GliderLinkTrafficList *trafficList = &(basic.glink_data.traffic);
+  GliderLinkTrafficList &traffic_list = basic.glink_data.traffic;
 
   GliderLinkId id = GliderLinkId((uint32_t)gid);
 
-  GliderLinkTraffic *traffic = trafficList->FindTraffic(id);
+  GliderLinkTraffic *traffic = traffic_list.FindTraffic(id);
   if (traffic == nullptr) {
-    traffic = trafficList->AllocateTraffic();
+    traffic = traffic_list.AllocateTraffic();
     if (traffic == nullptr)
       // no more slots available
       return;
@@ -310,10 +303,12 @@ Java_org_xcsoar_NonGPSSensors_setGliderLinkInfo(
     traffic->Clear();
     traffic->id = id;
 
-    trafficList->new_traffic.Update(basic.clock);
+    traffic_list.new_traffic.Update(basic.clock);
   }
 
-  traffic->name = name;
+  const char *nativeString = env->GetStringUTFChars(callsign, JNI_FALSE);
+  traffic->name.SetASCII(nativeString);
+  env->ReleaseStringUTFChars(callsign, nativeString);
 
   traffic->location_available = true;
   traffic->location = GeoPoint(Angle::Degrees(longitude),
