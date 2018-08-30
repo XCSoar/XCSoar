@@ -3,6 +3,8 @@ Version 6.8.11 - not yet releases
   - fix yet another crash bug (libJasper)
 * Android
   - fix crash on Android 8 due to overzealous seccomp filter
+* devices
+  - IMI: raise max payload size to 2kB due to device firmware change
 
 Version 6.8.10 - 2017/10/07
 * terrain
