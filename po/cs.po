@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2018-09-02 18:14+0000\n"
+"PO-Revision-Date: 2018-09-04 12:14+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -3650,7 +3650,7 @@ msgstr ""
 #: src/Weather/Rasp/RaspStore.cpp:68
 #, no-c-format
 msgid "dwcrit"
-msgstr ""
+msgstr "dwcrit"
 
 #: src/Weather/Rasp/RaspStore.cpp:69
 #, no-c-format
@@ -3716,7 +3716,7 @@ msgstr ""
 #: src/Weather/Rasp/RaspStore.cpp:83
 #, no-c-format
 msgid "hwcrit"
-msgstr ""
+msgstr "hwcrit"
 
 #: src/Weather/Rasp/RaspStore.cpp:84
 #, no-c-format
@@ -3743,7 +3743,7 @@ msgstr ""
 #: src/Weather/Rasp/RaspStore.cpp:88
 #, no-c-format
 msgid "wblmaxmin"
-msgstr ""
+msgstr "wblmaxmin"
 
 #: src/Weather/Rasp/RaspStore.cpp:89
 #, no-c-format
@@ -3764,7 +3764,7 @@ msgstr ""
 #: src/Weather/Rasp/RaspStore.cpp:93
 #, no-c-format
 msgid "blcwbase"
-msgstr ""
+msgstr "blcwbase"
 
 #: src/Topography/TopographyGlue.cpp:59
 msgid "Loading Topography File..."
