@@ -41,7 +41,14 @@
 static inline bool
 StringIsEmpty(const char *string) noexcept
 {
-	return *string == 0;
+  /*
+   * It is possible that string is null. If so it cannot be anything else
+   * but empty.
+   */
+  if (string == nullptr)
+    return true;
+  else
+	  return *string == 0;
 }
 
 gcc_pure gcc_nonnull_all
