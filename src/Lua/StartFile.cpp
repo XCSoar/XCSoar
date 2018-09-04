@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "StartFile.hpp"
-#include "RunFile.hpp"
+#include "RunFile.hxx"
 #include "Full.hpp"
 #include "Persistent.hpp"
 #include "Background.hpp"

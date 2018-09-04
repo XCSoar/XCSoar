@@ -25,7 +25,7 @@ Copyright_License {
 #include "Assert.hxx"
 #include "Value.hxx"
 #include "Util.hxx"
-#include "Error.hpp"
+#include "Error.hxx"
 #include "Catch.hpp"
 #include "Class.hxx"
 #include "Persistent.hpp"

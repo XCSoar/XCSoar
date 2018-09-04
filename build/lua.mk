@@ -11,12 +11,12 @@ endif
 
 LUA_SOURCES = \
 	$(SRC)/Lua/Ptr.cpp \
-	$(SRC)/Lua/Error.cpp \
+	$(SRC)/Lua/Error.cxx \
 	$(SRC)/Lua/Catch.cpp \
 	$(SRC)/Lua/Persistent.cpp \
 	$(SRC)/Lua/Background.cpp \
 	$(SRC)/Lua/Associate.cpp \
-	$(SRC)/Lua/RunFile.cpp \
+	$(SRC)/Lua/RunFile.cxx \
 	$(SRC)/Lua/StartFile.cpp \
 	$(SRC)/Lua/Log.cpp \
 	$(SRC)/Lua/Timer.cpp \

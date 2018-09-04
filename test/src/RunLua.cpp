@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Lua/Basic.hpp"
 #include "Lua/Log.hpp"
-#include "Lua/RunFile.hpp"
+#include "Lua/RunFile.hxx"
 #include "Lua/Ptr.hpp"
 #include "OS/Args.hpp"
 #include "Util/PrintException.hxx"

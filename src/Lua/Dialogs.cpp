@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Dialogs.hpp"
 #include "Catch.hpp"
-#include "Error.hpp"
+#include "Error.hxx"
 #include "Util/ConvertString.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/Error.hpp"

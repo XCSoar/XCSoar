@@ -24,7 +24,7 @@ Copyright_License {
 #include "InputEvent.hpp"
 #include "Value.hxx"
 #include "Util.hxx"
-#include "Error.hpp"
+#include "Error.hxx"
 #include "Catch.hpp"
 #include "Associate.hpp"
 #include "Persistent.hpp"
