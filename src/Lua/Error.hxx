@@ -48,6 +48,12 @@ public:
 Error
 PopError(lua_State *L);
 
+/**
+ * Pushes a representation of the given C++ exception on the stack.
+ */
+void
+Push(lua_State *L, std::exception_ptr e) noexcept;
+
 }
 
 #endif
