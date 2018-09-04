@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2017-11-06 21:46+0000\n"
-"Last-Translator: LL <lu.lecocq@free.fr>\n"
-"Language-Team: French "
-"<https://hosted.weblate.org/projects/xcsoar/translations/fr/>\n"
+"PO-Revision-Date: 2018-09-05 14:16+0000\n"
+"Last-Translator: SCHERR Nicolas <scherrnicolas@gmail.com>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
+"translations/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.18-dev\n"
+"X-Generator: Weblate 3.2-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -3019,7 +3019,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1039
 #, fuzzy, no-c-format
 msgid "Next waypoint arrival time (ground speed)"
-msgstr "Durée restante jusqu'au suivant (vitesse sol)"
+msgstr "Heure d'arrivée au prochain point (vitesse sol)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1040
 #, fuzzy, no-c-format
@@ -3055,14 +3055,14 @@ msgstr ""
 "départ du circuit."
 
 #: src/InfoBoxes/Content/Factory.cpp:1056
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Percentage climb chart"
-msgstr "Pourcentage de montée"
+msgstr "Graphique du pourcentage de montée"
 
 #: src/InfoBoxes/Content/Factory.cpp:1057
 #, fuzzy, no-c-format
 msgid "Climb %"
-msgstr "Vario"
+msgstr "% Montée"
 
 #: src/InfoBoxes/Content/Factory.cpp:1058
 #, no-c-format
@@ -3072,9 +3072,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1064
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Number of used satellites"
-msgstr ""
+msgstr "Nombre de satellites utilisés"
 
 #: src/InfoBoxes/Content/Factory.cpp:1065
 #, fuzzy, no-c-format
@@ -3182,7 +3182,7 @@ msgstr "Pos 3D"
 #: src/InfoBoxes/Content/Other.cpp:195
 #, fuzzy
 msgid "No GPS"
-msgstr "H GPS"
+msgstr "Pas de GPS"
 
 #: src/InfoBoxes/Content/Speed.cpp:120
 msgid "BLOCK"
@@ -5235,7 +5235,7 @@ msgstr "Tracking"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:154
 #, fuzzy, no-c-format
 msgid "Audio"
-msgstr "Vario sonore"
+msgstr "Son"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:161
 #, no-c-format
@@ -5433,7 +5433,7 @@ msgstr "Polaire"
 #: src/Dialogs/dlgAnalysis.cpp:528
 #, fuzzy
 msgid "MacCready Speeds"
-msgstr "MacCready "
+msgstr "Vitesses MacCready"
 
 #: src/Dialogs/dlgAnalysis.cpp:537
 msgid "Temperature Trace"
@@ -7401,7 +7401,7 @@ msgstr "Grise le terrain hors d'atteinte en finesse"
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:166
 #, fuzzy, no-c-format
 msgid "Working line"
-msgstr "Bande de Travail"
+msgstr "Ligne de Travail"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:167
 #, fuzzy, no-c-format
@@ -8355,14 +8355,14 @@ msgid "Units used for vertical speeds (variometer)."
 msgstr "Unité de vitesse verticale (e.g. variomètre)."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:180
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "feet"
-msgstr ""
+msgstr "Pied"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:181
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "meters"
-msgstr "mètre"
+msgstr "mètres"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:184
 msgid "Units used for altitude and heights."
@@ -9347,8 +9347,9 @@ msgid "Add this turn point?"
 msgstr "Ajouter ce point de virage ?"
 
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:225
+#, fuzzy
 msgid "Use"
-msgstr ""
+msgstr "Utiliser"
 
 #: src/Renderer/NOAAListRenderer.cpp:45
 msgid "No METAR available"
