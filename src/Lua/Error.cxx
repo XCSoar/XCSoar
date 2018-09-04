@@ -33,10 +33,14 @@ extern "C" {
 #include <lua.h>
 }
 
-Lua::Error
-Lua::PopError(lua_State *L)
+namespace Lua {
+
+Error
+PopError(lua_State *L)
 {
   Error e(lua_tostring(L, -1));
   lua_pop(L, 1);
   return e;
 }
+
+} // namespace Lua
