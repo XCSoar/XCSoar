@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2015 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2010-2018 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,7 +31,7 @@
 #include "Object.hxx"
 #include "String.hxx"
 
-Java::Exception::Exception(JNIEnv *env, jthrowable e)
+Java::Exception::Exception(JNIEnv *env, jthrowable e) noexcept
 	:std::runtime_error(Java::String(env, Object::toString(env, e)).ToString())
 {
 }
