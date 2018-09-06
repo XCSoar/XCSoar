@@ -33,7 +33,7 @@
 jmethodID Java::File::getAbsolutePath_method;
 
 void
-Java::File::Initialise(JNIEnv *env)
+Java::File::Initialise(JNIEnv *env) noexcept
 {
 	Class cls(env, "java/io/File");
 
