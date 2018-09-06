@@ -27,7 +27,7 @@ Copyright_License {
 #include "Compiler.h"
 
 #ifndef NDEBUG
-#include <boost/intrusive/list.hpp>
+#include <boost/intrusive/list_hook.hpp>
 #endif
 
 #ifdef HAVE_POSIX

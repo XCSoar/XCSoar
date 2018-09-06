@@ -29,6 +29,8 @@ Copyright_License {
 #include "Java/Global.hxx"
 #endif
 
+#include <boost/intrusive/list.hpp>
+
 #include <assert.h>
 
 #ifdef HAVE_POSIX
