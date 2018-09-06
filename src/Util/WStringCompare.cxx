@@ -29,8 +29,6 @@
 
 #include "WStringCompare.hxx"
 
-#include <assert.h>
-
 bool
 StringEndsWith(const wchar_t *haystack, const wchar_t *needle) noexcept
 {
