@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2017 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2010-2018 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -118,6 +118,8 @@ UnsafeCopyStringP(wchar_t *dest, const wchar_t *src) noexcept
 	/* emulate wcpcpy() */
 	UnsafeCopyString(dest, src);
 	return dest + StringLength(dest);
+#elif defined(__sun) && defined (__SVR4)
+	return std::wcpcpy(dest, src);
 #else
 	return wcpcpy(dest, src);
 #endif
@@ -184,7 +186,11 @@ gcc_malloc gcc_returns_nonnull gcc_nonnull_all
 static inline wchar_t *
 DuplicateString(const wchar_t *p) noexcept
 {
+#if defined(__sun) && defined (__SVR4)
+	return std::wcsdup(p);
+#else
 	return wcsdup(p);
+#endif
 }
 
 #endif
