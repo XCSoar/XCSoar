@@ -33,7 +33,7 @@ Copyright_License {
 #ifdef USE_WINUSER
 #include <windows.h>
 #else
-#include <boost/intrusive/list.hpp>
+#include <boost/intrusive/list_hook.hpp>
 #endif
 
 #ifdef ANDROID

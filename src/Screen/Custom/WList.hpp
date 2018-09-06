@@ -27,6 +27,8 @@ Copyright_License {
 #include "Screen/Window.hpp"
 #include "Compiler.h"
 
+#include <boost/intrusive/list.hpp>
+
 #include <assert.h>
 
 struct PixelPoint;
