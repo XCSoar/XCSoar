@@ -104,7 +104,7 @@ UnsafeCopyString(wchar_t *dest, const wchar_t *src) noexcept
 	wcscpy(dest, src);
 }
 
-gcc_returns_nonnull  gcc_nonnull_all
+gcc_returns_nonnull gcc_nonnull_all
 static inline wchar_t *
 UnsafeCopyStringP(wchar_t *dest, const wchar_t *src) noexcept
 {
@@ -153,7 +153,11 @@ gcc_pure gcc_nonnull_all
 static inline bool
 StringIsEqualIgnoreCase(const wchar_t *a, const wchar_t *b) noexcept
 {
+#ifdef _WIN32
 	return _wcsicmp(a, b) == 0;
+#else
+	return wcscasecmp(a, b) == 0;
+#endif
 }
 
 gcc_pure gcc_nonnull_all
@@ -161,7 +165,11 @@ static inline bool
 StringIsEqualIgnoreCase(const wchar_t *a, const wchar_t *b,
 			size_t size) noexcept
 {
+#ifdef _WIN32
 	return _wcsnicmp(a, b, size) == 0;
+#else
+	return wcsncasecmp(a, b, size) == 0;
+#endif
 }
 
 gcc_pure gcc_nonnull_all
