@@ -51,19 +51,21 @@ namespace Java {
 			:LocalRef<jstring>(_env, _env->NewStringUTF(_value)) {}
 
 		/**
-		 * Copy the value to the specified buffer.  Truncates the value if
-		 * it does not fit into the buffer.
+		 * Copy the value to the specified buffer.  Truncates
+		 * the value if it does not fit into the buffer.
 		 *
-		 * @return a pointer to the terminating null byte, nullptr on error
+		 * @return a pointer to the terminating null byte,
+		 * nullptr on error
 		 */
 		static char *CopyTo(JNIEnv *env, jstring value,
 				    char *buffer, size_t max_size) noexcept;
 
 		/**
-		 * Copy the value to the specified buffer.  Truncates the value if
-		 * it does not fit into the buffer.
+		 * Copy the value to the specified buffer.  Truncates
+		 * the value if it does not fit into the buffer.
 		 *
-		 * @return a pointer to the terminating null byte, nullptr on error
+		 * @return a pointer to the terminating null byte,
+		 * nullptr on error
 		 */
 		char *CopyTo(char *buffer, size_t max_size) noexcept {
 			return CopyTo(GetEnv(), Get(), buffer, max_size);
