@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2017 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2013-2018 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -36,6 +36,7 @@
 
 #include <wchar.h>
 
+gcc_pure gcc_nonnull_all
 static inline bool
 StringIsEmpty(const wchar_t *string) noexcept
 {
@@ -49,11 +50,11 @@ StringStartsWith(const wchar_t *haystack, WStringView needle) noexcept
 	return StringIsEqual(haystack, needle.data, needle.size);
 }
 
-gcc_pure
+gcc_pure gcc_nonnull_all
 bool
 StringEndsWith(const wchar_t *haystack, const wchar_t *needle) noexcept;
 
-gcc_pure
+gcc_pure gcc_nonnull_all
 bool
 StringEndsWithIgnoreCase(const wchar_t *haystack,
 			 const wchar_t *needle) noexcept;
@@ -72,6 +73,7 @@ StringAfterPrefix(const wchar_t *haystack, WStringView needle) noexcept
 		: nullptr;
 }
 
+gcc_pure gcc_nonnull_all
 inline wchar_t *
 StringAfterPrefix(wchar_t *haystack, WStringView needle) noexcept
 {
@@ -79,7 +81,7 @@ StringAfterPrefix(wchar_t *haystack, WStringView needle) noexcept
 						       needle));
 }
 
-gcc_pure
+gcc_pure gcc_nonnull_all
 static inline bool
 StringStartsWithIgnoreCase(const wchar_t *haystack,
 			   WStringView needle) noexcept
@@ -106,7 +108,7 @@ StringAfterPrefixCI(const wchar_t *string, WStringView needle) noexcept
  * Check if the given string ends with the specified suffix.  If yes,
  * returns the position of the suffix, and nullptr otherwise.
  */
-gcc_pure
+gcc_pure gcc_nonnull_all
 const wchar_t *
 FindStringSuffix(const wchar_t *p, const wchar_t *suffix) noexcept;
 
