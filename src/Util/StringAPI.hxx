@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2017 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2010-2018 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -141,7 +141,7 @@ gcc_pure gcc_nonnull_all
 static inline bool
 StringIsEqual(const char *a, const char *b) noexcept
 {
-	return strcmp(a, b) == 0;
+	return StringCompare(a, b) == 0;
 }
 
 /**
