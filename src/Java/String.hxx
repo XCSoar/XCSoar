@@ -67,8 +67,9 @@ namespace Java {
 		 * @return a pointer to the terminating null byte,
 		 * nullptr on error
 		 */
-		char *CopyTo(char *buffer, size_t max_size) noexcept {
-			return CopyTo(GetEnv(), Get(), buffer, max_size);
+		char *CopyTo(JNIEnv *env,
+			     char *buffer, size_t max_size) noexcept {
+			return CopyTo(env, Get(), buffer, max_size);
 		}
 
 		static std::string ToString(JNIEnv *env, jstring s) noexcept;
