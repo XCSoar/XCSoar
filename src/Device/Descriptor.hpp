@@ -37,6 +37,7 @@ Copyright_License {
 #include "Event/Notify.hpp"
 #include "Thread/Mutex.hpp"
 #include "Thread/Debug.hpp"
+#include "Android/GliderLink.hpp"
 
 #include <assert.h>
 #include <tchar.h>
@@ -153,6 +154,7 @@ class DeviceDescriptor final : private Notify, private PortLineSplitter {
   I2CbaroDevice *i2cbaro[3]; // static, pitot, tek; in any order
   NunchuckDevice *nunchuck;
   VoltageDevice *voltage;
+  GliderLink *glider_link;
 #endif
 
   /**
@@ -315,6 +317,8 @@ private:
   bool OpenNunchuck();
 
   bool OpenVoltage();
+
+  bool OpenGliderLink();
 public:
   /**
    * To be used by OpenDeviceJob, don't call directly.

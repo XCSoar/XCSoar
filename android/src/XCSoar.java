@@ -60,7 +60,6 @@ public class XCSoar extends Activity {
   PowerManager.WakeLock wakeLock;
 
   BatteryReceiver batteryReceiver;
-  GliderLinkReceiver gliderLinkReceiver;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     if (serviceClass == null)
@@ -91,6 +90,7 @@ public class XCSoar extends Activity {
     NetUtil.initialise(this);
     InternalGPS.Initialize();
     NonGPSSensors.Initialize();
+    GliderLinkReceiver.Initialize();
 
     IOIOHelper.onCreateContext(this);
 
@@ -126,10 +126,6 @@ public class XCSoar extends Activity {
     batteryReceiver = new BatteryReceiver();
     registerReceiver(batteryReceiver,
                      new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-
-    gliderLinkReceiver = new GliderLinkReceiver();
-    registerReceiver(gliderLinkReceiver, 
-                     new IntentFilter(GliderLinkReceiver.ACTION));
   }
 
   private void quit() {

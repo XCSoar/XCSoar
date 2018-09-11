@@ -49,6 +49,7 @@ Copyright_License {
 #include "Java/Object.hxx"
 #include "Java/Global.hxx"
 #include "Android/InternalSensors.hpp"
+#include "Android/GliderLink.hpp"
 #include "Android/Main.hpp"
 #include "Android/Product.hpp"
 #include "Android/IOIOHelper.hpp"
@@ -110,6 +111,7 @@ DeviceDescriptor::DeviceDescriptor(unsigned _index,
    droidsoar_v2(nullptr),
    nunchuck(nullptr),
    voltage(nullptr),
+   glider_link(nullptr),
 #endif
    n_failures(0u),
    ticker(false), borrowed(false)
@@ -174,6 +176,9 @@ DeviceDescriptor::GetState() const
     return PortState::READY;
 
   if (voltage != nullptr)
+    return PortState::READY;
+
+  if (glider_link != nullptr)
     return PortState::READY;
 #endif
 
@@ -406,6 +411,22 @@ DeviceDescriptor::OpenVoltage()
 }
 
 bool
+DeviceDescriptor::OpenGliderLink()
+{
+#ifdef ANDROID
+  if (is_simulator())
+    return true;
+
+  glider_link = GliderLink::create(Java::GetEnv(), context, GetIndex());
+
+  return true;
+#else
+  return false;
+#endif
+}
+
+
+bool
 DeviceDescriptor::DoOpen(OperationEnvironment &env)
 {
   assert(config.IsAvailable());
@@ -424,6 +445,9 @@ DeviceDescriptor::DoOpen(OperationEnvironment &env)
 
   if (config.port_type == DeviceConfig::PortType::IOIOVOLTAGE)
     return OpenVoltage();
+
+  if (config.port_type == DeviceConfig::PortType::GLIDER_LINK)
+    return OpenGliderLink();
 
   reopen_clock.Update();
 
@@ -505,6 +529,8 @@ DeviceDescriptor::Close()
   delete voltage;
   voltage = nullptr;
 
+  delete glider_link;
+  glider_link = nullptr;
 #endif
 
   /* safely delete the Device object */

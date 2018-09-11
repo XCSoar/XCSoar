@@ -77,6 +77,7 @@ static constexpr struct {
 #ifdef ANDROID
   { DeviceConfig::PortType::RFCOMM_SERVER, N_("Bluetooth server") },
   { DeviceConfig::PortType::DROIDSOAR_V2, _T("DroidSoar V2") },
+  { DeviceConfig::PortType::GLIDER_LINK, _T("GliderLink receiver") },
 #ifndef NDEBUG
   { DeviceConfig::PortType::NUNCHUCK, N_("IOIO switches and Nunchuk") },
 #endif
@@ -368,6 +369,7 @@ SetPort(DataFieldEnum &df, const DeviceConfig &config)
   case DeviceConfig::PortType::UDP_LISTENER:
   case DeviceConfig::PortType::PTY:
   case DeviceConfig::PortType::RFCOMM_SERVER:
+  case DeviceConfig::PortType::GLIDER_LINK:
     break;
 
   case DeviceConfig::PortType::SERIAL:
@@ -750,6 +752,7 @@ FinishPortField(DeviceConfig &config, const DataFieldEnum &df)
   case DeviceConfig::PortType::TCP_LISTENER:
   case DeviceConfig::PortType::UDP_LISTENER:
   case DeviceConfig::PortType::RFCOMM_SERVER:
+  case DeviceConfig::PortType::GLIDER_LINK:
     if (new_type == config.port_type)
       return false;
 

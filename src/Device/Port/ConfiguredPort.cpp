@@ -163,6 +163,7 @@ OpenPortInternal(const DeviceConfig &config, PortListener *listener,
   case DeviceConfig::PortType::NUNCHUCK:
   case DeviceConfig::PortType::I2CPRESSURESENSOR:
   case DeviceConfig::PortType::IOIOVOLTAGE:
+  case DeviceConfig::PortType::GLIDER_LINK:
     break;
 
   case DeviceConfig::PortType::TCP_CLIENT: {
