@@ -29,7 +29,7 @@ Copyright_License {
 #include "Screen/OpenGL/Surface.hpp"
 
 #ifdef USE_GLSL
-#include <glm/core/type.hpp>
+#include <glm/mat4x4.hpp>
 #endif
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
