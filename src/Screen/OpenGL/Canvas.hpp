@@ -34,10 +34,6 @@ Copyright_License {
 #include "Screen/Pen.hpp"
 #include "Compiler.h"
 
-#ifdef USE_GLSL
-#include <glm/glm.hpp>
-#endif
-
 #include <tchar.h>
 
 

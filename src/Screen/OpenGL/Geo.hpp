@@ -31,7 +31,7 @@ class WindowProjection;
 
 #include "Compiler.h"
 
-#include <glm/glm.hpp>
+#include <glm/fwd.hpp>
 
 gcc_pure
 glm::mat4

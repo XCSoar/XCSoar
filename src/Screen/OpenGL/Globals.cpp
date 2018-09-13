@@ -25,6 +25,10 @@ Copyright_License {
 #include "Screen/OpenGL/Debug.hpp"
 #include "Screen/Point.hpp"
 
+#ifdef USE_GLSL
+#include <glm/mat4x4.hpp>
+#endif
+
 namespace OpenGL {
   bool texture_non_power_of_two;
 

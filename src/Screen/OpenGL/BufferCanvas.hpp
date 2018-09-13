@@ -28,6 +28,10 @@ Copyright_License {
 #include "Math/Point2D.hpp"
 #include "Screen/OpenGL/Surface.hpp"
 
+#ifdef USE_GLSL
+#include <glm/mat4x4.hpp>
+#endif
+
 #ifdef SOFTWARE_ROTATE_DISPLAY
 #include <stdint.h>
 enum class DisplayOrientation : uint8_t;
