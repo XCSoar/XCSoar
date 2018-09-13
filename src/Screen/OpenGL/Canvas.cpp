@@ -407,7 +407,7 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
     const ScopeVertexPointer vp(points);
 
 #ifdef USE_GLSL
-    glm::mat4 matrix2 = glm::scale(glm::translate(glm::mat4(),
+    glm::mat4 matrix2 = glm::scale(glm::translate(glm::mat4(1),
                                                   glm::vec3(x, y, 0)),
                                    glm::vec3(GLfloat(radius), GLfloat(radius),
                                              1.));
@@ -438,7 +438,7 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
 
 #ifdef USE_GLSL
     glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
-                       glm::value_ptr(glm::mat4()));
+                       glm::value_ptr(glm::mat4(1)));
 #else
     glPopMatrix();
 #endif

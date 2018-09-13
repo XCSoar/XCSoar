@@ -193,7 +193,7 @@ OpenGL::InitShaders()
 
   solid_shader->Use();
   glUniformMatrix4fv(solid_modelview, 1, GL_FALSE,
-                     glm::value_ptr(glm::mat4()));
+                     glm::value_ptr(glm::mat4(1)));
 
   texture_shader = CompileProgram(texture_vertex_shader, texture_fragment_shader);
   texture_shader->BindAttribLocation(Attribute::TRANSLATE, "translate");

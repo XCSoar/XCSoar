@@ -352,7 +352,7 @@ OpenGL::SetupViewport(UnsignedPoint2D size)
 
 #ifdef USE_GLSL
 #ifdef SOFTWARE_ROTATE_DISPLAY
-  projection_matrix = glm::rotate(glm::mat4(),
+  projection_matrix = glm::rotate(glm::mat4(1),
                                   (GLfloat)Angle::Degrees(OrientationToRotation(display_orientation)).Radians(),
                                   glm::vec3(0, 0, 1));
   OrientationSwap(size, display_orientation);

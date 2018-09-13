@@ -425,7 +425,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
 #ifdef USE_GLSL
   glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
-                     glm::value_ptr(glm::mat4()));
+                     glm::value_ptr(glm::mat4(1)));
 #else
   glPopMatrix();
 #endif

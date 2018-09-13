@@ -48,7 +48,7 @@ public:
   CanvasRotateShift(const PixelPoint pos, Angle angle,
                     const int scale = 100) {
 #ifdef USE_GLSL
-    glm::mat4 matrix = glm::rotate(glm::translate(glm::mat4(),
+    glm::mat4 matrix = glm::rotate(glm::translate(glm::mat4(1),
                                                   glm::vec3(pos.x, pos.y, 0)),
                                    GLfloat(angle.Radians()),
                                    glm::vec3(0, 0, 1));
@@ -87,7 +87,7 @@ public:
   ~CanvasRotateShift() {
 #ifdef USE_GLSL
     glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
-                       glm::value_ptr(glm::mat4()));
+                       glm::value_ptr(glm::mat4(1)));
 #else
     glPopMatrix();
 #endif

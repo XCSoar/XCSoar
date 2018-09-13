@@ -141,7 +141,7 @@ BufferCanvas::Begin(Canvas &other)
 
 #ifdef USE_GLSL
     old_projection_matrix = OpenGL::projection_matrix;
-    OpenGL::projection_matrix = glm::mat4();
+    OpenGL::projection_matrix = glm::mat4(1);
 #else
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();

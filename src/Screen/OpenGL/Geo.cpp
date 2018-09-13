@@ -46,7 +46,7 @@ ToGLM(const WindowProjection &projection, const GeoPoint &reference)
 
   const glm::vec3 scale_vec(GLfloat(scale_x), GLfloat(scale_y), 1);
 
-  glm::mat4 matrix = glm::scale(glm::rotate(glm::translate(glm::mat4(),
+  glm::mat4 matrix = glm::scale(glm::rotate(glm::translate(glm::mat4(1),
                                                            glm::vec3(screen_origin.x,
                                                                      screen_origin.y,
                                                                      0)),
