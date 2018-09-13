@@ -50,7 +50,7 @@ public:
 #ifdef USE_GLSL
     glm::mat4 matrix = glm::rotate(glm::translate(glm::mat4(),
                                                   glm::vec3(pos.x, pos.y, 0)),
-                                   GLfloat(angle.Degrees()),
+                                   GLfloat(angle.Radians()),
                                    glm::vec3(0, 0, 1));
     float gl_scale = scale / 100.f;
     if (Layout::ScaleSupported())

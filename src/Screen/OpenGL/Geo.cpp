@@ -34,7 +34,7 @@ Copyright_License {
 glm::mat4
 ToGLM(const WindowProjection &projection, const GeoPoint &reference)
 {
-  auto angle = projection.GetScreenAngle().Degrees();
+  auto angle = projection.GetScreenAngle().Radians();
   auto scale = projection.GetScale();
   const PixelPoint &screen_origin = projection.GetScreenOrigin();
   const GeoPoint &screen_location = projection.GetGeoLocation();

@@ -41,6 +41,7 @@ Copyright_License {
 
 #ifdef USE_GLSL
 #include "Shaders.hpp"
+#include "Math/Angle.hpp"
 #endif
 
 #ifdef ANDROID
@@ -352,7 +353,7 @@ OpenGL::SetupViewport(UnsignedPoint2D size)
 #ifdef USE_GLSL
 #ifdef SOFTWARE_ROTATE_DISPLAY
   projection_matrix = glm::rotate(glm::mat4(),
-                                  OrientationToRotation(display_orientation),
+                                  (GLfloat)Angle::Degrees(OrientationToRotation(display_orientation)).Radians(),
                                   glm::vec3(0, 0, 1));
   OrientationSwap(size, display_orientation);
 #endif
