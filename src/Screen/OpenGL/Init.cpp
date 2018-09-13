@@ -50,6 +50,7 @@ Copyright_License {
 #endif
 
 #ifdef USE_GLSL
+#include <glm/gtc/matrix_projection.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #endif
 

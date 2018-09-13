@@ -35,7 +35,7 @@ Copyright_License {
 #include "System.hpp"
 
 #ifdef USE_GLSL
-#include <glm/fwd.hpp>
+#include <glm/core/type.hpp>
 #endif
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
