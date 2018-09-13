@@ -48,7 +48,6 @@ OPENGL_CPPFLAGS = -DENABLE_OPENGL
 
 ifeq ($(GLES2),y)
 OPENGL_CPPFLAGS += -DHAVE_GLES -DHAVE_GLES2
-OPENGL_CPPFLAGS += $(GLM_CPPFLAGS)
 ifeq ($(TARGET_IS_IOS),y)
 OPENGL_LDLIBS = -framework OpenGLES
 else ifeq ($(TARGET_IS_PI),y)
@@ -71,6 +70,7 @@ endif
 
 ifeq ($(GLSL),y)
 OPENGL_CPPFLAGS += -DUSE_GLSL
+OPENGL_CPPFLAGS += $(GLM_CPPFLAGS)
 endif
 
 # Needed for native VBO support
