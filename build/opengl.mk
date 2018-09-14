@@ -1,14 +1,7 @@
 ifeq ($(TARGET),ANDROID)
-# Android must use OpenGL
+# Android uses OpenGL/ES 2.0
 OPENGL = y
-
-  ifeq ($(EGL),y)
-    # if our Android has EGL (2.3 or newer), we enable GLES2, too
-    GLES2 = y
-  else
-    # old Androids use OpenGL ES 1.x only
-    GLES = y
-  endif
+GLES2 = y
 
 # the Kobo doesn't have OpenGL support
 else ifeq ($(TARGET_IS_KOBO),y)
