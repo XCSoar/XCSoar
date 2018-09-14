@@ -24,13 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_SHAPES_HPP
 #define XCSOAR_SCREEN_OPENGL_SHAPES_HPP
 
-class GLFallbackArrayBuffer;
+class GLArrayBuffer;
 
 namespace OpenGL {
   static constexpr unsigned CIRCLE_SIZE = 32;
   static constexpr unsigned SMALL_CIRCLE_SIZE = 8;
 
-  extern GLFallbackArrayBuffer *circle_buffer, *small_circle_buffer;
+  extern GLArrayBuffer *circle_buffer, *small_circle_buffer;
 
   void InitShapes();
   void DeinitShapes();

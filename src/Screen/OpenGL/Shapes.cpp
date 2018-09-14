@@ -22,22 +22,22 @@ Copyright_License {
 */
 
 #include "Screen/OpenGL/Shapes.hpp"
-#include "Screen/OpenGL/FallbackBuffer.hpp"
+#include "Screen/OpenGL/Buffer.hpp"
 #include "Math/FastTrig.hpp"
 #include "Math/Point2D.hpp"
 
 #include <assert.h>
 
 namespace OpenGL {
-  GLFallbackArrayBuffer *circle_buffer, *small_circle_buffer;
+  GLArrayBuffer *circle_buffer, *small_circle_buffer;
 }
 
-static GLFallbackArrayBuffer *
+static GLArrayBuffer *
 MakeCircleBuffer(unsigned n)
 {
   assert(INT_ANGLE_RANGE % n == 0);
 
-  auto buffer = new GLFallbackArrayBuffer();
+  auto buffer = new GLArrayBuffer();
 
   FloatPoint2D *const p0 = (FloatPoint2D *)buffer->BeginWrite(sizeof(*p0) * n);
   auto *p = p0, *p2 = p + n / 2;

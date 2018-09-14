@@ -38,7 +38,7 @@ Copyright_License {
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/VertexPointer.hpp"
-#include "Screen/OpenGL/FallbackBuffer.hpp"
+#include "Screen/OpenGL/Buffer.hpp"
 #include "Screen/OpenGL/Dynamic.hpp"
 #include "Screen/OpenGL/Geo.hpp"
 #endif
@@ -114,7 +114,7 @@ inline void
 TopographyFileRenderer::UpdateArrayBuffer()
 {
   if (array_buffer == nullptr)
-    array_buffer = new GLFallbackArrayBuffer();
+    array_buffer = new GLArrayBuffer();
   else if (file.GetSerial() == array_buffer_serial)
     return;
 
@@ -219,8 +219,8 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
 #ifdef ENABLE_OPENGL
   UpdateArrayBuffer();
-  const ShapePoint *const buffer = (const ShapePoint *)
-    array_buffer->BeginRead();
+  array_buffer->Bind();
+  const ShapePoint *const buffer = nullptr;
 
   pen.Bind();
 
@@ -434,7 +434,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
   pen.Unbind();
 
-  array_buffer->EndRead();
+  array_buffer->Unbind();
 #else
   shape_renderer.Commit();
 #endif

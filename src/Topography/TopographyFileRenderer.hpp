@@ -40,7 +40,7 @@ Copyright_License {
 
 class TopographyFile;
 class Canvas;
-class GLFallbackArrayBuffer;
+class GLArrayBuffer;
 class WindowProjection;
 class LabelBlock;
 class XShape;
@@ -77,7 +77,7 @@ class TopographyFileRenderer final
   std::vector<const XShape *> visible_shapes, visible_labels;
 
 #ifdef ENABLE_OPENGL
-  GLFallbackArrayBuffer *array_buffer;
+  GLArrayBuffer *array_buffer;
   Serial array_buffer_serial;
 #endif
 

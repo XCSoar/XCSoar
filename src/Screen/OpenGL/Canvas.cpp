@@ -28,7 +28,7 @@ Copyright_License {
 #include "Scope.hpp"
 #include "VertexArray.hpp"
 #include "Shapes.hpp"
-#include "FallbackBuffer.hpp"
+#include "Buffer.hpp"
 #include "Features.hpp"
 #include "VertexPointer.hpp"
 #include "ExactPixelPoint.hpp"
@@ -401,14 +401,15 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
     glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices.SIZE);
     pen.Unbind();
   } else {
-    GLFallbackArrayBuffer &buffer = radius < 16
+    auto &buffer = radius < 16
       ? *OpenGL::small_circle_buffer
       : *OpenGL::circle_buffer;
     const unsigned n = radius < 16
       ? OpenGL::SMALL_CIRCLE_SIZE
       : OpenGL::CIRCLE_SIZE;
 
-    const auto points = (const FloatPoint2D *)buffer.BeginRead();
+    buffer.Bind();
+    const auto points = (const FloatPoint2D *)nullptr;
     const ScopeVertexPointer vp(points);
 
 #ifdef USE_GLSL
@@ -448,7 +449,7 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
     glPopMatrix();
 #endif
 
-    buffer.EndRead();
+    buffer.Unbind();
   }
 }
 
