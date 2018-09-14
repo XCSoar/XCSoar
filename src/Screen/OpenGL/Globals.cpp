@@ -36,10 +36,6 @@ namespace OpenGL {
   bool oes_draw_texture;
 #endif
 
-#ifdef ANDROID
-  bool vertex_buffer_object;
-#endif
-
 #ifdef HAVE_OES_MAPBUFFER
   bool mapbuffer;
 #endif

@@ -62,18 +62,8 @@ namespace OpenGL {
 
   /**
    * Is it safe to use VBO?
-   *
-   * This check is important, because Android 1.6 will happily crash
-   * upon attempting to delete a VBO, a bug that will probably never
-   * get fixed (report is nearly 2 years old at the time of this
-   * writing):
-   * http://code.google.com/p/android/issues/detail?id=4273
    */
-#ifdef ANDROID
-  extern bool vertex_buffer_object;
-#else
   static constexpr bool vertex_buffer_object = true;
-#endif
 
   /**
    * Is glMapBuffer() available?  May be implemented by the extension
