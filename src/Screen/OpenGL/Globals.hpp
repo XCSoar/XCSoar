@@ -61,11 +61,6 @@ namespace OpenGL {
 #endif
 
   /**
-   * Is it safe to use VBO?
-   */
-  static constexpr bool vertex_buffer_object = true;
-
-  /**
    * Is glMapBuffer() available?  May be implemented by the extension
    * GL_OES_mapbuffer.
    */
