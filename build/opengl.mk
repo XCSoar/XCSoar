@@ -6,7 +6,6 @@ GLES2 = y
 # the Kobo doesn't have OpenGL support
 else ifeq ($(TARGET_IS_KOBO),y)
 OPENGL = n
-GLES = n
 
 # the Raspberry Pi uses EGL + GL/ES
 else ifeq ($(TARGET_IS_PI),y)
@@ -25,12 +24,10 @@ GLES2 ?= y
 # UNIX/Linux defaults to OpenGL
 else ifeq ($(TARGET),UNIX)
 OPENGL ?= y
-GLES ?= n
 
 else
 # Windows defaults to GDI (no OpenGL)
 OPENGL ?= n
-GLES = n
 endif
 
 GLES2 ?= n
@@ -47,13 +44,6 @@ else ifeq ($(TARGET_IS_PI),y)
 OPENGL_LDLIBS = -lbrcmGLESv2 -ldl
 else
 OPENGL_LDLIBS = -lGLESv2 -ldl
-endif
-else ifeq ($(GLES),y)
-OPENGL_CPPFLAGS += -DHAVE_GLES -DHAVE_GLES1
-ifeq ($(TARGET_IS_PI),y)
-OPENGL_LDLIBS = -lbrcmGLESv2 -ldl
-else
-OPENGL_LDLIBS = -lGLESv1_CM -ldl
 endif
 else ifeq ($(TARGET_IS_DARWIN),y)
 OPENGL_LDLIBS = -framework OpenGL

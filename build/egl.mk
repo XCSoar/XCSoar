@@ -21,9 +21,6 @@ EGL = n
 else ifeq ($(TARGET),ANDROID)
 # Android uses EGL
 EGL = y
-else ifeq ($(GLES),y)
-# use EGL if GLES1 was chosen explicitly
-EGL = y
 else ifeq ($(GLES2),y)
 # use EGL if GLES2 was chosen explicitly
 EGL = y
