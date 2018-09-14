@@ -88,13 +88,18 @@ void
 Canvas::DrawFilledRectangle(int left, int top, int right, int bottom,
                             const Color color)
 {
+  assert(offset == OpenGL::translate);
+
 #ifdef USE_GLSL
   OpenGL::solid_shader->Use();
 #endif
 
   color.Bind();
 
-#ifdef HAVE_GLES
+#if defined(HAVE_GLES) || defined(USE_GLSL)
+  /* can't use glRecti() with GLSL because it bypasses the vertex
+     shader */
+
   const BulkPixelPoint vertices[] = {
     { left, top },
     { right, top },
