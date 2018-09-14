@@ -11,7 +11,7 @@ GLES = n
 # the Raspberry Pi uses EGL + GL/ES
 else ifeq ($(TARGET_IS_PI),y)
 OPENGL ?= y
-GLES ?= y
+GLES2 ?= y
 
 # iOS uses GL/ES 2.0
 else ifeq ($(TARGET_IS_IOS),y)
@@ -21,7 +21,7 @@ GLES2 ?= y
 # the Cubieboard uses EGL + GL/ES
 else ifeq ($(TARGET_HAS_MALI),y)
 OPENGL ?= y
-GLES ?= y
+GLES2 ?= y
 # UNIX/Linux defaults to OpenGL
 else ifeq ($(TARGET),UNIX)
 OPENGL ?= y
