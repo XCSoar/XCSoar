@@ -306,6 +306,7 @@ protected:
   void DrawGlideThroughTerrain(Canvas &canvas) const;
   void DrawTerrainAbove(Canvas &canvas);
   void DrawFLARMTraffic(Canvas &canvas, PixelPoint aircraft_pos) const;
+  void DrawGLinkTraffic(Canvas &canvas, PixelPoint aircraft_pos) const;
 
   // thread, main functions
   /**

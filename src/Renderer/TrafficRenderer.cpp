@@ -26,6 +26,7 @@
 #include "Screen/Layout.hpp"
 #include "Look/TrafficLook.hpp"
 #include "FLARM/Traffic.hpp"
+#include "GliderLink/Traffic.hpp"
 #include "Math/Screen.hpp"
 #include "Util/Macros.hpp"
 
@@ -83,6 +84,39 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
   default:
     return;
   }
+
+  canvas.SelectHollowBrush();
+  canvas.DrawCircle(pt.x, pt.y, Layout::FastScale(11));
+}
+
+
+
+void
+TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
+                      const GliderLinkTraffic &traffic, const Angle angle, const PixelPoint pt)
+{
+  // Create point array that will form that arrow polygon
+  BulkPixelPoint arrow[] = {
+    { -4, 6 },
+    { 0, -8 },
+    { 4, 6 },
+    { 0, 3 },
+    { -4, 6 },
+  };
+
+  canvas.Select(traffic_look.safe_brush);
+
+  // Select black pen
+  if (IsDithered())
+    canvas.Select(Pen(Layout::FastScale(2), COLOR_BLACK));
+  else
+    canvas.SelectBlackPen();
+
+  // Rotate and shift the arrow to the right position and angle
+  PolygonRotateShift(arrow, ARRAY_SIZE(arrow), pt, angle);
+
+  // Draw the arrow
+  canvas.DrawPolygon(arrow, ARRAY_SIZE(arrow));
 
   canvas.SelectHollowBrush();
   canvas.DrawCircle(pt.x, pt.y, Layout::FastScale(11));

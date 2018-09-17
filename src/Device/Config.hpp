@@ -101,6 +101,11 @@ struct DeviceConfig {
      * for debugging.
      */
     PTY,
+
+    /**
+     * A GliderLink broadcast receiver. Available on Android only
+     */
+    GLIDER_LINK,
   };
 
   /**

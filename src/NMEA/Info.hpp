@@ -38,6 +38,10 @@ Copyright_License {
 #include "FLARM/Data.hpp"
 #include "Geo/SpeedVector.hpp"
 
+#ifdef ANDROID
+#include "GliderLink/GliderLinkData.hpp"
+#endif
+
 #include <type_traits>
 
 /**
@@ -358,6 +362,10 @@ struct NMEAInfo {
   DeviceInfo secondary_device;
 
   FlarmData flarm;
+
+#ifdef ANDROID
+  GliderLinkData glink_data;
+#endif
 
   void UpdateClock();
 

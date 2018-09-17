@@ -90,6 +90,7 @@ public class XCSoar extends Activity {
     NetUtil.initialise(this);
     InternalGPS.Initialize();
     NonGPSSensors.Initialize();
+    GliderLinkReceiver.Initialize();
 
     IOIOHelper.onCreateContext(this);
 
