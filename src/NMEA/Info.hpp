@@ -36,6 +36,7 @@ Copyright_License {
 #include "Atmosphere/Temperature.hpp"
 #include "DeviceInfo.hpp"
 #include "FLARM/Data.hpp"
+#include "GliderLink/GliderLinkData.hpp"
 #include "Geo/SpeedVector.hpp"
 
 #include <type_traits>
@@ -358,6 +359,8 @@ struct NMEAInfo {
   DeviceInfo secondary_device;
 
   FlarmData flarm;
+
+  GliderLinkData glink_data;
 
   void UpdateClock();
 

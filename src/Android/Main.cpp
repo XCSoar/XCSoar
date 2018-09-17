@@ -29,6 +29,7 @@ Copyright_License {
 #include "SoundUtil.hpp"
 #include "Vibrator.hpp"
 #include "InternalSensors.hpp"
+#include "GliderLink.hpp"
 #include "PortBridge.hpp"
 #include "BluetoothHelper.hpp"
 #include "NativeLeScanCallback.hpp"
@@ -135,6 +136,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   Environment::Initialise(env);
   AndroidBitmap::Initialise(env);
   InternalSensors::Initialise(env);
+  GliderLink::Initialise(env);
   NativePortListener::Initialise(env);
   NativeInputListener::Initialise(env);
   PortBridge::Initialise(env);
@@ -256,6 +258,7 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   NativeInputListener::Deinitialise(env);
   NativePortListener::Deinitialise(env);
   InternalSensors::Deinitialise(env);
+  GliderLink::Deinitialise(env);
   AndroidBitmap::Deinitialise(env);
   Environment::Deinitialise(env);
   NativeView::Deinitialise(env);
