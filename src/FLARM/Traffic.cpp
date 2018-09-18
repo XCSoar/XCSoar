@@ -23,7 +23,8 @@ Copyright_License {
 
 #include "FLARM/Traffic.hpp"
 
-const TCHAR* acTypes[16] = { _T("Unknown"), _T("Glider"), _T("TowPlane"),
+static constexpr const TCHAR* acTypes[16] = {
+  _T("Unknown"), _T("Glider"), _T("TowPlane"),
     _T("Helicopter"), _T("Parachute"), _T("DropPlane"), _T("HangGlider"),
     _T("ParaGlider"), _T("PoweredAircraft"), _T("JetAircraft"),
     _T("FlyingSaucer"), _T("Balloon"), _T("Airship"), _T("UAV"),
