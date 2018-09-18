@@ -77,9 +77,10 @@ public:
 
   // For information on these methods, see comments around analogous methods
   // in NonGPSSensors.java.
-  const std::vector<int>& getSubscribableSensors() const {
+  const auto &getSubscribableSensors() const {
     return subscribable_sensors_;
   }
+
   bool subscribeToSensor(int id);
   bool cancelSensorSubscription(int id);
   bool subscribedToSensor(int id) const;
@@ -87,7 +88,7 @@ public:
 
   gcc_malloc
   static InternalSensors *create(JNIEnv* env, Context* native_view,
-                               unsigned int index);
+                                 unsigned int index);
 };
 
 #endif
