@@ -29,13 +29,10 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Scope.hpp"
 #include "Compiler.h"
-
-#ifdef USE_GLSL
 #include "Shaders.hpp"
 #include "Program.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
-#endif
 
 #ifdef HAVE_OES_DRAW_TEXTURE
 #include <GLES/glext.h>
@@ -226,21 +223,12 @@ GLTexture::Draw(PixelRect dest, PixelRect src) const
     x1, flipped ? y0 : y1,
   };
 
-#ifdef USE_GLSL
   glEnableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
   glVertexAttribPointer(OpenGL::Attribute::TEXCOORD, 2, GL_FLOAT, GL_FALSE,
                         0, coord);
-#else
-  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-  glTexCoordPointer(2, GL_FLOAT, 0, coord);
-#endif
 
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-#ifdef USE_GLSL
   glDisableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
   OpenGL::solid_shader->Use();
-#else
-  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-#endif
 }

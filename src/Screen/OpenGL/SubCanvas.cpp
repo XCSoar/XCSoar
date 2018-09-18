@@ -23,10 +23,7 @@ Copyright_License {
 
 #include "Screen/SubCanvas.hpp"
 #include "Globals.hpp"
-
-#ifdef USE_GLSL
 #include "Shaders.hpp"
-#endif
 
 SubCanvas::SubCanvas(Canvas &canvas, PixelPoint _offset, PixelSize _size)
   :relative(_offset)
@@ -38,17 +35,8 @@ SubCanvas::SubCanvas(Canvas &canvas, PixelPoint _offset, PixelSize _size)
   if (relative.x != 0 || relative.y != 0) {
     OpenGL::translate += _offset;
 
-#ifdef USE_GLSL
     glVertexAttrib4f(OpenGL::Attribute::TRANSLATE,
                      OpenGL::translate.x, OpenGL::translate.y, 0, 0);
-#else
-    glPushMatrix();
-#ifdef HAVE_GLES
-    glTranslatex((GLfixed)relative.x << 16, (GLfixed)relative.y << 16, 0);
-#else
-    glTranslatef(relative.x, relative.y, 0);
-#endif
-#endif /* !USE_GLSL */
   }
 }
 
@@ -59,11 +47,7 @@ SubCanvas::~SubCanvas()
   if (relative.x != 0 || relative.y != 0) {
     OpenGL::translate -= relative;
 
-#ifdef USE_GLSL
     glVertexAttrib4f(OpenGL::Attribute::TRANSLATE,
                      OpenGL::translate.x, OpenGL::translate.y, 0, 0);
-#else
-    glPopMatrix();
-#endif
   }
 }

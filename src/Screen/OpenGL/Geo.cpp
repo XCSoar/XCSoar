@@ -27,8 +27,6 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "Geo/FAISphere.hpp"
 
-#ifdef USE_GLSL
-
 #include <glm/gtc/matrix_transform.hpp>
 
 glm::mat4
@@ -59,35 +57,3 @@ ToGLM(const WindowProjection &projection, const GeoPoint &reference)
                                     0.));
   return matrix;
 }
-
-#else
-
-void
-ApplyProjection(const WindowProjection &projection, const GeoPoint &reference)
-{
-  auto angle = projection.GetScreenAngle().Degrees();
-  auto scale = projection.GetScale();
-  const PixelPoint &screen_origin = projection.GetScreenOrigin();
-  const GeoPoint &screen_location = projection.GetGeoLocation();
-  const GeoPoint projection_delta = reference - screen_location;
-
-  const auto scale_r = scale * FAISphere::REARTH;
-  const auto scale_x = scale_r * screen_location.latitude.fastcosine();
-  const auto scale_y = -scale_r;
-
-#ifdef HAVE_GLES
-  GLfixed fixed_angle = angle * (1<<16);
-  glTranslatex((int)screen_origin.x << 16, (int)screen_origin.y << 16, 0);
-  glRotatex(fixed_angle, 0, 0, -(1<<16));
-#else
-  glTranslatef(screen_origin.x, screen_origin.y, 0.);
-  glRotatef((GLfloat)angle, 0., 0., -1.);
-#endif
-
-  glScalef(GLfloat(scale_x), GLfloat(scale_y), 1.);
-  glTranslatef(GLfloat(projection_delta.longitude.Native()),
-               GLfloat(projection_delta.latitude.Native()),
-               0.);
-}
-
-#endif

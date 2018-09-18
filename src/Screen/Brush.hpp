@@ -134,11 +134,9 @@ public:
     color.Bind();
   }
 
-#ifdef USE_GLSL
   void BindUniform(GLint location) const {
     color.Uniform(location);
   }
-#endif
 #endif /* OPENGL */
 };
 

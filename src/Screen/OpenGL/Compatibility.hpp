@@ -20,22 +20,3 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-
-#ifndef XCSOAR_SCREEN_OPENGL_COMPATIBILITY_HPP
-#define XCSOAR_SCREEN_OPENGL_COMPATIBILITY_HPP
-
-#include "Features.hpp"
-
-namespace OpenGL {
-  static inline void
-  glTexEnvi(GLenum target, GLenum pname, GLint param)
-  {
-    if (HaveGLES())
-      /* GLES 1.0 (Android emulator) doesn't support glTexEnvi() */
-      ::glTexEnvf(target, pname, (GLfloat)param);
-    else
-      ::glTexEnvi(target, pname, param);
-  }
-};
-
-#endif

@@ -34,9 +34,7 @@ Copyright_License {
 #include "Screen/OpenGL/Features.hpp"
 #include "System.hpp"
 
-#ifdef USE_GLSL
 #include <glm/fwd.hpp>
-#endif
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
 #include <stdint.h>
@@ -107,9 +105,7 @@ namespace OpenGL {
    */
   extern PixelPoint translate;
 
-#ifdef USE_GLSL
   extern glm::mat4 projection_matrix;
-#endif
 };
 
 #endif

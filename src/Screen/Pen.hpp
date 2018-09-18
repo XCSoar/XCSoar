@@ -220,12 +220,10 @@ public:
     BindStyle();
   }
 
-#ifdef USE_GLSL
   void BindUniform(GLint location) const {
     color.Uniform(location);
     BindStyle();
   }
-#endif
 
   void Unbind() const {
 #ifndef HAVE_GLES

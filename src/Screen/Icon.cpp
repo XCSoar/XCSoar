@@ -29,12 +29,8 @@ Copyright_License {
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Scope.hpp"
 
-#ifdef USE_GLSL
 #include "Screen/OpenGL/Shaders.hpp"
 #include "Screen/OpenGL/Program.hpp"
-#else
-#include "Screen/OpenGL/Compatibility.hpp"
-#endif
 #endif
 
 #include <algorithm>
@@ -114,12 +110,7 @@ MaskedIcon::Draw(Canvas &canvas, PixelPoint p) const
   p -= origin;
 
 #ifdef ENABLE_OPENGL
-#ifdef USE_GLSL
   OpenGL::texture_shader->Use();
-#else
-  const GLEnable<GL_TEXTURE_2D> scope;
-  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-#endif
 
   const ScopeAlphaBlend alpha_blend;
 
@@ -148,30 +139,10 @@ MaskedIcon::Draw(Canvas &canvas, const PixelRect &rc, bool inverse) const
   const PixelPoint position = rc.CenteredTopLeft(size);
 
 #ifdef ENABLE_OPENGL
-#ifdef USE_GLSL
   if (inverse)
     OpenGL::invert_shader->Use();
   else
     OpenGL::texture_shader->Use();
-#else
-  const GLEnable<GL_TEXTURE_2D> scope;
-
-  if (inverse) {
-    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
-
-    /* invert the texture color */
-    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_REPLACE);
-    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SRC0_RGB, GL_TEXTURE);
-    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB, GL_ONE_MINUS_SRC_COLOR);
-
-    /* copy the texture alpha */
-    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_REPLACE);
-    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SRC0_ALPHA, GL_TEXTURE);
-    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA, GL_SRC_ALPHA);
-  } else
-    /* simple copy */
-    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-#endif
 
   const ScopeAlphaBlend alpha_blend;
 

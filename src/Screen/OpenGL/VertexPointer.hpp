@@ -26,17 +26,13 @@ Copyright_License {
 
 #include "System.hpp"
 #include "Types.hpp"
-
-#ifdef USE_GLSL
 #include "Attribute.hpp"
-#endif
 
 struct FloatPoint2D;
 struct BulkPixelPoint;
 struct ExactPixelPoint;
 
 struct ScopeVertexPointer {
-#ifdef USE_GLSL
   ScopeVertexPointer() {
     glEnableVertexAttribArray(OpenGL::Attribute::POSITION);
   }
@@ -44,32 +40,21 @@ struct ScopeVertexPointer {
   ~ScopeVertexPointer() {
     glDisableVertexAttribArray(OpenGL::Attribute::POSITION);
   }
-#else
-  ScopeVertexPointer() = default;
-#endif
 
   ScopeVertexPointer(GLenum type, const void *p) {
-#ifdef USE_GLSL
     glEnableVertexAttribArray(OpenGL::Attribute::POSITION);
-#endif
     Update(type, p);
   }
 
   template<typename T>
   ScopeVertexPointer(const T *p) {
-#ifdef USE_GLSL
     glEnableVertexAttribArray(OpenGL::Attribute::POSITION);
-#endif
     Update(p);
   }
 
   void Update(GLenum type, GLsizei stride, const void *p) {
-#ifdef USE_GLSL
     glVertexAttribPointer(OpenGL::Attribute::POSITION, 2, type,
                           GL_FALSE, stride, p);
-#else
-    glVertexPointer(2, type, stride, p);
-#endif
   }
 
   void Update(GLenum type, const void *p) {

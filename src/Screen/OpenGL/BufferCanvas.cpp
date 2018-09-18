@@ -28,13 +28,8 @@ Copyright_License {
 #include "FrameBuffer.hpp"
 #include "RenderBuffer.hpp"
 #include "Init.hpp"
-
-#ifdef USE_GLSL
 #include "Shaders.hpp"
 #include "Program.hpp"
-#else
-#include "Compatibility.hpp"
-#endif
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
 #include "DisplayOrientation.hpp"
@@ -139,15 +134,8 @@ BufferCanvas::Begin(Canvas &other)
     glPushAttrib(GL_VIEWPORT_BIT);
 #endif
 
-#ifdef USE_GLSL
     old_projection_matrix = OpenGL::projection_matrix;
     OpenGL::projection_matrix = glm::mat4(1);
-#else
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-#endif
 
     old_translate = OpenGL::translate;
     old_size = OpenGL::viewport_size;
@@ -161,10 +149,8 @@ BufferCanvas::Begin(Canvas &other)
     OpenGL::SetupViewport({GetWidth(), GetHeight()});
     OpenGL::translate = {0, 0};
 
-#ifdef USE_GLSL
     glVertexAttrib4f(OpenGL::Attribute::TRANSLATE,
                      OpenGL::translate.x, OpenGL::translate.y, 0, 0);
-#endif
   } else {
     offset = other.offset;
   }
@@ -200,23 +186,14 @@ BufferCanvas::Commit(Canvas &other)
     glPopAttrib();
 #endif
 
-#ifdef USE_GLSL
     OpenGL::projection_matrix = old_projection_matrix;
     OpenGL::UpdateShaderProjectionMatrix();
-#else
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
-#endif
 
     OpenGL::translate = old_translate;
     OpenGL::viewport_size = old_size;
 
-#ifdef USE_GLSL
     glVertexAttrib4f(OpenGL::Attribute::TRANSLATE,
                      OpenGL::translate.x, OpenGL::translate.y, 0, 0);
-#endif
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
     OpenGL::display_orientation = old_orientation;
@@ -242,12 +219,7 @@ BufferCanvas::CopyTo(Canvas &other)
   assert(IsDefined());
   assert(!active || frame_buffer != nullptr);
 
-#ifdef USE_GLSL
   OpenGL::texture_shader->Use();
-#else
-  const GLEnable<GL_TEXTURE_2D> scope;
-  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-#endif
 
   texture->Bind();
   texture->Draw(other.GetRect(), GetRect());

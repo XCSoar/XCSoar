@@ -28,13 +28,10 @@ Copyright_License {
 #include "Screen/Point.hpp"
 #include "Screen/Layout.hpp"
 #include "System.hpp"
-
-#ifdef USE_GLSL
 #include "Shaders.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#endif
 
 /**
  * Temporarily changes the transformation matrix. Meant as replacement
@@ -47,7 +44,6 @@ class CanvasRotateShift
 public:
   CanvasRotateShift(const PixelPoint pos, Angle angle,
                     const int scale = 100) {
-#ifdef USE_GLSL
     glm::mat4 matrix = glm::rotate(glm::translate(glm::mat4(1),
                                                   glm::vec3(pos.x, pos.y, 0)),
                                    GLfloat(angle.Radians()),
@@ -58,39 +54,11 @@ public:
     matrix = glm::scale(matrix, glm::vec3(gl_scale));
     glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
                        glm::value_ptr(matrix));
-#else
-    glPushMatrix();
-
-#ifdef HAVE_GLES
-    glTranslatex((GLfixed)pos.x << 16, (GLfixed)pos.y << 16, 0);
-    GLfixed fixed_angle = angle.Degrees() * (1<<16);
-    glRotatex(fixed_angle, 0, 0, 1<<16);
-#else
-    glTranslatef(pos.x, pos.y, 0.);
-    glRotatef((GLfloat)angle.Degrees(), 0., 0., 1.);
-#endif
-
-#ifdef HAVE_GLES
-    GLfixed gl_scale = ((GLfixed) scale << 16) / 100;
-    if (Layout::ScaleSupported())
-      gl_scale = (gl_scale * Layout::scale_1024) >> 10;
-    glScalex(gl_scale, gl_scale, (GLfixed)1 << 16);
-#else
-    float gl_scale = scale / 100.f;
-    if (Layout::ScaleSupported())
-      gl_scale *= Layout::scale_1024 / 1024.f;
-    glScalef(gl_scale, gl_scale, 1.);
-#endif
-#endif /* USE_GLSL */
   };
 
   ~CanvasRotateShift() {
-#ifdef USE_GLSL
     glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
                        glm::value_ptr(glm::mat4(1)));
-#else
-    glPopMatrix();
-#endif
   }
 };
 

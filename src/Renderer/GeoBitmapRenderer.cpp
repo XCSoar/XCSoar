@@ -31,13 +31,8 @@ Copyright_License {
 #include "Screen/OpenGL/Scope.hpp"
 #include "Screen/OpenGL/VertexPointer.hpp"
 #include "Screen/OpenGL/BulkPoint.hpp"
-
-#ifdef USE_GLSL
 #include "Screen/OpenGL/Shaders.hpp"
 #include "Screen/OpenGL/Program.hpp"
-#else
-#include "Screen/OpenGL/Compatibility.hpp"
-#endif
 
 void
 DrawGeoBitmap(const RawBitmap &bitmap, PixelSize bitmap_size,
@@ -73,27 +68,15 @@ DrawGeoBitmap(const RawBitmap &bitmap, PixelSize bitmap_size,
     x1, y1,
   };
 
-#ifdef USE_GLSL
   OpenGL::texture_shader->Use();
   glEnableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
   glVertexAttribPointer(OpenGL::Attribute::TEXCOORD, 2, GL_FLOAT, GL_FALSE,
                         0, coord);
-#else
-  const GLEnable<GL_TEXTURE_2D> scope;
-  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-
-  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-  glTexCoordPointer(2, GL_FLOAT, 0, coord);
-#endif
 
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-#ifdef USE_GLSL
   glDisableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
   OpenGL::solid_shader->Use();
-#else
-  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-#endif
 }
 
 #endif

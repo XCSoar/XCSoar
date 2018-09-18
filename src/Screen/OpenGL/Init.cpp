@@ -39,19 +39,15 @@ Copyright_License {
 #include "Screen/EGL/System.hpp"
 #endif
 
-#ifdef USE_GLSL
 #include "Shaders.hpp"
 #include "Math/Angle.hpp"
-#endif
 
 #ifdef ANDROID
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
 #endif
 
-#ifdef USE_GLSL
 #include <glm/gtc/matrix_transform.hpp>
-#endif
 
 #include <algorithm>
 
@@ -272,15 +268,9 @@ OpenGL::SetupContext()
   glDisable(GL_LIGHTING);
 #endif
 
-#ifndef USE_GLSL
-  glEnableClientState(GL_VERTEX_ARRAY);
-#endif
-
   InitShapes();
 
-#ifdef USE_GLSL
   InitShaders();
-#endif
 }
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
@@ -331,7 +321,6 @@ OpenGL::SetupViewport(UnsignedPoint2D size)
 
   glViewport(0, 0, size.x, size.y);
 
-#ifdef USE_GLSL
 #ifdef SOFTWARE_ROTATE_DISPLAY
   projection_matrix = glm::rotate(glm::mat4(1),
                                   (GLfloat)Angle::Degrees(OrientationToRotation(display_orientation)).Radians(),
@@ -340,22 +329,6 @@ OpenGL::SetupViewport(UnsignedPoint2D size)
 #endif
   projection_matrix = glm::ortho<float>(0, size.x, size.y, 0, -1, 1);
   UpdateShaderProjectionMatrix();
-#else
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-#ifdef SOFTWARE_ROTATE_DISPLAY
-  glRotatef(OrientationToRotation(display_orientation), 0, 0, 1);
-  OrientationSwap(size, display_orientation);
-#endif
-#ifdef HAVE_GLES
-  glOrthox(0, size.x << 16, size.y << 16, 0, -(1<<16), 1<<16);
-#else
-  glOrtho(0, size.x, size.y, 0, -1, 1);
-#endif
-
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-#endif
 
   viewport_size = size;
 
@@ -365,9 +338,7 @@ OpenGL::SetupViewport(UnsignedPoint2D size)
 void
 OpenGL::Deinitialise()
 {
-#ifdef USE_GLSL
   DeinitShaders();
-#endif
 
   DeinitShapes();
 

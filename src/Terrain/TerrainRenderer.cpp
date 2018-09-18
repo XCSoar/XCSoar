@@ -28,20 +28,6 @@ Copyright_License {
 #include "Projection/WindowProjection.hpp"
 #include "Util/Macros.hpp"
 
-#ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Texture.hpp"
-#include "Screen/OpenGL/Scope.hpp"
-#include "Screen/OpenGL/VertexPointer.hpp"
-#include "Screen/OpenGL/BulkPoint.hpp"
-
-#ifdef USE_GLSL
-#include "Screen/OpenGL/Shaders.hpp"
-#include "Screen/OpenGL/Program.hpp"
-#else
-#include "Screen/OpenGL/Compatibility.hpp"
-#endif
-#endif
-
 #include <assert.h>
 
 static constexpr ColorRamp terrain_colors[][NUM_COLOR_RAMP_LEVELS] = {

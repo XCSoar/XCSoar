@@ -31,7 +31,6 @@ OPENGL ?= n
 endif
 
 GLES2 ?= n
-GLSL ?= $(GLES2)
 
 ifeq ($(OPENGL),y)
 OPENGL_CPPFLAGS = -DENABLE_OPENGL
@@ -51,10 +50,7 @@ else
 OPENGL_LDLIBS = -lGL
 endif
 
-ifeq ($(GLSL),y)
-OPENGL_CPPFLAGS += -DUSE_GLSL
 OPENGL_CPPFLAGS += $(GLM_CPPFLAGS)
-endif
 
 # Needed for native VBO support
 OPENGL_CPPFLAGS += -DGL_GLEXT_PROTOTYPES

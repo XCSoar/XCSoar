@@ -27,10 +27,7 @@ Copyright_License {
 #include "Screen/PortableColor.hpp"
 #include "Features.hpp"
 #include "System.hpp"
-
-#ifdef USE_GLSL
 #include "Attribute.hpp"
-#endif
 
 #include <stdint.h>
 
@@ -189,7 +186,6 @@ public:
                  Alpha());
   }
 
-#ifdef USE_GLSL
   void Uniform(GLint location) const {
     glUniform4f(location, ExportFloat(r), ExportFloat(g),
                 ExportFloat(b), ExportFloat(a));
@@ -199,22 +195,12 @@ public:
     glVertexAttrib4f(index, ExportFloat(r), ExportFloat(g),
                      ExportFloat(b), ExportFloat(a));
   }
-#endif
 
   /**
    * Configures this color in the OpenGL context.
    */
   void Bind() const {
-#ifdef USE_GLSL
     VertexAttrib(OpenGL::Attribute::COLOR);
-#elif defined(HAVE_GLES)
-    /* on Android, glColor4ub() is not implemented, and we're forced
-       to use floating point math for something as trivial as
-       configuring a RGB color value */
-    glColor4x(r, g, b, a);
-#else
-    glColor4ub(r, g, b, a);
-#endif
   }
 
   /**
@@ -246,22 +232,13 @@ public:
 
 struct ScopeColorPointer {
   ScopeColorPointer(const Color *p) {
-#ifdef USE_GLSL
     glEnableVertexAttribArray(OpenGL::Attribute::COLOR);
     glVertexAttribPointer(OpenGL::Attribute::COLOR, 4, Color::TYPE,
                           GL_FALSE, 0, p);
-#else
-    glEnableClientState(GL_COLOR_ARRAY);
-    glColorPointer(4, Color::TYPE, 0, p);
-#endif
   }
 
   ~ScopeColorPointer() {
-#ifdef USE_GLSL
     glDisableVertexAttribArray(OpenGL::Attribute::COLOR);
-#else
-    glDisableClientState(GL_COLOR_ARRAY);
-#endif
   }
 };
 
