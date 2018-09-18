@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2018 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "GliderLink.hpp"
-#include "Util/StaticString.hxx"
 #include "org_xcsoar_GliderLinkReceiver.h"
 #include "Compiler.h"
 #include "Components.hpp"
@@ -58,7 +57,7 @@ GliderLink* GliderLink::create(JNIEnv* env, Context* context,
                                          unsigned index) {
   assert(gl_cls != nullptr);
 
-  // Construct InternalGPS object.
+  // Construct GliderLinkReceiver object.
   jobject obj =
     env->NewObject(gl_cls, gl_ctor_id, context->Get(), index);
   assert(obj != nullptr);
@@ -84,6 +83,12 @@ Java_org_xcsoar_GliderLinkReceiver_setGliderLinkInfo(
     JNIEnv* env, jclass cls, jint index, jlong gid, jstring callsign,
     jdouble latitude, jdouble longitude, jdouble altitude,
     jdouble gspeed, jdouble vspeed, jint bearing) {
+
+  // GliderLink uses these special values in case they don't have a real value  
+  const double ALT_NONE = -10000.0;
+  const double BEARING_NONE = 361.0;
+  const double GSPEED_NONE = -1.0;
+  const double VSPEED_NONE = -8675309.0;
 
   ScopeLock protect(device_blackboard->mutex);
   NMEAInfo &basic = device_blackboard->SetRealState(index);
@@ -111,18 +116,21 @@ Java_org_xcsoar_GliderLinkReceiver_setGliderLinkInfo(
   traffic->name.SetASCII(nativeString);
   env->ReleaseStringUTFChars(callsign, nativeString);
 
-  traffic->location_available = true;
   traffic->location = GeoPoint(Angle::Degrees(longitude),
                               Angle::Degrees(latitude));
 
-  traffic->altitude_available = altitude > -10000.0;
-  traffic->altitude = altitude;
-  traffic->speed_received = gspeed >= 0.1;
-  traffic->speed = gspeed;
-  traffic->climb_rate_received = vspeed > -8675309.0;
-  traffic->climb_rate = vspeed;
-  traffic->track_received = bearing < 361.0;
-  traffic->track = Angle::Degrees(bearing);
+  traffic->altitude_received = altitude > ALT_NONE;
+  if (traffic->altitude_received)
+    traffic->altitude = altitude;
+  traffic->speed_received = gspeed >= GSPEED_NONE;
+  if (traffic->speed_received)
+    traffic->speed = gspeed;
+  traffic->climb_rate_received = vspeed > VSPEED_NONE;
+  if (traffic->climb_rate_received)
+    traffic->climb_rate = vspeed;
+  traffic->track_received = bearing < BEARING_NONE;
+  if (traffic->track_received)
+    traffic->track = Angle::Degrees(bearing);
 
   // set time of fix to current time
   traffic->valid.Update(basic.clock);

@@ -187,7 +187,7 @@ MapWindow::DrawGLinkTraffic(Canvas &canvas,
     }
 
     // use GPS altitude to be consistent with GliderLink
-    if(basic.gps_altitude_available && traf.altitude_available
+    if(basic.gps_altitude_available && traf.altitude_received
         && fabs(double(traf.altitude) - basic.gps_altitude) >= 100.0) {
       // If average climb data available draw it to the canvas
       TCHAR label_alt[100];

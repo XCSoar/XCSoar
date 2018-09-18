@@ -68,7 +68,7 @@ static constexpr struct {
 #ifdef ANDROID
   { DeviceConfig::PortType::RFCOMM_SERVER, N_("Bluetooth server") },
   { DeviceConfig::PortType::DROIDSOAR_V2, _T("DroidSoar V2") },
-  { DeviceConfig::PortType::GLIDER_LINK, _T("GliderLink receiver") },
+  { DeviceConfig::PortType::GLIDER_LINK, _T("GliderLink traffic receiver") },
 #ifndef NDEBUG
   { DeviceConfig::PortType::NUNCHUCK, N_("IOIO switches and Nunchuk") },
 #endif

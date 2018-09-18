@@ -2,7 +2,7 @@
  Copyright_License {
 
  XCSoar Glide Computer - http://www.xcsoar.org/
- Copyright (C) 2000-2015 The XCSoar Project
+ Copyright (C) 2000-2018 The XCSoar Project
  A detailed list of copyright holders can be found in the file "AUTHORS".
 
  This program is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@
 #include <stdint.h>
 
 /**
- * The identification number of a GLIDER_LINK traffic.
+ * The identification number of a GliderLink traffic.
  */
 class GliderLinkId {
   uint32_t value;

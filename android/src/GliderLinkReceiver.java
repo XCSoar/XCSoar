@@ -1,7 +1,7 @@
 /* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  Copyright (C) 2000-2018 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -36,8 +36,8 @@ import android.os.Handler;
 
 class GliderLinkReceiver extends BroadcastReceiver {
   private static final String TAG = "XCSoar";
-  public static final String ACTION ="link.glider.gliderlink.target_position";
-  
+  public static final String ACTION = "link.glider.gliderlink.target_position";
+
   /**
    * Index of this device in the global list. This value is extracted directly
    * from this object by the C++ wrapper code.
@@ -67,7 +67,7 @@ class GliderLinkReceiver extends BroadcastReceiver {
       }
     });
   }
-  
+
   public void close() {
     handler.post(new Runnable() {
       @Override
@@ -77,11 +77,11 @@ class GliderLinkReceiver extends BroadcastReceiver {
     });
   }
 
-  private static native void setGliderLinkInfo(int deviceId, long gid, String callsign, 
-      double latitude, double longitude, double altitude, 
-      double gspeed, double vspeed, int bearing);
-  
-  @Override 
+  private static native void setGliderLinkInfo(int deviceId, long gid, String callsign,
+          double latitude, double longitude, double altitude,
+          double gspeed, double vspeed, int bearing);
+
+  @Override
   public void onReceive(Context context, Intent intent) {
     try {
       JSONObject json = new JSONObject(intent.getStringExtra("json"));
@@ -107,8 +107,8 @@ class GliderLinkReceiver extends BroadcastReceiver {
       */
 
       setGliderLinkInfo(index, pos.getLong("gid"), pos.getString("callsign"), pos.getDouble("latitude"),
-          pos.getDouble("longitude"), pos.getDouble("altitude"), pos.getDouble("gspeed"), pos.getDouble("vspeed"),
-          pos.getInt("bearing"));
+              pos.getDouble("longitude"), pos.getDouble("altitude"), pos.getDouble("gspeed"), pos.getDouble("vspeed"),
+              pos.getInt("bearing"));
     } catch (JSONException e) {
       Log.e(TAG, e.getLocalizedMessage(), e);
     }

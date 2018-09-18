@@ -2,7 +2,7 @@
  Copyright_License {
 
  XCSoar Glide Computer - http://www.xcsoar.org/
- Copyright (C) 2000-2015 The XCSoar Project
+ Copyright (C) 2000-2018 The XCSoar Project
  A detailed list of copyright holders can be found in the file "AUTHORS".
 
  This program is free software; you can redistribute it and/or
@@ -34,12 +34,7 @@
 
 #include <type_traits>
 
-#include <tchar.h>
-
 struct GliderLinkTraffic {
-  /** Was the geographical location of the target received? */
-  bool location_available;
-
   /** Was the direction of the target received? */
   bool track_received;
 
@@ -47,7 +42,7 @@ struct GliderLinkTraffic {
   bool speed_received;
 
   /** Was the absolute altitude of the target received? */
-  bool altitude_available;
+  bool altitude_received;
 
   /** Was the climb_rate of the target received? */
   bool climb_rate_received;
@@ -103,8 +98,6 @@ struct GliderLinkTraffic {
     valid.Expire(Time, double(5*60));
     return valid;
   }
-
-  void Update(const GliderLinkTraffic &other);
 };
 
 static_assert(std::is_trivial<GliderLinkTraffic>::value, "type is not trivial");
