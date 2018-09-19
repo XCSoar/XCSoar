@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
 "PO-Revision-Date: 2018-09-20 20:30+0000\n"
-"Last-Translator: WaldiS <admin@sto.ugu.pl>\n"
+"Last-Translator: Tomasz Olejnik <oltomasz@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/pl/>\n"
 "Language: pl\n"
@@ -3005,12 +3005,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1019
 #, no-c-format
 msgid "Final MC0 altitude difference"
-msgstr ""
+msgstr "Różnica wysokości na mecie dla MC0"
 
 #: src/InfoBoxes/Content/Factory.cpp:1020
 #, no-c-format
 msgid "Fin MC0 AltD"
-msgstr ""
+msgstr "Fin MC0 RóżWys"
 
 #: src/InfoBoxes/Content/Factory.cpp:1021
 #, no-c-format
@@ -3018,6 +3018,8 @@ msgid ""
 "Arrival altitude at the final waypoint with MC 0 setting relative to the "
 "safety arrival height."
 msgstr ""
+"Wysokość przylotu nad metę z MC ustawionym na 0 w odniesieniu do wysokości "
+"bezpiecznej."
 
 #: src/InfoBoxes/Content/Factory.cpp:1027
 #: src/InfoBoxes/Content/Factory.cpp:1028 src/InfoBoxes/Content/Task.cpp:904
@@ -3033,6 +3035,9 @@ msgid ""
 "of the active waypoint in the current task, the center of a selected goto "
 "waypoint or the target within the AAT sector for AAT tasks."
 msgstr ""
+"Strzałka wskazuje aktualnie wybrany PZ. Wyświetla się także nazwa i dystans "
+"do PZ. Wskazanie jest zoptymalizowane pod kątem aktualnego zadania, wskazuje "
+"środek punktu lub celu wewnątrz sektora AAT dla zadania obszarowego."
 
 #: src/InfoBoxes/Content/Factory.cpp:1039
 #, no-c-format
@@ -3088,11 +3093,13 @@ msgid ""
 "Pie chart of time circling and climbing, circling and descending, and "
 "climbing non-circling."
 msgstr ""
+"Wykres kołowy czasu w krążeniu i wznoszeniu, krążeniu i opadaniu i "
+"wznoszeniu bez krążenia."
 
 #: src/InfoBoxes/Content/Factory.cpp:1064
 #, no-c-format
 msgid "Number of used satellites"
-msgstr ""
+msgstr "Liczba używanych satelitów"
 
 #: src/InfoBoxes/Content/Factory.cpp:1065
 #, no-c-format
@@ -3105,6 +3112,8 @@ msgid ""
 "The number of actually used (seen) satellites by GPS module. If this "
 "information is unavailable, the displayed value is '---'."
 msgstr ""
+"Ilość satelitów GPS aktualnie \"widzianych\" przez moduł GPS. W przypadku "
+"braku informacji wyświetla się '---'. "
 
 #: src/InfoBoxes/Content/Alternate.cpp:49
 #: src/Dialogs/Task/AlternatesListDialog.cpp:162 Data/Input/default.xci:388
@@ -3920,11 +3929,11 @@ msgstr "Podstawa chmur"
 
 #: src/Renderer/MacCreadyRenderer.cpp:51 src/Renderer/TaskSpeedRenderer.cpp:49
 msgid "Vave"
-msgstr ""
+msgstr "Fala"
 
 #: src/Renderer/TaskSpeedRenderer.cpp:52
 msgid "Vest"
-msgstr ""
+msgstr "Zachód"
 
 #: src/UIActions.cpp:52
 msgid "Quit program?"
@@ -5619,7 +5628,7 @@ msgstr "Masa bez balastu"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:146
 msgid "Dry all-up flying mass of your plane"
-msgstr ""
+msgstr "Masa w konfiguracji do lotu szybowca suchego "
 
 #. let the user select
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:188
@@ -6626,6 +6635,8 @@ msgid ""
 "The display resolution is used to adapt line widths, font size, landable "
 "size and more."
 msgstr ""
+"Rozdzielczość wyświetlacza pomaga dostosować szerokość linii, rozmiar "
+"czcionki, lądowisk i innych."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:104
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:129
@@ -7193,7 +7204,7 @@ msgstr "Wybierz co ma być wyświetlane w głównym obszarze ekranu"
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:177
 #, no-c-format
 msgid "Displays either the Circling, Cruise or Final glide infoxboxes"
-msgstr ""
+msgstr "Wyświetla infoboxy krążenia, przeskoku lub dolotu."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:178
 #, no-c-format
