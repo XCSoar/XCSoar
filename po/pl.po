@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2018-05-15 13:40+0000\n"
-"Last-Translator: Tomasz Olejnik <oltomasz@gmail.com>\n"
+"PO-Revision-Date: 2018-09-20 20:30+0000\n"
+"Last-Translator: WaldiS <admin@sto.ugu.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/pl/>\n"
 "Language: pl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.0-dev\n"
+"X-Generator: Weblate 3.2-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -3035,52 +3035,52 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1039
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next waypoint arrival time (ground speed)"
-msgstr "PTdTW: czas lotu do nast. PT z prędk. W"
+msgstr "Następny czas przybycia na punkt orientacyjny (prędkość na ziemi)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1040
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "WP ETA VMG"
-msgstr "PTdTW"
+msgstr "WP ETA VMG"
 
 #: src/InfoBoxes/Content/Factory.cpp:1041
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Estimated arrival time at next waypoint, assuming current ground speed is "
 "maintained."
 msgstr ""
-"PTdTW: Szacowany czas potrzebny do osiągnięcia następne punktu zwrotnego, "
-"zakładając że będzie zachowana obecna prędkość względem ziemi ."
+"Szacowany czas przybycia do następnego punktu orientacyjnego, zakładając "
+"utrzymanie aktualnej prędkości na ziemi."
 
 #: src/InfoBoxes/Content/Factory.cpp:1048
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Percentage non-circling climb"
-msgstr "WAR %T: procent czasu w krążeniu"
+msgstr "Procent wspinaczki bez okrążenia"
 
 #: src/InfoBoxes/Content/Factory.cpp:1049
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "% Str Climb"
-msgstr "WAR %T"
+msgstr "% Str Climb"
 
 #: src/InfoBoxes/Content/Factory.cpp:1050
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Percentage of time spent climbing without circling. These statistics are "
 "reset upon starting the task."
 msgstr ""
-"WAR %T: Procent czasu lotu spędzony w krążeniu. Statystyki są zerowane w "
-"momencie odejścia na trasę."
+"Procent czasu spędzanego na wspinaczce bez okrążenia. Te statystyki są "
+"resetowane po uruchomieniu zadania."
 
 #: src/InfoBoxes/Content/Factory.cpp:1056
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Percentage climb chart"
-msgstr "WAR %T: procent czasu w krążeniu"
+msgstr "Procentowa mapa wznoszenia"
 
 #: src/InfoBoxes/Content/Factory.cpp:1057
 #, fuzzy, no-c-format
 msgid "Climb %"
-msgstr "Wznoszenie"
+msgstr "Climb %"
 
 #: src/InfoBoxes/Content/Factory.cpp:1058
 #, no-c-format
@@ -3095,9 +3095,9 @@ msgid "Number of used satellites"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1065
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Satellites"
-msgstr "Widoczne satelity"
+msgstr "Satelity"
 
 #: src/InfoBoxes/Content/Factory.cpp:1066
 #, no-c-format
@@ -3198,9 +3198,8 @@ msgid "3D fix"
 msgstr "Fix 3D"
 
 #: src/InfoBoxes/Content/Other.cpp:195
-#, fuzzy
 msgid "No GPS"
-msgstr "H GPS"
+msgstr "Brak GPS"
 
 #: src/InfoBoxes/Content/Speed.cpp:120
 msgid "BLOCK"
@@ -4284,12 +4283,15 @@ msgstr "Sterownik"
 #: src/Dialogs/Device/DeviceEditWidget.cpp:642
 msgid "Passthrough device"
 msgstr ""
+"w przypadku urządzenia przejściowego należy zaoferować dodatkowy sterownik"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:643
 msgid ""
 "This option lets you configure if this device has a passed  through device "
 "connected."
 msgstr ""
+"Ta opcja pozwala skonfigurować, czy to urządzenie ma połączone urządzenie "
+"przekazane."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:654
 msgid "Second Driver"
@@ -5241,9 +5243,9 @@ msgid "Tracking"
 msgstr "Śledzenie www"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:154
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Audio"
-msgstr "Dźwięki Vega"
+msgstr "Dźwięk"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:161
 #, no-c-format
@@ -5423,9 +5425,8 @@ msgid "Thermal Band"
 msgstr "Rozkład noszeń"
 
 #: src/Dialogs/dlgAnalysis.cpp:502
-#, fuzzy
 msgid "Vario Histogram"
-msgstr "WARwykr: wykres wariometru GPS lub TEC"
+msgstr "Histogram Vario"
 
 #: src/Dialogs/dlgAnalysis.cpp:510
 msgid "Wind at Altitude"
@@ -5440,9 +5441,8 @@ msgid "Glide Polar"
 msgstr "Biegunowa"
 
 #: src/Dialogs/dlgAnalysis.cpp:528
-#, fuzzy
 msgid "MacCready Speeds"
-msgstr "MCread "
+msgstr "Prędkość MacCready"
 
 #: src/Dialogs/dlgAnalysis.cpp:537
 msgid "Temperature Trace"
@@ -6618,9 +6618,8 @@ msgid "Text size"
 msgstr "Rozmiar tekstu"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:93
-#, fuzzy
 msgid "Display Resolution"
-msgstr "Orientacja wyświetlacza."
+msgstr "Rozdzielczość wyświetlacza"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:94
 msgid ""
@@ -6636,7 +6635,7 @@ msgstr "Automatycznie"
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:107
 #, c-format
 msgid "%d dpi"
-msgstr ""
+msgstr "%d dpi"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:115
 msgid "Events"
@@ -6764,9 +6763,9 @@ msgid "9 Left + Right + Vario (Landscape)"
 msgstr "9 z lewej + z prawej + wario(poziomo)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:88
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "12 Left + 3 Right Vario (Landscape)"
-msgstr "9 z lewej + z prawej + wario(poziomo)"
+msgstr "12 w lewo + 3 prawo wariometr (Krajobraz)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:90
 #, no-c-format
@@ -7383,14 +7382,14 @@ msgid "Disables the reach display."
 msgstr "Wyłącza pokazywanie obszaru zasięgu."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:162
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terrain line"
-msgstr "Teren"
+msgstr "Linia terenu"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:163
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Draws a dashed line at the terrain glide reach."
-msgstr "Rysuje obwiednię obszaru zasięgu szybowca."
+msgstr "Rysuje przerywaną linię przy zasięgu poślizgu terenu."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:164
 #, fuzzy, no-c-format
