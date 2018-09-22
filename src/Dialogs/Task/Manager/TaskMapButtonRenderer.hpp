@@ -36,6 +36,10 @@ class OrderedTask;
 class TaskMapButtonRenderer : public ButtonRenderer {
   const MapLook &look;
 
+  /**
+   * \todo This should not be store within this class. Instead this class
+   *       should obtain this information from an authoritative source.
+   */
   const OrderedTask *task;
 
   mutable BufferCanvas buffer;
