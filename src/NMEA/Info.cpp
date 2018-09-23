@@ -161,6 +161,8 @@ NMEAInfo::Reset()
   airspeed_available.Clear();
   ground_speed = true_airspeed = indicated_airspeed = 0;
   airspeed_real = false;
+  
+  fix_2D = false;
 
   gps_altitude_available.Clear();
 
