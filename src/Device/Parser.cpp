@@ -307,9 +307,13 @@ NMEAParser::GSA(NMEAInputLine &line, NMEAInfo &info)
    */
 
   line.Skip();
-
-  if (line.Read(0) == 1)
-    info.location_available.Clear();
+  
+  // determine fix type
+  unsigned fix_mode;  
+  fix_mode = line.Read(0);  
+  if (fix_mode == 1)
+    info.location_available.Clear();  
+  info.fix_2d = (fix_mode == 2);
 
   // satellites are in items 4-15 of GSA string (4-15 is 1-indexed)
   for (unsigned i = 0; i < GPSState::MAXSATELLITES; i++)
