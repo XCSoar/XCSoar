@@ -119,6 +119,12 @@ struct NMEAInfo {
    * @see AirDensityRatio
    */
   double indicated_airspeed;
+  
+  /**
+   * 2D fix information
+   * true for 2d fix
+   */  
+  bool fix_2D;
 
   //##############
   //   Altitude
