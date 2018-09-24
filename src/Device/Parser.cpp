@@ -308,9 +308,7 @@ NMEAParser::GSA(NMEAInputLine &line, NMEAInfo &info)
 
   line.Skip();
   
-  // determine fix type
-  unsigned fix_mode;  
-  fix_mode = line.Read(0);  
+  unsigned fix_mode = line.Read(0);  
   if (fix_mode == 1)
     info.location_available.Clear();  
   info.fix_2d = (fix_mode == 2);
