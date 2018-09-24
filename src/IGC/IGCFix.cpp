@@ -36,7 +36,7 @@ IGCFix::Apply(const NMEAInfo &basic)
 
   /* "Use A for a 3D fix and V for a 2D fix (no GPS altitude) or for
      no GPS data" */
-  gps_valid = basic.location_available && basic.gps_altitude_available && !(basic.fix_2d);
+  gps_valid = basic.location_available && basic.gps_altitude_available && !basic.fix_2d;
 
   if (basic.location_available)
     location = basic.location;
