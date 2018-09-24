@@ -124,7 +124,7 @@ struct NMEAInfo {
    * 2D fix information
    * true for 2d fix
    */  
-  bool fix_2D;
+  bool fix_2d;
 
   //##############
   //   Altitude
