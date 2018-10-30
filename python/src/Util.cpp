@@ -41,7 +41,6 @@ PyObject* xcsoar_encode(PyObject *self, PyObject *args, PyObject *kwargs) {
 
   if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|idO", kwlist,
                                    &py_list, &delta, &floor_to, &py_method)) {
-    PyErr_SetString(PyExc_AttributeError, "Can't parse argument list.");
     return nullptr;
   }
 

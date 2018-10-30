@@ -45,7 +45,6 @@ PyObject* xcsoar_Flight_new(PyTypeObject *type, PyObject *args, PyObject *kwargs
 
   if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|b", kwlist,
                                    &py_input_data, &keep)) {
-    PyErr_SetString(PyExc_AttributeError, "Can't parse argument list.");
     return 0;
   }
 
@@ -115,7 +114,6 @@ PyObject* xcsoar_Flight_setQNH(Pyxcsoar_Flight *self, PyObject *args) {
   double qnh;
 
   if (!PyArg_ParseTuple(args, "d", &qnh)) {
-    PyErr_SetString(PyExc_AttributeError, "Can't parse QNH.");
     return nullptr;
   }
 
@@ -129,7 +127,6 @@ PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args) {
            *py_end = nullptr;
 
   if (!PyArg_ParseTuple(args, "|OO", &py_begin, &py_end)) {
-    PyErr_SetString(PyExc_AttributeError, "Can't parse argument list.");
     return nullptr;
   }
 
@@ -251,7 +248,6 @@ PyObject* xcsoar_Flight_reduce(Pyxcsoar_Flight *self, PyObject *args, PyObject *
   if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|OOIIIdIO", kwlist,
                                    &py_begin, &py_end, &num_levels, &zoom_factor,
                                    &max_delta_time, &threshold, &max_points, &py_force_endpoints)) {
-    PyErr_SetString(PyExc_AttributeError, "Can't parse argument list.");
     return nullptr;
   }
 
@@ -301,7 +297,6 @@ PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject 
                                    &py_takeoff, &py_scoring_start, &py_scoring_end, &py_landing,
                                    &full, &triangle, &sprint,
                                    &max_iterations, &max_tree_size)) {
-    PyErr_SetString(PyExc_AttributeError, "Can't parse argument list.");
     return nullptr;
   }
 
@@ -404,7 +399,6 @@ PyObject* xcsoar_Flight_encode(Pyxcsoar_Flight *self, PyObject *args) {
            *py_end = nullptr;
 
   if (!PyArg_ParseTuple(args, "|OO", &py_begin, &py_end)) {
-    PyErr_SetString(PyExc_AttributeError, "Can't parse argument list.");
     return nullptr;
   }
 
