@@ -64,6 +64,7 @@ final class BluetoothHelper {
   }
 
   public static void Initialize(Context context) {
+    BluetoothCache.initialize(context);
     hasLe = adapter != null && android.os.Build.VERSION.SDK_INT >= 18 &&
       context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE);
   }
@@ -79,6 +80,8 @@ final class BluetoothHelper {
     String name = device.getName();
     String address = device.getAddress();
 
+    if(name == null)
+      name = BluetoothCache.getName(address);
     if (name == null)
       return address;
 
@@ -93,6 +96,9 @@ final class BluetoothHelper {
     if (adapter == null)
       return null;
 
+    String name = BluetoothCache.getName(address);
+    if(name != null)
+      return name;
     try {
       return adapter.getRemoteDevice(address).getName();
     } catch (Exception e) {
@@ -137,10 +143,10 @@ final class BluetoothHelper {
       if (device == null)
         return null;
 
-      if (hasLe && BluetoothDevice.DEVICE_TYPE_LE == device.getType()) {
+      if (hasLe && (BluetoothCache.isBle(address) || BluetoothDevice.DEVICE_TYPE_LE == device.getType())) {
         Log.d(TAG, String.format(
-            "Bluetooth device \"%s\" (%s) is a LE device, trying to connect using GATT...",
-             device.getName(), device.getAddress()));
+            "Bluetooth device \"%s\" is a LE device, trying to connect using GATT...",
+             getDisplayString(device)));
         BluetoothGattClientPort gattClientPort
           = new BluetoothGattClientPort(device);
         gattClientPort.startConnect(context);
