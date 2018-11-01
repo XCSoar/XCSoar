@@ -10,6 +10,7 @@ LIBNET_SOURCES = \
 
 HAVE_HTTP := n
 
+ifneq ($(MAKECMDGOALS),python)
 ifneq ($(findstring $(TARGET),PC WINE CYGWIN),)
 HAVE_HTTP := y
 LIBNET_SOURCES += \
@@ -47,6 +48,7 @@ HAVE_HTTP := y
 LIBNET_SOURCES += \
 	$(SRC)/Net/HTTP/Java/Session.cpp \
 	$(SRC)/Net/HTTP/Java/Request.cpp
+endif
 endif
 
 ifeq ($(HAVE_HTTP),y)
