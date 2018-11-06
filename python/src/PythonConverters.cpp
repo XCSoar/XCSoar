@@ -339,7 +339,6 @@ bool Python::PyTupleToIGCFixEnhanced(PyObject *py_fix, IGCFixEnhanced &fix) {
          &py_gps_alt, &py_pressure_alt,
          &py_enl, &py_trt, &py_gsp, &py_tas, &py_ias,
          &py_siu, &py_elevation, &py_level)) {
-    PyErr_SetString(PyExc_TypeError, "Failed to parse tuple.");
     return false;
   }
 
