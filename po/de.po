@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2018-03-31 21:37+0000\n"
-"Last-Translator: Helmut Rohs <helmut.rohs@gmail.com>\n"
+"PO-Revision-Date: 2018-12-03 09:15+0000\n"
+"Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/xcsoar/"
 "translations/de/>\n"
 "Language: de\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.20-dev\n"
+"X-Generator: Weblate 3.3\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -2771,7 +2771,7 @@ msgstr "Wind - Pfeil"
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:234
 #: src/Weather/NOAAFormatter.cpp:96 src/Weather/NOAAFormatter.cpp:103
 #: Data/Input/default.xci:571
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Wind"
 msgstr "Wind"
 
@@ -4156,7 +4156,7 @@ msgstr "IOIO Spannungssensor"
 #: src/Dialogs/Device/DeviceEditWidget.cpp:78
 #, no-c-format
 msgid "TCP client"
-msgstr "TCP client"
+msgstr "TCP-Client"
 
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
@@ -4169,7 +4169,7 @@ msgstr "TCP-Port"
 #: src/Dialogs/Device/DeviceEditWidget.cpp:83
 #, no-c-format
 msgid "UDP Port"
-msgstr "UDP Port"
+msgstr "UDP-Port"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:355
 msgid "Bluetooth LE"
@@ -4203,7 +4203,7 @@ msgstr "IP Addresse"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:611
 msgid "I2C Bus"
-msgstr "I2C Bus"
+msgstr "I2C-Bus"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:611
 msgid "Select the description or bus number that matches your configuration."
@@ -5012,6 +5012,7 @@ msgid "Use ZigZag and circling."
 msgstr "Lässt beide Berechnungsmethoden zu."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:63
+#, fuzzy
 msgid "Auto wind"
 msgstr "Wind berech."
 
@@ -5189,7 +5190,7 @@ msgstr "Seiten"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:135
 #, no-c-format
 msgid "InfoBox Sets"
-msgstr "InfoBox Sets"
+msgstr "InfoBox-Sets"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:140
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:134
@@ -6207,7 +6208,7 @@ msgstr "Warnungsfenster"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:212
 msgid "Enable/disable displaying airspaces warnings dialog."
-msgstr "Aktivieren/deaktivieren der Anzeige des Luftraumwarnfensters"
+msgstr "Aktivieren/deaktivieren der Anzeige des Luftraumwarnfensters."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:216
 msgid "Warning time"
@@ -7000,7 +7001,7 @@ msgstr "Notiert alle Starts und Landungen."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:96
 msgid "Logger ID"
-msgstr "Logger ID"
+msgstr "Logger-ID"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:45
 #, no-c-format
@@ -7197,8 +7198,8 @@ msgid ""
 "For final glide mode.  Displayed when 'Auto' is selected and ship is above "
 "final glide altitude"
 msgstr ""
-"Endanflug. Wird angezeigt, wenn 'Auto' ausgewählt ist und das Luftfahrzeug "
-"überhalb der Endanflugshöhe ist."
+"Für den Endanflugmodus.  Wird angezeigt, wenn 'Auto' ausgewählt ist und das "
+"Luftfahrzeug über der Endanflughöhe liegt"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:191
 #, no-c-format
@@ -7327,7 +7328,7 @@ msgstr "Sicherheits MC"
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:150
 #, no-c-format
 msgid "Uses safety MacCready value"
-msgstr "Verwendet den Sicherheits-MacCready-Wert."
+msgstr "Verwendet den Sicherheits-MacCready-Wert"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:154
 msgid "Reach polar"
@@ -8075,7 +8076,7 @@ msgstr "Der FFVV NetCoupe \"libre\" Wettbewerb."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:119
 msgid "On-Line Contest"
-msgstr "On-Line Contest"
+msgstr "On-Line Wettbewerb"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:120
 msgid ""
@@ -8960,7 +8961,7 @@ msgstr "Wertungsstand"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:395
 msgid "Edit Alternates"
-msgstr "Startalternativen Bearb."
+msgstr "Alternativen bearbeiten"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:416
 #: src/Dialogs/Task/TaskPointDialog.cpp:487
@@ -9702,7 +9703,7 @@ msgstr "Flugzeugtyp"
 #: src/Dialogs/Device/Vega/FlarmRepeatParameters.hpp:33
 #, no-c-format
 msgid "Interval; info"
-msgstr "Interval; info"
+msgstr "Intervall; Info"
 
 #: src/Dialogs/Device/Vega/FlarmRepeatParameters.hpp:36
 #, no-c-format
@@ -9985,8 +9986,8 @@ msgid ""
 "Setup\n"
 "Stall"
 msgstr ""
-"Überzieh\n"
-"Konfig."
+"Einrichten\n"
+"Stall"
 
 #: Data/Input/default.xci:719
 msgid ""
