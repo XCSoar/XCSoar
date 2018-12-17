@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2018-09-20 20:30+0000\n"
-"Last-Translator: Tomasz Olejnik <oltomasz@gmail.com>\n"
+"PO-Revision-Date: 2018-12-18 20:24+0000\n"
+"Last-Translator: Jarosław Wosik <drzodrzo@tlen.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/pl/>\n"
 "Language: pl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.2-dev\n"
+"X-Generator: Weblate 3.4-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -318,7 +318,7 @@ msgstr "Sektor BGA Enhanced Option Fixed Course"
 #: src/Task/TypeStrings.cpp:119
 #, no-c-format
 msgid "Turn point cylinder"
-msgstr "Cylinder punktu zwrotnego."
+msgstr "Cylinder punktu zwrotnego"
 
 #: src/Task/TypeStrings.cpp:120
 #, no-c-format
@@ -338,7 +338,7 @@ msgstr "Sektor rejonu"
 #: src/Task/TypeStrings.cpp:123
 #, no-c-format
 msgid "FAI finish quadrant"
-msgstr "FAI kwadrant mety."
+msgstr "FAI kwadrant mety"
 
 #: src/Task/TypeStrings.cpp:124
 #, no-c-format
@@ -358,7 +358,7 @@ msgstr "Sektor startowy BGA"
 #: src/Task/TypeStrings.cpp:127
 #, no-c-format
 msgid "Area sector with inner radius"
-msgstr "Sektor rejonu z wewnętrznym promieniem."
+msgstr "Sektor rejonu z wewnętrznym promieniem"
 
 #: src/Task/TypeStrings.cpp:128 src/Dialogs/Task/dlgTaskHelpers.cpp:230
 #, no-c-format
@@ -594,7 +594,7 @@ msgstr "Pobierz lot"
 
 #: src/Logger/ExternalLogger.cpp:280
 msgid "Logger is empty."
-msgstr "Rejestrator jest pusty"
+msgstr "Rejestrator jest pusty."
 
 #: src/Logger/ExternalLogger.cpp:301
 msgid "Failed to download flight."
@@ -689,7 +689,7 @@ msgstr "Odległość"
 
 #: src/Gauge/BigTrafficWidget.cpp:425 src/Gauge/BigTrafficWidget.cpp:428
 msgid "Rel. Alt."
-msgstr "Różnica wysokości"
+msgstr "Wys. wzgl."
 
 #: src/Gauge/BigTrafficWidget.cpp:881 src/InfoBoxes/Content/Task.cpp:67
 #: src/Dialogs/MapItemListDialog.cpp:178
@@ -722,15 +722,15 @@ msgstr ""
 
 #: src/Menu/ExpandMacros.cpp:94
 msgid "Furthest Landpoint"
-msgstr "Najdal. lądow."
+msgstr "Najdalsze lądowanie"
 
 #: src/Menu/ExpandMacros.cpp:95
 msgid "Next Landpoint"
-msgstr "Nast. lądow."
+msgstr "Następne lądowanie"
 
 #: src/Menu/ExpandMacros.cpp:101
 msgid "Closest Landpoint"
-msgstr "Najbl. lądow."
+msgstr "Najbliższe lądowanie"
 
 #: src/Menu/ExpandMacros.cpp:102
 msgid "Previous Landpoint"
@@ -3083,9 +3083,9 @@ msgid "Percentage climb chart"
 msgstr "Procentowa mapa wznoszenia"
 
 #: src/InfoBoxes/Content/Factory.cpp:1057
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Climb %"
-msgstr "Climb %"
+msgstr "Wznoszenie %"
 
 #: src/InfoBoxes/Content/Factory.cpp:1058
 #, no-c-format
@@ -7403,9 +7403,9 @@ msgid "Draws a dashed line at the terrain glide reach."
 msgstr "Rysuje przerywaną linię przy zasięgu poślizgu terenu."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:164
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terrain shade"
-msgstr "Min. H AGL na dolocie"
+msgstr "Cieniowanie terenu"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:165
 #, no-c-format
@@ -8355,12 +8355,12 @@ msgstr "Jednostki prędkości pion. (wariometr)"
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:180
 #, no-c-format
 msgid "feet"
-msgstr ""
+msgstr "stopy"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:181
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "meters"
-msgstr "metr"
+msgstr "metry"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:184
 msgid "Units used for altitude and heights."
@@ -8684,7 +8684,7 @@ msgstr "Lotnia (Flex/FAI1)"
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:187
 #, no-c-format
 msgid "Hangglider (Rigid/FAI5)"
-msgstr ""
+msgstr "Lotnia (sztywna/FAI5)"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:206
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:232
@@ -8739,7 +8739,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/CloudConfigPanel.cpp:88
 msgid "Obtain and show thermal locations reported by others."
-msgstr ""
+msgstr "Pobierz i wyświetlaj pozycje kominów zarejestrowanych przez innych."
 
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:42
 msgid "Radius of the OZ cylinder."
@@ -9148,6 +9148,8 @@ msgid ""
 "AA Speed - Assigned Area Task average speed achievable around target points "
 "remaining in minimum AAT time."
 msgstr ""
+"Prędkość AA - Średnia prędkość zadania obszarowego osiągalna po punktach "
+"pozostających w minimalnym czasie AAT."
 
 #: src/Dialogs/Task/TargetDialog.cpp:463
 msgid "Optimized"
@@ -9262,14 +9264,12 @@ msgstr ""
 "włączona jest opcja 'Aktywuj wyciszenie'"
 
 #: src/Dialogs/Settings/Panels/AudioConfigPanel.cpp:60
-#, fuzzy
 msgid "Master Volume"
-msgstr "Napięcie baterii"
+msgstr "Głośność podstawowa"
 
 #: src/Dialogs/Weather/PCMetDialog.cpp:68
-#, fuzzy
 msgid "Failed to download file."
-msgstr "Błąd ładowania pliku."
+msgstr "Błąd pobierania pliku."
 
 #: src/Dialogs/Weather/NOAAList.cpp:121 src/Dialogs/Weather/NOAADetails.cpp:72
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:227
@@ -10156,9 +10156,8 @@ msgid "Accel"
 msgstr "Przec"
 
 #: Data/Input/default.xci:646
-#, fuzzy
 msgid "Lua"
-msgstr "Szerokość"
+msgstr "Lua"
 
 #: Data/Input/default.xci:957
 msgid "AVG/ALT"
