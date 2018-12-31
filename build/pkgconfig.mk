@@ -1,27 +1,27 @@
 PKG_CONFIG = pkg-config
 
 ifeq ($(USE_THIRDPARTY_LIBS),y)
-  PKG_CONFIG := PKG_CONFIG_LIBDIR=$(THIRDPARTY_LIBS_ROOT)/lib/pkgconfig $(PKG_CONFIG) --static
+  PKG_CONFIG := PKG_CONFIG_PATH=$(THIRDPARTY_LIBS_ROOT)/lib/pkgconfig $(PKG_CONFIG) --static
 endif
 
 ifeq ($(TARGET_IS_DARWIN),y)
   ifeq ($(DARWIN_LIBS),)
     PKG_CONFIG := $(PKG_CONFIG) --static
   else
-    PKG_CONFIG := PKG_CONFIG_LIBDIR=$(DARWIN_LIBS)/lib/pkgconfig $(PKG_CONFIG) --static --define-variable=prefix=$(DARWIN_LIBS)
+    PKG_CONFIG := PKG_CONFIG_PATH=$(DARWIN_LIBS)/lib/pkgconfig $(PKG_CONFIG) --static --define-variable=prefix=$(DARWIN_LIBS)
   endif
 endif
 
 ifeq ($(HOST_IS_WIN32)$(HAVE_WIN32)$(HAVE_CE),nyn)
-  PKG_CONFIG := PKG_CONFIG_LIBDIR=/usr/local/i686-w64-mingw32/lib/pkgconfig $(PKG_CONFIG)
+  PKG_CONFIG := PKG_CONFIG_PATH=/usr/local/i686-w64-mingw32/lib/pkgconfig $(PKG_CONFIG)
 endif
 
 ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)
-  PKG_CONFIG := PKG_CONFIG_LIBDIR=$(PI)/usr/lib/arm-linux-gnueabihf/pkgconfig $(PKG_CONFIG) --define-variable=prefix=$(PI)/usr
+  PKG_CONFIG := PKG_CONFIG_PATH=$(PI)/usr/lib/arm-linux-gnueabihf/pkgconfig $(PKG_CONFIG) --define-variable=prefix=$(PI)/usr
 endif
 
 ifeq ($(HOST_IS_ARM)$(TARGET_HAS_MALI),ny)
-  PKG_CONFIG := PKG_CONFIG_LIBDIR=$(CUBIE)/usr/lib/arm-linux-gnueabihf/pkgconfig $(PKG_CONFIG) --define-variable=prefix=$(CUBIE)/usr
+  PKG_CONFIG := PKG_CONFIG_PATH=$(CUBIE)/usr/lib/arm-linux-gnueabihf/pkgconfig $(PKG_CONFIG) --define-variable=prefix=$(CUBIE)/usr
 endif
 
 call-pkg-config = $(shell $(PKG_CONFIG) --$(2) $(1) || echo ERROR)
