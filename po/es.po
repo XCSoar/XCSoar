@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2018-04-24 18:41+0000\n"
-"Last-Translator: ejoseca <joseca.izq@gmail.com>\n"
+"PO-Revision-Date: 2019-01-09 12:07+0000\n"
+"Last-Translator: Philip Dodd <philipdodd@hotmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/es/>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.0-dev\n"
+"X-Generator: Weblate 3.4-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -2717,12 +2717,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:920
 #, no-c-format
 msgid "Head wind component (simplified)"
-msgstr "Head wind component (simplified)"
+msgstr "componente de viento en cara (simplificado)"
 
 #: src/InfoBoxes/Content/Factory.cpp:921
 #, no-c-format
 msgid "Head Wind *"
-msgstr "Head Wind *"
+msgstr "viento en cara *"
 
 #: src/InfoBoxes/Content/Factory.cpp:922
 #, no-c-format
@@ -2732,8 +2732,8 @@ msgid ""
 "external device."
 msgstr ""
 "La componente actual de viento de cara. El viento de cara simplificado se "
-"calcula restando la velocidad tierra de GPS al TAS si la velocidad aire esta "
-"disponible desde un dispositivo externo."
+"calcula restando la velocidad en tierra del GPS al TAS si la velocidad en el "
+"aire esta disponible desde un dispositivo externo."
 
 #: src/InfoBoxes/Content/Factory.cpp:928
 #, no-c-format
