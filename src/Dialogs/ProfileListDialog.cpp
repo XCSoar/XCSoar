@@ -286,7 +286,7 @@ ProfileListWidget::CopyClicked()
   }
 
   try {
-    Profile::SaveFile(data, item.path);
+    Profile::SaveFile(data, new_path);
   } catch (const std::runtime_error &e) {
     ShowError(e, _("Failed to save file."));
     return;
