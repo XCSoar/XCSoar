@@ -47,13 +47,6 @@ public:
   constexpr
   FlatLine(const FlatPoint _p1, const FlatPoint _p2):Base(_p1, _p2) {}
 
-  /**
-   * Constructor default
-   *
-   * @return Initialised object at origin
-   */
-  FlatLine() = default;
-
   /** 
    * Calculate intersections between this line
    * and a circle of specified radius centered at the origin.
