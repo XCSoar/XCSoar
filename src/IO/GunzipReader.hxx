@@ -31,7 +31,7 @@
 class GunzipReader final : public Reader {
 	Reader &next;
 
-	bool eof;
+	bool eof = false;
 
 	z_stream z;
 

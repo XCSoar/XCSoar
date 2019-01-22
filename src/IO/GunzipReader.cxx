@@ -21,7 +21,7 @@
 #include "ZlibError.hxx"
 
 GunzipReader::GunzipReader(Reader &_next)
-	:next(_next), eof(false)
+	:next(_next)
 {
 	z.next_in = nullptr;
 	z.avail_in = 0;
