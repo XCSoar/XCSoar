@@ -25,7 +25,7 @@
 #include "Compiler.h"
 
 #ifndef _WIN32
-#include "OS/FileDescriptor.hxx"
+#include "OS/UniqueFileDescriptor.hxx"
 #endif
 
 #ifdef _WIN32
@@ -40,7 +40,7 @@ class FileReader final : public Reader {
 #ifdef _WIN32
 	HANDLE handle;
 #else
-	FileDescriptor fd;
+	UniqueFileDescriptor fd;
 #endif
 
 public:
@@ -50,18 +50,16 @@ public:
 	FileReader(FileReader &&other) noexcept
 		:path(std::move(other.path)),
 		 handle(std::exchange(other.handle, INVALID_HANDLE_VALUE)) {}
-#else
-	FileReader(FileReader &&other) noexcept
-		:path(std::move(other.path)),
-		 fd(other.fd) {
-		other.fd.SetUndefined();
-	}
-#endif
 
 	~FileReader() noexcept {
 		if (IsDefined())
 			Close();
 	}
+#else
+	FileReader(FileReader &&other) noexcept
+		:path(std::move(other.path)),
+		 fd(std::move(other.fd)) {}
+#endif
 
 
 protected:
