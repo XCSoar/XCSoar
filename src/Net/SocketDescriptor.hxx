@@ -136,6 +136,11 @@ public:
 	 */
 	bool Create(int domain, int type, int protocol) noexcept;
 
+	/**
+	 * Like Create(), but enable non-blocking mode.
+	 */
+	bool CreateNonBlock(int domain, int type, int protocol) noexcept;
+
 	bool Bind(SocketAddress address) noexcept;
 
 	/**

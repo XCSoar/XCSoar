@@ -115,6 +115,23 @@ SocketDescriptor::Create(int domain, int type, int protocol) noexcept
 	return true;
 }
 
+bool
+SocketDescriptor::CreateNonBlock(int domain, int type, int protocol) noexcept
+{
+#ifdef SOCK_NONBLOCK
+	type |= SOCK_NONBLOCK;
+#endif
+
+	if (!Create(domain, type, protocol))
+		return false;
+
+#ifndef SOCK_NONBLOCK
+	SetNonBlocking();
+#endif
+
+	return true;
+}
+
 #ifdef _WIN32
 
 bool
