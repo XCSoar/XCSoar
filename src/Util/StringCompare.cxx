@@ -36,7 +36,8 @@ StringEndsWith(const char *haystack, const char *needle) noexcept
 	const size_t needle_length = StringLength(needle);
 
 	return haystack_length >= needle_length &&
-		StringIsEqual(haystack + haystack_length - needle_length, needle);
+		memcmp(haystack + haystack_length - needle_length,
+		       needle, needle_length) == 0;
 }
 
 bool
