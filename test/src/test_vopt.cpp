@@ -24,6 +24,10 @@
 #include "harness_wind.hpp"
 #include "test_debug.hpp"
 
+extern "C" {
+#include "tap.h"
+}
+
 static bool
 test_speed_factor(int test_num, int n_wind)
 {

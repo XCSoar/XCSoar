@@ -27,6 +27,10 @@
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Util/StaticArray.hxx"
 
+extern "C" {
+#include "tap.h"
+}
+
 static TaskPointFactoryType
 GetRandomType(const LegalPointSet &l)
 {

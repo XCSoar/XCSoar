@@ -24,6 +24,10 @@
 #include "Util/AircraftStateFilter.hpp"
 #include "test_debug.hpp"
 
+extern "C" {
+#include "tap.h"
+}
+
 int main(int argc, char** argv) {
   // default arguments
   autopilot_parms.SetRealistic();

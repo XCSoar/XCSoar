@@ -90,7 +90,6 @@ PyObject* xcsoar_Airspaces_addPolygon(Pyxcsoar_Airspaces *self, PyObject *args) 
   if (!PyArg_ParseTuple(args, "OOOdOdO", &py_points, &py_name, &py_as_class,
                                          &base_alt, &py_base_ref,
                                          &top_alt, &py_top_ref)) {
-    PyErr_SetString(PyExc_AttributeError, "Error reading attributes.");
     return nullptr;
   }
 
@@ -206,7 +205,6 @@ PyObject* xcsoar_Airspaces_findIntrusions(Pyxcsoar_Airspaces *self, PyObject *ar
   PyObject *py_flight = nullptr;
 
   if (!PyArg_ParseTuple(args, "O", &py_flight)) {
-    PyErr_SetString(PyExc_AttributeError, "Can't parse argument.");
     return nullptr;
   }
 

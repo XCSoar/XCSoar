@@ -34,6 +34,10 @@
 #include <string>
 #include <math.h>
 
+extern "C" {
+#include "tap.h"
+}
+
 const double Vmin(5.0);
 
 static void

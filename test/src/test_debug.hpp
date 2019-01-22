@@ -28,10 +28,6 @@
 #include "Replay/TaskAutoPilot.hpp"
 #include "OS/Path.hpp"
 
-extern "C" {
-#include "tap.h"
-}
-
 #include <iosfwd>
 #include <string>
 

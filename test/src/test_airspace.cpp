@@ -23,6 +23,10 @@
 #include "harness_flight.hpp"
 #include "test_debug.hpp"
 
+extern "C" {
+#include "tap.h"
+}
+
 static bool
 test_airspace(const unsigned n_airspaces)
 {

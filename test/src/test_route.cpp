@@ -43,6 +43,10 @@
 
 #include <string.h>
 
+extern "C" {
+#include "tap.h"
+}
+
 #define NUM_SOL 15
 
 static bool

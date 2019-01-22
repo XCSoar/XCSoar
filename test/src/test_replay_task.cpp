@@ -17,6 +17,10 @@
 
 #include <fstream>
 
+extern "C" {
+#include "tap.h"
+}
+
 static OrderedTask *
 task_load(const TaskBehaviour &task_behaviour)
 {
