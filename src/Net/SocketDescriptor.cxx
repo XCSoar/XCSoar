@@ -37,7 +37,12 @@
 #include <ws2tcpip.h>
 #else
 #include <sys/socket.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
 #endif
+
+#include <errno.h>
+#include <string.h>
 
 int
 SocketDescriptor::GetType() const noexcept
@@ -175,6 +180,45 @@ SocketDescriptor::CreateSocketPairNonBlock(int domain, int type, int protocol,
 
 #endif
 
+int
+SocketDescriptor::GetError() noexcept
+{
+	assert(IsDefined());
+
+	int s_err = 0;
+	socklen_t s_err_size = sizeof(s_err);
+	return getsockopt(fd, SOL_SOCKET, SO_ERROR,
+			  (char *)&s_err, &s_err_size) == 0
+		? s_err
+		: errno;
+}
+
+size_t
+SocketDescriptor::GetOption(int level, int name,
+			    void *value, size_t size) const noexcept
+{
+	assert(IsDefined());
+
+	socklen_t size2 = size;
+	return getsockopt(fd, level, name, (char *)value, &size2) == 0
+		? size2
+		: 0;
+}
+
+#ifdef HAVE_STRUCT_UCRED
+
+struct ucred
+SocketDescriptor::GetPeerCredentials() const noexcept
+{
+	struct ucred cred;
+	if (GetOption(SOL_SOCKET, SO_PEERCRED,
+		      &cred, sizeof(cred)) < sizeof(cred))
+		cred.pid = -1;
+	return cred;
+}
+
+#endif
+
 #ifdef _WIN32
 
 bool
@@ -183,6 +227,84 @@ SocketDescriptor::SetNonBlocking() noexcept
 	u_long val = 1;
 	return ioctlsocket(fd, FIONBIO, &val) == 0;
 }
+
+#endif
+
+bool
+SocketDescriptor::SetOption(int level, int name,
+			    const void *value, size_t size) noexcept
+{
+	assert(IsDefined());
+
+	/* on Windows, setsockopt() wants "const char *" */
+	return setsockopt(fd, level, name, (const char *)value, size) == 0;
+}
+
+bool
+SocketDescriptor::SetKeepAlive(bool value) noexcept
+{
+	return SetBoolOption(SOL_SOCKET, SO_KEEPALIVE, value);
+}
+
+bool
+SocketDescriptor::SetReuseAddress(bool value) noexcept
+{
+	return SetBoolOption(SOL_SOCKET, SO_REUSEADDR, value);
+}
+
+#ifdef __linux__
+
+bool
+SocketDescriptor::SetReusePort(bool value) noexcept
+{
+	return SetBoolOption(SOL_SOCKET, SO_REUSEPORT, value);
+}
+
+bool
+SocketDescriptor::SetFreeBind(bool value) noexcept
+{
+	return SetBoolOption(IPPROTO_IP, IP_FREEBIND, value);
+}
+
+bool
+SocketDescriptor::SetNoDelay(bool value) noexcept
+{
+	return SetBoolOption(IPPROTO_TCP, TCP_NODELAY, value);
+}
+
+bool
+SocketDescriptor::SetCork(bool value) noexcept
+{
+	return SetBoolOption(IPPROTO_TCP, TCP_CORK, value);
+}
+
+bool
+SocketDescriptor::SetTcpDeferAccept(const int &seconds) noexcept
+{
+	return SetOption(IPPROTO_TCP, TCP_DEFER_ACCEPT, &seconds, sizeof(seconds));
+}
+
+bool
+SocketDescriptor::SetV6Only(bool value) noexcept
+{
+	return SetBoolOption(IPPROTO_IPV6, IPV6_V6ONLY, value);
+}
+
+bool
+SocketDescriptor::SetBindToDevice(const char *name) noexcept
+{
+	return SetOption(SOL_SOCKET, SO_BINDTODEVICE, name, strlen(name));
+}
+
+#ifdef TCP_FASTOPEN
+
+bool
+SocketDescriptor::SetTcpFastOpen(int qlen) noexcept
+{
+	return SetOption(SOL_TCP, TCP_FASTOPEN, &qlen, sizeof(qlen));
+}
+
+#endif
 
 #endif
 

@@ -150,6 +150,51 @@ public:
 					     SocketDescriptor &b) noexcept;
 #endif
 
+	int GetError() noexcept;
+
+	/**
+	 * @return the value size or 0 on error
+	 */
+	size_t GetOption(int level, int name,
+			 void *value, size_t size) const noexcept;
+
+#ifdef HAVE_STRUCT_UCRED
+	/**
+	 * Receive peer credentials (SO_PEERCRED).  On error, the pid
+	 * is -1.
+	 */
+	gcc_pure
+	struct ucred GetPeerCredentials() const noexcept;
+#endif
+
+	bool SetOption(int level, int name,
+		       const void *value, size_t size) noexcept;
+
+	bool SetBoolOption(int level, int name, bool _value) noexcept {
+		const int value = _value;
+		return SetOption(level, name, &value, sizeof(value));
+	}
+
+	bool SetKeepAlive(bool value=true) noexcept;
+	bool SetReuseAddress(bool value=true) noexcept;
+
+#ifdef __linux__
+	bool SetReusePort(bool value=true) noexcept;
+	bool SetFreeBind(bool value=true) noexcept;
+	bool SetNoDelay(bool value=true) noexcept;
+	bool SetCork(bool value=true) noexcept;
+
+	bool SetTcpDeferAccept(const int &seconds) noexcept;
+	bool SetV6Only(bool value) noexcept;
+
+	/**
+	 * Setter for SO_BINDTODEVICE.
+	 */
+	bool SetBindToDevice(const char *name) noexcept;
+
+	bool SetTcpFastOpen(int qlen=16) noexcept;
+#endif
+
 	bool Bind(SocketAddress address) noexcept;
 
 	/**
