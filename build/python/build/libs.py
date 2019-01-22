@@ -212,9 +212,9 @@ curl = CmakeProject(
 )
 
 proj = CmakeProject(
-    'http://download.osgeo.org/proj/proj-5.1.0.tar.gz',
-    'https://fossies.org/linux/privat/proj-5.1.0.tar.gz',
-    '6b1379a53317d9b5b8c723c1dc7bf2e3a8eb22ceb46b8807a1ce48ef65685bb3',
+    'http://download.osgeo.org/proj/proj-5.2.0.tar.gz',
+    'https://fossies.org/linux/privat/proj-5.2.0.tar.gz',
+    'ef919499ffbc62a4aae2659a55e2b25ff09cccbbe230656ba71c6224056c7e60',
     'lib/libproj.a',
     [
         '-DPROJ_TESTS=OFF',
