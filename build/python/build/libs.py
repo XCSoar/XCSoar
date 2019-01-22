@@ -109,9 +109,9 @@ freetype = FreeTypeProject(
 )
 
 curl = CurlProject(
-    'http://curl.haxx.se/download/curl-7.61.0.tar.xz',
-    'https://github.com/curl/curl/releases/download/curl-7_61_0/curl-7.61.0.tar.xz',
-    'ef6e55192d04713673b4409ccbcb4cb6cd723137d6e10ca45b0c593a454e1720',
+    'http://curl.haxx.se/download/curl-7.63.0.tar.xz',
+    'https://github.com/curl/curl/releases/download/curl-7_63_0/curl-7.63.0.tar.xz',
+    '9600234c794bfb8a0d3f138e9294d60a20e7a5f10e35ece8cf518e2112d968c4',
     'lib/libcurl.a',
     [
         '--disable-shared', '--enable-static',
