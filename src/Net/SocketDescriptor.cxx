@@ -132,6 +132,49 @@ SocketDescriptor::CreateNonBlock(int domain, int type, int protocol) noexcept
 	return true;
 }
 
+#ifndef _WIN32
+
+bool
+SocketDescriptor::CreateSocketPair(int domain, int type, int protocol,
+				   SocketDescriptor &a,
+				   SocketDescriptor &b) noexcept
+{
+#ifdef SOCK_CLOEXEC
+	/* implemented since Linux 2.6.27 */
+	type |= SOCK_CLOEXEC;
+#endif
+
+	int fds[2];
+	if (socketpair(domain, type, protocol, fds) < 0)
+		return false;
+
+	a = SocketDescriptor(fds[0]);
+	b = SocketDescriptor(fds[1]);
+	return true;
+}
+
+bool
+SocketDescriptor::CreateSocketPairNonBlock(int domain, int type, int protocol,
+					   SocketDescriptor &a,
+					   SocketDescriptor &b) noexcept
+{
+#ifdef SOCK_NONBLOCK
+	type |= SOCK_NONBLOCK;
+#endif
+
+	if (!CreateSocketPair(domain, type, protocol, a, b))
+		return false;
+
+#ifndef SOCK_NONBLOCK
+	a.SetNonBlocking();
+	b.SetNonBlocking();
+#endif
+
+	return true;
+}
+
+#endif
+
 #ifdef _WIN32
 
 bool

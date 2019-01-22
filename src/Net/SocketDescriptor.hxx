@@ -141,6 +141,15 @@ public:
 	 */
 	bool CreateNonBlock(int domain, int type, int protocol) noexcept;
 
+#ifndef _WIN32
+	static bool CreateSocketPair(int domain, int type, int protocol,
+				     SocketDescriptor &a,
+				     SocketDescriptor &b) noexcept;
+	static bool CreateSocketPairNonBlock(int domain, int type, int protocol,
+					     SocketDescriptor &a,
+					     SocketDescriptor &b) noexcept;
+#endif
+
 	bool Bind(SocketAddress address) noexcept;
 
 	/**
