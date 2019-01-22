@@ -185,9 +185,9 @@ simple_usbmodeswitch = AutotoolsProject(
 )
 
 libtiff = AutotoolsProject(
-    'http://download.osgeo.org/libtiff/tiff-4.0.9.tar.gz',
-    'http://ftp.lfs-matrix.net/pub/blfs/conglomeration/tiff/tiff-4.0.9.tar.gz',
-    '6e7bdeec2c310734e734d19aae3a71ebe37a4d842e0e23dbb1b8921c0026cfcd',
+    'http://download.osgeo.org/libtiff/tiff-4.0.10.tar.gz',
+    'http://ftp.lfs-matrix.net/pub/blfs/conglomeration/tiff/tiff-4.0.10.tar.gz',
+    '2c52d11ccaf767457db0c46795d9c7d1a8d8f76f68b0b800a3dfe45786b996e4',
     'lib/libtiff.a',
     [
         '--disable-shared', '--enable-static',
