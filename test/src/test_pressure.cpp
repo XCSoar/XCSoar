@@ -26,6 +26,10 @@
 
 #include <stdio.h>
 
+extern "C" {
+#include "tap.h"
+}
+
 static bool
 test_find_qnh()
 {

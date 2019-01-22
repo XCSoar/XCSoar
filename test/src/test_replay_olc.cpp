@@ -13,6 +13,10 @@
 
 #include <fstream>
 
+extern "C" {
+#include "tap.h"
+}
+
 ContestResult official_score_classic,
   official_score_sprint,
   official_score_fai,

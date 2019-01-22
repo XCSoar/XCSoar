@@ -25,6 +25,10 @@
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "test_debug.hpp"
 
+extern "C" {
+#include "tap.h"
+}
+
 static bool
 test_abort(int n_wind)
 {

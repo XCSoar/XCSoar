@@ -31,6 +31,10 @@
 #include <stdio.h>
 #include <tchar.h>
 
+extern "C" {
+#include "tap.h"
+}
+
 class WaypointPredicateCounter: public WaypointVisitor
 {
 public:

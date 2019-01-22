@@ -30,6 +30,10 @@
 
 #include <fstream>
 
+extern "C" {
+#include "tap.h"
+}
+
 #define n_test 500
 
 class WaypointVisitorPrint: public WaypointVisitor {

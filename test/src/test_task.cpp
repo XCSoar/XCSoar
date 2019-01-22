@@ -25,6 +25,10 @@
 #include "test_debug.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 
+extern "C" {
+#include "tap.h"
+}
+
 int main(int argc, char** argv)
 {
   if (!ParseArgs(argc,argv)) {
