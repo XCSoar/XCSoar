@@ -28,6 +28,7 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 #include "Atmosphere/Pressure.hpp"
+#include "RadioFrequency.hpp"
 #include "Units/System.hpp"
 #include "Math/Util.hpp"
 
@@ -74,6 +75,10 @@ public:
   bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
   bool PutQNH(const AtmosphericPressure &pres,
               OperationEnvironment &env) override;
+  bool PutVolume(unsigned volume, OperationEnvironment &env) override;
+  bool PutStandbyFrequency(RadioFrequency frequency,
+                           const TCHAR *name,
+                           OperationEnvironment &env) override;
 };
 
 bool
@@ -82,6 +87,25 @@ ACDDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
   char buffer[100];
   unsigned qnh = uround(pres.GetPascal());
   sprintf(buffer, "PAAVC,S,ALT,QNH,%u", qnh);
+  return PortWriteNMEA(port, buffer, env);
+}
+
+bool
+ACDDevice::PutVolume(unsigned volume, OperationEnvironment &env)
+{
+  char buffer[100];
+  sprintf(buffer, "PAAVC,S,COM,RXVOL1,%u", volume);
+  return PortWriteNMEA(port, buffer, env);
+}
+
+bool
+ACDDevice::PutStandbyFrequency(RadioFrequency frequency,
+                                   const TCHAR *name,
+                                   OperationEnvironment &env)
+{
+  char buffer[100];
+  unsigned freq = frequency.GetKiloHertz();
+  sprintf(buffer, "PAAVC,S,COM,CHN2,%u", freq);
   return PortWriteNMEA(port, buffer, env);
 }
 
