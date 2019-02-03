@@ -68,10 +68,11 @@ Path
 GetPrimaryDataPath();
 
 /**
- * Returns the path of the XCSoarData folder, optionally including
- * the given file name
- * @param buffer Output buffer
- * @param file optional filename to include in the output
+ * Gives the position of an XCSoar data file within the particular file
+ * system of this host.
+ * @param file The name of the file in question. Should not be equal to 
+ *             'nullptr'.
+ * @return The fully qualified path of file.
  */
 AllocatedPath
 LocalPath(Path file);
