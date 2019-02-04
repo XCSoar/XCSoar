@@ -42,7 +42,7 @@ sudo ./install-debian-packages.sh
 \section{Optional: Eclipse IDE}
 One of the most widespread IDEs is eclipse. It is not limited to Android, and can be used for all targets. It is not required for \xc, but its installation is described here as an example. Eclipse is quite heavyweight, and many developers prefer other IDEs for \xc development.
 
-To install, download the eclipse installer (Sometimes called "\emph{Ooomph!}" for some reason) from here:\\
+To install, download the eclipse installer (Sometimes called ``\emph{Ooomph!}'' for some reason) from here:\\
 \texttt{https://www.eclipse.org/downloads/}
 
 Important: Install the CDT version of eclipse for C development, not the Android/Java package, even if you plan developing for Android. In addition, it is very convenient to install the git support (egit).
@@ -55,7 +55,7 @@ Next, create a new project, by generating a make project from existing sources f
 
 Important: After you have added the sources, eclipse will start indexing all files. If you have already started \texttt{make} before this time, then a lot of files have been downloaded for the various libraries which are exctracted/built within the \xc directory (most notably the boost libraries). Indexing all these takes a very long time, and a lot of heap space, so you should probably stop the indexer right away. In addition you should probably exclude these directories from the indexer for the future.
 
-For this, in the C/C++ scope, right-click on the "output" directory in the file tree on the left side, select "Properties", then "Resource/Resource Filters" and add a filter. In the "add filter" dialog, choose "exclude all", "files and folders", "all children (recursive)" and set the Filter details to "Name matches *".
+For this, in the C/C++ scope, right-click on the ``output'' directory in the file tree on the left side, select ``Properties'', then ``Resource/Resource Filters'' and add a filter. In the ``add filter'' dialog, choose ``exclude all'', ``files and folders'', ``all children (recursive)'' and set the Filter details to ``Name matches *''.
 This will exclude the output tree from the indexer, leading to a minimal index.
 
 \section{Optional: modern LaTeX editor for editing the Manual}
@@ -69,9 +69,9 @@ sudo apt-get install texstudio
 
 As the directory tree of \xc is very unusual for a LaTeX project, we need to make some special configurations in order to allow for quick compiling from within the editor, and for full synctex functionality:
 
-In "Options / Configure TeXStudio", enable "show advanced options".
+In ``Options / Configure TeXStudio'', enable ``show advanced options''.
 
-In "Options / Configure TeXStudio / Commands / Commands / LuaLaTeX", replace
+In ``Options / Configure TeXStudio / Commands / Commands / LuaLaTeX'', replace
 \begin{verbatim}
 lualatex -synctex=1 -interaction=nonstopmode %.tex
 \end{verbatim}
@@ -81,8 +81,8 @@ lualatex -synctex=1 -interaction=nonstopmode
  -output-directory=?a)../../../output/manual %.tex
 \end{verbatim}
 
-In "Options / Configure TexStudio / Build / Build Options / Addition Search Paths":\\
-Enter in \emph{both} fields ("Log file" and in the field "PDF File"):
+In ``Options / Configure TexStudio / Build / Build Options / Addition Search Paths'':\\
+Enter in \emph{both} fields (``Log file'' and in the field ``PDF File''):
 \begin{verbatim}
 ../../../output/manual/
 \end{verbatim}
@@ -96,6 +96,6 @@ export TEXINPUTS="..:../../../output/manual:../../../output/manual/en:../../..:"
 \end{maxipage}
 
 
-Finally, you need to run "make manual" in the \xc base directory at least once from the command line before you can compile from within the TexStudio interface. This creates the path structure and generates the figure files which are included into the manual. Of course, if you change figures, you might have to run "make manual" again.
+Finally, you need to run ``make manual'' in the \xc base directory at least once from the command line before you can compile from within the TexStudio interface. This creates the path structure and generates the figure files which are included into the manual. Of course, if you change figures, you might have to run ``make manual'' again.
 
-Inside TeXStudio, open the file "XCSoar-manual.tex" (or one of the other root files) and right-click on this file to "set as explicit root document", in the structure view on the left. Now you are good to go. Make changes and press F5 to see the result immediately.
+Inside TeXStudio, open the file ``XCSoar-manual.tex'' (or one of the other root files) and right-click on this file to ``set as explicit root document'', in the structure view on the left. Now you are good to go. Make changes and press F5 to see the result immediately.
