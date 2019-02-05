@@ -66,6 +66,7 @@ Version 6.8.12 - not yet released
   - increase targetSdkVersion to 26 (required by Google Play)
 * Task Editor
   - fixed task editor crashes (Ticket 3930).
+* fix IGC logger crash when no date is available
 
 Version 6.8.11 - 2018/08/18
 * terrain
