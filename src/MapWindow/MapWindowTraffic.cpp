@@ -141,13 +141,35 @@ MapWindow::DrawSkyLinesTraffic(Canvas &canvas) const
   if (skylines_data == nullptr)
     return;
 
+  if (DisplaySkyLinesTrafficMapMode::OFF == GetMapSettings().skylines_traffic_map_mode) {
+    return;
+  }
   canvas.Select(*traffic_look.font);
 
   ScopeLock protect(skylines_data->mutex);
   for (auto &i : skylines_data->traffic) {
     PixelPoint pt;
+
     if (render_projection.GeoToScreenIfVisible(i.second.location, pt)) {
+      // Points for the screen coordinates for the icon, name and height
+      TextInBoxMode mode;
+      mode.shape = LabelShape::OUTLINED;
+
       traffic_look.teammate_icon.Draw(canvas, pt);
+      if (DisplaySkyLinesTrafficMapMode::SYMBOL_NAME == GetMapSettings().skylines_traffic_map_mode) {
+        const auto name_i = skylines_data->user_names.find(i.first);
+        tstring name = name_i != skylines_data->user_names.end()
+          ? name_i->second
+          : tstring();
+
+        StaticString<128> buffer;
+        buffer.Format(_T("%s [%um]"), name.c_str(), i.second.altitude);
+    
+        // Draw the name 16 points below the icon
+        pt.y -= Layout::Scale(10);
+        TextInBox(canvas, buffer, pt.x, pt.y,
+                  mode, GetClientRect());
+     }    
     }
   }
 }

@@ -41,6 +41,7 @@ enum ControlIndex {
   ENABLE_DETOUR_COST_MARKERS,
   AIRCRAFT_SYMBOL,
   WIND_ARROW_STYLE,
+  SKYLINES_TRAFFIC_MAP_MODE,
 };
 
 class SymbolsConfigPanel final
@@ -135,6 +136,13 @@ static constexpr StaticEnumChoice wind_arrow_list[] = {
   { 0 }
 };
 
+static constexpr StaticEnumChoice skylines_map_mode_list[] = {
+  { (unsigned)DisplaySkyLinesTrafficMapMode::OFF, N_("Off"), N_("No SkyLines traffic is drawn.") },
+  { (unsigned)DisplaySkyLinesTrafficMapMode::SYMBOL, N_("Symbol"), N_("Draws the SkyLines symbol only.") },
+  { (unsigned)DisplaySkyLinesTrafficMapMode::SYMBOL_NAME, N_("Symbol and Name"), N_("Draws the SkyLines symbol with name.") },
+  { 0 }
+};
+
 void
 SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
@@ -184,6 +192,10 @@ SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           wind_arrow_list, (unsigned)settings_map.wind_arrow_style);
   SetExpertRow(WIND_ARROW_STYLE);
 
+  AddEnum(_("SkyLines traffic mode"),
+           ("Show the SkyLines traffic symbols/names on the map, downloaded from the SkyLines server."),
+          skylines_map_mode_list, (unsigned)settings_map.skylines_traffic_map_mode);
+
   ShowTrailControls(settings_map.trail.length != TrailSettings::Length::OFF);
 }
 
@@ -215,6 +227,9 @@ SymbolsConfigPanel::Save(bool &_changed)
   changed |= SaveValueEnum(AIRCRAFT_SYMBOL, ProfileKeys::AircraftSymbol, settings_map.aircraft_symbol);
 
   changed |= SaveValueEnum(WIND_ARROW_STYLE, ProfileKeys::WindArrowStyle, settings_map.wind_arrow_style);
+
+  changed |= SaveValueEnum(SKYLINES_TRAFFIC_MAP_MODE, ProfileKeys::SkyLinesTrafficMapMode,
+                           settings_map.skylines_traffic_map_mode);
 
   _changed |= changed;
 
