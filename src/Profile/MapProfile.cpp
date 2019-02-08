@@ -71,6 +71,8 @@ Profile::Load(const ProfileMap &map, MapSettings &settings)
 
   map.GetEnum(ProfileKeys::WindArrowStyle, settings.wind_arrow_style);
 
+  map.GetEnum(ProfileKeys::SkyLinesTrafficMapMode, settings.skylines_traffic_map_mode);
+
   settings.waypoint.LoadFromProfile();
 
   Load(map, settings.airspace);

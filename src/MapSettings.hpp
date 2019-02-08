@@ -70,6 +70,12 @@ enum class FinalGlideBarDisplayMode: uint8_t {
   AUTO,
 };
 
+enum class DisplaySkyLinesTrafficMapMode: uint8_t {
+  OFF,
+  SYMBOL,
+  SYMBOL_NAME,
+};
+
 struct MapItemListSettings {
 
   /** Add an LocationMapItem to the MapItemList? */
@@ -186,6 +192,11 @@ struct MapSettings {
    * Overlay FAI triangle areas on the map while flying?
    */
   bool show_fai_triangle_areas;
+
+  /**
+   * Display skylines name on map
+   */
+  DisplaySkyLinesTrafficMapMode skylines_traffic_map_mode;
 
   FAITriangleSettings fai_triangle_settings;
 
