@@ -85,10 +85,10 @@ struct MapItemListSettings {
   bool add_traffic;
 
   /* nearest map items: the range is a circle calculate in % of the smallest side of the display */
-  int range_of_nearest_map_items_in_percent_of_displaysize;
+  unsigned int range_of_nearest_map_items_in_percent_of_displaysize;
 
   /* nearest map items: range-filter in km for only landable waypoints  0km only landable */
-  int rangefilter_all_waypoint_up_to_km;
+  unsigned int rangefilter_all_waypoint_up_to_km;
 
   void SetDefaults();
 };

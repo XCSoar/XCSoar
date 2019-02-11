@@ -1,25 +1,25 @@
 /*
-Copyright_License {
+ Copyright_License {
 
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
-  A detailed list of copyright holders can be found in the file "AUTHORS".
+ XCSoar Glide Computer - http://www.xcsoar.org/
+ Copyright (C) 2000-2016 The XCSoar Project
+ A detailed list of copyright holders can be found in the file "AUTHORS".
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-}
-*/
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ }
+ */
 
 #include "Dialogs/MapItemListDialog.hpp"
 #include "Dialogs/WidgetDialog.hpp"
@@ -77,7 +77,7 @@ HasDetails(const MapItem &item)
 }
 
 class MapItemListWidget final
-  : public ListWidget, private ActionListener {
+: public ListWidget, private ActionListener {
   enum Buttons {
     SETTINGS,
     GOTO,
@@ -95,80 +95,105 @@ class MapItemListWidget final
   Button *ack_button;
 
 public:
-  void CreateButtons(WidgetDialog &dialog);
-  bool bSettingDone = false; // signals the setting of MapItemList paramter
+  void
+  CreateButtons(WidgetDialog &dialog);
+
+  /*
+   * bsetting_done == true the MapItemList settings changed, a refresh of the MapItemList is necessary
+   */
+  bool bsetting_done = false;
 
 public:
-  MapItemListWidget(const MapItemList &_list,
-                    const DialogLook &_dialog_look, const MapLook &_look,
-                    const TrafficLook &_traffic_look,
+  MapItemListWidget(const MapItemList &_list, const DialogLook &_dialog_look,
+                    const MapLook &_look, const TrafficLook &_traffic_look,
                     const FinalGlideBarLook &_final_glide_look,
                     const MapSettings &_settings)
-    :list(_list),
-     dialog_look(_dialog_look),
-     settings(_settings),
-     renderer(_look, _traffic_look, _final_glide_look,
-              _settings, CommonInterface::GetComputerSettings().utc_offset) {}
+      : list(_list), dialog_look(_dialog_look), settings(_settings), renderer(
+          _look, _traffic_look, _final_glide_look, _settings,
+          CommonInterface::GetComputerSettings().utc_offset)
+  {
+  }
 
-  unsigned GetCursorIndex() const {
+  unsigned
+  GetCursorIndex() const
+  {
     return GetList().GetCursorIndex();
   }
 
 protected:
-  void UpdateButtons() {
+  void
+  UpdateButtons()
+  {
     const unsigned current = GetCursorIndex();
     details_button->SetEnabled(HasDetails(*list[current]));
     goto_button->SetEnabled(CanGotoItem(current));
     ack_button->SetEnabled(CanAckItem(current));
   }
 
-  void OnGotoClicked();
-  void OnAckClicked();
+  void
+  OnGotoClicked();
+  void
+  OnAckClicked();
 
 public:
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual void Unprepare() override {
+  virtual void
+  Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual void
+  Unprepare() override
+  {
     DeleteWindow();
   }
 
   /* virtual methods from class List::Handler */
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) override;
+  virtual void
+  OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx) override;
 
-  virtual void OnCursorMoved(unsigned index) override {
+  virtual void
+  OnCursorMoved(unsigned index) override
+  {
     UpdateButtons();
   }
 
-  virtual bool CanActivateItem(unsigned index) const override {
+  virtual bool
+  CanActivateItem(unsigned index) const override
+  {
     return HasDetails(*list[index]);
   }
 
-  bool CanGotoItem(unsigned index) const {
+  bool
+  CanGotoItem(unsigned index) const
+  {
     return CanGotoItem(*list[index]);
   }
 
-  static bool CanGotoItem(const MapItem &item) {
-    return protected_task_manager != NULL &&
-      item.type == MapItem::WAYPOINT;
+  static bool
+  CanGotoItem(const MapItem &item)
+  {
+    return protected_task_manager != NULL && item.type == MapItem::WAYPOINT;
   }
 
-  bool CanAckItem(unsigned index) const {
+  bool
+  CanAckItem(unsigned index) const
+  {
     return CanAckItem(*list[index]);
   }
 
-  static bool CanAckItem(const MapItem &item) {
+  static bool
+  CanAckItem(const MapItem &item)
+  {
     const AirspaceMapItem &as_item = (const AirspaceMapItem &)item;
 
-    return item.type == MapItem::AIRSPACE &&
-      GetAirspaceWarnings() != nullptr &&
-      !GetAirspaceWarnings()->GetAckDay(*as_item.airspace);
+    return item.type == MapItem::AIRSPACE && GetAirspaceWarnings() != nullptr
+        && !GetAirspaceWarnings()->GetAckDay(*as_item.airspace);
   }
 
-  virtual void OnActivateItem(unsigned index) override;
+  virtual void
+  OnActivateItem(unsigned index) override;
 
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) override;
+  virtual void
+  OnAction(int id) override;
 };
 
 void
@@ -184,8 +209,7 @@ MapItemListWidget::CreateButtons(WidgetDialog &dialog)
 void
 MapItemListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  CreateList(parent, dialog_look, rc,
-             renderer.CalculateLayout(dialog_look));
+  CreateList(parent, dialog_look, rc, renderer.CalculateLayout(dialog_look));
 
   GetList().SetLength(list.size());
   UpdateButtons();
@@ -204,13 +228,12 @@ MapItemListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                                unsigned idx)
 {
   const MapItem &item = *list[idx];
-  renderer.Draw(canvas, rc, item,
-                &CommonInterface::Basic().flarm.traffic);
+  renderer.Draw(canvas, rc, item, &CommonInterface::Basic().flarm.traffic);
 
-  if ((settings.item_list.add_arrival_altitude &&
-       item.type == MapItem::Type::ARRIVAL_ALTITUDE) ||
-      (!settings.item_list.add_arrival_altitude &&
-       item.type == MapItem::Type::LOCATION)) {
+  if ((settings.item_list.add_arrival_altitude
+      && item.type == MapItem::Type::ARRIVAL_ALTITUDE)
+      || (!settings.item_list.add_arrival_altitude
+          && item.type == MapItem::Type::LOCATION)) {
     canvas.SelectBlackPen();
     canvas.DrawLine(rc.left, rc.bottom - 1, rc.right, rc.bottom - 1);
   }
@@ -241,8 +264,7 @@ MapItemListWidget::OnGotoClicked()
 inline void
 MapItemListWidget::OnAckClicked()
 {
-  const AirspaceMapItem &as_item = *(const AirspaceMapItem *)
-    list[GetCursorIndex()];
+  const AirspaceMapItem &as_item = *(const AirspaceMapItem *)list[GetCursorIndex()];
   GetAirspaceWarnings()->AcknowledgeDay(*as_item.airspace);
   UpdateButtons();
 }
@@ -254,7 +276,7 @@ MapItemListWidget::OnAction(int id)
   case SETTINGS:
     ShowMapItemListSettingsDialog();
     Profile::Save();
-    this->bSettingDone=true;
+    this->bsetting_done = true;
     cancel_button->Click();
     break;
   case GOTO:
@@ -268,27 +290,27 @@ MapItemListWidget::OnAction(int id)
 }
 
 static int
-ShowMapItemListDialog(const MapItemList &list,
-                      const DialogLook &dialog_look, const MapLook &look,
-                      const TrafficLook &traffic_look,
-                      const FinalGlideBarLook &final_glide_look,
-                      const MapSettings &settings)
+ShowMapItemListDialogNow(const MapItemList &list,
+                         const DialogLook &dialog_look, const MapLook &look,
+                         const TrafficLook &traffic_look,
+                         const FinalGlideBarLook &final_glide_look,
+                         const MapSettings &settings)
 {
-  MapItemListWidget widget(list, dialog_look, look,
-                           traffic_look, final_glide_look,
-                           settings);
+  MapItemListWidget widget(list, dialog_look, look, traffic_look,
+                           final_glide_look, settings);
   WidgetDialog dialog(dialog_look);
   dialog.CreateFull(UIGlobals::GetMainWindow(),
                     _("Map elements at this location"), &widget);
   widget.CreateButtons(dialog);
   dialog.EnableCursorSelection();
 
-  int result = dialog.ShowModal() == mrOK
-    ? (int)widget.GetCursorIndex()
-    : -1;
+  int result =
+      dialog.ShowModal() == mrOK ? (int)widget.GetCursorIndex() :
+                                   MAPITEMLIST_CANCEL;
   dialog.StealWidget();
 
-  if(widget.bSettingDone) return -2; // mapitemlist setting was done... => refresh
+  if (widget.bsetting_done)
+    return MAPITEMLIST_REBUILD; // mapitemlist setting was done... => rebuild
 
   return result;
 }
@@ -312,8 +334,8 @@ ShowMapItemDialog(const MapItem &item,
                        airspace_warnings);
     break;
   case MapItem::WAYPOINT:
-    dlgWaypointDetailsShowModal(((const WaypointMapItem &)item).waypoint,
-                                true, true);
+    dlgWaypointDetailsShowModal(((const WaypointMapItem &)item).waypoint, true,
+                                true);
     break;
   case MapItem::TASK_OZ:
     dlgTargetShowModal(((const TaskOZMapItem &)item).index);
@@ -338,40 +360,39 @@ ShowMapItemDialog(const MapItem &item,
   }
 }
 
-/* return value signals the using of map item list settings => refresh map item list */
-bool
-ShowMapItemListDialog(const MapItemList &list,
-                      const DialogLook &dialog_look,
-                      const MapLook &look,
-                      const TrafficLook &traffic_look,
+int
+ShowMapItemListDialog(const MapItemList &list, const DialogLook &dialog_look,
+                      const MapLook &look, const TrafficLook &traffic_look,
                       const FinalGlideBarLook &final_glide_look,
                       const MapSettings &settings,
                       ProtectedAirspaceWarningManager *airspace_warnings)
 {
+  int iret = MAPITEMLIST_CANCEL;
   switch (list.size()) {
   case 0:
     /* no map items in the list */
-    return false;
+    return MAPITEMLIST_CANCEL;
 
   case 1:
     /* only one map item, show it */
     ShowMapItemDialog(*list[0], airspace_warnings);
-    return false;
+    return 0;
 
   default:
     /* more than one map item: show a list */
 
-    int i = ShowMapItemListDialog(list, dialog_look, look,
-                                  traffic_look, final_glide_look, settings);
+    iret = ShowMapItemListDialogNow(list, dialog_look, look, traffic_look,
+                                    final_glide_look, settings);
+    /*
+     * checking for right return value (for debugging purposes)
+     */
+    if (iret != MAPITEMLIST_CANCEL && iret != MAPITEMLIST_REBUILD) {
+      assert(iret >= 0 && iret < (int)list.size());
+    }
 
-    assert(i >= -2 && i < (int)list.size());
-
-    if (i >= 0)
-      ShowMapItemDialog(*list[i], airspace_warnings);
-
-    /* setting of map item list was done */
-    if(i == -2) return true;
+    if (iret >= 0)
+      ShowMapItemDialog(*list[iret], airspace_warnings);
 
   }
-  return false;
+  return iret;
 }
