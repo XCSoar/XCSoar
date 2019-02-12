@@ -26,11 +26,22 @@
 #include "TaskFile.hpp"
 #include "OS/Path.hpp"
 
+/**
+ * A class that reads and parses a SeeYou task file to an XCSoar internal
+ * task representation.
+ */
+
 class TaskFileSeeYou: public TaskFile
 {
 public:
   explicit TaskFileSeeYou(Path _path):TaskFile(_path) {}
 
+  /**
+   * Give the task produced by parsing the SeeYou file.
+   * @param task_behaviour The type of the task.
+   * @param waypoints All waypoints contained in the SeeYou task file.
+   * @param index Index into the array of tasks in the SeeYou file, 0....n
+   */
   virtual OrderedTask *GetTask(const TaskBehaviour &task_behaviour,
                                const Waypoints *waypoints,
                                unsigned index) const;
