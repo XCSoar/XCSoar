@@ -24,6 +24,7 @@
 #include "SectorZoneEditWidget.hpp"
 #include "Engine/Task/ObservationZones/SectorZone.hpp"
 #include "Engine/Task/ObservationZones/AnnularSectorZone.hpp"
+#include "Engine/Task/ObservationZones/VariableKeyholeZone.hpp"
 #include "Language/Language.hpp"
 
 enum Controls {
@@ -62,7 +63,8 @@ SectorZoneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
              this);
   }
 
-  if (shape == ObservationZonePoint::Shape::ANNULAR_SECTOR) {
+  if (shape == ObservationZonePoint::Shape::ANNULAR_SECTOR ||
+      shape == ObservationZonePoint::Shape::VARIABLE_KEYHOLE) {
     const AnnularSectorZone &annulus = (const AnnularSectorZone &)GetObject();
 
     AddFloat(_("Inner radius"), _("Inner radius of the OZ sector."),
@@ -106,6 +108,16 @@ SectorZoneEditWidget::Save(bool &_changed)
     radius = annulus.GetInnerRadius();
     if (SaveValue(INNER_RADIUS, UnitGroup::DISTANCE, radius)) {
       annulus.SetInnerRadius(radius);
+      changed = true;
+    }
+  }
+
+  if (GetObject().GetShape() == ObservationZonePoint::Shape::VARIABLE_KEYHOLE) {
+    VariableKeyholeZone &kh = (VariableKeyholeZone &)GetObject();
+
+    radius = kh.GetInnerRadius();
+    if (SaveValue(INNER_RADIUS, UnitGroup::DISTANCE, radius)) {
+      kh.SetInnerRadius(radius);
       changed = true;
     }
   }

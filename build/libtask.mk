@@ -52,6 +52,7 @@ TASK_SOURCES = \
 	$(TASK_SRC_DIR)/ObservationZones/SymmetricSectorZone.cpp \
 	$(TASK_SRC_DIR)/ObservationZones/KeyholeZone.cpp \
 	$(TASK_SRC_DIR)/ObservationZones/AnnularSectorZone.cpp \
+	$(TASK_SRC_DIR)/ObservationZones/VariableKeyholeZone.cpp \
 	$(TASK_SRC_DIR)/PathSolvers/TaskDijkstra.cpp \
 	$(TASK_SRC_DIR)/PathSolvers/TaskDijkstraMin.cpp \
 	$(TASK_SRC_DIR)/PathSolvers/TaskDijkstraMax.cpp \

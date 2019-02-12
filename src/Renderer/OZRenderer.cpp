@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "OZRenderer.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
+#include "Task/ObservationZones/VariableKeyholeZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Projection/Projection.hpp"
@@ -63,7 +64,7 @@ OZRenderer::Prepare(Canvas &canvas, Layer layer, int offset) const
 #endif /* !GDI */
 
     canvas.SelectNullPen();
-    
+
     return;
   }
 
@@ -127,7 +128,7 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
     if (layer != LAYER_INACTIVE) {
       auto p_center = projection.GeoToScreen(oz.GetReference());
       canvas.DrawCircle(p_center.x, p_center.y,
-                    projection.GeoToScreenDistance(oz.GetRadius()));
+                        projection.GeoToScreenDistance(oz.GetRadius()));
     }
 
     break;
@@ -166,6 +167,17 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
                        oz.GetStartRadial() - projection.GetScreenAngle(),
                        oz.GetEndRadial() - projection.GetScreenAngle());
 
+    break;
+  }
+
+  case ObservationZone::Shape::VARIABLE_KEYHOLE: {
+    const VariableKeyholeZone &oz = (const VariableKeyholeZone &)_oz;
+    auto p_center = projection.GeoToScreen(oz.GetReference());
+    canvas.DrawKeyhole(p_center,
+                       projection.GeoToScreenDistance(oz.GetInnerRadius()),
+                       projection.GeoToScreenDistance(oz.GetRadius()),
+                       oz.GetStartRadial() - projection.GetScreenAngle(),
+                       oz.GetEndRadial() - projection.GetScreenAngle());
     break;
   }
 

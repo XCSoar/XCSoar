@@ -95,6 +95,7 @@ static const TCHAR *const tp_factory_descriptions[] = {
   N_("A 180 degree sector with 5km radius.  Exit area in any direction to start."),
   N_("A sector that can vary in angle, inner and outer radius.  Scored by farthest point "
      "reached inside area."),
+  N_("Variable Keyhole sector with included inner cylinder."),
   N_("A symmetric quadrant with a custom radius."),
   N_("A keyhole.  Scored by farthest point reached in area."),
 };
@@ -125,6 +126,7 @@ static const TCHAR *const tp_factory_names[] = {
   N_("Finish cylinder"),
   N_("BGA start sector"),
   N_("Area sector with inner radius"),
+  N_("Variable Keyhole sector"),
   N_("Symmetric quadrant"),
   N_("Area keyhole"),
 };
