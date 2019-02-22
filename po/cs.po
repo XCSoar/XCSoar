@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-01-24 08:06+0000\n"
+"PO-Revision-Date: 2019-02-23 14:18+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 3.4\n"
+"X-Generator: Weblate 3.5-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -83,8 +83,8 @@ msgid ""
 "FAI rules, allows only FAI start, finish and turn point types, for badges "
 "and records.  Enables FAI finish height for final glide calculation."
 msgstr ""
-"FAI pravidla, umožňuje pouze FAI start, cíl a druh otočných bodů pro odznaky "
-"a rekordy. Zapíná FAI cílovou výšku pro výpočet dokluzu."
+"FAI pravidla, pouze FAI start, cíl a otočné body pro odznaky a rekordy. "
+"Zapíná FAI cílovou výšku pro výpočet dokluzu."
 
 #: src/Task/TypeStrings.cpp:54
 #, no-c-format
@@ -126,7 +126,7 @@ msgid ""
 "mile cylinder.  Pilot can add additional points as needed.  Minimum task "
 "time applies."
 msgstr ""
-"Modifikovaná úloha přes určené oblasti. Úloha se startem cílem a alespoň "
+"Modifikovaná úloha přes určené oblasti. Úloha se startem, cílem a alespoň "
 "jedním definovaným 1-mílovým válcem. Pilot může přidat další body podle "
 "potřeby. Je aplikován minimální čas úlohy."
 
@@ -161,7 +161,7 @@ msgstr ""
 #, no-c-format
 msgid ""
 "A straight line start gate.  Cross start gate from inside area to start."
-msgstr "Startovní páska. Přetni linii pásky z vnějšku pro zahájení úlohy."
+msgstr "Startovní páska. Protni linii pásky z vnějšku pro zahájení úlohy."
 
 #: src/Task/TypeStrings.cpp:78
 #, no-c-format
@@ -4328,7 +4328,7 @@ msgstr "Rychlost proti vzduchu"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:399
 msgid "No data"
-msgstr "Chybí Data"
+msgstr "Chybí data"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:411
 #: src/Dialogs/Device/DeviceListDialog.cpp:479
@@ -6014,12 +6014,12 @@ msgstr "Ořezání"
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:60
 #, no-c-format
 msgid "Display airspaces below the clip altitude."
-msgstr "Zobraz prostory pod nastavenou nadmořskou výškou."
+msgstr "Zobrazí prostory pod nastavenou nadmořskou výškou."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:62
 #, no-c-format
 msgid "Display airspaces within a margin of the glider."
-msgstr "Zobrazí prostory v dosahu kluzáku."
+msgstr "Zobrazí prostory v dokluzu kluzáku."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:63
 #, no-c-format
@@ -6029,7 +6029,7 @@ msgstr "Vše pod"
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:64
 #, no-c-format
 msgid "Display airspaces below the glider or within a margin."
-msgstr "Zobrazit prostory pod kluzákem nebo v dosahu."
+msgstr "Zobrazí prostory pod kluzákem nebo v jeho dokluzu."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:69
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:169
