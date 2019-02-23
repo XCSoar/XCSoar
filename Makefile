@@ -203,6 +203,9 @@ endif
 all: $(OUTPUTS)
 everything: $(OUTPUTS) $(OPTIONAL_OUTPUTS) debug build-check build-harness
 
+clean-download:
+	$(Q)rm -rf $(DOWNLOAD_DIR)
+
 clean:
 	@$(NQ)echo "cleaning all"
 	$(Q)rm -rf build/local-config.mk

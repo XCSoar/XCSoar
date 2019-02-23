@@ -14,6 +14,7 @@
 *.s
 *.so
 Doc/html/*
+download
 output
 perf.data
 perf.data.old
