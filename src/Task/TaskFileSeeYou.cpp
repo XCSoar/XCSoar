@@ -30,6 +30,7 @@
 #include "Waypoint/WaypointReaderSeeYou.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
+#include "Task/ObservationZones/VariableKeyholeZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/StartPoint.hpp"
@@ -189,6 +190,8 @@ ParseOZs(SeeYouTurnpointInformation turnpoint_infos[], const TCHAR *params[],
     return -1;
 
   turnpoint_infos[oz_index].valid = true;
+  turnpoint_infos[oz_index].radius2 = 0.0;
+
   // Iterate through available OZ options
   for (unsigned i = 1; i < n_params; i++) {
     const TCHAR *pair = params[i];
@@ -378,20 +381,26 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
 
     const Angle A12adj = CalcIntermediateAngle(turnpoint_infos,
                                                wp->location,
+                                               wps[0]->location,
                                                wps[pos - 1]->location,
-                                               wps[pos + 1]->location,
-                                               wps[0]->location);
+                                               wps[pos + 1]->location);
 
     const Angle RadialStart = (A12adj - turnpoint_infos.angle1).AsBearing();
     const Angle RadialEnd = (A12adj + turnpoint_infos.angle1).AsBearing();
 
     if (turnpoint_infos.radius2 > 0 &&
-        (turnpoint_infos.angle2.AsBearing().Degrees()) < 1) {
-      oz = new AnnularSectorZone(wp->location, turnpoint_infos.radius1,
-          RadialStart, RadialEnd, turnpoint_infos.radius2);
+        (turnpoint_infos.angle2.AsBearing().Degrees()) != 0) {
+      oz = VariableKeyholeZone::New(wp->location,
+                                    turnpoint_infos.radius1,
+                                    turnpoint_infos.radius2,
+                                    RadialStart,
+                                    RadialEnd);
     } else {
-      oz = new SectorZone(wp->location, turnpoint_infos.radius1,
-          RadialStart, RadialEnd);
+      oz = new AnnularSectorZone(wp->location,
+                                 turnpoint_infos.radius1,
+                                 RadialStart,
+                                 RadialEnd,
+                                 turnpoint_infos.radius2);
     }
 
   } else { // catch-all
