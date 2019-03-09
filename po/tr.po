@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2018-09-27 16:39+0000\n"
-"Last-Translator: Burak Can <neoberg@gmail.com>\n"
+"PO-Revision-Date: 2019-03-10 20:04+0000\n"
+"Last-Translator: Mesut Akcan <makcan@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/tr/>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.2-dev\n"
+"X-Generator: Weblate 3.5.1\n"
 "X-Launchpad-Export-Date: 2013-04-09 06:28+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -62,7 +62,7 @@ msgstr "Yarışma"
 #: src/Task/TypeStrings.cpp:36
 #, no-c-format
 msgid "AAT"
-msgstr ""
+msgstr "AAT"
 
 #: src/Task/TypeStrings.cpp:37
 #, no-c-format
@@ -197,6 +197,8 @@ msgid ""
 "(British rules) Any point within 1/2 km of center or 20km of a 90 degree "
 "sector.  Scored from center."
 msgstr ""
+"(İngiliz kuralları) Merkeze 1/2 km veya 90 derecelik bir dilimin 20km "
+"içindeki herhangi bir nokta. Merkezden puan aldı."
 
 #: src/Task/TypeStrings.cpp:85
 #, no-c-format
@@ -204,11 +206,13 @@ msgid ""
 "(British rules) Any point within 1/2 km of center or 10km of a 180 degree "
 "sector.  Scored from center."
 msgstr ""
+"(İngiliz kuralları) Merkeze 1/2 km veya 180 derecelik bir dilimin 10km "
+"içindeki herhangi bir nokta. Merkezden puan aldı."
 
 #: src/Task/TypeStrings.cpp:87
 #, no-c-format
 msgid "A cylinder.  Any point within area scored from center."
-msgstr ""
+msgstr "Bir silindir.  Alandaki herhangi bir nokta merkezden puan aldı."
 
 #: src/Task/TypeStrings.cpp:88
 #, no-c-format
@@ -9461,6 +9465,8 @@ msgid ""
 "Climb\n"
 "Demo"
 msgstr ""
+"Tırmanış\n"
+"Demo"
 
 #~ msgid ""
 #~ "METAR\n"
