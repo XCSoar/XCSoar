@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_INFO_BOX_MANAGER_HPP
 #define XCSOAR_INFO_BOX_MANAGER_HPP
 
+#include "InfoBoxes/InfoBoxWindow.hpp"
+
 struct InfoBoxLook;
 class ContainerWindow;
 
@@ -51,6 +53,9 @@ namespace InfoBoxManager
    * then it configures the focused InfoBox if there is one.
    */
   void ShowInfoBoxPicker(const int id = -1);
+
+  bool OnKeyDown(InfoBoxWindow *ctx, unsigned key_code);
+  void SetFocus();
 };
 
 #endif

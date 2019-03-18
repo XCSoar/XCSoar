@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "InfoBoxWindow.hpp"
+#include "InfoBoxManager.hpp"
 #include "InfoBoxSettings.hpp"
 #include "Border.hpp"
 #include "Look/InfoBoxLook.hpp"
@@ -346,6 +347,10 @@ bool
 InfoBoxWindow::OnKeyDown(unsigned key_code)
 {
   /* handle local hot key */
+  if (HasFocus()) {
+    /* Let the InfoBoxManager decide what is to do */
+    InfoBoxManager::OnKeyDown(this, key_code);
+  }
 
   switch (key_code) {
   case KEY_UP:
@@ -442,6 +447,8 @@ InfoBoxWindow::OnMouseDouble(PixelPoint p)
 bool
 InfoBoxWindow::OnMouseMove(PixelPoint p, unsigned keys)
 {
+  SetFocus();
+
   if (dragging) {
     SetPressed(IsInside(p));
     if (!pressed)

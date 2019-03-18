@@ -33,6 +33,7 @@ Copyright_License {
 #include "Profile/Current.hpp"
 #include "Interface.hpp"
 #include "UIState.hpp"
+#include "Event/KeyCode.hpp"
 
 namespace InfoBoxManager
 {
@@ -50,6 +51,7 @@ namespace InfoBoxManager
 
 static bool infoboxes_dirty = false;
 static bool infoboxes_hidden = false;
+static int selected_infobox = 0;
 
 static InfoBoxWindow *infoboxes[InfoBoxSettings::Panel::MAX_CONTENTS];
 
@@ -222,4 +224,37 @@ InfoBoxManager::ShowInfoBoxPicker(const int i)
   DisplayInfoBox();
 
   Profile::Save(Profile::map, panel, panel_index);
+}
+
+bool
+InfoBoxManager::OnKeyDown(InfoBoxWindow *ctx, unsigned key_code)
+{
+  int key = 0;
+
+  switch (key_code) {
+  case KEY_UP:
+    key = -1;
+    break;
+
+  case KEY_DOWN:
+    key = 1;
+    break;
+  }
+
+  for (unsigned i = 0; i < layout.count; i++) {
+    if (infoboxes[i] == ctx) {
+      selected_infobox = i + key;
+      if ((selected_infobox >= (int)layout.count))
+        selected_infobox = 0;
+      if (selected_infobox < 0)
+        selected_infobox = layout.count - 1;
+      infoboxes[selected_infobox]->SetFocus();
+    }
+  }
+  return true;
+}
+
+void
+InfoBoxManager::SetFocus() {
+  infoboxes[selected_infobox]->SetFocus();
 }
