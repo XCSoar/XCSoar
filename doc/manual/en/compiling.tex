@@ -140,7 +140,7 @@ sudo apt-get install default-jdk-headless vorbis-tools adb
 
 The required Android SDK components are:
 \begin{itemize}
-\item Android SDK Build-Tools 26.0.0
+\item Android SDK Build-Tools 28.0.3
 \item SDK Platform 22
 \end{itemize}
 These can be installed from the Android Studio SDK Manager, or using the SDK
@@ -148,13 +148,13 @@ command line tools:
 
 \begin{verbatim*}
 tools/bin/sdkmanager \
-  "build-tools;26.0.0" \
+  "build-tools;28.0.3" \
   "platforms;android-22"
 \end{verbatim*}
 
 The \texttt{Makefile} assumes that the Android SDK is installed in
 \verb|~/opt/android-sdk-linux| and the NDK is installed in
-\verb|~/opt/android-ndk-r16b|.  You can use the options
+\verb|~/opt/android-ndk-r19|.  You can use the options
 \verb|ANDROID_SDK| and \verb|ANDROID_NDK| to override these paths.
 
 Load/update the IOIO source code:
