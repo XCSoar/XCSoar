@@ -70,7 +70,7 @@ namespace IMI
   const IMIBYTE IMICOMM_SYNC_CHAR2 = 'X';
   const unsigned IMICOMM_SYNC_LEN  = 2;
   const unsigned IMICOMM_CRC_LEN   = 2;
-  const unsigned COMM_MAX_PAYLOAD_SIZE = 1024;
+  const unsigned COMM_MAX_PAYLOAD_SIZE = 2048;
   const unsigned COMM_MAX_BULK_SIZE = 0xFFFF + 1;
 
   const unsigned IMIDECL_PLT_LENGTH = 30;
