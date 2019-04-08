@@ -15,6 +15,7 @@ Version 7.0 - not yet released
   - device manager: show flag if device provides data from
       environmental sensors (temperature, humidity)
   - combine traffic from all FLARM devices (support both FLARM and OGN devices on board)
+  - IMI: raise max payload size to 2kB
 * weather
   - merge all weather data in one dialog
   - allow showing both terrain and RASP
