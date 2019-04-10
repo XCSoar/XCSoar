@@ -42,7 +42,7 @@ Copyright_License {
 #endif
 
 static TextWriter
-OpenLog()
+OpenLog() noexcept
 {
   static bool initialised = false;
   static AllocatedPath path = nullptr;
@@ -74,7 +74,7 @@ OpenLog()
 }
 
 static void
-LogString(const char *p)
+LogString(const char *p) noexcept
 {
 #ifdef ANDROID
   __android_log_print(ANDROID_LOG_INFO, "XCSoar", "%s", p);
@@ -92,7 +92,7 @@ LogString(const char *p)
 }
 
 void
-LogFormat(const char *fmt, ...)
+LogFormat(const char *fmt, ...) noexcept
 {
   char buf[MAX_PATH];
   va_list ap;
@@ -107,7 +107,7 @@ LogFormat(const char *fmt, ...)
 #ifdef _UNICODE
 
 static void
-LogString(const TCHAR *p)
+LogString(const TCHAR *p) noexcept
 {
   TextWriter writer(OpenLog());
   if (!writer.IsOpen())
@@ -119,7 +119,7 @@ LogString(const TCHAR *p)
 }
 
 void
-LogFormat(const TCHAR *Str, ...)
+LogFormat(const TCHAR *Str, ...) noexcept
 {
   TCHAR buf[MAX_PATH];
   va_list ap;
@@ -134,13 +134,13 @@ LogFormat(const TCHAR *Str, ...)
 #endif
 
 void
-LogError(std::exception_ptr e)
+LogError(std::exception_ptr e) noexcept
 {
   LogString(GetFullMessage(e).c_str());
 }
 
 void
-LogError(std::exception_ptr e, const char *msg)
+LogError(std::exception_ptr e, const char *msg) noexcept
 {
   LogFormat("%s: %s", msg, GetFullMessage(e).c_str());
 }

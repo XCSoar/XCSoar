@@ -29,7 +29,7 @@ Copyright_License {
 #include <cstdio>
 
 void
-LogFormat(const char *fmt, ...)
+LogFormat(const char *fmt, ...) noexcept
 {
   va_list ap;
 
@@ -43,7 +43,7 @@ LogFormat(const char *fmt, ...)
 #ifdef _UNICODE
 
 void
-LogFormat(const TCHAR *fmt, ...)
+LogFormat(const TCHAR *fmt, ...) noexcept
 {
   va_list ap;
 
@@ -57,13 +57,13 @@ LogFormat(const TCHAR *fmt, ...)
 #endif
 
 void
-LogError(std::exception_ptr e)
+LogError(std::exception_ptr e) noexcept
 {
   LogFormat("%s", GetFullMessage(e).c_str());
 }
 
 void
-LogError(std::exception_ptr e, const char *msg)
+LogError(std::exception_ptr e, const char *msg) noexcept
 {
   LogFormat("%s: %s", msg, GetFullMessage(e).c_str());
 }

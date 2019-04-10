@@ -40,11 +40,11 @@ Copyright_License {
  */
 gcc_printf(1, 2)
 void
-LogFormat(const char *fmt, ...);
+LogFormat(const char *fmt, ...) noexcept;
 
 #ifdef _UNICODE
 void
-LogFormat(const TCHAR *fmt, ...);
+LogFormat(const TCHAR *fmt, ...) noexcept;
 #endif
 
 #if !defined(NDEBUG)
@@ -60,9 +60,9 @@ LogFormat(const TCHAR *fmt, ...);
 #endif /* NDEBUG */
 
 void
-LogError(std::exception_ptr e);
+LogError(std::exception_ptr e) noexcept;
 
 void
-LogError(std::exception_ptr e, const char *msg);
+LogError(std::exception_ptr e, const char *msg) noexcept;
 
 #endif
