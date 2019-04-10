@@ -53,8 +53,10 @@ namespace Profile
 
   /**
    * Saves the profile into the profile files
+   *
+   * Errors will be caught and logged.
    */
-  void Save();
+  void Save() noexcept;
   /**
    * Saves the profile into the given profile file
    */

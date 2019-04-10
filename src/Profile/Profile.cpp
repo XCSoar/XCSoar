@@ -71,7 +71,7 @@ Profile::LoadFile(Path path)
 }
 
 void
-Profile::Save()
+Profile::Save() noexcept
 {
   if (!IsModified())
     return;
@@ -81,7 +81,12 @@ Profile::Save()
     SetFiles(nullptr);
 
   assert(!startProfileFile.IsNull());
-  SaveFile(startProfileFile);
+
+  try {
+    SaveFile(startProfileFile);
+  } catch (...) {
+    LogError(std::current_exception(), "Failed to save profile");
+  }
 }
 
 void

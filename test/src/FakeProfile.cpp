@@ -26,7 +26,7 @@ Copyright_License {
 #include "OS/Path.hpp"
 
 void
-Profile::Save()
+Profile::Save() noexcept
 {
 }
 
