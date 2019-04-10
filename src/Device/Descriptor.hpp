@@ -344,7 +344,7 @@ public:
   /**
    * To be used by OpenDeviceJob, don't call directly.
    */
-  bool DoOpen(OperationEnvironment &env);
+  bool DoOpen(OperationEnvironment &env) noexcept;
 
   void ResetFailureCounter() {
     n_failures = 0u;

@@ -432,8 +432,8 @@ DeviceDescriptor::OpenGliderLink()
 
 
 bool
-DeviceDescriptor::DoOpen(OperationEnvironment &env)
-{
+DeviceDescriptor::DoOpen(OperationEnvironment &env) noexcept
+try {
   assert(config.IsAvailable());
 
   {
@@ -510,6 +510,10 @@ DeviceDescriptor::DoOpen(OperationEnvironment &env)
 
   ResetFailureCounter();
   return true;
+} catch (...) {
+  const UTF8ToWideConverter msg(GetFullMessage(std::current_exception()).c_str());
+  env.SetErrorMessage(msg);
+  return false;
 }
 
 void
