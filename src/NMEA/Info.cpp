@@ -257,6 +257,9 @@ NMEAInfo::Expire()
   voltage_available.Expire(clock, 300);
   battery_level_available.Expire(clock, 300);
   flarm.Expire(clock);
+#ifdef ANDROID
+  glink_data.Expire(clock);
+#endif
   gps.Expire(clock);
   attitude.Expire(clock);
 }
@@ -372,4 +375,8 @@ NMEAInfo::Complement(const NMEAInfo &add)
     stall_ratio = add.stall_ratio;
 
   flarm.Complement(add.flarm);
+
+#ifdef ANDROID
+  glink_data.Complement(add.glink_data);
+#endif
 }

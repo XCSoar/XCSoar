@@ -46,6 +46,7 @@ DeviceConfig::IsAvailable() const
 
   case PortType::RFCOMM:
   case PortType::RFCOMM_SERVER:
+  case PortType::GLIDER_LINK:
     return IsAndroid();
 
   case PortType::IOIOUART:
@@ -115,6 +116,7 @@ DeviceConfig::ShouldReopenOnTimeout() const
     return false;
 
   case PortType::PTY:
+  case PortType::GLIDER_LINK:
     return false;
   }
 
@@ -241,6 +243,9 @@ DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const
 
   case PortType::INTERNAL:
     return _("Built-in GPS & sensors");
+
+  case PortType::GLIDER_LINK:
+    return _("GliderLink traffic receiver");
 
   case PortType::TCP_CLIENT:
     StringFormat(buffer, max_size, _T("TCP client %s:%u"),
