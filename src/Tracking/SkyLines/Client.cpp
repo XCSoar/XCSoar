@@ -27,7 +27,6 @@ Copyright_License {
 #include "Protocol.hpp"
 #include "Import.hpp"
 #include "OS/ByteOrder.hpp"
-#include "Net/StaticSocketAddress.hxx"
 #include "Math/Angle.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Util/CRC.hpp"
