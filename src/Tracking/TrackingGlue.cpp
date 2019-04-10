@@ -98,8 +98,8 @@ TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
 {
   try {
     skylines.Tick(basic, calculated);
-  } catch (const std::runtime_error &e) {
-    LogError("SkyLines error", e);
+  } catch (...) {
+    LogError(std::current_exception(), "SkyLines error");
   }
 
   if (!settings.livetrack24.enabled)
@@ -211,8 +211,8 @@ TrackingGlue::Tick()
                               location, altitude, ground_speed, track,
                               current_timestamp,
                               env);
-  } catch (const std::exception &exception) {
-    LogError("LiveTrack24 error", exception);
+  } catch (...) {
+    LogError(std::current_exception(), "LiveTrack24 error");
   }
 }
 
@@ -276,7 +276,7 @@ TrackingGlue::OnThermal(unsigned time_of_day_ms,
 }
 
 void
-TrackingGlue::OnSkyLinesError(const std::exception &e)
+TrackingGlue::OnSkyLinesError(std::exception_ptr e)
 {
-  LogError("SkyLines error", e);
+  LogError(e, "SkyLines error");
 }

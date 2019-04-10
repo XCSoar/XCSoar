@@ -49,9 +49,9 @@ try {
   }
 
   return true;
-} catch (const std::runtime_error &e) {
+} catch (...) {
   LogFormat(_T("Failed to parse airspace file: %s"), path.c_str());
-  LogError(e);
+  LogError(std::current_exception());
   return false;
 }
 
@@ -68,9 +68,9 @@ try {
   }
 
   return true;
-} catch (const std::runtime_error &e) {
+} catch (...) {
   LogFormat("Failed to parse airspace file: %s", path);
-  LogError(e);
+  LogError(std::current_exception());
   return false;
 }
 

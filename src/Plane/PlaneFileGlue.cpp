@@ -144,8 +144,8 @@ try {
   FileLineReaderA reader(path);
   KeyValueFileReader kvreader(reader);
   return Read(plane, kvreader);
-} catch (const std::runtime_error &e) {
-  LogError(e);
+} catch (...) {
+  LogError(std::current_exception());
   return false;
 }
 

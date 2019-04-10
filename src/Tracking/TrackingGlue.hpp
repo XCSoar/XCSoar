@@ -104,7 +104,7 @@ private:
   void OnThermal(unsigned time_of_day_ms,
                  const AGeoPoint &bottom, const AGeoPoint &top,
                  double lift) override;
-  void OnSkyLinesError(const std::exception &e) override;
+  void OnSkyLinesError(std::exception_ptr e) override;
 
 public:
   const SkyLinesTracking::Data &GetSkyLinesData() const {

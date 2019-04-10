@@ -53,8 +53,8 @@ try {
   unsigned num_records = FlarmNetReader::LoadFile(path, db);
   if (num_records > 0)
     LogFormat("%u FLARMnet ids found", num_records);
-} catch (const std::runtime_error &e) {
-  LogError(e);
+} catch (...) {
+  LogError(std::current_exception());
 }
 
 /**
@@ -69,8 +69,8 @@ try {
 
   auto reader = OpenDataTextFile(_T("xcsoar-flarm.txt"));
   LoadFlarmNameFile(*reader, db);
-} catch (const std::runtime_error &e) {
-  LogError(e);
+} catch (...) {
+  LogError(std::current_exception());
 }
 
 void
@@ -117,8 +117,8 @@ try {
   SaveFlarmNameFile(bos, flarm_names);
   bos.Flush();
   fos.Commit();
-} catch (const std::runtime_error &e) {
-  LogError(e);
+} catch (...) {
+  LogError(std::current_exception());
 }
 
 void

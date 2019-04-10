@@ -289,8 +289,8 @@ DownloadManagerThread::ProcessQueue(Net::Session &session)
       success = DownloadToFileTransaction(session, item.uri.c_str(),
                                           LocalPath(item.path_relative.c_str()),
                                           nullptr, *this);
-    } catch (const std::exception &exception) {
-      LogError(exception);
+    } catch (...) {
+      LogError(std::current_exception());
     }
 
     current_size = current_position = -1;
@@ -320,8 +320,8 @@ DownloadManagerThread::Tick()
   try {
     Net::Session session;
     ProcessQueue(session);
-  } catch (const std::exception &exception) {
-    LogError(exception);
+  } catch (...) {
+    LogError(std::current_exception());
     FailQueue();
   }
 }

@@ -217,6 +217,6 @@ try {
   }
 
   // TODO: scan the rest
-} catch (const std::runtime_error &e) {
-  LogError("No rasp data file", e);
+} catch (...) {
+  LogError(std::current_exception(), "No rasp data file");
 }

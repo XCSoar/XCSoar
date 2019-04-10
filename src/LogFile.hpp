@@ -26,13 +26,11 @@ Copyright_License {
 
 #include "Compiler.h"
 
+#include <exception>
+
 #ifdef _UNICODE
 #include <tchar.h>
 #endif
-
-namespace std {
-  class exception;
-}
 
 /**
  * Write a formatted line to the log file.
@@ -62,9 +60,9 @@ LogFormat(const TCHAR *fmt, ...);
 #endif /* NDEBUG */
 
 void
-LogError(const std::exception &exception);
+LogError(std::exception_ptr e);
 
 void
-LogError(const char *msg, const std::exception &exception);
+LogError(std::exception_ptr e, const char *msg);
 
 #endif

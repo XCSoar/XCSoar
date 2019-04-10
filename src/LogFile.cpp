@@ -30,8 +30,7 @@ Copyright_License {
 #include "OS/Path.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/UniqueFileDescriptor.hxx"
-
-#include <exception>
+#include "Util/Exception.hxx"
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -134,28 +133,14 @@ LogFormat(const TCHAR *Str, ...)
 
 #endif
 
-static void
-LogNestedError(const std::exception &exception)
+void
+LogError(std::exception_ptr e)
 {
-  try {
-    std::rethrow_if_nested(exception);
-  } catch (const std::exception &nested) {
-    LogError(nested);
-  } catch (...) {
-    LogString("Unrecognized nested exception");
-  }
+  LogString(GetFullMessage(e).c_str());
 }
 
 void
-LogError(const std::exception &exception)
+LogError(std::exception_ptr e, const char *msg)
 {
-  LogString(exception.what());
-  LogNestedError(exception);
-}
-
-void
-LogError(const char *msg, const std::exception &exception)
-{
-  LogFormat("%s: %s", msg, exception.what());
-  LogNestedError(exception);
+  LogFormat("%s: %s", msg, GetFullMessage(e).c_str());
 }

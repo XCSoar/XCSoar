@@ -254,8 +254,8 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
 
   try {
     writer = new IGCWriter(filename);
-  } catch (const std::runtime_error &e) {
-    LogError(e);
+  } catch (...) {
+    LogError(std::current_exception());
     return false;
   }
 

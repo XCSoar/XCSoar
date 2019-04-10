@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "LogFile.hpp"
+#include "Util/Exception.hxx"
 
 #include <exception>
 #include <cstdarg>
@@ -56,13 +57,13 @@ LogFormat(const TCHAR *fmt, ...)
 #endif
 
 void
-LogError(const std::exception &exception)
+LogError(std::exception_ptr e)
 {
-  LogFormat("%s", exception.what());
+  LogFormat("%s", GetFullMessage(e).c_str());
 }
 
 void
-LogError(const char *msg, const std::exception &exception)
+LogError(std::exception_ptr e, const char *msg)
 {
-  LogFormat("%s: %s", msg, exception.what());
+  LogFormat("%s: %s", msg, GetFullMessage(e).c_str());
 }

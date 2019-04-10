@@ -26,12 +26,13 @@ Copyright_License {
 
 #include "Features.hpp"
 
+#include <exception>
+
 #include <stdint.h>
 #include <tchar.h>
 
 struct GeoPoint;
 struct AGeoPoint;
-namespace std { class exception; }
 
 namespace SkyLinesTracking {
 
@@ -59,7 +60,7 @@ public:
    * defunct.  To make restore its function, call Client::Open()
    * again.
    */
-  virtual void OnSkyLinesError(const std::exception &e) = 0;
+  virtual void OnSkyLinesError(std::exception_ptr e) = 0;
 };
 
 } /* namespace SkyLinesTracking */

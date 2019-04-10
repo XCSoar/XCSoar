@@ -36,6 +36,7 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "Util/StringAPI.hxx"
 #include "Util/ConvertString.hpp"
+#include "Util/Exception.hxx"
 #include "Logger/NMEALogger.hpp"
 #include "Language/Language.hpp"
 #include "Operation/Operation.hpp"
@@ -62,8 +63,6 @@ Copyright_License {
 #ifdef __APPLE__
 #include "Apple/InternalSensors.hpp"
 #endif
-
-#include <stdexcept>
 
 #include <assert.h>
 
@@ -228,8 +227,8 @@ DeviceDescriptor::CancelAsync()
 
   try {
     async.Wait();
-  } catch (const std::runtime_error &e) {
-    LogError(e);
+  } catch (...) {
+    LogError(std::current_exception());
   }
 
   delete open_job;
@@ -465,15 +464,17 @@ DeviceDescriptor::DoOpen(OperationEnvironment &env)
   Port *port;
   try {
     port = OpenPort(io_service, config, this, *this);
-  } catch (const std::runtime_error &e) {
+  } catch (...) {
+    const auto e = std::current_exception();
+
     TCHAR name_buffer[64];
     const TCHAR *name = config.GetPortName(name_buffer, 64);
 
-    LogError(WideToUTF8Converter(name), e);
+    LogError(e, WideToUTF8Converter(name));
 
     StaticString<256> msg;
 
-    const UTF8ToWideConverter what(e.what());
+    const UTF8ToWideConverter what(GetFullMessage(e).c_str());
     if (what.IsValid()) {
       ScopeLock protect(mutex);
       error_message = what;
@@ -1163,8 +1164,8 @@ DeviceDescriptor::OnNotification()
 
   try {
     async.Wait();
-  } catch (const std::runtime_error &e) {
-    LogError(e);
+  } catch (...) {
+    LogError(std::current_exception());
   }
 
   delete open_job;

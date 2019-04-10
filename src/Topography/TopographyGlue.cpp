@@ -46,8 +46,8 @@ try {
   ZipLineReaderA reader(archive->get(), "topology.tpl");
   store.Load(operation, reader, nullptr, archive->get());
   return true;
-} catch (const std::runtime_error &e) {
-  LogError("No topography in map file", e);
+} catch (...) {
+  LogError(std::current_exception(), "No topography in map file");
   return false;
 }
 

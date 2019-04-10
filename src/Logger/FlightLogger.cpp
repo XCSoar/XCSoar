@@ -54,8 +54,8 @@ try {
 
   writer.Flush();
   file.Commit();
-} catch (const std::runtime_error &e) {
-  LogError(e);
+} catch (...) {
+  LogError(std::current_exception());
 }
 
 void

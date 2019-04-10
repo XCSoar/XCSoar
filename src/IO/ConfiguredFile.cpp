@@ -33,8 +33,6 @@ Copyright_License {
 
 #include <zzip/zzip.h>
 
-#include <stdexcept>
-
 #include <assert.h>
 #include <string.h>
 
@@ -48,8 +46,8 @@ try {
     return nullptr;
 
   return std::make_unique<FileLineReaderA>(path);
-} catch (const std::runtime_error &e) {
-  LogError(e);
+} catch (...) {
+  LogError(std::current_exception());
   return nullptr;
 }
 
@@ -75,8 +73,8 @@ try {
     return nullptr;
 
   return std::make_unique<ZipLineReaderA>(archive->get(), in_map_file);
-} catch (const std::runtime_error &e) {
-  LogError(e);
+} catch (...) {
+  LogError(std::current_exception());
   return nullptr;
 }
 

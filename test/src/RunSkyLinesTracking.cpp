@@ -27,6 +27,7 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "Util/NumberParser.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/PrintException.hxx"
 #include "DebugReplay.hpp"
 
 #include <boost/asio/steady_timer.hpp>
@@ -70,8 +71,8 @@ public:
     ScheduleStop(std::chrono::seconds(1));
   }
 
-  void OnSkyLinesError(const std::exception &e) override {
-    fprintf(stderr, "Error: %s\n", e.what());
+  void OnSkyLinesError(std::exception_ptr e) override {
+    PrintException(e);
 
     timer.cancel();
   }
