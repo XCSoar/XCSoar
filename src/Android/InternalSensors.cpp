@@ -146,6 +146,7 @@ InternalSensors::create(JNIEnv *env, Context *context, unsigned int index)
   // Construct InternalGPS object.
   jobject gps_obj =
     env->NewObject(gps_cls, gps_ctor_id, context->Get(), index);
+  Java::RethrowException(env);
   assert(gps_obj != nullptr);
 
   // Construct NonGPSSensors object.
