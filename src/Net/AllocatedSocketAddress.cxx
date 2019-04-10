@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2017 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2012-2019 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,6 +28,7 @@
  */
 
 #include "AllocatedSocketAddress.hxx"
+#include "Util/StringView.hxx"
 
 #include <string.h>
 
@@ -68,6 +69,12 @@ AllocatedSocketAddress::SetSize(size_type new_size) noexcept
 }
 
 #ifdef HAVE_UN
+
+StringView
+AllocatedSocketAddress::GetLocalRaw() const noexcept
+{
+	return SocketAddress(*this).GetLocalRaw();
+}
 
 void
 AllocatedSocketAddress::SetLocal(const char *path) noexcept

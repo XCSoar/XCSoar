@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2017 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2012-2019 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,6 +28,7 @@
  */
 
 #include "StaticSocketAddress.hxx"
+#include "Util/StringView.hxx"
 
 #include <algorithm>
 
@@ -47,6 +48,16 @@ StaticSocketAddress::operator=(SocketAddress other) noexcept
 	memcpy(&address, other.GetAddress(), size);
 	return *this;
 }
+
+#ifdef HAVE_UN
+
+StringView
+StaticSocketAddress::GetLocalRaw() const noexcept
+{
+	return SocketAddress(*this).GetLocalRaw();
+}
+
+#endif
 
 #ifdef HAVE_TCP
 

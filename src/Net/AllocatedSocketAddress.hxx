@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2017 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2012-2019 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -140,6 +140,12 @@ public:
 	}
 
 #ifdef HAVE_UN
+	/**
+	 * @see SocketAddress::GetLocalRaw()
+	 */
+	gcc_pure
+	StringView GetLocalRaw() const noexcept;
+
 	/**
 	 * Make this a "local" address (UNIX domain socket).  If the path
 	 * begins with a '@', then the rest specifies an "abstract" local
