@@ -366,6 +366,12 @@ SocketDescriptor::AutoBind() noexcept
 
 #endif
 
+bool
+SocketDescriptor::Listen(int backlog) noexcept
+{
+	return listen(Get(), backlog) == 0;
+}
+
 StaticSocketAddress
 SocketDescriptor::GetLocalAddress() const noexcept
 {

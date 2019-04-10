@@ -217,6 +217,8 @@ public:
 	bool AutoBind() noexcept;
 #endif
 
+	bool Listen(int backlog) noexcept;
+
 	SocketDescriptor Accept() noexcept;
 
 	bool Connect(SocketAddress address) noexcept;
