@@ -123,11 +123,9 @@ AutoDetect()
                                          "()Ljava/util/Locale;");
   assert(cid != nullptr);
 
-  jobject _obj = env->CallStaticObjectMethod(cls, cid);
-  if (_obj == nullptr)
+  Java::LocalObject obj(env, env->CallStaticObjectMethod(cls, cid));
+  if (!obj)
     return 0;
-
-  Java::LocalObject obj(env, _obj);
 
   // Call function Locale.getLanguage() that
   // returns a two-letter language string
