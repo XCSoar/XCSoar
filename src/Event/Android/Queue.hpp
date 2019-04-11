@@ -45,10 +45,10 @@ class EventQueue {
   Mutex mutex;
   Cond cond;
 
-  bool quit;
+  bool quit = false;
 
 public:
-  EventQueue();
+  EventQueue() = default;
 
   EventQueue(const EventQueue &) = delete;
 

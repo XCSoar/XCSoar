@@ -23,9 +23,6 @@ Copyright_License {
 
 #include "Queue.hpp"
 
-EventQueue::EventQueue()
- :quit(false) {}
-
 void
 EventQueue::Push(const Event &event)
 {
