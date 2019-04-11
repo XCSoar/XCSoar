@@ -29,6 +29,8 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "Util/StaticString.hxx"
 
+#include <chrono>
+
 #include <tchar.h>
 
 struct UISettings;
@@ -63,14 +65,14 @@ private:
 
   struct Message {
     Type type;
-    unsigned tstart; // time message was created
-    unsigned texpiry; // time message will expire
-    unsigned tshow; // time message is visible for
+    std::chrono::steady_clock::time_point tstart{}; // time message was created
+    std::chrono::steady_clock::time_point texpiry{}; // time message will expire
+    std::chrono::steady_clock::duration tshow; // time message is visible for
 
     StaticString<256u> text;
 
     Message()
-      :type(MSG_UNKNOWN), tstart(0), texpiry(0)
+      :type(MSG_UNKNOWN)
     {
       text.clear();
     }
@@ -86,21 +88,24 @@ private:
     /**
      * Expired for the first time?
      */
-    bool IsNewlyExpired(unsigned now) const {
+    bool IsNewlyExpired(std::chrono::steady_clock::time_point now) const {
       return texpiry <= now && texpiry > tstart;
     }
 
-    void Set(Type type, unsigned tshow, const TCHAR *text, unsigned now);
+    void Set(Type type, std::chrono::steady_clock::duration tshow,
+             const TCHAR *text,
+             std::chrono::steady_clock::time_point now) noexcept;
 
     /**
      * @return true if something was changed
      */
-    bool Update(unsigned now);
+    bool Update(std::chrono::steady_clock::time_point now) noexcept;
 
     /**
      * @return true if a message has been appended
      */
-    bool AppendTo(StaticString<2000> &buffer, unsigned now);
+    bool AppendTo(StaticString<2000> &buffer,
+                  std::chrono::steady_clock::time_point now) noexcept;
   };
 
   SingleWindow &parent;
@@ -133,7 +138,8 @@ public:
 
 protected:
   /** Caller must hold the lock. */
-  void AddMessage(unsigned tshow, Type type, const TCHAR *Text);
+  void AddMessage(std::chrono::steady_clock::duration tshow, Type type,
+                  const TCHAR *Text) noexcept;
 
 public:
   void AddMessage(const TCHAR* text, const TCHAR *data=nullptr);

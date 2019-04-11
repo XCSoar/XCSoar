@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Compiler.h"
 
+#include <chrono>
+
 #include <tchar.h>
 
 /**
@@ -41,7 +43,7 @@ struct StatusMessage {
   bool visible;
 
   /** Delay for DoStatusMessage */
-  unsigned delay_ms;
+  std::chrono::steady_clock::duration delay;
 };
 
 gcc_pure

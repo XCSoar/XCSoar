@@ -31,7 +31,6 @@ Copyright_License {
 #include "Audio/Sound.hpp"
 #include "StatusMessage.hpp"
 #include "UISettings.hpp"
-#include "OS/Clock.hpp"
 
 #include <tchar.h>
 #include <algorithm>
@@ -40,8 +39,10 @@ using std::min;
 using std::max;
 
 void
-PopupMessage::Message::Set(Type _type, unsigned _tshow, const TCHAR *_text,
-                           unsigned now)
+PopupMessage::Message::Set(Type _type,
+                           std::chrono::steady_clock::duration _tshow,
+                           const TCHAR *_text,
+                           std::chrono::steady_clock::time_point now) noexcept
 {
   type = _type;
   tshow = _tshow;
@@ -51,7 +52,7 @@ PopupMessage::Message::Set(Type _type, unsigned _tshow, const TCHAR *_text,
 }
 
 bool
-PopupMessage::Message::Update(unsigned now)
+PopupMessage::Message::Update(std::chrono::steady_clock::time_point now) noexcept
 {
   if (IsUnknown())
     // ignore unknown messages
@@ -73,14 +74,15 @@ PopupMessage::Message::Update(unsigned now)
 }
 
 bool
-PopupMessage::Message::AppendTo(StaticString<2000> &buffer, unsigned now)
+PopupMessage::Message::AppendTo(StaticString<2000> &buffer,
+                                std::chrono::steady_clock::time_point now) noexcept
 {
   if (IsUnknown())
     // ignore unknown messages
     return false;
 
   if (texpiry < now) {
-    texpiry = tstart - 1;
+    texpiry = tstart - std::chrono::steady_clock::duration(1);
     // reset expiry so we don't refresh
     return false;
   }
@@ -224,7 +226,7 @@ PopupMessage::Render()
 
   mutex.Lock();
 
-  const unsigned now = MonotonicClockMS();
+  const auto now = std::chrono::steady_clock::now();
 
   // this has to be done quickly, since it happens in GUI thread
   // at subsecond interval
@@ -266,7 +268,8 @@ PopupMessage::GetEmptySlot()
   // todo: make this more robust with respect to message types and if can't
   // find anything to remove..
   unsigned imin = 0;
-  for (unsigned i = 0, tmin = 0; i < MAXMESSAGES; i++) {
+  std::chrono::steady_clock::time_point tmin{};
+  for (unsigned i = 0; i < MAXMESSAGES; i++) {
     if (i == 0 || messages[i].tstart < tmin) {
       tmin = messages[i].tstart;
       imin = i;
@@ -276,11 +279,12 @@ PopupMessage::GetEmptySlot()
 }
 
 void
-PopupMessage::AddMessage(unsigned tshow, Type type, const TCHAR *Text)
+PopupMessage::AddMessage(std::chrono::steady_clock::duration tshow, Type type,
+                         const TCHAR *Text) noexcept
 {
   assert(mutex.IsLockedByCurrent());
 
-  const unsigned now = MonotonicClockMS();
+  const auto now = std::chrono::steady_clock::now();
 
   int i = GetEmptySlot();
   messages[i].Set(type, tshow, Text, now);
@@ -292,11 +296,12 @@ PopupMessage::Repeat(Type type)
   int imax = -1;
 
   mutex.Lock();
-  const unsigned now = MonotonicClockMS();
+  const auto now = std::chrono::steady_clock::now();
 
   // find most recent non-visible message
 
-  for (unsigned i = 0, tmax = 0; i < MAXMESSAGES; i++) {
+  std::chrono::steady_clock::time_point tmax{};
+  for (unsigned i = 0; i < MAXMESSAGES; i++) {
     if (messages[i].texpiry < now &&
         messages[i].tstart > tmax &&
         (messages[i].type == type || type == 0)) {
@@ -317,13 +322,13 @@ bool
 PopupMessage::Acknowledge(Type type)
 {
   ScopeLock protect(mutex);
-  const unsigned now = MonotonicClockMS();
+  const auto now = std::chrono::steady_clock::now();
 
   for (unsigned i = 0; i < MAXMESSAGES; i++) {
     if (messages[i].texpiry > messages[i].tstart &&
         (type == MSG_UNKNOWN || type == messages[i].type)) {
       // message was previously visible, so make it expire now.
-      messages[i].texpiry = now - 1;
+      messages[i].texpiry = now - std::chrono::steady_clock::duration(1);
       return true;
     }
   }
@@ -362,6 +367,6 @@ PopupMessage::AddMessage(const TCHAR* text, const TCHAR *data)
       _tcscat(msgcache, data);
     }
 
-    AddMessage(msg.delay_ms, MSG_USERINTERFACE, msgcache);
+    AddMessage(msg.delay, MSG_USERINTERFACE, msgcache);
   }
 }
