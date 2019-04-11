@@ -24,7 +24,7 @@ Copyright_License {
 #include "ThreadedOperationEnvironment.hpp"
 
 ThreadedOperationEnvironment::ThreadedOperationEnvironment(OperationEnvironment &_other)
-  :DelayedNotify(250), other(_other)
+  :DelayedNotify(std::chrono::milliseconds(250)), other(_other)
 {
 }
 

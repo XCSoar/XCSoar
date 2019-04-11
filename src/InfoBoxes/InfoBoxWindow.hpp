@@ -35,9 +35,6 @@ class Color;
 
 class InfoBoxWindow : public LazyPaintWindow
 {
-  /** timeout of infobox focus [ms] */
-  static constexpr unsigned FOCUS_TIMEOUT_MAX = 20 * 1000;
-
 private:
   InfoBoxContent *content;
 

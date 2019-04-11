@@ -26,23 +26,23 @@ Copyright_License {
 #include "../Queue.hpp"
 
 void
-Timer::Schedule(unsigned _ms)
+Timer::Schedule(std::chrono::steady_clock::duration d) noexcept
 {
   if (queued.exchange(false))
     event_queue->CancelTimer(*this);
 
   enabled.store(true);
-  ms = _ms;
+  interval = d;
 
   if (!queued.exchange(true))
-    event_queue->AddTimer(*this, ms);
+    event_queue->AddTimer(*this, d);
 }
 
 void
-Timer::SchedulePreserve(unsigned _ms)
+Timer::SchedulePreserve(std::chrono::steady_clock::duration d) noexcept
 {
   if (!IsActive())
-    Schedule(_ms);
+    Schedule(d);
 }
 
 void
@@ -62,5 +62,5 @@ Timer::Invoke()
   OnTimer();
 
   if (enabled.load() && !queued.exchange(true))
-    event_queue->AddTimer(*this, ms);
+    event_queue->AddTimer(*this, interval);
 }

@@ -25,7 +25,8 @@ Copyright_License {
 #include "Interface.hpp"
 
 AllMonitors::AllMonitors()
-  :RateLimiter(500, 25) {
+  :RateLimiter(std::chrono::milliseconds(500), std::chrono::milliseconds(25))
+{
   Reset();
   CommonInterface::GetLiveBlackboard().AddListener(*this);
 }

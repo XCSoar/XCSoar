@@ -102,7 +102,7 @@ public:
     ListWidget::Show(rc);
 
     visible = true;
-    Schedule(0);
+    Schedule({});
   }
 
   virtual void Hide() override {
@@ -200,7 +200,7 @@ ListPicker(const TCHAR *caption,
       list_widget->GetList().Invalidate();
     });
   if (update)
-    update_timer.Schedule(1000);
+    update_timer.Schedule(std::chrono::seconds(1));
 
   int result = dialog.ShowModal();
   if (result == mrOK)

@@ -510,7 +510,7 @@ ListControl::OnMouseUp(PixelPoint p)
 
     if (enable_kinetic) {
       kinetic.MouseUp(GetPixelOrigin());
-      kinetic_timer.Schedule(30);
+      kinetic_timer.Schedule(std::chrono::milliseconds(30));
     }
 
     return true;

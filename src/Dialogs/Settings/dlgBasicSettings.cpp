@@ -108,7 +108,7 @@ public:
 
   virtual void Show(const PixelRect &rc) override {
     RowFormWidget::Show(rc);
-    Timer::Schedule(500);
+    Timer::Schedule(std::chrono::milliseconds(500));
 
     OnTimer();
     SetButtons();

@@ -29,6 +29,7 @@ Copyright_License {
 #endif
 
 #include <atomic>
+#include <chrono>
 
 #include <assert.h>
 
@@ -46,7 +47,7 @@ Copyright_License {
  */
 class Timer {
   std::atomic<bool> enabled, queued;
-  unsigned ms;
+  std::chrono::steady_clock::duration interval;
 
 #ifdef USE_POLL_EVENT
   boost::asio::steady_timer timer;
@@ -102,13 +103,13 @@ public:
    * Schedule the timer.  Cancels the previous setting if there was
    * one.
    */
-  void Schedule(unsigned ms);
+  void Schedule(std::chrono::steady_clock::duration d) noexcept;
 
   /**
    * Schedule the timer.  Preserves the previous setting if there was
    * one.
    */
-  void SchedulePreserve(unsigned ms);
+  void SchedulePreserve(std::chrono::steady_clock::duration d) noexcept;
 
   /**
    * Cancels the scheduled timer, if any.  This is safe to be called

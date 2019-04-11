@@ -95,11 +95,12 @@ EventQueue::HandlePaintMessages()
 }
 
 void
-EventQueue::AddTimer(Timer &timer, unsigned ms)
+EventQueue::AddTimer(Timer &timer, std::chrono::steady_clock::duration d) noexcept
 {
   ScopeLock protect(mutex);
 
-  const uint64_t due_us = MonotonicClockUS() + ms * 1000;
+  const auto us = std::chrono::duration_cast<std::chrono::microseconds>(d);
+  const uint64_t due_us = MonotonicClockUS() + us.count();
   timers.Add(timer, due_us);
 
   if (timers.IsBefore(due_us))

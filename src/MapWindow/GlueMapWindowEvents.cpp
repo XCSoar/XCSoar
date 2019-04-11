@@ -247,7 +247,7 @@ GlueMapWindow::OnMouseUp(PixelPoint p)
 #ifdef ENABLE_OPENGL
     kinetic_x.MouseUp(p.x);
     kinetic_y.MouseUp(p.y);
-    kinetic_timer.Schedule(30);
+    kinetic_timer.Schedule(std::chrono::milliseconds(30));
 #endif
     break;
 
@@ -287,7 +287,7 @@ GlueMapWindow::OnMouseUp(PixelPoint p)
   }
 
   if (arm_mapitem_list) {
-    map_item_timer.Schedule(200);
+    map_item_timer.Schedule(std::chrono::milliseconds(200));
     return true;
   }
 

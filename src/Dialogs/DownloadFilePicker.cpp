@@ -63,7 +63,7 @@ public:
   DownloadProgress(ProgressDialog &_dialog,
                    const Path _path_relative)
     :dialog(_dialog), env(_dialog), path_relative(_path_relative) {
-    Timer::Schedule(1000);
+    Timer::Schedule(std::chrono::seconds(1));
     Net::DownloadManager::AddListener(*this);
   }
 

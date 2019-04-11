@@ -189,7 +189,7 @@ protected:
     chart.MoveAndShow(layout.main);
 
     Update();
-    Timer::Schedule(2500);
+    Timer::Schedule(std::chrono::milliseconds(2500));
   }
 
   void Hide() override {

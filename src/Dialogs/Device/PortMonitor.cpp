@@ -54,7 +54,7 @@ class PortTerminalBridge : public DataHandler, private DelayedNotify {
 
 public:
   PortTerminalBridge(TerminalWindow &_terminal)
-    :DelayedNotify(100), terminal(_terminal) {}
+    :DelayedNotify(std::chrono::milliseconds(100)), terminal(_terminal) {}
   virtual ~PortTerminalBridge() {}
 
   virtual void DataReceived(const void *data, size_t length) {

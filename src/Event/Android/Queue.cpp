@@ -145,11 +145,14 @@ EventQueue::Purge(Window &window)
 }
 
 void
-EventQueue::AddTimer(Timer &timer, unsigned ms)
+EventQueue::AddTimer(Timer &timer, std::chrono::steady_clock::duration d) noexcept
 {
   ScopeLock protect(mutex);
 
-  timers.Add(timer, MonotonicClockUS() + ms * 1000);
+  const auto us = std::chrono::duration_cast<std::chrono::microseconds>(d);
+  const uint64_t due_us = MonotonicClockUS() + us.count();
+  timers.Add(timer, due_us);
+
   cond.signal();
 }
 

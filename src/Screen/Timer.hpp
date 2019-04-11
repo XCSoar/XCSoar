@@ -30,6 +30,8 @@ Copyright_License {
 #include "Event/Timer.hpp"
 #endif
 
+#include <chrono>
+
 #include <assert.h>
 
 class Window;
@@ -95,7 +97,7 @@ public:
    * Schedule the timer.  Cancels the previous setting if there was
    * one.
    */
-  void Schedule(unsigned ms);
+  void Schedule(std::chrono::steady_clock::duration d);
 
   /**
    * Cancels the scheduled timer, if any.  This is safe to be called

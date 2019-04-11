@@ -41,7 +41,7 @@ class RateLimiter : private Timer {
    */
   PeriodClock clock;
 
-  unsigned period_ms, delay_ms;
+  std::chrono::steady_clock::duration period, delay;
 
 public:
   /**
@@ -51,7 +51,8 @@ public:
    * @param delay_ms an event is delayed by this duration to combine
    * consecutive invocations
    */
-  RateLimiter(unsigned _period_ms, unsigned _delay_ms=0);
+  RateLimiter(std::chrono::steady_clock::duration _period,
+              std::chrono::steady_clock::duration _delay={}) noexcept;
 
   /**
    * Destructor.  Discards any pending events.

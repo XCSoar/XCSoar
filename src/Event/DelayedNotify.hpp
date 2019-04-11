@@ -33,10 +33,11 @@ Copyright_License {
  * OnNotification().
  */
 class DelayedNotify : private Timer {
-  const unsigned delay_ms;
+  const std::chrono::steady_clock::duration delay;
 
 public:
-  DelayedNotify(unsigned _delay_ms):delay_ms(_delay_ms) {}
+  explicit DelayedNotify(std::chrono::steady_clock::duration _delay) noexcept
+    :delay(_delay) {}
 
   ~DelayedNotify() {
     ClearNotification();
@@ -47,7 +48,7 @@ public:
    * from any thread.
    */
   void SendNotification() {
-    SchedulePreserve(delay_ms);
+    SchedulePreserve(delay);
   }
 
   /**

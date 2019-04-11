@@ -29,6 +29,7 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "Thread/Cond.hxx"
 
+#include <chrono>
 #include <queue>
 
 class Window;
@@ -86,7 +87,7 @@ public:
   void Purge(Event::Callback callback, void *ctx);
   void Purge(Window &window);
 
-  void AddTimer(Timer &timer, unsigned ms);
+  void AddTimer(Timer &timer, std::chrono::steady_clock::duration d) noexcept;
   void CancelTimer(Timer &timer);
 
 private:

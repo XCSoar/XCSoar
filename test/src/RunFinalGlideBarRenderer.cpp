@@ -143,7 +143,7 @@ Main()
 
       final_glide.Invalidate();
     });
-  timer.Schedule(100);
+  timer.Schedule(std::chrono::milliseconds(100));
 
   main_window.RunEventLoop();
 

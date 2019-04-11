@@ -34,7 +34,8 @@ class SystemStatusPanel final
 
 public:
   SystemStatusPanel(const DialogLook &look)
-    :StatusPanel(look), rate_limiter(*this, 2000, 500) {}
+    :StatusPanel(look), rate_limiter(*this, std::chrono::seconds(2),
+                                     std::chrono::milliseconds(500)) {}
 
   /* virtual methods from class StatusPanel */
   void Refresh() override;

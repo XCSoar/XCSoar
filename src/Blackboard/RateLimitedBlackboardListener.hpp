@@ -38,9 +38,10 @@ class RateLimitedBlackboardListener
 
 public:
   RateLimitedBlackboardListener(BlackboardListener &_next,
-                                unsigned period_ms, unsigned delay_ms)
+                                std::chrono::steady_clock::duration period,
+                                std::chrono::steady_clock::duration delay) noexcept
     :ProxyBlackboardListener(_next),
-     RateLimiter(period_ms, delay_ms),
+     RateLimiter(period, delay),
      basic(nullptr), basic2(nullptr), calculated(nullptr) {}
 
   using RateLimiter::Cancel;

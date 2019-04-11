@@ -25,9 +25,11 @@ Copyright_License {
 #include "Screen/Window.hpp"
 
 void
-WindowTimer::Schedule(unsigned ms)
+WindowTimer::Schedule(std::chrono::steady_clock::duration d)
 {
-  id = ::SetTimer(window, (UINT_PTR)this, ms, nullptr);
+  const auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(d);
+
+  id = ::SetTimer(window, (UINT_PTR)this, ms.count(), nullptr);
 }
 
 void

@@ -30,25 +30,25 @@ Timer::Timer()
    timer(event_queue->get_io_service()) {}
 
 void
-Timer::Schedule(unsigned _ms)
+Timer::Schedule(std::chrono::steady_clock::duration d) noexcept
 {
   if (queued.exchange(false))
     timer.cancel();
 
   enabled.store(true);
-  ms = _ms;
+  interval = d;
 
   if (!queued.exchange(true)) {
-    timer.expires_from_now(std::chrono::milliseconds(ms));
+    timer.expires_from_now(d);
     AsyncWait();
   }
 }
 
 void
-Timer::SchedulePreserve(unsigned _ms)
+Timer::SchedulePreserve(std::chrono::steady_clock::duration d) noexcept
 {
   if (!IsActive())
-    Schedule(_ms);
+    Schedule(d);
 }
 
 void
@@ -71,7 +71,7 @@ Timer::Invoke(const boost::system::error_code &ec)
   OnTimer();
 
   if (enabled.load() && !queued.exchange(true)) {
-    timer.expires_from_now(std::chrono::milliseconds(ms));
+    timer.expires_from_now(interval);
     AsyncWait();
   }
 }

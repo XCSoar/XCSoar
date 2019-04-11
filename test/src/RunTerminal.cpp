@@ -49,7 +49,7 @@ public:
 protected:
   virtual void OnCreate() override {
     SingleWindow::OnCreate();
-    timer.Schedule(10);
+    timer.Schedule(std::chrono::milliseconds(10));
   }
 
   virtual void OnDestroy() override {

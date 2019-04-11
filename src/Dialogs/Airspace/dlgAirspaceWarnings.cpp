@@ -221,7 +221,7 @@ AirspaceWarningListWidget::Show(const PixelRect &rc)
   sound_interval_counter = 0;
   ListWidget::Show(rc);
   UpdateList();
-  Timer::Schedule(500);
+  Timer::Schedule(std::chrono::milliseconds(500));
 }
 
 void

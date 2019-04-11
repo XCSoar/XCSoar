@@ -27,6 +27,8 @@ Copyright_License {
 #include "../Shared/TimerQueue.hpp"
 #include "Thread/Mutex.hpp"
 
+#include <chrono>
+
 #include <windows.h>
 
 struct Event;
@@ -57,7 +59,7 @@ private:
   }
 
 public:
-  void AddTimer(Timer &timer, unsigned ms);
+  void AddTimer(Timer &timer, std::chrono::steady_clock::duration d) noexcept;
   void CancelTimer(Timer &timer);
 
   /**

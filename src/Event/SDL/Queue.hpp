@@ -30,6 +30,8 @@ Copyright_License {
 
 #include <SDL_events.h>
 
+#include <chrono>
+
 class Window;
 
 class EventQueue {
@@ -88,7 +90,7 @@ public:
    */
   void Purge(Window &window);
 
-  void AddTimer(Timer &timer, unsigned ms);
+  void AddTimer(Timer &timer, std::chrono::steady_clock::duration d) noexcept;
   void CancelTimer(Timer &timer);
 };
 

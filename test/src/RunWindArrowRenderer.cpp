@@ -87,7 +87,7 @@ Main()
 
       wind.SetWind(_wind);
     });
-  timer.Schedule(250);
+  timer.Schedule(std::chrono::milliseconds(250));
 
   main_window.RunEventLoop();
 

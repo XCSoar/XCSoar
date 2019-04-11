@@ -80,7 +80,7 @@ public:
                row_renderer.CalculateLayout(look.text_font,
                                             look.small_font));
     UpdateList();
-    Timer::Schedule(1000);
+    Timer::Schedule(std::chrono::seconds(1));
   }
 
   virtual void Unprepare() override {

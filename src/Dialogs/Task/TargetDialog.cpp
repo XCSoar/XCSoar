@@ -120,7 +120,8 @@ public:
   TargetWidget(ActionListener &_dialog,
                const DialogLook &dialog_look, const MapLook &map_look)
     :dialog(_dialog),
-     rate_limited_bl(*this, 1800, 300),
+     rate_limited_bl(*this, std::chrono::milliseconds(1800),
+                     std::chrono::milliseconds(300)),
      map(*this,
          map_look.waypoint, map_look.airspace,
          map_look.trail, map_look.task, map_look.aircraft,

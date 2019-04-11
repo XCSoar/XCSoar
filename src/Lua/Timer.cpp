@@ -57,12 +57,13 @@ public:
     return callback.GetState();
   }
 
-  void Schedule(Lua::StackIndex timer_index, unsigned ms) {
+  void Schedule(Lua::StackIndex timer_index,
+                std::chrono::steady_clock::duration d) noexcept {
     const Lua::ScopeCheckStack check_stack(GetLuaState());
 
     Lua::AddPersistent(GetLuaState(), this);
     timer.Set(timer_index);
-    Timer::Schedule(ms);
+    Timer::Schedule(d);
   }
 
   void Cancel() {
@@ -106,6 +107,12 @@ static constexpr struct luaL_Reg timer_methods[] = {
 static constexpr char lua_timer_class[] = "xcsoar.timer";
 typedef Lua::Class<LuaTimer, lua_timer_class> LuaTimerClass;
 
+static constexpr auto
+LuaToSteadyDuration(lua_Number n) noexcept
+{
+  return std::chrono::duration_cast<std::chrono::steady_clock::duration>(std::chrono::duration<double>(n));
+}
+
 int
 LuaTimer::l_new(lua_State *L)
 {
@@ -120,7 +127,7 @@ LuaTimer::l_new(lua_State *L)
 
   auto *timer = LuaTimerClass::New(L, L, 2);
   timer->Schedule(Lua::StackIndex(-2),
-                  unsigned(lua_tonumber(L, 1) * 1000));
+                  LuaToSteadyDuration(lua_tonumber(L, 1)));
   return 1;
 }
 
@@ -144,7 +151,7 @@ LuaTimer::l_schedule(lua_State *L)
     luaL_argerror(L, 2, "number expected");
 
   timer.Schedule(Lua::StackIndex(1),
-                 unsigned(lua_tonumber(L, 2) * 1000));
+                 LuaToSteadyDuration(lua_tonumber(L, 2)));
   return 0;
 }
 

@@ -87,7 +87,7 @@ Replay::Start(Path _path)
   fast_forward = -1;
   next_data.Reset();
 
-  Timer::Schedule(100);
+  Timer::Schedule(std::chrono::milliseconds(100));
 }
 
 bool
@@ -221,19 +221,21 @@ Replay::OnTimer()
   if (!Update())
     return;
 
-  unsigned schedule;
+  std::chrono::steady_clock::duration schedule;
   if (time_scale <= 0)
-    schedule = 1000;
+    schedule = std::chrono::seconds(1);
   else if (fast_forward >= 0)
-    schedule = 100;
+    schedule = std::chrono::milliseconds(100);
   else if (virtual_time < 0 || !next_data.time_available)
-    schedule = 500;
+    schedule = std::chrono::milliseconds(500);
   else if (cli != nullptr)
-    schedule = 1000;
+    schedule = std::chrono::seconds(1);
   else {
-    double delta_s = (next_data.time - virtual_time) / time_scale;
-    int delta_ms = int(delta_s * 1000);
-    schedule = Clamp(delta_ms, 100, 3000);
+    constexpr std::chrono::steady_clock::duration lower = std::chrono::milliseconds(100);
+    constexpr std::chrono::steady_clock::duration upper = std::chrono::seconds(3);
+    const std::chrono::duration<double> delta_s((next_data.time - virtual_time) / time_scale);
+    const auto delta = std::chrono::duration_cast<std::chrono::steady_clock::duration>(delta_s);
+    schedule = Clamp(delta, lower, upper);
   }
 
   Timer::Schedule(schedule);

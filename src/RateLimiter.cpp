@@ -25,10 +25,11 @@ Copyright_License {
 
 #include <assert.h>
 
-RateLimiter::RateLimiter(unsigned _period_ms, unsigned _delay_ms)
-  :period_ms(_period_ms - _delay_ms), delay_ms(_delay_ms)
+RateLimiter::RateLimiter(std::chrono::steady_clock::duration _period,
+                         std::chrono::steady_clock::duration _delay) noexcept
+  :period(_period - _delay), delay(_delay)
 {
-  assert(_period_ms >= _delay_ms);
+  assert(_period >= _delay);
 }
 
 void
@@ -37,12 +38,12 @@ RateLimiter::Trigger()
   if (IsActive())
     return;
 
-  unsigned schedule_ms = delay_ms;
+  std::chrono::steady_clock::duration schedule = delay;
   int elapsed = clock.Elapsed();
-  if (elapsed >= 0 && (unsigned)elapsed < period_ms)
-    schedule_ms += period_ms - elapsed;
+  if (elapsed >= 0 && std::chrono::milliseconds(elapsed) < period)
+    schedule += period - std::chrono::milliseconds(elapsed);
 
-  Schedule(schedule_ms);
+  Schedule(schedule);
 }
 
 void

@@ -458,7 +458,7 @@ MainWindow::Destroy()
 void
 MainWindow::FinishStartup()
 {
-  timer.Schedule(500); // 2 times per second
+  timer.Schedule(std::chrono::milliseconds(500)); // 2 times per second
 
   ResumeThreads();
 }

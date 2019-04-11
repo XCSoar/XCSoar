@@ -388,7 +388,7 @@ ManagedFileListWidget::RefreshList()
 
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (download_active && !Timer::IsActive())
-    Timer::Schedule(1000);
+    Timer::Schedule(std::chrono::seconds(1));
 #endif
 }
 
