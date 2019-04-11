@@ -41,6 +41,8 @@ Copyright_License {
 #include "Util/StaticFifoBuffer.hxx"
 #include "Android/GliderLink.hpp"
 
+#include <chrono>
+
 #include <assert.h>
 #include <tchar.h>
 #include <stdio.h>
@@ -282,7 +284,7 @@ public:
   /**
    * @see DumpPort::EnableTemporarily()
    */
-  void EnableDumpTemporarily(unsigned duration_ms);
+  void EnableDumpTemporarily(std::chrono::steady_clock::duration duration) noexcept;
 
   /**
    * Wrapper for Driver::HasTimeout().  This method can't be inline

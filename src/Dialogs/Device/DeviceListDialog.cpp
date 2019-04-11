@@ -651,7 +651,7 @@ DeviceListWidget::DebugCurrent()
 
   static constexpr unsigned MINUTES = 10;
 
-  device.EnableDumpTemporarily(MINUTES * 60000);
+  device.EnableDumpTemporarily(std::chrono::minutes(MINUTES));
   RefreshList();
 
   StaticString<256> msg;

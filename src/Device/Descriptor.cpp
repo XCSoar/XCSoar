@@ -201,10 +201,10 @@ DeviceDescriptor::DisableDump()
 }
 
 void
-DeviceDescriptor::EnableDumpTemporarily(unsigned duration_ms)
+DeviceDescriptor::EnableDumpTemporarily(std::chrono::steady_clock::duration duration) noexcept
 {
   if (port != nullptr)
-    port->EnableTemporarily(duration_ms);
+    port->EnableTemporarily(duration);
 }
 
 bool

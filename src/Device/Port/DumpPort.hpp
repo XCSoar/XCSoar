@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Port.hpp"
 
+#include <chrono>
+
 /**
  * A port wrapper that dumps everything into the log file.
  */
@@ -33,10 +35,10 @@ class DumpPort final : public Port {
   Port *port;
 
   /**
-   * Dumping is enabled until this MonotonicClockMS() time stamp.  0
-   * means completely disabled, unsigned(-1) means enabled forever.
+   * Dumping is enabled until this time stamp.
    */
-  unsigned until_ms;
+  std::chrono::steady_clock::time_point until =
+    std::chrono::steady_clock::time_point::max();
 
 public:
   /**
@@ -51,23 +53,25 @@ public:
    * Disable dumping immediately.
    */
   void Disable() {
-    until_ms = 0;
+    until = std::chrono::steady_clock::time_point{};
   }
 
   /**
    * Enable dumping forever.
    */
   void EnableForever() {
-    until_ms = unsigned(-1);
+    until = std::chrono::steady_clock::time_point::max();
   }
 
   /**
    * Enable dumping for a certain duration.
    */
-  void EnableTemporarily(unsigned duration_ms);
+  void EnableTemporarily(std::chrono::steady_clock::duration duration) noexcept {
+    until = std::chrono::steady_clock::now() + duration;
+  }
 
   bool IsEnabled() const {
-    return until_ms > 0;
+    return until > std::chrono::steady_clock::time_point{};
   }
 
 private:

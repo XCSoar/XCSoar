@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "DumpPort.hpp"
 #include "HexDump.hpp"
-#include "OS/Clock.hpp"
 
 #include <stdint.h>
 #include <stdio.h>
@@ -34,33 +33,26 @@ Copyright_License {
 #endif
 
 DumpPort::DumpPort(Port *_port)
-  :Port(nullptr, *(DataHandler *)nullptr), port(_port),
-   until_ms(-1) {}
+  :Port(nullptr, *(DataHandler *)nullptr), port(_port) {}
 
 DumpPort::~DumpPort()
 {
   delete port;
 }
 
-void
-DumpPort::EnableTemporarily(unsigned duration_ms)
-{
-  until_ms = MonotonicClockMS() + duration_ms;
-}
-
 bool
 DumpPort::CheckEnabled()
 {
-  if (until_ms == 0)
+  if (until == std::chrono::steady_clock::time_point{})
     return false;
 
-  if (until_ms == unsigned(-1))
+  if (until == std::chrono::steady_clock::time_point::max())
     return true;
 
-  if (MonotonicClockMS() >= until_ms) {
+  if (std::chrono::steady_clock::now() >= until) {
     /* duration has just expired; clear to avoid calling
        MonotonicClockMS() again in the next call */
-    until_ms = 0;
+    until = std::chrono::steady_clock::time_point{};
     return false;
   }
 
