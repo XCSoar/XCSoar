@@ -32,6 +32,13 @@ EventQueue::EventQueue()
    quit(false) {}
 
 void
+EventQueue::FlushClockCaches() noexcept
+{
+  steady_clock_cache.flush();
+  now_us = MonotonicClockUS();
+}
+
+void
 EventQueue::Push(EventLoop::Callback callback, void *ctx)
 {
   SDL_Event event;
@@ -90,7 +97,7 @@ EventQueue::Wait(Event &event)
 
     Sleep(10);
 
-    now_us = MonotonicClockUS();
+    FlushClockCaches();
   }
 }
 

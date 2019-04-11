@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "../Shared/TimerQueue.hpp"
 #include "Thread/Mutex.hpp"
+#include "Time/ClockCache.hxx"
 
 #include <chrono>
 
@@ -34,6 +35,8 @@ Copyright_License {
 struct Event;
 
 class EventQueue {
+  ClockCache<std::chrono::steady_clock> steady_clock_cache;
+
   /**
    * The current time after the event thread returned from sleeping.
    */
@@ -51,6 +54,17 @@ public:
     ::CloseHandle(trigger);
   }
 
+  /**
+   * Caching wrapper for std::chrono::steady_clock::now().  The
+   * real clock is queried at most once per event loop
+   * iteration, because it is assumed that the event loop runs
+   * for a negligible duration.
+   */
+  gcc_pure
+  const auto &SteadyNow() const noexcept {
+    return steady_clock_cache.now();
+  }
+
   bool Wait(Event &event);
 
 private:
@@ -66,6 +80,9 @@ public:
    * Handle all pending repaint messages.
    */
   static void HandlePaintMessages();
+
+private:
+  void FlushClockCaches() noexcept;
 };
 
 #endif

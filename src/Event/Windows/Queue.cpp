@@ -31,12 +31,19 @@ EventQueue::EventQueue()
   :now_us(MonotonicClockUS()),
    trigger(::CreateEvent(nullptr, true, false, nullptr)) {}
 
+void
+EventQueue::FlushClockCaches() noexcept
+{
+  steady_clock_cache.flush();
+  now_us = MonotonicClockUS();
+}
+
 bool
 EventQueue::Wait(Event &event)
 {
   assert(InMainThread());
 
-  now_us = MonotonicClockUS();
+  FlushClockCaches();
 
   while (true) {
     ::ResetEvent(trigger);
@@ -73,7 +80,7 @@ EventQueue::Wait(Event &event)
     if (result == 0xffffffff)
       return false;
 
-    now_us = MonotonicClockUS();
+    FlushClockCaches();
   }
 }
 

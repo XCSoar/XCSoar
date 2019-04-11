@@ -29,6 +29,13 @@ EventQueue::EventQueue()
   quit(false) {}
 
 void
+EventQueue::FlushClockCaches() noexcept
+{
+  steady_clock_cache.flush();
+  now_us = MonotonicClockUS();
+}
+
+void
 EventQueue::Push(const Event &event)
 {
   ScopeLock protect(mutex);
@@ -72,7 +79,7 @@ EventQueue::Wait(Event &event)
     return false;
 
   if (events.empty())
-    now_us = MonotonicClockUS();
+    FlushClockCaches();
 
   while (events.empty()) {
     if (Generate(event))
@@ -84,7 +91,7 @@ EventQueue::Wait(Event &event)
     else
       cond.timed_wait(mutex, (timeout_us + 999) / 1000);
 
-    now_us = MonotonicClockUS();
+    FlushClockCaches();
   }
 
   event = events.front();

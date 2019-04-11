@@ -28,6 +28,7 @@ Copyright_License {
 #include "../Shared/Event.hpp"
 #include "Thread/Mutex.hpp"
 #include "Thread/Cond.hxx"
+#include "Time/ClockCache.hxx"
 
 #include <chrono>
 #include <queue>
@@ -36,6 +37,8 @@ class Window;
 
 class EventQueue {
   std::queue<Event> events;
+
+  ClockCache<std::chrono::steady_clock> steady_clock_cache;
 
   /**
    * The current time after the event thread returned from sleeping.
@@ -53,6 +56,17 @@ public:
   EventQueue();
 
   EventQueue(const EventQueue &) = delete;
+
+  /**
+   * Caching wrapper for std::chrono::steady_clock::now().  The
+   * real clock is queried at most once per event loop
+   * iteration, because it is assumed that the event loop runs
+   * for a negligible duration.
+   */
+  gcc_pure
+  const auto &SteadyNow() const noexcept {
+    return steady_clock_cache.now();
+  }
 
   /**
    * Returns the monotonic clock in microseconds.  This method is only
@@ -91,6 +105,8 @@ public:
   void CancelTimer(Timer &timer);
 
 private:
+  void FlushClockCaches() noexcept;
+
   bool Generate(Event &event);
 };
 
