@@ -28,15 +28,7 @@ Copyright_License {
 #include "OS/Clock.hpp"
 
 EventQueue::EventQueue()
-  :now_us(MonotonicClockUS()),
-   trigger(::CreateEvent(nullptr, true, false, nullptr)) {}
-
-void
-EventQueue::FlushClockCaches() noexcept
-{
-  steady_clock_cache.flush();
-  now_us = MonotonicClockUS();
-}
+  :trigger(::CreateEvent(nullptr, true, false, nullptr)) {}
 
 bool
 EventQueue::Wait(Event &event)
@@ -50,13 +42,14 @@ EventQueue::Wait(Event &event)
 
     /* invoke all due timers */
 
-    int64_t timeout_us;
+    const auto now = SteadyNow();
+    std::chrono::steady_clock::duration timeout;
     while (true) {
-      timeout_us = timers.GetTimeoutUS(now_us);
-      if (timeout_us != 0)
+      timeout = timers.GetTimeout(now);
+      if (timeout != std::chrono::steady_clock::duration::zero())
         break;
 
-      Timer *timer = timers.Pop(now_us);
+      Timer *timer = timers.Pop(now);
       if (timer == nullptr)
         break;
 
@@ -71,12 +64,12 @@ EventQueue::Wait(Event &event)
     const DWORD n = 1;
     const LPHANDLE handles = &trigger;
 
-    const DWORD timeout = timeout_us >= 0
-      ? DWORD(timeout_us / 1000) + 1
+    const DWORD timeout_ms = timeout >= std::chrono::steady_clock::duration::zero()
+      ? DWORD(std::chrono::duration_cast<std::chrono::milliseconds>(timeout).count()) + 1
       : INFINITE;
 
     DWORD result = ::MsgWaitForMultipleObjects(n, handles, false,
-                                               timeout, QS_ALLEVENTS);
+                                               timeout_ms, QS_ALLEVENTS);
     if (result == 0xffffffff)
       return false;
 
@@ -106,11 +99,10 @@ EventQueue::AddTimer(Timer &timer, std::chrono::steady_clock::duration d) noexce
 {
   ScopeLock protect(mutex);
 
-  const auto us = std::chrono::duration_cast<std::chrono::microseconds>(d);
-  const uint64_t due_us = MonotonicClockUS() + us.count();
-  timers.Add(timer, due_us);
+  const auto due = SteadyNow() + d;
+  timers.Add(timer, due);
 
-  if (timers.IsBefore(due_us))
+  if (timers.IsBefore(due))
     WakeUp();
 }
 

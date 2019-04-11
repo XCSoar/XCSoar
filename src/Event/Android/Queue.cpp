@@ -22,18 +22,9 @@ Copyright_License {
 */
 
 #include "Queue.hpp"
-#include "OS/Clock.hpp"
 
 EventQueue::EventQueue()
- :now_us(MonotonicClockUS()),
-  quit(false) {}
-
-void
-EventQueue::FlushClockCaches() noexcept
-{
-  steady_clock_cache.flush();
-  now_us = MonotonicClockUS();
-}
+ :quit(false) {}
 
 void
 EventQueue::Push(const Event &event)
@@ -61,7 +52,7 @@ EventQueue::Pop(Event &event)
 bool
 EventQueue::Generate(Event &event)
 {
-  Timer *timer = timers.Pop(now_us);
+  Timer *timer = timers.Pop(SteadyNow());
   if (timer != nullptr) {
     event.type = Event::TIMER;
     event.ptr = timer;
@@ -85,11 +76,11 @@ EventQueue::Wait(Event &event)
     if (Generate(event))
       return true;
 
-    const int64_t timeout_us = timers.GetTimeoutUS(now_us);
-    if (timeout_us < 0)
+    const auto timeout = timers.GetTimeout(SteadyNow());
+    if (timeout < std::chrono::steady_clock::duration::zero())
       cond.wait(mutex);
     else
-      cond.timed_wait(mutex, (timeout_us + 999) / 1000);
+      cond.timed_wait(mutex, (std::chrono::duration_cast<std::chrono::microseconds>(timeout).count() + 999) / 1000);
 
     FlushClockCaches();
   }
@@ -156,9 +147,7 @@ EventQueue::AddTimer(Timer &timer, std::chrono::steady_clock::duration d) noexce
 {
   ScopeLock protect(mutex);
 
-  const auto us = std::chrono::duration_cast<std::chrono::microseconds>(d);
-  const uint64_t due_us = MonotonicClockUS() + us.count();
-  timers.Add(timer, due_us);
+  timers.Add(timer, SteadyNow() + d);
 
   cond.signal();
 }

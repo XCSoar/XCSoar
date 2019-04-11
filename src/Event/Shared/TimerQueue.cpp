@@ -23,26 +23,26 @@ Copyright_License {
 
 #include "TimerQueue.hpp"
 
-int64_t
-TimerQueue::GetTimeoutUS(uint64_t now_us) const
+std::chrono::steady_clock::duration
+TimerQueue::GetTimeout(std::chrono::steady_clock::time_point now) const noexcept
 {
   auto i = timers.begin();
   if (i != timers.end()) {
-    int64_t relative = i->due_us - now_us;
-    if (relative <= 0)
-      return 0;
+    auto relative = i->due - now;
+    if (relative <= std::chrono::steady_clock::duration::zero())
+      return {};
 
     return relative;
   }
 
-  return -1;
+  return std::chrono::steady_clock::duration(-1);
 }
 
 Timer *
-TimerQueue::Pop(uint64_t now_us)
+TimerQueue::Pop(std::chrono::steady_clock::time_point now) noexcept
 {
   auto t = timers.begin();
-  if (t != timers.end() && t->IsDue(now_us)) {
+  if (t != timers.end() && t->IsDue(now)) {
     Timer *timer = t->timer;
     timers.erase(t);
     return timer;
@@ -51,9 +51,9 @@ TimerQueue::Pop(uint64_t now_us)
 }
 
 void
-TimerQueue::Add(Timer &timer, uint64_t due_us)
+TimerQueue::Add(Timer &timer, std::chrono::steady_clock::time_point due) noexcept
 {
-  timers.insert(TimerRecord(timer, due_us));
+  timers.insert(TimerRecord(timer, due));
 }
 
 void

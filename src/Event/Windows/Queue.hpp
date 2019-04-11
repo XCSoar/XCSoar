@@ -37,11 +37,6 @@ struct Event;
 class EventQueue {
   ClockCache<std::chrono::steady_clock> steady_clock_cache;
 
-  /**
-   * The current time after the event thread returned from sleeping.
-   */
-  uint64_t now_us;
-
   HANDLE trigger;
 
   Mutex mutex;
@@ -82,7 +77,9 @@ public:
   static void HandlePaintMessages();
 
 private:
-  void FlushClockCaches() noexcept;
+  void FlushClockCaches() noexcept {
+    steady_clock_cache.flush();
+  }
 };
 
 #endif

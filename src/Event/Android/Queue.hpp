@@ -40,11 +40,6 @@ class EventQueue {
 
   ClockCache<std::chrono::steady_clock> steady_clock_cache;
 
-  /**
-   * The current time after the event thread returned from sleeping.
-   */
-  uint64_t now_us;
-
   TimerQueue timers;
 
   Mutex mutex;
@@ -66,15 +61,6 @@ public:
   gcc_pure
   const auto &SteadyNow() const noexcept {
     return steady_clock_cache.now();
-  }
-
-  /**
-   * Returns the monotonic clock in microseconds.  This method is only
-   * available in the main thread.
-   */
-  gcc_pure
-  uint64_t ClockUS() const {
-    return now_us;
   }
 
   bool IsQuit() const {
@@ -105,7 +91,9 @@ public:
   void CancelTimer(Timer &timer);
 
 private:
-  void FlushClockCaches() noexcept;
+  void FlushClockCaches() noexcept {
+    steady_clock_cache.flush();
+  }
 
   bool Generate(Event &event);
 };

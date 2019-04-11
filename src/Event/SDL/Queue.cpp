@@ -25,18 +25,9 @@ Copyright_License {
 #include "Event.hpp"
 #include "../Timer.hpp"
 #include "OS/Sleep.h"
-#include "OS/Clock.hpp"
 
 EventQueue::EventQueue()
-  :now_us(MonotonicClockUS()),
-   quit(false) {}
-
-void
-EventQueue::FlushClockCaches() noexcept
-{
-  steady_clock_cache.flush();
-  now_us = MonotonicClockUS();
-}
+  :quit(false) {}
 
 void
 EventQueue::Push(EventLoop::Callback callback, void *ctx)
@@ -58,7 +49,7 @@ InvokeTimer(void *ctx)
 bool
 EventQueue::Generate(Event &event)
 {
-  Timer *timer = timers.Pop(now_us);
+  Timer *timer = timers.Pop(SteadyNow());
   if (timer != nullptr) {
     event.event.type = EVENT_CALLBACK;
     event.event.user.data1 = (void *)InvokeTimer;
@@ -156,9 +147,7 @@ EventQueue::AddTimer(Timer &timer, std::chrono::steady_clock::duration d) noexce
 {
   ScopeLock protect(mutex);
 
-  const auto us = std::chrono::duration_cast<std::chrono::microseconds>(d);
-  const uint64_t due_us = MonotonicClockUS() + us.count();
-  timers.Add(timer, due_us);
+  timers.Add(timer, SteadyNow() + d);
 }
 
 void

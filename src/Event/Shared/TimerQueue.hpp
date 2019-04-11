@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Compiler.h"
 
+#include <chrono>
 #include <set>
 
 #include <stdint.h>
@@ -37,23 +38,24 @@ class TimerQueue {
     /**
      * Projected MonotonicClockUS() value when this timer is due.
      */
-    uint64_t due_us;
+    std::chrono::steady_clock::time_point due;
 
     Timer *timer;
 
-    constexpr TimerRecord(Timer &_timer, uint64_t _due_us)
-      :due_us(_due_us), timer(&_timer) {}
+    constexpr TimerRecord(Timer &_timer,
+                          std::chrono::steady_clock::time_point _due) noexcept
+      :due(_due), timer(&_timer) {}
 
     TimerRecord(TimerRecord &&other) = default;
     TimerRecord(const TimerRecord &other) = delete;
     TimerRecord &operator=(const TimerRecord &other) = delete;
 
     bool operator<(const TimerRecord &other) const {
-      return due_us < other.due_us;
+      return due < other.due;
     }
 
-    bool IsDue(uint64_t now_us) const {
-      return now_us >= due_us;
+    bool IsDue(std::chrono::steady_clock::time_point now) const noexcept {
+      return now >= due;
     }
   };
 
@@ -70,8 +72,8 @@ public:
    * specified time stamp will require adjusting the poll timeout,
    * i.e. the event thread must be woken up.
    */
-  bool IsBefore(uint64_t t) const {
-    return timers.empty() || t < timers.begin()->due_us;
+  bool IsBefore(std::chrono::steady_clock::time_point t) const noexcept {
+    return timers.empty() || t < timers.begin()->due;
   }
 
   /**
@@ -81,7 +83,7 @@ public:
    * Caller must lock a mutex.
    */
   gcc_pure
-  int64_t GetTimeoutUS(uint64_t now_us) const;
+  std::chrono::steady_clock::duration GetTimeout(std::chrono::steady_clock::time_point now) const noexcept;
 
   /**
    * Returns the first timer that is due now, nullptr if no timer is
@@ -89,12 +91,12 @@ public:
    *
    * Caller must lock a mutex.
    */
-  Timer *Pop(uint64_t now_us);
+  Timer *Pop(std::chrono::steady_clock::time_point now) noexcept;
 
   /**
    * Caller must lock a mutex.
    */
-  void Add(Timer &timer, uint64_t due_us);
+  void Add(Timer &timer, std::chrono::steady_clock::time_point due) noexcept;
 
   /**
    * Caller must lock a mutex.
