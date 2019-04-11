@@ -25,7 +25,6 @@ Copyright_License {
 #include "Event.hpp"
 #include "../Timer.hpp"
 #include "Thread/Debug.hpp"
-#include "OS/Clock.hpp"
 
 EventQueue::EventQueue()
   :trigger(::CreateEvent(nullptr, true, false, nullptr)) {}

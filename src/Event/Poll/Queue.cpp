@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Queue.hpp"
 #include "DisplayOrientation.hpp"
-#include "OS/Clock.hpp"
 
 EventQueue::EventQueue()
   :SignalListener(io_service),
