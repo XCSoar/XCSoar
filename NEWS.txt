@@ -1,4 +1,6 @@
 Version 6.8.12 - not yet released
+* weather
+  - update source URLs for METARs and TAFs (https://)
 * Android
   - increase targetSdkVersion to 26 (required by Google Play)
 * Task Editor
