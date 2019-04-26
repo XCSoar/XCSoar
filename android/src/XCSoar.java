@@ -105,14 +105,16 @@ public class XCSoar extends Activity {
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN|
                          WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-    /* Workaround for layout problems in Android KitKat with immersive full
-       screen mode: Sometimes the content view was not initialized with the
-       correct size, which caused graphics artifacts. */
-    getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN|
-                         WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS|
-                         WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR|
-                         WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-
+    // In legacy mode immersive full screen mode is not supported. Therefore this work-around does not apply.
+    if (!Loader.isLegacy) {
+      /* Workaround for layout problems in Android KitKat with immersive full
+         screen mode: Sometimes the content view was not initialized with the
+         correct size, which caused graphics artifacts. */
+      getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN|
+                           WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS|
+                           WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR|
+                           WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+    }
     enableImmersiveModeIfSupported();
 
     TextView tv = new TextView(this);
@@ -220,7 +222,10 @@ public class XCSoar extends Activity {
 
   private void enableImmersiveModeIfSupported() {
     // Set / Reset the System UI visibility flags for Immersive Full Screen Mode, if supported
-    ImmersiveFullScreenMode.enable(getWindow().getDecorView());
+    // In legacy mode immersive full screen mode is not supported.
+	if (!Loader.isLegacy) {
+      ImmersiveFullScreenMode.enable(getWindow().getDecorView());
+	}
   }
 
   private void checkRequestPermission(String permission) {
