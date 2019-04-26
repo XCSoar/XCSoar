@@ -118,7 +118,7 @@ gcc_returns_nonnull gcc_nonnull_all
 static inline char *
 UnsafeCopyStringP(char *dest, const char *src) noexcept
 {
-#if defined(_WIN32)
+#if defined(_WIN32) || (defined (__ANDROID_API__) && __ANDROID_API__ < 21)
 	/* emulate stpcpy() */
 	UnsafeCopyString(dest, src);
 	return dest + StringLength(dest);

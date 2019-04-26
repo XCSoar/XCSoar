@@ -78,7 +78,7 @@ SocketDescriptor::Close() noexcept
 SocketDescriptor
 SocketDescriptor::Accept() noexcept
 {
-#ifdef __linux__
+#if defined (__linux__) && (!defined (__ANDROID_API__) || __ANDROID_API__ >= 21 )
 	int connection_fd = ::accept4(Get(), nullptr, nullptr, SOCK_CLOEXEC);
 #else
 	int connection_fd = ::accept(Get(), nullptr, nullptr);

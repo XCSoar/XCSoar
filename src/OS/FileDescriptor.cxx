@@ -38,6 +38,7 @@
 #endif
 
 #ifdef __linux__
+#include <sys/syscall.h>
 #include <sys/eventfd.h>
 #include <sys/signalfd.h>
 #include <sys/inotify.h>
@@ -240,7 +241,14 @@ FileDescriptor::CreateEventFD(unsigned initval) noexcept
 bool
 FileDescriptor::CreateSignalFD(const sigset_t *mask) noexcept
 {
-	int new_fd = ::signalfd(fd, mask, SFD_NONBLOCK|SFD_CLOEXEC);
+
+#if !defined (__ANDROID_API__) || __ANDROID_API__ >= 21
+  int new_fd = ::signalfd(fd, mask, SFD_NONBLOCK|SFD_CLOEXEC);
+#else
+  // Older Bionic versions used by the Legacy version do not implement the call but all relevant kernels do.
+  int new_fd = syscall(__NR_signalfd4, fd, mask, sizeof(*mask),
+           O_NONBLOCK|O_CLOEXEC);
+#endif
 	if (new_fd < 0)
 		return false;
 
@@ -251,7 +259,12 @@ FileDescriptor::CreateSignalFD(const sigset_t *mask) noexcept
 bool
 FileDescriptor::CreateInotify() noexcept
 {
-	int new_fd = inotify_init1(IN_CLOEXEC|IN_NONBLOCK);
+#if !defined (__ANDROID_API__) || __ANDROID_API__ >= 21
+  int new_fd = inotify_init1(IN_CLOEXEC|IN_NONBLOCK);
+#else
+  // Older Bionic versions used by the Legacy version do not implement inotify_init1 but inotify_init.
+  int new_fd = inotify_init();
+#endif
 	if (new_fd < 0)
 		return false;
 
