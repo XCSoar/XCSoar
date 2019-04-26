@@ -67,10 +67,16 @@ BluetoothHelper::Initialise(JNIEnv *env)
   createServer_method = env->GetStaticMethodID(cls, "createServer",
                                                "()Lorg/xcsoar/AndroidPort;");
 
+#if __ANDROID_API__ >= 21
+
   startLeScan_method = env->GetStaticMethodID(cls, "startLeScan",
                                               "(Landroid/bluetooth/BluetoothAdapter$LeScanCallback;)Z");
   stopLeScan_method = env->GetStaticMethodID(cls, "stopLeScan",
                                              "(Landroid/bluetooth/BluetoothAdapter$LeScanCallback;)V");
+#else /* __ANDROID_API__ >= 21 */
+  startLeScan_method = nullptr;
+  stopLeScan_method = nullptr;;
+#endif /* __ANDROID_API__ >= 21 */
 
   return true;
 }
@@ -130,12 +136,17 @@ BluetoothHelper::list(JNIEnv *env)
 bool
 BluetoothHelper::HasLe(JNIEnv *env)
 {
+#if __ANDROID_API__ >= 21
   return cls.IsDefined() && env->GetStaticBooleanField(cls, hasLe_field);
+#else
+  return false;
+#endif
 }
 
 jobject
 BluetoothHelper::StartLeScan(JNIEnv *env, LeScanCallback &_cb)
 {
+#if __ANDROID_API__ >= 21
   assert(HasLe(env));
 
   jobject cb = NativeLeScanCallback::Create(env, _cb);
@@ -151,16 +162,23 @@ BluetoothHelper::StartLeScan(JNIEnv *env, LeScanCallback &_cb)
   }
 
   return cb;
+#else /* __ANDROID_API__ >= 21 */
+  return nullptr;
+#endif /* __ANDROID_API__ >= 21 */
 }
 
 void
 BluetoothHelper::StopLeScan(JNIEnv *env, jobject cb)
 {
+#if __ANDROID_API__ >= 21
   assert(HasLe(env));
 
   env->CallStaticVoidMethod(cls, stopLeScan_method, cb);
   env->DeleteLocalRef(cb);
+#endif /* __ANDROID_API__ >= 21 */
 }
+
+
 
 PortBridge *
 BluetoothHelper::connect(JNIEnv *env, const char *address)
