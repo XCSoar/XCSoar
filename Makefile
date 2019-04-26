@@ -53,6 +53,24 @@
 #
 #   IWYU        "y" to run "include-what-you-use" on all sources
 #
+#   ANDROID_LEGACY "y" to build the legacy version of XCSoar.
+#                Bluetooth LE is not supported.
+#                Immersive display mode is not supported.
+#                Some system calls are replaced with earlier, simpler ones,
+#                or direct Linux Kernel calls when not supported by older Bionic C libraries.
+#                The legacy version is compatible down to Android 3.1 (Honeycomb), API 12.
+#                It can run on recent Android versions too, but the obovementioned restrictions in functionality remain.
+#                This option is not supported for X64 and AARCH64.
+#                Default is "n"
+#
+#   ANDROID_INCLUDE_LEGACY_LIB "y" to build an Android APK which includes the current library with all functionality
+#                for Android 5.0 and later, but also contains the legacy library which is automatically used for
+#                older Andoid versions.
+#                For Android versions < 5.0 the restrictions described for option ANDROID_LEGACY apply.
+#                This option is incompatible with ANDROID_LEGACY (to build the legacy version only).
+#                This option is not supported for X64 and AARCH64.
+#                Automatically set to "y" when you set "DEBUG=n".
+#                Default is "n".
 
 .DEFAULT_GOAL := all
 

@@ -1,7 +1,7 @@
 ifeq ($(HAVE_POSIX),y)
-PROGRAM_NAME = xcsoar
+PROGRAM_NAME = xcsoar$(PROGRAM_NAME_SUFFIX)
 else
-PROGRAM_NAME = XCSoar
+PROGRAM_NAME = XCSoar$(PROGRAM_NAME_SUFFIX)
 endif
 
 DIALOG_SOURCES = \
@@ -729,7 +729,6 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/NativeInputListener.cpp \
 	$(SRC)/Android/PortBridge.cpp \
 	$(SRC)/Android/BluetoothHelper.cpp \
-	$(SRC)/Android/NativeLeScanCallback.cpp \
 	$(SRC)/Android/Battery.cpp \
 	$(SRC)/Android/GliderLink.cpp \
 	$(SRC)/Android/DownloadManager.cpp \
@@ -745,6 +744,14 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/VoltageDevice.cpp \
 	$(SRC)/Android/IOIOHelper.cpp \
 	$(SRC)/Android/Main.cpp
+
+ifeq ($(ANDROID_LEGACY),n)
+XCSOAR_SOURCES += \
+	$(SRC)/Android/NativeLeScanCallback.cpp
+else
+XCSOAR_SOURCES += \
+	$(SRC)/Android/posix_memalign.cpp
+endif
 
 ifeq ($(DEBUG),y)
 XCSOAR_SOURCES += \

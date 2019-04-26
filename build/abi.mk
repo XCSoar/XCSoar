@@ -4,7 +4,15 @@
 # different ABI variants are never combined in one build.
 
 ifeq ($(DEBUG),y)
-  XCSOAR_ABI = dbg
+  ifeq ($(ANDROID_LEGACY),y)
+    XCSOAR_ABI := dbg_legacy
+  else
+    XCSOAR_ABI := dbg
+  endif
 else
-  XCSOAR_ABI = opt
+  ifeq ($(ANDROID_LEGACY),y)
+    XCSOAR_ABI := opt_legacy
+  else
+    XCSOAR_ABI := opt
+  endif
 endif

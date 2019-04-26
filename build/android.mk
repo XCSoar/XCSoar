@@ -27,6 +27,10 @@ DX = $(ANDROID_BUILD_TOOLS_DIR)/dx
 
 ANDROID_LIB_NAMES = xcsoar
 
+ifeq ($(ANDROID_LEGACY),y)
+  PROGRAM_NAME_SUFFIX = _legacy
+endif
+
 JARSIGNER_RELEASE := $(JARSIGNER) -digestalg SHA1 -sigalg MD5withRSA
 
 # The environment variable ANDROID_KEYSTORE_PASS may be used to
@@ -209,29 +213,46 @@ ifeq ($(FAT_BINARY),y)
 ANDROID_LIB_BUILD =
 ANDROID_THIRDPARTY_STAMPS =
 
-# Example: $(eval $(call generate-abi,xcsoar,armeabi-v7a,ANDROID7))
+# Example: $(eval $(call generate-abi,xcsoar,armeabi-v7a,ANDROID7,n))
+# ("n" sets ANDROID_LEGACY)
 define generate-abi
 
 ANDROID_LIB_BUILD += $$(ANDROID_BUILD)/lib/$(2)/lib$(1).so
 
-$$(ANDROID_BUILD)/lib/$(2)/lib$(1).so: $$(OUT)/$(3)/$$(XCSOAR_ABI)/bin/lib$(1).so | $$(ANDROID_BUILD)/lib/$(2)/dirstamp
+# Legacy lib or not?
+ifeq ($(4),n)
+  ANDROID_THIRDPARTY_STAMP := $$(OUT)/$(3)/lib/$(2)/stamp
+  ANDROID_ABI_LIB := $$(OUT)/$(3)/$$(XCSOAR_ABI)/bin/lib$(1).so
+else
+  ANDROID_THIRDPARTY_STAMP := $$(OUT)/$(3)/lib_legacy/$(2)/stamp
+  ANDROID_ABI_LIB := $$(OUT)/$(3)/$$(XCSOAR_ABI)_legacy/bin/lib$(1).so
+endif
+
+$$(ANDROID_BUILD)/lib/$(2)/lib$(1).so: $$(ANDROID_ABI_LIB) | $$(ANDROID_BUILD)/lib/$(2)/dirstamp
 	$$(Q)cp $$< $$@
 
-ANDROID_THIRDPARTY_STAMPS += $$(OUT)/$(3)/thirdparty.stamp
-$$(OUT)/$(3)/thirdparty.stamp:
-	$$(Q)$$(MAKE) TARGET=$(3) DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) libs
+ANDROID_THIRDPARTY_STAMPS += $(ANDROID_THIRDPARTY_STAMP)
+$(ANDROID_THIRDPARTY_STAMP):
+	$$(Q)$$(MAKE) TARGET=$(3) DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) ANDROID_LEGACY=$(4) ANDROID_INCLUDE_LEGACY_LIB=n libs
 
-$$(OUT)/$(3)/$$(XCSOAR_ABI)/bin/lib$(1).so: $$(OUT)/$(3)/thirdparty.stamp
-	$$(Q)$$(MAKE) TARGET=$(3) DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) $$@
+$$(ANDROID_ABI_LIB): $(ANDROID_THIRDPARTY_STAMP)
+	$$(Q)$$(MAKE) TARGET=$(3) DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) ANDROID_LEGACY=$(4) ANDROID_INCLUDE_LEGACY_LIB=n $$@
 
 endef
 
 # Example: $(eval $(call generate-abi,xcsoar))
 define generate-all-abis
-$(eval $(call generate-abi,$(1),armeabi-v7a,ANDROID7))
-$(eval $(call generate-abi,$(1),x86,ANDROID86))
-$(eval $(call generate-abi,$(1),arm64-v8a,ANDROIDAARCH64))
-$(eval $(call generate-abi,$(1),x86_64,ANDROIDX64))
+$(eval $(call generate-abi,$(1),armeabi-v7a,ANDROID7,n))
+$(eval $(call generate-abi,$(1),x86,ANDROID86,n))
+$(eval $(call generate-abi,$(1),arm64-v8a,ANDROIDAARCH64,n))
+$(eval $(call generate-abi,$(1),x86_64,ANDROIDX64,n))
+
+# Legacy versions are only supported for 32 bit ARM and X86 since the old platform version does not support 64 bit.
+ifeq ($$(ANDROID_INCLUDE_LEGACY_LIB),y)
+  $(eval $(call generate-abi,$(1)_legacy,armeabi-v7a,ANDROID7,y))
+  $(eval $(call generate-abi,$(1)_legacy,x86,ANDROID86,y))
+endif
+
 endef
 
 $(foreach NAME,$(ANDROID_LIB_NAMES),$(eval $(call generate-all-abis,$(NAME))))
@@ -256,9 +277,27 @@ $(call SRC_TO_OBJ,$(SRC)/Android/NativeI2CbaroListener.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/NativeNunchuckListener.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/NativeVoltageListener.cpp): $(NATIVE_HEADERS)
 
-ANDROID_LIB_BUILD = $(patsubst %,$(ANDROID_ABI_DIR)/lib%.so,$(ANDROID_LIB_NAMES))
+ifeq ($(ANDROID_LEGACY),y)
+  ANDROID_LIB_BUILD = $(patsubst %,$(ANDROID_ABI_DIR)/lib%.so,$(ANDROID_LIB_NAMES)_legacy)
+else
+  ANDROID_LIB_BUILD = $(patsubst %,$(ANDROID_ABI_DIR)/lib%.so,$(ANDROID_LIB_NAMES))
+endif
 $(ANDROID_LIB_BUILD): $(ANDROID_ABI_DIR)/lib%.so: $(ABI_BIN_DIR)/lib%.so | $(ANDROID_ABI_DIR)/dirstamp
 	$(Q)cp $< $@
+
+ifeq ($(ANDROID_INCLUDE_LEGACY_LIB),y)
+  ANDROID_LEGACY_LIB_DIR = $(TARGET_OUTPUT_DIR)/$(XCSOAR_ABI)_legacy/bin
+  ANDROID_LEGACY_LIB_BUILD = $(patsubst %,$(ANDROID_ABI_DIR)/lib%.so,$(ANDROID_LIB_NAMES)_legacy)
+
+  $(ANDROID_LEGACY_LIB_BUILD): $(ANDROID_LEGACY_LIB_DIR)/lib$(ANDROID_LIB_NAMES)_legacy.so
+	$(Q)cp $< $@
+
+# When the standard library was built or re-build build the legacy lib too.
+  $(ANDROID_LEGACY_LIB_DIR)/lib$(ANDROID_LIB_NAMES)_legacy.so : $(ANDROID_LIB_BUILD)
+	$(Q)$(MAKE) TARGET=$(ANDROID_ORG_TARGET) ANDROID_LEGACY=y ANDROID_INCLUDE_LEGACY_LIB=n DEBUG=$(DEBUG) USE_CCACHE=$(USE_CCACHE) V=$(V) $@
+
+endif # ANDROID_INCLUDE_LEGACY
+
 
 endif # !FAT_BINARY
 
@@ -266,7 +305,7 @@ endif # !FAT_BINARY
 $(NATIVE_HEADERS): $(ANDROID_BUILD)/classes.dex
 
 .DELETE_ON_ERROR: $(ANDROID_BUILD)/unsigned.apk
-$(ANDROID_BUILD)/unsigned.apk: $(ANDROID_BUILD)/classes.dex $(ANDROID_BUILD)/resources.apk $(ANDROID_LIB_BUILD)
+$(ANDROID_BUILD)/unsigned.apk: $(ANDROID_BUILD)/classes.dex $(ANDROID_BUILD)/resources.apk $(ANDROID_LIB_BUILD) $(ANDROID_LEGACY_LIB_BUILD)
 	@$(NQ)echo "  APK     $@"
 	$(Q)cp $(ANDROID_BUILD)/resources.apk $@
 	$(Q)cd $(dir $@) && zip -q -r $(notdir $@) classes.dex lib

@@ -69,6 +69,7 @@ endif
 
 ifeq ($(TARGET),ANDROID7NEON)
   NEON := y
+  ANDROID_ORG_TARGET := $(TARGET)
   override TARGET = ANDROID7
 endif
 
@@ -76,26 +77,49 @@ ifeq ($(TARGET),ANDROID7)
   TARGET_IS_ARM = y
   TARGET_IS_ARMHF = y
   ARMV7 := y
+  ANDROID_ORG_TARGET := $(TARGET)
   override TARGET = ANDROID
 endif
 
 ifeq ($(TARGET),ANDROID86)
   X86 := y
+  ANDROID_ORG_TARGET := $(TARGET)
   override TARGET = ANDROID
 endif
 
 ifeq ($(TARGET),ANDROIDAARCH64)
   AARCH64 := y
   override TARGET = ANDROID
+
+  ANDROID_ORG_TARGET := $(TARGET)
+  ifeq ($(ANDROID_LEGACY),y)
+    $(error ANDROID_LEGACY is not supported for AARCH64)
+  endif
+  override ANDROID_LEGACY = n
+  ifeq ($(ANDROID_INCLUDE_LEGACY_LIB),y)
+    $(error ANDROID_INCLUDE_LEGACY_LIB is not supported for AARCH64)
+  endif
+  override ANDROID_INCLUDE_LEGACY_LIB = n
 endif
 
 ifeq ($(TARGET),ANDROIDX64)
   X64 := y
   override TARGET = ANDROID
+
+  ANDROID_ORG_TARGET := $(TARGET)
+  ifeq ($(ANDROID_LEGACY),y)
+    $(error ANDROID_LEGACY is not supported for X64)
+  endif
+  override ANDROID_LEGACY = n
+  ifeq ($(ANDROID_INCLUDE_LEGACY_LIB),y)
+    $(error ANDROID_INCLUDE_LEGACY_LIB is not supported for X64)
+  endif
+  override ANDROID_INCLUDE_LEGACY_LIB = n
 endif
 
 ifeq ($(TARGET),ANDROIDFAT)
   FAT_BINARY := y
+  ANDROID_ORG_TARGET := $(TARGET)
   override TARGET = ANDROID
 endif
 
@@ -312,10 +336,44 @@ ifeq ($(TARGET),UNIX)
 endif
 
 ifeq ($(TARGET),ANDROID)
+
+  # Automatically determine if we are building or if we are integrating the Android legacy library
+  # By default we are building the standard full function Android library.
+  ANDROID_LEGACY ?= n
+
+  # Release versions by default include the legacy library unless explicitly specified on the command line
+  # Please note that 64-bit architectures are not supported for legacy builds.
+  # For these builds ANDROID_INCLUDE_LEGACY_LIB has been set to "n" explicitly above.
+  ifeq ($(DEBUG)$(ANDROID_LEGACY),nn)
+    ANDROID_INCLUDE_LEGACY_LIB ?= y
+  else
+    ANDROID_INCLUDE_LEGACY_LIB ?= n
+  endif
+
+  # A legacy build will never include a legacy library. It *is* the legacy build
+  ifeq ($(ANDROID_LEGACY)$(ANDROID_INCLUDE_LEGACY_LIB),yy)
+    $(error ANDROID_LEGACY and ANDROID_INCLUDE_LEGACY are mutually exclusive)
+  endif
+
+
   ANDROID_NDK ?= $(HOME)/opt/android-ndk-r19c
 
   ANDROID_SDK_PLATFORM = android-26
-  ANDROID_NDK_API = 21
+  ifeq ($(ANDROID_LEGACY),y)
+    # Distinguish between the NDK platform which determines the directory from the NKD where the
+    # Bionic binary library for linking is lonceated
+    ANDROID_NDK_PLATFORM = android-16
+    # ... and the NKD level which should be supported. This affects annotations and defines in the
+    # Android headers as well as the -target option to CLANG.
+    # This allows static compiler checking for compatibility with earlier Android versions than the one provided by
+    # the NDK platform. 
+    # Currently the lowest NDK platform level supported is 16, but the compatibility of XCSoar should be API 12 for the 
+    # legacy library.
+    ANDROID_NDK_API = 12
+  else
+    ANDROID_NDK_PLATFORM = android-21
+    ANDROID_NDK_API = 21
+  endif
 
   ANDROID_ARCH = arm
   ANDROID_ABI2 = arm-linux-androideabi
@@ -348,8 +406,6 @@ ifeq ($(TARGET),ANDROID)
     ANDROID_ABI3 = x86_64
     HOST_TRIPLET = x86_64-linux-android
   endif
-
-  ANDROID_NDK_PLATFORM = android-$(ANDROID_NDK_API)
 
   ANDROID_SYSROOT = $(ANDROID_NDK)/sysroot
   ANDROID_NDK_PLATFORM_DIR = $(ANDROID_NDK)/platforms/$(ANDROID_NDK_PLATFORM)
