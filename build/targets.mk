@@ -676,11 +676,9 @@ ifeq ($(TARGET),ANDROID)
     TARGET_LDFLAGS += -Wl,--no-warn-mismatch
   endif
 
-  # clang as linker driver adds the option '-pie' to the linker command for the X64 platform.
-  # This option which is incompatible with the option '-shared'.
-  ifeq ($(X64),y)
-    TARGET_LDFLAGS += -no-pie
-  endif
+  # clang as linker driver adds the option '-pie' to the linker command.
+  # This option is incompatible with the option '-shared'.
+  TARGET_LDFLAGS += -no-pie
 
 endif
 
