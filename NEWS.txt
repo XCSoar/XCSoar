@@ -59,6 +59,7 @@ Version 7.0 - not yet released
   - display rotation
 * Android
   - drop support for ARMv6 and MIPS CPUs
+  - support from Honeycomb (Android 3.1) onward in legacy mode, Lollipop (5.0) onward with full functionality
 * Kobo
   - support Kobo Glo HD
 
