@@ -65,7 +65,7 @@ final class BluetoothHelper {
   }
 
   public static void Initialize(Context context) {
-    hasLe = adapter != null &&
+    hasLe = adapter != null && !Loader.isLegacy &&
       context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE);
   }
 
