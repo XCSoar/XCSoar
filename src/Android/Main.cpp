@@ -141,7 +141,9 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   NativeInputListener::Initialise(env);
   PortBridge::Initialise(env);
   BluetoothHelper::Initialise(env);
+#if __ANDROID_API__ >= 21
   NativeLeScanCallback::Initialise(env);
+#endif
   const bool have_ioio = IOIOHelper::Initialise(env);
   NativeBMP085Listener::Initialise(env);
   BMP085Device::Initialise(env);
@@ -253,7 +255,9 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   VoltageDevice::Deinitialise(env);
   NativeVoltageListener::Deinitialise(env);
   IOIOHelper::Deinitialise(env);
+#if __ANDROID_API__ >= 21
   NativeLeScanCallback::Deinitialise(env);
+#endif
   BluetoothHelper::Deinitialise(env);
   NativeInputListener::Deinitialise(env);
   NativePortListener::Deinitialise(env);
