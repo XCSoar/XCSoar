@@ -2,8 +2,8 @@ TARGETS = PC WIN64 \
 	UNIX UNIX32 UNIX64 OPT \
 	WAYLAND \
 	PI PI2 CUBIE KOBO NEON \
-	ANDROID ANDROID7 ANDROID7NEON ANDROID86 ANDROIDMIPS \
-	ANDROIDAARCH64 ANDROIDX64 ANDROIDMIPS64 \
+	ANDROID ANDROID7 ANDROID7NEON ANDROID86 \
+	ANDROIDAARCH64 ANDROIDX64 \
 	ANDROIDFAT \
 	CYGWIN \
 	OSX64 IOS32 IOS64
@@ -40,8 +40,6 @@ ARMV7 := n
 NEON := n
 AARCH64 := n
 X86 := n
-MIPS := n
-MIPS64 := n
 FAT_BINARY := n
 
 TARGET_IS_DARWIN := n
@@ -86,11 +84,6 @@ ifeq ($(TARGET),ANDROID86)
   override TARGET = ANDROID
 endif
 
-ifeq ($(TARGET),ANDROIDMIPS)
-  MIPS := y
-  override TARGET = ANDROID
-endif
-
 ifeq ($(TARGET),ANDROIDAARCH64)
   AARCH64 := y
   override TARGET = ANDROID
@@ -98,11 +91,6 @@ endif
 
 ifeq ($(TARGET),ANDROIDX64)
   X64 := y
-  override TARGET = ANDROID
-endif
-
-ifeq ($(TARGET),ANDROIDMIPS64)
-  MIPS64 := y
   override TARGET = ANDROID
 endif
 
@@ -348,12 +336,6 @@ ifeq ($(TARGET),ANDROID)
     HOST_TRIPLET = i686-linux-android
   endif
 
-  ifeq ($(MIPS),y)
-    ANDROID_ARCH = mips
-    ANDROID_ABI2 = mipsel-linux-android
-    ANDROID_ABI3 = mips
-  endif
-
   ifeq ($(AARCH64),y)
     ANDROID_ARCH = arm64
     ANDROID_ABI2 = aarch64-linux-android
@@ -365,12 +347,6 @@ ifeq ($(TARGET),ANDROID)
     ANDROID_ABI2 = x86_64
     ANDROID_ABI3 = x86_64
     HOST_TRIPLET = x86_64-linux-android
-  endif
-
-  ifeq ($(MIPS64),y)
-    ANDROID_ARCH = mips64
-    ANDROID_ABI2 = mips64el-linux-android
-    ANDROID_ABI3 = mips64
   endif
 
   ANDROID_SYSROOT = $(ANDROID_NDK)/sysroot
@@ -413,10 +389,6 @@ ifeq ($(TARGET),ANDROID)
     LLVM_TARGET = i686-none-linux-android
   endif
 
-  ifeq ($(MIPS),y)
-    LLVM_TARGET = mipsel-none-linux-android
-  endif
-
   ifeq ($(ARMV7),y)
     LLVM_TARGET = armv7a-none-linux-androideabi
     TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp
@@ -434,10 +406,6 @@ ifeq ($(TARGET),ANDROID)
 
   ifeq ($(X64),y)
     LLVM_TARGET = x86_64-linux-android
-  endif
-
-  ifeq ($(MIPS64),y)
-    LLVM_TARGET = mips64el-linux-android
   endif
 
   TARGET_ARCH += -fpic -funwind-tables
@@ -633,7 +601,7 @@ endif
 
 ifeq ($(TARGET),ANDROID)
   TARGET_LDFLAGS += -Wl,--no-undefined
-  ifeq ($(call bool_or,$(X64),$(MIPS64)),y)
+  ifeq ($(X64),y)
     TARGET_LDFLAGS += -L$(ANDROID_TARGET_ROOT)/usr/lib64
     TARGET_LDFLAGS += -B$(ANDROID_TARGET_ROOT)/usr/lib64
   else

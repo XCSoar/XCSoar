@@ -58,7 +58,7 @@ Version 7.0 - not yet released
   - drop support for SDL 1.2
   - display rotation
 * Android
-  - drop support for ARMv6 CPUs
+  - drop support for ARMv6 and MIPS CPUs
 * Kobo
   - support Kobo Glo HD
 
