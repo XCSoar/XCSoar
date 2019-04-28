@@ -388,11 +388,11 @@ ifeq ($(TARGET),ANDROID)
   LLVM_PREFIX = $(ANDROID_TOOLCHAIN)/bin/
 
   ifeq ($(X86),y)
-    LLVM_TARGET = i686-none-linux-android
+    LLVM_TARGET := i686-linux-android
   endif
 
   ifeq ($(ARMV7),y)
-    LLVM_TARGET = armv7a-none-linux-androideabi
+    LLVM_TARGET := armv7a-linux-androideabi
     TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp
 
     ifeq ($(NEON),y)
@@ -403,12 +403,14 @@ ifeq ($(TARGET),ANDROID)
   endif
 
   ifeq ($(AARCH64),y)
-    LLVM_TARGET = aarch64-linux-android
+    LLVM_TARGET := aarch64-linux-android
   endif
 
   ifeq ($(X64),y)
-    LLVM_TARGET = x86_64-linux-android
+    LLVM_TARGET := x86_64-linux-android
   endif
+
+  LLVM_TARGET := $(LLVM_TARGET)$(ANDROID_NDK_API)
 
   TARGET_ARCH += -fpic -funwind-tables
 
