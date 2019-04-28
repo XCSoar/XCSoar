@@ -28,8 +28,8 @@ jobs:
 
       - type: run
         name: Build
-        command: make -j2 TARGET=UNIX everything
+        command: make -j2 TARGET=UNIX V=2 everything
 
       - type: run
         name: Tests
-        command: make TARGET=UNIX check
+        command: make TARGET=UNIX V=2 check
