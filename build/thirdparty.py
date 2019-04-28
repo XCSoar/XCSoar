@@ -5,10 +5,10 @@ import re
 import sys
 
 if len(sys.argv) != 14:
-    print("Usage: build.py TARGET_OUTPUT_DIR TARGET HOST_TRIPLET ACTUAL_HOST_TRIPLET ARCH_CFLAGS CPPFLAGS ARCH_LDFLAGS CC CXX AR ARFLAGS RANLIB STRIP", file=sys.stderr)
+    print("Usage: build.py LIB_PATH TARGET HOST_TRIPLET ACTUAL_HOST_TRIPLET ARCH_CFLAGS CPPFLAGS ARCH_LDFLAGS CC CXX AR ARFLAGS RANLIB STRIP", file=sys.stderr)
     sys.exit(1)
 
-target_output_dir, target, toolchain_host_triplet, actual_host_triplet, arch_cflags, cppflags, arch_ldflags, cc, cxx, ar, arflags, ranlib, strip = sys.argv[1:]
+lib_path, target, toolchain_host_triplet, actual_host_triplet, arch_cflags, cppflags, arch_ldflags, cc, cxx, ar, arflags, ranlib, strip = sys.argv[1:]
 
 # the path to the XCSoar sources
 xcsoar_path = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]) or '.', '..'))
@@ -17,9 +17,8 @@ sys.path[0] = os.path.join(xcsoar_path, 'build/python')
 # output directories
 from build.dirs import tarball_path, src_path
 
-target_output_dir = os.path.abspath(target_output_dir)
+lib_path = os.path.abspath(lib_path)
 
-lib_path = os.path.join(target_output_dir, 'lib')
 arch_path = os.path.join(lib_path, actual_host_triplet)
 build_path = os.path.join(arch_path, 'build')
 install_prefix = os.path.join(arch_path, 'root')
