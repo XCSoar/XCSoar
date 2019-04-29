@@ -3,6 +3,7 @@ Version 6.8.12 - not yet released
   - update source URLs for METARs and TAFs (https://)
 * Android
   - increase targetSdkVersion to 26 (required by Google Play)
+  - request storage and GPS permissions on Android 6+
   - fix crash when permission to use GPS is revoked
   - fix notification on Android 8+
 * Task Editor

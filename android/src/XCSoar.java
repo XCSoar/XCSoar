@@ -22,6 +22,7 @@
 
 package org.xcsoar;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.os.Bundle;
@@ -42,6 +43,7 @@ import android.content.IntentFilter;
 import android.content.BroadcastReceiver;
 import android.content.ServiceConnection;
 import android.content.ComponentName;
+import android.content.pm.PackageManager;
 import android.util.Log;
 import android.provider.Settings;
 import android.view.View;
@@ -125,6 +127,13 @@ public class XCSoar extends Activity {
     batteryReceiver = new BatteryReceiver();
     registerReceiver(batteryReceiver,
                      new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+
+    /* TODO: this sure is the wrong place to request permissions - it
+       will cause XCSoar to quit immediately; we should request
+       permissions when we need them, but implementing that is
+       complicated, so for now, we do it here to give users a quick
+       solution for the problem */
+    requestAllPermissions();
   }
 
   private void quit() {
@@ -218,6 +227,30 @@ public class XCSoar extends Activity {
     // Set / Reset the System UI visibility flags for Immersive Full Screen Mode, if supported
     if (android.os.Build.VERSION.SDK_INT >= 19)
       ImmersiveFullScreenMode.enable(getWindow().getDecorView());
+  }
+
+  private void checkRequestPermission(String permission) {
+    if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+      try {
+        this.requestPermissions(new String[]{permission}, 0);
+      } catch (Exception e) {
+        Log.e(TAG, "requestPermissions(" + permission + ") failed", e);
+      }
+    }
+  }
+
+  private void requestAllPermissions() {
+    if (android.os.Build.VERSION.SDK_INT < 23)
+      /* we don't need to request permissions on this old Android
+         version */
+      return;
+
+    /* starting with Android 6.0, we need to explicitly request all
+       permissions before using them; mentioning them in the manifest
+       is not enough */
+
+    checkRequestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    checkRequestPermission(Manifest.permission.ACCESS_FINE_LOCATION);
   }
 
   @Override protected void onResume() {
