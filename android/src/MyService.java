@@ -69,6 +69,20 @@ public class MyService extends Service {
   }
 
   private static Notification createNotification(Context context, PendingIntent intent) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
+      return createNotificationOld(context, intent);
+
+    Notification.Builder builder = new Notification.Builder(context)
+      .setOngoing(true)
+      .setContentIntent(intent)
+      .setContentTitle("XCSoar")
+      .setContentText("XCSoar is running")
+      .setSmallIcon(R.drawable.notification_icon);
+
+    return builder.build();
+  }
+
+  private static Notification createNotificationOld(Context context, PendingIntent intent) {
     Notification notification = new Notification(R.drawable.notification_icon, null,
                                                  System.currentTimeMillis());
 
