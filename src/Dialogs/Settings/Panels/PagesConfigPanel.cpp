@@ -152,7 +152,7 @@ public:
 
 private:
   /* virtual methods from ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
@@ -410,7 +410,7 @@ PageListWidget::OnModified(const PageLayout &new_value)
 }
 
 void
-PageListWidget::OnAction(int id)
+PageListWidget::OnAction(int id) noexcept
 {
   const unsigned n = GetList().GetLength();
   const unsigned cursor = GetList().GetCursorIndex();

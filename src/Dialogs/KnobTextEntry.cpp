@@ -141,7 +141,7 @@ protected:
   void OnPaint(Canvas &canvas) override;
 
   /* virtual methods from class ActionListener */
-  void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
@@ -184,7 +184,7 @@ KnobTextEntryWindow::OnPaint(Canvas &canvas)
 }
 
 void
-KnobTextEntryWindow::OnAction(int id)
+KnobTextEntryWindow::OnAction(int id) noexcept
 {
   switch (id) {
   case DOWN:

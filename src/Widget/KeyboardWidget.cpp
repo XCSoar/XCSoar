@@ -265,7 +265,7 @@ KeyboardWidget::OnShiftClicked()
 }
 
 void
-KeyboardWidget::OnAction(int id)
+KeyboardWidget::OnAction(int id) noexcept
 {
   switch (id) {
   case SHIFT:

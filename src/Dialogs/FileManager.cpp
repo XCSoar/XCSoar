@@ -273,7 +273,7 @@ public:
   virtual void OnCursorMoved(unsigned index) override;
 
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 
 #ifdef HAVE_DOWNLOAD_MANAGER
   /* virtual methods from class Timer */
@@ -579,7 +579,7 @@ ManagedFileListWidget::Cancel()
 }
 
 void
-ManagedFileListWidget::OnAction(int id)
+ManagedFileListWidget::OnAction(int id) noexcept
 {
   switch (id) {
   case DOWNLOAD:

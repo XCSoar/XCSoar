@@ -144,7 +144,7 @@ public:
 
 private:
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 
   /* virtual methods from Timer */
   virtual void OnTimer() override;
@@ -448,7 +448,7 @@ AirspaceWarningListWidget::CopyList()
 }
 
 void
-AirspaceWarningListWidget::OnAction(int id)
+AirspaceWarningListWidget::OnAction(int id) noexcept
 {
   switch (id) {
   case ACK:

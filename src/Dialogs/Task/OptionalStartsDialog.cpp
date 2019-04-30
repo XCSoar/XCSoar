@@ -114,7 +114,7 @@ public:
   }
 
   /* virtual methods from class ActionListener */
-  void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
@@ -153,7 +153,7 @@ OptionStartsWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
 }
 
 void
-OptionStartsWidget::OnAction(int id)
+OptionStartsWidget::OnAction(int id) noexcept
 {
   switch (id) {
   case RELOCATE:

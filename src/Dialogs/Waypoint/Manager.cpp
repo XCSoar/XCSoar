@@ -102,7 +102,7 @@ private:
   void OnActivateItem(unsigned index) override;
 
   /* virtual methods from ActionListener */
-  void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 
 private:
   void UpdateList();
@@ -282,7 +282,7 @@ WaypointManagerWidget::OnWaypointDeleteClicked(unsigned i)
 }
 
 void
-WaypointManagerWidget::OnAction(int id)
+WaypointManagerWidget::OnAction(int id) noexcept
 {
   switch (Buttons(id)) {
   case NEW:

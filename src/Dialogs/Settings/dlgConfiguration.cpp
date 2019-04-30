@@ -267,7 +267,7 @@ private:
   void OnExpertClicked();
 
   /* virtual methods from ActionListener */
-  virtual void OnAction(int id) override {
+  void OnAction(int id) noexcept override {
     switch (id) {
     case EXPERT:
       OnExpertClicked();

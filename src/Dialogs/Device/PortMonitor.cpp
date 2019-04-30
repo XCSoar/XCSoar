@@ -127,7 +127,7 @@ public:
   }
 
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) override {
+  void OnAction(int id) noexcept override {
     switch (id) {
     case CLEAR:
       Clear();

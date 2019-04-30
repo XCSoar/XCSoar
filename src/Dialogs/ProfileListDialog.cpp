@@ -136,7 +136,7 @@ protected:
 
 private:
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
@@ -343,7 +343,7 @@ ProfileListWidget::DeleteClicked()
 }
 
 void
-ProfileListWidget::OnAction(int id)
+ProfileListWidget::OnAction(int id) noexcept
 {
   switch ((Buttons)id) {
   case NEW:

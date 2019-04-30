@@ -116,7 +116,7 @@ OffsetButtonsWidget::SetFocus()
 }
 
 void
-OffsetButtonsWidget::OnAction(int id)
+OffsetButtonsWidget::OnAction(int id) noexcept
 {
   assert(unsigned(id) < ARRAY_SIZE(offsets));
 

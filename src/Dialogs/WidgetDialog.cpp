@@ -187,7 +187,7 @@ WidgetDialog::ShowModal()
 }
 
 void
-WidgetDialog::OnAction(int id)
+WidgetDialog::OnAction(int id) noexcept
 {
   if (id == mrOK) {
     if (!widget.Get()->Save(changed))

@@ -148,7 +148,7 @@ private:
   void OnSave();
 
   /* virtual methods from ActionListener */
-  void OnAction(int id) override {
+  void OnAction(int id) noexcept override {
     switch (id) {
     case DEMO:
       OnDemo();
@@ -230,7 +230,7 @@ public:
   }
 
   /* methods from ActionListener */
-  void OnAction(int id) override {
+  void OnAction(int id) noexcept override {
     SetParametersScheme(pager, id);
   }
 };

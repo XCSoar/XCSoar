@@ -45,11 +45,11 @@ public:
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
   virtual bool Save(bool &changed) override;
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
-InfoBoxesConfigPanel::OnAction(int id)
+InfoBoxesConfigPanel::OnAction(int id) noexcept
 {
   InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
 

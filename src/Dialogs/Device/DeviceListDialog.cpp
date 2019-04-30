@@ -220,7 +220,7 @@ public:
 
 private:
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 
   /* virtual methods from class BlackboardListener */
   virtual void OnGPSUpdate(const MoreData &basic) override;
@@ -661,7 +661,7 @@ DeviceListWidget::DebugCurrent()
 }
 
 void
-DeviceListWidget::OnAction(int id)
+DeviceListWidget::OnAction(int id) noexcept
 {
   switch (id) {
   case DISABLE:

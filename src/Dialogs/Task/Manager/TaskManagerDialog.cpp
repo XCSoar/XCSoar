@@ -94,7 +94,7 @@ TaskManagerDialog::OnPageFlipped()
 }
 
 void
-TaskManagerDialog::OnAction(int id)
+TaskManagerDialog::OnAction(int id) noexcept
 {
   switch (id) {
   case MAP:

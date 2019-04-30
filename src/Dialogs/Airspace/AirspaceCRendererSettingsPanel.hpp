@@ -54,7 +54,7 @@ public:
 
 protected:
   /* methods from ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 
 private:
   void FillAirspaceClasses();

@@ -47,11 +47,11 @@ public:
   virtual void Show(const PixelRect &rc) override;
 
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
-MacCreadySetupPanel::OnAction(int id)
+MacCreadySetupPanel::OnAction(int id) noexcept
 {
   TaskBehaviour &task_behaviour = CommonInterface::SetComputerSettings().task;
   task_behaviour.auto_mc = auto_mc.GetState();

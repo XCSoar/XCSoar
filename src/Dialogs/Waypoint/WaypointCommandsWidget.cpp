@@ -231,7 +231,7 @@ ActivatePan(const Waypoint &waypoint)
 }
 
 void
-WaypointCommandsWidget::OnAction(int id)
+WaypointCommandsWidget::OnAction(int id) noexcept
 {
   MessageOperationEnvironment env;
 

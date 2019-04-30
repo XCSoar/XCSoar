@@ -32,7 +32,7 @@ Copyright_License {
  */
 class ActionListener {
 public:
-  virtual void OnAction(int id) = 0;
+  virtual void OnAction(int id) noexcept = 0;
 };
 
 #endif

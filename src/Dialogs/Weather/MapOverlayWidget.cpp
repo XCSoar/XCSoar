@@ -216,7 +216,7 @@ private:
   void UpdateClicked();
 
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
@@ -410,7 +410,7 @@ WeatherMapOverlayListWidget::UpdateClicked()
 }
 
 void
-WeatherMapOverlayListWidget::OnAction(int id)
+WeatherMapOverlayListWidget::OnAction(int id) noexcept
 {
   switch ((Buttons)id) {
   case USE:

@@ -111,7 +111,7 @@ private:
   void OnShiftClicked();
 
   /* virtual methods from ActionListener */
-  void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 #endif

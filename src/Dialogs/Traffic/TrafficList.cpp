@@ -314,7 +314,7 @@ public:
   }
 
   /* virtual methods from ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 
 private:
   /* virtual methods from BlackboardListener */
@@ -744,7 +744,7 @@ TrafficListWidget::OnActivateItem(unsigned index)
 }
 
 void
-TrafficListWidget::OnAction(int id)
+TrafficListWidget::OnAction(int id) noexcept
 {
   switch (Buttons(id)) {
   case DETAILS:

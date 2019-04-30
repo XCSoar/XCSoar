@@ -100,11 +100,11 @@ public:
 
 private:
   /* virtual methods from class ActionListener */
-  void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
-AirspaceWarningWidget::OnAction(int id)
+AirspaceWarningWidget::OnAction(int id) noexcept
 {
   switch ((Action)id) {
   case ACK:

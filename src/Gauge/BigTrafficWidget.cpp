@@ -944,7 +944,7 @@ TrafficWidget::SetFocus()
 }
 
 void
-TrafficWidget::OnAction(int id)
+TrafficWidget::OnAction(int id) noexcept
 {
   switch ((Action)id) {
   case CLOSE:

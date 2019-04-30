@@ -51,7 +51,7 @@ public:
 
 private:
   /* virtual methods from ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
@@ -84,7 +84,7 @@ ManageFLARMWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-ManageFLARMWidget::OnAction(int id)
+ManageFLARMWidget::OnAction(int id) noexcept
 {
   switch (id) {
   case Setup:

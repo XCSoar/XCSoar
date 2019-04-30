@@ -38,7 +38,7 @@ class LambdaActionListener : public ActionListener, private C {
 public:
   LambdaActionListener(C &&c):C(std::move(c)) {}
 
-  virtual void OnAction(int id) override {
+  void OnAction(int id) noexcept override {
     C::operator()(id);
   }
 };

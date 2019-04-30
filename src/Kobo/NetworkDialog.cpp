@@ -63,7 +63,7 @@ private:
   void ToggleWifi();
 
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
@@ -101,7 +101,7 @@ NetworkWidget::ToggleWifi()
 }
 
 void
-NetworkWidget::OnAction(int id)
+NetworkWidget::OnAction(int id) noexcept
 {
   switch (id) {
   case TOGGLE_WIFI:

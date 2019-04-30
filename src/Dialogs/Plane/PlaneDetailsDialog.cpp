@@ -70,7 +70,7 @@ private:
   virtual void OnModified(DataField &df) override;
 
   /* virtual methods from ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
@@ -156,7 +156,7 @@ PlaneEditWidget::Save(bool &_changed)
 }
 
 void
-PlaneEditWidget::OnAction(int id)
+PlaneEditWidget::OnAction(int id) noexcept
 {
   switch (id) {
   case POLAR:

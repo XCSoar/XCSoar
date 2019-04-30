@@ -60,7 +60,7 @@ ProgressDialog::AddCancelButton(std::function<void()> &&callback)
 }
 
 void
-ProgressDialog::OnAction(int id)
+ProgressDialog::OnAction(int id) noexcept
 {
   if (id == mrCancel && cancel_callback)
     cancel_callback();

@@ -151,7 +151,7 @@ public:
   }
 
   /** inherited from ActionListener */
-  void OnAction(int id) override {
+  void OnAction(int id) noexcept override {
     SetModalResult(id);
   }
 

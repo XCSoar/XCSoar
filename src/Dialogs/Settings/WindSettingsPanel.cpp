@@ -154,7 +154,7 @@ WindSettingsPanel::Save(bool &_changed)
 }
 
 void
-WindSettingsPanel::OnAction(int id)
+WindSettingsPanel::OnAction(int id) noexcept
 {
   switch (id) {
   case CLEAR_MANUAL:

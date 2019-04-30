@@ -73,7 +73,7 @@ private:
   void OnAdd();
 
   /* virtual methods from class ActionListener */
-  void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 inline void
@@ -95,7 +95,7 @@ MatTaskAddWidget::OnAdd()
 }
 
 void
-MatTaskAddWidget::OnAction(int id)
+MatTaskAddWidget::OnAction(int id) noexcept
 {
   switch ((Action)id) {
   case DISMISS:

@@ -210,7 +210,7 @@ public:
   }
 
   /* virtual methods from class ActionListener */
-  void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 
   /* virtual methods from class Net::DownloadListener */
   void OnDownloadAdded(Path path_relative,
@@ -311,7 +311,7 @@ DownloadFilePickerWidget::Download()
 }
 
 void
-DownloadFilePickerWidget::OnAction(int id)
+DownloadFilePickerWidget::OnAction(int id) noexcept
 {
   switch (id) {
   case DOWNLOAD:

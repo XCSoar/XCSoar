@@ -132,7 +132,7 @@ private:
   void Connect();
 
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
@@ -299,7 +299,7 @@ WifiListWidget::Connect()
 }
 
 void
-WifiListWidget::OnAction(int id)
+WifiListWidget::OnAction(int id) noexcept
 {
   switch (id) {
   case SCAN:

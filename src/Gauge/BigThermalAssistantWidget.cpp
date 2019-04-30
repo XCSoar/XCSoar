@@ -119,7 +119,7 @@ BigThermalAssistantWidget::SetFocus()
 }
 
 void
-BigThermalAssistantWidget::OnAction(int id)
+BigThermalAssistantWidget::OnAction(int id) noexcept
 {
   switch ((Action)id) {
   case CLOSE:

@@ -75,7 +75,7 @@ TaskClosePanel::CommitAndClose()
 }
 
 void
-TaskClosePanel::OnAction(int id)
+TaskClosePanel::OnAction(int id) noexcept
 {
   switch (id) {
   case CLOSE:

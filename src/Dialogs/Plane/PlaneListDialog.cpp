@@ -123,7 +123,7 @@ protected:
 
 private:
   /* virtual methods from class ActionListener */
-  void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
@@ -362,7 +362,7 @@ PlaneListWidget::DeleteClicked()
 }
 
 void
-PlaneListWidget::OnAction(int id)
+PlaneListWidget::OnAction(int id) noexcept
 {
   switch ((Buttons)id) {
   case NEW:

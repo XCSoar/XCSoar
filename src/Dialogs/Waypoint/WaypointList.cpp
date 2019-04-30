@@ -192,7 +192,7 @@ public:
   void OnActivateItem(unsigned index) override;
 
   /* virtual methods from ActionListener */
-  void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 
   /* virtual methods from DataFieldListener */
   void OnModified(DataField &df) override;
@@ -485,7 +485,7 @@ WaypointListWidget::OnActivateItem(unsigned index)
 }
 
 void
-WaypointListWidget::OnAction(int id)
+WaypointListWidget::OnAction(int id) noexcept
 {
   switch (Buttons(id)) {
   case SELECT:
