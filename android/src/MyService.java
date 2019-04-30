@@ -26,6 +26,7 @@ import android.app.Service;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
@@ -66,17 +67,22 @@ public class MyService extends Service {
     notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
   }
 
+  private static Notification createNotification(Context context, PendingIntent intent) {
+    Notification notification = new Notification(R.drawable.notification_icon, null,
+                                                 System.currentTimeMillis());
+    notification.setLatestEventInfo(context, "XCSoar", "XCSoar is running",
+                                    intent);
+    notification.flags |= Notification.FLAG_ONGOING_EVENT;
+    return notification;
+  }
+
   private void onStart() {
     /* add an icon to the notification area while XCSoar runs, to
        remind the user that we're sucking his battery empty */
-    Notification notification = new Notification(R.drawable.notification_icon, null,
-                                                 System.currentTimeMillis());
     Intent intent2 = new Intent(this, mainActivityClass);
     PendingIntent contentIntent =
       PendingIntent.getActivity(this, 0, intent2, 0);
-    notification.setLatestEventInfo(this, "XCSoar", "XCSoar is running",
-                                    contentIntent);
-    notification.flags |= Notification.FLAG_ONGOING_EVENT;
+    Notification notification = createNotification(this, contentIntent);
 
     notificationManager.notify(1, notification);
 
