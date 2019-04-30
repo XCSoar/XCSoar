@@ -62,9 +62,14 @@ Version 7.0 - not yet released
 * Kobo
   - support Kobo Glo HD
 
-Version 6.8.12 - not yet released
+Version 6.8.12 - 2019/04/30
+* weather
+  - update source URLs for METARs and TAFs (https://)
 * Android
   - increase targetSdkVersion to 26 (required by Google Play)
+  - request storage and GPS permissions on Android 6+
+  - fix crash when permission to use GPS is revoked
+  - fix notification on Android 8+
 * Task Editor
   - fixed task editor crashes (Ticket 3930).
 * devices
