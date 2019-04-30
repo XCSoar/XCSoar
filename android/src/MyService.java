@@ -22,6 +22,7 @@
 
 package org.xcsoar;
 
+import java.lang.reflect.Method;
 import android.app.Service;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -70,8 +71,20 @@ public class MyService extends Service {
   private static Notification createNotification(Context context, PendingIntent intent) {
     Notification notification = new Notification(R.drawable.notification_icon, null,
                                                  System.currentTimeMillis());
-    notification.setLatestEventInfo(context, "XCSoar", "XCSoar is running",
-                                    intent);
+
+    try {
+      Method method = Notification.class.getMethod("setLatestEventInfo",
+                                                   Context.class,
+                                                   CharSequence.class,
+                                                   CharSequence.class,
+                                                   PendingIntent.class);
+      method.invoke(notification, context, "XCSoar", "XCSoar is running",
+                    intent);
+    } catch (Exception e) {
+      /* ignore silently - shouldn't happen, but there's nothing we
+         can do about this */
+    }
+
     notification.flags |= Notification.FLAG_ONGOING_EVENT;
     return notification;
   }
