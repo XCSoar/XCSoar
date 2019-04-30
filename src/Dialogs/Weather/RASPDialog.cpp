@@ -62,15 +62,15 @@ class RASPSettingsPanel final
   BrokenTime time;
 
 public:
-  explicit RASPSettingsPanel(std::shared_ptr<RaspStore> &&_rasp)
+  explicit RASPSettingsPanel(std::shared_ptr<RaspStore> &&_rasp) noexcept
     :RowFormWidget(UIGlobals::GetDialogLook()),
      rasp(std::move(_rasp)) {}
 
 private:
-  void FillItemControl();
-  void UpdateTimeControl();
-  void OnTimeModified(const DataFieldEnum &df);
-  void Download();
+  void FillItemControl() noexcept;
+  void UpdateTimeControl() noexcept;
+  void OnTimeModified(const DataFieldEnum &df) noexcept;
+  void Download() noexcept;
 
   /* methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
@@ -95,7 +95,7 @@ private:
 };
 
 void
-RASPSettingsPanel::FillItemControl()
+RASPSettingsPanel::FillItemControl() noexcept
 {
   auto &df = (DataFieldEnum &)GetDataField(ITEM);
 
@@ -119,7 +119,7 @@ RASPSettingsPanel::FillItemControl()
 }
 
 void
-RASPSettingsPanel::UpdateTimeControl()
+RASPSettingsPanel::UpdateTimeControl() noexcept
 {
   const DataFieldEnum &item = (const DataFieldEnum &)GetDataField(ITEM);
 
@@ -144,7 +144,7 @@ RASPSettingsPanel::UpdateTimeControl()
 }
 
 inline void
-RASPSettingsPanel::OnTimeModified(const DataFieldEnum &df)
+RASPSettingsPanel::OnTimeModified(const DataFieldEnum &df) noexcept
 {
   const int value = df.GetValue();
   time = value >= 0
@@ -156,7 +156,7 @@ class RaspProviderRenderer : public ListItemRenderer {
   TextRowRenderer row_renderer;
 
 public:
-  unsigned CalculateLayout(const DialogLook &look) {
+  unsigned CalculateLayout(const DialogLook &look) noexcept {
     return row_renderer.CalculateLayout(*look.list.font);
   }
 
@@ -167,7 +167,7 @@ public:
 };
 
 void
-RASPSettingsPanel::Download()
+RASPSettingsPanel::Download() noexcept
 {
   unsigned n = 0;
   for (auto i = rasp_providers; i->url != nullptr; ++i)
@@ -243,7 +243,7 @@ RASPSettingsPanel::Save(bool &_changed)
 }
 
 Widget *
-CreateRaspWidget()
+CreateRaspWidget() noexcept
 {
   auto rasp = DataGlobals::GetRasp();
   return new RASPSettingsPanel(std::move(rasp));
