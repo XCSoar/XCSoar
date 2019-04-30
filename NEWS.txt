@@ -4,6 +4,7 @@ Version 6.8.12 - not yet released
 * Android
   - increase targetSdkVersion to 26 (required by Google Play)
   - fix crash when permission to use GPS is revoked
+  - fix notification on Android 8+
 * Task Editor
   - fixed task editor crashes (Ticket 3930).
 * devices

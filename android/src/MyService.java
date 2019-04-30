@@ -25,6 +25,7 @@ package org.xcsoar;
 import java.lang.reflect.Method;
 import android.app.Service;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -51,6 +52,8 @@ import android.util.Log;
 public class MyService extends Service {
   private static final String TAG = "XCSoar";
 
+  private static final String NOTIFICATION_CHANNEL_ID = "xcsoar";
+
   /**
    * Hack: this is set by onCreate(), to support the "testing"
    * package.
@@ -66,6 +69,17 @@ public class MyService extends Service {
     super.onCreate();
 
     notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      String name = "XCSoar";
+
+      /* this disables sound: */
+      int importance = NotificationManager.IMPORTANCE_LOW;
+
+      NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,
+                                                            name, importance);
+      notificationManager.createNotificationChannel(channel);
+    }
   }
 
   private static Notification createNotification(Context context, PendingIntent intent) {
@@ -78,6 +92,9 @@ public class MyService extends Service {
       .setContentTitle("XCSoar")
       .setContentText("XCSoar is running")
       .setSmallIcon(R.drawable.notification_icon);
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+      builder.setChannelId(NOTIFICATION_CHANNEL_ID);
 
     return builder.build();
   }
