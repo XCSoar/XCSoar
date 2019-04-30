@@ -1,4 +1,4 @@
-Version 6.8.12 - not yet released
+Version 6.8.12 - 2019/04/30
 * weather
   - update source URLs for METARs and TAFs (https://)
 * Android
