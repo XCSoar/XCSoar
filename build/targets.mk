@@ -441,7 +441,7 @@ ifeq ($(TARGET),ANDROID)
   ANDROID_NDK ?= $(HOME)/opt/android-ndk-r15c
 
   ANDROID_SDK_PLATFORM = android-26
-  ANDROID_NDK_API = 19
+  ANDROID_NDK_API = 13
 
   ANDROID_ARCH = arm
   ANDROID_ABI2 = arm-linux-androideabi
