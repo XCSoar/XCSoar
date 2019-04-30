@@ -48,7 +48,7 @@ l_alert(lua_State *L)
 static void
 DialogCatchCallback(Lua::Error &&error)
 {
-  ShowError(error, _T("Lua"));
+  ShowError(std::make_exception_ptr(std::move(error)), _T("Lua"));
 }
 
 void

@@ -249,8 +249,8 @@ WaypointManagerWidget::SaveWaypoints()
   try {
     WaypointGlue::SaveWaypoints(way_points);
     WaypointFileChanged = true;
-  } catch (const std::runtime_error &e) {
-    ShowError(e, _("Failed to save waypoints"));
+  } catch (...) {
+    ShowError(std::current_exception(), _("Failed to save waypoints"));
   }
 
   modified = false;

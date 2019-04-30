@@ -107,8 +107,8 @@ ReplayControlWidget::OnStartClicked()
 
   try {
     replay->Start(path);
-  } catch (const std::runtime_error &e) {
-    ShowError(e, _("Replay"));
+  } catch (...) {
+    ShowError(std::current_exception(), _("Replay"));
   }
 }
 
