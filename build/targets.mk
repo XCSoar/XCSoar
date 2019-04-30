@@ -441,8 +441,7 @@ ifeq ($(TARGET),ANDROID)
   ANDROID_NDK ?= $(HOME)/opt/android-ndk-r15c
 
   ANDROID_SDK_PLATFORM = android-26
-  ANDROID_NDK_PLATFORM = android-19
-  ANDROID_NDK_PLATFORM_64 = android-21
+  ANDROID_NDK_API = 19
 
   ANDROID_ARCH = arm
   ANDROID_ABI2 = arm-linux-androideabi
@@ -473,7 +472,7 @@ ifeq ($(TARGET),ANDROID)
     ANDROID_ARCH = arm64
     ANDROID_ABI2 = aarch64-linux-android
     ANDROID_ABI3 = arm64-v8a
-    ANDROID_NDK_PLATFORM = $(ANDROID_NDK_PLATFORM_64)
+    ANDROID_NDK_API = 21
   endif
 
   ifeq ($(X64),y)
@@ -481,15 +480,17 @@ ifeq ($(TARGET),ANDROID)
     ANDROID_ABI2 = x86_64
     ANDROID_ABI3 = x86_64
     ANDROID_ABI4 = x86_64-linux-android
-    ANDROID_NDK_PLATFORM = $(ANDROID_NDK_PLATFORM_64)
+    ANDROID_NDK_API = 21
   endif
 
   ifeq ($(MIPS64),y)
     ANDROID_ARCH = mips64
     ANDROID_ABI2 = mips64el-linux-android
     ANDROID_ABI3 = mips64
-    ANDROID_NDK_PLATFORM = $(ANDROID_NDK_PLATFORM_64)
+    ANDROID_NDK_API = 21
   endif
+
+  ANDROID_NDK_PLATFORM = android-$(ANDROID_NDK_API)
 
   ANDROID_SYSROOT = $(ANDROID_NDK)/sysroot
   ANDROID_NDK_PLATFORM_DIR = $(ANDROID_NDK)/platforms/$(ANDROID_NDK_PLATFORM)
