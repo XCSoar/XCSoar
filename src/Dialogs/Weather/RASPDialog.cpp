@@ -24,6 +24,7 @@ Copyright_License {
 #include "RASPDialog.hpp"
 #include "Dialogs/ListPicker.hpp"
 #include "Dialogs/JobDialog.hpp"
+#include "Dialogs/Error.hpp"
 #include "Renderer/TextRowRenderer.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Look/DialogLook.hpp"
@@ -183,7 +184,7 @@ RASPSettingsPanel::Download()
   const char *url = rasp_providers[i].url;
   auto path = LocalPath(_T(RASP_FILENAME));
 
-  {
+  try {
     DialogJobRunner runner(UIGlobals::GetMainWindow(),
                            GetLook(),
                            _("Download"), true);
@@ -196,6 +197,9 @@ RASPSettingsPanel::Download()
       return;
 
     transaction.Commit();
+  } catch (...) {
+    ShowError(std::current_exception(), _("Download"));
+    return;
   }
 
   rasp = std::make_shared<RaspStore>(std::move(path));
