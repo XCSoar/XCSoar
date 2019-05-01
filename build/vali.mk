@@ -5,6 +5,13 @@ VALI_XCS_SOURCES = \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Version.cpp \
 	$(SRC)/VALI-XCS.cpp
+
+ifeq ($(ANDROID_LEGACY),y)
+VALI_XCS_SOURCES += \
+	$(SRC)/Android/posix_memalign.cpp
+endif
+
+
 VALI_XCS_DEPENDS = IO OS UTIL
 VALI_XCS_STRIP = y
 
