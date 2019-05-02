@@ -161,16 +161,18 @@ BlueFlyDevice::ParseSET(const char *content, NMEAInfo &info)
   if (!ParseUlong(&values, value))
     return true;
 
-  mutex_settings.Lock();
-  for (const auto token : IterableSplitString(settings_keys, ' ')) {
-    if (!ParseUlong(&values, value))
-      break;
+  {
+    ScopeLock lock(mutex_settings);
 
-    settings.Parse(token, value);
+    for (const auto token : IterableSplitString(settings_keys, ' ')) {
+      if (!ParseUlong(&values, value))
+        break;
+
+      settings.Parse(token, value);
+    }
+    settings_ready = true;
+    settings_cond.broadcast();
   }
-  settings_ready = true;
-  settings_cond.broadcast();
-  mutex_settings.Unlock();
 
   return true;
 }

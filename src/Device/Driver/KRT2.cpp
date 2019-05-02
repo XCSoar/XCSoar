@@ -165,17 +165,22 @@ KRT2Device::Send(const uint8_t *msg, unsigned msg_size,
   assert(msg_size > 0);
 
   do {
-    response_mutex.Lock();
-    response = NO_RSP;
-    response_mutex.Unlock();
+    {
+      const ScopeLock lock(response_mutex);
+      response = NO_RSP;
+    }
+
     // Send the message
     if (!port.FullWrite(msg, msg_size, env, CMD_TIMEOUT))
       return false;
+
     // Wait for the response
-    response_mutex.Lock();
-    rx_cond.timed_wait(response_mutex, CMD_TIMEOUT);
-    auto _response = response;
-    response_mutex.Unlock();
+    uint8_t _response;
+    {
+      const ScopeLock lock(response_mutex);
+      rx_cond.timed_wait(response_mutex, CMD_TIMEOUT);
+      _response = response;
+    }
 
     if (_response == ACK)
       // ACK received, finish
@@ -228,11 +233,12 @@ KRT2Device::DataReceived(const void *_data, size_t length,
           case ACK:
           case NAK:
             // Received a response to a normal command (STX)
-            response_mutex.Lock();
-            response = *(const uint8_t *) range.data;
-            // Signal the response to the TX thread
-            rx_cond.signal();
-            response_mutex.Unlock();
+            {
+              const ScopeLock lock(response_mutex);
+              response = *(const uint8_t *) range.data;
+              // Signal the response to the TX thread
+              rx_cond.signal();
+            }
             break;
           default:
             // Received a command from the radio -> ignore it

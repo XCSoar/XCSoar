@@ -252,10 +252,11 @@ DownloadFilePickerWidget::Unprepare()
 void
 DownloadFilePickerWidget::RefreshList()
 try {
-  mutex.Lock();
-  repository_modified = false;
-  repository_failed = false;
-  mutex.Unlock();
+  {
+    const ScopeLock lock(mutex);
+    repository_modified = false;
+    repository_failed = false;
+  }
 
   FileRepository repository;
 
@@ -334,15 +335,15 @@ DownloadFilePickerWidget::OnDownloadComplete(Path path_relative,
   if (name == nullptr)
     return;
 
-  mutex.Lock();
+  {
+    const ScopeLock lock(mutex);
 
-  if (name == Path(_T("repository"))) {
-    repository_failed = !success;
-    if (success)
-      repository_modified = true;
+    if (name == Path(_T("repository"))) {
+      repository_failed = !success;
+      if (success)
+        repository_modified = true;
+    }
   }
-
-  mutex.Unlock();
 
   SendNotification();
 }

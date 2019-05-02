@@ -79,9 +79,8 @@ BlueFlyDevice::WaitForSettings(unsigned int timeout)
 void
 BlueFlyDevice::GetSettings(BlueFlySettings &settings_r)
 {
-  mutex_settings.Lock();
+  const ScopeLock lock(mutex_settings);
   settings_r = settings;
-  mutex_settings.Unlock();
 }
 
 void
@@ -97,7 +96,6 @@ BlueFlyDevice::WriteDeviceSettings(const BlueFlySettings &new_settings,
 
   /* update the old values from the new settings.
    * The BlueFly Vario does not send back any ACK. */
-  mutex_settings.Lock();
+  const ScopeLock lock(mutex_settings);
   settings = new_settings;
-  mutex_settings.Unlock();
 }

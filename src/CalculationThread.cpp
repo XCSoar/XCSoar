@@ -117,9 +117,10 @@ CalculationThread::Tick()
 void
 CalculationThread::ForceTrigger()
 {
-  mutex.Lock();
-  force = true;
-  mutex.Unlock();
+  {
+    ScopeLock lock(mutex);
+    force = true;
+  }
 
   WorkerThread::Trigger();
 }

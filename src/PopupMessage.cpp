@@ -295,7 +295,8 @@ PopupMessage::Repeat(Type type)
 {
   int imax = -1;
 
-  mutex.Lock();
+  const ScopeLock lock(mutex);
+
   const auto now = std::chrono::steady_clock::now();
 
   // find most recent non-visible message
@@ -314,8 +315,6 @@ PopupMessage::Repeat(Type type)
     messages[imax].tstart = now;
     messages[imax].texpiry = messages[imax].tstart;
   }
-
-  mutex.Unlock();
 }
 
 bool

@@ -342,10 +342,11 @@ void
 ManagedFileListWidget::LoadRepositoryFile()
 try {
 #ifdef HAVE_DOWNLOAD_MANAGER
-  mutex.Lock();
-  repository_modified = false;
-  repository_failed = false;
-  mutex.Unlock();
+  {
+    const ScopeLock lock(mutex);
+    repository_modified = false;
+    repository_failed = false;
+  }
 #endif
 
   repository.Clear();
@@ -627,10 +628,11 @@ ManagedFileListWidget::OnDownloadAdded(Path path_relative,
 
   const std::string name3(name2);
 
-  mutex.Lock();
-  downloads[name3] = DownloadStatus{size, position};
-  failures.erase(name3);
-  mutex.Unlock();
+  {
+    const ScopeLock lock(mutex);
+    downloads[name3] = DownloadStatus{size, position};
+    failures.erase(name3);
+  }
 
   SendNotification();
 }
@@ -649,18 +651,18 @@ ManagedFileListWidget::OnDownloadComplete(Path path_relative,
 
   const std::string name3(name2);
 
-  mutex.Lock();
+  {
+    const ScopeLock lock(mutex);
 
-  downloads.erase(name3);
+    downloads.erase(name3);
 
-  if (StringIsEqual(name2, "repository")) {
-    repository_failed = !success;
-    if (success)
-      repository_modified = true;
-  } else if (!success)
-    failures.insert(name3);
-
-  mutex.Unlock();
+    if (StringIsEqual(name2, "repository")) {
+      repository_failed = !success;
+      if (success)
+        repository_modified = true;
+    } else if (!success)
+      failures.insert(name3);
+  }
 
   SendNotification();
 }
