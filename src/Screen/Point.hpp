@@ -61,7 +61,7 @@ struct PixelSize {
   }
 };
 
-inline constexpr PixelPoint
+constexpr PixelPoint
 operator+(PixelPoint p, PixelSize size)
 {
   return { p.x + size.cx, p.y + size.cy };

@@ -129,7 +129,7 @@ public:
  * @param b Color 2
  * @return True if colors match, False otherwise
  */
-static inline constexpr bool
+constexpr bool
 operator ==(const Color a, const Color b)
 {
   return a.GetNative() == b.GetNative();
@@ -141,7 +141,7 @@ operator ==(const Color a, const Color b)
  * @param b Color 2
  * @return True if color do not match, False otherwise
  */
-static inline constexpr bool
+constexpr bool
 operator !=(const Color a, const Color b)
 {
   return !(a == b);

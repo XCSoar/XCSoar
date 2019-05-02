@@ -52,7 +52,7 @@ static constexpr Color COLOR_MAGENTA = Color(0xff, 0x00, 0xff);
 static constexpr Color COLOR_ORANGE = Color(0xff, 0xa2, 0x00);
 static constexpr Color COLOR_BROWN = Color(0xb7, 0x64, 0x1e);
 
-static inline constexpr uint8_t
+constexpr uint8_t
 LightColor(uint8_t c)
 {
   return ((c ^ 0xff) >> 1) ^ 0xff;
@@ -62,7 +62,7 @@ LightColor(uint8_t c)
  * Returns a lighter version of the specified color, adequate for
  * SRCAND filtering.
  */
-static inline constexpr Color
+constexpr Color
 LightColor(Color c)
 {
 #ifdef GREYSCALE
@@ -73,7 +73,7 @@ LightColor(Color c)
 #endif
 }
 
-static inline constexpr uint8_t
+constexpr uint8_t
 DarkColor(uint8_t c)
 {
   return (c >> 1);
@@ -82,7 +82,7 @@ DarkColor(uint8_t c)
 /**
  * Returns a darker version of the specified color.
  */
-static inline constexpr Color
+constexpr Color
 DarkColor(Color c)
 {
 #ifdef GREYSCALE
@@ -95,7 +95,7 @@ DarkColor(Color c)
 
 Color Desaturate(Color c);
 
-static inline constexpr Color
+constexpr Color
 ColorWithAlpha(const Color &c, uint8_t a)
 {
 #ifdef ENABLE_OPENGL

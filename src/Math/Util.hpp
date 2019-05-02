@@ -43,21 +43,21 @@ iround(double x)
  * The parameter must not be negative.  The result for a negative
  * parameter is undefined.
  */
-static inline constexpr unsigned
+constexpr unsigned
 uround(const double x)
 {
   return (unsigned)(x + 0.5);
 }
 
 template<typename T>
-static inline constexpr T
+constexpr T
 Square(T a)
 {
   return a * a;
 }
 
 template<typename T>
-static inline constexpr T
+constexpr T
 Cubic(T a)
 {
   return a * a * a;

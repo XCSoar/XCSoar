@@ -60,7 +60,7 @@ MapOverlayBitmap::MapOverlayBitmap(Path path)
  * Convert a GeoPoint to a "fake" flat DoublePoint2D.  This conversion
  * is flawed in many ways, but good enough for clipping polygons.
  */
-static inline constexpr DoublePoint2D
+static constexpr DoublePoint2D
 GeoTo2D(GeoPoint p)
 {
   return {p.longitude.Native(), p.latitude.Native()};
@@ -69,7 +69,7 @@ GeoTo2D(GeoPoint p)
 /**
  * Inverse of GeoTo2D().
  */
-static inline constexpr GeoPoint
+static constexpr GeoPoint
 GeoFrom2D(DoublePoint2D p)
 {
   return {Angle::Native(p.x), Angle::Native(p.y)};

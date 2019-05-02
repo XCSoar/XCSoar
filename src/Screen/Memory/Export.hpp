@@ -34,7 +34,7 @@ class Dither;
 template<typename PixelTraits>
 struct ConstImageBuffer;
 
-static inline uint32_t
+constexpr uint32_t
 GreyscaleToRGB8(Luminosity8 luminosity)
 {
   const unsigned value = luminosity.GetLuminosity();
@@ -68,7 +68,7 @@ CopyGreyscaleToRGB565(RGB565Color *gcc_restrict dest,
     *dest++ = GreyscaleToRGB565(*src++);
 }
 
-static constexpr inline RGB565Color
+constexpr RGB565Color
 ToRGB565(BGRA8Color c)
 {
   return RGB565Color(c.Red(), c.Green(), c.Blue());

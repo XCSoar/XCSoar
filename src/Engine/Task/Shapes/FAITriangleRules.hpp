@@ -74,7 +74,7 @@ namespace FAITriangleRules
    */
   static constexpr double LARGE_MAX_LEG(0.45);
 
-  static constexpr inline double LargeMinLeg(double total) {
+  static constexpr double LargeMinLeg(double total) {
     return total / 4.;
   }
 

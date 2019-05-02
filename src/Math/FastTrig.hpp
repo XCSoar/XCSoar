@@ -38,19 +38,19 @@ extern const double INVCOSINETABLE[INT_ANGLE_RANGE];
 
 extern const short ISINETABLE[INT_ANGLE_RANGE];
 
-static constexpr inline unsigned
+constexpr unsigned
 NormalizeIntAngle(unsigned angle)
 {
   return angle & INT_ANGLE_MASK;
 }
 
-static constexpr inline unsigned
+constexpr unsigned
 IntAngleForCos(unsigned angle)
 {
   return NormalizeIntAngle(angle + INT_QUARTER_CIRCLE);
 }
 
-static inline constexpr unsigned
+constexpr unsigned
 UnsafeRadiansToIntAngle(double radians)
 {
   /* add INT_ANGLE_RANGE to ensure that the result is not negative
@@ -62,19 +62,19 @@ UnsafeRadiansToIntAngle(double radians)
   return unsigned(radians * INT_ANGLE_MULT + (10 * INT_ANGLE_RANGE + 0.5));
 }
 
-static inline constexpr unsigned
+constexpr unsigned
 NATIVE_TO_INT(double x)
 {
   return NormalizeIntAngle(UnsafeRadiansToIntAngle(x));
 }
 
-static inline constexpr unsigned
+constexpr unsigned
 NATIVE_TO_INT_COS(double x)
 {
   return IntAngleForCos(UnsafeRadiansToIntAngle(x));
 }
 
-static inline constexpr double
+constexpr double
 IntAngleToRadians(unsigned angle)
 {
   return angle / INT_ANGLE_MULT;

@@ -44,7 +44,7 @@ static constexpr DisplayOrientation DEFAULT_DISPLAY_ORIENTATION =
   DisplayOrientation::LANDSCAPE;
 #endif
 
-static constexpr inline DisplayOrientation
+constexpr DisplayOrientation
 TranslateDefaultDisplayOrientation(DisplayOrientation orientation)
 {
   return orientation == DisplayOrientation::DEFAULT
@@ -52,7 +52,7 @@ TranslateDefaultDisplayOrientation(DisplayOrientation orientation)
     : orientation;
 }
 
-static inline bool
+constexpr bool
 AreAxesSwapped(DisplayOrientation orientation)
 {
   switch (TranslateDefaultDisplayOrientation(orientation)) {

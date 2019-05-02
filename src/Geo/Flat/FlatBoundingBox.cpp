@@ -27,7 +27,7 @@
 
 #include <algorithm>
 
-static constexpr inline unsigned
+static constexpr unsigned
 Distance1D(int a1, int a2, int b1, int b2)
 {
   return a2 < b1

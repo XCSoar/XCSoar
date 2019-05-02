@@ -81,13 +81,13 @@ IsMono()
 #endif
 }
 
-static constexpr inline FT_Long
+static constexpr FT_Long
 FT_FLOOR(FT_Long x)
 {
   return (x & -64) / 64;
 }
 
-static constexpr inline FT_Long
+static constexpr FT_Long
 FT_CEIL(FT_Long x)
 {
   return FT_FLOOR(x + 63);

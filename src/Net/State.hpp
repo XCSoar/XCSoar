@@ -43,7 +43,7 @@ enum class NetState {
 NetState
 GetNetState();
 #else
-static constexpr inline NetState
+constexpr NetState
 GetNetState()
 {
   return NetState::UNKNOWN;

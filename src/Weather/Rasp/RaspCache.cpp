@@ -32,7 +32,7 @@ Copyright_License {
 #include <assert.h>
 #include <windef.h> // for MAX_PATH
 
-static inline constexpr unsigned
+static constexpr unsigned
 ToHalfHours(BrokenTime t)
 {
   return t.hour * 2u + t.minute / 30;
