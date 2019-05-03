@@ -73,7 +73,7 @@ protected:
    */
   Timer(Timer &&other)
 #ifdef USE_POLL_EVENT
-    :timer(other.timer.get_io_service())
+    :timer(std::move(other.timer))
 #endif
   {
     assert(!IsActive());
