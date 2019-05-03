@@ -27,6 +27,8 @@ Copyright_License {
 
 #include <algorithm>
 
+#include <assert.h>
+
 /**
  * The minimum and maximum vario range for the constants below [cm/s].
  */

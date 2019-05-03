@@ -27,7 +27,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "RadioFrequency.hpp"
 #include "Thread/Cond.hxx"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Util/CharUtil.hxx"
 #include "Util/StaticFifoBuffer.hxx"
 

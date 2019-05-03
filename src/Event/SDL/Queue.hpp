@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Loop.hpp"
 #include "../Shared/TimerQueue.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Time/ClockCache.hxx"
 
 #include <SDL_events.h>

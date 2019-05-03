@@ -34,7 +34,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Event/DelayedNotify.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "UIGlobals.hpp"
 
 enum Buttons {

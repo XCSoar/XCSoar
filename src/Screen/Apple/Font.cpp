@@ -26,7 +26,7 @@ Copyright_License {
 #include "Util/ScopeExit.hxx"
 
 #ifndef ENABLE_OPENGL
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #endif
 
 #include <assert.h>

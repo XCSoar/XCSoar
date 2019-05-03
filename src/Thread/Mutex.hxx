@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2019 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright (C) 2009-2016 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,41 +27,41 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef THREAD_WINDOWS_COND_HXX
-#define THREAD_WINDOWS_COND_HXX
+#ifndef THREAD_MUTEX_HXX
+#define THREAD_MUTEX_HXX
+
+#include <mutex>
+
+#ifdef _WIN32
 
 #include "CriticalSection.hxx"
+using Mutex = CriticalSection;
+
+#else
+
+#include "PosixMutex.hxx"
+using Mutex = PosixMutex;
+
+#endif
 
 /**
- * Wrapper for a CONDITION_VARIABLE, backend for the Cond class.
+ * Within the scope of an instance, this class will keep a #Mutex
+ * unlocked.
  */
-class WindowsCond {
-	CONDITION_VARIABLE cond;
+class ScopeUnlock {
+	Mutex &mutex;
 
 public:
-	WindowsCond() noexcept {
-		InitializeConditionVariable(&cond);
+	explicit ScopeUnlock(Mutex &_mutex) noexcept:mutex(_mutex) {
+		mutex.unlock();
+	};
+
+	~ScopeUnlock() noexcept {
+		mutex.lock();
 	}
 
-	WindowsCond(const WindowsCond &other) = delete;
-	WindowsCond &operator=(const WindowsCond &other) = delete;
-
-	void signal() noexcept {
-		WakeConditionVariable(&cond);
-	}
-
-	void broadcast() noexcept {
-		WakeAllConditionVariable(&cond);
-	}
-
-	bool timed_wait(CriticalSection &mutex, DWORD timeout_ms) noexcept {
-		return SleepConditionVariableCS(&cond, &mutex.critical_section,
-						timeout_ms);
-	}
-
-	void wait(CriticalSection &mutex) noexcept {
-		timed_wait(mutex, INFINITE);
-	}
+	ScopeUnlock(const ScopeUnlock &other) = delete;
+	ScopeUnlock &operator=(const ScopeUnlock &other) = delete;
 };
 
 #endif

@@ -30,7 +30,7 @@ Copyright_License {
 #include "OS/Path.hpp"
 
 #ifndef ENABLE_OPENGL
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #endif
 
 #ifndef _UNICODE

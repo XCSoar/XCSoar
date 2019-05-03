@@ -33,7 +33,7 @@ Copyright_License {
 #include "Port/ConfiguredPort.hpp"
 #include "Port/DumpPort.hpp"
 #include "NMEA/Info.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Util/StringAPI.hxx"
 #include "Util/ConvertString.hpp"
 #include "Util/Exception.hxx"

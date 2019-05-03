@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2015 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2009-2019 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,7 +30,7 @@
 #ifndef THREAD_POSIX_COND_HXX
 #define THREAD_POSIX_COND_HXX
 
-#include "Mutex.hpp"
+#include "PosixMutex.hxx"
 
 #include <sys/time.h>
 
@@ -72,11 +72,6 @@ public:
 		pthread_cond_wait(&cond, &mutex.mutex);
 	}
 
-	void wait(Mutex &mutex) noexcept {
-		TemporaryUnlock unlock(mutex);
-		wait(mutex.mutex);
-	}
-
 	bool timed_wait(PosixMutex &mutex, unsigned timeout_ms) noexcept {
 		struct timeval now;
 		gettimeofday(&now, nullptr);
@@ -91,11 +86,6 @@ public:
 		}
 
 		return pthread_cond_timedwait(&cond, &mutex.mutex, &ts) == 0;
-	}
-
-	bool timed_wait(Mutex &mutex, unsigned timeout_ms) noexcept {
-		TemporaryUnlock unlock(mutex);
-		return timed_wait(mutex.mutex, timeout_ms);
 	}
 };
 

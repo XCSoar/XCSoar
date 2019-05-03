@@ -35,7 +35,7 @@ Copyright_License {
 #include "Time/PeriodClock.hpp"
 #include "Job/Async.hpp"
 #include "Event/Notify.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Thread/Debug.hpp"
 #include "Util/tstring.hpp"
 #include "Util/StaticFifoBuffer.hxx"

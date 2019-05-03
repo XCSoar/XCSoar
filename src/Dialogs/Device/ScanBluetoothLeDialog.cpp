@@ -34,7 +34,7 @@
 #include "Android/LeScanCallback.hpp"
 #include "Android/BluetoothHelper.hpp"
 #include "Language/Language.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Event/Notify.hpp"
 #include "Util/StringCompare.hxx"
 

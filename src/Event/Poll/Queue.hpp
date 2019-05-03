@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Thread/Handle.hpp"
 #include "../Shared/Event.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "OS/EventPipe.hpp"
 #include "IO/Async/SignalListener.hpp"
 

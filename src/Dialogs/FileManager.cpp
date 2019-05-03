@@ -51,7 +51,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Net/HTTP/DownloadManager.hpp"
 #include "Event/Notify.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Event/Timer.hpp"
 
 #include <map>

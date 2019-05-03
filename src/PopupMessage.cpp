@@ -281,8 +281,6 @@ void
 PopupMessage::AddMessage(std::chrono::steady_clock::duration tshow, Type type,
                          const TCHAR *Text) noexcept
 {
-  assert(mutex.IsLockedByCurrent());
-
   const auto now = std::chrono::steady_clock::now();
 
   int i = GetEmptySlot();

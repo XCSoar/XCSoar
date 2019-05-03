@@ -23,11 +23,13 @@ Copyright_License {
 
 #include "InputQueue.hpp"
 #include "InputEvents.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Thread/Debug.hpp"
 #include "Util/Macros.hpp"
 
 #include <algorithm>
+
+#include <assert.h>
 
 static Mutex mutexEventQueue;
 

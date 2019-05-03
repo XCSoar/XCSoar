@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Util/Serial.hpp"
 #include "Time/TimeoutClock.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Thread/Cond.hxx"
 #include "Operation/Operation.hpp"
 

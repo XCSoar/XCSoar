@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "PCMPlayer.hpp"
 
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "SLES/Object.hpp"
 #include "SLES/Play.hpp"
 #include "SLES/AndroidSimpleBufferQueue.hpp"

@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Compiler.h"
 #include "Thread/Thread.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Cond.hxx"
 
 /**
@@ -77,14 +77,10 @@ public:
 
 private:
   void TriggerCommand() {
-    assert(mutex.IsLockedByCurrent());
-
     cond.signal();
   }
 
   void TriggerDone() {
-    assert(mutex.IsLockedByCurrent());
-
     cond.signal();
   }
 
@@ -118,8 +114,6 @@ protected:
    */
   gcc_pure
   bool IsBusy() const {
-    assert(mutex.IsLockedByCurrent());
-
     return pending || busy;
   }
 
@@ -131,8 +125,6 @@ protected:
    */
   gcc_pure
   bool IsStopped() const {
-    assert(mutex.IsLockedByCurrent());
-
     return stop;
   }
 
@@ -173,8 +165,6 @@ protected:
    * Caller must lock the mutex.
    */
   void Stop() {
-    assert(mutex.IsLockedByCurrent());
-
     StopAsync();
     WaitStopped();
   }

@@ -27,7 +27,7 @@ Copyright_License {
 #include "PCMBufferDataSource.hpp"
 #include "PCMDataSource.hpp"
 #include "PCMPlayer.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 
 #include <tchar.h>
 

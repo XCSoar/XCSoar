@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Screen/PaintWindow.hpp"
 #include "Renderer/TextRenderer.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Util/StaticString.hxx"
 
 #include <chrono>

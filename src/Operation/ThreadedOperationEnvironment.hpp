@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Operation/Operation.hpp"
 #include "Event/DelayedNotify.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Thread/Cond.hxx"
 #include "Util/StaticString.hxx"
 

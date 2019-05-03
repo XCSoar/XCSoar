@@ -27,7 +27,7 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "Math/KalmanFilter1d.hpp"
 #include "NMEA/Info.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Thread/Cond.hxx"
 
 #include <assert.h>

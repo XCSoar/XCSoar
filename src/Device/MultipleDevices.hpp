@@ -31,7 +31,7 @@ Copyright_License {
 
 #include "Features.hpp"
 #include "Device/Port/Listener.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 
 #include <array>
 #include <list>

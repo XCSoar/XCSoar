@@ -117,7 +117,6 @@ bool
 SuspensibleThread::_IsCommandPending() const
 {
   assert(Thread::IsInside());
-  assert(mutex.IsLockedByCurrent());
 
   return stop_received || suspend_received;
 }
@@ -135,7 +134,6 @@ bool
 SuspensibleThread::_CheckStoppedOrSuspended()
 {
   assert(Thread::IsInside());
-  assert(mutex.IsLockedByCurrent());
 
   assert(!suspended);
 
@@ -163,7 +161,6 @@ bool
 SuspensibleThread::_WaitForStopped(unsigned timeout_ms)
 {
   assert(Thread::IsInside());
-  assert(mutex.IsLockedByCurrent());
 
   assert(!suspended);
   suspended = true;

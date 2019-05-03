@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "ActionInterface.hpp"
 #include "Interface.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "MainWindow.hpp"
 #include "Projection/MapWindowProjection.hpp"
 #include "Language/Language.hpp"

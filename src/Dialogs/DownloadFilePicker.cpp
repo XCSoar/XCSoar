@@ -41,7 +41,7 @@ Copyright_License {
 #include "Net/HTTP/Features.hpp"
 #include "Net/HTTP/DownloadManager.hpp"
 #include "Event/Notify.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Operation/ThreadedOperationEnvironment.hpp"
 #include "Util/ConvertString.hpp"
 

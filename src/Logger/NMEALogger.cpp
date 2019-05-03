@@ -25,7 +25,7 @@ Copyright_License {
 #include "IO/TextWriter.hpp"
 #include "LocalPath.hpp"
 #include "Time/BrokenDateTime.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "OS/Path.hpp"
 #include "Util/StaticString.hxx"
 

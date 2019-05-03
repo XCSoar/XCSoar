@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "UdevContext.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 
 #include <libudev.h>
 

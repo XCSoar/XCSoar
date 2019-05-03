@@ -27,7 +27,7 @@ Copyright_License {
 #include "Protocol.hpp"
 #include "Device/Driver.hpp"
 #include "Device/SettingsMap.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 
 #include <atomic>
 #include <stdint.h>

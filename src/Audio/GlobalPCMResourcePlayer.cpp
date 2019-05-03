@@ -24,6 +24,8 @@ Copyright_License {
 #include "GlobalPCMResourcePlayer.hpp"
 #include "PCMResourcePlayer.hpp"
 
+#include <assert.h>
+
 PCMResourcePlayer *pcm_resource_player = nullptr;
 
 void
