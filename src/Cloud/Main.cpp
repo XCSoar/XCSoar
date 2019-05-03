@@ -66,16 +66,19 @@ class CloudServer final
 {
   const AllocatedPath db_path;
 
+  boost::asio::io_context &io_context;
+
   boost::asio::steady_timer save_timer, expire_timer;
 
 public:
-  CloudServer(AllocatedPath &&_db_path, boost::asio::io_context &io_context,
+  CloudServer(AllocatedPath &&_db_path, boost::asio::io_context &_io_context,
               boost::asio::ip::udp::endpoint endpoint)
     :SkyLinesTracking::Server(io_context, endpoint),
 #ifdef __linux__
     SignalListener(io_context),
 #endif
     db_path(std::move(_db_path)),
+     io_context(_io_context),
     save_timer(io_context),
     expire_timer(io_context)
   {
@@ -85,8 +88,6 @@ public:
 
     ScheduleSave();
   }
-
-  using SkyLinesTracking::Server::get_io_service;
 
   void Load();
   void Save();
@@ -150,7 +151,7 @@ protected:
 
   void OnError(std::exception_ptr e) override {
     cerr << GetFullMessage(e) << endl;
-    get_io_service().stop();
+    io_context.stop();
   }
 
 #ifdef __linux__
@@ -166,7 +167,7 @@ protected:
       break;
 
     default:
-      get_io_service().stop();
+      io_context.stop();
       break;
     }
   }
