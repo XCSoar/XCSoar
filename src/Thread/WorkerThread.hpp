@@ -57,7 +57,7 @@ public:
     const std::lock_guard<Mutex> lock(mutex);
     if (!trigger_flag) {
       trigger_flag = true;
-      trigger_cond.signal();
+      trigger_cond.notify_one();
     }
   }
 
@@ -74,7 +74,7 @@ public:
    */
   void _BeginSuspend() {
     SuspensibleThread::_BeginSuspend();
-    trigger_cond.signal();
+    trigger_cond.notify_one();
   }
 
   void Suspend() {
@@ -90,7 +90,7 @@ public:
   void BeginStop() {
     const std::lock_guard<Mutex> lock(mutex);
     SuspensibleThread::_BeginStop();
-    trigger_cond.signal();
+    trigger_cond.notify_one();
   }
 
 protected:

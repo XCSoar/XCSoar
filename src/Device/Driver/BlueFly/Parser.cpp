@@ -171,7 +171,7 @@ BlueFlyDevice::ParseSET(const char *content, NMEAInfo &info)
       settings.Parse(token, value);
     }
     settings_ready = true;
-    settings_cond.broadcast();
+    settings_cond.notify_all();
   }
 
   return true;

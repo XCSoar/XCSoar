@@ -104,7 +104,7 @@ public:
     const std::lock_guard<Mutex> lock(mutex);
     if (!cancel_flag) {
       cancel_flag = true;
-      cancel_cond.signal();
+      cancel_cond.notify_one();
     }
   }
 

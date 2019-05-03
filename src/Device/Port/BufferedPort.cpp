@@ -39,7 +39,7 @@ BufferedPort::BeginClose()
 {
   std::lock_guard<Mutex> lock(mutex);
   closing = true;
-  cond.signal();
+  cond.notify_one();
 }
 
 void
@@ -60,7 +60,7 @@ BufferedPort::StopRxThread()
   std::lock_guard<Mutex> lock(mutex);
   running = false;
 
-  cond.broadcast();
+  cond.notify_all();
   return true;
 }
 
@@ -73,7 +73,7 @@ BufferedPort::StartRxThread()
     buffer.Clear();
   }
 
-  cond.broadcast();
+  cond.notify_all();
   return true;
 }
 
@@ -109,7 +109,7 @@ BufferedPort::WaitRead(unsigned timeout_ms)
     if (remaining_ms <= 0)
       return WaitResult::TIMEOUT;
 
-    cond.timed_wait(mutex, remaining_ms);
+    cond.wait_for(mutex, remaining_ms);
   }
 
   return WaitResult::READY;
@@ -137,6 +137,6 @@ BufferedPort::DataReceived(const void *data, size_t length)
     std::copy_n(p, nbytes, r.data);
     buffer.Append(nbytes);
 
-    cond.broadcast();
+    cond.notify_all();
   }
 }

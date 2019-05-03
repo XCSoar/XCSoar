@@ -31,7 +31,7 @@ EventQueue::Push(const Event &event)
     return;
 
   events.push(event);
-  cond.signal();
+  cond.notify_one();
 }
 
 bool
@@ -77,7 +77,7 @@ EventQueue::Wait(Event &event)
     if (timeout < std::chrono::steady_clock::duration::zero())
       cond.wait(mutex);
     else
-      cond.timed_wait(mutex, (std::chrono::duration_cast<std::chrono::microseconds>(timeout).count() + 999) / 1000);
+      cond.wait_for(mutex, (std::chrono::duration_cast<std::chrono::microseconds>(timeout).count() + 999) / 1000);
 
     FlushClockCaches();
   }
@@ -146,7 +146,7 @@ EventQueue::AddTimer(Timer &timer, std::chrono::steady_clock::duration d) noexce
 
   timers.Add(timer, SteadyNow() + d);
 
-  cond.signal();
+  cond.notify_one();
 }
 
 void

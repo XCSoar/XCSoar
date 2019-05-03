@@ -77,11 +77,11 @@ public:
 
 private:
   void TriggerCommand() {
-    cond.signal();
+    cond.notify_one();
   }
 
   void TriggerDone() {
-    cond.signal();
+    cond.notify_one();
   }
 
 protected:

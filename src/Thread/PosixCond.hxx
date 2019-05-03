@@ -60,11 +60,11 @@ public:
 	PosixCond(const PosixCond &other) = delete;
 	PosixCond &operator=(const PosixCond &other) = delete;
 
-	void signal() noexcept {
+	void notify_one() noexcept {
 		pthread_cond_signal(&cond);
 	}
 
-	void broadcast() noexcept {
+	void notify_all() noexcept {
 		pthread_cond_broadcast(&cond);
 	}
 
@@ -72,7 +72,7 @@ public:
 		pthread_cond_wait(&cond, &mutex.mutex);
 	}
 
-	bool timed_wait(PosixMutex &mutex, unsigned timeout_ms) noexcept {
+	bool wait_for(PosixMutex &mutex, unsigned timeout_ms) noexcept {
 		struct timeval now;
 		gettimeofday(&now, nullptr);
 

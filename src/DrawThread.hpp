@@ -58,7 +58,7 @@ public:
   void TriggerRedraw() {
     const std::lock_guard<Mutex> lock(mutex);
     pending = true;
-    command_trigger.signal();
+    command_trigger.notify_one();
   }
 
 protected:

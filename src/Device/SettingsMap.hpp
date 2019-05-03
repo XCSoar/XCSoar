@@ -110,7 +110,7 @@ public:
       if (remaining <= 0)
         return end();
 
-      cond.timed_wait(*this, remaining);
+      cond.wait_for(*this, remaining);
     }
   }
 
@@ -140,7 +140,7 @@ public:
     if (!i.second)
       item.value = value;
 
-    cond.broadcast();
+    cond.notify_all();
   }
 
   template<typename K>

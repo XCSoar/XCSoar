@@ -121,7 +121,7 @@ TopWindow::OnPause()
   const std::lock_guard<Mutex> lock(paused_mutex);
   paused = true;
   resumed = false;
-  paused_cond.signal();
+  paused_cond.notify_one();
 }
 
 void

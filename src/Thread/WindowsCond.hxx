@@ -46,21 +46,21 @@ public:
 	WindowsCond(const WindowsCond &other) = delete;
 	WindowsCond &operator=(const WindowsCond &other) = delete;
 
-	void signal() noexcept {
+	void notify_one() noexcept {
 		WakeConditionVariable(&cond);
 	}
 
-	void broadcast() noexcept {
+	void notify_all() noexcept {
 		WakeAllConditionVariable(&cond);
 	}
 
-	bool timed_wait(CriticalSection &mutex, DWORD timeout_ms) noexcept {
+	bool wait_for(CriticalSection &mutex, DWORD timeout_ms) noexcept {
 		return SleepConditionVariableCS(&cond, &mutex.critical_section,
 						timeout_ms);
 	}
 
 	void wait(CriticalSection &mutex) noexcept {
-		timed_wait(mutex, INFINITE);
+		wait_for(mutex, INFINITE);
 	}
 };
 

@@ -178,7 +178,7 @@ KRT2Device::Send(const uint8_t *msg, unsigned msg_size,
     uint8_t _response;
     {
       const std::lock_guard<Mutex> lock(response_mutex);
-      rx_cond.timed_wait(response_mutex, CMD_TIMEOUT);
+      rx_cond.wait_for(response_mutex, CMD_TIMEOUT);
       _response = response;
     }
 
@@ -237,7 +237,7 @@ KRT2Device::DataReceived(const void *_data, size_t length,
               const std::lock_guard<Mutex> lock(response_mutex);
               response = *(const uint8_t *) range.data;
               // Signal the response to the TX thread
-              rx_cond.signal();
+              rx_cond.notify_one();
             }
             break;
           default:
