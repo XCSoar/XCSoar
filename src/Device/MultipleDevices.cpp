@@ -132,7 +132,7 @@ MultipleDevices::NotifyCalculatedUpdate(const MoreData &basic,
 void
 MultipleDevices::AddPortListener(PortListener &listener)
 {
-  const ScopeLock protect(listeners_mutex);
+  const std::lock_guard<Mutex> lock(listeners_mutex);
   assert(std::find(listeners.begin(), listeners.end(),
                    &listener) == listeners.end());
   listeners.push_back(&listener);
@@ -141,7 +141,7 @@ MultipleDevices::AddPortListener(PortListener &listener)
 void
 MultipleDevices::RemovePortListener(PortListener &listener)
 {
-  const ScopeLock protect(listeners_mutex);
+  const std::lock_guard<Mutex> lock(listeners_mutex);
   assert(std::find(listeners.begin(), listeners.end(),
                    &listener) != listeners.end());
   listeners.remove(&listener);
@@ -150,7 +150,7 @@ MultipleDevices::RemovePortListener(PortListener &listener)
 void
 MultipleDevices::PortStateChanged()
 {
-  const ScopeLock protect(listeners_mutex);
+  const std::lock_guard<Mutex> lock(listeners_mutex);
 
   for (auto *listener : listeners)
     listener->PortStateChanged();
@@ -159,7 +159,7 @@ MultipleDevices::PortStateChanged()
 void
 MultipleDevices::PortError(const char *msg)
 {
-  const ScopeLock protect(listeners_mutex);
+  const std::lock_guard<Mutex> lock(listeners_mutex);
 
   for (auto *listener : listeners)
     listener->PortError(msg);

@@ -60,7 +60,7 @@ bool
 BlueFlyDevice::RequestSettings(OperationEnvironment &env)
 {
   {
-    const ScopeLock lock(mutex_settings);
+    const std::lock_guard<Mutex> lock(mutex_settings);
     settings_ready = false;
   }
 
@@ -70,7 +70,7 @@ BlueFlyDevice::RequestSettings(OperationEnvironment &env)
 bool
 BlueFlyDevice::WaitForSettings(unsigned int timeout)
 {
-  const ScopeLock lock(mutex_settings);
+  const std::lock_guard<Mutex> lock(mutex_settings);
   if (!settings_ready)
     settings_cond.timed_wait(mutex_settings, timeout);
   return settings_ready;
@@ -79,7 +79,7 @@ BlueFlyDevice::WaitForSettings(unsigned int timeout)
 void
 BlueFlyDevice::GetSettings(BlueFlySettings &settings_r)
 {
-  const ScopeLock lock(mutex_settings);
+  const std::lock_guard<Mutex> lock(mutex_settings);
   settings_r = settings;
 }
 
@@ -96,6 +96,6 @@ BlueFlyDevice::WriteDeviceSettings(const BlueFlySettings &new_settings,
 
   /* update the old values from the new settings.
    * The BlueFly Vario does not send back any ACK. */
-  const ScopeLock lock(mutex_settings);
+  const std::lock_guard<Mutex> lock(mutex_settings);
   settings = new_settings;
 }

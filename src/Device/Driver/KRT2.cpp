@@ -166,7 +166,7 @@ KRT2Device::Send(const uint8_t *msg, unsigned msg_size,
 
   do {
     {
-      const ScopeLock lock(response_mutex);
+      const std::lock_guard<Mutex> lock(response_mutex);
       response = NO_RSP;
     }
 
@@ -177,7 +177,7 @@ KRT2Device::Send(const uint8_t *msg, unsigned msg_size,
     // Wait for the response
     uint8_t _response;
     {
-      const ScopeLock lock(response_mutex);
+      const std::lock_guard<Mutex> lock(response_mutex);
       rx_cond.timed_wait(response_mutex, CMD_TIMEOUT);
       _response = response;
     }
@@ -234,7 +234,7 @@ KRT2Device::DataReceived(const void *_data, size_t length,
           case NAK:
             // Received a response to a normal command (STX)
             {
-              const ScopeLock lock(response_mutex);
+              const std::lock_guard<Mutex> lock(response_mutex);
               response = *(const uint8_t *) range.data;
               // Signal the response to the TX thread
               rx_cond.signal();

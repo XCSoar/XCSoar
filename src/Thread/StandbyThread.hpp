@@ -107,7 +107,7 @@ protected:
    * Caller must not lock the mutex.
    */
   void LockTrigger() {
-    ScopeLock protect(mutex);
+    std::lock_guard<Mutex> lock(mutex);
     Trigger();
   }
 
@@ -156,7 +156,7 @@ protected:
    * Caller must not lock the mutex.
    */
   void LockWaitDone() {
-    ScopeLock protect(mutex);
+    std::lock_guard<Mutex> lock(mutex);
     WaitDone();
   }
 
@@ -180,7 +180,7 @@ protected:
   }
 
   void LockStop() {
-    ScopeLock protect(mutex);
+    std::lock_guard<Mutex> lock(mutex);
     Stop();
   }
 

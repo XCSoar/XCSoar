@@ -41,14 +41,14 @@ CalculationThread::CalculationThread(GlideComputer &_glide_computer)
 void
 CalculationThread::SetComputerSettings(const ComputerSettings &new_value)
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   settings_computer = new_value;
 }
 
 void
 CalculationThread::SetScreenDistanceMeters(double new_value)
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   screen_distance_meters = new_value;
 }
 
@@ -66,7 +66,7 @@ CalculationThread::Tick()
 
   // update and transfer master info to glide computer
   {
-    ScopeLock protect(device_blackboard->mutex);
+    std::lock_guard<Mutex> lock(device_blackboard->mutex);
 
     gps_updated = device_blackboard->Basic().location_available.Modified(glide_computer.Basic().location_available);
 
@@ -76,7 +76,7 @@ CalculationThread::Tick()
 
   bool force;
   {
-    ScopeLock protect(mutex);
+    std::lock_guard<Mutex> lock(mutex);
     // Copy settings from ComputerSettingsBlackboard to GlideComputerBlackboard
     glide_computer.ReadComputerSettings(settings_computer);
 
@@ -99,7 +99,7 @@ CalculationThread::Tick()
   // should be changed in DoCalculations, so we only need to write
   // that one back (otherwise we may write over new data)
   {
-    ScopeLock protect(device_blackboard->mutex);
+    std::lock_guard<Mutex> lock(device_blackboard->mutex);
     device_blackboard->ReadBlackboard(glide_computer.Calculated());
   }
 
@@ -118,7 +118,7 @@ void
 CalculationThread::ForceTrigger()
 {
   {
-    ScopeLock lock(mutex);
+    std::lock_guard<Mutex> lock(mutex);
     force = true;
   }
 

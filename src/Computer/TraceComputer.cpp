@@ -50,7 +50,7 @@ void
 TraceComputer::Reset()
 {
   {
-    const ScopeLock lock(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
     full.clear();
   }
 
@@ -61,7 +61,7 @@ TraceComputer::Reset()
 void
 TraceComputer::LockedCopyTo(TracePointVector &v) const
 {
-  const ScopeLock lock(mutex);
+  const std::lock_guard<Mutex> lock(mutex);
   full.GetPoints(v);
 }
 
@@ -70,7 +70,7 @@ TraceComputer::LockedCopyTo(TracePointVector &v, unsigned min_time,
                             const GeoPoint &location,
                             double resolution) const
 {
-  const ScopeLock lock(mutex);
+  const std::lock_guard<Mutex> lock(mutex);
   full.GetPoints(v, min_time, location, resolution);
 }
 
@@ -88,7 +88,7 @@ TraceComputer::Update(const ComputerSettings &settings_computer,
   const TracePoint point(basic);
 
   {
-    const ScopeLock lock(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
     full.push_back(point);
   }
 

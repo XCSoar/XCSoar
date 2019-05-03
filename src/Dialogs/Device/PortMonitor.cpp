@@ -76,7 +76,7 @@ private:
       size_t length;
 
       {
-        ScopeLock protect(mutex);
+        std::lock_guard<Mutex> lock(mutex);
         auto range = buffer.Read();
         if (range.empty())
           break;

@@ -132,7 +132,7 @@ Replay::Update()
       return true;
 
     {
-      ScopeLock protect(device_blackboard->mutex);
+      std::lock_guard<Mutex> lock(device_blackboard->mutex);
       device_blackboard->SetReplayState() = next_data;
       device_blackboard->ScheduleMerge();
     }
@@ -206,7 +206,7 @@ Replay::Update()
     data.ProvideBaroAltitudeTrue(r.baro_altitude);
 
     {
-      ScopeLock protect(device_blackboard->mutex);
+      std::lock_guard<Mutex> lock(device_blackboard->mutex);
       device_blackboard->SetReplayState() = data;
       device_blackboard->ScheduleMerge();
     }

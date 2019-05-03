@@ -39,7 +39,7 @@ static int NMEA_Queue[MAX_NMEA_QUEUE];
 void
 InputEvents::ClearQueues()
 {
-  ScopeLock protect(mutexEventQueue);
+  std::lock_guard<Mutex> lock(mutexEventQueue);
 
   std::fill_n(GCE_Queue, ARRAY_SIZE(GCE_Queue), -1);
   std::fill_n(NMEA_Queue, ARRAY_SIZE(NMEA_Queue), -1);
@@ -72,7 +72,7 @@ InputEvents::DoQueuedEvents()
 
   // copy the queue first, blocking
   {
-    const ScopeLock lock(mutexEventQueue);
+    const std::lock_guard<Mutex> lock(mutexEventQueue);
     std::copy_n(GCE_Queue, MAX_GCE_QUEUE, GCE_Queue_copy);
     std::fill_n(GCE_Queue, MAX_GCE_QUEUE, -1);
   }
@@ -93,7 +93,7 @@ bool
 InputEvents::processGlideComputer(unsigned gce_id)
 {
   // add an event to the bottom of the queue
-  ScopeLock protect(mutexEventQueue);
+  std::lock_guard<Mutex> lock(mutexEventQueue);
 
   for (int i = 0; i < MAX_GCE_QUEUE; i++) {
     if (GCE_Queue[i] == -1) {

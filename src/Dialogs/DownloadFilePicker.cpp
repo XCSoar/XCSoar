@@ -253,7 +253,7 @@ void
 DownloadFilePickerWidget::RefreshList()
 try {
   {
-    const ScopeLock lock(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
     repository_modified = false;
     repository_failed = false;
   }
@@ -336,7 +336,7 @@ DownloadFilePickerWidget::OnDownloadComplete(Path path_relative,
     return;
 
   {
-    const ScopeLock lock(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
 
     if (name == Path(_T("repository"))) {
       repository_failed = !success;

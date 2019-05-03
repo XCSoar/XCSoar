@@ -67,7 +67,7 @@ MergeThread::Tick()
 #endif
 
   {
-    ScopeLock protect(device_blackboard.mutex);
+    std::lock_guard<Mutex> lock(device_blackboard.mutex);
 
     Process();
 

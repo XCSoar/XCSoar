@@ -203,7 +203,7 @@ protected:
   gcc_pure
   bool IsDownloading(const char *name) const {
 #ifdef HAVE_DOWNLOAD_MANAGER
-    ScopeLock protect(mutex);
+    std::lock_guard<Mutex> lock(mutex);
     return downloads.find(name) != downloads.end();
 #else
     return false;
@@ -218,7 +218,7 @@ protected:
   gcc_pure
   bool IsDownloading(const char *name, DownloadStatus &status_r) const {
 #ifdef HAVE_DOWNLOAD_MANAGER
-    ScopeLock protect(mutex);
+    std::lock_guard<Mutex> lock(mutex);
     auto i = downloads.find(name);
     if (i == downloads.end())
       return false;
@@ -239,7 +239,7 @@ protected:
   gcc_pure
   bool HasFailed(const char *name) const {
 #ifdef HAVE_DOWNLOAD_MANAGER
-    ScopeLock protect(mutex);
+    std::lock_guard<Mutex> lock(mutex);
     return failures.find(name) != failures.end();
 #else
     return false;
@@ -343,7 +343,7 @@ ManagedFileListWidget::LoadRepositoryFile()
 try {
 #ifdef HAVE_DOWNLOAD_MANAGER
   {
-    const ScopeLock lock(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
     repository_modified = false;
     repository_failed = false;
   }
@@ -629,7 +629,7 @@ ManagedFileListWidget::OnDownloadAdded(Path path_relative,
   const std::string name3(name2);
 
   {
-    const ScopeLock lock(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
     downloads[name3] = DownloadStatus{size, position};
     failures.erase(name3);
   }
@@ -652,7 +652,7 @@ ManagedFileListWidget::OnDownloadComplete(Path path_relative,
   const std::string name3(name2);
 
   {
-    const ScopeLock lock(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
 
     downloads.erase(name3);
 

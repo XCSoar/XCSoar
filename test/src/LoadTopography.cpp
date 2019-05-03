@@ -43,7 +43,7 @@ Copyright_License {
 static void
 TriangulateAll(const TopographyFile &file)
 {
-  const ScopeLock protect(file.mutex);
+  const std::lock_guard<Mutex> lock(file.mutex);
 
   const unsigned short *count;
   for (const XShape &shape : file)

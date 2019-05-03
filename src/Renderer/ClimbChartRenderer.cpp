@@ -39,7 +39,7 @@ void
 ClimbChartCaption(TCHAR *sTmp,
                   const FlightStatistics &fs)
 {
-  ScopeLock lock(fs.mutex);
+  std::lock_guard<Mutex> lock(fs.mutex);
   if (fs.thermal_average.IsEmpty()) {
     sTmp[0] = _T('\0');
   } else if (fs.thermal_average.GetCount() == 1) {

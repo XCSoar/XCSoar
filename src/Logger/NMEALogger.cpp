@@ -81,7 +81,7 @@ NMEALogger::Log(const char *text)
   if (!enabled)
     return;
 
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   if (Start())
     writer->WriteLine(text);
 }

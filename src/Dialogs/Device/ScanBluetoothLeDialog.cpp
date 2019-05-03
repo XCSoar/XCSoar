@@ -111,7 +111,7 @@ private:
     }
 
     {
-      const ScopeLock protect(mutex);
+      const std::lock_guard<Mutex> lock(mutex);
       new_items.emplace_front(address, name);
     }
 
@@ -123,7 +123,7 @@ private:
     const bool was_empty = items.empty();
 
     {
-      const ScopeLock protect(mutex);
+      const std::lock_guard<Mutex> lock(mutex);
 
       if (new_items.empty())
         return;

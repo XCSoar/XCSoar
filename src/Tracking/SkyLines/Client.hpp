@@ -85,13 +85,13 @@ public:
   }
 
   bool IsDefined() const {
-    const ScopeLock protect(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
     return resolving || socket.is_open();
   }
 
   gcc_pure
   bool IsConnected() const {
-    const ScopeLock protect(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
     return socket.is_open();
   }
 
@@ -109,7 +109,7 @@ public:
 
   template<typename P>
   void SendPacket(const P &packet) {
-    const ScopeLock protect(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
     socket.send_to(boost::asio::buffer(&packet, sizeof(packet)),
                    endpoint, 0);
   }

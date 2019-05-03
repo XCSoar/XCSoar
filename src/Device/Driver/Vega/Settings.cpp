@@ -57,7 +57,7 @@ VegaDevice::RequestSetting(const char *name, OperationEnvironment &env)
 std::pair<bool, int>
 VegaDevice::GetSetting(const char *name) const
 {
-  ScopeLock protect(settings);
+  std::lock_guard<Mutex> lock(settings);
   auto i = settings.find(name);
   if (i == settings.end())
     return std::make_pair(false, 0);

@@ -162,7 +162,7 @@ BlueFlyDevice::ParseSET(const char *content, NMEAInfo &info)
     return true;
 
   {
-    ScopeLock lock(mutex_settings);
+    std::lock_guard<Mutex> lock(mutex_settings);
 
     for (const auto token : IterableSplitString(settings_keys, ' ')) {
       if (!ParseUlong(&values, value))

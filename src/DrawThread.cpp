@@ -36,7 +36,7 @@ DrawThread::Run()
 {
   SetLowPriority();
 
-  const ScopeLock lock(mutex);
+  const std::lock_guard<Mutex> lock(mutex);
 
   // circle until application is closed
   while (!_CheckStoppedOrSuspended()) {

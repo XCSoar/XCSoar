@@ -40,7 +40,7 @@ SuspensibleThread::BeginStop()
 {
   assert(!Thread::IsInside());
 
-  const ScopeLock lock(mutex);
+  const std::lock_guard<Mutex> lock(mutex);
   _BeginStop();
 }
 
@@ -59,7 +59,7 @@ SuspensibleThread::BeginSuspend()
   assert(!Thread::IsInside());
   assert(Thread::IsDefined());
 
-  const ScopeLock lock(mutex);
+  const std::lock_guard<Mutex> lock(mutex);
   _BeginSuspend();
 }
 
@@ -79,7 +79,7 @@ SuspensibleThread::WaitUntilSuspended()
   assert(!Thread::IsInside());
   assert(Thread::IsDefined());
 
-  const ScopeLock lock(mutex);
+  const std::lock_guard<Mutex> lock(mutex);
   _WaitUntilSuspended();
 }
 
@@ -108,7 +108,7 @@ SuspensibleThread::Resume()
 {
   assert(!Thread::IsInside());
 
-  const ScopeLock lock(mutex);
+  const std::lock_guard<Mutex> lock(mutex);
   suspend_received = false;
   command_trigger.signal();
 }
@@ -127,7 +127,7 @@ SuspensibleThread::IsCommandPending()
 {
   assert(Thread::IsInside());
 
-  const ScopeLock lock(mutex);
+  const std::lock_guard<Mutex> lock(mutex);
   return _IsCommandPending();
 }
 
@@ -155,7 +155,7 @@ SuspensibleThread::CheckStoppedOrSuspended()
 {
   assert(Thread::IsInside());
 
-  const ScopeLock lock(mutex);
+  const std::lock_guard<Mutex> lock(mutex);
   return _CheckStoppedOrSuspended();
 }
 
@@ -186,6 +186,6 @@ SuspensibleThread::WaitForStopped(unsigned timeout_ms)
 {
   assert(Thread::IsInside());
 
-  const ScopeLock lock(mutex);
+  const std::lock_guard<Mutex> lock(mutex);
   return _WaitForStopped(timeout_ms);
 }

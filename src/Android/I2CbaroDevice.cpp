@@ -99,7 +99,7 @@ static double static_p = 0;
 void
 I2CbaroDevice::onI2CbaroValues(unsigned sensor, AtmosphericPressure pressure)
 {
-  ScopeLock protect(device_blackboard->mutex);
+  std::lock_guard<Mutex> lock(device_blackboard->mutex);
   NMEAInfo &basic = device_blackboard->SetRealState(index);
   basic.UpdateClock();
   basic.alive.Update(basic.clock);
@@ -160,7 +160,7 @@ I2CbaroDevice::onI2CbaroValues(unsigned sensor, AtmosphericPressure pressure)
 void
 I2CbaroDevice::onI2CbaroError()
 {
-  ScopeLock protect(device_blackboard->mutex);
+  std::lock_guard<Mutex> lock(device_blackboard->mutex);
   NMEAInfo &basic = device_blackboard->SetRealState(index);
 
   basic.static_pressure_available.Clear();

@@ -41,7 +41,7 @@ TopWindow::Invalidate()
 void
 TopWindow::AnnounceResize(PixelSize _new_size)
 {
-  ScopeLock protect(paused_mutex);
+  std::lock_guard<Mutex> lock(paused_mutex);
   resized = true;
   new_size = _new_size;
 }
@@ -84,7 +84,7 @@ TopWindow::RefreshSize()
   PixelSize new_size_copy;
 
   {
-    ScopeLock protect(paused_mutex);
+    std::lock_guard<Mutex> lock(paused_mutex);
     if (!resized)
       return;
 
@@ -118,7 +118,7 @@ TopWindow::OnPause()
 
   native_view->deinitSurface();
 
-  const ScopeLock lock(paused_mutex);
+  const std::lock_guard<Mutex> lock(paused_mutex);
   paused = true;
   resumed = false;
   paused_cond.signal();
@@ -149,7 +149,7 @@ TopWindow::Pause()
   event_queue->Purge(match_pause_and_resume, nullptr);
   event_queue->Push(Event::PAUSE);
 
-  const ScopeLock lock(paused_mutex);
+  const std::lock_guard<Mutex> lock(paused_mutex);
   while (!paused)
     paused_cond.wait(paused_mutex);
 }

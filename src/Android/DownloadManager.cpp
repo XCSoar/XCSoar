@@ -93,7 +93,7 @@ AndroidDownloadManager::Create(JNIEnv *env, Context &context)
 void
 AndroidDownloadManager::AddListener(Net::DownloadListener &listener)
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
 
   assert(std::find(listeners.begin(), listeners.end(),
                    &listener) == listeners.end());
@@ -104,7 +104,7 @@ AndroidDownloadManager::AddListener(Net::DownloadListener &listener)
 void
 AndroidDownloadManager::RemoveListener(Net::DownloadListener &listener)
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
 
   auto i = std::find(listeners.begin(), listeners.end(), &listener);
   assert(i != listeners.end());
@@ -115,7 +115,7 @@ void
 AndroidDownloadManager::OnDownloadComplete(Path path_relative,
                                            bool success)
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
     (*i)->OnDownloadComplete(path_relative, success);
 }
@@ -204,7 +204,7 @@ AndroidDownloadManager::Enqueue(JNIEnv *env, const char *uri,
                             object.Get(), j_uri.Get(),
                             j_path.Get());
 
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
     (*i)->OnDownloadAdded(path_relative, -1, -1);
 }

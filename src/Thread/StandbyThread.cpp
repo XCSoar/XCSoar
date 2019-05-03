@@ -94,7 +94,7 @@ StandbyThread::Run()
   assert(!mutex.IsLockedByCurrent());
   assert(!busy);
 
-  const ScopeLock lock(mutex);
+  const std::lock_guard<Mutex> lock(mutex);
 
   alive = true;
 

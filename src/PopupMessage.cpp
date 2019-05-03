@@ -295,7 +295,7 @@ PopupMessage::Repeat(Type type)
 {
   int imax = -1;
 
-  const ScopeLock lock(mutex);
+  const std::lock_guard<Mutex> lock(mutex);
 
   const auto now = std::chrono::steady_clock::now();
 
@@ -320,7 +320,7 @@ PopupMessage::Repeat(Type type)
 bool
 PopupMessage::Acknowledge(Type type)
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   const auto now = std::chrono::steady_clock::now();
 
   for (unsigned i = 0; i < MAXMESSAGES; i++) {
@@ -350,7 +350,7 @@ PopupMessage::Acknowledge(Type type)
 void
 PopupMessage::AddMessage(const TCHAR* text, const TCHAR *data)
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
 
   const auto &msg = FindStatusMessage(text);
 

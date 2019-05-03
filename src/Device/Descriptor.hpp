@@ -259,7 +259,7 @@ public:
   PortState GetState() const;
 
   tstring GetErrorMessage() const {
-    const ScopeLock protect(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
     return error_message;
   }
 

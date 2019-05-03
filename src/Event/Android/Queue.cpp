@@ -26,7 +26,7 @@ Copyright_License {
 void
 EventQueue::Push(const Event &event)
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   if (quit)
     return;
 
@@ -37,7 +37,7 @@ EventQueue::Push(const Event &event)
 bool
 EventQueue::Pop(Event &event)
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   if (quit || events.empty())
     return false;
 
@@ -62,7 +62,7 @@ EventQueue::Generate(Event &event)
 bool
 EventQueue::Wait(Event &event)
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   if (quit)
     return false;
 
@@ -90,7 +90,7 @@ EventQueue::Wait(Event &event)
 void
 EventQueue::Purge(bool (*match)(const Event &event, void *ctx), void *ctx)
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   size_t n = events.size();
   while (n-- > 0) {
     if (!match(events.front(), ctx))
@@ -142,7 +142,7 @@ EventQueue::Purge(Window &window)
 void
 EventQueue::AddTimer(Timer &timer, std::chrono::steady_clock::duration d) noexcept
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
 
   timers.Add(timer, SteadyNow() + d);
 
@@ -152,7 +152,7 @@ EventQueue::AddTimer(Timer &timer, std::chrono::steady_clock::duration d) noexce
 void
 EventQueue::CancelTimer(Timer &timer)
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
 
   timers.Cancel(timer);
 }

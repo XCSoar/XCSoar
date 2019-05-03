@@ -53,12 +53,12 @@ DispatchWait(boost::asio::io_service &io_service, F &&f)
   boost::asio::dispatch(io_service, [&](){
       f();
 
-      ScopeLock lock(mutex);
+      std::lock_guard<Mutex> lock(mutex);
       finished = true;
       cond.signal();
     });
 
-  ScopeLock lock(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   while (!finished)
     cond.wait(mutex);
 }

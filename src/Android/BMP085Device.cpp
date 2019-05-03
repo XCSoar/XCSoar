@@ -99,7 +99,7 @@ void
 BMP085Device::onBMP085Values(double temperature,
                              AtmosphericPressure pressure)
 {
-  ScopeLock protect(device_blackboard->mutex);
+  std::lock_guard<Mutex> lock(device_blackboard->mutex);
   NMEAInfo &basic = device_blackboard->SetRealState(index);
   basic.UpdateClock();
   basic.alive.Update(basic.clock);
@@ -121,7 +121,7 @@ BMP085Device::onBMP085Values(double temperature,
 void
 BMP085Device::onBMP085Error()
 {
-  ScopeLock protect(device_blackboard->mutex);
+  std::lock_guard<Mutex> lock(device_blackboard->mutex);
   NMEAInfo &basic = device_blackboard->SetRealState(index);
 
 #ifdef USE_TEMPERATURE

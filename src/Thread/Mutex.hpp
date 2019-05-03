@@ -38,6 +38,8 @@ Copyright_License {
 
 #include "Thread/FastMutex.hpp"
 
+#include <mutex>
+
 #include <assert.h>
 
 #ifndef NDEBUG
@@ -175,33 +177,6 @@ public:
 
     mutex.unlock();
   }
-};
-
-/**
- * A class for an easy and clear way of handling mutexes
- *
- * Creating a ScopeLock instance locks the given Mutex, while
- * destruction of the ScopeLock leads to unlocking the Mutex.
- *
- * Usage: Create a ScopeLock at the beginning of a function and
- * after function is executed the ScopeLock will destroy itself
- * and unlock the Mutex again.
- * @author JMW
- */
-class ScopeLock {
-  Mutex &scope_mutex;
-
-public:
-  ScopeLock(Mutex& the_mutex):scope_mutex(the_mutex) {
-    scope_mutex.Lock();
-  };
-
-  ~ScopeLock() {
-    scope_mutex.Unlock();
-  }
-
-  ScopeLock(const ScopeLock &other) = delete;
-  ScopeLock &operator=(const ScopeLock &other) = delete;
 };
 
 /**

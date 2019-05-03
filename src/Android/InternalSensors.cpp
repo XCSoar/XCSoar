@@ -197,7 +197,7 @@ Java_org_xcsoar_InternalGPS_setConnected(JNIEnv *env, jobject obj,
 {
   unsigned index = getDeviceIndex(env, obj);
 
-  ScopeLock protect(device_blackboard->mutex);
+  std::lock_guard<Mutex> lock(device_blackboard->mutex);
   NMEAInfo &basic = device_blackboard->SetRealState(index);
 
   switch (connected) {
@@ -234,7 +234,7 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
 {
   unsigned index = getDeviceIndex(env, obj);
 
-  ScopeLock protect(device_blackboard->mutex);
+  std::lock_guard<Mutex> lock(device_blackboard->mutex);
   NMEAInfo &basic = device_blackboard->SetRealState(index);
   basic.UpdateClock();
   basic.alive.Update(basic.clock);
@@ -301,7 +301,7 @@ Java_org_xcsoar_NonGPSSensors_setAcceleration(JNIEnv *env, jobject obj,
   // TODO
   /*
   const unsigned int index = getDeviceIndex(env, obj);
-  ScopeLock protect(device_blackboard->mutex);
+  std::lock_guard<Mutex> lock(device_blackboard->mutex);
   NMEAInfo &basic = device_blackboard->SetRealState(index);
   */
 }
@@ -315,7 +315,7 @@ Java_org_xcsoar_NonGPSSensors_setRotation(JNIEnv *env, jobject obj,
   // TODO
   /*
   const unsigned int index = getDeviceIndex(env, obj);
-  ScopeLock protect(device_blackboard->mutex);
+  std::lock_guard<Mutex> lock(device_blackboard->mutex);
   NMEAInfo &basic = device_blackboard->SetRealState(index);
   */
 }
@@ -329,7 +329,7 @@ Java_org_xcsoar_NonGPSSensors_setMagneticField(JNIEnv *env, jobject obj,
   // TODO
   /*
   const unsigned int index = getDeviceIndex(env, obj);
-  ScopeLock protect(device_blackboard->mutex);
+  std::lock_guard<Mutex> lock(device_blackboard->mutex);
   NMEAInfo &basic = device_blackboard->SetRealState(index);
   */
 }
@@ -382,7 +382,7 @@ Java_org_xcsoar_NonGPSSensors_setBarometricPressure(JNIEnv *env, jobject obj,
   static SelfTimingKalmanFilter1d kalman_filter(KF_MAX_DT, KF_VAR_ACCEL);
 
   const unsigned int index = getDeviceIndex(env, obj);
-  ScopeLock protect(device_blackboard->mutex);
+  std::lock_guard<Mutex> lock(device_blackboard->mutex);
 
   /* Kalman filter updates are also protected by the blackboard
      mutex. These should not take long; we won't hog the mutex

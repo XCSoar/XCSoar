@@ -234,7 +234,7 @@ MapWindow::DrawSkyLinesTraffic(Canvas &canvas) const
 
   canvas.Select(*traffic_look.font);
 
-  ScopeLock protect(skylines_data->mutex);
+  std::lock_guard<Mutex> lock(skylines_data->mutex);
   for (auto &i : skylines_data->traffic) {
     PixelPoint pt;
     if (render_projection.GeoToScreenIfVisible(i.second.location, pt)) {

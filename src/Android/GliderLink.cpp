@@ -90,7 +90,7 @@ Java_org_xcsoar_GliderLinkReceiver_setGliderLinkInfo(
   const double GSPEED_NONE = -1.0;
   const double VSPEED_NONE = -8675309.0;
 
-  ScopeLock protect(device_blackboard->mutex);
+  std::lock_guard<Mutex> lock(device_blackboard->mutex);
   NMEAInfo &basic = device_blackboard->SetRealState(index);
   basic.UpdateClock();
   basic.alive.Update(basic.clock);

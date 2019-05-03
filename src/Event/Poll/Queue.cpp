@@ -47,7 +47,7 @@ EventQueue::~EventQueue()
 void
 EventQueue::Push(const Event &event)
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   events.push(event);
   WakeUp();
 }
@@ -83,7 +83,7 @@ EventQueue::Pop(Event &event)
   if (quit)
     return false;
 
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   if (events.empty()) {
     return Generate(event);
   }
@@ -100,7 +100,7 @@ EventQueue::Wait(Event &event)
   if (quit)
     return false;
 
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
 
   if (events.empty()) {
     if (Generate(event))
@@ -129,7 +129,7 @@ EventQueue::Wait(Event &event)
 void
 EventQueue::Purge(bool (*match)(const Event &event, void *ctx), void *ctx)
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   size_t n = events.size();
   while (n-- > 0) {
     if (!match(events.front(), ctx))

@@ -56,7 +56,7 @@ public:
    * Triggers a redraw.
    */
   void TriggerRedraw() {
-    const ScopeLock lock(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
     pending = true;
     command_trigger.signal();
   }

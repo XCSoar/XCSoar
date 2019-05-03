@@ -24,7 +24,7 @@ Copyright_License {
 #include "FlightStatistics.hpp"
 
 void FlightStatistics::Reset() {
-  ScopeLock lock(mutex);
+  std::lock_guard<Mutex> lock(mutex);
 
   thermal_average.Reset();
   altitude.Reset();
@@ -39,7 +39,7 @@ void FlightStatistics::Reset() {
 void
 FlightStatistics::StartTask()
 {
-  ScopeLock lock(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   // JMW clear thermal climb average on task start
   //  thermal_average.Reset();
   vario_circling_histogram.Clear();
@@ -49,7 +49,7 @@ FlightStatistics::StartTask()
 void
 FlightStatistics::AddAltitudeTerrain(const double tflight, const double terrainalt)
 {
-  ScopeLock lock(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   altitude_terrain.Update(std::max(0., tflight / 3600.),
                           terrainalt);
 }
@@ -57,7 +57,7 @@ FlightStatistics::AddAltitudeTerrain(const double tflight, const double terraina
 void
 FlightStatistics::AddAltitude(const double tflight, const double alt, const bool final_glide)
 {
-  ScopeLock lock(mutex);
+  std::lock_guard<Mutex> lock(mutex);
 
   const double t = std::max(0., tflight / 3600);
 
@@ -76,7 +76,7 @@ double
 FlightStatistics::AverageThermalAdjusted(const double mc_current,
                                          const bool circling)
 {
-  ScopeLock lock(mutex);
+  std::lock_guard<Mutex> lock(mutex);
 
   double mc_stats;
   if (! thermal_average.IsEmpty() && (thermal_average.GetAverageY() > 0)) {
@@ -95,14 +95,14 @@ FlightStatistics::AverageThermalAdjusted(const double mc_current,
 void
 FlightStatistics::AddTaskSpeed(const double tflight, const double val)
 {
-  ScopeLock lock(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   task_speed.Update(tflight / 3600, val);
 }
 
 void
 FlightStatistics::AddClimbBase(const double tflight, const double alt)
 {
-  ScopeLock lock(mutex);
+  std::lock_guard<Mutex> lock(mutex);
 
   // only add base after finished second climb, to avoid having the takeoff height
   // as the base
@@ -114,7 +114,7 @@ FlightStatistics::AddClimbBase(const double tflight, const double alt)
 void
 FlightStatistics::AddClimbCeiling(const double tflight, const double alt)
 {
-  ScopeLock lock(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   altitude_ceiling.UpdateConvexPositive(std::max(0., tflight) / 3600, alt);
 }
 
@@ -126,7 +126,7 @@ void
 FlightStatistics::AddThermalAverage(const double tflight_start,
                                     const double tflight_end, const double v)
 {
-  ScopeLock lock(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   thermal_average.Update(std::max(0., tflight_start) / 3600, v,
                          (tflight_end-tflight_start)/3600);
 }
@@ -134,7 +134,7 @@ FlightStatistics::AddThermalAverage(const double tflight_start,
 void
 FlightStatistics::AddClimbRate(const double tflight, const double vario, const bool circling)
 {
-  ScopeLock lock(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   if (circling) {
     vario_circling_histogram.UpdateHistogram(vario);
   } else {

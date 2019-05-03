@@ -37,7 +37,7 @@ BufferedPort::BufferedPort(PortListener *_listener, DataHandler &_handler)
 void
 BufferedPort::BeginClose()
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   closing = true;
   cond.signal();
 }
@@ -50,14 +50,14 @@ BufferedPort::EndClose()
 void
 BufferedPort::Flush()
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   buffer.Clear();
 }
 
 bool
 BufferedPort::StopRxThread()
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   running = false;
 
   cond.broadcast();
@@ -67,7 +67,7 @@ BufferedPort::StopRxThread()
 bool
 BufferedPort::StartRxThread()
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   if (!running) {
     running = true;
     buffer.Clear();
@@ -83,7 +83,7 @@ BufferedPort::Read(void *dest, size_t length)
   assert(!closing);
   assert(!running);
 
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
 
   auto r = buffer.Read();
   if (r.size == 0)
@@ -99,7 +99,7 @@ Port::WaitResult
 BufferedPort::WaitRead(unsigned timeout_ms)
 {
   TimeoutClock timeout(timeout_ms);
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
 
   while (buffer.empty()) {
     if (running)
@@ -123,7 +123,7 @@ BufferedPort::DataReceived(const void *data, size_t length)
   } else {
     const uint8_t *p = (const uint8_t *)data;
 
-    ScopeLock protect(mutex);
+    std::lock_guard<Mutex> lock(mutex);
 
     buffer.Shift();
     auto r = buffer.Write();
