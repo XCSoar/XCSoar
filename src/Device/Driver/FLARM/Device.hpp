@@ -53,9 +53,9 @@ class FlarmDevice: public AbstractDevice
 
   Port &port;
 
-  Mode mode;
+  Mode mode = Mode::UNKNOWN;
 
-  uint16_t sequence_number;
+  uint16_t sequence_number = 0;
 
   /**
    * Settings that were received in PDVSC sentences.
@@ -64,7 +64,7 @@ class FlarmDevice: public AbstractDevice
 
 public:
   FlarmDevice(Port &_port)
-    :port(_port), mode(Mode::UNKNOWN), sequence_number(0) {}
+    :port(_port) {}
 
   /**
    * Write a setting to the FLARM.
