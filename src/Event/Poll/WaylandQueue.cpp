@@ -120,10 +120,10 @@ static constexpr struct wl_pointer_listener pointer_listener = {
   WaylandPointerAxis,
 };
 
-WaylandEventQueue::WaylandEventQueue(boost::asio::io_service &io_service,
+WaylandEventQueue::WaylandEventQueue(boost::asio::io_context &io_context,
                                      EventQueue &_queue)
   :queue(_queue),
-   display(wl_display_connect(nullptr)), fd(io_service)
+   display(wl_display_connect(nullptr)), fd(io_context)
 {
   if (display == nullptr) {
     fprintf(stderr, "wl_display_connect() failed\n");

@@ -52,12 +52,12 @@ class WaylandEventQueue final {
 
 public:
   /**
-   * @param io_service the boost::asio::io_service that shall be used
+   * @param io_context the boost::asio::io_context that shall be used
    * to register the Wayland client socket
    * @param queue the #EventQueue that shall receive Wayland input
    * events
    */
-  WaylandEventQueue(boost::asio::io_service &io_service, EventQueue &queue);
+  WaylandEventQueue(boost::asio::io_context &io_context, EventQueue &queue);
 
   ~WaylandEventQueue();
 
