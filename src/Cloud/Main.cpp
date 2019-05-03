@@ -73,9 +73,9 @@ class CloudServer final
 public:
   CloudServer(AllocatedPath &&_db_path, boost::asio::io_context &_io_context,
               boost::asio::ip::udp::endpoint endpoint)
-    :SkyLinesTracking::Server(io_context, endpoint),
+    :SkyLinesTracking::Server(_io_context, endpoint),
 #ifdef __linux__
-    SignalListener(io_context),
+    SignalListener(_io_context),
 #endif
     db_path(std::move(_db_path)),
      io_context(_io_context),
