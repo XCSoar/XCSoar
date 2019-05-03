@@ -72,7 +72,7 @@ BlueFlyDevice::WaitForSettings(unsigned int timeout)
 {
   const std::lock_guard<Mutex> lock(mutex_settings);
   if (!settings_ready)
-    settings_cond.wait_for(mutex_settings, timeout);
+    settings_cond.wait_for(mutex_settings, std::chrono::milliseconds(timeout));
   return settings_ready;
 }
 

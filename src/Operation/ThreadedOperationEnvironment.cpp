@@ -40,7 +40,7 @@ ThreadedOperationEnvironment::Sleep(unsigned ms)
 {
   const std::lock_guard<Mutex> lock(mutex);
   if (!cancel_flag)
-    cancel_cond.wait_for(mutex, ms);
+    cancel_cond.wait_for(mutex, std::chrono::milliseconds(ms));
 }
 
 void

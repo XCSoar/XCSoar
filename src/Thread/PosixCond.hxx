@@ -32,6 +32,8 @@
 
 #include "PosixMutex.hxx"
 
+#include <chrono>
+
 #include <sys/time.h>
 
 /**
@@ -72,13 +74,14 @@ public:
 		pthread_cond_wait(&cond, &mutex.mutex);
 	}
 
-	bool wait_for(PosixMutex &mutex, unsigned timeout_ms) noexcept {
+private:
+	bool wait_for(PosixMutex &mutex, uint_least32_t timeout_us) noexcept {
 		struct timeval now;
 		gettimeofday(&now, nullptr);
 
 		struct timespec ts;
-		ts.tv_sec = now.tv_sec + timeout_ms / 1000;
-		ts.tv_nsec = (now.tv_usec + (timeout_ms % 1000) * 1000) * 1000;
+		ts.tv_sec = now.tv_sec + timeout_us / 1000000;
+		ts.tv_nsec = (now.tv_usec + (timeout_us % 1000000)) * 1000;
 		// Keep tv_nsec < 1E9 to prevent return of EINVAL
 		if (ts.tv_nsec >= 1000000000) {
 			ts.tv_nsec -= 1000000000;
@@ -86,6 +89,18 @@ public:
 		}
 
 		return pthread_cond_timedwait(&cond, &mutex.mutex, &ts) == 0;
+	}
+
+public:
+	bool wait_for(PosixMutex &mutex,
+		      std::chrono::steady_clock::duration timeout) noexcept {
+		auto timeout_us = std::chrono::duration_cast<std::chrono::microseconds>(timeout).count();
+		if (timeout_us < 0)
+			timeout_us = 0;
+		else if (timeout_us > std::numeric_limits<uint_least32_t>::max())
+			timeout_us = std::numeric_limits<uint_least32_t>::max();
+
+		return wait_for(mutex, timeout_us);
 	}
 };
 

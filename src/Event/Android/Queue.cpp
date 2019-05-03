@@ -77,7 +77,7 @@ EventQueue::Wait(Event &event)
     if (timeout < std::chrono::steady_clock::duration::zero())
       cond.wait(mutex);
     else
-      cond.wait_for(mutex, (std::chrono::duration_cast<std::chrono::microseconds>(timeout).count() + 999) / 1000);
+      cond.wait_for(mutex, timeout);
 
     FlushClockCaches();
   }

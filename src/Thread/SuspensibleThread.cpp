@@ -166,7 +166,7 @@ SuspensibleThread::_WaitForStopped(unsigned timeout_ms)
   suspended = true;
 
   if (!stop_received)
-    command_trigger.wait_for(mutex, timeout_ms);
+    command_trigger.wait_for(mutex, std::chrono::milliseconds(timeout_ms));
 
   if (!stop_received && suspend_received) {
     client_trigger.notify_one();

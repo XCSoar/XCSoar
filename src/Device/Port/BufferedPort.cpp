@@ -109,7 +109,7 @@ BufferedPort::WaitRead(unsigned timeout_ms)
     if (remaining_ms <= 0)
       return WaitResult::TIMEOUT;
 
-    cond.wait_for(mutex, remaining_ms);
+    cond.wait_for(mutex, std::chrono::milliseconds(remaining_ms));
   }
 
   return WaitResult::READY;

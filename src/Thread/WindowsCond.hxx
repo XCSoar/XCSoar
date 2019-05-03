@@ -32,6 +32,8 @@
 
 #include "CriticalSection.hxx"
 
+#include <chrono>
+
 /**
  * Wrapper for a CONDITION_VARIABLE, backend for the Cond class.
  */
@@ -54,9 +56,17 @@ public:
 		WakeAllConditionVariable(&cond);
 	}
 
+private:
 	bool wait_for(CriticalSection &mutex, DWORD timeout_ms) noexcept {
 		return SleepConditionVariableCS(&cond, &mutex.critical_section,
 						timeout_ms);
+	}
+
+public:
+	bool wait_for(CriticalSection &mutex,
+		      std::chrono::steady_clock::duration timeout) noexcept {
+		auto timeout_ms = std::chrono::duration_cast<std::chrono::milliseconds>(timeout).count();
+		return wait_for(mutex, timeout_ms);
 	}
 
 	void wait(CriticalSection &mutex) noexcept {

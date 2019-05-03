@@ -110,7 +110,7 @@ public:
       if (remaining <= 0)
         return end();
 
-      cond.wait_for(*this, remaining);
+      cond.wait_for(*this, std::chrono::milliseconds(remaining));
     }
   }
 

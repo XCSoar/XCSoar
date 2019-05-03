@@ -44,7 +44,7 @@ Copyright_License {
  * for the protocol specification.
  */
 class KRT2Device final : public AbstractDevice {
-  static constexpr unsigned CMD_TIMEOUT = 250; //!< Command timeout in ms.
+  static constexpr auto CMD_TIMEOUT = 250; //!< Command timeout in ms.
   static constexpr unsigned NR_RETRIES = 3; //!< Number of tries to send a command.
 
   static constexpr char STX = 0x02; //!< Command start character.
@@ -178,7 +178,7 @@ KRT2Device::Send(const uint8_t *msg, unsigned msg_size,
     uint8_t _response;
     {
       const std::lock_guard<Mutex> lock(response_mutex);
-      rx_cond.wait_for(response_mutex, CMD_TIMEOUT);
+      rx_cond.wait_for(response_mutex, std::chrono::milliseconds(CMD_TIMEOUT));
       _response = response;
     }
 
