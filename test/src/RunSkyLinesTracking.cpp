@@ -37,6 +37,8 @@ Copyright_License {
 class Handler : public SkyLinesTracking::Handler {
   Args &args;
 
+  boost::asio::io_context &io_context;
+
   SkyLinesTracking::Client client;
 
   boost::asio::steady_timer timer;
@@ -44,8 +46,9 @@ class Handler : public SkyLinesTracking::Handler {
   std::unique_ptr<DebugReplay> replay;
 
 public:
-  explicit Handler(Args &_args, boost::asio::io_context &io_context)
-    :args(_args), client(io_context, this), timer(io_context) {}
+  explicit Handler(Args &_args, boost::asio::io_context &_io_context)
+    :args(_args), io_context(_io_context),
+     client(io_context, this), timer(io_context) {}
 
   SkyLinesTracking::Client &GetClient() {
     return client;
@@ -55,7 +58,7 @@ public:
 
   virtual void OnAck(unsigned id) override {
     printf("received ack %u\n", id);
-    timer.get_io_service().stop();
+    io_context.stop();
   }
 
   virtual void OnTraffic(unsigned pilot_id, unsigned time_of_day_ms,
@@ -82,7 +85,7 @@ private:
     timer.expires_from_now(d);
     timer.async_wait([this](const boost::system::error_code &ec){
         if (!ec)
-          timer.get_io_service().stop();
+          io_context.stop();
       });
   }
 
@@ -94,7 +97,7 @@ private:
       client.SendFix(replay->Basic());
       ScheduleNextReplay(std::chrono::milliseconds(100));
     } else
-      timer.get_io_service().stop();
+      io_context.stop();
   }
 
   void ScheduleNextReplay(boost::asio::steady_timer::duration d) {
