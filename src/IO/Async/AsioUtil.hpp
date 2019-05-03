@@ -50,7 +50,7 @@ DispatchWait(boost::asio::io_service &io_service, F &&f)
   Cond cond;
   bool finished = false;
 
-  io_service.dispatch([&](){
+  boost::asio::dispatch(io_service, [&](){
       f();
 
       ScopeLock lock(mutex);
