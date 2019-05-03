@@ -37,19 +37,6 @@ Copyright_License {
 #include <signal.h>
 #endif
 
-#ifndef NDEBUG
-#include "Mutex.hpp"
-static Mutex all_threads_mutex;
-
-/**
- * This list keeps track of all active threads.  It is used to assert
- * that all threads have been cleaned up on shutdown.
- */
-static boost::intrusive::list<Thread,
-                              boost::intrusive::member_hook<Thread, Thread::SiblingsHook, &Thread::siblings>,
-                              boost::intrusive::constant_time_size<false>> all_threads;
-#endif
-
 void
 Thread::SetIdlePriority()
 {
@@ -89,14 +76,6 @@ Thread::Start()
   bool success = handle != nullptr;
 #endif
 
-#ifndef NDEBUG
-  if (success) {
-    all_threads_mutex.lock();
-    all_threads.push_back(*this);
-    all_threads_mutex.unlock();
-  }
-#endif
-
   return success;
 }
 
@@ -114,12 +93,6 @@ Thread::Join()
   ::CloseHandle(handle);
   handle = nullptr;
 #endif
-
-#ifndef NDEBUG
-  all_threads_mutex.lock();
-  all_threads.erase(all_threads.iterator_to(*this));
-  all_threads_mutex.unlock();
-#endif
 }
 
 #ifndef HAVE_POSIX
@@ -133,14 +106,6 @@ Thread::Join(unsigned timeout_ms)
   if (result) {
     ::CloseHandle(handle);
     handle = nullptr;
-
-#ifndef NDEBUG
-    {
-      all_threads_mutex.lock();
-      all_threads.erase(all_threads.iterator_to(*this));
-      all_threads_mutex.unlock();
-    }
-#endif
   }
 
   return result;
@@ -186,16 +151,3 @@ Thread::ThreadProc(LPVOID lpParameter)
 }
 
 #endif /* !HAVE_POSIX */
-
-#ifndef NDEBUG
-
-bool
-ExistsAnyThread()
-{
-  all_threads_mutex.lock();
-  bool result = !all_threads.empty();
-  all_threads_mutex.unlock();
-  return result;
-}
-
-#endif

@@ -47,10 +47,6 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
 
-#ifndef NDEBUG
-#include "Thread/Thread.hpp"
-#endif
-
 #ifdef ENABLE_SDL
 /* this is necessary on Mac OS X, to let libSDL bootstrap Quartz
    before entering our main() */
@@ -168,8 +164,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   }
 
   int ret = Main();
-
-  assert(!ExistsAnyThread());
 
 #if defined(__APPLE__) && TARGET_OS_IPHONE
   /* For some reason, the app process does not exit on iOS, but a black
