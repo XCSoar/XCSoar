@@ -27,7 +27,7 @@ Copyright_License {
 
 Timer::Timer()
   :enabled(false), queued(false),
-   timer(event_queue->get_io_service()) {}
+   timer(event_queue->get_io_context()) {}
 
 void
 Timer::Schedule(std::chrono::steady_clock::duration d) noexcept

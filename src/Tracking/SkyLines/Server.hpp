@@ -71,10 +71,6 @@ public:
     return "5597";
   }
 
-  auto &get_io_service() {
-    return socket.get_io_service();
-  }
-
   void SendBuffer(const boost::asio::ip::udp::endpoint &endpoint,
                   boost::asio::const_buffer data);
 

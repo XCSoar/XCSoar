@@ -25,12 +25,12 @@ Copyright_License {
 #include "DisplayOrientation.hpp"
 
 EventQueue::EventQueue()
-  :SignalListener(io_service),
+  :SignalListener(io_context),
    thread(ThreadHandle::GetCurrent()),
 #ifndef NON_INTERACTIVE
-   input_queue(io_service, *this),
+   input_queue(io_context, *this),
 #endif
-   event_pipe_asio(io_service),
+   event_pipe_asio(io_context),
    quit(false)
 {
   SignalListener::Create(SIGINT, SIGTERM);
@@ -55,8 +55,8 @@ EventQueue::Push(const Event &event)
 void
 EventQueue::Poll()
 {
-  io_service.run_one();
-  io_service.reset();
+  io_context.run_one();
+  io_context.reset();
 }
 
 void
@@ -191,7 +191,7 @@ EventQueue::OnEventPipe(const boost::system::error_code &ec)
     return;
 
   if (event_pipe.Read())
-    event_pipe_asio.get_io_service().stop();
+    get_io_context().stop();
 
   AsyncReadEventPipe();
 }

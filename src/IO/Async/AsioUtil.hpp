@@ -82,7 +82,8 @@ template<typename T>
 void
 CancelWait(T &t)
 {
-  CancelWait(t.get_io_service(), t);
+  // TODO: this cast is not safe; improve this!
+  CancelWait((boost::asio::io_context &)t.get_executor().context(), t);
 }
 
 #endif

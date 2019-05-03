@@ -77,10 +77,6 @@ public:
     return "5597";
   }
 
-  auto &get_io_service() {
-    return socket.get_io_service();
-  }
-
   /**
    * Is SkyLines tracking enabled in configuration?
    */
