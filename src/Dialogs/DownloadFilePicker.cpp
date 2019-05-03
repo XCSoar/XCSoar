@@ -351,12 +351,13 @@ DownloadFilePickerWidget::OnDownloadComplete(Path path_relative,
 void
 DownloadFilePickerWidget::OnNotification()
 {
-  mutex.Lock();
-  bool repository_modified2 = repository_modified;
-  repository_modified = false;
-  const bool repository_failed2 = repository_failed;
-  repository_failed = false;
-  mutex.Unlock();
+  bool repository_modified2, repository_failed2;
+
+  {
+    const std::lock_guard<Mutex> lock(mutex);
+    repository_modified2 = std::exchange(repository_modified, false);
+    repository_failed2 = std::exchange(repository_failed, false);
+  }
 
   if (repository_modified2) {
     if (repository_failed2)
