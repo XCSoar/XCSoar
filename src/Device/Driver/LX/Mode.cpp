@@ -37,13 +37,15 @@ LXDevice::LinkTimeout()
 
   ResetDeviceDetection();
 
-  v7_settings.Lock();
-  v7_settings.clear();
-  v7_settings.Unlock();
+  {
+    const std::lock_guard<Mutex> lock(v7_settings);
+    v7_settings.clear();
+  }
 
-  nano_settings.Lock();
-  nano_settings.clear();
-  nano_settings.Unlock();
+  {
+    const std::lock_guard<Mutex> lock(nano_settings);
+    nano_settings.clear();
+  }
 
   mode = Mode::UNKNOWN;
   old_baud_rate = 0;

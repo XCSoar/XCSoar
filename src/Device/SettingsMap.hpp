@@ -45,6 +45,7 @@ Copyright_License {
 template<typename V>
 class DeviceSettingsMap {
   Mutex mutex;
+
   Cond cond;
 
   struct Item {
@@ -82,14 +83,6 @@ public:
       return i != other.i;
     }
   };
-
-  void Lock() {
-    mutex.Lock();
-  }
-
-  void Unlock() {
-    mutex.Unlock();
-  }
 
   operator Mutex &() const {
     return const_cast<Mutex &>(mutex);

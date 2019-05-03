@@ -35,9 +35,10 @@ LXDevice::SendV7Setting(const char *name, const char *value,
   if (!EnableNMEA(env))
     return false;
 
-  v7_settings.Lock();
-  v7_settings.MarkOld(name);
-  v7_settings.Unlock();
+  {
+    const std::lock_guard<Mutex> lock(v7_settings);
+    v7_settings.MarkOld(name);
+  }
 
   char buffer[256];
   sprintf(buffer, "PLXV0,%s,W,%s", name, value);
@@ -50,9 +51,10 @@ LXDevice::RequestV7Setting(const char *name, OperationEnvironment &env)
   if (!EnableNMEA(env))
     return false;
 
-  v7_settings.Lock();
-  v7_settings.MarkOld(name);
-  v7_settings.Unlock();
+  {
+    const std::lock_guard<Mutex> lock(v7_settings);
+    v7_settings.MarkOld(name);
+  }
 
   char buffer[256];
   sprintf(buffer, "PLXV0,%s,R", name);
@@ -89,9 +91,10 @@ LXDevice::SendNanoSetting(const char *name, const char *value,
   if (!EnableNanoNMEA(env))
     return false;
 
-  nano_settings.Lock();
-  nano_settings.MarkOld(name);
-  nano_settings.Unlock();
+  {
+    const std::lock_guard<Mutex> lock(nano_settings);
+    nano_settings.MarkOld(name);
+  }
 
   char buffer[256];
   sprintf(buffer, "PLXVC,SET,W,%s,%s", name, value);
@@ -104,9 +107,10 @@ LXDevice::RequestNanoSetting(const char *name, OperationEnvironment &env)
   if (!EnableNanoNMEA(env))
     return false;
 
-  nano_settings.Lock();
-  nano_settings.MarkOld(name);
-  nano_settings.Unlock();
+  {
+    const std::lock_guard<Mutex> lock(nano_settings);
+    nano_settings.MarkOld(name);
+  }
 
   char buffer[256];
   sprintf(buffer, "PLXVC,SET,R,%s", name);

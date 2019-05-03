@@ -37,9 +37,10 @@ VegaDevice::SendSetting(const char *name, int value, OperationEnvironment &env)
 {
   /* erase the old value from the settings map, because we expect to
      receive the new one now */
-  settings.Lock();
-  settings.erase(name);
-  settings.Unlock();
+  {
+      const std::lock_guard<Mutex> lock(settings);
+      settings.erase(name);
+  }
 
   char buffer[64];
   sprintf(buffer, "PDVSC,S,%s,%d", name, value);
