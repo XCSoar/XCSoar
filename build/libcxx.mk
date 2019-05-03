@@ -10,6 +10,7 @@ LIBCXX_CXXFLAGS = -nostdinc++ \
 	-DLIBCXX
   LIBCXX_LDADD = $(ANDROID_NDK)/sources/cxx-stl/llvm-libc++/libs/$(ANDROID_ABI3)/libc++_static.a \
 	$(ANDROID_NDK)/sources/cxx-stl/llvm-libc++/libs/$(ANDROID_ABI3)/libc++abi.a
+  LIBCXX_LDFLAGS += -nostdlib++
 
   ifeq ($(ARMV7),y)
     LIBCXX_LDADD += $(ANDROID_NDK)/sources/cxx-stl/llvm-libc++/libs/$(ANDROID_ABI3)/libunwind.a
