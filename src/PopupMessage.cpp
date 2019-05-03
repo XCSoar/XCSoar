@@ -224,7 +224,7 @@ PopupMessage::Render()
   if (parent.HasDialog())
     return false;
 
-  mutex.Lock();
+  std::unique_lock<Mutex> lock(mutex);
 
   const auto now = std::chrono::steady_clock::now();
 
@@ -240,7 +240,6 @@ PopupMessage::Render()
     changed = messages[i].Update(now) || changed;
 
   if (!changed) {
-    mutex.Unlock();
     return false;
   }
 
@@ -253,7 +252,7 @@ PopupMessage::Render()
     if (messages[i].AppendTo(text, now))
       n_visible++;
 
-  mutex.Unlock();
+  lock.unlock();
 
   UpdateTextAndLayout();
 
