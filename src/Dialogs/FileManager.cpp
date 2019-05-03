@@ -602,9 +602,12 @@ ManagedFileListWidget::OnAction(int id) noexcept
 void
 ManagedFileListWidget::OnTimer()
 {
-  mutex.Lock();
-  const bool download_active = !downloads.empty();
-  mutex.Unlock();
+  bool download_active;
+
+  {
+    const std::lock_guard<Mutex> lock(mutex);
+    download_active = !downloads.empty();
+  }
 
   if (download_active) {
     Net::DownloadManager::Enumerate(*this);
@@ -670,12 +673,13 @@ ManagedFileListWidget::OnDownloadComplete(Path path_relative,
 void
 ManagedFileListWidget::OnNotification()
 {
-  mutex.Lock();
-  bool repository_modified2 = repository_modified;
-  repository_modified = false;
-  const bool repository_failed2 = repository_failed;
-  repository_failed = false;
-  mutex.Unlock();
+  bool repository_modified2, repository_failed2;
+
+  {
+    const std::lock_guard<Mutex> lock(mutex);
+    repository_modified2 = std::exchange(repository_modified, false);
+    repository_failed2 = std::exchange(repository_failed, false);
+  }
 
   if (repository_modified2)
     LoadRepositoryFile();
