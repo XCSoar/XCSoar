@@ -58,14 +58,16 @@ public:
   virtual ~PortTerminalBridge() {}
 
   virtual void DataReceived(const void *data, size_t length) {
-    mutex.Lock();
-    buffer.Shift();
-    auto range = buffer.Write();
-    if (range.size < length)
-      length = range.size;
-    memcpy(range.data, data, length);
-    buffer.Append(length);
-    mutex.Unlock();
+    {
+      const std::lock_guard<Mutex> lock(mutex);
+      buffer.Shift();
+      auto range = buffer.Write();
+      if (range.size < length)
+        length = range.size;
+      memcpy(range.data, data, length);
+      buffer.Append(length);
+    }
+
     SendNotification();
   }
 
