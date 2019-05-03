@@ -47,12 +47,8 @@ class TraceComputer {
 public:
   TraceComputer();
 
-  void Lock() const {
-    mutex.Lock();
-  }
-
-  void Unlock() const {
-    mutex.Unlock();
+  operator Mutex &() const {
+    return const_cast<Mutex &>(mutex);
   }
 
   /**
