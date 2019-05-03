@@ -38,8 +38,8 @@ Copyright_License {
 #endif
 
 #ifndef NDEBUG
-#include "FastMutex.hpp"
-static FastMutex all_threads_mutex;
+#include "Mutex.hpp"
+static Mutex all_threads_mutex;
 
 /**
  * This list keeps track of all active threads.  It is used to assert
