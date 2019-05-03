@@ -30,9 +30,9 @@ Copyright_License {
 
 namespace SkyLinesTracking {
 
-Server::Server(boost::asio::io_service &io_service,
+Server::Server(boost::asio::io_context &io_context,
                boost::asio::ip::udp::endpoint endpoint)
-  :socket(io_service, endpoint)
+  :socket(io_context, endpoint)
 {
   AsyncReceive();
 }

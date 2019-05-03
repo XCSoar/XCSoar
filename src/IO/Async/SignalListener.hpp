@@ -33,10 +33,10 @@ class SignalListener {
   boost::asio::posix::stream_descriptor asio;
 
 public:
-  explicit SignalListener(boost::asio::io_service &io_service)
-    :asio(io_service) {}
+  explicit SignalListener(boost::asio::io_context &io_context)
+    :asio(io_context) {}
 
-  boost::asio::io_service &get_io_service() {
+  auto &get_io_service() {
     return asio.get_io_service();
   }
 

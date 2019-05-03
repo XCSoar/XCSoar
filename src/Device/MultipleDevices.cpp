@@ -25,13 +25,13 @@ Copyright_License {
 #include "Descriptor.hpp"
 #include "Dispatcher.hpp"
 
-MultipleDevices::MultipleDevices(boost::asio::io_service &io_service)
+MultipleDevices::MultipleDevices(boost::asio::io_context &io_context)
 {
   for (unsigned i = 0; i < NUMDEV; ++i) {
     DeviceDispatcher *dispatcher = dispatchers[i] =
       new DeviceDispatcher(*this, i);
 
-    devices[i] = new DeviceDescriptor(io_service, i, this);
+    devices[i] = new DeviceDescriptor(io_context, i, this);
     devices[i]->SetDispatcher(dispatcher);
   }
 }

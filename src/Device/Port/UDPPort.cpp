@@ -24,11 +24,11 @@ Copyright_License {
 #include "UDPPort.hpp"
 #include "IO/Async/AsioUtil.hpp"
 
-UDPPort::UDPPort(boost::asio::io_service &io_service,
+UDPPort::UDPPort(boost::asio::io_context &io_context,
                  unsigned port,
                  PortListener *_listener, DataHandler &_handler)
   :BufferedPort(_listener, _handler),
-   socket(io_service,
+   socket(io_context,
           boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port))
 {
   AsyncRead();

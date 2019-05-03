@@ -37,8 +37,8 @@ static void alsa_error_handler_stub(const char *, int, const char *,
                                     int, const char *, ...) {}
 
 
-ALSAPCMPlayer::ALSAPCMPlayer(boost::asio::io_service &_io_service) :
-  io_service(_io_service)
+ALSAPCMPlayer::ALSAPCMPlayer(boost::asio::io_context &_io_context) :
+  io_context(_io_context)
 {
   snd_lib_error_set_handler(alsa_error_handler_stub);
 }
@@ -487,7 +487,7 @@ ALSAPCMPlayer::Start(PCMDataSource &_source)
       (source->GetSampleRate() == new_sample_rate)) {
     /* just change the source / resume playback */
     bool success = false;
-    DispatchWait(io_service, [this, &_source, &success]() {
+    DispatchWait(io_context, [this, &_source, &success]() {
       bool recovered_from_underrun = false;
 
       switch (snd_pcm_state(alsa_handle.get())) {
@@ -590,11 +590,11 @@ ALSAPCMPlayer::Start(PCMDataSource &_source)
   for (int i = 0; i < poll_fds_count; ++i) {
     if ((poll_fds[i].events & POLLIN) || (poll_fds[i].events & POLLPRI)) {
       read_poll_descs.emplace_back(
-          boost::asio::posix::stream_descriptor(io_service, poll_fds[i].fd));
+          boost::asio::posix::stream_descriptor(io_context, poll_fds[i].fd));
     }
     if (poll_fds[i].events & POLLOUT) {
       write_poll_descs.emplace_back(
-          boost::asio::posix::stream_descriptor(io_service, poll_fds[i].fd));
+          boost::asio::posix::stream_descriptor(io_context, poll_fds[i].fd));
     }
   }
 
@@ -622,7 +622,7 @@ void
 ALSAPCMPlayer::Stop()
 {
   if ((nullptr != alsa_handle) || poll_descs_registered) {
-    DispatchWait(io_service, [&]() {
+    DispatchWait(io_context, [&]() {
       StopEventHandling();
 
       if (nullptr != alsa_handle) {

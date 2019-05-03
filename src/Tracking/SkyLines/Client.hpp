@@ -62,9 +62,9 @@ class Client {
   boost::asio::ip::udp::endpoint sender_endpoint;
 
 public:
-  explicit Client(boost::asio::io_service &io_service,
+  explicit Client(boost::asio::io_context &io_context,
                   Handler *_handler=nullptr)
-    :handler(_handler), resolver(io_service), socket(io_service) {}
+    :handler(_handler), resolver(io_context), socket(io_context) {}
   ~Client() { Close(); }
 
   constexpr
@@ -77,7 +77,7 @@ public:
     return "5597";
   }
 
-  boost::asio::io_service &get_io_service() {
+  auto &get_io_service() {
     return socket.get_io_service();
   }
 

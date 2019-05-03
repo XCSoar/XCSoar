@@ -41,10 +41,10 @@ Copyright_License {
 #include <errno.h>
 #include <windef.h> // for MAX_PATH
 
-TTYPort::TTYPort(boost::asio::io_service &io_service,
+TTYPort::TTYPort(boost::asio::io_context &io_context,
                  PortListener *_listener, DataHandler &_handler)
   :BufferedPort(_listener, _handler),
-   serial_port(io_service)
+   serial_port(io_context)
 {
 }
 

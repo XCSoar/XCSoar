@@ -56,7 +56,7 @@ private:
   Client client_buffer;
 
 public:
-  Server(boost::asio::io_service &io_service,
+  Server(boost::asio::io_context &io_context,
          boost::asio::ip::udp::endpoint endpoint);
 
   ~Server();
@@ -71,7 +71,7 @@ public:
     return "5597";
   }
 
-  boost::asio::io_service &get_io_service() {
+  auto &get_io_service() {
     return socket.get_io_service();
   }
 

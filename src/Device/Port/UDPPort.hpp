@@ -44,7 +44,7 @@ public:
    * @param handler the callback object for input received on the
    * port
    */
-  UDPPort(boost::asio::io_service &io_service,
+  UDPPort(boost::asio::io_context &io_context,
           unsigned port,
           PortListener *_listener, DataHandler &_handler);
 

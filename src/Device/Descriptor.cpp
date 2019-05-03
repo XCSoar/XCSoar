@@ -98,10 +98,10 @@ public:
   };
 };
 
-DeviceDescriptor::DeviceDescriptor(boost::asio::io_service &_io_service,
+DeviceDescriptor::DeviceDescriptor(boost::asio::io_context &_io_context,
                                    unsigned _index,
                                    PortListener *_port_listener)
-  :io_service(_io_service), index(_index),
+  :io_context(_io_context), index(_index),
    port_listener(_port_listener),
    open_job(nullptr),
    port(nullptr), monitor(nullptr), dispatcher(nullptr),
@@ -463,7 +463,7 @@ try {
 
   Port *port;
   try {
-    port = OpenPort(io_service, config, this, *this);
+    port = OpenPort(io_context, config, this, *this);
   } catch (...) {
     const auto e = std::current_exception();
 

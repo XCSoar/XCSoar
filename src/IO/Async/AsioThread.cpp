@@ -35,7 +35,7 @@ void
 AsioThread::Stop()
 {
   /* set the "stop" flag and wake up the thread */
-  io_service.stop();
+  io_context.stop();
 
   /* wait for the thread to finish */
   Join();
@@ -44,9 +44,9 @@ AsioThread::Stop()
 void
 AsioThread::Run()
 {
-  /* a dummy work to keep the io_service alive even if we're
+  /* a dummy work to keep the io_context alive even if we're
      completely idle */
-  boost::asio::io_service::work work(io_service);
+  boost::asio::io_context::work work(io_context);
 
-  io_service.run();
+  io_context.run();
 }

@@ -48,9 +48,9 @@ MapVehicleTypeToLivetrack24(LiveTrack24::Settings::VehicleType vt)
   return vehicleTypeMap[vti];
 }
 
-TrackingGlue::TrackingGlue(boost::asio::io_service &io_service)
+TrackingGlue::TrackingGlue(boost::asio::io_context &io_context)
   :StandbyThread("Tracking"),
-   skylines(io_service, this)
+   skylines(io_context, this)
 {
   settings.SetDefaults();
   LiveTrack24::SetServer(settings.livetrack24.server);

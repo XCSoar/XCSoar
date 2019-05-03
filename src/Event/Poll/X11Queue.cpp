@@ -41,10 +41,10 @@ Copyright_License {
 #include <stdio.h>
 #include <stdlib.h>
 
-X11EventQueue::X11EventQueue(boost::asio::io_service &io_service, EventQueue &_queue)
+X11EventQueue::X11EventQueue(boost::asio::io_context &io_context, EventQueue &_queue)
   :queue(_queue),
    display(XOpenDisplay(nullptr)),
-   asio(io_service)
+   asio(io_context)
 {
   if (display == nullptr) {
     fprintf(stderr, "XOpenDisplay() failed\n");
