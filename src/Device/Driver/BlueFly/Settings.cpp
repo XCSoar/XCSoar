@@ -26,6 +26,7 @@ Copyright_License {
 #include "Util/StringView.hxx"
 
 #include <stdio.h>
+#include <limits.h>
 
 const char BlueFlyDevice::BlueFlySettings::VOLUME_NAME[] = "BVL";
 const char BlueFlyDevice::BlueFlySettings::OUTPUT_MODE_NAME[] = "BOM";
