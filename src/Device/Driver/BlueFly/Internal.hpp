@@ -117,7 +117,8 @@ public:
   /**
    * Copy the available settings to the caller.
    */
-  void GetSettings(BlueFlySettings &settings_r);
+  gcc_pure
+  BlueFlySettings GetSettings() noexcept;
 
   /**
    * Write settings to the BlueFly Vario.

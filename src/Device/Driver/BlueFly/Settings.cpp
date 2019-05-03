@@ -76,11 +76,11 @@ BlueFlyDevice::WaitForSettings(unsigned int timeout)
   return settings_ready;
 }
 
-void
-BlueFlyDevice::GetSettings(BlueFlySettings &settings_r)
+BlueFlyDevice::BlueFlySettings
+BlueFlyDevice::GetSettings() noexcept
 {
   const std::lock_guard<Mutex> lock(mutex_settings);
-  settings_r = settings;
+  return settings;
 }
 
 void
