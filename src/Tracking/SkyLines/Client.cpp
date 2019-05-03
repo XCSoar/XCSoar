@@ -76,12 +76,12 @@ SkyLinesTracking::Client::Close()
   const ScopeLock protect(mutex);
 
   if (socket.is_open()) {
-    CancelWait(socket.get_io_service(), socket);
+    CancelWait(socket);
     socket.close();
   }
 
   if (resolving) {
-    CancelWait(socket.get_io_service(), resolver);
+    CancelWait(resolver);
     resolving = false;
   }
 }
