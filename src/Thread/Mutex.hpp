@@ -77,7 +77,7 @@ public:
 #if defined(HAVE_POSIX) && defined(NDEBUG) && defined(__GLIBC__)
   constexpr
 #endif
-  Mutex()
+  Mutex() noexcept
 #ifndef NDEBUG
     :locked(false)
 #endif
@@ -88,7 +88,7 @@ public:
   /**
    * Deletes the Mutex
    */
-  ~Mutex() {
+  ~Mutex() noexcept {
     assert(!locked);
   }
 #endif
@@ -101,7 +101,7 @@ public:
    * in optimised builds.
    */
   gcc_pure
-  bool IsLockedByCurrent() const {
+  bool IsLockedByCurrent() const noexcept {
     debug_mutex.lock();
     bool result = locked && owner.IsInside();
     debug_mutex.unlock();
@@ -137,7 +137,7 @@ public:
   /**
    * Tries to lock the Mutex
    */
-  bool try_lock() {
+  bool try_lock() noexcept {
     if (!mutex.try_lock()) {
 #ifndef NDEBUG
       assert(!IsLockedByCurrent());
@@ -179,11 +179,11 @@ class ScopeUnlock {
   Mutex &mutex;
 
 public:
-  explicit ScopeUnlock(Mutex &_mutex):mutex(_mutex) {
+  explicit ScopeUnlock(Mutex &_mutex) noexcept:mutex(_mutex) {
     mutex.unlock();
   };
 
-  ~ScopeUnlock() {
+  ~ScopeUnlock() noexcept {
     mutex.lock();
   }
 
@@ -202,7 +202,7 @@ class TemporaryUnlock {
   Mutex &mutex;
 
 public:
-  TemporaryUnlock(Mutex &_mutex):mutex(_mutex) {
+  TemporaryUnlock(Mutex &_mutex) noexcept:mutex(_mutex) {
     mutex.debug_mutex.lock();
     assert(mutex.locked);
     assert(mutex.owner.IsInside());
@@ -210,7 +210,7 @@ public:
     mutex.debug_mutex.unlock();
   }
 
-  ~TemporaryUnlock() {
+  ~TemporaryUnlock() noexcept {
     mutex.debug_mutex.lock();
     assert(!mutex.locked);
     mutex.owner = ThreadHandle::GetCurrent();
@@ -219,7 +219,7 @@ public:
   }
 #else
 public:
-  constexpr TemporaryUnlock(Mutex &_mutex) {}
+  constexpr TemporaryUnlock(Mutex &_mutex) noexcept {}
 #endif
 
   TemporaryUnlock(const TemporaryUnlock &other) = delete;

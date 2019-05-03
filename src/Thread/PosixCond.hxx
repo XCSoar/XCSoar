@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009-2015 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2009-2015 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -44,15 +44,15 @@ public:
 #ifdef __GLIBC__
 	/* optimized constexpr constructor for pthread implementations
 	   that support it */
-	constexpr PosixCond():cond(PTHREAD_COND_INITIALIZER) {}
+	constexpr PosixCond() noexcept:cond(PTHREAD_COND_INITIALIZER) {}
 #else
 	/* slow fallback for pthread implementations that are not
 	   compatible with "constexpr" */
-	PosixCond() {
+	PosixCond() noexcept {
 		pthread_cond_init(&cond, nullptr);
 	}
 
-	~PosixCond() {
+	~PosixCond() noexcept {
 		pthread_cond_destroy(&cond);
 	}
 #endif
@@ -60,24 +60,24 @@ public:
 	PosixCond(const PosixCond &other) = delete;
 	PosixCond &operator=(const PosixCond &other) = delete;
 
-	void signal() {
+	void signal() noexcept {
 		pthread_cond_signal(&cond);
 	}
 
-	void broadcast() {
+	void broadcast() noexcept {
 		pthread_cond_broadcast(&cond);
 	}
 
-	void wait(PosixMutex &mutex) {
+	void wait(PosixMutex &mutex) noexcept {
 		pthread_cond_wait(&cond, &mutex.mutex);
 	}
 
-	void wait(Mutex &mutex) {
+	void wait(Mutex &mutex) noexcept {
 		TemporaryUnlock unlock(mutex);
 		wait(mutex.mutex);
 	}
 
-	bool timed_wait(PosixMutex &mutex, unsigned timeout_ms) {
+	bool timed_wait(PosixMutex &mutex, unsigned timeout_ms) noexcept {
 		struct timeval now;
 		gettimeofday(&now, nullptr);
 
@@ -93,7 +93,7 @@ public:
 		return pthread_cond_timedwait(&cond, &mutex.mutex, &ts) == 0;
 	}
 
-	bool timed_wait(Mutex &mutex, unsigned timeout_ms) {
+	bool timed_wait(Mutex &mutex, unsigned timeout_ms) noexcept {
 		TemporaryUnlock unlock(mutex);
 		return timed_wait(mutex.mutex, timeout_ms);
 	}

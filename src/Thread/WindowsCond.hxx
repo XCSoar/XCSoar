@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009-2013 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2009-2019 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -40,36 +40,36 @@ class WindowsCond {
 	CONDITION_VARIABLE cond;
 
 public:
-	WindowsCond() {
+	WindowsCond() noexcept {
 		InitializeConditionVariable(&cond);
 	}
 
 	WindowsCond(const WindowsCond &other) = delete;
 	WindowsCond &operator=(const WindowsCond &other) = delete;
 
-	void signal() {
+	void signal() noexcept {
 		WakeConditionVariable(&cond);
 	}
 
-	void broadcast() {
+	void broadcast() noexcept {
 		WakeAllConditionVariable(&cond);
 	}
 
-	bool timed_wait(CriticalSection &mutex, DWORD timeout_ms) {
+	bool timed_wait(CriticalSection &mutex, DWORD timeout_ms) noexcept {
 		return SleepConditionVariableCS(&cond, &mutex.critical_section,
 						timeout_ms);
 	}
 
-	bool timed_wait(Mutex &mutex, unsigned timeout_ms) {
+	bool timed_wait(Mutex &mutex, unsigned timeout_ms) noexcept {
 		TemporaryUnlock unlock(mutex);
 		return timed_wait(mutex.mutex, timeout_ms);
 	}
 
-	void wait(CriticalSection &mutex) {
+	void wait(CriticalSection &mutex) noexcept {
 		timed_wait(mutex, INFINITE);
 	}
 
-	void wait(Mutex &mutex) {
+	void wait(Mutex &mutex) noexcept {
 		TemporaryUnlock unlock(mutex);
 		wait(mutex.mutex);
 	}

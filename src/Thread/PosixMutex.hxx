@@ -44,15 +44,15 @@ public:
 #ifdef __GLIBC__
 	/* optimized constexpr constructor for pthread implementations
 	   that support it */
-	constexpr PosixMutex():mutex(PTHREAD_MUTEX_INITIALIZER) {}
+	constexpr PosixMutex() noexcept:mutex(PTHREAD_MUTEX_INITIALIZER) {}
 #else
 	/* slow fallback for pthread implementations that are not
 	   compatible with "constexpr" */
-	PosixMutex() {
+	PosixMutex() noexcept {
 		pthread_mutex_init(&mutex, nullptr);
 	}
 
-	~PosixMutex() {
+	~PosixMutex() noexcept {
 		pthread_mutex_destroy(&mutex);
 	}
 #endif
@@ -60,15 +60,15 @@ public:
 	PosixMutex(const PosixMutex &other) = delete;
 	PosixMutex &operator=(const PosixMutex &other) = delete;
 
-	void lock() {
+	void lock() noexcept {
 		pthread_mutex_lock(&mutex);
 	}
 
-	bool try_lock() {
+	bool try_lock() noexcept {
 		return pthread_mutex_trylock(&mutex) == 0;
 	}
 
-	void unlock() {
+	void unlock() noexcept {
 		pthread_mutex_unlock(&mutex);
 	}
 };
