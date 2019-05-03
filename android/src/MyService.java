@@ -82,9 +82,8 @@ public class MyService extends Service {
     }
   }
 
+  @SuppressWarnings("deprecation")
   private static Notification createNotification(Context context, PendingIntent intent) {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-      return createNotificationOld(context, intent);
 
     Notification.Builder builder = new Notification.Builder(context)
       .setOngoing(true)
@@ -96,28 +95,12 @@ public class MyService extends Service {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
       builder.setChannelId(NOTIFICATION_CHANNEL_ID);
 
-    return builder.build();
-  }
-
-  private static Notification createNotificationOld(Context context, PendingIntent intent) {
-    Notification notification = new Notification(R.drawable.notification_icon, null,
-                                                 System.currentTimeMillis());
-
-    try {
-      Method method = Notification.class.getMethod("setLatestEventInfo",
-                                                   Context.class,
-                                                   CharSequence.class,
-                                                   CharSequence.class,
-                                                   PendingIntent.class);
-      method.invoke(notification, context, "XCSoar", "XCSoar is running",
-                    intent);
-    } catch (Exception e) {
-      /* ignore silently - shouldn't happen, but there's nothing we
-         can do about this */
-    }
-
-    notification.flags |= Notification.FLAG_ONGOING_EVENT;
-    return notification;
+    /*
+     * Use getNotification() instead of build() albeit getNotification() is deprecated.
+     * build() was not implemented before API 16. getNotification() just calls build()
+     * in API>= 16. getNotification() is available in API >= 11.
+     */
+    return builder.getNotification();
   }
 
   private void onStart() {
