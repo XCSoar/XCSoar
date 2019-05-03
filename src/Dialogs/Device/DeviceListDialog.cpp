@@ -597,18 +597,24 @@ DeviceListWidget::ManageCurrent()
   if (descriptor.IsDriver(_T("CAI 302")))
     ManageCAI302Dialog(UIGlobals::GetMainWindow(), look, *device);
   else if (descriptor.IsDriver(_T("FLARM"))) {
-    device_blackboard->mutex.Lock();
-    const NMEAInfo &basic = device_blackboard->RealState(current);
-    const FlarmVersion version = basic.flarm.version;
-    device_blackboard->mutex.Unlock();
+    FlarmVersion version;
+
+    {
+      const std::lock_guard<Mutex> lock(device_blackboard->mutex);
+      const NMEAInfo &basic = device_blackboard->RealState(current);
+      version = basic.flarm.version;
+    }
 
     ManageFlarmDialog(*device, version);
   } else if (descriptor.IsDriver(_T("LX"))) {
-    device_blackboard->mutex.Lock();
-    const NMEAInfo &basic = device_blackboard->RealState(current);
-    const DeviceInfo info = basic.device;
-    const DeviceInfo secondary_info = basic.secondary_device;
-    device_blackboard->mutex.Unlock();
+    DeviceInfo info, secondary_info;
+
+    {
+      const std::lock_guard<Mutex> lock(device_blackboard->mutex);
+      const NMEAInfo &basic = device_blackboard->RealState(current);
+      info = basic.device;
+      secondary_info = basic.secondary_device;
+    }
 
     LXDevice &lx_device = *(LXDevice *)device;
     if (lx_device.IsV7())
