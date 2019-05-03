@@ -113,10 +113,6 @@ public:
    * Locks the Mutex
    */
   void lock() noexcept {
-    Lock();
-  }
-
-  void Lock() {
 #ifdef NDEBUG
     mutex.lock();
 #else
@@ -141,7 +137,7 @@ public:
   /**
    * Tries to lock the Mutex
    */
-  bool TryLock() {
+  bool try_lock() {
     if (!mutex.try_lock()) {
 #ifndef NDEBUG
       assert(!IsLockedByCurrent());
@@ -163,10 +159,6 @@ public:
    * Unlocks the Mutex
    */
   void unlock() noexcept {
-    Unlock();
-  }
-
-  void Unlock() {
 #ifndef NDEBUG
     debug_mutex.lock();
     assert(locked);
@@ -188,11 +180,11 @@ class ScopeUnlock {
 
 public:
   explicit ScopeUnlock(Mutex &_mutex):mutex(_mutex) {
-    mutex.Unlock();
+    mutex.unlock();
   };
 
   ~ScopeUnlock() {
-    mutex.Lock();
+    mutex.lock();
   }
 
   ScopeUnlock(const ScopeUnlock &other) = delete;
