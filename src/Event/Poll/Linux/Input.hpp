@@ -75,12 +75,12 @@ class LinuxInputDevice final {
   boost::asio::posix::stream_descriptor fd;
 
 public:
-  explicit LinuxInputDevice(boost::asio::io_service &io_service,
+  explicit LinuxInputDevice(boost::asio::io_context &io_context,
                             EventQueue &_queue,
                             MergeMouse &_merge)
     :queue(_queue), merge(_merge),
      edit_position(0, 0), public_position(0, 0),
-     fd(io_service) {}
+     fd(io_context) {}
 
   ~LinuxInputDevice() {
     Close();
