@@ -110,6 +110,10 @@ public:
   /**
    * Locks the Mutex
    */
+  void lock() noexcept {
+    Lock();
+  }
+
   void Lock() {
 #ifdef NDEBUG
     mutex.lock();
@@ -156,6 +160,10 @@ public:
   /**
    * Unlocks the Mutex
    */
+  void unlock() noexcept {
+    Unlock();
+  }
+
   void Unlock() {
 #ifndef NDEBUG
     debug_mutex.lock();
