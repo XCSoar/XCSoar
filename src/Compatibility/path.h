@@ -26,7 +26,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 
 #define DIR_SEPARATOR '\\'
 #define DIR_SEPARATOR_S "\\"
@@ -41,7 +41,7 @@ Copyright_License {
 static inline bool
 IsDirSeparator(TCHAR ch)
 {
-#ifdef WIN32
+#ifdef _WIN32
   return ch == _T('\\');
 #else
   return ch == _T('/');

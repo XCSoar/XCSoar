@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Util/ConstBuffer.hxx"
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windef.h>
 #endif
 
@@ -35,7 +35,7 @@ Copyright_License {
 class ResourceId;
 
 namespace ResourceLoader {
-#ifdef WIN32
+#ifdef _WIN32
   void
   Init(HINSTANCE hInstance);
 #endif
@@ -50,7 +50,7 @@ namespace ResourceLoader {
   Load(ResourceId id);
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
   HBITMAP
   LoadBitmap2(ResourceId id);
 #endif

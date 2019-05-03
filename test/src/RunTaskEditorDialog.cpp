@@ -135,7 +135,7 @@ CreateDefaultTask(TaskManager &task_manager, const Waypoints &way_points)
   }
 }
 
-#ifndef WIN32
+#ifndef _WIN32
 int main(int argc, char **argv)
 #else
 int WINAPI

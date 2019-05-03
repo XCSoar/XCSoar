@@ -56,11 +56,11 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #endif
 
-#if !defined(WIN32) && !defined(ANDROID)
+#if !defined(_WIN32) && !defined(ANDROID)
 #include <unistd.h>
 #endif
 
-#if !defined(WIN32) && !defined(ANDROID)
+#if !defined(_WIN32) && !defined(ANDROID)
 #include <unistd.h> /* for execl() */
 #endif
 
@@ -169,7 +169,7 @@ FatalError(const TCHAR *msg)
   LogFormat(_T("%s"), msg);
 
   /* now try to get a GUI error message out to the user */
-#ifdef WIN32
+#ifdef _WIN32
   MessageBox(nullptr, msg, _T("XCSoar"), MB_ICONEXCLAMATION|MB_OK);
 #elif !defined(ANDROID) && !defined(KOBO)
   execl("/usr/bin/xmessage", "xmessage", msg, nullptr);

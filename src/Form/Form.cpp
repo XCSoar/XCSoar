@@ -50,7 +50,7 @@ Copyright_License {
 #elif defined(USE_POLL_EVENT)
 #include "Event/Shared/Event.hpp"
 #include "Event/Poll/Loop.hpp"
-#elif defined(WIN32)
+#elif defined(_WIN32)
 #include "Event/Windows/Event.hpp"
 #include "Event/Windows/Loop.hpp"
 #endif
@@ -252,7 +252,7 @@ WndForm::OnCancelMode()
   }
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 
 bool
 WndForm::OnCommand(unsigned id, unsigned code)

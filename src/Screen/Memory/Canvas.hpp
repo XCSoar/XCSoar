@@ -37,7 +37,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 /* those are WIN32 macros - undefine, or Canvas::background_mode will
    break */
 #undef OPAQUE

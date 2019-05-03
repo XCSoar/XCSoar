@@ -34,7 +34,7 @@ SystemSettings::SetDefaults()
     devices[0].port_type = DeviceConfig::PortType::INTERNAL;
   } else {
     devices[0].port_type = DeviceConfig::PortType::SERIAL;
-#ifdef WIN32
+#ifdef _WIN32
     devices[0].path = _T("COM1:");
 #else
     devices[0].path = _T("/dev/tty0");

@@ -132,7 +132,7 @@ DetectSerialPorts(DataFieldEnum &df)
 
 #endif
 
-#if defined(WIN32) && !defined(HAVE_POSIX)
+#if defined(_WIN32) && !defined(HAVE_POSIX)
 
 static void
 FillDefaultSerialPorts(DataFieldEnum &df)
@@ -172,7 +172,7 @@ FillSerialPorts(DataFieldEnum &df, const DeviceConfig &config)
 {
 #if defined(HAVE_POSIX)
   DetectSerialPorts(df);
-#elif defined(WIN32)
+#elif defined(_WIN32)
   FillDefaultSerialPorts(df);
 #endif
 

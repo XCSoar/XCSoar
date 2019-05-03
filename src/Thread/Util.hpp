@@ -34,7 +34,7 @@
 #include <sched.h>
 #include <sys/syscall.h>
 #include <unistd.h>
-#elif defined(WIN32)
+#elif defined(_WIN32)
 #include <windows.h>
 #endif
 
@@ -79,7 +79,7 @@ SetThreadIdlePriority()
   ioprio_set_idle();
 #endif
 
-#elif defined(WIN32)
+#elif defined(_WIN32)
   SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_IDLE);
 #endif
 };

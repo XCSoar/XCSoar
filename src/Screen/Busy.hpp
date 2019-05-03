@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_BUSY_HPP
 #define XCSOAR_SCREEN_BUSY_HPP
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -32,7 +32,7 @@ Copyright_License {
  * Show the hour glass cursor while this object exists.
  */
 class ScopeBusyIndicator {
-#ifdef WIN32
+#ifdef _WIN32
   HCURSOR old_cursor;
 
 public:
@@ -43,7 +43,7 @@ public:
   ~ScopeBusyIndicator() {
     ::SetCursor(old_cursor);
   }
-#endif /* WIN32 */
+#endif /* _WIN32 */
 };
 
 #endif

@@ -499,7 +499,7 @@ InputEvents::eventNull(gcc_unused const TCHAR *misc)
 void
 InputEvents::eventBeep(gcc_unused const TCHAR *misc)
 {
-#ifdef WIN32
+#ifdef _WIN32
   MessageBeep(MB_ICONEXCLAMATION);
 #else
   PlayResource(_T("IDR_WAV_CLEAR"));
@@ -559,7 +559,7 @@ InputEvents::eventCredits(gcc_unused const TCHAR *misc)
 void
 InputEvents::eventRun(const TCHAR *misc)
 {
-  #ifdef WIN32
+#ifdef _WIN32
   PROCESS_INFORMATION pi;
   if (!::CreateProcess(misc, NULL, NULL, NULL, false, 0, NULL, NULL, NULL, &pi))
     return;

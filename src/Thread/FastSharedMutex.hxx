@@ -30,7 +30,7 @@
 #ifndef XCSOAR_THREAD_FAST_SHARED_MUTEX_HXX
 #define XCSOAR_THREAD_FAST_SHARED_MUTEX_HXX
 
-#ifdef WIN32
+#ifdef _WIN32
 
 #include "WindowsSharedMutex.hxx"
 using FastSharedMutex = WindowsSharedMutex;

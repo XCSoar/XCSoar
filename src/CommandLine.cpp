@@ -33,7 +33,7 @@ Copyright_License {
 #include "Util/NumberParser.hpp"
 #include "Asset.hpp"
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h> /* for AllocConsole() */
 #endif
 
@@ -114,7 +114,7 @@ CommandLine::Parse(Args &args)
     } else if (StringIsEqual(s, "-fullscreen")) {
       full_screen = true;
 #endif
-#ifdef WIN32
+#ifdef _WIN32
     } else if (StringIsEqual(s, "-console")) {
       AllocConsole();
       freopen("CONOUT$", "wb", stdout);

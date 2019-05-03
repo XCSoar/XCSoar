@@ -182,7 +182,7 @@ public:
   bool OnMouseUp(PixelPoint p) override;
   void OnCancelMode() override;
 
-#ifdef WIN32
+#ifdef _WIN32
   bool OnCommand(unsigned id, unsigned code) override;
 #endif
 
