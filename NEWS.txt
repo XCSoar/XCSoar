@@ -51,6 +51,7 @@ Version 7.0 - not yet released
       climbing cruise (green), circling non-climb (orange)
   - improved auto-scaling of vario-like graphical infoboxes
   - new infobox: "Number Of Satellites"
+  - infobox courser mode: navigate with courser keys through the InfoBoxes
 * Windows
   - drop support for Windows CE
   - require Windows Vista or later

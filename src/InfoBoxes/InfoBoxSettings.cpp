@@ -55,6 +55,8 @@ InfoBoxSettings::SetDefaults()
 
   inverse = false;
   use_colors = true;
+  courser_mode = false;
+
   border_style = BorderStyle::BOX;
 
   for (unsigned i = 0; i < MAX_PANELS; ++i)

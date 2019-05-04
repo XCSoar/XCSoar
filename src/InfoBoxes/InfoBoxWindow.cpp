@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "InfoBoxWindow.hpp"
+#include "InfoBoxManager.hpp"
 #include "InfoBoxSettings.hpp"
 #include "Border.hpp"
 #include "Look/InfoBoxLook.hpp"
@@ -48,7 +49,7 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &parent, PixelRect rc,
    settings(_settings), look(_look),
    border_kind(border_flags),
    id(_id),
-   dragging(false), pressed(false),
+   dragging(false), pressed(false), courser_mode(false),
    force_draw_selector(false),
    focus_timer(*this), dialog_timer(*this)
 {
@@ -186,11 +187,15 @@ InfoBoxWindow::PaintComment(Canvas &canvas)
 void
 InfoBoxWindow::Paint(Canvas &canvas)
 {
-  const Color background_color = pressed
-    ? look.pressed_background_color
-    : (HasFocus() || dragging || force_draw_selector
-       ? look.focused_background_color
-       : look.background_color);
+  Color background_color = look.background_color;
+  if (pressed) {
+    background_color = look.pressed_background_color;
+  } else if (courser_mode) {
+    background_color = look.courser_mode_background_color;
+  } else if (HasFocus() || dragging || force_draw_selector) {
+    background_color = look.focused_background_color;
+  }
+
   if (settings.border_style == InfoBoxSettings::BorderStyle::GLASS)
     DrawGlassBackground(canvas, canvas.GetRect(), background_color);
   else
@@ -348,6 +353,23 @@ InfoBoxWindow::OnResize(PixelSize new_size)
 bool
 InfoBoxWindow::OnKeyDown(unsigned key_code)
 {
+  if (settings.courser_mode && courser_mode) {
+    if (KEY_RETURN==key_code) {
+      courser_mode = false;
+      Invalidate();
+      ReleaseCapture();
+    } else if (KEY_ESCAPE==key_code) {
+      courser_mode = false;
+      focus_timer.Cancel();
+      FocusParent();
+    } else {
+      OnCancelMode();
+      /* Let the InfoBoxManager decide what is to do */
+      InfoBoxManager::OnKeyDown(id, key_code);
+    }
+    return true;
+  }
+
   /* handle local hot key */
 
   switch (key_code) {
@@ -411,6 +433,18 @@ InfoBoxWindow::OnMouseUp(PixelPoint p)
 {
   dialog_timer.Cancel();
 
+  if (settings.courser_mode) {
+    if (courser_mode) {
+      courser_mode = false;
+    } else {
+      courser_mode = true;
+      dragging = false;
+      pressed = false;
+      SetFocus();
+      return true;
+    }
+  }
+
   if (dragging) {
     const bool was_pressed = pressed;
 
@@ -464,6 +498,8 @@ InfoBoxWindow::OnPaintBuffer(Canvas &canvas)
 void
 InfoBoxWindow::OnCancelMode()
 {
+  courser_mode = false;
+
   if (dragging) {
     dragging = false;
     pressed = false;
@@ -479,6 +515,10 @@ InfoBoxWindow::OnCancelMode()
 void
 InfoBoxWindow::OnSetFocus()
 {
+  if(settings.courser_mode) {
+    courser_mode = true;
+  }
+
   // Call the parent function
   PaintWindow::OnSetFocus();
 
@@ -493,6 +533,9 @@ InfoBoxWindow::OnSetFocus()
 void
 InfoBoxWindow::OnKillFocus()
 {
+  // Remove courser mode from current InfoBox
+  courser_mode = false;
+
   // Call the parent function
   PaintWindow::OnKillFocus();
 
@@ -511,7 +554,7 @@ InfoBoxWindow::OnTimer(WindowTimer &timer)
     FocusParent();
     return true;
   } else if (timer == dialog_timer) {
-    dragging = pressed = false;
+    dragging = pressed = courser_mode = false;
     Invalidate();
     ReleaseCapture();
 

@@ -53,6 +53,7 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
     : Color(0xe0, 0xe0, 0xe0);
   focused_background_color = COLOR_XCSOAR_LIGHT;
   pressed_background_color = COLOR_YELLOW;
+  courser_mode_background_color = COLOR_RED;
 
   Color border_color = Color(128, 128, 128);
   border_pen.Create(BORDER_WIDTH, border_color);

@@ -117,7 +117,7 @@ struct InfoBoxSettings {
 
   } geometry;
 
-  bool inverse, use_colors;
+  bool inverse, use_colors, courser_mode;
 
   enum class BorderStyle : uint8_t {
     BOX,

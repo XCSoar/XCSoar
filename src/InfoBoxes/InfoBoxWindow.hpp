@@ -55,6 +55,11 @@ private:
   bool pressed;
 
   /**
+   * Was the mouse one time pressed inside this InfoBox?
+   */
+  bool courser_mode;
+
+  /**
    * draw the selector event if the InfoBox window is not the system focus
    */
   bool force_draw_selector;

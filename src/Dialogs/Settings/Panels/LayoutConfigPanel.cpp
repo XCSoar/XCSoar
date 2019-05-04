@@ -50,6 +50,7 @@ enum ControlIndex {
   AppInverseInfoBox,
   AppInfoBoxColors,
   AppInfoBoxBorder,
+  AppInfoBoxCourserMode,
 #ifdef KOBO
   ShowMenuButton,
 #endif
@@ -206,6 +207,11 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           unsigned(ui_settings.info_boxes.border_style));
   SetExpertRow(AppInfoBoxBorder);
 
+  AddBoolean(_("InfoBoxes courser mode"),
+             _("If true, the InfoBoxes have an additional mode to navigate through the InfoBoxes with the courser keys."
+               "The InfoBoxe will be red in the courser mode and light red in the normal mode."),
+             ui_settings.info_boxes.courser_mode);
+  SetExpertRow(AppInfoBoxCourserMode);
 #ifdef KOBO
   AddBoolean(_("Show Menubutton"), _("Show the Menubutton"),
              ui_settings.show_menu_button);
@@ -257,6 +263,9 @@ LayoutConfigPanel::Save(bool &_changed)
                 ui_settings.info_boxes.use_colors))
     require_restart = changed = true;
 
+  if (SaveValue(AppInfoBoxCourserMode, ProfileKeys::AppInfoBoxCourserMode,
+                ui_settings.info_boxes.courser_mode))
+    require_restart = changed = true;
 #ifdef KOBO
   if (SaveValue(ShowMenuButton, ProfileKeys::ShowMenuButton,ui_settings.show_menu_button))
     require_restart = changed = true;

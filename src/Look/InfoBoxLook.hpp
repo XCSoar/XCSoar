@@ -37,7 +37,7 @@ struct InfoBoxLook {
   bool inverse;
 
   Pen border_pen;
-  Color background_color, focused_background_color, pressed_background_color;
+  Color background_color, focused_background_color, pressed_background_color, courser_mode_background_color;
 
   /**
    * Used only by #InfoBoxSettings::BorderStyle::SHADED.

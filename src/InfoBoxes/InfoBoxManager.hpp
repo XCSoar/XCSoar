@@ -51,6 +51,9 @@ namespace InfoBoxManager
    * then it configures the focused InfoBox if there is one.
    */
   void ShowInfoBoxPicker(const int id = -1);
+
+  bool OnKeyDown(unsigned infobox_id, unsigned key_code);
+  void SetFocus();
 };
 
 #endif

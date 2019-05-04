@@ -113,6 +113,7 @@ extern const char AppLandableRenderingScale[];
 extern const char AppScaleRunwayLength[];
 extern const char AppInverseInfoBox[];
 extern const char AppInfoBoxColors[];
+extern const char AppInfoBoxCourserMode[];
 extern const char AppGaugeVarioSpeedToFly[];
 extern const char AppGaugeVarioAvgText[];
 extern const char AppGaugeVarioMc[];

@@ -84,6 +84,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Simulator.hpp"
 #include "Formatter/TimeFormatter.hpp"
+#include "InfoBoxes/InfoBoxManager.hpp"
 
 #include <assert.h>
 #include <tchar.h>
@@ -226,6 +227,9 @@ InputEvents::eventScreenModes(const TCHAR *misc)
         Message::AddMessage(_("Default InfoBoxes"));
   } else if (StringIsEqual(misc, _T("previous")))
     PageActions::Prev();
+  else if (StringIsEqual(misc, _T("infoboxfocus"))) {
+    InfoBoxManager::SetFocus();
+  }
   else
     PageActions::Next();
 
