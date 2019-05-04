@@ -52,7 +52,7 @@ private:
                        const PixelRect &rc) override;
 
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
@@ -137,7 +137,7 @@ SystemWidget::ExportUSBStorage()
 }
 
 void
-SystemWidget::OnAction(int id)
+SystemWidget::OnAction(int id) noexcept
 {
   switch (id) {
   case REBOOT:

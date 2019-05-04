@@ -55,11 +55,11 @@ public:
   }
 
 private:
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
-TaskAdvanceWidget::OnAction(int id)
+TaskAdvanceWidget::OnAction(int id) noexcept
 {
   switch ((Action)id) {
   case DISMISS:

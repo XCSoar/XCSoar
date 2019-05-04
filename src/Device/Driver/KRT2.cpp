@@ -27,7 +27,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "RadioFrequency.hpp"
 #include "Thread/Cond.hxx"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Util/CharUtil.hxx"
 #include "Util/StaticFifoBuffer.hxx"
 
@@ -44,7 +44,7 @@ Copyright_License {
  * for the protocol specification.
  */
 class KRT2Device final : public AbstractDevice {
-  static constexpr unsigned CMD_TIMEOUT = 250; //!< Command timeout in ms.
+  static constexpr auto CMD_TIMEOUT = 250; //!< Command timeout in ms.
   static constexpr unsigned NR_RETRIES = 3; //!< Number of tries to send a command.
 
   static constexpr char STX = 0x02; //!< Command start character.
@@ -165,17 +165,22 @@ KRT2Device::Send(const uint8_t *msg, unsigned msg_size,
   assert(msg_size > 0);
 
   do {
-    response_mutex.Lock();
-    response = NO_RSP;
-    response_mutex.Unlock();
+    {
+      const std::lock_guard<Mutex> lock(response_mutex);
+      response = NO_RSP;
+    }
+
     // Send the message
     if (!port.FullWrite(msg, msg_size, env, CMD_TIMEOUT))
       return false;
+
     // Wait for the response
-    response_mutex.Lock();
-    rx_cond.timed_wait(response_mutex, CMD_TIMEOUT);
-    auto _response = response;
-    response_mutex.Unlock();
+    uint8_t _response;
+    {
+      const std::lock_guard<Mutex> lock(response_mutex);
+      rx_cond.wait_for(response_mutex, std::chrono::milliseconds(CMD_TIMEOUT));
+      _response = response;
+    }
 
     if (_response == ACK)
       // ACK received, finish
@@ -228,11 +233,12 @@ KRT2Device::DataReceived(const void *_data, size_t length,
           case ACK:
           case NAK:
             // Received a response to a normal command (STX)
-            response_mutex.Lock();
-            response = *(const uint8_t *) range.data;
-            // Signal the response to the TX thread
-            rx_cond.signal();
-            response_mutex.Unlock();
+            {
+              const std::lock_guard<Mutex> lock(response_mutex);
+              response = *(const uint8_t *) range.data;
+              // Signal the response to the TX thread
+              rx_cond.notify_one();
+            }
             break;
           default:
             // Received a command from the radio -> ignore it

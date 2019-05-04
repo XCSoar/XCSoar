@@ -123,7 +123,7 @@ TaskActionsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-TaskActionsPanel::OnAction(int id)
+TaskActionsPanel::OnAction(int id) noexcept
 {
   switch (id) {
   case NEW_TASK:

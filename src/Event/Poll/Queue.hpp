@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Thread/Handle.hpp"
 #include "../Shared/Event.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "OS/EventPipe.hpp"
 #include "IO/Async/SignalListener.hpp"
 
@@ -48,20 +48,20 @@ enum class DisplayOrientation : uint8_t;
 class Window;
 
 /**
- * Helper class to guarantee that io_service gets initialised before
+ * Helper class to guarantee that io_context gets initialised before
  * SignalListener.
  */
-class IOServiceOwner {
+class IOContextOwner {
 protected:
-  boost::asio::io_service io_service;
+  boost::asio::io_context io_context;
 
 public:
-  boost::asio::io_service &get_io_service() {
-    return io_service;
+  boost::asio::io_context &get_io_context() {
+    return io_context;
   }
 };
 
-class EventQueue final : public IOServiceOwner, private SignalListener {
+class EventQueue final : public IOContextOwner, private SignalListener {
   const ThreadHandle thread;
 
 #ifdef USE_X11
@@ -85,7 +85,7 @@ public:
   EventQueue();
   ~EventQueue();
 
-  using IOServiceOwner::get_io_service;
+  using IOContextOwner::get_io_context;
 
 #ifdef USE_X11
   _XDisplay *GetDisplay() const {

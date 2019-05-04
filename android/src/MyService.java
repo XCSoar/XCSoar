@@ -22,11 +22,15 @@
 
 package org.xcsoar;
 
+import java.lang.reflect.Method;
 import android.app.Service;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.Binder;
 import android.util.Log;
@@ -48,6 +52,8 @@ import android.util.Log;
 public class MyService extends Service {
   private static final String TAG = "XCSoar";
 
+  private static final String NOTIFICATION_CHANNEL_ID = "xcsoar";
+
   /**
    * Hack: this is set by onCreate(), to support the "testing"
    * package.
@@ -63,19 +69,64 @@ public class MyService extends Service {
     super.onCreate();
 
     notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      String name = "XCSoar";
+
+      /* this disables sound: */
+      int importance = NotificationManager.IMPORTANCE_LOW;
+
+      NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,
+                                                            name, importance);
+      notificationManager.createNotificationChannel(channel);
+    }
+  }
+
+  private static Notification createNotification(Context context, PendingIntent intent) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
+      return createNotificationOld(context, intent);
+
+    Notification.Builder builder = new Notification.Builder(context)
+      .setOngoing(true)
+      .setContentIntent(intent)
+      .setContentTitle("XCSoar")
+      .setContentText("XCSoar is running")
+      .setSmallIcon(R.drawable.notification_icon);
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+      builder.setChannelId(NOTIFICATION_CHANNEL_ID);
+
+    return builder.build();
+  }
+
+  private static Notification createNotificationOld(Context context, PendingIntent intent) {
+    Notification notification = new Notification(R.drawable.notification_icon, null,
+                                                 System.currentTimeMillis());
+
+    try {
+      Method method = Notification.class.getMethod("setLatestEventInfo",
+                                                   Context.class,
+                                                   CharSequence.class,
+                                                   CharSequence.class,
+                                                   PendingIntent.class);
+      method.invoke(notification, context, "XCSoar", "XCSoar is running",
+                    intent);
+    } catch (Exception e) {
+      /* ignore silently - shouldn't happen, but there's nothing we
+         can do about this */
+    }
+
+    notification.flags |= Notification.FLAG_ONGOING_EVENT;
+    return notification;
   }
 
   private void onStart() {
     /* add an icon to the notification area while XCSoar runs, to
        remind the user that we're sucking his battery empty */
-    Notification notification = new Notification(R.drawable.notification_icon, null,
-                                                 System.currentTimeMillis());
     Intent intent2 = new Intent(this, mainActivityClass);
     PendingIntent contentIntent =
       PendingIntent.getActivity(this, 0, intent2, 0);
-    notification.setLatestEventInfo(this, "XCSoar", "XCSoar is running",
-                                    contentIntent);
-    notification.flags |= Notification.FLAG_ONGOING_EVENT;
+    Notification notification = createNotification(this, contentIntent);
 
     notificationManager.notify(1, notification);
 

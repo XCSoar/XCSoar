@@ -63,7 +63,7 @@ private:
   virtual void Show(const PixelRect &rc) override;
 
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
@@ -129,7 +129,7 @@ NOAADetailsWidget::Show(const PixelRect &rc)
 }
 
 void
-NOAADetailsWidget::OnAction(int id)
+NOAADetailsWidget::OnAction(int id) noexcept
 {
   switch (id) {
   case UPDATE:

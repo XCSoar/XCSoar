@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_AUDIO_VARIO_SYNTHESISER_HPP
 
 #include "ToneSynthesiser.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Compiler.h"
 
 /**

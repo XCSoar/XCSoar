@@ -30,7 +30,7 @@ Copyright_License {
 #include "OS/Path.hpp"
 
 #ifndef ENABLE_OPENGL
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #endif
 
 #ifndef _UNICODE
@@ -81,13 +81,13 @@ IsMono()
 #endif
 }
 
-static constexpr inline FT_Long
+static constexpr FT_Long
 FT_FLOOR(FT_Long x)
 {
   return (x & -64) / 64;
 }
 
-static constexpr inline FT_Long
+static constexpr FT_Long
 FT_CEIL(FT_Long x)
 {
   return FT_FLOOR(x + 63);
@@ -133,7 +133,7 @@ static unsigned
 GetCapitalHeight(FT_Face face)
 {
 #ifndef ENABLE_OPENGL
-  const ScopeLock protect(freetype_mutex);
+  const std::lock_guard<Mutex> lock(freetype_mutex);
 #endif
 
   FT_UInt i = FT_Get_Char_Index(face, 'M');
@@ -255,7 +255,7 @@ ForEachGlyph(const FT_Face face, unsigned ascent_height, T &&text,
   unsigned prev_index = 0;
 
 #ifndef ENABLE_OPENGL
-  const ScopeLock protect(freetype_mutex);
+  const std::lock_guard<Mutex> lock(freetype_mutex);
 #endif
 
   ForEachChar(std::forward<T>(text),

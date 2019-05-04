@@ -136,7 +136,7 @@ protected:
 
 private:
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
@@ -231,8 +231,8 @@ ProfileListWidget::PasswordClicked()
 
   try {
     Profile::LoadFile(data, item.path);
-  } catch (const std::runtime_error &e) {
-    ShowError(e, _("Failed to load file."));
+  } catch (...) {
+    ShowError(std::current_exception(), _("Failed to load file."));
     return;
   }
 
@@ -242,8 +242,8 @@ ProfileListWidget::PasswordClicked()
 
   try {
     Profile::SaveFile(data, item.path);
-  } catch (const std::runtime_error &e) {
-    ShowError(e, _("Failed to save file."));
+  } catch (...) {
+    ShowError(std::current_exception(), _("Failed to save file."));
     return;
   }
 }
@@ -260,8 +260,8 @@ ProfileListWidget::CopyClicked()
 
   try {
     Profile::LoadFile(data, old_path);
-  } catch (const std::runtime_error &e) {
-    ShowError(e, _("Failed to load file."));
+  } catch (...) {
+    ShowError(std::current_exception(), _("Failed to load file."));
     return;
   }
 
@@ -287,8 +287,8 @@ ProfileListWidget::CopyClicked()
 
   try {
     Profile::SaveFile(data, new_path);
-  } catch (const std::runtime_error &e) {
-    ShowError(e, _("Failed to save file."));
+  } catch (...) {
+    ShowError(std::current_exception(), _("Failed to save file."));
     return;
   }
 
@@ -333,8 +333,8 @@ ProfileListWidget::DeleteClicked()
       CheckProfilePasswordResult(password_result);
       return;
     }
-  } catch (const std::runtime_error &e) {
-    ShowError(e, _("Password"));
+  } catch (...) {
+    ShowError(std::current_exception(), _("Password"));
     return;
   }
 
@@ -343,7 +343,7 @@ ProfileListWidget::DeleteClicked()
 }
 
 void
-ProfileListWidget::OnAction(int id)
+ProfileListWidget::OnAction(int id) noexcept
 {
   switch ((Buttons)id) {
   case NEW:

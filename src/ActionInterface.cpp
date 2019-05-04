@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "ActionInterface.hpp"
 #include "Interface.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "MainWindow.hpp"
 #include "Projection/MapWindowProjection.hpp"
 #include "Language/Language.hpp"
@@ -47,7 +47,7 @@ void
 XCSoarInterface::ReceiveGPS()
 {
   {
-    ScopeLock protect(device_blackboard->mutex);
+    std::lock_guard<Mutex> lock(device_blackboard->mutex);
 
     ReadBlackboardBasic(device_blackboard->Basic());
 
@@ -67,7 +67,7 @@ void
 XCSoarInterface::ReceiveCalculated()
 {
   {
-    ScopeLock protect(device_blackboard->mutex);
+    std::lock_guard<Mutex> lock(device_blackboard->mutex);
 
     ReadBlackboardCalculated(device_blackboard->Calculated());
     device_blackboard->ReadComputerSettings(GetComputerSettings());
@@ -87,7 +87,7 @@ XCSoarInterface::ExchangeBlackboard()
 void
 XCSoarInterface::ExchangeDeviceBlackboard()
 {
-  ScopeLock protect(device_blackboard->mutex);
+  std::lock_guard<Mutex> lock(device_blackboard->mutex);
 
   device_blackboard->ReadComputerSettings(GetComputerSettings());
 }

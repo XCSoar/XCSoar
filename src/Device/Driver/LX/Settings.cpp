@@ -35,9 +35,10 @@ LXDevice::SendV7Setting(const char *name, const char *value,
   if (!EnableNMEA(env))
     return false;
 
-  v7_settings.Lock();
-  v7_settings.MarkOld(name);
-  v7_settings.Unlock();
+  {
+    const std::lock_guard<Mutex> lock(v7_settings);
+    v7_settings.MarkOld(name);
+  }
 
   char buffer[256];
   sprintf(buffer, "PLXV0,%s,W,%s", name, value);
@@ -50,9 +51,10 @@ LXDevice::RequestV7Setting(const char *name, OperationEnvironment &env)
   if (!EnableNMEA(env))
     return false;
 
-  v7_settings.Lock();
-  v7_settings.MarkOld(name);
-  v7_settings.Unlock();
+  {
+    const std::lock_guard<Mutex> lock(v7_settings);
+    v7_settings.MarkOld(name);
+  }
 
   char buffer[256];
   sprintf(buffer, "PLXV0,%s,R", name);
@@ -63,7 +65,7 @@ std::string
 LXDevice::WaitV7Setting(const char *name, OperationEnvironment &env,
                         unsigned timeout_ms)
 {
-  ScopeLock protect(v7_settings);
+  std::lock_guard<Mutex> lock(v7_settings);
   auto i = v7_settings.Wait(name, env, timeout_ms);
   if (i == v7_settings.end())
     return std::string();
@@ -74,7 +76,7 @@ LXDevice::WaitV7Setting(const char *name, OperationEnvironment &env,
 std::string
 LXDevice::GetV7Setting(const char *name) const
 {
-  ScopeLock protect(v7_settings);
+  std::lock_guard<Mutex> lock(v7_settings);
   auto i = v7_settings.find(name);
   if (i == v7_settings.end())
     return std::string();
@@ -89,9 +91,10 @@ LXDevice::SendNanoSetting(const char *name, const char *value,
   if (!EnableNanoNMEA(env))
     return false;
 
-  nano_settings.Lock();
-  nano_settings.MarkOld(name);
-  nano_settings.Unlock();
+  {
+    const std::lock_guard<Mutex> lock(nano_settings);
+    nano_settings.MarkOld(name);
+  }
 
   char buffer[256];
   sprintf(buffer, "PLXVC,SET,W,%s,%s", name, value);
@@ -104,9 +107,10 @@ LXDevice::RequestNanoSetting(const char *name, OperationEnvironment &env)
   if (!EnableNanoNMEA(env))
     return false;
 
-  nano_settings.Lock();
-  nano_settings.MarkOld(name);
-  nano_settings.Unlock();
+  {
+    const std::lock_guard<Mutex> lock(nano_settings);
+    nano_settings.MarkOld(name);
+  }
 
   char buffer[256];
   sprintf(buffer, "PLXVC,SET,R,%s", name);
@@ -117,7 +121,7 @@ std::string
 LXDevice::WaitNanoSetting(const char *name, OperationEnvironment &env,
                         unsigned timeout_ms)
 {
-  ScopeLock protect(nano_settings);
+  std::lock_guard<Mutex> lock(nano_settings);
   auto i = nano_settings.Wait(name, env, timeout_ms);
   if (i == nano_settings.end())
     return std::string();
@@ -128,7 +132,7 @@ LXDevice::WaitNanoSetting(const char *name, OperationEnvironment &env,
 std::string
 LXDevice::GetNanoSetting(const char *name) const
 {
-  ScopeLock protect(nano_settings);
+  std::lock_guard<Mutex> lock(nano_settings);
   auto i = nano_settings.find(name);
   if (i == nano_settings.end())
     return std::string();

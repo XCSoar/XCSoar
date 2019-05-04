@@ -76,7 +76,7 @@ public:
 
 private:
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 
 };
 
@@ -97,7 +97,7 @@ ToolsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-ToolsWidget::OnAction(int id)
+ToolsWidget::OnAction(int id) noexcept
 {
   if (id >= 0 && id < (int) list.size())
     Run(list[id].path.c_str());

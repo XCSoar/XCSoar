@@ -48,9 +48,9 @@ MapVehicleTypeToLivetrack24(LiveTrack24::Settings::VehicleType vt)
   return vehicleTypeMap[vti];
 }
 
-TrackingGlue::TrackingGlue(boost::asio::io_service &io_service)
+TrackingGlue::TrackingGlue(boost::asio::io_context &io_context)
   :StandbyThread("Tracking"),
-   skylines(io_service, this)
+   skylines(io_context, this)
 {
   settings.SetDefaults();
   LiveTrack24::SetServer(settings.livetrack24.server);
@@ -59,14 +59,14 @@ TrackingGlue::TrackingGlue(boost::asio::io_service &io_service)
 void
 TrackingGlue::StopAsync()
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   StandbyThread::StopAsync();
 }
 
 void
 TrackingGlue::WaitStopped()
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   StandbyThread::WaitStopped();
 }
 
@@ -88,7 +88,7 @@ TrackingGlue::SetSettings(const TrackingSettings &_settings)
   } else {
     /* no fundamental setting changes; the write needs to be protected
        by the mutex, because another job may be running already */
-    ScopeLock protect(mutex);
+    std::lock_guard<Mutex> lock(mutex);
     settings = _settings;
   }
 }
@@ -117,7 +117,7 @@ TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
     /* later */
     return;
 
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   if (IsBusy())
     /* still running, skip this submission */
     return;
@@ -223,7 +223,7 @@ TrackingGlue::OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
   bool user_known;
 
   {
-    const ScopeLock protect(skylines_data.mutex);
+    const std::lock_guard<Mutex> lock(skylines_data.mutex);
     const SkyLinesTracking::Data::Traffic traffic(time_of_day_ms,
                                                   location, altitude);
     skylines_data.traffic[pilot_id] = traffic;
@@ -240,7 +240,7 @@ TrackingGlue::OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
 void
 TrackingGlue::OnUserName(uint32_t user_id, const TCHAR *name)
 {
-  const ScopeLock protect(skylines_data.mutex);
+  const std::lock_guard<Mutex> lock(skylines_data.mutex);
   skylines_data.user_names[user_id] = name;
 }
 
@@ -248,7 +248,7 @@ void
 TrackingGlue::OnWave(unsigned time_of_day_ms,
                      const GeoPoint &a, const GeoPoint &b)
 {
-  const ScopeLock protect(skylines_data.mutex);
+  const std::lock_guard<Mutex> lock(skylines_data.mutex);
 
   /* garbage collection - hard-coded upper limit */
   auto n = skylines_data.waves.size();
@@ -264,7 +264,7 @@ TrackingGlue::OnThermal(unsigned time_of_day_ms,
                         const AGeoPoint &bottom, const AGeoPoint &top,
                         double lift)
 {
-  const ScopeLock protect(skylines_data.mutex);
+  const std::lock_guard<Mutex> lock(skylines_data.mutex);
 
   /* garbage collection - hard-coded upper limit */
   auto n = skylines_data.thermals.size();

@@ -36,7 +36,7 @@ WorkerThread::Run()
 {
   PeriodClock clock;
 
-  const ScopeLock lock(mutex);
+  const std::lock_guard<Mutex> lock(mutex);
 
   while (true) {
     /* wait for work */

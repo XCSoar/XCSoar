@@ -216,7 +216,7 @@ private:
   void UpdateClicked();
 
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
@@ -332,8 +332,8 @@ WeatherMapOverlayListWidget::SetOverlay(Path path, const TCHAR *label)
   std::unique_ptr<MapOverlayBitmap> bmp;
   try {
     bmp.reset(new MapOverlayBitmap(path));
-  } catch (const std::exception &e) {
-    ShowError(e, _("Weather"));
+  } catch (...) {
+    ShowError(std::current_exception(), _("Weather"));
     return;
   }
 
@@ -373,8 +373,8 @@ WeatherMapOverlayListWidget::UseClicked(unsigned i)
                                               settings, runner);
         item.path = AllocatedPath(overlay.path.c_str());
         UpdatePreview(item.path);
-      } catch (const std::exception &exception) {
-        ShowError(exception, _T("pc_met"));
+      } catch (...) {
+        ShowError(std::current_exception(), _T("pc_met"));
       }
     }
   }
@@ -399,8 +399,8 @@ WeatherMapOverlayListWidget::UpdateClicked()
         if (i == active_index)
           SetOverlay(overlay.path, info.label.c_str());
         item.path = AllocatedPath(overlay.path.c_str());
-      } catch (const std::exception &exception) {
-        ShowError(exception, _T("pc_met"));
+      } catch (...) {
+        ShowError(std::current_exception(), _T("pc_met"));
         break;
       }
     }
@@ -410,7 +410,7 @@ WeatherMapOverlayListWidget::UpdateClicked()
 }
 
 void
-WeatherMapOverlayListWidget::OnAction(int id)
+WeatherMapOverlayListWidget::OnAction(int id) noexcept
 {
   switch ((Buttons)id) {
   case USE:

@@ -25,7 +25,7 @@ Copyright_License {
 #include "IO/TextWriter.hpp"
 #include "LocalPath.hpp"
 #include "Time/BrokenDateTime.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "OS/Path.hpp"
 #include "Util/StaticString.hxx"
 
@@ -81,7 +81,7 @@ NMEALogger::Log(const char *text)
   if (!enabled)
     return;
 
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   if (Start())
     writer->WriteLine(text);
 }

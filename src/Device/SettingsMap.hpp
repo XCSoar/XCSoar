@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Util/Serial.hpp"
 #include "Time/TimeoutClock.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Thread/Cond.hxx"
 #include "Operation/Operation.hpp"
 
@@ -45,6 +45,7 @@ Copyright_License {
 template<typename V>
 class DeviceSettingsMap {
   Mutex mutex;
+
   Cond cond;
 
   struct Item {
@@ -83,14 +84,6 @@ public:
     }
   };
 
-  void Lock() {
-    mutex.Lock();
-  }
-
-  void Unlock() {
-    mutex.Unlock();
-  }
-
   operator Mutex &() const {
     return const_cast<Mutex &>(mutex);
   }
@@ -117,7 +110,7 @@ public:
       if (remaining <= 0)
         return end();
 
-      cond.timed_wait(*this, remaining);
+      cond.wait_for(*this, std::chrono::milliseconds(remaining));
     }
   }
 
@@ -147,7 +140,7 @@ public:
     if (!i.second)
       item.value = value;
 
-    cond.broadcast();
+    cond.notify_all();
   }
 
   template<typename K>

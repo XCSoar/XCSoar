@@ -33,7 +33,7 @@ Copyright_License {
 #include "Port/ConfiguredPort.hpp"
 #include "Port/DumpPort.hpp"
 #include "NMEA/Info.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Util/StringAPI.hxx"
 #include "Util/ConvertString.hpp"
 #include "Util/Exception.hxx"
@@ -98,10 +98,10 @@ public:
   };
 };
 
-DeviceDescriptor::DeviceDescriptor(boost::asio::io_service &_io_service,
+DeviceDescriptor::DeviceDescriptor(boost::asio::io_context &_io_context,
                                    unsigned _index,
                                    PortListener *_port_listener)
-  :io_service(_io_service), index(_index),
+  :io_context(_io_context), index(_index),
    port_listener(_port_listener),
    open_job(nullptr),
    port(nullptr), monitor(nullptr), dispatcher(nullptr),
@@ -248,7 +248,7 @@ DeviceDescriptor::OpenOnPort(DumpPort *_port, OperationEnvironment &env)
   reopen_clock.Update();
 
   {
-    const ScopeLock lock(device_blackboard->mutex);
+    const std::lock_guard<Mutex> lock(device_blackboard->mutex);
     device_blackboard->SetRealState(index).Reset();
     device_blackboard->ScheduleMerge();
   }
@@ -267,7 +267,7 @@ DeviceDescriptor::OpenOnPort(DumpPort *_port, OperationEnvironment &env)
   if (driver->CreateOnPort != nullptr) {
     Device *new_device = driver->CreateOnPort(config, *port);
 
-    const ScopeLock protect(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
     device = new_device;
 
     if (driver->HasPassThrough() && config.use_second_device)
@@ -437,7 +437,7 @@ try {
   assert(config.IsAvailable());
 
   {
-    ScopeLock protect(mutex);
+    std::lock_guard<Mutex> lock(mutex);
     error_message.clear();
   }
 
@@ -463,7 +463,7 @@ try {
 
   Port *port;
   try {
-    port = OpenPort(io_service, config, this, *this);
+    port = OpenPort(io_context, config, this, *this);
   } catch (...) {
     const auto e = std::current_exception();
 
@@ -476,7 +476,7 @@ try {
 
     const UTF8ToWideConverter what(GetFullMessage(e).c_str());
     if (what.IsValid()) {
-      ScopeLock protect(mutex);
+      std::lock_guard<Mutex> lock(mutex);
       error_message = what;
     }
 
@@ -576,7 +576,7 @@ DeviceDescriptor::Close()
   Device *old_device = device;
 
   {
-    const ScopeLock protect(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
     device = nullptr;
     /* after leaving this scope, no other thread may use the old
        object; to avoid locking the mutex for too long, the "delete"
@@ -595,7 +595,7 @@ DeviceDescriptor::Close()
   ticker = false;
 
   {
-    const ScopeLock lock(device_blackboard->mutex);
+    const std::lock_guard<Mutex> lock(device_blackboard->mutex);
     device_blackboard->SetRealState(index).Reset();
     device_blackboard->ScheduleMerge();
   }
@@ -733,7 +733,7 @@ DeviceDescriptor::Return()
 bool
 DeviceDescriptor::IsAlive() const
 {
-  ScopeLock protect(device_blackboard->mutex);
+  std::lock_guard<Mutex> lock(device_blackboard->mutex);
   return device_blackboard->RealState(index).alive;
 }
 
@@ -830,7 +830,7 @@ DeviceDescriptor::PutMacCready(double value, OperationEnvironment &env)
   if (!device->PutMacCready(value, env))
     return false;
 
-  ScopeLock protect(device_blackboard->mutex);
+  std::lock_guard<Mutex> lock(device_blackboard->mutex);
   NMEAInfo &basic = device_blackboard->SetRealState(index);
   settings_sent.mac_cready = value;
   settings_sent.mac_cready_available.Update(basic.clock);
@@ -855,7 +855,7 @@ DeviceDescriptor::PutBugs(double value, OperationEnvironment &env)
   if (!device->PutBugs(value, env))
     return false;
 
-  ScopeLock protect(device_blackboard->mutex);
+  std::lock_guard<Mutex> lock(device_blackboard->mutex);
   NMEAInfo &basic = device_blackboard->SetRealState(index);
   settings_sent.bugs = value;
   settings_sent.bugs_available.Update(basic.clock);
@@ -882,7 +882,7 @@ DeviceDescriptor::PutBallast(double fraction, double overload,
   if (!device->PutBallast(fraction, overload, env))
     return false;
 
-  ScopeLock protect(device_blackboard->mutex);
+  std::lock_guard<Mutex> lock(device_blackboard->mutex);
   NMEAInfo &basic = device_blackboard->SetRealState(index);
   settings_sent.ballast_fraction = fraction;
   settings_sent.ballast_fraction_available.Update(basic.clock);
@@ -962,7 +962,7 @@ DeviceDescriptor::PutQNH(const AtmosphericPressure &value,
   if (!device->PutQNH(value, env))
     return false;
 
-  ScopeLock protect(device_blackboard->mutex);
+  std::lock_guard<Mutex> lock(device_blackboard->mutex);
   NMEAInfo &basic = device_blackboard->SetRealState(index);
   settings_sent.qnh = value;
   settings_sent.qnh_available.Update(basic.clock);
@@ -1133,7 +1133,7 @@ DeviceDescriptor::OnSensorUpdate(const MoreData &basic)
   /* must hold the mutex because this method may run in any thread,
      just in case the main thread deletes the Device while this method
      still runs */
-  const ScopeLock protect(mutex);
+  const std::lock_guard<Mutex> lock(mutex);
 
   if (device != nullptr)
     device->OnSensorUpdate(basic);
@@ -1152,7 +1152,7 @@ DeviceDescriptor::OnCalculatedUpdate(const MoreData &basic,
 bool
 DeviceDescriptor::ParseLine(const char *line)
 {
-  ScopeLock protect(device_blackboard->mutex);
+  std::lock_guard<Mutex> lock(device_blackboard->mutex);
   NMEAInfo &basic = device_blackboard->SetRealState(index);
   basic.UpdateClock();
   return ParseNMEA(line, basic);
@@ -1195,7 +1195,7 @@ DeviceDescriptor::PortError(const char *msg)
   {
     const UTF8ToWideConverter tmsg(msg);
     if (tmsg.IsValid()) {
-      ScopeLock protect(mutex);
+      std::lock_guard<Mutex> lock(mutex);
       error_message = tmsg;
     }
   }
@@ -1212,7 +1212,7 @@ DeviceDescriptor::DataReceived(const void *data, size_t length)
 
   // Pass data directly to drivers that use binary data protocols
   if (driver != nullptr && device != nullptr && driver->UsesRawData()) {
-    ScopeLock protect(device_blackboard->mutex);
+    std::lock_guard<Mutex> lock(device_blackboard->mutex);
     NMEAInfo &basic = device_blackboard->SetRealState(index);
     basic.UpdateClock();
 

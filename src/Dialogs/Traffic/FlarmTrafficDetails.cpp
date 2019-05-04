@@ -105,7 +105,7 @@ private:
   void OnFriendColorClicked(FlarmColor color);
 
   /* virtual methods from ActionListener */
-  void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 
   /* virtual methods from BlackboardListener */
   void OnGPSUpdate(const MoreData &basic) override {
@@ -342,7 +342,7 @@ FlarmTrafficDetailsWidget::OnFriendColorClicked(FlarmColor color)
 }
 
 void
-FlarmTrafficDetailsWidget::OnAction(int id)
+FlarmTrafficDetailsWidget::OnAction(int id) noexcept
 {
   switch (id) {
   case CHANGE_CALLSIGN:

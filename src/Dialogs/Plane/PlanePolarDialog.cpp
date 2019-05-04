@@ -97,7 +97,7 @@ private:
   virtual void OnModified(DataField &df) override;
 
   /* virtual methods from ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
@@ -245,7 +245,7 @@ PlanePolarWidget::ImportClicked()
 }
 
 void
-PlanePolarWidget::OnAction(int id)
+PlanePolarWidget::OnAction(int id) noexcept
 {
   switch (id) {
   case LIST:

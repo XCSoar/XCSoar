@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_ASIO_UTIL_HPP
 #define XCSOAR_ASIO_UTIL_HPP
 
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Thread/Cond.hxx"
 
 #include <boost/asio.hpp>
@@ -50,15 +50,15 @@ DispatchWait(boost::asio::io_service &io_service, F &&f)
   Cond cond;
   bool finished = false;
 
-  io_service.dispatch([&](){
+  boost::asio::dispatch(io_service, [&](){
       f();
 
-      ScopeLock lock(mutex);
+      std::lock_guard<Mutex> lock(mutex);
       finished = true;
-      cond.signal();
+      cond.notify_one();
     });
 
-  ScopeLock lock(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   while (!finished)
     cond.wait(mutex);
 }
@@ -82,7 +82,8 @@ template<typename T>
 void
 CancelWait(T &t)
 {
-  CancelWait(t.get_io_service(), t);
+  // TODO: this cast is not safe; improve this!
+  CancelWait((boost::asio::io_context &)t.get_executor().context(), t);
 }
 
 #endif

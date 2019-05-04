@@ -124,7 +124,7 @@ protected:
 
 private:
   /* virtual methods from ActionListener */
-  void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 
   /* virtual methods from class ListControl::Handler */
   void OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx) override;
@@ -175,7 +175,7 @@ TaskListPanel::get_cursor_name()
 }
 
 void
-TaskListPanel::OnAction(int id)
+TaskListPanel::OnAction(int id) noexcept
 {
   switch (id) {
   case LOAD:

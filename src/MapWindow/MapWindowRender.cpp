@@ -60,7 +60,7 @@ MapWindow::RenderRasp(Canvas &canvas)
   const WeatherUIState &state = GetUIState().weather;
   if (rasp_renderer && state.map != (int)rasp_renderer->GetParameter()) {
 #ifndef ENABLE_OPENGL
-    const ScopeLock protect(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
 #endif
 
     rasp_renderer.reset();
@@ -71,7 +71,7 @@ MapWindow::RenderRasp(Canvas &canvas)
 
   if (!rasp_renderer) {
 #ifndef ENABLE_OPENGL
-    const ScopeLock protect(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
 #endif
     rasp_renderer.reset(new RaspRenderer(*rasp_store, state.map));
   }
@@ -165,7 +165,7 @@ MapWindow::DrawWaves(Canvas &canvas)
 
 #ifdef HAVE_SKYLINES_TRACKING
   if (skylines_data != nullptr) {
-    ScopeLock protect(skylines_data->mutex);
+    std::lock_guard<Mutex> lock(skylines_data->mutex);
     renderer.Draw(canvas, render_projection, *skylines_data);
   }
 #endif

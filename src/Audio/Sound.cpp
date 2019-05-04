@@ -30,7 +30,7 @@ Copyright_License {
 #include "Android/Context.hpp"
 #endif
 
-#if defined(WIN32)
+#if defined(_WIN32)
 #include "ResourceLoader.hpp"
 #include <windows.h>
 #include <mmsystem.h>
@@ -48,7 +48,7 @@ PlayResource(const TCHAR *resource_name)
     return SoundUtil::PlayExternal(Java::GetEnv(), context->Get(), resource_name);
   return SoundUtil::Play(Java::GetEnv(), context->Get(), resource_name);
 
-#elif defined(WIN32)
+#elif defined(_WIN32)
 
   if (_tcsstr(resource_name, TEXT(".wav")))
     return sndPlaySound(resource_name, SND_ASYNC | SND_NODEFAULT);

@@ -26,10 +26,6 @@ Copyright_License {
 
 #include "Compiler.h"
 
-#ifndef NDEBUG
-#include <boost/intrusive/list_hook.hpp>
-#endif
-
 #ifdef HAVE_POSIX
 #include <pthread.h>
 #else
@@ -63,11 +59,6 @@ class Thread {
 #endif
 
 public:
-
-#ifndef NDEBUG
-  typedef boost::intrusive::list_member_hook<boost::intrusive::link_mode<boost::intrusive::normal_link>> SiblingsHook;
-  SiblingsHook siblings;
-#endif
 
 #ifdef HAVE_POSIX
   Thread(const char *_name=nullptr):name(_name), defined(false) {
@@ -138,11 +129,5 @@ private:
   static DWORD WINAPI ThreadProc(LPVOID lpParameter);
 #endif
 };
-
-#ifndef NDEBUG
-gcc_pure
-bool
-ExistsAnyThread();
-#endif
 
 #endif

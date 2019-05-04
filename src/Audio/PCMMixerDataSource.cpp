@@ -36,7 +36,7 @@ PCMMixerDataSource::AddSource(PCMDataSource &source)
 {
   assert(source.GetSampleRate() == sample_rate);
 
-  const ScopeLock protect(lock);
+  const std::lock_guard<Mutex> protect(lock);
 
 #ifndef NDEBUG
   for (unsigned i = 0; i < MAX_MIXER_SOURCES_COUNT; ++i) {
@@ -57,7 +57,7 @@ PCMMixerDataSource::AddSource(PCMDataSource &source)
 void
 PCMMixerDataSource::RemoveSource(PCMDataSource &source)
 {
-  const ScopeLock protect(lock);
+  const std::lock_guard<Mutex> protect(lock);
 
   for (unsigned i = 0; i < MAX_MIXER_SOURCES_COUNT; ++i) {
     if (sources[i] == &source) {
@@ -72,7 +72,7 @@ PCMMixerDataSource::SetVolume(unsigned _vol_percent)
 {
   assert(_vol_percent <= 100);
 
-  const ScopeLock protect(lock);
+  const std::lock_guard<Mutex> protect(lock);
   vol_percent = _vol_percent;
 }
 
@@ -84,7 +84,7 @@ PCMMixerDataSource::GetData(int16_t *buffer, size_t n)
   PCMDataSource *sources_to_remove[MAX_MIXER_SOURCES_COUNT];
   unsigned sources_to_remove_count = 0;
 
-  const ScopeLock protect(lock);
+  const std::lock_guard<Mutex> protect(lock);
 
   for (unsigned i = 0; i < MAX_MIXER_SOURCES_COUNT; ++i) {
     PCMDataSource *source = sources[i];

@@ -32,7 +32,7 @@ Copyright_License {
 #include <stdint.h>
 #include <tchar.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #undef NO_ERROR
 #endif
 

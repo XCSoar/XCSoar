@@ -210,9 +210,9 @@ PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings)
 
   const auto value = line.Rest();
 
-  settings.Lock();
+  const std::lock_guard<Mutex> lock(settings);
   settings.Set(name, std::string(value.begin(), value.end()));
-  settings.Unlock();
+
   return true;
 }
 
@@ -246,9 +246,8 @@ PLXVC(NMEAInputLine &line, DeviceInfo &device,
 
     const auto value = line.Rest();
     if (!StringIsEmpty(name)) {
-      settings.Lock();
+      const std::lock_guard<Mutex> lock(settings);
       settings.Set(name, std::string(value.begin(), value.end()));
-      settings.Unlock();
     }
   } else if (StringIsEqual(key, "INFO") && type[0] == 'A') {
     ParseNanoInfo(line, device);

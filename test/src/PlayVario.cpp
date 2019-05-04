@@ -38,15 +38,17 @@ Copyright_License {
 #include <memory>
 
 class ReplayTimer {
+  boost::asio::io_context &io_context;
   boost::asio::steady_timer timer;
   DebugReplay &replay;
   VarioSynthesiser &synthesiser;
 
 public:
-  ReplayTimer(boost::asio::io_service &io_service,
+  ReplayTimer(boost::asio::io_context &_io_context,
               DebugReplay &_replay,
               VarioSynthesiser &_synthesiser)
-    :timer(io_service, std::chrono::seconds(0)),
+    :io_context(_io_context),
+     timer(io_context, std::chrono::seconds(0)),
      replay(_replay), synthesiser(_synthesiser) {}
 
   ~ReplayTimer() {
@@ -61,7 +63,7 @@ public:
 private:
   void OnTimer(const boost::system::error_code &ec) {
     if (ec || !replay.Next()) {
-      timer.get_io_service().stop();
+      io_context.stop();
       return;
     }
 

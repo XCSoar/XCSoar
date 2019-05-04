@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TRACE_COMPUTER_HPP
 #define XCSOAR_TRACE_COMPUTER_HPP
 
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Engine/Trace/Trace.hpp"
 
 struct ComputerSettings;
@@ -47,12 +47,8 @@ class TraceComputer {
 public:
   TraceComputer();
 
-  void Lock() const {
-    mutex.Lock();
-  }
-
-  void Unlock() const {
-    mutex.Unlock();
+  operator Mutex &() const {
+    return const_cast<Mutex &>(mutex);
   }
 
   /**

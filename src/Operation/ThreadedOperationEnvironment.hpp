@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Operation/Operation.hpp"
 #include "Event/DelayedNotify.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Thread/Cond.hxx"
 #include "Util/StaticString.hxx"
 
@@ -101,26 +101,26 @@ public:
   explicit ThreadedOperationEnvironment(OperationEnvironment &_other);
 
   void Cancel() {
-    const ScopeLock lock(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
     if (!cancel_flag) {
       cancel_flag = true;
-      cancel_cond.signal();
+      cancel_cond.notify_one();
     }
   }
 
 private:
   bool LockSetProgressRange(unsigned range) {
-    const ScopeLock lock(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
     return data.SetProgressRange(range);
   }
 
   bool LockSetProgressPosition(unsigned position) {
-    const ScopeLock lock(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
     return data.SetProgressPosition(position);
   }
 
   Data LockReceiveData() {
-    const ScopeLock lock(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
     Data new_data = data;
     data.ClearUpdate();
     return new_data;

@@ -41,7 +41,7 @@ Copyright_License {
 #include "Java/Object.hxx"
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -61,7 +61,7 @@ static MOLoader *mo_loader;
 
 #ifdef HAVE_BUILTIN_LANGUAGES
 
-#ifndef WIN32
+#ifndef _WIN32
 /**
  * Several fake WIN32 constants.  These are not used on Android, but
  * we need them or we have to have a separate version of
@@ -199,7 +199,7 @@ const BuiltinLanguage language_table[] = {
   { 0, nullptr, 0, nullptr, nullptr }
 };
 
-#ifdef WIN32
+#ifdef _WIN32
 
 gcc_pure
 static const BuiltinLanguage *
@@ -286,7 +286,7 @@ DetectLanguage()
   // Return e.g. "de.mo"
   return FindLanguage(language_buffer);
 
-#elif defined(WIN32)
+#elif defined(_WIN32)
 
   // Retrieve the default user language identifier from the OS
   LANGID lang_id = GetUserDefaultUILanguage();

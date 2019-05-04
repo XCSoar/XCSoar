@@ -28,6 +28,7 @@ Version 7.0 - not yet released
 * tracking
   - use DNS to resolve SkyLines server IP (#2604)
   - enable SkyLines traffic display on Windows
+  - add option to show SkyLines traffic names on the map
   - show thermals obtained from the XCSoar Cloud server
 * analysis
   - enhanced graphics: minor tics, color scheme, layout
@@ -58,13 +59,18 @@ Version 7.0 - not yet released
   - drop support for SDL 1.2
   - display rotation
 * Android
-  - drop support for ARMv6 CPUs
+  - drop support for ARMv6 and MIPS CPUs
 * Kobo
   - support Kobo Glo HD
 
-Version 6.8.12 - not yet released
+Version 6.8.12 - 2019/04/30
+* weather
+  - update source URLs for METARs and TAFs (https://)
 * Android
   - increase targetSdkVersion to 26 (required by Google Play)
+  - request storage and GPS permissions on Android 6+
+  - fix crash when permission to use GPS is revoked
+  - fix notification on Android 8+
 * Task Editor
   - fixed task editor crashes (Ticket 3930).
 * devices

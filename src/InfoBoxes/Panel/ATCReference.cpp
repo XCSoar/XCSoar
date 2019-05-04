@@ -53,7 +53,7 @@ public:
 
 private:
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
@@ -95,7 +95,7 @@ ATCReferencePanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-ATCReferencePanel::OnAction(int id)
+ATCReferencePanel::OnAction(int id) noexcept
 {
   GeoPoint &location =
     CommonInterface::SetComputerSettings().poi.atc_reference;

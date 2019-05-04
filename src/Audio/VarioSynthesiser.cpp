@@ -27,6 +27,8 @@ Copyright_License {
 
 #include <algorithm>
 
+#include <assert.h>
+
 /**
  * The minimum and maximum vario range for the constants below [cm/s].
  */
@@ -44,7 +46,7 @@ VarioSynthesiser::VarioToFrequency(int ivario)
 void
 VarioSynthesiser::SetVario(double vario)
 {
-  const ScopeLock protect(mutex);
+  const std::lock_guard<Mutex> lock(mutex);
 
   const int ivario = Clamp((int)(vario * 100), min_vario, max_vario);
 
@@ -87,7 +89,7 @@ VarioSynthesiser::SetVario(double vario)
 void
 VarioSynthesiser::SetSilence()
 {
-  const ScopeLock protect(mutex);
+  const std::lock_guard<Mutex> lock(mutex);
   UnsafeSetSilence();
 }
 
@@ -110,7 +112,7 @@ VarioSynthesiser::UnsafeSetSilence()
 void
 VarioSynthesiser::Synthesise(int16_t *buffer, size_t n)
 {
-  const ScopeLock protect(mutex);
+  const std::lock_guard<Mutex> lock(mutex);
 
   assert(audible_count > 0 || silence_count > 0);
 

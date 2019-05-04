@@ -54,7 +54,7 @@ public:
      allow_edit(_allow_edit) {}
 
   /* methods from ActionListener */
-  void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 
   /* methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;

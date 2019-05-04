@@ -112,8 +112,7 @@ public:
 
 protected:
   /* virtual methods from Widget */
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override {
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override {
     Layout layout(rc);
 
     WindowStyle style;
@@ -127,18 +126,18 @@ protected:
                        layout.save, style, *this, SAVE);
   }
 
-  virtual void Show(const PixelRect &rc) override {
+  void Show(const PixelRect &rc) override {
     Layout layout(rc);
     demo_button.MoveAndShow(layout.demo);
     save_button.MoveAndShow(layout.save);
   }
 
-  virtual void Hide() override {
+  void Hide() override {
     demo_button.FastHide();
     save_button.FastHide();
   }
 
-  virtual void Move(const PixelRect &rc) override {
+  void Move(const PixelRect &rc) override {
     Layout layout(rc);
     demo_button.Move(layout.demo);
     save_button.Move(layout.save);
@@ -149,7 +148,7 @@ private:
   void OnSave();
 
   /* virtual methods from ActionListener */
-  virtual void OnAction(int id) override {
+  void OnAction(int id) noexcept override {
     switch (id) {
     case DEMO:
       OnDemo();
@@ -221,7 +220,7 @@ public:
     :RowFormWidget(look), pager(_pager) {}
 
   /* methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) {
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override {
     RowFormWidget::Prepare(parent, rc);
 
     AddButton(_T("Vega"), *this, 0);
@@ -231,7 +230,7 @@ public:
   }
 
   /* methods from ActionListener */
-  virtual void OnAction(int id) {
+  void OnAction(int id) noexcept override {
     SetParametersScheme(pager, id);
   }
 };

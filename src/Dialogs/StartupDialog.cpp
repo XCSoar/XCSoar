@@ -172,8 +172,8 @@ SelectProfile(Path path)
   try {
     if (!CheckProfilePasswordResult(CheckProfileFilePassword(path)))
       return false;
-  } catch (const std::runtime_error &e) {
-    ShowError(e, _("Password"));
+  } catch (...) {
+    ShowError(std::current_exception(), _("Password"));
     return false;
   }
 

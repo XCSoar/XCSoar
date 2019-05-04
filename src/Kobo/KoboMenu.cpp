@@ -94,7 +94,7 @@ public:
   virtual bool KeyPress(unsigned key_code) override;
 
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
@@ -136,7 +136,7 @@ KoboMenuWidget::KeyPress(unsigned key_code)
 }
 
 void
-KoboMenuWidget::OnAction(int id)
+KoboMenuWidget::OnAction(int id) noexcept
 {
   switch (id) {
   case TOOLS:

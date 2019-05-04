@@ -31,9 +31,10 @@ VegaDevice::LinkTimeout()
   AbstractDevice::LinkTimeout();
   detected = false;
 
-  settings.Lock();
-  settings.clear();
-  settings.Unlock();
+  {
+    const std::lock_guard<Mutex> lock(settings);
+    settings.clear();
+  }
 }
 
 void

@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Compiler.h"
 #include "Thread/Thread.hpp"
-#include "Mutex.hpp"
+#include "Mutex.hxx"
 #include "Cond.hxx"
 
 /**

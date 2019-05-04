@@ -62,7 +62,7 @@ Copyright_License {
 #include "Look/Look.hpp"
 #include "OS/Args.hpp"
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <shellapi.h>
 #endif
 

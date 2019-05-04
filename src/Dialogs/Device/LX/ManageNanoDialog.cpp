@@ -49,7 +49,7 @@ public:
 
 private:
   /* virtual methods from ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
@@ -85,7 +85,7 @@ ManageNanoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-ManageNanoWidget::OnAction(int id)
+ManageNanoWidget::OnAction(int id) noexcept
 {
   switch (id) {
   case SETUP:

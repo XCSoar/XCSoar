@@ -145,7 +145,7 @@ operator<<(Serialiser &s, const boost::asio::ip::udp::endpoint &endpoint)
 inline Deserialiser &
 operator>>(Deserialiser &s, boost::asio::ip::udp::endpoint &endpoint)
 {
-  endpoint.address(boost::asio::ip::address::from_string(s.ReadString()));
+  endpoint.address(boost::asio::ip::make_address(s.ReadString()));
   endpoint.port(s.Read16());
   return s;
 }

@@ -85,7 +85,7 @@ NunchuckDevice::onNunchuckValues(int joy_x, int joy_y, int acc_x, int acc_y, int
 {
   static int joy_state_x, joy_state_y;
 
-  ScopeLock protect(device_blackboard->mutex);
+  std::lock_guard<Mutex> lock(device_blackboard->mutex);
   NMEAInfo &basic = device_blackboard->SetRealState(index);
   basic.UpdateClock();
   basic.alive.Update(basic.clock);
@@ -133,7 +133,7 @@ NunchuckDevice::onNunchuckValues(int joy_x, int joy_y, int acc_x, int acc_y, int
 void
 NunchuckDevice::onNunchuckError()
 {
-  ScopeLock protect(device_blackboard->mutex);
+  std::lock_guard<Mutex> lock(device_blackboard->mutex);
   NMEAInfo &basic = device_blackboard->SetRealState(index);
 
   basic.acceleration.Reset();

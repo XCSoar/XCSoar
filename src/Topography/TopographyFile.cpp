@@ -153,7 +153,7 @@ TopographyFile::Update(const WindowProjection &map_projection)
 
         /* remove from linked list (protected) */
         {
-          const ScopeLock lock(mutex);
+          const std::lock_guard<Mutex> lock(mutex);
           *current = it->next;
           ++serial;
         }
@@ -174,7 +174,7 @@ TopographyFile::Update(const WindowProjection &map_projection)
 
         /* insert into linked list (protected) */
         {
-          const ScopeLock lock(mutex);
+          const std::lock_guard<Mutex> lock(mutex);
           *current = it;
           ++serial;
         }

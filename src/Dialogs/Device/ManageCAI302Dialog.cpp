@@ -58,7 +58,7 @@ public:
 
 private:
   /* virtual methods from ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
@@ -102,7 +102,7 @@ UploadWaypoints(const DialogLook &look, CAI302Device &device)
 }
 
 void
-ManageCAI302Widget::OnAction(int id)
+ManageCAI302Widget::OnAction(int id) noexcept
 {
   switch (id) {
   case Units:

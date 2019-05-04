@@ -43,7 +43,7 @@ AirspaceClassRendererSettingsPanel::AirspaceClassRendererSettingsPanel(AirspaceC
 }
 
 void
-AirspaceClassRendererSettingsPanel::OnAction(int id)
+AirspaceClassRendererSettingsPanel::OnAction(int id) noexcept
 {
   if (id == BorderColor)
     border_color_changed |= ShowColorListDialog(settings.border_color);

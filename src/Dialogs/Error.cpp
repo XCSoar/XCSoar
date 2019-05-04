@@ -24,12 +24,11 @@ Copyright_License {
 #include "Error.hpp"
 #include "Message.hpp"
 #include "Util/ConvertString.hpp"
-
-#include <exception>
+#include "Util/Exception.hxx"
 
 void
-ShowError(const std::exception &exception, const TCHAR *caption)
+ShowError(std::exception_ptr e, const TCHAR *caption) noexcept
 {
-  ShowMessageBox(UTF8ToWideConverter(exception.what()), caption,
+  ShowMessageBox(UTF8ToWideConverter(GetFullMessage(e).c_str()), caption,
                  MB_OK|MB_ICONEXCLAMATION);
 }

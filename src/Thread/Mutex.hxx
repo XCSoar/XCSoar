@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright (C) 2009-2016 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,23 +27,41 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CLAMP_HPP
-#define CLAMP_HPP
+#ifndef THREAD_MUTEX_HXX
+#define THREAD_MUTEX_HXX
 
-#include "Compiler.h"
+#include <mutex>
+
+#ifdef _WIN32
+
+#include "CriticalSection.hxx"
+using Mutex = CriticalSection;
+
+#else
+
+#include "PosixMutex.hxx"
+using Mutex = PosixMutex;
+
+#endif
 
 /**
- * Clamps the specified value in a range.  Returns #min or #max if the
- * value is outside.
+ * Within the scope of an instance, this class will keep a #Mutex
+ * unlocked.
  */
-template<typename T>
-constexpr const T &
-Clamp(const T &value, const T &min, const T &max)
-{
-  return gcc_unlikely(value < min)
-    ? min
-    : (gcc_unlikely(value > max)
-       ? max : value);
-}
+class ScopeUnlock {
+	Mutex &mutex;
+
+public:
+	explicit ScopeUnlock(Mutex &_mutex) noexcept:mutex(_mutex) {
+		mutex.unlock();
+	};
+
+	~ScopeUnlock() noexcept {
+		mutex.lock();
+	}
+
+	ScopeUnlock(const ScopeUnlock &other) = delete;
+	ScopeUnlock &operator=(const ScopeUnlock &other) = delete;
+};
 
 #endif

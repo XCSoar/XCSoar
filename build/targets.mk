@@ -2,8 +2,8 @@ TARGETS = PC WIN64 \
 	UNIX UNIX32 UNIX64 OPT \
 	WAYLAND \
 	PI PI2 CUBIE KOBO NEON \
-	ANDROID ANDROID7 ANDROID7NEON ANDROID86 ANDROIDMIPS \
-	ANDROIDAARCH64 ANDROIDX64 ANDROIDMIPS64 \
+	ANDROID ANDROID7 ANDROID7NEON ANDROID86 \
+	ANDROIDAARCH64 ANDROIDX64 \
 	ANDROIDFAT \
 	CYGWIN \
 	OSX64 IOS32 IOS64
@@ -40,8 +40,6 @@ ARMV7 := n
 NEON := n
 AARCH64 := n
 X86 := n
-MIPS := n
-MIPS64 := n
 FAT_BINARY := n
 
 TARGET_IS_DARWIN := n
@@ -86,11 +84,6 @@ ifeq ($(TARGET),ANDROID86)
   override TARGET = ANDROID
 endif
 
-ifeq ($(TARGET),ANDROIDMIPS)
-  MIPS := y
-  override TARGET = ANDROID
-endif
-
 ifeq ($(TARGET),ANDROIDAARCH64)
   AARCH64 := y
   override TARGET = ANDROID
@@ -98,11 +91,6 @@ endif
 
 ifeq ($(TARGET),ANDROIDX64)
   X64 := y
-  override TARGET = ANDROID
-endif
-
-ifeq ($(TARGET),ANDROIDMIPS64)
-  MIPS64 := y
   override TARGET = ANDROID
 endif
 
@@ -324,10 +312,10 @@ ifeq ($(TARGET),UNIX)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r19c
+  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r20-beta2
 
-  ANDROID_SDK_PLATFORM = android-22
-  ANDROID_NDK_PLATFORM = android-21
+  ANDROID_SDK_PLATFORM = android-26
+  ANDROID_NDK_API = 21
 
   ANDROID_ARCH = arm
   ANDROID_ABI2 = arm-linux-androideabi
@@ -348,12 +336,6 @@ ifeq ($(TARGET),ANDROID)
     HOST_TRIPLET = i686-linux-android
   endif
 
-  ifeq ($(MIPS),y)
-    ANDROID_ARCH = mips
-    ANDROID_ABI2 = mipsel-linux-android
-    ANDROID_ABI3 = mips
-  endif
-
   ifeq ($(AARCH64),y)
     ANDROID_ARCH = arm64
     ANDROID_ABI2 = aarch64-linux-android
@@ -367,11 +349,7 @@ ifeq ($(TARGET),ANDROID)
     HOST_TRIPLET = x86_64-linux-android
   endif
 
-  ifeq ($(MIPS64),y)
-    ANDROID_ARCH = mips64
-    ANDROID_ABI2 = mips64el-linux-android
-    ANDROID_ABI3 = mips64
-  endif
+  ANDROID_NDK_PLATFORM = android-$(ANDROID_NDK_API)
 
   ANDROID_SYSROOT = $(ANDROID_NDK)/sysroot
   ANDROID_NDK_PLATFORM_DIR = $(ANDROID_NDK)/platforms/$(ANDROID_NDK_PLATFORM)
@@ -413,10 +391,6 @@ ifeq ($(TARGET),ANDROID)
     LLVM_TARGET = i686-none-linux-android
   endif
 
-  ifeq ($(MIPS),y)
-    LLVM_TARGET = mipsel-none-linux-android
-  endif
-
   ifeq ($(ARMV7),y)
     LLVM_TARGET = armv7a-none-linux-androideabi
     TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp
@@ -434,10 +408,6 @@ ifeq ($(TARGET),ANDROID)
 
   ifeq ($(X64),y)
     LLVM_TARGET = x86_64-linux-android
-  endif
-
-  ifeq ($(MIPS64),y)
-    LLVM_TARGET = mips64el-linux-android
   endif
 
   TARGET_ARCH += -fpic -funwind-tables
@@ -551,7 +521,7 @@ ifeq ($(TARGET),ANDROID)
   TARGET_CPPFLAGS += --sysroot=$(ANDROID_SYSROOT)
   TARGET_CPPFLAGS += -isystem $(ANDROID_SYSROOT)/usr/include/$(HOST_TRIPLET)
   TARGET_CPPFLAGS += -DANDROID
-  TARGET_CPPFLAGS += -D__ANDROID_API__=21
+  TARGET_CPPFLAGS += -D__ANDROID_API__=$(ANDROID_NDK_API)
   CXXFLAGS += -D__STDC_VERSION__=199901L
 
   ifeq ($(X86),y)
@@ -633,7 +603,7 @@ endif
 
 ifeq ($(TARGET),ANDROID)
   TARGET_LDFLAGS += -Wl,--no-undefined
-  ifeq ($(call bool_or,$(X64),$(MIPS64)),y)
+  ifeq ($(X64),y)
     TARGET_LDFLAGS += -L$(ANDROID_TARGET_ROOT)/usr/lib64
     TARGET_LDFLAGS += -B$(ANDROID_TARGET_ROOT)/usr/lib64
   else

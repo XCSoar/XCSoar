@@ -59,7 +59,7 @@ MessageProcessTimer()
 static void
 SystemClockTimer()
 {
-#ifdef WIN32
+#ifdef _WIN32
   const NMEAInfo &basic = CommonInterface::Basic();
 
   // as soon as we get a fix for the first time, set the

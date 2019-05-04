@@ -123,7 +123,7 @@ protected:
 
 private:
   /* virtual methods from class ActionListener */
-  void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
@@ -266,8 +266,8 @@ PlaneListWidget::NewClicked()
 
     try {
       PlaneGlue::WriteFile(plane, path);
-    } catch (const std::runtime_error &e) {
-      ShowError(e, _("Failed to save file."));
+    } catch (...) {
+      ShowError(std::current_exception(), _("Failed to save file."));
       return;
     }
 
@@ -315,8 +315,8 @@ PlaneListWidget::EditClicked()
 
       try {
         PlaneGlue::WriteFile(plane, path);
-      } catch (const std::runtime_error &e) {
-        ShowError(e, _("Failed to save file."));
+      } catch (...) {
+        ShowError(std::current_exception(), _("Failed to save file."));
         return;
       }
 
@@ -328,8 +328,8 @@ PlaneListWidget::EditClicked()
     } else {
       try {
         PlaneGlue::WriteFile(plane, old_path);
-      } catch (const std::runtime_error &e) {
-        ShowError(e, _("Failed to save file."));
+      } catch (...) {
+        ShowError(std::current_exception(), _("Failed to save file."));
         return;
       }
 
@@ -362,7 +362,7 @@ PlaneListWidget::DeleteClicked()
 }
 
 void
-PlaneListWidget::OnAction(int id)
+PlaneListWidget::OnAction(int id) noexcept
 {
   switch ((Buttons)id) {
   case NEW:

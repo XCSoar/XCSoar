@@ -28,14 +28,14 @@ class Port;
 class PortListener;
 class DataHandler;
 struct DeviceConfig;
-namespace boost { namespace asio { class io_service; }}
+namespace boost { namespace asio { class io_context; }}
 
 /**
  * Open the port described by #DeviceConfig.  On error, throws a
  * #std::runtime_error or returns nullptr.
  */
 Port *
-OpenPort(boost::asio::io_service &io_service,
+OpenPort(boost::asio::io_context &io_context,
          const DeviceConfig &config, PortListener *listener,
          DataHandler &handler);
 

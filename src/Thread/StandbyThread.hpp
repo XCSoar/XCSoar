@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Compiler.h"
 #include "Thread/Thread.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Cond.hxx"
 
 /**
@@ -77,15 +77,11 @@ public:
 
 private:
   void TriggerCommand() {
-    assert(mutex.IsLockedByCurrent());
-
-    cond.signal();
+    cond.notify_one();
   }
 
   void TriggerDone() {
-    assert(mutex.IsLockedByCurrent());
-
-    cond.signal();
+    cond.notify_one();
   }
 
 protected:
@@ -107,7 +103,7 @@ protected:
    * Caller must not lock the mutex.
    */
   void LockTrigger() {
-    ScopeLock protect(mutex);
+    std::lock_guard<Mutex> lock(mutex);
     Trigger();
   }
 
@@ -118,8 +114,6 @@ protected:
    */
   gcc_pure
   bool IsBusy() const {
-    assert(mutex.IsLockedByCurrent());
-
     return pending || busy;
   }
 
@@ -131,8 +125,6 @@ protected:
    */
   gcc_pure
   bool IsStopped() const {
-    assert(mutex.IsLockedByCurrent());
-
     return stop;
   }
 
@@ -156,7 +148,7 @@ protected:
    * Caller must not lock the mutex.
    */
   void LockWaitDone() {
-    ScopeLock protect(mutex);
+    std::lock_guard<Mutex> lock(mutex);
     WaitDone();
   }
 
@@ -173,14 +165,12 @@ protected:
    * Caller must lock the mutex.
    */
   void Stop() {
-    assert(mutex.IsLockedByCurrent());
-
     StopAsync();
     WaitStopped();
   }
 
   void LockStop() {
-    ScopeLock protect(mutex);
+    std::lock_guard<Mutex> lock(mutex);
     Stop();
   }
 

@@ -94,7 +94,7 @@ TaskManagerDialog::OnPageFlipped()
 }
 
 void
-TaskManagerDialog::OnAction(int id)
+TaskManagerDialog::OnAction(int id) noexcept
 {
   switch (id) {
   case MAP:
@@ -222,8 +222,8 @@ TaskManagerDialog::Commit()
 
     try {
       protected_task_manager->TaskSaveDefault();
-    } catch (const std::runtime_error &e) {
-      ShowError(e, _("Failed to save file."));
+    } catch (...) {
+      ShowError(std::current_exception(), _("Failed to save file."));
       return false;
     }
 

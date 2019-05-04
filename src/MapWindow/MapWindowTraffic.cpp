@@ -228,16 +228,34 @@ MapWindow::DrawTeammate(Canvas &canvas) const
 void
 MapWindow::DrawSkyLinesTraffic(Canvas &canvas) const
 {
-  if (skylines_data == nullptr)
+  if (DisplaySkyLinesTrafficMapMode::OFF == GetMapSettings().skylines_traffic_map_mode ||
+      skylines_data == nullptr)
     return;
 
   canvas.Select(*traffic_look.font);
 
-  ScopeLock protect(skylines_data->mutex);
+  std::lock_guard<Mutex> lock(skylines_data->mutex);
   for (auto &i : skylines_data->traffic) {
     PixelPoint pt;
     if (render_projection.GeoToScreenIfVisible(i.second.location, pt)) {
       traffic_look.teammate_icon.Draw(canvas, pt);
+      if (DisplaySkyLinesTrafficMapMode::SYMBOL_NAME == GetMapSettings().skylines_traffic_map_mode) {
+        const auto name_i = skylines_data->user_names.find(i.first);
+        const TCHAR *name = name_i != skylines_data->user_names.end()
+          ? name_i->second.c_str()
+          : _T("");
+
+        StaticString<128> buffer;
+        buffer.Format(_T("%s [%um]"), name, i.second.altitude);
+
+        TextInBoxMode mode;
+        mode.shape = LabelShape::OUTLINED;
+
+        // Draw the name 16 points below the icon
+        pt.y -= Layout::Scale(10);
+        TextInBox(canvas, buffer, pt.x, pt.y,
+                  mode, GetClientRect());
+      }
     }
   }
 }

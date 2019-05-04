@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TRACKING_SKYLINES_CLIENT_HPP
 #define XCSOAR_TRACKING_SKYLINES_CLIENT_HPP
 
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Compiler.h"
 
 #include <boost/asio/ip/udp.hpp>
@@ -62,9 +62,9 @@ class Client {
   boost::asio::ip::udp::endpoint sender_endpoint;
 
 public:
-  explicit Client(boost::asio::io_service &io_service,
+  explicit Client(boost::asio::io_context &io_context,
                   Handler *_handler=nullptr)
-    :handler(_handler), resolver(io_service), socket(io_service) {}
+    :handler(_handler), resolver(io_context), socket(io_context) {}
   ~Client() { Close(); }
 
   constexpr
@@ -77,10 +77,6 @@ public:
     return "5597";
   }
 
-  boost::asio::io_service &get_io_service() {
-    return socket.get_io_service();
-  }
-
   /**
    * Is SkyLines tracking enabled in configuration?
    */
@@ -89,13 +85,13 @@ public:
   }
 
   bool IsDefined() const {
-    const ScopeLock protect(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
     return resolving || socket.is_open();
   }
 
   gcc_pure
   bool IsConnected() const {
-    const ScopeLock protect(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
     return socket.is_open();
   }
 
@@ -113,7 +109,7 @@ public:
 
   template<typename P>
   void SendPacket(const P &packet) {
-    const ScopeLock protect(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
     socket.send_to(boost::asio::buffer(&packet, sizeof(packet)),
                    endpoint, 0);
   }

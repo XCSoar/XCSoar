@@ -228,7 +228,7 @@ AndroidPCMPlayer::Enqueue()
 {
   assert(source != nullptr);
 
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
 
   if (!filled) {
     filled = true;

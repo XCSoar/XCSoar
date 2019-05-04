@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "shapelib/mapprimitive.h"
 
-static inline constexpr GeoBounds
+constexpr GeoBounds
 ImportRect(const rectObj r)
 {
   return GeoBounds(GeoPoint(Angle::Degrees(r.minx),

@@ -39,7 +39,7 @@ Copyright_License {
 
 #include <alsa/asoundlib.h>
 
-namespace boost { namespace asio { class io_service; }}
+namespace boost { namespace asio { class io_context; }}
 
 /**
  * PCMPlayer implementation for the ALSA sound system
@@ -60,7 +60,7 @@ class ALSAPCMPlayer : public PCMPlayer {
 
   AlsaHandleUniquePtr alsa_handle = MakeAlsaHandleUniquePtr();
 
-  boost::asio::io_service &io_service;
+  boost::asio::io_context &io_context;
 
   snd_pcm_uframes_t buffer_size;
   std::unique_ptr<int16_t[]> buffer;
@@ -98,7 +98,7 @@ class ALSAPCMPlayer : public PCMPlayer {
                             unsigned &channels);
 
 public:
-  explicit ALSAPCMPlayer(boost::asio::io_service &_io_service);
+  explicit ALSAPCMPlayer(boost::asio::io_context &_io_context);
   virtual ~ALSAPCMPlayer();
 
   /* virtual methods from class PCMPlayer */

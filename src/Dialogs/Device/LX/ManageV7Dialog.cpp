@@ -55,7 +55,7 @@ public:
 
 private:
   /* virtual methods from ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
@@ -94,7 +94,7 @@ ManageV7Widget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-ManageV7Widget::OnAction(int id)
+ManageV7Widget::OnAction(int id) noexcept
 {
   MessageOperationEnvironment env;
 

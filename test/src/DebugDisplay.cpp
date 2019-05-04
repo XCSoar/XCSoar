@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Hardware/DisplayDPI.hpp"
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -32,7 +32,7 @@ Copyright_License {
 static void
 PrintScreenSize()
 {
-#ifdef WIN32
+#ifdef _WIN32
   unsigned width = GetSystemMetrics(SM_CXSCREEN);
   unsigned height = GetSystemMetrics(SM_CYSCREEN);
   printf("Width: %d px | Height: %d px\n", width, height);

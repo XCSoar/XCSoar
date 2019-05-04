@@ -31,7 +31,7 @@ Copyright_License {
 #include "Util/Serial.hpp"
 #include "Screen/Color.hpp"
 #include "ResourceId.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 
 #ifdef ENABLE_OPENGL
 #include "XShapePoint.hpp"
@@ -179,8 +179,6 @@ public:
   ~TopographyFile();
 
   const Serial &GetSerial() const {
-    assert(mutex.IsLockedByCurrent());
-
     return serial;
   }
 
@@ -243,14 +241,10 @@ public:
   }
 
   const_iterator begin() const {
-    assert(mutex.IsLockedByCurrent());
-
     return const_iterator(first);
   }
 
   const_iterator end() const {
-    assert(mutex.IsLockedByCurrent());
-
     return const_iterator(nullptr);
   }
 

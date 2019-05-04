@@ -100,7 +100,7 @@ public:
   void OnActivateItem(unsigned index) override;
 
   /* virtual methods from class ActionListener */
-  void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
@@ -128,7 +128,7 @@ AlternatesListWidget::OnActivateItem(unsigned index)
 }
 
 void
-AlternatesListWidget::OnAction(int id)
+AlternatesListWidget::OnAction(int id) noexcept
 {
   switch (id) {
   case GOTO:

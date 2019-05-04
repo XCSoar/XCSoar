@@ -28,7 +28,7 @@
  * nearest integral value.
  */
 template<typename T>
-static inline constexpr T
+constexpr T
 RoundingRightShift(T value, unsigned bits)
 {
   return (value + T(T(1) << (bits - 1))) >> bits;

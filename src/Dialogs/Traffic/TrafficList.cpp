@@ -314,7 +314,7 @@ public:
   }
 
   /* virtual methods from ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 
 private:
   /* virtual methods from BlackboardListener */
@@ -401,7 +401,7 @@ TrafficListWidget::UpdateList()
        dialog (from dlgTeamCode) */
     if (buttons != nullptr) {
       const auto &data = tracking->GetSkyLinesData();
-      const ScopeLock protect(data.mutex);
+      const std::lock_guard<Mutex> lock(data.mutex);
       for (const auto &i : data.traffic) {
         const auto name_i = data.user_names.find(i.first);
         tstring name = name_i != data.user_names.end()
@@ -477,7 +477,7 @@ TrafficListWidget::UpdateVolatile()
 #ifdef HAVE_SKYLINES_TRACKING
     } else if (i.IsSkyLines()) {
       const auto &data = tracking->GetSkyLinesData();
-      const ScopeLock protect(data.mutex);
+      const std::lock_guard<Mutex> lock(data.mutex);
 
       auto live = data.traffic.find(i.skylines_id);
       if (live != data.traffic.end()) {
@@ -744,7 +744,7 @@ TrafficListWidget::OnActivateItem(unsigned index)
 }
 
 void
-TrafficListWidget::OnAction(int id)
+TrafficListWidget::OnAction(int id) noexcept
 {
   switch (Buttons(id)) {
   case DETAILS:

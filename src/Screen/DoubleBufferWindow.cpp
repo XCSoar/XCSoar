@@ -61,7 +61,7 @@ DoubleBufferWindow::Flip()
 {
   /* enable the drawing buffer */
   {
-    const ScopeLock lock(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
     current ^= 1;
   }
 
@@ -76,7 +76,7 @@ DoubleBufferWindow::Flip()
 void
 DoubleBufferWindow::OnPaint(Canvas &canvas)
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   canvas.Copy(GetVisibleCanvas());
 }
 

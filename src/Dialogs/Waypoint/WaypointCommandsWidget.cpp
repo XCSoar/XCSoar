@@ -60,8 +60,8 @@ ReplaceInTask(ProtectedTaskManager &task_manager,
   case MapTaskManager::SUCCESS:
     try {
       task_manager.TaskSaveDefault();
-    } catch (const std::runtime_error &e) {
-      ShowError(e, _("Failed to save file."));
+    } catch (...) {
+      ShowError(std::current_exception(), _("Failed to save file."));
       return false;
     }
 
@@ -98,8 +98,8 @@ InsertInTask(ProtectedTaskManager &task_manager,
   case MapTaskManager::SUCCESS:
     try {
       task_manager.TaskSaveDefault();
-    } catch (const std::runtime_error &e) {
-      ShowError(e, _("Failed to save file."));
+    } catch (...) {
+      ShowError(std::current_exception(), _("Failed to save file."));
       return false;
     }
 
@@ -138,8 +138,8 @@ AppendToTask(ProtectedTaskManager &task_manager,
   case MapTaskManager::SUCCESS:
     try {
       task_manager.TaskSaveDefault();
-    } catch (const std::runtime_error &e) {
-      ShowError(e, _("Failed to save file."));
+    } catch (...) {
+      ShowError(std::current_exception(), _("Failed to save file."));
       return false;
     }
 
@@ -178,8 +178,8 @@ RemoveFromTask(ProtectedTaskManager &task_manager,
   case MapTaskManager::SUCCESS:
     try {
       task_manager.TaskSaveDefault();
-    } catch (const std::runtime_error &e) {
-      ShowError(e, _("Failed to save file."));
+    } catch (...) {
+      ShowError(std::current_exception(), _("Failed to save file."));
       return false;
     }
 
@@ -231,7 +231,7 @@ ActivatePan(const Waypoint &waypoint)
 }
 
 void
-WaypointCommandsWidget::OnAction(int id)
+WaypointCommandsWidget::OnAction(int id) noexcept
 {
   MessageOperationEnvironment env;
 
@@ -296,8 +296,8 @@ WaypointCommandsWidget::OnAction(int id)
 
         try {
           WaypointGlue::SaveWaypoints(way_points);
-        } catch (const std::runtime_error &e) {
-          ShowError(e, _("Failed to save waypoints"));
+        } catch (...) {
+          ShowError(std::current_exception(), _("Failed to save waypoints"));
         }
       }
     }

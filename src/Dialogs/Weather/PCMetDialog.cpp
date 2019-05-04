@@ -71,8 +71,8 @@ BitmapDialog(const PCMet::ImageType &type, const PCMet::ImageArea &area)
     }
 
     BitmapDialog(bitmap);
-  } catch (const std::exception &exception) {
-    ShowError(exception, _T("pc_met"));
+  } catch (...) {
+    ShowError(std::current_exception(), _T("pc_met"));
   }
 }
 

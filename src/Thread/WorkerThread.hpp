@@ -54,10 +54,10 @@ public:
    * Wakes up the thread to do work, calls tick().
    */
   void Trigger() {
-    const ScopeLock lock(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
     if (!trigger_flag) {
       trigger_flag = true;
-      trigger_cond.signal();
+      trigger_cond.notify_one();
     }
   }
 
@@ -65,7 +65,7 @@ public:
    * Suspend execution until Resume() is called.
    */
   void BeginSuspend() {
-    const ScopeLock lock(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
     _BeginSuspend();
   }
 
@@ -74,11 +74,11 @@ public:
    */
   void _BeginSuspend() {
     SuspensibleThread::_BeginSuspend();
-    trigger_cond.signal();
+    trigger_cond.notify_one();
   }
 
   void Suspend() {
-    const ScopeLock lock(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
     _BeginSuspend();
     _WaitUntilSuspended();
   }
@@ -88,9 +88,9 @@ public:
    * synchronously for the thread to exit.
    */
   void BeginStop() {
-    const ScopeLock lock(mutex);
+    const std::lock_guard<Mutex> lock(mutex);
     SuspensibleThread::_BeginStop();
-    trigger_cond.signal();
+    trigger_cond.notify_one();
   }
 
 protected:

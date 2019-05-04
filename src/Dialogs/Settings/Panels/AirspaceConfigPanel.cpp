@@ -112,7 +112,7 @@ private:
   virtual void OnModified(DataField &df) override;
 
   /* methods from ActionListener */
-  void OnAction(int id) override {
+  void OnAction(int id) noexcept override {
     switch (id) {
     case COLOURS:
       dlgAirspaceShowModal(true);

@@ -197,7 +197,7 @@ void
 TopographyFileRenderer::Paint(Canvas &canvas,
                               const WindowProjection &projection)
 {
-  const ScopeLock protect(file.mutex);
+  const std::lock_guard<Mutex> lock(file.mutex);
 
   if (file.IsEmpty())
     return;
@@ -428,7 +428,7 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
                                     const WindowProjection &projection,
                                     LabelBlock &label_block)
 {
-  const ScopeLock protect(file.mutex);
+  const std::lock_guard<Mutex> lock(file.mutex);
 
   if (file.IsEmpty())
     return;

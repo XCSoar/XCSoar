@@ -121,7 +121,7 @@ public:
   }
 
   /* virtual methods from ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 
 private:
   /* virtual methods from DataFieldListener */
@@ -346,7 +346,7 @@ FlightSetupPanel::Save(bool &changed)
 }
 
 void
-FlightSetupPanel::OnAction(int id)
+FlightSetupPanel::OnAction(int id) noexcept
 {
   if (id == DUMP)
     FlipBallastTimer();

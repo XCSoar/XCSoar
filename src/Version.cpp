@@ -42,7 +42,7 @@ Copyright_License {
   #else
     #define TARGET "macOS"
   #endif
-#elif !defined(WIN32)
+#elif !defined(_WIN32)
   #define TARGET "UNIX"
 #else
   #define TARGET "PC"

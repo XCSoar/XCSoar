@@ -29,10 +29,10 @@ Copyright_License {
 #include <boost/asio.hpp>
 
 /**
- * A thread which runs a boost::asio::io_service.
+ * A thread which runs a boost::asio::io_context.
  */
 class AsioThread final : protected Thread {
-  boost::asio::io_service io_service;
+  boost::asio::io_context io_context;
 
 public:
   AsioThread():Thread("asio") {}
@@ -49,12 +49,12 @@ public:
    */
   void Stop();
 
-  boost::asio::io_service &Get() {
-    return io_service;
+  auto &Get() {
+    return io_context;
   }
 
-  operator boost::asio::io_service &() {
-    return io_service;
+  operator boost::asio::io_context &() {
+    return io_context;
   }
 
 protected:

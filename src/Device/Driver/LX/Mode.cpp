@@ -33,17 +33,19 @@ LXDevice::LinkTimeout()
 {
   busy = false;
 
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
 
   ResetDeviceDetection();
 
-  v7_settings.Lock();
-  v7_settings.clear();
-  v7_settings.Unlock();
+  {
+    const std::lock_guard<Mutex> lock(v7_settings);
+    v7_settings.clear();
+  }
 
-  nano_settings.Lock();
-  nano_settings.clear();
-  nano_settings.Unlock();
+  {
+    const std::lock_guard<Mutex> lock(nano_settings);
+    nano_settings.clear();
+  }
 
   mode = Mode::UNKNOWN;
   old_baud_rate = 0;
@@ -55,7 +57,7 @@ LXDevice::EnableNMEA(OperationEnvironment &env)
   unsigned old_baud_rate;
 
   {
-    ScopeLock protect(mutex);
+    std::lock_guard<Mutex> lock(mutex);
     if (mode == Mode::NMEA)
       return true;
 
@@ -94,7 +96,7 @@ LXDevice::EnableNMEA(OperationEnvironment &env)
 void
 LXDevice::OnSysTicker()
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   if (mode == Mode::COMMAND && !busy) {
     /* keep the command mode alive while the user chooses a flight in
        the download dialog */
@@ -130,7 +132,7 @@ bool
 LXDevice::EnableCommandMode(OperationEnvironment &env)
 {
   {
-    ScopeLock protect(mutex);
+    std::lock_guard<Mutex> lock(mutex);
     if (mode == Mode::COMMAND)
       return true;
   }
@@ -171,14 +173,14 @@ LXDevice::EnableCommandMode(OperationEnvironment &env)
       old_baud_rate = 0;
     }
 
-    ScopeLock protect(mutex);
+    std::lock_guard<Mutex> lock(mutex);
     mode = Mode::UNKNOWN;
     return false;
   }
 
   busy = false;
 
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   mode = Mode::COMMAND;
   return true;
 }

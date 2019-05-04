@@ -62,11 +62,11 @@ class X11EventQueue {
 
 public:
   /**
-   * @param io_service the boost::asio::io_service that shall be used
+   * @param io_context the boost::asio::io_context that shall be used
    * to register the Xlib socket
    * @param queue the #EventQueue that shall receive X11 events
    */
-  X11EventQueue(boost::asio::io_service &io_service, EventQueue &queue);
+  X11EventQueue(boost::asio::io_context &io_context, EventQueue &queue);
 
   ~X11EventQueue();
 

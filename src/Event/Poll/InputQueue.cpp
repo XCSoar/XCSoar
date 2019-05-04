@@ -25,14 +25,14 @@ Copyright_License {
 #include "../Shared/Event.hpp"
 #include "DisplayOrientation.hpp"
 
-InputEventQueue::InputEventQueue(boost::asio::io_service &io_service,
+InputEventQueue::InputEventQueue(boost::asio::io_context &io_context,
                                  EventQueue &queue)
   :
 #ifdef KOBO
-   keyboard(io_service, queue, merge_mouse),
-   mouse(io_service, queue, merge_mouse)
+   keyboard(io_context, queue, merge_mouse),
+   mouse(io_context, queue, merge_mouse)
 #else
-   libinput_handler(io_service, queue)
+   libinput_handler(io_context, queue)
 #endif
 {
 #ifdef KOBO

@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Apple/InternalSensors.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 
@@ -74,7 +74,7 @@ Copyright_License {
   else
     location = nil;
 
-  ScopeLock protect(device_blackboard->mutex);
+  std::lock_guard<Mutex> lock(device_blackboard->mutex);
   NMEAInfo &basic = device_blackboard->SetRealState(self->index);
   basic.UpdateClock();
   if (location) {
@@ -132,7 +132,7 @@ Copyright_License {
 - (void)locationManager:(CLLocationManager *)manager
     didFailWithError:(NSError *)error
 {
-  ScopeLock protect(device_blackboard->mutex);
+  std::lock_guard<Mutex> lock(device_blackboard->mutex);
   NMEAInfo &basic = device_blackboard->SetRealState(self->index);
   if ([error code] != kCLErrorHeadingFailure) {
     basic.alive.Clear();

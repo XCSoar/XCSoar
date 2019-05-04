@@ -224,7 +224,7 @@ PopupMessage::Render()
   if (parent.HasDialog())
     return false;
 
-  mutex.Lock();
+  std::unique_lock<Mutex> lock(mutex);
 
   const auto now = std::chrono::steady_clock::now();
 
@@ -240,7 +240,6 @@ PopupMessage::Render()
     changed = messages[i].Update(now) || changed;
 
   if (!changed) {
-    mutex.Unlock();
     return false;
   }
 
@@ -253,7 +252,7 @@ PopupMessage::Render()
     if (messages[i].AppendTo(text, now))
       n_visible++;
 
-  mutex.Unlock();
+  lock.unlock();
 
   UpdateTextAndLayout();
 
@@ -282,8 +281,6 @@ void
 PopupMessage::AddMessage(std::chrono::steady_clock::duration tshow, Type type,
                          const TCHAR *Text) noexcept
 {
-  assert(mutex.IsLockedByCurrent());
-
   const auto now = std::chrono::steady_clock::now();
 
   int i = GetEmptySlot();
@@ -295,7 +292,8 @@ PopupMessage::Repeat(Type type)
 {
   int imax = -1;
 
-  mutex.Lock();
+  const std::lock_guard<Mutex> lock(mutex);
+
   const auto now = std::chrono::steady_clock::now();
 
   // find most recent non-visible message
@@ -314,14 +312,12 @@ PopupMessage::Repeat(Type type)
     messages[imax].tstart = now;
     messages[imax].texpiry = messages[imax].tstart;
   }
-
-  mutex.Unlock();
 }
 
 bool
 PopupMessage::Acknowledge(Type type)
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   const auto now = std::chrono::steady_clock::now();
 
   for (unsigned i = 0; i < MAXMESSAGES; i++) {
@@ -351,7 +347,7 @@ PopupMessage::Acknowledge(Type type)
 void
 PopupMessage::AddMessage(const TCHAR* text, const TCHAR *data)
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
 
   const auto &msg = FindStatusMessage(text);
 

@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Port.hpp"
 #include "IO/DataHandler.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Thread/Cond.hxx"
 #include "Util/StaticFifoBuffer.hxx"
 

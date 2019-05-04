@@ -24,13 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_DIALOGS_ERROR_MESSAGE_HPP
 #define XCSOAR_DIALOGS_ERROR_MESSAGE_HPP
 
+#include <exception>
+
 #include <tchar.h>
 
-namespace std {
-  class exception;
-}
-
 void
-ShowError(const std::exception &exception, const TCHAR *caption);
+ShowError(std::exception_ptr e, const TCHAR *caption) noexcept;
 
 #endif

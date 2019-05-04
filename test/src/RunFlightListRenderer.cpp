@@ -111,7 +111,7 @@ protected:
   }
 
   /* virtual methods from class ActionListener */
-  void OnAction(int id) override {
+  void OnAction(int id) noexcept override {
     switch (id) {
     case CLOSE:
       Close();

@@ -129,9 +129,9 @@ int main(int argc, char **argv)
   ok1(prefix_sum(irt, _T("foobar")) == 0);
 
   ok1(irt.Get(_T("foo"), 0) == 42 || irt.Get(_T("foo"), 0) == 2);
-  ok1(irt.GetIf(_T("foo"), 0, std::bind1st(std::equal_to<int>(), 42)) == 42);
-  ok1(irt.GetIf(_T("foo"), 0, std::bind1st(std::equal_to<int>(), 2)) == 2);
-  ok1(irt.GetIf(_T("foo"), 0, std::bind1st(std::equal_to<int>(), 22)) == 0);
+  ok1(irt.GetIf(_T("foo"), 0, [](auto i){ return i == 42; }) == 42);
+  ok1(irt.GetIf(_T("foo"), 0, [](auto i){ return i == 2; }) == 2);
+  ok1(irt.GetIf(_T("foo"), 0, [](auto i){ return i == 22; }) == 0);
 
   suggest = irt.Suggest(_T("foo"), buffer, 64);
   ok1(suggest != NULL);

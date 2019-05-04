@@ -56,9 +56,9 @@ class LibInputHandler final {
   unsigned n_pointers = 0, n_touch_screens = 0, n_keyboards = 0;
 
 public:
-  explicit LibInputHandler(boost::asio::io_service &io_service,
+  explicit LibInputHandler(boost::asio::io_context &io_context,
                            EventQueue &_queue)
-    :queue(_queue), fd(io_service) {}
+    :queue(_queue), fd(io_context) {}
 
   ~LibInputHandler() {
     Close();

@@ -102,7 +102,7 @@ private:
   void OnActivateItem(unsigned index) override;
 
   /* virtual methods from ActionListener */
-  void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 
 private:
   void UpdateList();
@@ -249,8 +249,8 @@ WaypointManagerWidget::SaveWaypoints()
   try {
     WaypointGlue::SaveWaypoints(way_points);
     WaypointFileChanged = true;
-  } catch (const std::runtime_error &e) {
-    ShowError(e, _("Failed to save waypoints"));
+  } catch (...) {
+    ShowError(std::current_exception(), _("Failed to save waypoints"));
   }
 
   modified = false;
@@ -282,7 +282,7 @@ WaypointManagerWidget::OnWaypointDeleteClicked(unsigned i)
 }
 
 void
-WaypointManagerWidget::OnAction(int id)
+WaypointManagerWidget::OnAction(int id) noexcept
 {
   switch (Buttons(id)) {
   case NEW:

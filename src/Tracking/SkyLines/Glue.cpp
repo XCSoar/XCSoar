@@ -34,10 +34,10 @@ Copyright_License {
 
 static constexpr double CLOUD_INTERVAL = 60;
 
-SkyLinesTracking::Glue::Glue(boost::asio::io_service &io_service,
+SkyLinesTracking::Glue::Glue(boost::asio::io_context &io_context,
                              Handler *_handler)
-  :client(io_service, _handler),
-   cloud_client(io_service, _handler)
+  :client(io_context, _handler),
+   cloud_client(io_context, _handler)
 {
 }
 

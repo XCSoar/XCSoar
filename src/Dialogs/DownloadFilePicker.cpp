@@ -41,7 +41,7 @@ Copyright_License {
 #include "Net/HTTP/Features.hpp"
 #include "Net/HTTP/DownloadManager.hpp"
 #include "Event/Notify.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Operation/ThreadedOperationEnvironment.hpp"
 #include "Util/ConvertString.hpp"
 
@@ -210,7 +210,7 @@ public:
   }
 
   /* virtual methods from class ActionListener */
-  void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 
   /* virtual methods from class Net::DownloadListener */
   void OnDownloadAdded(Path path_relative,
@@ -252,10 +252,11 @@ DownloadFilePickerWidget::Unprepare()
 void
 DownloadFilePickerWidget::RefreshList()
 try {
-  mutex.Lock();
-  repository_modified = false;
-  repository_failed = false;
-  mutex.Unlock();
+  {
+    const std::lock_guard<Mutex> lock(mutex);
+    repository_modified = false;
+    repository_failed = false;
+  }
 
   FileRepository repository;
 
@@ -311,7 +312,7 @@ DownloadFilePickerWidget::Download()
 }
 
 void
-DownloadFilePickerWidget::OnAction(int id)
+DownloadFilePickerWidget::OnAction(int id) noexcept
 {
   switch (id) {
   case DOWNLOAD:
@@ -334,15 +335,15 @@ DownloadFilePickerWidget::OnDownloadComplete(Path path_relative,
   if (name == nullptr)
     return;
 
-  mutex.Lock();
+  {
+    const std::lock_guard<Mutex> lock(mutex);
 
-  if (name == Path(_T("repository"))) {
-    repository_failed = !success;
-    if (success)
-      repository_modified = true;
+    if (name == Path(_T("repository"))) {
+      repository_failed = !success;
+      if (success)
+        repository_modified = true;
+    }
   }
-
-  mutex.Unlock();
 
   SendNotification();
 }
@@ -350,12 +351,13 @@ DownloadFilePickerWidget::OnDownloadComplete(Path path_relative,
 void
 DownloadFilePickerWidget::OnNotification()
 {
-  mutex.Lock();
-  bool repository_modified2 = repository_modified;
-  repository_modified = false;
-  const bool repository_failed2 = repository_failed;
-  repository_failed = false;
-  mutex.Unlock();
+  bool repository_modified2, repository_failed2;
+
+  {
+    const std::lock_guard<Mutex> lock(mutex);
+    repository_modified2 = std::exchange(repository_modified, false);
+    repository_failed2 = std::exchange(repository_failed, false);
+  }
 
   if (repository_modified2) {
     if (repository_failed2)

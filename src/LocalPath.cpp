@@ -36,7 +36,7 @@ Copyright_License {
 #include "Android/Environment.hpp"
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 #include "OS/PathName.hpp"
 #else
 #include "Util/tstring.hpp"
@@ -47,7 +47,7 @@ Copyright_License {
 #include <assert.h>
 #include <stdlib.h>
 #include <windef.h> // for MAX_PATH
-#ifdef WIN32
+#ifdef _WIN32
 #ifdef HAVE_POSIX
 #include <windows.h>
 #else
@@ -160,7 +160,7 @@ ExpandLocalPath(Path src)
   if (ptr == nullptr)
     return Path(src);
 
-#ifndef WIN32
+#ifndef _WIN32
   // Convert backslashes to slashes on platforms where it matters
   tstring src2(src.c_str());
   std::replace(src2.begin(), src2.end(), '\\', '/');
@@ -183,7 +183,7 @@ ContractLocalPath(Path src)
   return Path(local_path_code) + relative.c_str();
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 
 /**
  * Find a XCSoarData folder in the same location as the executable.
@@ -203,7 +203,7 @@ FindDataPathAtModule(HMODULE hModule)
 
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 
 static const TCHAR *
 ModuleInFlash(HMODULE module, TCHAR *buffer)
@@ -326,7 +326,7 @@ GetHomeDataPath(bool create=false)
 static AllocatedPath
 FindDataPath()
 {
-#ifdef WIN32
+#ifdef _WIN32
   {
     auto path = FindDataPathAtModule(nullptr);
     if (path != nullptr)
@@ -386,7 +386,7 @@ FindDataPath()
     return Path(_T(ANDROID_SDCARD "/" XCSDATADIR));
   }
 
-#ifdef WIN32
+#ifdef _WIN32
   /* if XCSoar was started from a flash disk, put the XCSoarData onto
      it, too */
   {

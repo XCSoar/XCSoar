@@ -26,7 +26,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #else
 

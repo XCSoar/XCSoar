@@ -71,7 +71,7 @@
 #include "LocalPath.hpp"
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -140,7 +140,7 @@ public:
   }
 
   /* virtual methods from class ActionListener */
-  void OnAction(int id) override {
+  void OnAction(int id) noexcept override {
     switch (id) {
     case CLOSE:
       Close();
@@ -191,7 +191,7 @@ UIGlobals::GetMainWindow()
 }
 #endif
 
-#ifndef WIN32
+#ifndef _WIN32
 int main(int argc, char **argv)
 #else
 int WINAPI
@@ -201,7 +201,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 {
 #if defined(ENABLE_CMDLINE) || defined(ENABLE_MAIN_WINDOW)
-#ifdef WIN32
+#ifdef _WIN32
   Args args(GetCommandLine(), USAGE);
 #else
   Args args(argc, argv, USAGE);

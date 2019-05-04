@@ -34,7 +34,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Event/DelayedNotify.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "UIGlobals.hpp"
 
 enum Buttons {
@@ -58,14 +58,16 @@ public:
   virtual ~PortTerminalBridge() {}
 
   virtual void DataReceived(const void *data, size_t length) {
-    mutex.Lock();
-    buffer.Shift();
-    auto range = buffer.Write();
-    if (range.size < length)
-      length = range.size;
-    memcpy(range.data, data, length);
-    buffer.Append(length);
-    mutex.Unlock();
+    {
+      const std::lock_guard<Mutex> lock(mutex);
+      buffer.Shift();
+      auto range = buffer.Write();
+      if (range.size < length)
+        length = range.size;
+      memcpy(range.data, data, length);
+      buffer.Append(length);
+    }
+
     SendNotification();
   }
 
@@ -76,7 +78,7 @@ private:
       size_t length;
 
       {
-        ScopeLock protect(mutex);
+        std::lock_guard<Mutex> lock(mutex);
         auto range = buffer.Read();
         if (range.empty())
           break;
@@ -127,7 +129,7 @@ public:
   }
 
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) override {
+  void OnAction(int id) noexcept override {
     switch (id) {
     case CLEAR:
       Clear();

@@ -238,6 +238,7 @@ extern const char SkyLinesRoaming[];
 extern const char SkyLinesTrackingInterval[];
 extern const char SkyLinesTrafficEnabled[];
 extern const char SkyLinesNearTrafficEnabled[];
+extern const char SkyLinesTrafficMapMode[];
 extern const char SkyLinesTrackingKey[];
 
 extern const char CloudEnabled[];

@@ -25,12 +25,12 @@ Copyright_License {
 #include "DisplayOrientation.hpp"
 
 EventQueue::EventQueue()
-  :SignalListener(io_service),
+  :SignalListener(io_context),
    thread(ThreadHandle::GetCurrent()),
 #ifndef NON_INTERACTIVE
-   input_queue(io_service, *this),
+   input_queue(io_context, *this),
 #endif
-   event_pipe_asio(io_service),
+   event_pipe_asio(io_context),
    quit(false)
 {
   SignalListener::Create(SIGINT, SIGTERM);
@@ -47,7 +47,7 @@ EventQueue::~EventQueue()
 void
 EventQueue::Push(const Event &event)
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   events.push(event);
   WakeUp();
 }
@@ -55,8 +55,8 @@ EventQueue::Push(const Event &event)
 void
 EventQueue::Poll()
 {
-  io_service.run_one();
-  io_service.reset();
+  io_context.run_one();
+  io_context.reset();
 }
 
 void
@@ -83,7 +83,7 @@ EventQueue::Pop(Event &event)
   if (quit)
     return false;
 
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   if (events.empty()) {
     return Generate(event);
   }
@@ -100,7 +100,7 @@ EventQueue::Wait(Event &event)
   if (quit)
     return false;
 
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
 
   if (events.empty()) {
     if (Generate(event))
@@ -129,7 +129,7 @@ EventQueue::Wait(Event &event)
 void
 EventQueue::Purge(bool (*match)(const Event &event, void *ctx), void *ctx)
 {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   size_t n = events.size();
   while (n-- > 0) {
     if (!match(events.front(), ctx))
@@ -191,7 +191,7 @@ EventQueue::OnEventPipe(const boost::system::error_code &ec)
     return;
 
   if (event_pipe.Read())
-    event_pipe_asio.get_io_service().stop();
+    get_io_context().stop();
 
   AsyncReadEventPipe();
 }

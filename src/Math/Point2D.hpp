@@ -131,7 +131,7 @@ struct EnableIfPoint2D : std::enable_if<IsPoint2D<P>::value> {
 
 template<typename P, typename RT=typename P::product_type,
          typename=typename EnableIfPoint2D<P>::type>
-static constexpr inline P
+constexpr P
 operator+(P a, P b)
 {
   return P(a.x + b.x, a.y + b.y);
@@ -139,7 +139,7 @@ operator+(P a, P b)
 
 template<typename P, typename RT=typename P::product_type,
          typename=typename EnableIfPoint2D<P>::type>
-static constexpr inline P
+constexpr P
 operator-(P a, P b)
 {
   return P(a.x - b.x, a.y - b.y);
@@ -149,7 +149,7 @@ template<typename P, typename RT=typename P::product_type,
          typename=typename EnableIfPoint2D<P>::type,
          typename Z,
          typename=typename std::enable_if<std::is_arithmetic<Z>::value>::type>
-static constexpr inline P
+constexpr P
 operator*(P a, Z z)
 {
   return P(a.x * z, a.y * z);
@@ -159,7 +159,7 @@ template<typename P, typename RT=typename P::product_type,
          typename=typename EnableIfPoint2D<P>::type,
          typename Z,
          typename=typename std::enable_if<std::is_arithmetic<Z>::value>::type>
-static constexpr inline P
+constexpr P
 operator/(P a, Z z)
 {
   return P(a.x / z, a.y / z);
@@ -167,7 +167,7 @@ operator/(P a, Z z)
 
 template<typename P, typename RT=typename P::product_type,
          typename=typename EnableIfPoint2D<P>::type>
-static constexpr inline RT
+constexpr RT
 DotProduct(P a, P b)
 {
   return RT(a.x) * RT(b.x) + RT(a.y) * RT(b.y);
@@ -175,7 +175,7 @@ DotProduct(P a, P b)
 
 template<typename P, typename RT=typename P::product_type,
          typename=typename EnableIfPoint2D<P>::type>
-static constexpr inline RT
+constexpr RT
 CrossProduct(P a, P b)
 {
   return RT(a.x) * RT(b.y) - RT(b.x) * RT(a.y);
@@ -186,7 +186,7 @@ CrossProduct(P a, P b)
  */
 template<typename P, typename RT=typename P::scalar_type,
          typename=typename EnableIfPoint2D<P>::type>
-static inline RT
+constexpr RT
 ManhattanDistance(P a, P b)
 {
   return std::abs(a.x - b.x) + std::abs(a.y - b.y);

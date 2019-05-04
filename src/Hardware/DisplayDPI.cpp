@@ -28,7 +28,7 @@ Copyright_License {
 #include "Android/NativeView.hpp"
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 #include "Screen/GDI/RootDC.hpp"
 
 #include <windows.h>
@@ -74,7 +74,7 @@ MMToDPI(unsigned pixels, unsigned mm)
   return pixels * 254 / (mm * 10);
 }
 
-#elif !defined(WIN32) && !defined(ANDROID)
+#elif !defined(_WIN32) && !defined(ANDROID)
 #ifndef __APPLE__
 gcc_const
 #endif
@@ -129,7 +129,7 @@ Display::GetXDPI(unsigned custom_dpi)
   if (custom_dpi)
     return custom_dpi;
 
-#ifdef WIN32
+#ifdef _WIN32
   RootDC dc;
   return GetDeviceCaps(dc, LOGPIXELSX);
 #elif defined(ANDROID)
@@ -157,7 +157,7 @@ Display::GetYDPI(unsigned custom_dpi)
   if (custom_dpi)
     return custom_dpi;
 
-#ifdef WIN32
+#ifdef _WIN32
   RootDC dc;
   return GetDeviceCaps(dc, LOGPIXELSY);
 #elif defined(ANDROID)

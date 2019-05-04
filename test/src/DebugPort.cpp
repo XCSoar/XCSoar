@@ -87,10 +87,10 @@ ParsePortArgs(Args &args)
 }
 
 std::unique_ptr<Port>
-DebugPort::Open(boost::asio::io_service &io_service,
+DebugPort::Open(boost::asio::io_context &io_context,
                 DataHandler &handler)
 {
-  Port *port = OpenPort(io_service, config, this, handler);
+  Port *port = OpenPort(io_context, config, this, handler);
   if (port == nullptr)
     throw std::runtime_error("Failed to open port");
 

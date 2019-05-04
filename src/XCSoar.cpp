@@ -47,10 +47,6 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "IO/Async/GlobalAsioThread.hpp"
 
-#ifndef NDEBUG
-#include "Thread/Thread.hpp"
-#endif
-
 #ifdef ENABLE_SDL
 /* this is necessary on Mac OS X, to let libSDL bootstrap Quartz
    before entering our main() */
@@ -87,7 +83,7 @@ static const char *const Usage = "\n"
 #ifdef HAVE_CMDLINE_RESIZABLE
   "  -resizable      resizable window\n"
 #endif
-#ifdef WIN32
+#ifdef _WIN32
   "  -console        open debug output console\n"
 #endif
   ;
@@ -102,7 +98,7 @@ Main()
   [NSApp setMainMenu: [[NSMenu alloc] init]];
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
   /* try to make the UI most responsive */
   SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL);
 #endif
@@ -136,7 +132,7 @@ Main()
 /**
  * Main entry point for the whole XCSoar application
  */
-#ifndef WIN32
+#ifndef _WIN32
 int main(int argc, char **argv)
 #else
 int WINAPI
@@ -159,7 +155,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   // Read options from the command line
   {
-#ifdef WIN32
+#ifdef _WIN32
     Args args(GetCommandLine(), Usage);
 #else
     Args args(argc, argv, Usage);
@@ -168,8 +164,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   }
 
   int ret = Main();
-
-  assert(!ExistsAnyThread());
 
 #if defined(__APPLE__) && TARGET_OS_IPHONE
   /* For some reason, the app process does not exit on iOS, but a black

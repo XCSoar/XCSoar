@@ -45,9 +45,8 @@ FlarmDevice::ParsePFLAC(NMEAInputLine &line)
   char value[256];
   line.Read(value, ARRAY_SIZE(value));
 
-  settings.Lock();
+  const std::lock_guard<Mutex> lock(settings);
   settings.Set(name, value);
-  settings.Unlock();
 
   return true;
 }

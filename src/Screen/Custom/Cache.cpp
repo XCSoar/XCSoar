@@ -32,7 +32,7 @@ Copyright_License {
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Debug.hpp"
 #else
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #endif
 
 #ifdef UNICODE
@@ -200,7 +200,7 @@ PixelSize
 TextCache::GetSize(const Font &font, const char *text)
 {
 #ifndef ENABLE_OPENGL
-  const ScopeLock protect(text_cache_mutex);
+  const std::lock_guard<Mutex> lock(text_cache_mutex);
 #endif
 
   TextCacheKey key(font, text);
@@ -223,7 +223,7 @@ PixelSize
 TextCache::LookupSize(const Font &font, const char *text)
 {
 #ifndef ENABLE_OPENGL
-  const ScopeLock protect(text_cache_mutex);
+  const std::lock_guard<Mutex> lock(text_cache_mutex);
 #endif
 
   PixelSize size = { 0, 0 };
@@ -265,7 +265,7 @@ TextCache::Get(const Font &font, const char *text)
   /* look it up */
 
 #ifndef ENABLE_OPENGL
-  const ScopeLock protect(text_cache_mutex);
+  const std::lock_guard<Mutex> lock(text_cache_mutex);
 #endif
 
   const RenderedText *cached = text_cache.Get(key);
@@ -334,7 +334,7 @@ TextCache::Flush()
 #endif
 
 #ifndef ENABLE_OPENGL
-  const ScopeLock protect(text_cache_mutex);
+  const std::lock_guard<Mutex> lock(text_cache_mutex);
 #endif
 
   size_cache.Clear();

@@ -278,8 +278,8 @@ InputEvents::eventProfileSave(const TCHAR *misc)
   if (!StringIsEmpty(misc)) {
       try {
         Profile::SaveFile(Path(misc));
-      } catch (const std::runtime_error &e) {
-        ShowError(e, _("Failed to save file."));
+      } catch (...) {
+        ShowError(std::current_exception(), _("Failed to save file."));
         return;
       }
   }

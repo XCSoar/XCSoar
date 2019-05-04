@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009-2013 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2009-2019 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,7 +31,8 @@
 #define THREAD_WINDOWS_COND_HXX
 
 #include "CriticalSection.hxx"
-#include "Mutex.hpp"
+
+#include <chrono>
 
 /**
  * Wrapper for a CONDITION_VARIABLE, backend for the Cond class.
@@ -40,38 +41,36 @@ class WindowsCond {
 	CONDITION_VARIABLE cond;
 
 public:
-	WindowsCond() {
+	WindowsCond() noexcept {
 		InitializeConditionVariable(&cond);
 	}
 
 	WindowsCond(const WindowsCond &other) = delete;
 	WindowsCond &operator=(const WindowsCond &other) = delete;
 
-	void signal() {
+	void notify_one() noexcept {
 		WakeConditionVariable(&cond);
 	}
 
-	void broadcast() {
+	void notify_all() noexcept {
 		WakeAllConditionVariable(&cond);
 	}
 
-	bool timed_wait(CriticalSection &mutex, DWORD timeout_ms) {
+private:
+	bool wait_for(CriticalSection &mutex, DWORD timeout_ms) noexcept {
 		return SleepConditionVariableCS(&cond, &mutex.critical_section,
 						timeout_ms);
 	}
 
-	bool timed_wait(Mutex &mutex, unsigned timeout_ms) {
-		TemporaryUnlock unlock(mutex);
-		return timed_wait(mutex.mutex, timeout_ms);
+public:
+	bool wait_for(CriticalSection &mutex,
+		      std::chrono::steady_clock::duration timeout) noexcept {
+		auto timeout_ms = std::chrono::duration_cast<std::chrono::milliseconds>(timeout).count();
+		return wait_for(mutex, timeout_ms);
 	}
 
-	void wait(CriticalSection &mutex) {
-		timed_wait(mutex, INFINITE);
-	}
-
-	void wait(Mutex &mutex) {
-		TemporaryUnlock unlock(mutex);
-		wait(mutex.mutex);
+	void wait(CriticalSection &mutex) noexcept {
+		wait_for(mutex, INFINITE);
 	}
 };
 

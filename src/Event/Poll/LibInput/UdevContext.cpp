@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "UdevContext.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 
 #include <libudev.h>
 
@@ -33,7 +33,7 @@ static Mutex udev_context_mutex;
 
 UdevContext::UdevContext(const UdevContext &other)
 {
-  ScopeLock protect(udev_context_mutex);
+  std::lock_guard<Mutex> lock(udev_context_mutex);
   if (other.ud) {
     ud = udev_ref(other.ud);
     assert(ud);
@@ -44,7 +44,7 @@ UdevContext::UdevContext(const UdevContext &other)
 
 UdevContext::~UdevContext()
 {
-  ScopeLock protect(udev_context_mutex);
+  std::lock_guard<Mutex> lock(udev_context_mutex);
   if (nullptr != ud)
     udev_unref(ud);
 }
@@ -53,7 +53,7 @@ UdevContext &
 UdevContext::operator=(const UdevContext &other)
 {
   if (this != &other) {
-    ScopeLock protect(udev_context_mutex);
+    std::lock_guard<Mutex> lock(udev_context_mutex);
     struct udev *new_ud = (nullptr == other.ud) ? udev_ref(other.ud) : nullptr;
     assert(nullptr == other.ud || nullptr != new_ud);
     if (ud != nullptr)
@@ -68,7 +68,7 @@ UdevContext
 UdevContext::NewRef()
 {
   {
-    ScopeLock protect(udev_context_mutex);
+    std::lock_guard<Mutex> lock(udev_context_mutex);
     if (nullptr == udev_root_context) {
       udev_root_context = new UdevContext(udev_new());
       assert(udev_root_context);

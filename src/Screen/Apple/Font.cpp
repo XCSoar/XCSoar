@@ -26,7 +26,7 @@ Copyright_License {
 #include "Util/ScopeExit.hxx"
 
 #ifndef ENABLE_OPENGL
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #endif
 
 #include <assert.h>
@@ -66,7 +66,7 @@ Font::Load(const FontDescription &d)
   NativeFontT *native_font;
 
 #ifndef ENABLE_OPENGL
-  const ScopeLock protect(apple_font_mutex);
+  const std::lock_guard<Mutex> lock(apple_font_mutex);
 #endif
 
   if (d.IsMonospace())
@@ -118,7 +118,7 @@ Font::TextSize(const TCHAR *text) const
   assert(nil != ns_str);
 
 #ifndef ENABLE_OPENGL
-  const ScopeLock protect(apple_font_mutex);
+  const std::lock_guard<Mutex> lock(apple_font_mutex);
 #endif
 
   CGSize size = [ns_str sizeWithAttributes: draw_attributes];
@@ -146,7 +146,7 @@ Font::Render(const TCHAR *text, const PixelSize size, void *buffer) const
   AtScopeExit(ctx) { CFRelease(ctx); };
 
 #ifndef ENABLE_OPENGL
-  const ScopeLock protect(apple_font_mutex);
+  const std::lock_guard<Mutex> lock(apple_font_mutex);
 #endif
 
 #ifdef USE_APPKIT

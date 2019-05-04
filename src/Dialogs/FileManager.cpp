@@ -51,7 +51,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Net/HTTP/DownloadManager.hpp"
 #include "Event/Notify.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Event/Timer.hpp"
 
 #include <map>
@@ -203,7 +203,7 @@ protected:
   gcc_pure
   bool IsDownloading(const char *name) const {
 #ifdef HAVE_DOWNLOAD_MANAGER
-    ScopeLock protect(mutex);
+    std::lock_guard<Mutex> lock(mutex);
     return downloads.find(name) != downloads.end();
 #else
     return false;
@@ -218,7 +218,7 @@ protected:
   gcc_pure
   bool IsDownloading(const char *name, DownloadStatus &status_r) const {
 #ifdef HAVE_DOWNLOAD_MANAGER
-    ScopeLock protect(mutex);
+    std::lock_guard<Mutex> lock(mutex);
     auto i = downloads.find(name);
     if (i == downloads.end())
       return false;
@@ -239,7 +239,7 @@ protected:
   gcc_pure
   bool HasFailed(const char *name) const {
 #ifdef HAVE_DOWNLOAD_MANAGER
-    ScopeLock protect(mutex);
+    std::lock_guard<Mutex> lock(mutex);
     return failures.find(name) != failures.end();
 #else
     return false;
@@ -273,7 +273,7 @@ public:
   virtual void OnCursorMoved(unsigned index) override;
 
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 
 #ifdef HAVE_DOWNLOAD_MANAGER
   /* virtual methods from class Timer */
@@ -342,10 +342,11 @@ void
 ManagedFileListWidget::LoadRepositoryFile()
 try {
 #ifdef HAVE_DOWNLOAD_MANAGER
-  mutex.Lock();
-  repository_modified = false;
-  repository_failed = false;
-  mutex.Unlock();
+  {
+    const std::lock_guard<Mutex> lock(mutex);
+    repository_modified = false;
+    repository_failed = false;
+  }
 #endif
 
   repository.Clear();
@@ -579,7 +580,7 @@ ManagedFileListWidget::Cancel()
 }
 
 void
-ManagedFileListWidget::OnAction(int id)
+ManagedFileListWidget::OnAction(int id) noexcept
 {
   switch (id) {
   case DOWNLOAD:
@@ -601,9 +602,12 @@ ManagedFileListWidget::OnAction(int id)
 void
 ManagedFileListWidget::OnTimer()
 {
-  mutex.Lock();
-  const bool download_active = !downloads.empty();
-  mutex.Unlock();
+  bool download_active;
+
+  {
+    const std::lock_guard<Mutex> lock(mutex);
+    download_active = !downloads.empty();
+  }
 
   if (download_active) {
     Net::DownloadManager::Enumerate(*this);
@@ -627,10 +631,11 @@ ManagedFileListWidget::OnDownloadAdded(Path path_relative,
 
   const std::string name3(name2);
 
-  mutex.Lock();
-  downloads[name3] = DownloadStatus{size, position};
-  failures.erase(name3);
-  mutex.Unlock();
+  {
+    const std::lock_guard<Mutex> lock(mutex);
+    downloads[name3] = DownloadStatus{size, position};
+    failures.erase(name3);
+  }
 
   SendNotification();
 }
@@ -649,18 +654,18 @@ ManagedFileListWidget::OnDownloadComplete(Path path_relative,
 
   const std::string name3(name2);
 
-  mutex.Lock();
+  {
+    const std::lock_guard<Mutex> lock(mutex);
 
-  downloads.erase(name3);
+    downloads.erase(name3);
 
-  if (StringIsEqual(name2, "repository")) {
-    repository_failed = !success;
-    if (success)
-      repository_modified = true;
-  } else if (!success)
-    failures.insert(name3);
-
-  mutex.Unlock();
+    if (StringIsEqual(name2, "repository")) {
+      repository_failed = !success;
+      if (success)
+        repository_modified = true;
+    } else if (!success)
+      failures.insert(name3);
+  }
 
   SendNotification();
 }
@@ -668,12 +673,13 @@ ManagedFileListWidget::OnDownloadComplete(Path path_relative,
 void
 ManagedFileListWidget::OnNotification()
 {
-  mutex.Lock();
-  bool repository_modified2 = repository_modified;
-  repository_modified = false;
-  const bool repository_failed2 = repository_failed;
-  repository_failed = false;
-  mutex.Unlock();
+  bool repository_modified2, repository_failed2;
+
+  {
+    const std::lock_guard<Mutex> lock(mutex);
+    repository_modified2 = std::exchange(repository_modified, false);
+    repository_failed2 = std::exchange(repository_failed, false);
+  }
 
   if (repository_modified2)
     LoadRepositoryFile();

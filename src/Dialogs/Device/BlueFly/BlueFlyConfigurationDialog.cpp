@@ -69,7 +69,7 @@ public:
   }
 
   void Show(const PixelRect &rc) override {
-    device.GetSettings(params);
+    params = device.GetSettings();
 
     LoadValue(VOLUME, params.volume);
     LoadValueEnum(OUTPUT_MODE, params.output_mode);
@@ -90,7 +90,7 @@ public:
 
 private:
   /* virtual methods from ActionListener */
-  void OnAction(int id) override {
+  void OnAction(int id) noexcept override {
     bool _changed = false;
 
     switch (id) {

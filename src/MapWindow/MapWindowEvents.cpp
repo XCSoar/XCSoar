@@ -148,7 +148,7 @@ MapWindow::OnPaint(Canvas &canvas)
 
     /* now stretch the buffer into the window Canvas */
 
-    ScopeLock protect(DoubleBufferWindow::mutex);
+    std::lock_guard<Mutex> lock(DoubleBufferWindow::mutex);
     const Canvas &src = GetVisibleCanvas();
     canvas.Stretch(top_left.x, top_left.y,
                    bottom_right.x - top_left.x, bottom_right.y - top_left.y,

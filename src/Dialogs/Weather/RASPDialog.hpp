@@ -27,6 +27,6 @@ Copyright_License {
 class Widget;
 
 Widget *
-CreateRaspWidget();
+CreateRaspWidget() noexcept;
 
 #endif

@@ -82,7 +82,7 @@ WrapPort(const DeviceConfig &config, PortListener *listener,
 }
 
 static Port *
-OpenPortInternal(boost::asio::io_service &io_service,
+OpenPortInternal(boost::asio::io_context &io_context,
                  const DeviceConfig &config, PortListener *listener,
                  DataHandler &handler)
 {
@@ -150,7 +150,7 @@ OpenPortInternal(boost::asio::io_service &io_service,
     if (!ip_address.IsValid())
       throw std::runtime_error("No IP address configured");
 
-    auto port = new TCPClientPort(io_service, listener, handler);
+    auto port = new TCPClientPort(io_context, listener, handler);
     if (!port->Connect(ip_address, config.tcp_port)) {
       delete port;
       return nullptr;
@@ -160,11 +160,11 @@ OpenPortInternal(boost::asio::io_service &io_service,
   }
 
   case DeviceConfig::PortType::TCP_LISTENER:
-    return new TCPPort(io_service, config.tcp_port,
+    return new TCPPort(io_context, config.tcp_port,
                        listener, handler);
 
   case DeviceConfig::PortType::UDP_LISTENER:
-    return new UDPPort(io_service, config.tcp_port, listener, handler);
+    return new UDPPort(io_context, config.tcp_port, listener, handler);
 
   case DeviceConfig::PortType::PTY: {
 #if defined(HAVE_POSIX) && !defined(ANDROID)
@@ -176,7 +176,7 @@ OpenPortInternal(boost::asio::io_service &io_service,
                                               std::system_category()),
                               "Failed to delete pty");
 
-    TTYPort *port = new TTYPort(io_service, listener, handler);
+    TTYPort *port = new TTYPort(io_context, listener, handler);
     const char *slave_path = port->OpenPseudo();
     if (slave_path == nullptr) {
       delete port;
@@ -199,7 +199,7 @@ OpenPortInternal(boost::asio::io_service &io_service,
     throw std::runtime_error("No port path configured");
 
 #ifdef HAVE_POSIX
-  TTYPort *port = new TTYPort(io_service, listener, handler);
+  TTYPort *port = new TTYPort(io_context, listener, handler);
 #else
   SerialPort *port = new SerialPort(listener, handler);
 #endif
@@ -212,11 +212,11 @@ OpenPortInternal(boost::asio::io_service &io_service,
 }
 
 Port *
-OpenPort(boost::asio::io_service &io_service,
+OpenPort(boost::asio::io_context &io_context,
          const DeviceConfig &config, PortListener *listener,
          DataHandler &handler)
 {
-  Port *port = OpenPortInternal(io_service, config, listener, handler);
+  Port *port = OpenPortInternal(io_context, config, listener, handler);
   if (port != nullptr)
     port = WrapPort(config, listener, handler, port);
   return port;

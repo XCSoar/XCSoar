@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Device/Driver/BlueFlyVario.hpp"
 #include "Internal.hpp"
+#include "NMEA/Info.hpp"
 #include "Util/IterableSplitString.hxx"
 
 bool
@@ -161,16 +162,18 @@ BlueFlyDevice::ParseSET(const char *content, NMEAInfo &info)
   if (!ParseUlong(&values, value))
     return true;
 
-  mutex_settings.Lock();
-  for (const auto token : IterableSplitString(settings_keys, ' ')) {
-    if (!ParseUlong(&values, value))
-      break;
+  {
+    std::lock_guard<Mutex> lock(mutex_settings);
 
-    settings.Parse(token, value);
+    for (const auto token : IterableSplitString(settings_keys, ' ')) {
+      if (!ParseUlong(&values, value))
+        break;
+
+      settings.Parse(token, value);
+    }
+    settings_ready = true;
+    settings_cond.notify_all();
   }
-  settings_ready = true;
-  settings_cond.broadcast();
-  mutex_settings.Unlock();
 
   return true;
 }

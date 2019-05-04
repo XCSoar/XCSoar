@@ -27,7 +27,7 @@ Copyright_License {
 
 #include "Features.hpp"
 
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 
 #if defined(HAVE_EXT_VOLUME_CONTROLLER) && defined(ENABLE_ALSA)
 #include <alsa/asoundlib.h>

@@ -26,6 +26,7 @@ Copyright_License {
 #include "Util/StringView.hxx"
 
 #include <stdio.h>
+#include <limits.h>
 
 const char BlueFlyDevice::BlueFlySettings::VOLUME_NAME[] = "BVL";
 const char BlueFlyDevice::BlueFlySettings::OUTPUT_MODE_NAME[] = "BOM";
@@ -60,7 +61,7 @@ bool
 BlueFlyDevice::RequestSettings(OperationEnvironment &env)
 {
   {
-    const ScopeLock lock(mutex_settings);
+    const std::lock_guard<Mutex> lock(mutex_settings);
     settings_ready = false;
   }
 
@@ -70,18 +71,17 @@ BlueFlyDevice::RequestSettings(OperationEnvironment &env)
 bool
 BlueFlyDevice::WaitForSettings(unsigned int timeout)
 {
-  const ScopeLock lock(mutex_settings);
+  const std::lock_guard<Mutex> lock(mutex_settings);
   if (!settings_ready)
-    settings_cond.timed_wait(mutex_settings, timeout);
+    settings_cond.wait_for(mutex_settings, std::chrono::milliseconds(timeout));
   return settings_ready;
 }
 
-void
-BlueFlyDevice::GetSettings(BlueFlySettings &settings_r)
+BlueFlyDevice::BlueFlySettings
+BlueFlyDevice::GetSettings() noexcept
 {
-  mutex_settings.Lock();
-  settings_r = settings;
-  mutex_settings.Unlock();
+  const std::lock_guard<Mutex> lock(mutex_settings);
+  return settings;
 }
 
 void
@@ -97,7 +97,6 @@ BlueFlyDevice::WriteDeviceSettings(const BlueFlySettings &new_settings,
 
   /* update the old values from the new settings.
    * The BlueFly Vario does not send back any ACK. */
-  mutex_settings.Lock();
+  const std::lock_guard<Mutex> lock(mutex_settings);
   settings = new_settings;
-  mutex_settings.Unlock();
 }

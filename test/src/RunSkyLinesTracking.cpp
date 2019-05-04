@@ -37,6 +37,8 @@ Copyright_License {
 class Handler : public SkyLinesTracking::Handler {
   Args &args;
 
+  boost::asio::io_context &io_context;
+
   SkyLinesTracking::Client client;
 
   boost::asio::steady_timer timer;
@@ -44,8 +46,9 @@ class Handler : public SkyLinesTracking::Handler {
   std::unique_ptr<DebugReplay> replay;
 
 public:
-  explicit Handler(Args &_args, boost::asio::io_service &io_service)
-    :args(_args), client(io_service, this), timer(io_service) {}
+  explicit Handler(Args &_args, boost::asio::io_context &_io_context)
+    :args(_args), io_context(_io_context),
+     client(io_context, this), timer(io_context) {}
 
   SkyLinesTracking::Client &GetClient() {
     return client;
@@ -55,7 +58,7 @@ public:
 
   virtual void OnAck(unsigned id) override {
     printf("received ack %u\n", id);
-    timer.get_io_service().stop();
+    io_context.stop();
   }
 
   virtual void OnTraffic(unsigned pilot_id, unsigned time_of_day_ms,
@@ -82,7 +85,7 @@ private:
     timer.expires_from_now(d);
     timer.async_wait([this](const boost::system::error_code &ec){
         if (!ec)
-          timer.get_io_service().stop();
+          io_context.stop();
       });
   }
 
@@ -94,7 +97,7 @@ private:
       client.SendFix(replay->Basic());
       ScheduleNextReplay(std::chrono::milliseconds(100));
     } else
-      timer.get_io_service().stop();
+      io_context.stop();
   }
 
   void ScheduleNextReplay(boost::asio::steady_timer::duration d) {
@@ -135,7 +138,7 @@ try {
   const char *host = args.ExpectNext();
   const char *key = args.ExpectNext();
 
-  boost::asio::io_service io_service;
+  boost::asio::io_context io_context;
 
   /* IPv4 only for now, because the official SkyLines tracking server
      doesn't support IPv6 yet */
@@ -143,13 +146,13 @@ try {
                                                     host,
                                                     SkyLinesTracking::Client::GetDefaultPortString());
 
-  Handler handler(args, io_service);
+  Handler handler(args, io_context);
 
   auto &client = handler.GetClient();
   client.SetKey(ParseUint64(key, NULL, 16));
   client.Open(query);
 
-  io_service.run();
+  io_context.run();
 
   return EXIT_SUCCESS;
 } catch (const std::exception &e) {

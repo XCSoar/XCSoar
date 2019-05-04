@@ -227,7 +227,7 @@ ArrowPagerWidget::KeyPress(unsigned key_code)
 }
 
 void
-ArrowPagerWidget::OnAction(int id)
+ArrowPagerWidget::OnAction(int id) noexcept
 {
   switch (id) {
   case PREVIOUS:

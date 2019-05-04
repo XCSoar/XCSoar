@@ -114,7 +114,7 @@ public:
   virtual void OnActivateItem(unsigned index) override;
 
   /* virtual methods from ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 
   /* virtual methods from DataFieldListener */
   virtual void OnModified(DataField &df) override;
@@ -225,7 +225,7 @@ AirspaceListWidget::OnActivateItem(unsigned index)
 }
 
 void
-AirspaceListWidget::OnAction(int id)
+AirspaceListWidget::OnAction(int id) noexcept
 {
   switch (Buttons(id)) {
   case DETAILS:

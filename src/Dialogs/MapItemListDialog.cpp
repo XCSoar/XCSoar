@@ -166,7 +166,7 @@ public:
   virtual void OnActivateItem(unsigned index) override;
 
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
@@ -246,7 +246,7 @@ MapItemListWidget::OnAckClicked()
 }
 
 void
-MapItemListWidget::OnAction(int id)
+MapItemListWidget::OnAction(int id) noexcept
 {
   switch (id) {
   case SETTINGS:

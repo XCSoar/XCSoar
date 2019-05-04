@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_EVENT_WINDOWS_QUEUE_HPP
 
 #include "../Shared/TimerQueue.hpp"
-#include "Thread/Mutex.hpp"
+#include "Thread/Mutex.hxx"
 #include "Time/ClockCache.hxx"
 
 #include <chrono>

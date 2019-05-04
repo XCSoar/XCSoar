@@ -79,7 +79,6 @@ VolumeController::~VolumeController()
 bool
 VolumeController::SetExternalVolumeNoLock(unsigned vol_percent)
 {
-  assert(alsa_lock.IsLockedByCurrent());
   assert(nullptr != alsa_mixer_handle);
 
   if (nullptr == ext_master_volume_ctl)
@@ -116,7 +115,7 @@ VolumeController::SetExternalVolumeNoLock(unsigned vol_percent)
 bool
 VolumeController::SetExternalVolume(unsigned vol_percent)
 {
-  const ScopeLock protect(alsa_lock);
+  const std::lock_guard<Mutex> lock(alsa_lock);
   if (alsa_mixer_initialised)
     return SetExternalVolumeNoLock(vol_percent);
   else
@@ -126,7 +125,6 @@ VolumeController::SetExternalVolume(unsigned vol_percent)
 bool
 VolumeController::InitExternalVolumeControl(unsigned initial_vol_percent)
 {
-  assert(alsa_lock.IsLockedByCurrent());
   assert(!alsa_mixer_initialised);
   assert(nullptr == alsa_mixer_handle);
   assert(nullptr == ext_master_volume_ctl);

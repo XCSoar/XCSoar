@@ -53,7 +53,7 @@ PCMMixer::Start(PCMDataSource &source)
     return false;
   }
 
-  const ScopeLock protect(lock);
+  const std::lock_guard<Mutex> protect(lock);
 
   if (!mixer_data_source.AddSource(source)) {
     LogFormat(_T("Cannot handle PCM data source to mixer, because the mixer ")
@@ -72,6 +72,6 @@ PCMMixer::Start(PCMDataSource &source)
 void
 PCMMixer::Stop(PCMDataSource &source)
 {
-  const ScopeLock protect(lock);
+  const std::lock_guard<Mutex> protect(lock);
   mixer_data_source.RemoveSource(source);
 }

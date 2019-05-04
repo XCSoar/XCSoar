@@ -69,7 +69,7 @@ public:
 
 private:
   /* virtual methods from ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 
   /* methods from DataFieldListener */
   virtual void OnModified(DataField &df) override;
@@ -107,13 +107,13 @@ ReplayControlWidget::OnStartClicked()
 
   try {
     replay->Start(path);
-  } catch (const std::runtime_error &e) {
-    ShowError(e, _("Replay"));
+  } catch (...) {
+    ShowError(std::current_exception(), _("Replay"));
   }
 }
 
 void
-ReplayControlWidget::OnAction(int id)
+ReplayControlWidget::OnAction(int id) noexcept
 {
   switch (id) {
   case START:

@@ -57,7 +57,7 @@ public:
                        const PixelRect &rc) override;
 
   /* methods from ActionListener */
-  virtual void OnAction(int id) override;
+  void OnAction(int id) noexcept override;
 };
 
 void
@@ -90,7 +90,7 @@ AirspaceDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-AirspaceDetailsWidget::OnAction(int id)
+AirspaceDetailsWidget::OnAction(int id) noexcept
 {
   assert(warnings != nullptr);
 

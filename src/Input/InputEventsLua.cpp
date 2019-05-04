@@ -88,9 +88,9 @@ InputEvents::eventRunLuaFile(const TCHAR *misc)
 
   try {
     Lua::StartFile(path);
-  } catch (const std::runtime_error &e) {
+  } catch (...) {
     TCHAR buffer[MAX_PATH];
     StringFormat(buffer, MAX_PATH, _T("RunLuaFile %s"), misc);
-    ShowError(e, buffer);
+    ShowError(std::current_exception(), buffer);
   }
 }
