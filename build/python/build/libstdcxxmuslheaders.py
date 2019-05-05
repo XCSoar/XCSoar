@@ -1,3 +1,4 @@
+import os
 from build.autotools import AutotoolsProject
 from build.makeproject import MakeProject
 
@@ -10,5 +11,5 @@ class LibstdcxxMuslHeadersProject(AutotoolsProject):
     def build(self, toolchain):
         build = self.configure(toolchain)
         incdir_param = 'gxx_include_dir=' + toolchain.install_prefix + '/include/libstdc++'
-        self.make(toolchain, build + '/libsupc++', [incdir_param, 'install-bitsHEADERS', 'install-stdHEADERS'])
-        self.make(toolchain, build + '/include', [incdir_param, 'install-headers'])
+        self.make(toolchain, os.path.join(build, 'libsupc++'), [incdir_param, 'install-bitsHEADERS', 'install-stdHEADERS'])
+        self.make(toolchain, os.path.join(build, 'include'), [incdir_param, 'install-headers'])
