@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-04-22 09:35+0000\n"
+"PO-Revision-Date: 2019-05-06 14:49+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/xcsoar/"
 "translations/pt/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.6\n"
+"X-Generator: Weblate 3.7-dev\n"
 "X-Launchpad-Export-Date: 2012-12-05 23:28+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -1551,8 +1551,8 @@ msgid ""
 "This is the barometric altitude obtained from a device equipped with a "
 "pressure sensor."
 msgstr ""
-"Altitude barométrica obtida a partir de um dispositivo equipado com sensor "
-"de pressão."
+"Altitude barométrica obtida a partir de um aparelho equipado com sensor de "
+"pressão."
 
 #: src/InfoBoxes/Content/Factory.cpp:415
 #, no-c-format
@@ -2606,8 +2606,8 @@ msgid ""
 "estimated wind is used for the calculation."
 msgstr ""
 "O componente atual vento de cabeça. Cabeça de vento é calculada a partir TAS "
-"e GPS velocidade no solo se velocidade está disponível a partir do "
-"dispositivo externo. Caso contrário, o vento estimado é usado para o cálculo."
+"e GPS velocidade no solo se velocidade está disponível a partir do aparelho "
+"externo. Caso contrário, o vento estimado é usado para o cálculo."
 
 #: src/InfoBoxes/Content/Factory.cpp:896
 #, no-c-format
@@ -2646,8 +2646,8 @@ msgid ""
 "pressure sensor or the GPS altitude if the barometric altitude is not "
 "available."
 msgstr ""
-"Esta é a altitude barométrica obtida a partir de um dispositivo equipado com "
-"um sensor de pressão ou a altitude GPS, se a altitude barométrica não está "
+"Esta é a altitude barométrica obtida a partir de um aparelho equipado com um "
+"sensor de pressão ou a altitude GPS, se a altitude barométrica não está "
 "disponível."
 
 #: src/InfoBoxes/Content/Factory.cpp:912
@@ -2977,9 +2977,9 @@ msgid "Number of used satellites"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1065
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Satellites"
-msgstr "Satélites visíveis"
+msgstr "Satélites"
 
 #: src/InfoBoxes/Content/Factory.cpp:1066
 #, no-c-format
@@ -4178,7 +4178,7 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:656
 msgid "Sync. from device"
-msgstr "Sinc. pelo dispositivo"
+msgstr "Sinc. pelo aparelho"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:657
 msgid ""
@@ -4186,11 +4186,11 @@ msgid ""
 "MacCready value, bugs and ballast from the device."
 msgstr ""
 "Esta opção deixa você configurar se o XCSoar deve usar definições como "
-"valores de MacCready, erros e lastro a partir do dispositivo."
+"valores de MacCready, erros e lastro a partir do aparelho."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:662
 msgid "Sync. to device"
-msgstr "Sinc. para dispositivo"
+msgstr "Sinc. para aparelho"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:663
 msgid ""
@@ -4198,11 +4198,11 @@ msgid ""
 "MacCready value, bugs and ballast to the device."
 msgstr ""
 "Esta opção deixa você configurar se o XCSoar deve mandar ajustes como o "
-"valor de MacCready, erros e lastro para o dispositivo."
+"valor de MacCready, erros e lastro para o aparelho."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:669
 msgid "Enable this if you use a K6Bt to connect the device."
-msgstr "Habilite isto se você usa um K6Bt para conectar o dispositivo."
+msgstr "Habilite isto se você usa um K6Bt para conectar o aparelho."
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:283
 msgid "Flight download"
@@ -4310,7 +4310,7 @@ msgstr "Dispositivo não está conectado"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:536
 msgid "Edit device"
-msgstr "Editar dispositivo"
+msgstr "Editar aparelho"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:649
 #, c-format
@@ -4358,7 +4358,7 @@ msgstr "REINICIA"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:132
 msgid "Do you really want to delete all flights from the device?"
-msgstr "Você realmente deseja deletar todos os voos do dispositivo?"
+msgstr "Você realmente deseja deletar todos os voos do aparelho?"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:53
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:194
