@@ -36,8 +36,13 @@ class AutotoolsProject(MakeProject):
                 flags = flags.replace(' ' + f + ' ', ' ')
         return flags
 
-    def configure(self, toolchain):
-        src = self.unpack(toolchain)
+    def configure(self, toolchain, src=None, build=None):
+        if src is None:
+            src = self.unpack(toolchain)
+
+        if build is None:
+            build = self.make_build_path(toolchain)
+
         if self.autogen:
             if sys.platform == 'darwin':
                 subprocess.check_call(['glibtoolize', '--force'], cwd=src)
@@ -46,8 +51,6 @@ class AutotoolsProject(MakeProject):
             subprocess.check_call(['aclocal'], cwd=src)
             subprocess.check_call(['automake', '--add-missing', '--force-missing', '--foreign'], cwd=src)
             subprocess.check_call(['autoconf'], cwd=src)
-
-        build = self.make_build_path(toolchain)
 
         cppflags = toolchain.cppflags
         if self.name == 'glibc':
