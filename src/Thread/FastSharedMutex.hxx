@@ -30,6 +30,8 @@
 #ifndef XCSOAR_THREAD_FAST_SHARED_MUTEX_HXX
 #define XCSOAR_THREAD_FAST_SHARED_MUTEX_HXX
 
+#include <shared_mutex>
+
 #ifdef _WIN32
 
 #include "WindowsSharedMutex.hxx"
@@ -41,37 +43,5 @@ using FastSharedMutex = WindowsSharedMutex;
 using FastSharedMutex = PosixSharedMutex;
 
 #endif
-
-class ScopeExclusiveLock {
-  FastSharedMutex &mutex;
-
-public:
-  ScopeExclusiveLock(FastSharedMutex &_mutex):mutex(_mutex) {
-    mutex.lock();
-  };
-
-  ~ScopeExclusiveLock() {
-    mutex.unlock();
-  }
-
-  ScopeExclusiveLock(const ScopeExclusiveLock &other) = delete;
-  ScopeExclusiveLock &operator=(const ScopeExclusiveLock &other) = delete;
-};
-
-class ScopeSharedLock {
-  FastSharedMutex &mutex;
-
-public:
-  ScopeSharedLock(FastSharedMutex &_mutex):mutex(_mutex) {
-    mutex.lock_shared();
-  };
-
-  ~ScopeSharedLock() {
-    mutex.unlock_shared();
-  }
-
-  ScopeSharedLock(const ScopeSharedLock &other) = delete;
-  ScopeSharedLock &operator=(const ScopeSharedLock &other) = delete;
-};
 
 #endif

@@ -69,7 +69,7 @@ Logger::LogFinishEvent(const NMEAInfo &gps_info)
 bool
 Logger::IsLoggerActive() const
 {
-  const ScopeSharedLock protect(lock);
+  const std::shared_lock<SharedMutex> protect(lock);
   return logger.IsActive();
 }
 
@@ -122,7 +122,7 @@ Logger::GUIStartLogger(const NMEAInfo& gps_info,
     return;
   }
 
-  const ScopeExclusiveLock protect(lock);
+  const std::lock_guard<SharedMutex> protect(lock);
   logger.StartLogger(gps_info, settings.logger, asset_number, decl);
 }
 
@@ -147,7 +147,7 @@ Logger::GUIStopLogger(const NMEAInfo &gps_info,
 
   if (noAsk || (ShowMessageBox(_("Stop Logger"), _("Stop Logger"),
                             MB_YESNO | MB_ICONQUESTION) == IDYES)) {
-    const ScopeExclusiveLock protect(lock);
+    const std::lock_guard<SharedMutex> protect(lock);
     logger.StopLogger(gps_info);
   }
 }
@@ -155,13 +155,13 @@ Logger::GUIStopLogger(const NMEAInfo &gps_info,
 void
 Logger::LoggerNote(const TCHAR *text)
 {
-  const ScopeExclusiveLock protect(lock);
+  const std::lock_guard<SharedMutex> protect(lock);
   logger.LoggerNote(text);
 }
 
 void
 Logger::ClearBuffer()
 {
-  const ScopeExclusiveLock protect(lock);
+  const std::lock_guard<SharedMutex> protect(lock);
   logger.ClearBuffer();
 }

@@ -177,7 +177,7 @@ TerrainLoader::PutTileData(unsigned index,
                                       end_x, end_y, m);
 
   if (scan_tiles) {
-    const ScopeExclusiveLock lock(mutex);
+    const std::lock_guard<SharedMutex> lock(mutex);
     raster_tile_cache.PutTileData(index, m);
   }
 }
