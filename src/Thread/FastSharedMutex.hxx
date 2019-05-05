@@ -39,8 +39,7 @@ using FastSharedMutex = WindowsSharedMutex;
 
 #else
 
-#include "PosixSharedMutex.hxx"
-using FastSharedMutex = PosixSharedMutex;
+using FastSharedMutex = std::shared_mutex;
 
 #endif
 
