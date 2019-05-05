@@ -149,9 +149,9 @@ TopWindow::Pause()
   event_queue->Purge(match_pause_and_resume, nullptr);
   event_queue->Push(Event::PAUSE);
 
-  const std::lock_guard<Mutex> lock(paused_mutex);
+  std::unique_lock<Mutex> lock(paused_mutex);
   while (!paused)
-    paused_cond.wait(paused_mutex);
+    paused_cond.wait(lock);
 }
 
 void

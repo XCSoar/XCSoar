@@ -78,7 +78,7 @@ protected:
    * Like WaitUntilSuspended(), but expects the mutex to be locked
    * already.
    */
-  void _WaitUntilSuspended();
+  void _WaitUntilSuspended(std::unique_lock<Mutex> &lock) noexcept;
 
   /**
    * Has a suspend or stop command been received?
@@ -104,7 +104,7 @@ protected:
    * Like CheckStoppedOrSuspended(), but expects the mutex to be
    * locked already.
    */
-  bool _CheckStoppedOrSuspended();
+  bool _CheckStoppedOrSuspended(std::unique_lock<Mutex> &lock) noexcept;
 
   bool WaitForStopped(unsigned timeout_ms);
 
@@ -112,7 +112,8 @@ protected:
    * Like WaitForStopped(), but expects the mutex to be locked
    * already.
    */
-  bool _WaitForStopped(unsigned timeout_ms);
+  bool _WaitForStopped(std::unique_lock<Mutex> &lock,
+                       unsigned timeout_ms) noexcept;
 };
 
 #endif

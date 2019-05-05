@@ -177,8 +177,8 @@ KRT2Device::Send(const uint8_t *msg, unsigned msg_size,
     // Wait for the response
     uint8_t _response;
     {
-      const std::lock_guard<Mutex> lock(response_mutex);
-      rx_cond.wait_for(response_mutex, std::chrono::milliseconds(CMD_TIMEOUT));
+      std::unique_lock<Mutex> lock(response_mutex);
+      rx_cond.wait_for(lock, std::chrono::milliseconds(CMD_TIMEOUT));
       _response = response;
     }
 

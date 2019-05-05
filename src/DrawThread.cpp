@@ -36,12 +36,12 @@ DrawThread::Run()
 {
   SetLowPriority();
 
-  const std::lock_guard<Mutex> lock(mutex);
+  std::unique_lock<Mutex> lock(mutex);
 
   // circle until application is closed
-  while (!_CheckStoppedOrSuspended()) {
+  while (!_CheckStoppedOrSuspended(lock)) {
     if (!pending) {
-      command_trigger.wait(mutex);
+      command_trigger.wait(lock);
       continue;
     }
 

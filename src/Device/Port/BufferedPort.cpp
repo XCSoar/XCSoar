@@ -99,7 +99,7 @@ Port::WaitResult
 BufferedPort::WaitRead(unsigned timeout_ms)
 {
   TimeoutClock timeout(timeout_ms);
-  std::lock_guard<Mutex> lock(mutex);
+  std::unique_lock<Mutex> lock(mutex);
 
   while (buffer.empty()) {
     if (running)
@@ -109,7 +109,7 @@ BufferedPort::WaitRead(unsigned timeout_ms)
     if (remaining_ms <= 0)
       return WaitResult::TIMEOUT;
 
-    cond.wait_for(mutex, std::chrono::milliseconds(remaining_ms));
+    cond.wait_for(lock, std::chrono::milliseconds(remaining_ms));
   }
 
   return WaitResult::READY;

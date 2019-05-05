@@ -140,7 +140,7 @@ protected:
    *
    * Caller must lock the mutex.
    */
-  void WaitDone();
+  void WaitDone(std::unique_lock<Mutex> &lock) noexcept;
 
   /**
    * Same as WaitDone(), but automatically lock and unlock the mutex.
@@ -148,8 +148,8 @@ protected:
    * Caller must not lock the mutex.
    */
   void LockWaitDone() {
-    std::lock_guard<Mutex> lock(mutex);
-    WaitDone();
+    std::unique_lock<Mutex> lock(mutex);
+    WaitDone(lock);
   }
 
   /**

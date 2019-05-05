@@ -38,9 +38,9 @@ ThreadedOperationEnvironment::IsCancelled() const
 void
 ThreadedOperationEnvironment::Sleep(unsigned ms)
 {
-  const std::lock_guard<Mutex> lock(mutex);
+  std::unique_lock<Mutex> lock(mutex);
   if (!cancel_flag)
-    cancel_cond.wait_for(mutex, std::chrono::milliseconds(ms));
+    cancel_cond.wait_for(lock, std::chrono::milliseconds(ms));
 }
 
 void

@@ -96,7 +96,8 @@ public:
   }
 
   template<typename K>
-  const_iterator Wait(const K &key, OperationEnvironment &env,
+  const_iterator Wait(std::unique_lock<Mutex> &lock,
+                      const K &key, OperationEnvironment &env,
                       TimeoutClock timeout) {
     while (true) {
       auto i = map.find(key);
@@ -110,15 +111,16 @@ public:
       if (remaining <= 0)
         return end();
 
-      cond.wait_for(*this, std::chrono::milliseconds(remaining));
+      cond.wait_for(lock, std::chrono::milliseconds(remaining));
     }
   }
 
   template<typename K>
-  const_iterator Wait(const K &key, OperationEnvironment &env,
+  const_iterator Wait(std::unique_lock<Mutex> &lock,
+                      const K &key, OperationEnvironment &env,
                       unsigned timeout_ms) {
     TimeoutClock timeout(timeout_ms);
-    return Wait(key, env, timeout);
+    return Wait(lock, key, env, timeout);
   }
 
   template<typename K>

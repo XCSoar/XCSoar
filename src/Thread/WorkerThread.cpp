@@ -36,25 +36,25 @@ WorkerThread::Run()
 {
   PeriodClock clock;
 
-  const std::lock_guard<Mutex> lock(mutex);
+  std::unique_lock<Mutex> lock(mutex);
 
   while (true) {
     /* wait for work */
     if (!trigger_flag) {
-      if (_CheckStoppedOrSuspended())
+      if (_CheckStoppedOrSuspended(lock))
         break;
 
       /* check trigger_flag again to avoid a race condition, because
          _CheckStoppedOrSuspended() may have unlocked the mutex while
          we were suspended */
       if (!trigger_flag)
-        trigger_cond.wait(mutex);
+        trigger_cond.wait(lock);
     }
 
     /* got the "stop" trigger? */
     if (delay > 0
-        ? _WaitForStopped(delay)
-        : _CheckStoppedOrSuspended())
+        ? _WaitForStopped(lock, delay)
+        : _CheckStoppedOrSuspended(lock))
       break;
 
     if (!trigger_flag)
@@ -79,7 +79,7 @@ WorkerThread::Run()
         idle = period_min - elapsed;
     }
 
-    if (idle > 0 && _WaitForStopped(idle))
+    if (idle > 0 && _WaitForStopped(lock, idle))
       break;
   }
 }

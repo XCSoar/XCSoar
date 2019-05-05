@@ -78,9 +78,9 @@ public:
   }
 
   void Suspend() {
-    const std::lock_guard<Mutex> lock(mutex);
+    std::unique_lock<Mutex> lock(mutex);
     _BeginSuspend();
-    _WaitUntilSuspended();
+    _WaitUntilSuspended(lock);
   }
 
   /**

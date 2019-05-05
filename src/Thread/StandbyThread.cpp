@@ -61,12 +61,12 @@ StandbyThread::StopAsync()
 }
 
 void
-StandbyThread::WaitDone()
+StandbyThread::WaitDone(std::unique_lock<Mutex> &lock) noexcept
 {
   assert(!IsInside());
 
   while (alive && IsBusy())
-    cond.wait(mutex);
+    cond.wait(lock);
 }
 
 void
@@ -89,7 +89,7 @@ StandbyThread::Run()
 {
   assert(!busy);
 
-  const std::lock_guard<Mutex> lock(mutex);
+  std::unique_lock<Mutex> lock(mutex);
 
   alive = true;
 
@@ -98,7 +98,7 @@ StandbyThread::Run()
 
     if (!pending) {
       /* wait for a command */
-      cond.wait(mutex);
+      cond.wait(lock);
     }
 
     assert(!busy);

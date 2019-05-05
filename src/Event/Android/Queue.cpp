@@ -62,7 +62,7 @@ EventQueue::Generate(Event &event)
 bool
 EventQueue::Wait(Event &event)
 {
-  std::lock_guard<Mutex> lock(mutex);
+  std::unique_lock<Mutex> lock(mutex);
   if (quit)
     return false;
 
@@ -75,9 +75,9 @@ EventQueue::Wait(Event &event)
 
     const auto timeout = timers.GetTimeout(SteadyNow());
     if (timeout < std::chrono::steady_clock::duration::zero())
-      cond.wait(mutex);
+      cond.wait(lock);
     else
-      cond.wait_for(mutex, timeout);
+      cond.wait_for(lock, timeout);
 
     FlushClockCaches();
   }
