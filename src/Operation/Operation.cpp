@@ -31,7 +31,7 @@ NullOperationEnvironment::IsCancelled() const
 }
 
 void
-NullOperationEnvironment::Sleep(unsigned ms)
+NullOperationEnvironment::Sleep(std::chrono::steady_clock::duration) noexcept
 {
 }
 
@@ -56,7 +56,7 @@ NullOperationEnvironment::SetProgressPosition(unsigned position)
 }
 
 void
-QuietOperationEnvironment::Sleep(unsigned ms)
+QuietOperationEnvironment::Sleep(std::chrono::steady_clock::duration duration) noexcept
 {
-  ::Sleep(ms);
+  ::Sleep(std::chrono::duration_cast<std::chrono::milliseconds>(duration).count());
 }

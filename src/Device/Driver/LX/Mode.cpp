@@ -157,7 +157,7 @@ LXDevice::EnableCommandMode(OperationEnvironment &env)
          because Port::Drain() does not seem to work reliably on Linux
          with a USB-RS232 converter; with a V7+Nano, 100ms is more
          than enough */
-      env.Sleep(100);
+      env.Sleep(std::chrono::milliseconds(100));
 
       if (!port.SetBaudrate(bulk_baud_rate)) {
         mode = Mode::UNKNOWN;

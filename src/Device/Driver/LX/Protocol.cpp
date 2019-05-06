@@ -51,11 +51,11 @@ void
 LX::CommandModeQuick(Port &port, OperationEnvironment &env)
 {
   SendSYN(port);
-  env.Sleep(500);
+  env.Sleep(std::chrono::milliseconds(500));
   SendSYN(port);
-  env.Sleep(500);
+  env.Sleep(std::chrono::milliseconds(500));
   SendSYN(port);
-  env.Sleep(500);
+  env.Sleep(std::chrono::milliseconds(500));
 }
 
 bool

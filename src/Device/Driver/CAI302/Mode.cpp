@@ -88,7 +88,7 @@ CAI302Device::SetBaudRate(unsigned baud_rate, OperationEnvironment &env)
 
   /* the CAI302 needs some time to apply the new baud rate; if we
      switch too early, it'll cancel the command */
-  env.Sleep(500);
+  env.Sleep(std::chrono::milliseconds(500));
 
   return port.SetBaudrate(baud_rate) && CAI302::CommandMode(port, env);
 }

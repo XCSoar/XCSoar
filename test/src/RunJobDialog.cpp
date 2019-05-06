@@ -36,7 +36,7 @@ public:
     env.SetProgressRange(30);
     for (unsigned i = 0; i < 30 && !env.IsCancelled(); ++i) {
       env.SetProgressPosition(i);
-      env.Sleep(500);
+      env.Sleep(std::chrono::milliseconds(500));
     }
   }
 };

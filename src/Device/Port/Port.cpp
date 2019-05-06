@@ -38,7 +38,7 @@ bool
 Port::WaitConnected(OperationEnvironment &env)
 {
   while (GetState() == PortState::LIMBO && !env.IsCancelled())
-    env.Sleep(200);
+    env.Sleep(std::chrono::milliseconds(200));
 
   return GetState() == PortState::READY;
 }

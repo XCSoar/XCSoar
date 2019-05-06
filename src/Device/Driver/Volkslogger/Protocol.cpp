@@ -32,7 +32,7 @@ Copyright_License {
 bool
 Volkslogger::Reset(Port &port, OperationEnvironment &env, unsigned n)
 {
-  static constexpr unsigned delay = 2;
+  static constexpr auto delay = std::chrono::milliseconds(2);
 
   while (n-- > 0) {
     if (!port.Write(CAN))
@@ -120,7 +120,7 @@ bool
 Volkslogger::SendCommand(Port &port, OperationEnvironment &env,
                          Command cmd, uint8_t param1, uint8_t param2)
 {
-  static constexpr unsigned delay = 2;
+  static constexpr auto delay = std::chrono::milliseconds(2);
 
   /* flush buffers */
   if (!port.FullFlush(env, std::chrono::milliseconds(20),
@@ -241,7 +241,7 @@ Volkslogger::ReadBulk(Port &port, OperationEnvironment &env,
 
     // dabei ist Benutzerabbruch jederzeit möglich
     if (env.IsCancelled()) {
-      env.Sleep(10);
+      env.Sleep(std::chrono::milliseconds(10));
       port.Write(CAN);
       port.Write(CAN);
       port.Write(CAN);
@@ -307,7 +307,7 @@ Volkslogger::ReadBulk(Port &port, OperationEnvironment &env,
     }
   }
 
-  env.Sleep(100);
+  env.Sleep(std::chrono::milliseconds(100));
 
   if (crc16 != 0)
     return -1;
@@ -323,7 +323,7 @@ bool
 Volkslogger::WriteBulk(Port &port, OperationEnvironment &env,
                        const void *buffer, unsigned length)
 {
-  const unsigned delay = 1;
+  static constexpr auto delay = std::chrono::milliseconds(100);
 
   env.SetProgressRange(length);
 
@@ -345,7 +345,7 @@ Volkslogger::WriteBulk(Port &port, OperationEnvironment &env,
 
     /* throttle sending a bit, or the Volkslogger's receive buffer
        will overrun */
-    env.Sleep(delay * 100);
+    env.Sleep(delay);
   }
 
   return port.Write(crc16 >> 8) && port.Write(crc16 & 0xff);
@@ -377,7 +377,7 @@ Volkslogger::SendCommandReadBulk(Port &port, unsigned baud_rate,
 
     /* after switching baud rates, this sleep time is necessary; it has
        been verified experimentally */
-    env.Sleep(300);
+    env.Sleep(std::chrono::milliseconds(300));
   } else {
     /* port does not support baud rate switching, use plain
        SendCommand() without new baud rate */
@@ -402,7 +402,7 @@ Volkslogger::SendCommandWriteBulk(Port &port, OperationEnvironment &env,
   if (!SendCommand(port, env, cmd, 0, 0) || !WaitForACK(port, env))
     return false;
 
-  env.Sleep(100);
+  env.Sleep(std::chrono::milliseconds(100));
 
   return WriteBulk(port, env, data, size) && WaitForACK(port, env);
 }
@@ -433,7 +433,7 @@ Volkslogger::ReadFlight(Port &port, unsigned databaud,
     return 0;
 
   // read signature
-  env.Sleep(300);
+  env.Sleep(std::chrono::milliseconds(300));
 
   /*
    * Testing has shown that downloading the Signature does not support

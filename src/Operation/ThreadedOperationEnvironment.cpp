@@ -36,11 +36,11 @@ ThreadedOperationEnvironment::IsCancelled() const
 }
 
 void
-ThreadedOperationEnvironment::Sleep(unsigned ms)
+ThreadedOperationEnvironment::Sleep(std::chrono::steady_clock::duration duration) noexcept
 {
   std::unique_lock<Mutex> lock(mutex);
   if (!cancel_flag)
-    cancel_cond.wait_for(lock, std::chrono::milliseconds(ms));
+    cancel_cond.wait_for(lock, duration);
 }
 
 void

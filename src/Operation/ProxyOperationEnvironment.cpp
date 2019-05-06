@@ -30,9 +30,9 @@ ProxyOperationEnvironment::IsCancelled() const
 }
 
 void
-ProxyOperationEnvironment::Sleep(unsigned ms)
+ProxyOperationEnvironment::Sleep(std::chrono::steady_clock::duration duration) noexcept
 {
-  other.Sleep(ms);
+  other.Sleep(duration);
 }
 
 void

@@ -37,7 +37,7 @@ public:
 
   /* virtual methods from class OperationEnvironment */
   bool IsCancelled() const override;
-  void Sleep(unsigned ms) override;
+  void Sleep(std::chrono::steady_clock::duration duration) noexcept override;
 };
 
 #endif
