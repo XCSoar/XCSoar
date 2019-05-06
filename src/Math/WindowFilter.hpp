@@ -31,11 +31,9 @@
 template<unsigned max>
 class WindowFilter : public AvFilter<max>
 {
-  unsigned i;
+  unsigned i = 0;
 
 public:
-  WindowFilter():i(0) {}
-
   /**
    * Updates filter to add sample to buffer
    *
