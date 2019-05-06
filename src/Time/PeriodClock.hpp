@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_PERIOD_CLOCK_HPP
 #define XCSOAR_PERIOD_CLOCK_HPP
 
-#include "OS/Clock.hpp"
-
 #include <chrono>
 
 /**
@@ -51,7 +49,7 @@ public:
 
 protected:
   static Stamp GetNow() {
-    return MonotonicClockMS();
+    return Import(std::chrono::steady_clock::now().time_since_epoch());
   }
 
   constexpr int Elapsed(Stamp now) const {
@@ -163,7 +161,7 @@ public:
 
 protected:
   template<class Rep, class Period>
-  static constexpr int Import(const std::chrono::duration<Rep,Period> &duration) noexcept {
+  static int Import(const std::chrono::duration<Rep,Period> &duration) noexcept {
     return std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
   }
 
