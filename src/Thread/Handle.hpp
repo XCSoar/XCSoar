@@ -51,16 +51,16 @@ public:
   ThreadHandle() = default;
 
 #ifdef HAVE_POSIX
-  constexpr ThreadHandle(pthread_t _handle):handle(_handle) {}
+  constexpr ThreadHandle(pthread_t _handle) noexcept:handle(_handle) {}
 #else
-  constexpr ThreadHandle(DWORD _handle):handle(_handle) {}
+  constexpr ThreadHandle(DWORD _handle) noexcept:handle(_handle) {}
 #endif
 
   /**
    * Return a handle referring to the current thread.
    */
   gcc_pure
-  static const ThreadHandle GetCurrent() {
+  static ThreadHandle GetCurrent() noexcept {
 #ifdef HAVE_POSIX
     return pthread_self();
 #else
@@ -69,7 +69,7 @@ public:
   }
 
   gcc_pure
-  bool operator==(const ThreadHandle &other) const {
+  bool operator==(const ThreadHandle &other) const noexcept {
 #ifdef HAVE_POSIX
     return pthread_equal(handle, other.handle);
 #else
@@ -80,7 +80,7 @@ public:
   /**
    * Check if this thread is the current thread.
    */
-  bool IsInside() const {
+  bool IsInside() const noexcept {
     return *this == GetCurrent();
   }
 };
