@@ -26,11 +26,10 @@
 #include "Point2D.hpp"
 #include "Compiler.h"
 
-gcc_const
-static double
+constexpr double
 CalcQuadrilateralU(const DoublePoint2D h, DoublePoint2D f,
                    DoublePoint2D e, DoublePoint2D g,
-                   double v)
+                   double v) noexcept
 {
   return e.x + g.x * v == 0
           ? (h.y - f.y * v) / (e.y + g.y * v)
@@ -48,7 +47,7 @@ gcc_const
 static DoublePoint2D
 MapInQuadrilateral(const DoublePoint2D a, const DoublePoint2D b,
                    const DoublePoint2D c, const DoublePoint2D d,
-                   const DoublePoint2D p)
+                   const DoublePoint2D p) noexcept
 {
   const DoublePoint2D e = b - a;
   const DoublePoint2D f = d - a;
