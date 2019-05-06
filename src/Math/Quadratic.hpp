@@ -43,7 +43,7 @@ public:
    * @param _b Value of b
    * @param _c Value of c
    */
-  Quadratic(const double _b, const double _c)
+  constexpr Quadratic(double _b, double _c) noexcept
     :da(2), b(_b), denom(Square(b) - 4 * _c)
   {
   }
@@ -55,7 +55,7 @@ public:
    * @param _b Value of b
    * @param _c Value of c
    */
-  Quadratic(const double _a, const double _b, const double _c)
+  constexpr Quadratic(double _a, double _b, double _c) noexcept
     :da(2 * _a), b(_b), denom(Square(b) - 2 * da * _c)
   {
   }
@@ -65,8 +65,7 @@ public:
    *
    * @return True if quadratic has at least one real solution
    */
-  gcc_pure
-  bool Check() const {
+  constexpr bool Check() const noexcept {
     if (denom < 0)
       return false;
 
@@ -81,8 +80,7 @@ public:
    *
    * @return greater x value of solutions
    */
-  gcc_pure
-  double SolutionMax() const {
+  double SolutionMax() const noexcept {
     assert(Check());
     return Solution(da > 0);
   }
@@ -93,7 +91,7 @@ public:
    * @return smallest x value of solutions
    */
   gcc_pure
-  double SolutionMin() const {
+  double SolutionMin() const noexcept {
     assert(Check());
     return Solution(da <= 0);
   }
@@ -108,7 +106,7 @@ private:
    * @return x value of solution
    */
   gcc_pure
-  double Solution(const bool positive) const {
+  double Solution(const bool positive) const noexcept {
     assert(Check());
     return (-b + (positive ? sqrt(denom) : -sqrt(denom))) / da;
   }
