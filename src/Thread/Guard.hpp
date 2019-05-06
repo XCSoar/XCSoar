@@ -48,6 +48,8 @@ public:
       guard.mutex.lock_shared();
     }
 
+    Lease(const Lease &) = delete;
+
     ~Lease() noexcept {
       guard.mutex.unlock_shared();
     }
@@ -71,6 +73,8 @@ public:
     explicit ExclusiveLease(Guard &_guard) noexcept:guard(_guard) {
       guard.mutex.lock();
     }
+
+    ExclusiveLease(const ExclusiveLease &) = delete;
 
     ~ExclusiveLease() noexcept {
       guard.mutex.unlock();
@@ -104,6 +108,8 @@ public:
   public:
     explicit UnprotectedLease(Guard &_guard) noexcept
       :value(_guard.value) {}
+
+    UnprotectedLease(const UnprotectedLease &) = delete;
 
     operator const T&() const noexcept {
       return value;
