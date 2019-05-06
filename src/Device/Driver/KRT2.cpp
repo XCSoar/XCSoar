@@ -44,7 +44,7 @@ Copyright_License {
  * for the protocol specification.
  */
 class KRT2Device final : public AbstractDevice {
-  static constexpr auto CMD_TIMEOUT = 250; //!< Command timeout in ms.
+  static constexpr auto CMD_TIMEOUT = 250ll; //!< Command timeout in ms.
   static constexpr unsigned NR_RETRIES = 3; //!< Number of tries to send a command.
 
   static constexpr char STX = 0x02; //!< Command start character.
