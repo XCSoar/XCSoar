@@ -107,11 +107,11 @@ public:
       if (env.IsCancelled())
         return end();
 
-      int remaining = timeout.GetRemainingSigned();
-      if (remaining <= 0)
+      const auto remaining = timeout.GetRemainingSigned();
+      if (remaining.count() <= 0)
         return end();
 
-      cond.wait_for(lock, std::chrono::milliseconds(remaining));
+      cond.wait_for(lock, remaining);
     }
   }
 

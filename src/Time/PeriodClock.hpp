@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "OS/Clock.hpp"
 
+#include <chrono>
+
 /**
  * This is a stopwatch which saves the timestamp of an event, and can
  * check whether a specified time span has passed since then.
@@ -121,6 +123,11 @@ public:
     Update(GetNow() + offset);
   }
 
+  template<class Rep, class Period>
+  constexpr void UpdateWithOffset(const std::chrono::duration<Rep,Period> &offset) noexcept {
+    UpdateWithOffset(Import(offset));
+  }
+
   /**
    * Checks whether the specified duration has passed since the last
    * update.  If yes, it updates the time stamp.
@@ -136,6 +143,11 @@ public:
       return false;
   }
 
+  template<class Rep, class Period>
+  bool CheckUpdate(const std::chrono::duration<Rep,Period> &duration) noexcept {
+    return CheckUpdate(Import(duration));
+  }
+
   /**
    * Checks whether the specified duration has passed since the last
    * update.  After that, it updates the time stamp.
@@ -147,6 +159,16 @@ public:
     bool ret = Check(now, duration);
     Update(now);
     return ret;
+  }
+
+protected:
+  template<class Rep, class Period>
+  static constexpr int Import(const std::chrono::duration<Rep,Period> &duration) noexcept {
+    return std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
+  }
+
+  static constexpr std::chrono::steady_clock::duration ExportMS(int ms) noexcept {
+    return std::chrono::milliseconds(ms);
   }
 };
 

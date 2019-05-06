@@ -38,6 +38,10 @@ public:
     UpdateWithOffset(max_duration_ms);
   }
 
+  template<class Rep, class Period>
+  explicit TimeoutClock(const std::chrono::duration<Rep,Period> &max_duration) noexcept
+    :TimeoutClock(Import(max_duration)) {}
+
   gcc_pure
   bool HasExpired() const {
     return Elapsed() > 0;
@@ -49,8 +53,8 @@ public:
    * negative.
    */
   gcc_pure
-  int GetRemainingSigned() const {
-    return -Elapsed();
+  std::chrono::steady_clock::duration GetRemainingSigned() const {
+    return ExportMS(-Elapsed());
   }
 
   /**
@@ -59,8 +63,9 @@ public:
    * 0.
    */
   gcc_pure
-  unsigned GetRemainingOrZero() const {
-    return std::max(GetRemainingSigned(), 0);
+  std::chrono::steady_clock::duration GetRemainingOrZero() const {
+    return std::max(GetRemainingSigned(),
+                    std::chrono::steady_clock::duration::zero());
   }
 };
 
