@@ -44,19 +44,19 @@ public:
     const Guard &guard;
 
   public:
-    explicit Lease(const Guard &_guard):guard(_guard) {
+    explicit Lease(const Guard &_guard) noexcept:guard(_guard) {
       guard.mutex.lock_shared();
     }
 
-    ~Lease() {
+    ~Lease() noexcept {
       guard.mutex.unlock_shared();
     }
 
-    operator const T&() const {
+    operator const T&() const noexcept {
       return guard.value;
     }
 
-    const T *operator->() const {
+    const T *operator->() const noexcept {
       return &guard.value;
     }
   };
@@ -68,27 +68,27 @@ public:
     Guard &guard;
 
   public:
-    explicit ExclusiveLease(Guard &_guard):guard(_guard) {
+    explicit ExclusiveLease(Guard &_guard) noexcept:guard(_guard) {
       guard.mutex.lock();
     }
 
-    ~ExclusiveLease() {
+    ~ExclusiveLease() noexcept {
       guard.mutex.unlock();
     }
 
-    operator const T&() const {
+    operator const T&() const noexcept {
       return guard.value;
     }
 
-    operator T&() {
+    operator T&() noexcept {
       return guard.value;
     }
 
-    const T *operator->() const {
+    const T *operator->() const noexcept {
       return &guard.value;
     }
 
-    T *operator->() {
+    T *operator->() noexcept {
       return &guard.value;
     }
   };
@@ -102,28 +102,28 @@ public:
     T &value;
 
   public:
-    explicit UnprotectedLease(Guard &_guard)
+    explicit UnprotectedLease(Guard &_guard) noexcept
       :value(_guard.value) {}
 
-    operator const T&() const {
+    operator const T&() const noexcept {
       return value;
     }
 
-    operator T&() {
+    operator T&() noexcept {
       return value;
     }
 
-    const T *operator->() const {
+    const T *operator->() const noexcept {
       return &value;
     }
 
-    T *operator->() {
+    T *operator->() noexcept{
       return &value;
     }
   };
 
 public:
-  explicit Guard(T &_value):value(_value) {}
+  explicit Guard(T &_value) noexcept:value(_value) {}
 };
 
 #endif
