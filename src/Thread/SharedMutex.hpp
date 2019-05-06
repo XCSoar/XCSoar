@@ -24,8 +24,17 @@ Copyright_License {
 #ifndef XCSOAR_THREAD_SHARED_MUTEX_HXX
 #define XCSOAR_THREAD_SHARED_MUTEX_HXX
 
-#include "FastSharedMutex.hxx"
+#include <shared_mutex>
 
-using SharedMutex = FastSharedMutex;
+#ifdef _WIN32
+
+#include "WindowsSharedMutex.hxx"
+using SharedMutex = WindowsSharedMutex;
+
+#else
+
+using SharedMutex = std::shared_mutex;
+
+#endif
 
 #endif
