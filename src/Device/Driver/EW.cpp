@@ -90,7 +90,8 @@ EWDevice::TryConnect(OperationEnvironment &env)
     if (port.ExpectString("IO Mode.\r", env))
       return true;
 
-    if (!port.FullFlush(env, 100, 500))
+    if (!port.FullFlush(env, std::chrono::milliseconds(100),
+                        std::chrono::milliseconds(500)))
       return false;
   }
 

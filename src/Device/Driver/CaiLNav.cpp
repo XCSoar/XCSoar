@@ -66,9 +66,9 @@ PortWriteNMEANoChecksum(Port &port, const char *line,
                         OperationEnvironment &env)
 {
   // reasonable hard-coded timeout; Copied from ::PortWriteNMEA()
-  const unsigned timeout_ms = 1000;
+  constexpr auto timeout = std::chrono::seconds(1);
 
-  port.FullWrite(line, strlen(line), env, timeout_ms);
+  port.FullWrite(line, strlen(line), env, timeout);
 }
 
 /*

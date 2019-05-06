@@ -149,9 +149,10 @@ namespace LX {
   }
 
   static inline bool
-  ExpectACK(Port &port, OperationEnvironment &env, unsigned timeout_ms=2000)
+  ExpectACK(Port &port, OperationEnvironment &env,
+            std::chrono::steady_clock::duration timeout=std::chrono::seconds(2))
   {
-    return port.WaitForChar(ACK, env, timeout_ms) == Port::WaitResult::READY;
+    return port.WaitForChar(ACK, env, timeout) == Port::WaitResult::READY;
   }
 
   /**
@@ -160,9 +161,10 @@ namespace LX {
    * @return true on success
    */
   static inline bool
-  Connect(Port &port, OperationEnvironment &env, unsigned timeout_ms=500)
+  Connect(Port &port, OperationEnvironment &env,
+          std::chrono::steady_clock::duration timeout=std::chrono::milliseconds(500))
   {
-    return SendSYN(port) && ExpectACK(port, env, timeout_ms);
+    return SendSYN(port) && ExpectACK(port, env, timeout);
   }
 
   /**
@@ -188,13 +190,15 @@ namespace LX {
   bool
   SendPacket(Port &port, Command command,
              const void *data, size_t length,
-             OperationEnvironment &env, unsigned timeout_ms=5000);
+             OperationEnvironment &env,
+             std::chrono::steady_clock::duration timeout=std::chrono::seconds(5));
 
   bool
   ReceivePacket(Port &port, Command command,
                 void *data, size_t length, OperationEnvironment &env,
-                unsigned first_timeout_ms, unsigned subsequent_timeout_ms,
-                unsigned total_timeout_ms);
+                std::chrono::steady_clock::duration first_timeout,
+                std::chrono::steady_clock::duration subsequent_timeout,
+                std::chrono::steady_clock::duration total_timeout);
 
   /**
    * Wrapper for ReceivePacket() which can retry on failure.  Before
@@ -204,8 +208,9 @@ namespace LX {
   bool
   ReceivePacketRetry(Port &port, Command command,
                      void *data, size_t length, OperationEnvironment &env,
-                     unsigned first_timeout_ms, unsigned subsequent_timeout_ms,
-                     unsigned total_timeout_ms,
+                     std::chrono::steady_clock::duration first_timeout,
+                     std::chrono::steady_clock::duration subsequent_timeout,
+                     std::chrono::steady_clock::duration total_timeout,
                      unsigned n_retries);
 
   gcc_const
@@ -218,8 +223,9 @@ namespace LX {
 
   bool
   ReadCRC(Port &port, void *buffer, size_t length, OperationEnvironment &env,
-          unsigned first_timeout_ms, unsigned subsequent_timeout_ms,
-          unsigned total_timeout_ms);
+          std::chrono::steady_clock::duration first_timeout,
+          std::chrono::steady_clock::duration subsequent_timeout,
+          std::chrono::steady_clock::duration total_timeout);
 
   /**
    * Writes data to a #Port, and keeps track of the CRC.
@@ -232,8 +238,9 @@ namespace LX {
     CRCWriter(Port &_port):port(_port), crc(0xff) {}
 
     bool Write(const void *data, size_t length,
-               OperationEnvironment &env, unsigned timeout_ms=5000) {
-      if (!port.FullWrite(data, length, env, timeout_ms))
+               OperationEnvironment &env,
+               std::chrono::steady_clock::duration timeout=std::chrono::seconds(5)) {
+      if (!port.FullWrite(data, length, env, timeout))
         return false;
 
       crc = calc_crc((const uint8_t *)data, length, crc);

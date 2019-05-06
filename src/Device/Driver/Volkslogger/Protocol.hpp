@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_VOLKSLOGGER_PROTOCOL_HPP
 #define XCSOAR_DEVICE_DRIVER_VOLKSLOGGER_PROTOCOL_HPP
 
+#include <chrono>
+
 #include <stdint.h>
 #include <stddef.h>
 
@@ -102,12 +104,14 @@ namespace Volkslogger {
 
   bool Reset(Port &port, OperationEnvironment &env, unsigned n);
 
-  bool Handshake(Port &port, OperationEnvironment &env, unsigned timeout_ms);
+  bool Handshake(Port &port, OperationEnvironment &env,
+               std::chrono::steady_clock::duration timeout);
 
-  bool Connect(Port &port, OperationEnvironment &env, unsigned timeout_ms);
+  bool Connect(Port &port, OperationEnvironment &env,
+               std::chrono::steady_clock::duration timeout);
 
   bool ConnectAndFlush(Port &port, OperationEnvironment &env,
-                       unsigned timeout_ms);
+                       std::chrono::steady_clock::duration timeout);
 
   bool SendCommand(Port &port, OperationEnvironment &env,
                    Command cmd, uint8_t param1=0, uint8_t param2=0);
@@ -134,13 +138,13 @@ namespace Volkslogger {
    * @param buffer Pointer to the buffer containing the reply received from the
    *        logger
    * @param max_length Maximum buffer size
-   * @param timeout_firstchar_ms Optional parameter. Prolonged timeout to wait
+   * @param timeout_firstchar Optional parameter. Prolonged timeout to wait
    *        for the first reply. If left out or set to 0(Zero) the standard
    *        timeout as for the other chars will be applied.
    */
   int ReadBulk(Port &port, OperationEnvironment &env,
                void *buffer, size_t max_length,
-               unsigned timeout_firstchar_ms=0);
+               std::chrono::steady_clock::duration timeout_firstchar={});
 
   bool WriteBulk(Port &port, OperationEnvironment &env,
                  const void *buffer, unsigned length);
@@ -153,13 +157,13 @@ namespace Volkslogger {
    * @param buffer Pointer to the buffer containing the reply received from the
    *        logger
    * @param max_length Maximum buffer size
-   * @param timeout_firstchar_ms Optional parameter. Prolonged timeout to wait
+   * @param timeout_firstchar Optional parameter. Prolonged timeout to wait
    *        for the first reply. If left out or set to 0(Zero) the standard
    *        timeout as for the other chars will be applied.
    */
   int SendCommandReadBulk(Port &port, OperationEnvironment &env,
                           Command cmd, void *buffer, size_t max_length,
-                          unsigned timeout_firstchar_ms=0);
+                          std::chrono::steady_clock::duration timeout_firstchar={});
 
   /**
     * Send command to Volkslogger and after that wait to read
@@ -171,7 +175,7 @@ namespace Volkslogger {
     * @param buffer Pointer to the buffer containing the reply received from the
     *        logger
     * @param max_length Maximum buffer size
-    * @param timeout_firstchar_ms Optional parameter. Prolonged timeout to wait
+    * @param timeout_firstchar Optional parameter. Prolonged timeout to wait
     *        for the first reply. If left out or set to 0(Zero) the standard
     *        timeout as for the other chars will be applied.
     */
@@ -180,7 +184,7 @@ namespace Volkslogger {
                           OperationEnvironment &env,
                           Command cmd, uint8_t param1,
                           void *buffer, size_t max_length,
-                          unsigned timeout_firstchar_ms=0);
+                          std::chrono::steady_clock::duration timeout_firstchar={});
 
   /**
    * Same Function as the one above. Only without param1.
@@ -189,10 +193,10 @@ namespace Volkslogger {
                                         OperationEnvironment &env,
                                         Command cmd,
                                         void *buffer, size_t max_length,
-                                        unsigned timeout_firstchar_ms=0)
+                                        std::chrono::steady_clock::duration timeout_firstchar={})
   {
     return SendCommandReadBulk(port, baud_rate, env, cmd, 0, buffer,
-                               max_length, timeout_firstchar_ms);
+                               max_length, timeout_firstchar);
   }
 
   bool SendCommandWriteBulk(Port &port, OperationEnvironment &env,

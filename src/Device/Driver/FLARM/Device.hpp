@@ -141,7 +141,8 @@ private:
    */
   bool Send(const char *sentence, OperationEnvironment &env);
   bool Receive(const char *prefix, char *buffer, size_t length,
-               OperationEnvironment &env, unsigned timeout_ms);
+               OperationEnvironment &env,
+               std::chrono::steady_clock::duration timeout);
 
   bool GetConfig(const char *setting, char *buffer, size_t length,
                  OperationEnvironment &env);
@@ -159,13 +160,15 @@ private:
                        OperationEnvironment &env);
 
   bool SendEscaped(const void *data, size_t length,
-                   OperationEnvironment &env, unsigned timeout_ms) {
-    return FLARM::SendEscaped(port, data, length, env, timeout_ms);
+                   OperationEnvironment &env,
+                   std::chrono::steady_clock::duration timeout) {
+    return FLARM::SendEscaped(port, data, length, env, timeout);
   }
 
   bool ReceiveEscaped(void *data, size_t length,
-                      OperationEnvironment &env, unsigned timeout_ms) {
-    return FLARM::ReceiveEscaped(port, data, length, env, timeout_ms);
+                      OperationEnvironment &env,
+                      std::chrono::steady_clock::duration timeout) {
+    return FLARM::ReceiveEscaped(port, data, length, env, timeout);
   }
 
   /**
@@ -177,10 +180,10 @@ private:
   /**
    * Waits for a certain amount of time until the next frame start signal byte
    * is received
-   * @param timeout_ms Timeout in milliseconds
    * @return True if the start byte was received, False if a timeout occurred
    */
-  bool WaitForStartByte(OperationEnvironment &env, unsigned timeout_ms);
+  bool WaitForStartByte(OperationEnvironment &env,
+                        std::chrono::steady_clock::duration timeout);
 
   /**
    * Convenience function. Returns a pre-populated FrameHeader instance that is
@@ -199,23 +202,23 @@ private:
    * Sends a FrameHeader to the port. Remember that a StartByte should be
    * sent first!
    * @param header FrameHeader that should be sent.
-   * @param timeout_ms Timeout in milliseconds
    * @return True if the header was sent successfully, False if a timeout
    * or any transfer problems occurred
    */
   bool SendFrameHeader(const FLARM::FrameHeader &header,
-                       OperationEnvironment &env, unsigned timeout_ms);
+                       OperationEnvironment &env,
+                       std::chrono::steady_clock::duration timeout);
 
   /**
    * Reads a FrameHeader from the port. This should only be done directly
    * after receiving a StartByte!
    * @param header FrameHeader instance that should be filled
-   * @param timeout_ms Timeout in milliseconds
    * @return True if the header was received successfully, False if a timeout
    * or any transfer problems occurred
    */
   bool ReceiveFrameHeader(FLARM::FrameHeader &header,
-                          OperationEnvironment &env, unsigned timeout_ms);
+                          OperationEnvironment &env,
+                          std::chrono::steady_clock::duration timeout);
 
   /**
    * Waits for an ACK or NACK message from the FLARM with the right
@@ -223,48 +226,47 @@ private:
    * @param sequence_number Sequence Number that is supposed to be received
    * @param data An AllocatedArray where the received payload will be stored in
    * @param length The length of the received payload
-   * @param timeout_ms Timeout in milliseconds
    * @return Message type if N(ACK) was received properly, otherwise 0x00
    */
   FLARM::MessageType
   WaitForACKOrNACK(uint16_t sequence_number, AllocatedArray<uint8_t> &data,
                    uint16_t &length,
-                   OperationEnvironment &env, unsigned timeout_ms);
+                   OperationEnvironment &env,
+                   std::chrono::steady_clock::duration timeout);
 
   /**
    * Waits for an ACK or NACK message from the FLARM with the right
    * sequence number
    * @param sequence_number Sequence Number that is supposed to be received
-   * @param timeout_ms Timeout in milliseconds
    * @return Message type if N(ACK) was received properly, otherwise 0x00
    */
   FLARM::MessageType WaitForACKOrNACK(uint16_t sequence_number,
                                       OperationEnvironment &env,
-                                      unsigned timeout_ms);
+                                      std::chrono::steady_clock::duration timeout);
 
   /**
    * Waits for an ACK message from the FLARM with the right sequence number
    * @param sequence_number Sequence Number that is supposed to be received
-   * @param timeout_ms Timeout in milliseconds
    * @return True if the ACK message was properly received, False otherwise
    */
   bool WaitForACK(uint16_t sequence_number,
-                  OperationEnvironment &env, unsigned timeout_ms);
+                  OperationEnvironment &env,
+                  std::chrono::steady_clock::duration timeout);
 
   /**
    * "Pings" the connected FLARM device in binary mode to see if the transfer
    * mode switched worked.
-   * @param timeout_ms Timeout in milliseconds
    * @return True if the FLARM responded properly to the ping, False otherwise
    */
-  bool BinaryPing(OperationEnvironment &env, unsigned timeout_ms);
+  bool BinaryPing(OperationEnvironment &env,
+                  std::chrono::steady_clock::duration timeout);
 
   /**
    * "Resets the device. The only way to resume normal operation."
-   * @param timeout_ms Timeout in milliseconds
    * @return True if the message was sent properly, False otherwise
    */
-  bool BinaryReset(OperationEnvironment &env, unsigned timeout_ms);
+  bool BinaryReset(OperationEnvironment &env,
+                   std::chrono::steady_clock::duration timeout);
 
   /**
    * Sends a SelectRecord message to the Flarm

@@ -35,7 +35,7 @@ bool
 CAI302::WriteString(Port &port, const char *p, OperationEnvironment &env)
 {
   size_t length = strlen(p);
-  return port.FullWrite(p, length, env, 2000);
+  return port.FullWrite(p, length, env, std::chrono::seconds(2));
 }
 
 bool
@@ -46,9 +46,9 @@ CAI302::CommandModeQuick(Port &port)
 
 static bool
 WaitCommandPrompt(Port &port, OperationEnvironment &env,
-                  unsigned timeout_ms=2000)
+                  std::chrono::steady_clock::duration timeout=std::chrono::seconds(2))
 {
-  return port.ExpectString("cmd>", env, timeout_ms);
+  return port.ExpectString("cmd>", env, timeout);
 }
 
 bool
@@ -71,10 +71,11 @@ CAI302::SendCommandQuick(Port &port, const char *cmd,
 
 bool
 CAI302::SendCommand(Port &port, const char *cmd,
-                    OperationEnvironment &env, unsigned timeout_ms)
+                    OperationEnvironment &env,
+                    std::chrono::steady_clock::duration timeout)
 {
   return SendCommandQuick(port, cmd, env) &&
-    WaitCommandPrompt(port, env, timeout_ms);
+    WaitCommandPrompt(port, env, timeout);
 }
 
 bool
@@ -91,9 +92,9 @@ CAI302::LogMode(Port &port, OperationEnvironment &env)
 
 static bool
 WaitUploadPrompt(Port &port, OperationEnvironment &env,
-                 unsigned timeout_ms=2000)
+                 std::chrono::steady_clock::duration timeout=std::chrono::seconds(2))
 {
-  return port.ExpectString("up>", env, timeout_ms);
+  return port.ExpectString("up>", env, timeout);
 }
 
 bool
@@ -105,10 +106,11 @@ CAI302::UploadMode(Port &port, OperationEnvironment &env)
 
 int
 CAI302::ReadShortReply(Port &port, void *buffer, unsigned max_size,
-                       OperationEnvironment &env, unsigned timeout_ms)
+                       OperationEnvironment &env,
+                       std::chrono::steady_clock::duration timeout)
 {
   unsigned char header[3];
-  if (!port.FullRead(header, sizeof(header), env, timeout_ms))
+  if (!port.FullRead(header, sizeof(header), env, timeout))
     return -1;
 
   unsigned size = header[0];
@@ -119,7 +121,7 @@ CAI302::ReadShortReply(Port &port, void *buffer, unsigned max_size,
   if (size > max_size)
     size = max_size;
 
-  if (!port.FullRead(buffer, size, env, timeout_ms))
+  if (!port.FullRead(buffer, size, env, timeout))
     return -1;
 
   // XXX verify the checksum
@@ -135,10 +137,11 @@ CAI302::ReadShortReply(Port &port, void *buffer, unsigned max_size,
 
 int
 CAI302::ReadLargeReply(Port &port, void *buffer, unsigned max_size,
-                       OperationEnvironment &env, unsigned timeout_ms)
+                       OperationEnvironment &env,
+                       std::chrono::steady_clock::duration timeout)
 {
   unsigned char header[5];
-  if (!port.FullRead(header, sizeof(header), env, timeout_ms))
+  if (!port.FullRead(header, sizeof(header), env, timeout))
     return -1;
 
   if (header[0] == 0x09 && header[1] >= 0x10 &&
@@ -163,7 +166,7 @@ CAI302::ReadLargeReply(Port &port, void *buffer, unsigned max_size,
   if (size > max_size)
     size = max_size;
 
-  if (!port.FullRead(buffer, size, env, timeout_ms))
+  if (!port.FullRead(buffer, size, env, timeout))
     return -1;
 
   // XXX verify the checksum
@@ -180,13 +183,14 @@ CAI302::ReadLargeReply(Port &port, void *buffer, unsigned max_size,
 int
 CAI302::UploadShort(Port &port, const char *command,
                     void *response, unsigned max_size,
-                    OperationEnvironment &env, unsigned timeout_ms)
+                    OperationEnvironment &env,
+                    std::chrono::steady_clock::duration timeout)
 {
   port.Flush();
   if (!WriteString(port, command, env))
     return -1;
 
-  int nbytes = ReadShortReply(port, response, max_size, env, timeout_ms);
+  int nbytes = ReadShortReply(port, response, max_size, env, timeout);
   if (nbytes < 0)
     return nbytes;
 
@@ -199,13 +203,14 @@ CAI302::UploadShort(Port &port, const char *command,
 int
 CAI302::UploadLarge(Port &port, const char *command,
                     void *response, unsigned max_size,
-                    OperationEnvironment &env, unsigned timeout_ms)
+                    OperationEnvironment &env,
+                    std::chrono::steady_clock::duration timeout)
 {
   port.Flush();
   if (!WriteString(port, command, env))
     return -1;
 
-  int nbytes = ReadLargeReply(port, response, max_size, env, timeout_ms);
+  int nbytes = ReadLargeReply(port, response, max_size, env, timeout);
 
   if (nbytes == -2) {
     /* transmission error - try again */
@@ -213,7 +218,7 @@ CAI302::UploadLarge(Port &port, const char *command,
     if (!WriteString(port, command, env))
       return -1;
 
-    nbytes = ReadLargeReply(port, response, max_size, env, timeout_ms);
+    nbytes = ReadLargeReply(port, response, max_size, env, timeout);
   }
 
   if (nbytes < 0)
@@ -269,7 +274,8 @@ int
 CAI302::UploadFileData(Port &port, bool next, void *data, unsigned length,
                        OperationEnvironment &env)
 {
-  return UploadLarge(port, next ? "B N\r" : "B R\r", data, length, env, 15000);
+  return UploadLarge(port, next ? "B N\r" : "B R\r", data, length, env,
+                     std::chrono::seconds(15));
 }
 
 bool
@@ -331,9 +337,9 @@ CAI302::UploadPilotBlock(Port &port, unsigned start, unsigned count,
 
 static bool
 WaitDownloadPrompt(Port &port, OperationEnvironment &env,
-                   unsigned timeout_ms=2000)
+                   std::chrono::steady_clock::duration timeout=std::chrono::seconds(2))
 {
-  return port.ExpectString("dn>", env, timeout_ms);
+  return port.ExpectString("dn>", env, timeout);
 }
 
 bool
@@ -345,7 +351,8 @@ CAI302::DownloadMode(Port &port, OperationEnvironment &env)
 
 bool
 CAI302::DownloadCommand(Port &port, const char *command,
-                        OperationEnvironment &env, unsigned timeout_ms)
+                        OperationEnvironment &env,
+                        std::chrono::steady_clock::duration timeout)
 {
   return WriteString(port, command, env) && WaitDownloadPrompt(port, env);
 }
@@ -477,7 +484,7 @@ CAI302::DownloadNavpoint(Port &port, const GeoPoint &location,
 bool
 CAI302::CloseNavpoints(Port &port, OperationEnvironment &env)
 {
-  return DownloadCommand(port, "C,-1\r", env, 5000);
+  return DownloadCommand(port, "C,-1\r", env, std::chrono::seconds(5));
 }
 
 
@@ -501,7 +508,7 @@ CAI302::DeclareTP(Port &port, unsigned i, const GeoPoint &location,
 bool
 CAI302::DeclareSave(Port &port, OperationEnvironment &env)
 {
-  return DownloadCommand(port, "D,255\r", env, 5000);
+  return DownloadCommand(port, "D,255\r", env, std::chrono::seconds(5));
 }
 
 bool
@@ -539,19 +546,19 @@ CAI302::SetVolume(Port &port, unsigned volume, OperationEnvironment &env)
 bool
 CAI302::ClearPoints(Port &port, OperationEnvironment &env)
 {
-  return SendCommand(port, "CLEAR POINTS\r", env, 5000);
+  return SendCommand(port, "CLEAR POINTS\r", env, std::chrono::seconds(5));
 }
 
 bool
 CAI302::ClearPilot(Port &port, OperationEnvironment &env)
 {
-  return SendCommand(port, "CLEAR PILOT\r", env, 5000);
+  return SendCommand(port, "CLEAR PILOT\r", env, std::chrono::seconds(5));
 }
 
 bool
 CAI302::ClearLog(Port &port, OperationEnvironment &env)
 {
-  return SendCommand(port, "CLEAR LOG\r", env, 60000);
+  return SendCommand(port, "CLEAR LOG\r", env, std::chrono::minutes(1));
 }
 
 static unsigned

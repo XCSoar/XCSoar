@@ -67,7 +67,7 @@ public:
   /* virtual methods from class Port */
   virtual void Flush() override;
   virtual int Read(void *Buffer, size_t Size) override;
-  virtual WaitResult WaitRead(unsigned timeout_ms) override;
+  virtual WaitResult WaitRead(std::chrono::steady_clock::duration timeout) override;
   virtual bool StopRxThread() override;
   virtual bool StartRxThread() override;
 

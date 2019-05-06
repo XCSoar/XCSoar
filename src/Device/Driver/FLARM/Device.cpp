@@ -200,7 +200,8 @@ FlarmDevice::GetConfig(const char *setting, char *buffer, size_t length,
   expected_answer.push_back(',');
 
   Send(request, env);
-  return Receive(expected_answer, buffer, length, env, 2000);
+  return Receive(expected_answer, buffer, length,
+                 env, std::chrono::seconds(2));
 }
 
 /**
@@ -211,7 +212,8 @@ static bool
 ExpectChecksum(Port &port, uint8_t checksum, OperationEnvironment &env)
 {
   char data[4];
-  if (!port.FullRead(data, 3, env, 500) || data[0] != '*')
+  if (!port.FullRead(data, 3, env, std::chrono::milliseconds(500)) ||
+      data[0] != '*')
     return false;
 
   data[3] = '\0';
@@ -229,7 +231,7 @@ FlarmDevice::SetConfig(const char *setting, const char *value,
   expected_answer[6u] = 'A';
 
   Send(buffer, env);
-  return port.ExpectString(expected_answer, env, 2000) &&
+  return port.ExpectString(expected_answer, env, std::chrono::seconds(2)) &&
     ExpectChecksum(port, NMEAChecksum(expected_answer), env);
 }
 

@@ -27,6 +27,8 @@ Copyright_License {
 #include "State.hpp"
 #include "Compiler.h"
 
+#include <chrono>
+
 #include <stddef.h>
 
 class OperationEnvironment;
@@ -120,19 +122,21 @@ public:
    * Note that this port's write timeout is still in effect for each
    * individual write operation.
    *
-   * @param timeout_ms give up after this number of milliseconds
+   * @param timeout give up after this duration
    * @return true on success
    */
   gcc_nonnull_all
   bool FullWrite(const void *buffer, size_t length,
-                 OperationEnvironment &env, unsigned timeout_ms);
+                 OperationEnvironment &env,
+                 std::chrono::steady_clock::duration timeout);
 
   /**
    * Just like FullWrite(), but write a null-terminated string
    */
   gcc_nonnull_all
   bool FullWriteString(const char *s,
-                       OperationEnvironment &env, unsigned timeout_ms);
+                       OperationEnvironment &env,
+                       std::chrono::steady_clock::duration timeout);
 
   /**
    * Wait until all data in the output buffer has been sent.
@@ -191,7 +195,7 @@ public:
   /**
    * Wait until data becomes available or the timeout expires.
    */
-  virtual WaitResult WaitRead(unsigned timeout_ms) = 0;
+  virtual WaitResult WaitRead(std::chrono::steady_clock::duration timeout) = 0;
 
   /**
    * Force flushing the receive buffers, by trying to read from the
@@ -199,50 +203,53 @@ public:
    *
    * The configured read timeout not relevant for this method.
    *
-   * @param total_timeout_ms the timeout for each read call [ms]
-   * @param total_timeout_ms the maximum total duration of this method [ms]
+   * @param total_timeout the timeout for each read call
+   * @param total_timeout the maximum total duration of this method
    * @return true on timeout, false if an error has occurred or the
    * operation was cancelled
    */
-  bool FullFlush(OperationEnvironment &env, unsigned timeout_ms,
-                 unsigned total_timeout_ms);
+  bool FullFlush(OperationEnvironment &env,
+                 std::chrono::steady_clock::duration timeout,
+                 std::chrono::steady_clock::duration total_timeout);
 
   /**
    * Read data from the serial port, take care for partial reads.
    *
    * @param env an OperationEnvironment that allows canceling the
    * operation
-   * @param first_timeout_ms timeout for the first read
-   * @param subsequent_timeout_ms timeout for the subsequent reads
-   * @param total_timeout_ms timeout for the whole operation
+   * @param first_timeout timeout for the first read
+   * @param subsequent_timeout timeout for the subsequent reads
+   * @param total_timeout timeout for the whole operation
    * @return true on success
    */
   gcc_nonnull_all
   bool FullRead(void *buffer, size_t length, OperationEnvironment &env,
-                unsigned first_timeout_ms, unsigned subsequent_timeout_ms,
-                unsigned total_timeout_ms);
+                std::chrono::steady_clock::duration first_timeout,
+                std::chrono::steady_clock::duration subsequent_timeout,
+                std::chrono::steady_clock::duration total_timeout);
 
   /**
    * Read data from the serial port, take care for partial reads.
    *
    * @param env an OperationEnvironment that allows canceling the
    * operation
-   * @param timeout_ms give up after this number of milliseconds
+   * @param timeout give up after this duration
    * @return true on success
    */
   gcc_nonnull_all
   bool FullRead(void *buffer, size_t length, OperationEnvironment &env,
-                unsigned timeout_ms);
+                std::chrono::steady_clock::duration timeout);
 
   /**
    * Wait until data becomes available, the timeout expires or the
    * operation gets cancelled.
    *
-   * @param timeout_ms give up after this number of milliseconds
+   * @param timeout give up after this duration
    * @param env an OperationEnvironment that allows cancelling the
    * operation
    */
-  WaitResult WaitRead(OperationEnvironment &env, unsigned timeout_ms);
+  WaitResult WaitRead(OperationEnvironment &env,
+                      std::chrono::steady_clock::duration timeout);
 
   /**
    * Combination of WaitRead() and Read().
@@ -250,7 +257,8 @@ public:
    * @return 0 on timeout/canceled/error or the number of bytes read
    */
   size_t WaitAndRead(void *buffer, size_t length,
-                     OperationEnvironment &env, unsigned timeout_ms);
+                     OperationEnvironment &env,
+                     std::chrono::steady_clock::duration timeout);
 
   /**
    * Combination of WaitRead() and Read().
@@ -262,7 +270,7 @@ public:
 
   gcc_nonnull_all
   bool ExpectString(const char *token, OperationEnvironment &env,
-                    unsigned timeout_ms = 2000);
+                    std::chrono::steady_clock::duration timeout=std::chrono::seconds(2));
 
   /**
    * Wait until the expected character is received, the timeout expires
@@ -271,10 +279,10 @@ public:
    * @param token The expected character
    * @param env An OperationEnvironment that allows canceling the
    * operation
-   * @param timeout_ms give up after this number of milliseconds
+   * @param timeout give up after this duration
    */
   WaitResult WaitForChar(const char token, OperationEnvironment &env,
-                         unsigned timeout_ms);
+                         std::chrono::steady_clock::duration timeout);
 
 protected:
   /**

@@ -330,7 +330,8 @@ DownloadFlightInner(Port &port, const char *filename, FILE *file,
 
         /* Discard data which might still be in-transit, e.g. buffered
            inside a bluetooth dongle */
-        port.FullFlush(env, 200, 2000);
+        port.FullFlush(env, std::chrono::milliseconds(200),
+                       std::chrono::seconds(2));
 
         /* If we already received parts of the request range correctly break
            out of the loop to calculate new request range */

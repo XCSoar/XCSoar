@@ -90,7 +90,7 @@ public:
     return Size;
   }
 
-  virtual WaitResult WaitRead(unsigned timeout_ms) override {
+  WaitResult WaitRead(std::chrono::steady_clock::duration timeout) override {
     return inject_port_fault > 0
       ? WaitResult::READY
       : WaitResult::FAILED;

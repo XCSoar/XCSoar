@@ -46,20 +46,20 @@ Volkslogger::Reset(Port &port, OperationEnvironment &env, unsigned n)
 
 bool
 Volkslogger::Handshake(Port &port, OperationEnvironment &env,
-                       unsigned timeout_ms)
+                       std::chrono::steady_clock::duration _timeout)
 {
-  TimeoutClock timeout(timeout_ms);
+  TimeoutClock timeout(_timeout);
 
   while (true) { // Solange R's aussenden, bis ein L zurückkommt
     if (!port.Write('R'))
       return false;
 
-    int remaining = timeout.GetRemainingSigned();
-    if (remaining < 0)
+    auto remaining = timeout.GetRemainingSigned();
+    if (remaining.count() < 0)
       return false;
 
-    if (remaining > 500)
-      remaining = 500;
+    if (remaining > std::chrono::milliseconds(500))
+      remaining = std::chrono::milliseconds(500);
 
     Port::WaitResult result =
       port.WaitForChar('L', env, remaining);
@@ -74,8 +74,8 @@ Volkslogger::Handshake(Port &port, OperationEnvironment &env,
 
   unsigned count = 1;
   while (true) { // Auf 4 hintereinanderfolgende L's warten
-    int remaining = timeout.GetRemainingSigned();
-    if (remaining < 0)
+    const auto remaining = timeout.GetRemainingSigned();
+    if (remaining.count() < 0)
       return false;
 
     if (port.WaitForChar('L', env, remaining) != Port::WaitResult::READY)
@@ -89,25 +89,27 @@ Volkslogger::Handshake(Port &port, OperationEnvironment &env,
 
 bool
 Volkslogger::Connect(Port &port, OperationEnvironment &env,
-                     unsigned timeout_ms)
+                     std::chrono::steady_clock::duration timeout)
 {
-  return Reset(port, env, 10) && Handshake(port, env, timeout_ms);
+  return Reset(port, env, 10) && Handshake(port, env, timeout);
 }
 
 bool
 Volkslogger::ConnectAndFlush(Port &port, OperationEnvironment &env,
-                             unsigned timeout_ms)
+                             std::chrono::steady_clock::duration timeout)
 {
   port.Flush();
 
-  return Connect(port, env, timeout_ms) && port.FullFlush(env, 50, 300);
+  return Connect(port, env, timeout) &&
+    port.FullFlush(env, std::chrono::milliseconds(50),
+                   std::chrono::milliseconds(300));
 }
 
 static bool
 SendWithCRC(Port &port, const void *data, size_t length,
             OperationEnvironment &env)
 {
-  if (!port.FullWrite(data, length, env, 2000))
+  if (!port.FullWrite(data, length, env, std::chrono::seconds(2)))
     return false;
 
   uint16_t crc16 = UpdateCRC16CCITT(data, length, 0);
@@ -121,7 +123,8 @@ Volkslogger::SendCommand(Port &port, OperationEnvironment &env,
   static constexpr unsigned delay = 2;
 
   /* flush buffers */
-  if (!port.FullFlush(env, 20, 100))
+  if (!port.FullFlush(env, std::chrono::milliseconds(20),
+                      std::chrono::milliseconds(100)))
     return false;
 
   /* reset command interpreter */
@@ -145,7 +148,7 @@ Volkslogger::SendCommand(Port &port, OperationEnvironment &env,
 
   /* wait for confirmation */
 
-  return port.WaitRead(env, 4000) == Port::WaitResult::READY &&
+  return port.WaitRead(env, std::chrono::seconds(4)) == Port::WaitResult::READY &&
     port.GetChar() == 0;
 }
 
@@ -192,13 +195,13 @@ Volkslogger::SendCommandSwitchBaudRate(Port &port, OperationEnvironment &env,
 bool
 Volkslogger::WaitForACK(Port &port, OperationEnvironment &env)
 {
-  return port.WaitForChar(ACK, env, 30000) == Port::WaitResult::READY;
+  return port.WaitForChar(ACK, env, std::chrono::seconds(30)) == Port::WaitResult::READY;
 }
 
 int
 Volkslogger::ReadBulk(Port &port, OperationEnvironment &env,
                       void *buffer, size_t max_length,
-                      unsigned timeout_firstchar_ms)
+                      std::chrono::steady_clock::duration timeout_firstchar)
 {
   unsigned nbytes = 0;
   bool dle_r = false;
@@ -209,7 +212,7 @@ Volkslogger::ReadBulk(Port &port, OperationEnvironment &env,
 
   uint8_t *p = (uint8_t *)buffer;
 
-  constexpr unsigned TIMEOUT_NORMAL_MS = 2000;
+  static constexpr auto TIMEOUT_NORMAL = std::chrono::seconds(2);
   /**
    * We need to wait longer for the first char to
    * give the logger time to calculate security
@@ -218,8 +221,8 @@ Volkslogger::ReadBulk(Port &port, OperationEnvironment &env,
    * If the timeout parameter is not specified or 0,
    * set standard timeout
    */
-  if (timeout_firstchar_ms == 0)
-    timeout_firstchar_ms = TIMEOUT_NORMAL_MS;
+  if (timeout_firstchar == std::chrono::steady_clock::duration::zero())
+    timeout_firstchar = TIMEOUT_NORMAL;
 
   while (!ende) {
     // Zeichen anfordern und darauf warten
@@ -228,7 +231,7 @@ Volkslogger::ReadBulk(Port &port, OperationEnvironment &env,
       return -1;
 
     // Set longer timeout on first char
-    unsigned timeout = start ? TIMEOUT_NORMAL_MS : timeout_firstchar_ms;
+    const std::chrono::steady_clock::duration timeout = start ? TIMEOUT_NORMAL : timeout_firstchar;
     if (port.WaitRead(env, timeout) != Port::WaitResult::READY)
       return -1;
 
@@ -352,10 +355,10 @@ int
 Volkslogger::SendCommandReadBulk(Port &port, OperationEnvironment &env,
                                  Command cmd,
                                  void *buffer, size_t max_length,
-                                 const unsigned timeout_firstchar_ms)
+                                 std::chrono::steady_clock::duration timeout_firstchar)
 {
   return SendCommand(port, env, cmd)
-    ? ReadBulk(port, env, buffer, max_length, timeout_firstchar_ms)
+    ? ReadBulk(port, env, buffer, max_length, timeout_firstchar)
     : -1;
 }
 
@@ -364,7 +367,7 @@ Volkslogger::SendCommandReadBulk(Port &port, unsigned baud_rate,
                                  OperationEnvironment &env,
                                  Command cmd, uint8_t param1,
                                  void *buffer, size_t max_length,
-                                 const unsigned timeout_firstchar_ms)
+                                 std::chrono::steady_clock::duration timeout_firstchar)
 {
   unsigned old_baud_rate = port.GetBaudrate();
 
@@ -383,7 +386,7 @@ Volkslogger::SendCommandReadBulk(Port &port, unsigned baud_rate,
       return -1;
   }
 
-  int nbytes = ReadBulk(port, env, buffer, max_length, timeout_firstchar_ms);
+  int nbytes = ReadBulk(port, env, buffer, max_length, timeout_firstchar);
 
   if (old_baud_rate != 0)
     port.SetBaudrate(old_baud_rate);
@@ -420,12 +423,12 @@ Volkslogger::ReadFlight(Port &port, unsigned databaud,
    * Since the VL needs time to calculate the Security of
    * the log before it responds.
    */
-  const unsigned timeout_firstchar_ms = 600000;
+  static constexpr auto timeout_firstchar = std::chrono::minutes(10);
 
   // Download binary log data supports BulkBaudrate
   int groesse = SendCommandReadBulk(port, databaud, env, cmd,
                                     flightnr, buffer, buffersize,
-                                    timeout_firstchar_ms);
+                                    timeout_firstchar);
   if (groesse <= 0)
     return 0;
 

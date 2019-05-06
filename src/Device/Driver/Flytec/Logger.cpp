@@ -39,15 +39,17 @@ Copyright_License {
 #include <string.h>
 
 static bool
-ExpectXOff(Port &port, OperationEnvironment &env, unsigned timeout_ms)
+ExpectXOff(Port &port, OperationEnvironment &env,
+           std::chrono::steady_clock::duration timeout)
 {
-  return port.WaitForChar(0x13, env, timeout_ms) == Port::WaitResult::READY;
+  return port.WaitForChar(0x13, env, timeout) == Port::WaitResult::READY;
 }
 
 static bool
-ReceiveLine(Port &port, char *buffer, size_t length, unsigned timeout_ms)
+ReceiveLine(Port &port, char *buffer, size_t length,
+            std::chrono::steady_clock::duration _timeout)
 {
-  TimeoutClock timeout(timeout_ms);
+  TimeoutClock timeout(_timeout);
 
   char *p = (char *)buffer, *end = p + length;
   while (p < end) {
@@ -182,7 +184,7 @@ FlytecDevice::ReadFlightList(RecordedFlightList &flight_list,
   strcat(buffer, "\r\n");
 
   port.Write(buffer);
-  if (!ExpectXOff(port, env, 1000))
+  if (!ExpectXOff(port, env, std::chrono::seconds(1)))
     return false;
 
   unsigned tracks = 0;
@@ -192,7 +194,8 @@ FlytecDevice::ReadFlightList(RecordedFlightList &flight_list,
       return false;
 
     // Receive the next line
-    if (!ReceiveLine(port, buffer, ARRAY_SIZE(buffer), 1000))
+    if (!ReceiveLine(port, buffer, ARRAY_SIZE(buffer),
+                     std::chrono::seconds(1)))
       return false;
 
     // XON was received, last record was read already
@@ -266,7 +269,7 @@ FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
   strcat(buffer, "\r\n");
 
   port.Write(buffer);
-  if (!ExpectXOff(port, env, 1000))
+  if (!ExpectXOff(port, env, std::chrono::seconds(1)))
     return false;
 
   // Open file writer
@@ -287,7 +290,8 @@ FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
       return false;
 
     // Receive the next line
-    if (!ReceiveLine(port, buffer, ARRAY_SIZE(buffer), 1000))
+    if (!ReceiveLine(port, buffer, ARRAY_SIZE(buffer),
+                     std::chrono::seconds(1)))
       return false;
 
     // XON was received

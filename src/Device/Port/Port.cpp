@@ -51,9 +51,10 @@ Port::Write(const char *s)
 
 bool
 Port::FullWrite(const void *buffer, size_t length,
-                OperationEnvironment &env, unsigned timeout_ms)
+                OperationEnvironment &env,
+                std::chrono::steady_clock::duration _timeout)
 {
-  const TimeoutClock timeout(timeout_ms);
+  const TimeoutClock timeout(_timeout);
 
   const char *p = (const char *)buffer, *end = p + length;
   while (p < end) {
@@ -72,9 +73,10 @@ Port::FullWrite(const void *buffer, size_t length,
 
 bool
 Port::FullWriteString(const char *s,
-                      OperationEnvironment &env, unsigned timeout_ms)
+                      OperationEnvironment &env,
+                      std::chrono::steady_clock::duration timeout)
 {
-  return FullWrite(s, strlen(s), env, timeout_ms);
+  return FullWrite(s, strlen(s), env, timeout);
 }
 
 int
@@ -87,16 +89,17 @@ Port::GetChar()
 }
 
 bool
-Port::FullFlush(OperationEnvironment &env, unsigned timeout_ms,
-                unsigned total_timeout_ms)
+Port::FullFlush(OperationEnvironment &env,
+                std::chrono::steady_clock::duration timeout,
+                std::chrono::steady_clock::duration _total_timeout)
 {
   Flush();
 
-  const TimeoutClock total_timeout(total_timeout_ms);
+  const TimeoutClock total_timeout(_total_timeout);
 
   char buffer[0x100];
   do {
-    switch (WaitRead(env, timeout_ms)) {
+    switch (WaitRead(env, timeout)) {
     case WaitResult::READY:
       if (!Read(buffer, sizeof(buffer)))
         return false;
@@ -116,26 +119,27 @@ Port::FullFlush(OperationEnvironment &env, unsigned timeout_ms,
 
 bool
 Port::FullRead(void *buffer, size_t length, OperationEnvironment &env,
-               unsigned first_timeout_ms, unsigned subsequent_timeout_ms,
-               unsigned total_timeout_ms)
+               std::chrono::steady_clock::duration first_timeout,
+               std::chrono::steady_clock::duration subsequent_timeout,
+               std::chrono::steady_clock::duration total_timeout)
 {
-  const TimeoutClock full_timeout(total_timeout_ms);
+  const TimeoutClock full_timeout(total_timeout);
 
   char *p = (char *)buffer, *end = p + length;
 
-  size_t nbytes = WaitAndRead(buffer, length, env, first_timeout_ms);
+  size_t nbytes = WaitAndRead(buffer, length, env, first_timeout);
   if (nbytes <= 0)
     return false;
 
   p += nbytes;
 
   while (p < end) {
-    const int ft = full_timeout.GetRemainingSigned();
-    if (ft < 0)
+    const auto ft = full_timeout.GetRemainingSigned();
+    if (ft.count() < 0)
       /* timeout */
       return false;
 
-    const unsigned t = std::min(unsigned(ft), subsequent_timeout_ms);
+    const auto t = std::min(ft, subsequent_timeout);
 
     nbytes = WaitAndRead(p, end - p, env, t);
     if (nbytes == 0)
@@ -153,20 +157,21 @@ Port::FullRead(void *buffer, size_t length, OperationEnvironment &env,
 
 bool
 Port::FullRead(void *buffer, size_t length, OperationEnvironment &env,
-               unsigned timeout_ms)
+               std::chrono::steady_clock::duration timeout)
 {
-  return FullRead(buffer, length, env, timeout_ms, timeout_ms, timeout_ms);
+  return FullRead(buffer, length, env, timeout, timeout, timeout);
 }
 
 Port::WaitResult
-Port::WaitRead(OperationEnvironment &env, unsigned timeout_ms)
+Port::WaitRead(OperationEnvironment &env,
+               std::chrono::steady_clock::duration timeout)
 {
-  unsigned remaining = timeout_ms;
+  auto remaining = timeout;
 
   do {
     /* this loop is ugly, and should be redesigned when we have
        non-blocking I/O in all Port implementations */
-    const unsigned t = std::min(remaining, 500u);
+    const auto t = std::min<std::chrono::steady_clock::duration>(remaining, std::chrono::milliseconds(500));
     WaitResult result = WaitRead(t);
     if (result != WaitResult::TIMEOUT)
       return result;
@@ -175,16 +180,17 @@ Port::WaitRead(OperationEnvironment &env, unsigned timeout_ms)
       return WaitResult::CANCELLED;
 
     remaining -= t;
-  } while (remaining > 0);
+  } while (remaining.count() > 0);
 
   return WaitResult::TIMEOUT;
 }
 
 size_t
 Port::WaitAndRead(void *buffer, size_t length,
-                  OperationEnvironment &env, unsigned timeout_ms)
+                  OperationEnvironment &env,
+                  std::chrono::steady_clock::duration timeout)
 {
-  WaitResult wait_result = WaitRead(env, timeout_ms);
+  WaitResult wait_result = WaitRead(env, timeout);
   if (wait_result != WaitResult::READY)
     // Operation canceled, Timeout expired or I/O error occurred
     return 0;
@@ -200,8 +206,8 @@ size_t
 Port::WaitAndRead(void *buffer, size_t length,
                   OperationEnvironment &env, TimeoutClock timeout)
 {
-  int remaining = timeout.GetRemainingSigned();
-  if (remaining < 0)
+  const auto remaining = timeout.GetRemainingSigned();
+  if (remaining.count() < 0)
     return 0;
 
   return WaitAndRead(buffer, length, env, remaining);
@@ -209,11 +215,11 @@ Port::WaitAndRead(void *buffer, size_t length,
 
 bool
 Port::ExpectString(const char *token, OperationEnvironment &env,
-                   unsigned timeout_ms)
+                   std::chrono::steady_clock::duration _timeout)
 {
   const char *const token_end = token + strlen(token);
 
-  const TimeoutClock timeout(timeout_ms);
+  const TimeoutClock timeout(_timeout);
 
   char buffer[256];
 
@@ -238,9 +244,9 @@ Port::ExpectString(const char *token, OperationEnvironment &env,
 
 Port::WaitResult
 Port::WaitForChar(const char token, OperationEnvironment &env,
-                  unsigned timeout_ms)
+                  std::chrono::steady_clock::duration _timeout)
 {
-  const TimeoutClock timeout(timeout_ms);
+  const TimeoutClock timeout(_timeout);
 
   while (true) {
     WaitResult wait_result = WaitRead(env, timeout.GetRemainingOrZero());

@@ -89,7 +89,7 @@ NullPort::Read(void *Buffer, size_t Size)
 }
 
 Port::WaitResult
-NullPort::WaitRead(unsigned timeout_ms)
+NullPort::WaitRead(std::chrono::steady_clock::duration timeout)
 {
   return WaitResult::FAILED;
 }

@@ -71,7 +71,7 @@ public:
 
   bool Send(Port &port, OperationEnvironment &env) {
     data[fill++] = checksum;
-    return port.FullWrite(data, fill, env, 2000);
+    return port.FullWrite(data, fill, env, std::chrono::seconds(2));
   }
 };
 

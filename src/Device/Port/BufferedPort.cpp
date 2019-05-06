@@ -96,20 +96,20 @@ BufferedPort::Read(void *dest, size_t length)
 }
 
 Port::WaitResult
-BufferedPort::WaitRead(unsigned timeout_ms)
+BufferedPort::WaitRead(std::chrono::steady_clock::duration _timeout)
 {
-  TimeoutClock timeout(timeout_ms);
+  TimeoutClock timeout(_timeout);
   std::unique_lock<Mutex> lock(mutex);
 
   while (buffer.empty()) {
     if (running)
       return WaitResult::CANCELLED;
 
-    int remaining_ms = timeout.GetRemainingSigned();
-    if (remaining_ms <= 0)
+    auto remaining = timeout.GetRemainingSigned();
+    if (remaining.count() <= 0)
       return WaitResult::TIMEOUT;
 
-    cond.wait_for(lock, std::chrono::milliseconds(remaining_ms));
+    cond.wait_for(lock, remaining);
   }
 
   return WaitResult::READY;

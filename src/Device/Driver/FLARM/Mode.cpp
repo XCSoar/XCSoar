@@ -32,7 +32,7 @@ FlarmDevice::EnableNMEA(OperationEnvironment &env)
   case Mode::UNKNOWN:
     /* device could be in binary mode, we don't know, but this is the
        best we can do: */
-    if (!BinaryReset(env, 500))
+    if (!BinaryReset(env, std::chrono::milliseconds(500)))
       return false;
 
     mode = Mode::NMEA;
@@ -53,7 +53,7 @@ FlarmDevice::EnableNMEA(OperationEnvironment &env)
     return true;
 
   case Mode::BINARY:
-    if (!BinaryReset(env, 500)) {
+    if (!BinaryReset(env, std::chrono::milliseconds(500))) {
       mode = Mode::UNKNOWN;
       return false;
     }
@@ -89,12 +89,12 @@ FlarmDevice::BinaryMode(OperationEnvironment &env)
   // for a certain time until the ping is ACKed properly or a timeout occurs.
   for (unsigned i = 0; i < 10; ++i) {
     if (env.IsCancelled()) {
-      BinaryReset(env, 200);
+      BinaryReset(env, std::chrono::milliseconds(200));
       mode = Mode::UNKNOWN;
       return false;
     }
 
-    if (BinaryPing(env, 500))
+    if (BinaryPing(env, std::chrono::milliseconds(500)))
       // We are now in binary mode and have verified that with a binary ping
       return true;
   }

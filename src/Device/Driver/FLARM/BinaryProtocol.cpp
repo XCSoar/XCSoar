@@ -37,12 +37,13 @@ FindSpecial(const uint8_t *const begin, const uint8_t *const end)
 
 bool
 FLARM::SendEscaped(Port &port, const void *buffer, size_t length,
-                   OperationEnvironment &env, unsigned timeout_ms)
+                   OperationEnvironment &env,
+                   std::chrono::steady_clock::duration _timeout)
 {
   assert(buffer != nullptr);
   assert(length > 0);
 
-  const TimeoutClock timeout(timeout_ms);
+  const TimeoutClock timeout(_timeout);
 
   // Send data byte-by-byte including escaping
   const uint8_t *p = (const uint8_t *)buffer, *end = p + length;
@@ -129,12 +130,13 @@ ReceiveSomeUnescape(Port &port, uint8_t *buffer, size_t length,
 
 bool
 FLARM::ReceiveEscaped(Port &port, void *buffer, size_t length,
-                      OperationEnvironment &env, unsigned timeout_ms)
+                      OperationEnvironment &env,
+                      std::chrono::steady_clock::duration _timeout)
 {
   assert(buffer != nullptr);
   assert(length > 0);
 
-  const TimeoutClock timeout(timeout_ms);
+  const TimeoutClock timeout(_timeout);
 
   // Receive data byte-by-byte including escaping until buffer is full
   uint8_t *p = (uint8_t *)buffer, *end = p + length;
@@ -154,9 +156,10 @@ FlarmDevice::SendStartByte()
 }
 
 bool
-FlarmDevice::WaitForStartByte(OperationEnvironment &env, unsigned timeout_ms)
+FlarmDevice::WaitForStartByte(OperationEnvironment &env,
+                              std::chrono::steady_clock::duration timeout)
 {
-  return port.WaitForChar(FLARM::START_FRAME, env, timeout_ms) == Port::WaitResult::READY;
+  return port.WaitForChar(FLARM::START_FRAME, env, timeout) == Port::WaitResult::READY;
 }
 
 FLARM::FrameHeader
@@ -185,24 +188,27 @@ FlarmDevice::PrepareFrameHeader(FLARM::MessageType message_type,
 
 bool
 FlarmDevice::SendFrameHeader(const FLARM::FrameHeader &header,
-                             OperationEnvironment &env, unsigned timeout_ms)
+                             OperationEnvironment &env,
+                             std::chrono::steady_clock::duration timeout)
 {
-  return SendEscaped(&header, sizeof(header), env, timeout_ms);
+  return SendEscaped(&header, sizeof(header), env, timeout);
 }
 
 bool
 FlarmDevice::ReceiveFrameHeader(FLARM::FrameHeader &header,
-                                OperationEnvironment &env, unsigned timeout_ms)
+                                OperationEnvironment &env,
+                                std::chrono::steady_clock::duration timeout)
 {
-  return ReceiveEscaped(&header, sizeof(header), env, timeout_ms);
+  return ReceiveEscaped(&header, sizeof(header), env, timeout);
 }
 
 FLARM::MessageType
 FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
                               AllocatedArray<uint8_t> &data, uint16_t &length,
-                              OperationEnvironment &env, unsigned timeout_ms)
+                              OperationEnvironment &env,
+                              std::chrono::steady_clock::duration _timeout)
 {
-  const TimeoutClock timeout(timeout_ms);
+  const TimeoutClock timeout(_timeout);
 
   // Receive frames until timeout or expected frame found
   while (!timeout.HasExpired()) {
@@ -252,24 +258,27 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
 
 FLARM::MessageType
 FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
-                              OperationEnvironment &env, unsigned timeout_ms)
+                              OperationEnvironment &env,
+                              std::chrono::steady_clock::duration timeout)
 {
   AllocatedArray<uint8_t> data;
   uint16_t length;
-  return WaitForACKOrNACK(sequence_number, data, length, env, timeout_ms);
+  return WaitForACKOrNACK(sequence_number, data, length, env, timeout);
 }
 
 bool
 FlarmDevice::WaitForACK(uint16_t sequence_number,
-                        OperationEnvironment &env, unsigned timeout_ms)
+                        OperationEnvironment &env,
+                        std::chrono::steady_clock::duration timeout)
 {
-  return WaitForACKOrNACK(sequence_number, env, timeout_ms) == FLARM::MT_ACK;
+  return WaitForACKOrNACK(sequence_number, env, timeout) == FLARM::MT_ACK;
 }
 
 bool
-FlarmDevice::BinaryPing(OperationEnvironment &env, unsigned timeout_ms)
+FlarmDevice::BinaryPing(OperationEnvironment &env,
+                        std::chrono::steady_clock::duration _timeout)
 {
-  const TimeoutClock timeout(timeout_ms);
+  const TimeoutClock timeout(_timeout);
 
   // Create header for sending a binary ping request
   FLARM::FrameHeader header = PrepareFrameHeader(FLARM::MT_PING);
@@ -281,9 +290,10 @@ FlarmDevice::BinaryPing(OperationEnvironment &env, unsigned timeout_ms)
 }
 
 bool
-FlarmDevice::BinaryReset(OperationEnvironment &env, unsigned timeout_ms)
+FlarmDevice::BinaryReset(OperationEnvironment &env,
+                         std::chrono::steady_clock::duration _timeout)
 {
-  TimeoutClock timeout(timeout_ms);
+  TimeoutClock timeout(_timeout);
 
   // Create header for sending a binary reset request
   FLARM::FrameHeader header = PrepareFrameHeader(FLARM::MT_EXIT);

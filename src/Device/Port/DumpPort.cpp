@@ -158,16 +158,16 @@ DumpPort::Read(void *buffer, size_t size)
 }
 
 Port::WaitResult
-DumpPort::WaitRead(unsigned timeout_ms)
+DumpPort::WaitRead(std::chrono::steady_clock::duration timeout)
 {
   const bool enabled = CheckEnabled();
   if (enabled)
-    LogFormat("WaitRead %u", timeout_ms);
+    LogFormat("WaitRead %lu", (unsigned long)timeout.count());
 
-  Port::WaitResult result = port->WaitRead(timeout_ms);
+  Port::WaitResult result = port->WaitRead(timeout);
 
   if (enabled)
-    LogFormat("WaitRead %u = %d", timeout_ms, (int)result);
+    LogFormat("WaitRead %lu = %d", (unsigned long)timeout.count(), (int)result);
 
   return result;
 }

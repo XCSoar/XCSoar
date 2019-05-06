@@ -27,6 +27,7 @@ Copyright_License {
 #include "OS/ByteOrder.hpp"
 #include "Compiler.h"
 
+#include <chrono>
 #include <type_traits>
 
 #include <stdint.h>
@@ -117,12 +118,12 @@ namespace FLARM {
    * @param data Pointer to the first byte
    * @param length Amount of bytes that should be send. Note that the actual
    * number of bytes can be larger due to the escaping.
-   * @param timeout_ms Timeout in milliseconds
    * @return True if the data was sent successfully, False if a timeout
    * or some transfer problems occurred
    */
   bool SendEscaped(Port &port, const void *buffer, size_t length,
-                   OperationEnvironment &env, unsigned timeout_ms);
+                   OperationEnvironment &env,
+                   std::chrono::steady_clock::duration timeout);
 
   /**
    * Reads a specified number of bytes from the port while applying the
@@ -130,12 +131,12 @@ namespace FLARM {
    * specified number is reached or a timeout occurs.
    * @param data Pointer to the first byte of the writable buffer
    * @param length Length of the buffer that should be filled
-   * @param timeout_ms Timeout in milliseconds
    * @return True if the data was received successfully, False if a timeout
    * or any transfer problems occurred
    */
   bool ReceiveEscaped(Port &port, void *data, size_t length,
-                      OperationEnvironment &env, unsigned timeout_ms);
+                      OperationEnvironment &env,
+                      std::chrono::steady_clock::duration timeout);
 };
 
 #endif

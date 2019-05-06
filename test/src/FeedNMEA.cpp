@@ -92,7 +92,7 @@ try {
       strncpy(stamp, line + 7, sizeof(stamp));
     }
 
-    if (!port->FullWriteString(line, env, 1000)) {
+    if (!port->FullWriteString(line, env, std::chrono::seconds(1))) {
       fprintf(stderr, "Failed to write to port\n");
       return EXIT_FAILURE;
     }

@@ -133,8 +133,10 @@ private:
       FLARM::PrepareFrameHeader(sequence_number, FLARM::MT_ACK,
                                 &payload, sizeof(payload));
     return port->Write(FLARM::START_FRAME) &&
-      FLARM::SendEscaped(*port, &header, sizeof(header), *env, 2000) &&
-      FLARM::SendEscaped(*port, &payload, sizeof(payload), *env, 2000);
+      FLARM::SendEscaped(*port, &header, sizeof(header), *env,
+                         std::chrono::seconds(2)) &&
+      FLARM::SendEscaped(*port, &payload, sizeof(payload), *env,
+                         std::chrono::seconds(2));
   }
 
   size_t HandleBinary(const void *_data, size_t length) {

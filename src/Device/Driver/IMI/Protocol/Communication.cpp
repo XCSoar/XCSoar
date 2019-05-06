@@ -40,7 +40,7 @@ bool
 IMI::Send(Port &port, const TMsg &msg, OperationEnvironment &env)
 {
   return port.FullWrite(&msg, IMICOMM_MSG_HEADER_SIZE + msg.payloadSize + 2,
-                        env, 2000);
+                        env, std::chrono::seconds(2));
 }
 
 bool

@@ -236,14 +236,15 @@ FlarmDevice::ReadFlightInfo(RecordedFlightInfo &flight,
 
   // Send request
   if (!SendStartByte() ||
-      !SendFrameHeader(header, env, 1000))
+      !SendFrameHeader(header, env, std::chrono::seconds(1)))
     return false;
 
   // Wait for an answer and save the payload for further processing
   AllocatedArray<uint8_t> data;
   uint16_t length;
   uint8_t ack_result =
-    WaitForACKOrNACK(header.sequence_number, data, length, env, 1000);
+    WaitForACKOrNACK(header.sequence_number, data, length,
+                     env, std::chrono::seconds(1));
 
   // If neither ACK nor NACK was received
   if (ack_result != FLARM::MT_ACK || length <= 2)
@@ -263,12 +264,13 @@ FlarmDevice::SelectFlight(uint8_t record_number, OperationEnvironment &env)
 
   // Send request
   if (!SendStartByte() ||
-      !SendFrameHeader(header, env, 1000) ||
-      !SendEscaped(data, sizeof(data), env, 1000))
+      !SendFrameHeader(header, env, std::chrono::seconds(1)) ||
+      !SendEscaped(data, sizeof(data), env, std::chrono::seconds(1)))
     return FLARM::MT_ERROR;
 
   // Wait for an answer
-  return WaitForACKOrNACK(header.sequence_number, env, 1000);
+  return WaitForACKOrNACK(header.sequence_number,
+                          env, std::chrono::seconds(1));
 }
 
 bool
@@ -317,7 +319,7 @@ FlarmDevice::DownloadFlight(Path path, OperationEnvironment &env)
 
     // Send request
     if (!SendStartByte() ||
-        !SendFrameHeader(header, env, 1000) ||
+        !SendFrameHeader(header, env, std::chrono::seconds(1)) ||
         env.IsCancelled())
       return false;
 
@@ -325,7 +327,7 @@ FlarmDevice::DownloadFlight(Path path, OperationEnvironment &env)
     AllocatedArray<uint8_t> data;
     uint16_t length;
     bool ack = WaitForACKOrNACK(header.sequence_number, data,
-                                length, env, 10000) == FLARM::MT_ACK;
+                                length, env, std::chrono::seconds(10)) == FLARM::MT_ACK;
 
     // If no ACK was received
     if (!ack || length <= 3 || env.IsCancelled())

@@ -55,7 +55,7 @@ try {
 
   char buffer[4096];
   while (true) {
-    switch (port->WaitRead(env, 60000)) {
+    switch (port->WaitRead(env, std::chrono::minutes(1))) {
     case Port::WaitResult::READY:
       break;
 

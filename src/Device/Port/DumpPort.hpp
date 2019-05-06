@@ -92,7 +92,7 @@ public:
   bool StopRxThread() override;
   bool StartRxThread() override;
   int Read(void *buffer, size_t size) override;
-  WaitResult WaitRead(unsigned timeout_ms) override;
+  WaitResult WaitRead(std::chrono::steady_clock::duration timeout) override;
 };
 
 #endif

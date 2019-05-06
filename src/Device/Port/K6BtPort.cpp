@@ -197,7 +197,7 @@ K6BtPort::Read(void *Buffer, size_t Size)
 }
 
 Port::WaitResult
-K6BtPort::WaitRead(unsigned timeout_ms)
+K6BtPort::WaitRead(std::chrono::steady_clock::duration timeout)
 {
-  return port->WaitRead(timeout_ms);
+  return port->WaitRead(timeout);
 }

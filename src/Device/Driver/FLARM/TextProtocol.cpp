@@ -90,13 +90,14 @@ FlarmDevice::Send(const char *sentence, OperationEnvironment &env)
 
 bool
 FlarmDevice::Receive(const char *prefix, char *buffer, size_t length,
-                     OperationEnvironment &env, unsigned timeout_ms)
+                     OperationEnvironment &env,
+                     std::chrono::steady_clock::duration _timeout)
 {
   assert(prefix != nullptr);
 
-  TimeoutClock timeout(timeout_ms);
+  TimeoutClock timeout(_timeout);
 
-  if (!port.ExpectString(prefix, env, timeout_ms))
+  if (!port.ExpectString(prefix, env, _timeout))
     return false;
 
   char *p = (char *)buffer, *end = p + length;
