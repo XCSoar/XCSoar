@@ -74,8 +74,8 @@ struct TrafficList {
   }
 
   void Expire(double clock) {
-    modified.Expire(clock, 300);
-    new_traffic.Expire(clock, 60);
+    modified.Expire(clock, std::chrono::minutes(5));
+    new_traffic.Expire(clock, std::chrono::minutes(1));
 
     for (unsigned i = list.size(); i-- > 0;)
       if (!list[i].Refresh(clock))

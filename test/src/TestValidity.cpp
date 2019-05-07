@@ -42,11 +42,11 @@ int main(int argc, char **argv)
   ok1(!v.IsValid());
   v.Update(100);
   ok1(v.IsValid());
-  v.Expire(101, 5);
+  v.Expire(101, std::chrono::seconds(5));
   ok1(v.IsValid());
-  v.Expire(105, 5);
+  v.Expire(105, std::chrono::seconds(5));
   ok1(v.IsValid());
-  v.Expire(106, 5);
+  v.Expire(106, std::chrono::seconds(5));
   ok1(!v.IsValid());
 
   v.Update(100);

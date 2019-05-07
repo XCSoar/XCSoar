@@ -90,9 +90,10 @@ public:
    * @param max_age the maximum age in seconds
    * @return true if the value is expired
    */
-  bool Expire(double _now, double _max_age) {
+  bool Expire(double _now,
+              std::chrono::steady_clock::duration _max_age) noexcept {
     const auto now = Import(_now);
-    const auto max_age = Import(_max_age);
+    const auto max_age = std::chrono::duration_cast<Duration>(_max_age);
 
     if (IsValid() &&
         (now < last || /* time warp? */

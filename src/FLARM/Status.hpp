@@ -63,7 +63,7 @@ struct FlarmStatus {
   }
 
   void Expire(double clock) {
-    available.Expire(clock, 10);
+    available.Expire(clock, std::chrono::seconds(10));
   }
 };
 

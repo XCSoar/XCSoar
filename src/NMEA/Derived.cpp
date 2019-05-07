@@ -108,12 +108,12 @@ DerivedInfo::Expire(double Time)
   // Invalidated shortly after the copy here).
 
   /* the estimated wind remains valid for an hour */
-  estimated_wind_available.Expire(Time, 3600);
+  estimated_wind_available.Expire(Time, std::chrono::hours(1));
 
-  head_wind_available.Expire(Time, 3);
+  head_wind_available.Expire(Time, std::chrono::seconds(3));
 
-  auto_mac_cready_available.Expire(Time, 3600);
-  sun_data_available.Expire(Time, 3600);
+  auto_mac_cready_available.Expire(Time, std::chrono::hours(1));
+  sun_data_available.Expire(Time, std::chrono::hours(1));
 }
 
 

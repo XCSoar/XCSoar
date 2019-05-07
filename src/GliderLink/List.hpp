@@ -71,7 +71,7 @@ struct GliderLinkTrafficList {
   }
 
   void Expire(double clock) {
-    new_traffic.Expire(clock, double(5*60));
+    new_traffic.Expire(clock, std::chrono::minutes(5));
 
     for (unsigned i = list.size(); i-- > 0;)
       if (!list[i].Refresh(clock))
