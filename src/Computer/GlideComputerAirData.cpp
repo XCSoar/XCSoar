@@ -397,7 +397,8 @@ GlideComputerAirData::ProcessSun(const NMEAInfo &basic,
     return;
 
   // Only calculate new azimuth if data is older than 15 minutes
-  if (!calculated.sun_data_available.IsOlderThan(basic.clock, 15 * 60))
+  if (!calculated.sun_data_available.IsOlderThan(basic.clock,
+                                                 std::chrono::minutes(15)))
     return;
 
   // Calculate new azimuth
