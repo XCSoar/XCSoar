@@ -133,11 +133,11 @@ public:
    * @param other The second Validity object
    * @return The time difference in seconds
    */
-  double GetTimeDifference(const Validity &other) const {
+  FloatDuration GetTimeDifference(const Validity &other) const noexcept {
     assert(IsValid());
     assert(other.IsValid());
 
-    return Export(last - other.last);
+    return std::chrono::duration_cast<FloatDuration>(last - other.last);
   }
 
   /**

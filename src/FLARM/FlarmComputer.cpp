@@ -110,12 +110,12 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
       continue;
 
     // Calculate the time difference between now and the last contact
-    double dt = traffic.valid.GetTimeDifference(last_traffic->valid);
-    if (dt > 0) {
+    const auto dt = traffic.valid.GetTimeDifference(last_traffic->valid);
+    if (dt.count() > 0) {
       // Calculate the immediate climb rate
       if (!traffic.climb_rate_received)
         traffic.climb_rate =
-          (traffic.relative_altitude - last_traffic->relative_altitude) / dt;
+          (traffic.relative_altitude - last_traffic->relative_altitude) / dt.count();
     } else {
       // Since the time difference is zero (or negative)
       // we can just copy the old values
@@ -123,7 +123,7 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
         traffic.climb_rate = last_traffic->climb_rate;
     }
 
-    if (dt > 0 &&
+    if (dt.count() > 0 &&
         traffic.location_available &&
         last_traffic->location_available) {
       // Calculate the GeoVector between now and the last contact
@@ -136,12 +136,12 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
       if (!traffic.turn_rate_received) {
         Angle turn_rate = traffic.track - last_traffic->track;
         traffic.turn_rate =
-          turn_rate.AsDelta().Degrees() / dt;
+          turn_rate.AsDelta().Degrees() / dt.count();
       }
 
       // Calculate the speed [m/s]
       if (!traffic.speed_received)
-        traffic.speed = vec.distance / dt;
+        traffic.speed = vec.distance / dt.count();
     } else {
       // Since the time difference is zero (or negative)
       // we can just copy the old values
