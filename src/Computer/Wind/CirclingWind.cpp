@@ -88,8 +88,10 @@ CirclingWind::NewSample(const MoreData &info, const CirclingInfo &circling)
     samples.clear();
   }
 
-  if (last_track_available.FixTimeWarp(info.track_available, 30) ||
-      last_ground_speed_available.FixTimeWarp(info.ground_speed_available, 30))
+  if (last_track_available.FixTimeWarp(info.track_available,
+                                       std::chrono::seconds(30)) ||
+      last_ground_speed_available.FixTimeWarp(info.ground_speed_available,
+                                              std::chrono::seconds(30)))
     /* time warp: start from scratch */
     Reset();
 

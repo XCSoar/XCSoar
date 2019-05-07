@@ -49,11 +49,6 @@ class Validity {
     return std::chrono::duration_cast<Duration>(FloatDuration(time));
   }
 
-  constexpr
-  static Duration Import(unsigned time) {
-    return Duration((uint32_t)(time << BITS));
-  }
-
   static constexpr double Export(Duration i) noexcept {
     return std::chrono::duration_cast<FloatDuration>(i).count();
   }
@@ -178,11 +173,14 @@ public:
    * @return true if a time warp has occurred and this object has been
    * cleared, false if this object is within range
    */
-  bool FixTimeWarp(const Validity &current, unsigned max_period=300) {
+  bool FixTimeWarp(const Validity &current,
+                   std::chrono::steady_clock::duration _max_period=std::chrono::minutes(5)) noexcept {
     if (!IsValid())
       return false;
 
-    if (last + Import(max_period) < current.last || last > current.last) {
+    const auto max_period = std::chrono::duration_cast<Duration>(_max_period);
+
+    if (last + max_period < current.last || last > current.last) {
       /* out of range, this is a time warp */
       Clear();
       return true;
