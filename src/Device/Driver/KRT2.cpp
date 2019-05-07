@@ -154,7 +154,7 @@ public:
    despite being defined so in C++17, see
    http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0386r2.pdf */
 #if GCC_VERSION == 80300 || GCC_VERSION == 60300
-    constexpr std::chrono::milliseconds KRT2Device::CMD_TIMEOUT;
+constexpr std::chrono::milliseconds KRT2Device::CMD_TIMEOUT;
 #endif
 
 KRT2Device::KRT2Device(Port &_port)
