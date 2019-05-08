@@ -52,7 +52,7 @@ int main(int argc, char **argv)
 
   GPSClock log_clock;
   while (replay->Next())
-    if (log_clock.CheckAdvance(replay->Basic().time, 1))
+    if (log_clock.CheckAdvance(replay->Basic().time, std::chrono::seconds(1)))
       writer.LogPoint(replay->Basic());
 
   writer.Flush();

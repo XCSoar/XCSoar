@@ -30,8 +30,8 @@ Copyright_License {
 class LoggerFRecord
 {
   /* 4.5 minutes */
-  static constexpr int DEFAULT_UPDATE_TIME = 270;
-  static constexpr int ACCELERATED_UPDATE_TIME = 30;
+  static constexpr std::chrono::steady_clock::duration DEFAULT_UPDATE_TIME = std::chrono::seconds(270);
+  static constexpr std::chrono::steady_clock::duration ACCELERATED_UPDATE_TIME = std::chrono::seconds(30);
 
   GPSClock clock;
 

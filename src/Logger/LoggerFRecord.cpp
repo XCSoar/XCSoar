@@ -67,7 +67,7 @@ bool
 LoggerFRecord::Update(const GPSState &gps, double time, bool nav_warning)
 {
   // Accelerate to 30 seconds if bad signal
-  const double period = IsBadSignal(gps) || nav_warning
+  const std::chrono::steady_clock::duration period = IsBadSignal(gps) || nav_warning
     ? ACCELERATED_UPDATE_TIME
     : DEFAULT_UPDATE_TIME;
 

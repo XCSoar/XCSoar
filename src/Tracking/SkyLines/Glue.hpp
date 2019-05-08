@@ -36,7 +36,7 @@ class Queue;
 
 class Glue {
   Client client;
-  unsigned interval = 0;
+  std::chrono::steady_clock::duration interval{};
   GPSClock clock;
 
   GPSClock traffic_clock;

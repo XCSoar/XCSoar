@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_GPS_CLOCK_HPP
 #define XCSOAR_GPS_CLOCK_HPP
 
+#include <chrono>
+
 /**
  * Class for GPS-time based time intervals
  */
@@ -81,11 +83,12 @@ public:
    * @param dt The timestep in seconds
    * @return
    */
-  bool CheckAdvance(const double now, const double dt) {
+  bool CheckAdvance(const double now,
+                    const std::chrono::steady_clock::duration dt) noexcept {
     if (CheckReverse(now))
       return false;
 
-    if (now >= last + dt) {
+    if (now >= last + std::chrono::duration_cast<std::chrono::duration<double>>(dt).count()) {
       Update(now);
       return true;
     } else

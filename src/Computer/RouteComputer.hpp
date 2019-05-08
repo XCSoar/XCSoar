@@ -38,7 +38,7 @@ class RasterTerrain;
 class GlidePolar;
 
 class RouteComputer {
-  static constexpr unsigned PERIOD = 5;
+  static constexpr std::chrono::steady_clock::duration PERIOD = std::chrono::seconds(5);
 
   RoutePlannerGlue route_planner;
   ProtectedRoutePlanner protected_route_planner;

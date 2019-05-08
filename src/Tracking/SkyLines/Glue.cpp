@@ -32,7 +32,7 @@ Copyright_License {
 
 #include <assert.h>
 
-static constexpr double CLOUD_INTERVAL = 60;
+static constexpr auto CLOUD_INTERVAL = std::chrono::minutes(1);
 
 SkyLinesTracking::Glue::Glue(boost::asio::io_context &io_context,
                              Handler *_handler)
@@ -171,14 +171,16 @@ SkyLinesTracking::Glue::Tick(const NMEAInfo &basic,
   if (client.IsConnected()) {
     SendFixes(basic);
 
-    if (traffic_enabled && traffic_clock.CheckAdvance(basic.clock, 60))
+    if (traffic_enabled &&
+        traffic_clock.CheckAdvance(basic.clock, std::chrono::minutes(1)))
       client.SendTrafficRequest(true, true, near_traffic_enabled);
   }
 
   if (cloud_client.IsConnected()) {
     SendCloudFix(basic, calculated);
 
-    if (thermal_enabled && thermal_clock.CheckAdvance(basic.clock, 60))
+    if (thermal_enabled &&
+        thermal_clock.CheckAdvance(basic.clock, std::chrono::minutes(1)))
       cloud_client.SendThermalRequest();
   }
 }
@@ -208,7 +210,7 @@ SkyLinesTracking::Glue::SetSettings(const Settings &settings)
 
   client.SetKey(settings.key);
 
-  interval = settings.interval;
+  interval = std::chrono::seconds(settings.interval);
 
   if (!client.IsDefined()) {
     /* IPv4 only for now, because the official SkyLines tracking server
