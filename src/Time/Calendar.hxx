@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_DATE_UTIL_HPP
-#define XCSOAR_DATE_UTIL_HPP
+#pragma once
 
 #include "Compiler.h"
 
@@ -58,5 +57,3 @@ DaysInMonth(unsigned month, unsigned year)
   else
     return DaysInFebruary(year);
 }
-
-#endif
