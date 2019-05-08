@@ -129,7 +129,7 @@ timegm (struct tm *tm)
   for (int month = 0; month < tm->tm_mon; ++month)
     res += ndays[month];
 
-  if (tm->tm_mon > 1 && IsLeapYear(tm->tm_year))
+  if (tm->tm_mon > 1 && IsLeapYear(tm->tm_year + 1900))
     res++;
 
   res += tm->tm_mday - 1;
