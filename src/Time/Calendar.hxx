@@ -29,26 +29,21 @@
 
 #pragma once
 
-#include "Compiler.h"
-
-gcc_const
-static inline bool
-IsLeapYear(unsigned y)
+constexpr bool
+IsLeapYear(unsigned y) noexcept
 {
 	y += 1900;
 	return (y % 4) == 0 && ((y % 100) != 0 || (y % 400) == 0);
 }
 
-gcc_const
-static inline unsigned
-DaysInFebruary(unsigned year)
+constexpr unsigned
+DaysInFebruary(unsigned year) noexcept
 {
 	return IsLeapYear(year) ? 29 : 28;
 }
 
-gcc_const
-static inline unsigned
-DaysInMonth(unsigned month, unsigned year)
+constexpr unsigned
+DaysInMonth(unsigned month, unsigned year) noexcept
 {
 	if (month == 4 || month == 6 || month == 9 || month == 11)
 		return 30;
