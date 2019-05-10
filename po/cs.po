@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-05-10 08:13+0000\n"
+"PO-Revision-Date: 2019-05-10 08:19+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -945,7 +945,7 @@ msgstr "Úloha&Plochy"
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:33
 #, no-c-format
 msgid "None"
-msgstr "Nezobrazovat"
+msgstr "Žádné"
 
 #: src/Menu/ExpandMacros.cpp:373 src/Input/InputEventsSettings.cpp:317
 #, no-c-format
