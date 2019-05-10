@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-05-10 08:19+0000\n"
+"PO-Revision-Date: 2019-05-10 08:22+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -915,7 +915,7 @@ msgstr "Terén Zap"
 
 #: src/Menu/ExpandMacros.cpp:349
 msgid "Terrain + Topography"
-msgstr "Terén + Topografie"
+msgstr "Terén+Topo"
 
 #: src/Menu/ExpandMacros.cpp:352
 msgid "Terrain Off"
@@ -931,7 +931,7 @@ msgstr "Vše"
 #: src/Menu/ExpandMacros.cpp:370 src/Input/InputEventsSettings.cpp:314
 #, no-c-format
 msgid "Task & Landables"
-msgstr "Úloha&Plochy"
+msgstr "Úloha+Plochy"
 
 #: src/Menu/ExpandMacros.cpp:372 src/Input/InputEventsSettings.cpp:316
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:201
@@ -950,7 +950,7 @@ msgstr "Žádné"
 #: src/Menu/ExpandMacros.cpp:373 src/Input/InputEventsSettings.cpp:317
 #, no-c-format
 msgid "Task & Airfields"
-msgstr "Úloha&Letiště"
+msgstr "Úloha+Letiště"
 
 #: src/InfoBoxes/Content/Factory.cpp:135
 #, no-c-format
