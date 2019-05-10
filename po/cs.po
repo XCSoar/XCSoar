@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-02-23 14:18+0000\n"
+"PO-Revision-Date: 2019-05-10 08:13+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 3.5-dev\n"
+"X-Generator: Weblate 3.7-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -931,7 +931,7 @@ msgstr "Vše"
 #: src/Menu/ExpandMacros.cpp:370 src/Input/InputEventsSettings.cpp:314
 #, no-c-format
 msgid "Task & Landables"
-msgstr "Úloha & nouz. plochy"
+msgstr "Úloha&Plochy"
 
 #: src/Menu/ExpandMacros.cpp:372 src/Input/InputEventsSettings.cpp:316
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:201
@@ -945,12 +945,12 @@ msgstr "Úloha & nouz. plochy"
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:33
 #, no-c-format
 msgid "None"
-msgstr "Není"
+msgstr "Nezobrazovat"
 
 #: src/Menu/ExpandMacros.cpp:373 src/Input/InputEventsSettings.cpp:317
 #, no-c-format
 msgid "Task & Airfields"
-msgstr "Úloha & Letiště"
+msgstr "Úloha&Letiště"
 
 #: src/InfoBoxes/Content/Factory.cpp:135
 #, no-c-format
@@ -9899,8 +9899,8 @@ msgid ""
 "Flight\n"
 "Setup"
 msgstr ""
-"Let\n"
-"Nastavení"
+"Nastavení\n"
+"Let"
 
 #: Data/Input/default.xci:473 Data/Input/default.xci:1049
 msgid ""
@@ -10022,7 +10022,9 @@ msgstr ""
 
 #: Data/Input/default.xci:1151
 msgid "Setup Plane"
-msgstr "Nastavení letadla"
+msgstr ""
+"Nastavení\n"
+"Letadlo"
 
 #: Data/Input/default.xci:693
 msgid "Accel"
