@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-05-10 08:22+0000\n"
+"PO-Revision-Date: 2019-05-10 11:33+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -4232,8 +4232,8 @@ msgid ""
 "This option lets you configure if XCSoar should use settings like the "
 "MacCready value, bugs and ballast from the device."
 msgstr ""
-"Tato volba Vám umožňuje nastavit, zda má XCSoar použít nastavení jako "
-"MacCready, mouchy a vodní zátěž ze zařízení."
+"Určuje, zda má XCSoar použít nastavení jako MacCready, mouchy a vodní zátěž "
+"z externího zařízení."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:662
 msgid "Sync. to device"
@@ -4244,8 +4244,8 @@ msgid ""
 "This option lets you configure if XCSoar should send settings like the "
 "MacCready value, bugs and ballast to the device."
 msgstr ""
-"Tato volba vám umožňuje nastavit zda XCSoar odesílat nastavení jako "
-"MacCeready, mouchy a vodní zátěž do zařízení."
+"Určuje, zda má XCSoar odesílat nastavení jako MacCready, mouchy a vodní "
+"zátěž do externího zařízení."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:669
 msgid "Enable this if you use a K6Bt to connect the device."
@@ -4962,7 +4962,7 @@ msgstr "Vyžaduje GPS a inteligentní vário s výstupem vzdušné rychlosti."
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:108
 #, no-c-format
 msgid "Both"
-msgstr "Obojí"
+msgstr "Kroužení + CikCak"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:59
 #, no-c-format
@@ -4997,8 +4997,8 @@ msgid ""
 "in circling mode. Switched Off, the snail trail stays uncompensated for wind "
 "drift."
 msgstr ""
-"Určuje, zda je pozemní stopa snášena větrem v režimu kroužení. Pro vypnutí "
-"zůstane pozemní stopa nekompenzovaná na snos."
+"Určuje, zda je pozemní stopa snášena větrem v režimu kroužení. Po vypnutí "
+"nebude pozemní stopa kompenzovaná na snos."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:83
 msgid "Source"
@@ -6458,7 +6458,7 @@ msgid ""
 "setting switches the flight mode between circling and cruise."
 msgstr ""
 "Pokud je připojen Vega variometr a tato volba je zapnuta, nastavení klapky "
-"na pozitivní hodnotu přepne letový režim mezi kroužením a přeskokem."
+"na pozitivní hodnotu přepíná letový režim mezi kroužením a přeskokem."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:97
 #, no-c-format
@@ -6480,9 +6480,9 @@ msgid ""
 "done. Normally for gliders a good value is 90-120 seconds, and for "
 "paragliders 15 seconds."
 msgstr ""
-"Zde nastavujete kolik sekund letu je zahrnuto ve výpočtu klouzavého poměru. "
-"Pro kluzáky je vhodná hodnota v rozsahu 90-120 sekund, pro padákové kluzáky "
-"15 sekund."
+"Nastavení, kolik sekund letu je zahrnuto ve výpočtu klouzavého poměru. Pro "
+"kluzáky je vhodná hodnota v rozsahu 90-120 sekund, pro padákové kluzáky 15 "
+"sekund."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:112
 msgid "Predict wind drift"
