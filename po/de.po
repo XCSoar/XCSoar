@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-05-08 22:49+0000\n"
+"PO-Revision-Date: 2019-05-14 07:50+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/xcsoar/"
 "translations/de/>\n"
@@ -5012,9 +5012,8 @@ msgid "Use ZigZag and circling."
 msgstr "Lässt beide Berechnungsmethoden zu."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:63
-#, fuzzy
 msgid "Auto wind"
-msgstr "Wind berech."
+msgstr "Auto Wind"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:64
 msgid "This allows switching on or off the automatic wind algorithm."
