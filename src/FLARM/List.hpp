@@ -67,8 +67,12 @@ struct TrafficList {
   void Complement(const TrafficList &add) {
     // Add unique traffic from 'add' list
     for (auto &traffic : add.list) {
-      if (FindTraffic(traffic.id) == NULL) {
-        list.append(traffic);
+      if (FindTraffic(traffic.id) == nullptr) {
+        FlarmTraffic * new_traffic = AllocateTraffic();
+        if (new_traffic == nullptr)
+          return;
+        new_traffic->Clear();
+        new_traffic->Update(traffic);
       }
     }
   }
