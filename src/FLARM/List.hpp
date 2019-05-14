@@ -71,8 +71,7 @@ struct TrafficList {
         FlarmTraffic * new_traffic = AllocateTraffic();
         if (new_traffic == nullptr)
           return;
-        new_traffic->Clear();
-        new_traffic->Update(traffic);
+        *new_traffic = traffic;
       }
     }
   }
