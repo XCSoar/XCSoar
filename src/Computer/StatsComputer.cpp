@@ -26,6 +26,13 @@ Copyright_License {
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 
+/* Workaround for some GCC versions which don't inline the constexpr
+   despite being defined so in C++17, see
+   http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0386r2.pdf */
+#if GCC_OLDER_THAN(9,0)
+constexpr std::chrono::steady_clock::duration StatsComputer::PERIOD;
+#endif
+
 void
 StatsComputer::ResetFlight(const bool full)
 {

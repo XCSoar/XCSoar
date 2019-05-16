@@ -31,6 +31,13 @@ Copyright_License {
 
 #include <algorithm>
 
+/* Workaround for some GCC versions which don't inline the constexpr
+   despite being defined so in C++17, see
+   http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0386r2.pdf */
+#if GCC_OLDER_THAN(9,0)
+constexpr std::chrono::steady_clock::duration RouteComputer::PERIOD;
+#endif
+
 RouteComputer::RouteComputer(const Airspaces &airspace_database,
                              const ProtectedAirspaceWarningManager *warnings)
   :protected_route_planner(route_planner, airspace_database, warnings),
