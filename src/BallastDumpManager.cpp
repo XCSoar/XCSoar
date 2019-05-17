@@ -63,10 +63,7 @@ BallastDumpManager::Update(GlidePolar &glide_polar,
   }
 
   // Milliseconds since last ballast_clock.Update() call
-  int dt = ballast_clock.Elapsed();
-
-  // Update ballast_clock for the next call to BallastDumpManager::Update()
-  ballast_clock.Update();
+  int dt = ballast_clock.ElapsedUpdate();
 
   // How many percent of the max. ballast do we dump in one millisecond
   auto percent_per_millisecond = 1. / (1000 * dump_time);
