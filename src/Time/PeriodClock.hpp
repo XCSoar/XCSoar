@@ -48,7 +48,7 @@ public:
   PeriodClock():last(0) {}
 
 protected:
-  static Stamp GetNow() {
+  static auto GetNow() {
     return Import(std::chrono::steady_clock::now().time_since_epoch());
   }
 
@@ -82,16 +82,16 @@ public:
    * Returns the number of milliseconds elapsed since the last
    * update().  Returns -1 if update() was never called.
    */
-  int Elapsed() const {
+  auto Elapsed() const {
     return Elapsed(GetNow());
   }
 
   /**
    * Combines a call to Elapsed() and Update().
    */
-  int ElapsedUpdate() {
+  auto ElapsedUpdate() {
     const auto now = GetNow();
-    int result = Elapsed(now);
+    auto result = Elapsed(now);
     Update(now);
     return result;
   }
