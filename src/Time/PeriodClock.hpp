@@ -35,7 +35,7 @@ protected:
   typedef unsigned Stamp;
 
 private:
-  Stamp last;
+  Stamp last{};
 
 public:
   /**
@@ -45,7 +45,7 @@ public:
    * object.
    */
   constexpr
-  PeriodClock():last(0) {}
+  PeriodClock() noexcept = default;
 
 protected:
   static auto GetNow() {
