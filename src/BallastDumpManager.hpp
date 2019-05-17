@@ -30,12 +30,10 @@ class GlidePolar;
 
 class BallastDumpManager
 {
-  bool enabled;
+  bool enabled = false;
   PeriodClock ballast_clock;
 
 public:
-  constexpr BallastDumpManager():enabled(false) {}
-
   bool IsEnabled() const {
     return enabled;
   }
