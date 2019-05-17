@@ -34,14 +34,14 @@ class BallastDumpManager
   PeriodClock ballast_clock;
 
 public:
-  bool IsEnabled() const {
+  bool IsEnabled() const noexcept {
     return enabled;
   }
 
-  void Start();
-  void Stop();
+  void Start() noexcept;
+  void Stop() noexcept;
 
-  void SetEnabled(bool _enabled);
+  void SetEnabled(bool _enabled) noexcept;
 
   /**
    * Updates the ballast of the given GlidePolar.
@@ -51,7 +51,7 @@ public:
    * @return True if ballast is not entirely dumped yet,
    *         False if we are dry now or dump_time is zero/unknown
    */
-  bool Update(GlidePolar &glide_polar, unsigned dump_time);
+  bool Update(GlidePolar &glide_polar, unsigned dump_time) noexcept;
 };
 
 #endif

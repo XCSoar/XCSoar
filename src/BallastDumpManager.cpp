@@ -25,7 +25,7 @@ Copyright_License {
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 
 void
-BallastDumpManager::Start()
+BallastDumpManager::Start() noexcept
 {
   assert(!IsEnabled());
   enabled = true;
@@ -35,14 +35,14 @@ BallastDumpManager::Start()
 }
 
 void
-BallastDumpManager::Stop()
+BallastDumpManager::Stop() noexcept
 {
   assert(IsEnabled());
   enabled = false;
 }
 
 void
-BallastDumpManager::SetEnabled(bool _enabled)
+BallastDumpManager::SetEnabled(bool _enabled) noexcept
 {
   if (_enabled && !IsEnabled())
     Start();
@@ -51,7 +51,8 @@ BallastDumpManager::SetEnabled(bool _enabled)
 }
 
 bool
-BallastDumpManager::Update(GlidePolar &glide_polar, unsigned dump_time)
+BallastDumpManager::Update(GlidePolar &glide_polar,
+                           unsigned dump_time) noexcept
 {
   assert(IsEnabled());
 
