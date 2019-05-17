@@ -54,10 +54,10 @@ protected:
     return std::chrono::steady_clock::now();
   }
 
-  constexpr int Elapsed(Stamp now) const {
+  constexpr auto Elapsed(Stamp now) const {
     return last > Stamp()
-      ? std::chrono::duration_cast<std::chrono::milliseconds>(now - last).count()
-      : -1;
+      ? now - last
+      : Duration(-1);
   }
 
   template<class Rep, class Period>
@@ -161,10 +161,6 @@ protected:
   template<class Rep, class Period>
   static auto Import(const std::chrono::duration<Rep,Period> &duration) noexcept {
     return std::chrono::duration_cast<Duration>(duration);
-  }
-
-  static constexpr std::chrono::steady_clock::duration ExportMS(int ms) noexcept {
-    return std::chrono::milliseconds(ms);
   }
 };
 

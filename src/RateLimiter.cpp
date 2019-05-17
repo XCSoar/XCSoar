@@ -39,9 +39,9 @@ RateLimiter::Trigger()
     return;
 
   std::chrono::steady_clock::duration schedule = delay;
-  int elapsed = clock.Elapsed();
-  if (elapsed >= 0 && std::chrono::milliseconds(elapsed) < period)
-    schedule += period - std::chrono::milliseconds(elapsed);
+  const auto elapsed = clock.Elapsed();
+  if (elapsed.count() >= 0 && elapsed < period)
+    schedule += period - elapsed;
 
   Schedule(schedule);
 }

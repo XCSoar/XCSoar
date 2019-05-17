@@ -31,6 +31,7 @@
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "CatmullRomInterpolator.hpp"
+#include "Util/ChronoUtil.hxx"
 #include "Util/Clamp.hpp"
 
 #include <stdexcept>
@@ -112,7 +113,7 @@ Replay::Update()
     assert(clock.IsDefined());
 
     if (fast_forward < 0) {
-      virtual_time += clock.ElapsedUpdate() * time_scale / 1000;
+      virtual_time += ToFloatSeconds(clock.ElapsedUpdate()) * time_scale;
     } else {
       clock.Update();
 

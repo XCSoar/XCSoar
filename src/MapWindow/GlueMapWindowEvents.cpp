@@ -86,7 +86,7 @@ GlueMapWindow::OnMouseMove(PixelPoint p, unsigned keys)
   const unsigned threshold = Layout::Scale(IsEmbedded() ? 50 : 10);
   if (drag_mode != DRAG_NONE && arm_mapitem_list &&
       ((unsigned)ManhattanDistance(drag_start, p) > threshold ||
-       mouse_down_clock.Elapsed() > 200))
+       mouse_down_clock.Elapsed() > std::chrono::milliseconds(200)))
     arm_mapitem_list = false;
 
   switch (drag_mode) {
@@ -219,7 +219,7 @@ GlueMapWindow::OnMouseUp(PixelPoint p)
     return true;
   }
 
-  int click_time = mouse_down_clock.Elapsed();
+  const auto click_time = mouse_down_clock.Elapsed();
   mouse_down_clock.Reset();
 
   DragMode old_drag_mode = drag_mode;
@@ -252,7 +252,7 @@ GlueMapWindow::OnMouseUp(PixelPoint p)
     break;
 
   case DRAG_SIMULATOR:
-    if (click_time > 50 &&
+    if (click_time > std::chrono::milliseconds(50) &&
         compare_squared(drag_start.x - p.x, drag_start.y - p.y,
                         Layout::Scale(36)) == 1) {
       GeoPoint location = visible_projection.ScreenToGeo(p);

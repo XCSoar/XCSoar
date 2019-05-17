@@ -28,6 +28,7 @@
  */
 
 #include "KineticManager.hpp"
+#include "Util/ChronoUtil.hxx"
 
 void
 KineticManager::MouseDown(int x)
@@ -42,10 +43,10 @@ void
 KineticManager::MouseMove(int x)
 {
   // Get time since last position update
-  int dt = clock.Elapsed();
+  const auto dt = clock.Elapsed();
 
   // Filter fast updates to get a better velocity
-  if (dt < 15)
+  if (dt < std::chrono::milliseconds(15))
     return;
 
   // Update clock for next event
@@ -55,7 +56,7 @@ KineticManager::MouseMove(int x)
   int dx = x - last;
 
   // Calculate value-based velocity
-  v = double(dx) / dt;
+  v = double(dx) / ToFloatSeconds(dt);
 
   // Save value for next event
   last = x;
@@ -65,19 +66,19 @@ void
 KineticManager::MouseUp(int x)
 {
   // Calculate end position of the kinetic movement
-  int dt = clock.Elapsed();
-  if (dt > 200) {
+  const auto dt = clock.Elapsed();
+  if (dt > std::chrono::milliseconds(200)) {
     end = x;
     steady = true;
   } else
-    end = last + (int)((v / 2) * stopping_time);
+    end = last + (int)((v / 2) * ToFloatSeconds(stopping_time));
 }
 
 int
 KineticManager::GetPosition()
 {
   // Get time that has passed since the end of the manual movement
-  int t = clock.Elapsed();
+  const auto t = clock.Elapsed();
 
   // If more time has passed than allocated for the kinetic movement
   if (t >= stopping_time) {
@@ -87,7 +88,8 @@ KineticManager::GetPosition()
   }
 
   // Calculate the current position of the kinetic movement
-  int x = last + (int)(v * t - v * t * t / (2 * stopping_time));
+  const auto ts = ToFloatSeconds(t);
+  int x = last + (int)(v * ts - v * ts * ts / (2 * ToFloatSeconds(stopping_time)));
   if (x == end)
     steady = true;
 

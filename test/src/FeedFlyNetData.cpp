@@ -34,6 +34,7 @@ Copyright_License {
 #include "Util/PrintException.hxx"
 #include "Math/Util.hpp"
 #include "Time/PeriodClock.hpp"
+#include "Util/ChronoUtil.hxx"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -68,8 +69,7 @@ try {
     if (pressure_clock.CheckUpdate(std::chrono::milliseconds(48))) {
       NarrowString<16> sentence;
 
-      int elapsed_ms = start_clock.Elapsed();
-      auto elapsed = elapsed_ms / 1000.;
+      const auto elapsed = ToFloatSeconds(start_clock.Elapsed());
       auto vario = sin(elapsed / 3) * cos(elapsed / 10) *
         cos(elapsed / 20 + 2) * 3;
 

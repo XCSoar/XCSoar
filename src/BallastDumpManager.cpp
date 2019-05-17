@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "BallastDumpManager.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
+#include "Util/ChronoUtil.hxx"
 
 void
 BallastDumpManager::Start() noexcept
@@ -63,13 +64,10 @@ BallastDumpManager::Update(GlidePolar &glide_polar,
   }
 
   // Milliseconds since last ballast_clock.Update() call
-  int dt = ballast_clock.ElapsedUpdate();
-
-  // How many percent of the max. ballast do we dump in one millisecond
-  auto percent_per_millisecond = 1. / (1000 * dump_time);
+  const auto dt = ballast_clock.ElapsedUpdate();
 
   // Calculate the new ballast percentage
-  auto ballast = glide_polar.GetBallast() - dt * percent_per_millisecond;
+  auto ballast = glide_polar.GetBallast() - ToFloatSeconds(dt) / dump_time;
 
   // Check if the plane is dry now
   if (ballast < 0) {

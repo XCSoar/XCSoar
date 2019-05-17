@@ -41,7 +41,7 @@ public:
 
   gcc_pure
   bool HasExpired() const {
-    return Elapsed() > 0;
+    return Elapsed() > Duration::zero();
   }
 
   /**
@@ -51,7 +51,7 @@ public:
    */
   gcc_pure
   std::chrono::steady_clock::duration GetRemainingSigned() const {
-    return ExportMS(-Elapsed());
+    return -Elapsed();
   }
 
   /**

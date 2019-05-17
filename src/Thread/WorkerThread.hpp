@@ -33,7 +33,7 @@ class WorkerThread : public SuspensibleThread {
   Cond trigger_cond;
   bool trigger_flag = false;
 
-  const unsigned period_min, idle_min, delay;
+  const std::chrono::steady_clock::duration period_min, idle_min, delay;
 
 public:
   /**

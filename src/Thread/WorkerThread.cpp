@@ -28,7 +28,10 @@ WorkerThread::WorkerThread(const char *_name,
                            unsigned _period_min, unsigned _idle_min,
                            unsigned _delay)
   :SuspensibleThread(_name),
-   period_min(_period_min), idle_min(_idle_min), delay(_delay) {
+   period_min(std::chrono::milliseconds(_period_min)),
+   idle_min(std::chrono::milliseconds(_idle_min)),
+   delay(std::chrono::milliseconds(_delay))
+{
 }
 
 void
@@ -52,7 +55,7 @@ WorkerThread::Run() noexcept
     }
 
     /* got the "stop" trigger? */
-    if (delay > 0
+    if (delay.count() > 0
         ? _WaitForStopped(lock, delay)
         : _CheckStoppedOrSuspended(lock))
       break;
@@ -66,20 +69,20 @@ WorkerThread::Run() noexcept
       const ScopeUnlock unlock(mutex);
 
       /* do the actual work */
-      if (period_min > 0)
+      if (period_min.count() > 0)
         clock.Update();
 
       Tick();
     }
 
-    unsigned idle = idle_min;
-    if (period_min > 0) {
-      unsigned elapsed = clock.Elapsed();
+    auto idle = idle_min;
+    if (period_min.count() > 0) {
+      const auto elapsed = clock.Elapsed();
       if (elapsed + idle < period_min)
         idle = period_min - elapsed;
     }
 
-    if (idle > 0 && _WaitForStopped(lock, idle))
+    if (idle.count() > 0 && _WaitForStopped(lock, idle))
       break;
   }
 }

@@ -255,7 +255,7 @@ ProcessTimer()
 
     if (replay && replay->IsActive()) {
       m_clock.Update();
-    } else if (m_clock.Elapsed() >= 1000) {
+    } else if (m_clock.Elapsed() >= std::chrono::seconds(1)) {
       m_clock.Update();
       device_blackboard->ProcessSimulation();
     } else if (!m_clock.IsDefined())
