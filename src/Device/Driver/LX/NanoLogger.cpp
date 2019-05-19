@@ -214,7 +214,7 @@ Nano::ReadFlightList(Port &port, RecordedFlightList &flight_list,
   port.StopRxThread();
   PortNMEAReader reader(port, env);
 
-  TimeoutClock timeout(2000);
+  TimeoutClock timeout(std::chrono::seconds(2));
   int nflights = GetNumberOfFlights(port, reader, env, timeout);
   if (nflights <= 0)
     return nflights == 0;
@@ -232,7 +232,7 @@ Nano::ReadFlightList(Port &port, RecordedFlightList &flight_list,
     /* read 8 records at a time */
     const unsigned nrequest = std::min(nmax, 8u);
 
-    timeout = TimeoutClock(2000);
+    timeout = TimeoutClock(std::chrono::seconds(2));
     if (!GetLogbookContents(port, reader, flight_list,
                             requested_tail, nrequest, env, timeout))
       return false;
@@ -322,7 +322,7 @@ DownloadFlightInner(Port &port, const char *filename, FILE *file,
         request_retry_count++;
       }
 
-      TimeoutClock timeout(2000);
+      TimeoutClock timeout(std::chrono::seconds(2));
       const char *line = reader.ExpectLine("PLXVC,FLIGHT,A,", timeout);
       if (line == nullptr || !HandleFlightLine(line, file, i, row_count)) {
         if (request_retry_count > 5)

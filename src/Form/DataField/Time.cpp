@@ -65,10 +65,10 @@ DataFieldTime::SpeedUp(bool key_up)
     return 1;
   }
 
-  if (!last_step.Check(200)) {
+  if (!last_step.Check(std::chrono::milliseconds(200))) {
     speedup++;
     if (speedup > 5) {
-      last_step.UpdateWithOffset(350);
+      last_step.UpdateWithOffset(std::chrono::milliseconds(350));
       return 10;
     }
   } else

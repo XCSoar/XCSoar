@@ -227,7 +227,7 @@ AltairProDevice::PropertySetGet(char *Buffer, size_t size,
 
   port.Flush();
 
-  TimeoutClock timeout(5000);
+  TimeoutClock timeout(std::chrono::seconds(5));
 
   // eg $PDVSC,S,FOO,BAR*<cr>\r\n
   if (!PortWriteNMEA(port, Buffer, env))

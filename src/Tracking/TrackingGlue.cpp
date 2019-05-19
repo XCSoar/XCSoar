@@ -113,7 +113,7 @@ TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
     /* can't track without a valid GPS fix */
     return;
 
-  if (!clock.CheckUpdate(settings.livetrack24.interval * 1000))
+  if (!clock.CheckUpdate(std::chrono::seconds(settings.livetrack24.interval)))
     /* later */
     return;
 

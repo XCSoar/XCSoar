@@ -44,7 +44,7 @@ static void
 VegaWriteDemo()
 {
   static PeriodClock last_time;
-  if (!last_time.CheckUpdate(250))
+  if (!last_time.CheckUpdate(std::chrono::milliseconds(250)))
     return;
 
   TCHAR dbuf[100];

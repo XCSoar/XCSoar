@@ -65,7 +65,7 @@ try {
   double pressure = 101300;
   unsigned battery_level = 11;
   while (true) {
-    if (pressure_clock.CheckUpdate(48)) {
+    if (pressure_clock.CheckUpdate(std::chrono::milliseconds(48))) {
       NarrowString<16> sentence;
 
       int elapsed_ms = start_clock.Elapsed();
@@ -84,7 +84,7 @@ try {
       port->Write(sentence.c_str(), sentence.length());
     }
 
-    if (battery_clock.CheckUpdate(11000)) {
+    if (battery_clock.CheckUpdate(std::chrono::seconds(11))) {
       NarrowString<16> sentence;
 
       sentence = "_BAT ";

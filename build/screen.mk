@@ -19,6 +19,7 @@ SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/SingleWindow.cpp
 
 SCREEN_CUSTOM_SOURCES = \
+	$(SCREEN_SRC_DIR)/Custom/DoubleClick.cpp \
 	$(SCREEN_SRC_DIR)/Custom/GeoBitmap.cpp \
 	$(SCREEN_SRC_DIR)/Custom/Pen.cpp \
 	$(SCREEN_SRC_DIR)/Custom/Timer.cpp \

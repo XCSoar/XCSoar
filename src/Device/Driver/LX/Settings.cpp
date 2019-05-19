@@ -66,7 +66,8 @@ LXDevice::WaitV7Setting(const char *name, OperationEnvironment &env,
                         unsigned timeout_ms)
 {
   std::unique_lock<Mutex> lock(v7_settings);
-  auto i = v7_settings.Wait(lock, name, env, timeout_ms);
+  auto i = v7_settings.Wait(lock, name, env,
+                            std::chrono::milliseconds(timeout_ms));
   if (i == v7_settings.end())
     return std::string();
 
@@ -122,7 +123,8 @@ LXDevice::WaitNanoSetting(const char *name, OperationEnvironment &env,
                         unsigned timeout_ms)
 {
   std::unique_lock<Mutex> lock(nano_settings);
-  auto i = nano_settings.Wait(lock, name, env, timeout_ms);
+  auto i = nano_settings.Wait(lock, name, env,
+                              std::chrono::milliseconds(timeout_ms));
   if (i == nano_settings.end())
     return std::string();
 

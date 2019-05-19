@@ -21,22 +21,11 @@ Copyright_License {
 }
 */
 
-#include "Idle.hpp"
-#include "Time/PeriodClock.hpp"
+#include "DoubleClick.hpp"
 
-static PeriodClock user_idle_clock;
-
-bool
-IsUserIdle(unsigned duration_ms)
-{
-  return user_idle_clock.Check(std::chrono::milliseconds(duration_ms));
-}
-
-/**
- * Acts as if the user had just interacted with XCSoar.
- */
-void
-ResetUserIdle()
-{
-  user_idle_clock.Update();
-}
+/* Workaround for some GCC versions which don't inline the constexpr
+   despite being defined so in C++17, see
+   http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0386r2.pdf */
+#if GCC_OLDER_THAN(9,0)
+constexpr std::chrono::milliseconds DoubleClick::INTERVAL;
+#endif

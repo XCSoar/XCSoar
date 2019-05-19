@@ -72,7 +72,7 @@ ProgressGlue::Step()
   if (global_progress_window == nullptr)
     return;
 
-  if (!throttle_clock.CheckUpdate(200))
+  if (!throttle_clock.CheckUpdate(std::chrono::milliseconds(200)))
     return;
 
   global_progress_window->Step();
@@ -86,7 +86,7 @@ ProgressGlue::SetValue(unsigned value)
   if (global_progress_window == nullptr)
     return;
 
-  if (!throttle_clock.CheckUpdate(200))
+  if (!throttle_clock.CheckUpdate(std::chrono::milliseconds(200)))
     return;
 
   global_progress_window->SetValue(value);

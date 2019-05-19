@@ -115,11 +115,11 @@ public:
     }
   }
 
-  template<typename K>
+  template<typename K, class Rep, class Period>
   const_iterator Wait(std::unique_lock<Mutex> &lock,
                       const K &key, OperationEnvironment &env,
-                      unsigned timeout_ms) {
-    TimeoutClock timeout(timeout_ms);
+                      const std::chrono::duration<Rep,Period> &_timeout) {
+    TimeoutClock timeout(_timeout);
     return Wait(lock, key, env, timeout);
   }
 

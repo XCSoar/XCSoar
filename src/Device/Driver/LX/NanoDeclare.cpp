@@ -44,7 +44,8 @@ NanoWriteDecl(Port &port, OperationEnvironment &env, PortNMEAReader &reader,
     return false;
 
   buffer.UnsafeFormat("PLXVC,DECL,C,%u", row);
-  char *response = reader.ExpectLine(buffer, TimeoutClock(2000));
+  char *response = reader.ExpectLine(buffer,
+                                     TimeoutClock(std::chrono::seconds(2)));
   return response != nullptr && (*response == 0 || *response == ',');
 }
 

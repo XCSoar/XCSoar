@@ -52,7 +52,7 @@ TaskConstraintsMonitor::Check()
 
     if (basic.ground_speed_available &&
         !settings.start_constraints.CheckSpeed(basic.ground_speed) &&
-        max_start_speed_clock.CheckUpdate(30000)) {
+        max_start_speed_clock.CheckUpdate(std::chrono::seconds(30))) {
       StaticString<256> msg;
       msg.Format(_T("%s (%s > %s)"), _("Maximum start speed exceeded"),
                  FormatUserSpeed(basic.ground_speed).c_str(),

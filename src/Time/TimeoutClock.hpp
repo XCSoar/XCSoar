@@ -34,13 +34,10 @@ Copyright_License {
  */
 class TimeoutClock : private PeriodClock {
 public:
-  explicit TimeoutClock(unsigned max_duration_ms) {
-    UpdateWithOffset(max_duration_ms);
-  }
-
   template<class Rep, class Period>
-  explicit TimeoutClock(const std::chrono::duration<Rep,Period> &max_duration) noexcept
-    :TimeoutClock(Import(max_duration)) {}
+  explicit TimeoutClock(const std::chrono::duration<Rep,Period> &max_duration) noexcept {
+    UpdateWithOffset(max_duration);
+  }
 
   gcc_pure
   bool HasExpired() const {

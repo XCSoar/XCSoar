@@ -344,7 +344,7 @@ WndForm::ShowModal()
     // hack to stop exiting immediately
     if (IsEmbedded() && !hastimed &&
         event.IsUserInput()) {
-      if (!enter_clock.Check(200))
+      if (!enter_clock.Check(std::chrono::milliseconds(200)))
         /* ignore user input in the first 200ms */
         continue;
       else

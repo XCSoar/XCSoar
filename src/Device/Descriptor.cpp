@@ -624,7 +624,7 @@ DeviceDescriptor::AutoReopen(OperationEnvironment &env)
       !config.IsAvailable() ||
       !ShouldReopen() ||
       /* attempt to reopen a failed device every 30 seconds */
-      !reopen_clock.CheckUpdate(30000))
+      !reopen_clock.CheckUpdate(std::chrono::seconds(30)))
     return;
 
   TCHAR buffer[64];

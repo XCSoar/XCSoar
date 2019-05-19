@@ -58,8 +58,10 @@ protected:
       : now - last;
   }
 
-  constexpr bool Check(Stamp now, unsigned duration) const {
-    return now >= last + duration;
+  template<class Rep, class Period>
+  constexpr bool Check(Stamp now,
+                       const std::chrono::duration<Rep,Period> &duration) const noexcept {
+    return now >= last + Import(duration);
   }
 
   void Update(Stamp now) {
@@ -102,7 +104,8 @@ public:
    *
    * @param duration the duration in milliseconds
    */
-  bool Check(unsigned duration) const {
+  template<class Rep, class Period>
+  bool Check(const std::chrono::duration<Rep,Period> &duration) const noexcept {
     return Check(GetNow(), duration);
   }
 
@@ -117,13 +120,9 @@ public:
    * Updates the time stamp, setting it to the current clock plus the
    * specified offset.
    */
-  void UpdateWithOffset(int offset) {
-    Update(GetNow() + offset);
-  }
-
   template<class Rep, class Period>
   constexpr void UpdateWithOffset(const std::chrono::duration<Rep,Period> &offset) noexcept {
-    UpdateWithOffset(Import(offset));
+    Update(GetNow() + Import(offset));
   }
 
   /**
@@ -132,7 +131,8 @@ public:
    *
    * @param duration the duration in milliseconds
    */
-  bool CheckUpdate(unsigned duration) {
+  template<class Rep, class Period>
+  bool CheckUpdate(const std::chrono::duration<Rep,Period> &duration) noexcept {
     Stamp now = GetNow();
     if (Check(now, duration)) {
       Update(now);
@@ -141,18 +141,14 @@ public:
       return false;
   }
 
-  template<class Rep, class Period>
-  bool CheckUpdate(const std::chrono::duration<Rep,Period> &duration) noexcept {
-    return CheckUpdate(Import(duration));
-  }
-
   /**
    * Checks whether the specified duration has passed since the last
    * update.  After that, it updates the time stamp.
    *
    * @param duration the duration in milliseconds
    */
-  bool CheckAlwaysUpdate(unsigned duration) {
+  template<class Rep, class Period>
+  bool CheckAlwaysUpdate(const std::chrono::duration<Rep,Period> &duration) noexcept {
     Stamp now = GetNow();
     bool ret = Check(now, duration);
     Update(now);

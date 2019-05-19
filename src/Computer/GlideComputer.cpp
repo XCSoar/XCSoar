@@ -152,7 +152,7 @@ GlideComputer::ProcessGPS(bool force)
   // Update the ConditionMonitors
   ConditionMonitorsUpdate(Basic(), Calculated(), settings);
 
-  return idle_clock.CheckUpdate(500);
+  return idle_clock.CheckUpdate(std::chrono::milliseconds(500));
 }
 
 void
@@ -205,7 +205,7 @@ GlideComputer::CalculateOwnTeamCode()
     return;
 
   // Only calculate every 10sec otherwise cancel calculation
-  if (!last_team_code_update.CheckUpdate(10000))
+  if (!last_team_code_update.CheckUpdate(std::chrono::seconds(10)))
     return;
 
   // Get bearing and distance to the reference waypoint

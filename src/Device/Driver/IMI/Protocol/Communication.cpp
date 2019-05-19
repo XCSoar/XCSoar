@@ -85,8 +85,8 @@ IMI::Receive(Port &port, OperationEnvironment &env,
     /* fallback for timeout calculation */
     baudrate = 9600;
 
-  const TimeoutClock timeout(extraTimeout + 10000 *
-                             (expectedPayloadSize + sizeof(IMICOMM_MSG_HEADER_SIZE) + 10) / baudrate);
+  const TimeoutClock timeout(std::chrono::milliseconds(extraTimeout) + 10 *
+                             std::chrono::seconds((expectedPayloadSize + sizeof(IMICOMM_MSG_HEADER_SIZE) + 10) / baudrate));
 
   // wait for the message
   while (true) {

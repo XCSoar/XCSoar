@@ -298,7 +298,7 @@ FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
     if (StringIsEmpty(buffer))
       break;
 
-    if (status_clock.CheckUpdate(250) &&
+    if (status_clock.CheckUpdate(std::chrono::milliseconds(250)) &&
         *buffer == 'B') {
       // Parse the fix time
       BrokenTime time;
