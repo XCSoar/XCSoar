@@ -32,10 +32,12 @@ Copyright_License {
  */
 class PeriodClock {
 protected:
-  typedef unsigned Stamp;
+  using Clock = std::chrono::steady_clock;
+  using Duration = Clock::duration;
+  using Stamp = Clock::time_point;
 
 private:
-  Stamp last{};
+  Stamp last;
 
 public:
   /**
@@ -45,17 +47,17 @@ public:
    * object.
    */
   constexpr
-  PeriodClock() noexcept = default;
+  PeriodClock() = default;
 
 protected:
   static auto GetNow() {
-    return Import(std::chrono::steady_clock::now().time_since_epoch());
+    return std::chrono::steady_clock::now();
   }
 
   constexpr int Elapsed(Stamp now) const {
-    return last == 0
-      ? -1
-      : now - last;
+    return last > Stamp()
+      ? std::chrono::duration_cast<std::chrono::milliseconds>(now - last).count()
+      : -1;
   }
 
   template<class Rep, class Period>
@@ -70,14 +72,14 @@ protected:
 
 public:
   constexpr bool IsDefined() const {
-    return last != 0;
+    return last > Stamp{};
   }
 
   /**
    * Resets the clock.
    */
   void Reset() {
-    last = 0;
+    last = Stamp{};
   }
 
   /**
@@ -157,8 +159,8 @@ public:
 
 protected:
   template<class Rep, class Period>
-  static int Import(const std::chrono::duration<Rep,Period> &duration) noexcept {
-    return std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
+  static auto Import(const std::chrono::duration<Rep,Period> &duration) noexcept {
+    return std::chrono::duration_cast<Duration>(duration);
   }
 
   static constexpr std::chrono::steady_clock::duration ExportMS(int ms) noexcept {
