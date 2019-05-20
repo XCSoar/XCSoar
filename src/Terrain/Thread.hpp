@@ -55,7 +55,7 @@ public:
 
 private:
   /* virtual methods from class StandbyThread*/
-  void Tick() override;
+  void Tick() noexcept override;
 };
 
 #endif

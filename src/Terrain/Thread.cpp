@@ -50,7 +50,7 @@ TerrainThread::Trigger(const WindowProjection &projection)
 }
 
 void
-TerrainThread::Tick()
+TerrainThread::Tick() noexcept
 {
   SetIdlePriority(); // TODO: call only once
 

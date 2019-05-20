@@ -59,7 +59,7 @@ public:
 
 protected:
   /* virtual methods from Thread */
-  void Run() override;
+  void Run() noexcept override;
 };
 
 #endif

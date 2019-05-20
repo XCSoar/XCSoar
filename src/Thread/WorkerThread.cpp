@@ -32,7 +32,7 @@ WorkerThread::WorkerThread(const char *_name,
 }
 
 void
-WorkerThread::Run()
+WorkerThread::Run() noexcept
 {
   PeriodClock clock;
 

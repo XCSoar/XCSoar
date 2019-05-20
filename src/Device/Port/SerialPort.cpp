@@ -234,7 +234,7 @@ SerialPort::WaitDataPending(OverlappedEvent &overlapped,
 }
 
 void
-SerialPort::Run()
+SerialPort::Run() noexcept
 {
   assert(Thread::IsInside());
 

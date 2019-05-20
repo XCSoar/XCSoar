@@ -38,13 +38,13 @@ Copyright_License {
 #endif
 
 void
-Thread::SetIdlePriority()
+Thread::SetIdlePriority() noexcept
 {
   ::SetThreadIdlePriority();
 }
 
 bool
-Thread::Start()
+Thread::Start() noexcept
 {
   assert(!IsDefined());
 
@@ -80,7 +80,7 @@ Thread::Start()
 }
 
 void
-Thread::Join()
+Thread::Join() noexcept
 {
   assert(IsDefined());
   assert(!IsInside());
@@ -97,7 +97,7 @@ Thread::Join()
 
 #ifndef HAVE_POSIX
 bool
-Thread::Join(unsigned timeout_ms)
+Thread::Join(unsigned timeout_ms) noexcept
 {
   assert(IsDefined());
   assert(!IsInside());
@@ -115,7 +115,7 @@ Thread::Join(unsigned timeout_ms)
 #ifdef HAVE_POSIX
 
 void *
-Thread::ThreadProc(void *p)
+Thread::ThreadProc(void *p) noexcept
 {
   Thread *thread = (Thread *)p;
 
@@ -142,7 +142,7 @@ Thread::ThreadProc(void *p)
 #else /* !HAVE_POSIX */
 
 DWORD WINAPI
-Thread::ThreadProc(LPVOID lpParameter)
+Thread::ThreadProc(LPVOID lpParameter) noexcept
 {
   Thread *thread = (Thread *)lpParameter;
 

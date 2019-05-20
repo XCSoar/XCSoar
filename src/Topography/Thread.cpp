@@ -63,7 +63,7 @@ TopographyThread::Trigger(const WindowProjection &_projection)
 }
 
 void
-TopographyThread::Tick()
+TopographyThread::Tick() noexcept
 {
   // TODO: call only once
   SetIdlePriority();

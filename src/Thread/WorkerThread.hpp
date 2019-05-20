@@ -94,12 +94,12 @@ public:
   }
 
 protected:
-  virtual void Run();
+  virtual void Run() noexcept;
 
   /**
    * Implement this to do the actual work.
    */
-  virtual void Tick() = 0;
+  virtual void Tick() noexcept = 0;
 };
 
 #endif

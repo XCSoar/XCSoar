@@ -85,7 +85,7 @@ StandbyThread::WaitStopped()
 }
 
 void
-StandbyThread::Run()
+StandbyThread::Run() noexcept
 {
   assert(!busy);
 

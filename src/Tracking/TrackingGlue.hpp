@@ -92,7 +92,7 @@ public:
   void OnTimer(const MoreData &basic, const DerivedInfo &calculated);
 
 protected:
-  void Tick() override;
+  void Tick() noexcept override;
 
 private:
   /* virtual methods from SkyLinesTracking::Handler */

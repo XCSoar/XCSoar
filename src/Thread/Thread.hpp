@@ -61,17 +61,17 @@ class Thread {
 public:
 
 #ifdef HAVE_POSIX
-  Thread(const char *_name=nullptr):name(_name), defined(false) {
+  Thread(const char *_name=nullptr) noexcept:name(_name), defined(false) {
 #ifndef NDEBUG
     creating = false;
 #endif
   }
 #else
-  Thread(const char *_name=nullptr):name(_name), handle(nullptr) {}
+  Thread(const char *_name=nullptr) noexcept:name(_name), handle(nullptr) {}
 #endif
 
 #ifndef NDEBUG
-  ~Thread() {
+  ~Thread() noexcept {
     /* all Thread objects must be destructed manually by calling
        Join(), to clean up */
     assert(!IsDefined());
@@ -81,7 +81,7 @@ public:
   Thread(const Thread &other) = delete;
   Thread &operator=(const Thread &other) = delete;
 
-  bool IsDefined() const {
+  bool IsDefined() const noexcept {
 #ifdef HAVE_POSIX
     return defined;
 #else
@@ -92,7 +92,7 @@ public:
   /**
    * Check if this thread is the current thread.
    */
-  bool IsInside() const {
+  bool IsInside() const noexcept {
 #ifdef HAVE_POSIX
 #ifdef NDEBUG
     const bool creating = false;
@@ -104,29 +104,29 @@ public:
 #endif
   }
 
-  void SetLowPriority() {
+  void SetLowPriority() noexcept {
 #ifndef HAVE_POSIX
     ::SetThreadPriority(handle, THREAD_PRIORITY_BELOW_NORMAL);
 #endif
   }
 
-  void SetIdlePriority();
+  void SetIdlePriority() noexcept;
 
-  bool Start();
-  void Join();
+  bool Start() noexcept;
+  void Join() noexcept;
 
 #ifndef HAVE_POSIX
-  bool Join(unsigned timeout_ms);
+  bool Join(unsigned timeout_ms) noexcept;
 #endif
 
 protected:
-  virtual void Run() = 0;
+  virtual void Run() noexcept = 0;
 
 private:
 #ifdef HAVE_POSIX
-  static void *ThreadProc(void *lpParameter);
+  static void *ThreadProc(void *lpParameter) noexcept;
 #else
-  static DWORD WINAPI ThreadProc(LPVOID lpParameter);
+  static DWORD WINAPI ThreadProc(LPVOID lpParameter) noexcept;
 #endif
 };
 

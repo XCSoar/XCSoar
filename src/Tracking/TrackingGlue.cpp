@@ -146,7 +146,7 @@ TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
 }
 
 void
-TrackingGlue::Tick()
+TrackingGlue::Tick() noexcept
 {
   if (!settings.livetrack24.enabled)
     /* settings have been cleared meanwhile, bail out */

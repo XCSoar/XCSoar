@@ -78,7 +78,7 @@ private:
   void Process();
 
 protected:
-  virtual void Tick();
+  void Tick() noexcept override;
 };
 
 #endif

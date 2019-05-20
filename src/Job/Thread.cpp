@@ -35,7 +35,7 @@ JobThread::Start()
 }
 
 void
-JobThread::Run()
+JobThread::Run() noexcept
 {
   assert(!running.load(std::memory_order_relaxed));
 

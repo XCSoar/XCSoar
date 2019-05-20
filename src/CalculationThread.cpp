@@ -56,7 +56,7 @@ CalculationThread::SetScreenDistanceMeters(double new_value)
  * Main loop of the CalculationThread
  */
 void
-CalculationThread::Tick()
+CalculationThread::Tick() noexcept
 {
 #ifdef HAVE_CPU_FREQUENCY
   const ScopeLockCPU cpu;

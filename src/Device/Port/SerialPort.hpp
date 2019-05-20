@@ -105,7 +105,7 @@ public:
 
 protected:
   /* virtual methods from class Thread */
-  virtual void Run() override;
+  void Run() noexcept override;
 };
 
 #endif

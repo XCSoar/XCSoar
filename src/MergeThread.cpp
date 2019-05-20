@@ -57,7 +57,7 @@ MergeThread::Process()
 }
 
 void
-MergeThread::Tick()
+MergeThread::Tick() noexcept
 {
   bool gps_updated, calculated_updated;
 

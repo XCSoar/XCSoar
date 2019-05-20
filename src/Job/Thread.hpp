@@ -71,7 +71,7 @@ public:
 
 protected:
   /* virtual methods from class Thread */
-  void Run() override;
+  void Run() noexcept override;
 
   /* virtual methods from class DelayedNotify */
   void OnNotification() override;

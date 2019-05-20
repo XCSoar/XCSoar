@@ -179,10 +179,10 @@ protected:
    * but you should unlock it while doing real work (and re-lock it
    * before returning), or the calling thread will block.
    */
-  virtual void Tick() = 0;
+  virtual void Tick() noexcept = 0;
 
 private:
-  virtual void Run();
+  void Run() noexcept override;
 };
 
 #endif

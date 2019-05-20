@@ -42,7 +42,7 @@ AsioThread::Stop()
 }
 
 void
-AsioThread::Run()
+AsioThread::Run() noexcept
 {
   /* a dummy work to keep the io_context alive even if we're
      completely idle */

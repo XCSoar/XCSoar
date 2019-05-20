@@ -73,7 +73,7 @@ public:
   void ForceTrigger();
 
 protected:
-  virtual void Tick();
+  void Tick() noexcept override;
 };
 
 #endif

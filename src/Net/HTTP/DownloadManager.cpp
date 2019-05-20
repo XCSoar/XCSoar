@@ -242,7 +242,7 @@ private:
 
 protected:
   /* methods from class StandbyThread */
-  void Tick() override;
+  void Tick() noexcept override;
 
 private:
   /* methods from class OperationEnvironment */
@@ -315,7 +315,7 @@ DownloadManagerThread::FailQueue()
 }
 
 void
-DownloadManagerThread::Tick()
+DownloadManagerThread::Tick() noexcept
 {
   try {
     Net::Session session;

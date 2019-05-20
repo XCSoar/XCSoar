@@ -114,7 +114,7 @@ public:
 
 private:
   /* virtual methods from class Thread */
-  void Run() override;
+  void Run() noexcept override;
 };
 
 #endif

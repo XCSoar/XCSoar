@@ -66,14 +66,14 @@ bool TopWindow::OnEvent(const Event &event) { return false; }
 
 static bool quit;
 
-class TestThread : public Thread {
+class TestThread final : public Thread {
   Notify &notify;
 
 public:
   TestThread(Notify &_notify):notify(_notify) {}
 
 protected:
-  virtual void Run() {
+  void Run() noexcept override {
     notify.SendNotification();
   }
 };

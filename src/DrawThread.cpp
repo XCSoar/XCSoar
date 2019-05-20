@@ -32,7 +32,7 @@ Copyright_License {
  * Main loop of the DrawThread
  */
 void
-DrawThread::Run()
+DrawThread::Run() noexcept
 {
   SetLowPriority();
 

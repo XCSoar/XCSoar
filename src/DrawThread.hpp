@@ -62,7 +62,7 @@ public:
   }
 
 protected:
-  virtual void Run();
+  void Run() noexcept override;
 };
 
 #endif
