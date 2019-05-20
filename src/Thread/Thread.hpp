@@ -71,7 +71,7 @@ public:
 #endif
 
 #ifndef NDEBUG
-  virtual ~Thread() {
+  ~Thread() {
     /* all Thread objects must be destructed manually by calling
        Join(), to clean up */
     assert(!IsDefined());
