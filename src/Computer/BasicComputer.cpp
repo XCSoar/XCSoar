@@ -28,6 +28,7 @@ Copyright_License {
 #include "Atmosphere/AirDensity.hpp"
 #include "Geo/Gravity.hpp"
 #include "Math/Util.hpp"
+#include "Util/ChronoUtil.hxx"
 
 static constexpr double INVERSE_G = 1. / GRAVITY;
 static constexpr double INVERSE_2G = INVERSE_G / 2.;
@@ -262,7 +263,7 @@ ComputeGPSVario(MoreData &basic,
 
     /* use the "Validity" time stamp, because it reflects when this
        vertical speed was measured, and GPS time may not be available */
-    const std::chrono::duration<double> delta_t =
+    const auto delta_t =
       basic.noncomp_vario_available.GetTimeDifference(last.noncomp_vario_available);
 
     if (delta_t.count() > 0) {
@@ -271,7 +272,7 @@ ComputeGPSVario(MoreData &basic,
       const auto delta_e = basic.energy_height - last.energy_height;
 
       basic.gps_vario = basic.noncomp_vario;
-      basic.gps_vario_TE = basic.noncomp_vario + delta_e / delta_t.count();
+      basic.gps_vario_TE = basic.noncomp_vario + delta_e / ToFloatSeconds(delta_t);
       basic.gps_vario_available = basic.noncomp_vario_available;
     }
   } else if (basic.pressure_altitude_available && last.pressure_altitude_available) {
@@ -279,7 +280,7 @@ ComputeGPSVario(MoreData &basic,
        even if navigate by GPS altitude is configured, because pressure
        altitude is expected to be more exact. */
 
-    const std::chrono::duration<double> delta_t =
+    const auto delta_t =
       basic.pressure_altitude_available.GetTimeDifference(last.pressure_altitude_available);
 
     if (delta_t.count() > 0) {
@@ -288,15 +289,15 @@ ComputeGPSVario(MoreData &basic,
       auto delta_h = basic.pressure_altitude - last.pressure_altitude;
       auto delta_e = basic.energy_height - last.energy_height;
 
-      basic.gps_vario = delta_h / delta_t.count();
-      basic.gps_vario_TE = (delta_h + delta_e) / delta_t.count();
+      basic.gps_vario = delta_h / ToFloatSeconds(delta_t);
+      basic.gps_vario_TE = (delta_h + delta_e) / ToFloatSeconds(delta_t);
       basic.gps_vario_available = basic.pressure_altitude_available;
     }
   } else if (basic.baro_altitude_available && last.baro_altitude_available) {
     /* barometric altitude is also ok, but it's rare that it is
        available when pressure altitude is not */
 
-    const std::chrono::duration<double> delta_t =
+    const auto delta_t =
       basic.baro_altitude_available.GetTimeDifference(last.baro_altitude_available);
 
     if (delta_t.count() > 0) {
@@ -305,8 +306,8 @@ ComputeGPSVario(MoreData &basic,
       auto delta_h = basic.baro_altitude - last.baro_altitude;
       auto delta_e = basic.energy_height - last.energy_height;
 
-      basic.gps_vario = delta_h / delta_t.count();
-      basic.gps_vario_TE = (delta_h + delta_e) / delta_t.count();
+      basic.gps_vario = delta_h / ToFloatSeconds(delta_t);
+      basic.gps_vario_TE = (delta_h + delta_e) / ToFloatSeconds(delta_t);
       basic.gps_vario_available = basic.baro_altitude_available;
     }
   } else if (basic.gps_altitude_available && last_gps.gps_altitude_available &&
