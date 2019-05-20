@@ -43,36 +43,36 @@ private:
   bool stop_received, suspend_received, suspended;
 
 public:
-  SuspensibleThread(const char *_name):Thread(_name) {}
+  SuspensibleThread(const char *_name) noexcept:Thread(_name) {}
 
-  bool Start(bool suspended=false);
+  bool Start(bool suspended=false) noexcept;
 
   /**
    * Triggers thread shutdown.  Call Thread::Join() after this to wait
    * synchronously for the thread to exit.
    */
-  void BeginStop();
+  void BeginStop() noexcept;
 
-  void BeginSuspend();
+  void BeginSuspend() noexcept;
 
-  void WaitUntilSuspended();
+  void WaitUntilSuspended() noexcept;
 
-  void Suspend();
+  void Suspend() noexcept;
 
-  void Resume();
+  void Resume() noexcept;
 
 protected:
   /**
    * Like BeginStop(), but expects the mutex to be locked
    * already.
    */
-  void _BeginStop();
+  void _BeginStop() noexcept;
 
   /**
    * Like BeginSuspend(), but expects the mutex to be locked
    * already.
    */
-  void _BeginSuspend();
+  void _BeginSuspend() noexcept;
 
   /**
    * Like WaitUntilSuspended(), but expects the mutex to be locked
@@ -84,21 +84,21 @@ protected:
    * Has a suspend or stop command been received?
    */
   gcc_pure
-  bool IsCommandPending();
+  bool IsCommandPending() noexcept;
 
   /**
    * Like IsCommandPending(), but expects the mutex to be locked
    * already.
    */
   gcc_pure
-  bool _IsCommandPending() const;
+  bool _IsCommandPending() const noexcept;
 
   /**
    * Handles the "suspend" and "stop" commands.
    *
    * @return true if the thread shall be stopped
    */
-  bool CheckStoppedOrSuspended();
+  bool CheckStoppedOrSuspended() noexcept;
 
   /**
    * Like CheckStoppedOrSuspended(), but expects the mutex to be
@@ -106,7 +106,7 @@ protected:
    */
   bool _CheckStoppedOrSuspended(std::unique_lock<Mutex> &lock) noexcept;
 
-  bool WaitForStopped(unsigned timeout_ms);
+  bool WaitForStopped(unsigned timeout_ms) noexcept;
 
   /**
    * Like WaitForStopped(), but expects the mutex to be locked

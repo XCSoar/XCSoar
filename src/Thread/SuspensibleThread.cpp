@@ -26,7 +26,7 @@ Copyright_License {
 #include <assert.h>
 
 bool
-SuspensibleThread::Start(bool _suspended)
+SuspensibleThread::Start(bool _suspended) noexcept
 {
   stop_received = false;
   suspend_received = _suspended;
@@ -36,7 +36,7 @@ SuspensibleThread::Start(bool _suspended)
 }
 
 void
-SuspensibleThread::BeginStop()
+SuspensibleThread::BeginStop() noexcept
 {
   assert(!Thread::IsInside());
 
@@ -45,7 +45,7 @@ SuspensibleThread::BeginStop()
 }
 
 void
-SuspensibleThread::_BeginStop()
+SuspensibleThread::_BeginStop() noexcept
 {
   assert(!Thread::IsInside());
 
@@ -54,7 +54,7 @@ SuspensibleThread::_BeginStop()
 }
 
 void
-SuspensibleThread::BeginSuspend()
+SuspensibleThread::BeginSuspend() noexcept
 {
   assert(!Thread::IsInside());
   assert(Thread::IsDefined());
@@ -64,7 +64,7 @@ SuspensibleThread::BeginSuspend()
 }
 
 void
-SuspensibleThread::_BeginSuspend()
+SuspensibleThread::_BeginSuspend() noexcept
 {
   assert(!Thread::IsInside());
   assert(Thread::IsDefined());
@@ -74,7 +74,7 @@ SuspensibleThread::_BeginSuspend()
 }
 
 void
-SuspensibleThread::WaitUntilSuspended()
+SuspensibleThread::WaitUntilSuspended() noexcept
 {
   assert(!Thread::IsInside());
   assert(Thread::IsDefined());
@@ -95,7 +95,7 @@ SuspensibleThread::_WaitUntilSuspended(std::unique_lock<Mutex> &lock) noexcept
 }
 
 void
-SuspensibleThread::Suspend()
+SuspensibleThread::Suspend() noexcept
 {
   assert(!Thread::IsInside());
 
@@ -104,7 +104,7 @@ SuspensibleThread::Suspend()
 }
 
 void
-SuspensibleThread::Resume()
+SuspensibleThread::Resume() noexcept
 {
   assert(!Thread::IsInside());
 
@@ -114,7 +114,7 @@ SuspensibleThread::Resume()
 }
 
 bool
-SuspensibleThread::_IsCommandPending() const
+SuspensibleThread::_IsCommandPending() const noexcept
 {
   assert(Thread::IsInside());
 
@@ -122,7 +122,7 @@ SuspensibleThread::_IsCommandPending() const
 }
 
 bool
-SuspensibleThread::IsCommandPending()
+SuspensibleThread::IsCommandPending() noexcept
 {
   assert(Thread::IsInside());
 
@@ -149,7 +149,7 @@ SuspensibleThread::_CheckStoppedOrSuspended(std::unique_lock<Mutex> &lock) noexc
 }
 
 bool
-SuspensibleThread::CheckStoppedOrSuspended()
+SuspensibleThread::CheckStoppedOrSuspended() noexcept
 {
   assert(Thread::IsInside());
 
@@ -180,7 +180,7 @@ SuspensibleThread::_WaitForStopped(std::unique_lock<Mutex> &lock,
 }
 
 bool
-SuspensibleThread::WaitForStopped(unsigned timeout_ms)
+SuspensibleThread::WaitForStopped(unsigned timeout_ms) noexcept
 {
   assert(Thread::IsInside());
 
