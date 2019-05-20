@@ -106,14 +106,23 @@ protected:
    */
   bool _CheckStoppedOrSuspended(std::unique_lock<Mutex> &lock) noexcept;
 
-  bool WaitForStopped(unsigned timeout_ms) noexcept;
+  bool WaitForStopped(std::chrono::steady_clock::duration timeout) noexcept;
+
+  bool WaitForStopped(unsigned timeout_ms) noexcept {
+    return WaitForStopped(std::chrono::milliseconds(timeout_ms));
+  }
 
   /**
    * Like WaitForStopped(), but expects the mutex to be locked
    * already.
    */
   bool _WaitForStopped(std::unique_lock<Mutex> &lock,
-                       unsigned timeout_ms) noexcept;
+                       std::chrono::steady_clock::duration timeout) noexcept;
+
+  bool _WaitForStopped(std::unique_lock<Mutex> &lock,
+                       unsigned timeout_ms) noexcept {
+    return _WaitForStopped(lock, std::chrono::milliseconds(timeout_ms));
+  }
 };
 
 #endif

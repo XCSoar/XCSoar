@@ -159,7 +159,7 @@ SuspensibleThread::CheckStoppedOrSuspended() noexcept
 
 bool
 SuspensibleThread::_WaitForStopped(std::unique_lock<Mutex> &lock,
-                                   unsigned timeout_ms) noexcept
+                                   std::chrono::steady_clock::duration timeout) noexcept
 {
   assert(Thread::IsInside());
 
@@ -167,7 +167,7 @@ SuspensibleThread::_WaitForStopped(std::unique_lock<Mutex> &lock,
   suspended = true;
 
   if (!stop_received)
-    command_trigger.wait_for(lock, std::chrono::milliseconds(timeout_ms));
+    command_trigger.wait_for(lock, timeout);
 
   if (!stop_received && suspend_received) {
     client_trigger.notify_one();
@@ -180,10 +180,10 @@ SuspensibleThread::_WaitForStopped(std::unique_lock<Mutex> &lock,
 }
 
 bool
-SuspensibleThread::WaitForStopped(unsigned timeout_ms) noexcept
+SuspensibleThread::WaitForStopped(std::chrono::steady_clock::duration timeout) noexcept
 {
   assert(Thread::IsInside());
 
   std::unique_lock<Mutex> lock(mutex);
-  return _WaitForStopped(lock, timeout_ms);
+  return _WaitForStopped(lock, timeout);
 }
