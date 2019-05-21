@@ -63,6 +63,8 @@ Version 7.0 - not yet released
 * Kobo
   - support Kobo Glo HD
 
+Version 6.8.13 - not yet released
+
 Version 6.8.12 - 2019/04/30
 * weather
   - update source URLs for METARs and TAFs (https://)
