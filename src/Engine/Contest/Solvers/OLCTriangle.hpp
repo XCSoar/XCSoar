@@ -245,11 +245,8 @@ private:
       UpdateDistances();
     }
 
-    CandidateSet(TurnPointRange _tp1, TurnPointRange _tp2, TurnPointRange _tp3) {
-      tp1 = _tp1;
-      tp2 = _tp2;
-      tp3 = _tp3;
-
+    CandidateSet(TurnPointRange _tp1, TurnPointRange _tp2, TurnPointRange _tp3)
+      :tp1(_tp1), tp2(_tp2), tp3(_tp3) {
       UpdateDistances();
     }
 
