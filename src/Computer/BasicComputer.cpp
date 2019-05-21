@@ -28,7 +28,7 @@ Copyright_License {
 #include "Atmosphere/AirDensity.hpp"
 #include "Geo/Gravity.hpp"
 #include "Math/Util.hpp"
-#include "Util/ChronoUtil.hxx"
+#include "Time/Cast.hxx"
 
 static constexpr double INVERSE_G = 1. / GRAVITY;
 static constexpr double INVERSE_2G = INVERSE_G / 2.;

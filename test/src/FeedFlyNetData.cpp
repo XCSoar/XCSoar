@@ -34,7 +34,7 @@ Copyright_License {
 #include "Util/PrintException.hxx"
 #include "Math/Util.hpp"
 #include "Time/PeriodClock.hpp"
-#include "Util/ChronoUtil.hxx"
+#include "Time/Cast.hxx"
 
 #include <stdio.h>
 #include <stdlib.h>

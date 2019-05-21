@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "BallastDumpManager.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
-#include "Util/ChronoUtil.hxx"
+#include "Time/Cast.hxx"
 
 void
 BallastDumpManager::Start() noexcept

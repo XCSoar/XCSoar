@@ -31,7 +31,7 @@
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "CatmullRomInterpolator.hpp"
-#include "Util/ChronoUtil.hxx"
+#include "Time/Cast.hxx"
 #include "Util/Clamp.hpp"
 
 #include <stdexcept>
