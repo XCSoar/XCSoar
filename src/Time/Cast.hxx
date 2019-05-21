@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CHRONO_UTIL_HXX
-#define CHRONO_UTIL_HXX
+#ifndef TIME_CAST_HXX
+#define TIME_CAST_HXX
 
 #include <chrono>
 
