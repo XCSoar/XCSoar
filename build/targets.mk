@@ -357,15 +357,11 @@ ifeq ($(TARGET),ANDROID)
 
   ANDROID_GCC_TOOLCHAIN_NAME = $(ANDROID_NDK_GCC_TOOLCHAIN_ABI)-$(ANDROID_GCC_VERSION)
 
-  # clang is the default compiler on Android
-  CLANG ?= y
+  # clang is the mandatory compiler on Android
+  override CLANG = y
 
-  ifeq ($(CLANG),y)
-    ANDROID_TOOLCHAIN_NAME = llvm
-    LIBCXX = y
-  else
-    ANDROID_TOOLCHAIN_NAME = $(ANDROID_GCC_TOOLCHAIN_NAME)
-  endif
+  ANDROID_TOOLCHAIN_NAME = llvm
+  override LIBCXX = y
 
   ifeq ($(HOST_IS_DARWIN),y)
     ifeq ($(UNAME_M),x86_64)
