@@ -365,11 +365,11 @@ EditPortCallback(const TCHAR *caption, DataField &_df,
 
 #ifdef ANDROID
   if (item.int_value == SCAN_BLUETOOTH_LE) {
-    char address[32];
-    if (!ScanBluetoothLeDialog(address, sizeof(address)))
+    auto address = ScanBluetoothLeDialog();
+    if (address.empty())
         return false;
 
-    SetPort(df, DeviceConfig::PortType::RFCOMM, address);
+    SetPort(df, DeviceConfig::PortType::RFCOMM, address.c_str());
     return true;
   }
 #endif

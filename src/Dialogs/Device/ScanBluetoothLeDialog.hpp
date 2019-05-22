@@ -24,9 +24,13 @@
 #ifndef XCSOAR_SCAN_BLUETOOTH_LE_DIALOG_HPP
 #define XCSOAR_SCAN_BLUETOOTH_LE_DIALOG_HPP
 
-#include <stddef.h>
+#include <string>
 
-bool
-ScanBluetoothLeDialog(char *address, size_t address_size);
+/**
+ * @return the selected address or an empty string if the user has
+ * canceled the dialog
+ */
+std::string
+ScanBluetoothLeDialog() noexcept;
 
 #endif
