@@ -8,12 +8,12 @@ LIBCXX_CXXFLAGS = -nostdinc++ \
 	-isystem $(ANDROID_NDK)/sources/cxx-stl/llvm-libc++/include \
 	-isystem $(ANDROID_NDK)/sources/android/support/include \
 	-DLIBCXX
-  LIBCXX_LDADD = $(ANDROID_NDK)/sources/cxx-stl/llvm-libc++/libs/$(ANDROID_ABI3)/libc++_static.a \
-	$(ANDROID_NDK)/sources/cxx-stl/llvm-libc++/libs/$(ANDROID_ABI3)/libc++abi.a
+  LIBCXX_LDADD = $(ANDROID_NDK)/sources/cxx-stl/llvm-libc++/libs/$(ANDROID_NDK_STL_LIB_ABI)/libc++_static.a \
+	$(ANDROID_NDK)/sources/cxx-stl/llvm-libc++/libs/$(ANDROID_NDK_STL_LIB_ABI)/libc++abi.a
   LIBCXX_LDFLAGS += -nostdlib++
 
   ifeq ($(ARMV7),y)
-    LIBCXX_LDADD += $(ANDROID_NDK)/sources/cxx-stl/llvm-libc++/libs/$(ANDROID_ABI3)/libunwind.a
+    LIBCXX_LDADD += $(ANDROID_NDK)/sources/cxx-stl/llvm-libc++/libs/$(ANDROID_NDK_STL_LIB_ABI)/libunwind.a
   endif
 
 else
