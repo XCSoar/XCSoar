@@ -36,20 +36,13 @@ class Font;
  * Render multi-line text.
  */
 class TextRenderer {
-  bool center, vcenter;
+  bool center = false, vcenter = false;
 
 #ifndef USE_GDI
-  bool control;
+  bool control = false;
 #endif
 
 public:
-  TextRenderer()
-    :center(false), vcenter(false)
-#ifndef USE_GDI
-    , control(false)
-#endif
-  {}
-
   void SetCenter(bool _center=true) {
     center = _center;
   }
