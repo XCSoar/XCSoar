@@ -43,8 +43,7 @@ enum ModalResult {
 };
 
 /**
- * A WndForm represents a Window with a titlebar.
- * It is used to display the XML dialogs and MessageBoxes.
+ * A modal dialog.
  */
 class WndForm : public ContainerWindow,
                 public ActionListener
@@ -84,10 +83,6 @@ protected:
 
   PixelPoint last_drag;
 
-  /**
-   * The OnPaint event is called when the button needs to be drawn
-   * (derived from PaintWindow)
-   */
   void OnPaint(Canvas &canvas) override;
 
   StaticString<256> caption;
