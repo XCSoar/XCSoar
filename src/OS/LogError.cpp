@@ -24,7 +24,7 @@ Copyright_License {
 #include "LogError.hpp"
 #include "LogFile.hpp"
 #include "Util/Macros.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringStrip.hxx"
 
 #include <stdio.h>
 #include <stdarg.h>

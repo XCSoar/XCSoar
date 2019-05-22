@@ -45,49 +45,6 @@ char *
 CopyString(char *dest, const char *src, size_t size);
 
 /**
- * Skips whitespace at the beginning of the string, and returns the
- * first non-whitespace character.  If the string has no
- * non-whitespace characters, then a pointer to the NULL terminator is
- * returned.
- */
-gcc_pure gcc_nonnull_all
-const char *
-StripLeft(const char *p);
-
-/**
- * Determine the string's end as if it was stripped on the right side.
- */
-gcc_pure
-const char *
-StripRight(const char *p, const char *end);
-
-/**
- * Determine the string's end as if it was stripped on the right side.
- */
-gcc_pure
-static inline char *
-StripRight(char *p, char *end)
-{
-  return const_cast<char *>(StripRight((const char *)p,
-                                       (const char *)end));
-}
-
-/**
- * Determine the string's length as if it was stripped on the right
- * side.
- */
-gcc_pure
-size_t
-StripRight(const char *p, size_t length);
-
-/**
- * Strips trailing whitespace.
- */
-gcc_nonnull_all
-void
-StripRight(char *p);
-
-/**
  * Normalize a string for searching.  This strips all characters
  * except letters and digits, folds case to a neutral form.  It is
  * possible to do this in-place (src==dest).

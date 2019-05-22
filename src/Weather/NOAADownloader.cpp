@@ -25,8 +25,8 @@ Copyright_License {
 #include "METAR.hpp"
 #include "TAF.hpp"
 #include "Net/HTTP/ToBuffer.hpp"
-#include "Util/StringUtil.hpp"
 #include "Job/Runner.hpp"
+#include "Util/StringStrip.hxx"
 
 #include <cstdlib>
 

@@ -24,7 +24,7 @@ Copyright_License {
 #include "Parser.hpp"
 #include "FileRepository.hpp"
 #include "IO/LineReader.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringStrip.hxx"
 
 static const char *
 ParseLine(char *line)

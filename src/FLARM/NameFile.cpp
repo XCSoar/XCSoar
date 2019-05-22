@@ -25,6 +25,7 @@ Copyright_License {
 #include "NameDatabase.hpp"
 #include "IO/LineReader.hpp"
 #include "IO/BufferedOutputStream.hxx"
+#include "Util/StringStrip.hxx"
 
 void
 LoadFlarmNameFile(TLineReader &reader, FlarmNameDatabase &db)

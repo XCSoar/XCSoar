@@ -30,7 +30,7 @@ Copyright_License {
 #include "Device/Driver/FLARM/Device.hpp"
 #include "Device/Config.hpp"
 #include "OS/Args.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringStrip.hxx"
 #include "Util/ConvertString.hpp"
 #include "Util/PrintException.hxx"
 #include "Operation/ConsoleOperationEnvironment.hpp"

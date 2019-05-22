@@ -40,6 +40,7 @@
 #include "Language/Language.hpp"
 #include "TeamActions.hpp"
 #include "Util/StringCompare.hxx"
+#include "Util/StringStrip.hxx"
 #include "Util/TruncateString.hpp"
 #include "Util/Macros.hpp"
 

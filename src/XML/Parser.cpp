@@ -30,7 +30,7 @@
 #include "Node.hpp"
 #include "Util/CharUtil.hxx"
 #include "Util/StringAPI.hxx"
-#include "Util/StringUtil.hpp"
+#include "Util/StringStrip.hxx"
 #include "Util/NumberParser.hpp"
 #include "IO/FileLineReader.hpp"
 

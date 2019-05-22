@@ -22,15 +22,12 @@ Copyright_License {
 */
 
 #include "StringUtil.hpp"
-#include "StringAPI.hxx"
 #include "StringCompare.hxx"
 #include "CharUtil.hxx"
 
 #include <algorithm>
 
-#include <assert.h>
 #include <string.h>
-#include <stdlib.h>
 
 char *
 CopyString(char *gcc_restrict dest, const char *gcc_restrict src, size_t size)
@@ -42,41 +39,6 @@ CopyString(char *gcc_restrict dest, const char *gcc_restrict src, size_t size)
   char *p = std::copy_n(src, length, dest);
   *p = '\0';
   return p;
-}
-
-const char *
-StripLeft(const char *p)
-{
-  while (IsWhitespaceNotNull(*p))
-    ++p;
-
-  return p;
-}
-
-const char *
-StripRight(const char *p, const char *end)
-{
-  while (end > p && IsWhitespaceOrNull(end[-1]))
-    --end;
-
-  return end;
-}
-
-size_t
-StripRight(const char *p, size_t length)
-{
-  while (length > 0 && IsWhitespaceOrNull(p[length - 1]))
-    --length;
-
-  return length;
-}
-
-void
-StripRight(char *p)
-{
-  size_t old_length = strlen(p);
-  size_t new_length = StripRight(p, old_length);
-  p[new_length] = 0;
 }
 
 char *

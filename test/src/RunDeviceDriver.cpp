@@ -32,6 +32,7 @@ Copyright_License {
 #include "Input/InputEvents.hpp"
 #include "OS/Args.hpp"
 #include "Util/ConvertString.hpp"
+#include "Util/StringStrip.hxx"
 
 #include <stdio.h>
 

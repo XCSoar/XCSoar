@@ -31,7 +31,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Util/CharUtil.hxx"
 #include "Util/Macros.hpp"
-#include "Util/StaticString.hxx"
+#include "Util/StringStrip.hxx"
 #include "Util/TruncateString.hpp"
 
 #include <algorithm>

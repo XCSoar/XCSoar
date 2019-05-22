@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "LineSplitter.hpp"
 #include "Util/TextFile.hxx"
-#include "Util/StringUtil.hpp"
+#include "Util/StringStrip.hxx"
 
 #include <algorithm>
 

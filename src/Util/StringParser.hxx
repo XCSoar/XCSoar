@@ -31,8 +31,8 @@
 #define STRING_PARSER_HXX
 
 #include "CharUtil.hxx"
-#include "StringUtil.hpp"
 #include "NumberParser.hpp"
+#include "StringStrip.hxx"
 
 /**
  * Parse a string incrementally.

@@ -25,7 +25,7 @@ Copyright_License {
 #include "Convert.hpp"
 #include "Util/StringAPI.hxx"
 #include "Util/UTF8.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StringStrip.hxx"
 #include "Util/ScopeExit.hxx"
 
 #ifdef ENABLE_OPENGL

@@ -24,8 +24,8 @@ Copyright_License {
 #include "FlarmNetReader.hpp"
 #include "FlarmNetRecord.hpp"
 #include "FlarmNetDatabase.hpp"
-#include "Util/StringUtil.hpp"
 #include "Util/CharUtil.hxx"
+#include "Util/StringStrip.hxx"
 #include "IO/LineReader.hpp"
 #include "IO/FileLineReader.hpp"
 

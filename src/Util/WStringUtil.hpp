@@ -40,37 +40,6 @@ gcc_nonnull_all
 wchar_t *
 CopyString(wchar_t *dest, const wchar_t *src, size_t size);
 
-gcc_pure gcc_nonnull_all
-const wchar_t *
-StripLeft(const wchar_t *p);
-
-gcc_pure
-const wchar_t *
-StripRight(const wchar_t *p, const wchar_t *end);
-
-/**
- * Determine the string's end as if it was stripped on the right side.
- */
-gcc_pure
-static inline wchar_t *
-StripRight(wchar_t *p, wchar_t *end)
-{
-  return const_cast<wchar_t *>(StripRight((const wchar_t *)p,
-                                        (const wchar_t *)end));
-}
-
-/**
- * Determine the string's length as if it was stripped on the right
- * side.
- */
-gcc_pure
-size_t
-StripRight(const wchar_t *p, size_t length);
-
-gcc_nonnull_all
-void
-StripRight(wchar_t *p);
-
 gcc_nonnull_all
 wchar_t *
 NormalizeSearchString(wchar_t *dest, const wchar_t *src);

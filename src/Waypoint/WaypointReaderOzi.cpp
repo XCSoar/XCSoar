@@ -27,6 +27,7 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Util/Macros.hpp"
 #include "Util/ExtractParameters.hpp"
+#include "Util/StringStrip.hxx"
 
 #include <stdlib.h>
 
