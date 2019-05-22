@@ -27,7 +27,7 @@ Copyright_License {
 #include "ActionListener.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/SolidContainerWindow.hpp"
-#include "Util/StaticString.hxx"
+#include "Util/tstring.hpp"
 
 #include <functional>
 
@@ -85,15 +85,15 @@ protected:
 
   void OnPaint(Canvas &canvas) override;
 
-  StaticString<256> caption;
+  tstring caption;
 
 public:
   WndForm(const DialogLook &_look);
 
   /**
    * Constructor of the WndForm class
-   * @param _main_window
-   * @param Caption Titlebar text of the Window
+   *
+   * @param caption titlebar text of the dialog
    */
   WndForm(SingleWindow &_main_window, const DialogLook &_look,
           const PixelRect &rc,

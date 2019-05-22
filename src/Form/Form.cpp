@@ -548,7 +548,7 @@ WndForm::SetCaption(const TCHAR *_caption)
   if (_caption == nullptr)
     _caption = _T("");
 
-  if (!caption.equals(_caption)) {
+  if (caption != _caption) {
     caption = _caption;
     UpdateLayout();
     client_area.Move(client_rect);

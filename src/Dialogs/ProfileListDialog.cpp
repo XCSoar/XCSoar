@@ -36,6 +36,7 @@ Copyright_License {
 #include "Profile/File.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
+#include "Util/StaticString.hxx"
 
 #include <vector>
 

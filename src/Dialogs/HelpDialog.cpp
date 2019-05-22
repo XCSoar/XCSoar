@@ -26,6 +26,7 @@ Copyright_License {
 #include "Widget/LargeTextWidget.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
+#include "Util/StaticString.hxx"
 
 #include <assert.h>
 

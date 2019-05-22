@@ -33,6 +33,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
 #include "Weather/Features.hpp"
+#include "Util/StaticString.hxx"
 
 static int weather_page = 0;
 

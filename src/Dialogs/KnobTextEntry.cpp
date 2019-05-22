@@ -31,9 +31,12 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Util/CharUtil.hxx"
 #include "Util/Macros.hpp"
+#include "Util/StaticString.hxx"
 #include "Util/TruncateString.hpp"
 
 #include <algorithm>
+
+#include <string.h>
 
 enum Buttons {
   DOWN,
