@@ -42,10 +42,10 @@
  */
 template<typename T=char>
 class StringBuilder {
-	typedef T value_type;
-	typedef T *pointer;
-	typedef const T *const_pointer;
-	typedef size_t size_type;
+	using value_type = T;
+	using pointer = T *;
+	using const_pointer = const T *;
+	using size_type = size_t;
 
 	pointer p;
 	const pointer end;
