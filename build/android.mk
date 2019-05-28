@@ -1,14 +1,19 @@
 # This Makefile fragment builds the Android package (XCSoar.apk).
 # We're not using NDK's Makefiles because our Makefile is so big and
 # complex, we don't want to duplicate that for another platform.
+# This fragment builds the Java and architecture indenpendent stuff.
+# It calls make again to build the native shared library.
+# The native shared library stuff is cared of in android_native.mk.
 
-ifeq ($(TARGET),ANDROID)
+ifeq ($(TARGET)$(ANDROID_BUILD_APK),ANDROIDy)
 
 ANDROID_KEYSTORE ?= $(HOME)/.android/mk.keystore
 ANDROID_KEY_ALIAS ?= mk
 
 ANDROID_BUILD = $(TARGET_OUTPUT_DIR)/$(XCSOAR_ABI)/build
 ANDROID_BIN = $(TARGET_BIN_DIR)
+
+NATIVE_INCLUDE = $(TARGET_OUTPUT_DIR)/include
 
 ifeq ($(HOST_IS_DARWIN),y)
   ANDROID_SDK ?= $(HOME)/opt/android-sdk-macosx
@@ -37,26 +42,6 @@ JARSIGNER_RELEASE += -storepass:env ANDROID_KEYSTORE_PASS
 endif
 
 JAVA_PACKAGE = org.xcsoar
-
-NATIVE_CLASSES := \
-	NativeView \
-	EventBridge \
-	InternalGPS \
-	NonGPSSensors \
-	NativeInputListener \
-	DownloadUtil \
-	BatteryReceiver \
-	GliderLinkReceiver \
-	NativePortListener \
-	NativeLeScanCallback \
-	NativeBMP085Listener \
-	NativeI2CbaroListener \
-	NativeNunchuckListener \
-	NativeVoltageListener
-NATIVE_SOURCES = $(patsubst %,android/src/%.java,$(NATIVE_CLASSES))
-NATIVE_INCLUDE = $(TARGET_OUTPUT_DIR)/include
-NATIVE_PREFIX = $(NATIVE_INCLUDE)/$(subst .,_,$(JAVA_PACKAGE))_
-NATIVE_HEADERS = $(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES))
 
 JAVA_SOURCES := \
 	$(wildcard android/src/*.java) \
@@ -150,6 +135,7 @@ $(PNG3): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics/%.bmp | $(DRAWABLE_DIR)/dirstam
 
 PNG4 := $(patsubst $(DATA)/icons/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_ICONS) $(BMP_ICONS_160))
 $(PNG4): $(DRAWABLE_DIR)/%.png: $(DATA)/icons/%.png | $(DRAWABLE_DIR)/dirstamp
+	@$(NQ)echo "  CP $< -> $@"
 	$(Q)cp $< $@
 
 PNG5 := $(patsubst $(DATA)/graphics/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_DIALOG_TITLE) $(BMP_PROGRESS_BORDER))
@@ -177,6 +163,7 @@ endif
 
 $(ANDROID_XML_RES_COPIES): $(ANDROID_BUILD)/%: android/%
 	$(Q)-$(MKDIR) -p $(dir $@)
+	@$(NQ)echo "  CP $< -> $@"
 	$(Q)cp $< $@
 
 $(ANDROID_BUILD)/resources.apk: $(PNG_FILES) $(SOUND_FILES) $(ANDROID_XML_RES_COPIES) | $(ANDROID_BUILD)/gen/dirstamp
@@ -202,74 +189,53 @@ $(ANDROID_BUILD)/classes.dex: $(JAVA_SOURCES) $(ANDROID_BUILD)/gen/org/xcsoar/R.
 	@$(NQ)echo "  DX      $@"
 	$(Q)$(DX) --dex --output $@ $(JAVA_CLASSFILES_DIR)
 
-ifeq ($(FAT_BINARY),y)
+# Build the native shared libraries
+ANDROID_LIB_BUILD :=
 
-# generate a "fat" APK file with binaries for all ABIs
-
-ANDROID_LIB_BUILD =
-ANDROID_THIRDPARTY_STAMPS =
-
-# Example: $(eval $(call generate-abi,xcsoar,armeabi-v7a,ANDROID7))
+# Example: $(eval $(call generate-abi,xcsoar,ANDROID7))
 define generate-abi
 
-ANDROID_LIB_BUILD += $$(ANDROID_BUILD)/lib/$(2)/lib$(1).so
+ANDROID_APK_LIB_ABI := $$($(2)_APK_LIB_ABI)
 
-$$(ANDROID_BUILD)/lib/$(2)/lib$(1).so: $$(OUT)/$(3)/$$(XCSOAR_ABI)/bin/lib$(1).so | $$(ANDROID_BUILD)/lib/$(2)/dirstamp
+ANDROID_LIB_BUILD += $$(ANDROID_BUILD)/lib/$$(ANDROID_APK_LIB_ABI)/lib$(1).so
+
+$$(ANDROID_BUILD)/lib/$$(ANDROID_APK_LIB_ABI)/lib$(1).so: $$(TARGET_OUTPUT_DIR)/$$(ANDROID_APK_LIB_ABI)/$$(XCSOAR_ABI)/bin/lib$(1).so | \
+  $$(ANDROID_BUILD)/lib/$$(ANDROID_APK_LIB_ABI)/dirstamp
+	@$$(NQ)echo "  CP $$< -> $$@"
+	$$(Q)-$$(MKDIR) -p $$(ANDROID_BUILD)/lib/$$(ANDROID_APK_LIB_ABI)
 	$$(Q)cp $$< $$@
 
-ANDROID_THIRDPARTY_STAMPS += $$(OUT)/$(3)/thirdparty.stamp
-$$(OUT)/$(3)/thirdparty.stamp:
-	$$(Q)$$(MAKE) TARGET=$(3) DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) libs
-
-$$(OUT)/$(3)/$$(XCSOAR_ABI)/bin/lib$(1).so: $$(OUT)/$(3)/thirdparty.stamp
-	$$(Q)$$(MAKE) TARGET=$(3) DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) $$@
+# Run the sub-makes every time but ensure that the native headers are generated (happens with the build of the DEX file).
+# Ensure that the existing native libs are all cleaned in the target build structure
+$$(TARGET_OUTPUT_DIR)/$$(ANDROID_APK_LIB_ABI)/$$(XCSOAR_ABI)/bin/lib$(1).so: FORCE $$(ANDROID_BUILD)/classes.dex cleanNativeLibs
+	$$(Q)$$(MAKE) TARGET=$(2) ANDROID_BUILD=$$(ANDROID_BUILD) NATIVE_INCLUDE=$$(NATIVE_INCLUDE) ANDROID_BUILD_APK=n \
+	  DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) $$@
 
 endef
 
-# Example: $(eval $(call generate-abi,xcsoar))
+# Example: $(eval $(call generate-all-abis,xcsoar))
 define generate-all-abis
-$(eval $(call generate-abi,$(1),armeabi-v7a,ANDROID7))
-$(eval $(call generate-abi,$(1),x86,ANDROID86))
-$(eval $(call generate-abi,$(1),arm64-v8a,ANDROIDAARCH64))
-$(eval $(call generate-abi,$(1),x86_64,ANDROIDX64))
+$(foreach T,$(ANDROID_TARGETS),$(call generate-abi,$(1),$(T)))
 endef
+#$(foreach T,$(ANDROID_TARGETS),$(eval $(call generate-abi,$(ANDROID_LIB_NAMES),$(T))))
 
 $(foreach NAME,$(ANDROID_LIB_NAMES),$(eval $(call generate-all-abis,$(NAME))))
-
-.PHONY: libs
-libs: $(ANDROID_THIRDPARTY_STAMPS)
-
-else # !FAT_BINARY
-
-# add dependency to this source file
-$(call SRC_TO_OBJ,$(SRC)/Android/Main.cpp): $(NATIVE_HEADERS)
-$(call SRC_TO_OBJ,$(SRC)/Android/EventBridge.cpp): $(NATIVE_HEADERS)
-$(call SRC_TO_OBJ,$(SRC)/Android/InternalSensors.cpp): $(NATIVE_HEADERS)
-$(call SRC_TO_OBJ,$(SRC)/Android/Battery.cpp): $(NATIVE_HEADERS)
-$(call SRC_TO_OBJ,$(SRC)/Android/GliderLink.cpp): $(NATIVE_HEADERS)
-$(call SRC_TO_OBJ,$(SRC)/Android/NativePortListener.cpp): $(NATIVE_HEADERS)
-$(call SRC_TO_OBJ,$(SRC)/Android/NativeLeScanCallback.cpp): $(NATIVE_HEADERS)
-$(call SRC_TO_OBJ,$(SRC)/Android/NativeInputListener.cpp): $(NATIVE_HEADERS)
-$(call SRC_TO_OBJ,$(SRC)/Android/DownloadManager.cpp): $(NATIVE_HEADERS)
-$(call SRC_TO_OBJ,$(SRC)/Android/NativeBMP085Listener.cpp): $(NATIVE_HEADERS)
-$(call SRC_TO_OBJ,$(SRC)/Android/NativeI2CbaroListener.cpp): $(NATIVE_HEADERS)
-$(call SRC_TO_OBJ,$(SRC)/Android/NativeNunchuckListener.cpp): $(NATIVE_HEADERS)
-$(call SRC_TO_OBJ,$(SRC)/Android/NativeVoltageListener.cpp): $(NATIVE_HEADERS)
-
-ANDROID_LIB_BUILD = $(patsubst %,$(ANDROID_ABI_DIR)/lib%.so,$(ANDROID_LIB_NAMES))
-$(ANDROID_LIB_BUILD): $(ANDROID_ABI_DIR)/lib%.so: $(ABI_BIN_DIR)/lib%.so | $(ANDROID_ABI_DIR)/dirstamp
-	$(Q)cp $< $@
-
-endif # !FAT_BINARY
-
-
-$(NATIVE_HEADERS): $(ANDROID_BUILD)/classes.dex
 
 .DELETE_ON_ERROR: $(ANDROID_BUILD)/unsigned.apk
 $(ANDROID_BUILD)/unsigned.apk: $(ANDROID_BUILD)/classes.dex $(ANDROID_BUILD)/resources.apk $(ANDROID_LIB_BUILD)
 	@$(NQ)echo "  APK     $@"
 	$(Q)cp $(ANDROID_BUILD)/resources.apk $@
 	$(Q)cd $(dir $@) && zip -q -r $(notdir $@) classes.dex lib
+
+.Phony: cleanNativeLibs
+
+# Remove potentially outdated native shared libs.
+# The native libs accumulate in the target lib directory structure, but only ones targeted in a new build are updated.
+# Worst case is when you "make TARGET=ANDROIDFAT", then change code, and perform "make TARGET=ANDROID86" to test the change.
+# The latter make only updates the X86 lib, but the old ARM, AARCH64 and X64 would still be integrated into the built APK.
+cleanNativeLibs:
+	@$(NQ)echo "  RM $(ANDROID_BUILD)/lib/*"
+	$(Q)rm -rf $(ANDROID_BUILD)/lib/*
 
 # Generate ~/.android/debug.keystore, if it does not exists, as the official
 # Android build tools do it:

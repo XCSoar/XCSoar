@@ -314,6 +314,12 @@ endif
 ifeq ($(TARGET),ANDROID)
   ANDROID_NDK ?= $(HOME)/opt/android-ndk-r20-beta3
 
+  # Indicator if the Java and other machine independent parts are being built
+  # or if the native libxcsoar.so is being built.
+  # The caller must never set this 'n'. This is being done by make itself
+  # which calls itself with 'ANDROID_BUILD_APK = n' to build the native lib.
+  ANDROID_BUILD_APK ?= y
+
   ANDROID_SDK_PLATFORM = android-26
   ANDROID_NDK_API = 21
 
@@ -328,8 +334,12 @@ ifeq ($(TARGET),ANDROID)
   #   e.g. aarch64-linux-android21-clang++ for AARCH64, NDK level 21, 
   #   and transcribe the value of the option "--target". 
   # HOST_TRIPLET = $(ANDROID_NDK_GCC_TOOLCHAIN_ABI)
-  # ANDROID_APK_LIB_ABI: See https://developer.android.com/ndk/guides/abis#sa for valid names.
+  # <TARGET_FLAVOR>_APK_LIB_ABI: See https://developer.android.com/ndk/guides/abis#sa for valid names.
+  #   Please note that <TARGET_FLAVOR> is the name of the original Android target like ANDROID7 or ANDROID86.
   # ANDROID_GCC_VERSION: Suffix of directories in $ANDROID_NDK/toolchains/. Since many NDK versions = "4.9".
+  # ANDROID_FAT_TARGETS collects the Android targets which will be built for the Android Fat build.
+  #   It is concatenated in each target architecture block.
+
 
   # Not architecture dependent
   ANDROID_GCC_VERSION = 4.9
@@ -338,18 +348,20 @@ ifeq ($(TARGET),ANDROID)
   ANDROID_ARCH                  = arm
   ANDROID_NDK_GCC_TOOLCHAIN_ABI = arm-linux-androideabi
   ANDROID_NDK_STL_LIB_ABI       = armeabi-v7a
-  ANDROID_APK_LIB_ABI           = armeabi-v7a
   LLVM_TARGET                  := armv7a-linux-androideabi
   HOST_TRIPLET                  = arm-linux-androideabi
+  ANDROID7_APK_LIB_ABI         := armeabi-v7a
+  ANDROID_FAT_TARGETS          := ANDROID7
 
   ifeq ($(X86),y)
     ANDROID_ARCH                  = x86
     ANDROID_NDK_GCC_TOOLCHAIN_ABI = x86
     ANDROID_NDK_STL_LIB_ABI       = x86
-    ANDROID_APK_LIB_ABI           = x86
     LLVM_TARGET                  := i686-linux-android
     HOST_TRIPLET                  = i686-linux-android
   endif
+  ANDROID86_APK_LIB_ABI          := x86
+  ANDROID_FAT_TARGETS            += ANDROID86
 
   ifeq ($(AARCH64),y)
     ANDROID_ARCH                  = arm64
@@ -359,14 +371,25 @@ ifeq ($(TARGET),ANDROID)
     LLVM_TARGET                  := aarch64-linux-android
     HOST_TRIPLET                  = aarch64-linux-android
   endif
+  ANDROIDAARCH64_APK_LIB_ABI     := arm64-v8a
+  ANDROID_FAT_TARGETS            += ANDROIDAARCH64
 
   ifeq ($(X64),y)
     ANDROID_ARCH                  = x86_64
     ANDROID_NDK_GCC_TOOLCHAIN_ABI = x86_64
     ANDROID_NDK_STL_LIB_ABI       = x86_64
-    ANDROID_APK_LIB_ABI           = x86_64
     LLVM_TARGET                  := x86_64-linux-android
     HOST_TRIPLET                  = x86_64-linux-android
+  endif
+  ANDROIDX64_APK_LIB_ABI         := x86_64
+  ANDROID_FAT_TARGETS            += ANDROIDX64
+
+  ifeq ($(FAT_BINARY),y)
+    ANDROID_TARGETS              := $(ANDROID_FAT_TARGETS)
+  else
+    # Dynamic resolution using TARGET_FLAVOR to determine the name of the source variable
+    ANDROID_APK_LIB_ABI          := $($(TARGET_FLAVOR)_APK_LIB_ABI)
+    ANDROID_TARGETS              := $(TARGET_FLAVOR)
   endif
 
   # Like in the clang compiler scripts in the NDK add the NDK level to the LLVM target
@@ -406,6 +429,14 @@ ifeq ($(TARGET),ANDROID)
   TCPREFIX = $(ANDROID_GCC_TOOLCHAIN)/bin/$(HOST_TRIPLET)-
   LLVM_PREFIX = $(ANDROID_TOOLCHAIN)/bin/
 
+  # Re-define TARGET_FLAVOR for Android targets
+  # The definition depends if it is the APK build
+  # or the native .so build
+  ifeq ($(ANDROID_BUILD_APK),y)
+    TARGET_FLAVOR := ANDROID
+  else
+    TARGET_FLAVOR := ANDROID/$(ANDROID_APK_LIB_ABI)
+  endif
 
   ifeq ($(ARMV7),y)
     TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp

@@ -98,6 +98,7 @@ include $(topdir)/build/resource.mk
 include $(topdir)/build/libdata.mk
 include $(topdir)/build/java.mk
 include $(topdir)/build/android.mk
+include $(topdir)/build/android_native.mk
 include $(topdir)/build/llvm.mk
 include $(topdir)/build/tools.mk
 include $(topdir)/build/version.mk
@@ -184,12 +185,10 @@ INCLUDES += -I$(SRC) -I$(ENGINE_SRC_DIR)
 
 include $(topdir)/build/gettext.mk
 
-ifeq ($(FAT_BINARY),n)
-OUTPUTS := $(XCSOAR_BIN) $(VALI_XCS_BIN)
-endif
-
 ifeq ($(TARGET),ANDROID)
-OUTPUTS += $(ANDROID_BIN)/XCSoar-debug.apk
+OUTPUTS := $(ANDROID_BIN)/XCSoar-debug.apk
+else
+OUTPUTS := $(XCSOAR_BIN) $(VALI_XCS_BIN)
 endif
 
 ifeq ($(TARGET_IS_KOBO),y)
