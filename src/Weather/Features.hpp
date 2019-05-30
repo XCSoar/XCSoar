@@ -29,6 +29,7 @@ Copyright_License {
 #ifdef HAVE_HTTP
 #define HAVE_NOAA
 #define HAVE_PCMET
+#define HAVE_SKYSIGHT
 #endif
 
 #endif

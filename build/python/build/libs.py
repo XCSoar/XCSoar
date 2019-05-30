@@ -8,6 +8,7 @@ from build.libpng import LibPNGProject
 from build.libstdcxxmuslheaders import LibstdcxxMuslHeadersProject
 from build.sdl2 import SDL2Project
 from build.lua import LuaProject
+from build.netcdfcxx import NetcdfCxxProject
 
 glibc = AutotoolsProject(
     'http://mirror.netcologne.de/gnu/libc/glibc-2.23.tar.xz',
@@ -268,4 +269,39 @@ libsalsa = AutotoolsProject(
         '--enable-tlv'
     ],
     patches=abspath('lib/salsa-lib/patches')
+)
+    
+netcdf = AutotoolsProject(
+    'ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-c-4.6.2.tar.gz',
+    'https://www.gfd-dennou.org/library/netcdf/unidata-mirror/netcdf-c-4.6.2.tar.gz',
+    'c37525981167b3cd82d32e1afa3022afb94e59287db5f116c57f5ed4d9c6a638',
+    'lib/libnetcdf.a',
+    [
+        '--disable-netcdf-4',
+        '--disable-dap',
+        '--disable-largefile',
+        '--disable-testsets',
+        '--disable-utilities',
+        '--disable-examples',
+        '--disable-doxygen',
+        '--disable-maintainer-mode',
+        '--disable-examples',
+        '--disable-shared', '--enable-static'
+    ],
+    patches=abspath('lib/netcdf/patches'),
+  ldflags='-Wl,--gc-sections'
+)
+
+netcdfcxx = NetcdfCxxProject(
+    'ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-cxx-4.2.tar.gz',
+    'https://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-cxx4-4.2.tar.gz',
+    '95ed6ab49a0ee001255eac4e44aacb5ca4ea96ba850c08337a3e4c9a0872ccd1',
+    'lib/libnetcdf_c++.a',
+    [
+        '--disable-shared', '--enable-static',
+        '--disable-large-file-tests',
+        '--disable-extra-tests',
+        '--disable-valgrind-tests'
+    ],
+  patches=abspath('lib/netcdfcxx/patches'),
 )
