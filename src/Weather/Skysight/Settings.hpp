@@ -21,30 +21,27 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DATA_GLOBALS_HPP
-#define XCSOAR_DATA_GLOBALS_HPP
+#ifndef XCSOAR_WEATHER_SKYSIGHT_SETTINGS_HPP
+#define XCSOAR_WEATHER_SKYSIGHT_SETTINGS_HPP
 
-#include <memory>
+#include "Util/StaticString.hxx"
 
-class RaspStore;
-class Skysight;
+struct SkysightSettings {
+	StaticString<64> email;
+	StaticString<64> password;
+	StaticString<64> region;
 
-/**
- * This namespace provides helper functions to access generic global
- * data objects.  Use them when you don't know where else to get them.
- * This is a last resort only, don't use it if you have a better way
- * to do it.
- *
- * This namespace exists to avoid direct access to #MainWindow and
- * others, because that would mean the code is not reusable in other
- * applications, while the functions in this namespace can easily be
- * replaced in another program.
- */
-namespace DataGlobals {
-std::shared_ptr<RaspStore> GetRasp();
-std::shared_ptr<Skysight> GetSkysight();
-void SetRasp(std::shared_ptr<RaspStore> rasp);
-void SetSkysight(std::shared_ptr<Skysight> skysight);
+	bool IsDefined() const {
+	  return !email.empty() && !password.empty();
+	}
+
+	void SetDefaults() {
+	  email.clear();
+	  password.clear();
+	  region.clear();
+	}
+
 };
 
 #endif
+

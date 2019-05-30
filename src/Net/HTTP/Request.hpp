@@ -77,6 +77,15 @@ namespace Net {
      * must not be destructed until Send() returns.
      */
     void SetRequestBody(const MultiPartFormData &body);
+    void SetRequestBody(const char *body, size_t size);
+ 
+    /**
+    * If this is not set, HTTP response codes > 400 will fail.
+    * Useful for e.g. APIs that can return useful informaion along with the error code.
+    */
+    void SetNoFailOnError();
+    
+    void SetVerifyPeer(bool value = true);    
 
     /**
      * Send the request to the server and receive response headers.

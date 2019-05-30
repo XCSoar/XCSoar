@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "DataGlobals.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
+#include "Weather/Skysight/Skysight.hpp"
 #include "UIGlobals.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Interface.hpp"
@@ -36,6 +37,15 @@ DataGlobals::GetRasp()
     : nullptr;
 }
 
+std::shared_ptr<Skysight>
+DataGlobals::GetSkysight()
+{
+  auto *map = UIGlobals::GetMap();
+  return map != nullptr
+    ? map->GetSkysight()
+    : nullptr;
+}
+
 void
 DataGlobals::SetRasp(std::shared_ptr<RaspStore> rasp)
 {
@@ -46,4 +56,12 @@ DataGlobals::SetRasp(std::shared_ptr<RaspStore> rasp)
   auto *map = UIGlobals::GetMap();
   if (map != nullptr)
     map->SetRasp(std::move(rasp));
+}
+
+void
+DataGlobals::SetSkysight(std::shared_ptr<Skysight> skysight)
+{
+  auto *map = UIGlobals::GetMap();
+  if (map != nullptr)
+    map->SetSkysight(std::move(skysight));
 }
