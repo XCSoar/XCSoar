@@ -2,7 +2,6 @@ from os.path import abspath
 
 from build.zlib import ZlibProject
 from build.autotools import AutotoolsProject
-from build.openssl import OpenSSLProject
 from build.freetype import FreeTypeProject
 from build.curl import CurlProject
 from build.libpng import LibPNGProject
@@ -53,13 +52,6 @@ libstdcxx_musl_headers = LibstdcxxMuslHeadersProject(
     use_actual_arch=True,
 )
 
-openssl = OpenSSLProject(
-    'https://www.openssl.org/source/openssl-1.0.2k.tar.gz',
-    'ftp://ftp.kfki.hu/pub/packages/security/openssl/openssl-1.0.2k.tar.gz',
-    '6b3977c61f2aedf0f96367dcfb5c6e578cf37e7b8d913b4ecb6643c3cb88d8c0',
-    'include/openssl/ossl_typ.h',
-)
-
 openssh = AutotoolsProject(
     'http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-7.2p2.tar.gz',
     'http://ftp.nluug.nl/security/OpenSSH/openssh-7.2p2.tar.gz',
@@ -108,6 +100,18 @@ freetype = FreeTypeProject(
     ],
 )
 
+wolfssl = AutotoolsProject(
+    'https://fossies.org/linux/misc/wolfssl-4.0.0.tar.gz',
+    'https://github.com/wolfSSL/wolfssl/archive/v4.0.0-stable.tar.gz',
+    '372bfe2a6ddeb2f42f1256ee084bb8c0575dd7323db3990cb2658e9924dc58be',
+    'lib/libwolfssl.a',
+    [
+      '--disable-option-checking',
+      '--enable-static',
+      '--disable-shared',
+    ],
+)
+
 curl = CurlProject(
     'http://curl.haxx.se/download/curl-7.64.1.tar.xz',
     'https://github.com/curl/curl/releases/download/curl-7_64_1/curl-7.64.1.tar.xz',
@@ -127,7 +131,7 @@ curl = CurlProject(
         '--disable-manual',
         '--disable-threaded-resolver', '--disable-verbose', '--disable-sspi',
         '--disable-crypto-auth', '--disable-ntlm-wb', '--disable-tls-srp', '--disable-cookies',
-        '--without-ssl', '--without-gnutls', '--without-nss', '--without-libssh2',
+        '--without-ssl', '--with-wolfssl', '--without-gnutls', '--without-nss', '--without-libssh2',
     ],
     patches=abspath('lib/curl/patches'),
 )
