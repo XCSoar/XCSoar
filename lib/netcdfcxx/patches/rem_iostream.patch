@@ -1,0 +1,166 @@
+diff --git a/cxx/ncvalues.cpp b/cxx/ncvalues.cpp
+index 1b1b4dd..2cf4c3f 100644
+--- a/cxx/ncvalues.cpp
++++ b/cxx/ncvalues.cpp
+@@ -8,7 +8,6 @@
+  *********************************************************************/
+ 
+ #include <config.h>
+-#include <iostream>
+ #include <string>
+ #include <cstring>
+ 
+@@ -29,11 +28,6 @@ long NcValues::num( void )
+     return the_number;
+ }    
+ 
+-std::ostream& operator<< (std::ostream& os, const NcValues& vals)
+-{
+-    return vals.print(os);
+-}
+-
+ implement(NcValues,ncbyte)
+ implement(NcValues,char)
+ implement(NcValues,short)
+@@ -248,84 +242,3 @@ inline char* NcValues_char::as_string( long n ) const
+     return s;
+ }
+ 
+-std::ostream& NcValues_short::print(std::ostream& os) const
+-{
+-    for(int i = 0; i < the_number - 1; i++)
+-      os << the_values[i] << ", ";
+-    if (the_number > 0)
+-      os << the_values[the_number-1] ;
+-    return os;
+-}
+-
+-std::ostream& NcValues_int::print(std::ostream& os) const
+-{
+-    for(int i = 0; i < the_number - 1; i++)
+-      os << the_values[i] << ", ";
+-    if (the_number > 0)
+-      os << the_values[the_number-1] ;
+-    return os;
+-}
+-
+-std::ostream& NcValues_nclong::print(std::ostream& os) const
+-{
+-    for(int i = 0; i < the_number - 1; i++)
+-      os << the_values[i] << ", ";
+-    if (the_number > 0)
+-      os << the_values[the_number-1] ;
+-    return os;
+-}
+-
+-std::ostream& NcValues_long::print(std::ostream& os) const
+-{
+-    for(int i = 0; i < the_number - 1; i++)
+-      os << the_values[i] << ", ";
+-    if (the_number > 0)
+-      os << the_values[the_number-1] ;
+-    return os;
+-}
+-
+-std::ostream& NcValues_ncbyte::print(std::ostream& os) const
+-{
+-    for(int i = 0; i < the_number - 1; i++)
+-      os << the_values[i] << ", ";
+-    if (the_number > 0)
+-      os << the_values[the_number-1] ;
+-    return os;
+-}
+-
+-std::ostream& NcValues_char::print(std::ostream& os) const
+-{
+-    os << '"';
+-    long len = the_number;
+-    while (the_values[--len] == '\0') // don't output trailing null bytes
+-	;
+-    for(int i = 0; i <= len; i++)
+-	os << the_values[i] ;
+-    os << '"';
+-    
+-    return os;
+-}
+-
+-std::ostream& NcValues_float::print(std::ostream& os) const
+-{
+-    std::streamsize save=os.precision();
+-    os.precision(7);
+-    for(int i = 0; i < the_number - 1; i++)
+-      os << the_values[i] << ", ";
+-    if (the_number > 0)
+-      os << the_values[the_number-1] ;
+-    os.precision(save);
+-    return os;
+-}
+-
+-std::ostream& NcValues_double::print(std::ostream& os) const
+-{
+-    std::streamsize save=os.precision();
+-    os.precision(15);
+-    for(int i = 0; i < the_number - 1; i++)
+-      os << the_values[i] << ", ";
+-    if (the_number > 0)
+-      os << the_values[the_number-1];
+-    os.precision(save);
+-    return os;
+-}
+diff --git a/cxx/ncvalues.h b/cxx/ncvalues.h
+index e7655e4..96071b4 100644
+--- a/cxx/ncvalues.h
++++ b/cxx/ncvalues.h
+@@ -10,7 +10,6 @@
+ #ifndef Ncvalues_def
+ #define Ncvalues_def
+ 
+-#include <iostream>
+ #include <sstream>
+ #include <limits.h>
+ #include "netcdf.h"
+@@ -88,7 +87,6 @@ class NcVal(TYPE) : public NcValues					      \
+     virtual int invalid( void ) const;					      \
+   private:								      \
+     TYPE* the_values;							      \
+-    std::ostream& print(std::ostream&) const;				      \
+ };
+ 
+ #define NcTypeEnum(TYPE) makename2(_nc__,TYPE)
+@@ -244,7 +242,6 @@ class NcValues			// ABC for value blocks
+     NcValues(NcType, long);
+     virtual ~NcValues( void );
+     virtual long num( void );
+-    virtual std::ostream& print(std::ostream&) const = 0;
+     virtual void* base( void ) const = 0;
+     virtual int bytes_for_one( void ) const = 0;
+ 
+@@ -264,7 +261,6 @@ class NcValues			// ABC for value blocks
+   protected:
+     NcType the_type;
+     long the_number;
+-    friend std::ostream& operator<< (std::ostream&, const NcValues&);
+ };
+ 
+ declare(NcValues,ncbyte)
+diff --git a/cxx/netcdf.cpp b/cxx/netcdf.cpp
+index 6cb0e74..e7f78a5 100644
+--- a/cxx/netcdf.cpp
++++ b/cxx/netcdf.cpp
+@@ -10,7 +10,6 @@
+ #include <config.h>
+ #include <string.h>
+ #include <stdlib.h>
+-#include <iostream>
+ #include "netcdfcpp.h"
+ 
+ #ifndef TRUE
+@@ -1645,7 +1644,7 @@ int NcError::set_err (int err)
+     // Check ncopts and handle appropriately
+     if(err != NC_NOERR) {
+ 	if(ncopts == verbose_nonfatal || ncopts == verbose_fatal) {
+-	    std::cout << nc_strerror(err) << std::endl;
++	  //  std::cout << nc_strerror(err) << std::endl;
+ 	}
+ 	if(ncopts == silent_fatal || ncopts == verbose_fatal) {
+ 	    exit(ncopts);

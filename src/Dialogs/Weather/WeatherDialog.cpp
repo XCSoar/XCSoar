@@ -25,6 +25,7 @@ Copyright_License {
 #include "NOAAList.hpp"
 #include "RASPDialog.hpp"
 #include "PCMetDialog.hpp"
+#include "SkysightDialog.hpp"
 #include "MapOverlayWidget.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/TabWidget.hpp"
@@ -78,6 +79,11 @@ ShowWeatherDialog(const TCHAR *page)
     start_page = widget.GetSize();
 
   widget.AddTab(CreateRaspWidget(), _T("RASP"));
+
+  if (page != nullptr && StringIsEqual(page, _T("Skysight")))
+    start_page = widget.GetSize();
+
+  widget.AddTab(CreateSkysightWidget(), _T("Skysight"));
 
 #ifdef HAVE_PCMET
   if (page != nullptr && StringIsEqual(page, _T("pc_met")))

@@ -21,30 +21,23 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DATA_GLOBALS_HPP
-#define XCSOAR_DATA_GLOBALS_HPP
+#include "SkysightRegions.hpp"
 
-#include <memory>
-
-class RaspStore;
-class Skysight;
-
-/**
- * This namespace provides helper functions to access generic global
- * data objects.  Use them when you don't know where else to get them.
- * This is a last resort only, don't use it if you have a better way
- * to do it.
- *
- * This namespace exists to avoid direct access to #MainWindow and
- * others, because that would mean the code is not reusable in other
- * applications, while the functions in this namespace can easily be
- * replaced in another program.
- */
-namespace DataGlobals {
-std::shared_ptr<RaspStore> GetRasp();
-std::shared_ptr<Skysight> GetSkysight();
-void SetRasp(std::shared_ptr<RaspStore> rasp);
-void SetSkysight(std::shared_ptr<Skysight> skysight);
+const SkysightRegionDetails skysight_region_defaults[] = {
+	{_T("Europe"), "EUROPE"},
+	{_T("Brazil"), "BRAZIL"},
+	{_T("Western US"), "WEST_US"},
+	{_T("Italy"), "ITALY"},
+	{_T("Western Australia"), "WA"},
+	{_T("New Zealand"), "NZ"},
+	{_T("Eastern US"), "EAST_US"},
+	{_T("Andes"), "ANDES"},
+	{_T("Eastern Canada"), "EAST_CANADA"},
+	{_T("South Africa"), "SANEW"},
+	{_T("Japan"), "JAPAN"},
+	{_T("Argentina"), "ARGENTINA"},
+	{_T("Eastern Australia"), "EAST_AUS"},
+	{_T("Canada, Mid US"), "CENTRAL_US"},
+	{_T("Spain"), "SPAIN"},
+	{nullptr, nullptr}
 };
-
-#endif

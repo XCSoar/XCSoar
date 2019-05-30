@@ -1,0 +1,22 @@
+diff --git a/cxx/netcdf.cpp b/cxx/netcdf.cpp
+index 6cb0e74..d74aae4 100644
+--- a/cxx/netcdf.cpp
++++ b/cxx/netcdf.cpp
+@@ -10,7 +10,7 @@
+ #include <config.h>
+ #include <string.h>
+ #include <stdlib.h>
+-#include <iostream>
++//#include <iostream>
+ #include "netcdfcpp.h"
+ 
+ #ifndef TRUE
+@@ -1645,7 +1645,7 @@ int NcError::set_err (int err)
+     // Check ncopts and handle appropriately
+     if(err != NC_NOERR) {
+ 	if(ncopts == verbose_nonfatal || ncopts == verbose_fatal) {
+-	    std::cout << nc_strerror(err) << std::endl;
++	   // std::cout << nc_strerror(err) << std::endl;
+ 	}
+ 	if(ncopts == silent_fatal || ncopts == verbose_fatal) {
+ 	    exit(ncopts);
