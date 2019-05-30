@@ -35,6 +35,12 @@ namespace Profile {
     map.Get(ProfileKeys::PCMetFtpUsername, settings.ftp_credentials.username);
     map.Get(ProfileKeys::PCMetFtpPassword, settings.ftp_credentials.password);
   }
+
+  static void Load(const ProfileMap &map, SkysightSettings &settings) {
+    map.Get(ProfileKeys::SkysightEmail, settings.email);
+    map.Get(ProfileKeys::SkysightPassword, settings.password);
+    map.Get(ProfileKeys::SkysightRegion, settings.region);
+  }  
 }
 
 #endif
@@ -44,5 +50,8 @@ Profile::Load(const ProfileMap &map, WeatherSettings &settings)
 {
 #ifdef HAVE_PCMET
   Load(map, settings.pcmet);
+#endif
+#ifdef HAVE_SKYSIGHT
+  Load(map, settings.skysight);
 #endif
 }

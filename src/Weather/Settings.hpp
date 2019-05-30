@@ -32,9 +32,17 @@ Copyright_License {
 
 #endif
 
+#ifdef HAVE_SKYSIGHT
+#include "Skysight/Settings.hpp"
+#endif
+
 struct WeatherSettings {
 #ifdef HAVE_PCMET
   PCMetSettings pcmet;
+#endif
+
+#ifdef HAVE_SKYSIGHT
+  SkysightSettings skysight;
 #endif
 
   void SetDefaults() {

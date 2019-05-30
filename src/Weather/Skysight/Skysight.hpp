@@ -21,30 +21,37 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DATA_GLOBALS_HPP
-#define XCSOAR_DATA_GLOBALS_HPP
+#ifndef WEATHER_SKYSIGHT_HPP
+#define WEATHER_SKYSIGHT_HPP
 
-#include <memory>
+#include "Weather/Skysight/SkysightAPI.hpp"
+#include "Blackboard/BlackboardListener.hpp"
 
-class RaspStore;
-class Skysight;
+class Skysight final: private NullBlackboardListener {
+public:
+  tstring region = "EUROPE";
 
-/**
- * This namespace provides helper functions to access generic global
- * data objects.  Use them when you don't know where else to get them.
- * This is a last resort only, don't use it if you have a better way
- * to do it.
- *
- * This namespace exists to avoid direct access to #MainWindow and
- * others, because that would mean the code is not reusable in other
- * applications, while the functions in this namespace can easily be
- * replaced in another program.
- */
-namespace DataGlobals {
-std::shared_ptr<RaspStore> GetRasp();
-std::shared_ptr<Skysight> GetSkysight();
-void SetRasp(std::shared_ptr<RaspStore> rasp);
-void SetSkysight(std::shared_ptr<Skysight> skysight);
+  static void APIInited(const tstring &&details,  const bool success,  
+			const tstring &&layer_id,  const uint64_t time_index);
+
+  std::map<tstring, tstring> GetRegions() {
+    return api->regions;
+  }
+
+  tstring GetRegion() {
+    return api->region;
+  }
+
+  Skysight();
+
+  void Init();
+
+protected:
+  SkysightAPI *api;
+
+private:
+  tstring email;
+  tstring password;
 };
 
 #endif

@@ -21,30 +21,9 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DATA_GLOBALS_HPP
-#define XCSOAR_DATA_GLOBALS_HPP
+#ifndef WEATHER_SKYSIGHT_METRICS_HPP
+#define WEATHER_SKYSIGHT_METRICS_HPP
 
-#include <memory>
-
-class RaspStore;
-class Skysight;
-
-/**
- * This namespace provides helper functions to access generic global
- * data objects.  Use them when you don't know where else to get them.
- * This is a last resort only, don't use it if you have a better way
- * to do it.
- *
- * This namespace exists to avoid direct access to #MainWindow and
- * others, because that would mean the code is not reusable in other
- * applications, while the functions in this namespace can easily be
- * replaced in another program.
- */
-namespace DataGlobals {
-std::shared_ptr<RaspStore> GetRasp();
-std::shared_ptr<Skysight> GetSkysight();
-void SetRasp(std::shared_ptr<RaspStore> rasp);
-void SetSkysight(std::shared_ptr<Skysight> skysight);
-};
+#include <map>
 
 #endif
