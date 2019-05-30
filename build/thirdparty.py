@@ -75,11 +75,13 @@ from build.libs import *
 if 'mingw32' in actual_host_triplet:
     thirdparty_libs = [
         zlib,
+	wolfssl,
         curl,
         lua,
     ]
 elif re.match('(arm.*|aarch64)-apple-darwin', actual_host_triplet) is not None:
     thirdparty_libs = [
+	wolfssl,
         curl,
         lua,
         proj,
@@ -97,6 +99,7 @@ elif 'apple-darwin' in actual_host_triplet:
     ]
 elif target == 'ANDROID':
     thirdparty_libs = [
+	wolfssl,
         curl,
         lua,
         proj,
@@ -107,6 +110,7 @@ elif toolchain_host_triplet.endswith('-musleabihf'):
     thirdparty_libs = [
         zlib,
         freetype,
+	wolfssl,
         curl,
         libpng,
         libjpeg,
@@ -121,6 +125,7 @@ else:
         libstdcxx_musl_headers,
         zlib,
         freetype,
+	wolfssl,
         curl,
         libpng,
         libjpeg,

@@ -108,6 +108,18 @@ freetype = FreeTypeProject(
     ],
 )
 
+wolfssl = AutotoolsProject(
+    'https://fossies.org/linux/misc/wolfssl-4.0.0.tar.gz',
+    'https://github.com/wolfSSL/wolfssl/archive/v4.0.0-stable.tar.gz',
+    '372bfe2a6ddeb2f42f1256ee084bb8c0575dd7323db3990cb2658e9924dc58be',
+    'lib/wolfssl.a',
+    [
+      '--disable-option-checking',
+      '--enable-static',
+      '--disable-shared',
+    ],
+)
+
 curl = CurlProject(
     'http://curl.haxx.se/download/curl-7.64.1.tar.xz',
     'https://github.com/curl/curl/releases/download/curl-7_64_1/curl-7.64.1.tar.xz',
@@ -127,7 +139,7 @@ curl = CurlProject(
         '--disable-manual',
         '--disable-threaded-resolver', '--disable-verbose', '--disable-sspi',
         '--disable-crypto-auth', '--disable-ntlm-wb', '--disable-tls-srp', '--disable-cookies',
-        '--without-ssl', '--without-gnutls', '--without-nss', '--without-libssh2',
+        '--without-ssl', '--with-wolfssl', '--without-gnutls', '--without-nss', '--without-libssh2',
     ],
     patches=abspath('lib/curl/patches'),
 )
