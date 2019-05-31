@@ -166,7 +166,6 @@ Button::OnKeyDown(unsigned key_code)
     Click();
     return true;
 
-
   default:
     return PaintWindow::OnKeyDown(key_code);
   }
