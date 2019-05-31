@@ -26,6 +26,7 @@ Copyright_License {
 
 /**
  * @see http://developer.android.com/reference/android/view/KeyEvent.html
+ * KEYCODES_* are also from here.
  */
 enum {
   KEY_UP = 0x13,
@@ -37,7 +38,6 @@ enum {
   KEY_RETURN = 0x42,
   KEY_MENU = 0x52,
   KEY_ESCAPE = 0x6f,
-// Added from the same source as above to allow other controller buttons to control XCS.
   KEYCODE_BUTTON_R1 = 0x67,
   KEYCODE_BUTTON_R2 = 0x69,
   KEYCODE_BUTTON_L1 = 0x66,
@@ -51,7 +51,6 @@ enum {
   KEYCODE_MEDIA_NEXT = 0x57,
   KEYCODE_MEDIA_PREVIOUS = 0x58,
   KEYCODE_MEDIA_PLAY_PAUSE = 0x55, 
-// end of additions
 
   KEY_DUMMY = 0x80,
   KEY_BACK,

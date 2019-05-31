@@ -44,6 +44,7 @@ Copyright_License {
 #ifdef ANDROID
 #include "Event/Shared/Event.hpp"
 #include "Event/Android/Loop.hpp"
+#include "Event/Android/KeyCode.hpp"
 #elif defined(ENABLE_SDL)
 #include "Event/SDL/Event.hpp"
 #include "Event/SDL/Loop.hpp"
