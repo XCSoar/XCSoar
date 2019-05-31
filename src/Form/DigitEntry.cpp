@@ -909,9 +909,9 @@ DigitEntry::OnKeyDown(unsigned key_code)
     return true;
 
   case KEY_RETURN:
-  #ifdef ANDROID
+#ifdef ANDROID
   case KEYCODE_BUTTON_L1:
-  #endif
+#endif
     if (action_listener != nullptr) {
       action_listener->OnAction(action_id);
       return true;

@@ -246,9 +246,9 @@ TabMenuDisplay::OnKeyCheck(unsigned key_code) const
  switch (key_code) {
 
  case KEY_RETURN:
-  #ifdef ANDROID
+#ifdef ANDROID
   case KEYCODE_BUTTON_L1:
-  #endif
+#endif
  case KEY_LEFT:
  case KEY_RIGHT:
    return true;
@@ -263,9 +263,9 @@ TabMenuDisplay::OnKeyDown(unsigned key_code)
 {
   switch (key_code) {
   case KEY_RETURN:
-  #ifdef ANDROID
+#ifdef ANDROID
   case KEYCODE_BUTTON_L1:
-  #endif
+#endif
     pager.ClickPage(PAGE_OFFSET + cursor);
     return true;
 

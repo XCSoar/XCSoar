@@ -368,9 +368,9 @@ InfoBoxWindow::OnKeyDown(unsigned key_code)
     return HandleKey(InfoBoxContent::ibkRight);
 
   case KEY_RETURN:
-  #ifdef ANDROID
+#ifdef ANDROID
   case KEYCODE_BUTTON_L1:
-  #endif
+#endif
     ShowDialog();
     return true;
 
@@ -384,7 +384,6 @@ InfoBoxWindow::OnKeyDown(unsigned key_code)
 
   if (InputEvents::ProcessKey(InputEvents::MODE_INFOBOX, key_code))
     return true;
-    
   /* call super class */
 
   return PaintWindow::OnKeyDown(key_code);

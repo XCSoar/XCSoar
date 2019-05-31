@@ -37,9 +37,9 @@ WndProperty::OnKeyCheck(unsigned key_code) const
 {
   switch (key_code) {
   case KEY_RETURN:
-  #ifdef ANDROID
+#ifdef ANDROID
   case KEYCODE_BUTTON_L1:
-  #endif
+#endif
     return true;
 
   case KEY_LEFT:

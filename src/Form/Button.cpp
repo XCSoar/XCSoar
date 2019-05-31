@@ -150,9 +150,9 @@ Button::OnKeyCheck(unsigned key_code) const
 {
   switch (key_code) {
   case KEY_RETURN:
-  #ifdef ANDROID
+#ifdef ANDROID
   case KEYCODE_BUTTON_L1:
-  #endif
+#endif
     return true;
 
   default:
@@ -166,12 +166,11 @@ Button::OnKeyDown(unsigned key_code)
   switch (key_code) {
   case KEY_RETURN:
   case KEY_SPACE:
-  #ifdef ANDROID
+#ifdef ANDROID
   case KEYCODE_BUTTON_L1:
-  #endif
+#endif
     Click();
     return true;
-
 
   default:
     return PaintWindow::OnKeyDown(key_code);

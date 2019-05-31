@@ -79,9 +79,6 @@ static constexpr struct string_to_key string_to_key[] = {
   { _T("F18"), KEY_F18 },
   { _T("F19"), KEY_F19 },
   { _T("F20"), KEY_F20 },
-
-
-
 #endif
   { _T("LEFT"), KEY_LEFT },
   { _T("RIGHT"), KEY_RIGHT },
