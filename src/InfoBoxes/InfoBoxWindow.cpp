@@ -380,7 +380,7 @@ InfoBoxWindow::OnKeyDown(unsigned key_code)
   /* handle global hot key */
 
   if (InputEvents::ProcessKey(InputEvents::MODE_INFOBOX, key_code))
-    return true;    
+    return true;
 
   /* call super class */
 
