@@ -368,9 +368,6 @@ InfoBoxWindow::OnKeyDown(unsigned key_code)
     return HandleKey(InfoBoxContent::ibkRight);
 
   case KEY_RETURN:
-#ifdef ANDROID
-  case KEYCODE_BUTTON_L1:
-#endif
     ShowDialog();
     return true;
 

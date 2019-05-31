@@ -81,9 +81,6 @@ CheckBoxControl::OnKeyCheck(unsigned key_code) const
 {
   switch (key_code) {
   case KEY_RETURN:
-#ifdef ANDROID
-  case KEYCODE_BUTTON_L1:
-#endif
     return true;
 
   default:
@@ -97,9 +94,6 @@ CheckBoxControl::OnKeyDown(unsigned key_code)
   switch (key_code) {
   case KEY_RETURN:
   case KEY_SPACE:
-#ifdef ANDROID
-  case KEYCODE_BUTTON_L1:
-#endif
     SetState(!GetState());
     OnClicked();
     return true;

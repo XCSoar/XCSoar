@@ -355,11 +355,7 @@ ButtonPanel::KeyPress(unsigned key_code)
     } else if (key_code == KEY_RIGHT) {
       SelectNext();
       return true;
-  #ifdef ANDROID
-    } else if (key_code == KEY_RETURN || key_code == KEYCODE_BUTTON_L1) {
-  #else
     } else if (key_code == KEY_RETURN) {
-  #endif
       auto &button = *buttons[selected_index];
       if (button.IsVisible() && button.IsEnabled())
         button.Click();
