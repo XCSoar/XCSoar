@@ -392,7 +392,7 @@ WndForm::ShowModal()
 #endif
 
 #ifdef ANDROID
-      if (event.GetKeyCode() == KEY_ESCAPE) {
+      if (event.GetKeyCode() == KEY_ESCAPE || event.GetKeyCode() == KEYCODE_BUTTON_R1) {
         modal_result = mrCancel;
         continue;
       }
