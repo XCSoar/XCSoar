@@ -294,6 +294,7 @@ TabDisplay::OnKeyDown(unsigned key_code)
     return true;
 
   case KEY_RETURN:
+
     pager.ClickPage(pager.GetCurrentIndex());
     return true;
 

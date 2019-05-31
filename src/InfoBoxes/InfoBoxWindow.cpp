@@ -381,7 +381,6 @@ InfoBoxWindow::OnKeyDown(unsigned key_code)
 
   if (InputEvents::ProcessKey(InputEvents::MODE_INFOBOX, key_code))
     return true;
-    
   /* call super class */
 
   return PaintWindow::OnKeyDown(key_code);
