@@ -44,7 +44,6 @@ Copyright_License {
 #ifdef ANDROID
 #include "Event/Shared/Event.hpp"
 #include "Event/Android/Loop.hpp"
-#include "Event/Android/KeyCode.hpp"
 #elif defined(ENABLE_SDL)
 #include "Event/SDL/Event.hpp"
 #include "Event/SDL/Loop.hpp"
@@ -387,13 +386,6 @@ WndForm::ShowModal()
 
 #ifndef USE_WINUSER
       if (event.GetKeyCode() == KEY_ESCAPE) {
-        modal_result = mrCancel;
-        continue;
-      }
-#endif
-
-#ifdef ANDROID
-      if (event.GetKeyCode() == KEY_ESCAPE || event.GetKeyCode() == KEYCODE_BUTTON_R1) {
         modal_result = mrCancel;
         continue;
       }
