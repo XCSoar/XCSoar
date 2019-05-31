@@ -416,6 +416,9 @@ ListControl::OnKeyCheck(unsigned key_code) const
 {
   switch (key_code) {
   case KEY_RETURN:
+  #ifdef ANDROID
+  case KEYCODE_BUTTON_L1:
+  #endif
     return CanActivateItem();
 
   case KEY_UP:
@@ -437,6 +440,9 @@ ListControl::OnKeyDown(unsigned key_code)
 
   switch (key_code) {
   case KEY_RETURN:
+  #ifdef ANDROID
+  case KEYCODE_BUTTON_L1:
+  #endif
     if (CanActivateItem())
       ActivateItem();
     return true;

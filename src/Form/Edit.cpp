@@ -37,6 +37,9 @@ WndProperty::OnKeyCheck(unsigned key_code) const
 {
   switch (key_code) {
   case KEY_RETURN:
+  #ifdef ANDROID
+  case KEYCODE_BUTTON_L1:
+  #endif
     return true;
 
   case KEY_LEFT:
@@ -52,7 +55,11 @@ bool
 WndProperty::OnKeyDown(unsigned key_code)
 {
   // If return key pressed (Compaq uses VKF23)
+#ifdef ANDROID
+  if (key_code == KEY_RETURN || key_code == KEYCODE_BUTTON_L1) {
+#else
   if (key_code == KEY_RETURN) {
+#endif
     BeginEditing();
     return true;
   }

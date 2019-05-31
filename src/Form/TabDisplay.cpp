@@ -248,6 +248,9 @@ TabDisplay::OnKeyCheck(unsigned key_code) const
     return true;
 
   case KEY_RETURN:
+  #ifdef ANDROID
+  case KEYCODE_BUTTON_L1:
+  #endif
     return true;
 
   case KEY_LEFT:
@@ -294,6 +297,9 @@ TabDisplay::OnKeyDown(unsigned key_code)
     return true;
 
   case KEY_RETURN:
+  #ifdef ANDROID
+  case KEYCODE_BUTTON_L1:
+  #endif
     pager.ClickPage(pager.GetCurrentIndex());
     return true;
 
