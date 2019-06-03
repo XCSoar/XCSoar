@@ -317,37 +317,60 @@ ifeq ($(TARGET),ANDROID)
   ANDROID_SDK_PLATFORM = android-26
   ANDROID_NDK_API = 21
 
-  ANDROID_ARCH = arm
-  ANDROID_NDK_GCC_TOOLCHAIN_ABI = arm-linux-androideabi
-  ANDROID_NDK_STL_LIB_ABI = armeabi
-  HOST_TRIPLET = $(ANDROID_NDK_GCC_TOOLCHAIN_ABI)
-  ANDROID_APK_LIB_ABI = $(ANDROID_NDK_STL_LIB_ABI)
+  # The naming of CPU ABIs, architectures, and various NDK directory names is an unholy mess.
+  # Therefore a number of variables exist for each supported ABI.
+  # Here is a brief outline where you can look up the names in the NDK in case that a new
+  # architecture appears in the NDK, or names chane in new NDK versions:
+  # ANDROID_ARCH: See $ANDROID_NDK/<NDK-Level>/. Name is without the prefix "arch-"
+  # ANDROID_NDK_GCC_TOOLCHAIN_ABI: See $ANDROID_NDK/toolchains/. Name without the GCC version suffix (now "-4.9")
+  # ANDROID_NDK_STL_LIB_ABI: See $ANDROID_NDK/sources/cxx-stl/llvm-libc++/libs
+  # LLVM_TARGET: Open the appropriate compiler script in $ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin,
+  #   e.g. aarch64-linux-android21-clang++ for AARCH64, NDK level 21, 
+  #   and transcribe the value of the option "--target". 
+  # HOST_TRIPLET = $(ANDROID_NDK_GCC_TOOLCHAIN_ABI)
+  # ANDROID_APK_LIB_ABI: See https://developer.android.com/ndk/guides/abis#sa for valid names.
+  # ANDROID_GCC_VERSION: Suffix of directories in $ANDROID_NDK/toolchains/. Since many NDK versions = "4.9".
+
+  # Not architecture dependent
   ANDROID_GCC_VERSION = 4.9
 
-  ifeq ($(ARMV7),y)
-    ANDROID_NDK_STL_LIB_ABI = armeabi-v7a
-    ANDROID_APK_LIB_ABI = armeabi-v7a
-  endif
+  # Default is ARM V7a
+  ANDROID_ARCH                  = arm
+  ANDROID_NDK_GCC_TOOLCHAIN_ABI = arm-linux-androideabi
+  ANDROID_NDK_STL_LIB_ABI       = armeabi-v7a
+  ANDROID_APK_LIB_ABI           = armeabi-v7a
+  LLVM_TARGET                  := armv7a-linux-androideabi
+  HOST_TRIPLET                  = arm-linux-androideabi
 
   ifeq ($(X86),y)
-    ANDROID_ARCH = x86
+    ANDROID_ARCH                  = x86
     ANDROID_NDK_GCC_TOOLCHAIN_ABI = x86
-    ANDROID_NDK_STL_LIB_ABI = x86
-    HOST_TRIPLET = i686-linux-android
+    ANDROID_NDK_STL_LIB_ABI       = x86
+    ANDROID_APK_LIB_ABI           = x86
+    LLVM_TARGET                  := i686-linux-android
+    HOST_TRIPLET                  = i686-linux-android
   endif
 
   ifeq ($(AARCH64),y)
-    ANDROID_ARCH = arm64
+    ANDROID_ARCH                  = arm64
     ANDROID_NDK_GCC_TOOLCHAIN_ABI = aarch64-linux-android
-    ANDROID_NDK_STL_LIB_ABI = arm64-v8a
+    ANDROID_NDK_STL_LIB_ABI       = arm64-v8a
+    ANDROID_APK_LIB_ABI           = arm64-v8a
+    LLVM_TARGET                  := aarch64-linux-android
+    HOST_TRIPLET                  = aarch64-linux-android
   endif
 
   ifeq ($(X64),y)
-    ANDROID_ARCH = x86_64
+    ANDROID_ARCH                  = x86_64
     ANDROID_NDK_GCC_TOOLCHAIN_ABI = x86_64
-    ANDROID_NDK_STL_LIB_ABI = x86_64
-    HOST_TRIPLET = x86_64-linux-android
+    ANDROID_NDK_STL_LIB_ABI       = x86_64
+    ANDROID_APK_LIB_ABI           = x86_64
+    LLVM_TARGET                  := x86_64-linux-android
+    HOST_TRIPLET                  = x86_64-linux-android
   endif
+
+  # Like in the clang compiler scripts in the NDK add the NDK level to the LLVM target
+  LLVM_TARGET := $(LLVM_TARGET)$(ANDROID_NDK_API)
 
   ANDROID_NDK_PLATFORM = android-$(ANDROID_NDK_API)
 
@@ -383,12 +406,8 @@ ifeq ($(TARGET),ANDROID)
   TCPREFIX = $(ANDROID_GCC_TOOLCHAIN)/bin/$(HOST_TRIPLET)-
   LLVM_PREFIX = $(ANDROID_TOOLCHAIN)/bin/
 
-  ifeq ($(X86),y)
-    LLVM_TARGET := i686-linux-android
-  endif
 
   ifeq ($(ARMV7),y)
-    LLVM_TARGET := armv7a-linux-androideabi
     TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp
 
     ifeq ($(NEON),y)
@@ -397,16 +416,6 @@ ifeq ($(TARGET),ANDROID)
       TARGET_ARCH += -mfpu=vfpv3-d16
     endif
   endif
-
-  ifeq ($(AARCH64),y)
-    LLVM_TARGET := aarch64-linux-android
-  endif
-
-  ifeq ($(X64),y)
-    LLVM_TARGET := x86_64-linux-android
-  endif
-
-  LLVM_TARGET := $(LLVM_TARGET)$(ANDROID_NDK_API)
 
   TARGET_ARCH += -fpic -funwind-tables
 
