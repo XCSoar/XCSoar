@@ -25,4 +25,4 @@ class OpenSSLProject(MakeProject):
                                'dist', 'no-dso', 'no-krb5',
                                '--prefix=' + self.toolchain.install_prefix],
                               cwd=src, env=self.toolchain.env)
-        MakeProject.build(self, wd)
+        MakeProject.build(self, src)
