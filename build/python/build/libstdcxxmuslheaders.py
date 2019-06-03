@@ -8,9 +8,9 @@ from build.makeproject import MakeProject
 # So we need to install a set of libstd++ headers, which are included in the gcc
 # source tarball.
 class LibstdcxxMuslHeadersProject(AutotoolsProject):
-    def build(self, toolchain):
-        src = self.unpack(toolchain)
-        top_build = self.make_build_path(toolchain)
+    def build(self):
+        src = self.unpack()
+        top_build = self.make_build_path()
         build = os.path.join(top_build, 'libstdc++-v3')
         os.mkdir(build)
 
@@ -23,8 +23,8 @@ class LibstdcxxMuslHeadersProject(AutotoolsProject):
         os.symlink(os.path.join(src, 'libgcc', 'gthr-posix.h'),
                    os.path.join(libgcc, 'gthr-default.h'))
 
-        build = self.configure(toolchain, src=src, build=build)
+        build = self.configure(src=src, build=build)
 
-        incdir_param = 'gxx_include_dir=' + toolchain.install_prefix + '/include/libstdc++'
-        self.make(toolchain, os.path.join(build, 'libsupc++'), [incdir_param, 'install-bitsHEADERS', 'install-stdHEADERS'])
-        self.make(toolchain, os.path.join(build, 'include'), [incdir_param, 'install-headers'])
+        incdir_param = 'gxx_include_dir=' + self.toolchain.install_prefix + '/include/libstdc++'
+        self.make(os.path.join(build, 'libsupc++'), [incdir_param, 'install-bitsHEADERS', 'install-stdHEADERS'])
+        self.make(os.path.join(build, 'include'), [incdir_param, 'install-headers'])

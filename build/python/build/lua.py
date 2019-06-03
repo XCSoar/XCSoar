@@ -4,36 +4,36 @@ from build.makeproject import MakeProject
 from build.quilt import push_all
 
 class LuaProject(MakeProject):
-    def __init__(self, url, alternative_url, md5, installed,
+    def __init__(self, toolchain, url, alternative_url, md5, installed,
                  **kwargs):
-        MakeProject.__init__(self, url, alternative_url, md5, installed, **kwargs)
+        MakeProject.__init__(self, toolchain, url, alternative_url, md5, installed, **kwargs)
 
-    def get_make_args(self, toolchain):
-        cflags = toolchain.cflags + ' ' + toolchain.cppflags
+    def get_make_args(self):
+        cflags = self.toolchain.cflags + ' ' + self.toolchain.cppflags
 
         # hard-code lua_getlocaledecpoint() because
         # localeconv()->decimal_point is not available on the Bionic
         # version we're depnding on
         cflags += " \"-Dlua_getlocaledecpoint()='.'\""
 
-        return MakeProject.get_make_args(self, toolchain) + [
-            'CC=' + toolchain.cc,
-            'AR=' + toolchain.ar + ' rcu',
+        return MakeProject.get_make_args(self) + [
+            'CC=' + self.toolchain.cc,
+            'AR=' + self.toolchain.ar + ' rcu',
             'RANLIB=true',
             'MYCFLAGS=' + cflags,
-            'MYLDFLAGS=' + toolchain.ldflags,
+            'MYLDFLAGS=' + self.toolchain.ldflags,
             'liblua.a'
         ]
 
-    def build(self, toolchain):
-        src = self.unpack(toolchain, out_of_tree=False)
+    def build(self):
+        src = self.unpack(out_of_tree=False)
 
         wd = os.path.join(src, 'src')
 
-        MakeProject.build(self, toolchain, wd, False)
+        MakeProject.build(self, wd, False)
 
-        includedir = os.path.join(toolchain.install_prefix, 'include')
-        libdir = os.path.join(toolchain.install_prefix, 'lib')
+        includedir = os.path.join(self.toolchain.install_prefix, 'include')
+        libdir = os.path.join(self.toolchain.install_prefix, 'lib')
 
         os.makedirs(includedir, exist_ok=True)
         for i in ('lauxlib.h', 'luaconf.h', 'lua.h', 'lualib.h'):

@@ -3,30 +3,30 @@ import subprocess
 from build.makeproject import MakeProject
 
 class ZlibProject(MakeProject):
-    def __init__(self, url, alternative_url, md5, installed,
+    def __init__(self, toolchain, url, alternative_url, md5, installed,
                  **kwargs):
-        MakeProject.__init__(self, url, alternative_url, md5, installed, **kwargs)
+        MakeProject.__init__(self, toolchain, url, alternative_url, md5, installed, **kwargs)
 
-    def get_make_args(self, toolchain):
-        return MakeProject.get_make_args(self, toolchain) + [
-            'CC=' + toolchain.cc + ' ' + toolchain.cppflags + ' ' + toolchain.cflags,
-            'CPP=' + toolchain.cc + ' -E ' + toolchain.cppflags,
-            'AR=' + toolchain.ar,
-            'ARFLAGS=' + toolchain.arflags,
-            'RANLIB=' + toolchain.ranlib,
-            'LDSHARED=' + toolchain.cc + ' -shared',
+    def get_make_args(self):
+        return MakeProject.get_make_args(self) + [
+            'CC=' + self.toolchain.cc + ' ' + self.toolchain.cppflags + ' ' + self.toolchain.cflags,
+            'CPP=' + self.toolchain.cc + ' -E ' + self.toolchain.cppflags,
+            'AR=' + self.toolchain.ar,
+            'ARFLAGS=' + self.toolchain.arflags,
+            'RANLIB=' + self.toolchain.ranlib,
+            'LDSHARED=' + self.toolchain.cc + ' -shared',
             'libz.a'
         ]
 
-    def get_make_install_args(self, toolchain):
+    def get_make_install_args(self):
         return [
-            'RANLIB=' + toolchain.ranlib,
+            'RANLIB=' + self.toolchain.ranlib,
             self.install_target
         ]
 
-    def build(self, toolchain):
-        src = self.unpack(toolchain, out_of_tree=False)
+    def build(self):
+        src = self.unpack(out_of_tree=False)
 
-        subprocess.check_call(['./configure', '--prefix=' + toolchain.install_prefix, '--static'],
-                              cwd=src, env=toolchain.env)
-        MakeProject.build(self, toolchain, src)
+        subprocess.check_call(['./configure', '--prefix=' + self.toolchain.install_prefix, '--static'],
+                              cwd=src, env=self.toolchain.env)
+        MakeProject.build(self, src)

@@ -6,9 +6,11 @@ from build.tar import untar
 from build.quilt import push_all
 
 class Project:
-    def __init__(self, url, alternative_url, md5, installed, name=None, version=None,
+    def __init__(self, toolchain, url, alternative_url, md5, installed, name=None, version=None,
                  base=None,
                  patches=None):
+        self.toolchain = toolchain
+        
         if base is None:
             basename = os.path.basename(url)
             m = re.match(r'^(.+)\.(tar(\.(gz|bz2|xz|lzma))?|zip)$', basename)
@@ -32,30 +34,30 @@ class Project:
 
         self.patches = patches
 
-    def download(self, toolchain):
-        return download_and_verify(self.url, self.alternative_url, self.md5, toolchain.tarball_path)
+    def download(self):
+        return download_and_verify(self.url, self.alternative_url, self.md5, self.toolchain.tarball_path)
 
-    def is_installed(self, toolchain):
-        tarball = self.download(toolchain)
-        installed = os.path.join(toolchain.install_prefix, self.installed)
+    def is_installed(self):
+        tarball = self.download()
+        installed = os.path.join(self.toolchain.install_prefix, self.installed)
         tarball_mtime = os.path.getmtime(tarball)
         try:
             return os.path.getmtime(installed) >= tarball_mtime
         except FileNotFoundError:
             return False
 
-    def unpack(self, toolchain, out_of_tree=True):
+    def unpack(self, out_of_tree=True):
         if out_of_tree:
-            parent_path = toolchain.src_path
+            parent_path = self.toolchain.src_path
         else:
-            parent_path = toolchain.build_path
-        path = untar(self.download(toolchain), parent_path, self.base)
+            parent_path = self.toolchain.build_path
+        path = untar(self.download(), parent_path, self.base)
         if self.patches is not None:
-            push_all(toolchain, path, self.patches)
+            push_all(self.toolchain,path, self.patches)
         return path
 
-    def make_build_path(self, toolchain):
-        path = os.path.join(toolchain.build_path, self.base)
+    def make_build_path(self):
+        path = os.path.join(self.toolchain.build_path, self.base)
         try:
             shutil.rmtree(path)
         except FileNotFoundError:

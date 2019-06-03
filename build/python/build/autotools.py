@@ -3,7 +3,7 @@ import os.path, subprocess, sys
 from build.makeproject import MakeProject
 
 class AutotoolsProject(MakeProject):
-    def __init__(self, url, alternative_url, md5, installed, configure_args=[],
+    def __init__(self, toolchain, url, alternative_url, md5, installed, configure_args=[],
                  autogen=False,
                  cppflags='',
                  ldflags='',
@@ -15,7 +15,7 @@ class AutotoolsProject(MakeProject):
                  config_script='configure',
                  use_actual_arch=False,
                  **kwargs):
-        MakeProject.__init__(self, url, alternative_url, md5, installed, **kwargs)
+        MakeProject.__init__(self, toolchain, url, alternative_url, md5, installed, **kwargs)
         self.configure_args = configure_args
         self.autogen = autogen
         self.cppflags = cppflags
@@ -36,12 +36,12 @@ class AutotoolsProject(MakeProject):
                 flags = flags.replace(' ' + f + ' ', ' ')
         return flags
 
-    def configure(self, toolchain, src=None, build=None):
+    def configure(self, src=None, build=None):
         if src is None:
-            src = self.unpack(toolchain)
+            src = self.unpack()
 
         if build is None:
-            build = self.make_build_path(toolchain)
+            build = self.make_build_path()
 
         if self.autogen:
             if sys.platform == 'darwin':
@@ -52,7 +52,7 @@ class AutotoolsProject(MakeProject):
             subprocess.check_call(['automake', '--add-missing', '--force-missing', '--foreign'], cwd=src)
             subprocess.check_call(['autoconf'], cwd=src)
 
-        cppflags = toolchain.cppflags
+        cppflags = self.toolchain.cppflags
         if self.name == 'glibc':
             # glibc's Makefile goes into an endless re-execution loop
             # if it is already installed; this kludge works around
@@ -63,38 +63,38 @@ class AutotoolsProject(MakeProject):
 
         install_prefix = self.install_prefix
         if install_prefix is None:
-            install_prefix = toolchain.install_prefix
+            install_prefix = self.toolchain.install_prefix
 
         configure = [
             os.path.join(src, self.config_script),
-            'CC=' + toolchain.cc,
-            'CXX=' + toolchain.cxx,
-            'CFLAGS=' + self._filter_cflags(toolchain.cflags),
-            'CXXFLAGS=' + self._filter_cflags(toolchain.cxxflags),
+            'CC=' + self.toolchain.cc,
+            'CXX=' + self.toolchain.cxx,
+            'CFLAGS=' + self._filter_cflags(self.toolchain.cflags),
+            'CXXFLAGS=' + self._filter_cflags(self.toolchain.cxxflags),
             'CPPFLAGS=' + cppflags + ' ' + self.cppflags,
-            'LDFLAGS=' + toolchain.ldflags + ' ' + self.ldflags,
-            'LIBS=' + toolchain.libs + ' ' + self.libs,
-            'AR=' + toolchain.ar,
-            'ARFLAGS=' + toolchain.arflags,
-            'RANLIB=' + toolchain.ranlib,
-            'STRIP=' + toolchain.strip,
-            '--host=' + (toolchain.actual_arch if self.use_actual_arch else toolchain.toolchain_arch),
+            'LDFLAGS=' + self.toolchain.ldflags + ' ' + self.ldflags,
+            'LIBS=' + self.toolchain.libs + ' ' + self.libs,
+            'AR=' + self.toolchain.ar,
+            'ARFLAGS=' + self.toolchain.arflags,
+            'RANLIB=' + self.toolchain.ranlib,
+            'STRIP=' + self.toolchain.strip,
+            '--host=' + (self.toolchain.actual_arch if self.use_actual_arch else self.toolchain.toolchain_arch),
             '--prefix=' + install_prefix,
             '--enable-silent-rules',
         ] + self.configure_args
 
-        subprocess.check_call(configure, cwd=build, env=toolchain.env)
+        subprocess.check_call(configure, cwd=build, env=self.toolchain.env)
         return build
 
-    def get_make_args(self, toolchain):
-        return MakeProject.get_make_args(self, toolchain) + self.make_args
+    def get_make_args(self):
+        return MakeProject.get_make_args(self) + self.make_args
 
-    def get_make_install_args(self, toolchain):
-        args = MakeProject.get_make_install_args(self, toolchain)
+    def get_make_install_args(self):
+        args = MakeProject.get_make_install_args(self)
         if self.use_destdir:
-            args += ['DESTDIR=' + toolchain.install_prefix]
+            args += ['DESTDIR=' + self.toolchain.install_prefix]
         return args
 
-    def build(self, toolchain):
-        build = self.configure(toolchain)
-        MakeProject.build(self, toolchain, build)
+    def build(self):
+        build = self.configure()
+        MakeProject.build(self, build)
