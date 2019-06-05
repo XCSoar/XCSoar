@@ -621,7 +621,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
   info.gps.nonexpiring_internal_gps = false;
 #endif
 
-  gps.hdop = line.Read(0.);
+  gps.hdop = line.Read(-1.);
 
   bool altitude_available = ReadAltitude(line, info.gps_altitude);
   if (altitude_available)

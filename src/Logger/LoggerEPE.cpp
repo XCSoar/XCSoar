@@ -139,6 +139,11 @@ IGCWriter::GetEPE(const GPSState &gps)
    * 8 = Simulation mode
    */
 
+  if (gps.hdop < 0)
+    /* negative GPSState::hdop value means unknown, but this method
+       returns 0 if the value is unknown */
+    return 0;
+
   switch (gps.fix_quality) {
   case FixQuality::GPS:
     return gps.hdop * 18.2;

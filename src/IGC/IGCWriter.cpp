@@ -216,7 +216,9 @@ void
 IGCWriter::LogPoint(const NMEAInfo& gps_info)
 {
   if (fix.Apply(gps_info))
-    LogPoint(fix, (int)GetEPE(gps_info.gps), GetSIU(gps_info.gps));
+    LogPoint(fix,
+             gps_info.location_available ? (int)GetEPE(gps_info.gps) : 0,
+             GetSIU(gps_info.gps));
 }
 
 void

@@ -281,8 +281,7 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
     basic.ground_speed_available.Update(basic.clock);
   }
 
-  if (hasAccuracy)
-    basic.gps.hdop = accuracy;
+  basic.gps.hdop = hasAccuracy ? accuracy : -1;
 
   if (hasAcceleration)
     basic.acceleration.ProvideGLoad(acceleration, true);

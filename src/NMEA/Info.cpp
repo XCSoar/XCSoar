@@ -210,7 +210,9 @@ void
 NMEAInfo::Expire()
 {
   if (location_available.Expire(clock, std::chrono::seconds(10)))
-    /* if the location expires, then GPSState should expire as well */
+    /* if the location expires, then GPSState should expire as well,
+       because all GPSState does is provide metadata for the GPS
+       fix */
     gps.Reset();
   else
     gps.Expire(clock);

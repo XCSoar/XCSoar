@@ -187,7 +187,7 @@ LoggerImpl::LogPoint(const NMEAInfo &gps_info)
       tmp_info.gps.satellites_used = src.satellites_used;
     }
 
-    tmp_info.gps.hdop = src.hdop;
+    tmp_info.gps.hdop = src.location.IsValid() ? src.hdop : -1;
     tmp_info.gps.real = src.real;
 
     if (src.satellite_ids_available) {

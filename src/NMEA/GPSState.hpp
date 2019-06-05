@@ -67,7 +67,12 @@ struct GPSState
   int satellite_ids[MAXSATELLITES];
   Validity satellite_ids_available;
 
-  /** Horizontal dilution of precision */
+  /**
+   * Horizontal dilution of precision.
+   *
+   * This attribute is only valid if NMEAInfo::location_available is
+   * true.  A negative value means "unknown".
+   */
   double hdop;
 
   /**

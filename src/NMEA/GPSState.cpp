@@ -35,6 +35,7 @@ GPSState::Reset()
 #endif
   satellites_used_available.Clear();
   satellite_ids_available.Clear();
+  hdop = -1;
   replay = false;
 }
 
