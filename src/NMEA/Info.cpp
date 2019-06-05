@@ -209,7 +209,12 @@ NMEAInfo::ExpireWallClock()
 void
 NMEAInfo::Expire()
 {
-  location_available.Expire(clock, std::chrono::seconds(10));
+  if (location_available.Expire(clock, std::chrono::seconds(10)))
+    /* if the location expires, then GPSState should expire as well */
+    gps.Reset();
+  else
+    gps.Expire(clock);
+
   track_available.Expire(clock, std::chrono::seconds(10));
   ground_speed_available.Expire(clock, std::chrono::seconds(10));
 
@@ -235,7 +240,6 @@ NMEAInfo::Expire()
 #ifdef ANDROID
   glink_data.Expire(clock);
 #endif
-  gps.Expire(clock);
   attitude.Expire(clock);
 }
 
