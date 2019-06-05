@@ -290,6 +290,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Logger/GlueFlightLogger.cpp \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/MoreData.cpp \
+	$(SRC)/NMEA/GPSState.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \

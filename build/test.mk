@@ -68,6 +68,7 @@ $(1)_SOURCES = \
 	$(SRC)/Engine/Trace/Vector.cpp \
 	$(SRC)/Engine/Navigation/Aircraft.cpp \
 	$(SRC)/Engine/Util/Gradient.cpp \
+	$(SRC)/NMEA/GPSState.cpp \
 	$(SRC)/NMEA/FlyingState.cpp \
 	$(SRC)/Atmosphere/AirDensity.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
@@ -323,6 +324,7 @@ $(eval $(call link-program,test_route,TEST_ROUTE))
 
 TEST_REPLAY_TASK_SOURCES = \
 	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/GPSState.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
@@ -649,6 +651,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/GPSState.cpp \
 	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
@@ -842,6 +845,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/MoreData.cpp \
+	$(SRC)/NMEA/GPSState.cpp \
 	$(SRC)/NMEA/SwitchState.cpp \
 	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
@@ -1003,6 +1007,7 @@ $(eval $(call link-program,RunWPASupplicant,RUN_WPA_SUPPLICANT))
 RUN_SL_TRACKING_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/GPSState.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
@@ -1278,6 +1283,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/FLARM/List.cpp \
 	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/GPSState.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
@@ -1312,6 +1318,7 @@ RUN_DECLARE_SOURCES = \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/GPSState.cpp \
 	$(SRC)/NMEA/SwitchState.cpp \
 	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
@@ -1347,6 +1354,7 @@ RUN_ENABLE_NMEA_SOURCES = \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/GPSState.cpp \
 	$(SRC)/NMEA/SwitchState.cpp \
 	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
@@ -1437,6 +1445,7 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/GPSState.cpp \
 	$(SRC)/NMEA/SwitchState.cpp \
 	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
@@ -1470,6 +1479,7 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/GPSState.cpp \
 	$(SRC)/NMEA/SwitchState.cpp \
 	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
@@ -1502,6 +1512,7 @@ CAI302_TOOL_SOURCES = \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/GPSState.cpp \
 	$(SRC)/NMEA/SwitchState.cpp \
 	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
@@ -1759,6 +1770,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/MoreData.cpp \
+	$(SRC)/NMEA/GPSState.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \

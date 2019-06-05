@@ -26,31 +26,6 @@ Copyright_License {
 #include "Atmosphere/AirDensity.hpp"
 
 void
-GPSState::Reset()
-{
-  fix_quality = FixQuality::NO_FIX;
-  fix_quality_available.Clear();
-  real = false;
-  simulator = false;
-#if defined(ANDROID) || defined(__APPLE__)
-  nonexpiring_internal_gps = false;
-#endif
-  satellites_used_available.Clear();
-  satellite_ids_available.Clear();
-  replay = false;
-}
-
-void
-GPSState::Expire(double now)
-{
-  if (fix_quality_available.Expire(now, std::chrono::seconds(5)))
-    fix_quality = FixQuality::NO_FIX;
-
-  satellites_used_available.Expire(now, std::chrono::seconds(5));
-  satellite_ids_available.Expire(now, std::chrono::minutes(1));
-}
-
-void
 NMEAInfo::UpdateClock()
 {
   clock = MonotonicClockFloat();
