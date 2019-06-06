@@ -8,7 +8,8 @@ from build.quilt import push_all
 class Project:
     def __init__(self, toolchain, url, alternative_url, md5, installed, name=None, version=None,
                  base=None,
-                 patches=None):
+                 patches=None,
+                 out_of_tree=True):
         self.toolchain = toolchain
         
         if base is None:
@@ -33,6 +34,7 @@ class Project:
         self.installed = installed
 
         self.patches = patches
+        self.out_of_tree = out_of_tree
 
     def download(self):
         return download_and_verify(self.url, self.alternative_url, self.md5, self.toolchain.tarball_path)
@@ -46,8 +48,8 @@ class Project:
         except FileNotFoundError:
             return False
 
-    def unpack(self, out_of_tree=True):
-        if out_of_tree:
+    def unpack(self):
+        if self.out_of_tree:
             parent_path = self.toolchain.src_path
         else:
             parent_path = self.toolchain.build_path

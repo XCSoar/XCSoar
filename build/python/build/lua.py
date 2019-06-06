@@ -26,7 +26,7 @@ class LuaProject(MakeProject):
         ]
 
     def build(self):
-        src = self.unpack(out_of_tree=False)
+        src = self.unpack()
 
         wd = os.path.join(src, 'src')
 

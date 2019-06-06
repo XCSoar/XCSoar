@@ -68,6 +68,7 @@ class Libs:
             'ftp://ftp.kfki.hu/pub/packages/security/openssl/openssl-1.0.2k.tar.gz',
             '6b3977c61f2aedf0f96367dcfb5c6e578cf37e7b8d913b4ecb6643c3cb88d8c0',
             'include/openssl/ossl_typ.h',
+            out_of_tree=False,
         )
         
         self.openssh = AutotoolsProject(
@@ -106,6 +107,7 @@ class Libs:
             'http://downloads.sourceforge.net/project/libpng/zlib/1.2.11/zlib-1.2.11.tar.xz',
             '4ff941449631ace0d4d203e3483be9dbc9da454084111f97ea0a2114e19bf066',
             'lib/libz.a',
+            out_of_tree=False,
         )
         
         self.freetype = FreeTypeProject(
@@ -260,6 +262,7 @@ class Libs:
                 '--disable-shared', '--enable-static',
             ],
             patches=abspath('lib/sdl2/patches'),
+            out_of_tree=False,
         )
         
         self.lua = LuaProject(
@@ -269,6 +272,7 @@ class Libs:
             '0c2eed3f960446e1a3e4b9a1ca2f3ff893b6ce41942cf54d5dd59ab4b3b058ac',
             'lib/liblua.a',
             patches=abspath('lib/lua/patches'),
+            out_of_tree=False,
         )
         
         self.libsalsa = AutotoolsProject(
