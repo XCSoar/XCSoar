@@ -317,6 +317,10 @@ NMEAParser::GSA(NMEAInputLine &line, NMEAInfo &info)
 
   info.gps.satellite_ids_available.Update(info.clock);
 
+  info.gps.pdop = line.Read(-1.);
+  info.gps.hdop = line.Read(-1.);
+  info.gps.vdop = line.Read(-1.);
+
   return true;
 }
 
