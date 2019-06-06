@@ -76,6 +76,22 @@ struct GPSState
   double hdop;
 
   /**
+   * Position (3D) dilution of precision.
+   *
+   * This attribute is only valid if NMEAInfo::location_available is
+   * true.  A negative value means "unknown".
+   */
+  double pdop;
+
+  /**
+   * Vertical dilution of precision.
+   *
+   * This attribute is only valid if NMEAInfo::location_available is
+   * true.  A negative value means "unknown".
+   */
+  double vdop;
+
+  /**
    * Is the fix real? (no replay, no simulator)
    */
   bool real;
