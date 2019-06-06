@@ -112,7 +112,7 @@ public:
   
 protected:
   Status status;
-  void Tick() override;
+  void Tick() noexcept override;
 };
 
 #endif

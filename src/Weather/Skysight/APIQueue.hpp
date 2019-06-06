@@ -39,7 +39,7 @@ class SkysightAPIQueue final : public Timer {
   void OnTimer() override;
   
   tstring key;
-  uint64_t key_expiry = 0;
+  uint64_t key_expiry_time = 0;
   tstring email;
   tstring password;
   
@@ -48,7 +48,7 @@ public:
   ~SkysightAPIQueue();
   
   void SetCredentials(const tstring &&_email, const tstring &&_pass);
-  void SetKey(const tstring &&_key, const uint64_t _key_expiry);
+  void SetKey(const tstring &&_key, const uint64_t _key_expiry_time);
   bool IsLoggedIn();
   void AddRequest(std::unique_ptr<SkysightAsyncRequest> &&request, bool append_end = true);
   void AddDecodeJob(std::unique_ptr<CDFDecoder> &&job);

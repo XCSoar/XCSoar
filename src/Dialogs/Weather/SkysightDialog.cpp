@@ -108,16 +108,12 @@ SkysightListItemRenderer::Draw(Canvas &canvas, const PixelRect rc, unsigned i) {
       second_row.Format("%s", _("No data. Press \"Update\" to update."));
     } else {
       
-      BrokenDateTime f = skysight->FromUnixTime(m.from) + settings.utc_offset.AsSeconds();
-      BrokenDateTime t = skysight->FromUnixTime(m.to) + settings.utc_offset.AsSeconds();
-
       uint64_t elapsed = BrokenDateTime::NowUTC().ToUnixTimeUTC() - m.mtime;
 
-      second_row.Format(_("Data from %04u/%02u/%02u %02u:%02u to %04u/%02u/%02u %02u:%02u. Updated %s ago"), 
-        f.year, f.month, f.day, f.hour, f.minute,
-        t.year, t.month, t.day, t.hour, t.minute,
-        FormatTimespanSmart(elapsed).c_str());
-  
+      second_row.Format(_("_Data from %s to %s. Updated %s ago"), 
+                        FormatLocalTimeHHMM((int)m.from, settings.utc_offset).c_str(),
+                        FormatLocalTimeHHMM((int)m.to, settings.utc_offset).c_str(),
+                        FormatTimespanSmart(elapsed).c_str());  
     }
   }
   
@@ -133,13 +129,9 @@ SkysightListItemRenderer::Draw(Canvas &canvas, const PixelRect rc, unsigned i) {
 class SkysightMetricsListItemRenderer : public ListItemRenderer {
   TextRowRenderer row_renderer;
   std::shared_ptr<Skysight> skysight;
-  static SkysightMetricsListItemRenderer *rp;
-  
 
 public:
-  SkysightMetricsListItemRenderer() : skysight(DataGlobals::GetSkysight()) {
-    rp = this;
-  }
+  SkysightMetricsListItemRenderer() : skysight(DataGlobals::GetSkysight()) {}
   
   unsigned CalculateLayout(const DialogLook &look) {
     return row_renderer.CalculateLayout(*look.list.font);
@@ -150,27 +142,19 @@ public:
   }
   
   static const TCHAR* HelpCallback(unsigned i) {
-    if(!rp)
+    
+    std::shared_ptr<Skysight> skysight = DataGlobals::GetSkysight();
+        
+    if(!skysight)
       return _("No description available.");
- 
-    return rp->GetHelp(i);
-  }
-  
-  const TCHAR* GetHelp(unsigned i) {
+    
     tstring helptext = skysight->GetMetric(i).desc;
     TCHAR* help = new TCHAR[helptext.length() + 1];
     std::strcpy(help, helptext.c_str());
     return help;
-  }
-  
+  }  
 
 };
-SkysightMetricsListItemRenderer *SkysightMetricsListItemRenderer::rp;
-
-
-
-
-
 
 class SkysightWidget final
   : public ListWidget, private ActionListener, private Timer {
@@ -182,7 +166,6 @@ class SkysightWidget final
     UPDATE,
     UPDATE_ALL
   };
-
 
   ButtonPanelWidget *buttons_widget;
 
@@ -238,11 +221,11 @@ protected:
     return true;
   }
 
-  virtual void OnActivateItem(unsigned index) override;
+  virtual void OnActivateItem(unsigned index) override {};
 
 private:
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) override;
+  virtual void OnAction(int id) noexcept override;
   
   /* virtual methods from Timer */
   virtual void OnTimer() override;
@@ -267,7 +250,7 @@ SkysightWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   const DialogLook &look = UIGlobals::GetDialogLook();
   CreateList(parent, look, rc, row_renderer.CalculateLayout(look));
   UpdateList();
-  Timer::Schedule(500);
+  Timer::Schedule(std::chrono::milliseconds(500));
 }
 
 void
@@ -413,15 +396,7 @@ SkysightWidget::DeactivateClicked()
 }
 
 void
-SkysightWidget::OnActivateItem(unsigned index)
-{
-  /*
-  OpenDetails(index);
-  */
-}
-
-void
-SkysightWidget::OnAction(int id)
+SkysightWidget::OnAction(int id) noexcept
 {
   switch ((Buttons)id) {
   case ACTIVATE:

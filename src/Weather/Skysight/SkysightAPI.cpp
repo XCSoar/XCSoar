@@ -206,7 +206,7 @@ void SkysightAPI::Init(tstring email, tstring password, tstring _region, Skysigh
   GetData(SkysightCallType::Regions, cb);
   
   // Check for maintenance actions every 15 mins
-  Timer::Schedule(900000);
+  Timer::Schedule(std::chrono::milliseconds(900000));
    
 }
 
@@ -486,7 +486,7 @@ bool SkysightAPI::GetData(SkysightCallType t, const TCHAR *const layer,
   const auto path = GetPath(t,  layer,  from);
 
   bool to_file = !(t == SkysightCallType::DataDetails || t == SkysightCallType::Login || t == SkysightCallType::LastUpdates);
-  
+    
   SkysightRequestArgs ra(
     url.c_str(),
     path.c_str(),

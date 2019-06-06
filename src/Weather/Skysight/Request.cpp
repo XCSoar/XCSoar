@@ -73,7 +73,7 @@ void SkysightRequest::BufferHandler::DataReceived(const void *data, size_t lengt
 }
 
 SkysightRequest::Status SkysightAsyncRequest::GetStatus() {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   Status s = status;
   return s;
 }
@@ -91,13 +91,13 @@ void SkysightRequest::SetCredentials(const TCHAR *_key, const TCHAR *_username,
 }
 
 SkysightCallType SkysightAsyncRequest::GetType() {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   SkysightCallType ct = args.calltype;
   return ct;
 }
 void SkysightAsyncRequest::SetCredentials(const TCHAR *_key, const TCHAR *_username, 
                              const TCHAR *_password)  {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   SkysightRequest::SetCredentials(_key, _username, _password);
 }
 
@@ -114,7 +114,7 @@ bool SkysightRequest::Process() {
 }
 
 tstring SkysightAsyncRequest::GetMessage() {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   tstring msg = tstring (_T("Downloading ")) + args.layer;
   return msg;
 }
@@ -124,15 +124,15 @@ bool SkysightRequest::ProcessToString(tstring &response) {
 }
 
 void SkysightAsyncRequest::Process() {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   if (IsBusy()) return;
   Trigger();
 }
 
-void SkysightAsyncRequest::Tick() {
+void SkysightAsyncRequest::Tick() noexcept {
   status = Status::Busy;
 
-  mutex.Unlock();
+  mutex.unlock();
 
   bool result;
   tstring resultStr;
@@ -150,7 +150,7 @@ void SkysightAsyncRequest::Tick() {
     SkysightAPI::ParseResponse(_T("Could not fetch data from Skysight server."), result, args);
   }
 
-  mutex.Lock();
+  mutex.lock();
   status = (!result) ? Status::Error : Status::Complete;
 }
 

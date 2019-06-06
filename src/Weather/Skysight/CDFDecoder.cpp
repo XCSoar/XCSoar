@@ -38,7 +38,7 @@ Copyright_License {
 
 
 void CDFDecoder::DecodeAsync() {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   Trigger();
   
 }
@@ -52,30 +52,30 @@ void CDFDecoder::Done() {
 }
 
 CDFDecoder::Status CDFDecoder::GetStatus() {
-  ScopeLock protect(mutex);
+  std::lock_guard<Mutex> lock(mutex);
   CDFDecoder::Status s = status;
   return s;
 }
 
 
 
-void CDFDecoder::Tick() {
+void CDFDecoder::Tick() noexcept {
   status = Status::Busy;
-  mutex.Unlock();
+  mutex.unlock();
   Decode();
 }
 
 bool CDFDecoder::DecodeError() {
   LogFormat("Decoder Error");
   MakeCallback(false);
-  mutex.Lock();
+  mutex.lock();
   status = Status::Error;
   return true;
 }
 
 bool CDFDecoder::DecodeSuccess() {
   MakeCallback(true);
-  mutex.Lock();
+  mutex.lock();
   status = Status::Complete;
   return true;
 }
@@ -206,7 +206,7 @@ bool CDFDecoder::Decode() {
 
   data_file.close();
   delete [] var_vals; 
-  File::Delete(Path(path.c_str()));
+  File::Delete(path);
   return (success) ? DecodeSuccess() : DecodeError();
 }
 #else
@@ -289,9 +289,9 @@ bool CDFDecoder::Decode() {
   int rb;
   bool success = true;
   double point_value;
-  for(int y=(int)lat_size-1; y>=0; y--) {
+  for(unsigned y=(unsigned)lat_size-1; y>=0; y--) {
     memset(row, 0, linebytes * sizeof(unsigned char)); //ensures unused data points are transparent
-    for(int x=0;x<(int)lon_size;x++) {
+    for(unsigned x=0;x<(unsigned)lon_size;x++) {
       rb = x * samplesperpixel;
       if(var_vals[y][x] != fill_value) {
         point_value = (var_vals[y][x] * var_scale) + var_offset;
@@ -324,7 +324,7 @@ bool CDFDecoder::Decode() {
   GTIFFree(gt);
 
   data_file.close();
-  File::Delete(Path(path.c_str()));
+  File::Delete(path);
   return (success) ? DecodeSuccess() : DecodeError();
 
   return false;

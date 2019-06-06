@@ -58,8 +58,8 @@ void SkysightAPIQueue::AddDecodeJob(std::unique_ptr<CDFDecoder> &&job) {
 void SkysightAPIQueue::Process() {
   is_busy = true;
   
-  if(request_queue.size()) {
-    auto &&job = request_queue.begin();
+  if(!empty(request_queue)) {
+    auto job = request_queue.begin();
     switch((*job)->GetStatus()) {
       case SkysightRequest::Status::Idle:
         
@@ -78,7 +78,7 @@ void SkysightAPIQueue::Process() {
         }
 
         if(!Timer::IsActive())
-          Timer::Schedule(300);
+          Timer::Schedule(std::chrono::milliseconds(300));
         break;
       case SkysightRequest::Status::Complete:
       case SkysightRequest::Status::Error:
@@ -90,13 +90,13 @@ void SkysightAPIQueue::Process() {
     }
   }
   
-  if(decode_queue.size()) {
+  if(!empty(decode_queue)) {
     auto &&decode_job = decode_queue.begin();
      switch((*decode_job)->GetStatus()) {
       case CDFDecoder::Status::Idle:
         (*decode_job)->DecodeAsync();
         if(!Timer::IsActive())
-          Timer::Schedule(300);
+          Timer::Schedule(std::chrono::milliseconds(300));
         break;
       case CDFDecoder::Status::Complete:
       case CDFDecoder::Status::Error:
@@ -109,7 +109,7 @@ void SkysightAPIQueue::Process() {
   }
 
 
-  if(!request_queue.size() && !decode_queue.size()) {
+  if(empty(request_queue) && empty(decode_queue)) {
     Timer::Cancel();
   }
   is_busy = false;
@@ -132,9 +132,9 @@ void SkysightAPIQueue::SetCredentials(const tstring &&_email, const tstring &&_p
   email = _email;
 }
 
-void SkysightAPIQueue::SetKey(const tstring &&_key, const uint64_t _key_expiry) {
+void SkysightAPIQueue::SetKey(const tstring &&_key, const uint64_t _key_expiry_time) {
   key = _key;
-  key_expiry = _key_expiry;
+  key_expiry_time = _key_expiry_time;
 }
 
 bool SkysightAPIQueue::IsLoggedIn() {
@@ -142,7 +142,7 @@ bool SkysightAPIQueue::IsLoggedIn() {
   uint64_t now = (uint64_t)BrokenDateTime::NowUTC().ToUnixTimeUTC();
 
   //Add a 2-minute padding so that token doesn't expire mid-way thru a request
-  return ( ((int64_t)(key_expiry - now)) > (60*2) );
+  return ( ((int64_t)(key_expiry_time - now)) > (60*2) );
   
 }
 

@@ -27,6 +27,7 @@ Copyright_License {
 #include "Util/tstring.hpp"
 #include "Operation/Operation.hpp"
 
+
 typedef void (*SkysightCallback)(
   const tstring &&details,
   const bool  success, 

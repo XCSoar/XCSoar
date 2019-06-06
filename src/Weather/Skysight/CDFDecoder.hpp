@@ -30,7 +30,7 @@ Copyright_License {
 #include "Util/tstring.hpp"
 #include <map>
 #include "Metrics.hpp"
-
+#include "OS/Path.hpp"
 
 
 class CDFDecoder final : public StandbyThread {
@@ -43,7 +43,7 @@ public:
   
   CDFDecoder(const tstring &&_path, const tstring &&_output, const tstring &&_varname,
              const uint64_t _time_index, const std::map<float, LegendColor> _legend, SkysightCallback _callback) : 
-             StandbyThread("CDFDecoder"), path(_path), output_path(_output), 
+             StandbyThread("CDFDecoder"), path(AllocatedPath(_path.c_str())), output_path(AllocatedPath(_output.c_str())), 
              data_varname(_varname), time_index(_time_index), legend(_legend), callback(_callback), 
              status(Status::Idle) {};
   ~CDFDecoder() {};
@@ -54,14 +54,14 @@ public:
   Status GetStatus();
   
 private:
-  const tstring path;
-  const tstring output_path;
+  const AllocatedPath path;
+  const AllocatedPath output_path;
   const tstring data_varname;
   const uint64_t time_index;
   const std::map<float, LegendColor> legend;
   SkysightCallback callback;
   Status status;
-  void Tick() override; 
+  void Tick() noexcept override; 
   bool Decode();
   void MakeCallback(bool result);
   bool DecodeError();

@@ -61,11 +61,8 @@ public:
 
   private:
   /* methods from DataFieldListener */
-  virtual void OnModified(DataField &df) override;
+  virtual void OnModified(DataField &df) override {};
 };
-
-void
-WeatherConfigPanel::OnModified(DataField &df) {};
 
 static void FillRegionControl(WndProperty &wp, const TCHAR *setting)
 {
