@@ -71,6 +71,10 @@ public:
     bool satellites_used_available;
     /** GPS Horizontal Dilution of precision */
     double hdop;
+    /** GPS Position (3D) Dilution of precision */
+    double pdop;
+    /** GPS Vertical Dilution of precision */
+    double vdop;
 
     /**
      * Is the fix real? (no replay, no simulator)

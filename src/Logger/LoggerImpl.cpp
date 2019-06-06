@@ -67,6 +67,8 @@ LoggerImpl::PreTakeoffBuffer::operator=(const NMEAInfo &src)
     satellites_used = src.gps.satellites_used;
 
   hdop = src.gps.hdop;
+  pdop = src.gps.pdop;
+  vdop = src.gps.vdop;
   real = src.gps.real;
 
   satellite_ids_available = src.gps.satellite_ids_available;
@@ -188,6 +190,8 @@ LoggerImpl::LogPoint(const NMEAInfo &gps_info)
     }
 
     tmp_info.gps.hdop = src.location.IsValid() ? src.hdop : -1;
+    tmp_info.gps.pdop = src.location.IsValid() ? src.pdop : -1;
+    tmp_info.gps.vdop = src.location.IsValid() ? src.vdop : -1;
     tmp_info.gps.real = src.real;
 
     if (src.satellite_ids_available) {
