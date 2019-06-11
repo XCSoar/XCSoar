@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-01-09 12:07+0000\n"
-"Last-Translator: Philip Dodd <philipdodd@hotmail.com>\n"
+"PO-Revision-Date: 2019-06-18 19:04+0000\n"
+"Last-Translator: Bruno Bonamin <bruno@bonamin.org>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/es/>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.4-dev\n"
+"X-Generator: Weblate 3.7\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -2722,7 +2722,7 @@ msgstr "componente de viento en cara (simplificado)"
 #: src/InfoBoxes/Content/Factory.cpp:921
 #, no-c-format
 msgid "Head Wind *"
-msgstr "viento en cara *"
+msgstr "Viento de Frente"
 
 #: src/InfoBoxes/Content/Factory.cpp:922
 #, no-c-format
@@ -2731,14 +2731,14 @@ msgid ""
 "subtracting GPS ground speed from the TAS if airspeed is available from "
 "external device."
 msgstr ""
-"La componente actual de viento de cara. El viento de cara simplificado se "
-"calcula restando la velocidad en tierra del GPS al TAS si la velocidad en el "
-"aire esta disponible desde un dispositivo externo."
+"La componente actual de viento de frente, que se calcula restando la "
+"velocidad GPS de la Indicada, si ésta está disponible desde un dispositivo "
+"externo."
 
 #: src/InfoBoxes/Content/Factory.cpp:928
 #, no-c-format
 msgid "Task cruise efficiency"
-msgstr ""
+msgstr "Eficiencia de planeo en la tarea"
 
 #: src/InfoBoxes/Content/Factory.cpp:929
 #, no-c-format
@@ -2752,16 +2752,16 @@ msgid ""
 "value estimates your cruise efficiency according to the current flight "
 "history with the set MC value.  Calculation begins after task is started."
 msgstr ""
-"Eficiencia del crucero. 100 indica el rendimiento perfecto de MacCready. "
-"Este valor calcula su eficiencia de crucero de acuerdo con la historia de "
-"vuelo actual con el valor de MC establecido. El cálculo comienza después de "
-"iniciar la tarea."
+"Eficiencia de planeo. 100 indica el rendimiento perfecto de MacCready. Este "
+"valor calcula la eficiencia del planeo de acuerdo durante el vuelo actual "
+"con el valor de MC establecido. El cálculo comienza después de iniciar la "
+"tarea."
 
 #: src/InfoBoxes/Content/Factory.cpp:937
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:183
 #, no-c-format
 msgid "Wind arrow"
-msgstr "flecha del Viento"
+msgstr "Flecha del Viento"
 
 #: src/InfoBoxes/Content/Factory.cpp:938
 #: src/Dialogs/Settings/dlgConfiguration.cpp:110
@@ -2778,7 +2778,7 @@ msgstr "Viento"
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:342
 #, no-c-format
 msgid "Thermal assistant"
-msgstr "Asistente de térmica"
+msgstr "Asistente de Térmica"
 
 #: src/InfoBoxes/Content/Factory.cpp:945
 #: src/Renderer/MapItemListRenderer.cpp:267
@@ -2792,13 +2792,13 @@ msgid ""
 "A circular thermal assistant that shows the lift distribution over each part "
 "of the circle."
 msgstr ""
-"Asistente de térmica que muestra la distribución de la ascendencia en cada "
-"parte del círculo"
+"Un asistente de térmica circular que muestra la distribución del ascensor "
+"sobre cada parte del círculo."
 
 #: src/InfoBoxes/Content/Factory.cpp:951
 #, no-c-format
 msgid "Start open/close countdown"
-msgstr "Cuenta atras del tiempo de Inicio/Final del Start"
+msgstr "Cuenta atrás al inicio/cierre"
 
 #: src/InfoBoxes/Content/Factory.cpp:952
 #, no-c-format
@@ -2809,7 +2809,8 @@ msgstr "Partida abierta"
 #, no-c-format
 msgid "Shows the time left until the start point opens or closes."
 msgstr ""
-"Muestra el tiempo restante hasta que el inicio de la prueba se abre o cierra."
+"Muestra el tiempo restante hasta que el punto de inicio de la prueba se abre "
+"o cierra."
 
 #: src/InfoBoxes/Content/Factory.cpp:958
 #, no-c-format
@@ -2827,29 +2828,28 @@ msgid ""
 "Shows the time left until the start point opens or closes, compared to the "
 "calculated time to reach it."
 msgstr ""
-"Muestra el tiempo faltante para que el Start abra o cierre, comparado con el "
-"tiempo calculado para alcanzarlo."
+"Muestra el tiempo faltante para que el punto de inicio abra o cierre, "
+"comparado con el tiempo calculado para alcanzarlo."
 
 #: src/InfoBoxes/Content/Factory.cpp:965
 #, no-c-format
 msgid "Next radial"
-msgstr "Next radial"
+msgstr "Siguiente radial"
 
 #: src/InfoBoxes/Content/Factory.cpp:966 src/Dialogs/Task/TargetDialog.cpp:438
 #, no-c-format
 msgid "Radial"
-msgstr "Remarcado"
+msgstr "Radial"
 
 #: src/InfoBoxes/Content/Factory.cpp:967
 #, no-c-format
 msgid "True bearing from the next waypoint to your position."
-msgstr ""
-"Rumbo verdadero desde el siguiente punto de referencia para su posición."
+msgstr "Rumbo verdadero desde el siguiente punto de viraje a tu posición."
 
 #: src/InfoBoxes/Content/Factory.cpp:973 src/InfoBoxes/Content/Factory.cpp:974
 #, no-c-format
 msgid "ATC radial"
-msgstr "ATC radial"
+msgstr "Radial ATC"
 
 #: src/InfoBoxes/Content/Factory.cpp:975
 #, no-c-format
@@ -2857,13 +2857,13 @@ msgid ""
 "True bearing from the selected reference location to your position.  The "
 "distance is displayed in nautical miles for communication with ATC."
 msgstr ""
-"Rumbo verdadero de la posición de referencia seleccionada a su posición. La "
-"distancia se muestra en millas marinas para la comunicación con el ATC."
+"Rumbo verdadero desde la posición de referencia seleccionado a su posición. "
+"La distancia se muestra en millas marinas para la comunicación con el ATC."
 
 #: src/InfoBoxes/Content/Factory.cpp:981
 #, no-c-format
 msgid "Speed task last hour"
-msgstr "Vel. prom. ultima hora"
+msgstr "Velocidad promedio (última hora)"
 
 #: src/InfoBoxes/Content/Factory.cpp:982
 #, no-c-format
@@ -2875,7 +2875,9 @@ msgstr "V Task H"
 msgid ""
 "Average cross country speed while on current task over the last hour, not "
 "compensated for altitude."
-msgstr "Promedio de veloccidad en la ultima hora, no compensado con la altura."
+msgstr ""
+"Promedio de velocidad durante la tarea en la última hora, sin corregir por "
+"altitud."
 
 #: src/InfoBoxes/Content/Factory.cpp:989
 #, no-c-format
@@ -2893,13 +2895,13 @@ msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the origin of the AAT sector."
 msgstr ""
-"Distancia al siguiente WP seleccionado, para AAT esta es la distancia al "
-"centro del area."
+"Distancia al punto de viraje seleccionado. En AAT, la distancia al centro "
+"del área."
 
 #: src/InfoBoxes/Content/Factory.cpp:997
 #, no-c-format
 msgid "Circle diameter"
-msgstr "Diametro del virage"
+msgstr "Diámetro del viraje"
 
 #: src/InfoBoxes/Content/Factory.cpp:998
 #, no-c-format
@@ -2907,46 +2909,47 @@ msgid "Circle D"
 msgstr "Circle D"
 
 #: src/InfoBoxes/Content/Factory.cpp:999
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Circle diameter. Displays estimated circle diameter and full circle flight "
 "time. Useful for evaluating best thermalling mode with a glider at different "
 "wing loading."
 msgstr ""
-"Diámetro del círculo. Muestra el diámetro estimado del viraje y el tiempo de "
-"vuelo de un círculo completo."
+"Diámetro del viraje. Muestra el diámetro estimado del viraje y el tiempo de "
+"un viraje completo. Útil para evaluar el mejor modo de virar con un "
+"planeador a diferente carga alar."
 
 #: src/InfoBoxes/Content/Factory.cpp:1004
 #, no-c-format
 msgid "Distance takeoff"
-msgstr "Distance takeoff"
+msgstr "Distancia al lugar del decolaje"
 
 #: src/InfoBoxes/Content/Factory.cpp:1005
 #, no-c-format
 msgid "Takeoff Dist"
-msgstr "Takeoff Dist"
+msgstr "Dist. Decol"
 
 #: src/InfoBoxes/Content/Factory.cpp:1006
 #, no-c-format
 msgid "Distance to where take-off was detected."
-msgstr "Distancia al lugar de decolage"
+msgstr "Distancia al lugar dónde se detectó el decolaje."
 
 #: src/InfoBoxes/Content/Factory.cpp:1012
 #, no-c-format
 msgid "On-Line Contest speed"
-msgstr "veloccidad OLC"
+msgstr "Velocidad OLC"
 
 #: src/InfoBoxes/Content/Factory.cpp:1013
 #, no-c-format
 msgid "OLC Speed"
-msgstr "OLC Speed"
+msgstr "Velocidad OLC"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
 #, no-c-format
 msgid ""
 "Instantaneous evaluation of the flown speed according to the configured On-"
 "Line Contest rule set."
-msgstr "Veloccidad de acuerdo la las reglas de la OLC"
+msgstr "Velocidad instantánea de acuerdo a las reglas de la OLC."
 
 #: src/InfoBoxes/Content/Factory.cpp:1019
 #, no-c-format
@@ -2964,8 +2967,8 @@ msgid ""
 "Arrival altitude at the final waypoint with MC 0 setting relative to the "
 "safety arrival height."
 msgstr ""
-"Altitud de llegada en el waypoint final con ajuste de MC 0 en relación con "
-"la altura de llegada de seguridad."
+"Altitud de llegada al punto de viraje final con MC 0  relativo a la altura "
+"de llegada de seguridad."
 
 #: src/InfoBoxes/Content/Factory.cpp:1027
 #: src/InfoBoxes/Content/Factory.cpp:1028 src/InfoBoxes/Content/Task.cpp:904
@@ -2981,10 +2984,10 @@ msgid ""
 "of the active waypoint in the current task, the center of a selected goto "
 "waypoint or the target within the AAT sector for AAT tasks."
 msgstr ""
-"Flecha que señala el waypoint actualmente seleccionado. También se muestra "
-"el nombre del waypoint y la distancia. La posición utilizada es la posición "
-"optimizada del waypoint activo en la tarea actual, el centro de un waypoint "
-"goto seleccionado o el objetivo dentro del sector AAT para tareas AAT."
+"Flecha que señala el punto de viraje seleccionado, su nombre y distancia. La "
+"posición utilizada es la posición optimizada del punto de viraje activo en "
+"la tarea, el centro de un GOTO seleccionado o el objetivo dentro del sector "
+"AAT."
 
 #: src/InfoBoxes/Content/Factory.cpp:1039
 #, no-c-format
