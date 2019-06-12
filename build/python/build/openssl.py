@@ -19,10 +19,9 @@ class OpenSSLProject(MakeProject):
         ]
 
     def build(self):
-        src = self.unpack(out_of_tree=False)
-
+        print(type(self).__name__ + ' install_prefix = ' + self.toolchain.install_prefix)
         subprocess.check_call(['/bin/sh', './Configure',
                                'dist', 'no-dso', 'no-krb5',
                                '--prefix=' + self.toolchain.install_prefix],
-                              cwd=src, env=self.toolchain.env)
-        MakeProject.build(self, src)
+                              cwd=self.build_dir, env=self.toolchain.env)
+        MakeProject.build(self, self.build_dir)

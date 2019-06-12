@@ -38,10 +38,10 @@ class AutotoolsProject(MakeProject):
 
     def configure(self, src=None, build=None):
         if src is None:
-            src = self.unpack()
+            src = self.src_dir
 
         if build is None:
-            build = self.make_build_path()
+            build = self.build_dir
 
         if self.autogen:
             if sys.platform == 'darwin':
@@ -84,7 +84,6 @@ class AutotoolsProject(MakeProject):
         ] + self.configure_args
 
         subprocess.check_call(configure, cwd=build, env=self.toolchain.env)
-        return build
 
     def get_make_args(self):
         return MakeProject.get_make_args(self) + self.make_args
@@ -96,5 +95,5 @@ class AutotoolsProject(MakeProject):
         return args
 
     def build(self):
-        build = self.configure()
-        MakeProject.build(self, build)
+        self.configure()
+        MakeProject.build(self,self.build_dir)

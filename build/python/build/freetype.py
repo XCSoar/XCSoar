@@ -5,10 +5,10 @@ from build.autotools import AutotoolsProject
 
 class FreeTypeProject(AutotoolsProject):
     def configure(self):
-        build = AutotoolsProject.configure(self)
+        AutotoolsProject.configure(self)
 
         comment_re = re.compile(r'^\w+_MODULES\s*\+=\s*(?:type1|cff|cid|pfr|type42|winfonts|pcf|bdf|lzw|bzip2|psaux|psnames)\s*$')
-        modules_cfg = os.path.join(build, 'modules.cfg')
+        modules_cfg = os.path.join(self.build_dir, 'modules.cfg')
         tmp = modules_cfg + '.tmp'
         with open(modules_cfg) as src:
             with open(tmp, 'w') as dest:
@@ -17,5 +17,3 @@ class FreeTypeProject(AutotoolsProject):
                         line = '# ' + line
                     dest.write(line)
         os.rename(tmp, modules_cfg)
-
-        return build

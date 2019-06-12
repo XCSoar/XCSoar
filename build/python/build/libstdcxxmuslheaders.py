@@ -1,6 +1,5 @@
 import os
 from build.autotools import AutotoolsProject
-from build.makeproject import MakeProject
 
 # Installer for musl compatible libstdc++ headers.
 # The static libstdc++ (and libsupc++) libraries from GNU toolchains are
@@ -9,22 +8,20 @@ from build.makeproject import MakeProject
 # source tarball.
 class LibstdcxxMuslHeadersProject(AutotoolsProject):
     def build(self):
-        src = self.unpack()
-        top_build = self.make_build_path()
-        build = os.path.join(top_build, 'libstdc++-v3')
+        build = os.path.join(self.build_dir, 'libstdc++-v3')
         os.mkdir(build)
 
         # libstdc++'s configure requires a configured libgcc or it
         # will disable threading support; but instead of configuring
         # libgcc, this kludge just creates the "gthr-default.h"
         # symlink, which is enough to enable multi-threading
-        libgcc = os.path.join(top_build, 'libgcc')
+        libgcc = os.path.join(self.build_dir, 'libgcc')
         os.mkdir(libgcc)
-        os.symlink(os.path.join(src, 'libgcc', 'gthr-posix.h'),
+        os.symlink(os.path.join(self.src_dir, 'libgcc', 'gthr-posix.h'),
                    os.path.join(libgcc, 'gthr-default.h'))
 
-        build = self.configure(src=src, build=build)
+        self.configure()
 
         incdir_param = 'gxx_include_dir=' + self.toolchain.install_prefix + '/include/libstdc++'
-        self.make(os.path.join(build, 'libsupc++'), [incdir_param, 'install-bitsHEADERS', 'install-stdHEADERS'])
-        self.make(os.path.join(build, 'include'), [incdir_param, 'install-headers'])
+        self.make(os.path.join(self.build_dir, 'libsupc++'), [incdir_param, 'install-bitsHEADERS', 'install-stdHEADERS'])
+        self.make(os.path.join(self.build_dir, 'include'), [incdir_param, 'install-headers'])

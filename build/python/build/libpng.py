@@ -6,4 +6,4 @@ class LibPNGProject(AutotoolsProject):
         if self.toolchain.actual_arch.startswith('aarch64') or '-mfpu=neon' in self.toolchain.cflags:
             self.configure_args.append('--enable-arm-neon')
 
-        return AutotoolsProject.configure(self)
+        AutotoolsProject.configure(self)

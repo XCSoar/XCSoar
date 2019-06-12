@@ -12,10 +12,8 @@ class SDL2Project(AutotoolsProject):
             # * SDL_config.h needs to be replaced with SDL_config_iphoneos.h
             #   after running "configure"
 
-            src = self.unpack(out_of_tree=False)
-
             configure = [
-                os.path.join(src, 'configure'),
+                os.path.join(self.src_dir, 'configure'),
                 'CC=' + self.toolchain.cc,
                 'CFLAGS=' + self.toolchain.cflags + ' -x objective-c -fobjc-arc',
                 'CPPFLAGS=' + self.toolchain.cppflags + ' ' + self.cppflags,
@@ -27,12 +25,10 @@ class SDL2Project(AutotoolsProject):
                 '--prefix=' + self.toolchain.install_prefix,
             ] + self.configure_args
 
-            subprocess.check_call(configure, cwd=src, env=self.toolchain.env)
+            subprocess.check_call(configure, cwd=self.build_dir, env=self.toolchain.env)
 
-            shutil.copyfile(os.path.join(src, 'include/SDL_config_iphoneos.h'),
-                            os.path.join(src, 'include/SDL_config.h'))
-
-            return src
+            shutil.copyfile(os.path.join(self.build_dir, 'include/SDL_config_iphoneos.h'),
+                            os.path.join(self.build_dir, 'include/SDL_config.h'))
 
         else:
-            return AutotoolsProject.configure(self)
+            AutotoolsProject.configure(self)

@@ -49,6 +49,27 @@ def libs_for_target (libs,toolchain, target):
             libs.libusb,
             libs.simple_usbmodeswitch,
         ]
+    elif target == 'TEST':
+        thirdparty_libs = [
+        libs.glibc,
+        libs.musl,
+        libs.libstdcxx_musl_headers,
+        libs.openssl,
+        libs.openssh,
+        libs.zlib,
+        libs.freetype,
+        libs.curl,
+        libs.proj,
+        libs.libpng,
+        libs.libjpeg,
+        libs.libusb,
+        libs.simple_usbmodeswitch,
+        libs.libtiff,
+        libs.libgeotiff,
+        libs.sdl2,
+        libs.lua,
+        libs.libsalsa,
+        ]
     else:
         thirdparty_libs = [
             libs.musl,

@@ -26,9 +26,7 @@ class LuaProject(MakeProject):
         ]
 
     def build(self):
-        src = self.unpack()
-
-        wd = os.path.join(src, 'src')
+        wd = os.path.join(self.build_dir, 'src')
 
         MakeProject.build(self, wd, False)
 
@@ -37,9 +35,9 @@ class LuaProject(MakeProject):
 
         os.makedirs(includedir, exist_ok=True)
         for i in ('lauxlib.h', 'luaconf.h', 'lua.h', 'lualib.h'):
-            shutil.copyfile(os.path.join(src, 'src', i),
+            shutil.copyfile(os.path.join(self.build_dir, 'src', i),
                             os.path.join(includedir, i))
 
         os.makedirs(libdir, exist_ok=True)
-        shutil.copyfile(os.path.join(src, 'src', 'liblua.a'),
+        shutil.copyfile(os.path.join(self.build_dir, 'src', 'liblua.a'),
                         os.path.join(libdir, 'liblua.a'))

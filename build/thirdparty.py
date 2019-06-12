@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-import os, os.path
-import re
+import os
 import sys
 
 
@@ -42,10 +41,22 @@ toolchain = Toolchain(tarball_path, src_path, build_path, install_prefix,
                       arch_cflags, cppflags, arch_ldflags, cc, cxx, ar, arflags,
                       ranlib, strip)
 
+# Create the common download, (shared) source and build base paths
+toolchain.make_paths()
+
 libs = Libs(toolchain)
 
 thirdparty_libs = libs_for_target(libs, toolchain, target)
 
 for x in thirdparty_libs:
-    if not x.is_installed():
+    if not x.check_installed():
+        # Delete the build directory if it existed, and (re-)create it empty
+        x.make_clean_build_path()
+
+        if not x.check_downloaded():
+            x.download()
+
+        if not x.check_unpacked():
+            x.unpack()
+
         x.build()

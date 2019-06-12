@@ -6,4 +6,4 @@ class CurlProject(AutotoolsProject):
         if 'mingw' in self.toolchain.actual_arch:
             self.configure_args.append('--enable-pthreads=no')
 
-        return AutotoolsProject.configure(self)
+        AutotoolsProject.configure(self)
