@@ -57,6 +57,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "IO/ConfiguredFile.hpp"
 #include "IO/LineReader.hpp"
 #include "Pan.hpp"
+#include "Dialogs/LockScreen.hpp"
 
 #ifdef KOBO
 #include "Event/KeyCode.hpp"
@@ -478,4 +479,10 @@ InputEvents::ProcessTimer()
 {
   DoQueuedEvents();
   ProcessMenuTimer();
+}
+
+void
+InputEvents::eventLockScreen(const TCHAR *mode)
+{
+  ShowLockBox();  
 }
