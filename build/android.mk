@@ -205,9 +205,14 @@ $$(ANDROID_BUILD)/lib/$$(ANDROID_APK_LIB_ABI)/lib$(1).so: $$(TARGET_OUTPUT_DIR)/
 	$$(Q)-$$(MKDIR) -p $$(ANDROID_BUILD)/lib/$$(ANDROID_APK_LIB_ABI)
 	$$(Q)cp $$< $$@
 
-# Run the sub-makes every time but ensure that the native headers are generated (happens with the build of the DEX file).
+# Ensure that the purge of the native libs happens before the native ABI target directories and dirstamps are re-created.
+# The rule to create diretory and stamp file is in util.mk. 
+$$(ANDROID_BUILD)/lib/$$(ANDROID_APK_LIB_ABI)/dirstamp: cleanNativeLibs
+
+# Run the sub-makes every time but ensure that the native headers are generated before (happens with the build of the DEX file).
 # Ensure that the existing native libs are all cleaned in the target build structure
-$$(TARGET_OUTPUT_DIR)/$$(ANDROID_APK_LIB_ABI)/$$(XCSOAR_ABI)/bin/lib$(1).so: FORCE $$(ANDROID_BUILD)/classes.dex cleanNativeLibs
+$$(TARGET_OUTPUT_DIR)/$$(ANDROID_APK_LIB_ABI)/$$(XCSOAR_ABI)/bin/lib$(1).so: FORCE $$(ANDROID_BUILD)/classes.dex \
+  cleanNativeLibs unpackThirdpartySources
 	$$(Q)$$(MAKE) TARGET=$(2) ANDROID_BUILD=$$(ANDROID_BUILD) NATIVE_INCLUDE=$$(NATIVE_INCLUDE) ANDROID_BUILD_APK=n \
 	  DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) $$@
 
@@ -236,6 +241,14 @@ $(ANDROID_BUILD)/unsigned.apk: $(ANDROID_BUILD)/classes.dex $(ANDROID_BUILD)/res
 cleanNativeLibs:
 	@$(NQ)echo "  RM $(ANDROID_BUILD)/lib/*"
 	$(Q)rm -rf $(ANDROID_BUILD)/lib/*
+
+# Download and unpack shared sources before the sub-makes for the native libraries start to ensure that downloading and unpacking happens
+# only once and not concurrently.
+unpackThirdpartySources:
+	./build/thirdparty.py --unpack-shared-sources $(TARGET_OUTPUT_DIR) $(TARGET)
+
+.Phony: unpackThirdpartySources
+
 
 # Generate ~/.android/debug.keystore, if it does not exists, as the official
 # Android build tools do it:
