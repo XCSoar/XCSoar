@@ -49,5 +49,3 @@ TARGET_CPPFLAGS += -isystem $(THIRDPARTY_LIBS_ROOT)/include
 TARGET_LDFLAGS += -L$(THIRDPARTY_LIBS_ROOT)/lib
 
 endif
-
-compile-depends += boost
