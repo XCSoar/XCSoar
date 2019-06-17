@@ -35,7 +35,7 @@ class Libs:
         self.musl = AutotoolsProject(
             toolchain,
             'https://www.musl-libc.org/releases/musl-1.1.18.tar.gz',
-            'https://fossies.org/linux/misc/musl-1.1.18.tar.gz',
+            'https://foss.aueb.gr/mirrors/linux/musl-libc/musl-1.1.18.tar.gz',
             'd017ee5d01aec0c522a1330fdff06b1e428cb409e1db819cc4935d5da4a5a118',
             'include/unistd.h',
             [
@@ -151,7 +151,7 @@ class Libs:
         self.proj = AutotoolsProject(
             toolchain,
             'http://download.osgeo.org/proj/proj-5.1.0.tar.gz',
-            'https://fossies.org/linux/privat/proj-5.1.0.tar.gz',
+            'https://ftp.fau.de/macports/distfiles/proj/proj-5.1.0.tar.gz',
             '6b1379a53317d9b5b8c723c1dc7bf2e3a8eb22ceb46b8807a1ce48ef65685bb3',
             'lib/libproj.a',
             [
@@ -199,7 +199,7 @@ class Libs:
         self.simple_usbmodeswitch = AutotoolsProject(
             toolchain,
             'https://github.com/felixhaedicke/simple_usbmodeswitch/releases/download/v1.0/simple_usbmodeswitch-1.0.tar.bz2',
-            'http://s15356785.onlinehome-server.info/~felix/simple_usbmodeswitch/simple_usbmodeswitch-1.0.tar.bz2',
+            'https://drive.google.com/uc?export=download&id=1VPO4tny3psN2e7dmOBPATUuyRcmax-G2',
             '35e8a6ed8551ef419baf7310e54d6d1a81e18bf44e111b07d74285001f18e98d',
             'bin/simple_usbmodeswitch',
             ldflags='-pthread',
@@ -237,7 +237,7 @@ class Libs:
         self.libgeotiff = AutotoolsProject(
             toolchain,
             'http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.4.2.tar.gz',
-            'https://fossies.org/linux/privat/libgeotiff-1.4.2.tar.gz',
+            'https://raw.github.com/geopaparazzi/libjsqlite-spatialite-android/master/archive/libgeotiff-1.4.2.tar.gz',
             '96ab80e0d4eff7820579957245d844f8',
             'lib/libgeotiff.a',
             [
@@ -277,8 +277,8 @@ class Libs:
         
         self.libsalsa = AutotoolsProject(
             toolchain,
-            'ftp://ftp.suse.com/pub/people/tiwai/salsa-lib/salsa-lib-0.1.6.tar.bz2',
-            'http://vesta.informatik.rwth-aachen.de/ftp/pub/Linux/suse/people/tiwai/salsa-lib/salsa-lib-0.1.6.tar.bz2',
+            'http://ftp.suse.com/pub/people/tiwai/salsa-lib/salsa-lib-0.1.6.tar.bz2',
+            'https://datasets.city/pub/linux/suse/ftp.suse.com/people/tiwai/salsa-lib/salsa-lib-0.1.6.tar.bz2',
             '08a6481cdbf4c79e05a9cba3b6c48375',
             'lib/libsalsa.a',
             [
