@@ -129,6 +129,8 @@ ifeq ($(TARGET),CYGWIN)
 
   WINVER = 0x0600
 
+  HOST_TRIPLET ?= $(UNAME_M)-pc-cygwin
+
   HAVE_POSIX := y
   HAVE_WIN32 := y
   HAVE_MSVCRT := n
@@ -309,6 +311,9 @@ ifeq ($(TARGET),UNIX)
       LLVM_TARGET ?= arm-linux-gnueabi
     endif
   endif
+
+  HOST_TRIPLET ?= $(UNAME_M)-linux-gnu
+
 endif
 
 ifeq ($(TARGET),ANDROID)

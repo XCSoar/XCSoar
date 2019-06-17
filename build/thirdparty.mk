@@ -14,7 +14,7 @@ else
 USE_THIRDPARTY_LIBS = n
 endif
 
-ifeq ($(USE_THIRDPARTY_LIBS),y)
+# Call thridparty.py unconditionally to download, unpack and install at least Boost.
 
 # In most cases, the ACTUAL_HOST_TRIPLET is not explicitly set. Set it to the
 # value of HOST_TRIPLET in this case.
@@ -43,4 +43,3 @@ $(THIRDPARTY_LIBS_DIR)/stamp:
 TARGET_CPPFLAGS += -isystem $(THIRDPARTY_LIBS_ROOT)/include
 TARGET_LDFLAGS += -L$(THIRDPARTY_LIBS_ROOT)/lib
 
-endif

@@ -16,6 +16,7 @@ class BoostProject(MakeProject):
             os.unlink(target)
         except FileNotFoundError:
             pass
+        pathlib.Path(os.path.join(self.toolchain.install_prefix,'include')).mkdir(parents=True, exist_ok=True)
         os.symlink(source, os.path.join(self.toolchain.install_prefix, self.installed), True)
-        # Touch the szmbolic link to make it younger than the unpack stamp.
+        # Touch the symbolic link to make it younger than the unpack stamp.
         pathlib.Path(target).touch

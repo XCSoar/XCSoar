@@ -54,6 +54,10 @@ def libs_for_target (libs,toolchain, target):
             libs.simple_usbmodeswitch,
             libs.boost,
         ]
+    elif target == 'UNIX' or target == 'CYGWIN':
+        thirdparty_libs = [
+            libs.boost,
+        ]
     elif target == 'TEST':
         thirdparty_libs = [
             libs.glibc,
