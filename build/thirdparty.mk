@@ -7,12 +7,7 @@ USE_THIRDPARTY_LIBS = y
 else ifeq ($(TARGET),PC)
 USE_THIRDPARTY_LIBS = y
 else ifeq ($(TARGET),ANDROID)
-  ifeq ($(FAT_BINARY),y)
-    # this is handled by android.mk
-    USE_THIRDPARTY_LIBS = n
-  else
-    USE_THIRDPARTY_LIBS = y
-  endif
+  USE_THIRDPARTY_LIBS = y
 else ifeq ($(TARGET_IS_DARWIN),y)
 USE_THIRDPARTY_LIBS = y
 else
