@@ -42,9 +42,11 @@ class Toolchain:
         self.env['QEMU_CPU'] = 'Deep Thought'
         self.env['QEMU_GUEST_BASE'] = '42'
 
-    # create the base directories where the tarballs are being downloaded, where shared sources are being unpacked,
-    # and where the libs are being built.
-    def make_paths(self):
+    # create the base directories where the tarballs are being downloaded and where shared sources are being unpacked,
+    def make_unpack_paths(self):
         os.makedirs(self.tarball_path, exist_ok=True)
         os.makedirs(self.src_path, exist_ok=True)
+
+    # create the base directories where the libs are being built.
+    def make_build_paths(self):
         os.makedirs(self.build_path, exist_ok=True)
