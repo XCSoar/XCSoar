@@ -6,7 +6,9 @@ ifeq ($(USE_THIRDPARTY_LIBS),y)
 LIBLUA_LDLIBS = -llua
 LIBLUA_CPPFLAGS =
 else
-$(eval $(call pkg-config-library,LIBLUA,lua5.2))
+TARGET_LUAVER=5.2
+LUAVER?=$(shell if pkg-config --silence-errors --libs lua$(TARGET_LUAVER); then echo $(TARGET_LUAVER); else echo $(subst .,,$(TARGET_LUAVER)); fi)
+$(eval $(call pkg-config-library,LIBLUA,lua$(LUAVER)))
 endif
 
 LUA_SOURCES = \
