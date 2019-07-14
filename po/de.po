@@ -6943,9 +6943,13 @@ msgstr "Menütaste zeigen"
 msgid "Start only"
 msgstr "Nur Start"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:68
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:69
 msgid "Pilot name"
 msgstr "Pilotenname"
+
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:71
+msgid "CoPilot name"
+msgstr "CoPilotenname"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:70
 msgid "Time step cruise"

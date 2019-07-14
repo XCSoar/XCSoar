@@ -55,6 +55,7 @@ struct Declaration {
   };
 
   StaticString<64> pilot_name;
+  StaticString<64> copilot_name;
   StaticString<32> aircraft_type;
   StaticString<32> aircraft_registration;
   StaticString<8> competition_id;

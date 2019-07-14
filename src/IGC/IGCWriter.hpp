@@ -96,7 +96,9 @@ public:
    * alphanumeric characters (plain ASCII)
    */
   void WriteHeader(const BrokenDateTime &date_time,
-                   const TCHAR *pilot_name, const TCHAR *aircraft_model,
+                   const TCHAR *pilot_name,
+                   const TCHAR *copilot_name,
+                   const TCHAR *aircraft_model,
                    const TCHAR *aircraft_registration,
                    const TCHAR *competition_id,
                    const char *logger_id, const TCHAR *driver_name,

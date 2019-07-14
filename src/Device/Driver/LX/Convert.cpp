@@ -284,6 +284,7 @@ LX::ConvertLXNToIGC(const void *_data, size_t _length,
         fprintf(file,
                 "HFFXA%03d\r\n"
                 "HFPLTPILOT:%s\r\n"
+		"HFCM2CREW2:%s\r\n"
                 "HFGTYGLIDERTYPE:%s\r\n"
                 "HFGIDGLIDERID:%s\r\n"
                 "HFDTM%03dGPSDATUM:%s\r\n"
@@ -292,6 +293,7 @@ LX::ConvertLXNToIGC(const void *_data, size_t _length,
                 "HFGPSGPS:%s\r\n",
                 context.flight_info.fix_accuracy,
                 context.flight_info.pilot,
+		context.flight_info.copilot,
                 context.flight_info.glider,
                 context.flight_info.registration,
                 context.flight_info.gps_date,
@@ -395,6 +397,8 @@ LX::ConvertLXNToIGC(const void *_data, size_t _length,
       if (data > end ||
           !ValidString(packet.flight_info->pilot,
                        sizeof(packet.flight_info->pilot)) ||
+	  !ValidString(packet.flight_info->copilot,
+		       sizeof(packet.flight_info->copilot)) ||
           !ValidString(packet.flight_info->glider,
                        sizeof(packet.flight_info->glider)) ||
           !ValidString(packet.flight_info->registration,
@@ -411,6 +415,7 @@ LX::ConvertLXNToIGC(const void *_data, size_t _length,
         fprintf(file,
                 "HFFXA%03d\r\n"
                 "HFPLTPILOT:%s\r\n"
+		"HFCM2CREW2:%s\r\n"
                 "HFGTYGLIDERTYPE:%s\r\n"
                 "HFGIDGLIDERID:%s\r\n"
                 "HFDTM%03dGPSDATUM:%s\r\n"
@@ -419,6 +424,7 @@ LX::ConvertLXNToIGC(const void *_data, size_t _length,
                 "HFGPSGPS:%s\r\n",
                 packet.flight_info->fix_accuracy,
                 packet.flight_info->pilot,
+		packet.flight_info->copilot,
                 packet.flight_info->glider,
                 packet.flight_info->registration,
                 packet.flight_info->gps_date,
