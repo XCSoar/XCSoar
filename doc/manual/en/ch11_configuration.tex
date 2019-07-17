@@ -20,7 +20,7 @@ There are several ways XCSoar can be customised:
   the content and structure of the button menu to be changed. 
 \item Changing or adding actions performed when glide computer events
   take place.
-\item Defining how long status messages appear and sounds to be played
+\item Defining how long status messages appear and sounds play
   when those messages occur.
 \end{itemize}
 %Describing all of these in a detail level like a reference manual would 
@@ -35,7 +35,7 @@ from the settings dialogues accessible from the menu:
 \begin{jspecs}
 \item[\bmenug{Config 2/3}\blink\bmenug{System}] Invokes the main configuration dialogue for rather static settings. It is in no way intended to be accessed during flight.
 \item[\bmenug{Config 2/3}\blink\bmenug{Plane}] Dialogue for specifying the plane's data, with polar and wing loading representing the most important ones. This dialogue is to be included in the preflight check if the XCSoar base system is used in different planes.
-\item[\bmenug{Config 2/3}\blink\bmenug{Devices}] Configuration of devices  connected to XCSoar. Although being a system setup dialogue, there might be rare occasions, this dialogue is required in-flight.  Whenever connections to devices are lost, this dialogue might be used to reconnect. This dialogue neither was nor will be intended for use in-flight. Unfortunately, buggy operating systems of host hardware create a demand for occasionally.
+\item[\bmenug{Config 2/3}\blink\bmenug{Devices}] Configuration of devices  connected to XCSoar. Although being a system setup dialogue, there might be rare occasions where this dialogue is required in-flight.  Whenever connections to devices are lost, this dialogue might be used to reconnect. This dialogue neither was nor will be intended for use in-flight. Unfortunately, buggy operating systems of host hardware create a demand for it occasionally.
 \end{jspecs}
 
 \section{Configure System}
@@ -234,7 +234,7 @@ This page provides options relating to the map display.
   {\bf Terrain avoidance glide}: Arrival height considering terrain avoidance. \\
   {\bf Straight \& terrain glide}: Both arrival heights are
   displayed. \\
-  {\bf Required glide ration}: Show the glide ratio over ground that is
+  {\bf Required glide ratio}: Show the glide ratio over ground that is
   required to reach the waypoint.
 \item[Label style*]  Labels for landables can be shown on a rounded rectangle with 
   white background, or with outlined letters.
@@ -335,7 +335,7 @@ displayed and how warnings are issued.
 \item[Airspace transparency*]  If enabled, then airspaces are filled transparently.
 \end{description}
 
-This page also has a \button{Colours} and a \button{Filter} buttons which
+This page also has \button{Colours} and \button{Filter} buttons which
 can be used to review or change the colours/patterns used by each
 airspace class, and whether each airspace class will be filtered out
 of warnings and/or display. Depending on the airspace transparency setting it is 
@@ -500,7 +500,7 @@ glide reach is drawn as a line resp.\ a shade on the map area.
 \item[Final glide bar MC0*]  If set to ON the final glide bar will show a second arrow 
   indicating the required altitude to reach the final waypoint at MC zero.
 \end{description}
-In all FLARM environment, the colour of the target indicates the threat level.
+In all FLARM environments, the colour of the target indicates the threat level.
 
 
 %%%%%%%%%%
@@ -709,7 +709,7 @@ This page shows and let you customise the available InfoBox sets.
 \item[Name]  Sets the name of the currently customized InfoBox set. The 
   button starts the text input dialogue of XCSoar.
 \item[InfoBox]  The number identifying the current box.
-\item[Content]  Select the information you want to see at the current box.
+\item[Content]  Select the information you want to see in the current box.
 \end{description}
 
 The right side of the dialogue always gives the overview on the composed set. 
@@ -720,8 +720,8 @@ See Section~\ref{cha:infobox} for a description of the InfoBox types and their m
 
 To change a set press on one of the InfoBoxes labeled with it's current content.
 The InfoBoxes are numbered; the location of the InfoBoxes depends on the screen layout.  
-The tables below shows the InfoBox enumeration scheme for the 
-landscape and portait screen layout.
+The tables below show the InfoBox enumeration scheme for the
+landscape and portrait screen layout.
 
 \begin{multicols}{2}
 \begin{tabular}{|c|c|}
@@ -842,7 +842,7 @@ for details on this setup.
 \begin{description}
 \item[SkyLines]  Switch this {\bf On} to enable the live stream of 
   your position to `{\em SkyLines}'.
-\item[Tracking Interval]  The time interval for which one position is send to 
+\item[Tracking Interval]  The time interval for which one position is sent to
   the tracking service. `{\em SkyLines}' implements a very lean protocol, so that even
   a 30 sec.\ interval does not exhaust a plain GPRS connection (ca.\ 12~kbit/sec).
 \item[Key]  Create a key on the page \url{http://skylines.xcsoar.org/tracking/info} 
@@ -850,7 +850,7 @@ for details on this setup.
 \\
 \item[LiveTrack24]  Switch this {\bf On} to enable the live stream of 
   your position to `{\em LiveTrack24}'.
-\item[Tracking Interval]  The time interval for which one position is send to 
+\item[Tracking Interval]  The time interval for which one position is sent to
   the tracking service.
 \item[Vehicle Type]  Type of vehicle used.
 \item[Server]  The service's web address to stream your position to. There is currently 
@@ -873,11 +873,11 @@ The file format is based on the WinPilot polar file format (see Section~\ref{sec
 \label{conf:polar} To configure the glide computer to the performance of a glider 
 type start with the selection of a type from the \bmenuw{List}. 
 Choose \bmenuw{Import} when you want to load an external polar file.
-Customise the three V/W points defining the parable curve and the reference 
+Customise the three V/W points defining the parabola curve and the reference
 weight to your needs. 
 \tip Be aware that namely those four items are of crucial importance 
 for every glide performance relevant computation of XCSoar.   
-\button{Export} your efforts to a file is always a good idea.
+\button{Export} your efforts to a file: always a good idea.
 
 \begin{description}
 \item[Polar V/W]  Three pairs of corresponding horizontal and vertical speed of the glider. 
@@ -886,10 +886,10 @@ for every glide performance relevant computation of XCSoar.
 \item[Reference mass]  Reference weight at which the given polar is valid.
 \item[Dry mass]  The complete weight of the rigged glider including the pilots weight except the 
   loaded water ballast. 
-  In the absence of a configurable pilot weight XCSoar expect you to include your own weight 
+  In the absence of a configurable pilot weight XCSoar expects you to include your own weight
   to the dry mass.
 \item[Wing area]  Optional specification of the wing area of the glider type.
-\item[V rough air] Optional the maximum manoeuvring speed can 
+\item[V rough air] Optionally the maximum manoeuvring speed can
   be entered on this page to prevent the glide computer from commanding 
   unrealistic cruise speeds.
 \item[Handicap]  The handicap factor used for the On-Line Contest scoring.

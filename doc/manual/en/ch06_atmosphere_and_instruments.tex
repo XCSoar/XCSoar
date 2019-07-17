@@ -42,10 +42,10 @@ adjusting the MacCready setting on one device should be kept in sync
 with the other, by the software and to not require additional input from
 the pilot.
 
-Pilots abuse the device synchronisation (see \ref{conf:comdevices}) for various 
-reasons. You may have  different MacCready settings on PDA and inteligent vario 
+Pilots abuse the device synchronisation (see Section~\ref{conf:comdevices}) for various
+reasons. You may have  different MacCready settings on PDA and intelligent vario
 to cross-check the results. You may do computations with different ballast 
-settings and cross-chsck the results. You may choose on one of the devices 
+settings and cross-check the results. You may choose on one of the devices
 manually a different wind setting and cross-check the results, etc.
 
 A list of supported variometers is maintained in
@@ -57,9 +57,9 @@ the variometer is in climb audio mode.
 \section{Audio Variometer}
 
 In addition to the variometer display XCSoar provides an acoustic variometer which transfers the 
-variometer measurements are transferre into sounds. The audio variometer is for now only available 
-on android devices. For proper performance connect your device to a barometric sensor or use the 
-internal one of your android device if provided.
+variometer measurements into sounds. The audio variometer is for now only available
+on Android devices. For proper performance connect your device to a barometric sensor or use the
+internal one of your Android device if provided.
 The audio vario is enabled/disabled via the gauges configuration in the configuration.
 
 
@@ -168,7 +168,7 @@ this algorithm, the wind estimate can be updated continuously during
 long glides without circling.
 
 This allows the wind estimate to be updated during cruise while the
-aircraft performs a zigzag manoeuver.  No specific manoeuver is
+aircraft performs a zigzag manoeuvre.  No specific manoeuvre is
 required, in many cases the estimate will be updated as the aircraft's
 heading changes naturally as the pilot hunts for lift.  In general,
 however, the technique requires the aircraft heading to change over 40
@@ -181,7 +181,7 @@ accuracy in long final glides.
 
 Wind estimates are updated when a large difference between the
 estimated ground speed and the true ground speed are detected even
-without much zig-zag manoeuvering.
+without much zig-zag manoeuvring.
 
 \subsection*{Compass algorithm}
 
@@ -203,7 +203,7 @@ direction to be entered, usually prior to flight.
 
 At any time during flight, the pilot can make corrections to the wind
 estimate by entering the correction in the wind settings dialogue.  Once the
-dialogue get closed , the internal estimate is ignored until a new internal
+dialogue gets closed, the internal estimate is ignored until a new internal
 estimate is obtained from the circling or zigzag algorithm.
 
 The automatic wind algorithm may also be switched on or off (or
@@ -300,9 +300,9 @@ gliders position; the vario should show the maximal climb rate: Narrow the
 circle as much as possible to centre the thermal updraft at it's maximum. 
 \end{description}
 
-It must be said, that the interpretation of the thermal assistant allways relays
+It must be said, that the interpretation of the thermal assistant always relays
 on the specific lag of the connected sensor and PDA itself. A successful
-updraft optimisation will thus depend on a bit training to take the lag into account.
+updraft optimisation will thus depend on a bit of training to take the lag into account.
 
 
 \section{Convection forecast}\label{sec:convection-forecast}
@@ -400,11 +400,11 @@ the keen pilot is invited to consult \url{http://www.drjack.info} on how RASP
 forecasts work, from where they are available, and their use and limitations. 
 At \url{http://www.drjack.info/RASP} a map depicts the coverage of available 
 RASP forecasts worldwide, provided by many soaring and paragliding enthusiasts. 
-Please note, that some of these links do provide data in-season only as well 
-as just a part of these providers make available data in XCSoar format.
+Please note, that some of these links provide data in-season only and only some
+of these providers make data available in XCSoar format.
 
 For use within XCSoar, an \verb|xcsoar-rasp.dat| file has to be installed
-into the XCSoarData directory.  As is with February 2014, download of 
+into the XCSoarData directory.  As of February 2014, download of
 \verb|xcsoar.rasp.dat| files is not (yet) supported by XCSoar's file manager. The
 RASP forecasts are displayed as colour-coded terrain overlays on the map. \\ \\
 Make sure, terrain display is set to on. \tip{} \\ \\

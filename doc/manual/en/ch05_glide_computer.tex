@@ -37,15 +37,15 @@ importantly on the adjusted MC value, but also the ground clearance
 is considered. On entering a thermal while in final glide mode for 
 gaining some extra safety margin XCSoar will switch to the circling 
 mode and back to the final glide mode, once the thermal is left again 
-and the final glide condition is still met (i.e. the glider is still 
+and the final glide condition is still met (i.e.\ the glider is still
 above the final glide path, considering MC setting and terrain).
 
 As an example, a powerful feature to be driven by flight modes is the 
-switch between different MacReady setting's strategies. If you decided 
+switch between different MacCready settings strategies. If you decided
 to let XCSoar manage the setting automatically it will maintain a value 
 based on past thermals worked out successfully until final glide. 
-Instantly MacReady is set to achive minimal arrival time or what you 
-set up for final glide (see section \ref{sec:auto-maccready}).
+Instantly MacCready is set to achieve minimal arrival time or what you
+set up for final glide (see Section~\ref{sec:auto-maccready}).
 \config{final-glide} Hence the switch to final glide mode is based on 
 a set of sophisticatedly computed tactical conditions.
 
@@ -63,7 +63,7 @@ a safety MacCready value is set. \config{safetyMC} Hence the switch to
 abort mode is based on the pilot's cognition.
 
 Due to the fact, the different flight modes typically are reflected in 
-differring things being displayed, the frequent XCSoar user might get 
+differing things being displayed, the frequent XCSoar user might get
 used to some kind of watching a `display mode'. This is just the 
 default \emph{perceived} after having installed XCSoar without having 
 done some advanced configuration. As holds true for almost everything 
@@ -142,11 +142,11 @@ Section~\ref{sec:auto-maccready}.
 The glide polar specifications of a wide selection of glider types,
 representing major classes of gliders, are built into XCSoar.
 \menulabelr{\bmenug{Config 2/3}\blink\bmenug{Plane}}
-If your glider type is not listed, these may be used as an approximation for  
+If your glider type is not listed, these may be used as an approximation
 if no better glide polar can be found.  \config{polar} However, for most 
 accurate results, it is advisable to use the correct glide polar for your particular
 aircraft type. 
-Besides the aircraft type the correct over all mass of the glider is important for 
+Besides the aircraft type the correct overall mass of the glider is important for
 accurate results. 
 The preflight check of your tactical glide computer certainly 
 includes a check of the correct settings for water ballast, with regard to the 
@@ -240,7 +240,7 @@ QNH such that the barometric altitude equals the terrain altitude.
 
 The QNH is only updated if the aircraft is on the ground for more than
 10 seconds, so that if XCSoar is restarted during flight, QNH will not
-be adjusted.  The update only occurs also if the terrain database is
+be adjusted.  The update also only occurs if the terrain database is
 valid at the current aircraft location.
 
 \section{Speed command display}
@@ -315,8 +315,9 @@ this optimum speed value.
   fraction of the current MacCready setting as a function of the
   height fraction.  The height fraction used in this calculation is
   the ratio of the height above terrain ($h$) to the height of the
-  maximum climb (this will usually be close to cloudbase) above the
-  terrain ($h_{top}$).  The $\gamma$ setting thus represents the
+  maximum climb above the
+  terrain ($h_{top}$, this will usually be close to cloudbase).
+  The $\gamma$ setting thus represents the
   fraction of the total available climb (cloudbase minus terrain) at
   which you would wish to abandon the task and begin to prepare for a
   landout.  Thus, low $\gamma$ values indicate a higher tolerance for
@@ -449,7 +450,7 @@ of the screen.
 
 The altitude required is adjusted for energy, compensating for
 the fact that the kinetic energy of the glider can be converted to
-height (potential energy).  The kinetic energy that is convertable to
+height (potential energy).  The kinetic energy that is convertible to
 height is calculated from the difference in the true airspeed to the
 true airspeed for best glide.  This compensation is most accurate when
 airspeed data is available to XCSoar, otherwise the true airspeed is
@@ -480,11 +481,11 @@ bar is coloured amber.
 \end{tabular}
 \end{center}
 \tip
-At this point also must be mentioned, that the indicated height below the glide 
+At this point it must also be mentioned, that the indicated height below the glide
 path is not just a plain difference of glide path and current altitude. Depending 
 on the setting `predict wind drift' (On) the `Below' indicator 
 shows the required height to gain by thermalling. \config{predict-drift}
-The required height might be quit a bit more with headwind, as well as a bit less 
+The required height might be quite a bit more with headwind, as well as a bit less
 with tailwind. 
 Otherwise (`predict wind drift' set to Off) it is just the plain
 altitude difference.
@@ -577,7 +578,7 @@ internal calculations.
 
 For assigned area tasks at the same time a new task time estimation is
 calculated the target position is optimised. \tip For each variable target set
-to ``auto'' can XCSoar tweak the position so that the AAT will be completed not
+to ``auto'' XCSoar can tweak the position so that the AAT will be completed not
 more than five minutes after the given task time.
 
 In addition, a measure called {\em achieved MacCready} is calculated.
@@ -674,10 +675,10 @@ To enable/disable Auto MacCready, use the menu.
 \menulabel{\bmenug{Config 1}\blink\bmenut{MacCready}{Auto}}
 
 When Auto MacCready is enabled, the MacCready infobox displays `MC auto'
-instead of `MC manuell'; and the MacCready indicator in the variometer
+instead of `MC manual'; and the MacCready indicator in the variometer
 gauge displays `AutoMC' instead of `MC'.
-To benefit at max from the automatic MC adjustment XCSoar propagates the MC 
-value to the connected inteligent variometer (if it supports). 
+To benefit the most from the automatic MC adjustment XCSoar propagates the MC
+value to the connected intelligent variometer (if it supports).
 
 The Auto MacCready methods are described in further detail below.
 
@@ -733,7 +734,7 @@ The analysis dialogue can be used to check the glide polar.
 \menulabel{\bmenug{Info 1}\blink\bmenug{Analysis}}
 
 The polar page shows a graph of the glide polar at the current bugs
-and ballast setting.  It also shows the calculated best LD and the
+and ballast setting.  It also shows the calculated best L/D and the
 speed at which it occurs, and the minimum sink and the speed at which
 it occurs.  The current aircraft all up weight is displayed in the
 title.

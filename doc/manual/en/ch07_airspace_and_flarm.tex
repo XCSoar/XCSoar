@@ -97,8 +97,8 @@ The sequence of events when entering an airspace results typically
 in two warnings: when near (level 1), and when inside (level 2).
 
 Whenever the warning level increases (above level 0) for any airspace,
-the airspace warning dialogue appears, accompanied by a system beep
-from.  When there are no more airspace regions at warning levels above
+the airspace warning dialogue appears, accompanied by a system beep.
+When there are no more airspace regions at warning levels above
 0, the dialogue disappears automatically.
 
 
@@ -215,7 +215,7 @@ displays all airspace details.
 
 %% To put at another place
 %Through the button menus is the same map query available.
-%The `What's here?' query brings up a map element list including the the nearest 
+%The `What's here?' query brings up a map element list including the nearest
 %airspace region. 
 %\begin{quote}
 %\bmenu{Info}\blink\bmenu{What's here?}
@@ -235,7 +235,7 @@ or disabled for each class of airspace.
 This may be accessed several ways:
 \begin{itemize}
 \item From the main menu \bmenug{Config 3}\blink\bmenug{Airspace}.
-\item Or at the system configuration page for airspacees, press the \button{Filter} button.
+\item Or at the system configuration page for airspaces, press the \button{Filter} button.
 \end{itemize}
 
 \sketch{figures/airspacefilter.png}
@@ -249,7 +249,7 @@ This functions similarly to the waypoint lookup dialogue, and allows
 search based on name, distance, direction, and type (class).  
 \sketch{figures/airspacelookup.png}
 
-Once an airspace item has been located, you have the chance to acknowledged it 
+Once an airspace item has been located, you have the chance to acknowledge it
 for the day.  From the
 airspace management dialogue it is possible to re-enable it again.
 
@@ -304,7 +304,7 @@ absolute track bearing of the target.
 Display on the map FLARM of aircraft registration or pilot name is
 made possible via a look-up of the ICAO aircraft ID of FLARM traffic
 in a file.  See Section~\ref{sec:flarm-ident-file} for details on this
-file format.  Aircrafts with the FLARM privacy flag set will not have
+file format.  Aircraft with the FLARM privacy flag set will not have
 any identification displayed.
 
 
@@ -357,7 +357,7 @@ enlarge the view to fullscreen size.
 The fullscreen FLARM display offers all available information
 \menulabel{\bmenug{Info 1}\blink\bmenut{FLARM}{Radar}}
 about the FLARM traffic and depending on the setup it closes by itself, when all
-traffic has been gone.
+traffic has gone.
 
 \begin{center}
 \includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/dialog-flarm1.png}
@@ -396,16 +396,16 @@ additional info to the selected target displayed:
 \item[Top right]  Vario of the target, derived from the consecutive altitude
 messages.
 \item[Bottom left]  The distance to the target.
-\item[Bottom right]  The relative hight of the target. 
+\item[Bottom right]  The relative height of the target.
 \end{description}
 
-From the first to the second FLARM snapshot were passed about 15 seconds. The
-selected blue target was climbing with 3.4 m/s and had a not as threat
-recognised course relation.  Then in the mean time the `DC' has turned more to
-the left, became an alerting threat and gets now displayed red.  The FLARM
-radar switched the zoom from 1000 meter to 500 meter. In snapshot three the
-continuously climbing target becomes classified to threat level 1, gets yellow 
-coloured and seams to no longer a threat.
+From the first to the second FLARM snapshot about 15~seconds elapsed. The
+selected blue target was climbing at 3.4~m/s and did not have a relative course
+recognised as a threat.  Then in the mean time the `DC' has turned more to
+the left, became an alerting threat and is now displayed red.  The FLARM
+radar switched the zoom from 1000~m to 500~m. In snapshot three the
+continuously climbing target becomes classified to threat level~1, gets
+coloured yellow and seams to no longer be a threat.
 
 
 \section{Team flying}\label{sec:team-flying}
@@ -438,15 +438,15 @@ bearing to the mate is calculated and updated in the dialogue.
 \subsection*{FLARM ID lookup}
 
 XCSoar also supports the encrypted team codes from the FlarmNet initiative.
-The \button{Flarm Lock} button allows you to accesses the FlarmNet database as well 
-as XCSoar's database for flarm to find a team mate. A simple 
+The \button{Flarm Lock} button allows you to access the FlarmNet database as well
+as XCSoar's database for FLARM to find a team mate. A simple
 lookup for a competition ID delivers potentially the desired 
 FLARM identity. Selecting the desired data base entry from the found items allows you 
-to `lock' your buddy from the far. See Section~\ref{sec:flarm-ident-file} 
-where to find the FlarmNet database etc. explained in detail.
+to `lock' your buddy from afar. See Section~\ref{sec:flarm-ident-file} for
+where to find the FlarmNet database etc.\ explained in detail.
 
 \menulabel{\bmenug{Info 2}\blink\bmenut{FLARM}{Details}}
-Just a similar functionality provides the flarm details diologue. It also let 
+Similar functionality provides the FLARM details dialogue. It also lets
 you search through the competition ID's in the data base and shows the details on it.  
 
 \begin{center}
@@ -454,11 +454,9 @@ you search through the competition ID's in the data base and shows the details o
 \end{center}
 
 
-\subsection*{Klick your buddy}
+\subsection*{Click your buddy}
 Even if XCSoar can `lock' only one team mate by reference waypoint, 
 it handles any number of `friends' with a known FLARM ID. Chances are high your buddy is not
 registered in any database. But in any case you get closer to 
-your flying college, just pick the the details from the FLARM radar screen, choose 
-a colour and identify this FLARM response in the future as your buddy.
-
-
+your flying colleague, just pick the details from the FLARM radar screen, choose
+a colour and XCSoar will identify this FLARM response in the future as your buddy.
