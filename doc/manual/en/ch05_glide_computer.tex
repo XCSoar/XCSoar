@@ -54,12 +54,12 @@ remaining turnpoints, if for example conditions get worse and you
 decided to just go home.
 
 Abort mode is invoked manually to give you full control in case of 
-emergency via menu.  No automatics - you decide.  The abort mode 
+emergency via menu.  No automatics -- you decide.  The abort mode
 might be understood technically as a special final glide mode with 
 concurrent support for multiple optional targets. However, in 
-perception the abort mode simply supports your urgent decision where 
-and how to go finally (see section \ref{sec:taskabort}).  In this case, 
-a safety MacReady value is set. \config{safetyMC} Hence the switch to 
+practice the abort mode simply supports your urgent decision where
+and how to go finally (see Section~\ref{sec:taskabort}).  In this case,
+a safety MacCready value is set. \config{safetyMC} Hence the switch to
 abort mode is based on the pilot's cognition.
 
 Due to the fact, the different flight modes typically are reflected in 
@@ -91,34 +91,34 @@ task active, or the task waypoint is not the finish point.
 \item[Final glide (c)]  The glider is not circling and the active waypoint 
 is the final one in the task.
 \item[Abort (d)]  This manually-triggered mode indicates the immediate 
-landing options to the user.(see section~\ref{sec:taskabort})
+landing options to the user. (See Section~\ref{sec:taskabort})
 \end{description}
 
 The concept of different flight modes enables much more to be automated:
 \begin{itemize}
 \item \config{screenpages} The InfoBoxes may be set up differently for 
-each flight mode. (see section \ref{sec:infoboxandpages})
+each flight mode. (See Section~\ref{sec:infoboxandpages})
 \item \config{circlingzoom} Change zoom level between circling and other 
-flight modes (this is called `circling zoom', see section\ref{sec:zooming}).
+flight modes (this is called `circling zoom', see Section~\ref{sec:zooming}).
 \item \config{variogauge} Switch the vario gauge's reading between Vario 
 (gross climb rate) and airmass lift around you (net) whilst cruising 
-(see section \ref{sec:variometer}).
+(see Section~\ref{sec:variometer}).
 \item \config{thermalassistant} When in circling mode, invoke the 
 `thermal assistant', a small polar diagram depicting the updraft over 
-circular course (see section \ref{sec:thermal-assistant}).
+circular course (see Section~\ref{sec:thermal-assistant}).
 \item \config{traildrift} Switch to a so-called drift compensation, 
 drawing a wind-compensated trail of the circles you fly to better depict 
-wind shear (see section \ref{sec:trail}). 
+wind shear (see Section~\ref{sec:trail}).
 \end{itemize}
 
 Take notice, that this list is just an excerpt from an entirety of 
 switchable items. You will find numerous dependencies conducted by the 
 actual flight mode, whilst further reading this manual. Please pay 
-attention to, because the flight mode concept is one of XCSoars 
+attention to it, because the flight mode concept is one of XCSoar's
 fundamental basics. Another very basic scheme deals with how to structure 
-informations to be displayed at once. These informations are grouped in 
-\emph{screen pages} Further details are given in section 
-\ref{sec:infoboxandpages} ``Infoboxes and screen pages''.\config{screenpages}
+information to be displayed together. This information is grouped in
+\emph{screen pages}. Further details are given in Section~\ref{sec:infoboxandpages}
+``Infoboxes and screen pages''.\config{screenpages}
 
 
 \section{MacCready setting}
@@ -131,10 +131,10 @@ The MacCready setting may be adjusted several ways:
 \item When connected to a supported intelligent variometer, adjusting
   the MacCready setting on the variometer will change the setting
   in XCSoar according to the devices synchronisation configuration (see 
-  section \ref{conf:comdevices})
+  Section~\ref{conf:comdevices})
 \end{itemize}
 In addition, an automatic MacCready mode is available as described in
-section~\ref{sec:auto-maccready}.
+Section~\ref{sec:auto-maccready}.
 
 
 \section{Glide polar}\label{sec:glidepolar}
@@ -206,10 +206,10 @@ before and during flight, as well as to set the QNH pressure.
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/dialog-basicsettings.png}
 \end{center}
 
-The 'bugs' setting determines the amount the polar is degraded
-due to contamination during a long flight.  A 'bugs' setting of 0\%
-will cause the software to use the clean polar. A 'bugs' setting of
-50\% will degrade the polar and effectively doubling the sink
+The `bugs' setting determines the amount the polar is degraded
+due to contamination during a long flight.  A `bugs' setting of 0\%
+will cause the software to use the clean polar. A `bugs' setting of
+50\% will degrade the polar and effectively double the sink
 rate for a given airspeed.
 
 The ballast setting is used to modify the polar to account for any
@@ -486,7 +486,7 @@ on the setting `predict wind drift' (On) the `Below' indicator
 shows the required height to gain by thermalling. \config{predict-drift}
 The required height might be quit a bit more with headwind, as well as a bit less 
 with tailwind. 
-Otherwise (predict wind drift set to Off) it is just the plain 
+Otherwise (`predict wind drift' set to Off) it is just the plain
 altitude difference.
 
 
@@ -506,13 +506,13 @@ Examples of the appearance in various configurations with the additional {\em MC
 bar display is shown below:
 
 \begin{description}
-\item[Above final glide] (current MC=0.7)
+\item[Above final glide] (current MC$=0.7$)
 \smallsketch{figures/fig-finalglide-allabove.png}
   Here the display shows that at the current MacCready setting, the aircraft
   is above final glide (filled arrow).  The split arrow shows the additional
   excess height.
 
-\item[Below/above final glide] (e.g. MC=1.8)
+\item[Below/above final glide] (e.g. MC$=1.8$)
   Here the display shows that at the current MacCready setting, the aircraft
   is below final glide (filled amber arrow).  The split green arrow
   shows that at MC$=0$, the aircraft is above final glide.
@@ -527,7 +527,7 @@ bar display is shown below:
   rate with the MacCready value.  When the achieved lift rate drops
   below the MacCready value, the thermal should be left.
 
-\item[Below final glide] (e.g. MC=2.5 and with less heigth)
+\item[Below final glide] (e.g. MC$=2.5$ and with less height)
 \smallsketch{figures/fig-finalglide-littlebelow.png}
   Here the display shows that at the current MacCready setting, the aircraft
   is below final glide (filled red arrow).  The tip of the red arrow is chopped off
@@ -588,7 +588,7 @@ the glider has climbed faster than the MacCready setting or when the
 glider has flown in cloud streets etc.  The achieved MacCready is used
 in the task calculator dialogue.
 
-Task speed estimates for achieved speed, are compensated for altitude
+Task speed estimates for achieved speed are compensated for altitude
 variations, such that the effects of climbs are taken into account in
 calculating the average task speed.  Considering two gliders A and B
 flying the same task.  Glider A has cruised faster, trading off altitude

@@ -3,7 +3,7 @@ XCSoar is a highly configurable glide computer and can be customised
 to suit a wide variety of preferences and user requirements. The entire 
 configuration is saved in a so-called profile file, reflecting all 
 configuration settings. Whenever a configuration is judged being worthy, a 
-backup of the profile file is advisable (see \ref{sec:profiles}. This
+backup of the profile file is advisable (see Section~\ref{sec:profiles}. This
 chapter describes the configuration settings and options.
 
 \section{Scope of configuration}
@@ -53,7 +53,7 @@ so that their desired effect on the programs behaviour can be
 verified.
 
 The settings dialogue contains several pages.  Once changes have been made,
-click the Close button on the screen to close the dialogue
+click \button{Close} on the screen to close the dialogue
 and return to the configuration menu. Another button press leads back to 
 the normal map mode.
 
@@ -93,7 +93,7 @@ configured when flying at a new site.
 \item[Watched waypoints*]  Waypoint file containing special waypoints for 
   which additional computations   like calculation of arrival height in map 
   display always takes place. Useful for waypoints   like known reliable 
-  thermal sources (e.g. powerplants) or mountain passes.
+  thermal sources (e.g.\ powerplants) or mountain passes.
 \item[Airspaces]  The file name of the primary airspace file.  If left blank,
   airspaces are loaded from the map file (if available).
 \item[More airspaces*]  The file name of the secondary airspace file.
@@ -154,7 +154,7 @@ This page let you specify the favoured map orientation and view.
   {\bf Target}: Use the current target waypoint as basis.
 \item[Glider position offset]  \label{conf:gliderposition} Defines the location of the 
   glider drawn on the screen in percent from the screen edge.
-\item[Max. auto zoom distance]  The upper limit for auto zoom distance.
+\item[Max.\ auto zoom distance]  The upper limit for auto zoom distance.
 \end{description}
 
 
@@ -407,7 +407,7 @@ This page allows glide computer algorithms to be configured.
   is set to the MacCready speed to fly in no vertical air-mass movement.
   If disabled, the command speed in cruise is set to the dolphin speed to fly,
   equivalent to the MacCready speed with vertical air-mass movement.
-\item[Nav. by baro altitude*]  When enabled and if connected to a barometric
+\item[Nav.\ by baro altitude*]  When enabled and if connected to a barometric
   altimeter, barometric altitude is used for all navigation functions. Otherwise
   GPS altitude is used.
 \item[Flap forces cruise*]
@@ -533,11 +533,11 @@ This page bundles all details to the audio vario-gauge. \label{conf:audiovarioga
 \item[Audio Vario]  Enable/Disable the audio variometer.
 \item[Volume]  Set the volume of the variometer sounds.
 \item[Enable Deadband]  Enable/Disable the mute for audio output when the current lift is in a certain range around zero.
-\item[Min. Frequency*]  The tone frequency that is played at maximum sink rate.
+\item[Min.\ Frequency*]  The tone frequency that is played at maximum sink rate.
 \item[Zero Frequency*]  The tone frequency that is played at zero climb rate.
-\item[Max. Frequency*]  The tone frequency that is played at maximum climb rate.
-\item[Deadband min. lift*]  If the deadband feature is enabled the vario will play sounds when the climb rate is below this threshold.
-\item[Deadband max. lift*]  If the deadband feature is enabled the vario will play sounds when the climb rate is above this threshold.
+\item[Max.\ Frequency*]  The tone frequency that is played at maximum climb rate.
+\item[Deadband min.\ lift*]  If the deadband feature is enabled the vario will play sounds when the climb rate is below this threshold.
+\item[Deadband max.\ lift*]  If the deadband feature is enabled the vario will play sounds when the climb rate is above this threshold.
 \end{description}
 
 
@@ -548,31 +548,31 @@ Task rules may be defined to limit valid starts according to competition
 rules. \label{conf:taskrules}
 
 \begin{description}
-\item[Start max. speed*]  Maximum speed allowed in start observation zone.  Set 
+\item[Start max.\ speed*]  Maximum speed allowed in start observation zone.  Set
   to 0 for no limit.
-\item[Start max. speed margin*] Maximum speed above maximum start speed to tolerate. 
+\item[Start max.\ speed margin*] Maximum speed above maximum start speed to tolerate.
   Set to 0 for no tolerance.
-\item[Start max. height*]  Maximum height above ground while starting the task. 
+\item[Start max.\ height*]  Maximum height above ground while starting the task.
   Set to 0 for no limit.
-\item[Start max. height margin*]  Maximum height above maximum start height to 
+\item[Start max.\ height margin*]  Maximum height above maximum start height to
   tolerate.  Set to 0 for no tolerance.
-\item[Start height ref.*]  Reference used for start max. height rule. \\
+\item[Start height ref.*]  Reference used for start max.\ height rule. \\
   {\bf MSL}: Reference is altitude above mean sea level. \\
   {\bf AGL}: Reference is the height above the start point.
-\item[Finish min. height*]  Minimum height based on finish height reference 
+\item[Finish min.\ height*]  Minimum height based on finish height reference
   (AGL or MSL) while finishing the task.  Set to 0 for no limit.
-\item[Finish height ref.*]  Reference used for finish min. height rule, 
+\item[Finish height ref.*]  Reference used for finish min.\ height rule,
   correspondingly to the start rule height reference.
 \item[On-Line Contest]  Determines the rules used to optimise On-Line Contest 
   paths.  The implementation  conforms to the official release 2010, Sept. 23. \\
   {\bf OLC FAI}: Conforms to FAI triangle rule. Three turns and common start and 
   finish.  For tasks longer than
-  500km, no leg less than 25\% or larger than 45\%; otherwise no leg less than 28\% 
-  of total.  Finish height must not be lower than start height less 1000 meters. \\
+  500~km, no leg less than 25\% or larger than 45\%; otherwise no leg less than 28\%
+  of total.  Finish height must not be lower than start height less 1000~m. \\
   {\bf OLC Classic}: Up to seven points including start and finish, finish height
-  must not be lower than start height less 1000 meters. \\
+  must not be lower than start height less 1000~m. \\
   {\bf OLC League}: A contest on top of the classic task optimisation, cutting
-  a 2.5 hours segment over max. 3 of the turns. Finish height must not be below
+  a 2.5~hours segment over max.\ 3 of the turns. Finish height must not be below
   start height. \\
   {\bf OLC Plus}: A combination of Classic and FAI rules. 30\% of the FAI score
   are added to the Classic score. \\
@@ -590,7 +590,7 @@ rules. \label{conf:taskrules}
 \section{Task Defaults / Turnpoint Types}
 
 This page allows to set default turnpoint types used by the task editor. All 
-options are well described for the task manager in chapter~\ref{cha:tasks}.
+options are well described for the task manager in Chapter~\ref{cha:tasks}.
 
 
 %%%%%%%%%%%%%%%%%%
@@ -681,7 +681,7 @@ and your custom InfoBox sets.
 
 \begin{description}
 \item[Page 1..3]  Select what you feel is appropriate for you to appear on page 1,2,3 etc. 
-  Selecting ``- - -'' will let the page inactive.
+  Selecting ``- - -'' will make the page inactive.
 \item[Page 4..8*]  Experts can configure up to eight pages in the already 
   described manner.
 \end{description}
@@ -793,10 +793,10 @@ will be referenced as `Custom' set and will also be stored in your profile.
 \begin{description}
 \item[Aircraft/Wind speed*]  Units used for airspeed and ground speed: mph, 
   knots, km/h. A separate unit is available for task speeds.
-\item[Distance*]  Units used for horizontal distances e.g. range to waypoint, 
+\item[Distance*]  Units used for horizontal distances e.g.\ range to waypoint,
   distance to go: sm, nm, km.
 \item[Lift*]  Units used for vertical speeds (variometer): knots, m/s, ft/min.
-\item[Altitude*] Units used for altitude and heights: foot/meter.
+\item[Altitude*] Units used for altitude and heights: ft, m.
 \item[Temperature*]  Units used for temperature: \degree C, \degree F.
 \item[Task speed*] Units used for task speed: mph, knots, km/h.
 \item[Pressure*]  Units used for pressures: hPa, mb, inHg.
@@ -834,7 +834,7 @@ your glide computer.
 Currently there are two tracking protocols implemented. `{\em SkyLines}' as a spin 
 off project from XCSoar itself; for details on this service have a look at 
 \url{http://skylines.xcsoar.org}. 
-And also the `{\em LiveTrack24}' protocol used e.g. by the tracking 
+And also the `{\em LiveTrack24}' protocol used e.g.\ by the tracking
 portal on \url{http://www.livetrack24.com}.  
 Please consult the web pages of the service provider listed under `Server' 
 for details on this setup.
@@ -844,7 +844,7 @@ for details on this setup.
   your position to `{\em SkyLines}'.
 \item[Tracking Interval]  The time interval for which one position is send to 
   the tracking service. `{\em SkyLines}' implements a very lean protocol, so that even
-  a 30 sec. interval does not exhaust a plain GPRS connection (ca. 12kbit/sec). 
+  a 30 sec.\ interval does not exhaust a plain GPRS connection (ca.\ 12~kbit/sec).
 \item[Key]  Create a key on the page \url{http://skylines.xcsoar.org/tracking/info} 
   and enter it here, to identify your positions at the tracking service.
 \\
@@ -868,7 +868,7 @@ This dialogue allows the glide polar to be defined. For a large variety of glide
 \marginlabel{\bmenug{Config 2/3}\blink\bmenug{Plane}} 
 types XCSoar provides a predefined glide polar, they could be modified if 
 needed, or you can load your own polar from a file. 
-The file format is based on the WinPilot polar file format (see section~\ref{sec:glide-polar}).
+The file format is based on the WinPilot polar file format (see Section~\ref{sec:glide-polar}).
 
 \label{conf:polar} To configure the glide computer to the performance of a glider 
 type start with the selection of a type from the \bmenuw{List}. 
@@ -893,7 +893,7 @@ for every glide performance relevant computation of XCSoar.
   be entered on this page to prevent the glide computer from commanding 
   unrealistic cruise speeds.
 \item[Handicap]  The handicap factor used for the On-Line Contest scoring.
-\item[Max. ballast]  Optional the amount of water ballast XCSoar refers to as 100\% ballast.
+\item[Max.\ ballast]  Optional the amount of water ballast XCSoar refers to as 100\% ballast.
   Set to zero if it does not apply.
 \item[Dump time]  The time in seconds needed for dumping full ballast.
 \end{description}
@@ -905,7 +905,7 @@ for every glide performance relevant computation of XCSoar.
 The Devices page is used to specify the ports used to communicate with
 \marginlabel{\bmenug{Config 2/3}\blink\bmenug{Devices}}
 the GPS and other serial devices. The default settings are COM1 and
-4800 bits per second.  When connected to the Vega intelligent
+4800~bits per second.  When connected to the Vega intelligent
 variometer, the settings should be COM1 and 38400.
 
 Four devices can be configured (device A through D). One, for
@@ -927,7 +927,7 @@ lists.
 \item[Port]  This setting maps an existing interface (port) of your 
   glide computer to one of the available slots A to D.
 \item[Baudrate]  Set this to the communication speed of the connected device.
-\item[TCP Port]  This setting is useful to e.g. connect to the Condor flight
+\item[TCP Port]  This setting is useful to e.g.\ connect to the Condor flight
   simulator and do some XCSoar training in winter time.
 \item[Bulk baud rate]  The baud rate used for bulk transfers, such 
   as task declaration or flight download. The item is visible for those 
@@ -935,11 +935,10 @@ lists.
 \item[Driver]  The specific type of device can be selected from a list in order
   to enable support for devices with proprietary protocols or special
   functions.
-\item[Sync. from device*]  This option lets you configure if XCSoar should use settings 
+\item[Sync.\ from device*]  This option lets you configure if XCSoar should use settings
   like the MacCready value, bugs and ballast from the device.
-\item[Sync. to device*]  This option lets you configure if XCSoar should send settings 
+\item[Sync.\ to device*]  This option lets you configure if XCSoar should send settings
   like the MacCready value, bugs and ballast to the device.
 \item[Ignore checksum*] If your GPS device outputs invalid NMEA checksums, this 
   will allow it's data to be used anyway.
 \end{description}
-

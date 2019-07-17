@@ -2,7 +2,7 @@
 InfoBox data types are grouped into logical categories.
 
 All InfoBoxes display their data in user-specified units.  Whenever the content 
-is invalid, the displayed value will be '---' and the content is
+is invalid, the displayed value will be `$---$' and the content is
 greyed out.  This happens, for example, when no terrain elevation is found for 
 the `Terrain Elevation' InfoBox, or in the same way for a derived InfoBox like 
 `Height AGL'.
@@ -41,7 +41,7 @@ GPS. (Touch-screen/PC only) In simulation mode this value is adjustable with the
 up/down arrow keys. The right/left arrow keys also cause the glider to turn.\footnotemark[1]}
 {figures/simulator-keys.png}
 \ibi{Barometric altitude}{Alt Baro}{This is the barometric altitude obtained from a
-device equipped with pressure sensor.\footnotemark}
+device equipped with pressure sensor.\footnotemark[1]}
 \ibi{Altitude (Auto)}{Alt $<$auto$>$}{This is the barometric altitude obtained from a 
 device equipped with a pressure sensor or the GPS altitude if the barometric altitude 
 is not available.}
@@ -95,11 +95,11 @@ available.}
 by the ground
 speed divided by the vertical speed (GPS speed) over the last 20 seconds. 
 Negative values indicate climbing cruise. If the vertical speed is close to
-zero, the displayed value is '---'.}
+zero, the displayed value is `- - -'.}
 \ibi{GR cruise}{GR Cruise}{The distance from the top of the last thermal,
 divided by the altitude lost since the top of the last thermal. Negative values
 indicate climbing cruise (height gain since leaving the last thermal). If the
-vertical speed is close to zero, the displayed value is '---'.}
+vertical speed is close to zero, the displayed value is `- - -'.}
 \ibi{Final GR}{Fin GR}{The required glide ratio over ground to finish the task, given 
 by the distance to go divided by the height required to arrive at the safety 
 arrival height. This is no adjusted total energy possible.} 
@@ -107,17 +107,17 @@ arrival height. This is no adjusted total energy possible.}
 given by the distance to next waypoint divided by the height required to arrive
 at the safety arrival height.  Negative values indicate a climb is necessary
 to reach the waypoint.  If the height required is close to zero, the displayed
-value is '---'.}
+value is `- - -'.}
 \ibi{L/D vario}{L/D Vario}{Instantaneous lift/drag ratio, given by the indicated
 airspeed divided by the total energy vertical speed, when connected to an
 intelligent variometer.  Negative values indicate climbing cruise. If the total
-energy vario speed is close to zero, the displayed value is '---'.}
+energy vario speed is close to zero, the displayed value is `- - -'.}
 \ibi{GR average}{GR Avg}{The distance made in the configured period of time ,
 divided by the altitude lost since then. Negative values are shown as 
-\^{ }\^{ }\^{ } and indicate climbing cruise (height gain). Over 200 of GR the
-value is shown as +++ . You can configure the period of averaging.
-Suggested values are 60, 90 or 120. Lower values will be closed to 
-GR inst., and higher values will be closed to GR cruise. Notice that the distance 
+`\^{ }\^{ }\^{ }' and indicate climbing cruise (height gain). Over 200 of GR the
+value is shown as `+++'. You can configure the period of averaging.
+Suggested values are 60, 90 or 120. Lower values will be closer to
+GR inst., and higher values will be closer to GR cruise. Notice that the distance
 is \textit{not} the straight line between your old and current position, it's exactly the 
 distance you have made even in a zigzag glide. This value is not calculated while 
 circling.}
@@ -166,7 +166,7 @@ manner as Wind arrow.}
 \ibi{Head wind component}{Head Wind}{The current head wind component. Head wind 
 is calculated from TAS and GPS ground speed if airspeed is available from 
 external device. Otherwise the estimated wind is used for the calculation.}
-\ibi{Head wind component (simplified)}{Head Wind *}{The current head wind component. 
+\ibi{Head wind component (simplified)}{Head Wind *}{The current head wind component. % TODO wat?
 The simplified head wind is calculated by subtracting GPS ground speed from the TAS if 
 airspeed is available from external device.}
 \ibi{Outside air temperature}{OAT}{Outside air temperature measured by a probe
@@ -248,13 +248,13 @@ remaining has expired.}
 AAT minimum time. Coloured red if negative (expected arrival too early), or 
 blue if in sector and can turn now with estimated arrival time greater than 
 AAT time plus 5 minutes.}
-\ibi{AAT max. distance}{AAT Dmax}{ `Assigned Area Task' maximum distance possible for
+\ibi{AAT max.\ distance}{AAT Dmax}{ `Assigned Area Task' maximum distance possible for
 remainder of task.}
-\ibi{AAT min. distance}{AA Dmin}{ `Assigned Area Task' minimum distance possible for
+\ibi{AAT min.\ distance}{AA Dmin}{ `Assigned Area Task' minimum distance possible for
 remainder of task.}
-\ibi{AAT speed max. distance}{AAT Vmax}{ `Assigned Area Task' average speed achievable if
+\ibi{AAT speed max.\ distance}{AAT Vmax}{ `Assigned Area Task' average speed achievable if
 flying maximum possible distance remaining in minimum AAT time.}
-\ibi{AAT speed min. distance}{AAT Vmin}{ `Assigned Area Task' average speed achievable if
+\ibi{AAT speed min.\ distance}{AAT Vmin}{ `Assigned Area Task' average speed achievable if
 flying minimum possible distance remaining in minimum AAT time.}
 \ibi{AAT distance around target}{AAT Dtgt}{`Assigned Area Task' distance around target points
 for remainder of task.}
@@ -292,10 +292,10 @@ reach next waypoint, assuming current ground speed is maintained.}
 completion, assuming performance of ideal MacCready cruise/climb cycle.}
 \ibi{Next arrival time}{WP ETA}{Estimated arrival local time at next waypoint,
 assuming performance of ideal MacCready cruise/climb cycle.}
-\ibi{Task req. total height trend}{RH Trend}{Trend (or neg. of the variation) of
+\ibi{Task req.\ total height trend}{RH Trend}{Trend (or neg.\ of the variation) of
 the total required height to complete the task.}
-\ibi{Time under max. start height}{Start Height}{The contiguous period the ship 
-has been below the task start max. height.}
+\ibi{Time under max.\ start height}{Start Height}{The contiguous period the ship
+has been below the task start max.\ height.}
 
 
 %%%%%%%%%%%
@@ -340,5 +340,3 @@ the airspace is below you.}
 \ibi{Terrain collision}{Terr Coll}{The distance to the next terrain collision 
 along the current task leg. At this location, the altitude will be below the 
 configured terrain clearance altitude.}
-
-

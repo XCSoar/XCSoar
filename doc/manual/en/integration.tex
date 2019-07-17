@@ -10,8 +10,8 @@ integration of XCSoar, with the components of interest:
 \item Hardware XCSoar runs on: Pocket PC, Android...
 \item XCSoar software
 \item Flight information databases: terrain, waypoint, weather, polar, 
-flarmnet, airfield details...
-\item Instruments: barometer, vario, Flarm, logger, horizon...
+FlarmNet, airfield details...
+\item Instruments: barometer, vario, FLARM, logger, horizon...
 \item Backup components: second XCSoar unit
 \item Mounting
 \item Configuration: XCSoar internally and connections with
@@ -73,12 +73,12 @@ with very little instrument space.
 
 \subsection*{XCSoar Classic}
 \subsubsection*{Setup} An XCSoar classic system is a basic system plus a 
-\emph{Flarm} connected. As long as the family of Flarm and Flarm like hardware 
+\emph{FLARM} connection. As long as the family of FLARM and FLARM-like hardware
 uses serial communication ports, a first piece of glue hardware appears necessary 
 in many cases. There are several pieces of hardware available, converting signals 
-form Flarm's serial port to either USB or even radio link Bluetooth.
+from FLARM's serial port to either USB or even Bluetooth radio link.
 
-\subsubsection*{Functionality} As you might have expected, Flarm itself gives you 
+\subsubsection*{Functionality} As you might have expected, FLARM itself gives you
 a collision detection system. Added integration value first of all might be a 
 rock-steady GPS reception. With precise GPS fixes, XCSoar's actual readings 
 improve a lot. Still, reception is heavily dependent on the pilot's mounting of 
@@ -88,10 +88,10 @@ Further added value is about Flarm devices, giving you an air pressure
 measurement. This enables XCSoar to compute QNH height. It is much more precise 
 than height derived from the GPS calculations due to the fact, GPS height is the 
 value with the worst precision out of all publicly available GPS measures. 
-Uncertainty in height is around 50 meters.
+Uncertainty in height is around 50~m.
 
-Additionally, XCsoar takes the position data of others around you from Flarm and 
-draws ``Flarm targets'' on your moving map. Displaying even climb rates of the
+Additionally, XCSoar takes the position data of others around you from FLARM and
+draws ``FLARM targets'' on your moving map. Displaying climb rates of
 others, a classic XCSoar system aids in team flying. As long as reception is 
 good, you do not have to call your mates whether their efforts in thermals are 
 worth it or just for asking where they are actually. Last but not least, Flarm 
@@ -100,7 +100,7 @@ several contests, as the logger has to be approved and sealed.
 
 \subsubsection*{Application} An XCSoar classic system also is club-glider 
 friendly. If your club-gliders are equipped with a plug, intended for managing or 
-downloading from Flarm devices, you can connect with almost no intrusion in the 
+downloading from FLARM devices, you can connect with almost no intrusion in the
 glider's instrumentation structure. Whatever you are willing to integrate in your 
 XCSoar system, said functionalities of a classic system turn out to own a very 
 good value / integration effort ratio.
@@ -111,12 +111,12 @@ market penetration of Flarm, a very welcome collision detection coverage in the
 glieder scene is already achieved. However, this is not the case with motor 
 driven vehicles. If you want to have motorized targets to be depicted on your 
 moving map, consider an ADS-B receiver on your integration list. Integrating a 
-Flarm and an ADS-B receiver is a first example for integrating two sources of 
-data. Possibly you need a multiplexer in case your hardware XCSoar runs on, has 
-only one communication port. Either purchase a hardware mutliplexer or use 
-Bluetooth functionality. Most smartphones come with a Bluetooth built in 
-multiplex functionality. Another way is to achieve a \emph{Power Flarm} device, 
-already equipped with a multiplexer for both Flarm and ADS-B data. 
+FLARM and an ADS-B receiver is a first example for integrating two sources of
+data. Possibly you need a multiplexer in case your hardware XCSoar runs on has
+only one communication port. Either purchase a hardware multiplexer or use
+Bluetooth functionality. Most smartphones come with a Bluetooth built-in
+multiplex functionality. Another way is to achieve a \emph{Power FLARM} device,
+already equipped with a multiplexer for both FLARM and ADS-B data.
 
 \subsubsection*{Functionality} ADS-B stands for Automatic Dependent Surveillance 
 - Broadcast. 
@@ -132,15 +132,15 @@ crowd your moving map.
 pilots judge ADS-B being information overkill as do many representatives of 
 ground control organisations. \emph{Please} take your time when reading 
 discussions on ADS-B usage in gliders \emph{before} purchasing hardware. 
-Technically speaking ADS-B is brilliant as is Flarm.
+Technically speaking ADS-B is brilliant as is FLARM.
 
 \subsection*{XCSoar Tactic}
 \subsubsection*{Setup} Integrate an electronic variometer with your classic 
-System, an \emph{eVario}. Since an eVario is expected to be a second piece of 
-hardware to be connected, you might need a data multiplexer for connecting both, 
-Flarm and eVario to your XCSoar hosting hardware. Take your time studying the 
-hardware features of your eVario of interest. There are some devices selling, 
-that bring with them a multiplexer for merging GPS and other data from Flarm with 
+system, an \emph{eVario}. Since an eVario is expected to be a second piece of
+hardware to be connected, you might need a data multiplexer for connecting both
+FLARM and eVario to your XCSoar hosting hardware. Take your time studying the
+hardware features of your eVario of interest. There are some devices selling
+which bring with them a multiplexer for merging GPS and other data from FLARM with
 their own measurements presented on an output. Additionally a voltage converting 
 power supply might be included on that output port, ready for supplying a ``data
 plus power package'' for your XCSoar hardware.

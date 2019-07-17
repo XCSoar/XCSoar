@@ -140,12 +140,12 @@ it is envisaged that in future these will be names of icon files. Available icon
 \end{itemize}
 \subsubsection{Adding new Icons}
 At the moment, adding new icons requires a rebuild of the XCSoar application.It is envisaged that, in future, 
-this process won't be required... users will include icon files in their .XCM map container files, and refer to them 
+this process won't be required\dots users will include icon files in their .XCM map container files, and refer to them
 by name. However, that has not yet been implemented. 
 
 To add your own images to the list of icons:
 \begin{enumerate}
-\item Create a .svg file for the icon (e.g. mast.svg) and copy into \texttt{xcsoar/Data/icons}. For Android, the name must be lowercase.
+\item Create a .svg file for the icon (e.g.\ mast.svg) and copy into \texttt{xcsoar/Data/icons}. For Android, the name must be lowercase.
 \item Insert two (for normal and high-res) lines into \texttt{xcsoar/Data/XCSoar.rc},  (e.g.)
 \begin{verbatim}
 BITMAP\_ICON(IDB\_MAST, "mast")

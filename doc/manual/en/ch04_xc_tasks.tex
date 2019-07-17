@@ -35,8 +35,8 @@ After having defined an ordered task for the very first time, the automatic ``go
 \section{Goto tasks}
 
 Goto tasks may be established by selecting a waypoint from the map,
-the waypoint list, or any other mechanism e.g. the alternates dialogue, 
-and select \bmenuw{Goto}. In goto task mode, selecting
+the waypoint list, or any other mechanism e.g.\ the alternates dialogue,
+and select \bmenuw{GoTo}. In goto task mode, selecting
 \bmenug{Nav 2}\blink\bmenug{Task Resume} resumes the ordered task (if
 any).
 
@@ -83,7 +83,7 @@ containing one waypoint takeoff as ``goto home''.
 
 XCSoar saves the current task when shutting down and loads it at
 startup, thereby allowing the task to be entered early in the day,
-then the device running XC Soar can be turned off until flight time.
+then the device running XCSoar can be turned off until flight time.
 
 Task waypoints are preserved even if the waypoint
 file is changed.  This means, if you save a task, then change the
@@ -108,7 +108,7 @@ waypoint as the new home.
 This may be accessed in several ways:
 
 \gesturespec{rd}or menu \bmenug{Nav 1/2}\blink\bmenug{Task},
-\todonum{descr. tabular ``Turn Points''}
+\todonum{descr.\ tabular ``Turn Points''}
 highlight a waypoint, then tap the highlighted waypoint again to display the 
 task point dialogue, then push \bmenuw{Details}.
 
@@ -177,7 +177,7 @@ of whether a GPS fix is received.  If no home is set, then XCSoar
 starts in the centre of the terrain map.
 
 \subsection*{Airfield information}
-This page may contain relevant text from the enroute supplement about
+This page may contain relevant text from the en-route supplement about
 the airfield, including runways, radio frequencies, traffic patterns,
 contacts.
 \begin{center}
@@ -235,7 +235,7 @@ waypoint.
 
 \section{Task manager}\label{sec:task-manager-dialog}
 \begin{it}  The task manager has undergone significant redesign compared with 
-earlier versions of XC Soar.\end{it}
+earlier versions of XCSoar.\end{it}
 \gesturespec{rd}
 
 The task manager is used to edit, view, load, save to file, and declare cross
@@ -253,7 +253,7 @@ various changes to the task on final performance.
 \menulabelr{\bmenuw{Calculator}}
 
 In flight the Task Calculator might also be accessed from the Analysis pages. 
-With pages Task, Climb, and TaskSpeed a button \bmenuw{Task Calc} comes up, 
+With pages Task, Climb, and Task Speed a button \bmenuw{Task Calc} comes up,
 that directly changes to the Task Calculator screen.
 
 
@@ -330,7 +330,7 @@ Also, tapping on the \bmenuw{Rules} button again after it is highlighted allows
 toggling between a ``thumbnail'' view of the task map and a larger view of the task.
 
 \section{Task types}
-XC Soar currently defines three different task types: Racing, AAT, and FAI badges/records.
+XCSoar currently defines three different task types: Racing, AAT, and FAI badges/records.
 
 A brief description of the task types is included below, but this manual does 
 not intend to rephrase FAI rules or contest task types. The reader is encouraged 
@@ -348,20 +348,20 @@ type allows the pilot to enter the following parameters.
   menu \bmenug{Nav 1/2}, controlling  the detection of the start condition.
   \item [Start open time] This is the time when the start zone opens.
   \item [Start close time] This is the time when the start zone closes.
-  \item [Start max. speed] This is the maximum speed allowed in the start observation 
+  \item [Start max.\ speed] This is the maximum speed allowed in the start observation
     zone.  This should be set to 0 if there is no limit.
-  \item [Start max. height] This is the maximum height above the start height 
+  \item [Start max.\ height] This is the maximum height above the start height
     reference (AGL or MSL) at which a task can be started.  This  should be set to 
     0 for no limit.
   \item [Start height ref.] This specifies whether the maximum start height is 
     referenced to ground level of the start point (``AGL'') or Mean Sea Level (``MSL'')
-  \item [Finish min. height] This is the minimum height based on the finish 
+  \item [Finish min.\ height] This is the minimum height based on the finish
     reference (AGL or MSL) at which a task can be finished.  This should be set to 
     0 for no limit.
   \item [Finish height ref.] This specifies whether the minimum finish height 
     is referenced to ground level of the finish point (``AGL'') or Mean Sea Level (``MSL'')
-% \item [FAI start/finish rules] If enabled, this task type has no max. start height 
-%   or max. start speed.  Finish height reference is set to AGL and finish height 
+% \item [FAI start/finish rules] If enabled, this task type has no max.\ start height
+%   or max.\ start speed.  Finish height reference is set to AGL and finish height
 %   is 1000m below the start height \todonum[inline]{Is this description correct?}
   \end{description}
   
@@ -370,7 +370,7 @@ type allows the pilot to enter the following parameters.
 areas (restricted to cylinder or sector observation zones).  A minimum task time 
 applies.  Rules options for this task type include:
   \begin{description}
-  \item [AAT min. time]  This is the required minimum time for the task.  Refer 
+  \item [AAT min.\ time]  This is the required minimum time for the task.  Refer
     to contest rules or consult an expert for penalties associated with finishing 
     prior to the minimum time.  The time in this option is given in minutes.
   \item [other rules] All other rules stay the same as in case of task type 
@@ -899,14 +899,14 @@ Several flight loggers are accessible via XCSoar:
   For this to work, the device must be specified in the `Devices' 
   section of the configuration \config{comdevices} settings.
 \item  For some of the numerous logger devices XCSoar can download IGC files. 
-  This is convenient especially for logger devices, which are not that easy 
+  This is convenient especially for logger devices which are not that easily
   removable from the glider.
 \end{itemize}
 
 \subsection*{Setup}
-For a complete matrix of the supported logger features see section~\ref{sec:supported-varios}.  
-The configuration is described in detail in section~\ref{conf:logger}.  Details 
-to the log files can be found in section~\ref{sec:logfiles}.
+For a complete matrix of the supported logger features see Section~\ref{sec:supported-varios}.
+The configuration is described in detail in Section~\ref{conf:logger}.  Details
+to the log files can be found in Section~\ref{sec:logfiles}.
 
 \subsection*{Logger activation}
 The logger can be turned on and off automatically or manually.  For para-glider 

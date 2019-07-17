@@ -50,7 +50,7 @@ map ahead of the glider.  This position is adjustable in the configuration
 
 \section{Zoom and map scale}\label{sec:zooming}
 
-To change the scale of the map, depending on the hardware You use:
+To change the scale of the map, depending on the hardware you use:
 \begin{enumerate}
 \item Tap/click on a blank part of the map to highlight the map if it is not
 already selected.
@@ -94,7 +94,7 @@ the waypoint at a reasonable screen distance. When \emph{Auto Zoom} is active,
 To invoke Auto Zoom use the gesture \gesturespec{ud}
 or menu path depicted to the left. 
 Switching back to manual zoom is simply done by using the same menu path
-or - just zooming manually, no matter whether done via menu or gesture. 
+or just zooming manually, no matter whether done via menu or gesture.
 \menulabel{\bmenug{Display 1}\blink\bmenut{Zoom}{Auto}}
 
 When a waypoint changes (automatically, via the task selector, or by
@@ -119,7 +119,7 @@ is particularly useful when task planning.
 \end{enumerate} 
 
 \sketch{figures/pan.png}
-When pan is active, the letters 'PAN' appears next to the map scale.  While
+When pan is active, the letters `PAN' appears next to the map scale.  While
 panning the location of the focus stays in the middle of the display under the
 cross hairs. 
 
@@ -134,7 +134,7 @@ waypoint type; the major distinction being landable and non-landable
 waypoints.
 
 \subsection*{Landables}
-The waypoint symbols are drawn as shown below There are three icon sets for
+The waypoint symbols are drawn as shown below. There are three icon sets for
 landable waypoints. \config{waypointicons}
 
 \begin{tabular}{c|ccc|ccc|}
@@ -173,7 +173,7 @@ Traffic lights &
 \end{tabular} \\
 
 The {\it marginal} icons are drawn for those waypoints which are principally in the 
-reach, but it is not possible to approach them directly. E.g. a mountain prohibits a direct approach.
+reach, but it is not possible to approach them directly. E.g.\ a mountain prohibits a direct approach.
   
 Waypoints are optionally labelled according to one of several
 abbreviation schemes \config{labels} and visibility.
@@ -187,7 +187,7 @@ encoded in the appearance of it's icon.
   circle shape, so that they become easy to distinguish.
 \item  All icon sets, including the `Purple Circle' icon set, get the 
   runway turned into their actual direction. The runway direction has to be available in 
-  the waypoint data. E.g. the SeeYou waypoint file format (\verb|.cup|) does 
+  the waypoint data. E.g.\ the SeeYou waypoint file format (\verb|.cup|) does
   include this information.  
 \end{enumerate}
 
@@ -307,7 +307,7 @@ thus brighter areas are on the upwind side of hills and dark areas in
 the lee of the hill.  
 Support for a sun ephemeris is also implemented. If the slope shading is set 
 to `Sun', the brightness of a slope follows the day time in a very natural way.
-The amount of shading and overall terrain brightness is configurable \config{shading}.
+The amount of shading and overall terrain brightness is configurable. \config{shading}
 
 Both terrain and topography display can be switched on or off from the
 menu.
@@ -343,7 +343,7 @@ Note that in all cases, the label format is configurable in the
 
 \section{Trail}\label{sec:trail}
 
-An optional 'snail trail' is drawn on the map showing the glider's
+An optional `snail trail' is drawn on the map showing the glider's
 path history.  The colour and thickness of the trail depends on the altitude or
 on the variometer value. 
 
@@ -506,7 +506,7 @@ the local sunrise, sunset times.
 Note that the values in the Status dialogue 
 are static once the particular dialogue page is displayed. 
 \sketch{figures/status-times.png}
-That is, position, times, etc. do not update while the page is displayed. 
+That is, position, times, etc.\ do not update while the page is displayed.
 To see the updated values, it is necessary to select a different tabular, 
 then return to the previous dialogue to see the new values.
 
@@ -528,10 +528,10 @@ mode.
 Routes take into account the glider polar performance and are
 calculated to be optimal in the sense of minimum time.  By default,
 route calculation is disabled, and can be enabled for terrain only or
-terrain and airspace avoidance \config{routemode}.
+terrain and airspace avoidance. \config{routemode}
 
-Terrain is avoided vertically by the terrain safety height
-\config{safetyterrain}, with no additional lateral clearance imposed.
+Terrain is avoided vertically by the terrain safety height,\config{safetyterrain}
+with no additional lateral clearance imposed.
 Valid routes may result in the aircraft arriving at the destination
 higher than the minimum height --- such as can occur when the
 destination is just beyond a steep mountain.
@@ -542,9 +542,9 @@ below or above airspace.
 
 If MacCready is positive, then climbs are optionally allowed
  in the computed routes.  The top of the climb
-may be limited to 500 m above the heigher of the start and destination
-ceiling, or increased to the ceiling defined by the thermal ceiling
-\config{routeceiling}.  Climbs above the higher of the start and
+may be limited to 500 m above the higher of the start and destination
+ceiling, or increased to the ceiling defined by the thermal ceiling.
+\config{routeceiling}  Climbs above the higher of the start and
 destination altitude are penalised by a slower climb rate than the
 actual MacCready value.
 

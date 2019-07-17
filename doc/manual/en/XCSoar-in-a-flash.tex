@@ -26,7 +26,7 @@
 \definecolor{flashyellow}{rgb}{.9,.85,0}
 \definecolor{flashblue}{rgb}{0,0,1}
 %
-%##############  advanced Makros and Menus ..##############
+%##############  advanced Macros and Menus ..##############
 %
 \newcommand{\nav}[3]{\bmenut{Nav}{#1/2}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%NavMenu
 \newcommand{\display}[3]{\bmenut{Display}{#1/2}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%DisplayMenu
@@ -209,7 +209,7 @@ Choose appropriate files in dialogue. If no files show up, again make sure files
 reside in subdirectory \texttt{/XCSoarData}.
 
 \subsection{\textcolor{flashblue}{File Manager}}\index{Filemanager}
-\textbf{please note:} XCSoar's File Manager on Android requires Android 2.2 
+\textbf{Please note:} XCSoar's File Manager on Android requires Android 2.2
 and up!!!
 
 If the platform you choose supports direct access to the internet, you can 
@@ -228,11 +228,11 @@ Selecting files will start downloading immediately. To add more files, repeat
 \blink Add.
 Updating files is done via \blink Download on the same menu screen.  As a 
 quick start, download terrain, airspace and waypoint files apiece only. With 
-some maps, e.g. depicting thermal spots and areas it might take some time to 
+some maps, e.g.\ depicting thermal spots and areas it might take some time to
 understand setups. For further info please refer to the main manual or 
 \url{http://www.glidinghotspots.eu/} 
 
-\subsection{\textcolor{flashblue}{Language ( Fonts, Sounds)}}
+\subsection{\textcolor{flashblue}{Language (Fonts, Sounds)}}
 Typically, XCSoar follows the operation system's language setting. If you do 
 prefer another, there are 28 languages available as is with Dec. 2013 (sorry 
 Bavarian, Boston and other people, dialects are not to be included ever):
@@ -269,7 +269,7 @@ or store your customized polar, invoke the plane configuration by
 The planes' indexes in this compilation are taken from the official DAEC list 
 of 2012.
 
-\subsection{\textcolor{flashblue}{Connect Logger, Flarm, Vario etc\dots NMEA setup}}
+\subsection{\textcolor{flashblue}{Connect Logger, FLARM, Vario etc\dots NMEA setup}}
 To run, XCSoar needs live data from a GPS receiver at least. You have to tell 
 XCSoar, which one to use, even built-in hardware. To connect to, use
 \begin{flushleft}\hspace*{1cm}\config{2}{Devices}{}\blink\bmenuw{edit}\\\end{flushleft}
@@ -285,7 +285,7 @@ circling.
 \item A task can be declared to an IGC logger, and after landing, the 
 flight log can be downloaded.
 \item Some varios allow synchronising the MacCready setting with XCSoar.
-\item Flarm (and even ADS-B input) provide status information of others 
+\item FLARM (and even ADS-B input) provide status information of others
 around you - whereas XCSoar does NOT provide collision detection.
 \end{compactitem}
 
@@ -315,13 +315,13 @@ GPS fix.
 If your hardware's GPS reception turns out to be stable: congratulations! You 
 acquired a good piece of hardware. No need for extra hardware, you already own 
 an XCSoar `basic' system. If not, the method of choice is to connect an extra 
-GPS receiver. Better you connect an IGC logger, best, you connect to a Flarm. 
+GPS receiver. Better you connect an IGC logger. Best, you connect to a FLARM.
 With an IGC Logger, you can declare tasks and download IGC-certified flight 
 logs needed to participate in the OLC league.
-Connecting Flarm will give you status information of your team mates, 
+Connecting FLARM will give you status information of your team mates,
 traffic info and a barometric height reading - and IGC-certified flight 
 logs if hardware is enabled.
-With a Flarm connected you own an XCSoar `classic' system.  Integrating even 
+With a FLARM connected you own an XCSoar `classic' system.  Integrating even
 more hardware is a task of its own and not within scope of a quick start guide. 
 
 \subsection{\textcolor{flashblue}{Glueing things together}}
@@ -333,8 +333,8 @@ Google introduced serious problems stemming from the serial bluetooth profile
 involved. With XCSoar coming for free, it is almost no risk to just test your 
 hardware's capabilities. If everything is fine ;-)
 
-\textbf{please note:} Before connecting instruments via bluetooth you have to 
-pair bluetooth devices. Needed steps differ depending on the hardware you use. 
+\textbf{Please note:} Before connecting instruments via Bluetooth you have to
+pair Bluetooth devices. Needed steps differ depending on the hardware you use.
 Use your operating system's tools.
 
 For using USB-equipped hardware, you need a serial-to-USB converter. Consult 
@@ -345,14 +345,14 @@ aware, there are three physically differing serial types of connection
 commonly used. It is about using different physical signal levels:
 
 \begin{compactitem}
-\item RS232 uses full-swing plus minus 12 Volt level
+\item RS232 uses full-swing \pm 12 Volt level
 \item TTL uses 5 Volt signal swing
 \item Low level logic uses 3 Volt signal swing
 \end{compactitem}
 Always, logically speaking these connections do all the same, exactly the 
 same.
 
-Make sure, serial ports signal swing match.  Otherwise you need a level 
+Make sure serial ports signal swing match.  Otherwise you need a level
 converter. Again, consult XCSoar's website for more details.
 
 Things go easy by using approved hardware setups. A widely used Android 
@@ -407,7 +407,7 @@ XCSoar's simulation mode.
 
 \subsection{\textcolor{flashblue}{Action - watch XCSoar replay a flight}}
 Pick a flight log and let XCSoar step back in time.  Place the file in 
-subdirectory\verb+/XCSoarData+ \verb+/logs+ and start replay.
+subdirectory \verb+/XCSoarData/logs+ and start replay.
 
 \begin{flushleft}\hspace*{1cm}\config{2}{Replay}{}\blink\bmenuw{File\dots Start}\\\end{flushleft}
 
@@ -417,13 +417,13 @@ content respectively. You are kindly requested to go through following steps
 only, if you have developed a deep demand to do so.  XCSoar comes with a 
 pre-configuration quite useful.
 
-\subsection*{\textcolor{flashblue}{Screen Layout (portrait, landscape, etc.\dots)}} 
+\subsection*{\textcolor{flashblue}{Screen Layout (portrait, landscape, etc\dots)}}
 To change basic Screen Layouts:
 \begin{flushleft}\hspace*{1cm}\config{2}{System}{}\blink\bmenuw{Look}\blink
 \bmenuw{Screen Layout}\\\end{flushleft}
 
-\subsection*{\textcolor{flashblue}{Change InfoBox' Content}}
-To change Infobox sets and boxes' content:
+\subsection*{\textcolor{flashblue}{Change InfoBox Content}}
+To change InfoBox sets and boxes' content:
 \begin{flushleft}\hspace*{1cm}\config{2}{System}{}\blink\bmenuw{Look}\blink
 \bmenuw{InfoBox Sets}\\\end{flushleft}
 
@@ -515,11 +515,11 @@ Bugs / QNH / Max temp}\\\end{flushleft}
 Speed / Direction}\\\end{flushleft}
 
 \subsection*{\textcolor{flashblue}{Setup Task?}}
-After having made your``home'', XCSoar will always give you support on how to 
+After having made your ``home'', XCSoar will always give you support on how to
 come home, unless you have created a task. As you might have expected, XCSoar 
 will guide you through your task and home from that time on.
 For creating and using tasks, a brief introduction is given at the end of this 
-flash. Set up either a``Simple'' Task or a``True'' task.
+flash. Set up either a ``Simple'' task or a``True'' task.
 
 
 %%%%%--------------------------------------------------------------------%%%%%
@@ -578,7 +578,7 @@ Download flight logs from your preferred \emph{connected} logger.
 \item A listing of flightlogs stored on your external logger appears.
 Choose one
 \item push \bmenuw{Select}
-\item wait.... this is an old fashioned serial line working
+\item wait....\ this is an old fashioned serial line working
 \item choose another or push \bmenuw{No} to resume
 \item depending on logger, wait once more patiently. Logger possibly will reset 
 and take its time to resume to normal operation.
@@ -595,9 +595,9 @@ and take its time to resume to normal operation.
 \vspace{2em}
 \textbf{Please note:} In case you are facing difficulties, make sure, the driver 
 you are using supports downloads from logger. In case, you are using a cascaded 
-system e.g. Flarm-Vario-XCsoar, it might be necessary to enable direct link or 
+system e.g. FLARM-Vario-XCSoar, it might be necessary to enable direct link or
 similar on vario and choose another driver in XCSoar in order to gain access to 
-downloads from Flarm to Xcsoar.
+downloads from FLARM to Xcsoar.
 
 \subsection{\textcolor{flashblue}{Flight Analysis}}
 \begin{flushleft}\hspace*{1cm}\info{1}{Analysis}{}\\\end{flushleft}
@@ -632,7 +632,7 @@ Saving some current. Make sure, you have included \emph{everything}.
 
 \subsection{\textcolor{flashblue}{Retrieve ``home''-function, Goto-task}}
 Since having defined a ``true'' task for the first time, the very basic navigate-
-home-function is shut down permanently. Use Goto function instead, providing 
+home function is shut down permanently. Use Goto function instead, providing
 the most ``simple'' task. \textbf{Please note:} There are several functions as is 
 InfoBoxes relating to the ``home'' waypoint. They do operate unaffected still. 
 The only function shut down is just the \emph{surrogate} XCSoar uses with 
