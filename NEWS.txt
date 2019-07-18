@@ -2,6 +2,9 @@ Version 7.0 - not yet released
 * LUA scripting
 * user interface
   - screen layout with 12 infoboxes on the left, vario+3 infoboxes on right
+  - added a field for the copilot to the logger settings
+* log file
+  - copilot is now written into the IGC file
 * data files
   - optimise the terrain loader
   - support runway width in CUP files
@@ -10,6 +13,7 @@ Version 7.0 - not yet released
   - driver for XC Tracer Vario
   - driver for KRT2 radio
   - driver for Air Control Display altimeter
+  - driver for LX extended so declaration includes copilot
   - show detailed error message in device list
   - FLARM/OGN - make it possible to set/download registered device database
   - device manager: show flag if device provides data from
