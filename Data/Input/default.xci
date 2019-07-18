@@ -902,6 +902,14 @@ location=4
 mode=Menu
 type=key
 data=9
+event=LockScreen
+event=Mode default
+label=Lock\nScreen
+location=7
+
+mode=Menu
+type=key
+data=9
 event=Mode default
 label=Cancel
 location=8
