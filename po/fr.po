@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
 "PO-Revision-Date: 2019-08-03 07:23+0000\n"
-"Last-Translator: Marc Pignat <marc@pignat.org>\n"
+"Last-Translator: Martin <sirmarm@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
 "Language: fr\n"
@@ -8357,9 +8357,9 @@ msgid "Units used for vertical speeds (variometer)."
 msgstr "Unité de vitesse verticale (e.g. variomètre)."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:180
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "feet"
-msgstr "Pied"
+msgstr "pieds"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:181
 #, no-c-format
