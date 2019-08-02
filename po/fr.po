@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-01-26 22:06+0000\n"
-"Last-Translator: Martin <sirmarm@gmail.com>\n"
+"PO-Revision-Date: 2019-08-03 07:23+0000\n"
+"Last-Translator: Marc Pignat <marc@pignat.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.5-dev\n"
+"X-Generator: Weblate 3.8-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -3060,9 +3060,9 @@ msgid "Percentage climb chart"
 msgstr "Graphique du pourcentage de montée"
 
 #: src/InfoBoxes/Content/Factory.cpp:1057
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Climb %"
-msgstr "% Montée"
+msgstr "% de montée "
 
 #: src/InfoBoxes/Content/Factory.cpp:1058
 #, no-c-format
@@ -3087,6 +3087,8 @@ msgid ""
 "The number of actually used (seen) satellites by GPS module. If this "
 "information is unavailable, the displayed value is '---'."
 msgstr ""
+"Le nombre de satellites atuellement utilisés (vus) par le module GPS. Si "
+"cette information n'est pas disponible, la valeur affichée est '---'."
 
 #: src/InfoBoxes/Content/Alternate.cpp:49
 #: src/Dialogs/Task/AlternatesListDialog.cpp:162 Data/Input/default.xci:388
