@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-08-10 08:55+0000\n"
-"Last-Translator: Ajay Kumar <ajayk.12122000@gmail.com>\n"
+"PO-Revision-Date: 2019-08-11 09:23+0000\n"
+"Last-Translator: sai sushanth <nsaisushanth@gmail.com>\n"
 "Language-Team: Telugu <https://hosted.weblate.org/projects/xcsoar/"
 "translations/te/>\n"
 "Language: te\n"
@@ -56,27 +56,27 @@ msgstr "FAI asyum"
 #: src/Task/TypeStrings.cpp:35
 #, no-c-format
 msgid "Racing"
-msgstr "Poty"
+msgstr "పోటీ"
 
 #: src/Task/TypeStrings.cpp:36
 #, no-c-format
 msgid "AAT"
-msgstr "AAT"
+msgstr "ఏ ఏ టీ"
 
 #: src/Task/TypeStrings.cpp:37
 #, no-c-format
 msgid "Modified area task (MAT)"
-msgstr "Marpuchandina stalum"
+msgstr "మార్పు చెందిన స్థలము యొక్క పన్ని"
 
 #: src/Task/TypeStrings.cpp:38
 #, no-c-format
 msgid "Mixed"
-msgstr "Calpadum"
+msgstr "కలపడం"
 
 #: src/Task/TypeStrings.cpp:39
 #, no-c-format
 msgid "Touring"
-msgstr ""
+msgstr "పర్యాటకం"
 
 #: src/Task/TypeStrings.cpp:52
 #, no-c-format
@@ -88,12 +88,12 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:54
 #, no-c-format
 msgid "FAI rules, path from a start to two turn points and return."
-msgstr ""
+msgstr "ఫ్ ఏ ఐ  నియమాలు, ప్రరంబిచిన దారి నుంచి వెనక్కి వచ్చింది"
 
 #: src/Task/TypeStrings.cpp:55
 #, no-c-format
 msgid "FAI rules, path from start to a single turn point and return."
-msgstr ""
+msgstr "ఫ్ ఏ ఐ నియమాలు,ప్రారంభించిన స్థలము నుంచి వెనక్కి వచ్చింది"
 
 #: src/Task/TypeStrings.cpp:56
 #, no-c-format
