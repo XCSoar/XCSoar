@@ -52,7 +52,7 @@ msgstr "Aller-retour FAI"
 #: src/Task/TypeStrings.cpp:34
 #, no-c-format
 msgid "FAI goal"
-msgstr "but FAI"
+msgstr "But FAI"
 
 #: src/Task/TypeStrings.cpp:35
 #, no-c-format
@@ -397,7 +397,7 @@ msgstr "Tous les points de virage ne sont pas du même type"
 #: src/Task/ValidationErrorStrings.cpp:36
 #, no-c-format
 msgid "Incorrect number of turnpoints"
-msgstr "Nombre de point de virage incorrect"
+msgstr "Nombre de points de virage incorrect"
 
 #: src/Task/ValidationErrorStrings.cpp:37
 #, no-c-format
@@ -443,7 +443,7 @@ msgstr "Type de fichier d'espace aérien inconnu"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorAATTime.cpp:51
 msgid "Expect early task arrival"
-msgstr "arrivée circuit estimée au plus tôt"
+msgstr "Arrivée circuit estimée au plus tôt"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorSunset.cpp:65
 msgid "Expect arrival past sunset"
@@ -564,7 +564,7 @@ msgstr "Logger OFF"
 
 #: src/Logger/ExternalLogger.cpp:84
 msgid "Declare task?"
-msgstr "Déclarer le circuit?"
+msgstr "Déclarer le circuit ?"
 
 #: src/Logger/ExternalLogger.cpp:93 src/Logger/ExternalLogger.cpp:132
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:96
@@ -573,7 +573,7 @@ msgstr "Déclarer circuit"
 
 #: src/Logger/ExternalLogger.cpp:100
 msgid "Task declared!"
-msgstr "Circuit déclaré!"
+msgstr "Circuit déclaré !"
 
 #: src/Logger/ExternalLogger.cpp:105
 msgid ""
@@ -581,7 +581,7 @@ msgid ""
 "Task NOT declared!"
 msgstr ""
 "Une erreur est survenue,\n"
-"Le circuit n'a pas été déclaré!"
+"Le circuit n'a pas été déclaré !"
 
 #: src/Logger/ExternalLogger.cpp:131
 msgid "No logger connected"
@@ -5987,27 +5987,27 @@ msgstr "Enlever du circuit"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:314
 msgid "Replace in Task"
-msgstr "remplacer la tâche"
+msgstr "Remplacer la tâche"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:315
 msgid "Insert in Task"
-msgstr "insérer la tâche"
+msgstr "Insérer la tâche"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:316
 msgid "Append to Task"
-msgstr "ajouter à la tâche"
+msgstr "Ajouter à la tâche"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:319
 msgid "Remove from Task"
-msgstr "retirer de la tâche"
+msgstr "Retirer de la tâche"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:322
 msgid "Set as New Home"
-msgstr "définir comme nouveau point de départ"
+msgstr "Définir comme nouveau point de départ"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:323
 msgid "Pan to Waypoint"
-msgstr "aller au point de repère"
+msgstr "Aller au point de repère"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:324
 msgid "Set Active Frequency"
@@ -6045,7 +6045,7 @@ msgstr "Point de virage"
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:71
 #, no-c-format
 msgid "Landable"
-msgstr "atterrissable"
+msgstr "Atterrissable"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:80
 msgid "Comment"
