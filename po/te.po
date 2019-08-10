@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
 "PO-Revision-Date: 2019-08-10 08:55+0000\n"
-"Last-Translator: sai sushanth <nsaisushanth@gmail.com>\n"
+"Last-Translator: Ajay Kumar <ajayk.12122000@gmail.com>\n"
 "Language-Team: Telugu <https://hosted.weblate.org/projects/xcsoar/"
 "translations/te/>\n"
 "Language: te\n"
@@ -36,42 +36,42 @@ msgstr "Pani"
 #: src/Task/TypeStrings.cpp:31
 #, no-c-format
 msgid "FAI badges/records"
-msgstr ""
+msgstr "Charitra"
 
 #: src/Task/TypeStrings.cpp:32 src/Dialogs/Task/dlgTaskHelpers.cpp:82
 #, no-c-format
 msgid "FAI triangle"
-msgstr ""
+msgstr "FAI threebujum"
 
 #: src/Task/TypeStrings.cpp:33
 #, no-c-format
 msgid "FAI out and return"
-msgstr ""
+msgstr "FAI byta maryu tirgirawadum"
 
 #: src/Task/TypeStrings.cpp:34
 #, no-c-format
 msgid "FAI goal"
-msgstr ""
+msgstr "FAI asyum"
 
 #: src/Task/TypeStrings.cpp:35
 #, no-c-format
 msgid "Racing"
-msgstr ""
+msgstr "Poty"
 
 #: src/Task/TypeStrings.cpp:36
 #, no-c-format
 msgid "AAT"
-msgstr ""
+msgstr "AAT"
 
 #: src/Task/TypeStrings.cpp:37
 #, no-c-format
 msgid "Modified area task (MAT)"
-msgstr ""
+msgstr "Marpuchandina stalum"
 
 #: src/Task/TypeStrings.cpp:38
 #, no-c-format
 msgid "Mixed"
-msgstr ""
+msgstr "Calpadum"
 
 #: src/Task/TypeStrings.cpp:39
 #, no-c-format
