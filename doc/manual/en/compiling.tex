@@ -50,6 +50,7 @@ The following is needed for all targets:
 \item \href{http://www.info-zip.org/}{Info-ZIP}
 \item Perl and XML::Parser
 \item FFmpeg
+\item \href{https://www.wolfssl.com}{wolfSSL}
 \end{itemize}
 
 The following command installs these on Debian:
@@ -60,7 +61,8 @@ sudo apt-get install make \
   imagemagick gettext ffmpeg \
   git quilt zip \
   m4 automake \
-  ttf-bitstream-vera fakeroot
+  ttf-bitstream-vera fakeroot \
+  libwolfssl-dev libwolfssl15
 \end{verbatim*}
 
 \section{Target-specific Build Instructions}
