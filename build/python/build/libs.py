@@ -127,7 +127,7 @@ curl = CurlProject(
         '--disable-manual',
         '--disable-threaded-resolver', '--disable-verbose', '--disable-sspi',
         '--disable-crypto-auth', '--disable-ntlm-wb', '--disable-tls-srp', '--disable-cookies',
-        '--without-ssl', '--without-gnutls', '--without-nss', '--without-libssh2', '--with-cyassl'
+        '--without-ssl', '--without-gnutls', '--without-nss', '--without-libssh2', '--with-cyassl',
     ],
     patches=abspath('lib/curl/patches'),
 )
