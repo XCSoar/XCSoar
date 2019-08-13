@@ -3,9 +3,10 @@
 set -e
 
 export DEBIAN_FRONTEND=noninteractive
+APTOPTS="--assume-yes --no-install-recommends"
 
 echo Installing base dependencies...
-apt-get --assume-yes install make \
+apt-get install $APTOPTS make \
   librsvg2-bin xsltproc \
   imagemagick gettext ffmpeg \
   git quilt zip \
@@ -14,7 +15,7 @@ apt-get --assume-yes install make \
 echo
 
 echo Installing Manual dependencies...
-apt-get --assume-yes install texlive \
+apt-get install $APTOPTS texlive \
   texlive-latex-extra \
   texlive-luatex \
   texlive-lang-french \
@@ -25,7 +26,7 @@ apt-get --assume-yes install texlive \
 echo
 
 echo Installing dependencies for the Linux target...
-apt-get --assume-yes install make g++ \
+apt-get install $APTOPTS make g++ \
   zlib1g-dev \
   libfreetype6-dev \
   libpng-dev libjpeg-dev \
@@ -41,21 +42,21 @@ apt-get --assume-yes install make g++ \
 echo
 
 echo Installing dependencies for compiling with LLVM / Clang...
-apt-get --assume-yes install llvm clang libc++-dev
+apt-get install $APTOPTS llvm clang libc++-dev
 echo
 
 echo Installing dependencies for compiling targets which need libinput or GBM...
-apt-get --assume-yes install libinput-dev libgbm-dev
+apt-get install $APTOPTS libinput-dev libgbm-dev
 echo
 
 echo Installing dependencies for ARM Linux targets...
-apt-get --assume-yes install g++-arm-linux-gnueabihf
+apt-get install $APTOPTS g++-arm-linux-gnueabihf
 echo
 
 echo Installing PC/WIN64 dependencies...
-apt-get --assume-yes install g++-mingw-w64
+apt-get install $APTOPTS g++-mingw-w64
 echo
 
 echo Installing dependencies for the Android target, not including SDK / NDK...
-apt-get --assume-yes install default-jdk-headless vorbis-tools adb
+apt-get install $APTOPTS default-jdk-headless vorbis-tools adb
 echo
