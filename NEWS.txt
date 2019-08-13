@@ -62,6 +62,8 @@ Version 7.0 - not yet released
   - drop support for ARMv6 and MIPS CPUs
 * Kobo
   - support Kobo Glo HD
+* Added SSL support through wolfSSL
+  - added support for SSL secured connections e.g. for download manager
 
 Version 6.8.13 - not yet released
 
