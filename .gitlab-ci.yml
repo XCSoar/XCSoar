@@ -3,6 +3,7 @@ image: docker:18.09
 stages:
  - prepare-image
  - build
+ - deploy
 
 variables:
   CONTAINER_IMAGE: $CI_REGISTRY/$CI_PROJECT_PATH
@@ -110,3 +111,15 @@ nightly-docs:
     when: always
     paths:
       - output
+
+deploy_nightlies:
+  stage: deploy
+  script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - scp -P ${DEPLOY_PORT} ./output ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}
+  only:
+    - master
