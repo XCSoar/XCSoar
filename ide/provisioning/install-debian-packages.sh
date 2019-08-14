@@ -8,7 +8,8 @@ apt-get --assume-yes install make \
   imagemagick gettext ffmpeg \
   git quilt zip \
   m4 automake wget \
-  ttf-bitstream-vera fakeroot
+  ttf-bitstream-vera fakeroot \
+  libwolfssl-dev libwolfssl15
 echo
 
 echo Installing Manual dependencies...
