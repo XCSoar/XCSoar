@@ -10,7 +10,7 @@ References:
 	- http://en.wikipedia.org/wiki/Test_Anything_Protocol
 
 What is in a number?
-	0*	Test the test system itself - psudo tests
+	0*	Test the test system itself - pseudo tests
 	1*	Configuration, XML and any other file format checking
 	2*	TODO
 

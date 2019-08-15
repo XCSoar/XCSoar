@@ -64,6 +64,8 @@ Version 7.0 - not yet released
   - drop support for ARMv6 and MIPS CPUs
 * Kobo
   - support Kobo Glo HD
+* Raspberry Pi
+  - resizable mouse cursor
 
 Version 6.8.13 - not yet released
 * devices

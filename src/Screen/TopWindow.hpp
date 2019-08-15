@@ -142,6 +142,9 @@ class TopWindow : public ContainerWindow {
 #elif defined(ENABLE_SDL)
   SDL_Window *window;
 #endif
+#ifdef DRAW_MOUSE_CURSOR
+  uint8_t cursor_size = 1;
+#endif
 
 #ifndef USE_WINUSER
   TopCanvas *screen = nullptr;
@@ -335,6 +338,13 @@ public:
 #ifdef SOFTWARE_ROTATE_DISPLAY
   void SetDisplayOrientation(DisplayOrientation orientation);
 #endif
+
+#ifdef DRAW_MOUSE_CURSOR
+  void SetCursorSize(const uint8_t &cursorSize) {
+    cursor_size = cursorSize;
+  }
+#endif
+
 
 protected:
   PixelPoint PointToReal(PixelPoint p) const {
