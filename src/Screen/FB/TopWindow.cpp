@@ -27,6 +27,7 @@ Copyright_License {
 #include "Event/Poll/Loop.hpp"
 #include "Event/Queue.hpp"
 #include "Event/Globals.hpp"
+#include "Interface.hpp"
 
 #ifdef DRAW_MOUSE_CURSOR
 #include "Util/Macros.hpp"
@@ -91,10 +92,14 @@ TopWindow::OnPaint(Canvas &canvas)
   /* draw the mouse cursor */
 
   const auto m = event_queue->GetMousePosition();
+  uint8_t cursorSize = CommonInterface::GetUISettings().display.cursor_size;
+  unsigned shortDistance = Layout::Scale(cursorSize * 4);
+  unsigned longDistance = Layout::Scale(cursorSize * 6);
+
   const BulkPixelPoint p[] = {
     { m.x, m.y },
-    { m.x + Layout::Scale(4), m.y + Layout::Scale(4) },
-    { m.x, m.y + Layout::Scale(6) },
+    { m.x + shortDistance, m.y + shortDistance },
+    { m.x, m.y + longDistance },
   };
 
   canvas.SelectBlackPen();

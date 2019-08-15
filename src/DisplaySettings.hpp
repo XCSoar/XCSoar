@@ -33,6 +33,7 @@ Copyright_License {
  */
 struct DisplaySettings {
   DisplayOrientation orientation;
+  uint8_t cursor_size;
 
   void SetDefaults();
 };

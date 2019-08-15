@@ -44,6 +44,7 @@ void
 Profile::Load(const ProfileMap &map, DisplaySettings &settings)
 {
   map.GetEnum(ProfileKeys::MapOrientation, settings.orientation);
+  map.Get(ProfileKeys::CursorSize, settings.cursor_size);
 }
 
 void

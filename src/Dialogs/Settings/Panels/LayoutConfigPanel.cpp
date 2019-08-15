@@ -53,6 +53,9 @@ enum ControlIndex {
 #ifdef KOBO
   ShowMenuButton,
 #endif
+#ifdef DRAW_MOUSE_CURSOR
+  CursorSize,
+#endif
 };
 
 static constexpr StaticEnumChoice display_orientation_list[] = {
@@ -212,6 +215,10 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   SetExpertRow(ShowMenuButton);
 #endif
 
+#ifdef DRAW_MOUSE_CURSOR
+  AddInteger(_("Cursor zoom"), _("Cursor zoom factor"), _T("%d x"), _T("%d x"), 1, 10, 1,
+             (unsigned)ui_settings.display.cursor_size);
+#endif
 }
 
 bool
@@ -264,6 +271,10 @@ LayoutConfigPanel::Save(bool &_changed)
 
   DialogSettings &dialog_settings = CommonInterface::SetUISettings().dialog;
   changed |= SaveValueEnum(TabDialogStyle, ProfileKeys::AppDialogTabStyle, dialog_settings.tab_style);
+
+#ifdef DRAW_MOUSE_CURSOR
+  changed |= SaveValue(CursorSize, ProfileKeys::CursorSize, ui_settings.display.cursor_size);
+#endif
 
   if (orientation_changed) {
     assert(Display::RotateSupported());
