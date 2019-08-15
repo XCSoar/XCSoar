@@ -41,7 +41,8 @@ apt-get install $APTOPTS make g++ \
   librsvg2-bin xsltproc \
   imagemagick gettext \
   mesa-common-dev libgl1-mesa-dev libegl1-mesa-dev \
-  fonts-dejavu
+  fonts-dejavu \
+  xz-utils
 echo
 
 echo Installing dependencies for compiling with LLVM / Clang...
@@ -61,7 +62,7 @@ apt-get install $APTOPTS g++-mingw-w64
 echo
 
 echo Installing dependencies for the Android target, not including SDK / NDK...
-apt-get install $APTOPTS default-jdk-headless vorbis-tools adb
+apt-get install $APTOPTS openjdk-8-jdk-headless vorbis-tools adb
 echo
 
 echo Clean up downloaded resources in order to free space
