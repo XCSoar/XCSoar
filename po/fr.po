@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
 "PO-Revision-Date: 2019-08-16 07:24+0000\n"
-"Last-Translator: Martin <sirmarm@gmail.com>\n"
+"Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
 "Language: fr\n"
@@ -575,7 +575,7 @@ msgstr "Déclarer circuit"
 
 #: src/Logger/ExternalLogger.cpp:100
 msgid "Task declared!"
-msgstr "Circuit déclaré!"
+msgstr "Circuit déclaré !"
 
 #: src/Logger/ExternalLogger.cpp:105
 msgid ""
@@ -9281,9 +9281,8 @@ msgstr ""
 "fonction \"bande muette\" est active."
 
 #: src/Dialogs/Settings/Panels/AudioConfigPanel.cpp:60
-#, fuzzy
 msgid "Master Volume"
-msgstr "Volume"
+msgstr "Volume principal "
 
 #: src/Dialogs/Weather/PCMetDialog.cpp:68
 #, fuzzy
@@ -10173,8 +10172,9 @@ msgid "Accel"
 msgstr "Accel"
 
 #: Data/Input/default.xci:646
+#, fuzzy
 msgid "Lua"
-msgstr ""
+msgstr "Lua"
 
 #: Data/Input/default.xci:957
 msgid "AVG/ALT"
