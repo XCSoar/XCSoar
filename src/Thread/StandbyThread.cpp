@@ -65,8 +65,7 @@ StandbyThread::WaitDone(std::unique_lock<Mutex> &lock) noexcept
 {
   assert(!IsInside());
 
-  while (alive && IsBusy())
-    cond.wait(lock);
+  cond.wait(lock, [this]{ return !alive || !IsBusy(); });
 }
 
 void

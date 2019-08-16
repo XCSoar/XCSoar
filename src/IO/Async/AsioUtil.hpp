@@ -59,8 +59,7 @@ DispatchWait(boost::asio::io_service &io_service, F &&f)
     });
 
   std::unique_lock<Mutex> lock(mutex);
-  while (!finished)
-    cond.wait(lock);
+  cond.wait(lock, [&]{ return finished; });
 }
 
 /**

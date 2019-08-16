@@ -150,8 +150,7 @@ TopWindow::Pause()
   event_queue->Push(Event::PAUSE);
 
   std::unique_lock<Mutex> lock(paused_mutex);
-  while (!paused)
-    paused_cond.wait(lock);
+  paused_cond.wait(lock, [this]{ return paused; });
 }
 
 void
