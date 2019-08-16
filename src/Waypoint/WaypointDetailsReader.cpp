@@ -120,10 +120,10 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
 
       operation.SetProgressPosition(reader.Tell() * 100 / filesize);
     } else if ((filename =
-                StringAfterPrefixCI(line, _T("image="))) != nullptr) {
+                StringAfterPrefixIgnoreCase(line, _T("image="))) != nullptr) {
       files_embed.emplace_back(filename);
     } else if ((filename =
-                StringAfterPrefixCI(line, _T("file="))) != nullptr) {
+                StringAfterPrefixIgnoreCase(line, _T("file="))) != nullptr) {
 #ifdef HAVE_RUN_FILE
       files_external.emplace_back(filename);
 #endif
