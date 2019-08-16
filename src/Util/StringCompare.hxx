@@ -99,7 +99,7 @@ gcc_pure gcc_nonnull_all
 static inline const char *
 StringAfterPrefixIgnoreCase(const char *haystack, StringView needle) noexcept
 {
-	return StringIsEqualIgnoreCase(haystack, needle.data, needle.size)
+	return StringStartsWithIgnoreCase(haystack, needle)
 		? haystack + needle.size
 		: nullptr;
 }
