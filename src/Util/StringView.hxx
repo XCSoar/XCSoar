@@ -73,6 +73,7 @@ struct BasicStringView : ConstBuffer<T> {
 	using ConstBuffer<T>::back;
 	using ConstBuffer<T>::pop_front;
 	using ConstBuffer<T>::pop_back;
+	using ConstBuffer<T>::skip_front;
 
 	gcc_pure
 	pointer_type Find(value_type ch) const noexcept {
@@ -144,6 +145,20 @@ struct BasicStringView : ConstBuffer<T> {
 	void Strip() noexcept {
 		StripLeft();
 		StripRight();
+	}
+
+	bool SkipPrefix(BasicStringView<T> needle) noexcept {
+		bool match = StartsWith(needle);
+		if (match)
+			skip_front(needle.size);
+		return match;
+	}
+
+	bool RemoveSuffix(BasicStringView<T> needle) noexcept {
+		bool match = EndsWith(needle);
+		if (match)
+			size -= needle.size;
+		return match;
 	}
 };
 
