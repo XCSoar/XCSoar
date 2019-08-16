@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2017 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2011-2019 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -32,23 +32,20 @@
 
 #include <wchar.h>
 
-constexpr
-static inline bool
-IsASCII(const wchar_t ch)
+constexpr bool
+IsASCII(const wchar_t ch) noexcept
 {
 	return (ch & ~0x7f) == 0;
 }
 
-constexpr
-static inline bool
-IsWhitespaceOrNull(const wchar_t ch)
+constexpr bool
+IsWhitespaceOrNull(const wchar_t ch) noexcept
 {
 	return (unsigned)ch <= 0x20;
 }
 
-constexpr
-static inline bool
-IsWhitespaceNotNull(const wchar_t ch)
+constexpr bool
+IsWhitespaceNotNull(const wchar_t ch) noexcept
 {
 	return ch > 0 && ch <= 0x20;
 }
@@ -59,51 +56,44 @@ IsWhitespaceNotNull(const wchar_t ch)
  * want the fastest implementation, and you don't care if a null byte
  * matches.
  */
-constexpr
-static inline bool
-IsWhitespaceFast(const wchar_t ch)
+constexpr bool
+IsWhitespaceFast(const wchar_t ch) noexcept
 {
 	return IsWhitespaceOrNull(ch);
 }
 
-constexpr
-static inline bool
-IsPrintableASCII(wchar_t ch)
+constexpr bool
+IsPrintableASCII(wchar_t ch) noexcept
 {
 	return IsASCII(ch) && ch >= 0x20;
 }
 
-constexpr
-static inline bool
-IsDigitASCII(wchar_t ch)
+constexpr bool
+IsDigitASCII(wchar_t ch) noexcept
 {
 	return ch >= '0' && ch <= '9';
 }
 
-constexpr
-static inline bool
-IsUpperAlphaASCII(wchar_t ch)
+constexpr bool
+IsUpperAlphaASCII(wchar_t ch) noexcept
 {
 	return ch >= 'A' && ch <= 'Z';
 }
 
-constexpr
-static inline bool
-IsLowerAlphaASCII(wchar_t ch)
+constexpr bool
+IsLowerAlphaASCII(wchar_t ch) noexcept
 {
 	return ch >= 'a' && ch <= 'z';
 }
 
-constexpr
-static inline bool
-IsAlphaASCII(wchar_t ch)
+constexpr bool
+IsAlphaASCII(wchar_t ch) noexcept
 {
 	return IsUpperAlphaASCII(ch) || IsLowerAlphaASCII(ch);
 }
 
-constexpr
-static inline bool
-IsAlphaNumericASCII(wchar_t ch)
+constexpr bool
+IsAlphaNumericASCII(wchar_t ch) noexcept
 {
 	return IsAlphaASCII(ch) || IsDigitASCII(ch);
 }
@@ -112,9 +102,8 @@ IsAlphaNumericASCII(wchar_t ch)
  * Convert the specified ASCII character (0x00..0x7f) to upper case.
  * Unlike toupper(), it ignores the system locale.
  */
-constexpr
-static inline wchar_t
-ToUpperASCII(wchar_t ch)
+constexpr wchar_t
+ToUpperASCII(wchar_t ch) noexcept
 {
 	return ch >= 'a' && ch <= 'z'
 		? (ch - ('a' - 'A'))
@@ -125,9 +114,8 @@ ToUpperASCII(wchar_t ch)
  * Convert the specified ASCII character (0x00..0x7f) to lower case.
  * Unlike tolower(), it ignores the system locale.
  */
-constexpr
-static inline wchar_t
-ToLowerASCII(wchar_t ch)
+constexpr wchar_t
+ToLowerASCII(wchar_t ch) noexcept
 {
 	return ch >= 'A' && ch <= 'Z'
 		? (ch + ('a' - 'A'))
