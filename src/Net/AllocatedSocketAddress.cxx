@@ -28,20 +28,14 @@
  */
 
 #include "AllocatedSocketAddress.hxx"
+#include "IPv4Address.hxx"
+#include "IPv6Address.hxx"
 #include "Util/StringView.hxx"
 
 #include <string.h>
 
 #ifdef HAVE_UN
 #include <sys/un.h>
-#endif
-
-#ifdef HAVE_TCP
-#ifdef _WIN32
-#include <ws2tcpip.h>
-#else
-#include <netinet/in.h>
-#endif
 #endif
 
 AllocatedSocketAddress &
@@ -108,15 +102,15 @@ AllocatedSocketAddress::SetPort(unsigned port) noexcept
 	switch (GetFamily()) {
 	case AF_INET:
 		{
-			auto *a = (struct sockaddr_in *)(void *)address;
-			a->sin_port = htons(port);
+			auto &a = *(IPv4Address *)(void *)address;
+			a.SetPort(port);
 			return true;
 		}
 
 	case AF_INET6:
 		{
-			auto *a = (struct sockaddr_in6 *)(void *)address;
-			a->sin6_port = htons(port);
+			auto &a = *(IPv6Address *)(void *)address;
+			a.SetPort(port);
 			return true;
 		}
 	}
