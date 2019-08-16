@@ -101,7 +101,7 @@ try {
     return RunValidate(path);
   } else
     return 0;
-} catch (const std::runtime_error &e) {
-  PrintException(e);
+} catch (...) {
+  PrintException(std::current_exception());
   return EXIT_FAILURE;
 }
