@@ -62,7 +62,7 @@ apt-get install $APTOPTS g++-mingw-w64
 echo
 
 echo Installing dependencies for the Android target, not including SDK / NDK...
-apt-get install $APTOPTS openjdk-8-jdk-headless vorbis-tools adb
+apt-get install $APTOPTS openjdk-8-jdk-headless vorbis-tools adb unzip
 echo
 
 echo Clean up downloaded resources in order to free space
