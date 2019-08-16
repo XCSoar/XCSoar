@@ -2,6 +2,8 @@
 
 set -e
 
+export DEBIAN_FRONTEND=noninteractive
+
 echo Installing base dependencies...
 apt-get --assume-yes install make \
   librsvg2-bin xsltproc \
