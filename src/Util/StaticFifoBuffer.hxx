@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003-2017 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2003-2019 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -78,11 +78,11 @@ public:
 		head = tail = 0;
 	}
 
-	bool empty() const noexcept {
+	constexpr bool empty() const noexcept {
 		return head == tail;
 	}
 
-	bool IsFull() const noexcept {
+	constexpr bool IsFull() const noexcept {
 		return head == 0 && tail == size;
 	}
 
@@ -115,7 +115,7 @@ public:
 	 * Return a buffer range which may be read.  The buffer pointer is
 	 * writable, to allow modifications while parsing.
 	 */
-	Range Read() noexcept {
+	constexpr Range Read() noexcept {
 		return Range(data + head, tail - head);
 	}
 
