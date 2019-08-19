@@ -207,22 +207,23 @@ private:
   }
 
 protected:
-  virtual void DataReceived(const void *data, size_t length) {
+  bool DataReceived(const void *data, size_t length) noexcept override {
     if (binary) {
       BinaryReceived(data, length);
+      return true;
     } else {
       fwrite(data, 1, length, stdout);
-      PortLineSplitter::DataReceived(data, length);
+      return PortLineSplitter::DataReceived(data, length);
     }
   }
 
-  virtual void LineReceived(const char *_line) {
+  bool LineReceived(const char *_line) noexcept override {
     const char *dollar = strchr(_line, '$');
     if (dollar != NULL)
       _line = dollar;
 
     if (!VerifyNMEAChecksum(_line))
-      return;
+      return true;
 
     NMEAInputLine line(_line);
     char cmd[32];
@@ -232,6 +233,8 @@ protected:
       PFLAC(line);
     else if (strcmp(cmd, "$PFLAX") == 0)
       PFLAX();
+
+    return true;
   }
 };
 

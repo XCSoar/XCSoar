@@ -25,8 +25,8 @@ Copyright_License {
 #include "Descriptor.hpp"
 #include "MultipleDevices.hpp"
 
-void
-DeviceDispatcher::LineReceived(const char *line)
+bool
+DeviceDispatcher::LineReceived(const char *line) noexcept
 {
   unsigned i = 0;
   for (DeviceDescriptor *device : devices) {
@@ -39,4 +39,6 @@ DeviceDispatcher::LineReceived(const char *line)
 
     device->ForwardLine(line);
   }
+
+  return true;
 }

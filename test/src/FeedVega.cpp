@@ -38,8 +38,8 @@ Copyright_License {
 
 class MyHandler : public DataHandler {
 public:
-  virtual void DataReceived(const void *data, size_t length) {
-    fwrite(data, 1, length, stdout);
+  bool DataReceived(const void *data, size_t length) noexcept override {
+    return fwrite(data, 1, length, stdout) == length;
   }
 };
 

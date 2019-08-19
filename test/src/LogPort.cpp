@@ -52,10 +52,11 @@ public:
 
 class MyHandler : public DataHandler {
 public:
-  virtual void DataReceived(const void *data, size_t length) {
+  bool DataReceived(const void *data, size_t length) noexcept override {
     char prefix[16];
     sprintf(prefix, "%12u ", MonotonicClockMS());
     HexDump(prefix, data, length);
+    return true;
   }
 };
 

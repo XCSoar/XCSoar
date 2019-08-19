@@ -31,8 +31,6 @@ Copyright_License {
 #include <cassert>
 #include <stdio.h>
 
-class CancelDownloadToFile {};
-
 class DownloadToFileHandler final : public Net::ResponseHandler {
   FILE *file;
 
@@ -44,11 +42,17 @@ class DownloadToFileHandler final : public Net::ResponseHandler {
 
   const bool do_sha256;
 
+  bool error = false;
+
 public:
   DownloadToFileHandler(FILE *_file, bool _do_sha256,
                         OperationEnvironment &_env) noexcept
     :file(_file), env(_env), do_sha256(_do_sha256)
   {
+  }
+
+  bool HasFailed() const noexcept {
+    return error;
   }
 
   auto GetSHA256() noexcept {
@@ -62,18 +66,21 @@ public:
       env.SetProgressRange(content_length);
   };
 
-  void DataReceived(const void *data, size_t length) override {
+  bool DataReceived(const void *data, size_t length) noexcept override {
     if (do_sha256)
       sha256.Update({data, length});
 
     size_t written = fwrite(data, 1, length, file);
-    if (written != (size_t)length)
-      throw CancelDownloadToFile();
+    if (written != (size_t)length) {
+      error = true;
+      return false;
+    }
 
     received += length;
 
     env.SetProgressPosition(received);
-  };
+    return true;
+  }
 };
 
 static bool
@@ -90,11 +97,9 @@ DownloadToFile(Net::Session &session, const char *url,
   if (username != nullptr)
     request.SetBasicAuth(username, password);
 
-  try {
-    request.Send(10000);
-  } catch (CancelDownloadToFile) {
+  request.Send(10000);
+  if (handler.HasFailed())
     return false;
-  }
 
   if (sha256 != nullptr)
     *sha256 = handler.GetSHA256();

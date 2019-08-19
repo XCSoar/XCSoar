@@ -28,7 +28,9 @@ Copyright_License {
 
 class NullDataHandler : public DataHandler {
 public:
-  virtual void DataReceived(const void *, size_t) {}
+  bool DataReceived(const void *, size_t) noexcept override {
+    return true;
+  }
 };
 
 #endif

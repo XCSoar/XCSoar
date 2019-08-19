@@ -115,11 +115,11 @@ BufferedPort::WaitRead(std::chrono::steady_clock::duration _timeout)
   return WaitResult::READY;
 }
 
-void
-BufferedPort::DataReceived(const void *data, size_t length)
+bool
+BufferedPort::DataReceived(const void *data, size_t length) noexcept
 {
   if (running) {
-    handler.DataReceived(data, length);
+    return handler.DataReceived(data, length);
   } else {
     const uint8_t *p = (const uint8_t *)data;
 
@@ -129,7 +129,7 @@ BufferedPort::DataReceived(const void *data, size_t length)
     auto r = buffer.Write();
     if (r.size == 0)
       /* the buffer is already full, discard excess data */
-      return;
+      return true;
 
     /* discard excess data */
     size_t nbytes = std::min(length, r.size);
@@ -138,5 +138,6 @@ BufferedPort::DataReceived(const void *data, size_t length)
     buffer.Append(nbytes);
 
     cond.notify_all();
+    return true;
   }
 }

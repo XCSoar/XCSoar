@@ -62,7 +62,7 @@ public:
     :terminal(_terminal) {}
   virtual ~PortTerminalBridge() {}
 
-  virtual void DataReceived(const void *data, size_t length) {
+  bool DataReceived(const void *data, size_t length) noexcept {
     {
       const std::lock_guard<Mutex> lock(mutex);
       buffer.Shift();
@@ -74,6 +74,7 @@ public:
     }
 
     notify.SendNotification();
+    return true;
   }
 
 private:

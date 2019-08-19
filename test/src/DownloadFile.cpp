@@ -45,11 +45,13 @@ public:
   void ResponseReceived(int64_t content_length) override {
   }
 
-  void DataReceived(const void *data, size_t length) override {
+  bool DataReceived(const void *data, size_t length) noexcept override {
     fwrite(data, 1, length, stdout);
 
     if (file != nullptr)
       fwrite(data, 1, length, file);
+
+    return true;
   }
 };
 

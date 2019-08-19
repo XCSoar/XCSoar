@@ -34,7 +34,8 @@ class PortLineSplitter : public DataHandler, protected PortLineHandler {
   Buffer buffer;
 
 public:
-  virtual void DataReceived(const void *data, size_t length) override;
+  /* virtual methods from class DataHandler */
+  bool DataReceived(const void *data, size_t length) noexcept override;
 };
 
 #endif

@@ -29,8 +29,6 @@ Copyright_License {
 #include <cstdint>
 #include <string.h>
 
-class CancelDownloadToBuffer {};
-
 class DownloadToBufferHandler final : public Net::ResponseHandler {
   uint8_t *buffer;
   const size_t max_size;
@@ -53,10 +51,10 @@ public:
       env.SetProgressRange(content_length);
   };
 
-  void DataReceived(const void *data, size_t length) override {
+  bool DataReceived(const void *data, size_t length) noexcept override {
     size_t remaining = max_size - received;
     if (remaining == 0 || env.IsCancelled())
-      throw CancelDownloadToBuffer();
+      return false;
 
     if (length > remaining)
       length = remaining;
@@ -65,6 +63,7 @@ public:
     received += length;
 
     env.SetProgressRange(received);
+    return true;
   };
 };
 
@@ -79,12 +78,10 @@ Net::DownloadToBuffer(Session &session, const char *url,
   if (username != nullptr)
     request.SetBasicAuth(username, password);
 
-  try {
-    request.Send(10000);
-  } catch (CancelDownloadToBuffer) {
-    if (env.IsCancelled())
-      return -1;
-  }
+  request.Send(10000);
+
+  if (env.IsCancelled())
+    return -1;
 
   return handler.GetReceived();
 }

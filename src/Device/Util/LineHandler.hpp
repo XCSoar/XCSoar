@@ -26,7 +26,7 @@ Copyright_License {
 
 class PortLineHandler {
 public:
-  virtual void LineReceived(const char *line) = 0;
+  virtual bool LineReceived(const char *line) noexcept = 0;
 };
 
 #endif

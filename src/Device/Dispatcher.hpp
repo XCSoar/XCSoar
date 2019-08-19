@@ -45,7 +45,7 @@ public:
     :devices(_devices), exclude(_exclude) {}
 
   /* virtual methods from DataHandler */
-  void LineReceived(const char *line) override;
+  bool LineReceived(const char *line) noexcept override;
 };
 
 #endif

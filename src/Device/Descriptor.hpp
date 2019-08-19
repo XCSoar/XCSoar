@@ -540,10 +540,10 @@ private:
   void PortError(const char *msg) override;
 
   /* virtual methods from DataHandler  */
-  void DataReceived(const void *data, size_t length) override;
+  bool DataReceived(const void *data, size_t length) noexcept override;
 
   /* virtual methods from PortLineHandler */
-  void LineReceived(const char *line) override;
+  bool LineReceived(const char *line) noexcept override;
 };
 
 #endif

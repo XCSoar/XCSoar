@@ -1204,8 +1204,8 @@ DeviceDescriptor::PortError(const char *msg)
     port_listener->PortError(msg);
 }
 
-void
-DeviceDescriptor::DataReceived(const void *data, size_t length)
+bool
+DeviceDescriptor::DataReceived(const void *data, size_t length) noexcept
 {
   if (monitor != nullptr)
     monitor->DataReceived(data, length);
@@ -1225,15 +1225,17 @@ DeviceDescriptor::DataReceived(const void *data, size_t length)
       device_blackboard->ScheduleMerge();
     }
 
-    return;
+    return true;
   }
 
   if (!IsNMEAOut())
     PortLineSplitter::DataReceived(data, length);
+
+  return true;
 }
 
-void
-DeviceDescriptor::LineReceived(const char *line)
+bool
+DeviceDescriptor::LineReceived(const char *line) noexcept
 {
   NMEALogger::Log(line);
 
@@ -1242,4 +1244,6 @@ DeviceDescriptor::LineReceived(const char *line)
 
   if (ParseLine(line))
     device_blackboard->ScheduleMerge();
+
+  return true;
 }

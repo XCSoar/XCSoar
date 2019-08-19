@@ -73,7 +73,7 @@ public:
 
 protected:
   /* virtual methods from class DataHandler */
-  virtual void DataReceived(const void *data, size_t length) override;
+  bool DataReceived(const void *data, size_t length) noexcept override;
 };
 
 #endif

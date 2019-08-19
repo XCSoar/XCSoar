@@ -49,7 +49,7 @@ public:
 
 private:
   /* virtual methods from class DataHandler */
-  void DataReceived(const void *data, size_t length) override;
+  bool DataReceived(const void *data, size_t length) noexcept override;
 };
 
 #endif

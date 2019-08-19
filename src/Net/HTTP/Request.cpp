@@ -82,8 +82,9 @@ Net::Request::ResponseData(const uint8_t *ptr, size_t size)
   if (!submitted)
     SubmitResponse();
 
-  handler.DataReceived(ptr, size);
-  return size;
+  return handler.DataReceived(ptr, size)
+    ? size
+    : 0;
 }
 
 size_t

@@ -45,8 +45,8 @@ SanitiseLine(char *const begin, char *const end)
   std::replace_if(begin, end, IsInsaneChar, ' ');
 }
 
-void
-PortLineSplitter::DataReceived(const void *_data, size_t length)
+bool
+PortLineSplitter::DataReceived(const void *_data, size_t length) noexcept
 {
   assert(_data != nullptr);
   assert(length > 0);
@@ -89,7 +89,10 @@ PortLineSplitter::DataReceived(const void *_data, size_t length)
       while ((nul = memchr(line, 0, end - line)) != nullptr)
         line = (char *)nul + 1;
 
-      LineReceived(line);
+      if (!LineReceived(line))
+        return false;
     }
   } while (data < end);
+
+  return true;
 }
