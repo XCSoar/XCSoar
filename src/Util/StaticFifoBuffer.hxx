@@ -46,10 +46,8 @@
 template<class T, size_t size>
 class StaticFifoBuffer {
 public:
-	typedef size_t size_type;
-
-public:
-	typedef WritableBuffer<T> Range;
+	using size_type = size_t;
+	using Range = WritableBuffer<T>;
 
 protected:
 	size_type head = 0, tail = 0;
