@@ -34,7 +34,7 @@
 #include "Features.hxx"
 #include "Compiler.h"
 
-#include <algorithm>
+#include <utility>
 
 #include <stdlib.h>
 
