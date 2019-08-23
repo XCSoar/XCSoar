@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_MENU_DATA_HPP
 #define XCSOAR_MENU_DATA_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <tchar.h>
 #include <string.h>

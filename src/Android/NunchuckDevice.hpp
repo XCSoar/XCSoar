@@ -27,7 +27,7 @@ Copyright_License {
 #include "NunchuckListener.hpp"
 #include "Java/Object.hxx"
 #include "Math/SelfTimingKalmanFilter1d.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <jni.h>
 

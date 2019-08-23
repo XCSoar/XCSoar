@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DELTA_TIME_HPP
 #define XCSOAR_DELTA_TIME_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 /**
  * Calculates the time difference between two events, and detects time

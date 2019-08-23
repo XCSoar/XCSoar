@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Java/Object.hxx"
 #include "Java/Class.hxx"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <jni.h>
 #include <vector>

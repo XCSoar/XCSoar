@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_AIRSPACE_FORMATTER_HPP
 
 #include "Engine/Airspace/AirspaceClass.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <tchar.h>
 

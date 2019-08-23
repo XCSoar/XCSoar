@@ -25,7 +25,7 @@
 
 #include "Flat/FlatProjection.hpp"
 #include "Flat/FlatEllipse.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 /**
  * Ellipse in geodesic coordinates, defined by two foci and

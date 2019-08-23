@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_NMEA_AIRCRAFT_HPP
 #define XCSOAR_NMEA_AIRCRAFT_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 struct MoreData;
 struct DerivedInfo;

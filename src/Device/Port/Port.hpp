@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_DEVICE_PORT_HPP
 
 #include "State.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <chrono>
 

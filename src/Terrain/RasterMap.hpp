@@ -27,7 +27,7 @@ Copyright_License {
 #include "RasterProjection.hpp"
 #include "RasterTileCache.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 class OperationEnvironment;
 

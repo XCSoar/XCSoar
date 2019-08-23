@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_LOCAL_PATH_HPP
 #define XCSOAR_LOCAL_PATH_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <tchar.h>
 

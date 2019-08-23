@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_MATH_TRIG_HPP
 #define XCSOAR_MATH_TRIG_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <utility>
 

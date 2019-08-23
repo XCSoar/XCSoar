@@ -24,7 +24,7 @@
 #define QUADRILATERAL_HPP
 
 #include "Point2D.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 constexpr double
 CalcQuadrilateralU(const DoublePoint2D h, DoublePoint2D f,

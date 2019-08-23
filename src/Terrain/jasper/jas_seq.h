@@ -79,7 +79,7 @@
 
 #include <jasper/jas_types.h>
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <stdio.h>
 

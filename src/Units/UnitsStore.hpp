@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_UNITS_STORE_HPP
 #define XCSOAR_UNITS_STORE_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 #include <tchar.h>
 
 struct UnitSetting;

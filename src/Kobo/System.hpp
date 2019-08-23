@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_KOBO_SYSTEM_HPP
 #define XCSOAR_KOBO_SYSTEM_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 bool
 KoboReboot();

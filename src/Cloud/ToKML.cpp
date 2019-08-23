@@ -27,7 +27,7 @@ Copyright_License {
 #include "IO/FileReader.hxx"
 #include "IO/BufferedOutputStream.hxx"
 #include "Util/PrintException.hxx"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <iostream>
 

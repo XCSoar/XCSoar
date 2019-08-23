@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_CACHE_HPP
 #define XCSOAR_SCREEN_OPENGL_CACHE_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 struct PixelSize;
 class Font;

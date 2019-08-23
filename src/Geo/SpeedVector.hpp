@@ -26,7 +26,7 @@ Copyright_License {
 #define XCSOAR_SPEED_VECTOR_HPP
 
 #include "Math/Angle.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 /**
  * An object describing the speed vector in a two dimensional surface.

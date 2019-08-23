@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_UNITS_GLUE_HPP
 #define XCSOAR_UNITS_GLUE_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 struct UnitSetting;
 

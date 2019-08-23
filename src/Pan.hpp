@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_PAN_HPP
 #define XCSOAR_PAN_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 struct GeoPoint;
 

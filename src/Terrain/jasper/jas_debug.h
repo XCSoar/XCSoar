@@ -80,7 +80,7 @@
 #include <jasper/jas_types.h>
 #include <jasper/jas_debug.h>
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #ifdef __cplusplus
 extern "C" {

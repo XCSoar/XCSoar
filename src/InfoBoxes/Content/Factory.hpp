@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_INFOBOX_FACTORY_HPP
 
 #include "Type.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <tchar.h>
 

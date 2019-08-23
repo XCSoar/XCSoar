@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_INFOBOX_CONTENT_HPP
 #define XCSOAR_INFOBOX_CONTENT_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 struct PixelRect;
 struct InfoBoxData;

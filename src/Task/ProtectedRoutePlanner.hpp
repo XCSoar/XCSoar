@@ -25,7 +25,7 @@
 
 #include "Thread/Guard.hpp"
 #include "Task/RoutePlannerGlue.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 struct GlideSettings;
 struct RoutePlannerConfig;

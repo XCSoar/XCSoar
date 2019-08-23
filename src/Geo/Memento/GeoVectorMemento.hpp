@@ -25,7 +25,7 @@
 
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoVector.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 /** Memento object to store results of previous GeoVector constructors. */
 class GeoVectorMemento 

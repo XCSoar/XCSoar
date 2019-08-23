@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_GLIDE_RATIO_HPP
 #define XCSOAR_GLIDE_RATIO_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 static constexpr double INVALID_GR = 999;
 

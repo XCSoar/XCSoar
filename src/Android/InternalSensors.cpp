@@ -31,7 +31,7 @@ Copyright_License {
 #include "Math/SelfTimingKalmanFilter1d.hpp"
 #include "OS/Clock.hpp"
 #include "Geo/Geoid.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 Java::TrivialClass InternalSensors::gps_cls, InternalSensors::sensors_cls;
 jmethodID InternalSensors::gps_ctor_id, InternalSensors::close_method;

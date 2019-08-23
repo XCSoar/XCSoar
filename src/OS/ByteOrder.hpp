@@ -31,7 +31,7 @@
 #ifndef XCSOAR_BYTE_ORDER_HPP
 #define XCSOAR_BYTE_ORDER_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <stdint.h>
 

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_MATH_FASTMATH_HPP
 #define XCSOAR_MATH_FASTMATH_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 /**
  * Compares a^2 + b^2 against c^2

@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "BinaryProtocol.hpp"
 #include "Util/AllocatedArray.hxx"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 #include "tchar.h"
 #include "Device/Driver.hpp"
 #include "Device/SettingsMap.hpp"

@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Features.hpp"
 #include "SystemExt.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 /**
  * Support for OpenGL framebuffer objects (GL_*_framebuffer_object).

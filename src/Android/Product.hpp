@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_PRODUCT_HPP
 #define XCSOAR_ANDROID_PRODUCT_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 extern bool has_cursor_keys;
 

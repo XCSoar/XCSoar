@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 /**
  * Base class for blackboards, providing read access to NMEA_INFO and DERIVED_INFO

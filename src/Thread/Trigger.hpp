@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_THREAD_TRIGGER_HXX
 #define XCSOAR_THREAD_TRIGGER_HXX
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <windows.h>
 

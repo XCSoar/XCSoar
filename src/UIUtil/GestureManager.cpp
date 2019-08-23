@@ -29,7 +29,7 @@
 
 #include "GestureManager.hpp"
 #include "Math/FastMath.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 static gcc_const TCHAR
 getDirection(int dx, int dy)

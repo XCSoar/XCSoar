@@ -24,7 +24,7 @@
 #define QUADRATIC_HPP
 
 #include "Util.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <assert.h>
 

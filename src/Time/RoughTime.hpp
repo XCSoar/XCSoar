@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_ROUGH_TIME_SPAN_HPP
 #define XCSOAR_ROUGH_TIME_SPAN_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <assert.h>
 #include <stdint.h>

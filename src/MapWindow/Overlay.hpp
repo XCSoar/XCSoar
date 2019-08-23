@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_MAP_OVERLAY_HPP
 #define XCSOAR_MAP_OVERLAY_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <tchar.h>
 

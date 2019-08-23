@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_HARDWARE_DISPLAY_SIZE_HPP
 #define XCSOAR_HARDWARE_DISPLAY_SIZE_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 struct PixelSize;
 

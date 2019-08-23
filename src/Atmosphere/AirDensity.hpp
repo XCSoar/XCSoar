@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_ATMOSPHERE_AIRDENSITY_H
 #define XCSOAR_ATMOSPHERE_AIRDENSITY_H
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 /**
  * Calculates the air density from a given QNH-based altitude

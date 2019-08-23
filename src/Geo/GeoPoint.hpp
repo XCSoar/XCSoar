@@ -26,7 +26,7 @@ Copyright_License {
 #define XCSOAR_GeoPoint_HPP
 
 #include "Math/Angle.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <type_traits>
 

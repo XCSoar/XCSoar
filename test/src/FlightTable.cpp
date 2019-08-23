@@ -27,7 +27,7 @@
 #include "OS/FileUtil.hpp"
 #include "Util/StaticString.hxx"
 #include "Util/PrintException.hxx"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <cstdio>
 

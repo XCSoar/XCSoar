@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_TRACKING_SKYLINES_CLIENT_HPP
 
 #include "Thread/Mutex.hxx"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <boost/asio/ip/udp.hpp>
 

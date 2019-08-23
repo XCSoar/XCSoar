@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_BUTTON_RENDERER_HPP
 #define XCSOAR_BUTTON_RENDERER_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 struct PixelRect;
 struct ButtonLook;

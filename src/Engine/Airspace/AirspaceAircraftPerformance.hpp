@@ -26,7 +26,7 @@
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideSolvers/GlideResult.hpp"
 #include "Util/AircraftStateFilter.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <assert.h>
 

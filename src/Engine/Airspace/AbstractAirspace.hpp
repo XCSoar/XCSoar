@@ -29,7 +29,7 @@
 #include "AirspaceActivity.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/SearchPointVector.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #ifdef DO_PRINT
 #include <iostream>

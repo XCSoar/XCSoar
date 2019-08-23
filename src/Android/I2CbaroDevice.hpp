@@ -27,7 +27,7 @@ Copyright_License {
 #include "I2CbaroListener.hpp"
 #include "Java/Object.hxx"
 #include "Math/SelfTimingKalmanFilter1d.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 #include "Device/Config.hpp"
 
 #include <jni.h>

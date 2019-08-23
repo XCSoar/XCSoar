@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FAI_TRIANGLE_POINT_VALIDATOR_HPP
 #define XCSOAR_FAI_TRIANGLE_POINT_VALIDATOR_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 class OrderedTask;
 struct GeoPoint;

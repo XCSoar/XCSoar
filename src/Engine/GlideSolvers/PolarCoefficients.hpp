@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_POLAR_COEFF_HPP
 #define XCSOAR_POLAR_COEFF_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 struct PolarCoefficients
 {

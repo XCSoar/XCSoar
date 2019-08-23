@@ -29,7 +29,7 @@
 #include "Task/Points/ScoredTaskPoint.hpp"
 #include "Task/ObservationZones/ObservationZoneClient.hpp"
 #include "Geo/Flat/FlatBoundingBox.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 struct TaskBehaviour;
 struct OrderedTaskSettings;

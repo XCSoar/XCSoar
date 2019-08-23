@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_LOG_FILE_HPP
 #define XCSOAR_LOG_FILE_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <exception>
 

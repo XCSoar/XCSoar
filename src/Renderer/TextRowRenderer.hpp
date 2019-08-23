@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TEXT_ROW_RENDERER_HPP
 #define XCSOAR_TEXT_ROW_RENDERER_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <tchar.h>
 

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_IDLE_HPP
 #define XCSOAR_EVENT_IDLE_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 /**
  * Check whether the user is currently inactive.

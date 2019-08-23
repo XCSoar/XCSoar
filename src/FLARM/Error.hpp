@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_FLARM_ERROR_HPP
 
 #include "NMEA/Validity.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <type_traits>
 

@@ -23,7 +23,7 @@
 #define GLIDEPOLAR_HPP
 
 #include "PolarCoefficients.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <type_traits>
 

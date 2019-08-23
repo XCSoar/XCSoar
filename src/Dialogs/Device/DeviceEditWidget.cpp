@@ -24,7 +24,7 @@
 #include "DeviceEditWidget.hpp"
 #include "Dialogs/ComboPicker.hpp"
 #include "UIGlobals.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 #include "Util/Macros.hpp"
 #include "Util/NumberParser.hpp"
 #include "Language/Language.hpp"

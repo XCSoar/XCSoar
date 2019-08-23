@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "InfoBoxSettings.hpp"
 #include "Screen/Point.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 namespace InfoBoxLayout
 {

@@ -24,7 +24,7 @@
 #define DISTANCE_MEMENTO_HPP
 
 #include "Geo/GeoPoint.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 /** Memento object to store results of previous distance calculations. */
 class DistanceMemento

@@ -33,7 +33,7 @@ Copyright_License {
 #include "PixelTraits.hpp"
 #include "Buffer.hpp"
 #include "ActivePixelTraits.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <tchar.h>
 

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_HARDWARE_ROTATE_DISPLAY_HPP
 #define XCSOAR_HARDWARE_ROTATE_DISPLAY_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <stdint.h>
 

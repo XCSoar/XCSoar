@@ -27,7 +27,7 @@ Copyright_License {
 #include "Event/Idle.hpp"
 #include "Event/Globals.hpp"
 #include "OS/Clock.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 /**
  * @see http://developer.android.com/reference/android/view/KeyEvent.html

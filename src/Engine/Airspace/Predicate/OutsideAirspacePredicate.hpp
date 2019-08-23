@@ -24,7 +24,7 @@
 #define XCSOAR_OUTSIDE_AIRSPACE_PREDICATE_HPP
 
 #include "Geo/GeoPoint.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 class AbstractAirspace;
 

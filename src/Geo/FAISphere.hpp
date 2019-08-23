@@ -29,7 +29,7 @@ Copyright_License {
 #define XCSOAR_GEO_FAI_SPHERE_HPP
 
 #include "Math/Angle.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 namespace FAISphere {
   static constexpr unsigned REARTH = 6371000;

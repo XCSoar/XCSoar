@@ -29,7 +29,7 @@
 #ifndef XCSOAR_XML_PARSER_HPP
 #define XCSOAR_XML_PARSER_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <tchar.h>
 

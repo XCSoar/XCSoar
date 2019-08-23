@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Util/StringBuffer.hxx"
 #include "Geo/CoordinateFormat.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <tchar.h>
 #include <stddef.h>

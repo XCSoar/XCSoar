@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_TASK_VALIDATION_ERROR_STRINGS_HPP
 
 #include "Engine/Task/Factory/ValidationError.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <tchar.h>
 

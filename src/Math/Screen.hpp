@@ -26,7 +26,7 @@ Copyright_License {
 #ifndef XCSOAR_MATH_SCREEN_HPP
 #define XCSOAR_MATH_SCREEN_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 struct BulkPixelPoint;
 struct PixelPoint;

@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_EVENT_LAMBDA_TIMER_HPP
 
 #include "Timer.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <utility>
 

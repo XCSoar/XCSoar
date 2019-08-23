@@ -62,7 +62,7 @@
 #ifndef	JPC_MATH_H
 #define	JPC_MATH_H
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 /******************************************************************************\
 * Includes

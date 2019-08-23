@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_WIDGET_HPP
 #define XCSOAR_WIDGET_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 struct PixelSize;
 struct PixelRect;

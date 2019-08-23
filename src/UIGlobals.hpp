@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_UI_GLOBALS_HPP
 #define XCSOAR_UI_GLOBALS_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 class SingleWindow;
 class GlueMapWindow;

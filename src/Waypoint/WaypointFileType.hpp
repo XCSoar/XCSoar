@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef WAYPOINT_FILE_TYPE_HPP
 #define WAYPOINT_FILE_TYPE_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <stdint.h>
 

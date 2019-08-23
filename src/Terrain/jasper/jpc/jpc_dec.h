@@ -84,7 +84,7 @@
 #include "jpc_mqdec.h"
 #include "jpc_t2cod.h"
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 /******************************************************************************\
 * Below are some ugly warts necessary to support packed packet headers.

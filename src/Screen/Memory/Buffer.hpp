@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_BUFFER_HPP
 #define XCSOAR_SCREEN_BUFFER_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 /**
  * A reference to an image buffer (or a portion of it) that we can

@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_DEVICE_DRIVER_LX_PROTOCOL_HPP
 
 #include "Device/Port/Port.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <stddef.h>
 #include <stdint.h>

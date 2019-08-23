@@ -58,7 +58,7 @@ Copyright_License {
 #include "Java/File.hxx"
 #include "Java/InputStream.hxx"
 #include "Java/URL.hxx"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 #include "org_xcsoar_NativeView.h"
 #include "IO/Async/GlobalAsioThread.hpp"
 #include "IO/Async/AsioThread.hpp"

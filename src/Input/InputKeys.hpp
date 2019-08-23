@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_INPUT_KEYS_HPP
 #define XCSOAR_INPUT_KEYS_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <tchar.h>
 

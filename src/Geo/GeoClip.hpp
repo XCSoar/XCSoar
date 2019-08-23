@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_GEO_CLIP_HPP
 
 #include "Geo/GeoBounds.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 /**
  * A rectangle on earth's surface with very simple semantics.  Similar

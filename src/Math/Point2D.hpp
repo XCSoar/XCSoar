@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_POINT2D_HPP
 #define XCSOAR_POINT2D_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <type_traits>
 #include <cmath>

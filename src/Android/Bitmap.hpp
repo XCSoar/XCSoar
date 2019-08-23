@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_BITMAP_HPP
 #define XCSOAR_ANDROID_BITMAP_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <jni.h>
 

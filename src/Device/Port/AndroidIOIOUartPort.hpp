@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_ANDROID_IOIO_UART_PORT_HPP
 #define XCSOAR_DEVICE_ANDROID_IOIO_UART_PORT_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <tchar.h>
 

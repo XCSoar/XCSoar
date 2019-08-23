@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_OS_CLOCK_HPP
 #define XCSOAR_OS_CLOCK_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <stdint.h>
 

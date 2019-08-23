@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_WINDOWS_LOOP_HPP
 #define XCSOAR_EVENT_WINDOWS_LOOP_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <windows.h>
 

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_IO_ZIP_ARCHIVE_HPP
 #define XCSOAR_IO_ZIP_ARCHIVE_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <algorithm>
 #include <string>

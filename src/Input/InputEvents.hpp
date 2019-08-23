@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_INPUT_EVENTS_HPP
 #define XCSOAR_INPUT_EVENTS_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <tchar.h>
 

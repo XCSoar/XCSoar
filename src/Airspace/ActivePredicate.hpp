@@ -23,7 +23,7 @@
 #ifndef XCSOAR_ACTIVE_AIRSPACE_PREDICATE_HPP
 #define XCSOAR_ACTIVE_AIRSPACE_PREDICATE_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 class ProtectedAirspaceWarningManager;
 class AbstractAirspace;

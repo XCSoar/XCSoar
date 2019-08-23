@@ -30,7 +30,7 @@
 #ifndef CURL_EASY_HXX
 #define CURL_EASY_HXX
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <curl/curl.h>
 

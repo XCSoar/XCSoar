@@ -30,7 +30,7 @@
 #ifndef BUFFERED_OUTPUT_STREAM_HXX
 #define BUFFERED_OUTPUT_STREAM_HXX
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 #include "Util/DynamicFifoBuffer.hxx"
 
 #include <stddef.h>

@@ -25,7 +25,7 @@ Copyright_License {
 #define	XCSOAR_TEAM_CODE_CALCULATION_HPP
 
 #include "Util/StaticString.hxx"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <type_traits>
 

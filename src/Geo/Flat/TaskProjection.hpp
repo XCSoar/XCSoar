@@ -25,7 +25,7 @@
 
 #include "FlatProjection.hpp"
 #include "Geo/GeoBounds.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 struct GeoPoint;
 

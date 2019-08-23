@@ -24,7 +24,7 @@
 #define TASKINTERFACE_H
 
 #include "TaskType.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 struct AircraftState;
 struct GeoPoint;

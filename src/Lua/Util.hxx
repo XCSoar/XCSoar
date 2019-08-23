@@ -31,7 +31,7 @@
 #define LUA_UTIL_HXX
 
 #include "Assert.hxx"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 extern "C" {
 #include <lua.h>

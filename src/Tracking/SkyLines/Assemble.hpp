@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_TRACKING_SKYLINES_ASSEMBLE_HPP
 
 #include "Features.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <stdint.h>
 

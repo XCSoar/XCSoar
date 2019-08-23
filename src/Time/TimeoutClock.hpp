@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_TIMEOUT_CLOCK_HPP
 
 #include "PeriodClock.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <algorithm>
 

@@ -81,7 +81,7 @@
 #include "jpc_dec.h"
 #include "jpc_mqdec.h"
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 /******************************************************************************\
 * Functions.

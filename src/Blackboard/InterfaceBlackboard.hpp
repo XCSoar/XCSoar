@@ -25,7 +25,7 @@ Copyright_License {
 #define INTERFACE_BLACKBOARD_H
 
 #include "LiveBlackboard.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 class InterfaceBlackboard : public LiveBlackboard
 {

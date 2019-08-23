@@ -25,7 +25,7 @@ Copyright_License {
 #define OS_CONVERT_PATH_NAME_HPP
 
 #include "Path.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #ifdef _UNICODE
 #include "Util/ConvertString.hpp"

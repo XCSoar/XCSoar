@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_TIMER_QUEUE_HPP
 #define XCSOAR_EVENT_TIMER_QUEUE_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <chrono>
 #include <set>

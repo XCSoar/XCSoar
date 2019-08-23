@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FAI_TRIANGLE_RULES_HPP
 #define XCSOAR_FAI_TRIANGLE_RULES_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 struct GeoPoint;
 struct FAITriangleSettings;

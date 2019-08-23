@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_POLAR_SHAPE_HPP
 #define XCSOAR_POLAR_SHAPE_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <array>
 

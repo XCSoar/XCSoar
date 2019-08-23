@@ -87,7 +87,7 @@
 #endif
 #include <jasper/jas_types.h>
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #ifdef __cplusplus
 extern "C" {

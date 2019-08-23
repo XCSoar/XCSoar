@@ -33,7 +33,7 @@ Copyright_License {
 #include "LogComputer.hpp"
 #include "WarningComputer.hpp"
 #include "CuComputer.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 #include "Engine/Contest/Solvers/Retrospective.hpp"
 
 class Waypoints;

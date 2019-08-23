@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_IO_LINE_READER_HPP
 #define XCSOAR_IO_LINE_READER_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <tchar.h>
 

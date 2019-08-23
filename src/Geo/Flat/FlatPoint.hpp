@@ -23,7 +23,7 @@
 #define FLATPOINT_HPP
 
 #include "Math/Point2D.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 class Angle;
 

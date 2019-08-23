@@ -79,7 +79,7 @@
 #include "jasper/jas_types.h"
 #include "jasper/jas_stream.h"
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 /******************************************************************************\
 * Constants.

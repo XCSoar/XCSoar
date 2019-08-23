@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef OLC_RULES_HPP
 #define OLC_RULES_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <stdint.h>
 #include <tchar.h>

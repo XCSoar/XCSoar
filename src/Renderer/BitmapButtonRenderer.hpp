@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_BITMAP_BUTTON_RENDERER_HPP
 
 #include "ButtonRenderer.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 class Bitmap;
 

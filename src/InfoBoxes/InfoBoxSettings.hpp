@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_INFO_BOX_SETTINGS_HPP
 
 #include "Util/StaticString.hxx"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 #include "InfoBoxes/Content/Type.hpp"
 
 #include <stdint.h>

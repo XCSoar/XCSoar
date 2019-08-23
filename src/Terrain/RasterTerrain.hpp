@@ -29,7 +29,7 @@ Copyright_License {
 #include "Thread/Guard.hpp"
 #include "OS/Path.hpp"
 #include "IO/ZipArchive.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 class FileCache;
 class OperationEnvironment;

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_LUA_ASSOCIATE_HPP
 #define XCSOAR_LUA_ASSOCIATE_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 struct lua_State;
 

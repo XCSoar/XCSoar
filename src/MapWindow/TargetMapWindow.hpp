@@ -31,7 +31,7 @@ Copyright_License {
 #include "Renderer/BackgroundRenderer.hpp"
 #include "Renderer/WaypointRenderer.hpp"
 #include "Renderer/TrailRenderer.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #ifndef ENABLE_OPENGL
 #include "Screen/BufferCanvas.hpp"

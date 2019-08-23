@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_FILE_REPOSITORY_HPP
 
 #include "AvailableFile.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <list>
 

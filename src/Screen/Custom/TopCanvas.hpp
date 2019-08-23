@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_TOP_CANVAS_HPP
 #define XCSOAR_SCREEN_TOP_CANVAS_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #ifdef USE_MEMORY_CANVAS
 #include "Screen/Memory/PixelTraits.hpp"

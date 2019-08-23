@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_IMI_TYPES_HPP
 #define XCSOAR_IMI_TYPES_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <stdint.h>
 #include <stddef.h>

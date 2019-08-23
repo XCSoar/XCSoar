@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_AUDIO_TONE_SYNTHESISER_HPP
 
 #include "PCMSynthesiser.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 /**
  * This class generates tones with a sine wave.

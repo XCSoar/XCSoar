@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_APPLE_INTERNAL_SENSORS_HPP
 #define XCSOAR_APPLE_INTERNAL_SENSORS_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #import <CoreLocation/CoreLocation.h>
 

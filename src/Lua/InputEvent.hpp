@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_LUA_INPUT_EVENT_HPP
 #define XCSOAR_LUA_INPUT_EVENT_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 #include <tchar.h>
 
 struct lua_State;

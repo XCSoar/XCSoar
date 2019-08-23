@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_MAPWINDOW_PROJECTION_HPP
 
 #include "WindowProjection.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 struct Waypoint;
 

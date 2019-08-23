@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_DITHER_HPP
 
 #include "Util/AllocatedArray.hxx"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <stdint.h>
 

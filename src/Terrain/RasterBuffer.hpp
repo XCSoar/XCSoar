@@ -27,7 +27,7 @@ Copyright_License {
 #include "RasterTraits.hpp"
 #include "Height.hpp"
 #include "Util/AllocatedGrid.hxx"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <stdint.h>
 

@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "GliderLink.hpp"
 #include "org_xcsoar_GliderLinkReceiver.h"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 #include "Components.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Context.hpp"

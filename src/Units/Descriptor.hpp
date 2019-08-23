@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_UNITS_DESCRIPTOR_HPP
 
 #include "Unit.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <tchar.h>
 

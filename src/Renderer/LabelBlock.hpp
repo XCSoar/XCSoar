@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Screen/Point.hpp"
 #include "Util/StaticArray.hxx"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 /**
  * Simple code to prevent text writing over map city names.

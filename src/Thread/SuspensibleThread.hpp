@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_THREAD_SUSPENSIBLE_THREAD_HPP
 #define XCSOAR_THREAD_SUSPENSIBLE_THREAD_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 #include "Thread/Thread.hpp"
 #include "Mutex.hxx"
 #include "Cond.hxx"

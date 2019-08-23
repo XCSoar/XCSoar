@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_OS_FILEUTIL_HPP
 #define XCSOAR_OS_FILEUTIL_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 #include "Path.hpp"
 
 #include <stdint.h>

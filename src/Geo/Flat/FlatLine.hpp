@@ -25,7 +25,7 @@
 
 #include "FlatPoint.hpp"
 #include "Math/Line2D.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 /**
  * Defines an infinite line in real-valued cartesian coordinates,

@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_NET_DOWNLOAD_MANAGER_HPP
 
 #include "Features.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <stdint.h>
 

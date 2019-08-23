@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_WINDOW_LIST_HPP
 
 #include "Screen/Window.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <boost/intrusive/list.hpp>
 

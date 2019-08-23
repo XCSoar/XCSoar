@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_CRC16_HPP
 #define XCSOAR_FLARM_CRC16_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <stdint.h>
 #include <stddef.h>

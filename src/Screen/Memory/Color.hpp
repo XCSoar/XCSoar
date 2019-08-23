@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_MEMORY_COLOR_HPP
 
 #include "Screen/PortableColor.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #include <stdint.h>
 

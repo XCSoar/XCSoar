@@ -24,7 +24,7 @@
 #define XCSOAR_DERIVE_WINDOW_FILTER_HPP
 
 #include "Util/OverwritingRingBuffer.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 /**
  * A filter that stores a certain amount of samples and calculates the

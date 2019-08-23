@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_CUSTOM_FILES_HPP
 #define XCSOAR_SCREEN_CUSTOM_FILES_HPP
 
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 class AllocatedPath;
 

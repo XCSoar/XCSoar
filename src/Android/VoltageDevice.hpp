@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "VoltageListener.hpp"
 #include "Java/Object.hxx"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 #include "Math/WindowFilter.hpp"
 
 #include <jni.h>

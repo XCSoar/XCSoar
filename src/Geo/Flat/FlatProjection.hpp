@@ -24,7 +24,7 @@
 #define XCSOAR_FLAT_PROJECTION_HPP
 
 #include "Geo/GeoPoint.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 struct FlatPoint;
 struct FlatGeoPoint;

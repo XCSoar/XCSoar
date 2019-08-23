@@ -22,7 +22,7 @@
 
 #include "Reader.hxx"
 #include "OS/Path.hpp"
-#include "Compiler.h"
+#include "Util/Compiler.h"
 
 #ifndef _WIN32
 #include "OS/UniqueFileDescriptor.hxx"
