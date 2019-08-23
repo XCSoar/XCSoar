@@ -29,6 +29,7 @@
 
 #include "Error.hxx"
 #include "Util/Exception.hxx"
+#include "Util/Compiler.h"
 
 extern "C" {
 #include <lua.h>
@@ -52,6 +53,27 @@ Push(lua_State *L, std::exception_ptr e) noexcept
 	assert(e);
 
 	lua_pushstring(L, GetFullMessage(e).c_str());
+}
+
+void
+Raise(lua_State *L, std::exception_ptr e)
+{
+	Push(L, std::move(e));
+	lua_error(L);
+
+	/* this is unreachable because lua_error() never returns, but
+	   the C header doesn't declare it that way */
+	gcc_unreachable();
+}
+
+void
+RaiseCurrent(lua_State *L)
+{
+	auto e = std::current_exception();
+	if (e)
+		Raise(L, std::move(e));
+	else
+		throw;
 }
 
 } // namespace Lua

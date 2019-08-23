@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2016-2019 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -53,6 +53,28 @@ PopError(lua_State *L);
  */
 void
 Push(lua_State *L, std::exception_ptr e) noexcept;
+
+/**
+ * Raise a Lua error (using lua_error()) based on the given C++
+ * exception.  This function never returns because lua_error() uses
+ * longjmp().
+ *
+ * Note that this function cannot be `noexcept`, because this would
+ * break _Unwind_RaiseException() which is used by Lua to raise
+ * errors.
+ */
+[[noreturn]]
+void
+Raise(lua_State *L, std::exception_ptr e);
+
+/**
+ * Wrapper for Raise() which uses std::current_exception.  As a
+ * special case, this supports Lua errors caught by a "catch(...)" and
+ * rethrows them as-is.
+ */
+[[noreturn]]
+void
+RaiseCurrent(lua_State *L);
 
 }
 
