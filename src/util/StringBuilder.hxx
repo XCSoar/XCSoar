@@ -54,15 +54,17 @@ class StringBuilder {
 	static constexpr value_type SENTINEL = '\0';
 
 public:
-	constexpr StringBuilder(pointer _p, pointer _end):p(_p), end(_end) {}
-	constexpr StringBuilder(pointer _p, size_type size)
+	constexpr StringBuilder(pointer _p, pointer _end) noexcept
+		:p(_p), end(_end) {}
+
+	constexpr StringBuilder(pointer _p, size_type size) noexcept
 		:p(_p), end(p + size) {}
 
-	constexpr size_type GetRemainingSize() const {
+	constexpr size_type GetRemainingSize() const noexcept {
 		return end - p;
 	}
 
-	constexpr bool IsFull() const {
+	constexpr bool IsFull() const noexcept {
 		return p >= end - 1;
 	}
 
