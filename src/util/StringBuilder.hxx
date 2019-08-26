@@ -60,6 +60,10 @@ public:
 	constexpr StringBuilder(pointer _p, size_type size) noexcept
 		:p(_p), end(p + size) {}
 
+	constexpr pointer GetTail() const noexcept {
+		return p;
+	}
+
 	constexpr size_type GetRemainingSize() const noexcept {
 		return end - p;
 	}
