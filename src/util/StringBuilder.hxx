@@ -71,6 +71,10 @@ public:
 		return p >= end - 1;
 	}
 
+	void Extend(size_type length) noexcept {
+		p += length;
+	}
+
 	/**
 	 * This class gets thrown when the buffer would overflow by an
 	 * operation.  The buffer is then in an undefined state.
