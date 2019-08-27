@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2018-12-18 20:24+0000\n"
-"Last-Translator: Jarosław Wosik <drzodrzo@tlen.pl>\n"
+"PO-Revision-Date: 2019-08-28 12:24+0000\n"
+"Last-Translator: leela <53352@protonmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/pl/>\n"
 "Language: pl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.4-dev\n"
+"X-Generator: Weblate 3.9-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -6046,7 +6046,7 @@ msgstr "Leć do"
 
 #: src/Dialogs/Waypoint/Manager.cpp:270
 msgid "Delete waypoint?"
-msgstr "Czy usunąć Punkt Trasy"
+msgstr "Czy usunąć Punkt Trasy?"
 
 #: src/Dialogs/Waypoint/Manager.cpp:316 Data/Input/default.xci:597
 msgid "Waypoints Editor"
@@ -8845,7 +8845,7 @@ msgstr "Edycja trasy"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:407
 msgid "Add Turnpoint"
-msgstr "Dodać punkt zwrotny?"
+msgstr "Dodać punkt zwrotny"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:213
 msgid "Task type"
@@ -8895,7 +8895,7 @@ msgstr "Nie zapisano zadania"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:81
 msgid "Create new task?"
-msgstr "Utworzyć nowe zadanie"
+msgstr "Utworzyć nowe zadanie?"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:81
 msgid "Task New"
