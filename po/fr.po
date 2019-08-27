@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-08-16 07:24+0000\n"
-"Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
+"PO-Revision-Date: 2019-08-28 12:24+0000\n"
+"Last-Translator: leela <53352@protonmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.8\n"
+"X-Generator: Weblate 3.9-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -566,7 +566,7 @@ msgstr "Logger OFF"
 
 #: src/Logger/ExternalLogger.cpp:84
 msgid "Declare task?"
-msgstr "Déclarer le circuit?"
+msgstr "Déclarer le circuit ?"
 
 #: src/Logger/ExternalLogger.cpp:93 src/Logger/ExternalLogger.cpp:132
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:96
@@ -8852,7 +8852,7 @@ msgstr "Tout effacer"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:354
 msgid "Clear all points?"
-msgstr "Supprimer tous les points?"
+msgstr "Supprimer tous les points ?"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:354
 msgid "Task edit"
@@ -8910,7 +8910,7 @@ msgstr "Circuit non sauvegardé"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:81
 msgid "Create new task?"
-msgstr "Créer nouveau circuit?"
+msgstr "Créer nouveau circuit ?"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:81
 msgid "Task New"
@@ -9016,7 +9016,7 @@ msgstr "Point de zone affectée"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:487
 msgid "Remove task point?"
-msgstr "Supprimer le point du circuit?"
+msgstr "Supprimer le point du circuit ?"
 
 #: src/Dialogs/Task/MutateTaskPointDialog.cpp:129
 msgid "Task Point Type"
@@ -9313,7 +9313,7 @@ msgstr ""
 #: src/Dialogs/Weather/NOAAList.cpp:225 src/Dialogs/Weather/NOAADetails.cpp:112
 #, c-format
 msgid "Do you want to remove station %s?"
-msgstr "Supprimer la station %s?"
+msgstr "Supprimer la station %s ?"
 
 #: src/Dialogs/Weather/NOAADetails.cpp:165
 msgid "This function is not available on your platform yet."
@@ -10002,7 +10002,7 @@ msgid ""
 "here?"
 msgstr ""
 "Qu'y a-\n"
-"t-il ici?"
+"t-il ici ?"
 
 #: Data/Input/default.xci:825
 msgid "Traffic List"
