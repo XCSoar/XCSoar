@@ -59,7 +59,7 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   RowFormWidget::Prepare(parent, rc);
 
-  AddFloat(_("Start max. speed"), _("Maximum speed allowed in start observation zone.  Set to 0 for no limit."),
+  AddFloat(_("Start max. speed"), _("Maximum speed allowed in start observation zone. Set to 0 for no limit."),
            _T("%.0f %s"), _T("%.0f"), 0, 300, 5, false, UnitGroup::HORIZONTAL_SPEED,
            task_behaviour.ordered_defaults.start_constraints.max_speed);
   SetExpertRow(StartMaxSpeed);
