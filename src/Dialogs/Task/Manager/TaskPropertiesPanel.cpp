@@ -227,7 +227,7 @@ TaskPropertiesPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                RoughTime::Invalid(), time_zone);
 
   AddFloat(_("Start max. speed"),
-           _("Maximum speed allowed in start observation zone.  Set to 0 for no limit."),
+           _("Maximum speed allowed in start observation zone. Set to 0 for no limit."),
            _T("%.0f %s"), _T("%.0f"),
            0, 300, 5, false, 0);
 
