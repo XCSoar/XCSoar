@@ -25,6 +25,9 @@ Copyright_License {
 #define XCSOAR_INFOBOX_CONTENT_RADIO_HPP
 
 #include "InfoBoxes/Content/Base.hpp"
+#include "RadioFrequency.hpp"
 
+void UpdateInfoBoxFrequency(InfoBoxData &data, const RadioFrequency & freq);
 void UpdateInfoBoxActiveFrequency(InfoBoxData &data);
+void UpdateInfoBoxStandbyFrequency(InfoBoxData &data);
 #endif

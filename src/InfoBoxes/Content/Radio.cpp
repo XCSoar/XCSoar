@@ -31,15 +31,10 @@ Copyright_License {
 #include <tchar.h>
 
 void
-UpdateInfoBoxActiveFrequency(InfoBoxData &data)
+UpdateInfoBoxFrequency(InfoBoxData & data, const RadioFrequency & freq)
 {
-  TCHAR buffer[32];
-
-  const ComputerSettings &settings_computer =
-    CommonInterface::GetComputerSettings();
-
-  const auto & freq = settings_computer.radio.active_frequency;
   if(freq.IsDefined()) {
+    TCHAR buffer[32];
     freq.Format(buffer, 32);
     data.SetValue(buffer);
   }
@@ -47,3 +42,20 @@ UpdateInfoBoxActiveFrequency(InfoBoxData &data)
     data.SetValue(_T("---"));
   }
 }
+
+void
+UpdateInfoBoxActiveFrequency(InfoBoxData &data)
+{
+  const ComputerSettings &settings_computer =
+    CommonInterface::GetComputerSettings();
+  UpdateInfoBoxFrequency(data, settings_computer.radio.active_frequency);
+}
+
+void
+UpdateInfoBoxStandbyFrequency(InfoBoxData &data)
+{
+  const ComputerSettings &settings_computer =
+    CommonInterface::GetComputerSettings();
+  UpdateInfoBoxFrequency(data, settings_computer.radio.standby_frequency);
+}
+
