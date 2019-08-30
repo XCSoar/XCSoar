@@ -26,12 +26,5 @@ Copyright_License {
 
 #include "InfoBoxes/Content/Base.hpp"
 
-class InfoBoxContentRadio : public InfoBoxContent
-{
-public:
-  virtual const InfoBoxPanel *GetDialogContent() override;
-
-  virtual void Update(InfoBoxData &data) override;
-};
-
+void UpdateInfoBoxActiveFrequency(InfoBoxData &data);
 #endif

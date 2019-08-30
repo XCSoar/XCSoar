@@ -164,6 +164,8 @@ namespace InfoBoxFactory
 
     e_NbrSat, /* Number of used Sat by GPS module */
 
+    e_Radio, /* Active Radio Frequency */
+
     e_NUM_TYPES /* Last item */
   };
 

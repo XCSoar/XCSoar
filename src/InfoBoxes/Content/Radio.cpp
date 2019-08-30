@@ -30,32 +30,20 @@ Copyright_License {
 
 #include <tchar.h>
 
-/*
- * Subpart callback function pointers
- */
-
-static constexpr InfoBoxPanel panels[] = {
-  { nullptr, nullptr }
-};
-
-const InfoBoxPanel *
-InfoBoxContentRadio::GetDialogContent() {
-  return panels;
-}
-
-/*
- * Subpart normal operations
- */
-
 void
-InfoBoxContentRadio::Update(InfoBoxData &data)
+UpdateInfoBoxActiveFrequency(InfoBoxData &data)
 {
   TCHAR buffer[32];
 
   const ComputerSettings &settings_computer =
     CommonInterface::GetComputerSettings();
 
-  settings_computer.radio.active_frequency.Format(buffer, 32);
-  data.SetValue(buffer);
-  data.SetValueUnit(_T("MHz"));
+  const auto & freq = settings_computer.radio.active_frequency;
+  if(freq.IsDefined()) {
+    freq.Format(buffer, 32);
+    data.SetValue(buffer);
+  }
+  else {
+    data.SetValue(_T("---"));
+  }
 }
