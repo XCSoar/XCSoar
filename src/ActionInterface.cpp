@@ -291,3 +291,23 @@ ActionInterface::SendUIState()
 
   main_window->SetUIState(GetUIState());
 }
+
+void
+ActionInterface::SetActiveFrequency(const RadioFrequency & freq, const TCHAR * freq_name, bool to_devices)
+{
+  /* update interface settings */
+
+  SetComputerSettings().radio.active_frequency = freq;
+
+  /* update InfoBoxes (that might show the ActiveFrequency setting) */
+
+  InfoBoxManager::SetDirty();
+
+  /* send to external devices */
+
+  if (to_devices) {
+    MessageOperationEnvironment env;
+    device_blackboard->SetActiveFrequency(freq, freq_name, env);
+  }
+
+}
