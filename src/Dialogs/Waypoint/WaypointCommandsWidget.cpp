@@ -39,6 +39,7 @@ Copyright_License {
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Profile/Current.hpp"
+#include "ActionInterface.hpp"
 
 enum Commands {
   REPLACE_IN_TASK,
@@ -268,13 +269,13 @@ WaypointCommandsWidget::OnAction(int id) noexcept
     break;
 
   case SET_ACTIVE_FREQUENCY:
-    device_blackboard->SetActiveFrequency(waypoint->radio_frequency,
-                                          waypoint->name.c_str(), env);
+    ActionInterface::SetActiveFrequency(waypoint->radio_frequency,
+                                        waypoint->name.c_str());
     break;
 
   case SET_STANDBY_FREQUENCY:
-    device_blackboard->SetStandbyFrequency(waypoint->radio_frequency,
-                                           waypoint->name.c_str(), env);
+    ActionInterface::SetStandbyFrequency(waypoint->radio_frequency,
+                                         waypoint->name.c_str());
     break;
 
   case EDIT:
