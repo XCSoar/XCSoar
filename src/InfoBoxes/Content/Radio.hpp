@@ -27,7 +27,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Base.hpp"
 #include "RadioFrequency.hpp"
 
-void UpdateInfoBoxFrequency(InfoBoxData &data, const RadioFrequency & freq);
+void UpdateInfoBoxFrequency(InfoBoxData &data, const RadioFrequency & freq, const TCHAR * freq_name);
 void UpdateInfoBoxActiveFrequency(InfoBoxData &data);
 void UpdateInfoBoxStandbyFrequency(InfoBoxData &data);
 #endif

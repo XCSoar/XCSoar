@@ -130,9 +130,14 @@ struct RadioSettings {
   RadioFrequency active_frequency;
   RadioFrequency standby_frequency;
 
+  StaticString<32> active_name;
+  StaticString<32> standby_name;
+
   void SetDefaults() {
     active_frequency.Clear();
     standby_frequency.Clear();
+    active_name = "";
+    standby_name = "";
   }
 };
 

@@ -31,31 +31,33 @@ Copyright_License {
 #include <tchar.h>
 
 void
-UpdateInfoBoxFrequency(InfoBoxData & data, const RadioFrequency & freq)
+UpdateInfoBoxFrequency(InfoBoxData & data, const RadioFrequency & freq, const TCHAR * freq_name)
 {
   if(freq.IsDefined()) {
     TCHAR buffer[32];
     freq.Format(buffer, 32);
     data.SetValue(buffer);
+    data.SetComment(freq_name);
   }
   else {
-    data.SetValue(_T("---"));
+    data.SetValueInvalid();
+    data.SetCommentInvalid();
   }
 }
 
 void
 UpdateInfoBoxActiveFrequency(InfoBoxData &data)
 {
-  const ComputerSettings &settings_computer =
-    CommonInterface::GetComputerSettings();
-  UpdateInfoBoxFrequency(data, settings_computer.radio.active_frequency);
+  const auto &settings_radio =
+    CommonInterface::GetComputerSettings().radio;
+  UpdateInfoBoxFrequency(data, settings_radio.active_frequency, settings_radio.active_name);
 }
 
 void
 UpdateInfoBoxStandbyFrequency(InfoBoxData &data)
 {
-  const ComputerSettings &settings_computer =
-    CommonInterface::GetComputerSettings();
-  UpdateInfoBoxFrequency(data, settings_computer.radio.standby_frequency);
+  const auto &settings_radio =
+    CommonInterface::GetComputerSettings().radio;
+  UpdateInfoBoxFrequency(data, settings_radio.standby_frequency, settings_radio.standby_name);
 }
 

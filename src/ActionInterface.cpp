@@ -298,6 +298,9 @@ ActionInterface::SetActiveFrequency(const RadioFrequency & freq, const TCHAR * f
   /* update interface settings */
 
   SetComputerSettings().radio.active_frequency = freq;
+  if(freq_name != nullptr) {
+    SetComputerSettings().radio.active_name = freq_name;
+  }
 
   /* update InfoBoxes (that might show the ActiveFrequency setting) */
 
@@ -317,7 +320,9 @@ ActionInterface::SetStandbyFrequency(const RadioFrequency & freq, const TCHAR * 
   /* update interface settings */
 
   SetComputerSettings().radio.standby_frequency = freq;
-
+  if(freq_name != nullptr) {
+    SetComputerSettings().radio.standby_name = freq_name;
+  }
   /* update InfoBoxes (that might show the ActiveFrequency setting) */
 
   InfoBoxManager::SetDirty();
