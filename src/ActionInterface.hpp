@@ -104,6 +104,22 @@ namespace ActionInterface {
    * and redraws relevant parts of the screen.
    */
   void SendUIState();
+
+  /**
+   * Update the Active Radio Frequency in #ComputerSettings, and
+   * forward it to all XCSoar modules that want it.
+   *
+   * @param to_devices send the new setting to all devices?
+   */
+  void SetActiveFrequency(const RadioFrequency & freq, const TCHAR * freq_name, bool to_devices=true);
+
+  /**
+   * Update the Standby Radio Frequency in #ComputerSettings, and
+   * forward it to all XCSoar modules that want it.
+   *
+   * @param to_devices send the new setting to all devices?
+   */
+  void SetStandbyFrequency(const RadioFrequency & freq, const TCHAR * freq_name, bool to_devices=true);
 };
 
 /** 
