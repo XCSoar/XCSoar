@@ -157,6 +157,10 @@ namespace InfoBoxFactory
     /* 110..119 */
     NEXT_ARROW,
 
+    e_ActiveRadio, /* Active Radio Frequency */
+
+    e_StandbyRadio, /* Standby Radio Frequency */
+
     e_NUM_TYPES /* Last item */
   };
 

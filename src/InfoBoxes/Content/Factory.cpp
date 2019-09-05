@@ -41,6 +41,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Trace.hpp"
 #include "InfoBoxes/Content/Weather.hpp"
 #include "InfoBoxes/Content/Airspace.hpp"
+#include "InfoBoxes/Content/Radio.hpp"
 
 #include "Util/Macros.hpp"
 #include "Language/Language.hpp"
@@ -1290,6 +1291,21 @@ static constexpr MetaData meta_data[] = {
     NEXT_ARROW,
     NEXT_ARROW,
   },
+  // Radio
+  {
+    N_("Active Radio Frequency"),
+    N_("Act Freq"),
+    N_("The currently active Radio Frequency"),
+    UpdateInfoBoxActiveFrequency,
+  },
+
+  {
+    N_("Standby Radio Frequency"),
+    N_("Stby Freq"),
+    N_("The currently standby Radio Frequency"),
+    UpdateInfoBoxStandbyFrequency,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,

@@ -38,6 +38,7 @@ Copyright_License {
 #include "Wind/Settings.hpp"
 #include "Audio/VegaVoiceSettings.hpp"
 #include "WaveSettings.hpp"
+#include "RadioFrequency.hpp"
 
 #include <type_traits>
 
@@ -121,6 +122,23 @@ struct PlacesOfInterestSettings {
   void SetHome(const Waypoint &wp);
 };
 
+/**
+ * Options for radio remote control
+ */
+struct RadioSettings {
+  RadioFrequency active_frequency;
+  RadioFrequency standby_frequency;
+
+  StaticString<32> active_name;
+  StaticString<32> standby_name;
+
+  void SetDefaults() {
+    active_frequency.Clear();
+    standby_frequency.Clear();
+    active_name.clear();
+    standby_name.clear();
+  }
+};
 
 /**
  * Options for glide computer features
@@ -207,6 +225,8 @@ struct ComputerSettings {
 #ifdef HAVE_TRACKING
   TrackingSettings tracking;
 #endif
+
+  RadioSettings radio;
 
   void SetDefaults();
 };

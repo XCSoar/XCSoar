@@ -39,6 +39,7 @@ Copyright_License {
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Profile/Current.hpp"
+#include "ActionInterface.hpp"
 
 enum Commands {
   REPLACE_IN_TASK,
