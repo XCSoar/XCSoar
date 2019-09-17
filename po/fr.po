@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
 "PO-Revision-Date: 2019-09-17 14:13+0000\n"
-"Last-Translator: Cloud Esp <Frederic.Darboux@inra.fr>\n"
+"Last-Translator: SCHERR Nicolas <scherrnicolas@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
 "Language: fr\n"
@@ -8755,6 +8755,8 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/CloudConfigPanel.cpp:88
 msgid "Obtain and show thermal locations reported by others."
 msgstr ""
+"Récupérer et afficher l'emplacement des thermiques envoyés par les autres "
+"utilisateurs. "
 
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:42
 msgid "Radius of the OZ cylinder."
