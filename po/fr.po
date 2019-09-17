@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-08-28 12:24+0000\n"
-"Last-Translator: leela <53352@protonmail.com>\n"
+"PO-Revision-Date: 2019-09-17 13:55+0000\n"
+"Last-Translator: Cloud Esp <Frederic.Darboux@inra.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
 "Language: fr\n"
@@ -3027,7 +3027,7 @@ msgid "WP ETA VMG"
 msgstr "TVP WP Vsol"
 
 #: src/InfoBoxes/Content/Factory.cpp:1041
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Estimated arrival time at next waypoint, assuming current ground speed is "
 "maintained."
@@ -3036,9 +3036,9 @@ msgstr ""
 "vitesse sol actuelle soit maintenue."
 
 #: src/InfoBoxes/Content/Factory.cpp:1048
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Percentage non-circling climb"
-msgstr "Pourcentage de montée"
+msgstr "Pourcentage de montée hors spirale"
 
 #: src/InfoBoxes/Content/Factory.cpp:1049
 #, fuzzy, no-c-format
@@ -3046,13 +3046,13 @@ msgid "% Str Climb"
 msgstr "% Montée"
 
 #: src/InfoBoxes/Content/Factory.cpp:1050
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Percentage of time spent climbing without circling. These statistics are "
 "reset upon starting the task."
 msgstr ""
-"Pourcentage de temps passé à monter. Ces statistiques sont remises à zéro au "
-"départ du circuit."
+"Pourcentage de temps passé à monter hors spirale. Ces statistiques sont "
+"remises à zéro au départ du circuit."
 
 #: src/InfoBoxes/Content/Factory.cpp:1056
 #, no-c-format
@@ -3070,6 +3070,8 @@ msgid ""
 "Pie chart of time circling and climbing, circling and descending, and "
 "climbing non-circling."
 msgstr ""
+"Graphique du temps de spirale ascendante, de spirale descendante et de "
+"montée hors spirale."
 
 #: src/InfoBoxes/Content/Factory.cpp:1064
 #, fuzzy, no-c-format
@@ -5416,9 +5418,8 @@ msgid "Thermal Band"
 msgstr "Profil d'ascendance"
 
 #: src/Dialogs/dlgAnalysis.cpp:502
-#, fuzzy
 msgid "Vario Histogram"
-msgstr "Trace du vario"
+msgstr "Histogramme du vario"
 
 #: src/Dialogs/dlgAnalysis.cpp:510
 msgid "Wind at Altitude"
@@ -6618,6 +6619,8 @@ msgid ""
 "The display resolution is used to adapt line widths, font size, landable "
 "size and more."
 msgstr ""
+"La résolution de l'affichage est utilisée pour adapter les largeurs de "
+"ligne, la taille de la police, la taille des aérodromes, etc."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:104
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:129
