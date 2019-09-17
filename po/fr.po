@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
 "PO-Revision-Date: 2019-09-18 15:24+0000\n"
-"Last-Translator: Cloud Esp <Frederic.Darboux@inra.fr>\n"
+"Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
 "Language: fr\n"
@@ -2100,7 +2100,7 @@ msgstr "Dist Base"
 #: src/InfoBoxes/Content/Factory.cpp:628
 #, no-c-format
 msgid "Distance to home waypoint (if defined)."
-msgstr "Distance jusqu'à la base (si définie)"
+msgstr "Distance jusqu'à la base (si définie)."
 
 #: src/InfoBoxes/Content/Factory.cpp:634
 #, no-c-format
@@ -2429,7 +2429,7 @@ msgstr "Barogramme"
 #: src/InfoBoxes/Content/Factory.cpp:783
 #, no-c-format
 msgid "Trace of altitude during flight"
-msgstr "Trace de l'altitude durant le vol."
+msgstr "Trace de l'altitude durant le vol"
 
 #: src/InfoBoxes/Content/Factory.cpp:789
 #, no-c-format
@@ -2723,7 +2723,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:912
 #, no-c-format
 msgid "Thermal next leg equivalent"
-msgstr "Vz moyenne sur la prochaine branche."
+msgstr "Vz moyenne sur la prochaine branche"
 
 #: src/InfoBoxes/Content/Factory.cpp:913
 #, no-c-format
@@ -2833,7 +2833,9 @@ msgstr "Start ouvert"
 #: src/InfoBoxes/Content/Factory.cpp:953
 #, no-c-format
 msgid "Shows the time left until the start point opens or closes."
-msgstr "Montrer le temps restant jusqu'à ce que le start soit ouvert ou fermé"
+msgstr ""
+"Montrer le temps restant jusqu'à ce que le point de départ soit ouvert ou "
+"fermé."
 
 #: src/InfoBoxes/Content/Factory.cpp:958
 #, no-c-format
@@ -2851,8 +2853,8 @@ msgid ""
 "Shows the time left until the start point opens or closes, compared to the "
 "calculated time to reach it."
 msgstr ""
-"Montrer le temps restant jusqu'à ce que le start soit ouvert ou fermé, "
-"comparé au temps estimé pour l'atteindre"
+"Montrer le temps restant jusqu'à ce que le point de départ soit ouvert ou "
+"fermé, comparé au temps estimé pour l'atteindre."
 
 #: src/InfoBoxes/Content/Factory.cpp:965
 #, no-c-format
@@ -2867,7 +2869,7 @@ msgstr "Radial"
 #: src/InfoBoxes/Content/Factory.cpp:967
 #, no-c-format
 msgid "True bearing from the next waypoint to your position."
-msgstr "Relevement vrai du prochain waypoint"
+msgstr "Relèvement vrai du prochain waypoint."
 
 #: src/InfoBoxes/Content/Factory.cpp:973 src/InfoBoxes/Content/Factory.cpp:974
 #, no-c-format
@@ -3628,7 +3630,7 @@ msgstr "Il n'y a rien d'intéressant à proximité de ce lieu."
 #: src/MapWindow/GlueMapWindowItems.cpp:116
 #: src/Dialogs/MapItemListDialog.cpp:277
 msgid "Map elements at this location"
-msgstr "Elements de la carte à cet endroit."
+msgstr "Eléments de la carte à cet endroit"
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:114
 msgid "Elevation: "
@@ -3677,7 +3679,7 @@ msgid ""
 msgstr ""
 "Vitesse et direction du vent moyen dans la couche convective. Cette "
 "prédiction peut prêter à confusion si le vent a une forte variation de "
-"direction au sein de la couche convective"
+"direction au sein de la couche convective."
 
 #: src/Weather/Rasp/RaspStore.cpp:63
 #, no-c-format
@@ -4147,7 +4149,7 @@ msgstr "Erreur"
 
 #: src/Dialogs/FileManager.cpp:689 src/Dialogs/DownloadFilePicker.cpp:361
 msgid "Failed to download the repository index."
-msgstr "Le téléchargement de l'index du répertoire a échoué"
+msgstr "Le téléchargement de l'index du répertoire a échoué."
 
 #: src/Dialogs/FileManager.cpp:698 src/Dialogs/FileManager.cpp:727
 #: src/Dialogs/DownloadFilePicker.cpp:374 Data/Input/default.xci:605
@@ -4934,7 +4936,7 @@ msgstr "Select. Airspace"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:35
 msgid "Airspace Renderer Settings"
-msgstr "Réglages du rendu des espaces aériens."
+msgstr "Réglages du rendu des espaces aériens"
 
 #. Add controls
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:76
