@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-09-17 13:55+0000\n"
-"Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
+"PO-Revision-Date: 2019-09-17 14:13+0000\n"
+"Last-Translator: Cloud Esp <Frederic.Darboux@inra.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
 "Language: fr\n"
@@ -1016,7 +1016,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:152
 #, no-c-format
 msgid "Thermal climb, last 30 s"
-msgstr "Vz moyenne sur les 30 dernières secondes."
+msgstr "Vz en spirale, sur les 30 dernières secondes."
 
 #: src/InfoBoxes/Content/Factory.cpp:153
 #, no-c-format
@@ -1061,7 +1061,7 @@ msgstr "Finesse instantanée"
 #: src/InfoBoxes/Content/Factory.cpp:170
 #, no-c-format
 msgid "GR Inst"
-msgstr "fin. inst."
+msgstr "Fin. inst."
 
 #: src/InfoBoxes/Content/Factory.cpp:171
 #, no-c-format
@@ -1168,7 +1168,7 @@ msgstr "Durée DerTh"
 #: src/InfoBoxes/Content/Factory.cpp:211
 #, no-c-format
 msgid "Time spent circling in the last thermal."
-msgstr "Temps passé dans le dernier thermique"
+msgstr "Temps passé à spiraler dans le dernier thermique."
 
 #: src/InfoBoxes/Content/Factory.cpp:217
 #, no-c-format
@@ -3074,7 +3074,7 @@ msgstr ""
 "montée hors spirale."
 
 #: src/InfoBoxes/Content/Factory.cpp:1064
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Number of used satellites"
 msgstr "Nombre de satellites utilisés"
 
@@ -3184,7 +3184,6 @@ msgid "3D fix"
 msgstr "Pos 3D"
 
 #: src/InfoBoxes/Content/Other.cpp:195
-#, fuzzy
 msgid "No GPS"
 msgstr "Pas de GPS"
 
@@ -4915,7 +4914,7 @@ msgstr "Détails Airspace"
 #: src/Dialogs/Airspace/AirspaceList.cpp:321
 #: src/Dialogs/Waypoint/WaypointList.cpp:455
 msgid "No Match!"
-msgstr "Pas de correspondance!"
+msgstr "Pas de correspondance !"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:344
 msgid "Heading"
@@ -5237,7 +5236,7 @@ msgid "Tracking"
 msgstr "Tracking"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:154
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Audio"
 msgstr "Son"
 
@@ -5434,7 +5433,6 @@ msgid "Glide Polar"
 msgstr "Polaire"
 
 #: src/Dialogs/dlgAnalysis.cpp:528
-#, fuzzy
 msgid "MacCready Speeds"
 msgstr "Vitesses MacCready"
 
@@ -5525,7 +5523,7 @@ msgstr "L'activation du planeur \"%s\" a échoué."
 #: src/Dialogs/Plane/PlaneListDialog.cpp:248
 #: src/Dialogs/Plane/PlaneListDialog.cpp:293
 msgid "Please enter the registration of the plane!"
-msgstr "Veuillez entrer l'immatriculation du planeur!"
+msgstr "Veuillez entrer l'immatriculation du planeur !"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:260
 #: src/Dialogs/Plane/PlaneListDialog.cpp:307
@@ -7383,19 +7381,19 @@ msgid "Disables the reach display."
 msgstr "Désactive l'affichage de la zone atteignable."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:162
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terrain line"
-msgstr "Relief On"
+msgstr "Courbe de niveau"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:163
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Draws a dashed line at the terrain glide reach."
-msgstr "Dessine en pointillés la limite de la zone d'atteinte du planeur"
+msgstr "Dessine en pointillés la limite de la zone d'atteinte en vol plané."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:164
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terrain shade"
-msgstr "Garde au sol"
+msgstr "Ombrage du relief"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:165
 #, no-c-format
@@ -7403,14 +7401,14 @@ msgid "Shades terrain outside glide reach."
 msgstr "Grise le terrain hors d'atteinte en finesse"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:166
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Working line"
-msgstr "Ligne de Travail"
+msgstr "Ligne de travail"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:167
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Draws a dashed line at the working glide reach."
-msgstr "Dessine en pointillés la limite de la zone d'atteinte du planeur"
+msgstr "Dessine en pointillés la limite de la zone d'atteinte en vol plané."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:168
 #, fuzzy, no-c-format
@@ -9287,9 +9285,8 @@ msgid "Master Volume"
 msgstr "Volume principal "
 
 #: src/Dialogs/Weather/PCMetDialog.cpp:68
-#, fuzzy
 msgid "Failed to download file."
-msgstr "Echec du chargement du fichier."
+msgstr "Échec du téléchargement du fichier."
 
 #: src/Dialogs/Weather/NOAAList.cpp:121 src/Dialogs/Weather/NOAADetails.cpp:72
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:227
@@ -9378,7 +9375,7 @@ msgstr "Conditions météo"
 #: src/Weather/NOAAFormatter.cpp:247
 #, c-format
 msgid "METAR for %s:"
-msgstr "METAR pour %s"
+msgstr "METAR pour %s :"
 
 #: src/Weather/NOAAFormatter.cpp:273
 msgid "No METAR available!"
@@ -10174,7 +10171,6 @@ msgid "Accel"
 msgstr "Accel"
 
 #: Data/Input/default.xci:646
-#, fuzzy
 msgid "Lua"
 msgstr "Lua"
 
