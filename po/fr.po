@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
 "PO-Revision-Date: 2019-09-17 13:55+0000\n"
-"Last-Translator: SCHERR Nicolas <scherrnicolas@gmail.com>\n"
+"Last-Translator: Sébastien Celles <s.celles@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
 "Language: fr\n"
@@ -6629,7 +6629,7 @@ msgstr "Automatique"
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:107
 #, c-format
 msgid "%d dpi"
-msgstr ""
+msgstr "%d dpi"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:115
 msgid "Events"
@@ -6759,9 +6759,9 @@ msgid "9 Left + Right + Vario (Landscape)"
 msgstr "9 Gauche + Droite + Vario (Paysage)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:88
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "12 Left + 3 Right Vario (Landscape)"
-msgstr "9 Gauche + Droite + Vario (Paysage)"
+msgstr "12 Gauche + 3 Droite Vario (Paysage)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:90
 #, no-c-format
