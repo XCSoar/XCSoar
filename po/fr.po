@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
 "PO-Revision-Date: 2019-09-17 13:55+0000\n"
-"Last-Translator: Cloud Esp <Frederic.Darboux@inra.fr>\n"
+"Last-Translator: Martin <sirmarm@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
 "Language: fr\n"
@@ -3041,9 +3041,9 @@ msgid "Percentage non-circling climb"
 msgstr "Pourcentage de montée hors spirale"
 
 #: src/InfoBoxes/Content/Factory.cpp:1049
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "% Str Climb"
-msgstr "% Montée"
+msgstr "% Montée en ligne droite"
 
 #: src/InfoBoxes/Content/Factory.cpp:1050
 #, no-c-format
@@ -3079,9 +3079,9 @@ msgid "Number of used satellites"
 msgstr "Nombre de satellites utilisés"
 
 #: src/InfoBoxes/Content/Factory.cpp:1065
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Satellites"
-msgstr "Satellites en vue"
+msgstr "Satellites"
 
 #: src/InfoBoxes/Content/Factory.cpp:1066
 #, no-c-format
@@ -3909,7 +3909,7 @@ msgstr "base des nuages"
 
 #: src/Renderer/MacCreadyRenderer.cpp:51 src/Renderer/TaskSpeedRenderer.cpp:49
 msgid "Vave"
-msgstr ""
+msgstr "Vmoy"
 
 #: src/Renderer/TaskSpeedRenderer.cpp:52
 msgid "Vest"
