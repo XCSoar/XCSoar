@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
 "PO-Revision-Date: 2019-09-17 13:55+0000\n"
-"Last-Translator: Martin <sirmarm@gmail.com>\n"
+"Last-Translator: SCHERR Nicolas <scherrnicolas@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
 "Language: fr\n"
@@ -6610,9 +6610,8 @@ msgid "Text size"
 msgstr "Taille du texte"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:93
-#, fuzzy
 msgid "Display Resolution"
-msgstr "Orientation de l'affichage"
+msgstr "Résolution de l'écran "
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:94
 msgid ""
