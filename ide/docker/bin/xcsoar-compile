@@ -22,6 +22,9 @@ case "${1}" in
       "PC")
         make TARGET="${1}" -j"${CPUS}" everything
       ;;
+      "WIN64")
+        make TARGET="${1}" -j"${CPUS}" everything
+      ;;
       "*")
         echo "No target specified. Valid targets: ANDROID DOCS KOBO UNIX PC"
         exit 1
