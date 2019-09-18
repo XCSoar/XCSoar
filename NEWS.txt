@@ -1,4 +1,6 @@
 Version 6.8.13 - not yet released
+* devices
+  - LX: fix buffer overflow
 
 Version 6.8.12 - 2019/04/30
 * weather
