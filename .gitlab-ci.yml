@@ -80,6 +80,22 @@ nightly-pc:
     paths:
       - output/PC
 
+nightly-win64:
+  stage: build
+  script:
+    - git submodule init
+    - git submodule update -f
+    - docker run
+        --mount type=bind,source="$(pwd)",target=/opt/xcsoar
+        $CONTAINER_IMAGE:$CI_COMMIT_SHA xcsoar-compile WIN64
+  except:
+    - tags
+  artifacts:
+    expire_in: 4 weeks
+    when: always
+    paths:
+      - output/WIN64
+
 nightly-kobo:
   stage: build
   script:
