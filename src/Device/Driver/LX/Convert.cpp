@@ -387,7 +387,7 @@ LX::ConvertLXNToIGC(const void *_data, size_t _length,
       snprintf(context.date, sizeof(context.date),
                "%02d%02d%02d",
                packet.date->day % 100, packet.date->month % 100,
-               FromBE16(packet.date->year));
+               FromBE16(packet.date->year) % 100);
       break;
 
     case LXN::FLIGHT_INFO:
