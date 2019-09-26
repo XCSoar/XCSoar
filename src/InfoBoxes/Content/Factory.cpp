@@ -41,6 +41,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Trace.hpp"
 #include "InfoBoxes/Content/Weather.hpp"
 #include "InfoBoxes/Content/Airspace.hpp"
+#include "InfoBoxes/Content/Radio.hpp"
 
 #include "Util/Macros.hpp"
 #include "Language/Language.hpp"
@@ -1065,6 +1066,21 @@ static constexpr MetaData meta_data[] = {
     N_("Satellites"),
     N_("The number of actually used (seen) satellites by GPS module. If this information is unavailable, the displayed value is '---'."),
     UpdateInfoBoxNbrSat,
+  },
+
+  // Radio
+  {
+    N_("Active Radio Frequency"),
+    N_("Act Freq"),
+    N_("The currently active Radio Frequency"),
+    UpdateInfoBoxActiveFrequency,
+  },
+
+  {
+    N_("Standby Radio Frequency"),
+    N_("Stby Freq"),
+    N_("The currently standby Radio Frequency"),
+    UpdateInfoBoxStandbyFrequency,
   },
 
 };

@@ -84,4 +84,5 @@ ComputerSettings::SetDefaults()
   tracking.SetDefaults();
 #endif
   weather.SetDefaults();
+  radio.SetDefaults();
 }
