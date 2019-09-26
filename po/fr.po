@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-09-26 15:54+0000\n"
+"PO-Revision-Date: 2019-09-29 10:56+0000\n"
 "Last-Translator: Cloud Esp <Frederic.Darboux@inra.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
@@ -1922,10 +1922,10 @@ msgid ""
 "and relative humidity probe. (Touch-screen/PC only) Pressing the up/down "
 "cursor keys adjusts this forecast temperature."
 msgstr ""
-"Température  prévueau sol à l'aérodrome \"base\", utilisé dans l'estimation "
-"de la hauteur de convection et la base des nuages, en utilisant la "
-"température extérieure et une sonde d'humidité. Pour écrans tactiles et PC : "
-"les flèches haut/bas ajustent cette température prévue."
+"Température  prévue au sol à l'aérodrome de départ, utilisé dans "
+"l'estimation de la hauteur de convection et la base des nuages, en utilisant "
+"la température extérieure et une sonde d'humidité. Pour écrans tactiles et "
+"PC : les flèches haut/bas ajustent cette température prévue."
 
 #: src/InfoBoxes/Content/Factory.cpp:554
 #, no-c-format
@@ -2091,17 +2091,17 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:626
 #, no-c-format
 msgid "Distance home"
-msgstr "Distance à la base"
+msgstr "Distance au point de départ"
 
 #: src/InfoBoxes/Content/Factory.cpp:627
 #, no-c-format
 msgid "Home Dist"
-msgstr "Dist Base"
+msgstr "Dist Départ"
 
 #: src/InfoBoxes/Content/Factory.cpp:628
 #, no-c-format
 msgid "Distance to home waypoint (if defined)."
-msgstr "Distance jusqu'à la base (si définie)."
+msgstr "Distance jusq'au point de départ (si définie)."
 
 #: src/InfoBoxes/Content/Factory.cpp:634
 #, no-c-format
@@ -2194,8 +2194,8 @@ msgid ""
 "Displays percentage of device battery remaining (where applicable) and "
 "status/voltage of external power supply."
 msgstr ""
-"Affiche le pourcentage restant de batterie (si possible) et le statut/"
-"tension de l'alimentation externe."
+"Affiche le pourcentage restant de batterie (si possible) et l'état/tension "
+"de l'alimentation externe."
 
 #: src/InfoBoxes/Content/Factory.cpp:674
 #, no-c-format
@@ -3631,7 +3631,7 @@ msgstr "Il n'y a rien d'intéressant à proximité de ce lieu."
 #: src/MapWindow/GlueMapWindowItems.cpp:116
 #: src/Dialogs/MapItemListDialog.cpp:277
 msgid "Map elements at this location"
-msgstr "Eléments de la carte à cet endroit"
+msgstr "Éléments de la carte à cet endroit"
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:114
 msgid "Elevation: "
@@ -4331,7 +4331,7 @@ msgstr "Télécharger le vol"
 #: src/Dialogs/Device/PortMonitor.cpp:159
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:141
 msgid "Manage"
-msgstr "Général"
+msgstr "Gérer"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:285
 msgid "Monitor"
@@ -5347,7 +5347,7 @@ msgstr "Fréquence radio"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:155 Data/Input/default.xci:547
 msgid "Plane"
-msgstr "Planeur"
+msgstr "Aéronef"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:243
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:390
@@ -5704,7 +5704,7 @@ msgstr "Entrez un nouveau mot de passe"
 #: src/Dialogs/Weather/WeatherDialog.cpp:62 Data/Input/default.xci:809
 #: Data/Input/default.xci:1198
 msgid "Status"
-msgstr "États"
+msgstr "État"
 
 #: src/Dialogs/dlgStatus.cpp:89 Data/Input/default.xci:563
 msgid "Flight"
@@ -6009,11 +6009,11 @@ msgstr "retirer de la tâche"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:322
 msgid "Set as New Home"
-msgstr "définir comme nouveau point de départ"
+msgstr "Définir comme nouveau point de départ"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:323
 msgid "Pan to Waypoint"
-msgstr "aller au point de repère"
+msgstr "Aller au point de repère"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:324
 msgid "Set Active Frequency"
@@ -6871,7 +6871,7 @@ msgstr "HautGauche"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:136
 #, no-c-format
 msgid "Show status message boxes ina the top left corner."
-msgstr "Message de statut dans le coin haut et gauche de l'écran."
+msgstr "Message d'état dans le coin haut et gauche de l'écran."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:142
 #, no-c-format
@@ -7481,14 +7481,15 @@ msgstr "L'ordre prendra aussi en compte la direction en cours du circuit."
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:82
 #, no-c-format
 msgid "Home"
-msgstr "Base"
+msgstr "Point de départ"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:83
 #, no-c-format
 msgid ""
 "The sorting will try to find landing options in the current direction to the "
 "configured home waypoint."
-msgstr "L'ordre favorisera les zones posables dans la direction de la base."
+msgstr ""
+"L'ordre favorisera les zones posables dans la direction du point de départ."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:87
 msgid "Alternates mode"
