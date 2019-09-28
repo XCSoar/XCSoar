@@ -23,18 +23,34 @@ Copyright_License {
 
 #include "Device/Driver/OpenVario.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Util/NMEAWriter.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Units/System.hpp"
 
 class OpenVarioDevice : public AbstractDevice {
+  Port &port;
+
 public:
+  OpenVarioDevice(Port &_port):port(_port) {}
+
   /* virtual methods from class Device */
   bool ParseNMEA(const char *line, NMEAInfo &info) override;
-
+  bool PutMacCready(double mc, OperationEnvironment &env) override;
   static bool POV(NMEAInputLine &line, NMEAInfo &info);
 };
+
+bool
+OpenVarioDevice::PutMacCready(double mc, OperationEnvironment &env)
+{
+  if (!EnableNMEA(env))
+    return false;
+  
+  char buffer[30];
+  sprintf(buffer,"POV,C,MC,%0.2f", (double)mc);
+  return PortWriteNMEA(port, buffer, env);
+}
 
 bool
 OpenVarioDevice::ParseNMEA(const char *_line, NMEAInfo &info)
@@ -122,12 +138,12 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
 static Device *
 OpenVarioCreateOnPort(const DeviceConfig &config, Port &com_port)
 {
-  return new OpenVarioDevice();
+  return new OpenVarioDevice(com_port);
 }
 
 const struct DeviceRegister open_vario_driver = {
   _T("OpenVario"),
   _T("OpenVario"),
-  0,
+  DeviceRegister::SEND_SETTINGS,
   OpenVarioCreateOnPort,
 };
