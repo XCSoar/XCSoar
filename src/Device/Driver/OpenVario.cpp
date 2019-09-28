@@ -26,8 +26,11 @@ Copyright_License {
 #include "Device/Util/NMEAWriter.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
+#include "NMEA/Derived.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Units/System.hpp"
+#include "Operation/Operation.hpp"
+#include "LogFile.hpp"
 
 class OpenVarioDevice : public AbstractDevice {
   Port &port;
@@ -41,8 +44,33 @@ public:
   bool PutBallast(double fraction, double overload,
                   OperationEnvironment &env) override;
   bool PutBugs(double bugs, OperationEnvironment &env) override;
+  void OnCalculatedUpdate(const MoreData &basic,
+                  const DerivedInfo &calculated) override;
   static bool POV(NMEAInputLine &line, NMEAInfo &info);
 };
+
+void
+OpenVarioDevice::OnCalculatedUpdate(const MoreData &basic, 
+    const DerivedInfo &calculated)
+{
+  PolarCoefficients polar_ideal;
+  PolarCoefficients polar_real;
+  NullOperationEnvironment env;
+  
+  // Get polar
+  polar_ideal = calculated.glide_polar_safety.GetCoefficients();
+  polar_real = calculated.glide_polar_safety.GetRealCoefficients();
+  
+  char buffer[50];
+  
+  // Compose Real Polar String
+  sprintf(buffer,"POV,C,RPO,%f,%f,%f", polar_real.a, polar_real.b, polar_real.c);
+  PortWriteNMEA(port, buffer, env);
+
+  // Compose ideal polar String
+  sprintf(buffer,"POV,C,IPO,%f,%f,%f", polar_ideal.a, polar_ideal.b, polar_ideal.c);
+  PortWriteNMEA(port, buffer, env);
+}
 
 bool
 OpenVarioDevice::PutMacCready(double mc, OperationEnvironment &env)
