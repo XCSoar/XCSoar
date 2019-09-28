@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
 "PO-Revision-Date: 2019-09-29 10:56+0000\n"
-"Last-Translator: Cloud Esp <Frederic.Darboux@inra.fr>\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
 "Language: fr\n"
@@ -7746,10 +7746,10 @@ msgid "HangGlider"
 msgstr "Delta plane"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:125
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Simplified hang glider as line graphics, white with black contours."
 msgstr ""
-"La représentation simplifiée d'un delta plane est filaire: blanc avec des "
+"La représentation simplifiée d'un delta plane est filaire : blanc avec des "
 "contours noirs."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:126
@@ -7758,10 +7758,10 @@ msgid "ParaGlider"
 msgstr "Para pente"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:127
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Simplified para glider as line graphics, white with black contours."
 msgstr ""
-"La représentation simplifiée d'un parapente est filaire: blanc avec des "
+"La représentation simplifiée d'un parapente est filaire : blanc avec des "
 "contours noirs."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:132
