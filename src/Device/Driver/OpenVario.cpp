@@ -38,6 +38,9 @@ public:
   /* virtual methods from class Device */
   bool ParseNMEA(const char *line, NMEAInfo &info) override;
   bool PutMacCready(double mc, OperationEnvironment &env) override;
+  bool PutBallast(double fraction, double overload,
+                  OperationEnvironment &env) override;
+  bool PutBugs(double bugs, OperationEnvironment &env) override;
   static bool POV(NMEAInputLine &line, NMEAInfo &info);
 };
 
@@ -49,6 +52,30 @@ OpenVarioDevice::PutMacCready(double mc, OperationEnvironment &env)
   
   char buffer[30];
   sprintf(buffer,"POV,C,MC,%0.2f", (double)mc);
+  return PortWriteNMEA(port, buffer, env);
+}
+
+bool
+OpenVarioDevice::PutBallast(double fraction, double overload, OperationEnvironment &env)
+{
+  if (!EnableNMEA(env))
+    return false;
+  
+  char buffer[15];
+  sprintf(buffer,"POV,C,WL,%3.0f", overload);
+  return PortWriteNMEA(port, buffer, env);
+}
+
+bool
+OpenVarioDevice::PutBugs(double bugs, OperationEnvironment &env)
+{
+  if (!EnableNMEA(env))
+    return false;
+ 
+  double _bugs = (double)(bugs);
+
+  char buffer[32];
+  sprintf(buffer, "POV,C,BU,%0.2f\r", _bugs);
   return PortWriteNMEA(port, buffer, env);
 }
 
