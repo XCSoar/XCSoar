@@ -108,6 +108,11 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
         info.temperature_available = true;
         break;
       }
+      case 'V': {
+        info.voltage = value;
+        info.voltage_available.Update(info.clock);
+        break;
+      }
     }
   }
 
