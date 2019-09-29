@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-09-29 10:56+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"PO-Revision-Date: 2019-09-30 13:56+0000\n"
+"Last-Translator: Cloud Esp <Frederic.Darboux@inra.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
 "Language: fr\n"
@@ -433,7 +433,7 @@ msgstr "Point de virage non-MAT"
 
 #: src/Airspace/AirspaceGlue.cpp:84
 msgid "Loading Airspace File..."
-msgstr "Chargement du fichier d'espace aérien..."
+msgstr "Chargement du fichier d'espace aérien…"
 
 #: src/Airspace/AirspaceParser.cpp:277
 msgid "Parse Error at Line"
@@ -613,7 +613,7 @@ msgstr "Télécharger un autre vol ?"
 #: src/Waypoint/WaypointGlue.cpp:91
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:37
 msgid "Loading Waypoints..."
-msgstr "Chargement des points de virage..."
+msgstr "Chargement des points de virage…"
 
 #: src/CrossSection/CrossSectionRenderer.cpp:67
 msgid "Not moving"
@@ -710,7 +710,7 @@ msgstr "Détails"
 
 #: src/Waypoint/WaypointDetailsReader.cpp:150
 msgid "Loading Airfield Details File..."
-msgstr "Chargement du fichier de détails des aérodromes..."
+msgstr "Chargement du fichier de détails des aérodromes…"
 
 #: src/Menu/ExpandMacros.cpp:83 src/Menu/ExpandMacros.cpp:116
 #: src/Menu/ExpandMacros.cpp:138
@@ -1235,7 +1235,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:243
 #, no-c-format
 msgid "Next altitude required"
-msgstr "Altitude nécessaire prochain waypoint"
+msgstr "Altitude nécessaire prochain point de virage"
 
 #: src/InfoBoxes/Content/Factory.cpp:244
 #, no-c-format
@@ -1729,7 +1729,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:480
 #, no-c-format
 msgid "Next time to go"
-msgstr "Temps restant vers prochain waypoint"
+msgstr "Temps restant vers prochain point de virage"
 
 #: src/InfoBoxes/Content/Factory.cpp:481
 #, no-c-format
@@ -1742,8 +1742,8 @@ msgid ""
 "Estimated time required to reach next waypoint, assuming performance of "
 "ideal MacCready cruise/climb cycle."
 msgstr ""
-"Temps requis estimé pour rejoindre le prochain waypoint, en tenant compte "
-"des meilleurs performances du MacCready en transition/spirale."
+"Temps requis estimé pour rejoindre le prochain point de virage, en tenant "
+"compte des meilleurs performances du MacCready en transition/spirale."
 
 #: src/InfoBoxes/Content/Factory.cpp:489
 #, no-c-format
@@ -1819,7 +1819,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:513
 #, no-c-format
 msgid "Next arrival time"
-msgstr "Heure d'arrivée prochain waypoint"
+msgstr "Heure d'arrivée prochain point de virage"
 
 #: src/InfoBoxes/Content/Factory.cpp:514
 #, no-c-format
@@ -1832,7 +1832,7 @@ msgid ""
 "Estimated arrival local time at next waypoint, assuming performance of ideal "
 "MacCready cruise/climb cycle."
 msgstr ""
-"Heure local d'arrivée au prochain waypoint estimée, en supposant la "
+"Heure local d'arrivée au prochain point de virage estimée, en supposant la "
 "performance idéale des cycles transitions/ascendances du MacCready."
 
 #: src/InfoBoxes/Content/Factory.cpp:522
@@ -1858,13 +1858,13 @@ msgid ""
 "account the curvature of the Earth."
 msgstr ""
 "Différence entre la route instantanée du planeur et le relèvement du "
-"prochain point, ou bien pour les AAT le relèvement du point objectif dans le "
-"secteur AAT. La navigation au GPS est basée sur la route sol instantanée, et "
-"cette route peut être différente du cap du planeur en présence de vent. Des "
-"chevrons indiquent la direction dans laquelle le planeur doit adapter sa "
-"trajectoire afin de corriger la dérive, et se diriger directement vers le "
-"prochain pont de virage. Cette indication prend en compte la courbure de la "
-"terre."
+"prochain point de virage, ou bien pour les AAT le relèvement du point "
+"objectif dans le secteur AAT. La navigation au GPS est basée sur la route "
+"sol instantanée, et cette route peut être différente du cap du planeur en "
+"présence de vent. Des chevrons indiquent la direction dans laquelle le "
+"planeur doit adapter sa trajectoire afin de corriger la dérive, et se "
+"diriger directement vers le prochain pont de virage. Cette indication prend "
+"en compte la courbure de la terre."
 
 #: src/InfoBoxes/Content/Factory.cpp:530
 #, no-c-format
@@ -2101,7 +2101,7 @@ msgstr "Dist Départ"
 #: src/InfoBoxes/Content/Factory.cpp:628
 #, no-c-format
 msgid "Distance to home waypoint (if defined)."
-msgstr "Distance jusq'au point de départ (si définie)."
+msgstr "Distance jusqu'au point de départ (si défini)."
 
 #: src/InfoBoxes/Content/Factory.cpp:634
 #, no-c-format
@@ -2377,7 +2377,7 @@ msgstr "Charge CPU consommée par XCSoar en moyenne sur 5 secondes."
 #: src/InfoBoxes/Content/Factory.cpp:755
 #, no-c-format
 msgid "Next altitude arrival"
-msgstr "Altitude d'arrivée prochain waypoint"
+msgstr "Altitude d'arrivée prochain point de virage"
 
 #: src/InfoBoxes/Content/Factory.cpp:756
 #, no-c-format
@@ -2641,7 +2641,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:878
 #, no-c-format
 msgid "Next MC0 altitude difference"
-msgstr "Différence d'altitude prochain waypoint à MC0"
+msgstr "Différence d'altitude prochain point de virage à MC0"
 
 #: src/InfoBoxes/Content/Factory.cpp:879
 #, no-c-format
@@ -2870,7 +2870,7 @@ msgstr "Radial"
 #: src/InfoBoxes/Content/Factory.cpp:967
 #, no-c-format
 msgid "True bearing from the next waypoint to your position."
-msgstr "Relèvement vrai du prochain waypoint."
+msgstr "Relèvement vrai du prochain point de virage."
 
 #: src/InfoBoxes/Content/Factory.cpp:973 src/InfoBoxes/Content/Factory.cpp:974
 #, no-c-format
@@ -2921,8 +2921,8 @@ msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the origin of the AAT sector."
 msgstr ""
-"Distance au prochain point sélectionné. Pour les AAT, c'est la distance "
-"jusqu'à l'origine du secteur."
+"Distance au prochain point de virage sélectionné. Pour les AAT, c'est la "
+"distance jusqu'à l'origine du secteur."
 
 #: src/InfoBoxes/Content/Factory.cpp:997
 #, no-c-format
@@ -3014,10 +3014,10 @@ msgid ""
 "of the active waypoint in the current task, the center of a selected goto "
 "waypoint or the target within the AAT sector for AAT tasks."
 msgstr ""
-"Flèche pointant vers le waypoint sélectionné actuellement. Ses nom et "
+"Flèche pointant vers le point de virage sélectionné actuellement. Ses nom et "
 "distance sont également affichés. La position utilisée est la position "
-"optimale du waypoint dans le circuit en cours, le centre du waypoint choisi "
-"en \"Aller à\" ou l'objectif dans un secteur de circuit AAT."
+"optimale du point de virage dans le circuit en cours, le centre du point de "
+"virage choisi en \"Aller à\" ou l'objectif dans un secteur de circuit AAT."
 
 #: src/InfoBoxes/Content/Factory.cpp:1039
 #, no-c-format
@@ -3322,7 +3322,7 @@ msgstr "Effacer"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:300
 #: src/Dialogs/Waypoint/Manager.cpp:253
 msgid "Failed to save waypoints"
-msgstr "Echec de la sauvegarde des waypoints"
+msgstr "Échec de la sauvegarde des points de virage"
 
 #: src/Input/InputEventsActions.cpp:218
 msgid "Screen Mode Full"
@@ -3338,7 +3338,7 @@ msgstr "InfoBoxes par défaut"
 
 #: src/Input/InputEventsActions.cpp:330
 msgid "No active waypoint!"
-msgstr "Pas de waypoint actif !"
+msgstr "Pas de point de virage actif !"
 
 #: src/Input/InputEventsActions.cpp:434
 msgid "NMEA log on"
@@ -3527,7 +3527,7 @@ msgstr "Echec de la sauvegarde du fichier."
 
 #: src/Input/InputEventsSettings.cpp:336
 msgid "Waypoint labels"
-msgstr "Etiquettes des waypoints"
+msgstr "Étiquettes des points de virage"
 
 #: src/Input/InputEventsSettings.cpp:463
 msgid "Topography/Terrain"
@@ -3829,7 +3829,7 @@ msgstr "blcwbase"
 
 #: src/Topography/TopographyGlue.cpp:59
 msgid "Loading Topography File..."
-msgstr "Chargement du fichier de topography..."
+msgstr "Chargement du fichier de topography…"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:192
 #: src/Renderer/FlightStatisticsRenderer.cpp:211
@@ -3944,7 +3944,7 @@ msgstr "Australien"
 #. Read the terrain file
 #: src/UtilsSettings.cpp:121 src/Startup.cpp:296
 msgid "Loading Terrain File..."
-msgstr "Chargement du fichier de topographie..."
+msgstr "Chargement du fichier de topographie…"
 
 #: src/Polar/PolarGlue.cpp:108
 msgid ""
@@ -3985,22 +3985,22 @@ msgstr "Initialisation de l'affichage"
 #. Show progress dialog
 #: src/Startup.cpp:490 src/Startup.cpp:532 src/Startup.cpp:597
 msgid "Shutdown, please wait..."
-msgstr "Arrêt en cours, merci de patienter..."
+msgstr "Arrêt en cours, merci de patienter…"
 
 #. Stop logger and save igc file
 #: src/Startup.cpp:510
 msgid "Shutdown, saving logs..."
-msgstr "Arrêt en cours, enregistrement des données..."
+msgstr "Arrêt en cours, enregistrement des données…"
 
 #. Save settings to profile
 #: src/Startup.cpp:529
 msgid "Shutdown, saving profile..."
-msgstr "Arrêt en cours, enregistrement du profil..."
+msgstr "Arrêt en cours, enregistrement du profil…"
 
 #. Save the task for the next time
 #: src/Startup.cpp:583
 msgid "Shutdown, saving task..."
-msgstr "Arrêt en cours, enregistrement du circuit..."
+msgstr "Arrêt en cours, enregistrement du circuit…"
 
 #: src/Device/Descriptor.cpp:458 src/Device/Descriptor.cpp:470
 msgid "Unable to open port"
@@ -4502,15 +4502,15 @@ msgstr "Echec du chargement du fichier."
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:46
 msgid "Too many waypoints."
-msgstr "Trop de waypoints."
+msgstr "Trop de points de virage."
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:50
 msgid "Uploading Waypoints"
-msgstr "Upload des waypoints"
+msgstr "Chargement des points de virage"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:56
 msgid "Failed to erase waypoints."
-msgstr "Echec de l'effacement des waypoints."
+msgstr "Échec de l'effacement des points de virage."
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:62
 msgid "Failed to switch baud rate."
@@ -4518,7 +4518,7 @@ msgstr "Echec du changement de vitesse de transfert."
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:75
 msgid "Failed to write waypoint."
-msgstr "Echec de l'enregistrement du waypoint."
+msgstr "Échec de l'enregistrement du point de virage."
 
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:66
 #: src/Dialogs/Device/LX/ManageV7Dialog.cpp:81
@@ -6013,7 +6013,7 @@ msgstr "Définir comme nouveau point de départ"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:323
 msgid "Pan to Waypoint"
-msgstr "Aller au point de repère"
+msgstr "Aller au point de virage"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:324
 msgid "Set Active Frequency"
@@ -6029,11 +6029,11 @@ msgstr "Aller à"
 
 #: src/Dialogs/Waypoint/Manager.cpp:270
 msgid "Delete waypoint?"
-msgstr "Supprimer le waypoint ?"
+msgstr "Supprimer le point de virage ?"
 
 #: src/Dialogs/Waypoint/Manager.cpp:316 Data/Input/default.xci:597
 msgid "Waypoints Editor"
-msgstr "Editeur de Waypoints"
+msgstr "Éditeur de points de virage"
 
 #: src/Dialogs/Waypoint/Manager.cpp:326
 msgid "Save changes to waypoint file?"
@@ -6041,7 +6041,7 @@ msgstr "Sauvegarder les modifications dans le fichier des points de virage ?"
 
 #: src/Dialogs/Waypoint/Manager.cpp:326
 msgid "Waypoints edited"
-msgstr "Waypoints édités"
+msgstr "Points de virage modifiés"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:69
 #, no-c-format
@@ -6062,13 +6062,13 @@ msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
 "format."
 msgstr ""
-"Désolé, l'éditeur de point de virage ne supporte pas encore les coordonnées "
+"Désolé, l'éditeur de points de virage ne supporte pas encore les coordonnées "
 "au format UTM."
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:130
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:137
 msgid "Waypoint Editor"
-msgstr "Editeur Waypoint"
+msgstr "Éditeur Waypoint"
 
 #: src/Dialogs/Waypoint/WaypointList.cpp:456
 msgid "Choose a filter or click here"
@@ -6076,7 +6076,7 @@ msgstr "Choisir un filtre ou cliquer ici"
 
 #: src/Dialogs/Waypoint/WaypointList.cpp:541
 msgid "Select Waypoint"
-msgstr "Selection Waypoint"
+msgstr "Sélection Waypoint"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:57
 #, no-c-format
@@ -6688,7 +6688,7 @@ msgstr "Style de saisie du texte"
 msgid ""
 "Determines how the user is prompted for text input (filename, teamcode etc.)"
 msgstr ""
-"Détermine le type de saisie du texte (noms de fichiers, nom d’équipier, ...)"
+"Détermine le type de saisie du texte (noms de fichiers, nom d’équipier…)"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:187
 #, no-c-format
@@ -7117,7 +7117,7 @@ msgstr "Objectif"
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:62
 #, no-c-format
 msgid "Use the current target waypoint as basis."
-msgstr "Utiliser le waypoint cible actuel comme base."
+msgstr "Utiliser le point de virage cible actuel comme base."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:111
 msgid "Cruise orientation"
@@ -7570,8 +7570,8 @@ msgid ""
 "Primary waypoints file.  Supported file types are Cambridge/WinPilot files (."
 "dat), Zander files (.wpz) or SeeYou files (.cup)."
 msgstr ""
-"Fichier de waypoints principal. Les types de fichier supportés sont ceux de "
-"Cambridge/WinPilot (.dat), Zander (.wpz) or SeeYou files (.cup)."
+"Fichier de points de virage principal. Les types de fichier supportés sont "
+"ceux de Cambridge/WinPilot (.dat), Zander (.wpz) or SeeYou files (.cup)."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:78
 msgid "More waypoints"
@@ -7582,8 +7582,8 @@ msgid ""
 "Secondary waypoints file.  This may be used to add waypoints for a "
 "competition."
 msgstr ""
-"Fichier de waypoints secondaire. Peut être utilisé pour ajouter des "
-"waypoints pour une compétition."
+"Fichier de points de virage secondaires. Peut être utilisé pour ajouter les "
+"points de virage d'une compétition."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:84
 msgid "Watched waypoints"
@@ -7596,10 +7596,10 @@ msgid ""
 "for waypoints like known reliable thermal sources (e.g. powerplants) or "
 "mountain passes."
 msgstr ""
-"Fichier de waypoints contenant des waypoints spéciaux, pour lesquels des "
-"calculs supplémentaires comme les calculs d'altitude d'arrivée en affichage "
-"carte sont toujours effectués. Utile pour des waypoints comme les source "
-"d'ascendances sûres, ou les cols."
+"Fichier de points de virage contenant des points de virage spéciaux, pour "
+"lesquels des calculs supplémentaires comme les calculs d'altitude d'arrivée "
+"en affichage carte sont toujours effectués. Utile pour des points de virage "
+"qui sont des ascendances fiables, ou des cols."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:92
 #: Data/Input/default.xci:860
@@ -7628,7 +7628,7 @@ msgid ""
 "information about individual waypoints and airfields."
 msgstr ""
 "Ce fichier peut contenir des extraits des compléments en-route ou autres "
-"informations relatives à des waypoints ou terrains."
+"informations relatives à des points de virage ou terrains."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:83
 #, no-c-format
@@ -7846,10 +7846,10 @@ msgid ""
 "extra distance required to reach that point as a percentage of straight-line "
 "distance to the waypoint."
 msgstr ""
-"Si le cap de l'aéronef dévie de la route à suivre vers le waypoint courant, "
-"des symboles sont représentés devant l'appareil. La valeur de chaque symbole "
-"représente, en pourcentage, la distance nécessaire à parcourir en plus pour "
-"rejoindre directement le waypoint courant."
+"Si le cap de l'aéronef dévie de la route à suivre vers le point de virage "
+"courant, des symboles sont représentés devant l'appareil. La valeur de "
+"chaque symbole représente, en pourcentage, la distance nécessaire à "
+"parcourir en plus pour rejoindre directement le point de virage courant."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:179
 msgid "Aircraft symbol"
@@ -8349,7 +8349,8 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:162
 msgid ""
 "Units used for horizontal distances e.g. range to waypoint, distance to go."
-msgstr "Unité de distance (e.g. distance à un waypoint, distance restante)."
+msgstr ""
+"Unité de distance (e.g. distance à un point de virage, distance restante)."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:174
 msgid "Lift"
@@ -8445,7 +8446,7 @@ msgstr "Nom complet"
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:87
 #, no-c-format
 msgid "The full name of each waypoint is displayed."
-msgstr "Le nom complet de chaque waypoint est affiché."
+msgstr "Le nom complet de chaque point de virage est affiché."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:89
 #, no-c-format
@@ -8455,7 +8456,7 @@ msgstr "1er mot du nom"
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:90
 #, no-c-format
 msgid "The first word of the waypoint name is displayed."
-msgstr "The premier mot du nom du waypoint est affiché."
+msgstr "Le premier mot du nom du point de virage est affiché."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:92
 #, no-c-format
@@ -8465,7 +8466,7 @@ msgstr "3 premières lettres"
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:93
 #, no-c-format
 msgid "The first 3 letters of the waypoint name are displayed."
-msgstr "Les 3 premières lettres du nom du waypoint sont affichées."
+msgstr "Les 3 premières lettres du nom du point de virage sont affichées."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:95
 #, no-c-format
@@ -8475,12 +8476,12 @@ msgstr "5 premières lettres"
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:96
 #, no-c-format
 msgid "The first 5 letters of the waypoint name are displayed."
-msgstr "Les 5 premières lettres du nom du waypoint sont affichées."
+msgstr "Les 5 premières lettres du nom du point de virage sont affichées."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:98
 #, no-c-format
 msgid "No waypoint name is displayed."
-msgstr "Aucun nom de waypoint n'est affiché."
+msgstr "Aucun nom de point de virage n'est affiché."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:101
 msgid "Label format"
@@ -8571,7 +8572,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:145
 #, no-c-format
 msgid "Task waypoints & landables"
-msgstr "Points de virage du circuit & champs posables"
+msgstr "Points de virage du circuit & champs vachables"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:146
 #, no-c-format
@@ -8582,12 +8583,12 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:148
 #, no-c-format
 msgid "Task waypoints"
-msgstr "Point de virage du circuit"
+msgstr "Points de virage du circuit"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:149
 #, no-c-format
 msgid "All waypoints part of a task will be displayed."
-msgstr "Tous les points de virage d'un circuit sont affichés."
+msgstr "Tous les points de virage d'un circuit seront affichés."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:162
 #, no-c-format
@@ -8602,10 +8603,10 @@ msgid ""
 "If the waypoint is blocked by a mountain the green circle will be red "
 "instead."
 msgstr ""
-"Les aérodromes et zones atterrissables sont affichés sous forme de cercles "
-"violets. Si le waypoint est atteignable, alors un contour circulaire vert "
-"est ajouté. Si la trajectoire vers le waypoint est bloquée par une montagne, "
-"alors le contour sera rouge au lieu de vert."
+"Les aérodromes et zones vachables sont affichés sous forme de cercles "
+"violets. Si le point de virage est atteignable, alors un contour circulaire "
+"vert est ajouté. Si la trajectoire vers le point de virage est bloquée par "
+"un relief, alors le contour sera rouge au lieu de vert."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:167
 #, no-c-format
@@ -8620,8 +8621,8 @@ msgid ""
 "mountain the color is changed to red instead."
 msgstr ""
 "Les aérodromes et les champs vachables sont affichés en blanc/gris. Si le "
-"waypoint est accessible sa couleur est changée en vert. Si il est bloqué "
-"pour une montagne sa couleur est changée en rouge."
+"point de virage est accessible sa couleur est changée en vert. Si il est "
+"bloqué pour un relief sa couleur est changée en rouge."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:172
 #, no-c-format
