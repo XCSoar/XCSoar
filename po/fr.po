@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-09-30 13:56+0000\n"
+"PO-Revision-Date: 2019-10-02 20:56+0000\n"
 "Last-Translator: Cloud Esp <Frederic.Darboux@inra.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
@@ -399,7 +399,7 @@ msgstr "Tous les points de virage ne sont pas du même type"
 #: src/Task/ValidationErrorStrings.cpp:36
 #, no-c-format
 msgid "Incorrect number of turnpoints"
-msgstr "Nombre de point de virage incorrect"
+msgstr "Nombre de points de virage incorrect"
 
 #: src/Task/ValidationErrorStrings.cpp:37
 #, no-c-format
@@ -740,7 +740,7 @@ msgstr "Point d'atterrissage précédent"
 
 #: src/Menu/ExpandMacros.cpp:115 src/Menu/ExpandMacros.cpp:137
 msgid "Finish Turnpoint"
-msgstr "point de virage d'arrivée"
+msgstr "Point de virage d'arrivée"
 
 #: src/Menu/ExpandMacros.cpp:119 src/Menu/ExpandMacros.cpp:156
 msgid "Next Startpoint"
@@ -2391,7 +2391,7 @@ msgid ""
 "tasks, the target within the AAT sector is used."
 msgstr ""
 "Altitude d'arrivée absolue au prochain point de virage en arrivée directe. "
-"Pour les AAT le point cible du secteur est utilisé pour le calcul."
+"Pour les AAT, le point cible du secteur est utilisé pour le calcul."
 
 #: src/InfoBoxes/Content/Factory.cpp:764 src/InfoBoxes/Content/Factory.cpp:765
 #, no-c-format
@@ -2656,8 +2656,8 @@ msgid ""
 "used."
 msgstr ""
 "Altitude d'arrivée au prochain point de virage avec MacReady calé à 0 tout "
-"en tenant compte de l'altitude de sécurité en arrivée. \r\n"
-"Pour les AAT le point cible du secteur est utilisé pour le calcul."
+"en tenant compte de l'altitude de sécurité en arrivée. \n"
+"Pour les AAT, le point cible du secteur est utilisé pour le calcul."
 
 #: src/InfoBoxes/Content/Factory.cpp:887
 #, no-c-format
@@ -7074,7 +7074,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:50
 #, no-c-format
 msgid "Target up"
-msgstr "Cible en haut"
+msgstr "Objectif en haut"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:51
 #, no-c-format
@@ -7500,7 +7500,7 @@ msgid ""
 "Determines sorting of alternates in the alternates dialog and in abort mode."
 msgstr ""
 "Définit l'ordre d'affichage des dégagements dans la fenêtre correspondante "
-"et en interruption de circuit."
+"et en cas d'abandon de circuit."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:91
 msgid "Polar degradation"
@@ -7533,7 +7533,7 @@ msgid ""
 "airfields."
 msgstr ""
 "Le réglage MacCready utilisé, quand le MC de sécurité est activé pour le "
-"calcul du local, en mode annulation de circuit et pour déterminer l'altitude "
+"calcul du local, en mode abandon de circuit et pour déterminer l'altitude "
 "d'arrivée sur les aérodromes."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:114
@@ -10159,7 +10159,7 @@ msgstr "Étiquettes"
 
 #: Data/Input/default.xci:414 Data/Input/default.xci:1039
 msgid "Dropped marker"
-msgstr "Marker déposé"
+msgstr "Marqueur déposé"
 
 #: Data/Input/default.xci:135 Data/Input/default.xci:451
 #: Data/Input/default.xci:936
