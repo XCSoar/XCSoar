@@ -42,16 +42,14 @@ the map area. Icons and text may appear along the lower edge of the screen
 to indicate status of connected devices, flight modes etc.
 Following the development process of XCSoar there is an increasing number of 
 items that may be chosen for display in the main area, which are gauges,
-FLARM Radar, Thermal Assistant and Horizon (as of Version 6.7.2,
-Dec. 2013).
+FLARM Radar, Thermal Assistant and Horizon.
 \item[InfoBoxes] A grid of data values is displayed usually either along
 the top and bottom of the screen (portrait display) or to the left and right of the
 screen (landscape display).  These so-called InfoBoxes display data from the
 GPS and other input devices as well as data calculated by XCSoar. Further, 
 InfoBoxes can even display gauges and certain graphs.
 \item[Bottom area] At the bottom of the screen, XCSoar is able to draw a cross-
-section of terrain and airspaces in the direction of your heading. (There might be
-more to come after Dec. 2013) % TODO remove this sentence.
+section of terrain and airspaces in the direction of your heading.
 \end{description}
 
 \subsection*{Overlays}
@@ -252,7 +250,7 @@ see
  & \bmenut{Logger}{Start}
  & \bmenus{Raw Logger}
  & \bmenus{Airspace}
- & \bmenus{Vega} \\
+ & \bmenus{Vega}
  & \bmenus{Profiles} \\
 see
  & \ref{sec:logger}
@@ -357,7 +355,7 @@ see
 \end{tabularx}}
 
 This sub-menu unfortunately overlays the full-screen map view of the pan mode.
- It's functions are quite evident, although the menu could be replaced by multi-touch
+ Its functions are quite evident, although the menu could be replaced by multi-touch
  technology or knobs. Besides the essential `exit pan mode'
  function the `What's here?' button offers brilliant access to the variety of
  information of the map.
@@ -429,7 +427,7 @@ screen orientation and the device's display size.
 
 For a 320x240 display
 Pocket PC in portrait mode, there are four InfoBoxes above and four
-InfoBoxes below the map display.  
+InfoBoxes below the map display.  %TODO Update the example by considering something else than a Pocket PC
 \sketch{figures/infoboxes.png}
 
 A typical landscape layout has 9 InfoBoxes and the variometer gauge 
@@ -453,7 +451,7 @@ Further, you can use screen pages to change InfoBox content manually, by
 assigning different Infobox sets to different pages (see following section).
 
 To gain access to automatic switching InfoBoxes dependent on the flight mode, 
-just let XCSoar run with it's pre-configured setup from installation. To set up 
+just let XCSoar run with its pre-configured setup from installation. To set up 
 your personal version of Infoboxes go through the following procedure.
 \begin{description}
 \item[InfoBox geometry] Choose a basic Infobox geometry or layout.  This basic 
@@ -474,7 +472,7 @@ respectively.\config{infobox_sets}
 XCSoar allows the pilot to define various sets of InfoBoxes that are 
 appropriate for ``normal'' states of flight.  Assuming circling,
 cruising, or final glide as normal, XCSoar can switch corresponding Infobox 
-sets automatically. Perfectly done.
+sets automatically.
 
 As you might imagine, there are countless cases, you wished you had another 
 ensemble of information displayed at once.  For all of these more or less 
@@ -493,7 +491,7 @@ gain benefit of XCSoar's numerous task- and competition-related computations.
 In order to get them related to the competition's phases, you might like the 
 idea of defining two special use cases with pages for the phase before start, 
 another one for whilst racing.  If you are in search of a specific value to
-be displayed, give it a try in chapter \ref{cha:infobox} ``Infobox reference''.
+be displayed, give it a try in chapter \ref{cha:infobox} ``\nameref{cha:infobox}''.
 There is a big chance you will find it.
 \item[On the ground] As a manager on duty you might use a screen page, showing 
 the ``FLARM Radar'' solely.  This might happen on a PC screen running XCSoar
@@ -525,7 +523,7 @@ InfoBox with the touch-screen or mouse.  This brings up a small tabular dialogue
 \item[\bmenuw{Setup}]
   Allows you to change the behaviour of the setting related to the InfoBox 
   (for example, changing from auto to manual MacCready mode); or 
-  to change the InfoBox itself by pressing `{\it Switch InfoBox}', then 
+  to change the InfoBox itself by pressing `\emph{Switch InfoBox}', then 
   choosing from a list of all available InfoBoxes.
 
 \end{description}
@@ -536,8 +534,8 @@ be adjusted include MacCready setting, wind speed, and altitude (QNH).
 
 \subsection*{Changing InfoBox sets}
 
-An entire set of InfoBox can be composed by the `{\it Setup System}' configuration 
-dialogues on the `{\it Look / InfoBox Modes}' and `{\it Look / InfoBox Pages}' 
+An entire set of InfoBox can be composed by the `\emph{Setup System}' configuration 
+dialogues on the `\emph{Look / InfoBox Modes}' and `\emph{Look / InfoBox Pages}' 
 \ref{sec:infobox_sets} setup page. 
 The dialogues give a wide variety to set up the look and feel of the XCSoar pages.  
 
@@ -669,7 +667,7 @@ one after the other. In some dialogues (e.g.\ waypoint editing) only the next
 letters matching to an entry in the database will be shown. For deleting the 
 last letter use the \button{$<-$} button. The \button{Clear} button deletes all input.
 
-Press \button{Ok} to take over, or \button{Cancel} to exit. %TODO take over?
+Press \button{Ok} to validate, or \button{Cancel} to exit.
 
 
 \section{Acoustic alert and sound feedback}
