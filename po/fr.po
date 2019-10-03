@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-10-02 20:56+0000\n"
+"PO-Revision-Date: 2019-10-04 18:56+0000\n"
 "Last-Translator: Cloud Esp <Frederic.Darboux@inra.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
@@ -5640,7 +5640,7 @@ msgstr "Vz polaire"
 
 #: src/Dialogs/dlgInfoBoxAccess.cpp:94 src/Dialogs/dlgInfoBoxAccess.cpp:108
 msgid "Switch InfoBox"
-msgstr "Change d'InfoBox"
+msgstr "Changer d'InfoBox"
 
 #: src/Dialogs/ReplayDialog.cpp:82
 msgid "File"
