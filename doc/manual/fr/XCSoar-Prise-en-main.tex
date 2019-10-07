@@ -1,253 +1,731 @@
-\documentclass{article}
-% Uncomment the following line to allow the usage of graphics (.png, .jpg)
-\usepackage{graphicx}
+% !TeX encoding = utf8
+% !TeX spellcheck = fr
+
+\documentclass[french, a4paper, 12pt]{refrep}
+\settextfraction{1}
+
+\input{xcsoar.sty}
+\usepackage{wasysym}
+\usepackage{graphicx}        % -> includegraphics
+\usepackage{paralist}
+\usepackage{framed}
+\usepackage{babel}
+\hypersetup{
+    pdftitle={\xc{} --- Prise en main},
+    pdfauthor={An Onymous},
+    pdfsubject={Démarrage rapide},
+    pdfproducer={xcsoar.org},
+    pdfkeywords={XCSoar}{Démarrage rapide}{Vol à voile}{Arrivée},
+}
+\parindent0mm                %no indent
+\textwidth=170mm             %match print and screen
+\setlength{\baselineskip}{1em}
+
+% Set the page title
+\input{xcsoar-headers.sty}
+\xcsoarheader{\xc{} --- Prise en main}
+
 %
-\usepackage{hyperref}
-\usepackage[utf8]{luainputenc}
-\usepackage[french]{babel}
+%##############  Colour, Background, Border ##############
 %
+\fboxrule0.4mm               % width Fbox-border
+\definecolor{flashyellow}{rgb}{.9,.85,0}
+\definecolor{flashblue}{rgb}{0,0,1}
+%
+%##############  advanced Macros and Menus ..##############
+%
+\newcommand{\nav}[3]{\bmenut{Nav}{#1/2}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%NavMenu
+\newcommand{\display}[3]{\bmenut{Display}{#1/2}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%DisplayMenu
+\renewcommand{\config}[3]{\bmenut{Config}{#1/3}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%ConfigNavMenu
+\newcommand{\info}[3]{\bmenut{Info}{#1/3}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%InfoMenu
+%
+%
+%##############  Document start of flash ##############
+%
+\setcounter{secnumdepth}{1}
+\renewcommand*{\thesection}{\textsf{\arabic{section}}}
+
+
 \begin{document}
 %
+%print-testchart 
+%\tiny
+%    \definecolor{mauve}{RGB}{224 176 255}
+%    \begin{testcolors}[rgb,RGB,cmyk,hsb,HSB,HTML,gray,Gray]
+%    \testcolor{black}
+%    \testcolor{white}
+%    \testcolor{darkgray}
+%    \testcolor{gray}
+%    \testcolor{lightgray}
+%    \testcolor{red}
+%    \testcolor{green}
+%    \testcolor{blue}
+%    \testcolor{cyan}
+%    \testcolor{magenta}
+%    \testcolor{yellow}
+%    \testcolor{brown}
+%    \testcolor{lime}
+%    \testcolor{olive}
+%    \testcolor{orange}
+%    \testcolor{pink}
+%    \testcolor{purple}
+%    \testcolor{teal}
+%    \testcolor{violet}
+%    \testcolor{mauve}
+%    \testcolor[cmyk]{0 0.5 1 0.42}
+%    \testcolor{flashblue}
+%    \testcolor{flashyellow}
+%    \end{testcolors}
+%\newpage
+%
+%
+%##############  Titlepage of flash ##############
+\thispagestyle{empty}
 \begin{center}
-\includegraphics[angle=0,width=0.5\textwidth,keepaspectratio='true']{graphics/logo.png}
-\vskip 0.5cm
-\includegraphics[angle=0,width=0.66\textwidth,keepaspectratio='true']{graphics/title.pdf}
-\subsection*{Prise en main du logiciel}
+\fontsize{34}{0}
+\selectfont\textbf{\xc{} --- Prise en main}
+\fontsize{12}{12}
+\vspace{0.1em}
+\includegraphics[angle=0,width=0.58\linewidth,keepaspectratio='true']{figures/blitzlogo.png}
+
+\vspace{1em}
+{\Huge Préparez-vous à l'embarquement\\}
+{\Large avec votre\\}
+{\Huge Assistant Tactique Personnel\\pour le Vol à Voile\\}
 \end{center}
-%
+
+%##############  XCSoar Checklist of flash ##############
+\newpage
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+
+\begin{framed}
+\begin{center}
+	\xc{} est entièrement développé par des bénévoles.\\
+	Cette documentation aussi.\\
+	Si vous voyez des imperfections, vous pouvez facilement les faire disparaître~:\\
+	\xcsoarwebsite{/develop/}
+
+\end{center}
+\end{framed}
+
+\begin{center}
+{\Huge\textbf{Checklist d'\xc}}
+\end{center}
+\section*{Éclair \textcolor{flashyellow}{On}}\label{ch:flashon}
+%%%%%--------------------------------------------------------------------%%%%%
+
+\subsection{\textcolor{flashblue}{Mise en piste d'\xc}}
+\begin{compactitem}
+\item acquérir un appareil et y installer \xc
+\item récupérer les fichiers de données adaptés à votre secteur de vol
+\item dire à \xc{} quels fichiers utiliser
+\item dire à \xc{} la polaire et la masse de votre planeur
+\item éventuellement, se connecter aux instruments
+\item terminer la configuration et se familiariser
+\item monter l'appareil
+\item ajouter les points listés ci-dessous dans vos checklists
+\item définir le point de départ
+\end{compactitem}
+
+\subsection*{\textcolor{flashblue}{Faire les vérifications pré-vols, incluant~:}}
+\begin{compactitem}
+\item configurer la polaire et la masse
+\item configurer le vent et les paramètres de vol (MC, moucherons, QNH)
+\item éventuellement, configurer un circuit
+\end{compactitem}
+
+\subsection*{\textcolor{flashblue}{Faire les vérifications avant le décollage, incluant~:}}
+\begin{compactitem}
+\item vérifier le vent et la configuration de vol une dernière fois
+\end{compactitem}
+
+\subsection*{\textcolor{flashblue}{Voler, prendre du plaisir}}
+
+\subsection*{\textcolor{flashblue}{Faire les vérification post-vol}}
+\begin{compactitem}
+\item Télécharger les enregistrements du vol depuis l'enregistreur, les mettre sur skylines, la netcoupe et l'OLC
+\item Récupérer les données statistiques sur le vol.
+\end{compactitem}
+
+\section*{{\color[rgb]{.9,.85,0}Éclair} Off}
+
+\hspace*{1cm} C'était trop bref~?\\
+\hspace*{4cm} Juste une seconde...\\
+\hspace*{6cm} Temps d'éclairement prolongé,\\
+\hspace*{10cm} on continue~:
+
+
+%##############  Start of main body of flash ##############
+\setlength{\parskip}{0.3\baselineskip}
+\newpage
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+\section{Installation d'\xc}\label{ch:XCSinstall}
+%%%%%--------------------------------------------------------------------%%%%%
+
+%\begin{wrapfigure}[10]{R}{0.23\textwidth}
+%\vspace{-5.5em}
+%  \begin{flushright}
+%    \includegraphics[width=0.17\textwidth]{figures/xy01.jpg}
+%    XY, ready for installation
+%  \end{flushright}
+%\end{wrapfigure}
+
+Identifiez la distribution d'\xc{} adaptée à votre appareil et
+système d'exploitation \textsf{(Android, Windows, Linux)} 
+sur \xcsoarwebsite{/download/}.
+Si vous avez choisi un répertoire d'installation autre que celui par défaut, assurez-vous que les droits
+d'accès sont adaptés. Créez un sous-répertoire \texttt{XCSoarData} et copiez-y tous
+les fichiers de données, c'est-à-dire les fichiers de configuration, d'espaces aériens, de points de virage et
+de relief XCM.
+
+En utilisant les valeurs par défaut des installateurs pour Android, Windows Mobile et PC, cela devrait
+fonctionner sans problème. Afin de garder les choses simples, restez avec les valeurs par défaut.
+L'installation sur une carte SD est possible.
+
+\begin{compactitem}
+\item[1.] Télécharger la dernière version d'\xc{} publiée sur la page d'accueil 
+\xcsoarwebsite{} ou via l'application Google Play pour Android.
+\item[2.] Télécharger le fichier de relief \texttt{name.xcm} depuis
+\xcsoarwebsite{/download/maps/}
+correspondant à votre secteur de vol. Si un fichier \texttt{.xcm} semble
+défectueux, utilisez un autre navigateur (il y a un problème avec plusieurs versions
+d'internet explorer, qui désintègrent les fichiers \texttt{.xcm}).
+\item[3.] Télécharger des points de virage dans l'un des formats connu d'\xc~:
+\texttt{.dat, .cup, .wpz, .wpt}.  Par défaut, allez les chercher sur
+\xcsoarwebsite{/download/data.html}.
+\item[4.] Télécharger un fichier d'espaces aériens \texttt{.txt} et/ou \texttt{.sua}. Là aussi, suivez
+le lien mentionné ci-dessus.
+\end{compactitem}
+
+\subsection{\textcolor{flashblue}{Lancer \xc{} pour la première fois}}
+Lancer \xc. Lors du démarrage, \xc{} vous demande d'entrer soit dans la vie réelle (VOL) soit
+dans le mode de simulation (SIM). En mode SIM, vous pouvez préciser manuellement la vitesse, le cap et la hauteur
+afin de vous exercer au sol. La position initiale en mode SIM
+peut être définie en utilisant le menu d'action Circuit \bmenuw{Définir comme nouveau point de départ}.
+En mode VOL, les valeurs des instruments des appareils déjà connectés sont fournis à \xc.
+Rappelez-vous en lorsque vous tentez de vous connecter aux instruments. En mode SIM, toutes
+les connexions sont arrêtées.
+
+Démarrez en mode VOL. Dites à \xc{} quels fichiers utiliser. Accédez à la configuration du système à travers le menu
+principal \button{Config}.
+
+\begin{flushleft}\hspace*{1cm}\config{2}{System}{}\blink\bmenuw{Fichiers}
+\blink\bmenuw{Fichiers}\\\end{flushleft}
+\index{Carte}\index{Waypoints}\index{Espaces aériens}
+
+Sélectionnez les fichiers appropriés dans la fenêtre de dialogue. Si aucun fichier ne s'affiche, assurez-vous une nouvelle fois que les fichiers
+sont bien dans le sous-répertoire \texttt{/XCSoarData}.
+
+\subsection{\textcolor{flashblue}{Gestionnaire de fichiers}}\index{Gestionnaire de fichiers}
+\textbf{Notez que} Le gestionnaire de fichier sur Android nécessite Android~2.2
+ou supérieur~!!!
+
+Si l'appareil que vous avez choisi est capable d'accéder directement à internet, vous pouvez
+facilement télécharger et mettre à jour les fichiers de données~:
+\begin{flushleft}\hspace*{1cm}\config{2}{Gestionnaire}{de fichiers}\\\end{flushleft}
+Une liste des fichiers déjà téléchargés s'affiche. Lors de la toute première fois, la
+liste peut apparaître vide. Choisissez \blink Ajouter.
+
+Une énorme liste de fichiers s'affichent. Sinon, vérifier votre connexion internet. L'équipe
+d'\xc{} met à jour cette liste de fichiers et les URL correspondantes
+afin de vous donner une liste aussi complète que possible des téléchargements
+dans le monde (notez que le nom d'un même fichier peut être différent si vous le téléchargez par un autre moyen).
+Pour ajouter un fichier sélectionner \blink Ajouter. 
+La sélection d'un fichier démarrera immédiatement le téléchargement. Pour ajouter d'autres fichiers, faites de nouveau
+\blink Ajouter.
+Mettre à jour des fichiers se fait avec \blink Télécharger, dans le même écran du menu. Pour
+débuter, téléchargez un seul fichier de relief, d'espaces aériens et de point de virage. Avec 
+certaines cartes, par exemple celle affichant des zones et des points d'ascendances, la configuration peut
+prendre un peu de temps à comprendre. Pour plus d'informations référez-vous s'il vous plaît au manuel principal ou
+à \url{http://www.glidinghotspots.eu/}.
+
+\subsection{\textcolor{flashblue}{Langue (Polices, Sons)}}
+Par défaut, XCSor reprend la langue du système d'exploitation. Si vous
+en préférez une autre, il y en a une trentaine de disponible en septembre 2019 (désolé,
+le Breton, le Basque et le Parisien sont absents...~:-)
+\begin{flushleft}\hspace*{1cm}\config{2}{Système}{}\blink\bmenuw{Apparence}\blink
+\bmenuw{Langue, Input}\\\end{flushleft}
+
+Cette page du menu permet aussi de changer les polices et, après avoir préparé un
+fichier de données particulier, de faire beaucoup plus en définissant des événements. Toutefois, ceci n'est pas
+supposé faire partie d'un guide de démarrage rapide, c'était juste pour info.
+
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+
+
+\section{Terminer la configuration}
+%%%%%--------------------------------------------------------------------%%%%%
+
+\subsection{\textcolor{flashblue}{Sélectionner une polaire}}
+
+%\begin{wrapfigure}[7]{R}{0.22\textwidth}
+%\vspace{-9em}
+%  \begin{flushright}
+%    \includegraphics[width=0.27\textwidth]{figures/xy02.png}
+%    xy figuring out the missing colours of life without configuration.
+%  \end{flushright}
+%\end{wrapfigure}
+
+\xc{} possède une longue liste de polaires prédéfinies. Pour en choisir une, l'éditer,
+ou enregistrer votre polaire particulière, allez dans la configuration de l'aéronef en faisant
+\begin{flushleft}\hspace*{1cm}\config{2}{Aéronef}{}\\\end{flushleft}
+La liste des aéronefs de cette compilation provient la liste officielle de 2012 du Deutscher Aero Club.
+
+\subsection{\textcolor{flashblue}{Connecter un enregistreur, un \fl, un vario, etc. Configuration NMEA}}
+
+Pour fonctionner, \xc{} a besoin, à minima, de données en temps réel provenant d'un récepteur GPS. Vous devez dire à 
+\xc{} lequel utiliser, même s'il est intégré à l'appareil. Pour s'y connecter, utilisez
+\begin{flushleft}\hspace*{1cm}\config{2}{Périph.}{}\blink\bmenuw{Éditer}\\\end{flushleft}
+De nombreux appareils portables possèdent ce type de compasant. Toutefois, c'est toujours
+une bonne idée de se connecter à un ou plusieurs périphériques externes~:
+\begin{compactitem}
+\item un récepteur GPS spécialisé possède une bien meilleure réception, fournissant de bien
+meilleures données pour les mesures et les calculs
+\item un indicateur de vitesse fournit de manière exacte et rapide des estimations du vent
+sans nécessiter de spiraler
+\item un variomètre améliore l'assistant en thermique
+\item un circuit peut être déclaré dans un enregistreur de vol IGC et, après l'atterrissage, l'enregistrement
+du vol peut être téléchargé
+\item certains variomètres permettent la synchronisation de la configuration du MacCready avec
+\xc
+\item un \fl{} (voire une entrée ADS-B) fournit des informations sur les autres
+autour de vous --- alors que \xc{} n'effectue PAS de détection de collision.
+\end{compactitem}
+
+\subsection{\textcolor{flashblue}{NMEA}}
+Vous vous demandez ce que c'est~? NMEA signifie ``National Marine Electronics Association'' (une association américaine de fabricants d'appareils électroniques maritimes), ayant
+atteint le statut de norme mondiale. La norme définit les interfaces électriques
+ainsi que les protocoles utilisés pour transmettre des données de navigation et
+autres. Comme avec le mile marin, une fois de plus, les aviateurs adoptent des pratiques des marins.
+Ainsi en va de leurs instruments\textellipsis
+
+\subsection{\textcolor{flashblue}{GPS interne}}
+Le récepteur GPS de votre propre appareil portable pourrait être de bonne qualité.
+Pour différentes raisons, vérifiez avec attention si c'est vrai en vol~:
+
+\begin{compactitem}
+\item L'orientation en trois dimensions de votre appareil et de son antenne GPS
+interne peuvent causer une mauvaise réception. Quand la position GPS est perdue, beaucoup
+d'appareils portables dépendent fortement du aGPS (``assisted GPS''). Vous pourriez devoir attendre
+plusieurs minutes pour une nouvelle position lors d'un vol.
+\item aGPS est basé sur des informations transmises par un opérateur de réseau de téléphonie
+mobile. Sa réception peut devenir mauvaise en l'air et ainsi affecter la précision de la
+position GPS.
+\item Des appareils bon marché ou mal configurés peuvent ``inventer'' des positions GPS. Des valeurs
+dites ``interpolées'' et possiblement fausses peuvent perturber les algorithmes d'\xc.
+\end{compactitem}
+
+Si la réception GPS de votre appareil semble être fiable, félicitations! Vous
+avez acheté un bon appareil. Vous n'avez pas besoin d'un périphérique en plus, vous possédez déjà
+un système \xc{} de ``base''. Dans le cas contraire, la méthode préférée est de se connecter à un récepteur
+GPS externe. Un bon choix est un enregistreur IGC. Un très bon choix est de se connecter à un \fl.
+Avec un enregistreur IGC, vous pouvez déclarer des circuits et télécharger des enregistrements de vol
+certifiés IGC, ce qui est nécessaire pour prendre part à l'OLC.
+Se connecter à un \fl{} vous donnera des informations sur les membres de votre équipe,
+sur le trafic et des données de hauteur barométrique --- ainsi que des enregistrements de vol certifiés IGC
+si votre périphérique le permet.
+Avec un \fl{} connecté, vous possédez un système \xc{} ``classique''. Intégrer d'autres
+périphériques est un travail en soit et sort du cadre de ce guide de démarrage rapide.
+
+\subsection{\textcolor{flashblue}{Attacher les choses ensembles}}
+Actuellement, il y a trois façons de se connecter à d'autres instruments: utiliser soit
+un cable série, soit un cable série-vers-USB, soit une connection sans fil par Bluetooth. Cette
+dernière solution est la meilleure méthode pour les appareils Android. Elle nécessite cependant
+ce que l'on appelle un ``Bluetooth Serial Port Profile (SPP)'' (``profil Bluetooth pour port série'').
+Avec la version 4 d'Android et postérieure, Google a introduit de nombreux problèmes provenant du profil Bluetooth.
+\xc{} étant gratuit, il n'y a presque aucun risque à tester les capacités de votre appareil. Au cas où cela fonctionne... ;-)
+
+\textbf{Veuillez noter} qu'avant de connecter des appareils en Bluetooth, vous devez
+apparier ces appareils. Les étapes requises dépendent de vos appareils.
+Utiliser les logiciels de votre système d'exploitation. 
+
+Pour utiliser des appareils équipés de ports USB, vous avez besoin d'un convertisseur série-vers-USB. Allez
+sur le site d'\xc{} pour plus de détails~: \xcsoarwebsite{/hardware/}.
+
+Si vous utilisez une connexion série, que les PDAs possèdent en général, faites 
+attention: il y a trois types différents de connecteur physique communément utilisés.
+Ils utilisent différents niveaux de signaux physiques~:
+\begin{compactitem}
+\item RS232 utilise un niveau \pm 12~Volt pleine gamme
+\item TTL utilise une gamme de signaux en 5~Volt
+\item LLL (``Low level logic'') utilise une gamme de signaux en 3~Volt
+\end{compactitem}
+D'un point de vue logique, ces connexions sont identiques et font exactement
+la même chose.
+Assurez-vous toutefois que les gammes des signaux des ports séries soient identiques. Dans le cas contraire, vous aurez besoin d'un convertisseur
+de niveau. À nouveau, allez consulter le site internet d'\xc{} pour plus de détails.
+
+Les choses sont plus simples si vous utilisez des configurations de périphériques recommandées. Un appareil très courant sous Android
+est le Dell Streak~5. Sur la page consacrée aux matériels du site internet d'\xc{} vous trouverez la liste de plusieurs adaptateurs Bluetooth connus
+pour fournir des connexions sans fil stables.
+
+\subsection{\textcolor{flashblue}{Nom du pilote}}
+\begin{flushleft}\hspace*{1cm}\config{2}{Système}{}\blink\bmenuw{Config.}\blink\bmenuw{Enregistreur}\\\end{flushleft}
+
+\subsection{\textcolor{flashblue}{Paramètres d'horloge}}
+\begin{flushleft}\hspace*{1cm}\config{2}{Système}{}\blink\bmenuw{Setup}\blink\bmenuw{Heure}\\\end{flushleft}
+
+\subsection{\textcolor{flashblue}{Déplacer manuellement la carte}}
+C'est le moment de considérer la carte. Vous pouvez la déplacer en entrant dans le mode panorama.
+\begin{flushleft}\hspace*{1cm}\display{1}{Panor.}{On}\\\end{flushleft}
+Selon votre appareil, utilisez ses boutons, cadrans, etc. --- ou même votre doigt --- pour
+déplacer la carte.
+
+\subsection{\textcolor{flashblue}{Définir le point de départ}}\index{Point de départ}
+Quand \xc{} démarre, l'affichage de la carte est centré sur votre point de
+''départ''. À moins que vous ayez défini un ``vrai'' circuit, la fonction route d'\xc{} vous
+montrera la direction de votre point de départ. Si vous ne l'avez pas défini, \xc{} en créera un
+automatiquement à partir de l'endroit détecté comme le point de décollage --- et
+vous affichera la route du retour.
+\begin{compactitem}
+\item Déplacez la carte jusqu'au point désiré
+\item Cliquez/tapotez sur l'écran (tactile) à proximité du point voulu.
+\item La fenêtre ``Éléments de la carte à cet endroit'' s'affiche
+\item Choisissez le point de virage.
+\item Sélectionnez \bmenuw{Détails}.
+\item Allez à la page suivante en touchant \blink
+\item Sélectionnez \bmenuw{Définir comme nouveau point de départ}.
+\end{compactitem}
+
+Après en avoir terminé avec des paramétrages de base, vous êtes prêt pour
+les vérifications pré-vol. À ce point, vous pourriez éprouver un fort intérêt
+à vous familiariser avec tous les boutons et paramètres qu'\xc{} fournit.
+Il se peut que toutes les fonctionnalités d'\xc{} vous fassent voir des X de partout~! Il
+y a alors deux stratégies possibles pour résoudre cette situation~:
+\begin{compactitem}
+\item Ouvrez le manuel principal d'\xc{} et prenez votre temps.
+\item Effectuez les dernières étapes ci-dessous. Puis rejouer un vol enregistré --- ou démarrer
+\xc{} en mode simulateur --- afin de voir
+l'écran d'\xc{} et se familiariser avec les affichages et les choses qui s'y produisent.
+\end{compactitem}
+La meilleure des stratégies étant de faire les deux\textellipsis
+
+\subsection{\textcolor{flashblue}{Action -- regarder \xc{} rejouer un vol}}
+Choisissez l'enregistrement d'un vol et laissez \xc{} remonter dans le temps. Copiez le fichier dans
+le sous-répertoire \verb+/XCSoarData/logs+ et débutez la séquence.
+
+\begin{flushleft}\hspace*{1cm}\config{2}{Rejouer}{}\blink\bmenuw{Fichier\textellipsis\ Démarrer}\\\end{flushleft}
+
+À présent, vous êtes en mesure d'étudier au sol le comportement d'\xc. Alors que vous découvrez ceci,
+vous pourriez ressentir le désir de modifier l'agencement de l'affichage et le contenu des
+InfoBoxes. Il vous est suggéré de ne faire ce qui suit
+que si vous avez un réel besoin de le faire. En effet, \xc{} est fourni avec une
+pré-configuration vraiment bien pensée.
+
+\subsection*{\textcolor{flashblue}{Agencement de l'affichage (portrait, paysage, etc.)}}
+Pour modifier l'agencement de base de l'affichage~:
+\begin{flushleft}\hspace*{1cm}\config{2}{Système}{}\blink\bmenuw{Apparence}\blink
+\bmenuw{Agencement de l'écran}\\\end{flushleft}
+
+\subsection*{\textcolor{flashblue}{Pour modifier le contenu d'une InfoBoxe}}
+Pour modifier une série d'InfoBoxes et le contenu des InfoBoxes~:
+\begin{flushleft}\hspace*{1cm}\config{2}{Système}{}\blink\bmenuw{Apparence}\blink
+\bmenuw{Paramètres InfoBox}\\\end{flushleft}
+
+\subsection{\textcolor{flashblue}{Fichiers de profil / Sauvegarde}}
+Pour utiliser \xc{} dans différentes situations, environnements et planeurs, on peut 
+créer des profils. Si \xc{} en trouve plus d'un au démarrage,
+il vous demandera lequel utiliser. Activer un profil revient juste
+à appuyer sur un bouton.
+Ainsi, une fois que vous serez satisfait de tout ce que vous avez configuré, effectuez une sauvegarde de votre
+fichier de profil. D'autres raisons d'utiliser plusieurs profils~: 
+\begin{compactitem}
+\item Vous ne possédez pas un planeur, mais vous volez avec tous les jouets de votre club. Afin de 
+ne pas avoir, à chaque fois que vous changez de machine, à modifier la polaire et la masse du planeur,
+et à reconfigurer les périphériques d'\xc{} avec les menus,
+vous créez différents fichiers de profil.
+\item Vous avez participé à un concours. Vous aviez alors défini un autre point de départ, un autre planeur, et
+vous aviez reconfiguré le contenu de plusieurs pages d'écran. Maintenant, vous voulez revenir rapidement à
+votre configuration de tous les jours.
+\item Vous êtes un instructeur, et vous montrez de temps à autre votre \xc{} 
+à vos élèves pour leur faire voir de quoi il en retourne. Ainsi, vous pourriez
+avoir besoin de configurations bien plus simples que celle que vous utilisez habituellement.
+\end{compactitem}
+Pour sauvegarder des profils, faites deux copies de votre fichier de profil. 
+Une première qui garde l'extension \verb+.prf+, une seconde où vous changez l'extension en
+\verb+.bak+.
+Pour repartir du dernier exemple, vous pourriez avoir~:
+\begin{compactitem}
+\item\verb+FormationEnASK13.prf+
+\item\verb+FormationEnASK13.bak+
+\item\verb+humphreyAuPaysDesMerveilles.prf+
+\item\verb+humphreyAuPaysDesMerveilles.bak+
+\end{compactitem}
+Lorsqu'\xc{} charge un profil spécifique \verb+.prf+, ce fichier
+va inclure tous les paramètres de configuration que vous avez sélectionné lorsque ce profil était actif.
+Ainsi, un fichier de sauvegarde \verb+.bak+ est nécessaire pour préserver votre configuration de référence. Vous
+en jugerez l'utilité par vous-même.
+
+\subsection{\textcolor{flashblue}{Monter l'appareil}}
+Monter l'appareil de votre choix peut s'avérer plus compliqué que
+prévu. Dans tous les cas, le support de l'appareil doit être en mesure résister à des conditions très difficiles,
+et ce que vous utilisiez un support spécial, un support à ventouse ou un truc vissé sur quelque chose.
+Au cas où vous auriez l'idée d'essayer, tenir votre téléphone à la main est une très
+mauvaise idée. Vous feriez alors mieux d'utiliser une bande Velcro. Une
+façon rapide est grossière peut être de~:
+\begin{compactitem}
+\item acheter une protection de téléphone en silicone et y coller du Velcro au dos.
+\item acheter une bande Velcro à vous la mettre autour de la cuisse, légèrement au-dessus du genou.
+\item y placer votre téléphone (avec sa protection) juste avant de monter à bord.
+\end{compactitem}
+Ne tenez jamais à la main un appareil complexe pendant que vous pilotez~!
+
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+
+\section{Vérification pré-vol}
+%%%%%--------------------------------------------------------------------%%%%%
+
+%\begin{wrapfigure}[4]{R}{0.5\textwidth}
+%\vspace{-4.5em}
+%  \begin{flushright}
+%    \includegraphics[width=0.48\textwidth]{figures/xy03.jpg}
+%    xy preflight check
+%  \end{flushright}
+%\end{wrapfigure}
+
+À inclure à votre Checklist.
+
+Si vous utilisez un seul appareil \xc{} dans plusieurs planeurs, commencez par configurer la
+polaire de votre planeur. Puis configurez votre vol.
+Faites soit~:
+
+\subsection*{\textcolor{flashblue}{Configurer la polaire}}
+\begin{flushleft}\hspace*{1cm}\config{2}{Aéronef}{}\hspace{1em}
+\end{flushleft}
+
+Soit~:
+
+\subsection*{\textcolor{flashblue}{Choisir un profil}}
+Redémarrez \xc{} et choisissez un autre profil ayant la bonne 
+polaire et la bonne masse.
+
+\subsection*{\textcolor{flashblue}{Configurer le vol}}
+\begin{flushleft}\hspace*{1cm}\config{1}{Vol}{}\blink\bmenuw{Charge alaire / 
+Moucherons / QNH / Temp max}\\\end{flushleft}
+
+\subsection*{\textcolor{flashblue}{Configurer le vent}}
+\begin{flushleft}\hspace*{1cm}\config{1}{Vent}{}\blink\bmenuw{Vent auto\textellipsis\ / 
+Vitesse / Direction}\\\end{flushleft}
+
+\subsection*{\textcolor{flashblue}{Définir un circuit~?}}
+Après avoir défini votre point de départ, \xc{} vous indiquera toujours comment
+y revenir, à moins que vous n'ayez créé un circuit. Comme vous pourriez vous y attendre, \xc
+va ensuite vous guider sur votre circuit.
+Pour créer et utiliser des circuits, une brève introduction est donnée à la fin de ce
+document. Vous pouvez configurer soit un circuit ``simple'' soit un circuit ``réel''.
+
+
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+
+\section{Vérification avant le décollage}
+%%%%%--------------------------------------------------------------------%%%%%
+
+%\begin{wrapfigure}[4]{R}{0.5\textwidth}
+%\vspace{-4.5em}
+%  \begin{flushright}
+%    \includegraphics[width=0.48\textwidth]{figures/xy04.jpg}
+%    xy checking wind
+%  \end{flushright}
+%\end{wrapfigure}
+
+À inclure à votre Checklist.
+
+\subsection{\textcolor{flashblue}{Vérifier le vol}}
+\begin{flushleft}\hspace*{1cm}\config{1}{Vol}{}
+%\blink\bmenuw{Wing loading / Bugs / QNH / Max temp}
+\\\end{flushleft}
+
+\subsection{\textcolor{flashblue}{Vérifier le vent}}
+\begin{flushleft}\hspace*{1cm}\config{1}{Vent}{}
+%\blink\bmenuw{Auto wind\dots / Speed / Direction}
+\\\end{flushleft}
+
+
+\section{Voler}
+Au cours du vol, il y a deux écrans d'informations qui pourraient
+vous intéresser.
+\subsection*{\textcolor{flashblue}{État du vol}}
+\begin{flushleft}\hspace*{1cm}\info{2}{État}{}\blink\bmenuw{Temps\textellipsis}\\\end{flushleft}
+\subsection*{\textcolor{flashblue}{Analyse du vol}}
+\begin{flushleft}\hspace*{1cm}\info{1}{Analyse}{}\bmenuw{\blink}\textellipsis\\\end{flushleft}
+
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+
+\section{Vérification post-vol}
+%%%%%--------------------------------------------------------------------%%%%%
+
+\subsection{\textcolor{flashblue}{Télécharger l'enregistrement du vol}}
+Télécharger les enregistrements de vol depuis l'enregistreur \emph{connecté} de votre choix.
+\begin{flushleft}\hspace*{1cm}\config{2}{Périph.}{}\\\end{flushleft}
+\begin{compactitem}
+\item sélectionnez le port
+\item appuyez sur \bmenuw{Télécharger le vol}
+\item une liste des enregistrements de vol stockés sur votre enregistreur externe s'affiche.
+Choisissez-en un
+\item appuyez sur \bmenuw{Sélection}
+\item attendez\textellipsis\ Le transfert se fait par une connexion série un peu ancienne
+\item choisissez-en un autre ou appuyez sur \bmenuw{Non} pour terminer
+\item selon votre enregistreur, vous devrez peut-être patienter un peu, une fois de plus. L'enregistreur redémarrera peut-être
+et prendra son temps pour revenir en fonctionnement normal.
+\end{compactitem}
+
+%\begin{wrapfigure}[8]{R}{0.4\textwidth}
+%\vspace{-3em}
+%  \begin{flushright}
+%    \includegraphics[width=0.39\textwidth]{figures/xy05.jpg}
+%    xy analyzing
+%  \end{flushright}
+%\end{wrapfigure}
+
+\textbf{Notez} qu'en cas de difficultés, la première chose à faire est de s'assurer que le pilote
+que vous utilisez assure le téléchargement à partir de votre enregistreur. Au cas où vous utilisiez un système
+en cascade (par ex. \fl-Vario-\xc), il pourrait être nécessaire de relier directement
+le variomètre et de choisir un autre pilote dans \xc{} afin qu'il puisse accéder aux
+téléchargements depuis le \fl{} vers \xc.
+
+\subsection{\textcolor{flashblue}{Analyse du vol}}
+\begin{flushleft}\hspace*{1cm}\info{1}{Analyse}{}\\\end{flushleft}
+Utilisez \bmenuw{\blink} pour naviguer entre les écrans successifs affichant les données statistiques
+acquises au cours du vol, comme l'estimation du résultat OLC, un barographe du vol\textellipsis\
+ et même une analyse de la polaire si vous disposez d'un instrument
+fournissant la vitesse air vrai.
+
+\subsection{\textcolor{flashblue}{État du vol}}
+\begin{flushleft}\hspace*{1cm}\info{2}{État}{}\blink\bmenuw{Temps\textellipsis}\\\end{flushleft}
+Pour avoir accès à plus d'informations statistiques.
+
+\subsection{\textcolor{flashblue}{Mettre en ligne un vol}}
+
+Il y a trois portails qui attendent de voir les enregistrements de vos vols.
+Skylines (\url{https://skylines.aero}), NetCoupe (\url{http://www.netcoupe.net})
+et OLC (\url{http://www.onlinecontest.org}).
+Si vous voulez y mettre en ligne un vol, probablement avez-vous intérêt à le faire immédiatement après le vol. L'OLC vous donne un délai de 24~heures pour y copier vos enregistrements ;  la NetCoupe deux semaines.
+Skylines est un peu moins restrictif, et est votre portail pour le suivi en temps réel et\textellipsis\
+vos fichiers de vols sont dans un sous-répertoire \texttt{logs}.
+
+\subsection*{\textcolor{flashblue}{Tout éteindre}}
+Afin d'économiser du jus, assurez-vous que vous avez bien pensé à \emph{tout} couper.
+
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+\section{Circuits}
+%%%%%--------------------------------------------------------------------%%%%%
+
+\subsection{\textcolor{flashblue}{Fonction ``Retour au point de départ'', Fonction ``Aller à''}}
+Après que vous ayez défini un ``vrai'' circuit pour la première fois, la fonctionnalité de base
+de ``Retour au point de départ'' est définitivement supprimée. À la place, utilisez la fonction
+``Aller à'', qui est le circuit le plus simple. \textbf{Notez qu'}il y a plusieurs fonctions, sous
+forme d'InfoBoxe, liées au point de départ. Elles ne sont pas modifiées.
+La seule fonction annulée est une \emph{astuce} qu'\xc{} utilise quand
+il ne trouve pas de `vrai'' circuit défini par l'utilisateur --- ou jusqu'à ce que l'utilisateur définisse 
+vraiment son tout premier circuit.
+
+\subsection{\textcolor{flashblue}{Circuit simple~: ``Aller à''}}
+Il y a plusieurs façons de créer un circuit simple. Dans tous les cas, sélectionnez un
+point de virage et appuyez sur \bmenuw{Aller à}.
+
+Cas les plus courants~:
+\begin{flushleft}\hspace*{1cm}\nav{1}{Waypoint}{Liste}\\\end{flushleft}
+\begin{compactitem}
+\item Utilisez le menu de filtrage pour identifier le point de virage. Attention, vous pouvez paramétrer
+plusieurs filtres. Si aucun point de virage n'apparaît, la combinaison des multiples filtres
+pourrait vous empêcher de trouver votre point. 
+\item Appuyez sur \bmenuw{OK}.
+\item Appuyez sur \bmenuw{Sélection}, puis sur \bmenuw{Aller à}.
+\end{compactitem}
+Ou utilisez la fonction panorama de la carte, puis travaillez de manière similaire au cas ``Retour au point de départ''~:
+\begin{compactitem}
+\item Déplacez la carte jusqu'au point désiré
+\item Cliquez/tapotez sur l'écran (tactile) à proximité du point voulu
+\item La fenêtre ``Éléments de la carte à cet endroit'' s'affiche
+\item Choisissez le point de virage
+\item Appuyez sur \bmenuw{Aller à}
+\end{compactitem}
+ 
+\subsection{\textcolor{flashblue}{Circuit~: créer, sauver, charger, déclarer}}
+Créer un nouveau circuit~:
+\begin{flushleft}\hspace*{1cm}\nav{1}{Circuit}{}\blink\bmenuw{Gérer}\blink\bmenuw{Nouveau circuit}\\\end{flushleft}
+\begin{compactitem}
+\item Dans le même menu à l'écran, vous trouverez \bmenuw{Circuits enregistrés}, \bmenuw{Enregistrer} et 
+\bmenuw{Déclarer} (à l'enregistreur). Après avoir appuyé sur \bmenuw{Nouveau circuit}, on vous demande de
+confirmer, puis le menu concernant les \bmenuw{Règles} s'affiche. Définissez alors 
+le \bmenuw{Type de circuit} en premier.
+\item En sélectionnant \bmenuw{Point de virage} et \bmenuw{Ajouter point de virage} un écran de 
+choix \bmenuw{Sélection Waypoint} s'affiche. Modifiez vos points de virage. En sélectionnant
+\bmenuw{Éditer le point}, vous pourrez faire vos changements.
+\item Ne fermez pas encore la fenêtre~! Pour terminer, utilisez  \bmenuw{Gérer} puis \bmenuw{Enregistrer},
+et enfin \bmenuw{Fermer}.
+\end{compactitem}
+
+\subsection*{\textcolor{flashblue}{Circuit~: Heure de début et heure de fin}}
+Comme vous arrivez à la fin de ce guide, pour creuser ce sujet, consulter le manuel principal d'\xc.
+
+Merci pour le temps passé à lire ce guide et\textellipsis
+%\begin{wrapfigure}[4]{l}{0.5\textwidth}
+%\vspace{-1.3em}
+%  \begin{centering}
+%    \includegraphics[width=0.48\textwidth]{figures/xy06.jpg}
+%  \end{centering}
+%\end{wrapfigure}
+
+\textellipsis\ faites de bons vols~!%no section at all, formatting reasons
+
+%##############  Indexes of flash ##############
+\input{toc.tex}
+
+
+%##############  Closing page of flash ##############
+\newpage
+\pagestyle{empty}
+
+\normalsize{Pour plus d'informations, consultez~:}
+
+\begin{center}
+    \includegraphics[angle=0,width=0.5\textwidth,keepaspectratio='true']{graphics/logo.png}
+    \vskip 0.5cm
+%   option 1: web release 
+%    \includegraphics[angle=0,width=0.66\textwidth,keepaspectratio='true']{graphics/title.pdf}\\
+%   option 2: print release
+    \fontsize{50}{0}
+    \selectfont\textbf{\xc}\\
+    \fontsize{12}{12}
+    \vspace{0.2em}
+    \LARGE{La Navigation Open Source}\\
+    \vspace{1.2em}
+    \LARGE{Manuel de l'utilisateur}\\
+    
+\vspace{9em}
+
+\end{center}
 \begin{flushright}
-Mise à jour du \today \space(par Adrien Ott)
+\normalsize disponible sur~: \xcsoarwebsite{/discover/manual.html}
 \end{flushright}
-%
-\pagebreak
-\noindent
-\textbf{\textit{Avant-propos}}\\
-\newline
-Ce document est un guide de prise en main du logiciel XCSoar et ne constitue pas un mode d'emploi exhaustif du logiciel. L'objectif de ce document est de permettre à un(e) utilisateur(trice) ne connaissant pas le logiciel de l'installer, le configurer et l'utiliser le plus rapidement et facilement possible.\\Un mode d'emploi en français (traduit de l'anglais) est disponible.\\Le mode d'emploi complet faisant référence est en anglais.\\Si vous avez des commentaires ou des suggestions d'amélioration de ce guide, n'hésitez pas à les faire sur le forum d'XCSoar, dans la rubrique "French".\\
-\newline
-La dernière version de ce guide de prise en main, ainsi que les modes d'emploi sont disponibles à l'adresse suivante : \url{http://www.xcsoar.org/discover/manual.html}\\
-\newline
-Si vous souhaitez contribuer au projet, que ce soit
-\begin{itemize}
-\item en complétant la traduction de l'interface du logiciel (de l'anglais au français),
-\item en complétant ce guide de prise en main ou les modes d'emploi (français ou anglais),
-\item en participant au développement du logiciel,
-\item en signalant des bugs ou en indiquant des suggestions d'amélioration,
-\end{itemize}
-alors rendez-vous à l'adresse suivante : \url{http://www.xcsoar.org/develop/}.\\
-%
-% Just an example to inlude the images from the "images" directory
-%\marginpar{\parbox{4.0cm}{\includegraphics[angle=0,width=1.0\linewidth,keepaspectratio='true']{images/smiley.png}}}
 
-\section{Introduction}
-\noindent
-XCSoar est un logiciel d'aide à la navigation en planeur : "XC" est l'abbréviation de "cross country" (vol sur la campagne), "Soar" fait référence au vol sans moteur (vol à voile, vol libre).\\
-%
-\newline
-%
-XCSoar est disponible sur plusieurs platformes matérielles (smartphones) et plusieurs systèmes d'exploitation, dont Windows Mobile 5 et 6, et Android (version 1.6 et plus récentes).\\
-%
-\newline
-%
-XCSoar est développé par des volontaires bénévoles avec un grand souci de qualité et de performance, et est très largement configurable du point de vue de l'interface utilisateur. La même équipe de volontaires développe la plateforme de partage des vols SkyLines (voir plus bas).\\
-Ce guide de prise en main suppose que vous utilisiez XSoar version 6.3 ou plus récente.\\
-Pour une version 6.x.y :
-\begin{itemize}
-\item les mises à jour dites de maintenance sont les évolutions "y" (correctifs si nécessaire),
-\item les mises à jour majeures sont les évolutions "x".
-\end{itemize}
-%
-Pour être informé des mises à jour, vous pouvez vous abonner au flux RSS du site XCSoar.org (voir paragraphe \ref{LiensUtiles} "Liens utiles").\\
-%
-\newline
-SkyLines est une plateforme internet de partage des vols, disponible à l'adresse \url{http://skylines.xcsoar.org}.\\
-La plateforme permet, entre autres, de visualiser ses vols, consulter les statistiques associées, superposer des vols, mais aussi une fonction de suivi en direct de votre vol (dite \textit{live tracking} en anglais). Cette dernière nécessite la version 6.4 d'XCSoar (ou plus récente), sous Android, avec un forfait téléphonique comprenant un accès internet mobile.\\
-%
-\section{Installation et lancement}
-\noindent
-La première étape nécessaire à l'installation est le téléchagement de la dernière version d'XCSoar.\\
-%
-\newline
-%
-\itshape Sous Android, lancez l'application "Play Store" (celle vous permettant d'installer des applications) et cherchez XCSoar. Téléchargez la version bleue, la version rouge est la version de développement.\upshape\\
-\newline
-Sinon, rendez-vous au lien suivant : \url{http://www.xcsoar.org/download/}\\
-Sur cette page figurent les différents systèmes d'exploitation supportés, sélectionnez le votre et téléchagez le logiciel. Copiez le sur votre appareil, et lancez-le.\\
-%
-\newline
-%
-\itshape Sous Windows Mobile, préférez le fichier ".exe" plutôt que le ".cab", quitte à placer un raccourci vers le ".exe" dans le menu "Démarrer" de Windows.\upshape\\
-\newline
-XCSoar affiche alors le logo au centre, la version du logiciel en haut à gauche, un bouton "Quit" en haut à droite, et deux boutons de lancement \textbf{FLY} et \textbf{SIM} en bas de l'écran, respectivement pour le mode vol (pour voler et enregistrer la trace du vol) et le mode simulation (pour apprendre à l'utiliser et le configurer, de façon isolée ou avec votre appareil connecté à un simulateur, comme Condor par exemple). A ce stade vous pouvez quitter le logiciel (bouton "Quit").\\
-%
-Si vous avez lancé le mode \textbf{FLY} ou \textbf{SIM}, le menu principal peut être invoqué par un double clic sur le fond de carte.
-L'utilisation est détaillée plus bas.\\
-%
-\newline
-%
-Notez qu'à partir de la version 7, Windows CE n'est plus supporté. Téléchargez la dernière version 6 si vous voulez continuer à utiliser XCSoar sous Windows CE.\\
-%
-\section{Configuration}
-%
-\subsection{Les fichiers}
-\noindent
-XCSoar stocke tous les fichiers et répertoires nécessaires à son fonctionnement dans un répertoire nommé XCSoarData. Si vous diposez d'une carte mémoire, ce répertoire doit être à la racine (typiquement "/sdcard/XCSoarData"). Sinon le répertoire XCSoarData sera dans "Mes Documents" pour les systèmes Windows (c'est la configuration par défaut qu'il peut être préférable d'éviter sur les appareils ayant peu de mémoire interne).
-%
-Sous Linux ce répertoire est ~/.xcsoar\\
-
-Les fichiers les plus utiles sont les suivants :
-\begin{itemize}
-\item points de virage ("waypoints"), ils peuvent être de diffèrents formats (*.dat de WinPilot/Cambridge, *.cup de SeeYou, *.wpz de Zander, *.wpt d'OziExplorer, GPSDump/FS, GEO ou UTM),
-\item espaces aériens (au format OpenAir),
-\item fond cartographique (format .xcm).\\
-\end{itemize}
-%
-Pour trouver ces fichiers, voir le paragraphe \ref{LiensUtiles} "Liens utiles". Notez que le fond cartographique contient le relief (altitude du terrain), des éléments topographiques (contours de villes, rivières, etc...), mais aussi un fichier de points de virage. Ce dernier est ignoré si vous séectionnez vous-même un fichier dans la page de configuration. Notez également que le navigateur internet "Internet Explorer" renomme les fichiers .xcm en .zip, il peut donc être nécessaire de renommer manuellement le fichier en .zip (ou utiliser un meilleur navigateur).\\
-%
-\newline
-Sous Android les fichiers sont téléchargeables directement depuis XCSoar au travers du "Gestionnaire de fichiers".\\
-%
-\subsection{L'interface}
-\noindent
-%
-Une fois ces fichiers placés dans le répertoire XCSoarData, la configuration proprement dite peut commencer. L'interaction avec le logiciel se fait principalement via l'écran tactile (plus les boutons éventuels, comme sur un iPaq ou un smartphone Android, mais cela ne sera pas détaillé ici).\\
-%
-\newline
-%
-Lancez XCSoar en mode simulation et lancez le menu principal:
-\begin{itemize}
-\item double clic sur la carte,\\
-ou bien
-\item raccourci gestuel "bas-haut" (\textbf{B H}).
-\end{itemize}
-Un raccourci gestuel ("gesture" dans le manuel en anglais), est un dessin géométrique que l'utilisateur peut tracer à l'écran pour invoquer un menu en particulier. "\textbf{B H}" consiste à tracer sur l'écran, avec le doigt, un aller-retour commençant par descendre. D'autres exemples sont détaillés plus bas.\\
-%
-\newline
-%
-Le \textbf{menu principal} est constitué des boutons
-\begin{itemize}
-\item "Nav." pour gérer les fonctions du logiciel liées à la navigation,
-\item "Affich." pour gérer les options d'affichage,
-\item "Config." pour la configuration du logiciel,
-\item "Info." pour consulter voire modifier l'état du système,
-\item "Annuler", pour effacer ces boutons,
-\item "Quitter" pour quitter le logiciel.
-\end{itemize}
-%
-Une fois le menu principal invoqué, vous pouvez changez la langue utilisée par l'interface si celle-ci n'est pas le français, par exemple (si en anglais) : choisir "fr.mo" dans Config / Config / System Setup / Look Language, Inputs / Language.\\
-%
-\newline
-%
-Sinon passez directement à la configuration du logiciel dans le menu Config. / Config. / Système / Fichiers / Fichiers, et sélectionnez les fichiers correspondants aux champs suivants :
-\begin{itemize}
-\item Carte,
-\item Waypoints,
-\item Espaces aériens.
-\end{itemize}
-Les champs configurables sont affichés sur fond blanc et modifiables en cliquant dessus, puis en sélectionnant l'option voulue. Pour chaque option une aide est disponible en français, fournissant les explications sur les différentes options (bouton "Aide").\\
-%
-\newline
-%
-XCSoar permet l'affichage de une à huit \textbf{pages}. Une \textbf{page} est un contenu comprenant un fond (par exemple la carte avec ou sans la coupe verticale, ou bien l'assistant en thermique) et un ensemble d'InfoBox dont le contenu peut être paramétré. Voir dans "Config. / Config. / Système / Apparence" les menus "Pages" et "Paramètres InfoBox".\\
-Une page nommée AUTO permet de basculer automatiquement entre les trois suivantes :
-\begin{itemize}
-\item Thermique,
-\item Transition,
-\item Arrivée.
-\end{itemize}
-Rien ne vous empêche de ne pas utiliser la page AUTO, ou de l'utiliser en parametrant les mêmes InfoBox pour Transition et Arrivée.\\
-A l'utilisation, le passage d'une page à l'autre s'effectue au choix par le menu principal (appuyez deux fois sur Affich., puis le bouton correspondant au nom de la prochaine page) ou plus simplement par les raccourcis gestuels suivants :
-\begin{itemize}
-\item "gauche" (\textbf{G}, glisser le doigt de la droite vers la gauche sur la carte),
-\item "droite" (\textbf{D}, l'inverse).
-\end{itemize}
-Ce qui permet de passer à la page précédente ou suivante (telles que listées dans le menu de configuration "Apparence / Pages").\\
-%
-L'affichage portrait ou paysage est également configurable, ainsi que la disposition de chaque InfoBox sur l'écran (quoique l'agencement globale des InfoBox reste identique sur toutes les pages).\\
-%
-\newline
-%
-Les \textbf{InfoBox} sont des fenêtres d'information numériques, alphanumériques ou graphiques. Leur configuration peut se faire au choix 
-\begin{itemize}
-\item dans le menu de configuration de la page correspondante (Config. / Config. / Système / Apparence / InfoBox)\\
-ou bien
-\item en agissant directement sur l'InfoBox, à partir de la carte : en effectuant un appui long sur l'InfoBox correspondante.\\
-\end{itemize}
-%
-\textit{Conseils :
-\begin{itemize}
-\item La capacité de configuration est telle qu'il est préférable que vos InfoBox reflétent vos habitudes de vol, ainsi demandez-vous de quelles informations vous avez besoin aujourd'hui, en évitant (dans un premier temps) d'afficher des données que vous n'utilisez pas,
-\item Si vous utilisez la même information sur deux pages (par exemple la distance au prochain point de virage), alors positionnez la au même endroit sur l'écran.
-\end{itemize} }
-%
-\noindent
-\newline
-Une fonction utile est l'affichage sur la carte du \textbf{plan nécessaire} pour rejoindre un aérodrome par exemple (en prenant en compte la hauteur de sécurité configurée). Cette fonction est activable dans "Config. / Config. / Système /  Carte / Waypoints / Indication d'arrivée", y choisir "Finesse nécessaire". Le champ "Indication d'arrivée" nécessite de cocher la case "Expert" en bas de l'écran.
-%
-\subsection{Raccourcis gestuels}
-\noindent
-%
-Voici quelques raccourcis facilitant l'accès à certaines fonctions fréquemment utilisées :
-\begin{itemize}
-\item Menu circuit : \textbf{D B}
-\item Menu waypoints : \textbf{B D}
-\item Dégagements : \textbf{B G}
-\item Page "Etats" : \textbf{G B D B G} (décrire un "S" pour \textit{Status})
-\end{itemize}
-%
-\section{Utilisation}
-\noindent
-Les valeurs numériques de certaines InfoBox sont modifiables :
-\begin{itemize}
-\item  En mode SIM (e.g. altitude, route instantanée) afin de modifier la trajectoire du symbole,
-\item En mode FLY (e.g. l'InfoBox du calage MacCready).
-\end{itemize}
-\noindent
-\newline
-La flêche verticale à gauche de l'écran indique l'écart au plan vertical pour rejoindre le prochain point de virage avec le calage sélectionné. Une seconde flêche peut être ajoutée à l'intérieur de la première pour indiquer l'écart au plan avec un calage nul. L'apparition d'une croix sur le symbole d'écart au plan signifie que la trajectoire directe vers le point de virage ne permet pas de franchir le relief (prenant en compte la marge paramétrable de franchissement du terrain).\\
-\section{Liens Utiles}
-\noindent
-\label{LiensUtiles}
-\subsection{Liens XCSoar}
-\noindent
-Site du logiciel XCSoar :\\
-\url{http://www.xcsoar.org}\\
-\newline
-Flux RSS du site XCSoar.org :\\
-\url{http://xcsoar.org/atom.xml}\\
-\newline
-Rubrique de téléchargement de la dernière version :\\
-\url{http://www.xcsoar.org/download/}\\
-\newline
-Génération de cartes :\\
-\url{http://mapgen.xcsoar.org/}\\
-\newline
-Boîte à bugs (et demandes d'amélioration) :\\ \url{http://www.xcsoar.org/trac/}\\
-\newline
-Le forum, dont une rubrique en français pour poser vos questions :\\
-\url{http://www.xcsoar.org/forum/}\\
-\newline
-Pour contribuer à la traduction de l'interface utilisateur d'XCSoar :\\
-\url{https://translations.launchpad.net/xcsoar/}\\
-\newline
-Pour les développeurs, voir le "developer manual" à l'adresse suivante : \url{http://www.xcsoar.org/discover/manual.html} et le site \url{http://www.xcsoar.org/develop/} .
-%
-\subsection{Liens divers}
-\noindent
-\label{LiensDivers}
-Page brute contenant toutes les versions officielles :\\ \url{http://download.xcsoar.org/releases/}\\
-\newline
-Différents sites pour points de virages et terrains :\\
-\url{http://planeur.net/index.php?option=com_jooget&Itemid=177}\\
-\url{http://qfu.free.fr/pdv.php}\\
-\url{http://www.segelflug.de/vereine/welt2000/}\\
-\url{http://www.cumulus-soaring.com/soaring_links/airports.htm}\\
-\url{http://soaringweb.org/TP}\\
-\url{http://www.lvzc.be/index.php/secretariaat/documenten/cat_view/62-keerpuntbestanden}\\
-\newline
-Espaces aériens en France :\\
-\url{http://www.ffvvespaceaerien.org/?page_id=412}\\
-Et ailleurs :\\
-\url{http://soaringweb.org/Airspace}\\
-%
 \end{document}

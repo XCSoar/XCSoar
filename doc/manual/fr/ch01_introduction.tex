@@ -1,107 +1,204 @@
-\chapter{Introduction}\label{cha:introduction}
-Ce document est le manuel d'utilistion de XCSoar, logiciel de navigation aérienne, open-source développé à l'origine pour les Poket PC. Le lecteur est sensé avoir de bonnes connaissances des fondamentaux de la théorie  du vol à voile et un minimum de pratique du vol sur la campagne.
+% !TeX encoding = utf8
+% !TeX spellcheck = fr
 
-Les mises à jour périodiques du logiciel peuvent rendre ce manuel périmé concernant certains points. Il est souhaitable de lire les notes de mise à jour du logiciel pour en connaitre les évolutions. Les mises à jour du logiciel et de la documentation sont disponibles sur 
+\chapter{Introduction}\label{cha:introduction}
+Ce document est le manuel d'utilisation d'\xc, logiciel de navigation aérienne, à source ouverte, développé à l'origine pour les Pocket PC. Le lecteur est censé avoir de bonnes connaissances des fondamentaux de la théorie du vol à voile et un minimum de pratique du vol sur la campagne.
+
+Les mises à jour régulières du logiciel peuvent rendre ce manuel périmé sur certains points. Il est souhaitable de lire les notes de mise à jour du logiciel pour en connaître les évolutions. Les mises à jour du logiciel et de la documentation sont disponibles sur~:
 \begin{quote}
-\xcsoarwebsite{/download}
+\xcsoarwebsite{/download/}
 \end{quote}
+
+\begin{framed}
+	\begin{center}
+		\xc{} est entièrement développé par des bénévoles.\\
+		Cette documentation aussi.\\
+		Si vous y voyez des imperfections, vous pouvez facilement les faire disparaître~:\\
+		\xcsoarwebsite{/develop/}
+	\end{center}
+\end{framed}
 
 \section{Organisation du manuel}
 
 \todonum[inline]{Write about the manual crossref hinting icons and the yellow
 colour. The Quickstart will be readable also without those links available} 
-Ce manuel est structuré par grandes fonctionnalités du point de vue du pilote. La suite de ce chapitre parle du téléchargement, de l'installation et du lancement du logiciel sur les différentes plateformes matérielles supportées. Le chapitre ~\ref{cha:interface} décrit les concepts de l'interface utilisateur et donne une vue générale de l'affichage.
+Ce manuel est principalement écrit pour permettre à un utilisateur d'\xc{} de s'en servir
+rapidement, \emph{mais aussi} de permettre une compréhension approfondie de toutes ses fonctionnalités,
+concepts et tactiques introduites. Les auteurs ont fait un effort constant
+pour le rédiger du point de vue du pilote (et espère sincèrement y avoir réussi).
 
-Le chapitre~\ref{cha:navigation} décrit en détail l'utilisation de la carte mobile et l'aide que peut apporter le logiciel de navigation. Le chapitre~\ref{cha:tasks} décrit comment les circuits sont définis et utilisés en vol. Il présente aussi les outils d'analyse permettant aux pilotes d'améliorer leurs performances. Le chapitre~\ref{cha:glide}  est consacré au calculateur de vol d'XCSoar et présente en détail les fonctionnalités qu'il offre. Il est important pour les pilotes de comprendre comment le calculateur effectue ses différents calculs.
+Les auteurs vous encouragent fortement à prendre le temps de lire l'ensemble du manuel,
+chapitre par chapitre (excepté pour les chapitres de références sur les Infoboxes et 
+la configuration). Soyez assuré que le temps que vous y aurez passé sera profondément
+utile à votre compréhension. Lors de votre lecture, vous pourriez vous sentir parfois un peu perdu.
+C'est pour vous aider à vous y retrouver que les auteurs ont introduit des liens et des icônes.
 
-Le chapitre~\ref{cha:atmosph} parle de l'interfaçage du calculateur avec des varios et autres instruments de mesure et comment ces données sont utilisées pour représenter différents modèles concernant entre autre le vent et la convection. Le chapitre~\ref{cha:airspace} parle de la gestion des espaces aériens et des alarmes dédiées ainsi que des alarmes du FLARM. Le chapitre~\ref{cha:avionics-airframe} présente l'intégration du calculateur avec le reste des systèmes utilisés dans l'environnement de vol ( terminaux permettant de communiquer avec le calculateur, switches divers) et des diagnostiques possibles.
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8cm,angle=0,keepaspectratio='true']{figures/config.pdf}
+\hspace{1.5cm}
+\includegraphics[width=0.8cm,angle=0,keepaspectratio='true']{figures/reminder.pdf}
+\hspace{1.5cm}
+\includegraphics[width=0.8cm,angle=0,keepaspectratio='true']{figures/gesture.pdf}
+\hspace{1.5cm}
+\includegraphics[width=0.8cm,angle=0,keepaspectratio='true']{figures/warning.pdf}
+\caption{Icônes de configuration, de rappel, de saisie tactile et de mise en garde}
+\end{figure}
 
-La suite du document est constituée principalement de chapitres de référence. Le chapitre~\ref{cha:infobox} liste les différentes informations qui peuvent être affichées dans les "InfoBox" sur les côtés de la carte mobile. La configuration du logiciel est décrite dans le chapitre ~\ref{cha:configuration}. Le format des fichiers utilisés ainsi que la manière de les obtenir ou les créer et les éditer est décrit dans le chapitre~\ref{cha:data-files}.
+\warning Mise en garde. L'icône de mise en garde est utilisé à chaque fois que quelque chose
+doit être strictement suivi. Ne pas l'effectuer pourrait amener à des résultats imprévus, un dysfonctionnement complet ou même un danger pour votre vie. Poursuivez plus avant uniquement si vous avez pleinement compris la mise en garde.
 
-Enfin, un bref historique et une explication du processus de développement de XCSoar sont présentés dans le chapitre ~\ref{cha:history-development}.
+\gesture{BH} Saisie tactile. Une saisie tactile est possible sur les appareils ayant
+un écran tactile, et permet d'ouvrir un menu, de lancer une action, etc. Dans le présent exemple BH
+signifie ``déplacer votre doigt vers le bas, puis vers le haut (en ligne droite) sur l'écran''.
+ 
+\gesturespec{DU} Saisie tactile spécifique. Lorsque les auteurs du manuel suivent le processus de développement rapide d'\xc{} par écrit, un icône spécifique est fourni, donnant les mouvements.
+
+\tip Rappel. Cette icône signale un conseil, une astuce ou des choses que vous auriez besoin de vous 
+rappeler après avoir lu les paragraphes correspondants, etc.
+
+\config{orientation} Voir configuration\textellipsis Cette icône représentant deux outils
+de mécanicien vous renvoie à une description approfondie des points qui sont discutés et à la
+manière de les configurer. Les nombres à côté de l'icône font référence au paragraphe
+des chapitres~\ref{cha:infobox} et~\ref{cha:configuration} de ce manuel. Et dans l'exemple présent,
+au paragraphe~\ref{conf:orientation}. 
+
+\marginlabel{\parbox{1.3cm}{\rotatebox[origin=c]{180}{\includegraphics[width=0.9cm]{figures/warning.pdf}}}}
+\rotatebox[origin=c]{180}{Arrêtez-vous de lire les manuels lorsque vous êtes en vol dos~!}
+
+\emph{Lisez} à la maison et \emph{configurez} au sol, en sécurité. Ayant compris cette mise en garde
+(renversée) comme un exemple, vous êtes prêt à continuer.
+
+\config{usingxcsoarsafely} Ceci est un second exemple de l'icône ``configuration''. L'icône renvoie
+au chapitre~\ref{cha:introduction} (ce chapitre), paragraphe 
+\ref{sec:usingxcsoarsafely}, ``Utiliser \xc{} en sécurité'' ci-dessous, qui pourrait être 
+compris comme ``comment vous configurez vous-même.'' C'est à vous de décider de poursuivre
+par une lecture approfondie puis de revenir en arrière, ou simplement de continuer. Si vous lisez ce manuel
+sur un écran, cliquer sur le numéro vous conduira vers le paragraphe
+mentionné. Utilisez la fonction ``retour'' (ou similaire) de votre
+logiciel de lecture pour revenir au chapitre que vous lisiez.
+
+Lorsque des nombres sont imprimés en bleu, comme à propos des icônes mentionnées ci-dessus, cela veut dire ``aide disponible''.
+De même lorsque des adresses internet (URL) sont écrites en bleu. 
+Cliquer sur un texte comme \xcsoarwebsite{/contact/} ouvrira votre navigateur web
+ou votre logiciel de messagerie pour vous proposer, respectivement, d'autres ressources, ou le contact
+de personnes compétentes.
+
+Le reste de ce chapitre ``Introduction'' est là pour vous préparer à \xc,
+à augmenter votre niveau de compréhension et à maintenir vos compétences.
+Si vous êtes un lecteur pressé, le chapitre~\ref{cha:installation} ``Installation'' pourrait être votre prochain point de virage, suivi du chapitre~\ref{cha:quickstart} ``Prise en main''. Ne vous gênez pas pour lire
+en diagonale, mais ne soyez pas non plus trop déprimé en lisant chapitre par chapitre. Le contenu des chapitres successifs est le suivant~:
+
+Le chapitre~\ref{cha:interface} décrit les concepts de l'interface utilisateur et donne une vue générale de l'affichage.
+
+Le chapitre~\ref{cha:navigation} décrit en détail l'utilisation de la carte mobile et l'aide que peut apporter le logiciel de navigation. Le chapitre~\ref{cha:tasks} décrit comment les circuits sont définis et utilisés en vol. Il présente aussi les outils d'analyse permettant aux pilotes d'améliorer leurs performances. Le chapitre~\ref{cha:glide} est consacré au calculateur de vol d'\xc{} et présente en détail les fonctionnalités qu'il offre. Il est important pour les pilotes de comprendre comment le calculateur effectue ses différents calculs.
+
+Le chapitre~\ref{cha:atmosph} parle de l'interfaçage du calculateur avec des varios et autres instruments de mesure et comment ces données sont utilisées pour représenter différents modèles concernant entre autres le vent et la convection. Le chapitre~\ref{cha:airspace} parle de la gestion des espaces aériens et des alarmes dédiées ainsi que des alarmes du \fl. Le chapitre~\ref{cha:avionics-airframe} présente l'intégration du calculateur avec le reste des systèmes utilisés dans l'environnement de vol (terminaux permettant de communiquer avec le calculateur, switches divers) et des diagnostics possibles.
+
+La suite du document est constituée principalement de chapitres de référence. Le chapitre~\ref{cha:infobox} liste les différentes informations qui peuvent être affichées dans les ``InfoBox'' sur les côtés de la carte mobile. La configuration du logiciel est décrite dans le chapitre~\ref{cha:configuration}. Le format des fichiers utilisés ainsi que la manière de les obtenir ou les créer et les éditer sont décrits dans le chapitre~\ref{cha:data-files}.
+
+Enfin, un bref historique et une explication du processus de développement d'\xc{} sont présentés dans le chapitre~\ref{cha:history-development}.
 
 \section{Remarques}
 
-\subsection*{Terminologie}
-Un certain nombre de termes sont utilisés pour la description de matériel embarqués tels que Pocket PC, comprenant 'organiser', Portable Digital Assistant (PDA), et Personal Navigation Assistant (PNA). Dans ce document ces termes sont utilisés indifféremment comme référence à un matériel supporté par XCSoar.
-
 \subsection*{Copies d'écran}
-Tout au long de ce manuel des copies d'écran de XCSoar sont présentées. Elles proviennent de différentes plateformes matériel et pas forcément de la même version d'XCSoar. Entre plateforme il peut y avoir des différences de résolution d'écran, de présentation générale, de police de caractères ce qui induit des différences entre la documentation et la visualisation sur l'appareil. La plupart des copies d'écran de ce manuel sont faites avec un affichage d'XCSoar en format paysage.
+Tout au long de ce manuel des copies d'écran d'\xc{} sont présentées. Elles proviennent de différentes plateformes matériel et pas forcément de la même version d'XCSoar. Entre plateformes, il peut y avoir des différences de résolution d'écran, de présentation générale, de police de caractères. Cela peut induire des différences entre la documentation et la visualisation sur votre appareil. La plupart des copies d'écran de ce manuel sont faites avec un affichage d'\xc{} en format paysage.
 
 \section{Platformes}
 \begin{description}
-\item[Windows PC]
-XCSoar fonctionne sur un PC sous Windows (XP, Vista, 7 versions 32 et 64 bits). Cette version est principalement utile pour la prise en main, l'entrainement à l'utilisation d'XCSoar, rejouer des fichiers IGC enregistrés ou utiliser XCSoar en mode simulation sur un PC non connecté à un GPS.
-\item[Windows Mobile PDA/PNA]
-XCSoar supporte les appareils utilisant Microsoft Pocket PC 2003 jusqu'à Windows Mobile 6. Windows Mobile 7 n'est pas supporté car Microsoft a décidé de ne pas maintenir les applications natives à partir de cette version.  
-\item[Unix/Linux PC]
-XCSoar peut tourner sous Unix en utilisant l'émulateur Wine. Une version native Unix existe à partir de la version 6.0 mais est toujours considérée comme expérimentale.     
-\item[Périphériques Androïd] supporté à partir d'Androïd 1.6 et versions ultérieures.
+\item[Appareils Android]
+\xc{} tourne sous Android~1.6 ou supérieur.
+\item [eBookreader]
+\xc{} tourne sur les plusieurs lecteurs Kobo.
+\item[PC Windows]
+\xc{} fonctionne sur un PC sous Windows (XP, Vista, 7 versions 32 et 64 bits). Cette version est principalement utile pour la prise en main, l'entraînement à l'utilisation d'\xc, rejouer des fichiers IGC enregistrés ou utiliser \xc{} en mode simulation sur un PC non connecté à un GPS.
+\item[PC Unix/Linux]
+\xc{} fonctionne sous Unix/Linux.
 \end{description}
 
-
-
-\section{Support technique}
+\section{Aide technique}
 
 \subsection*{Dépannage}
-XCSoar est développé par une petite équipe. Bien que nous soyons heureux de vous aider dans l'utilisation de notre logiciel, nous ne pouvons donner de cours sur l'utilisation des techniques modernes d'information!
-Si vous avez des questions concernant XCSoar, consultez la FAQ en premier lieu. Si vous ne trouvez pas de réponse satisfaisante, envoyez un mail à la liste:
+\xc{} est développé par une petite équipe. Bien que nous soyons heureux de vous aider dans 
+l'utilisation de notre logiciel, nous ne pouvons donner de cours sur l'utilisation des techniques
+modernes d'information~! Si vous avez une question à propos d'\xc{} et que vous n'avez pas 
+trouvé de réponse dans ce manuel, n'hésitez pas à nous contacter.
+Vous trouverez l'ensemble des contacts résumés ici~:
 \begin{quote}
-\href{mailto:xcsoar-user@lists.sourceforge.net}{xcsoar-user@lists.sourceforge.net}
+	\xcsoarwebsite{/contact}
 \end{quote}
 
-Les nouvelles questions seront ajoutées à la FAQ du site de XCSoar. 
-
-Vous pouvez aussi vous inscrire à la liste de mails de XCSoar afin d'être averti des derniers développements du logiciel. Pour plus d'information voir sur notre site:
+Pour démarrer, allez sur le forum XCSoar~:
 \begin{quote}
-\xcsoarwebsite{/discover/mailinglist.html}
+	\url{https://forum.xcsoar.org}
 \end{quote}
+Si votre question n'y a pas déjà trouvé de réponse, postez-y, ou envoyez-nous un courriel~:
+\begin{quote}
+	\href{mailto:xcsoar-user@lists.sourceforge.net}{xcsoar-user@lists.sourceforge.net}
+\end{quote}
+Toute question fréquente sera ajoutée à ce document.
+Vous pourriez aussi trouver utile de vous abonner à la liste de diffusion des utilisateurs
+d'\xc{} afin d'être tenu au courant des derniers développements.
 
-Le fichier de "log" du démarrage du logiciel est \verb|xcsoar.log|. Il peut être envoyé aux développeurs d'XCSoar pour les aider à déterminer les causes de problèmes au lancement du logiciel.
-
-\subsection*{Mises à jour}
-Il est souhaitable de visiter le site web de XCSoar pour vérifier si il n'y a pas de mise à jour disponible. La procédure d'installation décrite au chapitre~\ref{cha:installation} suivant peut être répétée pour la mise à jour du logiciel. Les fichiers de configurations et les données personnelles (cartes, points de virage,...) sont préservées lors des mises à jour et ré-installations.
-
-Il est bien entendu recommandé de mettre à jour les données de navigation (cartes, espaces aériens) pouvant être modifiées par les autorités. Le fichier d'espace aérien mis à disposition sur le site de la FFVV est mis à jour environ une fois par mois au cours de la saison.
+Si aucun de ces moyens ne vous aide, vous êtes probablement tombé sur un bug.
 
 \subsection*{Vos retours}
-Comme tout programme élaboré, XCSoar peut comporter des bugs. Si vous en trouvez un, veuillez le remonter à l'équipe de développement en utilisant notre portail dédié à:
+Comme tout logiciel élaboré, \xc{} peut comporter des bugs. Si vous en trouvez un,
+veuillez en informer à l'équipe de développement en utilisant notre portail dédié sur~:
 \begin{quote}
-\xcsoarwebsite{/trac}
+\xcsoarwebsite{/develop/new_ticket.html}
 \end{quote}
-ou en nous contactant par mail à:
-
+ou en nous contactant par mail à~:
 \begin{quote}
 \href{mailto:xcsoar-devel@lists.sourceforge.net}{xcsoar-devel@lists.sourceforge.net}
 \end{quote}
+\xc{} enregistre beaucoup d'informations utiles dans un fichier de log
+\verb|xcsoar.log| situé dans le répertoire \texttt{XCSoarData}. Le fichier de log peut être attaché
+au ticket de bug afin d'aider les développeurs d'\xc{} à déterminer la cause possible du problème.
 
-\section{Entrainement}
-Pour votre sécurité et celle des autres, les pilotes utilisant XCSoar doivent s'entrainer à l'utilisation du logiciel, au sol , afin de s'habituer à l'interface utilisateur et au différentes fonctionnalités qu'il offre, AVANT de l'utiliser en vol.
+Et si vous aimez l'idée d'en faire un peu plus, N'hésitez pas à contribuer~:
+\begin{quote}
+\xcsoarwebsite{/develop/}
+\end{quote}
 
-\subsection*{XCSoar sur un PC}
-La version PC permet de se familiariser avec le logiciel, son interface utilisateur et ses fonctionnalités tout en étant confortablement installé à la maison, une bière à la main.... Tous les fichiers et les configurations de cette version sont identiques aux versions embarquées. Il est donc très facile de tester différentes configurations sur le PC avant de les mettre en pratique en vol.
+\subsection*{Mises à jour}
+Vous devriez périodiquement aller sur le site web d'\xc{} afin de vérifier s'il
+y a des mises à jour du logiciel. La procédure d'installation décrite dans le chapitre suivant peut typiquement
+être répétée afin de mettre à jour le logiciel. Tous les paramètres de configuration
+de l'utilisateur et les fichiers de données seront conservés au cours
+d'une ré-installation ou d'une mise à jour.
 
-La version PC peut être connectée à des instruments et fonctionner comme un calculateur en l'air. Exemples d'utilisation:
+Il est aussi recommandé de vérifier périodiquement s'il y a des mises à jour des fichiers
+de données, spécialement pour les espaces aériens qui peuvent avoir subi des 
+changements par l'autorité nationale en charge de l'aviation civile.
 
+\section{Entraînement}
+Pour votre sécurité et celle des autres, les pilotes utilisant \xc{} doivent s'entraîner \emph{au sol}
+à l'utilisation du logiciel, et ainsi s'habituer à l'interface utilisateur et aux différentes fonctionnalités qu'il offre, et ce AVANT de l'utiliser en vol.
+
+\subsection*{\xc{} sur un PC}
+La version PC permet de se familiariser avec le logiciel, son interface utilisateur et ses fonctionnalités tout en étant confortablement installé à la maison, une bière à la main\textellipsis Tous les fichiers et les configurations de cette version sont identiques aux versions embarquées. Il est donc très facile de tester différentes configurations sur le PC avant de les mettre en pratique en vol.
+
+La version PC peut être connectée à des instruments et fonctionner comme la version embarquée. Exemples d'utilisation~:
 \begin{itemize}
-\item Connecter un FLARM au PC pour utiliser XCSoar comme station au sol, pour afficher le traffic des planeurs équipées de FLARM.
-\item Connecter un variomètre "intelligent"  comme le Vega pour tester le paramétrage du vario.
+\item connecter un \fl{} au PC pour utiliser \xc{} comme station au sol, et alors afficher le trafic des planeurs équipés de \fl.
+\item connecter un variomètre ``intelligent'' comme le Vega pour tester le paramétrage du vario.
 \end{itemize}
 
-\subsection*{XCSoar avec un simulateur de vol}
-Une bonne manière d'apprendre à se servir du logiciel est de connecter un Pocket PC à un PC sur lequel tourne un simulateur de vol qui peut envoyer des messages NMEA vers un port série. Condor et X-Plane le permettent par exemple.
+\subsection*{\xc{} avec un simulateur de vol}
+Une bonne manière d'apprendre à se servir du logiciel est de connecter un smartphone à un PC sur lequel tourne un simulateur de vol qui peut envoyer des messages NMEA vers un port série. Condor et X-Plane le permettent par exemple.
 
-Le gros avantage de s'entrainer ainsi est que XCSoar peut être utilisé en mode FLY. Ainsi, il se comporte exactement comme si vous voliez et vous pouvez avoir un très bon aperçu du fonctionnement de XCSoar quand vous utilisez le simulateur de vol. 
+Le gros avantage de s'entraîner ainsi est qu'\xc{} en alors utilisé en mode VOL. De ce fait, il se comporte exactement comme si vous voliez. Vous pouvez donc avoir un très bon aperçu du fonctionnement d'\xc{} quand vous utilisez le simulateur de vol. 
 
-\section{XCSoar et la sécurité}
-L'utilisation d'un calculateur tel que XCSoar en vol entraine certains risques: l'attention du pilote peut être diminuée de manière très significative, comme le temps passé à regarder en dehors du cockpit pour assurer la sécurité.
+\section{Utiliser \xc{} en sécurité}\label{sec:usingxcsoarsafely}\label{conf:usingxcsoarsafely}
+L'utilisation en vol d'un calculateur tel qu'\xc{} entraîne certains risques~: l'attention du pilote à son environnement peut être diminuée de manière très significative, de même que le temps passé à regarder en dehors du cockpit pour assurer la sécurité.
 
-La philosophie guidant la conception et le développement de XCSoar est de réduire cette distraction en minimisant les interactions de l'utilisateur et en présentant les informations de façon claire et lisible d'un coup d'œil.
+La philosophie guidant la conception et le développement d'\xc{} est de réduire cette distraction en minimisant les interactions de l'utilisateur et en présentant les informations de façon claire et lisible du premier coup d'œil.
 
-Les pilotes qui utilisent ce logiciel sont responsables de l'utilisation de XCSoar en sécurité. 
-Pour bien utiliser XCSoar vous devez:
+Les pilotes qui utilisent \xc sont responsables de son utilisation en sécurité. 
+Pour bien utiliser \xc{} vous devez~:
 \begin{itemize}
-\item Devenir familier avec l'interface graphique et avec vous entrainer au sol.
-\item En vol, prendre l'habitude de regarder dehors autour de vous avant d'interagir avec le logiciel.
-\item Configurer le logiciel pour profiter des fonctionnalités automatisées pour minimiser les interactions avec le logiciel. Si vous vous apercevez que vous faites mécaniquement des actions fréquentes, demandez-vous (ou à un autre utilisateur de XCSoar) si le logiciel ne peut pas être configuré pour le faire à votre place.
+\item être à l'aise avec l'utilisation du logiciel par un entraînement au sol.
+\item en vol, prendre l'habitude de regarder dehors autour de vous avant d'interagir avec le logiciel, et vous assurer ainsi qu'il n'y a pas de risques de collision avec d'autres aéronefs.
+\item configurer le logiciel pour profiter des fonctionnalités automatisées et minimiser ainsi les interactions avec le logiciel. Si vous vous apercevez que vous répétez fréquemment les mêmes successions d'actions, demandez-vous (ou demandez à un autre utilisateur d'\xc) si le logiciel ne peut pas être configuré pour le faire à votre place.
 \end{itemize}
