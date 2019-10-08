@@ -136,6 +136,26 @@ MacCreadyProcessTimer()
   return modified;
 }
 
+static bool
+RadioProcess()
+{
+  bool modified = false;
+
+  const NMEAInfo &basic = CommonInterface::Basic();
+
+  if (basic.settings.active_frequency.IsDefined()) {
+    ActionInterface::SetActiveFrequency(basic.settings.active_frequency, basic.settings.active_freq_name, false);
+    modified = true;
+  }
+
+  if (basic.settings.standby_frequency.IsDefined()) {
+    ActionInterface::SetStandbyFrequency(basic.settings.standby_frequency, basic.settings.standby_freq_name, false);
+    modified = true;
+  }
+
+  return modified;
+}
+
 bool
 ApplyExternalSettings()
 {
@@ -144,5 +164,6 @@ ApplyExternalSettings()
   modified |= BugsProcessTimer();
   modified |= QNHProcessTimer();
   modified |= MacCreadyProcessTimer();
+  modified |= RadioProcess();
   return modified;
 }
