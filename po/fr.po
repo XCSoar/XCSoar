@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-10-04 18:56+0000\n"
+"PO-Revision-Date: 2019-10-12 12:45+0000\n"
 "Last-Translator: Cloud Esp <Frederic.Darboux@inra.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
@@ -1228,9 +1228,9 @@ msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival height. "
 "For AAT tasks, the target within the AAT sector is used."
 msgstr ""
-"Altitude d'arrivée au prochain point de virage en prenant en compte "
-"l'altitude de sécurité en arrivée. Pour les épreuves AAT, c'est le point "
-"cible du secteur AAT qui est utilisé."
+"Altitude d'arrivée au prochain point de virage en prenant en compte la "
+"hauteur de sécurité en arrivée. Pour les épreuves AAT, c'est le point cible "
+"du secteur AAT qui est utilisé."
 
 #: src/InfoBoxes/Content/Factory.cpp:243
 #, no-c-format
@@ -1292,7 +1292,7 @@ msgid ""
 "height."
 msgstr ""
 "Altitude d'arrivée au point de virage final du circuit en tenant compte de "
-"l'altitude de sécurité."
+"la hauteur de sécurité en arrivée."
 
 #: src/InfoBoxes/Content/Factory.cpp:268
 #, no-c-format
@@ -1630,7 +1630,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:431
 #, no-c-format
 msgid "Flight duration"
-msgstr "Temps de vol"
+msgstr "Durée de vol"
 
 #: src/InfoBoxes/Content/Factory.cpp:432
 #, no-c-format
@@ -1680,7 +1680,7 @@ msgid ""
 msgstr ""
 "Finesse nécessaire pour atteindre le prochain point de virage, calculée "
 "comme le distance au prochain point divisée par la hauteur nécessaire pour y "
-"arriver à la hauteur de sécurité."
+"arriver à la hauteur de sécurité en arrivée."
 
 #: src/InfoBoxes/Content/Factory.cpp:456
 #, no-c-format
@@ -1862,9 +1862,9 @@ msgstr ""
 "objectif dans le secteur AAT. La navigation au GPS est basée sur la route "
 "sol instantanée, et cette route peut être différente du cap du planeur en "
 "présence de vent. Des chevrons indiquent la direction dans laquelle le "
-"planeur doit adapter sa trajectoire afin de corriger la dérive, et se "
-"diriger directement vers le prochain pont de virage. Cette indication prend "
-"en compte la courbure de la terre."
+"planeur doit adapter sa route afin de corriger la dérive, et se diriger "
+"directement vers le prochain pont de virage. Cette indication prend en "
+"compte la courbure de la Terre."
 
 #: src/InfoBoxes/Content/Factory.cpp:530
 #, no-c-format
@@ -2216,7 +2216,7 @@ msgid ""
 msgstr ""
 "Finesse nécessaire pour finir le circuit, calculée comme la distance "
 "restante à parcourir divisée par la hauteur nécessaire pour arriver à la "
-"hauteur de sécurité."
+"hauteur de sécurité en arrivée."
 
 #: src/InfoBoxes/Content/Factory.cpp:682
 #, no-c-format
@@ -2698,8 +2698,8 @@ msgid ""
 "altitude."
 msgstr ""
 "Distance à la prochaine collision avec le relief le long de la branche de "
-"circuit actuelle. A cet endroit, l'altitude devient inférieure à la garde au "
-"sol configurée par l'utilisateur (garde au sol)."
+"circuit actuelle. A cet endroit, la hauteur devient inférieure à la garde au "
+"sol configurée par l'utilisateur."
 
 #: src/InfoBoxes/Content/Factory.cpp:903
 #, no-c-format
@@ -2998,7 +2998,7 @@ msgid ""
 "safety arrival height."
 msgstr ""
 "Différence d'altitude au point d'arrivée avec un calage nul, par rapport à "
-"la hauteur de sécurité."
+"la hauteur de sécurité en arrivée."
 
 #: src/InfoBoxes/Content/Factory.cpp:1027
 #: src/InfoBoxes/Content/Factory.cpp:1028 src/InfoBoxes/Content/Task.cpp:904
@@ -5066,7 +5066,7 @@ msgstr ""
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:72
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:156
 msgid "Trail drift"
-msgstr "Dérive Compensée en spirale"
+msgstr "Dérive compensée en spirale"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:73
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:157
@@ -5115,7 +5115,7 @@ msgid ""
 "according to the dump rate specified in the configuration settings."
 msgstr ""
 "Ballast du planeur. Augmenter cette valeur si le poids du pilote est "
-"supérieur au poids de référence (typiquement 75kq). Appuyez sur ENTREE sur "
+"supérieur au poids de référence (typiquement 75kq). Appuyez sur ENTRÉE sur "
 "ce champ pour déclencher le décompte du volume de ballast selon le débit "
 "spécifié dans les préférences."
 
@@ -6051,7 +6051,7 @@ msgstr "Point de virage"
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:71
 #, no-c-format
 msgid "Landable"
-msgstr "Champ vachable"
+msgstr "Terrain posable"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:80
 msgid "Comment"
@@ -6170,13 +6170,13 @@ msgstr "Ne remplit pas l'espace aérien."
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:151
 #, no-c-format
 msgid "No labels will be displayed."
-msgstr "Aucun nom ne sera affiché."
+msgstr "Aucune étiquette ne sera affichée."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:85
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:140
 #, no-c-format
 msgid "All labels will be displayed."
-msgstr "Tous les noms seront affichés."
+msgstr "Toutes les étiquettes seront affichées."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:151
 msgid "Colours"
@@ -6203,12 +6203,12 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:193
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:155
 msgid "Label visibility"
-msgstr "Visibilité étiquettes"
+msgstr "Visibilité des étiquettes"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:194
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:156
 msgid "Determines what labels are displayed."
-msgstr "Définit quels noms seront affichés."
+msgstr "Définit quels étiquettes seront affichées."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:198
 msgid "Clip altitude"
@@ -6332,11 +6332,11 @@ msgid ""
 "of the target relative to you. In all modes, the color of the target "
 "indicates the threat level."
 msgstr ""
-"Permet l'affichage des informations radar FLARM. La trajectoire du planeur "
-"qui se trouve aux environs (cible) par rapport à votre trajectoire  est "
-"représenté par une flèche. Un triangle pointant vers le haut ou vers le bas "
-"indique l'altitude relative de la cible par rapport à vous. Dans tous les "
-"modes, la couleur de la cible indique le niveau de danger de collision."
+"Permet l'affichage des informations radar FLARM. Le cap de la route vers "
+"l'objectif par rapport au cap de la route du planeur  est représenté par une "
+"flèche. Un triangle pointant vers le haut ou vers le bas indique l'altitude "
+"relative de la cible par rapport à vous. Dans tous les modes, la couleur de "
+"l'objectif indique le niveau de danger de collision."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:88
 msgid "Auto close FLARM"
@@ -6619,7 +6619,7 @@ msgid ""
 "size and more."
 msgstr ""
 "La résolution de l'affichage est utilisée pour adapter les largeurs de "
-"ligne, la taille de la police, la taille des terrains vachables, etc."
+"ligne, la taille de la police, la taille des terrains posables, etc."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:104
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:129
@@ -7059,8 +7059,8 @@ msgid ""
 "The moving map display will be rotated so the glider's heading is oriented "
 "up."
 msgstr ""
-"La carte se déplace de façon à ce que la trajectoire du planeur soit "
-"orientée vers le haut."
+"La carte se déplace de façon à ce que la route du planeur soit orientée vers "
+"le haut."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:49
 #, no-c-format
@@ -7297,8 +7297,8 @@ msgid ""
 "When enabled and MC is positive, route planning allows climbs between the "
 "aircraft location and destination."
 msgstr ""
-"Si activé et MacCready positif, alors le calcul de la trajectoire autorise "
-"les montées entre la position de l'appareil et la destination."
+"Si activé et MacCready positif, alors le calcul de la route autorise les "
+"montées entre la position de l'appareil et la destination."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:122
 msgid "Route ceiling"
@@ -7376,7 +7376,7 @@ msgid ""
 "and alternate calculations."
 msgstr ""
 "Définit la performance du planeur utilisée pour la calcul de la zone "
-"d'atteinte au sol, des champs vachables, de l'arrêt du circuit et des "
+"d'atteinte au sol, des terrains posables, de l'arrêt du circuit et des "
 "dégagements."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:161
@@ -7441,7 +7441,7 @@ msgstr "Aff. Zone atteignable"
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:65
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:124
 msgid "Arrival height"
-msgstr "Indication d'arrivée"
+msgstr "Hauteur d'arrivée"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:66
 msgid ""
@@ -7471,7 +7471,7 @@ msgid ""
 "field) and arrival height."
 msgstr ""
 "Les dégagements ne seront ordonnés que par type de points (aérodrome/champ "
-"vachable) et hauteur d'arrivée."
+"posable) et hauteur d'arrivée."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:81
 #, no-c-format
@@ -7628,7 +7628,7 @@ msgid ""
 "information about individual waypoints and airfields."
 msgstr ""
 "Ce fichier peut contenir des extraits des compléments en-route ou autres "
-"informations relatives à des points de virage ou terrains."
+"informations relatives à des points de virage ou aérodromes."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:83
 #, no-c-format
@@ -8287,7 +8287,7 @@ msgid ""
 "values to emphasise terrain slope, smaller values if flying in steep "
 "mountains."
 msgstr ""
-"Définit l'intensité de l'ombrage dans le rendu du terrain. Utilisez de "
+"Définit l'intensité de l'ombrage dans le rendu du relief. Utilisez de "
 "grandes valeurs pour mettre en valeur les pentes, des valeurs plus petites "
 "si vous volez en régions montagneuses escarpées."
 
@@ -8572,13 +8572,13 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:145
 #, no-c-format
 msgid "Task waypoints & landables"
-msgstr "Points de virage du circuit & champs vachables"
+msgstr "Points de virage du circuit & terrains posables"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:146
 #, no-c-format
 msgid "All waypoints part of a task and all landables will be displayed."
 msgstr ""
-"Tous les points de virage du circuit et les champs vachables sont affichés."
+"Tous les points de virage du circuit et les terrains posables sont affichés."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:148
 #, no-c-format
@@ -8603,10 +8603,10 @@ msgid ""
 "If the waypoint is blocked by a mountain the green circle will be red "
 "instead."
 msgstr ""
-"Les aérodromes et zones vachables sont affichés sous forme de cercles "
+"Les aérodromes et champs posables sont affichés sous forme de cercles "
 "violets. Si le point de virage est atteignable, alors un contour circulaire "
-"vert est ajouté. Si la trajectoire vers le point de virage est bloquée par "
-"un relief, alors le contour sera rouge au lieu de vert."
+"vert est ajouté. Si la route vers le point de virage est bloquée par un "
+"relief, alors le contour sera rouge au lieu de vert."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:167
 #, no-c-format
@@ -8620,7 +8620,7 @@ msgid ""
 "is reachable the color is changed to green. If the waypoint is blocked by a "
 "mountain the color is changed to red instead."
 msgstr ""
-"Les aérodromes et les champs vachables sont affichés en blanc/gris. Si le "
+"Les aérodromes et les champs posables sont affichés en blanc/gris. Si le "
 "point de virage est accessible sa couleur est changée en vert. Si il est "
 "bloqué pour un relief sa couleur est changée en rouge."
 
@@ -8636,13 +8636,13 @@ msgid ""
 "light. Green if reachable, Orange if blocked by mountain and red if not "
 "reachable at all."
 msgstr ""
-"Les aérodromes et champs répertoriés sont affichés sous la forme de feux de "
-"signalisation. Vert pour atteignable, Orange si bloqué par une montagne, et "
-"rouge si pas atteignable du tout."
+"Les aérodromes et champs posables répertoriés sont affichés sous la forme de "
+"feux de signalisation. Vert pour atteignable, orange si bloqué par une "
+"montagne, et rouge si pas atteignable du tout."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:177
 msgid "Landable symbols"
-msgstr "Symbo. champ vachable"
+msgstr "Symbo. terrain posable"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:178
 msgid ""
@@ -8652,29 +8652,29 @@ msgid ""
 msgstr ""
 "Trois styles sont disponibles : des cercles violets (style WinPilot), un "
 "style très contrasté (une seule couleur), ou du orange. Le rendu est "
-"différent pour les champs vachables et les aérodromes. Les points "
+"différent entre les champs posables et les aérodromes. Les points "
 "accessibles sont affichés en vert quel que soit le style."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:183
 msgid "Detailed landables"
-msgstr "Champs vachables détaillés"
+msgstr "Terrains posables détaillés"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:184
 msgid ""
 "[Off] Display fixed icons for landables.\n"
 "[On] Show landables with variable information like runway length and heading."
 msgstr ""
-"[Off] Afficher des icônes fixes pour les champs vachables.\n"
-"[On] Montrer des informations variables sur les champs vachables, comme la "
+"[Off] Afficher des icônes fixes pour les terrains posables.\n"
+"[On] Montrer des informations variables sur les terrains posables, comme la "
 "longueur de la piste et l'élévation."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:189
 msgid "Landable size"
-msgstr "Taille du champ vachable"
+msgstr "Taille du terrain posable"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:190
 msgid "A percentage to select the size landables are displayed on the map."
-msgstr "Pourcentage pour la taille des champs vachables affichés sur la carte."
+msgstr "Pourcentage pour la taille des terrains posables affichés sur la carte."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:194
 msgid "Scale runway length"
