@@ -191,6 +191,7 @@ MainWindow::Initialise()
   Layout::Initialize(GetSize(),
                      CommonInterface::GetUISettings().GetPercentScale(),
                      CommonInterface::GetUISettings().custom_dpi);
+  SetDisplaySettings(CommonInterface::GetDisplaySettings());
 
   LogFormat("Initialise fonts");
   if (!Fonts::Initialize()) {

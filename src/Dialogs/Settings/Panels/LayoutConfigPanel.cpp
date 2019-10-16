@@ -35,6 +35,7 @@ Copyright_License {
 #include "UtilsSettings.hpp"
 #include "Asset.hpp"
 #include "Menu/ShowMenuButton.hpp"
+#include "ActionInterface.hpp"
 
 #ifdef USE_POLL_EVENT
 #include "Event/Globals.hpp"
@@ -293,6 +294,8 @@ LayoutConfigPanel::Save(bool &_changed)
     CommonInterface::main_window->CheckResize();
   } else if (info_box_geometry_changed)
     CommonInterface::main_window->ReinitialiseLayout();
+
+  CommonInterface::main_window->SetDisplaySettings(ui_settings.display);
 
   _changed |= changed;
 

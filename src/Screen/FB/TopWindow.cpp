@@ -27,7 +27,6 @@ Copyright_License {
 #include "Event/Poll/Loop.hpp"
 #include "Event/Queue.hpp"
 #include "Event/Globals.hpp"
-#include "Interface.hpp"
 
 #ifdef DRAW_MOUSE_CURSOR
 #include "Util/Macros.hpp"
@@ -84,6 +83,9 @@ TopWindow::OnResize(PixelSize new_size)
 }
 
 #ifdef DRAW_MOUSE_CURSOR
+
+TopWindow::TopWindow() : cursor_size(1) {}
+
 void
 TopWindow::OnPaint(Canvas &canvas)
 {
@@ -92,9 +94,8 @@ TopWindow::OnPaint(Canvas &canvas)
   /* draw the mouse cursor */
 
   const auto m = event_queue->GetMousePosition();
-  uint8_t cursorSize = CommonInterface::GetUISettings().display.cursor_size;
-  unsigned shortDistance = Layout::Scale(cursorSize * 4);
-  unsigned longDistance = Layout::Scale(cursorSize * 6);
+  unsigned shortDistance = Layout::Scale(cursor_size * 4);
+  unsigned longDistance = Layout::Scale(cursor_size * 6);
 
   const BulkPixelPoint p[] = {
     { m.x, m.y },
