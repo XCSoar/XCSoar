@@ -32,7 +32,7 @@ Copyright_License {
 #include <time.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <sys/poll.h>
+#include <poll.h>
 #include <sys/stat.h>
 #include <termios.h>
 
