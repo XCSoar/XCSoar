@@ -44,7 +44,7 @@ public:
   /**
    * Create a "fast" mutex.
    */
-#if !defined(__BIONIC__) || !defined(__clang__)
+#if defined(__GLIBC__) && !defined(__gnu_hurd__)
   constexpr
 #endif
   PosixMutex():mutex(PTHREAD_MUTEX_INITIALIZER) {}

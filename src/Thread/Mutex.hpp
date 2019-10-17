@@ -70,7 +70,7 @@ public:
   /**
    * Initializes the Mutex
    */
-#if defined(HAVE_POSIX) && defined(NDEBUG) && (!defined(__BIONIC__) || !defined(__clang__))
+#if defined(NDEBUG) && defined(__GLIBC__) && !defined(__gnu_hurd__)
   constexpr
 #endif
   Mutex()

@@ -36,7 +36,7 @@ class Cond {
   pthread_cond_t cond;
 
 public:
-#if !defined(__BIONIC__) || !defined(__clang__)
+#if defined(__GLIBC__) && !defined(__gnu_hurd__)
   constexpr
 #endif
   Cond():cond(PTHREAD_COND_INITIALIZER) {}
