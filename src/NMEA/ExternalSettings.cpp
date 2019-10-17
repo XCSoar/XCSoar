@@ -33,6 +33,10 @@ ExternalSettings::Clear()
   bugs_available.Clear();
   qnh_available.Clear();
   volume_available.Clear();
+  active_frequency.Clear();
+  standby_frequency.Clear();
+  active_freq_name.clear();
+  standby_freq_name.clear();
 }
 
 void
@@ -78,6 +82,16 @@ ExternalSettings::Complement(const ExternalSettings &add)
   if (add.volume_available.Modified(volume_available)) {
     volume = add.volume;
     volume_available = add.volume_available;
+  }
+
+  if (add.active_frequency.IsDefined()) {
+    active_frequency = add.active_frequency;
+    active_freq_name = add.active_freq_name;
+  }
+
+  if (add.standby_frequency.IsDefined()) {
+    standby_frequency = add.standby_frequency;
+    standby_freq_name = add.standby_freq_name;
   }
 }
 

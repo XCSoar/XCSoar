@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "NMEA/Validity.hpp"
 #include "Atmosphere/Pressure.hpp"
+#include "RadioFrequency.hpp"
+#include "Util/StaticString.hxx"
 
 #include <stdlib.h>
 #include <math.h>
@@ -71,6 +73,12 @@ struct ExternalSettings {
 
   /** the volume of the device [0-100%] */
   unsigned volume;
+
+  /** the radio frequencies of the device */
+  RadioFrequency active_frequency;
+  RadioFrequency standby_frequency;
+  StaticString<32> active_freq_name;
+  StaticString<32> standby_freq_name;
 
   void Clear();
   void Expire(double time);
