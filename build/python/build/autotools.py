@@ -1,8 +1,8 @@
 import os.path, subprocess, sys
 
-from build.project import Project
+from build.makeproject import MakeProject
 
-class AutotoolsProject(Project):
+class AutotoolsProject(MakeProject):
     def __init__(self, url, alternative_url, md5, installed, configure_args=[],
                  autogen=False,
                  cppflags='',
@@ -13,8 +13,10 @@ class AutotoolsProject(Project):
                  install_target='install',
                  use_destdir=False,
                  make_args=[],
+                 config_script='configure',
+                 use_actual_arch=False,
                  **kwargs):
-        Project.__init__(self, url, alternative_url, md5, installed, **kwargs)
+        MakeProject.__init__(self, url, alternative_url, md5, installed, **kwargs)
         self.configure_args = configure_args
         self.autogen = autogen
         self.cppflags = cppflags
@@ -25,6 +27,8 @@ class AutotoolsProject(Project):
         self.install_target = install_target
         self.use_destdir = use_destdir
         self.make_args = make_args
+        self.config_script = config_script
+        self.use_actual_arch = use_actual_arch
 
     def _filter_cflags(self, flags):
         if self.shared:
@@ -34,8 +38,13 @@ class AutotoolsProject(Project):
                 flags = flags.replace(' ' + f + ' ', ' ')
         return flags
 
-    def configure(self, toolchain):
-        src = self.unpack(toolchain)
+    def configure(self, toolchain, src=None, build=None):
+        if src is None:
+            src = self.unpack(toolchain)
+
+        if build is None:
+            build = self.make_build_path(toolchain)
+
         if self.autogen:
             if sys.platform == 'darwin':
                 subprocess.check_call(['glibtoolize', '--force'], cwd=src)
@@ -44,8 +53,6 @@ class AutotoolsProject(Project):
             subprocess.check_call(['aclocal'], cwd=src)
             subprocess.check_call(['automake', '--add-missing', '--force-missing', '--foreign'], cwd=src)
             subprocess.check_call(['autoconf'], cwd=src)
-
-        build = self.make_build_path(toolchain)
 
         cppflags = toolchain.cppflags
         if self.name == 'glibc':
@@ -61,7 +68,7 @@ class AutotoolsProject(Project):
             install_prefix = toolchain.install_prefix
 
         configure = [
-            os.path.join(src, 'configure'),
+            os.path.join(src, self.config_script),
             'CC=' + toolchain.cc,
             'CXX=' + toolchain.cxx,
             'CFLAGS=' + self._filter_cflags(toolchain.cflags),
@@ -73,7 +80,7 @@ class AutotoolsProject(Project):
             'ARFLAGS=' + toolchain.arflags,
             'RANLIB=' + toolchain.ranlib,
             'STRIP=' + toolchain.strip,
-            '--host=' + toolchain.arch,
+            '--host=' + (toolchain.actual_arch if self.use_actual_arch else toolchain.toolchain_arch),
             '--prefix=' + install_prefix,
             '--enable-silent-rules',
         ] + self.configure_args
@@ -81,14 +88,15 @@ class AutotoolsProject(Project):
         subprocess.check_call(configure, cwd=build, env=toolchain.env)
         return build
 
+    def get_make_args(self, toolchain):
+        return MakeProject.get_make_args(self, toolchain) + self.make_args
+
+    def get_make_install_args(self, toolchain):
+        args = MakeProject.get_make_install_args(self, toolchain)
+        if self.use_destdir:
+            args += ['DESTDIR=' + toolchain.install_prefix]
+        return args
+
     def build(self, toolchain):
         build = self.configure(toolchain)
-
-        destdir = []
-        if self.use_destdir:
-            destdir = ['DESTDIR=' + toolchain.install_prefix]
-
-        subprocess.check_call(['/usr/bin/make', '--quiet', '-j12'] + self.make_args,
-                              cwd=build, env=toolchain.env)
-        subprocess.check_call(['/usr/bin/make', '--quiet', self.install_target] + destdir,
-                              cwd=build, env=toolchain.env)
+        MakeProject.build(self, toolchain, build)

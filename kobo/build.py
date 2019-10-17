@@ -3,11 +3,11 @@
 import os, os.path
 import sys
 
-if len(sys.argv) != 12:
-    print("Usage: build.py TARGET_OUTPUT_DIR HOST_TRIPLET ARCH_CFLAGS CPPFLAGS ARCH_LDFLAGS CC CXX AR ARFLAGS RANLIB STRIP", file=sys.stderr)
+if len(sys.argv) != 13:
+    print("Usage: build.py TARGET_OUTPUT_DIR HOST_TRIPLET ACTUAL_HOST_TRIPLET ARCH_CFLAGS CPPFLAGS ARCH_LDFLAGS CC CXX AR ARFLAGS RANLIB STRIP", file=sys.stderr)
     sys.exit(1)
 
-target_output_dir, host_triplet, arch_cflags, cppflags, arch_ldflags, cc, cxx, ar, arflags, ranlib, strip = sys.argv[1:]
+target_output_dir, toolchain_host_triplet, actual_host_triplet, arch_cflags, cppflags, arch_ldflags, cc, cxx, ar, arflags, ranlib, strip = sys.argv[1:]
 
 # the path to the XCSoar sources
 xcsoar_path = os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]) or '.', '..'))
@@ -19,7 +19,7 @@ from build.dirs import tarball_path, src_path
 target_output_dir = os.path.abspath(target_output_dir)
 
 lib_path = os.path.join(target_output_dir, 'lib')
-arch_path = os.path.join(lib_path, host_triplet)
+arch_path = os.path.join(lib_path, actual_host_triplet)
 build_path = os.path.join(arch_path, 'build')
 install_prefix = os.path.join(arch_path, 'root')
 
@@ -30,13 +30,14 @@ if 'MAKEFLAGS' in os.environ:
 
 class Toolchain:
     def __init__(self, tarball_path, src_path, build_path, install_prefix,
-                 arch, arch_cflags, cppflags, arch_ldflags,
+                 toolchain_arch, actual_arch, arch_cflags, cppflags, arch_ldflags,
                  cc, cxx, ar, arflags, ranlib, strip):
         self.tarball_path = tarball_path
         self.src_path = src_path
         self.build_path = build_path
         self.install_prefix = install_prefix
-        self.arch = arch
+        self.toolchain_arch = toolchain_arch
+        self.actual_arch = actual_arch
 
         self.cc = cc
         self.cxx = cxx
@@ -70,7 +71,8 @@ class Toolchain:
 # a list of third-party libraries to be used by XCSoar
 from build.libs import *
 thirdparty_libs = [
-    glibc,
+    musl,
+    libstdcxx_musl_headers,
     zlib,
     freetype,
     curl,
@@ -80,7 +82,8 @@ thirdparty_libs = [
 
 # build the third-party libraries
 toolchain = Toolchain(tarball_path, src_path, build_path, install_prefix,
-                      host_triplet, arch_cflags, cppflags, arch_ldflags,
+                      toolchain_host_triplet, actual_host_triplet,
+                      arch_cflags, cppflags, arch_ldflags,
                       cc, cxx, ar, arflags, ranlib, strip)
 for x in thirdparty_libs:
     if not x.is_installed(toolchain):

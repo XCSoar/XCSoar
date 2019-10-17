@@ -281,6 +281,19 @@ ifeq ($(TARGET),KOBO)
   # Experimental target for Kobo Mini
   override TARGET = NEON
   TARGET_IS_KOBO = y
+
+  # We are using a GNU toolchain (triplet arm-linux-gnueabihf) by default, but
+  # the actual host triplet is different.
+  ACTUAL_HOST_TRIPLET = armv7a-a8neon-linux-musleabihf
+
+  ifeq ($(USE_CROSSTOOL_NG),y)
+    HOST_TRIPLET = $(ACTUAL_HOST_TRIPLET)
+    LLVM_TARGET = $(ACTUAL_HOST_TRIPLET)
+    KOBO_TOOLCHAIN = $(HOME)/x-tools/$(HOST_TRIPLET)
+    KOBO_SYSROOT = $(KOBO_TOOLCHAIN)/$(HOST_TRIPLET)/sysroot
+    TCPREFIX = $(KOBO_TOOLCHAIN)/bin/$(HOST_TRIPLET)-
+  else
+  endif
 endif
 
 ifeq ($(TARGET),NEON)
@@ -672,6 +685,19 @@ endif
 
 ifeq ($(TARGET_IS_KOBO),y)
   TARGET_CPPFLAGS += -DKOBO
+
+  ifeq ($(USE_CROSSTOOL_NG),y)
+    ifeq ($(CLANG),y)
+      TARGET_CPPFLAGS += -B$(KOBO_TOOLCHAIN)
+      TARGET_CPPFLAGS += --sysroot=$(KOBO_SYSROOT)
+    endif
+  else
+    LIBSTDCXX_HEADERS_DIR = $(abspath $(THIRDPARTY_LIBS_ROOT)/include/libstdc++)
+    TARGET_CXXFLAGS += \
+      -nostdinc++ \
+      -isystem $(LIBSTDCXX_HEADERS_DIR) \
+      -isystem $(LIBSTDCXX_HEADERS_DIR)/$(ACTUAL_HOST_TRIPLET)
+  endif
 endif
 
 ifeq ($(TARGET),ANDROID)
@@ -760,12 +786,16 @@ ifeq ($(HOST_IS_ARM)$(TARGET_HAS_MALI),ny)
 endif
 
 ifeq ($(TARGET_IS_KOBO),y)
-  TARGET_LDFLAGS += -static-libstdc++
-
-  # use our glibc version and its ld.so on the Kobo, not the one from
-  # the stock Kobo firmware, as it may be incompatible
-  TARGET_LDFLAGS += -Wl,--dynamic-linker=/opt/xcsoar/lib/ld-linux-armhf.so.3
-  TARGET_LDFLAGS += -Wl,--rpath=/opt/xcsoar/lib
+  TARGET_LDFLAGS += --static
+  ifeq ($(USE_CROSSTOOL_NG),y)
+    ifeq ($(CLANG),y)
+     TARGET_LDFLAGS += -B$(KOBO_TOOLCHAIN)
+     TARGET_LDFLAGS += -B$(KOBO_TOOLCHAIN)/bin
+     TARGET_LDFLAGS += --sysroot=$(KOBO_SYSROOT)
+    endif
+  else
+    TARGET_LDFLAGS += -specs=$(abspath $(THIRDPARTY_LIBS_ROOT)/lib/musl-gcc.specs)
+  endif
 endif
 
 ifeq ($(TARGET),ANDROID)

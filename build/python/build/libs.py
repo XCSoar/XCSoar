@@ -3,6 +3,7 @@ from os.path import abspath
 from build.zlib import ZlibProject
 from build.autotools import AutotoolsProject
 from build.freetype import FreeTypeProject
+from build.libstdcxxmuslheaders import LibstdcxxMuslHeadersProject
 
 glibc = AutotoolsProject(
     'http://mirror.netcologne.de/gnu/libc/glibc-2.23.tar.xz',
@@ -20,6 +21,31 @@ glibc = AutotoolsProject(
 
     # This is needed so glibc can find its NSS modules
     make_args=['default-rpath=/opt/xcsoar/lib'],
+)
+
+musl = AutotoolsProject(
+    'https://www.musl-libc.org/releases/musl-1.1.18.tar.gz',
+    'https://fossies.org/linux/misc/musl-1.1.18.tar.gz',
+    'd017ee5d01aec0c522a1330fdff06b1e428cb409e1db819cc4935d5da4a5a118',
+    'include/unistd.h',
+    [
+        '--disable-shared',
+    ],
+    patches=abspath('lib/musl/patches'),
+)
+
+libstdcxx_musl_headers = LibstdcxxMuslHeadersProject(
+    'https://ftp.gnu.org/gnu/gcc/gcc-8.3.0/gcc-8.3.0.tar.xz',
+    'http://mirrors.ibiblio.org/gnu/ftp/gnu/gcc/gcc-8.3.0/gcc-8.3.0.tar.xz',
+    '64baadfe6cc0f4947a84cb12d7f0dfaf45bb58b7e92461639596c21e02d97d2c',
+    'include/libstdc++/algorithm',
+    [
+        '--enable-clocale=generic',
+        '--disable-shared',
+        '--disable-multilib',
+    ],
+    config_script='libstdc++-v3/configure',
+    use_actual_arch=True,
 )
 
 zlib = ZlibProject(
