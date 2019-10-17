@@ -66,6 +66,10 @@ Version 7.0 - not yet released
   - support Kobo Glo HD
 
 Version 6.8.13 - not yet released
+* devices
+  - LX: fix buffer overflow
+* Kobo
+  - fix build failure with GCC 9
 
 Version 6.8.12 - 2019/04/30
 * weather

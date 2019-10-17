@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Screen/PortableColor.hpp"
 #include "OS/ByteOrder.hpp"
+#include "Util/Cast.hxx"
 #include "Util/Compiler.h"
 
 #include <algorithm>
@@ -140,12 +141,12 @@ struct GreyscalePixelTraits {
   }
 
   static constexpr pointer_type NextByte(pointer_type p, int delta) {
-    return pointer_type((uint8_t *)p + delta);
+    return OffsetCast<color_type>(p, delta);
   }
 
   static constexpr const_pointer_type NextByte(const_pointer_type p,
                                                int delta) {
-    return const_pointer_type((const uint8_t *)p + delta);
+    return OffsetCast<const color_type>(p, delta);
   }
 
   /**
