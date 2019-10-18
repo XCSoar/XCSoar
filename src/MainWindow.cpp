@@ -191,7 +191,9 @@ MainWindow::Initialise()
   Layout::Initialize(GetSize(),
                      CommonInterface::GetUISettings().GetPercentScale(),
                      CommonInterface::GetUISettings().custom_dpi);
-  SetDisplaySettings(CommonInterface::GetDisplaySettings());
+#ifdef DRAW_MOUSE_CURSOR
+  SetCursorSize(CommonInterface::GetDisplaySettings().cursor_size);
+#endif
 
   LogFormat("Initialise fonts");
   if (!Fonts::Initialize()) {

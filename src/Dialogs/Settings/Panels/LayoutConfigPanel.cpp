@@ -275,6 +275,7 @@ LayoutConfigPanel::Save(bool &_changed)
 
 #ifdef DRAW_MOUSE_CURSOR
   changed |= SaveValue(CursorSize, ProfileKeys::CursorSize, ui_settings.display.cursor_size);
+  CommonInterface::main_window->SetCursorSize(ui_settings.display.cursor_size);
 #endif
 
   if (orientation_changed) {
@@ -294,8 +295,6 @@ LayoutConfigPanel::Save(bool &_changed)
     CommonInterface::main_window->CheckResize();
   } else if (info_box_geometry_changed)
     CommonInterface::main_window->ReinitialiseLayout();
-
-  CommonInterface::main_window->SetDisplaySettings(ui_settings.display);
 
   _changed |= changed;
 

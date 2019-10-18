@@ -47,7 +47,6 @@ union SDL_Event;
 struct SDL_Window;
 #endif
 
-#include "DisplaySettings.hpp"
 #include <tchar.h>
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
@@ -144,7 +143,7 @@ class TopWindow : public ContainerWindow {
   SDL_Window *window;
 #endif
 #ifdef DRAW_MOUSE_CURSOR
-  uint8_t cursor_size;
+  uint8_t cursor_size = 1;
 #endif
 
 #ifndef USE_WINUSER
@@ -194,9 +193,6 @@ class TopWindow : public ContainerWindow {
 #endif
 
 public:
-#ifdef DRAW_MOUSE_CURSOR
-  TopWindow();
-#endif
 #ifndef USE_WINUSER
   virtual ~TopWindow();
 #endif
@@ -343,11 +339,11 @@ public:
   void SetDisplayOrientation(DisplayOrientation orientation);
 #endif
 
-  void SetDisplaySettings(const DisplaySettings& displaySettings) {
 #ifdef DRAW_MOUSE_CURSOR
-    cursor_size = displaySettings.cursor_size;
-#endif
+  void SetCursorSize(const uint8_t &cursorSize) {
+    cursor_size = cursorSize;
   }
+#endif
 
 
 protected:

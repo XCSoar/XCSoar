@@ -83,9 +83,6 @@ TopWindow::OnResize(PixelSize new_size)
 }
 
 #ifdef DRAW_MOUSE_CURSOR
-
-TopWindow::TopWindow() : cursor_size(1) {}
-
 void
 TopWindow::OnPaint(Canvas &canvas)
 {
