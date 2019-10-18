@@ -48,7 +48,7 @@ KeyboardWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddButton(parent, _T("Space"), ' ');
   AddButton(parent, _T("."), '.');
-  AddButton(parent, _T(","), ',');
+  AddButton(parent, _T("@"), '@');
   AddButton(parent, _T("-"), '-');
 
   if (show_shift_button) {
@@ -173,7 +173,7 @@ KeyboardWidget::MoveButtons(const PixelRect &rc)
   MoveButtonsToRow(rc, _T("1234567890"), 0);
   MoveButtonsToRow(rc, _T("QWERTYUIOP"), 1);
   MoveButtonsToRow(rc, _T("ASDFGHJKL"), 2, button_width / 3);
-  MoveButtonsToRow(rc, _T("ZXCVBNM,."), 3, button_width);
+  MoveButtonsToRow(rc, _T("ZXCVBNM@."), 3, button_width);
 
   if (IsLandscape(rc)) {
     MoveButton(_T('-'),
