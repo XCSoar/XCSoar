@@ -6938,40 +6938,44 @@ msgstr "Zeige Menübutton"
 msgid "Show the Menubutton"
 msgstr "Menütaste zeigen"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:56
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:57
 #, no-c-format
 msgid "Start only"
 msgstr "Nur Start"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:68
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:69
 msgid "Pilot name"
 msgstr "Pilotenname"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:70
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:71
+msgid "CoPilot name"
+msgstr "Copilotenname"
+
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:73
 msgid "Time step cruise"
 msgstr "Zeitintervall beim Vorflug"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:71
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:74
 msgid "This is the time interval between logged points when not circling."
 msgstr ""
 "Das Zeitintervall zwischen zwei Punkten im Logschrieb, wenn nicht im "
 "Steigmodus."
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:75
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:78
 msgid "Time step circling"
 msgstr "Zeitintervall im Steigen"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:76
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:79
 msgid "This is the time interval between logged points when circling."
 msgstr ""
 "Mit diesem Zeitintervall werden im Steigmodus GPS Positionen ins Logg "
 "geschrieben."
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:80
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:83
 msgid "Auto. logger"
 msgstr "Auto Logger"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:81
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:84
 msgid ""
 "Enables the automatic starting and stopping of logger on takeoff and landing "
 "respectively. Disable when flying paragliders."
@@ -6979,11 +6983,11 @@ msgstr ""
 "Aktiviert den automatischen Start und Stop des Loggers beim Abheben  und "
 "entsprechend bei der Landung. Für Gleitschirme muss es ausgeschaltet bleiben."
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:86
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:89
 msgid "NMEA logger"
 msgstr "NMEA Logger"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:87
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:90
 msgid ""
 "Enable the NMEA logger on startup? If this option is disabled, the NMEA "
 "logger can still be started manually."
@@ -6991,15 +6995,15 @@ msgstr ""
 "Den NMEA Logger bei Programmstart einschalten. Bei deaktivierung dieser "
 "Option, kann der Logger immernoch manuell gestartet werden."
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:92
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:95
 msgid "Log book"
 msgstr "Flugbuch"
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:92
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:95
 msgid "Logs each start and landing."
 msgstr "Notiert alle Starts und Landungen."
 
-#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:96
+#: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:99
 msgid "Logger ID"
 msgstr "Logger ID"
 
