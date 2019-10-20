@@ -167,6 +167,7 @@ namespace LXN {
     uint8_t cmd;
     uint16_t id;
     char pilot[19];
+    char copilot[19];
     char glider[12];
     char registration[8];
     char competition_class[4];
