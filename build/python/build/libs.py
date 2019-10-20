@@ -101,9 +101,9 @@ freetype = FreeTypeProject(
 )
 
 wolfssl = AutotoolsProject(
+    'http://www.caztech.com/glider/xcsoar/skysight/wolfssl-4.0.0.tar.gz',
     'https://fossies.org/linux/misc/wolfssl-4.0.0.tar.gz',
-    'https://github.com/wolfSSL/wolfssl/archive/v4.0.0-stable.tar.gz',
-    '372bfe2a6ddeb2f42f1256ee084bb8c0575dd7323db3990cb2658e9924dc58be',
+    '0da9104f9c442d8a4ec1fbbba9db73bb',
     'lib/libwolfssl.a',
     [
       '--disable-all',
