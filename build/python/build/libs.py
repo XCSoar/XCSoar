@@ -106,9 +106,13 @@ wolfssl = AutotoolsProject(
     '372bfe2a6ddeb2f42f1256ee084bb8c0575dd7323db3990cb2658e9924dc58be',
     'lib/libwolfssl.a',
     [
-      '--disable-option-checking',
-      '--enable-static',
+      '--disable-all',
       '--disable-shared',
+      '--enable-static',
+      '--enable-sslv3',
+      '--enable-tls13',
+      '--enable-alpn',
+      '--enable-opensslall',
     ],
 )
 
