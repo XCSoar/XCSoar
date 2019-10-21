@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-10-12 12:45+0000\n"
+"PO-Revision-Date: 2019-10-22 21:53+0000\n"
 "Last-Translator: Cloud Esp <Frederic.Darboux@inra.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.9-dev\n"
+"X-Generator: Weblate 3.9.1-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -133,7 +133,7 @@ msgid ""
 msgstr ""
 "Circuit à zone modifiée. Circuit avec un départ, une arrivée et au moins un "
 "cylindre prédéfini de 1 mile. Le pilote peut ajouter autant de points que "
-"nécessaires. Le circuit minimum s'applique."
+"nécessaires. La durée minimale de circuit s'applique."
 
 #: src/Task/TypeStrings.cpp:62
 #, no-c-format
@@ -150,8 +150,8 @@ msgid ""
 "Casual touring task, uses start and finish cylinders and FAI sector turn "
 "points."
 msgstr ""
-"Épreuve occasionnelle classique, comprenant des zones de départ/arrivée "
-"cylindriques et des points de virage avec secteurs FAI."
+"Épreuve occasionnelle classique, comprenant des cylindres de départ/arrivée "
+"et des points de virage avec secteurs FAI."
 
 #: src/Task/TypeStrings.cpp:76
 #, no-c-format
@@ -159,7 +159,7 @@ msgid ""
 "A 90 degree sector with 1km radius. Cross corner edge from inside area to "
 "start."
 msgstr ""
-"Secteur de 90° et 1 Km de rayon. Départ/passage valide en passant sur la "
+"Secteur de 90° et 1 km de rayon. Départ/passage valide en passant sur la "
 "médiane à l'intérieur du secteur."
 
 #: src/Task/TypeStrings.cpp:77
@@ -264,7 +264,7 @@ msgstr "Entrer dans le cylindre pour terminer."
 msgid ""
 "A 180 degree sector with 5km radius.  Exit area in any direction to start."
 msgstr ""
-"Secteur de 180° et 5 Km de rayon. La sortie du secteur dans n'importe quelle "
+"Secteur de 180° et 5 km de rayon. La sortie du secteur dans n'importe quelle "
 "direction valide le départ."
 
 #: src/Task/TypeStrings.cpp:96
@@ -760,7 +760,7 @@ msgstr "Préparer virage"
 
 #: src/Menu/ExpandMacros.cpp:165
 msgid "Disarm start"
-msgstr "Désarme le départ"
+msgstr "Désarmer le départ"
 
 #: src/Menu/ExpandMacros.cpp:168
 msgid "Disarm turn"
@@ -2781,7 +2781,7 @@ msgstr ""
 "Efficacité en transition. 100 correspond à la performance MacCready. Cette "
 "valeur quantifie l'efficacité en transition en fonction des performances "
 "mesurées pendant le vol, avec le calage MC choisi. Le calcul commence à "
-"partir du départ du circuit ."
+"partir du départ du circuit."
 
 #: src/InfoBoxes/Content/Factory.cpp:937
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:183
@@ -2824,12 +2824,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:951
 #, no-c-format
 msgid "Start open/close countdown"
-msgstr "Start démarrer/arrêter le compte à rebour"
+msgstr "Démarrer/arrêter le compte à rebours de départ"
 
 #: src/InfoBoxes/Content/Factory.cpp:952
 #, no-c-format
 msgid "Start open"
-msgstr "Start ouvert"
+msgstr "Départ ouvert"
 
 #: src/InfoBoxes/Content/Factory.cpp:953
 #, no-c-format
@@ -2841,12 +2841,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:958
 #, no-c-format
 msgid "Start open/close countdown at reaching"
-msgstr "Start: démarrer/arrêter le compte à rebour"
+msgstr "Démarrer/arrêter le compte à rebours de départ"
 
 #: src/InfoBoxes/Content/Factory.cpp:959
 #, no-c-format
 msgid "Start reach"
-msgstr "Start atteint"
+msgstr "Départ atteint"
 
 #: src/InfoBoxes/Content/Factory.cpp:960
 #, no-c-format
@@ -3390,7 +3390,7 @@ msgstr "Avancer automatiquement"
 
 #: src/Input/InputEventsTask.cpp:86
 msgid "Ready to start"
-msgstr "Prêt à débuter"
+msgstr "Prêt au départ"
 
 #: src/Input/InputEventsTask.cpp:89
 msgid "Hold start"
@@ -3970,7 +3970,7 @@ msgstr "Initialisation"
 #. Start the device thread(s)
 #: src/Startup.cpp:383
 msgid "Starting devices"
-msgstr "Démarrage"
+msgstr "Démarrage des périphériques"
 
 #.
 #. -- Reset polar in case devices need the data
@@ -7874,7 +7874,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:67
 msgid "Start max. speed margin"
-msgstr "Marge de v. max. au départ"
+msgstr "Marge de vitesse max. au départ"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:68
 msgid ""
@@ -7900,7 +7900,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:83
 msgid "Start max. height margin"
-msgstr "Marge h. max. au départ"
+msgstr "Marge hauteur max. au départ"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:84
 msgid ""
@@ -7925,7 +7925,7 @@ msgstr "La référence est l'altitude au-dessus du niveau moyen de la mer."
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:97
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:247
 msgid "Start height ref."
-msgstr "Hauteur départ réf."
+msgstr "Réf. pour hauteur départ"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:98
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:248
@@ -7976,12 +7976,12 @@ msgstr "Rayon"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:144
 msgid "Default start type for new tasks you create."
-msgstr "Type de circuit par défaut à la création d'un nouveau circuit."
+msgstr "Type de départ par défaut à la création d'un nouveau circuit."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:149
 msgid "Default radius or gate width of the start zone for new tasks."
 msgstr ""
-"Rayon ou largeur de ligne par défaut pour le départ d'un nouveau circuit."
+"Rayon ou largeur par défaut de la ligne de départ pour un nouveau circuit."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:155
 #: src/Dialogs/Task/TaskPointDialog.cpp:426
@@ -8049,8 +8049,8 @@ msgid ""
 msgstr ""
 "Conforme aux règles du triangle FAI. Trois points de virage dont départ et "
 "arrivée. Pas de branche inférieure à 28% de la longueur totale, sauf si "
-"longueur totale de plus de 500km. Si plus de 500km, alors pas de branche de "
-"moins de 25% ou plus de 45%."
+"longueur totale de plus de 500 km. Si plus de 500 km, alors pas de branche "
+"de moins de 25% ou plus de 45%."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:97
 #, no-c-format
@@ -8058,8 +8058,8 @@ msgid ""
 "Up to seven points including start and finish, finish height must not be "
 "lower than start height less 1000 meters."
 msgstr ""
-"Jusqu'à sept point, dont départ et arrivée. L'arrivée ne devant pas être "
-"plus basse que le départ moins 1000m."
+"Jusqu'à sept points, dont départ et arrivée. L'arrivée ne devant pas être à "
+"plus de 1000 m sous le départ."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:100
 #, no-c-format
@@ -8886,29 +8886,30 @@ msgstr "Arme départ manuellement"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:219
 msgid "Configure whether the start must be armed manually or automatically."
-msgstr "Configure le départ manuellement ou automatiquement."
+msgstr "Configure si le départ doit être armé manuellement ou automatiquement."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:224
 msgid "Start open time"
-msgstr "Heure d'ouverture du start"
+msgstr "Heure d'ouverture du départ"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:226
 msgid "Start close time"
-msgstr "Heure de fermeture du start"
+msgstr "Heure de fermeture du départ"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:260
 msgid "FAI start / finish rules"
 msgstr "Règles de départ/arrivée FAI"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:261
+#, fuzzy
 msgid ""
 "If enabled, has no max start height or max start speed and requires the "
 "minimum height above ground for finish to be greater than 1000m below the "
 "start height."
 msgstr ""
-"Si activé, pas d'altitude max ou de vitesse max au départ. Nécessite que "
-"l'altitude minimum au dessus du sol en arrivée soit supérieure à 1000 m au "
-"dessous de l'altitude de la ligne de départ."
+"Si activé, pas d'altitude max ou de vitesse max au départ. Nécessite que la "
+"hauteur minimum au dessus du sol en arrivée soit supérieure à 1000 m au "
+"dessous de la hauteur de la ligne de départ."
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:66
 msgid "Task not saved"
@@ -9312,8 +9313,8 @@ msgid ""
 "Please don't use special characters in the four letter code of the desired "
 "station."
 msgstr ""
-"Ne pas utiliser de caractères spéciaux parmi les quatre lettre de la station "
-"voulue."
+"Ne pas utiliser de caractères spéciaux dans le code à quatre lettres de la "
+"station voulue."
 
 #: src/Dialogs/Weather/NOAAList.cpp:225 src/Dialogs/Weather/NOAADetails.cpp:112
 #, c-format
@@ -9338,7 +9339,7 @@ msgstr "Dépassement de la vitesse maximum au départ"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:46
 msgid "In sector, arm advance when ready"
-msgstr "Dans le Secteur, Armer Point Suivant quand vous Voulez"
+msgstr "Dans le secteur, armer le point suivant quand vous voulez"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:48
 msgid "Arm"
