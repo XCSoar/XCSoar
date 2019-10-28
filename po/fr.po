@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-10-22 21:53+0000\n"
+"PO-Revision-Date: 2019-10-29 16:53+0000\n"
 "Last-Translator: Cloud Esp <Frederic.Darboux@inra.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.9.1-dev\n"
+"X-Generator: Weblate 3.9.1\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -3306,7 +3306,7 @@ msgstr "Localisation"
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:59
 #: src/Dialogs/Task/TaskPointDialog.cpp:277
 msgid "Relocate"
-msgstr "Relocaliser"
+msgstr "Repositionner"
 
 #: src/InfoBoxes/Panel/ATCReference.cpp:92
 #: src/Dialogs/Device/PortMonitor.cpp:150
@@ -9002,7 +9002,7 @@ msgstr "Modifier le type"
 #: src/Dialogs/Task/TaskPointDialog.cpp:292
 #: src/Dialogs/Task/TaskPointDialog.cpp:392
 msgid "Enable Alternate Starts"
-msgstr "Ajout départs alternatifs"
+msgstr "Activer départs alternatifs"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:295
 msgid "Score exit"
