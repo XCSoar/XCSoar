@@ -1,5 +1,5 @@
 FROM debian:buster
-RUN echo 'deb http://deb.debian.org/debian unstable main' > /etc/apt/sources.list.d/unstable.list
+RUN echo 'deb http://deb.debian.org/debian stretch main' > /etc/apt/sources.list.d/unstable.list
 RUN echo 'APT::Default-Release "stable";' > /etc/apt/apt.conf.d/99defaultrelease
 
 ENV DEBIAN_FRONTEND=noninteractive
