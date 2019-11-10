@@ -220,9 +220,9 @@ bool CDFDecoder::Decode() {
   size_t lat_size = data_file.get_dim("lat")->size();
   size_t lon_size = data_file.get_dim("lon")->size();
 
-  double lat_vals[lat_size];
-  double lon_vals[lon_size];
-  double var_vals[lat_size][lon_size];
+  double *lat_vals = new double[lat_size];
+  double *lon_vals = new double[lon_size];
+  double *var_vals = new double[lat_size * lon_size];
 
   data_file.get_var("lat")->get(&lat_vals[0], lat_size);
   data_file.get_var("lon")->get(&lon_vals[0], lon_size);
@@ -234,12 +234,14 @@ bool CDFDecoder::Decode() {
   double lon_scale = (lon_max - lon_min)/lon_size;
   double lat_scale = (lat_max - lat_min)/lat_size;
 
+  delete [] lat_vals;
+  delete [] lon_vals;
   NcVar *data_var = data_file.get_var(data_varname.c_str());
   if(!data_var->is_valid()) {
     return DecodeError();
   }
 
-  data_var->get(&var_vals[0][0], (long)lat_size, (long)lon_size);
+  data_var->get(var_vals, (long)lat_size, (long)lon_size);
   double fill_value = data_var->get_att("_FillValue")->values()->as_double(0);
   float var_offset = data_var->get_att("add_offset")->values()->as_float(0);
   float var_scale = data_var->get_att("scale_factor")->values()->as_float(0);
@@ -255,9 +257,8 @@ bool CDFDecoder::Decode() {
     (void)TIFFClose(tf);
     return DecodeError();
   }
-  double tp_topleft[6] = {0,0,0,lon_min, lat_min, 0}; 
-  double pix_scale[3]={lon_scale,-lat_scale,0}; 
-
+  double tp_topleft[6] = {0,0,0,lon_min, lat_min, 0};
+  double pix_scale[3]={lon_scale,-lat_scale,0};
 
   const int samplesperpixel = 4;
   TIFFSetField(tf, TIFFTAG_IMAGEWIDTH, lon_size);
@@ -289,14 +290,16 @@ bool CDFDecoder::Decode() {
   TIFFSetField(tf, TIFFTAG_ROWSPERSTRIP, TIFFDefaultStripSize(tf, linebytes));
 
   int rb;
+  unsigned int index = 0;
   bool success = true;
   double point_value;
-  for(unsigned y=(unsigned)lat_size-1; y>=0; y--) {
+  for(int y = (int)lat_size - 1; y >= 0; y--) {
     memset(row, 0, linebytes * sizeof(unsigned char)); //ensures unused data points are transparent
-    for(unsigned x=0;x<(unsigned)lon_size;x++) {
+    for(unsigned int x = 0; x < lon_size; x++) {
+      index = ((unsigned int)y * lon_size) + x;
       rb = x * samplesperpixel;
-      if(var_vals[y][x] != fill_value) {
-        point_value = (var_vals[y][x] * var_scale) + var_offset;
+      if(var_vals[index] != fill_value) {
+        point_value = (var_vals[index] * var_scale) + var_offset;
         if(point_value > legend.begin()->first) {
           auto color_index = legend.lower_bound(point_value);
           color_index--;
@@ -326,6 +329,7 @@ bool CDFDecoder::Decode() {
   GTIFFree(gt);
 
   data_file.close();
+  delete [] var_vals;
   File::Delete(path);
   return (success) ? DecodeSuccess() : DecodeError();
 
