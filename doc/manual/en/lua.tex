@@ -2,7 +2,7 @@
 {\lstset{language=[5.0]Lua}}
 {}
 
-Starting with version 7.0, \xc can be extended using
+Starting with version 7.0, \xc\ can be extended using
 \href{http://www.lua.org/}{Lua} scripts.
 
 Lua is a language that is easy to learn, powerful enough for XCSoar
@@ -62,7 +62,7 @@ The directory \texttt{XCSoarData/lua/} may contain Lua scripts
 (\texttt{*.lua}).  The directory \texttt{XCSoarData/lua/lib/} may
 contain Lua libraries to be loaded with \texttt{require}.
 
-After startup, \xc starts the script \texttt{init.lua} (if it
+After startup, \xc\ starts the script \texttt{init.lua} (if it
 exists).
 
 The \emph{InputEvent} ``\texttt{RunLuaFile}'' can be used to start
@@ -70,18 +70,18 @@ additional scripts.  If no parameter is given, the user is asked to
 choose a file.  Note that the \emph{InputEvent} subsystem is
 deprecated and will be removed once Lua support is complete.
 
-As long as a Lua script runs, the \xc user interface is blocked.
+As long as a Lua script runs, the \xc\ user interface is blocked.
 Be careful not to write scripts that loop forever.
 
 Once the Lua script finishes, the Lua interpreter is shut down --
 unless the script has registered a callback (e.g.\ a \verb|timer|).  In
 that case, the Lua script stays resident until it unregisters all
-callbacks (or until \xc quits or the user stops the script
+callbacks (or until \xc\ quits or the user stops the script
 explicitly).
 
 \section{Lua Standard Libraries}
 
-\xc enables the following Lua standard libraries:
+\xc\ enables the following Lua standard libraries:
 
 \begin{itemize}
 \item \verb|package|
@@ -90,13 +90,13 @@ explicitly).
 \item \verb|math|
 \end{itemize}
 
-Lua's \verb|print()| function writes to the \xc log file
+Lua's \verb|print()| function writes to the \xc\ log file
 (\texttt{XCSoarData/xcsoar.log}).
 
 The \verb|error()| function aborts the Lua script and reports the
 specified error message to the user.
 
-\xc adds another function to the root namespace: \verb|alert()|.
+\xc\ adds another function to the root namespace: \verb|alert()|.
 It shows a dialog with the specified message, and returns as soon as
 the user has closed the dialog.  This function is experimental, and
 may disappear or be renamed at any time.  Most importantly: do not
@@ -113,7 +113,7 @@ contains the following names:
   \hline
   \hline
 
-  \verb|VERSION| & The \xc version number, for example
+  \verb|VERSION| & The \xc\ version number, for example
   ``\texttt{7.0}''. \\
   \hline
   \verb|blackboard| & Access to sensor data. \\
@@ -315,7 +315,7 @@ $[{m}]$.\\
 
 \hline
 
-\verb|nearest_horizontal_distance| & The horizontal distance to the next airspace 
+\verb|nearest_horizontal_distance| & The horizontal distance to the next airspace
 $[{m}]$. \\
 
 \hline
@@ -327,7 +327,7 @@ $[{m}]$. \\
 
 \subsection{Task}
 
-The Task provides access to task data such as distances / bearing to the 
+The Task provides access to task data such as distances / bearing to the
 next waypoint.
 
 The following attributes are provided by \verb|xcsoar.task|:
@@ -337,51 +337,51 @@ The following attributes are provided by \verb|xcsoar.task|:
 Name & Description \\
 \hline\hline
 
-\verb|bearing| & The true bearing to the next waypoint. 
-For AAT tasks, this is the true \newline bearing 
+\verb|bearing| & The true bearing to the next waypoint.
+For AAT tasks, this is the true \newline bearing
 to the target within the AAT sector. $[{degrees}]$\\
 
 \hline
 
-\verb|bearing_diff| & The difference between the glider's track bearing, 
-to the bearing of \newline the next waypoint, or for AAT tasks, to the bearing 
+\verb|bearing_diff| & The difference between the glider's track bearing,
+to the bearing of \newline the next waypoint, or for AAT tasks, to the bearing
 to the target within \newline the AAT sector $[{degrees}]$.\\
 
 \hline
 
-\verb|radial| & The true bearing from the next waypoint 
+\verb|radial| & The true bearing from the next waypoint
 to your position. $[{degrees}]$. \\
 
 \hline
 
-\verb|next_distance| & The distance to the currently selected waypoint. 
+\verb|next_distance| & The distance to the currently selected waypoint.
 For AAT tasks, this \newline is the distance to the target within the AAT sector.
 $[{m}]$ \\
 
 \hline
 
-\verb|next_distance_nominal| & The distance to the currently selected waypoint. 
+\verb|next_distance_nominal| & The distance to the currently selected waypoint.
 For AAT tasks, this \newline is the distance to the origin of the AAT sector.
 $[{m}]$ \\
 
 \hline
 
-\verb|next_ete| &  Estimated time required to reach next waypoint, 
+\verb|next_ete| &  Estimated time required to reach next waypoint,
 assuming \newline performance of ideal MacCready cruise/climb cycle.\\
 
 \hline
 
-\verb|next_eta| & Estimated arrival local time at next waypoint, 
+\verb|next_eta| & Estimated arrival local time at next waypoint,
 assuming performance \newline of ideal MacCready cruise/climb cycle. \\
 
 \hline
 
-\verb|next_altitude_diff| & Arrival altitude at the next waypoint relative 
+\verb|next_altitude_diff| & Arrival altitude at the next waypoint relative
 to the safety arrival height. \\
 
 \hline
 
-\verb|nextmc0_altitude_diff| & Arrival altitude at the next waypoint with 
+\verb|nextmc0_altitude_diff| & Arrival altitude at the next waypoint with
 MC 0 setting, relative to the \newline safety arrival height. \\
 
 \hline
@@ -391,13 +391,13 @@ turnpoint. \\
 
 \hline
 
-\verb|next_altitude_arrival| & Absolute arrival height at the next waypoint in 
+\verb|next_altitude_arrival| & Absolute arrival height at the next waypoint in
 final glide. \\
 
 \hline
 
-\verb|next_gr| & The required glide ratio over ground to reach the next waypoint, 
-\newline given by the distance to the next waypoint divided by the height 
+\verb|next_gr| & The required glide ratio over ground to reach the next waypoint,
+\newline given by the distance to the next waypoint divided by the height
 \newline required to arrive at the safety arrival height. \\
 
 \hline
@@ -406,12 +406,12 @@ final glide. \\
 
 \hline
 
-\verb|final_ete| & Estimated time required to complete task, 
+\verb|final_ete| & Estimated time required to complete task,
 assuming performance \newline of ideal MacCready cruise/climb cycle. \\
 
 \hline
 
-\verb|final_eta| & Estimated arrival local time at task completion, 
+\verb|final_eta| & Estimated arrival local time at task completion,
 assuming performance \newline of ideal MacCready cruise/climb cycle. \\
 
 \hline
@@ -426,29 +426,29 @@ relative to the safety arrival \newline height. \\
 
 \hline
 
-\verb|final_altitude_require| & Additional altitude required to finish 
+\verb|final_altitude_require| & Additional altitude required to finish
 the task. \\
 
 \hline
 
-\verb|task_speed| & Average cross country speed while on the current 
+\verb|task_speed| & Average cross country speed while on the current
 task, \newline not compensated for altitude. \\
 
 \hline
 
-\verb|task_speed_achieved| & Achieved cross country speed while on the 
-current task, \newline compensated for altitude. Equivalent to 
+\verb|task_speed_achieved| & Achieved cross country speed while on the
+current task, \newline compensated for altitude. Equivalent to
 Pirker cross country \newline speed remaining. \\
 
 \hline
 
-\verb|task_speed_instant| & Instantaneous cross country speed while 
-on the current task, \newline  compensated for altitude. Equivalent 
+\verb|task_speed_instant| & Instantaneous cross country speed while
+on the current task, \newline  compensated for altitude. Equivalent
 to instantaneous Pirker cross \newline country speed. \\
 
 \hline
 
-\verb|task_speed_hour| & Average cross country speed while on the 
+\verb|task_speed_hour| & Average cross country speed while on the
 current task \newline over the last hour, not compensated for altitude. \\
 
 \end{tabularx}
@@ -459,8 +459,8 @@ current task \newline over the last hour, not compensated for altitude. \\
 Name & Description \\
 \hline\hline
 
-\verb|final_gr| & The required glide ratio over the ground to finish 
-the task, given by \newline the distance to go divided by the height 
+\verb|final_gr| & The required glide ratio over the ground to finish
+the task, given by \newline the distance to go divided by the height
 required to arrive at the safety \newline arrival height. \\
 
 \hline
@@ -469,59 +469,59 @@ required to arrive at the safety \newline arrival height. \\
 
 \hline
 
-\verb|aat_time_delta| & Difference between estimated task time and 
+\verb|aat_time_delta| & Difference between estimated task time and
 AAT miminum time.\\
 
 \hline
 
-\verb|aat_distance| & Assigned Area Task distance around target points 
+\verb|aat_distance| & Assigned Area Task distance around target points
 for remainder of \newline task. \\
 
 \hline
 
-\verb|aat_distance_max| & Assigned Area Task maximum distance possible 
+\verb|aat_distance_max| & Assigned Area Task maximum distance possible
 for remainder of \newline task. \\
 
 \hline
 
-\verb|aat_distance_min| & Assigned Area Task minimum distance possible 
+\verb|aat_distance_min| & Assigned Area Task minimum distance possible
 for remainder of  \newline task\\
 
 \hline
 
-\verb|aat_speed| & Assigned Area Task average speed achievable around 
+\verb|aat_speed| & Assigned Area Task average speed achievable around
 target points \newline remaining in minimum AAT time. \\
 
 \hline
 
-\verb|aat_speed_max| & Assigned Area Task average speed achievable 
-if flying maximum \newline possible distance remaining in minimum 
+\verb|aat_speed_max| & Assigned Area Task average speed achievable
+if flying maximum \newline possible distance remaining in minimum
 AAT time. \\
 
 \hline
 
-\verb|aat_speed_min| & Assigned Area Task average spped achievable 
-if flying minimum \newline possible distance remaining in minimum 
+\verb|aat_speed_min| & Assigned Area Task average spped achievable
+if flying minimum \newline possible distance remaining in minimum
 AAT time.  \\
 
 \hline
 
-\verb|time_under_max_height| & The contiguous period the plane has 
+\verb|time_under_max_height| & The contiguous period the plane has
 been below the task \newline start max.\ height. \\
 
 \hline
 
-\verb|next_etevmg| & Estimated time required to reach next waypoint, 
+\verb|next_etevmg| & Estimated time required to reach next waypoint,
 assuming current \newline ground speed is maintained. \\
 
 \hline
 
-\verb|final_etevmg| & Estimated time required to complete task, 
+\verb|final_etevmg| & Estimated time required to complete task,
 assuming current ground \newline speed is maintained. \\
 
 \hline
 
-\verb|cruise_efficiency| & Efficiency of cruse, 1 indicates perfect 
+\verb|cruise_efficiency| & Efficiency of cruse, 1 indicates perfect
 MacCready performance \\
 
 
@@ -567,13 +567,13 @@ $[{K}]$.\\
 
 \hline
 
-\verb|safetymc| & The MacCready setting used, when safety MC is enabled 
-for reach \newline calculations, in task abort mode and for determining arrival altitude 
+\verb|safetymc| & The MacCready setting used, when safety MC is enabled
+for reach \newline calculations, in task abort mode and for determining arrival altitude
 at \newline airfields.\\
 
 \hline
 
-\verb|riskfactor| & The STF risk factor reduces the MacCready setting used to 
+\verb|riskfactor| & The STF risk factor reduces the MacCready setting used to
 calculate \newline speed to fly as the glider gets low, in order to  compensate for risk.\\
 
 \hline
@@ -637,7 +637,7 @@ Name & Description \\
 
 \hline
 
-\verb|tail_drift| & Determines whether the snail trail is drifted with the 
+\verb|tail_drift| & Determines whether the snail trail is drifted with the
 wind \newline when displayed in circling mode, 0: Off, 1: On. \\
 
 \hline
@@ -651,7 +651,7 @@ wind \newline when displayed in circling mode, 0: Off, 1: On. \\
 
 \hline
 
-\verb|wind_speed| & The current wind speed 
+\verb|wind_speed| & The current wind speed
 $[{m/s}]$.\\
 
 \hline
@@ -660,7 +660,7 @@ $[{m/s}]$.\\
 
 \hline
 
-\verb|wind_bearing| & The current wind bearing 
+\verb|wind_bearing| & The current wind bearing
 $[{degrees}]$.\\
 
 \hline
@@ -695,22 +695,22 @@ Name & Description \\
 
 \hline
 
-\verb|time_step_cruise| & The time interval between logged 
+\verb|time_step_cruise| & The time interval between logged
 points when not circling. $[s]$.\\
 
 \hline
 
-\verb|set_time_step_cruise(int time)| &  Sets time interval between logged 
+\verb|set_time_step_cruise(int time)| &  Sets time interval between logged
 points when not circling $[s]$.\\
 
 \hline
 
-\verb|time_step_circling| &  The time interval between logged 
+\verb|time_step_circling| &  The time interval between logged
 points when circling $[s]$.\\
 
 \hline
 
-\verb|set_time_step_circling(int time)| &  Sets time interval between logged 
+\verb|set_time_step_circling(int time)| &  Sets time interval between logged
 points when circling $[s]$.\\
 
 \hline
@@ -918,7 +918,7 @@ it.  The period is a numeric value in seconds. \\
 
 \subsection{Legacy}
 
-Before version 7.0, \xc was adapted using the \emph{InputEvent}
+Before version 7.0, \xc\ was adapted using the \emph{InputEvent}
 subsystem (see Appendix~\ref{cha:file_formats}).  During the Lua
 transition, Lua scripts can invoke InputEvents, for example:
 
