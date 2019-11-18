@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-10-19 17:53+0000\n"
+"PO-Revision-Date: 2019-11-19 18:04+0000\n"
 "Last-Translator: Mattias Münster <mattiasmun@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/sv/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.9.1-dev\n"
+"X-Generator: Weblate 3.10-dev\n"
 "X-Launchpad-Export-Date: 2014-10-13 19:28+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -144,6 +144,7 @@ msgid ""
 "Casual touring task, uses start and finish cylinders and FAI sector turn "
 "points."
 msgstr ""
+"Spontantur, använder start- och målcylindrar och FAI-sektor brytpunktspoäng."
 
 #: src/Task/TypeStrings.cpp:76
 #, no-c-format
@@ -734,7 +735,7 @@ msgstr "Start brytpunkt"
 
 #: src/Menu/ExpandMacros.cpp:141
 msgid "Arm start"
-msgstr "Sätt i startläge."
+msgstr "Sätt i startläge"
 
 #: src/Menu/ExpandMacros.cpp:144
 msgid "Arm turn"
@@ -1103,7 +1104,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:193
 #, no-c-format
 msgid "Last thermal average"
-msgstr "Genomsnittligt stig i senaste blåsa."
+msgstr "Genomsnittligt stig i senaste blåsa"
 
 #: src/InfoBoxes/Content/Factory.cpp:194
 #, no-c-format
@@ -1145,7 +1146,7 @@ msgstr "Flyg tid"
 #: src/InfoBoxes/Content/Factory.cpp:211
 #, no-c-format
 msgid "Time spent circling in the last thermal."
-msgstr "Tid i senaste blåsan"
+msgstr "Tid i senaste blåsan."
 
 #: src/InfoBoxes/Content/Factory.cpp:217
 #, no-c-format
@@ -1190,12 +1191,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:234
 #, no-c-format
 msgid "Next altitude difference"
-msgstr "Höjdskillnad nästa BP."
+msgstr "Nästa höjdskillnad"
 
 #: src/InfoBoxes/Content/Factory.cpp:235
 #, no-c-format
 msgid "WP AltD"
-msgstr "BP Höjddiff."
+msgstr "BP Höjddiff"
 
 #: src/InfoBoxes/Content/Factory.cpp:236
 #, no-c-format
@@ -1287,7 +1288,7 @@ msgstr "Snittfart på bana"
 #: src/InfoBoxes/Content/Factory.cpp:277
 #, no-c-format
 msgid "V Task Avg"
-msgstr "Med. Hast. Uppg."
+msgstr "Med. Hast. Uppg"
 
 #: src/InfoBoxes/Content/Factory.cpp:278
 #, no-c-format
@@ -1456,7 +1457,7 @@ msgstr "AAT Dmax"
 #: src/InfoBoxes/Content/Factory.cpp:368
 #, no-c-format
 msgid "Assigned Area Task maximum distance possible for remainder of task."
-msgstr "AAT maximalt möjlig distans för återstoden av uppgiften"
+msgstr "AAT maximalt möjlig distans för återstoden av uppgiften."
 
 #: src/InfoBoxes/Content/Factory.cpp:374
 #, no-c-format
@@ -1471,7 +1472,7 @@ msgstr "AAT Dmin"
 #: src/InfoBoxes/Content/Factory.cpp:376
 #, no-c-format
 msgid "Assigned Area Task minimum distance possible for remainder of task."
-msgstr "AAT minimum distans för återstoden av uppgiften"
+msgstr "AAT minimum distans för återstoden av uppgiften."
 
 #: src/InfoBoxes/Content/Factory.cpp:382
 #, no-c-format
@@ -1524,7 +1525,7 @@ msgstr "V IAS"
 #: src/InfoBoxes/Content/Factory.cpp:400
 #, no-c-format
 msgid "Indicated Airspeed reported by a supported external intelligent vario."
-msgstr "Indikerad hastighet rapporterad av en extern inteligent variometer"
+msgstr "Indikerad hastighet rapporterad av en extern intelligent variometer."
 
 #: src/InfoBoxes/Content/Factory.cpp:406
 #, no-c-format
@@ -1661,7 +1662,7 @@ msgstr "Tid UTC"
 #: src/InfoBoxes/Content/Factory.cpp:466
 #, no-c-format
 msgid "GPS time expressed in UTC."
-msgstr "GPS tid i UTC"
+msgstr "GPS-tid uttryckt i UTC."
 
 #: src/InfoBoxes/Content/Factory.cpp:472
 #, no-c-format
@@ -3459,7 +3460,7 @@ msgstr "runt terrängen"
 
 #: src/Renderer/MapItemListRenderer.cpp:183
 msgid "Unreachable due to terrain."
-msgstr "Kan ej nås p.g.a. terräng"
+msgstr "Kan ej nås p.g.a. terräng."
 
 #: src/Renderer/MapItemListRenderer.cpp:188
 msgid "Arrival altitude"
@@ -5624,7 +5625,7 @@ msgstr "Starttid"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:103
 msgid "Start alt."
-msgstr "Starthöjd"
+msgstr "Starthöjd."
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:104
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:143
@@ -5638,7 +5639,7 @@ msgstr "StartHast"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:106
 msgid "Finish min. alt."
-msgstr "Min Målgångshöjd"
+msgstr "Min Målgångshöjd."
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:107
 msgid "Valid finish"
@@ -5713,11 +5714,11 @@ msgstr "Glidtal som krävs"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:149
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:189
 msgid "No task defined."
-msgstr "Ingen Bana"
+msgstr "Ingen bana lagd."
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:76
 msgid "No active task point."
-msgstr "Ingen aktiv banpunkt"
+msgstr "Ingen aktiv banpunkt."
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:76
 msgid "Replace in task"
@@ -6129,7 +6130,7 @@ msgstr "Varioband"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:119
 msgid "If set to ON the vario bar will be shown"
-msgstr "Om ställd PÅ visas variometerbandet."
+msgstr "Om ställd PÅ visas variometerbandet"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:59
 msgid "Speed arrows"
@@ -7226,7 +7227,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:84
 msgid "Watched waypoints"
-msgstr "Sedda vägpunkter."
+msgstr "Bevakade vägpunkter"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:85
 msgid ""
@@ -7531,7 +7532,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:97
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:247
 msgid "Start height ref."
-msgstr "Starthöjd ref"
+msgstr "Starthöjdsref."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:98
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:248
@@ -8136,7 +8137,7 @@ msgstr "Vägpunkter för bana"
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:149
 #, no-c-format
 msgid "All waypoints part of a task will be displayed."
-msgstr "Alla vägpunkter som del av en bana visas"
+msgstr "Alla vägpunkter som är del av en bana visas."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:162
 #, no-c-format
@@ -8839,7 +8840,7 @@ msgstr ""
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:46
 msgid "In sector, arm advance when ready"
-msgstr "Inom sektor, armera Nästa brytp."
+msgstr "Inom sektor, armera nästa brytpunkt"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:48
 msgid "Arm"
