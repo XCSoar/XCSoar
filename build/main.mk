@@ -403,6 +403,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/InfoBoxes/Panel/MacCreadySetup.cpp \
 	$(SRC)/InfoBoxes/Panel/WindEdit.cpp \
 	$(SRC)/InfoBoxes/Panel/ATCReference.cpp \
+	$(SRC)/InfoBoxes/Panel/RadioEdit.cpp \
 	$(SRC)/Pan.cpp \
 	$(SRC)/Input/InputConfig.cpp \
 	$(SRC)/Input/InputDefaults.cpp \

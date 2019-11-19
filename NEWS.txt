@@ -52,7 +52,7 @@ Version 7.0 - not yet released
       climbing cruise (green), circling non-climb (orange)
   - improved auto-scaling of vario-like graphical infoboxes
   - new infobox: "Number Of Satellites"
-  - new infoboxes for radio frequencies
+  - new infoboxes for radio frequencies, including setting the frequencies
 * Windows
   - drop support for Windows CE
   - require Windows Vista or later

@@ -120,6 +120,18 @@ namespace ActionInterface {
    * @param to_devices send the new setting to all devices?
    */
   void SetStandbyFrequency(const RadioFrequency & freq, const TCHAR * freq_name, bool to_devices=true);
+
+  /**
+   * Offset the Active Radio Frequency in #ComputerSettings, and
+   * forward it to all XCSoar modules that want it.
+   */
+  void OffsetActiveFrequency(double offset_khz, bool to_devices=true);
+
+  /**
+   * Offset the Active Radio Frequency in #ComputerSettings, and
+   * forward it to all XCSoar modules that want it.
+   */
+  void OffsetStandbyFrequency(double offset_khz, bool to_devices=true);
 };
 
 /** 

@@ -21,23 +21,14 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_INFOBOX_CONTENT_RADIO_HPP
-#define XCSOAR_INFOBOX_CONTENT_RADIO_HPP
+#ifndef XCSOAR_RADIO_EDIT_PANEL_HPP
+#define XCSOAR_RADIO_EDIT_PANEL_HPP
 
-#include "InfoBoxes/Content/Base.hpp"
+class Widget;
 
-class InfoBoxContentActiveRadioFrequency : public InfoBoxContent
-{
-public:
-  virtual const InfoBoxPanel *GetDialogContent() override;
-  virtual void Update(InfoBoxData & data) override;
-};
-
-class InfoBoxContentStandbyRadioFrequency : public InfoBoxContent
-{
-public:
-  virtual const InfoBoxPanel *GetDialogContent() override;
-  virtual void Update(InfoBoxData & data) override;
-};
+Widget *
+LoadActiveRadioFrequencyEditPanel(unsigned id);
+Widget *
+LoadStandbyRadioFrequencyEditPanel(unsigned id);
 
 #endif

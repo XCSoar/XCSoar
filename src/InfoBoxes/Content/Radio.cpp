@@ -21,7 +21,9 @@ Copyright_License {
 }
 */
 
+#include "InfoBoxes/Panel/Panel.hpp"
 #include "InfoBoxes/Content/Radio.hpp"
+#include "InfoBoxes/Panel/RadioEdit.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "Units/Units.hpp"
@@ -47,19 +49,38 @@ UpdateInfoBoxFrequency(InfoBoxData & data, const RadioFrequency & freq, const TC
   }
 }
 
+static constexpr InfoBoxPanel active_frequency_panels[] = {
+  { N_("Edit"), LoadActiveRadioFrequencyEditPanel },
+  { nullptr, nullptr }
+};
+
+static constexpr InfoBoxPanel standby_frequency_panels[] = {
+  { N_("Edit"), LoadStandbyRadioFrequencyEditPanel },
+  { nullptr, nullptr }
+};
+
+const InfoBoxPanel *
+InfoBoxContentActiveRadioFrequency::GetDialogContent() {
+  return active_frequency_panels;
+}
+
 void
-UpdateInfoBoxActiveFrequency(InfoBoxData &data)
+InfoBoxContentActiveRadioFrequency::Update(InfoBoxData &data)
 {
   const auto &settings_radio =
     CommonInterface::GetComputerSettings().radio;
   UpdateInfoBoxFrequency(data, settings_radio.active_frequency, settings_radio.active_name);
 }
 
+const InfoBoxPanel *
+InfoBoxContentStandbyRadioFrequency::GetDialogContent() {
+  return standby_frequency_panels;
+}
+
 void
-UpdateInfoBoxStandbyFrequency(InfoBoxData &data)
+InfoBoxContentStandbyRadioFrequency::Update(InfoBoxData &data)
 {
   const auto &settings_radio =
     CommonInterface::GetComputerSettings().radio;
   UpdateInfoBoxFrequency(data, settings_radio.standby_frequency, settings_radio.standby_name);
 }
-

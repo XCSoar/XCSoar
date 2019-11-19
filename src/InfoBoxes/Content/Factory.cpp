@@ -1073,14 +1073,14 @@ static constexpr MetaData meta_data[] = {
     N_("Active Radio Frequency"),
     N_("Act Freq"),
     N_("The currently active Radio Frequency"),
-    UpdateInfoBoxActiveFrequency,
+    IBFHelper<InfoBoxContentActiveRadioFrequency>::Create,
   },
 
   {
     N_("Standby Radio Frequency"),
     N_("Stby Freq"),
     N_("The currently standby Radio Frequency"),
-    UpdateInfoBoxStandbyFrequency,
+    IBFHelper<InfoBoxContentStandbyRadioFrequency>::Create,
   },
 
 };
