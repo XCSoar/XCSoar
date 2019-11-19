@@ -28,7 +28,7 @@ Copyright_License {
 #include <assert.h>
 
 gcc_pure
-static PixelRect
+PixelRect
 GetButtonPosition(unsigned i, PixelRect rc)
 {
   unsigned hwidth = rc.GetWidth(), hheight = rc.GetHeight();

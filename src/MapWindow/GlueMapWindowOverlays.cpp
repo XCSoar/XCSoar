@@ -42,6 +42,7 @@ Copyright_License {
 #include "Look/GestureLook.hpp"
 #include "Input/InputEvents.hpp"
 #include "Renderer/MapScaleRenderer.hpp"
+#include "Menu/MenuBar.hpp"
 
 #include <stdio.h>
 
@@ -278,8 +279,10 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
     If buttons are drawn on bottom (Pan mode and portrait);
     Change reference for rendering so scale is drawn above.
   */
-  if (IsPanning() && !Layout::landscape)
-    scaleRef.bottom -= rc.GetHeight() / 6; // Scale factor as in MenuBar.cpp
+  if (IsPanning() && !Layout::landscape){
+    PixelRect barPos = GetButtonPosition(1, scaleRef);
+    scaleRef.bottom = barPos.top;
+  }
 
   RenderMapScale(canvas, projection, scaleRef, look.overlay);
 
@@ -332,16 +335,12 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
     canvas.Select(font);
     const unsigned height = font.GetCapitalHeight()
         + Layout::GetTextPadding();
-    int y = rc.bottom - height;
 
     TextInBoxMode mode;
     mode.vertical_position = TextInBoxMode::VerticalPosition::ABOVE;
     mode.shape = LabelShape::OUTLINED;
 
-    if (IsPanning() && !Layout::landscape)
-      y -= rc.GetHeight() / 6; // Scale factor as in MenuBar.cpp
-
-    TextInBox(canvas, buffer, 0, y, mode, rc, nullptr);
+    TextInBox(canvas, buffer, 0, scaleRef.bottom - height, mode, rc, nullptr);
   }
 }
 

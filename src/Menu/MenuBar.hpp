@@ -70,4 +70,6 @@ public:
   void OnResize(const PixelRect &rc);
 };
 
+PixelRect GetButtonPosition(unsigned i, PixelRect rc);
+
 #endif
