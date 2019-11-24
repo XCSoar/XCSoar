@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-11-19 18:04+0000\n"
+"PO-Revision-Date: 2019-11-25 17:04+0000\n"
 "Last-Translator: Mattias Münster <mattiasmun@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/sv/>\n"
@@ -739,7 +739,7 @@ msgstr "Sätt i startläge"
 
 #: src/Menu/ExpandMacros.cpp:144
 msgid "Arm turn"
-msgstr "Arm turn"
+msgstr "Aktivera sväng"
 
 #: src/Menu/ExpandMacros.cpp:165
 msgid "Disarm start"
@@ -747,7 +747,7 @@ msgstr "Lämna startläge"
 
 #: src/Menu/ExpandMacros.cpp:168
 msgid "Disarm turn"
-msgstr "Disarm turn"
+msgstr "Avaktivera sväng"
 
 #: src/Menu/ExpandMacros.cpp:177
 msgid ""
@@ -931,7 +931,7 @@ msgstr "Allt"
 #: src/Menu/ExpandMacros.cpp:370 src/Input/InputEventsSettings.cpp:314
 #, no-c-format
 msgid "Task & Landables"
-msgstr "Task & Landables"
+msgstr "Uppgifter & landningsplatser"
 
 #: src/Menu/ExpandMacros.cpp:372 src/Input/InputEventsSettings.cpp:316
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:201
@@ -3110,7 +3110,7 @@ msgstr "Kurvläge"
 #: src/InfoBoxes/InfoBoxSettings.cpp:80
 #, no-c-format
 msgid "Cruise"
-msgstr "Cruise"
+msgstr "Kryssning"
 
 #: src/InfoBoxes/InfoBoxSettings.cpp:81
 #, no-c-format
@@ -4542,7 +4542,7 @@ msgstr "Bogserplan"
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:126
 #, no-c-format
 msgid "Helicopter"
-msgstr "Helicopter"
+msgstr "Helikopter"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:127
 #, no-c-format
