@@ -14,7 +14,8 @@ apt-get install $APTOPTS make \
   imagemagick gettext ffmpeg \
   git quilt zip \
   m4 automake wget \
-  ttf-bitstream-vera fakeroot
+  ttf-bitstream-vera fakeroot \
+  pkg-config
 echo
 
 echo Installing Manual dependencies...
