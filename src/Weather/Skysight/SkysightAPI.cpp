@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "CDFDecoder.hpp"
 #include "SkysightAPI.hpp"
 #include "Request.hpp"
 #include "SkysightRegions.hpp"
@@ -482,8 +483,11 @@ SkysightAPI::ParseLogin(const SkysightRequestArgs &args, const tstring &result)
 bool
 SkysightAPI::ParseData(const SkysightRequestArgs &args, const tstring &result)
 {
-  auto output_img = GetPath(SkysightCallType::Image, args.layer.c_str(),
-			    args.from);
+  auto output_img = GetPath(SkysightCallType::Image, args.layer.c_str(), args.from);
+  
+  queue.AddDecodeJob(std::make_unique<CDFDecoder>(args.path.c_str(), output_img.c_str(),
+                                          args.layer.c_str(), args.from, 
+                                          GetMetric(args.layer.c_str())->legend, args.cb));
   return true;
 }
 

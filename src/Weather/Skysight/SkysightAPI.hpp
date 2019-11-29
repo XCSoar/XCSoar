@@ -47,6 +47,7 @@ struct BrokenDateTime;
 class SkysightAPI final: public Timer {
   friend struct SkysightRequest;
   friend struct SkysightAsyncRequest;
+  friend class  CDFDecoder;
 
 public:
   tstring region;

@@ -43,6 +43,8 @@ apt-get install $APTOPTS make g++ \
   imagemagick gettext \
   mesa-common-dev libgl1-mesa-dev libegl1-mesa-dev \
   fonts-dejavu \
+  libnetcdf-c++4-dev \
+  libnetcdf-dev \
   xz-utils
 echo
 

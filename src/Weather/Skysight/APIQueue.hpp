@@ -24,12 +24,14 @@ Copyright_License {
 #define WEATHER_SKYSIGHTAPI_QUEUE_HPP
 
 #include "Request.hpp"
+#include "CDFDecoder.hpp"
 #include "Metrics.hpp"
 #include "Event/Timer.hpp"
 #include <vector>
 
 class SkysightAPIQueue final: public Timer {
   std::vector<std::unique_ptr<SkysightAsyncRequest>> request_queue;
+  std::vector<std::unique_ptr<CDFDecoder>> decode_queue;
   bool is_busy = false;
   tstring key;
   uint64_t key_expiry_time = 0;
@@ -48,6 +50,7 @@ public:
   bool IsLoggedIn();
   void AddRequest(std::unique_ptr<SkysightAsyncRequest> request,
 		  bool append_end = true);
+  void AddDecodeJob(std::unique_ptr<CDFDecoder> &&job);
   void Clear(const tstring msg);
 };
 
