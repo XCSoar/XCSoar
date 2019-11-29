@@ -354,6 +354,8 @@ private:
 
   void RenderRasp(Canvas &canvas);
 
+  void RenderSkysight(Canvas &canvas);
+
   void RenderTerrainAbove(Canvas &canvas, bool working);
 
   /**
