@@ -9,6 +9,7 @@ EOF
 
 sudo apt-get update
 
+sudo /xcsoar-host-src/ide/provisioning/add-debian-unstable.sh
 sudo /xcsoar-host-src/ide/provisioning/install-debian-packages.sh
 /xcsoar-host-src/ide/provisioning/install-android-tools.sh
 
