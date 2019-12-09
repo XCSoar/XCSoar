@@ -73,6 +73,10 @@ public:
 		return p >= end - 1;
 	}
 
+	WritableBuffer<value_type> Write() const noexcept {
+		return {p, end};
+	}
+
 	void Extend(size_type length) noexcept {
 		p += length;
 	}
