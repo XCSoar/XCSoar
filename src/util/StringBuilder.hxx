@@ -102,6 +102,8 @@ public:
 	void Append(const_pointer src);
 	void Append(const_pointer src, size_t length);
 
+	void Format(const_pointer fmt, ...);
+
 	template<typename... Args>
 	void Append(T ch, Args&&... args) {
 		Append(ch);
