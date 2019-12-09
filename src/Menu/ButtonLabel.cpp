@@ -121,7 +121,7 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
       /* concatenate the translated text and the part starting with '\n' */
       try {
         expanded.text = BuildString(buffer, size, translated, nl);
-      } catch (StringBuilder<TCHAR>::Overflow) {
+      } catch (BasicStringBuilder<TCHAR>::Overflow) {
         expanded.text = gettext(text);
       }
     } else
