@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-11-25 17:04+0000\n"
-"Last-Translator: Mattias Münster <mattiasmun@gmail.com>\n"
+"PO-Revision-Date: 2019-12-12 22:06+0000\n"
+"Last-Translator: Markus Bagge <markus.bagge@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/sv/>\n"
 "Language: sv\n"
@@ -312,7 +312,7 @@ msgstr "Brytpunkt cylinder"
 #: src/Task/TypeStrings.cpp:120
 #, no-c-format
 msgid "Cylinder with 1 mile radius."
-msgstr ""
+msgstr "Cylinder med radie 1 mile."
 
 #: src/Task/TypeStrings.cpp:121
 #, no-c-format
@@ -600,7 +600,7 @@ msgstr "Laddar vägpunkter..."
 
 #: src/CrossSection/CrossSectionRenderer.cpp:67
 msgid "Not moving"
-msgstr ""
+msgstr "Ej i rörelse"
 
 #: src/Gauge/ThermalAssistantRenderer.cpp:193
 msgid "Not Circling"
@@ -1406,6 +1406,9 @@ msgid ""
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
 msgstr ""
+"Vindhastighet estimerat av XCSoar. Manuell justering möjlig via tillhörande "
+"InfoBox dialog. Tryck på up/ner markörtangenter bläddrar cykliskt igenom "
+"inställningarna. Vänster/höger tangenter ändrar värdet."
 
 #: src/InfoBoxes/Content/Factory.cpp:349
 #, no-c-format
@@ -2534,6 +2537,8 @@ msgid ""
 "The vertical distance to the nearest airspace.  A positive value means the "
 "airspace is above you, and negative means the airspace is below you."
 msgstr ""
+"Vertikalt avstånd till närmaste luftrum.  Ett positivt tal anger att "
+"luftrumet är över dig och negativt att det är under dig."
 
 #: src/InfoBoxes/Content/Factory.cpp:878
 #, no-c-format
@@ -2943,7 +2948,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1064
 #, no-c-format
 msgid "Number of used satellites"
-msgstr ""
+msgstr "Antal använda satelliter"
 
 #: src/InfoBoxes/Content/Factory.cpp:1065
 #, fuzzy, no-c-format
@@ -2956,6 +2961,8 @@ msgid ""
 "The number of actually used (seen) satellites by GPS module. If this "
 "information is unavailable, the displayed value is '---'."
 msgstr ""
+"Antal faktiskt använda (observerade) satelliter av GPS-modulen. Om "
+"informationen saknas visas värde '---'."
 
 #: src/InfoBoxes/Content/Alternate.cpp:49
 #: src/Dialogs/Task/AlternatesListDialog.cpp:162 Data/Input/default.xci:388
