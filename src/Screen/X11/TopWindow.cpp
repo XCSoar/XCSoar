@@ -115,10 +115,24 @@ TopWindow::CreateNative(const TCHAR *text, PixelSize size,
     const Atom atoms[] = {
       XInternAtom(x_display, "_NET_WM_STATE_FULLSCREEN", false),
     };
+#if defined(SELFBUILD_RASPBIAN) || defined(SELFBUILD_ARMBIAN)
+    XEvent e;
+    memset(&e, 0, sizeof(e));
+    e.xclient.type = ClientMessage;
+    e.xclient.message_type = XInternAtom(x_display, "_NET_WM_STATE", false);
+    e.xclient.display = x_display;
+    e.xclient.window = x_window;
+    e.xclient.format = 32;
+    e.xclient.data.l[0] = 1 /* _NET_WM_STATE_ADD */;
+    e.xclient.data.l[1] = (long)atoms[0];
+    XSendEvent(x_display, DefaultRootWindow(x_display), False,
+	       SubstructureRedirectMask, &e);
+#else
     XChangeProperty(x_display, x_window,
                     XInternAtom(x_display, "_NET_WM_STATE", false),
                     XA_ATOM, 32, PropModeReplace,
                     (const unsigned char *)atoms, ARRAY_SIZE(atoms));
+#endif
   }
 
   /* receive "Close" button clicks from the window manager */

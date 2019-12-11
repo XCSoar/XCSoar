@@ -1,9 +1,19 @@
 ifeq ($(TARGET_IS_PI),y)
+ifeq ($(HOST_IS_RASPBIAN),y)
+# use opengl on self build on raspbian
+EGL ?= n
+else
 # auto-enable EGL on the Raspberry Pi.
 EGL ?= y
+endif
 else ifeq ($(TARGET_HAS_MALI),y)
+ifeq ($(HOST_IS_ARMBIAN),y)
+# use opengl on self build on raspbian
+EGL ?= n
+else
 # auto-enable EGL on the Cubieboard.
 EGL ?= y
+endif
 else ifeq ($(ENABLE_MESA_KMS),y)
 # if Mesa KMS is explicitly enabled, we also need to enable EGL
 EGL ?= y

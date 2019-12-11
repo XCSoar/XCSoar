@@ -524,6 +524,15 @@ ifeq ($(TARGET_IS_KOBO),y)
   endif
 endif
 
+ifeq ($(TARGET),UNIX)
+  ifeq ($(HOST_IS_RASPBIAN),y)
+    TARGET_CPPFLAGS += -DSELFBUILD_RASPBIAN
+  endif
+  ifeq ($(HOST_IS_ARMBIAN),y)
+    TARGET_CPPFLAGS += -DSELFBUILD_ARMBIAN
+  endif
+endif
+
 ifeq ($(TARGET),ANDROID)
   TARGET_CPPFLAGS += --sysroot=$(ANDROID_SYSROOT)
   TARGET_CPPFLAGS += -isystem $(ANDROID_SYSROOT)/usr/include/$(HOST_TRIPLET)
