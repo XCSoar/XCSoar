@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2017-11-06 13:47+0000\n"
+"PO-Revision-Date: 2019-12-13 07:19+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
-"Language-Team: Korean "
-"<https://hosted.weblate.org/projects/xcsoar/translations/ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
+"translations/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2.18-dev\n"
+"X-Generator: Weblate 3.10-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -2922,75 +2922,72 @@ msgstr ""
 "타겟을 가리킵니다."
 
 #: src/InfoBoxes/Content/Factory.cpp:1039
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next waypoint arrival time (ground speed)"
-msgstr "시간(다음포인트까지 대지속도로 계산된 시간)"
+msgstr "다음 웨이포인트 도착시간 (대지속도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1040
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "WP ETA VMG"
-msgstr "WP도달시간(대지)"
+msgstr "WP도착예정"
 
 #: src/InfoBoxes/Content/Factory.cpp:1041
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Estimated arrival time at next waypoint, assuming current ground speed is "
 "maintained."
-msgstr ""
-"다음웨이포인트까지 예상시간(대지속도), 대지속도에서 계산된 웨이포인트 도달시"
-"간을 표시합니다."
+msgstr "대지속도가 유지되는 것으로 가정했을때, 다음 웨이 포인트의 예상 도착 시간."
 
 #: src/InfoBoxes/Content/Factory.cpp:1048
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Percentage non-circling climb"
-msgstr "상승 비율"
+msgstr "써클링하지 않은 상승의 비율"
 
 #: src/InfoBoxes/Content/Factory.cpp:1049
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "% Str Climb"
-msgstr "상승비율"
+msgstr "써클링외상승"
 
 #: src/InfoBoxes/Content/Factory.cpp:1050
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Percentage of time spent climbing without circling. These statistics are "
 "reset upon starting the task."
-msgstr ""
-"상승비율, 타스크 비행시간중 써멀링에 사용된 시간을 비율로 보여줍니다.(%)"
+msgstr "써클링을 하지 않은 상승을 퍼센트로 표시합니다. 이 값은 타스크를 시작할때 재설정 됩니다."
 
 #: src/InfoBoxes/Content/Factory.cpp:1056
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Percentage climb chart"
-msgstr "상승 비율"
+msgstr "상승 비율 차트"
 
 #: src/InfoBoxes/Content/Factory.cpp:1057
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Climb %"
-msgstr "상승"
+msgstr "상승 %"
 
 #: src/InfoBoxes/Content/Factory.cpp:1058
 #, no-c-format
 msgid ""
 "Pie chart of time circling and climbing, circling and descending, and "
 "climbing non-circling."
-msgstr ""
+msgstr "상승, 서클링을 통한 상승, 그외의 상승에 대한 파이 차트."
 
 #: src/InfoBoxes/Content/Factory.cpp:1064
 #, no-c-format
 msgid "Number of used satellites"
-msgstr ""
+msgstr "사용하는 위성수"
 
 #: src/InfoBoxes/Content/Factory.cpp:1065
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Satellites"
-msgstr "GPS위성"
+msgstr "위성"
 
 #: src/InfoBoxes/Content/Factory.cpp:1066
 #, no-c-format
 msgid ""
 "The number of actually used (seen) satellites by GPS module. If this "
 "information is unavailable, the displayed value is '---'."
-msgstr ""
+msgstr "GPS 센서가 수신하고 실제로 사용하는 위성의 갯수입니다. 사용할 수 없으면 '---'로 표시됩니다."
 
 #: src/InfoBoxes/Content/Alternate.cpp:49
 #: src/Dialogs/Task/AlternatesListDialog.cpp:162 Data/Input/default.xci:388
@@ -3084,9 +3081,8 @@ msgid "3D fix"
 msgstr "3D 고정"
 
 #: src/InfoBoxes/Content/Other.cpp:195
-#, fuzzy
 msgid "No GPS"
-msgstr "수직 고도"
+msgstr "GPS 수신불가"
 
 #: src/InfoBoxes/Content/Speed.cpp:120
 msgid "BLOCK"
@@ -3774,11 +3770,11 @@ msgstr "운저고도"
 
 #: src/Renderer/MacCreadyRenderer.cpp:51 src/Renderer/TaskSpeedRenderer.cpp:49
 msgid "Vave"
-msgstr ""
+msgstr "Vave"
 
 #: src/Renderer/TaskSpeedRenderer.cpp:52
 msgid "Vest"
-msgstr ""
+msgstr "Vest"
 
 #: src/UIActions.cpp:52
 msgid "Quit program?"
@@ -5069,7 +5065,7 @@ msgid "Tracking"
 msgstr "라이브 트래킹"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:154
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Audio"
 msgstr "바리오소리"
 
@@ -5250,9 +5246,8 @@ msgid "Thermal Band"
 msgstr "써멀구간"
 
 #: src/Dialogs/dlgAnalysis.cpp:502
-#, fuzzy
 msgid "Vario Histogram"
-msgstr "그래프(바리오)"
+msgstr "바리오 히스토그램"
 
 #: src/Dialogs/dlgAnalysis.cpp:510
 msgid "Wind at Altitude"
@@ -5267,9 +5262,8 @@ msgid "Glide Polar"
 msgstr "활공성능(폴라커브)"
 
 #: src/Dialogs/dlgAnalysis.cpp:528
-#, fuzzy
 msgid "MacCready Speeds"
-msgstr "맥크레디 "
+msgstr "맥크레디 스피드"
 
 #: src/Dialogs/dlgAnalysis.cpp:537
 msgid "Temperature Trace"
@@ -6407,15 +6401,14 @@ msgid "Text size"
 msgstr "글자 크기"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:93
-#, fuzzy
 msgid "Display Resolution"
-msgstr "화면방향"
+msgstr "화면해상도"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:94
 msgid ""
 "The display resolution is used to adapt line widths, font size, landable "
 "size and more."
-msgstr ""
+msgstr "해상도 조정은 선의 굵기와 글자크기에 사용됩니다."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:104
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:129
@@ -6425,7 +6418,7 @@ msgstr "자동"
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:107
 #, c-format
 msgid "%d dpi"
-msgstr ""
+msgstr "%d dpi"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:115
 msgid "Events"
@@ -6553,9 +6546,9 @@ msgid "9 Left + Right + Vario (Landscape)"
 msgstr "정보창 9개(좌우나뉨) + 바리오(가로)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:88
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "12 Left + 3 Right Vario (Landscape)"
-msgstr "정보창 9개(좌우나뉨) + 바리오(가로)"
+msgstr "12개 왼쪽 + 바리오 3개 오른쪽 (가로)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:90
 #, no-c-format
@@ -7156,19 +7149,19 @@ msgid "Disables the reach display."
 msgstr "도달범위 표시해제"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:162
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terrain line"
-msgstr "지형 표시"
+msgstr "대지 라인"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:163
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Draws a dashed line at the terrain glide reach."
-msgstr "도달범위를 선(이나 점선)으로 표시합니다."
+msgstr "도달범위를 선으로 표시합니다."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:164
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terrain shade"
-msgstr "지점표고"
+msgstr "흐린 대지"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:165
 #, no-c-format
@@ -7176,34 +7169,34 @@ msgid "Shades terrain outside glide reach."
 msgstr "도달범위 바깥을 흐릿하게 표시합니다."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:166
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Working line"
-msgstr "비행고도"
+msgstr "도달 선"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:167
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Draws a dashed line at the working glide reach."
-msgstr "도달범위를 선(이나 점선)으로 표시합니다."
+msgstr "기체가 도달할 수 있는 거리를 직선으로 표시합니다."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:168
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Working line, terrain line"
-msgstr "직선활공 & 지형비행"
+msgstr "작업선, 지형선"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:169
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Draws a dashed line at the working and terrain glide reaches."
-msgstr "도달범위를 선(이나 점선)으로 표시합니다."
+msgstr "기체가 도달할수 있는 거리를 선으로 표시합니다."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:170
 #, no-c-format
 msgid "Working line, terrain shade"
-msgstr ""
+msgstr "작업선, 어두운 지형"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:171
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Draws a dashed line at working, and shade terrain, glide reaches."
-msgstr "도달범위를 선(이나 점선)으로 표시합니다."
+msgstr "글라이더가 도달 할 수 있는 거리를 지면에 점선으로 표시합니다."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:175
 msgid "Reach display"
@@ -8092,10 +8085,10 @@ msgstr "수직속도변화량에 사용하는 단위입니다. (고도계)"
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:180
 #, no-c-format
 msgid "feet"
-msgstr ""
+msgstr "feet"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:181
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "meters"
 msgstr "미터"
 
@@ -8467,7 +8460,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/CloudConfigPanel.cpp:88
 msgid "Obtain and show thermal locations reported by others."
-msgstr ""
+msgstr "서버에 저장된 열의 위치를 확인하고 보여줍니다."
 
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:42
 msgid "Radius of the OZ cylinder."
@@ -8985,14 +8978,12 @@ msgid ""
 msgstr "제한 상승량을 벗어나는 경우 바리오 소리가 경고음을 냅니다."
 
 #: src/Dialogs/Settings/Panels/AudioConfigPanel.cpp:60
-#, fuzzy
 msgid "Master Volume"
 msgstr "음량"
 
 #: src/Dialogs/Weather/PCMetDialog.cpp:68
-#, fuzzy
 msgid "Failed to download file."
-msgstr "파일 불러오기 실패."
+msgstr "파일 다운로드 실패."
 
 #: src/Dialogs/Weather/NOAAList.cpp:121 src/Dialogs/Weather/NOAADetails.cpp:72
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:227
@@ -9052,7 +9043,7 @@ msgstr "이 턴포인트를 추가하시겠습니까?"
 
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:225
 msgid "Use"
-msgstr ""
+msgstr "사용"
 
 #: src/Renderer/NOAAListRenderer.cpp:45
 msgid "No METAR available"
@@ -9858,7 +9849,7 @@ msgstr "엑셀"
 
 #: Data/Input/default.xci:646
 msgid "Lua"
-msgstr ""
+msgstr "Lua"
 
 #: Data/Input/default.xci:957
 msgid "AVG/ALT"
