@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-13 08:21+0000\n"
+"PO-Revision-Date: 2019-12-14 16:21+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -414,7 +414,7 @@ msgstr "구문 분석 오류"
 
 #: src/Airspace/AirspaceParser.cpp:892
 msgid "Unknown airspace filetype"
-msgstr "공역파일 형식이 잘못 되었습니다"
+msgstr "공역파일 형식이 잘못되었음"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorAATTime.cpp:51
 msgid "Expect early task arrival"
@@ -548,7 +548,7 @@ msgstr "타스크를 선언"
 
 #: src/Logger/ExternalLogger.cpp:100
 msgid "Task declared!"
-msgstr "타스크가 선언되었습니다!"
+msgstr "타스크가 선언되었음!"
 
 #: src/Logger/ExternalLogger.cpp:105
 msgid ""
@@ -556,7 +556,7 @@ msgid ""
 "Task NOT declared!"
 msgstr ""
 "에러 발생,\n"
-"타스크가 선언되지 못했습니다!"
+"타스크가 선언되지 못했음!"
 
 #: src/Logger/ExternalLogger.cpp:131
 msgid "No logger connected"
@@ -573,7 +573,7 @@ msgstr "비행 파일 다운로드"
 
 #: src/Logger/ExternalLogger.cpp:280
 msgid "Logger is empty."
-msgstr "로거파일이 없습니다."
+msgstr "로거파일이 없음."
 
 #: src/Logger/ExternalLogger.cpp:301
 msgid "Failed to download flight."
@@ -960,8 +960,8 @@ msgid ""
 "PC only: In simulation mode, this value is adjustable with the up/down arrow "
 "keys and the right/left arrow keys also cause the glider to turn."
 msgstr ""
-"해수면부터 기체위치의 GPS 고도를 표시합니다. \r시뮬레이션 모드에선 위 아래로 "
-"고도 설정, 좌우로 기체회전을 설정 할 수 있습니다."
+"해수면부터 기체위치의 GPS 고도를 표시한다. \n"
+"시뮬레이션 모드에서는 위 아래로 고도 설정, 좌우로 기체회전을 설정 할 수 있다."
 
 #: src/InfoBoxes/Content/Factory.cpp:143
 #, no-c-format
@@ -980,9 +980,7 @@ msgid ""
 "This is the navigation altitude minus the terrain elevation obtained from "
 "the terrain file. The value is coloured red when the glider is below the "
 "terrain safety clearance height."
-msgstr ""
-"AGL 고도는 지형도에서 얻어진 지형의 높이에서 기체의 높이까지의 상대적 고도를 "
-"표시합니다. 색이 붉은색이면 지형의 높이보다 고도가 낮은 것입니다."
+msgstr "AGL 고도는 지형의 높이에서 기체의 높이까지의 상대적 고도를 표시한다. 색이 붉은색이면 지형의 높이보다 고도가 낮은 것이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:152
 #, no-c-format
@@ -999,9 +997,7 @@ msgstr "바리오(30초간)"
 msgid ""
 "A 30 second rolling average climb rate based of the reported GPS altitude, "
 "or vario if available."
-msgstr ""
-"최근 30초 동안의 평균고도변화량을 보여줍니다. GPS 또는 외부 바리오의 값을 보"
-"여줍니다."
+msgstr "최근 30초 동안의 평균고도변화량을 보여준다. GPS나 외부바리오의 값이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:160
 #, no-c-format
@@ -1021,8 +1017,8 @@ msgid ""
 "True bearing of the next waypoint.  For AAT tasks, this is the true bearing "
 "to the target within the AAT sector."
 msgstr ""
-"다음웨이포인트로 향하는 방향을 각도로 표시합니다. \rAAT 타스크의 경우 다음 "
-"AAT 섹터의 방향을 표시합니다."
+"다음웨이포인트로 향하는 방향을 각도로 표시한다. \n"
+"AAT 타스크의 경우 다음 AAT 섹터의 방향을 표시한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:169
 #, no-c-format
@@ -1041,9 +1037,7 @@ msgid ""
 "the vertical speed (GPS speed) over the last 20 seconds. Negative values "
 "indicate climbing cruise. If the vertical speed is close to zero, the "
 "displayed value is '---'."
-msgstr ""
-"20초 동안의 평균 활공비를 보여줍니다. 음의 값은 상승을 나타냅니다.수직변화가 "
-"거의 없을경우 ---로 표시됩니다."
+msgstr "20초 동안의 평균 활공비를 보여준다. 음의 값은 상승을 나타내며, 수직변화가 거의 없을경우 ---로 표시된다."
 
 #: src/InfoBoxes/Content/Factory.cpp:177
 #, no-c-format
@@ -1063,9 +1057,8 @@ msgid ""
 "(height gain since leaving the last thermal). If the vertical speed is close "
 "to zero, the displayed value is '---'."
 msgstr ""
-"마지막 써멀의 최고점에서부터의 거리입니다.\r마지막 고도와 거리를 나눈값으로 "
-"표시됩니다.\r음수값은 서멀을 지나 더 상승되었을 경우 입니다.\r수직변화가 거"
-"의 없을경우 ---로 표시됩니다."
+"마지막 써멀의 최고점에서부터의 고도와 현재 고도를 뺀 값이다. 마이너스값은 이후에 더 상승되었을 때 이며, 고도가 같을때는 ---로 "
+"표시된다."
 
 #: src/InfoBoxes/Content/Factory.cpp:185
 #, no-c-format
@@ -1084,8 +1077,8 @@ msgid ""
 "mode, pressing the up and down arrows adjusts the speed, and left and right "
 "turn the glider."
 msgstr ""
-"대지속도는 GPS에서 얻어집니다.\r시뮬레이션 모드에서는 위, 아래를 누르면 속도"
-"증감, 좌우를 누르면 기체가 회전합니다."
+"대지속도는 GPS로 측정한다.\n"
+"시뮬레이션 모드에서는 위, 아래를 누르면 속도변화, 좌우를 누르면 기체가 회전한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:193
 #, no-c-format
@@ -1103,8 +1096,8 @@ msgid ""
 "Total altitude gain/loss in the last thermal divided by the time spent "
 "circling."
 msgstr ""
-"마지막 써멀에서의 고도상승/손실량을 보여줍니다.\r써멀선회중의 고도변화를 소요"
-"시간으로 나눈 값 입니다."
+"마지막 써멀에서의 고도상승/손실량이다.\n"
+"써멀선회중의 고도변화를 소요시간으로 나눈 값이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:201
 #, no-c-format
@@ -1119,7 +1112,7 @@ msgstr "써멀이득"
 #: src/InfoBoxes/Content/Factory.cpp:203
 #, no-c-format
 msgid "Total altitude gain/loss in the last thermal."
-msgstr "마지막 써멀에서 획득/손실량을 표시합니다."
+msgstr "마지막 써멀에서 획득/손실량을 표시한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:209
 #, no-c-format
@@ -1134,7 +1127,7 @@ msgstr "써멀(선회시간)"
 #: src/InfoBoxes/Content/Factory.cpp:211
 #, no-c-format
 msgid "Time spent circling in the last thermal."
-msgstr "마지막으로 써멀에서 선회하던 시간을 보여줍니다."
+msgstr "마지막으로 써멀에서 선회하던 시간을 보여준다."
 
 #: src/InfoBoxes/Content/Factory.cpp:217
 #, no-c-format
@@ -1152,9 +1145,7 @@ msgid ""
 "The current MacCready setting and the current MacCready mode (manual or "
 "auto). (Touch-screen/PC only) Also used to adjust the MacCready setting if "
 "the InfoBox is active, by using the up/down cursor keys."
-msgstr ""
-"(자동이나 수동으로) 설정된 맥크래디 모드를 보여줍니다. 정보창을 누르면 수치변"
-"경이 가능합니다."
+msgstr "(자동이나 수동으로) 설정된 맥크래디 모드를 보여준다. 정보창을 누르면 수치변경이 가능하다."
 
 #: src/InfoBoxes/Content/Factory.cpp:225
 #, no-c-format
@@ -1172,9 +1163,8 @@ msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the target within the AAT sector."
 msgstr ""
-"선택중인 웨이포인트의 외곽선과 기체의 거리입니다.\r\n"
-"AAT타스크의 경우 다음 AAT 섹터까지의 거리를 나타냅니다. 웨이포인트미입력시 이"
-"륙지점과의 거리를 나타냅니다."
+"선택한 웨이포인트의 외곽선과 기체의 거리이다.\n"
+"AAT타스크의 경우 다음 AAT 섹터까지의 거리를, 웨이포인트 미입력시에는 이륙지점과의 거리를 나타낸다."
 
 #: src/InfoBoxes/Content/Factory.cpp:234
 #, no-c-format
@@ -1192,9 +1182,8 @@ msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival height. "
 "For AAT tasks, the target within the AAT sector is used."
 msgstr ""
-"다음 웨이포인트에 도착했을때 고도를 보여줍니다.(안전고도 포함)\r\n"
-"-로 표시되면 현재고도로는 목표에 도착하지 못합니다. AAT타스크의 경우 AAT 섹터"
-"까지 가기위한 고도를 보여줍니다."
+"다음 웨이포인트에 도착했을때 고도.(안전고도 포함)\n"
+"-로 표시되면 현재고도로는 목표에 도착하지 못한다. AAT타스크의 경우 AAT 섹터까지 가기 위한 고도를 보여준다."
 
 #: src/InfoBoxes/Content/Factory.cpp:243
 #, no-c-format
@@ -1211,9 +1200,7 @@ msgstr "WP필요고도"
 msgid ""
 "Additional altitude required to reach the next turn point. For AAT tasks, "
 "the target within the AAT sector is used."
-msgstr ""
-"다음웨이포인트까지 가기위해 필요한 추가고도를 보여줍니다. AAT타스크의 경우 "
-"AAT 섹터까지 가기 위한 값입니다."
+msgstr "다음웨이포인트까지 가기위해 필요한 추가고도, AAT타스크의 경우 AAT 섹터까지 가기 위한 값."
 
 #: src/InfoBoxes/Content/Factory.cpp:252
 #, no-c-format
@@ -1233,9 +1220,8 @@ msgid ""
 "task. (Touch-screen/PC only) Pressing the enter cursor key brings up the "
 "waypoint details."
 msgstr ""
-"이 메뉴는 선택된 웨이포인트의 위치로 향하는 방위각을 보여줍니다. UP/DOWN 커서"
-"로 다음 웨이포인트를 볼 수 있습니다. (터치스크린이나 PC에서) 엔터키를 누르면 "
-"웨이포인트 설명을 볼 수 있습니다."
+"선택한 웨이포인트의 위치로 향하는 방위각. UP/DOWN 커서로 다음 웨이포인트를 선택한다. PC에서 엔터키를 누르면 웨이포인트 설명을 "
+"볼 수 있다."
 
 #: src/InfoBoxes/Content/Factory.cpp:260
 #, no-c-format
@@ -1252,7 +1238,7 @@ msgstr "고도차(골)"
 msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
 "height."
-msgstr "결승점(골)에 도착했을때의 고도(안전고도 포함)를 표시합니다."
+msgstr "결승점(골)에 도착했을때의 고도(안전고도 포함)."
 
 #: src/InfoBoxes/Content/Factory.cpp:268
 #, no-c-format
@@ -1267,9 +1253,7 @@ msgstr "필요고도(골)"
 #: src/InfoBoxes/Content/Factory.cpp:270
 #, no-c-format
 msgid "Additional altitude required to finish the task."
-msgstr ""
-"결승점에 도착하기 위해 필요한 고도입니다. 현위치에서 이 고도 이상을 획득해야 "
-"합니다."
+msgstr "결승점에 도착하기 위해 필요한 추가고도."
 
 #: src/InfoBoxes/Content/Factory.cpp:276
 #, no-c-format
@@ -1286,7 +1270,7 @@ msgstr "Task평균속도"
 msgid ""
 "Average cross country speed while on current task, not compensated for "
 "altitude."
-msgstr "타스크 비행중의 평균 속도를 나타냅니다. 고도값은 보정되지 않았습니다."
+msgstr "타스크 비행중의 평균 속도 (고도변화는 보정되지 않았음)."
 
 #: src/InfoBoxes/Content/Factory.cpp:284
 #, no-c-format
@@ -1301,7 +1285,7 @@ msgstr "골까지거리"
 #: src/InfoBoxes/Content/Factory.cpp:286
 #, no-c-format
 msgid "Distance to finish around remaining turn points."
-msgstr "나머지 포인트를 지나, 골포인트까지 남은 거리를 표시합니다."
+msgstr "남은 포인트를 지나, 골까지 남은 거리."
 
 #: src/InfoBoxes/Content/Factory.cpp:300
 #, no-c-format
@@ -1318,9 +1302,7 @@ msgstr "표고"
 msgid ""
 "This is the elevation of the terrain above mean sea level, obtained from the "
 "terrain file at the current GPS location."
-msgstr ""
-"해발고도에서부터 측정된 현재위치의 지면고도를 보여줍니다. GPS위치를 기준으로 "
-"지형파일에서 얻어집니다."
+msgstr "해발고도에서부터 측정된 현재위치의 지면고도. GPS위치를 지형과 비교하여 얻어진다."
 
 #: src/InfoBoxes/Content/Factory.cpp:308
 #, no-c-format
@@ -1337,7 +1319,7 @@ msgstr "평균써멀"
 msgid ""
 "Altitude gained/lost in the current thermal, divided by time spent "
 "thermalling."
-msgstr "현재 써멀의 시간당 획득/손실 고도를 보여줍니다."
+msgstr "현재 써멀의 시간당 획득/손실 고도."
 
 #: src/InfoBoxes/Content/Factory.cpp:316
 #, no-c-format
@@ -1352,7 +1334,7 @@ msgstr "써멀획득량"
 #: src/InfoBoxes/Content/Factory.cpp:318
 #, no-c-format
 msgid "The altitude gained/lost in the current thermal."
-msgstr "현재 써멀에서 획득/손실된 고도를 보여줍니다."
+msgstr "현재 써멀에서 획득/손실된 고도를 보여준다."
 
 #: src/InfoBoxes/Content/Factory.cpp:324 src/InfoBoxes/Content/Factory.cpp:325
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:59
@@ -1366,16 +1348,14 @@ msgid ""
 "Magnetic track reported by the GPS. (Touch-screen/PC only) If this InfoBox "
 "is active in simulation mode, pressing the up and down  arrows adjusts the "
 "track."
-msgstr "GPS로 부터 얻어진 방위각(나침반)입니다. 시뮬레이션모드에서는 위 아래로 고도를 조절합니다."
+msgstr "GPS로 부터 얻어진 방위각(나침반) 트랙."
 
 #: src/InfoBoxes/Content/Factory.cpp:334
 #, no-c-format
 msgid ""
 "Instantaneous vertical speed, as reported by the GPS, or the intelligent "
 "vario total energy vario value if connected to one."
-msgstr ""
-"현재의 GPS 데이터에서 얻어진 상승/하강속도, 바리오가 연결된 경우 바리오의 값"
-"을 보여줍니다."
+msgstr "GPS로 얻어진 상승/하강속도. 기압바리오가 연결된 경우 기압으로 측정된 값이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:340
 #, no-c-format
@@ -1393,9 +1373,7 @@ msgid ""
 "Wind speed estimated by XCSoar. Manual adjustment is possible with the "
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
-msgstr ""
-"풍속은 XCSoar 내부에서 계산되어 표시됩니다. 정보창을 열고 수동 보정이 가능합"
-"니다."
+msgstr "풍속은 XCSoar가 계산해서 표시. 정보창을 눌러 수동으로 보정이 가능하다."
 
 #: src/InfoBoxes/Content/Factory.cpp:349
 #, no-c-format
@@ -1413,9 +1391,7 @@ msgid ""
 "Wind bearing estimated by XCSoar. Manual adjustment is possible with the "
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
-msgstr ""
-"풍향은 XCSoar 내부에서 계산되어 표시됩니다. 정보창을 열고 수동 보정이 가능합"
-"니다."
+msgstr "풍향은 XCSoar가 계산해서 표시. 정보창을 열고 수동 보정이 가능하다."
 
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
@@ -1431,9 +1407,7 @@ msgstr "AAT시간"
 #, no-c-format
 msgid ""
 "Assigned Area Task time remaining. Goes red when time remaining has expired."
-msgstr ""
-"타스크에 할당된 시간을 보여줍니다.\r\n"
-"빨간색으로 변하면 마감된 것입니다."
+msgstr "타스크에 할당된 시간. 빨간색으로 변하면 종료된 것이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:366
 #, no-c-format
@@ -1448,9 +1422,7 @@ msgstr "AAT최대거리"
 #: src/InfoBoxes/Content/Factory.cpp:368
 #, no-c-format
 msgid "Assigned Area Task maximum distance possible for remainder of task."
-msgstr ""
-"AAT(Assigned Area Task) 최대거리, 현재 타스크에서 가능한 최대 거리를 보여줍니"
-"다."
+msgstr "AAT(Assigned Area Task) 최대거리, 현재 타스크에서 가능한 최대 거리이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:374
 #, no-c-format
@@ -1465,9 +1437,7 @@ msgstr "AAT최소거리"
 #: src/InfoBoxes/Content/Factory.cpp:376
 #, no-c-format
 msgid "Assigned Area Task minimum distance possible for remainder of task."
-msgstr ""
-"AAT(Assigned Area Task) 최소거리, 현재 타스크에서 가능한 최소 거리를 보여줍니"
-"다."
+msgstr "AAT(Assigned Area Task) 최소거리, 현재 타스크에서 가능한 최소 거리이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:382
 #, no-c-format
@@ -1484,9 +1454,7 @@ msgstr "AAT최대속도"
 msgid ""
 "Assigned Area Task average speed achievable if flying maximum possible "
 "distance remaining in minimum AAT time."
-msgstr ""
-"AAT(Assigned Area Task) 최대속도, 현재 타스크에서 최대 평균 속도를 내는데 필"
-"요한 최대 거리 입니다."
+msgstr "AAT(Assigned Area Task)에서 남은 AAT시간으로 가능한 최대 거리."
 
 #: src/InfoBoxes/Content/Factory.cpp:390
 #, no-c-format
@@ -1503,9 +1471,7 @@ msgstr "AAT최소속도"
 msgid ""
 "Assigned Area Task average speed achievable if flying minimum possible "
 "distance remaining in minimum AAT time."
-msgstr ""
-"AAT(Assigned Area Task) 최소속도, 현재 타스크에서 최소의 시간으로 비행이 가능"
-"한 최대 거리 입니다."
+msgstr "AAT(Assigned Area Task)에서 남은 AAT시간으로 가능한 최소 거리."
 
 #: src/InfoBoxes/Content/Factory.cpp:398
 #, no-c-format
@@ -1540,7 +1506,7 @@ msgstr "기압고도"
 msgid ""
 "This is the barometric altitude obtained from a device equipped with a "
 "pressure sensor."
-msgstr "기압고도, 기압고도계로 측정된 현재 고도를 표시합니다."
+msgstr "기압고도계로 측정된 현재 고도."
 
 #: src/InfoBoxes/Content/Factory.cpp:415
 #, no-c-format
@@ -1558,7 +1524,7 @@ msgid ""
 "The MacCready speed-to-fly for optimal flight to the next waypoint. In "
 "cruise flight mode, this speed-to-fly is calculated for maintaining "
 "altitude. In final glide mode, this speed-to-fly is calculated for descent."
-msgstr "다음 웨이포인트 도착에 필요한 맥크레디 설정값을 나타냅니다."
+msgstr "다음 웨이포인트 도착에 필요한 맥크레디값."
 
 #: src/InfoBoxes/Content/Factory.cpp:423
 #, no-c-format
@@ -1575,7 +1541,7 @@ msgstr "상승비율"
 msgid ""
 "Percentage of time spent in climb mode. These statistics are reset upon "
 "starting the task."
-msgstr "상승비율(%), 타스크 비행시간중 써멀링에 사용된 시간을 비율로 보여줍니다."
+msgstr "상승비율(%), 타스크 비행중 써멀링에 사용된 시간비율."
 
 #: src/InfoBoxes/Content/Factory.cpp:431
 #, no-c-format
@@ -1590,7 +1556,7 @@ msgstr "비행시간"
 #: src/InfoBoxes/Content/Factory.cpp:433
 #, no-c-format
 msgid "Time elapsed since takeoff was detected."
-msgstr "이륙 후 비행한 시간을 보여줍니다."
+msgstr "이륙 후 비행시간."
 
 #: src/InfoBoxes/Content/Factory.cpp:439
 #, no-c-format
@@ -1607,7 +1573,7 @@ msgstr "중력가속도"
 msgid ""
 "Magnitude of G loading reported by a supported external intelligent vario. "
 "This value is negative for pitch-down manoeuvres."
-msgstr "외부바리오에서 측정된 중력가속도를 보여줍니다 (- 값은 피치다운시의 값입니다.)."
+msgstr "외부센서에서 측정된 중력가속도(마이너스는 하강값)."
 
 #: src/InfoBoxes/Content/Factory.cpp:447
 #, no-c-format
@@ -1625,9 +1591,7 @@ msgid ""
 "The required glide ratio over ground to reach the next waypoint, given by "
 "the distance to next waypoint divided by the height required to arrive at "
 "the safety arrival height."
-msgstr ""
-"다음 웨이포인트에 도달하는데 필요한 활공비. 안전고도를 고려하여 남은 거리에 "
-"필요한 고도를 나눈 값 입니다."
+msgstr "다음 웨이포인트까지 필요한 활공비. 안전고도를 포함하여 남은 거리에 필요한 고도를 나눈 값."
 
 #: src/InfoBoxes/Content/Factory.cpp:456
 #, no-c-format
@@ -1642,12 +1606,12 @@ msgstr "현재시각"
 #: src/InfoBoxes/Content/Factory.cpp:458
 #, no-c-format
 msgid "GPS time expressed in local time zone."
-msgstr "현 위치의 GPS 시각을 보여줍니다."
+msgstr "현 위치의 GPS 시각."
 
 #: src/InfoBoxes/Content/Factory.cpp:464 src/InfoBoxes/Content/Factory.cpp:465
 #, no-c-format
 msgid "Time UTC"
-msgstr "시각(UTC)"
+msgstr "시각(UTC 세계표준시)"
 
 #: src/InfoBoxes/Content/Factory.cpp:466
 #, no-c-format
@@ -1669,7 +1633,7 @@ msgstr "결승점예상시간"
 msgid ""
 "Estimated time required to complete task, assuming performance of ideal "
 "MacCready cruise/climb cycle."
-msgstr "결승점 도달까지 예상시간, 현재의 맥크레디 설정에 의한 예상값입니다."
+msgstr "결승점까지 예상시간, 맥크레디 설정에 의한 예상값이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:480
 #, no-c-format
@@ -1686,8 +1650,7 @@ msgstr "다음WP시간"
 msgid ""
 "Estimated time required to reach next waypoint, assuming performance of "
 "ideal MacCready cruise/climb cycle."
-msgstr ""
-"다음 웨이포인트까지 예상 소요시간,  현재의 맥크레디 설정에 의한 예상값입니다."
+msgstr "다음 웨이포인트까지 예상 소요시간, 맥크레디 설정에 의한 예상값."
 
 #: src/InfoBoxes/Content/Factory.cpp:489
 #, no-c-format
@@ -1753,9 +1716,7 @@ msgstr "골도착시각"
 msgid ""
 "Estimated arrival local time at task completion, assuming performance of "
 "ideal MacCready cruise/climb cycle."
-msgstr ""
-"최종 결승점에 도달했을 때의 예상 시각을 표시해줍니다. 현재의 맥크레디값으로 "
-"계산되어 표시합니다."
+msgstr "최종 결승점에 도달했을 때의 예상 시각."
 
 #: src/InfoBoxes/Content/Factory.cpp:513
 #, no-c-format
@@ -1772,9 +1733,7 @@ msgstr "다음포인트시각"
 msgid ""
 "Estimated arrival local time at next waypoint, assuming performance of ideal "
 "MacCready cruise/climb cycle."
-msgstr ""
-"다음 웨이포인트에 도달했을 때의 예상 시각을 표시해줍니다. 현재의 맥크레디값으"
-"로 계산되어 표시합니다."
+msgstr "다음 웨이포인트의 도착 예상시각."
 
 #: src/InfoBoxes/Content/Factory.cpp:522
 #, no-c-format
@@ -2117,9 +2076,7 @@ msgstr "배터리"
 msgid ""
 "Displays percentage of device battery remaining (where applicable) and "
 "status/voltage of external power supply."
-msgstr ""
-"남아있는 배터리를 표시합니다. 외부전원 연결시 외부 전원장치의 전압을 표시합니"
-"다."
+msgstr "남아있는 배터리. 그외 외부센서의 배터리도 표시."
 
 #: src/InfoBoxes/Content/Factory.cpp:674
 #, no-c-format
@@ -2137,9 +2094,7 @@ msgid ""
 "The required glide ratio over ground to finish the task, given by the "
 "distance to go divided by the height required to arrive at the safety "
 "arrival height."
-msgstr ""
-"결승점 활공비, 타스크종료지점까지 필요한 활공비입니다. 남은거리를 활공하고 골"
-"인하는데 필요한 고도로 나눈 값이며, 안전도달 고도를 고려하여 보여집니다."
+msgstr "결승점 활공비, 결승점까지 필요한 활공비이다. 남은거리에서 골인하는데 필요한 고도로 나눈 값이며, 안전고도를 포함한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:682
 #, no-c-format
@@ -2154,7 +2109,7 @@ msgstr "예비1"
 #: src/InfoBoxes/Content/Factory.cpp:684
 #, no-c-format
 msgid "Displays name and bearing to the best alternate landing location."
-msgstr "예비 착륙장1번까지의 거리와 방향을 보여줍니다."
+msgstr "예비 착륙장까지의 거리와 방향."
 
 #: src/InfoBoxes/Content/Factory.cpp:690
 #, no-c-format
@@ -2169,7 +2124,7 @@ msgstr "예비2"
 #: src/InfoBoxes/Content/Factory.cpp:692
 #, no-c-format
 msgid "Displays name and bearing to the second alternate landing location."
-msgstr "예비 착륙장2번까지의 거리와 방향을 보여줍니다."
+msgstr "예비 2번착륙장의 거리와 방향."
 
 #: src/InfoBoxes/Content/Factory.cpp:698
 #, no-c-format
@@ -2186,9 +2141,7 @@ msgstr "예비1활공비"
 msgid ""
 "Geometric gradient to the arrival height above the best alternate. This is "
 "not adjusted for total energy."
-msgstr ""
-"예비착륙장까지 필요한 활공비를 보여줍니다. 이 값은 별도의 상승이 고려되지 않"
-"았습니다."
+msgstr "예비착륙장까지 필요한 활공비. 고도상승을 고려하지 않음."
 
 #: src/InfoBoxes/Content/Factory.cpp:706
 #, no-c-format
@@ -2205,7 +2158,7 @@ msgstr "이륙지점고도"
 msgid ""
 "Height based on an automatic take-off reference elevation (like a QFE "
 "reference)."
-msgstr "이륙지점의 고도를 보여줍니다."
+msgstr "이륙장의 고도."
 
 #: src/InfoBoxes/Content/Factory.cpp:715
 #, no-c-format
@@ -2262,7 +2215,7 @@ msgstr "OLC거리"
 msgid ""
 "Instantaneous evaluation of the flown distance according to the configured "
 "On-Line Contest rule set."
-msgstr "OLC규칙에 의해 계산된 거리를 표시합니다."
+msgstr "OLC규칙에 의해 계산된 거리."
 
 #: src/InfoBoxes/Content/Factory.cpp:739
 #, no-c-format
@@ -2361,9 +2314,7 @@ msgstr "바리오그래프"
 msgid ""
 "Trace of vertical speed, as reported by the GPS, or the intelligent vario "
 "total energy vario value if connected to one."
-msgstr ""
-"고도변화그래프는 GPS에 의해 표시됩니다, 고성능 바리오연결시 연결된 값이 표시"
-"됩니다."
+msgstr "고도변화그래프."
 
 #: src/InfoBoxes/Content/Factory.cpp:797
 #, no-c-format
@@ -2380,7 +2331,7 @@ msgstr "바리오그래프"
 msgid ""
 "Trace of vertical speed of air-mass, equal to vario value less the glider's "
 "estimated sink rate."
-msgstr "기단에서의 바리오 상승율/침하율을 보여줍니다."
+msgstr "기단에서의 고도 상승율/침하율."
 
 #: src/InfoBoxes/Content/Factory.cpp:805
 #, no-c-format
@@ -2397,9 +2348,7 @@ msgstr "상승그래프"
 msgid ""
 "Trace of average climb rate each turn in circling, based of the reported GPS "
 "altitude, or vario if available."
-msgstr ""
-"써클링시 획득한 상승그래프를 보여줍니다. GPS 로 보고되나, 연결된 바리오가 있"
-"을시 그 값을 보여줍니다."
+msgstr "써클링시 획득한 상승비율."
 
 #: src/InfoBoxes/Content/Factory.cpp:813
 #, no-c-format
@@ -2416,7 +2365,7 @@ msgstr "상승구간"
 msgid ""
 "Graph of average circling climb rate (horizontal axis) as a function of "
 "altitude (vertical axis)."
-msgstr "써클링으로 상승한 비율을 그래프로 보여줍니다. 수평축(상승률), 수직축(고도)."
+msgstr "평균 상승 비율 그래프. X축 - 상승, Y축 - 고도."
 
 #: src/InfoBoxes/Content/Factory.cpp:821
 #, no-c-format
@@ -2433,9 +2382,7 @@ msgstr "달성율"
 msgid ""
 "Clock-like display of distance remaining along task, showing achieved task "
 "points."
-msgstr ""
-"타스크달성율을 보여줍니다. 원형으로 표시되며, 남은 타스크 포인트가 표시됩니"
-"다."
+msgstr "타스크달성율. 남은 타스크 포인트가 표시된다."
 
 #: src/InfoBoxes/Content/Factory.cpp:829
 #, no-c-format
@@ -2451,7 +2398,7 @@ msgstr "시작고도"
 #, no-c-format
 msgid ""
 "The contiguous period the ship has been below the task start max. height."
-msgstr "최대출발고도이하에서의 시간을 보여줍니다."
+msgstr "스타트 최대 고도보다 아래에 근접해 있음."
 
 #: src/InfoBoxes/Content/Factory.cpp:837
 #, no-c-format
@@ -2468,8 +2415,7 @@ msgstr "Fin.도달시간"
 msgid ""
 "Estimated time required to complete task, assuming current ground speed is "
 "maintained."
-msgstr ""
-"결승점 예상시간(대지속도), 대지속도에서 계산된 결승점 도달시간을 표시합니다."
+msgstr "결승점 예상시간, 대지속도에서 계산된 결승점 도달시간을 표시."
 
 #: src/InfoBoxes/Content/Factory.cpp:845
 #, no-c-format
@@ -2486,9 +2432,7 @@ msgstr "WP도달시간(대지)"
 msgid ""
 "Estimated time required to reach next waypoint, assuming current ground "
 "speed is maintained."
-msgstr ""
-"다음웨이포인트까지 예상시간(대지속도), 대지속도에서 계산된 웨이포인트 도달시"
-"간을 표시합니다."
+msgstr "다음 웨이포인트까지 예상시간, 현재 속도로 계산한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:854
 #, no-c-format
@@ -2524,7 +2468,7 @@ msgstr "공역경계수평"
 #: src/InfoBoxes/Content/Factory.cpp:864
 #, no-c-format
 msgid "The horizontal distance to the nearest airspace."
-msgstr "최근 공역까지 수평거리를 표시합니다."
+msgstr "최근 공역까지 수평거리."
 
 #: src/InfoBoxes/Content/Factory.cpp:870
 #, no-c-format
@@ -2541,9 +2485,7 @@ msgstr "공역경계수직"
 msgid ""
 "The vertical distance to the nearest airspace.  A positive value means the "
 "airspace is above you, and negative means the airspace is below you."
-msgstr ""
-"공역 경계선까지 수직거리이며, 플러스 값의 경우 위쪽, 마이너스값의 경우 아래쪽"
-"을 나타냅니다."
+msgstr "근처의 공역 경계선까지의 고도, +값이면 공역위 , -값이면 공역아래이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:878
 #, no-c-format
@@ -2601,9 +2543,7 @@ msgid ""
 "The distance to the next terrain collision along the current task leg. At "
 "this location, the altitude will be below the configured terrain clearance "
 "altitude."
-msgstr ""
-"현재의 진로상의 지상 충돌지점과의 거리. 이 위치에서 예상되는 충돌지점과의 거"
-"리를 보여줍니다."
+msgstr "현재 진로상의 지상 충돌예상지점과의 거리. 현재 기체위치에서 충돌지점과의 거리이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:903
 #, no-c-format
@@ -2621,9 +2561,7 @@ msgid ""
 "This is the barometric altitude obtained from a device equipped with a "
 "pressure sensor or the GPS altitude if the barometric altitude is not "
 "available."
-msgstr ""
-"기압계가 설정된 경우 그 값을 보여주며, 고도기압계를 사용하지 못할경우 GPS나 "
-"압력센서로 얻어진 고도를 보여줍니다."
+msgstr "기압고도, 기압고도계가 없을 경우 GPS 고도이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:912
 #, no-c-format
@@ -2659,9 +2597,7 @@ msgid ""
 "The current head wind component. The simplified head wind is calculated by "
 "subtracting GPS ground speed from the TAS if airspeed is available from "
 "external device."
-msgstr ""
-"현재의 정풍(맞바람)성분, 외부대기(V TAS)속도와 GPS의 대지속도와의 차이를 보여"
-"줍니다."
+msgstr "현재의 정풍(맞바람)정보, 외부대기(V TAS)속도와 GPS속도의 차이이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:928
 #, no-c-format
@@ -2717,7 +2653,7 @@ msgstr "써멀"
 msgid ""
 "A circular thermal assistant that shows the lift distribution over each part "
 "of the circle."
-msgstr "써멀 분포를 써클링했던 기록으로 보여줍니다. 써멀의 강도도 표시합니다."
+msgstr "써멀어시스턴트, 열의 세기와 모양을 표시한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:951
 #, no-c-format
@@ -2732,7 +2668,7 @@ msgstr "게임시작시간"
 #: src/InfoBoxes/Content/Factory.cpp:953
 #, no-c-format
 msgid "Shows the time left until the start point opens or closes."
-msgstr "스타트/클로즈포인트의 오픈/클로즈 남은 시간을 보여줍니다."
+msgstr "스타트/클로즈포인트의 남은 시간."
 
 #: src/InfoBoxes/Content/Factory.cpp:958
 #, no-c-format
@@ -2749,9 +2685,7 @@ msgstr "시작점까지시간"
 msgid ""
 "Shows the time left until the start point opens or closes, compared to the "
 "calculated time to reach it."
-msgstr ""
-"스타트 포인트/피니시 포인트까지 현재위치에서 출발할때 도달하는 시간입니다. 스"
-"타트 오픈시간에 맟춰 비행 하시면 됩니다."
+msgstr "스타트/피니시까지 현재위치에서 출발할때 도달하는 시간."
 
 #: src/InfoBoxes/Content/Factory.cpp:965
 #, no-c-format
@@ -2869,9 +2803,7 @@ msgstr "OLC속도"
 msgid ""
 "Instantaneous evaluation of the flown speed according to the configured On-"
 "Line Contest rule set."
-msgstr ""
-"온라인선발대회(OLC) 규칙에 따라 계산된 현시점 까지의 평균 비행 속도를 나타냅"
-"니다."
+msgstr "OLC 규칙으로 계산된 현시점까지의 평균 비행 속도."
 
 #: src/InfoBoxes/Content/Factory.cpp:1019
 #, no-c-format
@@ -2905,10 +2837,7 @@ msgid ""
 "and the distance are also shown. The position used is the optimized position "
 "of the active waypoint in the current task, the center of a selected goto "
 "waypoint or the target within the AAT sector for AAT tasks."
-msgstr ""
-"현재 선택된 웨이포인트를 가리키는 화살표. 웨이포인트의 이름과 거리도 표시됩니"
-"다. 최적화된 방향을 가리키며, 웨이포인트의 중심이나, AAT 타스크의 AAT 섹터내 "
-"타겟을 가리킵니다."
+msgstr "타스크에서 다음 웨이포인트를 가리키는 화살표. 최적화한 포인트나, 타크스 중심까지 표시한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:1039
 #, no-c-format
@@ -2930,7 +2859,7 @@ msgstr "대지속도가 유지되는 것으로 가정했을때, 다음 웨이 �
 #: src/InfoBoxes/Content/Factory.cpp:1048
 #, no-c-format
 msgid "Percentage non-circling climb"
-msgstr "써클링하지 않은 상승의 비율"
+msgstr "써클링 외 상승비율"
 
 #: src/InfoBoxes/Content/Factory.cpp:1049
 #, no-c-format
@@ -2942,7 +2871,7 @@ msgstr "써클링외상승"
 msgid ""
 "Percentage of time spent climbing without circling. These statistics are "
 "reset upon starting the task."
-msgstr "써클링을 하지 않은 상승을 퍼센트로 표시합니다. 이 값은 타스크를 시작할때 재설정 됩니다."
+msgstr "써클링외 상승비율. 타스크를 시작할때 재설정된다."
 
 #: src/InfoBoxes/Content/Factory.cpp:1056
 #, no-c-format
@@ -2964,7 +2893,7 @@ msgstr "상승, 서클링을 통한 상승, 그외의 상승에 대한 파이 �
 #: src/InfoBoxes/Content/Factory.cpp:1064
 #, no-c-format
 msgid "Number of used satellites"
-msgstr "사용하는 위성수"
+msgstr "접속 위성수"
 
 #: src/InfoBoxes/Content/Factory.cpp:1065
 #, no-c-format
@@ -2976,7 +2905,7 @@ msgstr "위성"
 msgid ""
 "The number of actually used (seen) satellites by GPS module. If this "
 "information is unavailable, the displayed value is '---'."
-msgstr "GPS 센서가 수신하고 실제로 사용하는 위성의 갯수입니다. 사용할 수 없으면 '---'로 표시됩니다."
+msgstr "접속한 GPS위성수. 없으면 '---'로 표시된다."
 
 #: src/InfoBoxes/Content/Alternate.cpp:49
 #: src/Dialogs/Task/AlternatesListDialog.cpp:162 Data/Input/default.xci:388
@@ -3219,7 +3148,7 @@ msgstr "정보창초기설정"
 
 #: src/Input/InputEventsActions.cpp:330
 msgid "No active waypoint!"
-msgstr "활성화된 웨이포인트 없습니다!"
+msgstr "설정한 웨이포인트가 없음!"
 
 #: src/Input/InputEventsActions.cpp:434
 msgid "NMEA log on"
@@ -3404,7 +3333,7 @@ msgstr "발라스트 %"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:182
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:226
 msgid "Failed to save file."
-msgstr "파일저장을 실패했습니다."
+msgstr "파일 저장 실패."
 
 #: src/Input/InputEventsSettings.cpp:336
 msgid "Waypoint labels"
@@ -3477,7 +3406,7 @@ msgstr "지형"
 
 #: src/Renderer/MapItemListRenderer.cpp:183
 msgid "Unreachable due to terrain."
-msgstr "지상장애물에 도달할 수 없습니다."
+msgstr "지형으로 인해 도달불가."
 
 #: src/Renderer/MapItemListRenderer.cpp:188
 msgid "Arrival altitude"
@@ -3507,7 +3436,7 @@ msgstr "도착 고도"
 
 #: src/MapWindow/GlueMapWindowItems.cpp:115
 msgid "There is nothing interesting near this location."
-msgstr "이 위치 근처에 흥미로운 지점이 없습니다."
+msgstr "근처에 흥미로운 지점이 없음."
 
 #: src/MapWindow/GlueMapWindowItems.cpp:116
 #: src/Dialogs/MapItemListDialog.cpp:277
@@ -3524,7 +3453,7 @@ msgstr "GPS가 연결되지 않음"
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:159
 msgid "GPS waiting for fix"
-msgstr "GPS 수신을 기다립니다"
+msgstr "GPS 수신 대기 중"
 
 #: src/Weather/Rasp/RaspStore.cpp:48 src/Weather/Rasp/RaspStore.cpp:53
 #, no-c-format
@@ -3539,9 +3468,7 @@ msgid ""
 "strengths will be stronger than this forecast if convective clouds are "
 "present, since cloud condensation adds buoyancy aloft (i.e. this neglects "
 "\"cloudsuck\").  W* depends upon both the surface heating and the BL depth."
-msgstr ""
-"써멀 예상 평균 상승률, 구름이 없을때의 상승률과 구름의 높이에 따라 변화하는 "
-"써멀의 예상 평균 상승률을 보여줍니다."
+msgstr "써멀 예상 평균 상승률, 상승기류가 없을 때를 기준으로 계산되어, 예측값보다 더 상승할 수도 있다."
 
 #: src/Weather/Rasp/RaspStore.cpp:58
 #, no-c-format
@@ -3574,10 +3501,7 @@ msgid ""
 "thermalling height will then be limited by the cloud base.  Further, when "
 "the mixing results from shear turbulence rather than thermal mixing this "
 "parameter is not useful for glider flying. "
-msgstr ""
-"대류 상한 고도, 평지에서의 써멀 상한점을 나타낸다. 글라이더 하강속도 혹은 기"
-"타요인으로 낮아질 수 있다. 구름층에 의해 최대 상승 고도가 제한될 수 있습니"
-"다. 이는 예상치 않은 열의 혼합등으로 오차가 있을 수 있습니다. "
+msgstr "써멀최대예상고도, 건조한 열의 최대 예상고도(이슬점). 예상치 않은 열의 혼합등으로 오차가 있을 수 있다. "
 
 #: src/Weather/Rasp/RaspStore.cpp:68
 #, no-c-format
@@ -3595,10 +3519,7 @@ msgid ""
 "the max. thermalling height for dry consitions.) In the presence of clouds "
 "the maximum thermalling height may instead be limited by the cloud base.  "
 "Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
-msgstr ""
-"평균 상승률이 225fpm이하가 될 것으로 예상되는 고도(대지고도), 건조상태의 써"
-"멀 상승 한계를 보여줍니다. 구름층에 의해 상승 고도가 제한될 수 있습니다. 이"
-"는 예상치 않은 열의 혼합등으로 오차가 있을 수 있습니다."
+msgstr "평균 상승률이 225fpm이하가 될 것으로 예상되는 고도, 건조상태의 써멀 상승 한계. 오차가 있을 수 있음."
 
 #: src/Weather/Rasp/RaspStore.cpp:73
 #, no-c-format
@@ -3615,8 +3536,9 @@ msgid ""
 "humidity within the BL.  The cloud base height is not predicted, but is "
 "expected to be below the BL Top height."
 msgstr ""
-"구름량, 구름의 양이 지표면을 덮고 있는 비율, 운저에 따른 고도가 건조 최대고도"
-"보다 낮음을 예상합니다."
+"이 값은 BL 내에서 구름의 생성을 계산하는 추가정보를 제공하며 다른 예측 매개 변수와 함께 사용할 수 있다. 구름의 습도 백분율과 BL "
+"내의 최대 상대 습도 사이에 매우 단순한 관계가 있다고 가정한다. 클라우드 베이스 높이는 예측되지 않았지만 BL Top 높이보다 낮을 "
+"것으로 예상된다."
 
 #: src/Weather/Rasp/RaspStore.cpp:78
 #, no-c-format
@@ -3650,10 +3572,7 @@ msgid ""
 "thermalling height for dry consitions.) In the presence of clouds the "
 "maximum thermalling height may instead be limited by the cloud base.  Being "
 "for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
-msgstr ""
-"평균 상승률이 225fpm이하가 될 것으로 예상되는 고도(해면고도), 건조상태의 써"
-"멀 상승 한계를 보여줍니다. 구름층에 의해 상승 고도가 제한될 수 있습니다. 이"
-"는 예상치 않은 열의 혼합등으로 오차가 있을 수 있습니다."
+msgstr "평균 상승률이 225fpm이하가 될 것으로 예상되는 해면 고도, 건조상태의 써멀 상승 한계. 오차가 있을 수 있음."
 
 #: src/Weather/Rasp/RaspStore.cpp:88
 #, no-c-format
@@ -3668,7 +3587,7 @@ msgid ""
 "associated with local small-scale convergence lines.  Negative convergence "
 "(divergence) produces subsiding vertical motion, creating low-level "
 "inversions which limit thermalling heights."
-msgstr "기단내에서 예상되는 평균적인 상승/하강풍의 세기를 나타냅니다."
+msgstr "기단내에서 예상되는 평균적인 상승/하강풍의 세기를 나타낸다."
 
 #: src/Weather/Rasp/RaspStore.cpp:93
 #, no-c-format
@@ -3799,8 +3718,8 @@ msgid ""
 "Polar has invalid coefficients.\n"
 "Using LS8 polar instead!"
 msgstr ""
-"기체성능 폴라커브가 유효하지 않은 인자값을 가집니다.\n"
-"LS8 기체커브를 대신 사용하세요!"
+"폴라커브가 정확하지 않음.\n"
+"LS8 폴라커브를 대신 사용하시오!"
 
 #: src/Polar/PolarGlue.cpp:109
 msgid "Warning"
@@ -3818,7 +3737,7 @@ msgstr "초기화"
 #. Start the device thread(s)
 #: src/Startup.cpp:383
 msgid "Starting devices"
-msgstr "장치를 시작합니다."
+msgstr "장치 시동중"
 
 #.
 #. -- Reset polar in case devices need the data
@@ -3828,7 +3747,7 @@ msgstr "장치를 시작합니다."
 #.
 #: src/Startup.cpp:393
 msgid "Initialising display"
-msgstr "화면을 초기화하고 있습니다."
+msgstr "화면 초기화 중"
 
 #. Show progress dialog
 #: src/Startup.cpp:490 src/Startup.cpp:532 src/Startup.cpp:597
@@ -3852,11 +3771,11 @@ msgstr "종료중, 타스크 저장중..."
 
 #: src/Device/Descriptor.cpp:458 src/Device/Descriptor.cpp:470
 msgid "Unable to open port"
-msgstr "포트를 열 수 없습니다"
+msgstr "포트를 열 수 없음"
 
 #: src/Device/Descriptor.cpp:990 src/Device/Descriptor.cpp:996
 msgid "Sending declaration"
-msgstr "선언을 보냅니다"
+msgstr "선언을 보냄"
 
 #: src/Device/Descriptor.cpp:1043 src/Device/Descriptor.cpp:1050
 msgid "Reading flight list"
@@ -3998,7 +3917,7 @@ msgstr "오류"
 
 #: src/Dialogs/FileManager.cpp:689 src/Dialogs/DownloadFilePicker.cpp:361
 msgid "Failed to download the repository index."
-msgstr "저장소인덱스를 다운로드 실패했습니다."
+msgstr "저장소인덱스 다운로드 실패."
 
 #: src/Dialogs/FileManager.cpp:698 src/Dialogs/FileManager.cpp:727
 #: src/Dialogs/DownloadFilePicker.cpp:374 Data/Input/default.xci:605
@@ -4007,11 +3926,11 @@ msgstr "파일 매니저"
 
 #: src/Dialogs/FileManager.cpp:721 src/Dialogs/DownloadFilePicker.cpp:373
 msgid "The file manager is not available on this device."
-msgstr "본 기기에 파일매니저가 설치되어 있지 않습니다."
+msgstr "기기에 파일관리자가 설치되어 있지 않음."
 
 #: src/Dialogs/FileManager.cpp:724
 msgid "The file manager requires Android 2.3."
-msgstr "파일관리자는 안드로이드 2.3이상을 필요로 합니다."
+msgstr "파일관리자는 안드로이드 2.3이후 부터 제공."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:72
 #, no-c-format
@@ -4092,7 +4011,7 @@ msgid ""
 "your selection in the I2C Bus field is not an i2c bus number. In case you do "
 "not understand the previous sentence you may assume that this field is not "
 "used."
-msgstr "I2C 주소설정, I2C에 할당된 포트 번호가 아닌 경우 사용 할 수 없습니다."
+msgstr "I2C 주소설정, I2C에 할당된 포트 번호가 아닌 경우 사용불가."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:625
 msgid "Pressure use"
@@ -4103,9 +4022,7 @@ msgid ""
 "Select the purpose of this pressure sensor. This sensor measures some "
 "pressure. Here you tell the system what pressure this is and what its should "
 "be used for."
-msgstr ""
-"압력센서의 용도를 선택해주십시오. 압력센서가 측정 하는 것을 지정하셔야 합니"
-"다."
+msgstr "기압센서의 용도를 선택하시오, 어떤 값에 사용할지 설정한다."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:639
 msgid "Driver"
@@ -4120,7 +4037,7 @@ msgstr "장치 무시"
 msgid ""
 "This option lets you configure if this device has a passed  through device "
 "connected."
-msgstr "장치가 연결되었을때 기기에서 무시합니다."
+msgstr "장치가 연결되어도, 기기에서 연결무시."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:654
 msgid "Second Driver"
@@ -4234,7 +4151,7 @@ msgstr "데이터 없음"
 #: src/Dialogs/Device/DeviceListDialog.cpp:411
 #: src/Dialogs/Device/DeviceListDialog.cpp:479
 msgid "Bluetooth is disabled"
-msgstr "블루투스가 없습니다"
+msgstr "블루투스가 없음"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:414
 msgid "Duplicate"
@@ -4249,12 +4166,12 @@ msgstr "연결되지 않음"
 #: src/Dialogs/Device/DeviceListDialog.cpp:578
 #: src/Dialogs/Device/PortMonitor.cpp:159
 msgid "Device is occupied"
-msgstr "장치가 사용중입니다"
+msgstr "장치가 사용중"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:510
 #: src/Dialogs/Device/DeviceListDialog.cpp:572
 msgid "Device is not connected"
-msgstr "장치가 연결되지 않았습니다"
+msgstr "장치가 연결안되어 있음"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:536
 msgid "Edit device"
@@ -4263,7 +4180,7 @@ msgstr "장치 편집"
 #: src/Dialogs/Device/DeviceListDialog.cpp:649
 #, c-format
 msgid "Communication with this device will be logged for the next %u minutes."
-msgstr "이 장치와의 통신은 %u분간 기록되었습니다."
+msgstr "이 장치와의 통신은 %u분간 기록되었음."
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:701 Data/Input/default.xci:555
 #: Data/Input/default.xci:1143
@@ -4429,7 +4346,7 @@ msgstr "데모"
 
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:168
 msgid "Set new audio scheme?  Old values will be lost."
-msgstr "새 오디오설정을 하시겠습니까? 기존값은 삭제됩니다."
+msgstr "새로운 오디오로 설정? 기존값은 지워진다."
 
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:285
 msgid "Vario Configuration"
@@ -5471,7 +5388,7 @@ msgstr ""
 
 #: src/Dialogs/ReplayDialog.cpp:90
 msgid "Rate"
-msgstr "비율"
+msgstr "속도"
 
 #: src/Dialogs/ReplayDialog.cpp:91
 msgid ""
@@ -8565,7 +8482,7 @@ msgstr "최소 AAT 타스크시간(분)을 설정합니다."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:218
 msgid "Arm start manually"
-msgstr "수동으로 스타트 시작"
+msgstr "수동 스타트"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:219
 msgid "Configure whether the start must be armed manually or automatically."
