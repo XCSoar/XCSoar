@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-13 07:19+0000\n"
+"PO-Revision-Date: 2019-12-13 08:21+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -91,21 +91,17 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:54
 #, no-c-format
 msgid "FAI rules, path from a start to two turn points and return."
-msgstr ""
-"FAI 룰, 스타트 후 두개의 턴포인트를 통과 한 후 출발점으로 돌아온다. (FAI 삼각"
-"코스)"
+msgstr "FAI 룰, (FAI 삼각코스) 스타트 후 두개의 턴포인트를 통과 해서 출발점으로 돌아온다."
 
 #: src/Task/TypeStrings.cpp:55
 #, no-c-format
 msgid "FAI rules, path from start to a single turn point and return."
-msgstr ""
-"FAI 룰, 스타트 후 하나의 턴포인트를 통과 한 후 출발점으로 돌아온다. (FAI 아웃"
-"&리턴)"
+msgstr "FAI 룰, (FAI 아웃&리턴) 스타트 후 하나의 턴포인트를 통과 한 후 출발점으로 돌아온다."
 
 #: src/Task/TypeStrings.cpp:56
 #, no-c-format
 msgid "FAI rules, path from start to a goal destination."
-msgstr "FAI 룰, 스타트포인트 통과 후 마무리 포인트에 골 (목적지)"
+msgstr "FAI 룰,  스타트포인트 통과 후 골 포인트에 도착한다."
 
 #: src/Task/TypeStrings.cpp:57
 #, no-c-format
@@ -306,7 +302,7 @@ msgstr "턴 포인트 실린더"
 #: src/Task/TypeStrings.cpp:120
 #, no-c-format
 msgid "Cylinder with 1 mile radius."
-msgstr "1마일 반경 실린더"
+msgstr "1마일 반경 실린더."
 
 #: src/Task/TypeStrings.cpp:121
 #, no-c-format
@@ -414,11 +410,11 @@ msgstr "공역 파일을 불러오는 중..."
 
 #: src/Airspace/AirspaceParser.cpp:277
 msgid "Parse Error at Line"
-msgstr "라인에 있는 에러 분석 중..."
+msgstr "구문 분석 오류"
 
 #: src/Airspace/AirspaceParser.cpp:892
 msgid "Unknown airspace filetype"
-msgstr "공역파일 형식이 잘못 되었습니다."
+msgstr "공역파일 형식이 잘못 되었습니다"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorAATTime.cpp:51
 msgid "Expect early task arrival"
@@ -430,7 +426,7 @@ msgstr "해가 진 뒤 도착예상"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorWind.cpp:54
 msgid "Significant wind change"
-msgstr "급격한 풍향 변화. 주의!"
+msgstr "주의! 급격한 풍향 변화"
 
 #: src/FLARM/Error.cpp:29
 #, no-c-format
@@ -523,7 +519,7 @@ msgstr "트랜스폰더 수신기"
 #: src/FLARM/Error.cpp:60
 #, no-c-format
 msgid "Other"
-msgstr "그밖에.."
+msgstr "그밖에"
 
 #: src/Logger/Logger.cpp:112 src/Dialogs/Device/ManageCAI302Dialog.cpp:69
 msgid "Start Logger"
@@ -531,7 +527,7 @@ msgstr "로거 시작"
 
 #: src/Logger/Logger.cpp:119
 msgid "Logger inactive, insufficient storage!"
-msgstr "로거 정지. 메모리가 부족합니다."
+msgstr "로거 정지. 메모리가 부족합니다!"
 
 #: src/Logger/Logger.cpp:120
 msgid "Logger Error"
@@ -548,7 +544,7 @@ msgstr "타스크를 선언하시겠습니까?"
 #: src/Logger/ExternalLogger.cpp:93 src/Logger/ExternalLogger.cpp:132
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:96
 msgid "Declare task"
-msgstr "타스크를 선언합니다."
+msgstr "타스크를 선언"
 
 #: src/Logger/ExternalLogger.cpp:100
 msgid "Task declared!"
@@ -560,15 +556,15 @@ msgid ""
 "Task NOT declared!"
 msgstr ""
 "에러 발생,\n"
-"타스크가 선언되지 못하였습니다."
+"타스크가 선언되지 못했습니다!"
 
 #: src/Logger/ExternalLogger.cpp:131
 msgid "No logger connected"
-msgstr "연결된 로거 없음."
+msgstr "연결된 로거 없음"
 
 #: src/Logger/ExternalLogger.cpp:269
 msgid "Failed to download flight list."
-msgstr "비행 리스트 다운로드 실패"
+msgstr "비행 리스트 다운로드 실패."
 
 #: src/Logger/ExternalLogger.cpp:270 src/Logger/ExternalLogger.cpp:281
 #: src/Logger/ExternalLogger.cpp:302 src/Logger/ExternalLogger.cpp:325
@@ -581,7 +577,7 @@ msgstr "로거파일이 없습니다."
 
 #: src/Logger/ExternalLogger.cpp:301
 msgid "Failed to download flight."
-msgstr "비행 파일 다운로드 실패"
+msgstr "비행 파일 다운로드 실패."
 
 #: src/Logger/ExternalLogger.cpp:324
 msgid "Do you want to download another flight?"
@@ -598,7 +594,7 @@ msgstr "움직이지 않음"
 
 #: src/Gauge/ThermalAssistantRenderer.cpp:193
 msgid "Not Circling"
-msgstr "써클링중이 아닙니다."
+msgstr "써클링 아님"
 
 #: src/Gauge/BigThermalAssistantWidget.cpp:70
 #: src/Gauge/BigTrafficWidget.cpp:884 src/Dialogs/FileManager.cpp:699
@@ -672,7 +668,7 @@ msgstr "거리"
 
 #: src/Gauge/BigTrafficWidget.cpp:425 src/Gauge/BigTrafficWidget.cpp:428
 msgid "Rel. Alt."
-msgstr "고도차"
+msgstr "고도차."
 
 #: src/Gauge/BigTrafficWidget.cpp:881 src/InfoBoxes/Content/Task.cpp:67
 #: src/Dialogs/MapItemListDialog.cpp:178
@@ -970,13 +966,13 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:143
 #, no-c-format
 msgid "Height AGL"
-msgstr "고도(지면에서 기체까지의 고도)"
+msgstr "고도(실고도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:144
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:85
 #, no-c-format
 msgid "H AGL"
-msgstr "고도(대지고도)"
+msgstr "실고도"
 
 #: src/InfoBoxes/Content/Factory.cpp:145
 #, no-c-format
@@ -1256,7 +1252,7 @@ msgstr "고도차(골)"
 msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
 "height."
-msgstr "결승점(골)에 도착했을때의 고도를 표시합니다.(안전고도 포함)"
+msgstr "결승점(골)에 도착했을때의 고도(안전고도 포함)를 표시합니다."
 
 #: src/InfoBoxes/Content/Factory.cpp:268
 #, no-c-format
@@ -1362,7 +1358,7 @@ msgstr "현재 써멀에서 획득/손실된 고도를 보여줍니다."
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:59
 #, no-c-format
 msgid "Track"
-msgstr "트랙"
+msgstr "나침반(방위각)"
 
 #: src/InfoBoxes/Content/Factory.cpp:326
 #, no-c-format
@@ -1370,9 +1366,7 @@ msgid ""
 "Magnetic track reported by the GPS. (Touch-screen/PC only) If this InfoBox "
 "is active in simulation mode, pressing the up and down  arrows adjusts the "
 "track."
-msgstr ""
-"GPS로 부터 얻어진 자기 트랙입니다. 시뮬레이션모드에서는 위 아래로 고도를 조절"
-"합니다."
+msgstr "GPS로 부터 얻어진 방위각(나침반)입니다. 시뮬레이션모드에서는 위 아래로 고도를 조절합니다."
 
 #: src/InfoBoxes/Content/Factory.cpp:334
 #, no-c-format
@@ -1581,8 +1575,7 @@ msgstr "상승비율"
 msgid ""
 "Percentage of time spent in climb mode. These statistics are reset upon "
 "starting the task."
-msgstr ""
-"상승비율, 타스크 비행시간중 써멀링에 사용된 시간을 비율로 보여줍니다.(%)"
+msgstr "상승비율(%), 타스크 비행시간중 써멀링에 사용된 시간을 비율로 보여줍니다."
 
 #: src/InfoBoxes/Content/Factory.cpp:431
 #, no-c-format
@@ -1614,9 +1607,7 @@ msgstr "중력가속도"
 msgid ""
 "Magnitude of G loading reported by a supported external intelligent vario. "
 "This value is negative for pitch-down manoeuvres."
-msgstr ""
-"외부바리오에서 측정된 중력가속도를 보여줍니다. (- 값은 피치다운시의 값입니"
-"다.)"
+msgstr "외부바리오에서 측정된 중력가속도를 보여줍니다 (- 값은 피치다운시의 값입니다.)."
 
 #: src/InfoBoxes/Content/Factory.cpp:447
 #, no-c-format
@@ -2038,8 +2029,7 @@ msgstr "홈거리"
 #: src/InfoBoxes/Content/Factory.cpp:628
 #, no-c-format
 msgid "Distance to home waypoint (if defined)."
-msgstr ""
-"홈 웨이포인트와의 거리를 나타낸다. (홈 웨이포인트가 설정되어 있어야 한다.)"
+msgstr "홈 웨이포인트와의 거리를 나타낸다 (설정되어 있어야 한다.)."
 
 #: src/InfoBoxes/Content/Factory.cpp:634
 #, no-c-format
@@ -2297,7 +2287,7 @@ msgstr "CPU"
 #: src/InfoBoxes/Content/Factory.cpp:749
 #, no-c-format
 msgid "CPU load consumed by XCSoar averaged over 5 seconds."
-msgstr "XCSoar에 의해 사용된 5초 평균 CPU 부하"
+msgstr "XCSoar에 의해 사용된 5초 평균 CPU 부하."
 
 #: src/InfoBoxes/Content/Factory.cpp:755
 #, no-c-format
@@ -2325,7 +2315,7 @@ msgstr "남은 메모리"
 #: src/InfoBoxes/Content/Factory.cpp:766
 #, no-c-format
 msgid "Free RAM as reported by OS."
-msgstr "OS에서 남은 메모리"
+msgstr "OS에서 남은 메모리."
 
 #: src/InfoBoxes/Content/Factory.cpp:772
 #, no-c-format
@@ -2354,7 +2344,7 @@ msgstr "기압기록"
 #: src/InfoBoxes/Content/Factory.cpp:783
 #, no-c-format
 msgid "Trace of altitude during flight"
-msgstr "비행중의 기압 변화를 그래프로 보여준다."
+msgstr "비행중의 기압 변화 그래프"
 
 #: src/InfoBoxes/Content/Factory.cpp:789
 #, no-c-format
@@ -2426,8 +2416,7 @@ msgstr "상승구간"
 msgid ""
 "Graph of average circling climb rate (horizontal axis) as a function of "
 "altitude (vertical axis)."
-msgstr ""
-"써클링으로 상승한 비율을 그래프로 보여줍니다. 수평축(상승률), 수직축(고도)"
+msgstr "써클링으로 상승한 비율을 그래프로 보여줍니다. 수평축(상승률), 수직축(고도)."
 
 #: src/InfoBoxes/Content/Factory.cpp:821
 #, no-c-format
@@ -2639,7 +2628,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:912
 #, no-c-format
 msgid "Thermal next leg equivalent"
-msgstr "써멀(다음포인트의 써멀 평균 상승률을 보여준다.)"
+msgstr "써멀(다음포인트의 써멀 평균 상승률)"
 
 #: src/InfoBoxes/Content/Factory.cpp:913
 #, no-c-format
@@ -2924,7 +2913,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1039
 #, no-c-format
 msgid "Next waypoint arrival time (ground speed)"
-msgstr "다음 웨이포인트 도착시간 (대지속도)"
+msgstr "다음 웨이포인트 까지 도달 시간(대지속도로 계산됨)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1040
 #, no-c-format
@@ -3047,11 +3036,11 @@ msgstr "맥크레디 수동"
 
 #: src/InfoBoxes/Content/Other.cpp:57 src/InfoBoxes/Content/Other.cpp:60
 msgid "AC Off"
-msgstr "외부전원없음"
+msgstr "No AC"
 
 #: src/InfoBoxes/Content/Other.cpp:64
 msgid "AC ON"
-msgstr "외부전원연결"
+msgstr "AC ON"
 
 #: src/InfoBoxes/Content/Other.cpp:177
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:47
@@ -3072,13 +3061,13 @@ msgstr "유효하지 않은"
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:51
 #, no-c-format
 msgid "2D fix"
-msgstr "2D 고정"
+msgstr "2D 위치정보 수신 (고도확인 불가)"
 
 #: src/InfoBoxes/Content/Other.cpp:183
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:53
 #, no-c-format
 msgid "3D fix"
-msgstr "3D 고정"
+msgstr "3D 위치정보 수신 (고도확인)"
 
 #: src/InfoBoxes/Content/Other.cpp:195
 msgid "No GPS"
@@ -3431,7 +3420,7 @@ msgstr "찾을 수 없음"
 
 #: src/Input/InputEventsLua.cpp:65 src/Dialogs/FileManager.cpp:550
 msgid "Select a file"
-msgstr "파일을 선택하세요."
+msgstr "파일 선택"
 
 #: src/PageSettings.cpp:44 src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:84
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:166
@@ -3535,7 +3524,7 @@ msgstr "GPS가 연결되지 않음"
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:159
 msgid "GPS waiting for fix"
-msgstr "GPS수신을 기다림.."
+msgstr "GPS 수신을 기다립니다"
 
 #: src/Weather/Rasp/RaspStore.cpp:48 src/Weather/Rasp/RaspStore.cpp:53
 #, no-c-format
@@ -3863,15 +3852,15 @@ msgstr "종료중, 타스크 저장중..."
 
 #: src/Device/Descriptor.cpp:458 src/Device/Descriptor.cpp:470
 msgid "Unable to open port"
-msgstr "포트를 열 수 없습니다."
+msgstr "포트를 열 수 없습니다"
 
 #: src/Device/Descriptor.cpp:990 src/Device/Descriptor.cpp:996
 msgid "Sending declaration"
-msgstr "선언을 보냅니다."
+msgstr "선언을 보냅니다"
 
 #: src/Device/Descriptor.cpp:1043 src/Device/Descriptor.cpp:1050
 msgid "Reading flight list"
-msgstr "비행 파일 일기"
+msgstr "비행리스트 읽기"
 
 #: src/Device/Descriptor.cpp:1074 src/Device/Descriptor.cpp:1081
 msgid "Downloading flight log"
@@ -4161,7 +4150,7 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:669
 msgid "Enable this if you use a K6Bt to connect the device."
-msgstr "K6Bt로 연결하는 경우 설정을 켜기"
+msgstr "K6Bt로 연결하는 경우 설정을 켠다."
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:283
 msgid "Flight download"
@@ -4186,13 +4175,13 @@ msgstr "모니터"
 #: src/Dialogs/Device/DeviceListDialog.cpp:487
 #: src/Dialogs/Device/PortMonitor.cpp:151
 msgid "Reconnect"
-msgstr "다시 접속하기"
+msgstr "재접속"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:287
 #: src/Dialogs/Device/DeviceListDialog.cpp:301
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:226
 msgid "Disable"
-msgstr "비활성화"
+msgstr "끄기"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:288
 #: src/Dialogs/Device/DeviceListDialog.cpp:390
@@ -4205,7 +4194,7 @@ msgstr "디버그"
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:116
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:107
 msgid "Enable"
-msgstr "사용함"
+msgstr "켜기"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:348
 #, c-format
@@ -4245,7 +4234,7 @@ msgstr "데이터 없음"
 #: src/Dialogs/Device/DeviceListDialog.cpp:411
 #: src/Dialogs/Device/DeviceListDialog.cpp:479
 msgid "Bluetooth is disabled"
-msgstr "블루투스가 없습니다."
+msgstr "블루투스가 없습니다"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:414
 msgid "Duplicate"
@@ -4260,12 +4249,12 @@ msgstr "연결되지 않음"
 #: src/Dialogs/Device/DeviceListDialog.cpp:578
 #: src/Dialogs/Device/PortMonitor.cpp:159
 msgid "Device is occupied"
-msgstr "장치가 사용중입니다."
+msgstr "장치가 사용중입니다"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:510
 #: src/Dialogs/Device/DeviceListDialog.cpp:572
 msgid "Device is not connected"
-msgstr "장치가 연결되지 않았습니다."
+msgstr "장치가 연결되지 않았습니다"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:536
 msgid "Edit device"
@@ -4348,7 +4337,7 @@ msgstr "웨이포인트가 너무 많음."
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:50
 msgid "Uploading Waypoints"
-msgstr "웨이포인트 업로드."
+msgstr "웨이포인트 업로드중"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:56
 msgid "Failed to erase waypoints."
@@ -4706,7 +4695,7 @@ msgstr "도착고도표시"
 msgid ""
 "If enabled a row at the top will be added showing you the arrival altitude "
 "at the location."
-msgstr "설정할 경우 그 장소의 위에 도착하게 설정(고급설정)"
+msgstr "이 설정을 켜면, 해당 위치의 도착 고도를 상단에 보여준다."
 
 #: src/Dialogs/ColorListDialog.cpp:74
 msgid "Select Color"
@@ -4813,7 +4802,7 @@ msgstr "반투명점선"
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:101
 #, no-c-format
 msgid "Not filled"
-msgstr "채우기 없음."
+msgstr "채우기 없음"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:105
 msgid "Fill Mode"
@@ -5015,7 +5004,7 @@ msgstr "채점"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:117
 #, no-c-format
 msgid "FLARM, Other"
-msgstr "FLARM, 그외에.."
+msgstr "FLARM, 그외에"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:120
 #, no-c-format
@@ -5057,7 +5046,7 @@ msgstr "정보창 설정"
 #: Data/Input/default.xci:631 Data/Input/default.xci:1128
 #, no-c-format
 msgid "Logger"
-msgstr "로거(비행기록)"
+msgstr "비행기록"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:147
 #, no-c-format
@@ -5087,7 +5076,7 @@ msgstr "기본타스크"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:165
 #, no-c-format
 msgid "Look"
-msgstr "화면보기 설정"
+msgstr "화면보기"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:229
 msgid "Expert"
@@ -5191,7 +5180,7 @@ msgstr "새 동료"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:92
 msgid "Set code"
-msgstr "코드를 설정한다."
+msgstr "코드 설정"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:93
 msgid "Set WP"
@@ -5288,7 +5277,7 @@ msgstr "체크리스트"
 
 #: src/Dialogs/dlgChecklist.cpp:134
 msgid "No checklist loaded"
-msgstr "체크리스트가 읽혀지지 않았습니다."
+msgstr "체크리스트가 없습니다"
 
 #: src/Dialogs/dlgChecklist.cpp:134
 msgid "Create xcsoar-checklist.txt"
@@ -5352,7 +5341,7 @@ msgstr "\"%s\" 기체 활성화 실패함."
 #: src/Dialogs/Plane/PlaneListDialog.cpp:248
 #: src/Dialogs/Plane/PlaneListDialog.cpp:293
 msgid "Please enter the registration of the plane!"
-msgstr "기체등록정보를 넣어주세요."
+msgstr "기체등록정보를 넣어주세요!"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:260
 #: src/Dialogs/Plane/PlaneListDialog.cpp:307
@@ -5502,7 +5491,7 @@ msgstr "종료"
 
 #: src/Dialogs/SimulatorPromptWindow.cpp:113
 msgid "What do you want to do?"
-msgstr "실행하시겠습니까? FLY(비행) / SIM(시뮬레이터)"
+msgstr "FLY(비행) / SIM(시뮬레이터)를 실행하시겠습니까?"
 
 #: src/Dialogs/StartupDialog.cpp:163
 msgid "Profile"
@@ -5735,7 +5724,7 @@ msgstr "매우 심한 바람"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:57
 msgid "No solution"
-msgstr "답이 없음."
+msgstr "답이 없음"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:131
 msgid "Runway"
@@ -5768,7 +5757,7 @@ msgstr "필요활공비"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:149
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:189
 msgid "No task defined."
-msgstr "정의된 타스크가 없음"
+msgstr "정의된 타스크가 없음."
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:76
 msgid "No active task point."
@@ -5783,7 +5772,7 @@ msgstr "타스크교체"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:155
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:199
 msgid "Task would not be valid after the change."
-msgstr "변경후 타스크무효"
+msgstr "바뀐 타스크가 올바르지 않습니다."
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:120
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:160
@@ -5889,7 +5878,7 @@ msgstr "웨이포인트 에디터"
 
 #: src/Dialogs/Waypoint/WaypointList.cpp:456
 msgid "Choose a filter or click here"
-msgstr "필터를 선택하거나, 여기를 클릭하세요."
+msgstr "필터를 선택하거나, 여기를 클릭하세요"
 
 #: src/Dialogs/Waypoint/WaypointList.cpp:541
 msgid "Select Waypoint"
@@ -5903,7 +5892,7 @@ msgstr "모두 켜기"
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:58
 #, no-c-format
 msgid "All airspaces are displayed."
-msgstr "공역표시 모두켜기"
+msgstr "공역 모두 보기"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:59
 #, no-c-format
@@ -5913,12 +5902,12 @@ msgstr "클립"
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:60
 #, no-c-format
 msgid "Display airspaces below the clip altitude."
-msgstr "클립 고도 이하의 공역표시"
+msgstr "설정 고도 이하의 공역표시"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:62
 #, no-c-format
 msgid "Display airspaces within a margin of the glider."
-msgstr "글라이더의 비행가능지역내 공역 표시"
+msgstr "글라이더의 비행가능지역내 공역 표시."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:63
 #, no-c-format
@@ -5928,8 +5917,7 @@ msgstr "아래의 모든"
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:64
 #, no-c-format
 msgid "Display airspaces below the glider or within a margin."
-msgstr ""
-"글라이더 비행가능지역내의 공역 혹은 비행 가능한 고도 이하의 공역을 표시"
+msgstr "글라이더 비행가능지역내의 공역 혹은 비행 가능한 고도 이하의 공역을 표시."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:69
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:169
@@ -6118,12 +6106,12 @@ msgstr "최종 활공(글라이드)바를 표시하지 않음."
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:47
 #, no-c-format
 msgid "Always show final glide bar."
-msgstr "항상 최종 활공바(글라이드) 표시"
+msgstr "최종 활공바를 항상 표시."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:49
 #, no-c-format
 msgid "Show final glide bar if approaching final glide range."
-msgstr "최종 활공(글라이드)영역에 들어가면 최종 활공(글라이드)바 표시"
+msgstr "최종 활공영역에 들어가면 최종 활공바를 표시."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:85
 msgid ""
@@ -6133,8 +6121,8 @@ msgid ""
 "of the target relative to you. In all modes, the color of the target "
 "indicates the threat level."
 msgstr ""
-"FLARM 레이더 게이지를 표시하면, 부근을 날고 있는 기체가 있는 경우 화살표가 있"
-"으며, 위아래에 표시되는 숫자는 고도차, 거리에 따라 색상도 바뀐다."
+"FLARM을 표시할 수 있습니다. 기체 기준으로 다른 기체가 화살표 헤드로 표시되고 위 또는 아래를 가리키는 삼각형은 대상의 상대적 "
+"고도를 표시합니다. 대상의 색상은 근접위협 수준을 나타냅니다."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:88
 msgid "Auto close FLARM"
@@ -6192,7 +6180,7 @@ msgstr "바리오바"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:119
 msgid "If set to ON the vario bar will be shown"
-msgstr "켜시면 바리오표시바가 보입니다."
+msgstr "켜면 바리오바가 보입니다."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:59
 msgid "Speed arrows"
@@ -6203,9 +6191,7 @@ msgid ""
 "Whether to show speed command arrows on the vario gauge.  When shown, in "
 "cruise mode, arrows point up to command slow down; arrows point down to "
 "command speed up."
-msgstr ""
-"바리오 게이지에 표시되는 속도입니다. 활공모드 일때 아래쪽 화살표의 경우 속도"
-"를 줄이고, 위쪽으로 표시될 경우 속도를 올리세요/"
+msgstr "바리오 게이지에 표시되는 속도입니다. 활공모드 일때 아래쪽 화살표의 경우 속도를 줄이고, 위쪽으로 표시될 경우 속도를 올리세요."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:65
 msgid "Show average"
@@ -6331,9 +6317,7 @@ msgstr "기압고도계로 탐색"
 msgid ""
 "When enabled and if connected to a barometric altimeter, barometric altitude "
 "is used for all navigation functions. Otherwise GPS altitude is used."
-msgstr ""
-"기압고도계의 데이터를 연결할 수 있는 경우 표시, 모든 네비게이션 모드에서 기압"
-"고도가 사용된다. 없을경우 GPS 고도가 사용된다."
+msgstr "기압고도계의 데이터를 연결할 수 있는 경우 기압고도를 사용한다. 없을 때는 GPS 고도를 사용한다."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:90
 msgid "Flap forces cruise"
@@ -6348,12 +6332,12 @@ msgstr "Vega 바리오미터가 연결된 경우, 써클링, 순항중에 플랩
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:97
 #, no-c-format
 msgid "Preferred period for paragliders."
-msgstr "패러글라이더를 위한 시간설정"
+msgstr "패러글라이더를 위한 기간 설정"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:100
 #, no-c-format
 msgid "Preferred period for gliders."
-msgstr "글라이더(Gliders)를 위한 시간설정"
+msgstr "글라이더(Gliders)를 위한 기간 설정."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:106
 msgid "GR average period"
@@ -6513,7 +6497,7 @@ msgstr "가로방향(역방향)"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:74
 #, no-c-format
 msgid "8 Split"
-msgstr "정보창 8개 (위아래 혹은 좌우 4개씩)"
+msgstr "정보창 8개 (위아래 4개 혹은 좌우 4개)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:76
 #, no-c-format
@@ -6523,7 +6507,7 @@ msgstr "정보창 8개 (아래 혹은 오른쪽)"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:78
 #, no-c-format
 msgid "8 Bottom + Vario (Portrait)"
-msgstr "정보창 8개 + 바리오"
+msgstr "정보창 8개 + 바리오 (세로)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:80
 #, no-c-format
@@ -6568,7 +6552,7 @@ msgstr "정보창 12개 (위쪽 혹은 왼쪽)"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:96
 #, no-c-format
 msgid "16 Right (Landscape)"
-msgstr "16 Right (지형/지물)"
+msgstr "정보창 16개 (가로)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:98
 #, no-c-format
@@ -6758,7 +6742,7 @@ msgstr "메뉴버튼 보기"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:210
 msgid "Show the Menubutton"
-msgstr "메뉴버튼을 보여줍니다. 켰을 경우 나침반이 가려질 수 있습니다."
+msgstr "메뉴버튼을 표시합니다, 켰을 경우 나침반이 가려질 수 있습니다"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:56
 #, no-c-format
@@ -6902,7 +6886,7 @@ msgstr "지도방향"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:112
 msgid "Determines how the screen is rotated with the glider"
-msgstr "비행시 보여지는 지도 방향을 선택합니다."
+msgstr "비행시 보여지는 지도의 방향을 선택합니다."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:117
 msgid "Circling orientation"
@@ -6928,7 +6912,7 @@ msgstr "지도 중심 설정"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:128
 msgid "Determines what is used to shift the glider from the map center"
-msgstr "지도의 중심점을 설정합니다."
+msgstr "지도 중앙에서 글라이더의 위치를 설정합니다."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:134
 msgid "Glider position offset"
@@ -6969,7 +6953,7 @@ msgstr "주 정보창에 보이는 정보를 선택합니다."
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:177
 #, no-c-format
 msgid "Displays either the Circling, Cruise or Final glide infoxboxes"
-msgstr "써클링, 순항모드 혹은 최종 활공모드 정보창을 같이 표시한다."
+msgstr "써클링, 순항모드 혹은 최종 활공모드 정보창을 같이 표시한다"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:178
 #, no-c-format
@@ -6990,21 +6974,20 @@ msgstr "이 페이지의 정보창을 설정합니다."
 msgid ""
 "For cruise mode.  Displayed when 'Auto' is selected and ship is below final "
 "glide altitude"
-msgstr "순항 모드, 표시가 자동이고, 최종 활공고도 보다 낮을경우 표시된다."
+msgstr "순항 모드, 자동으로 화면을 설정할 때, 최종 활공고도 보다 낮을경우 표시된다."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:188
 #, no-c-format
 msgid ""
 "For circling mode.  Displayed when 'Auto' is selected and ship is circling"
-msgstr "써클링 모드, 자동모드일때 기체가 써클링중일 경우 표시된다."
+msgstr "써클링 모드, 자동 일때,  써클링중에 경우 표시된다."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:189
 #, no-c-format
 msgid ""
 "For final glide mode.  Displayed when 'Auto' is selected and ship is above "
 "final glide altitude"
-msgstr ""
-"최종 포인트 모드, 자동모드일때 최종 포인트로 비행하고 있을 시에 표시된다."
+msgstr "최종활공모드, 자동설정에서 최종 활공비로 비행할때 설정된다."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:191
 #, no-c-format
@@ -7082,7 +7065,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:131
 #, no-c-format
 msgid "Reach calculations disabled."
-msgstr "도달 범위 계산 비활성화"
+msgstr "도달 범위 계산을 끕니다."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:132
 #, no-c-format
@@ -7129,7 +7112,7 @@ msgstr "안전 맥크레디"
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:150
 #, no-c-format
 msgid "Uses safety MacCready value"
-msgstr "맥크레디 값으로 계산되는 안전 MC값을 사용하여 계산한다."
+msgstr "안전 맥크레디값을 사용하여 계산"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:154
 msgid "Reach polar"
@@ -7146,7 +7129,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:161
 #, no-c-format
 msgid "Disables the reach display."
-msgstr "도달범위 표시해제"
+msgstr "도달범위 표시를 끕니다."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:162
 #, no-c-format
@@ -8048,7 +8031,7 @@ msgstr "커스텀"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:130
 msgid "My individual set of units."
-msgstr "단위 설정"
+msgstr "단위"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:143
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:169
@@ -8076,7 +8059,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:174
 msgid "Lift"
-msgstr "수직속도단위"
+msgstr "바리오"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:174
 msgid "Units used for vertical speeds (variometer)."
@@ -8464,16 +8447,16 @@ msgstr "서버에 저장된 열의 위치를 확인하고 보여줍니다."
 
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:42
 msgid "Radius of the OZ cylinder."
-msgstr "OZ 실린더 반경"
+msgstr "OZ 실린더의 반경."
 
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
 msgid "Width of the start/finish gate."
-msgstr "스타트/피니시 게이트의 폭"
+msgstr "스타트/피니시 게이트의 폭."
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:46
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:42
 msgid "Radius of the OZ sector."
-msgstr "OZ 섹터 반경"
+msgstr "OZ 섹터 반경."
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:56
 msgid "Start radial"
@@ -8587,8 +8570,7 @@ msgstr "수동으로 스타트 시작"
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:219
 msgid "Configure whether the start must be armed manually or automatically."
 msgstr ""
-"출발 판단을 수동 혹은 자동으로 할 것인지 설정합니다. 수동으로 설정시 \"네비게"
-"이션 - 스타트 시작\" 을 수동으로 눌러 주어야 합니다."
+"출발 판단을 수동 혹은 자동으로 할 것인지 설정합니다. 수동으로 설정시 \"내비게이션 - 스타트 시작\" 을 수동으로 눌러 주어야 합니다."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:224
 msgid "Start open time"
@@ -8890,7 +8872,7 @@ msgstr ""
 
 #: src/Dialogs/TimeEntry.cpp:73 src/Dialogs/Weather/RASPDialog.cpp:131
 msgid "Now"
-msgstr "지금!"
+msgstr "지금"
 
 #: src/Dialogs/Weather/WeatherDialog.cpp:43
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:336
@@ -8919,7 +8901,7 @@ msgstr "바리오소리"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:71
 msgid "Emulate the sound of an electronic vario."
-msgstr "바리오소리를 켜시겠습니까?"
+msgstr "전자식 바리오소리를 에뮬레이트합니다."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:77
 msgid "Enable Deadband"
@@ -9023,7 +9005,7 @@ msgstr "공역접근"
 
 #: src/Monitor/TaskConstraintsMonitor.cpp:57
 msgid "Maximum start speed exceeded"
-msgstr "최대스타트속도에 도달했습니다."
+msgstr "최대스타트속도에 도달했습니다"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:46
 msgid "In sector, arm advance when ready"
@@ -9069,15 +9051,15 @@ msgstr "기상 상태"
 #: src/Weather/NOAAFormatter.cpp:247
 #, c-format
 msgid "METAR for %s:"
-msgstr "%s METAR"
+msgstr "%s METAR:"
 
 #: src/Weather/NOAAFormatter.cpp:273
 msgid "No METAR available!"
-msgstr "METAR 데이터를 다운로드 할 수 없습니다."
+msgstr "METAR 데이터를 다운로드 할 수 없습니다!"
 
 #: src/Weather/NOAAFormatter.cpp:287
 msgid "No TAF available!"
-msgstr "TAF 데이터를 다운로드 할 수 없습니다."
+msgstr "TAF 데이터를 다운로드 할 수 없습니다!"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:33
 #, no-c-format
@@ -9132,7 +9114,7 @@ msgstr "써클링제한유형"
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:41
 #, no-c-format
 msgid "Type of dead band used in circling mode."
-msgstr "써클링사용불능영역"
+msgstr "써클링모드에서 사용불가."
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:45
 #, no-c-format
@@ -9489,9 +9471,7 @@ msgid ""
 "Whether the internal accelerometer is used.  Only change this if the "
 "accelerometer has malfunctioned or the instrument cannot be installed with "
 "correct alignment."
-msgstr ""
-"내장 가속도계를 사용? 가속도 센서가 오작동 혹은 함께 사용 할 수 없을 경우에"
-"만 본 설정을 변경해주십시오."
+msgstr "내장 가속도계를 사용합니다. 가속도 센서가 문제있을 경우에만 본 설정을 변경해주십시오."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:69
 #, no-c-format
@@ -9523,7 +9503,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:78
 #, no-c-format
 msgid "FLARM connected"
-msgstr "FLARM이 연결되었습니다."
+msgstr "FLARM이 연결됨"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:79
 #, no-c-format
@@ -9688,12 +9668,12 @@ msgstr "장소"
 
 #: Data/Input/default.xci:64
 msgid "Below final glide"
-msgstr "최종활공비 보다 아래입니다."
+msgstr "현재 L/D로 가면 목표보다 아래고도 입니다"
 
 #: Data/Input/default.xci:350 Data/Input/default.xci:399
 #: Data/Input/default.xci:878
 msgid "Nav"
-msgstr "네비게이션"
+msgstr "내비게이션"
 
 #: Data/Input/default.xci:734
 msgid ""
@@ -9763,7 +9743,7 @@ msgstr "항적"
 
 #: Data/Input/default.xci:59
 msgid "Above final glide"
-msgstr "최종활공 중 좋습니다."
+msgstr "현재의 활공비를 유지하세요"
 
 #: Data/Input/default.xci:712
 msgid ""
@@ -9830,7 +9810,7 @@ msgstr "이름"
 
 #: Data/Input/default.xci:414 Data/Input/default.xci:1039
 msgid "Dropped marker"
-msgstr "마커를 표시했습니다!"
+msgstr "마커 표시"
 
 #: Data/Input/default.xci:135 Data/Input/default.xci:451
 #: Data/Input/default.xci:936
@@ -9857,7 +9837,7 @@ msgstr "AVG/ALT"
 
 #: Data/Input/default.xci:69
 msgid "Final glide through terrain"
-msgstr "최종활공비가 지형을 통과합니다."
+msgstr "L/D가 지형을 통과합니다"
 
 #: Data/Input/default.xci:653 Data/Input/default.xci:664
 #: Data/Input/default.xci:704
