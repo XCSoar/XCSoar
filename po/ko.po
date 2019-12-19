@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-19 09:38+0000\n"
+"PO-Revision-Date: 2019-12-19 10:42+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -85,8 +85,8 @@ msgid ""
 "FAI rules, allows only FAI start, finish and turn point types, for badges "
 "and records.  Enables FAI finish height for final glide calculation."
 msgstr ""
-"FAI 룰, FAI스타트에서, 턴포인트와 피니시만 기록된다. \rFAI 결승점에서는 최종"
-"점에서의 활공을 적용한다."
+"FAI 룰, FAI스타트에서, 턴포인트와 피니시만 기록된다. \n"
+"FAI 결승점에서는 최종러시로 설정한다."
 
 #: src/Task/TypeStrings.cpp:54
 #, no-c-format
@@ -134,14 +134,14 @@ msgstr ""
 msgid ""
 "Racing task with a mix of assigned areas and turn points, minimum task time "
 "applies."
-msgstr "AAT 레이스타스크의 경우, 통과구역과 턴포인트에 최소 시간이 적용된다."
+msgstr "AAT 레이스타스크: 통과구역과 턴포인트에 최소 시간이 적용된다."
 
 #: src/Task/TypeStrings.cpp:63
 #, no-c-format
 msgid ""
 "Casual touring task, uses start and finish cylinders and FAI sector turn "
 "points."
-msgstr "투어링타스크. 스타트와 결승점으로 FAI 섹터 턴포인트를 사용한다."
+msgstr "투어링타스크: 스타트와 결승점으로 FAI 섹터 턴포인트를 사용한다."
 
 #: src/Task/TypeStrings.cpp:76
 #, no-c-format
@@ -372,7 +372,7 @@ msgstr "모든 턴포인트가 같지 않음"
 #: src/Task/ValidationErrorStrings.cpp:36
 #, no-c-format
 msgid "Incorrect number of turnpoints"
-msgstr "잘못된 번호의 턴포인트"
+msgstr "턴포인트수가 정확하지 않음"
 
 #: src/Task/ValidationErrorStrings.cpp:37
 #, no-c-format
@@ -387,7 +387,7 @@ msgstr "턴포인트가 더이상 없음"
 #: src/Task/ValidationErrorStrings.cpp:39
 #, no-c-format
 msgid "Turnpoints not unique"
-msgstr "유일하지 않은 턴포인트"
+msgstr "특이하지 않은 턴포인트"
 
 #: src/Task/ValidationErrorStrings.cpp:40
 #, no-c-format
@@ -397,12 +397,12 @@ msgstr "빈 타스크"
 #: src/Task/ValidationErrorStrings.cpp:41
 #, no-c-format
 msgid "non-FAI turn points"
-msgstr "FAI 턴포인트 아님"
+msgstr "FAI 턴포인트가 아님"
 
 #: src/Task/ValidationErrorStrings.cpp:42
 #, no-c-format
 msgid "non-MAT turn points"
-msgstr "MAT 턴포인트 아님"
+msgstr "MAT 턴포인트가 아님"
 
 #: src/Airspace/AirspaceGlue.cpp:84
 msgid "Loading Airspace File..."
@@ -693,7 +693,9 @@ msgstr "다음 턴 포인트"
 #: src/Menu/ExpandMacros.cpp:87 src/Menu/ExpandMacros.cpp:124
 #: src/Menu/ExpandMacros.cpp:161
 msgid "Previous Turnpoint"
-msgstr "이전 턴 포인트"
+msgstr ""
+"이전\n"
+"턴포인트"
 
 #: src/Menu/ExpandMacros.cpp:94
 msgid "Furthest Landpoint"
@@ -1713,7 +1715,7 @@ msgstr "골도착시각"
 msgid ""
 "Estimated arrival local time at task completion, assuming performance of "
 "ideal MacCready cruise/climb cycle."
-msgstr "최종 결승점에 도달했을 때의 예상 시각."
+msgstr "골에 도착하는 예상 시각."
 
 #: src/InfoBoxes/Content/Factory.cpp:513
 #, no-c-format
@@ -1754,10 +1756,9 @@ msgid ""
 "good is pointing directly at the next waypoint. This bearing takes into "
 "account the curvature of the Earth."
 msgstr ""
-"다음 웨이포인트까지의 라인과 GPS 항적의 차이,AAT타스크의 경우 다음 섹터까지"
-"의 경로와의 차이,GPS트랙은 지상위의 기록이므로 실제 기체의 방위각은 풍향풍속"
-"의 영향을 받는다. 다음 포인트로 가기위해 보정된 경로값을 보여주며, 그 경로는 "
-"지구의 곡률을 고려하여 계산된다."
+"다음 웨이포인트까지의 라인과 GPS 항적의 차이, AAT타스크의 경우 다음 섹터까지의 경로와의 차이, GPS 내비게이션은 지표에서 "
+"계산하므로 실제 기체의 기수는 바람의 영향을 받는다. 다음 포인트로 가기위해 보정된 경로를 보여주며, 경로는 지구의 곡률을 고려하여 "
+"계산한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:530
 #, no-c-format
@@ -2801,19 +2802,19 @@ msgstr "OLC 규칙으로 계산된 현시점까지의 평균 비행 속도."
 #: src/InfoBoxes/Content/Factory.cpp:1019
 #, no-c-format
 msgid "Final MC0 altitude difference"
-msgstr "고도(최종도착고도MC0)"
+msgstr "고도(골러시MC0)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1020
 #, no-c-format
 msgid "Fin MC0 AltD"
-msgstr "최종고도(MC0)"
+msgstr "골러시고도(MC0)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1021
 #, no-c-format
 msgid ""
 "Arrival altitude at the final waypoint with MC 0 setting relative to the "
 "safety arrival height."
-msgstr "최종 결승점에 도달했을때 맥크레디값이 0이 되는 (최고로 효율적으로 비행을 한)고도를 말한다."
+msgstr "결승점에 도착할때, 안전고도까지 최고로 효율적으로 비행할 수 있는 고도(맥크레디값은 0)."
 
 #: src/InfoBoxes/Content/Factory.cpp:1027
 #: src/InfoBoxes/Content/Factory.cpp:1028 src/InfoBoxes/Content/Task.cpp:904
@@ -3055,7 +3056,7 @@ msgstr "순항"
 #: src/InfoBoxes/InfoBoxSettings.cpp:81
 #, no-c-format
 msgid "FinalGlide"
-msgstr "최종포인트(골포인트)"
+msgstr "골러시(Goal)"
 
 #: src/InfoBoxes/InfoBoxManager.cpp:208
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:263
@@ -3274,7 +3275,9 @@ msgstr "타스크 시작"
 
 #: src/Input/InputEventsTask.cpp:331
 msgid "Next turnpoint"
-msgstr "다음 턴포인트"
+msgstr ""
+"다음\n"
+"턴포인트"
 
 #: src/Input/InputEventsTask.cpp:333
 msgid "Task finished"
@@ -4553,7 +4556,7 @@ msgstr "타입"
 #: src/Dialogs/Device/Vega/LoggerParameters.hpp:40
 #, no-c-format
 msgid "Logger interval"
-msgstr "기록간격"
+msgstr "기록시간"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:148
 msgid "No tracking mode"
@@ -4581,19 +4584,17 @@ msgstr "맵아이템 목록설정"
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:40
 msgid "Show Location row"
-msgstr "현재위치표시"
+msgstr "현재위치"
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:41
 msgid ""
 "If enabled a row at the top will be added showing you the distance and "
 "bearing to the location and the elevation."
-msgstr ""
-"현재위치표시, 현재 위치표시를 호출하면 그 위치까지의 거리와 방향, 고도를 표시"
-"한다."
+msgstr "현재위치: 현재 위치를 선택하면 지정한 화면상의 위치까지 거리와 방향, 고도를 표시한다."
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:45
 msgid "Show Arrival Altitude"
-msgstr "도착고도표시"
+msgstr "도착고도보기"
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:46
 msgid ""
@@ -5724,7 +5725,7 @@ msgstr "대기주파수 설정"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:433 Data/Input/default.xci:1015
 msgid "GoTo"
-msgstr "포인트로 이동"
+msgstr "목표로 설정"
 
 #: src/Dialogs/Waypoint/Manager.cpp:270
 msgid "Delete waypoint?"
@@ -5992,17 +5993,17 @@ msgstr "선택하면 공역을 투명하게 채움."
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:45
 #, no-c-format
 msgid "Disable final glide bar."
-msgstr "최종 활공(글라이드)바를 표시하지 않음."
+msgstr "골러시(최종L/D)바를 표시하지 않음."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:47
 #, no-c-format
 msgid "Always show final glide bar."
-msgstr "최종 활공바를 항상 표시."
+msgstr "골 러시 바를 항상 표시."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:49
 #, no-c-format
 msgid "Show final glide bar if approaching final glide range."
-msgstr "최종 활공영역에 들어가면 최종 활공바를 표시."
+msgstr "결승점(Goal)이 목표가 되면 골 러시 바를 표시."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:85
 msgid ""
@@ -6043,25 +6044,25 @@ msgstr "이 설정은 화면에 써멀 상승 밴드를 지도상에 표시한�
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:101
 msgid "Final glide bar"
-msgstr "최종 활공(글라이드)바"
+msgstr "골러시(Goal Rush)바"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:102
 msgid ""
 "If set to \"On\" the final glide will always be shown, if set to \"Auto\" it "
 "will be shown when approaching the final glide possibility."
 msgstr ""
-"ON의 경우 항상 최종 활공(글라이드)바가 표시되며, AUTO의 경우 최종 활공바가 가"
-"능한 시점에서 표시된다."
+"골러시(마지막 목표가 Goal 일때, 골에 최대한 빠르게 도착하기 위한 안내막대를 표시), 자동으로 설정하면, 골 러시가 가능한 위치에서 "
+"부터 표시한다."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:108
 msgid "Final glide bar MC0"
-msgstr "최종 활공바(MC0)"
+msgstr "골러시바(MC0)"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:109
 msgid ""
 "If set to ON the final glide bar will show a second arrow indicating the "
 "required height to reach the final waypoint at MC zero."
-msgstr "최종활공을 선택하면, 두번째 고도보조가 표시된다. 최종지점에 도착하는데 필요한 고도보조이며, 맥크레디0으로 계산한다."
+msgstr "골러시바: 두번째 고도보조막대를 화면에 표시. 골에 도착하는데 필요한 고도보조막대이며, 맥크레디0으로 계산한다."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:118
 msgid "Vario bar"
@@ -6143,7 +6144,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:62
 #, no-c-format
 msgid "Final glide"
-msgstr "최종 활공"
+msgstr "골 러시"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:63
 #, no-c-format
@@ -6257,15 +6258,13 @@ msgstr "웨이브 보조"
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:87
 msgid "Use final glide mode"
-msgstr "결승점만 남았을때, 최종 포인트 모드로 변경"
+msgstr "결승점만 남았을때, 골러시 모드"
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:88
 msgid ""
 "Controls whether the \"final glide\" InfoBox mode should be used on \"auto\" "
 "pages."
-msgstr ""
-"마지막 최종 포인트만 남았을때, 정보창이 최종 포인트 모드로 자동으로 변경되는 "
-"것을 설정한다."
+msgstr "골포인트 비행일때, 정보창을 골 러시 화면으로 설정한다."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:88
 msgid "Text size"
@@ -6299,9 +6298,7 @@ msgstr "이벤트"
 msgid ""
 "The Input Events file defines the menu system and how XCSoar responds to "
 "button presses and events from external devices."
-msgstr ""
-"입력 이벤트 파일을 메뉴에서 설정한다. 외부장치에서 보내는 신호를 XCSoar에서 "
-"표시하게 설정한다."
+msgstr "입력 이벤트 파일을 불러온다. XCSoar에서 외부장치로 이벤트를 보낼수 있다."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:123
 msgid "Language"
@@ -6631,7 +6628,7 @@ msgstr "파일럿 이름"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:70
 msgid "Time step cruise"
-msgstr "순항시 기록간격"
+msgstr "순항 기록 시간"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:71
 msgid "This is the time interval between logged points when not circling."
@@ -6639,7 +6636,7 @@ msgstr "로그 기록 시간: 1초에 가까울수록 세밀하게 저장한다.
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:75
 msgid "Time step circling"
-msgstr "써클링시 기록간격"
+msgstr "써클링 기록 시간"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:76
 msgid "This is the time interval between logged points when circling."
@@ -6757,7 +6754,7 @@ msgstr "지도방향"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:112
 msgid "Determines how the screen is rotated with the glider"
-msgstr "순항에서 지도 방향."
+msgstr "순항에서 지도 방향"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:117
 msgid "Circling orientation"
@@ -6765,7 +6762,7 @@ msgstr "써클링지도방향"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:118
 msgid "Determines how the screen is rotated with the glider while circling"
-msgstr "써클링에서 지도의 방향."
+msgstr "써클링에서 지도의 방향"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:123
 msgid "Circling zoom"
@@ -6783,7 +6780,7 @@ msgstr "지도 중심 설정"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:128
 msgid "Determines what is used to shift the glider from the map center"
-msgstr "지도 중앙에서 글라이더의 위치."
+msgstr "지도 중앙에서 글라이더의 위치"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:134
 msgid "Glider position offset"
@@ -6793,9 +6790,7 @@ msgstr "기체 위치 오프셋"
 msgid ""
 "Defines the location of the glider drawn on the screen in percent from the "
 "screen edge."
-msgstr ""
-"화면에서 기체의 표시 위치를 설정합니다. 10%는 아래쪽에, 50%는 화면의 가운데"
-"에 위치하게 설정합니다."
+msgstr "화면에서 기체의 위치: 10%는 화면 아래로, 50%는 화면의 가운데에 위치한다."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:140
 msgid "Max. auto zoom distance"
@@ -6824,7 +6819,7 @@ msgstr "주 정보창에 보이는 정보를 선택합니다."
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:177
 #, no-c-format
 msgid "Displays either the Circling, Cruise or Final glide infoxboxes"
-msgstr "써클링, 순항모드 혹은 최종 활공모드 정보창을 같이 표시한다"
+msgstr "써클링, 순항모드 혹은 골러시 정보창을 같이 보여준다"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:178
 #, no-c-format
@@ -6845,20 +6840,20 @@ msgstr "이 페이지의 정보창을 설정합니다."
 msgid ""
 "For cruise mode.  Displayed when 'Auto' is selected and ship is below final "
 "glide altitude"
-msgstr "순항 모드, 자동으로 화면을 설정할 때, 최종 활공고도 보다 낮을경우 표시."
+msgstr "순항 모드: 자동일때, 골러시 모드 고도보다 낮으면 보이는 설정이다"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:188
 #, no-c-format
 msgid ""
 "For circling mode.  Displayed when 'Auto' is selected and ship is circling"
-msgstr "써클링 모드, 자동 일때,  써클링중에 경우 표시된다."
+msgstr "써클링 모드, 자동변경일 때,  써클링 할 때의 설정이다"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:189
 #, no-c-format
 msgid ""
 "For final glide mode.  Displayed when 'Auto' is selected and ship is above "
 "final glide altitude"
-msgstr "최종활공모드, 자동설정에서 최종 활공비로 비행할때 설정된다."
+msgstr "골러시 모드: 자동설정에서 골러시 고도 보다 위일때 보이는 설정이다"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:191
 #, no-c-format
@@ -7072,7 +7067,7 @@ msgstr "지점표고"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:72
 msgid "The height above terrain that the glider must clear during final glide."
-msgstr "최종 활공 중 지형에서 안전한 고도를 유지하기 위한 최소표고입니다."
+msgstr "골 러시 비행중 지형을 피해 안전한 고도를 유지하기 위한 최소고도."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:78
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:118
@@ -7135,9 +7130,7 @@ msgstr "자동 버그(침하율)"
 #, no-c-format
 msgid ""
 "If enabled, adds 1% to the bugs setting after each full hour while flying."
-msgstr ""
-"이 설정을 켜면 매 시간마다 1%씩 기체 침하율 그래프가 상승한다. (50%는 침하율 "
-"두배)"
+msgstr "이 설정을 켜면, 매 시간마다 1%씩 기체 침하율이 상승한다(50%는 0%의 침하율 두배)(행/패러는 필요없는 설정)."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:106
 msgid ""
@@ -7328,7 +7321,7 @@ msgstr "큰 글라이더"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:121
 #, no-c-format
 msgid "Enlarged simple graphics."
-msgstr "확대된 글라이더"
+msgstr "큰 글라이더"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:122
 #, no-c-format
@@ -7348,7 +7341,7 @@ msgstr "행글라이더"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:125
 #, no-c-format
 msgid "Simplified hang glider as line graphics, white with black contours."
-msgstr "행글라이더 모양 아이콘"
+msgstr "행글라이더"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:126
 #, no-c-format
@@ -7358,7 +7351,7 @@ msgstr "패러글라이더"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:127
 #, no-c-format
 msgid "Simplified para glider as line graphics, white with black contours."
-msgstr "패러글라이더 모양 아이콘"
+msgstr "패러글라이더"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:132
 #, no-c-format
@@ -7438,9 +7431,8 @@ msgid ""
 "extra distance required to reach that point as a percentage of straight-line "
 "distance to the waypoint."
 msgstr ""
-"비행중 항공기의 방향이 현재의 웨이포인트와 다를 경우, 비행 방향중에 있는 마커"
-"웨이포인트까지 추가거리가 표시된다, 각 마커의 값에 도달하기 위한 직선상의 비"
-"율이 표시된다.(?)"
+"기체방향이 현재 목표한 웨이포인트에서 벗어나면 마커가 항공기 앞에 표시된다. 마커의 값은 웨이포인트까지의 직선 거리의 백분율로 해당 "
+"포인트에 도착하는 데 필요한 추가 거리이다."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:179
 msgid "Aircraft symbol"
@@ -7515,7 +7507,7 @@ msgstr "참조. 기본고도는 MSL(평균해면고도) 입니다."
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:97
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:247
 msgid "Start height ref."
-msgstr "스타트 고도설정"
+msgstr "스타트 고도"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:98
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:248
@@ -7539,7 +7531,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:113
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:256
 msgid "Finish height ref."
-msgstr "결승점 고도기준"
+msgstr "결승점 고도"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:114
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:257
@@ -7575,15 +7567,15 @@ msgstr "시작 포인트의 타스크 반경이나 게이트 폭의 기본값을
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:155
 #: src/Dialogs/Task/TaskPointDialog.cpp:426
 msgid "Finish point"
-msgstr "최종 포인트"
+msgstr "결승점"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:156
 msgid "Default finish type for new tasks you create."
-msgstr "최종 포인트를 입력할때 기본적으로 입력되는 설정입니다."
+msgstr "최종 포인트를 입력할때 항상 보이는 기본 설정."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:161
 msgid "Default radius or gate width of the finish zone in new tasks."
-msgstr "최종 포인트의 타스크 반경이나 게이트 폭의 기본값을 설정합니다."
+msgstr "최종 포인트의 타스크 반경이나 게이트 폭의 기본값을 설정."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:167
 msgid "Turn point"
@@ -7591,7 +7583,7 @@ msgstr "턴 포인트"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:167
 msgid "Default turn point type for new tasks you create."
-msgstr "턴포인트를 입력할때 기본적으로 입력되는 설정입니다."
+msgstr "턴 포인트의 타스크 반경이나 게이트 폭의 기본값을 설정."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:171
 msgid "Default radius of turnpoint cylinders and sectors in new tasks."
@@ -7643,14 +7635,12 @@ msgstr ""
 msgid ""
 "Up to seven points including start and finish, finish height must not be "
 "lower than start height less 1000 meters."
-msgstr ""
-"처음과 끝지점 사이에 7포인트가 있어야 하며, 최종 고도는 시작고도보다 1000미"
-"터 이내이어야 합니다."
+msgstr "스타트와 골 사이에 7포인트이상 있어야 하며, 골의 고도는 이륙고도보다 1000미터 이내의 차이로 설정한다."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:100
 #, no-c-format
 msgid "The most recent contest with Sprint task rules."
-msgstr "최신 속도 경기 규칙 (Sprint Task Rules)"
+msgstr "최신 속도 경기 규칙(Sprint Task Rules)."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:102
 #, no-c-format
@@ -7685,8 +7675,8 @@ msgid ""
 "The bounding box part with 1 km = 1.0 point and the additional zick-zack "
 "part with 1 km = 0.5 p."
 msgstr ""
-"오스트리아 온라인 글라이더 콘테스트. 득점은 최대 턴포인트 6개. 득점상자 내부"
-"는 1km = 1.0점, 추가되는 지그재그 부분은 1km = 0.5 점으로 계산된다."
+"오스트리아 온라인 글라이더 콘테스트: 득점은 최대 턴포인트 6개. 득점상자 내부는 1km = 1.0점, 추가되는 지그재그 부분은 1km ="
+" 0.5 점으로 계산한다."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:116
 #, no-c-format
@@ -8048,7 +8038,7 @@ msgstr "표시 설정"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:101
 msgid "Determines how labels are displayed with each waypoint"
-msgstr "웨이포인트 이름을 표시하는 방법을 설정."
+msgstr "웨이포인트 이름을 표시하는 방법"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:107
 #, no-c-format
@@ -8063,7 +8053,7 @@ msgstr "직선활공"
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:110
 #, no-c-format
 msgid "Straight glide arrival height (no terrain is considered)."
-msgstr "직선활공으로 도착했을 때의 고도를 표시한다. (지형영향을 고려하지 않음)"
+msgstr "직선비행으로 비행했을때 도착고도를 표시(지형영향을 고려하지 않음)."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:112
 #, no-c-format
@@ -8092,7 +8082,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:124
 msgid "Determines how arrival height is displayed in waypoint labels"
-msgstr "착륙시 도착고도를 표시하는 설정."
+msgstr "목표에 도착할때의 고도를 계산하는 방법을 설정"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:129
 #, no-c-format
@@ -8331,7 +8321,7 @@ msgstr "내부 반경"
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:68
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:48
 msgid "Inner radius of the OZ sector."
-msgstr "OZ 섹터의 내부 반경"
+msgstr "OZ 섹터의 내부 반경."
 
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:54
 msgid "Angle"
@@ -8362,11 +8352,11 @@ msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskClosePanel.cpp:65
 msgid "Task has been modified"
-msgstr "타스크를 수정했음."
+msgstr "타스크가 수정됨"
 
 #: src/Dialogs/Task/Manager/TaskClosePanel.cpp:65
 msgid "Task unchanged"
-msgstr "타스크 변화 없음."
+msgstr "타스크 변화 없음"
 
 #: src/Dialogs/Task/Manager/TaskClosePanel.cpp:112
 msgid "Revert Changes"
@@ -8667,7 +8657,7 @@ msgstr "도착예정시각"
 
 #: src/Dialogs/Task/TargetDialog.cpp:446
 msgid "Estimated time en-route to the next AAT target."
-msgstr "다음 AAT 타겟에 도착예정시간"
+msgstr "다음 AAT 목표의 도착예정시간."
 
 #: src/Dialogs/Task/TargetDialog.cpp:448
 msgid "Delta T"
@@ -8685,7 +8675,7 @@ msgstr ""
 
 #: src/Dialogs/Task/TargetDialog.cpp:452
 msgid "V rem."
-msgstr "잔여속도(V rem.)"
+msgstr "속도(V rem.)"
 
 #: src/Dialogs/Task/TargetDialog.cpp:456
 msgid "V ach"
@@ -9044,10 +9034,9 @@ msgid ""
 "[RELATIVE MC/2] LIFT tone when relative vario greater than half MC.\n"
 "[NET MC/2] LIFT tone when airmass velocity greater than half MC."
 msgstr ""
-"순항모드로 상승을 검출했을때의 음량설정. [NONE] 설정하지 않음. [RELATIVE "
-"ZERO] : 바리오값이 0보다 큰 경우, [GROSS ZERO] 글라이더가 상승시에, "
-"[RELATIVE MC/2] 바리오의 값이 맥크레디의 절반보다 클때, [NET MC/2] 기단상승값"
-"이 맥크레디 절반보다 클때,"
+"순항모드에서 고도상승 음량설정. [NONE] 설정하지 않음. [RELATIVE ZERO] : 바리오값이 0보다 큰 경우, [GROSS "
+"ZERO] 글라이더가 상승시에, [RELATIVE MC/2] 바리오의 값이 맥크레디의 절반보다 클때, [NET MC/2] 기단상승값이 "
+"맥크레디 절반보다 클때 이다."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:82
 #, no-c-format
@@ -9057,7 +9046,7 @@ msgstr "평균상승률"
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:82
 #, no-c-format
 msgid "Time scale used for vario averager."
-msgstr "바리오 평균 상승률 타임 스케일"
+msgstr "바리오 평균 상승률 계산시간"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:86
 #, no-c-format
@@ -9067,7 +9056,7 @@ msgstr "슨항 평균 상승률 스케일"
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:87
 #, no-c-format
 msgid "Time scale used for cruise speed command averager."
-msgstr "순항 평균 속도 타임 스케일"
+msgstr "순항 평균 속도 계산 시간."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:91
 #, no-c-format
@@ -9567,8 +9556,8 @@ msgid ""
 "Mark\n"
 "Drop"
 msgstr ""
-"마크\n"
-"표시"
+"위치\n"
+"마크"
 
 #: Data/Input/default.xci:718
 msgid "Accelerometer leveled"
