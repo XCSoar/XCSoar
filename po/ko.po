@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-19 16:40+0000\n"
+"PO-Revision-Date: 2019-12-20 05:28+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -3061,7 +3061,7 @@ msgstr "골러시(Goal)"
 #: src/InfoBoxes/InfoBoxManager.cpp:208
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:263
 msgid "InfoBox"
-msgstr "인포 박스"
+msgstr "정보창"
 
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:58
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:62
@@ -6511,7 +6511,7 @@ msgstr "중앙"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:134
 #, no-c-format
 msgid "Center the status message boxes."
-msgstr "알림 메세지가 가운데에 표시됨."
+msgstr "알림 메세지 위치가 가운데."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:135
 #, no-c-format
@@ -6521,7 +6521,7 @@ msgstr "왼쪽 위"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:136
 #, no-c-format
 msgid "Show status message boxes ina the top left corner."
-msgstr "알림메세지가 왼쪽위에 표시됨."
+msgstr "알림메세지 위치가 왼쪽위."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:142
 #, no-c-format
@@ -6585,7 +6585,7 @@ msgstr "탭 메뉴 스타일"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:187
 msgid "Message display"
-msgstr "알림 메세지 표시"
+msgstr "알림 메세지 위치"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:192
 msgid "Inverse InfoBoxes"
@@ -6597,7 +6597,7 @@ msgstr "선택하면, 검정바탕에 흰 글씨로 표시한다."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:197
 msgid "Colored InfoBoxes"
-msgstr "정보창색상설정"
+msgstr "컬러 정보창"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:198
 msgid ""
@@ -7908,7 +7908,7 @@ msgstr "바리오"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:174
 msgid "Units used for vertical speeds (variometer)."
-msgstr "고도변화속도에 사용하는 단위(고도계)."
+msgstr "수직속도에 사용하는 단위(고도계)."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:180
 #, no-c-format
@@ -8736,13 +8736,13 @@ msgstr "바리오소리를 설정한다."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:77
 msgid "Enable Deadband"
-msgstr "고도변화설정"
+msgstr "버저(Buzzer)사용안함"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:78
 msgid ""
 "Mute the audio output in when the current lift is in a certain range around "
 "zero"
-msgstr "대기중일때 바리오 소리 음소거"
+msgstr "버저(Buzzer): 침하가 끝나고 상승직전 바리오가 0을 가리킬때, 버저가 울림"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:84
 msgid "Min. Frequency"
