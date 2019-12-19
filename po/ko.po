@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-19 09:34+0000\n"
+"PO-Revision-Date: 2019-12-19 09:38+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -1163,8 +1163,7 @@ msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the target within the AAT sector."
 msgstr ""
-"선택한 웨이포인트의 외곽선과 기체의 거리이다.\n"
-"AAT타스크의 경우 다음 AAT 섹터까지의 거리를, 웨이포인트 미입력시에는 이륙지점과의 거리를 나타낸다."
+"선택한 웨이포인트의 외곽선과 기체의 거리- AAT타스크의 경우 다음 AAT 섹터까지의 거리를, 웨이포인트 미입력시에는 이륙장의 거리이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:234
 #, no-c-format
@@ -2144,12 +2143,12 @@ msgstr "예비착륙장까지 필요한 활공비. 고도상승을 고려하지 
 #: src/InfoBoxes/Content/Factory.cpp:706
 #, no-c-format
 msgid "Height above take-off"
-msgstr "고도(이륙지점)"
+msgstr "고도(이륙장)"
 
 #: src/InfoBoxes/Content/Factory.cpp:707
 #, no-c-format
 msgid "H T/O"
-msgstr "이륙지점고도"
+msgstr "이륙장고도"
 
 #: src/InfoBoxes/Content/Factory.cpp:708
 #, no-c-format
@@ -2770,17 +2769,17 @@ msgstr "선회 지름: 예상되는 최소 선회 시간이다. 익면 하중차
 #: src/InfoBoxes/Content/Factory.cpp:1004
 #, no-c-format
 msgid "Distance takeoff"
-msgstr "이륙지점 거리"
+msgstr "거리(이륙장)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1005
 #, no-c-format
 msgid "Takeoff Dist"
-msgstr "이륙지점거리"
+msgstr "이륙장거리"
 
 #: src/InfoBoxes/Content/Factory.cpp:1006
 #, no-c-format
 msgid "Distance to where take-off was detected."
-msgstr "이륙지점에서 현 위치사이의 거리이다."
+msgstr "이륙장에서 기체의 거리."
 
 #: src/InfoBoxes/Content/Factory.cpp:1012
 #, no-c-format
