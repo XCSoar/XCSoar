@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-19 10:42+0000\n"
+"PO-Revision-Date: 2019-12-19 16:40+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -953,7 +953,7 @@ msgstr "고도(GPS)"
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:83
 #, no-c-format
 msgid "Alt GPS"
-msgstr "GPS 고도"
+msgstr "GPS고도"
 
 #: src/InfoBoxes/Content/Factory.cpp:137
 #, no-c-format
@@ -1374,7 +1374,7 @@ msgid ""
 "Wind speed estimated by XCSoar. Manual adjustment is possible with the "
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
-msgstr "풍속은 XCSoar가 계산해서 표시. 정보창을 눌러 수동으로 보정이 가능하다."
+msgstr "풍속은 XCSoar가 계산해서 표시. 정보창을 눌러 수동 보정도 가능하다."
 
 #: src/InfoBoxes/Content/Factory.cpp:349
 #, no-c-format
@@ -1392,7 +1392,7 @@ msgid ""
 "Wind bearing estimated by XCSoar. Manual adjustment is possible with the "
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
-msgstr "풍향은 XCSoar가 계산해서 표시. 정보창을 열고 수동 보정이 가능하다."
+msgstr "풍향은 XCSoar가 계산해서 표시. 정보창을 눌러 수동 보정도 가능하다."
 
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
@@ -2539,7 +2539,7 @@ msgid ""
 "The distance to the next terrain collision along the current task leg. At "
 "this location, the altitude will be below the configured terrain clearance "
 "altitude."
-msgstr "현재 진로상의 지상 충돌예상지점과의 거리. 현재 기체위치에서 충돌지점과의 거리이다."
+msgstr "현재 진로상의 지상 충돌예상지점과의 거리: 현재 기체위치에서 충돌지점과의 거리이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:903
 #, no-c-format
@@ -3680,7 +3680,7 @@ msgstr "Vest"
 
 #: src/UIActions.cpp:52
 msgid "Quit program?"
-msgstr "XCsoar를 종료합니까?"
+msgstr "XCSoar를 종료합니까?"
 
 #: src/Units/UnitsStore.cpp:39
 #, no-c-format
@@ -3746,7 +3746,7 @@ msgstr "화면 초기화 중"
 #. Show progress dialog
 #: src/Startup.cpp:490 src/Startup.cpp:532 src/Startup.cpp:597
 msgid "Shutdown, please wait..."
-msgstr "종료중, 기다려 주세요..."
+msgstr "XCSoar를 종료합니다..."
 
 #. Stop logger and save igc file
 #: src/Startup.cpp:510
@@ -4580,11 +4580,11 @@ msgstr "날짜"
 
 #: src/Dialogs/MapItemListSettingsDialog.cpp:34
 msgid "Map Item List Settings"
-msgstr "맵아이템 목록설정"
+msgstr "맵아이템 목록"
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:40
 msgid "Show Location row"
-msgstr "현재위치"
+msgstr "현재위치보기"
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:41
 msgid ""
@@ -4600,7 +4600,7 @@ msgstr "도착고도보기"
 msgid ""
 "If enabled a row at the top will be added showing you the arrival altitude "
 "at the location."
-msgstr "이 설정을 켜면, 해당 위치의 도착 고도를 상단에 보여준다."
+msgstr "도착고도: 도착 고도를 선택하면 지정한 화면상의 위치에 도착하는 고도를 표시한다."
 
 #: src/Dialogs/ColorListDialog.cpp:74
 msgid "Select Color"
@@ -5238,13 +5238,13 @@ msgstr "\"%s\" 기체 활성화 실패함."
 #: src/Dialogs/Plane/PlaneListDialog.cpp:248
 #: src/Dialogs/Plane/PlaneListDialog.cpp:293
 msgid "Please enter the registration of the plane!"
-msgstr "기체등록정보를 넣어주세요!"
+msgstr "기체등록정보를 입력하시오!"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:260
 #: src/Dialogs/Plane/PlaneListDialog.cpp:307
 #, c-format
 msgid "Plane \"%s\" already exists. Overwrite it?"
-msgstr "\"%s\" 기체는 있습니다. 덮어쓰겠습니까?"
+msgstr "\"%s\" 기체는 있음. 덮어쓰겠습니까?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:263
 #: src/Dialogs/Plane/PlaneListDialog.cpp:310
@@ -5398,7 +5398,7 @@ msgstr "계속"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:63
 msgid "Enter your password"
-msgstr "비밀번호를 입력하세요"
+msgstr "비밀번호 입력"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:88
 msgid "Wrong password."
@@ -5632,7 +5632,7 @@ msgstr "고도차 맥크레디0"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:178
 msgid "Alt. diff. MC safety"
-msgstr "고도차 맥크레디 안전"
+msgstr "고도차 안전 맥크레디"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:183
 msgid "Alt. diff. MC current"
@@ -5770,7 +5770,7 @@ msgstr "웨이포인트 에디터"
 
 #: src/Dialogs/Waypoint/WaypointList.cpp:456
 msgid "Choose a filter or click here"
-msgstr "필터를 선택하거나, 여기를 클릭하세요"
+msgstr "필터 선택 혹은, 여기를 클릭"
 
 #: src/Dialogs/Waypoint/WaypointList.cpp:541
 msgid "Select Waypoint"
@@ -5816,7 +5816,7 @@ msgstr "글라이더 비행가능지역내의 공역 혹은 비행 가능한 고
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:60
 #, no-c-format
 msgid "Default"
-msgstr "기본값"
+msgstr "기본"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:70
 #, no-c-format
@@ -6199,13 +6199,13 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:84
 msgid "Nav. by baro altitude"
-msgstr "기압고도계로 탐색"
+msgstr "기압고도계 사용"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:85
 msgid ""
 "When enabled and if connected to a barometric altimeter, barometric altitude "
 "is used for all navigation functions. Otherwise GPS altitude is used."
-msgstr "기압고도계의 데이터를 연결할 수 있는 경우 기압고도를 사용한다. 없을 때는 GPS 고도를 사용한다."
+msgstr "기압고도계의 데이터가 있으면, 계산할때 기압고도를 사용한다. 없으면, GPS 고도를 사용한다."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:90
 msgid "Flap forces cruise"
@@ -6559,7 +6559,7 @@ msgstr "화면방향"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:170
 msgid "Rotate the display on devices that support it."
-msgstr "화면 방향을 고정. 기기에서 지원해야 설정 가능."
+msgstr "화면 방향을 선택한다. 기기에서 지원해야 설정할 수 있다."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:175
 msgid "InfoBox geometry"
@@ -6669,7 +6669,7 @@ msgstr "이/착륙 자동분리"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:92
 msgid "Logs each start and landing."
-msgstr "이/착륙시 개별로 로그를 기록합니다."
+msgstr "이/착륙하면 로그를 분리해서 기록."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:96
 msgid "Logger ID"
@@ -6679,7 +6679,7 @@ msgstr "로거 ID"
 #, no-c-format
 msgid ""
 "The moving map display will be rotated so the glider's track is oriented up."
-msgstr "기체의 항적방향이 위로 오도록 표시 됩니다."
+msgstr "기체의 항적방향이 위로 향하도록 표시."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:46
 #, no-c-format
@@ -6691,14 +6691,14 @@ msgstr "기수방향"
 msgid ""
 "The moving map display will be rotated so the glider's heading is oriented "
 "up."
-msgstr "기체의 기수방향이 위로 향하도록 지도가 표시 됩니다."
+msgstr "기체의 기수방향이 위로 향하도록 표시."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:49
 #, no-c-format
 msgid ""
 "The moving map display will always be orientated north to south and the "
 "glider icon will be rotated to show its course."
-msgstr "기체의 방향과 관계없이 북쪽이 위로 가도록 고정됩니다."
+msgstr "기체의 방향과 관계없이 위가 북쪽으로 고정."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:50
 #, no-c-format
@@ -6710,7 +6710,7 @@ msgstr "타겟방향"
 msgid ""
 "The moving map display will be rotated so the navigation target is oriented "
 "up."
-msgstr "다음 타겟이 위쪽으로 보이도록 지도가 회전합니다."
+msgstr "다음 목표가 위쪽으로 보이도록 지도가 회전."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:52
 #, no-c-format
@@ -6722,9 +6722,7 @@ msgstr "바람방향"
 msgid ""
 "The moving map display will be rotated so the wind is always oriented up to "
 "down. (can be useful for wave flying)"
-msgstr ""
-"바람의 방향이 위쪽으로 오도록 지도가 회전합니다. (바람을 이용한 비행에 용이합"
-"니다.)"
+msgstr "바람의 방향이 위쪽으로 오도록 지도가 회전(바람을 이용한 비행에 용이)"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:58
 #, no-c-format
@@ -6734,7 +6732,7 @@ msgstr "자동조정하지 않는다."
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:60
 #, no-c-format
 msgid "Use a recent average of the ground track as basis."
-msgstr "평균 대지 항적(대지트랙)을 사용한다."
+msgstr "비행 기록으로 지도위치를 보정한다."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:61
 #: src/Dialogs/Task/TargetDialog.cpp:792 Data/Input/default.xci:425
@@ -6746,7 +6744,7 @@ msgstr "웨이포인트"
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:62
 #, no-c-format
 msgid "Use the current target waypoint as basis."
-msgstr "현재 목표의 웨이포인트를 기준으로 사용한다."
+msgstr "다음 웨이포인트와 현재위치로 지도를 보정한다."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:111
 msgid "Cruise orientation"
@@ -6772,11 +6770,11 @@ msgstr "써클링 확대/축소"
 msgid ""
 "If enabled, then the map will zoom in automatically when entering circling "
 "mode and zoom out automatically when leaving circling mode."
-msgstr "써클링시에 지도가 자동으로 확대/축소 됩니다."
+msgstr "써클링할때, 지도가 자동으로 확대/축소된다."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:127
 msgid "Map shift reference"
-msgstr "지도 중심 설정"
+msgstr "지도 중심 보정"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:128
 msgid "Determines what is used to shift the glider from the map center"
@@ -6784,21 +6782,22 @@ msgstr "지도 중앙에서 글라이더의 위치"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:134
 msgid "Glider position offset"
-msgstr "기체 위치 오프셋"
+msgstr "기체 위치 보정"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:135
 msgid ""
 "Defines the location of the glider drawn on the screen in percent from the "
 "screen edge."
-msgstr "화면에서 기체의 위치: 10%는 화면 아래로, 50%는 화면의 가운데에 위치한다."
+msgstr ""
+"화면에서 기체의 위치를 보정: (10% ~ 50%)이며, 50%는 화면의 가운데에 기체가 위치하고, 내려갈수록 아래쪽으로 보이게 한다."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:140
 msgid "Max. auto zoom distance"
-msgstr "지도줌한계설정"
+msgstr "지도축소한계"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:141
 msgid "The upper limit for auto zoom distance."
-msgstr "자동으로 축소되는 지도의 한계치를 설정합니다."
+msgstr "자동줌으로 설정했을때, 지도 축적의 한계값을 설정한다."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:146
 msgid "Distinct page zoom"
@@ -6806,7 +6805,7 @@ msgstr "페이지별 고정줌"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:147
 msgid "Maintain one map zoom level on each page."
-msgstr "각 페이지별로 확대/축소 레벨을 고정합니다."
+msgstr "각 페이지별로 지도 확대/축소 범위를 고정한다."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:171
 msgid "Main area"
@@ -6814,7 +6813,7 @@ msgstr "주정보창 표시"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:172
 msgid "Specifies what should be displayed in the main area."
-msgstr "주 정보창에 보이는 정보를 선택합니다."
+msgstr "주 정보창에 보이는 정보를 선택한다."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:177
 #, no-c-format
@@ -6833,7 +6832,7 @@ msgstr "정보창설정"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:183
 msgid "Specifies which InfoBoxes should be displayed on this page."
-msgstr "이 페이지의 정보창을 설정합니다."
+msgstr "이 페이지의 정보창을 설정한다."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:187
 #, no-c-format
@@ -6877,7 +6876,7 @@ msgstr "하부창"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:215
 msgid "Specifies what should be displayed below the main area."
-msgstr "하부창에 표시되는 정보를 선택합니다."
+msgstr "화면 아래에 표시되는 정보를 선택한다."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:103
 #, no-c-format
@@ -6931,17 +6930,17 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:131
 #, no-c-format
 msgid "Reach calculations disabled."
-msgstr "도달 범위 계산을 끕니다."
+msgstr "도달 범위 계산을 하지않음."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:132
 #, no-c-format
 msgid "Straight"
-msgstr "직선(직진)"
+msgstr "직진"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:133
 #, no-c-format
 msgid "The reach is from straight line paths from the glider."
-msgstr "글라이더 도달범위를 직선으로 표시."
+msgstr "직진 했을때의 글라이더 도달범위를 표시한다."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:134
 #, no-c-format
@@ -6951,7 +6950,7 @@ msgstr "선회(지형지물 계산)"
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:135
 #, no-c-format
 msgid "The reach is calculated allowing turns around terrain obstacles."
-msgstr "글라이더 도달범위를 지형 장애물과 고도를 고려하여 계산."
+msgstr "글라이더 도달범위를 지형 장애물과 고도를 고려하여 계산한다."
 
 #. Spacer
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:141
@@ -6978,7 +6977,7 @@ msgstr "안전 맥크레디"
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:150
 #, no-c-format
 msgid "Uses safety MacCready value"
-msgstr "안전 맥크레디값을 사용하여 계산"
+msgstr "안전 맥크레디값을 사용하여 계산한다"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:154
 msgid "Reach polar"
@@ -6988,14 +6987,12 @@ msgstr "도달범위 계산"
 msgid ""
 "This determines the glide performance used in reach, landable arrival, abort "
 "and alternate calculations."
-msgstr ""
-"도달범위를 계산하는데 필요한 활공비를 설정합니다. 착륙가능한 착륙장이나, 비행"
-"중지시에 비상착륙장 계산에도 사용됩니다."
+msgstr "도달범위를 계산하는데 필요한 활공비를 설정한다. 착륙가능한 착륙장이나, 비행중지시에 비상착륙장 계산에도 사용된다."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:161
 #, no-c-format
 msgid "Disables the reach display."
-msgstr "도달범위 표시를 끕니다."
+msgstr "도달범위 표시를 하지않음."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:162
 #, no-c-format
@@ -7005,7 +7002,7 @@ msgstr "대지 라인"
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:163
 #, no-c-format
 msgid "Draws a dashed line at the terrain glide reach."
-msgstr "도달범위를 선으로 표시합니다."
+msgstr "도달범위를 점선으로 표시한다."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:164
 #, no-c-format
@@ -7015,7 +7012,7 @@ msgstr "흐린 대지"
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:165
 #, no-c-format
 msgid "Shades terrain outside glide reach."
-msgstr "도달범위 바깥을 흐릿하게 표시합니다."
+msgstr "도달범위 바깥을 흐릿하게 표시한다."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:166
 #, no-c-format
@@ -7138,8 +7135,8 @@ msgid ""
 "calculations, in task abort mode and for determining arrival altitude at "
 "airfields."
 msgstr ""
-"맥크레디가 설정되어 있는경우 안전맥크레디를 사용할 경우의 기체 도달범위를 선"
-"택한다, 타스크 중단 모드시, 가능한 착륙장의 도착고도를 계산한다."
+"맥크레디가 설정되어 있는경우 안전맥크레디를 사용할 경우의 기체 도달범위를 계산한다. 타스크 중단시, 착륙장에 도달 가능한 도착고도 또한 "
+"계산한다."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:114
 msgid "STF risk factor"
@@ -7164,15 +7161,15 @@ msgstr "지도파일"
 msgid ""
 "The name of the file (.xcm) containing terrain, topography, and optionally "
 "waypoints, their details and airspaces."
-msgstr "지도파일(.xcm)을 선택해주세요. 지형도와 지역이름등이 들어있습니다."
+msgstr "지도파일(.xcm)을 선택하시오. 지형도와 지역이름에 대한 정보가 포함되어 있음."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:73
 msgid ""
 "Primary waypoints file.  Supported file types are Cambridge/WinPilot files (."
 "dat), Zander files (.wpz) or SeeYou files (.cup)."
 msgstr ""
-"주 웨이포인트 파일을 선택해주세요. 지원되는 파일은 Cambridge/WinPilot files "
-"(.dat), Zander files (.wpz), SeeYou files (.cup)입니다."
+"주 웨이포인트 파일을 선택하시오. 지원 파일은 Cambridge/WinPilot files (.dat), Zander files "
+"(.wpz), SeeYou files (.cup)."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:78
 msgid "More waypoints"
@@ -7205,7 +7202,7 @@ msgstr "공역파일"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:92
 msgid "The file name of the primary airspace file."
-msgstr "비행공역의 정보가 담긴 파일을 추가해주세요."
+msgstr "공역 정보가 담긴 파일을 추가하시오."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:96
 msgid "More airspaces"
@@ -7213,7 +7210,7 @@ msgstr "추가공역파일"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:96
 msgid "The file name of the secondary airspace file."
-msgstr "추가되는 공역파일을 선택해주세요."
+msgstr "추가 공역파일을 선택하시오."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:101
 msgid "Waypoint details"
@@ -7476,9 +7473,8 @@ msgid ""
 "Maximum height based on start height reference (AGL or MSL) while starting "
 "the task.  Set to 0 for no limit."
 msgstr ""
-"스타트 지점의 최대 시작고도(AGL:Altitude Above Ground Level:대지고도 혹은 "
-"MSL:Mean Sea Level 평균해발고도)를 설정합니다. 제한이 없는 경우 0 로 설정합니"
-"다."
+"스타트 지점의 최고고도(AGL:Altitude Above Ground Level:대지고도 혹은 MSL:Mean Sea Level "
+"평균해발고도)를 설정한다. 제한이 없는 경우 0 로 설정한다(시작점 고도가 특정고도이하로 규정되었을 때 필요하다)."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:83
 msgid "Start max. height margin"
@@ -7488,21 +7484,19 @@ msgstr "스타트 최고고도 마진"
 msgid ""
 "Maximum height above maximum start height to tolerate.  Set to 0 for no "
 "tolerance."
-msgstr ""
-"스타트 최대 고도에 추가되는 여유 고도를 설정합니다. 허용범위가 없는경우 0으"
-"로 설정합니다."
+msgstr "스타트 최대 고도에 추가되는 여유 고도를 설정한다. 여유고도가 없으면 0으로 설정하면 된다."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:91
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:241
 #, no-c-format
 msgid "Reference is the height above the task point."
-msgstr "타스크 포인트의 기본 고도를 설정합니다."
+msgstr "타스크 포인트의 고도를 AGL로 설정한다."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:93
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:243
 #, no-c-format
 msgid "Reference is altitude above mean sea level."
-msgstr "참조. 기본고도는 MSL(평균해면고도) 입니다."
+msgstr "타스크 포인트의 고도를 MSL로 설정한다."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:97
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:247
@@ -7525,8 +7519,8 @@ msgid ""
 "Minimum height based on finish height reference (AGL or MSL) while finishing "
 "the task.  Set to 0 for no limit."
 msgstr ""
-"결승점의 최저도달고도(AGL:Altitude Above Ground Level:대지고도 혹은 MSL:Mean "
-"Sea Level 평균해발고도)를 설정합니다. 제한이 없는 경우 0 로 설정합니다."
+"골포인트의 최고고도(AGL:Altitude Above Ground Level:대지고도 혹은 MSL:Mean Sea Level 평균해발고도)"
+"를 설정한다. 제한이 없는 경우 0 로 설정하면 된다(골포인트 고도가 특정고도이상으로 규정되었을 때 필요하다)."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:113
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:256
@@ -7562,7 +7556,7 @@ msgstr "시작 포인트를 입력할때 기본적으로 입력되는 설정입�
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:149
 msgid "Default radius or gate width of the start zone for new tasks."
-msgstr "시작 포인트의 타스크 반경이나 게이트 폭의 기본값을 설정합니다."
+msgstr "시작 포인트의 타스크 반경이나 게이트 폭의 기본값을 설정한다."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:155
 #: src/Dialogs/Task/TaskPointDialog.cpp:426
@@ -7575,7 +7569,7 @@ msgstr "최종 포인트를 입력할때 항상 보이는 기본 설정."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:161
 msgid "Default radius or gate width of the finish zone in new tasks."
-msgstr "최종 포인트의 타스크 반경이나 게이트 폭의 기본값을 설정."
+msgstr "최종 포인트의 타스크 반경이나 게이트 폭의 기본값을 설정한다."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:167
 msgid "Turn point"
@@ -7583,11 +7577,11 @@ msgstr "턴 포인트"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:167
 msgid "Default turn point type for new tasks you create."
-msgstr "턴 포인트의 타스크 반경이나 게이트 폭의 기본값을 설정."
+msgstr "턴 포인트의 타스크 반경이나 게이트 폭의 기본값을 설정한다."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:171
 msgid "Default radius of turnpoint cylinders and sectors in new tasks."
-msgstr "턴 포인트의 타스크 반경이나 섹터 값의 기본값을 설정합니다."
+msgstr "턴포인트의 타스크 반경이나 게이트 폭의 기본값을 설정한다."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:177
 msgid "Default task type for new tasks you create."
@@ -8078,7 +8072,7 @@ msgid ""
 "Both arrival heights are displayed. Requires \"Reach mode: Turning\" in "
 "\"Glide Computer > Route\" settings."
 msgstr ""
-"직선활공과 지형비행의 도착 고도를 동시에 표시. . \"글라이더 컴퓨터 -> 루트 -> 도달범위 모드 -> 선회\" 설정이 필요합니다."
+"직선활공과 지형비행의 도착 고도를 동시에 표시: \"글라이더 컴퓨터 -> 루트 -> 도달범위 모드 -> 선회\" 설정이 필요하다."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:124
 msgid "Determines how arrival height is displayed in waypoint labels"
@@ -9569,7 +9563,7 @@ msgstr "항적"
 
 #: Data/Input/default.xci:59
 msgid "Above final glide"
-msgstr "현재의 활공비를 유지하세요"
+msgstr "현재 활공비를 유지하십시오"
 
 #: Data/Input/default.xci:712
 msgid ""
