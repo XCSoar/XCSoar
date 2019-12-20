@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-20 05:28+0000\n"
+"PO-Revision-Date: 2019-12-21 08:21+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.10-dev\n"
+"X-Generator: Weblate 3.10\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -1147,7 +1147,7 @@ msgid ""
 "The current MacCready setting and the current MacCready mode (manual or "
 "auto). (Touch-screen/PC only) Also used to adjust the MacCready setting if "
 "the InfoBox is active, by using the up/down cursor keys."
-msgstr "(자동이나 수동으로) 설정된 맥크래디 모드를 보여준다. 정보창을 누르면 수치변경이 가능하다."
+msgstr "현재 설정된 맥크레디 모드(자동이나 수동): 정보창을 누르면 수치변경이 가능하다."
 
 #: src/InfoBoxes/Content/Factory.cpp:225
 #, no-c-format
@@ -1512,12 +1512,12 @@ msgstr "기압고도계로 측정된 현재 고도."
 #: src/InfoBoxes/Content/Factory.cpp:415
 #, no-c-format
 msgid "Speed MacCready"
-msgstr "속도(맥크레디)"
+msgstr "맥크레디(속도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:416
 #, no-c-format
 msgid "V MC"
-msgstr "맥크레디속도"
+msgstr "V MC"
 
 #: src/InfoBoxes/Content/Factory.cpp:417
 #, no-c-format
@@ -1525,7 +1525,9 @@ msgid ""
 "The MacCready speed-to-fly for optimal flight to the next waypoint. In "
 "cruise flight mode, this speed-to-fly is calculated for maintaining "
 "altitude. In final glide mode, this speed-to-fly is calculated for descent."
-msgstr "다음 웨이포인트 도착에 필요한 맥크레디값."
+msgstr ""
+"다음 웨이 포인트에 최적의 비행을 하기 위한 MacCready비행 속도: 순항모드에서는 고도를 유지하기 위해 계산하며, "
+"최종골러시모드에서는 하강에 대해 계산한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:423
 #, no-c-format
@@ -1634,7 +1636,7 @@ msgstr "결승점예상시간"
 msgid ""
 "Estimated time required to complete task, assuming performance of ideal "
 "MacCready cruise/climb cycle."
-msgstr "결승점까지 예상시간, 맥크레디 설정에 의한 예상값이다."
+msgstr "타스크 종료를 위해 이상적으로 계산한 MacCready 예상 시간."
 
 #: src/InfoBoxes/Content/Factory.cpp:480
 #, no-c-format
@@ -1651,7 +1653,7 @@ msgstr "다음WP시간"
 msgid ""
 "Estimated time required to reach next waypoint, assuming performance of "
 "ideal MacCready cruise/climb cycle."
-msgstr "다음 웨이포인트까지 예상 소요시간, 맥크레디 설정에 의한 예상값."
+msgstr "다음 웨이포인트까지 예상 소요시간, 맥크레디 설정에 의한 예상시간이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:489
 #, no-c-format
@@ -1675,7 +1677,7 @@ msgid ""
 "speed to fly is selected, this InfoBox displays the MacCready speed."
 msgstr ""
 "돌핀 속도의 경우 현재의 비행 방향에 대해 웨이브를 계산해서 현재의 맥크레디속도를 표시한다. 순항 모드의 경우 고도를 유지하면서 "
-"비행하도록 지시하며, 결승점 모드의 경우 최종점을 향해 비행하도록 지시한다. 상승 모드의 경우 최소 침하 속도를 지시한다. 블로킹 모드를 "
+"비행하도록 지시하며, 결승점 모드의 경우 최종점을 향해 비행하도록 지시한다. 상승 모드의 경우 최소 침하 속도를 지시한다. 블록 모드를 "
 "선택한 경우(엑셀레이터가 있을때), 정보창은 맥크레디속도를 보여준다."
 
 #: src/InfoBoxes/Content/Factory.cpp:497
@@ -2486,7 +2488,7 @@ msgstr "근처의 공역 경계선까지의 고도, +값이면 공역위 , -값�
 #: src/InfoBoxes/Content/Factory.cpp:878
 #, no-c-format
 msgid "Next MC0 altitude difference"
-msgstr "고도차(다음 맥크래디값이 0으로 계산된 고도차)"
+msgstr "맥크레디(MC0으로 계산된 고도차이)"
 
 #: src/InfoBoxes/Content/Factory.cpp:879
 #, no-c-format
@@ -2500,8 +2502,8 @@ msgid ""
 "safety arrival height.  For AAT tasks, the target within the AAT sector is "
 "used."
 msgstr ""
-"다음 웨이포인트 도착 고도와 맥크레디가 0으로 설정된 값을 비교한 고도차, AAT "
-"타스크의 경우 다음 AAT 섹터까지의 고도차이가 사용된다."
+"다음 웨이포인트 도착 고도와 맥크레디가 0으로 설정된 값을 비교한 고도차: AAT 타스크의 경우 다음 AAT 섹터까지의 고도 차이를 "
+"사용한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:887
 #, no-c-format
@@ -2612,8 +2614,8 @@ msgid ""
 "value estimates your cruise efficiency according to the current flight "
 "history with the set MC value.  Calculation begins after task is started."
 msgstr ""
-"순항 효율, 지시값 100의 경우 맥크레디값을 완벽히 달성한 것이다. 맥크레디 값"
-"과 현재까지의 비행데이터 값을 비교하여 타스크 시작후에 계산된다."
+"순항 효율:지시값 100의 경우 이상적인 맥크레디값을 달성한 것이다. 맥크레디 값과 현재까지의 비행데이터 값을 비교하여 타스크 시작 후에 "
+"계산한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:937
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:183
@@ -2949,11 +2951,11 @@ msgstr "편집"
 
 #: src/InfoBoxes/Content/MacCready.cpp:70
 msgid "MC AUTO"
-msgstr "맥크레디 자동"
+msgstr "자동MC"
 
 #: src/InfoBoxes/Content/MacCready.cpp:70
 msgid "MC MANUAL"
-msgstr "맥크레디 수동"
+msgstr "수동MC"
 
 #: src/InfoBoxes/Content/Other.cpp:57 src/InfoBoxes/Content/Other.cpp:60
 msgid "AC Off"
@@ -3136,7 +3138,7 @@ msgstr "보조 정보창"
 
 #: src/Input/InputEventsActions.cpp:222
 msgid "Default InfoBoxes"
-msgstr "정보창초기설정"
+msgstr "초기정보창설정"
 
 #: src/Input/InputEventsActions.cpp:330
 msgid "No active waypoint!"
@@ -4045,8 +4047,7 @@ msgstr "장치로 싱크 (데이터취득)"
 msgid ""
 "This option lets you configure if XCSoar should use settings like the "
 "MacCready value, bugs and ballast from the device."
-msgstr ""
-"XCSoar의 정보취득, 현재설정, 맥크레디값, 기체노후도, 밸러스트값등을 취득한다."
+msgstr "이 옵션은 XCSoar가 기기의 MacCready값, 노후도 및 밸러스트와 같은 설정을 장비에서 받을수 있도록 설정한다."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:662
 msgid "Sync. to device"
@@ -4056,8 +4057,7 @@ msgstr "장치에 싱크 (데이터저장)"
 msgid ""
 "This option lets you configure if XCSoar should send settings like the "
 "MacCready value, bugs and ballast to the device."
-msgstr ""
-"XCSoar에 정보저장, 현재설정, 맥크레디값, 기체노후도, 밸러스트값등을 한다."
+msgstr "이 옵션은 XCSoar가 기기의 MacCready값, 노후도 및 밸러스트와 같은 설정을 장비로 보낼 수 있도록 설정한다."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:669
 msgid "Enable this if you use a K6Bt to connect the device."
@@ -5149,7 +5149,7 @@ msgstr "활공성능(폴라커브)"
 
 #: src/Dialogs/dlgAnalysis.cpp:528
 msgid "MacCready Speeds"
-msgstr "맥크레디 스피드"
+msgstr "맥크레디 속도"
 
 #: src/Dialogs/dlgAnalysis.cpp:537
 msgid "Temperature Trace"
@@ -5494,7 +5494,7 @@ msgstr "평균속도"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:148
 msgid "Set MacCready"
-msgstr "맥크레디 설정"
+msgstr "맥크레디(설정)"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:149
 msgid ""
@@ -5503,7 +5503,7 @@ msgid ""
 "affect the main computer's setting if the dialog is exited with the Cancel "
 "button."
 msgstr ""
-"계산기를 사용하여 맥크레디 값을 조정: 조건의 변화가 타스크 시간에 미치는 영향을 조절해주기 위해 사용한다. 취소버튼으로 종료할 경우, "
+"계산할때 사용하는 맥크레디값을 조정: 조건의 변화가 타스크 시간에 미치는 영향을 조절해주기 위해 사용한다. 취소버튼으로 종료할 경우, "
 "글라이더 컴퓨터에 영향을 주지 않는다."
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:159
@@ -5528,7 +5528,7 @@ msgstr "남은 속도"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:167
 msgid "Achieved MacCready"
-msgstr "맥크레디평균값"
+msgstr "맥크레디 달성"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:172
 msgid "Achieved speed"
@@ -5628,15 +5628,15 @@ msgstr "각도와 거리"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:174
 msgid "Alt. diff. MC 0"
-msgstr "고도차 맥크레디0"
+msgstr "맥크레디(고도차MC0)"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:178
 msgid "Alt. diff. MC safety"
-msgstr "고도차 안전 맥크레디"
+msgstr "고도차안전MC"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:183
 msgid "Alt. diff. MC current"
-msgstr "고도차 맥크레디 현재치"
+msgstr "고도차현재MC"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:201
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:120
@@ -6097,11 +6097,11 @@ msgstr "평균상승률: 순항모드의 경우 기단에서의 평균상승률�
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:71
 msgid "Show MacReady"
-msgstr "맥크레디 표시"
+msgstr "맥크레디 보기"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:71
 msgid "Whether to show the MacCready setting."
-msgstr "맥크레디 설정 표시."
+msgstr "MacCready 설정을 표시할지 여부."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:74
 msgid "Show bugs"
@@ -6152,9 +6152,7 @@ msgid ""
 "Adjusts MC for fastest arrival.  For OLC sprint tasks, the MacCready is "
 "adjusted in order to cover the greatest distance in the remaining time and "
 "reach the finish height."
-msgstr ""
-"OLC 최속도달을 위한 맥크래디수정치: OLC 스프린트 타스크에서, 맥크레디 세팅을 수정하여, 남은 시간에 가장 멀리 갈 수 있는 수치로 "
-"조정한다."
+msgstr "빠른 도착을 위한 맥크레디: 남은 시간 대비 골에 가장 빨리 도착 할 수 있게 조절한다."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:65
 #, no-c-format
@@ -6171,17 +6169,15 @@ msgstr "써클링 모드에서 현재 비행의 평균 상승량에 따라 이�
 msgid ""
 "Uses trending average during task, then fastest arrival when in final glide "
 "mode."
-msgstr ""
-"평균타스크트렌드사용, 파이널 글라이드 모드에서 가장 빠르게 도착하는 값을 보여"
-"준다."
+msgstr "평균타스크수행: 타스크 진행중의 평균적인 비행수치로 계산한다."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:72
 msgid "Auto MC mode"
-msgstr "맥크레디 자동"
+msgstr "자동 MC 모드"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:73
 msgid "This option defines which auto MacCready algorithm is used."
-msgstr "맥크레디 알고리즘을 자동으로 설정."
+msgstr "어떤 알고리즘으로 맥크레디를 자동으로 계산할지 설정한다."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:76
 msgid "Block speed to fly"
@@ -6194,8 +6190,8 @@ msgid ""
 "is set to the dolphin speed to fly, equivalent to the MacCready speed with "
 "vertical air-mass movement."
 msgstr ""
-"이 설정은, 순항중에 표시되는 지시속도가 수직방향의 기단(상승)에 영향을 받지 않게 한다. 설정을 해제하면, 지시속도는 돌핀 속도와 "
-"맥크레디속도가 기단에 적용되는 값으로 보여준다."
+"이 설정은 순항중의 속도지시가 수직방향의 기단(상승/하강)에 영향을 받지 않게 하는 설정이다: 설정을 해제하면, 속도지시는 돌핀 속도로 "
+"계산한다."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:84
 msgid "Nav. by baro altitude"
@@ -6220,16 +6216,16 @@ msgstr "Vega 바리오미터가 연결된 경우, 써클링, 순항중에 플랩
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:97
 #, no-c-format
 msgid "Preferred period for paragliders."
-msgstr "패러글라이더를 위한 기간 설정."
+msgstr "패러글라이더(Paraglider)를 위한 시간설정."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:100
 #, no-c-format
 msgid "Preferred period for gliders."
-msgstr "글라이더(Gliders)를 위한 기간 설정."
+msgstr "글라이더(Gliders)를 위한 시간설정."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:106
 msgid "GR average period"
-msgstr "평균활공비 시간(초)"
+msgstr "평균활공비 계산시간"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:107
 msgid ""
@@ -6319,7 +6315,7 @@ msgstr "메뉴자동꺼짐시간"
 msgid ""
 "This determines how long menus will appear on screen if the user does not "
 "make any button presses or interacts with the computer."
-msgstr "메뉴표시 시간설정: 입력없이 설정한 시간만큼 지나면 메뉴가 사라짐."
+msgstr "메뉴표시 시간설정: 입력없이 설정한 시간만큼 지나면 메뉴가 사라진다."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:170
 #, no-c-format
@@ -6910,9 +6906,7 @@ msgstr "루트 상승"
 msgid ""
 "When enabled and MC is positive, route planning allows climbs between the "
 "aircraft location and destination."
-msgstr ""
-"맥크레디 값이 설정되어 있는경우, 현재위치와 목적지 사이에서 상승하도록 설정한"
-"다."
+msgstr "이 설정을 켜고, 맥크레디 값이 양수값으로 나오면, 목적지계산에서 상승을 허용한다."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:122
 msgid "Route ceiling"
@@ -7127,7 +7121,7 @@ msgstr "자동 버그(침하율)"
 #, no-c-format
 msgid ""
 "If enabled, adds 1% to the bugs setting after each full hour while flying."
-msgstr "이 설정을 켜면, 매 시간마다 1%씩 기체 침하율이 상승한다(50%는 0%의 침하율 두배)(행/패러는 필요없는 설정)."
+msgstr "매 시간마다 1%씩 기체 침하율을 상승하게 설정 할 수 있다(50%는 0%의 침하율 두배)(행/패러는 필요없는 설정)."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:106
 msgid ""
@@ -7135,12 +7129,12 @@ msgid ""
 "calculations, in task abort mode and for determining arrival altitude at "
 "airfields."
 msgstr ""
-"맥크레디가 설정되어 있는경우 안전맥크레디를 사용할 경우의 기체 도달범위를 계산한다. 타스크 중단시, 착륙장에 도달 가능한 도착고도 또한 "
+"맥크레디가 설정되어 있는경우 안전맥크레디를 사용해서 기체 도달범위를 계산한다. 타스크 중단시, 착륙장에 도달 가능한 도착고도 또한 "
 "계산한다."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:114
 msgid "STF risk factor"
-msgstr "STF 리스크 값"
+msgstr "STF 위험 요소"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:115
 msgid ""
@@ -7149,9 +7143,9 @@ msgid ""
 "no compensation, 1.0 scales MC linearly with current height (with reference "
 "to height of the maximum climb). If considered, 0.3 is recommended."
 msgstr ""
-"안전 위험요소, 맥크레디 설정에 사용되는 리스크 값을 결정한다. 0.0의 경우 보정"
-"안함(위험적음), 1.0의 경우 위험이 큰(최대평균상승율) 설정이다. 판단할수 없는"
-"경우 0.3을 추천한다."
+"STF 위험 요소는 위험을 보상하기 위해 글라이더가 하강할 때의 비행 속도를 계산하는 데 사용되는 MacCready 설정에 대한 여윳값 "
+"이다. (0.0-1.0) 0.0으로 설정하면 무보정, 1.0으로 설정하면 현재 고도(최대 상승고도를 포함)에 따라 MC를 선형으로 "
+"조정한다. 특별히 고려하지 않는다면 0.3을 권장한다."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:67
 msgid "Map database"
@@ -7594,7 +7588,7 @@ msgstr "AAT 최소시간"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:194
 msgid "Default AAT min. time for new AAT tasks."
-msgstr "새로 만드는 AAT 타스크에서, 기본 AAT 최소시간을 설정합니다."
+msgstr "새로 만드는 AAT 타스크에서, 기본 AAT 최소시간을 설정한다."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:197
 msgid "Optimisation margin"
@@ -7604,9 +7598,7 @@ msgstr "최적 마진"
 msgid ""
 "Safety margin for AAT task optimisation.  Optimisation seeks to complete the "
 "task at the minimum time plus this margin time."
-msgstr ""
-"AAT 타스크 최적화를 위한 안전 마진. 안전한 타스크 종료를 위해 주어진 최소 시"
-"간에 여기에 설정된 마진시간을 추가합니다."
+msgstr "AAT 타스크 최적화를 위한 안전 마진. 안전한 타스크 종료를 위해 주어진 최소 시간에 여기에 설정된 마진시간을 추가한다."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:92
 #, no-c-format
