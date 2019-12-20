@@ -1500,8 +1500,7 @@ TestACD()
   nmea_info.Reset();
   nmea_info.clock = 1;
 
-  /* $PAAVS responses from COM and XPDR must be ignored */
-  ok1(!device->ParseNMEA("$PAAVS,COM,118275,122550,50,50,1,0,0,0*30",nmea_info));
+  /* $PAAVS responses from XPDR must be ignored */
   ok1(!device->ParseNMEA("$PAAVS,XPDR,7000,1,0,1697,0,0*68",nmea_info));
 
   nmea_info.Reset();
@@ -1517,6 +1516,17 @@ TestACD()
   ok1(equals(nmea_info.baro_altitude, 457.33));
   ok1(nmea_info.settings.qnh_available);
   ok1(equals(nmea_info.settings.qnh.GetPascal(), 100500));
+
+  nmea_info.Reset();
+  nmea_info.clock = 1;
+
+  /* test COM response */
+  ok1(device->ParseNMEA("$PAAVS,COM,130330,122500,100,75,1,1,0,0*0D",
+                        nmea_info));
+
+  ok1(nmea_info.settings.active_frequency.GetKiloHertz() == 130330);
+  ok1(nmea_info.settings.standby_frequency.GetKiloHertz() == 122500);
+  ok1(equals(nmea_info.settings.volume, 100));
 
   delete device;
 }
@@ -1592,7 +1602,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(824);
+  plan_tests(827);
 
   TestGeneric();
   TestTasman();
