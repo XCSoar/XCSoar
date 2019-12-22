@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-12 22:06+0000\n"
+"PO-Revision-Date: 2019-12-23 01:21+0000\n"
 "Last-Translator: Markus Bagge <markus.bagge@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/sv/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10-dev\n"
+"X-Generator: Weblate 3.10\n"
 "X-Launchpad-Export-Date: 2014-10-13 19:28+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -85,13 +85,13 @@ msgid ""
 "FAI rules, allows only FAI start, finish and turn point types, for badges "
 "and records.  Enables FAI finish height for final glide calculation."
 msgstr ""
-"FAI regler; tillåter endast FAI start, mål och brytpunkter, för diplom och "
+"FAI regler; tillåter endast FAI start, mål och brytpunkter, för emblem och "
 "rekord. Aktiverar FAI målhöjd för finalglidsberäkning."
 
 #: src/Task/TypeStrings.cpp:54
 #, no-c-format
 msgid "FAI rules, path from a start to two turn points and return."
-msgstr "FAI regler, bana från start till två brytpunkter och tillbaka."
+msgstr "FAI regler, bana från start till två brytpunkter och åter."
 
 #: src/Task/TypeStrings.cpp:55
 #, no-c-format
@@ -128,6 +128,9 @@ msgid ""
 "mile cylinder.  Pilot can add additional points as needed.  Minimum task "
 "time applies."
 msgstr ""
+"Modifierad områdesuppgift. Uppgift med start, mål och minste en "
+"fördefinierad 1-mile cylinder. Piloten kan addera fler punkter efter behov. "
+"Minsta uppgiftstid gäller."
 
 #: src/Task/TypeStrings.cpp:62
 #, no-c-format
@@ -210,7 +213,7 @@ msgstr "En cylinder. Korsa kanten, och poängen räknas från centrum."
 #: src/Task/TypeStrings.cpp:88
 #, no-c-format
 msgid "A 1 mile cylinder.  Scored by farthest point reached in area."
-msgstr ""
+msgstr "En 1 mile cylinder. Poängsatt av mest avlägsna nådda punkt i området."
 
 #: src/Task/TypeStrings.cpp:89
 #, no-c-format
@@ -9469,6 +9472,8 @@ msgid ""
 "What's\n"
 "here?"
 msgstr ""
+"Vad är\n"
+"här?"
 
 #: Data/Input/default.xci:825
 msgid "Traffic List"
