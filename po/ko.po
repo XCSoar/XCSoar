@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-23 14:28+0000\n"
+"PO-Revision-Date: 2019-12-23 14:32+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -681,7 +681,7 @@ msgstr "상세설명"
 
 #: src/Waypoint/WaypointDetailsReader.cpp:150
 msgid "Loading Airfield Details File..."
-msgstr "활공장 디테일 파일 읽는중..."
+msgstr "자세한 활공장 파일 읽는 중..."
 
 #: src/Menu/ExpandMacros.cpp:83 src/Menu/ExpandMacros.cpp:116
 #: src/Menu/ExpandMacros.cpp:138
@@ -3683,7 +3683,7 @@ msgstr "XCSoar를 종료합니까?"
 #: src/Units/UnitsStore.cpp:39
 #, no-c-format
 msgid "European"
-msgstr "유럽(아시아)"
+msgstr "한국(유럽/아시아)"
 
 #: src/Units/UnitsStore.cpp:51
 #, no-c-format
