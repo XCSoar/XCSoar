@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-23 12:54+0000\n"
+"PO-Revision-Date: 2019-12-23 13:37+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -42,7 +42,7 @@ msgstr "FAI 배지/기록"
 #: src/Task/TypeStrings.cpp:32 src/Dialogs/Task/dlgTaskHelpers.cpp:82
 #, no-c-format
 msgid "FAI triangle"
-msgstr "FAI 삼각코스"
+msgstr "FAI 트라이앵글"
 
 #: src/Task/TypeStrings.cpp:33
 #, no-c-format
@@ -67,7 +67,7 @@ msgstr "AAT타스크"
 #: src/Task/TypeStrings.cpp:37
 #, no-c-format
 msgid "Modified area task (MAT)"
-msgstr "변형된 지역타스크"
+msgstr "변형된 영역타스크(MAT)"
 
 #: src/Task/TypeStrings.cpp:38
 #, no-c-format
@@ -91,17 +91,17 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:54
 #, no-c-format
 msgid "FAI rules, path from a start to two turn points and return."
-msgstr "FAI 룰, (FAI 삼각코스) 스타트 후 두개의 턴포인트를 통과 해서 출발점으로 돌아온다."
+msgstr "FAI 룰(FAI 트라이앵글): 스타트이후 두개의 턴포인트를 통과해서 출발점으로 돌아온다."
 
 #: src/Task/TypeStrings.cpp:55
 #, no-c-format
 msgid "FAI rules, path from start to a single turn point and return."
-msgstr "FAI 룰, (FAI 아웃&리턴) 스타트 후 하나의 턴포인트를 통과 한 후 출발점으로 돌아온다."
+msgstr "FAI 룰(FAI 아웃&리턴): 스타트 후 단일 턴포인트를 통과하고 출발점으로 돌아오는 경로."
 
 #: src/Task/TypeStrings.cpp:56
 #, no-c-format
 msgid "FAI rules, path from start to a goal destination."
-msgstr "FAI 룰, 스타트포인트 통과 후 골 포인트에 도착한다."
+msgstr "FAI 규칙: 스타트포인트를 통과해서 골 포인트까지 경로."
 
 #: src/Task/TypeStrings.cpp:57
 #, no-c-format
@@ -117,7 +117,7 @@ msgstr ""
 msgid ""
 "Task through assigned areas, minimum task time applies.  Restricted to "
 "cylinder and sector observation zones."
-msgstr "AAT 타스크, 실린더나 섹터간의 통과는 최소시간이 적용된다."
+msgstr "AAT 타스크: 실린더나 섹터간의 통과는 최소시간이 적용된다."
 
 #: src/Task/TypeStrings.cpp:61
 #, no-c-format
@@ -126,8 +126,8 @@ msgid ""
 "mile cylinder.  Pilot can add additional points as needed.  Minimum task "
 "time applies."
 msgstr ""
-"변형된 지역타스크.\r 시작,종료,에 최소 1개의 실린더(1마일)을 포함하여 조종사"
-"는 추가 포인트를 설정 할 수 있다.\r최소비행시간으로 적용된다."
+"변형된 지역타스크(MAT): 시작과 종료에 최소 1개의 실린더(1마일)을 포함해 설정할 수 있다. 파일럿의 필요에 따라 추가로 포인트를 "
+"추가할 수 있으며, 최소비행시간이 적용된다."
 
 #: src/Task/TypeStrings.cpp:62
 #, no-c-format
@@ -166,7 +166,7 @@ msgstr "실린더. 실린더 밖을 나올때 스타트 한다."
 msgid ""
 "A 90 degree sector with 'infinite' length sides.  Cross any edge, scored "
 "from corner point."
-msgstr "반경 무제한의 90도 부채꼴 섹터 경계를 안에서 밖으로 통과하는 경우."
+msgstr "반경 무제한의 90도 부채꼴 섹터: 경계를 안에서 밖으로 통과하는 경우."
 
 #: src/Task/TypeStrings.cpp:81
 #, no-c-format
@@ -183,8 +183,8 @@ msgid ""
 "(British rules) Any point within 1/2 km of center or 20km of a 90 degree "
 "sector.  Scored from center."
 msgstr ""
-"(영국식 룰) \r포인트에서 1/2km의 원혹은 반경 20km의 90도 섹터를 안에서 밖으"
-"로 통과할때 득점한다."
+"(영국식 룰)\n"
+"포인트에서 1/2km의 원혹은 반경 20km의 90도 섹터를 안에서 밖으로 통과할때 득점한다."
 
 #: src/Task/TypeStrings.cpp:85
 #, no-c-format
@@ -198,7 +198,7 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:87
 #, no-c-format
 msgid "A cylinder.  Any point within area scored from center."
-msgstr "실린더. 내부의 아무지점이나 통과하면 득점한다."
+msgstr "실린더: 내부의 아무지점이나 통과하면 득점한다."
 
 #: src/Task/TypeStrings.cpp:88
 #, no-c-format
@@ -227,7 +227,7 @@ msgstr "결승점에 닿은 반경 1km/90도 섹터의 영역."
 #: src/Task/TypeStrings.cpp:93
 #, no-c-format
 msgid "Cross finish gate line into area to finish."
-msgstr "골라인을 통과 할 경우."
+msgstr "골 포인트는 마지막 포인트에서 수직으로 교차해 그은 라인이다."
 
 #: src/Task/TypeStrings.cpp:94
 #, no-c-format
@@ -1349,7 +1349,7 @@ msgid ""
 "Magnetic track reported by the GPS. (Touch-screen/PC only) If this InfoBox "
 "is active in simulation mode, pressing the up and down  arrows adjusts the "
 "track."
-msgstr "GPS로 측정한 방위각(나침반) 트랙."
+msgstr "GPS로 측정한 나침반(방위각) 기록."
 
 #: src/InfoBoxes/Content/Factory.cpp:334
 #, no-c-format
@@ -1614,12 +1614,12 @@ msgstr "현 위치의 GPS 시각."
 #: src/InfoBoxes/Content/Factory.cpp:464 src/InfoBoxes/Content/Factory.cpp:465
 #, no-c-format
 msgid "Time UTC"
-msgstr "시각(UTC 세계표준시)"
+msgstr "UTC시각"
 
 #: src/InfoBoxes/Content/Factory.cpp:466
 #, no-c-format
 msgid "GPS time expressed in UTC."
-msgstr "UTC GPS시각"
+msgstr "UTC GPS시각."
 
 #: src/InfoBoxes/Content/Factory.cpp:472
 #, no-c-format
@@ -3995,7 +3995,7 @@ msgstr "I2C 버스"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:611
 msgid "Select the description or bus number that matches your configuration."
-msgstr "설정에 적합한 포트를 선택하십시오."
+msgstr "설정에 적합한 포트를 선택하시오."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid "I2C Addr"
@@ -4715,7 +4715,7 @@ msgstr "채우기 모드"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:106
 msgid "Defines how the airspace is filled with the configured color."
-msgstr "공역을 채울 색을 설정하십시오."
+msgstr "공역을 채울 색을 선택하시오."
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:105
 #: src/Monitor/AirspaceWarningMonitor.cpp:80
@@ -4896,7 +4896,7 @@ msgstr "경로"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:112
 #, no-c-format
 msgid "Scoring"
-msgstr "채점"
+msgstr "채점방식"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:117
 #, no-c-format
@@ -4911,7 +4911,7 @@ msgstr "바리오 소리"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:126
 #, no-c-format
 msgid "Task Rules"
-msgstr "타스크 규정"
+msgstr "타스크 규칙"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:127
 #, no-c-format
@@ -4986,7 +4986,7 @@ msgstr "설정"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:385
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
-msgstr "설정저장: XCSoar를 재시작하십시오."
+msgstr "설정저장: XCSoar를 재시작하시오."
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:276
 msgid "Content"
@@ -5425,7 +5425,7 @@ msgstr "시스템"
 #: src/Dialogs/dlgStatus.cpp:98
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:142
 msgid "Rules"
-msgstr "규정"
+msgstr "규칙"
 
 #: src/Dialogs/dlgStatus.cpp:101
 msgid "Times"
@@ -5978,7 +5978,7 @@ msgstr "공역 채우기 모드"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:237
 msgid "Specifies the mode for filling the airspace area."
-msgstr "공역 채우기 유형을 선택하십시오."
+msgstr "공역 채우기 유형을 선택하시오."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:242
 msgid "Airspace transparency"
@@ -6117,7 +6117,7 @@ msgstr "기체의 밸러스트(무게추)의 질량을 퍼센트로 표시(열�
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:80
 msgid "Show gross"
-msgstr "총상승량표시"
+msgstr "총상승량 표시"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:80
 msgid "Whether to show the gross climb rate."
@@ -6125,7 +6125,7 @@ msgstr "총 상승량을 표시한다."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:83
 msgid "Averager needle"
-msgstr "평균표시기"
+msgstr "평균 표시 화살표"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:84
 msgid ""
@@ -6133,9 +6133,8 @@ msgid ""
 "cruise, this needle displays the average netto value.  During circling, this "
 "needle displays the average gross value."
 msgstr ""
-"바리오 평균 표시기. 바리오 게이지에서 < 표시로 추가로 표시한다. 순항중일 경"
-"우 활공중의 평균 상승률을 표시, 써클링 중일경우 써멀의 평균 상승률이 표시된"
-"다."
+"바리오 평균 표시 화살표: 아날로그바리오에 < 마크로 표시 - 순항중일 경우 활공중의 평균 상승률을 표시, 써클링 중일경우 써멀의 평균 "
+"상승률이 표시된다."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:62
 #, no-c-format
@@ -6607,7 +6606,7 @@ msgstr "메뉴버튼 보기"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:210
 msgid "Show the Menubutton"
-msgstr "메뉴버튼표시: 나침반이 가려질 수 있음"
+msgstr "메뉴버튼보기: 나침반이 가려질 수 있음"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:56
 #, no-c-format
@@ -7207,8 +7206,7 @@ msgstr "웨이포인트(개요)"
 msgid ""
 "The file may contain extracts from enroute supplements or other contributed "
 "information about individual waypoints and airfields."
-msgstr ""
-"활공장/비행장 웨이포인트 등의 개요와 정보를 기록한 파일을 선택해주십시오."
+msgstr "이 파일에는 개별 웨이포인트 및 비행장에 대한 보충설명 또는 기타정보를 추가할 수 있다."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:83
 #, no-c-format
@@ -7419,7 +7417,7 @@ msgstr "기체아이콘"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:183
 msgid "Determines the way the wind arrow is drawn on the map."
-msgstr "지도상에 바람 화살표를 표시하는 방법을 선택하십시오."
+msgstr "지도에 풍향및 풍속에 대해 표시할 화살표 모양을 선택하시오."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:62
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:229
@@ -7454,7 +7452,7 @@ msgid ""
 "the task.  Set to 0 for no limit."
 msgstr ""
 "스타트 지점의 최고고도(AGL:Altitude Above Ground Level:대지고도 혹은 MSL:Mean Sea Level "
-"평균해발고도)를 설정한다. 제한이 없는 경우 0 로 설정한다(시작점 고도가 특정고도이하로 규정되었을 때 필요하다)."
+"평균해발고도)를 설정한다. 제한이 없는 경우 0 로 설정한다(시작포인트 고도가 특정고도 이하로 규정되었을 때 필요하다)."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:83
 msgid "Start max. height margin"
@@ -7626,8 +7624,9 @@ msgid ""
 "PG online contest with different track values: Free flight - 1 km = 1.0 "
 "point; flat trianlge - 1 km = 1.2 p; FAI triangle - 1 km = 1.4 p."
 msgstr ""
-"패러글라이딩 온라인콘테스트(PG online contest)  채점 규칙 : 자유비행 1km = "
-"1.0점, 플랫 삼각코스 = 1.2점, FAI 삼각코스 = 1.4점 이다."
+"패러글라이딩 온라인콘테스트(PG online contest)채점 규칙: 자유비행 1km = 1.0점, 얇은트라이앵글 1km = 1.2점, "
+"FAI트라이앵글 1km = \n"
+" 1.4점이다."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:110
 #, no-c-format
@@ -7636,8 +7635,8 @@ msgid ""
 "the XContest rules, but with different track values: 1 km = 1.5 points, 1.75 "
 "p and 2.0 p for FAI triangles respectively."
 msgstr ""
-"DHV 주최 유러피안 패러글라이딩 OLC, XContest 규칙과 비슷하지만, 배점이 다르"
-"다. 1km = 1.5점, FAI 삼각코스는 1.75점, 2.0점이다."
+"DHV 주최 유러피안 패러글라이딩 OLC규칙: XContest 규칙과 비슷하지만, 배점이 다르다. 자유비행 1km = 1.5점, 얇은 "
+"트라이앵글 1km = 1.75점, FAI 트라이앵글 1km = 2.0점이다."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:113
 #, no-c-format
@@ -7679,7 +7678,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:132
 msgid "FAI triangle areas"
-msgstr "FAI 삼각 코스"
+msgstr "FAI트라이앵글 영역"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:133
 msgid "Show FAI triangle areas on the map."
@@ -7687,11 +7686,11 @@ msgstr "FAI 트라이앵글로 비행한 영역을 지도에 표시한다."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:137
 msgid "FAI triangle threshold"
-msgstr "FAI 삼각코스 제한사항"
+msgstr "FAI 트라이앵글 제한사항"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:138
 msgid "Specifies which threshold is used for \"large\" FAI triangles."
-msgstr "FAI 삼각코스의 설정시에 어느 제한사항으로 설정 할 것인지 고르십시오."
+msgstr "FAI트라이앵글에 대한 제한사항을 선택하시오."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:197
 msgid "Terrain display"
@@ -7944,7 +7943,7 @@ msgid ""
 "The UTC offset field allows the UTC local time offset to be specified.  The "
 "local time is displayed below in order to make it easier to verify the "
 "correct offset has been entered."
-msgstr "UTC 보정값을 입력. 한국은 UTC + 9h 입니다."
+msgstr "UTC 보정값을 입력. 한국은 UTC + 9h이다."
 
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:90
 msgid "Use GPS time"
@@ -8307,7 +8306,7 @@ msgstr "턴 포인트"
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:238
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:261
 msgid "Task Manager"
-msgstr "작업 관리자"
+msgstr "타스크 관리자"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:235
 msgid "Validation Errors"
@@ -8538,7 +8537,7 @@ msgstr "3포인트"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:86
 msgid "non-FAI triangle"
-msgstr "FAI 삼각코스 아님"
+msgstr "FAI트라이앵글 아님"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:90
 #, c-format
@@ -8723,7 +8722,7 @@ msgstr "버저(Buzzer): 침하가 끝나고 상승직전 바리오가 0을 가�
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:84
 msgid "Min. Frequency"
-msgstr "침하 경고음"
+msgstr "싱크 경고음"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:85
 msgid "The tone frequency that is played at maximum sink rate."
@@ -8784,7 +8783,7 @@ msgstr "공항 ICAO 코드"
 
 #: src/Dialogs/Weather/NOAAList.cpp:185
 msgid "Please enter the FOUR letter code of the desired station."
-msgstr "목표 공항의 4자리 ICAO 코드를 입력하십시오."
+msgstr "목표 공항의 4자리 ICAO 코드를 입력하시오."
 
 #: src/Dialogs/Weather/NOAAList.cpp:191
 msgid ""
@@ -9540,7 +9539,7 @@ msgstr "항적"
 
 #: Data/Input/default.xci:59
 msgid "Above final glide"
-msgstr "현재 활공비를 유지하십시오"
+msgstr "현재 활공비를 유지하시오"
 
 #: Data/Input/default.xci:712
 msgid ""
