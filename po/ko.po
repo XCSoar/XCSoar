@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-23 13:41+0000\n"
+"PO-Revision-Date: 2019-12-23 14:05+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -2396,7 +2396,7 @@ msgstr "시작고도"
 #, no-c-format
 msgid ""
 "The contiguous period the ship has been below the task start max. height."
-msgstr "스타트 최대 고도보다 아래에 근접해 있음."
+msgstr "스타트 최대 고도보다 아래에 있음."
 
 #: src/InfoBoxes/Content/Factory.cpp:837
 #, no-c-format
@@ -2831,7 +2831,7 @@ msgid ""
 "and the distance are also shown. The position used is the optimized position "
 "of the active waypoint in the current task, the center of a selected goto "
 "waypoint or the target within the AAT sector for AAT tasks."
-msgstr "타스크에서 다음 웨이포인트를 가리키는 화살표. 최적화한 포인트나, 타크스 중심까지 표시한다."
+msgstr "타스크에서 다음 웨이포인트를 가리키는 화살표: 최적화한 포인트나, 타크스 중심까지 표시한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:1039
 #, no-c-format
@@ -3182,7 +3182,7 @@ msgstr "공역 감추기"
 
 #: src/Input/InputEventsAirspace.cpp:65
 msgid "Show airspace on"
-msgstr "공역 보이기"
+msgstr "공역 보기"
 
 #: src/Input/InputEventsTask.cpp:80
 msgid "Advance manually"
@@ -4584,7 +4584,7 @@ msgstr "맵아이템 목록"
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:40
 msgid "Show Location row"
-msgstr "현재위치보기"
+msgstr "현재위치 보기"
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:41
 msgid ""
@@ -4594,7 +4594,7 @@ msgstr "현재위치: 현재 위치를 선택하면 지정한 화면상의 위�
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:45
 msgid "Show Arrival Altitude"
-msgstr "도착고도보기"
+msgstr "도착고도 보기"
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:46
 msgid ""
@@ -6070,7 +6070,7 @@ msgstr "바리오바 표시"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:59
 msgid "Speed arrows"
-msgstr "속도표시"
+msgstr "속도 화살표"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:60
 msgid ""
@@ -6083,13 +6083,13 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:65
 msgid "Show average"
-msgstr "평균표시"
+msgstr "평균 상승 보기"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:66
 msgid ""
 "Whether to show the average climb rate.  In cruise mode, this switches to "
 "showing the average netto airmass rate."
-msgstr "평균상승률: 순항모드의 경우 기단에서의 평균상승률을 보여준다."
+msgstr "평균상승: 순항모드에서 기단의 평균상승률을 보여준다."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:71
 msgid "Show MacReady"
@@ -6101,23 +6101,23 @@ msgstr "맥크레디 설정을 표시할지 여부."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:74
 msgid "Show bugs"
-msgstr "노후도/피로도 표시"
+msgstr "노후도/피로도 보기"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:74
 msgid "Whether to show the bugs percentage."
-msgstr "기체 노후도(피로도)를 표시."
+msgstr "기체 노후도(피로도)를 표시한다."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:77
 msgid "Show ballast"
-msgstr "밸러스트 표시"
+msgstr "밸러스트 보기"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:77
 msgid "Whether to show the ballast percentage."
-msgstr "기체의 밸러스트(무게추)의 질량을 퍼센트로 표시(열기구)."
+msgstr "기체의 밸러스트(무게추)의 질량을 퍼센트로 확인한다(열기구)."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:80
 msgid "Show gross"
-msgstr "총상승량 표시"
+msgstr "총상승량 보기"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:80
 msgid "Whether to show the gross climb rate."
@@ -6300,7 +6300,7 @@ msgid ""
 "The language options selects translations for English texts to other "
 "languages. Select English for a native interface or Automatic to localise "
 "XCSoar according to the system settings."
-msgstr "언어설정: 사용 언어를 선택하시오."
+msgstr "언어설정: 화면 표시에 필요한 언어를 선택하시오."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:162
 msgid "Menu timeout"
@@ -6482,7 +6482,7 @@ msgstr "글자"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:126
 #, no-c-format
 msgid "Show text on tabbed dialogs."
-msgstr "메세지를 대화상자로 표시."
+msgstr "설정버튼을 글상자로 표시한다."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:127
 #, no-c-format
@@ -6492,7 +6492,7 @@ msgstr "아이콘"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:128
 #, no-c-format
 msgid "Show icons on tabbed dialogs."
-msgstr "설정버튼을 그림(아이콘)으로 표시한다."
+msgstr "설정버튼을 아이콘으로 표시한다."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:133
 #, no-c-format
@@ -6560,7 +6560,7 @@ msgstr "정보창 구성"
 msgid ""
 "A list of possible InfoBox layouts. Do some trials to find the best for your "
 "screen size."
-msgstr "정보창 구성 리스트. 적절한 설정을 찾아보시오."
+msgstr "정보창 구성 목록: 화면 크기에 적절하게 설정하시오."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:179
 msgid "FLARM display"
@@ -7479,12 +7479,12 @@ msgstr "타스크 포인트의 고도를 MSL로 설정한다."
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:97
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:247
 msgid "Start height ref."
-msgstr "스타트 고도"
+msgstr "스타트 고도 기준"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:98
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:248
 msgid "Reference used for start max height rule."
-msgstr "최고 스타트 고도(시작 포인트의 고도상승한계)에 사용하는 고도를 입력한다."
+msgstr "최고 스타트 고도(시작 포인트의 고도상승한계)에 사용하는 고도측정 방식을 선택한다."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:106
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:251
@@ -7503,12 +7503,12 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:113
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:256
 msgid "Finish height ref."
-msgstr "결승점 고도"
+msgstr "결승점 고도 기준"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:114
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:257
 msgid "Reference used for finish min height rule."
-msgstr "최저 결승점 고도(골 포인트의 최소인정고도)에 사용하는 고도를 입력한다."
+msgstr "최저 결승점 고도(골 포인트의 최소인정고도)에 사용하는 고도측정 방식을 선택한다."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:79
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
@@ -7682,7 +7682,7 @@ msgstr "FAI트라이앵글 영역"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:133
 msgid "Show FAI triangle areas on the map."
-msgstr "FAI 트라이앵글로 비행한 영역을 지도에 표시한다."
+msgstr "FAI트라이앵글로 비행한 영역을 지도에 표시한다."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:137
 msgid "FAI triangle threshold"
@@ -7936,14 +7936,14 @@ msgstr "위도/경도를 표시하는 단위."
 #: src/Dialogs/Device/Vega/LoggerParameters.hpp:33
 #, no-c-format
 msgid "UTC offset"
-msgstr "UTC시간보정"
+msgstr "UTC 오프셋"
 
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:81
 msgid ""
 "The UTC offset field allows the UTC local time offset to be specified.  The "
 "local time is displayed below in order to make it easier to verify the "
 "correct offset has been entered."
-msgstr "UTC시간보정값을 입력한다. 한국은 UTC + 9h이다."
+msgstr "UTC에 대한 현지시간 보정값을 입력한다. 한국은 UTC + 9h이다."
 
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:90
 msgid "Use GPS time"
@@ -8215,7 +8215,7 @@ msgstr "Skylines 서버에서 친구의 라이브트래킹을 연결한다."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:213
 msgid "Show nearby traffic"
-msgstr "근처의 트래픽 표시"
+msgstr "근처의 트래픽 보기"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:214
 msgid ""
@@ -8350,7 +8350,7 @@ msgstr "모두 삭제"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:354
 msgid "Clear all points?"
-msgstr "모든 포인트 삭제(타스크만 삭제합니다.)?"
+msgstr "모든 포인트 삭제(타스크만 삭제한다)?"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:354
 msgid "Task edit"
