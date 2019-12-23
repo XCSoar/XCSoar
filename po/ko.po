@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-23 13:37+0000\n"
+"PO-Revision-Date: 2019-12-23 13:41+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -5587,11 +5587,11 @@ msgstr "현재시각"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:110
 msgid "UTC time"
-msgstr "UTC 시각"
+msgstr "시각(UTC)"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:111
 msgid "UTC date"
-msgstr "UTC 날짜"
+msgstr "날짜(UTC)"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:112
 msgid "Flight time"
@@ -7936,14 +7936,14 @@ msgstr "위도/경도를 표시하는 단위."
 #: src/Dialogs/Device/Vega/LoggerParameters.hpp:33
 #, no-c-format
 msgid "UTC offset"
-msgstr "UTC 보정"
+msgstr "UTC시간보정"
 
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:81
 msgid ""
 "The UTC offset field allows the UTC local time offset to be specified.  The "
 "local time is displayed below in order to make it easier to verify the "
 "correct offset has been entered."
-msgstr "UTC 보정값을 입력. 한국은 UTC + 9h이다."
+msgstr "UTC시간보정값을 입력한다. 한국은 UTC + 9h이다."
 
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:90
 msgid "Use GPS time"
