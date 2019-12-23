@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-21 08:21+0000\n"
+"PO-Revision-Date: 2019-12-23 11:30+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -5794,7 +5794,7 @@ msgstr "클립"
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:60
 #, no-c-format
 msgid "Display airspaces below the clip altitude."
-msgstr "설정한 고도 이하의 공역을 표시."
+msgstr "설정한 고도 이하의 공역을 표시한다."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:62
 #, no-c-format
@@ -5894,7 +5894,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:193
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:155
 msgid "Label visibility"
-msgstr "웨이포인트 이름 표시"
+msgstr "표시 범위"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:194
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:156
@@ -5919,9 +5919,7 @@ msgstr "마진"
 msgid ""
 "For auto and all below airspace mode, this is the altitude above/below which "
 "airspace is included."
-msgstr ""
-"자동표시 및 모든공역표시, 이 설정은 이 고도 이상/이하의 공역을 포함하여 표시"
-"한다."
+msgstr "자동표시 및 모든공역표시: 설정 고도 이상/이하의 공역을 포함하여 표시한다."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:208
 msgid "Enable/disable all airspace warnings."
@@ -5943,7 +5941,7 @@ msgstr "경보시간"
 msgid ""
 "This is the time before an airspace incursion is estimated at which the "
 "system will warn the pilot."
-msgstr "파일럿에게 경보를 표시하는 시간을 설정한다."
+msgstr "파일럿에게 경보를 보여주는 시간을 설정한다."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:221
 msgid "Repetitive sound"
@@ -6040,7 +6038,7 @@ msgstr "써멀 밴드"
 msgid ""
 "This enables the display of the thermal profile (climb band) display on the "
 "map."
-msgstr "이 설정은 화면에 써멀 상승 밴드를 지도상에 표시한다."
+msgstr "화면에 써멀 상승 밴드를 지도상에 표시한다."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:101
 msgid "Final glide bar"
@@ -6101,7 +6099,7 @@ msgstr "맥크레디 보기"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:71
 msgid "Whether to show the MacCready setting."
-msgstr "MacCready 설정을 표시할지 여부."
+msgstr "맥크레디 설정을 표시할지 여부."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:74
 msgid "Show bugs"
@@ -6497,7 +6495,7 @@ msgstr "아이콘"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:128
 #, no-c-format
 msgid "Show icons on tabbed dialogs."
-msgstr "설정버튼을 그림(아이콘)으로 표시."
+msgstr "설정버튼을 그림(아이콘)으로 표시한다."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:133
 #, no-c-format
@@ -7259,7 +7257,7 @@ msgstr "바리오 #1 (하강점)"
 #, no-c-format
 msgid ""
 "The same colour scheme as the previous, but with dotted lines while sinking."
-msgstr "위 설정과 같으나 하강시에 만 점( . ) 으로 표시됩니다."
+msgstr "위 설정과 같으나 하강시에만 점( . ) 으로 보여진다."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:103
 #, no-c-format
@@ -8020,11 +8018,11 @@ msgstr "웨이포인트 이름을 표시하지 않음."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:101
 msgid "Label format"
-msgstr "표시 설정"
+msgstr "라벨형식"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:101
 msgid "Determines how labels are displayed with each waypoint"
-msgstr "웨이포인트 이름을 표시하는 방법"
+msgstr "웨이포인트 이름을 보여주는 형식"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:107
 #, no-c-format
@@ -8051,7 +8049,7 @@ msgstr "지형을 피해서 활공"
 msgid ""
 "Arrival height considering terrain avoidance. Requires \"Reach mode: Turning"
 "\" in \"Glide Computer > Route\" settings."
-msgstr "도착고도의 계산에서 지형을 우회하여 계산. 단 \"글라이더 컴퓨터 -> 루트 -> 도달범위 -> 선회\"의 설정이 필요함."
+msgstr "도착고도의 계산에서 지형을 우회하여 계산. 단 \"글라이더 컴퓨터 -> 루트 -> 도달범위 -> 선회\"의 설정이 필요하다."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:116
 #, no-c-format
@@ -9338,7 +9336,7 @@ msgstr "PDA전원"
 msgid ""
 "Enable output of +5V power supply for PDA etc. at Vega connector~X2.  If "
 "Vega is connected to Altair, this should be set to False."
-msgstr "+5V 외부전원 연결: Vega X2에 Altair를 연결한다면 이 설정이 필요함."
+msgstr "+5V 외부전원 연결: Vega X2에 Altair를 연결한다면 이 설정이 필요하다."
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:32
 #, no-c-format
