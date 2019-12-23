@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-23 11:30+0000\n"
+"PO-Revision-Date: 2019-12-23 12:54+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -846,19 +846,19 @@ msgstr "시작"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:91
 #, no-c-format
 msgid "Long"
-msgstr "길게표시"
+msgstr "긴 항적"
 
 #: src/Menu/ExpandMacros.cpp:321
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:92
 #, no-c-format
 msgid "Short"
-msgstr "짧게표시"
+msgstr "짧은 항적"
 
 #: src/Menu/ExpandMacros.cpp:324
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:93
 #, no-c-format
 msgid "Full"
-msgstr "모두표시"
+msgstr "모든 항적"
 
 #: src/Menu/ExpandMacros.cpp:327 src/Menu/ExpandMacros.cpp:332
 #: src/Menu/ExpandMacros.cpp:357 src/Menu/ExpandMacros.cpp:362
@@ -4740,12 +4740,12 @@ msgstr "공역경고"
 msgid ""
 "When the algorithm is switched off, the pilot is responsible for setting the "
 "wind estimate."
-msgstr "이 설정을 끈 경우 풍향 풍속의 측정은 파일럿이 해야 한다."
+msgstr "XCSoar에서 계산하지 않고, 수동으로 바람에 대해 입력한다."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:55
 #, no-c-format
 msgid "Requires only a GPS source."
-msgstr "GPS 정보가 필요하다."
+msgstr "GPS신호만 있으면 사용가능하다."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:56
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:213
@@ -4756,35 +4756,35 @@ msgstr "지그재그"
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:57
 #, no-c-format
 msgid "Requires GPS and an intelligent vario with airspeed output."
-msgstr "GPS 와 고기능 바리오(에어스피드 출력이 포함된)가 필요하다."
+msgstr "GPS정보와 에어스피드센서(피토센서)가 모두 필요하다."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:58
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:67
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:108
 #, no-c-format
 msgid "Both"
-msgstr "둘 다 사용"
+msgstr "모두 사용"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:59
 #, no-c-format
 msgid "Use ZigZag and circling."
-msgstr "지그재그와 선회 둘다 설정한다."
+msgstr "지그재그와 써클링을 모두 사용한다."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:63
 msgid "Auto wind"
-msgstr "자동풍향풍속"
+msgstr "바람측정방식"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:64
 msgid "This allows switching on or off the automatic wind algorithm."
-msgstr "이 설정은 바람표시 알고리즘을 켜고 끄는데 사용한다."
+msgstr "풍향과 풍속에 대해 계산하는 알고리즘을 선택 할 수 있다."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:67
 msgid "External wind"
-msgstr "외부측정바람"
+msgstr "외부풍속계"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:68
 msgid "Should XCSoar accept wind estimates from other instruments?"
-msgstr "외부센서로 측정한 바람을 XCSoar에서 사용합니까?"
+msgstr "추가 풍속,풍량계기를 이 기기에 연결하여 사용할 것인지 선택하시오?"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:72
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:156
@@ -4891,7 +4891,7 @@ msgstr "글라이더컴퓨터"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:111
 #, no-c-format
 msgid "Route"
-msgstr "루트"
+msgstr "경로"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:112
 #, no-c-format
@@ -5064,7 +5064,7 @@ msgstr "기체(Plane)"
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:243
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:390
 msgid "FLARM Traffic Details"
-msgstr "FLARM 상세트래픽"
+msgstr "FLARM 트래픽(상세)"
 
 #. Ask for confirmation
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:312
@@ -5862,13 +5862,13 @@ msgstr "공역을 채우지 않음."
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:151
 #, no-c-format
 msgid "No labels will be displayed."
-msgstr "아무 이름도 표시하지 않음."
+msgstr "아무 것도 표시하지 않음."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:85
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:140
 #, no-c-format
 msgid "All labels will be displayed."
-msgstr "모든 이름을 표시."
+msgstr "모든 웨이포인트를 표시."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:151
 msgid "Colours"
@@ -5899,7 +5899,7 @@ msgstr "표시 범위"
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:194
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:156
 msgid "Determines what labels are displayed."
-msgstr "표시항목을 선택."
+msgstr "웨이포인트를 화면에 얼마나 나오게 할 것인지 선택한다."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:198
 msgid "Clip altitude"
@@ -6022,9 +6022,7 @@ msgstr "FLARM 자동종료"
 msgid ""
 "Setting this to \"On\" will automatically close the FLARM dialog if there is "
 "no traffic. \"Off\" will keep the dialog open even without current traffic."
-msgstr ""
-"켜기로 설정하면 근처에 트래픽이 없을경우 FLARM상자는 자동으로 닫히며, 끄기로 "
-"선택하면 항상 표시된다."
+msgstr "설정을 켜면 근처에 트래픽이 없을경우 FLARM알림은 자동으로 사라지며, 끄기로 선택하면 항상 표시된다."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:94
 msgid "This enables the display of the thermal assistant gauge."
@@ -6042,7 +6040,7 @@ msgstr "화면에 써멀 상승 밴드를 지도상에 표시한다."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:101
 msgid "Final glide bar"
-msgstr "골러시(Goal Rush)바"
+msgstr "골러시바(Final Glide)"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:102
 msgid ""
@@ -6880,35 +6878,35 @@ msgstr "공역이나, 지형을 고려하지 않는다."
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:105
 #, no-c-format
 msgid "Routes will avoid terrain."
-msgstr "루트 설정시, 지형을 피해 설정한다."
+msgstr "경로를 계산할때 지형을 피해서 계산한다."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:107
 #, no-c-format
 msgid "Routes will avoid airspace."
-msgstr "루트 설정시, 공역을 피해 설정한다."
+msgstr "경로를 계산할때 공역을 피해서 계산한다."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:109
 #, no-c-format
 msgid "Routes will avoid airspace and terrain."
-msgstr "루트 설정시, 공역과 지형을 피해 설정한다."
+msgstr "경로를 계산할때 공역과 지형을 모두 피해서 계산한다."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:113
 msgid "Route mode"
-msgstr "루트 모드"
+msgstr "경로 모드"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:116
 msgid "Route climb"
-msgstr "루트 상승"
+msgstr "경로 상승"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:117
 msgid ""
 "When enabled and MC is positive, route planning allows climbs between the "
 "aircraft location and destination."
-msgstr "이 설정을 켜고, 맥크레디 값이 양수값으로 나오면, 목적지계산에서 상승을 허용한다."
+msgstr "비행중에 맥크레디 값이 양수로 계산되면, 경로계산에서 상승을 허용한다."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:122
 msgid "Route ceiling"
-msgstr "루트 상승한계"
+msgstr "경로 상승한계"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:123
 msgid ""
@@ -6916,8 +6914,7 @@ msgid ""
 "greater of current aircraft altitude plus 500 m and the thermal ceiling.  If "
 "disabled, climbs are unlimited."
 msgstr ""
-"설정시 상승한계치를 설정한다, 루트 계획에서 현재 기체고도에서 500m 추가상승까"
-"지로 제한한다. 설정이 꺼져 있을경우 무제한이다."
+"상승한계치 설정: 경로를 계산할때, 현재의 기체고도에서 500m만 더 상승할수 있게 제한한다. 설정을 끈다면 무제한으로 계산한다."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:131
 #, no-c-format
@@ -6932,7 +6929,7 @@ msgstr "직진"
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:133
 #, no-c-format
 msgid "The reach is from straight line paths from the glider."
-msgstr "직진 했을때의 글라이더 도달범위를 표시한다."
+msgstr "직진 했을때 글라이더 도달범위를 표시한다."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:134
 #, no-c-format
@@ -7014,7 +7011,7 @@ msgstr "도달 선"
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:167
 #, no-c-format
 msgid "Draws a dashed line at the working glide reach."
-msgstr "기체가 도달할 수 있는 거리를 직선으로 표시합니다."
+msgstr "기체가 도달할 수 있는 거리를 직선으로 표시한다."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:168
 #, no-c-format
@@ -7024,7 +7021,7 @@ msgstr "작업선, 지형선"
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:169
 #, no-c-format
 msgid "Draws a dashed line at the working and terrain glide reaches."
-msgstr "기체가 도달할수 있는 거리를 선으로 표시합니다."
+msgstr "기체가 도달할수 있는 거리를 선으로 표시한다."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:170
 #, no-c-format
@@ -7034,7 +7031,7 @@ msgstr "작업선, 어두운 지형"
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:171
 #, no-c-format
 msgid "Draws a dashed line at working, and shade terrain, glide reaches."
-msgstr "글라이더가 도달 할 수 있는 거리를 지면에 점선으로 표시합니다."
+msgstr "글라이더가 도달 할 수 있는 거리를 지면에 점선으로 표시한다."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:175
 msgid "Reach display"
@@ -7171,7 +7168,7 @@ msgstr "추가웨이포인트"
 msgid ""
 "Secondary waypoints file.  This may be used to add waypoints for a "
 "competition."
-msgstr "더 추가하는 웨이포인트파일 입니다. 현재 웨이포인트 위에 덧씌웁니다."
+msgstr "추가 웨이포인트파일: (대회를 참가하거나 할때)기본 웨이포인트 위에 덧씌울 수 있다."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:84
 msgid "Watched waypoints"
@@ -7183,9 +7180,7 @@ msgid ""
 "like calculation of arrival height in map display always takes place. Useful "
 "for waypoints like known reliable thermal sources (e.g. powerplants) or "
 "mountain passes."
-msgstr ""
-"높이의 계산이나, 도착표시등에 활용되는 특별한 웨이포인트 파일을 추가합니다. "
-"알려진 상승포인트, 유의할 곳 등을 넣는데 유용합니다."
+msgstr "높이의 계산이나, 특별한 표지에 활용되는 웨이포인트 파일: 알려진 써멀, 상승포인트, 유의할 곳 등을 넣는데 유용하다."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:92
 #: Data/Input/default.xci:860
@@ -7218,20 +7213,19 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:83
 #, no-c-format
 msgid "Disable display of ground track line."
-msgstr "대지트랙라인을 끕니다."
+msgstr "대지라인을 표시하지 않음."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:84
 #, no-c-format
 msgid "Always display ground track line."
-msgstr "대지트랙라인을 표시합니다."
+msgstr "대지라인을 표시."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:85
 #, no-c-format
 msgid ""
 "Display ground track line if there is a significant difference to plane "
 "heading."
-msgstr ""
-"대지에 그려지는 라인과 비행 중에 그리는 라인이 많이 차이 날 경우 표시합니다."
+msgstr "대지라인과 비행라인에 차이가 클 경우 표시."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:98
 #, no-c-format
@@ -7243,9 +7237,7 @@ msgstr "바리오 #1"
 msgid ""
 "Within lift areas lines get displayed green and thicker, while sinking lines "
 "are shown brown and thin. Zero lift is presented as a grey line."
-msgstr ""
-"상승구역에서는 녹색 굵은 선, 침하구역에서는 갈색의 얆은 선, 고도변화가 없을"
-"시 회색선으로 표시합니다."
+msgstr "상승할 때는 녹색 굵은 선, 하강할 때는 갈색의 얆은 선, 고도변화가 없을 때는 회색선으로 표시한다."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:101
 #, no-c-format
@@ -7257,7 +7249,7 @@ msgstr "바리오 #1 (하강점)"
 #, no-c-format
 msgid ""
 "The same colour scheme as the previous, but with dotted lines while sinking."
-msgstr "위 설정과 같으나 하강시에만 점( . ) 으로 보여진다."
+msgstr "위 설정과 같으나 하강은 점( . )으로 표시한다."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:103
 #, no-c-format
@@ -7269,9 +7261,7 @@ msgstr "바리오 #2"
 msgid ""
 "The climb colour for this scheme is orange to red, sinking is displayed as "
 "light blue to dark blue. Zero lift is presented as a yellow line."
-msgstr ""
-"상승구역에서는 빨간색 선, 침하구역에서는 파란색 선, 고도변화가 없을시 노란색 "
-"선으로 표시합니다."
+msgstr "상승할 때는 빨간색 선, 하강할 때는 파란색 선, 고도변화가 없을 때는 노란색 선으로 표시한다."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:106
 #, no-c-format
@@ -7373,7 +7363,7 @@ msgstr "대지라인"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:144
 msgid "Display the ground track as a grey line on the map."
-msgstr "대지위의 항적을 회색선으로 표시합니다."
+msgstr "비행항적을 대지위에 회색선으로 표시한다."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:147
 msgid "FLARM traffic"
@@ -7381,7 +7371,7 @@ msgstr "FLARM 트래픽"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:147
 msgid "This enables the display of FLARM traffic on the map window."
-msgstr "FLARM 트래픽을 지도창에서 보여줍니다."
+msgstr "FLARM 트래픽(Flarm을 설정한 다른 기체)을 지도에 표시한다."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:150
 msgid "Trail length"
@@ -7390,7 +7380,7 @@ msgstr "항적길이"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:151
 msgid ""
 "Determines whether and how long a snail trail is drawn behind the glider."
-msgstr "지도에 표시되는 비행항적의 길이를 선택할 수 있습니다."
+msgstr "지도에서 보이는 비행항적의 길이를 선택할 수 있다."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:163
 msgid "Trail type"
@@ -7398,7 +7388,7 @@ msgstr "항적유형(색상)"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:164
 msgid "Sets the type of the snail trail display."
-msgstr "비행시 항적의 표시색상및 모양을 선택할 수 있습니다."
+msgstr "비행항적의 표시색 및 모양을 선택할 수 있다."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:167
 msgid "Trail scaled"
@@ -7407,11 +7397,11 @@ msgstr "항적굵기변화(바리오)"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:168
 msgid ""
 "If set to ON the snail trail width is scaled according to the vario signal."
-msgstr "항적선이 고도변화에 따라 굵기가 다르게 기록됩니다."
+msgstr "비행기록선이 고도변화에 따라 굵기가 다르게 보인다."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:172
 msgid "Detour cost markers"
-msgstr "우회 포인트 마크"
+msgstr "포인트 우회 마커"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:173
 msgid ""
@@ -7420,8 +7410,8 @@ msgid ""
 "extra distance required to reach that point as a percentage of straight-line "
 "distance to the waypoint."
 msgstr ""
-"기체방향이 현재 목표한 웨이포인트에서 벗어나면 마커가 항공기 앞에 표시된다. 마커의 값은 웨이포인트까지의 직선 거리의 백분율로 해당 "
-"포인트에 도착하는 데 필요한 추가 거리이다."
+"기체방향이 목표하는 웨이포인트에서 벗어나면 마커가 항공기 앞에 표시된다. 마커의 선과 값은 웨이포인트까지의 직선 거리의 백분율로 해당 "
+"포인트에 도착하는 데 필요한 추가 거리를 표시한다."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:179
 msgid "Aircraft symbol"
@@ -7450,9 +7440,7 @@ msgstr "스타트 최대속도 마진"
 msgid ""
 "Maximum speed above maximum start speed to tolerate.  Set to 0 for no "
 "tolerance."
-msgstr ""
-"스타트 최대 속도에 추가되는 여유 속도를 설정합니다. 허용범위가 없는경우 0으"
-"로 설정합니다."
+msgstr "스타트 최대 속도에 추가되는 여유 속도를 설정한다. 0으로 설정하면 여유속도가 없다."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:76
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:234
@@ -7498,7 +7486,7 @@ msgstr "스타트 고도"
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:98
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:248
 msgid "Reference used for start max height rule."
-msgstr "최고 스타트 고도에 대한 기준값을 설정합니다."
+msgstr "최고 스타트 고도(시작 포인트의 고도상승한계)에 사용하는 고도를 입력한다."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:106
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:251
@@ -7522,7 +7510,7 @@ msgstr "결승점 고도"
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:114
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:257
 msgid "Reference used for finish min height rule."
-msgstr "최저 결승점 고도에 대한 기준값을 설정합니다."
+msgstr "최저 결승점 고도(골 포인트의 최소인정고도)에 사용하는 고도를 입력한다."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:79
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
@@ -7544,7 +7532,7 @@ msgstr "타스크 반경"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:144
 msgid "Default start type for new tasks you create."
-msgstr "시작 포인트를 입력할때 기본적으로 입력되는 설정입니다."
+msgstr "시작 포인트의 기본입력 설정."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:149
 msgid "Default radius or gate width of the start zone for new tasks."
@@ -7577,7 +7565,7 @@ msgstr "턴포인트의 타스크 반경이나 게이트 폭의 기본값을 설
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:177
 msgid "Default task type for new tasks you create."
-msgstr "새 타스크를 만들때 기본적으로 입력되는 설정을 입력합니다."
+msgstr "새 타스크생성에 사용하는 기본 타스크 유형."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:194
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:215
@@ -7610,9 +7598,8 @@ msgid ""
 "leg less than 28% of total except for tasks longer than 500km: No leg less "
 "than 25% or larger than 45%."
 msgstr ""
-"FAI 트라이앵글 룰로 설정합니다. 턴 3회와 시작점과 끝점이 같아야 합니다. 구간 "
-"겹침이 28%를 넘지 않아야 하며, 500km 이상 타스크의 경우 25%이상 이어야 합니"
-"다."
+"FAI 트라이앵글: 턴 3회와 시작점과 끝점이 같아야 한다. 구간 겹침이 28%를 넘지 않아야 하며, 500km이상 타스크의 경우 25%"
+"이상 겹치지 않거나, 45%이상 길어야 한다."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:97
 #, no-c-format
@@ -7676,8 +7663,8 @@ msgid ""
 "Select the rules used for calculating optimal points for the On-Line "
 "Contest. The implementation  conforms to the official release 2010, Sept.23."
 msgstr ""
-"OLC(On-Line contest) 온라인 콘테스트 점수 계산방법을 선택합니다. 본 규칙은 "
-"2010년 9월 23일까지 업데이트된 기준입니다."
+"OLC(On-Line contest) 온라인 콘테스트 점수 계산방법: 본 규칙은 2010년 9월 23일 이전까지 업데이트된 항목을 "
+"준수한다."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:124
 msgid "Predict Contest"
@@ -7696,7 +7683,7 @@ msgstr "FAI 삼각 코스"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:133
 msgid "Show FAI triangle areas on the map."
-msgstr "FAI 삼각 코스로 비행한 영역을 지도에 보여줍니다."
+msgstr "FAI 트라이앵글로 비행한 영역을 지도에 표시한다."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:137
 msgid "FAI triangle threshold"
@@ -7712,7 +7699,7 @@ msgstr "지형표시"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:198
 msgid "Draw a digital elevation terrain on the map."
-msgstr "지형을 화면에 표시합니다."
+msgstr "디지털 지형을 화면에 표시한다."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:202
 msgid "Topography display"
@@ -7803,7 +7790,7 @@ msgstr "지형색상"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:226
 msgid "Defines the color ramp used in terrain rendering."
-msgstr "지형 색 설정."
+msgstr "지형 렌더링에 사용하는 색상구성을 선택한다."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:232
 #, no-c-format
@@ -8018,7 +8005,7 @@ msgstr "웨이포인트 이름을 표시하지 않음."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:101
 msgid "Label format"
-msgstr "라벨형식"
+msgstr "이름 형식"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:101
 msgid "Determines how labels are displayed with each waypoint"
@@ -8049,7 +8036,8 @@ msgstr "지형을 피해서 활공"
 msgid ""
 "Arrival height considering terrain avoidance. Requires \"Reach mode: Turning"
 "\" in \"Glide Computer > Route\" settings."
-msgstr "도착고도의 계산에서 지형을 우회하여 계산. 단 \"글라이더 컴퓨터 -> 루트 -> 도달범위 -> 선회\"의 설정이 필요하다."
+msgstr ""
+"도착고도를 계산할때 지형을 우회하여 계산: 단 \"글라이더 컴퓨터 -> 경로 -> 도달범위 모드 -> 선회\"의 설정이 필요하다."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:116
 #, no-c-format
@@ -8061,8 +8049,7 @@ msgstr "직선활공 & 지형비행"
 msgid ""
 "Both arrival heights are displayed. Requires \"Reach mode: Turning\" in "
 "\"Glide Computer > Route\" settings."
-msgstr ""
-"직선활공과 지형비행의 도착 고도를 동시에 표시: \"글라이더 컴퓨터 -> 루트 -> 도달범위 모드 -> 선회\" 설정이 필요하다."
+msgstr "직선활공과 지형비행의 도착고도를 동시에 표시: \"글라이더 컴퓨터 -> 경로 -> 도달범위 모드 -> 선회\" 설정이 필요하다."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:124
 msgid "Determines how arrival height is displayed in waypoint labels"
@@ -8080,7 +8067,7 @@ msgstr "외각선"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:134
 msgid "Label style"
-msgstr "라벨 스타일"
+msgstr "이름 스타일"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:142
 #, no-c-format
