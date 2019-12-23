@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-23 14:32+0000\n"
+"PO-Revision-Date: 2019-12-24 08:21+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -517,7 +517,7 @@ msgstr "트랜스폰더 수신기"
 #: src/FLARM/Error.cpp:60
 #, no-c-format
 msgid "Other"
-msgstr "그밖에"
+msgstr "Other"
 
 #: src/Logger/Logger.cpp:112 src/Dialogs/Device/ManageCAI302Dialog.cpp:69
 msgid "Start Logger"
@@ -3348,7 +3348,9 @@ msgstr "파일 선택"
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:338
 #, no-c-format
 msgid "FLARM radar"
-msgstr "FLARM 레이더"
+msgstr ""
+"FLARM\n"
+"레이더"
 
 #: src/PageSettings.cpp:60
 msgid "Map and InfoBoxes"
@@ -4590,7 +4592,7 @@ msgstr "현재위치: 현재 위치를 선택하면 지정한 화면상의 위�
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:45
 msgid "Show Arrival Altitude"
-msgstr "도착고도 보기"
+msgstr "도착고도보기"
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:46
 msgid ""
@@ -5055,7 +5057,9 @@ msgstr "주파수"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:155 Data/Input/default.xci:547
 msgid "Plane"
-msgstr "기체(Plane)"
+msgstr ""
+"기체\n"
+"(Plane)"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:243
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:390
@@ -5412,7 +5416,9 @@ msgstr "상태"
 
 #: src/Dialogs/dlgStatus.cpp:89 Data/Input/default.xci:563
 msgid "Flight"
-msgstr "기체(Flight)"
+msgstr ""
+"기체\n"
+"(Flight)"
 
 #: src/Dialogs/dlgStatus.cpp:92 Data/Input/default.xci:539
 msgid "System"
@@ -5729,7 +5735,9 @@ msgstr "웨이포인트를 삭제합니까?"
 
 #: src/Dialogs/Waypoint/Manager.cpp:316 Data/Input/default.xci:597
 msgid "Waypoints Editor"
-msgstr "웨이포인트 에디터"
+msgstr ""
+"웨이포인트\n"
+"에디터"
 
 #: src/Dialogs/Waypoint/Manager.cpp:326
 msgid "Save changes to waypoint file?"
@@ -5762,7 +5770,9 @@ msgstr "UTM 형식의 웨이포인트는 편집할 수 없음."
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:130
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:137
 msgid "Waypoint Editor"
-msgstr "웨이포인트 에디터"
+msgstr ""
+"웨이포인트\n"
+"에디터"
 
 #: src/Dialogs/Waypoint/WaypointList.cpp:456
 msgid "Choose a filter or click here"
@@ -5864,7 +5874,7 @@ msgstr "아무 것도 표시하지 않음."
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:140
 #, no-c-format
 msgid "All labels will be displayed."
-msgstr "모든 웨이포인트를 표시."
+msgstr "모든 이름을 표시."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:151
 msgid "Colours"
@@ -5895,7 +5905,7 @@ msgstr "표시 범위"
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:194
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:156
 msgid "Determines what labels are displayed."
-msgstr "웨이포인트를 화면에 얼마나 나오게 할 것인지 선택한다."
+msgstr "레이블을 화면에 얼마나 나오게 할 것인지 선택한다."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:198
 msgid "Clip altitude"
@@ -6079,7 +6089,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:65
 msgid "Show average"
-msgstr "평균 상승 보기"
+msgstr "평균상승 보기"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:66
 msgid ""
@@ -6320,7 +6330,7 @@ msgstr "글자순차선택(키보드를 쓰지 않고 위아래 버튼만으로 
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:176
 msgid "Text input style"
-msgstr "문자 입력 스타일"
+msgstr "문자입력스타일"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:177
 msgid ""
@@ -6615,19 +6625,19 @@ msgstr "파일럿 이름"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:70
 msgid "Time step cruise"
-msgstr "순항 기록 시간"
+msgstr "순항 기록시간"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:71
 msgid "This is the time interval between logged points when not circling."
-msgstr "로그 기록 시간: 1초에 가까울수록 세밀하게 저장한다."
+msgstr "로그 기록시간: 1초에 가까울수록 세밀하게 저장한다."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:75
 msgid "Time step circling"
-msgstr "써클링 기록 시간"
+msgstr "써클링 기록시간"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:76
 msgid "This is the time interval between logged points when circling."
-msgstr "써클링 로그 기록 시간: 1초에 가까울수록 세밀하게 저장한다."
+msgstr "써클링 로그 기록시간: 1초에 가까울수록 세밀하게 저장한다."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:80
 msgid "Auto. logger"
@@ -7035,7 +7045,7 @@ msgstr "도달범위 표시"
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:65
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:124
 msgid "Arrival height"
-msgstr "도착고도"
+msgstr "도착고도계산"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:66
 msgid ""
@@ -7698,7 +7708,7 @@ msgstr "디지털 지형을 화면에 표시한다."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:202
 msgid "Topography display"
-msgstr "지역명/도로 표시"
+msgstr "지역명/도로표시"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:203
 msgid "Draw topographical features (roads, rivers, lakes etc.) on the map."
@@ -8048,7 +8058,7 @@ msgstr "직선활공과 지형비행의 도착고도를 동시에 표시: \"글�
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:124
 msgid "Determines how arrival height is displayed in waypoint labels"
-msgstr "목표에 도착할때의 고도를 계산하는 방법을 설정"
+msgstr "도착고도계산: 목표에 도착했을 때 기체의 예상 고도를 계산하는 방법"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:129
 #, no-c-format
@@ -9452,7 +9462,9 @@ msgstr ""
 
 #: Data/Input/default.xci:825
 msgid "Traffic List"
-msgstr "트래픽 리스트"
+msgstr ""
+"트래픽\n"
+"리스트"
 
 #: Data/Input/default.xci:514 Data/Input/default.xci:1079
 msgid "Topo."
