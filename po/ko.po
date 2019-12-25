@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-25 06:08+0000\n"
+"PO-Revision-Date: 2019-12-25 06:11+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -1119,12 +1119,12 @@ msgstr "직전 써멀에서의 획득/손실량을 표시한다."
 #: src/InfoBoxes/Content/Factory.cpp:209
 #, no-c-format
 msgid "Last thermal duration"
-msgstr "직전열시간"
+msgstr "써멀(직전써멀 선회시간)"
 
 #: src/InfoBoxes/Content/Factory.cpp:210
 #, no-c-format
 msgid "TL duration"
-msgstr "써멀(선회시간)"
+msgstr "직전열시간"
 
 #: src/InfoBoxes/Content/Factory.cpp:211
 #, no-c-format
