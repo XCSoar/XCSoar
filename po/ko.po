@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-25 04:54+0000\n"
+"PO-Revision-Date: 2019-12-25 05:57+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -1061,7 +1061,7 @@ msgid ""
 "(height gain since leaving the last thermal). If the vertical speed is close "
 "to zero, the displayed value is '---'."
 msgstr ""
-"마지막 써멀의 최고점에서부터의 고도와 현재 고도를 뺀 값이다. 마이너스값은 이후에 더 상승되었을 때 이며, 고도가 같을때는 ---로 "
+"직전 써멀의 최고점에서부터의 고도와 현재 고도를 뺀 값이다. 마이너스값은 이후에 더 상승되었을 때 이며, 고도가 같을때는 ---로 "
 "표시된다."
 
 #: src/InfoBoxes/Content/Factory.cpp:185
@@ -1099,29 +1099,27 @@ msgstr "직전써멀평균"
 msgid ""
 "Total altitude gain/loss in the last thermal divided by the time spent "
 "circling."
-msgstr ""
-"마지막 써멀에서의 고도상승/손실량이다.\n"
-"써멀선회중의 고도변화를 소요시간으로 나눈 값이다."
+msgstr "직전 써멀에서의 고도상승/손실량: 앞 써멀의 고도변화를 소요시간으로 나눈 값이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:201
 #, no-c-format
 msgid "Last thermal gain"
-msgstr "써멀(마지막 상승값)"
+msgstr "써멀(직전 서멀의 고도 획득량)"
 
 #: src/InfoBoxes/Content/Factory.cpp:202
 #, no-c-format
 msgid "TL Gain"
-msgstr "써멀이득"
+msgstr "직전열이득"
 
 #: src/InfoBoxes/Content/Factory.cpp:203
 #, no-c-format
 msgid "Total altitude gain/loss in the last thermal."
-msgstr "마지막 써멀에서 획득/손실량을 표시한다."
+msgstr "직전 써멀에서의 획득/손실량을 표시한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:209
 #, no-c-format
 msgid "Last thermal duration"
-msgstr "써멀(마지막 써멀 선회시간)"
+msgstr "써멀(직전써멀 선회시간)"
 
 #: src/InfoBoxes/Content/Factory.cpp:210
 #, no-c-format
@@ -1131,7 +1129,7 @@ msgstr "써멀(선회시간)"
 #: src/InfoBoxes/Content/Factory.cpp:211
 #, no-c-format
 msgid "Time spent circling in the last thermal."
-msgstr "마지막으로 써멀에서 선회하던 시간을 보여준다."
+msgstr "직전의 써멀에서 선회한 시간을 표시한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:217
 #, no-c-format
@@ -1223,8 +1221,8 @@ msgid ""
 "task. (Touch-screen/PC only) Pressing the enter cursor key brings up the "
 "waypoint details."
 msgstr ""
-"선택한 웨이포인트의 위치로 향하는 방위각. UP/DOWN 커서로 다음 웨이포인트를 선택한다. PC에서 엔터키를 누르면 웨이포인트 설명을 "
-"볼 수 있다."
+"선택한 웨이포인트로 향하는 방위각. UP/DOWN 커서로 다음 웨이포인트를 선택한다. PC에서 엔터키를 누르면 웨이포인트 설명을 볼 수 "
+"있다."
 
 #: src/InfoBoxes/Content/Factory.cpp:260
 #, no-c-format
@@ -1381,7 +1379,7 @@ msgstr "풍속은 XCSoar가 계산해서 표시. 정보창을 눌러 수동 보�
 #: src/InfoBoxes/Content/Factory.cpp:349
 #, no-c-format
 msgid "Wind bearing"
-msgstr "풍향"
+msgstr "바람(풍향)"
 
 #: src/InfoBoxes/Content/Factory.cpp:350
 #, no-c-format
@@ -1445,7 +1443,7 @@ msgstr "AAT(Assigned Area Task) 최소거리: 현재 타스크에서 가능한 �
 #: src/InfoBoxes/Content/Factory.cpp:382
 #, no-c-format
 msgid "AAT speed max. distance"
-msgstr "AAT타스크 최대속도, 거리"
+msgstr "AAT속도, 최대거리"
 
 #: src/InfoBoxes/Content/Factory.cpp:383
 #, no-c-format
@@ -1462,7 +1460,7 @@ msgstr "AAT(Assigned Area Task)에서 남은 AAT시간으로 가능한 최대 �
 #: src/InfoBoxes/Content/Factory.cpp:390
 #, no-c-format
 msgid "AAT speed min. distance"
-msgstr "AAT타스크 최소속도, 최대거리"
+msgstr "AAT속도, 최소거리"
 
 #: src/InfoBoxes/Content/Factory.cpp:391
 #, no-c-format
@@ -2027,7 +2025,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:650
 #, no-c-format
 msgid "Thermal average over all"
-msgstr "써멀(비행전체평균상승)"
+msgstr "써멀(비행전체 평균상승)"
 
 #: src/InfoBoxes/Content/Factory.cpp:651
 #, no-c-format
@@ -2042,19 +2040,19 @@ msgstr "비행중의 모든 써멀에 대한 평균상승률."
 #: src/InfoBoxes/Content/Factory.cpp:658
 #, no-c-format
 msgid "Task req. total height trend"
-msgstr "고도(타스크트렌드)"
+msgstr "바리오(이륙에서 현재까지의 평균값)"
 
 #: src/InfoBoxes/Content/Factory.cpp:659
 #, no-c-format
 msgid "RH Trend"
-msgstr "필요고도"
+msgstr "바리오트렌드"
 
 #: src/InfoBoxes/Content/Factory.cpp:660
 #, no-c-format
 msgid ""
 "Trend (or neg. of the variation) of the total required height to complete "
 "the task."
-msgstr "필요고도, 타스크종료에 필요한 고도."
+msgstr "바리오트렌드(상승 혹은 하강) , 타스크 종료를 위해 필요한 상승,하강의 추세치."
 
 #: src/InfoBoxes/Content/Factory.cpp:666
 #, no-c-format
@@ -2104,7 +2102,7 @@ msgstr "예비1"
 #: src/InfoBoxes/Content/Factory.cpp:684
 #, no-c-format
 msgid "Displays name and bearing to the best alternate landing location."
-msgstr "예비 착륙장까지의 거리와 방향."
+msgstr "예비 1착륙장까지의 거리와 방향."
 
 #: src/InfoBoxes/Content/Factory.cpp:690
 #, no-c-format
@@ -2119,7 +2117,7 @@ msgstr "예비2"
 #: src/InfoBoxes/Content/Factory.cpp:692
 #, no-c-format
 msgid "Displays name and bearing to the second alternate landing location."
-msgstr "예비 2번착륙장의 거리와 방향."
+msgstr "예비 2착륙장의 거리와 방향."
 
 #: src/InfoBoxes/Content/Factory.cpp:698
 #, no-c-format
@@ -2141,12 +2139,12 @@ msgstr "예비착륙장까지 필요한 활공비. 고도상승을 고려하지 
 #: src/InfoBoxes/Content/Factory.cpp:706
 #, no-c-format
 msgid "Height above take-off"
-msgstr "고도(이륙장)"
+msgstr "고도차(이륙장고도와 현재 기체고도의 차이)"
 
 #: src/InfoBoxes/Content/Factory.cpp:707
 #, no-c-format
 msgid "H T/O"
-msgstr "이륙장고도"
+msgstr "이륙장고도차"
 
 #: src/InfoBoxes/Content/Factory.cpp:708
 #, no-c-format
@@ -2559,7 +2557,7 @@ msgstr "기압고도, 기압고도계가 없을 경우 GPS 고도이다."
 #: src/InfoBoxes/Content/Factory.cpp:912
 #, no-c-format
 msgid "Thermal next leg equivalent"
-msgstr "써멀(다음포인트의 써멀 평균 상승률)"
+msgstr "써멀(다음포인트까지 필요한 상승량)"
 
 #: src/InfoBoxes/Content/Factory.cpp:913
 #, no-c-format
@@ -2571,8 +2569,7 @@ msgstr "포인트써멀"
 msgid ""
 "The thermal rate of climb on next leg which is equivalent to a thermal equal "
 "to the MacCready setting on current leg."
-msgstr ""
-"다음포인트(leg)의 써멀 평균 상승률 설정. 현재의 맥레이디 설정값과 동일하다."
+msgstr "다음포인트(leg)까지의 필요 상승률. 현재의 맥크레디 설정값과 동일하다."
 
 #: src/InfoBoxes/Content/Factory.cpp:920
 #, no-c-format
@@ -2616,7 +2613,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:183
 #, no-c-format
 msgid "Wind arrow"
-msgstr "풍향풍속(바람)"
+msgstr "바람(풍향/풍속화살표)"
 
 #: src/InfoBoxes/Content/Factory.cpp:938
 #: src/Dialogs/Settings/dlgConfiguration.cpp:110
@@ -3462,7 +3459,7 @@ msgstr "써멀 예상 평균 상승률, 상승기류가 없을 때를 기준으�
 #: src/Weather/Rasp/RaspStore.cpp:58
 #, no-c-format
 msgid "BL Wind spd"
-msgstr "블록 풍향/풍속"
+msgstr "BL풍속"
 
 #: src/Weather/Rasp/RaspStore.cpp:59
 #, no-c-format
@@ -6799,7 +6796,7 @@ msgstr "각 페이지별로 지도 확대/축소 범위를 고정한다."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:171
 msgid "Main area"
-msgstr "주정보창 표시"
+msgstr "메인화면"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:172
 msgid "Specifies what should be displayed in the main area."
@@ -6818,7 +6815,7 @@ msgstr "전체화면 보기 (정보창 없음)"
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:182
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:354
 msgid "InfoBoxes"
-msgstr "정보창설정"
+msgstr "정보창 구성"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:183
 msgid "Specifies which InfoBoxes should be displayed on this page."
