@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-10-29 16:53+0000\n"
+"PO-Revision-Date: 2019-12-27 16:26+0000\n"
 "Last-Translator: Cloud Esp <Frederic.Darboux@inra.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.9.1\n"
+"X-Generator: Weblate 3.10\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -69,7 +69,7 @@ msgstr "AAT"
 #: src/Task/TypeStrings.cpp:37
 #, no-c-format
 msgid "Modified area task (MAT)"
-msgstr "Circuit à zone modifiée (MAT)"
+msgstr "Circuit à secteurs modifiés (MAT)"
 
 #: src/Task/TypeStrings.cpp:38
 #, no-c-format
@@ -121,8 +121,8 @@ msgid ""
 "Task through assigned areas, minimum task time applies.  Restricted to "
 "cylinder and sector observation zones."
 msgstr ""
-"Passage par des zones définies avec temps minimum de vol. Les zones sont des "
-"cercles ou portions de cercles."
+"Passage par des zones définies avec durée minimale de vol. Les zones sont "
+"des cercles ou portions de cercles."
 
 #: src/Task/TypeStrings.cpp:61
 #, no-c-format
@@ -142,7 +142,7 @@ msgid ""
 "applies."
 msgstr ""
 "Épreuve comprenant un mélange de zones définies et de points de virages sans "
-"zone, avec temps minimum de vol."
+"zone, avec durée minimale de vol."
 
 #: src/Task/TypeStrings.cpp:63
 #, no-c-format
@@ -724,7 +724,7 @@ msgstr "Point de virage précédent"
 
 #: src/Menu/ExpandMacros.cpp:94
 msgid "Furthest Landpoint"
-msgstr "Point de poser le plus éloigné"
+msgstr "Point d'atterrissage le plus éloigné"
 
 #: src/Menu/ExpandMacros.cpp:95
 msgid "Next Landpoint"
@@ -732,7 +732,7 @@ msgstr "Prochain point d'atterrissage"
 
 #: src/Menu/ExpandMacros.cpp:101
 msgid "Closest Landpoint"
-msgstr "atterrissage  le plus proche"
+msgstr "Atterrissage le plus proche"
 
 #: src/Menu/ExpandMacros.cpp:102
 msgid "Previous Landpoint"
@@ -1137,8 +1137,8 @@ msgid ""
 "Total altitude gain/loss in the last thermal divided by the time spent "
 "circling."
 msgstr ""
-"Gain ou perte total(e) d'altitude dans le dernier thermique, divisé par le "
-"temps passé en spirale."
+"Gain ou perte total(e) d'altitude dans le dernier thermique, divisé par la "
+"durée passée en spirale."
 
 #: src/InfoBoxes/Content/Factory.cpp:201
 #, no-c-format
@@ -1168,7 +1168,7 @@ msgstr "Durée DerTh"
 #: src/InfoBoxes/Content/Factory.cpp:211
 #, no-c-format
 msgid "Time spent circling in the last thermal."
-msgstr "Temps passé à spiraler dans le dernier thermique."
+msgstr "Durée passée à spiraler dans le dernier thermique."
 
 #: src/InfoBoxes/Content/Factory.cpp:217
 #, no-c-format
@@ -1379,7 +1379,7 @@ msgid ""
 "Altitude gained/lost in the current thermal, divided by time spent "
 "thermalling."
 msgstr ""
-"Altitude (gain/perte) dans le thermique courant, divisé par le temps passé "
+"Altitude (gain/perte) dans le thermique courant, divisé par la durée passée "
 "en spirale."
 
 #: src/InfoBoxes/Content/Factory.cpp:316
@@ -1481,8 +1481,8 @@ msgstr "Temps AAT"
 msgid ""
 "Assigned Area Task time remaining. Goes red when time remaining has expired."
 msgstr ""
-"Temps restant sur l'AAT. Devient rouge lorsque le temps de l'épreuve est "
-"écoulé."
+"Durée restante sur l'AAT. Devient rouge lorsque la durée de l'épreuve est "
+"écoulée."
 
 #: src/InfoBoxes/Content/Factory.cpp:366
 #, no-c-format
@@ -1531,7 +1531,7 @@ msgid ""
 "distance remaining in minimum AAT time."
 msgstr ""
 "Vitesse moyenne maximale possible sur l'AAT en parcourant la distance "
-"maximale restante dans le temps minimum de l'épreuve."
+"maximale restante dans la durée minimale de l'épreuve."
 
 #: src/InfoBoxes/Content/Factory.cpp:390
 #, no-c-format
@@ -1550,7 +1550,7 @@ msgid ""
 "distance remaining in minimum AAT time."
 msgstr ""
 "Vitesse moyenne minimale possible de l'AAT (en parcourant la distance "
-"minimale restante dans le temps minimum de l'épreuve)."
+"minimale restante dans la durée minimale de l'épreuve)."
 
 #: src/InfoBoxes/Content/Factory.cpp:398
 #, no-c-format
@@ -1710,7 +1710,7 @@ msgstr "Heure UTC GPS."
 #: src/InfoBoxes/Content/Factory.cpp:472
 #, no-c-format
 msgid "Task time to go"
-msgstr "Temps restant jusqu'à la fin du circuit"
+msgstr "Durée restante jusqu'à la fin du circuit"
 
 #: src/InfoBoxes/Content/Factory.cpp:473
 #, no-c-format
@@ -1723,13 +1723,13 @@ msgid ""
 "Estimated time required to complete task, assuming performance of ideal "
 "MacCready cruise/climb cycle."
 msgstr ""
-"Temps requis estimé pour finir le circuit, en tenant compte des meilleurs "
+"Durée requise estimée pour finir le circuit, en tenant compte des meilleurs "
 "performances du MacCready en transition/spirale."
 
 #: src/InfoBoxes/Content/Factory.cpp:480
 #, no-c-format
 msgid "Next time to go"
-msgstr "Temps restant vers prochain point de virage"
+msgstr "Durée restante vers prochain point de virage"
 
 #: src/InfoBoxes/Content/Factory.cpp:481
 #, no-c-format
@@ -1742,7 +1742,7 @@ msgid ""
 "Estimated time required to reach next waypoint, assuming performance of "
 "ideal MacCready cruise/climb cycle."
 msgstr ""
-"Temps requis estimé pour rejoindre le prochain point de virage, en tenant "
+"Durée requise estimée pour rejoindre le prochain point de virage, en tenant "
 "compte des meilleurs performances du MacCready en transition/spirale."
 
 #: src/InfoBoxes/Content/Factory.cpp:489
@@ -1768,11 +1768,11 @@ msgid ""
 msgstr ""
 "Vitesse de consigne MacCready instantanée, prenant en compte le vario netto "
 "pour déterminer la vitesse en vol dauphin sur le segment courant. En "
-"transition cette consigne est calculée pour maintenir l'altitude. En arrivée "
-"elle est calculée pour la descente. En montée elle indique la vitesse de "
-"taux de chute minimum a facteur de charge courant (si un accéléromètre est "
-"disponible). Si le mode \"vitesse de consigne bloquée\" est sélectionné, "
-"alors la consigne est la vitesse de consigne MacCready."
+"transition cette consigne est calculée pour maintenir l'altitude. En "
+"arrivée, elle est calculée pour la descente. En montée elle indique la "
+"vitesse de taux de chute minimum a facteur de charge courant (si un "
+"accéléromètre est disponible). Si le mode \"vitesse de consigne bloquée\" "
+"est sélectionné, alors la consigne est la vitesse de consigne MacCready."
 
 #: src/InfoBoxes/Content/Factory.cpp:497
 #, no-c-format
@@ -1832,7 +1832,7 @@ msgid ""
 "Estimated arrival local time at next waypoint, assuming performance of ideal "
 "MacCready cruise/climb cycle."
 msgstr ""
-"Heure local d'arrivée au prochain point de virage estimée, en supposant la "
+"Heure locale d'arrivée estimée au prochain point de virage, en supposant la "
 "performance idéale des cycles transitions/ascendances du MacCready."
 
 #: src/InfoBoxes/Content/Factory.cpp:522
@@ -1957,7 +1957,7 @@ msgstr "V AAT"
 msgid ""
 "Assigned Area Task average speed achievable around target points remaining "
 "in minimum AAT time."
-msgstr "Vitesse moyenne réalisable sur l'AAT dans le minimum de temps restant."
+msgstr "Vitesse moyenne réalisable sur l'AAT dans le minimum de durée restant."
 
 #: src/InfoBoxes/Content/Factory.cpp:570
 #, no-c-format
@@ -2530,7 +2530,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:829
 #, no-c-format
 msgid "Time under max. start height"
-msgstr "Temps en dessous de la hauteur max. du départ"
+msgstr "Durée en-dessous de la hauteur max. du départ"
 
 #: src/InfoBoxes/Content/Factory.cpp:830
 #, no-c-format
@@ -2560,8 +2560,8 @@ msgid ""
 "Estimated time required to complete task, assuming current ground speed is "
 "maintained."
 msgstr ""
-"Temps estimé pour finir la tâche, en supposant que la vitesse sol actuelle "
-"soit maintenue."
+"Durée estimée pour finir le circuit, en supposant que la vitesse sol "
+"actuelle soit maintenue."
 
 #: src/InfoBoxes/Content/Factory.cpp:845
 #, no-c-format
@@ -2579,8 +2579,8 @@ msgid ""
 "Estimated time required to reach next waypoint, assuming current ground "
 "speed is maintained."
 msgstr ""
-"Temps estimé pour rejoindre le prochain point de virage, en supposant que la "
-"vitesse sol actuelle soit maintenue."
+"Durée estimée pour rejoindre le prochain point de virage, en supposant que "
+"la vitesse sol actuelle soit maintenue."
 
 #: src/InfoBoxes/Content/Factory.cpp:854
 #, no-c-format
@@ -2835,7 +2835,7 @@ msgstr "Départ ouvert"
 #, no-c-format
 msgid "Shows the time left until the start point opens or closes."
 msgstr ""
-"Montrer le temps restant jusqu'à ce que le point de départ soit ouvert ou "
+"Montrer la durée restante jusqu'à ce que le point de départ soit ouvert ou "
 "fermé."
 
 #: src/InfoBoxes/Content/Factory.cpp:958
@@ -2854,8 +2854,8 @@ msgid ""
 "Shows the time left until the start point opens or closes, compared to the "
 "calculated time to reach it."
 msgstr ""
-"Montrer le temps restant jusqu'à ce que le point de départ soit ouvert ou "
-"fermé, comparé au temps estimé pour l'atteindre."
+"Montrer la durée restante jusqu'à ce que le point de départ soit ouvert ou "
+"fermé, comparé à la durée estimée pour l'atteindre."
 
 #: src/InfoBoxes/Content/Factory.cpp:965
 #, no-c-format
@@ -2941,16 +2941,14 @@ msgid ""
 "time. Useful for evaluating best thermalling mode with a glider at different "
 "wing loading."
 msgstr ""
-"Diamètre du cercle. Affiche le diamètre du cercle estimé et le temps pour un "
+"Diamètre du cercle. Affiche le diamètre du cercle estimé et la durée pour un "
 "tour complet. Utile pour évaluer le meilleur taux de montée à différentes "
 "charges alaires."
 
 #: src/InfoBoxes/Content/Factory.cpp:1004
 #, no-c-format
 msgid "Distance takeoff"
-msgstr ""
-"Distance de décollage\r\n"
-"(Il faudrait le contexte car cela peut aussi être 'Décollage distant')"
+msgstr "Distance de décollage"
 
 #: src/InfoBoxes/Content/Factory.cpp:1005
 #, no-c-format
@@ -2978,7 +2976,7 @@ msgid ""
 "Instantaneous evaluation of the flown speed according to the configured On-"
 "Line Contest rule set."
 msgstr ""
-"Evaluation en temps-réel de la vitesse moyenne sur l'optimisation OLC "
+"Évaluation en temps-réel de la vitesse moyenne sur l'optimisation OLC "
 "choisie."
 
 #: src/InfoBoxes/Content/Factory.cpp:1019
@@ -3035,8 +3033,8 @@ msgid ""
 "Estimated arrival time at next waypoint, assuming current ground speed is "
 "maintained."
 msgstr ""
-"Temps estimé pour rejoindre le prochain point de virage, en supposant que la "
-"vitesse sol actuelle soit maintenue."
+"Durée estimée pour rejoindre le prochain point de virage, en supposant que "
+"la vitesse sol actuelle soit maintenue."
 
 #: src/InfoBoxes/Content/Factory.cpp:1048
 #, no-c-format
@@ -3073,7 +3071,7 @@ msgid ""
 "Pie chart of time circling and climbing, circling and descending, and "
 "climbing non-circling."
 msgstr ""
-"Graphique du temps de spirale ascendante, de spirale descendante et de "
+"Graphique des durées de spirale ascendante, de spirale descendante et de "
 "montée hors spirale."
 
 #: src/InfoBoxes/Content/Factory.cpp:1064
@@ -3852,7 +3850,7 @@ msgstr "Circuit restant"
 #: src/Renderer/FlightStatisticsRenderer.cpp:311
 #: src/Renderer/FlightStatisticsRenderer.cpp:321
 msgid "AAT to go"
-msgstr "Temps restant AAT"
+msgstr "Durée restante AAT"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:312
 #: src/Renderer/FlightStatisticsRenderer.cpp:322
@@ -4222,7 +4220,7 @@ msgid ""
 "download."
 msgstr ""
 "Vitesse de transmission (en baud) pour les transferts volumineux, tels que "
-"déclaration de tâche ou téléchargement du fichier de vol."
+"déclaration de circuit ou téléchargement du fichier de vol."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:601
 msgid "IP Address"
@@ -4844,7 +4842,7 @@ msgstr "OK Auj."
 
 #: src/Dialogs/MapItemListSettingsDialog.cpp:34
 msgid "Map Item List Settings"
-msgstr "Reglages de la liste des éléments cartographiques"
+msgstr "Réglages de la liste des éléments cartographiques"
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:40
 msgid "Show Location row"
@@ -5168,7 +5166,7 @@ msgstr "Éléments"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:108
 #, no-c-format
 msgid "Safety Factors"
-msgstr "Paramètres de Sécurité"
+msgstr "Paramètres de sécurité"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:109
 #: src/Dialogs/Settings/dlgConfiguration.cpp:162
@@ -5663,8 +5661,8 @@ msgid ""
 "Time acceleration of replay. Set to 0 for pause, 1 for normal real-time "
 "replay."
 msgstr ""
-"Accélération du temps pour le rejeu. Mettre 0 pour pause, 1 pour le rejeu en "
-"temps-réel."
+"Accélération du temps pour la relecture. Mettre 0 pour pause, 1 pour la "
+"relecture en temps-réel."
 
 #: src/Dialogs/ReplayDialog.cpp:111 src/Dialogs/ReplayDialog.cpp:153
 #: Data/Input/default.xci:613
@@ -5762,11 +5760,11 @@ msgstr "Durée Circuit AAT"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:141
 msgid "Estimated task time"
-msgstr "Temps circuit estimé"
+msgstr "Durée circuit estimée"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:142
 msgid "Remaining time"
-msgstr "Temps restant"
+msgstr "Durée restante"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:143
 msgid "Task distance"
@@ -5895,7 +5893,7 @@ msgstr "Date UTC"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:112
 msgid "Flight time"
-msgstr "Temps de vol"
+msgstr "Durée du vol"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:113
 msgid "Takeoff time"
@@ -5932,11 +5930,11 @@ msgstr "Diff. Alt. MC 0"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:178
 msgid "Alt. diff. MC safety"
-msgstr "Diff Alt MC sécurité"
+msgstr "Diff. Alt. MC sécurité"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:183
 msgid "Alt. diff. MC current"
-msgstr "Diff. Alt. MC act"
+msgstr "Diff. Alt. MC act."
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:201
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:120
@@ -5957,7 +5955,7 @@ msgstr "Pas de point actif dans le circuit."
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:76
 msgid "Replace in task"
-msgstr "Remplacer dans circuit"
+msgstr "Remplacer dans le circuit"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:81
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:115
@@ -5993,19 +5991,19 @@ msgstr "Enlever du circuit"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:314
 msgid "Replace in Task"
-msgstr "remplacer la tâche"
+msgstr "Remplacer dans le circuit"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:315
 msgid "Insert in Task"
-msgstr "insérer la tâche"
+msgstr "Insérer dans le circuit"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:316
 msgid "Append to Task"
-msgstr "ajouter à la tâche"
+msgstr "Ajouter au circuit"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:319
 msgid "Remove from Task"
-msgstr "retirer de la tâche"
+msgstr "Retirer du circuit"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:322
 msgid "Set as New Home"
@@ -6017,11 +6015,11 @@ msgstr "Aller au point de virage"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:324
 msgid "Set Active Frequency"
-msgstr "Sélection de la fréquence active"
+msgstr "Sélectionner la fréquence active"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:325
 msgid "Set Standby Frequency"
-msgstr "Sélection de la fréquence Standby"
+msgstr "Sélectionner la fréquence Standby"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:433 Data/Input/default.xci:1015
 msgid "GoTo"
@@ -6250,7 +6248,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:216
 msgid "Warning time"
-msgstr "Temps d'alerte"
+msgstr "Durée d'alerte"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:217
 msgid ""
@@ -6482,8 +6480,8 @@ msgid ""
 "reach the finish height."
 msgstr ""
 "Adapte le calage MacCready pour l'arrivée la plus rapide. Pour les sprints "
-"OLC, le calage est adapté afin de parcourir la plus grande distance dans le "
-"temps restant et rejoindre la hauteur d'arrivée."
+"OLC, le calage est adapté afin de parcourir la plus grande distance dans la "
+"durée restante et rejoindre la hauteur d'arrivée."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:65
 #, no-c-format
@@ -6587,7 +6585,7 @@ msgid ""
 "Account for wind drift for the predicted circling duration. This reduces the "
 "arrival height for legs with head wind."
 msgstr ""
-"Prend en compte la dérive due au vent pour le calcul du temps en spirale. "
+"Prend en compte la dérive due au vent pour le calcul de la durée en spirale. "
 "Cela réduit la hauteur d'arrivée pour les branches face au vent."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:117
@@ -7376,7 +7374,7 @@ msgid ""
 "and alternate calculations."
 msgstr ""
 "Définit la performance du planeur utilisée pour la calcul de la zone "
-"d'atteinte au sol, des terrains posables, de l'arrêt du circuit et des "
+"d'atteinte au sol, des terrains posables, de l'abandon du circuit et des "
 "dégagements."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:161
@@ -7925,17 +7923,17 @@ msgstr "La référence est l'altitude au-dessus du niveau moyen de la mer."
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:97
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:247
 msgid "Start height ref."
-msgstr "Réf. pour hauteur départ"
+msgstr "Réf. hauteur départ"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:98
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:248
 msgid "Reference used for start max height rule."
-msgstr "Référence utilisée par la règle de hauteur max de départ."
+msgstr "Référence utilisée par la règle de hauteur max. de départ."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:106
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:251
 msgid "Finish min. height"
-msgstr "Altitude min. d'arrivé"
+msgstr "Hauteur min. d'arrivée"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:107
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:252
@@ -7954,7 +7952,7 @@ msgstr "Réf. hauteur arrivée"
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:114
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:257
 msgid "Reference used for finish min height rule."
-msgstr "Référence utilisée par la règle d'altitude mini d'arrivée."
+msgstr "Référence utilisée par la règle de hauteur minimale d'arrivée."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:79
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
@@ -8017,11 +8015,11 @@ msgstr "Type de circuit par défaut pour un nouveau circuit."
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:194
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:215
 msgid "AAT min. time"
-msgstr "Temps mini AAT"
+msgstr "Durée mini AAT"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:194
 msgid "Default AAT min. time for new AAT tasks."
-msgstr "Temps min. pour les nouveaux circuits AAT."
+msgstr "Durée min. pour les nouveaux circuits AAT."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:197
 msgid "Optimisation margin"
@@ -8033,7 +8031,7 @@ msgid ""
 "task at the minimum time plus this margin time."
 msgstr ""
 "Marge de sécurité pour l'optimisation des circuits AAT. Cette optimisation "
-"cherche à compléter le circuit dans le temps minimum plus cette marge."
+"cherche à compléter le circuit dans la durée minimale plus cette marge."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:92
 #, no-c-format
@@ -8534,7 +8532,7 @@ msgid ""
 "Both arrival heights are displayed. Requires \"Reach mode: Turning\" in "
 "\"Glide Computer > Route\" settings."
 msgstr ""
-"Deux altitudes d'arrivée. Nécessite l'utilisation du paramètre \"Contourne\" "
+"Deux hauteurs d'arrivée. Nécessite l'utilisation du paramètre \"Contourne\" "
 "pour \"Mode de la zone atteignable\" dans le sous menu Config. > Options "
 "Système > Calculateur de vol > Itinéraire."
 
@@ -8878,7 +8876,7 @@ msgstr "Configure le comportement pour le circuit actuel."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:215
 msgid "Minimum AAT task time in minutes."
-msgstr "Temps minimum de l'épreuve AAT en minutes."
+msgstr "Durée minimale de l'épreuve AAT en minutes."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:218
 msgid "Arm start manually"
@@ -8901,14 +8899,13 @@ msgid "FAI start / finish rules"
 msgstr "Règles de départ/arrivée FAI"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:261
-#, fuzzy
 msgid ""
 "If enabled, has no max start height or max start speed and requires the "
 "minimum height above ground for finish to be greater than 1000m below the "
 "start height."
 msgstr ""
-"Si activé, pas d'altitude max ou de vitesse max au départ. Nécessite que la "
-"hauteur minimum au dessus du sol en arrivée soit supérieure à 1000 m au "
+"Si activé, pas d'altitude max. ou de vitesse max. au départ. Nécessite que "
+"la hauteur minimum au dessus du sol en arrivée soit supérieure à 1000 m au "
 "dessous de la hauteur de la ligne de départ."
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:66
@@ -9139,7 +9136,7 @@ msgstr "ETA"
 
 #: src/Dialogs/Task/TargetDialog.cpp:446
 msgid "Estimated time en-route to the next AAT target."
-msgstr "Temps estimé pour rejoindre le prochain point de l'AAT."
+msgstr "Durée estimée pour rejoindre le prochain point de l'AAT."
 
 #: src/Dialogs/Task/TargetDialog.cpp:448
 msgid "Delta T"
@@ -9152,7 +9149,7 @@ msgid ""
 "sector and can turn now with estimated arrival time greater than AAT time "
 "plus 5 minutes."
 msgstr ""
-"Delta de temps de l'AAT : différence entre le temps estimé du circuit et le "
+"Delta de temps de l'AAT : différence entre la durée estimée du circuit et le "
 "minimum de l'AAT. Rouge si négatif (heure d'arrivée estimée trop tôt), ou "
 "bleu si dans le secteur et qu'il est possible de virer maintenant avec une "
 "heure estimée d'arrivée supérieure de 5 minutes à l'heure de l'AAT."
@@ -9170,8 +9167,8 @@ msgid ""
 "AA Speed - Assigned Area Task average speed achievable around target points "
 "remaining in minimum AAT time."
 msgstr ""
-"Vitesse AA - Vitesse moyenne atteignable sur les points restants, dans le "
-"temps minimum imparti de l'AAT."
+"Vitesse AA - Vitesse moyenne atteignable sur les points restants, dans la "
+"durée minimale impartie de l'AAT."
 
 #: src/Dialogs/Task/TargetDialog.cpp:463
 msgid "Optimized"
@@ -9975,7 +9972,7 @@ msgstr ""
 
 #: Data/Input/default.xci:638 Data/Input/default.xci:1135
 msgid "Raw Logger"
-msgstr "Logger brut"
+msgstr "Enregistreur brut"
 
 #: Data/Input/default.xci:531 Data/Input/default.xci:581
 #: Data/Input/default.xci:623 Data/Input/default.xci:892
