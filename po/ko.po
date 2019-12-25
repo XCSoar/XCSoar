@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-24 08:21+0000\n"
+"PO-Revision-Date: 2019-12-25 01:38+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -1579,7 +1579,7 @@ msgstr "외부센서에서 측정된 중력가속도(마이너스는 하강값).
 #: src/InfoBoxes/Content/Factory.cpp:447
 #, no-c-format
 msgid "Next GR"
-msgstr "활공비(다음활공비)"
+msgstr "활공비(다음 포인트까지)"
 
 #: src/InfoBoxes/Content/Factory.cpp:448
 #, no-c-format
@@ -2484,12 +2484,12 @@ msgstr "근처의 공역 경계선까지의 고도, +값이면 공역위 , -값�
 #: src/InfoBoxes/Content/Factory.cpp:878
 #, no-c-format
 msgid "Next MC0 altitude difference"
-msgstr "맥크레디(MC0으로 계산된 고도차이)"
+msgstr "WP고도차"
 
 #: src/InfoBoxes/Content/Factory.cpp:879
 #, no-c-format
 msgid "WP MC0 AltD"
-msgstr "고도차(다음웨이포인트 까지 MC0으로 설정된 고도차)"
+msgstr "WP MC0 AltD"
 
 #: src/InfoBoxes/Content/Factory.cpp:880
 #, no-c-format
