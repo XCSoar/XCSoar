@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-25 01:49+0000\n"
+"PO-Revision-Date: 2019-12-25 02:40+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -139,7 +139,7 @@ msgstr "AAT 레이스타스크: 통과구역과 턴포인트에 최소 시간이
 msgid ""
 "Casual touring task, uses start and finish cylinders and FAI sector turn "
 "points."
-msgstr "투어링타스크: 스타트와 피니시로 FAI 섹터 턴포인트를 사용한다."
+msgstr "투어링 타스크: 스타트와 피니시로 FAI 섹터 턴포인트를 사용한다."
 
 #: src/Task/TypeStrings.cpp:76
 #, no-c-format
@@ -295,7 +295,7 @@ msgstr "(영국글라이더협회) 강화 옵션 고정 코스 섹터"
 #: src/Task/TypeStrings.cpp:119
 #, no-c-format
 msgid "Turn point cylinder"
-msgstr "턴 포인트 실린더"
+msgstr "턴포인트 실린더"
 
 #: src/Task/TypeStrings.cpp:120
 #, no-c-format
@@ -370,7 +370,7 @@ msgstr "모든 턴포인트가 같지 않음"
 #: src/Task/ValidationErrorStrings.cpp:36
 #, no-c-format
 msgid "Incorrect number of turnpoints"
-msgstr "턴포인트수가 정확하지 않음"
+msgstr "턴포인트갯수가 정확하지 않음"
 
 #: src/Task/ValidationErrorStrings.cpp:37
 #, no-c-format
@@ -686,7 +686,7 @@ msgstr "자세한 활공장 파일 읽는 중..."
 #: src/Menu/ExpandMacros.cpp:83 src/Menu/ExpandMacros.cpp:116
 #: src/Menu/ExpandMacros.cpp:138
 msgid "Next Turnpoint"
-msgstr "다음 턴 포인트"
+msgstr "다음T턴포인트"
 
 #: src/Menu/ExpandMacros.cpp:87 src/Menu/ExpandMacros.cpp:124
 #: src/Menu/ExpandMacros.cpp:161
@@ -721,7 +721,9 @@ msgstr "다음 시작 포인트"
 
 #: src/Menu/ExpandMacros.cpp:123 src/Menu/ExpandMacros.cpp:160
 msgid "Start Turnpoint"
-msgstr "시작 턴 포인트"
+msgstr ""
+"시작\n"
+"포인트"
 
 #: src/Menu/ExpandMacros.cpp:141
 msgid "Arm start"
@@ -2484,12 +2486,12 @@ msgstr "근처의 공역 경계선까지의 고도, +값이면 공역위 , -값�
 #: src/InfoBoxes/Content/Factory.cpp:878
 #, no-c-format
 msgid "Next MC0 altitude difference"
-msgstr "WP고도차"
+msgstr "고도차(다음포인트까지 MC0으로 계산한 고도차이 )"
 
 #: src/InfoBoxes/Content/Factory.cpp:879
 #, no-c-format
 msgid "WP MC0 AltD"
-msgstr "WP MC0 AltD"
+msgstr "WP고도차MC0"
 
 #: src/InfoBoxes/Content/Factory.cpp:880
 #, no-c-format
@@ -2800,12 +2802,12 @@ msgstr "OLC 규칙으로 계산된 현시점까지의 평균 비행 속도."
 #: src/InfoBoxes/Content/Factory.cpp:1019
 #, no-c-format
 msgid "Final MC0 altitude difference"
-msgstr "고도(골러시MC0)"
+msgstr "고도차(골까지 MC0으로 계산된 고도차이)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1020
 #, no-c-format
 msgid "Fin MC0 AltD"
-msgstr "골러시고도(MC0)"
+msgstr "Fin고도차MC0"
 
 #: src/InfoBoxes/Content/Factory.cpp:1021
 #, no-c-format
@@ -2818,7 +2820,7 @@ msgstr "피니시 포인트에 도착할때, 안전고도까지 최고로 효율
 #: src/InfoBoxes/Content/Factory.cpp:1028 src/InfoBoxes/Content/Task.cpp:904
 #, no-c-format
 msgid "Next arrow"
-msgstr "화살표(다음 포인트까지)"
+msgstr "화살표(다음WP)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1029
 #, no-c-format
@@ -3273,9 +3275,7 @@ msgstr "타스크 시작"
 
 #: src/Input/InputEventsTask.cpp:331
 msgid "Next turnpoint"
-msgstr ""
-"다음\n"
-"턴포인트"
+msgstr "다음t턴포인트"
 
 #: src/Input/InputEventsTask.cpp:333
 msgid "Task finished"
@@ -4914,7 +4914,7 @@ msgstr "타스크 규칙"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:127
 #, no-c-format
 msgid "Turnpoint Types"
-msgstr "턴포인트 종류"
+msgstr "턴포인트종류"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:132
 #, no-c-format
@@ -7423,7 +7423,7 @@ msgstr "기체아이콘"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:183
 msgid "Determines the way the wind arrow is drawn on the map."
-msgstr "지도에 풍향및 풍속에 대해 표시할 화살표 모양을 선택하시오."
+msgstr "지도에 풍향및 풍속에 대해 화면에 알려줄 화살표 모양을 선택하시오."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:62
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:229
@@ -7557,11 +7557,11 @@ msgstr "최종 포인트의 타스크 반경이나 게이트 폭의 기본값을
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:167
 msgid "Turn point"
-msgstr "턴 포인트"
+msgstr "턴포인트"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:167
 msgid "Default turn point type for new tasks you create."
-msgstr "턴 포인트의 타스크 반경이나 게이트 폭의 기본값을 설정한다."
+msgstr "턴포인트의 타스크 반경이나 게이트 폭의 기본값을 설정한다."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:171
 msgid "Default radius of turnpoint cylinders and sectors in new tasks."
@@ -8262,7 +8262,9 @@ msgstr "서버에 저장된 열의 위치를 확인하고 표시한다."
 
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:42
 msgid "Radius of the OZ cylinder."
-msgstr "OZ 실린더의 반경."
+msgstr ""
+"실린더의 반경을 선택하시오(ex. 2.5km등 항목에 없는 값이 표시되면 먼저 2.0km등 앞의 단위를 선택하고 다시 반경을 누르면 "
+"0.1 단위의 항목이 목록에 표시됨)."
 
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
 msgid "Width of the start/finish gate."
@@ -8305,7 +8307,7 @@ msgstr "앵글"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:140
 msgid "Turn Points"
-msgstr "턴 포인트"
+msgstr "턴포인트"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:160
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:163
@@ -8340,7 +8342,7 @@ msgstr "수정전으로 되돌리기"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:164
 msgid "Edit Point"
-msgstr "턴포인트수정"
+msgstr "포인트수정"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:167
 msgid "Make Finish"
@@ -8502,7 +8504,7 @@ msgstr "대체시작포인트 활성화"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:295
 msgid "Score exit"
-msgstr "점수 종료 포인트"
+msgstr "점수 종료 포인트(ESS)"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:395
 msgid "Edit Alternates"
@@ -8511,7 +8513,9 @@ msgstr "대체시작포인트수정"
 #: src/Dialogs/Task/TaskPointDialog.cpp:416
 #: src/Dialogs/Task/TaskPointDialog.cpp:487
 msgid "Task point"
-msgstr "턴 포인트"
+msgstr ""
+"타스크\n"
+"포인트"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:421
 msgid "Assigned area point"
