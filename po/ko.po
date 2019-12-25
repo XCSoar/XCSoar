@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-25 04:49+0000\n"
+"PO-Revision-Date: 2019-12-25 04:54+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -3345,9 +3345,7 @@ msgstr "파일 선택"
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:338
 #, no-c-format
 msgid "FLARM radar"
-msgstr ""
-"FLARM\n"
-"레이더"
+msgstr "FLARM레이더"
 
 #: src/PageSettings.cpp:60
 msgid "Map and InfoBoxes"
@@ -9520,7 +9518,9 @@ msgstr ""
 
 #: Data/Input/default.xci:759 Data/Input/default.xci:1158
 msgid "FLARM Radar"
-msgstr "FLARM 레이더"
+msgstr ""
+"FLARM\n"
+"레이더"
 
 #: Data/Input/default.xci:1120
 msgid ""
