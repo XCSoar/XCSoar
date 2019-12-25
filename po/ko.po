@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-25 02:40+0000\n"
+"PO-Revision-Date: 2019-12-25 04:49+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -686,7 +686,9 @@ msgstr "자세한 활공장 파일 읽는 중..."
 #: src/Menu/ExpandMacros.cpp:83 src/Menu/ExpandMacros.cpp:116
 #: src/Menu/ExpandMacros.cpp:138
 msgid "Next Turnpoint"
-msgstr "다음T턴포인트"
+msgstr ""
+"다음\n"
+"턴포인트"
 
 #: src/Menu/ExpandMacros.cpp:87 src/Menu/ExpandMacros.cpp:124
 #: src/Menu/ExpandMacros.cpp:161
@@ -1765,20 +1767,19 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:530
 #, no-c-format
 msgid "Outside air temperature"
-msgstr "외부 온도"
+msgstr "온도(외기온도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:531
 #, no-c-format
 msgid "OAT"
-msgstr "외부온도"
+msgstr "외기온도"
 
 #: src/InfoBoxes/Content/Factory.cpp:532
 #, no-c-format
 msgid ""
 "Outside air temperature measured by a probe if supported by a connected "
 "intelligent variometer."
-msgstr ""
-"외부온도, 외부프로브 혹은 고성능 바리오에서 측정된 외부온도를 보여준다."
+msgstr "외기온도, 프로브 혹은 고성능 바리오에서 측정한 기체 외부의 온도."
 
 #: src/InfoBoxes/Content/Factory.cpp:538
 #, no-c-format
@@ -1795,12 +1796,12 @@ msgstr "상대습도"
 msgid ""
 "Relative humidity of the air in percent as measured by a probe if supported "
 "by a connected intelligent variometer."
-msgstr "상대습도, 외부센서 혹은 고성능 바리오에서 측정된 외부온도를 보여준다."
+msgstr "상대습도, 프로브 혹은 고성능 바리오에서 측정한 기체 외부의 습도."
 
 #: src/InfoBoxes/Content/Factory.cpp:546 src/Input/InputEventsSettings.cpp:305
 #, no-c-format
 msgid "Forecast temperature"
-msgstr "예보온도"
+msgstr "온도(예보온도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:547
 #, no-c-format
@@ -1814,9 +1815,7 @@ msgid ""
 "convection height and cloud base in conjunction with outside air temperature "
 "and relative humidity probe. (Touch-screen/PC only) Pressing the up/down "
 "cursor keys adjusts this forecast temperature."
-msgstr ""
-"비행장의 지상 예상 기온을 보여준다. 외부 온도/습도센서가 장비된 경우 구름층"
-"의 높이를 예보할 수 있다. 정보창의 설정으로 예상 온도를 변경 할 수 있다."
+msgstr "비행장의 지상 예상 기온: 외부 온도/습도센서가 장비된 경우 구름층의 높이를 예측 할 수 있다."
 
 #: src/InfoBoxes/Content/Factory.cpp:554
 #, no-c-format
@@ -2003,9 +2002,7 @@ msgstr "Task평균속도"
 msgid ""
 "Achieved cross country speed while on current task, compensated for "
 "altitude.  Equivalent to Pirker cross-country speed remaining."
-msgstr ""
-"현재 타스크의 평균 비행속도를 나타낸다. 고도값이 보정되어 있으며, 온도보정된 "
-"Pirker 크로스컨트리 속도와 동일하다."
+msgstr "현재 타스크의 평균 비행속도: 고도값이 보정되어 있으며, 온도보정된 Pirker 크로스컨트리 속도와 동일하다."
 
 #: src/InfoBoxes/Content/Factory.cpp:642
 #, no-c-format
@@ -3275,7 +3272,7 @@ msgstr "타스크 시작"
 
 #: src/Input/InputEventsTask.cpp:331
 msgid "Next turnpoint"
-msgstr "다음t턴포인트"
+msgstr "다음 턴포인트"
 
 #: src/Input/InputEventsTask.cpp:333
 msgid "Task finished"
@@ -3546,9 +3543,7 @@ msgid ""
 "to observed surface temperatures as an indication of model simulation "
 "accuracy; e.g. if observed surface temperatures are significantly below "
 "those forecast, then soaring conditions will be poorer than forecast."
-msgstr ""
-"지상 2m 지점의 기온, 이 위치의 온도를 측정하는데 사용된다. 온도가 낮을경우 써"
-"클링 컨디션이 나빠진다."
+msgstr "지상 2m 지점의 기온: 이 위치의 온도를 측정하는데 사용된다. 온도가 낮을경우 써클링 컨디션이 나빠진다."
 
 #: src/Weather/Rasp/RaspStore.cpp:83
 #, no-c-format
@@ -5448,11 +5443,11 @@ msgstr "로밍"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:130
 msgid "GPS lock"
-msgstr "GPS 위치"
+msgstr "GPS신호"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:131
 msgid "Satellites in view"
-msgstr "GPS 위성"
+msgstr "GPS위성"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:132
 msgid "Variometer"
