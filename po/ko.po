@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-25 05:57+0000\n"
+"PO-Revision-Date: 2019-12-25 06:08+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -1092,7 +1092,7 @@ msgstr "써멀(직전써멀 평균값)"
 #: src/InfoBoxes/Content/Factory.cpp:194
 #, no-c-format
 msgid "TL Avg"
-msgstr "직전써멀평균"
+msgstr "직전열평균"
 
 #: src/InfoBoxes/Content/Factory.cpp:195
 #, no-c-format
@@ -1104,7 +1104,7 @@ msgstr "직전 써멀에서의 고도상승/손실량: 앞 써멀의 고도변�
 #: src/InfoBoxes/Content/Factory.cpp:201
 #, no-c-format
 msgid "Last thermal gain"
-msgstr "써멀(직전 서멀의 고도 획득량)"
+msgstr "써멀(직전써멀 고도획득)"
 
 #: src/InfoBoxes/Content/Factory.cpp:202
 #, no-c-format
@@ -1119,7 +1119,7 @@ msgstr "직전 써멀에서의 획득/손실량을 표시한다."
 #: src/InfoBoxes/Content/Factory.cpp:209
 #, no-c-format
 msgid "Last thermal duration"
-msgstr "써멀(직전써멀 선회시간)"
+msgstr "직전열시간"
 
 #: src/InfoBoxes/Content/Factory.cpp:210
 #, no-c-format
@@ -1129,7 +1129,7 @@ msgstr "써멀(선회시간)"
 #: src/InfoBoxes/Content/Factory.cpp:211
 #, no-c-format
 msgid "Time spent circling in the last thermal."
-msgstr "직전의 써멀에서 선회한 시간을 표시한다."
+msgstr "직전 써멀에서 선회한 시간을 표시한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:217
 #, no-c-format
