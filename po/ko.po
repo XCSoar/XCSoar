@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-25 01:38+0000\n"
+"PO-Revision-Date: 2019-12-25 01:49+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -666,7 +666,7 @@ msgstr "거리"
 
 #: src/Gauge/BigTrafficWidget.cpp:425 src/Gauge/BigTrafficWidget.cpp:428
 msgid "Rel. Alt."
-msgstr "고도차."
+msgstr "고도차"
 
 #: src/Gauge/BigTrafficWidget.cpp:881 src/InfoBoxes/Content/Task.cpp:67
 #: src/Dialogs/MapItemListDialog.cpp:178
@@ -5630,7 +5630,7 @@ msgstr "각도와 거리"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:174
 msgid "Alt. diff. MC 0"
-msgstr "맥크레디(고도차MC0)"
+msgstr "고도차(MC0)"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:178
 msgid "Alt. diff. MC safety"
