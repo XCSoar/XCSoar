@@ -22,11 +22,10 @@ Copyright_License {
 */
 
 #include "InfoBoxes/InfoBoxLayout.hpp"
+#include "Interface.hpp"
 #include "Border.hpp"
 #include "Util/Macros.hpp"
 #include "Util/Clamp.hpp"
-
-static constexpr double CONTROLHEIGHTRATIO = 7.4;
 
 /**
  * The number of info boxes in each geometry.
@@ -459,18 +458,22 @@ InfoBoxLayout::ValidateGeometry(InfoBoxSettings::Geometry geometry,
   return geometry;
 }
 
-static constexpr unsigned
+static unsigned
 CalculateInfoBoxRowHeight(unsigned screen_height, unsigned control_width)
 {
-  return Clamp(unsigned(screen_height / CONTROLHEIGHTRATIO),
+  const double i2s = CommonInterface::GetUISettings().info_boxes.ib_to_screen_ratio;
+
+  return Clamp(unsigned(screen_height / i2s),
                control_width * 5 / 7,
                control_width);
 }
 
-static constexpr unsigned
+static unsigned
 CalculateInfoBoxColumnWidth(unsigned screen_width, unsigned control_height)
 {
-  return Clamp(unsigned(screen_width / CONTROLHEIGHTRATIO * 1.3),
+  const double i2s = CommonInterface::GetUISettings().info_boxes.ib_to_screen_ratio;
+
+  return Clamp(unsigned(screen_width / i2s * 1.3),
                control_height,
                control_height * 7 / 5);
 }

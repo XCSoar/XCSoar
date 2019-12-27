@@ -55,6 +55,7 @@ InfoBoxSettings::SetDefaults()
 
   inverse = false;
   use_colors = true;
+  ib_to_screen_ratio = 7.4;
   border_style = BorderStyle::BOX;
 
   for (unsigned i = 0; i < MAX_PANELS; ++i)

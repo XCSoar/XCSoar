@@ -24,6 +24,7 @@ Copyright_License {
 #include "LayoutConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
+#include "Form/DataField/Float.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Hardware/RotateDisplay.hpp"
 #include "Interface.hpp"
@@ -45,6 +46,7 @@ Copyright_License {
 enum ControlIndex {
   MapOrientation,
   AppInfoBoxGeom,
+  AppInfoBoxScreenRatio,
   AppFlarmLocation,
   TabDialogStyle,
   AppStatusMessageAlignment,
@@ -186,6 +188,15 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           _("A list of possible InfoBox layouts. Do some trials to find the best for your screen size."),
           info_box_geometry_list, (unsigned)ui_settings.info_boxes.geometry);
 
+  AddFloat(_("InfoBox to Screen ratio"),
+           _("The ratio of the InfoBox size to the screen size. "
+	     "Larger numbers give more space for the Map Window. "
+	     "Internally it is limmited to reasonable InfoBox sizes. "
+	     "A good choice is 7.5."),
+	   _T("%.2f %s"), _T("%.2f"),
+           6, 10, 0.25, false,
+           ui_settings.info_boxes.ib_to_screen_ratio);
+
   AddEnum(_("FLARM display"), _("Choose a location for the FLARM display."),
           flarm_display_location_list,
           (unsigned)ui_settings.traffic.gauge_location);
@@ -249,6 +260,10 @@ LayoutConfigPanel::Save(bool &_changed)
   info_box_geometry_changed |=
     SaveValueEnum(AppInfoBoxGeom, ProfileKeys::InfoBoxGeometry,
                   ui_settings.info_boxes.geometry);
+
+  info_box_geometry_changed |=
+    SaveValue(AppInfoBoxScreenRatio, ProfileKeys::InfoBoxScreenRatio,
+    		  ui_settings.info_boxes.ib_to_screen_ratio);
 
   info_box_geometry_changed |=
     SaveValueEnum(AppFlarmLocation, ProfileKeys::FlarmLocation,
