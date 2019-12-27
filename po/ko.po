@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-27 16:26+0000\n"
+"PO-Revision-Date: 2019-12-27 17:28+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -984,7 +984,7 @@ msgid ""
 "This is the navigation altitude minus the terrain elevation obtained from "
 "the terrain file. The value is coloured red when the glider is below the "
 "terrain safety clearance height."
-msgstr "AGL 고도는 지형의 높이에서 기체의 높이까지의 상대적 고도를 표시한다. 색이 붉은색이면 지형의 높이보다 고도가 낮은 것이다."
+msgstr "실고도: 대지에서 기체의 높이까지 고도, 붉은색 글씨로 표시되면 지면안전고도보다 기체고도가 낮다는 경고이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:152
 #, no-c-format
