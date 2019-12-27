@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-27 17:28+0000\n"
+"PO-Revision-Date: 2019-12-27 17:34+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -1921,7 +1921,7 @@ msgstr "팀 방위각: 동료 기체의 위치를 각도로 표시한다."
 #: src/InfoBoxes/Content/Factory.cpp:602
 #, no-c-format
 msgid "Team bearing difference"
-msgstr "팀(팀 방위각차이)"
+msgstr "팀(팀경로차이)"
 
 #: src/InfoBoxes/Content/Factory.cpp:603
 #, no-c-format
@@ -1933,7 +1933,7 @@ msgstr "팀방위차"
 msgid ""
 "The relative bearing to the team aircraft location at the last reported team "
 "code."
-msgstr "팀 방위각차이: 동료 기체와 내 기체의 현재 비행 진로예상치를 표시한다."
+msgstr "팀경로차이: 동료 기체와 내 기체의 현재 비행 진로예상치를 표시한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:610
 #, no-c-format
