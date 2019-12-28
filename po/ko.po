@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-27 17:34+0000\n"
+"PO-Revision-Date: 2019-12-29 02:42+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -579,7 +579,7 @@ msgstr "비행 파일 다운로드 실패."
 
 #: src/Logger/ExternalLogger.cpp:324
 msgid "Do you want to download another flight?"
-msgstr "다른 비행 파일을 다운로드 하겠습니까?"
+msgstr "다른 비행을 다운로드합니까?"
 
 #: src/Waypoint/WaypointGlue.cpp:91
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:37
@@ -4099,7 +4099,7 @@ msgstr "%s on %s"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:362
 msgid "GPS fix"
-msgstr "GPS 수신"
+msgstr "GPS수신"
 
 #. device sends GPGGA, but no valid location
 #: src/Dialogs/Device/DeviceListDialog.cpp:365
@@ -4112,7 +4112,7 @@ msgstr "GPS 불량"
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:94
 #, no-c-format
 msgid "Connected"
-msgstr "연결됨"
+msgstr "연결"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:372
 msgid "Baro"
@@ -4589,7 +4589,7 @@ msgstr "도착고도: 도착 고도를 선택하면 지정한 화면상의 위�
 
 #: src/Dialogs/ColorListDialog.cpp:74
 msgid "Select Color"
-msgstr "색상변경"
+msgstr "색상선택"
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:120
 #: src/Dialogs/Airspace/dlgAirspace.cpp:121 Data/Input/default.xci:436
@@ -4613,7 +4613,7 @@ msgstr "공역"
 
 #: src/Dialogs/Airspace/dlgAirspacePatterns.cpp:65
 msgid "Select Pattern"
-msgstr "패턴변경"
+msgstr "패턴선택"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:72
 msgid "Radio"
@@ -4663,11 +4663,11 @@ msgstr "테두리색상변경"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:77
 msgid "Change Fill Color"
-msgstr "채움색변경"
+msgstr "채우기색변경"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:84
 msgid "Change Fill Brush"
-msgstr "채움붓변경"
+msgstr "채움브러시변경"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:93
 msgid "Border Width"
@@ -5728,7 +5728,7 @@ msgstr ""
 
 #: src/Dialogs/Waypoint/Manager.cpp:326
 msgid "Save changes to waypoint file?"
-msgstr "변경 사항을 웨이포인트 파일에 저장 하겠습니까?"
+msgstr "웨이포인트파일에 변경내용을 저장합니까?"
 
 #: src/Dialogs/Waypoint/Manager.cpp:326
 msgid "Waypoints edited"
