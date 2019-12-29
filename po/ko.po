@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-29 05:50+0000\n"
+"PO-Revision-Date: 2019-12-29 05:58+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -645,7 +645,7 @@ msgstr "트래픽 없음"
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:150
 #, no-c-format
 msgid "Vario"
-msgstr "바리오"
+msgstr "아날로그 바리오"
 
 #: src/Gauge/BigTrafficWidget.cpp:382 src/Renderer/MapItemListRenderer.cpp:77
 #: src/Renderer/MapItemListRenderer.cpp:83
