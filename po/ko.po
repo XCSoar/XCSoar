@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-29 11:57+0000\n"
+"PO-Revision-Date: 2019-12-29 13:11+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -2643,7 +2643,7 @@ msgstr "써멀어시스턴트, 열의 세기와 모양을 표시한다."
 #: src/InfoBoxes/Content/Factory.cpp:951
 #, no-c-format
 msgid "Start open/close countdown"
-msgstr "시간 (게임 시작 오픈/클로즈 카운트다운)"
+msgstr "시간(게임 시작 오픈/클로즈 카운트다운)"
 
 #: src/InfoBoxes/Content/Factory.cpp:952
 #, no-c-format
@@ -2658,7 +2658,7 @@ msgstr "스타트포인트의 남은 시작 시간."
 #: src/InfoBoxes/Content/Factory.cpp:958
 #, no-c-format
 msgid "Start open/close countdown at reaching"
-msgstr "시간 (게임 시작 카운트다운 - 현위치에서 스타트포인트까지)"
+msgstr "시간(게임 시작 카운트다운 - 현위치에서 스타트포인트까지)"
 
 #: src/InfoBoxes/Content/Factory.cpp:959
 #, no-c-format
@@ -8188,7 +8188,7 @@ msgstr "행글라이더 (Flex/FAI1)"
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:187
 #, no-c-format
 msgid "Hangglider (Rigid/FAI5)"
-msgstr "행글라이더 (Flex/FAI5)"
+msgstr "행글라이더 (Rigid/FAI5)"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:206
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:232
@@ -9016,7 +9016,7 @@ msgstr "바리오 평균 상승률 계산시간"
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:86
 #, no-c-format
 msgid "Cruise averager scale"
-msgstr "슨항 평균 상승률 스케일"
+msgstr "순항 평균 상승률 스케일"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:87
 #, no-c-format
