@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-29 05:24+0000\n"
+"PO-Revision-Date: 2019-12-29 05:50+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -2653,7 +2653,7 @@ msgstr "게임시작시간"
 #: src/InfoBoxes/Content/Factory.cpp:953
 #, no-c-format
 msgid "Shows the time left until the start point opens or closes."
-msgstr "스타트/클로즈포인트의 남은 시간."
+msgstr "스타트포인트의 남은 시작 시간."
 
 #: src/InfoBoxes/Content/Factory.cpp:958
 #, no-c-format
@@ -2670,7 +2670,7 @@ msgstr "시작까지"
 msgid ""
 "Shows the time left until the start point opens or closes, compared to the "
 "calculated time to reach it."
-msgstr "스타트/피니시까지 현재위치에서 출발할때 도달하는 시간."
+msgstr "스타트포인트까지 현재위치에서 출발할때 소요되는 시간."
 
 #: src/InfoBoxes/Content/Factory.cpp:965
 #, no-c-format
@@ -4940,12 +4940,12 @@ msgstr "소리"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:161
 #, no-c-format
 msgid "Map Display"
-msgstr "지도 표시"
+msgstr "지도 화면"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:163
 #, no-c-format
 msgid "Gauges"
-msgstr "게이지"
+msgstr "계기"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:164
 #, no-c-format
@@ -6068,7 +6068,7 @@ msgid ""
 "cruise mode, arrows point up to command slow down; arrows point down to "
 "command speed up."
 msgstr ""
-"바리오 게이지에 표시되는 속도보조화살표: 순항중에 아래쪽 화살표의 경우 속도를 줄이고, 위쪽으로 표시될 경우 속도를 올리면 적절한 "
+"아날로그 바리오에 표시되는 속도보조화살표: 순항중에 아래쪽 화살표의 경우 속도를 줄이고, 위쪽으로 표시될 경우 속도를 올리면 적절한 "
 "활공값으로 비행한다."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:65
