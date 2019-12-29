@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-29 02:42+0000\n"
+"PO-Revision-Date: 2019-12-29 03:37+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -1349,7 +1349,7 @@ msgid ""
 "Magnetic track reported by the GPS. (Touch-screen/PC only) If this InfoBox "
 "is active in simulation mode, pressing the up and down  arrows adjusts the "
 "track."
-msgstr "GPS로 측정한 나침반(방위각) 기록."
+msgstr "GPS로 측정한 나침반(방위각)기록."
 
 #: src/InfoBoxes/Content/Factory.cpp:334
 #, no-c-format
@@ -2913,7 +2913,7 @@ msgstr "시뮬레이터"
 #: Data/Input/default.xci:843 Data/Input/default.xci:899
 #, no-c-format
 msgid "Info"
-msgstr "정보"
+msgstr "정보창"
 
 #: src/InfoBoxes/Content/Altitude.cpp:52 src/InfoBoxes/Content/MacCready.cpp:51
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:82
@@ -5447,7 +5447,7 @@ msgstr "바리오미터"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:135
 msgid "Supply voltage"
-msgstr "공급전압"
+msgstr "배터리"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:136
 msgid "Network"
@@ -5463,7 +5463,7 @@ msgstr "타스크예상시간"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:142
 msgid "Remaining time"
-msgstr "남은 시간"
+msgstr "남은시간"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:143
 msgid "Task distance"
@@ -5497,7 +5497,7 @@ msgstr ""
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:159
 msgid "AAT range"
-msgstr "AAT 레인지"
+msgstr "AAT레인지"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:161
 #, no-c-format
@@ -5513,7 +5513,7 @@ msgstr ""
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:164
 #: src/Dialogs/Task/TargetDialog.cpp:454
 msgid "Speed remaining"
-msgstr "남은 속도"
+msgstr "남은속도"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:167
 msgid "Achieved MacCready"
@@ -5541,7 +5541,7 @@ msgstr ""
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:101
 msgid "Valid start"
-msgstr "유효한 출발"
+msgstr "유효출발"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:102
 msgid "Start time"
@@ -5567,7 +5567,7 @@ msgstr "최소골도달고도"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:107
 msgid "Valid finish"
-msgstr "유효한 도착"
+msgstr "유효도착"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:109
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:87
