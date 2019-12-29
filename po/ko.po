@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-29 03:49+0000\n"
+"PO-Revision-Date: 2019-12-29 04:13+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -1206,7 +1206,7 @@ msgstr "다음 포인트까지 가기위해 필요한 추가고도: AAT타스크
 #: src/InfoBoxes/Content/Factory.cpp:252
 #, no-c-format
 msgid "Next waypoint"
-msgstr "웨이포인트(다음)"
+msgstr "타스크 (다음 웨이포인트)"
 
 #: src/InfoBoxes/Content/Factory.cpp:253
 #, no-c-format
@@ -1220,9 +1220,7 @@ msgid ""
 "using the up/down cursor keys selects the next/previous waypoint in the "
 "task. (Touch-screen/PC only) Pressing the enter cursor key brings up the "
 "waypoint details."
-msgstr ""
-"선택한 웨이포인트로 향하는 방위각. UP/DOWN 커서로 다음 웨이포인트를 선택한다. PC에서 엔터키를 누르면 웨이포인트 설명을 볼 수 "
-"있다."
+msgstr "다음 포인트로 가는 적절한 진행각도. 정보창 메뉴에서 웨이포인트 설명을 볼 수 있다."
 
 #: src/InfoBoxes/Content/Factory.cpp:260
 #, no-c-format
@@ -1739,12 +1737,12 @@ msgstr "다음 웨이포인트의 도착 예상시각."
 #: src/InfoBoxes/Content/Factory.cpp:522
 #, no-c-format
 msgid "Bearing difference"
-msgstr "타스크보조 (비행진행각도)"
+msgstr "타스크 (다음 포인트 - 포인트이름제외)"
 
 #: src/InfoBoxes/Content/Factory.cpp:523
 #, no-c-format
 msgid "Brng D"
-msgstr "진행각수정"
+msgstr "적절진입각"
 
 #: src/InfoBoxes/Content/Factory.cpp:524
 #, no-c-format
