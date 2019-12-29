@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-29 05:17+0000\n"
+"PO-Revision-Date: 2019-12-29 05:24+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -2658,12 +2658,12 @@ msgstr "스타트/클로즈포인트의 남은 시간."
 #: src/InfoBoxes/Content/Factory.cpp:958
 #, no-c-format
 msgid "Start open/close countdown at reaching"
-msgstr "시간 (게임 시작시간 카운트다운 - 스타트포인트까지)"
+msgstr "시간 (게임 시작 카운트다운 - 현위치에서 스타트포인트까지)"
 
 #: src/InfoBoxes/Content/Factory.cpp:959
 #, no-c-format
 msgid "Start reach"
-msgstr "시작점까지시간"
+msgstr "시작까지"
 
 #: src/InfoBoxes/Content/Factory.cpp:960
 #, no-c-format
