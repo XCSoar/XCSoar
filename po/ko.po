@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-29 03:37+0000\n"
+"PO-Revision-Date: 2019-12-29 03:49+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -2913,7 +2913,7 @@ msgstr "시뮬레이터"
 #: Data/Input/default.xci:843 Data/Input/default.xci:899
 #, no-c-format
 msgid "Info"
-msgstr "정보창"
+msgstr "정보"
 
 #: src/InfoBoxes/Content/Altitude.cpp:52 src/InfoBoxes/Content/MacCready.cpp:51
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:82
