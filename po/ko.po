@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-29 05:58+0000\n"
+"PO-Revision-Date: 2019-12-29 11:57+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -645,7 +645,7 @@ msgstr "트래픽 없음"
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:150
 #, no-c-format
 msgid "Vario"
-msgstr "아날로그 바리오"
+msgstr "바리오"
 
 #: src/Gauge/BigTrafficWidget.cpp:382 src/Renderer/MapItemListRenderer.cpp:77
 #: src/Renderer/MapItemListRenderer.cpp:83
@@ -719,12 +719,12 @@ msgstr "피니시 포인트"
 
 #: src/Menu/ExpandMacros.cpp:119 src/Menu/ExpandMacros.cpp:156
 msgid "Next Startpoint"
-msgstr "다음 시작 포인트"
+msgstr "다음 스타트포인트"
 
 #: src/Menu/ExpandMacros.cpp:123 src/Menu/ExpandMacros.cpp:160
 msgid "Start Turnpoint"
 msgstr ""
-"시작\n"
+"스타트\n"
 "포인트"
 
 #: src/Menu/ExpandMacros.cpp:141
@@ -2919,7 +2919,7 @@ msgstr "정보"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:166
 #, no-c-format
 msgid "Setup"
-msgstr "기타설정"
+msgstr "기타"
 
 #: src/InfoBoxes/Content/Altitude.cpp:70 src/InfoBoxes/Content/Altitude.cpp:128
 #: src/InfoBoxes/Content/Altitude.cpp:194
@@ -3429,7 +3429,7 @@ msgstr "표고: "
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:156
 msgid "GPS not connected"
-msgstr "GPS가 연결되지 않음"
+msgstr "GPS 연결 없음"
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:159
 msgid "GPS waiting for fix"
@@ -4955,7 +4955,7 @@ msgstr "기본타스크"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:165
 #, no-c-format
 msgid "Look"
-msgstr "화면보기"
+msgstr "일반"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:229
 msgid "Expert"
@@ -5552,7 +5552,7 @@ msgstr "시작 고도"
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:143
 #: src/Dialogs/Task/TaskPointDialog.cpp:411
 msgid "Start point"
-msgstr "시작 포인트"
+msgstr "스타트 포인트"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:105
 msgid "Start speed"
@@ -7479,7 +7479,7 @@ msgstr "최고 스타트 고도(시작 포인트의 고도상승한계)에 사�
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:106
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:251
 msgid "Finish min. height"
-msgstr "최저 피니시 고도"
+msgstr "피니시 최저고도"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:107
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:252
@@ -7498,7 +7498,7 @@ msgstr "피니시 고도 기준"
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:114
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:257
 msgid "Reference used for finish min height rule."
-msgstr "최저 피니시 포인트 고도(골 포인트의 최소인정고도)에 사용하는 고도측정 방식을 선택한다."
+msgstr "피니시 포인트 최저고도(골 포인트의 최소인정고도)에 사용하는 고도측정 방식을 선택한다."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:79
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
@@ -7520,11 +7520,11 @@ msgstr "타스크 반경"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:144
 msgid "Default start type for new tasks you create."
-msgstr "시작 포인트의 기본입력 설정."
+msgstr "스타트 포인트의 기본입력 설정."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:149
 msgid "Default radius or gate width of the start zone for new tasks."
-msgstr "시작 포인트의 타스크 반경이나 게이트 폭의 기본값을 설정한다."
+msgstr "스타트 포인트의 타스크 반경이나 게이트 폭의 기본값을 설정한다."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:155
 #: src/Dialogs/Task/TaskPointDialog.cpp:426
@@ -8470,11 +8470,11 @@ msgstr "제거"
 
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:140
 msgid "(Add Alternate Start)"
-msgstr "(재시작포인트 추가)"
+msgstr "(대체 스타트포인트 추가)"
 
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:217
 msgid "Alternate Start Points"
-msgstr "대체 시작포인트"
+msgstr "대체 스타트 포인트"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:239
 #: src/Dialogs/Task/TaskPointDialog.cpp:284
@@ -8484,7 +8484,7 @@ msgstr "타입변경"
 #: src/Dialogs/Task/TaskPointDialog.cpp:292
 #: src/Dialogs/Task/TaskPointDialog.cpp:392
 msgid "Enable Alternate Starts"
-msgstr "대체시작포인트 활성화"
+msgstr "대체 스타트포인트 활성화"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:295
 msgid "Score exit"
@@ -8492,7 +8492,7 @@ msgstr "점수 종료 포인트(ESS)"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:395
 msgid "Edit Alternates"
-msgstr "대체시작포인트수정"
+msgstr "대체 스타트 수정"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:416
 #: src/Dialogs/Task/TaskPointDialog.cpp:487
@@ -8702,7 +8702,7 @@ msgstr "바리오소리"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:71
 msgid "Emulate the sound of an electronic vario."
-msgstr "바리오소리를 설정한다."
+msgstr "바리오 소리를 켜고 끌 수 있다."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:77
 msgid "Enable Deadband"
@@ -8712,7 +8712,8 @@ msgstr "버저(Buzzer)사용안함"
 msgid ""
 "Mute the audio output in when the current lift is in a certain range around "
 "zero"
-msgstr "버저(Buzzer): 침하가 끝나고 상승직전 바리오가 0을 가리킬때, 버저가 울림"
+msgstr ""
+"버저(Buzzer)사용 설정: 침하가 끝나고 상승직전 바리오가 0을 가리킬때, 버저가 울림(써멀링 전 예비경보로 사용 할 수 있다.)"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:84
 msgid "Min. Frequency"
