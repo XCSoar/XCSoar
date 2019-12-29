@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-29 02:42+0000\n"
+"PO-Revision-Date: 2020-01-03 15:21+0000\n"
 "Last-Translator: Cloud Esp <Frederic.Darboux@inra.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
@@ -1016,7 +1016,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:152
 #, no-c-format
 msgid "Thermal climb, last 30 s"
-msgstr "Vz en spirale, sur les 30 dernières secondes."
+msgstr "Vz en spirale, sur les 30 dernières secondes"
 
 #: src/InfoBoxes/Content/Factory.cpp:153
 #, no-c-format
@@ -1124,7 +1124,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:193
 #, no-c-format
 msgid "Last thermal average"
-msgstr "Vz Moyenne du dernier thermique"
+msgstr "Vz moyenne du dernier thermique"
 
 #: src/InfoBoxes/Content/Factory.cpp:194
 #, no-c-format
@@ -1158,7 +1158,7 @@ msgstr "Gain ou perte total(e) d'altitude dans le dernier thermique."
 #: src/InfoBoxes/Content/Factory.cpp:209
 #, no-c-format
 msgid "Last thermal duration"
-msgstr "Durée du dernier termique"
+msgstr "Durée du dernier thermique"
 
 #: src/InfoBoxes/Content/Factory.cpp:210
 #, no-c-format
@@ -1312,7 +1312,7 @@ msgstr "Altitude supplémentaire nécessaire pour finir le circuit."
 #: src/InfoBoxes/Content/Factory.cpp:276
 #, no-c-format
 msgid "Speed task average"
-msgstr "Vitesse moyenne du circuit"
+msgstr "Vitesse moyenne estimée"
 
 #: src/InfoBoxes/Content/Factory.cpp:277
 #, no-c-format
@@ -1421,8 +1421,8 @@ msgid ""
 "Instantaneous vertical speed, as reported by the GPS, or the intelligent "
 "vario total energy vario value if connected to one."
 msgstr ""
-"Vitesse verticale instantanée, telle que fournie par le GPS, or le "
-"périphérique si connecté."
+"Vitesse verticale instantanée, telle que fournie par le GPS, ou, si "
+"connecté, la valeur du vario à énergie totale du périphérique."
 
 #: src/InfoBoxes/Content/Factory.cpp:340
 #, no-c-format
@@ -1442,7 +1442,7 @@ msgid ""
 "through settings, adjust the values with left/right cursor keys."
 msgstr ""
 "Vitesse du vent estimée par XCSoar. Un réglage manuel est possible au "
-"travers l'InfoBox correspondante. Les touches haut/bas passent les "
+"travers l'InfoBoxe correspondante. Les touches haut/bas passent les "
 "paramètres en boucle, les flèches gauche/droite modifient la valeur."
 
 #: src/InfoBoxes/Content/Factory.cpp:349
@@ -1462,8 +1462,8 @@ msgid ""
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
 msgstr ""
-"Direction du vent estimée par XCSoar.Un réglage manuel est possible au "
-"travers l'InfoBox correspondante. Les touches haut/bas passent les "
+"Direction du vent estimée par XCSoar. Un réglage manuel est possible au "
+"travers l'InfoBoxe correspondante. Les touches haut/bas passent les "
 "paramètres en boucle, les flèches gauche/droite modifient la valeur."
 
 #: src/InfoBoxes/Content/Factory.cpp:358
@@ -1530,8 +1530,8 @@ msgid ""
 "Assigned Area Task average speed achievable if flying maximum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
-"Vitesse moyenne maximale possible sur l'AAT en parcourant la distance "
-"maximale restante dans la durée minimale de l'épreuve."
+"Vitesse moyenne possible sur l'AAT en parcourant la distance maximale "
+"restante dans la durée minimale de l'épreuve."
 
 #: src/InfoBoxes/Content/Factory.cpp:390
 #, no-c-format
@@ -1549,8 +1549,8 @@ msgid ""
 "Assigned Area Task average speed achievable if flying minimum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
-"Vitesse moyenne minimale possible de l'AAT (en parcourant la distance "
-"minimale restante dans la durée minimale de l'épreuve)."
+"Vitesse moyenne possible de l'AAT (en parcourant la distance minimale "
+"restante dans la durée minimale de l'épreuve)."
 
 #: src/InfoBoxes/Content/Factory.cpp:398
 #, no-c-format
@@ -1659,7 +1659,7 @@ msgid ""
 "This value is negative for pitch-down manoeuvres."
 msgstr ""
 "Valeur du facteur de charge mesuré par un vario externe intelligent. Cette "
-"valeur est négative pour des manoeuvres en piqué."
+"valeur est négative pour des manœuvres en piqué."
 
 #: src/InfoBoxes/Content/Factory.cpp:447
 #, no-c-format
@@ -1957,7 +1957,7 @@ msgstr "V AAT"
 msgid ""
 "Assigned Area Task average speed achievable around target points remaining "
 "in minimum AAT time."
-msgstr "Vitesse moyenne réalisable sur l'AAT dans le minimum de durée restant."
+msgstr "Vitesse moyenne réalisable sur l'AAT dans le minimum de durée restante."
 
 #: src/InfoBoxes/Content/Factory.cpp:570
 #, no-c-format
@@ -2072,7 +2072,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:618
 #, no-c-format
 msgid "Speed task instantaneous"
-msgstr "Vitesse instantanée sur le circuit"
+msgstr "Vitesse estimée instantanée"
 
 #: src/InfoBoxes/Content/Factory.cpp:619
 #, no-c-format
@@ -2085,8 +2085,8 @@ msgid ""
 "Instantaneous cross country speed while on current task, compensated for "
 "altitude. Equivalent to instantaneous Pirker cross-country speed."
 msgstr ""
-"Vitesse de croisère instantanée sur le circuit en cours, compensée en "
-"altitude. Equivaut à la vitesse de croisière dite de Pirker."
+"Vitesse de croisière instantanée sur le circuit en cours, compensée en "
+"altitude. Équivaut à la vitesse de croisière dite de Pirker."
 
 #: src/InfoBoxes/Content/Factory.cpp:626
 #, no-c-format
@@ -2106,7 +2106,7 @@ msgstr "Distance jusqu'au point de départ (si défini)."
 #: src/InfoBoxes/Content/Factory.cpp:634
 #, no-c-format
 msgid "Speed task achieved"
-msgstr "Vitesse sur le circuit achevé"
+msgstr "Vitesse réalisée sur le circuit"
 
 #: src/InfoBoxes/Content/Factory.cpp:635
 #, no-c-format
@@ -2119,8 +2119,8 @@ msgid ""
 "Achieved cross country speed while on current task, compensated for "
 "altitude.  Equivalent to Pirker cross-country speed remaining."
 msgstr ""
-"Vitesse de croisière effective sur circuit, compensée en altitude. Equivaut "
-"à la vitesse de croisière de Pirker."
+"Vitesse de croisière réalisée sur le circuit présent, compensée en altitude. "
+"Équivaut à la vitesse de croisière de Pirker."
 
 #: src/InfoBoxes/Content/Factory.cpp:642
 #, no-c-format
@@ -2347,7 +2347,7 @@ msgid ""
 "On-Line Contest rule set."
 msgstr ""
 "Estimation instantanée de la distance parcourue en tenant compte des règles "
-"de concours paramétrées."
+"de concours OLC paramétrées."
 
 #: src/InfoBoxes/Content/Factory.cpp:739
 #, no-c-format
@@ -2737,7 +2737,7 @@ msgid ""
 "The thermal rate of climb on next leg which is equivalent to a thermal equal "
 "to the MacCready setting on current leg."
 msgstr ""
-"Vz moyenne prévue sur la prochaine branche. Equivalent au calage MacCready "
+"Vz moyenne prévue sur la prochaine branche. Équivalent au calage MacCready "
 "de la branche courante."
 
 #: src/InfoBoxes/Content/Factory.cpp:920
@@ -2787,7 +2787,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:183
 #, no-c-format
 msgid "Wind arrow"
-msgstr "Flèche de Vent"
+msgstr "Flèche de vent"
 
 #: src/InfoBoxes/Content/Factory.cpp:938
 #: src/Dialogs/Settings/dlgConfiguration.cpp:110
@@ -3255,7 +3255,7 @@ msgstr "Arrivée"
 #: src/InfoBoxes/InfoBoxManager.cpp:208
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:263
 msgid "InfoBox"
-msgstr "InfoBox"
+msgstr "InfoBoxe"
 
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:58
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:62
@@ -3487,15 +3487,15 @@ msgstr "Son vario OFF"
 
 #: src/Input/InputEventsSettings.cpp:89
 msgid "Snail trail off"
-msgstr "Trace spirale OFF"
+msgstr "Trace de cheminement OFF"
 
 #: src/Input/InputEventsSettings.cpp:93
 msgid "Long snail trail"
-msgstr "Trace spirale longue"
+msgstr "Trace de cheminement longue"
 
 #: src/Input/InputEventsSettings.cpp:97
 msgid "Short snail trail"
-msgstr "Trace spirale courte"
+msgstr "Trace de cheminement courte"
 
 #: src/Input/InputEventsSettings.cpp:101
 msgid "Full snail trail"
@@ -3768,10 +3768,10 @@ msgid ""
 "accuracy; e.g. if observed surface temperatures are significantly below "
 "those forecast, then soaring conditions will be poorer than forecast."
 msgstr ""
-"La température à une hauteur de 2m au dessus du sol. Peut être comparée à la "
-"température à la surface observée et ainsi donner une indication de la "
+"La température à une hauteur de 2 m au dessus du sol. Peut être comparée à "
+"la température à la surface observée et ainsi donner une indication de la "
 "précision du modèle : si la température observée est largement en dessous de "
-"la prévision, alors les conditions de vol seront plus mauvaises que prévu."
+"la prévision, alors les conditions de vol seront plus mauvaises que prévues."
 
 #: src/Weather/Rasp/RaspStore.cpp:83
 #, no-c-format
@@ -3797,7 +3797,7 @@ msgstr ""
 "dépend plus des cisaillements de vent que de la convection thermique. Note : "
 "L'hypothèse actuelle sous-estime la hauteur max en thermiques pur. En "
 "présence nuages, la hauteur maximale des thermique peut être limitée pas la "
-"base des nuages. Etant destinés aux thermiques purs, cette estimation "
+"base des nuages. Étant destinés aux thermiques purs, cette estimation "
 "néglige l'effet d'aspiration du nuage."
 
 #: src/Weather/Rasp/RaspStore.cpp:88
@@ -4596,7 +4596,7 @@ msgstr "Démo"
 
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:168
 msgid "Set new audio scheme?  Old values will be lost."
-msgstr "Définir un nouveau son ? Les précedents seront effacés."
+msgstr "Définir un nouveau son ? Les précédents seront effacés."
 
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:285
 msgid "Vario Configuration"
@@ -4822,7 +4822,7 @@ msgstr "Intervalle d'enregistrement"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:148
 msgid "No tracking mode"
-msgstr "Mode sans tracking"
+msgstr "Mode sans suivi"
 
 #: src/Dialogs/MapItemListDialog.cpp:175 src/Dialogs/dlgAnalysis.cpp:479
 #: src/Dialogs/dlgAnalysis.cpp:523 src/Dialogs/dlgAnalysis.cpp:532
@@ -5023,7 +5023,7 @@ msgstr "Nécessite seulement une source GPS."
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:213
 #, no-c-format
 msgid "ZigZag"
-msgstr "ZigZag"
+msgstr "Zigzag"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:57
 #, no-c-format
@@ -5044,12 +5044,11 @@ msgstr "Utilise ZigZag et spirales."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:63
 msgid "Auto wind"
-msgstr "Vent Auto"
+msgstr "Vent auto"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:64
 msgid "This allows switching on or off the automatic wind algorithm."
-msgstr ""
-"activation/désactivation de l'algorithme de calcul automatique du vent."
+msgstr "Activation/désactivation de l'algorithme de calcul automatique du vent."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:67
 msgid "External wind"
@@ -5058,13 +5057,13 @@ msgstr "Vent externe"
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:68
 msgid "Should XCSoar accept wind estimates from other instruments?"
 msgstr ""
-"XCSoar doit-il accepter les estimations de vents de la part d'autres "
+"XCSoar doit-il accepter les estimations de vent de la part d'autres "
 "instruments ?"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:72
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:156
 msgid "Trail drift"
-msgstr "Dérive compensée en spirale"
+msgstr "Dérive compensée en cheminement"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:73
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:157
@@ -5073,8 +5072,8 @@ msgid ""
 "in circling mode. Switched Off, the snail trail stays uncompensated for wind "
 "drift."
 msgstr ""
-"Permet de décaler la trace pour compenser sa dérive, en mode spirale. OFF ne "
-"fait aucun décalage de la trace."
+"Permet de décaler la trace de cheminement pour compenser sa dérive, en mode "
+"spirale. OFF ne fait aucun décalage de la trace."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:83
 msgid "Source"
@@ -5094,7 +5093,7 @@ msgstr "Externe"
 
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:35
 msgid "Wind Settings"
-msgstr "Réglage Vent"
+msgstr "Réglages vent"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:141
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:367
@@ -5113,7 +5112,7 @@ msgid ""
 "according to the dump rate specified in the configuration settings."
 msgstr ""
 "Ballast du planeur. Augmenter cette valeur si le poids du pilote est "
-"supérieur au poids de référence (typiquement 75kq). Appuyez sur ENTRÉE sur "
+"supérieur au poids de référence (typiquement 75 kg). Appuyez sur ENTRÉE sur "
 "ce champ pour déclencher le décompte du volume de ballast selon le débit "
 "spécifié dans les préférences."
 
@@ -5140,8 +5139,8 @@ msgid ""
 "Set to forecast ground temperature.  Used by convection estimator "
 "(temperature trace page of Analysis dialog)"
 msgstr ""
-"A remplir pour prédire la température au sol. Utilisé par l'estimateur de "
-"convection (page Trace de la température du menu Analyses)."
+"À remplir pour prédire la température au sol. Utilisé par l'estimateur de "
+"convection (page Courbe de température du menu Analyses)"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:361
 msgid "Flight Setup"
@@ -5423,11 +5422,11 @@ msgstr "Histogramme du vario"
 
 #: src/Dialogs/dlgAnalysis.cpp:510
 msgid "Wind at Altitude"
-msgstr "vent d'altitude"
+msgstr "Vent d'altitude"
 
 #: src/Dialogs/dlgAnalysis.cpp:513
 msgid "Set Wind"
-msgstr "Régl. Vent"
+msgstr "Régl. vent"
 
 #: src/Dialogs/dlgAnalysis.cpp:518
 msgid "Glide Polar"
@@ -7093,7 +7092,7 @@ msgid ""
 "down. (can be useful for wave flying)"
 msgstr ""
 "La carte sera orientée de façon à ce que vent vienne du haut (peut être "
-"utile en vol d'onde)."
+"utile en vol d'onde)"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:58
 #, no-c-format
@@ -7217,7 +7216,7 @@ msgid ""
 "glide altitude"
 msgstr ""
 "Pour le mode transition. Affichée quand le mode 'Auto' est sélectionné et "
-"que le planeur est sous le plan d'arrivée."
+"que le planeur est sous le plan d'arrivée"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:188
 #, no-c-format
@@ -7545,11 +7544,11 @@ msgid ""
 "no compensation, 1.0 scales MC linearly with current height (with reference "
 "to height of the maximum climb). If considered, 0.3 is recommended."
 msgstr ""
-"Le facteur de risque STF (Speed To Fly) réduit le calage MacCready utilisé "
-"dans le calcul de la vitesse de consigne lorsque le planeur est bas. Mettre "
-"0 pour ne pas effectuer cette prise en compte du risque STF, 1.0 linéarise "
-"le calage en fonction de la hauteur courante (par rapport à la hauteur "
-"maximale de montée). Si utilisé, 0.3 est une valeur recommandée."
+"Le coefficient de risque sur calage réduit le calage MacCready utilisé dans "
+"le calcul de la vitesse optimale lorsque le planeur est bas. Mettre 0 pour "
+"ne pas effectuer cette prise en compte du risque de calage, 1.0 linéarise le "
+"calage en fonction de la hauteur courante (par rapport à la hauteur maximale "
+"de montée). Si utilisé, 0.3 est une valeur recommandée."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:67
 msgid "Map database"
@@ -7721,7 +7720,7 @@ msgstr "Symbole simplifié, lignes noires avec contours blancs."
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:120
 #, no-c-format
 msgid "Simple (large)"
-msgstr "Simple (large)"
+msgstr "Simple (grand)"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:121
 #, no-c-format
@@ -7744,11 +7743,11 @@ msgid "HangGlider"
 msgstr "Delta plane"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:125
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Simplified hang glider as line graphics, white with black contours."
 msgstr ""
-"La représentation simplifiée d'un delta plane est filaire : blanc avec des "
-"contours noirs."
+"Représentation simplifiée comme un deltaplane : blanc avec des contours "
+"noirs."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:126
 #, no-c-format
@@ -7756,11 +7755,10 @@ msgid "ParaGlider"
 msgstr "Para pente"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:127
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Simplified para glider as line graphics, white with black contours."
 msgstr ""
-"La représentation simplifiée d'un parapente est filaire : blanc avec des "
-"contours noirs."
+"Représentation simplifiée comme un parapente : blanc avec des contours noirs."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:132
 #, no-c-format
@@ -7811,26 +7809,28 @@ msgstr "Longueur Trace"
 msgid ""
 "Determines whether and how long a snail trail is drawn behind the glider."
 msgstr ""
-"Définit la longueur de la trace affichée derrière le planeur (aucune, "
-"courte, longue et complète)."
+"Définit la longueur de la trace de cheminement affichée derrière le planeur ("
+"aucune, courte, longue et complète)."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:163
 msgid "Trail type"
-msgstr "Type de la trace"
+msgstr "Type de trace"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:164
 msgid "Sets the type of the snail trail display."
-msgstr "Choisit le type de la trace à afficher (vario 1, vario 2 ou altitude)."
+msgstr ""
+"Choisit le type de la trace de cheminement à afficher (vario 1, vario 2 ou "
+"altitude)."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:167
 msgid "Trail scaled"
-msgstr "Epaississement de la trace"
+msgstr "Épaississement de la trace"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:168
 msgid ""
 "If set to ON the snail trail width is scaled according to the vario signal."
 msgstr ""
-"Sur ON, la l'épaisseur de la trace en spirale est proportionnelle à la "
+"Sur ON, l'épaisseur de la trace de cheminement est proportionnelle à la "
 "valeur du vario."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:172
@@ -8398,7 +8398,7 @@ msgstr "Unité de charge alaire."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:253
 msgid "Lat./Lon."
-msgstr "Lat./Lon."
+msgstr "Lat./Long."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:253
 msgid "Units used for latitude and longitude."
@@ -8704,7 +8704,7 @@ msgstr "Deltaplane (Rigide/FAI5)"
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:206
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:232
 msgid "Tracking Interval"
-msgstr "Intervalle de tracking"
+msgstr "Intervalle de suivi"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:209
 msgid "Track friends"
@@ -9189,9 +9189,9 @@ msgstr ""
 "Voulez-vous participer à la campagne de test ? Cela signifie que votre "
 "position, l'emplacement des thermiques, courants ascendants et autres "
 "informations liées à la météo seront transmis à nos serveurs de tests. Vous "
-"pouvez-vous désactiver cette fonctionnalité à tout instant dans les "
-"paramètres de \"Tracking\".\n"
-"S'il vous plat, aidez nous à améliorer XCSoar !"
+"pouvez désactiver cette fonctionnalité à tout instant dans les paramètres de "
+"\"Suivi\".\n"
+"S'il vous plaît, aidez-nous à améliorer XCSoar !"
 
 #: src/Dialogs/TimeEntry.cpp:73 src/Dialogs/Weather/RASPDialog.cpp:131
 msgid "Now"
@@ -9220,7 +9220,7 @@ msgstr "Crédits"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:70
 msgid "Audio vario"
-msgstr "Vario audio"
+msgstr "Vario sonore"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:71
 msgid "Emulate the sound of an electronic vario."
@@ -9351,7 +9351,6 @@ msgid "Add this turn point?"
 msgstr "Ajouter ce point de virage ?"
 
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:225
-#, fuzzy
 msgid "Use"
 msgstr "Utiliser"
 
@@ -9759,12 +9758,12 @@ msgstr "Intervale Info"
 #: src/Dialogs/Device/Vega/FlarmRepeatParameters.hpp:36
 #, no-c-format
 msgid "Interval; caution"
-msgstr "Intervalle Avert."
+msgstr "Intervalle avert."
 
 #: src/Dialogs/Device/Vega/FlarmRepeatParameters.hpp:39
 #, no-c-format
 msgid "Interval; warning"
-msgstr "Intervalle Avert."
+msgstr "Intervalle avert."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:52
 #, no-c-format
@@ -10088,7 +10087,7 @@ msgstr "Accéléromètre lissé"
 
 #: Data/Input/default.xci:500 Data/Input/default.xci:1065
 msgid "Trail"
-msgstr "Trace"
+msgstr "Trace de cheminement"
 
 #: Data/Input/default.xci:59
 msgid "Above final glide"
