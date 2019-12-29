@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-29 04:45+0000\n"
+"PO-Revision-Date: 2019-12-29 05:17+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -1703,7 +1703,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:505
 #, no-c-format
 msgid "Task arrival time"
-msgstr "시각(타스크예상도착시각)"
+msgstr "시각(피니시예상도착시각)"
 
 #: src/InfoBoxes/Content/Factory.cpp:506
 #, no-c-format
@@ -2643,7 +2643,7 @@ msgstr "써멀어시스턴트, 열의 세기와 모양을 표시한다."
 #: src/InfoBoxes/Content/Factory.cpp:951
 #, no-c-format
 msgid "Start open/close countdown"
-msgstr "카운트다운 시간(게임스타트 오픈/클로즈 시간)"
+msgstr "시간 (게임 시작 오픈/클로즈 카운트다운)"
 
 #: src/InfoBoxes/Content/Factory.cpp:952
 #, no-c-format
@@ -2658,7 +2658,7 @@ msgstr "스타트/클로즈포인트의 남은 시간."
 #: src/InfoBoxes/Content/Factory.cpp:958
 #, no-c-format
 msgid "Start open/close countdown at reaching"
-msgstr "카운트다운 시간(스타트포인트까지 도달하는데 걸리는 시간)"
+msgstr "시간 (게임 시작시간 카운트다운 - 스타트포인트까지)"
 
 #: src/InfoBoxes/Content/Factory.cpp:959
 #, no-c-format
@@ -2675,7 +2675,7 @@ msgstr "스타트/피니시까지 현재위치에서 출발할때 도달하는 �
 #: src/InfoBoxes/Content/Factory.cpp:965
 #, no-c-format
 msgid "Next radial"
-msgstr "다음 방사상 각도"
+msgstr "타스크 (다음 포인트 각도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:966 src/Dialogs/Task/TargetDialog.cpp:438
 #, no-c-format
