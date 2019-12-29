@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-29 13:11+0000\n"
+"PO-Revision-Date: 2019-12-30 17:24+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -1206,7 +1206,7 @@ msgstr "다음 포인트까지 가기위해 필요한 추가고도: AAT타스크
 #: src/InfoBoxes/Content/Factory.cpp:252
 #, no-c-format
 msgid "Next waypoint"
-msgstr "타스크 (다음 포인트)"
+msgstr "타스크(다음 포인트)"
 
 #: src/InfoBoxes/Content/Factory.cpp:253
 #, no-c-format
@@ -1737,7 +1737,7 @@ msgstr "다음 포인트의 도착 예상시각."
 #: src/InfoBoxes/Content/Factory.cpp:522
 #, no-c-format
 msgid "Bearing difference"
-msgstr "타스크 (다음 포인트 - 포인트이름제외)"
+msgstr "타스크(다음 포인트 - 포인트이름제외)"
 
 #: src/InfoBoxes/Content/Factory.cpp:523
 #, no-c-format
@@ -2675,7 +2675,7 @@ msgstr "스타트포인트까지 현재위치에서 출발할때 소요되는 �
 #: src/InfoBoxes/Content/Factory.cpp:965
 #, no-c-format
 msgid "Next radial"
-msgstr "타스크 (다음 포인트 각도)"
+msgstr "타스크(다음 포인트 각도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:966 src/Dialogs/Task/TargetDialog.cpp:438
 #, no-c-format
