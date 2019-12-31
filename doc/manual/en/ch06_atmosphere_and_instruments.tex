@@ -1,7 +1,10 @@
+% !TeX encoding = utf8
+% !TeX spellcheck = en
+
 \chapter{Atmosphere and Instruments}\label{cha:atmosph}
 XCSoar maintains an internal model of the atmosphere based on
-statistics gathered from the flight path and other instruments
-connected to the Pocket PC device.  These statistics and measurements
+statistics gathered from the flight path and other connected devices.
+These statistics and measurements
 are approximate and the weather can on some days change rapidly.  The
 pilot should at all times keep observing the weather.  In
 particular, when out-landing in fields, the pilot should look for
@@ -19,7 +22,7 @@ speeding up is recommended.
 
 When the averager value is displayed, the value shown is the average
 gross climb rate over the previous 30 seconds when in circling mode,
-and the netto (airmass) vertical speed over the previous 30 seconds
+and the netto (airmass) vertical speed over the previous 30~seconds
 when in cruise mode.
 
 \marginpar{\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/gaugevario2.png}}
@@ -102,7 +105,7 @@ all calculations.
 \begin{center}
 \includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/optwind.png}
 
-%{\it DIAGRAM CUTOUT SHOWING WIND VECTOR AT GLIDER, MAYBE ALSO SHOW A
+%TODO{\it DIAGRAM CUTOUT SHOWING WIND VECTOR AT GLIDER, MAYBE ALSO SHOW A
 %WINDSOCK NEXT TO THE DISPLAY TO MAKE THE DIRECTION OBVIOUS.  NO
 %TERRAIN/TOPOGRAPHY}
 
@@ -115,7 +118,7 @@ XCSoar offers two ways of estimating wind during flight.
 \item[Circling]  This method uses GPS position fixes to estimate the wind
   based on drift, typically while thermalling; and is available on all
   XCSoar installations.
-\item[ZigZag]  This method uses GPS position fixes and true airspeed measurements
+\item[Zigzag]  This method uses GPS position fixes and true airspeed measurements
   to estimate the wind, typically during cruise.  It is only available where
   XCSoar is connected to an intelligent variometer that outputs true airspeed.
 \end{description}
@@ -128,7 +131,7 @@ altitudes and times.  When the glider's altitude changes significantly,
 the statistics are consulted to determine the best estimate of the
 wind based on previous measurements.
 
-For PC and Pocket PC with touchscreens, you can
+For PC with touchscreens, you can
 also do this by highlighting the wind {\InfoBox} and using the cursor
 keys (up and down increase and decrease the magnitude, left and right
 rotate the wind direction).
@@ -138,8 +141,8 @@ estimation method is used for wind updates, via the field `Auto Wind':
 \begin{itemize}
 \item Manual
 \item Circling
-\item ZigZag
-\item Both (ZigZag and Circling)
+\item Zigzag
+\item Both (Zigzag and Circling)
 \end{itemize}
 
 When wind estimates change significantly, a status message
@@ -158,12 +161,12 @@ Estimates are only obtained if the average GPS fix rate is better than
 one every two seconds.  This results in improved fidelity of estimates
 in the presence of GPS dropouts.
 
-%{\it DIAGRAM SHOWING WIND CALCULATION, BAD TURN AND GOOD TURN}
+%TODO{\it DIAGRAM SHOWING WIND CALCULATION, BAD TURN AND GOOD TURN}
 
-\subsection*{Zig-Zag algorithm}
+\subsection*{Zigzag algorithm}
 
 For aircraft fitted with intelligent variometers connected to XCSoar,
-a so-called `zig-zag' wind estimation algorithm is available.  With
+a so-called `zigzag' wind estimation algorithm is available.  With
 this algorithm, the wind estimate can be updated continuously during
 long glides without circling.
 
@@ -171,17 +174,16 @@ This allows the wind estimate to be updated during cruise while the
 aircraft performs a zigzag manoeuvre.  No specific manoeuvre is
 required, in many cases the estimate will be updated as the aircraft's
 heading changes naturally as the pilot hunts for lift.  In general,
-however, the technique requires the aircraft heading to change over 40
-degrees.
+however, the technique requires the aircraft heading to change over 40~degrees.
 
 If the wind changes significantly while in straight flight, the
-zig-zag algorithm is used to update the wind estimate even if the
+zigzag algorithm is used to update the wind estimate even if the
 aircraft's heading does not change much. This provides greater
 accuracy in long final glides.
 
 Wind estimates are updated when a large difference between the
 estimated ground speed and the true ground speed are detected even
-without much zig-zag manoeuvring.
+without much zigzag manoeuvring.
 
 \subsection*{Compass algorithm}
 
@@ -189,13 +191,13 @@ For aircraft fitted with intelligent variometers and digital compasses
 connected to XCSoar, a wind estimation algorithm making use of
 magnetic heading and airspeed is being developed.  This provides
 another method of updating the wind estimate during cruise and does
-not require zig-zag manoeuvres.
+not require zigzag manoeuvres.
 
 \section{Wind settings dialogue}\label{sec:wind-setup}
 
 The wind dialogue allows the initial estimate of the wind speed and
 direction to be entered, usually prior to flight.
-\menulabel{\bmenug{Config 1}\blink\bmenus{Wind}}
+\menulabel{\bmenug{Config 1}\blink\bmenug{Wind}}
 
 \begin{center}
 \includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/dialog-wind2.png}
@@ -221,9 +223,6 @@ thermal band meter.  This is shown above the final glide difference
 bar on the left side of the map display.  It is not shown when the
 glider is above final glide.  
 
-\vskip 2cm
-\marginpar{\hbox{\vbox{\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/thermalprofile.png}}}}
-
 The thermal band meter shows a graph, where the vertical axis is
 height above the break-off height (Section~\ref{sec:safety-heights}), and is
 scaled according to the maximum altitude achieved.  The horizontal axis is the average climb
@@ -233,6 +232,8 @@ setting, and the glider's current altitude is overlaid on the shaded
 area.  This scaling and arrow makes it easy to see how the pilot's
 MacCready setting compares with achieved thermals and to plan the
 desired working height band.
+
+\marginpar{\hbox{\vbox{\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/thermalprofile.png}}}}
 
 When cruising between thermals, the vertical position of the arrow,
 indicating the glider's height relative to the thermal band, can be
@@ -249,8 +250,8 @@ thermal marker symbol is a green circle with a spiral.
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/shot-tlocator-circling.png}
 \end{center}
 
-The thermal locator marks the location of the last 20 
-thermals on the map with the thermal symbol during cruise.
+The thermal locator marks the location of the last
+20~thermals on the map with the thermal symbol during cruise.
 
 This location is calculated to compensate for the thermal drift at 
 the glider's altitude.  This means that internally XCSoar remembers 
@@ -272,8 +273,8 @@ at altitude will be projected downwind at the new wind estimate.
 
 The thermal assistant is a graphical aid to maximise the exploitation of the
 given thermal updraft. If it is configured ``On'' \config{thermalassistant} the
-small polar digram is mapped to the lower left corner of the screen. A
-single tap on the small digram enlarges it to a full-screen view. 
+small polar diagram is mapped to the lower left corner of the screen. A
+single tap on the small diagram enlarges it to a full-screen view. 
 
 The polar diagram shows the climb rate over the circular course of the glider.
 The screen-shots show a right circle, where the glider position is fixed to the
@@ -291,13 +292,13 @@ practical usage of the rotating climb diagram. A simple recipe to optimise
 the climb rate according to the assistant would be to follow these two steps
 repeatedly:
 \begin{description}
-\item[1.]  At the moment the maximum peak on the polar diagram passes the top of
+\item[1.]  At the moment, the maximum peak on the polar diagram passes the top of
 the display; that is a quarter of the circle before you reach that part again:
 Open the circle a bit to displace the circle centre in the direction of the
 strongest climb rate.
-\item[2.]  At the moment the maximum peak on the polar diagram passes the
+\item[2.]  At the moment, the maximum peak on the polar diagram passes the
 gliders position; the vario should show the maximal climb rate: Narrow the
-circle as much as possible to centre the thermal updraft at it's maximum. 
+circle as much as possible to centre the thermal updraft at its maximum. 
 \end{description}
 
 It must be said, that the interpretation of the thermal assistant always relays
@@ -319,7 +320,7 @@ forecast temperature on the ground, by adjusting the value in the
 The forecast convection ceiling is determined by the altitude at which
 the atmospheric temperature equals the maximum forecast temperature on
 the ground, cooled adiabatically as it rises according to the dry
-adiabatic lapse rate.  Typically the glider will not climb as far as
+adiabatic lapse rate.  Typically, the glider will not climb as far as
 the convection ceiling and so the measured values are extrapolated to
 find the ceiling.  If the atmosphere is stable, the convection ceiling
 is reported as zero altitude.
@@ -328,16 +329,16 @@ The maximum forecast temperature on the ground is entered using the
 flight settings dialogue described in Section~\ref{sec:flight-setup}.
 
 
-%{\it DIAGRAM SHOWING THERMAL FORECAST, STABLE WITH CLOUD}
+%TODO{\it DIAGRAM SHOWING THERMAL FORECAST, STABLE WITH CLOUD}
 %
-%{\it DIAGRAM SHOWING THERMAL FORECAST, UNSTABLE }
+%TODO{\it DIAGRAM SHOWING THERMAL FORECAST, UNSTABLE }
 
 The forecast cloud base is determined by the altitude at which the dew
 point intersects the maximum forecast temperature on the ground,
 cooled adiabatically as it rises according to the dry adiabatic lapse
 rate.  If no clouds are forecast, the cloud base is reported as zero.
 
-%{\it DIAGRAM SHOWING THERMAL FORECAST, STABLE WITH NO CLOUDS}
+%TODO{\it DIAGRAM SHOWING THERMAL FORECAST, STABLE WITH NO CLOUDS}
 
 \section{Analysis dialogue}
 
@@ -378,17 +379,18 @@ trends in the soaring conditions.
 \section{Weather, METAR / TAF}\label{sec:metar-taf}
 
 If the hardware hosting XCSoar is able to connect to the internet, weather 
-reports and forecasts can be downloaded. \menulabelr{\bmenug{Info}\blink
-\bmenug{Weather}} Present actual informations available are depicted by a 
+reports and forecasts can be downloaded.
+\menulabelr{\bmenug{Info}\blink\bmenug{Weather}}
+Present actual informations available are depicted by a 
 little flag, pinned to the waypoint of the reporting station. 
-\menulabelr{\includegraphics[width=0.6cm]{icons/map_weather_station.pdf}} To 
-set up reports and forecasts, invoke the METAR and TAF dialogue. With 
+\menulabelr{\includegraphics[width=0.6cm]{icons/map_weather_station.pdf}}
+To set up reports and forecasts, invoke the METAR and TAF dialogue. With 
 \bmenuw{Add} a filtering screen for ICAO codes comes up. After typing and 
-pushing \bmenuw{OK}another station is added to the list. Accessing the 
+pushing \bmenuw{OK} another station is added to the list. Accessing the 
 information is either possible via selecting an airport and pushing 
 \bmenuw{Details} on the same screen or by touching the map invoking the ``Map 
 elements at this location'' dialogue. The dialogue will show airports, 
-airspaces... ...and weather data. If the flags are missing on the map, no 
+airspaces\textellipsis \textellipsis{}and weather data. If the flags are missing on the map, no 
 actual information is available. Invoke the info dialogue and touch 
 \bmenuw{Update}.
 
@@ -398,7 +400,7 @@ Regional Atmospheric Soaring Prediction (RASP) is intended to provide
 detailed graphical weather forecasts for soaring purposes. For further details 
 the keen pilot is invited to consult \url{http://www.drjack.info} on how RASP 
 forecasts work, from where they are available, and their use and limitations. 
-At \url{http://www.drjack.info/RASP} a map depicts the coverage of available 
+At \url{http://www.drjack.info/RASP}, a list gives the coverage of available 
 RASP forecasts worldwide, provided by many soaring and paragliding enthusiasts. 
 Please note, that some of these links provide data in-season only and only some
 of these providers make data available in XCSoar format.
@@ -406,8 +408,9 @@ of these providers make data available in XCSoar format.
 For use within XCSoar, an \verb|xcsoar-rasp.dat| file has to be installed
 into the XCSoarData directory.  As of February 2014, download of
 \verb|xcsoar.rasp.dat| files is not (yet) supported by XCSoar's file manager. The
-RASP forecasts are displayed as colour-coded terrain overlays on the map. \\ \\
-Make sure, terrain display is set to on. \tip{} \\ \\
+RASP forecasts are displayed as colour-coded terrain overlays on the map.  \\ \\
+Make sure, terrain display is set to on. \tip{}  \\ \\
+
 The RASP-forecast overlays are invoked via menu 
 \menulabelr{\bmenug{Info}\blink\bmenug{Weather}}
 \bmenug{Info}.
@@ -440,9 +443,9 @@ the surface heating and the BL depth.
 \end{center}
 
 \item[BL wind spd] 
-The speed and direction of the vector-averaged wind in the BL.  This
+The speed and direction of the vector-averaged wind in the BL.\@  This
 prediction can be misleading if there is a large change in wind
-direction through the BL.
+direction through the BL.\@
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/rasp-blwindspd.png}
@@ -465,7 +468,7 @@ glider flying.
 
 \item[dwcrit]  
 This parameter estimates the height above ground at which the average
-dry updraft strength drops below 225 fpm and is expected to give
+dry updraft strength drops below 225~fpm (1.1~m/s) and is expected to give
 better quantitative numbers for the maximum cloudless thermalling
 height than the BL Top altitude, especially when mixing results from
 vertical wind shear rather than thermals.  (Note: the present
@@ -474,12 +477,16 @@ conditions.) In the presence of clouds the maximum thermalling height
 may instead be limited by the cloud base.  Being for ``dry'' thermals,
 this parameter omits the effect of ``cloudsuck''.
 
+\item[hwcrit]  
+Same as \emph{dwcrit}, but giving the altitude instead of the height at which the average
+dry updraft strength drops below 225~fpm.
+
 \item[bl cloud]  
 This parameter provides an additional means of evaluating the
 formation of clouds within the BL and might be used either in
 conjunction with or instead of the other cloud prediction parameters.
 It assumes a very simple relationship between cloud cover percentage
-and the maximum relative humidity within the BL.  The cloud base
+and the maximum relative humidity within the BL.\@  The cloud base
 altitude is not predicted, but is expected to be below the BL Top
 altitude.
 
@@ -488,21 +495,11 @@ altitude.
 \end{center}
 
 \item[Sfc temp] 
-The temperature at a height of 2m above ground level.  This can be
+The temperature at a height of 2~m above ground level.  This can be
 compared to observed surface temperatures as an indication of model
 simulation accuracy; e.g.\ if observed surface temperatures are
 significantly below those forecast, then soaring conditions will be
 poorer than forecast.
-\item[hwcrit]  
-This parameter estimates the altitude at which the average dry updraft
-strength drops below 225 fpm and is expected to give better
-quantitative numbers for the maximum cloudless thermalling height than
-the BL Top altitude, especially when mixing results from vertical wind
-shear rather than thermals.  (Note: the present assumptions tend to
-underpredict the max.\ thermalling height for dry conditions.) In the
-presence of clouds the maximum thermalling height may instead be
-limited by the cloud base.  Being for ``dry'' thermals, this parameter
-omits the effect of ``cloudsuck''.
 \item[wblmaxmin]  
 Maximum grid-area-averaged extensive upward or downward motion within
 the BL as created by horizontal wind convergence. Positive convergence
@@ -518,12 +515,12 @@ The colour schemes used in rendering the RASP contours are illustrated
 in the table below.
 
 \begin{longtable}{c c c}
-\em{Cloud cover [\%]} & \em{Height [m]} & \em{Temperature [°C]} \\
+\emph{Cloud cover [\%]} & \emph{Height [m]} & \emph{Temperature [°C]} \\
 \includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-rasp-cloudpct.png} &
 \includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-rasp-h.png} &
 \includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-rasp-temperature.png} \\
 \\
-\em{Vertical speed [m/s]} & \em{Wind speed [m/s]} & \\
+\emph{Vertical speed [m/s]} & \emph{Wind speed [m/s]} & \\
 \includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-rasp-vertspeed.png} &
 \includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-rasp-windspeed.png} & \\
 
@@ -541,12 +538,12 @@ may be expensive, depending on your mobile data plan.
 
 To enable the feature, enter your \emph{pc\_met} credentials in
 XCSoar's system configuration.  There are two username/password pairs:
-the first is for DWD's web services (on \texttt{www.flugwetter.de}),
-and the other is the FTP password (on \texttt{ftp.pcmet.de}).
+the first is for DWD's web services (on \url{www.flugwetter.de}),
+and the other is the FTP password (on \url{ftp.pcmet.de}).
 
 During preflight check and during the flight, you can check weather
 forecasts and live weather data in the
 \menulabelr{\bmenug{Info}\blink\bmenug{Weather}} \bmenug{Info} menu.
 Below ``Overlay'', you can choose layers for the map window.
 ``pc\_met'' is a collection of live images which are usually displayed
-on the DWD web site \texttt{www.flugwetter.de}.
+on the DWD web site \url{www.flugwetter.de}.
