@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-01-01 17:00+0000\n"
+"PO-Revision-Date: 2020-01-01 17:26+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -994,7 +994,7 @@ msgstr "바리오(30초평균)"
 #: src/InfoBoxes/Content/Factory.cpp:153
 #, no-c-format
 msgid "TC 30s"
-msgstr "바리오(30초간)"
+msgstr "바리오(30초)"
 
 #: src/InfoBoxes/Content/Factory.cpp:154
 #, no-c-format
@@ -1254,7 +1254,7 @@ msgstr "최종필요고도: 최종 포인트까지 가기위해 현재고도에�
 #: src/InfoBoxes/Content/Factory.cpp:276
 #, no-c-format
 msgid "Speed task average"
-msgstr "속도(타스크 평균속도 - 고도보정없음)"
+msgstr "타스크(속도 - 타스크 평균속도:고도보정없음)"
 
 #: src/InfoBoxes/Content/Factory.cpp:277
 #, no-c-format
@@ -1266,7 +1266,7 @@ msgstr "Task평균속도"
 msgid ""
 "Average cross country speed while on current task, not compensated for "
 "altitude."
-msgstr "타스크 평균속도-고도보정없음: 타스크 진행의 평균속도이다. 단, 고도변화는 보정되지 않은 대지속도로 계산한다."
+msgstr "Task평균속도: 타스크 진행의 평균속도, 고도변화를 보정되지 않은 대지속도로 계산한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:284
 #, no-c-format
@@ -1946,7 +1946,7 @@ msgstr "팀거리: 동료 기체의 위치간 거리를 나타낸다."
 #: src/InfoBoxes/Content/Factory.cpp:618
 #, no-c-format
 msgid "Speed task instantaneous"
-msgstr "속도(타스크 순간속도)"
+msgstr "타스크(속도 - 타스크 순간속도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:619
 #, no-c-format
@@ -1959,7 +1959,7 @@ msgid ""
 "Instantaneous cross country speed while on current task, compensated for "
 "altitude. Equivalent to instantaneous Pirker cross-country speed."
 msgstr ""
-"타스크 순간속도: 고도가 보정된, 타스크진행의 순간 속도이다. Pirker 크로스컨트리 속도(Pirker Cross-country "
+"Task순간속도: 고도가 보정된, 타스크진행의 순간 속도이다. 순간 Pirker 크로스컨트리 속도(Pirker Cross-country "
 "speed)와 동일하다."
 
 #: src/InfoBoxes/Content/Factory.cpp:626
@@ -1980,7 +1980,7 @@ msgstr "거리(홈): 홈 웨이포인트까지 거리(홈설정필요)."
 #: src/InfoBoxes/Content/Factory.cpp:634
 #, no-c-format
 msgid "Speed task achieved"
-msgstr "속도(타스크 평균속도)"
+msgstr "타스크(속도 - 타스크 평균속도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:635
 #, no-c-format
@@ -1993,8 +1993,8 @@ msgid ""
 "Achieved cross country speed while on current task, compensated for "
 "altitude.  Equivalent to Pirker cross-country speed remaining."
 msgstr ""
-"타스크 평균속도: 고도가 보정된, 타스크진행의 평균속도이다. 남은 Pirker 크로스컨트리속도(Pirker Cross-country "
-"speed)이다."
+"Task달성속도: 고도가 보정된, 타스크진행의 평균속도이다. 남은 Pirker 크로스컨트리속도(Pirker Cross-country "
+"speed)와 동일하다."
 
 #: src/InfoBoxes/Content/Factory.cpp:642
 #, no-c-format
@@ -2281,7 +2281,7 @@ msgstr "그래프(기압)"
 #: src/InfoBoxes/Content/Factory.cpp:783
 #, no-c-format
 msgid "Trace of altitude during flight"
-msgstr "비행중의 기압 변화 그래프"
+msgstr "그래프(기압): 비행중의 기압변화 그래프"
 
 #: src/InfoBoxes/Content/Factory.cpp:789
 #, no-c-format
@@ -2298,7 +2298,7 @@ msgstr "바리오그래프"
 msgid ""
 "Trace of vertical speed, as reported by the GPS, or the intelligent vario "
 "total energy vario value if connected to one."
-msgstr "고도변화그래프."
+msgstr "바리오그래프: 연결된 기압 바리오의 고도변화 그래프."
 
 #: src/InfoBoxes/Content/Factory.cpp:797
 #, no-c-format
@@ -2698,7 +2698,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:981
 #, no-c-format
 msgid "Speed task last hour"
-msgstr "타스크 (타스크진행의 1시간평균속도)"
+msgstr "타스크(속도 - 타스크진행 1시간평균속도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:982
 #, no-c-format
