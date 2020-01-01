@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-12-30 17:24+0000\n"
+"PO-Revision-Date: 2020-01-01 12:32+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -85,7 +85,7 @@ msgid ""
 "FAI rules, allows only FAI start, finish and turn point types, for badges "
 "and records.  Enables FAI finish height for final glide calculation."
 msgstr ""
-"FAI 룰, FAI스타트에서, 턴포인트와 피니시만 기록된다. \n"
+"FAI 룰, FAI스타트에서, 턴포인트와 최종골만 기록된다. \n"
 "FAI 결승점에서는 화면을 골 러시(Final Glide)로 설정한다."
 
 #: src/Task/TypeStrings.cpp:54
@@ -139,7 +139,7 @@ msgstr "AAT 레이스타스크: 통과구역과 턴포인트에 최소 시간이
 msgid ""
 "Casual touring task, uses start and finish cylinders and FAI sector turn "
 "points."
-msgstr "투어링 타스크: 스타트와 피니시로 FAI 섹터 턴포인트를 사용한다."
+msgstr "투어링 타스크: 스타트와 최종골로 FAI 섹터 턴포인트를 사용한다."
 
 #: src/Task/TypeStrings.cpp:76
 #, no-c-format
@@ -220,7 +220,7 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:92
 #, no-c-format
 msgid "A 90 degree sector with 1km radius.  Cross edge to finish."
-msgstr "피니시 포인트에 닿은 반경 1km/90도 섹터의 영역."
+msgstr "최종골포인트에 닿은 반경 1km/90도 섹터의 영역."
 
 #: src/Task/TypeStrings.cpp:93
 #, no-c-format
@@ -315,7 +315,7 @@ msgstr "섹터 지역"
 #: src/Task/TypeStrings.cpp:123
 #, no-c-format
 msgid "FAI finish quadrant"
-msgstr "FAI피니시 90도 섹터"
+msgstr "FAI 최종골 90도 섹터"
 
 #: src/Task/TypeStrings.cpp:124
 #, no-c-format
@@ -355,7 +355,7 @@ msgstr "무효 스타트"
 #: src/Task/ValidationErrorStrings.cpp:33
 #, no-c-format
 msgid "No valid finish"
-msgstr "무효 피니시"
+msgstr "최종골 무효"
 
 #: src/Task/ValidationErrorStrings.cpp:34
 #, no-c-format
@@ -715,7 +715,7 @@ msgstr "이전 착륙점"
 
 #: src/Menu/ExpandMacros.cpp:115 src/Menu/ExpandMacros.cpp:137
 msgid "Finish Turnpoint"
-msgstr "피니시 포인트"
+msgstr "최종골 포인트"
 
 #: src/Menu/ExpandMacros.cpp:119 src/Menu/ExpandMacros.cpp:156
 msgid "Next Startpoint"
@@ -1041,7 +1041,7 @@ msgid ""
 "the vertical speed (GPS speed) over the last 20 seconds. Negative values "
 "indicate climbing cruise. If the vertical speed is close to zero, the "
 "displayed value is '---'."
-msgstr "20초 동안의 평균 활공비를 보여준다. 음의 값은 상승을 나타내며, 수직변화가 거의 없을경우 ---로 표시된다."
+msgstr "현재활공비: 20초 동안의 평균 활공비, 음의 값은 상승을 나타내며, 수직변화가 거의 없을경우 ---로 표시된다."
 
 #: src/InfoBoxes/Content/Factory.cpp:177
 #, no-c-format
@@ -1189,7 +1189,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:243
 #, no-c-format
 msgid "Next altitude required"
-msgstr "고도(다음 포인트까지 가기위한 고도)"
+msgstr "고도(다음 포인트 필요고도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:244
 #, no-c-format
@@ -1225,7 +1225,7 @@ msgstr "다음 포인트로 가는 적절한 진행각도. 정보창 메뉴에�
 #: src/InfoBoxes/Content/Factory.cpp:260
 #, no-c-format
 msgid "Final altitude difference"
-msgstr "고도차(피니시까지 고도차)"
+msgstr "고도차(최종골까지 고도차)"
 
 #: src/InfoBoxes/Content/Factory.cpp:261
 #, no-c-format
@@ -1237,12 +1237,12 @@ msgstr "고도차(골)"
 msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
 "height."
-msgstr "피니시 포인트(골)에 도착했을때의 고도(안전고도 포함)."
+msgstr "최종골까지 필요한 고도차(안전고도 포함)."
 
 #: src/InfoBoxes/Content/Factory.cpp:268
 #, no-c-format
 msgid "Final altitude required"
-msgstr "고도(피니시까지 필요고도)"
+msgstr "고도(최종골까지 필요고도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:269
 #, no-c-format
@@ -1252,7 +1252,7 @@ msgstr "필요고도(골)"
 #: src/InfoBoxes/Content/Factory.cpp:270
 #, no-c-format
 msgid "Additional altitude required to finish the task."
-msgstr "피니시포인트에 도착하기 위해 필요한 추가고도."
+msgstr "최종골까지 필요한 추가고도."
 
 #: src/InfoBoxes/Content/Factory.cpp:276
 #, no-c-format
@@ -1395,7 +1395,7 @@ msgstr "풍향은 XCSoar가 계산해서 표시. 정보창을 눌러 수동 보�
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
 msgid "AAT time"
-msgstr "시간(AAT)"
+msgstr "AAT시간"
 
 #: src/InfoBoxes/Content/Factory.cpp:359
 #, no-c-format
@@ -1574,7 +1574,7 @@ msgstr "중력가속도"
 msgid ""
 "Magnitude of G loading reported by a supported external intelligent vario. "
 "This value is negative for pitch-down manoeuvres."
-msgstr "외부센서에서 측정된 중력가속도(마이너스는 하강값)."
+msgstr "중력가속도: 외부센서에서 측정된 중력가속도(마이너스는 하강값)."
 
 #: src/InfoBoxes/Content/Factory.cpp:447
 #, no-c-format
@@ -1622,19 +1622,19 @@ msgstr "UTC(세계표준시) GPS시각."
 #: src/InfoBoxes/Content/Factory.cpp:472
 #, no-c-format
 msgid "Task time to go"
-msgstr "시간(피니시까지 예상 시간MC0)"
+msgstr "시간(최종골까지 예상 시간MC0)"
 
 #: src/InfoBoxes/Content/Factory.cpp:473
 #, no-c-format
 msgid "Fin ETE"
-msgstr "피니시예상시간"
+msgstr "최종골예상시간"
 
 #: src/InfoBoxes/Content/Factory.cpp:474
 #, no-c-format
 msgid ""
 "Estimated time required to complete task, assuming performance of ideal "
 "MacCready cruise/climb cycle."
-msgstr "피니시 포인트 예상시간(MC0), 이상적으로 계산한 MacCready0의 예상시간."
+msgstr "최종골 포인트 예상시간(MC0), 이상적으로 계산한 MacCready0의 예상시간."
 
 #: src/InfoBoxes/Content/Factory.cpp:480
 #, no-c-format
@@ -1675,7 +1675,7 @@ msgid ""
 "speed to fly is selected, this InfoBox displays the MacCready speed."
 msgstr ""
 "돌핀 속도의 경우 현재의 비행 방향에 대해 웨이브를 계산해서 현재의 맥크레디속도를 표시한다. 순항 모드의 경우 고도를 유지하면서 "
-"비행하도록 지시하며, 골 러시모드의 경우 피니시포인트를 향해 비행하도록 지시한다. 상승 모드의 경우 최소 침하 속도를 지시한다. 블록 "
+"비행하도록 지시하며, 골 러시모드의 경우 최종골 포인트를 향해 비행하도록 지시한다. 상승 모드의 경우 최소 침하 속도를 지시한다. 블록 "
 "모드를 선택한 경우(엑셀레이터가 있을때), 정보창은 맥크레디속도를 보여준다."
 
 #: src/InfoBoxes/Content/Factory.cpp:497
@@ -1703,7 +1703,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:505
 #, no-c-format
 msgid "Task arrival time"
-msgstr "시각(피니시예상도착시각)"
+msgstr "시각(최종골예상도착시각)"
 
 #: src/InfoBoxes/Content/Factory.cpp:506
 #, no-c-format
@@ -1732,7 +1732,7 @@ msgstr "WP예상시각"
 msgid ""
 "Estimated arrival local time at next waypoint, assuming performance of ideal "
 "MacCready cruise/climb cycle."
-msgstr "다음 포인트의 도착 예상시각."
+msgstr "WP예상시각: 다음 포인트의 예상도착시각, 이상적인 맥크레디값으로 계산."
 
 #: src/InfoBoxes/Content/Factory.cpp:522
 #, no-c-format
@@ -1801,7 +1801,7 @@ msgstr "온도(예보온도)"
 #: src/InfoBoxes/Content/Factory.cpp:547
 #, no-c-format
 msgid "Max Temp"
-msgstr "최고온도"
+msgstr "예보온도"
 
 #: src/InfoBoxes/Content/Factory.cpp:548
 #, no-c-format
@@ -2073,12 +2073,12 @@ msgstr "남아있는 배터리. 그외 외부센서의 배터리도 표시."
 #: src/InfoBoxes/Content/Factory.cpp:674
 #, no-c-format
 msgid "Final GR"
-msgstr "활공비(피니시)"
+msgstr "활공비(최종골)"
 
 #: src/InfoBoxes/Content/Factory.cpp:675
 #, no-c-format
 msgid "Fin GR"
-msgstr "Fin GR"
+msgstr "최종활공비"
 
 #: src/InfoBoxes/Content/Factory.cpp:676
 #, no-c-format
@@ -2086,7 +2086,7 @@ msgid ""
 "The required glide ratio over ground to finish the task, given by the "
 "distance to go divided by the height required to arrive at the safety "
 "arrival height."
-msgstr "피니시 포인트 활공비, 결승점까지 필요한 활공비이다. 남은거리에서 골인하는데 필요한 고도로 나눈 값이며, 안전고도를 포함한다."
+msgstr "최종활공비: 결승점까지 필요한 활공비 - 남은거리에서 골인하는데 필요한 고도로 나눈 값이며, 안전고도를 포함한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:682
 #, no-c-format
@@ -2313,7 +2313,7 @@ msgstr "그래프(Netto외부바리오)"
 #: src/InfoBoxes/Content/Factory.cpp:798
 #, no-c-format
 msgid "Netto Trace"
-msgstr "바리오그래프"
+msgstr "Netto그래프"
 
 #: src/InfoBoxes/Content/Factory.cpp:799
 #, no-c-format
@@ -2376,7 +2376,7 @@ msgstr "타스크달성율: 남은 타스크 포인트가 표시된다."
 #: src/InfoBoxes/Content/Factory.cpp:829
 #, no-c-format
 msgid "Time under max. start height"
-msgstr "고도(최대출발고도까지 예상시간)"
+msgstr "시간(출발최대고도까지 예상시간)"
 
 #: src/InfoBoxes/Content/Factory.cpp:830
 #, no-c-format
@@ -2387,12 +2387,12 @@ msgstr "시작고도"
 #, no-c-format
 msgid ""
 "The contiguous period the ship has been below the task start max. height."
-msgstr "글라이더가 스타트 최대 고도보다 아래에 있을때 내용을 표시."
+msgstr "스타트 최대 고도보다 낮은 고도에 있을때 최대고도까지 예상상승시간."
 
 #: src/InfoBoxes/Content/Factory.cpp:837
 #, no-c-format
 msgid "Task time to go (ground speed)"
-msgstr "시간(피니시까지 대지속도로 계산된 시간)"
+msgstr "시간(최종골까지 대지속도로 계산된 시간)"
 
 #: src/InfoBoxes/Content/Factory.cpp:838
 #, no-c-format
@@ -2404,7 +2404,7 @@ msgstr "Fin.도달시간"
 msgid ""
 "Estimated time required to complete task, assuming current ground speed is "
 "maintained."
-msgstr "피니시 포인트 예상시간, 대지속도에서 계산된 결승점 도달시간을 표시."
+msgstr "최종골 포인트 예상시간, 대지속도에서 계산된 결승점 도달시간을 표시."
 
 #: src/InfoBoxes/Content/Factory.cpp:845
 #, no-c-format
@@ -2440,9 +2440,7 @@ msgstr "인공수평선"
 msgid ""
 "Attitude indicator (artificial horizon) display calculated from flight path, "
 "supplemented with acceleration and variometer data if available."
-msgstr ""
-"자세지시기(인공수평선). 비행경로표시, 옵션으로 엑셀레이터와 바리오데이터간 동"
-"조가 가능하다."
+msgstr "자세계: 수평자세계 - 옵션으로 엑셀레이터와 바리오데이터간 동조가 가능하다."
 
 #: src/InfoBoxes/Content/Factory.cpp:862
 #, no-c-format
@@ -2709,7 +2707,7 @@ msgstr "속도(스피드타스크의 1시간평균)"
 #: src/InfoBoxes/Content/Factory.cpp:982
 #, no-c-format
 msgid "V Task H"
-msgstr "V타스크시간"
+msgstr "V타스크속도"
 
 #: src/InfoBoxes/Content/Factory.cpp:983
 #, no-c-format
@@ -2802,7 +2800,7 @@ msgstr "Fin고도차MC0"
 msgid ""
 "Arrival altitude at the final waypoint with MC 0 setting relative to the "
 "safety arrival height."
-msgstr "피니시 포인트에 도착할때, 안전고도까지 최고로 효율적으로 비행할 수 있는 고도(맥크레디값은 0)."
+msgstr "최종골 포인트에 도착할때, 안전고도까지 최고로 효율적으로 비행할 수 있는 고도(맥크레디값은 0)."
 
 #: src/InfoBoxes/Content/Factory.cpp:1027
 #: src/InfoBoxes/Content/Factory.cpp:1028 src/InfoBoxes/Content/Task.cpp:904
@@ -2822,7 +2820,7 @@ msgstr "다음 포인트로 향하는 화살표: 최적화된 방향으로 표�
 #: src/InfoBoxes/Content/Factory.cpp:1039
 #, no-c-format
 msgid "Next waypoint arrival time (ground speed)"
-msgstr "시각(다음 포인트에 도착하는 시각 - 대지속도계산)"
+msgstr "시각(다음 포인트 도착시각 - 대지속도계산)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1040
 #, no-c-format
@@ -2834,7 +2832,7 @@ msgstr "WP대지예상"
 msgid ""
 "Estimated arrival time at next waypoint, assuming current ground speed is "
 "maintained."
-msgstr "다음 웨이 포인트의 예상 도착 시간, 대지속도가 유지되는 것으로 가정한다."
+msgstr "WP대지예상: 다음 포인트의 예상도착시각, 대지속도로 계산."
 
 #: src/InfoBoxes/Content/Factory.cpp:1048
 #, no-c-format
@@ -7479,7 +7477,7 @@ msgstr "최고 스타트 고도(시작 포인트의 고도상승한계)에 사�
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:106
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:251
 msgid "Finish min. height"
-msgstr "피니시 최저고도"
+msgstr "최종골 최저고도"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:107
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:252
@@ -7493,12 +7491,12 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:113
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:256
 msgid "Finish height ref."
-msgstr "피니시 고도 기준"
+msgstr "최종골 고도 기준"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:114
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:257
 msgid "Reference used for finish min height rule."
-msgstr "피니시 포인트 최저고도(골 포인트의 최소인정고도)에 사용하는 고도측정 방식을 선택한다."
+msgstr "최종골 포인트 최저고도(골 포인트의 최소인정고도)에 사용하는 고도측정 방식을 선택한다."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:79
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
@@ -7529,7 +7527,7 @@ msgstr "스타트 포인트의 타스크 반경이나 게이트 폭의 기본값
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:155
 #: src/Dialogs/Task/TaskPointDialog.cpp:426
 msgid "Finish point"
-msgstr "피니시 포인트"
+msgstr "최종골 포인트"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:156
 msgid "Default finish type for new tasks you create."
@@ -8252,7 +8250,7 @@ msgstr ""
 
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
 msgid "Width of the start/finish gate."
-msgstr "스타트/피니시 게이트의 폭."
+msgstr "스타트/최종골 게이트의 폭."
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:46
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:42
@@ -8273,7 +8271,7 @@ msgstr "결승점(Finish) 반경"
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:60
 msgid "Finish radial of the OZ area"
-msgstr "OZ 영역의 피니시 포인트 반경"
+msgstr "OZ 영역의 최종골 포인트 반경"
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:68
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:48
@@ -8390,8 +8388,8 @@ msgid ""
 "minimum height above ground for finish to be greater than 1000m below the "
 "start height."
 msgstr ""
-"FAI 규칙으로 설정하면, 출발과 도착의 고도차이가 1000m를 넘어설때 이외에는, 최고 출발 고도, 혹은 최고 출발 속도, 최소 피니시 "
-"포인트 고도를 설정하지 않음."
+"FAI 규칙으로 설정하면, 출발과 도착의 고도차이가 1000m를 넘어설때 이외에는, 최고 출발 고도, 혹은 최고 출발 속도, 최종골 "
+"포인트 최소고도를 설정하지 않음."
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:66
 msgid "Task not saved"
