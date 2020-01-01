@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-01-01 17:26+0000\n"
+"PO-Revision-Date: 2020-01-01 17:33+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -7514,7 +7514,7 @@ msgstr "타스크 반경"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:144
 msgid "Default start type for new tasks you create."
-msgstr "스타트 포인트의 기본입력 설정."
+msgstr "새로운 타스크의 스타트 포인트의 타스크 반경이나 게이트 폭의 기본값."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:149
 msgid "Default radius or gate width of the start zone for new tasks."
@@ -7527,7 +7527,7 @@ msgstr "최종골 포인트"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:156
 msgid "Default finish type for new tasks you create."
-msgstr "최종 포인트를 입력할때 항상 보이는 기본 설정."
+msgstr "최종 포인트의 타스크 반경이나 게이트 폭의 기본값을 설정한다."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:161
 msgid "Default radius or gate width of the finish zone in new tasks."
