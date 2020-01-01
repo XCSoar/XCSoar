@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-01-01 13:45+0000\n"
+"PO-Revision-Date: 2020-01-01 17:00+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -1006,23 +1006,21 @@ msgstr "최근 30초 동안의 평균고도변화량을 보여준다. GPS나 외
 #: src/InfoBoxes/Content/Factory.cpp:160
 #, no-c-format
 msgid "Next bearing"
-msgstr "다음방위각"
+msgstr "타스크(다음포인트 방위각도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:161
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:104
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:82
 #, no-c-format
 msgid "Bearing"
-msgstr "방위각"
+msgstr "방위각도"
 
 #: src/InfoBoxes/Content/Factory.cpp:162
 #, no-c-format
 msgid ""
 "True bearing of the next waypoint.  For AAT tasks, this is the true bearing "
 "to the target within the AAT sector."
-msgstr ""
-"다음 포인트로 향하는 방향을 각도로 표시한다. \n"
-"AAT 타스크의 경우 다음 AAT 섹터의 방향을 표시한다."
+msgstr "방위각도: 다음포인트의 현재위치에서 절대방향, AAT타스크의 경우 다음 AAT섹터의 방향을 표시한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:169
 #, no-c-format
@@ -1152,25 +1150,24 @@ msgstr "현재 설정된 맥크레디 모드(자동이나 수동): 정보창을 
 #: src/InfoBoxes/Content/Factory.cpp:225
 #, no-c-format
 msgid "Next distance"
-msgstr "거리(웨이포인트실린더의 외곽까지 거리)"
+msgstr "타스크(거리 - 턴포인트 실린더)"
 
 #: src/InfoBoxes/Content/Factory.cpp:226 src/InfoBoxes/Content/Task.cpp:182
 #, no-c-format
 msgid "WP Dist"
-msgstr "웨이포인트거리"
+msgstr "WP거리"
 
 #: src/InfoBoxes/Content/Factory.cpp:227
 #, no-c-format
 msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the target within the AAT sector."
-msgstr ""
-"다음 포인트의 외곽선과 기체의 거리: AAT타스크의 경우 다음 AAT 섹터까지의 거리를, 웨이포인트 미입력시에는 이륙장의 거리이다."
+msgstr "WP거리: 다음 포인트의 실린더까지 거리, AAT타스크의 경우 다음 AAT 섹터까지의 거리이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:234
 #, no-c-format
 msgid "Next altitude difference"
-msgstr "고도(다음 포인트 도착고도)"
+msgstr "타스크(고도 - 다음 포인트 도착고도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:235
 #, no-c-format
@@ -1183,13 +1180,13 @@ msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival height. "
 "For AAT tasks, the target within the AAT sector is used."
 msgstr ""
-"다음 포인트에 도착했을때 고도(안전고도 포함):\n"
-"-로 표시되면 현재고도로는 목표에 도착하지 못한다. AAT타스크의 경우 AAT 섹터까지 가기 위한 고도를 보여준다."
+"WP도착고도: 다음 포인트에 도착했을때 고도(안전고도 포함), -로 표시되면 현재고도로는 목표에 도착하지 못한다. AAT타스크의 경우 "
+"AAT 섹터까지 가기 위한 고도이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:243
 #, no-c-format
 msgid "Next altitude required"
-msgstr "고도(다음 포인트 필요고도)"
+msgstr "타스크(고도 - 다음 포인트 필요고도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:244
 #, no-c-format
@@ -1201,12 +1198,12 @@ msgstr "WP필요고도"
 msgid ""
 "Additional altitude required to reach the next turn point. For AAT tasks, "
 "the target within the AAT sector is used."
-msgstr "다음 포인트까지 가기위해 필요한 추가고도: AAT타스크의 경우 AAT 섹터까지 가기 위한 값."
+msgstr "WP필요고도: 다음 포인트까지 가기위해 현재고도에서 필요한 추가고도, AAT타스크의 경우 AAT 섹터까지 가기 위한 고도이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:252
 #, no-c-format
 msgid "Next waypoint"
-msgstr "타스크(다음 포인트)"
+msgstr "타스크(다음포인트 진입각차 - 포인트이름)"
 
 #: src/InfoBoxes/Content/Factory.cpp:253
 #, no-c-format
@@ -1220,39 +1217,39 @@ msgid ""
 "using the up/down cursor keys selects the next/previous waypoint in the "
 "task. (Touch-screen/PC only) Pressing the enter cursor key brings up the "
 "waypoint details."
-msgstr "다음 포인트로 가는 적절한 진행각도. 정보창 메뉴에서 웨이포인트 설명을 볼 수 있다."
+msgstr "적절진입각: 포인트 이름을 포함한 적절진입각 정보, 정보창 메뉴에서 상세설명을 볼 수 있다."
 
 #: src/InfoBoxes/Content/Factory.cpp:260
 #, no-c-format
 msgid "Final altitude difference"
-msgstr "고도차(최종골까지 고도차)"
+msgstr "최종골(고도차 - 최종 포인트 고도차이MC0)"
 
 #: src/InfoBoxes/Content/Factory.cpp:261
 #, no-c-format
 msgid "Fin AltD"
-msgstr "고도차(골)"
+msgstr "최종고도차"
 
 #: src/InfoBoxes/Content/Factory.cpp:262
 #, no-c-format
 msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
 "height."
-msgstr "최종골까지 필요한 고도차(안전고도 포함)."
+msgstr "최종고도차: 최종골 포인트 도착고도를 현재고도에서 계산한 고도차이."
 
 #: src/InfoBoxes/Content/Factory.cpp:268
 #, no-c-format
 msgid "Final altitude required"
-msgstr "고도(최종골까지 필요고도)"
+msgstr "최종골(고도 - 최종 포인트 필요고도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:269
 #, no-c-format
 msgid "Fin AltR"
-msgstr "필요고도(골)"
+msgstr "최종필요고도"
 
 #: src/InfoBoxes/Content/Factory.cpp:270
 #, no-c-format
 msgid "Additional altitude required to finish the task."
-msgstr "최종골까지 필요한 추가고도."
+msgstr "최종필요고도: 최종 포인트까지 가기위해 현재고도에서 필요한 추가고도."
 
 #: src/InfoBoxes/Content/Factory.cpp:276
 #, no-c-format
@@ -1274,17 +1271,17 @@ msgstr "타스크 평균속도-고도보정없음: 타스크 진행의 평균속
 #: src/InfoBoxes/Content/Factory.cpp:284
 #, no-c-format
 msgid "Final distance"
-msgstr "거리(골까지 남은거리)"
+msgstr "최종골(거리 - 골까지 남은거리)"
 
 #: src/InfoBoxes/Content/Factory.cpp:285
 #, no-c-format
 msgid "Fin Dist"
-msgstr "골까지거리"
+msgstr "거리(골)"
 
 #: src/InfoBoxes/Content/Factory.cpp:286
 #, no-c-format
 msgid "Distance to finish around remaining turn points."
-msgstr "남은 포인트를 지나, 골까지 남은 거리."
+msgstr "거리(골): 최종 포인트까지 남은 거리."
 
 #: src/InfoBoxes/Content/Factory.cpp:300
 #, no-c-format
@@ -1301,7 +1298,7 @@ msgstr "표고"
 msgid ""
 "This is the elevation of the terrain above mean sea level, obtained from the "
 "terrain file at the current GPS location."
-msgstr "해발고도에서부터 측정된 현재위치의 지면고도. GPS위치를 지형과 비교하여 얻어진다."
+msgstr "표고: 기체아래의 지면고도, GPS위치를 지형데이터에 비교하여 표시한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:308
 #, no-c-format
@@ -1372,7 +1369,7 @@ msgid ""
 "Wind speed estimated by XCSoar. Manual adjustment is possible with the "
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
-msgstr "풍속은 XCSoar가 계산해서 표시. 정보창을 눌러 수동 보정도 가능하다."
+msgstr "바람은 XCSoar가 계산해서 표시. 정보창을 누르면 나오는 메뉴에서 수동입력도 가능하다."
 
 #: src/InfoBoxes/Content/Factory.cpp:349
 #, no-c-format
@@ -1390,7 +1387,7 @@ msgid ""
 "Wind bearing estimated by XCSoar. Manual adjustment is possible with the "
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
-msgstr "풍향은 XCSoar가 계산해서 표시. 정보창을 눌러 수동 보정도 가능하다."
+msgstr "풍향은 XCSoar가 계산해서 표시. 정보창을 누르면 나오는 메뉴에서 수동입력도 가능하다."
 
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
@@ -1475,19 +1472,17 @@ msgstr "AAT(Assigned Area Task)에서 남은 AAT시간으로 가능한 최소 �
 #: src/InfoBoxes/Content/Factory.cpp:398
 #, no-c-format
 msgid "Airspeed IAS"
-msgstr "대기속도(V IAS)"
+msgstr "속도(대기속도V IAS)"
 
 #: src/InfoBoxes/Content/Factory.cpp:399
 #, no-c-format
 msgid "V IAS"
-msgstr "대기속도"
+msgstr "V IAS"
 
 #: src/InfoBoxes/Content/Factory.cpp:400
 #, no-c-format
 msgid "Indicated Airspeed reported by a supported external intelligent vario."
-msgstr ""
-"대기속도(V IAS), 외부의 고성능 바리오혹은 피토관으로 부터 측정된 대기속도값"
-"을 보여준다."
+msgstr "V IAS: 외부 피토관 혹은 센서에서 보고되는 대기속도."
 
 #: src/InfoBoxes/Content/Factory.cpp:406
 #, no-c-format
@@ -1510,7 +1505,7 @@ msgstr "기압고도계로 측정된 현재 고도."
 #: src/InfoBoxes/Content/Factory.cpp:415
 #, no-c-format
 msgid "Speed MacCready"
-msgstr "맥크레디(속도)"
+msgstr "속도(맥크레디 속도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:416
 #, no-c-format
@@ -1524,8 +1519,8 @@ msgid ""
 "cruise flight mode, this speed-to-fly is calculated for maintaining "
 "altitude. In final glide mode, this speed-to-fly is calculated for descent."
 msgstr ""
-"다음 웨이 포인트에 최적의 비행을 하기 위한 MacCready비행 속도: 순항모드에서는 고도를 유지하기 위해 계산하며, "
-"최종골러시모드에서는 하강에 대해 계산한다."
+"V MC: 다음 포인트까지 최적의 비행을 계산하기 위한 MacCready비행 속도, 순항모드에서는 적절한 고도를 유지하기 위한 계산값, "
+"최종골모드에서는 적절한 하강을 위한 계산값."
 
 #: src/InfoBoxes/Content/Factory.cpp:423
 #, no-c-format
@@ -1542,7 +1537,7 @@ msgstr "상승비율"
 msgid ""
 "Percentage of time spent in climb mode. These statistics are reset upon "
 "starting the task."
-msgstr "상승비율(%), 타스크 비행중 써멀링에 사용된 시간비율."
+msgstr "상승비율(%), 비행중에 써멀링에 사용한 비행의 비율. 타스크를 시작하면 비율은 다시 계산한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:431
 #, no-c-format
@@ -1622,7 +1617,7 @@ msgstr "UTC(세계표준시) GPS시각."
 #: src/InfoBoxes/Content/Factory.cpp:472
 #, no-c-format
 msgid "Task time to go"
-msgstr "시간(최종골예상시간MC0)"
+msgstr "최종골(시간 - 최종골예상시간(MC0))"
 
 #: src/InfoBoxes/Content/Factory.cpp:473
 #, no-c-format
@@ -1639,19 +1634,19 @@ msgstr "최종골MC0: 최종골 포인트의 예상소요시간, 이상적인 �
 #: src/InfoBoxes/Content/Factory.cpp:480
 #, no-c-format
 msgid "Next time to go"
-msgstr "시간(다음포인트예상시간MC0)"
+msgstr "타스크(시간 - 다음포인트예상시간(MC0))"
 
 #: src/InfoBoxes/Content/Factory.cpp:481
 #, no-c-format
 msgid "WP ETE"
-msgstr "다음WP시간"
+msgstr "WP예상시간"
 
 #: src/InfoBoxes/Content/Factory.cpp:482
 #, no-c-format
 msgid ""
 "Estimated time required to reach next waypoint, assuming performance of "
 "ideal MacCready cruise/climb cycle."
-msgstr "다음WP시간: 다음 포인트의 예상소요시간, 이상적인 맥크레디값으로 계산."
+msgstr "WP예상시간: 다음 포인트의 예상소요시간, 이상적인 맥크레디값으로 계산."
 
 #: src/InfoBoxes/Content/Factory.cpp:489
 #, no-c-format
@@ -1674,14 +1669,14 @@ msgid ""
 "the current load factor (if an accelerometer is connected). When Block mode "
 "speed to fly is selected, this InfoBox displays the MacCready speed."
 msgstr ""
-"돌핀 속도의 경우 현재의 비행 방향에 대해 웨이브를 계산해서 현재의 맥크레디속도를 표시한다. 순항 모드의 경우 고도를 유지하면서 "
-"비행하도록 지시하며, 골 러시모드의 경우 최종골 포인트를 향해 비행하도록 지시한다. 상승 모드의 경우 최소 침하 속도를 지시한다. 블록 "
-"모드를 선택한 경우(엑셀레이터가 있을때), 정보창은 맥크레디속도를 보여준다."
+"최적속도: 돌핀 속도의 경우 Netto 바리오 값과 현재의 맥크레디속도로 계산한 값, 순항모드에서는 적절한 고도를 유지하기 위한 계산값, "
+"최종골모드에서는 적절한 하강을 위한 계산값이다. 상승 모드의 경우 최소 침하 속도를 지시한다. 엑셀레이터가 있을때 블록 모드를 선택한 "
+"경우, 정보창은 맥크레디속도를 보여준다."
 
 #: src/InfoBoxes/Content/Factory.cpp:497
 #, no-c-format
 msgid "Netto vario"
-msgstr "바리오(Netto외부바리오)"
+msgstr "바리오(Netto바리오)"
 
 #: src/InfoBoxes/Content/Factory.cpp:498
 #, no-c-format
@@ -1696,14 +1691,13 @@ msgid ""
 "vario are connected, otherwise calculations are based on GPS measurements "
 "and wind estimates."
 msgstr ""
-"현재 비행하고있는 기단의 상승속도, 바리오미터 수치에서 글라이더의 침하율"
-"(sink)를 뺀 수치, 고기능 바리오미터가 연결된 경우 그 수치, 그렇지 않으면 GPS"
-"의 고도값을 보여준다."
+"Netto바리오: 기단에서 수직고도의 경향, 기체의 싱크속도에서 기단의 상승값을 보상한 바리오 값이며, 고기능 바리오, 외부피토관, "
+"가속도가 연결된 경우 에 가장 적합한 결과를 보여준다, 만약 없으면 GPS측정과 바람에 대한 추정치로 계산한 값을 보여준다."
 
 #: src/InfoBoxes/Content/Factory.cpp:505
 #, no-c-format
 msgid "Task arrival time"
-msgstr "시각(최종골예상도착시각)"
+msgstr "최종골(시각 - 최종골예상도착시각)"
 
 #: src/InfoBoxes/Content/Factory.cpp:506
 #, no-c-format
@@ -1720,7 +1714,7 @@ msgstr "골에 도착하는 예상 시각."
 #: src/InfoBoxes/Content/Factory.cpp:513
 #, no-c-format
 msgid "Next arrival time"
-msgstr "시각(다음포인트예상시각MC0)"
+msgstr "타스크(시각 - 다음포인트예상시각(MC0))"
 
 #: src/InfoBoxes/Content/Factory.cpp:514
 #, no-c-format
@@ -1737,7 +1731,7 @@ msgstr "WP예상시각: 다음 포인트의 예상도착시각, 이상적인 맥
 #: src/InfoBoxes/Content/Factory.cpp:522
 #, no-c-format
 msgid "Bearing difference"
-msgstr "타스크(다음 포인트 - 포인트이름제외)"
+msgstr "타스크(다음포인트 진입각차 - 포인트거리)"
 
 #: src/InfoBoxes/Content/Factory.cpp:523
 #, no-c-format
@@ -1756,8 +1750,9 @@ msgid ""
 "good is pointing directly at the next waypoint. This bearing takes into "
 "account the curvature of the Earth."
 msgstr ""
-"다음 포인트까지 라인과 GPS 항적의 차이: AAT타스크의 경우 다음 섹터까지의 경로와의 차이, GPS 내비게이션은 지표에서 계산하므로 "
-"실제 기체의 기수는 바람의 영향을 받는다. 다음 포인트로 가기위해 보정된 경로를 보여주며, 경로는 지구의 곡률을 고려하여 계산한다."
+"적절진입각: 다음 포인트까지 라인과 GPS 항적의 차이, AAT타스크의 경우 다음 섹터까지의 경로와의 차이, GPS 내비게이션은 지표에서 "
+"계산하므로 실제 기체의 기수는 바람의 영향을 받는다. 다음 포인트로 가기위해 보정된 경로를 보여주며, 경로는 지구의 곡률을 고려하여 "
+"계산한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:530
 #, no-c-format
@@ -1871,17 +1866,17 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:578
 #, no-c-format
 msgid "Airspeed TAS"
-msgstr "대기속도(V TAS)"
+msgstr "속도(대기속도V TAS)"
 
 #: src/InfoBoxes/Content/Factory.cpp:579
 #, no-c-format
 msgid "V TAS"
-msgstr "외기속도"
+msgstr "V TAS"
 
 #: src/InfoBoxes/Content/Factory.cpp:580
 #, no-c-format
 msgid "True Airspeed reported by a supported external intelligent vario."
-msgstr "대기속도(V TAS), 고성능 바리오로 부터 측정된 실제 대기속도를 보여준다."
+msgstr "V TAS: 외부 피토관의 V IAS 값과 현재 고도를 비교해서 계산한 실제 대기속도."
 
 #: src/InfoBoxes/Content/Factory.cpp:586
 #, no-c-format
@@ -1980,7 +1975,7 @@ msgstr "거리(홈)"
 #: src/InfoBoxes/Content/Factory.cpp:628
 #, no-c-format
 msgid "Distance to home waypoint (if defined)."
-msgstr "홈 웨이포인트와의 거리를 나타낸다 (설정되어 있어야 한다.)."
+msgstr "거리(홈): 홈 웨이포인트까지 거리(홈설정필요)."
 
 #: src/InfoBoxes/Content/Factory.cpp:634
 #, no-c-format
@@ -2039,7 +2034,7 @@ msgstr "비행중의 모든 써멀에 대한 평균상승률."
 #: src/InfoBoxes/Content/Factory.cpp:658
 #, no-c-format
 msgid "Task req. total height trend"
-msgstr "바리오(이륙에서 현재까지의 평균값)"
+msgstr "타스크(바리오 트렌드)"
 
 #: src/InfoBoxes/Content/Factory.cpp:659
 #, no-c-format
@@ -2051,7 +2046,7 @@ msgstr "바리오트렌드"
 msgid ""
 "Trend (or neg. of the variation) of the total required height to complete "
 "the task."
-msgstr "바리오트렌드(상승 혹은 하강), 타스크 종료를 위해 필요한 바리오수치의 추정치."
+msgstr "바리오트렌드: 타스크 종료를 위해 필요한 상승/하강값의 추세(경향)."
 
 #: src/InfoBoxes/Content/Factory.cpp:666
 #, no-c-format
@@ -2068,12 +2063,12 @@ msgstr "배터리"
 msgid ""
 "Displays percentage of device battery remaining (where applicable) and "
 "status/voltage of external power supply."
-msgstr "남아있는 배터리. 그외 외부센서의 배터리도 표시."
+msgstr "배터리: 남아있는 기기배터리, 외부센서의 배터리상태도 보여준다."
 
 #: src/InfoBoxes/Content/Factory.cpp:674
 #, no-c-format
 msgid "Final GR"
-msgstr "활공비(최종골)"
+msgstr "최종골(최종활공비)"
 
 #: src/InfoBoxes/Content/Factory.cpp:675
 #, no-c-format
@@ -2237,7 +2232,7 @@ msgstr "XCSoar에 의해 사용된 5초 평균 CPU 부하."
 #: src/InfoBoxes/Content/Factory.cpp:755
 #, no-c-format
 msgid "Next altitude arrival"
-msgstr "고도(다음 포인트 - 표고)"
+msgstr "타스크(고도 - 다음 포인트 표고)"
 
 #: src/InfoBoxes/Content/Factory.cpp:756
 #, no-c-format
@@ -2249,7 +2244,7 @@ msgstr "WP표고"
 msgid ""
 "Absolute arrival altitude at the next waypoint in final glide.  For AAT "
 "tasks, the target within the AAT sector is used."
-msgstr "다음 포인트의 표고, AAT 타스크의 경우 다음 AAT섹터의 표고를 보여준다."
+msgstr "WP표고: 다음 포인트에 도착할 위치의 표고, AAT 타스크의 경우 다음 AAT섹터의 표고이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:764 src/InfoBoxes/Content/Factory.cpp:765
 #, no-c-format
@@ -2320,7 +2315,7 @@ msgstr "Netto그래프"
 msgid ""
 "Trace of vertical speed of air-mass, equal to vario value less the glider's "
 "estimated sink rate."
-msgstr "Netto그래프: 기단에서 수직고도의 경향, 기체의 싱크속도에서 기단의 상승값을 보상한 그래프이다."
+msgstr "Netto그래프: 기단에서 수직고도의 경향, 기체의 싱크속도에서 기단의 상승값을 보상한 바리오그래프이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:805
 #, no-c-format
@@ -2376,7 +2371,7 @@ msgstr "타스크달성율: 남은 타스크 포인트가 표시된다."
 #: src/InfoBoxes/Content/Factory.cpp:829
 #, no-c-format
 msgid "Time under max. start height"
-msgstr "시간(출발최대고도까지 예상시간)"
+msgstr "타스크(시간 - 출발최대고도까지 예상시간)"
 
 #: src/InfoBoxes/Content/Factory.cpp:830
 #, no-c-format
@@ -2392,7 +2387,7 @@ msgstr "스타트 최대 고도보다 낮은 고도에 있을때 최대고도까
 #: src/InfoBoxes/Content/Factory.cpp:837
 #, no-c-format
 msgid "Task time to go (ground speed)"
-msgstr "시간(최종골예상시간 - 대지속도)"
+msgstr "최종골(시간 - 최종골예상시간(대지속도))"
 
 #: src/InfoBoxes/Content/Factory.cpp:838
 #, no-c-format
@@ -2409,31 +2404,31 @@ msgstr "최종골시간: 최종골 포인트의 예상소요시간, 대지속도
 #: src/InfoBoxes/Content/Factory.cpp:845
 #, no-c-format
 msgid "Next time to go (ground speed)"
-msgstr "시간(다음포인트예상시간 - 대지속도)"
+msgstr "타스크(시간 - 다음포인트예상시간(대지속도))"
 
 #: src/InfoBoxes/Content/Factory.cpp:846
 #, no-c-format
 msgid "WP ETE VMG"
-msgstr "다음WP대지"
+msgstr "WP대지시간"
 
 #: src/InfoBoxes/Content/Factory.cpp:847
 #, no-c-format
 msgid ""
 "Estimated time required to reach next waypoint, assuming current ground "
 "speed is maintained."
-msgstr "다음WP대지: 다음 포인트의 예상소요시간, 대지 속도로 계산."
+msgstr "WP대지시간: 다음 포인트의 예상소요시간, 대지 속도로 계산."
 
 #: src/InfoBoxes/Content/Factory.cpp:854
 #, no-c-format
 msgid "Attitude indicator"
-msgstr "자세표시기"
+msgstr "자세계"
 
 #: src/InfoBoxes/Content/Factory.cpp:855 src/PageSettings.cpp:52
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:168
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:346
 #, no-c-format
 msgid "Horizon"
-msgstr "인공수평선"
+msgstr "자세계"
 
 #: src/InfoBoxes/Content/Factory.cpp:856
 #, no-c-format
@@ -2477,7 +2472,7 @@ msgstr "근처의 공역 경계선까지의 고도, +값이면 공역위 , -값�
 #: src/InfoBoxes/Content/Factory.cpp:878
 #, no-c-format
 msgid "Next MC0 altitude difference"
-msgstr "고도차(다음 포인트까지 MC0으로 계산한 고도차이 )"
+msgstr "타스크(고도차 - 다음 포인트 고도차이MC0)"
 
 #: src/InfoBoxes/Content/Factory.cpp:879
 #, no-c-format
@@ -2491,7 +2486,8 @@ msgid ""
 "safety arrival height.  For AAT tasks, the target within the AAT sector is "
 "used."
 msgstr ""
-"다음 포인트 도착고도와 맥크레디가 0으로 설정된 값을 비교한 고도차: AAT 타스크의 경우 다음 AAT 섹터까지의 고도 차이를 사용한다."
+"WP고도차MC0: 다음 포인트 도착고도를 현재고도에서 이상적인 맥크레디 값으로 계산한 고도차, AAT 타스크의 경우 다음 AAT "
+"섹터까지의 고도차이."
 
 #: src/InfoBoxes/Content/Factory.cpp:887
 #, no-c-format
@@ -2509,7 +2505,7 @@ msgid ""
 "The current head wind component. Head wind is calculated from TAS and GPS "
 "ground speed if airspeed is available from external device. Otherwise the "
 "estimated wind is used for the calculation."
-msgstr "현재의 정풍(맞바람)정보, GPS 속도나, 외부장치에서 들어온 신호를 바탕으로 XCsoar에서 계산된 값이다."
+msgstr "정풍: 현재의 정풍(맞바람)정보, 외부 피토관에서 GPS속도를 뺀 정풍정보이며, 다른방법으로 측정한 바람도 계산에 사용한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:896
 #, no-c-format
@@ -2545,7 +2541,7 @@ msgid ""
 "This is the barometric altitude obtained from a device equipped with a "
 "pressure sensor or the GPS altitude if the barometric altitude is not "
 "available."
-msgstr "기압고도, 기압고도계가 없을 경우 GPS 고도이다."
+msgstr "고도계(자동): 기압고도계가 없을 경우 GPS 고도를 표시한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:912
 #, no-c-format
@@ -2580,7 +2576,7 @@ msgid ""
 "The current head wind component. The simplified head wind is calculated by "
 "subtracting GPS ground speed from the TAS if airspeed is available from "
 "external device."
-msgstr "현재의 정풍(맞바람)정보, 외부대기(V TAS)속도와 GPS속도의 차이이다."
+msgstr "정풍(심플): 현재의 정풍(맞바람)정보, 외부 피토관에서 GPS속도를 뺀 단순화한 정풍정보이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:928
 #, no-c-format
@@ -2641,7 +2637,7 @@ msgstr "써멀어시스턴트, 열의 세기와 모양을 표시한다."
 #: src/InfoBoxes/Content/Factory.cpp:951
 #, no-c-format
 msgid "Start open/close countdown"
-msgstr "시간(게임 시작 오픈/클로즈 카운트다운)"
+msgstr "타스크(시작시간 - 카운트다운)"
 
 #: src/InfoBoxes/Content/Factory.cpp:952
 #, no-c-format
@@ -2656,7 +2652,7 @@ msgstr "스타트포인트의 남은 시작 시간."
 #: src/InfoBoxes/Content/Factory.cpp:958
 #, no-c-format
 msgid "Start open/close countdown at reaching"
-msgstr "시간(게임 시작 카운트다운 - 현위치에서 스타트포인트까지)"
+msgstr "타스크(시작시간 - 스타트까지 카운트다운)"
 
 #: src/InfoBoxes/Content/Factory.cpp:959
 #, no-c-format
@@ -2673,7 +2669,7 @@ msgstr "스타트포인트까지 현재위치에서 출발할때 소요되는 �
 #: src/InfoBoxes/Content/Factory.cpp:965
 #, no-c-format
 msgid "Next radial"
-msgstr "타스크(다음 포인트 각도)"
+msgstr "타스크(다음포인트 진입각도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:966 src/Dialogs/Task/TargetDialog.cpp:438
 #, no-c-format
@@ -2683,7 +2679,7 @@ msgstr "방사각도"
 #: src/InfoBoxes/Content/Factory.cpp:967
 #, no-c-format
 msgid "True bearing from the next waypoint to your position."
-msgstr "다음 포인트에서 현재위치로의 방향을 나타낸다."
+msgstr "진입각도: 다음포인트까지 현재위치에서 진입각도."
 
 #: src/InfoBoxes/Content/Factory.cpp:973 src/InfoBoxes/Content/Factory.cpp:974
 #, no-c-format
@@ -2702,7 +2698,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:981
 #, no-c-format
 msgid "Speed task last hour"
-msgstr "속도(스피드타스크의 1시간평균)"
+msgstr "타스크 (타스크진행의 1시간평균속도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:982
 #, no-c-format
@@ -2714,26 +2710,24 @@ msgstr "V타스크속도"
 msgid ""
 "Average cross country speed while on current task over the last hour, not "
 "compensated for altitude."
-msgstr "과거 1시간의 타스크 평균 속도: 고도는 보정되지 않음(대지시간)."
+msgstr "V타스크속도: 타스크진행중 직전 1시간의 평균 속도, 고도변화는 보정되지 않음."
 
 #: src/InfoBoxes/Content/Factory.cpp:989
 #, no-c-format
 msgid "Next distance (nominal)"
-msgstr "거리(웨이포인트의 반경중심까지, 실린더 반경을 무시)"
+msgstr "타스크(거리 - 턴포인트 중심)"
 
 #: src/InfoBoxes/Content/Factory.cpp:990
 #, no-c-format
 msgid "WP Dist-N"
-msgstr "실제WP거리"
+msgstr "WP중심거리"
 
 #: src/InfoBoxes/Content/Factory.cpp:991
 #, no-c-format
 msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the origin of the AAT sector."
-msgstr ""
-"일반적인 웨이포인트와의 거리, 실린더의 중심점까지 거리이다. AAT 타스크의 경"
-"우 AAT 섹터의 원점까지의 거리이다."
+msgstr "WP중심거리: 다음 포인트의 중심까지 거리, AAT 타스크의 경우 AAT 섹터의 원점의 거리이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:997
 #, no-c-format
@@ -2751,7 +2745,7 @@ msgid ""
 "Circle diameter. Displays estimated circle diameter and full circle flight "
 "time. Useful for evaluating best thermalling mode with a glider at different "
 "wing loading."
-msgstr "선회 지름: 예상되는 최소 선회 시간이다. 익면 하중차이에 의한 최선의 써클링을 판단하기 위해 사용할수 있다."
+msgstr "선회반경: 예상되는 최소 선회 시간이다. 익면 하중차이에 의한 최선의 써클링을 판단하기 위해 사용할수 있다."
 
 #: src/InfoBoxes/Content/Factory.cpp:1004
 #, no-c-format
@@ -2788,25 +2782,27 @@ msgstr "OLC 규칙으로 계산된 현시점까지의 평균 비행 속도."
 #: src/InfoBoxes/Content/Factory.cpp:1019
 #, no-c-format
 msgid "Final MC0 altitude difference"
-msgstr "고도차(골까지 MC0으로 계산된 고도차이)"
+msgstr "최종골(고도차 - 최종 포인트 고도차이MC0)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1020
 #, no-c-format
 msgid "Fin MC0 AltD"
-msgstr "Fin고도차MC0"
+msgstr "최종고도차MC0"
 
 #: src/InfoBoxes/Content/Factory.cpp:1021
 #, no-c-format
 msgid ""
 "Arrival altitude at the final waypoint with MC 0 setting relative to the "
 "safety arrival height."
-msgstr "최종골 포인트에 도착할때, 안전고도까지 최고로 효율적으로 비행할 수 있는 고도(맥크레디값은 0)."
+msgstr ""
+"최종고도차MC0: 최종골 포인트 도착고도를 현재고도에서 이상적인 맥크레디 값으로 계산한 고도차, AAT 타스크의 경우 다음 AAT "
+"섹터까지의 고도차이."
 
 #: src/InfoBoxes/Content/Factory.cpp:1027
 #: src/InfoBoxes/Content/Factory.cpp:1028 src/InfoBoxes/Content/Task.cpp:904
 #, no-c-format
 msgid "Next arrow"
-msgstr "화살표(다음WP)"
+msgstr "타스크(다음포인트화살표)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1029
 #, no-c-format
@@ -2820,19 +2816,19 @@ msgstr "다음 포인트로 향하는 화살표: 최적화된 방향으로 표�
 #: src/InfoBoxes/Content/Factory.cpp:1039
 #, no-c-format
 msgid "Next waypoint arrival time (ground speed)"
-msgstr "시각(다음포인트예상시각 - 대지속도)"
+msgstr "타스크(시각 - 다음포인트예상시각(대지속도))"
 
 #: src/InfoBoxes/Content/Factory.cpp:1040
 #, no-c-format
 msgid "WP ETA VMG"
-msgstr "WP대지예상"
+msgstr "WP대지시각"
 
 #: src/InfoBoxes/Content/Factory.cpp:1041
 #, no-c-format
 msgid ""
 "Estimated arrival time at next waypoint, assuming current ground speed is "
 "maintained."
-msgstr "WP대지예상: 다음 포인트의 예상도착시각, 대지속도로 계산."
+msgstr "WP대지시각: 다음 포인트의 예상도착시각, 대지속도로 계산."
 
 #: src/InfoBoxes/Content/Factory.cpp:1048
 #, no-c-format
@@ -2866,7 +2862,7 @@ msgstr "상승 %"
 msgid ""
 "Pie chart of time circling and climbing, circling and descending, and "
 "climbing non-circling."
-msgstr "상승비율(%), 비행중에 써멀링과 순항의 비율에 대한 차트."
+msgstr "상승%: 비행중에 써멀링과 순항, 하강, 써멀링외의 상승에 대한 비율차트."
 
 #: src/InfoBoxes/Content/Factory.cpp:1064
 #, no-c-format
@@ -2982,7 +2978,7 @@ msgstr "GPS 수신불가"
 
 #: src/InfoBoxes/Content/Speed.cpp:120
 msgid "BLOCK"
-msgstr "차단"
+msgstr "블록"
 
 #: src/InfoBoxes/Content/Speed.cpp:122
 msgid "DOLPHIN"
@@ -6085,7 +6081,7 @@ msgstr "맥크레디 보기"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:71
 msgid "Whether to show the MacCready setting."
-msgstr "맥크레디 설정을 표시할지 여부."
+msgstr "맥크레디: 현재의 맥크레디 설정을 정보창에 보여준다."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:74
 msgid "Show bugs"
@@ -8100,7 +8096,7 @@ msgid ""
 "instead."
 msgstr ""
 "비행장과 착륙가능한 곳은 자주색 원으로 표시된다. 웨이포인트에 도달 할 수 있을 경우 큰 녹색 원으로 표시되고, 웨이포인트가 산에 의해 "
-"차단 된 경우 녹색 원은 빨간색으로 표시된다."
+"차단된 경우 녹색 원은 빨간색으로 표시된다."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:167
 #, no-c-format
