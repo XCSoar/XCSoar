@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-01-01 12:32+0000\n"
+"PO-Revision-Date: 2020-01-01 13:45+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -1406,7 +1406,7 @@ msgstr "AAT시간"
 #, no-c-format
 msgid ""
 "Assigned Area Task time remaining. Goes red when time remaining has expired."
-msgstr "AAT타스크에 할당된 시간. 빨간색으로 변하면 남은 시간이 종료된 것이다."
+msgstr "AAT(Assigned Area Task)시간: 시간이 종료되면 빨간색으로 표시된다."
 
 #: src/InfoBoxes/Content/Factory.cpp:366
 #, no-c-format
@@ -1622,24 +1622,24 @@ msgstr "UTC(세계표준시) GPS시각."
 #: src/InfoBoxes/Content/Factory.cpp:472
 #, no-c-format
 msgid "Task time to go"
-msgstr "시간(최종골까지 예상 시간MC0)"
+msgstr "시간(최종골예상시간MC0)"
 
 #: src/InfoBoxes/Content/Factory.cpp:473
 #, no-c-format
 msgid "Fin ETE"
-msgstr "최종골예상시간"
+msgstr "최종골MC0"
 
 #: src/InfoBoxes/Content/Factory.cpp:474
 #, no-c-format
 msgid ""
 "Estimated time required to complete task, assuming performance of ideal "
 "MacCready cruise/climb cycle."
-msgstr "최종골 포인트 예상시간(MC0), 이상적으로 계산한 MacCready0의 예상시간."
+msgstr "최종골MC0: 최종골 포인트의 예상소요시간, 이상적인 맥크레디값으로 계산."
 
 #: src/InfoBoxes/Content/Factory.cpp:480
 #, no-c-format
 msgid "Next time to go"
-msgstr "시간(다음 포인트까지 예상소요시간)"
+msgstr "시간(다음포인트예상시간MC0)"
 
 #: src/InfoBoxes/Content/Factory.cpp:481
 #, no-c-format
@@ -1651,7 +1651,7 @@ msgstr "다음WP시간"
 msgid ""
 "Estimated time required to reach next waypoint, assuming performance of "
 "ideal MacCready cruise/climb cycle."
-msgstr "다음 포인트까지 예상 소요시간, 맥크레디 설정에 의한 예상시간이다."
+msgstr "다음WP시간: 다음 포인트의 예상소요시간, 이상적인 맥크레디값으로 계산."
 
 #: src/InfoBoxes/Content/Factory.cpp:489
 #, no-c-format
@@ -1720,7 +1720,7 @@ msgstr "골에 도착하는 예상 시각."
 #: src/InfoBoxes/Content/Factory.cpp:513
 #, no-c-format
 msgid "Next arrival time"
-msgstr "시각(다음 포인트에 도착하는 시각)"
+msgstr "시각(다음포인트예상시각MC0)"
 
 #: src/InfoBoxes/Content/Factory.cpp:514
 #, no-c-format
@@ -1975,7 +1975,7 @@ msgstr "거리(홈)"
 #: src/InfoBoxes/Content/Factory.cpp:627
 #, no-c-format
 msgid "Home Dist"
-msgstr "홈거리"
+msgstr "거리(홈)"
 
 #: src/InfoBoxes/Content/Factory.cpp:628
 #, no-c-format
@@ -2018,8 +2018,8 @@ msgid ""
 "negative (expected arrival too early), or blue if in sector and can turn now "
 "with estimated arrival time greater than AAT time plus 5 minutes."
 msgstr ""
-"AAT타스크의 경우 AAT 최소시간과 실제 도착시간과의 차이를 나타낸다. 붉은색의 "
-"경우 시간이 부족한 것이며, 파란색의 경우 도착하여 선회가능한 것이다."
+"AAT(Assigned Area Task)델타시간: AAT 최소시간과 실제 도착시간과의 차이, 시간이 부족하면 빨간색, 적절한 시간이면 "
+"파란색이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:650
 #, no-c-format
@@ -2308,7 +2308,7 @@ msgstr "고도변화그래프."
 #: src/InfoBoxes/Content/Factory.cpp:797
 #, no-c-format
 msgid "Netto vario trace"
-msgstr "그래프(Netto외부바리오)"
+msgstr "그래프(Netto바리오)"
 
 #: src/InfoBoxes/Content/Factory.cpp:798
 #, no-c-format
@@ -2320,7 +2320,7 @@ msgstr "Netto그래프"
 msgid ""
 "Trace of vertical speed of air-mass, equal to vario value less the glider's "
 "estimated sink rate."
-msgstr "기단에서의 고도 상승율/침하율."
+msgstr "Netto그래프: 기단에서 수직고도의 경향, 기체의 싱크속도에서 기단의 상승값을 보상한 그래프이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:805
 #, no-c-format
@@ -2392,36 +2392,36 @@ msgstr "스타트 최대 고도보다 낮은 고도에 있을때 최대고도까
 #: src/InfoBoxes/Content/Factory.cpp:837
 #, no-c-format
 msgid "Task time to go (ground speed)"
-msgstr "시간(최종골까지 대지속도로 계산된 시간)"
+msgstr "시간(최종골예상시간 - 대지속도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:838
 #, no-c-format
 msgid "Fin ETE VMG"
-msgstr "Fin.도달시간"
+msgstr "최종골시간"
 
 #: src/InfoBoxes/Content/Factory.cpp:839
 #, no-c-format
 msgid ""
 "Estimated time required to complete task, assuming current ground speed is "
 "maintained."
-msgstr "최종골 포인트 예상시간, 대지속도에서 계산된 결승점 도달시간을 표시."
+msgstr "최종골시간: 최종골 포인트의 예상소요시간, 대지속도로 계산."
 
 #: src/InfoBoxes/Content/Factory.cpp:845
 #, no-c-format
 msgid "Next time to go (ground speed)"
-msgstr "시간(다음 포인트까지 대지속도로 계산된 시간)"
+msgstr "시간(다음포인트예상시간 - 대지속도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:846
 #, no-c-format
 msgid "WP ETE VMG"
-msgstr "WP시간(대지)"
+msgstr "다음WP대지"
 
 #: src/InfoBoxes/Content/Factory.cpp:847
 #, no-c-format
 msgid ""
 "Estimated time required to reach next waypoint, assuming current ground "
 "speed is maintained."
-msgstr "다음 포인트까지 예상시간: 현재 속도로 계산한다."
+msgstr "다음WP대지: 다음 포인트의 예상소요시간, 대지 속도로 계산."
 
 #: src/InfoBoxes/Content/Factory.cpp:854
 #, no-c-format
@@ -2820,7 +2820,7 @@ msgstr "다음 포인트로 향하는 화살표: 최적화된 방향으로 표�
 #: src/InfoBoxes/Content/Factory.cpp:1039
 #, no-c-format
 msgid "Next waypoint arrival time (ground speed)"
-msgstr "시각(다음 포인트 도착시각 - 대지속도계산)"
+msgstr "시각(다음포인트예상시각 - 대지속도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1040
 #, no-c-format
