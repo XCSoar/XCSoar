@@ -147,6 +147,6 @@ FlarmNetReader::LoadFile(Path path, FlarmNetDatabase &database)
 try {
   FileLineReaderA file(path);
   return LoadFile(file, database);
-} catch (const std::runtime_error &e) {
+} catch (...) {
   return 0;
 }

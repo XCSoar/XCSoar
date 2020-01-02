@@ -39,7 +39,7 @@ ProfileFileHasPassword(Path path)
 
   try {
     Profile::LoadFile(map, path);
-  } catch (const std::runtime_error &) {
+  } catch (...) {
     return TriState::UNKNOWN;
   }
 

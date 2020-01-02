@@ -170,7 +170,7 @@ try {
   grecord.VerifyGRecordInFile(path);
 
   return exit_status();
-} catch (const std::runtime_error &e) {
-  PrintException(e);
+} catch (...) {
+  PrintException(std::current_exception());
   return EXIT_FAILURE;
 }

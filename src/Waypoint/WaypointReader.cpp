@@ -76,7 +76,7 @@ try {
   FileLineReader line_reader(path, Charset::AUTO);
   reader->Parse(way_points, line_reader, operation);
   return true;
-} catch (const std::runtime_error &) {
+} catch (...) {
   return false;
 }
 
@@ -101,6 +101,6 @@ try {
   ZipLineReader line_reader(dir, path, Charset::AUTO);
   reader->Parse(way_points, line_reader, operation);
   return true;
-} catch (const std::runtime_error &e) {
+} catch (...) {
   return false;
 }

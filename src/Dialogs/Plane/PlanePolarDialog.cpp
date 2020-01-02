@@ -224,7 +224,7 @@ PlanePolarWidget::ImportClicked()
   PolarInfo polar;
   try {
     PolarGlue::LoadFromFile(polar, path);
-  } catch (const std::runtime_error &) {
+  } catch (...) {
   }
 
   plane.reference_mass = polar.reference_mass;

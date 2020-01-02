@@ -121,7 +121,7 @@ try {
   if (inDetails) {
     addChecklist(Name, Details);
   }
-} catch (const std::runtime_error &e) {
+} catch (...) {
 }
 
 void
