@@ -44,7 +44,7 @@ Profile::Get(const char *key, const char *default_value)
 }
 
 bool
-Profile::Get(const char *key, TCHAR *value, size_t max_size)
+Profile::Get(const char *key, TCHAR *value, std::size_t max_size)
 {
   return map.Get(key, value, max_size);
 }
