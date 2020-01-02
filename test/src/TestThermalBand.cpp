@@ -26,7 +26,7 @@
 #include "Engine/ThermalBand/ThermalEncounterBand.hpp"
 #include "Engine/ThermalBand/ThermalEncounterCollection.hpp"
 
-int verbose = 1;
+static int verbose = 1;
 
 static void report(ThermalBand& band, const char* title)
 {
