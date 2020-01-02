@@ -27,6 +27,8 @@ Copyright_License {
 #include "Device/Port/Port.hpp"
 #include "Device/Port/ConfiguredPort.hpp"
 
+#include <stdexcept>
+
 DeviceConfig
 ParsePortArgs(Args &args)
 {
