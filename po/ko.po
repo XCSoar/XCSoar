@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-01-01 17:33+0000\n"
+"PO-Revision-Date: 2020-01-03 15:21+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -1090,7 +1090,7 @@ msgstr "써멀(직전써멀 평균값)"
 #: src/InfoBoxes/Content/Factory.cpp:194
 #, no-c-format
 msgid "TL Avg"
-msgstr "직전열평균"
+msgstr "평균(직전열)"
 
 #: src/InfoBoxes/Content/Factory.cpp:195
 #, no-c-format
@@ -1107,7 +1107,7 @@ msgstr "써멀(직전써멀 고도획득)"
 #: src/InfoBoxes/Content/Factory.cpp:202
 #, no-c-format
 msgid "TL Gain"
-msgstr "직전열이득"
+msgstr "상승(직전열)"
 
 #: src/InfoBoxes/Content/Factory.cpp:203
 #, no-c-format
@@ -1122,7 +1122,7 @@ msgstr "써멀(직전써멀 선회시간)"
 #: src/InfoBoxes/Content/Factory.cpp:210
 #, no-c-format
 msgid "TL duration"
-msgstr "직전열시간"
+msgstr "시간(직전열)"
 
 #: src/InfoBoxes/Content/Factory.cpp:211
 #, no-c-format
@@ -1308,7 +1308,7 @@ msgstr "써멀(평균)"
 #: src/InfoBoxes/Content/Factory.cpp:309
 #, no-c-format
 msgid "TC Avg"
-msgstr "평균써멀"
+msgstr "평균(현재열)"
 
 #: src/InfoBoxes/Content/Factory.cpp:310
 #, no-c-format
@@ -1325,7 +1325,7 @@ msgstr "써멀(획득)"
 #: src/InfoBoxes/Content/Factory.cpp:317
 #, no-c-format
 msgid "TC Gain"
-msgstr "써멀획득량"
+msgstr "상승(현재열)"
 
 #: src/InfoBoxes/Content/Factory.cpp:318
 #, no-c-format
@@ -1574,7 +1574,7 @@ msgstr "중력가속도: 외부센서에서 측정된 중력가속도(마이너�
 #: src/InfoBoxes/Content/Factory.cpp:447
 #, no-c-format
 msgid "Next GR"
-msgstr "활공비(다음 포인트까지)"
+msgstr "타스크(활공비 - 다음 포인트)"
 
 #: src/InfoBoxes/Content/Factory.cpp:448
 #, no-c-format
@@ -1587,7 +1587,7 @@ msgid ""
 "The required glide ratio over ground to reach the next waypoint, given by "
 "the distance to next waypoint divided by the height required to arrive at "
 "the safety arrival height."
-msgstr "다음 포인트까지 필요한 활공비: 안전고도를 포함하여 남은 거리에 필요한 고도를 나눈 값."
+msgstr "WP활공비: 다음 포인트까지 필요한 활공비, 안전고도를 포함하여 남은 거리에 필요한 고도를 나눈 값이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:456
 #, no-c-format
@@ -2024,7 +2024,7 @@ msgstr "써멀(비행전체 평균상승)"
 #: src/InfoBoxes/Content/Factory.cpp:651
 #, no-c-format
 msgid "T Avg"
-msgstr "써멀(전체평균)"
+msgstr "상승(전체평균)"
 
 #: src/InfoBoxes/Content/Factory.cpp:652
 #, no-c-format
@@ -2068,7 +2068,7 @@ msgstr "배터리: 남아있는 기기배터리, 외부센서의 배터리상태
 #: src/InfoBoxes/Content/Factory.cpp:674
 #, no-c-format
 msgid "Final GR"
-msgstr "최종골(최종활공비)"
+msgstr "최종골(활공비 - 최종활공비)"
 
 #: src/InfoBoxes/Content/Factory.cpp:675
 #, no-c-format
@@ -2145,7 +2145,7 @@ msgstr "이륙장고도차"
 msgid ""
 "Height based on an automatic take-off reference elevation (like a QFE "
 "reference)."
-msgstr "이륙장의 고도."
+msgstr "이륙장고도차: 이륙장고도와 현재 기체고도의 차이."
 
 #: src/InfoBoxes/Content/Factory.cpp:715
 #, no-c-format
@@ -2546,19 +2546,19 @@ msgstr "고도계(자동): 기압고도계가 없을 경우 GPS 고도를 표시
 #: src/InfoBoxes/Content/Factory.cpp:912
 #, no-c-format
 msgid "Thermal next leg equivalent"
-msgstr "써멀(다음 포인트까지 필요한 상승량)"
+msgstr "타스크(써멀 - 다음포인트 필요상승)"
 
 #: src/InfoBoxes/Content/Factory.cpp:913
 #, no-c-format
 msgid "T Next Leg"
-msgstr "포인트써멀"
+msgstr "필요상승(다음)"
 
 #: src/InfoBoxes/Content/Factory.cpp:914
 #, no-c-format
 msgid ""
 "The thermal rate of climb on next leg which is equivalent to a thermal equal "
 "to the MacCready setting on current leg."
-msgstr "다음 포인트(leg)까지 필요한 상승률: 현재의 맥크레디 설정값과 동일하다."
+msgstr "필요상승(다음): 다음포인트(leg)까지 필요한 상승률, 현재의 맥크레디 설정으로 예측한다."
 
 #: src/InfoBoxes/Content/Factory.cpp:920
 #, no-c-format
@@ -2625,7 +2625,7 @@ msgstr "써멀레이더"
 #: src/Renderer/MapItemListRenderer.cpp:267
 #, no-c-format
 msgid "Thermal"
-msgstr "써멀"
+msgstr "써멀레이더"
 
 #: src/InfoBoxes/Content/Factory.cpp:946
 #, no-c-format
@@ -2745,7 +2745,7 @@ msgid ""
 "Circle diameter. Displays estimated circle diameter and full circle flight "
 "time. Useful for evaluating best thermalling mode with a glider at different "
 "wing loading."
-msgstr "선회반경: 예상되는 최소 선회 시간이다. 익면 하중차이에 의한 최선의 써클링을 판단하기 위해 사용할수 있다."
+msgstr "선회반경: 예상되는 최소 선회 반경이다. 익면 하중차이에 의한 최선의 써클링을 판단하기 위해 사용할 수 있다."
 
 #: src/InfoBoxes/Content/Factory.cpp:1004
 #, no-c-format
@@ -2760,7 +2760,7 @@ msgstr "이륙장거리"
 #: src/InfoBoxes/Content/Factory.cpp:1006
 #, no-c-format
 msgid "Distance to where take-off was detected."
-msgstr "이륙장에서 기체의 거리."
+msgstr "이륙장거리: 이륙장에서 기체까지의 거리."
 
 #: src/InfoBoxes/Content/Factory.cpp:1012
 #, no-c-format
@@ -2838,7 +2838,7 @@ msgstr "써클링 외 상승비율"
 #: src/InfoBoxes/Content/Factory.cpp:1049
 #, no-c-format
 msgid "% Str Climb"
-msgstr "써클링외상승"
+msgstr "상승(릿지)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1050
 #, no-c-format
@@ -8336,7 +8336,7 @@ msgstr "모두 삭제"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:354
 msgid "Clear all points?"
-msgstr "모든 포인트 삭제(타스크만 삭제한다)?"
+msgstr "모든 포인트를 삭제할까요(타스크정리)?"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:354
 msgid "Task edit"
