@@ -54,7 +54,7 @@ namespace Profile {
    * profile), or default_value if the key does not exist
    */
   gcc_pure
-  const char *Get(const char *key, const char *default_value=NULL);
+  const char *Get(const char *key, const char *default_value=nullptr);
 
   /**
    * Reads a value from the profile map
