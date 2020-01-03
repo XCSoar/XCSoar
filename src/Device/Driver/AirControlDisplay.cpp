@@ -57,8 +57,38 @@ ParsePAAVS(NMEAInputLine &line, NMEAInfo &info)
       auto qnh = AtmosphericPressure::Pascal(value);
       info.settings.ProvideQNH(qnh, info.clock);
     }
+  } else if (StringIsEqual(type, "COM")) {
+    /*
+    $PAAVS,COM,<CHN1>,<CHN2>,<RXVOL1>,<RXVOL2>,<DWATCH>,<RX1>,<RX2>,<TX1>
+     <CHN1> Primary radio channel;
+            25kHz frequencies and 8.33kHz channels as unsigned integer
+            values between 118000 and 136990
+     <CHN2> Secondary radio channel;
+            25kHz frequencies and 8.33kHz channels as unsigned integer
+            values between 118000 and 136990
+     <RXVOL1> Primary radio channel volume (Unsigned integer values, 0–100)
+     <RXVOL2> Secondary radio channel volume (Unsigned integer values, 0–100)
+     <DWATCH> Dual watch mode (0 = off; 1 = on)
+     <RX1> Primary channel rx state (0 = no signal rec; 1 = signal rec)
+     <RX2> Secondary channel rx state (0 = no signal rec; 1 = signal rec)
+     <TX1> Transmit active (0 = no transmission; 1 = transmitting signal)
+     */
+    RadioFrequency freq;
+
+    if (line.ReadChecked(value)) {
+      freq.SetKiloHertz(value);
+      info.settings.active_frequency = freq;
+    }
+
+    if (line.ReadChecked(value)) {
+      freq.SetKiloHertz(value);
+      info.settings.standby_frequency = freq;
+    }
+
+    if (line.ReadChecked(value))
+      info.settings.volume = value;
   } else {
-    // ignore responses from COM and XPDR
+    // ignore responses from XPDR
     return false;
   }
 

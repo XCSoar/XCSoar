@@ -17,6 +17,7 @@ Version 7.0 - not yet released
       environmental sensors (temperature, humidity)
   - combine traffic from all FLARM devices (support both FLARM and OGN devices on board)
   - GliderLink: new driver
+  - AirControlDisplay: read radio frequencies from PAAVS,COM sentence
 * weather
   - merge all weather data in one dialog
   - allow showing both terrain and RASP
