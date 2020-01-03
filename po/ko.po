@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-01-03 17:01+0000\n"
+"PO-Revision-Date: 2020-01-03 18:14+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -2958,7 +2958,7 @@ msgstr "연결 해제"
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:49
 #, no-c-format
 msgid "Fix invalid"
-msgstr "유효하지 않은"
+msgstr "수신불가"
 
 #: src/InfoBoxes/Content/Other.cpp:181
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:51
