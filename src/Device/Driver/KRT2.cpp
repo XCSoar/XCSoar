@@ -254,6 +254,10 @@ KRT2Device::DataReceived(const void *_data, size_t length,
 
       if (range.size >= expected_msg_length) {
         switch (*(const uint8_t *) range.data) {
+          case 'S':
+            // Respond to connection query.
+            port.Write(0x01);
+            break;
           case ACK:
           case NAK:
             // Received a response to a normal command (STX)
