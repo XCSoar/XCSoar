@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-01-03 15:21+0000\n"
+"PO-Revision-Date: 2020-01-03 17:01+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -1167,7 +1167,7 @@ msgstr "WP거리: 다음 포인트의 실린더까지 거리, AAT타스크의 �
 #: src/InfoBoxes/Content/Factory.cpp:234
 #, no-c-format
 msgid "Next altitude difference"
-msgstr "타스크(고도 - 다음 포인트 도착고도)"
+msgstr "타스크(고도 - 다음포인트 도착고도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:235
 #, no-c-format
@@ -1186,7 +1186,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:243
 #, no-c-format
 msgid "Next altitude required"
-msgstr "타스크(고도 - 다음 포인트 필요고도)"
+msgstr "타스크(고도 - 다음포인트 필요고도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:244
 #, no-c-format
@@ -1222,7 +1222,7 @@ msgstr "적절진입각: 포인트 이름을 포함한 적절진입각 정보, �
 #: src/InfoBoxes/Content/Factory.cpp:260
 #, no-c-format
 msgid "Final altitude difference"
-msgstr "최종골(고도차 - 최종 포인트 고도차이MC0)"
+msgstr "최종골(고도차 - 최종포인트 고도차이)"
 
 #: src/InfoBoxes/Content/Factory.cpp:261
 #, no-c-format
@@ -1239,7 +1239,7 @@ msgstr "최종고도차: 최종골 포인트 도착고도를 현재고도에서 
 #: src/InfoBoxes/Content/Factory.cpp:268
 #, no-c-format
 msgid "Final altitude required"
-msgstr "최종골(고도 - 최종 포인트 필요고도)"
+msgstr "최종골(고도 - 최종포인트 필요고도)"
 
 #: src/InfoBoxes/Content/Factory.cpp:269
 #, no-c-format
@@ -1271,7 +1271,7 @@ msgstr "Task평균속도: 타스크 진행의 평균속도, 고도변화를 보�
 #: src/InfoBoxes/Content/Factory.cpp:284
 #, no-c-format
 msgid "Final distance"
-msgstr "최종골(거리 - 골까지 남은거리)"
+msgstr "최종골(거리 - 최종포인트 남은거리)"
 
 #: src/InfoBoxes/Content/Factory.cpp:285
 #, no-c-format
@@ -1519,8 +1519,8 @@ msgid ""
 "cruise flight mode, this speed-to-fly is calculated for maintaining "
 "altitude. In final glide mode, this speed-to-fly is calculated for descent."
 msgstr ""
-"V MC: 다음 포인트까지 최적의 비행을 계산하기 위한 MacCready비행 속도, 순항모드에서는 적절한 고도를 유지하기 위한 계산값, "
-"최종골모드에서는 적절한 하강을 위한 계산값."
+"V MC: 다음포인트까지 최적의 비행을 계산하기 위한 MacCready비행 속도, 순항모드에서는 적절한 고도를 유지하기 위한 계산값, "
+"최종골러시모드에서는 적절한 하강을 위한 계산값."
 
 #: src/InfoBoxes/Content/Factory.cpp:423
 #, no-c-format
@@ -1587,7 +1587,7 @@ msgid ""
 "The required glide ratio over ground to reach the next waypoint, given by "
 "the distance to next waypoint divided by the height required to arrive at "
 "the safety arrival height."
-msgstr "WP활공비: 다음 포인트까지 필요한 활공비, 안전고도를 포함하여 남은 거리에 필요한 고도를 나눈 값이다."
+msgstr "WP활공비: 다음포인트까지 필요한 활공비, 안전고도를 포함하여 남은 거리에 필요한 고도를 나눈 값이다."
 
 #: src/InfoBoxes/Content/Factory.cpp:456
 #, no-c-format
@@ -1617,7 +1617,7 @@ msgstr "UTC(세계표준시) GPS시각."
 #: src/InfoBoxes/Content/Factory.cpp:472
 #, no-c-format
 msgid "Task time to go"
-msgstr "최종골(시간 - 최종골예상시간(MC0))"
+msgstr "최종골(시간 - 최종포인트 예상시간(MC0))"
 
 #: src/InfoBoxes/Content/Factory.cpp:473
 #, no-c-format
@@ -1629,7 +1629,7 @@ msgstr "최종골MC0"
 msgid ""
 "Estimated time required to complete task, assuming performance of ideal "
 "MacCready cruise/climb cycle."
-msgstr "최종골MC0: 최종골 포인트의 예상소요시간, 이상적인 맥크레디값으로 계산."
+msgstr "최종골MC0: 최종 포인트의 예상소요시간, 이상적인 맥크레디값으로 계산."
 
 #: src/InfoBoxes/Content/Factory.cpp:480
 #, no-c-format
@@ -1697,7 +1697,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:505
 #, no-c-format
 msgid "Task arrival time"
-msgstr "최종골(시각 - 최종골예상도착시각)"
+msgstr "최종골(시각 - 최종포인트 예상도착시각)"
 
 #: src/InfoBoxes/Content/Factory.cpp:506
 #, no-c-format
@@ -1709,7 +1709,7 @@ msgstr "골도착시각"
 msgid ""
 "Estimated arrival local time at task completion, assuming performance of "
 "ideal MacCready cruise/climb cycle."
-msgstr "골에 도착하는 예상 시각."
+msgstr "골도착시각: 최종골 포인트에 도착하는 예상 시각."
 
 #: src/InfoBoxes/Content/Factory.cpp:513
 #, no-c-format
@@ -2068,7 +2068,7 @@ msgstr "배터리: 남아있는 기기배터리, 외부센서의 배터리상태
 #: src/InfoBoxes/Content/Factory.cpp:674
 #, no-c-format
 msgid "Final GR"
-msgstr "최종골(활공비 - 최종활공비)"
+msgstr "최종골(활공비 - 최종포인트 활공비)"
 
 #: src/InfoBoxes/Content/Factory.cpp:675
 #, no-c-format
@@ -2232,7 +2232,7 @@ msgstr "XCSoar에 의해 사용된 5초 평균 CPU 부하."
 #: src/InfoBoxes/Content/Factory.cpp:755
 #, no-c-format
 msgid "Next altitude arrival"
-msgstr "타스크(고도 - 다음 포인트 표고)"
+msgstr "타스크(고도 - 다음포인트 표고)"
 
 #: src/InfoBoxes/Content/Factory.cpp:756
 #, no-c-format
@@ -2387,7 +2387,7 @@ msgstr "스타트 최대 고도보다 낮은 고도에 있을때 최대고도까
 #: src/InfoBoxes/Content/Factory.cpp:837
 #, no-c-format
 msgid "Task time to go (ground speed)"
-msgstr "최종골(시간 - 최종골예상시간(대지속도))"
+msgstr "최종골(시간 - 최종포인트 예상시간(대지속도))"
 
 #: src/InfoBoxes/Content/Factory.cpp:838
 #, no-c-format
@@ -2399,7 +2399,7 @@ msgstr "최종골시간"
 msgid ""
 "Estimated time required to complete task, assuming current ground speed is "
 "maintained."
-msgstr "최종골시간: 최종골 포인트의 예상소요시간, 대지속도로 계산."
+msgstr "최종골시간: 최종 포인트의 예상소요시간, 대지속도로 계산."
 
 #: src/InfoBoxes/Content/Factory.cpp:845
 #, no-c-format
@@ -2472,7 +2472,7 @@ msgstr "근처의 공역 경계선까지의 고도, +값이면 공역위 , -값�
 #: src/InfoBoxes/Content/Factory.cpp:878
 #, no-c-format
 msgid "Next MC0 altitude difference"
-msgstr "타스크(고도차 - 다음 포인트 고도차이MC0)"
+msgstr "타스크(고도차 - 다음포인트 고도차이MC0)"
 
 #: src/InfoBoxes/Content/Factory.cpp:879
 #, no-c-format
@@ -2782,7 +2782,7 @@ msgstr "OLC 규칙으로 계산된 현시점까지의 평균 비행 속도."
 #: src/InfoBoxes/Content/Factory.cpp:1019
 #, no-c-format
 msgid "Final MC0 altitude difference"
-msgstr "최종골(고도차 - 최종 포인트 고도차이MC0)"
+msgstr "최종골(고도차 - 최종포인트 고도차이MC0)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1020
 #, no-c-format
@@ -2795,7 +2795,7 @@ msgid ""
 "Arrival altitude at the final waypoint with MC 0 setting relative to the "
 "safety arrival height."
 msgstr ""
-"최종고도차MC0: 최종골 포인트 도착고도를 현재고도에서 이상적인 맥크레디 값으로 계산한 고도차, AAT 타스크의 경우 다음 AAT "
+"최종고도차MC0: 최종 포인트 도착고도를 현재고도에서 이상적인 맥크레디 값으로 계산한 고도차, AAT 타스크의 경우 다음 AAT "
 "섹터까지의 고도차이."
 
 #: src/InfoBoxes/Content/Factory.cpp:1027
@@ -7523,7 +7523,7 @@ msgstr "스타트 포인트의 타스크 반경이나 게이트 폭의 기본값
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:155
 #: src/Dialogs/Task/TaskPointDialog.cpp:426
 msgid "Finish point"
-msgstr "최종골 포인트"
+msgstr "최종 골포인트"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:156
 msgid "Default finish type for new tasks you create."
