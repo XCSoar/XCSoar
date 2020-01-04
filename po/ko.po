@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-01-03 18:33+0000\n"
+"PO-Revision-Date: 2020-01-05 08:39+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -3658,7 +3658,7 @@ msgstr "Vest"
 
 #: src/UIActions.cpp:52
 msgid "Quit program?"
-msgstr "XCSoar를 종료합니까?"
+msgstr "XCSoar를 종료할까요?"
 
 #: src/Units/UnitsStore.cpp:39
 #, no-c-format
@@ -4121,7 +4121,7 @@ msgstr "데이터 없음"
 #: src/Dialogs/Device/DeviceListDialog.cpp:411
 #: src/Dialogs/Device/DeviceListDialog.cpp:479
 msgid "Bluetooth is disabled"
-msgstr "블루투스가 없음"
+msgstr "블루투스 연결없음"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:414
 msgid "Duplicate"
@@ -4625,7 +4625,7 @@ msgstr "상세설명(공역)"
 #: src/Dialogs/Airspace/AirspaceList.cpp:321
 #: src/Dialogs/Waypoint/WaypointList.cpp:455
 msgid "No Match!"
-msgstr "맞는 정보가 없음!"
+msgstr "데이터 없음!"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:344
 msgid "Heading"
@@ -4962,7 +4962,7 @@ msgstr "설정"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:385
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
-msgstr "설정저장: XCSoar를 재시작하시오."
+msgstr "설정저장: XCSoar를 재시작하세요."
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:276
 msgid "Content"
@@ -6253,7 +6253,7 @@ msgstr "화면해상도"
 msgid ""
 "The display resolution is used to adapt line widths, font size, landable "
 "size and more."
-msgstr "해상도를 조정하면: 선의 굵기와 글자크기가 달라진다."
+msgstr "해상도조정: 표시되는 선의 굵기와 글자크기가 달라진다."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:104
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:129
