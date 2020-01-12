@@ -321,9 +321,7 @@ ifeq ($(TARGET),ANDROID)
   # Therefore a number of variables exist for each supported ABI.
   # Here is a brief outline where you can look up the names in the NDK in case that a new
   # architecture appears in the NDK, or names chane in new NDK versions:
-  # ANDROID_ARCH: See $ANDROID_NDK/<NDK-Level>/. Name is without the prefix "arch-"
   # ANDROID_NDK_GCC_TOOLCHAIN_ABI: See $ANDROID_NDK/toolchains/. Name without the GCC version suffix (now "-4.9")
-  # ANDROID_NDK_STL_LIB_ABI: See $ANDROID_NDK/sources/cxx-stl/llvm-libc++/libs
   # LLVM_TARGET: Open the appropriate compiler script in $ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin,
   #   e.g. aarch64-linux-android21-clang++ for AARCH64, NDK level 21, 
   #   and transcribe the value of the option "--target". 
@@ -335,35 +333,27 @@ ifeq ($(TARGET),ANDROID)
   ANDROID_GCC_VERSION = 4.9
 
   # Default is ARM V7a
-  ANDROID_ARCH                  = arm
   ANDROID_NDK_GCC_TOOLCHAIN_ABI = arm-linux-androideabi
-  ANDROID_NDK_STL_LIB_ABI       = armeabi-v7a
   ANDROID_APK_LIB_ABI           = armeabi-v7a
   LLVM_TARGET                  := armv7a-linux-androideabi
   HOST_TRIPLET                  = arm-linux-androideabi
 
   ifeq ($(X86),y)
-    ANDROID_ARCH                  = x86
     ANDROID_NDK_GCC_TOOLCHAIN_ABI = x86
-    ANDROID_NDK_STL_LIB_ABI       = x86
     ANDROID_APK_LIB_ABI           = x86
     LLVM_TARGET                  := i686-linux-android
     HOST_TRIPLET                  = i686-linux-android
   endif
 
   ifeq ($(AARCH64),y)
-    ANDROID_ARCH                  = arm64
     ANDROID_NDK_GCC_TOOLCHAIN_ABI = aarch64-linux-android
-    ANDROID_NDK_STL_LIB_ABI       = arm64-v8a
     ANDROID_APK_LIB_ABI           = arm64-v8a
     LLVM_TARGET                  := aarch64-linux-android
     HOST_TRIPLET                  = aarch64-linux-android
   endif
 
   ifeq ($(X64),y)
-    ANDROID_ARCH                  = x86_64
     ANDROID_NDK_GCC_TOOLCHAIN_ABI = x86_64
-    ANDROID_NDK_STL_LIB_ABI       = x86_64
     ANDROID_APK_LIB_ABI           = x86_64
     LLVM_TARGET                  := x86_64-linux-android
     HOST_TRIPLET                  = x86_64-linux-android
@@ -371,12 +361,6 @@ ifeq ($(TARGET),ANDROID)
 
   # Like in the clang compiler scripts in the NDK add the NDK level to the LLVM target
   LLVM_TARGET := $(LLVM_TARGET)$(ANDROID_NDK_API)
-
-  ANDROID_NDK_PLATFORM = android-$(ANDROID_NDK_API)
-
-  ANDROID_SYSROOT = $(ANDROID_NDK)/sysroot
-  ANDROID_NDK_PLATFORM_DIR = $(ANDROID_NDK)/platforms/$(ANDROID_NDK_PLATFORM)
-  ANDROID_TARGET_ROOT = $(ANDROID_NDK_PLATFORM_DIR)/arch-$(ANDROID_ARCH)
 
   ANDROID_GCC_TOOLCHAIN_NAME = $(ANDROID_NDK_GCC_TOOLCHAIN_ABI)-$(ANDROID_GCC_VERSION)
 
@@ -525,10 +509,7 @@ ifeq ($(TARGET_IS_KOBO),y)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  TARGET_CPPFLAGS += --sysroot=$(ANDROID_SYSROOT)
-  TARGET_CPPFLAGS += -isystem $(ANDROID_SYSROOT)/usr/include/$(HOST_TRIPLET)
   TARGET_CPPFLAGS += -DANDROID
-  TARGET_CPPFLAGS += -D__ANDROID_API__=$(ANDROID_NDK_API)
   CXXFLAGS += -D__STDC_VERSION__=199901L
 
   ifeq ($(X86),y)
@@ -610,13 +591,6 @@ endif
 
 ifeq ($(TARGET),ANDROID)
   TARGET_LDFLAGS += -Wl,--no-undefined
-  ifeq ($(X64),y)
-    TARGET_LDFLAGS += -L$(ANDROID_TARGET_ROOT)/usr/lib64
-    TARGET_LDFLAGS += -B$(ANDROID_TARGET_ROOT)/usr/lib64
-  else
-    TARGET_LDFLAGS += -L$(ANDROID_TARGET_ROOT)/usr/lib
-    TARGET_LDFLAGS += -B$(ANDROID_TARGET_ROOT)/usr/lib
-  endif
 
   ifeq ($(ARMV7),y)
     TARGET_LDFLAGS += -Wl,--fix-cortex-a8
@@ -646,11 +620,7 @@ ifeq ($(TARGET),UNIX)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  TARGET_LDLIBS += -lc
-  TARGET_LDLIBS += -lm
-
   TARGET_LDLIBS += -llog
-  TARGET_LDLIBS += -lgcc
 endif
 
 ######## output files

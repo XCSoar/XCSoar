@@ -158,10 +158,6 @@ ifneq ($(TARGET_IS_DARWIN),y)
 $$($(2)_NOSTRIP): LDFLAGS += -shared -Wl,-Bsymbolic
 endif
 
-ifeq ($$(TARGET),ANDROID)
-$$($(2)_NOSTRIP): LDFLAGS += -nostdlib
-endif
-
 $$($(2)_NOSTRIP): $$($(2)_OBJS) $$($(2)_LDADD) $$(TARGET_LDADD) | $$(ABI_BIN_DIR)/dirstamp
 	@$$(NQ)echo "  LINK    $$@"
 	$$(Q)$$(LINK) $$(ld-flags) -o $$@ $$^ $$($(2)_LDLIBS) $$(ld-libs)

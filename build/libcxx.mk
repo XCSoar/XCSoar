@@ -4,16 +4,12 @@
 ifeq ($(LIBCXX),y)
 
 ifeq ($(TARGET),ANDROID)
-LIBCXX_CXXFLAGS = -nostdinc++ \
-	-isystem $(ANDROID_NDK)/sources/cxx-stl/llvm-libc++/include \
-	-isystem $(ANDROID_NDK)/sources/android/support/include \
+  LIBCXX_CXXFLAGS = \
 	-DLIBCXX
-  LIBCXX_LDADD = $(ANDROID_NDK)/sources/cxx-stl/llvm-libc++/libs/$(ANDROID_NDK_STL_LIB_ABI)/libc++_static.a \
-	$(ANDROID_NDK)/sources/cxx-stl/llvm-libc++/libs/$(ANDROID_NDK_STL_LIB_ABI)/libc++abi.a
-  LIBCXX_LDFLAGS += -nostdlib++
+  LIBCXX_LDFLAGS += -static-libstdc++
 
   ifeq ($(ARMV7),y)
-    LIBCXX_LDADD += $(ANDROID_NDK)/sources/cxx-stl/llvm-libc++/libs/$(ANDROID_NDK_STL_LIB_ABI)/libunwind.a
+    LIBCXX_LDFLAGS += -lunwind
   endif
 
 else
