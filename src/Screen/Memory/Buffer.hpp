@@ -33,12 +33,12 @@ Copyright_License {
  */
 template<typename PixelTraits>
 struct WritableImageBuffer {
-  typedef typename PixelTraits::pointer_type pointer_type;
-  typedef typename PixelTraits::rpointer_type rpointer_type;
+  typedef typename PixelTraits::pointer pointer;
+  typedef typename PixelTraits::rpointer rpointer;
 
-  typedef typename PixelTraits::const_pointer_type const_pointer_type;
+  typedef typename PixelTraits::const_pointer const_pointer;
 
-  rpointer_type data;
+  rpointer data;
 
   unsigned pitch, width, height;
 
@@ -63,11 +63,11 @@ struct WritableImageBuffer {
     return x < width && y < height;
   }
 
-  constexpr pointer_type At(unsigned x, unsigned y) {
+  constexpr pointer At(unsigned x, unsigned y) {
     return PixelTraits::At(data, pitch, x, y);
   }
 
-  constexpr const_pointer_type At(unsigned x, unsigned y) const {
+  constexpr const_pointer At(unsigned x, unsigned y) const {
     return PixelTraits::At(data, pitch, x, y);
   }
 };
@@ -79,16 +79,16 @@ struct WritableImageBuffer {
  */
 template<typename PixelTraits>
 struct ConstImageBuffer {
-  typedef typename PixelTraits::const_pointer_type pointer_type;
-  typedef typename PixelTraits::const_rpointer_type rpointer_type;
+  typedef typename PixelTraits::const_pointer pointer;
+  typedef typename PixelTraits::const_rpointer rpointer;
 
-  rpointer_type data;
+  rpointer data;
 
   unsigned pitch, width, height;
 
   ConstImageBuffer() = default;
 
-  constexpr ConstImageBuffer(rpointer_type _data, unsigned _pitch,
+  constexpr ConstImageBuffer(rpointer _data, unsigned _pitch,
                              unsigned _width, unsigned _height)
     :data(_data), pitch(_pitch), width(_width), height(_height) {}
 
@@ -104,7 +104,7 @@ struct ConstImageBuffer {
     return x < width && y < height;
   }
 
-  constexpr pointer_type At(unsigned x, unsigned y) const {
+  constexpr pointer At(unsigned x, unsigned y) const {
     return PixelTraits::At(data, pitch, x, y);
   }
 };

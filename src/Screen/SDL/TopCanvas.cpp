@@ -256,7 +256,7 @@ TopCanvas::Lock()
   SDL_QueryTexture(texture, nullptr, nullptr, &width, &height);
   if (SDL_LockTexture(texture, nullptr, &pixels, &pitch) != 0)
     return Canvas();
-  buffer.data = (ActivePixelTraits::pointer_type)pixels;
+  buffer.data = (ActivePixelTraits::pointer)pixels;
   buffer.pitch = (unsigned) pitch;
   buffer.width = (unsigned) width;
   buffer.height = (unsigned) height;

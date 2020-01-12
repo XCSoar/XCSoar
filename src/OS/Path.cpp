@@ -53,7 +53,7 @@ Path::ToUTF8() const
 }
 
 AllocatedPath
-Path::operator+(const_pointer_type other) const
+Path::operator+(const_pointer other) const
 {
   assert(!IsNull());
   assert(other != nullptr);
@@ -72,7 +72,7 @@ Path::operator+(const_pointer_type other) const
 
 gcc_pure gcc_nonnull_all
 static constexpr bool
-IsDrive(Path::const_pointer_type p)
+IsDrive(Path::const_pointer p)
 {
   return IsAlphaASCII(p[0]) && p[1] == ':';
 }
@@ -105,8 +105,8 @@ Path::IsBase() const
 }
 
 gcc_pure
-static Path::const_pointer_type
-LastSeparator(Path::const_pointer_type path)
+static Path::const_pointer
+LastSeparator(Path::const_pointer path)
 {
   const auto *p = StringFindLast(path, _T('/'));
 #ifdef _WIN32
@@ -122,8 +122,8 @@ Path::GetParent() const
 {
   assert(!IsNull());
 
-  const const_pointer_type v = c_str();
-  const const_pointer_type p = LastSeparator(v);
+  const const_pointer v = c_str();
+  const const_pointer p = LastSeparator(v);
   if (p == nullptr || p == v)
     return AllocatedPath(_T("."));
 
@@ -135,8 +135,8 @@ Path::GetBase() const
 {
   assert(!IsNull());
 
-  const_pointer_type result = c_str();
-  const_pointer_type p = LastSeparator(result);
+  const_pointer result = c_str();
+  const_pointer p = LastSeparator(result);
   if (p != nullptr)
     result = p + 1;
 
@@ -167,7 +167,7 @@ Path::RelativeTo(Path parent) const
 }
 
 bool
-Path::MatchesExtension(const_pointer_type extension) const
+Path::MatchesExtension(const_pointer extension) const
 {
   size_t filename_length = StringLength(c_str());
   size_t extension_length = StringLength(extension);
@@ -177,7 +177,7 @@ Path::MatchesExtension(const_pointer_type extension) const
                             extension);
 }
 
-Path::const_pointer_type
+Path::const_pointer
 Path::GetExtension() const
 {
   auto base = GetBase();
@@ -190,7 +190,7 @@ Path::GetExtension() const
 }
 
 AllocatedPath
-Path::WithExtension(const_pointer_type new_extension) const
+Path::WithExtension(const_pointer new_extension) const
 {
   assert(new_extension != nullptr);
   assert(*new_extension == _T('.'));
@@ -202,7 +202,7 @@ Path::WithExtension(const_pointer_type new_extension) const
 }
 
 AllocatedPath
-AllocatedPath::Build(const_pointer_type a, const_pointer_type b)
+AllocatedPath::Build(const_pointer a, const_pointer b)
 {
   size_t a_length = StringLength(a);
   size_t b_length = StringLength(b);

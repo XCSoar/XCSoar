@@ -46,8 +46,8 @@ class SelectOptimisedPixelOperations
 public:
   typedef typename Portable::PixelTraits PixelTraits;
   typedef typename PixelTraits::color_type color_type;
-  typedef typename PixelTraits::rpointer_type rpointer_type;
-  typedef typename PixelTraits::const_rpointer_type const_rpointer_type;
+  typedef typename PixelTraits::rpointer rpointer;
+  typedef typename PixelTraits::const_rpointer const_rpointer;
 
   static constexpr unsigned PORTABLE_MASK = N - 1;
   static constexpr unsigned OPTIMISED_MASK = ~PORTABLE_MASK;
@@ -62,7 +62,7 @@ public:
   using Portable::WritePixel;
 
   gcc_flatten gcc_nonnull_all
-  void FillPixels(rpointer_type p, unsigned n, color_type c) const {
+  void FillPixels(rpointer p, unsigned n, color_type c) const {
     const unsigned no = n & OPTIMISED_MASK;
     const unsigned np = n & PORTABLE_MASK;
 
@@ -71,7 +71,7 @@ public:
   }
 
   gcc_flatten gcc_nonnull_all
-  void CopyPixels(rpointer_type p, const_rpointer_type q, unsigned n) const {
+  void CopyPixels(rpointer p, const_rpointer q, unsigned n) const {
     const unsigned no = n & OPTIMISED_MASK;
     const unsigned np = n & PORTABLE_MASK;
 

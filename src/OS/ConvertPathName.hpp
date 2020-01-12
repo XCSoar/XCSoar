@@ -52,7 +52,7 @@ class PathName {
   Value value;
 
 public:
-  explicit PathName(Value::const_pointer_type _value)
+  explicit PathName(Value::const_pointer _value)
     :value(_value) {}
 
 #ifdef _UNICODE
@@ -98,7 +98,7 @@ public:
     return !value.IsNull();
   }
 
-  operator Value::const_pointer_type() const {
+  operator Value::const_pointer() const {
     return value.c_str();
   }
 };

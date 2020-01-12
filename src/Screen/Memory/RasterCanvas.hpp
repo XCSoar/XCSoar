@@ -49,10 +49,10 @@ Copyright_License {
  */
 template<typename PixelTraits>
 class RasterCanvas : private PixelTraits {
-  using typename PixelTraits::pointer_type;
-  using typename PixelTraits::rpointer_type;
-  using typename PixelTraits::const_pointer_type;
-  using typename PixelTraits::const_rpointer_type;
+  using typename PixelTraits::pointer;
+  using typename PixelTraits::rpointer;
+  using typename PixelTraits::const_pointer;
+  using typename PixelTraits::const_rpointer;
   using PixelTraits::ReadPixel;
   using PixelTraits::ForVertical;
 
@@ -79,7 +79,7 @@ protected:
     return buffer.Check(x, y);
   }
 
-  pointer_type At(unsigned x, unsigned y) {
+  pointer At(unsigned x, unsigned y) {
     assert(x < buffer.width);
     assert(y < buffer.height);
 
@@ -277,8 +277,8 @@ public:
 
     const unsigned columns = x2 - x1;
 
-    pointer_type p = At(x1, y1);
-    ForVertical(p, buffer.pitch, y2 - y1, [operations, columns, c](pointer_type q){
+    pointer p = At(x1, y1);
+    ForVertical(p, buffer.pitch, y2 - y1, [operations, columns, c](pointer q){
         operations.FillPixels(q, columns, c);
       });
   }
@@ -302,7 +302,7 @@ public:
     if (x1 >= x2)
       return;
 
-    pointer_type p = At(x1, y);
+    pointer p = At(x1, y);
     operations.FillPixels(p, x2 - x1, c);
   }
 
@@ -326,8 +326,8 @@ public:
     if (y1 >= y2)
       return;
 
-    pointer_type p = At(x, y1);
-    ForVertical(p, buffer.pitch, y2 - y1, [operations, c](pointer_type q){
+    pointer p = At(x, y1);
+    ForVertical(p, buffer.pitch, y2 - y1, [operations, c](pointer q){
         operations.WritePixel(q, c);
       });
   }
@@ -358,7 +358,7 @@ public:
     dx = sx * dx + 1;
     dy = sy * dy + 1;
 
-    pointer_type p = At(x1, y1);
+    pointer p = At(x1, y1);
 
     int pixx = PixelTraits::CalcIncrement(sx) * sizeof(*p);
     int pixy = sy * buffer.pitch;
@@ -815,7 +815,7 @@ public:
   __attribute__((flatten))
 #endif
   void CopyRectangle(int x, int y, unsigned w, unsigned h,
-                     typename SPT::const_rpointer_type src, unsigned src_pitch,
+                     typename SPT::const_rpointer src, unsigned src_pitch,
                      PixelOperations operations) {
     unsigned src_x = 0, src_y = 0;
     if (!ClipAxis(x, w, buffer.width, src_x) ||
@@ -824,21 +824,21 @@ public:
 
     src = SPT::At(src, src_pitch, src_x, src_y);
 
-    pointer_type p = At(x, y);
+    pointer p = At(x, y);
     for (; h > 0; --h, p = PixelTraits::NextRow(p, buffer.pitch, 1),
            src = SPT::NextRow(src, src_pitch, 1))
       operations.CopyPixels(p, src, w);
   }
 
   void CopyRectangle(int x, int y, unsigned w, unsigned h,
-                     const_pointer_type src, unsigned src_pitch) {
+                     const_pointer src, unsigned src_pitch) {
     CopyRectangle(x, y, w, h, src, src_pitch,
                   GetPixelTraits());
   }
 
   template<typename PixelOperations, typename SPT=PixelTraits>
-  void ScalePixels(rpointer_type dest, unsigned dest_size,
-                   typename SPT::const_rpointer_type src,
+  void ScalePixels(rpointer dest, unsigned dest_size,
+                   typename SPT::const_rpointer src,
                    unsigned src_size,
                    PixelOperations operations) const {
 #if defined(__ARM_NEON__) && defined(GREYSCALE)
@@ -871,7 +871,7 @@ public:
   template<typename PixelOperations, typename SPT=PixelTraits>
   void ScaleRectangle(int dest_x, int dest_y,
                       unsigned dest_width, unsigned dest_height,
-                      typename SPT::const_rpointer_type src, unsigned src_pitch,
+                      typename SPT::const_rpointer src, unsigned src_pitch,
                       unsigned src_width, unsigned src_height,
                       PixelOperations operations) {
     unsigned src_x = 0, src_y = 0;
@@ -881,10 +881,10 @@ public:
 
     src = SPT::At(src, src_pitch, src_x, src_y);
 
-    typename SPT::const_rpointer_type old_src = nullptr;
+    typename SPT::const_rpointer old_src = nullptr;
 
     unsigned j = 0;
-    rpointer_type dest = At(dest_x, dest_y);
+    rpointer dest = At(dest_x, dest_y);
     for (unsigned i = dest_height; i > 0; --i,
            dest = PixelTraits::NextRow(dest, buffer.pitch, 1)) {
       if (src == old_src) {
@@ -910,7 +910,7 @@ public:
 
   void ScaleRectangle(int dest_x, int dest_y,
                       unsigned dest_width, unsigned dest_height,
-                      const_rpointer_type src, unsigned src_pitch,
+                      const_rpointer src, unsigned src_pitch,
                       unsigned src_width, unsigned src_height) {
     ScaleRectangle(dest_x, dest_y, dest_width, dest_height,
                    src, src_pitch, src_width, src_height,

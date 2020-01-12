@@ -33,14 +33,14 @@ Copyright_License {
 template<class WritePixelOperation>
 struct PerPixelOperations : private WritePixelOperation {
   typedef typename WritePixelOperation::PixelTraits PixelTraits;
-  typedef typename PixelTraits::pointer_type pointer_type;
-  typedef typename PixelTraits::rpointer_type rpointer_type;
-  typedef typename PixelTraits::const_pointer_type const_pointer_type;
+  typedef typename PixelTraits::pointer pointer;
+  typedef typename PixelTraits::rpointer rpointer;
+  typedef typename PixelTraits::const_pointer const_pointer;
   typedef typename PixelTraits::color_type color_type;
 
   typedef typename WritePixelOperation::SourcePixelTraits SourcePixelTraits;
   typedef typename SourcePixelTraits::color_type source_color_type;
-  typedef typename SourcePixelTraits::const_rpointer_type source_const_rpointer_type;
+  typedef typename SourcePixelTraits::const_rpointer source_const_rpointer;
 
   PerPixelOperations() = default;
 
@@ -48,20 +48,20 @@ struct PerPixelOperations : private WritePixelOperation {
   explicit constexpr PerPixelOperations(Args&&... args)
     :WritePixelOperation(std::forward<Args>(args)...) {}
 
-  inline void WritePixel(pointer_type p, source_color_type c) const {
+  inline void WritePixel(pointer p, source_color_type c) const {
     WritePixelOperation::WritePixel(p, c);
   }
 
   gcc_hot
-  void FillPixels(pointer_type p, unsigned n, source_color_type c) const {
-    PixelTraits::ForHorizontal(p, n, [this, c](pointer_type p){
+  void FillPixels(pointer p, unsigned n, source_color_type c) const {
+    PixelTraits::ForHorizontal(p, n, [this, c](pointer p){
         /* requires "this->" due to gcc 4.7.2 crash bug */
         this->WritePixel(p, c);
       });
   }
 
   gcc_hot
-  void CopyPixels(rpointer_type p, source_const_rpointer_type src,
+  void CopyPixels(rpointer p, source_const_rpointer src,
                   unsigned n) const {
     for (unsigned i = 0; i < n; ++i)
       WritePixel(PixelTraits::Next(p, i),
@@ -72,7 +72,7 @@ struct PerPixelOperations : private WritePixelOperation {
 template<class Operation>
 struct UnaryWritePixel : private Operation {
   typedef typename Operation::PixelTraits PixelTraits;
-  typedef typename PixelTraits::pointer_type pointer_type;
+  typedef typename PixelTraits::pointer pointer;
 
   typedef typename Operation::SourcePixelTraits SourcePixelTraits;
   typedef typename SourcePixelTraits::color_type source_color_type;
@@ -83,7 +83,7 @@ struct UnaryWritePixel : private Operation {
   explicit constexpr UnaryWritePixel(Args&&... args)
     :Operation(std::forward<Args>(args)...) {}
 
-  inline void WritePixel(pointer_type p, source_color_type c) const {
+  inline void WritePixel(pointer p, source_color_type c) const {
     PixelTraits::WritePixel(p, (*this)(c));
   }
 };
@@ -100,7 +100,7 @@ using UnaryPerPixelOperations =
 template<class Operation>
 struct BinaryWritePixel : private Operation {
   typedef typename Operation::PixelTraits PixelTraits;
-  typedef typename PixelTraits::pointer_type pointer_type;
+  typedef typename PixelTraits::pointer pointer;
 
   typedef typename Operation::SourcePixelTraits SourcePixelTraits;
   typedef typename SourcePixelTraits::color_type source_color_type;
@@ -111,7 +111,7 @@ struct BinaryWritePixel : private Operation {
   explicit constexpr BinaryWritePixel(Args&&... args)
     :Operation(std::forward<Args>(args)...) {}
 
-  inline void WritePixel(pointer_type p, source_color_type c) const {
+  inline void WritePixel(pointer p, source_color_type c) const {
     PixelTraits::WritePixel(p, (*this)(PixelTraits::ReadPixel(p), c));
   }
 };
@@ -132,8 +132,8 @@ using BinaryPerPixelOperations =
 template<typename Check, typename Operation=typename Check::PixelTraits>
 struct ConditionalWritePixel : private Check, private Operation {
   typedef typename Check::PixelTraits PixelTraits;
-  typedef typename PixelTraits::rpointer_type rpointer_type;
-  typedef typename PixelTraits::const_rpointer_type const_rpointer_type;
+  typedef typename PixelTraits::rpointer rpointer;
+  typedef typename PixelTraits::const_rpointer const_rpointer;
   typedef typename PixelTraits::color_type color_type;
 
   typedef PixelTraits SourcePixelTraits;
@@ -148,7 +148,7 @@ struct ConditionalWritePixel : private Check, private Operation {
   ConditionalWritePixel(C &&c, O &&o)
     :Check(std::forward<C>(c)), Operation(std::forward<O>(o)) {}
 
-  void WritePixel(rpointer_type p, color_type c) const {
+  void WritePixel(rpointer p, color_type c) const {
     if (Check::operator()(c))
       Operation::WritePixel(p, c);
   }
@@ -471,7 +471,7 @@ template<typename PixelTraits>
 class TransparentInvertPixelOperations
   : private PixelIntegerAdapter<PixelTraits,
                                 PixelBitNot<typename PixelTraits::integer_type>> {
-  typedef typename PixelTraits::pointer_type pointer_type;
+  typedef typename PixelTraits::pointer pointer;
   typedef typename PixelTraits::color_type color_type;
 
   color_type key;
@@ -479,7 +479,7 @@ class TransparentInvertPixelOperations
 public:
   constexpr TransparentInvertPixelOperations(color_type _key):key(_key) {}
 
-  void WritePixel(pointer_type p, color_type c) const {
+  void WritePixel(pointer p, color_type c) const {
     if (c != key)
       PixelTraits::WritePixel(p, (*this)(c));
   }

@@ -49,7 +49,7 @@ struct GrayPixelReader {
 
 template<typename PixelTraits, typename Reader>
 static inline void
-ConvertLine(typename PixelTraits::rpointer_type dest, Reader src, unsigned n)
+ConvertLine(typename PixelTraits::rpointer dest, Reader src, unsigned n)
 {
   for (unsigned i = 0; i < n; ++i, dest = PixelTraits::Next(dest, 1))
     PixelTraits::WritePixel(dest, src.Read(PixelTraits()));
@@ -60,7 +60,7 @@ static inline void
 ConvertImage(WritableImageBuffer<PixelTraits> buffer,
              const uint8_t *src, int src_pitch, bool flipped)
 {
-  typename PixelTraits::rpointer_type dest = buffer.data;
+  typename PixelTraits::rpointer dest = buffer.data;
 
   if (flipped) {
     src += src_pitch * (buffer.height - 1);

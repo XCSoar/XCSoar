@@ -48,8 +48,8 @@ namespace Lua {
 template<typename T, const char *name>
 struct Class {
 	typedef T value_type;
-	typedef T *pointer_type;
-	typedef T &reference_type;
+	typedef T *pointer;
+	typedef T &reference;
 
 	/**
 	 * Register the Lua metatable and leave it on the stack.  This
@@ -74,7 +74,7 @@ struct Class {
 	 * You must call Register() once before calling this method.
 	 */
 	template<typename... Args>
-	static pointer_type New(lua_State *L, Args&&... args) {
+	static pointer New(lua_State *L, Args&&... args) {
 		const ScopeCheckStack check_stack(L, 1);
 
 		void *p = lua_newuserdata(L, sizeof(value_type));
@@ -94,7 +94,7 @@ struct Class {
 	 * stack.  Returns nullptr if the type is wrong.
 	 */
 	gcc_pure
-	static pointer_type Check(lua_State *L, int idx) {
+	static pointer Check(lua_State *L, int idx) {
 		const ScopeCheckStack check_stack(L);
 
 		void *p = lua_touserdata(L, idx);
@@ -110,7 +110,7 @@ struct Class {
 		if (!equal)
 			return nullptr;
 
-		return pointer_type(p);
+		return pointer(p);
 	}
 
 	/**
@@ -118,8 +118,8 @@ struct Class {
 	 * stack.  Raise a Lua error if the type is wrong.
 	 */
 	gcc_pure
-	static reference_type Cast(lua_State *L, int idx) {
-		return *(pointer_type)luaL_checkudata(L, idx, name);
+	static reference Cast(lua_State *L, int idx) {
+		return *(pointer)luaL_checkudata(L, idx, name);
 	}
 
 private:

@@ -272,7 +272,7 @@ WeatherMapOverlayListWidget::UpdateList()
  * Set up reasonable defaults for the given overlay.
  */
 static void
-SetupOverlay(MapOverlayBitmap &bmp, Path::const_pointer_type name)
+SetupOverlay(MapOverlayBitmap &bmp, Path::const_pointer name)
 {
   /* File name convention according to DWD paper:
    *

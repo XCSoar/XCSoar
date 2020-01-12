@@ -68,7 +68,7 @@ class UTF8ToWideConverter {
 #else
   typedef StringPointer<> Value;
 #endif
-  typedef typename Value::const_pointer_type const_pointer_type;
+  typedef typename Value::const_pointer const_pointer;
 
   Value value;
 
@@ -77,7 +77,7 @@ public:
   UTF8ToWideConverter(const char *_value)
     :value(Value::Donate(ConvertUTF8ToWide(_value))) {}
 #else
-  UTF8ToWideConverter(const_pointer_type _value):value(_value) {
+  UTF8ToWideConverter(const_pointer _value):value(_value) {
     assert(_value != nullptr);
   }
 #endif
@@ -96,7 +96,7 @@ public:
 #endif
   }
 
-  operator const_pointer_type() const {
+  operator const_pointer() const {
     assert(!value.IsNull());
 
     return value.c_str();
@@ -113,7 +113,7 @@ class WideToUTF8Converter {
 #else
   typedef StringPointer<> Value;
 #endif
-  typedef typename Value::const_pointer_type const_pointer_type;
+  typedef typename Value::const_pointer const_pointer;
 
   Value value;
 
@@ -122,7 +122,7 @@ public:
   WideToUTF8Converter(const TCHAR *_value)
     :value(Value::Donate(ConvertWideToUTF8(_value))) {}
 #else
-  WideToUTF8Converter(const_pointer_type _value):value(_value) {
+  WideToUTF8Converter(const_pointer _value):value(_value) {
     assert(_value != nullptr);
   }
 #endif
@@ -141,7 +141,7 @@ public:
 #endif
   }
 
-  operator const_pointer_type() const {
+  operator const_pointer() const {
     assert(!value.IsNull());
 
     return value.c_str();
@@ -159,7 +159,7 @@ class WideToACPConverter {
 #else
   typedef StringPointer<> Value;
 #endif
-  typedef typename Value::const_pointer_type const_pointer_type;
+  typedef typename Value::const_pointer const_pointer;
 
   Value value;
 
@@ -168,7 +168,7 @@ public:
   WideToACPConverter(const TCHAR *_value)
     :value(Value::Donate(ConvertWideToACP(_value))) {}
 #else
-  WideToACPConverter(const_pointer_type _value):value(_value) {
+  WideToACPConverter(const_pointer _value):value(_value) {
     assert(_value != nullptr);
   }
 #endif
@@ -187,7 +187,7 @@ public:
 #endif
   }
 
-  operator const_pointer_type() const {
+  operator const_pointer() const {
     assert(!value.IsNull());
 
     return value.c_str();

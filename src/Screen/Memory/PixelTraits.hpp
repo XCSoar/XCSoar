@@ -65,24 +65,24 @@ struct GreyscalePixelTraits {
    * dereference.  This class provides functions for all of this, use
    * them.
    */
-  typedef color_type *pointer_type;
+  typedef color_type *pointer;
 
   /**
-   * Same as #pointer_type, but with "restrict".  This guarantees the
+   * Same as #pointer, but with "restrict".  This guarantees the
    * compiler that there will be no aliasing, and allows the compiler
    * to apply more optimisations, e.g. auto vectorisation.
    */
-  typedef color_type *gcc_restrict rpointer_type;
+  typedef color_type *gcc_restrict rpointer;
 
   /**
    * A pointer/iterator to a read-only image buffer.
    */
-  typedef const color_type *const_pointer_type;
+  typedef const color_type *const_pointer;
 
   /**
-   * Like #rpointer_type, but read-only.
+   * Like #rpointer, but read-only.
    */
-  typedef const color_type *gcc_restrict const_rpointer_type;
+  typedef const color_type *gcc_restrict const_rpointer;
 
   /**
    * Transform a color by passing integers to the given functions.
@@ -132,19 +132,19 @@ struct GreyscalePixelTraits {
   /**
    * Calculate a pointer to the pixel with the given offset.
    */
-  static constexpr pointer_type Next(pointer_type p, int delta) {
+  static constexpr pointer Next(pointer p, int delta) {
     return p + CalcIncrement(delta);
   }
 
-  static constexpr const_pointer_type Next(const_pointer_type p, int delta) {
+  static constexpr const_pointer Next(const_pointer p, int delta) {
     return p + CalcIncrement(delta);
   }
 
-  static constexpr pointer_type NextByte(pointer_type p, int delta) {
+  static constexpr pointer NextByte(pointer p, int delta) {
     return OffsetCast<color_type>(p, delta);
   }
 
-  static constexpr const_pointer_type NextByte(const_pointer_type p,
+  static constexpr const_pointer NextByte(const_pointer p,
                                                int delta) {
     return OffsetCast<const color_type>(p, delta);
   }
@@ -154,12 +154,12 @@ struct GreyscalePixelTraits {
    *
    * @param pitch the number of bytes per row
    */
-  static constexpr pointer_type NextRow(pointer_type p,
+  static constexpr pointer NextRow(pointer p,
                                         unsigned pitch, int delta) {
     return NextByte(p, int(pitch) * delta);
   }
 
-  static constexpr const_pointer_type NextRow(const_pointer_type p,
+  static constexpr const_pointer NextRow(const_pointer p,
                                               unsigned pitch, int delta) {
     return NextByte(p, int(pitch) * delta);
   }
@@ -169,12 +169,12 @@ struct GreyscalePixelTraits {
    *
    * @param pitch the number of bytes per row
    */
-  static constexpr pointer_type At(pointer_type p, unsigned pitch,
+  static constexpr pointer At(pointer p, unsigned pitch,
                                    int x, int y) {
     return Next(NextRow(p, pitch, y), x);
   }
 
-  static constexpr const_pointer_type At(const_pointer_type p, unsigned pitch,
+  static constexpr const_pointer At(const_pointer p, unsigned pitch,
                                          int x, int y) {
     return Next(NextRow(p, pitch, y), x);
   }
@@ -182,28 +182,28 @@ struct GreyscalePixelTraits {
   /**
    * Read the pixel at the location pointed to.
    */
-  static color_type ReadPixel(const_pointer_type p) {
+  static color_type ReadPixel(const_pointer p) {
     return *p;
   }
 
   /**
    * Write the pixel at the location pointed to.
    */
-  static void WritePixel(pointer_type p, color_type c) {
+  static void WritePixel(pointer p, color_type c) {
     *p = c;
   }
 
   /**
    * Fill #n horizontal pixels with the given color.
    */
-  static void FillPixels(pointer_type p, unsigned n, color_type c) {
+  static void FillPixels(pointer p, unsigned n, color_type c) {
     std::fill_n(p, n, c.GetLuminosity());
   }
 
   /**
    * Copy #n horizontal pixels from #src.
    */
-  static void CopyPixels(rpointer_type p, const_rpointer_type src,
+  static void CopyPixels(rpointer p, const_rpointer src,
                          unsigned n) {
     std::copy_n(src, n, p);
   }
@@ -214,14 +214,14 @@ struct GreyscalePixelTraits {
    */
   template<typename F>
   gcc_hot
-  static void ForHorizontal(pointer_type p, unsigned n, F f) {
+  static void ForHorizontal(pointer p, unsigned n, F f) {
     for (unsigned i = 0; i < n; ++i)
       f(Next(p, i));
   }
 
   template<typename F>
   gcc_hot
-  static void ForHorizontal(rpointer_type p, const_rpointer_type q,
+  static void ForHorizontal(rpointer p, const_rpointer q,
                             unsigned n, F f) {
     for (unsigned i = 0; i < n; ++i)
       f(Next(p, i), Next(q, i));
@@ -233,7 +233,7 @@ struct GreyscalePixelTraits {
    */
   template<typename F>
   gcc_hot
-  static void ForVertical(pointer_type p, unsigned pitch, unsigned n, F f) {
+  static void ForVertical(pointer p, unsigned pitch, unsigned n, F f) {
     for (; n > 0; --n, p = NextByte(p, pitch))
       f(p);
   }
@@ -248,8 +248,8 @@ struct GreyscalePixelTraits {
   struct Mixed {
     template<typename F>
     gcc_hot
-    static void ForHorizontal(pointer_type p,
-                              typename SPT::const_pointer_type q,
+    static void ForHorizontal(pointer p,
+                              typename SPT::const_pointer q,
                               unsigned n, F f) {
       for (unsigned i = 0; i < n; ++i)
         f(Next(p, i), SPT::Next(q, i));
@@ -269,10 +269,10 @@ struct BGRAPixelTraits {
   typedef BGRA8Color color_type;
   typedef uint8_t channel_type;
   typedef uint32_t integer_type;
-  typedef color_type *pointer_type;
-  typedef color_type *gcc_restrict rpointer_type;
-  typedef const color_type *const_pointer_type;
-  typedef const color_type *gcc_restrict const_rpointer_type;
+  typedef color_type *pointer;
+  typedef color_type *gcc_restrict rpointer;
+  typedef const color_type *const_pointer;
+  typedef const color_type *gcc_restrict const_rpointer;
 
   static_assert(sizeof(color_type) == sizeof(integer_type),
                 "Wrong integer_type");
@@ -330,54 +330,54 @@ struct BGRAPixelTraits {
     return delta;
   }
 
-  static constexpr pointer_type Next(pointer_type p, int delta) {
+  static constexpr pointer Next(pointer p, int delta) {
     return p + CalcIncrement(delta);
   }
 
-  static constexpr const_pointer_type Next(const_pointer_type p, int delta) {
+  static constexpr const_pointer Next(const_pointer p, int delta) {
     return p + CalcIncrement(delta);
   }
 
-  static constexpr pointer_type NextByte(pointer_type p, int delta) {
-    return pointer_type((uint8_t *)p + delta);
+  static constexpr pointer NextByte(pointer p, int delta) {
+    return pointer((uint8_t *)p + delta);
   }
 
-  static constexpr const_pointer_type NextByte(const_pointer_type p,
+  static constexpr const_pointer NextByte(const_pointer p,
                                                int delta) {
-    return const_pointer_type((const uint8_t *)p + delta);
+    return const_pointer((const uint8_t *)p + delta);
   }
 
-  static constexpr pointer_type NextRow(pointer_type p,
+  static constexpr pointer NextRow(pointer p,
                                         unsigned pitch, int delta) {
     return NextByte(p, int(pitch) * delta);
   }
 
-  static constexpr const_pointer_type NextRow(const_pointer_type p,
+  static constexpr const_pointer NextRow(const_pointer p,
                                               unsigned pitch, int delta) {
     return NextByte(p, int(pitch) * delta);
   }
 
-  static constexpr pointer_type At(pointer_type p, unsigned pitch,
+  static constexpr pointer At(pointer p, unsigned pitch,
                                    int x, int y) {
     return Next(NextRow(p, pitch, y), x);
   }
 
-  static constexpr const_pointer_type At(const_pointer_type p, unsigned pitch,
+  static constexpr const_pointer At(const_pointer p, unsigned pitch,
                                          int x, int y) {
     return Next(NextRow(p, pitch, y), x);
   }
 
-  static color_type ReadPixel(const_pointer_type p) {
+  static color_type ReadPixel(const_pointer p) {
     const integer_type *const pi = reinterpret_cast<const integer_type *>(p);
     return FromInteger(*pi);
   }
 
-  static void WritePixel(pointer_type p, color_type c) {
+  static void WritePixel(pointer p, color_type c) {
     integer_type *const pi = reinterpret_cast<integer_type *>(p);
     *pi = ToInteger(c);
   }
 
-  static void FillPixels(pointer_type p, unsigned n, color_type c) {
+  static void FillPixels(pointer p, unsigned n, color_type c) {
     /* gcc is pretty bad at optimising BGRA8Color assignment; the
        following switches to 32 bit integer operations */
     integer_type *const pi = reinterpret_cast<integer_type *>(p);
@@ -409,26 +409,26 @@ struct BGRAPixelTraits {
 #endif
   }
 
-  static void CopyPixels(rpointer_type p,
-                         const_rpointer_type src, unsigned n) {
+  static void CopyPixels(rpointer p,
+                         const_rpointer src, unsigned n) {
     std::copy_n(src, n, p);
   }
 
   template<typename F>
-  static void ForHorizontal(pointer_type p, unsigned n, F f) {
+  static void ForHorizontal(pointer p, unsigned n, F f) {
     for (unsigned i = 0; i < n; ++i)
       f(Next(p, i));
   }
 
   template<typename F>
-  static void ForHorizontal(rpointer_type p, const_rpointer_type q,
+  static void ForHorizontal(rpointer p, const_rpointer q,
                             unsigned n, F f) {
     for (unsigned i = 0; i < n; ++i)
       f(Next(p, i), Next(q, i));
   }
 
   template<typename F>
-  static void ForVertical(pointer_type p, unsigned pitch, unsigned n, F f) {
+  static void ForVertical(pointer p, unsigned pitch, unsigned n, F f) {
     for (; n > 0; --n, p = NextByte(p, pitch))
       f(p);
   }
