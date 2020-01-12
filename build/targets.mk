@@ -624,11 +624,6 @@ ifeq ($(TARGET),ANDROID)
     # workaround for "... uses VFP register arguments, output does not"
     TARGET_LDFLAGS += -Wl,--no-warn-mismatch
   endif
-
-  # clang as linker driver adds the option '-pie' to the linker command.
-  # This option is incompatible with the option '-shared'.
-  TARGET_LDFLAGS += -no-pie
-
 endif
 
 ifeq ($(HAVE_WIN32),y)
