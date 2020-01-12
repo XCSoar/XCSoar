@@ -1,172 +1,200 @@
+% !TeX encoding = utf8
+% !TeX spellcheck = fr
+
 \chapter{Circuits}\label{cha:tasks}
 
-XCSoar fournit toutes les fonctionnalités de gestion des circuits sur la campagne. Ils peuvent être édités avant le décollage et modifiés en vol. Le passage au point de virage suivant est automatique. Ce chapitre décrit aussi l'utilisation de l'enregistrement et relecture des vols au format IGC.
+\xc{} fournit un système complet de fonctionnalités de gestion des circuits sur la campagne. Ils peuvent être
+édités avant le décollage et, lors d'un vol d'agrément
+sur la campagne, être modifiés en vol. Le passage au point de virage suivant est automatique,
+mais peut aussi être effectué manuellement. Beaucoup des calculs d'\xc{} sont en lien avec
+soit les points de virages, soit le point d'arrivée.
+À moins qu'un ``vrai'' circuit ne soit défini, \xc{} fournira une fonction ``Retour au point de départ'',
+sachant que beaucoup des fonctionnalités liées aux circuits font référence au lieu de décollage.
+Ce chapitre décrit aussi l'utilisation d'enregistreurs IGC avec \xc.
 
-Il y a trois modes de circuit:
+Il y a trois modes de circuit~:
 \begin{description}
-\item[Circuit prévu] C'est le mode de circuit normal, dans lequel le circuit est constitué d'un point de départ, de zéro ou plus point de virage et d'un point d'arrivée. Les points doivent être passés dans un ordre défini.
-\item[Circuit GoTo] Vol vers un point unique.
-\item[Dégagements] Permet de visualiser les terrains posables les plus proches et les informations les concernant, dont l'éloignement et l'altitude nécessaire pour les rejoindre. 
+\item[Circuit prévu] C'est le mode de circuit normal,
+dans lequel le circuit est constitué d'un point de départ, de zéro ou plus point de virage
+et d'un point d'arrivée. Les points doivent être passés dans un ordre défini.
+\item[Circuit ``Aller à''] Vol vers un point unique.
+\item[Dégagements] Fournit des propositions de vol vers les  terrains posables les plus proches.
 \end{description}
 
-Noter qu'en mode GoTo ou Dégagements le circuit prévu est conservé et peut être repris plus tard. Les données nécessaires aux calculs statistiques relatifs à un circuit accompli sont conservées.
+Notez qu'en mode ``Aller à'' ou ``Dégagements'', le circuit prévu est conservé et peut être repris plus tard.
+Les statistiques relatifs à un circuit accompli sont conservées.
 
-\section{Circuit GoTo}\label{sec:Goto-tasks}
+\subsection*{Circuit ``Aller à'' automatique}
 
-Un circuit Goto peut se définir simplement en sélectionnant un point de virage sur la carte ou bien dans la liste des points de virage ou encore en utilisant: \bmenug{Dégagmts} \blink\bmenug{Aller à} 
-\gesture{Bas - Gauche}.  En mode GoTo, la sélection de 
-\bmenug{Nav. 2}\blink\bmenug{Circuit Reprendre} permet de revenir au circuit prévu(si il y en avait un).
+Si aucun circuit prévu n'est actif, alors, au moment du décollage, un circuit ``Aller à'' est automatiquement
+créé et activé avec pour point d'arrivée le point de décollage ou l'aérodrome le plus proche
+s'il est voisin du point de décollage.
 
-\subsection*{Goto automatique}
+Qu'un circuit soit défini ou pas, le point de décollage est toujours
+créé et est affiché dans la liste des points de virage comme référence ou pour une utilisation ultérieure.
 
-Si aucun circuit n'est prévu (actif) alors au décollage un circuit "Goto" est automatiquement crée avec comme point d'arrivée, le point de décollage ou l'aérodrome le plus proche du point de décollage.
+Après qu'un circuit prévu ait été défini pour la première fois, la fonction automatique ``Aller au point de décollage''
+est désactivée. Pour faire un circuit simple, utiliser ``Aller à''.
 
-Qu'un circuit soit défini ou pas, le point de décollage est toujours crée automatiquement et apparait dans la liste des points de virage pour pouvoir être utilisé ultérieurement.
+\section{Circuits ``Aller à''}
+
+Un circuit ``Aller à'' peut être défini simplement en sélectionnant un point de virage sur la carte
+dans la liste des points de virage ou un autre moyen, comme en ouvrant le fenêtre de dialogue sur les dégagements
+et en y sélectionnant \bmenuw{Aller à}. En mode circuit ``Aller à'', sélectionner
+\bmenug{Nav. 2}\blink\bmenug{Circuit Reprendre}
+permet de reprendre le circuit prévu (s’il y en avait un).
 
 \section{Édition des circuits}
 
-Plusieurs méthodes sont possibles. Certaines plus efficaces au sol lors de la préparation du circuit, d'autres utiles pour modifier le circuit en vol lors de vols sur la campagne "touristiques" ou en dehors de compétitions. Les circuits peuvent être crées et sauvegardés sur fichier pour être utilisés plus tard. Ils peuvent être utilisés par toutes les version de XCSoar: sur votre PC vous pouvez donc préparer les circuits de la prochaine saison et les transférer sur l'appareil utilisé dans le planeur, les mettre à disposition pour d'autres vélivoles...
+Plusieurs méthodes sont possibles pour éditer des circuits. Certaines sont plus efficaces au sol lors
+de la préparation du circuit, d'autres sont utiles pour modifier le circuit en vol lors
+de vols d'agrément sur la campagne. Les circuits peuvent être sauvegardés dans
+un fichier pour être utilisés plus tard ou transférer entre différents plateformes \xc{}
+(Android, Windows, Linux\textellipsis).
 
-%\tip It is also possible to save a `default' task and have this task loaded
-%automatically upon start-up of XCSoar.  One application of this is to
-%set up a default task with one waypoint being the home --- this means
-%that XCSoar is then programmed for final glide back to home, which is
-%useful for casual cross-country touring.
+\tip{} Il est aussi possible d'enregistrer un circuit ``par défaut'' et être ensuite rechargée
+automatiquement lors du démarrage du \xc. Une utilisation de cette fonction est de
+configurer un circuit par défaut avec comme unique point de virage votre aérodrome --- cela signifie
+qu'\xc{} est alors programmé par défaut pour une arrivée finale en finesse vers votre aérodrome de départ, ce qui
+est utile pour des vols d'agrément sur la campagne.
 
-Les principales méthodes de définition des circuits sont:
+Les principales méthodes de définition des circuits sont~:
 \begin{itemize}
-\item Utilisation de l'interface d'édition de circuit.
-\item Sélection de points de virage sur la carte et les ajouter au circuit en utilisant le bouton \bmenug{Détails}.
+\item utilisation de la fenêtre d'édition de circuit.
+\item Sélection de points de virage sur la carte, avec ajout au circuit en utilisant la fenêtre ``Détails''.
 \item Charger le circuit à partir d'un fichier.
 \end{itemize}
 
-%Selecting the Task menu item will produce the Task dialog box.  The
-%list box on the left displays all of the turn points loaded into the
-%system. Highlight the desired entries and using the "-$>$" and "$<$-"
-%buttons assemble the desired task in the Task list box. As each turn
-%point is added to the task a continuous display of the calculated task
-%length is shown.  Tasks can be saved for recalling later using the
-%"Save" button and recalled using the "Load" button.  Once the desired
-%task is complete select "OK".
-%
-%{\it DIAGRAM SHOWING TASK DIALOG EDITING, WITH LABELED ARROWS POINTING
-%TO THE USER INTERFACE ELEMENTS?}
 
-\tip Le chargement d'un circuit à partir d'un fichier peut-être très utile pour ceux qui font le même circuit car une seule personne crée le circuit et le distribue ensuite aux autres.
+Le chargement d'un circuit à partir d'un fichier peut-être très utile en compétition ou pour ceux 
+qui font un même circuit à plusieurs, une seule personne le 
+distribuant aux autres, permettant ainsi de ne pas avoir à créer plusieurs fois le même circuit.
+\tip{}
+Si aucun circuit n'est présent au démarrage, un circuit est créé automatiquement.
+Il contient un unique point de virage qui est le lieu de décollage et est utilisé par la fonction ``Aller au point de décollage''.
 
-XCSoar sauvegarde le circuit en cours quand le programme est arrêté. A la mise en route le circuit est rechargé. Ceci permet de préparer un circuit tôt dans la journée et d'éteindre l'appareil sur lequel XCSoar fonctionne et de le remettre sous tension juste avant le décollage.
+\xc{} sauvegarde le circuit en cours quand le programme est arrêté. A la mise en route,
+le circuit est rechargé. Ceci permet de préparer un circuit tôt dans la journée et d'éteindre l'appareil sur lequel \xc{} fonctionne
+et de le remettre sous tension juste avant le décollage.
 
-Les points de virage des circuits sont sauvegardés même si le fichier de points de virage est modifié. Ce qui veut dire que si vous sauvegardez un circuit puis changez le fichier de points de virage, et rechargez le fichier de points de virage, de nouveaux points de virage sont crées pour chaque point de virage manquant dans le nouveau fichier.
+Les points de virage des circuits sont sauvegardés même si le fichier de
+points de virage est modifié. Ce qui veut dire que si vous sauvegardez un circuit puis changez le
+fichier de points de virage, alors rechargez à nouveau le circuit, de nouveaux points de virage seront créés
+pour chaque point de virage manquant dans le nouveau fichier.
 
 \section{Informations sur les points de virage}
-%Several ways of selecting a waypoint are available:
-%\begin{itemize}
-%\item Touch its name or the waypoint symbol on the map screen if it is visible.
-%\item If the waypoint is in the active task, highlight the waypoint {\InfoBox}, then use the up/down arrow keys to select the desired waypoint, and press the
-%enter key.
-%\item From the Task dialog, find and highlight the waypoint in
-% the waypoint list, then press the 'Details' button.
-%\end{itemize}
-%The display will now show the waypoint details dialog.
 
-La page des détails des points de virage a des fonctionnalités de navigation comme "Aller à", "Inséré dans le circuit", "Ajouter au circuit" et définir comme nouvelle "base".
+La page des détails des points de virage décrit en détail un point de virage et possède
+des fonctionnalités de navigation comme ``Aller à'', ``Insérer dans le circuit'', ``Ajouter au circuit'' et ``Définir comme nouveau point de départ''.
 
-On peut y accéder de différentes façons:
+On peut accéder de différentes façons aux informations sur les points de virage~:
 \begin{itemize}
 \item
-Depuis le menu \bmenug{Nav. 1}\blink\bmenug{Circuit}\blink\bmenug{Pts de virage} en sélectionnant un des points de virage du circuit en cours, appuyer dessus une seconde fois pour faire apparaitre la fenêtre de gestion des points de virage, puis utiliser le bouton  \bmenug{Details}.
+\gesturespec{rd} le menu~\bmenug{Nav. 1}\blink\bmenug{Circuit},
+en sélectionnant un des points de virage du circuit en cours, appuyer dessus une seconde fois pour faire apparaître la fenêtre de gestion des points de virage, puis utiliser le bouton  \bmenug{Détails}.
 
 \item
-Depuis \bmenug{Info. 1}\blink\bmenug{Qu'y a-t-il ici?} pour afficher la liste des éléments qui se trouvent sous le curseur ou sous votre doigt sur la carte.
+\gesturespec{dl} le \bmenug{Nav. 1}\blink\bmenug{Dégagmts} 
+pour afficher les
+détails des terrains posables les plus proches.
 
 \item
-Depuis \bmenug{Nav. 1}\blink\bmenug{Dégagmts} pour afficher les détails des terrains posables les plus proches.
+\gesturespec{dr} le menu \bmenug{Nav. 1}\blink\bmenug{Liste des waypoints}, puis surligné un point de virage
+et \bmenuw{Sélectionner} un point de virage.
 
 \item
-Depuis \bmenug{Nav. 1}\blink\bmenug{Liste des waypoints} pour sélectionner un point de virage dans la liste et afficher ses détails.
+\gesturespec{urdl} le menu \bmenug{Affich. 1}\blink\bmenug{Panor. On} pour afficher la
+carte en mode panorama, puis aller jusqu'au point de virage recherché et toucher son étiquette ou son
+symbole.
 
 \item
-Si le point de virage est visible sur la carte, appuyer sur son nom ou son symbole.
+\gesturespec{urdl}  le menu \bmenug{Info. 1}\blink\bmenug{Qu'y a-t-il ici~?}
+pour afficher la
+liste des éléments qui se trouvent sous le curseur ou sous votre doigt sur la carte.
 
-\item 
-From the menu \bmenug{Nav. 2}\blink\bmenug{Détails Pt de virage} pour afficher les détails du point de virage actif.
 \end{itemize}
 
-
-
 \subsection*{Détails des points de virage}\label{sec:waypointdetails}
-Cette page contient les informations du point de virage: nom aéronautique (LFMR pour BARCELONNETTE Saint-Pons), la fréquence radio, l'axe de piste et sa longueur, coordonnées GPS, altitude, heure du coucher du soleil, cap et distance, différence d'altitude nécessaire pour atteindre ce point avec un calage MC à zéro. Il y a aussi un bouton \button{GoTo} qui permet de démarrer un circuit GoTo vers ce point. L'utilisation de ce bouton, suspend le circuit en cours.
-
+Cette fenêtre donne des informations sur un point de virage~: nom du point de virage,
+coordonnées GPS, altitude, fréquence radio et l'axe de piste et sa longueur (si ces informations sont dans le fichier de points de virage),
+heures locales de lever et de coucher du soleil, cap et distance, hauteurs nécessaires
+pour atteindre ce point (voir détails ci-dessous). De plus, il y a aussi un bouton
+\button{Aller à} qui permet de démarrer directement
+une navigation vers ce point. L'utilisation de ce bouton annule le circuit en cours.
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-waypointdetails0.png}
 \end{center}
 
-Cette page contient aussi trois différences d'altitude (altitude en plus, nécessaire pour atteindre, avec sécurité,  le point de virage considéré):
-%As mentioned above, the Waypoint info dialog also shows three forms of altitude 
-%difference (additional
-%altitude required to reach the waypoint at the safety height) for
-%the corresponding waypoint:
+Comme mentionné ci-dessus, cette fenêtre affiche aussi trois types de différences d'altitude pour le point de virage considéré
+(c'est-à-dire de hauteur nécessaire pour atteindre le point de virage à la hauteur de sécurité)~:
 \begin{description}
-\item[Diff. Alt. MC 0] Différence d'altitude nécessaire comparée avec un calage MC à zéro.
-\item[Diff Alt MC sécurité] Différence d'altitude nécessaire comparée au calage MC de sécurité. (Voir \ref{sec:secu-parameter} )
-\item[Diff. Alt. MC act] Différence d'altitude nécessaire comparée au calage MC actuel.
+\item[Diff. Alt. MC 0] Différence d'altitude avec un calage MacCready à zéro.
+\item[Diff Alt MC sécurité] Différence d'altitude avec le calage MacCready de 
+sécurité (voir~\ref{sec:secu-parameter}).
+\item[Diff. Alt. MC act.] Différence d'altitude au calage MacCready actuel.
 \end{description}
 
-La page des détails des points de virage est constituées de deux pages (accessibles avec les boutons \button{$>$} et \button{$<$} ). En fonction de l'existence et du nombre d'autres détails propre au point de virage visualisé, d'autres pages pourront être affichées.
+La fenêtre des détails des points de virage est constituée de deux pages, accessibles avec les touches
+\bmenuw{$>$} et \bmenuw{$<$} situées au coin inférieur gauche.
+En fonction de l'existence et du nombre d'autres détails propres au point de virage visualisé,
+d'autres pages pourront être disponibles.
 
-\subsection*{Waypoints et Circuit}  
-La deuxième page "Détails de points de virage" comporte une colonne de boutons permettant plusieurs actions sur le point de virage étudié:
+\subsection*{Points de virage et circuit}
+La deuxième page des ``Détails de points de virage''
+comporte une colonne de boutons permettant plusieurs actions concernant le point de virage sélectionné~:
 \begin{description}
-\item[\button{Remplacer dans le circuit}] remplace le point de virage actif du circuit en cours par le point de virage sélectionné.
-\item[\button{Inséré dans Circuit}] Insère le point de virage sélectionné avant le point de virage actif du circuit en cours.
-\item[\button{Ajouter Au Circuit}] Ajoute le point de virage sélectionné à la fin du circuit en cours.
-\item[\button{Retirer du circuit}] Retire du circuit en cours le point de virage sélectionné. (option visible seulement si le point de virage sélectionné fait partie du circuit en cours)
-\item[\button{Nvelle Base}] Défini le point de virage sélectionné comme nouvelle base de départ.
-\item[\button{Panor. au WP}] Passe en mode Panoramique et affiche le point de virage sélectionné.
-%\item[\button{Set teamcode}] sets the waypoint as reference waypoint for
-%  team code coordinates.
-
-
+\item[\button{Remplacer dans le circuit}] Remplace le point de virage actif du circuit en cours par le point de virage sélectionné.
+\item[\button{Insérer dans le circuit}] Insère le point de virage sélectionné avant le point de virage actif du circuit en cours.
+\item[\button{Ajouter au circuit}] Ajoute le point de virage sélectionné à la fin du circuit en cours.
+\item[\button{Retirer du circuit}] Retire le point de virage sélectionné du circuit en cours. Cette option est visible seulement si le point de virage sélectionné fait partie du circuit en cours.
+\item[\button{Définir comme nouveau point de départ}] Définit le point de virage sélectionné comme nouvelle base de départ.
+\item[\button{Afficher le point de virage}] Passe en mode panorama et se centre sur le point de virage sélectionné
+\item[\button{Sélectionner la fréquence active}] %TODO à définir
+\item[\button{Sélectionner la fréquence Standby}] %TODO à définir
+\item[\button{Editer}] Permet de modifier les différents attributs du point de virage sélectionné
 \end{description}
 
-C'est une bonne habitude que de définir votre point "Base" à partir de cette fenêtre de détails des points de virage. XCSoar démarre avec ce point comme  base de départ quand il n'a pas de signal GPS. Quand aucune base n'est définie la base par défaut est le centre de la carte.
+C'est une bonne habitude que de définir votre point ``Base'' à partir de cette fenêtre de détails
+des points de virage. \xc{} démarre avec ce point comme base de départ même s'il
+n'y a pas de signal GPS.\@ Quand aucune base n'est définie, la base par défaut est le centre de la carte.
 
 \subsection*{Informations Aérodromes}
-Cette page peut contenir des extraits des compléments en-route ou autres informations relatives à des points de virage ou des terrains. Pour plus de détails sur le format du fichier contenant ces informations, voir ~\ref{sec:Airfield-details}.
-
-%This page may contain relevant text from the enroute supplement about
-%the airfield, including runways, radio frequencies, traffic patterns,
-%contacts.
+Cette page peut contenir des informations pertinentes
+extraites des documents aéronautiques
+à propos de l'aérodrome, dont les pistes, les fréquences radios, les circuits d'approche, les contacts.
+Voir paragraphe~\ref{sec:Airfield-details}.
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-waypointdetails1.png}
 \end{center}
 
-%\subsection*{Image Satellite}
-%Cette page permet d'afficher une vue satellite du point de virage.
-%Pour plus de détails sur le format du fichier contenant ces informations, voir ~\ref{sec:Airfield-details}.
-%\begin{center}
-%\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-waypointdetails2.pdf}
-%\end{center}
+\subsection*{Image de détails du point de virage}
+Cette page affiche une image satellite du point de virage.
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-waypointdetails2.pdf}
+\end{center}
+Pour savoir comment configurer les informations détaillées des points de virage, allez au paragraphe~\ref{sec:airfield-details}.
 
 \section{Sélection des points de virage}\label{sec:waypoint-selector-dialog}
-La fenêtre de sélection des points de virage permet de retrouver un point de virage dans une liste pouvant être très importante. 
 
-On y accède de plusieurs façons:
-\begin{itemize}
-\item depuis  \bmenug{Nav. 1}\blink\bmenug{Liste des waypoints}
-\item depuis l'éditeur de circuits,  \bmenug{Nav. 1}\blink\bmenug{Circuit} et "Général" et créer un nouveau circuit et ajouter un point de virage.
-\item ou simplement par geste(le plus rapide)\gesture{Bas - Droit}.
-\end{itemize}
+La fenêtre de sélection des points de virage permet de retrouver facilement
+un point de virage dans une liste pouvant être très longue. \gesturespec{dr}
 
-Le sélecteur de points de virage comporte sur la gauche plusieurs filtres optionnels qui peuvent être combinés. Les résultats sont à droite. 
+Le sélecteur de point de virage propose une fonction de filtrage avec une série de
+\menulabelr{\bmenug{Nav 1/2}\blink\bmenug{Liste des waypoints}}
+filtres optionnels sur le coté gauche de la page et, sur la droite, une liste des points de virage correspondants.
+Plusieurs filtres sont disponibles. Ils peuvent être combinés, utilisés individuellement, voire pas du tout.
 \begin{description}
-\item[Nom] Tri basé sur les premières lettres du nom du point recherché. Au fur et à mesure que les caractères du nom sont choisis, la liste affichée se réduit pour faciliter la sélection.\\
-\item[Distance] Affichage des waypoints se trouvant à l'intérieur d'un cercle, centré sur le planeur, dont on défini le rayon.\\
-\item[Direction] Affichage des waypoints qui sont dans un cap défini par rapport au planeur.
- Une direction spéciale "HDG(125°)" montre les waypoints qui sont dans les 30° de part et d'autre de la route du planeur (ici route au 125). Ceci permet au pilote de répertorier rapidement les terrains se trouvant dans la direction qu'il suit.\\
-\item[Type] Affiche les waypoints qui sont du type choisi (posable, aérodrome, point de virage) ou qui sont dans le fichier principal de waypoints ou dans le fichier secondaire ou parmi ceux récemment utilisés.\\
+\item[Nom] Tri basé sur les premières lettres du nom du point recherché. Au fur et à mesure que les caractères du nom sont choisis, la liste affichée se réduit pour faciliter la sélection.
+\item[Distance] Affichage des points de virage se trouvant à l'intérieur d'un cercle, centré sur le planeur, dont on définit le rayon.
+\item[Direction] Affichage des points de virage qui sont dans un cap défini par rapport au planeur.
+Une direction spéciale ``HDG(xx°)'' (``HDG'' pour ``heading'', c.-à-d. ``cap'')
+ montre les points de virage qui sont dans les 30° de part et d'autre de la route du planeur (ici route au 125). Ceci permet au pilote de répertorier rapidement les points de virage se trouvant dans la direction qu'il suit.
+\item[Type] Affiche les points de virage qui sont du type choisi (posable, aérodrome, point de virage, etc.)
+ou qui sont dans le fichier principal de points de virage ou dans le fichier secondaire
+ou parmi ceux récemment utilisés.
 \end{description}
-Quand on tri par nom et par type le résultat est classé par ordre alphabétique. Quand (en plus) on tri par distance ou direction le résultat est classé par distance.
+Quand on trie par nom et par type, le résultat est classé par ordre alphabétique des noms. Quand (en plus) on tri par distance ou par direction, le résultat est classé par distance.
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-waypointselect.png}
@@ -174,349 +202,460 @@ Quand on tri par nom et par type le résultat est classé par ordre alphabétiqu
 
 Si la liste de résultats est longue, on peut la faire descendre ou monter à l'aide de l'ascenseur de droite. 
 
-La sélection d'un des éléments de la liste conduit à un comportement différent suivant la fonctionnalité qui à été utilisée précédemment. Le cas le plus courant est l'ouverture de la fenêtre de détails du point choisi. 
+La sélection d'un des éléments de la liste conduit à un comportement différent suivant la fonctionnalité qui à été utilisée précédemment. Le cas le plus courant est l'ouverture de la fenêtre de détails du point sélectionné. 
 
-\section{Gestionnaire de circuit}\label{sec:task-manager-dialog}
-\begin{it}  La gestion des circuits à subit une refonte importante. De notables différences et nouveautés sont donc apparues en comparaison aux précédentes versions de XCSoar.\end{it}
+\section{Gestionnaire de circuits}\label{sec:task-manager-dialog}
+\gesturespec{rd}
 
-Le gestionnaire des circuits permet d'éditer, voir, charger, modifier, sauvegarder sur fichier et déclarer les circuits. On y accède par le menu
-\begin{quote}
-\bmenug{Nav. 1}\blink\bmenug{Circuit}
-\end{quote} 
+Le gestionnaire de circuits permet d'éditer, de voir, de charger, de modifier, de sauvegarder dans un fichier et de déclarer les circuits.
+\menulabelr{\bmenug{Nav. 1/2}\blink\bmenug{Circuit}}
 
-La première page du gestionnaire de circuit montre divers calculs relatifs au circuit en cours, comme expliqué en détails après. Il y a en plus les onglets   \button{Calculateur}, \button{Pts de virage}, \button{General}, et  \button{Règles}, et aussi un onglet pour \button{Fermer} le gestionnaire de circuit.
+La première page du gestionnaire de circuit montre divers calculs
+relatifs au circuit en cours, comme expliqué en détails après. De plus, il y a 
+des boutons pour ouvrir les onglets
+\bmenuw{Points de virage}, \bmenuw{Gérer},
+and \bmenuw{Règles}, ainsi qu'un bouton pour \bmenuw{Fermer} le gestionnaire de circuits.
 
-\subsection*{Points de virage}
-L'onglet \button{Pts de virage} affiche une liste ordonnée des points de virages du circuit en cours. Si il n'y a pas de point de virage dans le circuit,  "(Ajouter point de virage)" est affiché. En sélectionnant cette ligne le sélecteur de points de virage apparait comme décrit précédemment. Le choix d'un point de virage l'ajoute au circuit en cours de création.
+\subsection*{Calculateur de circuit}\label{sec:task-calc-dial}
+La fenêtre du calculateur de circuit permet au pilote de voir l'effet de
+différents modifications du circuit sur la performance finale.
+\menulabelr{\bmenuw{Calc.\ circuit}}
 
-\subsection*{General}
-En appuyant sur \button{General} quatres boutons peuvent être sélectionnés:
-
-\begin{itemize}
-\item \button{Nouveau circuit} Efface le circuit courant de la mémoire de travail. Les valeurs des règles sont les valeurs par défaut.
-\item \button{Déclarer}  Si un logger externe est connecté, ceci permet de charger le circuit actif vers le logger et de le déclarer.
-\item \button{Circuits enregistrés} Affiche la liste des circuits enregistrés. Un circuit déjà préparé et sauvegardé, peut être utilisé. Il faut noter que le circuit actif courant est remplacé par le circuit choisi.
-\item \button{Enregistrer}  Sauvegarde du circuit actif courant. En appuyant sur \button{Enregistrer} un nom de fichier devra être donné: un nom explicite est de bonne augure pour pouvoir le retrouver ensuite dans la liste des circuits existants.
-\end{itemize}
-
-\subsection*{Règles}
-Les champs affichés en appuyant sur  \button{Règles} dépendent du type de circuit choisi. En sélectionnant un champ, une fenêtre apparait pour permettre de modifier la valeur de ce champ. Les types de circuit sont expliqués en détails juste après.
-
-En appuyant sur \button{Règles} quand il est en bleu, une vue générale de la carte apparait avec le tracé du circuit.
-
-\subsection*{Type de circuit}
-XCSoar pour le moment supporte trois types de circuits: Course, AAT et Insignes/records FAI
-
-Une description sommaire de ces types de circuit est faite dans ce manuel. Cependant la définition exacte et à jour de ces types de circuit, si elle vous intéresse, doit être recherchée  dans les documents officiels. Les règlements FAI sont sur  \url{http://www.fai.org/fai-documents}. 
-
-\begin{itemize}
-\item Course (course sur circuit).  passage obligatoire à chaque point de virage défini, et dans l'ordre fixé. Le choix de ce type d'épreuve permet de définir les valeurs des champs suivants (note: si l'option "Règles de départ/arrivée FAI" est mise à On alors aucunes de ces options sont disponibles):
-  \begin{itemize}
-  \item Vitesse max. au départ: C'est la vitesse maxi au passage de la ligne de départ. Si la vitesse n'est pas limitée, il faut mettre 0.
-  \item Hauteur max. départ : hauteur maxi au passage de la ligne de départ. C'est la hauteur maxi au-dessus de la hauteur de départ de référence(AGL ou MSL) autorisée pour l'épreuve. Si pas de limite, il faut mettre 0.
-  \item Hauteur départ réf. : défini si la hauteur maxi du point de départ est au dessus du sol (AGL) ou bien au-dessus du niveau moyen de la mer (MSL). AGL = QFE et MSL = QNH.
-  \item Hauteur min. arrivée: hauteur minimum de passage au-dessus de la ligne d'arrivée. Hauteur basée sur le type de référence de hauteur d'arrivée (AGL ou MSL). Si pas de limite, il faut mettre 0.
-  \item Ref. hauteur arrivée: défini si la hauteur mini du point d'arrivée est au dessus du sol (AGL) ou bien au-dessus du niveau moyen de la mer (MSL).
-  \item Règles de départ/arrivée FAI: sur On, le pilote doit connaitre les règles FAI adaptées au type de circuit et de record qu'il souhaite réaliser. 
-  \end{itemize}
-\item AAT (épreuve de vitesse sur secteurs). Circuit limité en durée. Passage par des zones cylindriques ou non et dans l'ordre défini. Les champs de valeurs à remplir sont:
-  \begin{itemize}
-  \item Temps mini AAT: temps minimum requis (en minutes) pour l'épreuve. Se référer aux documents officiels pour plus de détails, surtout pour le calcul des pénalités lors de l'arrivée avant le temps minimum imparti.
-  \item Vitesse max. au départ: idem que pour "Course sur circuit".
-  \item Hauteur max. départ : idem que pour "Course sur circuit".
-  \item Hauteur départ réf. : idem que pour "Course sur circuit".
-  \item Hauteur min. arrivée : idem que pour "Course sur circuit".
-  \item Ref. hauteur arrivée : idem que pour "Course sur circuit".
-   \item Règles de départ/arrivée FAI : idem que pour "Course sur circuit".
- \end{itemize}
-\item Insignes/records FAI :  ce type de circuit ne permet que des départs, arrivées et points de virage de type FAI. Ceci pour l'obtention d'insigne/record FAI. Permet l'utilisation de l'altitude d'arrivée FAI lors du calcul du plan d'arrivée.
-\end{itemize}
-
-Une fois sélectionnés, les points de virage peuvent être déplacés avec les flèches Haut et Bas. Le point de virage de début est automatiquement un point de type "Départ" et celui du bas le point de type "arrivée".
-
-Quand le type de circuit a été choisi et que les règles de départ et d'arrivée ont été définies, il faut préciser les propriétés des points de virage. Les points de virage peuvent être aussi des points de départ ou d'arrivée.\\
-Ceci se fait en appuyant sur  \button{Pts de virage} du gestionnaire de circuit. Choisir un des points de virage de la liste (si il y en a de définis). Appuyer 2 fois sur le point de virage désiré ou un fois puis sur \button{Editer le point} le panel d'édition des points de virage apparait. En appuyant sur  \button{Modifier le type} on obtient la liste des différents types de points de virage possibles. Un rappel de la définition du point et de sa spécificité se trouve en bas de la liste. 
-L'interface utilisateur permet de comprendre rapidement la signification des différents boutons disponibles ainsi que des champs pouvant être modifiés. Un schémas représentant le type de point choisi facilite aussi la compréhension. 
-
-\section{Démarrage du circuit}\label{sec:demarrage-circuit}
-
-Une fois que les waypoints sont bien définis (départ, points de virage et leur particularités, arrivée) ainsi que les règles du circuit, il reste deux choses à faire:
-\begin{itemize}
-\item  \button{Enregistrer} pour sauvegarder le circuit en lui donnant un nom, ou si vous venez de modifier un circuit existant, lui donner le même nom ou un autre nom si vous souhaitez en créer un nouveau à partir d'un existant.
-\item Appuyer sur l'onglet  \button{Fermer} du gestionnaire de circuit. Suivant les créations, modifications faites auparavant, les dialogues qui apparaissent sont différents. Vous pouvez annuler les modifications afin de garder le circuit en cours. Vous pouvez choisir  \button{Vol} pour utiliser le circuit que vous venez de modifier ou de créer. Le bouton  \button{Annuler les modifications} permet d'oublier les modifications faites et de continuer avec le circuit qui était chargé précédemment. Si vous avez crée un nouveau circuit et que vous l'avez enregistré, il n'est pas perdu, vous le retrouverez plus tard dans la liste des circuits: par contre le circuit qui était en cours, lui, a bien été effacé de la mémoire de travail. Il vous faut donc recharger le circuit que vous souhaitez réaliser.
- \end{itemize}
-
-Si vous avez appuyé sur  \button{Vol} le circuit est démarré (actif).
-
-\section{Déroulement et faux départs}\label{sec:advanc-rest-tasks}
-A chaque instant un point de virage est désigné comme point de virage "actif" : c'est celui vers lequel on se dirige, le prochain dans la liste des waypoints du circuit. Le waypoint actif est utilisé pour les calculs et l'affichage des informations de navigation. Le pilote est dirigé vers le point "actif" : voir le chapitre ~\ref{cha:infobox}.
-
-En vol, l'affichage de la direction à suivre pour atteindre le point actif, est permanent.
-
-L'altitude requise pour terminer le circuit est calculée à partir de la position du planeur par rapport au waypoint actif jusqu'au point d'arrivée.
-
-Le passage au point de virage suivant est automatique ou manuel. 
-Pour les points de départ en compétition, le passage de ligne se fait plus d'une fois, avant ouverture de ligne ou pour ruser (ou essayer de ruser) et faire un faux départ.
-
-\tip Conseil pour les  utilisateurs de XCSoar en compétition: lors du véritable passage de ligne, il faut vérifier que  \bmenug{Nav. 1}\blink\bmenug{Point de virage précédent} n'est pas sélectionnable et que après avoir passé la ligne, le message de passage de ligne est bien apparu avec \bmenug{Info. 3}\blink\bmenug{Répéter message} ou bien en vérifiant votre objectif avec \bmenug{Nav. 1}\blink\bmenug{Circuit}\blink\bmenug{Objectif} ou plus simplement en vérifiant que la flèche vous donnant le cap à suivre ne pointe pas vers la ligne de départ!!
- Pour repasser la ligne après un ou plusieurs passages (faux départ, passages multiples avant l'ouverture de ligne) le bouton \bmenug{Nav. 1}\blink\bmenug{Point de virage de départ} doit être utilisé pour que le calculateur vous donne la route à suivre vers la ligne de départ.\\
-Les points de virages des AAT sont des cas spéciaux qui demandent d'être "armé" avant que calculateur passe au point de virage suivant car c'est le pilote qui décide si il a bien été passé. Pour tous les autres types de waypoint le passage au point suivant est automatique, une fois qu'il a bien été passé.
-
-Pour des circuits "touristiques" il n'y a donc pas d'interaction nécessaire lors du passage des points de virage. Quand un point de virage est atteint, le système passe automatiquement au suivant. Manuellement, le pilote peut toujours avancer ou reculer le point de virage "actif" avec \bmenug{Nav. 1}\blink\bmenug{Point de virage précédent} et \bmenug{Nav. 1}\blink\bmenug{Point de virage suivant} respectivement.
-
-Le contenu des boutons \bmenug{Point de virage précédent}  et \bmenug{Point de virage suivant} est dynamique: ils indiquent l'action qui sera faite si on appuie dessus.
-
-Pour les points de virage nécessitant une "préparation" ou un "armement", \bmenug{Nav. 1}\blink\bmenug{Point de virage suivant}  devient \bmenug{Préparer virage} si le point de virage n'est pas "préparé"; si il est préparé, alors il se change en \bmenug{Point de virage suivant} permettant l'avance manuelle.   \bmenug{Nav. 1}\blink\bmenug{Point de virage précédent} devient  \bmenug{Désarmer le virage} si le waypoint est préparé; si il n'est pas préparé, alors il devient \bmenug{Point de virage précédent} permettant le passage manuel au point précédent.
-
-Des messages apparaissent pour les points nécessitant une préparation, une fois dans la zone définie pour le point actif. Ce sont des rappels au pilote de préparer le passage du waypoint quand il est prêt à passer au point de virage suivant. 
-
-Pour les PC et Pocket PC avec écran tactile uniquement, l'utilisateur peut passer manuellement d'un point à l'autre en sélectionnant le waypoint {\InfoBox}  et en appuyant sur les touches Haut et Bas.
-
-Voir ~\ref{sec:task-rules} pour plus de détails concernant le passage des zones ou points de virages. 
-
-Si le pilote passe les points de virage manuellement, cela ne signifie pas qu'il les a passé réellement! Mais cette fonctionnalité est utile pour forcer un nouveau départ ou bien pour sauter un point de virage quand on ne fait pas de compétition.
-
-\tip Le départ des circuit peut être redémarré simplement en revenant manuellement au point de départ.
-
-Dans tous les types de circuit, si le planeur entre plusieurs fois dans la zone de départ ou bien passe plusieurs fois la ligne de départ, le circuit est redémarré automatiquement.
-
-En sélectionnant \button{Point de virage précédent} le système "oubli" que ce point de virage a déjà été passé: le gestionnaire de circuit s'attend alors à devoir repasser par ce point de virage pour pouvoir terminer le circuit comme défini au départ. Le pilote peut toujours appuyer sur \button{Point de virage suivant} pour définir le prochain point de virage.
-
-Un message associé d'une alarme sonore apparait à chaque passage au point suivant. Les messages sont affichés quand le système avance automatiquement au prochain point  ou en mode "préparé manuel, quand le waypoint est préparé et le planeur dans le secteur du point de virage:
-\begin{itemize}
-\item[Démarrage circuit]  apparait au passage de la ligne ou à la sortie du secteur de départ: le nombre de passages n'est pas limité.
-\item[Dans le secteur,]  armer point suivant quand vous voulez! Ce message apparait à l'entrée de la zone de point de virage. La préparation se fait juste avant de passer le point de virage: c'est simplement pour déclarer au système que le point est passé et que l'on se dirige vers le point de virage suivant. Si le pilote souhaite allonger sont passage dans la zone et qu'il a déjà "préparé" le waypoint, il lui suffit de revenir en arrière en appuyant sur \button{Désarmer} si il a préparé le point suivant ou bien \button{Point de virage précédent}.
-\item[Circuit terminé]  Ce message apparait lors du passage de la ligne ou du cylindre d'arrivée. 
-\end{itemize}
-
-\section{Règles du circuit}\label{sec:task-rules}
-
-Un certain nombre de règles peuvent être utilisées lors de la définition du circuit, dont les triangles FAI et les AAT. Un grand nombre des paramètres de ces règles peuvent être ajustés.
-
-Les lignes de départ et d'arrivée sont centrées sur leur point de virage associé. Les lignes sont respectivement perpendiculaires aux routes de départ et d'arrivée.
-
-Les secteurs de points de virage des épreuves FAI sont prédéfinis, ainsi que ceux de la BGA britannique et les secteurs DAeC Allemands.
-
-Les conditions de validité du départ dépendent du type de départ :
-\begin{description}
-\item[Cylindre de départ] Quand le planeur quitte la surface du cercle.
-\item[Ligne de départ] Quand le planeur passe la ligne en direction du premier point de virage.
-\end{description}
-
-Les conditions de validité de passage des points de virage intermédiaires dépendent de leur type :
-\begin{description}
-\item[Quadrant FAI] Passage valable quand le planeur passe au-dessus d'une zone définie par un quart de cercle de 20 km de rayon, centré sur le point de virage et centré sur la bissectrice de l'angle.
-\item[Secteur DAeC] Règles Allemandes. Passage valable si dans un cercle de 0.5 Km autour du point de virage et dans un secteur de 90° centré sur la bissectrice de l'angle et de 10 Km de rayon.
-\item[Cylindre de point de virage]  Passage valable si survol de la surface au sol du cylindre centré sur le point de virage.
-\item[Épreuve de type BGA]  Règles britanniques. Passage valable si dans un cercle de 0.5 Km autour du point de virage et dans un secteur de 90° centré sur la bissectrice de l'angle et de 20 Km de rayon.
-\item[Épreuve de type BGA avec options] Règles britanniques. Passage valable si dans un cercle de 0.5 Km autour du point de virage et dans un secteur de 180° centré sur la bissectrice de l'angle et de 10 Km de rayon.
-\item[Zone secteur de cercle (AAT)]  Passage valable si dans un cercle, ou portion de cercle, centré sur le point de virage. 
-\item[Zone secteur de couronne (AAT)]  Passage valable si dans une couronne, ou portion de couronne, centré sur le point de virage. 
-\end{description}
-
-La validité du passage du point d'arrivée dépend de son type :
-\begin{description}
-\item[Cylindre d'arrivée] Passage valable quand le planeur entre dans une zone cylindrique centrée sur le point d'arrivée.
-\item[Ligne d'arrivée] Quand le planeur passe un segment centré sur le point d'arrivée et perpendiculaire à la route reliant le dernier point de virage et le point d'arrivée.
-\end{description}
-
-
-Les règles de compétition peuvent être définies dans un fichier de profil et distribué à une équipe ou à l'ensemble des\tip concurrents pour qu'ils puissent concourir avec les mêmes règles!
-
-Des règles spécifiques aux points de départ et d'arrivée peuvent aussi être définies. Une hauteur maxi au-dessus du sol et une vitesse maxi pour les départs. Une hauteur minimum au-dessus du sol pour les arrivées. Ces paramètres sont modifiables dans le menu\config{taskrules}  \bmenug{Config. 2}\blink\bmenug{Options Système} dans l'onglet "Valeurs par défaut du circuit".
-
-Pour les circuits qui ne sont pas des AAT, une option es t disponible afin de paramétrer l'altitude minimum d'arrivée, en accord avec les règles FAI. Dans ce cas, l'altitude d'arrivée peut être inférieure à celle de départ de moins de 1000 mètres au maximum.
-
-\section{Points de départ mulitiples}\label{sec:alternate-starts}
-
-Les points de départ multiples ne sont plus supportés par XCSoar 6.0 mais pourraient être de retour dans de prochaines versions.
-%Alternate start points are skipped for XCsoar 6.0, but
-%will potentially brought back in a next release. 
-
-%\todonum[inline]{Alternate start points are skipped for XCsoar 6.0, but
-%will potentially brought back in a next release. This section can thus be
-%treated as obsolete. }
-
-%The task system allows alternate start sectors to be defined.
-  
-%To use it, on the task edit page, select the start point, then turn on
-%the `Alternate start points' property.  Then press the button 'Edit
-%alternate start points'.
-
-%\begin{center}
-%\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-startpoint2.png}
-%\end{center}
-  
-%  To edit the start points, move the cursor to an item in the list on
-%  the right side of the dialog, and press enter.  This opens the
-%  waypoint selector dialog, to allow selection of the waypoint.  This
-%  process can be repeated several times for several alternate start
-%  waypoints.  Press the `clear' button to clear all alternate start
-%  points.
-
-%  Each start sector is fixed to the same type (line/cylinder) and size
-%  (start radius) defined in the task waypoint page.
-
-%  Note that the task start point should be included in the alternate
-%  start location list. 
-
-%\begin{center}
-%\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-startpoint3.png}
-%\end{center}
-
-%\begin{center}
-%\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-startpoint4.png}
-%\end{center}
-
-%  In flight, any time you cross a start line (or exit a start
-%  cylinder), this will start the task at that particular alternate
-%  start.  Task statistics are recalculated for the start sector you
-%  last flew through.  All alternate start sectors are shown on the
-%  map.  You can re-start simply by flying through the start sector
-%  again or another start sector.  This automatic re-start will only
-%  happen if the active waypoint is the first turnpoint after the
-%  start, or the start itself.
-
-%  When the waypoint advance mode is `Arm' or `Arm Start', then a start
-%  is only recognised by XCSoar if the advance trigger is armed.
-
-%  If desired, alternate start points may be selected as the active
-%  waypoint by selecting the previous waypoint.  Continuing to select
-%  the previous waypoint will cycle through all alternate start points.
-
-\section{Circuit et ergonomie}\label{sec:task-calc-dial}
-L'ergonomie de l'interface permet au pilote de visualiser rapidement les effets, sur la performance finale, des modifications qu'il lui sont possible d'affecter à deux paramètres.
-
-C'est accessible de plusieurs façons : \gesture{Droite - Bas}
-\begin{itemize}
-\item Par geste sur la carte
-\item A partir du menu 
-\begin{quote}
-\bmenug{Nav. 1}\blink\bmenug{Circuit}
-\end{quote}
-\item Depuis le menu \bmenug{Info 1}\blink\bmenug{Analyses} et en appuyant sur \button{Calc. circuit}
-\end{itemize}
+En vol, le calculateur de circuit peut aussi être atteint par les pages d'analyses.
+Dans les pages Circuit, Vario.\ et Vitesse circuit, un bouton \bmenuw{Calc.\ circuit} s'affiche,
+et permet d'accéder directement à la fenêtre du calculateur de circuit.
 
 \begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-taskcalc3.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-taskcalculator.png}
 \end{center}
 
 \begin{description}
-\item[Durée Circuit AAT]  Durée imposée du circuit.
-\item[Temps circuit estimé]  Temps total estimé pour terminer le circuit en tenant compte du calage MC.
-\item[Distance circuit]  Distance restante pour terminer le circuit.
-\item[Entrer MacCready]  Permet au pilote de faire varier le calage MacCready et d'observer son influence sur le temps estimé du circuit.
-\item[Durée AAT]  Pour les épreuves AAT. Représente la performance de votre vol basée sur les données de l'épreuve, par rapport au plus grand et plus petits circuits possibles. -100 \% représente le plus petit circuit possible, 0 \% le circuit nominal et +100 \% le plus grand circuit.
-\item[Vitesse restante]  Cette vitesse est la vitesse estimée pour le reste du circuit tenant compte du calage MC donné.
-\item[MacCready réalisé]  This field displays the achieved MacCready value.
-\item[Vitesse réalisée]  Calage MacCready réalisé.
-\item[Finesse Transition]  100 \% indique une performance égale au calage MC. Plus de 100 \% pour un performance supérieure à celle du calage MC (ex : sous des rues de nuage) et mois de 100 \% si vous êtes souvent à côtés de vos pompes... Ce paramètre évalue la performance du vol en croisière en fonction de l'historique du vol avec le calage MC. Les calculs démarrent à partir du passage de la ligne de départ.
+\item[Durée circuit estimée] Ce champ affiche la durée totale estimée
+du circuit en le terminant avec le calage MacCready choisi.
+\item[Durée restante] %TODO: To define
+\item[Distance circuit] Ce champ affiche la distance totale du circuit.
+\item[Distance restante] Ce champ affiche la distance restante pour terminer le circuit.
+\item[Vitesse estimée] Ce champ affiche la vitesse estimée pour le
+reste du circuit considérant le calage MacCready choisi.
+\item[Vitesse Moyenne] %TODO: To define
+\item[Entrer MacCready] Permet au pilote de faire varier le calage MacCready et d'observer son influence sur la durée estimée du circuit.
+\item[Distance AAT] Permet à l'utilisateur d'ajuster les objectifs dans les zones AAT
+restantes, pour voir l'effet que cela a sur la durée estimée du circuit et la longueur du circuit.
+\item[Vitesse restante]
+\item[MacCready réalisé] Ce champ affiche la valeur MacCready réalisée.
+\item[Vitesse réalisée] Ce champ affiche la vitesse réalisée %TODO at the achieved MacCready setting???
+\item[Efficacité en transition] 100~\% indique une performance égale au calage MacCready. Plus de 100~\% indique une performance supérieure à celle du calage MacCready (ex.~: sous des rues de nuage)~; et moins de 100~\% si vous êtes souvent à côtés de vos pompes.
+Cet indice évalue la performance du vol en croisière en fonction de l'historique du vol avec le calage MacCready choisi.
+Les calculs démarrent à partir du passage de la ligne de départ.
 \end{description}
-Regarder la section~\ref{sec:task-speed-estim} pour plus de détails concernant les calculs des vitesses.
+Pour plus de détails sur les calculs de la vitesse du circuit et les MacCready réalisés, allez au paragraphe~\ref{sec:task-speed-estim}.
 
-En fermant la fenêtre la valeur du calage MacCready est utilisée comme calage MC pour les calculs. 
-%On closing the dialog the entered MacCready value is used as the MacCready 
-%setting. If the \button{Cancel} button is pressed, the MacCready setting is 
-%unaffected.
+Lors de la fermeture de la fenêtre, la valeur du MacCready entrée est utilisée comme calage du
+MacCready pour les calculs. Si le bouton \bmenuw{Annuler} est enfoncé, le calage MacCready n'est pas modifié.
 
-Pour les AAT le bouton \button{Objectif} ajuste la distance (en plus ou en moins) de sorte que le temps estimé soit supérieur au temps imparti de 5 minutes maximum. La distance est ajustée en fonction des points objectifs restants. En utilisation standard, tous les objectifs sont réglés sur "Optimisé" ce qui fait que le pilote n'a pas à s'occuper de positionner manuellement les points objectif pour trouver la meilleure distance à parcourir dans le temps imparti. Il peut donc se consacrer à autre chose pendant ce temps.
-%The \button{Target} button, for AAT tasks, adjusts the range
-%(increases or decreases) so that the estimated task time exceeds the
-%assigned task time by less than five minutes.  The range is adjusted
-%target-wise. In typical use, all targets are set to ``auto" that means the pilot 
-%does not have to manually adjust the range to find the course for arrival at 
-%the assigned task time, thereby reducing pilot workload.
+Pour les circuits AAT, le bouton \bmenuw{Objectif} ajuste la distance
+(à la hausse ou à la baisse) de sorte que la durée estimée du circuit soit supérieure de moins de cinq minutes à la durée impartie du circuit. La distance est ajustée en fonction
+des points objectifs restants. Habituellement, tous les objectifs sont réglés sur ``Optimisé'', ce qui fait que le pilote
+n'a pas à s'occuper de repositionner manuellement les points objectifs pour trouver la meilleure distance à parcourir dans le temps imparti, diminuant ainsi la charge de travail du pilote.
+
+\subsection*{Points de virage}
+L'onglet \button{Pts de virage} affiche une liste ordonnée des points de virages du circuit en cours.
+\menulabelr{\bmenuw{Pts de virage}}
+S'il n'y a pas de point de virage dans le circuit, seul
+``Ajouter point de virage'' est affiché.
+En sélectionnant ce menu, le sélecteur de points de virage apparaît
+comme décrit précédemment. Appuyez deux fois sur un point de virage de la liste ajoute ce point de virage au circuit.
+
+
+\subsection*{Gérer}
+Cet onglet permet d'accéder à toutes les opérations nécessaires pour créer de nouveaux circuits ou gérer
+\menulabelr{\bmenuw{Gestion}}les circuits déjà existants.
+Quatre boutons peuvent être sélectionnés~:
+\begin{itemize}
+\item [\bmenuw{Nouveau circuit}] Efface le circuit courant de la mémoire de travail et rétablit 
+les règles par défaut.
+\item [\bmenuw{Déclarer}] Si un enregistreur externe est connecté, ceci permet de
+charger le circuit actif vers l'enregistreur et de le déclarer.
+\item [\bmenuw{Circuits enregistrés}] Affiche la liste des circuits enregistrés, permettant au pilote de charger un circuit précédemment enregistré. Notez que cette action écrasera le circuit
+en cours.
+\item [\bmenuw{Enregistrer}]  Sauvegarde le circuit actif courant.
+En appuyant sur \bmenuw{Enregistrer} un nom de fichier vous sera demandé.
+\end{itemize}
+
+\subsection*{Règles}
+Les champs affichés en appuyant sur \menulabelr{\bmenuw{Règles}} 
+dépendent du type de circuit choisi. En sélectionnant un champ,
+une fenêtre apparaît pour permettre de modifier
+la valeur de cette règle. Les types de circuit sont expliqués en
+détails juste après.
+
+De plus, en appuyant de nouveau sur le bouton \bmenuw{Règles} après qu'il eut déjà été sélectionné permet
+de basculer entre une vue miniature de la carte du circuit et une vue plus grande du circuit.
+
+\section{Types de circuit}
+\xc{} permet actuellement de définir trois différents types de circuits~: course, AAT et insignes/records FAI.\@
+
+Une description sommaire de ces types de circuit est donnée ci-dessous. Cependant ce manuel
+ne paraphrase pas les règles FAI ou celles des types de circuit de concours. Le
+lecteur est encouragé à connaître parfaitement chaque type de circuit en se référant aux règles des compétitions
+et aux règles FAI.\@ Les règles FAI sont disponibles sur \url{http://www.fai.org}. 
+
+\subsection*{Course (course sur circuit)}
+Une course sur circuit implique un passage obligatoire à chaque point de virage défini et dans l'ordre fixé. 
+Le choix de ce type d'épreuve permet de définir les valeurs des champs suivants
+(note~: si l'option ``Règles de départ/arrivée FAI'' est mise à ``On'', alors seule une partie de ces options est disponible)~:
+  \begin{description}
+  \item [Arme départ manuellement] Si mis sur ``On'', des boutons supplémentaires seront dans le menu \bmenug{Nav. 1/2} afin de vous permettre d'\bmenug{Armer le départ} et de \bmenug{Désarmer le départ}, contrôlant ainsi la détection de la condition de départ.
+  \item [Heure d'ouverture du départ] L'heure à laquelle la zone de départ ouvre.
+  \item [Heure de fermeture du départ] L'heure à laquelle la zone de départ ferme.
+  \item [Vitesse max.\ au départ] La vitesse maximale autorisée dans la zone d'observation et au passage de la ligne de départ.
+  Si la vitesse n'est pas limitée, il faut mettre 0~km/h.
+  \item [Hauteur max.\ départ] La hauteur maximale autorisée dans la zone d'observation et au passage de la ligne de départ.
+  C'est une hauteur maximale autorisée pour l'épreuve au-dessus de la hauteur de référence (AGL ou MSL). S'il n'y a pas de limite, il faut mettre 0~m.
+  \item [Réf.\ hauteur départ] Définit la référence pour la hauteur maximale du point de départ~: au-dessus du sol (``AGL'') ou bien au-dessus du niveau moyen de la mer (``MSL'').
+  \item [Hauteur min.\ arrivée] La hauteur minimale de passage au-dessus de la ligne d'arrivée. 
+  C'est une hauteur minimale autorisée pour l'épreuve au-dessus de la hauteur de référence (AGL ou MSL). S'il n'y a pas de limite, il faut mettre 0~m.
+  \item [Ref.\ hauteur arrivée] Définit la référence pour la hauteur minimale du point d'arrivée~: au-dessus du sol (``AGL'') ou bien au-dessus du niveau moyen de la mer (``MSL'').
+  \end{description}
+
+\subsection*{AAT (épreuve de vitesse sur secteurs) et MAT (circuit à secteurs modifiés)}
+C'est un circuit passant par des zones définies (cylindres ou secteurs) qui doit être effectué sur une durée minimale imposée.
+Le choix de ce type d'épreuve permet de définir, en plus des champs définis pour un circuit de type ``Course'' (voir ci-dessus) la valeur du champ suivant~:
+  \begin{description}
+  \item [Durée mini AAT] Durée minimum requise pour l'épreuve.
+  Se référer aux documents officiels pour plus de détails, surtout pour le calcul des pénalités lors de l'arrivée avant la durée minimum impartie.
+ \end{description}
+
+\subsection*{Insignes/records FAI}
+Le choix de ce type d'épreuve permet de définir la valeur du champ suivant~: 
+  \begin{description}
+  \item [Règles de départ/arrivée FAI] Si mis sur ``On'', seuls le mode d'armement et les heures d'ouverture et de fermeture du départ peuvent être paramétrés.
+Si mis sur `Off'', toutes les autres règles de circuits peuvent être modifiées par rapport au FAI normal (voir ci-dessus le type de circuit ``Course''). 
+  \end{description}
+
+Quand le type de circuit a été choisi et que les règles de départ et d'arrivée
+ont été définies comme décrit ci-dessus, il faut préciser les propriétés
+de chaque point de virage du circuit.
+
+Une fois sélectionnés, les points de virage peuvent être déplacés avec les flèches Haut et Bas.
+Le premier point de virage est automatiquement un point de type ``Départ'' et le dernier un point de type ``Arrivée''.
+
+\section{Règle de circuit pour les points de virage}\label{sec:task-rules}
+
+La fenêtre de \bmenuw{points de virage} montre la liste des points de virage du circuit.
+\menulabelr{\bmenuw{Points de virage}} Si aucun point n'est encore défini, cette fenêtre
+affichera une liste vide. Avec \bmenuw{(Ajouter point de virage)}, flèches Haut et Bas, et
+\bmenuw{Pt d'arrivée}, une liste ordonnée de points de virage est créée.
+Un point de virage peut être un point de départ, un point de virage ou un point d'arrivée.
+En appuyant 2~fois sur le point de virage désiré (ou une fois puis sur \button{Éditer le point}) ouvre la fenêtre d'édition des points de virage.
+En appuyant sur \button{Modifier le type} on obtient la liste des différents types de point de virage possibles.
+Un rappel de la définition du point et de sa spécificité est affiché en bas de la liste.
+
+Différentes règles de circuit peuvent être utilisées lors de la définition d'un circuit, dont les triangles FAI habituels et les AAT.\@
+De nombreux détails des règles peuvent être configurés.
+
+Les lignes de départ et d'arrivée sont centrées sur le point de virage associé
+et sont alignées perpendiculairement au point de virage suivant ou précédent,
+selon le cas.
+
+Les secteurs de points de virage
+sont des quadrants de 90~degrés alignés sur la bissectrice des
+points de virage précédent et suivant, comme il est d'usage dans les circuits FAI.\@
+Il est aussi possible de définir des secteurs britanniques (BGA) et allemands (DAeC).
+
+\subsection*{Types de point de départ}
+Les conditions de validité du départ dépendent du type de départ~:
+\begin{description}
+\item[Cylindre de départ] Quand le planeur quitte la surface du cylindre.
+\item[Ligne de départ] Quand le planeur passe la ligne en direction du premier point de virage.
+\end{description}
+
+\subsection*{Types de point de virage}
+Les conditions de validité de passage aux points de virage intermédiaires dépendent de leur type~:
+\begin{description}
+\item[Quadrant FAI] Passage dans la zone définie par un quart de cercle de 20~km de rayon, centré sur le point de virage et orienté sur la bissectrice de l'angle.
+\item[Secteur en trou à clef (secteur DAeC 0,5/10)] Règles allemandes.
+Passage dans un secteur de 90° centré sur la bissectrice de l'angle et de 10~km de rayon.
+Le secteur inclue aussi un cylindre de 500~m de rayon.
+\item[Épreuve de type BGA]  Règles britanniques. Passage dans un secteur de 90° centré sur la bissectrice de l'angle et de 20~km de rayon.
+Le secteur inclue aussi un cylindre de 500~m de rayon.
+\item[Épreuve de type BGA avec option] Règles britanniques. Passage dans un secteur de 180° centré sur la bissectrice de l'angle et de 10~km de rayon.
+Le secteur inclue aussi un cylindre de 500~m de rayon.
+\item[Cylindre de point de virage]  Passage dans un cylindre centré sur le point de virage.
+\item[Quadrant symétrique] Un quadrant symétrique d'un rayon configurable.
+\item[Zone secteur de cylindre (AAT)]  Passage dans un cercle, ou portion de cercle, centré sur le point de virage.
+\item[Zone secteur de couronne (AAT)]  Passage valable si dans une couronne, ou portion de couronne, centré sur le point de virage.
+\end{description}
+
+\subsection*{Types de point d'arrivée}
+La validité du passage du point d'arrivée dépend de son type~:
+\begin{description}
+\item[Quadrant d'arrivée FAI] Un secteur de 90~degrés d'un rayon de un kilomètre. Traverser le bord pour terminer le circuit.
+\item[Ligne d'arrivée] Quand le planeur passe la ligne en direction opposée au dernier point de virage.
+\item[Cylindre d'arrivée] Quand le planeur entre dans la surface du cylindre.
+\end{description}
+
+L'avancée automatique au point suivant est effectuée dès qu'une des conditions est remplie. Pour démarrer un AAT, un circuit mixte, ou un circuit de course, le départ doit être préalablement armé.
+
+\tip{} Les règles de compétition peuvent être définies dans un fichier de profil et distribuées au groupe de pilotes ou personnes définissant les circuits afin qu'ils puissent concourir avec les mêmes règles~!
+
+Des règles supplémentaires pour les points de départ et d'arrivée peuvent aussi être définies~:  pour les départs, une hauteur maximale au-dessus du sol et une vitesse maximale~; pour les arrivées, une hauteur minimale au-dessus du sol. Ces paramètres sont modifiables dans le menu\config{taskrules} \bmenug{Config. 1/3}\blink\bmenug{Système} dans les onglets ``Circuit/Règles'' et ``Circuit/Types de point de virage''.
+Pour les circuits qui ne sont pas des AAT, une option est disponible afin de paramétrer l'altitude minimum d'arrivée, en accord avec les règles FAI.\@ Dans ce cas, l'altitude d'arrivée doit être inférieure de moins de 1000 mètres à celle du départ.
+
+\section{Démarrage du circuit}\label{sec:start-task}
+Une fois que les points de virage (départ, points de virage et leur particularités, arrivée) ainsi que les règles du circuit sont bien définis, il reste deux choses à faire~:
+\begin{itemize}
+\item Dans l'onglet ``Gérer'', appuyer sur \button{Enregistrer} pour sauvegarder le circuit en lui donnant un nom, ou si vous venez de modifier un circuit existant, lui donner le même nom ou un autre nom si vous souhaitez en créer un nouveau à partir de celui préexistant.
+\item Appuyer sur le bouton \button{Fermer} du gestionnaire de circuit.
+Suivant les créations et modifications faites auparavant, les fenêtres qui apparaissent sont différentes.
+Vous pouvez choisir \button{Fermer} pour utiliser le circuit que vous venez de modifier ou de créer.
+Le bouton \button{Annuler les modifications} permet d'oublier les modifications faites et de continuer avec le circuit qui était chargé précédemment.
+Si vous avez créé un nouveau circuit et que vous l'avez enregistré, il n'est pas perdu~: vous le retrouverez plus tard dans la liste des circuits enregistrés.
+Par contre le circuit qui était en cours, lui, a bien été effacé de la mémoire de travail.
+Il vous faut donc recharger le circuit que vous souhaitez réaliser.
+\end{itemize}
+Si vous avez appuyé sur \button{Fermer}, le circuit est démarré (actif).
+
+\section{Déroulement et faux départs}\label{sec:advanc-rest-tasks}
+À chaque instant un point de virage du circuit est désigné comme point de virage
+actif. Le point de virage actif est utilisé pour les calculs et l'affichage des
+informations de navigation (aussi nommé ``Point de virage suivant'' dans la
+description des InfoBoxes du chapitre~\ref{cha:infobox}).
+
+En vol, la direction à suivre pour atteindre le point actif est affichée en permanence.
+
+L'altitude requise pour terminer le circuit est calculée pour la trajectoire partant
+de la position présente du planeur, passant par tous les points de virage et allant
+jusqu'au point d'arrivée.
+
+Le passage au point de virage suivant est automatique ou manuel.
+Le point de départ d'un circuit en compétition, ainsi que les points des circuits AAT, sont particuliers et nécessitent
+que le point du circuit soit ``armé'' avant que le système n'avance automatiquement au prochain point du circuit une fois que ce point a été passé.
+
+Pour les circuits hors-compétition, aucune interaction avec l'utilisateur n'est nécessaire pour
+changer de point sur le circuit --- le système avancera automatiquement lorsque
+chaque point sera atteint. L'utilisateur peut toujours sélectionner manuellement le point suivant ou revenir au point
+précédent en sélectionnant soit le menu \bmenug{Nav. 1/2}\blink\bmenug{Point de virage précédent}, soit le menu \bmenug{Nav. 1/2}\blink\bmenug{Point de virage suivant}.
+
+Les boutons \bmenug{Point de virage précédent} et \bmenug{Point de virage suivant}
+affichent des étiquettes dynamiques indiquant l'action qui sera faite si l'on appuie dessus.
+
+Pour les points de virage nécessitant d'être armé, \bmenug{Point de virage suivant} devient 
+\bmenug{Armer le virage} si le point de virage n'est pas armé et,
+s'il est armé,
+\bmenug{Point de virage suivant}, permettant l'avance manuelle.
+\bmenug{Point de virage précédent} devient \bmenug{Désarmer le virage} si le point de virage est armé,
+et vice-versa. De même, pour les circuits de compétition, ces menus se mettent à jour pour armer
+les points de départ. Si le point de virage suivant est le \bmenug{Point d'arrivée}, l'étiquette
+du menu est adaptée en conséquence.
+
+
+Des messages d'information apparaissent pour les points de virage nécessitant d'être armé une fois
+dans la zone d'observation. Ce sont des rappels au pilote d'armer le point de virage quand il est prêt à passer au point de virage suivant. Pour le départ, une
+alerte signale que le planeur est dans le cylindre de départ ou derrière la ligne de départ, afin de lui rappeler d'armer si nécessaire.
+
+Pour les PC avec écran tactile, l'utilisateur peut
+faire défiler manuellement d'un point à l'autre en sélectionnant le point de virage
+ et en appuyant sur les touches Haut et Bas.
+
+Voir le paragraphe~\ref{sec:task-rules} pour plus de détails concernant les règles des secteurs d'observation.
+
+Si le pilote fait défiler les points de virage manuellement, cela ne signifie pas
+que le planeur les a passé réellement~! Toutefois, cette
+fonctionnalité est utile pour forcer un nouveau départ ou bien pour sauter un point de virage quand
+on est sur un circuit d'agrément.
+
+\tip{} Les circuits peuvent être redémarrés en faisant simplement défiler manuellement
+les points de virage jusqu'au point de départ.
+
+Dans tous les types de circuit, si le planeur rentre à nouveau dans la zone de départ ou bien repasse à 
+nouveau la ligne de départ, le circuit est redémarré automatiquement.
+
+En sélectionnant \button{Point de virage précédent} le système ``oubli'' que ce point
+de virage a déjà été passé~: le gestionnaire de circuit
+s'attend alors à devoir repasser par ce point de virage
+avant de poursuivre le circuit. Le pilote peut toujours appuyer sur \button{Point de virage
+suivant} pour sélectionner le prochain point de virage.
+
+Un message associé à une alarme sonore apparaît à chaque passage au point de virage suivant. Les
+messages sont affichés quand le système avance automatiquement au prochain point
+de virage du circuit ou, en mode ``armé manuellement'', quand le système est armé et que le planeur est dans le secteur du point de virage~:
+\begin{description}
+\item[Démarrage circuit] apparaît au passage de la ligne de départ ou à la sortie du secteur de départ. Cela peut être fait plusieurs fois.
+\item[Point de virage suivant] apparaît quand le planeur est entré dans le secteur
+d'observation du point de virage. Les points de virage avec un objectif variable
+sont passés dès l'appui sur le bouton \button{Armer point de virage}. En cas d'armement en mode manuel, si le
+planeur est passé par le secteur d'observation et en est déjà sorti, appuyer sur ``armer'' suggérera
+au gestionnaire de circuit que le pilote à l'intention de repasser
+ce point de virage.
+\item[Circuit terminé] apparaît lors du passage de la ligne
+ou de l'entrée dans le cylindre d'arrivée. Cela survient en mode manuel comme en mode automatique.
+\end{description}
+
+
+
+\section{Points de départ multiples}\label{sec:alternate-starts}
+
+Le gestionnaire de circuit permet de définir plusieurs secteurs de départ~:
+
+\blink\bmenuw{Points de virage} sélectionne le point de départ, \menulabelr{\bmenug{Nav. 1/2}\blink
+\bmenug{Circuit}}\bmenuw{Éditer le point}\blink\bmenuw{Ajout départs alternatifs}
+
+Dans le gestionnaire de circuit, sur la page d'édition du point de départ, sélectionner le menu the \bmenuw{Activer départs alternatifs}. Un autre écran s'affiche pour définir un point de départ alternatif. Si des points de départs alternatifs
+ont été définis précédemment, l'étiquette \bmenuw{Activer départs alternatifs} est transformée en \bmenuw{Modifier départs alternatifs}. Après avoir sélectionné ``Ajouter départs alternatifs''
+et appuyer sur \bmenuw{Repositionner}, la fenêtre de filtrage ``Sélectionner point de virage'' s'affiche.
+
+Ayant défini plusieurs points de départ alternatifs, la façon de faire avec ``prochain point de virage'' sera reproduite. Avant la détection d'un départ valide et l'ayant armé manuellement, les boutons faisant défiler tous les points de virage afficheront l'étiquette \bmenug{Prochain point de départ}.
+
+En résumé, toutes les étiquettes dynamiques du menu \bmenug{Nav. 1/2} affiche des actions devant être
+effectuées pour sélectionner les points de virage et leurs conditions, soit de manière consécutive, soit en ordre inversé.
+
+
+\section{Abandon/reprise d'un circuit et dégagements}
+
+Si les conditions atmosphériques se dégradent, le pilote peut juger que l'épreuve ne peut être terminée. Dans cette situation, \xc{} vous permet d'``abandonner'' le circuit~; il vous aidera
+ensuite à atteindre un site d'atterrissage sûr. Un circuit peut être annulé de
+différentes façons~: soit en sélectionnant un point de virage et en faisant un ``Aller à'', soit en sélectionnant ``Annuler''. Dans les deux cas, le circuit peut être repris.
+
+\subsection*{Abandon de circuit}\label{sec:taskabort}
+Passer en mode ``Abandon de circuit'' fait entrer \xc{} dans un cas spécial d'arrivée finale.
+\menulabelr{\bmenug{Nav. 2/2}\blink\bmenug{Circuit Abandon}} Pour une discussion sur 
+les modes de vol, aller au paragraphe~\ref{sec:flightmodes}. Dans ce mode de vol,
+l'option de configuration ``Polaire pour zone d'atteinte'' permet de définir si
+le calcul des hauteurs d'arrivée en mode abandon utilisent la valeur du MacCready avant
+l'abandon du circuit ou la calage MacCready de sécurité. \config{reachpolar}
+Par défaut, c'est la valeur de sécurité du MacCready qui est utilisée. Lors du passage en mode abandon, le calage MacCready est celui qui est le plus faible entre MacCready de sécurité et MacCready actuel.
+
+Avec le passage en mode abandon, le circuit sur la campagne est ignoré. Sur la carte, des flèches
+sont dessinées, pointant vers les terrains posables les plus proches,
+assistant le pilote dans sa décision. Comme pendant le reste du vol, le groupe des terrains
+posables proches est mis à jour en permanence. Les flèches et les plus proches terrains posables peuvent changer
+dynamiquement en mode abandon, de telle façon qu'à chaque instant plusieurs options d'atterrissage soient 
+proposées et peuvent être sélectionnées comme point de virage actif\sketch{figures/abort-low.png}. Même si aucun
+terrain posable n'est à portée, les flèches sont dessinées.
+\sketch{figures/abort-low.png} 
+Si les conditions s'améliorent, le circuit peut être ``repris'' en sélectionnant le même
+bouton que celui qui a annulé le circuit, maintenant nommé \bmenug{Circuit Reprendre}. Le point de virage
+qui était actif avant l'abandon du circuit est alors réactivé, ainsi que tous les autres éléments du circuit.
+
+\subsection*{Dégagements}\label{sec:alternates}
+Les terrains de dégagements sont mis à jour tout au long du vol, ce qui permet un bonne conscience
+de la situation en jetant un coup d'œil aux dégagements possibles.\menulabelr{\bmenug{Nav. 1/2}\blink
+\bmenug{Dégagements}} Six options d'atterrissages
+sont considérées. Elles sont filtrées par les critères de configuration de l'``ordre de dégagement''
+(simple, circuit ou base). \config{alternatesmode}.
+Choisir ``Circuit'' ou ``Base'' modifie l'ordre proposé des dégagements en favorisant 
+la direction que vous aviez lorsque vous étiez encore en circuit.
+
+Comme avec toute liste de points de virage, des informations supplémentaires peuvent être affichées en appuyant sur \bmenuw{Détails} avant de décider de son choix. Sélectionner le point de virage de la liste et appuyer sur \bmenuw{Aller à}.
+\sketch{figures/alternates_list.png}
+
+Bien que les éléments de la liste des dégagements suivent des règles différentes, ils ont le même comportement vis-à-vis du circuit en cours. Faire sa sélection dans la liste des dégagements annule le circuit en cours. Une fois que les conditions s'améliorent, la reprise du circuit en utilisant le bouton déjà mentionné.
 
 
 \section{États du circuit}\label{sec:task-status}
 
-Cet ensemble de pages permet d'accéder rapidement aux principales informations concernant le circuit en cours. Elles sont utiles pour avoir une vue générale des données du vol et permettent de libérer des InfoBox pour afficher d'autres paramètres. On y trouve la confirmation de la validité du passage de la ligne de départ et des informations de progression du circuit. On y accède part le menu:
-\begin{quote}
-\bmenug{Info. 2}\blink\bmenug{Etats}
-\end{quote}
+Les fenêtres d'états donnent un aperçu des informations importantes sur le circuit en cours. 
+\gesturespec{ldrdl} Elles sont utiles pour avoir une
+vue générale des données du circuit et permettent de libérer des InfoBoxes pour afficher
+d'autres paramètres. Les fenêtres d'état peut être consultées pour confirmer
+qu'un départ valide a été détecté, mais aussi pour des informations sur le déroulement du circuit. 
+\menulabelr{\bmenug{Info. 2/3}\blink\bmenug{États}}
+Les fenêtres d'état peuvent être accédées par le menu ou en faisant un gauche-bas-droit-bas-gauche (un peu comme un S). Les onglets ``Circuit'' et ``Règles'' sont pertinentes.
 
-L'onglet 'Task' récapitule: la rurée AAT impartie, le temps estimé du circuit, le temps restant, la distance parcourue et la distance restante la vitesse estimée et la vitesse moyenne.\\
-L'onglet 'Rules' donne la validité des points de départ et d'arrivée en accord avec les règles du circuit.
+L'onglet ``Circuit'' affiche en particulier la durée AAT, les distances parcourues et restantes, et les vitesses sur le circuit. 
+L'onglet ``Règles'' donne en particulier la validité des points de départ et d'arrivée selon les règles du circuit.
 \begin{center}
 \begin{tabular}{c c}
-Task & Rules \\
+Circuit & Règles \\
 \includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/status-task.png} &
 \includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/status-rules.png} \\
 \end{tabular}
 \end{center}
 
-\section{Assigned Area Tasks : AAT}\label{sec:aat-tasks}
+\section{AAT (Assigned Area Tasks)}\label{sec:aat-tasks}
 
 \subsection*{Objectifs AAT}
 
-Un {\em Objectif} pour les AAT, est un point dans une zone de virage AAT vers lequel le pilote se dirige pour optimiser son épreuve. Ces objectifs peuvent être déplacés à l'intérieur des zones afin d'ajuster au mieux la distance du circuit par rapport au temps imparti. Les objectifs peuvent être positionnés avant le vol, pendant la préparation du circuit et modifiés en cours d'épreuve.
+Un \emph{objectif} est un point dans une zone de virage AAT vers lequel le pilote
+se dirige. Ces objectifs peuvent être déplacés à l'intérieur des zones AAT afin
+que le pilote ajuste au mieux la distance du circuit. Les objectifs peuvent être positionnés
+avant le vol, pendant la préparation du circuit et modifiés en cours d'épreuve.
 
-Au cours d'un AAT, le calculateur dirige le planeur vers l'objectif. Les statistiques comme la distance au waypoint sont calcules à partir de l'objectif, non pas à partir du point de virage de la zone de l'AAT lui même.
+Au cours d'un AAT, le calculateur dirige le planeur vers l'objectif.
+Les statistiques comme la distance au point de virage sont calculées en se basant sur
+l'objectif, et non sur la base du point de virage de la zone de l'AAT lui-même.
 
-L'avance automatique au prochain point de virage n'est pas déclenchée seulement en entrant dans la zone AAT. Le pilote doit "préparer" le passage au point de virage suivant lui même, manuellement. En faisant cela l'optimiseur de circuit est mis en route afin de relever les coordonnées du point de virage réalisé et mettre à jour les données pour le calcul de l'optimisation du reste du circuit. Voir section ~\ref{sec:advanc-rest-tasks} pour plus de détails.
+L'avance automatique au prochain point de virage n'est pas déclenchée directement
+par l'entrée dans la zone AAT~: le pilote doit ``armer'' manuellement le passage au point de virage
+suivant. En faisant cela, l'optimiseur de circuit est mis en route afin de relever
+les coordonnées de l'objectif réalisé et de mettre à jour l'optimisation
+de l'objectif pour le reste du circuit. Voir paragraphe~\ref{sec:advanc-rest-tasks} pour plus de détails.
 
 \subsection*{Déplacement manuel des objectifs}
-Dans le but de simplifier le positionnement des points objectifs, le paramètre "Durée AAT" permet de connaitre l'amplitude de la longueur du circuit défini par rapport aux distances minimum et maximum possibles. Si ce paramètre affiche 100\% la position des objectifs donne le plus grand circuit possible. Si il affiche ~$-100$\% c'est alors le plus petit circuit possible. 
 
-Une valeur de zéro représente le circuit nominal : pour des zones en forme de secteur, l'objectif se trouve au milieu de la bissectrice, pour des zones cylindriques, il est au centre.
+Dans le but de simplifier la définition des points objectifs, 
+leur position est définie par un paramètre d'amplitude qui détermine à quelle
+distance est l'objectif entre les distances minimale et maximale possibles.  
+Il est exprimé comme un pourcentage. Par exemple, pour une amplitude de 100\%,
+l'objectif est positionné pour avoir le plus grand circuit possible. Avec une amplitude de -100\%, l'objectif est positionné pour avoir le plus petit circuit possible. 
 
-Les objectifs peuvent être déplacés un par un à l'aide du panel \bmenug{Objectif} et des flèches permettant de passer de l'un à l'autre.\\
+Une amplitude nulle donne un circuit de taille nominale~:
+pour des secteurs, l'objectif est
+à mi-distance le long du rayon de la bissectrice~; pour des cylindres, l'objectif est au
+centre du cylindre.
+
+La fenêtre de dialogue du calculateur de circuit (voir paragraphe~\ref{sec:task-calc-dial}) montre
+le pourcentage moyen sur tous les points dans la gamme d'amplitude de l'AAT.\@
+Les objectifs peuvent être modifiés un par un à partir de la fenêtre d'objectif du calculateur de circuit.
 
 \includegraphics[angle=0,width=1.2\linewidth,keepaspectratio='true']{figures/gestion_circuit_00.png}
 
-Dans la fenêtre "Objectif" si la case "Optimisé" est cochée, la position de l'objectif est calculée par l'optimiseur.
 
-\subsection*{Objectifs AAT et calculateur}
 
-Déroulement classique d'une épreuve AAT avec utilisation des objectifs :
+\subsection*{Objectifs AAT et calculateur de circuit}
+
+Les objectifs lors d'une épreuve AAT sont typiquement utilisés comme ceci~:
 \begin{itemize}
-\item entrer les valeurs des paramètres MC, moucherons, ballast, force et direction du vent en utilisant "Options Vol" et "Options Vent".
-\item Définir le circuit avec l'éditeur de circuits.
-\item En se basant sur son jugement et sur son expérience, en fonction de la météo du jour, de sa connaissance de la région, le pilote peut placer un par un les objectifs de chaque zone de virage (\bmenug{Nav. 1}\blink\bmenug{Circuit}\blink\bmenug{Objectif}). Le paramètre ETA permet d'avoir une idée de la durée estimée du vol et de la comparer à la durée impartie de l'épreuve. Le paramètre Delta T permet de contrôler si la variation de position de l'objectif est efficace ou non.
-\item En vol, si les conditions changent et que le calage MC est modifié ou que le vent estimé est modifié, le gestionnaire de circuit peut être ouvert pour vérifier la valeur de la durée estimée du vol.
-\item Si le pilote décide d'allonger ou de réduire le circuit, les objectifs des points de virages restant peuvent être repositionnés à l'aide de l'éditeur de circuit.
+\item entrer les valeurs des paramètres MacCready, moucherons, ballast, force et direction du vent pour le vol en utilisant les fenêtres \menulabelr{\bmenug{Config. 1/3}\blink\bmenug{Vol}} et \menulabelr{\bmenug{Config. 1/3}\blink\bmenug{Vent}}.
+\item Définir le circuit comme habituellement avec l'éditeur de circuits.
+\item En se basant sur son expérience et son avis sur la météo du jour,
+et si certaines zones sont probablement plus ou moins difficiles que
+d'autres, les objectifs peuvent être définis individuellement pour chaque point de virage
+dans la fenêtre d'objectif. Le paramètre ETA permet d'avoir une idée de la durée estimée du vol et de la comparer à
+la durée impartie de l'épreuve. Le paramètre Delta~T permet de contrôler si le circuit
+envisagé est efficace et suffisamment long.
+\item En vol, si les conditions changent, comme l'adoption d'un autre calage MacCready ou une modification du vent estimé,
+le gestionnaire de circuit peut être ouvert pour vérifier la durée estimée du vol, et de la comparer à la durée minimale.
+\item Si le pilote décide d'allonger ou de raccourcir le circuit, tous les objectifs
+restant peuvent être repositionnés à l'aide de le gestionnaire de circuit.
 \end{itemize}
 
-Le calculateur aide ainsi le pilote à répondre à la question "que se passera-t-il si ?", par exemple :
+Le gestionnaire de circuit aide ainsi le pilote à répondre à la
+question ``que se passera-t-il si~?'', telle que~:
 \begin{itemize}
-\item Que se passera-t-il si les conditions s'améliorent? Le calage MC peut-être augmenté et le pilote peut voir si il y a assez de distance restante pour agrandir son circuit dans les limites imposées. 
-\item Que se passera-t-il si les contritions se dégradent? Le calage MC peut-être réduit et le pilote peut voir si il y a assez d'espace dans les zones pour diminuer son circuit dans les limites imposées tout en passant la ligne d'arrivée juste après la durée imposée.
-\item Que se passe-t-il si je quitte la zone AAT maintenant? En appuyant sur \button{Préparer virage} la prise en compte de la position courante par l'optimiseur de circuit est forcée et les paramètres calculés sont mis à jour comme si on avait viré. La position des objectifs suivant peut-être visualisée avec \bmenug{Objectif}.
+\item Que se passera-t-il si les conditions s'améliorent~? Le calage MacCready peut être
+augmenté et le pilote peut voir s'il dispose d'assez de marge sur les objectifs pour
+agrandir son circuit. 
+\item Que se passera-t-il si les conditions se dégradent~? Le calage MacCready peut être
+réduit et le pilote peut voir de combien le circuit peut être raccourci tout en
+finissant le circuit après la durée minimale imposée.
+\item Que se passe-t-il si je quitte la zone AAT maintenant~? En appuyant sur \button{Armer le
+virage}, la prise en compte de la position actuelle par l'optimiseur de circuit est imposée. Le repositionnement des objectifs suivants peut être visualisé dans la fenêtre du gestionnaire de circuit.
 \end{itemize}
 
 \subsection*{Position de l'objectif}
 
-XCSoar analyse en permanence le chemin du planeur dans les zones AAT pour calculer les waypoints théoriques donnant le score maximum pour la distance parcourue effective. En interne, le programme bouge les points de virage des zones passées qui sont alors les points de virage optimum. 
-%XCSoar continually analyses the path of the glider through AAT sectors
-%to find the points in previous AAT sectors through which the achieved
-%scoreable distance will be greatest.  Internally, the program moves
-%the targets for previous AAT sectors, which are then the optimal
-%targets.
+\xc{} analyse en permanence le chemin du planeur dans les zones AAT pour calculer les points théoriques donnant le score maximum pour la distance parcourue effective. En interne, le programme déplace les objectifs des zones passées qui sont alors les objectifs optimaux. 
 
-Dans certains cas l'objectif de la zone AAT active peut-être déplacé automatiquement :
+Dans certains cas l'objectif de la zone AAT active peut être déplacé automatiquement~:
 \begin{itemize}
-\item Quand à l'intérieur de la zone, l'objectif est projeté sur la droite passant par l'objectif de la zone précédente et la position actuelle du planeur. Ceci permet au pilote de continuer sur la même route et d'avoir un objectif optimisé sur sa route.  
-%When inside an AAT sector, the target in that sector is moved to
-%to a line projecting from the previous sector's target through the
-%aircraft, at the same distance from the previous sector's target to
-%the target prior to entering the sector.  The effect of this is to
-%allow pilots to choose to enter an AAT sector in a different direction
-%or offset from the direct line from the previous target to the current
-%target.
-\item Quand le planeur est dans la zone AAT, que la distance au dernier objectif est supérieure à la distance au prochain objectif, alors l'objectif est projeté au devant du planeur sur la droite reliant le dernier objectif et la position actuelle du planeur. La trace n'est plus montrée mais la flèche de direction optimale ponite dans la direction de cette droite.
-%While the aircraft is in the AAT sector and the distance from the
-%previous target to the aircraft is greater than the distance from the
-%previous target to the current target, the target is moved further
-%along the projected line from the previous target to the aircraft,
-%just beyond the aircraft.  Hence, the black track line will not be
-%visible but the blue optimal track arrow will point along this
-%projected direction.
+\item Quand à l'intérieur de la zone, l'objectif de cette zone est projeté sur la droite passant par l'objectif de la zone précédente et la position actuelle du planeur. Ceci permet au pilote de choisir d'entrer dans une zone AAT avec un autre cap ou avec un décalage par rapport à la ligne partant de l'objectif précédent et allant vers l'objectif actuel.
+
+\item Quand le planeur est dans la zone AAT et que la distance à l'objectif précédent est supérieure à la distance au prochain objectif, l'objectif est alors projeté au devant du planeur sur la droite reliant le dernier objectif et la position actuelle du planeur. La trace n'est plus montrée mais la flèche bleue de direction optimale pointe dans la direction de cette droite.
 \end{itemize}
 
-Les figures suivantes illustrent ces positionnement d'objectif et montrent comment XCSoar calcule le chemin théorique maximum rapportant le plus de points.
-%A worked example is provided in the following figures to illustrate
-%how targets move during a flight and to show how XCSoar determines the
-%maximum scored path.
+A titre d'exemple, les figures suivantes illustrent comment le positionnement des objectifs évoluent au cours du vol et montrent comment \xc{} calcule le chemin théorique rapportant le plus de points.
 
 \begin{maxipage}
 \begin{center}
@@ -524,20 +663,20 @@ Les figures suivantes illustrent ces positionnement d'objectif et montrent comme
 \toprule
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat01.png} & 
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat02.png} \\
-{\em Hors zone} & {\em Dans la zone} \\
-Objectif (-20\%) sur la bissectrice & Objectif positionné sur la route \\
+\emph{Hors zone} & \emph{Dans la zone} \\
+Objectif (-20\%) sur la bissectrice & Objectif projeté sur la route \\
 
 \midrule
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat03.png} & 
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat04.png} \\
-{\em Distance AAT diminuée par le pilote} & {\em Distance AAT augmentée par le pilote} \\
+\emph{Distance AAT diminuée par le pilote} & \emph{Distance AAT augmentée par le pilote} \\
 Objectif (-80\%) projeté sur la route & Objectif (80\%) projeté sur la route \\
 
 \midrule
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat05.png} & 
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat06.png} \\
-{\em Analyses (page circuit)} & {\em Prochain waypoint} \\
-Chemin encadrant l'objectif  & "Préparer virage'' appuyé \\
+\emph{Analyses (page circuit)} & \emph{Prochain point de virage} \\
+Chemin encadrant l'objectif actif & ``Armer virage'' appuyé \\
 \bottomrule
 \end{longtable}
 \end{center}
@@ -549,18 +688,18 @@ Chemin encadrant l'objectif  & "Préparer virage'' appuyé \\
 \toprule
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat07.png} & 
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat08.png} \\
-{\em Analyses (page circuit)} & {\em En approche de la prochaine zone} \\
+\emph{Analyses (page circuit)} & \emph{En approche de la prochaine zone} \\
 Meilleur objectif calculé & Objectif (60\%) sur la bissectrice \\
 
 \midrule
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat09.png} & 
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat11.png} \\
-{\em Dans la zone} & {\em Prochain waypoint} \\
-Objectif (60\%) projeté sur la route & "Préparer virage'' appuyé \\
+\emph{Dans la zone} & \emph{Prochain point de virage} \\
+Objectif (60\%) projeté sur la route & ``Armer virage'' appuyé \\
 
 \midrule
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat12.png} &  \\
-{\em Analyses (page circuit)} &  \\
+\emph{Analyses (page circuit)} &  \\
 Meilleurs objectifs calculés &  \\
 
 \bottomrule
@@ -570,145 +709,158 @@ Meilleurs objectifs calculés &  \\
 
 \section{OnLine Contest}
 
-Le menu Analyses contient la page "OLC Plus" pouvant être utilisée afin de voir le parcours optimal et le nombre de points estimés. Les paramètres de configuration \config{taskrules} (Valeurs par défaut du circuit) permettent de choisir l'ensemble de règles à appliquer pour l'optimisation OLC.
+La fenêtre d'analyse contient la page ``OLC Plus'' pouvant être
+utilisée afin de voir le parcours optimal et le score estimé. Les paramètres de configuration \config{taskrules}
+(page des règles de circuit) permettent de choisir l'ensemble des règles à appliquer pour l'optimisation OLC.\@
 
-L'optimisation se fait en permanence et peut être consultée à volonté. Les pages Analyses affichent une vue du parcours optimisé, la distance et le score. Une infoBox donne aussi les valeurs instantanées OLC de distance et de score.
+L'optimisation se fait en permanence en tâche de fond et peut être consultée à volonté. La page d'analyse affiche une vue du parcours
+optimisé, la distance et le score. Une InfoBoxe permet aussi d'avoir les valeurs instantanées OLC de distance et de score.
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/shot-olc.png}
 \end{center}
 
-En vol OLC, les circuits AAT ou non AAT peuvent peuvent encore être utilisés pour la navigation. En vol, le calculateur optimise le vol en accord avec les règles OLC choisies.
+En vol OLC, les circuits AAT ou non AAT peuvent encore être utilisés pour la navigation. En vol, le calculateur optimise le vol en accord avec les règles OLC choisies.
 
-Dans la page Analyses OLC la trace du planeur est représentée par une mince ligne verte tandis que le parcours optimal est représenté par une ligne rouge pointillée épaisse.
+Dans la page ``Analyses OLC'' la trace du planeur est représentée par une mince ligne verte tandis que le parcours optimal est représenté par une ligne rouge pointillée épaisse.
 
-Si en finale le vol se poursuit, le score augmente et le résultat affiché est "en cours". Un ligne bleue montre le parcours projeté pour amélioré les résultats. Pour les type Sprint ou OLC classiques ce parcours est allongé dans la direction du waypoint courant. Pour les type OLC triangle, le parcours s'étend dans la direction permettant d'avoir le plus grand triangle possible.  \todonum{still true?}
+Le score et la distance optimale calculée sont approximatifs.
 
-Le résultat et la distance optimale sont approximatifs.
-
-Une fois au sol les résultats ne sont plus mis à jour.
+Une fois au sol, les résultats ne sont plus mis à jour.
 
 
-\section{Abandon/reprise et dégagements}
+\section{Enregistreur}\label{sec:logger}
 
-Si les conditions atmosphériques se dégradent, le pilote peut juger que l'épreuve ne peut être terminée. Dans cette situation il est possible d'abandonner l'épreuve et XCSoar aide le pilote à trouver un terrain posabe en sécurité.
+Un enregistreur de vol (``logger'') conforme aux règles IGC permet d'enregistrer les vols.
 
-\subsection*{Abandon du circuit}\label{sec:taskabort}
-Le circuit est "abandonné" à la suite d'une de ces actions :
+Avec \xc{} on peut accéder à plusieurs enregistreurs~:
 \begin{itemize}
-\item Appui sur  \bmenug{Nav. 2}\blink\bmenug{Circuit Abandon}
-\item Choix d'un terrain de dégagement dans la liste  \gesture{Bas - Gauche}
- \bmenug{Nav. 1}\blink\bmenug{Dégagmts}
-\item Ou en sélectionnant une cible sur la carte et en démarrant un circuit "Aller à".
-\end{itemize}
-
-Une fois abandonné, tout type de circuit en cours est ignoré. La liste des points posables est ordonnée par ordre de proximité.
-
-Le paramètre des options systèmes, "Polaire pour zone d'atteinte", permet de définir si le calcul des hauteurs d'arrivée en mode abandon utilise le calage MC juste avant l'abandon du circuit ou le calage MC de sécurité. \config{reachpolar} Par défaut le calage MC de sécurité est utilisé. Lors du passage en mode abandon, le calage MC utilisé est celui qui est le plus faible entre MC de sécurité et MC courant.
-
-Les 10 points de virages les plus proches sont toujours affichés, même si aucun n'est posable.
-
-Le point de virage actif, et en fait la liste des points posables les plus proches, est dynamique en mode abandon afin de présenter à tout moment plusieurs options d'atterrissage et que chaque option soit sélectionnable pour devenir un point de virage actif.\sketch{figures/abort-low.png}
-
-Si les conditions météo s'améliorent le circuit peut être "repris" (\bmenug{Nav. 2}\blink\bmenug{Circuit Reprendre}). Le point de virage actif, avant l'abandon, est restauré ainsi que tous les détails du circuit qui était en cours. 
-
-\subsection*{Dégagements} \label{sec:alternates}
-Les terrains de dégagement sont mis à jour tout au long du vol. A la différence du mode "abandon", le mode "dégagements" permet d'avoir en permanence un œil sur les terrains posables les plus proches. Une liste de 6 terrains posables est actualisée. Ils sont triés à l'aide du paramètre 'Ordre des dégagements' (Simple, Circuit et Base). \config{alternatesmode} L'un de ces paramètres doit être en accord avec vos préférences.
-
-La liste inclue le distance au point de dégagement, l'altitude pour l'atteindre et sa fréquence radio. Il y a aussi 2 infoBoxes dédiées aux 2 premiers éléments de la liste, de bons candidats à mettre dans une page d'infoBoxes supplémentaire.\sketch{figures/alternates_list.png}
-
-Bien que les éléments de la liste des dégagements suivent des règles de fonctionnement différentes, ils ont le même comportement vis à vis du circuit en cours. Le choix d'un terrain de dégagement arrête le circuit en cours. Si les conditions s'améliorent le circuit peut être repris en utilisant le même bouton.
-
-\section{Enregistrement}\label{sec:logger}
-
-Un enregistreur de vol (logger) conforme aux règles IGC permet d'enregistrer les vols.
-
-Avec XCSoar on peut accéder à plusieurs loggers :
-\begin{itemize}
-\item Un logger basé sur un logiciel. Toutes les versions de XCSoar proposent cette fonction. L'enregistreur est conforme aux standards IGC mais il n'est pas certifié.
-\item Par exemple la version PRO d'Altair comporte un logger certifié IGC. XCSoar communique avec le logger comme avec tout autre appareil externe.
-\item XCSoar peut aussi envoyer des déclarations de circuit vers des loggers externes. Pour que se soit possible il faut que l'appareil fasse partie de ceux de la liste des périphériques supportés (Configuration + Périph.). \config{comdevices}
-\item  Pour certains parmi les nombreux loggers externes, XCSoar peut télécharger des fichiers IGC. Ceci est particulièrement pratique pour les loggers qui ne sont pas facilement démontables du planeur ou pour envoyer son fichier de vol si XCSoar est utilisé sur un smartphone.
+\item Un enregistreur basé sur un logiciel. Toutes les versions d'\xc{} proposent cette fonction. L'enregistreur est conforme à la norme IGC mais il n'est pas certifié.
+\item \xc{} peut aussi envoyer des déclarations de circuit vers des enregistreurs externes.
+Pour que ce soit possible, l'enregistreur doit être sélectionné dans la partie ``Périphériques'' des paramètres de \config{comdevices} configuration.
+\item  Pour une partie des nombreux enregistreurs externes, \xc{} peut télécharger des fichiers IGC.\@
+Ceci est particulièrement pratique pour les enregistreurs qui ne sont pas facilement démontables du planeur.
 \end{itemize}
 
 \subsection*{Configuration}
-Pour une matrice complète des fonctionnalités des loggers supportés, voir ~\ref{sec:supported-varios}.
-La configuration est décrite en détails dans ~\ref{conf:logger}. Les détails du fichier de log se trouvent dans ~\ref{sec:logfiles}.
+Pour une matrice complète des fonctionnalités des enregistreurs supportés, voir paragraphe~\ref{sec:supported-varios}.
+La configuration est décrite en détails dans le paragraphe~\ref{conf:logger}. Les détails du fichier d'enregistrement se trouvent dans le paragraphe~\ref{sec:logfiles}.
 
 \subsection*{Activation de l'enregistreur}
-La mise en route et l'arrêt de l'enregistreur peuvent être manuels ou automatiques. Pour les para-pentes XCSoar fourni seulement le démarrage automatique. Ainsi, une vitesse sol faible ou une hauteur faible au-dessus du relief ne stopperont pas l'enregistrement du vol. Si vous choisissez l'enregistrement automatique 'départ seulement' il faudra arrêter manuellement. Pour démarrer / arrêter manuellement, utiliser le menu :
+La mise en route et l'arrêt de l'enregistreur peuvent être manuels ou automatiques. Pour les parapentes,
+\xc{} fournit seulement le démarrage automatique. Ainsi, une vitesse
+sol faible ou une hauteur faible au-dessus du relief ne stopperont pas l'enregistrement du vol.
+Si vous choisissez l'enregistrement automatique ``départ seulement'', il faudra l'arrêter manuellement.
+Pour démarrer (ou arrêter) manuellement, utiliser le menu~:
 \sketch{figures/logger-startdeclare.png}
 \begin{quote}
-\bmenug{Config. 2}\blink\bmenug{Enregistr. Démarrer}
-\bmenug{Config. 2}\blink\bmenug{Enregistr. Arrêter}
+\bmenug{Config. 3/3}\blink\bmenut{Enregistr.}{Démarrer}
 \end{quote}
 
-Quand le logger interne de XCSoar est en fonctionnement, un petit bouton rond vert, en bas et à droite, s'allume et s'éteint une fois par seconde.
+Quand l'enregistreur interne d'\xc{} est en fonctionnement, un petit ``bouton'' rond vert en 
+bas et à droite de la carte clignote une fois par seconde.
 
-Par défaut XCSoar est configuré en mode de démarrage et arrêt automatiques, l'enregistrement débute quand XCSoar détecte le début du vol et il s'arrête à l'atterrissage. La confirmation de démarrage d'enregistrement avec déclaration n'a lieu qu'en mode manuel : si le démarrage est automatique, la déclaration du circuit est aussi automatique. En mode simulation le logger ne peut être démarré automatiquement.
+Par défaut, \xc{} est configuré en mode de démarrage et arrêt automatiques.
+L'enregistrement débute quand \xc{} détecte le début du vol et il s'arrête à l'atterrissage. La confirmation du démarrage
+de l'enregistrement avec déclaration n'a lieu qu'en mode manuel. Si
+le démarrage est automatique, la déclaration du circuit est aussi automatique.
+En mode simulation, l'enregistreur ne peut être démarré automatiquement.
 
-Si un circuit a été déclaré, alors toute tentative de modification du circuit fait apparaitre un message de confirmation qui invaliderai la déclaration du circuit. Ceci dans le but de rendre plus difficile de modifier involontairement le circuit, ce qui conduirai à un circuit déclaré invalide.
+Si un circuit a été déclaré, alors toute tentative de modification du
+circuit fait apparaître un message d'avertissement demandant une confirmation
+de l'annulation et l'invalidation de la déclaration du circuit. Ceci a pour but de
+rendre plus difficile une modification involontaire du circuit qui conduirai à un circuit
+déclaré invalide.
 
-Le logger de XCSoar, quand il démarre, vérifie si il y a au moins 500kB d'espace libre pour stocker le circuit. Si il y a moins de 500kB de libre XCSoar élimine les plus anciens fichiers IGC. Il n'y a pas de message de confirmation. \warning
+L'enregistreur d'\xc, quand il démarre, vérifie s’il y a au moins 500~kO d'espace
+libre dans le système de fichiers. S'il y en a moins, \xc{} éliminera
+automatiquement les fichiers IGC les plus anciens, jusqu'à disposer de 500~kO. Il n'y a pas de message de confirmation avant d'effectuer cette opération. \warning{}
 
-Le logger interne de XCSoar enregistre en permanence les 60 secondes passées. Ce qui fait qu'au décollage (automatique ou manuel) 60 secondes sont enregistrées avant le démarrage du logger. Le logger enregistre ainsi correctement la totalité du décollage.
+L'enregistreur interne d'\xc{} met des données dans un tampon mémoire de façon qu'au démarrage
+(automatique et manuel) au moins 60~secondes de données antérieures soient enregistrées. Ainsi, la totalité du décollage est correctement
+enregistré par \xc. 
 
 \subsection*{Rejouer un enregistrement}\label{sec:logger-replay}
-Les vols enregistrés au format IGC par XCSoar ou d'autres loggers peuvent être rejoués. On y accède par :
+Les vols enregistrés au format IGC par \xc{} ou d'autres enregistreurs peuvent être rejoués. La fenêtre de relecture de l'enregistreur
+est accessible par~:
 \begin{quote}
-\bmenug{Config. 2}\blink\bmenug{Rejouer}
+\bmenug{Config. 2/3}\blink\bmenug{Rejouer}
 \end{quote}
 \sketch{figures/loggerreplay.png}
 
-Le mot "REPLAY" apparait en bas à gauche de l'écran et le programme se comporte comme si le GPS  recevait des informations de mises à jour.
-Pour commencer à rejouer un vol, il faut choisir le fichier IGC à charger et ensuite appuyer sur \button{Démarrer} puis \button{Fermer}. La vitesse de défilement du vol peut être modifiée en modifiant le champ "Taux". Pour mettre en pause, mettre la valeur de "Taux" à zéro. Des valeurs de Taux élevées peuvent conduire à des valeurs dégradées de l'estimation du vent et autres fonctions de statistiques/analyses.
+Au cours d'une relecture, le mot ``REPLAY'' s'affiche en bas à gauche de
+l'écran et le programme se comporte comme si le GPS  recevait des informations
+d'actualisation. La fenêtre de relecture de l'enregistreur n'a pas besoin d'être
+ouverte pendant une relecture.
+
+Pour commencer à rejouer un vol, il faut commencer par choisir le fichier à charger, puis appuyer sur
+\button{Démarrer}. La vitesse de défilement du vol peut être modifiée en
+modifiant le champ ``Taux''. Pour mettre en pause,
+mettre la valeur de ``Taux'' à zéro. Des valeurs de taux élevées peuvent conduire à  dégrader
+l'estimation du vent et d'autres fonctions de statistiques/analyses.
 
 Pour arrêter de rejouer le vol, appuyer sur \button{Arrêter}.
-Lorsqu'un vol est rejoué, le fait d'appuyer sur \button{Démarrer} redémarre le vol à son début.
+Lorsqu'un vol est rejoué, le fait de rappuyer sur \button{Démarrer} redémarre
+le vol à son début.
 
-\tip Il est recommandé de redémarrer l'appareil avant de voler, quand un fichier IGC a été rejoué, afin de resetter les paramètres de statistiques internes de XCSoar.
+\tip{} Quand un fichier de vol a été rejoué, il est recommandé de redémarrer
+l'appareil avant de voler, afin de s'assurer que les paramètres de
+statistiques internes d'\xc{} soient réinitialisés.
 
-Quand on utilise XCSoar en mode FLY il n'est pas possible de rejouer un vol IGC si le GPS détecte que l'appareil est en mouvement.
+Quand on utilise \xc{} en mode VOL, il n'est pas possible de rejouer un vol
+enregistré si le GPS détecte que l'appareil est en mouvement.
 
-Les fichiers IGC doivent avoir des intervalles de mesures assez réduits : 6 secondes ou moins sont des valeurs correctes pour rejouer les vols.
+La relectur des fichiers de vol fonctionne mieux si l'intervalle entre mesures est inférieur ou égal à 6~secondes.
 
-
-\subsection*{logger d'erreur}\label{sec:raw-logger}
-Pour la faciliter la recherche de solution à des bugs du logiciel XCSoar il y a un enregistreur "brut". Si vous pouvez reproduire un comportement anormal du logiciel, il faut utiliser cet enregistreur. Démarrer l'enregistreur brut puis reproduisez le "bug" et arrêter l'enregistreur brut. Pour générer le fichier à envoyer aux développeurs de XCSoar :
+\subsection*{Enregistreur d'erreur}\label{sec:raw-logger}
+Pour la faciliter la recherche de solution à des bugs d'\xc,
+il y a un ``enregistreur brut''. Si vous pouvez reproduire un comportement anormal d'\xc, il faut activer cet enregistreur en faisant~:
 \begin{quote}
-\bmenug{Config. 3}\blink\bmenug{Logger brut}
+\bmenug{Config. 3}\blink\bmenug{Enregistreur brut}
 \end{quote}
-Pour corriger un bug, les développeurs ont besoin d'une description détaillée du problème et d'un fichier de traces comme celui généré par ce logger brut. Celui-ci permet d'accélérer énormément l'analyse de la cause du problème et donc de trouver sa solution et livrer rapidement une nouvelle version corrigée.
+Pour corriger un bug, les développeurs apprécieront une description détaillée du problème incluant un fichier de l'enregistreur brut. Celui-ci permet d'accélérer énormément l'analyse de la cause du problème et donc de résoudre l'erreur.
 
-\section{Analyses du vol} \label{sec:analysis-climb}
+\section{Analyse du vol}\label{sec:analysis-climb}
 
-Les pages Analyses sont très utiles pour planifier et gérer les vols sur la campagne. On y accède par le menu : 
- \gesture{Haut - Droite - Bas}
+Les pages d'analyse sont très utiles pour planifier et gérer
+les vols sur la campagne. On y accède par le menu~: \gesture{Haut - Droite - Bas}
 \begin{quote}
-\bmenug{Info.}\blink\bmenug{Analyses}
+\bmenug{Info. 1/3}\blink\bmenug{Analyses}
 \end{quote}
 
-Plusieurs pages sont particulièrement intéressante :
+Plusieurs pages sont particulièrement intéressantes~:
 \begin{description}
-\item[Barographe]  Présente un graphique de l'altitude au cours du vol. Les statistiques sont exploitées pour évaluer la bande de travail (moyenne de la base et du sommet des ascendances) et pour donner une valeur estimée de la variation de plafond à court terme. La base et le plafond moyens des ascendances sont représentés par des lignes sur le graphe. 
+\item[Barographe] Présente un graphique de l'altitude au cours du vol.
+Les statistiques sont exploitées pour évaluer la bande de travail en thermique (moyenne
+de la base et du sommet des ascendances) et pour estimer la variation de plafond au
+cours du temps. La base et le plafond des ascendances sont représentés par des lignes sur le graphe. 
 
-Le bouton 'Paramètres' ouvre directement la page de configuration des paramètres du vol. Les valeurs des ballast, des moucherons, du QNH et de la température maximum peuvent être modifiées.
+Le bouton \button{Paramètres} ouvre directement la page de configuration des paramètres du vol, permettant de modifier les valeurs des ballast, des moucherons, du QNH et de la température maximum.
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-barograph.png}
 \end{center}
 
-\item[Historique vario]
-montre sous forme de graphique à barres la moyenne de chaque ascendance. Les statistiques sont utilisées pour calculer la moyenne générale et sa variation au cours du vol. La valeur du calage MC courant est affichée par une ligne rouge épaisse, la variation de la moyenne des ascendances par une ligne bleue.
-Le bouton "Calc. circuit" permet d'ouvrir directement la page principale du gestionnaire de circuit et permet de faire varier le calage MC.
+\item[Vario]
+Montre sous forme d'un graphique à barres la moyenne de chaque
+ascendance. Les statistiques sont utilisées pour calculer la moyenne générale
+des ascendances et pour estimer comment cette moyenne évolue au cours du temps. La
+valeur actuelle du calage MacCready  est représentée par un tireté rouge
+épais, et la tendance du taux de montée par une ligne bleue.
+
+Le bouton \button{Calc.\ circuit} ouvre directement la page principale du gestionnaire de circuit et permet d'ajuster, par exemple, le calage MacCready.
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-climb.png}
 \end{center}
 
 \item[Circuit]
-Cette page montre le parcours intégral du vol. Le circuit est représenté par une ligne verte épaisse en pointillé. Les zones AAT sont ombrées. Pour les circuits AAT le chemin restant depuis le planeur jusqu'au points de virages restants, est en pointillé rouge. Le parcours réalisé est représenté par une fine ligne continue verte.
-  Le bouton 'Calc. circuit' ouvre directement le gestionnaire de circuit et permet de modifier le calage MC ou la longueur du circuit.
+Cette page montre le parcours intégral du vol. Le circuit
+est représenté par un tireté vert épais, les zones AAT étant ombrées. Pour les circuits
+AAT, le chemin restant depuis le planeur jusqu'aux points de virage restants
+est en rouge. Le parcours réalisé est représenté par une fine ligne continue verte.
+
+Le bouton \button{Calc.\ circuit} ouvre directement le gestionnaire de circuit et permet de modifier le calage MacCready et la longueur du circuit AAT.\@
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-task.png}
@@ -716,12 +868,10 @@ Cette page montre le parcours intégral du vol. Le circuit est représenté par 
 
 \end{description}
 
-\section{Le coucher de soleil}
+\section{Heure et levée/coucher de soleil}
 
-L'heure du coucher du soleil est consultable dans le panel "Times"  sous \bmenug{Info. 2}\blink\bmenug{Etats}. Notez que les conditions atmosphériques locales et l'environnement propre au terrain peuvent conduire à une visibilité très médiocre avant l'heure calculée du coucher de soleil.
-Pour les PDA, l'heure d'été est paramétrée par le système d'exploitation du PDA. Pour Altair, le décalage de l'heure UTC, doit être réglé manuellement dans le panneau de configuration
+L'heure de levée et de coucher du soleil est consultable dans la fenêtre d'états du vol (voir paragraphe~\ref{sec:time-status}). Notez que les conditions atmosphériques locales et l'environnement propre au terrain peuvent conduire à une visibilité très médiocre avant l'heure calculée du coucher de soleil.
 
- \bmenug{Config. 2}\blink\bmenug{Système}\blink\bmenug{Configuration}\blink\bmenug{Heure}.
+Pour les PDA, l'heure d'été est paramétrée par le système d'exploitation du PDA.\@
 
-Si l'heure d'arrivée prévue du circuit est après le coucher du soleil calculé, un message d'avertissement est affiché. 
-
+Si l'heure d'arrivée prévue au dernier point du circuit est après le coucher du soleil, un message d'avertissement est affiché.

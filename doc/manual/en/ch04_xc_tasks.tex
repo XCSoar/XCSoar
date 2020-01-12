@@ -1,3 +1,6 @@
+% !TeX encoding = utf8
+% !TeX spellcheck = en
+
 \chapter{Cross Country Tasks}\label{cha:tasks}
 
 XCSoar provides a full task management system, in which tasks can be
@@ -46,9 +49,9 @@ You can edit tasks in several ways.  Some methods are more useful for
 editing prior to flight, and others allow tasks to be modified whilst
 in flight for casual cross-country touring.  Tasks can be saved to
 files and reloaded later, and can be transferred between any XCSoar
-platform (Android, Windows, Linux, ...).
+platform (Android, Windows, Linux\textellipsis).
 
-\tip It is also possible to save a `default' task and have this task loaded
+\tip{} It is also possible to save a `default' task and have this task loaded
 automatically upon start-up of XCSoar.  One application of this is to
 set up a default task with one waypoint being the home --- this means
 that XCSoar is then programmed for final glide back to home, which is
@@ -77,7 +80,7 @@ The main ways of setting tasks are the following:
 Loading a task from file may be useful in competition or casual
 cross-country flying in groups, as one person can distribute the task
 file to others, thereby saving effort on editing the task severalfold.
-\tip
+\tip{}
 If no task is present at startup, a task is created automatically,
 containing one waypoint takeoff as ``goto home''.
 
@@ -132,9 +135,11 @@ The waypoint details dialogue contains two major pages (accessed via the
 details of the waypoint they will by shown on extra pages.
 
 \subsection*{Waypoint details}\label{sec:waypointdetails}
-This page contains text describing the waypoint's location, radio frequency and 
-runway information (if this information is in the waypoint file) elevation, 
-local daylight time, bearing and distance to the waypoint, and the altitude required 
+This page contains text giving the name of the waypoint,
+the waypoint's GPS coordinates, elevation, radio frequency and 
+runway information (if this information is in the waypoint file), 
+local daylight time, bearing and distance to the waypoint, and the altitude 
+differences required 
 to reach the waypoint as described below. In addition, there is a button 
 \bmenuw{GoTo} to directly initiate
 navigating to this waypoint. The button cancels the current task. 
@@ -147,28 +152,33 @@ difference (additional
 altitude required to reach the waypoint at the safety height) for
 the corresponding waypoint:
 \begin{description}
-\item[Alt diff MC 0] Altitude difference at MC setting of 0
+\item[Alt diff MC 0] Altitude difference at MC setting of~0
 \item[Alt diff MC safety] Altitude difference at the abort/safety MacCready 
-  setting (see \ref{sec:safety-factor})
+  setting (see~\ref{sec:safety-factor})
 \item[Alt diff MC current] Altitude difference at the current MacCready setting
 \end{description}
 
 From the main Waypoint Info screen, you can access the second page by using the 
 \bmenuw{$>$} and \bmenuw{$<$} buttons in the bottom left corner of the page.
+Depending of the type and number of details available for a waypoint,
+other pages could be available.
+
 \subsection*{Task actions menu}  
 This page contains a column of buttons allowing various actions to be performed:
 \begin{description}
-\item[\bmenuw{Replace in task}] replaces the active waypoint in the task with 
+\item[\button{Replace in task}] replaces the active waypoint in the task with 
   the selected waypoint.
-\item[\bmenuw{Insert in task}] inserts the selected waypoint before the active 
-  waypoint in
-  the task.
-\item[\bmenuw{Append to task}] adds the selected waypoint to the end of the task.
-\item[\bmenuw{Remove from task}] removes the selected waypoint from the task.  
+\item[\button{Insert in task}] inserts the selected waypoint before the active 
+  waypoint in the task.
+\item[\button{Append to task}] adds the selected waypoint to the end of the task.
+\item[\button{Remove from task}] removes the selected waypoint from the task.  
   Note that this option is only visible if the selected waypoint is included in 
   the active task.
-\item[\bmenuw{Set as new home}] sets the waypoint as the home airfield.
-\item[\bmenuw{Pan to waypoint}] switches to pan mode and pans to that waypoint.
+\item[\button{Set as new home}] sets the waypoint as the home airfield.
+\item[\button{Pan to waypoint}] switches to pan mode and pans to that waypoint.
+\item[\button{Set Active Frequency}] %TODO To define
+\item[\button{Set Standby Frequency}] %TODO To define
+\item[\button{Edit}] allows to change the various attributes of the selected waypoint
 \end{description}
 
 It is a good idea to set your home waypoint from the waypoint details
@@ -180,6 +190,7 @@ starts in the centre of the terrain map.
 This page may contain relevant text from the en-route supplement about
 the airfield, including runways, radio frequencies, traffic patterns,
 contacts.
+See Section~\ref{sec:airfield-details}.
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-waypointdetails1.png}
 \end{center}
@@ -190,7 +201,7 @@ This page shows a satellite image of the waypoint.
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-waypointdetails2.pdf}
 \end{center}
-How to set up the detailed waypoint information read section \ref{sec:airfield-details}
+How to set up the detailed waypoint information read Section~\ref{sec:airfield-details}.
 
 \section{Waypoint selector dialogue}\label{sec:waypoint-selector-dialog}
 
@@ -209,12 +220,12 @@ individually or not at all.
   aircraft.
 \item[Direction] Filters out waypoints that are not in a specified direction 
   from the aircraft. 
-  An additional special direction ``HDG(0°)'' filters waypoints within 30
+  An additional special direction ``HDG(xx°)'' (``HDG'' stands for ``heading'') filters waypoints within 30
   degrees to either side of the heading of the glider.  This allows the pilot 
   to point the glider at a group of waypoints and quickly find them.
 \item[Type] Filters out waypoints that are not of the specified type
-(Landable point, Airport or Turnpoint) or that appear in the specified File~1 or
-File~2 (primary or secondary waypoint file respectively).
+(Landable point, Airport, Turnpoint, etc.) or that appear in the specified File~1 or
+File~2 (primary or secondary waypoint file respectively), or in recently-used files.
 \end{description}
 When filtering by name and type, the list of matching waypoints is
 sorted by name. When (in addition) filtering by distance or direction,
@@ -234,8 +245,6 @@ use it brings up the waypoint details dialogue for the selected
 waypoint.
 
 \section{Task manager}\label{sec:task-manager-dialog}
-\begin{it}  The task manager has undergone significant redesign compared with 
-earlier versions of XCSoar.\end{it}
 \gesturespec{rd}
 
 The task manager is used to edit, view, load, save to file, and declare cross
@@ -262,10 +271,13 @@ that directly changes to the Task Calculator screen.
 \end{center}
 
 \begin{description}
-%\item[Assigned task time]  This field displays the assigned task time.
 \item[Estimated task time]  This field displays the estimated total time 
   on task to complete the task at the provided MacCready setting.
-\item[Task distance]  This field displays the task distance remaining.
+\item[Remaining task time]  This field displays the time remaining to complete the task.
+\item[Task distance]  This field displays the total task distance.
+\item[Remaining distance]  This field displays the remaining distance to complete the task.
+\item[Speed estimated]  This field displays the estimated speed  for the remaining of the task considering the provided MacCready setting.
+\item[Speed average]  %TODO: To define
 \item[Set MacCready]  Allows the user to adjust the MacCready value and 
   see the effect it has on the estimated task time.
 \item[AAT range]  Allows the user to adjust the targets within the remaining 
@@ -273,10 +285,10 @@ that directly changes to the Task Calculator screen.
 \item[Speed remaining]  This field displays the estimated speed for the
   remainder of the task at the provided MacCready setting.
 \item[Achieved MacCready]  This field displays the achieved MacCready value.
-\item[Achieved speed]  This field displays the achieved speed % at the achieved MacCready setting???
-\item[Cruise efficiency]  100 indicates perfect MacCready performance, greater 
-than 100 indicates better than MacCready performance is achieved through flying
-in streets. Less than 100 is appropriate if you fly considerably off-track. This 
+\item[Achieved speed]  This field displays the achieved speed %TODO at the achieved MacCready setting???
+\item[Cruise efficiency]  100~\% indicates perfect MacCready performance, greater 
+than 100~\% indicates better than MacCready performance is achieved through flying
+in streets. Less than 100~\% is appropriate if you fly considerably off-track. This 
 value estimates your cruise efficiency according to the current flight history 
 with the set MC value. Calculation begins after task is started.
 \end{description}
@@ -341,7 +353,9 @@ or FAI rules, which are available at \url{http://www.fai.org}.
 \subsection*{Racing}
 (also known as an ``assigned task'').  The racing task involves flight
 around each specified turnpoint in the specified order.  Selecting the racing task 
-type allows the pilot to enter the following parameters.
+type allows the pilot to enter the following parameters
+(note that if the option
+``FAI start/arrival tasks'' is ``On'', only part of these options is available)~:
   \begin{description}
   \item [Arm start manually] If set to ``On'', some extra buttons are presented 
   in order to let you \bmenug{Arm start} as well as \bmenug{Disarm start} in 
@@ -349,44 +363,46 @@ type allows the pilot to enter the following parameters.
   \item [Start open time] This is the time when the start zone opens.
   \item [Start close time] This is the time when the start zone closes.
   \item [Start max.\ speed] This is the maximum speed allowed in the start observation
-    zone.  This should be set to 0 if there is no limit.
+    zone.  This should be set to~0 if there is no limit.
   \item [Start max.\ height] This is the maximum height above the start height
-    reference (AGL or MSL) at which a task can be started.  This  should be set to 
-    0 for no limit.
+    reference (AGL or MSL) at which a task can be started.  This  should be set to~0
+    for no limit.
   \item [Start height ref.] This specifies whether the maximum start height is 
     referenced to ground level of the start point (``AGL'') or Mean Sea Level (``MSL'')
   \item [Finish min.\ height] This is the minimum height based on the finish
-    reference (AGL or MSL) at which a task can be finished.  This should be set to 
-    0 for no limit.
+    reference (AGL or MSL) at which a task can be finished.  This should be set
+    to~0 for no limit.
   \item [Finish height ref.] This specifies whether the minimum finish height 
     is referenced to ground level of the finish point (``AGL'') or Mean Sea Level (``MSL'')
-% \item [FAI start/finish rules] If enabled, this task type has no max.\ start height
-%   or max.\ start speed.  Finish height reference is set to AGL and finish height
-%   is 1000m below the start height \todonum[inline]{Is this description correct?}
   \end{description}
-  
+
 \subsection*{Assigned area task (AAT) and Modified area task (MAT)}
-(also known as ``Turn Area Task,''or TAT).  This is a task through assigned
+(also known as ``Turn Area Task'', or TAT).  This is a task through assigned
 areas (restricted to cylinder or sector observation zones).  A minimum task time 
-applies.  Rules options for this task type include:
+applies.  
+Rules options for this task type include:
   \begin{description}
   \item [AAT min.\ time]  This is the required minimum time for the task.  Refer
     to contest rules or consult an expert for penalties associated with finishing 
-    prior to the minimum time.  The time in this option is given in minutes.
-  \item [other rules] All other rules stay the same as in case of task type 
+    prior to the minimum time.
+  \item [Other rules] All other rules stay the same as in case of task type 
     ``racing''.
   \end{description}
 
 
 \subsection*{FAI badges/records}
+The selection of this type of task allows to define the value of the following field: 
   \begin{description}
-  \item [FAI start/finish rules] If set to ``On'', only start times might be set. 
+  \item [FAI start/finish rules] If set to ``On'', only the type of start, and the start and end times might be set. 
   If set to ``Off'', all other racing task rules might be altered from the FAI standard.
   \end{description}
 
 Once the appropriate task type has been selected and start and finish rules 
 have been defined as described above, it is necessary to define the properties 
 of each waypoint in the task.  
+
+Once selected, waypoints can be moved with the Up and Down arrows.
+The first waypoing is automatically set as a start point, and the last as an arrival point.
 
 \section{Turn Points' task rules}\label{sec:task-rules}
 
@@ -408,7 +424,7 @@ Starting and finishing lines are centred on their associated waypoint
 and aligned perpendicular to the next and previous waypoints
 respectively.
 
-Sector turn-points are 90 degree segments aligned to the bisection of
+Sector turn-points are 90-degree segments aligned to the bisection of
 the previous and next waypoints, as commonly used in FAI tasks.
 There is also support for British BGA, and German DAeC sectors.
 
@@ -425,26 +441,27 @@ The conditions to be met for a valid turnpoint pass depend on its
 \begin{description}
 \item[FAI Sector] When the glider has entered the observation zone (OZ), defined 
 by a segment and radial distance from the waypoint.  The segment is
-defined by a 90 degree arc centred about the bisector of inbound and
-outbound legs, with a distance of 20 km.
+defined by a 90-degree arc centred about the bisector of inbound and
+outbound legs, with a distance of 20~km.
 \item[Keyhole Sector (DAeC 0.5/10 sector)] When the glider has entered the
 observation zone, defined by a segment and radial distance from the waypoint.  The segment is
-defined by a 90 degree arc centred about the bisector of inbound and
-outbound legs, with a distance of 10 km.  The observation zone also includes
-a cylinder of 500 m.
-\item[Turnpoint Cylinder]  When the glider has entered the observation zone
-defined by a radial distance from the waypoint.
+defined by a 90~degree arc centred about the bisector of inbound and
+outbound legs, with a distance of 10~km.  The observation zone also includes
+a cylinder of 500~m.
 \item[BGA Fixed Course Sector]  When the glider has entered the
 observation zone defined by a segment and radial distance from the
-waypoint. The segment is defined by a 90 degree arc centred about the
-bisector of inbound and outbound legs, with a distance of 20 km.
-The observation zone also includes a cylinder of 500 m (British rules).
+waypoint. The segment is defined by a 90-degree arc centred about the
+bisector of inbound and outbound legs, with a distance of 20~km.
+The observation zone also includes a cylinder of 500~m (British rules).
 \item[BGA Enhanced Option Fixed Course Sector]  When the glider has entered the
 observation zone defined by a segment and radial distance from the
-waypoint. The segment is defined by a 180 degree arc centred about the
-bisector of inbound and outbound legs, with a distance of 10 km.
-The observation zone also includes a cylinder of 500 m (British rules).
-\item[Area Cylinder (AAT)]  and
+waypoint. The segment is defined by a 180-degree arc centred about the
+bisector of inbound and outbound legs, with a distance of 10~km.
+The observation zone also includes a cylinder of 500~m (British rules).
+\item[Turnpoint Cylinder]  When the glider has entered the observation zone
+defined by a radial distance from the waypoint.
+\item[Symmetric quadrant] A symmetric quadrant with a custom radius.
+\item[Area Cylinder (AAT)] %TODO To define
 \item[Area Sector (AAT)]  When the glider has entered the observation zone
 defined by the radial distance from the waypoint, and segment for sector areas.
 \end{description}
@@ -452,14 +469,15 @@ defined by the radial distance from the waypoint, and segment for sector areas.
 \subsection*{Finish point types}
 Task completion depends on the finish type:
 \begin{description}
-\item[Finish Cylinder] When the glider enters the cylinder area.
-\item[Finish Line] When the glider crosses the finish line.
+\item[FAI finish quadrant] A 90~degree sector with a radius of one kilometer. Cross edge to finish.
+\item[Finish line] When the glider crosses the finish line.
+\item[Finish cylinder] When the glider enters the cylinder area.
 \end{description}
 
 Automatic advancement is triggered whenever a condition is met. To start an AAT,
 mixed task, or Racing task the start has to be armed before. 
 
-\tip Competition rules may be defined in a profile file for
+\tip{} Competition rules may be defined in a profile file for
 distribution to a group of pilots or task-setters, so all competitors
 are playing by the same rules!
 
@@ -467,15 +485,26 @@ Additional task rules for valid starts and finishes may also be
 specified.  Starts may have a defined maximum altitude above ground,
 and a maximum speed.  Finishes may have a minimum altitude above
 ground.  These parameters are defined in the page ``Default Task Rules'' in
-the configuration \config{taskrules} settings.
-
+the configuration \config{taskrules} settings in 
+\bmenug{Config. 1/3}\blink\bmenug{System} in the panels ``Task Defaults/Task Rules'' and ``Task Defaults/Turnpoint Types''.
 For non-AAT tasks, an option is available to set the minimum finish
 altitude according to the FAI rule, whereby the minimum finish
-altitude is above 1000 meters below the start altitude.
+altitude is above 1000~meters below the start altitude.
 
 
-%Need to add a section describing how to start the task%
-
+\section{Start a task}\label{sec:start-task}
+One the waypoints (start, turn points with their special features, finish) and task rules defined, there are two things to do:
+\begin{itemize}
+\item In the panel ``Manage'', press on \button{Save} to save the task by giving it a name. If you have just modified an existing task, you can either give it the same or give it another name (to create a new task based on an already-existing one).
+\item Press on the item \button{Close} of the task manager.
+After the creations and changes done, the displayed windows may differ.
+You can choose between \button{Close} to use the task you have just modified or created.
+The button \button{Revert Changes} allows to discard the changes and continue with the task that was previously loaded.
+If you have created and saved a new task, it will not be most: you could find it later on in you list of saved tasks.
+However, the activated task would have been erased from the working memory.
+You will have to reload the task that you wish to do.
+\end{itemize}
+Si you push on \button{Close}, the task is started (activated).
 
 \section{Advancing and restarting tasks}\label{sec:advanc-rest-tasks}
 At all times one waypoint in the task is designated as the active
@@ -520,9 +549,9 @@ pilot is ready to advance to the next waypoint. For starting, a
 warning is given that the glider is in the start cylinder or behind
 the start line, as a reminder to ``arm'' if necessary.
 
-For PC and Pocket PC with touchscreen versions only, the user may
+For PC with touchscreen, the user may
 manually cycle through the waypoints by highlighting the waypoint
-{\InfoBox} and by pushing the up or down cursor key.
+and by pushing the up or down cursor key.
 
 See Section~\ref{sec:task-rules} for details on observation rules.
 
@@ -531,7 +560,7 @@ that the glider has successfully passed the waypoint!  However, this
 facility is useful to force a task restart or to skip a waypoint when
 flying a casual cross-country task.
 
-\tip Tasks can be restarted simply by manually cycling back through the
+\tip{} Tasks can be restarted simply by manually cycling back through the
 waypoints to the start.
 
 In all modes, if the glider re-enters the start zone or crosses the
@@ -562,13 +591,6 @@ aircraft is in sector:
 
 
 \section{Alternate starts}\label{sec:alternate-starts}
-
-%Alternate start points are skipped for XCsoar 6.0, but
-%will potentially brought back in a next release. 
-
-%\todonum[inline]{Alternate start points are skipped for XCsoar 6.0, but
-%will potentially brought back in a next release. This section can thus be
-%treated as obsolete. }
 
 The task system allows alternate start sectors to be defined:
 
@@ -638,7 +660,7 @@ command or by invoking the abort mode. In either case, the ordered task might be
 
 \subsection*{Task Abort}\label{sec:taskabort}
 Invoking the abort mode forces XCSoar to enter a special case of the final glide mode. \menulabelr{\bmenug{Nav 2/2}\blink\bmenug{Task Abort}} For a discussion on 
-flight modes refer to section \ref{sec:flightmodes}. In this flight mode
+flight modes refer to Section~\ref{sec:flightmodes}. In this flight mode
 the configuration option `reach polar' determines whether
 waypoint arrival heights in abort mode uses the MacCready value prior
 to aborting the task, or if the safety MacCready value is used. \config{reachpolar}
@@ -659,7 +681,7 @@ menu button that aborted the task, now denoting \bmenug{Resume Task}. The active
 waypoint, prior to aborting the task, is then restored along with all the other 
 task details.
 
-\subsection*{Alternates} \label{sec:alternates}
+\subsection*{Alternates}\label{sec:alternates}
 Alternates are maintained throughout the flight, reflecting good airmenship by 
 always keeping an eye on possible alternates.\menulabelr{\bmenug{Nav 1/2}\blink
 \bmenug{Alternates}} Six landing 
@@ -704,7 +726,7 @@ Task & Rules \\
 
 \subsection*{AAT targets}
 
-A {\em target} is a point within an AAT area that the pilot intends to
+A \emph{target} is a point within an AAT area that the pilot intends to
 fly to.  These targets can be moved within the AAT areas so the pilot
 can adjust the effective distance of the task.  Targets may be set on
 the ground, during task planning, and modified during flight.
@@ -745,7 +767,7 @@ calculator.
 The typical use of targets in flying AAT is as follows:
 \begin{itemize}
 \item Set the expected MacCready, bugs/ballast and wind settings
-  for the flight using the flight settings and wind settings dialogues.
+  for the flight using the dialogues \menulabelr{\bmenug{Config. 1/3}\blink\bmenug{Flight}} and \menulabelr{\bmenug{Config. 1/3}\blink\bmenug{Wind}}.
 \item Define the task as normal from the task editor.
 \item Based on the pilot's judgement of how good the weather is,
   and whether some areas are likely to be more or less difficult than
@@ -786,7 +808,7 @@ targets.
 In certain conditions, targets for the current AAT sector may be moved
 automatically:
 \begin{itemize}
-\item When inside an AAT sector, the target in that sector is moved to
+\item When inside an AAT sector, the target in that sector is moved
 to a line projecting from the previous sector's target through the
 aircraft, at the same distance from the previous sector's target to
 the target prior to entering the sector.  The effect of this is to
@@ -813,19 +835,19 @@ maximum scored path.
 \toprule
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat01.png} & 
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat02.png} \\
-{\em Outside sector} & {\em Inside sector} \\
+\emph{Outside sector} & \emph{Inside sector} \\
 Target (-20\%) is on bisector & Target moved along track line \\
 
 \midrule
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat03.png} & 
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat04.png} \\
-{\em User decreased range} & {\em User increased range} \\
+\emph{User decreased range} & \emph{User increased range} \\
 Target (-80\%) moved along track line & Target (80\%) moved along track \\
 
 \midrule
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat05.png} & 
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat06.png} \\
-{\em Analysis (task page)} & {\em Next waypoint} \\
+\emph{Analysis (task page)} & \emph{Next waypoint} \\
 Path around active target  & ``Arm Turn'' pressed \\
 \bottomrule
 \end{longtable}
@@ -838,18 +860,18 @@ Path around active target  & ``Arm Turn'' pressed \\
 \toprule
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat07.png} & 
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat08.png} \\
-{\em Analysis (task page)} & {\em Approaching next area} \\
+\emph{Analysis (task page)} & \emph{Approaching next area} \\
 Best scored target found & Target (60\%) is on bisector \\
 
 \midrule
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat09.png} & 
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat11.png} \\
-{\em Inside sector} & {\em Next waypoint} \\
+\emph{Inside sector} & \emph{Next waypoint} \\
 Target (60\%) moved along track line & ``Arm Turn'' pressed \\
 
 \midrule
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/faat12.png} &  \\
-{\em Analysis (task page)} &  \\
+\emph{Analysis (task page)} &  \\
 Best scored targets found &  \\
 
 \bottomrule
@@ -935,14 +957,14 @@ is to be taken and invalidate the declaration.  This is intended to
 make it harder to accidentally modify the task resulting in a failed
 declared task.
 
-The XCSoar software logger, when started, checks for 500kB of free
+The XCSoar software logger, when started, checks for 500~kB of free
 space on the file storage.  If there is insufficient space, it will
 automatically delete IGC files, oldest first, in order to free up
 500kB.  It does not ask the user for confirmation before performing
-this operation. \warning
+this operation. \warning{}
 
 The internal software logger buffers data so that when it starts
-(automatically or manually) up to 60 seconds of data prior to starting
+(automatically or manually) up to 60~seconds of data prior to starting
 is recorded.  This means that the software logger now adequately
 captures the full take-off.
 
@@ -957,7 +979,7 @@ menu:
 
 During replay, the word `REPLAY' appears at the lower left corner of
 the screen.  During replay, the program behaves as if real GPS updates
-are being received by a GPS.  The logger replay dialogue does not need
+are being received by a GPS.\@  The logger replay dialogue does not need
 to be open during replay.
 
 To start a log replay, first select the file to load, and then select the
@@ -970,15 +992,15 @@ Stop the log by pressing \button{Stop}.
 Once a log is started, further presses of the \button{Start} has the
 effect of restarting the replay.
 
-\tip It is recommended to reset the device before flight, after a log
-file has been replayed, in order to ensure that XCSoar's internal
+\tip{} After a log file has been replayed, it is recommended to reset
+the device before flight, in order to ensure that XCSoar's internal
 statistics are properly reset.
 
 When operating XCSoar in FLY mode, the replay is disabled (stopped) if
 the real GPS receiver detects that the aircraft is moving.
 
 The logger replay works best with high sampling rate log files;
-a 6 second interval or less works fine.
+a 6~second interval or less works fine.
 
 \subsection*{Error analysis logger}\label{sec:raw-logger}
 For the pure reason of tracking down error prone behaviour of XCSoar 
@@ -989,7 +1011,7 @@ activate the raw log file creation by:
 \end{quote}
 Developers will appreciate very much any detailed error description including a log file like this. It really facilitates the root cause analysis and saves time to fix an error.
 
-\section{Flight analysis} \label{sec:analysis-climb}
+\section{Flight analysis}\label{sec:analysis-climb}
 
 The analysis dialogue is very useful in planning and conducting
 cross-country flights.  It is accessed via the menu:  \gesture{Up - Right - Down}
@@ -1005,8 +1027,8 @@ Several pages are of interest:
   changing over time.  The base and ceiling lines are drawn on the
   barograph.
 
-  The `Settings' button opens the flight settings dialogue
-  (e.g.\ to adjust the QNH)
+  The `Settings' button opens the flight settings dialogue,
+  allowing to alter the values of ballast, bugs, QNH and maximum temperature.
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-barograph.png}
@@ -1021,7 +1043,7 @@ Several pages are of interest:
   blue line.
 
   The ``Task Calc'' button opens the task calculator,
-  (e.g.\ to adjust the MC value)
+  (e.g.\ to adjust the MC value).
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-climb.png}
@@ -1034,7 +1056,7 @@ Several pages are of interest:
   areas is shown in red.  The aircraft track is shown as a thin green line.
 
   The `Task Calc' button opens the task calculator,
-  (e.g.\ to adjust the AAT task range or MC value)
+  (e.g.\ to adjust the AAT task range or MC value).
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-task.png}
