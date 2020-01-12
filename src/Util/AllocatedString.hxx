@@ -136,9 +136,7 @@ public:
 	}
 
 	pointer Steal() {
-		pointer result = value;
-		value = nullptr;
-		return result;
+		return std::exchange(value, nullptr);
 	}
 
 	AllocatedString Clone() const {
