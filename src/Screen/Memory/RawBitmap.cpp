@@ -53,7 +53,7 @@ RawBitmap::StretchTo(unsigned width, unsigned height,
                      Canvas &dest_canvas,
                      unsigned dest_width, unsigned dest_height) const
 {
-  ConstImageBuffer<ActivePixelTraits> src(ActivePixelTraits::const_pointer_type(buffer),
+  ConstImageBuffer<ActivePixelTraits> src(ActivePixelTraits::const_pointer(buffer),
                                           corrected_width * sizeof(*buffer),
                                           width, height);
 

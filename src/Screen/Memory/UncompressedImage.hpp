@@ -29,7 +29,7 @@ Copyright_License {
 
 template<typename PixelTraits>
 static inline void
-ConvertFromRGB(typename PixelTraits::rpointer_type dest,
+ConvertFromRGB(typename PixelTraits::rpointer dest,
                const uint8_t *src, unsigned n)
 {
   for (unsigned i = 0; i < n; ++i, dest = PixelTraits::Next(dest, 1)) {
@@ -44,7 +44,7 @@ static inline void
 ConvertFromRGB(WritableImageBuffer<PixelTraits> buffer,
                const uint8_t *src, unsigned src_pitch)
 {
-  typename PixelTraits::rpointer_type dest = buffer.data;
+  typename PixelTraits::rpointer dest = buffer.data;
 
   for (unsigned i = 0; i < buffer.height; ++i,
          dest = PixelTraits::NextRow(dest, buffer.pitch, 1),
@@ -54,7 +54,7 @@ ConvertFromRGB(WritableImageBuffer<PixelTraits> buffer,
 
 template<typename PixelTraits>
 static inline void
-ConvertFromGray(typename PixelTraits::rpointer_type dest,
+ConvertFromGray(typename PixelTraits::rpointer dest,
                 const uint8_t *src, unsigned n)
 {
   for (unsigned i = 0; i < n; ++i, dest = PixelTraits::Next(dest, 1)) {
@@ -69,7 +69,7 @@ static inline void
 ConvertFromGray(WritableImageBuffer<PixelTraits> buffer,
                 const uint8_t *src, unsigned src_pitch)
 {
-  typename PixelTraits::rpointer_type dest = buffer.data;
+  typename PixelTraits::rpointer dest = buffer.data;
 
   for (unsigned i = 0; i < buffer.height; ++i,
          dest = PixelTraits::NextRow(dest, buffer.pitch, 1),

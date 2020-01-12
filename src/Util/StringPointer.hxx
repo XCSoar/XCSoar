@@ -42,6 +42,8 @@ public:
 	using pointer = T *;
 	using const_pointer = const T *;
 
+	static constexpr value_type SENTINEL = '\0';
+
 private:
 	const_pointer value;
 
