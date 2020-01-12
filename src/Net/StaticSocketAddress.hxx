@@ -31,6 +31,7 @@
 #define STATIC_SOCKET_ADDRESS_HXX
 
 #include "SocketAddress.hxx"
+#include "Features.hxx"
 #include "Util/Compiler.h"
 
 #include <assert.h>
