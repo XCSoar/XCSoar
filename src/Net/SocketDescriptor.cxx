@@ -286,6 +286,13 @@ SocketDescriptor::SetTcpDeferAccept(const int &seconds) noexcept
 }
 
 bool
+SocketDescriptor::SetTcpUserTimeout(const unsigned &milliseconds) noexcept
+{
+	return SetOption(IPPROTO_TCP, TCP_USER_TIMEOUT,
+			 &milliseconds, sizeof(milliseconds));
+}
+
+bool
 SocketDescriptor::SetV6Only(bool value) noexcept
 {
 	return SetBoolOption(IPPROTO_IPV6, IPV6_V6ONLY, value);

@@ -30,6 +30,7 @@
 #ifndef SOCKET_DESCRIPTOR_HXX
 #define SOCKET_DESCRIPTOR_HXX
 
+#include "Features.hxx"
 #include "OS/FileDescriptor.hxx"
 
 #include <type_traits>
@@ -114,6 +115,7 @@ public:
 	using FileDescriptor::SetNonBlocking;
 	using FileDescriptor::SetBlocking;
 	using FileDescriptor::Duplicate;
+	using FileDescriptor::CheckDuplicate;
 	using FileDescriptor::Close;
 #else
 	bool SetNonBlocking() noexcept;
@@ -187,6 +189,12 @@ public:
 	bool SetCork(bool value=true) noexcept;
 
 	bool SetTcpDeferAccept(const int &seconds) noexcept;
+
+	/**
+	 * Setter for TCP_USER_TIMEOUT.
+	 */
+	bool SetTcpUserTimeout(const unsigned &milliseconds) noexcept;
+
 	bool SetV6Only(bool value) noexcept;
 
 	/**
