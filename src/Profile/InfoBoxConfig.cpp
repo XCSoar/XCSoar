@@ -76,6 +76,7 @@ Profile::Load(const ProfileMap &map, InfoBoxSettings &settings)
   /* migrate from XCSoar older than 6.7 */
   switch (settings.geometry) {
   case InfoBoxSettings::Geometry::SPLIT_8:
+  case InfoBoxSettings::Geometry::SPLIT_10:
   case InfoBoxSettings::Geometry::BOTTOM_RIGHT_8:
   case InfoBoxSettings::Geometry::TOP_LEFT_8:
     break;
@@ -94,6 +95,7 @@ Profile::Load(const ProfileMap &map, InfoBoxSettings &settings)
 
   case InfoBoxSettings::Geometry::RIGHT_9_VARIO:
   case InfoBoxSettings::Geometry::RIGHT_5:
+  case InfoBoxSettings::Geometry::BOTTOM_RIGHT_10:
   case InfoBoxSettings::Geometry::BOTTOM_RIGHT_12:
   case InfoBoxSettings::Geometry::RIGHT_16:
   case InfoBoxSettings::Geometry::RIGHT_24:
@@ -103,6 +105,7 @@ Profile::Load(const ProfileMap &map, InfoBoxSettings &settings)
     settings.geometry = InfoBoxSettings::Geometry::BOTTOM_RIGHT_12;
     break;
 
+  case InfoBoxSettings::Geometry::TOP_LEFT_10:
   case InfoBoxSettings::Geometry::TOP_LEFT_12:
   case InfoBoxSettings::Geometry::LEFT_6_RIGHT_3_VARIO:
   case InfoBoxSettings::Geometry::LEFT_12_RIGHT_3_VARIO:
