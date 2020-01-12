@@ -155,7 +155,7 @@ $$($(2)_OBJS): CPPFLAGS += $(patsubst %,$$(%_CPPFLAGS),$($(2)_DEPENDS))
 
 # Link the unstripped binary
 ifneq ($(TARGET_IS_DARWIN),y)
-$$($(2)_NOSTRIP): LDFLAGS += -Wl,-shared,-Bsymbolic
+$$($(2)_NOSTRIP): LDFLAGS += -shared -Wl,-Bsymbolic
 endif
 
 ifeq ($$(TARGET),ANDROID)
