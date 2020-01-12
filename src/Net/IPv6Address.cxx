@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2017 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2012-2019 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,6 +28,7 @@
  */
 
 #include "IPv6Address.hxx"
+#include "IPv4Address.hxx"
 
 #include <assert.h>
 #include <string.h>
@@ -52,6 +53,20 @@ IPv6Address::IsAny() const noexcept
 
 	return memcmp(&address.sin6_addr,
 		      &in6addr_any, sizeof(in6addr_any)) == 0;
+}
+
+IPv4Address
+IPv6Address::UnmapV4() const noexcept
+{
+	assert(IsV4Mapped());
+
+	struct sockaddr_in buffer{};
+	buffer.sin_family = AF_INET;
+	memcpy(&buffer.sin_addr, ((const char *)&address.sin6_addr) + 12,
+	       sizeof(buffer.sin_addr));
+	buffer.sin_port = address.sin6_port;
+
+	return buffer;
 }
 
 template<typename T>

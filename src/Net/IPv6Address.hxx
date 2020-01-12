@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2017 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2012-2019 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -42,6 +42,8 @@
 #else
 #include <netinet/in.h>
 #endif
+
+class IPv4Address;
 
 /**
  * An OO wrapper for struct sockaddr_in.
@@ -182,6 +184,12 @@ public:
 	bool IsV4Mapped() const noexcept {
 		return IN6_IS_ADDR_V4MAPPED(&address.sin6_addr);
 	}
+
+	/**
+	 * Convert "::ffff:127.0.0.1" to "127.0.0.1".
+	 */
+	gcc_pure
+	IPv4Address UnmapV4() const noexcept;
 
 	/**
 	 * Bit-wise AND of two addresses.  This is useful for netmask
