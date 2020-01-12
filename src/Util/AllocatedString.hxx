@@ -36,8 +36,6 @@
 #include <cstddef>
 #include <utility>
 
-#include <cstddef>
-
 /**
  * A string pointer whose memory is managed by this class.
  *

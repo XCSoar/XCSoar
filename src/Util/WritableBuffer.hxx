@@ -44,7 +44,7 @@ struct WritableBuffer;
 
 template<>
 struct WritableBuffer<void> {
-	typedef size_t size_type;
+	typedef std::size_t size_type;
 	typedef void value_type;
 	typedef void *pointer;
 	typedef const void *const_pointer;
@@ -89,7 +89,7 @@ struct WritableBuffer<void> {
  */
 template<typename T>
 struct WritableBuffer {
-	typedef size_t size_type;
+	typedef std::size_t size_type;
 	typedef T value_type;
 	typedef T &reference;
 	typedef const T &const_reference;

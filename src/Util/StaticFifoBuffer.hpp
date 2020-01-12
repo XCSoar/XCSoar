@@ -34,9 +34,9 @@
 
 #include <utility>
 #include <algorithm>
+#include <cstddef>
 
 #include <assert.h>
-#include <stddef.h>
 
 /**
  * A first-in-first-out buffer: you can append data at the end, and
@@ -46,7 +46,7 @@
 template<class T, size_t size>
 class StaticFifoBuffer {
 public:
-  typedef size_t size_type;
+  typedef std::size_t size_type;
 
 public:
   typedef WritableBuffer<T> Range;
