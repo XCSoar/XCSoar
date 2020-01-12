@@ -117,6 +117,8 @@ struct InfoBoxSettings {
 
   } geometry;
 
+  double ib_to_screen_ratio;
+
   bool inverse, use_colors;
 
   enum class BorderStyle : uint8_t {

@@ -123,6 +123,10 @@ Profile::Load(const ProfileMap &map, InfoBoxSettings &settings)
     break;
   }
 
+  map.Get(ProfileKeys::InfoBoxScreenRatio, settings.ib_to_screen_ratio);
+  if (settings.ib_to_screen_ratio < 5.99 || settings.ib_to_screen_ratio > 10.01)
+    settings.ib_to_screen_ratio = 7.4;
+
   map.Get(ProfileKeys::AppInverseInfoBox, settings.inverse);
   map.Get(ProfileKeys::AppInfoBoxColors, settings.use_colors);
 
