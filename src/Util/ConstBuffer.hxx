@@ -43,7 +43,7 @@ struct ConstBuffer;
 
 template<>
 struct ConstBuffer<void> {
-	typedef size_t size_type;
+	typedef std::size_t size_type;
 	typedef void value_type;
 	typedef const void *pointer;
 	typedef pointer const_pointer;
@@ -90,7 +90,7 @@ struct ConstBuffer<void> {
  */
 template<typename T>
 struct ConstBuffer {
-	typedef size_t size_type;
+	typedef std::size_t size_type;
 	typedef T value_type;
 	typedef const T &reference;
 	typedef reference const_reference;

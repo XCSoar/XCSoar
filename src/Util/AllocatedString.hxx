@@ -33,7 +33,6 @@
 #include "StringPointer.hxx"
 
 #include <algorithm>
-
 #include <cstddef>
 
 /**
@@ -49,7 +48,7 @@ public:
 	typedef typename StringPointer<T>::const_reference const_reference;
 	typedef typename StringPointer<T>::pointer pointer;
 	typedef typename StringPointer<T>::const_pointer const_pointer;
-	typedef size_t size_type;
+	typedef std::size_t size_type;
 
 	static constexpr value_type SENTINEL = '\0';
 

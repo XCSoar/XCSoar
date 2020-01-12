@@ -51,7 +51,7 @@
 template<typename T>
 class ForeignFifoBuffer {
 public:
-	using size_type = size_t;
+	using size_type = std::size_t;
 	using Range = WritableBuffer<T>;
 	using pointer = typename Range::pointer;
 	using const_pointer = typename Range::const_pointer;
