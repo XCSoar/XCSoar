@@ -378,6 +378,9 @@ KRT2Device::ExpectedMsgLengthSTX(uint8_t code)
 void
 KRT2Device::GetStationName(char *station_name, const TCHAR *name)
 {
+  if(name == nullptr)
+      name = _T("");
+
   size_t s_idx = 0; //!< Source name index
   size_t d_idx = 0; //!< Destination name index
   TCHAR c; //!< Character at source name index
