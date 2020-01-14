@@ -87,6 +87,7 @@ static constexpr struct string_to_key string_to_key[] = {
   { _T("RETURN"), KEY_RETURN },
   { _T("ESCAPE"), KEY_ESCAPE },
   { _T("MENU"), KEY_MENU },
+  { _T("TAB"), KEY_TAB },
   { NULL }
 };
 
