@@ -411,7 +411,7 @@ InfoBoxLayout::ValidateGeometry(InfoBoxSettings::Geometry geometry,
   return geometry;
 }
 
-static unsigned
+static constexpr unsigned
 CalculateInfoBoxRowHeight(unsigned screen_height, unsigned control_width, unsigned scale)
 {
   return Clamp(scale * control_width * 5 / 700,
@@ -419,7 +419,7 @@ CalculateInfoBoxRowHeight(unsigned screen_height, unsigned control_width, unsign
     scale * control_width * 5 / 700);
 }
 
-static unsigned
+static constexpr unsigned
 CalculateInfoBoxColumnWidth(unsigned screen_width, unsigned control_height, unsigned scale)
 {
   return (scale * control_height * 7 / 500);

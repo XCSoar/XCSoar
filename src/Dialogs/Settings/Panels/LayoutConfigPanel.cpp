@@ -24,7 +24,6 @@ Copyright_License {
 #include "LayoutConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
-#include "Form/DataField/Float.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Hardware/RotateDisplay.hpp"
 #include "Interface.hpp"
