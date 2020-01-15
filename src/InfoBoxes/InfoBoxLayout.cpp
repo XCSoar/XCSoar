@@ -26,8 +26,6 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Util/Clamp.hpp"
 
-static constexpr double CONTROLHEIGHTRATIO = 7.4;
-
 /**
  * The number of info boxes in each geometry.
  */
@@ -46,7 +44,7 @@ namespace InfoBoxLayout
 
   static void
   CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
-                   InfoBoxSettings::Geometry geometry);
+                   InfoBoxSettings::Geometry geometry, unsigned ib_scale);
 }
 
 static int
@@ -112,7 +110,7 @@ MakeRightColumn(const InfoBoxLayout::Layout &layout,
 }
 
 InfoBoxLayout::Layout
-InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
+InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry, unsigned ib_scale)
 {
   const PixelSize screen_size = rc.GetSize();
 
@@ -125,7 +123,7 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
   layout.count = geometry_counts[(unsigned)geometry];
   assert(layout.count <= InfoBoxSettings::Panel::MAX_CONTENTS);
 
-  CalcInfoBoxSizes(layout, screen_size, geometry);
+  CalcInfoBoxSizes(layout, screen_size, geometry, ib_scale);
 
   layout.ClearVario();
 
@@ -358,9 +356,13 @@ InfoBoxLayout::ValidateGeometry(InfoBoxSettings::Geometry geometry,
     case InfoBoxSettings::Geometry::TOP_8_VARIO:
       return InfoBoxSettings::Geometry::LEFT_6_RIGHT_3_VARIO;
     }
+#ifdef	HANDLE_SQUARE_SCREEN_SIZE // remove this code section if we are certain
   } else if (screen_size.cx == screen_size.cy) {
     /* square */
+    // do we really need to cover the square case ??
+    // it's probably not intended to fix it to RIGHT_5 !!!
     geometry = InfoBoxSettings::Geometry::RIGHT_5;
+#endif
   } else {
     /* portrait */
 
@@ -409,25 +411,23 @@ InfoBoxLayout::ValidateGeometry(InfoBoxSettings::Geometry geometry,
   return geometry;
 }
 
-static constexpr unsigned
-CalculateInfoBoxRowHeight(unsigned screen_height, unsigned control_width)
+static unsigned
+CalculateInfoBoxRowHeight(unsigned screen_height, unsigned control_width, unsigned scale)
 {
-  return Clamp(unsigned(screen_height / CONTROLHEIGHTRATIO),
-               control_width * 5 / 7,
-               control_width);
+  return Clamp(scale * control_width * 5 / 700,
+    75 * control_width * 5 / 700,
+    scale * control_width * 5 / 700);
 }
 
-static constexpr unsigned
-CalculateInfoBoxColumnWidth(unsigned screen_width, unsigned control_height)
+static unsigned
+CalculateInfoBoxColumnWidth(unsigned screen_width, unsigned control_height, unsigned scale)
 {
-  return Clamp(unsigned(screen_width / CONTROLHEIGHTRATIO * 1.3),
-               control_height,
-               control_height * 7 / 5);
+  return (scale * control_height * 7 / 500);
 }
 
 void
 InfoBoxLayout::CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
-                                InfoBoxSettings::Geometry geometry)
+                                InfoBoxSettings::Geometry geometry, unsigned ib_scale)
 {
   const bool landscape = screen_size.cx > screen_size.cy;
 
@@ -440,11 +440,11 @@ InfoBoxLayout::CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
     if (landscape) {
       layout.control_size.cy = 2 * screen_size.cy / layout.count;
       layout.control_size.cx = CalculateInfoBoxColumnWidth(screen_size.cx,
-                                                           layout.control_size.cy);
+						 layout.control_size.cy, ib_scale);
     } else {
       layout.control_size.cx = 2 * screen_size.cx / layout.count;
       layout.control_size.cy = CalculateInfoBoxRowHeight(screen_size.cy,
-                                                         layout.control_size.cx);
+						 layout.control_size.cx, ib_scale);
     }
 
     break;
@@ -454,11 +454,11 @@ InfoBoxLayout::CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
     if (landscape) {
       layout.control_size.cy = screen_size.cy / layout.count;
       layout.control_size.cx = CalculateInfoBoxColumnWidth(screen_size.cx,
-                                                           layout.control_size.cy);
+						   layout.control_size.cy, ib_scale);
     } else {
       layout.control_size.cx = screen_size.cx / layout.count;
       layout.control_size.cy = CalculateInfoBoxRowHeight(screen_size.cy,
-                                                         layout.control_size.cx);
+						 layout.control_size.cx, ib_scale);
     }
 
     break;
@@ -467,14 +467,14 @@ InfoBoxLayout::CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
     // calculate control dimensions
     layout.control_size.cx = 2 * screen_size.cx / (layout.count + 2);
     layout.control_size.cy = CalculateInfoBoxRowHeight(screen_size.cy,
-                                                       layout.control_size.cx);
+					       layout.control_size.cx, ib_scale);
     break;
 
   case InfoBoxSettings::Geometry::TOP_8_VARIO:
     // calculate control dimensions
     layout.control_size.cx = 2 * screen_size.cx / (layout.count + 2);
     layout.control_size.cy = CalculateInfoBoxRowHeight(screen_size.cy,
-                                                       layout.control_size.cx);
+					       layout.control_size.cx, ib_scale);
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_9_VARIO:

@@ -117,6 +117,8 @@ struct InfoBoxSettings {
 
   } geometry;
 
+  unsigned scale; /* scales the size of the InfoBox in the free dimension between 50% and 150% */
+
   bool inverse, use_colors;
 
   enum class BorderStyle : uint8_t {

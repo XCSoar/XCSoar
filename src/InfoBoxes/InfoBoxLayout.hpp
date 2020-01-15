@@ -55,7 +55,7 @@ namespace InfoBoxLayout
 
   gcc_pure
   Layout
-  Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry);
+  Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry, unsigned ib_scale=100);
 
   gcc_const
   int

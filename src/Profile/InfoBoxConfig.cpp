@@ -25,6 +25,7 @@ Copyright_License {
 #include "ProfileKeys.hpp"
 #include "Map.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
+#include "Util/Clamp.hpp"
 
 using namespace InfoBoxFactory;
 
@@ -122,6 +123,9 @@ Profile::Load(const ProfileMap &map, InfoBoxSettings &settings)
   case InfoBoxSettings::Geometry::TOP_8_VARIO:
     break;
   }
+
+  map.Get(ProfileKeys::InfoBoxScale, settings.scale);
+  settings.scale = Clamp((unsigned)settings.scale,(unsigned)50,(unsigned)150);
 
   map.Get(ProfileKeys::AppInverseInfoBox, settings.inverse);
   map.Get(ProfileKeys::AppInfoBoxColors, settings.use_colors);

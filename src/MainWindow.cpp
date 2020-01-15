@@ -219,7 +219,7 @@ MainWindow::InitialiseConfigured()
   PixelRect rc = GetClientRect();
 
   const InfoBoxLayout::Layout ib_layout =
-    InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
+    InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry, ui_settings.info_boxes.scale);
 
   assert(look != nullptr);
   look->InitialiseConfigured(CommonInterface::GetUISettings(),
@@ -339,7 +339,7 @@ MainWindow::ReinitialiseLayout()
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 
   const InfoBoxLayout::Layout ib_layout =
-    InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
+    InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry, ui_settings.info_boxes.scale);
 
   look->ReinitialiseLayout(ib_layout.control_size.cx);
 

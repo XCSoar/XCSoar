@@ -215,6 +215,7 @@ const char FontTeamCodeFont[] = "TeamCodeFont";
 
 const char UseFinalGlideDisplayMode[] = "UseFinalGlideDisplayMode";
 const char InfoBoxGeometry[] = "InfoBoxGeometry";
+const char InfoBoxScale[] = "InfoBoxSccale";
 
 const char FlarmSideData[] = "FlarmRadarSideData";
 const char FlarmAutoZoom[] = "FlarmRadarAutoZoom";
