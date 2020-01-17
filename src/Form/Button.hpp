@@ -47,9 +47,8 @@ class Button : public PaintWindow {
   /**
    * This flag specifies whether the button is "selected".  The
    * "selected" button in a #ButtonPanel is the button that will be
-   * triggered by the #KEY_RETURN.  On some devices without touch
-   * screen, cursor keys left/right can be used to navigate the
-   * #ButtonPanel.
+   * triggered by the #KEY_RETURN. Cursor keys left/right can be used to
+   * navigate the #ButtonPanel.
    */
   bool selected;
 

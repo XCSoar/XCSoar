@@ -239,7 +239,7 @@ Button::OnPaint(Canvas &canvas)
 
   const bool pressed = down;
   const bool focused = HasCursorKeys()
-    ? HasFocus() || (selected && !HasPointer())
+    ? HasFocus() || selected
     : pressed;
 
   renderer->DrawButton(canvas, GetClientRect(),
