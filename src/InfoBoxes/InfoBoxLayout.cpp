@@ -358,11 +358,8 @@ InfoBoxLayout::ValidateGeometry(InfoBoxSettings::Geometry geometry,
     case InfoBoxSettings::Geometry::TOP_8_VARIO:
       return InfoBoxSettings::Geometry::LEFT_6_RIGHT_3_VARIO;
     }
-  } else if (screen_size.cx == screen_size.cy) {
-    /* square */
-    geometry = InfoBoxSettings::Geometry::RIGHT_5;
   } else {
-    /* portrait */
+    /* portrait and square */
 
     switch (geometry) {
     case InfoBoxSettings::Geometry::SPLIT_8:
