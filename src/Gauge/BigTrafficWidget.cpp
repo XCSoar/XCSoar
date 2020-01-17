@@ -763,16 +763,10 @@ FlarmTrafficControl::OnKeyDown(unsigned key_code)
 {
   switch (key_code) {
   case KEY_UP:
-    if (!HasPointer())
-      break;
-
     ZoomIn();
     return true;
 
   case KEY_DOWN:
-    if (!HasPointer())
-      break;
-
     ZoomOut();
     return true;
   }
