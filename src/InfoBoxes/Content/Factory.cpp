@@ -772,7 +772,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Flight level"),
     N_("FL"),
-    N_("Pressure Altitude given as Flight Level. Only available if barometric altitude available and correct QNH set."),
+    N_("Pressure Altitude given as Flight Level. If barometric altitude is not available, FL is calculated from GPS altitude, given that the correct QNH is set. In case the FL is calculated from the GPS altitude, the FL label is coloured red."),
     UpdateInfoBoxAltitudeFlightLevel,
     altitude_infobox_panels,
   },
