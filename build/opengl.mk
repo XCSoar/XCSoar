@@ -24,11 +24,7 @@ GLES2 ?= y
 # the Cubieboard uses EGL + GL/ES
 else ifeq ($(TARGET_HAS_MALI),y)
 OPENGL ?= y
-ifeq ($(HOST_IS_ARMBIAN),y)
-GLES ?= n
-else
 GLES2 ?= y
-endif
 # UNIX/Linux defaults to OpenGL
 else ifeq ($(TARGET),UNIX)
 OPENGL ?= y

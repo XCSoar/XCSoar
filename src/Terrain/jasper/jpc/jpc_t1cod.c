@@ -314,8 +314,7 @@ int jpc_getzcctxno(int f, int orient)
 		h = v;
 		v = t;
 		/* fallthrough */
-		/* g++-8 of Armbian does not allow inplicit fallthrough */
-#if defined(SELFBUILD_ARMBIAN) || defined(SELFBUILD_RASPBIAN)
+#if defined(SELFBUILD_RASPBIAN)
 		__attribute__ ((fallthrough));
 #endif
 	case JPC_TSFB_LL:

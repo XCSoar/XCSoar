@@ -528,9 +528,6 @@ ifeq ($(TARGET),UNIX)
   ifeq ($(HOST_IS_RASPBIAN),y)
     TARGET_CPPFLAGS += -DSELFBUILD_RASPBIAN
   endif
-  ifeq ($(HOST_IS_ARMBIAN),y)
-    TARGET_CPPFLAGS += -DSELFBUILD_ARMBIAN
-  endif
 endif
 
 ifeq ($(TARGET),ANDROID)
