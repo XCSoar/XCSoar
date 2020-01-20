@@ -157,9 +157,7 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
     right = layout.vario.left;
 
     /* fall through */
-#if defined(SELFBUILD_RASPBIAN)
-    __attribute__ ((fallthrough));
-#endif
+    gcc_fallthrough;
 
   case InfoBoxSettings::Geometry::BOTTOM_RIGHT_8:
   case InfoBoxSettings::Geometry::OBSOLETE_BOTTOM_RIGHT_8:
@@ -186,9 +184,7 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
     right = layout.vario.left;
 
     /* fall through */
-#if defined(SELFBUILD_RASPBIAN)
-    __attribute__ ((fallthrough));
-#endif
+    gcc_fallthrough;
 
   case InfoBoxSettings::Geometry::TOP_LEFT_8:
   case InfoBoxSettings::Geometry::OBSOLETE_TOP_LEFT_8:

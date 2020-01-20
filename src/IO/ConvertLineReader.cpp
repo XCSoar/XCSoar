@@ -120,9 +120,7 @@ ConvertLineReader::ReadLine()
       return nullptr;
 
     /* fall through ... */
-#if defined(SELFBUILD_RASPBIAN)
-    __attribute__ ((fallthrough));
-#endif
+    gcc_fallthrough;
 
   case Charset::AUTO:
     return narrow;

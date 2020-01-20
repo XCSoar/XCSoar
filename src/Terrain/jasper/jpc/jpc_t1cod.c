@@ -314,9 +314,7 @@ int jpc_getzcctxno(int f, int orient)
 		h = v;
 		v = t;
 		/* fallthrough */
-#if defined(SELFBUILD_RASPBIAN)
-		__attribute__ ((fallthrough));
-#endif
+		gcc_fallthrough;
 	case JPC_TSFB_LL:
 	case JPC_TSFB_LH:
 		if (!h) {
