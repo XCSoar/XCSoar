@@ -33,10 +33,13 @@ ExternalSettings::Clear()
   bugs_available.Clear();
   qnh_available.Clear();
   volume_available.Clear();
+  has_active_frequency.Clear();
   active_frequency.Clear();
-  standby_frequency.Clear();
   active_freq_name.clear();
+  has_standby_frequency.Clear();
+  standby_frequency.Clear();
   standby_freq_name.clear();
+  swap_frequencies.Clear();
 }
 
 void
@@ -84,14 +87,22 @@ ExternalSettings::Complement(const ExternalSettings &add)
     volume_available = add.volume_available;
   }
 
-  if (add.active_frequency.IsDefined()) {
+  if (add.has_active_frequency.Modified(has_active_frequency) &&
+      add.active_frequency.IsDefined()) {
+    has_active_frequency = add.has_active_frequency;
     active_frequency = add.active_frequency;
     active_freq_name = add.active_freq_name;
   }
 
-  if (add.standby_frequency.IsDefined()) {
+  if (add.has_standby_frequency.Modified(has_standby_frequency) &&
+      add.standby_frequency.IsDefined()) {
+    has_standby_frequency = add.has_standby_frequency;
     standby_frequency = add.standby_frequency;
     standby_freq_name = add.standby_freq_name;
+  }
+
+  if (add.swap_frequencies.Modified(swap_frequencies)) {
+    swap_frequencies = add.swap_frequencies;
   }
 }
 

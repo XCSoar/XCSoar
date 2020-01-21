@@ -132,6 +132,12 @@ namespace ActionInterface {
    * forward it to all XCSoar modules that want it.
    */
   void OffsetStandbyFrequency(double offset_khz, bool to_devices=true);
+
+  /**
+   * Exchange the Active and Standby Radio Frequencies in #ComputerSettings, and
+   * forward them to all XCSoar modules that want it.
+   */
+  void ExchangeRadioFrequencies(bool to_devices=true);
 };
 
 /** 

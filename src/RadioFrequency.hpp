@@ -31,6 +31,8 @@ Copyright_License {
 #include <stddef.h>
 #include <tchar.h>
 
+#include <cmath>
+
 /**
  * This class tores a VHF radio frequency.
  */
@@ -44,6 +46,15 @@ class RadioFrequency {
   uint16_t value;
 
   constexpr RadioFrequency(unsigned _value):value(_value) {}
+
+  /**
+   * When 8.33kHz channels are used, channels are rounded to the nearest
+   * 5kHz value for display purposes. Some channels are undefined because
+   * of this. They are matched by the pattern below.
+   */
+  constexpr static bool IsValid8KHzChannel(unsigned khz) {
+    return (khz % 25) != 20;
+  }
 
 public:
   /**
@@ -87,6 +98,13 @@ public:
       : 0;
   }
 
+  void OffsetKiloHertz(int khz_offset) {
+    unsigned new_khz = GetKiloHertz() + khz_offset;
+    if (!IsValid8KHzChannel(new_khz)) {
+      new_khz += std::copysign(5, khz_offset);
+    }
+    SetKiloHertz(new_khz);
+  }
   TCHAR *Format(TCHAR *buffer, size_t max_size) const;
 
   gcc_pure
