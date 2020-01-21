@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-01-21 00:21+0000\n"
+"PO-Revision-Date: 2020-01-22 23:41+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -2939,11 +2939,11 @@ msgstr "수동MC"
 
 #: src/InfoBoxes/Content/Other.cpp:57 src/InfoBoxes/Content/Other.cpp:60
 msgid "AC Off"
-msgstr "No AC"
+msgstr "배터리"
 
 #: src/InfoBoxes/Content/Other.cpp:64
 msgid "AC ON"
-msgstr "AC ON"
+msgstr "충전"
 
 #: src/InfoBoxes/Content/Other.cpp:177
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:47
@@ -4141,7 +4141,7 @@ msgstr "장치가 사용중"
 #: src/Dialogs/Device/DeviceListDialog.cpp:510
 #: src/Dialogs/Device/DeviceListDialog.cpp:572
 msgid "Device is not connected"
-msgstr "장치가 연결안되어 있음"
+msgstr "장치가 연결되어 있지 않음"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:536
 msgid "Edit device"
