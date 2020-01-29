@@ -31,6 +31,7 @@ Copyright_License {
 #include "Util/CharUtil.hxx"
 #include "Util/StaticFifoBuffer.hxx"
 #include "Util/Compiler.h"
+#include "Util/Clamp.hpp"
 
 #include <stdint.h>
 #include <stdio.h>
@@ -406,7 +407,12 @@ KRT2Device::GetStationName(char *station_name, const TCHAR *name)
 void
 KRT2Device::HandleSTXCommand(const struct stx_msg * msg, struct NMEAInfo & info)
 {
-  if(msg->command != 'U' && msg->command != 'R') {
+  if(msg->command != 'U' && msg->command != 'R' && msg->command != 'C') {
+    return;
+  }
+
+  if(msg->command == 'C') {
+    info.settings.swap_frequencies.Update(info.clock);
     return;
   }
 
@@ -420,10 +426,12 @@ KRT2Device::HandleSTXCommand(const struct stx_msg * msg, struct NMEAInfo & info)
   freq_name.SetASCII(&(msg->station[0]), &(msg->station[MAX_NAME_LENGTH - 1]));
 
   if(msg->command == 'U') {
+    info.settings.has_active_frequency.Update(info.clock);
     info.settings.active_frequency = freq;
     info.settings.active_freq_name = freq_name;
   }
   else if(msg->command == 'R') {
+    info.settings.has_standby_frequency.Update(info.clock);
     info.settings.standby_frequency = freq;
     info.settings.standby_freq_name = freq_name;
   }
@@ -436,11 +444,12 @@ KRT2Device::PutFrequency(char cmd,
                          OperationEnvironment &env)
 {
   if (frequency.IsDefined()) {
+    const auto clamped_khz = Clamp(frequency.GetKiloHertz(), 118000u, 136995u);
     stx_msg msg;
 
     msg.command = cmd;
-    msg.mhz = frequency.GetKiloHertz() / 1000;
-    msg.khz = (frequency.GetKiloHertz() % 1000) / 5;
+    msg.mhz = clamped_khz / 1000;
+    msg.khz = (clamped_khz % 1000) / 5;
     GetStationName(msg.station, name);
     msg.checksum = msg.mhz ^ msg.khz;
 

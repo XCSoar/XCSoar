@@ -75,10 +75,15 @@ struct ExternalSettings {
   unsigned volume;
 
   /** the radio frequencies of the device */
+  Validity has_active_frequency;
   RadioFrequency active_frequency;
-  RadioFrequency standby_frequency;
   StaticString<32> active_freq_name;
+
+  Validity has_standby_frequency;
+  RadioFrequency standby_frequency;
   StaticString<32> standby_freq_name;
+
+  Validity swap_frequencies;
 
   void Clear();
   void Expire(double time);

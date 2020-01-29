@@ -143,14 +143,25 @@ RadioProcess()
 
   const NMEAInfo &basic = CommonInterface::Basic();
 
-  if (basic.settings.active_frequency.IsDefined()) {
+  static Validity last_active_frequency;
+  static Validity last_standby_frequency;
+  static Validity last_swap_frequencies;
+
+  if (basic.settings.has_active_frequency.Modified(last_active_frequency)) {
     ActionInterface::SetActiveFrequency(basic.settings.active_frequency, basic.settings.active_freq_name, false);
+    last_active_frequency = basic.settings.has_active_frequency;
     modified = true;
   }
 
-  if (basic.settings.standby_frequency.IsDefined()) {
+  if (basic.settings.has_standby_frequency.Modified(last_standby_frequency)) {
     ActionInterface::SetStandbyFrequency(basic.settings.standby_frequency, basic.settings.standby_freq_name, false);
+    last_standby_frequency = basic.settings.has_standby_frequency;
     modified = true;
+  }
+
+  if (basic.settings.swap_frequencies.Modified(last_swap_frequencies)) {
+    ActionInterface::ExchangeRadioFrequencies(false);
+    last_swap_frequencies = basic.settings.swap_frequencies;
   }
 
   return modified;
