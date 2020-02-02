@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-01-03 15:21+0000\n"
+"PO-Revision-Date: 2020-02-03 21:50+0000\n"
 "Last-Translator: Cloud Esp <Frederic.Darboux@inra.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.10\n"
+"X-Generator: Weblate 3.11-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -4959,8 +4959,8 @@ msgid ""
 "The width of the border drawn around each airspace. Set this value to zero "
 "to hide the border."
 msgstr ""
-"Epaisseur de la bordure dessinan le contour de chaque espace aérien. Choisir "
-"zéro pour cacher la bordure."
+"Épaisseur de la bordure dessinant le contour de chaque espace aérien. "
+"Choisir zéro pour cacher la bordure."
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:99
 #, no-c-format
@@ -5003,7 +5003,7 @@ msgstr "Pas d'Alerte"
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:549
 msgid "Airspace Warnings"
-msgstr "Alertes Airspace"
+msgstr "Alertes Espace Aérien"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:53
 #, no-c-format
@@ -5362,11 +5362,11 @@ msgstr "Nouvel équipier"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:92
 msgid "Set code"
-msgstr "Définir Code"
+msgstr "Définir code"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:93
 msgid "Set WP"
-msgstr "Def WP"
+msgstr "Définir WP"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:94
 msgid "Flarm Lock"
@@ -6238,12 +6238,12 @@ msgstr "Active/désactive toutes les alertes d'espace aérien."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:211
 msgid "Warnings dialog"
-msgstr "Fenêtre d'avertissement"
+msgstr "Fenêtre d'avertissements"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:212
 msgid "Enable/disable displaying airspaces warnings dialog."
 msgstr ""
-"Active/Désactive l'affichage de la fenêtre d'avertissement d'espaces aériens."
+"Active/désactive l'affichage de la fenêtre d'avertissement d'espaces aériens."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:216
 msgid "Warning time"
@@ -6271,14 +6271,14 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:226
 msgid "Acknowledge time"
-msgstr "Durée d'acquittement"
+msgstr "Durée d'acquiescement"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:227
 msgid ""
 "This is the time period in which an acknowledged airspace warning will not "
 "be repeated."
 msgstr ""
-"Durée pendant laquelle un espace aérien acquitté ne donnera pas de nouvelle "
+"Durée pendant laquelle un espace aérien acquiescé ne donnera pas de nouvelle "
 "alerte."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:231
@@ -10008,7 +10008,7 @@ msgstr ""
 
 #: Data/Input/default.xci:825
 msgid "Traffic List"
-msgstr "Liste du traffic"
+msgstr "Liste du trafic"
 
 #: Data/Input/default.xci:514 Data/Input/default.xci:1079
 msgid "Topo."
@@ -10125,7 +10125,9 @@ msgstr "Enregistrer"
 msgid ""
 "Team\n"
 "Code"
-msgstr "Equipe"
+msgstr ""
+"Code\n"
+"Équipe"
 
 #: Data/Input/default.xci:121
 msgid ""
