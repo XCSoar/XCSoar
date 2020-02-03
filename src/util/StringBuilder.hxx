@@ -30,6 +30,7 @@
 #ifndef STRING_BUILDER_HXX
 #define STRING_BUILDER_HXX
 
+#include "ConstBuffer.hxx"
 #include "WritableBuffer.hxx"
 
 #include <algorithm>
@@ -105,6 +106,10 @@ public:
 
 	void Append(const_pointer src);
 	void Append(const_pointer src, size_t length);
+
+	void Append(ConstBuffer<T> src) {
+		Append(src.data, src.size);
+	}
 
 	void Format(const_pointer fmt, ...);
 
