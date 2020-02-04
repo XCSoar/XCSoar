@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-02-03 21:50+0000\n"
+"PO-Revision-Date: 2020-02-05 20:50+0000\n"
 "Last-Translator: Cloud Esp <Frederic.Darboux@inra.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
@@ -4166,7 +4166,7 @@ msgstr "Le gestionnaire de fichier nécessite Android 2.3."
 #: src/Dialogs/Device/DeviceEditWidget.cpp:72
 #, no-c-format
 msgid "IOIO switches and Nunchuk"
-msgstr "Bouttons IOIO et Nunchuk"
+msgstr "Boutons IOIO et Nunchuk"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:74
 #, no-c-format
@@ -10106,8 +10106,8 @@ msgid ""
 "Airframe\n"
 "Switches"
 msgstr ""
-"Boutons\n"
-"Cockpit"
+"Interrupteurs\n"
+"aéronef"
 
 #: Data/Input/default.xci:1104
 msgid ""
