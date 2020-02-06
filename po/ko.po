@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-01-24 17:21+0000\n"
+"PO-Revision-Date: 2020-02-07 14:50+0000\n"
 "Last-Translator: DongWon Yoo <comicman.kr@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ko/>\n"
@@ -6331,22 +6331,22 @@ msgstr "터치진동을 설정."
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:62
 #, no-c-format
 msgid "Portrait"
-msgstr "세로방향"
+msgstr "세로"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:64
 #, no-c-format
 msgid "Landscape"
-msgstr "가로방향"
+msgstr "가로"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:66
 #, no-c-format
 msgid "Reverse Portrait"
-msgstr "세로방향(역방향)"
+msgstr "세로(역방향)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:68
 #, no-c-format
 msgid "Reverse Landscape"
-msgstr "가로방향(역방향)"
+msgstr "가로(역방향)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:74
 #, no-c-format
