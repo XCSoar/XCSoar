@@ -508,6 +508,12 @@ ifeq ($(TARGET_IS_KOBO),y)
   endif
 endif
 
+ifeq ($(TARGET),UNIX)
+  ifeq ($(HOST_IS_RASPBIAN),y)
+    TARGET_CPPFLAGS += -DSELFBUILD_RASPBIAN
+  endif
+endif
+
 ifeq ($(TARGET),ANDROID)
   TARGET_CPPFLAGS += -DANDROID
   CXXFLAGS += -D__STDC_VERSION__=199901L
