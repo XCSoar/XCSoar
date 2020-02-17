@@ -24,6 +24,8 @@
 		 android:resource="@xml/accessory_filter" />
       <meta-data android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
                  android:resource="@xml/usb_device_filter" />
+      <meta-data android:name="android.max_aspect"
+                 android:value="ratio_float"/>
     </activity>
 
     <service android:name=".MyService"/>
