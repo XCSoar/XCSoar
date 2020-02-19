@@ -215,7 +215,7 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
           } else {
           #endif
 
-          ef = _stscanf(value, _T("%[^ ] %[A-Za-z0-9_ \\/().,]"), d_event,
+          ef = _stscanf(value, _T("%[^ ] %[A-Za-z0-9_ \\/().,-]"), d_event,
               d_misc);
 
           #if defined(__BORLANDC__)
