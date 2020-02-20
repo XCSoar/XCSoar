@@ -84,6 +84,8 @@
 #include "jpc_t1cod.h"
 #include "jpc_tsfb.h"
 
+#include "Util/Compiler.h"
+
 static double jpc_pow2i(int n);
 
 /******************************************************************************\
@@ -314,6 +316,7 @@ int jpc_getzcctxno(int f, int orient)
 		h = v;
 		v = t;
 		/* fallthrough */
+		gcc_fallthrough;
 	case JPC_TSFB_LL:
 	case JPC_TSFB_LH:
 		if (!h) {

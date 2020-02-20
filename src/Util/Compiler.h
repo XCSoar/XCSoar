@@ -161,7 +161,7 @@ Copyright_License {
 
 #if GCC_CHECK_VERSION(7,0)
 #define gcc_fallthrough __attribute__((fallthrough))
-#elif CLANG_CHECK_VERSION(10,0)
+#elif CLANG_CHECK_VERSION(10,0) && defined(__cplusplus)
 #define gcc_fallthrough [[fallthrough]]
 #else
 #define gcc_fallthrough
