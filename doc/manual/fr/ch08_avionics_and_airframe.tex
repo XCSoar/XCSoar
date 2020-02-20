@@ -1,0 +1,160 @@
+% !TeX encoding = utf8
+% !TeX spellcheck = fr
+
+\chapter{Avionique et cellule d'aéronef}\label{cha:avionics-airframe}
+
+\begin{framed}
+	\begin{center}
+		\xc{} est entièrement développé par des bénévoles.\\
+		Cette documentation aussi.\\
+		Si vous y voyez des imperfections, vous pouvez facilement les faire disparaître~:\\
+		\xcsoarwebsite{/develop/}
+	\end{center}
+\end{framed}
+
+Ce chapitre considère \xc{} en tant que sous-système de l'aéronef.
+Il couvre l'intégration d'\xc{} avec des périphériques externes tels que les GPS, les interrupteurs, les capteurs, les récepteurs radios et les autres matériels, à l'exception de l'intégration avec le FLARM (qui est abordée dans le chapitre~\ref{cha:airspace}) et l'intégration avec des variomètres (abordée dans le chapitre~\ref{cha:atmosph}).
+
+\section{Autonomie de la batterie}
+
+La plupart des terminaux personnels sont conçus pour une utilisation de courte durée, et ainsi n'ont pas une batterie de grande autonomie par rapport à la durée des vols en planeur sur la campagne.
+Il est donc recommandé que les terminaux personnels disposent d'une alimentation externe, à travers un convertisseur de tension adapté, connecté à la batterie du planeur.
+Cette installation doit être effectuée par une personne disposant des qualifications adéquates, et doit inclure un fusible et un interrupteur d'isolement manuel.
+
+La plus grande source de consommation électrique d'un terminal personnel provient du rétro-éclairage de l'écran LCD.
+Comme la plupart des terminaux personnels du marché ne sont pas particulièrement lumineux, ils nécessitent que leur rétro-éclairage soit réglé au maximum.
+Au contraire, pour les systèmes d'instruments électroniques de vol (``EFIS''), il est recommandé de régler le rétro-éclairage à l'intensité minimale permettant une lecture confortable.
+
+Lorsqu'un terminal personnel fonctionne sur sa batterie interne, \xc{} est capable de détecter un niveau de batterie faible et permet au système d'exploitation de s'éteindre et de préserver la mémoire.
+De plus, il peut être paramétrer pour éteindre l'écran après une période d'inactivité afin de réduire la consommation électrique.
+Quand l'écran est éteint, appuyer sur l'un des boutons du terminal réactive l'écran.
+Quand un message d'état est publié par le système, l'écran s'active aussi.
+
+Une autre façon de préserver la batterie est de réduire le charge de calcul en éteignant certaines fonctions.
+L'affichage du relief et de traces longues contribuent significativement à la charge du CPU
+
+Pour d'autres plateformes embarquées, une InfoBoxe \infobox{Batterie} est disponible et affiche le durée de batterie restante ainsi que l'état de charge (Alimentation branchée --- charge en cours ou Alimentation débranchée --- utilisation de la batterie interne).
+
+\section{Connexion GPS}
+
+\xc{} nécessite un positionnement GPS en 3~dimensions pour ses fonctions de navigation.
+
+\subsection*{Statut du GPS}
+
+Les icônes de statut du GPS et du texte peuvent s'afficher sur le bord inférieur de la carte pour indiquer~:
+
+\begin{tabular}{c c}%{c c}
+\includegraphics[angle=0,width=0.75cm,keepaspectratio='true']{icons/gps_acquiring.pdf} & \includegraphics[angle=0,width=0.75cm,keepaspectratio='true']{icons/gps_disconnected.pdf}\\
+(a) & (b)
+\end{tabular}
+
+\begin{description}
+\item[En attente d'une positino GPS (a)]  Une meilleure réception ou une durée supplémentaire pour trouver des satellites est nécessaire.
+	Le GPS peut avoir une position en 2~dimensions.
+	Le symbole de l'aéronef disparaît tant qu'il n'y a pas de position en 3~dimensions.
+\item[GPS non connecté (b)] Aucune communication en provenance du GPS n'est reçue.
+	Cela indique soit une erreur dans le paramétrage du port de communication, soit que le boîtier GPS est déconnecté ou éteint.
+\end{description}
+
+Quand le GPS ne s'est pas connecté pour plus d'une minute d'attente, \xc{} tente automatiquement de redémarrer une communication avec le boîtier et se remettra à attendre.
+Cette méthode fournit le moyen le plus fiable pour récupérer à la suite d'erreurs de communication.
+
+\xc{} peut gérer des sources GPS multiples et les utilisent afin de disposer de redondance.
+Ces sources sont paramétrées dans l'écran de configuration du système, sur la page intitulée ``Périphériques''.
+Le périphérique~A est la source primaire de données GPS, et le périphérique~B la source secondaire.
+
+En fonctionnement, si la source GPS primaire est perdue, \xc{} utilisera les données provenant de la source secondaire.
+Si les deux sources fournissent des positions valides, la source secondaire est ignorée.
+Pour cette raison, il est recommandé de configurer comme source primaire (c.-à-d. comme périphérique~A) la source GPS ayant la meilleure antenne ou le fonctionnement le plus fiable.
+
+\subsection*{Altitude GPS}
+
+Certains boîtiers GPS anciens (mais aussi certains récents) ne fournissent pas une altitude par rapport au niveau moyen de la mer, mais par rapport à l'ellipsoïde WGS84.
+\xc{} le détecte et applique le décalage entre l'éllipsoïde et le géode sur la base de données d'un tableau interne ayant une résolution de deux degrés.
+Ce n'est pas nécessaire pour les boîtiers FLARM, qui fournissent bien une altitude au-dessus du niveau moyen de la mer.
+
+
+\section{Entrées par interrupteurs et capteurs}
+
+\xc{} permet le suivi des interrupteurs et des capteurs connectés au terminal.
+Cela permet d'avoir un retour sur la situation, des alertes et de disposer de périphériques d'entrée génériques pour l'utilisateur.
+Plusieurs mécanismes sont disponibles pour interfacer des interrupteurs et des capteurs~:
+\begin{description}
+\item[Port série] Certains variomètres intelligents tel le Vega de Triadis Engineering possèdent plusieurs interrupteurs et transmettent leurs informations vers le terminal personnel ou l'EFIS sous forme de messages NMEA spéciaux.
+\item[Port Bluetooth] De nombreux terminaux supportent une connexion sans fil vers un périphérique Bluetooth telle un manette de jeu disposant de plusieurs boutons.
+C'est plus approprié pour les périphériques d'entrée utilisateur que pour le suivi d'état de l'aéronef.
+\end{description}
+
+Un fichier d'`évènements d'entrées' modifiable détermine le traitement des entrées provenant des interrupteurs et des capteurs.
+
+Des interrupteurs habituels sur l'aéronef sont~:
+\begin{itemize}
+\item les aérofreins
+\item la position des volets (positive/atterrissage, neutre, négative/action)
+\item le train d'atterrissage.
+\end{itemize}
+
+Il est prévu d'inclure aussi les suivis du moteur et du carburant.
+
+D'autres entrées logiques venant du Vega incluent les quantités calculées en relation avec des alertes spécifiques à l'aéronef et des avertissements sur l'enveloppe de vol de l'aéronef, tel que ``aérofreins sortis et train d'atterrissage rentré''.  
+
+Pour plus de détails sur les interrupteurs d'entrée et sur la façon de les utiliser, consultez la documentation du Vega.
+
+\section{Fenêtre de dialogue des interrupteurs du Vega}
+
+Une fenêtre de dialogue affichant les états des interrupteurs pour le variomètre Vega est disponible dans le menu.
+\menulabel{\bmenug{Config 3}\blink\bmenug{Vega}\\
+\bmenut{Interrupteurs}{aéronef}}
+
+Cette fenêtre de dialogue est mise en jour en temps réel, permettant au pilote de vérifier le bon fonctionnement des interrupteurs lors des tests d'inspection journalière ou d'avant décollage.
+
+\begin{center}
+\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/dialog-switches.png}
+\end{center}
+
+\section{Mode esclave}
+
+Dans les paramètres de configuration, le type de périphérique ``NMEA Out'' est défini pour l'utilisation simultanée de deux systèmes en mode maître-esclave.
+Dans le périphérique maître, le second périphérique de communication peut être paramétré comme ``NMEA Out''.
+Toutes les informations reçues du premier périphérique de communication (ainsi que les informations sortantes) seront alors envoyées à l'esclave.
+
+Voici un exemple où deux périphériques sont connectés ensemble~: dans l'esclave, le premier périphérique de communication est paramétré comme ``Vega''. Ainsi, ce système recevra toutes les données comme si elles venaient du GPS du maître et des instruments connectés (Vega, FLARM, etc.).
+
+\section{État du système}\label{sec:system-status}
+
+La fenêtre de dialogue d'état du système est
+\menulabel{\bmenug{Info 2}\blink\bmenug{États}}
+utilisée en premier pour vérifier les systèmes, et voir comment l'ordinateur de vol et les périphériques connectés se comportent.
+On y accède par le menu puis en sélectionnant le tableau \textbf{Système}.
+\sketch{figures/status-system.png}
+
+Toutes les valeurs dynamiques (par ex. la tension de la batterie, le nombre de satellites en vue) sont mis à jour temps réel.
+
+\section{Périphériques multiples}
+
+Vous pouvez configurer de multiples périphériques externes connectés simultanément (peu de terminaux personnels disposent de deux ports série, mais le Bluetooth peut gérer un très grand nombre de connexions simultanées).
+
+Quand deux périphériques fournissent simultanément une position GPS valide, le premier (c.-à-d. le périphérique A) est choisi par \xc, et la position GPS du second périphérique est alors ignorée.
+Dès que le premier périphérique lâche, \xc{} bascule automatiquement sur le second, et ce jusqu'à ce que le premier refonctionne.
+
+Ceci est vrai pour toutes les valeurs (altitude barométrique, variomètre, vitesse air, trafic, etc.)~: \xc{} favorise le premier périphérique, et n'utilise le second que pour les valeurs qui ne sont pas reçues depuis le premier.
+
+Par exemple~: le périphérique~A est un CAI~302 et le périphérique~B est un FLARM. 
+Cela permet d'avoir le meilleur des deux~: \xc{} dispose alors de la vitesse air, du variomètre et des informations sur le trafic.
+
+\section{Gestion des périphériques externes}
+
+La fenêtre de dialogue de gestion des périphériques est accessible à partir du menu de configuration.
+\menulabel{\bmenug{Config. 1}\blink\bmenug{Périph.}}
+Elle affiche la liste des périphériques externes configurés et les informations qu'ils fournissent.
+
+\config{comdevices}
+Le bouton ``Reconnecter'' tente de rétablir la connexion avec le périphérique sélectionné.
+\xc{} tente périodiquement de se reconnecter à un périphérique défaillant, mais, parfois, il peut être opportun de le déclencher manuellement.
+
+Le bouton ``Télécharger le vol'' est uniquement disponible pour les enregistreurs IGC supportés (voir §~\ref{sec:supported-varios} pour la liste).
+Après avoir cliqué, \xc{} récupère la liste des vols et vous demande d'en sélectionner un. 
+Le fichier IGC sera téléchargé dans le répertoire ``\texttt{logs}'' de \texttt{XCSoarData}.
+
+Le bouton ``Gérer'' est activé quand un Vega ou un CAI~302 est connecté.
+Il permet d'accéder à des fonctions spécifiques de ces périphériques, tel que l'initialisation de la mémoire du CAI~302, ce qui est parfois nécessaire pour contourner un bug du firmware de Cambridge.

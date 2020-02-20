@@ -82,8 +82,8 @@ Some older GPS units (and some new ones) do not output altitude
 relative to mean sea level, rather they output elevation with respect
 to the WGS84 ellipsoid.  XCSoar detects when this occurs and applies
 the ellipsoid to geoid offset according to an internal tabulated data
-at two degree spacing.  This is not required for FLARM units or Altair
-Pro, which correctly output MSL altitude.
+at two degree spacing.  This is not required for FLARM units,
+which correctly output MSL altitude.
 
 \section{Switch inputs}
 
@@ -146,8 +146,8 @@ data received in the first com device (as well as outgoing data) will
 be sent to the slave.  
 
 As an example where two devices are being connected together, in the
-slave, the first com device can then be set to ``Vega'' or ``Altair
-Pro'' and this system receives all data as if it came from the
+slave, the first com device can then be set to ``Vega'' 
+and this system receives all data as if it came from the
 Master's GPS and connected instruments (Vega, FLARM etc).
 
 
@@ -157,7 +157,7 @@ The system status dialogue is
 \menulabel{\bmenug{Info 2}\blink\bmenug{Status}}
 used primarily as a systems check, to see how the glide computer and the 
 connected devices are performing.  This is accessed via the menu 
-and then selecting the tabular {\bf System}.
+and then selecting the tabular \textbf{System}.
 \sketch{figures/status-system.png}
 
 All dynamic values (e.g.\ battery voltage, number of satellites in
@@ -185,7 +185,7 @@ traffic data.
 \section{Managing external devices}
 
 The device management dialogue can be accessed from the configuration
-\menulabel{\bmenug{Config 2}\blink\bmenug{Devices}}
+\menulabel{\bmenug{Config 1}\blink\bmenug{Devices}}
 menu. It shows a list of configured external devices,
 and it lists what information they provide.
 
