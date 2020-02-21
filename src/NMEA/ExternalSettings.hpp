@@ -83,6 +83,8 @@ struct ExternalSettings {
   RadioFrequency standby_frequency;
   StaticString<32> standby_freq_name;
 
+  Validity swap_frequencies;
+
   void Clear();
   void Expire(double time);
   void Complement(const ExternalSettings &add);

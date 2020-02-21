@@ -39,6 +39,7 @@ ExternalSettings::Clear()
   has_standby_frequency.Clear();
   standby_frequency.Clear();
   standby_freq_name.clear();
+  swap_frequencies.Clear();
 }
 
 void
@@ -98,6 +99,10 @@ ExternalSettings::Complement(const ExternalSettings &add)
     has_standby_frequency = add.has_standby_frequency;
     standby_frequency = add.standby_frequency;
     standby_freq_name = add.standby_freq_name;
+  }
+
+  if (add.swap_frequencies.Modified(swap_frequencies)) {
+    swap_frequencies = add.swap_frequencies;
   }
 }
 
