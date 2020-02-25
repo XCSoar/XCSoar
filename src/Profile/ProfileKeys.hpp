@@ -262,6 +262,8 @@ extern const char PCMetFtpPassword[];
 extern const char SkysightEmail[];
 extern const char SkysightPassword[];
 extern const char SkysightRegion[];
+extern const char SkysightActiveMetrics[];
+extern const char SkysightDisplayedMetric[];
 
 extern const char EnableLocationMapItem[];
 extern const char EnableArrivalAltitudeMapItem[];

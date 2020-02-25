@@ -1,5 +1,5 @@
 import os, shutil
-import re
+import re, glob
 
 from build.download import download_and_verify
 from build.tar import untar
@@ -52,6 +52,10 @@ class Project:
         path = untar(self.download(toolchain), parent_path, self.base)
         if self.patches is not None:
             push_all(toolchain, path, self.patches)
+        if os.path.isdir(path) is not True:
+            # rename wolfssl-4.0.0-stable to wolfssl-4.0.0
+            filename = glob.glob(path+"*")
+            os.rename(filename[0], path)
         return path
 
     def make_build_path(self, toolchain):
