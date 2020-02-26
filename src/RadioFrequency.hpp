@@ -36,7 +36,8 @@ Copyright_License {
  */
 class RadioFrequency {
   static constexpr unsigned BASE_KHZ = 100000;
-  static constexpr unsigned MAX_KHZ = BASE_KHZ + 50000;
+  static constexpr unsigned MIN_KHZ = BASE_KHZ + 18000;
+  static constexpr unsigned MAX_KHZ = BASE_KHZ + 37000;
 
   /**
    * The radio frequency in kilohertz minus 100 MHz.
@@ -81,10 +82,26 @@ public:
     return BASE_KHZ + value;
   }
 
+  /**
+   * VHF Voice channels range from 118000 kHz up to not including 137000 kHz
+   * Valid 8.33 kHz channels must be a multiple of 5 kHz
+   * Due to rounding from 8.33 kHz to multiples of 5 (for displaying), some
+   * channels are invalid. These are matched by (value % 25) == 20.
+   */
   void SetKiloHertz(unsigned khz) {
-    value = khz >= BASE_KHZ && khz < MAX_KHZ
+    value = (khz >= MIN_KHZ && khz < MAX_KHZ) &&
+            (khz % 5 == 0) &&
+            (khz % 25 != 20)
       ? (khz - BASE_KHZ)
       : 0;
+  }
+
+  void OffsetKiloHertz(int khz_offset) {
+    auto new_khz = GetKiloHertz() + khz_offset;
+    if ((new_khz % 25) == 20) {
+      new_khz += khz_offset > 0 ? 5 : -5;
+    }
+    SetKiloHertz(new_khz);
   }
 
   TCHAR *Format(TCHAR *buffer, size_t max_size) const;
