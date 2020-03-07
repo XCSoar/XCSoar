@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
 "PO-Revision-Date: 2020-03-08 21:33+0000\n"
-"Last-Translator: Jaume Prats <prats.jaume@gmail.com>\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ca/>\n"
 "Language: ca\n"
@@ -205,6 +205,8 @@ msgid ""
 "(British rules) Any point within 1/2 km of center or 10km of a 180 degree "
 "sector.  Scored from center."
 msgstr ""
+"(Regles britàniques) Qualsevol punt dins de 1/2 km del centre o de 10 km de "
+"un sector de 180 graus. Puntuat des del centre."
 
 #: src/Task/TypeStrings.cpp:87
 #, no-c-format
