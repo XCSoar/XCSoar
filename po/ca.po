@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2017-09-25 19:44+0000\n"
+"PO-Revision-Date: 2020-03-08 21:33+0000\n"
 "Last-Translator: Jaume Prats <prats.jaume@gmail.com>\n"
-"Language-Team: Catalan "
-"<https://hosted.weblate.org/projects/xcsoar/translations/ca/>\n"
+"Language-Team: Catalan <https://hosted.weblate.org/projects/xcsoar/"
+"translations/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2.17-dev\n"
+"X-Generator: Weblate 4.0-dev\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -220,6 +220,8 @@ msgstr ""
 #, no-c-format
 msgid "A cylinder.  Scored by farthest point reached in area."
 msgstr ""
+"Un cilindre. Puntuat segons el punt més llunyà al que s'ha arribat dins de "
+"l' àrea."
 
 #: src/Task/TypeStrings.cpp:90
 #, no-c-format
