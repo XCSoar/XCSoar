@@ -44,6 +44,11 @@ class AutotoolsProject(MakeProject):
             build = self.make_build_path(toolchain)
 
         if self.autogen:
+            # run autogen.sh in wolfssl
+            autogen_sh = os.path.join(src, "autogen.sh")
+            if os.path.exists(autogen_sh):
+                subprocess.check_call([autogen_sh], cwd=src)
+
             if sys.platform == 'darwin':
                 subprocess.check_call(['glibtoolize', '--force'], cwd=src)
             else:
