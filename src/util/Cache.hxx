@@ -159,10 +159,10 @@ class Cache {
 
 	ItemList chronological_list;
 
-	typedef boost::intrusive::unordered_set<Item,
-						boost::intrusive::hash<ItemHash>,
-						boost::intrusive::equal<ItemEqual>,
-						boost::intrusive::constant_time_size<false>> KeyMap;
+	using KeyMap = boost::intrusive::unordered_set<Item,
+						       boost::intrusive::hash<ItemHash>,
+						       boost::intrusive::equal<ItemEqual>,
+						       boost::intrusive::constant_time_size<false>>;
 
 	std::array<typename KeyMap::bucket_type, table_size> buckets;
 
