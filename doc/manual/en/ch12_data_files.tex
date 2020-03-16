@@ -97,7 +97,9 @@ inaccessible.}: \url{http://soaringweb.org/TP}
 Several commercial and freely distributable programs exist for
 converting between different waypoint formats.
 
-If the elevation of any waypoints is set to zero in the waypoint file,
+Elevation field of a waypoint shouldn't be empty. If so, import of such
+a waypoint is skipped.
+But if the elevation of any waypoints is set to zero in the waypoint file,
 then XCSoar estimates the waypoint elevation from the terrain database
 if available.
 
