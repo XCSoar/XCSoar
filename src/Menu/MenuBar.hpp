@@ -28,6 +28,11 @@ Copyright_License {
 
 #include <tchar.h>
 
+/*
+    Menubar button height as a fraction of the screen height
+*/
+static constexpr unsigned menubar_height_scale_factor = 6;
+
 class ContainerWindow;
 
 /**

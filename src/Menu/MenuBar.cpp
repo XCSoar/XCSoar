@@ -36,7 +36,7 @@ GetButtonPosition(unsigned i, PixelRect rc)
   if (hheight > hwidth) {
     // portrait
 
-    hheight /= 6;
+    hheight /= menubar_height_scale_factor;
 
     if (i == 0) {
       rc.left = rc.right;
