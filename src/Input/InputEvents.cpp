@@ -58,6 +58,8 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "IO/LineReader.hpp"
 #include "Pan.hpp"
 #include "Dialogs/LockScreen.hpp"
+#include "Menu/MenuBar.hpp"
+#include "MapWindow/GlueMapWindow.hpp"
 
 #ifdef KOBO
 #include "Event/KeyCode.hpp"
@@ -198,6 +200,16 @@ InputEvents::drawButtons(Mode mode, bool full)
     : NULL;
 
   ButtonLabel::Set(menu, overlay_menu, full);
+
+  GlueMapWindow *map = CommonInterface::main_window->GetMapIfActive();
+  if (map != nullptr){
+      if (mode != MODE_DEFAULT){
+          // Set margin so that GlueMapWindow doesn't draw HUD underneath buttons
+          map->SetBottomMargin(menubar_height_scale_factor);
+      } else {
+          map->SetBottomMargin(0);
+      }
+  }
 }
 
 InputEvents::Mode
@@ -484,5 +496,5 @@ InputEvents::ProcessTimer()
 void
 InputEvents::eventLockScreen(const TCHAR *mode)
 {
-  ShowLockBox();  
+  ShowLockBox();
 }
