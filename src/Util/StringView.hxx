@@ -37,9 +37,10 @@
 
 template<typename T>
 struct BasicStringView : ConstBuffer<T> {
-	typedef typename ConstBuffer<T>::size_type size_type;
-	typedef typename ConstBuffer<T>::value_type value_type;
-	typedef typename ConstBuffer<T>::pointer pointer;
+	using typename ConstBuffer<T>::size_type;
+	using typename ConstBuffer<T>::value_type;
+	using typename ConstBuffer<T>::pointer;
+	using typename ConstBuffer<T>::const_pointer;
 
 	using ConstBuffer<T>::data;
 	using ConstBuffer<T>::size;
@@ -55,8 +56,7 @@ struct BasicStringView : ConstBuffer<T> {
 	constexpr BasicStringView(pointer _data, size_type _size) noexcept
 		:ConstBuffer<T>(_data, _size) {}
 
-	constexpr BasicStringView(pointer _begin,
-				  pointer _end) noexcept
+	constexpr BasicStringView(pointer _begin, pointer _end) noexcept
 		:ConstBuffer<T>(_begin, _end - _begin) {}
 
 	BasicStringView(pointer _data) noexcept
