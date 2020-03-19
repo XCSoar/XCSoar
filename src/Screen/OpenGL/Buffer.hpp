@@ -32,7 +32,7 @@ Copyright_License {
 #include "Dynamic.hpp"
 #endif
 
-#include <assert.h>
+#include <cassert>
 #include <stdlib.h>
 
 #ifndef NDEBUG

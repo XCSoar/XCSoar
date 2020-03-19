@@ -28,7 +28,7 @@ Copyright_License {
 #include "Screen/Pen.hpp"
 #include "Screen/Brush.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 struct ChartLook {
   enum Style {

@@ -26,7 +26,7 @@ Copyright_License {
 
 #include <boost/asio/posix/stream_descriptor.hpp>
 
-#include <assert.h>
+#include <cassert>
 
 class EventQueue;
 class UdevContext;

@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "ExtractParameters.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 static bool is_closing_quote_char(TCHAR const *s) {
   // Perform look-ahead to check if the detected quote_char terminates

@@ -28,7 +28,7 @@
 
 #include <vector>
 
-#include <assert.h>
+#include <cassert>
 
 class Waypoints;
 class AbortIntersectionTest;

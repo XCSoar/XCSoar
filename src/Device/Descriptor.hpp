@@ -43,7 +43,7 @@ Copyright_License {
 
 #include <chrono>
 
-#include <assert.h>
+#include <cassert>
 #include <tchar.h>
 #include <stdio.h>
 

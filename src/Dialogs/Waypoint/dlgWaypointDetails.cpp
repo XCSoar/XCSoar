@@ -58,7 +58,7 @@ Copyright_License {
 #include "Util/StringPointer.hxx"
 #include "Util/AllocatedString.hxx"
 
-#include <assert.h>
+#include <cassert>
 
 #ifdef HAVE_RUN_FILE
 

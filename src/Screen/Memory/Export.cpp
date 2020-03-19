@@ -28,7 +28,7 @@ Copyright_License {
 #include "../Memory/Dither.hpp"
 #endif
 
-#include <assert.h>
+#include <cassert>
 
 #ifdef GREYSCALE
 

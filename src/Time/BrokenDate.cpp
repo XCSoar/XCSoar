@@ -25,7 +25,7 @@ Copyright_License {
 #include "BrokenDateTime.hpp"
 #include "Calendar.hxx"
 
-#include <assert.h>
+#include <cassert>
 
 BrokenDate
 BrokenDate::TodayUTC()

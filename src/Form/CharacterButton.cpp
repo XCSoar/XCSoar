@@ -28,7 +28,7 @@ Copyright_License {
 #include "Util/UTF8.hpp"
 #endif
 
-#include <assert.h>
+#include <cassert>
 
 void
 CharacterButton::Create(ContainerWindow &parent, const ButtonLook &look,

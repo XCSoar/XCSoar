@@ -28,7 +28,7 @@ Copyright_License {
 
 #include <algorithm>
 
-#include <assert.h>
+#include <cassert>
 #include <stddef.h>
 #include <stdio.h>
 

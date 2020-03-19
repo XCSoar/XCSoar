@@ -32,7 +32,7 @@ Copyright_License {
 
 #include <memory>
 
-#include <assert.h>
+#include <cassert>
 #include <tchar.h>
 
 #define RASP_FILENAME "xcsoar-rasp.dat"

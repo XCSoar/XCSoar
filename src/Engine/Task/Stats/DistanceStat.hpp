@@ -22,7 +22,7 @@
 #ifndef DISTANCE_STAT_HPP
 #define DISTANCE_STAT_HPP
 
-#include <assert.h>
+#include <cassert>
 
 /**
  * Simple distance statistics with derived values (speed, incremental speed)

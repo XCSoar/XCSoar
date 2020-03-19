@@ -36,7 +36,7 @@
 #include <algorithm>
 #include <cstddef>
 
-#include <assert.h>
+#include <cassert>
 
 /**
  * A first-in-first-out buffer: you can append data at the end, and

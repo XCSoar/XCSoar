@@ -25,7 +25,7 @@ Copyright_License {
 #include "Math/Angle.hpp"
 #include "Util/StringFormat.hpp"
 
-#include <assert.h>
+#include <cassert>
 #include <string.h>
 
 void

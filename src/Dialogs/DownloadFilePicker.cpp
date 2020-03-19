@@ -47,7 +47,7 @@ Copyright_License {
 
 #include <vector>
 
-#include <assert.h>
+#include <cassert>
 
 /**
  * This class tracks a download and updates a #ProgressDialog.

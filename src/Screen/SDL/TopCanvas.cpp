@@ -51,7 +51,7 @@ Copyright_License {
 #include <alloca.h>
 #endif
 
-#include <assert.h>
+#include <cassert>
 #include <stdio.h>
 
 #ifndef ENABLE_OPENGL

@@ -21,7 +21,7 @@
 */
 #include "ThermalSlice.hpp"
 #include <math.h>
-#include <assert.h>
+#include <cassert>
 
 void
 ThermalSlice::Merge(const ThermalSlice& o)

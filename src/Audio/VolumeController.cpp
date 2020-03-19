@@ -31,7 +31,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Util/StringAPI.hxx"
 
-#include <assert.h>
+#include <cassert>
 
 #include <list>
 

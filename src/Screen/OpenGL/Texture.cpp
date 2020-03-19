@@ -42,7 +42,7 @@ Copyright_License {
 #include <SDL.h>
 #endif
 
-#include <assert.h>
+#include <cassert>
 
 #ifndef NDEBUG
 unsigned num_textures;

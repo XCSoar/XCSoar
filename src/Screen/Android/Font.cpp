@@ -30,7 +30,7 @@ Copyright_License {
 #include "Android/TextUtil.hpp"
 #include "Util/StringCompare.hxx"
 
-#include <assert.h>
+#include <cassert>
 
 /*
  * create a new instance of org.xcsoar.TextUtil and store it with a global

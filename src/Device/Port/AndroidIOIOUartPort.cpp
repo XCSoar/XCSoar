@@ -27,7 +27,7 @@ Copyright_License {
 #include "Android/Main.hpp"
 #include "Java/Global.hxx"
 
-#include <assert.h>
+#include <cassert>
 
 Port *
 OpenAndroidIOIOUartPort(unsigned uart_id, unsigned baud_rate,

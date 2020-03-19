@@ -28,7 +28,7 @@
 #include "Trace/Point.hpp"
 #include "PathSolvers/SolverResult.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 class TracePoint;
 

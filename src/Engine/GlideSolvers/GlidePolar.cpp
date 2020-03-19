@@ -32,7 +32,7 @@
 
 #include <algorithm>
 
-#include <assert.h>
+#include <cassert>
 
 GlidePolar::GlidePolar(const double _mc, const double _bugs, const double _ballast)
   :mc(_mc),

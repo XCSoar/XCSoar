@@ -27,7 +27,7 @@
 #include "Math/ZeroFinder.hpp"
 #include "Util/Tolerances.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 MacCready::MacCready(const GlideSettings &_settings,
                      const GlidePolar &_glide_polar,

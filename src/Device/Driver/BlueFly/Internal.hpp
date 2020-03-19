@@ -30,7 +30,7 @@ Copyright_License {
 #include "Thread/Cond.hxx"
 #include "Util/Compiler.h"
 
-#include <assert.h>
+#include <cassert>
 
 struct NMEAInfo;
 struct StringView;

@@ -33,7 +33,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 AirspaceClassRendererSettingsPanel::AirspaceClassRendererSettingsPanel(AirspaceClass _type)
   :RowFormWidget(UIGlobals::GetDialogLook()), border_color_changed(false),

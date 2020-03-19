@@ -28,7 +28,7 @@
 #include "Form/DataField/Listener.hpp"
 #include "Device/Config.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 class DeviceEditWidget : public RowFormWidget, DataFieldListener {
 public:

@@ -27,7 +27,7 @@ Copyright_License {
 
 #include "Util/Macros.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 #include <algorithm>
 

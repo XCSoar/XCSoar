@@ -27,7 +27,7 @@ Copyright_License {
 #include "Cast.hpp"
 
 #include <algorithm>
-#include <assert.h>
+#include <cassert>
 
 // set size of reserved queue elements (may differ from Dijkstra default)
 static constexpr unsigned CONTEST_QUEUE_SIZE = 5000;

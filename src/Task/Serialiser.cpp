@@ -34,7 +34,7 @@
 
 #include <memory>
 
-#include <assert.h>
+#include <cassert>
 #include <tchar.h>
 
 gcc_const

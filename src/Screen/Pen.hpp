@@ -28,7 +28,7 @@ Copyright_License {
 #include "Screen/Features.hpp"
 #include "Debug.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 /**
  * A pen draws lines and borders.

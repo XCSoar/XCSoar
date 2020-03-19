@@ -27,7 +27,7 @@
 #include "Widget/RowFormWidget.hpp"
 #include "Form/DataField/Listener.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 class ObservationZone;
 

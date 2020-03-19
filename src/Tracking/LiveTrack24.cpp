@@ -30,7 +30,7 @@ Copyright_License {
 #include "Util/StaticString.hxx"
 #include "Version.hpp"
 
-#include <assert.h>
+#include <cassert>
 #include <cstdlib>
 
 namespace LiveTrack24

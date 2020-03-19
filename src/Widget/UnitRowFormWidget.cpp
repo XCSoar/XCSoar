@@ -28,7 +28,7 @@ Copyright_License {
 #include "Units/Descriptor.hpp"
 #include "Math/Util.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 void
 RowFormWidget::AddReadOnly(const TCHAR *label, const TCHAR *help,

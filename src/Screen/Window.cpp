@@ -31,7 +31,7 @@ Copyright_License {
 #include "Screen/OpenGL/Debug.hpp"
 #endif
 
-#include <assert.h>
+#include <cassert>
 
 Window::~Window()
 {

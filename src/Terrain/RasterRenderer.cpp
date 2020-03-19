@@ -34,7 +34,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Event/Idle.hpp"
 
-#include <assert.h>
+#include <cassert>
 #include <stdint.h>
 
 /**

@@ -28,7 +28,7 @@
 #include "Util/AircraftStateFilter.hpp"
 #include "Util/Compiler.h"
 
-#include <assert.h>
+#include <cassert>
 
 /**
  *  Class used for simplified/idealised performace

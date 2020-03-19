@@ -26,7 +26,7 @@ Copyright_License {
 #include "Math/FastTrig.hpp"
 #include "Math/Point2D.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 namespace OpenGL {
   GLArrayBuffer *circle_buffer, *small_circle_buffer;

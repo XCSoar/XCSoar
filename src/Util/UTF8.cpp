@@ -26,7 +26,7 @@ Copyright_License {
 
 #include <algorithm>
 
-#include <assert.h>
+#include <cassert>
 
 /**
  * Is this a leading byte that is followed by 1 continuation byte?

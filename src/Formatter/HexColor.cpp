@@ -26,7 +26,7 @@ Copyright_License {
 #include "Util/NumberParser.hpp"
 
 #include <stdio.h>
-#include <assert.h>
+#include <cassert>
 
 void
 FormatHexColor(char *buffer, size_t size, const RGB8Color color)

@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "RateLimiter.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 RateLimiter::RateLimiter(std::chrono::steady_clock::duration _period,
                          std::chrono::steady_clock::duration _delay) noexcept

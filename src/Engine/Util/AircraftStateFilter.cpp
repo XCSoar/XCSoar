@@ -23,7 +23,7 @@
 #include "AircraftStateFilter.hpp"
 #include "Geo/GeoVector.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 AircraftStateFilter::AircraftStateFilter(const double cutoff_wavelength)
   :x_diff_filter(0), y_diff_filter(0),

@@ -30,7 +30,7 @@ Copyright_License {
 #include "Net/State.hpp"
 #include "OS/ByteOrder.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 static constexpr auto CLOUD_INTERVAL = std::chrono::minutes(1);
 

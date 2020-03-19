@@ -29,7 +29,7 @@ Copyright_License {
 #include <atomic>
 #include <exception>
 
-#include <assert.h>
+#include <cassert>
 
 class Job;
 class OperationEnvironment;

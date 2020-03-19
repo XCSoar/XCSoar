@@ -30,7 +30,7 @@ Copyright_License {
 #include <windows.h>
 
 #include <algorithm>
-#include <assert.h>
+#include <cassert>
 #include <tchar.h>
 #include <stdio.h>
 

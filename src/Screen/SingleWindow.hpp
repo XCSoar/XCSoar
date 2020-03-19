@@ -28,7 +28,7 @@ Copyright_License {
 
 #include <list>
 
-#include <assert.h>
+#include <cassert>
 
 struct Event;
 class WndForm;

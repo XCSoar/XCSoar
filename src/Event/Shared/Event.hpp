@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Screen/Point.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 struct Event {
   enum Type {

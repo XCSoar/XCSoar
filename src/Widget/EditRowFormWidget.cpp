@@ -39,7 +39,7 @@ Copyright_License {
 #include "Util/StringAPI.hxx"
 #include "Util/TruncateString.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 WndProperty *
 RowFormWidget::CreateEdit(const TCHAR *label, const TCHAR *help,

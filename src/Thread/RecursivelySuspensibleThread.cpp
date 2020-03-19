@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "RecursivelySuspensibleThread.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 bool
 RecursivelySuspensibleThread::Start(bool suspended)

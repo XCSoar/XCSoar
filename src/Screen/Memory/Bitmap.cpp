@@ -26,7 +26,7 @@ Copyright_License {
 #include "Screen/Custom/UncompressedImage.hpp"
 #include "UncompressedImage.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 bool
 Bitmap::Load(UncompressedImage &&uncompressed, gcc_unused Type type)

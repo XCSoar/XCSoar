@@ -27,7 +27,7 @@ Copyright_License {
 #include "Math/LeastSquares.hpp"
 #include "Util/StaticString.hxx"
 
-#include <assert.h>
+#include <cassert>
 #include <windef.h> /* for MAX_PATH */
 
 #ifdef ENABLE_OPENGL

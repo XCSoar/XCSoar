@@ -39,7 +39,7 @@ Copyright_License {
 #include "Util/ConvertString.hpp"
 #endif
 
-#include <assert.h>
+#include <cassert>
 
 /**
  * A key type for the Cache template class.  It can be operated in two

@@ -42,7 +42,7 @@ Copyright_License {
 #include <windows.h>
 #endif
 
-#include <assert.h>
+#include <cassert>
 
 class Path;
 class ResourceId;

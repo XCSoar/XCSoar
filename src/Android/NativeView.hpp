@@ -33,7 +33,7 @@ Copyright_License {
 #include "Screen/Point.hpp"
 #endif
 
-#include <assert.h>
+#include <cassert>
 
 class NativeView {
   JNIEnv *env;

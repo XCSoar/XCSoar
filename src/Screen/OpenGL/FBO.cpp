@@ -27,7 +27,7 @@ Copyright_License {
 
 #include "Function.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 static PFNGLBINDRENDERBUFFEROESPROC _glBindRenderbuffer;
 static PFNGLDELETERENDERBUFFERSOESPROC _glDeleteRenderbuffers;

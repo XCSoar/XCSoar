@@ -30,7 +30,7 @@ Copyright_License {
 #include "Rough/RoughVSpeed.hpp"
 #include "Util/Compiler.h"
 
-#include <assert.h>
+#include <cassert>
 #include <stdint.h>
 
 struct MoreData;

@@ -28,7 +28,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Util/Macros.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 ScrollBar::ScrollBar(const ButtonLook &_button_look)
   :button_renderer(_button_look), dragging(false)

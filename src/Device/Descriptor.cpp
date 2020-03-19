@@ -64,7 +64,7 @@ Copyright_License {
 #include "Apple/InternalSensors.hpp"
 #endif
 
-#include <assert.h>
+#include <cassert>
 
 /**
  * This scope class calls DeviceDescriptor::Return() and

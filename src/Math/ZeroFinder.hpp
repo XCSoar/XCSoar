@@ -25,7 +25,7 @@
 
 #include "Util/Compiler.h"
 
-#include <assert.h>
+#include <cassert>
 
 /**
  * Zero finding and minimisation search algorithm

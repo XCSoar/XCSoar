@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Angle.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 Angle::DMS
 Angle::ToDMS() const

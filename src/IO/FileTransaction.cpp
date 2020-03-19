@@ -24,7 +24,7 @@ Copyright_License {
 #include "FileTransaction.hpp"
 #include "OS/FileUtil.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 static AllocatedPath
 MakeTemporaryPath(Path path)

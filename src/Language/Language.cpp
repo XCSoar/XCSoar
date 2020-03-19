@@ -26,7 +26,7 @@ Copyright_License {
 #include "Util/StringCompare.hxx"
 #include "Util/UTF8.hpp"
 
-#include <assert.h>
+#include <cassert>
 #include <string.h>
 
 #if defined(HAVE_POSIX) && !defined(ANDROID) && !defined(KOBO) && !defined(__APPLE__)

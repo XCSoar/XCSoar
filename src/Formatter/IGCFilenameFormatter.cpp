@@ -29,7 +29,7 @@ Copyright_License {
 #include <algorithm>
 #endif
 
-#include <assert.h>
+#include <cassert>
 #include <string.h>
 
 static TCHAR

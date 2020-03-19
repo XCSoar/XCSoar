@@ -24,7 +24,7 @@
 #include "RoutePolar.hpp"
 #include "Geo/Flat/FlatProjection.hpp"
 
-#include <assert.h>
+#include <cassert>
 #include <stdlib.h>
 
 gcc_const

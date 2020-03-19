@@ -24,7 +24,7 @@ Copyright_License {
 #include "CRC16.hpp"
 #include "Util/CRC.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 uint16_t
 FLARM::CalculateCRC(const FrameHeader &header,

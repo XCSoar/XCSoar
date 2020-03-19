@@ -20,7 +20,7 @@
    }
 */
 #include "ThermalBand.hpp"
-#include <assert.h>
+#include <cassert>
 #include <algorithm>
 
 void

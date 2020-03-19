@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Multi.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 Net::CurlMulti::CurlMulti()
   :multi(curl_multi_init())

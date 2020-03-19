@@ -27,7 +27,7 @@
 #include "TestUtil.hpp"
 #include "Util/PrintException.hxx"
 
-#include <assert.h>
+#include <cassert>
 #include <cstdio>
 
 static void

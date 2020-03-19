@@ -32,7 +32,7 @@ Copyright_License {
 #include "Event/LambdaTimer.hpp"
 #include "Event/Timer.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 static constexpr int HELP = 100;
 

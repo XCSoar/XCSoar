@@ -27,7 +27,7 @@ Copyright_License {
 
 #include <algorithm>
 
-#include <assert.h>
+#include <cassert>
 
 char *
 CopyTruncateString(char *dest, size_t dest_size, const char *src)

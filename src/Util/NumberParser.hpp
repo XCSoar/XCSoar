@@ -26,7 +26,7 @@ Copyright_License {
 
 #include <stdint.h>
 #include <stdlib.h>
-#include <assert.h>
+#include <cassert>
 
 #ifdef _UNICODE
 #include <wchar.h>

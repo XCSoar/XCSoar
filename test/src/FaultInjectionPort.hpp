@@ -23,7 +23,7 @@
 #include "Device/Port/Port.hpp"
 
 #include <algorithm>
-#include <assert.h>
+#include <cassert>
 #include <stdio.h>
 
 static unsigned inject_port_fault;

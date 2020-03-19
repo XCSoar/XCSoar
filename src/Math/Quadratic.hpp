@@ -26,7 +26,7 @@
 #include "Util.hpp"
 #include "Util/Compiler.h"
 
-#include <assert.h>
+#include <cassert>
 
 /**
  * Utility class for efficient solution of quadratic equations

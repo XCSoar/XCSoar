@@ -31,7 +31,7 @@ Copyright_License {
 #include "Util/TrivialArray.hxx"
 #include "Util/TStringView.hxx"
 
-#include <assert.h>
+#include <cassert>
 #include <tchar.h>
 
 #ifdef ENABLE_SDL

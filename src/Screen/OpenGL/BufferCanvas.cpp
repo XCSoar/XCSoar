@@ -35,7 +35,7 @@ Copyright_License {
 #include "DisplayOrientation.hpp"
 #endif
 
-#include <assert.h>
+#include <cassert>
 
 void
 BufferCanvas::Create(PixelSize new_size)

@@ -39,7 +39,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "OS/Path.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 /**
  *

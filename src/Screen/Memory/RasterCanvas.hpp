@@ -31,7 +31,7 @@ Copyright_License {
 #include "Util/AllocatedArray.hxx"
 #include "Util/Compiler.h"
 
-#include <assert.h>
+#include <cassert>
 
 /*
   line_masks:

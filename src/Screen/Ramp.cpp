@@ -24,7 +24,7 @@ Copyright_License {
 #include "Screen/Ramp.hpp"
 #include "PortableColor.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 static constexpr RGB8Color
 Interpolate(RGB8Color c1, RGB8Color c2,

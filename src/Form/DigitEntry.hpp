@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/PaintWindow.hpp"
 #include "Renderer/ButtonRenderer.hpp"
 
-#include <assert.h>
+#include <cassert>
 #include <stdint.h>
 
 enum class CoordinateFormat : uint8_t;

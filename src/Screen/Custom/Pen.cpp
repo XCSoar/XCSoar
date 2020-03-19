@@ -24,7 +24,7 @@ Copyright_License {
 #include "Screen/Pen.hpp"
 #include "Screen/Debug.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 void
 Pen::Create(Style _style, unsigned _width, const Color c)

@@ -32,7 +32,7 @@ Copyright_License {
 #include "Screen/BulkPoint.hpp"
 #include "Util/Compiler.h"
 
-#include <assert.h>
+#include <cassert>
 #include <windows.h>
 #include <tchar.h>
 

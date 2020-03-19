@@ -33,7 +33,7 @@ Copyright_License {
 
 #include <algorithm>
 
-#include <assert.h>
+#include <cassert>
 
 std::string
 Path::ToUTF8() const

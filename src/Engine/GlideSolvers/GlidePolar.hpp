@@ -27,7 +27,7 @@
 
 #include <type_traits>
 
-#include <assert.h>
+#include <cassert>
 
 struct GlideState;
 struct GlideResult;

@@ -34,7 +34,7 @@
 #include <initializer_list>
 #include <algorithm>
 
-#include <assert.h>
+#include <cassert>
 #include <stddef.h>
 
 /**

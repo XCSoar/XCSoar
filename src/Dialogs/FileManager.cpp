@@ -59,7 +59,7 @@ Copyright_License {
 #include <vector>
 #endif
 
-#include <assert.h>
+#include <cassert>
 
 static AllocatedPath
 LocalPath(const AvailableFile &file)

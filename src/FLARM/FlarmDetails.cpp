@@ -27,7 +27,7 @@ Copyright_License {
 #include "FLARM/FlarmId.hpp"
 #include "Util/StringCompare.hxx"
 
-#include <assert.h>
+#include <cassert>
 
 const FlarmNetRecord *
 FlarmDetails::LookupRecord(FlarmId id)

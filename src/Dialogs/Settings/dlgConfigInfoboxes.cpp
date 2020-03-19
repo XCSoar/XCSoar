@@ -40,7 +40,7 @@ Copyright_License {
 #include "Util/StringAPI.hxx"
 #include "Util/StaticArray.hxx"
 
-#include <assert.h>
+#include <cassert>
 
 static InfoBoxSettings::Panel clipboard;
 static unsigned clipboard_size;

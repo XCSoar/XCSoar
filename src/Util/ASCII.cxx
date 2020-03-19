@@ -30,7 +30,7 @@
 #include "ASCII.hxx"
 #include "CharUtil.hxx"
 
-#include <assert.h>
+#include <cassert>
 
 void
 CopyASCII(char *dest, const char *src)

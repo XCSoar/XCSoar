@@ -32,7 +32,7 @@ Copyright_License {
 
 #include <chrono>
 
-#include <assert.h>
+#include <cassert>
 
 class Window;
 

@@ -21,7 +21,7 @@
 */
 #include "ThermalEncounterCollection.hpp"
 #include <algorithm>
-#include <assert.h>
+#include <cassert>
 
 void
 ThermalEncounterCollection::Merge(const ThermalBand& tb)

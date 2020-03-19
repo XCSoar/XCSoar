@@ -60,7 +60,7 @@ Copyright_License {
 #endif
 #endif
 
-#include <assert.h>
+#include <cassert>
 
 static const char *const Usage = "\n"
   "  -datapath=      path to XCSoar data can be defined\n"

@@ -28,7 +28,7 @@ Copyright_License {
 #include "GeoPoint.hpp"
 #include "Math/Util.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 using namespace WGS84;
 

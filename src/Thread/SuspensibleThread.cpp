@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Thread/SuspensibleThread.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 bool
 SuspensibleThread::Start(bool _suspended) noexcept

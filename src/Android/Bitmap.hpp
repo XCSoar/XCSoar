@@ -28,7 +28,7 @@ Copyright_License {
 
 #include <jni.h>
 
-#include <assert.h>
+#include <cassert>
 
 class AndroidBitmap {
   static jmethodID recycle_method;

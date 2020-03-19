@@ -47,7 +47,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 
 #include <stddef.h>
-#include <assert.h>
+#include <cassert>
 
 /**
  * An #InfoBoxContent implementation that invokes a callback.  This is

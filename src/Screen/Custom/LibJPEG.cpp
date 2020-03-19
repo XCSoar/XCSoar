@@ -30,7 +30,7 @@ Copyright_License {
 #include <stdexcept>
 
 #include <tchar.h>
-#include <assert.h>
+#include <cassert>
 #include <stdio.h>
 #include <stddef.h>
 

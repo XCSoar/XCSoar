@@ -32,7 +32,7 @@ Copyright_License {
 #include "Screen/LargeTextWindow.hpp"
 #include "Screen/Font.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 gcc_pure
 static unsigned

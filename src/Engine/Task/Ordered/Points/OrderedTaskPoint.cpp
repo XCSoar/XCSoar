@@ -31,7 +31,7 @@
 #include "Geo/Flat/FlatProjection.hpp"
 #include "Geo/Math.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 OrderedTaskPoint::OrderedTaskPoint(TaskPointType _type,
                                    ObservationZonePoint *_oz,

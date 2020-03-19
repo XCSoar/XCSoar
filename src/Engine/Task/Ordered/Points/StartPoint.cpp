@@ -26,7 +26,7 @@
 #include "Task/TaskBehaviour.hpp"
 #include "Geo/Math.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 StartPoint::StartPoint(ObservationZonePoint *_oz,
                        WaypointPtr &&wp,

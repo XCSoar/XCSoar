@@ -30,7 +30,7 @@ Copyright_License {
 
 #include <algorithm>
 
-#include <assert.h>
+#include <cassert>
 
 inline void
 ThermalLocator::Point::Drift(double t, const FlatProjection &projection,

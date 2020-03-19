@@ -29,7 +29,7 @@ Copyright_License {
 
 #include <boost/intrusive/list.hpp>
 
-#include <assert.h>
+#include <cassert>
 
 struct PixelPoint;
 class Window;

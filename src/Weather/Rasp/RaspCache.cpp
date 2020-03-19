@@ -29,7 +29,7 @@ Copyright_License {
 #include "OS/Path.hpp"
 #include "IO/ZipArchive.hpp"
 
-#include <assert.h>
+#include <cassert>
 #include <windef.h> // for MAX_PATH
 
 static constexpr unsigned

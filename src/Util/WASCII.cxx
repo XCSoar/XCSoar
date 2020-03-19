@@ -30,7 +30,7 @@
 #include "WASCII.hxx"
 #include "WCharUtil.hxx"
 
-#include <assert.h>
+#include <cassert>
 
 void
 CopyASCII(wchar_t *dest, const wchar_t *src)

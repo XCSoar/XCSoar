@@ -28,7 +28,7 @@ Copyright_License {
 #include "Screen/Point.hpp"
 
 #include <utility>
-#include <assert.h>
+#include <cassert>
 
 /**
  * A #Widget that contains two other widgets, the second one following

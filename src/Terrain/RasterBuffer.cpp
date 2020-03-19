@@ -25,7 +25,7 @@ Copyright_License {
 #include "Math/FastMath.hpp"
 
 #include <algorithm>
-#include <assert.h>
+#include <cassert>
 #include <stdlib.h>
 
 void

@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Init.hpp"
 
-#include <assert.h>
+#include <cassert>
 #include <stddef.h>
 #include <dlfcn.h>
 

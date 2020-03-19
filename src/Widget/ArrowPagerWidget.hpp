@@ -28,7 +28,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Form/ActionListener.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 struct ButtonLook;
 

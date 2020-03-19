@@ -30,7 +30,7 @@ Copyright_License {
 #include "Screen/Features.hpp"
 #include "Dialogs/DataField.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 bool
 WndProperty::OnKeyCheck(unsigned key_code) const

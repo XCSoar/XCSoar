@@ -38,7 +38,7 @@
 
 #include <array>
 
-#include <assert.h>
+#include <cassert>
 
 /**
  * A simple LRU cache.  Item lookup is done with a hash table.  No

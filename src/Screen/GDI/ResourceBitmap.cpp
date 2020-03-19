@@ -25,7 +25,7 @@ Copyright_License {
 #include "ResourceLoader.hpp"
 #include "ResourceId.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 Bitmap::Bitmap(ResourceId id)
 {

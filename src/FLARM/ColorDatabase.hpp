@@ -30,7 +30,7 @@ Copyright_License {
 
 #include <map>
 
-#include <assert.h>
+#include <cassert>
 
 class FlarmColorDatabase {
   typedef std::map<FlarmId, FlarmColor> Map;

@@ -30,7 +30,7 @@ Copyright_License {
 #include "Util/Compiler.h"
 
 #include <unordered_map>
-#include <assert.h>
+#include <cassert>
 
 /**
  * Abstract class for A* /Dijkstra searches of nav points, managing

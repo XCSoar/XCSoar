@@ -28,7 +28,7 @@ Copyright_License {
 #include "Projection/WindowProjection.hpp"
 #include "Util/Macros.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 static constexpr ColorRamp terrain_colors[][NUM_COLOR_RAMP_LEVELS] = {
   {

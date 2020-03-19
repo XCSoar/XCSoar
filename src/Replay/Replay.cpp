@@ -36,7 +36,7 @@
 
 #include <stdexcept>
 
-#include <assert.h>
+#include <cassert>
 
 void
 Replay::Stop()

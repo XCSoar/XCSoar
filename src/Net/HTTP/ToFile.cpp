@@ -28,7 +28,7 @@ Copyright_License {
 #include "OS/FileUtil.hpp"
 #include "Logger/MD5.hpp"
 
-#include <assert.h>
+#include <cassert>
 #include <stdio.h>
 
 class CancelDownloadToFile {};

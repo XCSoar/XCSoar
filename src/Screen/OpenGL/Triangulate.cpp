@@ -29,7 +29,7 @@ Copyright_License {
 
 #include <algorithm>
 #include <math.h>
-#include <assert.h>
+#include <cassert>
 
 /**
  * Calculate signed area of the polygon to determine the rotary direction.

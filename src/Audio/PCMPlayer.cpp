@@ -28,7 +28,7 @@ Copyright_License {
 #include "PCMDataSource.hpp"
 #include "AudioAlgorithms.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 #include <algorithm>
 

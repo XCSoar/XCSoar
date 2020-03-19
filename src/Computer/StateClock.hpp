@@ -26,7 +26,7 @@ Copyright_License {
 
 #include <algorithm>
 
-#include <assert.h>
+#include <cassert>
 
 /**
  * Track how much time the aircraft was in a certain state

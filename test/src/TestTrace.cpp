@@ -32,7 +32,7 @@
 #include "Util/PrintException.hxx"
 
 #include <windef.h>
-#include <assert.h>
+#include <cassert>
 #include <cstdio>
 
 static void

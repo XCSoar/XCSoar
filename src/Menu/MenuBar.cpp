@@ -25,7 +25,7 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 #include "Input/InputEvents.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 gcc_pure
 static PixelRect

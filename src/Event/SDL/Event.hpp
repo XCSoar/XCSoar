@@ -28,7 +28,7 @@ Copyright_License {
 
 #include <SDL_events.h>
 
-#include <assert.h>
+#include <cassert>
 
 enum {
   /**

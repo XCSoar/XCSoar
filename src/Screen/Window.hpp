@@ -28,7 +28,7 @@ Copyright_License {
 #include "Screen/Features.hpp"
 #include "Util/Compiler.h"
 
-#include <assert.h>
+#include <cassert>
 
 #ifdef USE_WINUSER
 #include <windows.h>

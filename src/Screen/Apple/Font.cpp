@@ -29,7 +29,7 @@ Copyright_License {
 #include "Thread/Mutex.hxx"
 #endif
 
-#include <assert.h>
+#include <cassert>
 #include <math.h>
 #include <string.h>
 

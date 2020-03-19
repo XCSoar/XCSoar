@@ -27,7 +27,7 @@ Copyright_License {
 #include "Util/StaticArray.hxx"
 #include "Form/Button.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 class ButtonPanel {
   ContainerWindow &parent;

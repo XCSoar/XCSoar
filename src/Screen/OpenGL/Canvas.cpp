@@ -53,7 +53,7 @@ Copyright_License {
 #include "Util/UTF8.hpp"
 #endif
 
-#include <assert.h>
+#include <cassert>
 
 AllocatedArray<BulkPixelPoint> Canvas::vertex_buffer;
 

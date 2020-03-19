@@ -43,7 +43,7 @@ Copyright_License {
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Util/StringCompare.hxx"
 
-#include <assert.h>
+#include <cassert>
 
 static unsigned task_list_serial;
 

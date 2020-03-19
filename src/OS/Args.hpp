@@ -37,7 +37,7 @@ Copyright_License {
 #include <algorithm>
 #include <stdlib.h>
 #include <stdio.h>
-#include <assert.h>
+#include <cassert>
 
 #ifdef MORE_USAGE
 extern void PrintMoreUsage();

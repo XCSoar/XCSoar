@@ -36,7 +36,7 @@
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
-#include <assert.h>
+#include <cassert>
 
 // Conversion-Constants
 

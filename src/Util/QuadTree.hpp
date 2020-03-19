@@ -37,7 +37,7 @@
 #include <limits>
 #include <memory>
 
-#include <assert.h>
+#include <cassert>
 
 /**
  * A quad tree implementation.  It provides quick searches on a two

@@ -29,7 +29,7 @@ Copyright_License {
 #include <chrono>
 #include <type_traits>
 
-#include <assert.h>
+#include <cassert>
 #include <stdint.h>
 
 /**

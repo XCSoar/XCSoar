@@ -25,7 +25,7 @@ Copyright_License {
 
 #ifndef NDEBUG
 
-#include <assert.h>
+#include <cassert>
 
 static bool screen_initialized = false;
 

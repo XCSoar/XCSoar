@@ -29,7 +29,7 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "UIGlobals.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 void
 ShowLockBox()

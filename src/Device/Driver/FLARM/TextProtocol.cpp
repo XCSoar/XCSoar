@@ -27,7 +27,7 @@ Copyright_License {
 #include "Device/Util/NMEAWriter.hpp"
 #include "Time/TimeoutClock.hpp"
 
-#include <assert.h>
+#include <cassert>
 #include <string.h>
 
 static constexpr bool

@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Util/Compiler.h"
 
-#include <assert.h>
+#include <cassert>
 #include <tchar.h>
 #include <stdint.h>
 

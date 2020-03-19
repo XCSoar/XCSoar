@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "DebugReplay.hpp"
 #include "IGCFixEnhanced.hpp"
-#include <assert.h>
+#include <cassert>
 
 
 class DebugReplayVector : public DebugReplay {

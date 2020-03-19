@@ -85,7 +85,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Simulator.hpp"
 #include "Formatter/TimeFormatter.hpp"
 
-#include <assert.h>
+#include <cassert>
 #include <tchar.h>
 #include <algorithm>
 

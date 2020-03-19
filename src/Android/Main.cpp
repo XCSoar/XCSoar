@@ -79,7 +79,7 @@ Copyright_License {
 #include "Screen/OpenGL/Buffer.hpp"
 #endif
 
-#include <assert.h>
+#include <cassert>
 #include <stdlib.h>
 
 unsigned android_api_level;

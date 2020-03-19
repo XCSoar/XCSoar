@@ -26,7 +26,7 @@
 #include "OS/Args.hpp"
 #include "DebugReplay.hpp"
 
-#include <assert.h>
+#include <cassert>
 #include <stdio.h>
 
 // Uncomment the following line to use the same trace size as LK8000.

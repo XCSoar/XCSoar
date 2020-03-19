@@ -44,7 +44,7 @@ Copyright_License {
 #include "Util/StringAPI.hxx"
 
 #include <vector>
-#include <assert.h>
+#include <cassert>
 
 /* this macro exists in the WIN32 API */
 #ifdef DELETE

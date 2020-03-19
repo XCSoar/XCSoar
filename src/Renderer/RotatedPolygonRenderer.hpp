@@ -36,7 +36,7 @@ Copyright_License {
 
 #include <algorithm>
 
-#include <assert.h>
+#include <cassert>
 
 class RotatedPolygonRenderer {
 #ifdef ENABLE_OPENGL

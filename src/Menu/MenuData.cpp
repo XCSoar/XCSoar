@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "MenuData.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 void
 Menu::Clear()

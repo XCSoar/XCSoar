@@ -83,7 +83,7 @@ Copyright_License {
 #include "Panels/WeatherConfigPanel.hpp"
 #endif
 
-#include <assert.h>
+#include <cassert>
 
 static unsigned current_page;
 

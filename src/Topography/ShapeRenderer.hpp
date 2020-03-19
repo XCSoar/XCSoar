@@ -31,7 +31,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Brush.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 /**
  * A helper class optimized for doing bulk draws on OpenGL.

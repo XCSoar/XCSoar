@@ -30,7 +30,7 @@ Copyright_License {
 #include "FBO.hpp"
 #include "Asset.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 #ifdef ENABLE_SDL
 #include <SDL_video.h>

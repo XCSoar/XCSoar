@@ -24,7 +24,7 @@ Copyright_License {
 #include "ManagedWidget.hpp"
 #include "Widget.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 void
 ManagedWidget::Unprepare()

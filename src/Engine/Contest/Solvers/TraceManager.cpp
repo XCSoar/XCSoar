@@ -24,7 +24,7 @@ Copyright_License {
 #include "TraceManager.hpp"
 #include "Trace/Trace.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 TraceManager::TraceManager(const Trace &_trace)
   :trace_master(_trace),

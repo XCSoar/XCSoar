@@ -24,7 +24,7 @@ Copyright_License {
 #include "BrokenDateTime.hpp"
 #include "Calendar.hxx"
 
-#include <assert.h>
+#include <cassert>
 #include <time.h>
 
 #ifndef HAVE_POSIX

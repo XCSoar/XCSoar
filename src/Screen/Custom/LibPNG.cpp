@@ -28,7 +28,7 @@ Copyright_License {
 
 #include <png.h>
 
-#include <assert.h>
+#include <cassert>
 #include <string.h>
 
 struct PNGCallbackContext {

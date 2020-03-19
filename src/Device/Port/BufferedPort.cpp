@@ -26,7 +26,7 @@ Copyright_License {
 
 #include <algorithm>
 
-#include <assert.h>
+#include <cassert>
 
 BufferedPort::BufferedPort(PortListener *_listener, DataHandler &_handler)
   :Port(_listener, _handler),

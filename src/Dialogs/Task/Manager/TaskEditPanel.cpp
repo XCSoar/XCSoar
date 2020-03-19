@@ -50,7 +50,7 @@ Copyright_License {
 #include "Util/StringCompare.hxx"
 #include "UIGlobals.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 enum Buttons {
   EDIT = 100,

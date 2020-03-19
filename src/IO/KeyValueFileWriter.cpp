@@ -25,7 +25,7 @@ Copyright_License {
 #include "BufferedOutputStream.hxx"
 #include "Util/Macros.hpp"
 
-#include <assert.h>
+#include <cassert>
 #include <string.h>
 
 #ifdef _UNICODE

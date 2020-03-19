@@ -29,7 +29,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 // SendNMEA
 //  Sends a user-defined NMEA string to an external instrument.

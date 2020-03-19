@@ -29,7 +29,7 @@
 
 #include "FileDescriptor.hxx"
 
-#include <assert.h>
+#include <cassert>
 #include <sys/stat.h>
 #include <fcntl.h>
 

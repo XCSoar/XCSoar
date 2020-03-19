@@ -20,7 +20,7 @@
    }
 */
 #include "ThermalEncounterBand.hpp"
-#include <assert.h>
+#include <cassert>
 
 void
 ThermalEncounterBand::AddSample(const double time, const double height)

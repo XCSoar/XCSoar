@@ -24,7 +24,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Util/Compiler.h"
 
-#include <assert.h>
+#include <cassert>
 #include <stdlib.h>
 #include <android/log.h>
 

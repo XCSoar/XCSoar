@@ -23,7 +23,7 @@
 #include "GlideResult.hpp"
 #include "GlideState.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 GlideResult::GlideResult(const GlideState &task, const double V)
   :head_wind(task.head_wind),

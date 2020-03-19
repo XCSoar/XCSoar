@@ -44,7 +44,7 @@ Copyright_License {
 
 #include <algorithm>
 
-#include <assert.h>
+#include <cassert>
 #include <stdlib.h>
 #include <windef.h> // for MAX_PATH
 #ifdef _WIN32

@@ -32,7 +32,7 @@ Copyright_License {
 #include "Util/StaticArray.hxx"
 #include "UIGlobals.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 int
 ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)

@@ -23,7 +23,7 @@
 #include "TaskLeg.hpp"
 #include "Task/Ordered/Points/OrderedTaskPoint.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 inline const OrderedTaskPoint *
 TaskLeg::GetOrigin() const

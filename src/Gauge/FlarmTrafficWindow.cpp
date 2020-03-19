@@ -35,7 +35,7 @@
 
 #include <algorithm>
 
-#include <assert.h>
+#include <cassert>
 #include <stdio.h>
 
 #ifdef ENABLE_OPENGL

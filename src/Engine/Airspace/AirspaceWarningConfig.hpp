@@ -25,7 +25,7 @@
 
 #include "AirspaceClass.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 struct AirspaceWarningConfig
 {

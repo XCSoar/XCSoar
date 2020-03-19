@@ -36,7 +36,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 class OptionStartsWidget : public ListWidget, private ActionListener {
   enum Buttons {

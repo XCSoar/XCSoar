@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "PagerWidget.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 PagerWidget::~PagerWidget()
 {

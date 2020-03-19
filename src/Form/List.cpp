@@ -34,7 +34,7 @@ Copyright_License {
 #include "Screen/WindowCanvas.hpp"
 #endif
 
-#include <assert.h>
+#include <cassert>
 
 #include <algorithm>
 

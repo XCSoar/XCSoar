@@ -32,7 +32,7 @@ Copyright_License {
 #include "Util/EnumCast.hpp"
 #include "Units/Group.hpp"
 
-#include <assert.h>
+#include <cassert>
 #include <stdint.h>
 
 struct DialogLook;

@@ -28,7 +28,7 @@ Copyright_License {
 #include "PathSolvers/NavDijkstra.hpp"
 #include "TraceManager.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 class Trace;
 

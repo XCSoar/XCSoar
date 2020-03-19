@@ -29,7 +29,7 @@
 
 #include "EventPipe.hpp"
 
-#include <assert.h>
+#include <cassert>
 #include <stdint.h>
 
 bool

@@ -35,7 +35,7 @@ extern "C" {
 #include <lua.h>
 }
 
-#include <assert.h>
+#include <cassert>
 
 namespace Lua {
 

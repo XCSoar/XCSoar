@@ -31,7 +31,7 @@ Copyright_License {
 #include "SLES/Init.hpp"
 #endif
 
-#include <assert.h>
+#include <cassert>
 
 static constexpr unsigned sample_rate = 44100;
 

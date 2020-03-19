@@ -24,7 +24,7 @@ Copyright_License {
 #include "Screen/Brush.hpp"
 #include "Screen/Bitmap.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 void
 Brush::Create(const Color c)

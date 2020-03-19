@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "PagerWidget.hpp"
 
-#include <assert.h>
+#include <cassert>
 #include <tchar.h>
 
 class MaskedIcon;

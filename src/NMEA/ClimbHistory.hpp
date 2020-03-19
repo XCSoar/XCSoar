@@ -26,7 +26,7 @@ Copyright_License {
 
 #include <type_traits>
 
-#include <assert.h>
+#include <cassert>
 
 /**
  * Derived climb rate history

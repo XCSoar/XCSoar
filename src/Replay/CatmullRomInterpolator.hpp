@@ -30,7 +30,7 @@
 #include "Util/Clamp.hpp"
 
 #include <algorithm>
-#include <assert.h>
+#include <cassert>
 
 /**
  * A Catmull-Rom splines interpolator

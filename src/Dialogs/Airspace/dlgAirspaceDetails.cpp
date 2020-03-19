@@ -34,7 +34,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Util/Compiler.h"
 
-#include <assert.h>
+#include <cassert>
 
 class AirspaceDetailsWidget final
   : public RowFormWidget, public ActionListener {

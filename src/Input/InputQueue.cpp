@@ -29,7 +29,7 @@ Copyright_License {
 
 #include <algorithm>
 
-#include <assert.h>
+#include <cassert>
 
 static Mutex mutexEventQueue;
 

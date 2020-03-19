@@ -51,7 +51,7 @@ Copyright_License {
 #include "XYDataStore.hpp"
 #include "Angle.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 struct ErrorEllipse {
   double x;

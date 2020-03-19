@@ -24,7 +24,7 @@ Copyright_License {
 #include "FlarmNetDatabase.hpp"
 #include "Util/StringUtil.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 void
 FlarmNetDatabase::Insert(const FlarmNetRecord &record)

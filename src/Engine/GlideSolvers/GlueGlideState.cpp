@@ -26,7 +26,7 @@
 
 #include <algorithm>
 
-#include <assert.h>
+#include <cassert>
 
 GlideState
 GlideState::Remaining(const TaskPoint &tp,

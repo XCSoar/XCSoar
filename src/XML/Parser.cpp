@@ -36,7 +36,7 @@
 
 #include <stdexcept>
 
-#include <assert.h>
+#include <cassert>
 
 namespace XML {
   /** Main structure used for parsing XML. */

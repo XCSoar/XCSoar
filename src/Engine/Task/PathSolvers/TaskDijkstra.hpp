@@ -26,7 +26,7 @@
 #include "PathSolvers/NavDijkstra.hpp"
 #include "Geo/SearchPoint.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 class OrderedTask;
 class SearchPointVector;

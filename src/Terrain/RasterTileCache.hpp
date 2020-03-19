@@ -31,7 +31,7 @@ Copyright_License {
 #include "Util/StaticArray.hxx"
 #include "Util/Serial.hpp"
 
-#include <assert.h>
+#include <cassert>
 #include <stdio.h>
 #include <stdint.h>
 

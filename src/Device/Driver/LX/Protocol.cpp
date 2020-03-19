@@ -24,7 +24,7 @@ Copyright_License {
 #include "Protocol.hpp"
 #include "Operation/Operation.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 bool
 LX::CommandMode(Port &port, OperationEnvironment &env)

@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "IO/BufferedOutputStream.hxx"
 
-#include <assert.h>
+#include <cassert>
 
 namespace JSON {
   /**

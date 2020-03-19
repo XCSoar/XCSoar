@@ -31,7 +31,7 @@
 #include "AirspaceIntersectionVector.hpp"
 #include "Util/StringAPI.hxx"
 
-#include <assert.h>
+#include <cassert>
 
 AbstractAirspace::~AbstractAirspace() {}
 

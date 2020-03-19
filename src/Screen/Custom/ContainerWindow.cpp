@@ -26,7 +26,7 @@ Copyright_License {
 #include "Reference.hpp"
 
 #include <algorithm>
-#include <assert.h>
+#include <cassert>
 
 ContainerWindow::~ContainerWindow()
 {

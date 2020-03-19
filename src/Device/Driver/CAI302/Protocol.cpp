@@ -27,7 +27,7 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 
 #include <algorithm>
-#include <assert.h>
+#include <cassert>
 #include <string.h>
 #include <stdio.h>
 

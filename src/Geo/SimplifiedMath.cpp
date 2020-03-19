@@ -26,7 +26,7 @@ Copyright_License {
 #include "GeoPoint.hpp"
 #include "Math/Util.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 static inline Angle
 EarthDistance(const double a)

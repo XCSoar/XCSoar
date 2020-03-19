@@ -30,7 +30,7 @@
 #include "FileReader.hxx"
 #include "OS/Error.hxx"
 
-#include <assert.h>
+#include <cassert>
 
 #ifdef _WIN32
 

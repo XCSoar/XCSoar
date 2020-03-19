@@ -32,7 +32,7 @@
 
 #include "AllocatedArray.hxx"
 
-#include <assert.h>
+#include <cassert>
 
 /**
  * A two dimensional array allocated on the heap with a length

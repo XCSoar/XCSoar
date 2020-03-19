@@ -28,7 +28,7 @@ Copyright_License {
 #include "Look/FontDescription.hpp"
 #include "Asset.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 bool
 Font::Load(const FontDescription &d)

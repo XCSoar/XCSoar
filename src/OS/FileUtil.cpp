@@ -28,7 +28,7 @@ Copyright_License {
 
 #include <windef.h> /* for MAX_PATH */
 
-#include <assert.h>
+#include <cassert>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>

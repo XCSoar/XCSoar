@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Screen/BufferCanvas.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 BufferCanvas::BufferCanvas(const Canvas &canvas, PixelSize new_size)
   :VirtualCanvas(canvas, new_size)

@@ -31,7 +31,7 @@ Copyright_License {
 #include <atomic>
 #include <chrono>
 
-#include <assert.h>
+#include <cassert>
 
 /**
  * A timer that, once initialized, periodically calls OnTimer() after

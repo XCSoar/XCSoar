@@ -24,7 +24,7 @@
 #include "Util/Macros.hpp"
 #include "TestUtil.hpp"
 
-#include <assert.h>
+#include <cassert>
 #include <string.h>
 
 static const char *const valid[] = {

@@ -30,7 +30,7 @@ Copyright_License {
 #include <algorithm>
 
 #include <windef.h> /* for MAX_PATH */
-#include <assert.h>
+#include <cassert>
 #include <stdlib.h>
 
 /**

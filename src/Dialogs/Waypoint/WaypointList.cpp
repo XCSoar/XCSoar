@@ -58,7 +58,7 @@ Copyright_License {
 #include <algorithm>
 #include <list>
 
-#include <assert.h>
+#include <cassert>
 #include <stdio.h>
 
 enum Controls {

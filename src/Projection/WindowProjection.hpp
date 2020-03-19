@@ -31,7 +31,7 @@ Copyright_License {
 
 #include <algorithm>
 
-#include <assert.h>
+#include <cassert>
 
 class WindowProjection:
   public Projection

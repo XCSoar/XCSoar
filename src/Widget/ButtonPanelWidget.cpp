@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 ButtonPanelWidget::~ButtonPanelWidget()
 {

@@ -26,7 +26,7 @@
 
 #include "ObservationZonePoint.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 /**
  * Observation zone represented as a circular area with specified

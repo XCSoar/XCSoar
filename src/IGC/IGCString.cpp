@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "IGCString.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 char *
 CopyIGCString(char *dest, char *dest_limit, const char *src)

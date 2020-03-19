@@ -30,7 +30,7 @@ Copyright_License {
 #include <algorithm>
 #include <type_traits>
 
-#include <assert.h>
+#include <cassert>
 #include <stddef.h>
 #include <stdint.h>
 

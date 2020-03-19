@@ -23,7 +23,7 @@
 #include "KalmanFilter1d.hpp"
 #include "Util.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 KalmanFilter1d::KalmanFilter1d(const double var_x_accel)
   :var_x_accel_(var_x_accel)

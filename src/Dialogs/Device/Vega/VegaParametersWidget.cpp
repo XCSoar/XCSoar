@@ -27,7 +27,7 @@ Copyright_License {
 #include "OS/Sleep.h"
 #include "Operation/PopupOperationEnvironment.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 void
 VegaParametersWidget::AddBoolean(const char *name, const TCHAR *label,

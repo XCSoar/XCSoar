@@ -35,7 +35,7 @@ extern "C" {
 }
 
 #ifndef NDEBUG
-#include <assert.h>
+#include <cassert>
 #endif
 
 namespace Lua {

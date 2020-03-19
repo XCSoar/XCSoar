@@ -37,7 +37,7 @@
 #include "UTF8.hpp"
 #include "ASCII.hxx"
 
-#include <assert.h>
+#include <cassert>
 #include <stddef.h>
 
 #ifdef _UNICODE

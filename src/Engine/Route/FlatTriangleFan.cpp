@@ -23,7 +23,7 @@
 #include "FlatTriangleFan.hpp"
 #include "Math/Line2D.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 void
 FlatTriangleFan::CalcBoundingBox()

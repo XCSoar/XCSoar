@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "../../Shared/RotatePointer.hpp"
 
-#include <assert.h>
+#include <cassert>
 
 struct Event;
 
