@@ -155,7 +155,7 @@ MainWindow::Create(PixelSize size, TopWindowStyle style)
   SingleWindow::Create(title, size, style);
 }
 
-gcc_noreturn
+[[noreturn]]
 static void
 FatalError(const TCHAR *msg)
 {
@@ -178,7 +178,7 @@ FatalError(const TCHAR *msg)
   exit(EXIT_FAILURE);
 }
 
-gcc_noreturn
+[[noreturn]]
 static void
 NoFontsAvailable()
 {

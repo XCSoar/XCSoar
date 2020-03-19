@@ -129,7 +129,7 @@ public:
 
   Args &operator=(const Args &other) = delete;
 
-  gcc_noreturn
+  [[noreturn]]
   void UsageError() {
     fprintf(stderr, "Usage: %s %s\n", name, usage);
 #ifdef MORE_USAGE
