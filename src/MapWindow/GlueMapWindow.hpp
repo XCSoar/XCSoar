@@ -106,6 +106,11 @@ class GlueMapWindow : public MapWindow {
 
   OffsetHistory offset_history;
 
+  /*
+   * Area of the map where no HUD items should be drawn
+   */
+  unsigned int bottom_margin = 0;
+
 #ifndef ENABLE_OPENGL
   /**
    * This mutex protects the attributes that are read by the
@@ -147,6 +152,7 @@ public:
   void SetMapSettings(const MapSettings &new_value);
   void SetComputerSettings(const ComputerSettings &new_value);
   void SetUIState(const UIState &new_value);
+  void SetBottomMargin(unsigned int margin);
 
   /**
    * Update the blackboard from DeviceBlackboard and

@@ -267,11 +267,37 @@ GlueMapWindow::DrawVario(Canvas &canvas, const PixelRect &rc) const
                                 true); //NOTE: AVG enabled for now, make it configurable ;
 }
 
+/*
+    Sets a relative margin at the bottom of the screen where no HUD
+    elements should be drawn
+*/
+void
+GlueMapWindow::SetBottomMargin(unsigned int margin_factor){
+
+    if (margin_factor == 0){
+        bottom_margin = 0;
+        QuickRedraw();
+        return;
+    }
+
+    PixelRect map_rect = GetClientRect();
+
+    if (map_rect.GetHeight() > map_rect.GetWidth()){
+        bottom_margin = map_rect.bottom / margin_factor;
+    } else {
+        bottom_margin = 0;
+    }
+    QuickRedraw();
+}
+
 void
 GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
                             const MapWindowProjection &projection) const
 {
-  RenderMapScale(canvas, projection, rc, look.overlay);
+
+  PixelRect scale_pos(rc.left, rc.top, rc.right, rc.bottom - bottom_margin);
+
+  RenderMapScale(canvas, projection, scale_pos, look.overlay);
 
   if (!projection.IsValid())
     return;
@@ -322,7 +348,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
     canvas.Select(font);
     const unsigned height = font.GetCapitalHeight()
         + Layout::GetTextPadding();
-    int y = rc.bottom - height;
+    int y = scale_pos.bottom - height;
 
     TextInBoxMode mode;
     mode.vertical_position = TextInBoxMode::VerticalPosition::ABOVE;
