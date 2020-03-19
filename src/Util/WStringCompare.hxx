@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2018 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2013-2020 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -34,6 +34,8 @@
 #include "WStringAPI.hxx"
 #include "Compiler.h"
 
+#include <string_view>
+
 #include <wchar.h>
 
 gcc_pure gcc_nonnull_all
@@ -41,6 +43,14 @@ static inline bool
 StringIsEmpty(const wchar_t *string) noexcept
 {
 	return *string == 0;
+}
+
+gcc_pure
+static inline bool
+StringIsEqual(std::wstring_view a, std::wstring_view b) noexcept
+{
+	return a.size() == b.size() &&
+		StringIsEqual(a.data(), b.data(), b.size());
 }
 
 gcc_pure gcc_nonnull_all
