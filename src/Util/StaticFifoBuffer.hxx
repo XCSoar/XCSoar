@@ -32,11 +32,10 @@
 
 #include "WritableBuffer.hxx"
 
-#include <utility>
 #include <algorithm>
-#include <cstddef>
-
 #include <cassert>
+#include <cstddef>
+#include <utility>
 
 /**
  * A first-in-first-out buffer: you can append data at the end, and

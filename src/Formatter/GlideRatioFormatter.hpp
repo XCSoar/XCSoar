@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_GLIDE_RATIO_FORMATTER_HPP
 
 #include <tchar.h>
-#include <stddef.h>
+#include <cstddef>
 
 void
 FormatGlideRatio(TCHAR *buffer, size_t size, double gr);

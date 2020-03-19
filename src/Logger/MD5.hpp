@@ -24,7 +24,7 @@
 #define MD5_HPP
 
 #include <stdint.h>
-#include <stddef.h>
+#include <cstddef>
 
 class MD5
 {

@@ -46,7 +46,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Language/Language.hpp"
 
-#include <stddef.h>
+#include <cstddef>
 #include <cassert>
 
 /**

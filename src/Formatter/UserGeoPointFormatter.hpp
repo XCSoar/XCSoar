@@ -29,7 +29,7 @@ Copyright_License {
 #include "Util/Compiler.h"
 
 #include <tchar.h>
-#include <stddef.h>
+#include <cstddef>
 
 class Angle;
 struct GeoPoint;

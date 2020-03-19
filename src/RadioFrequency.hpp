@@ -28,7 +28,7 @@ Copyright_License {
 
 #include <cassert>
 #include <stdint.h>
-#include <stddef.h>
+#include <cstddef>
 #include <tchar.h>
 
 /**

@@ -32,7 +32,7 @@
 
 #include "Compiler.h"
 
-#include <stddef.h>
+#include <cstddef>
 #include <wchar.h>
 
 gcc_nonnull_all

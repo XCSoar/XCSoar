@@ -28,7 +28,7 @@ Copyright_License {
 
 #include <cassert>
 #include <string.h>
-#include <stddef.h>
+#include <cstddef>
 
 #ifdef _UNICODE
 #include "Util/ReusableArray.hpp"

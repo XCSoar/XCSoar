@@ -30,7 +30,7 @@
 #ifndef CAST_HXX
 #define CAST_HXX
 
-#include <stddef.h>
+#include <cstddef>
 
 /**
  * Offset the given pointer by the specified number of bytes.

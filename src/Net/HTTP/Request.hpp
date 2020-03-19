@@ -29,7 +29,7 @@ Copyright_License {
 
 #include <curl/curl.h>
 
-#include <stddef.h>
+#include <cstddef>
 #include <stdint.h>
 
 namespace Net {

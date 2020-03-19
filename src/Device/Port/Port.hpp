@@ -29,7 +29,7 @@ Copyright_License {
 
 #include <chrono>
 
-#include <stddef.h>
+#include <cstddef>
 
 class OperationEnvironment;
 class PortListener;

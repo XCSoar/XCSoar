@@ -28,7 +28,7 @@ Copyright_License {
 
 #include <utility>
 
-#include <stddef.h>
+#include <cstddef>
 
 /**
  * Is this a valid UTF-8 string?

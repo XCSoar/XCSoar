@@ -38,7 +38,7 @@
 #include "ASCII.hxx"
 
 #include <cassert>
-#include <stddef.h>
+#include <cstddef>
 
 #ifdef _UNICODE
 #include <wchar.h>

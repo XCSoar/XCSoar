@@ -27,7 +27,7 @@ Copyright_License {
 #include "Java/String.hxx"
 #include "org_xcsoar_NativePortListener.h"
 
-#include <stddef.h>
+#include <cstddef>
 
 namespace NativePortListener {
   static Java::TrivialClass cls;

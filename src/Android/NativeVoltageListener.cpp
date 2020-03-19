@@ -26,7 +26,7 @@ Copyright_License {
 #include "Java/Class.hxx"
 #include "org_xcsoar_NativeVoltageListener.h"
 
-#include <stddef.h>
+#include <cstddef>
 
 namespace NativeVoltageListener {
   static Java::TrivialClass cls;

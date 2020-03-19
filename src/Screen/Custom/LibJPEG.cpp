@@ -32,7 +32,7 @@ Copyright_License {
 #include <tchar.h>
 #include <cassert>
 #include <stdio.h>
-#include <stddef.h>
+#include <cstddef>
 
 extern "C" {
 #include <jpeglib.h>

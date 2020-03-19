@@ -28,7 +28,7 @@ Copyright_License {
 #include "Java/Class.hxx"
 #include "org_xcsoar_NativeI2CbaroListener.h"
 
-#include <stddef.h>
+#include <cstddef>
 
 namespace NativeI2CbaroListener {
   static Java::TrivialClass cls;

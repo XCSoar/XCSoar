@@ -44,7 +44,7 @@ CloseLanguageFile();
 
 #define HAVE_BUILTIN_LANGUAGES
 
-#include <stddef.h>
+#include <cstddef>
 #include <tchar.h>
 
 struct BuiltinLanguage {

@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_ANDROID_ENVIRONMENT_HPP
 
 #include <jni.h>
-#include <stddef.h>
+#include <cstddef>
 
 namespace Environment {
   void Initialise(JNIEnv *env);

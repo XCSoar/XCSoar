@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef INFLATE_HPP
 #define INFLATE_HPP
 
-#include <stddef.h>
+#include <cstddef>
 
 /**
  * Uncompress the given buffer, and return it as a C string.  The

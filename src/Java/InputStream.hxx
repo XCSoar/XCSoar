@@ -32,7 +32,7 @@
 
 #include <jni.h>
 #include <cassert>
-#include <stddef.h>
+#include <cstddef>
 
 namespace Java {
 	/**

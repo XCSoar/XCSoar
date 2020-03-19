@@ -26,7 +26,7 @@ Copyright_License {
 #include "Java/Class.hxx"
 #include "org_xcsoar_NativeInputListener.h"
 
-#include <stddef.h>
+#include <cstddef>
 
 namespace NativeInputListener {
   static Java::TrivialClass cls;

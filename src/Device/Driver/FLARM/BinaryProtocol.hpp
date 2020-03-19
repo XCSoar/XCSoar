@@ -31,7 +31,7 @@ Copyright_License {
 #include <type_traits>
 
 #include <stdint.h>
-#include <stddef.h>
+#include <cstddef>
 
 class Port;
 struct Declaration;

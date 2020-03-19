@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_HPP
 #define XCSOAR_DEVICE_DRIVER_HPP
 
-#include <stddef.h>
+#include <cstddef>
 #include <tchar.h>
 
 struct NMEAInfo;

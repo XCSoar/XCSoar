@@ -29,7 +29,7 @@ Copyright_License {
 #include <algorithm>
 
 #include <cassert>
-#include <stddef.h>
+#include <cstddef>
 #include <stdio.h>
 
 #include <tchar.h>

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_APPLE_IMAGEDECODER_HPP
 #define XCSOAR_SCREEN_APPLE_IMAGEDECODER_HPP
 
-#include <stddef.h>
+#include <cstddef>
 
 class Path;
 class UncompressedImage;

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_LIBPNG_HPP
 #define XCSOAR_LIBPNG_HPP
 
-#include <stddef.h>
+#include <cstddef>
 
 class UncompressedImage;
 class Path;

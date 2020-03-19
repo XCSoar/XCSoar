@@ -36,7 +36,7 @@
 #include <utility>
 #include <algorithm>
 
-#include <stddef.h>
+#include <cstddef>
 
 /**
  * Fills a string buffer incrementally by appending more data to the

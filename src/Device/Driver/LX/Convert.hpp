@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_DEVICE_DRIVER_LX_CONVERT_HPP
 
 #include <stdio.h>
-#include <stddef.h>
+#include <cstddef>
 
 namespace LX {
   /**

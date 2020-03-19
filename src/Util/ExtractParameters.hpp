@@ -25,7 +25,7 @@ Copyright_License {
 #define EXTRACT_PARAMETERS_HPP
 
 #include <tchar.h>
-#include <stddef.h>
+#include <cstddef>
 
 /**
  * Split line (comma separated fields) in individual fields.

@@ -27,7 +27,7 @@ Copyright_License {
 #include "Util/Compiler.h"
 
 #include <tchar.h>
-#include <stddef.h>
+#include <cstddef>
 
 struct PixelRect;
 struct ButtonLook;

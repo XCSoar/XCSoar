@@ -28,7 +28,7 @@ Copyright_License {
 #include "Java/Class.hxx"
 #include "org_xcsoar_NativeBMP085Listener.h"
 
-#include <stddef.h>
+#include <cstddef>
 
 namespace NativeBMP085Listener {
   static Java::TrivialClass cls;

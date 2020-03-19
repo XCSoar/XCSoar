@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Util/Compiler.h"
 
-#include <stddef.h>
+#include <cstddef>
 
 /**
  * Interface with callbacks for the #Port class.

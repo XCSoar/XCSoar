@@ -29,7 +29,7 @@ Copyright_License {
 #include "Util/Compiler.h"
 
 #include <cassert>
-#include <stddef.h>
+#include <cstddef>
 #include <stdint.h>
 
 #include <list>

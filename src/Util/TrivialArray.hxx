@@ -35,7 +35,7 @@
 #include <algorithm>
 
 #include <cassert>
-#include <stddef.h>
+#include <cstddef>
 
 /**
  * An array with a maximum size known at compile time.  It keeps track

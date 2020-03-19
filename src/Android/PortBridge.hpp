@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Java/Object.hxx"
 
-#include <stddef.h>
+#include <cstddef>
 
 class PortListener;
 class DataHandler;

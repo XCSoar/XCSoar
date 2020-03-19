@@ -32,7 +32,7 @@
 
 #include "Util/Compiler.h"
 
-#include <stddef.h>
+#include <cstddef>
 
 /**
  * An interface that can read bytes from a stream until the stream

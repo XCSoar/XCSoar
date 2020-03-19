@@ -31,7 +31,7 @@ Copyright_License {
 #include <type_traits>
 
 #include <cassert>
-#include <stddef.h>
+#include <cstddef>
 #include <stdint.h>
 
 /* Algorithms for processing audio data */

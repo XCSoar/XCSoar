@@ -28,7 +28,7 @@ Copyright_License {
 #include <tchar.h>
 #endif
 
-#include <stddef.h>
+#include <cstddef>
 
 class RGB8Color;
 

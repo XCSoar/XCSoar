@@ -32,7 +32,7 @@
 
 #include "Compiler.h"
 
-#include <stddef.h>
+#include <cstddef>
 
 #ifdef _UNICODE
 #include "WStringStrip.hxx"

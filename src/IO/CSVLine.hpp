@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Util/Range.hpp"
 
-#include <stddef.h>
+#include <cstddef>
 
 /**
  * A helper class which can dissect a NMEA input line.

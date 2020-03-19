@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_TRUNCATE_STRING_HPP
 
 #include <tchar.h>
-#include <stddef.h>
+#include <cstddef>
 
 /**
  * Copy a string to a buffer, truncating it if the buffer is not large

@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Job/Job.hpp"
 
-#include <stddef.h>
+#include <cstddef>
 
 class OperationEnvironment;
 
