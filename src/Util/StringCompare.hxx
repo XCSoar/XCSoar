@@ -99,6 +99,14 @@ StringStartsWithIgnoreCase(const char *haystack, StringView needle) noexcept
 	return StringIsEqualIgnoreCase(haystack, needle.data, needle.size);
 }
 
+gcc_pure
+static inline bool
+StringStartsWithIgnoreCase(StringView haystack, StringView needle) noexcept
+{
+	return haystack.size >= needle.size &&
+		StringIsEqualIgnoreCase(haystack.data, needle.data, needle.size);
+}
+
 /**
  * Returns the portion of the string after a prefix.  If the string
  * does not begin with the specified prefix, this function returns
@@ -111,6 +119,16 @@ StringAfterPrefixIgnoreCase(const char *haystack, StringView needle) noexcept
 {
 	return StringStartsWithIgnoreCase(haystack, needle)
 		? haystack + needle.size
+		: nullptr;
+}
+
+gcc_pure
+static inline StringView
+StringAfterPrefixIgnoreCase(StringView haystack,
+			    StringView needle) noexcept
+{
+	return StringStartsWithIgnoreCase(haystack, needle)
+		? haystack.substr(needle.size)
 		: nullptr;
 }
 
