@@ -23,7 +23,7 @@
 #ifndef XCSOAR_TASK_TYPE_HPP
 #define XCSOAR_TASK_TYPE_HPP
 
-#include <stdint.h>
+#include <cstdint>
 
 enum class TaskType : uint8_t {
   NONE,

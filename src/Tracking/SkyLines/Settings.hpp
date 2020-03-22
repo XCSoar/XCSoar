@@ -30,7 +30,7 @@ Copyright_License {
 
 #ifdef HAVE_SKYLINES_TRACKING
 
-#include <stdint.h>
+#include <cstdint>
 
 namespace SkyLinesTracking {
 

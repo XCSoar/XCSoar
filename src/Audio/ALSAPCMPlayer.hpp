@@ -30,7 +30,7 @@ Copyright_License {
 
 #include <cassert>
 #include <cstddef>
-#include <stdint.h>
+#include <cstdint>
 
 #include <list>
 #include <memory>

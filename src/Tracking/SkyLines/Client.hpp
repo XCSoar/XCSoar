@@ -29,7 +29,7 @@ Copyright_License {
 
 #include <boost/asio/ip/udp.hpp>
 
-#include <stdint.h>
+#include <cstdint>
 
 struct NMEAInfo;
 struct GeoPoint;

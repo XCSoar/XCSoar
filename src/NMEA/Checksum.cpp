@@ -27,7 +27,7 @@ Copyright_License {
 #include <cstring>
 #include <cstdlib>
 #include <cstdio>
-#include <stdint.h>
+#include <cstdint>
 
 bool
 VerifyNMEAChecksum(const char *p)

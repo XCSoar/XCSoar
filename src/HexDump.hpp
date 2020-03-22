@@ -27,7 +27,7 @@ Copyright_License {
 #include "Util/StaticString.hxx"
 #include "LogFile.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 
 static inline bool
 IsPrintable(uint8_t ch)

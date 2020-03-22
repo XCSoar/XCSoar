@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TERRAIN_SETTINGS_HPP
 #define XCSOAR_TERRAIN_SETTINGS_HPP
 
-#include <stdint.h>
+#include <cstdint>
 
 enum class SlopeShading: uint8_t {
   OFF,

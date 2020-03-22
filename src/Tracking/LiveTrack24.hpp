@@ -25,7 +25,7 @@ Copyright_License {
 #define LIVETRACK24_HPP
 
 #include <tchar.h>
-#include <stdint.h>
+#include <cstdint>
 
 class Angle;
 struct BrokenDateTime;

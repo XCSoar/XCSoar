@@ -35,7 +35,7 @@ Copyright_License {
 #endif
 
 #include <tchar.h>
-#include <stdint.h>
+#include <cstdint>
 
 struct GeoPoint;
 

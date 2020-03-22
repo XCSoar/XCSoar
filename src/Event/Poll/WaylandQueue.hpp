@@ -28,7 +28,7 @@ Copyright_License {
 
 #include <boost/asio/posix/stream_descriptor.hpp>
 
-#include <stdint.h>
+#include <cstdint>
 
 class EventQueue;
 struct Event;

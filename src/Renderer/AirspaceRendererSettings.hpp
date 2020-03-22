@@ -28,7 +28,7 @@ Copyright_License {
 #include "Screen/Features.hpp"
 #include "Screen/PortableColor.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 
 /** Airspace display modes */
 enum class AirspaceDisplayMode: uint8_t

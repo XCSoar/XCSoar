@@ -26,7 +26,7 @@
 #include <memory>
 #endif
 
-#include <stdint.h>
+#include <cstdint>
 
 class Canvas;
 

@@ -30,7 +30,7 @@ Copyright_License {
 #include <type_traits>
 
 #include <cassert>
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * This keeps track when a value was last changed, to check if it was

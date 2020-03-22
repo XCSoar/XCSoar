@@ -27,7 +27,7 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "Math/Util.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 
 class CProbeDevice : public AbstractDevice {
 public:

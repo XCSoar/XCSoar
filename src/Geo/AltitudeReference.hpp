@@ -23,7 +23,7 @@
 #ifndef XCSOAR_ALTITUDE_REFERENCE_HPP
 #define XCSOAR_ALTITUDE_REFERENCE_HPP
 
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * This enum specifies the reference for altitude specifications.

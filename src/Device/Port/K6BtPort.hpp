@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Port.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * Wraps the K6Bt protocol over an existing Port instance.

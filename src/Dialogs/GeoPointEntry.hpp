@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_DIALOGS_GEOPOINT_ENTRY_HPP
 
 #include <tchar.h>
-#include <stdint.h>
+#include <cstdint>
 
 enum class CoordinateFormat : uint8_t;
 struct GeoPoint;

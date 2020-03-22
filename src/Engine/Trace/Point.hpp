@@ -31,7 +31,7 @@ Copyright_License {
 #include "Util/Compiler.h"
 
 #include <cassert>
-#include <stdint.h>
+#include <cstdint>
 
 struct MoreData;
 struct AircraftState;

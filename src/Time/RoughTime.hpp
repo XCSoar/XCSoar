@@ -27,7 +27,7 @@ Copyright_License {
 #include "Util/Compiler.h"
 
 #include <cassert>
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * This data type stores a time of day with minute granularity.

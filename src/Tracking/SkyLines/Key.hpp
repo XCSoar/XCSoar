@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TRACKING_SKYLINES_KEY_HPP
 #define XCSOAR_TRACKING_SKYLINES_KEY_HPP
 
-#include <stdint.h>
+#include <cstdint>
 
 namespace SkyLinesTracking {
 

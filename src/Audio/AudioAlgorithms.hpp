@@ -32,7 +32,7 @@ Copyright_License {
 
 #include <cassert>
 #include <cstddef>
-#include <stdint.h>
+#include <cstdint>
 
 /* Algorithms for processing audio data */
 

@@ -27,7 +27,7 @@ Copyright_License {
 #include "Util/Compiler.h"
 
 #include <tchar.h>
-#include <stdint.h>
+#include <cstdint>
 
 enum class TaskPointType : uint8_t;
 enum class TaskFactoryType : uint8_t;

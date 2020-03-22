@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Util/Compiler.h"
 
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * Calculates the checksum for the specified line (without the

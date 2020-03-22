@@ -30,7 +30,7 @@ Copyright_License {
 #include "Thread/Mutex.hxx"
 
 #include <atomic>
-#include <stdint.h>
+#include <cstdint>
 
 class LXDevice: public AbstractDevice
 {

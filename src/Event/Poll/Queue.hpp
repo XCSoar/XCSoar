@@ -40,7 +40,7 @@ Copyright_License {
 
 #include <boost/asio.hpp>
 
-#include <stdint.h>
+#include <cstdint>
 
 #include <queue>
 

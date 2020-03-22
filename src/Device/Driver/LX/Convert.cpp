@@ -25,7 +25,8 @@ Copyright_License {
 #include "LXN.hpp"
 #include "OS/ByteOrder.hpp"
 
-#include <stdint.h>
+#include <cstdint>
+
 #include <stdlib.h>
 #include <string.h>
 

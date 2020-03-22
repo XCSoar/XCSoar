@@ -24,9 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_VARIO_SOUND_SETTINGS_HPP
 #define XCSOAR_VARIO_SOUND_SETTINGS_HPP
 
+#include <cstdint>
 #include <type_traits>
-
-#include <stdint.h>
 
 struct VarioSoundSettings {
   bool enabled;

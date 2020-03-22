@@ -28,7 +28,7 @@ Copyright_License {
 
 #include <memory>
 
-#include <stdint.h>
+#include <cstdint>
 
 class UncompressedImage {
 public:

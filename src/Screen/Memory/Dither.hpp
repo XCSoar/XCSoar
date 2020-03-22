@@ -27,7 +27,7 @@ Copyright_License {
 #include "Util/AllocatedArray.hxx"
 #include "Util/Compiler.h"
 
-#include <stdint.h>
+#include <cstdint>
 
 class Dither {
   typedef int ErrorDistType; // must be wider than 8bits

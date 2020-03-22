@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DISPLAY_ORIENTATION_HPP
 #define XCSOAR_DISPLAY_ORIENTATION_HPP
 
-#include <stdint.h>
+#include <cstdint>
 
 enum class DisplayOrientation : uint8_t {
   DEFAULT,

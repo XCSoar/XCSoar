@@ -31,7 +31,7 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "Math/Util.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 
 #define EGM96SIZE 16200
 

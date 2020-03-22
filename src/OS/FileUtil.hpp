@@ -27,7 +27,7 @@ Copyright_License {
 #include "Util/Compiler.h"
 #include "Path.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 #include <tchar.h>
 
 #ifdef HAVE_POSIX

@@ -25,7 +25,7 @@ Copyright_License {
 #include "OS/FileUtil.hpp"
 #include "Util/Compiler.h"
 
-#include <stdint.h>
+#include <cstdint>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>

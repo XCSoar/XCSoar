@@ -24,7 +24,7 @@ Copyright_License {
 #include "DumpPort.hpp"
 #include "HexDump.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 #include <stdio.h>
 
 #ifdef __clang__

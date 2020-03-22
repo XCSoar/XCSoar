@@ -34,7 +34,7 @@
 #include "OS/ByteOrder.hpp"
 #include "Util/Compiler.h"
 
-#include <stdint.h>
+#include <cstdint>
 
 #ifdef _WIN32
 #include <winsock2.h>

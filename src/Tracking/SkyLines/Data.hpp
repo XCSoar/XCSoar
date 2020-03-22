@@ -33,7 +33,7 @@ Copyright_License {
 #include <list>
 #include <chrono>
 
-#include <stdint.h>
+#include <cstdint>
 
 namespace SkyLinesTracking {
 

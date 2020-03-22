@@ -25,7 +25,7 @@ Copyright_License {
 #ifndef WAYPOINT_READER_HPP
 #define WAYPOINT_READER_HPP
 
-#include <stdint.h>
+#include <cstdint>
 
 enum class WaypointFileType: uint8_t;
 struct zzip_dir;

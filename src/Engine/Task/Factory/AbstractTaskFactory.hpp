@@ -31,7 +31,7 @@ Copyright_License {
 #include "LegalPointSet.hpp"
 #include "Engine/Waypoint/Ptr.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 
 struct TaskFactoryConstraints;
 class AATPoint;

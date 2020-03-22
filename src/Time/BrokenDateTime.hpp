@@ -30,7 +30,7 @@ Copyright_License {
 
 #include <type_traits>
 
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * A broken-down representation of date and time.

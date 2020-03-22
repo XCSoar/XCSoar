@@ -28,7 +28,7 @@ Copyright_License {
 #include "Util/Compiler.h"
 #include "InfoBoxes/Content/Type.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 
 struct InfoBoxSettings {
   enum PanelIndex {

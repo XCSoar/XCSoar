@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "VegaSwitchState.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * State of external switch devices (esp Vega)

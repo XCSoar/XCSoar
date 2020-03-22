@@ -28,7 +28,7 @@
 
 #include <type_traits>
 
-#include <stdint.h>
+#include <cstdint>
 
 struct AircraftState;
 struct GlideState;

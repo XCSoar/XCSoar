@@ -35,7 +35,7 @@ Copyright_License {
 #include "Event/Idle.hpp"
 
 #include <cassert>
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * Interpolate between x and y with i/128, i.e. i/(1 << 7).

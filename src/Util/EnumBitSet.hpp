@@ -32,7 +32,7 @@
 
 #include "Compiler.h"
 
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * A container that stores each enum value as a bit.

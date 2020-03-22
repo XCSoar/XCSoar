@@ -30,7 +30,7 @@
 #ifndef TRI_STATE_HPP
 #define TRI_STATE_HPP
 
-#include <stdint.h>
+#include <cstdint>
 
 #ifdef _WIN32
 #include <windows.h>

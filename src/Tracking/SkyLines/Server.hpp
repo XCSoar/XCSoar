@@ -29,7 +29,7 @@ Copyright_License {
 #include <chrono>
 #include <exception>
 
-#include <stdint.h>
+#include <cstdint>
 
 struct GeoPoint;
 

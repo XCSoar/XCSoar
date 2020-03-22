@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/PortableColor.hpp"
 #include "Util/Compiler.h"
 
-#include <stdint.h>
+#include <cstdint>
 
 
 /* Workaround: Some Win32 headers define OPAQUE and TRANSPARENT as preprocessor

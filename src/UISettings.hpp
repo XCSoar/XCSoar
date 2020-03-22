@@ -36,7 +36,7 @@ Copyright_License {
 
 #include <type_traits>
 
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * User interface settings.

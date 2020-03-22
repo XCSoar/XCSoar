@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "NMEA/Validity.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 
 enum class FixQuality: uint8_t {
   NO_FIX,

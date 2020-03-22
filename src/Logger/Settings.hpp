@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Util/StaticString.hxx"
 
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * Logger settings

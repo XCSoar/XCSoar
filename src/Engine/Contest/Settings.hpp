@@ -25,7 +25,7 @@
 
 #include <type_traits>
 
-#include <stdint.h>
+#include <cstdint>
 
 enum class Contest : uint8_t {
   /**

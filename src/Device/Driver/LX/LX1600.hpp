@@ -32,7 +32,7 @@ Copyright_License {
 #include "Math/Util.hpp"
 
 #include <cassert>
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * Code specific to LX Navigation varios (e.g. LX1600).

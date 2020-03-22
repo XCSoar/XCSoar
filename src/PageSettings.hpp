@@ -27,7 +27,7 @@ Copyright_License {
 #include <array>
 #include <type_traits>
 
-#include <stdint.h>
+#include <cstdint>
 #include <tchar.h>
 
 struct InfoBoxSettings;

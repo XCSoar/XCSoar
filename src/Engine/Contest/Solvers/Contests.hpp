@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Util/Compiler.h"
 
-#include <stdint.h>
+#include <cstdint>
 #include <tchar.h>
 
 enum class Contest : uint8_t;

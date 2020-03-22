@@ -33,7 +33,7 @@ Copyright_License {
 
 #include <cassert>
 #include <stdio.h>
-#include <stdint.h>
+#include <cstdint>
 
 #define RASTER_SLOPE_FACT 12
 

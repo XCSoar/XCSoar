@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef SCANTASKPOINT_HPP
 #define SCANTASKPOINT_HPP
 
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * A reference to a trace/search point: first element is the stage

@@ -31,7 +31,7 @@ Copyright_License {
 #include <glm/mat4x4.hpp>
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
-#include <stdint.h>
+#include <cstdint>
 enum class DisplayOrientation : uint8_t;
 #endif
 

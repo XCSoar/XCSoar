@@ -33,7 +33,7 @@ Copyright_License {
 #include "Util/Compiler.h"
 
 #include <cstddef>
-#include <stdint.h>
+#include <cstdint>
 
 #endif
 

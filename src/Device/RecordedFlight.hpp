@@ -27,7 +27,7 @@ Copyright_License {
 #include "Util/StaticArray.hxx"
 #include "FlightInfo.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 
 struct RecordedFlightInfo : FlightInfo {
   /**

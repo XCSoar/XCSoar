@@ -41,9 +41,8 @@ Copyright_License {
 #include "WaveSettings.hpp"
 #include "RadioFrequency.hpp"
 
+#include <cstdint>
 #include <type_traits>
-
-#include <stdint.h>
 
 struct Waypoint;
 

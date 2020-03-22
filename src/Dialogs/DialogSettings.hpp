@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DIALOG_SETTINGS_HPP
 #define XCSOAR_DIALOG_SETTINGS_HPP
 
-#include <stdint.h>
+#include <cstdint>
 
 struct DialogSettings {
   enum class TextInputStyle : uint8_t {

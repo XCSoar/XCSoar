@@ -28,7 +28,7 @@ Copyright_License {
 #include "Util/Compiler.h"
 
 #include <tchar.h>
-#include <stdint.h>
+#include <cstdint>
 
 class KeyValueFileWriter;
 

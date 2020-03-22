@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "IO/DataHandler.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 
 namespace Net {
   class ResponseHandler : public DataHandler {

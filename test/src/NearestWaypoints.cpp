@@ -29,7 +29,7 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "Operation/Operation.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 #include <stdio.h>
 #include <tchar.h>
 

@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Util/TrivialArray.hxx"
 
-#include <stdint.h>
+#include <cstdint>
 
 struct IGCExtension {
   uint16_t start, finish;

@@ -25,7 +25,7 @@ Copyright_License {
 #define DIALOG_TASK_HELPERS_HPP
 
 #include <tchar.h>
-#include <stdint.h>
+#include <cstdint>
 
 enum class TaskPointType : uint8_t;
 class OrderedTask;

@@ -32,7 +32,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Resources.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 #include <windef.h> // for MAX_PATH
 
 static bool

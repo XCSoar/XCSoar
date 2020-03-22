@@ -8,7 +8,7 @@
 #else
 
 #include <cstddef>
-#include <stdint.h>
+#include <cstdint>
 
 #include "Util/ConstBuffer.hxx"
 

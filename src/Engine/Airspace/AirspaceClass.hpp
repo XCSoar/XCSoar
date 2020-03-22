@@ -25,7 +25,7 @@
 
 #include "Util/Compiler.h"
 
-#include <stdint.h>
+#include <cstdint>
 
 enum AirspaceClass : uint8_t
 {

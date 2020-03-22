@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Reader.hxx"
 
-#include <stdint.h>
+#include <cstdint>
 
 struct zzip_file;
 struct zzip_dir;

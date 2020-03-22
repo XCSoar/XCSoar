@@ -25,7 +25,7 @@
 
 #include "KalmanFilter1d.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * Wraps KalmanFilter1d and does its own internal time bookkeeping so

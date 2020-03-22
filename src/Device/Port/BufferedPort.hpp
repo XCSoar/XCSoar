@@ -30,7 +30,7 @@ Copyright_License {
 #include "Thread/Cond.hxx"
 #include "Util/StaticFifoBuffer.hxx"
 
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * An abstract #Port implementation which manages incoming data in a

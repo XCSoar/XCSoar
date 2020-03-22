@@ -29,8 +29,7 @@ Copyright_License {
 #include "Thread/Mutex.hxx"
 #include "Util/ConstBuffer.hxx"
 
-#include <stdint.h>
-
+#include <cstdint>
 #include <list>
 
 /**

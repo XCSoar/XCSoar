@@ -23,7 +23,7 @@
 #ifndef FACTORY_TYPE_HPP
 #define FACTORY_TYPE_HPP
 
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * Enumeration of factory types.  This is the set of

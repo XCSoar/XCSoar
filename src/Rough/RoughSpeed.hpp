@@ -26,7 +26,7 @@ Copyright_License {
 
 #include <type_traits>
 
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * Store an rough speed value, when the exact value is not needed.

@@ -30,7 +30,7 @@ Copyright_License {
 #include "Widget/ManagedWidget.hpp"
 #include "UIUtil/GestureManager.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 #include <cassert>
 
 #ifdef KOBO

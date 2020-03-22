@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_LABEL_SHAPE_HPP
 #define XCSOAR_LABEL_SHAPE_HPP
 
-#include <stdint.h>
+#include <cstdint>
 
 enum class LabelShape : uint8_t {
   SIMPLE,

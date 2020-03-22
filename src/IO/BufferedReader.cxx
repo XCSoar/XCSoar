@@ -33,7 +33,7 @@
 
 #include <stdexcept>
 
-#include <stdint.h>
+#include <cstdint>
 #include <string.h>
 
 bool

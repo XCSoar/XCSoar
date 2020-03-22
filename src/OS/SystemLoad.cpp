@@ -28,7 +28,7 @@
 #include <windows.h>
 #include <tlhelp32.h>
 #include <stdio.h>
-#include <stdint.h>
+#include <cstdint>
 
 unsigned SystemLoadCPU()
 {

@@ -31,9 +31,8 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "Device/SettingsMap.hpp"
 
+#include <cstdint>
 #include <string>
-
-#include <stdint.h>
 
 class Port;
 struct Declaration;

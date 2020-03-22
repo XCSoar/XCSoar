@@ -32,7 +32,7 @@
 #ifndef XCSOAR_TRACKING_SKYLINES_PROTOCOL_HPP
 #define XCSOAR_TRACKING_SKYLINES_PROTOCOL_HPP
 
-#include <stdint.h>
+#include <cstdint>
 
 /*
  * This file defines the SkyLines live tracking protocol.  It is a

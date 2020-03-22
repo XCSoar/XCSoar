@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_INIT_HPP
 #define XCSOAR_SCREEN_OPENGL_INIT_HPP
 
-#include <stdint.h>
+#include <cstdint>
 
 struct UnsignedPoint2D;
 enum class DisplayOrientation : uint8_t;

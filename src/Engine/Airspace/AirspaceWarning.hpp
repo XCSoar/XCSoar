@@ -26,7 +26,7 @@
 #include "AirspaceInterceptSolution.hpp"
 #include "Util/Compiler.h"
 
-#include <stdint.h>
+#include <cstdint>
 
 #ifdef DO_PRINT
 #include <iostream>

@@ -26,7 +26,7 @@
 
 #include "Util/Compiler.h"
 
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * Definitions for the LXN file format.

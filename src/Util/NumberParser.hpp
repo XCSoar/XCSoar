@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_NUMBER_PARSER_HPP
 #define XCSOAR_NUMBER_PARSER_HPP
 
-#include <stdint.h>
+#include <cstdint>
 #include <stdlib.h>
 #include <cassert>
 

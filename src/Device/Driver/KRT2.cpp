@@ -32,7 +32,8 @@ Copyright_License {
 #include "Util/StaticFifoBuffer.hxx"
 #include "Util/Compiler.h"
 
-#include <stdint.h>
+#include <cstdint>
+
 #include <stdio.h>
 
 /**

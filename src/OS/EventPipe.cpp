@@ -30,7 +30,7 @@
 #include "EventPipe.hpp"
 
 #include <cassert>
-#include <stdint.h>
+#include <cstdint>
 
 bool
 EventPipe::Create()

@@ -28,7 +28,7 @@ Copyright_License {
 #include "Protocol.hpp"
 
 #include <vector>
-#include <stdint.h>
+#include <cstdint>
 
 /** 
  * Device driver for Cambridge Aero Instruments 302 

@@ -27,7 +27,7 @@ Copyright_License {
 #include "Protocol.hpp"
 #include "Util/OverwritingRingBuffer.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 
 namespace SkyLinesTracking {
 

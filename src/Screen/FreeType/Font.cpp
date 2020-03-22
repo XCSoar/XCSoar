@@ -49,7 +49,7 @@ Copyright_License {
 #include <algorithm>
 
 #include <cassert>
-#include <stdint.h>
+#include <cstdint>
 
 #ifndef ENABLE_OPENGL
 /**

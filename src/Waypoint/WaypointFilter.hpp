@@ -27,7 +27,7 @@ Copyright_License {
 #include "Util/StaticString.hxx"
 #include "Math/Angle.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 #include <tchar.h>
 
 struct Waypoint;

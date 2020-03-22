@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TRAFFIC_SETTINGS_HPP
 #define XCSOAR_TRAFFIC_SETTINGS_HPP
 
-#include <stdint.h>
+#include <cstdint>
 
 struct TrafficSettings {
   /** Show traffic radar if traffic present? */

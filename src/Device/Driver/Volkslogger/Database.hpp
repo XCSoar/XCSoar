@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Util/Compiler.h"
 
-#include <stdint.h>
+#include <cstdint>
 
 struct GeoPoint;
 

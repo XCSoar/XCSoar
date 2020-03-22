@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "LabelShape.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 
 struct WaypointRendererSettings {
   /** What type of text to draw next to the waypoint icon */

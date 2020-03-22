@@ -24,7 +24,7 @@
 #ifndef XCSOAR_GLIDER_LINK_ID_HPP
 #define XCSOAR_GLIDER_LINK_ID_HPP
 
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * The identification number of a GliderLink traffic.

@@ -30,7 +30,7 @@
 #ifndef ENUM_CAST_HPP
 #define ENUM_CAST_HPP
 
-#include <stdint.h>
+#include <cstdint>
 
 template<typename T, unsigned size>
 struct EnumCastInternal {};

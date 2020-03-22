@@ -28,7 +28,7 @@ Copyright_License {
 
 #include <cassert>
 #include <tchar.h>
-#include <stdint.h>
+#include <cstdint>
 
 #define OUTBUFFERSIZE 128
 

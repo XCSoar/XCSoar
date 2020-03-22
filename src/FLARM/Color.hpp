@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_COLOR_HPP
 #define XCSOAR_FLARM_COLOR_HPP
 
-#include <stdint.h>
+#include <cstdint>
 
 enum class FlarmColor : uint8_t {
   NONE,

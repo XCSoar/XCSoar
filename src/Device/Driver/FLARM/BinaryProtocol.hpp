@@ -30,7 +30,7 @@ Copyright_License {
 #include <chrono>
 #include <type_traits>
 
-#include <stdint.h>
+#include <cstdint>
 #include <cstddef>
 
 class Port;

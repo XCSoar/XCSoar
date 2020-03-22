@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_PORTABLE_COLOR_HPP
 #define XCSOAR_SCREEN_PORTABLE_COLOR_HPP
 
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * Represents a device-independent color class that stores 8 bits for

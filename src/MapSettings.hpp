@@ -34,7 +34,7 @@ Copyright_License {
 
 #include <type_traits>
 
-#include <stdint.h>
+#include <cstdint>
 
 enum class AircraftSymbol : uint8_t {
   SIMPLE,

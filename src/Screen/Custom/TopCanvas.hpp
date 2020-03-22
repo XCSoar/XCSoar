@@ -68,7 +68,7 @@ struct _XDisplay;
 #include "../Memory/Dither.hpp"
 #endif
 
-#include <stdint.h>
+#include <cstdint>
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
 enum class DisplayOrientation : uint8_t;

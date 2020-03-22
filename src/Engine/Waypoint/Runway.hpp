@@ -26,7 +26,7 @@
 #include "Math/Angle.hpp"
 #include "Math/Util.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 
 class Runway {
   /** Main runway direction in degrees (0-359, -1 unknown) */

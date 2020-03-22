@@ -30,7 +30,7 @@
 #ifndef BASE64_HXX
 #define BASE64_HXX
 
-#include <stdint.h>
+#include <cstdint>
 
 template<typename T>
 struct ConstBuffer;

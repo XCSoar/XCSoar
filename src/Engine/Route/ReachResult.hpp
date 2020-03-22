@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_REACH_RESULT_HPP
 #define XCSOAR_REACH_RESULT_HPP
 
-#include <stdint.h>
+#include <cstdint>
 #include <stdlib.h>
 
 /**

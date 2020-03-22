@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Util/Compiler.h"
 
-#include <stdint.h>
+#include <cstdint>
 
 enum class DisplayOrientation : uint8_t;
 

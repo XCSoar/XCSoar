@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Util/EnumBitSet.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 
 /** Task Validation Error Types */
 enum class TaskValidationErrorType : uint8_t {

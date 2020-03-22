@@ -29,7 +29,7 @@ Copyright_License {
 #include <chrono>
 #include <set>
 
-#include <stdint.h>
+#include <cstdint>
 
 class Timer;
 

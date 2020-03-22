@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Util/AllocatedArray.hxx"
 
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * Loader for GNU gettext *.mo files.

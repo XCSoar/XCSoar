@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Util/Compiler.h"
 
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * Returns the value of a monotonic clock in milliseconds.

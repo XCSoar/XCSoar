@@ -22,7 +22,7 @@
 
 #include "TestUtil.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 
 #include "OS/ByteOrder.hpp"
 

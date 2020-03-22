@@ -33,7 +33,7 @@ Copyright_License {
 
 #include "Screen/Point.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 
 enum class DisplayOrientation : uint8_t;
 class EventQueue;

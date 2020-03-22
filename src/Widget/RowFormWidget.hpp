@@ -33,7 +33,7 @@ Copyright_License {
 #include "Units/Group.hpp"
 
 #include <cassert>
-#include <stdint.h>
+#include <cstdint>
 
 struct DialogLook;
 struct StaticEnumChoice;

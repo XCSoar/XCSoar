@@ -24,7 +24,7 @@
 #ifndef XCSOAR_TASK_POINT_TYPE_HPP
 #define XCSOAR_TASK_POINT_TYPE_HPP
 
-#include <stdint.h>
+#include <cstdint>
 
 enum class TaskPointType : uint8_t {
   UNORDERED,

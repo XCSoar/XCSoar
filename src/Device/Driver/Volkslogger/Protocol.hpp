@@ -26,7 +26,7 @@ Copyright_License {
 
 #include <chrono>
 
-#include <stdint.h>
+#include <cstdint>
 #include <cstddef>
 
 class Port;

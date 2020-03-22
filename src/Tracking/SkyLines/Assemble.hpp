@@ -27,7 +27,7 @@ Copyright_License {
 #include "Features.hpp"
 #include "Util/Compiler.h"
 
-#include <stdint.h>
+#include <cstdint>
 
 struct NMEAInfo;
 struct GeoPoint;

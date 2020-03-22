@@ -29,7 +29,7 @@ Copyright_License {
 #include <algorithm>
 
 #include <math.h>
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * Implementation of the Murphy line drawing algorithm.  Based on

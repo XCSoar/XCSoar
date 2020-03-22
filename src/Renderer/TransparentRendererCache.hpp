@@ -29,7 +29,7 @@ Copyright_License {
 #include "Screen/BufferCanvas.hpp"
 #endif
 
-#include <stdint.h>
+#include <cstdint>
 
 class Canvas;
 class WindowProjection;

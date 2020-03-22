@@ -26,9 +26,8 @@ Copyright_License {
 
 #include "VarioSettings.hpp"
 
+#include <cstdint>
 #include <type_traits>
-
-#include <stdint.h>
 
 struct SoundSettings {
   // sound stuff not used?

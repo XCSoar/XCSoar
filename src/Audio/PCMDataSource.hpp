@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_AUDIO_PCM_DATA_SOURCE_HPP
 
 #include <cstddef>
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * This interface is used by PCMPlayer.

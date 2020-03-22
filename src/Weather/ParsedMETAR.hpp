@@ -29,7 +29,7 @@ Copyright_License {
 #include "Atmosphere/Pressure.hpp"
 #include "Util/StaticString.hxx"
 
-#include <stdint.h>
+#include <cstdint>
 
 struct ParsedMETAR
 {

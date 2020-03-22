@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_UNITS_UNIT_HPP
 #define XCSOAR_UNITS_UNIT_HPP
 
-#include <stdint.h>
+#include <cstdint>
 
 enum class Unit: uint8_t {
   UNDEFINED,

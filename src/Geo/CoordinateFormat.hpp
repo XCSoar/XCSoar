@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef COORDINATE_FORMAT_HPP
 #define COORDINATE_FORMAT_HPP
 
-#include <stdint.h>
+#include <cstdint>
 
 enum class CoordinateFormat: uint8_t {
   DDMMSS = 0,

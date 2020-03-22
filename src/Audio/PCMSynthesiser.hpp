@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_AUDIO_PCM_SYNTHESISER_HPP
 
 #include <cstddef>
-#include <stdint.h>
+#include <cstdint>
 
 #include "PCMDataSource.hpp"
 #include "OS/ByteOrder.hpp"

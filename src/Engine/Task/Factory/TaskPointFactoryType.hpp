@@ -23,7 +23,7 @@
 #ifndef XCSOAR_TASK_POINT_FACTORY_TYPE_HPP
 #define XCSOAR_TASK_POINT_FACTORY_TYPE_HPP
 
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * Legal types of points with observation zones.

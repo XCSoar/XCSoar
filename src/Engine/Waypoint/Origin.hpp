@@ -23,7 +23,7 @@
 #ifndef WAYPOINT_FILE_ID_HPP
 #define WAYPOINT_FILE_ID_HPP
 
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * The origin where we loaded the waypoint from.

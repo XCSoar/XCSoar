@@ -28,7 +28,7 @@ Copyright_License {
 #include "Renderer/ButtonRenderer.hpp"
 
 #include <cassert>
-#include <stdint.h>
+#include <cstdint>
 
 enum class CoordinateFormat : uint8_t;
 class RoughTime;

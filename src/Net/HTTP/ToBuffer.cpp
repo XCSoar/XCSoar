@@ -26,7 +26,7 @@ Copyright_License {
 #include "Handler.hpp"
 #include "Operation/Operation.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 #include <string.h>
 
 class CancelDownloadToBuffer {};
