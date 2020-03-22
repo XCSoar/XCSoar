@@ -130,12 +130,16 @@ nightly-docs:
 
 deploy_nightlies:
   stage: deploy
+  before_script:
+    - apk update && apk add openssh-client rsync
   script:
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
-    - scp -P ${DEPLOY_PORT} ./output ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}
+    - export DIRECTORY="$(cat VERSION.txt)~git#$CI_COMMIT_SHORT_SHA"
+    - rsync -e "ssh -o StrictHostKeyChecking=no -p ${DEPLOY_PORT}" -r ./output/* ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/${DIRECTORY}/
   only:
     - master
+  except:
+    - tags
