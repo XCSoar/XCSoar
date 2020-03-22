@@ -107,6 +107,11 @@ struct BasicStringView : ConstBuffer<T> {
 		return StringFind(data, ch, this->size);
 	}
 
+	gcc_pure
+	pointer FindLast(value_type ch) const noexcept {
+		return StringFindLast(data, ch, size);
+	}
+
 	/**
 	 * Split the string at the first occurrence of the given
 	 * character.  If the character is not found, then the first
@@ -132,6 +137,23 @@ struct BasicStringView : ConstBuffer<T> {
 		return this->size >= needle.size &&
 			StringIsEqual(data + this->size - needle.size,
 				      needle.data, needle.size);
+	}
+
+	gcc_pure
+	int Compare(BasicStringView<T> other) const noexcept {
+		if (size < other.size) {
+			int result = StringCompare(data, other.data, size);
+			if (result == 0)
+				result = -1;
+			return result;
+		} else if (size > other.size) {
+			int result = StringCompare(data, other.data,
+						   other.size);
+			if (result == 0)
+				result = 1;
+			return result;
+		} else
+			return StringCompare(data, other.data, size);
 	}
 
 	gcc_pure
