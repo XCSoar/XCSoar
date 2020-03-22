@@ -89,8 +89,8 @@ OpenVarioDevice::PutBallast(double fraction, double overload, OperationEnvironme
   if (!EnableNMEA(env))
     return false;
   
-  char buffer[15];
-  sprintf(buffer,"POV,C,WL,%3.0f", overload);
+  char buffer[20];
+  sprintf(buffer,"POV,C,WL,%1.3f",(float)overload);
   return PortWriteNMEA(port, buffer, env);
 }
 
@@ -100,10 +100,8 @@ OpenVarioDevice::PutBugs(double bugs, OperationEnvironment &env)
   if (!EnableNMEA(env))
     return false;
  
-  double _bugs = (double)(bugs);
-
   char buffer[32];
-  sprintf(buffer, "POV,C,BU,%0.2f\r", _bugs);
+  sprintf(buffer, "POV,C,BU,%0.2f",(float)bugs);
   return PortWriteNMEA(port, buffer, env);
 }
 
