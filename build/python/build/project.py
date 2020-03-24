@@ -3,10 +3,12 @@ import re
 
 from build.download import download_and_verify
 from build.tar import untar
+from build.quilt import push_all
 
 class Project:
     def __init__(self, url, alternative_url, md5, installed, name=None, version=None,
-                 base=None)
+                 base=None,
+                 patches=None):
         if base is None:
             basename = os.path.basename(url)
             m = re.match(r'^(.+)\.(tar(\.(gz|bz2|xz|lzma))?|zip)$', basename)
@@ -28,6 +30,8 @@ class Project:
         self.md5 = md5
         self.installed = installed
 
+        self.patches = patches
+
     def download(self, toolchain):
         return download_and_verify(self.url, self.alternative_url, self.md5, toolchain.tarball_path)
 
@@ -46,6 +50,8 @@ class Project:
         else:
             parent_path = toolchain.build_path
         path = untar(self.download(toolchain), parent_path, self.base)
+        if self.patches is not None:
+            push_all(toolchain, path, self.patches)
         return path
 
     def make_build_path(self, toolchain):
