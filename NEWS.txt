@@ -71,10 +71,14 @@ Version 7.0 - not yet released
 Version 6.8.13 - not yet released
 * devices
   - LX: fix buffer overflow
+  - LX: support downloading flights from LX7000 Pro IGC
 * Android
   - use the full screen on very narrow/wide displays
 * Kobo
   - fix build failure with GCC 9
+  - switch from glibc to Musl
+* WinCE
+  - build with GCC 9
 * allow the hyphen in XCI files
 
 Version 6.8.12 - 2019/04/30

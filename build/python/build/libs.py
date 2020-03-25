@@ -108,10 +108,10 @@ freetype = FreeTypeProject(
     ],
 )
 
-curl = CurlProject(
-    'http://curl.haxx.se/download/curl-7.64.1.tar.xz',
-    'https://github.com/curl/curl/releases/download/curl-7_64_1/curl-7.64.1.tar.xz',
-    '9252332a7f871ce37bfa7f78bdd0a0e3924d8187cc27cb57c76c9474a7168fb3',
+curl = AutotoolsProject(
+    'http://curl.haxx.se/download/curl-7.69.1.tar.xz',
+    'https://github.com/curl/curl/releases/download/curl-7_69_1/curl-7.69.1.tar.xz',
+    '03c7d5e6697f7b7e40ada1b2256e565a555657398e6c1fcfa4cb251ccd819d4f',
     'lib/libcurl.a',
     [
         '--disable-shared', '--enable-static',
@@ -145,10 +145,10 @@ proj = AutotoolsProject(
     autogen=True,
 )
 
-libpng = LibPNGProject(
-    'ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/libpng-1.6.36.tar.xz',
-    'http://downloads.sourceforge.net/project/libpng/libpng16/1.6.36/libpng-1.6.36.tar.xz',
-    'eceb924c1fa6b79172fdfd008d335f0e59172a86a66481e09d4089df872aa319',
+libpng = AutotoolsProject(
+    'ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng16/libpng-1.6.37.tar.xz',
+    'http://downloads.sourceforge.net/project/libpng/libpng16/1.6.37/libpng-1.6.37.tar.xz',
+    '505e70834d35383537b6491e7ae8641f1a4bed1876dbfe361201fc80868d88ca',
     'lib/libpng.a',
     [
         '--disable-shared', '--enable-static',
