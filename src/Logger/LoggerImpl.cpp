@@ -307,7 +307,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
     return;
 
   simulator = gps_info.location_available && !gps_info.gps.real;
-  writer->WriteHeader(gps_info.date_time_utc, decl.pilot_name,
+  writer->WriteHeader(gps_info.date_time_utc, decl.pilot_name, decl.copilot_name,
                       decl.aircraft_type, decl.aircraft_registration,
                       decl.competition_id,
                       logger_id, GetGPSDeviceName(), simulator);

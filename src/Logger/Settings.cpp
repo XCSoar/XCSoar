@@ -31,6 +31,7 @@ LoggerSettings::SetDefaults()
   auto_logger = AutoLogger::ON;
   logger_id.clear();
   pilot_name.clear();
+  copilot_name.clear();
 
   /* XXX disabled by default for now, until the FlightLogger
      implementation is finished */

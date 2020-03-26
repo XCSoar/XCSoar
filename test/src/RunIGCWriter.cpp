@@ -46,7 +46,7 @@ int main(int argc, char **argv)
   const TCHAR *driver_name = _T("Unknown");
 
   IGCWriter writer(output_file);
-  writer.WriteHeader(replay->Basic().date_time_utc, _T("Manfred Mustermann"),
+  writer.WriteHeader(replay->Basic().date_time_utc, _T("Manfred Mustermann"), _T("Manuela Mustermann"),
                      _T("Ventus"), _T("D-1234"),
                      _T("MM"), "FOO", driver_name, true);
 

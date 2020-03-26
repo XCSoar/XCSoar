@@ -84,7 +84,9 @@ IGCWriter::WriteLine(const char *a, const TCHAR *b)
 
 void
 IGCWriter::WriteHeader(const BrokenDateTime &date_time,
-                       const TCHAR *pilot_name, const TCHAR *aircraft_model,
+                       const TCHAR *pilot_name,
+                       const TCHAR *copilot_name,
+                       const TCHAR *aircraft_model,
                        const TCHAR *aircraft_registration,
                        const TCHAR *competition_id,
                        const char *logger_id, const TCHAR *driver_name,
@@ -94,6 +96,7 @@ IGCWriter::WriteHeader(const BrokenDateTime &date_time,
    * HFDTE141203  <- should be UTC, same as time in filename
    * HFFXA100
    * HFPLTPILOT:JOHN WHARINGTON
+   * HFCM2CREW2: LISA HAMMOND
    * HFGTYGLIDERTYPE:LS 3
    * HFGIDGLIDERID:VH-WUE
    * HFDTM100GPSDATUM:WGS-1984
@@ -123,6 +126,7 @@ IGCWriter::WriteHeader(const BrokenDateTime &date_time,
     WriteLine(GetHFFXARecord());
 
   WriteLine("HFPLTPILOTINCHARGE:", pilot_name);
+  WriteLine("HFCM2CREW2:", copilot_name);
   WriteLine("HFGTYGLIDERTYPE:", aircraft_model);
   WriteLine("HFGIDGLIDERID:", aircraft_registration);
   WriteLine("HFCIDCOMPETITIONID:", competition_id);

@@ -83,7 +83,8 @@ NanoWriteDeclMeta(Port &port, OperationEnvironment &env,
 {
   return NanoWriteDeclString(port, env, reader, 1, total_size,
                              "HFPLTPILOT:", declaration.pilot_name) &&
-    NanoWriteDecl(port, env, reader, 2, total_size, "HFCM2CREW2:") &&
+    NanoWriteDeclString(port, env, reader, 2, total_size,
+                        "HFCM2CREW2:", declaration.copilot_name) &&
     NanoWriteDeclString(port, env, reader, 3, total_size,
                         "HFGTYGLIDERTYPE:", declaration.aircraft_type) &&
     NanoWriteDeclString(port, env, reader, 4, total_size,

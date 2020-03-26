@@ -62,6 +62,7 @@ static const char *const expect[] = {
   "HFDTE040910",
   "HFFXA050",
   "HFPLTPILOTINCHARGE:Pilot Name",
+  "HFCM2CREW2:CoPilot Name",
   "HFGTYGLIDERTYPE:ASK-21",
   "HFGIDGLIDERID:D-1234",
   "HFCIDCOMPETITIONID:34",
@@ -110,7 +111,7 @@ Run(IGCWriter &writer)
   i.ProvidePressureAltitude(490);
   i.ProvideBaroAltitudeTrue(400);
 
-  writer.WriteHeader(i.date_time_utc, _T("Pilot Name"), _T("ASK-21"),
+  writer.WriteHeader(i.date_time_utc, _T("Pilot Name"), _T("CoPilot Name"), _T("ASK-21"),
                      _T("D-1234"), _T("34"), "FOO", _T("bar"), false);
   writer.StartDeclaration(i.date_time_utc, 3);
   writer.AddDeclaration(home, _T("Bergneustadt"));
@@ -156,7 +157,7 @@ Run(Path path)
 
 int main(int argc, char **argv)
 try {
-  plan_tests(49);
+  plan_tests(51);
 
   const Path path(_T("output/test/test.igc"));
   File::Delete(path);

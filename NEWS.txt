@@ -3,6 +3,7 @@ Version 7.0 - not yet released
 * user interface
   - screen layout with 12 infoboxes on the left, vario+3 infoboxes on right
   - new translation: Traditional Chinese
+  - new Logger-setting "CoPilot"
 * data files
   - optimise the terrain loader
   - support runway width in CUP files
@@ -18,6 +19,7 @@ Version 7.0 - not yet released
   - combine traffic from all FLARM devices (support both FLARM and OGN devices on board)
   - GliderLink: new driver
   - AirControlDisplay: read radio frequencies from PAAVS,COM sentence
+  - driver for LXNano modified, so declaration contains copilot
 * weather
   - merge all weather data in one dialog
   - allow showing both terrain and RASP

@@ -67,6 +67,7 @@ Declaration::Declaration(const LoggerSettings &logger_settings,
                          const Plane &plane,
                          const OrderedTask* task)
   :pilot_name(logger_settings.pilot_name),
+   copilot_name(logger_settings.copilot_name),
    aircraft_type(plane.type),
    aircraft_registration(plane.registration),
    competition_id(plane.competition_id)
