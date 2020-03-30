@@ -46,63 +46,145 @@ public:
   bool PutBugs(double bugs, OperationEnvironment &env) override;
   void OnCalculatedUpdate(const MoreData &basic,
                   const DerivedInfo &calculated) override;
-  static bool POV(NMEAInputLine &line, NMEAInfo &info);
+private:
+  bool POV(NMEAInputLine &line, NMEAInfo &info);
+  bool ComposeWrite(const char p_type,double a, double b, double c,
+  		  OperationEnvironment &env);
+  bool PutIdealPolar(bool force, const DerivedInfo *calculated,
+  		  OperationEnvironment &env);
+  bool PutRealPolar(bool force, const DerivedInfo *calculated,
+  		  OperationEnvironment &env);
+  bool RepeatBugs(OperationEnvironment &env);
+  bool RepeatBallast(OperationEnvironment &env);
+  bool RepeatMacCready(OperationEnvironment &env);
 };
+
+static const DerivedInfo *_calculated = NULL;
+static double _bugs = 1;
+static double _overload = 1;
+static double _mc = 1;
+
+bool
+OpenVarioDevice::ComposeWrite(const char p_type,double a, double b, double c,
+  OperationEnvironment &env)
+{
+  // NullOperationEnvironment env;
+  char buffer[50];
+  // Compose Polar String
+  // TODO does the receiver understand %e format? Or do we have to use %f, even if
+  //      the number of significant digits is less then 3.
+  sprintf(buffer,"POV,C,%cPO,%e,%e,%e", p_type, a, b, c);
+  return PortWriteNMEA(port, buffer, env);
+}
+
+
+bool
+OpenVarioDevice::PutIdealPolar(bool force, const DerivedInfo *calculated,
+  OperationEnvironment &env)
+{
+  bool rv = false;
+  if (calculated == NULL) return rv;
+
+  // Get ideal polar
+  PolarCoefficients polar = calculated->glide_polar_safety.GetCoefficients();
+  static double prev_a=0, prev_b=0, prev_c=0;
+  if (force
+     || (prev_a != polar.a)
+     || (prev_b != polar.b)
+     || (prev_c != polar.c)) {
+       if (OpenVarioDevice::ComposeWrite('I',polar.a,polar.b,polar.c,env)){
+	prev_a = polar.a; prev_b = polar.b; prev_c = polar.c;
+	rv |= true;
+       }
+     }
+  return rv;
+}
+
+bool
+OpenVarioDevice::PutRealPolar(bool force, const DerivedInfo *calculated,
+  OperationEnvironment &env)
+{
+  bool rv = false;
+  if (calculated == NULL) return rv;
+
+  // Get real polar
+  PolarCoefficients polar = calculated->glide_polar_safety.GetRealCoefficients();
+  static double prev_a=0, prev_b=0, prev_c=0;
+  if (force
+     || (prev_a != polar.a)
+     || (prev_b != polar.b)
+     || (prev_c != polar.c)) {
+       if (OpenVarioDevice::ComposeWrite('R',polar.a,polar.b,polar.c,env)){
+	prev_a = polar.a; prev_b = polar.b; prev_c = polar.c;
+	rv |= true;
+       }
+     }
+  return rv;
+}
 
 void
 OpenVarioDevice::OnCalculatedUpdate(const MoreData &basic, 
     const DerivedInfo &calculated)
 {
-  PolarCoefficients polar_ideal;
-  PolarCoefficients polar_real;
+  _calculated = &calculated;
   NullOperationEnvironment env;
-  
-  // Get polar
-  polar_ideal = calculated.glide_polar_safety.GetCoefficients();
-  polar_real = calculated.glide_polar_safety.GetRealCoefficients();
-  
-  char buffer[50];
-  
-  // Compose Real Polar String
-  sprintf(buffer,"POV,C,RPO,%f,%f,%f", polar_real.a, polar_real.b, polar_real.c);
-  PortWriteNMEA(port, buffer, env);
 
-  // Compose ideal polar String
-  sprintf(buffer,"POV,C,IPO,%f,%f,%f", polar_ideal.a, polar_ideal.b, polar_ideal.c);
-  PortWriteNMEA(port, buffer, env);
+  // PutIdealPolar(false, _calculated, env);
+  PutRealPolar(false, _calculated, env);
+}
+
+bool
+OpenVarioDevice::RepeatMacCready(OperationEnvironment &env)
+{
+  if (!EnableNMEA(env))
+    return false;
+  
+  char buffer[20];
+  sprintf(buffer,"POV,C,MC,%0.2f", (double)_mc);
+  return PortWriteNMEA(port, buffer, env);
 }
 
 bool
 OpenVarioDevice::PutMacCready(double mc, OperationEnvironment &env)
 {
+  _mc = mc;
+  return RepeatMacCready(env);
+}
+
+bool
+OpenVarioDevice::RepeatBallast(OperationEnvironment &env)
+{
   if (!EnableNMEA(env))
     return false;
   
-  char buffer[30];
-  sprintf(buffer,"POV,C,MC,%0.2f", (double)mc);
+  char buffer[20];
+  sprintf(buffer,"POV,C,WL,%1.3f",(float)_overload);
   return PortWriteNMEA(port, buffer, env);
 }
 
 bool
 OpenVarioDevice::PutBallast(double fraction, double overload, OperationEnvironment &env)
 {
+  _overload = overload;
+  return RepeatBallast(env);
+}
+
+bool
+OpenVarioDevice::RepeatBugs(OperationEnvironment &env)
+{
   if (!EnableNMEA(env))
     return false;
-  
-  char buffer[20];
-  sprintf(buffer,"POV,C,WL,%1.3f",(float)overload);
+ 
+  char buffer[32];
+  sprintf(buffer, "POV,C,BU,%0.2f",(float)_bugs);
   return PortWriteNMEA(port, buffer, env);
 }
 
 bool
 OpenVarioDevice::PutBugs(double bugs, OperationEnvironment &env)
 {
-  if (!EnableNMEA(env))
-    return false;
- 
-  char buffer[32];
-  sprintf(buffer, "POV,C,BU,%0.2f",(float)bugs);
-  return PortWriteNMEA(port, buffer, env);
+  _bugs = bugs;
+  return RepeatBugs(env);
 }
 
 bool
@@ -131,7 +213,9 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
    * R: total pressure in hPa
    * S: true airspeed in km/h
    * T: temperature in deg C
+   * ?: respond with selected strings, e.g. Ballast, Bugs, Polar
    */
+
 
   while (!line.IsEmpty()) {
     char type = line.ReadOneChar();
@@ -143,6 +227,17 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
       break;
 
     switch (type) {
+      case '?': {
+	  NullOperationEnvironment env;
+	  int sel = (int)(value+0.1);
+	  if (sel & 0x10) RepeatBallast(env);
+	  if (sel & 0x08) RepeatBugs(env);
+	  if (sel & 0x04) RepeatMacCready(env);
+	  if (sel & 0x02) PutIdealPolar(true, _calculated, env);
+	  if (sel & 0x01) PutRealPolar(true, _calculated, env);
+	  // TODO : what else might the connected device want to know ?
+        break;
+      }
       case 'E': {
         info.ProvideTotalEnergyVario(value);
         break;
@@ -191,6 +286,7 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
 static Device *
 OpenVarioCreateOnPort(const DeviceConfig &config, Port &com_port)
 {
+  _calculated = NULL;
   return new OpenVarioDevice(com_port);
 }
 
