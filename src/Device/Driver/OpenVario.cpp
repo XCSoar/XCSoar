@@ -65,7 +65,6 @@ private:
   bool   _mc_valid = false;
   double _overload = 1;
   bool   _overload_valid = false;
-  const DerivedInfo *_calculated = NULL;
 };
 
 
@@ -82,48 +81,97 @@ OpenVarioDevice::ComposeWrite(const char p_type,double a, double b, double c,
   return PortWriteNMEA(port, buffer, env);
 }
 
-
 bool
 OpenVarioDevice::PutIdealPolar(bool force, const DerivedInfo *calculated,
   OperationEnvironment &env)
+  /****
+  (calculated == NULL): it will repeat the previous polar string
+    if there is a valid set of coefficients.
+  (calculated != NULL): it uses the pointer to retrieve a set of polar coefficients
+    and remebers them for later.
+  (force == true): write the NMEA sentence even it's no different from the
+    previously sent.
+  ***/
+
 {
   bool rv = false;
-  if (calculated == NULL) return rv;
+  static bool coeffs_valid = false;	// remember if coeffs had been set
+  static double prev_a=0, prev_b=0, prev_c=0;  // remeber the coefficients for the next call
 
-  // Get ideal polar
-  PolarCoefficients polar = calculated->glide_polar_safety.GetCoefficients();
-  static double prev_a=0, prev_b=0, prev_c=0;
-  if (force
-     || (prev_a != polar.a)
-     || (prev_b != polar.b)
-     || (prev_c != polar.c)) {
-       if (OpenVarioDevice::ComposeWrite('I',polar.a,polar.b,polar.c,env)){
+  if (calculated == NULL) {
+    // being called to repeat the last polar string
+    if (coeffs_valid) {
+       rv |= OpenVarioDevice::ComposeWrite('I',prev_a,prev_b,prev_c,env);
+    }
+  } else {
+    // Get ideal polar coeffs from DerivedInfo
+    PolarCoefficients polar = calculated->glide_polar_safety.GetCoefficients();
+    if (!coeffs_valid) {
+	// remeber the first set of polar coefficients
 	prev_a = polar.a; prev_b = polar.b; prev_c = polar.c;
-	rv |= true;
+	coeffs_valid = true;
+	// make sure to write the first set of polar coefficients
+	force = true;
+	}
+    if (force
+       || (prev_a != polar.a)
+       || (prev_b != polar.b)
+       || (prev_c != polar.c)) {
+	 // get here if the coeffs differ from previously or if forced to write
+	 if (OpenVarioDevice::ComposeWrite('I',polar.a,polar.b,polar.c,env)){
+	  // remember what was just sent
+	  prev_a = polar.a; prev_b = polar.b; prev_c = polar.c;
+	  rv |= true;
+	 }
        }
-     }
+  }
   return rv;
 }
 
 bool
 OpenVarioDevice::PutRealPolar(bool force, const DerivedInfo *calculated,
   OperationEnvironment &env)
+  /****
+  (calculated == NULL): it will repeat the previous polar string
+    if there is a valid set of coefficients.
+  (calculated != NULL): it uses the pointer to retrieve a set of polar coefficients
+    and remebers them for later.
+  (force == true): write the NMEA sentence even it's no different from the
+    previously sent.
+  ***/
+
 {
   bool rv = false;
-  if (calculated == NULL) return rv;
+  static bool coeffs_valid = false;	// remember if coeffs had been set
+  static double prev_a=0, prev_b=0, prev_c=0;  // remeber the coefficients for the next call
 
-  // Get real polar
-  PolarCoefficients polar = calculated->glide_polar_safety.GetRealCoefficients();
-  static double prev_a=0, prev_b=0, prev_c=0;
-  if (force
-     || (prev_a != polar.a)
-     || (prev_b != polar.b)
-     || (prev_c != polar.c)) {
-       if (OpenVarioDevice::ComposeWrite('R',polar.a,polar.b,polar.c,env)){
+  if (calculated == NULL) {
+    // being called to repeat the last polar string
+    if (coeffs_valid) {
+       rv |= OpenVarioDevice::ComposeWrite('R',prev_a,prev_b,prev_c,env);
+    }
+  } else {
+    // Get real polar coeffs from DerivedInfo
+    PolarCoefficients polar = calculated->glide_polar_safety.GetRealCoefficients();
+    if (!coeffs_valid) {
+	// remeber the first set of polar coefficients
 	prev_a = polar.a; prev_b = polar.b; prev_c = polar.c;
-	rv |= true;
+	coeffs_valid = true;
+	// make sure to write the first set of polar coefficients
+	force = true;
+	}
+    if (force
+       || (prev_a != polar.a)
+       || (prev_b != polar.b)
+       || (prev_c != polar.c)) {
+	 // get here if the coeffs differ from previously or if forced to write
+	 if (OpenVarioDevice::ComposeWrite('R',polar.a,polar.b,polar.c,env)){
+	  // remember what was just sent
+	  prev_a = polar.a; prev_b = polar.b; prev_c = polar.c;
+	  rv |= true;
+	 }
        }
-     }
+  }
   return rv;
 }
 
@@ -131,11 +179,10 @@ void
 OpenVarioDevice::OnCalculatedUpdate(const MoreData &basic, 
     const DerivedInfo &calculated)
 {
-  _calculated = &calculated;
   NullOperationEnvironment env;
 
-  // PutIdealPolar(false, _calculated, env);
-  PutRealPolar(false, _calculated, env);
+  PutIdealPolar(false, &calculated, env);
+  PutRealPolar(false, &calculated, env);
 }
 
 bool
@@ -241,8 +288,8 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
 	  if (sel & 0x10) RepeatBallast(env);
 	  if (sel & 0x08) RepeatBugs(env);
 	  if (sel & 0x04) RepeatMacCready(env);
-	  if (sel & 0x02) PutIdealPolar(true, _calculated, env);
-	  if (sel & 0x01) PutRealPolar(true, _calculated, env);
+	  if (sel & 0x02) PutIdealPolar(true, NULL, env);
+	  if (sel & 0x01) PutRealPolar(true, NULL, env);
 	  // TODO : what else might the connected device want to know ?
         break;
       }
