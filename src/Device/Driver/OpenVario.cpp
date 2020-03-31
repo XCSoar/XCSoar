@@ -54,11 +54,20 @@ private:
   		  OperationEnvironment &env);
   bool PutRealPolar(bool force, const DerivedInfo *calculated,
   		  OperationEnvironment &env);
-  // bool RepeatBugs(double bugs, OperationEnvironment &env);
-  // bool RepeatBallast(double ballast, OperationEnvironment &env);
+  bool RepeatBugs(OperationEnvironment &env);
+  bool RepeatBallast(OperationEnvironment &env);
+  bool RepeatMacCready(OperationEnvironment &env);
+
+  // remember the settings to be able to repeat the most recent values upon request
+  double _bugs = 1;
+  bool   _bugs_valid = false;
+  double _mc = 1;
+  bool   _mc_valid = false;
+  double _overload = 1;
+  bool   _overload_valid = false;
+  const DerivedInfo *_calculated = NULL;
 };
 
-static const DerivedInfo *_calculated = NULL;
 
 bool
 OpenVarioDevice::ComposeWrite(const char p_type,double a, double b, double c,
@@ -130,36 +139,60 @@ OpenVarioDevice::OnCalculatedUpdate(const MoreData &basic,
 }
 
 bool
-OpenVarioDevice::PutMacCready(double mc,OperationEnvironment &env)
+OpenVarioDevice::RepeatMacCready(OperationEnvironment &env)
 {
-  if (!EnableNMEA(env))
+  if ((!EnableNMEA(env)) || (!_mc_valid))
     return false;
   
   char buffer[20];
-  sprintf(buffer,"POV,C,MC,%0.2f", (float)mc);
+  sprintf(buffer,"POV,C,MC,%0.2f", (double)_mc);
+  return PortWriteNMEA(port, buffer, env);
+}
+
+bool
+OpenVarioDevice::PutMacCready(double mc, OperationEnvironment &env)
+{
+  _mc = mc;
+  _mc_valid = true;
+  return RepeatMacCready(env);
+}
+
+bool
+OpenVarioDevice::RepeatBallast(OperationEnvironment &env)
+{
+  if ((!EnableNMEA(env)) || (!_overload_valid))
+    return false;
+  
+  char buffer[20];
+  sprintf(buffer,"POV,C,WL,%1.3f",(float)_overload);
   return PortWriteNMEA(port, buffer, env);
 }
 
 bool
 OpenVarioDevice::PutBallast(double fraction, double overload, OperationEnvironment &env)
 {
-  if (!EnableNMEA(env))
+  _overload = overload;
+  _overload_valid = true;
+  return RepeatBallast(env);
+}
+
+bool
+OpenVarioDevice::RepeatBugs(OperationEnvironment &env)
+{
+  if ((!EnableNMEA(env)) || (!_bugs_valid))
     return false;
-  
-  char buffer[20];
-  sprintf(buffer,"POV,C,WL,%1.3f",(float)overload);
+ 
+  char buffer[32];
+  sprintf(buffer, "POV,C,BU,%0.2f",(float)_bugs);
   return PortWriteNMEA(port, buffer, env);
 }
 
 bool
-OpenVarioDevice::PutBugs(double bugs,OperationEnvironment &env)
+OpenVarioDevice::PutBugs(double bugs, OperationEnvironment &env)
 {
-  if (!EnableNMEA(env))
-    return false;
- 
-  char buffer[32];
-  sprintf(buffer, "POV,C,BU,%0.2f",(float)bugs);
-  return PortWriteNMEA(port, buffer, env);
+  _bugs = bugs;
+  _bugs_valid = true;
+  return RepeatBugs(env);
 }
 
 bool
@@ -205,9 +238,9 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
       case '?': {
 	  NullOperationEnvironment env;
 	  int sel = (int)(value+0.1);
-	  if (sel & 0x10) PutBallast(info.settings.ballast_fraction,info.settings.ballast_overload,env);
-	  if (sel & 0x08) PutBugs(info.settings.bugs,env);
-	  if (sel & 0x04) PutMacCready(info.settings.mac_cready,env);
+	  if (sel & 0x10) RepeatBallast(env);
+	  if (sel & 0x08) RepeatBugs(env);
+	  if (sel & 0x04) RepeatMacCready(env);
 	  if (sel & 0x02) PutIdealPolar(true, _calculated, env);
 	  if (sel & 0x01) PutRealPolar(true, _calculated, env);
 	  // TODO : what else might the connected device want to know ?
@@ -261,7 +294,6 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
 static Device *
 OpenVarioCreateOnPort(const DeviceConfig &config, Port &com_port)
 {
-  _calculated = NULL;
   return new OpenVarioDevice(com_port);
 }
 
