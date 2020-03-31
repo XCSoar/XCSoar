@@ -25,9 +25,9 @@ jobs:
 
       - type: restore_cache
         keys:
-          - ccache-{{ arch }}-master
           - v1-ccache-{{ arch }}-{{ .Branch }}
           - v1-ccache-{{ arch }}-master
+          - v1-ccache-{{ arch }}
 
       - type: run
         name: Initialize ccache
