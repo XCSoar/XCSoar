@@ -54,5 +54,5 @@ jobs:
           ccache --show-stats
 
       - type: save_cache
-        key: 'v1-ccache-{{ arch }}-{{ .Branch }}'
+        key: 'v1-ccache-{{ arch }}-{{ .Branch }}-{{ epoch }}'
         paths: [ "/root/.ccache" ]
