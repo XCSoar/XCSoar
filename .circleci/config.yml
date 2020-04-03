@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: buildpack-deps:stretch
+      - image: buildpack-deps:buster
 
     steps:
       - type: shell
@@ -10,6 +10,7 @@ jobs:
         command: |
           apt-get update -qqy
           apt-get install -qqy --no-install-recommends \
+            ccache \
             ffmpeg \
             gettext \
             libasound2-dev \
@@ -22,14 +23,36 @@ jobs:
 
       - type: checkout
 
+      - type: restore_cache
+        keys:
+          - v1-ccache-{{ arch }}-{{ .Branch }}
+          - v1-ccache-{{ arch }}-master
+          - v1-ccache-{{ arch }}
+
+      - type: run
+        name: Initialize ccache
+        command: |
+          ccache --show-stats
+          ccache --zero-stats
+          ccache --max-size=2.0G
+
       - type: run
         name: Update git submodules
         command: git submodule update --init --recursive
 
       - type: run
         name: Build
-        command: make -j2 TARGET=UNIX V=2 everything
+        command: make -j2 TARGET=UNIX V=2 USE_CCACHE=y everything
 
       - type: run
         name: Tests
         command: make TARGET=UNIX V=2 check
+
+      - type: run
+        name: Show ccache statistics
+        command: |
+          ccache --show-stats
+
+      - type: save_cache
+        key: 'v1-ccache-{{ arch }}-{{ .Branch }}-{{ epoch }}'
+        paths: [ "/root/.ccache" ]

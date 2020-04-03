@@ -1,7 +1,7 @@
-Index: boost_1_69_0/boost/asio/detail/impl/win_thread.ipp
+Index: boost_1_72_0/boost/asio/detail/impl/win_thread.ipp
 ===================================================================
---- boost_1_69_0.orig/boost/asio/detail/impl/win_thread.ipp
-+++ boost_1_69_0/boost/asio/detail/impl/win_thread.ipp
+--- boost_1_72_0.orig/boost/asio/detail/impl/win_thread.ipp
++++ boost_1_72_0/boost/asio/detail/impl/win_thread.ipp
 @@ -43,7 +43,7 @@ win_thread::~win_thread()
  void win_thread::join()
  {
@@ -20,10 +20,10 @@ Index: boost_1_69_0/boost/asio/detail/impl/win_thread.ipp
  
    return 0;
  }
-Index: boost_1_69_0/boost/asio/detail/impl/win_iocp_handle_service.ipp
+Index: boost_1_72_0/boost/asio/detail/impl/win_iocp_handle_service.ipp
 ===================================================================
---- boost_1_69_0.orig/boost/asio/detail/impl/win_iocp_handle_service.ipp
-+++ boost_1_69_0/boost/asio/detail/impl/win_iocp_handle_service.ipp
+--- boost_1_72_0.orig/boost/asio/detail/impl/win_iocp_handle_service.ipp
++++ boost_1_72_0/boost/asio/detail/impl/win_iocp_handle_service.ipp
 @@ -40,7 +40,7 @@ public:
      OffsetHigh = 0;
  
@@ -51,29 +51,43 @@ Index: boost_1_69_0/boost/asio/detail/impl/win_iocp_handle_service.ipp
    if (!ok)
    {
      DWORD last_error = ::GetLastError();
-Index: boost_1_69_0/boost/asio/detail/impl/win_iocp_serial_port_service.ipp
+Index: boost_1_72_0/boost/asio/detail/impl/win_iocp_serial_port_service.ipp
 ===================================================================
---- boost_1_69_0.orig/boost/asio/detail/impl/win_iocp_serial_port_service.ipp
-+++ boost_1_69_0/boost/asio/detail/impl/win_iocp_serial_port_service.ipp
-@@ -81,10 +81,10 @@ boost::system::error_code win_iocp_seria
+--- boost_1_72_0.orig/boost/asio/detail/impl/win_iocp_serial_port_service.ipp
++++ boost_1_72_0/boost/asio/detail/impl/win_iocp_serial_port_service.ipp
+@@ -81,19 +81,19 @@ boost::system::error_code win_iocp_seria
  
    // Set some default serial port parameters. This implementation does not
-   // support changing these, so they might as well be in a known state.
+   // support changing all of these, so they might as well be in a known state.
 -  dcb.fBinary = TRUE; // Win32 only supports binary mode.
--  dcb.fDsrSensitivity = FALSE;
 -  dcb.fNull = FALSE; // Do not ignore NULL characters.
 -  dcb.fAbortOnError = FALSE; // Ignore serial framing errors.
 +  dcb.fBinary = true; // Win32 only supports binary mode.
-+  dcb.fDsrSensitivity = false;
 +  dcb.fNull = false; // Do not ignore NULL characters.
 +  dcb.fAbortOnError = false; // Ignore serial framing errors.
+   dcb.BaudRate = CBR_9600; // 9600 baud by default
+   dcb.ByteSize = 8; // 8 bit bytes
+-  dcb.fOutxCtsFlow = FALSE; // No flow control
+-  dcb.fOutxDsrFlow = FALSE;
++  dcb.fOutxCtsFlow = false; // No flow control
++  dcb.fOutxDsrFlow = false;
+   dcb.fDtrControl = DTR_CONTROL_DISABLE;
+-  dcb.fDsrSensitivity = FALSE;
+-  dcb.fOutX = FALSE;
+-  dcb.fInX = FALSE;
++  dcb.fDsrSensitivity = false;
++  dcb.fOutX = false;
++  dcb.fInX = false;
+   dcb.fRtsControl = RTS_CONTROL_DISABLE;
+-  dcb.fParity = FALSE; // No parity
++  dcb.fParity = false; // No parity
+   dcb.Parity = NOPARITY;
+   dcb.StopBits = ONESTOPBIT; // One stop bit
    if (!::SetCommState(handle, &dcb))
-   {
-     DWORD last_error = ::GetLastError();
-Index: boost_1_69_0/boost/asio/detail/impl/win_static_mutex.ipp
+Index: boost_1_72_0/boost/asio/detail/impl/win_static_mutex.ipp
 ===================================================================
---- boost_1_69_0.orig/boost/asio/detail/impl/win_static_mutex.ipp
-+++ boost_1_69_0/boost/asio/detail/impl/win_static_mutex.ipp
+--- boost_1_72_0.orig/boost/asio/detail/impl/win_static_mutex.ipp
++++ boost_1_72_0/boost/asio/detail/impl/win_static_mutex.ipp
 @@ -53,7 +53,7 @@ int win_static_mutex::do_init()
  #if defined(BOOST_ASIO_WINDOWS_APP)
    HANDLE mutex = ::CreateMutexExW(0, mutex_name, CREATE_MUTEX_INITIAL_OWNER, 0);
@@ -83,10 +97,10 @@ Index: boost_1_69_0/boost/asio/detail/impl/win_static_mutex.ipp
  #endif // defined(BOOST_ASIO_WINDOWS_APP)
    DWORD last_error = ::GetLastError();
    if (mutex == 0)
-Index: boost_1_69_0/boost/asio/impl/serial_port_base.ipp
+Index: boost_1_72_0/boost/asio/impl/serial_port_base.ipp
 ===================================================================
---- boost_1_69_0.orig/boost/asio/impl/serial_port_base.ipp
-+++ boost_1_69_0/boost/asio/impl/serial_port_base.ipp
+--- boost_1_72_0.orig/boost/asio/impl/serial_port_base.ipp
++++ boost_1_72_0/boost/asio/impl/serial_port_base.ipp
 @@ -222,24 +222,24 @@ BOOST_ASIO_SYNC_OP_VOID serial_port_base
      BOOST_ASIO_OPTION_STORAGE& storage, boost::system::error_code& ec) const
  {
@@ -140,11 +154,11 @@ Index: boost_1_69_0/boost/asio/impl/serial_port_base.ipp
      storage.Parity = EVENPARITY;
      break;
    default:
-Index: boost_1_69_0/boost/asio/detail/impl/win_iocp_io_context.ipp
+Index: boost_1_72_0/boost/asio/detail/impl/win_iocp_io_context.ipp
 ===================================================================
---- boost_1_69_0.orig/boost/asio/detail/impl/win_iocp_io_context.ipp
-+++ boost_1_69_0/boost/asio/detail/impl/win_iocp_io_context.ipp
-@@ -95,7 +95,7 @@ void win_iocp_io_context::shutdown()
+--- boost_1_72_0.orig/boost/asio/detail/impl/win_iocp_io_context.ipp
++++ boost_1_72_0/boost/asio/detail/impl/win_iocp_io_context.ipp
+@@ -127,7 +127,7 @@ void win_iocp_io_context::shutdown()
    {
      LARGE_INTEGER timeout;
      timeout.QuadPart = 1;
@@ -152,8 +166,8 @@ Index: boost_1_69_0/boost/asio/detail/impl/win_iocp_io_context.ipp
 +    ::SetWaitableTimer(waitable_timer_.handle, &timeout, 1, 0, 0, false);
    }
  
-   while (::InterlockedExchangeAdd(&outstanding_work_, 0) > 0)
-@@ -496,7 +496,7 @@ void win_iocp_io_context::do_add_timer_q
+   if (thread_.get())
+@@ -535,7 +535,7 @@ void win_iocp_io_context::do_add_timer_q
  
    if (!waitable_timer_.handle)
    {
@@ -162,7 +176,7 @@ Index: boost_1_69_0/boost/asio/detail/impl/win_iocp_io_context.ipp
      if (waitable_timer_.handle == 0)
      {
        DWORD last_error = ::GetLastError();
-@@ -509,7 +509,7 @@ void win_iocp_io_context::do_add_timer_q
+@@ -548,7 +548,7 @@ void win_iocp_io_context::do_add_timer_q
      timeout.QuadPart = -max_timeout_usec;
      timeout.QuadPart *= 10;
      ::SetWaitableTimer(waitable_timer_.handle,
@@ -171,7 +185,7 @@ Index: boost_1_69_0/boost/asio/detail/impl/win_iocp_io_context.ipp
    }
  
    if (!timer_thread_.get())
-@@ -540,7 +540,7 @@ void win_iocp_io_context::update_timeout
+@@ -579,7 +579,7 @@ void win_iocp_io_context::update_timeout
        timeout.QuadPart = -timeout_usec;
        timeout.QuadPart *= 10;
        ::SetWaitableTimer(waitable_timer_.handle,
