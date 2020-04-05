@@ -219,25 +219,22 @@ Nano::ReadFlightList(Port &port, RecordedFlightList &flight_list,
     return nflights == 0;
 
   env.SetProgressRange(nflights);
-
-  unsigned requested_tail = 1;
+  
+  unsigned requested_tail = 0;
   while (true) {
-    const unsigned room = flight_list.max_size() - flight_list.size();
-    const unsigned remaining = nflights - requested_tail + 1;
-    const unsigned nmax = std::min(room, remaining);
-    if (nmax == 0)
-      break;
 
-    /* read 8 records at a time */
-    const unsigned nrequest = std::min(nmax, 8u);
+    if (nflights == 0)
+      break;
 
     timeout = TimeoutClock(2000);
     if (!GetLogbookContents(port, reader, flight_list,
-                            requested_tail, nrequest, env, timeout))
+                            nflights, 1, env, timeout))
       return false;
 
-    requested_tail += nrequest;
-    env.SetProgressPosition(requested_tail - 1);
+    nflights--;
+
+    requested_tail++;
+    env.SetProgressPosition(requested_tail);
   }
 
   return true;
