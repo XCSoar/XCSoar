@@ -28,8 +28,11 @@
  */
 
 #include "FileDescriptor.hxx"
+#include "Error.hxx"
 
 #include <cassert>
+#include <cstdint>
+
 #include <sys/stat.h>
 #include <fcntl.h>
 
@@ -283,6 +286,24 @@ FileDescriptor::GetSize() const noexcept
 	return ::fstat(fd, &st) >= 0
 		? (long)st.st_size
 		: -1;
+}
+
+void
+FileDescriptor::FullRead(void *_buffer, size_t length)
+{
+	auto *buffer = (uint8_t *)_buffer;
+
+	while (length > 0) {
+		ssize_t nbytes = Read(buffer, length);
+		if (nbytes <= 0) {
+			if (nbytes < 0)
+				throw MakeErrno("Failed to read");
+			throw std::runtime_error("Unexpected end of file");
+		}
+
+		buffer += nbytes;
+		length -= nbytes;
+	}
 }
 
 #ifndef _WIN32
