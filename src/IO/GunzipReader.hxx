@@ -53,7 +53,7 @@ public:
 	 *
 	 * Throws on error.
 	 */
-	GunzipReader(Reader &_next);
+	explicit GunzipReader(Reader &_next);
 
 	~GunzipReader() {
 		inflateEnd(&z);
