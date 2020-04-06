@@ -36,7 +36,7 @@ struct DialogLook;
 class WndFrame : public PaintWindow {
   const DialogLook &look;
 
-  Color caption_color;
+  Color text_color;
 
   TextRenderer text_renderer;
 
@@ -56,19 +56,14 @@ public:
   void SetAlignCenter() noexcept;
   void SetVAlignCenter() noexcept;
 
-  void SetText(const TCHAR *_text) noexcept;
-
-  const TCHAR *GetCaption() const noexcept {
+  const TCHAR *GetText() const noexcept {
     return text.c_str();
   }
 
-  void SetCaption(const TCHAR *_text) noexcept {
-    SetText(_text);
-    text_renderer.InvalidateLayout();
-  }
+  void SetText(const TCHAR *_text) noexcept;
 
-  void SetCaptionColor(const Color &color) noexcept {
-    caption_color = color;
+  void SetTextColor(const Color &color) noexcept {
+    text_color = color;
   }
 
   gcc_pure

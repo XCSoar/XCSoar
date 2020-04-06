@@ -67,7 +67,7 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
   // Create text element
   WndFrame *text_frame = new WndFrame(client_area, dialog_look, form_rc);
 
-  text_frame->SetCaption(text);
+  text_frame->SetText(text);
   text_frame->SetAlignCenter();
 
   const unsigned text_height = text_frame->GetTextHeight();
