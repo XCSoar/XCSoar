@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2019 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright (C) 2011-2017 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -128,6 +128,14 @@ ToLowerASCII(char ch) noexcept
 	return ch >= 'A' && ch <= 'Z'
 		? (ch + ('a' - 'A'))
 		: ch;
+}
+
+constexpr bool
+IsHexDigit(char ch) noexcept
+{
+	return IsDigitASCII(ch) ||
+		(ch >= 'a' && ch <= 'f') ||
+		(ch >= 'A' && ch <= 'F');
 }
 
 #endif
