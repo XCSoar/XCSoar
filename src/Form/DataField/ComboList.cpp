@@ -31,11 +31,11 @@ ComboList::Item::Item(int _int_value,
                       const TCHAR *_display_string,
                       const TCHAR *_help_text)
   :int_value(_int_value),
-   string_value(AllocatedString<TCHAR>::Duplicate(_string_value)),
-   display_string(AllocatedString<TCHAR>::Duplicate(_display_string)),
+   string_value(_string_value),
+   display_string(_display_string),
    help_text(_help_text != nullptr
-             ? AllocatedString<TCHAR>::Duplicate(_help_text)
-             : nullptr)
+             ? _help_text
+             : _T(""))
 {
 }
 

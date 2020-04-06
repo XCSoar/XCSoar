@@ -54,10 +54,7 @@ public:
 static const TCHAR*
 OnItemHelp(unsigned i)
 {
-  if (!(*ComboListPopup)[i].help_text.IsNull())
-    return (*ComboListPopup)[i].help_text.c_str();
-
-  return _T("");
+  return (*ComboListPopup)[i].help_text.c_str();
 }
 
 int

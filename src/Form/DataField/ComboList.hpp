@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DATA_FIELD_COMBO_LIST_HPP
 #define XCSOAR_DATA_FIELD_COMBO_LIST_HPP
 
-#include "Util/AllocatedString.hxx"
+#include "Util/tstring.hpp"
 
 #include <vector>
 
@@ -38,9 +38,9 @@ public:
     static constexpr int DOWNLOAD = -800003;
 
     int int_value;
-    AllocatedString<TCHAR> string_value;
-    AllocatedString<TCHAR> display_string;
-    AllocatedString<TCHAR> help_text;
+    tstring string_value;
+    tstring display_string;
+    tstring help_text;
 
     Item(int _int_value, const TCHAR *_string_value,
          const TCHAR *_display_string, const TCHAR *_help_text = nullptr);
