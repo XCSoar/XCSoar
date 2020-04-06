@@ -42,13 +42,10 @@ protected:
 
 private:
   /** Helptext of the Control */
-  TCHAR *help_text;
+  const TCHAR *help_text = nullptr;
 
 public:
   WindowControl();
-
-  /** Destructor */
-  virtual ~WindowControl();
 
   /**
    * Does this control have a help text?
@@ -84,7 +81,9 @@ public:
    * Sets the Helptext of the Control
    * @param Value The new Helptext of the Control
    */
-  void SetHelpText(const TCHAR *Value);
+  void SetHelpText(const TCHAR *_help_text) noexcept {
+    help_text = _help_text;
+  }
 
   const TCHAR *GetHelpText() const {
     return help_text;

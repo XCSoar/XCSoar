@@ -24,25 +24,10 @@ Copyright_License {
 #include "Form/Control.hpp"
 #include "Dialogs/HelpDialog.hpp"
 
-#include <stdlib.h>
-
 WindowControl::WindowControl()
-  :help_text(nullptr)
 {
   // Clear the caption
   caption.clear();
-}
-
-WindowControl::~WindowControl()
-{
-  free(help_text);
-}
-
-void
-WindowControl::SetHelpText(const TCHAR *Value)
-{
-  free(help_text);
-  help_text = Value != nullptr ? _tcsdup(Value) : nullptr;
 }
 
 void
