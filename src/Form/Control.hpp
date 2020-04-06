@@ -45,21 +45,21 @@ private:
   const TCHAR *help_text = nullptr;
 
 public:
-  WindowControl();
+  WindowControl() noexcept;
 
   /**
    * Does this control have a help text?
    */
-  bool HasHelp() const {
+  bool HasHelp() const noexcept {
     return help_text != nullptr;
   }
 
   /**
    * Opens up a help dialog if a help text exists
    */
-  bool OnHelp();
+  bool OnHelp() noexcept;
 
-  bool HasCaption() const {
+  bool HasCaption() const noexcept {
     return !caption.empty();
   }
 
@@ -67,7 +67,7 @@ public:
    * Returns the Caption/Text of the Control
    * @return The Caption/Text of the Control
    */
-  const TCHAR *GetCaption() const {
+  const TCHAR *GetCaption() const noexcept {
     return caption.c_str();
   }
 
@@ -75,7 +75,7 @@ public:
    * Sets the Caption/Text of the Control
    * @param Value The new Caption/Text of the Control
    */
-  void SetCaption(const TCHAR *Value);
+  void SetCaption(const TCHAR *Value) noexcept;
 
   /**
    * Sets the Helptext of the Control
@@ -85,7 +85,7 @@ public:
     help_text = _help_text;
   }
 
-  const TCHAR *GetHelpText() const {
+  const TCHAR *GetHelpText() const noexcept {
     return help_text;
   }
 };

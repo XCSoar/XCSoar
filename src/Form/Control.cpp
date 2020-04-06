@@ -24,14 +24,14 @@ Copyright_License {
 #include "Form/Control.hpp"
 #include "Dialogs/HelpDialog.hpp"
 
-WindowControl::WindowControl()
+WindowControl::WindowControl() noexcept
 {
   // Clear the caption
   caption.clear();
 }
 
 void
-WindowControl::SetCaption(const TCHAR *Value)
+WindowControl::SetCaption(const TCHAR *Value) noexcept
 {
   if (Value == nullptr)
     Value = _T("");
@@ -43,7 +43,7 @@ WindowControl::SetCaption(const TCHAR *Value)
 }
 
 bool
-WindowControl::OnHelp()
+WindowControl::OnHelp() noexcept
 {
   if (help_text) {
     HelpDialog(caption.c_str(), help_text);
