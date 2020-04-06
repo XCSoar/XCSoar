@@ -31,7 +31,6 @@
 #define LUA_UTIL_HXX
 
 #include "Assert.hxx"
-#include "Util/StringView.hxx"
 #include "Util/Compiler.h"
 
 extern "C" {
@@ -39,6 +38,7 @@ extern "C" {
 }
 
 #include <cstddef>
+#include <string_view>
 #include <tuple>
 
 namespace Lua {
@@ -102,9 +102,9 @@ Push(lua_State *L, const char *value) noexcept
 
 gcc_nonnull_all
 static inline void
-Push(lua_State *L, StringView value) noexcept
+Push(lua_State *L, std::string_view value) noexcept
 {
-	lua_pushlstring(L, value.data, value.size);
+	lua_pushlstring(L, value.data(), value.size());
 }
 
 gcc_nonnull_all
