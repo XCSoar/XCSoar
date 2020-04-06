@@ -696,7 +696,9 @@ MainWindow::OnDestroy()
   SingleWindow::OnDestroy();
 }
 
-bool MainWindow::OnClose() {
+bool
+MainWindow::OnClose() noexcept
+{
   if (HasDialog() || !IsRunning())
     /* no shutdown dialog if XCSoar hasn't completed initialization
        yet (e.g. if we are in the simulator prompt) */
@@ -1021,7 +1023,7 @@ MainWindow::ToggleForceFLARMRadar()
 #ifdef ANDROID
 
 void
-MainWindow::OnPause()
+MainWindow::OnPause() noexcept
 {
   if (!IsRunning() && HasDialog())
     /* suspending before initialization has finished doesn't leave

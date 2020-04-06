@@ -28,7 +28,7 @@ Copyright_License {
 
 void
 Window::Create(ContainerWindow *parent, PixelRect rc,
-               const WindowStyle window_style)
+               const WindowStyle window_style) noexcept
 {
   assert(IsScreenInitialized());
   assert(rc.left <= rc.right);
@@ -54,7 +54,7 @@ Window::Create(ContainerWindow *parent, PixelRect rc,
 }
 
 void
-Window::ToScreen(PixelRect &rc) const
+Window::ToScreen(PixelRect &rc) const noexcept
 {
   assert(IsDefined());
 
@@ -67,7 +67,7 @@ Window::ToScreen(PixelRect &rc) const
 }
 
 PixelRect
-Window::GetParentClientRect() const
+Window::GetParentClientRect() const noexcept
 {
   assert(IsDefined());
   assert(parent != nullptr);
@@ -76,7 +76,7 @@ Window::GetParentClientRect() const
 }
 
 bool
-Window::IsMaximised() const
+Window::IsMaximised() const noexcept
 {
   assert(IsDefined());
 
@@ -85,7 +85,7 @@ Window::IsMaximised() const
 }
 
 void
-Window::SetEnabled(bool enabled)
+Window::SetEnabled(bool enabled) noexcept
 {
   AssertThread();
 
@@ -101,7 +101,7 @@ Window::SetEnabled(bool enabled)
 }
 
 Window *
-Window::GetFocusedWindow()
+Window::GetFocusedWindow() noexcept
 {
   assert(IsDefined());
 
@@ -109,7 +109,7 @@ Window::GetFocusedWindow()
 }
 
 void
-Window::SetFocus()
+Window::SetFocus() noexcept
 {
   assert(IsDefined());
 
@@ -126,7 +126,7 @@ Window::SetFocus()
 }
 
 void
-Window::ClearFocus()
+Window::ClearFocus() noexcept
 {
   if (focused) {
     OnKillFocus();
@@ -136,7 +136,7 @@ Window::ClearFocus()
 }
 
 void
-Window::FocusParent()
+Window::FocusParent() noexcept
 {
   AssertThread();
   assert(parent != nullptr);
@@ -145,7 +145,7 @@ Window::FocusParent()
 }
 
 void
-Window::SetCapture()
+Window::SetCapture() noexcept
 {
   AssertThread();
 
@@ -158,7 +158,7 @@ Window::SetCapture()
 }
 
 void
-Window::ReleaseCapture()
+Window::ReleaseCapture() noexcept
 {
   AssertThread();
 
@@ -171,13 +171,13 @@ Window::ReleaseCapture()
 }
 
 void
-Window::ClearCapture()
+Window::ClearCapture() noexcept
 {
   capture = false;
 }
 
 void
-Window::Invalidate()
+Window::Invalidate() noexcept
 {
   AssertThread();
   assert(IsDefined());
@@ -187,7 +187,7 @@ Window::Invalidate()
 }
 
 void
-Window::Show()
+Window::Show() noexcept
 {
   AssertThread();
 
@@ -199,7 +199,7 @@ Window::Show()
 }
 
 void
-Window::Hide()
+Window::Hide() noexcept
 {
   AssertThread();
 
@@ -211,7 +211,7 @@ Window::Hide()
 }
 
 void
-Window::BringToTop()
+Window::BringToTop() noexcept
 {
   AssertThread();
 
@@ -219,7 +219,7 @@ Window::BringToTop()
 }
 
 void
-Window::BringToBottom()
+Window::BringToBottom() noexcept
 {
   AssertThread();
 

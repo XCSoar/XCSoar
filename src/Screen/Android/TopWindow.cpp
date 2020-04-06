@@ -33,13 +33,13 @@ Copyright_License {
 #include "Android/NativeView.hpp"
 
 void
-TopWindow::Invalidate()
+TopWindow::Invalidate() noexcept
 {
   invalidated = true;
 }
 
 void
-TopWindow::AnnounceResize(PixelSize _new_size)
+TopWindow::AnnounceResize(PixelSize _new_size) noexcept
 {
   std::lock_guard<Mutex> lock(paused_mutex);
   resized = true;
@@ -47,7 +47,7 @@ TopWindow::AnnounceResize(PixelSize _new_size)
 }
 
 bool
-TopWindow::ResumeSurface()
+TopWindow::ResumeSurface() noexcept
 {
   /* Try to reinitialize OpenGL.  This often fails on the first
      attempt (IllegalArgumentException "Make sure the SurfaceView or
@@ -73,13 +73,13 @@ TopWindow::ResumeSurface()
 }
 
 bool
-TopWindow::CheckResumeSurface()
+TopWindow::CheckResumeSurface() noexcept
 {
   return (!resumed || ResumeSurface()) && !paused && surface_valid;
 }
 
 void
-TopWindow::RefreshSize()
+TopWindow::RefreshSize() noexcept
 {
   PixelSize new_size_copy;
 
@@ -106,7 +106,7 @@ TopWindow::OnResize(PixelSize new_size)
 }
 
 void
-TopWindow::OnPause()
+TopWindow::OnPause() noexcept
 {
   if (paused)
     return;
@@ -125,7 +125,7 @@ TopWindow::OnPause()
 }
 
 void
-TopWindow::OnResume()
+TopWindow::OnResume() noexcept
 {
   if (!paused)
     return;
@@ -138,13 +138,13 @@ TopWindow::OnResume()
 }
 
 static bool
-match_pause_and_resume(const Event &event, void *ctx)
+match_pause_and_resume(const Event &event, void *ctx) noexcept
 {
   return event.type == Event::PAUSE || event.type == Event::RESUME;
 }
 
 void
-TopWindow::Pause()
+TopWindow::Pause() noexcept
 {
   event_queue->Purge(match_pause_and_resume, nullptr);
   event_queue->Push(Event::PAUSE);
@@ -154,7 +154,7 @@ TopWindow::Pause()
 }
 
 void
-TopWindow::Resume()
+TopWindow::Resume() noexcept
 {
   event_queue->Purge(match_pause_and_resume, nullptr);
   event_queue->Push(Event::RESUME);
@@ -239,7 +239,7 @@ TopWindow::OnEvent(const Event &event)
 }
 
 int
-TopWindow::RunEventLoop()
+TopWindow::RunEventLoop() noexcept
 {
   Refresh();
 
@@ -252,7 +252,7 @@ TopWindow::RunEventLoop()
 }
 
 void
-TopWindow::PostQuit()
+TopWindow::PostQuit() noexcept
 {
   event_queue->Quit();
 }

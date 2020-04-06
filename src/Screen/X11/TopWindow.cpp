@@ -37,7 +37,7 @@ Copyright_License {
 
 void
 TopWindow::CreateNative(const TCHAR *text, PixelSize size,
-                        TopWindowStyle style)
+                        TopWindowStyle style) noexcept
 {
   x_display = event_queue->GetDisplay();
   assert(x_display != nullptr);
@@ -127,13 +127,13 @@ TopWindow::CreateNative(const TCHAR *text, PixelSize size,
 }
 
 bool
-TopWindow::IsVisible() const
+TopWindow::IsVisible() const noexcept
 {
   return event_queue->IsVisible();
 }
 
 void
-TopWindow::EnableCapture()
+TopWindow::EnableCapture() noexcept
 {
   XGrabPointer(x_display, x_window, true,
                ButtonPressMask |
@@ -144,7 +144,7 @@ TopWindow::EnableCapture()
 }
 
 void
-TopWindow::DisableCapture()
+TopWindow::DisableCapture() noexcept
 {
   XUngrabPointer(x_display, CurrentTime);
 }

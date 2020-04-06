@@ -25,13 +25,13 @@ Copyright_License {
 #include "Form/Form.hpp"
 
 void
-SingleWindow::AddDialog(WndForm *dialog)
+SingleWindow::AddDialog(WndForm *dialog) noexcept
 {
   dialogs.push_front(dialog);
 }
 
 void
-SingleWindow::RemoveDialog(WndForm *dialog)
+SingleWindow::RemoveDialog(WndForm *dialog) noexcept
 {
   assert(dialog == dialogs.front());
 
@@ -39,7 +39,7 @@ SingleWindow::RemoveDialog(WndForm *dialog)
 }
 
 void
-SingleWindow::CancelDialog()
+SingleWindow::CancelDialog() noexcept
 {
   AssertThread();
 
@@ -47,7 +47,7 @@ SingleWindow::CancelDialog()
 }
 
 bool
-SingleWindow::OnClose()
+SingleWindow::OnClose() noexcept
 {
   if (!dialogs.empty()) {
     /* close the current dialog instead of the main window */

@@ -194,20 +194,21 @@ class TopWindow : public ContainerWindow {
 
 public:
 #ifndef USE_WINUSER
-  virtual ~TopWindow();
+  ~TopWindow() noexcept override;
 #endif
 
 #ifdef USE_WINUSER
   void Create(const TCHAR *cls, const TCHAR *text, PixelSize size,
-              TopWindowStyle style=TopWindowStyle());
+              TopWindowStyle style=TopWindowStyle()) noexcept;
 #else
   void Create(const TCHAR *text, PixelSize size,
-              TopWindowStyle style=TopWindowStyle());
+              TopWindowStyle style=TopWindowStyle()) noexcept;
 #endif
 
 #if defined(USE_X11) || defined(USE_WAYLAND) || defined(ENABLE_SDL)
 private:
-  void CreateNative(const TCHAR *text, PixelSize size, TopWindowStyle style);
+  void CreateNative(const TCHAR *text, PixelSize size,
+                    TopWindowStyle style) noexcept;
 
 public:
 #endif
@@ -216,16 +217,16 @@ public:
    * Check if the screen has been resized.
    */
 #ifdef USE_FB
-  void CheckResize();
+  void CheckResize() noexcept;
 #else
-  void CheckResize() {}
+  void CheckResize() noexcept {}
 #endif
 
 #if !defined(USE_WINUSER) && !defined(ENABLE_SDL)
 #if defined(ANDROID) || defined(USE_FB) || defined(USE_EGL) || defined(USE_GLX) || defined(USE_VFB)
-  void SetCaption(gcc_unused const TCHAR *caption) {}
+  void SetCaption(gcc_unused const TCHAR *caption) noexcept {}
 #else
-  void SetCaption(const TCHAR *caption);
+  void SetCaption(const TCHAR *caption) noexcept;
 #endif
 #endif
 
@@ -233,11 +234,11 @@ public:
    * Triggers an OnCancelMode() call on the focused #Window and/or the
    * #Window currently capturing the mouse.
    */
-  void CancelMode();
+  void CancelMode() noexcept;
 
 #if defined(USE_WINUSER)
   gcc_pure
-  const PixelRect GetClientRect() const {
+  const PixelRect GetClientRect() const noexcept {
     if (::IsIconic(hWnd)) {
       /* for a minimized window, GetClientRect() returns the
          dimensions of the icon, which is not what we want */
@@ -254,7 +255,7 @@ public:
   }
 
   gcc_pure
-  const PixelSize GetSize() const {
+  const PixelSize GetSize() const noexcept {
     /* this is implemented again because Window::get_size() would call
        Window::GetClientRect() (method is not virtual) */
     PixelRect rc = GetClientRect();
@@ -266,14 +267,14 @@ public:
 #endif
 
 #ifndef USE_WINUSER
-  void Invalidate() override;
+  void Invalidate() noexcept override;
 
 protected:
-  void Expose();
+  void Expose() noexcept;
 
 #if defined(USE_X11) || defined(USE_WAYLAND)
-  void EnableCapture() override;
-  void DisableCapture() override;
+  void EnableCapture() noexcept override;
+  void DisableCapture() noexcept override;
 #endif
 
 public:
@@ -283,9 +284,9 @@ public:
    * Synchronously refresh the screen by handling all pending repaint
    * requests.
    */
-  void Refresh();
+  void Refresh() noexcept;
 
-  void Close() {
+  void Close() noexcept {
 #ifndef USE_WINUSER
     OnClose();
 #else
@@ -301,7 +302,7 @@ public:
 
 #if defined(USE_X11) || defined(USE_WAYLAND)
   gcc_pure
-  bool IsVisible() const;
+  bool IsVisible() const noexcept;
 #endif
 
 #ifdef ANDROID
@@ -310,9 +311,9 @@ public:
    * that this has happened.  The caller should also submit the RESIZE
    * event to the event queue.  This method is thread-safe.
    */
-  void AnnounceResize(PixelSize _new_size);
+  void AnnounceResize(PixelSize _new_size) noexcept;
 
-  bool ResumeSurface();
+  bool ResumeSurface() noexcept;
 
   /**
    * Reinitialise the OpenGL surface if the Android Activity has been
@@ -320,34 +321,34 @@ public:
    *
    * @return true if there is a valid OpenGL surface
    */
-  bool CheckResumeSurface();
+  bool CheckResumeSurface() noexcept;
 
   /**
    * Synchronously update the size of the TopWindow to the new OpenGL
    * surface dimensions.
    */
-  void RefreshSize();
+  void RefreshSize() noexcept;
 #else
-  bool CheckResumeSurface() {
+  bool CheckResumeSurface() noexcept {
     return true;
   }
 
-  void RefreshSize() {}
+  void RefreshSize() noexcept {}
 #endif
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
-  void SetDisplayOrientation(DisplayOrientation orientation);
+  void SetDisplayOrientation(DisplayOrientation orientation) noexcept;
 #endif
 
 #ifdef DRAW_MOUSE_CURSOR
-  void SetCursorSize(const uint8_t &cursorSize) {
+  void SetCursorSize(const uint8_t &cursorSize) noexcept {
     cursor_size = cursorSize;
   }
 #endif
 
 
 protected:
-  PixelPoint PointToReal(PixelPoint p) const {
+  PixelPoint PointToReal(PixelPoint p) const noexcept {
 #ifdef HAVE_HIGHDPI_SUPPORT
     p.x = int(static_cast<float>(p.x) * point_to_real_x);
     p.y = int(static_cast<float>(p.y) * point_to_real_y);
@@ -356,10 +357,10 @@ protected:
   }
 
 protected:
-  virtual bool OnActivate();
-  virtual bool OnDeactivate();
+  virtual bool OnActivate() noexcept;
+  virtual bool OnDeactivate() noexcept;
 
-  virtual bool OnClose();
+  virtual bool OnClose() noexcept;
 
 #ifdef KOBO
   void OnDestroy() override;
@@ -371,7 +372,7 @@ protected:
 
 #ifdef USE_WINUSER
   LRESULT OnMessage(HWND _hWnd, UINT message,
-                    WPARAM wParam, LPARAM lParam) override;
+                    WPARAM wParam, LPARAM lParam) noexcept override;
 #endif
 
 #ifndef USE_WINUSER
@@ -382,25 +383,25 @@ protected:
   /**
    * @see Event::PAUSE
    */
-  virtual void OnPause();
+  virtual void OnPause() noexcept;
 
   /**
    * @see Event::RESUME
    */
-  virtual void OnResume();
+  virtual void OnResume() noexcept;
 
 public:
-  void Pause();
-  void Resume();
+  void Pause() noexcept;
+  void Resume() noexcept;
 #endif
 
 public:
-  void PostQuit();
+  void PostQuit() noexcept;
 
   /**
    * Runs the event loop until the application quits.
    */
-  int RunEventLoop();
+  int RunEventLoop() noexcept;
 };
 
 #endif

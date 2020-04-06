@@ -39,35 +39,35 @@ class ContainerWindow;
 class PaintWindow : public Window {
 public:
 #ifdef USE_WINUSER
-  static bool register_class(HINSTANCE hInstance);
+  static bool register_class(HINSTANCE hInstance) noexcept;
 #endif
 
 #ifndef USE_WINUSER
   using Window::Create;
 
   void Create(ContainerWindow &parent, PixelRect rc,
-              const WindowStyle style=WindowStyle()) {
+              const WindowStyle style=WindowStyle()) noexcept {
     Create(&parent, rc, style);
   }
 #else /* USE_WINUSER */
   void Create(ContainerWindow *parent, const TCHAR *cls, PixelRect rc,
-              const WindowStyle style=WindowStyle()) {
+              const WindowStyle style=WindowStyle()) noexcept {
     Window::Create(parent, cls, nullptr, rc, style);
   }
 
   void Create(ContainerWindow &parent, const TCHAR *cls, PixelRect rc,
-              const WindowStyle style=WindowStyle()) {
+              const WindowStyle style=WindowStyle()) noexcept {
     Create(&parent, cls, rc, style);
   }
 
   void Create(ContainerWindow &parent, PixelRect rc,
-              const WindowStyle style=WindowStyle()) {
+              const WindowStyle style=WindowStyle()) noexcept {
     Create(parent, _T("PaintWindow"), rc, style);
   }
 #endif /* USE_WINUSER */
 
   constexpr
-  static bool SupportsPartialRedraw() {
+  static bool SupportsPartialRedraw() noexcept {
 #ifdef USE_WINUSER
     /* we can use the GDI function InvalidateRect() with a non-nullptr
        RECT */
@@ -83,7 +83,7 @@ public:
    * Invalidates the visible area and schedules a repaint (which will
    * occur in the main thread).
    */
-  void Invalidate() {
+  void Invalidate() noexcept {
     AssertThread();
 
 #ifndef USE_WINUSER
@@ -97,7 +97,7 @@ public:
    * Invalidates a part of the visible area and schedules a repaint
    * (which will occur in the main thread).
    */
-  void Invalidate(gcc_unused const PixelRect &rect) {
+  void Invalidate(gcc_unused const PixelRect &rect) noexcept {
 #ifndef USE_WINUSER
     Invalidate();
 #else
@@ -110,7 +110,7 @@ public:
 protected:
   /* virtual methods from class Window */
   LRESULT OnMessage(HWND hWnd, UINT message,
-                    WPARAM wParam, LPARAM lParam) override;
+                    WPARAM wParam, LPARAM lParam) noexcept override;
 #endif
 
   /* virtual methods from class PaintWindow */

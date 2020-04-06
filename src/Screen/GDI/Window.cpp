@@ -33,7 +33,7 @@ Copyright_License {
 
 void
 Window::Create(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
-               PixelRect rc, const WindowStyle window_style)
+               PixelRect rc, const WindowStyle window_style) noexcept
 {
   assert(IsScreenInitialized());
   assert(rc.left <= rc.right);
@@ -56,7 +56,7 @@ Window::Create(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
 }
 
 void
-Window::CreateMessageWindow()
+Window::CreateMessageWindow() noexcept
 {
   hWnd = ::CreateWindowEx(0, _T("PaintWindow"), nullptr, 0, 0, 0, 0, 0,
                           HWND_MESSAGE,
@@ -65,7 +65,7 @@ Window::CreateMessageWindow()
 }
 
 bool
-Window::IsMaximised() const
+Window::IsMaximised() const noexcept
 {
   const PixelRect this_rc = GetPosition();
   const PixelRect parent_rc = GetParentClientRect();
@@ -75,7 +75,7 @@ Window::IsMaximised() const
 }
 
 void
-Window::SetEnabled(bool enabled)
+Window::SetEnabled(bool enabled) noexcept
 {
   AssertThread();
 
@@ -102,7 +102,7 @@ Window::SetEnabled(bool enabled)
 }
 
 void
-Window::Created(HWND _hWnd)
+Window::Created(HWND _hWnd) noexcept
 {
   assert(hWnd == nullptr);
   hWnd = _hWnd;
@@ -111,7 +111,7 @@ Window::Created(HWND _hWnd)
 }
 
 void
-Window::SetFont(const Font &_font)
+Window::SetFont(const Font &_font) noexcept
 {
   AssertThread();
 
@@ -127,14 +127,14 @@ Window::OnCommand(unsigned id, unsigned code)
 
 LRESULT
 Window::OnUnhandledMessage(HWND hWnd, UINT message,
-                             WPARAM wParam, LPARAM lParam)
+                             WPARAM wParam, LPARAM lParam) noexcept
 {
   return ::DefWindowProc(hWnd, message, wParam, lParam);
 }
 
 LRESULT
 Window::OnMessage(HWND _hWnd, UINT message,
-                       WPARAM wParam, LPARAM lParam)
+                  WPARAM wParam, LPARAM lParam) noexcept
 {
   switch (message) {
   case WM_CREATE:
@@ -257,7 +257,8 @@ Window::OnMessage(HWND _hWnd, UINT message,
 }
 
 LRESULT CALLBACK
-Window::WndProc(HWND _hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+Window::WndProc(HWND _hWnd, UINT message,
+                WPARAM wParam, LPARAM lParam) noexcept
 {
   if (message == WM_GETMINMAXINFO)
     /* WM_GETMINMAXINFO is called before WM_CREATE, and we havn't set

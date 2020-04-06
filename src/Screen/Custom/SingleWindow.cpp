@@ -25,7 +25,7 @@ Copyright_License {
 
 gcc_pure
 static const ContainerWindow *
-IsAncestor(const Window *maybe_ancestor, const Window *w)
+IsAncestor(const Window *maybe_ancestor, const Window *w) noexcept
 {
   while (true) {
     const ContainerWindow *parent = w->GetParent();
@@ -41,7 +41,7 @@ IsAncestor(const Window *maybe_ancestor, const Window *w)
 
 bool
 SingleWindow::FilterMouseEvent(PixelPoint pt,
-                               Window *allowed) const
+                               Window *allowed) const noexcept
 {
   const ContainerWindow *container = this;
   while (true) {

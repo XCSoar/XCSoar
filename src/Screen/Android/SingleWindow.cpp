@@ -25,7 +25,7 @@ Copyright_License {
 #include "Event/Shared/Event.hpp"
 
 bool
-SingleWindow::FilterEvent(const Event &event, Window *allowed) const
+SingleWindow::FilterEvent(const Event &event, Window *allowed) const noexcept
 {
   assert(allowed != nullptr);
 

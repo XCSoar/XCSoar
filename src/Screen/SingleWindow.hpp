@@ -49,11 +49,11 @@ public:
   /**
    * Register the WIN32 window class.
    */
-  static bool RegisterClass(HINSTANCE hInstance);
+  static bool RegisterClass(HINSTANCE hInstance) noexcept;
 #endif
 
   void Create(const TCHAR *text, PixelSize size,
-              TopWindowStyle style=TopWindowStyle()) {
+              TopWindowStyle style=TopWindowStyle()) noexcept {
 #ifdef USE_WINUSER
     TopWindow::Create(class_name, text, size, style);
 #else
@@ -61,16 +61,16 @@ public:
 #endif
   }
 
-  void AddDialog(WndForm *dialog);
-  void RemoveDialog(WndForm *dialog);
+  void AddDialog(WndForm *dialog) noexcept;
+  void RemoveDialog(WndForm *dialog) noexcept;
 
   /**
    * Forcefully cancel the top-most dialog.
    */
-  void CancelDialog();
+  void CancelDialog() noexcept;
 
   gcc_pure
-  bool HasDialog() const {
+  bool HasDialog() const noexcept {
     return !dialogs.empty();
   }
 
@@ -78,13 +78,13 @@ public:
    * Check whether the specified dialog is the top-most one.
    */
   gcc_pure
-  bool IsTopDialog(const WndForm &dialog) const {
+  bool IsTopDialog(const WndForm &dialog) const noexcept {
     assert(HasDialog());
 
     return &dialog == dialogs.front();
   }
 
-  WndForm &GetTopDialog() {
+  WndForm &GetTopDialog() noexcept {
     assert(HasDialog());
 
     return *dialogs.front();
@@ -93,7 +93,7 @@ public:
 #ifndef USE_WINUSER
 protected:
   gcc_pure
-  bool FilterMouseEvent(PixelPoint pt, Window *allowed) const;
+  bool FilterMouseEvent(PixelPoint pt, Window *allowed) const noexcept;
 #endif
 
 public:
@@ -103,10 +103,10 @@ public:
    * to a window outside of the dialog.
    */
   gcc_pure
-  bool FilterEvent(const Event &event, Window *allowed) const;
+  bool FilterEvent(const Event &event, Window *allowed) const noexcept;
 
 protected:
-  bool OnClose() override;
+  bool OnClose() noexcept override;
   void OnDestroy() override;
   void OnResize(PixelSize new_size) override;
 };

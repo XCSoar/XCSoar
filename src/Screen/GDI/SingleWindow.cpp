@@ -28,7 +28,7 @@ Copyright_License {
 #include <cassert>
 
 bool
-SingleWindow::RegisterClass(HINSTANCE hInstance)
+SingleWindow::RegisterClass(HINSTANCE hInstance) noexcept
 {
   WNDCLASS wc;
 
@@ -47,7 +47,7 @@ SingleWindow::RegisterClass(HINSTANCE hInstance)
 }
 
 bool
-SingleWindow::FilterEvent(const Event &event, Window *allowed) const
+SingleWindow::FilterEvent(const Event &event, Window *allowed) const noexcept
 {
   assert(allowed != nullptr);
 

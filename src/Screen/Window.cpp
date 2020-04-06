@@ -33,7 +33,7 @@ Copyright_License {
 
 #include <cassert>
 
-Window::~Window()
+Window::~Window() noexcept
 {
   Destroy();
 }
@@ -41,7 +41,7 @@ Window::~Window()
 #ifndef NDEBUG
 
 void
-Window::AssertThread() const
+Window::AssertThread() const noexcept
 {
   assert(IsDefined());
 
@@ -55,7 +55,7 @@ Window::AssertThread() const
 }
 
 void
-Window::AssertThreadOrUndefined() const
+Window::AssertThreadOrUndefined() const noexcept
 {
 #ifdef ENABLE_OPENGL
   assert(pthread_equal(pthread_self(), OpenGL::thread));
@@ -68,7 +68,7 @@ Window::AssertThreadOrUndefined() const
 #endif /* !NDEBUG */
 
 void
-Window::Destroy()
+Window::Destroy() noexcept
 {
   if (!IsDefined())
     return;
@@ -87,7 +87,7 @@ Window::Destroy()
 }
 
 ContainerWindow *
-Window::GetRootOwner()
+Window::GetRootOwner() noexcept
 {
   assert(IsDefined());
 

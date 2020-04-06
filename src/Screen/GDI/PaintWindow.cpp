@@ -25,7 +25,7 @@ Copyright_License {
 #include "PaintCanvas.hpp"
 
 bool
-PaintWindow::register_class(HINSTANCE hInstance)
+PaintWindow::register_class(HINSTANCE hInstance) noexcept
 {
   WNDCLASS wc;
 
@@ -44,7 +44,8 @@ PaintWindow::register_class(HINSTANCE hInstance)
 }
 
 LRESULT
-PaintWindow::OnMessage(HWND _hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+PaintWindow::OnMessage(HWND _hWnd, UINT message,
+                       WPARAM wParam, LPARAM lParam) noexcept
 {
   if (message == WM_PAINT) {
     PaintCanvas canvas(*this);

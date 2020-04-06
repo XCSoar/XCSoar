@@ -29,7 +29,7 @@ Copyright_License {
 
 void
 TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelSize size,
-                  TopWindowStyle style)
+                  TopWindowStyle style) noexcept
 {
   hSavedFocus = nullptr;
 
@@ -38,7 +38,7 @@ TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelSize size,
 }
 
 void
-TopWindow::CancelMode()
+TopWindow::CancelMode() noexcept
 {
   HWND focus = ::GetFocus();
   if (focus != nullptr)
@@ -47,13 +47,13 @@ TopWindow::CancelMode()
 
 
 void
-TopWindow::Refresh()
+TopWindow::Refresh() noexcept
 {
   EventQueue::HandlePaintMessages();
 }
 
 bool
-TopWindow::OnActivate()
+TopWindow::OnActivate() noexcept
 {
   if (hSavedFocus != nullptr && ::IsWindow(hSavedFocus) &&
       ::IsWindowVisible(hSavedFocus) && ::IsWindowEnabled(hSavedFocus)) {
@@ -67,7 +67,7 @@ TopWindow::OnActivate()
 }
 
 bool
-TopWindow::OnDeactivate()
+TopWindow::OnDeactivate() noexcept
 {
   /* remember the currently focused control */
   hSavedFocus = ::GetFocus();
@@ -78,14 +78,14 @@ TopWindow::OnDeactivate()
 }
 
 bool
-TopWindow::OnClose()
+TopWindow::OnClose() noexcept
 {
   return false;
 }
 
 LRESULT
 TopWindow::OnMessage(HWND _hWnd, UINT message,
-                      WPARAM wParam, LPARAM lParam)
+                     WPARAM wParam, LPARAM lParam) noexcept
 {
   switch (message) {
   case WM_CLOSE:
@@ -103,7 +103,7 @@ TopWindow::OnMessage(HWND _hWnd, UINT message,
 }
 
 int
-TopWindow::RunEventLoop()
+TopWindow::RunEventLoop() noexcept
 {
   EventLoop loop(*event_queue);
   Event event;
@@ -114,7 +114,7 @@ TopWindow::RunEventLoop()
 }
 
 void
-TopWindow::PostQuit()
+TopWindow::PostQuit() noexcept
 {
   ::PostQuitMessage(0);
 }

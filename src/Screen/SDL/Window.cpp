@@ -25,7 +25,7 @@ Copyright_License {
 #include "Event/SDL/Event.hpp"
 
 void
-Window::SendUser(unsigned id)
+Window::SendUser(unsigned id) noexcept
 {
   SDL_Event event;
   event.user.type = EVENT_USER;

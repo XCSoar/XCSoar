@@ -41,9 +41,8 @@ Copyright_License {
 #include <alloca.h>
 #endif
 
-gcc_const
-static Uint32
-MakeSDLFlags(bool full_screen, bool resizable)
+static constexpr Uint32
+MakeSDLFlags(bool full_screen, bool resizable) noexcept
 {
   Uint32 flags = 0;
 
@@ -75,7 +74,7 @@ MakeSDLFlags(bool full_screen, bool resizable)
 
 void
 TopWindow::CreateNative(const TCHAR *_text, PixelSize new_size,
-                        TopWindowStyle style)
+                        TopWindowStyle style) noexcept
 {
 #ifdef UNICODE
   const WideToUTF8Converter text(_text);
@@ -119,7 +118,7 @@ TopWindow::CreateNative(const TCHAR *_text, PixelSize new_size,
 }
 
 void
-TopWindow::Invalidate()
+TopWindow::Invalidate() noexcept
 {
   invalidated = true;
 }
@@ -284,7 +283,7 @@ TopWindow::OnEvent(const SDL_Event &event)
 }
 
 int
-TopWindow::RunEventLoop()
+TopWindow::RunEventLoop() noexcept
 {
   Refresh();
 
@@ -297,7 +296,7 @@ TopWindow::RunEventLoop()
 }
 
 void
-TopWindow::PostQuit()
+TopWindow::PostQuit() noexcept
 {
   event_queue->Quit();
 }

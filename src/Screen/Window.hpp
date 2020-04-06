@@ -65,7 +65,7 @@ protected:
 
 public:
   /** The window is initially not visible. */
-  void Hide() {
+  void Hide() noexcept {
 #ifndef USE_WINUSER
     visible = false;
 #else
@@ -77,7 +77,7 @@ public:
    * The window is initially disabled.
    * A disabled window cannot receive input from the user.
    */
-  void Disable() {
+  void Disable() noexcept {
 #ifndef USE_WINUSER
     enabled = false;
 #else
@@ -90,7 +90,7 @@ public:
    * user presses the TAB key. Pressing the TAB key changes the keyboard
    * focus to the next control with the WS_TABSTOP style.
    */
-  void TabStop() {
+  void TabStop() noexcept {
 #ifndef USE_WINUSER
     tab_stop = true;
 #else
@@ -103,7 +103,7 @@ public:
    * a window with the WS_EX_CONTROLPARENT style, the system recursively
    * searches the window's children.
    */
-  void ControlParent() {
+  void ControlParent() noexcept {
 #ifndef USE_WINUSER
     control_parent = true;
 #else
@@ -112,7 +112,7 @@ public:
   }
 
   /** The window has a thin-line border. */
-  void Border() {
+  void Border() noexcept {
 #ifdef USE_WINUSER
     style |= WS_BORDER;
 #else
@@ -121,7 +121,7 @@ public:
   }
 
   /** The window has a sunken 3D border. */
-  void SunkenEdge() {
+  void SunkenEdge() noexcept {
     Border();
 #ifdef USE_WINUSER
     ex_style |= WS_EX_CLIENTEDGE;
@@ -129,7 +129,7 @@ public:
   }
 
   /** The window has a vertical scroll bar. */
-  void VerticalScroll() {
+  void VerticalScroll() noexcept {
 #ifdef USE_WINUSER
     style |= WS_VSCROLL;
 #endif
@@ -182,19 +182,19 @@ private:
 
 public:
   Window() = default;
-  virtual ~Window();
+  virtual ~Window() noexcept;
 
   Window(const Window &other) = delete;
   Window &operator=(const Window &other) = delete;
 
 #ifndef USE_WINUSER
-  const ContainerWindow *GetParent() const {
+  const ContainerWindow *GetParent() const noexcept {
     assert(IsDefined());
 
     return parent;
   }
 #else
-  operator HWND() const {
+  operator HWND() const noexcept {
     assert(IsDefined());
 
     return hWnd;
@@ -204,7 +204,7 @@ public:
    * Is it this window?
    */
   gcc_pure
-  bool Identify(HWND h) const {
+  bool Identify(HWND h) const noexcept {
     assert(IsDefined());
 
     return h == hWnd;
@@ -214,7 +214,7 @@ public:
    * Is it this window or one of its descendants?
    */
   gcc_pure
-  bool IdentifyDescendant(HWND h) const {
+  bool IdentifyDescendant(HWND h) const noexcept {
     assert(IsDefined());
 
     return h == hWnd || ::IsChild(hWnd, h);
@@ -227,21 +227,21 @@ protected:
    * window.
    */
 #ifdef NDEBUG
-  void AssertThread() const {}
-  void AssertThreadOrUndefined() const {}
+  void AssertThread() const noexcept {}
+  void AssertThreadOrUndefined() const noexcept {}
 #else
-  void AssertThread() const;
-  void AssertThreadOrUndefined() const;
+  void AssertThread() const noexcept;
+  void AssertThreadOrUndefined() const noexcept;
 #endif
 
 #ifndef USE_WINUSER
-  bool HasBorder() const {
+  bool HasBorder() const noexcept {
     return has_border;
   }
 #endif
 
 public:
-  bool IsDefined() const {
+  bool IsDefined() const noexcept {
 #ifndef USE_WINUSER
     return size.cx > 0;
 #else
@@ -250,31 +250,31 @@ public:
   }
 
 #ifndef USE_WINUSER
-  PixelPoint GetTopLeft() const {
+  PixelPoint GetTopLeft() const noexcept {
     assert(IsDefined());
 
     return position;
   }
 
-  int GetTop() const {
+  int GetTop() const noexcept {
     assert(IsDefined());
 
     return position.y;
   }
 
-  int GetLeft() const {
+  int GetLeft() const noexcept {
     assert(IsDefined());
 
     return position.x;
   }
 
-  unsigned GetWidth() const {
+  unsigned GetWidth() const noexcept {
     assert(IsDefined());
 
     return size.cx;
   }
 
-  unsigned GetHeight() const {
+  unsigned GetHeight() const noexcept {
     assert(IsDefined());
 
     return size.cy;
@@ -284,45 +284,45 @@ public:
     return GetLeft() + GetWidth();
   }
 
-  int GetBottom() const {
+  int GetBottom() const noexcept {
     return GetTop() + GetHeight();
   }
 #else /* USE_WINUSER */
-  unsigned GetWidth() const {
+  unsigned GetWidth() const noexcept {
     return GetSize().cx;
   }
 
-  unsigned GetHeight() const {
+  unsigned GetHeight() const noexcept {
     return GetSize().cy;
   }
 #endif
 
 #ifndef USE_WINUSER
   void Create(ContainerWindow *parent, const PixelRect rc,
-              const WindowStyle window_style=WindowStyle());
+              const WindowStyle window_style=WindowStyle()) noexcept;
 #else
   void Create(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
               const PixelRect rc,
-              const WindowStyle window_style=WindowStyle());
+              const WindowStyle window_style=WindowStyle()) noexcept;
 
   /**
    * Create a message-only window.
    */
-  void CreateMessageWindow();
+  void CreateMessageWindow() noexcept;
 #endif
 
 #ifdef USE_WINUSER
-  void Created(HWND _hWnd);
+  void Created(HWND _hWnd) noexcept;
 #endif
 
-  void Destroy();
+  void Destroy() noexcept;
 
   /**
    * Determines the root owner window of this Window.  This is
    * probably a pointer to the #MainWindow instance.
    */
   gcc_pure
-  ContainerWindow *GetRootOwner();
+  ContainerWindow *GetRootOwner() noexcept;
 
   /**
    * Checks whether the window is "maximised" within its parent
@@ -330,9 +330,9 @@ public:
    * parent's dimensions.
    */
   gcc_pure
-  bool IsMaximised() const;
+  bool IsMaximised() const noexcept;
 
-  void Move(int left, int top) {
+  void Move(int left, int top) noexcept {
     AssertThread();
 
 #ifndef USE_WINUSER
@@ -346,7 +346,7 @@ public:
   }
 
   void Move(int left, int top,
-            unsigned width, unsigned height) {
+            unsigned width, unsigned height) noexcept {
     AssertThread();
 
 #ifndef USE_WINUSER
@@ -359,14 +359,14 @@ public:
 #endif
   }
 
-  void Move(const PixelRect rc) {
+  void Move(const PixelRect rc) noexcept {
     assert(rc.left < rc.right);
     assert(rc.top < rc.bottom);
 
     Move(rc.left, rc.top, rc.GetWidth(), rc.GetHeight());
   }
 
-  void MoveToCenter() {
+  void MoveToCenter() noexcept {
     const PixelSize window_size = GetSize();
     const PixelSize parent_size = GetParentClientRect().GetSize();
     int dialog_x = (parent_size.cx - window_size.cx) / 2;
@@ -379,7 +379,7 @@ public:
    * caller is responsible for redrawing.
    */
   void FastMove(int left, int top,
-                unsigned width, unsigned height) {
+                unsigned width, unsigned height) noexcept {
     AssertThread();
 
 #ifndef USE_WINUSER
@@ -391,7 +391,7 @@ public:
 #endif
   }
 
-  void FastMove(const PixelRect rc) {
+  void FastMove(const PixelRect rc) noexcept {
     FastMove(rc.left, rc.top, rc.GetWidth(), rc.GetHeight());
   }
 
@@ -399,7 +399,7 @@ public:
    * Move the Window to the specified position within the parent
    * ContainerWindow and make it visible.
    */
-  void MoveAndShow(const PixelRect rc) {
+  void MoveAndShow(const PixelRect rc) noexcept {
     AssertThread();
 
 #ifdef USE_WINUSER
@@ -413,7 +413,7 @@ public:
 #endif
   }
 
-  void Resize(unsigned width, unsigned height) {
+  void Resize(unsigned width, unsigned height) noexcept {
     AssertThread();
 
 #ifndef USE_WINUSER
@@ -432,15 +432,15 @@ public:
 #endif
   }
 
-  void Resize(PixelSize size) {
+  void Resize(PixelSize size) noexcept {
     Resize(size.cx, size.cy);
   }
 
 #ifndef USE_WINUSER
-  void BringToTop();
-  void BringToBottom();
+  void BringToTop() noexcept;
+  void BringToBottom() noexcept;
 #else
-  void BringToTop() {
+  void BringToTop() noexcept {
     AssertThread();
 
     /* not using BringWindowToTop() because it activates the
@@ -450,7 +450,7 @@ public:
                    SWP_NOACTIVATE|SWP_NOOWNERZORDER);
   }
 
-  void BringToBottom() {
+  void BringToBottom() noexcept {
     AssertThread();
 
     ::SetWindowPos(hWnd, HWND_BOTTOM, 0, 0, 0, 0,
@@ -459,7 +459,7 @@ public:
   }
 #endif
 
-  void ShowOnTop() {
+  void ShowOnTop() noexcept {
     AssertThread();
 
 #ifndef USE_WINUSER
@@ -473,7 +473,7 @@ public:
   }
 
 #ifdef USE_WINUSER
-  void SetFont(const Font &_font);
+  void SetFont(const Font &_font) noexcept;
 #endif
 
   /**
@@ -482,7 +482,7 @@ public:
    * flag is set for this Window.
    */
   gcc_pure
-  bool IsVisible() const {
+  bool IsVisible() const noexcept {
     assert(IsDefined());
 
 #ifndef USE_WINUSER
@@ -493,16 +493,16 @@ public:
   }
 
 #ifndef USE_WINUSER
-  void Show();
-  void Hide();
+  void Show() noexcept;
+  void Hide() noexcept;
 #else
-  void Show() {
+  void Show() noexcept {
     AssertThread();
 
     ::ShowWindow(hWnd, SW_SHOW);
   }
 
-  void Hide() {
+  void Hide() noexcept {
     AssertThread();
 
     ::ShowWindow(hWnd, SW_HIDE);
@@ -513,7 +513,7 @@ public:
    * Like Hide(), but does not trigger a synchronous redraw of the
    * parent window's background.
    */
-  void FastHide() {
+  void FastHide() noexcept {
     AssertThread();
 
 #ifndef USE_WINUSER
@@ -527,7 +527,7 @@ public:
 #endif
   }
 
-  void SetVisible(bool visible) {
+  void SetVisible(bool visible) noexcept {
     if (visible)
       Show();
     else
@@ -535,7 +535,7 @@ public:
   }
 
 #ifndef USE_WINUSER
-  bool IsTransparent() const {
+  bool IsTransparent() const noexcept {
     return transparent;
   }
 
@@ -545,7 +545,7 @@ public:
    * considered "covering" windows behind it completely.  This flag is
    * evaluated by WindowList::IsCovered().
    */
-  void SetTransparent() {
+  void SetTransparent() noexcept {
     assert(!transparent);
 
     transparent = true;
@@ -553,7 +553,7 @@ public:
 #endif
 
   gcc_pure
-  bool IsTabStop() const {
+  bool IsTabStop() const noexcept {
     assert(IsDefined());
 
 #ifdef USE_WINUSER
@@ -564,7 +564,7 @@ public:
   }
 
   gcc_pure
-  bool IsControlParent() const {
+  bool IsControlParent() const noexcept {
     assert(IsDefined());
 
 #ifdef USE_WINUSER
@@ -578,7 +578,7 @@ public:
    * Can this window get user input?
    */
   gcc_pure
-  bool IsEnabled() const {
+  bool IsEnabled() const noexcept {
     assert(IsDefined());
 
 #ifndef USE_WINUSER
@@ -591,36 +591,36 @@ public:
   /**
    * Specifies whether this window can get user input.
    */
-  void SetEnabled(bool enabled);
+  void SetEnabled(bool enabled) noexcept;
 
 #ifndef USE_WINUSER
 
-  virtual Window *GetFocusedWindow();
-  virtual void SetFocus();
+  virtual Window *GetFocusedWindow() noexcept;
+  virtual void SetFocus() noexcept;
 
   /**
    * Called by the parent window when this window loses focus, or when
    * one of its (indirect) child windows loses focus.  This method is
    * responsible for invoking OnKillFocus().
    */
-  virtual void ClearFocus();
+  virtual void ClearFocus() noexcept;
 
   /**
    * Send keyboard focus to this window's parent.  This should usually
    * only be called when this window owns the keyboard focus, and
    * doesn't want it anymore.
    */
-  void FocusParent();
+  void FocusParent() noexcept;
 
 #else /* USE_WINUSER */
 
-  void SetFocus() {
+  void SetFocus() noexcept {
     AssertThread();
 
     ::SetFocus(hWnd);
   }
 
-  void FocusParent() {
+  void FocusParent() noexcept {
     AssertThread();
 
     ::SetFocus(::GetParent(hWnd));
@@ -629,7 +629,7 @@ public:
 #endif /* USE_WINUSER */
 
   gcc_pure
-  bool HasFocus() const {
+  bool HasFocus() const noexcept {
     assert(IsDefined());
 
 #ifndef USE_WINUSER
@@ -640,36 +640,36 @@ public:
   }
 
 #ifndef USE_WINUSER
-  void SetCapture();
-  void ReleaseCapture();
-  virtual void ClearCapture();
+  void SetCapture() noexcept;
+  void ReleaseCapture() noexcept;
+  virtual void ClearCapture() noexcept;
 
 protected:
 #if defined(USE_X11) || defined(USE_WAYLAND)
-  virtual void EnableCapture() {}
-  virtual void DisableCapture() {}
+  virtual void EnableCapture() noexcept {}
+  virtual void DisableCapture() noexcept {}
 #else
-  void EnableCapture() {}
-  void DisableCapture() {}
+  void EnableCapture() noexcept {}
+  void DisableCapture() noexcept {}
 #endif
 
 public:
 
 #else /* USE_WINUSER */
 
-  void SetCapture() {
+  void SetCapture() noexcept {
     AssertThread();
 
     ::SetCapture(hWnd);
   }
 
-  void ReleaseCapture() {
+  void ReleaseCapture() noexcept {
     AssertThread();
 
     ::ReleaseCapture();
   }
 
-  WNDPROC SetWndProc(WNDPROC wndproc)
+  WNDPROC SetWndProc(WNDPROC wndproc) noexcept
   {
     AssertThread();
 
@@ -677,11 +677,11 @@ public:
   }
 
   gcc_const
-  static void *GetUserData(HWND hWnd) {
+  static void *GetUserData(HWND hWnd) noexcept {
     return (void *)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
   }
 
-  void SetUserData(void *value)
+  void SetUserData(void *value) noexcept
   {
     AssertThread();
 
@@ -690,14 +690,14 @@ public:
 #endif /* USE_WINUSER */
 
 #ifndef USE_WINUSER
-  void ToScreen(PixelRect &rc) const;
+  void ToScreen(PixelRect &rc) const noexcept;
 #endif
 
   /**
    * Returns the position on the screen.
    */
   gcc_pure
-  const PixelRect GetScreenPosition() const
+  const PixelRect GetScreenPosition() const noexcept
   {
     assert(IsDefined());
 
@@ -715,7 +715,7 @@ public:
    * Returns the position within the parent window.
    */
   gcc_pure
-  const PixelRect GetPosition() const
+  const PixelRect GetPosition() const noexcept
   {
     assert(IsDefined());
 
@@ -745,7 +745,7 @@ public:
   }
 
   gcc_pure
-  const PixelRect GetClientRect() const
+  const PixelRect GetClientRect() const noexcept
   {
     assert(IsDefined());
 
@@ -759,7 +759,7 @@ public:
   }
 
   gcc_pure
-  const PixelSize GetSize() const
+  const PixelSize GetSize() const noexcept
   {
     assert(IsDefined());
 
@@ -776,7 +776,7 @@ public:
    * client area.
    */
   gcc_pure
-  bool IsInside(PixelPoint p) const {
+  bool IsInside(PixelPoint p) const noexcept {
     assert(IsDefined());
 
     const PixelSize size = GetSize();
@@ -789,7 +789,7 @@ public:
    */
 #ifdef USE_WINUSER
   gcc_pure
-  PixelRect GetParentClientRect() const {
+  PixelRect GetParentClientRect() const noexcept {
     assert(IsDefined());
 
     HWND hParent = ::GetParent(hWnd);
@@ -801,25 +801,25 @@ public:
   }
 #else
   gcc_pure
-  PixelRect GetParentClientRect() const;
+  PixelRect GetParentClientRect() const noexcept;
 #endif
 
 #ifndef USE_WINUSER
-  virtual void Invalidate();
+  virtual void Invalidate() noexcept;
 #else /* USE_WINUSER */
-  HDC BeginPaint(PAINTSTRUCT *ps) {
+  HDC BeginPaint(PAINTSTRUCT *ps) noexcept {
     AssertThread();
 
     return ::BeginPaint(hWnd, ps);
   }
 
-  void EndPaint(PAINTSTRUCT *ps) {
+  void EndPaint(PAINTSTRUCT *ps) noexcept {
     AssertThread();
 
     ::EndPaint(hWnd, ps);
   }
 
-  void Scroll(int dx, int dy, const PixelRect &_rc) {
+  void Scroll(int dx, int dy, const PixelRect &_rc) noexcept {
     assert(IsDefined());
 
     const RECT rc = _rc;
@@ -832,7 +832,7 @@ public:
    * is legal.
    */
   gcc_const
-  static Window *GetUnchecked(HWND hWnd) {
+  static Window *GetUnchecked(HWND hWnd) noexcept {
     return (Window *)GetUserData(hWnd);
   }
 
@@ -842,7 +842,7 @@ public:
    * use our WndProc.
    */
   gcc_const
-  static Window *GetChecked(HWND hWnd) {
+  static Window *GetChecked(HWND hWnd) noexcept {
     WNDPROC wndproc = (WNDPROC)::GetWindowLongPtr(hWnd, GWLP_WNDPROC);
     return wndproc == WndProc
       ? GetUnchecked(hWnd)
@@ -850,39 +850,39 @@ public:
   }
 
   gcc_pure
-  LONG GetWindowLong(int nIndex) const {
+  LONG GetWindowLong(int nIndex) const noexcept {
     assert(IsDefined());
 
     return ::GetWindowLong(hWnd, nIndex);
   }
 
-  void SetWindowLong(int nIndex, LONG value) {
+  void SetWindowLong(int nIndex, LONG value) noexcept {
     assert(IsDefined());
 
     ::SetWindowLong(hWnd, nIndex, value);
   }
 
-  LONG GetStyle() const {
+  LONG GetStyle() const noexcept {
     return GetWindowLong(GWL_STYLE);
   }
 
-  void SetStyle(LONG value) {
+  void SetStyle(LONG value) noexcept {
     SetWindowLong(GWL_STYLE, value);
   }
 
-  LONG GetExStyle() const {
+  LONG GetExStyle() const noexcept {
     return GetWindowLong(GWL_EXSTYLE);
   }
 
-  void SetExStyle(LONG value) {
+  void SetExStyle(LONG value) noexcept {
     SetWindowLong(GWL_EXSTYLE, value);
   }
 #endif
 
 #ifndef USE_WINUSER
-  void SendUser(unsigned id);
+  void SendUser(unsigned id) noexcept;
 #else
-  void SendUser(unsigned id) {
+  void SendUser(unsigned id) noexcept {
     assert(IsDefined());
 
     ::PostMessage(hWnd, WM_USER + id, (WPARAM)0, (LPARAM)0);
@@ -958,10 +958,10 @@ public:
    * dialogs have slightly different semantics.
    */
   virtual LRESULT OnUnhandledMessage(HWND hWnd, UINT message,
-                                     WPARAM wParam, LPARAM lParam);
+                                     WPARAM wParam, LPARAM lParam) noexcept;
 
   virtual LRESULT OnMessage(HWND hWnd, UINT message,
-                            WPARAM wParam, LPARAM lParam);
+                            WPARAM wParam, LPARAM lParam) noexcept;
 #endif /* USE_WINUSER */
 
 public:
@@ -971,7 +971,7 @@ public:
    * calls OnMessage().
    */
   static LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
-                                  WPARAM wParam, LPARAM lParam);
+                                  WPARAM wParam, LPARAM lParam) noexcept;
 #endif /* USE_WINUSER */
 };
 

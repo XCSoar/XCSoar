@@ -55,7 +55,7 @@ Display::Rotate(DisplayOrientation orientation)
 #if defined(USE_EGL) || defined(USE_GLX)
 /* avoid TopWindow.cpp from being linked, as it brings some heavy
    dependencies */
-void TopWindow::Refresh() {}
+void TopWindow::Refresh() noexcept {}
 #endif
 
 #ifdef USE_POLL_EVENT

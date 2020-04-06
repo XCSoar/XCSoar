@@ -26,7 +26,7 @@ Copyright_License {
 #include "Event/Globals.hpp"
 
 void
-Window::SendUser(unsigned id)
+Window::SendUser(unsigned id) noexcept
 {
   event_queue->Push(Event(Event::USER, id, this));
 }

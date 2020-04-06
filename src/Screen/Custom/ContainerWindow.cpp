@@ -28,13 +28,13 @@ Copyright_License {
 #include <algorithm>
 #include <cassert>
 
-ContainerWindow::~ContainerWindow()
+ContainerWindow::~ContainerWindow() noexcept
 {
   Destroy();
 }
 
 Window *
-ContainerWindow::FindNextControl(Window *reference)
+ContainerWindow::FindNextControl(Window *reference) noexcept
 {
   assert(reference != nullptr);
 
@@ -57,7 +57,7 @@ ContainerWindow::FindNextControl(Window *reference)
 }
 
 Window *
-ContainerWindow::FindPreviousControl(Window *reference)
+ContainerWindow::FindPreviousControl(Window *reference) noexcept
 {
   assert(reference != nullptr);
 
@@ -80,7 +80,7 @@ ContainerWindow::FindPreviousControl(Window *reference)
 }
 
 bool
-ContainerWindow::FocusFirstControl()
+ContainerWindow::FocusFirstControl() noexcept
 {
   Window *control = children.FindFirstControl();
   if (control == nullptr)
@@ -91,7 +91,7 @@ ContainerWindow::FocusFirstControl()
 }
 
 bool
-ContainerWindow::FocusNextControl()
+ContainerWindow::FocusNextControl() noexcept
 {
   Window *focused = GetFocusedWindow();
   if (focused != nullptr) {
@@ -106,7 +106,7 @@ ContainerWindow::FocusNextControl()
 }
 
 bool
-ContainerWindow::FocusPreviousControl()
+ContainerWindow::FocusPreviousControl() noexcept
 {
   Window *focused = GetFocusedWindow();
   Window *control = focused != nullptr
@@ -225,14 +225,16 @@ ContainerWindow::OnPaint(Canvas &canvas)
 }
 
 void
-ContainerWindow::AddChild(Window &child) {
+ContainerWindow::AddChild(Window &child) noexcept
+{
   children.Add(child);
 
   InvalidateChild(child);
 }
 
 void
-ContainerWindow::RemoveChild(Window &child) {
+ContainerWindow::RemoveChild(Window &child) noexcept
+{
   InvalidateChild(child);
 
   children.Remove(child);
@@ -242,7 +244,7 @@ ContainerWindow::RemoveChild(Window &child) {
 }
 
 Window *
-ContainerWindow::EventChildAt(PixelPoint p)
+ContainerWindow::EventChildAt(PixelPoint p) noexcept
 {
   if (capture)
     /* if this window is capturing the mouse, events must go exactly
@@ -257,7 +259,7 @@ ContainerWindow::EventChildAt(PixelPoint p)
 }
 
 void
-ContainerWindow::InvalidateChild(const Window &child)
+ContainerWindow::InvalidateChild(const Window &child) noexcept
 {
   AssertThread();
 
@@ -266,7 +268,7 @@ ContainerWindow::InvalidateChild(const Window &child)
 }
 
 void
-ContainerWindow::SetActiveChild(Window &child)
+ContainerWindow::SetActiveChild(Window &child) noexcept
 {
   if (active_child == &child)
     return;
@@ -280,7 +282,7 @@ ContainerWindow::SetActiveChild(Window &child)
 }
 
 void
-ContainerWindow::SetFocus()
+ContainerWindow::SetFocus() noexcept
 {
   /* just in case our child window was focused previously, we must
      clear it now */
@@ -290,7 +292,7 @@ ContainerWindow::SetFocus()
 }
 
 void
-ContainerWindow::ClearFocus()
+ContainerWindow::ClearFocus() noexcept
 {
   if (active_child != nullptr) {
     /* clear the focus recursively, until the focused window is
@@ -303,7 +305,7 @@ ContainerWindow::ClearFocus()
 }
 
 Window *
-ContainerWindow::GetFocusedWindow()
+ContainerWindow::GetFocusedWindow() noexcept
 {
   Window *window = PaintWindow::GetFocusedWindow();
   if (window != nullptr)
@@ -316,7 +318,7 @@ ContainerWindow::GetFocusedWindow()
 }
 
 WindowReference
-ContainerWindow::GetFocusedWindowReference()
+ContainerWindow::GetFocusedWindowReference() noexcept
 {
   Window *focus = GetFocusedWindow();
   return focus != nullptr
@@ -325,7 +327,7 @@ ContainerWindow::GetFocusedWindowReference()
 }
 
 void
-ContainerWindow::SetChildCapture(Window *window)
+ContainerWindow::SetChildCapture(Window *window) noexcept
 {
   assert(window != nullptr);
   assert(window->parent == this);
@@ -344,7 +346,7 @@ ContainerWindow::SetChildCapture(Window *window)
 }
 
 void
-ContainerWindow::ReleaseChildCapture(Window *window)
+ContainerWindow::ReleaseChildCapture(Window *window) noexcept
 {
   assert(window != nullptr);
   assert(window->parent == this);
@@ -361,7 +363,7 @@ ContainerWindow::ReleaseChildCapture(Window *window)
 }
 
 void
-ContainerWindow::ClearCapture()
+ContainerWindow::ClearCapture() noexcept
 {
   Window::ClearCapture();
 

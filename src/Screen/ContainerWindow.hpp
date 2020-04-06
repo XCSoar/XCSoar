@@ -60,7 +60,7 @@ protected:
   Window *capture_child = nullptr;
 
 public:
-  virtual ~ContainerWindow();
+  ~ContainerWindow() noexcept override;
 #endif /* !USE_WINUSER */
 
 protected:
@@ -85,11 +85,11 @@ protected:
 
 public:
 #ifndef USE_WINUSER
-  void AddChild(Window &child);
-  void RemoveChild(Window &child);
+  void AddChild(Window &child) noexcept;
+  void RemoveChild(Window &child) noexcept;
 
   gcc_pure
-  bool HasChild(const Window &w) const {
+  bool HasChild(const Window &w) const noexcept {
     return children.Contains(w);
   }
 
@@ -97,14 +97,14 @@ public:
    * Like Invalidate(), but if the specified window is covered by a
    * sibling, this method is a no-op.
    */
-  void InvalidateChild(const Window &child);
+  void InvalidateChild(const Window &child) noexcept;
 
-  void BringChildToTop(Window &child) {
+  void BringChildToTop(Window &child) noexcept {
     children.BringToTop(child);
     InvalidateChild(child);
   }
 
-  void BringChildToBottom(Window &child) {
+  void BringChildToBottom(Window &child) noexcept {
     children.BringToBottom(child);
     Invalidate();
   }
@@ -113,7 +113,7 @@ public:
    * Locate a child window by its relative coordinates.
    */
   gcc_pure
-  Window *ChildAt(PixelPoint p) {
+  Window *ChildAt(PixelPoint p) noexcept {
     return children.FindAt(p);
   }
 
@@ -122,32 +122,32 @@ public:
    * captured child.
    */
   gcc_pure
-  Window *EventChildAt(PixelPoint p);
+  Window *EventChildAt(PixelPoint p) noexcept;
 
-  void SetActiveChild(Window &child);
-  void SetFocus() override;
-  void ClearFocus() override;
+  void SetActiveChild(Window &child) noexcept;
+  void SetFocus() noexcept override;
+  void ClearFocus() noexcept override;
 
   /**
    * Override the Window::GetFocusedWindow() method, and search in
    * the active child window.
    */
   gcc_pure
-  Window *GetFocusedWindow() override;
+  Window *GetFocusedWindow() noexcept override;
 
   gcc_pure
-  WindowReference GetFocusedWindowReference();
+  WindowReference GetFocusedWindowReference() noexcept;
 
-  void SetChildCapture(Window *window);
-  void ReleaseChildCapture(Window *window);
-  void ClearCapture() override;
+  void SetChildCapture(Window *window) noexcept;
+  void ReleaseChildCapture(Window *window) noexcept;
+  void ClearCapture() noexcept override;
 
 protected:
   gcc_pure
-  Window *FindNextControl(Window *reference);
+  Window *FindNextControl(Window *reference) noexcept;
 
   gcc_pure
-  Window *FindPreviousControl(Window *reference);
+  Window *FindPreviousControl(Window *reference) noexcept;
 
 public:
 #endif /* !USE_WINUSER */
@@ -158,7 +158,7 @@ public:
    *
    * @return true if the focus has been moved
    */
-  bool FocusFirstControl();
+  bool FocusFirstControl() noexcept;
 
   /**
    * Sets the keyboard focus on the next descendant window which has
@@ -166,7 +166,7 @@ public:
    *
    * @return true if the focus has been moved
    */
-  bool FocusNextControl();
+  bool FocusNextControl() noexcept;
 
   /**
    * Sets the keyboard focus on the previous descendant window which
@@ -174,7 +174,7 @@ public:
    *
    * @return true if the focus has been moved
    */
-  bool FocusPreviousControl();
+  bool FocusPreviousControl() noexcept;
 };
 
 #endif

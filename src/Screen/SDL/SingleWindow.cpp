@@ -30,7 +30,7 @@ Copyright_License {
 #include <cassert>
 
 bool
-SingleWindow::FilterEvent(const Event &_event, Window *allowed) const
+SingleWindow::FilterEvent(const Event &_event, Window *allowed) const noexcept
 {
   assert(allowed != nullptr);
 

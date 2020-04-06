@@ -40,7 +40,7 @@ class BufferWindow : public PaintWindow {
   bool dirty;
 
 public:
-  void Invalidate()
+  void Invalidate() noexcept
 #ifndef USE_WINUSER
     override
 #endif
@@ -49,7 +49,7 @@ public:
     PaintWindow::Invalidate();
   }
 
-  void Invalidate(const PixelRect &rect) {
+  void Invalidate(const PixelRect &rect) noexcept {
     dirty = true;
     PaintWindow::Invalidate(rect);
   }
@@ -59,7 +59,7 @@ protected:
    * Determines whether this BufferWindow maintains a persistent
    * buffer which allows incremental drawing in each frame.
    */
-  static constexpr bool IsPersistent() {
+  static constexpr bool IsPersistent() noexcept {
     return true;
   }
 

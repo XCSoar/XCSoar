@@ -38,7 +38,7 @@ Copyright_License {
 #include "Screen/Memory/Canvas.hpp"
 
 void
-TopWindow::CheckResize()
+TopWindow::CheckResize() noexcept
 {
   assert(screen != nullptr);
 
@@ -49,7 +49,7 @@ TopWindow::CheckResize()
 #endif
 
 void
-TopWindow::Invalidate()
+TopWindow::Invalidate() noexcept
 {
   invalidated = true;
 }
@@ -177,7 +177,7 @@ TopWindow::OnEvent(const Event &event)
 #endif
 
 int
-TopWindow::RunEventLoop()
+TopWindow::RunEventLoop() noexcept
 {
   Refresh();
 
@@ -190,7 +190,7 @@ TopWindow::RunEventLoop()
 }
 
 void
-TopWindow::PostQuit()
+TopWindow::PostQuit() noexcept
 {
   event_queue->Quit();
 }

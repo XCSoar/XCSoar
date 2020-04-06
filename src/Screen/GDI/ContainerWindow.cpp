@@ -25,7 +25,7 @@ Copyright_License {
 #include "Canvas.hpp"
 
 bool
-ContainerWindow::FocusFirstControl()
+ContainerWindow::FocusFirstControl() noexcept
 {
   HWND hControl = ::GetNextDlgTabItem(hWnd, nullptr, false);
   if (hControl == nullptr)
@@ -36,7 +36,7 @@ ContainerWindow::FocusFirstControl()
 }
 
 bool
-ContainerWindow::FocusNextControl()
+ContainerWindow::FocusNextControl() noexcept
 {
   HWND hControl = ::GetNextDlgTabItem(hWnd, ::GetFocus(), false);
   if (hControl == nullptr)
@@ -47,7 +47,7 @@ ContainerWindow::FocusNextControl()
 }
 
 bool
-ContainerWindow::FocusPreviousControl()
+ContainerWindow::FocusPreviousControl() noexcept
 {
   HWND hFocus = ::GetFocus();
 

@@ -360,10 +360,10 @@ protected:
   virtual void OnPaint(Canvas &canvas) override;
 
   /* virtual methods from class TopWindow */
-  virtual bool OnClose() override;
+  virtual bool OnClose() noexcept override;
 
 #ifdef ANDROID
-  virtual void OnPause() override;
+  virtual void OnPause() noexcept override;
 #endif
 };
 

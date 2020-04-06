@@ -29,14 +29,14 @@ Copyright_License {
 #include "Screen/Memory/Canvas.hpp"
 #endif
 
-TopWindow::~TopWindow()
+TopWindow::~TopWindow() noexcept
 {
   delete screen;
 }
 
 void
 TopWindow::Create(const TCHAR *text, PixelSize size,
-                  TopWindowStyle style)
+                  TopWindowStyle style) noexcept
 {
   invalidated = true;
 
@@ -71,7 +71,7 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
 #ifdef SOFTWARE_ROTATE_DISPLAY
 
 void
-TopWindow::SetDisplayOrientation(DisplayOrientation orientation)
+TopWindow::SetDisplayOrientation(DisplayOrientation orientation) noexcept
 {
   assert(screen != nullptr);
   assert(screen->IsDefined());
@@ -83,13 +83,13 @@ TopWindow::SetDisplayOrientation(DisplayOrientation orientation)
 #endif
 
 void
-TopWindow::CancelMode()
+TopWindow::CancelMode() noexcept
 {
   OnCancelMode();
 }
 
 void
-TopWindow::Expose()
+TopWindow::Expose() noexcept
 {
 #ifdef HAVE_CPU_FREQUENCY
   const ScopeLockCPU cpu;
@@ -109,7 +109,7 @@ TopWindow::Expose()
 }
 
 void
-TopWindow::Refresh()
+TopWindow::Refresh() noexcept
 {
   if (!CheckResumeSurface())
     /* the application is paused/suspended, and we don't have an
@@ -132,19 +132,19 @@ TopWindow::Refresh()
 }
 
 bool
-TopWindow::OnActivate()
+TopWindow::OnActivate() noexcept
 {
   return false;
 }
 
 bool
-TopWindow::OnDeactivate()
+TopWindow::OnDeactivate() noexcept
 {
   return false;
 }
 
 bool
-TopWindow::OnClose()
+TopWindow::OnClose() noexcept
 {
   Destroy();
   return true;
