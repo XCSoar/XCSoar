@@ -68,17 +68,17 @@ public:
   WndProperty(ContainerWindow &parent, const DialogLook &look,
               const TCHAR *Caption,
               const PixelRect &rc, int CaptionWidth,
-              const WindowStyle style);
+              const WindowStyle style) noexcept;
 
-  WndProperty(const DialogLook &_look);
+  WndProperty(const DialogLook &_look) noexcept;
 
   /** Destructor */
-  ~WndProperty();
+  ~WndProperty() noexcept;
 
   void Create(ContainerWindow &parent, const PixelRect &rc,
               const TCHAR *_caption,
               unsigned _caption_width,
-              const WindowStyle style);
+              const WindowStyle style) noexcept;
 
 public:
   /**
@@ -86,18 +86,18 @@ public:
    * font.
    */
   gcc_pure
-  unsigned GetRecommendedCaptionWidth() const;
+  unsigned GetRecommendedCaptionWidth() const noexcept;
 
-  void SetCaptionWidth(int caption_width);
+  void SetCaptionWidth(int caption_width) noexcept;
 
-  void RefreshDisplay();
+  void RefreshDisplay() noexcept;
 
-  void SetReadOnly(bool _read_only=true) {
+  void SetReadOnly(bool _read_only=true) noexcept {
     read_only = _read_only;
   }
 
   gcc_pure
-  bool IsReadOnly() const {
+  bool IsReadOnly() const noexcept {
     return read_only;
   }
 
@@ -108,7 +108,7 @@ public:
    *
    * @return true if the value has been modified
    */
-  bool BeginEditing();
+  bool BeginEditing() noexcept;
 
 protected:
   void OnResize(PixelSize new_size) override;
@@ -129,7 +129,7 @@ public:
    * Returns the Control's DataField
    * @return The Control's DataField
    */
-  DataField *GetDataField() {
+  DataField *GetDataField() noexcept {
     return data_field;
   }
 
@@ -137,13 +137,13 @@ public:
    * Returns the Control's DataField
    * @return The Control's DataField
    */
-  const DataField *GetDataField() const {
+  const DataField *GetDataField() const noexcept {
     return data_field;
   }
 
-  void SetDataField(DataField *Value);
+  void SetDataField(DataField *Value) noexcept;
 
-  void SetEditCallback(EditCallback _ec) {
+  void SetEditCallback(EditCallback _ec) noexcept {
     edit_callback = _ec;
   }
 
@@ -151,7 +151,7 @@ public:
    * Sets the Editors text to the given Value
    * @param Value The new text of the Editor Control
    */
-  void SetText(const TCHAR *_value);
+  void SetText(const TCHAR *_value) noexcept;
 
 private:
   /**
@@ -161,11 +161,11 @@ private:
   void OnPaint(Canvas &canvas) override;
 
   /** Increases the Editor value */
-  int IncValue();
+  int IncValue() noexcept;
   /** Decreases the Editor value */
-  int DecValue();
+  int DecValue() noexcept;
 
-  void UpdateLayout();
+  void UpdateLayout() noexcept;
 };
 
 #endif
