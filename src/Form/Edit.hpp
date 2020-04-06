@@ -50,13 +50,13 @@ class WndProperty : public WindowControl {
 
   tstring value;
 
-  DataField *data_field;
+  DataField *data_field = nullptr;
 
   EditCallback edit_callback;
 
-  bool read_only;
+  bool read_only = false;
 
-  bool dragging, pressed;
+  bool dragging = false, pressed = false;
 
 public:
   /**

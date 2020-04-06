@@ -97,10 +97,7 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
                          int CaptionWidth,
                          const WindowStyle style)
   :look(_look),
-   data_field(nullptr),
-   edit_callback(EditDataFieldDialog),
-   read_only(false),
-   dragging(false), pressed(false)
+   edit_callback(EditDataFieldDialog)
 {
   Create(parent, rc, Caption, CaptionWidth, style);
 
@@ -111,10 +108,7 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
 
 WndProperty::WndProperty(const DialogLook &_look)
   :look(_look),
-   data_field(nullptr),
-   edit_callback(EditDataFieldDialog),
-   read_only(false),
-   dragging(false), pressed(false)
+   edit_callback(EditDataFieldDialog)
 {
 }
 
