@@ -192,7 +192,7 @@ public:
     :AllocatedPath(Path(src)) {}
 
   AllocatedPath(const_pointer _begin, const_pointer _end)
-    :AllocatedPath(value_type::Duplicate(_begin, _end)) {}
+    :AllocatedPath(value_type::Duplicate({_begin, size_t(_end - _begin)})) {}
 
   static AllocatedPath Donate(pointer value) {
     return value_type::Donate(value);

@@ -15,7 +15,6 @@ UTIL_SOURCES = \
 	$(UTIL_SRC_DIR)/ExtractParameters.cpp \
 	$(UTIL_SRC_DIR)/ConvertString.cpp \
 	$(UTIL_SRC_DIR)/StaticString.cxx \
-	$(UTIL_SRC_DIR)/AllocatedString.cxx \
 	$(UTIL_SRC_DIR)/StringView.cxx \
 	$(UTIL_SRC_DIR)/StringCompare.cxx \
 	$(UTIL_SRC_DIR)/StringStrip.cxx \
