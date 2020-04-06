@@ -30,7 +30,7 @@ static constexpr unsigned CIRCLE_SEGS = 64;
 
 gcc_const
 static PixelPoint
-CirclePoint(int radius, unsigned angle)
+CirclePoint(int radius, unsigned angle) noexcept
 {
   assert(angle < ARRAY_SIZE(ISINETABLE));
 
@@ -40,7 +40,7 @@ CirclePoint(int radius, unsigned angle)
 
 gcc_const
 static PixelPoint
-CirclePoint(PixelPoint p, int radius, unsigned angle)
+CirclePoint(PixelPoint p, int radius, unsigned angle) noexcept
 {
   return p + CirclePoint(radius, angle);
 }
@@ -48,7 +48,7 @@ CirclePoint(PixelPoint p, int radius, unsigned angle)
 static void
 segment_poly(BulkPixelPoint *pt, const PixelPoint center,
              const int radius, const unsigned istart, const unsigned iend,
-             unsigned &npoly, const bool forward=true)
+             unsigned &npoly, const bool forward=true) noexcept
 {
   assert(istart < ARRAY_SIZE(ISINETABLE));
   assert(iend < ARRAY_SIZE(ISINETABLE));
@@ -85,7 +85,8 @@ segment_poly(BulkPixelPoint *pt, const PixelPoint center,
 
 gcc_pure
 static bool
-IsCircleVisible(const Canvas &canvas, PixelPoint center, unsigned radius)
+IsCircleVisible(const Canvas &canvas,
+                PixelPoint center, unsigned radius) noexcept
 {
   return int(center.x + radius) >= 0 && center.x < int(canvas.GetWidth() + radius) &&
     int(center.y + radius) >= 0 && center.y < int(canvas.GetHeight() + radius);
@@ -93,7 +94,7 @@ IsCircleVisible(const Canvas &canvas, PixelPoint center, unsigned radius)
 
 bool
 Segment(Canvas &canvas, PixelPoint center, unsigned radius,
-        Angle start, Angle end, bool horizon)
+        Angle start, Angle end, bool horizon) noexcept
 {
   // dont draw if out of view
   if (!IsCircleVisible(canvas, center, radius))
@@ -122,7 +123,7 @@ Segment(Canvas &canvas, PixelPoint center, unsigned radius,
 
 bool
 Annulus(Canvas &canvas, PixelPoint center, unsigned radius,
-        Angle start, Angle end, unsigned inner_radius)
+        Angle start, Angle end, unsigned inner_radius) noexcept
 {
   // dont draw if out of view
   if (!IsCircleVisible(canvas, center, radius))
@@ -146,7 +147,7 @@ Annulus(Canvas &canvas, PixelPoint center, unsigned radius,
 
 bool
 KeyHole(Canvas &canvas, PixelPoint center, unsigned radius,
-        Angle start, Angle end, unsigned inner_radius)
+        Angle start, Angle end, unsigned inner_radius) noexcept
 {
   // dont draw if out of view
   if (!IsCircleVisible(canvas, center, radius))
@@ -170,7 +171,7 @@ KeyHole(Canvas &canvas, PixelPoint center, unsigned radius,
 
 void
 RoundRect(Canvas &canvas, int left, int top,
-          int right, int bottom, unsigned radius)
+          int right, int bottom, unsigned radius) noexcept
 {
   unsigned npoly = 0;
   BulkPixelPoint pt[(CIRCLE_SEGS+2)*4];
@@ -198,7 +199,7 @@ RoundRect(Canvas &canvas, int left, int top,
 
 bool
 Arc(Canvas &canvas, PixelPoint center, unsigned radius,
-    Angle start, Angle end)
+    Angle start, Angle end) noexcept
 {
   // dont draw if out of view
   if (!IsCircleVisible(canvas, center, radius))

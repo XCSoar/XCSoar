@@ -35,22 +35,22 @@ struct PixelPoint;
 
 bool
 Segment(Canvas &canvas, PixelPoint center, unsigned radius,
-        Angle start, Angle end, bool horizon=false);
+        Angle start, Angle end, bool horizon=false) noexcept;
 
 bool
 Annulus(Canvas &canvas, PixelPoint center, unsigned radius,
-        Angle start, Angle end, unsigned inner_radius);
+        Angle start, Angle end, unsigned inner_radius) noexcept;
 
 bool
 KeyHole(Canvas &canvas, PixelPoint center, unsigned radius,
-        Angle start, Angle end, unsigned inner_radius);
+        Angle start, Angle end, unsigned inner_radius) noexcept;
 
 void
 RoundRect(Canvas &canvas, int left, int top,
-          int right, int bottom, unsigned radius);
+          int right, int bottom, unsigned radius) noexcept;
 
 bool
 Arc(Canvas &canvas, PixelPoint center, unsigned radius,
-    Angle start, Angle end);
+    Angle start, Angle end) noexcept;
 
 #endif
