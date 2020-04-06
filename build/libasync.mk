@@ -12,3 +12,5 @@ ASYNC_SOURCES += \
 endif
 
 $(eval $(call link-library,async,ASYNC))
+
+ASYNC_LDADD += $(THREAD_LDADD)

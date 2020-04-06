@@ -130,7 +130,6 @@ include $(topdir)/build/jasper.mk
 include $(topdir)/build/libport.mk
 include $(topdir)/build/driver.mk
 include $(topdir)/build/libio.mk
-include $(topdir)/build/libasync.mk
 include $(topdir)/build/shapelib.mk
 include $(topdir)/build/libwaypoint.mk
 include $(topdir)/build/libairspace.mk
@@ -151,6 +150,7 @@ include $(topdir)/build/appkit.mk
 include $(topdir)/build/uikit.mk
 include $(topdir)/build/screen.mk
 include $(topdir)/build/libthread.mk
+include $(topdir)/build/libasync.mk
 include $(topdir)/build/form.mk
 include $(topdir)/build/libwidget.mk
 include $(topdir)/build/libaudio.mk
