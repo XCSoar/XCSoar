@@ -38,7 +38,7 @@
 #include <sys/types.h>
 
 #ifdef __linux__
-#include <signal.h>
+#include <csignal>
 #endif
 
 #ifdef _WIN32
@@ -77,6 +77,12 @@ public:
 	 */
 	gcc_pure
 	bool IsValid() const noexcept;
+
+	/**
+	 * Ask the kernel whether this is a regular file.
+	 */
+	gcc_pure
+	bool IsRegularFile() const noexcept;
 
 	/**
 	 * Ask the kernel whether this is a pipe.
