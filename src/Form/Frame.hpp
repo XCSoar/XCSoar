@@ -43,36 +43,36 @@ class WndFrame : public PaintWindow {
   tstring text;
 
 public:
-  explicit WndFrame(const DialogLook &look);
+  explicit WndFrame(const DialogLook &look) noexcept;
 
   WndFrame(ContainerWindow &parent, const DialogLook &look,
            PixelRect rc,
-           const WindowStyle style=WindowStyle());
+           const WindowStyle style=WindowStyle()) noexcept;
 
-  const DialogLook &GetLook() const {
+  const DialogLook &GetLook() const noexcept {
     return look;
   }
 
-  void SetAlignCenter();
-  void SetVAlignCenter();
+  void SetAlignCenter() noexcept;
+  void SetVAlignCenter() noexcept;
 
-  void SetText(const TCHAR *_text);
+  void SetText(const TCHAR *_text) noexcept;
 
-  const TCHAR *GetCaption() const {
+  const TCHAR *GetCaption() const noexcept {
     return text.c_str();
   }
 
-  void SetCaption(const TCHAR *_text) {
+  void SetCaption(const TCHAR *_text) noexcept {
     SetText(_text);
     text_renderer.InvalidateLayout();
   }
 
-  void SetCaptionColor(const Color &color) {
+  void SetCaptionColor(const Color &color) noexcept {
     caption_color = color;
   }
 
   gcc_pure
-  unsigned GetTextHeight() const;
+  unsigned GetTextHeight() const noexcept;
 
 protected:
   /** from class PaintWindow */

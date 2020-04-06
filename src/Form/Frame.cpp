@@ -26,7 +26,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Look/DialogLook.hpp"
 
-WndFrame::WndFrame(const DialogLook &_look)
+WndFrame::WndFrame(const DialogLook &_look) noexcept
   :look(_look),
    caption_color(look.text_color)
 {
@@ -34,7 +34,7 @@ WndFrame::WndFrame(const DialogLook &_look)
 
 WndFrame::WndFrame(ContainerWindow &parent, const DialogLook &_look,
                    PixelRect rc,
-                   const WindowStyle style)
+                   const WindowStyle style) noexcept
   :look(_look),
    caption_color(look.text_color)
 {
@@ -42,28 +42,28 @@ WndFrame::WndFrame(ContainerWindow &parent, const DialogLook &_look,
 }
 
 void
-WndFrame::SetAlignCenter()
+WndFrame::SetAlignCenter() noexcept
 {
   text_renderer.SetCenter();
   Invalidate();
 }
 
 void
-WndFrame::SetVAlignCenter()
+WndFrame::SetVAlignCenter() noexcept
 {
   text_renderer.SetVCenter();
   Invalidate();
 }
 
 void
-WndFrame::SetText(const TCHAR *_text)
+WndFrame::SetText(const TCHAR *_text) noexcept
 {
   text = _text;
   Invalidate();
 }
 
 unsigned
-WndFrame::GetTextHeight() const
+WndFrame::GetTextHeight() const noexcept
 {
   PixelRect rc = GetClientRect();
   const int padding = Layout::GetTextPadding();
