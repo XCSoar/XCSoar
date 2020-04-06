@@ -214,9 +214,9 @@ public:
   }
 
   /* virtual methods from class List::Handler */
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) override;
-  virtual void OnCursorMoved(unsigned index) override;
+   void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                    unsigned idx) noexcept override;
+  void OnCursorMoved(unsigned index) noexcept override;
 
 private:
   /* virtual methods from class ActionListener */
@@ -329,7 +329,8 @@ DeviceListWidget::UpdateButtons()
 }
 
 void
-DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
+DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
+                              unsigned idx) noexcept
 {
   assert(idx < NUMDEV);
 
@@ -436,7 +437,7 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 }
 
 void
-DeviceListWidget::OnCursorMoved(unsigned index)
+DeviceListWidget::OnCursorMoved(unsigned index) noexcept
 {
   UpdateButtons();
 }

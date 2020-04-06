@@ -127,17 +127,18 @@ private:
   void OnAction(int id) noexcept override;
 
   /* virtual methods from class ListControl::Handler */
-  void OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx) override;
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned idx) noexcept override;
 
-  void OnCursorMoved(unsigned index) override {
+  void OnCursorMoved(unsigned index) noexcept override {
     RefreshView();
   }
 
-  bool CanActivateItem(unsigned index) const override {
+  bool CanActivateItem(unsigned index) const noexcept override {
       return true;
   }
 
-  void OnActivateItem(unsigned index) override {
+  void OnActivateItem(unsigned index) noexcept override {
     LoadTask();
   }
 };
@@ -198,7 +199,7 @@ TaskListPanel::OnAction(int id) noexcept
 
 void
 TaskListPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned DrawListIndex)
+                           unsigned DrawListIndex) noexcept
 {
   assert(DrawListIndex <= task_store->Size());
 

@@ -98,15 +98,15 @@ public:
 
 protected:
   /* virtual methods from ListItemRenderer */
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) override;
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned idx) noexcept override;
 
   /* virtual methods from ListCursorHandler */
-  virtual bool CanActivateItem(unsigned index) const override {
+  bool CanActivateItem(unsigned index) const noexcept override {
     return true;
   }
 
-  virtual void OnActivateItem(unsigned index) override;
+  void OnActivateItem(unsigned index) noexcept override;
 
 private:
   /* virtual methods from class ActionListener */
@@ -166,7 +166,8 @@ NOAAListWidget::UpdateList()
 }
 
 void
-NOAAListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned index)
+NOAAListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
+                            unsigned index) noexcept
 {
   assert(index < stations.size());
 
@@ -250,7 +251,7 @@ NOAAListWidget::DetailsClicked()
 }
 
 void
-NOAAListWidget::OnActivateItem(unsigned index)
+NOAAListWidget::OnActivateItem(unsigned index) noexcept
 {
   OpenDetails(index);
 }

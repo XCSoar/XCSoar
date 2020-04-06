@@ -295,18 +295,18 @@ public:
 
   /* virtual methods from ListItemRenderer */
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) override;
+                           unsigned idx) noexcept override;
 
   /* virtual methods from ListCursorHandler */
-  virtual void OnCursorMoved(unsigned index) override {
+  virtual void OnCursorMoved(unsigned index) noexcept override {
     UpdateButtons();
   }
 
-  virtual bool CanActivateItem(unsigned index) const override {
+  virtual bool CanActivateItem(unsigned index) const noexcept override {
     return true;
   }
 
-  virtual void OnActivateItem(unsigned index) override;
+  virtual void OnActivateItem(unsigned index) noexcept override;
 
   /* virtual methods from DataFieldListener */
   virtual void OnModified(DataField &df) override {
@@ -565,7 +565,7 @@ SinceInMinutes(double now_s, uint32_t past_ms)
 
 void
 TrafficListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
-                               unsigned index)
+                               unsigned index) noexcept
 {
   assert(index < items.size());
   Item &item = items[index];
@@ -734,7 +734,7 @@ TrafficListWidget::OpenMap(unsigned index)
 }
 
 void
-TrafficListWidget::OnActivateItem(unsigned index)
+TrafficListWidget::OnActivateItem(unsigned index) noexcept
 {
   if (buttons == nullptr)
     /* it's a traffic picker: finish the dialog */

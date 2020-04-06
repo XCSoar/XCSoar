@@ -44,7 +44,7 @@ public:
     :look(_look) {}
 
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned i) override {
+                           unsigned i) noexcept override {
     assert(i < ARRAY_SIZE(AirspaceLook::brushes));
 
     const unsigned padding = Layout::GetTextPadding();

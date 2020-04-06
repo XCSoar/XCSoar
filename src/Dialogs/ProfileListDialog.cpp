@@ -122,16 +122,16 @@ public:
 
 protected:
   /* virtual methods from TextListWidget */
-  const TCHAR *GetRowText(unsigned i) const override {
+  const TCHAR *GetRowText(unsigned i) const noexcept override {
     return list[i].name;
   }
 
   /* virtual methods from ListCursorHandler */
-  virtual bool CanActivateItem(unsigned index) const override {
+  bool CanActivateItem(unsigned index) const noexcept override {
     return select;
   }
 
-  virtual void OnActivateItem(unsigned index) override {
+  void OnActivateItem(unsigned index) noexcept override {
     form->SetModalResult(mrOK);
   }
 

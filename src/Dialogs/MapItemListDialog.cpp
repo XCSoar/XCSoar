@@ -131,31 +131,31 @@ public:
   }
 
   /* virtual methods from class List::Handler */
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) override;
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned idx) noexcept override;
 
-  virtual void OnCursorMoved(unsigned index) override {
+  void OnCursorMoved(unsigned index) noexcept override {
     UpdateButtons();
   }
 
-  virtual bool CanActivateItem(unsigned index) const override {
+  bool CanActivateItem(unsigned index) const noexcept override {
     return HasDetails(*list[index]);
   }
 
-  bool CanGotoItem(unsigned index) const {
+  bool CanGotoItem(unsigned index) const noexcept {
     return CanGotoItem(*list[index]);
   }
 
-  static bool CanGotoItem(const MapItem &item) {
+  static bool CanGotoItem(const MapItem &item) noexcept {
     return protected_task_manager != NULL &&
       item.type == MapItem::WAYPOINT;
   }
 
-  bool CanAckItem(unsigned index) const {
+  bool CanAckItem(unsigned index) const noexcept {
     return CanAckItem(*list[index]);
   }
 
-  static bool CanAckItem(const MapItem &item) {
+  static bool CanAckItem(const MapItem &item) noexcept {
     const AirspaceMapItem &as_item = (const AirspaceMapItem &)item;
 
     return item.type == MapItem::AIRSPACE &&
@@ -163,7 +163,7 @@ public:
       !GetAirspaceWarnings()->GetAckDay(*as_item.airspace);
   }
 
-  virtual void OnActivateItem(unsigned index) override;
+  void OnActivateItem(unsigned index) noexcept override;
 
   /* virtual methods from class ActionListener */
   void OnAction(int id) noexcept override;
@@ -199,7 +199,7 @@ MapItemListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
 void
 MapItemListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
-                               unsigned idx)
+                               unsigned idx) noexcept
 {
   const MapItem &item = *list[idx];
   renderer.Draw(canvas, rc, item,
@@ -215,7 +215,7 @@ MapItemListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 }
 
 void
-MapItemListWidget::OnActivateItem(unsigned index)
+MapItemListWidget::OnActivateItem(unsigned index) noexcept
 {
   details_button->Click();
 }

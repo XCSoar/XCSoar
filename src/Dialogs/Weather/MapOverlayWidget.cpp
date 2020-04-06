@@ -173,12 +173,13 @@ protected:
   }
 
   /* virtual methods from TextListWidget */
-  const TCHAR *GetRowText(unsigned i) const override {
+  const TCHAR *GetRowText(unsigned i) const noexcept override {
     return items[i].name.c_str();
   }
 
   /* virtual methods from ListItemRenderer */
-  void OnPaintItem(Canvas &canvas, PixelRect rc, unsigned i) override {
+  void OnPaintItem(Canvas &canvas, PixelRect rc,
+                   unsigned i) noexcept override {
     if (int(i) == active_index) {
       rc.left = row_renderer.DrawColumn(canvas, rc, _T(" > "));
       rc.right = row_renderer.DrawRightColumn(canvas, rc, _T(" < "));
@@ -188,15 +189,15 @@ protected:
   }
 
   /* virtual methods from ListCursorHandler */
-  virtual void OnCursorMoved(unsigned i) override {
+  void OnCursorMoved(unsigned i) noexcept override {
     UpdatePreview(items[i].path);
   }
 
-  virtual bool CanActivateItem(unsigned i) const override {
+  bool CanActivateItem(unsigned i) const noexcept override {
     return true;
   }
 
-  virtual void OnActivateItem(unsigned i) override {
+  void OnActivateItem(unsigned i) noexcept override {
     UseClicked(i);
   }
 

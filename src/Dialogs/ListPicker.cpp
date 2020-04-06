@@ -113,20 +113,20 @@ public:
 
   /* virtual methods from class ListControl::Handler */
 
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) override {
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned idx) noexcept override {
     item_renderer.OnPaintItem(canvas, rc, idx);
   }
 
-  virtual void OnCursorMoved(unsigned index) override {
+  void OnCursorMoved(unsigned index) noexcept override {
     UpdateHelp(index);
   }
 
-  virtual bool CanActivateItem(unsigned index) const override {
+  bool CanActivateItem(unsigned index) const noexcept override {
     return true;
   }
 
-  virtual void OnActivateItem(unsigned index) override {
+  void OnActivateItem(unsigned index) noexcept override {
     action_listener.OnAction(mrOK);
   }
 

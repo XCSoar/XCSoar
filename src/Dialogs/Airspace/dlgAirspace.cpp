@@ -72,20 +72,20 @@ public:
   }
 
   /* virtual methods from class ListItemRenderer */
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) override;
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned idx) noexcept override;
 
   /* virtual methods from class ListCursorHandler */
-  virtual bool CanActivateItem(unsigned index) const override {
+  bool CanActivateItem(unsigned index) const noexcept override {
     return true;
   }
 
-  virtual void OnActivateItem(unsigned index) override;
+  void OnActivateItem(unsigned index) noexcept override;
 };
 
 void
 AirspaceSettingsListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
-                                         unsigned i)
+                                        unsigned i) noexcept
 {
   assert(i < AIRSPACECLASSCOUNT);
 
@@ -129,7 +129,7 @@ AirspaceSettingsListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
 }
 
 void
-AirspaceSettingsListWidget::OnActivateItem(unsigned index)
+AirspaceSettingsListWidget::OnActivateItem(unsigned index) noexcept
 {
   assert(index < AIRSPACECLASSCOUNT);
 

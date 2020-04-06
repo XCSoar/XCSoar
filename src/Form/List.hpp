@@ -39,7 +39,7 @@ typedef void (*ListItemRendererFunction)(Canvas &canvas, const PixelRect rc,
 class ListItemRenderer {
 public:
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) = 0;
+                           unsigned idx) noexcept = 0;
 };
 
 template<typename C>
@@ -47,7 +47,8 @@ class LambdaListItemRenderer : public ListItemRenderer, private C {
 public:
   LambdaListItemRenderer(C &&c):C(std::move(c)) {}
 
-  void OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx) override {
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned idx) noexcept override {
     C::operator()(canvas, rc, idx);
   }
 };
@@ -69,21 +70,22 @@ public:
   FunctionListItemRenderer(ListItemRendererFunction _function)
     :function(_function) {}
 
-  void OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx) override {
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned idx) noexcept override {
     function(canvas, rc, idx);
   }
 };
 
 class ListCursorHandler {
 public:
-  virtual void OnCursorMoved(gcc_unused unsigned index) {}
+  virtual void OnCursorMoved(gcc_unused unsigned index) noexcept {}
 
   gcc_pure
-  virtual bool CanActivateItem(gcc_unused unsigned index) const {
+  virtual bool CanActivateItem(gcc_unused unsigned index) const noexcept {
     return false;
   }
 
-  virtual void OnActivateItem(gcc_unused unsigned index) {}
+  virtual void OnActivateItem(gcc_unused unsigned index) noexcept {}
 };
 
 /**
@@ -157,7 +159,7 @@ protected:
   WindowTimer kinetic_timer;
 
 public:
-  ListControl(const DialogLook &_look);
+  explicit ListControl(const DialogLook &_look) noexcept;
 
   /**
    * @param parent the parent window
@@ -165,22 +167,22 @@ public:
    */
   ListControl(ContainerWindow &parent, const DialogLook &look,
               PixelRect rc, const WindowStyle style,
-              unsigned _item_height);
+              unsigned _item_height) noexcept;
 
-  virtual ~ListControl();
+  ~ListControl() noexcept override;
 
   void Create(ContainerWindow &parent,
               PixelRect rc, const WindowStyle style,
-              unsigned _item_height);
+              unsigned _item_height) noexcept;
 
-  void SetItemRenderer(ListItemRenderer *_item_renderer) {
+  void SetItemRenderer(ListItemRenderer *_item_renderer) noexcept {
     assert(_item_renderer != nullptr);
     assert(item_renderer == nullptr);
 
     item_renderer = _item_renderer;
   }
 
-  void SetCursorHandler(ListCursorHandler *_cursor_handler) {
+  void SetCursorHandler(ListCursorHandler *_cursor_handler) noexcept {
     assert(_cursor_handler != nullptr);
     assert(cursor_handler == nullptr);
 
@@ -191,13 +193,13 @@ public:
    * Returns the height of list items
    * @return height of list items in pixel
    */
-  unsigned GetItemHeight() const {
+  unsigned GetItemHeight() const noexcept {
     return item_height;
   }
 
-  void SetItemHeight(unsigned _item_height);
+  void SetItemHeight(unsigned _item_height) noexcept;
 
-  bool IsEmpty() const {
+  bool IsEmpty() const noexcept {
     return length == 0;
   }
 
@@ -205,19 +207,19 @@ public:
    * Returns the number of items in the list
    * @return The number of items in the list
    */
-  unsigned GetLength() const {
+  unsigned GetLength() const noexcept {
     return length;
   }
 
   /** Changes the number of items in the list. */
-  void SetLength(unsigned n);
+  void SetLength(unsigned n) noexcept;
 
   /**
    * Check whether the length of the list is below a certain
    * threshold.  Small lists may have different behaviour on some
    * platforms.
    */
-  bool IsShort() const {
+  bool IsShort() const noexcept {
     return length <= 8 || length <= items_visible;
   }
 
@@ -225,7 +227,7 @@ public:
    * Returns the current cursor position
    * @return The current cursor position
    */
-  unsigned GetCursorIndex() const {
+  unsigned GetCursorIndex() const noexcept {
     return cursor;
   }
 
@@ -235,62 +237,62 @@ public:
    * @return true if the cursor was moved to the specified position,
    * false if the position was invalid
    */
-  bool SetCursorIndex(unsigned i);
+  bool SetCursorIndex(unsigned i) noexcept;
 
   /**
    * Move the cursor this many items up (negative delta) or down
    * (positive delta).  Scrolls if necessary.
    */
-  void MoveCursor(int delta);
+  void MoveCursor(int delta) noexcept;
 
   /**
    * Pan the "origin item" to the specified pixel position.
    */
-  void SetPixelPan(unsigned _pixel_pan);
+  void SetPixelPan(unsigned _pixel_pan) noexcept;
 
   /**
    * Scrolls to the specified index.
    */
-  void SetOrigin(int i);
+  void SetOrigin(int i) noexcept;
 
-  unsigned GetPixelOrigin() const {
+  unsigned GetPixelOrigin() const noexcept {
     return origin * item_height + pixel_pan;
   }
 
-  void SetPixelOrigin(int pixel_origin);
+  void SetPixelOrigin(int pixel_origin) noexcept;
 
   /**
    * Scrolls a number of items up (negative delta) or down (positive
    * delta).  The cursor is not moved.
    */
-  void MoveOrigin(int delta);
+  void MoveOrigin(int delta) noexcept;
 
 protected:
   gcc_pure
-  bool CanActivateItem() const;
-  void ActivateItem();
+  bool CanActivateItem() const noexcept;
+  void ActivateItem() noexcept;
 
   /** Checks whether a ScrollBar is needed and shows/hides it */
-  void show_or_hide_scroll_bar();
+  void show_or_hide_scroll_bar() noexcept;
 
   /**
    * Scroll to the ListItem defined by i
    * @param i The ListItem array id
    */
-  void EnsureVisible(unsigned i);
+  void EnsureVisible(unsigned i) noexcept;
 
   /**
    * Determine which list item resides at the specified pixel row.
    * Returns -1 if there is no such list item.
    */
   gcc_pure
-  int ItemIndexAt(int y) const {
+  int ItemIndexAt(int y) const noexcept {
     int i = (y + pixel_pan) / item_height + origin;
     return i >= 0 && (unsigned)i < length ? i : -1;
   }
 
   gcc_pure
-  PixelRect item_rect(unsigned i) const {
+  PixelRect item_rect(unsigned i) const noexcept {
     PixelRect rc;
     rc.left = 0;
     rc.top = (int)(i - origin) * item_height - pixel_pan;
@@ -299,16 +301,16 @@ protected:
     return rc;
   }
 
-  void Invalidate_item(unsigned i) {
+  void Invalidate_item(unsigned i) noexcept {
     Invalidate(item_rect(i));
   }
 
-  void drag_end();
+  void drag_end() noexcept;
 
-  void DrawItems(Canvas &canvas, unsigned start, unsigned end) const;
+  void DrawItems(Canvas &canvas, unsigned start, unsigned end) const noexcept;
 
   /** Draws the ScrollBar */
-  void DrawScrollBar(Canvas &canvas);
+  void DrawScrollBar(Canvas &canvas) noexcept;
 
   bool OnTimer(WindowTimer &timer) override;
   void OnDestroy() override;

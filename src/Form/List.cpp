@@ -45,12 +45,12 @@ Copyright_License {
  */
 gcc_const
 static bool
-UsePixelPan()
+UsePixelPan() noexcept
 {
   return !HasEPaper();
 }
 
-ListControl::ListControl(const DialogLook &_look)
+ListControl::ListControl(const DialogLook &_look) noexcept
   :look(_look),
    scroll_bar(look.button),
    length(0),
@@ -64,7 +64,7 @@ ListControl::ListControl(const DialogLook &_look)
 
 ListControl::ListControl(ContainerWindow &parent, const DialogLook &_look,
                          PixelRect rc, const WindowStyle style,
-                         unsigned _item_height)
+                         unsigned _item_height) noexcept
   :look(_look),
    scroll_bar(look.button),
    length(0),
@@ -77,7 +77,8 @@ ListControl::ListControl(ContainerWindow &parent, const DialogLook &_look,
   Create(parent, rc, style, _item_height);
 }
 
-ListControl::~ListControl() {
+ListControl::~ListControl() noexcept
+{
   /* we must override ~Window(), because in ~Window(), our own
      OnDestroy() method won't be called (during object destruction,
      this object loses its identity) */
@@ -87,14 +88,14 @@ ListControl::~ListControl() {
 void
 ListControl::Create(ContainerWindow &parent,
                     PixelRect rc, const WindowStyle style,
-                    unsigned _item_height)
+                    unsigned _item_height) noexcept
 {
   item_height = _item_height;
   PaintWindow::Create(parent, rc, style);
 }
 
 bool
-ListControl::CanActivateItem() const
+ListControl::CanActivateItem() const noexcept
 {
   if (IsEmpty())
     return false;
@@ -104,7 +105,7 @@ ListControl::CanActivateItem() const
 }
 
 void
-ListControl::ActivateItem()
+ListControl::ActivateItem() noexcept
 {
   assert(CanActivateItem());
 
@@ -115,7 +116,7 @@ ListControl::ActivateItem()
 }
 
 void
-ListControl::show_or_hide_scroll_bar()
+ListControl::show_or_hide_scroll_bar() noexcept
 {
   const PixelSize size = GetSize();
 
@@ -163,7 +164,8 @@ ListControl::OnKillFocus()
 }
 
 void
-ListControl::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
+ListControl::DrawItems(Canvas &canvas,
+                       unsigned start, unsigned end) const noexcept
 {
   PixelRect rc = item_rect(start);
 
@@ -228,7 +230,8 @@ ListControl::OnPaint(Canvas &canvas, const PixelRect &dirty)
 }
 
 void
-ListControl::DrawScrollBar(Canvas &canvas) {
+ListControl::DrawScrollBar(Canvas &canvas) noexcept
+{
   if (!scroll_bar.IsDefined())
     return;
 
@@ -241,7 +244,7 @@ ListControl::DrawScrollBar(Canvas &canvas) {
 }
 
 void
-ListControl::SetItemHeight(unsigned _item_height)
+ListControl::SetItemHeight(unsigned _item_height) noexcept
 {
   item_height = _item_height;
   items_visible = GetHeight() / item_height;
@@ -251,7 +254,7 @@ ListControl::SetItemHeight(unsigned _item_height)
 }
 
 void
-ListControl::SetLength(unsigned n)
+ListControl::SetLength(unsigned n) noexcept
 {
   if (n == length)
     return;
@@ -281,7 +284,7 @@ ListControl::SetLength(unsigned n)
 }
 
 void
-ListControl::EnsureVisible(unsigned i)
+ListControl::EnsureVisible(unsigned i) noexcept
 {
   assert(i < length);
 
@@ -302,7 +305,7 @@ ListControl::EnsureVisible(unsigned i)
 }
 
 bool
-ListControl::SetCursorIndex(unsigned i)
+ListControl::SetCursorIndex(unsigned i) noexcept
 {
   if (i >= length)
     return false;
@@ -322,7 +325,7 @@ ListControl::SetCursorIndex(unsigned i)
 }
 
 void
-ListControl::MoveCursor(int delta)
+ListControl::MoveCursor(int delta) noexcept
 {
   if (length == 0)
     return;
@@ -337,7 +340,7 @@ ListControl::MoveCursor(int delta)
 }
 
 void
-ListControl::SetPixelPan(unsigned _pixel_pan)
+ListControl::SetPixelPan(unsigned _pixel_pan) noexcept
 {
   if (pixel_pan == _pixel_pan)
     return;
@@ -347,7 +350,7 @@ ListControl::SetPixelPan(unsigned _pixel_pan)
 }
 
 void
-ListControl::SetOrigin(int i)
+ListControl::SetOrigin(int i) noexcept
 {
   if (length <= items_visible)
     return;
@@ -385,7 +388,7 @@ ListControl::SetOrigin(int i)
 }
 
 void
-ListControl::SetPixelOrigin(int pixel_origin)
+ListControl::SetPixelOrigin(int pixel_origin) noexcept
 {
   int max = length * item_height - GetHeight();
   if (pixel_origin > max)
@@ -401,7 +404,7 @@ ListControl::SetPixelOrigin(int pixel_origin)
 }
 
 void
-ListControl::MoveOrigin(int delta)
+ListControl::MoveOrigin(int delta) noexcept
 {
   if (UsePixelPan()) {
     int pixel_origin = (int)GetPixelOrigin();
@@ -519,7 +522,7 @@ ListControl::OnMouseUp(PixelPoint p)
 }
 
 void
-ListControl::drag_end()
+ListControl::drag_end() noexcept
 {
   if (drag_mode != DragMode::NONE) {
     if (drag_mode == DragMode::CURSOR)

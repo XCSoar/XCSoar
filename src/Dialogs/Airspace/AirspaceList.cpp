@@ -103,15 +103,15 @@ public:
   }
 
   /* virtual methods from ListItemRenderer */
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) override;
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned idx) noexcept override;
 
   /* virtual methods from ListCursorHandler */
-  virtual bool CanActivateItem(unsigned index) const override {
+  bool CanActivateItem(unsigned index) const noexcept override {
     return true;
   }
 
-  virtual void OnActivateItem(unsigned index) override;
+  void OnActivateItem(unsigned index) noexcept override;
 
   /* virtual methods from ActionListener */
   void OnAction(int id) noexcept override;
@@ -219,7 +219,7 @@ AirspaceListWidget::OnAirspaceListEnter(unsigned i)
 }
 
 void
-AirspaceListWidget::OnActivateItem(unsigned index)
+AirspaceListWidget::OnActivateItem(unsigned index) noexcept
 {
   OnAirspaceListEnter(index);
 }
@@ -312,7 +312,7 @@ AirspaceListWidget::OnModified(DataField &df)
 
 void
 AirspaceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
-                                unsigned i)
+                                unsigned i) noexcept
 {
   if (items.empty()) {
     assert(i == 0);

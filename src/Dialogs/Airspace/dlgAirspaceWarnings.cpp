@@ -130,17 +130,17 @@ public:
   virtual void Hide() override;
 
   /* virtual methods from ListItemRenderer */
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) override;
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned idx) noexcept override;
 
   /* virtual methods from ListCursorHandler */
-  virtual void OnCursorMoved(unsigned index) override;
+  void OnCursorMoved(unsigned index) noexcept override;
 
-  virtual bool CanActivateItem(unsigned index) const override {
+  bool CanActivateItem(unsigned index) const noexcept override {
     return true;
   }
 
-  virtual void OnActivateItem(unsigned index) override;
+  void OnActivateItem(unsigned index) noexcept override;
 
 private:
   /* virtual methods from class ActionListener */
@@ -206,7 +206,7 @@ AirspaceWarningListWidget::Prepare(ContainerWindow &parent,
 }
 
 void
-AirspaceWarningListWidget::OnCursorMoved(unsigned i)
+AirspaceWarningListWidget::OnCursorMoved(unsigned i) noexcept
 {
   selected_airspace = i < warning_list.size()
     ? warning_list[i].airspace
@@ -232,7 +232,7 @@ AirspaceWarningListWidget::Hide()
 }
 
 void
-AirspaceWarningListWidget::OnActivateItem(gcc_unused unsigned i)
+AirspaceWarningListWidget::OnActivateItem(gcc_unused unsigned i) noexcept
 {
   if (selected_airspace != nullptr)
     dlgAirspaceDetails(*selected_airspace, &airspace_warnings);
@@ -309,7 +309,8 @@ AirspaceWarningListWidget::Enable()
 
 void
 AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
-                                       const PixelRect paint_rc, unsigned i)
+                                       const PixelRect paint_rc,
+                                       unsigned i) noexcept
 {
   TCHAR buffer[128];
 

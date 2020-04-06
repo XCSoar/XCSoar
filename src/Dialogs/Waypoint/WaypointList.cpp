@@ -182,14 +182,14 @@ public:
 
   /* virtual methods from ListItemRenderer */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                   unsigned idx) override;
+                   unsigned idx) noexcept override;
 
   /* virtual methods from ListCursorHandler */
-  bool CanActivateItem(unsigned index) const override {
+  bool CanActivateItem(unsigned index) const noexcept override {
     return true;
   }
 
-  void OnActivateItem(unsigned index) override;
+  void OnActivateItem(unsigned index) noexcept override;
 
   /* virtual methods from ActionListener */
   void OnAction(int id) noexcept override;
@@ -446,7 +446,7 @@ WaypointListWidget::OnModified(DataField &df)
 
 void
 WaypointListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
-                                unsigned i)
+                                unsigned i) noexcept
 {
   if (items.empty()) {
     assert(i == 0);
@@ -479,7 +479,7 @@ WaypointListWidget::OnWaypointListEnter()
 }
 
 void
-WaypointListWidget::OnActivateItem(unsigned index)
+WaypointListWidget::OnActivateItem(unsigned index) noexcept
 {
   OnWaypointListEnter();
 }

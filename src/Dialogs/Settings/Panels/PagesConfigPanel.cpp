@@ -137,15 +137,15 @@ public:
   virtual bool Save(bool &changed) override;
 
   /* virtual methods from class ListItemRenderer */
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) override;
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned idx) noexcept override;
 
   /* virtual methods from class ListCursorHandler */
-  virtual void OnCursorMoved(unsigned index) override;
-  virtual bool CanActivateItem(unsigned index) const override {
+  void OnCursorMoved(unsigned index) noexcept override;
+  bool CanActivateItem(unsigned index) const noexcept override {
     return true;
   }
-  virtual void OnActivateItem(unsigned index) override;
+  void OnActivateItem(unsigned index) noexcept override;
 
   /* virtual methods from class PageLayoutEditWidget::Listener */
   virtual void OnModified(const PageLayout &new_value) override;
@@ -319,7 +319,8 @@ PageListWidget::Save(bool &_changed)
 }
 
 void
-PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
+PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
+                            unsigned idx) noexcept
 {
   const InfoBoxSettings &info_box_settings =
     CommonInterface::GetUISettings().info_boxes;
@@ -380,7 +381,7 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 }
 
 void
-PageListWidget::OnCursorMoved(unsigned idx)
+PageListWidget::OnCursorMoved(unsigned idx) noexcept
 {
   UpdateButtons();
 
@@ -388,7 +389,7 @@ PageListWidget::OnCursorMoved(unsigned idx)
 }
 
 void
-PageListWidget::OnActivateItem(unsigned idx)
+PageListWidget::OnActivateItem(unsigned idx) noexcept
 {
   editor->SetFocus();
 }

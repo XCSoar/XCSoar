@@ -160,8 +160,8 @@ public:
     return row_renderer.CalculateLayout(*look.list.font);
   }
 
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned i) override {
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned i) noexcept override {
     row_renderer.DrawTextRow(canvas, rc, rasp_providers[i].name);
   }
 };

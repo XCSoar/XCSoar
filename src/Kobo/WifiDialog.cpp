@@ -90,10 +90,10 @@ public:
 
   /* virtual methods from class ListItemRenderer */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                   unsigned idx) override;
+                   unsigned idx) noexcept override;
 
   /* virtual methods from class ListCursorHandler */
-  void OnCursorMoved(unsigned index) override {
+  void OnCursorMoved(unsigned index) noexcept override {
     UpdateButtons();
   }
 
@@ -157,7 +157,7 @@ WifiListWidget::UpdateButtons()
 
 void
 WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
-                            unsigned idx)
+                            unsigned idx) noexcept
 {
   const auto &info = networks[idx];
 

@@ -268,9 +268,9 @@ public:
   virtual void Unprepare() override;
 
   /* virtual methods from class List::Handler */
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) override;
-  virtual void OnCursorMoved(unsigned index) override;
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned idx) noexcept override;
+  void OnCursorMoved(unsigned index) noexcept override;
 
   /* virtual methods from class ActionListener */
   void OnAction(int id) noexcept override;
@@ -421,7 +421,7 @@ ManagedFileListWidget::UpdateButtons()
 
 void
 ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
-                                   unsigned i)
+                                   unsigned i) noexcept
 {
   const FileItem &file = items[i];
 
@@ -456,7 +456,7 @@ ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 }
 
 void
-ManagedFileListWidget::OnCursorMoved(unsigned index)
+ManagedFileListWidget::OnCursorMoved(unsigned index) noexcept
 {
   UpdateButtons();
 }
@@ -502,12 +502,12 @@ public:
     return row_renderer.CalculateLayout(*look.list.font);
   }
 
-  void OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i) override;
+  void OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i) noexcept override;
 };
 
 void
 AddFileListItemRenderer::OnPaintItem(Canvas &canvas, const PixelRect rc,
-                                     unsigned i)
+                                     unsigned i) noexcept
 {
   assert(i < list.size());
 

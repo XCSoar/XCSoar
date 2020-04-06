@@ -266,10 +266,11 @@ private:
   void OnAction(int id) noexcept override;
 
   /* virtual methods from List::Handler */
-  void OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx) override;
-  void OnCursorMoved(unsigned index) override;
-  bool CanActivateItem(unsigned index) const override;
-  void OnActivateItem(unsigned index) override;
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned idx) noexcept override;
+  void OnCursorMoved(unsigned index) noexcept override;
+  bool CanActivateItem(unsigned index) const noexcept override;
+  void OnActivateItem(unsigned index) noexcept override;
 };
 
 void
@@ -393,7 +394,7 @@ TaskEditPanel::OnAction(int id) noexcept
 
 void
 TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned DrawListIndex)
+                           unsigned DrawListIndex) noexcept
 {
   assert(DrawListIndex <= ordered_task->TaskSize());
 
@@ -455,7 +456,7 @@ TaskEditPanel::OnEditTurnpointClicked()
 }
 
 bool
-TaskEditPanel::CanActivateItem(gcc_unused unsigned index) const
+TaskEditPanel::CanActivateItem(gcc_unused unsigned index) const noexcept
 {
   return true;
 }
@@ -502,13 +503,13 @@ TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
 }
 
 void
-TaskEditPanel::OnActivateItem(unsigned index)
+TaskEditPanel::OnActivateItem(unsigned index) noexcept
 {
   EditTaskPoint(index);
 }
 
 void
-TaskEditPanel::OnCursorMoved(gcc_unused unsigned index)
+TaskEditPanel::OnCursorMoved(gcc_unused unsigned index) noexcept
 {
   UpdateButtons();
 }

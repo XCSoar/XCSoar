@@ -112,14 +112,15 @@ public:
 
 protected:
   /* virtual methods from ListItemRenderer */
-  void OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx) override;
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned idx) noexcept override;
 
   /* virtual methods from ListCursorHandler */
-  bool CanActivateItem(gcc_unused unsigned index) const override {
+  bool CanActivateItem(gcc_unused unsigned index) const noexcept override {
     return true;
   }
 
-  void OnActivateItem(unsigned index) override;
+  void OnActivateItem(unsigned index) noexcept override;
 
 private:
   /* virtual methods from class ActionListener */
@@ -177,7 +178,8 @@ PlaneListWidget::Unprepare()
 }
 
 void
-PlaneListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
+PlaneListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
+                             unsigned i) noexcept
 {
   assert(i < list.size());
 
@@ -384,7 +386,7 @@ PlaneListWidget::OnAction(int id) noexcept
 }
 
 void
-PlaneListWidget::OnActivateItem(unsigned i)
+PlaneListWidget::OnActivateItem(unsigned i) noexcept
 {
   assert(i < list.size());
 

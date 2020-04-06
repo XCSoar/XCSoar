@@ -258,13 +258,13 @@ protected:
   }
 
   /* virtual methods from ListItemRenderer */
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) override {
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned idx) noexcept override {
     canvas.DrawText(rc.left + 2, rc.top + 2, oz_type_names[idx]);
   }
 
   /* virtual methods from ListCursorHandler */
-  virtual void OnCursorMoved(unsigned idx) override {
+  void OnCursorMoved(unsigned idx) noexcept override {
     assert(idx < NUM_OZ_TYPES);
 
     oz.set_shape((ObservationZone::Shape)idx);

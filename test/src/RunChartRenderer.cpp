@@ -164,15 +164,15 @@ protected:
   }
 
   /* virtual methods from ListItemRenderer */
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) override {
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned idx) noexcept override {
     assert(idx < ARRAY_SIZE(chart_names));
 
     canvas.DrawText(rc.left + 2, rc.top + 2, chart_names[idx]);
   }
 
   /* virtual methods from ListCursorHandler */
-  virtual void OnCursorMoved(unsigned idx) override {
+  void OnCursorMoved(unsigned idx) noexcept override {
     assert(idx < ARRAY_SIZE(chart_names));
 
     chart.SetChart(idx);

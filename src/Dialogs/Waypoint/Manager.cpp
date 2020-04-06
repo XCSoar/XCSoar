@@ -92,14 +92,14 @@ public:
 private:
   /* virtual methods from ListItemRenderer */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                   unsigned idx) override;
+                   unsigned idx) noexcept override;
 
   /* virtual methods from ListCursorHandler */
-  bool CanActivateItem(unsigned index) const override {
+  bool CanActivateItem(unsigned index) const noexcept override {
     return true;
   }
 
-  void OnActivateItem(unsigned index) override;
+  void OnActivateItem(unsigned index) noexcept override;
 
   /* virtual methods from ActionListener */
   void OnAction(int id) noexcept override;
@@ -164,7 +164,7 @@ WaypointManagerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
 void
 WaypointManagerWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
-                                   unsigned i)
+                                   unsigned i) noexcept
 {
   assert(i < items.size());
 
@@ -177,7 +177,7 @@ WaypointManagerWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 }
 
 void
-WaypointManagerWidget::OnActivateItem(unsigned i)
+WaypointManagerWidget::OnActivateItem(unsigned i) noexcept
 {
   OnWaypointEditClicked(i);
 }

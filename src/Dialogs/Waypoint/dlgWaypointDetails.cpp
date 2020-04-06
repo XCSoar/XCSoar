@@ -72,17 +72,17 @@ public:
 
   /* virtual methods from class ListItemRenderer */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                   unsigned idx) override;
+                   unsigned idx) noexcept override;
 
-  bool CanActivateItem(gcc_unused unsigned index) const override {
+  bool CanActivateItem(gcc_unused unsigned index) const noexcept override {
     return true;
   }
 
-  void OnActivateItem(unsigned index) override;
+  void OnActivateItem(unsigned index) noexcept override;
 };
 
 void
-WaypointExternalFileListHandler::OnActivateItem(unsigned i)
+WaypointExternalFileListHandler::OnActivateItem(unsigned i) noexcept
 {
   auto file = waypoint->files_external.begin();
   std::advance(file, i);
@@ -93,7 +93,7 @@ WaypointExternalFileListHandler::OnActivateItem(unsigned i)
 void
 WaypointExternalFileListHandler::OnPaintItem(Canvas &canvas,
                                              const PixelRect paint_rc,
-                                             unsigned i)
+                                             unsigned i) noexcept
 {
   auto file = waypoint->files_external.begin();
   std::advance(file, i);

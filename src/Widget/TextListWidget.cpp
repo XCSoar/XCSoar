@@ -44,7 +44,8 @@ TextListWidget::Unprepare()
 }
 
 void
-TextListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
+TextListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
+                            unsigned i) noexcept
 {
   auto text = GetRowText(i);
   if (text != nullptr)

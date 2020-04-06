@@ -79,7 +79,7 @@ public:
 
   /* virtual methods from class List::Handler */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                   unsigned index) override {
+                   unsigned index) noexcept override {
     assert(index < alternates.size());
 
     const ComputerSettings &settings = CommonInterface::GetComputerSettings();
@@ -93,11 +93,11 @@ public:
                                CommonInterface::GetMapSettings().waypoint);
   }
 
-  bool CanActivateItem(unsigned index) const  override{
+  bool CanActivateItem(unsigned index) const noexcept override {
     return true;
   }
 
-  void OnActivateItem(unsigned index) override;
+  void OnActivateItem(unsigned index) noexcept override;
 
   /* virtual methods from class ActionListener */
   void OnAction(int id) noexcept override;
@@ -122,7 +122,7 @@ AlternatesListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-AlternatesListWidget::OnActivateItem(unsigned index)
+AlternatesListWidget::OnActivateItem(unsigned index) noexcept
 {
   details_button->Click();
 }

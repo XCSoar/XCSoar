@@ -87,14 +87,15 @@ private:
   void Unprepare() override;
 
   /* virtual methods from class ListItemRenderer */
-  void OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx) override;
+  void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                   unsigned idx) noexcept override;
 
   /* virtual methods from class ListCursorHandler */
-  bool CanActivateItem(unsigned index) const override {
+  bool CanActivateItem(unsigned index) const noexcept override {
     return true;
   }
 
-  void OnActivateItem(unsigned index) override {
+  void OnActivateItem(unsigned index) noexcept override {
     dialog.SetModalResult(mrOK);
   }
 
@@ -164,7 +165,7 @@ ScanBluetoothLeWidget::Unprepare()
 
 void
 ScanBluetoothLeWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
-                                   unsigned i)
+                                   unsigned i) noexcept
 {
   const auto &item = items[i];
 

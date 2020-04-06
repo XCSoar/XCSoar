@@ -35,7 +35,7 @@ protected:
   TextRowRenderer row_renderer;
 
   gcc_pure
-  virtual const TCHAR *GetRowText(unsigned i) const = 0;
+  virtual const TCHAR *GetRowText(unsigned i) const noexcept = 0;
 
 public:
   /* virtual methods from class Widget */
@@ -44,7 +44,8 @@ public:
 
 protected:
   /* virtual methods from ListItemRenderer */
-  void OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i) override;
+  void OnPaintItem(Canvas &canvas, PixelRect rc,
+                   unsigned i) noexcept override;
 };
 
 #endif

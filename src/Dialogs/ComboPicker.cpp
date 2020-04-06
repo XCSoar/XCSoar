@@ -46,7 +46,7 @@ public:
   }
 
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned i) override {
+                           unsigned i) noexcept override {
     row_renderer.DrawTextRow(canvas, rc, combo_list[i].display_string.c_str());
   }
 };
