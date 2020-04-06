@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2019 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2015-2020 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -49,13 +49,15 @@ namespace Lua {
 struct StackIndex {
 	int idx;
 
-	explicit constexpr StackIndex(int _idx):idx(_idx) {}
+	explicit constexpr StackIndex(int _idx) noexcept
+		:idx(_idx) {}
 };
 
 struct LightUserData {
 	void *value;
 
-	explicit constexpr LightUserData(void *_value):value(_value) {}
+	explicit constexpr LightUserData(void *_value) noexcept
+		:value(_value) {}
 };
 
 template<typename... T>
@@ -73,48 +75,48 @@ MakeCClosure(lua_CFunction fn, T&&... values)
 }
 
 static inline void
-Push(lua_State *L, std::nullptr_t)
+Push(lua_State *L, std::nullptr_t) noexcept
 {
 	lua_pushnil(L);
 }
 
 static inline void
-Push(lua_State *L, StackIndex i)
+Push(lua_State *L, StackIndex i) noexcept
 {
 	lua_pushvalue(L, i.idx);
 }
 
 gcc_nonnull_all
 static inline void
-Push(lua_State *L, bool value)
+Push(lua_State *L, bool value) noexcept
 {
 	lua_pushboolean(L, value);
 }
 
 gcc_nonnull_all
 static inline void
-Push(lua_State *L, const char *value)
+Push(lua_State *L, const char *value) noexcept
 {
 	lua_pushstring(L, value);
 }
 
 gcc_nonnull_all
 static inline void
-Push(lua_State *L, StringView value)
+Push(lua_State *L, StringView value) noexcept
 {
 	lua_pushlstring(L, value.data, value.size);
 }
 
 gcc_nonnull_all
 static inline void
-Push(lua_State *L, int value)
+Push(lua_State *L, int value) noexcept
 {
 	lua_pushinteger(L, value);
 }
 
 gcc_nonnull_all
 static inline void
-Push(lua_State *L, double value)
+Push(lua_State *L, double value) noexcept
 {
 	lua_pushnumber(L, value);
 }
@@ -147,7 +149,7 @@ Push(lua_State *L, const std::tuple<T...> &t)
 
 gcc_nonnull_all
 static inline void
-Push(lua_State *L, lua_CFunction value)
+Push(lua_State *L, lua_CFunction value) noexcept
 {
 	lua_pushcfunction(L, value);
 }
@@ -155,7 +157,7 @@ Push(lua_State *L, lua_CFunction value)
 template<typename... T>
 gcc_nonnull_all
 void
-Push(lua_State *L, const CClosure<T...> &value)
+Push(lua_State *L, const CClosure<T...> &value) noexcept
 {
 	Push(L, value.values);
 	lua_pushcclosure(L, value.fn, sizeof...(T));
@@ -163,7 +165,7 @@ Push(lua_State *L, const CClosure<T...> &value)
 
 gcc_nonnull_all
 static inline void
-Push(lua_State *L, LightUserData value)
+Push(lua_State *L, LightUserData value) noexcept
 {
 	lua_pushlightuserdata(L, value.value);
 }
@@ -205,7 +207,7 @@ Push(lua_State *L, _Lambda<T> l)
 
 template<typename V>
 void
-SetGlobal(lua_State *L, const char *name, V &&value)
+SetGlobal(lua_State *L, const char *name, V &&value) noexcept
 {
 	Push(L, std::forward<V>(value));
 	lua_setglobal(L, name);
@@ -213,7 +215,7 @@ SetGlobal(lua_State *L, const char *name, V &&value)
 
 template<typename K>
 void
-GetTable(lua_State *L, int idx, K &&key)
+GetTable(lua_State *L, int idx, K &&key) noexcept
 {
 	const ScopeCheckStack check_stack(L, 1);
 
@@ -223,7 +225,7 @@ GetTable(lua_State *L, int idx, K &&key)
 
 template<typename K, typename V>
 void
-SetTable(lua_State *L, int idx, K &&key, V &&value)
+SetTable(lua_State *L, int idx, K &&key, V &&value) noexcept
 {
 	const ScopeCheckStack check_stack(L);
 
@@ -234,7 +236,7 @@ SetTable(lua_State *L, int idx, K &&key, V &&value)
 
 template<typename V>
 void
-SetField(lua_State *L, int idx, const char *name, V &&value)
+SetField(lua_State *L, int idx, const char *name, V &&value) noexcept
 {
 	const ScopeCheckStack check_stack(L);
 
@@ -244,13 +246,13 @@ SetField(lua_State *L, int idx, const char *name, V &&value)
 
 template<typename V>
 static inline void
-SetRegistry(lua_State *L, const char *name, V &&value)
+SetRegistry(lua_State *L, const char *name, V &&value) noexcept
 {
 	SetField(L, LUA_REGISTRYINDEX, name, std::forward<V>(value));
 }
 
 static inline void *
-GetRegistryLightUserData(lua_State *L, const char *name)
+GetRegistryLightUserData(lua_State *L, const char *name) noexcept
 {
 	const ScopeCheckStack check_stack(L);
 
@@ -262,7 +264,8 @@ GetRegistryLightUserData(lua_State *L, const char *name)
 
 template<typename V>
 static inline void
-SetField(lua_State *L, const char *package, const char *name, V &&value)
+SetField(lua_State *L, const char *package,
+	 const char *name, V &&value) noexcept
 {
 	const ScopeCheckStack check_stack(L);
 
@@ -277,7 +280,8 @@ SetField(lua_State *L, const char *package, const char *name, V &&value)
  */
 gcc_nonnull_all
 static inline void
-SetPackagePath(lua_State *L, const char *path) {
+SetPackagePath(lua_State *L, const char *path) noexcept
+{
 	SetField(L, "package", "path", path);
 }
 
