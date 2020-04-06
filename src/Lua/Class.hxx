@@ -47,9 +47,9 @@ namespace Lua {
  */
 template<typename T, const char *name>
 struct Class {
-	typedef T value_type;
-	typedef T *pointer;
-	typedef T &reference;
+	using value_type = T;
+	using pointer = T *;
+	using reference = T &;
 
 	/**
 	 * Register the Lua metatable and leave it on the stack.  This

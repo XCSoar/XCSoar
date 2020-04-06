@@ -47,7 +47,7 @@ class LuaInputEvent;
 
 template<typename T>
 class LuaEventRegistry {
-  typedef std::multimap<T, LuaInputEvent*> Map;
+  using Map = std::multimap<T, LuaInputEvent*>;
   Map data;
 
 public:

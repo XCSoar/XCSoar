@@ -34,7 +34,7 @@ struct StateDeleter {
   void operator()(lua_State *state) const;
 };
 
-typedef std::unique_ptr<lua_State, StateDeleter> StatePtr;
+using StatePtr = std::unique_ptr<lua_State, StateDeleter>;
 
 }
 

@@ -105,7 +105,7 @@ static constexpr struct luaL_Reg timer_methods[] = {
 };
 
 static constexpr char lua_timer_class[] = "xcsoar.timer";
-typedef Lua::Class<LuaTimer, lua_timer_class> LuaTimerClass;
+using LuaTimerClass = Lua::Class<LuaTimer, lua_timer_class>;
 
 static constexpr auto
 LuaToSteadyDuration(lua_Number n) noexcept
