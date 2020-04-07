@@ -39,59 +39,59 @@
  */
 template<typename IT, typename VT=std::remove_pointer<typename IT::value_type>>
 class DereferenceIterator {
-  typedef std::iterator_traits<IT> Traits;
+	typedef std::iterator_traits<IT> Traits;
 
-  IT original;
+	IT original;
 
 public:
-  typedef typename Traits::iterator_category iterator_category;
-  typedef typename Traits::difference_type difference_type;
-  typedef VT value_type;
-  typedef VT *pointer;
-  typedef VT &reference;
+	typedef typename Traits::iterator_category iterator_category;
+	typedef typename Traits::difference_type difference_type;
+	typedef VT value_type;
+	typedef VT *pointer;
+	typedef VT &reference;
 
-  DereferenceIterator() = default;
+	DereferenceIterator() = default;
 
-  constexpr
-  DereferenceIterator(const IT _original):original(_original) {}
+	constexpr
+	DereferenceIterator(const IT _original):original(_original) {}
 
-  reference operator*() const {
-    return static_cast<reference>(**original);
-  }
+	reference operator*() const {
+		return static_cast<reference>(**original);
+	}
 
-  pointer operator->() const {
-    return static_cast<reference>(*original.IT::operator->());
-  }
+	pointer operator->() const {
+		return static_cast<reference>(*original.IT::operator->());
+	}
 
-  DereferenceIterator<IT,VT> &operator++() {
-    original = ++original;
-    return *this;
-  }
+	DereferenceIterator<IT,VT> &operator++() {
+		original = ++original;
+		return *this;
+	}
 
-  DereferenceIterator<IT,VT> operator++(int) {
-    DereferenceIterator<IT,VT> old = *this;
-    original++;
-    return old;
-  }
+	DereferenceIterator<IT,VT> operator++(int) {
+		DereferenceIterator<IT,VT> old = *this;
+		original++;
+		return old;
+	}
 
-  DereferenceIterator<IT,VT> &operator--() {
-    original = --original;
-    return *this;
-  }
+	DereferenceIterator<IT,VT> &operator--() {
+		original = --original;
+		return *this;
+	}
 
-  DereferenceIterator<IT,VT> operator--(int) {
-    DereferenceIterator<IT,VT> old = *this;
-    original--;
-    return old;
-  }
+	DereferenceIterator<IT,VT> operator--(int) {
+		DereferenceIterator<IT,VT> old = *this;
+		original--;
+		return old;
+	}
 
-  bool operator==(const DereferenceIterator<IT,VT> &other) const {
-    return original == other.original;
-  }
+	bool operator==(const DereferenceIterator<IT,VT> &other) const {
+		return original == other.original;
+	}
 
-  bool operator!=(const DereferenceIterator<IT,VT> &other) const {
-    return original != other.original;
-  }
+	bool operator!=(const DereferenceIterator<IT,VT> &other) const {
+		return original != other.original;
+	}
 };
 
 /**
@@ -100,45 +100,45 @@ public:
  */
 template<typename CT, typename VT=std::remove_pointer<typename CT::value_type>>
 class DereferenceContainerAdapter {
-  CT &original;
+	CT &original;
 
 public:
-  typedef VT value_type;
-  typedef VT *pointer;
-  typedef VT &reference;
+	typedef VT value_type;
+	typedef VT *pointer;
+	typedef VT &reference;
 
-  typedef DereferenceIterator<typename CT::iterator, VT> iterator;
-  typedef DereferenceIterator<typename CT::const_iterator, const VT> const_iterator;
+	typedef DereferenceIterator<typename CT::iterator, VT> iterator;
+	typedef DereferenceIterator<typename CT::const_iterator, const VT> const_iterator;
 
-  DereferenceContainerAdapter(CT &_original):original(_original) {}
-
-#if 0
-  iterator begin() {
-    return original.begin();
-  }
-#endif
-
-  const_iterator begin() const {
-    return original.begin();
-  }
-
-  const_iterator cbegin() const {
-    return original.begin();
-  }
+	DereferenceContainerAdapter(CT &_original):original(_original) {}
 
 #if 0
-  iterator end() {
-    return original.end();
-  }
+	iterator begin() {
+		return original.begin();
+	}
 #endif
 
-  const_iterator end() const {
-    return original.end();
-  }
+	const_iterator begin() const {
+		return original.begin();
+	}
 
-  const_iterator cend() const {
-    return original.end();
-  }
+	const_iterator cbegin() const {
+		return original.begin();
+	}
+
+#if 0
+	iterator end() {
+		return original.end();
+	}
+#endif
+
+	const_iterator end() const {
+		return original.end();
+	}
+
+	const_iterator cend() const {
+		return original.end();
+	}
 };
 
 #endif
