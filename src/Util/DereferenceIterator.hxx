@@ -39,16 +39,16 @@
  */
 template<typename IT, typename VT=std::remove_pointer<typename IT::value_type>>
 class DereferenceIterator {
-	typedef std::iterator_traits<IT> Traits;
+	using Traits = std::iterator_traits<IT>;
 
 	IT original;
 
 public:
-	typedef typename Traits::iterator_category iterator_category;
-	typedef typename Traits::difference_type difference_type;
-	typedef VT value_type;
-	typedef VT *pointer;
-	typedef VT &reference;
+	using iterator_category = typename Traits::iterator_category;
+	using difference_type = typename Traits::difference_type;
+	using value_type = VT;
+	using pointer = VT *;
+	using reference = VT &;
 
 	DereferenceIterator() = default;
 
@@ -103,12 +103,12 @@ class DereferenceContainerAdapter {
 	CT &original;
 
 public:
-	typedef VT value_type;
-	typedef VT *pointer;
-	typedef VT &reference;
+	using value_type = VT;
+	using pointer = VT *;
+	using reference = VT &;
 
-	typedef DereferenceIterator<typename CT::iterator, VT> iterator;
-	typedef DereferenceIterator<typename CT::const_iterator, const VT> const_iterator;
+	using iterator = DereferenceIterator<typename CT::iterator, VT>;
+	using const_iterator = DereferenceIterator<typename CT::const_iterator, const VT>;
 
 	DereferenceContainerAdapter(CT &_original):original(_original) {}
 
