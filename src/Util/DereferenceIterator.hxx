@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2012-2020 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DEREFERENCE_ITERATOR_HPP
-#define DEREFERENCE_ITERATOR_HPP
+#ifndef DEREFERENCE_ITERATOR_HXX
+#define DEREFERENCE_ITERATOR_HXX
 
 #include <iterator>
 #include <type_traits>
