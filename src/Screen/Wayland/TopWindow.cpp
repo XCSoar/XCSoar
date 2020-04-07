@@ -28,19 +28,19 @@ Copyright_License {
 
 static void
 handle_ping(void *data, struct wl_shell_surface *shell_surface,
-            uint32_t serial)
+            uint32_t serial) noexcept
 {
   wl_shell_surface_pong(shell_surface, serial);
 }
 
 static void
 handle_configure(void *data, struct wl_shell_surface *shell_surface,
-                 uint32_t edges, int32_t width, int32_t height)
+                 uint32_t edges, int32_t width, int32_t height) noexcept
 {
 }
 
 static void
-handle_popup_done(void *data, struct wl_shell_surface *shell_surface)
+handle_popup_done(void *data, struct wl_shell_surface *shell_surface) noexcept
 {
 }
 
@@ -52,7 +52,7 @@ static constexpr struct wl_shell_surface_listener shell_surface_listener = {
 
 void
 TopWindow::CreateNative(const TCHAR *text, PixelSize size,
-                        TopWindowStyle style)
+                        TopWindowStyle style) noexcept
 {
   auto display = event_queue->GetDisplay();
   auto compositor = event_queue->GetCompositor();
@@ -81,19 +81,19 @@ TopWindow::CreateNative(const TCHAR *text, PixelSize size,
 }
 
 bool
-TopWindow::IsVisible() const
+TopWindow::IsVisible() const noexcept
 {
   return event_queue->IsVisible();
 }
 
 void
-TopWindow::EnableCapture()
+TopWindow::EnableCapture() noexcept
 {
   // TODO: implement
 }
 
 void
-TopWindow::DisableCapture()
+TopWindow::DisableCapture() noexcept
 {
   // TODO: implement
 }
