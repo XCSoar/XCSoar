@@ -52,44 +52,44 @@ public:
 
 	DereferenceIterator() = default;
 
-	constexpr
-	DereferenceIterator(const IT _original):original(_original) {}
+	constexpr DereferenceIterator(const IT _original) noexcept
+		:original(_original) {}
 
-	reference operator*() const {
+	reference operator*() const noexcept {
 		return static_cast<reference>(**original);
 	}
 
-	pointer operator->() const {
+	pointer operator->() const noexcept {
 		return static_cast<reference>(*original.IT::operator->());
 	}
 
-	auto &operator++() {
+	auto &operator++() noexcept {
 		original = ++original;
 		return *this;
 	}
 
-	auto operator++(int) {
+	auto operator++(int) noexcept {
 		DereferenceIterator<IT,VT> old = *this;
 		original++;
 		return old;
 	}
 
-	auto &operator--() {
+	auto &operator--() noexcept {
 		original = --original;
 		return *this;
 	}
 
-	auto operator--(int) {
+	auto operator--(int) noexcept {
 		DereferenceIterator<IT,VT> old = *this;
 		original--;
 		return old;
 	}
 
-	bool operator==(const DereferenceIterator<IT,VT> &other) const {
+	bool operator==(const DereferenceIterator<IT,VT> &other) const noexcept {
 		return original == other.original;
 	}
 
-	bool operator!=(const DereferenceIterator<IT,VT> &other) const {
+	bool operator!=(const DereferenceIterator<IT,VT> &other) const noexcept {
 		return original != other.original;
 	}
 };
@@ -110,33 +110,34 @@ public:
 	using iterator = DereferenceIterator<typename CT::iterator, VT>;
 	using const_iterator = DereferenceIterator<typename CT::const_iterator, const VT>;
 
-	DereferenceContainerAdapter(CT &_original):original(_original) {}
+	DereferenceContainerAdapter(CT &_original) noexcept
+		:original(_original) {}
 
 #if 0
-	iterator begin() {
+	iterator begin() noexcept {
 		return original.begin();
 	}
 #endif
 
-	const_iterator begin() const {
+	const_iterator begin() const noexcept {
 		return original.begin();
 	}
 
-	const_iterator cbegin() const {
+	const_iterator cbegin() const noexcept {
 		return original.begin();
 	}
 
 #if 0
-	iterator end() {
+	iterator end() noexcept {
 		return original.end();
 	}
 #endif
 
-	const_iterator end() const {
+	const_iterator end() const noexcept {
 		return original.end();
 	}
 
-	const_iterator cend() const {
+	const_iterator cend() const noexcept {
 		return original.end();
 	}
 };
