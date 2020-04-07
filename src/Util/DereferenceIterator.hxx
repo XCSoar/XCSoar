@@ -69,7 +69,7 @@ public:
 	}
 
 	auto operator++(int) noexcept {
-		DereferenceIterator<IT,VT> old = *this;
+		auto old = *this;
 		original++;
 		return old;
 	}
@@ -80,7 +80,7 @@ public:
 	}
 
 	auto operator--(int) noexcept {
-		DereferenceIterator<IT,VT> old = *this;
+		auto old = *this;
 		original--;
 		return old;
 	}
