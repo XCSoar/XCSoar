@@ -32,13 +32,13 @@ Copyright_License {
  * Is this a leading byte that is followed by 1 continuation byte?
  */
 static constexpr bool
-IsLeading1(unsigned char ch)
+IsLeading1(unsigned char ch) noexcept
 {
   return (ch & 0xe0) == 0xc0;
 }
 
 static constexpr unsigned char
-MakeLeading1(unsigned char value)
+MakeLeading1(unsigned char value) noexcept
 {
   return 0xc0 | value;
 }
@@ -47,13 +47,13 @@ MakeLeading1(unsigned char value)
  * Is this a leading byte that is followed by 2 continuation byte?
  */
 static constexpr bool
-IsLeading2(unsigned char ch)
+IsLeading2(unsigned char ch) noexcept
 {
   return (ch & 0xf0) == 0xe0;
 }
 
 static constexpr unsigned char
-MakeLeading2(unsigned char value)
+MakeLeading2(unsigned char value) noexcept
 {
   return 0xe0 | value;
 }
@@ -62,13 +62,13 @@ MakeLeading2(unsigned char value)
  * Is this a leading byte that is followed by 3 continuation byte?
  */
 static constexpr bool
-IsLeading3(unsigned char ch)
+IsLeading3(unsigned char ch) noexcept
 {
   return (ch & 0xf8) == 0xf0;
 }
 
 static constexpr unsigned char
-MakeLeading3(unsigned char value)
+MakeLeading3(unsigned char value) noexcept
 {
   return 0xf0 | value;
 }
@@ -77,13 +77,13 @@ MakeLeading3(unsigned char value)
  * Is this a leading byte that is followed by 4 continuation byte?
  */
 static constexpr bool
-IsLeading4(unsigned char ch)
+IsLeading4(unsigned char ch) noexcept
 {
   return (ch & 0xfc) == 0xf8;
 }
 
 static constexpr unsigned char
-MakeLeading4(unsigned char value)
+MakeLeading4(unsigned char value) noexcept
 {
   return 0xf8 | value;
 }
@@ -92,19 +92,19 @@ MakeLeading4(unsigned char value)
  * Is this a leading byte that is followed by 5 continuation byte?
  */
 static constexpr bool
-IsLeading5(unsigned char ch)
+IsLeading5(unsigned char ch) noexcept
 {
   return (ch & 0xfe) == 0xfc;
 }
 
 static constexpr unsigned char
-MakeLeading5(unsigned char value)
+MakeLeading5(unsigned char value) noexcept
 {
   return 0xfc | value;
 }
 
 static constexpr bool
-IsContinuation(unsigned char ch)
+IsContinuation(unsigned char ch) noexcept
 {
   return (ch & 0xc0) == 0x80;
 }
@@ -113,13 +113,13 @@ IsContinuation(unsigned char ch)
  * Generate a continuation byte of the low 6 bit.
  */
 static constexpr unsigned char
-MakeContinuation(unsigned char value)
+MakeContinuation(unsigned char value) noexcept
 {
   return 0x80 | (value & 0x3f);
 }
 
 bool
-ValidateUTF8(const char *p)
+ValidateUTF8(const char *p) noexcept
 {
   for (; *p != 0; ++p) {
     unsigned char ch = *p;
@@ -162,7 +162,7 @@ ValidateUTF8(const char *p)
 }
 
 size_t
-SequenceLengthUTF8(char ch)
+SequenceLengthUTF8(char ch) noexcept
 {
   if (IsASCII(ch))
     return 1;
@@ -190,14 +190,14 @@ SequenceLengthUTF8(char ch)
 template<size_t L>
 struct CheckSequenceUTF8 {
   gcc_pure
-  bool operator()(const char *p) const {
+  bool operator()(const char *p) const noexcept {
     return IsContinuation(*p) && CheckSequenceUTF8<L-1>()(p + 1);
   }
 };
 
 template<>
 struct CheckSequenceUTF8<0u> {
-  constexpr bool operator()(gcc_unused const char *p) const {
+  constexpr bool operator()(gcc_unused const char *p) const noexcept {
     return true;
   }
 };
@@ -205,7 +205,7 @@ struct CheckSequenceUTF8<0u> {
 template<size_t L>
 gcc_pure
 static size_t
-InnerSequenceLengthUTF8(const char *p)
+InnerSequenceLengthUTF8(const char *p) noexcept
 {
   return CheckSequenceUTF8<L>()(p)
     ? L + 1
@@ -213,7 +213,7 @@ InnerSequenceLengthUTF8(const char *p)
 }
 
 size_t
-SequenceLengthUTF8(const char *p)
+SequenceLengthUTF8(const char *p) noexcept
 {
   const unsigned char ch = *p++;
 
@@ -241,7 +241,7 @@ SequenceLengthUTF8(const char *p)
 }
 
 static const char *
-FindNonASCIIOrZero(const char *p)
+FindNonASCIIOrZero(const char *p) noexcept
 {
   while (*p != 0 && IsASCII(*p))
     ++p;
@@ -249,7 +249,7 @@ FindNonASCIIOrZero(const char *p)
 }
 
 char *
-Latin1ToUTF8(unsigned char ch, char *buffer)
+Latin1ToUTF8(unsigned char ch, char *buffer) noexcept
 {
   if (IsASCII(ch)) {
     *buffer++ = ch;
@@ -263,7 +263,7 @@ Latin1ToUTF8(unsigned char ch, char *buffer)
 
 const char *
 Latin1ToUTF8(const char *gcc_restrict src, char *gcc_restrict buffer,
-             size_t buffer_size)
+             size_t buffer_size) noexcept
 {
   const char *p = FindNonASCIIOrZero(src);
   if (*p == 0)
@@ -301,7 +301,7 @@ Latin1ToUTF8(const char *gcc_restrict src, char *gcc_restrict buffer,
 }
 
 char *
-UnicodeToUTF8(unsigned ch, char *q)
+UnicodeToUTF8(unsigned ch, char *q) noexcept
 {
   if (gcc_likely(ch < 0x80)) {
     *q++ = (char)ch;
@@ -338,7 +338,7 @@ UnicodeToUTF8(unsigned ch, char *q)
 }
 
 size_t
-LengthUTF8(const char *p)
+LengthUTF8(const char *p) noexcept
 {
   /* this is a very naive implementation: it does not do any
      verification, it just counts the bytes that are not a UTF-8
@@ -356,7 +356,7 @@ LengthUTF8(const char *p)
  */
 gcc_pure
 static char *
-FindTerminator(char *p)
+FindTerminator(char *p) noexcept
 {
   assert(p != nullptr);
 
@@ -371,7 +371,7 @@ FindTerminator(char *p)
  */
 gcc_pure
 static char *
-FindLeading(gcc_unused char *const begin, char *i)
+FindLeading(gcc_unused char *const begin, char *i) noexcept
 {
   assert(i > begin);
   assert(IsContinuation(*i));
@@ -384,7 +384,7 @@ FindLeading(gcc_unused char *const begin, char *i)
 }
 
 char *
-CropIncompleteUTF8(char *const p)
+CropIncompleteUTF8(char *const p) noexcept
 {
   char *const end = FindTerminator(p);
   if (end == p)
@@ -441,7 +441,7 @@ CropIncompleteUTF8(char *const p)
 }
 
 size_t
-TruncateStringUTF8(const char *p, size_t max_chars, size_t max_bytes)
+TruncateStringUTF8(const char *p, size_t max_chars, size_t max_bytes) noexcept
 {
 #if !CLANG_CHECK_VERSION(3,6)
   /* disabled on clang due to -Wtautological-pointer-compare */
@@ -466,7 +466,7 @@ TruncateStringUTF8(const char *p, size_t max_chars, size_t max_bytes)
 
 char *
 CopyTruncateStringUTF8(char *dest, size_t dest_size,
-                       const char *src, size_t truncate)
+                       const char *src, size_t truncate) noexcept
 {
   assert(dest != nullptr);
   assert(dest_size > 0);
@@ -480,7 +480,7 @@ CopyTruncateStringUTF8(char *dest, size_t dest_size,
 }
 
 std::pair<unsigned, const char *>
-NextUTF8(const char *p)
+NextUTF8(const char *p) noexcept
 {
   unsigned char a = *p++;
   if (a == 0)

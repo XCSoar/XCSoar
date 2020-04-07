@@ -35,7 +35,7 @@ Copyright_License {
  */
 gcc_pure  gcc_nonnull_all
 bool
-ValidateUTF8(const char *p);
+ValidateUTF8(const char *p) noexcept;
 
 /**
  * @return the number of the sequence beginning with the given
@@ -43,7 +43,7 @@ ValidateUTF8(const char *p);
  */
 gcc_const
 size_t
-SequenceLengthUTF8(char ch);
+SequenceLengthUTF8(char ch) noexcept;
 
 /**
  * @return the number of the first sequence in the given string, or 0
@@ -51,7 +51,7 @@ SequenceLengthUTF8(char ch);
  */
 gcc_pure
 size_t
-SequenceLengthUTF8(const char *p);
+SequenceLengthUTF8(const char *p) noexcept;
 
 /**
  * Convert the specified string from ISO-8859-1 to UTF-8.
@@ -62,7 +62,7 @@ SequenceLengthUTF8(const char *p);
  */
 gcc_pure  gcc_nonnull_all
 const char *
-Latin1ToUTF8(const char *src, char *buffer, size_t buffer_size);
+Latin1ToUTF8(const char *src, char *buffer, size_t buffer_size) noexcept;
 
 /**
  * Convert the specified character from ISO-8859-1 to UTF-8 and write
@@ -72,7 +72,7 @@ Latin1ToUTF8(const char *src, char *buffer, size_t buffer_size);
  */
 gcc_nonnull_all
 char *
-Latin1ToUTF8(unsigned char ch, char *buffer);
+Latin1ToUTF8(unsigned char ch, char *buffer) noexcept;
 
 /**
  * Convert the specified Unicode character to UTF-8 and write it to
@@ -82,7 +82,7 @@ Latin1ToUTF8(unsigned char ch, char *buffer);
  */
 gcc_nonnull_all
 char *
-UnicodeToUTF8(unsigned ch, char *buffer);
+UnicodeToUTF8(unsigned ch, char *buffer) noexcept;
 
 /**
  * Returns the number of characters in the string.  This is different
@@ -90,7 +90,7 @@ UnicodeToUTF8(unsigned ch, char *buffer);
  */
 gcc_pure gcc_nonnull_all
 size_t
-LengthUTF8(const char *p);
+LengthUTF8(const char *p) noexcept;
 
 /**
  * Check if the string ends with an incomplete UTF-8 multi-byte
@@ -106,7 +106,7 @@ LengthUTF8(const char *p);
  */
 gcc_nonnull_all
 char *
-CropIncompleteUTF8(char *p);
+CropIncompleteUTF8(char *p) noexcept;
 
 /**
  * Return the number of bytes representing the first #max_chars
@@ -116,7 +116,7 @@ CropIncompleteUTF8(char *p);
  */
 gcc_pure gcc_nonnull_all
 size_t
-TruncateStringUTF8(const char *p, size_t max_chars, size_t max_bytes);
+TruncateStringUTF8(const char *p, size_t max_chars, size_t max_bytes) noexcept;
 
 /**
  * Copy a string to a buffer, truncating it if the buffer is not large
@@ -131,7 +131,7 @@ TruncateStringUTF8(const char *p, size_t max_chars, size_t max_bytes);
  */
 char *
 CopyTruncateStringUTF8(char *dest, size_t dest_size,
-                       const char *src, size_t truncate);
+                       const char *src, size_t truncate) noexcept;
 
 /**
  * Decode the next UNICODE character.
@@ -143,6 +143,6 @@ CopyTruncateStringUTF8(char *dest, size_t dest_size,
  */
 gcc_pure gcc_nonnull_all
 std::pair<unsigned, const char *>
-NextUTF8(const char *p);
+NextUTF8(const char *p) noexcept;
 
 #endif
