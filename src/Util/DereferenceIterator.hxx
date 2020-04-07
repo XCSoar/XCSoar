@@ -63,23 +63,23 @@ public:
 		return static_cast<reference>(*original.IT::operator->());
 	}
 
-	DereferenceIterator<IT,VT> &operator++() {
+	auto &operator++() {
 		original = ++original;
 		return *this;
 	}
 
-	DereferenceIterator<IT,VT> operator++(int) {
+	auto operator++(int) {
 		DereferenceIterator<IT,VT> old = *this;
 		original++;
 		return old;
 	}
 
-	DereferenceIterator<IT,VT> &operator--() {
+	auto &operator--() {
 		original = --original;
 		return *this;
 	}
 
-	DereferenceIterator<IT,VT> operator--(int) {
+	auto operator--(int) {
 		DereferenceIterator<IT,VT> old = *this;
 		original--;
 		return old;
