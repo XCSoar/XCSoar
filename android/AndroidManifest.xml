@@ -41,6 +41,9 @@
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
   <uses-permission android:name="android.permission.VIBRATE"/>
 
+  <!-- required since Android 9 / targetSdkVersion 28 -->
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
   <!-- Disable implicit requirements -->
   <uses-feature android:name="android.hardware.bluetooth" android:required="false"/>
   <uses-feature android:name="android.hardware.bluetooth_le" android:required="false"/>
