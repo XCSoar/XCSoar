@@ -75,6 +75,15 @@ public:
 		return old;
 	}
 
+	auto &operator+=(difference_type n) noexcept {
+		original += n;
+		return *this;
+	}
+
+	auto &operator+(difference_type n) noexcept {
+		return original + n;
+	}
+
 	auto &operator--() noexcept {
 		original = --original;
 		return *this;
@@ -84,6 +93,15 @@ public:
 		auto old = *this;
 		original--;
 		return old;
+	}
+
+	auto &operator-=(difference_type n) noexcept {
+		original -= n;
+		return *this;
+	}
+
+	auto &operator-(difference_type n) noexcept {
+		return original - n;
 	}
 
 	bool operator==(const DereferenceIterator<IT,VT> &other) const noexcept {
