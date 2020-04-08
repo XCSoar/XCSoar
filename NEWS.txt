@@ -68,7 +68,7 @@ Version 7.0 - not yet released
 * Raspberry Pi
   - resizable mouse cursor
 
-Version 6.8.13 - not yet released
+Version 6.8.13 - 2020/04/08
 * devices
   - LX: fix buffer overflow
   - LX: support downloading flights from LX7000 Pro IGC
