@@ -37,7 +37,8 @@
  * An iterator wrapper that dereferences the values returned by the
  * original iterator.
  */
-template<typename IT, typename VT=std::remove_pointer<typename IT::value_type>>
+template<typename IT,
+	 typename VT=typename std::remove_pointer<typename IT::value_type>::type>
 class DereferenceIterator {
 	using Traits = std::iterator_traits<IT>;
 
