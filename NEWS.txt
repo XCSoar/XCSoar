@@ -68,6 +68,10 @@ Version 7.0 - not yet released
 * Raspberry Pi
   - resizable mouse cursor
 
+Version 6.8.14 - not yet released
+* Android
+  - compatibility with Android 9
+
 Version 6.8.13 - 2020/04/08
 * devices
   - LX: fix buffer overflow
