@@ -124,6 +124,9 @@ struct InfoBoxSettings {
 
   } geometry;
 
+  /* scales the font for InfoBox titles and comments between 80% and 150% */
+  unsigned scale_title_font;
+
   bool inverse, use_colors;
 
   enum class BorderStyle : uint8_t {

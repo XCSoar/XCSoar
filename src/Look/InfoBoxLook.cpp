@@ -26,6 +26,8 @@ Copyright_License {
 #include "Colors.hpp"
 #include "Screen/Layout.hpp"
 #include "AutoFont.hpp"
+#include "Interface.hpp"
+#include "Util/Clamp.hpp"
 
 #ifdef HAVE_TEXT_CACHE
 #include "Screen/Custom/Cache.hpp"
@@ -75,8 +77,11 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
 void
 InfoBoxLook::ReinitialiseLayout(unsigned width)
 {
+  const UISettings &ui_settings = CommonInterface::GetUISettings();
+
   FontDescription title_font_d(8);
-  AutoSizeFont(title_font_d, width, _T("123456789012345"));
+  unsigned scaled_width = width * Clamp((int)ui_settings.info_boxes.scale_title_font,50,150) / 100;
+  AutoSizeFont(title_font_d, scaled_width, _T("123456789012345"));
   title_font.Load(title_font_d);
 
   FontDescription value_font_d(10, true);
