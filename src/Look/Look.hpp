@@ -74,7 +74,7 @@ struct Look {
                             const Font &map_font, const Font &map_bold_font,
                             unsigned infobox_width);
 
-  void ReinitialiseLayout(unsigned infobox_width);
+  void ReinitialiseLayout(unsigned infobox_width, unsigned scale_title_font);
 };
 
 #endif

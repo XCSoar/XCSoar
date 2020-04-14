@@ -341,7 +341,7 @@ MainWindow::ReinitialiseLayout()
   const InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
 
-  look->ReinitialiseLayout(ib_layout.control_size.cx);
+  look->ReinitialiseLayout(ib_layout.control_size.cx, ui_settings.info_boxes.scale_title_font);
 
   InfoBoxManager::Create(*this, ib_layout, look->info_box);
   InfoBoxManager::ProcessTimer();

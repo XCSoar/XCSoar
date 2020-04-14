@@ -43,7 +43,7 @@ Copyright_License {
 
 void
 InfoBoxLook::Initialise(bool _inverse, bool use_colors,
-                        unsigned width)
+                        unsigned width, unsigned scale_title_font)
 {
   inverse = _inverse;
 
@@ -59,7 +59,7 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
   Color border_color = Color(128, 128, 128);
   border_pen.Create(BORDER_WIDTH, border_color);
 
-  ReinitialiseLayout(width);
+  ReinitialiseLayout(width, scale_title_font);
 
   unit_fraction_pen.Create(1, value.fg_color);
 
@@ -75,12 +75,10 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
 }
 
 void
-InfoBoxLook::ReinitialiseLayout(unsigned width)
+InfoBoxLook::ReinitialiseLayout(unsigned width, unsigned scale_title_font)
 {
-  const UISettings &ui_settings = CommonInterface::GetUISettings();
-
   FontDescription title_font_d(8);
-  unsigned scaled_width = width * Clamp((int)ui_settings.info_boxes.scale_title_font,50,150) / 100;
+  unsigned scaled_width = width * Clamp((int)scale_title_font,50,150) / 100;
   AutoSizeFont(title_font_d, scaled_width, _T("123456789012345"));
   title_font.Load(title_font_d);
 
