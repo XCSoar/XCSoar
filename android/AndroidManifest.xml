@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.xcsoar"
           android:installLocation="auto"
-          android:versionCode="114"
-          android:versionName="6.8.13">
+          android:versionCode="115"
+          android:versionName="6.8.13b">
   <application android:icon="@drawable/icon" android:label="@string/app_name">
     <activity android:name=".XCSoar"
               android:label="@string/app_name"
@@ -31,7 +31,7 @@
     <service android:name=".MyService"/>
   </application>
 
-  <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="26"/>
+  <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="28"/>
   <uses-permission android:name="android.permission.BLUETOOTH"></uses-permission>
   <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"></uses-permission>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
@@ -40,6 +40,9 @@
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
   <uses-permission android:name="android.permission.VIBRATE"/>
+
+  <!-- required since Android 9 / targetSdkVersion 28 -->
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
   <!-- Disable implicit requirements -->
   <uses-feature android:name="android.hardware.bluetooth" android:required="false"/>
