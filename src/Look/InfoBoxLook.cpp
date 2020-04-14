@@ -78,7 +78,7 @@ void
 InfoBoxLook::ReinitialiseLayout(unsigned width, unsigned scale_title_font)
 {
   FontDescription title_font_d(8);
-  unsigned scaled_width = width * Clamp((int)scale_title_font,50,150) / 100;
+  unsigned scaled_width = (width * Clamp((int)scale_title_font,50,150)) / 100;
   AutoSizeFont(title_font_d, scaled_width, _T("123456789012345"));
   title_font.Load(title_font_d);
 

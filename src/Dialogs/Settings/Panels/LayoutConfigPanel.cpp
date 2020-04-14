@@ -187,10 +187,7 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           _("A list of possible InfoBox layouts. Do some trials to find the best for your screen size."),
           info_box_geometry_list, (unsigned)ui_settings.info_boxes.geometry);
 
-  AddInteger(_("InfoBox title size"),
-             _("An InfoBox has 3 lines: the value in the middle, "
-               "the title in the top line and the comment in the bottom line. "
-               "This parameter scales title and comment."),
+  AddInteger(_("InfoBox title size"), nullptr,
              _T("%d %%"), _T("%d"), 80, 150, 5,
              ui_settings.info_boxes.scale_title_font);
   SetExpertRow(InfoBoxTitleScale);
