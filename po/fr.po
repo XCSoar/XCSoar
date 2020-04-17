@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-04-17 02:52+0000\n"
-"Last-Translator: Patrick PIPART <p.pipart@gmail.com>\n"
+"PO-Revision-Date: 2020-04-17 02:53+0000\n"
+"Last-Translator: Jeannette L <j.lavoie@net-c.ca>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
 "Language: fr\n"
@@ -3025,7 +3025,7 @@ msgstr "Heure d'arrivée au prochain point de virage (vitesse sol)"
 #: src/InfoBoxes/Content/Factory.cpp:1040
 #, no-c-format
 msgid "WP ETA VMG"
-msgstr "WP ETA Vsol"
+msgstr "WP ETA VMG"
 
 #: src/InfoBoxes/Content/Factory.cpp:1041
 #, no-c-format
