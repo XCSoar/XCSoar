@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
 "PO-Revision-Date: 2020-04-18 03:11+0000\n"
-"Last-Translator: Jeannette L <j.lavoie@net-c.ca>\n"
+"Last-Translator: Cloud Esp <Frederic.Darboux@inra.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
 "Language: fr\n"
@@ -7427,9 +7427,9 @@ msgid "Working line, terrain shade"
 msgstr "Ligne de travail, ombrage du relief"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:171
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Draws a dashed line at working, and shade terrain, glide reaches."
-msgstr "Dessine en pointillés la limite de la zone d'atteinte du planeur"
+msgstr "Dessine en pointillés la limite de la zone d'atteinte du planeur."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:175
 msgid "Reach display"
