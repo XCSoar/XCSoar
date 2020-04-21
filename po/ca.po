@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-03-08 21:33+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2020-04-22 14:11+0000\n"
+"Last-Translator: Jaume Prats <prats.jaume@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ca/>\n"
 "Language: ca\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.0-dev\n"
+"X-Generator: Weblate 4.0.2-dev\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -211,7 +211,7 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:87
 #, no-c-format
 msgid "A cylinder.  Any point within area scored from center."
-msgstr ""
+msgstr "Un cilindre. Qualsevol punt dins de l'àrea des del centre."
 
 #: src/Task/TypeStrings.cpp:88
 #, no-c-format
