@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
 "PO-Revision-Date: 2020-04-22 14:11+0000\n"
-"Last-Translator: Jaume Prats <prats.jaume@gmail.com>\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/xcsoar/"
 "translations/ca/>\n"
 "Language: ca\n"
@@ -217,6 +217,8 @@ msgstr "Un cilindre. Qualsevol punt dins de l'àrea des del centre."
 #, no-c-format
 msgid "A 1 mile cylinder.  Scored by farthest point reached in area."
 msgstr ""
+"Cilindre de 1 milla. Puntuat segons el punt més llunyà al que s'ha arribat "
+"dins de l' àrea"
 
 #: src/Task/TypeStrings.cpp:89
 #, no-c-format
