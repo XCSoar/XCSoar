@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-04-18 03:11+0000\n"
-"Last-Translator: Cloud Esp <Frederic.Darboux@inra.fr>\n"
+"PO-Revision-Date: 2020-04-23 17:11+0000\n"
+"Last-Translator: NEOX <exitneox+weblate@outlook.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
 "Language: fr\n"
@@ -39,7 +39,7 @@ msgstr "Circuit"
 #: src/Task/TypeStrings.cpp:31
 #, no-c-format
 msgid "FAI badges/records"
-msgstr "Insignes/records FAI"
+msgstr "Insignes/Records FAI"
 
 #: src/Task/TypeStrings.cpp:32 src/Dialogs/Task/dlgTaskHelpers.cpp:82
 #, no-c-format
@@ -54,7 +54,7 @@ msgstr "Aller-retour FAI"
 #: src/Task/TypeStrings.cpp:34
 #, no-c-format
 msgid "FAI goal"
-msgstr "but FAI"
+msgstr "But FAI"
 
 #: src/Task/TypeStrings.cpp:35
 #, no-c-format
