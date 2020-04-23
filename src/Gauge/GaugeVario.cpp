@@ -113,7 +113,8 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
     RenderBugs(canvas);
 
   dirty = false;
-  int ival, sval, ival_av = 0;
+  int ival, sval, ival_av, ival_av_all = 0;
+  static int ival_av_last = 0;
   static int vval_last = 0;
   static int sval_last = 0;
   static int ival_last = 0;
@@ -121,6 +122,7 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
   auto vval = Basic().brutto_vario;
   ival = ValueToNeedlePos(vval);
   sval = ValueToNeedlePos(Calculated().sink_rate);
+  ival_av_all = ValueToNeedlePos(((Basic().nav_altitude + Basic().energy_height) - Calculated().climb_start_altitude_te) / (Basic().time - Calculated().climb_start_time));
   if (Settings().show_average_needle) {
     if (!Calculated().circling)
       ival_av = ValueToNeedlePos(Calculated().netto_average);
@@ -142,17 +144,17 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
 
   sval_last = sval;
 
-  if (!IsPersistent() || ival != vval_last)
-    RenderNeedle(canvas, vval_last, false, true);
+  if (!IsPersistent() || ival_av_all != ival_av_last)
+    RenderNeedle(canvas, ival_av_last, false, true);
 
-  vval_last = ival;
+  ival_av_last = ival_av_all;
 
   // now draw items
   RenderVarioLine(canvas, ival, sval, false);
   if (Settings().show_average_needle)
     RenderNeedle(canvas, ival_av, true, false);
 
-  RenderNeedle(canvas, ival, false, false);
+  RenderNeedle(canvas, ival_av_all, false, false);
 
   if (Settings().show_gross) {
     auto vvaldisplay = Clamp(Units::ToUserVSpeed(vval),
