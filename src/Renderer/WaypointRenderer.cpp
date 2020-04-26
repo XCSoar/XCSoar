@@ -225,7 +225,8 @@ protected:
     if (!way_point.IsLandable() && !way_point.flags.watched)
       return;
 
-    if (settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::REQUIRED_GR) {
+    if (settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::REQUIRED_GR ||
+        settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::REQUIRED_GR_AND_TERRAIN) {
       if (!basic.location_available || !basic.NavAltitudeAvailable())
         return;
 
@@ -244,6 +245,15 @@ protected:
       size_t length = _tcslen(buffer);
       if (length > 0)
         buffer[length++] = _T(':');
+
+      if (settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::REQUIRED_GR_AND_TERRAIN &&
+         reach.IsReachableTerrain()) {
+          int uah_terrain = (int)Units::ToUserAltitude(reach.terrain);
+          StringFormatUnsafe(buffer + length, _T("%.1f/%d%s"), (double) gr,
+                            uah_terrain, altitude_unit);
+          return;
+         }
+
       StringFormatUnsafe(buffer + length, _T("%.1f"), (double) gr);
       return;
     }

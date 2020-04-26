@@ -48,6 +48,7 @@ struct WaypointRendererSettings {
     TERRAIN,
     GLIDE_AND_TERRAIN,
     REQUIRED_GR,
+    REQUIRED_GR_AND_TERRAIN,
   } arrival_height_display;
 
   /** What type of waypoint labels to render */
