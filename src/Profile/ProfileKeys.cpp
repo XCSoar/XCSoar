@@ -135,6 +135,7 @@ const char ShowMenuButton[] = "ShowMenuButton";
 const char CursorSize[] = "CursorSize";
 
 const char AppAveNeedle[] = "AppAveNeedle";
+const char AppAveThermalNeedle[] = "AppAveThermalNeedle";
 
 const char AutoAdvance[] = "AutoAdvance";
 const char UTCOffset[] = "UTCOffset";

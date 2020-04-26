@@ -113,7 +113,11 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
     RenderBugs(canvas);
 
   dirty = false;
-  int ival, sval, ival_av, ival_av_all = 0;
+  int ival, sval, ival_av;
+  int ival_av_thermal = 0;
+  if (Settings().show_thermal_average_needle) {
+      ival_av_thermal = ValueToNeedlePos(Calculated().current_thermal.lift_rate);
+  }
   static int ival_av_last = 0;
   static int vval_last = 0;
   static int sval_last = 0;
@@ -122,7 +126,6 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
   auto vval = Basic().brutto_vario;
   ival = ValueToNeedlePos(vval);
   sval = ValueToNeedlePos(Calculated().sink_rate);
-  ival_av_all = ValueToNeedlePos(Calculated().current_thermal.lift_rate);
   if (Settings().show_average_needle) {
     if (!Calculated().circling)
       ival_av = ValueToNeedlePos(Calculated().netto_average);
@@ -143,18 +146,27 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
     RenderVarioLine(canvas, vval_last, sval_last, true);
 
   sval_last = sval;
+  if (Settings().show_thermal_average_needle) {
+      if (!IsPersistent() || ival_av_thermal != ival_av_last)
+          RenderNeedle(canvas, ival_av_last, false, true);
 
-  if (!IsPersistent() || ival_av_all != ival_av_last)
-    RenderNeedle(canvas, ival_av_last, false, true);
+      ival_av_last = ival_av_thermal;
+  } else {
+      if (!IsPersistent() || ival != vval_last)
+        RenderNeedle(canvas, vval_last, false, true);
 
-  ival_av_last = ival_av_all;
+      vval_last = ival;
+  }
 
   // now draw items
   RenderVarioLine(canvas, ival, sval, false);
   if (Settings().show_average_needle)
     RenderNeedle(canvas, ival_av, true, false);
 
-  RenderNeedle(canvas, ival_av_all, false, false);
+  if (Settings().show_thermal_average_needle)
+    RenderNeedle(canvas, ival_av_thermal, false, false);
+  else
+    RenderNeedle(canvas, ival, false, false);
 
   if (Settings().show_gross) {
     auto vvaldisplay = Clamp(Units::ToUserVSpeed(vval),
