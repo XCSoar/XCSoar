@@ -122,7 +122,7 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
   auto vval = Basic().brutto_vario;
   ival = ValueToNeedlePos(vval);
   sval = ValueToNeedlePos(Calculated().sink_rate);
-  ival_av_all = ValueToNeedlePos(((Basic().nav_altitude + Basic().energy_height) - Calculated().climb_start_altitude_te) / (Basic().time - Calculated().climb_start_time));
+  ival_av_all = ValueToNeedlePos(Calculated().current_thermal.lift_rate);
   if (Settings().show_average_needle) {
     if (!Calculated().circling)
       ival_av = ValueToNeedlePos(Calculated().netto_average);
