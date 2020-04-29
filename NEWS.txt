@@ -28,6 +28,7 @@ Version 7.0 - not yet released
   - RASP download from various well-known providers
   - show satellite images from pc_met (Deutscher Wetterdienst)
   - show wave forecast from pc_met (Deutscher Wetterdienst)
+  - WIP: add Skysight integration for Linux build
 * calculations
   - merge redundant waves
   - task restart

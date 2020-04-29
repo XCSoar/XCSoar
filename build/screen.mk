@@ -29,7 +29,8 @@ SCREEN_CUSTOM_SOURCES = \
 	$(SCREEN_SRC_DIR)/Custom/ContainerWindow.cpp \
 	$(SCREEN_SRC_DIR)/Custom/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/Custom/SingleWindow.cpp \
-	$(SCREEN_SRC_DIR)/Custom/MoreCanvas.cpp
+	$(SCREEN_SRC_DIR)/Custom/MoreCanvas.cpp \
+	$(SRC)/Weather/Skysight/CDFDecoder.cpp
 
 ifeq ($(COREGRAPHICS),y)
 SCREEN_CUSTOM_SOURCES_IMG = \

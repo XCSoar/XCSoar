@@ -264,6 +264,12 @@ const char PCMetPassword[] = "PCMetPassword";
 const char PCMetFtpUsername[] = "PCMetFtpUsername";
 const char PCMetFtpPassword[] = "PCMetFtpPassword";
 
+const char SkysightEmail[] = "SkysightEmail";
+const char SkysightPassword[] = "SkysightPassword";
+const char SkysightRegion[] = "SkysightRegion";
+const char SkysightStandbyLayers[] = "SkysightStandbyLayers";
+const char SkysightDisplayedLayer[] = "SkysightDisplayedLayer";
+
 const char EnableLocationMapItem[] = "EnableLocationMapItem";
 const char EnableArrivalAltitudeMapItem[] = "EnableArrivalAltitudeMapItem";
 
