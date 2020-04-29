@@ -104,6 +104,8 @@ elif target == 'ANDROID':
     thirdparty_libs = [
         libsodium,
         openssl,
+        netcdf,
+        netcdfcxx,
         curl,
         lua,
         proj,
