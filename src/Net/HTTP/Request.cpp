@@ -75,11 +75,22 @@ Net::Request::SetRequestBody(const MultiPartFormData &body)
 {
   handle.SetHttpPost(body.Get());
 }
+void
+Net::Request::SetNoFailOnError()
+{
+  handle.SetFailOnError(false);
+}
 
 void
 Net::Request::SetVerifyPeer(bool value)
 {
   handle.SetVerifyPeer(value);
+}
+
+void
+Net::Request::SetRequestBody(const char *body, size_t size)
+{
+  handle.SetRequestBody(body, size);
 }
 
 size_t
