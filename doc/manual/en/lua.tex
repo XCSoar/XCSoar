@@ -116,25 +116,25 @@ contains the following names:
   \verb|VERSION| & The \xc\ version number, for example
   ``\texttt{7.0}''. \\
   \hline
-  \verb|blackboard| & Access to sensor data. \\
+  \verb|blackboard| & Access to sensor data. (\ref{sec:lua.blackboard}) \\
   \hline
-  \verb|map| & The map view. \\
+  \verb|map| & The map view. (\ref{sec:lua.map}) \\
   \hline
-  \verb|airspace| & Access to airspace data. \\
+  \verb|airspace| & Access to airspace data. (\ref{sec:lua.airspace}) \\
   \hline
-  \verb|wind| & Access to wind data and settings. \\
+  \verb|wind| & Access to wind data and settings. (\ref{sec:lua.wind}) \\
   \hline
-  \verb|logger| & Access to logger settings. \\
+  \verb|logger| & Access to logger settings. (\ref{sec:lua.logger}) \\
   \hline
-  \verb|replay| & Access to replay system. \\
+  \verb|replay| & Access to replay system. (\ref{sec:lua.replay}) \\
   \hline
-  \verb|tracking| & Access to tracking settings. \\
+  \verb|tracking| & Access to tracking settings. (\ref{sec:lua.tracking}) \\
   \hline
-  \verb|timer| & Class for scheduling periodic callbacks. \\
+  \verb|timer| & Class for scheduling periodic callbacks. (\ref{sec:lua.timer}) \\
 \end{tabularx}
 \end{maxipage}
 
-\subsection{The Blackboard}
+\subsection{The Blackboard}\label{sec:lua.blackboard}
 
 The blackboard provides access to sensor data, such as GPS location.
 
@@ -236,7 +236,7 @@ $[{m \over s}]$. \\
 Any of these may be \verb|nil| if its value is not known, e.g.\ if
 there is no GPS fix.
 
-\subsection{The Map}
+\subsection{The Map}\label{sec:lua.map}
 
 The map provides access to XCSoar's map view.
 
@@ -294,7 +294,7 @@ widgets replacing the map view. \\
 \end{tabularx}
 \end{maxipage}
 
-\subsection{Airspace}
+\subsection{Airspace}\label{sec:lua.airspace}
 
 The Airspace provides access to airspace data, such as name / distance
 to the next airspace.
@@ -325,7 +325,7 @@ $[{m}]$. \\
 \end{tabularx}
 \end{maxipage}
 
-\subsection{Task}
+\subsection{Task}\label{sec:lua.task}
 
 The Task provides access to task data such as distances / bearing to the
 next waypoint.
@@ -528,7 +528,7 @@ MacCready performance \\
 \end{tabularx}
 \end{maxipage}
 
-\subsection{Settings}
+\subsection{Settings}\label{sec:lua.settings}
 
 The Settings provides access to xcsoar settings, such as MC value.
 
@@ -618,7 +618,7 @@ of the maximum \newline ballst the glider can carry.\\
 \end{tabularx}
 \end{maxipage}
 
-\subsection{Wind}
+\subsection{Wind}\label{sec:lua.wind}
 
 The Settings provides access to xcsoar wind data and settings.
 
@@ -676,7 +676,7 @@ $[{degrees}]$.\\
 \end{tabularx}
 \end{maxipage}
 
-\subsection{Logger}
+\subsection{Logger}\label{sec:lua.logger}
 
 The Settings provides access to xcsoar Logger data and settings.
 
@@ -758,7 +758,7 @@ points when circling $[s]$.\\
 \end{tabularx}
 \end{maxipage}
 
-\subsection{Tracking}
+\subsection{Tracking}\label{sec:lua.tracking}
 
 The Settings provides access to xcsoar Tracking settings.
 
@@ -847,7 +847,7 @@ download the position \newline of your friends live from the SkyLines server.\\
 \end{tabularx}
 \end{maxipage}
 
-\subsection{Replay}
+\subsection{Replay}\label{sec:lua.replay}
 
 The Settings provides access to xcsoar Replay system.
 
@@ -883,7 +883,7 @@ Name & Description \\
 \end{tabularx}
 \end{maxipage}
 
-\subsection{Timers}
+\subsection{Timers}\label{sec:lua.timer}
 
 The class \verb|xcsoar.timer| implements a timer that calls a given
 Lua function periodically.
@@ -916,10 +916,10 @@ it.  The period is a numeric value in seconds. \\
 \end{tabularx}
 \end{maxipage}
 
-\subsection{Legacy}
+\subsection{Legacy}\label{sec:lua.legacy}
 
 Before version 7.0, \xc\ was adapted using the \emph{InputEvent}
-subsystem (see Appendix~\ref{cha:file_formats}).  During the Lua
+subsystem (see Appendix~\ref{sec:input-events}).  During the Lua
 transition, Lua scripts can invoke InputEvents, for example:
 
 \begin{lua}
