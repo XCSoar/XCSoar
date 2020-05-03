@@ -102,7 +102,8 @@ SiteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddFile(_("Waypoint details"),
           _("The file may contain extracts from enroute supplements or other contributed "
             "information about individual waypoints and airfields."),
-          ProfileKeys::AirfieldFile, _T("*.txt\0"));
+          ProfileKeys::AirfieldFile, _T("*.txt\0"),
+          FileType::WAYPOINTDETAILS);
   SetExpertRow(AirfieldFile);
 
   AddFile(_("FLARM Device Database"),
