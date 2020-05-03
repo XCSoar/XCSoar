@@ -90,6 +90,8 @@ ParseFileRepository(FileRepository &repository, NLineReader &reader)
     } else if (StringIsEqual(name, "type")) {
       if (StringIsEqual(value, "airspace"))
         file.type = FileType::AIRSPACE;
+      else if (StringIsEqual(value, "waypoint-details"))
+        file.type = FileType::WAYPOINTDETAILS;
       else if (StringIsEqual(value, "waypoint"))
         file.type = FileType::WAYPOINT;
       else if (StringIsEqual(value, "map"))

@@ -30,6 +30,7 @@ enum class FileType : uint8_t {
   UNKNOWN,
   AIRSPACE,
   WAYPOINT,
+  WAYPOINTDETAILS,
   MAP,
   FLARMNET,
 };
