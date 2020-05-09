@@ -183,6 +183,13 @@ OpenVarioDevice::OnCalculatedUpdate(const MoreData &basic,
 
   PutIdealPolar(calculated, env);
   PutRealPolar(calculated, env);
+
+  if (!_mc_valid) {
+    // this is the MacCready at start up
+    _mc = calculated.glide_polar_safety.GetMC();
+    _mc_valid = true;
+    RepeatMacCready(env);
+    }
 }
 
 bool
@@ -290,10 +297,10 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
         if (strlen(query_item) == 0) return true;
 
         if (StringIsEqual(query_item,"WL")) RepeatBallast(env);
-        if (StringIsEqual(query_item,"BU")) RepeatBugs(env);
-        if (StringIsEqual(query_item,"MC")) RepeatMacCready(env);
-        if (StringIsEqual(query_item,"IPO")) RepeatIdealPolar(env);
-        if (StringIsEqual(query_item,"RPO")) RepeatRealPolar(env);
+        else if (StringIsEqual(query_item,"BU")) RepeatBugs(env);
+        else if (StringIsEqual(query_item,"MC")) RepeatMacCready(env);
+        else if (StringIsEqual(query_item,"IPO")) RepeatIdealPolar(env);
+        else if (StringIsEqual(query_item,"RPO")) RepeatRealPolar(env);
       }
       return false;
     }
