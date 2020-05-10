@@ -283,9 +283,8 @@ JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_pauseNative(JNIEnv *env, jobject obj)
 {
   if (event_queue == nullptr || CommonInterface::main_window == nullptr)
-    /* pause before we have initialized the event subsystem does not
-       work - let's bail out, nothing is lost anyway */
-    exit(0);
+    return;
+    /* event subsystem is not initialized, there is nothing to pause */
 
   CommonInterface::main_window->Pause();
 
@@ -298,8 +297,8 @@ JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_resumeNative(JNIEnv *env, jobject obj)
 {
   if (event_queue == nullptr || CommonInterface::main_window == nullptr)
-    /* there is nothing here yet which can be resumed */
-    exit(0);
+    return;
+    /* event subsystem is not initialized, there is nothing to resume */
 
   CommonInterface::main_window->Resume();
 }

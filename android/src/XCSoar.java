@@ -128,11 +128,10 @@ public class XCSoar extends Activity {
     registerReceiver(batteryReceiver,
                      new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
-    /* TODO: this sure is the wrong place to request permissions - it
-       will cause XCSoar to quit immediately; we should request
-       permissions when we need them, but implementing that is
-       complicated, so for now, we do it here to give users a quick
-       solution for the problem */
+    /* TODO: this sure is the wrong place to request permissions -
+       we should request permissions when we need them, but
+       implementing that is complicated, so for now, we do it
+       here to give users a quick solution for the problem */
     requestAllPermissions();
   }
 
@@ -229,14 +228,19 @@ public class XCSoar extends Activity {
       ImmersiveFullScreenMode.enable(getWindow().getDecorView());
   }
 
-  private void checkRequestPermission(String permission) {
-    if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
-      try {
-        this.requestPermissions(new String[]{permission}, 0);
-      } catch (Exception e) {
-        Log.e(TAG, "requestPermissions(" + permission + ") failed", e);
+  private static final String[] NEEDED_PERMISSIONS = new String[] {
+    Manifest.permission.ACCESS_FINE_LOCATION,
+    Manifest.permission.WRITE_EXTERNAL_STORAGE
+  };
+
+  private boolean hasAllPermissions() {
+    for (String p : NEEDED_PERMISSIONS) {
+      if (checkSelfPermission(p) != PackageManager.PERMISSION_GRANTED) {
+        return false;
       }
     }
+
+    return true;
   }
 
   private void requestAllPermissions() {
@@ -249,8 +253,13 @@ public class XCSoar extends Activity {
        permissions before using them; mentioning them in the manifest
        is not enough */
 
-    checkRequestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-    checkRequestPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+    if (!hasAllPermissions()) {
+      try {
+        this.requestPermissions(NEEDED_PERMISSIONS, 0);
+      } catch (IllegalArgumentException e) {
+        Log.e(TAG, "could not request permissions: " + String.join(", ", NEEDED_PERMISSIONS), e);
+      }
+    }
   }
 
   @Override protected void onResume() {
