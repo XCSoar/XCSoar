@@ -64,6 +64,7 @@ Profile::Load(const ProfileMap &map, VarioSettings &settings)
   map.Get(ProfileKeys::AppGaugeVarioBallast, settings.show_ballast);
   map.Get(ProfileKeys::AppGaugeVarioGross, settings.show_gross);
   map.Get(ProfileKeys::AppAveNeedle, settings.show_average_needle);
+  map.Get(ProfileKeys::AppAveThermalNeedle, settings.show_thermal_average_needle);
 }
 
 void

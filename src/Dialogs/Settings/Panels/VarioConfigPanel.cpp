@@ -36,6 +36,7 @@ enum ControlIndex {
   AppGaugeVarioBallast,
   AppGaugeVarioGross,
   AppAveNeedle,
+  AppAveThermalNeedle,
 };
 
 
@@ -86,6 +87,13 @@ VarioConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                  "average gross value."),
              settings.show_average_needle);
   SetExpertRow(AppAveNeedle);
+
+  AddBoolean(_("Thermal Averager needle"),
+             _("If true, the vario gauge will display a thermal averager needle instead of current climb rate needle.  During cruise, this "
+               "needle displays the last thermal average netto value.  During circling, this needle displays the "
+               "average net value."),
+             settings.show_thermal_average_needle);
+  SetExpertRow(AppAveThermalNeedle);
 }
 
 bool
@@ -108,6 +116,8 @@ VarioConfigPanel::Save(bool &_changed)
   changed |= SaveValue(AppGaugeVarioGross, ProfileKeys::AppGaugeVarioGross, settings.show_gross);
 
   changed |= SaveValue(AppAveNeedle, ProfileKeys::AppAveNeedle, settings.show_average_needle);
+
+  changed |= SaveValue(AppAveThermalNeedle, ProfileKeys::AppAveThermalNeedle, settings.show_thermal_average_needle);
 
   _changed |= changed;
 

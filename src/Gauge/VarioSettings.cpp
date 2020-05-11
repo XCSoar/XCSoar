@@ -33,4 +33,5 @@ VarioSettings::SetDefaults()
   show_bugs = false;
   show_gross = true;
   show_average_needle = false;
+  show_thermal_average_needle = false;
 }
