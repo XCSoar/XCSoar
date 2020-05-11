@@ -251,8 +251,8 @@ public class XCSoar extends Activity {
     if (!hasAllPermissions()) {
       try {
         this.requestPermissions(NEEDED_PERMISSIONS, 0);
-      } catch (Exception e) {
-        Log.e(TAG, "could not request permissions: " + String.join(", ", NEEDED_PERMISSIONS));
+      } catch (IllegalArgumentException e) {
+        Log.e(TAG, "could not request permissions: " + String.join(", ", NEEDED_PERMISSIONS), e);
       }
     }
   }
