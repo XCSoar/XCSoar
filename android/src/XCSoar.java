@@ -223,8 +223,11 @@ public class XCSoar extends Activity {
     ImmersiveFullScreenMode.enable(getWindow().getDecorView());
   }
 
-  private final String[] NEEDED_PERMISSIONS = new String[] {Manifest.permission.ACCESS_FINE_LOCATION,
-                                                            Manifest.permission.WRITE_EXTERNAL_STORAGE};
+  private static final String[] NEEDED_PERMISSIONS = new String[] {
+    Manifest.permission.ACCESS_FINE_LOCATION,
+    Manifest.permission.WRITE_EXTERNAL_STORAGE
+  };
+
   private boolean hasAllPermissions() {
     for (String p : NEEDED_PERMISSIONS) {
       if (checkSelfPermission(p) != PackageManager.PERMISSION_GRANTED) {
