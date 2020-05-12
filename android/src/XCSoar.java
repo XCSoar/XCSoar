@@ -123,11 +123,10 @@ public class XCSoar extends Activity {
     registerReceiver(batteryReceiver,
                      new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
-    /* TODO: this sure is the wrong place to request permissions - it
-       will cause XCSoar to quit immediately; we should request
-       permissions when we need them, but implementing that is
-       complicated, so for now, we do it here to give users a quick
-       solution for the problem */
+    /* TODO: this sure is the wrong place to request permissions -
+       we should request permissions when we need them, but
+       implementing that is complicated, so for now, we do it
+       here to give users a quick solution for the problem */
     requestAllPermissions();
   }
 
