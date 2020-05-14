@@ -153,8 +153,8 @@ GlueMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
   }
 
   mouse_down_clock.Update();
-  arm_mapitem_list = HasFocus();
 
+  const bool had_focus = HasFocus();
   SetFocus();
 
   drag_start.x = x;
@@ -168,6 +168,7 @@ GlueMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
   }
 
   drag_start_geopoint = visible_projection.ScreenToGeo(x, y);
+  arm_mapitem_list = had_focus;
 
   switch (follow_mode) {
   case FOLLOW_SELF:
