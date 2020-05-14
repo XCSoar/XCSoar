@@ -265,7 +265,15 @@ public class XCSoar extends Activity {
   @Override protected void onResume() {
     super.onResume();
 
-    startService(new Intent(this, serviceClass));
+    try {
+      startService(new Intent(this, serviceClass));
+    } catch (IllegalStateException e) {
+      /* we get crash reports on this all the time, but I don't know
+         why - Android docs say "the application is in a state where
+         the service can not be started (such as not in the foreground
+         in a state when services are allowed)", but we're about to be
+         resumed, which means we're in foreground... */
+    }
 
     if (nativeView != null)
       nativeView.onResume();
