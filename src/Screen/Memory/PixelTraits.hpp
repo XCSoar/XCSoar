@@ -28,6 +28,7 @@ Copyright_License {
 #include "OS/ByteOrder.hpp"
 #include "Util/Cast.hxx"
 #include "Util/Compiler.h"
+#include "Util/OffsetPointer.hxx"
 
 #include <algorithm>
 
@@ -339,12 +340,12 @@ struct BGRAPixelTraits {
   }
 
   static constexpr pointer NextByte(pointer p, int delta) {
-    return pointer((uint8_t *)p + delta);
+    return (pointer)OffsetPointer(p, delta);
   }
 
   static constexpr const_pointer NextByte(const_pointer p,
                                                int delta) {
-    return const_pointer((const uint8_t *)p + delta);
+    return (const_pointer)OffsetPointer(p, delta);
   }
 
   static constexpr pointer NextRow(pointer p,

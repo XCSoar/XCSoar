@@ -308,8 +308,10 @@ GaugeVario::RenderNeedle(Canvas &canvas, int i, bool average, bool clear)
   // legacy behaviour
   if (clear ^ look.inverse) {
     canvas.SelectWhiteBrush();
+    canvas.SelectWhitePen();
   } else {
     canvas.SelectBlackBrush();
+    canvas.SelectBlackPen();
   }
 
   if (average)

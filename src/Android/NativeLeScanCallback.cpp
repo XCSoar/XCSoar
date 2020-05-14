@@ -42,9 +42,15 @@ Java_org_xcsoar_NativeLeScanCallback_onLeScan(JNIEnv *env, jobject obj,
   if (ptr == 0)
     return;
 
-  char address[64], name[256];
+  char address[64], name_buffer[256];
   Java::String::CopyTo(env, _address, address, sizeof(address));
-  Java::String::CopyTo(env, _name, name, sizeof(name));
+
+  const char *name;
+  if (_name != nullptr) {
+    Java::String::CopyTo(env, _name, name_buffer, sizeof(name_buffer));
+    name = name_buffer;
+  } else
+    name = address;
 
   LeScanCallback &cb = *(LeScanCallback *)(void *)ptr;
   cb.OnLeScan(address, name);
