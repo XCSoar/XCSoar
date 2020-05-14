@@ -90,6 +90,8 @@ Angle::AbsoluteRadians() const
 Angle
 Angle::AsBearing() const
 {
+  assert(!isnan(value));
+  assert(!isinf(value));
   assert(fabs(value) < fixed(100) * FullCircle().Native());
 
   Angle retval(value);
@@ -106,6 +108,8 @@ Angle::AsBearing() const
 Angle
 Angle::AsDelta() const
 {
+  assert(!isnan(value));
+  assert(!isinf(value));
   assert(fabs(value) < fixed(100) * FullCircle().Native());
 
   Angle retval(value);
