@@ -27,6 +27,7 @@ Copyright_License {
 #include "Screen/PortableColor.hpp"
 #include "OS/ByteOrder.hpp"
 #include "Util/Cast.hxx"
+#include "Util/OffsetPointer.hxx"
 #include "Compiler.h"
 
 #include <algorithm>
@@ -339,12 +340,12 @@ struct BGRAPixelTraits {
   }
 
   static constexpr pointer_type NextByte(pointer_type p, int delta) {
-    return pointer_type((uint8_t *)p + delta);
+    return (pointer_type)OffsetPointer(p, delta);
   }
 
   static constexpr const_pointer_type NextByte(const_pointer_type p,
                                                int delta) {
-    return const_pointer_type((const uint8_t *)p + delta);
+    return (const_pointer_type)OffsetPointer(p, delta);
   }
 
   static constexpr pointer_type NextRow(pointer_type p,
