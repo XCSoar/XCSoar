@@ -94,6 +94,16 @@ Angle::AsBearing() const
   assert(!isinf(value));
   assert(fabs(value) < fixed(100) * FullCircle().Native());
 
+#ifndef FIXED_MATH
+  /* Workaround for endless loops below; this is only for release
+     builds.  Debug builds will crash due to assertion failure.  Right
+     now, I don't know where those abnormal values come from, but I
+     hope we'll find out soon - until that happens, this workaround
+     reduces some user frustration with XCSoar freezes. */
+  if (!isnormal(value))
+    return Zero();
+#endif
+
   Angle retval(value);
 
   while (retval < Zero())
@@ -111,6 +121,12 @@ Angle::AsDelta() const
   assert(!isnan(value));
   assert(!isinf(value));
   assert(fabs(value) < fixed(100) * FullCircle().Native());
+
+#ifndef FIXED_MATH
+  /* same workaround as in AsBearing() */
+  if (!isnormal(value))
+    return Zero();
+#endif
 
   Angle retval(value);
 
