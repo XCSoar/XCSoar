@@ -23,6 +23,9 @@
 #include <zzip/file.h>
 #include <zzip/format.h>
 
+/** get file size.
+ * This function works on a real file descriptor.
+ */
 zzip_off_t
 zzip_filesize(int fd)
 {
@@ -88,7 +91,8 @@ zzip_get_default_io(void)
     return (zzip_plugin_io_t) & default_io;
 }
 
-/**
+/** init plugin struct.
+ *
  * This function initializes the users handler struct to default values 
  * being the posix io functions in default configured environments.
  *

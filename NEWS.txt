@@ -71,12 +71,14 @@ Version 7.0 - not yet released
 * Raspberry Pi
   - resizable mouse cursor
 
-Version 6.8.14 - not yet released
+Version 6.8.14 - 2020/05/14
 * user interface
   - fix average needle color in inverted mode
 * Android
   - compatibility with Android 9
   - request all permissions without manual restarts
+  - fix crash bug
+* Kobo
   - fix crash bug
 
 Version 6.8.13 - 2020/04/08
