@@ -321,16 +321,11 @@ ifeq ($(TARGET),ANDROID)
   # Therefore a number of variables exist for each supported ABI.
   # Here is a brief outline where you can look up the names in the NDK in case that a new
   # architecture appears in the NDK, or names chane in new NDK versions:
-  # ANDROID_NDK_GCC_TOOLCHAIN_ABI: See $ANDROID_NDK/toolchains/. Name without the GCC version suffix (now "-4.9")
   # LLVM_TARGET: Open the appropriate compiler script in $ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin,
   #   e.g. aarch64-linux-android21-clang++ for AARCH64, NDK level 21, 
   #   and transcribe the value of the option "--target". 
   # HOST_TRIPLET = $(ANDROID_NDK_GCC_TOOLCHAIN_ABI)
   # ANDROID_APK_LIB_ABI: See https://developer.android.com/ndk/guides/abis#sa for valid names.
-  # ANDROID_GCC_VERSION: Suffix of directories in $ANDROID_NDK/toolchains/. Since many NDK versions = "4.9".
-
-  # Not architecture dependent
-  ANDROID_GCC_VERSION = 4.9
 
   # Default is ARM V7a
   ANDROID_NDK_GCC_TOOLCHAIN_ABI = arm-linux-androideabi
@@ -339,21 +334,18 @@ ifeq ($(TARGET),ANDROID)
   HOST_TRIPLET                  = arm-linux-androideabi
 
   ifeq ($(X86),y)
-    ANDROID_NDK_GCC_TOOLCHAIN_ABI = x86
     ANDROID_APK_LIB_ABI           = x86
     LLVM_TARGET                  := i686-linux-android
     HOST_TRIPLET                  = i686-linux-android
   endif
 
   ifeq ($(AARCH64),y)
-    ANDROID_NDK_GCC_TOOLCHAIN_ABI = aarch64-linux-android
     ANDROID_APK_LIB_ABI           = arm64-v8a
     LLVM_TARGET                  := aarch64-linux-android
     HOST_TRIPLET                  = aarch64-linux-android
   endif
 
   ifeq ($(X64),y)
-    ANDROID_NDK_GCC_TOOLCHAIN_ABI = x86_64
     ANDROID_APK_LIB_ABI           = x86_64
     LLVM_TARGET                  := x86_64-linux-android
     HOST_TRIPLET                  = x86_64-linux-android
@@ -361,8 +353,6 @@ ifeq ($(TARGET),ANDROID)
 
   # Like in the clang compiler scripts in the NDK add the NDK level to the LLVM target
   LLVM_TARGET := $(LLVM_TARGET)$(ANDROID_NDK_API)
-
-  ANDROID_GCC_TOOLCHAIN_NAME = $(ANDROID_NDK_GCC_TOOLCHAIN_ABI)-$(ANDROID_GCC_VERSION)
 
   # clang is the mandatory compiler on Android
   override CLANG = y
@@ -384,10 +374,9 @@ ifeq ($(TARGET),ANDROID)
     ANDROID_HOST_TAG = linux-x86
   endif
 
-  ANDROID_GCC_TOOLCHAIN = $(ANDROID_NDK)/toolchains/$(ANDROID_GCC_TOOLCHAIN_NAME)/prebuilt/$(ANDROID_HOST_TAG)
   ANDROID_TOOLCHAIN = $(ANDROID_NDK)/toolchains/$(ANDROID_TOOLCHAIN_NAME)/prebuilt/$(ANDROID_HOST_TAG)
 
-  TCPREFIX = $(ANDROID_GCC_TOOLCHAIN)/bin/$(HOST_TRIPLET)-
+  TCPREFIX = $(ANDROID_TOOLCHAIN)/bin/$(HOST_TRIPLET)-
   LLVM_PREFIX = $(ANDROID_TOOLCHAIN)/bin/
 
 
