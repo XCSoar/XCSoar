@@ -763,6 +763,20 @@ inline fixed operator/(const fixed a, const fixed b)
   return temp/=b;
 }
 
+#undef isnan
+static constexpr bool
+isnan(fixed)
+{
+  return false;
+}
+
+#undef isinf
+static constexpr bool
+isinf(fixed)
+{
+  return false;
+}
+
 gcc_pure
 static inline fixed pow(fixed x, fixed y)
 {
