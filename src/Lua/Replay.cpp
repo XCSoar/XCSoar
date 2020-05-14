@@ -85,7 +85,7 @@ l_replay_start(lua_State *L)
     try {
       replay->Start(p);
       return 0;
-    } catch (const std::runtime_error &) {
+    } catch (...) {
     }
   }
   return luaL_error(L, "Replay");
