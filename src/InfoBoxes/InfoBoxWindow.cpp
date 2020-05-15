@@ -44,12 +44,9 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &parent, PixelRect rc,
                              const InfoBoxLook &_look,
                              unsigned _id,
                              WindowStyle style)
-  :content(NULL),
-   settings(_settings), look(_look),
+  :settings(_settings), look(_look),
    border_kind(border_flags),
-   id(_id),
-   dragging(false), pressed(false),
-   force_draw_selector(false)
+   id(_id)
 {
   data.Clear();
 

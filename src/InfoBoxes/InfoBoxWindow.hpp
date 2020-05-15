@@ -36,7 +36,7 @@ class Color;
 class InfoBoxWindow : public LazyPaintWindow
 {
 private:
-  InfoBoxContent *content;
+  InfoBoxContent *content = nullptr;
 
   const InfoBoxSettings &settings;
   const InfoBoxLook &look;
@@ -47,17 +47,17 @@ private:
 
   InfoBoxData data;
 
-  bool dragging;
+  bool dragging = false;
 
   /**
    * Is the mouse currently pressed inside this InfoBox?
    */
-  bool pressed;
+  bool pressed = false;
 
   /**
    * draw the selector event if the InfoBox window is not the system focus
    */
-  bool force_draw_selector;
+  bool force_draw_selector = false;
 
   /** a timer which returns keyboard focus back to the map window after a while */
   Timer focus_timer{[this]{ FocusParent(); }};
