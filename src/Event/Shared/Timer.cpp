@@ -28,39 +28,31 @@ Copyright_License {
 void
 Timer::Schedule(std::chrono::steady_clock::duration d) noexcept
 {
-  if (queued.exchange(false))
-    event_queue->CancelTimer(*this);
+  Cancel();
 
-  enabled.store(true);
-  interval = d;
-
-  if (!queued.exchange(true))
-    event_queue->AddTimer(*this, d);
+  pending = true;
+  event_queue->AddTimer(*this, d);
 }
 
 void
 Timer::SchedulePreserve(std::chrono::steady_clock::duration d) noexcept
 {
-  if (!IsActive())
+  if (!IsPending())
     Schedule(d);
 }
 
 void
 Timer::Cancel()
 {
-  if (enabled.exchange(false) && queued.exchange(false))
+  if (std::exchange(pending, false))
     event_queue->CancelTimer(*this);
 }
 
 void
 Timer::Invoke()
 {
-  if (!queued.exchange(false))
-    /* was cancelled by another thread */
-    return;
+  assert(pending);
+  pending = false;
 
   callback();
-
-  if (enabled.load() && !queued.exchange(true))
-    event_queue->AddTimer(*this, interval);
 }

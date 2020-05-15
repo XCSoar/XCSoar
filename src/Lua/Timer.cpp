@@ -29,14 +29,14 @@ Copyright_License {
 #include "Catch.hpp"
 #include "Class.hxx"
 #include "Persistent.hpp"
-#include "Event/Timer.hpp"
+#include "Event/PeriodicTimer.hpp"
 
 extern "C" {
 #include <lauxlib.h>
 }
 
 class LuaTimer final {
-  Timer timer_event{[this]{ OnTimer(); }};
+  PeriodicTimer timer_event{[this]{ OnTimer(); }};
 
   Lua::Value callback;
 

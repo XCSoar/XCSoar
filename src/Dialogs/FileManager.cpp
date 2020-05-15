@@ -52,7 +52,7 @@ Copyright_License {
 #include "Net/HTTP/DownloadManager.hpp"
 #include "Event/Notify.hpp"
 #include "Thread/Mutex.hxx"
-#include "Event/Timer.hpp"
+#include "Event/PeriodicTimer.hpp"
 
 #include <map>
 #include <set>
@@ -182,7 +182,7 @@ class ManagedFileListWidget
    */
   std::set<std::string> failures;
 
-  Timer refresh_download_timer{[this]{ OnTimer(); }};
+  PeriodicTimer refresh_download_timer{[this]{ OnTimer(); }};
 
   /**
    * Was the repository file modified, and needs to be reloaded by

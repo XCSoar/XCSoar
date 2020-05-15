@@ -41,6 +41,7 @@ Copyright_License {
 #include "Net/HTTP/Features.hpp"
 #include "Net/HTTP/DownloadManager.hpp"
 #include "Event/Notify.hpp"
+#include "Event/PeriodicTimer.hpp"
 #include "Thread/Mutex.hxx"
 #include "Operation/ThreadedOperationEnvironment.hpp"
 #include "Util/ConvertString.hpp"
@@ -57,7 +58,7 @@ class DownloadProgress final : Net::DownloadListener, Notify {
   ThreadedOperationEnvironment env;
   const Path path_relative;
 
-  Timer update_timer{[this]{ Net::DownloadManager::Enumerate(*this); }};
+  PeriodicTimer update_timer{[this]{ Net::DownloadManager::Enumerate(*this); }};
 
   bool got_size = false, complete = false, success;
 

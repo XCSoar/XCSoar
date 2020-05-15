@@ -27,7 +27,7 @@ Copyright_License {
 #ifdef USE_WINUSER
 #include <windows.h>
 #else
-#include "Event/Timer.hpp"
+#include "Event/PeriodicTimer.hpp"
 #endif
 
 #include <chrono>
@@ -53,7 +53,7 @@ class WindowTimer {
 #ifdef USE_WINUSER
   UINT_PTR id = 0;
 #else
-  Timer timer{[this]{ OnTimer(); }};
+  PeriodicTimer timer{[this]{ OnTimer(); }};
 #endif
 
 public:

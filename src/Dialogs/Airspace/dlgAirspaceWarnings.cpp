@@ -29,7 +29,7 @@ Copyright_License {
 #include "Formatter/UserUnits.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Event/Timer.hpp"
+#include "Event/PeriodicTimer.hpp"
 #include "Airspace/AirspaceWarning.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"
@@ -78,7 +78,7 @@ class AirspaceWarningListWidget final
 
   ProtectedAirspaceWarningManager &airspace_warnings;
 
-  Timer update_list_timer{[this]{ UpdateList(); }};
+  PeriodicTimer update_list_timer{[this]{ UpdateList(); }};
 
   Button *ack_button;
   Button *ack_day_button;

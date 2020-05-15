@@ -40,7 +40,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
-#include "Event/Timer.hpp"
+#include "Event/PeriodicTimer.hpp"
 
 #include <math.h>
 
@@ -60,7 +60,7 @@ enum Actions {
 class FlightSetupPanel final
   : public RowFormWidget, DataFieldListener,
     public ActionListener {
-  Timer timer{[this]{ OnTimer(); }};
+  PeriodicTimer timer{[this]{ OnTimer(); }};
 
   Button *dump_button;
 

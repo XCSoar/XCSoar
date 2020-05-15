@@ -30,7 +30,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 #include "Event/Timer.hpp"
-#include "Event/Timer.hpp"
+#include "Event/PeriodicTimer.hpp"
 
 #include <cassert>
 
@@ -54,7 +54,6 @@ class ListPickerWidget : public ListWidget, public ActionListener {
    */
   Timer postpone_update_help{[this]{
     UpdateHelp(GetList().GetCursorIndex());
-    postpone_update_help.Cancel();
   }};
 
   const TCHAR *const caption, *const help_text;
@@ -192,7 +191,7 @@ ListPicker(const TCHAR *caption,
 
   dialog.EnableCursorSelection();
 
-  Timer update_timer([list_widget](){
+  PeriodicTimer update_timer([list_widget](){
     list_widget->GetList().Invalidate();
   });
   if (update)

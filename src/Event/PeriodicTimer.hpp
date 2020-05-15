@@ -21,89 +21,68 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_EVENT_TIMER_HPP
-#define XCSOAR_EVENT_TIMER_HPP
+#ifndef XCSOAR_EVENT_PERIODIC_TIMER_HPP
+#define XCSOAR_EVENT_PERIODIC_TIMER_HPP
 
-#ifdef USE_POLL_EVENT
-#include <boost/asio/steady_timer.hpp>
-#endif
-
-#include <chrono>
-#include <cassert>
-#include <functional>
+#include "Timer.hpp"
 
 /**
- * A timer that calls a given function after a specified amount of
- * time.
+ * A timer that, once initialized, periodically calls a given function
+ * after a specified amount of time, until Cancel() gets called.
  *
  * Initially, this class does not schedule a timer.
  *
  * This class is not thread safe; all of the methods must be called
  * from the main thread.
- *
- * The class #WindowTimer is cheaper on WIN32; use it instead of this
- * class if you are implementing a #Window.
  */
-class Timer final {
-  bool pending = false;
+class PeriodicTimer final {
+  Timer timer{[this]{ Invoke(); }};
 
-#ifdef USE_POLL_EVENT
-  boost::asio::steady_timer timer;
-#endif
+  std::chrono::steady_clock::duration interval{-1};
 
   using Callback = std::function<void()>;
   const Callback callback;
 
 public:
   /**
-   * Construct a Timer object that is not set initially.
+   * Construct an inactive timer.  Activate it by calling Schedule().
    */
-#ifdef USE_POLL_EVENT
-  explicit Timer(Callback _callback) noexcept;
-#else
-  explicit Timer(Callback &&_callback) noexcept:callback(std::move(_callback)) {}
-#endif
-
-  Timer(const Timer &other) = delete;
-
-  ~Timer() {
-    /* timer must be cleaned up explicitly */
-    assert(!IsPending());
-  }
+  explicit PeriodicTimer(Callback &&_callback) noexcept
+    :callback(std::move(_callback)) {}
 
   /**
-   * Is the timer pending?
+   * Is the timer active, i.e. is it waiting for the current period to
+   * end?
    */
-  bool IsPending() const noexcept {
-    return pending;
+  bool IsActive() const {
+    return interval.count() >= 0;
   }
 
   /**
    * Schedule the timer.  Cancels the previous setting if there was
    * one.
    */
-  void Schedule(std::chrono::steady_clock::duration d) noexcept;
-
-  /**
-   * Schedule the timer.  Preserves the previous setting if there was
-   * one.
-   */
-  void SchedulePreserve(std::chrono::steady_clock::duration d) noexcept;
+  void Schedule(std::chrono::steady_clock::duration d) noexcept {
+    interval = d;
+    timer.Schedule(d);
+  }
 
   /**
    * Cancels the scheduled timer, if any.  This is safe to be called
    * while the timer is running.
    */
-  void Cancel();
+  void Cancel() noexcept {
+    interval = std::chrono::steady_clock::duration{-1};
+    timer.Cancel();
+  }
 
-#ifdef USE_POLL_EVENT
-private:
-  void Invoke(const boost::system::error_code &ec);
-
-#else
 public:
-  void Invoke();
-#endif
+  void Invoke() noexcept {
+    callback();
+
+    if (IsActive() && !timer.IsPending())
+      timer.Schedule(interval);
+  }
 };
 
 #endif

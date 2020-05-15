@@ -32,29 +32,25 @@ Timer::Timer(Callback _callback) noexcept
 void
 Timer::Schedule(std::chrono::steady_clock::duration d) noexcept
 {
-  if (queued.exchange(false))
-    timer.cancel();
+  Cancel();
 
-  enabled.store(true);
-  interval = d;
+  pending = true;
 
-  if (!queued.exchange(true)) {
-    timer.expires_from_now(d);
-    AsyncWait();
-  }
+  timer.expires_from_now(d);
+  timer.async_wait(std::bind(&Timer::Invoke, this, std::placeholders::_1));
 }
 
 void
 Timer::SchedulePreserve(std::chrono::steady_clock::duration d) noexcept
 {
-  if (!IsActive())
+  if (!IsPending())
     Schedule(d);
 }
 
 void
 Timer::Cancel()
 {
-  if (enabled.exchange(false) && queued.exchange(false))
+  if (std::exchange(pending, false))
     timer.cancel();
 }
 
@@ -64,14 +60,8 @@ Timer::Invoke(const boost::system::error_code &ec)
   if (ec)
     return;
 
-  if (!queued.exchange(false))
-    /* was cancelled by another thread */
-    return;
+  assert(pending);
+  pending = false;
 
   callback();
-
-  if (enabled.load() && !queued.exchange(true)) {
-    timer.expires_from_now(interval);
-    AsyncWait();
-  }
 }

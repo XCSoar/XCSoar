@@ -25,7 +25,7 @@ Copyright_License {
 #define ENABLE_CLOSE_BUTTON
 
 #include "Main.hpp"
-#include "Event/Timer.hpp"
+#include "Event/PeriodicTimer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Look/WindArrowLook.hpp"
 #include "Renderer/WindArrowRenderer.hpp"
@@ -77,7 +77,7 @@ Main()
   wind.Create(main_window, main_window.GetClientRect(), with_border);
   main_window.SetFullWindow(wind);
 
-  Timer timer([&wind](){
+  PeriodicTimer timer([&wind](){
     SpeedVector _wind = wind.GetWind();
 
     _wind.bearing = (_wind.bearing + Angle::Degrees(5)).AsBearing();

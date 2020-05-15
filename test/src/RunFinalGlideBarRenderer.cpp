@@ -25,7 +25,7 @@ Copyright_License {
 #define ENABLE_CLOSE_BUTTON
 
 #include "Main.hpp"
-#include "Event/Timer.hpp"
+#include "Event/PeriodicTimer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Form/Button.hpp"
 #include "Form/ActionListener.hpp"
@@ -117,7 +117,7 @@ Main()
   double step(10);
   double mc_mc0_step(100);
 
-  Timer timer([&](){
+  PeriodicTimer timer([&](){
     double altitude_difference = final_glide.GetAltitudeDifference();
     double altitude_difference0 = final_glide.GetAltitudeDifference0();
 

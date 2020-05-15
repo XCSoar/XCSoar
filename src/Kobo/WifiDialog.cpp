@@ -35,6 +35,7 @@ Copyright_License {
 #include "Widget/ListWidget.hpp"
 #include "WPASupplicant.hpp"
 #include "Net/IPv4Address.hxx"
+#include "Event/PeriodicTimer.hpp"
 
 class WifiListWidget final
   : public ListWidget, ActionListener {
@@ -63,7 +64,7 @@ class WifiListWidget final
 
   WPASupplicant wpa_supplicant;
 
-  Timer update_timer{[this]{ UpdateList(); }};
+  PeriodicTimer update_timer{[this]{ UpdateList(); }};
 
 public:
   void CreateButtons(WidgetDialog &dialog) {

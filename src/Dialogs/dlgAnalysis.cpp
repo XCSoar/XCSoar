@@ -51,7 +51,7 @@ Copyright_License {
 #include "Blackboard/FullBlackboard.hpp"
 #include "Language/Language.hpp"
 #include "Engine/Contest/Solvers/Contests.hpp"
-#include "Event/Timer.hpp"
+#include "Event/PeriodicTimer.hpp"
 #include "Util/StringCompare.hxx"
 
 #ifdef ENABLE_OPENGL
@@ -148,7 +148,7 @@ class AnalysisWidget final : public NullWidget, ActionListener {
   Button details_button, previous_button, next_button, close_button;
   ChartControl chart;
 
-  Timer update_timer{[this]{ Update(); }};
+  PeriodicTimer update_timer{[this]{ Update(); }};
 
 public:
   AnalysisWidget(WndForm &_dialog, const Look &look,

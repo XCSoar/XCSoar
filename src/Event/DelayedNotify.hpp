@@ -33,7 +33,7 @@ Copyright_License {
  * OnNotification().
  */
 class DelayedNotify {
-  Timer timer{[this]{ timer.Cancel(); OnNotification(); }};
+  Timer timer{[this]{ OnNotification(); }};
 
   const std::chrono::steady_clock::duration delay;
 
