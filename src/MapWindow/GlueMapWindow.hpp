@@ -32,6 +32,7 @@ Copyright_License {
 #include "Renderer/FinalGlideBarRenderer.hpp"
 #include "Renderer/VarioBarRenderer.hpp"
 #include "Event/Timer.hpp"
+#include "Event/Notify.hpp"
 #include "Screen/Features.hpp"
 
 #ifdef ENABLE_OPENGL
@@ -62,10 +63,6 @@ public:
 
 
 class GlueMapWindow : public MapWindow {
-  enum class Command {
-    INVALIDATE,
-  };
-
   TopographyThread *topography_thread = nullptr;
 
   TerrainThread *terrain_thread = nullptr;
@@ -146,6 +143,8 @@ class GlueMapWindow : public MapWindow {
 
   Timer map_item_timer{[this]{ OnMapItemTimer(); }};
 
+  Notify redraw_notify{[this]{ PartialRedraw(); }};
+
 public:
   GlueMapWindow(const Look &look);
   virtual ~GlueMapWindow();
@@ -178,6 +177,7 @@ public:
    * Trigger a full redraw of the map.
    */
   void FullRedraw();
+  void PartialRedraw() noexcept;
 
   void QuickRedraw();
 
@@ -214,7 +214,6 @@ protected:
   virtual void OnCancelMode() override;
   virtual void OnPaint(Canvas &canvas) override;
   virtual void OnPaintBuffer(Canvas& canvas) override;
-  bool OnUser(unsigned id) override;
 
   /**
    * This event handler gets called when a gesture has

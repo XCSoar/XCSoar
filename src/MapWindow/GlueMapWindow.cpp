@@ -61,7 +61,7 @@ GlueMapWindow::SetTopography(TopographyStore *_topography)
     topography_thread =
       new TopographyThread(*_topography,
                            [this](){
-                             SendUser(unsigned(Command::INVALIDATE));
+                             redraw_notify.SendNotification();
                            });
 }
 
@@ -80,7 +80,7 @@ GlueMapWindow::SetTerrain(RasterTerrain *_terrain)
     terrain_thread =
       new TerrainThread(*_terrain,
                         [this](){
-                          SendUser(unsigned(Command::INVALIDATE));
+                          redraw_notify.SendNotification();
                         });
 }
 
@@ -171,6 +171,13 @@ GlueMapWindow::FullRedraw()
   UpdateMapScale();
   UpdateScreenBounds();
 
+  PartialRedraw();
+}
+
+void
+GlueMapWindow::PartialRedraw() noexcept
+{
+
 #ifdef ENABLE_OPENGL
   Invalidate();
 #else
@@ -203,21 +210,4 @@ GlueMapWindow::QuickRedraw()
      trigger that now */
   draw_thread->TriggerRedraw();
 #endif
-}
-
-bool
-GlueMapWindow::OnUser(unsigned id)
-{
-  switch (Command(id)) {
-  case Command::INVALIDATE:
-#ifdef ENABLE_OPENGL
-    Invalidate();
-#else
-    draw_thread->TriggerRedraw();
-#endif
-    return true;
-
-  default:
-    return MapWindow::OnUser(id);
-  }
 }
