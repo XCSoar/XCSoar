@@ -17,13 +17,13 @@ case "${1}" in
         make TARGET="${1}" -j"${CPUS}" output/KOBO/KoboRoot.tgz
       ;;
       "UNIX")
-        make TARGET="${1}" -j"${CPUS}" everything
+        make TARGET="${1}" -j"${CPUS}" all
       ;;
       "PC")
-        make TARGET="${1}" -j"${CPUS}" everything
+        make TARGET="${1}" -j"${CPUS}" all
       ;;
       "WIN64")
-        make TARGET="${1}" -j"${CPUS}" everything
+        make TARGET="${1}" -j"${CPUS}" all
       ;;
       "*")
         echo "No target specified. Valid targets: ANDROID DOCS KOBO UNIX PC"
