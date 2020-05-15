@@ -541,38 +541,32 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
 void
 GaugeVario::RenderBallast(Canvas &canvas)
 {
-  static int last_ballast = -1;
-  static PixelRect label_rect = {-1,-1,-1,-1};
-  static PixelRect value_rect = {-1,-1,-1,-1};
-  static PixelPoint label_pos = {-1,-1};
-  static PixelPoint value_pos = {-1,-1};
-
   if (!ballast_initialised) { // ontime init, origin and background rect
     const PixelRect rc = GetClientRect();
 
     PixelSize tSize;
 
     // position of ballast label
-    label_pos.x = 1;
-    label_pos.y = rc.top + 2
+    ballast_label_pos.x = 1;
+    ballast_label_pos.y = rc.top + 2
       + look.text_font->GetCapitalHeight() * 2
       - look.text_font->GetAscentHeight();
 
     // position of ballast value
-    value_pos.x = 1;
-    value_pos.y = rc.top + 1
+    ballast_value_pos.x = 1;
+    ballast_value_pos.y = rc.top + 1
       + look.text_font->GetCapitalHeight()
       - look.text_font->GetAscentHeight();
 
     // set upper left corner
-    label_rect.left = label_pos.x;
-    label_rect.top = label_pos.y
+    ballast_label_rect.left = ballast_label_pos.x;
+    ballast_label_rect.top = ballast_label_pos.y
       + look.text_font->GetAscentHeight()
       - look.text_font->GetCapitalHeight();
 
     // set upper left corner
-    value_rect.left = value_pos.x;
-    value_rect.top = value_pos.y
+    ballast_value_rect.left = ballast_value_pos.x;
+    ballast_value_rect.top = ballast_value_pos.y
       + look.text_font->GetAscentHeight()
       - look.text_font->GetCapitalHeight();
 
@@ -581,16 +575,16 @@ GaugeVario::RenderBallast(Canvas &canvas)
     tSize = canvas.CalcTextSize(TEXT_BALLAST);
 
     // update back rect with max label size
-    label_rect.right = label_rect.left + tSize.cx;
-    label_rect.bottom = label_rect.top +
+    ballast_label_rect.right = ballast_label_rect.left + tSize.cx;
+    ballast_label_rect.bottom = ballast_label_rect.top +
       look.text_font->GetCapitalHeight();
 
     // get max value size
     tSize = canvas.CalcTextSize(_T("100%"));
 
-    value_rect.right = value_rect.left + tSize.cx;
+    ballast_value_rect.right = ballast_value_rect.left + tSize.cx;
     // update back rect with max label size
-    value_rect.bottom = value_rect.top +
+    ballast_value_rect.bottom = ballast_value_rect.top +
       look.text_font->GetCapitalHeight();
 
     ballast_initialised = true;
@@ -614,11 +608,11 @@ GaugeVario::RenderBallast(Canvas &canvas)
         canvas.SetTextColor(look.dimmed_text_color);
         // ols ballast was 0, show label
         if (IsPersistent())
-          canvas.DrawOpaqueText(label_pos.x, label_pos.y, label_rect, TEXT_BALLAST);
+          canvas.DrawOpaqueText(ballast_label_pos.x, ballast_label_pos.y, ballast_label_rect, TEXT_BALLAST);
         else
-          canvas.DrawText(label_pos.x, label_pos.y, TEXT_BALLAST);
+          canvas.DrawText(ballast_label_pos.x, ballast_label_pos.y, TEXT_BALLAST);
       } else if (IsPersistent())
-        canvas.DrawFilledRectangle(label_rect, look.background_color);
+        canvas.DrawFilledRectangle(ballast_label_rect, look.background_color);
     }
 
     // new ballast 0, hide value
@@ -628,11 +622,11 @@ GaugeVario::RenderBallast(Canvas &canvas)
       canvas.SetTextColor(look.text_color);
 
       if (IsPersistent())
-        canvas.DrawOpaqueText(value_pos.x, value_pos.y, value_rect, buffer);
+        canvas.DrawOpaqueText(ballast_value_pos.x, ballast_value_pos.y, ballast_value_rect, buffer);
       else
-        canvas.DrawText(value_pos.x, value_pos.y, buffer);
+        canvas.DrawText(ballast_value_pos.x, ballast_value_pos.y, buffer);
     } else if (IsPersistent())
-      canvas.DrawFilledRectangle(value_rect, look.background_color);
+      canvas.DrawFilledRectangle(ballast_value_rect, look.background_color);
 
     if (IsPersistent())
       last_ballast = ballast;
