@@ -46,7 +46,7 @@ Copyright_License {
  * class if you are implementing a #Window.
  */
 class Timer {
-  std::atomic<bool> enabled, queued;
+  std::atomic<bool> enabled{false}, queued{false};
   std::chrono::steady_clock::duration interval;
 
 #ifdef USE_POLL_EVENT
@@ -60,7 +60,7 @@ public:
 #ifdef USE_POLL_EVENT
   Timer();
 #else
-  Timer():enabled(false), queued(false) {}
+  Timer() = default;
 #endif
 
   Timer(const Timer &other) = delete;

@@ -26,8 +26,7 @@ Copyright_License {
 #include "../Queue.hpp"
 
 Timer::Timer()
-  :enabled(false), queued(false),
-   timer(event_queue->get_io_context()) {}
+  :timer(event_queue->get_io_context()) {}
 
 void
 Timer::Schedule(std::chrono::steady_clock::duration d) noexcept
