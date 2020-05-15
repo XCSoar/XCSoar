@@ -494,8 +494,8 @@ ShowWifiDialog()
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
   WifiListWidget widget;
-  WidgetDialog dialog(look);
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Wifi"), &widget);
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      look, _("Wifi"), &widget);
   widget.CreateButtons(dialog);
   dialog.AddButton(_("Close"), mrOK);
   dialog.ShowModal();

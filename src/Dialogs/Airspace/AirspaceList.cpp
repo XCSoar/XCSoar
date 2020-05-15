@@ -451,7 +451,8 @@ ShowAirspaceListDialog(const Airspaces &_airspaces,
   airspaces = &_airspaces;
   location = CommonInterface::Basic().location;
 
-  WidgetDialog dialog(look);
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      look, _("Select Airspace"));
 
   AirspaceFilterWidget *filter_widget = new AirspaceFilterWidget(look);
 
@@ -466,9 +467,7 @@ ShowAirspaceListDialog(const Airspaces &_airspaces,
   filter_widget->SetListener(list_widget);
   buttons_widget->SetList(list_widget);
 
-  TwoWidgets *widget = new TwoWidgets(left_widget, list_widget, false);
-
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Select Airspace"), widget);
+  dialog.FinishPreliminary(new TwoWidgets(left_widget, list_widget, false));
   dialog.ShowModal();
 }
 

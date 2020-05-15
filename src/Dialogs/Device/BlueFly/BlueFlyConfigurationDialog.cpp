@@ -126,10 +126,10 @@ dlgConfigurationBlueFlyVarioShowModal(Device &_device)
 
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  WidgetDialog dialog(look);
-
-  dialog.CreateAuto(UIGlobals::GetMainWindow(), _T("BlueFly Vario"),
-                    new BlueFlyConfigurationWidget(look, dialog, device));
+  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
+                      look,
+                      _T("BlueFly Vario"),
+                      new BlueFlyConfigurationWidget(look, dialog, device));
 
   dialog.AddButton(_("Cancel"), mrCancel);
   dialog.ShowModal();

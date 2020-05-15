@@ -342,8 +342,8 @@ void dlgConfigurationShowModal()
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  WidgetDialog dialog(look);
-
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      look, _("Configuration"));
   auto on_close = MakeLambdaActionListener([&dialog](unsigned id) {
       OnCloseClicked(dialog);
     });
@@ -365,11 +365,11 @@ void dlgConfigurationShowModal()
   /* restore last selected menu item */
   menu->SetCursor(current_page);
 
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Configuration"), pager);
-
   pager->SetPageFlippedCallback([&dialog, menu](){
       OnPageFlipped(dialog, *menu);
     });
+
+  dialog.FinishPreliminary(pager);
 
   dialog.ShowModal();
 

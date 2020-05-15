@@ -519,7 +519,8 @@ ShowWaypointListDialog(const GeoPoint &_location,
 
   dialog_state.name.clear();
 
-  WidgetDialog dialog(look);
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      look, _("Select Waypoint"));
 
   auto *filter_widget = new WaypointFilterWidget(look, heading);
 
@@ -538,7 +539,7 @@ ShowWaypointListDialog(const GeoPoint &_location,
 
   TwoWidgets *widget = new TwoWidgets(left_widget, list_widget, false);
 
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Select Waypoint"), widget);
+  dialog.FinishPreliminary(widget);
   return dialog.ShowModal() == mrOK
     ? list_widget->GetCursorObject()
     : nullptr;

@@ -246,9 +246,9 @@ void
 dlgTeamCodeShowModal()
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  WidgetDialog dialog(look);
   TeamCodeWidget widget(look);
-  dialog.CreateAuto(UIGlobals::GetMainWindow(), _("Team Code"), &widget);
+  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
+                      look, _("Team Code"), &widget);
   widget.CreateButtons(dialog);
   dialog.AddButton(_("Close"), mrOK);
   dialog.ShowModal();

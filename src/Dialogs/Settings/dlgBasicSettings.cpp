@@ -362,8 +362,9 @@ dlgBasicSettingsShowModal()
   caption.append(_T(" - "));
   caption.append(plane.polar_name);
 
-  WidgetDialog dialog(UIGlobals::GetDialogLook());
-  dialog.CreateAuto(UIGlobals::GetMainWindow(), caption, instance);
+  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
+                      UIGlobals::GetDialogLook(),
+                      caption, instance);
   instance->SetDumpButton(dialog.AddButton(_("Dump"), *instance, DUMP));
   dialog.AddButton(_("OK"), mrOK);
 

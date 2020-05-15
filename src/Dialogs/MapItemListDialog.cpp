@@ -272,9 +272,9 @@ ShowMapItemListDialog(const MapItemList &list,
   MapItemListWidget widget(list, dialog_look, look,
                            traffic_look, final_glide_look,
                            settings);
-  WidgetDialog dialog(dialog_look);
-  dialog.CreateFull(UIGlobals::GetMainWindow(),
-                    _("Map elements at this location"), &widget);
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      dialog_look, _("Map elements at this location"),
+                      &widget);
   widget.CreateButtons(dialog);
   dialog.EnableCursorSelection();
 

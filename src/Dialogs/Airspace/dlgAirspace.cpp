@@ -167,8 +167,9 @@ void
 dlgAirspaceShowModal(bool color_mode)
 {
   AirspaceSettingsListWidget widget(color_mode);
-  WidgetDialog dialog(UIGlobals::GetDialogLook());
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Airspace"), &widget);
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      UIGlobals::GetDialogLook(),
+                      _("Airspace"), &widget);
   dialog.AddButton(_("Close"), mrOK);
 
   dialog.ShowModal();

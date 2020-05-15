@@ -45,8 +45,9 @@ static void
 BitmapDialog(const Bitmap &bitmap)
 {
   ViewImageWidget widget(bitmap);
-  WidgetDialog dialog(UIGlobals::GetDialogLook());
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _T("pc_met"), &widget);
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      UIGlobals::GetDialogLook(),
+                      _T("pc_met"), &widget);
   dialog.AddButton(_("Close"), mrOK);
   dialog.ShowModal();
   dialog.StealWidget();

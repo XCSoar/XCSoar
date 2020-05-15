@@ -312,9 +312,8 @@ dlgConfigWaypointsShowModal()
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
   WaypointManagerWidget widget;
-  WidgetDialog dialog(look);
-  dialog.CreateAuto(UIGlobals::GetMainWindow(), _("Waypoints Editor"),
-                    &widget);
+  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
+                      look, _("Waypoints Editor"), &widget);
   widget.CreateButtons(dialog);
   dialog.AddButton(_("Close"), mrCancel);
   dialog.EnableCursorSelection();

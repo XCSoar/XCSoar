@@ -241,11 +241,12 @@ dlgStartupShowModal()
 
   /* show the dialog */
   const DialogLook &look = UIGlobals::GetDialogLook();
-  WidgetDialog dialog(look);
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      UIGlobals::GetDialogLook(), nullptr);
   TwoWidgets widget(new LogoQuitWidget(look.button, dialog),
                     new StartupWidget(look, dialog, dff));
 
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _T(""), &widget);
+  dialog.FinishPreliminary(&widget);
 
   const int result = dialog.ShowModal();
   dialog.StealWidget();

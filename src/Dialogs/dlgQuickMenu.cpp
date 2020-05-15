@@ -272,10 +272,11 @@ dlgQuickMenuShowModal(SingleWindow &parent)
 
   const auto &dialog_look = UIGlobals::GetDialogLook();
 
-  WidgetDialog dialog(dialog_look);
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      dialog_look, nullptr);
   QuickMenu quick_menu(dialog, *menu);
 
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _T(""), &quick_menu);
+  dialog.FinishPreliminary(&quick_menu);
 
   const auto result = dialog.ShowModal();
   dialog.StealWidget();

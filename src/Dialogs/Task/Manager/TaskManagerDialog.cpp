@@ -266,10 +266,10 @@ dlgTaskManagerShowModal()
     return;
 
   const DialogLook &look = UIGlobals::GetDialogLook();
-  WidgetDialog dialog(look);
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      look, _("Task Manager"));
   TaskManagerDialog tm(dialog);
-
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Task Manager"), &tm);
+  dialog.FinishPreliminary(&tm);
   dialog.ShowModal();
   dialog.StealWidget();
 }

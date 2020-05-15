@@ -158,8 +158,8 @@ dlgAlternatesListShowModal()
     /* no alternates: don't show the dialog */
     return;
 
-  WidgetDialog dialog(dialog_look);
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Alternates"), &widget);
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      dialog_look, _("Alternates"), &widget);
   widget.CreateButtons(dialog);
   dialog.EnableCursorSelection();
 

@@ -37,8 +37,8 @@ NumberEntryDialog(const TCHAR *caption,
 
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  WidgetDialog dialog(look);
-  dialog.CreatePreliminary(UIGlobals::GetMainWindow(), caption);
+  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
+                      look, caption);
 
   ContainerWindow &client_area = dialog.GetClientAreaWindow();
 
@@ -81,8 +81,8 @@ NumberEntryDialog(const TCHAR *caption,
 
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  WidgetDialog dialog(look);
-  dialog.CreatePreliminary(UIGlobals::GetMainWindow(), caption);
+  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
+                      look, caption);
 
   ContainerWindow &client_area = dialog.GetClientAreaWindow();
 
@@ -124,8 +124,8 @@ AngleEntryDialog(const TCHAR *caption, Angle &value)
 
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  WidgetDialog dialog(look);
-  dialog.CreatePreliminary(UIGlobals::GetMainWindow(), caption);
+  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
+                      look, caption);
 
   ContainerWindow &client_area = dialog.GetClientAreaWindow();
 

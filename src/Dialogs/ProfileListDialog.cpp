@@ -369,8 +369,9 @@ void
 ProfileListDialog()
 {
   ProfileListWidget widget;
-  WidgetDialog dialog(UIGlobals::GetDialogLook());
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Profiles"), &widget);
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      UIGlobals::GetDialogLook(),
+                      _("Profiles"), &widget);
   widget.CreateButtons(dialog);
   dialog.AddButton(_("Close"), mrOK);
   dialog.EnableCursorSelection();
@@ -383,8 +384,9 @@ AllocatedPath
 SelectProfileDialog(Path selected_path)
 {
   ProfileListWidget widget(true);
-  WidgetDialog dialog(UIGlobals::GetDialogLook());
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Select profile"), &widget);
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      UIGlobals::GetDialogLook(),
+                      _("Select profile"), &widget);
   dialog.AddButton(_("Select"), mrOK);
   widget.CreateButtons(dialog);
   dialog.AddButton(_("Cancel"), mrCancel);

@@ -30,9 +30,10 @@ Copyright_License {
 void
 ShowMapItemListSettingsDialog()
 {
-  WidgetDialog dialog(UIGlobals::GetDialogLook());
-  dialog.CreateAuto(UIGlobals::GetMainWindow(), _("Map Item List Settings"),
-                    new MapItemListSettingsPanel());
+  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
+                      UIGlobals::GetDialogLook(),
+                      _("Map Item List Settings"),
+                      new MapItemListSettingsPanel());
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
   dialog.ShowModal();

@@ -122,14 +122,15 @@ dlgCreditsShowModal(SingleWindow &parent)
   char *license = InflateToString(COPYING_gz, COPYING_gz_size);
   const UTF8ToWideConverter license2(license);
 
-  WidgetDialog dialog(look);
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      look, _("Credits"));
 
   ArrowPagerWidget pager(dialog, look.button);
   pager.Add(new CreateWindowWidget(CreateLogoPage));
   pager.Add(new LargeTextWidget(look, authors2));
   pager.Add(new LargeTextWidget(look, license2));
 
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Credits"), &pager);
+  dialog.FinishPreliminary(&pager);
   dialog.ShowModal();
   dialog.StealWidget();
 

@@ -788,9 +788,10 @@ dlgTargetShowModal(int _target_point)
     return;
 
   const Look &look = UIGlobals::GetLook();
-  WidgetDialog dialog(look.dialog);
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      look.dialog, _("Target"));
   TargetWidget widget(dialog, look.dialog, look.map);
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Target"), &widget);
+  dialog.FinishPreliminary(&widget);
 
   if (widget.InitTargetPoints(_target_point))
     dialog.ShowModal();

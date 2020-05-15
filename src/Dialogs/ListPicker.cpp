@@ -159,7 +159,8 @@ ListPicker(const TCHAR *caption,
   assert((num_items == 0 && initial_value == 0) || initial_value < num_items);
   assert(item_height > 0);
 
-  WidgetDialog dialog(UIGlobals::GetDialogLook());
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      UIGlobals::GetDialogLook(), caption);
 
   ListPickerWidget *const list_widget =
     new ListPickerWidget(num_items, initial_value, item_height,
@@ -175,8 +176,6 @@ ListPicker(const TCHAR *caption,
 
     list_widget->EnableItemHelp(_itemhelp_callback, text_widget, two_widgets);
   }
-
-  dialog.CreateFull(UIGlobals::GetMainWindow(), caption, widget);
 
   if (help_text != nullptr)
     dialog.AddButton(_("Help"), *list_widget, HELP);
@@ -196,6 +195,8 @@ ListPicker(const TCHAR *caption,
   });
   if (update)
     update_timer.Schedule(std::chrono::seconds(1));
+
+  dialog.FinishPreliminary(widget);
 
   int result = dialog.ShowModal();
   if (result == mrOK)

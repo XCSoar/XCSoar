@@ -148,9 +148,9 @@ void
 dlgSwitchesShowModal()
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  WidgetDialog dialog(look);
-  dialog.CreateAuto(UIGlobals::GetMainWindow(), _("Switches"),
-                    new SwitchesDialog(look));
+  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
+                      look, _("Switches"),
+                      new SwitchesDialog(look));
   dialog.AddButton(_("Close"), mrCancel);
   dialog.ShowModal();
 }

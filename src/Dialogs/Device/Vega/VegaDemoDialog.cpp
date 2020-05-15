@@ -121,9 +121,9 @@ dlgVegaDemoShowModal()
   VarioWriteNMEA(_T("PDVSC,S,DemoMode,3"), env);
 
   const DialogLook &look = UIGlobals::GetDialogLook();
-  WidgetDialog dialog(look);
   VegaDemoWidget widget(look);
-  dialog.CreateAuto(UIGlobals::GetMainWindow(), _("Vario Demo"), &widget);
+  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
+                      look, _("Vario Demo"), &widget);
   dialog.AddButton(_("Close"), mrOK);
   dialog.ShowModal();
   dialog.StealWidget();

@@ -712,8 +712,9 @@ ShowDeviceList()
 {
   DeviceListWidget widget(UIGlobals::GetDialogLook());
 
-  WidgetDialog dialog(UIGlobals::GetDialogLook());
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Devices"), &widget);
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      UIGlobals::GetDialogLook(),
+                      _("Devices"), &widget);
   widget.CreateButtons(dialog);
   dialog.AddButton(_("Close"), mrOK);
   dialog.EnableCursorSelection();

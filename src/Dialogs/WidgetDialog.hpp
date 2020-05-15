@@ -41,36 +41,51 @@ class WidgetDialog : public WndForm {
 
   bool auto_size;
 
-  bool changed;
+  bool changed = false;
 
 public:
   explicit WidgetDialog(const DialogLook &look);
+
+  WidgetDialog(SingleWindow &parent, const DialogLook &look,
+               const PixelRect &rc, const TCHAR *caption,
+               Widget *widget) noexcept;
+
+  struct Auto {};
+
+  /**
+   * Create a dialog, but do not associate it with a #Widget yet.
+   * Call FinishPreliminary() to resume building the dialog.
+   */
+  WidgetDialog(Auto, SingleWindow &parent, const DialogLook &look,
+               const TCHAR *caption) noexcept;
+
+  /**
+   * Create a dialog with an automatic size (by
+   * Widget::GetMinimumSize() and Widget::GetMaximumSize()).
+   */
+  WidgetDialog(Auto, SingleWindow &parent, const DialogLook &look,
+               const TCHAR *caption, Widget *widget) noexcept;
+
+  struct Full {};
+
+  /**
+   * Create a dialog, but do not associate it with a #Widget yet.
+   * Call FinishPreliminary() to resume building the dialog.
+   */
+  WidgetDialog(Full, SingleWindow &parent, const DialogLook &look,
+               const TCHAR *caption) noexcept;
+
+  /**
+   * Create a full-screen dialog.
+   */
+  WidgetDialog(Full, SingleWindow &parent, const DialogLook &look,
+               const TCHAR *caption, Widget *widget) noexcept;
 
   virtual ~WidgetDialog();
 
   const ButtonLook &GetButtonLook() const {
     return buttons.GetLook();
   }
-
-  void Create(SingleWindow &parent, const TCHAR *caption,
-              const PixelRect &rc, Widget *widget);
-
-  /**
-   * Create a full-screen dialog.
-   */
-  void CreateFull(SingleWindow &parent, const TCHAR *caption, Widget *widget);
-
-  /**
-   * Create a dialog with an automatic size (by
-   * Widget::GetMinimumSize() and Widget::GetMaximumSize()).
-   */
-  void CreateAuto(SingleWindow &parent, const TCHAR *caption, Widget *widget);
-
-  /**
-   * Create a dialog, but do not associate it with a #Widget yet.
-   * Call FinishPreliminary() to resume building the dialog.
-   */
-  void CreatePreliminary(SingleWindow &parent, const TCHAR *caption);
 
   void FinishPreliminary(Widget *widget);
 

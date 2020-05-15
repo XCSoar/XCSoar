@@ -275,14 +275,14 @@ dlgConfigurationVarioShowModal(Device &_device)
 
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  WidgetDialog dialog(look);
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      look, _("Vario Configuration"));
 
   ArrowPagerWidget widget(dialog, look.button,
                           new VegaConfigurationExtraButtons(dialog));
   FillPager(widget);
 
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Vario Configuration"),
-                    &widget);
+  dialog.FinishPreliminary(&widget);
 
   widget.SetPageFlippedCallback([&dialog, &widget](){
       UpdateCaption(dialog, widget.GetCurrentIndex());

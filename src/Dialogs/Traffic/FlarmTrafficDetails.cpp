@@ -383,13 +383,13 @@ dlgFlarmTrafficDetailsShowModal(FlarmId id)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  WidgetDialog dialog(look);
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      look, _("FLARM Traffic Details"));
 
   FlarmTrafficDetailsWidget *widget =
     new FlarmTrafficDetailsWidget(dialog, id);
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _("FLARM Traffic Details"),
-                    widget);
   widget->CreateButtons(dialog);
   dialog.AddButton(_("Close"), mrCancel);
+  dialog.FinishPreliminary(widget);
   dialog.ShowModal();
 }

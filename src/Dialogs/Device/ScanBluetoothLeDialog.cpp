@@ -182,7 +182,8 @@ ScanBluetoothLeWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 std::string
 ScanBluetoothLeDialog() noexcept
 {
-  WidgetDialog dialog(UIGlobals::GetDialogLook());
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      UIGlobals::GetDialogLook(), _("Bluetooth LE"));
   ScanBluetoothLeWidget widget(dialog);
 
   const auto env = Java::GetEnv();
@@ -194,9 +195,9 @@ ScanBluetoothLeDialog() noexcept
     return {};
   }
 
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Bluetooth LE"), &widget);
   widget.CreateButtons();
   dialog.AddButton(_("Cancel"), mrCancel);
+  dialog.FinishPreliminary(&widget);
 
   int result = dialog.ShowModal();
   BluetoothHelper::StopLeScan(env, callback);

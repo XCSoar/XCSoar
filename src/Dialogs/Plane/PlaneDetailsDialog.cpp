@@ -187,11 +187,12 @@ bool
 dlgPlaneDetailsShowModal(Plane &_plane)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  WidgetDialog dialog(look);
+  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
+                      look, _("Plane Details"));
   PlaneEditWidget widget(_plane, look, &dialog);
-  dialog.CreateAuto(UIGlobals::GetMainWindow(), _("Plane Details"), &widget);
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
+  dialog.FinishPreliminary(&widget);
   const int result = dialog.ShowModal();
   dialog.StealWidget();
 

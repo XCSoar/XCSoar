@@ -138,14 +138,15 @@ dlgChecklistShowModal()
 
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  WidgetDialog dialog(look);
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      look, _("Checklist"));
 
   ArrowPagerWidget widget(dialog, look.button);
   for (int i = 0; i < nLists; ++i)
     widget.Add(new LargeTextWidget(look, ChecklistText[i]));
   widget.SetCurrent(current_page);
 
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Checklist"), &widget);
+  dialog.FinishPreliminary(&widget);
 
   widget.SetPageFlippedCallback([&dialog, &widget](){
       UpdateCaption(dialog, widget.GetCurrentIndex());

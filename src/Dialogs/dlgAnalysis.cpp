@@ -715,11 +715,12 @@ dlgAnalysisShowModal(SingleWindow &parent, const Look &look,
                      const RasterTerrain *terrain,
                      AnalysisPage _page)
 {
-  WidgetDialog dialog(look.dialog);
+  WidgetDialog dialog(WidgetDialog::Full{}, parent,
+                      look.dialog, _("Analysis"));
   AnalysisWidget analysis(dialog, look,
                           airspaces, terrain,
                           blackboard, glide_computer);
-  dialog.CreateFull(parent, _("Analysis"), &analysis);
+  dialog.FinishPreliminary(&analysis);
 
   if (_page != AnalysisPage::COUNT)
     page = (AnalysisPage)_page;

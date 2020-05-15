@@ -273,9 +273,9 @@ dlgPlanePolarShowModal(Plane &_plane)
   caption.Format(_T("%s: %s"), _("Plane Polar"), _plane.registration.c_str());
 
   const DialogLook &look = UIGlobals::GetDialogLook();
-  WidgetDialog dialog(look);
   PlanePolarWidget widget(_plane, look);
-  dialog.CreateAuto(UIGlobals::GetMainWindow(), caption, &widget);
+  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
+                      look, caption, &widget);
   widget.CreateButtons(dialog);
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);

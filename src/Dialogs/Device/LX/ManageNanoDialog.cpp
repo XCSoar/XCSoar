@@ -101,10 +101,11 @@ ManageNanoWidget::OnAction(int id) noexcept
 void
 ManageNanoDialog(Device &device, const DeviceInfo &info)
 {
-  WidgetDialog dialog(UIGlobals::GetDialogLook());
-  dialog.CreateAuto(UIGlobals::GetMainWindow(), _T("LXNAV Nano"),
-                    new ManageNanoWidget(UIGlobals::GetDialogLook(),
-                                         (LXDevice &)device, info));
+  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
+                      UIGlobals::GetDialogLook(),
+                      _T("LXNAV Nano"),
+                      new ManageNanoWidget(UIGlobals::GetDialogLook(),
+                                           (LXDevice &)device, info));
   dialog.AddButton(_("Close"), mrCancel);
   dialog.ShowModal();
 }

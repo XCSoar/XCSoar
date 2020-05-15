@@ -53,7 +53,9 @@ void
 dlgStatusShowModal(int start_page)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  WidgetDialog dialog(look);
+
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      look, _("Status"));
 
   auto *close_button = new ButtonWidget(look.button, _("Close"),
                                         dialog, mrOK);
@@ -63,7 +65,7 @@ dlgStatusShowModal(int start_page)
       SetTitle(dialog, widget);
     });
 
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Status"), &widget);
+  dialog.FinishPreliminary(&widget);
   dialog.PrepareWidget();
 
   const NMEAInfo &basic = CommonInterface::Basic();

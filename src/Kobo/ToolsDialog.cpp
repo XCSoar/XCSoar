@@ -108,8 +108,8 @@ ShowToolsDialog()
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
   ToolsWidget widget(look);
-  WidgetDialog dialog(look);
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Tools"), &widget);
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      look, _("Tools"), &widget);
   dialog.AddButton(_("Close"), mrOK);
   dialog.ShowModal();
   dialog.StealWidget();

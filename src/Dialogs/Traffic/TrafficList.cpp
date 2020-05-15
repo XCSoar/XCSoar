@@ -761,7 +761,9 @@ void
 TrafficListDialog()
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  WidgetDialog dialog(look);
+
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      look, _("Traffic"));
 
   TrafficFilterWidget *filter_widget = new TrafficFilterWidget(look);
 
@@ -778,7 +780,7 @@ TrafficListDialog()
 
   TwoWidgets *widget = new TwoWidgets(left_widget, list_widget, false);
 
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Traffic"), widget);
+  dialog.FinishPreliminary(widget);
   dialog.ShowModal();
 }
 
@@ -787,17 +789,18 @@ PickFlarmTraffic(const TCHAR *title, FlarmId array[], unsigned count)
 {
   assert(count > 0);
 
-  WidgetDialog dialog(UIGlobals::GetDialogLook());
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      UIGlobals::GetDialogLook(), title);
 
   TrafficListWidget *const list_widget =
     new TrafficListWidget(dialog, array, count);
 
   Widget *widget = list_widget;
 
-  dialog.CreateFull(UIGlobals::GetMainWindow(), title, widget);
   dialog.AddButton(_("Select"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
   dialog.EnableCursorSelection();
+  dialog.FinishPreliminary(widget);
 
   return dialog.ShowModal() == mrOK
     ? list_widget->GetCursorId()

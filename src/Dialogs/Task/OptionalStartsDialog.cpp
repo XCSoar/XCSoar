@@ -213,9 +213,9 @@ dlgTaskOptionalStarts(OrderedTask &task)
   assert(task.TaskSize() > 0);
 
   OptionStartsWidget widget(task);
-  WidgetDialog dialog(UIGlobals::GetDialogLook());
-  dialog.CreateFull(UIGlobals::GetMainWindow(),
-                    _("Alternate Start Points"), &widget);
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      UIGlobals::GetDialogLook(),
+                      _("Alternate Start Points"), &widget);
   widget.CreateButtons(dialog);
   dialog.EnableCursorSelection();
 

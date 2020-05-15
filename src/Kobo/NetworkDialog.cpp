@@ -127,8 +127,8 @@ ShowNetworkDialog()
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
   NetworkWidget widget(look);
-  WidgetDialog dialog(look);
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Network"), &widget);
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      look, _("Network"), &widget);
   dialog.AddButton(_("Close"), mrOK);
   dialog.ShowModal();
   dialog.StealWidget();

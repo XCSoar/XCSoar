@@ -260,8 +260,8 @@ KnobTextEntry(TCHAR *text, size_t width,
     width = MAX_TEXTENTRY;
 
   KnobTextEntryWidget widget(text, width);
-  WidgetDialog dialog(UIGlobals::GetDialogLook());
-  dialog.CreateFull(UIGlobals::GetMainWindow(), caption, &widget);
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      UIGlobals::GetDialogLook(), caption, &widget);
   dialog.AddButton(_("Close"), mrOK);
   widget.CreateButtons(dialog);
 

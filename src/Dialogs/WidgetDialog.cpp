@@ -43,9 +43,56 @@ GetDialogStyle()
 WidgetDialog::WidgetDialog(const DialogLook &look)
   :WndForm(look),
    buttons(GetClientAreaWindow(), look.button),
-   widget(GetClientAreaWindow()),
-   changed(false)
+   widget(GetClientAreaWindow())
 {
+}
+
+WidgetDialog::WidgetDialog(SingleWindow &parent, const DialogLook &look,
+                           const PixelRect &rc, const TCHAR *caption,
+                           Widget *_widget) noexcept
+  :WndForm(parent, look, rc, caption, GetDialogStyle()),
+   buttons(GetClientAreaWindow(), look.button),
+   widget(GetClientAreaWindow()),
+   full(false), auto_size(false)
+{
+  widget.Set(_widget);
+  widget.Move(buttons.UpdateLayout());
+}
+
+WidgetDialog::WidgetDialog(Auto, SingleWindow &parent, const DialogLook &look,
+                           const TCHAR *caption) noexcept
+  :WndForm(parent, look, parent.GetClientRect(), caption, GetDialogStyle()),
+   buttons(GetClientAreaWindow(), look.button),
+   widget(GetClientAreaWindow()),
+   full(false), auto_size(true)
+{
+}
+
+WidgetDialog::WidgetDialog(Auto tag, SingleWindow &parent, const DialogLook &look,
+                           const TCHAR *caption,
+                           Widget *_widget) noexcept
+  :WidgetDialog(tag, parent, look, caption)
+{
+  widget.Set(_widget);
+  widget.Move(buttons.UpdateLayout());
+}
+
+WidgetDialog::WidgetDialog(Full, SingleWindow &parent, const DialogLook &look,
+                           const TCHAR *caption) noexcept
+  :WndForm(parent, look, parent.GetClientRect(), caption, GetDialogStyle()),
+   buttons(GetClientAreaWindow(), look.button),
+   widget(GetClientAreaWindow()),
+   full(true), auto_size(false)
+{
+}
+
+WidgetDialog::WidgetDialog(Full tag, SingleWindow &parent, const DialogLook &look,
+                           const TCHAR *caption,
+                           Widget *_widget) noexcept
+  :WidgetDialog(tag, parent, look, caption)
+{
+  widget.Set(_widget);
+  widget.Move(buttons.UpdateLayout());
 }
 
 WidgetDialog::~WidgetDialog()
@@ -54,45 +101,6 @@ WidgetDialog::~WidgetDialog()
      OnDestroy() method won't be called (during object destruction,
      this object loses its identity) */
   Destroy();
-}
-
-void
-WidgetDialog::Create(SingleWindow &parent,
-                     const TCHAR *caption, const PixelRect &rc,
-                     Widget *_widget)
-{
-  full = false;
-  auto_size = false;
-  WndForm::Create(parent, rc, caption, GetDialogStyle());
-  widget.Set(_widget);
-  widget.Move(buttons.UpdateLayout());
-}
-
-void
-WidgetDialog::CreateFull(SingleWindow &parent, const TCHAR *caption,
-                         Widget *widget)
-{
-  Create(parent, caption, parent.GetClientRect(), widget);
-  full = true;
-}
-
-void
-WidgetDialog::CreateAuto(SingleWindow &parent, const TCHAR *caption,
-                         Widget *_widget)
-{
-  full = false;
-  auto_size = true;
-  WndForm::Create(parent, caption, GetDialogStyle());
-  widget.Set(_widget);
-  widget.Move(buttons.UpdateLayout());
-}
-
-void
-WidgetDialog::CreatePreliminary(SingleWindow &parent, const TCHAR *caption)
-{
-  full = false;
-  auto_size = true;
-  WndForm::Create(parent, parent.GetClientRect(), caption, GetDialogStyle());
 }
 
 void
@@ -105,7 +113,8 @@ WidgetDialog::FinishPreliminary(Widget *_widget)
   widget.Set(_widget);
   widget.Move(buttons.UpdateLayout());
 
-  AutoSize();
+  if (auto_size)
+    AutoSize();
 }
 
 void
@@ -245,8 +254,7 @@ bool
 DefaultWidgetDialog(SingleWindow &parent, const DialogLook &look,
                     const TCHAR *caption, const PixelRect &rc, Widget &widget)
 {
-  WidgetDialog dialog(look);
-  dialog.Create(parent, caption, rc, &widget);
+  WidgetDialog dialog(parent, look, rc, caption, &widget);
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
 
@@ -262,8 +270,7 @@ bool
 DefaultWidgetDialog(SingleWindow &parent, const DialogLook &look,
                     const TCHAR *caption, Widget &widget)
 {
-  WidgetDialog dialog(look);
-  dialog.CreateAuto(parent, caption, &widget);
+  WidgetDialog dialog(WidgetDialog::Auto{}, parent, look, caption, &widget);
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
 

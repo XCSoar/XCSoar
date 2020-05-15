@@ -75,10 +75,11 @@ ManageLX16xxDialog(Device &device, const DeviceInfo &info)
   StaticString<64> title;
   title.Format(_T("LX %s"), info.product.c_str());
 
-  WidgetDialog dialog(UIGlobals::GetDialogLook());
-  dialog.CreateAuto(UIGlobals::GetMainWindow(), title,
-                    new ManageLX16xxWidget(UIGlobals::GetDialogLook(),
-                                           (LXDevice &)device, info));
+  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
+                      UIGlobals::GetDialogLook(),
+                      title,
+                      new ManageLX16xxWidget(UIGlobals::GetDialogLook(),
+                                             (LXDevice &)device, info));
   dialog.AddButton(_("Close"), mrCancel);
   dialog.ShowModal();
 }

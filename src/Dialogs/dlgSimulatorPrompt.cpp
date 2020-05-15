@@ -57,10 +57,11 @@ dlgSimulatorPromptShowModal()
 {
 #ifdef SIMULATOR_AVAILABLE
   const DialogLook &look = UIGlobals::GetDialogLook();
-  WidgetDialog dialog(look);
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      look, nullptr);
   SimulatorPromptWidget widget(look, dialog);
 
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _T(""), &widget);
+  dialog.FinishPreliminary(&widget);
 
   const int result = dialog.ShowModal();
   dialog.StealWidget();
