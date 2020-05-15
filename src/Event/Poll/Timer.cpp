@@ -25,8 +25,9 @@ Copyright_License {
 #include "../Globals.hpp"
 #include "../Queue.hpp"
 
-Timer::Timer()
-  :timer(event_queue->get_io_context()) {}
+Timer::Timer(Callback _callback) noexcept
+  :timer(event_queue->get_io_context()),
+   callback(std::move(_callback)) {}
 
 void
 Timer::Schedule(std::chrono::steady_clock::duration d) noexcept
@@ -67,7 +68,7 @@ Timer::Invoke(const boost::system::error_code &ec)
     /* was cancelled by another thread */
     return;
 
-  OnTimer();
+  callback();
 
   if (enabled.load() && !queued.exchange(true)) {
     timer.expires_from_now(interval);

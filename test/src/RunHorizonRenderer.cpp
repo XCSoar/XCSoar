@@ -25,7 +25,7 @@ Copyright_License {
 #define ENABLE_CLOSE_BUTTON
 
 #include "Main.hpp"
-#include "Event/LambdaTimer.hpp"
+#include "Event/Timer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Form/Button.hpp"
 #include "Form/ActionListener.hpp"
@@ -67,15 +67,15 @@ Main()
   horizon.Create(main_window, main_window.GetClientRect(), with_border);
   main_window.SetFullWindow(horizon);
 
-  auto timer = MakeLambdaTimer([&horizon](){
-      AttitudeState attitude;
-      attitude.bank_angle_computed = true;
-      attitude.pitch_angle_computed = true;
-      attitude.bank_angle = Angle::Zero();
-      attitude.pitch_angle = Angle::Zero();
+  Timer timer([&horizon](){
+    AttitudeState attitude;
+    attitude.bank_angle_computed = true;
+    attitude.pitch_angle_computed = true;
+    attitude.bank_angle = Angle::Zero();
+    attitude.pitch_angle = Angle::Zero();
 
-      horizon.SetAttitude(attitude);
-    });
+    horizon.SetAttitude(attitude);
+  });
   timer.Schedule(std::chrono::milliseconds(250));
 
   main_window.RunEventLoop();

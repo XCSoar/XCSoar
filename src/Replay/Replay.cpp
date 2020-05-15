@@ -44,7 +44,7 @@ Replay::Stop()
   if (replay == nullptr)
     return;
 
-  Timer::Cancel();
+  timer.Cancel();
 
   delete replay;
   replay = nullptr;
@@ -88,7 +88,7 @@ Replay::Start(Path _path)
   fast_forward = -1;
   next_data.Reset();
 
-  Timer::Schedule(std::chrono::milliseconds(100));
+  timer.Schedule(std::chrono::milliseconds(100));
 }
 
 bool
@@ -239,5 +239,5 @@ Replay::OnTimer()
     schedule = Clamp(delta, lower, upper);
   }
 
-  Timer::Schedule(schedule);
+  timer.Schedule(schedule);
 }

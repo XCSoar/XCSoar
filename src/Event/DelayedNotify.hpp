@@ -32,7 +32,9 @@ Copyright_License {
  * To use it, subclass it and implement the abstract method
  * OnNotification().
  */
-class DelayedNotify : private Timer {
+class DelayedNotify {
+  Timer timer{[this]{ timer.Cancel(); OnNotification(); }};
+
   const std::chrono::steady_clock::duration delay;
 
 public:
@@ -48,14 +50,14 @@ public:
    * from any thread.
    */
   void SendNotification() {
-    SchedulePreserve(delay);
+    timer.SchedulePreserve(delay);
   }
 
   /**
    * Clear any pending notification.
    */
   void ClearNotification() {
-    Cancel();
+    timer.Cancel();
   }
 
 protected:
@@ -64,10 +66,6 @@ protected:
    * This method runs in the main thread.
    */
   virtual void OnNotification() = 0;
-
-private:
-  /* virtual methods from class Timer */
-  virtual void OnTimer();
 };
 
 #endif

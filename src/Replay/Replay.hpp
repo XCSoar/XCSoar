@@ -36,8 +36,9 @@ class CatmullRomInterpolator;
 class Error;
 
 class Replay final
-  : private Timer
 {
+  Timer timer{[this]{ OnTimer(); }};
+
   double time_scale;
 
   AbstractReplay *replay;
@@ -135,7 +136,7 @@ public:
   }
 
 private:
-  void OnTimer() override;
+  void OnTimer();
 };
 
 #endif

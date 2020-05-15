@@ -59,7 +59,7 @@ Timer::Invoke()
     /* was cancelled by another thread */
     return;
 
-  OnTimer();
+  callback();
 
   if (enabled.load() && !queued.exchange(true))
     event_queue->AddTimer(*this, interval);

@@ -59,8 +59,9 @@ enum Actions {
 
 class FlightSetupPanel final
   : public RowFormWidget, DataFieldListener,
-    private Timer,
     public ActionListener {
+  Timer timer{[this]{ OnTimer(); }};
+
   Button *dump_button;
 
   PolarSettings &polar_settings;
@@ -108,7 +109,7 @@ public:
 
   virtual void Show(const PixelRect &rc) override {
     RowFormWidget::Show(rc);
-    Timer::Schedule(std::chrono::milliseconds(500));
+    timer.Schedule(std::chrono::milliseconds(500));
 
     OnTimer();
     SetButtons();
@@ -116,7 +117,7 @@ public:
   }
 
   virtual void Hide() override {
-    Timer::Cancel();
+    timer.Cancel();
     RowFormWidget::Hide();
   }
 
@@ -124,11 +125,10 @@ public:
   void OnAction(int id) noexcept override;
 
 private:
+  void OnTimer();
+
   /* virtual methods from DataFieldListener */
   virtual void OnModified(DataField &df) override;
-
-  /* virtual methods from Timer */
-  virtual void OnTimer() override;
 };
 
 void

@@ -22,10 +22,3 @@ Copyright_License {
 */
 
 #include "DelayedNotify.hpp"
-
-void
-DelayedNotify::OnTimer()
-{
-  Cancel();
-  OnNotification();
-}

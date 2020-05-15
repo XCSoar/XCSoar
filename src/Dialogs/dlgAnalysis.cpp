@@ -124,7 +124,7 @@ protected:
   virtual void OnPaint(Canvas &canvas) override;
 };
 
-class AnalysisWidget final : public NullWidget, ActionListener, Timer {
+class AnalysisWidget final : public NullWidget, ActionListener {
   enum Buttons {
     PREVIOUS,
     NEXT,
@@ -147,6 +147,8 @@ class AnalysisWidget final : public NullWidget, ActionListener, Timer {
   WndFrame info;
   Button details_button, previous_button, next_button, close_button;
   ChartControl chart;
+
+  Timer update_timer{[this]{ Update(); }};
 
 public:
   AnalysisWidget(WndForm &_dialog, const Look &look,
@@ -189,11 +191,11 @@ protected:
     chart.MoveAndShow(layout.main);
 
     Update();
-    Timer::Schedule(std::chrono::milliseconds(2500));
+    update_timer.Schedule(std::chrono::milliseconds(2500));
   }
 
   void Hide() override {
-    Timer::Cancel();
+    update_timer.Cancel();
 
     info.Hide();
     details_button.Hide();
@@ -237,11 +239,6 @@ private:
       OnCalcClicked();
       break;
     }
-  }
-
-  /* virtual methods from class Timer */
-  void OnTimer() override {
-    Update();
   }
 };
 

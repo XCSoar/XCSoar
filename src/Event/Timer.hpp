@@ -30,12 +30,12 @@ Copyright_License {
 
 #include <atomic>
 #include <chrono>
-
 #include <cassert>
+#include <functional>
 
 /**
- * A timer that, once initialized, periodically calls OnTimer() after
- * a specified amount of time, until Cancel() gets called.
+ * A timer that, once initialized, periodically calls a given function
+ * after a specified amount of time, until Cancel() gets called.
  *
  * Initially, this class does not schedule a timer.
  *
@@ -45,7 +45,7 @@ Copyright_License {
  * The class #WindowTimer is cheaper on WIN32; use it instead of this
  * class if you are implementing a #Window.
  */
-class Timer {
+class Timer final {
   std::atomic<bool> enabled{false}, queued{false};
   std::chrono::steady_clock::duration interval;
 
@@ -53,14 +53,17 @@ class Timer {
   boost::asio::steady_timer timer;
 #endif
 
+  using Callback = std::function<void()>;
+  const Callback callback;
+
 public:
   /**
    * Construct a Timer object that is not set initially.
    */
 #ifdef USE_POLL_EVENT
-  Timer();
+  explicit Timer(Callback _callback) noexcept;
 #else
-  Timer() = default;
+  explicit Timer(Callback &&_callback) noexcept:callback(std::move(_callback)) {}
 #endif
 
   Timer(const Timer &other) = delete;
@@ -116,13 +119,6 @@ public:
    * while the timer is running.
    */
   void Cancel();
-
-protected:
-  /**
-   * This method gets called after the configured time has elapsed.
-   * Implement it.
-   */
-  virtual void OnTimer() = 0;
 
 #ifdef USE_POLL_EVENT
 private:

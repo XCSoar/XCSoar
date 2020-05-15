@@ -25,7 +25,7 @@ Copyright_License {
 #define ENABLE_CLOSE_BUTTON
 
 #include "Main.hpp"
-#include "Event/LambdaTimer.hpp"
+#include "Event/Timer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Form/Button.hpp"
 #include "Form/ActionListener.hpp"
@@ -117,32 +117,32 @@ Main()
   double step(10);
   double mc_mc0_step(100);
 
-  auto timer = MakeLambdaTimer([&](){
-      double altitude_difference = final_glide.GetAltitudeDifference();
-      double altitude_difference0 = final_glide.GetAltitudeDifference0();
+  Timer timer([&](){
+    double altitude_difference = final_glide.GetAltitudeDifference();
+    double altitude_difference0 = final_glide.GetAltitudeDifference0();
 
-      if (altitude_difference >= 600 ) {
-        step = -10;
-      } else if (altitude_difference <= -600) {
-        step = 10;
+    if (altitude_difference >= 600 ) {
+      step = -10;
+    } else if (altitude_difference <= -600) {
+      step = 10;
 
-        if (altitude_difference0 > 600) {
-          mc_mc0_step = -100;
-        } else if (altitude_difference0 <= altitude_difference) {
-          mc_mc0_step = 100;
-        }
-
-        altitude_difference0 += mc_mc0_step;
+      if (altitude_difference0 > 600) {
+        mc_mc0_step = -100;
+      } else if (altitude_difference0 <= altitude_difference) {
+        mc_mc0_step = 100;
       }
 
-      altitude_difference += step;
-      altitude_difference0 += step;
+      altitude_difference0 += mc_mc0_step;
+    }
 
-      final_glide.SetAltitudeDifference(altitude_difference);
-      final_glide.SetAltitudeDifference0(altitude_difference0);
+    altitude_difference += step;
+    altitude_difference0 += step;
 
-      final_glide.Invalidate();
-    });
+    final_glide.SetAltitudeDifference(altitude_difference);
+    final_glide.SetAltitudeDifference0(altitude_difference0);
+
+    final_glide.Invalidate();
+  });
   timer.Schedule(std::chrono::milliseconds(100));
 
   main_window.RunEventLoop();

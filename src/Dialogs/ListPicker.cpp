@@ -29,15 +29,14 @@ Copyright_License {
 #include "Widget/TwoWidgets.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
-#include "Event/LambdaTimer.hpp"
+#include "Event/Timer.hpp"
 #include "Event/Timer.hpp"
 
 #include <cassert>
 
 static constexpr int HELP = 100;
 
-class ListPickerWidget : public ListWidget, public ActionListener,
-                         private Timer {
+class ListPickerWidget : public ListWidget, public ActionListener {
   unsigned num_items;
   unsigned initial_value;
   unsigned row_height;
@@ -46,6 +45,17 @@ class ListPickerWidget : public ListWidget, public ActionListener,
 
   ListItemRenderer &item_renderer;
   ActionListener &action_listener;
+
+  /**
+   * This timer is used to postpone the initial UpdateHelp() call.
+   * This is necessary because the TwoWidgets instance is not fully
+   * initialised yet in Show(), and recursively calling into Widget
+   * methods is dangerous anyway.
+   */
+  Timer postpone_update_help{[this]{
+    UpdateHelp(GetList().GetCursorIndex());
+    postpone_update_help.Cancel();
+  }};
 
   const TCHAR *const caption, *const help_text;
   ItemHelpCallback_t item_help_callback;
@@ -102,12 +112,12 @@ public:
     ListWidget::Show(rc);
 
     visible = true;
-    Schedule({});
+    postpone_update_help.Schedule({});
   }
 
   virtual void Hide() override {
     visible = false;
-    Cancel();
+    postpone_update_help.Cancel();
     ListWidget::Hide();
   }
 
@@ -134,20 +144,6 @@ public:
 
   void OnAction(int id) noexcept override {
     HelpDialog(caption, help_text);
-  }
-
-private:
-  /* virtual methods from class Timer */
-
-  /**
-   * This timer is used to postpone the initial UpdateHelp() call.
-   * This is necessary because the TwoWidgets instance is not fully
-   * initialised yet in Show(), and recursively calling into Widget
-   * methods is dangerous anyway.
-   */
-  virtual void OnTimer() override {
-    UpdateHelp(GetList().GetCursorIndex());
-    Timer::Cancel();
   }
 };
 
@@ -196,9 +192,9 @@ ListPicker(const TCHAR *caption,
 
   dialog.EnableCursorSelection();
 
-  auto update_timer = MakeLambdaTimer([list_widget](){
-      list_widget->GetList().Invalidate();
-    });
+  Timer update_timer([list_widget](){
+    list_widget->GetList().Invalidate();
+  });
   if (update)
     update_timer.Schedule(std::chrono::seconds(1));
 

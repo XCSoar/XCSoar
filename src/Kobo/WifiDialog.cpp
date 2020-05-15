@@ -37,7 +37,7 @@ Copyright_License {
 #include "Net/IPv4Address.hxx"
 
 class WifiListWidget final
-  : public ListWidget, ActionListener, Timer {
+  : public ListWidget, ActionListener {
   enum Buttons {
     SCAN,
     CONNECT,
@@ -63,6 +63,8 @@ class WifiListWidget final
 
   WPASupplicant wpa_supplicant;
 
+  Timer update_timer{[this]{ UpdateList(); }};
+
 public:
   void CreateButtons(WidgetDialog &dialog) {
     dialog.AddButton(_("Scan"), *this, SCAN);
@@ -80,11 +82,11 @@ public:
                row_renderer.CalculateLayout(look.text_font,
                                             look.small_font));
     UpdateList();
-    Timer::Schedule(std::chrono::seconds(1));
+    update_timer.Schedule(std::chrono::seconds(1));
   }
 
   virtual void Unprepare() override {
-    Timer::Cancel();
+    update_timer.Cancel();
     DeleteWindow();
   }
 
@@ -95,11 +97,6 @@ public:
   /* virtual methods from class ListCursorHandler */
   void OnCursorMoved(unsigned index) noexcept override {
     UpdateButtons();
-  }
-
-  /* virtual methods from class Timer */
-  void OnTimer() override {
-    UpdateList();
   }
 
 private:

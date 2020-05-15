@@ -68,7 +68,7 @@ struct WarningItem
 };
 
 class AirspaceWarningListWidget final
-  : public ListWidget, private ActionListener, private Timer {
+  : public ListWidget, private ActionListener {
 
   enum Buttons {
     ACK,
@@ -77,6 +77,8 @@ class AirspaceWarningListWidget final
   };
 
   ProtectedAirspaceWarningManager &airspace_warnings;
+
+  Timer update_list_timer{[this]{ UpdateList(); }};
 
   Button *ack_button;
   Button *ack_day_button;
@@ -145,9 +147,6 @@ public:
 private:
   /* virtual methods from class ActionListener */
   void OnAction(int id) noexcept override;
-
-  /* virtual methods from Timer */
-  virtual void OnTimer() override;
 };
 
 static WndForm *dialog = NULL;
@@ -221,13 +220,13 @@ AirspaceWarningListWidget::Show(const PixelRect &rc)
   sound_interval_counter = 0;
   ListWidget::Show(rc);
   UpdateList();
-  Timer::Schedule(std::chrono::milliseconds(500));
+  update_list_timer.Schedule(std::chrono::milliseconds(500));
 }
 
 void
 AirspaceWarningListWidget::Hide()
 {
-  Timer::Cancel();
+  update_list_timer.Cancel();
   ListWidget::Hide();
 }
 
@@ -521,12 +520,6 @@ AirspaceWarningListWidget::UpdateList()
   GetList().Invalidate();
   UpdateButtons();
   AutoHide();
-}
-
-void
-AirspaceWarningListWidget::OnTimer()
-{
-  UpdateList();
 }
 
 bool

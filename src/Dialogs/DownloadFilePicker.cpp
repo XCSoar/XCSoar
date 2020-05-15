@@ -52,10 +52,12 @@ Copyright_License {
 /**
  * This class tracks a download and updates a #ProgressDialog.
  */
-class DownloadProgress final : Timer, Net::DownloadListener, Notify {
+class DownloadProgress final : Net::DownloadListener, Notify {
   ProgressDialog &dialog;
   ThreadedOperationEnvironment env;
   const Path path_relative;
+
+  Timer update_timer{[this]{ Net::DownloadManager::Enumerate(*this); }};
 
   bool got_size = false, complete = false, success;
 
@@ -63,21 +65,16 @@ public:
   DownloadProgress(ProgressDialog &_dialog,
                    const Path _path_relative)
     :dialog(_dialog), env(_dialog), path_relative(_path_relative) {
-    Timer::Schedule(std::chrono::seconds(1));
+    update_timer.Schedule(std::chrono::seconds(1));
     Net::DownloadManager::AddListener(*this);
   }
 
   ~DownloadProgress() {
     Net::DownloadManager::RemoveListener(*this);
-    Timer::Cancel();
+    update_timer.Cancel();
   }
 
 private:
-  /* virtual methods from class Timer */
-  void OnTimer() override {
-    Net::DownloadManager::Enumerate(*this);
-  }
-
   /* virtual methods from class Net::DownloadListener */
   void OnDownloadAdded(Path _path_relative,
                        int64_t size, int64_t position) override {

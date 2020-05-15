@@ -25,7 +25,7 @@ Copyright_License {
 #define ENABLE_CLOSE_BUTTON
 
 #include "Main.hpp"
-#include "Event/LambdaTimer.hpp"
+#include "Event/Timer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Look/WindArrowLook.hpp"
 #include "Renderer/WindArrowRenderer.hpp"
@@ -77,16 +77,16 @@ Main()
   wind.Create(main_window, main_window.GetClientRect(), with_border);
   main_window.SetFullWindow(wind);
 
-  auto timer = MakeLambdaTimer([&wind](){
-      SpeedVector _wind = wind.GetWind();
+  Timer timer([&wind](){
+    SpeedVector _wind = wind.GetWind();
 
-      _wind.bearing = (_wind.bearing + Angle::Degrees(5)).AsBearing();
-      _wind.norm += 1;
-      if (_wind.norm > 15)
-        _wind.norm = 0;
+    _wind.bearing = (_wind.bearing + Angle::Degrees(5)).AsBearing();
+    _wind.norm += 1;
+    if (_wind.norm > 15)
+      _wind.norm = 0;
 
-      wind.SetWind(_wind);
-    });
+    wind.SetWind(_wind);
+  });
   timer.Schedule(std::chrono::milliseconds(250));
 
   main_window.RunEventLoop();

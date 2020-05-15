@@ -48,14 +48,12 @@ class Window;
  * This class is not thread safe; all of the methods must be called
  * from the main thread.
  */
-class WindowTimer
-#ifndef USE_WINUSER
-  : private Timer
-#endif
-{
+class WindowTimer {
   Window &window;
 #ifdef USE_WINUSER
   UINT_PTR id = 0;
+#else
+  Timer timer{[this]{ OnTimer(); }};
 #endif
 
 public:
@@ -80,7 +78,7 @@ public:
 #ifdef USE_WINUSER
     return id != 0;
 #else
-    return Timer::IsActive();
+    return timer.IsActive();
 #endif
   }
 
@@ -105,11 +103,17 @@ public:
    */
   void Cancel();
 #else
-  using Timer::Schedule;
-  using Timer::Cancel;
+
+  void Schedule(std::chrono::steady_clock::duration d) noexcept {
+    timer.Schedule(d);
+  }
+
+  void Cancel() noexcept {
+    timer.Cancel();
+  }
 
 protected:
-  virtual void OnTimer();
+  void OnTimer();
 #endif
 };
 

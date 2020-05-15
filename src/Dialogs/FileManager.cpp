@@ -105,7 +105,7 @@ CanDownload(const FileRepository &repository, const TCHAR *name)
 class ManagedFileListWidget
   : public ListWidget,
 #ifdef HAVE_DOWNLOAD_MANAGER
-    private Timer, private Net::DownloadListener, private Notify,
+    private Net::DownloadListener, private Notify,
 #endif
     private ActionListener {
   enum Buttons {
@@ -181,6 +181,8 @@ class ManagedFileListWidget
    * Each item in this set is a failed download.
    */
   std::set<std::string> failures;
+
+  Timer refresh_download_timer{[this]{ OnTimer(); }};
 
   /**
    * Was the repository file modified, and needs to be reloaded by
@@ -276,8 +278,7 @@ public:
   void OnAction(int id) noexcept override;
 
 #ifdef HAVE_DOWNLOAD_MANAGER
-  /* virtual methods from class Timer */
-  virtual void OnTimer() override;
+  void OnTimer();
 
   /* virtual methods from class Net::DownloadListener */
   virtual void OnDownloadAdded(Path path_relative,
@@ -317,7 +318,7 @@ void
 ManagedFileListWidget::Unprepare()
 {
 #ifdef HAVE_DOWNLOAD_MANAGER
-  Timer::Cancel();
+  refresh_download_timer.Cancel();
 
   if (Net::DownloadManager::IsAvailable())
     Net::DownloadManager::RemoveListener(*this);
@@ -388,8 +389,8 @@ ManagedFileListWidget::RefreshList()
   list.Invalidate();
 
 #ifdef HAVE_DOWNLOAD_MANAGER
-  if (download_active && !Timer::IsActive())
-    Timer::Schedule(std::chrono::seconds(1));
+  if (download_active && !refresh_download_timer.IsActive())
+    refresh_download_timer.Schedule(std::chrono::seconds(1));
 #endif
 }
 
@@ -614,7 +615,7 @@ ManagedFileListWidget::OnTimer()
     RefreshList();
     UpdateButtons();
   } else
-    Timer::Cancel();
+    refresh_download_timer.Cancel();
 }
 
 void
