@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Screen/SingleWindow.hpp"
 #include "Event/PeriodicTimer.hpp"
+#include "Event/Notify.hpp"
 #include "BatteryTimer.hpp"
 #include "Widget/ManagedWidget.hpp"
 #include "UIUtil/GestureManager.hpp"
@@ -54,24 +55,6 @@ namespace InfoBoxLayout { struct Layout; }
  * The XCSoar main window.
  */
 class MainWindow : public SingleWindow {
-  enum class Command: uint8_t {
-    /**
-     * Called by the #MergeThread when new GPS data is available.
-     */
-    GPS_UPDATE,
-
-    /**
-     * Called by the calculation thread when new calculation results
-     * are available.  This updates the map and the info boxes.
-     */
-    CALCULATED_UPDATE,
-
-    /**
-     * @see DeferredRestorePage()
-     */
-    RESTORE_PAGE,
-  };
-
   static constexpr const TCHAR *title = _T("XCSoar");
 
   Look *look = nullptr;
@@ -108,6 +91,22 @@ public:
   PopupMessage *popup = nullptr;
 
 private:
+  /**
+   * Called by the #MergeThread when new GPS data is available.
+   */
+  Notify gps_notify{[this]{ OnGpsNotify(); }};
+
+  /**
+   * Called by the calculation thread when new calculation results are
+   * available.  This updates the map and the info boxes.
+   */
+  Notify calculated_notify{[this]{ OnCalculatedNotify(); }};
+
+  /**
+   * @see DeferredRestorePage()
+   */
+  Notify restore_page_notify{[this]{ OnRestorePageNotify(); }};
+
   PeriodicTimer timer{[this]{ RunTimer(); }};
 
   BatteryTimer battery_timer;
@@ -245,11 +244,11 @@ public:
   void SetFullScreen(bool _full_screen);
 
   void SendGPSUpdate() {
-    SendUser((unsigned)Command::GPS_UPDATE);
+    gps_notify.SendNotification();
   }
 
   void SendCalculatedUpdate() {
-    SendUser((unsigned)Command::CALCULATED_UPDATE);
+    calculated_notify.SendNotification();
   }
 
   void SetTerrain(RasterTerrain *terrain);
@@ -345,6 +344,10 @@ private:
 
   void RunTimer() noexcept;
 
+  void OnGpsNotify() noexcept;
+  void OnCalculatedNotify() noexcept;
+  void OnRestorePageNotify() noexcept;
+
 protected:
   /* virtual methods from class Window */
   virtual void OnDestroy() override;
@@ -356,7 +359,6 @@ protected:
   bool OnMouseMove(PixelPoint p, unsigned keys) override;
   bool OnMouseDouble(PixelPoint p) override;
   virtual bool OnKeyDown(unsigned key_code) override;
-  virtual bool OnUser(unsigned id) override;
   virtual void OnPaint(Canvas &canvas) override;
 
   /* virtual methods from class TopWindow */

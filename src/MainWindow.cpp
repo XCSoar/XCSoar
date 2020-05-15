@@ -639,25 +639,23 @@ MainWindow::RunTimer() noexcept
   battery_timer.Process();
 }
 
-bool
-MainWindow::OnUser(unsigned id)
+void
+MainWindow::OnGpsNotify() noexcept
 {
-  switch ((Command)id) {
-  case Command::GPS_UPDATE:
-    UIReceiveSensorData();
-    return true;
+  UIReceiveSensorData();
+}
 
-  case Command::CALCULATED_UPDATE:
-    UIReceiveCalculatedData();
-    return true;
+void
+MainWindow::OnCalculatedNotify() noexcept
+{
+  UIReceiveCalculatedData();
+}
 
-  case Command::RESTORE_PAGE:
-    if (restore_page_pending)
-      PageActions::Restore();
-    return true;
-  }
-
-  return false;
+void
+MainWindow::OnRestorePageNotify() noexcept
+{
+  if (restore_page_pending)
+    PageActions::Restore();
 }
 
 void
@@ -803,7 +801,7 @@ MainWindow::DeferredRestorePage()
     return;
 
   restore_page_pending = true;
-  SendUser((unsigned)Command::RESTORE_PAGE);
+  restore_page_notify.SendNotification();
 }
 
 void
