@@ -34,14 +34,10 @@ Copyright_License {
 
 GlueMapWindow::GlueMapWindow(const Look &look)
   :MapWindow(look.map, look.traffic),
-#ifdef ENABLE_OPENGL
-   kinetic_timer(*this),
-#endif
    thermal_band_renderer(look.thermal_band, look.chart),
    final_glide_bar_renderer(look.final_glide_bar, look.map.task),
    vario_bar_renderer(look.vario_bar),
-   gesture_look(look.gesture),
-   map_item_timer(*this)
+   gesture_look(look.gesture)
 {
 }
 
