@@ -81,6 +81,8 @@ class GaugeVario : public AntiFlickerWindow
   DrawInfo label_middle;
   DrawInfo label_bottom;
 
+  double last_v_diff = 0;
+
   int last_bugs = -1;
   PixelRect bugs_label_rect;
   PixelRect bugs_value_rect;

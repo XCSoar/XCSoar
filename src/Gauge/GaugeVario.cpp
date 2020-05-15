@@ -428,7 +428,6 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
       !Basic().total_energy_vario_available)
     return;
 
-  static double last_v_diff;
   double v_diff;
 
   const unsigned arrow_y_size = Layout::Scale(3);
