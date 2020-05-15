@@ -73,15 +73,9 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
 
   if (Settings().show_average) {
     // JMW averager now displays netto average if not circling
-    if (!Calculated().circling) {
-      RenderValue(canvas, top_position.x, top_position.y, &value_top, &label_top,
-                  Units::ToUserVSpeed(Calculated().netto_average),
-                  _T("NetAvg"));
-    } else {
-      RenderValue(canvas, top_position.x, top_position.y,
-                  &value_top, &label_top,
-                  Units::ToUserVSpeed(Calculated().average), _T("Avg"));
-    }
+    RenderValue(canvas, top_position.x, top_position.y, &value_top, &label_top,
+                Units::ToUserVSpeed(Calculated().circling ? Calculated().average : Calculated().netto_average),
+                Calculated().circling ? _T("Avg") : _T("NetAvg"));
   }
 
   if (Settings().show_mc) {
