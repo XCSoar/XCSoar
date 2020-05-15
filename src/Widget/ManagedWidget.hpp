@@ -40,28 +40,20 @@ class ManagedWidget {
   ContainerWindow &parent;
   PixelRect position;
 
-  Widget *widget;
+  Widget *widget = nullptr;
 
   bool prepared, visible;
 
 #ifndef NDEBUG
-  bool have_position;
+  bool have_position = false;
 #endif
 
 public:
   ManagedWidget(ContainerWindow &_parent)
-    :parent(_parent), widget(nullptr)
-#ifndef NDEBUG
-    , have_position(false)
-#endif
-  {}
+    :parent(_parent) {}
 
   ManagedWidget(ContainerWindow &_parent, Widget *_widget)
-    :parent(_parent), widget(_widget), prepared(false)
-#ifndef NDEBUG
-    , have_position(false)
-#endif
-  {}
+    :parent(_parent), widget(_widget), prepared(false) {}
 
   ~ManagedWidget() {
     Clear();
