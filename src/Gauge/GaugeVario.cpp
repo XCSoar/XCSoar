@@ -83,8 +83,47 @@ GaugeVario::BallastGeometry::BallastGeometry(const VarioLook &look,
 }
 
 inline
+GaugeVario::BugsGeometry::BugsGeometry(const VarioLook &look,
+                                             const PixelRect &rc) noexcept
+{
+  PixelSize tSize;
+
+  label_pos.x = 1;
+  label_pos.y = rc.bottom - 2
+    - look.text_font->GetCapitalHeight()
+    - look.text_font->GetAscentHeight();
+
+  value_pos.x = 1;
+  value_pos.y = rc.bottom - 1
+    - look.text_font->GetAscentHeight();
+
+  label_rect.left = label_pos.x;
+  label_rect.top = label_pos.y
+    + look.text_font->GetAscentHeight()
+    - look.text_font->GetCapitalHeight();
+  value_rect.left = value_pos.x;
+  value_rect.top = value_pos.y
+    + look.text_font->GetAscentHeight()
+    - look.text_font->GetCapitalHeight();
+
+  tSize = look.text_font->TextSize(TEXT_BUG);
+
+  label_rect.right = label_rect.left + tSize.cx;
+  label_rect.bottom = label_rect.top
+    + look.text_font->GetCapitalHeight()
+    + look.text_font->GetHeight()
+    - look.text_font->GetAscentHeight();
+
+  tSize = look.text_font->TextSize(_T("100%"));
+
+  value_rect.right = value_rect.left + tSize.cx;
+  value_rect.bottom = value_rect.top +
+    look.text_font->GetCapitalHeight();
+}
+
+inline
 GaugeVario::Geometry::Geometry(const VarioLook &look, const PixelRect &rc) noexcept
-  :ballast(look, rc)
+  :ballast(look, rc), bugs(look, rc)
 {
   nlength0 = Layout::Scale(15);
   nlength1 = Layout::Scale(6);
@@ -639,46 +678,6 @@ GaugeVario::RenderBallast(Canvas &canvas)
 void
 GaugeVario::RenderBugs(Canvas &canvas)
 {
-  if (!bugs_initialised) {
-    const PixelRect rc = GetClientRect();
-    PixelSize tSize;
-
-    bugs_label_pos.x = 1;
-    bugs_label_pos.y = rc.bottom - 2
-      - look.text_font->GetCapitalHeight()
-      - look.text_font->GetAscentHeight();
-
-    bugs_value_pos.x = 1;
-    bugs_value_pos.y = rc.bottom - 1
-      - look.text_font->GetAscentHeight();
-
-    bugs_label_rect.left = bugs_label_pos.x;
-    bugs_label_rect.top = bugs_label_pos.y
-      + look.text_font->GetAscentHeight()
-      - look.text_font->GetCapitalHeight();
-    bugs_value_rect.left = bugs_value_pos.x;
-    bugs_value_rect.top = bugs_value_pos.y
-      + look.text_font->GetAscentHeight()
-      - look.text_font->GetCapitalHeight();
-
-    canvas.Select(*look.text_font);
-    tSize = canvas.CalcTextSize(TEXT_BUG);
-
-    bugs_label_rect.right = bugs_label_rect.left + tSize.cx;
-    bugs_label_rect.bottom = bugs_label_rect.top
-      + look.text_font->GetCapitalHeight()
-      + look.text_font->GetHeight()
-      - look.text_font->GetAscentHeight();
-
-    tSize = canvas.CalcTextSize(_T("100%"));
-
-    bugs_value_rect.right = bugs_value_rect.left + tSize.cx;
-    bugs_value_rect.bottom = bugs_value_rect.top +
-      look.text_font->GetCapitalHeight();
-
-    bugs_initialised = true;
-  }
-
   int bugs = iround((1 - GetComputerSettings().polar.bugs) * 100);
   if (!IsPersistent() || bugs != last_bugs) {
 
@@ -689,16 +688,18 @@ GaugeVario::RenderBugs(Canvas &canvas)
     else
       canvas.SetBackgroundTransparent();
 
+    const auto &g = geometry.bugs;
+
     if (IsPersistent() || last_bugs < 1 || bugs < 1) {
       if (bugs > 0) {
         canvas.SetTextColor(look.dimmed_text_color);
         if (IsPersistent())
-          canvas.DrawOpaqueText(bugs_label_pos.x, bugs_label_pos.y,
-                                bugs_label_rect, TEXT_BUG);
+          canvas.DrawOpaqueText(g.label_pos.x, g.label_pos.y,
+                                g.label_rect, TEXT_BUG);
         else
-          canvas.DrawText(bugs_label_pos.x, bugs_label_pos.y, TEXT_BUG);
+          canvas.DrawText(g.label_pos.x, g.label_pos.y, TEXT_BUG);
       } else if (IsPersistent())
-        canvas.DrawFilledRectangle(bugs_label_rect, look.background_color);
+        canvas.DrawFilledRectangle(g.label_rect, look.background_color);
     }
 
     if (bugs > 0) {
@@ -706,12 +707,12 @@ GaugeVario::RenderBugs(Canvas &canvas)
       _stprintf(buffer, _T("%d%%"), bugs);
       canvas.SetTextColor(look.text_color);
       if (IsPersistent())
-        canvas.DrawOpaqueText(bugs_value_pos.x, bugs_value_pos.y,
-                              bugs_value_rect, buffer);
+        canvas.DrawOpaqueText(g.value_pos.x, g.value_pos.y,
+                              g.value_rect, buffer);
       else 
-        canvas.DrawText(bugs_value_pos.x, bugs_value_pos.y, buffer);
+        canvas.DrawText(g.value_pos.x, g.value_pos.y, buffer);
     } else if (IsPersistent())
-      canvas.DrawFilledRectangle(bugs_value_rect, look.background_color);
+      canvas.DrawFilledRectangle(g.value_rect, look.background_color);
 
     if (IsPersistent())
       last_bugs = bugs;
@@ -728,7 +729,6 @@ GaugeVario::OnResize(PixelSize new_size)
   /* trigger reinitialisation */
   background_dirty = true;
   needle_initialised = false;
-  bugs_initialised = false;
 
   value_top.initialised = false;
   value_middle.initialised = false;
