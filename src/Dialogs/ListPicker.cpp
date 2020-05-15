@@ -203,6 +203,5 @@ ListPicker(const TCHAR *caption,
   else if (result != -2)
     result = -1;
 
-  update_timer.Cancel();
   return result;
 }

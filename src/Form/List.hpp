@@ -169,8 +169,6 @@ public:
               PixelRect rc, const WindowStyle style,
               unsigned _item_height) noexcept;
 
-  ~ListControl() noexcept override;
-
   void Create(ContainerWindow &parent,
               PixelRect rc, const WindowStyle style,
               unsigned _item_height) noexcept;

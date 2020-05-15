@@ -79,6 +79,4 @@ Main()
   timer.Schedule(std::chrono::milliseconds(250));
 
   main_window.RunEventLoop();
-
-  timer.Cancel();
 }

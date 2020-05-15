@@ -72,7 +72,6 @@ public:
 
   ~DownloadProgress() {
     Net::DownloadManager::RemoveListener(*this);
-    update_timer.Cancel();
   }
 
 private:

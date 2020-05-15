@@ -51,10 +51,6 @@ public:
   explicit LuaTimer(lua_State *L, int callback_idx)
     :callback(L, Lua::StackIndex(callback_idx)), timer(L) {}
 
-  ~LuaTimer() {
-    timer_event.Cancel();
-  }
-
   lua_State *GetLuaState() {
     return callback.GetState();
   }

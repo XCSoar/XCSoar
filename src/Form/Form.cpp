@@ -99,14 +99,6 @@ WndForm::Create(SingleWindow &main_window,
   Create(main_window, main_window.GetClientRect(), _caption, style);
 }
 
-WndForm::~WndForm()
-{
-  /* we must override the ~Window() reset call, because in ~Window(),
-     our own OnDestroy() method won't be called (during object
-     destruction, this object loses its identity) */
-  Destroy();
-}
-
 SingleWindow &
 WndForm::GetMainWindow()
 {

@@ -56,13 +56,6 @@ public:
   RateLimiter(std::chrono::steady_clock::duration _period,
               std::chrono::steady_clock::duration _delay={}) noexcept;
 
-  /**
-   * Destructor.  Discards any pending events.
-   */
-  ~RateLimiter() {
-    Cancel();
-  }
-
   void Trigger();
 
   void Cancel() noexcept {

@@ -100,9 +100,6 @@ public:
           const TCHAR *caption=nullptr,
           const WindowStyle style = WindowStyle());
 
-  /** Destructor */
-  virtual ~WndForm();
-
   void Create(SingleWindow &main_window, const PixelRect &rc,
               const TCHAR *caption=nullptr,
               const WindowStyle style=WindowStyle());

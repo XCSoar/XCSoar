@@ -118,8 +118,6 @@ public:
                 unsigned id,
                 WindowStyle style=WindowStyle());
 
-  ~InfoBoxWindow();
-
   const InfoBoxLook &GetLook() const {
     return look;
   }

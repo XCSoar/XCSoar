@@ -64,8 +64,7 @@ public:
   Timer(const Timer &other) = delete;
 
   ~Timer() {
-    /* timer must be cleaned up explicitly */
-    assert(!IsPending());
+    Cancel();
   }
 
   /**

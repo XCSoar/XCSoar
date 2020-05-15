@@ -53,10 +53,6 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &parent, PixelRect rc,
   Create(parent, rc, style);
 }
 
-InfoBoxWindow::~InfoBoxWindow() {
-  Destroy();
-}
-
 void
 InfoBoxWindow::SetTitle(const TCHAR *_title)
 {
