@@ -610,12 +610,9 @@ MainWindow::OnKeyDown(unsigned key_code)
     SingleWindow::OnKeyDown(key_code);
 }
 
-bool
-MainWindow::OnTimer(WindowTimer &_timer)
+void
+MainWindow::RunTimer() noexcept
 {
-  if (_timer != timer)
-    return SingleWindow::OnTimer(_timer);
-
   ProcessTimer();
 
   UpdateGaugeVisibility();
@@ -640,8 +637,6 @@ MainWindow::OnTimer(WindowTimer &_timer)
   }
 
   battery_timer.Process();
-
-  return true;
 }
 
 bool

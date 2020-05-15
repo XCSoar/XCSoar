@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_MAIN_WINDOW_HXX
 
 #include "Screen/SingleWindow.hpp"
-#include "Screen/Timer.hpp"
+#include "Event/PeriodicTimer.hpp"
 #include "BatteryTimer.hpp"
 #include "Widget/ManagedWidget.hpp"
 #include "UIUtil/GestureManager.hpp"
@@ -108,7 +108,7 @@ public:
   PopupMessage *popup = nullptr;
 
 private:
-  WindowTimer timer{*this};
+  PeriodicTimer timer{[this]{ RunTimer(); }};
 
   BatteryTimer battery_timer;
 
@@ -343,6 +343,8 @@ private:
 
   void StopDragging();
 
+  void RunTimer() noexcept;
+
 protected:
   /* virtual methods from class Window */
   virtual void OnDestroy() override;
@@ -355,7 +357,6 @@ protected:
   bool OnMouseDouble(PixelPoint p) override;
   virtual bool OnKeyDown(unsigned key_code) override;
   virtual bool OnUser(unsigned id) override;
-  virtual bool OnTimer(WindowTimer &timer) override;
   virtual void OnPaint(Canvas &canvas) override;
 
   /* virtual methods from class TopWindow */
