@@ -150,10 +150,9 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
   if (Settings().show_average_needle)
     RenderNeedle(canvas, ival_av, true, false);
 
-  if (Settings().show_thermal_average_needle)
-    RenderNeedle(canvas, ival_av_thermal, false, false);
-  else
-    RenderNeedle(canvas, ival, false, false);
+  RenderNeedle(canvas,
+               Settings().show_thermal_average_needle ? ival_av_thermal : ival,
+               false, false);
 
   if (Settings().show_gross) {
     auto vvaldisplay = Clamp(Units::ToUserVSpeed(vval),
