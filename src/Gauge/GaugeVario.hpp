@@ -47,7 +47,7 @@ class GaugeVario : public AntiFlickerWindow
   static constexpr int gmin = -gmax;
 
   struct DrawInfo {
-    bool initialised;
+    bool initialised = false;
     PixelRect rc;
     PixelPoint text_position;
     double last_value;
@@ -59,17 +59,16 @@ class GaugeVario : public AntiFlickerWindow
 
   const VarioLook &look;
 
-private:
   const unsigned nlength0, nlength1, nwidth, nline;
 
   IntPoint2D offset;
 
-  bool dirty;
+  bool dirty = true;
 
-  bool layout_initialised;
-  bool needle_initialised;
-  bool ballast_initialised;
-  bool bugs_initialised;
+  bool layout_initialised = false;
+  bool needle_initialised = false;
+  bool ballast_initialised = false;
+  bool bugs_initialised = false;
 
   PixelPoint top_position;
   PixelPoint middle_position;
