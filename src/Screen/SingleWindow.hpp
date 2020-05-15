@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Screen/TopWindow.hpp"
 
-#include <list>
+#include <forward_list>
 
 #include <cassert>
 
@@ -42,7 +42,7 @@ class SingleWindow : public TopWindow {
   static constexpr const TCHAR *class_name = _T("XCSoarMain");
 #endif
 
-  std::list<WndForm *> dialogs;
+  std::forward_list<WndForm *> dialogs;
 
 public:
 #ifdef USE_WINUSER
