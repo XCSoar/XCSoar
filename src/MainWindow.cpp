@@ -120,26 +120,6 @@ GetMapRectAbove(const PixelRect &rc, const PixelRect &bottom_rect)
   return result;
 }
 
-MainWindow::MainWindow()
-  :look(nullptr),
-#ifdef HAVE_SHOW_MENU_BUTTON
-   show_menu_button(nullptr),
-#endif
-   map(nullptr), bottom_widget(nullptr), widget(nullptr), vario(*this),
-   traffic_gauge(*this),
-   suppress_traffic_gauge(false), force_traffic_gauge(false),
-   thermal_assistant(*this),
-   dragging(false),
-   popup(nullptr),
-   timer(*this),
-   FullScreen(false),
-#ifndef ENABLE_OPENGL
-   draw_suspended(false),
-#endif
-   restore_page_pending(false)
-{
-}
-
 /**
  * Destructor of the MainWindow-Class
  * @return

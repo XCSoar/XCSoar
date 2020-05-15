@@ -74,59 +74,58 @@ class MainWindow : public SingleWindow {
 
   static constexpr const TCHAR *title = _T("XCSoar");
 
-  Look *look;
+  Look *look = nullptr;
 
 #ifdef HAVE_SHOW_MENU_BUTTON
-  ShowMenuButton *show_menu_button;
+  ShowMenuButton *show_menu_button = nullptr;
 #endif
 
-  GlueMapWindow *map;
+  GlueMapWindow *map = nullptr;
 
   /**
    * A #Widget that is shown below the map.
    */
-  Widget *bottom_widget;
+  Widget *bottom_widget = nullptr;
 
   /**
    * A #Widget that is shown instead of the map.  The #GlueMapWindow
    * is hidden and the DrawThread is suspended while this attribute is
    * non-nullptr.
    */
-  Widget *widget;
+  Widget *widget = nullptr;
 
-  ManagedWidget vario;
+  ManagedWidget vario{*this};
 
-  ManagedWidget traffic_gauge;
-  bool suppress_traffic_gauge, force_traffic_gauge;
+  ManagedWidget traffic_gauge{*this};
+  bool suppress_traffic_gauge = false, force_traffic_gauge = false;
 
-  ManagedWidget thermal_assistant;
+  ManagedWidget thermal_assistant{*this};
 
-  bool dragging;
+  bool dragging = false;
   GestureManager gestures;
 
 public:
-  PopupMessage *popup;
+  PopupMessage *popup = nullptr;
 
 private:
-  WindowTimer timer;
+  WindowTimer timer{*this};
 
   BatteryTimer battery_timer;
 
   PixelRect map_rect;
-  bool FullScreen;
+  bool FullScreen = false;
 
 #ifndef ENABLE_OPENGL
   /**
    * This variable tracks whether the #DrawThread was suspended
    * because the map was replaced by a #Widget.
    */
-  bool draw_suspended;
+  bool draw_suspended = false;
 #endif
 
-  bool restore_page_pending;
+  bool restore_page_pending = false;
 
 public:
-  MainWindow();
   virtual ~MainWindow();
 
 protected:
