@@ -49,8 +49,7 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &parent, PixelRect rc,
    border_kind(border_flags),
    id(_id),
    dragging(false), pressed(false),
-   force_draw_selector(false),
-   focus_timer(*this), dialog_timer(*this)
+   force_draw_selector(false)
 {
   data.Clear();
 
@@ -503,21 +502,12 @@ InfoBoxWindow::OnKillFocus()
   Invalidate();
 }
 
-bool
-InfoBoxWindow::OnTimer(WindowTimer &timer)
+void
+InfoBoxWindow::OnDialogTimer() noexcept
 {
-  if (timer == focus_timer) {
-    focus_timer.Cancel();
-    FocusParent();
-    return true;
-  } else if (timer == dialog_timer) {
-    dragging = pressed = false;
-    Invalidate();
-    ReleaseCapture();
+  dragging = pressed = false;
+  Invalidate();
+  ReleaseCapture();
 
-    dialog_timer.Cancel();
-    ShowDialog();
-    return true;
-  } else
-    return PaintWindow::OnTimer(timer);
+  ShowDialog();
 }

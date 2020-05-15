@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "InfoBoxes/Content/Base.hpp"
 #include "Screen/LazyPaintWindow.hpp"
-#include "Screen/Timer.hpp"
+#include "Event/Timer.hpp"
 #include "Data.hpp"
 
 struct InfoBoxSettings;
@@ -60,14 +60,14 @@ private:
   bool force_draw_selector;
 
   /** a timer which returns keyboard focus back to the map window after a while */
-  WindowTimer focus_timer;
+  Timer focus_timer{[this]{ FocusParent(); }};
 
   /**
    * This timer opens the dialog.  It is used to check for "long
    * click" and to delay the dialog a bit (for double click
    * detection).
    */
-  WindowTimer dialog_timer;
+  Timer dialog_timer{[this]{ OnDialogTimer(); }};
 
   PixelRect title_rect;
   PixelRect value_rect;
@@ -151,13 +151,15 @@ public:
     return value_and_comment_rect;
   }
 
+private:
+  void OnDialogTimer() noexcept;
+
 protected:
   virtual void OnDestroy() override;
   virtual void OnResize(PixelSize new_size) override;
   virtual void OnSetFocus() override;
   virtual void OnKillFocus() override;
   virtual void OnCancelMode() override;
-  virtual bool OnTimer(WindowTimer &timer) override;
 
   virtual bool OnKeyDown(unsigned key_code) override;
 
