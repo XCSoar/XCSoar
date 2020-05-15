@@ -70,11 +70,13 @@ struct RecordedFlightInfo;
 class OperationEnvironment;
 class OpenDeviceJob;
 
-class DeviceDescriptor final : Notify, PortListener, PortLineSplitter {
+class DeviceDescriptor final : PortListener, PortLineSplitter {
   /**
    * The io_context instance used by Port instances.
    */
   boost::asio::io_context &io_context;
+
+  Notify job_finished_notify{[this]{ OnJobFinished(); }};
 
   /**
    * This mutex protects modifications of the attribute "device".  If
@@ -531,8 +533,7 @@ public:
 private:
   bool ParseLine(const char *line);
 
-  /* virtual methods from class Notify */
-  void OnNotification() override;
+  void OnJobFinished() noexcept;
 
   /* virtual methods from class PortListener */
   void PortStateChanged() override;

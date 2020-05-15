@@ -538,7 +538,7 @@ DeviceDescriptor::Open(OperationEnvironment &env)
   LogFormat(_T("Opening device %s"), config.GetPortName(buffer, 64));
 
   open_job = new OpenDeviceJob(*this);
-  async.Start(open_job, env, this);
+  async.Start(open_job, env, &job_finished_notify);
 }
 
 void
@@ -1159,7 +1159,7 @@ DeviceDescriptor::ParseLine(const char *line)
 }
 
 void
-DeviceDescriptor::OnNotification()
+DeviceDescriptor::OnJobFinished() noexcept
 {
   /* notification from AsyncJobRunner, the Job was finished */
 

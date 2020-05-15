@@ -66,7 +66,7 @@ Copyright_License {
 
 class DeviceListWidget final
   : public ListWidget, private ActionListener,
-    NullBlackboardListener, PortListener, Notify {
+    NullBlackboardListener, PortListener {
   enum Buttons {
     DISABLE,
     RECONNECT, FLIGHT, EDIT, MANAGE, MONITOR,
@@ -170,6 +170,11 @@ class DeviceListWidget final
   Button *manage_button, *monitor_button;
   Button *debug_button;
 
+  Notify port_state_notify{[this]{
+    if (RefreshList())
+      UpdateButtons();
+  }};
+
 public:
   DeviceListWidget(const DialogLook &_look)
     :look(_look) {}
@@ -227,13 +232,7 @@ private:
 
   /* virtual methods from class PortListener */
   void PortStateChanged() override {
-    Notify::SendNotification();
-  }
-
-  /* virtual methods from class Notify */
-  void OnNotification() override {
-    if (RefreshList())
-      UpdateButtons();
+    port_state_notify.SendNotification();
   }
 };
 

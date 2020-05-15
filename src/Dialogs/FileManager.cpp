@@ -105,7 +105,7 @@ CanDownload(const FileRepository &repository, const TCHAR *name)
 class ManagedFileListWidget
   : public ListWidget,
 #ifdef HAVE_DOWNLOAD_MANAGER
-    private Net::DownloadListener, private Notify,
+    private Net::DownloadListener,
 #endif
     private ActionListener {
   enum Buttons {
@@ -183,6 +183,8 @@ class ManagedFileListWidget
   std::set<std::string> failures;
 
   PeriodicTimer refresh_download_timer{[this]{ OnTimer(); }};
+
+  Notify download_notify{[this]{ OnDownloadNotification(); }};
 
   /**
    * Was the repository file modified, and needs to be reloaded by
@@ -286,8 +288,7 @@ public:
   virtual void OnDownloadComplete(Path path_relative,
                                   bool success) override;
 
-  /* virtual methods from class Notify */
-  virtual void OnNotification() override;
+  void OnDownloadNotification() noexcept;
 #endif
 };
 
@@ -323,7 +324,7 @@ ManagedFileListWidget::Unprepare()
   if (Net::DownloadManager::IsAvailable())
     Net::DownloadManager::RemoveListener(*this);
 
-  ClearNotification();
+  download_notify.ClearNotification();
 #endif
 
   DeleteWindow();
@@ -638,7 +639,7 @@ ManagedFileListWidget::OnDownloadAdded(Path path_relative,
     failures.erase(name3);
   }
 
-  SendNotification();
+  download_notify.SendNotification();
 }
 
 void
@@ -668,11 +669,11 @@ ManagedFileListWidget::OnDownloadComplete(Path path_relative,
       failures.insert(name3);
   }
 
-  SendNotification();
+  download_notify.SendNotification();
 }
 
 void
-ManagedFileListWidget::OnNotification()
+ManagedFileListWidget::OnDownloadNotification() noexcept
 {
   bool repository_modified2, repository_failed2;
 

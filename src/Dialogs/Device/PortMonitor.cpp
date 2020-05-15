@@ -47,14 +47,19 @@ enum Buttons {
  * A bridge between DataHandler and TerminalWindow: copy all data
  * received from the Port to the TerminalWindow.
  */
-class PortTerminalBridge : public DataHandler, private DelayedNotify {
+class PortTerminalBridge final : public DataHandler {
   TerminalWindow &terminal;
   Mutex mutex;
   StaticFifoBuffer<char, 1024> buffer;
 
+  DelayedNotify notify{
+    std::chrono::milliseconds(100),
+    [this]{ OnNotification(); },
+  };
+
 public:
   PortTerminalBridge(TerminalWindow &_terminal)
-    :DelayedNotify(std::chrono::milliseconds(100)), terminal(_terminal) {}
+    :terminal(_terminal) {}
   virtual ~PortTerminalBridge() {}
 
   virtual void DataReceived(const void *data, size_t length) {
@@ -68,11 +73,11 @@ public:
       buffer.Append(length);
     }
 
-    SendNotification();
+    notify.SendNotification();
   }
 
 private:
-  virtual void OnNotification() {
+  void OnNotification() noexcept {
     while (true) {
       char data[64];
       size_t length;

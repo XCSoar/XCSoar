@@ -25,7 +25,8 @@ Copyright_License {
 #include "Globals.hpp"
 #include "Queue.hpp"
 
-Notify::Notify()
+Notify::Notify(CallbackFunction _callback) noexcept
+  :callback(std::move(_callback))
 {
 #ifdef USE_WINUSER
   Window::CreateMessageWindow();
@@ -60,7 +61,7 @@ void
 Notify::RunNotification()
 {
   if (pending.exchange(false, std::memory_order_relaxed))
-    OnNotification();
+    callback();
 }
 
 #ifdef USE_WINUSER

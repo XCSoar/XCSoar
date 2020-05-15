@@ -24,7 +24,7 @@ Copyright_License {
 #include "ThreadedOperationEnvironment.hpp"
 
 ThreadedOperationEnvironment::ThreadedOperationEnvironment(OperationEnvironment &_other)
-  :DelayedNotify(std::chrono::milliseconds(250)), other(_other)
+  :other(_other)
 {
 }
 
@@ -51,7 +51,7 @@ ThreadedOperationEnvironment::SetErrorMessage(const TCHAR *_error)
     data.SetErrorMessage(_error);
   }
 
-  SendNotification();
+  notify.SendNotification();
 }
 
 void
@@ -62,21 +62,21 @@ ThreadedOperationEnvironment::SetText(const TCHAR *_text)
     data.SetText(_text);
   }
 
-  SendNotification();
+  notify.SendNotification();
 }
 
 void
 ThreadedOperationEnvironment::SetProgressRange(unsigned range)
 {
   if (LockSetProgressRange(range))
-    SendNotification();
+    notify.SendNotification();
 }
 
 void
 ThreadedOperationEnvironment::SetProgressPosition(unsigned position)
 {
   if (LockSetProgressPosition(position))
-    SendNotification();
+    notify.SendNotification();
 }
 
 void

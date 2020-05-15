@@ -37,8 +37,7 @@ Copyright_License {
  * another thread.
  */
 class ThreadedOperationEnvironment
-  : public OperationEnvironment,
-    protected DelayedNotify {
+  : public OperationEnvironment{
   struct Data {
     StaticString<256u> error;
     StaticString<128u> text;
@@ -89,6 +88,11 @@ class ThreadedOperationEnvironment
     }
   };
 
+  DelayedNotify notify{
+    std::chrono::milliseconds(250),
+    [this]{ OnNotification(); },
+  };
+
   OperationEnvironment &other;
 
   mutable Mutex mutex;
@@ -99,6 +103,10 @@ class ThreadedOperationEnvironment
 
 public:
   explicit ThreadedOperationEnvironment(OperationEnvironment &_other);
+
+  void SendNotification() noexcept {
+    notify.SendNotification();
+  }
 
   void Cancel() {
     const std::lock_guard<Mutex> lock(mutex);
@@ -136,8 +144,7 @@ public:
   void SetProgressPosition(unsigned position) override;
 
 protected:
-  /* virtual methods from class DelayedNotify */
-  void OnNotification() override;
+  virtual void OnNotification();
 };
 
 #endif

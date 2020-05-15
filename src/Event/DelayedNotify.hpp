@@ -24,48 +24,34 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_DELAYED_NOTIFY_HPP
 #define XCSOAR_EVENT_DELAYED_NOTIFY_HPP
 
-#include "Event/Timer.hpp"
+#include "Notify.hpp"
+#include "Timer.hpp"
 
 /**
  * This class is similar to #Notify, but it delivers the notification
  * with a certain delay, to limit the rate of redundant notifications.
- * To use it, subclass it and implement the abstract method
- * OnNotification().
  */
-class DelayedNotify {
-  Timer timer{[this]{ OnNotification(); }};
+class DelayedNotify final {
+  Timer timer{[this]{ callback(); }};
+  Notify notify{[this]{ timer.SchedulePreserve(delay); }};
 
   const std::chrono::steady_clock::duration delay;
 
-public:
-  explicit DelayedNotify(std::chrono::steady_clock::duration _delay) noexcept
-    :delay(_delay) {}
+  using Callback = std::function<void()>;
+  const Callback callback;
 
-  ~DelayedNotify() {
-    ClearNotification();
-  }
+public:
+  explicit DelayedNotify(std::chrono::steady_clock::duration _delay,
+                         Callback &&_callback) noexcept
+    :delay(_delay), callback(std::move(_callback)) {}
 
   /**
    * Send a notification to this object.  This method can be called
    * from any thread.
    */
   void SendNotification() {
-    timer.SchedulePreserve(delay);
+    notify.SendNotification();
   }
-
-  /**
-   * Clear any pending notification.
-   */
-  void ClearNotification() {
-    timer.Cancel();
-  }
-
-protected:
-  /**
-   * Called after SendNotification() has been called at least once.
-   * This method runs in the main thread.
-   */
-  virtual void OnNotification() = 0;
 };
 
 #endif

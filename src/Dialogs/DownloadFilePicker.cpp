@@ -53,12 +53,14 @@ Copyright_License {
 /**
  * This class tracks a download and updates a #ProgressDialog.
  */
-class DownloadProgress final : Net::DownloadListener, Notify {
+class DownloadProgress final : Net::DownloadListener {
   ProgressDialog &dialog;
   ThreadedOperationEnvironment env;
   const Path path_relative;
 
   PeriodicTimer update_timer{[this]{ Net::DownloadManager::Enumerate(*this); }};
+
+  Notify download_complete_notify{[this]{ OnDownloadCompleteNotification(); }};
 
   bool got_size = false, complete = false, success;
 
@@ -94,12 +96,11 @@ private:
     if (!complete && path_relative == _path_relative) {
       complete = true;
       success = _success;
-      Notify::SendNotification();
+      download_complete_notify.SendNotification();
     }
   }
 
-  /* virtual methods from class Notify */
-  void OnNotification() override {
+  void OnDownloadCompleteNotification() noexcept {
     assert(complete);
     dialog.SetModalResult(success ? mrOK : mrCancel);
   }
@@ -135,13 +136,15 @@ DownloadFile(const char *uri, const char *_base)
 
 class DownloadFilePickerWidget final
   : public ListWidget,
-    Net::DownloadListener, Notify,
+    Net::DownloadListener,
     ActionListener {
   enum Buttons {
     DOWNLOAD,
   };
 
   WidgetDialog &dialog;
+
+  Notify download_complete_notify{[this]{ OnDownloadCompleteNotification(); }};
 
   const FileType file_type;
 
@@ -215,8 +218,7 @@ public:
                        int64_t size, int64_t position) override;
   void OnDownloadComplete(Path path_relative, bool success) override;
 
-  /* virtual methods from class Notify */
-  void OnNotification() override;
+  void OnDownloadCompleteNotification() noexcept;
 };
 
 void
@@ -242,7 +244,7 @@ DownloadFilePickerWidget::Unprepare()
 {
   Net::DownloadManager::RemoveListener(*this);
 
-  ClearNotification();
+  download_complete_notify.ClearNotification();
 
   DeleteWindow();
 }
@@ -343,11 +345,11 @@ DownloadFilePickerWidget::OnDownloadComplete(Path path_relative,
     }
   }
 
-  SendNotification();
+  download_complete_notify.SendNotification();
 }
 
 void
-DownloadFilePickerWidget::OnNotification()
+DownloadFilePickerWidget::OnDownloadCompleteNotification() noexcept
 {
   bool repository_modified2, repository_failed2;
 

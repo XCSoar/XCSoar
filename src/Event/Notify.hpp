@@ -29,21 +29,24 @@ Copyright_License {
 #endif
 
 #include <atomic>
+#include <functional>
 
 /**
  * This class implements message passing from any thread to the main
- * thread.  To use it, subclass it and implement the abstract method
- * OnNotification().
+ * thread.
  */
-class Notify
+class Notify final
 #ifdef USE_WINUSER
   : Window
 #endif
 {
   std::atomic<bool> pending{false};
 
+  using CallbackFunction = std::function<void()>;
+  const CallbackFunction callback;
+
 public:
-  Notify();
+  explicit Notify(CallbackFunction _callback) noexcept;
 
   Notify(const Notify &) = delete;
 
@@ -73,13 +76,6 @@ private:
    */
   static void Callback(void *ctx);
 #endif
-
-protected:
-  /**
-   * Called after SendNotification() has been called at least once.
-   * This method runs in the main thread.
-   */
-  virtual void OnNotification() = 0;
 
 #ifdef USE_WINUSER
 private:
