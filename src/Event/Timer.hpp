@@ -68,22 +68,6 @@ public:
 
   Timer(const Timer &other) = delete;
 
-protected:
-  /**
-   * The move constructor may only be used on inactive timers.  This
-   * shall only be used by derived classes to pass inactive instances
-   * around.
-   */
-  Timer(Timer &&other)
-#ifdef USE_POLL_EVENT
-    :timer(std::move(other.timer))
-#endif
-  {
-    assert(!IsActive());
-    assert(!other.IsActive());
-  }
-
-public:
   ~Timer() {
     /* timer must be cleaned up explicitly */
     assert(!IsActive());
