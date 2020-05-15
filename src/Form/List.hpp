@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_FORM_LIST_HPP
 
 #include "Screen/PaintWindow.hpp"
-#include "Screen/Timer.hpp"
+#include "Event/PeriodicTimer.hpp"
 #include "Form/ScrollBar.hpp"
 #include "UIUtil/KineticManager.hpp"
 #include "Util/Compiler.h"
@@ -156,7 +156,7 @@ protected:
   ListCursorHandler *cursor_handler = nullptr;
 
   KineticManager kinetic;
-  WindowTimer kinetic_timer{*this};
+  PeriodicTimer kinetic_timer{[this]{ OnKineticTimer(); }};
 
 public:
   explicit ListControl(const DialogLook &_look) noexcept;
@@ -312,7 +312,8 @@ protected:
   /** Draws the ScrollBar */
   void DrawScrollBar(Canvas &canvas) noexcept;
 
-  bool OnTimer(WindowTimer &timer) override;
+  void OnKineticTimer() noexcept;
+
   void OnDestroy() override;
 
   void OnResize(PixelSize new_size) override;

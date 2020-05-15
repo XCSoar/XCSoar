@@ -644,21 +644,15 @@ ListControl::OnCancelMode()
   kinetic_timer.Cancel();
 }
 
-bool
-ListControl::OnTimer(WindowTimer &timer)
+void
+ListControl::OnKineticTimer() noexcept
 {
-  if (timer == kinetic_timer) {
-    assert(UsePixelPan());
+  assert(UsePixelPan());
 
-    if (kinetic.IsSteady()) {
-      kinetic_timer.Cancel();
-    } else
-      SetPixelOrigin(kinetic.GetPosition());
-
-    return true;
-  }
-
-  return PaintWindow::OnTimer(timer);
+  if (kinetic.IsSteady()) {
+    kinetic_timer.Cancel();
+  } else
+    SetPixelOrigin(kinetic.GetPosition());
 }
 
 void
