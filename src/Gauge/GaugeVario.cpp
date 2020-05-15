@@ -319,7 +319,6 @@ GaugeVario::RenderValue(Canvas &canvas, PixelPoint position,
     // update back rect with max label size
     value_info->rc.bottom = value_info->rc.top + look.value_font.GetCapitalHeight();
 
-    value_info->text_position.x = value_info->rc.left;
     value_info->text_position.y = value_info->rc.top
                          + look.value_font.GetCapitalHeight()
                          - look.value_font.GetAscentHeight();
@@ -341,7 +340,6 @@ GaugeVario::RenderValue(Canvas &canvas, PixelPoint position,
     label_info->rc.bottom = label_info->rc.top
       + look.text_font->GetCapitalHeight();
 
-    label_info->text_position.x = label_info->rc.left;
     label_info->text_position.y = label_info->rc.top
       + look.text_font->GetCapitalHeight()
       - look.text_font->GetAscentHeight();
