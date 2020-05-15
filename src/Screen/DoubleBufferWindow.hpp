@@ -36,6 +36,7 @@ using DoubleBufferWindow = BufferWindow;
 
 #include "Screen/PaintWindow.hpp"
 #include "Screen/BufferCanvas.hpp"
+#include "Event/Notify.hpp"
 #include "Thread/Mutex.hxx"
 
 /**
@@ -44,7 +45,7 @@ using DoubleBufferWindow = BufferWindow;
  * copies the other buffer to the screen.
  */
 class DoubleBufferWindow : public PaintWindow {
-  static constexpr unsigned INVALIDATE = 4242;
+  Notify invalidate_notify{[this]{ Invalidate(); }};
 
   BufferCanvas buffers[2];
 
@@ -88,7 +89,6 @@ protected:
 protected:
   virtual void OnCreate() override;
   virtual void OnDestroy() override;
-  virtual bool OnUser(unsigned id) override;
   virtual void OnPaint(Canvas &canvas) override;
   virtual void OnPaintBuffer(Canvas &canvas) = 0;
 
