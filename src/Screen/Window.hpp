@@ -878,9 +878,7 @@ public:
   }
 #endif
 
-#ifndef USE_WINUSER
-  void SendUser(unsigned id) noexcept;
-#else
+#ifdef USE_WINUSER
   void SendUser(unsigned id) noexcept {
     assert(IsDefined());
 
@@ -946,9 +944,10 @@ public:
   virtual void OnCancelMode();
   virtual void OnSetFocus();
   virtual void OnKillFocus();
-  virtual bool OnUser(unsigned id);
 
 #ifdef USE_WINUSER
+  virtual bool OnUser(unsigned id);
+
   /**
    * Called by OnMessage() when the message was not handled by any
    * virtual method.  Calls the default handler.  This function is

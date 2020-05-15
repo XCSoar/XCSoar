@@ -22,16 +22,3 @@ Copyright_License {
 */
 
 #include "Screen/Window.hpp"
-#include "Event/SDL/Event.hpp"
-
-void
-Window::SendUser(unsigned id) noexcept
-{
-  SDL_Event event;
-  event.user.type = EVENT_USER;
-  event.user.code = (int)id;
-  event.user.data1 = this;
-  event.user.data2 = nullptr;
-
-  ::SDL_PushEvent(&event);
-}

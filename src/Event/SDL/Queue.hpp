@@ -33,8 +33,6 @@ Copyright_License {
 
 #include <chrono>
 
-class Window;
-
 class EventQueue {
   ClockCache<std::chrono::steady_clock> steady_clock_cache;
 
@@ -84,11 +82,6 @@ public:
    * Purge all events for this callback from the event queue.
    */
   void Purge(EventLoop::Callback callback, void *ctx);
-
-  /**
-   * Purge all events for this Window from the event queue.
-   */
-  void Purge(Window &window);
 
   void AddTimer(Timer &timer, std::chrono::steady_clock::duration d) noexcept;
   void CancelTimer(Timer &timer);

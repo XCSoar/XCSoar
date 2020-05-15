@@ -166,18 +166,6 @@ EventQueue::Purge(Event::Callback callback, void *ctx)
   Purge(MatchCallback, (void *)&match);
 }
 
-static bool
-match_window(const Event &event, void *ctx)
-{
-  return event.type == Event::USER && event.ptr == ctx;
-}
-
-void
-EventQueue::Purge(Window &window)
-{
-  Purge(match_window, (void *)&window);
-}
-
 void
 EventQueue::OnSignal(int signo)
 {

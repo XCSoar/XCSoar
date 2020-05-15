@@ -125,6 +125,12 @@ Window::OnCommand(unsigned id, unsigned code)
   return false;
 }
 
+bool
+Window::OnUser(unsigned id)
+{
+  return false;
+}
+
 LRESULT
 Window::OnUnhandledMessage(HWND hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam) noexcept

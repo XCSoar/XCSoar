@@ -32,14 +32,9 @@ Copyright_License {
 
 enum {
   /**
-   * A "user" event for a #Window.
-   */
-  EVENT_USER = SDL_USEREVENT,
-
-  /**
    * A function pointer with a pointer argument gets called.
    */
-  EVENT_CALLBACK,
+  EVENT_CALLBACK = SDL_USEREVENT,
 };
 
 struct Event {

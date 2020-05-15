@@ -38,8 +38,6 @@ struct Event {
     TIMER,
 #endif
 
-    USER,
-
     CALLBACK,
 
     KEY_DOWN,

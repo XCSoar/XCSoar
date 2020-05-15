@@ -54,10 +54,7 @@ EventLoop::Get(Event &event)
 void
 EventLoop::Dispatch(const Event &event)
 {
-  if (event.type == Event::USER) {
-    Window *window = (Window *)event.ptr;
-    window->OnUser(event.param);
-  } else if (event.type == Event::CALLBACK) {
+  if (event.type == Event::CALLBACK) {
     event.callback(event.ptr);
   } else if (top_window != nullptr && event.type != Event::NOP) {
 #ifndef NON_INTERACTIVE

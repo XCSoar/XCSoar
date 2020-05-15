@@ -33,8 +33,6 @@ Copyright_License {
 #include <chrono>
 #include <queue>
 
-class Window;
-
 class EventQueue {
   std::queue<Event> events;
 
@@ -85,7 +83,6 @@ public:
 
   void Purge(Event::Type type);
   void Purge(Event::Callback callback, void *ctx);
-  void Purge(Window &window);
 
   void AddTimer(Timer &timer, std::chrono::steady_clock::duration d) noexcept;
   void CancelTimer(Timer &timer);

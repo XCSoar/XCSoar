@@ -22,11 +22,3 @@ Copyright_License {
 */
 
 #include "Screen/Window.hpp"
-#include "Event/Queue.hpp"
-#include "Event/Globals.hpp"
-
-void
-Window::SendUser(unsigned id) noexcept
-{
-  event_queue->Push(Event(Event::USER, id, this));
-}

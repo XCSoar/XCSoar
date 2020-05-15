@@ -45,7 +45,6 @@ Copyright_License {
 #include <queue>
 
 enum class DisplayOrientation : uint8_t;
-class Window;
 
 /**
  * Helper class to guarantee that io_context gets initialised before
@@ -184,7 +183,6 @@ public:
 
   void Purge(enum Event::Type type);
   void Purge(Event::Callback callback, void *ctx);
-  void Purge(Window &window);
 
 private:
   /* virtual methods from SignalListener */

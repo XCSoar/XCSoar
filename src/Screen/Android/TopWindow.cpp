@@ -168,7 +168,6 @@ TopWindow::OnEvent(const Event &event)
 
   case Event::NOP:
   case Event::TIMER:
-  case Event::USER:
   case Event::CALLBACK:
     break;
 

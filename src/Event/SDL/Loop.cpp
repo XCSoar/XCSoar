@@ -54,10 +54,7 @@ EventLoop::Dispatch(const Event &_event)
 {
   const SDL_Event &event = _event.event;
 
-  if (event.type == EVENT_USER && event.user.data1 != NULL) {
-    Window *window = (Window *)event.user.data1;
-    window->OnUser(event.user.code);
-  } else if (event.type == EVENT_CALLBACK) {
+  if (event.type == EVENT_CALLBACK) {
     Callback callback = (Callback)event.user.data1;
     callback(event.user.data2);
   } else if (top_window != nullptr) {

@@ -128,20 +128,6 @@ EventQueue::Purge(EventLoop::Callback callback, void *ctx)
   Purge(EVENT_CALLBACK, MatchCallback, (void *)&data);
 }
 
-static bool
-match_window(const SDL_Event &event, void *ctx)
-{
-  return event.type == EVENT_USER &&
-    event.user.data1 == ctx;
-}
-
-void
-EventQueue::Purge(Window &window)
-{
-  Purge(EVENT_USER,
-        match_window, (void *)&window);
-}
-
 void
 EventQueue::AddTimer(Timer &timer, std::chrono::steady_clock::duration d) noexcept
 {

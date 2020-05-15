@@ -115,7 +115,6 @@ TopWindow::OnEvent(const Event &event)
     Window *w;
 
   case Event::NOP:
-  case Event::USER:
   case Event::CALLBACK:
     break;
 
