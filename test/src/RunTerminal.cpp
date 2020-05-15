@@ -26,17 +26,17 @@ Copyright_License {
 #include "Main.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/TerminalWindow.hpp"
-#include "Screen/Timer.hpp"
+#include "Event/PeriodicTimer.hpp"
 #include "Look/TerminalLook.hpp"
 
 class TestWindow : public SingleWindow {
   TerminalWindow terminal;
 
-  WindowTimer timer;
+  PeriodicTimer timer{[this]{ WriteRandomChar(); }};
 
 public:
   TestWindow(const TerminalLook &look)
-    :terminal(look), timer(*this) {}
+    :terminal(look) {}
 
   void Create(PixelSize size) {
     SingleWindow::Create(_T("RunTerminal"), size);
@@ -57,18 +57,15 @@ protected:
     SingleWindow::OnDestroy();
   }
 
-  virtual bool OnTimer(WindowTimer &_timer) override {
-    if (_timer == timer) {
-      unsigned r = rand();
-      char ch;
-      if ((r % 16) == 0)
-        ch = '\n';
-      else
-        ch = 0x20 + ((r / 16) % 0x60);
-      terminal.Write(&ch, 1);
-      return true;
-    } else
-      return SingleWindow::OnTimer(_timer);
+private:
+  void WriteRandomChar() noexcept {
+    unsigned r = rand();
+    char ch;
+    if ((r % 16) == 0)
+      ch = '\n';
+    else
+      ch = 0x20 + ((r / 16) % 0x60);
+    terminal.Write(&ch, 1);
   }
 };
 
