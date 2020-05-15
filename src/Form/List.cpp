@@ -52,27 +52,14 @@ UsePixelPan() noexcept
 
 ListControl::ListControl(const DialogLook &_look) noexcept
   :look(_look),
-   scroll_bar(look.button),
-   length(0),
-   origin(0), pixel_pan(0),
-   cursor(0),
-   drag_mode(DragMode::NONE),
-   item_renderer(nullptr), cursor_handler(nullptr),
-   kinetic_timer(*this)
+   scroll_bar(look.button)
 {
 }
 
 ListControl::ListControl(ContainerWindow &parent, const DialogLook &_look,
                          PixelRect rc, const WindowStyle style,
                          unsigned _item_height) noexcept
-  :look(_look),
-   scroll_bar(look.button),
-   length(0),
-   origin(0), pixel_pan(0),
-   cursor(0),
-   drag_mode(DragMode::NONE),
-   item_renderer(nullptr), cursor_handler(nullptr),
-   kinetic_timer(*this)
+  :ListControl(_look)
 {
   Create(parent, rc, style, _item_height);
 }

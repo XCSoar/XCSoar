@@ -102,20 +102,20 @@ protected:
   /** The height of one item on the screen, in pixels. */
   unsigned item_height;
   /** The number of items in the list. */
-  unsigned length;
+  unsigned length = 0;
   /** The index of the topmost item currently being displayed. */
-  unsigned origin;
+  unsigned origin = 0;
 
   /**
    * Which pixel row of the "origin" item is being displayed at the
    * top of the Window?
    */
-  unsigned pixel_pan;
+  unsigned pixel_pan = 0;
 
   /** The number of items visible at a time. */
   unsigned items_visible;
   /** The index of the selected item on the screen. */
-  unsigned cursor;
+  unsigned cursor = 0;
 
   /**
    * Tracks the state of the mouse dragging over the list items
@@ -138,7 +138,7 @@ protected:
     CURSOR,
   };
 
-  DragMode drag_mode;
+  DragMode drag_mode = DragMode::NONE;
 
   /**
    * the vertical distance from the start of the drag relative to the
@@ -152,11 +152,11 @@ protected:
    */
   int drag_y_window;
 
-  ListItemRenderer *item_renderer;
-  ListCursorHandler *cursor_handler;
+  ListItemRenderer *item_renderer = nullptr;
+  ListCursorHandler *cursor_handler = nullptr;
 
   KineticManager kinetic;
-  WindowTimer kinetic_timer;
+  WindowTimer kinetic_timer{*this};
 
 public:
   explicit ListControl(const DialogLook &_look) noexcept;
