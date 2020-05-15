@@ -27,6 +27,8 @@ Copyright_License {
 #include "Type.hpp"
 #include "Util/Compiler.h"
 
+#include <memory>
+
 #include <tchar.h>
 
 class InfoBoxContent;
@@ -56,7 +58,7 @@ namespace InfoBoxFactory
   const TCHAR *
   GetDescription(Type type);
 
-  InfoBoxContent* Create(Type infobox_type);
+  std::unique_ptr<InfoBoxContent> Create(Type infobox_type);
 };
 
 #endif

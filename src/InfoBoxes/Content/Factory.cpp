@@ -1115,7 +1115,7 @@ InfoBoxFactory::GetDescription(Type type)
   return meta_data[type].description;
 }
 
-InfoBoxContent*
+std::unique_ptr<InfoBoxContent>
 InfoBoxFactory::Create(Type type)
 {
   assert(type < NUM_TYPES);
@@ -1125,7 +1125,7 @@ InfoBoxFactory::Create(Type type)
          m.update != nullptr);
 
   if (m.create != nullptr)
-    return m.create();
+    return std::unique_ptr<InfoBoxContent>(m.create());
   else
-    return new InfoBoxContentCallback(m.update, m.panels);
+    return std::make_unique<InfoBoxContentCallback>(m.update, m.panels);
 }

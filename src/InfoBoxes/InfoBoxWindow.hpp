@@ -29,14 +29,15 @@ Copyright_License {
 #include "Event/Timer.hpp"
 #include "Data.hpp"
 
+#include <memory>
+
 struct InfoBoxSettings;
 struct InfoBoxLook;
 class Color;
 
 class InfoBoxWindow : public LazyPaintWindow
 {
-private:
-  InfoBoxContent *content = nullptr;
+  std::unique_ptr<InfoBoxContent> content;
 
   const InfoBoxSettings &settings;
   const InfoBoxLook &look;
@@ -123,7 +124,7 @@ public:
     return look;
   }
 
-  void SetContentProvider(InfoBoxContent *_content);
+  void SetContentProvider(std::unique_ptr<InfoBoxContent> _content);
   void UpdateContent();
 
 private:

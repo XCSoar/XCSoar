@@ -54,7 +54,6 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &parent, PixelRect rc,
 }
 
 InfoBoxWindow::~InfoBoxWindow() {
-  delete content;
   Destroy();
 }
 
@@ -192,7 +191,7 @@ InfoBoxWindow::Paint(Canvas &canvas)
   else
     canvas.Clear(background_color);
 
-  if (data.GetCustom() && content != NULL) {
+  if (data.GetCustom() && content) {
     /* if there's no comment, the content object may paint that area,
        too */
     const PixelRect &rc = data.comment.empty()
@@ -232,10 +231,9 @@ InfoBoxWindow::Paint(Canvas &canvas)
 }
 
 void
-InfoBoxWindow::SetContentProvider(InfoBoxContent *_content)
+InfoBoxWindow::SetContentProvider(std::unique_ptr<InfoBoxContent> _content)
 {
-  delete content;
-  content = _content;
+  content = std::move(_content);
 
   data.SetInvalid();
   Invalidate();
@@ -244,7 +242,7 @@ InfoBoxWindow::SetContentProvider(InfoBoxContent *_content)
 void
 InfoBoxWindow::UpdateContent()
 {
-  if (content == NULL)
+  if (!content)
     return;
 
   InfoBoxData old = data;
@@ -283,7 +281,7 @@ InfoBoxWindow::ShowDialog()
 bool
 InfoBoxWindow::HandleKey(InfoBoxContent::InfoBoxKeyCodes keycode)
 {
-  if (content != NULL && content->HandleKey(keycode)) {
+  if (content && content->HandleKey(keycode)) {
     UpdateContent();
     return true;
   }
@@ -293,7 +291,7 @@ InfoBoxWindow::HandleKey(InfoBoxContent::InfoBoxKeyCodes keycode)
 const InfoBoxPanel *
 InfoBoxWindow::GetDialogContent() const
 {
-  if (content != NULL)
+  if (content)
     return content->GetDialogContent();
 
   return NULL;
