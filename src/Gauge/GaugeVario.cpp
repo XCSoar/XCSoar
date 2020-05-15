@@ -73,14 +73,14 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
 
   if (Settings().show_average) {
     // JMW averager now displays netto average if not circling
-    RenderValue(canvas, top_position.x, top_position.y, &value_top, &label_top,
+    RenderValue(canvas, top_position, &value_top, &label_top,
                 Units::ToUserVSpeed(Calculated().circling ? Calculated().average : Calculated().netto_average),
                 Calculated().circling ? _T("Avg") : _T("NetAvg"));
   }
 
   if (Settings().show_mc) {
     auto mc = Units::ToUserVSpeed(GetGlidePolar().GetMC());
-    RenderValue(canvas, bottom_position.x, bottom_position.y,
+    RenderValue(canvas, bottom_position,
                 &value_bottom, &label_bottom,
                 mc,
                 GetComputerSettings().task.auto_mc ? _T("Auto MC") : _T("MC"));
@@ -152,7 +152,7 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
     auto vvaldisplay = Clamp(Units::ToUserVSpeed(vval),
                               -99.9, 99.9);
 
-    RenderValue(canvas, middle_position.x, middle_position.y,
+    RenderValue(canvas, middle_position,
                 &value_middle, &label_middle,
                 vvaldisplay,
                 _T("Gross"));
@@ -302,7 +302,7 @@ GaugeVario::RenderNeedle(Canvas &canvas, int i, bool average, bool clear)
 
 // TODO code: Optimise vario rendering, this is slow
 void
-GaugeVario::RenderValue(Canvas &canvas, int x, int y,
+GaugeVario::RenderValue(Canvas &canvas, PixelPoint position,
                         DrawInfo *value_info, DrawInfo *label_info,
                         double value, const TCHAR *label)
 {
@@ -311,6 +311,7 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y,
   value = (double)iround(value * 10) / 10; // prevent the -0.0 case
 
   if (!value_info->initialised) {
+    const int x = position.x, y = position.y;
 
     value_info->rc.right = x - Layout::Scale(5);
     value_info->rc.top = y + Layout::Scale(3)
@@ -332,6 +333,7 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y,
   }
 
   if (!label_info->initialised) {
+    const int x = position.x, y = position.y;
 
     label_info->rc.right = x;
     label_info->rc.top = y + Layout::Scale(1);
@@ -404,7 +406,7 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y,
     canvas.Select(look.unit_font);
     canvas.SetTextColor(COLOR_GRAY);
     UnitSymbolRenderer::Draw(canvas,
-                             PixelPoint(x - Layout::Scale(5),
+                             PixelPoint(position.x - Layout::Scale(5),
                                         value_info->text_position.y + ascent_height - unit_height),
                              unit, look.unit_fraction_pen);
   }

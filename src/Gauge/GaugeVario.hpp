@@ -134,7 +134,7 @@ protected:
 
 private:
   void RenderZero(Canvas &canvas);
-  void RenderValue(Canvas &canvas, int x, int y,
+  void RenderValue(Canvas &canvas, PixelPoint position,
                    DrawInfo *diValue, DrawInfo *diLabel,
                    double Value, const TCHAR *Label);
   void RenderSpeedToFly(Canvas &canvas, int x, int y);
