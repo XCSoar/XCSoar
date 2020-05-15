@@ -144,8 +144,7 @@ TouchTextEntry(TCHAR *text, size_t width,
   max_width = std::min(MAX_TEXTENTRY, width);
 
   const DialogLook &look = UIGlobals::GetDialogLook();
-  WndForm form(look);
-  form.Create(UIGlobals::GetMainWindow(), caption);
+  WndForm form(UIGlobals::GetMainWindow(), look, caption);
   form.SetKeyDownFunction(FormKeyDown);
   form.SetCharacterFunction(FormCharacter);
 
