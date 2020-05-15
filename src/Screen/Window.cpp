@@ -248,12 +248,6 @@ Window::OnKillFocus()
 }
 
 bool
-Window::OnTimer(WindowTimer &timer)
-{
-  return false;
-}
-
-bool
 Window::OnUser(unsigned id)
 {
   return false;

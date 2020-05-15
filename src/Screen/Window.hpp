@@ -43,7 +43,6 @@ struct Event;
 class Font;
 class Canvas;
 class ContainerWindow;
-class WindowTimer;
 
 /**
  * A portable wrapper for describing a window's style settings on
@@ -947,7 +946,6 @@ public:
   virtual void OnCancelMode();
   virtual void OnSetFocus();
   virtual void OnKillFocus();
-  virtual bool OnTimer(WindowTimer &timer);
   virtual bool OnUser(unsigned id);
 
 #ifdef USE_WINUSER

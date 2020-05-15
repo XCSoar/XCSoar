@@ -239,11 +239,6 @@ Window::OnMessage(HWND _hWnd, UINT message,
        it's not focused anymore */
     break;
 
-  case WM_TIMER:
-    if (OnTimer(*(WindowTimer *)wParam))
-      return 0;
-    break;
-
   case WM_GETDLGCODE:
     if (OnKeyCheck(wParam))
       return DLGC_WANTMESSAGE;

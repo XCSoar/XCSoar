@@ -40,9 +40,6 @@ Copyright_License {
  *
  * This class is not thread safe; all of the methods must be called
  * from the main thread.
- *
- * The class #WindowTimer is cheaper on WIN32; use it instead of this
- * class if you are implementing a #Window.
  */
 class Timer final {
   bool pending = false;
