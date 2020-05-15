@@ -81,6 +81,11 @@ class GaugeVario : public AntiFlickerWindow
   DrawInfo label_middle;
   DrawInfo label_bottom;
 
+  int ival_av_last = 0;
+  int vval_last = 0;
+  int sval_last = 0;
+  int ival_last = 0;
+
   double last_v_diff = 0;
 
   int last_ballast = -1;

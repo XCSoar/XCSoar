@@ -109,10 +109,6 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
   if (Settings().show_thermal_average_needle) {
       ival_av_thermal = ValueToNeedlePos(Calculated().current_thermal.lift_rate);
   }
-  static int ival_av_last = 0;
-  static int vval_last = 0;
-  static int sval_last = 0;
-  static int ival_last = 0;
 
   auto vval = Basic().brutto_vario;
   ival = ValueToNeedlePos(vval);
