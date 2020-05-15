@@ -81,6 +81,12 @@ class GaugeVario : public AntiFlickerWindow
   DrawInfo label_middle;
   DrawInfo label_bottom;
 
+  int last_bugs = -1;
+  PixelRect bugs_label_rect;
+  PixelRect bugs_value_rect;
+  PixelPoint bugs_label_pos;
+  PixelPoint bugs_value_pos;
+
   BulkPixelPoint polys[(gmax * 2 + 1) * 3];
   BulkPixelPoint lines[gmax * 2 + 1];
 

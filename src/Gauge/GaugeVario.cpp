@@ -643,47 +643,41 @@ GaugeVario::RenderBallast(Canvas &canvas)
 void
 GaugeVario::RenderBugs(Canvas &canvas)
 {
-  static int last_bugs = -1;
-  static PixelRect label_rect = {-1,-1,-1,-1};
-  static PixelRect value_rect = {-1,-1,-1,-1};
-  static PixelPoint label_pos = {-1,-1};
-  static PixelPoint value_pos = {-1,-1};
-
   if (!bugs_initialised) {
     const PixelRect rc = GetClientRect();
     PixelSize tSize;
 
-    label_pos.x = 1;
-    label_pos.y = rc.bottom - 2
+    bugs_label_pos.x = 1;
+    bugs_label_pos.y = rc.bottom - 2
       - look.text_font->GetCapitalHeight()
       - look.text_font->GetAscentHeight();
 
-    value_pos.x = 1;
-    value_pos.y = rc.bottom - 1
+    bugs_value_pos.x = 1;
+    bugs_value_pos.y = rc.bottom - 1
       - look.text_font->GetAscentHeight();
 
-    label_rect.left = label_pos.x;
-    label_rect.top = label_pos.y
+    bugs_label_rect.left = bugs_label_pos.x;
+    bugs_label_rect.top = bugs_label_pos.y
       + look.text_font->GetAscentHeight()
       - look.text_font->GetCapitalHeight();
-    value_rect.left = value_pos.x;
-    value_rect.top = value_pos.y
+    bugs_value_rect.left = bugs_value_pos.x;
+    bugs_value_rect.top = bugs_value_pos.y
       + look.text_font->GetAscentHeight()
       - look.text_font->GetCapitalHeight();
 
     canvas.Select(*look.text_font);
     tSize = canvas.CalcTextSize(TEXT_BUG);
 
-    label_rect.right = label_rect.left + tSize.cx;
-    label_rect.bottom = label_rect.top
+    bugs_label_rect.right = bugs_label_rect.left + tSize.cx;
+    bugs_label_rect.bottom = bugs_label_rect.top
       + look.text_font->GetCapitalHeight()
       + look.text_font->GetHeight()
       - look.text_font->GetAscentHeight();
 
     tSize = canvas.CalcTextSize(_T("100%"));
 
-    value_rect.right = value_rect.left + tSize.cx;
-    value_rect.bottom = value_rect.top +
+    bugs_value_rect.right = bugs_value_rect.left + tSize.cx;
+    bugs_value_rect.bottom = bugs_value_rect.top +
       look.text_font->GetCapitalHeight();
 
     bugs_initialised = true;
@@ -703,11 +697,12 @@ GaugeVario::RenderBugs(Canvas &canvas)
       if (bugs > 0) {
         canvas.SetTextColor(look.dimmed_text_color);
         if (IsPersistent())
-          canvas.DrawOpaqueText(label_pos.x, label_pos.y, label_rect, TEXT_BUG);
+          canvas.DrawOpaqueText(bugs_label_pos.x, bugs_label_pos.y,
+                                bugs_label_rect, TEXT_BUG);
         else
-          canvas.DrawText(label_pos.x, label_pos.y, TEXT_BUG);
+          canvas.DrawText(bugs_label_pos.x, bugs_label_pos.y, TEXT_BUG);
       } else if (IsPersistent())
-        canvas.DrawFilledRectangle(label_rect, look.background_color);
+        canvas.DrawFilledRectangle(bugs_label_rect, look.background_color);
     }
 
     if (bugs > 0) {
@@ -715,11 +710,12 @@ GaugeVario::RenderBugs(Canvas &canvas)
       _stprintf(buffer, _T("%d%%"), bugs);
       canvas.SetTextColor(look.text_color);
       if (IsPersistent())
-        canvas.DrawOpaqueText(value_pos.x, value_pos.y, value_rect, buffer);
+        canvas.DrawOpaqueText(bugs_value_pos.x, bugs_value_pos.y,
+                              bugs_value_rect, buffer);
       else 
-        canvas.DrawText(value_pos.x, value_pos.y, buffer);
+        canvas.DrawText(bugs_value_pos.x, bugs_value_pos.y, buffer);
     } else if (IsPersistent())
-      canvas.DrawFilledRectangle(value_rect, look.background_color);
+      canvas.DrawFilledRectangle(bugs_value_rect, look.background_color);
 
     if (IsPersistent())
       last_bugs = bugs;
