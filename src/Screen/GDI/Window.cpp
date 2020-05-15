@@ -132,13 +132,6 @@ Window::OnUser(unsigned id)
 }
 
 LRESULT
-Window::OnUnhandledMessage(HWND hWnd, UINT message,
-                             WPARAM wParam, LPARAM lParam) noexcept
-{
-  return ::DefWindowProc(hWnd, message, wParam, lParam);
-}
-
-LRESULT
 Window::OnMessage(HWND _hWnd, UINT message,
                   WPARAM wParam, LPARAM lParam) noexcept
 {
@@ -254,7 +247,7 @@ Window::OnMessage(HWND _hWnd, UINT message,
   if (message >= WM_USER && message <= 0x7FFF && OnUser(message - WM_USER))
     return 0;
 
-  return OnUnhandledMessage(_hWnd, message, wParam, lParam);
+  return ::DefWindowProc(hWnd, message, wParam, lParam);
 }
 
 LRESULT CALLBACK

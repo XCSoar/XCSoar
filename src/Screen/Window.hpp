@@ -948,15 +948,6 @@ public:
 #ifdef USE_WINUSER
   virtual bool OnUser(unsigned id);
 
-  /**
-   * Called by OnMessage() when the message was not handled by any
-   * virtual method.  Calls the default handler.  This function is
-   * virtual, because the Dialog class will have to override it -
-   * dialogs have slightly different semantics.
-   */
-  virtual LRESULT OnUnhandledMessage(HWND hWnd, UINT message,
-                                     WPARAM wParam, LPARAM lParam) noexcept;
-
   virtual LRESULT OnMessage(HWND hWnd, UINT message,
                             WPARAM wParam, LPARAM lParam) noexcept;
 #endif /* USE_WINUSER */
