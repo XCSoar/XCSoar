@@ -35,14 +35,30 @@ Copyright_License {
 #define TEXT_BUG _T("Bug")
 #define TEXT_BALLAST _T("Bal")
 
+GaugeVario::Geometry::Geometry(const VarioLook &look, const PixelRect &rc) noexcept
+{
+  nlength0 = Layout::Scale(15);
+  nlength1 = Layout::Scale(6);
+  nwidth = Layout::Scale(4);
+  nline = Layout::Scale(8);
+
+  offset = rc.GetCenter();
+
+  unsigned value_height = 4 + look.value_font.GetCapitalHeight()
+    + look.text_font->GetCapitalHeight();
+
+  middle_position.y = offset.y - value_height / 2;
+  middle_position.x = rc.right;
+  top_position.y = middle_position.y - value_height;
+  top_position.x = rc.right;
+  bottom_position.y = middle_position.y + value_height;
+  bottom_position.x = rc.right;
+}
+
 GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
                        ContainerWindow &parent, const VarioLook &_look,
                        PixelRect rc, const WindowStyle style)
-  :blackboard(_blackboard), look(_look),
-   nlength0(Layout::Scale(15)),
-   nlength1(Layout::Scale(6)),
-   nwidth(Layout::Scale(4)),
-   nline(Layout::Scale(8))
+  :blackboard(_blackboard), look(_look)
 {
   Create(parent, rc, style);
 }
@@ -53,34 +69,24 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
   const PixelRect rc = GetClientRect();
   const unsigned width = rc.GetWidth(), height = rc.GetHeight();
 
-  if (!IsPersistent() || !layout_initialised) {
-    unsigned value_height = 4 + look.value_font.GetCapitalHeight()
-      + look.text_font->GetCapitalHeight();
-
-    middle_position.y = offset.y - value_height / 2;
-    middle_position.x = rc.right;
-    top_position.y = middle_position.y - value_height;
-    top_position.x = rc.right;
-    bottom_position.y = middle_position.y + value_height;
-    bottom_position.x = rc.right;
-
+  if (!IsPersistent() || background_dirty) {
     canvas.Stretch(rc.left, rc.top, width, height,
                    look.background_bitmap,
                    look.background_x, 0, 58, 120);
 
-    layout_initialised = true;
+    background_dirty = true;
   }
 
   if (Settings().show_average) {
     // JMW averager now displays netto average if not circling
-    RenderValue(canvas, top_position, &value_top, &label_top,
+    RenderValue(canvas, geometry.top_position, &value_top, &label_top,
                 Units::ToUserVSpeed(Calculated().circling ? Calculated().average : Calculated().netto_average),
                 Calculated().circling ? _T("Avg") : _T("NetAvg"));
   }
 
   if (Settings().show_mc) {
     auto mc = Units::ToUserVSpeed(GetGlidePolar().GetMC());
-    RenderValue(canvas, bottom_position,
+    RenderValue(canvas, geometry.bottom_position,
                 &value_bottom, &label_bottom,
                 mc,
                 GetComputerSettings().task.auto_mc ? _T("Auto MC") : _T("MC"));
@@ -152,7 +158,7 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
     auto vvaldisplay = Clamp(Units::ToUserVSpeed(vval),
                               -99.9, 99.9);
 
-    RenderValue(canvas, middle_position,
+    RenderValue(canvas, geometry.middle_position,
                 &value_middle, &label_middle,
                 vvaldisplay,
                 _T("Gross"));
@@ -176,15 +182,19 @@ GaugeVario::MakePolygon(const int i)
 
   const FastIntegerRotation r(Angle::Degrees(i));
 
-  bit[0] = TransformRotatedPoint(r.Rotate(-offset.x + nlength0, nwidth),
-                                 offset);
-  bit[1] = TransformRotatedPoint(r.Rotate(-offset.x + nlength1, 0),
-                                 offset);
-  bit[2] = TransformRotatedPoint(r.Rotate(-offset.x + nlength0, -nwidth),
-                                 offset);
+  bit[0] = TransformRotatedPoint(r.Rotate(-geometry.offset.x + geometry.nlength0,
+                                          geometry.nwidth),
+                                 geometry.offset);
+  bit[1] = TransformRotatedPoint(r.Rotate(-geometry.offset.x + geometry.nlength1,
+                                          0),
+                                 geometry.offset);
+  bit[2] = TransformRotatedPoint(r.Rotate(-geometry.offset.x + geometry.nlength0,
+                                          -geometry.nwidth),
+                                 geometry.offset);
 
-  *bline = TransformRotatedPoint(r.Rotate(-offset.x + nline, 0),
-                                 offset);
+  *bline = TransformRotatedPoint(r.Rotate(-geometry.offset.x + geometry.nline,
+                                          0),
+                                 geometry.offset);
 }
 
 BulkPixelPoint *
@@ -225,8 +235,10 @@ GaugeVario::RenderZero(Canvas &canvas)
   else
     canvas.SelectBlackPen();
 
-  canvas.DrawLine(0, offset.y, Layout::Scale(17), offset.y);
-  canvas.DrawLine(0, offset.y + 1, Layout::Scale(17), offset.y + 1);
+  canvas.DrawLine(0, geometry.offset.y,
+                  Layout::Scale(17), geometry.offset.y);
+  canvas.DrawLine(0, geometry.offset.y + 1,
+                  Layout::Scale(17), geometry.offset.y + 1);
 }
 
 int
@@ -707,10 +719,10 @@ GaugeVario::OnResize(PixelSize new_size)
 {
   AntiFlickerWindow::OnResize(new_size);
 
+  geometry = {look, GetClientRect()};
+
   /* trigger reinitialisation */
-  offset.x = new_size.cx;
-  offset.y = new_size.cy / 2;
-  layout_initialised = false;
+  background_dirty = true;
   needle_initialised = false;
   ballast_initialised = false;
   bugs_initialised = false;
