@@ -46,6 +46,14 @@ class GaugeVario : public AntiFlickerWindow
   static constexpr int gmax = GAUGEVARIOSWEEP + 2;
   static constexpr int gmin = -gmax;
 
+  struct BallastGeometry {
+    PixelRect label_rect, value_rect;
+    PixelPoint label_pos, value_pos;
+
+    BallastGeometry() = default;
+    BallastGeometry(const VarioLook &look, const PixelRect &rc) noexcept;
+  };
+
   struct Geometry {
     unsigned nlength0, nlength1, nwidth, nline;
 
@@ -55,8 +63,9 @@ class GaugeVario : public AntiFlickerWindow
     PixelPoint middle_position;
     PixelPoint bottom_position;
 
-    Geometry() = default;
+    BallastGeometry ballast;
 
+    Geometry() = default;
     Geometry(const VarioLook &look, const PixelRect &rc) noexcept;
   } geometry;
 
@@ -77,7 +86,6 @@ class GaugeVario : public AntiFlickerWindow
 
   bool background_dirty = true;
   bool needle_initialised = false;
-  bool ballast_initialised = false;
   bool bugs_initialised = false;
 
   DrawInfo value_top;
@@ -95,8 +103,6 @@ class GaugeVario : public AntiFlickerWindow
   double last_v_diff = 0;
 
   int last_ballast = -1;
-  PixelRect ballast_label_rect, ballast_value_rect;
-  PixelPoint ballast_label_pos, ballast_value_pos;
 
   int last_bugs = -1;
   PixelRect bugs_label_rect, bugs_value_rect;
