@@ -40,7 +40,7 @@ class Notify
   : Window
 #endif
 {
-  std::atomic<bool> pending;
+  std::atomic<bool> pending{false};
 
 public:
   Notify();

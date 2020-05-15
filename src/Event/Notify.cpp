@@ -26,7 +26,6 @@ Copyright_License {
 #include "Queue.hpp"
 
 Notify::Notify()
-  :pending(false)
 {
 #ifdef USE_WINUSER
   Window::CreateMessageWindow();
