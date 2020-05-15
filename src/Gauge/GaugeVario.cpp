@@ -306,8 +306,6 @@ GaugeVario::RenderValue(Canvas &canvas, PixelPoint position,
                         DrawInfo *value_info, DrawInfo *label_info,
                         double value, const TCHAR *label)
 {
-  PixelSize tsize;
-
   value = (double)iround(value * 10) / 10; // prevent the -0.0 case
 
   if (!value_info->initialised) {
@@ -358,7 +356,7 @@ GaugeVario::RenderValue(Canvas &canvas, PixelPoint position,
   if (!IsPersistent() || (dirty && !StringIsEqual(label_info->last_text, label))) {
     canvas.SetTextColor(look.dimmed_text_color);
     canvas.Select(*look.text_font);
-    tsize = canvas.CalcTextSize(label);
+    const auto tsize = canvas.CalcTextSize(label);
     label_info->text_position.x = label_info->rc.right - tsize.cx;
 
     if (IsPersistent()) {
@@ -379,7 +377,7 @@ GaugeVario::RenderValue(Canvas &canvas, PixelPoint position,
     canvas.SetTextColor(look.text_color);
     _stprintf(buffer, _T("%.1f"), (double)value);
     canvas.Select(look.value_font);
-    tsize = canvas.CalcTextSize(buffer);
+    const auto tsize = canvas.CalcTextSize(buffer);
     value_info->text_position.x = value_info->rc.right - tsize.cx;
 
     if (IsPersistent()) {
