@@ -100,6 +100,13 @@ public:
           const TCHAR *caption=nullptr,
           const WindowStyle style = WindowStyle());
 
+  /**
+   * Construct a full-screen dialog.
+   */
+  WndForm(SingleWindow &_main_window, const DialogLook &_look,
+          const TCHAR *caption=nullptr,
+          const WindowStyle style={}) noexcept;
+
   void Create(SingleWindow &main_window, const PixelRect &rc,
               const TCHAR *caption=nullptr,
               const WindowStyle style=WindowStyle());

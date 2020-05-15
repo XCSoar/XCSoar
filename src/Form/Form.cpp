@@ -76,6 +76,13 @@ WndForm::WndForm(SingleWindow &main_window, const DialogLook &_look,
   Create(main_window, rc, Caption, style);
 }
 
+WndForm::WndForm(SingleWindow &main_window, const DialogLook &_look,
+                 const TCHAR *caption,
+                 const WindowStyle style) noexcept
+  :WndForm(main_window, _look, main_window.GetClientRect(), caption, style)
+{
+}
+
 void
 WndForm::Create(SingleWindow &main_window, const PixelRect &rc,
                 const TCHAR *_caption, const WindowStyle style)
