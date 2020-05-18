@@ -1,6 +1,8 @@
 Version 6.8.14 - 2020/05/14
 * user interface
   - fix average needle color in inverted mode
+* tracking
+  - SkyLines: update tracking IP address
 * Android
   - compatibility with Android 9
   - request all permissions without manual restarts
