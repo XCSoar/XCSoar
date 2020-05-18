@@ -118,6 +118,10 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc
          "Requires \"Reach mode: Turning\" in \"Glide Computer > Route\" settings.") },
     { (unsigned)WaypointRendererSettings::ArrivalHeightDisplay::REQUIRED_GR,
       N_("Required glide ratio") },
+    { (unsigned)WaypointRendererSettings::ArrivalHeightDisplay::REQUIRED_GR_AND_TERRAIN,
+      N_("Required GR & terrain glide"),
+      N_("Both Required glide ratio and terrain avoidance height are displayed. "
+         "Requires \"Reach mode: Turning\" in \"Glide Computer > Route\" settings.") },
     { 0 }
   };
 
