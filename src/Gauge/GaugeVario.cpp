@@ -130,7 +130,7 @@ GaugeVario::Geometry::Geometry(const VarioLook &look, const PixelRect &rc) noexc
   nwidth = Layout::Scale(4);
   nline = Layout::Scale(8);
 
-  offset = rc.GetCenter();
+  offset = rc.GetMiddleRight();
 
   unsigned value_height = 4 + look.value_font.GetCapitalHeight()
     + look.text_font->GetCapitalHeight();
