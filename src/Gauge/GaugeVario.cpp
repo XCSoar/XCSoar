@@ -283,13 +283,13 @@ GaugeVario::MakePolygon(const int i) noexcept
                                  geometry.offset);
 }
 
-BulkPixelPoint *
+inline BulkPixelPoint *
 GaugeVario::getPolygon(int i) noexcept
 {
   return polys + (i + gmax) * 3;
 }
 
-void
+inline void
 GaugeVario::MakeAllPolygons() noexcept
 {
   for (int i = gmin; i <= gmax; i++)
@@ -313,7 +313,7 @@ GaugeVario::RenderClimb(Canvas &canvas) noexcept
                           look.background_color);
 }
 
-void
+inline void
 GaugeVario::RenderZero(Canvas &canvas) noexcept
 {
   if (look.inverse)
@@ -508,7 +508,7 @@ GaugeVario::RenderValue(Canvas &canvas, PixelPoint position,
   }
 }
 
-void
+inline void
 GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y) noexcept
 {
   if (!Basic().airspeed_available ||
@@ -625,7 +625,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y) noexcept
   }
 }
 
-void
+inline void
 GaugeVario::RenderBallast(Canvas &canvas) noexcept
 {
   int ballast = iround(GetGlidePolar().GetBallast() * 100);
@@ -675,7 +675,7 @@ GaugeVario::RenderBallast(Canvas &canvas) noexcept
   }
 }
 
-void
+inline void
 GaugeVario::RenderBugs(Canvas &canvas) noexcept
 {
   int bugs = iround((1 - GetComputerSettings().polar.bugs) * 100);
