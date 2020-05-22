@@ -430,8 +430,6 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
     // update back rect with max label size
     di.value.rc.bottom = g.value_bottom;
 
-    di.value.text_position.y = g.value_y;
-
     di.value.last_value = -9999;
     di.value.last_text[0] = '\0';
     di.value.last_unit = Unit::UNDEFINED;
@@ -446,8 +444,6 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
     // update back rect with max label size
     di.label.rc.bottom = g.label_bottom;
 
-    di.label.text_position.y = g.label_y;
-
     di.label.last_value = -9999;
     di.label.last_text[0] = '\0';
     di.label.initialised = true;
@@ -459,16 +455,17 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
     canvas.SetTextColor(look.dimmed_text_color);
     canvas.Select(*look.text_font);
     const auto tsize = canvas.CalcTextSize(label);
-    di.label.text_position.x = di.label.rc.right - tsize.cx;
+
+    const PixelPoint text_position{g.label_right - tsize.cx, g.label_y};
 
     if (IsPersistent()) {
       canvas.SetBackgroundColor(look.background_color);
-      canvas.DrawOpaqueText(di.label.text_position.x, di.label.text_position.y,
+      canvas.DrawOpaqueText(text_position.x, text_position.y,
                             di.label.rc, label);
-      di.label.rc.left = di.label.text_position.x;
+      di.label.rc.left = text_position.x;
       _tcscpy(di.label.last_text, label);
     } else {
-      canvas.DrawText(di.label.text_position.x, di.label.text_position.y,
+      canvas.DrawText(text_position.x, text_position.y,
                       label);
     }
   }
@@ -480,18 +477,17 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
     _stprintf(buffer, _T("%.1f"), (double)value);
     canvas.Select(look.value_font);
     const auto tsize = canvas.CalcTextSize(buffer);
-    di.value.text_position.x = di.value.rc.right - tsize.cx;
+
+    const PixelPoint text_position{g.value_right - tsize.cx, g.value_y};
 
     if (IsPersistent()) {
-      canvas.DrawOpaqueText(di.value.text_position.x,
-                            di.value.text_position.y,
+      canvas.DrawOpaqueText(text_position.x, text_position.y,
                             di.value.rc, buffer);
 
-      di.value.rc.left = di.value.text_position.x;
+      di.value.rc.left = text_position.x;
       di.value.last_value = value;
     } else {
-      canvas.DrawText(di.value.text_position.x, di.value.text_position.y,
-                      buffer);
+      canvas.DrawText(text_position.x, text_position.y, buffer);
     }
   }
 
@@ -507,7 +503,7 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
     canvas.SetTextColor(COLOR_GRAY);
     UnitSymbolRenderer::Draw(canvas,
                              PixelPoint(g.value_right,
-                                        di.value.text_position.y + ascent_height - unit_height),
+                                        g.value_y + ascent_height - unit_height),
                              unit, look.unit_fraction_pen);
   }
 }

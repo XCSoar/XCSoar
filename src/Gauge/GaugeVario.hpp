@@ -87,7 +87,6 @@ class GaugeVario : public AntiFlickerWindow
   struct DrawInfo {
     bool initialised = false;
     PixelRect rc;
-    PixelPoint text_position;
     double last_value;
     TCHAR last_text[32];
     Unit last_unit;
