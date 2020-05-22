@@ -34,7 +34,7 @@ struct PixelPoint : IntPoint2D {
   PixelPoint() = default;
 
   template<typename... Args>
-  constexpr PixelPoint(Args&&... args)
+  constexpr PixelPoint(Args&&... args) noexcept
     :IntPoint2D(args...) {}
 };
 
@@ -43,26 +43,26 @@ struct PixelSize {
 
   PixelSize() = default;
 
-  constexpr PixelSize(int _width, int _height)
+  constexpr PixelSize(int _width, int _height) noexcept
     :cx(_width), cy(_height) {}
 
-  constexpr PixelSize(unsigned _width, unsigned _height)
+  constexpr PixelSize(unsigned _width, unsigned _height) noexcept
     :cx(_width), cy(_height) {}
 
-  constexpr PixelSize(long _width, long _height)
+  constexpr PixelSize(long _width, long _height) noexcept
     :cx(_width), cy(_height) {}
 
-  bool operator==(const PixelSize &other) const {
+  bool operator==(const PixelSize &other) const noexcept {
     return cx == other.cx && cy == other.cy;
   }
 
-  bool operator!=(const PixelSize &other) const {
+  bool operator!=(const PixelSize &other) const noexcept {
     return !(*this == other);
   }
 };
 
 constexpr PixelPoint
-operator+(PixelPoint p, PixelSize size)
+operator+(PixelPoint p, PixelSize size) noexcept
 {
   return { p.x + size.cx, p.y + size.cy };
 }
@@ -80,88 +80,88 @@ struct PixelRect {
 
   PixelRect() = default;
 
-  constexpr PixelRect(int _left, int _top, int _right, int _bottom)
+  constexpr PixelRect(int _left, int _top, int _right, int _bottom) noexcept
     :left(_left), top(_top), right(_right), bottom(_bottom) {}
 
-  constexpr PixelRect(PixelPoint origin, PixelSize size)
+  constexpr PixelRect(PixelPoint origin, PixelSize size) noexcept
     :left(origin.x), top(origin.y),
      right(origin.x + size.cx), bottom(origin.y + size.cy) {}
 
-  explicit constexpr PixelRect(PixelSize size)
+  explicit constexpr PixelRect(PixelSize size) noexcept
     :left(0), top(0), right(size.cx), bottom(size.cy) {}
 
-  bool IsEmpty() {
+  bool IsEmpty() noexcept {
     return left >= right || top >= bottom;
   }
 
-  void SetEmpty() {
+  void SetEmpty() noexcept {
     left = top = right = bottom = 0;
   }
 
-  void Offset(int dx, int dy) {
+  void Offset(int dx, int dy) noexcept {
     left += dx;
     top += dy;
     right += dx;
     bottom += dy;
   }
 
-  void Grow(int dx, int dy) {
+  void Grow(int dx, int dy) noexcept {
     left -= dx;
     top -= dy;
     right += dx;
     bottom += dy;
   }
 
-  void Grow(int d) {
+  void Grow(int d) noexcept {
     Grow(d, d);
   }
 
-  constexpr PixelPoint GetOrigin() const {
+  constexpr PixelPoint GetOrigin() const noexcept {
     return { left, top };
   }
 
-  constexpr PixelSize GetSize() const {
+  constexpr PixelSize GetSize() const noexcept {
     return { right - left, bottom - top };
   }
 
-  constexpr PixelPoint GetCenter() const {
+  constexpr PixelPoint GetCenter() const noexcept {
     return { (left + right) / 2, (top + bottom) / 2 };
   }
 
-  constexpr PixelPoint GetTopLeft() const {
+  constexpr PixelPoint GetTopLeft() const noexcept {
     return { left, top };
   }
 
-  constexpr PixelPoint GetTopRight() const {
+  constexpr PixelPoint GetTopRight() const noexcept {
     return { right, top };
   }
 
-  constexpr PixelPoint GetBottomLeft() const {
+  constexpr PixelPoint GetBottomLeft() const noexcept {
     return { left, bottom };
   }
 
-  constexpr PixelPoint GetBottomRight() const {
+  constexpr PixelPoint GetBottomRight() const noexcept {
     return { right, bottom };
   }
 
-  constexpr unsigned GetWidth() const {
+  constexpr unsigned GetWidth() const noexcept {
     return right - left;
   }
 
-  constexpr unsigned GetHeight() const {
+  constexpr unsigned GetHeight() const noexcept {
     return bottom - top;
   }
 
-  constexpr bool Contains(PixelPoint pt) const {
+  constexpr bool Contains(PixelPoint pt) const noexcept {
     return pt.x >= left && pt.x < right && pt.y >= top && pt.y < bottom;
   }
 
-  constexpr bool Contains(PixelRect other) const {
+  constexpr bool Contains(PixelRect other) const noexcept {
     return left <= other.left && top <= other.top &&
       right >= other.right && bottom >= other.bottom;
   }
 
-  constexpr bool OverlapsWith(PixelRect other) const {
+  constexpr bool OverlapsWith(PixelRect other) const noexcept {
     return left < other.right && other.left <= right &&
       top <= other.bottom && other.top <= bottom;
   }
@@ -170,17 +170,17 @@ struct PixelRect {
    * Calculate the top-left point of a rectangle centered inside this
    * one.
    */
-  constexpr PixelPoint CenteredTopLeft(PixelSize size) const {
+  constexpr PixelPoint CenteredTopLeft(PixelSize size) const noexcept {
     return PixelPoint((left + right - size.cx) / 2,
                       (top + bottom - size.cy) / 2);
   }
 
 #ifdef USE_WINUSER
-  constexpr PixelRect(RECT src)
+  constexpr PixelRect(RECT src) noexcept
     :left(src.left), top(src.top), right(src.right), bottom(src.bottom) {}
 
-  operator RECT() const {
-    RECT r;
+  constexpr operator RECT() const noexcept {
+    RECT r{};
     r.left = left;
     r.top = top;
     r.right = right;
