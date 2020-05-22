@@ -39,6 +39,10 @@
 #include "mapproject.h"
 #endif /* SHAPELIB_DISABLED */
 
+#ifdef SHAPELIB_DISABLED
+#include "cpl_vsi.h"
+#endif /* SHAPELIB_DISABLED */
+
 struct zzip_dir;
 
 #ifdef __cplusplus
@@ -196,6 +200,9 @@ extern "C" {
     projectionObj sTileProj;
 #endif /* SHAPELIB_DISABLED */
     rectObj searchrect;
+#ifdef SHAPELIB_DISABLED
+    reprojectionObj* reprojectorFromTileProjToLayerProj;
+#endif /* SHAPELIB_DISABLED */
   } msTiledSHPLayerInfo;
 
   /* shapefileObj function prototypes  */

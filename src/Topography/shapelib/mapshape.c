@@ -50,10 +50,10 @@
 #endif
 #include "maptree.h"
 
-#if defined(USE_GDAL) || defined(USE_OGR)
+#ifdef SHAPELIB_DISABLED
 #include <cpl_conv.h>
 #include <ogr_srs_api.h>
-#endif
+#endif /* SHAPELIB_DISABLED */
 
 /* Only use this macro on 32-bit integers! */
 #define SWAP_FOUR_BYTES(data) \
@@ -169,8 +169,8 @@ static void writeHeader( SHPHandle psSHP )
   /* -------------------------------------------------------------------- */
   /*      Write .shp file header.                                         */
   /* -------------------------------------------------------------------- */
-  fseek( psSHP->fpSHP, 0, 0 );
-  fwrite( abyHeader, 100, 1, psSHP->fpSHP );
+  VSIFSeekL( psSHP->fpSHP, 0, 0 );
+  VSIFWriteL( abyHeader, 100, 1, psSHP->fpSHP );
 
   /* -------------------------------------------------------------------- */
   /*      Prepare, and write .shx file header.                            */
@@ -179,8 +179,8 @@ static void writeHeader( SHPHandle psSHP )
   ByteCopy( &i32, abyHeader+24, 4 );
   if( !bBigEndian ) SwapWord( 4, abyHeader+24 );
 
-  fseek( psSHP->fpSHX, 0, 0 );
-  fwrite( abyHeader, 100, 1, psSHP->fpSHX );
+  VSIFSeekL( psSHP->fpSHX, 0, 0 );
+  VSIFWriteL( abyHeader, 100, 1, psSHP->fpSHX );
 
   /* -------------------------------------------------------------------- */
   /*      Write out the .shx contents.                                    */
@@ -196,7 +196,7 @@ static void writeHeader( SHPHandle psSHP )
     }
   }
 
-  fwrite( panSHX, sizeof(ms_int32) * 2, psSHP->nRecords, psSHP->fpSHX );
+  VSIFWriteL( panSHX, sizeof(ms_int32) * 2, psSHP->nRecords, psSHP->fpSHX );
 
   free( panSHX );
 }
@@ -482,7 +482,7 @@ SHPHandle msSHPCreate( const char * pszLayer, int nShapeType )
 {
   char *pszBasename, *pszFullname;
   int i;
-  FILE *fpSHP, *fpSHX;
+  VSILFILE *fpSHP, *fpSHX;
   uchar abyHeader[100];
   ms_int32 i32;
   double dValue;
@@ -532,7 +532,7 @@ SHPHandle msSHPCreate( const char * pszLayer, int nShapeType )
   /* -------------------------------------------------------------------- */
   pszFullname = (char *) msSmallMalloc(strlen(pszBasename) + 5);
   sprintf( pszFullname, "%s.shp", pszBasename );
-  fpSHP = fopen(pszFullname, "wb" );
+  fpSHP = VSIFOpenL(pszFullname, "wb" );
   if( fpSHP == NULL ) {
     free( pszFullname );
     free(pszBasename);
@@ -540,9 +540,9 @@ SHPHandle msSHPCreate( const char * pszLayer, int nShapeType )
   }
 
   sprintf( pszFullname, "%s.shx", pszBasename );
-  fpSHX = fopen(pszFullname, "wb" );
+  fpSHX = VSIFOpenL(pszFullname, "wb" );
   if( fpSHX == NULL ) {
-    fclose(fpSHP);
+    VSIFCloseL(fpSHP);
     free( pszFullname );
     free(pszBasename);
     return( NULL );
@@ -581,7 +581,7 @@ SHPHandle msSHPCreate( const char * pszLayer, int nShapeType )
   /* -------------------------------------------------------------------- */
   /*      Write .shp file header.                                         */
   /* -------------------------------------------------------------------- */
-  fwrite( abyHeader, 100, 1, fpSHP );
+  VSIFWriteL( abyHeader, 100, 1, fpSHP );
 
   /* -------------------------------------------------------------------- */
   /*      Prepare, and write .shx file header.                            */
@@ -590,13 +590,13 @@ SHPHandle msSHPCreate( const char * pszLayer, int nShapeType )
   ByteCopy( &i32, abyHeader+24, 4 );
   if( !bBigEndian ) SwapWord( 4, abyHeader+24 );
 
-  fwrite( abyHeader, 100, 1, fpSHX );
+  VSIFWriteL( abyHeader, 100, 1, fpSHX );
 
   /* -------------------------------------------------------------------- */
   /*      Close the files, and then open them as regular existing files.  */
   /* -------------------------------------------------------------------- */
-  fclose( fpSHP );
-  fclose( fpSHX );
+  VSIFCloseL( fpSHP );
+  VSIFCloseL( fpSHX );
 
   return( msSHPOpen( pszLayer, "rb+" ) );
 }
@@ -710,8 +710,8 @@ int msSHPWritePoint(SHPHandle psSHP, pointObj *point )
   /* -------------------------------------------------------------------- */
   /*      Write out record.                                               */
   /* -------------------------------------------------------------------- */
-  if(fseek( psSHP->fpSHP, nRecordOffset, 0 ) == 0) {
-    fwrite( pabyRec, nRecordSize+8, 1, psSHP->fpSHP );
+  if(VSIFSeekL( psSHP->fpSHP, nRecordOffset, 0 ) == 0) {
+    VSIFWriteL( pabyRec, nRecordSize+8, 1, psSHP->fpSHP );
 
     psSHP->panRecSize[psSHP->nRecords-1] = nRecordSize;
     psSHP->nFileSize += nRecordSize + 8;
@@ -1002,8 +1002,8 @@ int msSHPWriteShape(SHPHandle psSHP, shapeObj *shape )
   /* -------------------------------------------------------------------- */
   /*      Write out record.                                               */
   /* -------------------------------------------------------------------- */
-  if(fseek( psSHP->fpSHP, nRecordOffset, 0 ) == 0) {
-    fwrite( pabyRec, nRecordSize+8, 1, psSHP->fpSHP );
+  if(VSIFSeekL( psSHP->fpSHP, nRecordOffset, 0 ) == 0) {
+    VSIFWriteL( pabyRec, nRecordSize+8, 1, psSHP->fpSHP );
 
     psSHP->panRecSize[psSHP->nRecords-1] = nRecordSize;
     psSHP->nFileSize += nRecordSize + 8;
@@ -1119,11 +1119,11 @@ int msSHPReadPoint( SHPHandle psSHP, int hEntity, pointObj *point )
   /* -------------------------------------------------------------------- */
   /*      Read the record.                                                */
   /* -------------------------------------------------------------------- */
-  if( 0 != fseek( psSHP->fpSHP, msSHXReadOffset( psSHP, hEntity), 0 )) {
+  if( 0 != VSIFSeekL( psSHP->fpSHP, msSHXReadOffset( psSHP, hEntity), 0 )) {
     msSetError(MS_IOERR, "failed to seek offset", "msSHPReadPoint()");
     return(MS_FAILURE);
   }
-  if( 1 != fread( psSHP->pabyRec, nEntitySize, 1, psSHP->fpSHP )) {
+  if( 1 != VSIFReadL( psSHP->pabyRec, nEntitySize, 1, psSHP->fpSHP )) {
     msSetError(MS_IOERR, "failed to fread record", "msSHPReadPoint()");
     return(MS_FAILURE);
   }
@@ -1960,6 +1960,9 @@ static const char* msTiledSHPLoadEntry(layerObj *layer, int i, char* tilename, s
     const char* filename;
     msTiledSHPLayerInfo *tSHP= layer->layerinfo;
 
+    msProjectDestroyReprojector(tSHP->reprojectorFromTileProjToLayerProj);
+    tSHP->reprojectorFromTileProjToLayerProj = NULL;
+
     msFreeProjection(&(tSHP->sTileProj));
     if( layer->tilesrs != NULL )
     {
@@ -1998,9 +2001,10 @@ int msTiledSHPOpenFile(layerObj *layer)
     return MS_FAILURE;
 
   /* allocate space for a shapefileObj using layer->layerinfo  */
-  tSHP = (msTiledSHPLayerInfo *) malloc(sizeof(msTiledSHPLayerInfo));
+  tSHP = (msTiledSHPLayerInfo *) calloc(1, sizeof(msTiledSHPLayerInfo));
   MS_CHECK_ALLOC(tSHP, sizeof(msTiledSHPLayerInfo), MS_FAILURE);
   msInitProjection(&(tSHP->sTileProj));
+  msProjectionInheritContextFrom(&(tSHP->sTileProj), &layer->projection);
 
   tSHP->shpfile = (shapefileObj *) malloc(sizeof(shapefileObj));
   if (tSHP->shpfile == NULL) {
@@ -2145,12 +2149,10 @@ int msTiledSHPWhichShapes(layerObj *layer, rectObj rect, int isQuery)
       else if (try_open == MS_FAILURE )
         return(MS_FAILURE);
 
-#ifdef USE_PROJ
       if( tSHP->sTileProj.numargs > 0 )
       {
         msProjectRect(&(layer->projection), &(tSHP->sTileProj), &rectTile);
       }
-#endif
 
       status = msShapefileWhichShapes(tSHP->shpfile, rectTile, layer->debug);
       if(status == MS_DONE) {
@@ -2190,12 +2192,10 @@ int msTiledSHPWhichShapes(layerObj *layer, rectObj rect, int isQuery)
         else if (try_open == MS_FAILURE )
           return(MS_FAILURE);
 
-#ifdef USE_PROJ
         if( tSHP->sTileProj.numargs > 0 )
         {
           msProjectRect(&(layer->projection), &(tSHP->sTileProj), &rectTile);
         }
-#endif
 
         status = msShapefileWhichShapes(tSHP->shpfile, rectTile, layer->debug);
         if(status == MS_DONE) {
@@ -2270,12 +2270,11 @@ int msTiledSHPNextShape(layerObj *layer, shapeObj *shape)
           else if (try_open == MS_FAILURE )
             return(MS_FAILURE);
 
-#ifdef USE_PROJ
           if( tSHP->sTileProj.numargs > 0 )
           {
             msProjectRect(&(layer->projection), &(tSHP->sTileProj), &rectTile);
           }
-#endif
+
           status = msShapefileWhichShapes(tSHP->shpfile, rectTile, layer->debug);
           if(status == MS_DONE) {
             /* Close and continue to next tile */
@@ -2317,12 +2316,11 @@ int msTiledSHPNextShape(layerObj *layer, shapeObj *shape)
             else if (try_open == MS_FAILURE )
               return(MS_FAILURE);
 
-#ifdef USE_PROJ
             if( tSHP->sTileProj.numargs > 0 )
             {
               msProjectRect(&(layer->projection), &(tSHP->sTileProj), &rectTile);
             }
-#endif
+
             status = msShapefileWhichShapes(tSHP->shpfile, rectTile, layer->debug);
             if(status == MS_DONE) {
               /* Close and continue to next tile */
@@ -2355,12 +2353,17 @@ int msTiledSHPNextShape(layerObj *layer, shapeObj *shape)
       continue; /* skip NULL shapes */
     }
 
-#ifdef USE_PROJ
     if( tSHP->sTileProj.numargs > 0 )
     {
-      msProjectShape( &(tSHP->sTileProj), &(layer->projection), shape);
+      if( tSHP->reprojectorFromTileProjToLayerProj == NULL )
+      {
+          tSHP->reprojectorFromTileProjToLayerProj = msProjectCreateReprojector(&(tSHP->sTileProj), &(layer->projection));
+      }
+      if( tSHP->reprojectorFromTileProjToLayerProj )
+      {
+        msProjectShapeEx( tSHP->reprojectorFromTileProjToLayerProj, shape);
+      }
     }
-#endif
 
     shape->tileindex = tSHP->tileshpfile->lastshape;
     shape->numvalues = layer->numitems;
@@ -2427,12 +2430,17 @@ int msTiledSHPGetShape(layerObj *layer, shapeObj *shape, resultObj *record)
   tSHP->shpfile->lastshape = shapeindex;
   tSHP->tileshpfile->lastshape = tileindex;
 
-#ifdef USE_PROJ
   if( tSHP->sTileProj.numargs > 0 )
   {
-      msProjectShape( &(tSHP->sTileProj), &(layer->projection), shape);
+      if( tSHP->reprojectorFromTileProjToLayerProj == NULL )
+      {
+          tSHP->reprojectorFromTileProjToLayerProj = msProjectCreateReprojector(&(tSHP->sTileProj), &(layer->projection));
+      }
+      if( tSHP->reprojectorFromTileProjToLayerProj )
+      {
+        msProjectShapeEx( tSHP->reprojectorFromTileProjToLayerProj, shape);
+      }
   }
-#endif
 
   if(layer->numitems > 0 && layer->iteminfo) {
     shape->numvalues = layer->numitems;
@@ -2465,6 +2473,9 @@ void msTiledSHPClose(layerObj *layer)
       msShapefileClose(tSHP->tileshpfile);
       free(tSHP->tileshpfile);
     }
+
+    msProjectDestroyReprojector(tSHP->reprojectorFromTileProjToLayerProj);
+
     msFreeProjection(&(tSHP->sTileProj));
 
     free(tSHP);
@@ -2697,17 +2708,16 @@ int msSHPLayerOpen(layerObj *layer)
   if (layer->projection.numargs > 0 &&
       EQUAL(layer->projection.args[0], "auto"))
   {
-#if defined(USE_GDAL) || defined(USE_OGR)
     const char* pszPRJFilename = CPLResetExtension(szPath, "prj");
     int bOK = MS_FALSE;
-    FILE* fp = fopen(pszPRJFilename, "rb");
+    VSILFILE* fp = VSIFOpenL(pszPRJFilename, "rb");
     if( fp != NULL )
     {
         char szPRJ[2048];
         OGRSpatialReferenceH hSRS;
         int nRead;
 
-        nRead = (int)fread(szPRJ, 1, sizeof(szPRJ) - 1, fp);
+        nRead = (int)VSIFReadL(szPRJ, 1, sizeof(szPRJ) - 1, fp);
         szPRJ[nRead] = '\0';
         hSRS = OSRNewSpatialReference(szPRJ);
         if( hSRS != NULL )
@@ -2727,7 +2737,7 @@ int msSHPLayerOpen(layerObj *layer)
             }
             OSRDestroySpatialReference(hSRS);
         }
-      fclose(fp);
+      VSIFCloseL(fp);
     }
 
     if( bOK != MS_TRUE )
@@ -2736,11 +2746,6 @@ int msSHPLayerOpen(layerObj *layer)
             msDebug( "Unable to get SRS from shapefile '%s' for layer '%s'.\n", szPath, layer->name );
         }
     }
-#else /* !(defined(USE_GDAL) || defined(USE_OGR)) */
-    if( layer->debug || layer->map->debug ) {
-        msDebug( "Unable to get SRS from shapefile '%s' for layer '%s'. GDAL or OGR support needed\n", szPath, layer->name );
-    }
-#endif /* defined(USE_GDAL) || defined(USE_OGR) */
   }
 
   return MS_SUCCESS;

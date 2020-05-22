@@ -36,7 +36,9 @@
 #include <string.h>
 #include <ctype.h>
 
-
+#ifdef SHAPELIB_DISABLED
+#include "cpl_vsi.h"
+#endif /* SHAPELIB_DISABLED */
 
 /* try to use a large file version of fseek for files up to 4GB (#3514) */
 #define safe_fseek zzip_seek
@@ -98,9 +100,9 @@ static void writeHeader(DBFHandle psDBF)
   /*      Write the initial 32 byte file header, and all the field        */
   /*      descriptions.                                             */
   /* -------------------------------------------------------------------- */
-  fseek( psDBF->fp, 0, 0 );
-  fwrite( abyHeader, 32, 1, psDBF->fp );
-  fwrite( psDBF->pszHeader, 32, psDBF->nFields, psDBF->fp );
+  VSIFSeekL( psDBF->fp, 0, 0 );
+  VSIFWriteL( abyHeader, 32, 1, psDBF->fp );
+  VSIFWriteL( psDBF->pszHeader, 32, psDBF->nFields, psDBF->fp );
 
   /* -------------------------------------------------------------------- */
   /*      Write out the newline character if there is room for it.        */
@@ -109,7 +111,7 @@ static void writeHeader(DBFHandle psDBF)
     char  cNewline;
 
     cNewline = 0x0d;
-    fwrite( &cNewline, 1, 1, psDBF->fp );
+    VSIFWriteL( &cNewline, 1, 1, psDBF->fp );
   }
 }
 
@@ -129,8 +131,8 @@ static void flushRecord( DBFHandle psDBF )
     nRecordOffset = psDBF->nRecordLength * psDBF->nCurrentRecord
                     + psDBF->nHeaderLength;
 
-    safe_fseek( psDBF->fp, nRecordOffset, 0 );
-    fwrite( psDBF->pszCurrentRecord, psDBF->nRecordLength, 1, psDBF->fp );
+    VSIFSeekL( psDBF->fp, nRecordOffset, 0 );
+    VSIFWriteL( psDBF->pszCurrentRecord, psDBF->nRecordLength, 1, psDBF->fp );
   }
 }
 
@@ -290,8 +292,8 @@ void  msDBFClose(DBFHandle psDBF)
   if( psDBF->bUpdated ) {
     uchar   abyFileHeader[32];
 
-    fseek( psDBF->fp, 0, 0 );
-    IGUR_sizet(fread( abyFileHeader, 32, 1, psDBF->fp ));
+    VSIFSeekL( psDBF->fp, 0, 0 );
+    IGUR_sizet(VSIFReadL( abyFileHeader, 32, 1, psDBF->fp ));
 
     abyFileHeader[1] = 95;      /* YY */
     abyFileHeader[2] = 7;     /* MM */
@@ -302,8 +304,8 @@ void  msDBFClose(DBFHandle psDBF)
     abyFileHeader[6] = (psDBF->nRecords/(256*256)) % 256;
     abyFileHeader[7] = (psDBF->nRecords/(256*256*256)) % 256;
 
-    fseek( psDBF->fp, 0, 0 );
-    fwrite( abyFileHeader, 32, 1, psDBF->fp );
+    VSIFSeekL( psDBF->fp, 0, 0 );
+    VSIFWriteL( abyFileHeader, 32, 1, psDBF->fp );
   }
 #endif /* SHAPELIB_DISABLED */
 
@@ -338,19 +340,22 @@ DBFHandle msDBFCreate( const char * pszFilename )
 
 {
   DBFHandle psDBF;
-  FILE  *fp;
+  VSILFILE  *fp;
 
   /* -------------------------------------------------------------------- */
   /*      Create the file.                                                */
   /* -------------------------------------------------------------------- */
-  fp = fopen( pszFilename, "wb" );
+  fp = VSIFOpenL( pszFilename, "wb" );
   if( fp == NULL )
     return( NULL );
 
-  fputc( 0, fp );
-  fclose( fp );
+  {
+      char ch = 0;
+      VSIFWriteL(&ch, 1, 1, fp);
+  }
+  VSIFCloseL( fp );
 
-  fp = fopen( pszFilename, "rb+" );
+  fp = VSIFOpenL( pszFilename, "rb+" );
   if( fp == NULL )
     return( NULL );
 
@@ -361,7 +366,7 @@ DBFHandle msDBFCreate( const char * pszFilename )
   if (psDBF == NULL) {
     msSetError(MS_MEMERR, "%s: %d: Out of memory allocating %u bytes.\n", "msDBFCreate()",
                __FILE__, __LINE__, (unsigned int)sizeof(DBFInfo));
-    fclose(fp);
+    VSIFCloseL(fp);
     return NULL;
   }
 
@@ -743,8 +748,8 @@ static int msDBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField, void * 
 
     nRecordOffset = psDBF->nRecordLength * hEntity + psDBF->nHeaderLength;
 
-    safe_fseek( psDBF->fp, nRecordOffset, 0 );
-    if( fread( psDBF->pszCurrentRecord, psDBF->nRecordLength, 1, psDBF->fp ) != 1 )
+    VSIFSeekL( psDBF->fp, nRecordOffset, 0 );
+    if( VSIFReadL( psDBF->pszCurrentRecord, psDBF->nRecordLength, 1, psDBF->fp ) != 1 )
       return MS_FALSE;
 
     psDBF->nCurrentRecord = hEntity;
