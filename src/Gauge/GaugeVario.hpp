@@ -63,10 +63,11 @@ class GaugeVario : public AntiFlickerWindow
   };
 
   struct LabelValueGeometry {
-    PixelPoint position;
+    int label_right, label_top, label_bottom, label_y;
+    int value_right, value_top, value_bottom, value_y;
 
     LabelValueGeometry() = default;
-    LabelValueGeometry(PixelPoint _p) noexcept;
+    LabelValueGeometry(const VarioLook &look, PixelPoint position) noexcept;
   };
 
   struct Geometry {

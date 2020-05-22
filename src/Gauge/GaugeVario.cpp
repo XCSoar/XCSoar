@@ -122,8 +122,19 @@ GaugeVario::BugsGeometry::BugsGeometry(const VarioLook &look,
 }
 
 inline
-GaugeVario::LabelValueGeometry::LabelValueGeometry(PixelPoint _p) noexcept
-  :position(_p)
+GaugeVario::LabelValueGeometry::LabelValueGeometry(const VarioLook &look,
+                                                   PixelPoint position) noexcept
+  :label_right(position.x),
+   label_top(position.y + Layout::Scale(1)),
+   label_bottom(label_top + look.text_font->GetCapitalHeight()),
+   label_y(label_top + look.text_font->GetCapitalHeight()
+           - look.text_font->GetAscentHeight()),
+   value_right(position.x - Layout::Scale(5)),
+   value_top(position.y + Layout::Scale(3)
+             + look.text_font->GetCapitalHeight()),
+   value_bottom(value_top + look.value_font.GetCapitalHeight()),
+   value_y(value_top + look.value_font.GetCapitalHeight()
+           - look.value_font.GetAscentHeight())
 {
 }
 
@@ -142,9 +153,9 @@ GaugeVario::Geometry::Geometry(const VarioLook &look, const PixelRect &rc) noexc
     + look.text_font->GetCapitalHeight();
 
   const PixelPoint gross_position{rc.right, offset.y - value_height / 2};
-  gross = gross_position;
-  average = {{rc.right, gross_position.y - value_height}};
-  mc = {{rc.right, gross_position.y + value_height}};
+  gross = {look, gross_position};
+  average = {look, {rc.right, gross_position.y - value_height}};
+  mc = {look, {rc.right, gross_position.y + value_height}};
 }
 
 GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
@@ -412,19 +423,14 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
   value = (double)iround(value * 10) / 10; // prevent the -0.0 case
 
   if (!di.value.initialised) {
-    const int x = g.position.x, y = g.position.y;
-
-    di.value.rc.right = x - Layout::Scale(5);
-    di.value.rc.top = y + Layout::Scale(3)
-      + look.text_font->GetCapitalHeight();
+    di.value.rc.right = g.value_right;
+    di.value.rc.top = g.value_top;
 
     di.value.rc.left = di.value.rc.right;
     // update back rect with max label size
-    di.value.rc.bottom = di.value.rc.top + look.value_font.GetCapitalHeight();
+    di.value.rc.bottom = g.value_bottom;
 
-    di.value.text_position.y = di.value.rc.top
-                         + look.value_font.GetCapitalHeight()
-                         - look.value_font.GetAscentHeight();
+    di.value.text_position.y = g.value_y;
 
     di.value.last_value = -9999;
     di.value.last_text[0] = '\0';
@@ -433,19 +439,14 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
   }
 
   if (!di.label.initialised) {
-    const int x = g.position.x, y = g.position.y;
-
-    di.label.rc.right = x;
-    di.label.rc.top = y + Layout::Scale(1);
+    di.label.rc.right = g.label_right;
+    di.label.rc.top = g.label_top;
 
     di.label.rc.left = di.label.rc.right;
     // update back rect with max label size
-    di.label.rc.bottom = di.label.rc.top
-      + look.text_font->GetCapitalHeight();
+    di.label.rc.bottom = g.label_bottom;
 
-    di.label.text_position.y = di.label.rc.top
-      + look.text_font->GetCapitalHeight()
-      - look.text_font->GetAscentHeight();
+    di.label.text_position.y = g.label_y;
 
     di.label.last_value = -9999;
     di.label.last_text[0] = '\0';
@@ -505,7 +506,7 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
     canvas.Select(look.unit_font);
     canvas.SetTextColor(COLOR_GRAY);
     UnitSymbolRenderer::Draw(canvas,
-                             PixelPoint(g.position.x - Layout::Scale(5),
+                             PixelPoint(g.value_right,
                                         di.value.text_position.y + ascent_height - unit_height),
                              unit, look.unit_fraction_pen);
   }
