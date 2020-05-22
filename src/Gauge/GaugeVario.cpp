@@ -84,7 +84,7 @@ GaugeVario::BallastGeometry::BallastGeometry(const VarioLook &look,
 
 inline
 GaugeVario::BugsGeometry::BugsGeometry(const VarioLook &look,
-                                             const PixelRect &rc) noexcept
+                                       const PixelRect &rc) noexcept
 {
   PixelSize tSize;
 
@@ -145,7 +145,7 @@ GaugeVario::Geometry::Geometry(const VarioLook &look, const PixelRect &rc) noexc
 
 GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
                        ContainerWindow &parent, const VarioLook &_look,
-                       PixelRect rc, const WindowStyle style)
+                       PixelRect rc, const WindowStyle style) noexcept
   :blackboard(_blackboard), look(_look)
 {
   Create(parent, rc, style);
@@ -261,7 +261,7 @@ TransformRotatedPoint(IntPoint2D pt, IntPoint2D offset)
 }
 
 void
-GaugeVario::MakePolygon(const int i)
+GaugeVario::MakePolygon(const int i) noexcept
 {
   auto *bit = getPolygon(i);
   auto *bline = &lines[i + gmax];
@@ -284,20 +284,20 @@ GaugeVario::MakePolygon(const int i)
 }
 
 BulkPixelPoint *
-GaugeVario::getPolygon(int i)
+GaugeVario::getPolygon(int i) noexcept
 {
   return polys + (i + gmax) * 3;
 }
 
 void
-GaugeVario::MakeAllPolygons()
+GaugeVario::MakeAllPolygons() noexcept
 {
   for (int i = gmin; i <= gmax; i++)
     MakePolygon(i);
 }
 
 void
-GaugeVario::RenderClimb(Canvas &canvas)
+GaugeVario::RenderClimb(Canvas &canvas) noexcept
 {
   const PixelRect rc = GetClientRect();
   int x = rc.right - Layout::Scale(14);
@@ -314,7 +314,7 @@ GaugeVario::RenderClimb(Canvas &canvas)
 }
 
 void
-GaugeVario::RenderZero(Canvas &canvas)
+GaugeVario::RenderZero(Canvas &canvas) noexcept
 {
   if (look.inverse)
     canvas.SelectWhitePen();
@@ -328,7 +328,7 @@ GaugeVario::RenderZero(Canvas &canvas)
 }
 
 int
-GaugeVario::ValueToNeedlePos(double Value)
+GaugeVario::ValueToNeedlePos(double Value) noexcept
 {
   constexpr double degrees_per_unit =
     double(GAUGEVARIOSWEEP) / GAUGEVARIORANGE;
@@ -347,7 +347,8 @@ GaugeVario::ValueToNeedlePos(double Value)
 }
 
 void
-GaugeVario::RenderVarioLine(Canvas &canvas, int i, int sink, bool clear)
+GaugeVario::RenderVarioLine(Canvas &canvas, int i, int sink,
+                            bool clear) noexcept
 {
   dirty = true;
   if (i == sink)
@@ -377,7 +378,8 @@ GaugeVario::RenderVarioLine(Canvas &canvas, int i, int sink, bool clear)
 }
 
 void
-GaugeVario::RenderNeedle(Canvas &canvas, int i, bool average, bool clear)
+GaugeVario::RenderNeedle(Canvas &canvas, int i, bool average,
+                         bool clear) noexcept
 {
   dirty = true;
 
@@ -402,7 +404,7 @@ GaugeVario::RenderNeedle(Canvas &canvas, int i, bool average, bool clear)
 void
 GaugeVario::RenderValue(Canvas &canvas, PixelPoint position,
                         LabelValueDrawInfo &di,
-                        double value, const TCHAR *label)
+                        double value, const TCHAR *label) noexcept
 {
   value = (double)iround(value * 10) / 10; // prevent the -0.0 case
 
@@ -507,7 +509,7 @@ GaugeVario::RenderValue(Canvas &canvas, PixelPoint position,
 }
 
 void
-GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
+GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y) noexcept
 {
   if (!Basic().airspeed_available ||
       !Basic().total_energy_vario_available)
@@ -624,7 +626,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
 }
 
 void
-GaugeVario::RenderBallast(Canvas &canvas)
+GaugeVario::RenderBallast(Canvas &canvas) noexcept
 {
   int ballast = iround(GetGlidePolar().GetBallast() * 100);
 
@@ -674,7 +676,7 @@ GaugeVario::RenderBallast(Canvas &canvas)
 }
 
 void
-GaugeVario::RenderBugs(Canvas &canvas)
+GaugeVario::RenderBugs(Canvas &canvas) noexcept
 {
   int bugs = iround((1 - GetComputerSettings().polar.bugs) * 100);
   if (!IsPersistent() || bugs != last_bugs) {

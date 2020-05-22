@@ -125,26 +125,26 @@ class GaugeVario : public AntiFlickerWindow
 public:
   GaugeVario(const FullBlackboard &blackboard,
              ContainerWindow &parent, const VarioLook &look,
-             PixelRect rc, const WindowStyle style=WindowStyle());
+             PixelRect rc, const WindowStyle style=WindowStyle()) noexcept;
 
 protected:
-  const MoreData &Basic() const {
+  const MoreData &Basic() const noexcept {
     return blackboard.Basic();
   }
 
-  const DerivedInfo &Calculated() const {
+  const DerivedInfo &Calculated() const noexcept {
     return blackboard.Calculated();
   }
 
-  const ComputerSettings &GetComputerSettings() const {
+  const ComputerSettings &GetComputerSettings() const noexcept {
     return blackboard.GetComputerSettings();
   }
 
-  const GlidePolar &GetGlidePolar() const {
+  const GlidePolar &GetGlidePolar() const noexcept {
     return GetComputerSettings().polar.glide_polar_task;
   }
 
-  const VarioSettings &Settings() const {
+  const VarioSettings &Settings() const noexcept {
     return blackboard.GetUISettings().vario;
   }
 
@@ -156,21 +156,21 @@ protected:
   virtual void OnPaintBuffer(Canvas &canvas) override;
 
 private:
-  void RenderZero(Canvas &canvas);
+  void RenderZero(Canvas &canvas) noexcept;
   void RenderValue(Canvas &canvas, PixelPoint position,
                    LabelValueDrawInfo &di,
-                   double Value, const TCHAR *Label);
-  void RenderSpeedToFly(Canvas &canvas, int x, int y);
-  void RenderBallast(Canvas &canvas);
-  void RenderBugs(Canvas &canvas);
-  int  ValueToNeedlePos(double Value);
-  void RenderNeedle(Canvas &canvas, int i, bool average, bool clear);
-  void RenderVarioLine(Canvas &canvas, int i, int sink, bool clear);
-  void RenderClimb(Canvas &canvas);
+                   double Value, const TCHAR *Label) noexcept;
+  void RenderSpeedToFly(Canvas &canvas, int x, int y) noexcept;
+  void RenderBallast(Canvas &canvas) noexcept;
+  void RenderBugs(Canvas &canvas) noexcept;
+  int  ValueToNeedlePos(double Value) noexcept;
+  void RenderNeedle(Canvas &canvas, int i, bool average, bool clear) noexcept;
+  void RenderVarioLine(Canvas &canvas, int i, int sink, bool clear) noexcept;
+  void RenderClimb(Canvas &canvas) noexcept;
 
-  void MakePolygon(const int i);
-  void MakeAllPolygons();
-  BulkPixelPoint *getPolygon(const int i);
+  void MakePolygon(const int i) noexcept;
+  void MakeAllPolygons() noexcept;
+  BulkPixelPoint *getPolygon(const int i) noexcept;
 };
 
 #endif
