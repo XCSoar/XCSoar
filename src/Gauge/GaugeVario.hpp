@@ -62,14 +62,16 @@ class GaugeVario : public AntiFlickerWindow
     BugsGeometry(const VarioLook &look, const PixelRect &rc) noexcept;
   };
 
+  struct LabelValueGeometry {
+    PixelPoint position;
+  };
+
   struct Geometry {
     unsigned nlength0, nlength1, nwidth, nline;
 
     IntPoint2D offset;
 
-    PixelPoint top_position;
-    PixelPoint middle_position;
-    PixelPoint bottom_position;
+    LabelValueGeometry average, gross, mc;
 
     BallastGeometry ballast;
     BugsGeometry bugs;
@@ -157,7 +159,7 @@ protected:
 
 private:
   void RenderZero(Canvas &canvas) noexcept;
-  void RenderValue(Canvas &canvas, PixelPoint position,
+  void RenderValue(Canvas &canvas, const LabelValueGeometry &g,
                    LabelValueDrawInfo &di,
                    double Value, const TCHAR *Label) noexcept;
   void RenderSpeedToFly(Canvas &canvas, int x, int y) noexcept;

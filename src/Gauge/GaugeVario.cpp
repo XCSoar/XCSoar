@@ -135,12 +135,12 @@ GaugeVario::Geometry::Geometry(const VarioLook &look, const PixelRect &rc) noexc
   unsigned value_height = 4 + look.value_font.GetCapitalHeight()
     + look.text_font->GetCapitalHeight();
 
-  middle_position.y = offset.y - value_height / 2;
-  middle_position.x = rc.right;
-  top_position.y = middle_position.y - value_height;
-  top_position.x = rc.right;
-  bottom_position.y = middle_position.y + value_height;
-  bottom_position.x = rc.right;
+  gross.position.y = offset.y - value_height / 2;
+  gross.position.x = rc.right;
+  average.position.y = gross.position.y - value_height;
+  average.position.x = rc.right;
+  mc.position.y = gross.position.y + value_height;
+  mc.position.x = rc.right;
 }
 
 GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
@@ -167,14 +167,14 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
 
   if (Settings().show_average) {
     // JMW averager now displays netto average if not circling
-    RenderValue(canvas, geometry.top_position, average_di,
+    RenderValue(canvas, geometry.average, average_di,
                 Units::ToUserVSpeed(Calculated().circling ? Calculated().average : Calculated().netto_average),
                 Calculated().circling ? _T("Avg") : _T("NetAvg"));
   }
 
   if (Settings().show_mc) {
     auto mc = Units::ToUserVSpeed(GetGlidePolar().GetMC());
-    RenderValue(canvas, geometry.bottom_position, mc_di,
+    RenderValue(canvas, geometry.mc, mc_di,
                 mc,
                 GetComputerSettings().task.auto_mc ? _T("Auto MC") : _T("MC"));
   }
@@ -245,7 +245,7 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
     auto vvaldisplay = Clamp(Units::ToUserVSpeed(vval),
                               -99.9, 99.9);
 
-    RenderValue(canvas, geometry.middle_position, gross_di,
+    RenderValue(canvas, geometry.gross, gross_di,
                 vvaldisplay,
                 _T("Gross"));
   }
@@ -401,14 +401,14 @@ GaugeVario::RenderNeedle(Canvas &canvas, int i, bool average,
 
 // TODO code: Optimise vario rendering, this is slow
 void
-GaugeVario::RenderValue(Canvas &canvas, PixelPoint position,
+GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
                         LabelValueDrawInfo &di,
                         double value, const TCHAR *label) noexcept
 {
   value = (double)iround(value * 10) / 10; // prevent the -0.0 case
 
   if (!di.value.initialised) {
-    const int x = position.x, y = position.y;
+    const int x = g.position.x, y = g.position.y;
 
     di.value.rc.right = x - Layout::Scale(5);
     di.value.rc.top = y + Layout::Scale(3)
@@ -429,7 +429,7 @@ GaugeVario::RenderValue(Canvas &canvas, PixelPoint position,
   }
 
   if (!di.label.initialised) {
-    const int x = position.x, y = position.y;
+    const int x = g.position.x, y = g.position.y;
 
     di.label.rc.right = x;
     di.label.rc.top = y + Layout::Scale(1);
@@ -501,7 +501,7 @@ GaugeVario::RenderValue(Canvas &canvas, PixelPoint position,
     canvas.Select(look.unit_font);
     canvas.SetTextColor(COLOR_GRAY);
     UnitSymbolRenderer::Draw(canvas,
-                             PixelPoint(position.x - Layout::Scale(5),
+                             PixelPoint(g.position.x - Layout::Scale(5),
                                         di.value.text_position.y + ascent_height - unit_height),
                              unit, look.unit_fraction_pen);
   }
