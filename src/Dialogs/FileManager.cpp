@@ -132,6 +132,7 @@ class ManagedFileListWidget
     DOWNLOAD,
     ADD,
     CANCEL,
+    UPDATE,
   };
 
   struct DownloadStatus {
@@ -181,7 +182,13 @@ class ManagedFileListWidget
   TwoTextRowsRenderer row_renderer;
 
 #ifdef HAVE_DOWNLOAD_MANAGER
-  Button *download_button, *add_button, *cancel_button;
+  Button *download_button, *add_button, *cancel_button, *update_button;
+
+  /**
+  * Whether at least one file is out of date.
+  * Used to activate "Update All" button.
+  */
+  bool some_out_of_date;
 #endif
 
   FileRepository repository;
@@ -287,6 +294,7 @@ protected:
   void Download();
   void Add();
   void Cancel();
+  void UpdateFiles();
 
 public:
   /* virtual methods from class Widget */
@@ -386,6 +394,8 @@ ManagedFileListWidget::RefreshList()
 {
   items.clear();
 
+  some_out_of_date = false;
+
   bool download_active = false;
   for (auto i = repository.begin(), end = repository.end(); i != end; ++i) {
     const auto &remote_file = *i;
@@ -409,6 +419,9 @@ ManagedFileListWidget::RefreshList()
         BrokenDate local_changed = static_cast<BrokenDate>(BrokenDateTime::FromUnixTimeUTC(
                                     File::GetLastModification(path)));
         is_out_of_date = (local_changed < remote_file.update_date);
+
+        if (is_out_of_date)
+          some_out_of_date = true;
       }
 #endif
 
@@ -436,6 +449,7 @@ ManagedFileListWidget::CreateButtons(WidgetDialog &dialog)
     download_button = dialog.AddButton(_("Download"), *this, DOWNLOAD);
     add_button = dialog.AddButton(_("Add"), *this, ADD);
     cancel_button = dialog.AddButton(_("Cancel"), *this, CANCEL);
+    update_button = dialog.AddButton(_("Update all"), *this, UPDATE);
   }
 #endif
 }
@@ -450,6 +464,7 @@ ManagedFileListWidget::UpdateButtons()
     download_button->SetEnabled(!items.empty() &&
                                 CanDownload(repository, items[current].name));
     cancel_button->SetEnabled(!items.empty() && items[current].downloading);
+    update_button->SetEnabled(!items.empty() && some_out_of_date);
   }
 #endif
 }
@@ -602,6 +617,27 @@ ManagedFileListWidget::Add()
 }
 
 void
+ManagedFileListWidget::UpdateFiles() {
+#ifdef HAVE_DOWNLOAD_MANAGER
+  assert(Net::DownloadManager::IsAvailable());
+
+  for (const auto &file : items) {
+    if (UpdateAvailable(repository, file.name)) {
+      const AvailableFile *remote_file = FindRemoteFile(repository, file.name);
+
+      if (remote_file != nullptr) {
+        const UTF8ToWideConverter base(remote_file->GetName());
+        if (!base.IsValid())
+          return;
+
+        Net::DownloadManager::Enqueue(remote_file->GetURI(), Path(base));
+      }
+    }
+  }
+#endif
+}
+
+void
 ManagedFileListWidget::Cancel()
 {
 #ifdef HAVE_DOWNLOAD_MANAGER
@@ -632,6 +668,10 @@ ManagedFileListWidget::OnAction(int id) noexcept
 
   case CANCEL:
     Cancel();
+    break;
+
+  case UPDATE:
+    UpdateFiles();
     break;
   }
 }
