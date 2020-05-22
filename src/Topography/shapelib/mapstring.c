@@ -103,10 +103,10 @@
 ** TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 ** OR THE USE OR OTHER DEALINGS WITH THE SOFTWARE.
 */
-char *strrstr(char *string, char *find)
+char *strrstr(const char *string, const char *find)
 {
   size_t stringlen, findlen;
-  char *cp;
+  const char *cp;
 
   findlen = strlen(find);
   stringlen = strlen(string);
@@ -115,7 +115,7 @@ char *strrstr(char *string, char *find)
 
   for (cp = string + stringlen - findlen; cp >= string; cp--)
     if (strncmp(cp, find, findlen) == 0)
-      return cp;
+      return (char*) cp;
 
   return NULL;
 }
@@ -282,22 +282,6 @@ char *strcasestr(const char *s, const char *find)
     s--;
   }
   return ((char *)s);
-}
-#endif
-
-#ifndef HAVE_STRDUP
-char  *strdup(char *s)
-{
-  char  *s1;
-
-  if(!s)
-    return(NULL);
-  s1 = (char *)malloc(strlen(s) + 1);
-  if(!s1)
-    return(NULL);
-
-  strcpy(s1,s);
-  return(s1);
 }
 #endif
 
@@ -2130,22 +2114,26 @@ int msStringIsInteger(const char *string)
 
 /* Safe version of msStrdup(). This function is taken from gdal/cpl. */
 
-char *msStrdup( const char * pszString )
+char *msStrdup(const char * pszString)
 {
-  char        *pszReturn;
+    size_t nStringLength; 
+    char *pszReturn;
 
-  if( pszString == NULL )
-    pszString = "";
+    if (pszString == NULL)
+        pszString = "";
 
-  pszReturn = strdup( pszString );
+    nStringLength = strlen(pszString) + 1; /* null terminated byte */
+    pszReturn = malloc(nStringLength);
 
-  if( pszReturn == NULL ) {
-    fprintf(stderr, "msSmallMsStrdup(): Out of memory allocating %ld bytes.\n",
-            (long) strlen(pszString) );
-    exit(1);
-  }
+    if (pszReturn == NULL) {
+        fprintf(stderr, "msSmallMalloc(): Out of memory allocating %ld bytes.\n",
+            (long)strlen(pszString));
+        exit(1);
+    }
 
-  return( pszReturn );
+    memcpy(pszReturn, pszString, nStringLength);
+
+    return pszReturn;
 }
 
 #ifdef SHAPELIB_DISABLED
