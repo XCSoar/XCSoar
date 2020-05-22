@@ -122,6 +122,12 @@ GaugeVario::BugsGeometry::BugsGeometry(const VarioLook &look,
 }
 
 inline
+GaugeVario::LabelValueGeometry::LabelValueGeometry(PixelPoint _p) noexcept
+  :position(_p)
+{
+}
+
+inline
 GaugeVario::Geometry::Geometry(const VarioLook &look, const PixelRect &rc) noexcept
   :ballast(look, rc), bugs(look, rc)
 {
@@ -135,12 +141,10 @@ GaugeVario::Geometry::Geometry(const VarioLook &look, const PixelRect &rc) noexc
   unsigned value_height = 4 + look.value_font.GetCapitalHeight()
     + look.text_font->GetCapitalHeight();
 
-  gross.position.y = offset.y - value_height / 2;
-  gross.position.x = rc.right;
-  average.position.y = gross.position.y - value_height;
-  average.position.x = rc.right;
-  mc.position.y = gross.position.y + value_height;
-  mc.position.x = rc.right;
+  const PixelPoint gross_position{rc.right, offset.y - value_height / 2};
+  gross = gross_position;
+  average = {{rc.right, gross_position.y - value_height}};
+  mc = {{rc.right, gross_position.y + value_height}};
 }
 
 GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
