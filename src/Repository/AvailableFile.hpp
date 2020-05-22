@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Util/StaticString.hxx"
 #include "FileType.hpp"
+#include "Time/BrokenDate.hpp"
 
 #include <string>
 
@@ -51,6 +52,8 @@ struct AvailableFile {
 
   FileType type;
 
+  BrokenDate update_date;
+
   bool IsEmpty() const {
     return name.empty();
   }
@@ -64,6 +67,7 @@ struct AvailableFile {
     uri.clear();
     area.clear();
     type = FileType::UNKNOWN;
+    update_date = BrokenDate::Invalid();
   }
 
   const char *GetName() const {
