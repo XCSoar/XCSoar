@@ -132,12 +132,28 @@ struct PixelRect {
     return { left, top };
   }
 
+  constexpr PixelPoint GetTopMiddle() const noexcept {
+    return { (left + right) / 2, top };
+  }
+
   constexpr PixelPoint GetTopRight() const noexcept {
     return { right, top };
   }
 
+  constexpr PixelPoint GetMiddleLeft() const noexcept {
+    return { left, (top + bottom) / 2 };
+  }
+
+  constexpr PixelPoint GetMiddleRight() const noexcept {
+    return { right, (top + bottom) / 2 };
+  }
+
   constexpr PixelPoint GetBottomLeft() const noexcept {
     return { left, bottom };
+  }
+
+  constexpr PixelPoint GetBottomMiddle() const noexcept {
+    return { (left + right) / 2, bottom };
   }
 
   constexpr PixelPoint GetBottomRight() const noexcept {
