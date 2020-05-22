@@ -100,6 +100,26 @@ CanDownload(const FileRepository &repository, const TCHAR *name)
   return FindRemoteFile(repository, name) != nullptr;
 }
 
+static bool
+UpdateAvailable(const FileRepository &repository, const TCHAR *name)
+{
+#ifdef HAVE_POSIX
+  const AvailableFile *remote_file = FindRemoteFile(repository, name);
+
+  if (remote_file == nullptr)
+    return false;
+
+  BrokenDate remote_changed = remote_file->update_date;
+
+  const auto path = LocalPath(name);
+  BrokenDate local_changed = static_cast<BrokenDate>(BrokenDateTime::FromUnixTimeUTC(
+                              File::GetLastModification(path)));
+
+  return local_changed < remote_changed;
+#else
+  return false;
+#endif
+}
 #endif
 
 class ManagedFileListWidget
@@ -123,12 +143,12 @@ class ManagedFileListWidget
     StaticString<32u> size;
     StaticString<32u> last_modified;
 
-    bool downloading, failed;
+    bool downloading, failed, out_of_date;
 
     DownloadStatus download_status;
 
     void Set(const TCHAR *_name, const DownloadStatus *_download_status,
-             bool _failed) {
+             bool _failed, bool _out_of_date) {
       name = _name;
 
       const auto path = LocalPath(name);
@@ -153,6 +173,8 @@ class ManagedFileListWidget
         download_status = *_download_status;
 
       failed = _failed;
+
+      out_of_date = _out_of_date;
     }
   };
 
@@ -371,17 +393,28 @@ ManagedFileListWidget::RefreshList()
     const bool is_downloading = IsDownloading(remote_file, download_status);
 
     const auto path = LocalPath(remote_file);
+    const bool file_exists = File::Exists(path);
+
     if (!path.IsNull() &&
-        (is_downloading || File::Exists(path))) {
+        (is_downloading || file_exists)) {
       download_active |= is_downloading;
 
       const Path base = path.GetBase();
       if (base.IsNull())
         continue;
 
+      bool is_out_of_date = false;
+#ifdef HAVE_POSIX
+      if (file_exists) {
+        BrokenDate local_changed = static_cast<BrokenDate>(BrokenDateTime::FromUnixTimeUTC(
+                                    File::GetLastModification(path)));
+        is_out_of_date = (local_changed < remote_file.update_date);
+      }
+#endif
+
       items.append().Set(base.c_str(),
                          is_downloading ? &download_status : nullptr,
-                         HasFailed(remote_file));
+                         HasFailed(remote_file), is_out_of_date);
     }
   }
 
@@ -452,9 +485,13 @@ ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     row_renderer.DrawRightFirstRow(canvas, rc, text);
   }
 
-  row_renderer.DrawRightSecondRow(canvas, rc, file.last_modified.c_str());
-
   row_renderer.DrawSecondRow(canvas, rc, file.size.c_str());
+
+  if (file.out_of_date) {
+    row_renderer.DrawRightSecondRow(canvas, rc, _("Update available"));
+  } else {
+    row_renderer.DrawRightSecondRow(canvas, rc, file.last_modified.c_str());
+  }
 }
 
 void
