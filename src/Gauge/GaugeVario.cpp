@@ -253,9 +253,8 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
   RenderZero(canvas);
 }
 
-gcc_const
-static PixelPoint
-TransformRotatedPoint(IntPoint2D pt, IntPoint2D offset)
+static constexpr PixelPoint
+TransformRotatedPoint(IntPoint2D pt, IntPoint2D offset) noexcept
 {
   return { pt.x + offset.x, (pt.y * 112 / 100) + offset.y + 1 };
 }
