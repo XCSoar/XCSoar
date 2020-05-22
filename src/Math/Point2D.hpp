@@ -43,37 +43,38 @@ struct Point2D {
 
   Point2D() = default;
 
-  constexpr Point2D(scalar_type _x, scalar_type _y):x(_x), y(_y) {}
+  constexpr Point2D(scalar_type _x, scalar_type _y) noexcept
+    :x(_x), y(_y) {}
 
-  constexpr bool operator==(const Point2D<T, PT> &other) const {
+  constexpr bool operator==(const Point2D<T, PT> &other) const noexcept {
     return x == other.x && y == other.y;
   }
 
-  constexpr bool operator!=(const Point2D<T, PT> &other) const {
+  constexpr bool operator!=(const Point2D<T, PT> &other) const noexcept {
     return !(*this == other);
   }
 
-  constexpr Point2D<T, PT> operator+(Point2D<T, PT> other) const {
+  constexpr Point2D<T, PT> operator+(Point2D<T, PT> other) const noexcept {
     return { scalar_type(x + other.x), scalar_type(y + other.y) };
   }
 
-  constexpr Point2D<T, PT> operator-(Point2D<T, PT> other) const {
+  constexpr Point2D<T, PT> operator-(Point2D<T, PT> other) const noexcept {
     return { scalar_type(x - other.x), scalar_type(y - other.y) };
   }
 
-  Point2D<T, PT> &operator+=(Point2D<T, PT> other) {
+  Point2D<T, PT> &operator+=(Point2D<T, PT> other) noexcept {
     x += other.x;
     y += other.y;
     return *this;
   }
 
-  Point2D<T, PT> &operator-=(Point2D<T, PT> other) {
+  Point2D<T, PT> &operator-=(Point2D<T, PT> other) noexcept {
     x -= other.x;
     y -= other.y;
     return *this;
   }
 
-  constexpr product_type MagnitudeSquared() const {
+  constexpr product_type MagnitudeSquared() const noexcept {
     return PT(x) * PT(x) + PT(y) * PT(y);
   }
 };
@@ -81,7 +82,8 @@ struct Point2D {
 struct UnsignedPoint2D : Point2D<unsigned> {
   UnsignedPoint2D() = default;
 
-  constexpr UnsignedPoint2D(unsigned _x, unsigned _y):Point2D<unsigned>(_x, _y) {}
+  constexpr UnsignedPoint2D(unsigned _x, unsigned _y) noexcept
+    :Point2D<unsigned>(_x, _y) {}
 };
 
 static_assert(std::is_trivial<UnsignedPoint2D>::value, "type is not trivial");
@@ -89,7 +91,8 @@ static_assert(std::is_trivial<UnsignedPoint2D>::value, "type is not trivial");
 struct IntPoint2D : Point2D<int> {
   IntPoint2D() = default;
 
-  constexpr IntPoint2D(int _x, int _y):Point2D<int>(_x, _y) {}
+  constexpr IntPoint2D(int _x, int _y) noexcept
+    :Point2D<int>(_x, _y) {}
 };
 
 static_assert(std::is_trivial<IntPoint2D>::value, "type is not trivial");
@@ -97,10 +100,11 @@ static_assert(std::is_trivial<IntPoint2D>::value, "type is not trivial");
 struct DoublePoint2D : Point2D<double> {
   DoublePoint2D() = default;
 
-  constexpr DoublePoint2D(double _x, double _y):Point2D<double>(_x, _y) {}
+  constexpr DoublePoint2D(double _x, double _y) noexcept
+    :Point2D<double>(_x, _y) {}
 
   gcc_pure
-  double Magnitude() const {
+  double Magnitude() const noexcept {
     return hypot(x, y);
   }
 };
@@ -110,10 +114,11 @@ static_assert(std::is_trivial<DoublePoint2D>::value, "type is not trivial");
 struct FloatPoint2D : Point2D<float> {
   FloatPoint2D() = default;
 
-  constexpr FloatPoint2D(float _x, float _y):Point2D<float>(_x, _y) {}
+  constexpr FloatPoint2D(float _x, float _y) noexcept
+    :Point2D<float>(_x, _y) {}
 
   gcc_pure
-  float Magnitude() const {
+  float Magnitude() const noexcept {
     return hypotf(x, y);
   }
 };
@@ -132,7 +137,7 @@ struct EnableIfPoint2D : std::enable_if<IsPoint2D<P>::value> {
 template<typename P, typename RT=typename P::product_type,
          typename=typename EnableIfPoint2D<P>::type>
 constexpr P
-operator+(P a, P b)
+operator+(P a, P b) noexcept
 {
   return P(a.x + b.x, a.y + b.y);
 }
@@ -140,7 +145,7 @@ operator+(P a, P b)
 template<typename P, typename RT=typename P::product_type,
          typename=typename EnableIfPoint2D<P>::type>
 constexpr P
-operator-(P a, P b)
+operator-(P a, P b) noexcept
 {
   return P(a.x - b.x, a.y - b.y);
 }
@@ -150,7 +155,7 @@ template<typename P, typename RT=typename P::product_type,
          typename Z,
          typename=typename std::enable_if<std::is_arithmetic<Z>::value>::type>
 constexpr P
-operator*(P a, Z z)
+operator*(P a, Z z) noexcept
 {
   return P(a.x * z, a.y * z);
 }
@@ -160,7 +165,7 @@ template<typename P, typename RT=typename P::product_type,
          typename Z,
          typename=typename std::enable_if<std::is_arithmetic<Z>::value>::type>
 constexpr P
-operator/(P a, Z z)
+operator/(P a, Z z) noexcept
 {
   return P(a.x / z, a.y / z);
 }
@@ -168,7 +173,7 @@ operator/(P a, Z z)
 template<typename P, typename RT=typename P::product_type,
          typename=typename EnableIfPoint2D<P>::type>
 constexpr RT
-DotProduct(P a, P b)
+DotProduct(P a, P b) noexcept
 {
   return RT(a.x) * RT(b.x) + RT(a.y) * RT(b.y);
 }
@@ -176,7 +181,7 @@ DotProduct(P a, P b)
 template<typename P, typename RT=typename P::product_type,
          typename=typename EnableIfPoint2D<P>::type>
 constexpr RT
-CrossProduct(P a, P b)
+CrossProduct(P a, P b) noexcept
 {
   return RT(a.x) * RT(b.y) - RT(b.x) * RT(a.y);
 }
@@ -187,7 +192,7 @@ CrossProduct(P a, P b)
 template<typename P, typename RT=typename P::scalar_type,
          typename=typename EnableIfPoint2D<P>::type>
 constexpr RT
-ManhattanDistance(P a, P b)
+ManhattanDistance(P a, P b) noexcept
 {
   return std::abs(a.x - b.x) + std::abs(a.y - b.y);
 }
