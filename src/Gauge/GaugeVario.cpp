@@ -167,15 +167,14 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
 
   if (Settings().show_average) {
     // JMW averager now displays netto average if not circling
-    RenderValue(canvas, geometry.top_position, &value_top, &label_top,
+    RenderValue(canvas, geometry.top_position, average_di,
                 Units::ToUserVSpeed(Calculated().circling ? Calculated().average : Calculated().netto_average),
                 Calculated().circling ? _T("Avg") : _T("NetAvg"));
   }
 
   if (Settings().show_mc) {
     auto mc = Units::ToUserVSpeed(GetGlidePolar().GetMC());
-    RenderValue(canvas, geometry.bottom_position,
-                &value_bottom, &label_bottom,
+    RenderValue(canvas, geometry.bottom_position, mc_di,
                 mc,
                 GetComputerSettings().task.auto_mc ? _T("Auto MC") : _T("MC"));
   }
@@ -246,8 +245,7 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
     auto vvaldisplay = Clamp(Units::ToUserVSpeed(vval),
                               -99.9, 99.9);
 
-    RenderValue(canvas, geometry.middle_position,
-                &value_middle, &label_middle,
+    RenderValue(canvas, geometry.middle_position, gross_di,
                 vvaldisplay,
                 _T("Gross"));
   }
@@ -403,97 +401,97 @@ GaugeVario::RenderNeedle(Canvas &canvas, int i, bool average, bool clear)
 // TODO code: Optimise vario rendering, this is slow
 void
 GaugeVario::RenderValue(Canvas &canvas, PixelPoint position,
-                        DrawInfo *value_info, DrawInfo *label_info,
+                        LabelValueDrawInfo &di,
                         double value, const TCHAR *label)
 {
   value = (double)iround(value * 10) / 10; // prevent the -0.0 case
 
-  if (!value_info->initialised) {
+  if (!di.value.initialised) {
     const int x = position.x, y = position.y;
 
-    value_info->rc.right = x - Layout::Scale(5);
-    value_info->rc.top = y + Layout::Scale(3)
+    di.value.rc.right = x - Layout::Scale(5);
+    di.value.rc.top = y + Layout::Scale(3)
       + look.text_font->GetCapitalHeight();
 
-    value_info->rc.left = value_info->rc.right;
+    di.value.rc.left = di.value.rc.right;
     // update back rect with max label size
-    value_info->rc.bottom = value_info->rc.top + look.value_font.GetCapitalHeight();
+    di.value.rc.bottom = di.value.rc.top + look.value_font.GetCapitalHeight();
 
-    value_info->text_position.y = value_info->rc.top
+    di.value.text_position.y = di.value.rc.top
                          + look.value_font.GetCapitalHeight()
                          - look.value_font.GetAscentHeight();
 
-    value_info->last_value = -9999;
-    value_info->last_text[0] = '\0';
-    value_info->last_unit = Unit::UNDEFINED;
-    value_info->initialised = true;
+    di.value.last_value = -9999;
+    di.value.last_text[0] = '\0';
+    di.value.last_unit = Unit::UNDEFINED;
+    di.value.initialised = true;
   }
 
-  if (!label_info->initialised) {
+  if (!di.label.initialised) {
     const int x = position.x, y = position.y;
 
-    label_info->rc.right = x;
-    label_info->rc.top = y + Layout::Scale(1);
+    di.label.rc.right = x;
+    di.label.rc.top = y + Layout::Scale(1);
 
-    label_info->rc.left = label_info->rc.right;
+    di.label.rc.left = di.label.rc.right;
     // update back rect with max label size
-    label_info->rc.bottom = label_info->rc.top
+    di.label.rc.bottom = di.label.rc.top
       + look.text_font->GetCapitalHeight();
 
-    label_info->text_position.y = label_info->rc.top
+    di.label.text_position.y = di.label.rc.top
       + look.text_font->GetCapitalHeight()
       - look.text_font->GetAscentHeight();
 
-    label_info->last_value = -9999;
-    label_info->last_text[0] = '\0';
-    label_info->initialised = true;
+    di.label.last_value = -9999;
+    di.label.last_text[0] = '\0';
+    di.label.initialised = true;
   }
 
   canvas.SetBackgroundTransparent();
 
-  if (!IsPersistent() || (dirty && !StringIsEqual(label_info->last_text, label))) {
+  if (!IsPersistent() || (dirty && !StringIsEqual(di.label.last_text, label))) {
     canvas.SetTextColor(look.dimmed_text_color);
     canvas.Select(*look.text_font);
     const auto tsize = canvas.CalcTextSize(label);
-    label_info->text_position.x = label_info->rc.right - tsize.cx;
+    di.label.text_position.x = di.label.rc.right - tsize.cx;
 
     if (IsPersistent()) {
       canvas.SetBackgroundColor(look.background_color);
-      canvas.DrawOpaqueText(label_info->text_position.x, label_info->text_position.y,
-                            label_info->rc, label);
-      label_info->rc.left = label_info->text_position.x;
-      _tcscpy(label_info->last_text, label);
+      canvas.DrawOpaqueText(di.label.text_position.x, di.label.text_position.y,
+                            di.label.rc, label);
+      di.label.rc.left = di.label.text_position.x;
+      _tcscpy(di.label.last_text, label);
     } else {
-      canvas.DrawText(label_info->text_position.x, label_info->text_position.y,
+      canvas.DrawText(di.label.text_position.x, di.label.text_position.y,
                       label);
     }
   }
 
-  if (!IsPersistent() || (dirty && value_info->last_value != value)) {
+  if (!IsPersistent() || (dirty && di.value.last_value != value)) {
     TCHAR buffer[18];
     canvas.SetBackgroundColor(look.background_color);
     canvas.SetTextColor(look.text_color);
     _stprintf(buffer, _T("%.1f"), (double)value);
     canvas.Select(look.value_font);
     const auto tsize = canvas.CalcTextSize(buffer);
-    value_info->text_position.x = value_info->rc.right - tsize.cx;
+    di.value.text_position.x = di.value.rc.right - tsize.cx;
 
     if (IsPersistent()) {
-      canvas.DrawOpaqueText(value_info->text_position.x,
-                            value_info->text_position.y,
-                            value_info->rc, buffer);
+      canvas.DrawOpaqueText(di.value.text_position.x,
+                            di.value.text_position.y,
+                            di.value.rc, buffer);
 
-      value_info->rc.left = value_info->text_position.x;
-      value_info->last_value = value;
+      di.value.rc.left = di.value.text_position.x;
+      di.value.last_value = value;
     } else {
-      canvas.DrawText(value_info->text_position.x, value_info->text_position.y,
+      canvas.DrawText(di.value.text_position.x, di.value.text_position.y,
                       buffer);
     }
   }
 
   if (!IsPersistent() ||
-      value_info->last_unit != Units::current.vertical_speed_unit) {
-    auto unit = value_info->last_unit = Units::current.vertical_speed_unit;
+      di.value.last_unit != Units::current.vertical_speed_unit) {
+    auto unit = di.value.last_unit = Units::current.vertical_speed_unit;
 
     const int ascent_height = look.value_font.GetAscentHeight();
     const int unit_height =
@@ -503,7 +501,7 @@ GaugeVario::RenderValue(Canvas &canvas, PixelPoint position,
     canvas.SetTextColor(COLOR_GRAY);
     UnitSymbolRenderer::Draw(canvas,
                              PixelPoint(position.x - Layout::Scale(5),
-                                        value_info->text_position.y + ascent_height - unit_height),
+                                        di.value.text_position.y + ascent_height - unit_height),
                              unit, look.unit_fraction_pen);
   }
 }
@@ -730,10 +728,7 @@ GaugeVario::OnResize(PixelSize new_size)
   background_dirty = true;
   needle_initialised = false;
 
-  value_top.initialised = false;
-  value_middle.initialised = false;
-  value_bottom.initialised = false;
-  label_top.initialised = false;
-  label_middle.initialised = false;
-  label_bottom.initialised = false;
+  average_di.Reset();
+  mc_di.Reset();
+  gross_di.Reset();
 }

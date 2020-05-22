@@ -87,6 +87,16 @@ class GaugeVario : public AntiFlickerWindow
     Unit last_unit;
   };
 
+  struct LabelValueDrawInfo {
+    DrawInfo label;
+    DrawInfo value;
+
+    void Reset() noexcept {
+      label.initialised = false;
+      value.initialised = false;
+    }
+  };
+
   const FullBlackboard &blackboard;
 
   const VarioLook &look;
@@ -96,12 +106,7 @@ class GaugeVario : public AntiFlickerWindow
   bool background_dirty = true;
   bool needle_initialised = false;
 
-  DrawInfo value_top;
-  DrawInfo value_middle;
-  DrawInfo value_bottom;
-  DrawInfo label_top;
-  DrawInfo label_middle;
-  DrawInfo label_bottom;
+  LabelValueDrawInfo average_di, mc_di, gross_di;
 
   int ival_av_last = 0;
   int vval_last = 0;
@@ -153,7 +158,7 @@ protected:
 private:
   void RenderZero(Canvas &canvas);
   void RenderValue(Canvas &canvas, PixelPoint position,
-                   DrawInfo *diValue, DrawInfo *diLabel,
+                   LabelValueDrawInfo &di,
                    double Value, const TCHAR *Label);
   void RenderSpeedToFly(Canvas &canvas, int x, int y);
   void RenderBallast(Canvas &canvas);
