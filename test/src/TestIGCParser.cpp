@@ -101,6 +101,24 @@ TestDate()
   ok1(date.year == 1999);
   ok1(date.month == 12);
   ok1(date.day == 31);
+
+  // long-form header is supported
+  ok1(IGCParseDateRecord("HFDTEDATE:170520", date));
+  ok1(date.year == 2020);
+  ok1(date.month == 5);
+  ok1(date.day == 17);
+
+  // long-form header without colon is supported
+  ok1(IGCParseDateRecord("HFDTEDATE170520", date));
+  ok1(date.year == 2020);
+  ok1(date.month == 5);
+  ok1(date.day == 17);
+
+  // header extensions are ignored
+  ok1(IGCParseDateRecord("HFDTEDATE:170520,01", date));
+  ok1(date.year == 2020);
+  ok1(date.month == 5);
+  ok1(date.day == 17);
 }
 
 static void
@@ -252,7 +270,7 @@ TestDeclarationTurnpoint()
 
 int main(int argc, char **argv)
 {
-  plan_tests(136);
+  plan_tests(148);
 
   TestHeader();
   TestDate();
