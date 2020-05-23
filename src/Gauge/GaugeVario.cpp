@@ -137,6 +137,13 @@ GaugeVario::LabelValueGeometry::LabelValueGeometry(const VarioLook &look,
 {
 }
 
+inline unsigned
+GaugeVario::LabelValueGeometry::GetHeight(const VarioLook &look) noexcept
+{
+  return 4 + look.value_font.GetCapitalHeight()
+    + look.text_font->GetCapitalHeight();
+}
+
 inline
 GaugeVario::Geometry::Geometry(const VarioLook &look, const PixelRect &rc) noexcept
   :ballast(look, rc), bugs(look, rc)
@@ -148,8 +155,7 @@ GaugeVario::Geometry::Geometry(const VarioLook &look, const PixelRect &rc) noexc
 
   offset = rc.GetMiddleRight();
 
-  unsigned value_height = 4 + look.value_font.GetCapitalHeight()
-    + look.text_font->GetCapitalHeight();
+  unsigned value_height = LabelValueGeometry::GetHeight(look);
 
   const PixelPoint gross_position{rc.right, offset.y - value_height / 2};
   gross = {look, gross_position};

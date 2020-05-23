@@ -68,6 +68,8 @@ class GaugeVario : public AntiFlickerWindow
 
     LabelValueGeometry() = default;
     LabelValueGeometry(const VarioLook &look, PixelPoint position) noexcept;
+
+    static unsigned GetHeight(const VarioLook &look) noexcept;
   };
 
   struct Geometry {
