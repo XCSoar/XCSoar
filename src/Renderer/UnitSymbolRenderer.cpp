@@ -69,7 +69,7 @@ static_assert(ARRAY_SIZE(symbol_strings) == (size_t)Unit::COUNT,
               "number of unit symbols does not match number of units");
 
 PixelSize
-UnitSymbolRenderer::GetSize(const Canvas &canvas, const Unit unit)
+UnitSymbolRenderer::GetSize(const Canvas &canvas, const Unit unit) noexcept
 {
   assert((size_t)unit < ARRAY_SIZE(symbol_strings));
 
@@ -97,7 +97,7 @@ UnitSymbolRenderer::GetSize(const Canvas &canvas, const Unit unit)
 }
 
 unsigned
-UnitSymbolRenderer::GetAscentHeight(const Font &font, const Unit unit)
+UnitSymbolRenderer::GetAscentHeight(const Font &font, const Unit unit) noexcept
 {
   assert((size_t)unit < ARRAY_SIZE(symbol_strings));
 
@@ -119,7 +119,8 @@ UnitSymbolRenderer::GetAscentHeight(const Font &font, const Unit unit)
 
 void
 UnitSymbolRenderer::Draw(Canvas &canvas, const PixelPoint pos,
-                         const Unit unit, const Pen &unit_fraction_pen)
+                         const Unit unit,
+                         const Pen &unit_fraction_pen) noexcept
 {
   assert((size_t)unit < ARRAY_SIZE(symbol_strings));
 
