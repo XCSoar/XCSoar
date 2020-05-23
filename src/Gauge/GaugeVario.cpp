@@ -432,9 +432,9 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
   if (!IsPersistent() || (dirty && !StringIsEqual(di.label.last_text, label))) {
     canvas.SetTextColor(look.dimmed_text_color);
     canvas.Select(*look.text_font);
-    const auto tsize = canvas.CalcTextSize(label);
+    const unsigned width = canvas.CalcTextSize(label).cx;
 
-    const PixelPoint text_position{g.label_right - tsize.cx, g.label_y};
+    const PixelPoint text_position{g.label_right - width, g.label_y};
 
     if (IsPersistent()) {
       PixelRect rc;
@@ -445,7 +445,7 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
 
       canvas.SetBackgroundColor(look.background_color);
       canvas.DrawOpaqueText(text_position.x, text_position.y, rc, label);
-      di.label.last_width = tsize.cx;
+      di.label.last_width = width;
       _tcscpy(di.label.last_text, label);
     } else {
       canvas.DrawText(text_position.x, text_position.y,
@@ -459,9 +459,9 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
     canvas.SetTextColor(look.text_color);
     _stprintf(buffer, _T("%.1f"), (double)value);
     canvas.Select(look.value_font);
-    const auto tsize = canvas.CalcTextSize(buffer);
+    const unsigned width = canvas.CalcTextSize(buffer).cx;
 
-    const PixelPoint text_position{g.value_right - tsize.cx, g.value_y};
+    const PixelPoint text_position{g.value_right - width, g.value_y};
 
     if (IsPersistent()) {
       PixelRect rc;
@@ -472,7 +472,7 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
 
       canvas.DrawOpaqueText(text_position.x, text_position.y, rc, buffer);
 
-      di.value.last_width = tsize.cx;
+      di.value.last_width = width;
       di.value.last_value = value;
     } else {
       canvas.DrawText(text_position.x, text_position.y, buffer);
