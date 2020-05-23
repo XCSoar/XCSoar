@@ -90,6 +90,10 @@ class GaugeVario : public AntiFlickerWindow
     double last_value;
     TCHAR last_text[32];
     Unit last_unit;
+
+    void Reset() noexcept {
+      initialised = false;
+    }
   };
 
   struct LabelValueDrawInfo {
@@ -97,8 +101,8 @@ class GaugeVario : public AntiFlickerWindow
     DrawInfo value;
 
     void Reset() noexcept {
-      label.initialised = false;
-      value.initialised = false;
+      label.Reset();
+      value.Reset();
     }
   };
 
