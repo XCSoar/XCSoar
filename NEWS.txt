@@ -1,9 +1,13 @@
-Version 6.8.14 - 2020/05/14
+Version 6.8.15 - not yet released
 * user interface
-  - fix average needle color in inverted mode
   - vario: fix overlapping text lines
 * tracking
   - SkyLines: update tracking IP address
+* support for long-form `DTE` header in IGC files
+
+Version 6.8.14 - 2020/05/14
+* user interface
+  - fix average needle color in inverted mode
 * Android
   - compatibility with Android 9
   - request all permissions without manual restarts
