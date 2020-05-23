@@ -96,6 +96,13 @@ IGCParseDateRecord(const char *line, BrokenDate &date)
 
   line += 5;
 
+  if (strncmp(line, "DATE", 4) == 0) {
+    line += 4;
+  }
+  if (line[0] == ':') {
+    line += 1;
+  }
+
   char *endptr;
   unsigned long value = strtoul(line, &endptr, 10);
   if (endptr != line + 6)

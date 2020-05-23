@@ -55,7 +55,7 @@ PyObject* xcsoar_Flight_new(PyTypeObject *type, PyObject *args, PyObject *kwargs
 #if PY_MAJOR_VERSION >= 3
   if (PyUnicode_Check(py_input_data)) {
     Py_ssize_t length;
-    char *ptr = PyUnicode_AsUTF8AndSize(py_input_data, &length);
+    const char *ptr = PyUnicode_AsUTF8AndSize(py_input_data, &length);
     if (!ptr) {
         return NULL;
     }

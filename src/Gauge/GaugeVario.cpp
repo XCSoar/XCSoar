@@ -140,7 +140,7 @@ GaugeVario::LabelValueGeometry::LabelValueGeometry(const VarioLook &look,
 inline unsigned
 GaugeVario::LabelValueGeometry::GetHeight(const VarioLook &look) noexcept
 {
-  return 4 + look.value_font.GetCapitalHeight()
+  return Layout::Scale(4) + look.value_font.GetCapitalHeight()
     + look.text_font->GetCapitalHeight();
 }
 
