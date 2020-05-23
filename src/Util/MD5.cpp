@@ -20,7 +20,7 @@
 }
  */
 
-#include "Logger/MD5.hpp"
+#include "Util/MD5.hpp"
 #include "Util/Macros.hpp"
 #include "OS/ByteOrder.hpp"
 

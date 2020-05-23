@@ -21,7 +21,7 @@
  */
 
 #include "Logger/GRecord.hpp"
-#include "Logger/MD5.hpp"
+#include "Util/MD5.hpp"
 #include "IGC/IGCString.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/FileOutputStream.hxx"

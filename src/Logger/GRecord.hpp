@@ -23,7 +23,7 @@
 #ifndef GRECORD_HPP
 #define GRECORD_HPP
 
-#include "Logger/MD5.hpp"
+#include "Util/MD5.hpp"
 
 #define XCSOAR_IGC_CODE "XCS"
 
@@ -109,4 +109,3 @@ private:
   bool IncludeRecordInGCalc(const char *szIn);
 };
 #endif
-
