@@ -177,7 +177,7 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
                    look.background_bitmap,
                    look.background_x, 0, 58, 120);
 
-    background_dirty = true;
+    background_dirty = false;
   }
 
   if (Settings().show_average) {
