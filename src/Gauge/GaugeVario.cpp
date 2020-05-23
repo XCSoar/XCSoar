@@ -130,8 +130,7 @@ GaugeVario::LabelValueGeometry::LabelValueGeometry(const VarioLook &look,
    label_y(label_top + look.text_font->GetCapitalHeight()
            - look.text_font->GetAscentHeight()),
    value_right(position.x - Layout::Scale(5)),
-   value_top(position.y + Layout::Scale(3)
-             + look.text_font->GetCapitalHeight()),
+   value_top(label_bottom + Layout::Scale(2)),
    value_bottom(value_top + look.value_font.GetCapitalHeight()),
    value_y(value_top + look.value_font.GetCapitalHeight()
            - look.value_font.GetAscentHeight())
