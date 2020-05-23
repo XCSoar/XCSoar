@@ -73,9 +73,6 @@ UnitSymbolRenderer::GetSize(const Font &font, const Unit unit) noexcept
 {
   assert((size_t)unit < ARRAY_SIZE(symbol_strings));
 
-  if (unit == Unit::UNDEFINED)
-    return {0, 0};
-
   const UnitSymbolStrings &strings = symbol_strings[(unsigned)unit];
 
   if (!strings.line1 && !strings.line2)
@@ -100,9 +97,6 @@ PixelSize
 UnitSymbolRenderer::GetSize(const Canvas &canvas, const Unit unit) noexcept
 {
   assert((size_t)unit < ARRAY_SIZE(symbol_strings));
-
-  if (unit == Unit::UNDEFINED)
-    return {0, 0};
 
   const UnitSymbolStrings &strings = symbol_strings[(unsigned)unit];
 
@@ -129,9 +123,6 @@ UnitSymbolRenderer::GetAscentHeight(const Font &font, const Unit unit) noexcept
 {
   assert((size_t)unit < ARRAY_SIZE(symbol_strings));
 
-  if (unit == Unit::UNDEFINED)
-    return 0;
-
   const UnitSymbolStrings &strings = symbol_strings[(unsigned)unit];
 
   if (!strings.line1 && !strings.line2)
@@ -151,9 +142,6 @@ UnitSymbolRenderer::Draw(Canvas &canvas, const PixelPoint pos,
                          const Pen &unit_fraction_pen) noexcept
 {
   assert((size_t)unit < ARRAY_SIZE(symbol_strings));
-
-  if (unit == Unit::UNDEFINED)
-    return;
 
   const UnitSymbolStrings &strings = symbol_strings[(unsigned)unit];
 
