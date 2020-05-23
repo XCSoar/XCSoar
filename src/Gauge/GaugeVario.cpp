@@ -422,21 +422,6 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
 {
   value = (double)iround(value * 10) / 10; // prevent the -0.0 case
 
-  if (!di.value.initialised) {
-    di.value.last_width = 0;
-    di.value.last_value = -9999;
-    di.value.last_text[0] = '\0';
-    di.value.last_unit = Unit::UNDEFINED;
-    di.value.initialised = true;
-  }
-
-  if (!di.label.initialised) {
-    di.label.last_width = 0;
-    di.label.last_value = -9999;
-    di.label.last_text[0] = '\0';
-    di.label.initialised = true;
-  }
-
   canvas.SetBackgroundTransparent();
 
   if (!IsPersistent() || (dirty && !StringIsEqual(di.label.last_text, label))) {

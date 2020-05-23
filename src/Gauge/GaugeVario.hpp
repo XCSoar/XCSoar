@@ -85,14 +85,16 @@ class GaugeVario : public AntiFlickerWindow
   } geometry;
 
   struct DrawInfo {
-    bool initialised = false;
     unsigned last_width;
     double last_value;
     TCHAR last_text[32];
     Unit last_unit;
 
     void Reset() noexcept {
-      initialised = false;
+      last_width = 0;
+      last_value = -9999;
+      last_text[0] = '\0';
+      last_unit = Unit::UNDEFINED;
     }
   };
 
