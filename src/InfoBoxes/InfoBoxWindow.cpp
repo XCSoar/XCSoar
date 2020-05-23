@@ -120,10 +120,6 @@ InfoBoxWindow::PaintValue(Canvas &canvas, Color background_color)
 
   canvas.SetTextColor(look.GetValueColor(data.value_color));
 
-  canvas.Select(look.unit_font);
-  int unit_width =
-    UnitSymbolRenderer::GetSize(canvas, data.value_unit).cx;
-
   canvas.Select(look.value_font);
   int ascent_height = look.value_font.GetAscentHeight();
 
@@ -136,7 +132,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas, Color background_color)
 
   int x = std::max(0,
                    (value_rect.left + value_rect.right
-                    - value_size.cx - unit_width) / 2);
+                    - value_size.cx - (int)unit_width) / 2);
 
   int y = (value_rect.top + value_rect.bottom - value_size.cy) / 2;
 
@@ -261,6 +257,9 @@ InfoBoxWindow::UpdateContent()
     if (!data.CompareComment(old))
       Invalidate(comment_rect);
 #endif
+
+    unit_width = UnitSymbolRenderer::GetSize(look.unit_font,
+                                             data.value_unit).cx;
   }
 }
 
