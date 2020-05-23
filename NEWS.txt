@@ -1,6 +1,7 @@
 Version 6.8.14 - 2020/05/14
 * user interface
   - fix average needle color in inverted mode
+  - vario: fix overlapping text lines
 * tracking
   - SkyLines: update tracking IP address
 * Android

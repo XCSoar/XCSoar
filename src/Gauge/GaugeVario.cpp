@@ -68,7 +68,8 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
   const unsigned height = rc.bottom - rc.top;
 
   if (!IsPersistent() || !layout_initialised) {
-    unsigned value_height = 4 + look.value_font.GetCapitalHeight()
+    unsigned value_height = Layout::Scale(4)
+      + look.value_font.GetCapitalHeight()
       + look.text_font->GetCapitalHeight();
 
     middle_position.y = offset.y - value_height / 2;
