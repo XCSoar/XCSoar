@@ -423,13 +423,7 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
   value = (double)iround(value * 10) / 10; // prevent the -0.0 case
 
   if (!di.value.initialised) {
-    di.value.rc.right = g.value_right;
-    di.value.rc.top = g.value_top;
-
-    di.value.rc.left = di.value.rc.right;
-    // update back rect with max label size
-    di.value.rc.bottom = g.value_bottom;
-
+    di.value.last_width = 0;
     di.value.last_value = -9999;
     di.value.last_text[0] = '\0';
     di.value.last_unit = Unit::UNDEFINED;
@@ -437,13 +431,7 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
   }
 
   if (!di.label.initialised) {
-    di.label.rc.right = g.label_right;
-    di.label.rc.top = g.label_top;
-
-    di.label.rc.left = di.label.rc.right;
-    // update back rect with max label size
-    di.label.rc.bottom = g.label_bottom;
-
+    di.label.last_width = 0;
     di.label.last_value = -9999;
     di.label.last_text[0] = '\0';
     di.label.initialised = true;
@@ -459,10 +447,15 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
     const PixelPoint text_position{g.label_right - tsize.cx, g.label_y};
 
     if (IsPersistent()) {
+      PixelRect rc;
+      rc.left = text_position.x;
+      rc.top = g.label_top;
+      rc.right = g.label_right;
+      rc.bottom = g.label_bottom;
+
       canvas.SetBackgroundColor(look.background_color);
-      canvas.DrawOpaqueText(text_position.x, text_position.y,
-                            di.label.rc, label);
-      di.label.rc.left = text_position.x;
+      canvas.DrawOpaqueText(text_position.x, text_position.y, rc, label);
+      di.label.last_width = tsize.cx;
       _tcscpy(di.label.last_text, label);
     } else {
       canvas.DrawText(text_position.x, text_position.y,
@@ -481,10 +474,15 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
     const PixelPoint text_position{g.value_right - tsize.cx, g.value_y};
 
     if (IsPersistent()) {
-      canvas.DrawOpaqueText(text_position.x, text_position.y,
-                            di.value.rc, buffer);
+      PixelRect rc;
+      rc.left = text_position.x;
+      rc.top = g.value_top;
+      rc.right = g.value_right;
+      rc.bottom = g.value_bottom;
 
-      di.value.rc.left = text_position.x;
+      canvas.DrawOpaqueText(text_position.x, text_position.y, rc, buffer);
+
+      di.value.last_width = tsize.cx;
       di.value.last_value = value;
     } else {
       canvas.DrawText(text_position.x, text_position.y, buffer);
