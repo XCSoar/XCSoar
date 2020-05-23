@@ -69,6 +69,34 @@ static_assert(ARRAY_SIZE(symbol_strings) == (size_t)Unit::COUNT,
               "number of unit symbols does not match number of units");
 
 PixelSize
+UnitSymbolRenderer::GetSize(const Font &font, const Unit unit) noexcept
+{
+  assert((size_t)unit < ARRAY_SIZE(symbol_strings));
+
+  if (unit == Unit::UNDEFINED)
+    return {0, 0};
+
+  const UnitSymbolStrings &strings = symbol_strings[(unsigned)unit];
+
+  if (!strings.line1 && !strings.line2)
+    return {0, 0};
+
+  assert(strings.line2 != nullptr);
+
+  if (!strings.line1)
+    return font.TextSize(strings.line2);
+
+  PixelSize size1 = font.TextSize(strings.line1);
+  PixelSize size2 = font.TextSize(strings.line2);
+
+  PixelSize size;
+  size.cy = size1.cy + size2.cy;
+  size.cx = std::max(size1.cx, size2.cx);
+
+  return size;
+}
+
+PixelSize
 UnitSymbolRenderer::GetSize(const Canvas &canvas, const Unit unit) noexcept
 {
   assert((size_t)unit < ARRAY_SIZE(symbol_strings));

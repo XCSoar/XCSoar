@@ -36,6 +36,9 @@ class Pen;
 namespace UnitSymbolRenderer
 {
   gcc_pure
+  PixelSize GetSize(const Font &font, const Unit unit) noexcept;
+
+  gcc_pure
   PixelSize GetSize(const Canvas &canvas, const Unit unit) noexcept;
 
   gcc_pure
