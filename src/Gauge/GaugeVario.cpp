@@ -129,7 +129,9 @@ GaugeVario::LabelValueGeometry::LabelValueGeometry(const VarioLook &look,
    label_bottom(label_top + look.text_font->GetCapitalHeight()),
    label_y(label_top + look.text_font->GetCapitalHeight()
            - look.text_font->GetAscentHeight()),
-   value_right(position.x - Layout::Scale(5)),
+   // TODO: update after units got reconfigured?
+   value_right(position.x - UnitSymbolRenderer::GetSize(look.unit_font,
+                                                        Units::current.vertical_speed_unit).cx),
    value_top(label_bottom + Layout::Scale(2)),
    value_bottom(value_top + look.value_font.GetCapitalHeight()),
    value_y(value_top + look.value_font.GetCapitalHeight()
