@@ -13,6 +13,7 @@ jobs:
             ccache \
             ffmpeg \
             gettext \
+            libsodium-dev \
             libasound2-dev \
             libgeotiff-dev \
             libgl1-mesa-dev \
