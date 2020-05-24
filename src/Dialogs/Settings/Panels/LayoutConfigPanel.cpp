@@ -45,6 +45,7 @@ Copyright_License {
 enum ControlIndex {
   MapOrientation,
   AppInfoBoxGeom,
+  InfoBoxTitleScale,
   AppFlarmLocation,
   TabDialogStyle,
   AppStatusMessageAlignment,
@@ -188,6 +189,11 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           _("A list of possible InfoBox layouts. Do some trials to find the best for your screen size."),
           info_box_geometry_list, (unsigned)ui_settings.info_boxes.geometry);
 
+  AddInteger(_("InfoBox title size"), nullptr,
+             _T("%d %%"), _T("%d"), 50, 150, 5,
+             ui_settings.info_boxes.scale_title_font);
+  SetExpertRow(InfoBoxTitleScale);
+
   AddEnum(_("FLARM display"), _("Choose a location for the FLARM display."),
           flarm_display_location_list,
           (unsigned)ui_settings.traffic.gauge_location);
@@ -251,6 +257,10 @@ LayoutConfigPanel::Save(bool &_changed)
   info_box_geometry_changed |=
     SaveValueEnum(AppInfoBoxGeom, ProfileKeys::InfoBoxGeometry,
                   ui_settings.info_boxes.geometry);
+
+  info_box_geometry_changed |=
+    SaveValueEnum(InfoBoxTitleScale, ProfileKeys::InfoBoxTitleScale,
+                  ui_settings.info_boxes.scale_title_font);
 
   info_box_geometry_changed |=
     SaveValueEnum(AppFlarmLocation, ProfileKeys::FlarmLocation,

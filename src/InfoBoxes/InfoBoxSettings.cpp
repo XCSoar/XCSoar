@@ -53,6 +53,7 @@ InfoBoxSettings::SetDefaults()
 
   geometry = Geometry::SPLIT_8;
 
+  scale_title_font = 100U; // default to 100%
   inverse = false;
   use_colors = true;
   border_style = BorderStyle::BOX;

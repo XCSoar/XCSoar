@@ -49,7 +49,8 @@ Look::InitialiseConfigured(const UISettings &settings,
   trace_history.Initialise(settings.info_boxes.inverse);
   info_box.Initialise(settings.info_boxes.inverse,
                       settings.info_boxes.use_colors,
-                      infobox_width);
+                      infobox_width,
+		      settings.info_boxes.scale_title_font);
   vario.Initialise(settings.info_boxes.inverse,
                    settings.info_boxes.use_colors,
                    info_box.title_font);
@@ -64,7 +65,7 @@ Look::InitialiseConfigured(const UISettings &settings,
 }
 
 void
-Look::ReinitialiseLayout(unsigned infobox_width)
+Look::ReinitialiseLayout(unsigned infobox_width, unsigned scale_title_font)
 {
-  info_box.ReinitialiseLayout(infobox_width);
+  info_box.ReinitialiseLayout(infobox_width, scale_title_font);
 }
