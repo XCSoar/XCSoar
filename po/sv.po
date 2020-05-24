@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-01-03 15:21+0000\n"
+"PO-Revision-Date: 2020-05-25 19:41+0000\n"
 "Last-Translator: Markus Bagge <markus.bagge@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/sv/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10\n"
+"X-Generator: Weblate 4.1-dev\n"
 "X-Launchpad-Export-Date: 2014-10-13 19:28+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -109,8 +109,8 @@ msgid ""
 "Racing task around turn points.  Can also be used for FAI badge and record "
 "tasks.  Allows all shapes of observation zones."
 msgstr ""
-"Hastighetsbana runt brytpunkter. Kan också användas för FAI diplom och "
-"rekord. Tillåter alla former på observationsektorn."
+"Hastighetsuppgift runt brytpunkter. Kan också användas för FAI diplom- och "
+"rekorduppgifter. Tillåter alla former på observationsektorer."
 
 #: src/Task/TypeStrings.cpp:59
 #, no-c-format
@@ -138,8 +138,8 @@ msgid ""
 "Racing task with a mix of assigned areas and turn points, minimum task time "
 "applies."
 msgstr ""
-"Hastighetsbana med en blandning av designerade områden och brytpunkter, "
-"minsta tid på banan gäller."
+"Hastighetsuppgift med en mix av angivna områden och brytpunkter, minsta tid "
+"på banan gäller."
 
 #: src/Task/TypeStrings.cpp:63
 #, no-c-format
@@ -424,7 +424,7 @@ msgstr "Laddar Luftrumsfil..."
 
 #: src/Airspace/AirspaceParser.cpp:277
 msgid "Parse Error at Line"
-msgstr "syntaxfel på rad"
+msgstr "Syntaxfel på rad"
 
 #: src/Airspace/AirspaceParser.cpp:892
 msgid "Unknown airspace filetype"
@@ -432,7 +432,7 @@ msgstr "Okänd filtyp för luftrum"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorAATTime.cpp:51
 msgid "Expect early task arrival"
-msgstr "För tidig målgång förväntas"
+msgstr "Förväntad tidig målgång"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorSunset.cpp:65
 msgid "Expect arrival past sunset"
@@ -959,7 +959,7 @@ msgstr "Banor & Flygplatser"
 #: src/InfoBoxes/Content/Factory.cpp:135
 #, no-c-format
 msgid "Altitude GPS"
-msgstr "Altitude GPS"
+msgstr "Höjd GPS"
 
 #: src/InfoBoxes/Content/Factory.cpp:136
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:83
@@ -1088,7 +1088,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:185
 #, no-c-format
 msgid "Speed ground"
-msgstr "Hastighet över marken"
+msgstr "Hastighet över mark"
 
 #: src/InfoBoxes/Content/Factory.cpp:186
 #, no-c-format
@@ -1181,7 +1181,7 @@ msgstr "Nästa ben"
 #: src/InfoBoxes/Content/Factory.cpp:226 src/InfoBoxes/Content/Task.cpp:182
 #, no-c-format
 msgid "WP Dist"
-msgstr "Brytpunkt avstånd"
+msgstr "BP avstånd"
 
 #: src/InfoBoxes/Content/Factory.cpp:227
 #, no-c-format
@@ -1238,7 +1238,7 @@ msgstr "Nästa brytpunkt"
 #: src/InfoBoxes/Content/Factory.cpp:253
 #, no-c-format
 msgid "Next WP"
-msgstr "Nästa brytpunkt"
+msgstr "Nästa BP"
 
 #: src/InfoBoxes/Content/Factory.cpp:254
 #, no-c-format
@@ -1304,7 +1304,7 @@ msgstr "Snittfart på banan, ej kompenserad för höjd."
 #: src/InfoBoxes/Content/Factory.cpp:284
 #, no-c-format
 msgid "Final distance"
-msgstr "Mål distans"
+msgstr "Distans till final"
 
 #: src/InfoBoxes/Content/Factory.cpp:285
 #, no-c-format
@@ -1314,12 +1314,12 @@ msgstr "Mål dist"
 #: src/InfoBoxes/Content/Factory.cpp:286
 #, no-c-format
 msgid "Distance to finish around remaining turn points."
-msgstr "Distans kvar runt banan till mål."
+msgstr "Kvarvarande distans utmed banan till mål."
 
 #: src/InfoBoxes/Content/Factory.cpp:300
 #, no-c-format
 msgid "Terrain elevation"
-msgstr "Terräng höjd"
+msgstr "Terränghöjd"
 
 #: src/InfoBoxes/Content/Factory.cpp:301
 #, no-c-format
@@ -1332,8 +1332,8 @@ msgid ""
 "This is the elevation of the terrain above mean sea level, obtained from the "
 "terrain file at the current GPS location."
 msgstr ""
-"Det här är markens höjd över havet, hämtat från terräng-filen vid aktuell "
-"GPS-position."
+"Detta är markens höjd över havet, hämtat från terräng-filen vid aktuell GPS-"
+"position."
 
 #: src/InfoBoxes/Content/Factory.cpp:308
 #, no-c-format
@@ -1595,7 +1595,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:431
 #, no-c-format
 msgid "Flight duration"
-msgstr "Flyg tid"
+msgstr "Flygtid"
 
 #: src/InfoBoxes/Content/Factory.cpp:432
 #, no-c-format
@@ -1629,7 +1629,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:447
 #, no-c-format
 msgid "Next GR"
-msgstr "GR till WP"
+msgstr "GR till BP"
 
 #: src/InfoBoxes/Content/Factory.cpp:448
 #, no-c-format
@@ -1699,7 +1699,7 @@ msgstr "Tid nästa WP"
 #: src/InfoBoxes/Content/Factory.cpp:481
 #, no-c-format
 msgid "WP ETE"
-msgstr ""
+msgstr "BP ETE"
 
 #: src/InfoBoxes/Content/Factory.cpp:482
 #, no-c-format
@@ -1758,7 +1758,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:505
 #, no-c-format
 msgid "Task arrival time"
-msgstr "Ankomsttid för banan"
+msgstr "Ankomsttid för uppgift"
 
 #: src/InfoBoxes/Content/Factory.cpp:506
 #, no-c-format
@@ -1782,7 +1782,7 @@ msgstr "Nästa ankomsttid"
 #: src/InfoBoxes/Content/Factory.cpp:514
 #, no-c-format
 msgid "WP ETA"
-msgstr "WP ETA"
+msgstr "BP ETA"
 
 #: src/InfoBoxes/Content/Factory.cpp:515
 #, no-c-format
@@ -1824,7 +1824,7 @@ msgstr "Lufttemperatur"
 #: src/InfoBoxes/Content/Factory.cpp:531
 #, no-c-format
 msgid "OAT"
-msgstr ""
+msgstr "OAT"
 
 #: src/InfoBoxes/Content/Factory.cpp:532
 #, no-c-format
@@ -2049,7 +2049,7 @@ msgstr "Hastighet avklarad bana"
 #: src/InfoBoxes/Content/Factory.cpp:635
 #, no-c-format
 msgid "V Task Ach"
-msgstr ""
+msgstr "V uppg. uppnådd"
 
 #: src/InfoBoxes/Content/Factory.cpp:636
 #, no-c-format
@@ -2096,7 +2096,7 @@ msgstr "Tidsmedelvärde för stighastighet i alla blåsor."
 #: src/InfoBoxes/Content/Factory.cpp:658
 #, no-c-format
 msgid "Task req. total height trend"
-msgstr ""
+msgstr "Trend total höjd nödvändig för uppgift"
 
 #: src/InfoBoxes/Content/Factory.cpp:659
 #, no-c-format
@@ -2202,7 +2202,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:706
 #, no-c-format
 msgid "Height above take-off"
-msgstr "Höjd över startplatsen"
+msgstr "Höjd över start"
 
 #: src/InfoBoxes/Content/Factory.cpp:707
 #, no-c-format
@@ -2302,7 +2302,7 @@ msgstr "Ankomsthöjd nästa brytpunkt"
 #: src/InfoBoxes/Content/Factory.cpp:756
 #, no-c-format
 msgid "WP AltA"
-msgstr "WP AltA"
+msgstr "BP AltA"
 
 #: src/InfoBoxes/Content/Factory.cpp:757
 #, no-c-format
@@ -2396,7 +2396,7 @@ msgstr "Spår för termiskt stig"
 #: src/InfoBoxes/Content/Factory.cpp:806
 #, no-c-format
 msgid "TC Trace"
-msgstr ""
+msgstr "TC spår"
 
 #: src/InfoBoxes/Content/Factory.cpp:807
 #, no-c-format
@@ -2485,7 +2485,7 @@ msgstr "Tid till nästa brytpunkt (GS)"
 #: src/InfoBoxes/Content/Factory.cpp:846
 #, no-c-format
 msgid "WP ETE VMG"
-msgstr ""
+msgstr "BP ETE VMG"
 
 #: src/InfoBoxes/Content/Factory.cpp:847
 #, no-c-format
@@ -2559,7 +2559,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:879
 #, no-c-format
 msgid "WP MC0 AltD"
-msgstr ""
+msgstr "BP MC0 AltD"
 
 #: src/InfoBoxes/Content/Factory.cpp:880
 #, no-c-format
@@ -2666,6 +2666,9 @@ msgid ""
 "subtracting GPS ground speed from the TAS if airspeed is available from "
 "external device."
 msgstr ""
+"Aktuell motvindskomponent. Den förenklade motvinden beräknas genom "
+"subtraktion av GPS hastighet från TAS (True Air Speed) om externt instrument "
+"finns."
 
 #: src/InfoBoxes/Content/Factory.cpp:928
 #, no-c-format
@@ -2675,7 +2678,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:929
 #, no-c-format
 msgid "Cruise Eff"
-msgstr ""
+msgstr "Effektivitet glid"
 
 #: src/InfoBoxes/Content/Factory.cpp:930
 #, no-c-format
@@ -2724,7 +2727,7 @@ msgstr "En cirkulär assistant som visar blåsans form och stig."
 #: src/InfoBoxes/Content/Factory.cpp:951
 #, no-c-format
 msgid "Start open/close countdown"
-msgstr "Nedräkning för Start öppnar/stänger"
+msgstr "Nedräkning inför startens öppning/stängning"
 
 #: src/InfoBoxes/Content/Factory.cpp:952
 #, no-c-format
@@ -2744,7 +2747,7 @@ msgstr "Start öppnar/stänger nedräkningen när detta nås"
 #: src/InfoBoxes/Content/Factory.cpp:959
 #, no-c-format
 msgid "Start reach"
-msgstr ""
+msgstr "Tid startpunkt"
 
 #: src/InfoBoxes/Content/Factory.cpp:960
 #, no-c-format
@@ -2788,7 +2791,7 @@ msgstr "Banhastighet senaste timmen"
 #: src/InfoBoxes/Content/Factory.cpp:982
 #, no-c-format
 msgid "V Task H"
-msgstr ""
+msgstr "V uppg. H"
 
 #: src/InfoBoxes/Content/Factory.cpp:983
 #, no-c-format
@@ -2805,7 +2808,7 @@ msgstr "Nästa distans (nominellt)"
 #: src/InfoBoxes/Content/Factory.cpp:990
 #, no-c-format
 msgid "WP Dist-N"
-msgstr ""
+msgstr "BP Dist-N"
 
 #: src/InfoBoxes/Content/Factory.cpp:991
 #, no-c-format
@@ -2840,7 +2843,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1004
 #, no-c-format
 msgid "Distance takeoff"
-msgstr "Avstånd till startplats"
+msgstr "Avstånd till start"
 
 #: src/InfoBoxes/Content/Factory.cpp:1005
 #, no-c-format
@@ -2872,7 +2875,7 @@ msgstr "Direkt beräkning av flugen hastighet enligt inställda OLC regler."
 #: src/InfoBoxes/Content/Factory.cpp:1019
 #, no-c-format
 msgid "Final MC0 altitude difference"
-msgstr ""
+msgstr "Höjdskillnad mål MC0"
 
 #: src/InfoBoxes/Content/Factory.cpp:1020
 #, no-c-format
@@ -2885,12 +2888,14 @@ msgid ""
 "Arrival altitude at the final waypoint with MC 0 setting relative to the "
 "safety arrival height."
 msgstr ""
+"Ankomsthöjd vid sista brytpunkt med MC 0 inställning relativt säker "
+"ankomsthöjd."
 
 #: src/InfoBoxes/Content/Factory.cpp:1027
 #: src/InfoBoxes/Content/Factory.cpp:1028 src/InfoBoxes/Content/Task.cpp:904
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next arrow"
-msgstr "Nästa startpunkt"
+msgstr "Nästa BP pil"
 
 #: src/InfoBoxes/Content/Factory.cpp:1029
 #, no-c-format
@@ -2902,52 +2907,52 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1039
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next waypoint arrival time (ground speed)"
-msgstr "Tid till nästa brytpunkt (GS)"
+msgstr "Ankomstid nästa brytpunkt (markhastighet)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1040
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "WP ETA VMG"
-msgstr "WP ETA"
+msgstr "BP ETA VMG"
 
 #: src/InfoBoxes/Content/Factory.cpp:1041
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Estimated arrival time at next waypoint, assuming current ground speed is "
 "maintained."
 msgstr ""
-"Beräknad tid som krävs för att nå nästa vägpunkt, om nuvarande markhastighet "
-"(GS) bibehålls."
+"Estimerad ankomsttid till nästa brytpunkt, om nuvarande markhastighet "
+"bibehålls."
 
 #: src/InfoBoxes/Content/Factory.cpp:1048
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Percentage non-circling climb"
-msgstr "Procent stig"
+msgstr "Procent av tid i stig (ej kurvande)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1049
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "% Str Climb"
-msgstr "% stig"
+msgstr "% rakt stig"
 
 #: src/InfoBoxes/Content/Factory.cpp:1050
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Percentage of time spent climbing without circling. These statistics are "
 "reset upon starting the task."
 msgstr ""
-"Procent av tiden som spenderats i stig. Statistiken nollställs när banan "
-"påbörjas."
+"Procent av tid som i stig utan kurvning. Statistiken nollställs när "
+"uppgiften startas."
 
 #: src/InfoBoxes/Content/Factory.cpp:1056
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Percentage climb chart"
-msgstr "Procent stig"
+msgstr "Procent stig diagram"
 
 #: src/InfoBoxes/Content/Factory.cpp:1057
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Climb %"
-msgstr "Stig"
+msgstr "Stig %"
 
 #: src/InfoBoxes/Content/Factory.cpp:1058
 #, no-c-format
@@ -2955,6 +2960,8 @@ msgid ""
 "Pie chart of time circling and climbing, circling and descending, and "
 "climbing non-circling."
 msgstr ""
+"Pajdiagram med tid med kurvning- och stig, kurvning och sjunk samt rakflykt "
+"i stig."
 
 #: src/InfoBoxes/Content/Factory.cpp:1064
 #, no-c-format
@@ -2962,9 +2969,9 @@ msgid "Number of used satellites"
 msgstr "Antal använda satelliter"
 
 #: src/InfoBoxes/Content/Factory.cpp:1065
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Satellites"
-msgstr "Satelliter i sikte"
+msgstr "Satelliter"
 
 #: src/InfoBoxes/Content/Factory.cpp:1066
 #, no-c-format
@@ -3033,11 +3040,11 @@ msgstr "MANUELL MC"
 
 #: src/InfoBoxes/Content/Other.cpp:57 src/InfoBoxes/Content/Other.cpp:60
 msgid "AC Off"
-msgstr ""
+msgstr "AC Av"
 
 #: src/InfoBoxes/Content/Other.cpp:64
 msgid "AC ON"
-msgstr ""
+msgstr "AC På"
 
 #: src/InfoBoxes/Content/Other.cpp:177
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:47
@@ -3067,9 +3074,8 @@ msgid "3D fix"
 msgstr "3D fix"
 
 #: src/InfoBoxes/Content/Other.cpp:195
-#, fuzzy
 msgid "No GPS"
-msgstr "H GPS"
+msgstr "Ingen GPS"
 
 #: src/InfoBoxes/Content/Speed.cpp:120
 msgid "BLOCK"
@@ -3167,6 +3173,8 @@ msgid ""
 "Area pressure for barometric altimeter calibration.  This is set "
 "automatically if Vega connected."
 msgstr ""
+"Områdestryck för kalibrering av barometrisk höjdmätare.  Sätts automatiskt "
+"om Vega är ansluten."
 
 #: src/InfoBoxes/Panel/ATCReference.cpp:88
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:644
@@ -3200,9 +3208,8 @@ msgstr "Töm"
 #: src/Input/InputEventsActions.cpp:143
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:300
 #: src/Dialogs/Waypoint/Manager.cpp:253
-#, fuzzy
 msgid "Failed to save waypoints"
-msgstr "Kunde inte radera vägpunkter."
+msgstr "Misslyckades att spara brytpunkter"
 
 #: src/Input/InputEventsActions.cpp:218
 msgid "Screen Mode Full"
@@ -3210,11 +3217,11 @@ msgstr "Skärmläget fullt"
 
 #: src/Input/InputEventsActions.cpp:220
 msgid "Auxiliary InfoBoxes"
-msgstr ""
+msgstr "Extra InfoBoxar"
 
 #: src/Input/InputEventsActions.cpp:222
 msgid "Default InfoBoxes"
-msgstr ""
+msgstr "Standard InfoBoxar"
 
 #: src/Input/InputEventsActions.cpp:330
 msgid "No active waypoint!"
@@ -3402,9 +3409,8 @@ msgstr "Ballast %"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:142
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:182
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:226
-#, fuzzy
 msgid "Failed to save file."
-msgstr "Kunde inte läsa in filen."
+msgstr "Misslyckades att spara fil."
 
 #: src/Input/InputEventsSettings.cpp:336
 msgid "Waypoint labels"
@@ -3415,7 +3421,6 @@ msgid "Topography/Terrain"
 msgstr "Topografi/Terräng"
 
 #: src/Input/InputEventsLua.cpp:60
-#, fuzzy
 msgid "Not found"
 msgstr "Hittades ej"
 
@@ -3545,7 +3550,7 @@ msgstr ""
 #: src/Weather/Rasp/RaspStore.cpp:58
 #, no-c-format
 msgid "BL Wind spd"
-msgstr ""
+msgstr "BL vindhastighet"
 
 #: src/Weather/Rasp/RaspStore.cpp:59
 #, no-c-format
@@ -3554,11 +3559,14 @@ msgid ""
 "prediction can be misleading if there is a large change in wind direction "
 "through the BL."
 msgstr ""
+"Hastighet och riktning av vind i BL (Boundary Layer/gränsskikt).  "
+"Skattningen kan vara missvisande vid stora förändringar av vindriktning  "
+"genom BL."
 
 #: src/Weather/Rasp/RaspStore.cpp:63
 #, no-c-format
 msgid "H bl"
-msgstr ""
+msgstr "H BL"
 
 #: src/Weather/Rasp/RaspStore.cpp:64
 #, no-c-format
@@ -3594,7 +3602,7 @@ msgstr ""
 #: src/Weather/Rasp/RaspStore.cpp:73
 #, no-c-format
 msgid "bl cloud"
-msgstr ""
+msgstr "BL moln"
 
 #: src/Weather/Rasp/RaspStore.cpp:74
 #, no-c-format
@@ -3695,7 +3703,7 @@ msgstr "Återstående sträcka"
 #: src/Renderer/FlightStatisticsRenderer.cpp:314
 #: src/Renderer/FlightStatisticsRenderer.cpp:325
 msgid "Target speed"
-msgstr ""
+msgstr "Målhastighet"
 
 #: src/Renderer/BarographRenderer.cpp:47 src/Renderer/BarographRenderer.cpp:53
 msgid "Working band"
@@ -3751,7 +3759,7 @@ msgstr ""
 
 #: src/UIActions.cpp:52
 msgid "Quit program?"
-msgstr "Avsluta programmet?"
+msgstr "Avsluta program?"
 
 #: src/Units/UnitsStore.cpp:39
 #, no-c-format
@@ -3982,7 +3990,7 @@ msgstr "Fel"
 
 #: src/Dialogs/FileManager.cpp:689 src/Dialogs/DownloadFilePicker.cpp:361
 msgid "Failed to download the repository index."
-msgstr ""
+msgstr "Misslyckades ladda ner förrådsindex."
 
 #: src/Dialogs/FileManager.cpp:698 src/Dialogs/FileManager.cpp:727
 #: src/Dialogs/DownloadFilePicker.cpp:374 Data/Input/default.xci:605
@@ -4031,9 +4039,8 @@ msgid "UDP Port"
 msgstr "UDP-port"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:355
-#, fuzzy
 msgid "Bluetooth LE"
-msgstr "Bluetooth server"
+msgstr "Blåtand LE"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:583
 msgid "Port"
@@ -4047,13 +4054,15 @@ msgstr "Baudhastighet"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:595
 msgid "Bulk baud rate"
-msgstr ""
+msgstr "Bulk baud-hastighet"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:596
 msgid ""
 "The baud rate used for bulk transfers, such as task declaration or flight "
 "download."
 msgstr ""
+"Baud-hastighet som används för bulk-data såsom uppgiftsdeklarationer eller "
+"flyg nedladdning."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:601
 msgid "IP Address"
@@ -4065,7 +4074,7 @@ msgstr "I2C Buss"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:611
 msgid "Select the description or bus number that matches your configuration."
-msgstr ""
+msgstr "Välj beskrivning eller bussnummer som passar din konfiguration."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid "I2C Addr"
@@ -4078,6 +4087,9 @@ msgid ""
 "not understand the previous sentence you may assume that this field is not "
 "used."
 msgstr ""
+"I2C adressen som passar din konfiguration. Fältet används när ditt val av "
+"I2C-buss ej är ett I2C bussnummer. Förstår du ej föregående mening kan du "
+"anta att detta fält ej används."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:625
 msgid "Pressure use"
@@ -4109,19 +4121,20 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:654
-#, fuzzy
 msgid "Second Driver"
-msgstr "Drivrutin"
+msgstr "Sekundär drivrutin"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:656
 msgid "Sync. from device"
-msgstr ""
+msgstr "Sync. från instrument"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:657
 msgid ""
 "This option lets you configure if XCSoar should use settings like the "
 "MacCready value, bugs and ballast from the device."
 msgstr ""
+"Detta val låter dig konfigurera om XCSoar bör läsa inställningar såsom "
+"MacCready värde, insekter och ballast från instrumentet."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:662
 msgid "Sync. to device"
@@ -4132,6 +4145,8 @@ msgid ""
 "This option lets you configure if XCSoar should send settings like the "
 "MacCready value, bugs and ballast to the device."
 msgstr ""
+"Detta val låter dig konfigurera om XCSoar bör skicka inställningar såsom "
+"MacCready värde, insekter och ballast till instrumentet."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:669
 msgid "Enable this if you use a K6Bt to connect the device."
@@ -4311,7 +4326,7 @@ msgstr "Lufttryck"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:87
 msgid "Sink tone"
-msgstr ""
+msgstr "Sjunkljud"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:41
 #: src/Dialogs/ProfileListDialog.cpp:235 src/Dialogs/ProfileListDialog.cpp:264
@@ -4359,9 +4374,9 @@ msgid "Volume"
 msgstr "Volym"
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:66
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Output mode"
-msgstr "Ruttläge"
+msgstr "Utdataläge"
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:68
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:126
@@ -4416,11 +4431,11 @@ msgstr ""
 
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:168
 msgid "Set new audio scheme?  Old values will be lost."
-msgstr ""
+msgstr "Ange nytt ljudschema?  Gamla värden raderas."
 
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:285
 msgid "Vario Configuration"
-msgstr ""
+msgstr "Vario-konfiguration"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:99
 msgid "TE vario"
@@ -4514,7 +4529,7 @@ msgstr "Repetera"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:77
 msgid "Speed command"
-msgstr ""
+msgstr "Hastighetskommando"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:99
 msgid "Switch"
@@ -4522,7 +4537,7 @@ msgstr "Växla"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:100
 msgid "Vario circling"
-msgstr ""
+msgstr "Vario kurvning"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:152
 msgid "Switches"
@@ -4656,17 +4671,19 @@ msgstr "Bekr. Dag"
 
 #: src/Dialogs/MapItemListSettingsDialog.cpp:34
 msgid "Map Item List Settings"
-msgstr ""
+msgstr "Inställningar lista kartdetaljer"
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:40
 msgid "Show Location row"
-msgstr ""
+msgstr "Visa lokaliseringsrad"
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:41
 msgid ""
 "If enabled a row at the top will be added showing you the distance and "
 "bearing to the location and the elevation."
 msgstr ""
+"Om aktiverad, visar en rad högst upp med distans och bäring till platsen och "
+"dess höjd."
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:45
 msgid "Show Arrival Altitude"
@@ -4676,7 +4693,7 @@ msgstr "Visa ankomsthöjd"
 msgid ""
 "If enabled a row at the top will be added showing you the arrival altitude "
 "at the location."
-msgstr ""
+msgstr "Om aktiverad, visar en rad högst upp med ankomsthöjd vid platsen."
 
 #: src/Dialogs/ColorListDialog.cpp:74
 msgid "Select Color"
@@ -4745,7 +4762,7 @@ msgstr "Välj Luftrum"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:35
 msgid "Airspace Renderer Settings"
-msgstr ""
+msgstr "Inställningar rendering luftrum"
 
 #. Add controls
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:76
@@ -4758,7 +4775,7 @@ msgstr "Ändra fyllnadsfärg"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:84
 msgid "Change Fill Brush"
-msgstr ""
+msgstr "Ändra penselfyllnad"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:93
 msgid "Border Width"
@@ -4780,7 +4797,7 @@ msgstr "Fylld"
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:100
 #, no-c-format
 msgid "Only padding"
-msgstr ""
+msgstr "Endast gränsifyllnad"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:101
 #, no-c-format
@@ -4789,17 +4806,16 @@ msgstr "Inte fylld"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:105
 msgid "Fill Mode"
-msgstr ""
+msgstr "Ifyllnadsläge"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:106
 msgid "Defines how the airspace is filled with the configured color."
-msgstr ""
+msgstr "Definierar hur luftrum fylls i med konfigurerad färg."
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:105
 #: src/Monitor/AirspaceWarningMonitor.cpp:80
-#, fuzzy
 msgid "ACK"
-msgstr "Bekr. Dag"
+msgstr "Bekr."
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:106
 #: src/Monitor/AirspaceWarningMonitor.cpp:81
@@ -4820,6 +4836,7 @@ msgid ""
 "When the algorithm is switched off, the pilot is responsible for setting the "
 "wind estimate."
 msgstr ""
+"När algoritmen är avstängd är piloten ansvarig för att ange vindestimat."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:55
 #, no-c-format
@@ -4835,7 +4852,7 @@ msgstr "SickSack"
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:57
 #, no-c-format
 msgid "Requires GPS and an intelligent vario with airspeed output."
-msgstr ""
+msgstr "Kräver GPS och intelligent vario med utgång för lufthastighet."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:58
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:67
@@ -4858,13 +4875,12 @@ msgid "This allows switching on or off the automatic wind algorithm."
 msgstr "Detta tillåter på/av för den automatiska vindalgoritmen."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:67
-#, fuzzy
 msgid "External wind"
-msgstr "Extern"
+msgstr "Extern vind"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:68
 msgid "Should XCSoar accept wind estimates from other instruments?"
-msgstr ""
+msgstr "Skall XCSoar acceptera vindestimat från andra instrument?"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:72
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:156
@@ -4878,6 +4894,8 @@ msgid ""
 "in circling mode. Switched Off, the snail trail stays uncompensated for wind "
 "drift."
 msgstr ""
+"Bestämmer om snigelspår driftar med vinden vid visning i kurvläge. Om "
+"avstängd tas ingen hänsyn till vindavdrift."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:83
 msgid "Source"
@@ -4942,7 +4960,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:361
 msgid "Flight Setup"
-msgstr ""
+msgstr "Flyginställning"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:94
 #: src/Dialogs/Settings/dlgConfiguration.cpp:160
@@ -5034,9 +5052,9 @@ msgid "Tracking"
 msgstr "Spårning"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:154
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Audio"
-msgstr "Ljudvario"
+msgstr "Ljud"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:161
 #, no-c-format
@@ -5060,7 +5078,7 @@ msgstr "Utseende"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:229
 msgid "Expert"
-msgstr ""
+msgstr "Expert"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:337
 #: src/Dialogs/Settings/dlgConfiguration.cpp:368
@@ -5070,6 +5088,8 @@ msgstr "Konfiguration"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:385
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr ""
+"Ändrad konfiguration sparad.  Starta om XCSoar för att verkställa "
+"ändringarna."
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:276
 msgid "Content"
@@ -5164,7 +5184,7 @@ msgstr "Ställ kod"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:93
 msgid "Set WP"
-msgstr "Sätt WP"
+msgstr "Sätt BP"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:94
 msgid "Flarm Lock"
@@ -5215,9 +5235,8 @@ msgid "Thermal Band"
 msgstr "Termik höjd"
 
 #: src/Dialogs/dlgAnalysis.cpp:502
-#, fuzzy
 msgid "Vario Histogram"
-msgstr "Variometerspår"
+msgstr "Variometerhistogram"
 
 #: src/Dialogs/dlgAnalysis.cpp:510
 msgid "Wind at Altitude"
@@ -5232,9 +5251,8 @@ msgid "Glide Polar"
 msgstr "Glid polar"
 
 #: src/Dialogs/dlgAnalysis.cpp:528
-#, fuzzy
 msgid "MacCready Speeds"
-msgstr "MacCready "
+msgstr "MacCready-hastigheter"
 
 #: src/Dialogs/dlgAnalysis.cpp:537
 msgid "Temperature Trace"
@@ -5295,9 +5313,9 @@ msgid "File exists already."
 msgstr "Fil existerar redan."
 
 #: src/Dialogs/ProfileListDialog.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Delete \"%s\"?"
-msgstr "Ta bort"
+msgstr "Radera \"%s\"?"
 
 #: src/Dialogs/ProfileListDialog.cpp:372 Data/Input/default.xci:589
 msgid "Profiles"
@@ -5402,9 +5420,8 @@ msgid "Reference Mass"
 msgstr "Referensvikt"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:141
-#, fuzzy
 msgid "Reference mass of the polar"
-msgstr "Referensvikt"
+msgstr "Referensvikt för polaren"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:146
 msgid "Dry Mass"
@@ -5449,6 +5466,8 @@ msgid ""
 "Name of file to replay.  Can be an IGC file (.igc), a raw NMEA log file (."
 "nmea), or if blank, runs the demo."
 msgstr ""
+"Filnamn att spela upp. Kan vara en IGC fil (.igc), en rå NMEA logfil (.nmea)"
+", eller om blankt, kör en demo."
 
 #: src/Dialogs/ReplayDialog.cpp:90
 msgid "Rate"
@@ -5458,7 +5477,7 @@ msgstr "Grad"
 msgid ""
 "Time acceleration of replay. Set to 0 for pause, 1 for normal real-time "
 "replay."
-msgstr ""
+msgstr "Accelererad uppspelning. Ange 0 för paus, 1 för uppspelning i realtid."
 
 #: src/Dialogs/ReplayDialog.cpp:111 src/Dialogs/ReplayDialog.cpp:153
 #: Data/Input/default.xci:613
@@ -5484,11 +5503,11 @@ msgstr "Fortsätt"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:63
 msgid "Enter your password"
-msgstr ""
+msgstr "Ange lösenord"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:88
 msgid "Wrong password."
-msgstr ""
+msgstr "Fel lösenord."
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:103
 msgid "Enter a new password"
@@ -5800,9 +5819,8 @@ msgid "Set Active Frequency"
 msgstr "Ange aktiv frekvens"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:325
-#, fuzzy
 msgid "Set Standby Frequency"
-msgstr "Radiofrekvens"
+msgstr "Ange vänte-frekvens"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:433 Data/Input/default.xci:1015
 msgid "GoTo"
@@ -5943,15 +5961,15 @@ msgstr "Fyll inte luftrummets yta."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:83
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:151
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No labels will be displayed."
-msgstr "Inga vägpunktsetiketter kommer att visas."
+msgstr "Inga etiketter kommer visas."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:85
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:140
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "All labels will be displayed."
-msgstr "Alla vägpunktsetiketter kommer att visas."
+msgstr "Alla etiketter kommer visas."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:151
 msgid "Colours"
@@ -5979,9 +5997,8 @@ msgstr "Etikettvisning"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:194
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:156
-#, fuzzy
 msgid "Determines what labels are displayed."
-msgstr "Bestämmer hur etiketter visas vid varje vägpunkt"
+msgstr "Bestämmer vilka etiketter som visas."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:198
 msgid "Clip altitude"
@@ -6008,14 +6025,12 @@ msgid "Enable/disable all airspace warnings."
 msgstr "Aktivera/avaktivera alla luftrumsvarningar."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:211
-#, fuzzy
 msgid "Warnings dialog"
-msgstr "Varningar"
+msgstr "Varningsdialog"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:212
-#, fuzzy
 msgid "Enable/disable displaying airspaces warnings dialog."
-msgstr "Aktivera/avaktivera alla luftrumsvarningar."
+msgstr "Aktivera/avaktivera visning av dialog för luftrumsvarningar."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:216
 msgid "Warning time"
@@ -6147,6 +6162,8 @@ msgid ""
 "If set to ON the final glide bar will show a second arrow indicating the "
 "required height to reach the final waypoint at MC zero."
 msgstr ""
+"Om \"På\" kommer stapel för finalglid visa en andra pil för indikering av "
+"höjd som krävs, vid MC 0, för att nå sista brytpunkten."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:118
 msgid "Vario bar"
@@ -6303,12 +6320,12 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:97
 #, no-c-format
 msgid "Preferred period for paragliders."
-msgstr ""
+msgstr "Föredragen period för skärmar."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:100
 #, no-c-format
 msgid "Preferred period for gliders."
-msgstr ""
+msgstr "Föredragen period glidflyg."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:106
 msgid "GR average period"
@@ -6320,6 +6337,8 @@ msgid ""
 "done. Normally for gliders a good value is 90-120 seconds, and for "
 "paragliders 15 seconds."
 msgstr ""
+"Här kan du bestämma hur många sekunder av flyg som denna beräkning baseras "
+"på. Normalt för glidflyg är 90-120 sekunder och för skärmar 15 sekunder."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:112
 msgid "Predict wind drift"
@@ -6334,9 +6353,8 @@ msgstr ""
 "ankomsthöjden för ben med motvind."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:117
-#, fuzzy
 msgid "Wave assistant"
-msgstr "Blåsassistant"
+msgstr "Vågassistent"
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:87
 msgid "Use final glide mode"
@@ -6347,22 +6365,23 @@ msgid ""
 "Controls whether the \"final glide\" InfoBox mode should be used on \"auto\" "
 "pages."
 msgstr ""
+"Styr huruvida \"Finalglid\" InfoBox läget skall användas på \"auto\" sidor."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:88
-#, fuzzy
 msgid "Text size"
-msgstr "Text"
+msgstr "Textstorlek"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:93
-#, fuzzy
 msgid "Display Resolution"
-msgstr "Skärmorientering"
+msgstr "Skärmupplösning"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:94
 msgid ""
 "The display resolution is used to adapt line widths, font size, landable "
 "size and more."
 msgstr ""
+"Skärmupplösningen används för att anpassa linjebredd, font-storlek, "
+"banstorlek med mera."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:104
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:129
@@ -6372,7 +6391,7 @@ msgstr "Automatisk"
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:107
 #, c-format
 msgid "%d dpi"
-msgstr ""
+msgstr "%d dpi"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:115
 msgid "Events"
@@ -6404,6 +6423,8 @@ msgid ""
 "This determines how long menus will appear on screen if the user does not "
 "make any button presses or interacts with the computer."
 msgstr ""
+"Detta anger hur lång tid menyer visas på skärmen om användaren ej trycker på "
+"knappar eller interagerar med datorn."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:170
 #, no-c-format
@@ -6423,6 +6444,7 @@ msgstr "Text Input utseende"
 msgid ""
 "Determines how the user is prompted for text input (filename, teamcode etc.)"
 msgstr ""
+"Bestämmer hur textinmatning (filnamn, lag-koder etc.) visas för användaren"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:187
 #, no-c-format
@@ -6431,11 +6453,11 @@ msgstr "OS inställningar"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:193
 msgid "Haptic feedback"
-msgstr ""
+msgstr "Haptisk återkoppling"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:194
 msgid "Determines if haptic feedback like vibration is used."
-msgstr ""
+msgstr "Anger om haptisk återkoppling såsom vibration används."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:62
 #, no-c-format
@@ -6455,7 +6477,7 @@ msgstr "Omvänt porträtt"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:68
 #, no-c-format
 msgid "Reverse Landscape"
-msgstr ""
+msgstr "Omvänt landskap"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:74
 #, no-c-format
@@ -6470,7 +6492,7 @@ msgstr "8 Nedtill el. Höger"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:78
 #, no-c-format
 msgid "8 Bottom + Vario (Portrait)"
-msgstr ""
+msgstr "8 botten + vario (porträtt)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:80
 #, no-c-format
@@ -6480,22 +6502,22 @@ msgstr "8 Överst el. Vänster"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:82
 #, no-c-format
 msgid "8 Top + Vario (Portrait)"
-msgstr ""
+msgstr "8 top + vario (porträtt)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:84
 #, no-c-format
 msgid "9 Right + Vario (Landscape)"
-msgstr ""
+msgstr "9 höger + vario (landskap)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:86
 #, no-c-format
 msgid "9 Left + Right + Vario (Landscape)"
-msgstr ""
+msgstr "9 vänster + höger + vario (landskap)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:88
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "12 Left + 3 Right Vario (Landscape)"
-msgstr "Landskapsläge"
+msgstr "12 vänster + 3 höger vario (Landskap)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:90
 #, no-c-format
@@ -6510,32 +6532,32 @@ msgstr "12 Nedtill el. Höger"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:94
 #, no-c-format
 msgid "12 Top or Left"
-msgstr ""
+msgstr "12 topp eller vänster"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:96
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "16 Right (Landscape)"
-msgstr "Landskapsläge"
+msgstr "16 höger (landskap)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:98
 #, no-c-format
 msgid "24 Right (Landscape)"
-msgstr ""
+msgstr "24 höger (landskap)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:100
 #, no-c-format
 msgid "4 Top or Left"
-msgstr ""
+msgstr "4 topp eller vänster"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:102
 #, no-c-format
 msgid "4 Bottom or Right"
-msgstr ""
+msgstr "4 botten eller höger"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:108
 #, no-c-format
 msgid "Auto (follow infoboxes)"
-msgstr ""
+msgstr "Auto (följ infoboxar)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:110
 #, no-c-format
@@ -6560,12 +6582,12 @@ msgstr "Nederst till höger"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:118
 #, no-c-format
 msgid "Centre Top"
-msgstr ""
+msgstr "Centrera topp"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:120
 #, no-c-format
 msgid "Centre Bottom"
-msgstr ""
+msgstr "Centrera botten"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:125
 #, no-c-format
@@ -6575,7 +6597,7 @@ msgstr "Text"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:126
 #, no-c-format
 msgid "Show text on tabbed dialogs."
-msgstr ""
+msgstr "Visa text på flik-dialoger."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:127
 #, no-c-format
@@ -6585,7 +6607,7 @@ msgstr "Ikoner"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:128
 #, no-c-format
 msgid "Show icons on tabbed dialogs."
-msgstr ""
+msgstr "Visa ikoner på flik-dialoger."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:133
 #, no-c-format
@@ -6605,7 +6627,7 @@ msgstr "Övre vänster"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:136
 #, no-c-format
 msgid "Show status message boxes ina the top left corner."
-msgstr ""
+msgstr "Visa boxar för statusmeddelande i övre vänstra hörnet."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:142
 #, no-c-format
@@ -6615,7 +6637,7 @@ msgstr "Ruta"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:142
 #, no-c-format
 msgid "Draws boxes around each InfoBox."
-msgstr ""
+msgstr "Rita ram runt varje InfoBox."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:144
 #, no-c-format
@@ -6625,7 +6647,7 @@ msgstr "Flik"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:144
 #, no-c-format
 msgid "Draws a tab at the top of the InfoBox across the title."
-msgstr ""
+msgstr "Ritar en flik bakom titeln överst i InfoBoxen."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:146
 #, no-c-format
@@ -6654,6 +6676,8 @@ msgid ""
 "A list of possible InfoBox layouts. Do some trials to find the best for your "
 "screen size."
 msgstr ""
+"En lista på möjliga InfoBox layout. Testa för att se vad som bäst passar din "
+"skärmstorlek."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:179
 msgid "FLARM display"
@@ -6665,41 +6689,43 @@ msgstr "Välj en placering på FLARM displayen."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:184
 msgid "Tab dialog style"
-msgstr ""
+msgstr "Stil flik-dialog"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:187
 msgid "Message display"
-msgstr ""
+msgstr "Visning meddelande"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:192
 msgid "Inverse InfoBoxes"
-msgstr ""
+msgstr "Inverterade InfoBoxar"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:192
 msgid "If true, the InfoBoxes are white on black, otherwise black on white."
-msgstr ""
+msgstr "Om markerad är InfoBox text/bakgrund vit/svart. Annars svart/vit."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:197
 msgid "Colored InfoBoxes"
-msgstr ""
+msgstr "Färgade InfoBoxar"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:198
 msgid ""
 "If true, certain InfoBoxes will have coloured text.  For example, the active "
 "waypoint InfoBox will be blue when the glider is above final glide."
 msgstr ""
+"Om markerad kommer vissa InfoBoxar ha färgad text.  Exempelvis InfoBox för "
+"aktiv brytpunkt kommer bli blå när farkosten är överstiger finalglidet."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:205
 msgid "InfoBox border"
-msgstr ""
+msgstr "InfoBox ram"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:210
 msgid "Show Menubutton"
-msgstr ""
+msgstr "Visa menyknapp"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:210
 msgid "Show the Menubutton"
-msgstr ""
+msgstr "Visa menyknappen"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:56
 #, no-c-format
@@ -6716,7 +6742,7 @@ msgstr "Tidsstegring cruise"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:71
 msgid "This is the time interval between logged points when not circling."
-msgstr ""
+msgstr "Tidsintervall för loggpunkter vid glidflyg (ej kurvning)."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:75
 msgid "Time step circling"
@@ -6724,7 +6750,7 @@ msgstr "Tidsstegring kurvläge"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:76
 msgid "This is the time interval between logged points when circling."
-msgstr ""
+msgstr "Tidsintervall för loggpunkter vid kurvning."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:80
 msgid "Auto. logger"
@@ -6735,6 +6761,8 @@ msgid ""
 "Enables the automatic starting and stopping of logger on takeoff and landing "
 "respectively. Disable when flying paragliders."
 msgstr ""
+"Aktiverar automatisk start och stopp av logger på start och landning. "
+"Inaktivera vid skärmflygning."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:86
 msgid "NMEA logger"
@@ -6764,12 +6792,12 @@ msgstr "Logg ID"
 #, no-c-format
 msgid ""
 "The moving map display will be rotated so the glider's track is oriented up."
-msgstr ""
+msgstr "Den rörliga kartan roteras så att farkostens spår orienteras uppåt."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:46
 #, no-c-format
 msgid "Heading up"
-msgstr ""
+msgstr "Färdriktning uppåt"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:47
 #, no-c-format
@@ -6777,6 +6805,7 @@ msgid ""
 "The moving map display will be rotated so the glider's heading is oriented "
 "up."
 msgstr ""
+"Den rörliga kartan roteras så att farkostens färdriktning förblir uppåt."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:49
 #, no-c-format
@@ -6784,6 +6813,8 @@ msgid ""
 "The moving map display will always be orientated north to south and the "
 "glider icon will be rotated to show its course."
 msgstr ""
+"Den rörliga kartan orienteras med nord uppåt och farkostens ikon roteras för "
+"att visa dessa färdriktning."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:50
 #, no-c-format
@@ -6795,7 +6826,7 @@ msgstr "Mål uppåt"
 msgid ""
 "The moving map display will be rotated so the navigation target is oriented "
 "up."
-msgstr ""
+msgstr "Den rörliga kartan roteras så att navigationsmålet är uppåt."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:52
 #, no-c-format
@@ -6808,11 +6839,13 @@ msgid ""
 "The moving map display will be rotated so the wind is always oriented up to "
 "down. (can be useful for wave flying)"
 msgstr ""
+"Den rörliga kartan roteras så att vindriktningen är uppifrån och ned. (Kan "
+"vara användbart vid våg-flygning)"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:58
 #, no-c-format
 msgid "Disable adjustments."
-msgstr ""
+msgstr "Inaktivera justeringar."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:60
 #, no-c-format
@@ -6833,11 +6866,11 @@ msgstr "Använd nuvarande målvägpunkt som bas."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:111
 msgid "Cruise orientation"
-msgstr ""
+msgstr "Orientering glidflyg"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:112
 msgid "Determines how the screen is rotated with the glider"
-msgstr ""
+msgstr "Anger hur skärmen roterar med farkosten"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:117
 msgid "Circling orientation"
@@ -6845,7 +6878,7 @@ msgstr "Orientering kurvning"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:118
 msgid "Determines how the screen is rotated with the glider while circling"
-msgstr ""
+msgstr "Anger hur skärmen roterar med farkosten vid kurvning"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:123
 msgid "Circling zoom"
@@ -6865,11 +6898,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:128
 msgid "Determines what is used to shift the glider from the map center"
-msgstr ""
+msgstr "Anger vad som används för att flytta farkosten från kartcentrum"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:134
 msgid "Glider position offset"
-msgstr ""
+msgstr "Farkost position offset"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:135
 msgid ""
@@ -7077,9 +7110,9 @@ msgid "Disables the reach display."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:162
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terrain line"
-msgstr "Terräng på"
+msgstr "Terränglinje"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:163
 #, no-c-format
@@ -7087,9 +7120,9 @@ msgid "Draws a dashed line at the terrain glide reach."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:164
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terrain shade"
-msgstr "Terräng höjd"
+msgstr "Terrängskugga"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:165
 #, no-c-format
@@ -7097,9 +7130,9 @@ msgid "Shades terrain outside glide reach."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:166
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Working line"
-msgstr "Arbetsområde"
+msgstr "Fungerande GR-linje"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:167
 #, no-c-format
@@ -7107,9 +7140,9 @@ msgid "Draws a dashed line at the working glide reach."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:168
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Working line, terrain line"
-msgstr "Räckviddsområde"
+msgstr "Fungerande GR-linje, terräng"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:169
 #, no-c-format
@@ -7250,8 +7283,8 @@ msgid ""
 "Primary waypoints file.  Supported file types are Cambridge/WinPilot files (."
 "dat), Zander files (.wpz) or SeeYou files (.cup)."
 msgstr ""
-"Primär fil för vägpunkter. Supporterade filtyper är Cambridge/WinPilot filer "
-"(.dat), Zander files (.wpz) eller SeeYou files (.cup)."
+"Primär brytpunktsfil. Supporterade filtyper är Cambridge/WinPilot filer (."
+"dat), Zander files (.wpz) eller SeeYou files (.cup)."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:78
 msgid "More waypoints"
@@ -8304,9 +8337,8 @@ msgid "Download the position of your friends live from the SkyLines server."
 msgstr "Hämta dina vänners positioner i realtid från SkyLines-servern."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:213
-#, fuzzy
 msgid "Show nearby traffic"
-msgstr "Kort snigelspår"
+msgstr "Visa nära trafik"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:214
 msgid ""
@@ -8611,7 +8643,7 @@ msgstr ""
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:64
 msgid "Goal"
-msgstr ""
+msgstr "Mål"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:71
 msgid "Out and return"
@@ -8685,7 +8717,7 @@ msgstr ""
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:226
 msgid "BGA Start Sector"
-msgstr ""
+msgstr "BGA startsektor"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:242
 msgid "Enter a task name"
@@ -8735,7 +8767,6 @@ msgid "V ach"
 msgstr "Uppnådd Hast"
 
 #: src/Dialogs/Task/TargetDialog.cpp:458
-#, fuzzy
 msgid ""
 "AA Speed - Assigned Area Task average speed achievable around target points "
 "remaining in minimum AAT time."
@@ -8783,9 +8814,8 @@ msgid "Credits"
 msgstr "Tack till"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:70
-#, fuzzy
 msgid "Audio vario"
-msgstr "Ljudvario"
+msgstr "Variometerljud"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:71
 msgid "Emulate the sound of an electronic vario."
@@ -8802,27 +8832,24 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:84
-#, fuzzy
 msgid "Min. Frequency"
-msgstr "Radiofrekvens"
+msgstr "Min. frekvens"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:85
 msgid "The tone frequency that is played at maximum sink rate."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:90
-#, fuzzy
 msgid "Zero Frequency"
-msgstr "Radiofrekvens"
+msgstr "Noll-frekvens"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:91
 msgid "The tone frequency that is played at zero climb rate."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:96
-#, fuzzy
 msgid "Max. Frequency"
-msgstr "Radiofrekvens"
+msgstr "Max. frekvens"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:97
 msgid "The tone frequency that is played at maximum climb rate."
@@ -8849,14 +8876,12 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/AudioConfigPanel.cpp:60
-#, fuzzy
 msgid "Master Volume"
-msgstr "Volym"
+msgstr "Huvudvolym"
 
 #: src/Dialogs/Weather/PCMetDialog.cpp:68
-#, fuzzy
 msgid "Failed to download file."
-msgstr "Kunde inte läsa in filen."
+msgstr "Misslyckades att ladda ner fil."
 
 #: src/Dialogs/Weather/NOAAList.cpp:121 src/Dialogs/Weather/NOAADetails.cpp:72
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:227
@@ -8887,14 +8912,12 @@ msgid "This function is not available on your platform yet."
 msgstr ""
 
 #: src/Monitor/AirspaceWarningMonitor.cpp:62
-#, fuzzy
 msgid "Inside airspace"
-msgstr "Luftrum"
+msgstr "Innanför luftrum"
 
 #: src/Monitor/AirspaceWarningMonitor.cpp:64
-#, fuzzy
 msgid "Near airspace"
-msgstr "Närmsta luftrum i vertikal led"
+msgstr "Nära luftrum"
 
 #: src/Monitor/TaskConstraintsMonitor.cpp:57
 msgid "Maximum start speed exceeded"
@@ -9722,6 +9745,8 @@ msgid ""
 "Setup\n"
 "System"
 msgstr ""
+"Inställningar\n"
+"System"
 
 #: Data/Input/default.xci:726
 msgid "Stored to EEPROM"
