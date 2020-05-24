@@ -1072,6 +1072,7 @@ $(eval $(call link-program,ReadProfileInt,READ_PROFILE_INT))
 RUN_MD5_SOURCES = \
 	$(SRC)/Util/MD5.cpp \
 	$(TEST_SRC_DIR)/RunMD5.cpp
+RUN_MD5_DEPENDS = IO OS UTIL
 $(eval $(call link-program,RunMD5,RUN_MD5))
 
 RUN_SHA256_SOURCES = \

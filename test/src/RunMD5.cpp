@@ -21,36 +21,44 @@ Copyright_License {
 }
 */
 
-#include "Util/MD5.hpp"
+#include "IO/FileReader.hxx"
 #include "OS/Args.hpp"
+#include "Util/MD5.hpp"
+#include "Util/PrintException.hxx"
 
 #include <stdio.h>
 
+static void
+Feed(Reader &r, MD5 &state)
+{
+  while (true) {
+    char buffer[65536];
+    size_t nbytes = r.Read(buffer, sizeof(buffer));
+    if (nbytes == 0)
+      break;
+
+    state.Append(buffer, nbytes);
+  }
+}
+
+static void
+Feed(Path path, MD5 &state)
+{
+  FileReader r(path);
+  Feed(r, state);
+}
+
 int
 main(int argc, char **argv)
-{
+try {
   Args args(argc, argv, "PATH");
-  const char *path = args.ExpectNext();
+  const auto path = args.ExpectNextPath();
   args.ExpectEnd();
-
-  FILE *file = fopen(path, "rb");
-  if (file == NULL) {
-    fprintf(stderr, "Failed to open file\n");
-    return EXIT_FAILURE;
-  }
 
   MD5 md5;
   md5.Initialise();
 
-  while (!feof(file)) {
-    int ch = fgetc(file);
-    if (ch == EOF)
-      break;
-
-    md5.Append((uint8_t)ch);
-  }
-
-  fclose(file);
+  Feed(path, md5);
 
   md5.Finalize();
 
@@ -59,4 +67,7 @@ main(int argc, char **argv)
 
   puts(digest);
   return EXIT_SUCCESS;
+} catch (...) {
+  PrintException(std::current_exception());
+  return EXIT_FAILURE;
 }
