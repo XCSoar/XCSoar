@@ -25,6 +25,7 @@ Copyright_License {
 #include "FileRepository.hpp"
 #include "IO/LineReader.hpp"
 #include "Util/StringStrip.hxx"
+#include "Util/HexString.hpp"
 
 static const char *
 ParseLine(char *line)
@@ -102,6 +103,12 @@ ParseFileRepository(FileRepository &repository, NLineReader &reader)
       int year, month, day;
       sscanf(value, "%04u-%02u-%02u", &year, &month, &day);
       file.update_date = BrokenDate(year, month, day);
+    } else if (StringIsEqual(name, "sha256")) {
+      try {
+        file.sha256_hash = ParseHexString<32>(std::string_view(value));
+      } catch (std::exception &e) {
+        // Parsing failed, sha256_hash stays zeroed
+      }
     }
   }
 

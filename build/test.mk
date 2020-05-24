@@ -123,10 +123,16 @@ TEST_NAMES = \
 	TestIGCFilenameFormatter \
 	TestLXNToIGC \
 	TestLeastSquares \
+	TestHexString \
 	TestThermalBand
 
 
 TESTS = $(call name-to-bin,$(TEST_NAMES))
+
+TEST_HEX_STRING_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestHexString.cpp
+$(eval $(call link-program,TestHexString,TEST_HEX_STRING))
 
 TEST_CRC_SOURCES = \
 	$(SRC)/Util/CRC.cpp \

@@ -54,6 +54,12 @@ struct AvailableFile {
 
   BrokenDate update_date;
 
+  /**
+  * The SHA256 hash of the contents of this file.
+  * Zeroed if no hash is available.
+  */
+  std::array<std::byte, 32> sha256_hash;
+
   bool IsEmpty() const {
     return name.empty();
   }
@@ -62,12 +68,22 @@ struct AvailableFile {
     return !name.empty() && !uri.empty();
   }
 
+  bool HasHash() const {
+    for (std::size_t i = 0; i < sha256_hash.size(); i++) {
+      if (sha256_hash[i] != std::byte{0})
+        return true;
+    }
+
+    return false;
+  }
+
   void Clear() {
     name.clear();
     uri.clear();
     area.clear();
     type = FileType::UNKNOWN;
     update_date = BrokenDate::Invalid();
+    sha256_hash.fill(std::byte{0});
   }
 
   const char *GetName() const {
