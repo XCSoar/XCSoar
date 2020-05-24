@@ -89,6 +89,16 @@ openssh = AutotoolsProject(
     use_destdir=True,
 )
 
+libsodium = AutotoolsProject(
+    'https://download.libsodium.org/libsodium/releases/libsodium-1.0.18.tar.gz',
+    "https://github.com/jedisct1/libsodium/releases/download/1.0.18-RELEASE/libsodium-1.0.18.tar.gz",
+    '6f504490b342a4f8a4c4a02fc9b866cbef8622d5df4e5452b46be121e46636c1',
+    'include/sodium/crypto_hash_sha256.h',
+    [
+        '--disable-shared', '--enable-static',
+    ],
+)
+
 zlib = ZlibProject(
     'http://zlib.net/zlib-1.2.11.tar.xz',
     'http://downloads.sourceforge.net/project/libpng/zlib/1.2.11/zlib-1.2.11.tar.xz',

@@ -739,7 +739,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunXMLParser \
 	ReadMO \
 	ReadProfileString ReadProfileInt \
-	RunMD5 \
+	RunMD5 RunSHA256 \
 	ReadGRecord VerifyGRecord AppendGRecord FixGRecord \
 	AddChecksum \
 	KeyCodeDumper \
@@ -1073,6 +1073,11 @@ RUN_MD5_SOURCES = \
 	$(SRC)/Logger/MD5.cpp \
 	$(TEST_SRC_DIR)/RunMD5.cpp
 $(eval $(call link-program,RunMD5,RUN_MD5))
+
+RUN_SHA256_SOURCES = \
+	$(TEST_SRC_DIR)/RunSHA256.cpp
+RUN_SHA256_DEPENDS = LIBSODIUM IO OS UTIL
+$(eval $(call link-program,RunSHA256,RUN_SHA256))
 
 READ_GRECORD_SOURCES = \
 	$(SRC)/Logger/GRecord.cpp \

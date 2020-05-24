@@ -126,6 +126,7 @@ include $(topdir)/build/sdl.mk
 include $(topdir)/build/alsa.mk
 include $(topdir)/build/zlib.mk
 include $(topdir)/build/zzip.mk
+include $(topdir)/build/libcrypto.mk
 include $(topdir)/build/jasper.mk
 include $(topdir)/build/libport.mk
 include $(topdir)/build/driver.mk

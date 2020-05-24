@@ -75,11 +75,13 @@ from build.libs import *
 if 'mingw32' in actual_host_triplet:
     thirdparty_libs = [
         zlib,
+        libsodium,
         curl,
         lua,
     ]
 elif re.match('(arm.*|aarch64)-apple-darwin', actual_host_triplet) is not None:
     thirdparty_libs = [
+        libsodium,
         curl,
         lua,
         proj,
@@ -89,6 +91,7 @@ elif re.match('(arm.*|aarch64)-apple-darwin', actual_host_triplet) is not None:
     ]
 elif 'apple-darwin' in actual_host_triplet:
     thirdparty_libs = [
+        libsodium,
         lua,
         proj,
         libtiff,
@@ -97,6 +100,7 @@ elif 'apple-darwin' in actual_host_triplet:
     ]
 elif target == 'ANDROID':
     thirdparty_libs = [
+        libsodium,
         curl,
         lua,
         proj,
@@ -106,6 +110,7 @@ elif target == 'ANDROID':
 elif toolchain_host_triplet.endswith('-musleabihf'):
     thirdparty_libs = [
         zlib,
+        libsodium,
         freetype,
         curl,
         libpng,
@@ -120,6 +125,7 @@ else:
         musl,
         libstdcxx_musl_headers,
         zlib,
+        libsodium,
         freetype,
         curl,
         libpng,

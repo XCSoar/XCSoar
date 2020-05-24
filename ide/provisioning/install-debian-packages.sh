@@ -32,6 +32,7 @@ echo
 echo Installing dependencies for the Linux target...
 apt-get install $APTOPTS make g++ \
   zlib1g-dev \
+  libsodium-dev \
   libfreetype6-dev \
   libpng-dev libjpeg-dev \
   libtiff5-dev libgeotiff-dev \
