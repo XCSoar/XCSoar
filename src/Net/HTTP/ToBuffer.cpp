@@ -46,9 +46,10 @@ public:
     return received;
   }
 
-  void ResponseReceived(int64_t content_length) override {
+  bool ResponseReceived(int64_t content_length) noexcept override {
     if (content_length > 0)
       env.SetProgressRange(content_length);
+    return true;
   };
 
   bool DataReceived(const void *data, size_t length) noexcept override {

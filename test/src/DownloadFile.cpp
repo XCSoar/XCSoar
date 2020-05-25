@@ -42,7 +42,8 @@ class MyResponseHandler final : public Net::ResponseHandler {
 public:
   explicit MyResponseHandler(FILE *_file):file(_file) {}
 
-  void ResponseReceived(int64_t content_length) override {
+  bool ResponseReceived(int64_t content_length) noexcept override {
+    return true;
   }
 
   bool DataReceived(const void *data, size_t length) noexcept override {

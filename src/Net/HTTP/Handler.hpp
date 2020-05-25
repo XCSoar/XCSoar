@@ -36,8 +36,9 @@ namespace Net {
      *
      * @param content_length the total length of the response body or -1 if
      * the server did not announce a length
+     * @return false if the handler wishes to receive no more data
      */
-    virtual void ResponseReceived(int64_t content_length) = 0;
+    virtual bool ResponseReceived(int64_t content_length) noexcept = 0;
   };
 }
 
