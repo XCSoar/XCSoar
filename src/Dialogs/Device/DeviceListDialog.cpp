@@ -231,7 +231,7 @@ private:
   virtual void OnGPSUpdate(const MoreData &basic) override;
 
   /* virtual methods from class PortListener */
-  void PortStateChanged() override {
+  void PortStateChanged() noexcept override {
     port_state_notify.SendNotification();
   }
 };

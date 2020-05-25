@@ -148,7 +148,7 @@ MultipleDevices::RemovePortListener(PortListener &listener)
 }
 
 void
-MultipleDevices::PortStateChanged()
+MultipleDevices::PortStateChanged() noexcept
 {
   const std::lock_guard<Mutex> lock(listeners_mutex);
 
@@ -157,7 +157,7 @@ MultipleDevices::PortStateChanged()
 }
 
 void
-MultipleDevices::PortError(const char *msg)
+MultipleDevices::PortError(const char *msg) noexcept
 {
   const std::lock_guard<Mutex> lock(listeners_mutex);
 

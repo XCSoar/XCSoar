@@ -1177,14 +1177,14 @@ DeviceDescriptor::OnJobFinished() noexcept
 }
 
 void
-DeviceDescriptor::PortStateChanged()
+DeviceDescriptor::PortStateChanged() noexcept
 {
   if (port_listener != nullptr)
     port_listener->PortStateChanged();
 }
 
 void
-DeviceDescriptor::PortError(const char *msg)
+DeviceDescriptor::PortError(const char *msg) noexcept
 {
   {
     TCHAR buffer[64];

@@ -100,14 +100,14 @@ DebugPort::Open(boost::asio::io_context &io_context,
 }
 
 void
-DebugPort::PortStateChanged()
+DebugPort::PortStateChanged() noexcept
 {
   if (listener != nullptr)
     listener->PortStateChanged();
 }
 
 void
-DebugPort::PortError(const char *msg)
+DebugPort::PortError(const char *msg) noexcept
 {
   fprintf(stderr, "Port error: %s\n", msg);
 

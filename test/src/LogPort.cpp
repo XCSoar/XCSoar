@@ -44,7 +44,7 @@ public:
   MyListener(boost::asio::io_service &_io_service, Port &_port)
     :io_service(_io_service), port(_port) {}
 
-  void PortStateChanged() override {
+  void PortStateChanged() noexcept override {
     if (port.GetState() == PortState::FAILED)
       io_service.stop();
   }

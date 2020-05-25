@@ -536,8 +536,8 @@ private:
   void OnJobFinished() noexcept;
 
   /* virtual methods from class PortListener */
-  void PortStateChanged() override;
-  void PortError(const char *msg) override;
+  void PortStateChanged() noexcept override;
+  void PortError(const char *msg) noexcept override;
 
   /* virtual methods from DataHandler  */
   bool DataReceived(const void *data, size_t length) noexcept override;
