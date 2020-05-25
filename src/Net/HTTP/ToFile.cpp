@@ -72,7 +72,7 @@ public:
 
     received += length;
 
-    env.SetProgressRange(received);
+    env.SetProgressPosition(received);
   };
 };
 
