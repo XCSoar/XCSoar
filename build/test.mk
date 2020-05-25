@@ -979,7 +979,7 @@ RUN_DOWNLOAD_TO_FILE_SOURCES = \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/RunDownloadToFile.cpp
-RUN_DOWNLOAD_TO_FILE_DEPENDS = LIBNET UTIL
+RUN_DOWNLOAD_TO_FILE_DEPENDS = LIBNET IO OS UTIL
 $(eval $(call link-program,RunDownloadToFile,RUN_DOWNLOAD_TO_FILE))
 
 RUN_NOAA_DOWNLOADER_SOURCES = \

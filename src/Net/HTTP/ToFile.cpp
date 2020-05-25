@@ -25,14 +25,13 @@ Copyright_License {
 #include "Request.hpp"
 #include "Handler.hpp"
 #include "Operation/Operation.hpp"
-#include "OS/FileUtil.hpp"
+#include "IO/FileOutputStream.hxx"
 #include "Crypto/SHA256.hxx"
 
 #include <cassert>
-#include <stdio.h>
 
 class DownloadToFileHandler final : public Net::ResponseHandler {
-  FILE *file;
+  OutputStream &out;
 
   SHA256State sha256;
 
@@ -45,9 +44,9 @@ class DownloadToFileHandler final : public Net::ResponseHandler {
   bool error = false;
 
 public:
-  DownloadToFileHandler(FILE *_file, bool _do_sha256,
+  DownloadToFileHandler(OutputStream &_out, bool _do_sha256,
                         OperationEnvironment &_env) noexcept
-    :file(_file), env(_env), do_sha256(_do_sha256)
+    :out(_out), env(_env), do_sha256(_do_sha256)
   {
   }
 
@@ -71,8 +70,9 @@ public:
     if (do_sha256)
       sha256.Update({data, length});
 
-    size_t written = fwrite(data, 1, length, file);
-    if (written != (size_t)length) {
+    try {
+      out.Write(data, length);
+    } catch (...) {
       error = true;
       return false;
     }
@@ -87,13 +87,12 @@ public:
 static bool
 DownloadToFile(Net::Session &session, const char *url,
                const char *username, const char *password,
-               FILE *file, std::array<std::byte, 32> *sha256,
+               OutputStream &out, std::array<std::byte, 32> *sha256,
                OperationEnvironment &env)
 {
   assert(url != nullptr);
-  assert(file != nullptr);
 
-  DownloadToFileHandler handler(file, sha256 != nullptr, env);
+  DownloadToFileHandler handler(out, sha256 != nullptr, env);
   Net::Request request(session, handler, url);
   if (username != nullptr)
     request.SetBasicAuth(username, password);
@@ -117,25 +116,14 @@ Net::DownloadToFile(Session &session, const char *url,
   assert(url != nullptr);
   assert(path != nullptr);
 
-  /* make sure we create a new file */
-  if (!File::Delete(path) && File::ExistsAny(path))
-    /* failed to delete the old file */
+  FileOutputStream file(path);
+
+  if (!::DownloadToFile(session, url, username, password,
+                        file, sha256, env))
     return false;
 
-  /* now create the new file */
-  FILE *file = _tfopen(path.c_str(), _T("wb"));
-  if (file == nullptr)
-    return false;
-
-  bool success = ::DownloadToFile(session, url, username, password,
-                                  file, sha256, env);
-  success &= fclose(file) == 0;
-
-  if (!success)
-    /* delete the partial file on error */
-    File::Delete(path);
-
-  return success;
+  file.Commit();
+  return true;
 }
 
 void
