@@ -51,11 +51,7 @@ try {
   ConsoleOperationEnvironment env;
 
   Net::Session session;
-  if (!Net::DownloadToFile(session, url, path,
-                           &hash, env)) {
-    fprintf(stderr, "Error\n");
-    return EXIT_FAILURE;
-  }
+  Net::DownloadToFile(session, url, path, &hash, env);
 
   HexPrint({&hash, sizeof(hash)});
   printf("\n");

@@ -268,9 +268,8 @@ DownloadToFileTransaction(Net::Session &session,
                           std::array<std::byte, 32> *sha256, OperationEnvironment &env)
 {
   FileTransaction transaction(path);
-  return DownloadToFile(session, url, transaction.GetTemporaryPath(),
-                        sha256, env) &&
-    transaction.Commit();
+  DownloadToFile(session, url, transaction.GetTemporaryPath(), sha256, env);
+  return transaction.Commit();
 }
 
 inline void

@@ -193,7 +193,7 @@ RASPSettingsPanel::Download() noexcept
 
     FileTransaction transaction(path);
     Net::DownloadToFileJob job(session, url, transaction.GetTemporaryPath());
-    if (!runner.Run(job) || !job.WasSuccessful())
+    if (!runner.Run(job))
       return;
 
     transaction.Commit();

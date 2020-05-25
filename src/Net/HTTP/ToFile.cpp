@@ -39,9 +39,9 @@ class DownloadToFileHandler final : public Net::ResponseHandler {
 
   OperationEnvironment &env;
 
-  const bool do_sha256;
+  std::exception_ptr error;
 
-  bool error = false;
+  const bool do_sha256;
 
 public:
   DownloadToFileHandler(OutputStream &_out, bool _do_sha256,
@@ -50,8 +50,9 @@ public:
   {
   }
 
-  bool HasFailed() const noexcept {
-    return error;
+  void CheckError() const {
+    if (error)
+      std::rethrow_exception(error);
   }
 
   auto GetSHA256() noexcept {
@@ -73,7 +74,7 @@ public:
     try {
       out.Write(data, length);
     } catch (...) {
-      error = true;
+      error = std::current_exception();
       return false;
     }
 
@@ -84,7 +85,7 @@ public:
   }
 };
 
-static bool
+static void
 DownloadToFile(Net::Session &session, const char *url,
                const char *username, const char *password,
                OutputStream &out, std::array<std::byte, 32> *sha256,
@@ -97,17 +98,24 @@ DownloadToFile(Net::Session &session, const char *url,
   if (username != nullptr)
     request.SetBasicAuth(username, password);
 
-  request.Send(10000);
-  if (handler.HasFailed())
-    return false;
+  try {
+    request.Send(10000);
+  } catch (...) {
+    if (env.IsCancelled())
+      /* cancelled by user, not an error: ignore the CURL error */
+      return;
+
+    /* see if a pending exception needs to be rethrown */
+    handler.CheckError();
+    /* no - rethrow the original exception we just caught here */
+    throw;
+  }
 
   if (sha256 != nullptr)
     *sha256 = handler.GetSHA256();
-
-  return true;
 }
 
-bool
+void
 Net::DownloadToFile(Session &session, const char *url,
                     const char *username, const char *password,
                     Path path, std::array<std::byte, 32> *sha256,
@@ -117,18 +125,13 @@ Net::DownloadToFile(Session &session, const char *url,
   assert(path != nullptr);
 
   FileOutputStream file(path);
-
-  if (!::DownloadToFile(session, url, username, password,
-                        file, sha256, env))
-    return false;
-
+  ::DownloadToFile(session, url, username, password,
+                   file, sha256, env);
   file.Commit();
-  return true;
 }
 
 void
 Net::DownloadToFileJob::Run(OperationEnvironment &env)
 {
-  success = DownloadToFile(session, url, username, password,
-                           path, &sha256, env);
+  DownloadToFile(session, url, username, password, path, &sha256, env);
 }

@@ -38,22 +38,23 @@ namespace Net {
   /**
    * Download a URL into the specified file.
    *
+   * Throws on error.
+   *
    * @param md5_digest an optional buffer with at least 33 characters
    * which will contain the hex MD5 digest after returning
-   * @return true on success, false on error
    */
-  bool DownloadToFile(Session &session, const char *url,
+  void DownloadToFile(Session &session, const char *url,
                       const char *username, const char *password,
                       Path path, std::array<std::byte, 32> *sha256,
                       OperationEnvironment &env);
 
-  static inline bool
+  static inline void
   DownloadToFile(Session &session, const char *url,
                  Path path, std::array<std::byte, 32> *sha256,
                  OperationEnvironment &env)
   {
-    return DownloadToFile(session, url, nullptr, nullptr,
-                          path, sha256, env);
+    DownloadToFile(session, url, nullptr, nullptr,
+                   path, sha256, env);
   }
 
   class DownloadToFileJob : public Job {
@@ -62,19 +63,14 @@ namespace Net {
     const char *username = nullptr, *password = nullptr;
     const Path path;
     std::array<std::byte, 32> sha256;
-    bool success;
 
   public:
     DownloadToFileJob(Session &_session, const char *_url, Path _path)
-      :session(_session), url(_url), path(_path), success(false) {}
+      :session(_session), url(_url), path(_path) {}
 
     void SetBasicAuth(const char *_username, const char *_password) {
       username = _username;
       password = _password;
-    }
-
-    bool WasSuccessful() const {
-      return success;
     }
 
     const auto &GetSHA256() const {
