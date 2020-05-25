@@ -265,11 +265,11 @@ private:
 static bool
 DownloadToFileTransaction(Net::Session &session,
                           const char *url, Path path,
-                          char *md5_digest, OperationEnvironment &env)
+                          std::array<std::byte, 32> *sha256, OperationEnvironment &env)
 {
   FileTransaction transaction(path);
   return DownloadToFile(session, url, transaction.GetTemporaryPath(),
-                        md5_digest, env) &&
+                        sha256, env) &&
     transaction.Commit();
 }
 

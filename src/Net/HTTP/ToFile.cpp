@@ -26,7 +26,7 @@ Copyright_License {
 #include "Handler.hpp"
 #include "Operation/Operation.hpp"
 #include "OS/FileUtil.hpp"
-#include "Util/MD5.hpp"
+#include "Crypto/SHA256.hxx"
 
 #include <cassert>
 #include <stdio.h>
@@ -36,26 +36,25 @@ class CancelDownloadToFile {};
 class DownloadToFileHandler final : public Net::ResponseHandler {
   FILE *file;
 
-  MD5 md5;
+  SHA256State sha256;
 
   size_t received = 0;
 
   OperationEnvironment &env;
 
-  bool do_md5;
+  const bool do_sha256;
 
 public:
-  DownloadToFileHandler(FILE *_file, bool _do_md5, OperationEnvironment &_env)
-    :file(_file), env(_env), do_md5(_do_md5) {
-    if (do_md5)
-      md5.Initialise();
+  DownloadToFileHandler(FILE *_file, bool _do_sha256,
+                        OperationEnvironment &_env) noexcept
+    :file(_file), env(_env), do_sha256(_do_sha256)
+  {
   }
 
-  void GetDigest(char *digest) {
-    assert(do_md5);
+  auto GetSHA256() noexcept {
+    assert(do_sha256);
 
-    md5.Finalize();
-    md5.GetDigest(digest);
+    return sha256.Final();
   }
 
   void ResponseReceived(int64_t content_length) override {
@@ -64,8 +63,8 @@ public:
   };
 
   void DataReceived(const void *data, size_t length) override {
-    if (do_md5)
-      md5.Append(data, length);
+    if (do_sha256)
+      sha256.Update({data, length});
 
     size_t written = fwrite(data, 1, length, file);
     if (written != (size_t)length)
@@ -80,13 +79,13 @@ public:
 static bool
 DownloadToFile(Net::Session &session, const char *url,
                const char *username, const char *password,
-               FILE *file, char *md5_digest,
+               FILE *file, std::array<std::byte, 32> *sha256,
                OperationEnvironment &env)
 {
   assert(url != nullptr);
   assert(file != nullptr);
 
-  DownloadToFileHandler handler(file, md5_digest != nullptr, env);
+  DownloadToFileHandler handler(file, sha256 != nullptr, env);
   Net::Request request(session, handler, url);
   if (username != nullptr)
     request.SetBasicAuth(username, password);
@@ -97,8 +96,8 @@ DownloadToFile(Net::Session &session, const char *url,
     return false;
   }
 
-  if (md5_digest != nullptr)
-    handler.GetDigest(md5_digest);
+  if (sha256 != nullptr)
+    *sha256 = handler.GetSHA256();
 
   return true;
 }
@@ -106,7 +105,7 @@ DownloadToFile(Net::Session &session, const char *url,
 bool
 Net::DownloadToFile(Session &session, const char *url,
                     const char *username, const char *password,
-                    Path path, char *md5_digest,
+                    Path path, std::array<std::byte, 32> *sha256,
                     OperationEnvironment &env)
 {
   assert(url != nullptr);
@@ -123,7 +122,7 @@ Net::DownloadToFile(Session &session, const char *url,
     return false;
 
   bool success = ::DownloadToFile(session, url, username, password,
-                                  file, md5_digest, env);
+                                  file, sha256, env);
   success &= fclose(file) == 0;
 
   if (!success)
@@ -137,5 +136,5 @@ void
 Net::DownloadToFileJob::Run(OperationEnvironment &env)
 {
   success = DownloadToFile(session, url, username, password,
-                           path, md5_digest,env);
+                           path, &sha256, env);
 }

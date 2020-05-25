@@ -25,8 +25,17 @@ Copyright_License {
 #include "Net/HTTP/Session.hpp"
 #include "OS/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
+#include "Util/ConstBuffer.hxx"
 
 #include <stdio.h>
+
+static void
+HexPrint(ConstBuffer<void> _b) noexcept
+{
+  const auto b = ConstBuffer<uint8_t>::FromVoid(_b);
+  for (uint8_t i : b)
+    printf("%02x", i);
+}
 
 int main(int argc, char **argv)
 {
@@ -35,17 +44,18 @@ int main(int argc, char **argv)
   const auto path = args.ExpectNextPath();
   args.ExpectEnd();
 
-  char md5_digest[33];
+  std::array<std::byte, 32> hash;
 
   ConsoleOperationEnvironment env;
 
   Net::Session session;
   if (!Net::DownloadToFile(session, url, path,
-                           md5_digest, env)) {
+                           &hash, env)) {
     fprintf(stderr, "Error\n");
     return EXIT_FAILURE;
   }
 
-  puts(md5_digest);
+  HexPrint({&hash, sizeof(hash)});
+  printf("\n");
   return EXIT_SUCCESS;
 }

@@ -27,6 +27,9 @@ Copyright_License {
 #include "Job/Job.hpp"
 #include "OS/Path.hpp"
 
+#include <array>
+#include <cstddef> // for std::byte
+
 class OperationEnvironment;
 
 namespace Net {
@@ -41,16 +44,16 @@ namespace Net {
    */
   bool DownloadToFile(Session &session, const char *url,
                       const char *username, const char *password,
-                      Path path, char *md5_digest,
+                      Path path, std::array<std::byte, 32> *sha256,
                       OperationEnvironment &env);
 
   static inline bool
   DownloadToFile(Session &session, const char *url,
-                 Path path, char *md5_digest,
+                 Path path, std::array<std::byte, 32> *sha256,
                  OperationEnvironment &env)
   {
     return DownloadToFile(session, url, nullptr, nullptr,
-                          path, md5_digest, env);
+                          path, sha256, env);
   }
 
   class DownloadToFileJob : public Job {
@@ -58,7 +61,7 @@ namespace Net {
     const char *url;
     const char *username = nullptr, *password = nullptr;
     const Path path;
-    char md5_digest[33];
+    std::array<std::byte, 32> sha256;
     bool success;
 
   public:
@@ -74,8 +77,8 @@ namespace Net {
       return success;
     }
 
-    const char *GetMD5Digest() const {
-      return md5_digest;
+    const auto &GetSHA256() const {
+      return sha256;
     }
 
     virtual void Run(OperationEnvironment &env);
