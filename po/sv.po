@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-05-25 19:41+0000\n"
+"PO-Revision-Date: 2020-05-28 14:41+0000\n"
 "Last-Translator: Markus Bagge <markus.bagge@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/sv/>\n"
@@ -3139,7 +3139,7 @@ msgstr "Kryssning"
 #: src/InfoBoxes/InfoBoxSettings.cpp:81
 #, no-c-format
 msgid "FinalGlide"
-msgstr "FinalGlidning"
+msgstr "Finalglid"
 
 #: src/InfoBoxes/InfoBoxManager.cpp:208
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:263
@@ -4423,7 +4423,7 @@ msgstr "Aktivera NMEA"
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:109
 msgid "Recording interval"
-msgstr "Inspelningsinvervall"
+msgstr "Inspelningsintervall"
 
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:124
 msgid "Demo"
@@ -5022,7 +5022,7 @@ msgstr "Brytpunktstyper"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:132
 #, no-c-format
 msgid "Language, Input"
-msgstr "Språk, Inmatning"
+msgstr "Språk, inmatning"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:133
 #, no-c-format
@@ -5069,7 +5069,7 @@ msgstr "Visare"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:164
 #, no-c-format
 msgid "Task Defaults"
-msgstr "Förval för bana"
+msgstr "Förval bana"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:165
 #, no-c-format
@@ -5608,10 +5608,13 @@ msgid ""
 "affect the main computer's setting if the dialog is exited with the Cancel "
 "button."
 msgstr ""
+"Justerar MC värdet använt av kalkylatorn. Använd för att avgöra påverkan på "
+"estimerad uppgiftstid till följd av förändrade förhållanden. Värdet påverkar "
+"ej huvuddatorns inställning om dialogen avslutas med Avbryt-knappen."
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:159
 msgid "AAT range"
-msgstr ""
+msgstr "AAT räckvidd"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:161
 #, no-c-format
@@ -5621,6 +5624,10 @@ msgid ""
 "indicates the minimum AAT distance.  0% is the nominal AAT distance.  +100% "
 "is maximum AAT distance."
 msgstr ""
+"Värdet anger, för AAT uppgifter, hur långt du kommer flyga baserat på målet "
+"för din uppgift relativt minimal och maximal möjlig uppgift. -100% indikerar "
+"minimal AAT distans. 0% är nominell AAT distans. +100% är maximal AAT "
+"distans."
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:164
 #: src/Dialogs/Task/TargetDialog.cpp:454
@@ -5648,6 +5655,11 @@ msgid ""
 "flight history with the set MC value.  Calculation begins after task is "
 "started."
 msgstr ""
+"Effektivitet för planflygt. 100 indikerar perfekt MacCready prestanda, över "
+"100 indikerar att bättre än MacCready prestanda nås genom flyg under "
+"molngator.  Mindre än 100 är lämpligt vid flyg väsentligt utanför banan. "
+"Värdet skattar din glidflyktseffektivitet enligt aktuell flyghistorik givet "
+"inställt MC värde. Beräkningen startar när uppgiften är startad."
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:101
 msgid "Valid start"
@@ -5731,11 +5743,11 @@ msgstr ""
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:178
 msgid "Alt. diff. MC safety"
-msgstr ""
+msgstr "Alt. diff. MC säker"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:183
 msgid "Alt. diff. MC current"
-msgstr ""
+msgstr "Alt. diff. MC aktuell"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:201
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:120
@@ -5897,12 +5909,12 @@ msgstr "Tak"
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:60
 #, no-c-format
 msgid "Display airspaces below the clip altitude."
-msgstr ""
+msgstr "Visa luftrum under clip-höjd."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:62
 #, no-c-format
 msgid "Display airspaces within a margin of the glider."
-msgstr ""
+msgstr "Visa luftrum inom en marginal från farkosten."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:63
 #, no-c-format
@@ -5912,7 +5924,7 @@ msgstr "Allt Under"
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:64
 #, no-c-format
 msgid "Display airspaces below the glider or within a margin."
-msgstr ""
+msgstr "Visa luftrum under farkosten eller inom en marginal."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:69
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:169
@@ -5927,6 +5939,8 @@ msgid ""
 "This selects the best performing option for your hardware. In fact it "
 "favours 'fill padding' except for PPC 2000 system."
 msgstr ""
+"Väljer bästa val för prestanda för din hårdvara. 'Fill padding' föredras med "
+"undantag för PPC 2000 system."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:72
 #, no-c-format
@@ -5936,18 +5950,18 @@ msgstr "Fyll allt"
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:73
 #, no-c-format
 msgid "Transparently fills the airspace colour over the whole area."
-msgstr ""
+msgstr "Fyller hela ytan med luftrumsfärgen med transparens."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:74
 #, no-c-format
 msgid "Fill padding"
-msgstr ""
+msgstr "Fyll marginal"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:75
 #, no-c-format
 msgid ""
 "Draws a solid outline with a half transparent border around the airspace."
-msgstr ""
+msgstr "Ritar ett halvtransparent solid linje runt luftrummet."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:76
 #, no-c-format
@@ -5989,6 +6003,8 @@ msgid ""
 "filter button also allows filtering of display and warnings independently "
 "for each airspace class."
 msgstr ""
+"Filtrerar vilka luftrum och varningar som visas. Tillåter även individuella "
+"urval för visning och varningar för varje luftrumsklass."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:193
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:155
@@ -6008,7 +6024,7 @@ msgstr "Luftrum Tak"
 msgid ""
 "For clip airspace mode, this is the altitude below which airspace is "
 "displayed."
-msgstr ""
+msgstr "Höjd under vilken luftrum visas i luftrumsläge klippt."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:203
 msgid "Margin"
@@ -6019,6 +6035,7 @@ msgid ""
 "For auto and all below airspace mode, this is the altitude above/below which "
 "airspace is included."
 msgstr ""
+"Höjd under/över vilken luftrum visas i luftrumsläge auto och allt under."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:208
 msgid "Enable/disable all airspace warnings."
@@ -6041,6 +6058,7 @@ msgid ""
 "This is the time before an airspace incursion is estimated at which the "
 "system will warn the pilot."
 msgstr ""
+"Tid innan en förväntad luftrumsöverträdelse när systemet varnar piloten."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:221
 msgid "Repetitive sound"
@@ -6093,17 +6111,17 @@ msgstr "Om aktiverad, så fylls luftrummen transparent."
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:45
 #, no-c-format
 msgid "Disable final glide bar."
-msgstr "Stäng av finalglidningsband."
+msgstr "Inaktivera stapel för finalglid."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:47
 #, no-c-format
 msgid "Always show final glide bar."
-msgstr "Visa alltid finalglidningsband."
+msgstr "Visa alltid stapel för finalglid."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:49
 #, no-c-format
 msgid "Show final glide bar if approaching final glide range."
-msgstr "Visa finalglidningsband om finalglid närmar sig."
+msgstr "Visa stapel för finalglid när finalglid är möjligt."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:85
 msgid ""
@@ -6113,6 +6131,10 @@ msgid ""
 "of the target relative to you. In all modes, the color of the target "
 "indicates the threat level."
 msgstr ""
+"Aktiverar visning av FLARM radar-visaren. Bäring mot mål relativt farkostens "
+"bäring visas med en pil. En triangel som pekar upp eller ner visar målets "
+"höjd relativt din egen. I alla lägen färgas målet för att indikera graden av "
+"fara."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:88
 msgid "Auto close FLARM"
@@ -6129,11 +6151,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:94
 msgid "This enables the display of the thermal assistant gauge."
-msgstr "Aktiverar visning av visare för termik-assistent."
+msgstr "Aktiverar visning av blåsassistent."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:97
 msgid "Thermal band"
-msgstr "Termiskt band"
+msgstr "Termikband"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:98
 msgid ""
@@ -6155,7 +6177,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:108
 msgid "Final glide bar MC0"
-msgstr ""
+msgstr "Stapel för MC0 finalglid"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:109
 msgid ""
@@ -6225,11 +6247,11 @@ msgstr "Om ballastprocent skall visas."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:80
 msgid "Show gross"
-msgstr ""
+msgstr "Visa brutto"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:80
 msgid "Whether to show the gross climb rate."
-msgstr ""
+msgstr "Om brutto stighastighet skall visas."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:83
 msgid "Averager needle"
@@ -6257,6 +6279,9 @@ msgid ""
 "adjusted in order to cover the greatest distance in the remaining time and "
 "reach the finish height."
 msgstr ""
+"Justerar MC för snabbast ankomst. För OLC sprint-uppgifter justeras "
+"MacCready för att uppnå längsta distansen under kvarvarande tid som kan nås "
+"med bibehållen målgångshöjd."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:65
 #, no-c-format
@@ -6281,7 +6306,7 @@ msgstr "Auto Mc"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:73
 msgid "This option defines which auto MacCready algorithm is used."
-msgstr ""
+msgstr "Val definierar vilken MacCready algoritm som används."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:76
 msgid "Block speed to fly"
@@ -6402,6 +6427,8 @@ msgid ""
 "The Input Events file defines the menu system and how XCSoar responds to "
 "button presses and events from external devices."
 msgstr ""
+"\"Input Events\" filen definierar menysystem och hur XCSoar reagerar på "
+"knapptryckningar och händelser från externa enheter."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:123
 msgid "Language"
@@ -6413,6 +6440,9 @@ msgid ""
 "languages. Select English for a native interface or Automatic to localise "
 "XCSoar according to the system settings."
 msgstr ""
+"Språkvalet väljer översättningar för engelska texter till andra språk. Välj "
+"engelska för ursprungs-gränssnitt eller Automatiskt för att anpassning "
+"enligt systeminställning."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:162
 msgid "Menu timeout"
@@ -6438,7 +6468,7 @@ msgstr "HighScore utseende"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:176
 msgid "Text input style"
-msgstr "Text Input utseende"
+msgstr "Stil textinmatning"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:177
 msgid ""
@@ -6669,7 +6699,7 @@ msgstr "Rotera skärmen på enheter som stödjer det."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:175
 msgid "InfoBox geometry"
-msgstr "Infobox Geometri"
+msgstr "InfoBox geometri"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:176
 msgid ""
@@ -6734,11 +6764,11 @@ msgstr "Endast start"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:68
 msgid "Pilot name"
-msgstr "Pilot Namn"
+msgstr "Pilotnamn"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:70
 msgid "Time step cruise"
-msgstr "Tidsstegring cruise"
+msgstr "Tidssteg glidflykt"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:71
 msgid "This is the time interval between logged points when not circling."
@@ -6746,7 +6776,7 @@ msgstr "Tidsintervall för loggpunkter vid glidflyg (ej kurvning)."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:75
 msgid "Time step circling"
-msgstr "Tidsstegring kurvläge"
+msgstr "Tidssteg kurvläge"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:76
 msgid "This is the time interval between logged points when circling."
@@ -6920,38 +6950,38 @@ msgstr "Övre gräns för auto. zoom-distans."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:146
 msgid "Distinct page zoom"
-msgstr ""
+msgstr "Stegvis sid-zoom"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:147
 msgid "Maintain one map zoom level on each page."
-msgstr ""
+msgstr "Behåll en zoom-nivå för varje sida."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:171
 msgid "Main area"
-msgstr ""
+msgstr "Huvudyta"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:172
 msgid "Specifies what should be displayed in the main area."
-msgstr ""
+msgstr "Anger vad som visas på huvudytan."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:177
 #, no-c-format
 msgid "Displays either the Circling, Cruise or Final glide infoxboxes"
-msgstr ""
+msgstr "Visa en av InfoBoxarna för kurvning, glidflykt eller finalglid"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:178
 #, no-c-format
 msgid "Show fullscreen (no InfoBoxes)"
-msgstr ""
+msgstr "Vissa fullskärm (utan InfoBoxar)"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:182
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:354
 msgid "InfoBoxes"
-msgstr ""
+msgstr "InfoBoxar"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:183
 msgid "Specifies which InfoBoxes should be displayed on this page."
-msgstr ""
+msgstr "Anger vilka InfoBoxar som ska visas på sidan."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:187
 #, no-c-format
@@ -6959,12 +6989,14 @@ msgid ""
 "For cruise mode.  Displayed when 'Auto' is selected and ship is below final "
 "glide altitude"
 msgstr ""
+"Visas, i glidflygsläget, vid val 'Auto' och när farkosten är under "
+"finalglidshöjd"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:188
 #, no-c-format
 msgid ""
 "For circling mode.  Displayed when 'Auto' is selected and ship is circling"
-msgstr ""
+msgstr "Visas, i kurvläge, vid val 'Auto' och när farkosten kurvar"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:189
 #, no-c-format
@@ -6972,6 +7004,8 @@ msgid ""
 "For final glide mode.  Displayed when 'Auto' is selected and ship is above "
 "final glide altitude"
 msgstr ""
+"Visas, i finalglidläget, vid val 'Auto' och om farkosten är över "
+"finalglidshöjd"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:191
 #, no-c-format
@@ -6987,20 +7021,20 @@ msgstr "Inget"
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:370
 #, no-c-format
 msgid "Cross section"
-msgstr ""
+msgstr "Snittyta"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:214
 msgid "Bottom area"
-msgstr ""
+msgstr "Bottenyta"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:215
 msgid "Specifies what should be displayed below the main area."
-msgstr ""
+msgstr "Anger vad som ska visas under huvudytan."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:103
 #, no-c-format
 msgid "Neither airspace nor terrain is used for route planning."
-msgstr ""
+msgstr "Varken luftrum eller terräng används för ruttplanering."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:105
 #, no-c-format
@@ -7045,7 +7079,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:131
 #, no-c-format
 msgid "Reach calculations disabled."
-msgstr ""
+msgstr "Räckviddsberäkning inaktiverad."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:132
 #, no-c-format
@@ -7127,7 +7161,7 @@ msgstr "Terrängskugga"
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:165
 #, no-c-format
 msgid "Shades terrain outside glide reach."
-msgstr ""
+msgstr "Skuggar terräng utanför glidräckvidd."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:166
 #, no-c-format
@@ -7137,7 +7171,7 @@ msgstr "Fungerande GR-linje"
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:167
 #, no-c-format
 msgid "Draws a dashed line at the working glide reach."
-msgstr ""
+msgstr "Ritar en streckad linje vid glidräckvidd."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:168
 #, no-c-format
@@ -7161,31 +7195,31 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:175
 msgid "Reach display"
-msgstr ""
+msgstr "Visning räckvidd"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:65
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:124
 msgid "Arrival height"
-msgstr ""
+msgstr "Ankomsthöjd"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:66
 msgid ""
 "The height above terrain that the glider should arrive at for a safe landing."
-msgstr ""
+msgstr "Ankomsthöjd över terräng för säker landning."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:71
 msgid "Terrain height"
-msgstr "Terräng höjd"
+msgstr "Terränghöjd"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:72
 msgid "The height above terrain that the glider must clear during final glide."
-msgstr ""
+msgstr "Önskad höjd över terräng under finalglid."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:78
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:118
 #, no-c-format
 msgid "Simple"
-msgstr ""
+msgstr "Enkel"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:79
 #, no-c-format
@@ -7193,18 +7227,18 @@ msgid ""
 "The alternates will only be sorted by waypoint type (airport/outlanding "
 "field) and arrival height."
 msgstr ""
-"Landingsalternativen kommer endast sorteras på vägpunktstyp (flygplats/"
-"utelandningsfält) och ankomsthöjd."
+"Landningar sorteras endast enligt vägpunktstyp (flygplats/utelandningsfält) "
+"och ankomsthöjd."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:81
 #, no-c-format
 msgid "The sorting will also take the current task direction into account."
-msgstr ""
+msgstr "Sortering tar även riktning på aktuell uppgift i beaktande."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:82
 #, no-c-format
 msgid "Home"
-msgstr "Hem"
+msgstr "Hemåt"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:83
 #, no-c-format
@@ -7212,8 +7246,7 @@ msgid ""
 "The sorting will try to find landing options in the current direction to the "
 "configured home waypoint."
 msgstr ""
-"Sorteringen kommer att försöka hitta landningsbara alternativ i riktningen "
-"mot inställd hemmavägpunkt."
+"Sortering försöker finna landningar i riktning mot inställd hemmavägpunkt."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:87
 msgid "Alternates mode"
@@ -7535,7 +7568,7 @@ msgstr "Om På skalas snigelspårets bredd enligt variometervärdet."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:172
 msgid "Detour cost markers"
-msgstr ""
+msgstr "Markörer för kostnad av omväg"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:173
 msgid ""
