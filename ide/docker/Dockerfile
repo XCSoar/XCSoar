@@ -16,3 +16,10 @@ WORKDIR /opt/xcsoar
 
 COPY ./docker/bin/* /usr/local/bin/
 RUN cd /usr/local/bin && chmod 755 ./*
+
+# Environment to support running XCSoar
+ENV DISPLAY=host.docker.internal:0
+ENV SDL_RENDER_DRIVER=software
+# We set the home directory to the project root such that XCSoar generated files
+# are retained.
+ENV HOME=/opt/xcsoar
