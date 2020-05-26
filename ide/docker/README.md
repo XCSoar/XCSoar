@@ -1,6 +1,6 @@
 # XCSoar Docker Image
 
-This Docker Image when built, will compile XCSoar for several targets in a clean room environment.
+This Docker image when built, will compile XCSoar for several targets in a clean room environment.
 
 
 ## Currently Supported Targets
@@ -13,25 +13,37 @@ This Docker Image when built, will compile XCSoar for several targets in a clean
 
 ## Instructions
 
-The container itself is readonly. The build results will appear in `./output/`.
+The build container should be considered read only. When used as described below
+the output will appear in the XCSoar project directory the same way as when
+building on directly the host system.
 
-To build the container:
+
+### Build the container
+
+Ensure your current working directory is the XCSoar project root. Then run:
+
 ```
-docker build \
-    --file ide/docker/Dockerfile \
-    -t xcsoar/xcsoar-build:latest ./ide/
+docker build --file ide/docker/Dockerfile -t xcsoar-build ./ide/
+```
+This will take time and download a lot of software. You only need to run this
+once as long as the XCSoar build dependencies stay the same.
+
+
+### Run the container
+
+
+Ensure your current working directory is the XCSoar project root.
+
+**Interactively:**
+```
+docker run -it --rm -v $PWD:/opt/xcsoar:delegated xcsoar-build
 ```
 
-To run the container interactivly:
+**To build a specific target, e.g. ANDROID:**
 ```
-docker run \
-    --mount type=bind,source="$(pwd)",target=/opt/xcsoar \
-    -it xcsoar/xcsoar-build:latest /bin/bash
+docker run -it --rm -v $PWD:/opt/xcsoar:delegated xcsoar-build xcsoar-compile ANDROID
 ```
 
-To run the ANDROID build:
-```
-docker run \
-    --mount type=bind,source="$(pwd)",target=/opt/xcsoar \
-    -it xcsoar/xcsoar-build:latest xcsoar-compile ANDROID
-```
+Note: the `delegated` volume modifier is used to speed up compilation on non Linux hosts 
+(macOS and Windows), it allows for eventual consistent filesystem change propagation 
+from the container to the host system.
