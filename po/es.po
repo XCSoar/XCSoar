@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-05-25 19:41+0000\n"
+"PO-Revision-Date: 2020-05-28 14:41+0000\n"
 "Last-Translator: Darío Hereñú <magallania@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/es/>\n"
@@ -7254,9 +7254,9 @@ msgid "Disables the reach display."
 msgstr "Deshabilita la visualización de la cobertura."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:162
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terrain line"
-msgstr "Activar Terreno"
+msgstr "Línea de terreno"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:163
 #, no-c-format
@@ -7264,9 +7264,9 @@ msgid "Draws a dashed line at the terrain glide reach."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:164
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terrain shade"
-msgstr "Altura del Terreno"
+msgstr "Sombra del terreno"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:165
 #, fuzzy, no-c-format
