@@ -4,7 +4,7 @@ Priority: extra
 Maintainer: Max Kellermann <max.kellermann@gmail.com>
 Build-Depends: debhelper (>= 9),
  g++ (>= 4:4.6),
- libraspberrypi-dev | libegl1-mesa-dev | libsdl1.2-dev,
+ libraspberrypi-dev | libegl1-mesa-dev | libsdl2-dev,
  libfreetype6-dev,
  libgl-dev,
  libgl1-mesa-dev,
