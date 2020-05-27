@@ -35,6 +35,7 @@ Copyright_License {
 #include "Time/BrokenDateTime.hpp"
 
 #include <cstdio>
+#include <memory>
 
 #include <stdlib.h>
 
@@ -205,9 +206,7 @@ IMI::FlightDownload(Port &port, const RecordedFlightInfo &flight_info,
     return false;
 
   unsigned fixesCount = COMM_MAX_PAYLOAD_SIZE / sizeof(Fix);
-  Fix *fixBuffer = (Fix*)malloc(sizeof(Fix) * fixesCount);
-  if (fixBuffer == nullptr)
-    return false;
+  auto fixBuffer = std::make_unique<Fix[]>(fixesCount);
 
   bool ok = true;
 
@@ -225,13 +224,13 @@ IMI::FlightDownload(Port &port, const RecordedFlightInfo &flight_info,
     if (fixesToRead > fixesCount)
       fixesToRead = fixesCount;
 
-    if (!FlashRead(port, fixBuffer, address, fixesToRead * sizeof(Fix), env))
+    if (!FlashRead(port, fixBuffer.get(), address, fixesToRead * sizeof(Fix), env))
       ok = false;
 
     for (unsigned i = 0; ok && i < fixesToRead; i++) {
-      const Fix *pFix = fixBuffer + i;
-      if (IMIIS_FIX(pFix->id))
-        WriteFix(*pFix, false, noenl, fileIGC);
+      const auto &pFix = fixBuffer[i];
+      if (IMIIS_FIX(pFix.id))
+        WriteFix(pFix, false, noenl, fileIGC);
     }
 
     address = address + fixesToRead * sizeof(Fix);
@@ -241,8 +240,6 @@ IMI::FlightDownload(Port &port, const RecordedFlightInfo &flight_info,
       // canceled by user
       ok = false;
   }
-
-  free(fixBuffer);
 
   if (ok)
     WriteSignature(flight.signature, flight.decl.header.sn, fileIGC);
