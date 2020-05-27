@@ -26,13 +26,13 @@ Copyright_License {
 
 #include "Types.hpp"
 
-#include <cstdio>
+class BufferedOutputStream;
 
 namespace IMI
 {
-  void WriteHeader(const TDeclaration &decl, IMIBYTE tampered, FILE *file);
-  void WriteFix(const Fix &fix, bool fromB2, int no_enl, FILE *file);
-  void WriteSignature(const Signature &sig, IMIWORD sn, FILE *file);
+void WriteHeader(BufferedOutputStream &os, const TDeclaration &decl, IMIBYTE tampered);
+void WriteFix(BufferedOutputStream &os, const Fix &fix, bool fromB2, int no_enl);
+void WriteSignature(BufferedOutputStream &os, const Signature &sig, IMIWORD sn);
 };
 
 #endif

@@ -24,15 +24,14 @@ Copyright_License {
 #include "IGC.hpp"
 #include "Conversion.hpp"
 #include "Checksum.hpp"
+#include "IO/BufferedOutputStream.hxx"
 #include "Time/BrokenDateTime.hpp"
 #include "Util/Macros.hpp"
 
-#include <cstdio>
-
 namespace IMI
 {
-  void WriteString(const char *buffer, size_t max_length, FILE *file);
-  void WriteSerialNumber(IMIWORD sn, FILE *file);
+  void WriteString(BufferedOutputStream &os, const char *buffer, size_t max_length);
+  void WriteSerialNumber(BufferedOutputStream &os, IMIWORD sn);
   const IMICHAR* GetDeviceName(unsigned i);
   const IMICHAR* GetGPSName(unsigned i);
   const IMICHAR* GetSensorName(unsigned i);
@@ -46,31 +45,31 @@ static IMI::FixB fixB2 = {0};
 static constexpr IMI::IMICHAR snDigits[] = "0123456789ABCDEFHJKLMNPRSTUVWXYZ";
 
 void
-IMI::WriteString(const char *buffer, size_t max_length, FILE *file)
+IMI::WriteString(BufferedOutputStream &os, const char *buffer, size_t max_length)
 {
   size_t length = max_length;
   const char *zero = (const char *)memchr(buffer, '\0', max_length);
   if (zero != nullptr)
     length = zero - buffer;
 
-  fwrite(buffer, sizeof(char), length, file);
+  os.Write(buffer, length);
 }
 
 void
-IMI::WriteSerialNumber(IMIWORD sn, FILE *file)
+IMI::WriteSerialNumber(BufferedOutputStream &os, IMIWORD sn)
 {
   if (sn >= (32*32*32))
     sn = 0;
 
   IMIWORD x = sn >> 10; //(32*32 = 1024 = 2^10)
-  putc(snDigits[x], file);
+  os.Write(snDigits[x]);
   sn -= (32 * 32) * x;
 
   x = sn >> 5; // 32 = 2^5
-  putc(snDigits[x], file);
+  os.Write(snDigits[x]);
   sn -= 32 * x;
 
-  putc(snDigits[sn], file);
+  os.Write(snDigits[sn]);
 }
 
 static const IMI::IMICHAR *const UNKNOWN = "Unknown";
@@ -135,139 +134,139 @@ CountWaypoints(const IMI::TWaypoint *wps)
 }
 
 void
-IMI::WriteHeader(const TDeclaration &decl, IMIBYTE tampered, FILE *file)
+IMI::WriteHeader(BufferedOutputStream &os, const TDeclaration &decl, IMIBYTE tampered)
 {
-  fputs("AIMI", file);
-  WriteSerialNumber(decl.header.sn, file);
-  fputs("\r\n", file);
+  os.Write("AIMI");
+  WriteSerialNumber(os, decl.header.sn);
+  os.Write("\r\n");
 
   BrokenDate start_date = ConvertToDateTime(decl.header.recStartDateTime);
-  fprintf(file, "HFDTE%02d%02d%02d\r\n",
-          start_date.day, start_date.month, start_date.year % 100);
+  os.Format("HFDTE%02d%02d%02d\r\n",
+            start_date.day, start_date.month, start_date.year % 100);
 
-  fputs("HFFXA010\r\n", file);
+  os.Write("HFFXA010\r\n");
 
-  fputs("HFPLTPILOT:", file);
-  WriteString(decl.header.plt, sizeof(decl.header.plt), file);
-  fputs("\r\n", file);
+  os.Write("HFPLTPILOT:");
+  WriteString(os, decl.header.plt, sizeof(decl.header.plt));
+  os.Write("\r\n");
 
   if (decl.header.db1Day != 0)
-    fprintf(file, "HFDB1PILOTBIRTHDATE:%02d%02d%02d\r\n",
-            decl.header.db1Day + 1, decl.header.db1Month + 1,
-            decl.header.db1Year % 100);
+    os.Format("HFDB1PILOTBIRTHDATE:%02d%02d%02d\r\n",
+              decl.header.db1Day + 1, decl.header.db1Month + 1,
+              decl.header.db1Year % 100);
 
-  fputs("HFGTYGLIDERTYPE:", file);
-  WriteString(decl.header.gty, sizeof(decl.header.gty), file);
-  fputs("\r\n", file);
+  os.Write("HFGTYGLIDERTYPE:");
+  WriteString(os, decl.header.gty, sizeof(decl.header.gty));
+  os.Write("\r\n");
 
-  fputs("HFGIDGLIDERID:", file);
-  WriteString(decl.header.gid, sizeof(decl.header.gid), file);
-  fputs("\r\n", file);
+  os.Write("HFGIDGLIDERID:");
+  WriteString(os, decl.header.gid, sizeof(decl.header.gid));
+  os.Write("\r\n");
 
-  fputs("HFDTM100DATUM:WGS-1984\r\n", file);
+  os.Write("HFDTM100DATUM:WGS-1984\r\n");
 
-  fprintf(file, "HFRFWFIRMWAREVERSION:%d.%d\r\n",
-          (unsigned)(decl.header.swVersion >> 4),
-          (unsigned)(decl.header.swVersion & 0x0F));
+  os.Format("HFRFWFIRMWAREVERSION:%d.%d\r\n",
+            (unsigned)(decl.header.swVersion >> 4),
+            (unsigned)(decl.header.swVersion & 0x0F));
 
-  fprintf(file, "HFRHWHARDWAREVERSION:%d.%d\r\n",
-          (unsigned)(decl.header.hwVersion >> 4),
-          (unsigned)(decl.header.hwVersion & 0x0F));
+  os.Format("HFRHWHARDWAREVERSION:%d.%d\r\n",
+            (unsigned)(decl.header.hwVersion >> 4),
+            (unsigned)(decl.header.hwVersion & 0x0F));
 
-  fprintf(file, "HFFTYFRTYPE:IMI Gliding, %s\r\n",
-          GetDeviceName(decl.header.device));
+  os.Format("HFFTYFRTYPE:IMI Gliding, %s\r\n",
+            GetDeviceName(decl.header.device));
 
-  fprintf(file, "HFGPSGPS:%s\r\n",
-          GetGPSName(decl.header.gps));
+  os.Format("HFGPSGPS:%s\r\n",
+            GetGPSName(decl.header.gps));
 
-  fprintf(file, "HFPRSPRESSALTSENSOR:%s\r\n",
-          GetSensorName(decl.header.sensor));
+  os.Format("HFPRSPRESSALTSENSOR:%s\r\n",
+            GetSensorName(decl.header.sensor));
 
   if (tampered)
-    fputs("HFFRSSECURITYSUSPECTUSEVALIPROGRAM:Tamper detected, FR needs to be reset", file);
+    os.Write("HFFRSSECURITYSUSPECTUSEVALIPROGRAM:Tamper detected, FR needs to be reset");
 
   if (decl.header.cid[0] != 0) {
-    fputs("HFCIDCOMPETITIONID:", file);
-    WriteString(decl.header.cid, sizeof(decl.header.cid), file);
-    fputs("\r\n", file);
+    os.Write("HFCIDCOMPETITIONID:");
+    WriteString(os, decl.header.cid, sizeof(decl.header.cid));
+    os.Write("\r\n");
   }
 
   // This seems to be a bug in the original implementation
   // When the competition class line is missing the integrity check will fail!
   if (decl.header.cid[0] != 0) {
-    fputs("HFCCLCOMPETITIONCLASS:", file);
+    os.Write("HFCCLCOMPETITIONCLASS:");
     if (decl.header.ccl[0] != 0)
-      WriteString(decl.header.ccl, sizeof(decl.header.ccl), file);
-    fputs("\r\n", file);
+      WriteString(os, decl.header.ccl, sizeof(decl.header.ccl));
+    os.Write("\r\n");
   }
 
   if (decl.header.cm2[0] != '\0') {
-    fputs("HFCM2SECONDCREW:", file);
-    WriteString(decl.header.cm2, sizeof(decl.header.cm2), file);
-    fputs("\r\n", file);
+    os.Write("HFCM2SECONDCREW:");
+    WriteString(os, decl.header.cm2, sizeof(decl.header.cm2));
+    os.Write("\r\n");
 
     if (decl.header.db2Day != 0)
-      fprintf(file, "HFDB1SECONDCREWBIRTHDATE:%02d%02d%02d\r\n",
-              decl.header.db2Day + 1, decl.header.db2Month + 1,
-              decl.header.db2Year % 100);
+      os.Format("HFDB1SECONDCREWBIRTHDATE:%02d%02d%02d\r\n",
+                decl.header.db2Day + 1, decl.header.db2Month + 1,
+                decl.header.db2Year % 100);
   }
 
   if (decl.header.clb[0] != '\0') {
-    fputs("HFCLBCLUB:", file);
-    WriteString(decl.header.clb, sizeof(decl.header.clb), file);
-    fputs("\r\n", file);
+    os.Write("HFCLBCLUB:");
+    WriteString(os, decl.header.clb, sizeof(decl.header.clb));
+    os.Write("\r\n");
   }
 
   if (decl.header.sit[0] != '\0') {
-    fputs("HFCLBSITE:", file);
-    WriteString(decl.header.sit, sizeof(decl.header.sit), file);
-    fputs("\r\n", file);
+    os.Write("HFCLBSITE:");
+    WriteString(os, decl.header.sit, sizeof(decl.header.sit));
+    os.Write("\r\n");
   }
 
   if ((decl.header.sensor & IMINO_ENL_MASK) != 0)
-    fputs("I033638FXA3940SIU\r\n", file);
+    os.Write("I033638FXA3940SIU\r\n");
   else
-    fputs("I033638FXA3940SIU4143ENL\r\n", file);
+    os.Write("I033638FXA3940SIU4143ENL\r\n");
 
-  fputs("J020810HDT1113GSP\r\n", file);
+  os.Write("J020810HDT1113GSP\r\n");
 
   unsigned count = CountWaypoints(decl.wp);
   if (count >= 2) {
     BrokenDateTime decl_date = ConvertToDateTime(decl.header.date);
-    fprintf(file, "C%02d%02d%02d", decl_date.day, decl_date.month,
-            decl_date.year % 100);
-    fprintf(file, "%02d%02d%02d", decl_date.hour, decl_date.minute,
-            decl_date.second);
+    os.Format("C%02d%02d%02d", decl_date.day, decl_date.month,
+              decl_date.year % 100);
+    os.Format("%02d%02d%02d", decl_date.hour, decl_date.minute,
+              decl_date.second);
 
     if (decl.header.tskYear != 0)
-      fprintf(file, "%02d%02d%02d", decl.header.tskDay + 1,
-              decl.header.tskMonth + 1, decl.header.tskYear % 100);
+      os.Format("%02d%02d%02d", decl.header.tskDay + 1,
+                decl.header.tskMonth + 1, decl.header.tskYear % 100);
     else
-      fputs("000000", file);
+      os.Write("000000");
 
-    fprintf(file, "%04d%02d", decl.header.tskNumber, count - 2);
-    WriteString(decl.header.tskName, sizeof(decl.header.tskName), file);
-    fputs("\r\n", file);
+    os.Format("%04d%02d", decl.header.tskNumber, count - 2);
+    WriteString(os, decl.header.tskName, sizeof(decl.header.tskName));
+    os.Write("\r\n");
 
     const IMI::TWaypoint *wp = decl.wp;
     for (unsigned i = 0; i < count + 2; i++, wp++) {
       AngleConverter l;
       l.value = wp->lat;
-      fprintf(file, "C%02d%05d%c", l.degrees, l.milliminutes,
-              (l.sign ? 'S' : 'N'));
+      os.Format("C%02d%05d%c", l.degrees, l.milliminutes,
+                (l.sign ? 'S' : 'N'));
 
       l.value = wp->lon;
-      fprintf(file, "%03d%05d%c", l.degrees, l.milliminutes,
-              (l.sign ? 'W' : 'E'));
+      os.Format("%03d%05d%c", l.degrees, l.milliminutes,
+                (l.sign ? 'W' : 'E'));
 
-      WriteString(wp->name, sizeof(wp->name), file);
-      fputs("\r\n", file);
+      WriteString(os, wp->name, sizeof(wp->name));
+      os.Write("\r\n");
     }
   }
 
-  fputs("LIMIFLIGHTOFDAY:", file);
-  fprintf(file, "%03d", decl.header.flightOfDay);
-  fputs("\r\n", file);
+  os.Write("LIMIFLIGHTOFDAY:");
+  os.Format("%03d", decl.header.flightOfDay);
+  os.Write("\r\n");
 
   //first fix must be full
   fixBLastFull.id = 0;
@@ -333,7 +332,7 @@ SplitB2Fix(const IMI::FixB2 *fixB2, const IMI::FixB *fixFull,
 }
 
 void
-IMI::WriteFix(const Fix &fix, bool fromB2, int no_enl, FILE *file)
+IMI::WriteFix(BufferedOutputStream &os, const Fix &fix, bool fromB2, int no_enl)
 {
   bool append_line_break = false;
 
@@ -347,32 +346,32 @@ IMI::WriteFix(const Fix &fix, bool fromB2, int no_enl, FILE *file)
     const FixB *fix_b = (const FixB *)&fix;
     AngleConverter angle;
 
-    fputc('B', file);
+    os.Write('B');
     BrokenTime time = ConvertToDateTime(fix.time);
-    fprintf(file, "%02d%02d%02d", time.hour, time.minute, time.second);
+    os.Format("%02d%02d%02d", time.hour, time.minute, time.second);
 
     angle.value = (IMIDWORD)fix_b->lat;
-    fprintf(file, "%02d%05d", angle.degrees, angle.milliminutes);
+    os.Format("%02d%05d", angle.degrees, angle.milliminutes);
 
-    fputc((angle.sign) ? 'S' : 'N', file);
+    os.Write(angle.sign ? 'S' : 'N');
 
     angle.value = (IMIDWORD)fix_b->lon;
-    fprintf(file, "%03d%05d", angle.degrees, angle.milliminutes);
+    os.Format("%03d%05d", angle.degrees, angle.milliminutes);
 
-    fputc((angle.sign) ? 'W' : 'E', file);
+    os.Write(angle.sign ? 'W' : 'E');
 
-    fputc("VA??"[fix_b->fv], file);
+    os.Write("VA??"[fix_b->fv]);
 
     int alt = (int)fix_b->alt - 1000;
-    fprintf(file, alt < 0 ? "%04d" : "%05d", alt);
+    os.Format(alt < 0 ? "%04d" : "%05d", alt);
     int gpsalt = (int)fix_b->gpsalt - 1000;
-    fprintf(file, alt < 0 ? "%04d" : "%05d", gpsalt);
+    os.Format(alt < 0 ? "%04d" : "%05d", gpsalt);
 
-    fprintf(file, "%03d", fix_b->fxa);
-    fprintf(file, "%02d", siu);
+    os.Format("%03d", fix_b->fxa);
+    os.Format("%02d", siu);
 
     if (!no_enl)
-      fprintf(file, "%03d", fix_b->enl);
+      os.Format("%03d", fix_b->enl);
 
     append_line_break = true;
 
@@ -381,66 +380,66 @@ IMI::WriteFix(const Fix &fix, bool fromB2, int no_enl, FILE *file)
   } else if (fix.id == IMIFIX_ID_B2_RECORD) {
     const FixB2 *fix_b2 = (const FixB2 *)&fix;
     if (SplitB2Fix(fix_b2, &fixBLastFull, &fixB1, &fixB2)) {
-      WriteFix(*(Fix*)&fixB1, true, no_enl, file);
-      WriteFix(*(Fix*)&fixB2, true, no_enl, file);
+      WriteFix(os, *(Fix*)&fixB1, true, no_enl);
+      WriteFix(os, *(Fix*)&fixB2, true, no_enl);
     }
   } else if (fix.id == IMIFIX_ID_K_RECORD) {
     const FixK *fix_k = (const FixK *)&fix;
 
-    fputc('K', file);
+    os.Write('K');
     BrokenTime time = ConvertToDateTime(fix.time);
-    fprintf(file, "%02d%02d%02d", time.hour, time.minute, time.second);
+    os.Format("%02d%02d%02d", time.hour, time.minute, time.second);
 
-    fprintf(file, "%03d", fix_k->hdt);
-    fprintf(file, "%03d", fix_k->gsp);
+    os.Format("%03d", fix_k->hdt);
+    os.Format("%03d", fix_k->gsp);
     append_line_break = true;
   } else if (fix.id == IMIFIX_ID_E_RECORD) {
     const FixE *fix_e = (const FixE *)&fix;
     if (fix_e->type == IMIFIX_E_TYPE_SATELLITES) {
       siu = 0;
-      fputc('F', file);
+      os.Write('F');
       BrokenTime time = ConvertToDateTime(fix.time);
-      fprintf(file, "%02d%02d%02d", time.hour, time.minute, time.second);
+      os.Format("%02d%02d%02d", time.hour, time.minute, time.second);
 
       for (unsigned i = 0; i < sizeof(fix_e->text); i++) {
         if (fix_e->text[i] > 0) {
-          fprintf(file, "%02d", fix_e->text[i]);
+          os.Format("%02d", fix_e->text[i]);
           siu++;
         }
       }
       append_line_break = true;
     } else if (fix_e->type == IMIFIX_E_TYPE_COMMENT) {
-      fputs("LIMI", file);
+      os.Write("LIMI");
       BrokenTime time = ConvertToDateTime(fix.time);
-      fprintf(file, "%02d%02d%02d", time.hour, time.minute, time.second);
-      WriteString((const char *)fix_e->text, sizeof(fix_e->text), file);
+      os.Format("%02d%02d%02d", time.hour, time.minute, time.second);
+      WriteString(os, (const char *)fix_e->text, sizeof(fix_e->text));
 
       append_line_break = true;
     } else if (fix_e->type == IMIFIX_E_TYPE_PEV) {
-      fputc('E', file);
+      os.Write('E');
       BrokenTime time = ConvertToDateTime(fix.time);
-      fprintf(file, "%02d%02d%02d", time.hour, time.minute, time.second);
-      WriteString((const char *)fix_e->text, sizeof(fix_e->text), file);
+      os.Format("%02d%02d%02d", time.hour, time.minute, time.second);
+      WriteString(os, (const char *)fix_e->text, sizeof(fix_e->text));
 
       append_line_break = true;
     } else if (fix_e->type == IMIFIX_E_TYPE_TASK) {
-      fputc('E', file);
+      os.Write('E');
       BrokenTime time = ConvertToDateTime(fix.time);
-      fprintf(file, "%02d%02d%02d", time.hour, time.minute, time.second);
+      os.Format("%02d%02d%02d", time.hour, time.minute, time.second);
 
       if (fix_e->text[0] == 1) {
-        fputs("STA", file);
-        WriteString((const char *)fix_e->text + 2, sizeof(fix_e->text) - 2, file);
+        os.Write("STA");
+        WriteString(os, (const char *)fix_e->text + 2, sizeof(fix_e->text) - 2);
       } else {
         if (fix_e->text[0] == 2)
-          fputs("ONT", file);
+          os.Write("ONT");
         else if (fix_e->text[0] == 3)
-          fputs("FIN", file);
+          os.Write("FIN");
         else
-          fputs("TPC", file);
+          os.Write("TPC");
 
-        fprintf(file, "%02d", fix_e->text[1]);
-        WriteString((const char *)fix_e->text + 2, sizeof(fix_e->text) - 2, file);
+        os.Format("%02d", fix_e->text[1]);
+        WriteString(os, (const char *)fix_e->text + 2, sizeof(fix_e->text) - 2);
       }
 
       append_line_break = true;
@@ -448,34 +447,34 @@ IMI::WriteFix(const Fix &fix, bool fromB2, int no_enl, FILE *file)
   }
 
   if (append_line_break)
-    fputs("\r\n", file);
+    os.Write("\r\n");
 }
 
 void
-IMI::WriteSignature(const Signature &sig, IMIWORD sn, FILE *file)
+IMI::WriteSignature(BufferedOutputStream &os, const Signature &sig, IMIWORD sn)
 {
   const IMICHAR _hexChars[] = "0123456789ABCDEF";
 
   if (sn == 0)
-    fputs("GINVALID:Invalid serial number\r\n", file);
+    os.Write("GINVALID:Invalid serial number\r\n");
   else if (sig.rsaBits != 512 && sig.rsaBits != 768 && sig.rsaBits != 1024)
-    fputs("GINVALID:Invalid RSA key size\r\n", file);
+    os.Write("GINVALID:Invalid RSA key size\r\n");
   else if (sig.tampered)
-    fputs("GINVALID:Tamper detected\r\n", file);
+    os.Write("GINVALID:Tamper detected\r\n");
   else {
-    fputc('G', file);
+    os.Write('G');
 
     const IMICHAR *signature = (const IMICHAR*)sig.signature;
     for (unsigned i = 0; i < (sig.rsaBits / 8u);) {
       IMICHAR ch = signature[i++];
-      fputc(_hexChars[(ch & 0xF0) >> 4], file);
-      fputc(_hexChars[(ch & 0x0F)], file);
+      os.Write(_hexChars[(ch & 0xF0) >> 4]);
+      os.Write(_hexChars[(ch & 0x0F)]);
 
       if ((i & (32 - 1)) == 0) {
-        fputs("\r\n", file);
+        os.Write("\r\n");
 
         if (i + 1 < (sig.rsaBits / 8u))
-          fputc('G', file);
+          os.Write('G');
       }
     }
   }
