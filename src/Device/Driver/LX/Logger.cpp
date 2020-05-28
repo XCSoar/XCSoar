@@ -30,6 +30,8 @@
 #include "Operation/Operation.hpp"
 #include "OS/ByteOrder.hpp"
 #include "OS/Path.hpp"
+#include "IO/BufferedOutputStream.hxx"
+#include "IO/FileOutputStream.hxx"
 #include "Util/ScopeExit.hxx"
 
 #include <memory>
@@ -172,7 +174,7 @@ LXDevice::ReadFlightList(RecordedFlightList &flight_list,
 
 static bool
 DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
-                    FILE *file, OperationEnvironment &env)
+                    BufferedOutputStream &os, OperationEnvironment &env)
 {
   if (!LX::CommandMode(port, env))
     return false;
@@ -218,7 +220,7 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
     env.SetProgressPosition(p - data.get());
   }
 
-  return LX::ConvertLXNToIGC(data.get(), total_length, file);
+  return LX::ConvertLXNToIGC(data.get(), total_length, os);
 }
 
 bool
@@ -237,16 +239,19 @@ LXDevice::DownloadFlight(const RecordedFlightInfo &flight,
   if (!EnableCommandMode(env))
     return false;
 
-  FILE *file = _tfopen(path.c_str(), _T("wb"));
-  if (file == nullptr)
-    return false;
+  FileOutputStream fos(path);
+  BufferedOutputStream bos(fos);
 
   assert(!busy);
   busy = true;
   AtScopeExit(this) { busy = false; };
 
-  bool success = DownloadFlightInner(port, flight, file, env);
-  fclose(file);
+  bool success = DownloadFlightInner(port, flight, bos, env);
+
+  if (success) {
+    bos.Flush();
+    fos.Commit();
+  }
 
   LX::CommandModeQuick(port, env);
   return success;

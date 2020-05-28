@@ -21,6 +21,10 @@
 */
 
 #include "Device/Driver/LX/Convert.hpp"
+#include "OS/ConvertPathName.hpp"
+#include "IO/BufferedOutputStream.hxx"
+#include "IO/FileOutputStream.hxx"
+#include "Util/PrintException.hxx"
 #include "TestUtil.hpp"
 
 #include <stdio.h>
@@ -42,18 +46,15 @@ RunConversion()
     return false;
   }
 
-  FILE *igc_file = fopen(igc_out_path, "wb");
-  if (igc_file == NULL) {
-    fprintf(stderr, "Failed to open file %s\n", igc_out_path);
-    return false;
-  }
+  const PathName igc_out_path_(igc_out_path);
+  FileOutputStream igc_fos(igc_out_path_);
+  BufferedOutputStream igc_bos(igc_fos);
 
   long size;
   if (fseek(lxn_file, 0, SEEK_END) != 0 || (size = ftell(lxn_file)) <= 0 ||
       fseek(lxn_file, 0, SEEK_SET) != 0 || size > MAX_LXN_SIZE)  {
     fprintf(stderr, "Failed to seek file %s\n", lxn_path);
     fclose(lxn_file);
-    fclose(igc_file);
     return false;
   }
 
@@ -63,14 +64,14 @@ RunConversion()
   if (n != (size_t)size) {
     free(data);
     fprintf(stderr, "Failed to read from file %s\n", lxn_path);
-    fclose(igc_file);
     return false;
   }
 
-  bool success = ok1(LX::ConvertLXNToIGC(data, n, igc_file));
-  fclose(igc_file);
+  bool success = ok1(LX::ConvertLXNToIGC(data, n, igc_bos));
   free(data);
 
+  igc_bos.Flush();
+  igc_fos.Commit();
   return success;
 }
 
@@ -138,7 +139,7 @@ CompareFiles()
 }
 
 int main(int argc, char **argv)
-{
+try {
   plan_tests(2);
 
   if (!RunConversion())
@@ -147,4 +148,7 @@ int main(int argc, char **argv)
   ok1(CompareFiles());
 
   return exit_status();
+} catch (...) {
+  PrintException(std::current_exception());
+  return EXIT_FAILURE;
 }
