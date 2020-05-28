@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-05-28 14:41+0000\n"
+"PO-Revision-Date: 2020-05-31 06:41+0000\n"
 "Last-Translator: Markus Bagge <markus.bagge@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/sv/>\n"
@@ -311,7 +311,7 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:119
 #, no-c-format
 msgid "Turn point cylinder"
-msgstr "Brytpunkt cylinder"
+msgstr "Brytpunktscylinder"
 
 #: src/Task/TypeStrings.cpp:120
 #, no-c-format
@@ -346,12 +346,12 @@ msgstr "Målcylinder"
 #: src/Task/TypeStrings.cpp:126
 #, no-c-format
 msgid "BGA start sector"
-msgstr ""
+msgstr "BGA startsektor"
 
 #: src/Task/TypeStrings.cpp:127
 #, no-c-format
 msgid "Area sector with inner radius"
-msgstr "Areasektor med inre radie"
+msgstr "Areasektor med innerradie"
 
 #: src/Task/TypeStrings.cpp:128 src/Dialogs/Task/dlgTaskHelpers.cpp:230
 #, no-c-format
@@ -366,12 +366,12 @@ msgstr ""
 #: src/Task/ValidationErrorStrings.cpp:32
 #, no-c-format
 msgid "No valid start"
-msgstr "Ingen giltlig start"
+msgstr "Ingen giltig start"
 
 #: src/Task/ValidationErrorStrings.cpp:33
 #, no-c-format
 msgid "No valid finish"
-msgstr "Ingen giltlig målgång"
+msgstr "Ingen giltig målgång"
 
 #: src/Task/ValidationErrorStrings.cpp:34
 #, no-c-format
@@ -416,7 +416,7 @@ msgstr "Brytpunkter icke-FAI"
 #: src/Task/ValidationErrorStrings.cpp:42
 #, no-c-format
 msgid "non-MAT turn points"
-msgstr ""
+msgstr "Brytpunkter icke-MAT"
 
 #: src/Airspace/AirspaceGlue.cpp:84
 msgid "Loading Airspace File..."
@@ -1731,6 +1731,13 @@ msgid ""
 "the current load factor (if an accelerometer is connected). When Block mode "
 "speed to fly is selected, this InfoBox displays the MacCready speed."
 msgstr ""
+"Momentan MacCready hastighet-att-flyga som nyttjar beräkningar för netto "
+"vario för att bestämma delfinflyghastighet på farkostens aktuella bäring. I "
+"glidflygsläge beräknas hastighet-att-flyga för bibehållen höjd. I "
+"finalglidsläge beräknas hastighet-att-flyga utifrån nedstigning. I stigläge "
+"beräknas hastighet-att-flyga enligt minsta sjunk vid aktuell lastfaktor (om "
+"accelerometer är ansluten). När \"Block mode\" hastighet-att-flyga är valt "
+"visar InfoBoxen MacCready-hastighet."
 
 #: src/InfoBoxes/Content/Factory.cpp:497
 #, no-c-format
@@ -1815,6 +1822,13 @@ msgid ""
 "good is pointing directly at the next waypoint. This bearing takes into "
 "account the curvature of the Earth."
 msgstr ""
+"Skillnad mellan farkostens spår-bäring och bäring för nästa brytpunkt. Eller "
+"för AAT-uppgift, skillnad till bäring mot målet inom AAT-sektorn. GPS-"
+"navigering baseras på spår-bäring över mark vilken kan skilja från "
+"farkostens riktning vid vind. Chevron pilar pekar i riktningen farkosten "
+"behöver anta för att ändra sin kurs och korrigera sin bäringen, alltså så "
+"att farkostens rätta kurs pekar mot nästa brytpunkt. Jordens kurvatur tas i "
+"beaktande för denna bäring."
 
 #: src/InfoBoxes/Content/Factory.cpp:530
 #, no-c-format
@@ -1872,6 +1886,10 @@ msgid ""
 "and relative humidity probe. (Touch-screen/PC only) Pressing the up/down "
 "cursor keys adjusts this forecast temperature."
 msgstr ""
+"Prognostiserad marktemperatur vid hemmafältet. Används för estimering av "
+"konvektionshöjd och molnbas ihop med utetemperatur och givare för relativ "
+"fuktighet. (Pekskärm/PC) Tryck på markörer för upp/ner för att justera den "
+"prognostiserade temperaturen."
 
 #: src/InfoBoxes/Content/Factory.cpp:554
 #, no-c-format
@@ -1923,6 +1941,10 @@ msgid ""
 "variometer. Negative values indicate climbing cruise. If the total energy "
 "vario speed is close to zero, the displayed value is '---'."
 msgstr ""
+"Momentant lyft/drag-förhållande, utifrån indikerad lufthastighet dividerat "
+"med vertikal hastighet total energi, vid anslutning till en intelligent "
+"variometer. Negativa värden indikerar glidflygning i stig. Om "
+"variometerhastighet total energi är nära noll visas värdet '--'."
 
 #: src/InfoBoxes/Content/Factory.cpp:578
 #, no-c-format
@@ -2005,7 +2027,7 @@ msgstr "Teamdistans"
 #: src/InfoBoxes/Content/Factory.cpp:612
 #, no-c-format
 msgid "The range to the team aircraft location at the last reported team code."
-msgstr ""
+msgstr "Avståndet till lag-farkostens position vid senast rapporterad lag-kod."
 
 #: src/InfoBoxes/Content/Factory.cpp:618
 #, no-c-format
@@ -2077,6 +2099,9 @@ msgid ""
 "negative (expected arrival too early), or blue if in sector and can turn now "
 "with estimated arrival time greater than AAT time plus 5 minutes."
 msgstr ""
+"Skillnad mellan estimerad uppgiftstid och minsta AAT-tid. Rödfärgad om "
+"negativ (förväntad tidig ankomst) eller blå om i sektor och sväng möjlig med "
+"estimerad ankomsttid senare än AAT-tiden plus 5 minuter."
 
 #: src/InfoBoxes/Content/Factory.cpp:650
 #, no-c-format
@@ -2241,6 +2266,14 @@ msgid ""
 "have made even in a zigzag glide. This value is not calculated while "
 "circling."
 msgstr ""
+"Tillryggalagd distans under den konfigurerade tidsperioden, dividerat med "
+"dess höjdförlust. Negativa värden visas som ^^^och indikerar stigande glid "
+"(höjdvinst). Glidtal större än 200 visas med +++. Du kan konfigurera "
+"medelvärdes-perioden i system-inställningarna. Föreslagna värden är 60, 90 "
+"eller 120. Lägre värden rundas mot momentant glidtal och högre värden mot "
+"glidtal vid planflykt. Notera att avståndet INTE är den raka linjen mellan "
+"föregående och nuvarande position. Det är exakt den tillryggalagd distansen, "
+"även vid sicksack-flygning. Värdet beräknas ej under kurvning."
 
 #: src/InfoBoxes/Content/Factory.cpp:723
 #, no-c-format
@@ -2268,6 +2301,8 @@ msgid ""
 "Instantaneous evaluation of the flown distance according to the configured "
 "On-Line Contest rule set."
 msgstr ""
+"Momentan utvärdering av flygen distans enligt konfigurerat regelverk för On-"
+"Line Contest."
 
 #: src/InfoBoxes/Content/Factory.cpp:739
 #, no-c-format
@@ -2368,6 +2403,8 @@ msgid ""
 "Trace of vertical speed, as reported by the GPS, or the intelligent vario "
 "total energy vario value if connected to one."
 msgstr ""
+"Spår med vertikal hastighet, rapporterad från GPS eller, om intelligenta "
+"vario är ansluten, variometervärde total energi."
 
 #: src/InfoBoxes/Content/Factory.cpp:797
 #, no-c-format
