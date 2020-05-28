@@ -30,6 +30,9 @@
 #include "Operation/Operation.hpp"
 #include "OS/ByteOrder.hpp"
 #include "OS/Path.hpp"
+#include "Util/ScopeExit.hxx"
+
+#include <memory>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -149,10 +152,9 @@ LXDevice::ReadFlightList(RecordedFlightList &flight_list,
 
     assert(!busy);
     busy = true;
+    AtScopeExit(this) { busy = false; };
 
-    bool success = Nano::ReadFlightList(port, flight_list, env);
-    busy = false;
-    return success;
+    return Nano::ReadFlightList(port, flight_list, env);
   }
 
   if (!EnableCommandMode(env))
@@ -160,13 +162,11 @@ LXDevice::ReadFlightList(RecordedFlightList &flight_list,
 
   assert(!busy);
   busy = true;
+  AtScopeExit(this) { busy = false; };
 
   bool success = ReadFlightListInner(port, flight_list, env);
 
   LX::CommandModeQuick(port, env);
-
-  busy = false;
-
   return success;
 }
 
@@ -203,25 +203,22 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
 
   env.SetProgressRange(total_length);
 
-  uint8_t *data = new uint8_t[total_length], *p = data;
+  const auto data = std::make_unique<uint8_t[]>(total_length);
+  uint8_t *p = data.get();
   for (unsigned i = 0; i < LX::MemorySection::N && lengths[i] > 0; ++i) {
     if (!LX::ReceivePacketRetry(port, (LX::Command)(LX::READ_LOGGER_DATA + i),
                                 p, lengths[i], env,
                                 std::chrono::seconds(20),
                                 std::chrono::seconds(2),
                                 std::chrono::minutes(5), 2)) {
-      delete [] data;
       return false;
     }
 
     p += lengths[i];
-    env.SetProgressPosition(p - data);
+    env.SetProgressPosition(p - data.get());
   }
 
-  bool success = LX::ConvertLXNToIGC(data, total_length, file);
-  delete [] data;
-
-  return success;
+  return LX::ConvertLXNToIGC(data.get(), total_length, file);
 }
 
 bool
@@ -232,10 +229,9 @@ LXDevice::DownloadFlight(const RecordedFlightInfo &flight,
   if (flight.internal.lx.nano_filename[0] != 0) {
     assert(!busy);
     busy = true;
+    AtScopeExit(this) { busy = false; };
 
-    bool success = Nano::DownloadFlight(port, flight, path, env);
-    busy = false;
-    return success;
+    return Nano::DownloadFlight(port, flight, path, env);
   }
 
   if (!EnableCommandMode(env))
@@ -247,13 +243,11 @@ LXDevice::DownloadFlight(const RecordedFlightInfo &flight,
 
   assert(!busy);
   busy = true;
+  AtScopeExit(this) { busy = false; };
 
   bool success = DownloadFlightInner(port, flight, file, env);
   fclose(file);
 
   LX::CommandModeQuick(port, env);
-
-  busy = false;
-
   return success;
 }
