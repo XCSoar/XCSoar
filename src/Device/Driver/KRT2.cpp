@@ -26,14 +26,15 @@ Copyright_License {
 #include "Device/Port/Port.hpp"
 #include "NMEA/Info.hpp"
 #include "RadioFrequency.hpp"
-#include "Thread/Cond.hxx"
-#include "Thread/Mutex.hxx"
-#include "Util/CharUtil.hxx"
-#include "Util/StaticFifoBuffer.hxx"
-#include "Util/Compiler.h"
+#include "Thread/Cond.hpp"
+#include "Thread/Mutex.hpp"
+#include "Thread/Guard.hpp"
+#include "Util/CharUtil.hpp"
+#include "Util/StaticFifoBuffer.hpp"
+#include "Compiler.h"
 
-#include <stdint.h>
-#include <stdio.h>
+#include <cstdint>
+#include <cstdio>
 
 /**
  * KRT2 device class.
@@ -45,7 +46,7 @@ Copyright_License {
  * for the protocol specification.
  */
 class KRT2Device final : public AbstractDevice {
-  static constexpr auto CMD_TIMEOUT = std::chrono::milliseconds(250); //!< Command timeout
+  static constexpr unsigned CMD_TIMEOUT = 250; //!< Command timeout in milli seconds
   static constexpr unsigned NR_RETRIES = 3; //!< Number of tries to send a command.
 
   static constexpr char STX = 0x02; //!< Command start character.
@@ -190,7 +191,7 @@ KRT2Device::Send(const uint8_t *msg, unsigned msg_size,
 
   do {
     {
-      const std::lock_guard<Mutex> lock(response_mutex);
+      const Guard<Mutex> lock(response_mutex);
       response = NO_RSP;
     }
 
@@ -201,8 +202,8 @@ KRT2Device::Send(const uint8_t *msg, unsigned msg_size,
     // Wait for the response
     uint8_t _response;
     {
-      std::unique_lock<Mutex> lock(response_mutex);
-      rx_cond.wait_for(lock, std::chrono::milliseconds(CMD_TIMEOUT));
+      Guard<Mutex> lock(response_mutex);
+      rx_cond.Wait(response_mutex, CMD_TIMEOUT);
       _response = response;
     }
 
@@ -244,7 +245,7 @@ KRT2Device::DataReceived(const void *_data, size_t length,
     for (;;) {
       // Read data from buffer to handle the messages
       range = rx_buf.Read();
-      if (range.empty())
+      if (range.IsEmpty())
         break;
 
       if (range.size < expected_msg_length)
@@ -262,16 +263,16 @@ KRT2Device::DataReceived(const void *_data, size_t length,
           case NAK:
             // Received a response to a normal command (STX)
             {
-              const std::lock_guard<Mutex> lock(response_mutex);
+              const Guard<Mutex> lock(response_mutex);
               response = *(const uint8_t *) range.data;
               // Signal the response to the TX thread
-              rx_cond.notify_one();
+              rx_cond.Signal();
             }
             break;
           case STX:
             // Received a command from the radio (STX). Handle what we know.
             {
-              const std::lock_guard<Mutex> lock(response_mutex);
+              const Guard<Mutex> lock(response_mutex);
               const struct stx_msg * msg = (const struct stx_msg *) range.data;
               HandleSTXCommand(msg, info);
             }
