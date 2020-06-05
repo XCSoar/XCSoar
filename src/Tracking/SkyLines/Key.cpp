@@ -70,6 +70,7 @@ MakeUint64(uint8_t a, uint8_t b, uint8_t c, uint8_t d,
 {
   return MakeUint64_64(a, b, c, d, e, f, g, h);
 }
+
 #endif
 
 static constexpr uint64_t

@@ -38,6 +38,9 @@ static const char *const font_search_paths[] = {
 #else
   "/Library/Fonts",
   "/Library/Fonts/Microsoft",
+
+  /* found on macOS Catalina */
+  "/System/Library/Fonts/Supplemental",
 #endif
 #elif defined(_WIN32) && !defined(HAVE_POSIX)
   /* just for the experimental WINSDL target */
