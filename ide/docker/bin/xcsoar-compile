@@ -19,6 +19,9 @@ case "${1}" in
       "UNIX")
         make TARGET="${1}" -j"${CPUS}" all
       ;;
+      "UNIX-SDL")
+        make TARGET="UNIX" -j"${CPUS}" all OPENGL=n ENABLE_SDL=y USE_SDL2=y
+      ;;
       "PC")
         make TARGET="${1}" -j"${CPUS}" all
       ;;
@@ -26,7 +29,7 @@ case "${1}" in
         make TARGET="${1}" -j"${CPUS}" all
       ;;
       *)
-        echo "No target specified. Valid targets: ANDROID DOCS KOBO UNIX PC"
+        echo "No target specified. Valid targets: ANDROID DOCS KOBO UNIX UNIX-SDL PC"
         exit 1
       ;;
 esac
