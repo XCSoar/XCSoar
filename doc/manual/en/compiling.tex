@@ -265,6 +265,22 @@ To compile for macOS / x86\_64, run:
 make TARGET=OSX64 dmg
 \end{verbatim*}
 
+\subsection{Compiling for macOS (with Homebrew)}
+
+Install the required Homebrew packages:
+
+\begin{verbatim*}
+brew install automake autoconf libtool \
+  imagemagick librsvg quilt pkg-config \
+  boost sdl2
+\end{verbatim*}
+
+Then compile:
+
+\begin{verbatim*}
+make dmg
+\end{verbatim*}
+
 \subsection{Compiling for the Raspberry Pi}
 
 You need an ARM toolchain.  For example, you can use the Debian
