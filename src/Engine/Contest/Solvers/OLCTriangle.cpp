@@ -23,7 +23,7 @@
 #include "OLCTriangle.hpp"
 #include "Cast.hpp"
 #include "Trace/Trace.hpp"
-#include "Util/QuadTree.hpp"
+#include "Util/QuadTree.hxx"
 
 #include <limits>
 

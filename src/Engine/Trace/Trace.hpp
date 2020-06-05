@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Point.hpp"
 #include "Util/NonCopyable.hpp"
-#include "Util/SliceAllocator.hpp"
+#include "Util/SliceAllocator.hxx"
 #include "Util/Serial.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
 #include "Compiler.h"
