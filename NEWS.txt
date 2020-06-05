@@ -4,6 +4,8 @@ Version 6.8.15 - not yet released
 * tracking
   - SkyLines: update tracking IP address
 * support for long-form `DTE` header in IGC files
+* macOS
+  - add macOS Catalina font path
 
 Version 6.8.14 - 2020/05/14
 * user interface
