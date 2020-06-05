@@ -215,6 +215,8 @@ libtiff = AutotoolsProject(
         '--disable-old-jpeg',
         '--disable-jbig',
         '--disable-lzma',
+        '--disable-zstd',
+        '--disable-webp',
         '--disable-strip-chopping',
         '--disable-extrasample-as-alpha',
     ],
