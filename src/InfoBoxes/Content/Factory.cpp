@@ -1288,8 +1288,8 @@ static constexpr MetaData meta_data[] = {
        "in the current task, the center of a selected goto waypoint "
        "or the target within the AAT sector for AAT tasks."),
     IBFHelper<InfoBoxContentNextArrow>::Create,
-    NEXT_ARROW,
-    NEXT_ARROW,
+    e_ActiveRadio,
+    e_ActiveRadio,
   },
   // Radio
   {
@@ -1297,13 +1297,17 @@ static constexpr MetaData meta_data[] = {
     N_("Act Freq"),
     N_("The currently active Radio Frequency"),
     UpdateInfoBoxActiveFrequency,
-  },
+    e_StandbyRadio,
+    e_StandbyRadio,
+    },
 
   {
     N_("Standby Radio Frequency"),
     N_("Stby Freq"),
     N_("The currently standby Radio Frequency"),
     UpdateInfoBoxStandbyFrequency,
+    NEXT_ARROW,
+    NEXT_ARROW,
   },
 
 };
