@@ -34,7 +34,7 @@
 
 #include <utility>
 #include <cstddef>
-#include <assert.h>
+#include <cassert>
 
 /**
  * An optimized allocator for many objects of the same size.  It is
