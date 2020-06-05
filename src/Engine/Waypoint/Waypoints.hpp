@@ -23,7 +23,7 @@
 #define WAYPOINTS_HPP
 
 #include "Util/RadixTree.hpp"
-#include "Util/QuadTree.hpp"
+#include "Util/QuadTree.hxx"
 #include "Util/Serial.hpp"
 #include "Ptr.hpp"
 #include "Waypoint.hpp"

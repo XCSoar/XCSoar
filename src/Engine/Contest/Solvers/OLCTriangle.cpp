@@ -23,7 +23,7 @@
 #include "OLCTriangle.hpp"
 #include "Cast.hpp"
 #include "Trace/Trace.hpp"
-#include "Util/QuadTree.hpp"
+#include "Util/QuadTree.hxx"
 
 /*
  @todo potential to use 3d convex hull to speed search

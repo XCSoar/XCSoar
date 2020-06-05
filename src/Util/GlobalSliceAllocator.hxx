@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2011-2020 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,10 +27,10 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef GLOBAL_SLICE_ALLOCATOR_HPP
-#define GLOBAL_SLICE_ALLOCATOR_HPP
+#ifndef GLOBAL_SLICE_ALLOCATOR_HXX
+#define GLOBAL_SLICE_ALLOCATOR_HXX
 
-#include "SliceAllocator.hpp"
+#include "SliceAllocator.hxx"
 
 template<typename T, unsigned size>
 SliceAllocator<T, size> GlobalSliceAllocator<T, size>::allocator;

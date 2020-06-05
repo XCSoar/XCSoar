@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Trace.hpp"
 #include "Vector.hpp"
-#include "Util/GlobalSliceAllocator.hpp"
+#include "Util/GlobalSliceAllocator.hxx"
 
 #include <algorithm>
 

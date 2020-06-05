@@ -24,7 +24,7 @@
 #include "RouteLink.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "ReachFanParms.hpp"
-#include "Util/GlobalSliceAllocator.hpp"
+#include "Util/GlobalSliceAllocator.hxx"
 #include "Geo/Flat/FlatProjection.hpp"
 
 #define REACH_BUFFER 1
