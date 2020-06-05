@@ -60,8 +60,7 @@ template<typename T, typename Accessor,
 	 typename Alloc = std::allocator<T> >
 class QuadTree {
 	struct AlwaysTrue {
-		constexpr
-		bool operator()(const T &) const {
+		constexpr bool operator()(const T &) const noexcept {
 			return true;
 		}
 	};
@@ -78,8 +77,7 @@ public:
 	/**
 	 * Returns the maximum value for the numeric type #distance_type.
 	 */
-	constexpr
-	static inline distance_type max_distance(){
+	static constexpr distance_type max_distance() noexcept {
 		return std::numeric_limits<distance_type>::max();
 	}
 
@@ -89,8 +87,7 @@ public:
 	/**
 	 * Calculate the square of this number.
 	 */
-	constexpr
-	static distance_type Square(distance_type x) {
+	static constexpr distance_type Square(distance_type x) noexcept {
 		return x * x;
 	}
 
@@ -99,8 +96,7 @@ public:
 	 * Without this overload, the square of a negative number cannot be
 	 * calculated.
 	 */
-	constexpr
-	static distance_type Square(position_type x) {
+	static constexpr distance_type Square(position_type x) noexcept {
 		return x * x;
 	}
 
@@ -111,23 +107,24 @@ public:
 		position_type x, y;
 
 		constexpr
-		Point(position_type _x, position_type _y):x(_x), y(_y) {}
+		Point(position_type _x, position_type _y) noexcept
+			:x(_x), y(_y) {}
 
 		/**
 		 * Calculate the square distance to another point.
 		 */
 		constexpr
-		distance_type SquareDistanceTo(const Point &other) const {
+		distance_type SquareDistanceTo(const Point &other) const noexcept {
 			return Square(other.x - x) + Square(other.y - y);
 		}
 
 		constexpr
-		bool operator==(const Point &other) const {
+		bool operator==(const Point &other) const noexcept {
 			return x == other.x && y == other.y;
 		}
 
 		constexpr
-		bool operator!=(const Point &other) const {
+		bool operator!=(const Point &other) const noexcept {
 			return !(*this == other);
 		}
 	};
@@ -145,11 +142,11 @@ public:
 
 		constexpr
 		Rectangle(position_type _left, position_type _top,
-			  position_type _right, position_type _bottom)
+			  position_type _right, position_type _bottom) noexcept
 			:left(_left), top(_top), right(_right), bottom(_bottom) {}
 
 		constexpr
-		bool IsEmpty() const {
+		bool IsEmpty() const noexcept {
 			return left == right || top == bottom;
 		}
 
@@ -157,7 +154,7 @@ public:
 		 * Initialise all attributes with zero, making this object
 		 * "empty".
 		 */
-		void Clear() {
+		void Clear() noexcept {
 			left = top = right = bottom = 0;
 		}
 
@@ -165,17 +162,17 @@ public:
 		 * Is this rectangle big enough so it can be splitted?
 		 */
 		constexpr
-		bool CanSplit() const {
+		bool CanSplit() const noexcept {
 			return left + 2 <= right && top + 2 <= bottom;
 		}
 
 		constexpr
-		Point GetMiddle() const {
+		Point GetMiddle() const noexcept {
 			return Point((left + right) / 2, (top + bottom) / 2);
 		}
 
 		constexpr
-		bool IsInside(const Point &point) const {
+		bool IsInside(const Point &point) const noexcept {
 			return point.x >= left && point.x <= right &&
 				point.y >= top && point.y <= bottom;
 		}
@@ -183,7 +180,7 @@ public:
 		/**
 		 * Make this rectangle empty, at the specified position.
 		 */
-		void Set(const Point &point) {
+		void Set(const Point &point) noexcept {
 			left = right = point.x;
 			top = bottom = point.y;
 		}
@@ -192,7 +189,7 @@ public:
 		 * Extend the bounds of this rectangle so the specified point is
 		 * inside.
 		 */
-		void Scan(const Point &point) {
+		void Scan(const Point &point) noexcept {
 			if (point.x < left)
 				left = point.x;
 
@@ -207,7 +204,7 @@ public:
 		}
 
 		constexpr
-		distance_type HorizontalDistanceTo(const Point &other) const {
+		distance_type HorizontalDistanceTo(const Point &other) const noexcept {
 			return other.x < left
 				? left - other.x
 				: (other.x > right
@@ -216,7 +213,7 @@ public:
 		}
 
 		constexpr
-		distance_type VerticalDistanceTo(const Point &other) const {
+		distance_type VerticalDistanceTo(const Point &other) const noexcept {
 			return other.y < top
 				? top - other.y
 				: (other.y > bottom
@@ -229,12 +226,13 @@ public:
 		 * specified point.  Returns 0 when the point is inside.
 		 */
 		constexpr
-		distance_type SquareDistanceTo(const Point &other) const {
+		distance_type SquareDistanceTo(const Point &other) const noexcept {
 			return Square(HorizontalDistanceTo(other)) + Square(VerticalDistanceTo(other));
 		}
 
 		constexpr
-		bool IsWithinSquareRange(const Point &other, distance_type square_range) const {
+		bool IsWithinSquareRange(const Point &other,
+					 distance_type square_range) const noexcept {
 			return SquareDistanceTo(other) <= square_range;
 		}
 
@@ -243,7 +241,7 @@ public:
 		 * rectangle.  Returns a pair which specifies the position of the
 		 * new rectangle inside the old bigger one.
 		 */
-		std::pair<bool,bool> Split(const Point &point) {
+		std::pair<bool,bool> Split(const Point &point) noexcept {
 			const Point middle = GetMiddle();
 			bool x = point.x >= middle.x;
 			bool y = point.y >= middle.y;
@@ -266,7 +264,7 @@ public:
 	 * Function wrapper for the Accessor.
 	 */
 	constexpr
-	static Point GetPosition(const T &value) {
+	static Point GetPosition(const T &value) noexcept {
 		return Point(Accessor().GetX(value),
 			     Accessor().GetY(value));
 	}
@@ -283,20 +281,22 @@ protected:
 		T value;
 
 		template<typename U>
-		explicit Leaf(U &&_value):value(std::forward<U>(_value)) {}
+		explicit Leaf(U &&_value) noexcept
+			:value(std::forward<U>(_value)) {}
 
 		constexpr
-		Point GetPosition() const {
+		Point GetPosition() const noexcept {
 			return QuadTree<T,Accessor,Alloc>::GetPosition(value);
 		}
 
 		constexpr
-		distance_type SquareDistanceTo(const Point &other) const {
+		distance_type SquareDistanceTo(const Point &other) const noexcept {
 			return GetPosition().SquareDistanceTo(other);
 		}
 
 		constexpr
-		bool InSquareRange(const Point &ref, distance_type square_range) const {
+		bool InSquareRange(const Point &ref,
+				   distance_type square_range) const noexcept {
 			return GetPosition().SquareDistanceTo(ref) <= square_range;
 		}
 	};
@@ -308,27 +308,27 @@ protected:
 		Leaf *head;
 		unsigned size;
 
-		LeafList():head(nullptr), size(0) {}
+		LeafList() noexcept:head(nullptr), size(0) {}
 
-		~LeafList() {
+		~LeafList() noexcept {
 			assert(head == nullptr);
 			assert(size == 0);
 		}
 
 		constexpr
-		bool IsEmpty() const {
+		bool IsEmpty() const noexcept {
 			return head == nullptr;
 		}
 
 		constexpr
-		unsigned GetSize() const {
+		unsigned GetSize() const noexcept {
 			return size;
 		}
 
 		/**
 		 * Add the specified leaf to the list.
 		 */
-		void Add(Leaf *leaf) {
+		void Add(Leaf *leaf) noexcept {
 			leaf->next = head;
 			head = leaf;
 			++size;
@@ -338,7 +338,7 @@ protected:
 		 * Remove the specified Leaf from the list, and return a non-const
 		 * pointer to it.  It is not freed.
 		 */
-		Leaf *Remove(const Leaf *leaf) {
+		Leaf *Remove(const Leaf *leaf) noexcept {
 			assert(size > 0);
 
 			Leaf **p = &head;
@@ -359,7 +359,7 @@ protected:
 		 * Remove the topmost Leaf from the list and returns it.  It is
 		 * not freed.
 		 */
-		Leaf *Pop() {
+		Leaf *Pop() noexcept {
 			assert(!IsEmpty());
 
 			Leaf *leaf = head;
@@ -371,7 +371,7 @@ protected:
 		/**
 		 * Remove and free all Leaf objects in the list.
 		 */
-		void Clear(LeafAllocator &allocator) {
+		void Clear(LeafAllocator &allocator) noexcept {
 			Leaf *leaf = head;
 			while (leaf != nullptr) {
 				Leaf *next = leaf->next;
@@ -385,7 +385,8 @@ protected:
 		}
 
 		template<class P>
-		void EraseIf(const P &predicate, LeafAllocator &leaf_allocator) {
+		void EraseIf(const P &predicate,
+			     LeafAllocator &leaf_allocator) noexcept {
 			Leaf **p = &head;
 			while (true) {
 				Leaf *leaf = *p;
@@ -407,7 +408,7 @@ protected:
 		/**
 		 * Move all Leaf objects from the specified list to this one.
 		 */
-		void MoveAllFrom(LeafList &other) {
+		void MoveAllFrom(LeafList &other) noexcept {
 			Leaf *last = other.head;
 			if (last == nullptr)
 				return;
@@ -423,7 +424,7 @@ protected:
 		}
 
 		gcc_pure
-		const Leaf &FindPointer(const T *value) const {
+		const Leaf &FindPointer(const T *value) const noexcept {
 			assert(value != nullptr);
 
 			const Leaf *i = head;
@@ -440,7 +441,7 @@ protected:
 		gcc_pure
 		std::pair<const Leaf *, distance_type>
 		FindNearestIf(const Point location, distance_type square_range,
-			      const P &predicate) const {
+			      const P &predicate) const noexcept {
 			const Leaf *nearest = nullptr;
 			distance_type nearest_square_distance = square_range;
 
@@ -487,20 +488,20 @@ protected:
 		/* a list of values; must be empty in a "splitted" bucket */
 		LeafList leaves;
 
-		Bucket()
+		Bucket() noexcept
 			:parent(nullptr), children(nullptr) {}
 
-		~Bucket() {
+		~Bucket() noexcept {
 			assert(IsEmpty());
 		}
 
 		constexpr
-		bool IsEmpty() const {
+		bool IsEmpty() const noexcept {
 			return children == nullptr && leaves.IsEmpty();
 		}
 
 		constexpr
-		bool IsSplitted() const {
+		bool IsSplitted() const noexcept {
 			return children != nullptr;
 		}
 
@@ -508,13 +509,13 @@ protected:
 		 * Returns the (deep) number of leaves in this bucket.
 		 */
 		gcc_pure
-		unsigned GetSize() const {
+		unsigned GetSize() const noexcept {
 			return IsSplitted()
 				? children->GetSize()
 				: leaves.GetSize();
 		}
 
-		const Bucket *GetRoot() const {
+		const Bucket *GetRoot() const noexcept {
 			const Bucket *bucket = this;
 			while (bucket->parent != nullptr)
 				bucket = bucket->parent;
@@ -525,7 +526,7 @@ protected:
 		 * Dispose all child buckets and values.
 		 */
 		void Clear(BucketAllocator &bucket_allocator,
-			   LeafAllocator &leaf_allocator) {
+			   LeafAllocator &leaf_allocator) noexcept {
 			assert(children == nullptr || leaves.IsEmpty());
 
 			if (IsSplitted()) {
@@ -541,7 +542,7 @@ protected:
 		 * Add the specified Leaf directly into this bucket, without
 		 * further checks.  Not legal on splitted buckets.
 		 */
-		void AddHere(Leaf *leaf) {
+		void AddHere(Leaf *leaf) noexcept {
 			assert(!IsSplitted());
 
 			leaves.Add(leaf);
@@ -551,7 +552,8 @@ protected:
 		 * Split this bucket into four children, and distribute the leaves
 		 * to them.
 		 */
-		void Split(const Point middle, BucketAllocator &bucket_allocator) {
+		void Split(const Point middle,
+			   BucketAllocator &bucket_allocator) noexcept {
 			assert(!IsSplitted());
 
 			children = bucket_allocator.allocate(1);
@@ -568,7 +570,7 @@ protected:
 			}
 		}
 
-		Bucket &GetChildAt(Rectangle &bounds, Point location) const {
+		Bucket &GetChildAt(Rectangle &bounds, Point location) const noexcept {
 			assert(IsSplitted());
 			assert(bounds.IsInside(location));
 
@@ -581,7 +583,7 @@ protected:
 		 * splits the bucket automatically when it grows too large.
 		 */
 		void Add(Rectangle &bounds, Leaf *leaf,
-			 BucketAllocator &bucket_allocator) {
+			 BucketAllocator &bucket_allocator) noexcept {
 			if (IsSplitted()) {
 				Bucket &child = GetChildAt(bounds, GetPosition(leaf->value));
 				return child.Add(bounds, leaf, bucket_allocator);
@@ -593,20 +595,22 @@ protected:
 			}
 		}
 
-		Leaf *Remove(const Leaf *leaf) {
+		Leaf *Remove(const Leaf *leaf) noexcept {
 			assert(leaf != nullptr);
 
 			return leaves.Remove(leaf);
 		}
 
-		void Erase(const Leaf *cleaf, LeafAllocator &leaf_allocator) {
+		void Erase(const Leaf *cleaf,
+			   LeafAllocator &leaf_allocator) noexcept {
 			Leaf *leaf = Remove(cleaf);
 			leaf_allocator.destroy(leaf);
 			leaf_allocator.deallocate(leaf, 1);
 		}
 
 		template<class P>
-		void EraseIf(const P &predicate, LeafAllocator &leaf_allocator) {
+		void EraseIf(const P &predicate,
+			     LeafAllocator &leaf_allocator) noexcept {
 			leaves.EraseIf(predicate, leaf_allocator);
 
 			if (children != nullptr)
@@ -617,7 +621,7 @@ protected:
 		 * Scan the bounds of all leaves.  Only legal in a "flat"
 		 * (unsplitted) root bucket.
 		 */
-		void Scan(Rectangle &bounds) {
+		void Scan(Rectangle &bounds) noexcept {
 			assert(parent == nullptr);
 			assert(!IsSplitted());
 
@@ -632,7 +636,7 @@ protected:
 				bounds.Scan(GetPosition(leaf->value));
 		}
 
-		void Flatten(BucketAllocator &bucket_allocator) {
+		void Flatten(BucketAllocator &bucket_allocator) noexcept {
 			if (!IsSplitted())
 				return;
 
@@ -648,7 +652,7 @@ protected:
 		}
 
 		void Optimise(const Rectangle &bounds,
-			      BucketAllocator &bucket_allocator) {
+			      BucketAllocator &bucket_allocator) noexcept {
 			if (leaves.GetSize() < SPLIT_THRESHOLD || !bounds.CanSplit())
 				return;
 
@@ -660,7 +664,7 @@ protected:
 		 * Find the first Bucket in the tree that has at least one Leaf.
 		 */
 		gcc_pure
-		const Bucket *FindFirstLeafBucket() const {
+		const Bucket *FindFirstLeafBucket() const noexcept {
 			if (!leaves.IsEmpty())
 				return this;
 
@@ -677,7 +681,7 @@ protected:
 		}
 
 		gcc_pure
-		const Bucket *FindNextLeafBucket() const {
+		const Bucket *FindNextLeafBucket() const noexcept {
 			assert(children == nullptr);
 
 			const Bucket *current = this, *parent;
@@ -697,19 +701,20 @@ protected:
 		}
 
 		gcc_pure
-		Bucket *FindFirstLeafBucket() {
+		Bucket *FindFirstLeafBucket() noexcept {
 			const Bucket *cthis = this;
 			return const_cast<Bucket *>(cthis->FindFirstLeafBucket());
 		}
 
 		gcc_pure
-		Bucket *FindNextLeafBucket() {
+		Bucket *FindNextLeafBucket() noexcept {
 			const Bucket *cthis = this;
 			return const_cast<Bucket *>(cthis->FindNextLeafBucket());
 		}
 
 		gcc_pure
-		const_iterator FindPointer(Rectangle &bounds, const T *value) const {
+		const_iterator FindPointer(Rectangle &bounds,
+					   const T *value) const noexcept {
 			assert(value != nullptr);
 			assert(bounds.IsEmpty() || bounds.IsInside(GetPosition(*value)));
 			assert(!bounds.IsEmpty() || parent == nullptr);
@@ -728,7 +733,7 @@ protected:
 		std::pair<const_iterator, distance_type>
 		FindNearestIf(const Rectangle &bounds,
 			      const Point location, distance_type square_range,
-			      const P &predicate) const {
+			      const P &predicate) const noexcept {
 			if (!bounds.IsWithinSquareRange(location, square_range))
 				return std::make_pair(const_iterator(), max_distance());
 
@@ -765,18 +770,18 @@ protected:
 
 		Bucket buckets[N];
 
-		QuadBucket(Bucket *parent) {
+		QuadBucket(Bucket *parent) noexcept {
 			for (unsigned i = 0; i < N; ++i)
 				buckets[i].parent = parent;
 		}
 
 		gcc_const
-		Bucket &Get(bool right, bool bottom) {
+		Bucket &Get(bool right, bool bottom) noexcept {
 			return buckets[(bottom << 1) | right];
 		}
 
 		gcc_pure
-		const Bucket *GetNext(const Bucket *bucket) {
+		const Bucket *GetNext(const Bucket *bucket) noexcept {
 			assert(bucket != nullptr);
 			assert(bucket->parent != nullptr);
 			assert(this == bucket->parent->children);
@@ -787,44 +792,50 @@ protected:
 		}
 
 		constexpr
-		unsigned GetSize() const {
+		unsigned GetSize() const noexcept {
 			return buckets[0].GetSize() + buckets[1].GetSize() +
 				buckets[2].GetSize() + buckets[3].GetSize();
 		}
 
 		void Clear(BucketAllocator &bucket_allocator,
-			   LeafAllocator &leaf_allocator) {
+			   LeafAllocator &leaf_allocator) noexcept {
 			for (unsigned i = 0; i < N; ++i)
 				buckets[i].Clear(bucket_allocator, leaf_allocator);
 		}
 
 		template<class P>
-		void EraseIf(const P &predicate, LeafAllocator &leaf_allocator) {
+		void EraseIf(const P &predicate,
+			     LeafAllocator &leaf_allocator) noexcept {
 			for (unsigned i = 0; i < N; ++i)
 				buckets[i].EraseIf(predicate, leaf_allocator);
 		}
 
 		constexpr
-		static Rectangle GetTopLeft(const Rectangle r, const Point middle) {
+		static Rectangle GetTopLeft(const Rectangle r,
+					    const Point middle) noexcept {
 			return Rectangle(r.left, r.top, middle.x, middle.y);
 		}
 
 		constexpr
-		static Rectangle GetTopRight(const Rectangle r, const Point middle) {
+		static Rectangle GetTopRight(const Rectangle r,
+					     const Point middle) noexcept {
 			return Rectangle(middle.x, r.top, r.right, middle.y);
 		}
 
 		constexpr
-		static Rectangle GetBottomLeft(const Rectangle r, const Point middle) {
+		static Rectangle GetBottomLeft(const Rectangle r,
+					       const Point middle) noexcept {
 			return Rectangle(r.left, middle.y, middle.x, r.bottom);
 		}
 
 		constexpr
-		static Rectangle GetBottomRight(const Rectangle r, const Point middle) {
+		static Rectangle GetBottomRight(const Rectangle r,
+						const Point middle) noexcept {
 			return Rectangle(middle.x, middle.y, r.right, r.bottom);
 		}
 
-		void Optimise(const Rectangle &bounds, BucketAllocator &bucket_allocator) {
+		void Optimise(const Rectangle &bounds,
+			      BucketAllocator &bucket_allocator) noexcept {
 			const Point middle = bounds.GetMiddle();
 
 			buckets[0].Optimise(GetTopLeft(bounds, middle), bucket_allocator);
@@ -838,7 +849,7 @@ protected:
 		std::pair<const_iterator, distance_type>
 		FindNearestIf(const Rectangle &bounds,
 			      const Point location, distance_type square_range,
-			      const P &predicate) const {
+			      const P &predicate) const noexcept {
 			const Point middle = bounds.GetMiddle();
 
 			auto result =
@@ -904,7 +915,7 @@ protected:
 	 * Safely deconstify a bucket pointer.  This is a hack.
 	 */
 	gcc_const
-	Bucket *DeconstifyBucket(const Bucket *bucket) {
+	Bucket *DeconstifyBucket(const Bucket *bucket) noexcept {
 		assert(bucket != nullptr);
 		assert(bucket->GetRoot() == &root);
 
@@ -915,7 +926,7 @@ protected:
 	 * Safely deconstify a leaf pointer.  This is a hack.
 	 */
 	gcc_const
-	Leaf *DeconstifyLeaf(const Leaf *leaf) {
+	Leaf *DeconstifyLeaf(const Leaf *leaf) noexcept {
 		assert(leaf != nullptr);
 
 		return const_cast<Leaf *>(leaf);
@@ -929,20 +940,20 @@ protected:
 	Bucket root;
 
 public:
-	QuadTree() {
+	QuadTree() noexcept {
 		bounds.Clear();
 	}
 
 	QuadTree(const QuadTree &) = delete;
 
-	~QuadTree() {
+	~QuadTree() noexcept {
 		/* this needs to be called manually, because we can't pass the
 		   allocator references to the (Quad)Bucket / Leaf destructors */
 		Clear();
 	}
 
 	constexpr
-	bool HaveBounds() const {
+	bool HaveBounds() const noexcept {
 		return !bounds.IsEmpty();
 	}
 
@@ -951,7 +962,7 @@ public:
 	 *
 	 * @param _bounds the new bounds, which must not be empty
 	 */
-	void SetBounds(const Rectangle &_bounds) {
+	void SetBounds(const Rectangle &_bounds) noexcept {
 		assert(bounds.IsEmpty());
 		assert(root.IsEmpty());
 		assert(!_bounds.IsEmpty());
@@ -963,7 +974,7 @@ public:
 	 * Clear the bounds.  May only be called on a "flat" QuadTree,
 	 * e.g. after Flatten() has been called.
 	 */
-	void ClearBounds() {
+	void ClearBounds() noexcept {
 		assert(IsFlat());
 
 		bounds.Clear();
@@ -974,12 +985,12 @@ public:
 	 * it may be added without a rescan.
 	 */
 	constexpr
-	bool IsWithinBounds(const T &value) const {
+	bool IsWithinBounds(const T &value) const noexcept {
 		return bounds.IsInside(GetPosition(value));
 	}
 
 	constexpr
-	bool IsWithinKnownBounds(const T &value) const {
+	bool IsWithinKnownBounds(const T &value) const noexcept {
 		return bounds.IsEmpty() || bounds.IsInside(GetPosition(value));
 	}
 
@@ -989,7 +1000,7 @@ public:
 	 *
 	 * @return true if the QuadTree has non-empty bounds now
 	 */
-	bool ScanBounds() {
+	bool ScanBounds() noexcept {
 		ClearBounds();
 		root.Scan(bounds);
 
@@ -997,7 +1008,7 @@ public:
 	}
 
 	constexpr
-	bool IsFlat() const {
+	bool IsFlat() const noexcept {
 		return !root.IsSplitted();
 	}
 
@@ -1005,14 +1016,14 @@ public:
 	 * Flatten the tree, i.e. put all values into the root bucket and
 	 * delete all other buckets.
 	 */
-	void Flatten() {
+	void Flatten() noexcept {
 		root.Flatten(bucket_allocator);
 	}
 
 	/**
 	 * Rescan the bounds and rebuild the tree.
 	 */
-	void Optimise() {
+	void Optimise() noexcept {
 		Flatten();
 		if (ScanBounds())
 			root.Optimise(bounds, bucket_allocator);
@@ -1021,7 +1032,7 @@ public:
 	/**
 	 * Remove all values.
 	 */
-	void Clear() {
+	void Clear() noexcept {
 		root.Clear(bucket_allocator, leaf_allocator);
 		bounds.Clear();
 	}
@@ -1034,7 +1045,7 @@ public:
 	 * valid until the value is removed
 	 */
 	template<typename U>
-	const T &AddQuick(U &&value) {
+	const T &AddQuick(U &&value) noexcept {
 		assert(IsFlat());
 		assert(bounds.IsEmpty());
 
@@ -1054,7 +1065,7 @@ public:
 	 * valid until the value is removed
 	 */
 	template<typename U>
-	const T &AddScan(U &&value) {
+	const T &AddScan(U &&value) noexcept {
 		assert(IsFlat());
 
 		Leaf *leaf = leaf_allocator.allocate(1);
@@ -1073,7 +1084,7 @@ public:
 	 * remains valid until the value is removed
 	 */
 	template<typename U>
-	const T &AddDeep(U &&value) {
+	const T &AddDeep(U &&value) noexcept {
 		assert(IsWithinBounds(value));
 
 		Leaf *leaf = leaf_allocator.allocate(1);
@@ -1092,7 +1103,7 @@ public:
 	 * valid until the value is removed
 	 */
 	template<typename U>
-	const T &Add(U &&value) {
+	const T &Add(U &&value) noexcept {
 		if (bounds.IsEmpty())
 			/* quick-add mode: add all values to the root bucket, optimise
 			   later */
@@ -1114,7 +1125,7 @@ public:
 	 * Does this QuadTree contain at least one value?
 	 */
 	constexpr
-	bool IsEmpty() const {
+	bool IsEmpty() const noexcept {
 		return root.IsEmpty();
 	}
 
@@ -1125,11 +1136,11 @@ public:
 		Leaf *leaf;
 
 		constexpr
-		iterator()
+		iterator() noexcept
 			:bucket(nullptr), leaf(nullptr) {}
 
 		constexpr
-		iterator(Bucket *_bucket)
+		iterator(Bucket *_bucket) noexcept
 			:bucket(_bucket), leaf(bucket->leaves.head) {}
 
 	public:
@@ -1140,16 +1151,16 @@ public:
 		typedef T &reference;
 
 		constexpr
-		bool operator==(const iterator &other) const {
+		bool operator==(const iterator &other) const noexcept {
 			return bucket == other.bucket && leaf == other.leaf;
 		}
 
 		constexpr
-		bool operator!=(const iterator &other) const {
+		bool operator!=(const iterator &other) const noexcept {
 			return !(*this == other);
 		}
 
-		iterator &operator++() {
+		iterator &operator++() noexcept {
 			assert(leaf != nullptr);
 
 			leaf = leaf->next;
@@ -1163,13 +1174,13 @@ public:
 			return *this;
 		}
 
-		reference operator*() const {
+		reference operator*() const noexcept {
 			assert(leaf != nullptr);
 
 			return leaf->value;
 		}
 
-		pointer operator->() const {
+		pointer operator->() const noexcept {
 			assert(leaf != nullptr);
 
 			return &leaf->value;
@@ -1177,7 +1188,7 @@ public:
 	};
 
 	gcc_pure
-	iterator begin() {
+	iterator begin() noexcept {
 		Bucket *bucket = root.FindFirstLeafBucket();
 		return bucket != nullptr
 			? iterator(bucket)
@@ -1185,7 +1196,7 @@ public:
 	}
 
 	gcc_pure
-	iterator end() {
+	iterator end() noexcept {
 		return iterator();
 	}
 
@@ -1196,15 +1207,15 @@ public:
 		const Leaf *leaf;
 
 		constexpr
-		const_iterator()
+		const_iterator() noexcept
 			:bucket(nullptr), leaf(nullptr) {}
 
 		constexpr
-		const_iterator(const Bucket *_bucket)
+		const_iterator(const Bucket *_bucket) noexcept
 			:bucket(_bucket), leaf(bucket->leaves.head) {}
 
 		constexpr
-		const_iterator(const Bucket *_bucket, const Leaf *_leaf)
+		const_iterator(const Bucket *_bucket, const Leaf *_leaf) noexcept
 			:bucket(_bucket), leaf(_leaf) {}
 
 	public:
@@ -1215,20 +1226,20 @@ public:
 		typedef const T &reference;
 
 		constexpr
-		const_iterator(const iterator &other)
+		const_iterator(const iterator &other) noexcept
 			:bucket(other.bucket), leaf(other.leaf) {}
 
 		constexpr
-		bool operator==(const const_iterator &other) const {
+		bool operator==(const const_iterator &other) const noexcept {
 			return bucket == other.bucket && leaf == other.leaf;
 		}
 
 		constexpr
-		bool operator!=(const const_iterator &other) const {
+		bool operator!=(const const_iterator &other) const noexcept {
 			return !(*this == other);
 		}
 
-		const_iterator &operator++() {
+		const_iterator &operator++() noexcept {
 			assert(leaf != nullptr);
 
 			leaf = leaf->next;
@@ -1242,13 +1253,13 @@ public:
 			return *this;
 		}
 
-		reference operator*() const {
+		reference operator*() const noexcept {
 			assert(leaf != nullptr);
 
 			return leaf->value;
 		}
 
-		pointer operator->() const {
+		pointer operator->() const noexcept {
 			assert(leaf != nullptr);
 
 			return &leaf->value;
@@ -1256,7 +1267,7 @@ public:
 	};
 
 	gcc_pure
-	const_iterator begin() const {
+	const_iterator begin() const noexcept {
 		const Bucket *bucket = root.FindFirstLeafBucket();
 		return bucket != nullptr
 			? const_iterator(bucket)
@@ -1264,12 +1275,12 @@ public:
 	}
 
 	gcc_pure
-	const_iterator end() const {
+	const_iterator end() const noexcept {
 		return const_iterator();
 	}
 
 	gcc_pure
-	const_iterator FindPointer(const T *value) const {
+	const_iterator FindPointer(const T *value) const noexcept {
 		assert(value != nullptr);
 		assert(IsWithinKnownBounds(*value));
 
@@ -1278,20 +1289,20 @@ public:
 	}
 
 	gcc_pure
-	unsigned size() const {
+	unsigned size() const noexcept {
 		return root.GetSize();
 	}
 
-	void clear() {
+	void clear() noexcept {
 		Clear();
 	}
 
 	template<typename U>
-	void insert(U &&value) {
+	void insert(U &&value) noexcept {
 		Add(std::forward<U>(value));
 	}
 
-	void erase(const_iterator it) {
+	void erase(const_iterator it) noexcept {
 		assert(it.bucket != nullptr);
 		assert(it.bucket->GetRoot() == &root);
 		assert(it.leaf != nullptr);
@@ -1307,7 +1318,7 @@ public:
 	 * Erase all elements that match the specified predicate.
 	 */
 	template<class P>
-	void EraseIf(const P &predicate) {
+	void EraseIf(const P &predicate) noexcept {
 		root.EraseIf(predicate, leaf_allocator);
 
 		if (IsEmpty())
@@ -1319,7 +1330,7 @@ public:
 	 * position has been modified).
 	 */
 	template<typename U>
-	void Replace(const_iterator it, U &&value) {
+	void Replace(const_iterator it, U &&value) noexcept {
 		assert(it.bucket != nullptr);
 		assert(it.bucket->GetRoot() == &root);
 		assert(it.leaf != nullptr);
@@ -1351,7 +1362,7 @@ public:
 	gcc_pure
 	std::pair<const_iterator, distance_type>
 	FindNearestIf(const Point location, distance_type range,
-		      const P &predicate) const {
+		      const P &predicate) const noexcept {
 		return root.FindNearestIf(bounds, location, Square(range),
 					  predicate);
 	}
@@ -1360,19 +1371,19 @@ public:
 	gcc_pure
 	std::pair<const_iterator, distance_type>
 	FindNearestIf(const T &value, distance_type range,
-		      const P &predicate) const {
+		      const P &predicate) const noexcept {
 		return FindNearestIf(GetPosition(value), range, predicate);
 	}
 
 	gcc_pure
 	std::pair<const_iterator, distance_type>
-	FindNearest(const Point location, distance_type range) const {
+	FindNearest(const Point location, distance_type range) const noexcept {
 		return root.FindNearestIf(bounds, location, Square(range), AlwaysTrue());
 	}
 
 	gcc_pure
 	std::pair<const_iterator, distance_type>
-	FindNearest(const T &value, distance_type range) const {
+	FindNearest(const T &value, distance_type range) const noexcept {
 		return FindNearest(GetPosition(value), range);
 	}
 
