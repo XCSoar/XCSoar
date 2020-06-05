@@ -6,6 +6,7 @@ This Docker Image when built, will compile XCSoar for several targets in a clean
 ## Currently Supported Targets
 
 - UNIX (linux & co)
+- UNIX-SDL (Software Rendering for X11 forward)
 - ANDROID
 - PC
 - KOBO
