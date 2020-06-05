@@ -301,7 +301,7 @@ protected:
 		}
 	};
 
-	typedef typename Alloc::template rebind<Leaf>::other LeafAllocator;
+	using LeafAllocator = typename std::allocator_traits<Alloc>::template rebind_alloc<Leaf>;
 
 	struct LeafList {
 		/* a linked list of values, or nullptr if this is a splitted bucket */
@@ -375,7 +375,7 @@ protected:
 			Leaf *leaf = head;
 			while (leaf != nullptr) {
 				Leaf *next = leaf->next;
-				allocator.destroy(leaf);
+				std::allocator_traits<LeafAllocator>::destroy(allocator, leaf);
 				allocator.deallocate(leaf, 1);
 				leaf = next;
 			}
@@ -398,7 +398,7 @@ protected:
 					--size;
 
 					*p = leaf->next;
-					leaf_allocator.destroy(leaf);
+					std::allocator_traits<LeafAllocator>::destroy(leaf_allocator, leaf);
 					leaf_allocator.deallocate(leaf, 1);
 				} else
 					p = &leaf->next;
@@ -469,7 +469,7 @@ protected:
 	};
 
 	struct QuadBucket;
-	typedef typename Alloc::template rebind<QuadBucket>::other BucketAllocator;
+	using BucketAllocator = typename std::allocator_traits<Alloc>::template rebind_alloc<QuadBucket>;
 
 	/**
 	 * A rectangular partition of the plane.  A bucket can be "splitted"
@@ -531,7 +531,8 @@ protected:
 
 			if (IsSplitted()) {
 				children->Clear(bucket_allocator, leaf_allocator);
-				bucket_allocator.destroy(children);
+				std::allocator_traits<BucketAllocator>::destroy(bucket_allocator,
+										children);
 				bucket_allocator.deallocate(children, 1);
 				children = nullptr;
 			} else
@@ -557,7 +558,8 @@ protected:
 			assert(!IsSplitted());
 
 			children = bucket_allocator.allocate(1);
-			bucket_allocator.construct(children, QuadBucket(this));
+			std::allocator_traits<BucketAllocator>::construct(bucket_allocator,
+									  children, QuadBucket(this));
 
 			while (!leaves.IsEmpty()) {
 				Leaf *leaf = leaves.Pop();
@@ -604,7 +606,7 @@ protected:
 		void Erase(const Leaf *cleaf,
 			   LeafAllocator &leaf_allocator) noexcept {
 			Leaf *leaf = Remove(cleaf);
-			leaf_allocator.destroy(leaf);
+			std::allocator_traits<LeafAllocator>::destroy(leaf_allocator, leaf);
 			leaf_allocator.deallocate(leaf, 1);
 		}
 
@@ -646,7 +648,8 @@ protected:
 				leaves.MoveAllFrom(bucket.leaves);
 			}
 
-			bucket_allocator.destroy(children);
+			std::allocator_traits<BucketAllocator>::destroy(bucket_allocator,
+									children);
 			bucket_allocator.deallocate(children, 1);
 			children = nullptr;
 		}
@@ -1050,7 +1053,8 @@ public:
 		assert(bounds.IsEmpty());
 
 		Leaf *leaf = leaf_allocator.allocate(1);
-		leaf_allocator.construct(leaf, Leaf(std::forward<U>(value)));
+		std::allocator_traits<LeafAllocator>::construct(leaf_allocator,
+								leaf, Leaf(std::forward<U>(value)));
 
 		root.AddHere(leaf);
 
@@ -1069,7 +1073,8 @@ public:
 		assert(IsFlat());
 
 		Leaf *leaf = leaf_allocator.allocate(1);
-		leaf_allocator.construct(leaf, Leaf(std::forward<U>(value)));
+		std::allocator_traits<LeafAllocator>::construct(leaf_allocator,
+								leaf, Leaf(std::forward<U>(value)));
 
 		bounds.Scan(GetPosition(leaf->value));
 		root.AddHere(leaf);
@@ -1088,7 +1093,8 @@ public:
 		assert(IsWithinBounds(value));
 
 		Leaf *leaf = leaf_allocator.allocate(1);
-		leaf_allocator.construct(leaf, Leaf(std::forward<U>(value)));
+		std::allocator_traits<LeafAllocator>::construct(leaf_allocator,
+								leaf, Leaf(std::forward<U>(value)));
 
 		Rectangle bounds = this->bounds;
 		root.Add(bounds, leaf, bucket_allocator);
