@@ -92,14 +92,6 @@
 						<useDefaultCommand>true</useDefaultCommand>
 						<runAllBuilders>true</runAllBuilders>
 					</target>
-					<target name="WINE" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
-						<buildCommand>make</buildCommand>
-						<buildArguments>everything  -j4</buildArguments>
-						<buildTarget>TARGET=WINE</buildTarget>
-						<stopOnError>true</stopOnError>
-						<useDefaultCommand>true</useDefaultCommand>
-						<runAllBuilders>true</runAllBuilders>
-					</target>
 					<target name="PPC2003" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 						<buildCommand>make</buildCommand>
 						<buildArguments>everything  -j4</buildArguments>
@@ -689,14 +681,6 @@
 						<buildCommand>make</buildCommand>
 						<buildArguments>everything  -j4</buildArguments>
 						<buildTarget>TARGET=UNIX</buildTarget>
-						<stopOnError>true</stopOnError>
-						<useDefaultCommand>true</useDefaultCommand>
-						<runAllBuilders>true</runAllBuilders>
-					</target>
-					<target name="WINE" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
-						<buildCommand>make</buildCommand>
-						<buildArguments>everything  -j4</buildArguments>
-						<buildTarget>TARGET=WINE</buildTarget>
 						<stopOnError>true</stopOnError>
 						<useDefaultCommand>true</useDefaultCommand>
 						<runAllBuilders>true</runAllBuilders>
@@ -1315,14 +1299,6 @@
 						<useDefaultCommand>true</useDefaultCommand>
 						<runAllBuilders>true</runAllBuilders>
 					</target>
-					<target name="WINE" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
-						<buildCommand>make</buildCommand>
-						<buildArguments>everything  -j4</buildArguments>
-						<buildTarget>TARGET=WINE</buildTarget>
-						<stopOnError>true</stopOnError>
-						<useDefaultCommand>true</useDefaultCommand>
-						<runAllBuilders>true</runAllBuilders>
-					</target>
 					<target name="PPC2003" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 						<buildCommand>make</buildCommand>
 						<buildArguments>everything  -j4</buildArguments>
@@ -1933,14 +1909,6 @@
 						<buildCommand>make</buildCommand>
 						<buildArguments>everything  -j4</buildArguments>
 						<buildTarget>TARGET=UNIX</buildTarget>
-						<stopOnError>true</stopOnError>
-						<useDefaultCommand>true</useDefaultCommand>
-						<runAllBuilders>true</runAllBuilders>
-					</target>
-					<target name="WINE" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
-						<buildCommand>make</buildCommand>
-						<buildArguments>everything  -j4</buildArguments>
-						<buildTarget>TARGET=WINE</buildTarget>
 						<stopOnError>true</stopOnError>
 						<useDefaultCommand>true</useDefaultCommand>
 						<runAllBuilders>true</runAllBuilders>

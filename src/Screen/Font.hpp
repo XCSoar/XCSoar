@@ -31,7 +31,7 @@ Copyright_License {
 typedef struct FT_FaceRec_ *FT_Face;
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
 

@@ -22,9 +22,9 @@
 #ifndef WAYPOINTS_HPP
 #define WAYPOINTS_HPP
 
-#include "Util/SliceAllocator.hpp"
+#include "Util/SliceAllocator.hxx"
 #include "Util/RadixTree.hpp"
-#include "Util/QuadTree.hpp"
+#include "Util/QuadTree.hxx"
 #include "Util/Serial.hpp"
 #include "Waypoint.hpp"
 #include "Geo/Flat/TaskProjection.hpp"

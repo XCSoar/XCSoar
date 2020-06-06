@@ -22,9 +22,9 @@
 #ifndef AIRSPACESINTERFACE_HPP
 #define AIRSPACESINTERFACE_HPP
 
-#include "Util/SliceAllocator.hpp"
 #include "Airspace.hpp"
 #include "Geo/Flat/BoundingBoxDistance.hpp"
+#include "Util/SliceAllocator.hxx"
 
 #include <kdtree++/kdtree.hpp>
 

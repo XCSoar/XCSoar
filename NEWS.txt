@@ -4,6 +4,11 @@ Version 6.8.15 - not yet released
 * tracking
   - SkyLines: update tracking IP address
 * support for long-form `DTE` header in IGC files
+* Raspberry Pi
+  - support 64 bit kernels
+  - Raspberry Pi 4 support
+* macOS
+  - add macOS Catalina font path
 
 Version 6.8.14 - 2020/05/14
 * user interface

@@ -28,10 +28,6 @@ Copyright_License {
 #include "Util/NonCopyable.hpp"
 #include "Thread/Trigger.hpp"
 
-#ifdef __WINE__
-#include <windows.h>
-#endif
-
 #include <wininet.h>
 #include <tchar.h>
 #include <assert.h>

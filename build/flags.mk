@@ -1,5 +1,5 @@
 CXX_FEATURES = -fno-exceptions -fno-rtti
-CXX_FEATURES += -std=gnu++0x
+CXX_FEATURES += -std=gnu++14
 CXX_FEATURES += -fno-threadsafe-statics
 CXX_FEATURES += -fmerge-all-constants
 
@@ -7,13 +7,7 @@ ifeq ($(CLANG),n)
 CXX_FEATURES += -fconserve-space -fno-operator-names
 endif
 
-ifneq ($(TARGET),WINE)
 C_FEATURES = -std=gnu99
-else
-# libwine fails with -std=gnu99 due to funny "extern inline" tricks in
-# winnt.h
-C_FEATURES =
-endif
 
 # produce position independent code when compiling the python library
 ifeq ($(MAKECMDGOALS),python)

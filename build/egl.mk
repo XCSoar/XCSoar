@@ -1,6 +1,12 @@
 ifeq ($(TARGET_IS_PI),y)
 # auto-enable EGL on the Raspberry Pi.
 EGL ?= y
+
+  ifeq ($(TARGET_IS_PI4)$(EGL),yy)
+    # the Raspberry Pi 4 uses GBM/KMS
+    ENABLE_MESA_KMS = y
+  endif
+
 else ifeq ($(TARGET_HAS_MALI),y)
 # auto-enable EGL on the Cubieboard.
 EGL ?= y
@@ -37,14 +43,14 @@ ENABLE_SDL = n
 
 EGL_CPPFLAGS = -DUSE_EGL
 
-ifeq ($(TARGET_IS_PI),y)
+ifeq ($(TARGET_IS_PI)$(TARGET_IS_PI4),yn)
 EGL_LDLIBS = -lbrcmEGL
 else
 EGL_LDLIBS = -lEGL
 endif
 
-ifeq ($(TARGET_IS_PI),y)
-# Raspberry Pi detected
+ifeq ($(TARGET_IS_PI)$(TARGET_IS_PI4),yn)
+# Raspberry Pi < 4 detected (the 4 uses GBM instead of VideoCore)
 EGL_CPPFLAGS += -DUSE_VIDEOCORE
 EGL_CPPFLAGS += -isystem $(PI)/opt/vc/include -isystem $(PI)/opt/vc/include/interface/vcos/pthreads
 EGL_CPPFLAGS += -isystem $(PI)/opt/vc/include/interface/vmcs_host/linux

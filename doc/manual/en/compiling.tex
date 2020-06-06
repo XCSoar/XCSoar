@@ -152,15 +152,6 @@ git submodule init
 git submodule update
 \end{verbatim*}
 
-If you are using a 64-bit machine you might have a problem when you try to run the Android cross-compiler. 
-The cross-compiler is a 32bit version of the compiler and the build script might complain that the necessary 
-compiler is “not found”, which is obviously wrong since the file is there and accessible. Instead, the problem is
-that the supporting 32-bit libraries are missing, which can be fixed through the following command:
-
-\begin{verbatim*}
-sudo apt-get install ia32-libs
-\end{verbatim*}
-
 To compile, run:
 
 \begin{verbatim*}
@@ -187,6 +178,8 @@ extension \\
 
 \end{tabular}
 
+It is possible that problems occur on 64bit OS (which is now required for Android SDK) when you try to run the cross-compiler toolchain which contains 32 bit components. In some distributions this can be fixed by using the \emph{ia32-libs}, newer distributions (Ubuntu 16.04 for example) might require a different approach (e.g. \emph{lib32z1}).
+
 \subsection{Compiling for Windows}
 
 To cross-compile to (desktop) Windows, you need the mingw-w64 version
@@ -207,8 +200,6 @@ Use one of the following targets:
 \texttt{PC} & 32 bit Windows (i686) \\
 
 \texttt{WIN64} & Windows x64 (amd64 / x86-64) \\
-
-\texttt{WINE} & WineLib (experimental) \\
 
 \texttt{CYGWIN} & Windows build with Cygwin (experimental) \\
 
@@ -244,57 +235,69 @@ Use one of the following targets:
 
 \end{tabular}
 
-\subsection{Compiling for iOS and OS X}
+\subsection{Compiling for iOS and macOS}
 
-For iOS and OS X, you can use the
-\href{https://github.com/felixhaedicke/DarwinToolchainBuilder}{DarwinToolchainBuilder}
-toolset. This toolset can be used regardless of whether compiling on OS X or on
-any other operaing system. The installation instructions for these the tools
-can be found in its
-\href{https://github.com/felixhaedicke/DarwinToolchainBuilder/blob/master/README.md}{README.md}.
-
-Furthermore, the following tools are required:
+On macOS, the following tools are required:
 \begin{itemize}
 \item png2icns from \href{http://icns.sourceforge.net}{libicns} to build for
-  OS X
+  macOS
 \item \href{https://alioth.debian.org/projects/dpkg}{dpkg} to build the iOS
-  Cydia package
+  IPA package
 \item \href{http://cdrecord.org/private/cdrecord.html}{mkisofs} to build the
-  OS X DMG package
+  macOS DMG package
 \end{itemize}
 
 To compile for iOS / AArch64, run:
 
 \begin{verbatim*}
-make TARGET=IOS64 cydia-deb
+make TARGET=IOS64 ipa
 \end{verbatim*}
 
 To compile for iOS / ARMv7, run:
 
 \begin{verbatim*}
-make TARGET=IOS32 cydia-deb
+make TARGET=IOS32 ipa
 \end{verbatim*}
 
-To compile for OS X / x86\_64, run:
+To compile for macOS / x86\_64, run:
 
 \begin{verbatim*}
 make TARGET=OSX64 dmg
 \end{verbatim*}
 
-To compile for OS X / x86, run:
+\subsection{Compiling for macOS (with Homebrew)}
+
+Install the required Homebrew packages:
 
 \begin{verbatim*}
-make TARGET=OSX32 dmg
+brew install automake autoconf libtool \
+  imagemagick librsvg quilt pkg-config \
+  sdl2
 \end{verbatim*}
 
-The \texttt{Makefile} assumes that the Darwin toolchain is installed in
-\verb|~/opt/darwin-toolchain| (only relevant if you are not compiling on OS X).
-You can use the option \verb|DARWIN_TOOLCHAIN| to override this path.
-To compile on Mac OS X, the directory where the library set (built with
-DarwinToolchainBuilder) for the current target is installed needs to be
-specified using the \verb|DARWIN_LIBS| option.
+Then compile:
 
-\subsection{Compiling for the Raspberry Pi}
+\begin{verbatim*}
+make dmg
+\end{verbatim*}
+
+\subsection{Compiling on the Raspberry Pi 4}
+
+Install additional dependencies:
+
+\begin{verbatim*}
+apt-get install libdrm-dev libgbm-dev \
+  libgles2-mesa-dev libglm-dev \
+  libinput-dev
+\end{verbatim*}
+
+Compile:
+
+\begin{verbatim*}
+make
+\end{verbatim*}
+
+\subsection{Compiling for the Raspberry Pi 1-3}
 
 You need an ARM toolchain.  For example, you can use the Debian
 package \verb|g++-5-arm-linux-gnueabihf|:

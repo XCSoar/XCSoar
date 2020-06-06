@@ -8,6 +8,11 @@ else ifeq ($(TARGET_IS_KOBO),y)
 OPENGL = n
 GLES = n
 
+# the Raspberry Pi 4 uses EGL + GL/ES2
+else ifeq ($(TARGET_IS_PI4),y)
+OPENGL ?= y
+GLES2 ?= y
+
 # the Raspberry Pi uses EGL + GL/ES
 else ifeq ($(TARGET_IS_PI),y)
 OPENGL ?= y
@@ -43,7 +48,7 @@ ifeq ($(GLES2),y)
 OPENGL_CPPFLAGS += -DHAVE_GLES -DHAVE_GLES2
 ifeq ($(TARGET_IS_IOS),y)
 OPENGL_LDLIBS = -framework OpenGLES
-else ifeq ($(TARGET_IS_PI),y)
+else ifeq ($(TARGET_IS_PI)$(TARGET_IS_PI4),yn)
 OPENGL_LDLIBS = -lbrcmGLESv2 -ldl
 else
 OPENGL_LDLIBS = -lGLESv2 -ldl
