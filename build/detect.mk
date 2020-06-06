@@ -28,7 +28,7 @@ endif
 
 ifeq ($(HOST_IS_LINUX)$(HOST_IS_ARM_OR_AARCH64),yy)
 # Check for VideoCore headers present on a Raspberry Pi
-HOST_IS_PI := $(call string_contains,$(shell cat /sys/firmware/devicetree/base/model),Raspberry)
+HOST_IS_PI := $(call string_contains,$(shell cat /sys/firmware/devicetree/base/model 2>/dev/null),Raspberry)
 else
 HOST_IS_PI := n
 endif
