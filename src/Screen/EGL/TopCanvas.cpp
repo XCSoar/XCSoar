@@ -42,6 +42,12 @@ constexpr const char * DEFAULT_DRI_DEVICE = "/dev/dri/card0";
 
 static constexpr uint32_t XCSOAR_GBM_FORMAT = GBM_FORMAT_XRGB8888;
 
+/**
+ * A fallback value for EGL_NATIVE_VISUAL_ID; this is needed for the
+ * "amdgpu" driver on Linux.
+ */
+static constexpr uint32_t XCSOAR_GBM_FORMAT_FALLBACK = GBM_FORMAT_ARGB8888;
+
 struct drm_fb {
   struct gbm_bo *bo;
   uint32_t fb_id;
@@ -282,6 +288,10 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
   EGLint i = FindConfigWithAttribute(display, configs, num_configs,
                                      EGL_NATIVE_VISUAL_ID,
                                      XCSOAR_GBM_FORMAT);
+  if (i < 0)
+    i = FindConfigWithAttribute(display, configs, num_configs,
+                                EGL_NATIVE_VISUAL_ID,
+                                XCSOAR_GBM_FORMAT_FALLBACK);
   const EGLConfig chosen_config = i >= 0 ? configs[i] : configs[0];
 #else
   const EGLConfig chosen_config = configs[0];
