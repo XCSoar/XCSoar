@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Asset.hpp"
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -34,7 +34,7 @@ Copyright_License {
  * Show the hour glass cursor while this object exists.
  */
 class ScopeBusyIndicator {
-#ifdef WIN32
+#ifdef _WIN32
   HCURSOR old_cursor;
 
 public:
@@ -49,7 +49,7 @@ public:
     if (IsAltair() && IsEmbedded())
       SetCursorPos(640, 480);
   }
-#endif /* WIN32 */
+#endif /* _WIN32 */
 };
 
 #endif
