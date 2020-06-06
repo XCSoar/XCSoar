@@ -28,6 +28,10 @@ Copyright_License {
 #include "../Memory/Dither.hpp"
 #endif
 
+#ifdef USE_FB
+#include "Hardware/DisplayDPI.hpp"
+#endif
+
 #if defined(KOBO) && defined(USE_FB)
 #include "Kobo/Model.hpp"
 #include "mxcfb.h"
@@ -223,6 +227,9 @@ TopCanvas::Create(PixelSize new_size,
 #endif
 
   new_size = ::GetSize(vinfo);
+
+  Display::ProvideSizeMM(new_size.cx, new_size.cy, vinfo.width, vinfo.height);
+
 #elif defined(USE_VFB)
   /* allocate buffer as requested by caller */
 #else

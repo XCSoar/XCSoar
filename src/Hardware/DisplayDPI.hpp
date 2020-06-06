@@ -26,6 +26,10 @@ Copyright_License {
 
 #include "Compiler.h"
 
+#ifdef USE_FB
+#define HAVE_DPI_DETECTION
+#endif
+
 namespace Display {
   /**
    * Sets the displays x/y DPI
@@ -33,6 +37,16 @@ namespace Display {
    * @param y Number of pixels per logical inch along the screen height
    */
   void SetDPI(unsigned x_dpi, unsigned y_dpi);
+
+#ifdef HAVE_DPI_DETECTION
+/**
+ * This function gets called by our UI toolkit (the "Screen" library)
+ * after it has determined the physical dimensions of the screen.
+ */
+void
+ProvideSizeMM(unsigned width_pixels, unsigned height_pixels,
+             unsigned width_mm, unsigned height_mm) noexcept;
+#endif
 
   /**
    * Returns the number of pixels per logical inch along the screen width

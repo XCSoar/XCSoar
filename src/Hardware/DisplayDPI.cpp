@@ -65,7 +65,11 @@ Copyright_License {
   static unsigned forced_y_dpi = 0;
 #endif
 
-#ifdef USE_X11
+#ifdef HAVE_DPI_DETECTION
+static unsigned detected_x_dpi = 0, detected_y_dpi = 0;
+#endif
+
+#if defined(USE_X11) || defined(HAVE_DPI_DETECTION)
 
 static constexpr unsigned
 MMToDPI(unsigned pixels, unsigned mm)
@@ -74,7 +78,9 @@ MMToDPI(unsigned pixels, unsigned mm)
   return pixels * 254 / (mm * 10);
 }
 
-#elif !defined(_WIN32) && !defined(ANDROID)
+#endif
+
+#if !defined(_WIN32) && !defined(ANDROID) && !defined(USE_X11)
 #ifndef __APPLE__
 gcc_const
 #endif
@@ -118,12 +124,29 @@ Display::SetDPI(unsigned x_dpi, unsigned y_dpi)
 #endif
 }
 
+#ifdef HAVE_DPI_DETECTION
+
+void
+Display::ProvideSizeMM(unsigned width_pixels, unsigned height_pixels,
+                       unsigned width_mm, unsigned height_mm) noexcept
+{
+  detected_x_dpi = MMToDPI(width_pixels, width_mm);
+  detected_y_dpi = MMToDPI(height_pixels, height_mm);
+}
+
+#endif
+
 unsigned
 Display::GetXDPI()
 {
 #if !defined(ANDROID) && !defined(_WIN32_WCE)
   if (forced_x_dpi > 0)
     return forced_x_dpi;
+#endif
+
+#ifdef HAVE_DPI_DETECTION
+  if (detected_x_dpi > 0)
+    return detected_x_dpi;
 #endif
 
 #ifdef _WIN32
@@ -149,6 +172,11 @@ Display::GetYDPI()
 #if !defined(ANDROID) && !defined(_WIN32_WCE)
   if (forced_y_dpi > 0)
     return forced_y_dpi;
+#endif
+
+#ifdef HAVE_DPI_DETECTION
+  if (detected_y_dpi > 0)
+    return detected_y_dpi;
 #endif
 
 #ifdef _WIN32
