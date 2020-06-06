@@ -52,6 +52,8 @@ TARGET_IS_DARWIN := n
 TARGET_IS_LINUX := n
 TARGET_IS_ANDROID := n
 TARGET_IS_PI := n
+TARGET_IS_PI32 := n
+TARGET_IS_PI64 := n
 TARGET_IS_KOBO := n
 HAVE_POSIX := n
 HAVE_WIN32 := y
@@ -220,10 +222,12 @@ ifeq ($(TARGET),UNIX)
   TCSUFFIX := $(LOCAL_TCSUFFIX)
   TARGET_IS_ARM = $(HOST_IS_ARM)
   TARGET_IS_PI = $(HOST_IS_PI)
+  TARGET_IS_PI32 = $(call bool_and,$(HOST_IS_PI),$(HOST_IS_ARM))
+  TARGET_IS_PI64 = $(call bool_and,$(HOST_IS_PI),$(HOST_IS_AARCH64))
   ARMV6 = $(HOST_IS_ARMV6)
   ARMV7 = $(HOST_IS_ARMV7)
   NEON = $(HOST_HAS_NEON)
-  TARGET_IS_ARMHF := $(call bool_or,$(ARMV7),$(TARGET_IS_PI))
+  TARGET_IS_ARMHF := $(call bool_or,$(ARMV7),$(TARGET_IS_PI32))
   TARGET_HAS_MALI = $(HOST_HAS_MALI)
 endif
 
@@ -244,6 +248,7 @@ ifeq ($(TARGET),PI)
     PI ?= /opt/pi/root
   endif
   TARGET_IS_PI = y
+  TARGET_IS_PI32 = y
   TARGET_IS_ARM = y
   TARGET_IS_ARMHF = y
   ARMV6 = y
@@ -255,6 +260,7 @@ ifeq ($(TARGET),PI2)
     PI ?= /opt/pi/root
   endif
   TARGET_IS_PI = y
+  TARGET_IS_PI32 = y
 endif
 
 ifeq ($(TARGET),CUBIE)
