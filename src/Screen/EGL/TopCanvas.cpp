@@ -235,7 +235,11 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
 
   EGLint num_configs;
   EGLConfig chosen_config = 0;
-  eglChooseConfig(display, attributes, &chosen_config, 1, &num_configs);
+  if (!eglChooseConfig(display, attributes, &chosen_config, 1, &num_configs)) {
+    fprintf(stderr, "eglChooseConfig() failed: %#x\n", eglGetError());
+    exit(EXIT_FAILURE);
+  }
+
   if (num_configs == 0) {
     fprintf(stderr, "eglChooseConfig() failed\n");
     exit(EXIT_FAILURE);
