@@ -38,7 +38,14 @@ Copyright_License {
 #include <sys/stat.h>
 #include <unistd.h>
 
+#ifdef RASPBERRY_PI
+/* on the Raspberry Pi 4, /dev/dri/card1 is the VideoCore IV (the
+   "legacy mode") which we want to use for now), and /dev/dri/card0 is
+   V3D which I havn't figured out yet */
+static constexpr const char *DEFAULT_DRI_DEVICE = "/dev/dri/card1";
+#else
 constexpr const char * DEFAULT_DRI_DEVICE = "/dev/dri/card0";
+#endif
 
 static constexpr uint32_t XCSOAR_GBM_FORMAT = GBM_FORMAT_XRGB8888;
 
@@ -259,7 +266,9 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
     EGL_RED_SIZE, 1,
     EGL_GREEN_SIZE, 1,
     EGL_BLUE_SIZE, 1,
+#ifndef RASPBERRY_PI /* the Raspberry Pi 4 doesn't have an alpha channel */
     EGL_ALPHA_SIZE, 1,
+#endif
 #endif
     EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
     EGL_RENDERABLE_TYPE, GetRenderableType(),

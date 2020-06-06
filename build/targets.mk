@@ -617,6 +617,8 @@ ifeq ($(HAVE_WIN32),n)
 endif
 
 ifeq ($(TARGET_IS_PI),y)
+  TARGET_CPPFLAGS += -DRASPBERRY_PI
+
   ifneq ($(PI),)
     TARGET_CPPFLAGS += --sysroot=$(PI) -isystem $(PI)/usr/include/arm-linux-gnueabihf -isystem $(PI)/usr/include
   endif
