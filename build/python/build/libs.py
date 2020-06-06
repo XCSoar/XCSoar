@@ -242,9 +242,9 @@ libgeotiff = AutotoolsProject(
 )
 
 sdl2 = SDL2Project(
-    'http://www.libsdl.org/release/SDL2-2.0.8.tar.gz',
-    'https://fossies.org/linux/misc/SDL2-2.0.8.tar.gz',
-    'edc77c57308661d576e843344d8638e025a7818bff73f8fbfab09c3c5fd092ec',
+    'http://www.libsdl.org/release/SDL2-2.0.12.tar.gz',
+    'https://fossies.org/linux/misc/SDL2-2.0.12.tar.gz',
+    '349268f695c02efbc9b9148a70b85e58cefbbf704abd3e91be654db7f1e2c863',
     'lib/libSDL2.a',
     [
         '--disable-shared', '--enable-static',
