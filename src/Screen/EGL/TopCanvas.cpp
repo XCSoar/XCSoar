@@ -40,6 +40,8 @@ Copyright_License {
 
 constexpr const char * DEFAULT_DRI_DEVICE = "/dev/dri/card0";
 
+static constexpr uint32_t XCSOAR_GBM_FORMAT = GBM_FORMAT_XRGB8888;
+
 struct drm_fb {
   struct gbm_bo *bo;
   uint32_t fb_id;
@@ -187,7 +189,7 @@ TopCanvas::Create(PixelSize new_size,
 
   native_window = gbm_surface_create(native_display, mode.hdisplay,
                                      mode.vdisplay,
-                                     GBM_FORMAT_XRGB8888,
+                                     XCSOAR_GBM_FORMAT,
                                      GBM_BO_USE_SCANOUT | GBM_BO_USE_RENDERING);
   if (native_window == nullptr) {
     fprintf(stderr, "Could not create GBM surface\n");
@@ -199,6 +201,31 @@ TopCanvas::Create(PixelSize new_size,
 }
 
 #endif
+
+#ifdef MESA_KMS
+
+/**
+ * Find an EGLConfig with the specified attribute value.
+ *
+ * @return an index into the #configs parameter or -1 if no matching
+ * EGLConfig was found
+ */
+static EGLint
+FindConfigWithAttribute(EGLDisplay display,
+                        const EGLConfig *configs, EGLint num_configs,
+                        EGLint attribute, EGLint expected_value) noexcept
+{
+  for (EGLint i = 0; i < num_configs; ++i) {
+    EGLint value;
+    if (eglGetConfigAttrib(display, configs[i], attribute, &value) &&
+        value == expected_value)
+      return i;
+  }
+
+  return -1;
+}
+
+#endif /* MESA_KMS */
 
 void
 TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
@@ -233,9 +260,11 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
     EGL_NONE
   };
 
+  static constexpr EGLint MAX_CONFIGS = 64;
+  EGLConfig configs[MAX_CONFIGS];
   EGLint num_configs;
-  EGLConfig chosen_config = 0;
-  if (!eglChooseConfig(display, attributes, &chosen_config, 1, &num_configs)) {
+ if (!eglChooseConfig(display, attributes, configs,
+                       MAX_CONFIGS, &num_configs)) {
     fprintf(stderr, "eglChooseConfig() failed: %#x\n", eglGetError());
     exit(EXIT_FAILURE);
   }
@@ -244,6 +273,19 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
     fprintf(stderr, "eglChooseConfig() failed\n");
     exit(EXIT_FAILURE);
   }
+
+#ifdef MESA_KMS
+  /* On some GBM targets, such as the Raspberry Pi 4,
+     eglChooseConfig() gives us an EGLConfig which will later fail
+     eglCreateWindowSurface() with EGL_BAD_MATCH.  Only the EGLConfig
+     which has the matching EGL_NATIVE_VISUAL_ID will work. */
+  EGLint i = FindConfigWithAttribute(display, configs, num_configs,
+                                     EGL_NATIVE_VISUAL_ID,
+                                     XCSOAR_GBM_FORMAT);
+  const EGLConfig chosen_config = i >= 0 ? configs[i] : configs[0];
+#else
+  const EGLConfig chosen_config = configs[0];
+#endif
 
   surface = eglCreateWindowSurface(display, chosen_config,
                                    native_window, nullptr);
