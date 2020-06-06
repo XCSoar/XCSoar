@@ -244,7 +244,7 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
   surface = eglCreateWindowSurface(display, chosen_config,
                                    native_window, nullptr);
   if (surface == nullptr) {
-    fprintf(stderr, "eglCreateWindowSurface() failed\n");
+    fprintf(stderr, "eglCreateWindowSurface() failed: %#x\n", eglGetError());
     exit(EXIT_FAILURE);
   }
 
