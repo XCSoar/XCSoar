@@ -24,12 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_INIT_HPP
 #define XCSOAR_SCREEN_OPENGL_INIT_HPP
 
+#include "Math/Point2D.hpp"
+
 #include <stdint.h>
 
 enum class DisplayOrientation : uint8_t;
-
-template<typename T>
-struct Point2D;
 
 namespace OpenGL {
   /**

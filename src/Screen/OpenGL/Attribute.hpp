@@ -1,9 +1,8 @@
 /*
-
 Copyright_License {
 
-  XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2015 The XCSoar Project
+  XCSoar Glide Compute5r - http://www.xcsoar.org/
+  Copyright (C) 2000-2016 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -22,18 +21,21 @@ Copyright_License {
 }
 */
 
-#ifndef TOPOGRAPHY_XSHAPE_POINT_HPP
-#define TOPOGRAPHY_XSHAPE_POINT_HPP
+#ifndef XCSOAR_SCREEN_OPENGL_ATTRIBUTE_HPP
+#define XCSOAR_SCREEN_OPENGL_ATTRIBUTE_HPP
 
-#include "Math/Point2D.hpp"
+#include "System.hpp"
 
-struct ShapePoint : FloatPoint2D {
-  ShapePoint() = default;
-
-  template<typename... Args>
-  constexpr ShapePoint(Args&&... args):FloatPoint2D(args...) {}
+namespace OpenGL {
+  /**
+   * GLSL attributes.
+   */
+  namespace Attribute {
+    static constexpr GLuint TRANSLATE = 0;
+    static constexpr GLuint POSITION = 1;
+    static constexpr GLuint TEXCOORD = 2;
+    static constexpr GLuint COLOR = 3;
+  };
 };
-
-typedef ShapePoint::scalar_type ShapeScalar;
 
 #endif

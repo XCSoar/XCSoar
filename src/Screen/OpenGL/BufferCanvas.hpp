@@ -41,11 +41,11 @@ class GLRenderBuffer;
  * An off-screen #Canvas implementation.
  */
 class BufferCanvas : public Canvas, private GLSurfaceListener {
-  GLTexture *texture;
+  GLTexture *texture = nullptr;
 
-  GLFrameBuffer *frame_buffer;
+  GLFrameBuffer *frame_buffer = nullptr;
 
-  GLRenderBuffer *stencil_buffer;
+  GLRenderBuffer *stencil_buffer = nullptr;
 
 #ifdef HAVE_GLES
   GLint old_viewport[4];
@@ -63,19 +63,10 @@ class BufferCanvas : public Canvas, private GLSurfaceListener {
 #endif
 
 #ifndef NDEBUG
-  bool active;
+  bool active = false;
 #endif
 
 public:
-  BufferCanvas()
-    :texture(nullptr), frame_buffer(nullptr), stencil_buffer(nullptr)
-#ifndef NDEBUG
-    , active(false)
-#endif
-  {}
-
-  BufferCanvas(const Canvas &canvas,
-               UPixelScalar _width, UPixelScalar _height);
   ~BufferCanvas() {
     Destroy();
   }

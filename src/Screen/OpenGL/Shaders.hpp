@@ -25,17 +25,11 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_SHADERS_HPP
 
 #include "System.hpp"
+#include "Attribute.hpp"
 
 class GLProgram;
 
 namespace OpenGL {
-  namespace Attribute {
-    static constexpr GLuint TRANSLATE = 0;
-    static constexpr GLuint POSITION = 1;
-    static constexpr GLuint TEXCOORD = 2;
-    static constexpr GLuint COLOR = 3;
-  };
-
   /**
    * A shader that draws a solid color (#Attribute::COLOR).
    */

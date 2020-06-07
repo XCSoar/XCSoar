@@ -28,9 +28,14 @@ Copyright_License {
 #include <cmath>
 #include <cstdlib>
 
-template<typename T>
+template<typename T, typename PT=T>
 struct Point2D {
   typedef T scalar_type;
+
+  /**
+   * Type to be used by vector math.
+   */
+  typedef PT product_type;
 
   scalar_type x, y;
 
@@ -38,87 +43,83 @@ struct Point2D {
 
   constexpr Point2D(scalar_type _x, scalar_type _y):x(_x), y(_y) {}
 
-  constexpr bool operator==(const Point2D<T> &other) const {
+  constexpr bool operator==(const Point2D<T, PT> &other) const {
     return x == other.x && y == other.y;
   }
 
-  constexpr bool operator!=(const Point2D<T> &other) const {
+  constexpr bool operator!=(const Point2D<T, PT> &other) const {
     return !(*this == other);
   }
 
-  constexpr Point2D<T> operator+(Point2D<T> other) const {
+  constexpr Point2D<T, PT> operator+(Point2D<T, PT> other) const {
     return { scalar_type(x + other.x), scalar_type(y + other.y) };
   }
 
-  constexpr Point2D<T> operator-(Point2D<T> other) const {
+  constexpr Point2D<T, PT> operator-(Point2D<T, PT> other) const {
     return { scalar_type(x - other.x), scalar_type(y - other.y) };
   }
 
-  Point2D<T> &operator+=(Point2D<T> other) {
+  Point2D<T, PT> &operator+=(Point2D<T, PT> other) {
     x += other.x;
     y += other.y;
     return *this;
   }
 
-  Point2D<T> &operator-=(Point2D<T> other) {
+  Point2D<T, PT> &operator-=(Point2D<T, PT> other) {
     x -= other.x;
     y -= other.y;
     return *this;
   }
 };
 
-struct FloatPoint : Point2D<float> {
-  /**
-   * Type to be used by vector math.
-   */
-  typedef float product_type;
-
-  FloatPoint() = default;
+struct FloatPoint2D : Point2D<float> {
+  FloatPoint2D() = default;
 
   template<typename... Args>
-  constexpr FloatPoint(Args&&... args):Point2D<float>(args...) {}
+  constexpr FloatPoint2D(Args&&... args):Point2D<float>(args...) {}
 };
 
-template<typename P, typename RT=typename P::scalar_type>
-static inline RT
+template<typename P>
+struct IsPoint2D : std::is_base_of<Point2D<typename P::scalar_type,
+                                           typename P::product_type>, P> {
+};
+
+template<typename P>
+struct EnableIfPoint2D : std::enable_if<IsPoint2D<P>::value> {
+};
+
+template<typename P, typename RT=typename P::product_type,
+         typename=typename EnableIfPoint2D<P>::type>
+static constexpr inline RT
 DotProduct(P a, P b)
 {
-  static_assert(std::is_base_of<Point2D<typename P::scalar_type>, P>::value,
-                "Must be Point2D");
-
   return RT(a.x) * RT(b.x) + RT(a.y) * RT(b.y);
 }
 
-template<typename P, typename RT=typename P::scalar_type>
-static inline RT
+template<typename P, typename RT=typename P::product_type,
+         typename=typename EnableIfPoint2D<P>::type>
+static constexpr inline RT
 CrossProduct(P a, P b)
 {
-  static_assert(std::is_base_of<Point2D<typename P::scalar_type>, P>::value,
-                "Must be Point2D");
-
   return RT(a.x) * RT(b.y) - RT(b.x) * RT(a.y);
 }
 
-template<typename P>
+template<typename P,
+         typename=typename EnableIfPoint2D<P>::type>
 static constexpr inline P
 Normal(P a, P b)
 {
-  static_assert(std::is_base_of<Point2D<typename P::scalar_type>, P>::value,
-                "Must be Point2D");
-
   return P(a.y - b.y, b.x - a.x);
 }
 
 /**
  * Calculates the "manhattan distance" or "taxicab distance".
  */
-template<typename P, typename RT=typename P::scalar_type>
+template<typename P, typename RT=typename P::scalar_type,
+         typename=typename EnableIfPoint2D<P>::type>
 static inline RT
 ManhattanDistance(P a, P b)
 {
-  static_assert(std::is_base_of<Point2D<typename P::scalar_type>, P>::value,
-                "Must be Point2D");
-
   return std::abs(a.x - b.x) + std::abs(a.y - b.y);
 }
 

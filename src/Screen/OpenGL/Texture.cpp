@@ -30,7 +30,7 @@ Copyright_License {
 #include "Compiler.h"
 
 #ifdef USE_GLSL
-#include "Shapes.hpp"
+#include "Shaders.hpp"
 #include "Program.hpp"
 
 #include <glm/gtc/type_ptr.hpp>

@@ -42,17 +42,6 @@ Copyright_License {
 
 #include <assert.h>
 
-BufferCanvas::BufferCanvas(const Canvas &canvas,
-                           UPixelScalar _width, UPixelScalar _height)
-  :Canvas({_width, _height}),
-   texture(new GLTexture(_width, _height))
-#ifndef NDEBUG
-  , active(false)
-#endif
-{
-  assert(canvas.IsDefined());
-}
-
 void
 BufferCanvas::Create(PixelSize new_size)
 {

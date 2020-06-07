@@ -28,7 +28,7 @@ Copyright_License {
 #include "Point.hpp"
 
 #ifdef USE_GLSL
-#include "Shaders.hpp"
+#include "Attribute.hpp"
 #endif
 
 struct ScopeVertexPointer {
@@ -80,7 +80,7 @@ struct ScopeVertexPointer {
     Update(GL_EXACT, p);
   }
 
-  void Update(const FloatPoint *p) {
+  void Update(const FloatPoint2D *p) {
     Update(GL_FLOAT, p);
   }
 };
