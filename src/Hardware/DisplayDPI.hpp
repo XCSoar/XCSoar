@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Compiler.h"
 
-#ifdef USE_FB
+#if defined(USE_FB) || defined(MESA_KMS)
 #define HAVE_DPI_DETECTION
 #endif
 
