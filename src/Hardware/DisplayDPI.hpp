@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Compiler.h"
 
-#if defined(USE_FB) || defined(MESA_KMS)
+#if defined(USE_FB) || defined(MESA_KMS) || defined(ANDROID)
 #define HAVE_DPI_DETECTION
 #endif
 
@@ -39,6 +39,13 @@ namespace Display {
   void SetDPI(unsigned x_dpi, unsigned y_dpi);
 
 #ifdef HAVE_DPI_DETECTION
+/**
+ * This function gets called by our UI toolkit (the "Screen" library)
+ * after it has determined the DPI value of the screen.
+ */
+void
+ProvideDPI(unsigned x_dpi, unsigned y_dpi) noexcept;
+
 /**
  * This function gets called by our UI toolkit (the "Screen" library)
  * after it has determined the physical dimensions of the screen.

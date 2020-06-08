@@ -23,11 +23,6 @@ Copyright_License {
 
 #include "DisplayDPI.hpp"
 
-#ifdef ANDROID
-#include "Android/Main.hpp"
-#include "Android/NativeView.hpp"
-#endif
-
 #ifdef _WIN32
 #include "Screen/GDI/RootDC.hpp"
 
@@ -80,7 +75,7 @@ MMToDPI(unsigned pixels, unsigned mm)
 
 #endif
 
-#if !defined(_WIN32) && !defined(ANDROID) && !defined(USE_X11)
+#if !defined(_WIN32) && !defined(USE_X11)
 #ifndef __APPLE__
 gcc_const
 #endif
@@ -127,6 +122,13 @@ Display::SetDPI(unsigned x_dpi, unsigned y_dpi)
 #ifdef HAVE_DPI_DETECTION
 
 void
+Display::ProvideDPI(unsigned x_dpi, unsigned y_dpi) noexcept
+{
+  detected_x_dpi = x_dpi;
+  detected_y_dpi = y_dpi;
+}
+
+void
 Display::ProvideSizeMM(unsigned width_pixels, unsigned height_pixels,
                        unsigned width_mm, unsigned height_mm) noexcept
 {
@@ -152,8 +154,6 @@ Display::GetXDPI()
 #ifdef _WIN32
   RootDC dc;
   return GetDeviceCaps(dc, LOGPIXELSX);
-#elif defined(ANDROID)
-  return native_view->GetXDPI();
 #elif defined(USE_X11)
   assert(event_queue != nullptr);
 
@@ -182,8 +182,6 @@ Display::GetYDPI()
 #ifdef _WIN32
   RootDC dc;
   return GetDeviceCaps(dc, LOGPIXELSY);
-#elif defined(ANDROID)
-  return native_view->GetYDPI();
 #elif defined(USE_X11)
   assert(event_queue != nullptr);
 

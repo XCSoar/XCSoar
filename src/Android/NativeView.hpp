@@ -39,7 +39,6 @@ class NativeView {
   Java::Object obj;
 
   unsigned width, height;
-  unsigned xdpi, ydpi;
   char product[20];
 
   static Java::TrivialClass cls;
@@ -90,14 +89,6 @@ public:
     return { width, height };
   }
 #endif
-
-  unsigned GetXDPI() const {
-    return xdpi;
-  }
-
-  unsigned GetYDPI() const {
-    return ydpi;
-  }
 
   void SetSize(unsigned _width, unsigned _height) {
     width = _width;
