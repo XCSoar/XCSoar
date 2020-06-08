@@ -183,8 +183,6 @@ Startup()
   Net::DownloadManager::Initialise();
 #endif
 
-  LogFormat("Display dpi=%u,%u", Display::GetXDPI(), Display::GetYDPI());
-
   // Creates the main window
 
   TopWindowStyle style;
@@ -199,6 +197,8 @@ Startup()
   main_window->Create(SystemWindowSize(), style);
   if (!main_window->IsDefined())
     return false;
+
+  LogFormat("Display dpi=%u,%u", Display::GetXDPI(), Display::GetYDPI());
 
 #ifdef ENABLE_OPENGL
   LogFormat("OpenGL: "
