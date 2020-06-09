@@ -424,6 +424,7 @@ Version 7.0 - 2021/03/25
   - GliderLink: new driver
   - AirControlDisplay: read radio frequencies from PAAVS,COM sentence
   - driver for LXNano modified, so declaration contains copilot
+  - driver for Becker AR62xx radios: setting of active or passive channel out of waypoint database, behaves like KRT2 driver
 * weather
   - merge all weather data in one dialog
   - allow showing both terrain and RASP

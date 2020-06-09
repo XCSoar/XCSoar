@@ -62,6 +62,7 @@ Copyright_License {
 #include "Device/Driver/ATR833.hpp"
 #include "Device/Driver/XCTracer.hpp"
 #include "Device/Driver/KRT2.hpp"
+#include "Device/Driver/AR62xx.hpp"
 #include "util/Macros.hpp"
 #include "util/StringAPI.hxx"
 
@@ -109,6 +110,7 @@ static const struct DeviceRegister *const driver_list[] = {
   &thermalexpress_driver,
   &acd_driver,
   &anemoi_driver,
+  &ar62xx_driver,
   nullptr
 };
 
