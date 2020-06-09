@@ -40,7 +40,6 @@ class NativeView {
   Java::GlobalObject obj;
 
   unsigned width, height;
-  unsigned xdpi, ydpi;
   char product[20];
 
   static Java::TrivialClass cls;
@@ -82,26 +81,13 @@ public:
 
   NativeView(JNIEnv *_env, jobject _obj, unsigned _width, unsigned _height,
              unsigned _xdpi, unsigned _ydpi,
-             jstring _product)
-    :env(_env), obj(env, _obj),
-     width(_width), height(_height),
-     xdpi(_xdpi), ydpi(_ydpi) {
-    Java::String::CopyTo(env, _product, product, sizeof(product));
-  }
+             jstring _product) noexcept;
 
 #ifndef NO_SCREEN
   PixelSize GetSize() const {
     return { width, height };
   }
 #endif
-
-  unsigned GetXDPI() const {
-    return xdpi;
-  }
-
-  unsigned GetYDPI() const {
-    return ydpi;
-  }
 
   void SetSize(unsigned _width, unsigned _height) {
     width = _width;

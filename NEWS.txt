@@ -80,6 +80,7 @@ Version 6.8.15 - not yet released
 * Raspberry Pi
   - support 64 bit kernels
   - Raspberry Pi 4 support
+  - detect display dimensions and scale user interface accordingly
 * macOS
   - add macOS Catalina font path
 

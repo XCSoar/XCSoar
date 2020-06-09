@@ -30,6 +30,8 @@ Copyright_License {
 #include <stdlib.h>
 
 #ifdef MESA_KMS
+#include "Hardware/DisplayDPI.hpp"
+
 #include <errno.h>
 #include <fcntl.h>
 #include <stdlib.h>
@@ -207,6 +209,10 @@ TopCanvas::Create(PixelSize new_size,
     fprintf(stderr, "Could not create GBM surface\n");
     exit(EXIT_FAILURE);
   }
+
+  Display::ProvideSizeMM(mode.hdisplay, mode.vdisplay,
+                         connector->mmWidth,
+                         connector->mmHeight);
 #endif
 
   CreateEGL(native_display, native_window);
