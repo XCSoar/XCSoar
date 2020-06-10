@@ -23,11 +23,6 @@ Copyright_License {
 
 #include "DisplayDPI.hpp"
 
-#ifdef ANDROID
-#include "Android/Main.hpp"
-#include "Android/NativeView.hpp"
-#endif
-
 #ifdef _WIN32
 #include "Screen/GDI/RootDC.hpp"
 
@@ -65,7 +60,11 @@ Copyright_License {
   static unsigned forced_y_dpi = 0;
 #endif
 
-#ifdef USE_X11
+#ifdef HAVE_DPI_DETECTION
+static unsigned detected_x_dpi = 0, detected_y_dpi = 0;
+#endif
+
+#if defined(USE_X11) || defined(HAVE_DPI_DETECTION)
 
 static constexpr unsigned
 MMToDPI(unsigned pixels, unsigned mm)
@@ -74,7 +73,9 @@ MMToDPI(unsigned pixels, unsigned mm)
   return pixels * 254 / (mm * 10);
 }
 
-#elif !defined(_WIN32) && !defined(ANDROID)
+#endif
+
+#if !defined(_WIN32) && !defined(USE_X11)
 #ifndef __APPLE__
 gcc_const
 #endif
@@ -118,6 +119,25 @@ Display::SetDPI(unsigned x_dpi, unsigned y_dpi)
 #endif
 }
 
+#ifdef HAVE_DPI_DETECTION
+
+void
+Display::ProvideDPI(unsigned x_dpi, unsigned y_dpi) noexcept
+{
+  detected_x_dpi = x_dpi;
+  detected_y_dpi = y_dpi;
+}
+
+void
+Display::ProvideSizeMM(unsigned width_pixels, unsigned height_pixels,
+                       unsigned width_mm, unsigned height_mm) noexcept
+{
+  detected_x_dpi = MMToDPI(width_pixels, width_mm);
+  detected_y_dpi = MMToDPI(height_pixels, height_mm);
+}
+
+#endif
+
 unsigned
 Display::GetXDPI()
 {
@@ -126,11 +146,14 @@ Display::GetXDPI()
     return forced_x_dpi;
 #endif
 
+#ifdef HAVE_DPI_DETECTION
+  if (detected_x_dpi > 0)
+    return detected_x_dpi;
+#endif
+
 #ifdef _WIN32
   RootDC dc;
   return GetDeviceCaps(dc, LOGPIXELSX);
-#elif defined(ANDROID)
-  return native_view->GetXDPI();
 #elif defined(USE_X11)
   assert(event_queue != nullptr);
 
@@ -151,11 +174,14 @@ Display::GetYDPI()
     return forced_y_dpi;
 #endif
 
+#ifdef HAVE_DPI_DETECTION
+  if (detected_y_dpi > 0)
+    return detected_y_dpi;
+#endif
+
 #ifdef _WIN32
   RootDC dc;
   return GetDeviceCaps(dc, LOGPIXELSY);
-#elif defined(ANDROID)
-  return native_view->GetYDPI();
 #elif defined(USE_X11)
   assert(event_queue != nullptr);
 

@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "NativeView.hpp"
+#include "Hardware/DisplayDPI.hpp"
 
 Java::TrivialClass NativeView::cls;
 jfieldID NativeView::textureNonPowerOfTwo_field;
@@ -64,4 +65,17 @@ void
 NativeView::Deinitialise(JNIEnv *env)
 {
   cls.Clear(env);
+}
+
+NativeView::NativeView(JNIEnv *_env, jobject _obj,
+                       unsigned _width, unsigned _height,
+                       unsigned _xdpi, unsigned _ydpi,
+                       jstring _product) noexcept
+  :env(_env), obj(env, _obj),
+   width(_width), height(_height)
+{
+  Java::String::CopyTo(env, _product, product, sizeof(product));
+
+  Display::ProvideDPI(_xdpi, _ydpi);
+
 }
