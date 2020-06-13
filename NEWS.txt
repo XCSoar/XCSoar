@@ -4,6 +4,8 @@ Version 6.8.15 - not yet released
 * tracking
   - SkyLines: update tracking IP address
 * support for long-form `DTE` header in IGC files
+* Windows
+  - fix buffer overflow causing crashes in the waypoint dialog
 * Raspberry Pi
   - support 64 bit kernels
   - Raspberry Pi 4 support
