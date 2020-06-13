@@ -1,4 +1,4 @@
-Version 6.8.15 - not yet released
+Version 6.8.15 - 2020/06/13
 * user interface
   - vario: fix overlapping text lines
 * tracking
