@@ -71,12 +71,14 @@ Version 7.0 - not yet released
 * Raspberry Pi
   - resizable mouse cursor
 
-Version 6.8.15 - not yet released
+Version 6.8.15 - 2020/06/13
 * user interface
   - vario: fix overlapping text lines
 * tracking
   - SkyLines: update tracking IP address
 * support for long-form `DTE` header in IGC files
+* Windows
+  - fix buffer overflow causing crashes in the waypoint dialog
 * Raspberry Pi
   - support 64 bit kernels
   - Raspberry Pi 4 support
