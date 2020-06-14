@@ -637,6 +637,7 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/Repository/FileRepository.cpp \
 	$(SRC)/Repository/Parser.cpp \
+	$(SRC)/Repository/RepoFileManager.cpp \
 	\
 	$(SRC)/Job/Thread.cpp \
 	$(SRC)/Job/Async.cpp \

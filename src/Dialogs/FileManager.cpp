@@ -44,6 +44,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Repository/FileRepository.hpp"
 #include "Repository/Parser.hpp"
+#include "Repository/RepoFileManager.hpp"
 
 #ifdef HAVE_DOWNLOAD_MANAGER
 #include "Repository/Glue.hpp"
@@ -98,27 +99,6 @@ static bool
 CanDownload(const FileRepository &repository, const TCHAR *name)
 {
   return FindRemoteFile(repository, name) != nullptr;
-}
-
-static bool
-UpdateAvailable(const FileRepository &repository, const TCHAR *name)
-{
-#ifdef HAVE_POSIX
-  const AvailableFile *remote_file = FindRemoteFile(repository, name);
-
-  if (remote_file == nullptr)
-    return false;
-
-  BrokenDate remote_changed = remote_file->update_date;
-
-  const auto path = LocalPath(name);
-  BrokenDate local_changed = static_cast<BrokenDate>(BrokenDateTime::FromUnixTimeUTC(
-                              File::GetLastModification(path)));
-
-  return local_changed < remote_changed;
-#else
-  return false;
-#endif
 }
 #endif
 
@@ -191,7 +171,8 @@ class ManagedFileListWidget
   bool some_out_of_date;
 #endif
 
-  FileRepository repository;
+  RepoFileManager repomanager;
+  const FileRepository &repository = repomanager.repository;
 
 #ifdef HAVE_DOWNLOAD_MANAGER
   /**
@@ -355,6 +336,8 @@ ManagedFileListWidget::Unprepare()
     Net::DownloadManager::RemoveListener(*this);
 
   download_notify.ClearNotification();
+
+  repomanager.Close();
 #endif
 
   DeleteWindow();
@@ -381,11 +364,9 @@ try {
   }
 #endif
 
-  repository.Clear();
 
   const auto path = LocalPath(_T("repository"));
-  FileLineReaderA reader(path);
-  ParseFileRepository(repository, reader);
+  repomanager.Load(path);
 } catch (const std::runtime_error &e) {
 }
 
@@ -416,9 +397,8 @@ ManagedFileListWidget::RefreshList()
       bool is_out_of_date = false;
 #ifdef HAVE_POSIX
       if (file_exists) {
-        BrokenDate local_changed = static_cast<BrokenDate>(BrokenDateTime::FromUnixTimeUTC(
-                                    File::GetLastModification(path)));
-        is_out_of_date = (local_changed < remote_file.update_date);
+        is_out_of_date = repomanager.IsOutOfDate(remote_file.GetName());
+
 
         if (is_out_of_date)
           some_out_of_date = true;
@@ -528,16 +508,8 @@ ManagedFileListWidget::Download()
   assert(current < items.size());
 
   const FileItem &item = items[current];
-  const AvailableFile *remote_file_p = FindRemoteFile(repository, item.name);
-  if (remote_file_p == nullptr)
-    return;
 
-  const AvailableFile &remote_file = *remote_file_p;
-  const UTF8ToWideConverter base(remote_file.GetName());
-  if (!base.IsValid())
-    return;
-
-  Net::DownloadManager::Enqueue(remote_file.uri.c_str(), Path(base));
+  repomanager.Download(item.name.c_str());
 #endif
 }
 
@@ -608,11 +580,7 @@ ManagedFileListWidget::Add()
   assert((unsigned)i < list.size());
 
   const AvailableFile &remote_file = list[i];
-  const UTF8ToWideConverter base(remote_file.GetName());
-  if (!base.IsValid())
-    return;
-
-  Net::DownloadManager::Enqueue(remote_file.GetURI(), Path(base));
+  repomanager.Download(remote_file.GetName());
 #endif
 }
 
@@ -622,17 +590,8 @@ ManagedFileListWidget::UpdateFiles() {
   assert(Net::DownloadManager::IsAvailable());
 
   for (const auto &file : items) {
-    if (UpdateAvailable(repository, file.name)) {
-      const AvailableFile *remote_file = FindRemoteFile(repository, file.name);
-
-      if (remote_file != nullptr) {
-        const UTF8ToWideConverter base(remote_file->GetName());
-        if (!base.IsValid())
-          return;
-
-        Net::DownloadManager::Enqueue(remote_file->GetURI(), Path(base));
-      }
-    }
+    if (repomanager.IsOutOfDate(file.name.c_str()))
+      repomanager.Download(file.name.c_str());
   }
 #endif
 }

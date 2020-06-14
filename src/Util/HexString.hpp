@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef HEX_STRING_HPP
 #define HEX_STRING_HPP
 
+#include "Util/StringBuffer.hxx"
+
 #include <array>
 #include <string_view>
 #include <stdexcept>
@@ -68,5 +70,24 @@ ParseHexString(const std::string_view hex_str)
   }
 
   return raw_hash;
+}
+
+template<std::size_t len>
+StringBuffer<len*2 + 1>
+RenderHexString(const std::array<std::byte, len> data)
+{
+  constexpr char digits[] = "0123456789ABCDEF";
+  StringBuffer<len*2 + 1> out;
+
+  for (std::size_t i = 0; i < len; i++) {
+    unsigned char upper = (static_cast<unsigned char>(data[i])&0xF0)>>4;
+    unsigned char lower =  static_cast<unsigned char>(data[i])&0x0F;
+
+    out[i*2]     = digits[upper];
+    out[i*2 + 1] = digits[lower];
+  }
+
+  out[len * 2] = out.SENTINEL;
+  return out;
 }
 #endif
