@@ -29,11 +29,12 @@ Copyright_License {
 #include "Form/DataField/Listener.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
+#include "MainWindow.hpp"
 
 enum ControlIndex {
   EnableFLARMGauge,
   AutoCloseFlarmDialog,
-  EnableTAGauge,
+  TAPosition,
   EnableThermalProfile,
   FinalGlideBarDisplayModeControl,
   EnableFinalGlideBarMC0,
@@ -49,6 +50,26 @@ static constexpr StaticEnumChoice final_glide_bar_display_mode_list[] = {
     N_("Show final glide bar if approaching final glide range.") },
   { 0 }
 };
+
+static constexpr StaticEnumChoice thermal_assistant_position_list[] = {
+  { (unsigned)UISettings::ThermalAssistantPosition::OFF,
+    N_("Off"),
+    N_("Disable thermal assistant.") },
+  { (unsigned)UISettings::ThermalAssistantPosition::BOTTOM_LEFT,
+    N_("Bottom left"),
+    N_("Show thermal assistant in bottom left.") },
+  { (unsigned)UISettings::ThermalAssistantPosition::BOTTOM_LEFT_AVOID_IB,
+    N_("Bottom left (avoid infoboxes)"),
+    N_("Show thermal assistant in bottom left, above/to right of infoboxes (if there).") },
+  { (unsigned)UISettings::ThermalAssistantPosition::BOTTOM_RIGHT,
+    N_("Bottom right"),
+    N_("Show thermal assistant in bottom right.") },
+  { (unsigned)UISettings::ThermalAssistantPosition::BOTTOM_RIGHT_AVOID_IB,
+    N_("Bottom right (avoid infoboxes)"),
+    N_("Show thermal assistant in bottom right above/to left of infoboxes (if there).") },
+  { 0 }
+};
+
 
 class GaugesConfigPanel final : public RowFormWidget, DataFieldListener {
 public:
@@ -90,9 +111,11 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              ui_settings.traffic.auto_close_dialog);
   SetExpertRow(AutoCloseFlarmDialog);
 
-  AddBoolean(_("Thermal assistant"),
-             _("This enables the display of the thermal assistant gauge."),
-             ui_settings.enable_thermal_assistant_gauge);
+  AddEnum(_("Thermal assistant"),
+            _("Enable and select the position of the thermal assistant when overlayed on the main screen."),
+            thermal_assistant_position_list,
+            (unsigned)ui_settings.thermal_assistant_position,
+            this);
 
   AddBoolean(_("Thermal band"),
              _("This enables the display of the thermal profile (climb band) display on the map."),
@@ -136,8 +159,9 @@ GaugesConfigPanel::Save(bool &_changed)
   changed |= SaveValue(AutoCloseFlarmDialog, ProfileKeys::AutoCloseFlarmDialog,
                        ui_settings.traffic.auto_close_dialog);
 
-  changed |= SaveValue(EnableTAGauge, ProfileKeys::EnableTAGauge,
-                       ui_settings.enable_thermal_assistant_gauge);
+  if (SaveValueEnum(TAPosition, ProfileKeys::TAPosition,
+                    ui_settings.thermal_assistant_position))
+    CommonInterface::main_window->ReinitialiseLayout();
 
   changed |= SaveValue(EnableThermalProfile, ProfileKeys::EnableThermalProfile,
                        map_settings.show_thermal_profile);

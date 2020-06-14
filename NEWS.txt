@@ -5,6 +5,7 @@ Version 7.0 - not yet released
   - new translation: Traditional Chinese
   - new Logger-setting "CoPilot"
   - new setting "Thermal Averager needle"
+  - select position of Thermal Assistant
 * data files
   - optimise the terrain loader
   - support runway width in CUP files
