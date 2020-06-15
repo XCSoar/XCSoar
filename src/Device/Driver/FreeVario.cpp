@@ -59,9 +59,10 @@ FreeVarioDevice::PFVParser(NMEAInputLine &line, NMEAInfo &info, Port &port)
     char subCommand = line.ReadOneChar();
 
     if (type == '\0')break;
-    if (subCommand == '\0')break;
-
-       switch (type) {
+    if (subCommand == '\0')
+      break;
+    
+    switch (type) {
              case 'M': {
                if (subCommand == 'S'){
 
