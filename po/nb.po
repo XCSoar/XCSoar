@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2018-08-29 21:19+0000\n"
+"PO-Revision-Date: 2020-06-18 08:41+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/xcsoar/"
-"translations/nb/>\n"
+"translations/nb_NO/>\n"
 "Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.2-dev\n"
+"X-Generator: Weblate 4.1.1-dev\n"
 "X-Launchpad-Export-Date: 2015-04-20 16:44+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -1407,7 +1407,7 @@ msgid ""
 "through settings, adjust the values with left/right cursor keys."
 msgstr ""
 "Vindhastighet estimert av XCSoar. Mulighet for justering gjennom dialogene i "
-"den gjeldene infoboksen.  Trykk på opp/ned-tastene for å bla gjennom "
+"den gjeldene infoboksen. Trykk på opp/ned-tastene for å bla gjennom "
 "innstillingene, og venstre/høyre-taster for å velge verdier."
 
 #: src/InfoBoxes/Content/Factory.cpp:349
@@ -5336,9 +5336,9 @@ msgid "File exists already."
 msgstr ""
 
 #: src/Dialogs/ProfileListDialog.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Delete \"%s\"?"
-msgstr "Slett"
+msgstr "Slett «%s»?"
 
 #: src/Dialogs/ProfileListDialog.cpp:372 Data/Input/default.xci:589
 #, fuzzy
@@ -7767,7 +7767,7 @@ msgstr "Standard radius for vendepunktsylinder og sektor i nye oppgaver."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:177
 msgid "Default task type for new tasks you create."
-msgstr "Standard oppgavetype for  nye oppgaver."
+msgstr "Forvalgt oppgavetype for opprettede oppgaver."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:194
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:215
