@@ -143,9 +143,10 @@ class Cache {
 			return Equal::operator()(a.GetKey(), b.GetKey());
 		}
 
+		template<typename A>
 		gcc_pure
-		bool operator()(const Key &a, const Item &b) const noexcept {
-			return Equal::operator()(a, b.GetKey());
+		bool operator()(A &&a, const Item &b) const noexcept {
+			return Equal::operator()(std::forward<A>(a), b.GetKey());
 		}
 	};
 
