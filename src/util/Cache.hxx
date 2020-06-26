@@ -327,7 +327,8 @@ public:
 	void Remove(K &&key) noexcept {
 		auto i = map.find(std::forward<K>(key),
 				  map.hash_function(), map.key_eq());
-		assert(i != map.end());
+		if (i == map.end())
+			return;
 
 		Item &item = *i;
 
