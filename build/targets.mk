@@ -522,9 +522,6 @@ ifeq ($(TARGET),ANDROID)
     LLVM_TARGET = armv7a-none-linux-androideabi
     TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp
     HAVE_FPU := y
-
-    # workaround for "... uses VFP register arguments, output does not"
-    TARGET_ARCH += -Wl,--no-warn-mismatch
   endif
 
   ifeq ($(ARMV7)$(NEON),yy)
