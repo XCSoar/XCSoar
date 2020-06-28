@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-05-19 05:41+0000\n"
-"Last-Translator: rab77 <bd8bin@gmail.com>\n"
+"PO-Revision-Date: 2020-06-30 01:54+0000\n"
+"Last-Translator: 山岭野兔 <bd8bin@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "xcsoar/translations/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.1-dev\n"
+"X-Generator: Weblate 4.2-dev\n"
 "X-Launchpad-Export-Date: 2016-03-01 23:01+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -723,7 +723,6 @@ msgid "Disarm turn"
 msgstr "解除转弯z准备"
 
 #: src/Menu/ExpandMacros.cpp:177
-#, fuzzy
 msgid ""
 "Advance\n"
 "(manual)"
@@ -2890,12 +2889,10 @@ msgid "MC MANUAL"
 msgstr "手动MC"
 
 #: src/InfoBoxes/Content/Other.cpp:57 src/InfoBoxes/Content/Other.cpp:60
-#, fuzzy
 msgid "AC Off"
 msgstr "断开充电器"
 
 #: src/InfoBoxes/Content/Other.cpp:64
-#, fuzzy
 msgid "AC ON"
 msgstr "接通充电器"
 
