@@ -67,12 +67,12 @@
  * $Id$
  */
 
+#include "jpc_t2cod.h"
+#include "jpc_cs.h"
+#include "jpc_math.h"
+
 #include "jasper/jas_math.h"
 #include "jasper/jas_malloc.h"
-
-#include "jpc_cs.h"
-#include "jpc_t2cod.h"
-#include "jpc_math.h"
 
 static int jpc_pi_nextlrcp(jpc_pi_t *pi);
 static int jpc_pi_nextrlcp(jpc_pi_t *pi);

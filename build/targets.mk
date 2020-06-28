@@ -593,9 +593,6 @@ ifeq ($(TARGET),ANDROID)
 
   ifeq ($(ARMV7),y)
     TARGET_LDFLAGS += -Wl,--fix-cortex-a8
-
-    # workaround for "... uses VFP register arguments, output does not"
-    TARGET_LDFLAGS += -Wl,--no-warn-mismatch
   endif
 endif
 

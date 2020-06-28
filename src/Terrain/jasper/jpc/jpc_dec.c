@@ -69,9 +69,13 @@
 * Includes.
 \******************************************************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
+#include "jpc_dec.h"
+#include "jpc_fix.h"
+#include "jpc_cs.h"
+#include "jpc_mct.h"
+#include "jpc_t2dec.h"
+#include "jpc_t1dec.h"
+#include "jpc_math.h"
 
 #include "jasper/jas_types.h"
 #include "jasper/jas_math.h"
@@ -79,13 +83,9 @@
 #include "jasper/jas_malloc.h"
 #include "jasper/jas_debug.h"
 
-#include "jpc_fix.h"
-#include "jpc_dec.h"
-#include "jpc_cs.h"
-#include "jpc_mct.h"
-#include "jpc_t2dec.h"
-#include "jpc_t1dec.h"
-#include "jpc_math.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
 
 // JMW
 #include "jasper/jpc_rtc.h"
@@ -139,22 +139,22 @@ typedef struct {
 \******************************************************************************/
 
 #ifdef ENABLE_JASPER_PPM
-jpc_ppxstab_t *jpc_ppxstab_create(void);
-void jpc_ppxstab_destroy(jpc_ppxstab_t *tab);
-int jpc_ppxstab_grow(jpc_ppxstab_t *tab, int maxents);
-int jpc_ppxstab_insert(jpc_ppxstab_t *tab, jpc_ppxstabent_t *ent);
-jpc_streamlist_t *jpc_ppmstabtostreams(jpc_ppxstab_t *tab);
-int jpc_pptstabwrite(jas_stream_t *out, jpc_ppxstab_t *tab);
-jpc_ppxstabent_t *jpc_ppxstabent_create(void);
-void jpc_ppxstabent_destroy(jpc_ppxstabent_t *ent);
+static jpc_ppxstab_t *jpc_ppxstab_create(void);
+static void jpc_ppxstab_destroy(jpc_ppxstab_t *tab);
+static int jpc_ppxstab_grow(jpc_ppxstab_t *tab, int maxents);
+static int jpc_ppxstab_insert(jpc_ppxstab_t *tab, jpc_ppxstabent_t *ent);
+static jpc_streamlist_t *jpc_ppmstabtostreams(jpc_ppxstab_t *tab);
+static int jpc_pptstabwrite(jas_stream_t *out, jpc_ppxstab_t *tab);
+static jpc_ppxstabent_t *jpc_ppxstabent_create(void);
+static void jpc_ppxstabent_destroy(jpc_ppxstabent_t *ent);
 
-int jpc_streamlist_numstreams(jpc_streamlist_t *streamlist);
-jpc_streamlist_t *jpc_streamlist_create(void);
-int jpc_streamlist_insert(jpc_streamlist_t *streamlist, int streamno,
+static int jpc_streamlist_numstreams(jpc_streamlist_t *streamlist);
+static jpc_streamlist_t *jpc_streamlist_create(void);
+
+static int jpc_streamlist_insert(jpc_streamlist_t *streamlist, int streamno,
   jas_stream_t *stream);
-jas_stream_t *jpc_streamlist_remove(jpc_streamlist_t *streamlist, int streamno);
-void jpc_streamlist_destroy(jpc_streamlist_t *streamlist);
-jas_stream_t *jpc_streamlist_get(jpc_streamlist_t *streamlist, int streamno);
+static jas_stream_t *jpc_streamlist_remove(jpc_streamlist_t *streamlist, int streamno);
+static void jpc_streamlist_destroy(jpc_streamlist_t *streamlist);
 #endif /* ENABLE_JASPER_PPM */
 
 static void jpc_dec_cp_resetflags(jpc_dec_cp_t *cp);
@@ -316,7 +316,7 @@ typedef enum {
 	OPT_DEBUG
 } optid_t;
 
-static jas_taginfo_t decopts[] = {
+static const jas_taginfo_t decopts[] = {
 	{OPT_MAXLYRS, "maxlyrs"},
 	{OPT_MAXPKTS, "maxpkts"},
 	{OPT_MAXSAMPLES, "max_samples"},
@@ -518,7 +518,7 @@ static int jpc_dec_process_sot(jpc_dec_t *dec, jpc_ms_t *ms)
 #ifdef ENABLE_JASPER_IMAGE
 		if (!(compinfos = jas_alloc2(dec->numcomps,
 		  sizeof(jas_image_cmptparm_t)))) {
-			abort();
+			return -1;
 		}
 		for (cmptno = 0, cmpt = dec->cmpts, compinfo = compinfos;
 		  cmptno < dec->numcomps; ++cmptno, ++cmpt, ++compinfo) {
@@ -547,7 +547,7 @@ static int jpc_dec_process_sot(jpc_dec_t *dec, jpc_ms_t *ms)
 			/* Convert the PPM marker segment data into a collection of streams
 			  (one stream per tile-part). */
 			if (!(dec->pkthdrstreams = jpc_ppmstabtostreams(dec->ppmstab))) {
-				abort();
+				return -1;
 			}
 			jpc_ppxstab_destroy(dec->ppmstab);
 			dec->ppmstab = 0;
@@ -643,7 +643,6 @@ static int jpc_dec_process_sod(jpc_dec_t *dec, jpc_ms_t *ms)
 		if (jpc_dec_cp_prepare(tile->cp)) {
 			return -1;
 		}
-
 		if (jpc_dec_tileinit(dec, tile)) {
 			return -1;
 		}
@@ -1669,6 +1668,10 @@ static int jpc_dec_process_com(jpc_dec_t *dec, jpc_ms_t *ms)
 {
 	const jpc_com_t *com = &ms->parms.com;
 
+	/* Eliminate compiler warnings about unused variables. */
+	dec = 0;
+	ms = 0;
+
 	jas_rtc_ProcessComment(dec->loader,
 			       (const char *)com->data, com->len);
 
@@ -2236,7 +2239,7 @@ void jpc_seg_destroy(jpc_dec_seg_t *seg)
 }
 
 #ifdef ENABLE_JASPER_PPM
-jpc_streamlist_t *jpc_streamlist_create()
+static jpc_streamlist_t *jpc_streamlist_create()
 {
 	jpc_streamlist_t *streamlist;
 	int i;
@@ -2257,7 +2260,7 @@ jpc_streamlist_t *jpc_streamlist_create()
 	return streamlist;
 }
 
-int jpc_streamlist_insert(jpc_streamlist_t *streamlist, int streamno,
+static int jpc_streamlist_insert(jpc_streamlist_t *streamlist, int streamno,
   jas_stream_t *stream)
 {
 	jas_stream_t **newstreams;
@@ -2285,7 +2288,7 @@ int jpc_streamlist_insert(jpc_streamlist_t *streamlist, int streamno,
 	return 0;
 }
 
-jas_stream_t *jpc_streamlist_remove(jpc_streamlist_t *streamlist, int streamno)
+static jas_stream_t *jpc_streamlist_remove(jpc_streamlist_t *streamlist, int streamno)
 {
 	jas_stream_t *stream;
 	int i;
@@ -2300,7 +2303,7 @@ jas_stream_t *jpc_streamlist_remove(jpc_streamlist_t *streamlist, int streamno)
 	return stream;
 }
 
-void jpc_streamlist_destroy(jpc_streamlist_t *streamlist)
+static void jpc_streamlist_destroy(jpc_streamlist_t *streamlist)
 {
 	int streamno;
 	if (streamlist->streams) {
@@ -2313,18 +2316,12 @@ void jpc_streamlist_destroy(jpc_streamlist_t *streamlist)
 	jas_free(streamlist);
 }
 
-jas_stream_t *jpc_streamlist_get(jpc_streamlist_t *streamlist, int streamno)
-{
-	assert(streamno < streamlist->numstreams);
-	return streamlist->streams[streamno];
-}
-
-int jpc_streamlist_numstreams(jpc_streamlist_t *streamlist)
+static int jpc_streamlist_numstreams(jpc_streamlist_t *streamlist)
 {
 	return streamlist->numstreams;
 }
 
-jpc_ppxstab_t *jpc_ppxstab_create()
+static jpc_ppxstab_t *jpc_ppxstab_create()
 {
 	jpc_ppxstab_t *tab;
 
@@ -2337,7 +2334,7 @@ jpc_ppxstab_t *jpc_ppxstab_create()
 	return tab;
 }
 
-void jpc_ppxstab_destroy(jpc_ppxstab_t *tab)
+static void jpc_ppxstab_destroy(jpc_ppxstab_t *tab)
 {
 	int i;
 	for (i = 0; i < tab->numents; ++i) {
@@ -2349,7 +2346,7 @@ void jpc_ppxstab_destroy(jpc_ppxstab_t *tab)
 	jas_free(tab);
 }
 
-int jpc_ppxstab_grow(jpc_ppxstab_t *tab, int maxents)
+static int jpc_ppxstab_grow(jpc_ppxstab_t *tab, int maxents)
 {
 	jpc_ppxstabent_t **newents;
 	if (tab->maxents < maxents) {
@@ -2364,7 +2361,7 @@ int jpc_ppxstab_grow(jpc_ppxstab_t *tab, int maxents)
 	return 0;
 }
 
-int jpc_ppxstab_insert(jpc_ppxstab_t *tab, jpc_ppxstabent_t *ent)
+static int jpc_ppxstab_insert(jpc_ppxstab_t *tab, jpc_ppxstabent_t *ent)
 {
 	int inspt;
 	int i;
@@ -2391,7 +2388,7 @@ int jpc_ppxstab_insert(jpc_ppxstab_t *tab, jpc_ppxstabent_t *ent)
 	return 0;
 }
 
-jpc_streamlist_t *jpc_ppmstabtostreams(jpc_ppxstab_t *tab)
+static jpc_streamlist_t *jpc_ppmstabtostreams(jpc_ppxstab_t *tab)
 {
 	jpc_streamlist_t *streams;
 	jas_uchar *dataptr;
@@ -2471,7 +2468,7 @@ error:
 	return 0;
 }
 
-int jpc_pptstabwrite(jas_stream_t *out, jpc_ppxstab_t *tab)
+static int jpc_pptstabwrite(jas_stream_t *out, jpc_ppxstab_t *tab)
 {
 	int i;
 	jpc_ppxstabent_t *ent;
@@ -2484,7 +2481,7 @@ int jpc_pptstabwrite(jas_stream_t *out, jpc_ppxstab_t *tab)
 	return 0;
 }
 
-jpc_ppxstabent_t *jpc_ppxstabent_create()
+static jpc_ppxstabent_t *jpc_ppxstabent_create()
 {
 	jpc_ppxstabent_t *ent;
 	if (!(ent = jas_malloc(sizeof(jpc_ppxstabent_t)))) {
@@ -2496,7 +2493,7 @@ jpc_ppxstabent_t *jpc_ppxstabent_create()
 	return ent;
 }
 
-void jpc_ppxstabent_destroy(jpc_ppxstabent_t *ent)
+static void jpc_ppxstabent_destroy(jpc_ppxstabent_t *ent)
 {
 	if (ent->data) {
 		jas_free(ent->data);

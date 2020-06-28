@@ -71,14 +71,13 @@
 * Includes.
 \******************************************************************************/
 
-#include <assert.h>
-#include <stdlib.h>
+#include "jp2_cod.h"
 
-#include "jasper/jas_stream.h"
 #include "jasper/jas_malloc.h"
 #include "jasper/jas_debug.h"
 
-#include "jp2_cod.h"
+#include <assert.h>
+#include <stdlib.h>
 
 /******************************************************************************\
 * Function prototypes.
@@ -216,7 +215,7 @@ static jp2_box_t *jp2_box_create0(void)
 jp2_box_t *jp2_box_create(int type)
 {
 	jp2_box_t *box;
-	jp2_boxinfo_t *boxinfo;
+	const jp2_boxinfo_t *boxinfo;
 	if (!(box = jp2_box_create0())) {
 		return 0;
 	}
@@ -356,7 +355,7 @@ error:
 #ifdef JASPER_DISABLED
 void jp2_box_dump(jp2_box_t *box, FILE *out)
 {
-	jp2_boxinfo_t *boxinfo;
+	const jp2_boxinfo_t *boxinfo;
 	boxinfo = jp2_boxinfolookup(box->type);
 	assert(boxinfo);
 
@@ -859,6 +858,12 @@ static int jp2_pclr_getdata(jp2_box_t *box, jas_stream_t *in)
 	  jp2_getuint8(in, &pclr->numchans)) {
 		return -1;
 	}
+
+	// verify in range data as per I.5.3.4 - Palette box
+	if (pclr->numchans < 1 || pclr->numlutents < 1 || pclr->numlutents > 1024) {
+		return -1;
+	}
+
 	lutsize = pclr->numlutents * pclr->numchans;
 	if (!(pclr->lutdata = jas_alloc2(lutsize, sizeof(int_fast32_t)))) {
 		return -1;

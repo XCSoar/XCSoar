@@ -71,15 +71,15 @@
 * Includes.
 \******************************************************************************/
 
-#include <assert.h>
-#include <stdlib.h>
-#include <stdarg.h>
+#include "jpc_bs.h"
 
 #include "jasper/jas_malloc.h"
 #include "jasper/jas_math.h"
 #include "jasper/jas_debug.h"
 
-#include "jpc_bs.h"
+#include <assert.h>
+#include <stdlib.h>
+#include <stdarg.h>
 
 /******************************************************************************\
 * Local function prototypes.

@@ -78,14 +78,15 @@
 * Includes.
 \******************************************************************************/
 
-#include <assert.h>
+#include "jpc_qmfb.h"
+#include "jpc_tsfb.h"
+#include "jpc_math.h"
+
 #include "jasper/jas_fix.h"
 #include "jasper/jas_malloc.h"
 #include "jasper/jas_math.h"
 
-#include "jpc_qmfb.h"
-#include "jpc_tsfb.h"
-#include "jpc_math.h"
+#include <assert.h>
 
 /******************************************************************************\
 *
@@ -95,60 +96,64 @@
 #define	QMFB_JOINBUFSIZE	4096
 
 #ifdef ENABLE_JASPER_ENCODE
-int jpc_ft_analyze(jpc_fix_t *a, int xstart, int ystart, int width, int height,
+static int jpc_ft_analyze(jpc_fix_t *a, int xstart, int ystart, int width, int height,
   int stride);
 #endif /* ENABLE_JASPER_ENCODE */
-int jpc_ft_synthesize(jpc_fix_t *a, int xstart, int ystart, int width, int height,
+static int jpc_ft_synthesize(jpc_fix_t *a, int xstart, int ystart, int width, int height,
   int stride);
 
 #ifdef ENABLE_JASPER_ENCODE
-int jpc_ns_analyze(jpc_fix_t *a, int xstart, int ystart, int width, int height,
+static int jpc_ns_analyze(jpc_fix_t *a, int xstart, int ystart, int width, int height,
   int stride);
 #endif /* ENABLE_JASPER_ENCODE */
-int jpc_ns_synthesize(jpc_fix_t *a, int xstart, int ystart, int width,
+static int jpc_ns_synthesize(jpc_fix_t *a, int xstart, int ystart, int width,
   int height, int stride);
 
 #ifdef ENABLE_JASPER_ENCODE
-void jpc_ft_fwdlift_row(jpc_fix_t *a, int numcols, int parity);
-void jpc_ft_fwdlift_col(jpc_fix_t *a, int numrows, int stride,
+static void jpc_ft_fwdlift_row(jpc_fix_t *a, int numcols, int parity);
+static void jpc_ft_fwdlift_col(jpc_fix_t *a, int numrows, int stride,
   int parity);
-void jpc_ft_fwdlift_colgrp(jpc_fix_t *a, int numrows, int stride,
+static void jpc_ft_fwdlift_colgrp(jpc_fix_t *a, int numrows, int stride,
   int parity);
-void jpc_ft_fwdlift_colres(jpc_fix_t *a, int numrows, int numcols,
+static void jpc_ft_fwdlift_colres(jpc_fix_t *a, int numrows, int numcols,
   int stride, int parity);
 #endif /* ENABLE_JASPER_ENCODE */
 
-void jpc_ft_invlift_row(jpc_fix_t *a, int numcols, int parity);
-void jpc_ft_invlift_col(jpc_fix_t *a, int numrows, int stride,
+static void jpc_ft_invlift_row(jpc_fix_t *a, int numcols, int parity);
+#ifdef ENABLE_JASPER_ENCODE
+static void jpc_ft_invlift_col(jpc_fix_t *a, int numrows, int stride,
   int parity);
-void jpc_ft_invlift_colgrp(jpc_fix_t *a, int numrows, int stride,
+#endif /* ENABLE_JASPER_ENCODE */
+static void jpc_ft_invlift_colgrp(jpc_fix_t *a, int numrows, int stride,
   int parity);
-void jpc_ft_invlift_colres(jpc_fix_t *a, int numrows, int numcols,
+static void jpc_ft_invlift_colres(jpc_fix_t *a, int numrows, int numcols,
   int stride, int parity);
 
 #ifdef ENABLE_JASPER_ENCODE
-void jpc_ns_fwdlift_row(jpc_fix_t *a, int numcols, int parity);
-void jpc_ns_fwdlift_colgrp(jpc_fix_t *a, int numrows, int stride, int parity);
-void jpc_ns_fwdlift_colres(jpc_fix_t *a, int numrows, int numcols, int stride,
+static void jpc_ns_fwdlift_row(jpc_fix_t *a, int numcols, int parity);
+static void jpc_ns_fwdlift_colgrp(jpc_fix_t *a, int numrows, int stride, int parity);
+static void jpc_ns_fwdlift_colres(jpc_fix_t *a, int numrows, int numcols, int stride,
   int parity);
 #endif /* ENABLE_JASPER_ENCODE */
-void jpc_ns_invlift_row(jpc_fix_t *a, int numcols, int parity);
-void jpc_ns_invlift_colgrp(jpc_fix_t *a, int numrows, int stride, int parity);
-void jpc_ns_invlift_colres(jpc_fix_t *a, int numrows, int numcols, int stride,
+static void jpc_ns_invlift_row(jpc_fix_t *a, int numcols, int parity);
+static void jpc_ns_invlift_colgrp(jpc_fix_t *a, int numrows, int stride, int parity);
+static void jpc_ns_invlift_colres(jpc_fix_t *a, int numrows, int numcols, int stride,
   int parity);
 
 #ifdef ENABLE_JASPER_ENCODE
-void jpc_qmfb_split_row(jpc_fix_t *a, int numcols, int parity);
-void jpc_qmfb_split_col(jpc_fix_t *a, int numrows, int stride, int parity);
-void jpc_qmfb_split_colgrp(jpc_fix_t *a, int numrows, int stride, int parity);
-void jpc_qmfb_split_colres(jpc_fix_t *a, int numrows, int numcols, int stride,
+static void jpc_qmfb_split_row(jpc_fix_t *a, int numcols, int parity);
+static void jpc_qmfb_split_col(jpc_fix_t *a, int numrows, int stride, int parity);
+static void jpc_qmfb_split_colgrp(jpc_fix_t *a, int numrows, int stride, int parity);
+static void jpc_qmfb_split_colres(jpc_fix_t *a, int numrows, int numcols, int stride,
   int parity);
 #endif /* ENABLE_JASPER_ENCODE */
 
-void jpc_qmfb_join_row(jpc_fix_t *a, int numcols, int parity);
-void jpc_qmfb_join_col(jpc_fix_t *a, int numrows, int stride, int parity);
-void jpc_qmfb_join_colgrp(jpc_fix_t *a, int numrows, int stride, int parity);
-void jpc_qmfb_join_colres(jpc_fix_t *a, int numrows, int numcols, int stride,
+static void jpc_qmfb_join_row(jpc_fix_t *a, int numcols, int parity);
+#ifdef ENABLE_JASPER_ENCODE
+static void jpc_qmfb_join_col(jpc_fix_t *a, int numrows, int stride, int parity);
+#endif /* ENABLE_JASPER_ENCODE */
+static void jpc_qmfb_join_colgrp(jpc_fix_t *a, int numrows, int stride, int parity);
+static void jpc_qmfb_join_colres(jpc_fix_t *a, int numrows, int numcols, int stride,
   int parity);
 
 static const double jpc_ft_lpenergywts[32] = {
@@ -664,6 +669,8 @@ void jpc_qmfb_join_row(jpc_fix_t *a, int numcols, int parity)
 
 }
 
+#ifdef ENABLE_JASPER_ENCODE
+
 void jpc_qmfb_join_col(jpc_fix_t *a, int numrows, int stride,
   int parity)
 {
@@ -720,6 +727,8 @@ void jpc_qmfb_join_col(jpc_fix_t *a, int numrows, int stride,
 	}
 
 }
+
+#endif /* ENABLE_JASPER_ENCODE */
 
 void jpc_qmfb_join_colgrp(jpc_fix_t *a, int numrows, int stride,
   int parity)
@@ -1284,6 +1293,8 @@ void jpc_ft_invlift_row(jpc_fix_t *a, int numcols, int parity)
 
 }
 
+#ifdef ENABLE_JASPER_ENCODE
+
 void jpc_ft_invlift_col(jpc_fix_t *a, int numrows, int stride, int parity)
 {
 
@@ -1350,6 +1361,8 @@ void jpc_ft_invlift_col(jpc_fix_t *a, int numrows, int stride, int parity)
 	}
 
 }
+
+#endif /* ENABLE_JASPER_ENCODE */
 
 void jpc_ft_invlift_colgrp(jpc_fix_t *a, int numrows, int stride, int parity)
 {
@@ -2187,183 +2200,6 @@ void jpc_ns_fwdlift_colres(jpc_fix_t *a, int numrows, int numcols,
 
 }
 
-void jpc_ns_fwdlift_col(jpc_fix_t *a, int numrows, int stride,
-  int parity)
-{
-
-	jpc_fix_t *lptr;
-	jpc_fix_t *hptr;
-	register jpc_fix_t *lptr2;
-	register jpc_fix_t *hptr2;
-	register int n;
-	int llen;
-
-	llen = (numrows + 1 - parity) >> 1;
-
-	if (numrows > 1) {
-
-		/* Apply the first lifting step. */
-		lptr = &a[0];
-		hptr = &a[llen * stride];
-		if (parity) {
-			lptr2 = lptr;
-			hptr2 = hptr;
-			jpc_fix_pluseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * ALPHA),
-			  lptr2[0]));
-			++hptr2;
-			++lptr2;
-			hptr += stride;
-		}
-		n = numrows - llen - parity - (parity == (numrows & 1));
-		while (n-- > 0) {
-			lptr2 = lptr;
-			hptr2 = hptr;
-			jpc_fix_pluseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(ALPHA),
-			  jpc_fix_add(lptr2[0], lptr2[stride])));
-			++lptr2;
-			++hptr2;
-			hptr += stride;
-			lptr += stride;
-		}
-		if (parity == (numrows & 1)) {
-			lptr2 = lptr;
-			hptr2 = hptr;
-			jpc_fix_pluseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * ALPHA),
-			  lptr2[0]));
-			++lptr2;
-			++hptr2;
-		}
-
-		/* Apply the second lifting step. */
-		lptr = &a[0];
-		hptr = &a[llen * stride];
-		if (!parity) {
-			lptr2 = lptr;
-			hptr2 = hptr;
-			jpc_fix_pluseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * BETA),
-			  hptr2[0]));
-			++lptr2;
-			++hptr2;
-			lptr += stride;
-		}
-		n = llen - (!parity) - (parity != (numrows & 1));
-		while (n-- > 0) {
-			lptr2 = lptr;
-			hptr2 = hptr;
-			jpc_fix_pluseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(BETA),
-			  jpc_fix_add(hptr2[0], hptr2[stride])));
-			++lptr2;
-			++hptr2;
-			lptr += stride;
-			hptr += stride;
-		}
-		if (parity != (numrows & 1)) {
-			lptr2 = lptr;
-			hptr2 = hptr;
-			jpc_fix_pluseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * BETA),
-			  hptr2[0]));
-			++lptr2;
-			++hptr2;
-		}
-
-		/* Apply the third lifting step. */
-		lptr = &a[0];
-		hptr = &a[llen * stride];
-		if (parity) {
-			lptr2 = lptr;
-			hptr2 = hptr;
-			jpc_fix_pluseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * GAMMA),
-			  lptr2[0]));
-			++hptr2;
-			++lptr2;
-			hptr += stride;
-		}
-		n = numrows - llen - parity - (parity == (numrows & 1));
-		while (n-- > 0) {
-			lptr2 = lptr;
-			hptr2 = hptr;
-			jpc_fix_pluseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(GAMMA),
-			  jpc_fix_add(lptr2[0], lptr2[stride])));
-			++lptr2;
-			++hptr2;
-			hptr += stride;
-			lptr += stride;
-		}
-		if (parity == (numrows & 1)) {
-			lptr2 = lptr;
-			hptr2 = hptr;
-			jpc_fix_pluseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * GAMMA),
-			  lptr2[0]));
-			++lptr2;
-			++hptr2;
-		}
-
-		/* Apply the fourth lifting step. */
-		lptr = &a[0];
-		hptr = &a[llen * stride];
-		if (!parity) {
-			lptr2 = lptr;
-			hptr2 = hptr;
-			jpc_fix_pluseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * DELTA),
-			  hptr2[0]));
-			++lptr2;
-			++hptr2;
-			lptr += stride;
-		}
-		n = llen - (!parity) - (parity != (numrows & 1));
-		while (n-- > 0) {
-			lptr2 = lptr;
-			hptr2 = hptr;
-			jpc_fix_pluseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(DELTA),
-			  jpc_fix_add(hptr2[0], hptr2[stride])));
-			++lptr2;
-			++hptr2;
-			lptr += stride;
-			hptr += stride;
-		}
-		if (parity != (numrows & 1)) {
-			lptr2 = lptr;
-			hptr2 = hptr;
-			jpc_fix_pluseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * DELTA),
-			  hptr2[0]));
-			++lptr2;
-			++hptr2;
-		}
-
-		/* Apply the scaling step. */
-#if defined(WT_DOSCALE)
-		lptr = &a[0];
-		n = llen;
-		while (n-- > 0) {
-			lptr2 = lptr;
-			lptr2[0] = jpc_fix_mul(lptr2[0], jpc_dbltofix(LGAIN));
-			++lptr2;
-			lptr += stride;
-		}
-		hptr = &a[llen * stride];
-		n = numrows - llen;
-		while (n-- > 0) {
-			hptr2 = hptr;
-			hptr2[0] = jpc_fix_mul(hptr2[0], jpc_dbltofix(HGAIN));
-			++hptr2;
-			hptr += stride;
-		}
-#endif
-
-	} else {
-
-#if defined(WT_LENONE)
-		if (parity) {
-			lptr2 = &a[0];
-			//lptr2[0] <<= 1;
-			lptr2[0] = jpc_fix_asl(lptr2[0], 1);
-			++lptr2;
-		}
-#endif
-
-	}
-
-}
 #endif /* ENABLE_JASPER_ENCODE */
 
 void jpc_ns_invlift_row(jpc_fix_t *a, int numcols, int parity)
@@ -2907,183 +2743,6 @@ void jpc_ns_invlift_colres(jpc_fix_t *a, int numrows, int numcols,
 }
 
 #ifdef ENABLE_JASPER_ENCODE
-void jpc_ns_invlift_col(jpc_fix_t *a, int numrows, int stride,
-  int parity)
-{
-
-	jpc_fix_t *lptr;
-	jpc_fix_t *hptr;
-	register jpc_fix_t *lptr2;
-	register jpc_fix_t *hptr2;
-	register int n;
-	int llen;
-
-	llen = (numrows + 1 - parity) >> 1;
-
-	if (numrows > 1) {
-
-		/* Apply the scaling step. */
-#if defined(WT_DOSCALE)
-		lptr = &a[0];
-		n = llen;
-		while (n-- > 0) {
-			lptr2 = lptr;
-			lptr2[0] = jpc_fix_mul(lptr2[0], jpc_dbltofix(1.0 / LGAIN));
-			++lptr2;
-			lptr += stride;
-		}
-		hptr = &a[llen * stride];
-		n = numrows - llen;
-		while (n-- > 0) {
-			hptr2 = hptr;
-			hptr2[0] = jpc_fix_mul(hptr2[0], jpc_dbltofix(1.0 / HGAIN));
-			++hptr2;
-			hptr += stride;
-		}
-#endif
-
-		/* Apply the first lifting step. */
-		lptr = &a[0];
-		hptr = &a[llen * stride];
-		if (!parity) {
-			lptr2 = lptr;
-			hptr2 = hptr;
-			jpc_fix_minuseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 *
-			  DELTA), hptr2[0]));
-			++lptr2;
-			++hptr2;
-			lptr += stride;
-		}
-		n = llen - (!parity) - (parity != (numrows & 1));
-		while (n-- > 0) {
-			lptr2 = lptr;
-			hptr2 = hptr;
-			jpc_fix_minuseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(DELTA),
-			  jpc_fix_add(hptr2[0], hptr2[stride])));
-			++lptr2;
-			++hptr2;
-			lptr += stride;
-			hptr += stride;
-		}
-		if (parity != (numrows & 1)) {
-			lptr2 = lptr;
-			hptr2 = hptr;
-			jpc_fix_minuseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 *
-			  DELTA), hptr2[0]));
-			++lptr2;
-			++hptr2;
-		}
-
-		/* Apply the second lifting step. */
-		lptr = &a[0];
-		hptr = &a[llen * stride];
-		if (parity) {
-			lptr2 = lptr;
-			hptr2 = hptr;
-			jpc_fix_minuseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 *
-			  GAMMA), lptr2[0]));
-			++hptr2;
-			++lptr2;
-			hptr += stride;
-		}
-		n = numrows - llen - parity - (parity == (numrows & 1));
-		while (n-- > 0) {
-			lptr2 = lptr;
-			hptr2 = hptr;
-			jpc_fix_minuseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(GAMMA),
-			  jpc_fix_add(lptr2[0], lptr2[stride])));
-			++lptr2;
-			++hptr2;
-			hptr += stride;
-			lptr += stride;
-		}
-		if (parity == (numrows & 1)) {
-			lptr2 = lptr;
-			hptr2 = hptr;
-			jpc_fix_minuseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 *
-			  GAMMA), lptr2[0]));
-			++lptr2;
-			++hptr2;
-		}
-
-		/* Apply the third lifting step. */
-		lptr = &a[0];
-		hptr = &a[llen * stride];
-		if (!parity) {
-			lptr2 = lptr;
-			hptr2 = hptr;
-			jpc_fix_minuseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * BETA),
-			  hptr2[0]));
-			++lptr2;
-			++hptr2;
-			lptr += stride;
-		}
-		n = llen - (!parity) - (parity != (numrows & 1));
-		while (n-- > 0) {
-			lptr2 = lptr;
-			hptr2 = hptr;
-			jpc_fix_minuseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(BETA),
-			  jpc_fix_add(hptr2[0], hptr2[stride])));
-			++lptr2;
-			++hptr2;
-			lptr += stride;
-			hptr += stride;
-		}
-		if (parity != (numrows & 1)) {
-			lptr2 = lptr;
-			hptr2 = hptr;
-			jpc_fix_minuseq(lptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 * BETA),
-			  hptr2[0]));
-			++lptr2;
-			++hptr2;
-		}
-
-		/* Apply the fourth lifting step. */
-		lptr = &a[0];
-		hptr = &a[llen * stride];
-		if (parity) {
-			lptr2 = lptr;
-			hptr2 = hptr;
-			jpc_fix_minuseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 *
-			  ALPHA), lptr2[0]));
-			++hptr2;
-			++lptr2;
-			hptr += stride;
-		}
-		n = numrows - llen - parity - (parity == (numrows & 1));
-		while (n-- > 0) {
-			lptr2 = lptr;
-			hptr2 = hptr;
-			jpc_fix_minuseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(ALPHA),
-			  jpc_fix_add(lptr2[0], lptr2[stride])));
-			++lptr2;
-			++hptr2;
-			hptr += stride;
-			lptr += stride;
-		}
-		if (parity == (numrows & 1)) {
-			lptr2 = lptr;
-			hptr2 = hptr;
-			jpc_fix_minuseq(hptr2[0], jpc_fix_mul(jpc_dbltofix(2.0 *
-			  ALPHA), lptr2[0]));
-			++lptr2;
-			++hptr2;
-		}
-
-	} else {
-
-#if defined(WT_LENONE)
-		if (parity) {
-			lptr2 = &a[0];
-			//lptr2[0] >>= 1;
-			lptr2[0] = jpc_fix_asr(lptr2[0], 1);
-			++lptr2;
-		}
-#endif
-
-	}
-
-}
 
 int jpc_ns_analyze(jpc_fix_t *a, int xstart, int ystart, int width, int height,
   int stride)
