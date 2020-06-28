@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-05-31 06:41+0000\n"
+"PO-Revision-Date: 2020-06-30 01:54+0000\n"
 "Last-Translator: Markus Bagge <markus.bagge@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/sv/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.1-dev\n"
+"X-Generator: Weblate 4.2-dev\n"
 "X-Launchpad-Export-Date: 2014-10-13 19:28+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -301,12 +301,12 @@ msgstr "Nyckelhålssektor (DAeC)"
 #: src/Task/TypeStrings.cpp:117
 #, no-c-format
 msgid "BGA Fixed Course sector"
-msgstr ""
+msgstr "BGA sektor fix bana"
 
 #: src/Task/TypeStrings.cpp:118
 #, no-c-format
 msgid "BGA Enhanced Option Fixed Course sector"
-msgstr ""
+msgstr "BGA sektor utökad bana"
 
 #: src/Task/TypeStrings.cpp:119
 #, no-c-format
@@ -361,7 +361,7 @@ msgstr "Symmetrisk kvadrant"
 #: src/Task/TypeStrings.cpp:129
 #, no-c-format
 msgid "Area keyhole"
-msgstr ""
+msgstr "Nyckelhålsarea"
 
 #: src/Task/ValidationErrorStrings.cpp:32
 #, no-c-format
@@ -1922,6 +1922,8 @@ msgid ""
 "Assigned Area Task average speed achievable around target points remaining "
 "in minimum AAT time."
 msgstr ""
+"Uppnåbar medelhastighet runt areauppgiftens (AAT) brytpunkter inom AAT "
+"minimumtid."
 
 #: src/InfoBoxes/Content/Factory.cpp:570
 #, no-c-format
@@ -2591,7 +2593,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:878
 #, no-c-format
 msgid "Next MC0 altitude difference"
-msgstr ""
+msgstr "Nästa MC0 höjdskillnad"
 
 #: src/InfoBoxes/Content/Factory.cpp:879
 #, no-c-format
@@ -2672,12 +2674,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:912
 #, no-c-format
 msgid "Thermal next leg equivalent"
-msgstr ""
+msgstr "Termik nästa ben ekvivalent"
 
 #: src/InfoBoxes/Content/Factory.cpp:913
 #, no-c-format
 msgid "T Next Leg"
-msgstr ""
+msgstr "T nästa ben"
 
 #: src/InfoBoxes/Content/Factory.cpp:914
 #, no-c-format
@@ -2685,6 +2687,8 @@ msgid ""
 "The thermal rate of climb on next leg which is equivalent to a thermal equal "
 "to the MacCready setting on current leg."
 msgstr ""
+"Termikens stig för nästa ben som motsvarar en blåsa lika med MacCready-"
+"inställningen för nuvarande ben."
 
 #: src/InfoBoxes/Content/Factory.cpp:920
 #, no-c-format
@@ -2710,7 +2714,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:928
 #, no-c-format
 msgid "Task cruise efficiency"
-msgstr ""
+msgstr "Effektivitet glidflyg för uppgift"
 
 #: src/InfoBoxes/Content/Factory.cpp:929
 #, no-c-format
@@ -2724,6 +2728,9 @@ msgid ""
 "value estimates your cruise efficiency according to the current flight "
 "history with the set MC value.  Calculation begins after task is started."
 msgstr ""
+"Effektivitet för glidflygning. 100 indikerar perfekt MacCready prestanda. "
+"Värdet skattar effektiviteten enligt aktuell flyghistorik med inställt MC "
+"värde. Beräkningen startar när uppgiften startar."
 
 #: src/InfoBoxes/Content/Factory.cpp:937
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:183
@@ -2792,6 +2799,8 @@ msgid ""
 "Shows the time left until the start point opens or closes, compared to the "
 "calculated time to reach it."
 msgstr ""
+"Visar tid tills dess att startpunkten öppnar eller stänger, relativt "
+"beräknad tid att nå dit."
 
 #: src/InfoBoxes/Content/Factory.cpp:965
 #, no-c-format
@@ -2819,6 +2828,8 @@ msgid ""
 "True bearing from the selected reference location to your position.  The "
 "distance is displayed in nautical miles for communication with ATC."
 msgstr ""
+"Verklig bäring från vald referenspunkt till din position. Avståndet visas "
+"som nautiska miles för kommunikation med ATC."
 
 #: src/InfoBoxes/Content/Factory.cpp:981
 #, no-c-format
@@ -2836,6 +2847,8 @@ msgid ""
 "Average cross country speed while on current task over the last hour, not "
 "compensated for altitude."
 msgstr ""
+"Medelhastighet distansflygning för aktuell uppgift över senaste timmen utan "
+"kompensering för höjd."
 
 #: src/InfoBoxes/Content/Factory.cpp:989
 #, no-c-format
@@ -2942,6 +2955,9 @@ msgid ""
 "of the active waypoint in the current task, the center of a selected goto "
 "waypoint or the target within the AAT sector for AAT tasks."
 msgstr ""
+"Pil riktad mot nuvarande valda vägpunkt. Dess namn och avstånd visas även. "
+"Riktningen är optimal för aktiv vägpunkt i aktuell uppgift, centrum av en "
+"goto vägpunkt eller målet inom en AAT sektor för en areauppgift."
 
 #: src/InfoBoxes/Content/Factory.cpp:1039
 #, no-c-format
