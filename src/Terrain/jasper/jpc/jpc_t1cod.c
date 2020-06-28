@@ -69,22 +69,22 @@
 * Includes.
 \******************************************************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
-#include <math.h>
-
-#include "jasper/jas_types.h"
-#include "jasper/jas_math.h"
-
+#include "jpc_t1cod.h"
 #include "jpc_bs.h"
 #include "jpc_dec.h"
 #include "jpc_cs.h"
 #include "jpc_mqcod.h"
-#include "jpc_t1cod.h"
 #include "jpc_tsfb.h"
 
+#include "jasper/jas_types.h"
+#include "jasper/jas_math.h"
+
 #include "Compiler.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <math.h>
 
 static double jpc_pow2i(int n);
 
@@ -108,7 +108,7 @@ jpc_mqctx_t jpc_mqctxs[JPC_NUMCTXS];
 *
 \******************************************************************************/
 
-void jpc_initmqctxs(void);
+static void jpc_initmqctxs(void);
 
 /******************************************************************************\
 * Code.
@@ -479,13 +479,13 @@ void jpc_initctxs(jpc_mqctx_t *ctxs)
 	}
 }
 
-void jpc_initmqctxs()
+static void jpc_initmqctxs()
 {
 	jpc_initctxs(jpc_mqctxs);
 }
 
 /* Calculate the real quantity exp2(n), where x is an integer. */
-double jpc_pow2i(int n)
+static double jpc_pow2i(int n)
 {
 	double x;
 	double a;

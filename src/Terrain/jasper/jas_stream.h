@@ -231,7 +231,7 @@ typedef struct {
 	jas_uchar tinybuf_[JAS_STREAM_MAXPUTBACK + 1];
 
 	/* The operations for the underlying stream file object. */
-	jas_stream_ops_t *ops_;
+	const jas_stream_ops_t *ops_;
 
 	/* The underlying stream file object. */
 	jas_stream_obj_t *obj_;

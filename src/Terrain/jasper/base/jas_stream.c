@@ -71,8 +71,11 @@
 * Includes.
 \******************************************************************************/
 
-/* The configuration header file should be included first. */
-#include "jasper/jas_config.h"
+#include "jasper/jas_stream.h"
+#include "jasper/jas_debug.h"
+#include "jasper/jas_types.h"
+#include "jasper/jas_malloc.h"
+#include "jasper/jas_math.h"
 
 #include <assert.h>
 #if defined(JAS_HAVE_FCNTL_H)
@@ -88,12 +91,6 @@
 #if !defined(__WINE__) && (defined(WIN32) || defined(JAS_HAVE_IO_H))
 #include <io.h>
 #endif
-
-#include "jasper/jas_debug.h"
-#include "jasper/jas_types.h"
-#include "jasper/jas_stream.h"
-#include "jasper/jas_malloc.h"
-#include "jasper/jas_math.h"
 
 /******************************************************************************\
 * Local function prototypes.
@@ -126,14 +123,14 @@ static int file_close(jas_stream_obj_t *obj);
 \******************************************************************************/
 
 #ifdef JASPER_DISABLED
-static jas_stream_ops_t jas_stream_fileops = {
+static const jas_stream_ops_t jas_stream_fileops = {
 	file_read,
 	file_write,
 	file_seek,
 	file_close
 };
 
-static jas_stream_ops_t jas_stream_sfileops = {
+static const jas_stream_ops_t jas_stream_sfileops = {
 	sfile_read,
 	sfile_write,
 	sfile_seek,
@@ -141,7 +138,7 @@ static jas_stream_ops_t jas_stream_sfileops = {
 };
 #endif /* JASPER_DISABLED */
 
-static jas_stream_ops_t jas_stream_memops = {
+static const jas_stream_ops_t jas_stream_memops = {
 	mem_read,
 	mem_write,
 	mem_seek,

@@ -75,6 +75,8 @@
 \******************************************************************************/
 
 #ifdef ENABLE_JASPER_MULTICOMPONENT
+#include "jpc_fix.h"
+
 #include "jasper/jas_seq.h"
 #include "jasper/jas_fix.h"
 #endif /* ENABLE_JASPER_MULTICOMPONENT */

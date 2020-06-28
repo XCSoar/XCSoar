@@ -71,11 +71,6 @@
 * Includes.
 \******************************************************************************/
 
-#include <assert.h>
-
-#include "jasper/jas_malloc.h"
-#include "jasper/jas_seq.h"
-
 #include "jpc_tsfb.h"
 #include "jpc_cod.h"
 #include "jpc_cs.h"
@@ -85,12 +80,15 @@
 #include "jpc_math.h"
 #include "jpc_fix.h"
 
-static
-int jpc_tsfb_synthesize2(jpc_tsfb_t *tsfb, jpc_fix_t *a, int xstart, int ystart,
+#include "jasper/jas_malloc.h"
+#include "jasper/jas_seq.h"
+
+#include <assert.h>
+
+static int jpc_tsfb_synthesize2(jpc_tsfb_t *tsfb, jpc_fix_t *a, int xstart, int ystart,
   int width, int height, int stride, int numlvls);
 
-static
-void jpc_tsfb_getbands2(jpc_tsfb_t *tsfb, int locxstart, int locystart,
+static void jpc_tsfb_getbands2(jpc_tsfb_t *tsfb, int locxstart, int locystart,
   int xstart, int ystart, int xend, int yend, jpc_tsfb_band_t **bands,
   int numlvls);
 
@@ -165,8 +163,7 @@ int jpc_tsfb_synthesize(jpc_tsfb_t *tsfb, jas_seq2d_t *a)
 	  jas_seq2d_height(a), jas_seq2d_rowstep(a), tsfb->numlvls - 1) : 0;
 }
 
-static
-int jpc_tsfb_synthesize2(jpc_tsfb_t *tsfb, jpc_fix_t *a, int xstart, int ystart,
+static int jpc_tsfb_synthesize2(jpc_tsfb_t *tsfb, jpc_fix_t *a, int xstart, int ystart,
   int width, int height, int stride, int numlvls)
 {
 	if (numlvls > 0) {

@@ -71,10 +71,10 @@
 * Includes
 \******************************************************************************/
 
-#include <string.h>
-
-#include "jasper/jas_malloc.h"
 #include "jasper/jas_string.h"
+#include "jasper/jas_malloc.h"
+
+#include <string.h>
 
 /******************************************************************************\
 * Miscellaneous Functions

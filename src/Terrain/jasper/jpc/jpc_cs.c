@@ -71,14 +71,14 @@
 * Includes.
 \******************************************************************************/
 
-#include <stdlib.h>
-#include <assert.h>
-#include <ctype.h>
+#include "jpc_cs.h"
 
 #include "jasper/jas_malloc.h"
 #include "jasper/jas_debug.h"
 
-#include "jpc_cs.h"
+#include <stdlib.h>
+#include <assert.h>
+#include <ctype.h>
 
 /******************************************************************************\
 * Types.
