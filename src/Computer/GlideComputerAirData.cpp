@@ -104,11 +104,12 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
   wind_computer.Select(settings.wind, basic, calculated);
   wind_computer.ComputeHeadWind(basic, calculated);
 
-  thermallocator.Process(calculated.circling,
-                         basic.time, basic.location,
-                         basic.netto_vario,
-                         calculated.GetWindOrZero(),
-                         calculated.thermal_locator);
+  if (basic.location_available)
+    thermallocator.Process(calculated.circling,
+                           basic.time, basic.location,
+                           basic.netto_vario,
+                           calculated.GetWindOrZero(),
+                           calculated.thermal_locator);
 
   LastThermalStats(basic, calculated, last_circling);
 
@@ -203,7 +204,8 @@ GlideComputerAirData::GR(const MoreData &basic, const FlyingState &flying,
 inline void
 GlideComputerAirData::CruiseGR(const MoreData &basic, DerivedInfo &calculated)
 {
-  if (!calculated.circling && basic.NavAltitudeAvailable()) {
+  if (!calculated.circling && basic.location_available &&
+      basic.NavAltitudeAvailable()) {
     if (negative(calculated.cruise_start_time)) {
       calculated.cruise_start_location = basic.location;
       calculated.cruise_start_altitude = basic.nav_altitude;
