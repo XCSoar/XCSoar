@@ -203,14 +203,18 @@ jas_matrix_t *jas_matrix_copy(jas_matrix_t *x)
 * Bind operations.
 \******************************************************************************/
 
-void jas_seq2d_bindsub(jas_matrix_t *s, jas_matrix_t *s1, jas_matind_t xstart,
+int jas_seq2d_bindsub(jas_matrix_t *s, jas_matrix_t *s1, jas_matind_t xstart,
   jas_matind_t ystart, jas_matind_t xend, jas_matind_t yend)
 {
-	jas_matrix_bindsub(s, s1, ystart - s1->ystart_, xstart - s1->xstart_,
-	  yend - s1->ystart_ - 1, xend - s1->xstart_ - 1);
+	if (xstart < s1->xstart_ || ystart < s1->ystart_ ||
+	    xend > s1->xend_ || yend > s1->yend_)
+		return -1;
+
+	return jas_matrix_bindsub(s, s1, ystart - s1->ystart_, xstart - s1->xstart_,
+				  yend - s1->ystart_ - 1, xend - s1->xstart_ - 1);
 }
 
-void jas_matrix_bindsub(jas_matrix_t *mat0, jas_matrix_t *mat1,
+int jas_matrix_bindsub(jas_matrix_t *mat0, jas_matrix_t *mat1,
   jas_matind_t r0, jas_matind_t c0, jas_matind_t r1, jas_matind_t c1)
 {
 	jas_matind_t i;
@@ -231,14 +235,7 @@ void jas_matrix_bindsub(jas_matrix_t *mat0, jas_matrix_t *mat1,
 	mat0->numcols_ = c1 - c0 + 1;
 	mat0->maxrows_ = mat0->numrows_;
 	if (!(mat0->rows_ = jas_alloc2(mat0->maxrows_, sizeof(jas_seqent_t *)))) {
-		/*
-			There is no way to indicate failure to the caller.
-			So, we have no choice but to abort.
-			Ideally, this function should have a non-void return type.
-			In practice, a non-void return type probably would not help
-			much anyways as the caller would just have to terminate anyways.
-		*/
-		abort();
+		return -1;
 	}
 
 	for (i = 0; i < mat0->numrows_; ++i) {
@@ -249,6 +246,8 @@ void jas_matrix_bindsub(jas_matrix_t *mat0, jas_matrix_t *mat1,
 	mat0->ystart_ = mat1->ystart_ + r0;
 	mat0->xend_ = mat0->xstart_ + mat0->numcols_;
 	mat0->yend_ = mat0->ystart_ + mat0->numrows_;
+
+	return 0;
 }
 
 /******************************************************************************\

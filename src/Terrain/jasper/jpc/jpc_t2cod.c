@@ -301,8 +301,10 @@ static int jpc_pi_nextrpcl(register jpc_pi_t *pi)
 						  pi->picomp->vsamp << r), pi->pirlvl->prcheightexpn) -
 						  JPC_FLOORDIVPOW2(try0, pi->pirlvl->prcheightexpn);
 						pi->prcno = prcvind * pi->pirlvl->numhprcs + prchind;
+						if (pi->prcno < 0 || pi->prcno >= pi->pirlvl->numprcs) {
+							return -1;
+						}
 
-						assert(pi->prcno < pi->pirlvl->numprcs);
 						for (pi->lyrno = 0; pi->lyrno <
 						  pi->numlyrs && pi->lyrno < JAS_CAST(int,
 						  pchg->lyrnoend); ++pi->lyrno) {
