@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-06-30 01:54+0000\n"
+"PO-Revision-Date: 2020-06-30 06:55+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -161,7 +161,7 @@ msgstr ""
 #, no-c-format
 msgid ""
 "A straight line start gate.  Cross start gate from inside area to start."
-msgstr "Startovní páska. Protni linii pásky z vnějšku pro zahájení úlohy."
+msgstr "Startovní páska. Protni linii pásky zevnitř výseče pro zahájení úlohy."
 
 #: src/Task/TypeStrings.cpp:78
 #, no-c-format
@@ -1210,7 +1210,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:243
 #, no-c-format
 msgid "Next altitude required"
-msgstr "Příští OB  - požadovaná výška"
+msgstr "Příští OB - požadovaná výška"
 
 #: src/InfoBoxes/Content/Factory.cpp:244
 #, no-c-format
@@ -6525,7 +6525,7 @@ msgid ""
 "size and more."
 msgstr ""
 "Nastavení rozlišení displeje je používáno k adaptaci šíře linek, velikosti "
-"fontů, velikosti nouzových ploch  a dalším úpravám."
+"fontů, velikosti nouzových ploch a dalším úpravám."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:104
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:129
