@@ -77,7 +77,6 @@
 /* The configuration header file should be included first. */
 #include <jasper/jas_config.h>
 
-#include <stdlib.h>
 #include <stdio.h>
 
 #include "Compiler.h"

@@ -70,8 +70,6 @@
 #ifndef JPC_FLT_H
 #define JPC_FLT_H
 
-#include <float.h>
-
 /* The code ought to be modified so this type is not used at all. */
 /* Very few places in the code rely on floating-point arithmetic, aside
   from conversions in printf's. */

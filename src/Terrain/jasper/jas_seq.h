@@ -75,7 +75,7 @@
 \******************************************************************************/
 
 /* The configuration header file should be included first. */
-#include <jasper/jas_config.h>
+#include <jasper/jas_config.h> /* IWYU pragma: keep */
 
 #include <jasper/jas_types.h>
 

@@ -74,12 +74,10 @@
 * Includes.
 \******************************************************************************/
 
-#include "jasper/jas_fix.h"
 #include "jasper/jas_stream.h"
 
-#include "jpc_bs.h"
 #include "jpc_dec.h"
-#include "jpc_mqdec.h"
+#include "jpc_t2cod.h"
 
 #include "Compiler.h"
 

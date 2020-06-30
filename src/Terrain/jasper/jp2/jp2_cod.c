@@ -77,7 +77,7 @@
 #include "jasper/jas_debug.h"
 
 #include <assert.h>
-#include <stdlib.h>
+#include <string.h>
 
 /******************************************************************************\
 * Function prototypes.
@@ -299,10 +299,7 @@ jp2_box_t *jp2_box_get(jas_stream_t *in)
 		if (jp2_getuint64(in, &extlen)) {
 			goto error;
 		}
-		if (extlen > 0x7fffffffUL) {
-			/* this limit is the largest value which can
-			   be passed to jas_stream_copy() without
-			   overflowing */
+		if (extlen > 0xffffffffUL) {
 			jas_eprintf("warning: cannot handle large 64-bit box length\n");
 			goto error;
 		}
@@ -312,6 +309,12 @@ jp2_box_t *jp2_box_get(jas_stream_t *in)
 		hdrlen = JP2_BOX_HDRLEN(false);
 	}
 	if (box->len != 0 && box->len < 8) {
+		goto error;
+	}
+	if (box->len > 0x7fffffffUL) {
+		/* this limit is the largest value which can
+		   be passed to jas_stream_copy() without
+		   overflowing */
 		goto error;
 	}
 

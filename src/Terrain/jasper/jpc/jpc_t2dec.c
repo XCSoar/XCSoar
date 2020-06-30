@@ -75,20 +75,16 @@
 #include "jpc_bs.h"
 #include "jpc_dec.h"
 #include "jpc_cs.h"
-#include "jpc_mqdec.h"
 #include "jpc_t1cod.h"
 #include "jpc_math.h"
 
 #include "jasper/jas_types.h"
-#include "jasper/jas_fix.h"
 #include "jasper/jas_malloc.h"
 #include "jasper/jas_math.h"
 #include "jasper/jas_stream.h"
 #include "jasper/jas_debug.h"
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
 
 /******************************************************************************\
 *
@@ -491,14 +487,14 @@ int jpc_dec_decodepkts(jpc_dec_t *dec, jas_stream_t *pkthdrstream, jas_stream_t 
 jpc_pi_t *jpc_dec_pi_create(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 {
 	jpc_pi_t *pi;
-	int compno;
+	unsigned compno;
 	jpc_picomp_t *picomp;
 	jpc_pirlvl_t *pirlvl;
 	jpc_dec_tcomp_t *tcomp;
-	int rlvlno;
+	unsigned rlvlno;
 	jpc_dec_rlvl_t *rlvl;
-	int prcno;
-	int *prclyrno;
+	unsigned prcno;
+	unsigned *prclyrno;
 	jpc_dec_cmpt_t *cmpt;
 
 	if (!(pi = jpc_pi_create0())) {

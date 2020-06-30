@@ -75,12 +75,9 @@
 /* The configuration header file should be included first. */
 #include <jasper/jas_config.h>
 
-#include <stdio.h>
-
-#include <jasper/jas_types.h>
-#include <jasper/jas_debug.h>
-
 #include "Compiler.h"
+
+#include <stdio.h>
 
 #ifdef __cplusplus
 extern "C" {

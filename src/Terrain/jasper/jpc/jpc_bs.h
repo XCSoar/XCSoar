@@ -74,12 +74,13 @@
 * Includes.
 \******************************************************************************/
 
-#include <stdio.h>
-
 #include "jasper/jas_types.h"
 #include "jasper/jas_stream.h"
 
 #include "Compiler.h"
+
+#include <assert.h>
+#include <stdio.h>
 
 /******************************************************************************\
 * Constants.

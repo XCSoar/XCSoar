@@ -75,12 +75,12 @@
 \******************************************************************************/
 
 #include "jasper/jas_stream.h"
+#include "jasper/jas_image.h"
 
 #include "jpc_tsfb.h"
 #include "jpc_bs.h"
 #include "jpc_tagtree.h"
 #include "jpc_cs.h"
-#include "jpc_cod.h"
 #include "jpc_mqdec.h"
 #include "jpc_t2cod.h"
 
@@ -467,7 +467,7 @@ typedef struct {
 	jas_matrix_t *data;
 
 	/* The number of resolution levels. */
-	int numrlvls;
+	unsigned numrlvls;
 
 	/* The per resolution level information. */
 	jpc_dec_rlvl_t *rlvls;

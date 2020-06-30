@@ -34,6 +34,8 @@ extern "C" {
 #include "jasper/jpc/jpc_t1cod.h"
 }
 
+#include <string.h>
+
 long
 TerrainLoader::SkipMarkerSegment(long file_offset) const
 {

@@ -79,6 +79,8 @@
 
 #include "jpc_mqcod.h"
 
+#include <stdio.h>
+
 /******************************************************************************\
 * Types.
 \******************************************************************************/
@@ -97,10 +99,10 @@ typedef struct {
 	uint_fast32_t ctreg;
 
 	/* The current context. */
-	jpc_mqstate_t **curctx;
+	const jpc_mqstate_t **curctx;
 
 	/* The per-context information. */
-	jpc_mqstate_t **ctxs;
+	const jpc_mqstate_t **ctxs;
 
 	/* The maximum number of contexts. */
 	int maxctxs;
@@ -149,7 +151,7 @@ void jpc_mqdec_init(jpc_mqdec_t *dec);
 void jpc_mqdec_setctx(jpc_mqdec_t *dec, int ctxno, jpc_mqctx_t *ctx);
 
 /* Set the state information for all contexts of a MQ decoder. */
-void jpc_mqdec_setctxs(jpc_mqdec_t *dec, int numctxs, jpc_mqctx_t *ctxs);
+void jpc_mqdec_setctxs(const jpc_mqdec_t *dec, int numctxs, jpc_mqctx_t *ctxs);
 
 /******************************************************************************\
 * Functions/macros for decoding bits.
@@ -178,7 +180,7 @@ void jpc_mqdec_setctxs(jpc_mqdec_t *dec, int numctxs, jpc_mqctx_t *ctxs);
 \******************************************************************************/
 
 /* Dump the MQ decoder state for debugging. */
-void jpc_mqdec_dump(jpc_mqdec_t *dec, FILE *out);
+void jpc_mqdec_dump(const jpc_mqdec_t *dec, FILE *out);
 
 /******************************************************************************\
 * EVERYTHING BELOW THIS POINT IS IMPLEMENTATION SPECIFIC AND NOT PART OF THE
@@ -197,12 +199,12 @@ void jpc_mqdec_dump(jpc_mqdec_t *dec, FILE *out);
 #define	jpc_mqdec_mpsexchange(areg, delta, curctx, bit) \
 { \
 	if ((areg) < (delta)) { \
-		register jpc_mqstate_t *state = *(curctx); \
+		register const jpc_mqstate_t *state = *(curctx); \
 		/* LPS decoded. */ \
 		(bit) = state->mps ^ 1; \
 		*(curctx) = state->nlps; \
 	} else { \
-		register jpc_mqstate_t *state = *(curctx); \
+		register const jpc_mqstate_t *state = *(curctx); \
 		/* MPS decoded. */ \
 		(bit) = state->mps; \
 		*(curctx) = state->nmps; \
@@ -212,12 +214,12 @@ void jpc_mqdec_dump(jpc_mqdec_t *dec, FILE *out);
 #define	jpc_mqdec_lpsexchange(areg, delta, curctx, bit) \
 { \
 	if ((areg) >= (delta)) { \
-		register jpc_mqstate_t *state = *(curctx); \
+		register const jpc_mqstate_t *state = *(curctx); \
 		(areg) = (delta); \
 		(bit) = state->mps ^ 1; \
 		*(curctx) = state->nlps; \
 	} else { \
-		register jpc_mqstate_t *state = *(curctx); \
+		register const jpc_mqstate_t *state = *(curctx); \
 		(areg) = (delta); \
 		(bit) = state->mps; \
 		*(curctx) = state->nmps; \

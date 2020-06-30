@@ -75,6 +75,7 @@
 \******************************************************************************/
 
 #include "jasper/jas_seq.h"
+#include "jasper/jas_types.h"
 
 #include "jpc_fix.h"
 #include "jpc_qmfb.h"

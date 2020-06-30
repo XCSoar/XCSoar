@@ -74,6 +74,7 @@
 #include "jpc_cs.h"
 #include "jpc_mct.h"
 #include "jpc_t2dec.h"
+#include "jpc_t1cod.h"
 #include "jpc_t1dec.h"
 #include "jpc_math.h"
 
@@ -740,7 +741,7 @@ static int jpc_dec_tileinit(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 {
 	jpc_dec_tcomp_t *tcomp;
 	int compno;
-	int rlvlno;
+	unsigned rlvlno;
 	jpc_dec_rlvl_t *rlvl;
 	jpc_dec_band_t *band;
 	jpc_dec_prc_t *prc;
@@ -1047,7 +1048,7 @@ static int jpc_dec_tilefini(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 	jpc_dec_tcomp_t *tcomp;
 	int compno;
 	int bandno;
-	int rlvlno;
+	unsigned rlvlno;
 	jpc_dec_band_t *band;
 	jpc_dec_rlvl_t *rlvl;
 	int prcno;
@@ -1162,7 +1163,7 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 	jpc_dec_rlvl_t *rlvl;
 	jpc_dec_band_t *band;
 	int compno;
-	int rlvlno;
+	unsigned rlvlno;
 	int bandno;
 	int adjust;
 	int v;
@@ -1342,6 +1343,13 @@ static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
 	size_t size;
 	size_t num_samples;
 	size_t num_samples_delta;
+
+	size_t total_samples;
+	if (!jas_safe_size_mul(siz->width, siz->height, &total_samples) ||
+	    (dec->max_samples > 0 && total_samples > dec->max_samples)) {
+		jas_eprintf("image too large\n");
+		return -1;
+	}
 
 	size_t tile_samples;
 	if (!jas_safe_size_mul(siz->tilewidth, siz->tileheight, &tile_samples) ||

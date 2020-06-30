@@ -78,8 +78,9 @@
 #include <jasper/jas_config.h>
 
 #include <jasper/jas_stream.h>
-#include <jasper/jas_seq.h>
-#include <jasper/jas_cm.h>
+#include <jasper/jas_types.h>
+#include <jasper/jas_seq.h> /* IWYU pragma: export */
+#include <jasper/jas_cm.h> /* IWYU pragma: export */
 #include <stdio.h>
 
 #ifdef __cplusplus

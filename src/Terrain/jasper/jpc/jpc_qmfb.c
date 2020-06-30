@@ -79,14 +79,12 @@
 \******************************************************************************/
 
 #include "jpc_qmfb.h"
-#include "jpc_tsfb.h"
 #include "jpc_math.h"
 
-#include "jasper/jas_fix.h"
 #include "jasper/jas_malloc.h"
 #include "jasper/jas_math.h"
 
-#include <assert.h>
+#include <stdlib.h>
 
 /******************************************************************************\
 *

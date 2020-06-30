@@ -75,9 +75,7 @@
 #include "jasper/jas_malloc.h"
 #include "jasper/jas_math.h"
 
-#include <stdlib.h>
 #include <assert.h>
-#include <math.h>
 
 /******************************************************************************\
 * Constructors and destructors.

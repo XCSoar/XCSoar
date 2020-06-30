@@ -73,10 +73,8 @@
 #include "jasper/jas_malloc.h"
 #include "jasper/jas_string.h"
 
-#include <assert.h>
-#include <stdio.h>
 #include <ctype.h>
-#include <stdlib.h>
+#include <string.h>
 
 /******************************************************************************\
 * Macros.
