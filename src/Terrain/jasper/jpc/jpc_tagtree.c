@@ -74,9 +74,9 @@
 #include "jpc_tagtree.h"
 
 #include "jasper/jas_malloc.h"
+#include "jasper/jas_stream.h"
 
 #include <limits.h>
-#include <stdlib.h>
 #include <assert.h>
 #include <stdio.h>
 

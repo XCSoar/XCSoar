@@ -70,18 +70,15 @@
 \******************************************************************************/
 
 #include "jpc_t1cod.h"
-#include "jpc_bs.h"
-#include "jpc_dec.h"
+#include "jpc_cod.h"
 #include "jpc_cs.h"
 #include "jpc_mqcod.h"
 #include "jpc_tsfb.h"
 
-#include "jasper/jas_types.h"
 #include "jasper/jas_math.h"
 
 #include "Util/Compiler.h"
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <math.h>
@@ -212,8 +209,7 @@ int JPC_SEGPASSCNT(int passno, int firstpassno, int numpasses, int bypass, int t
 	} else {
 		ret = JPC_PREC * 3 - 2;
 	}
-	if (passno < numpasses)
-		ret = JAS_MIN(ret, numpasses - passno);
+	ret = JAS_MIN(ret, numpasses - passno);
 	return ret;
 }
 

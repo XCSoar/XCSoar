@@ -74,12 +74,9 @@
 * Includes.
 \******************************************************************************/
 
-#ifdef ENABLE_JASPER_IMAGE
-#include "jasper/jas_image.h"
-#endif /* ENABLE_JASPER_IMAGE */
 #include "jasper/jas_stream.h"
 
-#include "jpc_cod.h"
+#include <stdio.h>
 
 /******************************************************************************\
 * Constants and Types.

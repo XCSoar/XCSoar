@@ -101,10 +101,10 @@ typedef struct {
 typedef struct {
 
 	/* The number of precincts. */
-	int numprcs;
+	unsigned numprcs;
 
 	/* The last layer processed for each precinct. */
-	int *prclyrnos;
+	unsigned *prclyrnos;
 
 	/* The precinct width exponent. */
 	int prcwidthexpn;
@@ -114,7 +114,7 @@ typedef struct {
 
 	/* The number of precincts spanning the resolution level in the horizontal
 	  direction. */
-	int numhprcs;
+	unsigned numhprcs;
 
 } jpc_pirlvl_t;
 
@@ -123,7 +123,7 @@ typedef struct {
 typedef struct {
 
 	/* The number of resolution levels. */
-	int numrlvls;
+	unsigned numrlvls;
 
 	/* The per-resolution-level information. */
 	jpc_pirlvl_t *pirlvls;
@@ -141,13 +141,13 @@ typedef struct {
 typedef struct {
 
 	/* The number of layers. */
-	int numlyrs;
+	unsigned numlyrs;
 
 	/* The number of resolution levels. */
-	int maxrlvls;
+	unsigned maxrlvls;
 
 	/* The number of components. */
-	int numcomps;
+	unsigned numcomps;
 
 	/* The per-component information. */
 	jpc_picomp_t *picomps;
@@ -159,16 +159,16 @@ typedef struct {
 	jpc_pirlvl_t *pirlvl;
 
 	/* The number of the current component. */
-	int compno;
+	unsigned compno;
 
 	/* The number of the current resolution level. */
-	int rlvlno;
+	unsigned rlvlno;
 
 	/* The number of the current precinct. */
-	int prcno;
+	unsigned prcno;
 
 	/* The number of the current layer. */
-	int lyrno;
+	unsigned lyrno;
 
 	/* The x-coordinate of the current position. */
 	uint_fast32_t x;

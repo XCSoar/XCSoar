@@ -68,6 +68,8 @@
 #include <jasper/jas_types.h>
 #include <jasper/jas_stream.h>
 
+#include <stdio.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -74,6 +74,7 @@
 #include "jpc_cs.h"
 #include "jpc_mct.h"
 #include "jpc_t2dec.h"
+#include "jpc_t1cod.h"
 #include "jpc_t1dec.h"
 #include "jpc_math.h"
 
@@ -740,7 +741,7 @@ static int jpc_dec_tileinit(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 {
 	jpc_dec_tcomp_t *tcomp;
 	int compno;
-	int rlvlno;
+	unsigned rlvlno;
 	jpc_dec_rlvl_t *rlvl;
 	jpc_dec_band_t *band;
 	jpc_dec_prc_t *prc;
@@ -798,6 +799,10 @@ static int jpc_dec_tileinit(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 		  sizeof(jpc_dec_rlvl_t)))) {
 			return -1;
 		}
+		for (rlvlno = 0, rlvl = tcomp->rlvls; rlvlno < tcomp->numrlvls;
+		  ++rlvlno, ++rlvl) {
+			rlvl->bands = NULL;
+		}
 		if (!(tcomp->data = jas_seq2d_create(JPC_CEILDIV(tile->xstart,
 		  cmpt->hstep), JPC_CEILDIV(tile->ystart, cmpt->vstep),
 		  JPC_CEILDIV(tile->xend, cmpt->hstep), JPC_CEILDIV(tile->yend,
@@ -840,6 +845,14 @@ static int jpc_dec_tileinit(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 			  rlvl->prcheightexpn;
 			rlvl->numprcs = rlvl->numhprcs * rlvl->numvprcs;
 
+			if (rlvl->numprcs >= 64 * 1024) {
+				/* avoid out-of-memory due to
+				   malicious file; this limit is
+				   rather arbitrary; "good" files I
+				   have seen have values 1..12 */
+				return -1;
+			}
+
 			if (rlvl->xstart >= rlvl->xend || rlvl->ystart >= rlvl->yend) {
 				rlvl->bands = 0;
 				rlvl->numprcs = 0;
@@ -861,6 +874,11 @@ static int jpc_dec_tileinit(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 				brcbgyend = JPC_CEILDIVPOW2(brprcyend, 1);
 				rlvl->cbgwidthexpn = rlvl->prcwidthexpn - 1;
 				rlvl->cbgheightexpn = rlvl->prcheightexpn - 1;
+				if (rlvl->cbgwidthexpn < 0 || rlvl->cbgheightexpn < 0) {
+					/* the control block width/height offset
+					   exponent must not be negative */
+					return -1;
+				}
 			}
 			rlvl->cblkwidthexpn = JAS_MIN(ccp->cblkwidthexpn,
 			  rlvl->cbgwidthexpn);
@@ -896,8 +914,10 @@ static int jpc_dec_tileinit(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 				if (!(band->data = jas_seq2d_create(0, 0, 0, 0))) {
 					return -1;
 				}
-				jas_seq2d_bindsub(band->data, tcomp->data, bnd->locxstart,
-				  bnd->locystart, bnd->locxend, bnd->locyend);
+				if (jas_seq2d_bindsub(band->data, tcomp->data, bnd->locxstart,
+						      bnd->locystart, bnd->locxend, bnd->locyend)) {
+					return -1;
+				}
 				jas_seq2d_setshift(band->data, bnd->xstart, bnd->ystart);
 
 				assert(rlvl->numprcs);
@@ -977,8 +997,10 @@ static int jpc_dec_tileinit(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 								  0))) {
 									return -1;
 								}
-								jas_seq2d_bindsub(cblk->data, band->data,
-								  tmpxstart, tmpystart, tmpxend, tmpyend);
+								if (jas_seq2d_bindsub(cblk->data, band->data,
+										      tmpxstart, tmpystart, tmpxend, tmpyend)) {
+									return -1;
+								}
 								++cblk;
 								--cblkcnt;
 							}
@@ -1026,7 +1048,7 @@ static int jpc_dec_tilefini(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 	jpc_dec_tcomp_t *tcomp;
 	int compno;
 	int bandno;
-	int rlvlno;
+	unsigned rlvlno;
 	jpc_dec_band_t *band;
 	jpc_dec_rlvl_t *rlvl;
 	int prcno;
@@ -1141,7 +1163,7 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 	jpc_dec_rlvl_t *rlvl;
 	jpc_dec_band_t *band;
 	int compno;
-	int rlvlno;
+	unsigned rlvlno;
 	int bandno;
 	int adjust;
 	int v;
@@ -1322,6 +1344,20 @@ static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
 	size_t num_samples;
 	size_t num_samples_delta;
 
+	size_t total_samples;
+	if (!jas_safe_size_mul(siz->width, siz->height, &total_samples) ||
+	    (dec->max_samples > 0 && total_samples > dec->max_samples)) {
+		jas_eprintf("image too large\n");
+		return -1;
+	}
+
+	size_t tile_samples;
+	if (!jas_safe_size_mul(siz->tilewidth, siz->tileheight, &tile_samples) ||
+	    (dec->max_samples > 0 && tile_samples > dec->max_samples)) {
+		jas_eprintf("tile too large\n");
+		return -1;
+	}
+
 	dec->xstart = siz->xoff;
 	dec->ystart = siz->yoff;
 	dec->xend = siz->width;
@@ -1360,6 +1396,7 @@ static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
 		}
 		if (!jas_safe_size_add(num_samples, num_samples_delta, &num_samples)) {
 			jas_eprintf("image too large\n");
+			return -1;
 		}
 	}
 
@@ -1379,6 +1416,20 @@ static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
 	assert(dec->numvtiles >= 0);
 	if (!jas_safe_size_mul(dec->numhtiles, dec->numvtiles, &size) ||
 	  size > INT_MAX) {
+		return -1;
+	}
+	if (dec->max_samples > 0 && size > dec->max_samples / 16 / 16) {
+		/* avoid Denial of Service by a malicious input file
+		   with millions of tiny tiles; if max_samples is
+		   configured, then assume the tiles are at least
+		   16x16, and don't allow more than this number of
+		   tiles */
+		return -1;
+	}
+	if (dec->max_samples > 0 && size > dec->max_samples / dec->numcomps / 16) {
+		/* another DoS check: since each tile allocates an
+		   array of components, this check attempts to catch
+		   excessive tile*component numbers */
 		return -1;
 	}
 	dec->numtiles = size;
@@ -2130,6 +2181,9 @@ void jpc_dec_destroy(jpc_dec_t *dec)
 #ifdef ENABLE_JASPER_PPM
 	if (dec->pkthdrstreams) {
 		jpc_streamlist_destroy(dec->pkthdrstreams);
+	}
+	if (dec->ppmstab) {
+		jpc_ppxstab_destroy(dec->ppmstab);
 	}
 #endif /* ENABLE_JASPER_PPM */
 #ifdef ENABLE_JASPER_IMAGE
