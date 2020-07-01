@@ -83,6 +83,7 @@
 #include <assert.h>
 #include <math.h>
 
+JAS_ATTRIBUTE_CONST
 static double jpc_pow2i(int n);
 
 /******************************************************************************\

@@ -76,6 +76,7 @@
 
 #include "jasper/jas_stream.h"
 
+#include <assert.h>
 #include <stdio.h>
 
 /******************************************************************************\
@@ -269,9 +270,18 @@ typedef struct {
 #define	JPC_COD_MCT		0x01 /* Multicomponent transform. */
 
 /* Get the code block size value from the code block size exponent. */
-#define	JPC_COX_CBLKSIZEEXPN(x)		((x) - 2)
+JAS_ATTRIBUTE_CONST
+static inline unsigned JPC_COX_CBLKSIZEEXPN(unsigned x)
+{
+	return x - 2;
+}
+
 /* Get the code block size exponent from the code block size value. */
-#define	JPC_COX_GETCBLKSIZEEXPN(x)	((x) + 2)
+JAS_ATTRIBUTE_CONST
+static inline unsigned JPC_COX_GETCBLKSIZEEXPN(unsigned x)
+{
+	return x + 2;
+}
 
 /* Per resolution-level information. */
 
@@ -384,10 +394,33 @@ typedef struct {
  * Stepsize manipulation macros.
  */
 
-#define	JPC_QCX_GETEXPN(x)	((x) >> 11)
-#define	JPC_QCX_GETMANT(x)	((x) & 0x07ff)
-#define	JPC_QCX_EXPN(x)		(assert(!((x) & (~0x1f))), (((x) & 0x1f) << 11))
-#define	JPC_QCX_MANT(x)		(assert(!((x) & (~0x7ff))), ((x) & 0x7ff))
+JAS_ATTRIBUTE_CONST
+static inline unsigned JPC_QCX_GETEXPN(unsigned x)
+{
+	return x >> 11;
+}
+
+JAS_ATTRIBUTE_CONST
+static inline unsigned JPC_QCX_GETMANT(unsigned x)
+{
+	return x & 0x7ff;
+}
+
+JAS_ATTRIBUTE_CONST
+static inline uint_fast16_t JPC_QCX_EXPN(unsigned x)
+{
+	assert(!(x & (~0x1f)));
+
+	return (x & 0x1f) << 11;
+}
+
+JAS_ATTRIBUTE_CONST
+static inline uint_fast16_t JPC_QCX_MANT(unsigned x)
+{
+	assert(!(x & (~0x7ff)));
+
+	return x & 0x7ff;
+}
 
 /* Per component information. */
 
@@ -719,13 +752,19 @@ jpc_ms_t *jpc_ms_create(int type);
 void jpc_ms_destroy(jpc_ms_t *ms);
 
 /* Does a marker segment have parameters? */
-#define	JPC_MS_HASPARMS(x) \
-	(!((x) == JPC_MS_SOC || (x) == JPC_MS_SOD || (x) == JPC_MS_EOC || \
-	  (x) == JPC_MS_EPH || ((x) >= 0xff30 && (x) <= 0xff3f)))
+JAS_ATTRIBUTE_CONST
+static inline bool JPC_MS_HASPARMS(unsigned x)
+{
+	return !(x == JPC_MS_SOC || x == JPC_MS_SOD || x == JPC_MS_EOC ||
+		 x == JPC_MS_EPH || (x >= 0xff30 && x <= 0xff3f));
+}
 
 /* Get the marker segment type. */
-#define	jpc_ms_gettype(ms) \
-	((ms)->id)
+JAS_ATTRIBUTE_PURE
+static inline unsigned jpc_ms_gettype(const jpc_ms_t *ms)
+{
+	return ms->id;
+}
 
 /* Read a marker segment from a stream. */
 jpc_ms_t *jpc_getms(jas_stream_t *in, jpc_cstate_t *cstate);

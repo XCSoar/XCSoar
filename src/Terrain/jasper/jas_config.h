@@ -77,6 +77,14 @@
 #define JAS_DEC_DEFAULT_MAX_SAMPLES (64 * ((size_t) 1048576))
 #endif
 
+#ifdef __GNUC__
+#define JAS_ATTRIBUTE_CONST __attribute__((const))
+#define JAS_ATTRIBUTE_PURE __attribute__((pure))
+#else
+#define JAS_ATTRIBUTE_CONST
+#define JAS_ATTRIBUTE_PURE
+#endif
+
 #if defined(__GNUC__) && !defined(__clang__)
 #define JAS_ATTRIBUTE_DISABLE_USAN \
   __attribute__((no_sanitize_undefined))

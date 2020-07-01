@@ -276,7 +276,7 @@ int jpc_bitstream_fillbuf(jpc_bitstream_t *bitstream)
 
 /* Does the bit stream need to be aligned to a byte boundary (considering
   the effects of bit stuffing)? */
-int jpc_bitstream_needalign(jpc_bitstream_t *bitstream)
+int jpc_bitstream_needalign(const jpc_bitstream_t *bitstream)
 {
 	if (bitstream->openmode_ & JPC_BITSTREAM_READ) {
 		/* The bit stream is open for reading. */
@@ -305,7 +305,7 @@ int jpc_bitstream_needalign(jpc_bitstream_t *bitstream)
 }
 
 /* How many additional bytes would be output if we align the bit stream? */
-int jpc_bitstream_pending(jpc_bitstream_t *bitstream)
+int jpc_bitstream_pending(const jpc_bitstream_t *bitstream)
 {
 	if (bitstream->openmode_ & JPC_BITSTREAM_WRITE) {
 		/* The bit stream is being used for writing. */

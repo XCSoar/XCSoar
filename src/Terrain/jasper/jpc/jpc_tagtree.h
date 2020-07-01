@@ -150,6 +150,7 @@ void jpc_tagtree_setvalue(jpc_tagtree_t *tree, jpc_tagtreenode_t *leaf,
   int value);
 
 /* Get a pointer to a particular leaf node. */
+JAS_ATTRIBUTE_PURE
 jpc_tagtreenode_t *jpc_tagtree_getleaf(jpc_tagtree_t *tree, int n);
 
 /* Invoke the tag tree decoding procedure. */

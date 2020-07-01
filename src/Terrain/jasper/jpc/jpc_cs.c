@@ -765,9 +765,7 @@ static int jpc_cox_getcompparms(jpc_ms_t *ms, jpc_cstate_t *cstate,
 	}
 	return 0;
 error:
-	if (compparms) {
-		jpc_cox_destroycompparms(compparms);
-	}
+	jpc_cox_destroycompparms(compparms);
 	return -1;
 }
 

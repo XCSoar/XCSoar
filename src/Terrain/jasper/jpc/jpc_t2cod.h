@@ -278,12 +278,14 @@ int jpc_pchglist_insert(jpc_pchglist_t *pchglist, int pchgno, jpc_pchg_t *pchg);
 jpc_pchg_t *jpc_pchglist_remove(jpc_pchglist_t *pchglist, int pchgno);
 
 /* Get an element from a progression change list. */
+JAS_ATTRIBUTE_PURE
 jpc_pchg_t *jpc_pchglist_get(jpc_pchglist_t *pchglist, int pchgno);
 
 /* Copy a progression change list. */
 jpc_pchglist_t *jpc_pchglist_copy(jpc_pchglist_t *pchglist);
 
 /* Get the number of elements in a progression change list. */
+JAS_ATTRIBUTE_PURE
 int jpc_pchglist_numpchgs(jpc_pchglist_t *pchglist);
 
 /******************************************************************************\

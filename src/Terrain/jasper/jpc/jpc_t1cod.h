@@ -196,11 +196,13 @@ extern jpc_mqctx_t jpc_mqctxs[];
 void jpc_initctxs(jpc_mqctx_t *ctxs);
 
 /* Get the zero coding context. */
+JAS_ATTRIBUTE_CONST
 int jpc_getzcctxno(int f, int orient);
 #define	JPC_GETZCCTXNO(f, orient) \
 	(jpc_zcctxnolut[((orient) << 8) | ((f) & JPC_OTHSIGMSK)])
 
 /* Get the sign prediction bit. */
+JAS_ATTRIBUTE_CONST
 int jpc_getspb(int f);
 #define	JPC_GETSPB(f) \
 	(jpc_spblut[((f) & (JPC_PRIMSIGMSK | JPC_SGNMSK)) >> 4])
@@ -273,19 +275,24 @@ jpc_fix_t jpc_refsignmsedec_func(jpc_fix_t x, int bitpos);
 void jpc_initluts(void);
 
 /* Get the nominal gain associated with a particular band. */
+JAS_ATTRIBUTE_CONST
 int JPC_NOMINALGAIN(int qmfbid, int numlvls, int lvlno, int orient);
 
 /* Get the coding pass type. */
+JAS_ATTRIBUTE_CONST
 int JPC_PASSTYPE(int passno);
 
 /* Get the segment type. */
+JAS_ATTRIBUTE_CONST
 int JPC_SEGTYPE(int passno, int firstpassno, int bypass);
 
 /* Get the number of coding passess in the segment. */
+JAS_ATTRIBUTE_CONST
 int JPC_SEGPASSCNT(int passno, int firstpassno, int numpasses, int bypass,
   int termall);
 
 /* Is the coding pass terminated? */
+JAS_ATTRIBUTE_CONST
 int JPC_ISTERMINATED(int passno, int firstpassno, int numpasses, int termall,
   int lazy);
 

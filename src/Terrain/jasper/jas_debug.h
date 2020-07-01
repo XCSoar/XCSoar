@@ -75,8 +75,6 @@
 /* The configuration header file should be included first. */
 #include <jasper/jas_config.h>
 
-#include "Compiler.h"
-
 #include <stdio.h>
 
 #ifdef __cplusplus
@@ -98,7 +96,7 @@ extern "C" {
 
 #ifdef ENABLE_JASPER_LOG
 /* Get the library debug level. */
-gcc_const
+JAS_ATTRIBUTE_CONST
 JAS_DLLEXPORT int jas_getdbglevel(void);
 
 /* Set the library debug level. */

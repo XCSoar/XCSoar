@@ -390,13 +390,14 @@ JAS_DLLEXPORT int jas_stream_ungetc(jas_stream_t *stream, int c);
 \******************************************************************************/
 
 /* Is it possible to seek on this stream? */
-gcc_pure
+JAS_ATTRIBUTE_PURE
 JAS_DLLEXPORT int jas_stream_isseekable(jas_stream_t *stream);
 
 /* Set the current position within the stream. */
 JAS_DLLEXPORT long jas_stream_seek(jas_stream_t *stream, long offset, int origin);
 
 /* Get the current position within the stream. */
+JAS_ATTRIBUTE_PURE
 JAS_DLLEXPORT long jas_stream_tell(jas_stream_t *stream);
 
 /* Seek to the beginning of a stream. */
@@ -429,6 +430,7 @@ JAS_DLLEXPORT int jas_stream_pad(jas_stream_t *stream, int n, int c);
 
 /* Get the size of the file associated with the specified stream.
   The specified stream must be seekable. */
+JAS_ATTRIBUTE_PURE
 JAS_DLLEXPORT long jas_stream_length(jas_stream_t *stream);
 
 /******************************************************************************\

@@ -2479,8 +2479,8 @@ static jpc_streamlist_t *jpc_ppmstabtostreams(jpc_ppxstab_t *tab)
 		  stream)) {
 			goto error;
 		}
-		tpcnt = (dataptr[0] << 24) | (dataptr[1] << 16) | (dataptr[2] << 8)
-		  | dataptr[3];
+		tpcnt = ((uint_least32_t)dataptr[0] << 24) | ((uint_least32_t)dataptr[1] << 16) | ((uint_least32_t)dataptr[2] << 8)
+		  | (uint_least32_t)dataptr[3];
 		datacnt -= 4;
 		dataptr += 4;
 
