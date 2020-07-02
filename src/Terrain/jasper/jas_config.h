@@ -10,6 +10,7 @@
 #if 1
 
 #define JAS_VERSION "unknown"
+#define JAS_ENABLE_32BIT 1
 #define JAS_HAVE_FCNTL_H		1
 #undef  JAS_HAVE_IO_H
 #define JAS_HAVE_UNISTD_H 1

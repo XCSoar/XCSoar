@@ -99,12 +99,24 @@ extern "C" {
 \******************************************************************************/
 
 /* An element in a sequence. */
+#ifdef JAS_ENABLE_32BIT
+typedef int_least32_t jas_seqent_t;
+#else
 typedef int_fast32_t jas_seqent_t;
+#endif
 
 /* An element in a matrix. */
+#ifdef JAS_ENABLE_32BIT
+typedef int_least32_t jas_matent_t;
+#else
 typedef int_fast32_t jas_matent_t;
+#endif
 
+#ifdef JAS_ENABLE_32BIT
+typedef int_least32_t jas_matind_t;
+#else
 typedef int_fast32_t jas_matind_t;
+#endif
 
 /* Matrix. */
 
