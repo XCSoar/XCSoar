@@ -71,24 +71,20 @@
 * Includes.
 \******************************************************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
+#include "jpc_t2dec.h"
+#include "jpc_bs.h"
+#include "jpc_dec.h"
+#include "jpc_cs.h"
+#include "jpc_t1cod.h"
+#include "jpc_math.h"
 
 #include "jasper/jas_types.h"
-#include "jasper/jas_fix.h"
 #include "jasper/jas_malloc.h"
 #include "jasper/jas_math.h"
 #include "jasper/jas_stream.h"
 #include "jasper/jas_debug.h"
 
-#include "jpc_bs.h"
-#include "jpc_dec.h"
-#include "jpc_cs.h"
-#include "jpc_mqdec.h"
-#include "jpc_t2dec.h"
-#include "jpc_t1cod.h"
-#include "jpc_math.h"
+#include <stdio.h>
 
 /******************************************************************************\
 *
@@ -225,6 +221,7 @@ hdroffstart = jas_stream_getrwcount(pkthdrstream);
 	}
 
 	if ((present = jpc_bitstream_getbit(inb)) < 0) {
+		jpc_bitstream_close(inb);
 		return 1;
 	}
 	JAS_DBGLOG(10, ("\n", present));
@@ -252,10 +249,12 @@ hdroffstart = jas_stream_getrwcount(pkthdrstream);
 				if (!cblk->numpasses) {
 					leaf = jpc_tagtree_getleaf(prc->incltagtree, usedcblkcnt - 1);
 					if ((included = jpc_tagtree_decode(prc->incltagtree, leaf, lyrno + 1, inb)) < 0) {
+						jpc_bitstream_close(inb);
 						return -1;
 					}
 				} else {
 					if ((included = jpc_bitstream_getbit(inb)) < 0) {
+						jpc_bitstream_close(inb);
 						return -1;
 					}
 				}
@@ -269,6 +268,7 @@ hdroffstart = jas_stream_getrwcount(pkthdrstream);
 					leaf = jpc_tagtree_getleaf(prc->numimsbstagtree, usedcblkcnt - 1);
 					for (;;) {
 						if ((ret = jpc_tagtree_decode(prc->numimsbstagtree, leaf, i, inb)) < 0) {
+							jpc_bitstream_close(inb);
 							return -1;
 						}
 						if (ret) {
@@ -280,6 +280,7 @@ hdroffstart = jas_stream_getrwcount(pkthdrstream);
 					cblk->firstpassno = cblk->numimsbs * 3;
 				}
 				if ((numnewpasses = jpc_getnumnewpasses(inb)) < 0) {
+					jpc_bitstream_close(inb);
 					return -1;
 				}
 				JAS_DBGLOG(10, ("numnewpasses=%d ", numnewpasses));
@@ -287,7 +288,22 @@ hdroffstart = jas_stream_getrwcount(pkthdrstream);
 				savenumnewpasses = numnewpasses;
 				mycounter = 0;
 				if (numnewpasses > 0) {
+					if (cblk->firstpassno > 10000) {
+						/* workaround for
+						   CVE-2016-9398: this
+						   large value would
+						   make
+						   JPC_SEGPASSCNT()
+						   return a negative
+						   value, causing an
+						   assertion failure
+						   in
+						   jpc_floorlog2() */
+						jpc_bitstream_close(inb);
+						return -1;
+					}
 					if ((m = jpc_getcommacode(inb)) < 0) {
+						jpc_bitstream_close(inb);
 						return -1;
 					}
 					cblk->numlenbits += m;
@@ -298,6 +314,7 @@ hdroffstart = jas_stream_getrwcount(pkthdrstream);
 						maxpasses = JPC_SEGPASSCNT(passno, cblk->firstpassno, 10000, (ccp->cblkctx & JPC_COX_LAZY) != 0, (ccp->cblkctx & JPC_COX_TERMALL) != 0);
 						if (!discard && !seg) {
 							if (!(seg = jpc_seg_alloc())) {
+								jpc_bitstream_close(inb);
 								return -1;
 							}
 							jpc_seglist_insert(&cblk->segs, cblk->segs.tail, seg);
@@ -312,6 +329,7 @@ hdroffstart = jas_stream_getrwcount(pkthdrstream);
 						mycounter += n;
 						numnewpasses -= n;
 						if ((len = jpc_bitstream_getbits(inb, cblk->numlenbits + jpc_floorlog2(n))) < 0) {
+							jpc_bitstream_close(inb);
 							return -1;
 						}
 						JAS_DBGLOG(10, ("len=%d ", len));
@@ -333,6 +351,7 @@ hdroffstart = jas_stream_getrwcount(pkthdrstream);
 	} else {
 		if (jpc_bitstream_inalign(inb, 0x7f, 0)) {
 			jas_eprintf("alignment failed\n");
+			jpc_bitstream_close(inb);
 			return -1;
 		}
 	}
@@ -468,14 +487,14 @@ int jpc_dec_decodepkts(jpc_dec_t *dec, jas_stream_t *pkthdrstream, jas_stream_t 
 jpc_pi_t *jpc_dec_pi_create(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 {
 	jpc_pi_t *pi;
-	int compno;
+	unsigned compno;
 	jpc_picomp_t *picomp;
 	jpc_pirlvl_t *pirlvl;
 	jpc_dec_tcomp_t *tcomp;
-	int rlvlno;
+	unsigned rlvlno;
 	jpc_dec_rlvl_t *rlvl;
-	int prcno;
-	int *prclyrno;
+	unsigned prcno;
+	unsigned *prclyrno;
 	jpc_dec_cmpt_t *cmpt;
 
 	if (!(pi = jpc_pi_create0())) {

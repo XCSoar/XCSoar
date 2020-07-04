@@ -71,14 +71,16 @@
 * Includes.
 \******************************************************************************/
 
-#include <stdlib.h>
-#include <assert.h>
-#include <ctype.h>
+#include "jpc_cs.h"
 
 #include "jasper/jas_malloc.h"
 #include "jasper/jas_debug.h"
+#include "jasper/jas_image.h"
 
-#include "jpc_cs.h"
+#include <assert.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include <string.h>
 
 /******************************************************************************\
 * Types.
@@ -181,8 +183,8 @@ static const jpc_mstabent_t jpc_mstab[] = {
 	{JPC_MS_QCD, "QCD", {jpc_qcd_destroyparms, jpc_qcd_getparms, }},
 	{JPC_MS_QCC, "QCC", {jpc_qcc_destroyparms, jpc_qcc_getparms, }},
 	{JPC_MS_POC, "POC", {jpc_poc_destroyparms, jpc_poc_getparms, }},
-	{JPC_MS_TLM, "TLM", {0, jpc_unk_getparms}},
-	{JPC_MS_PLM, "PLM", {0, jpc_unk_getparms}},
+	{JPC_MS_TLM, "TLM", {jpc_unk_destroyparms, jpc_unk_getparms}},
+	{JPC_MS_PLM, "PLM", {jpc_unk_destroyparms, jpc_unk_getparms}},
 #ifdef ENABLE_JASPER_PPM
 	{JPC_MS_PPM, "PPM", {jpc_ppm_destroyparms, jpc_ppm_getparms, }},
 	{JPC_MS_PPT, "PPT", {jpc_ppt_destroyparms, jpc_ppt_getparms, }},
@@ -401,8 +403,7 @@ static int jpc_sot_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in
 	  jpc_getuint8(in, &sot->numparts)) {
 		return -1;
 	}
-	if (sot->tileno > 65534 || sot->len < 12 || sot->partno > 254 ||
-	  sot->numparts > 255) {
+	if (sot->tileno > 65534 || sot->len < 12 || sot->partno > 254) {
 		return -1;
 	}
 	if (jas_stream_eof(in)) {
@@ -507,16 +508,20 @@ static int jpc_siz_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate,
 		  jpc_getuint8(in, &siz->comps[i].vsamp)) {
 			goto error;
 		}
-		if (siz->comps[i].hsamp == 0 || siz->comps[i].hsamp > 255) {
+		if (siz->comps[i].hsamp == 0) {
 			jas_eprintf("invalid XRsiz value %d\n", siz->comps[i].hsamp);
 			goto error;
 		}
-		if (siz->comps[i].vsamp == 0 || siz->comps[i].vsamp > 255) {
+		if (siz->comps[i].vsamp == 0) {
 			jas_eprintf("invalid YRsiz value %d\n", siz->comps[i].vsamp);
 			goto error;
 		}
 		siz->comps[i].sgnd = (tmp >> 7) & 1;
 		siz->comps[i].prec = (tmp & 0x7f) + 1;
+		if (siz->comps[i].prec > 38) {
+			jas_eprintf("invalid component bit depth %d\n", siz->comps[i].prec);
+			goto error;
+		}
 	}
 	if (jas_stream_eof(in)) {
 		goto error;
@@ -978,11 +983,13 @@ static int jpc_qcx_getcompparms(jpc_qcxcp_t *compparms, jpc_cstate_t *cstate,
 		for (i = 0; i < compparms->numstepsizes; ++i) {
 			if (compparms->qntsty == JPC_QCX_NOQNT) {
 				if (jpc_getuint8(in, &tmp)) {
+					jpc_qcx_destroycompparms(compparms);
 					return -1;
 				}
 				compparms->stepsizes[i] = JPC_QCX_EXPN(tmp >> 3);
 			} else {
 				if (jpc_getuint16(in, &compparms->stepsizes[i])) {
+					jpc_qcx_destroycompparms(compparms);
 					return -1;
 				}
 			}
@@ -1006,7 +1013,9 @@ static int jpc_qcx_putcompparms(jpc_qcxcp_t *compparms, jpc_cstate_t *cstate,
 	/* Eliminate compiler warning about unused variables. */
 	cstate = 0;
 
-	jpc_putuint8(out, ((compparms->numguard & 7) << 5) | compparms->qntsty);
+	if (jpc_putuint8(out, ((compparms->numguard & 7) << 5) | compparms->qntsty)) {
+		return -1;
+	}
 	for (i = 0; i < compparms->numstepsizes; ++i) {
 		if (compparms->qntsty == JPC_QCX_NOQNT) {
 			if (jpc_putuint8(out, JPC_QCX_GETEXPN(

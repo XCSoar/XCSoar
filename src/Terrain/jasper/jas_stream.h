@@ -75,15 +75,11 @@
 \******************************************************************************/
 
 /* The configuration header file should be included first. */
-#include <jasper/jas_config.h>
+#include <jasper/jas_config.h> /* IWYU pragma: export */
 
 #include <stdio.h>
 #if defined(JAS_HAVE_FCNTL_H)
 #include <fcntl.h>
-#endif
-#include <string.h>
-#if defined(JAS_HAVE_UNISTD_H)
-#include <unistd.h>
 #endif
 #include <jasper/jas_types.h>
 
@@ -182,10 +178,10 @@ typedef void jas_stream_obj_t;
 typedef struct {
 
 	/* Read characters from a file object. */
-	int (*read_)(jas_stream_obj_t *obj, char *buf, int cnt);
+	int (*read_)(jas_stream_obj_t *obj, char *buf, unsigned cnt);
 
 	/* Write characters to a file object. */
-	int (*write_)(jas_stream_obj_t *obj, char *buf, int cnt);
+	int (*write_)(jas_stream_obj_t *obj, char *buf, unsigned cnt);
 
 	/* Set the position for a file object. */
 	long (*seek_)(jas_stream_obj_t *obj, long offset, int origin);
@@ -231,7 +227,7 @@ typedef struct {
 	jas_uchar tinybuf_[JAS_STREAM_MAXPUTBACK + 1];
 
 	/* The operations for the underlying stream file object. */
-	jas_stream_ops_t *ops_;
+	const jas_stream_ops_t *ops_;
 
 	/* The underlying stream file object. */
 	jas_stream_obj_t *obj_;
@@ -273,10 +269,10 @@ typedef struct {
 	size_t bufsize_;
 
 	/* The length of the file. */
-	int_fast32_t len_;
+	uint_fast32_t len_;
 
 	/* The seek position. */
-	int_fast32_t pos_;
+	uint_fast32_t pos_;
 
 	/* Is the buffer growable? */
 	int growable_;
@@ -366,10 +362,10 @@ JAS_DLLEXPORT long jas_stream_setrwcount(jas_stream_t *stream, long rwcnt);
 #endif
 
 /* Read characters from a stream into a buffer. */
-JAS_DLLEXPORT int jas_stream_read(jas_stream_t *stream, void *buf, int cnt);
+JAS_DLLEXPORT int jas_stream_read(jas_stream_t *stream, void *buf, unsigned cnt);
 
 /* Write characters from a buffer to a stream. */
-JAS_DLLEXPORT int jas_stream_write(jas_stream_t *stream, const void *buf, int cnt);
+JAS_DLLEXPORT int jas_stream_write(jas_stream_t *stream, const void *buf, unsigned cnt);
 
 /* Write formatted output to a stream. */
 JAS_DLLEXPORT int jas_stream_printf(jas_stream_t *stream, const char *fmt, ...);

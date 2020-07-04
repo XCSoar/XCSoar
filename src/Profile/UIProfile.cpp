@@ -130,8 +130,14 @@ Profile::Load(const ProfileMap &map, UISettings &settings)
   if (settings.custom_dpi < 120 || settings.custom_dpi > 520)
     settings.custom_dpi = 0;
 
-  map.Get(ProfileKeys::EnableTAGauge, settings.enable_thermal_assistant_gauge);
-
+  /* Migrate old data if TA enabled */
+  if (!map.GetEnum(ProfileKeys::TAPosition, settings.thermal_assistant_position)) {
+    bool enable_thermal_assistant_gauge_obsolete;
+    map.Get(ProfileKeys::EnableTAGauge, enable_thermal_assistant_gauge_obsolete);
+    enable_thermal_assistant_gauge_obsolete ?
+      settings.thermal_assistant_position = UISettings::ThermalAssistantPosition::BOTTOM_LEFT :
+      settings.thermal_assistant_position = UISettings::ThermalAssistantPosition::OFF;
+  }
   map.Get(ProfileKeys::AirspaceWarningDialog, settings.enable_airspace_warning_dialog);
 
   map.GetEnum(ProfileKeys::AppStatusMessageAlignment, settings.popup_message_position);

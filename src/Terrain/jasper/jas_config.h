@@ -78,12 +78,8 @@
 #endif
 
 #if defined(__GNUC__) && !defined(__clang__)
-#if __GNUC__ >= 5
 #define JAS_ATTRIBUTE_DISABLE_USAN \
   __attribute__((no_sanitize_undefined))
-#else
-#define JAS_ATTRIBUTE_DISABLE_USAN
-#endif
 #elif defined(__clang__)
 #define JAS_ATTRIBUTE_DISABLE_USAN \
   __attribute__((no_sanitize("undefined")))

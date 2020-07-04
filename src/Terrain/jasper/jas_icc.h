@@ -68,6 +68,8 @@
 #include <jasper/jas_types.h>
 #include <jasper/jas_stream.h>
 
+#include <stdio.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -394,11 +396,11 @@ JAS_DLLEXPORT jas_iccattrval_t *jas_iccattrval_create(jas_iccuint32_t type);
 
 JAS_DLLEXPORT void jas_iccattrtab_dump(jas_iccattrtab_t *attrtab, FILE *out);
 
-extern jas_uchar jas_iccprofdata_srgb[];
-extern int jas_iccprofdata_srgblen;
-extern jas_uchar jas_iccprofdata_sgray[];
-extern int jas_iccprofdata_sgraylen;
-JAS_DLLEXPORT jas_iccprof_t *jas_iccprof_createfrombuf(jas_uchar *buf, int len);
+extern const jas_uchar jas_iccprofdata_srgb[];
+extern const int jas_iccprofdata_srgblen;
+extern const jas_uchar jas_iccprofdata_sgray[];
+extern const int jas_iccprofdata_sgraylen;
+JAS_DLLEXPORT jas_iccprof_t *jas_iccprof_createfrombuf(const jas_uchar *buf, int len);
 JAS_DLLEXPORT jas_iccprof_t *jas_iccprof_createfromclrspc(int clrspc);
 
 #ifdef __cplusplus

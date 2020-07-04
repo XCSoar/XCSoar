@@ -71,13 +71,11 @@
 * Includes.
 \******************************************************************************/
 
-#include <stdlib.h>
-#include <assert.h>
-#include <math.h>
-
 #include "jasper/jas_seq.h"
 #include "jasper/jas_malloc.h"
 #include "jasper/jas_math.h"
+
+#include <assert.h>
 
 /******************************************************************************\
 * Constructors and destructors.
@@ -107,11 +105,16 @@ jas_matrix_t *jas_matrix_create(jas_matind_t numrows, jas_matind_t numcols)
 	matrix = 0;
 
 	if (numrows < 0 || numcols < 0) {
-		goto error;
+		return NULL;
+	}
+
+	// matrix->datasize_ = numrows * numcols;
+	if (!jas_safe_size_mul(numrows, numcols, &size)) {
+		return NULL;
 	}
 
 	if (!(matrix = jas_malloc(sizeof(jas_matrix_t)))) {
-		goto error;
+		return NULL;
 	}
 	matrix->flags_ = 0;
 	matrix->numrows_ = numrows;
@@ -119,12 +122,6 @@ jas_matrix_t *jas_matrix_create(jas_matind_t numrows, jas_matind_t numcols)
 	matrix->rows_ = 0;
 	matrix->maxrows_ = numrows;
 	matrix->data_ = 0;
-	matrix->datasize_ = 0;
-
-	// matrix->datasize_ = numrows * numcols;
-	if (!jas_safe_size_mul(numrows, numcols, &size)) {
-		goto error;
-	}
 	matrix->datasize_ = size;
 
 	if (matrix->maxrows_ > 0) {
@@ -156,9 +153,7 @@ jas_matrix_t *jas_matrix_create(jas_matind_t numrows, jas_matind_t numcols)
 	return matrix;
 
 error:
-	if (matrix) {
-		jas_matrix_destroy(matrix);
-	}
+	jas_matrix_destroy(matrix);
 	return 0;
 }
 
@@ -166,13 +161,9 @@ void jas_matrix_destroy(jas_matrix_t *matrix)
 {
 	if (matrix->data_) {
 		assert(!(matrix->flags_ & JAS_MATRIX_REF));
-		jas_free(matrix->data_);
-		matrix->data_ = 0;
 	}
-	if (matrix->rows_) {
-		jas_free(matrix->rows_);
-		matrix->rows_ = 0;
-	}
+	jas_free(matrix->data_);
+	jas_free(matrix->rows_);
 	jas_free(matrix);
 }
 
@@ -210,14 +201,18 @@ jas_matrix_t *jas_matrix_copy(jas_matrix_t *x)
 * Bind operations.
 \******************************************************************************/
 
-void jas_seq2d_bindsub(jas_matrix_t *s, jas_matrix_t *s1, jas_matind_t xstart,
+int jas_seq2d_bindsub(jas_matrix_t *s, jas_matrix_t *s1, jas_matind_t xstart,
   jas_matind_t ystart, jas_matind_t xend, jas_matind_t yend)
 {
-	jas_matrix_bindsub(s, s1, ystart - s1->ystart_, xstart - s1->xstart_,
-	  yend - s1->ystart_ - 1, xend - s1->xstart_ - 1);
+	if (xstart < s1->xstart_ || ystart < s1->ystart_ ||
+	    xend > s1->xend_ || yend > s1->yend_)
+		return -1;
+
+	return jas_matrix_bindsub(s, s1, ystart - s1->ystart_, xstart - s1->xstart_,
+				  yend - s1->ystart_ - 1, xend - s1->xstart_ - 1);
 }
 
-void jas_matrix_bindsub(jas_matrix_t *mat0, jas_matrix_t *mat1,
+int jas_matrix_bindsub(jas_matrix_t *mat0, jas_matrix_t *mat1,
   jas_matind_t r0, jas_matind_t c0, jas_matind_t r1, jas_matind_t c1)
 {
 	jas_matind_t i;
@@ -238,14 +233,7 @@ void jas_matrix_bindsub(jas_matrix_t *mat0, jas_matrix_t *mat1,
 	mat0->numcols_ = c1 - c0 + 1;
 	mat0->maxrows_ = mat0->numrows_;
 	if (!(mat0->rows_ = jas_alloc2(mat0->maxrows_, sizeof(jas_seqent_t *)))) {
-		/*
-			There is no way to indicate failure to the caller.
-			So, we have no choice but to abort.
-			Ideally, this function should have a non-void return type.
-			In practice, a non-void return type probably would not help
-			much anyways as the caller would just have to terminate anyways.
-		*/
-		abort();
+		return -1;
 	}
 
 	for (i = 0; i < mat0->numrows_; ++i) {
@@ -256,6 +244,8 @@ void jas_matrix_bindsub(jas_matrix_t *mat0, jas_matrix_t *mat1,
 	mat0->ystart_ = mat1->ystart_ + r0;
 	mat0->xend_ = mat0->xstart_ + mat0->numcols_;
 	mat0->yend_ = mat0->ystart_ + mat0->numrows_;
+
+	return 0;
 }
 
 /******************************************************************************\
@@ -422,94 +412,3 @@ void jas_matrix_setall(jas_matrix_t *matrix, jas_seqent_t val)
 		}
 	}
 }
-
-#ifdef ENABLE_JASPER_DUMP
-jas_matrix_t *jas_seq2d_input(FILE *in)
-{
-	jas_matrix_t *matrix;
-	jas_matind_t i;
-	jas_matind_t j;
-	long x;
-	jas_matind_t numrows;
-	jas_matind_t numcols;
-	jas_matind_t xoff;
-	jas_matind_t yoff;
-	long tmp_xoff;
-	long tmp_yoff;
-	long tmp_numrows;
-	long tmp_numcols;
-
-	if (fscanf(in, "%ld %ld", &tmp_xoff, &tmp_yoff) != 2) {
-		return 0;
-	}
-	xoff = tmp_xoff;
-	yoff = tmp_yoff;
-	if (fscanf(in, "%ld %ld", &tmp_numcols, &tmp_numrows) != 2) {
-		return 0;
-	}
-	numrows = tmp_numrows;
-	numcols = tmp_numcols;
-	if (!(matrix = jas_seq2d_create(xoff, yoff, xoff + numcols,
-	  yoff + numrows))) {
-		return 0;
-	}
-
-	if (jas_matrix_numrows(matrix) != numrows ||
-	  jas_matrix_numcols(matrix) != numcols) {
-		abort();
-	}
-
-	/* Get matrix data. */
-	for (i = 0; i < jas_matrix_numrows(matrix); i++) {
-		for (j = 0; j < jas_matrix_numcols(matrix); j++) {
-			if (fscanf(in, "%ld", &x) != 1) {
-				jas_matrix_destroy(matrix);
-				return 0;
-			}
-			jas_matrix_set(matrix, i, j, JAS_CAST(jas_seqent_t, x));
-		}
-	}
-
-	return matrix;
-}
-
-int jas_seq2d_output(jas_matrix_t *matrix, FILE *out)
-{
-#define MAXLINELEN	80
-	jas_matind_t i;
-	jas_matind_t j;
-	jas_seqent_t x;
-	char buf[MAXLINELEN + 1];
-	char sbuf[MAXLINELEN + 1];
-	int n;
-
-	fprintf(out, "%"PRIiFAST32" %"PRIiFAST32"\n", jas_seq2d_xstart(matrix),
-	  jas_seq2d_ystart(matrix));
-	fprintf(out, "%"PRIiFAST32" %"PRIiFAST32"\n", jas_matrix_numcols(matrix),
-	  jas_matrix_numrows(matrix));
-
-	buf[0] = '\0';
-	for (i = 0; i < jas_matrix_numrows(matrix); ++i) {
-		for (j = 0; j < jas_matrix_numcols(matrix); ++j) {
-			x = jas_matrix_get(matrix, i, j);
-			sprintf(sbuf, "%s%4ld", (strlen(buf) > 0) ? " " : "",
-			  JAS_CAST(long, x));
-			n = JAS_CAST(int, strlen(buf));
-			if (n + JAS_CAST(int, strlen(sbuf)) > MAXLINELEN) {
-				fputs(buf, out);
-				fputs("\n", out);
-				buf[0] = '\0';
-			}
-			strcat(buf, sbuf);
-			if (j == jas_matrix_numcols(matrix) - 1) {
-				fputs(buf, out);
-				fputs("\n", out);
-				buf[0] = '\0';
-			}
-		}
-	}
-	fputs(buf, out);
-
-	return 0;
-}
-#endif /* ENABLE_JASPER_DUMP */

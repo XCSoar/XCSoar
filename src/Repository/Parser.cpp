@@ -27,6 +27,11 @@ Copyright_License {
 #include "Util/StringStrip.hxx"
 #include "Util/HexString.hpp"
 
+/**
+ * Parses a line of the repository file.
+ * Each line is of the form `name = value`
+ * @returns A pointer to the value field.
+ */
 static const char *
 ParseLine(char *line)
 {

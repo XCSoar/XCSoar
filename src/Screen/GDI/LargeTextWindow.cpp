@@ -39,7 +39,8 @@ LargeTextWindow::SetText(const TCHAR *text)
 {
   // Replace \n by \r\r\n to enable usage of line-breaks in edit control
   unsigned size = _tcslen(text);
-  TCHAR buffer[size * sizeof(TCHAR) * 3];
+  // TODO variable-length arrays are illegal in C++
+  TCHAR buffer[size * sizeof(TCHAR) * 3 + 1];
   const TCHAR* p2 = text;
   TCHAR* p3 = buffer;
   for (; *p2 != _T('\0'); p2++) {

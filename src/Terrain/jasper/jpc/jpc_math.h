@@ -68,7 +68,7 @@
 * Includes
 \******************************************************************************/
 
-#include	<assert.h>
+#include "jpc_fix.h"
 
 /******************************************************************************\
 * Macros
@@ -93,7 +93,10 @@
 /* Calculate the bit position of the first leading one in a nonnegative
   integer. */
 gcc_const
-int jpc_firstone(int x);
+int jpc_int_firstone(int x);
+
+gcc_const
+int jpc_fix_firstone(jpc_fix_t x);
 
 /* Calculate the integer quantity floor(log2(x)), where x is a positive
   integer. */

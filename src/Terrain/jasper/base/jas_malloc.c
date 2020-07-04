@@ -71,18 +71,15 @@
 * Includes.
 \******************************************************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <stddef.h>
-#include <assert.h>
-
-/* We need the prototype for memset. */
-#include <string.h>
-
 #include "jasper/jas_malloc.h"
 #include "jasper/jas_debug.h"
 #include "jasper/jas_math.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+
+/* We need the prototype for memset. */
+#include <string.h>
 
 /******************************************************************************\
 * Code.

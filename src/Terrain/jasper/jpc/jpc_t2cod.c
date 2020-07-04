@@ -67,12 +67,14 @@
  * $Id$
  */
 
+#include "jpc_t2cod.h"
+#include "jpc_cs.h"
+#include "jpc_math.h"
+
 #include "jasper/jas_math.h"
 #include "jasper/jas_malloc.h"
 
-#include "jpc_cs.h"
-#include "jpc_t2cod.h"
-#include "jpc_math.h"
+#include <assert.h>
 
 static int jpc_pi_nextlrcp(jpc_pi_t *pi);
 static int jpc_pi_nextrlcp(jpc_pi_t *pi);
@@ -138,7 +140,7 @@ int jpc_pi_next(jpc_pi_t *pi)
 static int jpc_pi_nextlrcp(register jpc_pi_t *pi)
 {
 	jpc_pchg_t *pchg;
-	int *prclyrno;
+	unsigned *prclyrno;
 
 	pchg = pi->pchg;
 	if (!pi->prgvolfirst) {
@@ -149,12 +151,12 @@ static int jpc_pi_nextlrcp(register jpc_pi_t *pi)
 	}
 
 	for (pi->lyrno = 0; pi->lyrno < pi->numlyrs && pi->lyrno <
-	  JAS_CAST(int, pchg->lyrnoend); ++pi->lyrno) {
+	  pchg->lyrnoend; ++pi->lyrno) {
 		for (pi->rlvlno = pchg->rlvlnostart; pi->rlvlno < pi->maxrlvls &&
 		  pi->rlvlno < pchg->rlvlnoend; ++pi->rlvlno) {
 			for (pi->compno = pchg->compnostart, pi->picomp =
 			  &pi->picomps[pi->compno]; pi->compno < pi->numcomps
-			  && pi->compno < JAS_CAST(int, pchg->compnoend); ++pi->compno,
+			  && pi->compno < pchg->compnoend; ++pi->compno,
 			  ++pi->picomp) {
 				if (pi->rlvlno >= pi->picomp->numrlvls) {
 					continue;
@@ -181,7 +183,7 @@ skip:
 static int jpc_pi_nextrlcp(register jpc_pi_t *pi)
 {
 	jpc_pchg_t *pchg;
-	int *prclyrno;
+	unsigned *prclyrno;
 
 	pchg = pi->pchg;
 	if (!pi->prgvolfirst) {
@@ -195,10 +197,10 @@ static int jpc_pi_nextrlcp(register jpc_pi_t *pi)
 	for (pi->rlvlno = pchg->rlvlnostart; pi->rlvlno < pi->maxrlvls &&
 	  pi->rlvlno < pchg->rlvlnoend; ++pi->rlvlno) {
 		for (pi->lyrno = 0; pi->lyrno < pi->numlyrs && pi->lyrno <
-		  JAS_CAST(int, pchg->lyrnoend); ++pi->lyrno) {
+		  pchg->lyrnoend; ++pi->lyrno) {
 			for (pi->compno = pchg->compnostart, pi->picomp =
 			  &pi->picomps[pi->compno]; pi->compno < pi->numcomps &&
-			  pi->compno < JAS_CAST(int, pchg->compnoend); ++pi->compno,
+			  pi->compno < pchg->compnoend; ++pi->compno,
 			  ++pi->picomp) {
 				if (pi->rlvlno >= pi->picomp->numrlvls) {
 					continue;
@@ -222,16 +224,16 @@ skip:
 
 static int jpc_pi_nextrpcl(register jpc_pi_t *pi)
 {
-	int rlvlno;
+	unsigned rlvlno;
 	jpc_pirlvl_t *pirlvl;
 	jpc_pchg_t *pchg;
 	int prchind;
 	int prcvind;
-	int *prclyrno;
-	int compno;
+	unsigned *prclyrno;
+	unsigned compno;
 	jpc_picomp_t *picomp;
-	int xstep;
-	int ystep;
+	unsigned xstep;
+	unsigned ystep;
 	uint_fast32_t r;
 	uint_fast32_t rpx;
 	uint_fast32_t rpy;
@@ -274,7 +276,7 @@ static int jpc_pi_nextrpcl(register jpc_pi_t *pi)
 			  pi->xstep - (pi->x % pi->xstep)) {
 				for (pi->compno = pchg->compnostart,
 				  pi->picomp = &pi->picomps[pi->compno];
-				  pi->compno < JAS_CAST(int, pchg->compnoend) && pi->compno <
+				  pi->compno < pchg->compnoend && pi->compno <
 				  pi->numcomps; ++pi->compno, ++pi->picomp) {
 					if (pi->rlvlno >= pi->picomp->numrlvls) {
 						continue;
@@ -301,11 +303,12 @@ static int jpc_pi_nextrpcl(register jpc_pi_t *pi)
 						  pi->picomp->vsamp << r), pi->pirlvl->prcheightexpn) -
 						  JPC_FLOORDIVPOW2(try0, pi->pirlvl->prcheightexpn);
 						pi->prcno = prcvind * pi->pirlvl->numhprcs + prchind;
+						if (pi->prcno >= pi->pirlvl->numprcs) {
+							return -1;
+						}
 
-						assert(pi->prcno < pi->pirlvl->numprcs);
 						for (pi->lyrno = 0; pi->lyrno <
-						  pi->numlyrs && pi->lyrno < JAS_CAST(int,
-						  pchg->lyrnoend); ++pi->lyrno) {
+						  pi->numlyrs && pi->lyrno < pchg->lyrnoend; ++pi->lyrno) {
 							prclyrno = &pi->pirlvl->prclyrnos[pi->prcno];
 							if (pi->lyrno >= *prclyrno) {
 								++(*prclyrno);
@@ -324,16 +327,16 @@ skip:
 
 static int jpc_pi_nextpcrl(register jpc_pi_t *pi)
 {
-	int rlvlno;
+	unsigned rlvlno;
 	jpc_pirlvl_t *pirlvl;
 	jpc_pchg_t *pchg;
 	int prchind;
 	int prcvind;
-	int *prclyrno;
-	int compno;
+	unsigned *prclyrno;
+	unsigned compno;
 	jpc_picomp_t *picomp;
-	int xstep;
-	int ystep;
+	unsigned xstep;
+	unsigned ystep;
 	uint_fast32_t trx0;
 	uint_fast32_t try0;
 	uint_fast32_t r;
@@ -374,7 +377,7 @@ static int jpc_pi_nextpcrl(register jpc_pi_t *pi)
 		  (pi->x % pi->xstep)) {
 			for (pi->compno = pchg->compnostart, pi->picomp =
 			  &pi->picomps[pi->compno]; pi->compno < pi->numcomps
-			  && pi->compno < JAS_CAST(int, pchg->compnoend); ++pi->compno,
+			  && pi->compno < pchg->compnoend; ++pi->compno,
 			  ++pi->picomp) {
 				for (pi->rlvlno = pchg->rlvlnostart,
 				  pi->pirlvl = &pi->picomp->pirlvls[pi->rlvlno];
@@ -404,7 +407,7 @@ static int jpc_pi_nextpcrl(register jpc_pi_t *pi)
 						pi->prcno = prcvind * pi->pirlvl->numhprcs + prchind;
 						assert(pi->prcno < pi->pirlvl->numprcs);
 						for (pi->lyrno = 0; pi->lyrno < pi->numlyrs &&
-						  pi->lyrno < JAS_CAST(int, pchg->lyrnoend);
+						  pi->lyrno < pchg->lyrnoend;
 						  ++pi->lyrno) {
 							prclyrno = &pi->pirlvl->prclyrnos[pi->prcno];
 							if (pi->lyrno >= *prclyrno) {
@@ -424,12 +427,12 @@ skip:
 
 static int jpc_pi_nextcprl(register jpc_pi_t *pi)
 {
-	int rlvlno;
+	unsigned rlvlno;
 	jpc_pirlvl_t *pirlvl;
 	jpc_pchg_t *pchg;
 	int prchind;
 	int prcvind;
-	int *prclyrno;
+	unsigned *prclyrno;
 	uint_fast32_t trx0;
 	uint_fast32_t try0;
 	uint_fast32_t r;
@@ -444,7 +447,7 @@ static int jpc_pi_nextcprl(register jpc_pi_t *pi)
 	}
 
 	for (pi->compno = pchg->compnostart, pi->picomp = &pi->picomps[pi->compno];
-	  pi->compno < JAS_CAST(int, pchg->compnoend) && pi->compno < pi->numcomps;
+	  pi->compno < pchg->compnoend && pi->compno < pi->numcomps;
 	  ++pi->compno, ++pi->picomp) {
 		pirlvl = pi->picomp->pirlvls;
 		// Check for the potential for overflow problems.
@@ -498,7 +501,7 @@ static int jpc_pi_nextcprl(register jpc_pi_t *pi)
 						pi->prcno = prcvind * pi->pirlvl->numhprcs + prchind;
 						assert(pi->prcno < pi->pirlvl->numprcs);
 						for (pi->lyrno = 0; pi->lyrno < pi->numlyrs &&
-						  pi->lyrno < JAS_CAST(int, pchg->lyrnoend);
+						  pi->lyrno < pchg->lyrnoend;
 						  ++pi->lyrno) {
 							prclyrno = &pi->pirlvl->prclyrnos[pi->prcno];
 							if (pi->lyrno >= *prclyrno) {
@@ -525,7 +528,7 @@ static void pirlvl_destroy(jpc_pirlvl_t *rlvl)
 
 static void jpc_picomp_destroy(jpc_picomp_t *picomp)
 {
-	int rlvlno;
+	unsigned rlvlno;
 	jpc_pirlvl_t *pirlvl;
 	if (picomp->pirlvls) {
 		for (rlvlno = 0, pirlvl = picomp->pirlvls; rlvlno <
@@ -539,7 +542,7 @@ static void jpc_picomp_destroy(jpc_picomp_t *picomp)
 void jpc_pi_destroy(jpc_pi_t *pi)
 {
 	jpc_picomp_t *picomp;
-	int compno;
+	unsigned compno;
 	if (pi->picomps) {
 		for (compno = 0, picomp = pi->picomps; compno < pi->numcomps;
 		  ++compno, ++picomp) {
@@ -680,12 +683,12 @@ int jpc_pchglist_numpchgs(jpc_pchglist_t *pchglist)
 
 int jpc_pi_init(jpc_pi_t *pi)
 {
-	int compno;
-	int rlvlno;
-	int prcno;
+	unsigned compno;
+	unsigned rlvlno;
+	unsigned prcno;
 	jpc_picomp_t *picomp;
 	jpc_pirlvl_t *pirlvl;
-	int *prclyrno;
+	unsigned *prclyrno;
 
 	pi->prgvolfirst = 0;
 	pi->valid = 0;

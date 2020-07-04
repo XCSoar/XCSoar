@@ -78,8 +78,9 @@
 #include <jasper/jas_config.h>
 
 #include <jasper/jas_stream.h>
-#include <jasper/jas_seq.h>
-#include <jasper/jas_cm.h>
+#include <jasper/jas_types.h>
+#include <jasper/jas_seq.h> /* IWYU pragma: export */
+#include <jasper/jas_cm.h> /* IWYU pragma: export */
 #include <stdio.h>
 
 #ifdef __cplusplus
@@ -408,11 +409,11 @@ JAS_DLLEXPORT void jas_image_destroy(jas_image_t *image);
 	  (image)->cmpts_[cmptno]->vstep_)
 
 // Test if all components are specified at the same positions in space. */
-JAS_DLLEXPORT bool jas_image_cmpt_domains_same(jas_image_t *image);
+JAS_DLLEXPORT bool jas_image_cmpt_domains_same(const jas_image_t *image);
 
 /* Get the raw size of an image (i.e., the nominal size of the image without
   any compression. */
-JAS_DLLEXPORT uint_fast32_t jas_image_rawsize(jas_image_t *image);
+JAS_DLLEXPORT uint_fast32_t jas_image_rawsize(const jas_image_t *image);
 
 /* Create an image from a stream in some specified format. */
 JAS_DLLEXPORT jas_image_t *jas_image_decode(jas_stream_t *in, int fmt, const char *optstr);
@@ -459,7 +460,7 @@ JAS_DLLEXPORT int jas_image_readcmptsample(jas_image_t *image, int cmptno, int x
 JAS_DLLEXPORT void jas_image_writecmptsample(jas_image_t *image, int cmptno, int x, int y,
   int_fast32_t v);
 
-JAS_DLLEXPORT int jas_image_getcmptbytype(jas_image_t *image, int ctype);
+JAS_DLLEXPORT int jas_image_getcmptbytype(const jas_image_t *image, int ctype);
 
 /******************************************************************************\
 * Image format-related operations.
@@ -473,26 +474,26 @@ JAS_DLLEXPORT int jas_image_addfmt(int id, const char *name, const char *ext, co
   jas_image_fmtops_t *ops);
 
 /* Get the ID for the image format with the specified name. */
-JAS_DLLEXPORT int jas_image_strtofmt(char *s);
+JAS_DLLEXPORT int jas_image_strtofmt(const char *s);
 
 /* Get the name of the image format with the specified ID. */
-JAS_DLLEXPORT char *jas_image_fmttostr(int fmt);
+JAS_DLLEXPORT const char *jas_image_fmttostr(int fmt);
 
 /* Lookup image format information by the format ID. */
-JAS_DLLEXPORT jas_image_fmtinfo_t *jas_image_lookupfmtbyid(int id);
+JAS_DLLEXPORT const jas_image_fmtinfo_t *jas_image_lookupfmtbyid(int id);
 
 /* Lookup image format information by the format name. */
-JAS_DLLEXPORT jas_image_fmtinfo_t *jas_image_lookupfmtbyname(const char *name);
+JAS_DLLEXPORT const jas_image_fmtinfo_t *jas_image_lookupfmtbyname(const char *name);
 
 /* Guess the format of an image file based on its name. */
-JAS_DLLEXPORT int jas_image_fmtfromname(char *filename);
+JAS_DLLEXPORT int jas_image_fmtfromname(const char *filename);
 
 /* Get the format of image data in a stream. */
 JAS_DLLEXPORT int jas_image_getfmt(jas_stream_t *in);
 
 
 #define	jas_image_cmprof(image)	((image)->cmprof_)
-int jas_image_ishomosamp(jas_image_t *image);
+int jas_image_ishomosamp(const jas_image_t *image);
 int jas_image_sampcmpt(jas_image_t *image, int cmptno, int newcmptno,
   jas_image_coord_t ho, jas_image_coord_t vo, jas_image_coord_t hs,
   jas_image_coord_t vs, int sgnd, int prec);

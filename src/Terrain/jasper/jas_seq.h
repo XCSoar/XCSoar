@@ -75,7 +75,7 @@
 \******************************************************************************/
 
 /* The configuration header file should be included first. */
-#include <jasper/jas_config.h>
+#include <jasper/jas_config.h> /* IWYU pragma: keep */
 
 #include <jasper/jas_types.h>
 
@@ -207,7 +207,7 @@ JAS_DLLEXPORT int jas_matrix_output(jas_matrix_t *matrix, FILE *out);
 #endif
 
 /* Create a matrix that references part of another matrix. */
-JAS_DLLEXPORT void jas_matrix_bindsub(jas_matrix_t *mat0, jas_matrix_t *mat1, jas_matind_t r0,
+JAS_DLLEXPORT int jas_matrix_bindsub(jas_matrix_t *mat0, jas_matrix_t *mat1, jas_matind_t r0,
   jas_matind_t c0, jas_matind_t r1, jas_matind_t c1);
 
 /* Create a matrix that is a reference to a row of another matrix. */
@@ -292,7 +292,7 @@ JAS_DLLEXPORT jas_matrix_t *jas_seq2d_create(jas_matind_t xstart, jas_matind_t y
 #define jas_seq2d_size(s) \
 	(jas_seq2d_width(s) * jas_seq2d_height(s))
 
-JAS_DLLEXPORT void jas_seq2d_bindsub(jas_matrix_t *s, jas_matrix_t *s1, jas_matind_t xstart,
+JAS_DLLEXPORT int jas_seq2d_bindsub(jas_matrix_t *s, jas_matrix_t *s1, jas_matind_t xstart,
   jas_matind_t ystart, jas_matind_t xend, jas_matind_t yend);
 
 /******************************************************************************\

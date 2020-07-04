@@ -107,10 +107,10 @@ typedef struct jpc_mqstate_s {
 	int mps;
 
 	/* The NMPS state. */
-	struct jpc_mqstate_s *nmps;
+	const struct jpc_mqstate_s *nmps;
 
 	/* The NLPS state. */
-	struct jpc_mqstate_s *nlps;
+	const struct jpc_mqstate_s *nlps;
 
 } jpc_mqstate_t;
 
@@ -119,6 +119,6 @@ typedef struct jpc_mqstate_s {
 \******************************************************************************/
 
 /* The state table for the MQ coder. */
-extern jpc_mqstate_t jpc_mqstates[];
+extern const jpc_mqstate_t jpc_mqstates[];
 
 #endif

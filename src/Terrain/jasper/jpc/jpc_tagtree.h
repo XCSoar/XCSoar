@@ -74,7 +74,6 @@
 * Includes
 \******************************************************************************/
 
-#include <limits.h>
 #include <stdio.h>
 
 #include "jpc_bs.h"

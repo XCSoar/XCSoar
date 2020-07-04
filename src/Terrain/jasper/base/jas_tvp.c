@@ -69,14 +69,12 @@
 * Includes.
 \******************************************************************************/
 
-#include <assert.h>
-#include <stdio.h>
-#include <ctype.h>
-#include <stdlib.h>
-
+#include "jasper/jas_tvp.h"
 #include "jasper/jas_malloc.h"
 #include "jasper/jas_string.h"
-#include "jasper/jas_tvp.h"
+
+#include <ctype.h>
+#include <string.h>
 
 /******************************************************************************\
 * Macros.
@@ -195,13 +193,13 @@ int jas_tvparser_next(jas_tvparser_t *tvp)
 \******************************************************************************/
 
 /* Get the current tag. */
-char *jas_tvparser_gettag(jas_tvparser_t *tvp)
+const char *jas_tvparser_gettag(const jas_tvparser_t *tvp)
 {
 	return tvp->tag;
 }
 
 /* Get the current value. */
-const char *jas_tvparser_getval(jas_tvparser_t *tvp)
+const char *jas_tvparser_getval(const jas_tvparser_t *tvp)
 {
 	return tvp->val;
 }
@@ -211,9 +209,9 @@ const char *jas_tvparser_getval(jas_tvparser_t *tvp)
 \******************************************************************************/
 
 /* Lookup a tag by name. */
-jas_taginfo_t *jas_taginfos_lookup(jas_taginfo_t *taginfos, const char *name)
+const jas_taginfo_t *jas_taginfos_lookup(const jas_taginfo_t *taginfos, const char *name)
 {
-	jas_taginfo_t *taginfo;
+	const jas_taginfo_t *taginfo;
 	taginfo = taginfos;
 	while (taginfo->id >= 0) {
 		if (!strcmp(taginfo->name, name)) {
@@ -227,9 +225,9 @@ jas_taginfo_t *jas_taginfos_lookup(jas_taginfo_t *taginfos, const char *name)
 /* This function is simply for convenience. */
 /* One can avoid testing for the special case of a null pointer, by
   using this function.   This function never returns a null pointer.  */
-jas_taginfo_t *jas_taginfo_nonull(jas_taginfo_t *taginfo)
+const jas_taginfo_t *jas_taginfo_nonull(const jas_taginfo_t *taginfo)
 {
-	static jas_taginfo_t invalidtaginfo = {
+	static const jas_taginfo_t invalidtaginfo = {
 		-1, 0
 	};
 	

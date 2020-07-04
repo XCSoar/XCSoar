@@ -71,20 +71,17 @@
 * Includes.
 \******************************************************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
+#include "jpc_t1dec.h"
+#include "jpc_bs.h"
+#include "jpc_mqdec.h"
+#include "jpc_t1cod.h"
+#include "jpc_dec.h"
 
-#include "jasper/jas_fix.h"
 #include "jasper/jas_stream.h"
 #include "jasper/jas_math.h"
 #include "jasper/jas_debug.h"
 
-#include "jpc_bs.h"
-#include "jpc_mqdec.h"
-#include "jpc_t1dec.h"
-#include "jpc_t1cod.h"
-#include "jpc_dec.h"
+#include <assert.h>
 
 /******************************************************************************\
 *
@@ -780,7 +777,6 @@ static int dec_clnpass(jpc_dec_t *dec, register jpc_mqdec_t *mqdec, int bitpos, 
 	int j;
 	int k;
 	int vscanlen;
-	int v;
 	int half;
 	int runlen;
 	int f;
@@ -832,6 +828,7 @@ static int dec_clnpass(jpc_dec_t *dec, register jpc_mqdec_t *mqdec, int bitpos, 
 			  !((*fp) & (JPC_SIG | JPC_VISIT | JPC_OTHSIGMSK)))) {
 
 				jpc_mqdec_setcurctx(mqdec, JPC_AGGCTXNO);
+				int v;
 				JPC_T1D_GETBIT(mqdec, v, "CLN", "AGG");
 				if (!v) {
 					continue;
@@ -906,6 +903,7 @@ static int dec_clnpass(jpc_dec_t *dec, register jpc_mqdec_t *mqdec, int bitpos, 
 		int segsymval;
 		segsymval = 0;
 		jpc_mqdec_setcurctx(mqdec, JPC_UCTXNO);
+		int v;
 		JPC_T1D_GETBITNOSKEW(mqdec, v, "CLN", "SEGSYM");
 		segsymval = (segsymval << 1) | (v & 1);
 		JPC_T1D_GETBITNOSKEW(mqdec, v, "CLN", "SEGSYM");

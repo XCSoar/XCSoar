@@ -34,7 +34,7 @@ UISettings::SetDefaults()
 
   custom_dpi = 0;  // automatic
 
-  enable_thermal_assistant_gauge = true;
+  thermal_assistant_position = ThermalAssistantPosition::BOTTOM_LEFT;
 
   enable_airspace_warning_dialog = true;
 
