@@ -44,6 +44,6 @@ class NativeLeScanCallback implements BluetoothAdapter.LeScanCallback {
 
   @Override
   public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
-    onLeScan(device.getAddress(), device.getName());
+    onLeScan("LE:" + device.getAddress(), device.getName());
   }
 }

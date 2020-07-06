@@ -94,6 +94,9 @@ final class BluetoothHelper {
     if (adapter == null)
       return null;
 
+    if (address.startsWith("LE:")) {
+        address = address.substring(3);
+    }
     try {
       return adapter.getRemoteDevice(address).getName();
     } catch (Exception e) {
@@ -134,11 +137,16 @@ final class BluetoothHelper {
     if (adapter == null)
       return null;
 
+    boolean isLe = false;
+    if (address.startsWith("LE:")) {
+        isLe = true;
+        address = address.substring(3);
+    }
     BluetoothDevice device = adapter.getRemoteDevice(address);
     if (device == null)
       return null;
 
-    if (hasLe && BluetoothDevice.DEVICE_TYPE_LE == device.getType()) {
+    if (hasLe && (isLe || BluetoothDevice.DEVICE_TYPE_LE == device.getType())) {
       Log.d(TAG, String.format(
                                "Bluetooth device \"%s\" (%s) is a LE device, trying to connect using GATT...",
                                device.getName(), device.getAddress()));
