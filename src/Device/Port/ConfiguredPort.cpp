@@ -112,6 +112,19 @@ OpenPortInternal(const DeviceConfig &config, PortListener *listener,
     path = config.path.c_str();
     break;
 
+  case DeviceConfig::PortType::BLE_HM10:
+#ifdef ANDROID
+    if (config.bluetooth_mac.empty()) {
+      LogFormat("No Bluetooth MAC configured");
+      return nullptr;
+    }
+
+    return OpenAndroidBleHm10Port(config.bluetooth_mac, listener, handler);
+#else
+    LogFormat("Bluetooth not available on this platform");
+    return nullptr;
+#endif
+
   case DeviceConfig::PortType::RFCOMM:
 #ifdef ANDROID
     if (config.bluetooth_mac.empty()) {

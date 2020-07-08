@@ -64,6 +64,7 @@ DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
     return a.path.equals(b.path);
 
   case DeviceConfig::PortType::RFCOMM:
+  case DeviceConfig::PortType::BLE_HM10:
     return a.bluetooth_mac.equals(b.bluetooth_mac);
 
   case DeviceConfig::PortType::IOIOUART:

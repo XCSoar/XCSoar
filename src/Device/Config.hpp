@@ -102,6 +102,12 @@ struct DeviceConfig {
      * for debugging.
      */
     PTY,
+
+    /**
+     * Bluetooth Low Energy HM10 protocol to a paired device.
+     */
+    BLE_HM10,
+
   };
 
   /**
@@ -276,6 +282,7 @@ struct DeviceConfig {
   static bool UsesDriver(PortType port_type) {
     return port_type == PortType::SERIAL || port_type == PortType::RFCOMM ||
       port_type == PortType::RFCOMM_SERVER ||
+      port_type == PortType::BLE_HM10 ||
       port_type == PortType::AUTO || port_type == PortType::TCP_LISTENER ||
       port_type == PortType::TCP_CLIENT ||
       port_type == PortType::IOIOUART || port_type == PortType::PTY ||

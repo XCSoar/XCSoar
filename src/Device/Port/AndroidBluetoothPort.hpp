@@ -39,6 +39,11 @@ OpenAndroidBluetoothPort(const TCHAR *address, PortListener *_listener,
 
 gcc_malloc
 Port *
+OpenAndroidBleHm10Port(const TCHAR *address, PortListener *_listener,
+                         DataHandler &_handler);
+
+gcc_malloc
+Port *
 OpenAndroidBluetoothServerPort(PortListener *_listener, DataHandler &_handler);
 
 #endif
