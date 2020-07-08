@@ -25,7 +25,6 @@ package org.xcsoar;
 
 import java.util.UUID;
 import java.util.Set;
-import java.io.IOException;
 
 import android.util.Log;
 import android.bluetooth.BluetoothAdapter;
@@ -130,22 +129,26 @@ final class BluetoothHelper {
       adapter.stopLeScan(cb);
   }
 
-  public static AndroidPort connectHM10(Context context, String address)
-    throws IOException {
+  public static AndroidPort connectHM10(Context context, String address) {
     if (adapter == null || !hasLe)
       return null;
 
-    BluetoothDevice device = adapter.getRemoteDevice(address);
-    if (device == null)
+    try {
+      BluetoothDevice device = adapter.getRemoteDevice(address);
+      if (device == null)
+        return null;
+  
+      Log.d(TAG, String.format(
+                               "Bluetooth device \"%s\" is a LE device, trying to connect using GATT...",
+                               address));
+      BluetoothGattClientPort gattClientPort
+        = new BluetoothGattClientPort(device);
+      gattClientPort.startConnect(context);
+      return gattClientPort;
+    } catch (Exception e) {
+      Log.e(TAG, "Failed to connect to BLE", e);
       return null;
-
-    Log.d(TAG, String.format(
-                             "Bluetooth device \"%s\" is a LE device, trying to connect using GATT...",
-                             address));
-    BluetoothGattClientPort gattClientPort
-      = new BluetoothGattClientPort(device);
-    gattClientPort.startConnect(context);
-    return gattClientPort;
+    }
   }
 
   public static AndroidPort connect(Context context, String address) {
