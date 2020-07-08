@@ -50,6 +50,7 @@ static const char *const port_type_strings[] = {
   "tcp_listener",
   "udp_listener",
   "pty",
+  "ble_hm10",
   "glider_link",
   "android_usb_serial",
   NULL

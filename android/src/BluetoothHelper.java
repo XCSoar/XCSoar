@@ -110,11 +110,12 @@ final class BluetoothHelper {
     if (devices == null)
       return null;
 
-    String[] addresses = new String[devices.size() * 2];
+    String[] addresses = new String[devices.size() * 3];
     int n = 0;
     for (BluetoothDevice device: devices) {
       addresses[n++] = device.getAddress();
       addresses[n++] = device.getName();
+      addresses[n++] = BluetoothDevice.DEVICE_TYPE_LE == device.getType() ? "BLE" : "CLASSIC";
     }
 
     return addresses;
@@ -129,6 +130,23 @@ final class BluetoothHelper {
       adapter.stopLeScan(cb);
   }
 
+  public static AndroidPort connectHM10(Context context, String address)
+    throws IOException {
+    if (adapter == null || !hasLe)
+      return null;
+
+    BluetoothDevice device = adapter.getRemoteDevice(address);
+    if (device == null)
+      return null;
+
+    Log.d(TAG, String.format("Bluetooth device \"%s\" (%s) is a LE device, trying to connect using GATT...",
+                             device.getName(), device.getAddress()));
+    BluetoothGattClientPort gattClientPort
+      = new BluetoothGattClientPort(device);
+    gattClientPort.startConnect(context);
+    return gattClientPort;
+  }
+
   public static AndroidPort connect(Context context, String address)
     throws IOException {
     if (adapter == null)
@@ -138,19 +156,9 @@ final class BluetoothHelper {
     if (device == null)
       return null;
 
-    if (hasLe && BluetoothDevice.DEVICE_TYPE_LE == device.getType()) {
-      Log.d(TAG, String.format(
-                               "Bluetooth device \"%s\" (%s) is a LE device, trying to connect using GATT...",
-                               device.getName(), device.getAddress()));
-      BluetoothGattClientPort gattClientPort
-        = new BluetoothGattClientPort(device);
-      gattClientPort.startConnect(context);
-      return gattClientPort;
-    } else {
-      BluetoothSocket socket =
-        device.createRfcommSocketToServiceRecord(THE_UUID);
-      return new BluetoothClientPort(socket);
-    }
+    BluetoothSocket socket =
+      device.createRfcommSocketToServiceRecord(THE_UUID);
+    return new BluetoothClientPort(socket);
   }
 
   public static AndroidPort createServer() throws IOException {

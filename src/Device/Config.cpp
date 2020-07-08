@@ -45,6 +45,7 @@ DeviceConfig::IsAvailable() const
     return true;
 
   case PortType::RFCOMM:
+  case PortType::BLE_HM10:
   case PortType::RFCOMM_SERVER:
   case PortType::GLIDER_LINK:
   case PortType::ANDROID_USB_SERIAL:
@@ -95,6 +96,7 @@ DeviceConfig::ShouldReopenOnTimeout() const
     return false;
 
   case PortType::RFCOMM:
+  case PortType::BLE_HM10:
   case PortType::RFCOMM_SERVER:
   case PortType::ANDROID_USB_SERIAL:
   case PortType::IOIOUART:
@@ -208,6 +210,18 @@ DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const
   case PortType::SERIAL:
     return path.c_str();
 
+  case PortType::BLE_HM10: {
+    const TCHAR *name = bluetooth_mac.c_str();
+#ifdef ANDROID
+    const char *name2 =
+      BluetoothHelper::GetNameFromAddress(Java::GetEnv(), name);
+    if (name2 != nullptr)
+      name = name2;
+#endif
+
+    StringFormat(buffer, max_size, _T("HM10 %s"), name);
+    return buffer;
+    }
   case PortType::RFCOMM: {
     const TCHAR *name = bluetooth_mac.c_str();
 #ifdef ANDROID

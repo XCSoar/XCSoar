@@ -104,6 +104,11 @@ struct DeviceConfig {
     PTY,
 
     /**
+     * Bluetooth Low Energy HM10 protocol to a paired device.
+     */
+    BLE_HM10,
+
+    /**
      * A GliderLink broadcast receiver. Available on Android only
      */
     GLIDER_LINK,
@@ -296,6 +301,7 @@ struct DeviceConfig {
       return false;
 
     case PortType::SERIAL:
+    case PortType::BLE_HM10:
     case PortType::RFCOMM:
     case PortType::RFCOMM_SERVER:
     case PortType::AUTO:

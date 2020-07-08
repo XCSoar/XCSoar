@@ -1,6 +1,8 @@
 Version 7.11 - not yet released
 * user interface
   - new vario gauge background
+* Android
+  - fix reconnect to Bluetooth LE devices
 
 Version 7.10 - 2021/07/09
 * weather

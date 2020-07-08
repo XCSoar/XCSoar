@@ -50,3 +50,16 @@ OpenAndroidBluetoothServerPort(PortListener *listener, DataHandler &handler)
 
   return std::make_unique<AndroidPort>(listener, handler, bridge);
 }
+
+std::unique_ptr<Port>
+OpenAndroidBleHm10Port(const TCHAR *address, PortListener *listener,
+                         DataHandler &handler)
+{
+  assert(address != nullptr);
+
+  PortBridge *bridge = BluetoothHelper::connectHM10(Java::GetEnv(), address);
+  if (bridge == nullptr)
+    return nullptr;
+
+  return std::make_unique<AndroidPort>(listener, handler, bridge);
+}
