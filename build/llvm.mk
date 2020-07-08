@@ -23,7 +23,7 @@ endif
 ifeq ($(TARGET),ANDROID)
   TARGET_ARCH := $(filter-out -mthumb-interwork,$(TARGET_ARCH))
   TARGET_ARCH += -integrated-as
-  TARGET_CPPFLAGS += -DBIONIC -DLIBCPP_NO_IOSTREAM
+  TARGET_CPPFLAGS += -DBIONIC -DLIBCPP_NO_IOSTREAM $(TARGET_ARCH)
   TARGET_LDLIBS += -latomic
 endif # Android
 
