@@ -57,7 +57,7 @@ union SDL_Event;
 #endif
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
-enum class DisplayOrientation : uint8_t;
+#include "DisplayOrientation.hpp"
 #endif
 
 #ifndef USE_GDI
@@ -87,6 +87,9 @@ class TopWindowStyle : public WindowStyle {
 #endif
 #ifdef ENABLE_SDL
   bool resizable;
+#endif
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  DisplayOrientation initial_orientation = DisplayOrientation::DEFAULT;
 #endif
 
 public:
@@ -143,6 +146,15 @@ public:
     return false;
 #endif
   }
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  void InitialOrientation(DisplayOrientation orientation) {
+    initial_orientation = orientation;
+  }
+
+  DisplayOrientation GetInitialOrientation() const {
+    return initial_orientation;
+  }
+#endif
 };
 
 /**

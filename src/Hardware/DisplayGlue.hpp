@@ -24,12 +24,15 @@ Copyright_License {
 #ifndef XCSOAR_HARDWARE_DISPLAY_GLUE_H
 #define XCSOAR_HARDWARE_DISPLAY_GLUE_H
 
+#include "DisplayOrientation.hpp"
+
 class VerboseOperationEnvironment;
 
 namespace Display
 {
   void LoadOrientation(VerboseOperationEnvironment &env);
   void RestoreOrientation();
+  DisplayOrientation DetectInitialOrientation();
 }
 
 #endif

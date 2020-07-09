@@ -192,6 +192,10 @@ Startup()
   if (!IsWindowsCE())
     style.Resizable();
 
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  style.InitialOrientation(Display::DetectInitialOrientation());
+#endif
+
   MainWindow *const main_window = CommonInterface::main_window =
     new MainWindow();
   main_window->Create(SystemWindowSize(), style);
