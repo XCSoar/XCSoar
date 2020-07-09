@@ -27,6 +27,8 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
+#include <stdio.h>
+
 
 #ifdef KOBO
 #include "Event/Globals.hpp"
@@ -86,4 +88,29 @@ Display::RestoreOrientation()
 #ifdef KOBO
   event_queue->SetMouseRotation(DisplayOrientation::DEFAULT);
 #endif
+}
+
+DisplayOrientation
+Display::DetectInitialOrientation()
+{
+  auto orientation = DisplayOrientation::DEFAULT;
+
+#ifdef MESA_KMS
+  // When running in DRM/KMS mode, infer the display orientation from the linux
+  // console rotation.
+  char buf[3];
+  FILE *rotatefile = fopen("/sys/class/graphics/fbcon/rotate", "rb");
+  if (rotatefile) {
+    if (fread(buf, 1, sizeof(buf), rotatefile) > 0) {
+      switch (*buf) {
+        case '0': orientation = DisplayOrientation::LANDSCAPE; break;
+        case '1': orientation = DisplayOrientation::REVERSE_PORTRAIT; break;
+        case '2': orientation = DisplayOrientation::REVERSE_LANDSCAPE; break;
+        case '3': orientation = DisplayOrientation::PORTRAIT; break;
+      }
+    }
+    fclose(rotatefile);
+  }
+#endif
+  return orientation;
 }
