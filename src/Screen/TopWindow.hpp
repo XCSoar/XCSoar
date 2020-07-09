@@ -50,7 +50,7 @@ struct SDL_Window;
 #include <tchar.h>
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
-enum class DisplayOrientation : uint8_t;
+#include "DisplayOrientation.hpp"
 #endif
 
 #ifndef USE_WINUSER
@@ -80,6 +80,9 @@ class TopWindowStyle : public WindowStyle {
 #endif
 #ifdef ENABLE_SDL
   bool resizable = false;
+#endif
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  DisplayOrientation initial_orientation = DisplayOrientation::DEFAULT;
 #endif
 
 public:
@@ -124,6 +127,15 @@ public:
     return false;
 #endif
   }
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  void InitialOrientation(DisplayOrientation orientation) {
+    initial_orientation = orientation;
+  }
+
+  DisplayOrientation GetInitialOrientation() const {
+    return initial_orientation;
+  }
+#endif
 };
 
 /**
