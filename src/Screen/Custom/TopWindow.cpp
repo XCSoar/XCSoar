@@ -74,6 +74,9 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
     return;
   }
 
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  screen->SetDisplayOrientation(style.GetInitialOrientation());
+#endif
   ContainerWindow::Create(nullptr, screen->GetRect(), style);
 
 #if defined(ENABLE_SDL) && (SDL_MAJOR_VERSION < 2)
