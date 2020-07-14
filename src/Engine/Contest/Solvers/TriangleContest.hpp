@@ -197,19 +197,10 @@ private:
     unsigned df_min, df_max;
     unsigned shortest_max, longest_min, longest_max;
 
-    CandidateSet(const TriangleContest &parent,
-                 unsigned first, unsigned last) noexcept
-      :tp1(parent, first, last), tp2(tp1), tp3(tp1) {
-      UpdateDistances();
-    }
-
     CandidateSet(TurnPointRange _tp1, TurnPointRange _tp2,
                  TurnPointRange _tp3) noexcept
-      :tp1(_tp1), tp2(_tp2), tp3(_tp3) {
-      UpdateDistances();
-    }
-
-    void UpdateDistances() noexcept {
+      :tp1(_tp1), tp2(_tp2), tp3(_tp3)
+    {
       const unsigned df_12_min = tp1.GetMinDistance(tp2),
                      df_23_min = tp2.GetMinDistance(tp3),
                      df_31_min = tp3.GetMinDistance(tp1);
@@ -226,6 +217,13 @@ private:
       df_max = std::min(df_12_max + df_23_max + df_31_max,
                         shortest_max * 4);
     }
+
+    explicit CandidateSet(TurnPointRange tp) noexcept
+      :CandidateSet(tp, tp, tp) {}
+
+    CandidateSet(const TriangleContest &parent,
+                 unsigned first, unsigned last) noexcept
+      :CandidateSet(TurnPointRange{parent, first, last}) {}
 
     bool operator==(CandidateSet other) const noexcept {
       return (tp1 == other.tp1 && tp2 == other.tp2 && tp3 == other.tp3);
