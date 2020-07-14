@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-06-30 06:55+0000\n"
+"PO-Revision-Date: 2020-07-17 21:41+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -267,7 +267,7 @@ msgstr "Symetrická výseč s vlastním poloměrem."
 #: src/Task/TypeStrings.cpp:99
 #, no-c-format
 msgid "A keyhole.  Scored by farthest point reached in area."
-msgstr "Klíčová dírka, bodováno dle nejzazšího dosaženého hodu v oblasti."
+msgstr "Kružnice + výseč, bodováno dle nejzazšího dosaženého hodu v oblasti."
 
 #: src/Task/TypeStrings.cpp:112
 #, no-c-format
@@ -292,7 +292,7 @@ msgstr "FAI sektor"
 #: src/Task/TypeStrings.cpp:116
 #, no-c-format
 msgid "Keyhole sector (DAeC)"
-msgstr "Sektor tvaru klíčové dírky (DAeC)"
+msgstr "Sektor kružnice + výseč (DAeC)"
 
 #: src/Task/TypeStrings.cpp:117
 #, no-c-format
