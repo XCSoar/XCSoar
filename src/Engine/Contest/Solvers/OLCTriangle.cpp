@@ -404,56 +404,47 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
 
       const unsigned max_diag = std::max({tp1_diag, tp2_diag, tp3_diag});
 
-      CandidateSet left, right;
-      bool add = false;
-
       if (tp1_diag == max_diag && node->second.tp1.GetSize() != 1) {
         // split tp1 range
         const unsigned split = (node->second.tp1.index_min + node->second.tp1.index_max) / 2;
 
         if (split <= node->second.tp2.index_max) {
-          add = true;
+          CheckAddCandidate(worst_d, large_triangle_check,
+                            {TurnPointRange(*this, node->second.tp1.index_min, split),
+                             node->second.tp2, node->second.tp3});
 
-          left = CandidateSet(TurnPointRange(*this, node->second.tp1.index_min, split),
-                              node->second.tp2, node->second.tp3);
-
-          right = CandidateSet(TurnPointRange(*this, split, node->second.tp1.index_max),
-                               node->second.tp2, node->second.tp3);
+          CheckAddCandidate(worst_d, large_triangle_check,
+                            {TurnPointRange(*this, split, node->second.tp1.index_max),
+                             node->second.tp2, node->second.tp3});
         }
       } else if (tp2_diag == max_diag && node->second.tp2.GetSize() != 1) {
         // split tp2 range
         const unsigned split = (node->second.tp2.index_min + node->second.tp2.index_max) / 2;
 
         if (split <= node->second.tp3.index_max && split >= node->second.tp1.index_min) {
-          add = true;
+          CheckAddCandidate(worst_d, large_triangle_check,
+                            {node->second.tp1,
+                             TurnPointRange(*this, node->second.tp2.index_min, split),
+                             node->second.tp3});
 
-          left = CandidateSet(node->second.tp1,
-                              TurnPointRange(*this, node->second.tp2.index_min, split),
-                              node->second.tp3);
-
-          right = CandidateSet(node->second.tp1,
-                               TurnPointRange(*this, split, node->second.tp2.index_max),
-                               node->second.tp3);
+          CheckAddCandidate(worst_d, large_triangle_check,
+                            {node->second.tp1,
+                             TurnPointRange(*this, split, node->second.tp2.index_max),
+                             node->second.tp3});
         }
       } else if (node->second.tp3.GetSize() != 1) {
         // split tp3 range
         const unsigned split = (node->second.tp3.index_min + node->second.tp3.index_max) / 2;
 
         if (split >= node->second.tp2.index_min) {
-          add = true;
+          CheckAddCandidate(worst_d, large_triangle_check,
+                            {node->second.tp1, node->second.tp2,
+                             TurnPointRange(*this, node->second.tp3.index_min, split)});
 
-          left = CandidateSet(node->second.tp1, node->second.tp2,
-                              TurnPointRange(*this, node->second.tp3.index_min, split));
-
-          right = CandidateSet(node->second.tp1, node->second.tp2,
-                               TurnPointRange(*this, split, node->second.tp3.index_max));
+          CheckAddCandidate(worst_d, large_triangle_check,
+                            {node->second.tp1, node->second.tp2,
+                             TurnPointRange(*this, split, node->second.tp3.index_max)});
         }
-      }
-
-      if (add) {
-        // add the new candidate set only if it it's feasible and has d_min >= worst_d
-        CheckAddCandidate(worst_d, large_triangle_check, left);
-        CheckAddCandidate(worst_d, large_triangle_check, right);
       }
     }
 
