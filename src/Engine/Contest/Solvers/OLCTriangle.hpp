@@ -357,6 +357,14 @@ protected:
   void UpdateTrace(bool force) noexcept override;
   void ResetBranchAndBound() noexcept;
 
+private:
+  void CheckAddCandidate(unsigned worst_d, unsigned large_triangle_check,
+                         CandidateSet candidate_set) noexcept {
+    if (candidate_set.df_max >= worst_d &&
+        candidate_set.IsFeasible(is_fai, large_triangle_check))
+      branch_and_bound.emplace(candidate_set.df_max, candidate_set);
+  }
+
 public:
   void SetMaxIterations(unsigned _max_iterations) noexcept {
     max_iterations = _max_iterations;

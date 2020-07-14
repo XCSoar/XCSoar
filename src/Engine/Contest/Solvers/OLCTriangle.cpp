@@ -452,15 +452,8 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
 
       if (add) {
         // add the new candidate set only if it it's feasible and has d_min >= worst_d
-        if (left.df_max >= worst_d &&
-            left.IsFeasible(is_fai, large_triangle_check)) {
-          branch_and_bound.emplace(left.df_max, left);
-        }
-
-        if (right.df_max >= worst_d &&
-            right.IsFeasible(is_fai, large_triangle_check)) {
-          branch_and_bound.emplace(right.df_max, right);
-        }
+        CheckAddCandidate(worst_d, large_triangle_check, left);
+        CheckAddCandidate(worst_d, large_triangle_check, right);
       }
     }
 
