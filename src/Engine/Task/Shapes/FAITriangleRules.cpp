@@ -29,7 +29,7 @@ using namespace FAITriangleRules;
 gcc_const
 static bool
 IsSmallFAITriangle(const double d_total,
-                   const double d1, const double d2, const double d3)
+                   const double d1, const double d2, const double d3) noexcept
 {
   const auto d_min = d_total * SMALL_MIN_LEG;
   return d1 >= d_min && d2 >= d_min && d3 >= d_min;
@@ -39,7 +39,7 @@ gcc_const
 static bool
 IsLargeFAITriangle(const double d_total,
                    const double d1, const double d2, const double d3,
-                   const double large_threshold)
+                   const double large_threshold) noexcept
 {
   if (d_total < large_threshold)
     return false;
@@ -54,7 +54,7 @@ IsLargeFAITriangle(const double d_total,
 
 bool
 FAITriangleRules::TestDistances(const double d1, const double d2, const double d3,
-                                const FAITriangleSettings &settings)
+                                const FAITriangleSettings &settings) noexcept
 {
   const auto d_wp = d1 + d2 + d3;
 
@@ -72,7 +72,7 @@ FAITriangleRules::TestDistances(const double d1, const double d2, const double d
 bool
 FAITriangleRules::TestDistances(const GeoPoint &a, const GeoPoint &b,
                                 const GeoPoint &c,
-                                const FAITriangleSettings &settings)
+                                const FAITriangleSettings &settings) noexcept
 {
   return TestDistances(Distance(a, b), Distance(b, c), Distance(c, a),
                        settings);
