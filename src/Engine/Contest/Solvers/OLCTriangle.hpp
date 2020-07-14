@@ -35,8 +35,6 @@
  */
 class OLCTriangle : public AbstractContest, public TraceManager {
 protected:
-  const bool is_fai;
-
   /**
    * The last solution.  Use only if Solve() has returned VALID.
    */
@@ -238,11 +236,7 @@ private:
      * or integer rounding don't invalidate close positives.
      */
     gcc_pure
-    bool IsFeasible(const bool fai,
-                    const unsigned large_triangle_check) const noexcept {
-      // always feasible if no fai constraints
-      if (!fai) return true;
-
+    bool IsFeasible(const unsigned large_triangle_check) const noexcept {
       // shortest leg min 28% (here: 27.5%) for small triangle,
       // min 25% (here: 24.3%) for large triangle
       if ((df_max > large_triangle_check && shortest_max * 37 < df_min * 9) ||
@@ -262,12 +256,10 @@ private:
      * distances for certain checks, otherwise real distances for marginal fai triangles.
      */
     gcc_pure
-    bool IsIntegral(OLCTriangle &parent, const bool fai,
+    bool IsIntegral(OLCTriangle &parent,
                     const unsigned large_triangle_check) const noexcept {
       if (!(tp1.GetSize() == 1 && tp2.GetSize() == 1 && tp3.GetSize() == 1))
         return false;
-
-      if (!fai) return true;
 
       // Solution is integral, calculate rough distance for fast checks
       const unsigned df_total = tp1.GetMaxDistance(tp2) +
@@ -323,7 +315,6 @@ private:
 
 public:
   OLCTriangle(const Trace &_trace,
-              bool is_fai,
               bool predict,
               const unsigned finish_alt_diff = 1000) noexcept;
 
@@ -346,7 +337,7 @@ private:
   void CheckAddCandidate(unsigned worst_d, unsigned large_triangle_check,
                          CandidateSet candidate_set) noexcept {
     if (candidate_set.df_max >= worst_d &&
-        candidate_set.IsFeasible(is_fai, large_triangle_check))
+        candidate_set.IsFeasible(large_triangle_check))
       branch_and_bound.emplace(candidate_set.df_max, candidate_set);
   }
 

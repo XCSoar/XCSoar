@@ -23,7 +23,7 @@
 #include "OLCFAI.hpp"
 
 OLCFAI::OLCFAI(const Trace &_trace, bool predict) noexcept
-  :OLCTriangle(_trace, true, predict, 1000)
+  :OLCTriangle(_trace, predict, 1000)
 {
 }
 

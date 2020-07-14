@@ -56,11 +56,11 @@
 static constexpr double max_distance(1000);
 
 OLCTriangle::OLCTriangle(const Trace &_trace,
-                         const bool _is_fai, bool _predict,
+                         bool _predict,
                          const unsigned _finish_alt_diff) noexcept
   : AbstractContest(_finish_alt_diff),
    TraceManager(_trace),
-   is_fai(_is_fai), predict(_predict)
+   predict(_predict)
 {
 }
 
@@ -335,7 +335,7 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
 
     // initialize bound-and-branch tree with root node (note: Candidate set interval is [min, max))
     CandidateSet root_candidates(*this, from, to + 1);
-    if (root_candidates.IsFeasible(is_fai, large_triangle_check) &&
+    if (root_candidates.IsFeasible(large_triangle_check) &&
         root_candidates.df_max >= worst_d)
       branch_and_bound.emplace(root_candidates.df_max, root_candidates);
   }
@@ -379,7 +379,7 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
     }
 
     if (node->second.df_min >= worst_d &&
-        node->second.IsIntegral(*this, is_fai, large_triangle_check)) {
+        node->second.IsIntegral(*this, large_triangle_check)) {
       // node is integral feasible -> a possible solution
 
       worst_d = node->second.df_min;

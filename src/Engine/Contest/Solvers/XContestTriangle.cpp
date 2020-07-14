@@ -24,7 +24,7 @@
 
 XContestTriangle::XContestTriangle(const Trace &_trace,
                                    bool predict, bool _is_dhv) noexcept
-  :OLCTriangle(_trace, true, predict),
+  :OLCTriangle(_trace, predict),
    is_dhv(_is_dhv) {}
 
 ContestResult
@@ -49,6 +49,7 @@ XContestTriangle::CalculateResult() const noexcept
   // DHV-XC: 2.0 or 1.75 points per km for FAI vs non-FAI triangle
   // XContest: 1.4 or 1.2 points per km for FAI vs non-FAI triangle
 
+  constexpr bool is_fai = true; // TODO: how to set this flag?
   const auto score_factor = is_dhv
     ? (is_fai ? 0.002 : 0.00175)
     : (is_fai ? 0.0014 : 0.0012);
