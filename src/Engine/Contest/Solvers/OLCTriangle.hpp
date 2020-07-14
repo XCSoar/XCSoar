@@ -148,10 +148,6 @@ private:
 
     FlatBoundingBox bounding_box;
 
-    TurnPointRange() noexcept
-      :index_min(0), index_max(0),
-       bounding_box(FlatGeoPoint(0, 0)) {}
-
     TurnPointRange(const OLCTriangle &parent,
                    unsigned min, unsigned max) noexcept {
       Update(parent, min, max);
