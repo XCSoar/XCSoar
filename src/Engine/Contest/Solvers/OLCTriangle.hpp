@@ -227,9 +227,8 @@ private:
                      df_23_max = tp2.GetMaxDistance(tp3),
                      df_31_max = tp3.GetMaxDistance(tp1);
 
-      shortest_max = std::min({df_12_max, df_23_max, df_31_max});
+      std::tie(shortest_max, longest_max) = std::minmax({df_12_max, df_23_max, df_31_max});
       longest_min = std::max({df_12_min, df_23_min, df_31_min});
-      longest_max = std::max({df_12_max, df_23_max, df_31_max});
 
       df_min = std::max(df_12_min + df_23_min + df_31_min,
                         longest_min * 2);
@@ -308,13 +307,15 @@ private:
 
       const unsigned d_total = d_12 + d_23 + d_31;
 
+      const auto shortest_longest = std::minmax({d_12, d_23, d_31});
+
       // real check of 28% rule
-      const unsigned shortest = std::min({d_12, d_23, d_31});
+      const unsigned shortest = shortest_longest.first;
       if (shortest * 25 >= d_total * 7)
         return true;
 
       // real check of 45% rule
-      const unsigned longest = std::max({d_12, d_23, d_31});
+      const unsigned longest = shortest_longest.second;
       if (longest * 20 > d_total * 9)
         return false;
 
