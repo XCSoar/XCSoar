@@ -149,8 +149,12 @@ private:
     FlatBoundingBox bounding_box;
 
     TurnPointRange(const OLCTriangle &parent,
-                   unsigned min, unsigned max) noexcept {
-      Update(parent, min, max);
+                   const unsigned min, const unsigned max) noexcept
+      :index_min(min), index_max(max),
+       bounding_box(FlatBoundingBox(parent.GetPoint(min).GetFlatLocation()))
+    {
+      for (unsigned i = min + 1; i < max; ++i)
+        bounding_box.Expand(parent.GetPoint(i).GetFlatLocation());
     }
 
     bool operator==(TurnPointRange other) const noexcept {
@@ -166,18 +170,6 @@ private:
     // returns the number of points in this range
     unsigned GetSize() const noexcept {
       return index_max - index_min;
-    }
-
-    // updates the bounding box by a given point range
-    void Update(const OLCTriangle &parent,
-                unsigned _min, unsigned _max) noexcept {
-      bounding_box = FlatBoundingBox(parent.GetPoint(_min).GetFlatLocation());
-
-      for (unsigned i = _min + 1; i < _max; ++i)
-        bounding_box.Expand(parent.GetPoint(i).GetFlatLocation());
-
-      index_min = _min;
-      index_max = _max;
     }
 
     // calculate the minimal distance estimate between two TurnPointRanges
