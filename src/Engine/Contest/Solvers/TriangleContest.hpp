@@ -20,8 +20,8 @@
 }
 */
 
-#ifndef OLC_TRIANGLE_HPP
-#define OLC_TRIANGLE_HPP
+#ifndef TRIANGLE_CONTEST_HPP
+#define TRIANGLE_CONTEST_HPP
 
 #include "AbstractContest.hpp"
 #include "OLCTriangleRules.hpp"
@@ -34,7 +34,7 @@
 /**
  * Specialisation of AbstractContest for OLC Triangle (triangle) rules
  */
-class OLCTriangle : public AbstractContest, public TraceManager {
+class TriangleContest : public AbstractContest, public TraceManager {
 protected:
   /**
    * The last solution.  Use only if Solve() has returned VALID.
@@ -147,7 +147,7 @@ private:
 
     FlatBoundingBox bounding_box;
 
-    TurnPointRange(const OLCTriangle &parent,
+    TurnPointRange(const TriangleContest &parent,
                    const unsigned min, const unsigned max) noexcept
       :index_min(min), index_max(max),
        bounding_box(FlatBoundingBox(parent.GetPoint(min).GetFlatLocation()))
@@ -197,7 +197,7 @@ private:
     unsigned df_min, df_max;
     unsigned shortest_max, longest_min, longest_max;
 
-    CandidateSet(const OLCTriangle &parent,
+    CandidateSet(const TriangleContest &parent,
                  unsigned first, unsigned last) noexcept
       :tp1(parent, first, last), tp2(tp1), tp3(tp1) {
       UpdateDistances();
@@ -246,7 +246,7 @@ private:
      * distances for certain checks, otherwise real distances for marginal fai triangles.
      */
     gcc_pure
-    bool IsIntegral(OLCTriangle &parent,
+    bool IsIntegral(TriangleContest &parent,
                     const OLCTriangleValidator &validator) const noexcept {
       if (!(tp1.GetSize() == 1 && tp2.GetSize() == 1 && tp3.GetSize() == 1))
         return false;
@@ -265,9 +265,9 @@ private:
   std::multimap<unsigned, CandidateSet> branch_and_bound;
 
 public:
-  OLCTriangle(const Trace &_trace,
-              bool predict,
-              const unsigned finish_alt_diff = 1000) noexcept;
+  TriangleContest(const Trace &_trace,
+                  bool predict,
+                  const unsigned finish_alt_diff = 1000) noexcept;
 
   void SetIncremental(bool _incremental) noexcept {
     incremental = _incremental;

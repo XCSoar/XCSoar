@@ -23,17 +23,17 @@
 #ifndef OLC_FAI_HPP
 #define OLC_FAI_HPP
 
-#include "OLCTriangle.hpp"
+#include "TriangleContest.hpp"
 
 /**
  * Specialisation of OLC Triangle with OLC FAI (triangle) rules
  */
-class OLCFAI : public OLCTriangle {
+class OLCFAI : public TriangleContest {
 public:
   OLCFAI(const Trace &_trace, bool predict) noexcept;
 
 protected:
-  /* virtual methods from class OLCTriangle */
+  /* virtual methods from class TriangleContest */
   ContestResult CalculateResult() const noexcept override;
 };
 

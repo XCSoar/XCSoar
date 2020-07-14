@@ -23,14 +23,14 @@
 #ifndef XCONTEST_TRIANGLE_HPP
 #define XCONTEST_TRIANGLE_HPP
 
-#include "OLCTriangle.hpp"
+#include "TriangleContest.hpp"
 
 /**
  * Specialisation of ContestDijkstra for XContest and DHV-XC triangle rules.
  *
  * This solver alternates between searching for FAI and non-FAI triangles
  */
-class XContestTriangle : public OLCTriangle {
+class XContestTriangle : public TriangleContest {
   const bool is_dhv;
 
 public:
@@ -40,7 +40,7 @@ protected:
   /* virtual methods from AbstractContest */
   SolverResult Solve(bool exhaustive) noexcept override;
 
-  /* virtual methods from OLCTriangle */
+  /* virtual methods from TriangleContest */
   ContestResult CalculateResult() const noexcept override;
 };
 

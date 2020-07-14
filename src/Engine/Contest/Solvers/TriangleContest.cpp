@@ -20,7 +20,7 @@
 }
 */
 
-#include "OLCTriangle.hpp"
+#include "TriangleContest.hpp"
 #include "Cast.hpp"
 #include "Trace/Trace.hpp"
 #include "Util/QuadTree.hxx"
@@ -55,9 +55,9 @@
  */
 static constexpr double max_distance(1000);
 
-OLCTriangle::OLCTriangle(const Trace &_trace,
-                         bool _predict,
-                         const unsigned _finish_alt_diff) noexcept
+TriangleContest::TriangleContest(const Trace &_trace,
+                                 bool _predict,
+                                 const unsigned _finish_alt_diff) noexcept
   : AbstractContest(_finish_alt_diff),
    TraceManager(_trace),
    predict(_predict)
@@ -65,7 +65,7 @@ OLCTriangle::OLCTriangle(const Trace &_trace,
 }
 
 void
-OLCTriangle::Reset() noexcept
+TriangleContest::Reset() noexcept
 {
   is_complete = false;
   is_closed = false;
@@ -83,7 +83,7 @@ OLCTriangle::Reset() noexcept
 }
 
 void
-OLCTriangle::ResetBranchAndBound() noexcept
+TriangleContest::ResetBranchAndBound() noexcept
 {
   running = false;
   branch_and_bound.clear();
@@ -105,7 +105,7 @@ CalcLegDistance(const ContestTraceVector &solution,
 }
 
 void
-OLCTriangle::UpdateTrace(bool force) noexcept
+TriangleContest::UpdateTrace(bool force) noexcept
 {
   if (IsMasterAppended()) return; /* unmodified */
 
@@ -138,7 +138,7 @@ OLCTriangle::UpdateTrace(bool force) noexcept
 }
 
 SolverResult
-OLCTriangle::Solve(bool exhaustive) noexcept
+TriangleContest::Solve(bool exhaustive) noexcept
 {
   if (trace_master.size() < 3) {
     ClearTrace();
@@ -170,7 +170,7 @@ OLCTriangle::Solve(bool exhaustive) noexcept
 }
 
 void
-OLCTriangle::SolveTriangle(bool exhaustive) noexcept
+TriangleContest::SolveTriangle(bool exhaustive) noexcept
 {
   unsigned tp1 = 0,
            tp2 = 0,
@@ -298,8 +298,8 @@ OLCTriangle::SolveTriangle(bool exhaustive) noexcept
 
 
 std::tuple<unsigned, unsigned, unsigned, unsigned>
-OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
-                               bool exhaustive) noexcept
+TriangleContest::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
+                                   bool exhaustive) noexcept
 {
   /* Some general information about the branch and bound method can be found here:
    * http://eaton.math.rpi.edu/faculty/Mitchell/papers/leeejem.html
@@ -465,7 +465,7 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
 }
 
 ContestResult
-OLCTriangle::CalculateResult() const noexcept
+TriangleContest::CalculateResult() const noexcept
 {
   ContestResult result;
   result.time = (is_complete && is_closed)
@@ -491,7 +491,7 @@ IsInRange(const SearchPoint &a, const SearchPoint &b,
 }
 
 bool
-OLCTriangle::FindClosingPairs(unsigned old_size) noexcept
+TriangleContest::FindClosingPairs(unsigned old_size) noexcept
 {
   if (predict) {
     return closing_pairs.Insert(ClosingPair(0, n_points-1));
@@ -574,13 +574,13 @@ OLCTriangle::FindClosingPairs(unsigned old_size) noexcept
 }
 
 bool
-OLCTriangle::UpdateScore() noexcept
+TriangleContest::UpdateScore() noexcept
 {
   return false;
 }
 
 void
-OLCTriangle::CopySolution(ContestTraceVector &result) const noexcept
+TriangleContest::CopySolution(ContestTraceVector &result) const noexcept
 {
   result = solution;
   assert(result.size() == 5);
