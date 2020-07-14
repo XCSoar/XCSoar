@@ -218,9 +218,9 @@ OLCTriangle::SolveTriangle(bool exhaustive) noexcept
 
     for (const auto relaxed_pair : relaxed_pairs.closing_pairs) {
 
-      std::tuple<unsigned, unsigned, unsigned, unsigned> triangle;
-
-      triangle = RunBranchAndBound(relaxed_pair.first, relaxed_pair.second, best_d, exhaustive);
+      const auto triangle = RunBranchAndBound(relaxed_pair.first,
+                                              relaxed_pair.second,
+                                              best_d, exhaustive);
 
       if (std::get<3>(triangle) > best_d) {
         // solution is better than best_d
@@ -249,11 +249,9 @@ OLCTriangle::SolveTriangle(bool exhaustive) noexcept
     }
 
     for (const auto &close_look_pair : close_look.closing_pairs) {
-      std::tuple<unsigned, unsigned, unsigned, unsigned> triangle;
-
-      triangle = RunBranchAndBound(close_look_pair.first,
-                                   close_look_pair.second,
-                                   best_d, exhaustive);
+      const auto triangle = RunBranchAndBound(close_look_pair.first,
+                                              close_look_pair.second,
+                                              best_d, exhaustive);
 
       if (std::get<3>(triangle) > best_d) {
         // solution is better than best_d
@@ -274,9 +272,7 @@ OLCTriangle::SolveTriangle(bool exhaustive) noexcept
      * one closing pair only (0 -> n_points-1) which allows us to suspend the
      * solver...
      */
-    std::tuple<unsigned, unsigned, unsigned, unsigned> triangle;
-
-    triangle = RunBranchAndBound(0, n_points - 1, best_d, false);
+    const auto triangle = RunBranchAndBound(0, n_points - 1, best_d, false);
 
     if (std::get<3>(triangle) > best_d) {
       // solution is better than best_d
@@ -323,7 +319,7 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
     trace_master.ProjectRange(GetPoint(from).GetLocation(), fastskiprange);
 
   if (fastskiprange_flat < worst_d)
-    return std::tuple<unsigned, unsigned, unsigned, unsigned>(0, 0, 0, 0);
+    return {0, 0, 0, 0};
 
   bool integral_feasible = false;
   unsigned best_d = 0,
@@ -481,9 +477,9 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
     if (tp2 > tp3) std::swap(tp2, tp3);
     if (tp1 > tp2) std::swap(tp1, tp2);
 
-    return std::tuple<unsigned, unsigned, unsigned, unsigned>(tp1, tp2, tp3, best_d);
+    return {tp1, tp2, tp3, best_d};
   } else {
-    return std::tuple<unsigned, unsigned, unsigned, unsigned>(0, 0, 0, 0);
+    return {0, 0, 0, 0};
   }
 }
 
