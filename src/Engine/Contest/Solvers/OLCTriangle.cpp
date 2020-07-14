@@ -345,7 +345,7 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
     CandidateSet root_candidates(*this, from, to + 1);
     if (root_candidates.IsFeasible(is_fai, large_triangle_check) &&
         root_candidates.df_max >= worst_d)
-      branch_and_bound.insert(std::pair<unsigned, CandidateSet>(root_candidates.df_max, root_candidates));
+      branch_and_bound.emplace(root_candidates.df_max, root_candidates);
   }
 
   // set max_iterations only if non-exhaustive and predictive solving is enabled.
@@ -458,12 +458,12 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
         // add the new candidate set only if it it's feasible and has d_min >= worst_d
         if (left.df_max >= worst_d &&
             left.IsFeasible(is_fai, large_triangle_check)) {
-          branch_and_bound.insert(std::pair<unsigned, CandidateSet>(left.df_max, left));
+          branch_and_bound.emplace(left.df_max, left);
         }
 
         if (right.df_max >= worst_d &&
             right.IsFeasible(is_fai, large_triangle_check)) {
-          branch_and_bound.insert(std::pair<unsigned, CandidateSet>(right.df_max, right));
+          branch_and_bound.emplace(right.df_max, right);
         }
       }
     }
