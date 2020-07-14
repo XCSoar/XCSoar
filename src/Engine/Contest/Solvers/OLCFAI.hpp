@@ -30,11 +30,11 @@
  */
 class OLCFAI : public OLCTriangle {
 public:
-  OLCFAI(const Trace &_trace, bool predict);
+  OLCFAI(const Trace &_trace, bool predict) noexcept;
 
 protected:
   /* virtual methods from class OLCTriangle */
-  ContestResult CalculateResult() const override;
+  ContestResult CalculateResult() const noexcept override;
 };
 
 #endif

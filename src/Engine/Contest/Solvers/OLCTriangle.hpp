@@ -96,7 +96,7 @@ private:
   struct ClosingPairs {
     std::map<unsigned, unsigned> closing_pairs;
 
-    bool Insert(const ClosingPair &p) {
+    bool Insert(const ClosingPair &p) noexcept {
       auto found = FindRange(p);
       if (found.first == 0 && found.second == 0) {
         const auto result = closing_pairs.insert(p);
@@ -110,7 +110,7 @@ private:
     }
 
     gcc_pure
-    ClosingPair FindRange(const ClosingPair &p) const {
+    ClosingPair FindRange(const ClosingPair &p) const noexcept {
       for (const auto &i : closing_pairs) {
         if (i.first > p.first)
           break;
@@ -123,7 +123,7 @@ private:
     }
 
     void RemoveRange(std::map<unsigned, unsigned>::iterator it,
-                     unsigned last) {
+                     unsigned last) noexcept {
       const auto end = closing_pairs.end();
       while (it != end) {
         if (it->second < last)
@@ -133,7 +133,7 @@ private:
       }
     }
 
-    void Clear() {
+    void Clear() noexcept {
       closing_pairs.clear();
     }
   };
@@ -148,31 +148,33 @@ private:
 
     FlatBoundingBox bounding_box;
 
-    TurnPointRange()
+    TurnPointRange() noexcept
       :index_min(0), index_max(0),
        bounding_box(FlatGeoPoint(0, 0)) {}
 
-    TurnPointRange(const OLCTriangle &parent, unsigned min, unsigned max) {
+    TurnPointRange(const OLCTriangle &parent,
+                   unsigned min, unsigned max) noexcept {
       Update(parent, min, max);
     }
 
-    bool operator==(TurnPointRange other) const {
+    bool operator==(TurnPointRange other) const noexcept {
       return (index_min == other.index_min && index_max == other.index_max);
     }
 
     // returns the manhatten diagonal of the bounding box
     gcc_pure
-    unsigned GetDiagnoal() const {
+    unsigned GetDiagnoal() const noexcept {
       return bounding_box.GetWidth() + bounding_box.GetHeight();
     }
 
     // returns the number of points in this range
-    unsigned GetSize() const {
+    unsigned GetSize() const noexcept {
       return index_max - index_min;
     }
 
     // updates the bounding box by a given point range
-    void Update(const OLCTriangle &parent, unsigned _min, unsigned _max) {
+    void Update(const OLCTriangle &parent,
+                unsigned _min, unsigned _max) noexcept {
       bounding_box = FlatBoundingBox(parent.GetPoint(_min).GetFlatLocation());
 
       for (unsigned i = _min + 1; i < _max; ++i)
@@ -184,13 +186,13 @@ private:
 
     // calculate the minimal distance estimate between two TurnPointRanges
     gcc_pure
-    unsigned GetMinDistance(const TurnPointRange &tp) const {
+    unsigned GetMinDistance(const TurnPointRange &tp) const noexcept {
       return bounding_box.Distance(tp.bounding_box);
     }
 
     // calculate maximal distance estimate between two TurnPointRanges
     gcc_pure
-    unsigned GetMaxDistance(const TurnPointRange &tp) const {
+    unsigned GetMaxDistance(const TurnPointRange &tp) const noexcept {
       const unsigned d_lon = std::max(bounding_box.GetRight() - tp.bounding_box.GetLeft(),
                                       tp.bounding_box.GetRight() - bounding_box.GetLeft());
       const unsigned d_lat = std::max(bounding_box.GetTop() - tp.bounding_box.GetBottom(),
@@ -208,21 +210,23 @@ private:
     unsigned df_min, df_max;
     unsigned shortest_max, longest_min, longest_max;
 
-    CandidateSet() :
-      df_min(0), df_max(0),
-      shortest_max(0), longest_min(0), longest_max(0) {}
+    CandidateSet() noexcept
+      :df_min(0), df_max(0),
+       shortest_max(0), longest_min(0), longest_max(0) {}
 
-    CandidateSet(const OLCTriangle &parent, unsigned first, unsigned last)
+    CandidateSet(const OLCTriangle &parent,
+                 unsigned first, unsigned last) noexcept
       :tp1(parent, first, last), tp2(tp1), tp3(tp1) {
       UpdateDistances();
     }
 
-    CandidateSet(TurnPointRange _tp1, TurnPointRange _tp2, TurnPointRange _tp3)
+    CandidateSet(TurnPointRange _tp1, TurnPointRange _tp2,
+                 TurnPointRange _tp3) noexcept
       :tp1(_tp1), tp2(_tp2), tp3(_tp3) {
       UpdateDistances();
     }
 
-    void UpdateDistances() {
+    void UpdateDistances() noexcept {
       const unsigned df_12_min = tp1.GetMinDistance(tp2),
                      df_23_min = tp2.GetMinDistance(tp3),
                      df_31_min = tp3.GetMinDistance(tp1);
@@ -241,7 +245,7 @@ private:
                         shortest_max * 4);
     }
 
-    bool operator==(CandidateSet other) const {
+    bool operator==(CandidateSet other) const noexcept {
       return (tp1 == other.tp1 && tp2 == other.tp2 && tp3 == other.tp3);
     }
 
@@ -251,7 +255,8 @@ private:
      * or integer rounding don't invalidate close positives.
      */
     gcc_pure
-    bool IsFeasible(const bool fai, const unsigned large_triangle_check) const {
+    bool IsFeasible(const bool fai,
+                    const unsigned large_triangle_check) const noexcept {
       // always feasible if no fai constraints
       if (!fai) return true;
 
@@ -275,7 +280,7 @@ private:
      */
     gcc_pure
     bool IsIntegral(OLCTriangle &parent, const bool fai,
-                    const unsigned large_triangle_check) const {
+                    const unsigned large_triangle_check) const noexcept {
       if (!(tp1.GetSize() == 1 && tp2.GetSize() == 1 && tp3.GetSize() == 1))
         return false;
 
@@ -335,40 +340,41 @@ public:
   OLCTriangle(const Trace &_trace,
               bool is_fai,
               bool predict,
-              const unsigned finish_alt_diff = 1000);
+              const unsigned finish_alt_diff = 1000) noexcept;
 
-  void SetIncremental(bool _incremental) {
+  void SetIncremental(bool _incremental) noexcept {
     incremental = _incremental;
   }
 
 protected:
-  bool FindClosingPairs(unsigned old_size);
-  void SolveTriangle(bool exhaustive);
+  bool FindClosingPairs(unsigned old_size) noexcept;
+  void SolveTriangle(bool exhaustive) noexcept;
 
   std::tuple<unsigned, unsigned, unsigned, unsigned>
-  RunBranchAndBound(unsigned from, unsigned to, unsigned best_d, bool exhaustive);
+  RunBranchAndBound(unsigned from, unsigned to, unsigned best_d,
+                    bool exhaustive) noexcept;
 
-  void UpdateTrace(bool force) override;
-  void ResetBranchAndBound();
+  void UpdateTrace(bool force) noexcept override;
+  void ResetBranchAndBound() noexcept;
 
 public:
-  void SetMaxIterations(unsigned _max_iterations) {
+  void SetMaxIterations(unsigned _max_iterations) noexcept {
     max_iterations = _max_iterations;
   };
 
-  void SetMaxTreeSize(unsigned _max_tree_size) {
+  void SetMaxTreeSize(unsigned _max_tree_size) noexcept {
     max_tree_size = _max_tree_size;
   };
 
   /* virtual methods from AbstractContest */
-  void Reset() override;
-  SolverResult Solve(bool exhaustive) override;
+  void Reset() noexcept override;
+  SolverResult Solve(bool exhaustive) noexcept override;
 
 protected:
   /* virtual methods from AbstractContest */
-  bool UpdateScore() override;
-  void CopySolution(ContestTraceVector &vec) const override;
-  ContestResult CalculateResult() const override;
+  bool UpdateScore() noexcept override;
+  void CopySolution(ContestTraceVector &vec) const noexcept override;
+  ContestResult CalculateResult() const noexcept override;
 };
 
 #endif

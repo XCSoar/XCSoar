@@ -30,7 +30,7 @@
  */
 class TaskDijkstraMin final : public TaskDijkstra {
 public:
-  TaskDijkstraMin()
+  TaskDijkstraMin() noexcept
     :TaskDijkstra(true) {}
 
   /**
@@ -46,7 +46,7 @@ public:
    * @param location Location of aircraft
    * @return True if succeeded
    */
-  bool DistanceMin(const SearchPoint &location);
+  bool DistanceMin(const SearchPoint &location) noexcept;
 };
 
 #endif

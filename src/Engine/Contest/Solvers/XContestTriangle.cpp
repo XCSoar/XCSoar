@@ -23,12 +23,12 @@
 #include "XContestTriangle.hpp"
 
 XContestTriangle::XContestTriangle(const Trace &_trace,
-                                   bool predict, bool _is_dhv)
+                                   bool predict, bool _is_dhv) noexcept
   :OLCTriangle(_trace, true, predict),
    is_dhv(_is_dhv) {}
 
 ContestResult
-XContestTriangle::CalculateResult() const
+XContestTriangle::CalculateResult() const noexcept
 {
   ContestResult result = OLCTriangle::CalculateResult();
 
@@ -58,7 +58,7 @@ XContestTriangle::CalculateResult() const
 }
 
 SolverResult
-XContestTriangle::Solve(bool exhaustive)
+XContestTriangle::Solve(bool exhaustive) noexcept
 {
   SolverResult result = OLCTriangle::Solve(exhaustive);
   if (result != SolverResult::FAILED)

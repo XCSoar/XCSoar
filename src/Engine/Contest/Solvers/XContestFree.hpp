@@ -33,11 +33,11 @@ class XContestFree : public ContestDijkstra {
 
 public:
   XContestFree(const Trace &_trace,
-               const bool _is_dhv=false);
+               const bool _is_dhv=false) noexcept;
 
 protected:
   /* virtual methods from AbstractContest */
-  ContestResult CalculateResult() const override;
+  ContestResult CalculateResult() const noexcept override;
 };
 
 #endif

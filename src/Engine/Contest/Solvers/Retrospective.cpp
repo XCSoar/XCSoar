@@ -23,7 +23,7 @@
 #include "Retrospective.hpp"
 #include "Waypoint/Waypoints.hpp"
 
-Retrospective::Retrospective(const Waypoints &wps)
+Retrospective::Retrospective(const Waypoints &wps) noexcept
   :waypoints(wps),
    search_range(15000),
    angle_tolerance(Angle::Degrees(25))
@@ -31,13 +31,13 @@ Retrospective::Retrospective(const Waypoints &wps)
 }
 
 void
-Retrospective::Clear()
+Retrospective::Clear() noexcept
 {
   candidate_list.clear();
 }
 
 void
-Retrospective::PruneCandidates()
+Retrospective::PruneCandidates() noexcept
 {
   assert(candidate_list.size()>2);
 
@@ -60,7 +60,7 @@ Retrospective::PruneCandidates()
 }
 
 void
-Retrospective::CalcDistances(double &d_ach, double &d_can)
+Retrospective::CalcDistances(double &d_ach, double &d_can) noexcept
 {
   d_ach = 0;
   d_can = 0;
@@ -71,9 +71,8 @@ Retrospective::CalcDistances(double &d_ach, double &d_can)
   // last leg part actual_in should be distance from previous to current ac location
 }
 
-
 bool
-Retrospective::UpdateSample(const GeoPoint &aircraft_location)
+Retrospective::UpdateSample(const GeoPoint &aircraft_location) noexcept
 {
   assert(aircraft_location.IsValid());
 

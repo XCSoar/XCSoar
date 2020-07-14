@@ -30,7 +30,7 @@
  */
 class TaskDijkstraMax final : public TaskDijkstra {
 public:
-  TaskDijkstraMax()
+  TaskDijkstraMax() noexcept
     :TaskDijkstra(false) {}
 
   /**
@@ -41,7 +41,7 @@ public:
    *
    * @return True if succeeded
    */
-  bool DistanceMax();
+  bool DistanceMax() noexcept;
 };
 
 #endif

@@ -30,11 +30,11 @@
  */
 class OLCSISAT : public ContestDijkstra {
 public:
-  OLCSISAT(const Trace &_trace);
+  explicit OLCSISAT(const Trace &_trace) noexcept;
 
 protected:
   /* virtual methods from class ContestDijkstra */
-  ContestResult CalculateResult(const ContestTraceVector &solution) const override;
+  ContestResult CalculateResult(const ContestTraceVector &solution) const noexcept override;
 };
 
 #endif

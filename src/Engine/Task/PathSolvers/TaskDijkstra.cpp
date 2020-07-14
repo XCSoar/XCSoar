@@ -23,14 +23,14 @@
 #include "TaskDijkstra.hpp"
 #include "Geo/SearchPointVector.hpp"
 
-TaskDijkstra::TaskDijkstra(bool _is_min)
+TaskDijkstra::TaskDijkstra(bool _is_min) noexcept
   :NavDijkstra(0),
    is_min(_is_min)
 {
 }
 
 inline unsigned
-TaskDijkstra::GetStageSize(const unsigned stage) const
+TaskDijkstra::GetStageSize(const unsigned stage) const noexcept
 {
   assert(stage < num_stages);
 
@@ -38,13 +38,13 @@ TaskDijkstra::GetStageSize(const unsigned stage) const
 }
 
 const SearchPoint &
-TaskDijkstra::GetPoint(const ScanTaskPoint sp) const
+TaskDijkstra::GetPoint(const ScanTaskPoint sp) const noexcept
 {
   return (*boundaries[sp.GetStageNumber()])[sp.GetPointIndex()];
 }
 
 void
-TaskDijkstra::AddEdges(const ScanTaskPoint curNode)
+TaskDijkstra::AddEdges(const ScanTaskPoint curNode) noexcept
 {
   ScanTaskPoint destination(curNode.GetStageNumber() + 1, 0);
   const unsigned dsize = GetStageSize(destination.GetStageNumber());
@@ -55,7 +55,7 @@ TaskDijkstra::AddEdges(const ScanTaskPoint curNode)
 }
 
 void
-TaskDijkstra::AddZeroStartEdges()
+TaskDijkstra::AddZeroStartEdges() noexcept
 {
   const unsigned stage = 0;
   ScanTaskPoint destination(stage, 0);
@@ -66,8 +66,9 @@ TaskDijkstra::AddZeroStartEdges()
     LinkStart(destination, 0);
 }
 
-void 
-TaskDijkstra::AddStartEdges(unsigned stage, const SearchPoint &currentLocation)
+void
+TaskDijkstra::AddStartEdges(unsigned stage,
+                            const SearchPoint &currentLocation) noexcept
 {
   assert(currentLocation.IsValid());
 
@@ -80,7 +81,7 @@ TaskDijkstra::AddStartEdges(unsigned stage, const SearchPoint &currentLocation)
 }
 
 bool
-TaskDijkstra::Run()
+TaskDijkstra::Run() noexcept
 {
   const bool retval = DistanceGeneral() == SolverResult::VALID;
   dijkstra.Clear();

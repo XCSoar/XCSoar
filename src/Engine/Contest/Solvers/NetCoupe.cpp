@@ -22,11 +22,11 @@
 
 #include "NetCoupe.hpp"
 
-NetCoupe::NetCoupe(const Trace &_trace)
+NetCoupe::NetCoupe(const Trace &_trace) noexcept
   :ContestDijkstra(_trace, true, 4, 1000) {}
 
 ContestResult
-NetCoupe::CalculateResult() const
+NetCoupe::CalculateResult() const noexcept
 {
   ContestResult result = ContestDijkstra::CalculateResult();
   // 0.8 factor for free distance and 1/1000 m -> km

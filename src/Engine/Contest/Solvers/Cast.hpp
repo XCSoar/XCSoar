@@ -27,7 +27,7 @@
 #include "Trace/Point.hpp"
 
 inline
-ContestTracePoint::ContestTracePoint(const TracePoint &src)
+ContestTracePoint::ContestTracePoint(const TracePoint &src) noexcept
   :time(src.GetTime()), location(src.GetLocation()) {}
 
 #endif

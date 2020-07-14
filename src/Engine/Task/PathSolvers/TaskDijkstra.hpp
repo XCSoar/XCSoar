@@ -63,13 +63,13 @@ public:
    *
    * @param is_min Whether this will be used to minimise or maximise distances
    */
-  TaskDijkstra(const bool is_min);
+  explicit TaskDijkstra(const bool is_min) noexcept;
 
-  void SetTaskSize(unsigned size) {
+  void SetTaskSize(unsigned size) noexcept {
     SetStageCount(size);
   }
 
-  void SetBoundary(unsigned idx, const SearchPointVector &boundary) {
+  void SetBoundary(unsigned idx, const SearchPointVector &boundary) noexcept {
     assert(idx < num_stages);
 
     boundaries[idx] = &boundary;
@@ -79,7 +79,7 @@ public:
    * Returns the solution point for the specified task point.  Call
    * this after run() has returned true.
    */
-  const SearchPoint &GetSolution(unsigned stage) const {
+  const SearchPoint &GetSolution(unsigned stage) const noexcept {
     assert(stage < num_stages);
 
     return GetPoint(ScanTaskPoint(stage, solution[stage]));
@@ -87,12 +87,12 @@ public:
 
 protected:
   gcc_pure
-  const SearchPoint &GetPoint(ScanTaskPoint sp) const;
+  const SearchPoint &GetPoint(ScanTaskPoint sp) const noexcept;
 
-  bool Run();
+  bool Run() noexcept;
 
   bool Link(const ScanTaskPoint node, const ScanTaskPoint parent,
-            unsigned value) {
+            unsigned value) noexcept {
     if (!is_min)
       value = DIJKSTRA_MINMAX_OFFSET - value;
 
@@ -102,13 +102,13 @@ protected:
   /**
    * Add a zero-length start edge to each point in the first stage.
    */
-  void AddZeroStartEdges();
+  void AddZeroStartEdges() noexcept;
 
   /**
    * Add a start edge from the given location to each point in the
    * given stage.
    */
-  void AddStartEdges(unsigned stage, const SearchPoint &loc);
+  void AddStartEdges(unsigned stage, const SearchPoint &loc) noexcept;
 
   /** 
    * Distance function for free point
@@ -120,7 +120,7 @@ protected:
    */
   gcc_pure
   unsigned CalcDistance(const ScanTaskPoint curNode,
-                        const SearchPoint &currentLocation) const {
+                        const SearchPoint &currentLocation) const noexcept {
     /* using expensive floating point formulas here to avoid integer
        rounding errors */
 
@@ -139,17 +139,18 @@ protected:
    * @return Distance (flat) from origin to destination
    */
   gcc_pure
-  unsigned CalcDistance(const ScanTaskPoint s1, const ScanTaskPoint s2) const {
+  unsigned CalcDistance(const ScanTaskPoint s1,
+                        const ScanTaskPoint s2) const noexcept {
     return CalcDistance(s1, GetPoint(s2));
   }
 
 private:
   gcc_pure
-  unsigned GetStageSize(const unsigned stage) const;
+  unsigned GetStageSize(const unsigned stage) const noexcept;
 
 protected:
   /* methods from NavDijkstra */
-  virtual void AddEdges(ScanTaskPoint curNode) final;
+  virtual void AddEdges(ScanTaskPoint curNode) noexcept final;
 };
 
 #endif

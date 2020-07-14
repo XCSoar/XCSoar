@@ -57,7 +57,7 @@ static constexpr double max_distance(1000);
 
 OLCTriangle::OLCTriangle(const Trace &_trace,
                          const bool _is_fai, bool _predict,
-                         const unsigned _finish_alt_diff)
+                         const unsigned _finish_alt_diff) noexcept
   : AbstractContest(_finish_alt_diff),
    TraceManager(_trace),
    is_fai(_is_fai), predict(_predict),
@@ -69,7 +69,7 @@ OLCTriangle::OLCTriangle(const Trace &_trace,
 }
 
 void
-OLCTriangle::Reset()
+OLCTriangle::Reset() noexcept
 {
   is_complete = false;
   is_closed = false;
@@ -87,7 +87,7 @@ OLCTriangle::Reset()
 }
 
 void
-OLCTriangle::ResetBranchAndBound()
+OLCTriangle::ResetBranchAndBound() noexcept
 {
   running = false;
   branch_and_bound.clear();
@@ -95,7 +95,8 @@ OLCTriangle::ResetBranchAndBound()
 
 gcc_pure
 static double
-CalcLegDistance(const ContestTraceVector &solution, const unsigned index)
+CalcLegDistance(const ContestTraceVector &solution,
+                const unsigned index) noexcept
 {
   // leg 0: 1-2
   // leg 1: 2-3
@@ -108,7 +109,7 @@ CalcLegDistance(const ContestTraceVector &solution, const unsigned index)
 }
 
 void
-OLCTriangle::UpdateTrace(bool force)
+OLCTriangle::UpdateTrace(bool force) noexcept
 {
   if (IsMasterAppended()) return; /* unmodified */
 
@@ -140,9 +141,8 @@ OLCTriangle::UpdateTrace(bool force)
   tick_iterations = n_points * n_points / 8;
 }
 
-
 SolverResult
-OLCTriangle::Solve(bool exhaustive)
+OLCTriangle::Solve(bool exhaustive) noexcept
 {
   if (trace_master.size() < 3) {
     ClearTrace();
@@ -174,7 +174,7 @@ OLCTriangle::Solve(bool exhaustive)
 }
 
 void
-OLCTriangle::SolveTriangle(bool exhaustive)
+OLCTriangle::SolveTriangle(bool exhaustive) noexcept
 {
   unsigned tp1 = 0,
            tp2 = 0,
@@ -306,7 +306,8 @@ OLCTriangle::SolveTriangle(bool exhaustive)
 
 
 std::tuple<unsigned, unsigned, unsigned, unsigned>
-OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, bool exhaustive)
+OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
+                               bool exhaustive) noexcept
 {
   /* Some general information about the branch and bound method can be found here:
    * http://eaton.math.rpi.edu/faculty/Mitchell/papers/leeejem.html
@@ -487,7 +488,7 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
 }
 
 ContestResult
-OLCTriangle::CalculateResult() const
+OLCTriangle::CalculateResult() const noexcept
 {
   ContestResult result;
   result.time = (is_complete && is_closed)
@@ -503,7 +504,7 @@ OLCTriangle::CalculateResult() const
 gcc_pure
 static bool
 IsInRange(const SearchPoint &a, const SearchPoint &b,
-          unsigned half_max_range_sq, double max_distance)
+          unsigned half_max_range_sq, double max_distance) noexcept
 {
   /* optimisation: if the flat distance is much smaller than the
      maximum range, we don't need to call the method
@@ -513,7 +514,7 @@ IsInRange(const SearchPoint &a, const SearchPoint &b,
 }
 
 bool
-OLCTriangle::FindClosingPairs(unsigned old_size)
+OLCTriangle::FindClosingPairs(unsigned old_size) noexcept
 {
   if (predict) {
     return closing_pairs.Insert(ClosingPair(0, n_points-1));
@@ -526,12 +527,12 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
 
   struct TracePointNodeAccessor {
     gcc_pure
-    int GetX(const TracePointNode &node) const {
+    int GetX(const TracePointNode &node) const noexcept {
       return node.point->GetFlatLocation().x;
     }
 
     gcc_pure
-    int GetY(const TracePointNode &node) const {
+    int GetY(const TracePointNode &node) const noexcept {
       return node.point->GetFlatLocation().y;
     }
   };
@@ -596,13 +597,13 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
 }
 
 bool
-OLCTriangle::UpdateScore()
+OLCTriangle::UpdateScore() noexcept
 {
   return false;
 }
 
 void
-OLCTriangle::CopySolution(ContestTraceVector &result) const
+OLCTriangle::CopySolution(ContestTraceVector &result) const noexcept
 {
   result = solution;
   assert(result.size() == 5);

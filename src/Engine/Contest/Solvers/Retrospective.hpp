@@ -34,7 +34,7 @@ class Waypoints;
 
 class Retrospective {
 public:
-  Retrospective(const Waypoints &wps);
+  explicit Retrospective(const Waypoints &wps) noexcept;
 
   struct NearWaypoint {
     WaypointPtr waypoint;
@@ -44,20 +44,20 @@ public:
     double actual_in;
     Angle bearing;
 
-    NearWaypoint(WaypointPtr &&_waypoint, const GeoPoint& _location)
+    NearWaypoint(WaypointPtr &&_waypoint, const GeoPoint& _location) noexcept
       :waypoint(std::move(_waypoint)),
        location(_location), leg_in(0), actual_in(0) {
       range = location.Distance(waypoint->location);
     }
 
     NearWaypoint(WaypointPtr &&_waypoint, const GeoPoint& _location,
-                 const NearWaypoint& previous)
+                 const NearWaypoint& previous) noexcept
       :waypoint(std::move(_waypoint)), location(_location) {
       range = location.Distance(waypoint->location);
       update_leg(previous);
     }
 
-    bool update_location(const GeoPoint &location_now) {
+    bool update_location(const GeoPoint &location_now) noexcept {
       auto range_now = location_now.Distance(waypoint->location);
       if (range_now < range) {
         range = range_now;
@@ -67,7 +67,8 @@ public:
       return false;
       // TODO: or if distance from previous tp to here is greater than leg (and wasnt previously)
     }
-    void update_leg(const NearWaypoint& previous) {
+
+    void update_leg(const NearWaypoint& previous) noexcept {
       leg_in = previous.waypoint->location.Distance(waypoint->location);
       actual_in = previous.location.Distance(location);
       bearing = previous.location.Bearing(location);
@@ -81,20 +82,20 @@ protected:
 
   NearWaypointList candidate_list;
 
-  void PruneCandidates();
+  void PruneCandidates() noexcept;
 
 public:
-  const NearWaypointList& getNearWaypointList() const {
+  const NearWaypointList& getNearWaypointList() const noexcept {
     return candidate_list;
   }
 
-  bool UpdateSample(const GeoPoint &aircraft_location);
-  void Clear();
-  void Reset() {
+  bool UpdateSample(const GeoPoint &aircraft_location) noexcept;
+  void Clear() noexcept;
+  void Reset() noexcept {
     Clear();
   }
 
-  void CalcDistances(double &d_ach, double &d_can);
+  void CalcDistances(double &d_ach, double &d_can) noexcept;
 
   /** search range in m */
   double search_range;

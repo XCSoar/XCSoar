@@ -52,11 +52,11 @@
     potentially implement as circular buffer (emulate as dequeue)
 */
 
-OLCSprint::OLCSprint(const Trace &_trace)
+OLCSprint::OLCSprint(const Trace &_trace) noexcept
   :ContestDijkstra(_trace, false, 4, 0) {}
 
 unsigned
-OLCSprint::FindStart() const
+OLCSprint::FindStart() const noexcept
 {
   assert(num_stages <= MAX_STAGES);
   assert(n_points >= 2);
@@ -77,7 +77,7 @@ OLCSprint::FindStart() const
 }
 
 void
-OLCSprint::AddStartEdges()
+OLCSprint::AddStartEdges() noexcept
 {
   assert(num_stages <= MAX_STAGES);
   assert(num_stages > 0);
@@ -92,7 +92,7 @@ OLCSprint::AddStartEdges()
 }
 
 void
-OLCSprint::AddEdges(const ScanTaskPoint origin)
+OLCSprint::AddEdges(const ScanTaskPoint origin) noexcept
 {
   const ScanTaskPoint destination(origin.GetStageNumber() + 1, n_points - 1);
   if (IsFinal(destination)) {
@@ -105,7 +105,7 @@ OLCSprint::AddEdges(const ScanTaskPoint origin)
 }
 
 ContestResult
-OLCSprint::CalculateResult() const
+OLCSprint::CalculateResult() const noexcept
 {
   ContestResult result = ContestDijkstra::CalculateResult();
   result.score = ApplyShiftedHandicap(result.distance / 2500.);
@@ -113,7 +113,7 @@ OLCSprint::CalculateResult() const
 }
 
 void
-OLCSprint::UpdateTrace(bool force)
+OLCSprint::UpdateTrace(bool force) noexcept
 {
   /* since this is online, all solutions must have start to end of
      trace satisfy the finish altitude requirements.  otherwise there

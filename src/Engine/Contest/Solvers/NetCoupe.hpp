@@ -30,11 +30,11 @@
  */
 class NetCoupe : public ContestDijkstra {
 public:
-  NetCoupe(const Trace &_trace);
+  explicit NetCoupe(const Trace &_trace) noexcept;
 
 protected:
   /* virtual methods from class AbstractContest */
-  ContestResult CalculateResult() const override;
+  ContestResult CalculateResult() const noexcept override;
 };
 
 #endif

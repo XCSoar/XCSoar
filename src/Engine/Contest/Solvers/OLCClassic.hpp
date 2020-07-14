@@ -30,7 +30,7 @@
  */
 class OLCClassic : public ContestDijkstra {
 public:
-  OLCClassic(const Trace &_trace);
+  explicit OLCClassic(const Trace &_trace) noexcept;
 };
 
 #endif

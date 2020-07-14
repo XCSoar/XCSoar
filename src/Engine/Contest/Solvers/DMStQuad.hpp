@@ -33,7 +33,7 @@
  */
 class DMStQuad : public ContestDijkstra {
 public:
-  DMStQuad(const Trace &_trace);
+  explicit DMStQuad(const Trace &_trace) noexcept;
 };
 
 #endif

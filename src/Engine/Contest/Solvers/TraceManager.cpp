@@ -26,7 +26,7 @@ Copyright_License {
 
 #include <cassert>
 
-TraceManager::TraceManager(const Trace &_trace)
+TraceManager::TraceManager(const Trace &_trace) noexcept
   :trace_master(_trace),
    predicted(TracePoint::Invalid())
 {
@@ -34,7 +34,7 @@ TraceManager::TraceManager(const Trace &_trace)
 
 
 bool
-TraceManager::SetPredicted(const TracePoint &_predicted)
+TraceManager::SetPredicted(const TracePoint &_predicted) noexcept
 {
   TracePoint n(_predicted);
   if (n.IsDefined() && !trace_master.empty())
@@ -60,7 +60,7 @@ TraceManager::SetPredicted(const TracePoint &_predicted)
 }
 
 bool
-TraceManager::IsMasterUpdated(bool continuous) const
+TraceManager::IsMasterUpdated(bool continuous) const noexcept
 {
   /* disabled assertion, TraceManager doesn't know about stages */
   // assert(num_stages <= MAX_STAGES);
@@ -92,7 +92,7 @@ TraceManager::IsMasterUpdated(bool continuous) const
 }
 
 void
-TraceManager::ClearTrace()
+TraceManager::ClearTrace() noexcept
 {
   append_serial = modify_serial = Serial();
   trace_dirty = true;
@@ -102,7 +102,7 @@ TraceManager::ClearTrace()
 }
 
 void
-TraceManager::UpdateTraceFull()
+TraceManager::UpdateTraceFull() noexcept
 {
   trace.reserve(trace_master.GetMaxSize());
   trace_master.GetPoints(trace);
@@ -116,7 +116,7 @@ TraceManager::UpdateTraceFull()
 }
 
 bool
-TraceManager::UpdateTraceTail()
+TraceManager::UpdateTraceTail() noexcept
 {
   /* the following assertions were disabled because this method doesn't
      get the "force" and "continuous" parameter */
@@ -138,7 +138,7 @@ TraceManager::UpdateTraceTail()
 }
 
 void
-TraceManager::UpdateTrace(bool force)
+TraceManager::UpdateTrace(bool force) noexcept
 {
 }
 

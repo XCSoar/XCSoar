@@ -23,7 +23,7 @@
 #include "TaskDijkstraMax.hpp"
 
 bool
-TaskDijkstraMax::DistanceMax()
+TaskDijkstraMax::DistanceMax() noexcept
 {
   dijkstra.Clear();
   dijkstra.Reserve(256);

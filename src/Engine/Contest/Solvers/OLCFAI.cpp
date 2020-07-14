@@ -22,13 +22,13 @@
 
 #include "OLCFAI.hpp"
 
-OLCFAI::OLCFAI(const Trace &_trace, bool predict)
+OLCFAI::OLCFAI(const Trace &_trace, bool predict) noexcept
   :OLCTriangle(_trace, true, predict, 1000)
 {
 }
 
 ContestResult
-OLCFAI::CalculateResult() const
+OLCFAI::CalculateResult() const noexcept
 {
   ContestResult result = OLCTriangle::CalculateResult();
   // 0.3 points per km

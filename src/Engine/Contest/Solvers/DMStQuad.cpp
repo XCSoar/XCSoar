@@ -22,5 +22,5 @@
 
 #include "DMStQuad.hpp"
 
-DMStQuad::DMStQuad(const Trace &_trace)
+DMStQuad::DMStQuad(const Trace &_trace) noexcept
   :ContestDijkstra(_trace, true, 4, 1000) {}

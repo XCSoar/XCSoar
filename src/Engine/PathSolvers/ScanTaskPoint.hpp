@@ -36,7 +36,7 @@ class ScanTaskPoint {
 
 public:
   constexpr
-  ScanTaskPoint(unsigned stage_number, unsigned point_index)
+  ScanTaskPoint(unsigned stage_number, unsigned point_index) noexcept
     :value((stage_number << 16) | point_index) {}
 
   /**
@@ -44,40 +44,40 @@ public:
    * operator.
    */
   constexpr
-  uint32_t Key() const {
+  uint32_t Key() const noexcept {
     return value;
   }
 
   constexpr
-  bool operator==(const ScanTaskPoint other) const {
+  bool operator==(const ScanTaskPoint other) const noexcept {
     return Key() == other.Key();
   }
 
   constexpr
-  bool operator!=(const ScanTaskPoint other) const {
+  bool operator!=(const ScanTaskPoint other) const noexcept {
     return Key() != other.Key();
   }
 
   constexpr
-  bool operator<(const ScanTaskPoint other) const {
+  bool operator<(const ScanTaskPoint other) const noexcept {
     return Key() < other.Key();
   }
 
   constexpr
-  unsigned GetStageNumber() const {
+  unsigned GetStageNumber() const noexcept {
     return value >> 16;
   }
 
   constexpr
-  unsigned GetPointIndex() const {
+  unsigned GetPointIndex() const noexcept {
     return value & 0xffff;
   }
 
-  void SetPointIndex(unsigned i) {
+  void SetPointIndex(unsigned i) noexcept {
     value = (value & 0xffff0000) | i;
   }
 
-  void IncrementPointIndex() {
+  void IncrementPointIndex() noexcept {
     ++value;
   }
 
@@ -85,7 +85,7 @@ public:
    * Determine whether a point is a starting point (no previous edges).
    */
   constexpr
-  bool IsFirst() const {
+  bool IsFirst() const noexcept {
     return GetStageNumber() == 0;
   }
 };

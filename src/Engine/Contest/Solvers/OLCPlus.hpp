@@ -36,7 +36,7 @@ class OLCPlus : public AbstractContest {
   ContestResult result_fai;
 
 public:
-  OLCPlus();
+  OLCPlus() noexcept;
 
   /**
    * Feed results from OLCClassic and OLCFAI.  This must be called
@@ -45,7 +45,7 @@ public:
   void Feed(const ContestResult &_result_classic,
             const ContestTraceVector &_solution_classic,
             const ContestResult &_result_fai,
-            const ContestTraceVector &_solution_fai) {
+            const ContestTraceVector &_solution_fai) noexcept {
     result_classic = _result_classic;
     solution_classic = _solution_classic;
     result_fai = _result_fai;
@@ -54,13 +54,13 @@ public:
 
 public:
   /* virtual methods from class AbstractContest */
-  void Reset() override;
-  SolverResult Solve(bool exhaustive) override;
-  void CopySolution(ContestTraceVector &vec) const override;
+  void Reset() noexcept override;
+  SolverResult Solve(bool exhaustive) noexcept override;
+  void CopySolution(ContestTraceVector &vec) const noexcept override;
 
 protected:
   /* virtual methods from class AbstractContest */
-  ContestResult CalculateResult() const override;
+  ContestResult CalculateResult() const noexcept override;
 };
 
 #endif

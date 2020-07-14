@@ -28,7 +28,7 @@
 IsolineCrossingFinder::IsolineCrossingFinder(const AATPoint& _aap,
                                              const GeoEllipse &_ell,
                                              const double _xmin,
-                                             const double _xmax)
+                                             const double _xmax) noexcept
   :ZeroFinder(_xmin, _xmax, TOLERANCE_ISOLINE_CROSSING),
    aap(_aap),
    ell(_ell)
@@ -36,7 +36,7 @@ IsolineCrossingFinder::IsolineCrossingFinder(const AATPoint& _aap,
 }
 
 double
-IsolineCrossingFinder::f(const double t)
+IsolineCrossingFinder::f(const double t) noexcept
 {
   const GeoPoint a = ell.Parametric(t);
   AircraftState s;
@@ -51,7 +51,7 @@ IsolineCrossingFinder::f(const double t)
 #define bsgn(x) (x < 1. ? false : true)
 
 bool
-IsolineCrossingFinder::valid(const double x)
+IsolineCrossingFinder::valid(const double x) noexcept
 {
 /*
   const bool bsgn_0 = bsgn(f(x));
@@ -65,7 +65,7 @@ IsolineCrossingFinder::valid(const double x)
 }
 
 double
-IsolineCrossingFinder::solve()
+IsolineCrossingFinder::solve() noexcept
 {
   const auto sol = find_zero((xmax + xmin) / 2.);
   if (valid(sol)) {

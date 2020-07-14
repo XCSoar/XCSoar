@@ -48,16 +48,16 @@ public:
    * @return Partially initialised object
    */
   IsolineCrossingFinder(const AATPoint& _aap, const GeoEllipse &_ell,
-                        const double xmin, const double xmax);
+                        const double xmin, const double xmax) noexcept;
 
-  double f(const double t);
+  double f(const double t) noexcept;
 
   /**
    * Test validity of solution
    * @param t parametric location of test point
    * @return True if valid
    */
-  bool valid(const double t);
+  bool valid(const double t) noexcept;
 
   /**
    * Search for parameter value of isoline intersecting the OZ boundary
@@ -65,7 +65,7 @@ public:
    *
    * @return Parameter value of isoline intersection
    */
-  double solve();
+  double solve() noexcept;
 };
 
 #endif

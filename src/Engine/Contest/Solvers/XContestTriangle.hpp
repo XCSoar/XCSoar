@@ -34,14 +34,14 @@ class XContestTriangle : public OLCTriangle {
   const bool is_dhv;
 
 public:
-  XContestTriangle(const Trace &_trace, bool predict, bool _is_dhv);
+  XContestTriangle(const Trace &_trace, bool predict, bool _is_dhv) noexcept;
 
 protected:
   /* virtual methods from AbstractContest */
-  SolverResult Solve(bool exhaustive) override;
+  SolverResult Solve(bool exhaustive) noexcept override;
 
   /* virtual methods from OLCTriangle */
-  ContestResult CalculateResult() const override;
+  ContestResult CalculateResult() const noexcept override;
 };
 
 #endif

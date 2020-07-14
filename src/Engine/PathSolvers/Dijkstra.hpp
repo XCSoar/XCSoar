@@ -44,7 +44,8 @@ public:
 
     unsigned value;
 
-    Edge(Node _parent, unsigned _value):parent(_parent), value(_value) {}
+    constexpr Edge(Node _parent, unsigned _value) noexcept
+      :parent(_parent), value(_value) {}
   };
 
   typedef typename MapTemplate::template Bind<Edge> EdgeMap;
@@ -58,13 +59,13 @@ private:
 
     edge_iterator iterator;
 
-    Value(unsigned _edge_value, edge_iterator _iterator)
+    constexpr Value(unsigned _edge_value, edge_iterator _iterator) noexcept
       :edge_value(_edge_value), iterator(_iterator) {}
   };
 
   struct Rank : public std::binary_function<Value, Value, bool> {
     gcc_pure
-    bool operator()(const Value &x, const Value &y) const {
+    constexpr bool operator()(const Value &x, const Value &y) const noexcept {
       return x.edge_value > y.edge_value;
     }
   };
@@ -97,7 +98,7 @@ public:
   /** 
    * Clears the queues
    */
-  void Clear() {
+  void Clear() noexcept {
     // Clear the search queue
     q.clear();
 
@@ -112,7 +113,7 @@ public:
    * for "continuous" search, see
    * ContestDijkstra::AddIncrementalEdges().
    */
-  const EdgeMap &GetEdgeMap() const {
+  const EdgeMap &GetEdgeMap() const noexcept {
     return edges;
   }
 
@@ -122,7 +123,7 @@ public:
    * @return True if no more nodes to search
    */
   gcc_pure
-  bool IsEmpty() const {
+  bool IsEmpty() const noexcept {
     return q.empty();
   }
 
@@ -132,7 +133,7 @@ public:
    * @return Queue size in elements
    */
   gcc_pure
-  unsigned GetQueueSize() const {
+  unsigned GetQueueSize() const noexcept {
     return q.size();
   }
 
@@ -140,7 +141,7 @@ public:
    * Hack to allow incremental / continuous runs, see
    * ContestDijkstra::AddIncrementalEdges().
    */
-  void SetCurrentValue(unsigned value) {
+  void SetCurrentValue(unsigned value) noexcept {
     current_value = value;
   }
 
@@ -149,7 +150,7 @@ public:
    *
    * @return Node for processing
    */
-  Node Pop() {
+  Node Pop() noexcept {
     edge_const_iterator cur(q.top().iterator);
     current_value = cur->second.value;
 
@@ -168,7 +169,7 @@ public:
    * @param e Edge distance
    * @return false if this link was worse than an existing one
    */
-  bool Link(const Node node, const Node parent, unsigned edge_value) {
+  bool Link(const Node node, const Node parent, unsigned edge_value) noexcept {
     return Push(node, parent, current_value + edge_value);
   }
 
@@ -180,7 +181,7 @@ public:
    * @return Predecessor node
    */
   gcc_pure
-  Node GetPredecessor(const Node node) const {
+  Node GetPredecessor(const Node node) const noexcept {
     // Try to find the given node in the node_parent_map
     edge_const_iterator it = edges.find(node);
     if (it == edges.end())
@@ -197,14 +198,14 @@ public:
   /**
    * Reserve queue size (if available)
    */
-  void Reserve(unsigned size) {
+  void Reserve(unsigned size) noexcept {
     q.reserve(size);
   }
 
   /**
    * Clear the queue and re-insert all known links.
    */
-  void RestartQueue() {
+  void RestartQueue() noexcept {
     // Clear the search queue
     q.clear();
 
@@ -221,7 +222,8 @@ private:
    * @param e Edge distance (previous to this)
    * @return false if this link was worse than an existing one
    */
-  bool Push(const Node node, const Node parent, unsigned edge_value = 0) {
+  bool Push(const Node node, const Node parent,
+            unsigned edge_value = 0) noexcept {
     // Try to find the given node n in the EdgeMap
     edge_iterator it = edges.find(node);
     if (it == edges.end())

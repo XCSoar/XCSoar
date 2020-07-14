@@ -87,23 +87,23 @@ public:
   ContestDijkstra(const Trace &_trace,
                   bool continuous,
                   const unsigned n_legs,
-                  const unsigned finish_alt_diff = 1000);
+                  const unsigned finish_alt_diff = 1000) noexcept;
 
-  void SetIncremental(bool _incremental) {
+  void SetIncremental(bool _incremental) noexcept {
     incremental = _incremental;
   }
 
 protected:
-  bool IsIncremental() const {
+  bool IsIncremental() const noexcept {
     return incremental;
   }
 
   gcc_pure
-  const TracePoint &GetPoint(const ScanTaskPoint sp) const {
+  const TracePoint &GetPoint(const ScanTaskPoint sp) const noexcept {
     return TraceManager::GetPoint(sp.GetPointIndex());
   }
 
-  void AddEdges(ScanTaskPoint origin, unsigned first_point);
+  void AddEdges(ScanTaskPoint origin, unsigned first_point) noexcept;
 
   /**
    * Restart the solver with the new points added by
@@ -111,7 +111,7 @@ protected:
    *
    * @param first_point the first point that was added
    */
-  void AddIncrementalEdges(unsigned first_point);
+  void AddIncrementalEdges(unsigned first_point) noexcept;
 
   /**
    * Retrieve weighting of specified leg
@@ -119,7 +119,7 @@ protected:
    * @return Weighting of leg
    */
   gcc_pure
-  unsigned GetStageWeight(const unsigned index) const {
+  unsigned GetStageWeight(const unsigned index) const noexcept {
     assert(num_stages <= MAX_STAGES);
     assert(index + 1 < num_stages);
 
@@ -136,17 +136,17 @@ protected:
    */
   gcc_pure
   unsigned CalcEdgeDistance(const ScanTaskPoint s1,
-                            const ScanTaskPoint s2) const {
+                            const ScanTaskPoint s2) const noexcept {
     return GetPoint(s1).FlatDistanceTo(GetPoint(s2));
   }
 
   bool Link(const ScanTaskPoint node, const ScanTaskPoint parent,
-            unsigned value) {
+            unsigned value) noexcept {
     return NavDijkstra::Link(node, parent, DIJKSTRA_MINMAX_OFFSET - value);
   }
 
 private:
-  bool SaveSolution();
+  bool SaveSolution() noexcept;
 
 protected:
   /**
@@ -155,28 +155,28 @@ protected:
    * @param force disable lazy updates, force the trace to be up to
    * date before returning
    */
-  void UpdateTrace(bool force) override;
+  void UpdateTrace(bool force) noexcept override;
 
   /**
    * Perform actions required at start of new search
    */
-  virtual void StartSearch();
-  virtual void AddStartEdges();
-  virtual ContestResult CalculateResult(const ContestTraceVector &solution) const;
+  virtual void StartSearch() noexcept;
+  virtual void AddStartEdges() noexcept;
+  virtual ContestResult CalculateResult(const ContestTraceVector &solution) const noexcept;
 
 public:
   /* public virtual methods from AbstractContest */
-  SolverResult Solve(bool exhaustive) override;
-  void Reset() override;
+  SolverResult Solve(bool exhaustive) noexcept override;
+  void Reset() noexcept override;
 
 protected:
   /* protected virtual methods from AbstractContest */
-  ContestResult CalculateResult() const override;
-  void CopySolution(ContestTraceVector &vec) const override;
+  ContestResult CalculateResult() const noexcept override;
+  void CopySolution(ContestTraceVector &vec) const noexcept override;
 
 protected:
   /* virtual methods from NavDijkstra */
-  void AddEdges(ScanTaskPoint curNode) override;
+  void AddEdges(ScanTaskPoint curNode) noexcept override;
 };
 
 #endif

@@ -40,24 +40,24 @@ class OLCLeague : public AbstractContest
   ContestTraceVector solution;
 
 public:
-  OLCLeague(const Trace &_trace);
+  explicit OLCLeague(const Trace &_trace) noexcept;
 
   /**
    * Feed the result from OLCClassic.  This must be called
    * before this class can do any calculation.
    */
-  void Feed(const ContestTraceVector &_solution_classic) {
+  void Feed(const ContestTraceVector &_solution_classic) noexcept {
     solution_classic = _solution_classic;
   }
 
 protected:
-  ContestResult CalculateResult() const override;
+  ContestResult CalculateResult() const noexcept override;
 
 public:
   /* virtual methods from class AbstractContest */
-  void Reset() override;
-  SolverResult Solve(bool exhaustive) override;
-  void CopySolution(ContestTraceVector &vec) const override;
+  void Reset() noexcept override;
+  SolverResult Solve(bool exhaustive) noexcept override;
+  void CopySolution(ContestTraceVector &vec) const noexcept override;
 };
 
 #endif
