@@ -326,8 +326,9 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
 
   // note: this is _not_ the breakepoint between small and large triangles,
   // but a slightly lower value used for relaxed large triangle checking.
-  const unsigned large_triangle_check =
-    trace_master.ProjectRange(GetPoint(from).GetLocation(), 500000) * 0.99;
+  const auto validator =
+    OLCTriangleRules::MakeValidator(trace_master.GetProjection(),
+                                    GetPoint(from).GetLocation());
 
   if (!running) {
     // initiate algorithm. otherwise continue unfinished run
@@ -335,7 +336,7 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
 
     // initialize bound-and-branch tree with root node (note: Candidate set interval is [min, max))
     CandidateSet root_candidates(*this, from, to + 1);
-    if (root_candidates.IsFeasible(large_triangle_check) &&
+    if (root_candidates.IsFeasible(validator) &&
         root_candidates.df_max >= worst_d)
       branch_and_bound.emplace(root_candidates.df_max, root_candidates);
   }
@@ -379,7 +380,7 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
     }
 
     if (node->second.df_min >= worst_d &&
-        node->second.IsIntegral(*this, large_triangle_check)) {
+        node->second.IsIntegral(*this, validator)) {
       // node is integral feasible -> a possible solution
 
       worst_d = node->second.df_min;
@@ -405,11 +406,11 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
         const unsigned split = (node->second.tp1.index_min + node->second.tp1.index_max) / 2;
 
         if (split <= node->second.tp2.index_max) {
-          CheckAddCandidate(worst_d, large_triangle_check,
+          CheckAddCandidate(worst_d, validator,
                             {TurnPointRange(*this, node->second.tp1.index_min, split),
                              node->second.tp2, node->second.tp3});
 
-          CheckAddCandidate(worst_d, large_triangle_check,
+          CheckAddCandidate(worst_d, validator,
                             {TurnPointRange(*this, split, node->second.tp1.index_max),
                              node->second.tp2, node->second.tp3});
         }
@@ -418,12 +419,12 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
         const unsigned split = (node->second.tp2.index_min + node->second.tp2.index_max) / 2;
 
         if (split <= node->second.tp3.index_max && split >= node->second.tp1.index_min) {
-          CheckAddCandidate(worst_d, large_triangle_check,
+          CheckAddCandidate(worst_d, validator,
                             {node->second.tp1,
                              TurnPointRange(*this, node->second.tp2.index_min, split),
                              node->second.tp3});
 
-          CheckAddCandidate(worst_d, large_triangle_check,
+          CheckAddCandidate(worst_d, validator,
                             {node->second.tp1,
                              TurnPointRange(*this, split, node->second.tp2.index_max),
                              node->second.tp3});
@@ -433,11 +434,11 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
         const unsigned split = (node->second.tp3.index_min + node->second.tp3.index_max) / 2;
 
         if (split >= node->second.tp2.index_min) {
-          CheckAddCandidate(worst_d, large_triangle_check,
+          CheckAddCandidate(worst_d, validator,
                             {node->second.tp1, node->second.tp2,
                              TurnPointRange(*this, node->second.tp3.index_min, split)});
 
-          CheckAddCandidate(worst_d, large_triangle_check,
+          CheckAddCandidate(worst_d, validator,
                             {node->second.tp1, node->second.tp2,
                              TurnPointRange(*this, split, node->second.tp3.index_max)});
         }

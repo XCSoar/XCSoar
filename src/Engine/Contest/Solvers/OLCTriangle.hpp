@@ -24,6 +24,7 @@
 #define OLC_TRIANGLE_HPP
 
 #include "AbstractContest.hpp"
+#include "OLCTriangleRules.hpp"
 #include "TraceManager.hpp"
 #include "Trace/Point.hpp"
 #include "Geo/Flat/FlatBoundingBox.hpp"
@@ -236,20 +237,9 @@ private:
      * or integer rounding don't invalidate close positives.
      */
     gcc_pure
-    bool IsFeasible(const unsigned large_triangle_check) const noexcept {
-      // shortest leg min 28% (here: 27.5%) for small triangle,
-      // min 25% (here: 24.3%) for large triangle
-      if ((df_max > large_triangle_check && shortest_max * 37 < df_min * 9) ||
-          (df_max <= large_triangle_check && shortest_max * 40 < df_min * 11)) {
-        return false;
-      }
-
-      // longest leg max 45% (here: 47%)
-      if (longest_min * 19 > df_max * 9) {
-        return false;
-      }
-
-      return true;
+    bool IsFeasible(const OLCTriangleValidator &validator) const noexcept {
+      return validator.IsFeasible(df_min, df_max,
+                                  shortest_max, longest_min);
     }
 
     /* Check if the candidate set is a real fai triangle. Use fast checks on projected
@@ -257,57 +247,18 @@ private:
      */
     gcc_pure
     bool IsIntegral(OLCTriangle &parent,
-                    const unsigned large_triangle_check) const noexcept {
+                    const OLCTriangleValidator &validator) const noexcept {
       if (!(tp1.GetSize() == 1 && tp2.GetSize() == 1 && tp3.GetSize() == 1))
         return false;
 
-      // Solution is integral, calculate rough distance for fast checks
-      const unsigned df_total = tp1.GetMaxDistance(tp2) +
-                                tp2.GetMaxDistance(tp3) +
-                                tp3.GetMaxDistance(tp1);
-
-      // fast checks, as in IsFeasible
-
-      // shortest >= 28.2% * df_total
-      if (shortest_max * 39 >= df_total * 11)
-        return true;
-
-      // longest >= 45.8% * df_total
-      if (longest_max * 24 > df_total * 11)
-        return false;
-
-      // small triangle and shortest < 27.5% df_total
-      if (df_total < large_triangle_check && shortest_max * 40 < df_total * 11)
-        return false;
-
-      // detailed checks
-      auto geo_tp1 = parent.GetPoint(tp1.index_min).GetLocation();
-      auto geo_tp2 = parent.GetPoint(tp2.index_min).GetLocation();
-      auto geo_tp3 = parent.GetPoint(tp3.index_min).GetLocation();
-
-      const unsigned d_12 = unsigned(geo_tp1.Distance(geo_tp2));
-      const unsigned d_23 = unsigned(geo_tp2.Distance(geo_tp3));
-      const unsigned d_31 = unsigned(geo_tp3.Distance(geo_tp1));
-
-      const unsigned d_total = d_12 + d_23 + d_31;
-
-      const auto shortest_longest = std::minmax({d_12, d_23, d_31});
-
-      // real check of 28% rule
-      const unsigned shortest = shortest_longest.first;
-      if (shortest * 25 >= d_total * 7)
-        return true;
-
-      // real check of 45% rule
-      const unsigned longest = shortest_longest.second;
-      if (longest * 20 > d_total * 9)
-        return false;
-
-      // real check of 25% for dist_total >= 500km rule
-      if (d_total >= 500000 && shortest * 4 >= d_total)
-        return true;
-
-      return false;
+      return validator.IsIntegral(tp1, tp2, tp3,
+                                  shortest_max, longest_max,
+                                  [](const auto &a, const auto &b){
+                                    return a.GetMaxDistance(b);
+                                  },
+                                  [&parent](const auto &tp){
+                                    return parent.GetPoint(tp.index_min).GetLocation();
+                                  });
     }
   };
 
@@ -334,10 +285,11 @@ protected:
   void ResetBranchAndBound() noexcept;
 
 private:
-  void CheckAddCandidate(unsigned worst_d, unsigned large_triangle_check,
+  void CheckAddCandidate(unsigned worst_d,
+                         const OLCTriangleValidator &validator,
                          CandidateSet candidate_set) noexcept {
     if (candidate_set.df_max >= worst_d &&
-        candidate_set.IsFeasible(large_triangle_check))
+        candidate_set.IsFeasible(validator))
       branch_and_bound.emplace(candidate_set.df_max, candidate_set);
   }
 
