@@ -60,11 +60,7 @@ OLCTriangle::OLCTriangle(const Trace &_trace,
                          const unsigned _finish_alt_diff) noexcept
   : AbstractContest(_finish_alt_diff),
    TraceManager(_trace),
-   is_fai(_is_fai), predict(_predict),
-   is_closed(false),
-   is_complete(false),
-   max_iterations(1e6),
-   max_tree_size(5e5)
+   is_fai(_is_fai), predict(_predict)
 {
 }
 

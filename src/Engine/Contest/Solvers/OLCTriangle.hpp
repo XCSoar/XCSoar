@@ -67,12 +67,12 @@ private:
   /**
    * True if at least one closed track loop is found
    */
-  bool is_closed;
+  bool is_closed = false;
 
   /**
    * True if a valid triangle is found
    */
-  bool is_complete;
+  bool is_complete = false;
 
   /**
    * True if the branch and bound algorithm is running
@@ -88,8 +88,8 @@ private:
   /**
    * Hard limits for number of iterations and tree size.
    */
-  unsigned max_iterations,
-           max_tree_size;
+  unsigned max_iterations = 1e6,
+           max_tree_size = 5e5;
 
   typedef std::pair<unsigned, unsigned> ClosingPair;
 
