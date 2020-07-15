@@ -24,20 +24,6 @@
 #include "FAITriangleSettings.hpp"
 #include "Geo/Math.hpp"
 
-using namespace FAITriangleRules;
-
-gcc_const
-static bool
-IsLargeFAITriangle(const double d_total,
-                   const double d1, const double d2, const double d3,
-                   const double large_threshold) noexcept
-{
-  if (d_total < large_threshold)
-    return false;
-
-  return CheckLargeTriangle(d1, d2, d3);
-}
-
 bool
 FAITriangleRules::TestDistances(const double d1, const double d2, const double d3,
                                 const FAITriangleSettings &settings) noexcept
@@ -51,8 +37,9 @@ FAITriangleRules::TestDistances(const double d1, const double d2, const double d
    * (totallength >= 750km).
    */
 
-  return CheckSmallTriangle(d1, d2, d3) ||
-    IsLargeFAITriangle(d_wp, d1, d2, d3, settings.GetThreshold());
+  return d_wp >= settings.GetThreshold()
+    ? CheckLargeTriangle(d1, d2, d3)
+    : CheckSmallTriangle(d1, d2, d3);
 }
 
 bool
