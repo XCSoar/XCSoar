@@ -23,6 +23,7 @@
 #ifndef OLC_TRIANGLE_RULES_HPP
 #define OLC_TRIANGLE_RULES_HPP
 
+#include "Engine/Task/Shapes/FAITriangleRules.hpp"
 #include "Util/Compiler.h"
 
 #include <algorithm>
@@ -100,23 +101,9 @@ public:
 
     const unsigned d_total = d_12 + d_23 + d_31;
 
-    const auto shortest_longest = std::minmax({d_12, d_23, d_31});
-
-    // real check of 28% rule
-    const unsigned shortest = shortest_longest.first;
-    if (shortest * 25 >= d_total * 7)
-      return true;
-
-    // real check of 45% rule
-    const unsigned longest = shortest_longest.second;
-    if (longest * 20 > d_total * 9)
-      return false;
-
-    // real check of 25% for dist_total >= 500km rule
-    if (d_total >= unsigned(large_threshold_m) && shortest * 4 >= d_total)
-      return true;
-
-    return false;
+    return d_total >= unsigned(large_threshold_m)
+      ? FAITriangleRules::CheckLargeTriangle(d_12, d_23, d_31)
+      : FAITriangleRules::CheckSmallTriangle(d_12, d_23, d_31);
   }
 };
 

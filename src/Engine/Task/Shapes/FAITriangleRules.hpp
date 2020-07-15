@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Util/Compiler.h"
 
+#include <algorithm>
+
 struct GeoPoint;
 struct FAITriangleSettings;
 
@@ -81,6 +83,14 @@ constexpr bool CheckSmallTriangle(double a, double b, double c) noexcept
   return a >= min && b >= min && c >= min;
 }
 
+constexpr bool CheckSmallTriangle(unsigned a, unsigned b, unsigned c) noexcept
+{
+  const auto total = a + b + c;
+  const auto shortest = std::min({a, b, c});
+  /* 28% */
+  return shortest * 25 >= total * 7;
+}
+
 constexpr bool CheckLargeTriangle(double a, double b, double c) noexcept
 {
   const double total = a + b + c;
@@ -90,6 +100,14 @@ constexpr bool CheckLargeTriangle(double a, double b, double c) noexcept
 
   const double max = total * LARGE_MAX_LEG;
   return a <= max && b <= max && c <= max;
+}
+
+constexpr bool CheckLargeTriangle(unsigned a, unsigned b, unsigned c) noexcept
+{
+  const auto total = a + b + c;
+  const auto [shortest, longest] = std::minmax({a, b, c});
+  /* 25% / 45% */
+  return shortest * 4 >= total && longest * 20 < total * 9;
 }
 
 gcc_pure
