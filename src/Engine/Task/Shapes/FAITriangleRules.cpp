@@ -44,7 +44,7 @@ IsLargeFAITriangle(const double d_total,
   if (d_total < large_threshold)
     return false;
 
-  const auto d_min = LargeMinLeg(d_total);
+  const auto d_min = d_total * LARGE_MIN_LEG;
   if (d1 < d_min || d2 < d_min || d3 < d_min)
     return false;
 

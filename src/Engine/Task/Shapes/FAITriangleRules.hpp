@@ -74,10 +74,6 @@ namespace FAITriangleRules
    */
   static constexpr double LARGE_MAX_LEG(0.45);
 
-  static constexpr double LargeMinLeg(double total) noexcept {
-    return total / 4.;
-  }
-
   gcc_pure
   bool TestDistances(double d1, double d2, double d3,
                      const FAITriangleSettings &settings) noexcept;
