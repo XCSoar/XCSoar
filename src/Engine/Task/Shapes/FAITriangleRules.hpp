@@ -74,6 +74,24 @@ static constexpr double LARGE_MIN_LEG(0.25);
  */
 static constexpr double LARGE_MAX_LEG(0.45);
 
+constexpr bool CheckSmallTriangle(double a, double b, double c) noexcept
+{
+  const double total = a + b + c;
+  const double min = total * SMALL_MIN_LEG;
+  return a >= min && b >= min && c >= min;
+}
+
+constexpr bool CheckLargeTriangle(double a, double b, double c) noexcept
+{
+  const double total = a + b + c;
+  const double min = total * LARGE_MIN_LEG;
+  if (a < min || b < min || c < min)
+    return false;
+
+  const double max = total * LARGE_MAX_LEG;
+  return a <= max && b <= max && c <= max;
+}
+
 gcc_pure
 bool TestDistances(double d1, double d2, double d3,
                    const FAITriangleSettings &settings) noexcept;

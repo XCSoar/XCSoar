@@ -28,15 +28,6 @@ using namespace FAITriangleRules;
 
 gcc_const
 static bool
-IsSmallFAITriangle(const double d_total,
-                   const double d1, const double d2, const double d3) noexcept
-{
-  const auto d_min = d_total * SMALL_MIN_LEG;
-  return d1 >= d_min && d2 >= d_min && d3 >= d_min;
-}
-
-gcc_const
-static bool
 IsLargeFAITriangle(const double d_total,
                    const double d1, const double d2, const double d3,
                    const double large_threshold) noexcept
@@ -44,12 +35,7 @@ IsLargeFAITriangle(const double d_total,
   if (d_total < large_threshold)
     return false;
 
-  const auto d_min = d_total * LARGE_MIN_LEG;
-  if (d1 < d_min || d2 < d_min || d3 < d_min)
-    return false;
-
-  const auto d_max = d_total * LARGE_MAX_LEG;
-  return d1 <= d_max && d2 <= d_max && d3 <= d_max;
+  return CheckLargeTriangle(d1, d2, d3);
 }
 
 bool
@@ -65,7 +51,7 @@ FAITriangleRules::TestDistances(const double d1, const double d2, const double d
    * (totallength >= 750km).
    */
 
-  return IsSmallFAITriangle(d_wp, d1, d2, d3) ||
+  return CheckSmallTriangle(d1, d2, d3) ||
     IsLargeFAITriangle(d_wp, d1, d2, d3, settings.GetThreshold());
 }
 
