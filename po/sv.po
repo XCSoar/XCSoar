@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-06-30 01:54+0000\n"
+"PO-Revision-Date: 2020-07-17 21:41+0000\n"
 "Last-Translator: Markus Bagge <markus.bagge@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/sv/>\n"
@@ -2805,22 +2805,22 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:965
 #, no-c-format
 msgid "Next radial"
-msgstr ""
+msgstr "Nästa radial"
 
 #: src/InfoBoxes/Content/Factory.cpp:966 src/Dialogs/Task/TargetDialog.cpp:438
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Radial"
-msgstr "Radiell"
+msgstr "Radial"
 
 #: src/InfoBoxes/Content/Factory.cpp:967
 #, no-c-format
 msgid "True bearing from the next waypoint to your position."
-msgstr "Faktisk bäring från nästa vägpunkt till din position."
+msgstr "Bäring från nästa vägpunkt till din position."
 
 #: src/InfoBoxes/Content/Factory.cpp:973 src/InfoBoxes/Content/Factory.cpp:974
 #, no-c-format
 msgid "ATC radial"
-msgstr ""
+msgstr "ATC radial"
 
 #: src/InfoBoxes/Content/Factory.cpp:975
 #, no-c-format
@@ -2828,8 +2828,8 @@ msgid ""
 "True bearing from the selected reference location to your position.  The "
 "distance is displayed in nautical miles for communication with ATC."
 msgstr ""
-"Verklig bäring från vald referenspunkt till din position. Avståndet visas "
-"som nautiska miles för kommunikation med ATC."
+"Bäring från vald referenspunkt till din position. Avståndet visas i nautiska "
+"miles för kommunikation med ATC."
 
 #: src/InfoBoxes/Content/Factory.cpp:981
 #, no-c-format
@@ -3681,6 +3681,9 @@ msgid ""
 "accuracy; e.g. if observed surface temperatures are significantly below "
 "those forecast, then soaring conditions will be poorer than forecast."
 msgstr ""
+"Temperatur 2m över marknivå. Kan jämföras med observerad marktemperatur som "
+"indikation på en prognos noggrannhet. Om observerad temperatur är väsentligt "
+"lägre än prognos kommer segelflygförhållanden vara sämre än prognos."
 
 #: src/Weather/Rasp/RaspStore.cpp:83
 #, no-c-format
@@ -4506,10 +4509,12 @@ msgid ""
 "This produces a fake airspeed.  It can be used when not in circling mode to "
 "demonstrate the speed command tones."
 msgstr ""
+"Producerar en simulerad hastighet. Kan användas, undantaget kurvläge, för "
+"att demonstrera ljudsignaler för hastigheter."
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:112
 msgid "This forces the variometer into circling or cruise mode"
-msgstr ""
+msgstr "Tvingar variometer till kurv- eller glidflygsläge"
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:126
 msgid "Vario Demo"
@@ -4704,7 +4709,7 @@ msgstr "Loggintervall"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:148
 msgid "No tracking mode"
-msgstr ""
+msgstr "Spårning avstängd"
 
 #: src/Dialogs/MapItemListDialog.cpp:175 src/Dialogs/dlgAnalysis.cpp:479
 #: src/Dialogs/dlgAnalysis.cpp:523 src/Dialogs/dlgAnalysis.cpp:532
@@ -4986,6 +4991,10 @@ msgid ""
 "75kg).  Press ENTER on this field to toggle count-down of the ballast volume "
 "according to the dump rate specified in the configuration settings."
 msgstr ""
+"Farkostens ballast. Öka värdet om pilot-/cockpitlast är större än "
+"referensvikten (typiskt 75kg) för polarkurvan. Tryck ENTER på detta fält för "
+"att växla nedräkning av ballastvolymen enligt dumphastighet specificerad i "
+"konfigurationsinställningar."
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:295
 msgid "Bugs"
@@ -5010,6 +5019,8 @@ msgid ""
 "Set to forecast ground temperature.  Used by convection estimator "
 "(temperature trace page of Analysis dialog)"
 msgstr ""
+"Använd prognostiserad marktemperatur. Används vid nederbördsuppskattning ("
+"sida för temperaturspår i Analys dialogen)"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:361
 msgid "Flight Setup"
@@ -5188,11 +5199,11 @@ msgstr "Trafik"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:138
 msgid "Team"
-msgstr ""
+msgstr "Lag"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:145
 msgid "Callsign"
-msgstr ""
+msgstr "Anropssignal"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:146
 msgid "Change callsign"
@@ -5394,7 +5405,7 @@ msgstr "Aktivering av farkost \"%s\" misslyckades."
 #: src/Dialogs/Plane/PlaneListDialog.cpp:248
 #: src/Dialogs/Plane/PlaneListDialog.cpp:293
 msgid "Please enter the registration of the plane!"
-msgstr "Skriv in planets registering!"
+msgstr "Skriv in farkostens registrering!"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:260
 #: src/Dialogs/Plane/PlaneListDialog.cpp:307
@@ -5419,7 +5430,7 @@ msgstr "Aktivera farkost \"%s\"?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:404
 msgid "Planes"
-msgstr "Flygplan"
+msgstr "Farkoster"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:83
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:192
@@ -5482,7 +5493,7 @@ msgstr "Tomvikt"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:146
 msgid "Dry all-up flying mass of your plane"
-msgstr ""
+msgstr "Torrvikt för din kompletta farkost"
 
 #. let the user select
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:188
@@ -6344,7 +6355,7 @@ msgstr "Trend medelstig"
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:66
 #, no-c-format
 msgid "Sets MC to the trending average climb rate based on all climbs."
-msgstr ""
+msgstr "Sätt MC till medelvärdestrenden för stighastighet baserat på alla stig."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:68
 #, no-c-format
@@ -6352,6 +6363,8 @@ msgid ""
 "Uses trending average during task, then fastest arrival when in final glide "
 "mode."
 msgstr ""
+"Använder trendande medelvärde under uppgift, därefter snabbast ankomst vid "
+"finalglid."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:72
 msgid "Auto MC mode"
@@ -6933,7 +6946,7 @@ msgstr "Inaktivera justeringar."
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:60
 #, no-c-format
 msgid "Use a recent average of the ground track as basis."
-msgstr ""
+msgstr "Använd senaste medel för markspåret som grund."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:61
 #: src/Dialogs/Task/TargetDialog.cpp:792 Data/Input/default.xci:425
@@ -6977,7 +6990,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:127
 msgid "Map shift reference"
-msgstr ""
+msgstr "Växla kartreferens"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:128
 msgid "Determines what is used to shift the glider from the map center"
@@ -6991,7 +7004,7 @@ msgstr "Farkost position offset"
 msgid ""
 "Defines the location of the glider drawn on the screen in percent from the "
 "screen edge."
-msgstr ""
+msgstr "Definierar farkostens positionen på skärmen i procent från skärmkanten."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:140
 msgid "Max. auto zoom distance"
@@ -7063,7 +7076,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:191
 #, no-c-format
 msgid "A custom InfoBox set"
-msgstr ""
+msgstr "En egen InfoBox-uppsättning"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:209
 #, no-c-format
@@ -7117,6 +7130,8 @@ msgid ""
 "When enabled and MC is positive, route planning allows climbs between the "
 "aircraft location and destination."
 msgstr ""
+"När aktiverad och positivt MC tillåter ruttplaneringen stig mellan "
+"farkostens nuvarande läge och dess destination."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:122
 msgid "Route ceiling"
@@ -7128,6 +7143,9 @@ msgid ""
 "greater of current aircraft altitude plus 500 m and the thermal ceiling.  If "
 "disabled, climbs are unlimited."
 msgstr ""
+"När aktiverad begränsas termikhöjd utmed planerad rutt till det högsta av "
+"nuvarande höjd plus 500m och termikens tak (beräknat?). Om inaktiverad är "
+"stigen obegränsade."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:131
 #, no-c-format
@@ -7147,28 +7165,28 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:134
 #, no-c-format
 msgid "Turning"
-msgstr ""
+msgstr "Svängar"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:135
 #, no-c-format
 msgid "The reach is calculated allowing turns around terrain obstacles."
-msgstr ""
+msgstr "Räckvidd beräknas med hänsyn till svängar runt terränghinder."
 
 #. Spacer
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:141
 msgid "Reach mode"
-msgstr ""
+msgstr "Räckviddsläge"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:142
 msgid ""
 "How calculations are performed of the reach of the glider with respect to "
 "terrain."
-msgstr ""
+msgstr "Hur beräkningar av farkostens räckvidd utförs med hänsyn till terräng."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:148
 #, no-c-format
 msgid "Uses task glide polar."
-msgstr ""
+msgstr "Använder polarkurva för uppgift."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:149
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:105
@@ -7179,22 +7197,24 @@ msgstr "Säk.McReady"
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:150
 #, no-c-format
 msgid "Uses safety MacCready value"
-msgstr ""
+msgstr "Använder MacCready-säkerhetsvärde"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:154
 msgid "Reach polar"
-msgstr ""
+msgstr "Räckviddspolar"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:155
 msgid ""
 "This determines the glide performance used in reach, landable arrival, abort "
 "and alternate calculations."
 msgstr ""
+"Anger vilken glidprestanda som används i beräkningar för räckvidd, landning, "
+"avbrott och alternativa landningar."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:161
 #, no-c-format
 msgid "Disables the reach display."
-msgstr ""
+msgstr "Inaktiverar visning av räckvidd."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:162
 #, no-c-format
@@ -7204,7 +7224,7 @@ msgstr "Terränglinje"
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:163
 #, no-c-format
 msgid "Draws a dashed line at the terrain glide reach."
-msgstr ""
+msgstr "Ritar en streckad linje vid räckvidd för terrängglid."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:164
 #, no-c-format
@@ -7224,7 +7244,7 @@ msgstr "Fungerande GR-linje"
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:167
 #, no-c-format
 msgid "Draws a dashed line at the working glide reach."
-msgstr "Ritar en streckad linje vid glidräckvidd."
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:168
 #, no-c-format
