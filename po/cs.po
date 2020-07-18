@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-07-17 21:41+0000\n"
+"PO-Revision-Date: 2020-07-18 22:22+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -292,7 +292,7 @@ msgstr "FAI sektor"
 #: src/Task/TypeStrings.cpp:116
 #, no-c-format
 msgid "Keyhole sector (DAeC)"
-msgstr "Sektor kružnice + výseč (DAeC)"
+msgstr "Sektor kruh+výseč (DAeC)"
 
 #: src/Task/TypeStrings.cpp:117
 #, no-c-format
@@ -357,7 +357,7 @@ msgstr "Symetrický kvadrant"
 #: src/Task/TypeStrings.cpp:129
 #, no-c-format
 msgid "Area keyhole"
-msgstr "Oblast tvaru klíčové dírky"
+msgstr "Oblast kruh+výseč"
 
 #: src/Task/ValidationErrorStrings.cpp:32
 #, no-c-format
@@ -8948,11 +8948,11 @@ msgstr "MAT cylindr"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:208
 msgid "Keyhole"
-msgstr "Klíč. dírka"
+msgstr "Kruh+výseč"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:214
 msgid "DAeC Keyhole"
-msgstr "DAeC klíč. dírka"
+msgstr "DAeC kruh+výseč"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:218
 msgid "BGA Fixed Course"
