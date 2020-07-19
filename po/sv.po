@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-07-18 22:22+0000\n"
+"PO-Revision-Date: 2020-07-20 22:41+0000\n"
 "Last-Translator: Markus Bagge <markus.bagge@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/sv/>\n"
@@ -85,18 +85,18 @@ msgid ""
 "FAI rules, allows only FAI start, finish and turn point types, for badges "
 "and records.  Enables FAI finish height for final glide calculation."
 msgstr ""
-"FAI regler; tillåter endast FAI start, mål och vändpunkter, för emblem och "
-"rekord. Aktiverar FAI målhöjd för finalglidsberäkning."
+"FAI regler; tillåter endast FAI start, mål och vägpunkter, för emblem och "
+"rekord. Aktiverar FAI målhöjd för beräkning av finalglid."
 
 #: src/Task/TypeStrings.cpp:54
 #, no-c-format
 msgid "FAI rules, path from a start to two turn points and return."
-msgstr "FAI regler, väg från start till två vändpunkter och åter."
+msgstr "FAI regler, väg från start till två vägpunkter och åter."
 
 #: src/Task/TypeStrings.cpp:55
 #, no-c-format
 msgid "FAI rules, path from start to a single turn point and return."
-msgstr "FAI regler, väg från start till en vändpunkt och åter."
+msgstr "FAI regler, väg från start till en vägpunkt och åter."
 
 #: src/Task/TypeStrings.cpp:56
 #, no-c-format
@@ -109,7 +109,7 @@ msgid ""
 "Racing task around turn points.  Can also be used for FAI badge and record "
 "tasks.  Allows all shapes of observation zones."
 msgstr ""
-"Hastighetsuppgift runt vändpunkter. Kan också användas för FAI diplom- och "
+"Hastighetsuppgift runt vägpunkter. Kan också användas för FAI diplom- och "
 "rekorduppgifter. Tillåter alla former på observationsektorer."
 
 #: src/Task/TypeStrings.cpp:59
@@ -138,7 +138,7 @@ msgid ""
 "Racing task with a mix of assigned areas and turn points, minimum task time "
 "applies."
 msgstr ""
-"Hastighetsuppgift med en mix av tilldelade områden och vändpunkter. Minsta "
+"Hastighetsuppgift med en mix av tilldelade områden och vägpunkter. Minsta "
 "uppgiftstid gäller."
 
 #: src/Task/TypeStrings.cpp:63
@@ -146,8 +146,7 @@ msgstr ""
 msgid ""
 "Casual touring task, uses start and finish cylinders and FAI sector turn "
 "points."
-msgstr ""
-"Spontantur, använder start- och målcylindrar och FAI-sektor vändpunkter."
+msgstr "Spontantur, använder start- och målcylindrar och FAI-sektor vägpunkter."
 
 #: src/Task/TypeStrings.cpp:76
 #, no-c-format
@@ -381,27 +380,27 @@ msgstr "Bana ej sluten"
 #: src/Task/ValidationErrorStrings.cpp:35
 #, no-c-format
 msgid "All turnpoints not the same type"
-msgstr "Alla vändpunkter ej av samma typ"
+msgstr "Alla vägpunkter ej av samma typ"
 
 #: src/Task/ValidationErrorStrings.cpp:36
 #, no-c-format
 msgid "Incorrect number of turnpoints"
-msgstr "Felaktigt antal vändpunkter"
+msgstr "Felaktigt antal vägpunkter"
 
 #: src/Task/ValidationErrorStrings.cpp:37
 #, no-c-format
 msgid "Too many turnpoints"
-msgstr "För många vändpunkter"
+msgstr "För många vägpunkter"
 
 #: src/Task/ValidationErrorStrings.cpp:38
 #, no-c-format
 msgid "Not enough turnpoints"
-msgstr "För få vändpunkter"
+msgstr "För få vägpunkter"
 
 #: src/Task/ValidationErrorStrings.cpp:39
 #, no-c-format
 msgid "Turnpoints not unique"
-msgstr "Icke unika vändpunkter"
+msgstr "Icke unika vägpunkter"
 
 #: src/Task/ValidationErrorStrings.cpp:40
 #, no-c-format
@@ -702,12 +701,12 @@ msgstr "Laddar fil med flygfältsdata..."
 #: src/Menu/ExpandMacros.cpp:83 src/Menu/ExpandMacros.cpp:116
 #: src/Menu/ExpandMacros.cpp:138
 msgid "Next Turnpoint"
-msgstr "Nästa vändpunkt"
+msgstr "Nästa vägpunkt"
 
 #: src/Menu/ExpandMacros.cpp:87 src/Menu/ExpandMacros.cpp:124
 #: src/Menu/ExpandMacros.cpp:161
 msgid "Previous Turnpoint"
-msgstr "Föregående vändpunkt"
+msgstr "Föregående vägpunkt"
 
 #: src/Menu/ExpandMacros.cpp:94
 msgid "Furthest Landpoint"
@@ -727,7 +726,7 @@ msgstr "Föregående landning"
 
 #: src/Menu/ExpandMacros.cpp:115 src/Menu/ExpandMacros.cpp:137
 msgid "Finish Turnpoint"
-msgstr "Mål vändpunkt"
+msgstr "Mål vägpunkt"
 
 #: src/Menu/ExpandMacros.cpp:119 src/Menu/ExpandMacros.cpp:156
 msgid "Next Startpoint"
@@ -735,7 +734,7 @@ msgstr "Nästa startpunkt"
 
 #: src/Menu/ExpandMacros.cpp:123 src/Menu/ExpandMacros.cpp:160
 msgid "Start Turnpoint"
-msgstr "Start vändpunkt"
+msgstr "Start vägpunkt"
 
 #: src/Menu/ExpandMacros.cpp:141
 msgid "Arm start"
@@ -791,7 +790,7 @@ msgid ""
 "Turn"
 msgstr ""
 "Avbryt\n"
-"vändpunkt"
+"vägpunkt"
 
 #: src/Menu/ExpandMacros.cpp:193
 msgid ""
@@ -1037,7 +1036,7 @@ msgid ""
 "True bearing of the next waypoint.  For AAT tasks, this is the true bearing "
 "to the target within the AAT sector."
 msgstr ""
-"Bäring till nästa vändpunkt. För AAT uppgifter är detta bäringen till målet "
+"Bäring till nästa vägpunkt. För AAT uppgifter är detta bäringen till målet "
 "inom AAT-sektorn."
 
 #: src/InfoBoxes/Content/Factory.cpp:169
@@ -1181,7 +1180,7 @@ msgstr "Nästa ben"
 #: src/InfoBoxes/Content/Factory.cpp:226 src/InfoBoxes/Content/Task.cpp:182
 #, no-c-format
 msgid "WP Dist"
-msgstr "BP avstånd"
+msgstr "WP avstånd"
 
 #: src/InfoBoxes/Content/Factory.cpp:227
 #, no-c-format
@@ -1200,7 +1199,7 @@ msgstr "Nästa höjdskillnad"
 #: src/InfoBoxes/Content/Factory.cpp:235
 #, no-c-format
 msgid "WP AltD"
-msgstr "BP Höjddiff"
+msgstr "WP Höjddiff"
 
 #: src/InfoBoxes/Content/Factory.cpp:236
 #, no-c-format
@@ -1214,12 +1213,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:243
 #, no-c-format
 msgid "Next altitude required"
-msgstr "Höjd för nästa BP"
+msgstr "Höjd för nästa WP"
 
 #: src/InfoBoxes/Content/Factory.cpp:244
 #, no-c-format
 msgid "WP AltR"
-msgstr "BP höjdb"
+msgstr "WP höjdb"
 
 #: src/InfoBoxes/Content/Factory.cpp:245
 #, no-c-format
@@ -1227,7 +1226,7 @@ msgid ""
 "Additional altitude required to reach the next turn point. For AAT tasks, "
 "the target within the AAT sector is used."
 msgstr ""
-"Ytterligare höjd som krävs för att nå nästa vändpunkt. För AAT uppgifter så "
+"Ytterligare höjd som krävs för att nå nästa vägpunkt. För AAT uppgifter så "
 "används målet inom AAT sektorn."
 
 #: src/InfoBoxes/Content/Factory.cpp:252
@@ -1238,7 +1237,7 @@ msgstr "Nästa vägpunkt"
 #: src/InfoBoxes/Content/Factory.cpp:253
 #, no-c-format
 msgid "Next WP"
-msgstr "Nästa BP"
+msgstr "Nästa WP"
 
 #: src/InfoBoxes/Content/Factory.cpp:254
 #, no-c-format
@@ -1267,7 +1266,7 @@ msgstr "Fin Hjd"
 msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
 "height."
-msgstr "Ankomsthöjd vid uppgiftens sista vändpunkt relativt säkerhetshöjden."
+msgstr "Ankomsthöjd vid uppgiftens sista vägpunkt relativt säkerhetshöjden."
 
 #: src/InfoBoxes/Content/Factory.cpp:268
 #, no-c-format
@@ -1629,7 +1628,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:447
 #, no-c-format
 msgid "Next GR"
-msgstr "GR till BP"
+msgstr "GR till WP"
 
 #: src/InfoBoxes/Content/Factory.cpp:448
 #, no-c-format
@@ -1699,7 +1698,7 @@ msgstr "Tid nästa WP"
 #: src/InfoBoxes/Content/Factory.cpp:481
 #, no-c-format
 msgid "WP ETE"
-msgstr "BP ETE"
+msgstr "WP ETE"
 
 #: src/InfoBoxes/Content/Factory.cpp:482
 #, no-c-format
@@ -1757,10 +1756,10 @@ msgid ""
 "vario are connected, otherwise calculations are based on GPS measurements "
 "and wind estimates."
 msgstr ""
-"Direkt vertikal hastighet av luftmassan,  lika med variometerns värde plus "
+"Momentant vertikal hastighet av luftmassan, lika med variometerns värde plus "
 "planets uppskattade sjunkhastighet. Fungerar bäst om fartmätare, "
-"accelerometer och variometer är ansluten, annars görs beräkningen med GPS "
-"och uppskattad vind."
+"accelerometer och variometer är ansluten. Annars används GPS och uppskattad "
+"vind för beräkningen."
 
 #: src/InfoBoxes/Content/Factory.cpp:505
 #, no-c-format
@@ -1789,7 +1788,7 @@ msgstr "Nästa ankomsttid"
 #: src/InfoBoxes/Content/Factory.cpp:514
 #, no-c-format
 msgid "WP ETA"
-msgstr "BP ETA"
+msgstr "WP ETA"
 
 #: src/InfoBoxes/Content/Factory.cpp:515
 #, no-c-format
@@ -1822,12 +1821,12 @@ msgid ""
 "good is pointing directly at the next waypoint. This bearing takes into "
 "account the curvature of the Earth."
 msgstr ""
-"Skillnad mellan farkostens spår-bäring och bäring för nästa vändpunkt. Eller "
+"Skillnad mellan farkostens spår-bäring och bäring för nästa vägpunkt. Eller "
 "för AAT-uppgift, skillnad till bäring mot målet inom AAT-sektorn. GPS-"
 "navigering baseras på spår-bäring över mark vilken kan skilja från "
 "farkostens riktning vid vind. Chevron pilar pekar i riktningen farkosten "
 "behöver anta för att ändra sin kurs och korrigera sin bäringen, alltså så "
-"att farkostens rätta kurs pekar mot nästa vändpunkt. Jordens kurvatur tas i "
+"att farkostens rätta kurs pekar mot nästa vägpunkt. Jordens kurvatur tas i "
 "beaktande för denna bäring."
 
 #: src/InfoBoxes/Content/Factory.cpp:530
@@ -2153,7 +2152,7 @@ msgid ""
 "Displays percentage of device battery remaining (where applicable) and "
 "status/voltage of external power supply."
 msgstr ""
-"Visar enhetens återstående batterikapacitet  i procent (om applicerbart) och "
+"Visar enhetens återstående batterikapacitet i procent (om applicerbart) och "
 "status/spänning för extern strömkälla."
 
 #: src/InfoBoxes/Content/Factory.cpp:674
@@ -2339,7 +2338,7 @@ msgstr "Ankomsthöjd nästa vägpunkt"
 #: src/InfoBoxes/Content/Factory.cpp:756
 #, no-c-format
 msgid "WP AltA"
-msgstr "BP AltA"
+msgstr "WP AltA"
 
 #: src/InfoBoxes/Content/Factory.cpp:757
 #, no-c-format
@@ -2524,7 +2523,7 @@ msgstr "Tid till nästa vägpunkt (GS)"
 #: src/InfoBoxes/Content/Factory.cpp:846
 #, no-c-format
 msgid "WP ETE VMG"
-msgstr "BP ETE VMG"
+msgstr "WP ETE VMG"
 
 #: src/InfoBoxes/Content/Factory.cpp:847
 #, no-c-format
@@ -2596,9 +2595,9 @@ msgid "Next MC0 altitude difference"
 msgstr "Nästa MC0 höjdskillnad"
 
 #: src/InfoBoxes/Content/Factory.cpp:879
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "WP MC0 AltD"
-msgstr "BP MC0 AltD"
+msgstr "WP MC0 AltD"
 
 #: src/InfoBoxes/Content/Factory.cpp:880
 #, no-c-format
@@ -2808,7 +2807,7 @@ msgid "Next radial"
 msgstr "Nästa radial"
 
 #: src/InfoBoxes/Content/Factory.cpp:966 src/Dialogs/Task/TargetDialog.cpp:438
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Radial"
 msgstr "Radial"
 
@@ -2858,7 +2857,7 @@ msgstr "Nästa distans (nominellt)"
 #: src/InfoBoxes/Content/Factory.cpp:990
 #, no-c-format
 msgid "WP Dist-N"
-msgstr "BP Dist-N"
+msgstr "WP Dist-N"
 
 #: src/InfoBoxes/Content/Factory.cpp:991
 #, no-c-format
@@ -2945,7 +2944,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1028 src/InfoBoxes/Content/Task.cpp:904
 #, no-c-format
 msgid "Next arrow"
-msgstr "Nästa BP pil"
+msgstr "Nästa WP pil"
 
 #: src/InfoBoxes/Content/Factory.cpp:1029
 #, no-c-format
@@ -2967,7 +2966,7 @@ msgstr "Ankomstid nästa vägpunkt (markhastighet)"
 #: src/InfoBoxes/Content/Factory.cpp:1040
 #, no-c-format
 msgid "WP ETA VMG"
-msgstr "BP ETA VMG"
+msgstr "WP ETA VMG"
 
 #: src/InfoBoxes/Content/Factory.cpp:1041
 #, no-c-format
@@ -3413,7 +3412,7 @@ msgstr "Startpunkt"
 
 #: src/Input/InputEventsTask.cpp:331
 msgid "Next turnpoint"
-msgstr "Nästa vändpunkt"
+msgstr "Nästa vägpunkt"
 
 #: src/Input/InputEventsTask.cpp:333
 msgid "Task finished"
@@ -4162,9 +4161,8 @@ msgid ""
 "pressure. Here you tell the system what pressure this is and what its should "
 "be used for."
 msgstr ""
-"Välj användningen för denna trycksensor. Denna sensor mäter något tryck.  "
-"Här säger du åt systemet vilket tryck detta är, och vad det ska användas "
-"till."
+"Välj användning för denna trycksensor. Här anger du vilket tryck som avses "
+"och vad det ska användas till."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:639
 msgid "Driver"
@@ -5253,7 +5251,7 @@ msgstr "Ställ kod"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:93
 msgid "Set WP"
-msgstr "Sätt BP"
+msgstr "Sätt WP"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:94
 msgid "Flarm Lock"
@@ -6214,9 +6212,8 @@ msgid ""
 "Setting this to \"On\" will automatically close the FLARM dialog if there is "
 "no traffic. \"Off\" will keep the dialog open even without current traffic."
 msgstr ""
-"Aktivera detta för att FLARM dialogrutan ska stängas automatiskt när det "
-"inte finns trafik.  Avaktivera för att FLARM dialogrutan alltid ska vara "
-"aktiv, även utan trafik."
+"Aktivera för att dölja FLARM dialogrutan automatiskt när det inte är någon "
+"trafik. Inaktivera för att alltid visa FLARM dialogrutan, även utan trafik."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:94
 msgid "This enables the display of the thermal assistant gauge."
@@ -7798,12 +7795,12 @@ msgstr "Vändpunkt"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:167
 msgid "Default turn point type for new tasks you create."
-msgstr "Standard vändpunktstyp för nya uppgifter som du skapar."
+msgstr "Standard vägpunktstyp för nya uppgifter som du skapar."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:171
 msgid "Default radius of turnpoint cylinders and sectors in new tasks."
 msgstr ""
-"Standard radie på cylindrar för vändpunkter och sektorer i nya uppgifter."
+"Standard radie på cylindrar för vägpunkter och sektorer i nya uppgifter."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:177
 msgid "Default task type for new tasks you create."
@@ -8607,7 +8604,7 @@ msgstr "Ändra uppgift"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:407
 msgid "Add Turnpoint"
-msgstr "Addera vändpunkt"
+msgstr "Addera vägpunkt"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:213
 msgid "Task type"
@@ -9066,7 +9063,7 @@ msgstr "Maximal starthastighet överskriden"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:46
 msgid "In sector, arm advance when ready"
-msgstr "Inom sektor, armera nästa vändpunkt"
+msgstr "Inom sektor, armera nästa vägpunkt"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:48
 msgid "Arm"
@@ -9078,7 +9075,7 @@ msgstr "Avböj"
 
 #: src/Monitor/MatTaskMonitor.cpp:55
 msgid "Add this turn point?"
-msgstr "Addera denna vändpunkt?"
+msgstr "Addera denna vägpunkt?"
 
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:225
 msgid "Use"
@@ -9513,7 +9510,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:64
 #, no-c-format
 msgid "Accelerometer"
-msgstr ""
+msgstr "Accelerometer"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:65
 #, no-c-format
