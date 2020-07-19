@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-07-13 10:41+0000\n"
+"PO-Revision-Date: 2020-07-20 22:41+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/xcsoar/"
 "translations/pt/>\n"
@@ -247,7 +247,7 @@ msgstr "Cruzar uma portão final dentro da área para finalizar."
 #: src/Task/TypeStrings.cpp:94
 #, no-c-format
 msgid "Enter cylinder to finish."
-msgstr "Entrar em um cilindro para finalizar."
+msgstr "Entrar num cilindro para finalizar."
 
 #: src/Task/TypeStrings.cpp:95
 #, no-c-format
@@ -2249,15 +2249,15 @@ msgid ""
 "have made even in a zigzag glide. This value is not calculated while "
 "circling."
 msgstr ""
-"Distância percorrida durante o período de tempo selecionado, dividida pela "
-"altitude perdida desde então. Valores negativos são mostrados como ^^^ e "
-"indicam acensão (ganho de altura). Planeio maior que de 200 é mostrado como "
-"+++. Você pode configurar o período de média na configuração do sistema. Os "
-"valores sugeridos são de 60, 90 ou 120. Com valor baixo, será similar ao "
-"PLANEIO Inst, e valores mais elevados serão similares ao PLANEIO em "
-"cruzeiro. Observe que a distância não é em linha reta entre a sua posição "
-"antiga e atual, e sim exatamente a distância que você percorreu, mesmo em um "
-"deslizamento em ziguezague. Este valor não é calculado enquanto circulando."
+"Distância percorrida durante o período selecionado, dividida pela altitude "
+"perdida desde então. Valores negativos são mostrados como ^^^ e indicam "
+"ascensão (ganho de altura). Planeio maior que de 200 é mostrado como +++. "
+"Pode configurar o período de média na configuração do sistema. Os valores "
+"sugeridos são de 60, 90 ou 120. Com valor baixo, será similar ao PLANEIO "
+"Inst, e valores mais elevados serão similares ao PLANEIO em cruzeiro. "
+"Observe que a distância não é em linha reta entre a sua posição antiga e "
+"atual, e sim exatamente a distância que percorreu, mesmo num deslizamento em "
+"ziguezague. Este valor não é calculado enquanto circulando."
 
 #: src/InfoBoxes/Content/Factory.cpp:723
 #, no-c-format
@@ -4202,7 +4202,7 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:669
 msgid "Enable this if you use a K6Bt to connect the device."
-msgstr "Habilite isto se você usa um K6Bt para conectar o aparelho."
+msgstr "Ative isto se usa um K6Bt para conectar o aparelho."
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:283
 msgid "Flight download"
@@ -4233,7 +4233,7 @@ msgstr "Reconectar"
 #: src/Dialogs/Device/DeviceListDialog.cpp:301
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:226
 msgid "Disable"
-msgstr "Desabilitar"
+msgstr "Desativar"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:288
 #: src/Dialogs/Device/DeviceListDialog.cpp:390
@@ -4301,12 +4301,12 @@ msgstr "Desconectado"
 #: src/Dialogs/Device/DeviceListDialog.cpp:578
 #: src/Dialogs/Device/PortMonitor.cpp:159
 msgid "Device is occupied"
-msgstr "Dispositivo ocupado"
+msgstr "Aparelho ocupado"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:510
 #: src/Dialogs/Device/DeviceListDialog.cpp:572
 msgid "Device is not connected"
-msgstr "Dispositivo não está conectado"
+msgstr "Aparelho não está conectado"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:536
 msgid "Edit device"
@@ -6107,7 +6107,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:208
 msgid "Enable/disable all airspace warnings."
-msgstr "Habilitar/desabilitar todos os avisos de espaço aéreo."
+msgstr "Ativar/desativar todos os avisos de espaço aéreo."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:211
 msgid "Warnings dialog"
@@ -6513,7 +6513,7 @@ msgid ""
 "button presses and events from external devices."
 msgstr ""
 "O ficheiro de Entrada de Eventos define o sistema de menu e como o XCSoar "
-"responde ao apertar de botões e aos eventos de dispositivos externos."
+"responde ao apertar de botões e aos eventos de aparelho externos."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:123
 msgid "Language"
@@ -6538,8 +6538,8 @@ msgid ""
 "This determines how long menus will appear on screen if the user does not "
 "make any button presses or interacts with the computer."
 msgstr ""
-"Determina quanto tempo os menus irão aparecer no ecrã se o usuário não "
-"apertar nenhum botão, ou interagir com o computador."
+"Determina quanto tempo os menus irão aparecer no ecrã se o utilizador não "
+"apertar nenhum botão ou interagir com o computador."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:170
 #, no-c-format
@@ -6559,7 +6559,7 @@ msgstr "Estilo entrada Texto"
 msgid ""
 "Determines how the user is prompted for text input (filename, teamcode etc.)"
 msgstr ""
-"Determina como o usuário será solicitado para entrada de texto (filename, "
+"Determina como o utilizador será solicitado para entrada de texto (filename, "
 "teamcode, etc.)"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:187
@@ -6781,7 +6781,7 @@ msgstr "Orientação do display"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:170
 msgid "Rotate the display on devices that support it."
-msgstr "Rotacionar o display em dispositivos que suportam isso."
+msgstr "Rotacionar o display em aparelho que suportam isso."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:175
 msgid "InfoBox geometry"
@@ -8567,7 +8567,7 @@ msgstr "Servidor"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:243
 msgid "Username"
-msgstr "Usuário"
+msgstr "Utilizador"
 
 #: src/Dialogs/Settings/Panels/CloudConfigPanel.cpp:83
 msgid ""
@@ -8816,7 +8816,7 @@ msgstr "Mudar o Tipo"
 #: src/Dialogs/Task/TaskPointDialog.cpp:292
 #: src/Dialogs/Task/TaskPointDialog.cpp:392
 msgid "Enable Alternate Starts"
-msgstr "Habilitar Starts Alternados"
+msgstr "Ativar Starts Alternados"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:295
 msgid "Score exit"
