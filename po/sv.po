@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-07-20 22:41+0000\n"
+"PO-Revision-Date: 2020-07-22 17:41+0000\n"
 "Last-Translator: Markus Bagge <markus.bagge@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/sv/>\n"
@@ -32,7 +32,7 @@ msgstr ""
 #: Data/Input/default.xci:969 Data/Input/default.xci:1007
 #, no-c-format
 msgid "Task"
-msgstr "Bana"
+msgstr "Uppgift"
 
 #: src/Task/TypeStrings.cpp:31
 #, no-c-format
@@ -47,7 +47,7 @@ msgstr "FAI triangel"
 #: src/Task/TypeStrings.cpp:33
 #, no-c-format
 msgid "FAI out and return"
-msgstr "FAI ut och tillbaka"
+msgstr "FAI ut och åter"
 
 #: src/Task/TypeStrings.cpp:34
 #, no-c-format
@@ -67,7 +67,7 @@ msgstr "AAT"
 #: src/Task/TypeStrings.cpp:37
 #, no-c-format
 msgid "Modified area task (MAT)"
-msgstr "Modifierad area uppgift (MAT)"
+msgstr "Modifierad areauppgift (MAT)"
 
 #: src/Task/TypeStrings.cpp:38
 #, no-c-format
@@ -118,7 +118,7 @@ msgid ""
 "Task through assigned areas, minimum task time applies.  Restricted to "
 "cylinder and sector observation zones."
 msgstr ""
-"Bana genom bestämda områden, minsta tiden gäller. Observationszonerna "
+"Uppgift genom bestämda områden, minsta tiden gäller. Observationszonerna "
 "begränsade till cylindrar och sektorer."
 
 #: src/Task/TypeStrings.cpp:61
@@ -375,7 +375,7 @@ msgstr "Ingen giltig målgång"
 #: src/Task/ValidationErrorStrings.cpp:34
 #, no-c-format
 msgid "Task not closed"
-msgstr "Bana ej sluten"
+msgstr "Uppgift ej sluten"
 
 #: src/Task/ValidationErrorStrings.cpp:35
 #, no-c-format
@@ -405,7 +405,7 @@ msgstr "Icke unika vägpunkter"
 #: src/Task/ValidationErrorStrings.cpp:40
 #, no-c-format
 msgid "Empty task"
-msgstr "Tom bana"
+msgstr "Tom uppgift"
 
 #: src/Task/ValidationErrorStrings.cpp:41
 #, no-c-format
@@ -552,24 +552,24 @@ msgstr "Stoppa logger"
 
 #: src/Logger/ExternalLogger.cpp:84
 msgid "Declare task?"
-msgstr "Deklarera banan?"
+msgstr "Deklarera uppgift?"
 
 #: src/Logger/ExternalLogger.cpp:93 src/Logger/ExternalLogger.cpp:132
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:96
 msgid "Declare task"
-msgstr "Deklarera bana"
+msgstr "Deklarera uppgift"
 
 #: src/Logger/ExternalLogger.cpp:100
 msgid "Task declared!"
-msgstr "Banan deklarerad!"
+msgstr "Uppgift deklarerad!"
 
 #: src/Logger/ExternalLogger.cpp:105
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
 msgstr ""
-"Ett fel inträffade\n"
-"Banan EJ deklarerad!"
+"Ett fel inträffade; \n"
+"Uppgiften EJ deklarerad!"
 
 #: src/Logger/ExternalLogger.cpp:131
 msgid "No logger connected"
@@ -774,7 +774,7 @@ msgid ""
 "Start"
 msgstr ""
 "Avbryt\n"
-"start"
+"Start"
 
 #: src/Menu/ExpandMacros.cpp:187
 msgid ""
@@ -1002,7 +1002,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:152
 #, no-c-format
 msgid "Thermal climb, last 30 s"
-msgstr "Termik stigning, sista 30 sek"
+msgstr "Stig, senaste 30 s"
 
 #: src/InfoBoxes/Content/Factory.cpp:153
 #, no-c-format
@@ -1199,7 +1199,7 @@ msgstr "Nästa höjdskillnad"
 #: src/InfoBoxes/Content/Factory.cpp:235
 #, no-c-format
 msgid "WP AltD"
-msgstr "WP Höjddiff"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:236
 #, no-c-format
@@ -1247,8 +1247,8 @@ msgid ""
 "task. (Touch-screen/PC only) Pressing the enter cursor key brings up the "
 "waypoint details."
 msgstr ""
-"Namn på nu vald vägpunkt. När InfoBoxen är aktiv; upp-/ner-tangent väljer nä"
-"sta/föregående vägpunkt i banan. (Pekskärm/PC endast: returtangent visar "
+"Namn på nu vald vägpunkt. När InfoBoxen är aktiv väljer upp-/ner-tangent nä"
+"sta/föregående vägpunkt. (Pekskärm/PC endast: returtangent visar "
 "vägpunktsdetaljer)."
 
 #: src/InfoBoxes/Content/Factory.cpp:260
@@ -1281,24 +1281,24 @@ msgstr "Krävd Finalhöjd"
 #: src/InfoBoxes/Content/Factory.cpp:270
 #, no-c-format
 msgid "Additional altitude required to finish the task."
-msgstr "Ytterligare höjd som krävs före att avsluta banan."
+msgstr "Ytterligare höjd nödvändig för att avsluta bana."
 
 #: src/InfoBoxes/Content/Factory.cpp:276
 #, no-c-format
 msgid "Speed task average"
-msgstr "Snittfart på bana"
+msgstr "Snittfart bana"
 
 #: src/InfoBoxes/Content/Factory.cpp:277
 #, no-c-format
 msgid "V Task Avg"
-msgstr "Med. Hast. Uppg"
+msgstr "V Task Avg"
 
 #: src/InfoBoxes/Content/Factory.cpp:278
 #, no-c-format
 msgid ""
 "Average cross country speed while on current task, not compensated for "
 "altitude."
-msgstr "Snittfart på banan, ej kompenserad för höjd."
+msgstr "Medelhastighet utmed banan, ej kompenserad för höjd."
 
 #: src/InfoBoxes/Content/Factory.cpp:284
 #, no-c-format
@@ -1588,8 +1588,8 @@ msgid ""
 "Percentage of time spent in climb mode. These statistics are reset upon "
 "starting the task."
 msgstr ""
-"Procent av tiden som spenderats i stig. Statistiken nollställs när banan "
-"påbörjas."
+"Procent av tiden som spenderats i stig. Statistiken nollställs när uppgiften "
+"startas."
 
 #: src/InfoBoxes/Content/Factory.cpp:431
 #, no-c-format
@@ -1674,7 +1674,7 @@ msgstr "GPS-tid uttryckt i UTC."
 #: src/InfoBoxes/Content/Factory.cpp:472
 #, no-c-format
 msgid "Task time to go"
-msgstr "Tid kvar på banan"
+msgstr "Återstående tid bana"
 
 #: src/InfoBoxes/Content/Factory.cpp:473
 #, no-c-format
@@ -1687,8 +1687,8 @@ msgid ""
 "Estimated time required to complete task, assuming performance of ideal "
 "MacCready cruise/climb cycle."
 msgstr ""
-"Uppskattad tid som krävs för att avsluta banan, förutsatt ideal MacCready "
-"glid/stig -cykel."
+"Estimerad tid för att slutföra banan, förutsatt ideal MacCready glid/stig "
+"-cykel."
 
 #: src/InfoBoxes/Content/Factory.cpp:480
 #, no-c-format
@@ -1777,8 +1777,8 @@ msgid ""
 "Estimated arrival local time at task completion, assuming performance of "
 "ideal MacCready cruise/climb cycle."
 msgstr ""
-"Uppskattat ankomstklockslag i lokal tid, vid avklarad bana, antar ideal "
-"MacCready glid/stid-cykel."
+"Estimerad lokal tid för slutförd bana, förutsatt ideal MacCready glid/stid-"
+"cykel."
 
 #: src/InfoBoxes/Content/Factory.cpp:513
 #, no-c-format
@@ -1903,7 +1903,7 @@ msgstr "AAT Dtgt"
 #: src/InfoBoxes/Content/Factory.cpp:556
 #, no-c-format
 msgid "Assigned Area Task distance around target points for remainder of task."
-msgstr "AAT distans runt objektpunkter för resten av banan."
+msgstr "AAT distans runt kvarvarande vändpunkter utmed banan."
 
 #: src/InfoBoxes/Content/Factory.cpp:562
 #, no-c-format
@@ -2046,8 +2046,8 @@ msgid ""
 "Instantaneous cross country speed while on current task, compensated for "
 "altitude. Equivalent to instantaneous Pirker cross-country speed."
 msgstr ""
-"Momentan distanshastighet för nuvarande bana, inklusive höjdkompensering. "
-"Samma som momentan Pirker distans (cross-country) hastighet."
+"Momentan banhastighet, med höjdkompensering. Motsvarar momentan Pirker "
+"distans (cross-country) hastighet."
 
 #: src/InfoBoxes/Content/Factory.cpp:626
 #, no-c-format
@@ -2067,7 +2067,7 @@ msgstr "Distans till vägpunkten Hemma (om definierad)."
 #: src/InfoBoxes/Content/Factory.cpp:634
 #, no-c-format
 msgid "Speed task achieved"
-msgstr "Hastighet avklarad bana"
+msgstr "Uppnådd banhastighet"
 
 #: src/InfoBoxes/Content/Factory.cpp:635
 #, no-c-format
@@ -2080,8 +2080,8 @@ msgid ""
 "Achieved cross country speed while on current task, compensated for "
 "altitude.  Equivalent to Pirker cross-country speed remaining."
 msgstr ""
-"Uppnådd distanshastighet för nuvarande bana, inklusive höjdkompensering. "
-"Samma som \" Pirker cross-country speed remaining\"."
+"Uppnådd banhastighet, med höjdkompensering. Samma som \" Pirker cross-"
+"country speed remaining\"."
 
 #: src/InfoBoxes/Content/Factory.cpp:642
 #, no-c-format
@@ -2134,7 +2134,7 @@ msgstr "RH Trend"
 msgid ""
 "Trend (or neg. of the variation) of the total required height to complete "
 "the task."
-msgstr "Trenden av total höjd som krävs för att avsluta banan."
+msgstr "Trend för total höjd nödvändig för att slutföra banan."
 
 #: src/InfoBoxes/Content/Factory.cpp:666
 #, no-c-format
@@ -2172,9 +2172,8 @@ msgid ""
 "distance to go divided by the height required to arrive at the safety "
 "arrival height."
 msgstr ""
-"Glidtal över marken som krävs för att avsluta banan, ges av återstående "
-"distans dividerat med höjden som krävs för att komma i mål på "
-"säkerhetshöjden."
+"Glidtal över mark nödvändigt för att slutföra banan, baserat på kvarvarande "
+"distans dividerat med nödvändig höjd för målgång vid säkerhetshöjd."
 
 #: src/InfoBoxes/Content/Factory.cpp:682
 #, no-c-format
@@ -2496,12 +2495,13 @@ msgstr "Starthöjd"
 msgid ""
 "The contiguous period the ship has been below the task start max. height."
 msgstr ""
-"Sammanhängande period som planet har varit under banans maximala starthöjd."
+"Sammanhängande period som farkosten har varit lägre än banans maximala "
+"starthöjd."
 
 #: src/InfoBoxes/Content/Factory.cpp:837
 #, no-c-format
 msgid "Task time to go (ground speed)"
-msgstr "Tid kvar på banan (GS)"
+msgstr "Kvarstående tid bana (GS)"
 
 #: src/InfoBoxes/Content/Factory.cpp:838
 #, no-c-format
@@ -2513,7 +2513,9 @@ msgstr ""
 msgid ""
 "Estimated time required to complete task, assuming current ground speed is "
 "maintained."
-msgstr "Beräknad tid som krävs för att klara banan, om nuvarande GS bibehålls."
+msgstr ""
+"Estimerad tid nödvändig för att slutföra banan, förutsatt nuvarande "
+"markhastighet bibehålls."
 
 #: src/InfoBoxes/Content/Factory.cpp:845
 #, no-c-format
@@ -2595,9 +2597,9 @@ msgid "Next MC0 altitude difference"
 msgstr "Nästa MC0 höjdskillnad"
 
 #: src/InfoBoxes/Content/Factory.cpp:879
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "WP MC0 AltD"
-msgstr "WP MC0 AltD"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:880
 #, no-c-format
@@ -2648,7 +2650,8 @@ msgid ""
 "altitude."
 msgstr ""
 "Distansen till nästa terrängkollision längs nuvarande ben på banan. Vid "
-"denna plats, kommer höjden vara under den inställda 'fri höjd över terräng'."
+"denna plats, kommer höjden vara lägre än inställning för 'fri höjd över "
+"terräng'."
 
 #: src/InfoBoxes/Content/Factory.cpp:903
 #, no-c-format
@@ -3186,7 +3189,7 @@ msgstr "Kurvläge"
 #: src/InfoBoxes/InfoBoxSettings.cpp:80
 #, no-c-format
 msgid "Cruise"
-msgstr "Kryssning"
+msgstr "Glidläge"
 
 #: src/InfoBoxes/InfoBoxSettings.cpp:81
 #, no-c-format
@@ -3357,7 +3360,7 @@ msgstr "MacCready "
 
 #: src/Input/InputEventsTask.cpp:229
 msgid "Task aborted"
-msgstr "Banan avbruten"
+msgstr "Bana avbruten"
 
 #: src/Input/InputEventsTask.cpp:232
 msgid "Go to target"
@@ -3416,7 +3419,7 @@ msgstr "Nästa vägpunkt"
 
 #: src/Input/InputEventsTask.cpp:333
 msgid "Task finished"
-msgstr "Banan avklarad"
+msgstr "Bana slutförd"
 
 #: src/Input/InputEventsSettings.cpp:59
 msgid "Vario sounds on"
@@ -3900,7 +3903,7 @@ msgstr "Stänger av, sparar profil..."
 #. Save the task for the next time
 #: src/Startup.cpp:583
 msgid "Shutdown, saving task..."
-msgstr "Stänger av, sparar banan..."
+msgstr "Stänger av, sparar bana..."
 
 #: src/Device/Descriptor.cpp:458 src/Device/Descriptor.cpp:470
 msgid "Unable to open port"
@@ -4055,7 +4058,7 @@ msgstr "Misslyckades ladda ner förrådsindex."
 #: src/Dialogs/FileManager.cpp:698 src/Dialogs/FileManager.cpp:727
 #: src/Dialogs/DownloadFilePicker.cpp:374 Data/Input/default.xci:605
 msgid "File Manager"
-msgstr "Filhanterare"
+msgstr "Filer"
 
 #: src/Dialogs/FileManager.cpp:721 src/Dialogs/DownloadFilePicker.cpp:373
 msgid "The file manager is not available on this device."
@@ -4946,7 +4949,7 @@ msgstr "Skall XCSoar acceptera vindestimat från andra instrument?"
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:72
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:156
 msgid "Trail drift"
-msgstr "Spår Avdrift"
+msgstr "Spåravdrift"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:73
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:157
@@ -5295,7 +5298,7 @@ msgstr "Stig"
 
 #: src/Dialogs/dlgAnalysis.cpp:488 src/Dialogs/dlgAnalysis.cpp:551
 msgid "Task Calc"
-msgstr "Beräkna bana"
+msgstr "Beräkna Bana"
 
 #: src/Dialogs/dlgAnalysis.cpp:493
 msgid "Thermal Band"
@@ -5331,7 +5334,7 @@ msgstr "Banhastighet"
 
 #: src/Dialogs/dlgAnalysis.cpp:560
 msgid "Task calc"
-msgstr "Beräkna bana"
+msgstr "Beräkna Bana"
 
 #: src/Dialogs/dlgAnalysis.cpp:578
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:208
@@ -5642,7 +5645,7 @@ msgstr "Tilldelad tid"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:141
 msgid "Estimated task time"
-msgstr "Beräknad tid för bana"
+msgstr "Estimerad bantid"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:142
 msgid "Remaining time"
@@ -5711,7 +5714,7 @@ msgstr "Uppnådd Hast"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:175
 msgid "Cruise efficiency"
-msgstr "Cruise effektivitet"
+msgstr "Effektivitet glid"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:176
 msgid ""
@@ -5722,7 +5725,7 @@ msgid ""
 "flight history with the set MC value.  Calculation begins after task is "
 "started."
 msgstr ""
-"Effektivitet för planflygt. 100 indikerar perfekt MacCready prestanda, över "
+"Effektivitet glidflygning. 100 indikerar perfekt MacCready prestanda, över "
 "100 indikerar att bättre än MacCready prestanda nås genom flyg under "
 "molngator.  Mindre än 100 är lämpligt vid flyg väsentligt utanför banan. "
 "Värdet skattar din glidflyktseffektivitet enligt aktuell flyghistorik givet "
@@ -5752,7 +5755,7 @@ msgstr "StartHast"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:106
 msgid "Finish min. alt."
-msgstr "Min Målgångshöjd."
+msgstr "Min målgångshöjd"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:107
 msgid "Valid finish"
@@ -5827,7 +5830,7 @@ msgstr "Glidtal som krävs"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:149
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:189
 msgid "No task defined."
-msgstr "Ingen bana lagd."
+msgstr "Bana ej definierad."
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:76
 msgid "No active task point."
@@ -5842,7 +5845,7 @@ msgstr "Ersätt i Bana"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:155
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:199
 msgid "Task would not be valid after the change."
-msgstr "Banan är inte giltlig efter ändringen."
+msgstr "Ogiltig bana efter ändringen."
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:120
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:160
@@ -5863,11 +5866,11 @@ msgstr "Skapat en 2-punktsuppgift från Goto uppgift."
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:194
 msgid "Waypoint not in task."
-msgstr "Vägpunkt inte i banan."
+msgstr "Vägpunkt ej i bana."
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:194
 msgid "Remove from task"
-msgstr "Ta bort från Bana"
+msgstr "Radera från bana"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:314
 msgid "Replace in Task"
@@ -5911,9 +5914,7 @@ msgstr "Ta bort vägpunkt?"
 
 #: src/Dialogs/Waypoint/Manager.cpp:316 Data/Input/default.xci:597
 msgid "Waypoints Editor"
-msgstr ""
-"Vägpunkts-\n"
-"editor"
+msgstr "Vägpunkter"
 
 #: src/Dialogs/Waypoint/Manager.cpp:326
 msgid "Save changes to waypoint file?"
@@ -6085,7 +6086,7 @@ msgstr "Bestämmer vilka etiketter som visas."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:198
 msgid "Clip altitude"
-msgstr "Luftrum Tak"
+msgstr "Luftrumstak"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:199
 msgid ""
@@ -6161,7 +6162,7 @@ msgstr "Rita en svart gräns runt varje luftrum istället för luftrummets färg
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:236
 msgid "Airspace fill mode"
-msgstr "Luftrum ifyllnadsläge"
+msgstr "Luftrum fylläge"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:237
 msgid "Specifies the mode for filling the airspace area."
@@ -6205,7 +6206,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:88
 msgid "Auto close FLARM"
-msgstr "Stäng FLAR automatiskt"
+msgstr "Stäng FLARM automatiskt"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:89
 msgid ""
@@ -6378,7 +6379,7 @@ msgstr "Val definierar vilken MacCready algoritm som används."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:76
 msgid "Block speed to fly"
-msgstr "Blocka rek. Fart"
+msgstr "Blocka rek. fart"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:77
 msgid ""
@@ -6836,7 +6837,7 @@ msgstr "Pilotnamn"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:70
 msgid "Time step cruise"
-msgstr "Tidssteg glidflykt"
+msgstr "Tidssteg glidflyg"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:71
 msgid "This is the time interval between logged points when not circling."
@@ -6972,7 +6973,7 @@ msgstr "Anger hur skärmen roterar med farkosten"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:117
 msgid "Circling orientation"
-msgstr "Orientering kurvning"
+msgstr "Orientering kurvläge"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:118
 msgid "Determines how the screen is rotated with the glider while circling"
@@ -7035,7 +7036,7 @@ msgstr "Anger vad som visas på huvudytan."
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:177
 #, no-c-format
 msgid "Displays either the Circling, Cruise or Final glide infoxboxes"
-msgstr "Visa en av InfoBoxarna för kurvning, glidflykt eller finalglid"
+msgstr "Visa en av InfoBoxarna för kurvning, glidflyg eller finalglid"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:178
 #, no-c-format
@@ -7617,7 +7618,7 @@ msgstr "Aktiverar visning av FLARM trafik på kartan."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:150
 msgid "Trail length"
-msgstr "Spår Längd"
+msgstr "Spårlängd"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:151
 msgid ""
@@ -7643,7 +7644,7 @@ msgstr "Om På skalas snigelspårets bredd enligt variometervärdet."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:172
 msgid "Detour cost markers"
-msgstr "Markörer för kostnad av omväg"
+msgstr "Kostnadsmarkörer för omväg"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:173
 msgid ""
@@ -7698,7 +7699,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:83
 msgid "Start max. height margin"
-msgstr ""
+msgstr "Max starthöjd marginal"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:84
 msgid ""
@@ -7721,7 +7722,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:97
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:247
 msgid "Start height ref."
-msgstr "Starthöjdsref."
+msgstr "Starthöjd referens"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:98
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:248
@@ -7743,7 +7744,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:113
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:256
 msgid "Finish height ref."
-msgstr ""
+msgstr "Målgångshöjd referens"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:114
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:257
@@ -8073,7 +8074,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:127
 msgid "Preset"
-msgstr ""
+msgstr "Förval"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:127
 msgid "Load a set of units."
@@ -8309,7 +8310,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:142
 #, no-c-format
 msgid "Task waypoints & airfields"
-msgstr "Banans vägpunkter & flygplatser"
+msgstr "Banans vägpunkter & flygfält"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:143
 #, no-c-format
@@ -8320,7 +8321,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:145
 #, no-c-format
 msgid "Task waypoints & landables"
-msgstr "Banans vägpunkter & landningsbara platser"
+msgstr "Banans vägpunkter & landningar"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:146
 #, no-c-format
@@ -8330,12 +8331,12 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:148
 #, no-c-format
 msgid "Task waypoints"
-msgstr "Vägpunkter för bana"
+msgstr "Vägpunkter bana"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:149
 #, no-c-format
 msgid "All waypoints part of a task will be displayed."
-msgstr "Alla vägpunkter som är del av en bana visas."
+msgstr "Alla vägpunkter som ingår i en bana visas."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:162
 #, no-c-format
@@ -9661,9 +9662,7 @@ msgstr ""
 
 #: Data/Input/default.xci:638 Data/Input/default.xci:1135
 msgid "Raw Logger"
-msgstr ""
-"Rådata-\n"
-"loggning"
+msgstr "Logga Rådata"
 
 #: Data/Input/default.xci:531 Data/Input/default.xci:581
 #: Data/Input/default.xci:623 Data/Input/default.xci:892
@@ -9706,7 +9705,7 @@ msgstr ""
 
 #: Data/Input/default.xci:64
 msgid "Below final glide"
-msgstr "Under Glidbanan"
+msgstr "Under finalglidbanan"
 
 #: Data/Input/default.xci:350 Data/Input/default.xci:399
 #: Data/Input/default.xci:878
@@ -9779,7 +9778,7 @@ msgstr "Spår"
 
 #: Data/Input/default.xci:59
 msgid "Above final glide"
-msgstr "Över glidbanan"
+msgstr "Över finalglidbanan"
 
 #: Data/Input/default.xci:712
 msgid ""
