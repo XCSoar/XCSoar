@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-07-20 22:41+0000\n"
+"PO-Revision-Date: 2020-07-25 19:34+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/xcsoar/"
 "translations/pt/>\n"
@@ -8631,7 +8631,7 @@ msgstr "Pilões"
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:238
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:261
 msgid "Task Manager"
-msgstr "Gerador de Tarefas"
+msgstr "Gestor de Tarefas"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:235
 msgid "Validation Errors"
