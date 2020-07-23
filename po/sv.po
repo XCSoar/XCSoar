@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-07-22 17:41+0000\n"
+"PO-Revision-Date: 2020-07-25 19:34+0000\n"
 "Last-Translator: Markus Bagge <markus.bagge@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/sv/>\n"
@@ -410,12 +410,12 @@ msgstr "Tom uppgift"
 #: src/Task/ValidationErrorStrings.cpp:41
 #, no-c-format
 msgid "non-FAI turn points"
-msgstr "Vändpunkter icke-FAI"
+msgstr "Vägpunkter ej FAI"
 
 #: src/Task/ValidationErrorStrings.cpp:42
 #, no-c-format
 msgid "non-MAT turn points"
-msgstr "Vändpunkter icke-MAT"
+msgstr "Vägpunkter ej MAT"
 
 #: src/Airspace/AirspaceGlue.cpp:84
 msgid "Loading Airspace File..."
@@ -790,7 +790,7 @@ msgid ""
 "Turn"
 msgstr ""
 "Avbryt\n"
-"vägpunkt"
+"Vägpunkt"
 
 #: src/Menu/ExpandMacros.cpp:193
 msgid ""
@@ -2288,7 +2288,7 @@ msgstr "Exp1"
 #: src/InfoBoxes/Content/Factory.cpp:731
 #, no-c-format
 msgid "On-Line Contest distance"
-msgstr "OLC distans"
+msgstr "On-Line Contest distans"
 
 #: src/InfoBoxes/Content/Factory.cpp:732
 #, no-c-format
@@ -2783,7 +2783,7 @@ msgstr "Starten öppen"
 #: src/InfoBoxes/Content/Factory.cpp:953
 #, no-c-format
 msgid "Shows the time left until the start point opens or closes."
-msgstr "Visar tid kvar tills startpunkten öppnar eller stänger."
+msgstr "Återstående tid tills starten öppnar eller stänger."
 
 #: src/InfoBoxes/Content/Factory.cpp:958
 #, no-c-format
@@ -2793,7 +2793,7 @@ msgstr "Start öppnar/stänger nedräkningen när detta nås"
 #: src/InfoBoxes/Content/Factory.cpp:959
 #, no-c-format
 msgid "Start reach"
-msgstr "Tid startpunkt"
+msgstr "Passa start"
 
 #: src/InfoBoxes/Content/Factory.cpp:960
 #, no-c-format
@@ -2801,8 +2801,8 @@ msgid ""
 "Shows the time left until the start point opens or closes, compared to the "
 "calculated time to reach it."
 msgstr ""
-"Visar tid tills dess att startpunkten öppnar eller stänger, relativt "
-"beräknad tid att nå dit."
+"Tid tills dess att starten öppnar eller stänger, relativt beräknad tid att "
+"nå startgränsen."
 
 #: src/InfoBoxes/Content/Factory.cpp:965
 #, no-c-format
@@ -2915,7 +2915,7 @@ msgstr "On-Line Contest hastighet"
 #: src/InfoBoxes/Content/Factory.cpp:1013
 #, no-c-format
 msgid "OLC Speed"
-msgstr "OLC Hastighet"
+msgstr "OLC hastighet"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
 #, no-c-format
@@ -4062,7 +4062,7 @@ msgstr "Filer"
 
 #: src/Dialogs/FileManager.cpp:721 src/Dialogs/DownloadFilePicker.cpp:373
 msgid "The file manager is not available on this device."
-msgstr "Filhanterare är inte tillgänglig på denna enhet."
+msgstr "Filhanterare ej tillgänglig på denna enhet."
 
 #: src/Dialogs/FileManager.cpp:724
 msgid "The file manager requires Android 2.3."
@@ -8546,7 +8546,7 @@ msgstr "Vinkel"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:140
 msgid "Turn Points"
-msgstr "Vändpunkter"
+msgstr "Vägpunkter"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:160
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:163
@@ -9829,7 +9829,7 @@ msgid ""
 "In"
 msgstr ""
 "Zooma\n"
-"in"
+"In"
 
 #: Data/Input/default.xci:783 Data/Input/default.xci:1182
 msgid ""
@@ -9854,7 +9854,7 @@ msgid ""
 "Out"
 msgstr ""
 "Zooma\n"
-"ut"
+"Ut"
 
 #: Data/Input/default.xci:1151
 msgid "Setup Plane"
@@ -9886,8 +9886,8 @@ msgid ""
 "Message\n"
 "Repeat"
 msgstr ""
-"Meddelande\n"
-"Repetera"
+"Repetera\n"
+"Meddelande"
 
 #: Data/Input/default.xci:1112
 msgid ""
