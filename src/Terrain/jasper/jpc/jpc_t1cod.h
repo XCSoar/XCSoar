@@ -72,6 +72,8 @@
 * Includes.
 \******************************************************************************/
 
+#include "jasper/jas_math.h"
+
 #include "jpc_fix.h"
 #include "jpc_mqcod.h"
 
@@ -176,10 +178,10 @@
 
 /* These lookup tables are used by various macros/functions. */
 /* Do not access these lookup tables directly. */
-extern int jpc_zcctxnolut[];
-extern int jpc_spblut[];
-extern int jpc_scctxnolut[];
-extern int jpc_magctxnolut[];
+extern uint_least8_t jpc_zcctxnolut[];
+extern bool jpc_spblut[];
+extern uint_least8_t jpc_scctxnolut[];
+extern uint_least8_t jpc_magctxnolut[];
 extern jpc_fix_t jpc_refnmsedec[];
 extern jpc_fix_t jpc_signmsedec[];
 extern jpc_fix_t jpc_refnmsedec0[];
@@ -192,83 +194,95 @@ extern jpc_mqctx_t jpc_mqctxs[];
 * Functions and macros.
 \******************************************************************************/
 
-/* Initialize the MQ contexts. */
-void jpc_initctxs(jpc_mqctx_t *ctxs);
+/* Arithmetic shift right (with ability to shift left also). */
+JAS_ATTRIBUTE_CONST
+static inline jpc_fix_t JPC_ASR(jpc_fix_t x, int n)
+{
+	return n >= 0
+		? x >> n
+		: x << -n;
+}
 
 /* Get the zero coding context. */
 JAS_ATTRIBUTE_CONST
-int jpc_getzcctxno(int f, int orient);
-#define	JPC_GETZCCTXNO(f, orient) \
-	(jpc_zcctxnolut[((orient) << 8) | ((f) & JPC_OTHSIGMSK)])
+static inline uint_least8_t JPC_GETZCCTXNO(unsigned f, unsigned orient)
+{
+	return jpc_zcctxnolut[(orient << 8) | (f & JPC_OTHSIGMSK)];
+}
 
 /* Get the sign prediction bit. */
 JAS_ATTRIBUTE_CONST
-int jpc_getspb(int f);
-#define	JPC_GETSPB(f) \
-	(jpc_spblut[((f) & (JPC_PRIMSIGMSK | JPC_SGNMSK)) >> 4])
+static inline bool JPC_GETSPB(unsigned f)
+{
+	return jpc_spblut[(f & (JPC_PRIMSIGMSK | JPC_SGNMSK)) >> 4];
+}
 
 /* Get the sign coding context. */
-int jpc_getscctxno(int f);
-#define	JPC_GETSCCTXNO(f) \
-	(jpc_scctxnolut[((f) & (JPC_PRIMSIGMSK | JPC_SGNMSK)) >> 4])
+JAS_ATTRIBUTE_CONST
+static inline uint_least8_t JPC_GETSCCTXNO(unsigned f)
+{
+	return jpc_scctxnolut[(f & (JPC_PRIMSIGMSK | JPC_SGNMSK)) >> 4];
+}
 
 /* Get the magnitude context. */
-int jpc_getmagctxno(int f);
-#define	JPC_GETMAGCTXNO(f) \
-	(jpc_magctxnolut[((f) & JPC_OTHSIGMSK) | ((((f) & JPC_REFINE) != 0) << 11)])
+JAS_ATTRIBUTE_CONST
+static inline uint_least8_t JPC_GETMAGCTXNO(unsigned f)
+{
+	return jpc_magctxnolut[(f & JPC_OTHSIGMSK) | (((f & JPC_REFINE) != 0) << 11)];
+}
 
 /* Get the normalized MSE reduction for significance passes. */
-#define	JPC_GETSIGNMSEDEC(x, bitpos)	jpc_getsignmsedec_macro(x, bitpos)
-jpc_fix_t jpc_getsignmsedec_func(jpc_fix_t x, int bitpos);
-#define	jpc_getsignmsedec_macro(x, bitpos) \
-	((bitpos > JPC_NMSEDEC_FRACBITS) ? jpc_signmsedec[JPC_ASR(x, bitpos - JPC_NMSEDEC_FRACBITS) & JAS_ONES(JPC_NMSEDEC_BITS)] : \
-	  (jpc_signmsedec0[JPC_ASR(x, bitpos - JPC_NMSEDEC_FRACBITS) & JAS_ONES(JPC_NMSEDEC_BITS)]))
+JAS_ATTRIBUTE_CONST
+static inline jpc_fix_t JPC_GETSIGNMSEDEC(jpc_fix_t x, int bitpos)
+{
+	return bitpos > JPC_NMSEDEC_FRACBITS
+		? jpc_signmsedec[JPC_ASR(x, bitpos - JPC_NMSEDEC_FRACBITS) & JAS_ONES(JPC_NMSEDEC_BITS)]
+		: jpc_signmsedec0[JPC_ASR(x, bitpos - JPC_NMSEDEC_FRACBITS) & JAS_ONES(JPC_NMSEDEC_BITS)];
+}
 
 /* Get the normalized MSE reduction for refinement passes. */
-#define	JPC_GETREFNMSEDEC(x, bitpos)	jpc_getrefnmsedec_macro(x, bitpos)
-jpc_fix_t jpc_refsignmsedec_func(jpc_fix_t x, int bitpos);
-#define	jpc_getrefnmsedec_macro(x, bitpos) \
-	((bitpos > JPC_NMSEDEC_FRACBITS) ? jpc_refnmsedec[JPC_ASR(x, bitpos - JPC_NMSEDEC_FRACBITS) & JAS_ONES(JPC_NMSEDEC_BITS)] : \
-	  (jpc_refnmsedec0[JPC_ASR(x, bitpos - JPC_NMSEDEC_FRACBITS) & JAS_ONES(JPC_NMSEDEC_BITS)]))
-
-/* Arithmetic shift right (with ability to shift left also). */
-#define	JPC_ASR(x, n) \
-	(((n) >= 0) ? ((x) >> (n)) : ((x) << (-(n))))
+JAS_ATTRIBUTE_CONST
+static inline jpc_fix_t JPC_GETREFNMSEDEC(jpc_fix_t x, int bitpos)
+{
+	return bitpos > JPC_NMSEDEC_FRACBITS
+		? jpc_refnmsedec[JPC_ASR(x, bitpos - JPC_NMSEDEC_FRACBITS) & JAS_ONES(JPC_NMSEDEC_BITS)]
+		: jpc_refnmsedec0[JPC_ASR(x, bitpos - JPC_NMSEDEC_FRACBITS) & JAS_ONES(JPC_NMSEDEC_BITS)];
+}
 
 /* Update the per-sample state information. */
-#define	JPC_UPDATEFLAGS4(fp, rowstep, s, vcausalflag) \
-{ \
-	register jpc_fix_t *np = (fp) - (rowstep); \
-	register jpc_fix_t *sp = (fp) + (rowstep); \
-	if ((vcausalflag)) { \
-		sp[-1] |= JPC_NESIG; \
-		sp[1] |= JPC_NWSIG; \
-		if (s) { \
-			*sp |= JPC_NSIG | JPC_NSGN; \
-			(fp)[-1] |= JPC_ESIG | JPC_ESGN; \
-			(fp)[1] |= JPC_WSIG | JPC_WSGN; \
-		} else { \
-			*sp |= JPC_NSIG; \
-			(fp)[-1] |= JPC_ESIG; \
-			(fp)[1] |= JPC_WSIG; \
-		} \
-	} else { \
-		np[-1] |= JPC_SESIG; \
-		np[1] |= JPC_SWSIG; \
-		sp[-1] |= JPC_NESIG; \
-		sp[1] |= JPC_NWSIG; \
-		if (s) { \
-			*np |= JPC_SSIG | JPC_SSGN; \
-			*sp |= JPC_NSIG | JPC_NSGN; \
-			(fp)[-1] |= JPC_ESIG | JPC_ESGN; \
-			(fp)[1] |= JPC_WSIG | JPC_WSGN; \
-		} else { \
-			*np |= JPC_SSIG; \
-			*sp |= JPC_NSIG; \
-			(fp)[-1] |= JPC_ESIG; \
-			(fp)[1] |= JPC_WSIG; \
-		} \
-	} \
+static inline void JPC_UPDATEFLAGS4(jpc_fix_t *fp, unsigned rowstep, bool s, bool vcausalflag)
+{
+	jpc_fix_t *np = fp - rowstep;
+	jpc_fix_t *sp = fp + rowstep;
+	if (vcausalflag) {
+		sp[-1] |= JPC_NESIG;
+		sp[1] |= JPC_NWSIG;
+		if (s) {
+			*sp |= JPC_NSIG | JPC_NSGN;
+			fp[-1] |= JPC_ESIG | JPC_ESGN;
+			fp[1] |= JPC_WSIG | JPC_WSGN;
+		} else {
+			*sp |= JPC_NSIG;
+			fp[-1] |= JPC_ESIG;
+			fp[1] |= JPC_WSIG;
+		}
+	} else {
+		np[-1] |= JPC_SESIG;
+		np[1] |= JPC_SWSIG;
+		sp[-1] |= JPC_NESIG;
+		sp[1] |= JPC_NWSIG;
+		if (s) {
+			*np |= JPC_SSIG | JPC_SSGN;
+			*sp |= JPC_NSIG | JPC_NSGN;
+			fp[-1] |= JPC_ESIG | JPC_ESGN;
+			fp[1] |= JPC_WSIG | JPC_WSGN;
+		} else {
+			*np |= JPC_SSIG;
+			*sp |= JPC_NSIG;
+			fp[-1] |= JPC_ESIG;
+			fp[1] |= JPC_WSIG;
+		}
+	}
 }
 
 /* Initialize the lookup tables used by the codec. */

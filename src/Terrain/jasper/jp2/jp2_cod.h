@@ -76,6 +76,7 @@
 
 #include "jasper/jas_types.h"
 #include "jasper/jas_stream.h"
+#include "jasper/jas_image.h"
 
 #include <stdio.h>
 
@@ -293,10 +294,17 @@ void jp2_box_destroy(jp2_box_t *box);
 jp2_box_t *jp2_box_get(jas_stream_t *in);
 int jp2_box_put(jp2_box_t *box, jas_stream_t *out);
 
-#define JP2_DTYPETOBPC(dtype) \
-  ((JAS_IMAGE_CDT_GETSGND(dtype) << 7) | (JAS_IMAGE_CDT_GETPREC(dtype) - 1))
-#define	JP2_BPCTODTYPE(bpc) \
-  (JAS_IMAGE_CDT_SETSGND(bpc >> 7) | JAS_IMAGE_CDT_SETPREC((bpc & 0x7f) + 1))
+JAS_ATTRIBUTE_CONST
+static inline uint_least8_t JP2_DTYPETOBPC(uint_least8_t dtype)
+{
+	return (JAS_IMAGE_CDT_GETSGND(dtype) << 7) | (JAS_IMAGE_CDT_GETPREC(dtype) - 1);
+}
+
+JAS_ATTRIBUTE_CONST
+static inline uint_least8_t JP2_BPCTODTYPE(uint_least8_t bpc)
+{
+	return JAS_IMAGE_CDT_SETSGND(bpc >> 7) | JAS_IMAGE_CDT_SETPREC((bpc & 0x7f) + 1);
+}
 
 #define ICC_CS_RGB	0x52474220
 #define ICC_CS_YCBCR	0x59436272

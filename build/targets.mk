@@ -582,6 +582,10 @@ endif
 ifeq ($(HAVE_CE),y)
   TARGET_CPPFLAGS += -D_WIN32_WCE=0x0$(CE_MAJOR)$(CE_MINOR)
   TARGET_CPPFLAGS += -DWIN32_PLATFORM_PSPC=$(CE_MAJOR)$(CE_MINOR)
+
+  # on mingw32ce, this macro is needed to make stdint.h define the
+  # limit macros (used by JasPer)
+  TARGET_CXXFLAGS += -D__STDC_LIMIT_MACROS
 endif
 
 ifeq ($(HAVE_WIN32),y)

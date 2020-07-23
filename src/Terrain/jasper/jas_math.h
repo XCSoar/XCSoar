@@ -122,7 +122,7 @@ extern "C" {
 *
 \******************************************************************************/
 
-#ifdef __clang__
+#ifdef __GNUC__
 /* suppress clang warning "shifting a negative signed value is
    undefined" in the assertions below */
 #pragma GCC diagnostic push
@@ -185,7 +185,7 @@ inline static int jas_fast32_asl(int_fast32_t x, int n)
 	return x << n;
 }
 
-#ifdef __clang__
+#ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif
 

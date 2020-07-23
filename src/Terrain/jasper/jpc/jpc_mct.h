@@ -109,9 +109,6 @@ void jpc_ict(jas_matrix_t *c0, jas_matrix_t *c1, jas_matrix_t *c2);
 /* Calculate the inverse ICT. */
 void jpc_iict(jas_matrix_t *c0, jas_matrix_t *c1, jas_matrix_t *c2);
 
-/* Get the synthesis weight associated with a particular component. */
-JAS_ATTRIBUTE_CONST
-jpc_fix_t jpc_mct_getsynweight(int mctid, int cmptno);
 #endif /* ENABLE_JASPER_MULTICOMPONENT */
 
 #endif

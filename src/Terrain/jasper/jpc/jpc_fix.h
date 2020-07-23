@@ -115,15 +115,39 @@ typedef int_fast64_t jpc_fix_big_t;
 #define jpc_fixtodbl(x)	JAS_FIXTODBL(jpc_fix_t, JPC_FIX_FRACBITS, x)
 #define jpc_dbltofix(x)	JAS_DBLTOFIX(jpc_fix_t, JPC_FIX_FRACBITS, x)
 
-#define	jpc_fix_add(x, y)	JAS_FIX_ADD(jpc_fix_t, JPC_FIX_FRACBITS, x, y)
-#define	jpc_fix_sub(x, y)	JAS_FIX_SUB(jpc_fix_t, JPC_FIX_FRACBITS, x, y)
-#define	jpc_fix_mul(x, y) \
-	JAS_FIX_MUL(jpc_fix_t, JPC_FIX_FRACBITS, jpc_fix_big_t, x, y)
+JAS_ATTRIBUTE_CONST
+static inline jpc_fix_t jpc_fix_add(jpc_fix_t x, jpc_fix_t y)
+{
+	return JAS_FIX_ADD(jpc_fix_t, JPC_FIX_FRACBITS, x, y);
+}
+
+JAS_ATTRIBUTE_CONST
+static inline jpc_fix_t jpc_fix_sub(jpc_fix_t x, jpc_fix_t y)
+{
+	return JAS_FIX_SUB(jpc_fix_t, JPC_FIX_FRACBITS, x, y);
+}
+
+JAS_ATTRIBUTE_CONST
+static inline jpc_fix_t jpc_fix_mul(jpc_fix_big_t x, jpc_fix_big_t y)
+{
+	return JAS_FIX_MUL(jpc_fix_t, JPC_FIX_FRACBITS, jpc_fix_big_t, x, y);
+}
+
 #define	jpc_fix_mulbyint(x, y) \
 	JAS_FIX_MULBYINT(jpc_fix_t, JPC_FIX_FRACBITS, x, y)
-#define	jpc_fix_div(x, y) \
-	JAS_FIX_DIV(jpc_fix_t, JPC_FIX_FRACBITS, jpc_fix_big_t, x, y)
-#define	jpc_fix_neg(x)		JAS_FIX_NEG(jpc_fix_t, JPC_FIX_FRACBITS, x)
+
+JAS_ATTRIBUTE_CONST
+static inline jpc_fix_t jpc_fix_div(jpc_fix_big_t x, jpc_fix_t y)
+{
+	return JAS_FIX_DIV(jpc_fix_t, JPC_FIX_FRACBITS, jpc_fix_big_t, x, y);
+}
+
+JAS_ATTRIBUTE_CONST
+static inline jpc_fix_t jpc_fix_neg(jpc_fix_big_t x)
+{
+	return JAS_FIX_NEG(jpc_fix_t, JPC_FIX_FRACBITS, x);
+}
+
 //#define	jpc_fix_asl(x, n)	JAS_FIX_ASL(jpc_fix_t, JPC_FIX_FRACBITS, x, n)
 //#define	jpc_fix_asr(x, n)	JAS_FIX_ASR(jpc_fix_t, JPC_FIX_FRACBITS, x, n)
 #define jpc_fix_asl jas_fast32_asl
