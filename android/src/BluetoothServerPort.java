@@ -78,7 +78,16 @@ final class BluetoothServerPort extends MultiPort
   @Override public void run() {
     while (true) {
       try {
-        BluetoothSocket socket = serverSocket.accept();
+        /* copy serverSocket to a local variable, so we can compare it
+           with null without risking a race condition with the thread
+           calling close() */
+        BluetoothServerSocket ss = serverSocket;
+        if (ss == null)
+          /* close() is being called by another thread, which now
+             waits for this thread to quit */
+          break;
+
+        BluetoothSocket socket = ss.accept();
         Log.i(TAG, "Accepted Bluetooth connection from " +
               BluetoothHelper.getDisplayString(socket));
         BluetoothPort port = new BluetoothPort(socket);

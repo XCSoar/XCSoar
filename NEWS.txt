@@ -5,6 +5,8 @@ Version 6.8.16 - not yet released
   - fix crash bug
 * terrain
   - fix several crash bugs (JasPer)
+* Android
+  - fix several crash bugs
 
 Version 6.8.15 - 2020/06/13
 * user interface
