@@ -351,7 +351,12 @@ class NativeView extends SurfaceView
     BitmapFactory.Options opts = new BitmapFactory.Options();
     opts.inScaled = false;
 
-    return BitmapFactory.decodeResource(resources, resourceId, opts);
+    try {
+      return BitmapFactory.decodeResource(resources, resourceId, opts);
+    } catch (IllegalArgumentException e) {
+      Log.e(TAG, "Failed to load bitmap", e);
+      return null;
+    }
   }
 
   /**
