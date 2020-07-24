@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Util/UTF8.hpp"
 #include "Util/CharUtil.hpp"
+#include "StringView.hxx"
 
 #include <algorithm>
 
@@ -153,6 +154,52 @@ ValidateUTF8(const char *p)
       if (!IsContinuation(*++p) || !IsContinuation(*++p) ||
           !IsContinuation(*++p) || !IsContinuation(*++p) ||
           !IsContinuation(*++p))
+        return false;
+    } else
+      return false;
+  }
+
+  return true;
+}
+
+bool
+ValidateUTF8(StringView p) noexcept
+{
+  while (!p.empty()) {
+    unsigned char ch = p.shift();
+    if (IsASCII(ch))
+      continue;
+
+    if (IsContinuation(ch))
+      /* continuation without a prefix */
+      return false;
+
+    if (IsLeading1(ch)) {
+      /* 1 continuation */
+      if (p.size < 1 || !IsContinuation(p.shift()))
+        return false;
+    } else if (IsLeading2(ch)) {
+      /* 2 continuations */
+      if (p.size < 2 || !IsContinuation(p.shift()) ||
+          !IsContinuation(p.shift()))
+        return false;
+    } else if (IsLeading3(ch)) {
+      /* 3 continuations */
+      if (p.size < 3 || !IsContinuation(p.shift()) ||
+          !IsContinuation(p.shift()) ||
+          !IsContinuation(p.shift()))
+        return false;
+    } else if (IsLeading4(ch)) {
+      /* 4 continuations */
+      if (p.size < 4 || !IsContinuation(p.shift()) ||
+          !IsContinuation(p.shift()) ||
+          !IsContinuation(p.shift()) || !IsContinuation(p.shift()))
+        return false;
+    } else if (IsLeading5(ch)) {
+      /* 5 continuations */
+      if (p.size < 5 || !IsContinuation(p.shift()) ||
+          !IsContinuation(p.shift()) || !IsContinuation(p.shift()) ||
+          !IsContinuation(p.shift()) || !IsContinuation(p.shift()))
         return false;
     } else
       return false;
