@@ -241,7 +241,7 @@ int
 TopWindow::RunEventLoop() noexcept
 {
   {
-    ScopeLock protect(paused_mutex);
+    std::lock_guard<Mutex> lock(paused_mutex);
     assert(!running);
     running = true;
   }
@@ -254,12 +254,12 @@ TopWindow::RunEventLoop() noexcept
     loop.Dispatch(event);
 
   {
-    ScopeLock protect(paused_mutex);
+    std::lock_guard<Mutex> lock(paused_mutex);
     assert(running);
     running = false;
     /* wake up the Android Activity thread, just in case it's waiting
        inside Pause() */
-    paused_cond.Signal();
+    paused_cond.notify_one();
   }
 
   return 0;
