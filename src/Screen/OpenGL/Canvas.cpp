@@ -36,6 +36,7 @@ Copyright_License {
 #include "Screen/Util.hpp"
 #include "Util/AllocatedArray.hpp"
 #include "Util/Macros.hpp"
+#include "Util/TStringView.hxx"
 
 #ifdef USE_GLSL
 #include "Shaders.hpp"

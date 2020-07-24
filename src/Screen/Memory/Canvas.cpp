@@ -27,6 +27,7 @@ Copyright_License {
 #include "Optimised.hpp"
 #include "RasterCanvas.hpp"
 #include "Screen/Custom/Cache.hpp"
+#include "Util/TStringView.hxx"
 
 #ifdef __ARM_NEON__
 #include "NEON.hpp"

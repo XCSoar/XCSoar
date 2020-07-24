@@ -21,43 +21,11 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_OPENGL_CACHE_HPP
-#define XCSOAR_SCREEN_OPENGL_CACHE_HPP
+#include "Font.hpp"
+#include "Util/TStringView.hxx"
 
-#include "Compiler.h"
-
-struct PixelSize;
-struct StringView;
-class Font;
-
-#ifdef ENABLE_OPENGL
-class GLTexture;
-#endif
-
-namespace TextCache {
-#ifdef ENABLE_OPENGL
-  typedef GLTexture *Result;
-#else
-  struct Result {
-    const void *data;
-    unsigned pitch, width, height;
-
-    static constexpr Result Null() {
-      return { nullptr, 0, 0, 0 };
-    }
-  };
-#endif
-
-  gcc_pure
-  PixelSize GetSize(const Font &font, StringView text) noexcept;
-
-  gcc_pure
-  PixelSize LookupSize(const Font &font, StringView text) noexcept;
-
-  gcc_pure
-  Result Get(const Font &font, StringView text) noexcept;
-
-  void Flush();
-};
-
-#endif
+PixelSize
+Font::TextSize(const TCHAR *text) const noexcept
+{
+  return TextSize(TStringView(text));
+}

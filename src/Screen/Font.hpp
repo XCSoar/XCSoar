@@ -39,6 +39,7 @@ typedef struct FT_FaceRec_ *FT_Face;
 
 class FontDescription;
 class TextUtil;
+struct TStringView;
 
 /**
  * A font loaded from storage.  It is used by #Canvas to draw text.
@@ -104,7 +105,10 @@ public:
   void Destroy();
 
   gcc_pure
-  PixelSize TextSize(const TCHAR *text) const;
+  PixelSize TextSize(TStringView text) const noexcept;
+
+  gcc_pure
+  PixelSize TextSize(const TCHAR *text) const noexcept;
 
 #ifdef USE_FREETYPE
   gcc_const
@@ -112,9 +116,9 @@ public:
     return size.cx * size.cy;
   }
 
-  void Render(const TCHAR *text, const PixelSize size, void *buffer) const;
+  void Render(TStringView text, const PixelSize size, void *buffer) const;
 #elif defined(ANDROID)
-  int TextTextureGL(const TCHAR *text, PixelSize &size,
+  int TextTextureGL(TStringView text, PixelSize &size,
                     PixelSize &allocated_size) const;
 #elif defined(USE_GDI)
   HFONT Native() const {

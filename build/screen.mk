@@ -8,6 +8,7 @@ SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/Debug.cpp \
 	$(SCREEN_SRC_DIR)/ProgressBar.cpp \
 	$(SCREEN_SRC_DIR)/Util.cpp \
+	$(SCREEN_SRC_DIR)/Font.cpp \
 	$(SCREEN_SRC_DIR)/Icon.cpp \
 	$(SCREEN_SRC_DIR)/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/Color.cpp \

@@ -29,6 +29,7 @@ Copyright_License {
 
 #include <utility>
 
+struct StringView;
 struct PixelSize;
 class FontDescription;
 
@@ -50,7 +51,7 @@ public:
   static TextUtil *create(const FontDescription &d);
 
   gcc_pure
-  PixelSize getTextBounds(const char *text) const;
+  PixelSize getTextBounds(StringView text) const;
 
   struct Texture {
     unsigned id;
@@ -64,7 +65,7 @@ public:
        allocated_height(_allocated_height) {}
   };
 
-  Texture getTextTextureGL(const char *text) const;
+  Texture getTextTextureGL(StringView text) const;
 
   unsigned get_height() const {
     return height;

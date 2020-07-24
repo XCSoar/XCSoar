@@ -27,6 +27,7 @@ Copyright_License {
 #include "Java/Exception.hxx"
 #include "Screen/Point.hpp"
 #include "Look/FontDescription.hpp"
+#include "Util/StringView.hxx"
 #include "Asset.hpp"
 
 JNIEnv *TextUtil::env;
@@ -109,7 +110,7 @@ TextUtil::create(const FontDescription &d)
 }
 
 PixelSize
-TextUtil::getTextBounds(const char *text) const
+TextUtil::getTextBounds(StringView text) const
 {
   jint extent[2];
 
@@ -130,7 +131,7 @@ TextUtil::getTextBounds(const char *text) const
 }
 
 TextUtil::Texture
-TextUtil::getTextTextureGL(const char *text) const
+TextUtil::getTextTextureGL(StringView text) const
 {
   Java::String text2(env, text);
   jintArray jresult = (jintArray)

@@ -25,6 +25,7 @@ Copyright_License {
 #include "Screen/Debug.hpp"
 #include "Screen/Custom/Files.hpp"
 #include "Look/FontDescription.hpp"
+#include "Util/TStringView.hxx"
 #include "Init.hpp"
 #include "Asset.hpp"
 
@@ -92,13 +93,17 @@ FT_CEIL(FT_Long x)
 }
 
 gcc_pure
-static std::pair<unsigned, const TCHAR *>
-NextChar(const TCHAR *p)
+static unsigned
+NextChar(TStringView &s) noexcept
 {
+  assert(!s.empty());
+
 #ifdef _UNICODE
-  return std::make_pair(unsigned(*p), p + 1);
+  return unsigned(s.shift());
 #else
-  return NextUTF8(p);
+  auto n = NextUTF8(s.data);
+  s.MoveFront(n.second);
+  return n.first;
 #endif
 }
 
@@ -230,7 +235,7 @@ Font::Destroy()
 }
 
 PixelSize
-Font::TextSize(const TCHAR *text) const
+Font::TextSize(TStringView text) const
 {
   assert(text != nullptr);
 #ifndef _UNICODE
@@ -247,13 +252,8 @@ Font::TextSize(const TCHAR *text) const
   const ScopeLock protect(freetype_mutex);
 #endif
 
-  while (true) {
-    const auto n = NextChar(text);
-    if (n.first == 0)
-      break;
-
-    const unsigned ch = n.first;
-    text = n.second;
+  while (!text.empty()) {
+    const unsigned ch = NextChar(text);
 
     FT_UInt i = FT_Get_Char_Index(face, ch);
     if (i == 0)
@@ -386,7 +386,7 @@ RenderGlyph(uint8_t *buffer, size_t width, size_t height,
 }
 
 void
-Font::Render(const TCHAR *text, const PixelSize size, void *_buffer) const
+Font::Render(TStringView text, const PixelSize size, void *_buffer) const
 {
   assert(text != nullptr);
 #ifndef _UNICODE
@@ -406,13 +406,8 @@ Font::Render(const TCHAR *text, const PixelSize size, void *_buffer) const
   const ScopeLock protect(freetype_mutex);
 #endif
 
-  while (true) {
-    const auto n = NextChar(text);
-    if (n.first == 0)
-      break;
-
-    const unsigned ch = n.first;
-    text = n.second;
+  while (!text.empty()) {
+    const unsigned ch = NextChar(text);
 
     FT_UInt i = FT_Get_Char_Index(face, ch);
     if (i == 0)
