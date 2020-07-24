@@ -170,6 +170,13 @@ class TopWindow : public ContainerWindow {
   Cond paused_cond;
 
   /**
+   * Is the main (UI) thread currently inside RunEventLoop()?  If not,
+   * then the Android Activity thread should not wait for
+   * #paused_cond, to avoid deadlocks.
+   */
+  bool running = false;
+
+  /**
    * Is the application currently paused?  While this flag is set, no
    * OpenGL operations are allowed, because the OpenGL surface does
    * not exist.
