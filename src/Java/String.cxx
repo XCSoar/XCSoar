@@ -29,6 +29,15 @@
 
 #include "String.hxx"
 #include "Util/TruncateString.hpp"
+#include "Util/StringView.hxx"
+
+#include <string>
+
+Java::String::String(JNIEnv *_env, StringView _value) noexcept
+	// TODO: is there no way to do this without duplicating the string?
+	:String(_env, std::string(_value.data, _value.size).c_str())
+{
+}
 
 char *
 Java::String::CopyTo(JNIEnv *env, jstring value,

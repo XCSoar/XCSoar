@@ -36,6 +36,8 @@
 
 #include <stddef.h>
 
+struct StringView;
+
 namespace Java {
 	/**
 	 * Wrapper for a local "jstring" reference.
@@ -47,6 +49,8 @@ namespace Java {
 
 		String(JNIEnv *_env, const char *_value)
 			:LocalRef<jstring>(_env, _env->NewStringUTF(_value)) {}
+
+		String(JNIEnv *_env, StringView _value) noexcept;
 
 		/**
 		 * Copy the value to the specified buffer.  Truncates the value if
