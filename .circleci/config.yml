@@ -17,6 +17,7 @@ jobs:
             libasound2-dev \
             libgeotiff-dev \
             libgl1-mesa-dev \
+            libglvnd-dev \
             liblua5.2-dev \
             librsvg2-bin \
             quilt \

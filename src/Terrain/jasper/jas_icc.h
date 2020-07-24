@@ -379,6 +379,7 @@ typedef struct {
 JAS_DLLEXPORT jas_iccprof_t *jas_iccprof_load(jas_stream_t *in);
 JAS_DLLEXPORT int jas_iccprof_save(jas_iccprof_t *prof, jas_stream_t *out);
 JAS_DLLEXPORT void jas_iccprof_destroy(jas_iccprof_t *prof);
+JAS_ATTRIBUTE_PURE
 JAS_DLLEXPORT jas_iccattrval_t *jas_iccprof_getattr(jas_iccprof_t *prof,
   jas_iccattrname_t name);
 JAS_DLLEXPORT int jas_iccprof_setattr(jas_iccprof_t *prof, jas_iccattrname_t name,

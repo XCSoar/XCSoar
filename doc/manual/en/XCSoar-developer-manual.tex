@@ -253,6 +253,10 @@ XCSoar is written in C++17.
 XCSoar's standard compilers are \texttt{gcc} (at least version 6) and
 \texttt{clang} (at least version 4.0).
 
+Avoid preprocessor macros, because they are obscure, error prone, not
+type-safe, hard to read and hard to debug.  Use \texttt{inline}
+functions and \texttt{constexpr} variables instead.
+
 \subsection{Other rules}
 
 In a class declaration, attributes come first, then

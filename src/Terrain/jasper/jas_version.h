@@ -106,6 +106,7 @@ extern "C" {
 * Functions.
 \******************************************************************************/
 
+JAS_ATTRIBUTE_CONST
 JAS_DLLEXPORT const char *jas_getversion(void);
 /* Get the version information for the JasPer library. */
 /* Note:  Since libjasper can be built as a shared library, the version

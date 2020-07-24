@@ -171,7 +171,7 @@ void jpc_mqdec_setinput(jpc_mqdec_t *mqdec, jas_stream_t *in)
 
 /* Initialize one or more contexts. */
 
-void jpc_mqdec_setctxs(const jpc_mqdec_t *mqdec, int numctxs, jpc_mqctx_t *ctxs)
+void jpc_mqdec_setctxs(const jpc_mqdec_t *mqdec, int numctxs, const jpc_mqctx_t *ctxs)
 {
 	const jpc_mqstate_t **ctx;
 	int n;
@@ -192,7 +192,7 @@ void jpc_mqdec_setctxs(const jpc_mqdec_t *mqdec, int numctxs, jpc_mqctx_t *ctxs)
 
 /* Initialize a context. */
 
-void jpc_mqdec_setctx(jpc_mqdec_t *mqdec, int ctxno, jpc_mqctx_t *ctx)
+void jpc_mqdec_setctx(jpc_mqdec_t *mqdec, int ctxno, const jpc_mqctx_t *ctx)
 {
 	const jpc_mqstate_t **ctxi;
 	ctxi = &mqdec->ctxs[ctxno];

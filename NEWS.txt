@@ -73,10 +73,18 @@ Version 7.0 - not yet released
   - resizable mouse cursor
 
 Version 6.8.16 - not yet released
+* input events
+  - fix two crash bugs with malformed files
+* user interface
+  - fix crash bug in waypoint editor
+* devices
+  - added ports 8880, 8881, 8882 to tcp-client
 * glide computer
   - fix crash bug
 * terrain
   - fix several crash bugs (JasPer)
+* Android
+  - fix several crash bugs
 
 Version 6.8.15 - 2020/06/13
 * user interface

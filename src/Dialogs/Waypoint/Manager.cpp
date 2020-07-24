@@ -85,8 +85,7 @@ public:
 
   void Show(const PixelRect &rc) override {
     ListWidget::Show(rc);
-    UpdateList();
-    UpdateButtons();
+    Update();
   }
 
 private:
@@ -107,6 +106,11 @@ private:
 private:
   void UpdateList();
   void UpdateButtons();
+
+  void Update() noexcept {
+    UpdateList();
+    UpdateButtons();
+  }
 
   void OnWaypointNewClicked();
   void OnWaypointImportClicked();
@@ -200,7 +204,7 @@ WaypointManagerWidget::OnWaypointNewClicked()
       way_points.Optimise();
     }
 
-    UpdateList();
+    Update();
   }
 }
 
@@ -224,7 +228,7 @@ WaypointManagerWidget::OnWaypointImportClicked()
         way_points.Optimise();
       }
 
-      UpdateList();
+      Update();
     }
   }
 }
@@ -277,7 +281,7 @@ WaypointManagerWidget::OnWaypointDeleteClicked(unsigned i)
       way_points.Optimise();
     }
 
-    UpdateList();
+    Update();
   }
 }
 

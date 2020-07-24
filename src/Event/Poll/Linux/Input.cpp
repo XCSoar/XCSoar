@@ -33,6 +33,7 @@ Copyright_License {
 
 #include <termios.h>
 #include <sys/ioctl.h>
+#include <errno.h>
 
 template<typename T>
 static constexpr unsigned

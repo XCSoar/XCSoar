@@ -62,11 +62,11 @@
 #ifndef	JPC_MATH_H
 #define	JPC_MATH_H
 
-#include "Util/Compiler.h"
-
 /******************************************************************************\
 * Includes
 \******************************************************************************/
+
+#include "jasper/jas_config.h"
 
 #include "jpc_fix.h"
 
@@ -92,15 +92,15 @@
 
 /* Calculate the bit position of the first leading one in a nonnegative
   integer. */
-gcc_const
+JAS_ATTRIBUTE_CONST
 int jpc_int_firstone(int x);
 
-gcc_const
+JAS_ATTRIBUTE_CONST
 int jpc_fix_firstone(jpc_fix_t x);
 
 /* Calculate the integer quantity floor(log2(x)), where x is a positive
   integer. */
-gcc_const
+JAS_ATTRIBUTE_CONST
 int jpc_floorlog2(int x);
 
 #endif
