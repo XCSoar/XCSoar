@@ -1,6 +1,6 @@
 Version 6.8.16 - not yet released
 * input events
-  - fix crash bug with malformed files
+  - fix two crash bugs with malformed files
 * devices
   - added ports 8880, 8881, 8882 to tcp-client
 * glide computer
