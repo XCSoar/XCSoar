@@ -57,7 +57,7 @@ Font::TextSize(TStringView text) const
 {
   AnyCanvas canvas;
   canvas.Select(*this);
-  return canvas.CalcTextSize(text.data, text.size);
+  return canvas.CalcTextSize(text);
 }
 
 void

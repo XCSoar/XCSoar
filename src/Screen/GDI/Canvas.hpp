@@ -384,7 +384,7 @@ public:
   }
 
   gcc_pure
-  const PixelSize CalcTextSize(const TCHAR *text, size_t length) const;
+  const PixelSize CalcTextSize(TStringView text) const noexcept;
 
   gcc_pure
   const PixelSize CalcTextSize(const TCHAR *text) const;

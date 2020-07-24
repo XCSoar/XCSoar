@@ -34,24 +34,6 @@ Copyright_License {
 #include <string.h>
 #include <winuser.h>
 
-const PixelSize
-Canvas::CalcTextSize(const TCHAR *text, size_t length) const
-{
-  assert(text != nullptr);
-
-  TCHAR *duplicated = _tcsdup(text);
-  duplicated[length] = 0;
-
-#ifndef UNICODE
-  assert(ValidateUTF8(duplicated));
-#endif
-
-  const PixelSize size = CalcTextSize(duplicated);
-  free(duplicated);
-
-  return size;
-}
-
 void
 Canvas::DrawFormattedText(PixelRect *rc, const TCHAR *text, unsigned format)
 {

@@ -24,6 +24,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Bitmap.hpp"
+#include "Util/TStringView.hxx"
 
 void
 Canvas::ScaleCopy(int dest_x, int dest_y,
@@ -38,4 +39,12 @@ Canvas::ScaleCopy(int dest_x, int dest_y,
   else
     Copy(dest_x, dest_y, src_width, src_height,
          src, src_x, src_y);
+}
+
+const PixelSize
+Canvas::CalcTextSize(const TCHAR *text) const
+{
+  assert(text != nullptr);
+
+  return CalcTextSize(TStringView(text));
 }

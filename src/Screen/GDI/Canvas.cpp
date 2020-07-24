@@ -27,6 +27,7 @@ Copyright_License {
 #include "Compatibility/gdi.h"
 #include "Asset.hpp" /* for needclipping */
 #include "AlphaBlend.hpp"
+#include "Util/TStringView.hxx"
 
 #include <algorithm>
 
@@ -98,19 +99,13 @@ Canvas::DrawKeyhole(int x, int y,
 }
 
 const PixelSize
-Canvas::CalcTextSize(const TCHAR *text, size_t length) const
+Canvas::CalcTextSize(TStringView text) const
 {
   assert(IsDefined());
 
   PixelSize size;
-  ::GetTextExtentPoint(dc, text, length, &size);
+  ::GetTextExtentPoint(dc, text.data, text.size, &size);
   return size;
-}
-
-const PixelSize
-Canvas::CalcTextSize(const TCHAR *text) const
-{
-  return CalcTextSize(text, _tcslen(text));
 }
 
 unsigned

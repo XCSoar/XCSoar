@@ -218,13 +218,13 @@ Canvas::DrawKeyhole(int x, int y,
 }
 
 const PixelSize
-Canvas::CalcTextSize(const TCHAR *text) const
+Canvas::CalcTextSize(TStringView text) const
 {
   assert(text != nullptr);
 #ifdef UNICODE
   const WideToUTF8Converter text2(text);
 #else
-  const char* text2 = text;
+  const StringView text2 = text;
   assert(ValidateUTF8(text));
 #endif
 

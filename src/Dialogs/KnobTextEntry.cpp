@@ -34,6 +34,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Util/Macros.hpp"
 #include "Util/TruncateString.hpp"
+#include "Util/TStringView.hxx"
 
 #include <algorithm>
 
@@ -158,8 +159,8 @@ KnobTextEntryWindow::OnPaint(Canvas &canvas)
   canvas.Select(look.text_font);
 
   PixelSize tsize = canvas.CalcTextSize(buffer);
-  PixelSize tsizec = canvas.CalcTextSize(buffer, cursor);
-  PixelSize tsizea = canvas.CalcTextSize(buffer, cursor + 1);
+  PixelSize tsizec = canvas.CalcTextSize({buffer, cursor});
+  PixelSize tsizea = canvas.CalcTextSize({buffer, cursor + 1});
 
   RasterPoint p[5];
   p[0].x = 10;
