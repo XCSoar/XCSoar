@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: buildpack-deps:stretch
+      - image: buildpack-deps:buster
 
     steps:
       - type: shell
