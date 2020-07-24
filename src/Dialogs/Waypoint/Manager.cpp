@@ -204,7 +204,7 @@ WaypointManagerWidget::OnWaypointNewClicked()
       way_points.Optimise();
     }
 
-    UpdateList();
+    Update();
   }
 }
 
@@ -228,7 +228,7 @@ WaypointManagerWidget::OnWaypointImportClicked()
         way_points.Optimise();
       }
 
-      UpdateList();
+      Update();
     }
   }
 }
@@ -279,7 +279,7 @@ WaypointManagerWidget::OnWaypointDeleteClicked(unsigned i)
       way_points.Optimise();
     }
 
-    UpdateList();
+    Update();
   }
 }
 
