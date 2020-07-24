@@ -65,7 +65,7 @@ Font::Destroy()
 }
 
 PixelSize
-Font::TextSize(TStringView text) const
+Font::TextSize(TStringView text) const noexcept
 {
   if (text_util_object == nullptr) {
     PixelSize empty = { 0, 0 };
