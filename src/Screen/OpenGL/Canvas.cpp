@@ -60,6 +60,19 @@ Copyright_License {
 
 AllocatedArray<RasterPoint> Canvas::vertex_buffer;
 
+static TStringView
+ClipText(TStringView text, int x, unsigned canvas_width) noexcept
+{
+  if (text.empty() || x >= int(canvas_width))
+    return nullptr;
+
+  unsigned max_width = canvas_width - x;
+  unsigned max_chars = max_width / 8u; // TODO: use real font width?
+
+  text.size = TruncateStringUTF8(text.data, max_chars, text.size);
+  return text;
+}
+
 void
 Canvas::DrawFilledRectangle(int left, int top, int right, int bottom,
                             const Color color)
@@ -627,7 +640,11 @@ Canvas::DrawText(int x, int y, const TCHAR *text)
   if (font == nullptr)
     return;
 
-  GLTexture *texture = TextCache::Get(*font, text2);
+  const StringView text3 = ClipText(text2, x, size.cx);
+  if (text3.empty())
+    return;
+
+  GLTexture *texture = TextCache::Get(*font, text3);
   if (texture == nullptr)
     return;
 
@@ -666,7 +683,11 @@ Canvas::DrawTransparentText(int x, int y, const TCHAR *text)
   if (font == nullptr)
     return;
 
-  GLTexture *texture = TextCache::Get(*font, text2);
+  const StringView text3 = ClipText(text2, x, size.cx);
+  if (text3.empty())
+    return;
+
+  GLTexture *texture = TextCache::Get(*font, text3);
   if (texture == nullptr)
     return;
 
@@ -702,7 +723,11 @@ Canvas::DrawClippedText(int x, int y,
   if (font == nullptr)
     return;
 
-  GLTexture *texture = TextCache::Get(*font, text2);
+  const StringView text3 = ClipText(text2, 0, width);
+  if (text3.empty())
+    return;
+
+  GLTexture *texture = TextCache::Get(*font, text3);
   if (texture == nullptr)
     return;
 
