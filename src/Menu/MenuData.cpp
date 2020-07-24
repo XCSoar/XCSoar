@@ -33,10 +33,8 @@ Menu::Clear()
 }
 
 void
-Menu::Add(const TCHAR *label, int location, unsigned event_id)
+Menu::Add(const TCHAR *label, unsigned location, unsigned event_id)
 {
-  assert(location >= 0);
-
   if (location >= MAX_ITEMS)
     return;
 

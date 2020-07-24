@@ -77,7 +77,7 @@ public:
     return items[i];
   }
 
-  void Add(const TCHAR *label, int location, unsigned event_id);
+  void Add(const TCHAR *label, unsigned location, unsigned event_id);
 
   gcc_pure
   int FindByEvent(unsigned event) const;
