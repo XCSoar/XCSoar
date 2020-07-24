@@ -28,8 +28,8 @@ Copyright_License {
 void
 Menu::Clear()
 {
-  for (auto i = items, end = items + MAX_ITEMS; i != end; ++i)
-    i->Clear();
+  for (auto &i : items)
+    i.Clear();
 }
 
 void
