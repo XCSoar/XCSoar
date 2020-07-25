@@ -37,6 +37,7 @@ Copyright_License {
 #include "Util/AllocatedArray.hpp"
 #include "Util/Macros.hpp"
 #include "Util/TStringView.hxx"
+#include "Util/UTF8.hpp"
 
 #ifdef USE_GLSL
 #include "Shaders.hpp"
@@ -50,10 +51,6 @@ Copyright_License {
 
 #ifdef UNICODE
 #include "Util/ConvertString.hpp"
-#endif
-
-#ifndef NDEBUG
-#include "Util/UTF8.hpp"
 #endif
 
 #include <assert.h>
