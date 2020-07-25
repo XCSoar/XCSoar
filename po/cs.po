@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-07-25 19:11+0000\n"
+"PO-Revision-Date: 2020-07-25 19:16+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -1130,7 +1130,7 @@ msgstr "ST zisk posl"
 #: src/InfoBoxes/Content/Factory.cpp:203
 #, no-c-format
 msgid "Total altitude gain/loss in the last thermal."
-msgstr "Celkový zisk/ztráta výšky v posledním stoupavé m proudu."
+msgstr "Celkový zisk/ztráta výšky v posledním stoupavém proudu."
 
 #: src/InfoBoxes/Content/Factory.cpp:209
 #, no-c-format
@@ -11128,5 +11128,6 @@ msgstr ""
 
 #~ msgid "Additional altitude required to reach the next turn point."
 #~ msgstr "Výška potřebná pro dosažení dalšího otočného bodu."
+
 
 
