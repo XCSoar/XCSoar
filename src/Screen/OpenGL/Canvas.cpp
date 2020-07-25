@@ -39,6 +39,7 @@ Copyright_License {
 #include "Util/AllocatedArray.hxx"
 #include "Util/Macros.hpp"
 #include "Util/TStringView.hxx"
+#include "Util/UTF8.hpp"
 
 #include "Shaders.hpp"
 #include "Program.hpp"
