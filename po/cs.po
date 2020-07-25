@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-07-25 18:55+0000\n"
+"PO-Revision-Date: 2020-07-25 19:11+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -6309,8 +6309,8 @@ msgid ""
 "cruise mode, arrows point up to command slow down; arrows point down to "
 "command speed up."
 msgstr ""
-"Zda zobrazit rychlostní šipky (STF) na variometru. Pokud je zobrazeno při "
-"přeskoku, šipka nahoru znamená zpomal, šipka dolů zrychli."
+"Určuje, zda zobrazit rychlostní šipky (STF) na variometru. Pokud je "
+"zobrazeno při přeskoku, šipka nahoru znamená zpomal, šipka dolů zrychli."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:65
 msgid "Show average"
@@ -6321,8 +6321,8 @@ msgid ""
 "Whether to show the average climb rate.  In cruise mode, this switches to "
 "showing the average netto airmass rate."
 msgstr ""
-"Zda zobrazit průměrnou hodnotu stoupání. V přímém letu dojde k přepnutí na "
-"zobrazení průměrného netto stoupání vzdušné hmoty."
+"Určuje, zda zobrazit průměrnou hodnotu stoupání. V přímém letu dojde k "
+"přepnutí na zobrazení průměrného netto stoupání vzdušné hmoty."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:71
 msgid "Show MacReady"
@@ -6338,7 +6338,7 @@ msgstr "Zobrazit mouchy"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:74
 msgid "Whether to show the bugs percentage."
-msgstr "Zda zobrazit procento much."
+msgstr "Určuje, zda zobrazit znečištění křídel."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:77
 msgid "Show ballast"
@@ -6346,7 +6346,7 @@ msgstr "Zobrazit zátěž"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:77
 msgid "Whether to show the ballast percentage."
-msgstr "Zda zobrazit procento přítěže."
+msgstr "Určuje, zda zobrazit procento přítěže."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:80
 msgid "Show gross"
@@ -6354,7 +6354,7 @@ msgstr "Zobrazit hrubé vário"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:80
 msgid "Whether to show the gross climb rate."
-msgstr "Zda zobrazit hrubou hodnotu stoupání."
+msgstr "Určuje, zda zobrazit hrubou hodnotu stoupání."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:83
 msgid "Averager needle"
@@ -7692,7 +7692,7 @@ msgstr "Délka pozemní stopy"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:151
 msgid ""
 "Determines whether and how long a snail trail is drawn behind the glider."
-msgstr "Určuje zda a jak dlouhou pozemní stopu vykreslí do mapy za kluzákem."
+msgstr "Určuje, zda a jak dlouhou pozemní stopu vykreslí do mapy za kluzákem."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:163
 msgid "Trail type"
@@ -8740,7 +8740,7 @@ msgstr "Označ start ručně"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:219
 msgid "Configure whether the start must be armed manually or automatically."
-msgstr "Nastaví zda má start být označen ručně nebo automaticky."
+msgstr "Určuje, zda má start být označen ručně nebo automaticky."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:224
 msgid "Start open time"
@@ -9617,7 +9617,7 @@ msgstr "TE port"
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:52
 #, no-c-format
 msgid "Whether the Total Energy port is connected."
-msgstr "Zda je připojena sonda celkové energie."
+msgstr "Určuje, zda je připojena sonda celkové energie TE."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:55
 #, no-c-format
@@ -9627,7 +9627,7 @@ msgstr "Pitot port"
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:55
 #, no-c-format
 msgid "Whether the Pitot port is connected."
-msgstr "Zda je připojena pitotka."
+msgstr "Určuje, zda je připojena pitotova trubice."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:58
 #, no-c-format
@@ -9637,7 +9637,7 @@ msgstr "Statický port"
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:58
 #, no-c-format
 msgid "Whether the Static port is connected."
-msgstr "Zda je připojena sonda statického tlaku."
+msgstr "Určuje, zda je připojena sonda statického tlaku."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:61
 #, no-c-format
@@ -9647,7 +9647,7 @@ msgstr "Port varování před pádem"
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:61
 #, no-c-format
 msgid "Whether the Stall pressure port is connected."
-msgstr "Zda je připojen port varování před pádem."
+msgstr "Určuje, zda je připojen tlakový port varování před pádem."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:64
 #, no-c-format
@@ -9661,7 +9661,7 @@ msgid ""
 "accelerometer has malfunctioned or the instrument cannot be installed with "
 "correct alignment."
 msgstr ""
-"Zda je použit interní akcelerometr. Změnte nastavení pouze pokud "
+"Určuje, zda je použit interní akcelerometr. Nastavení změňte pouze pokud "
 "akcelerometr selhal nebo ho nelze správně zkalibrovat."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:69
@@ -9671,8 +9671,8 @@ msgid ""
 "disable, 255 to enable auto-detect; otherwise the 1Wire device ID can be "
 "specified."
 msgstr ""
-"Určuje, zda je nainstalován senzor teploty a vlhkosti. Nastav 0 pro vypnuto, "
-"255 pro autodetekci, jinak může být nastaveno na 1Wire device ID."
+"Určuje, zda je nainstalován senzor teploty a vlhkosti. Nastavte 0 pro "
+"vypnuto, 255 pro autodetekci , jinak může být nastaveno device ID pro 1Wire."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:73
 #, no-c-format
@@ -11128,4 +11128,5 @@ msgstr ""
 
 #~ msgid "Additional altitude required to reach the next turn point."
 #~ msgstr "Výška potřebná pro dosažení dalšího otočného bodu."
+
 
