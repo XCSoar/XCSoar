@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-07-25 19:16+0000\n"
+"PO-Revision-Date: 2020-07-25 19:33+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -4925,7 +4925,7 @@ msgstr "ACK Den"
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:325
 msgid "No Warnings"
-msgstr "Chybí Varování"
+msgstr "Žádné varování"
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:549
 msgid "Airspace Warnings"
@@ -6334,7 +6334,7 @@ msgstr "Aktivace zobrazení nastavení MacCready."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:74
 msgid "Show bugs"
-msgstr "Zobrazit mouchy"
+msgstr "Zobrazit znečištění"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:74
 msgid "Whether to show the bugs percentage."
