@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-07-25 18:29+0000\n"
+"PO-Revision-Date: 2020-07-25 18:55+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -1754,7 +1754,7 @@ msgid ""
 "and wind estimates."
 msgstr ""
 "Okamžitá vertikální rychlost vzduchové hmoty. Vypočítána jako hodnota vária "
-"mínus odhadované opadání větroně. Nejpřesnější, je-li připojeno vário, "
+"mínus odhadované opadání kluzáku. Nejpřesnější, je-li připojeno vário, "
 "rychlost letu a akcelerometr, jinak jsou použity hodnoty GPS a odhad větru."
 
 #: src/InfoBoxes/Content/Factory.cpp:505
@@ -5351,7 +5351,7 @@ msgstr "Nastavit vítr"
 
 #: src/Dialogs/dlgAnalysis.cpp:518
 msgid "Glide Polar"
-msgstr "Polára větroně"
+msgstr "Polára kluzáku"
 
 #: src/Dialogs/dlgAnalysis.cpp:528
 msgid "MacCready Speeds"
@@ -7199,9 +7199,9 @@ msgid ""
 "greater of current aircraft altitude plus 500 m and the thermal ceiling.  If "
 "disabled, climbs are unlimited."
 msgstr ""
-"Pokud je povoleno, plánování trasy je omezeno stropem definovaným větším z "
-"aktuální výška plus 500m nebo termickým stropem. Pokud je zakázáno, stoupání "
-"je neomezeno."
+"Pokud je povoleno, plánované stoupání na trase jsou omezeny stropem, "
+"definovaným větší hodnotou z aktuální výšky plus 500m nebo termickým "
+"stropem. Pokud je zakázáno, stoupání je neomezeno."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:131
 #, no-c-format
@@ -7483,8 +7483,8 @@ msgid ""
 "for waypoints like known reliable thermal sources (e.g. powerplants) or "
 "mountain passes."
 msgstr ""
-"Soubor speciálních bodů pro které budou zvláštní výpočty jako např. výpočet "
-"příletové výšky v mapě vždy prováděny. Užitečné pro body, jako jsou známé "
+"Soubor speciálních bodů, pro které budou zvláštní výpočty vždy prováděny ("
+"např. výpočet příletové výšky v mapě). Užitečné pro body, jako jsou známé "
 "termální zóny (elektrárny) nebo horské průsmyky."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:92
@@ -7976,8 +7976,9 @@ msgid ""
 "The bounding box part with 1 km = 1.0 point and the additional zick-zack "
 "part with 1 km = 0.5 p."
 msgstr ""
-"Australská online soutěž kluzáků. Tratě max. 6 otočných bodů. Spojený box "
-"1km = 1.0b a dodatečný cik-cak 1km = 0.5b."
+"Australská online soutěž kluzáků. Jsou hodnoceny tratě okolo max. 6 otočných "
+"bodů. Hraniční box je hodnocený 1km = 1.0 bodu a přídavná cik-cak část 1km = "
+"0.5bodu."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:116
 #, no-c-format
@@ -8463,8 +8464,8 @@ msgid ""
 "instead."
 msgstr ""
 "Letiště a nouzové plochy jsou zobrazeny jako fialové kruhy. Pokud je otočný "
-"bod v doletu, větší, zelený kruh je zobrazen pod fialovým. Pokud je otočný "
-"bod blokován horou bude místo zeleného kruhu zobrazen červený."
+"bod v doletu, větší zelený kruh je zobrazen pod fialovým. Pokud je otočný "
+"bod blokován horou, bude místo zeleného kruhu zobrazen červený."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:167
 #, no-c-format
@@ -8521,7 +8522,7 @@ msgid ""
 "[Off] Display fixed icons for landables.\n"
 "[On] Show landables with variable information like runway length and heading."
 msgstr ""
-"[Vypnuto] Zobrazí stejné ikony pro nouzové plochy\n"
+"[Vypnuto] Zobrazí stejné ikony pro všechny přistávací plochy.\n"
 "[Zapnuto] Zobrazí přistávací plochy s dodatečnou informací, jako délka a "
 "směr dráhy."
 
@@ -8542,7 +8543,7 @@ msgid ""
 "[Off] Display fixed length for runways.\n"
 "[On] Scale displayed runway length based on real length."
 msgstr ""
-"[Vypnuto] Zobrazí jednotnou délku dráhy\n"
+"[Vypnuto] Zobrazí jednotnou délku dráhy.\n"
 "[Zapnuto] Zobrazí délku dráhy v odpovídajícím měřítku."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:185
@@ -9686,7 +9687,7 @@ msgid ""
 "connected the baud rate will be fixed at 38400.  For OzFLARM, the value can "
 "be set to 19200."
 msgstr ""
-"Přenosová rychlost zařízení přiojeného na Vega port X1. Použijte dle "
+"Přenosová rychlost zařízení, přiojeného na Vega port X1. Použijte dle "
 "potřeby, pokud používáte logger nebo GPS jiný než FLARM. Pokud je připojen "
 "FLARM, přenosová rychlost bude nastavena na 38400. Pro OzFLARM může být "
 "rychlost 19200."
