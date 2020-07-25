@@ -28,6 +28,7 @@ Copyright_License {
 #include "RasterCanvas.hpp"
 #include "Screen/Custom/Cache.hpp"
 #include "Math/Angle.hpp"
+#include "Util/TStringView.hxx"
 
 #ifdef __ARM_NEON__
 #include "NEON.hpp"
@@ -221,13 +222,13 @@ Canvas::DrawArc(PixelPoint center, unsigned radius,
 }
 
 const PixelSize
-Canvas::CalcTextSize(const TCHAR *text) const
+Canvas::CalcTextSize(TStringView text) const noexcept
 {
   assert(text != nullptr);
 #ifdef UNICODE
   const WideToUTF8Converter text2(text);
 #else
-  const char* text2 = text;
+  const StringView text2 = text;
   assert(ValidateUTF8(text));
 #endif
 

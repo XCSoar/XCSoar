@@ -28,6 +28,7 @@ Copyright_License {
 #include "Asset.hpp" /* for needclipping */
 #include "AlphaBlend.hpp"
 #include "Math/Angle.hpp"
+#include "Util/TStringView.hxx"
 
 #include <algorithm>
 
@@ -108,19 +109,13 @@ Canvas::DrawArc(PixelPoint center, unsigned radius,
 }
 
 const PixelSize
-Canvas::CalcTextSize(const TCHAR *text, size_t length) const
+Canvas::CalcTextSize(TStringView text) const noexcept
 {
   assert(IsDefined());
 
   SIZE size;
-  ::GetTextExtentPoint(dc, text, length, &size);
+  ::GetTextExtentPoint(dc, text.data, text.size, &size);
   return PixelSize(size.cx, size.cy);
-}
-
-const PixelSize
-Canvas::CalcTextSize(const TCHAR *text) const
-{
-  return CalcTextSize(text, _tcslen(text));
 }
 
 unsigned
