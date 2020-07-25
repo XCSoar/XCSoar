@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-07-25 19:33+0000\n"
+"PO-Revision-Date: 2020-07-25 19:45+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -4230,8 +4230,8 @@ msgid ""
 "This option lets you configure if XCSoar should use settings like the "
 "MacCready value, bugs and ballast from the device."
 msgstr ""
-"Určuje, zda má XCSoar použít nastavení jako MacCready, mouchy a vodní zátěž "
-"z externího zařízení."
+"Určuje, zda má XCSoar použít nastavení jako MacCready, znečištění křídel a "
+"vodní zátěž z externího zařízení."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:662
 msgid "Sync. to device"
@@ -4242,8 +4242,8 @@ msgid ""
 "This option lets you configure if XCSoar should send settings like the "
 "MacCready value, bugs and ballast to the device."
 msgstr ""
-"Určuje, zda má XCSoar odesílat nastavení jako MacCready, mouchy a vodní "
-"zátěž do externího zařízení."
+"Určuje, zda má XCSoar odesílat nastavení jako MacCready, znečištění křídel a "
+"vodní zátěž do externího zařízení."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:669
 msgid "Enable this if you use a K6Bt to connect the device."
@@ -5040,7 +5040,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:295
 msgid "Bugs"
-msgstr "Mouchy"
+msgstr "Znečištění"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:296
 #, no-c-format
@@ -5048,8 +5048,8 @@ msgid ""
 "How clean the glider is. Set to 0% for clean, larger numbers as the wings "
 "pick up bugs or gets wet.  50% indicates the glider's sink rate is doubled."
 msgstr ""
-"Jak čistý je kluzák. nastav 0% pro čistý, vyšší číslo jak přibývají mouchy "
-"na náběžce. 50% znamená dvojnásobné opadání."
+"Čistota kluzáku. Nastavte 0% pro čistý, vyšší číslo tak, jak přibývají "
+"mouchy na křídlech nebo jsou mokrá. 50% znamená dvojnásobné opadání."
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:320
 msgid "Max. temp."
@@ -7405,7 +7405,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:100
 msgid "Auto bugs"
-msgstr "Mouchy automaticky"
+msgstr "Znečištění automaticky"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:101
 #, no-c-format
