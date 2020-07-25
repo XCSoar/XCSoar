@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-07-25 18:10+0000\n"
+"PO-Revision-Date: 2020-07-25 18:29+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -1753,9 +1753,9 @@ msgid ""
 "vario are connected, otherwise calculations are based on GPS measurements "
 "and wind estimates."
 msgstr ""
-"Okamžitá vertikální rychlost vzduchu. Vypočítána jako hodnota vária plus "
-"odhadované opadání větroně. Nejpřesnější, je-li připojeno vário, rychlost "
-"letu a akcelerometr, jinak jsou použity hodnoty GPS a odhad větru."
+"Okamžitá vertikální rychlost vzduchové hmoty. Vypočítána jako hodnota vária "
+"mínus odhadované opadání větroně. Nejpřesnější, je-li připojeno vário, "
+"rychlost letu a akcelerometr, jinak jsou použity hodnoty GPS a odhad větru."
 
 #: src/InfoBoxes/Content/Factory.cpp:505
 #, no-c-format
@@ -2293,7 +2293,7 @@ msgstr "OLC vzdál"
 msgid ""
 "Instantaneous evaluation of the flown distance according to the configured "
 "On-Line Contest rule set."
-msgstr "Okamžitá hodnota uletěně vzdálenosti dle nastavených OLC pravidel."
+msgstr "Okamžitá hodnota uletěné vzdálenosti dle nastavených OLC pravidel."
 
 #: src/InfoBoxes/Content/Factory.cpp:739
 #, no-c-format
