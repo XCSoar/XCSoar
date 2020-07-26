@@ -266,9 +266,7 @@ Startup()
 
   main_window->InitialiseConfigured();
 
-  {
-    file_cache = new FileCache(LocalPath(_T("cache")));
-  }
+  file_cache = new FileCache(LocalPath(_T("cache")));
 
   ReadLanguageFile();
 
