@@ -1,4 +1,4 @@
-Version 6.8.16 - not yet released
+Version 6.8.16 - 2020/07/26
 * input events
   - fix two crash bugs with malformed files
 * user interface
