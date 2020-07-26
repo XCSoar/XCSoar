@@ -36,6 +36,7 @@ Copyright_License {
 #include <algorithm>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <assert.h>
 
 #ifdef MORE_USAGE
