@@ -25,35 +25,29 @@ Copyright_License {
 #include "Colors.hpp"
 #include "Asset.hpp"
 
-void
-ButtonLook::Initialise(const Font &_font)
+#include "Look/Themes/BlueTheme.hpp"
+
+void ButtonLook::Initialise(const Font &_font)
 {
   font = &_font;
 
-  standard.foreground_color = COLOR_BLACK;
-  standard.foreground_brush.Create(standard.foreground_color);
-  standard.background_color = IsDithered() ? COLOR_WHITE : COLOR_LIGHT_GRAY;
-  if (IsDithered()) {
-    standard.CreateBorder(COLOR_BLACK, COLOR_BLACK);
-  } else if (!HasColors()) {
-    standard.CreateBorder(LightColor(COLOR_DARK_GRAY), COLOR_BLACK);
-  } else {
-    standard.CreateBorder(LightColor(standard.background_color),
-                          DarkColor(standard.background_color));
-  }
+  standard.foreground_color = COLOR_BUTTON_NORMAL_FOREGROUND;
+  standard.background_color = COLOR_BUTTON_NORMAL_BACKGROUND_LIGHT;
+  standard.background_color2 = COLOR_BUTTON_NORMAL_BACKGROUND_DARK;
+  standard.foreground_brush.Create(COLOR_BUTTON_NORMAL_FOREGROUND);
 
-  focused.foreground_color = COLOR_WHITE;
-  focused.foreground_brush.Create(focused.foreground_color);
-  focused.background_color = IsDithered() ? COLOR_BLACK : COLOR_XCSOAR_DARK;
-  if (IsDithered()) {
-    focused.CreateBorder(COLOR_WHITE, COLOR_WHITE);
-  } else if (!HasColors()) {
-    focused.CreateBorder(LightColor(COLOR_DARK_GRAY), COLOR_BLACK);
-  } else {
-    focused.CreateBorder(LightColor(focused.background_color),
-                         DarkColor(focused.background_color));
-  }
+  focused.foreground_color = COLOR_BUTTON_FOCUSSED_FOREGROUND;
+  focused.background_color = COLOR_BUTTON_FOCUSSED_BACKGROUND_LIGHT;
+  focused.background_color2 = COLOR_BUTTON_FOCUSSED_BACKGROUND_DARK;
+  focused.foreground_brush.Create(COLOR_BUTTON_FOCUSSED_FOREGROUND);
 
-  disabled.color = COLOR_GRAY;
-  disabled.brush.Create(disabled.color);
+  pressed.foreground_color = COLOR_BUTTON_PRESSED_FOREGROUND;
+  pressed.background_color = COLOR_BUTTON_PRESSED_BACKGROUND_LIGHT;
+  pressed.background_color2 = COLOR_BUTTON_PRESSED_BACKGROUND_DARK;
+  pressed.foreground_brush.Create(COLOR_BUTTON_PRESSED_FOREGROUND);
+
+  disabled.foreground_color = COLOR_BUTTON_DISABLED_FOREGROUND;
+  disabled.background_color = COLOR_BUTTON_DISABLED_BACKGROUND_LIGHT;
+  disabled.background_color2 = COLOR_BUTTON_DISABLED_BACKGROUND_DARK;
+  disabled.foreground_brush.Create(COLOR_BUTTON_DISABLED_FOREGROUND);
 }

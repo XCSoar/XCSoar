@@ -27,6 +27,7 @@ Copyright_License {
 #include "Look/Colors.hpp"
 #include "Thread/Debug.hpp"
 #include "Asset.hpp"
+#include "Look/Themes/BlueTheme.hpp"
 
 void
 ProgressBar::SetRange(unsigned min_value, unsigned max_value)
@@ -100,7 +101,7 @@ ProgressBar::OnPaint(Canvas &canvas)
   canvas.DrawRoundRectangle(0, 0, GetWidth(), GetHeight(),
                             GetHeight(), GetHeight());
 
-  Brush progress_brush(IsDithered() ? COLOR_BLACK : COLOR_XCSOAR_LIGHT);
+  Brush progress_brush(IsDithered() ? COLOR_BLACK : COLOR_PROGRESSBAR_FOREGROUND);
   canvas.Select(progress_brush);
   unsigned margin = GetHeight() / 9;
   unsigned top, bottom;

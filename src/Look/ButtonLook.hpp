@@ -34,10 +34,14 @@ struct ButtonLook {
   const Font *font;
 
   struct StateLook {
+
+    //foreground
     Color foreground_color;
     Brush foreground_brush;
 
+    //background
     Color background_color;
+    Color background_color2;
     Pen light_border_pen, dark_border_pen;
     Brush light_border_brush, dark_border_brush;
 
@@ -47,12 +51,7 @@ struct ButtonLook {
       dark_border_pen.Create(1, dark);
       dark_border_brush.Create(dark);
     }
-  } standard, focused;
-
-  struct {
-    Color color;
-    Brush brush;
-  } disabled;
+  } standard, focused, disabled, pressed;
 
   void Initialise(const Font &_font);
 };

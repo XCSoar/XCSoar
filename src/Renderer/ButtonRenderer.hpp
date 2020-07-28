@@ -30,32 +30,37 @@ struct PixelRect;
 struct ButtonLook;
 class Canvas;
 
-class ButtonFrameRenderer {
+class ButtonFrameRenderer
+{
   const ButtonLook &look;
 
 public:
-  explicit ButtonFrameRenderer(const ButtonLook &_look):look(_look) {}
+  explicit ButtonFrameRenderer(const ButtonLook &_look) : look(_look) {}
 
-  const ButtonLook &GetLook() const {
+  const ButtonLook &GetLook() const
+  {
     return look;
   }
 
-  gcc_const
-  static unsigned GetMargin();
+  gcc_const static unsigned GetMargin();
 
   void DrawButton(Canvas &canvas, PixelRect rc,
                   bool focused, bool pressed) const;
 
+  void DrawButton(Canvas &canvas, PixelRect rc,
+                  bool focused, bool pressed, bool enabled) const;
+
   gcc_pure
-  PixelRect GetDrawingRect(PixelRect rc, bool pressed) const;
+      PixelRect
+      GetDrawingRect(PixelRect rc, bool pressed) const;
 };
 
-class ButtonRenderer {
+class ButtonRenderer
+{
 public:
   virtual ~ButtonRenderer() {}
 
-  gcc_pure
-  virtual unsigned GetMinimumButtonWidth() const;
+  gcc_pure virtual unsigned GetMinimumButtonWidth() const;
 
   virtual void DrawButton(Canvas &canvas, const PixelRect &rc,
                           bool enabled, bool focused, bool pressed) const = 0;

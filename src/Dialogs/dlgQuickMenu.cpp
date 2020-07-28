@@ -84,11 +84,11 @@ QuickMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
     canvas.DrawFilledRectangle(rc, look.focused.background_color);
     canvas.SetTextColor(enabled
                         ? look.focused.text_color
-                        : look.button.disabled.color);
+                        : look.button.disabled.foreground_color);
   } else {
     if (HaveClipping())
       canvas.DrawFilledRectangle(rc, look.background_brush);
-    canvas.SetTextColor(enabled ? look.text_color : look.button.disabled.color);
+    canvas.SetTextColor(enabled ? look.text_color : look.button.disabled.foreground_color);
   }
 
   canvas.Select(*look.button.font);

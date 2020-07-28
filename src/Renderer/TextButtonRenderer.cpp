@@ -34,7 +34,7 @@ TextButtonRenderer::DrawCaption(Canvas &canvas, const PixelRect &rc,
 
   canvas.SetBackgroundTransparent();
   if (!enabled)
-    canvas.SetTextColor(look.disabled.color);
+    canvas.SetTextColor(look.disabled.foreground_color);
   else if (focused)
     canvas.SetTextColor(look.focused.foreground_color);
   else
@@ -56,7 +56,7 @@ void
 TextButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
                                bool enabled, bool focused, bool pressed) const
 {
-  frame_renderer.DrawButton(canvas, rc, focused, pressed);
+  frame_renderer.DrawButton(canvas, rc, focused, pressed, enabled);
 
   if (!caption.empty())
     DrawCaption(canvas, frame_renderer.GetDrawingRect(rc, pressed),

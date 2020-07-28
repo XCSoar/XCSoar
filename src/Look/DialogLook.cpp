@@ -26,6 +26,7 @@ Copyright_License {
 #include "Colors.hpp"
 #include "Screen/Layout.hpp"
 #include "Asset.hpp"
+#include "Look/Themes/BlueTheme.hpp"
 
 #ifdef EYE_CANDY
 #include "Resources.hpp"
@@ -33,34 +34,26 @@ Copyright_License {
 
 #include <algorithm>
 
-void
-DialogLook::Initialise()
+void DialogLook::Initialise()
 {
   const FontDescription text_font_d(std::min(Layout::FontScale(12),
                                              Layout::min_screen_pixels / 20));
   const FontDescription small_font_d =
-    text_font_d.WithHeight(text_font_d.GetHeight() * 3u / 4u);
+      text_font_d.WithHeight(text_font_d.GetHeight() * 3u / 4u);
 
   text_font.Load(text_font_d);
   small_font.Load(small_font_d);
 
   bold_font.Load(text_font_d.WithBold());
 
-  caption.text_color = COLOR_BLACK;
+  caption.text_color = COLOR_DIALOG_CAPTION_FOREGROUND;
   caption.font = &text_font;
 
-#ifdef EYE_CANDY
-  caption.background_bitmap.Load(IDB_DIALOGTITLE);
-#endif
+  caption.background_color = IsDithered() ? COLOR_BLACK : COLOR_DIALOG_CAPTION_BACKGROUND;
+  caption.inactive_background_color = COLOR_DIALOG_INACTIVE_BACKGROUND;
 
-  caption.background_color = IsDithered() ? COLOR_BLACK : COLOR_XCSOAR_DARK;
-  caption.inactive_background_color = COLOR_GRAY;
-
-  if (IsDithered())
-    SetBackgroundColor(COLOR_WHITE);
-  else
-    SetBackgroundColor(Color(0xe2, 0xdc, 0xbe));
-  text_color = COLOR_BLACK;
+  SetBackgroundColor(COLOR_DIALOG_BACKGROUND);
+  text_color = COLOR_DIALOG_FOREGROUND;
 
   button.Initialise(bold_font);
   check_box.Initialise(text_font);
@@ -69,21 +62,21 @@ DialogLook::Initialise()
   focused.text_color = COLOR_WHITE;
   focused.border_pen.Create(Layout::FastScale(1) + 2, COLOR_BLACK);
 
-  list.background_color = COLOR_WHITE;
-  list.text_color = COLOR_BLACK;
+  list.background_color = COLOR_LIST_BACKGROUND;
+  list.text_color = COLOR_LIST_FOREGROUND;
   list.selected.background_color = IsDithered()
-    ? COLOR_VERY_LIGHT_GRAY : COLOR_XCSOAR_LIGHT;
-  list.selected.text_color = COLOR_BLACK;
-  list.focused.background_color = IsDithered() ? COLOR_BLACK : COLOR_XCSOAR;
-  list.focused.text_color = COLOR_WHITE;
-  list.pressed.background_color = COLOR_YELLOW;
-  list.pressed.text_color = COLOR_BLACK;
+                                       ? COLOR_VERY_LIGHT_GRAY
+                                       : COLOR_LIST_SELECTED_BACKGROUND;
+  list.selected.text_color = COLOR_LIST_SELECTED_FOREGROUND;
+  list.focused.background_color = IsDithered() ? COLOR_BLACK : COLOR_LIST_FOCUSED_BACKGROUND;
+  list.focused.text_color = COLOR_LIST_FOCUSED_FOREGROUND;
+  list.pressed.background_color = COLOR_LIST_PRESSED_BACKGROUND;
+  list.pressed.text_color = COLOR_LIST_PRESSED_FOREGROUND;
   list.font = &text_font;
   list.font_bold = &bold_font;
 }
 
-void
-DialogLook::SetBackgroundColor(Color color)
+void DialogLook::SetBackgroundColor(Color color)
 {
   background_color = color;
   background_brush.Create(color);

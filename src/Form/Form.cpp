@@ -505,27 +505,12 @@ WndForm::OnPaint(Canvas &canvas)
 
     // JMW todo add here icons?
 
-#ifdef EYE_CANDY
-    if (!IsDithered() && is_active) {
-      canvas.SetBackgroundTransparent();
-      canvas.Stretch(title_rect.left, title_rect.top,
-                     title_rect.GetWidth(),
-                     title_rect.GetHeight(),
-                     look.caption.background_bitmap);
+    canvas.SetBackgroundColor(is_active
+                              ? look.caption.background_color
+                              : look.caption.inactive_background_color);
+    canvas.DrawOpaqueText(title_rect.left + Layout::GetTextPadding(),
+                          title_rect.top, title_rect, caption.c_str());
 
-      // Draw titlebar text
-      canvas.DrawText(title_rect.left + Layout::GetTextPadding(),
-                      title_rect.top, caption.c_str());
-    } else {
-#endif
-      canvas.SetBackgroundColor(is_active
-                                ? look.caption.background_color
-                                : look.caption.inactive_background_color);
-      canvas.DrawOpaqueText(title_rect.left + Layout::GetTextPadding(),
-                            title_rect.top, title_rect, caption.c_str());
-#ifdef EYE_CANDY
-    }
-#endif
   }
 
   if (dragging) {

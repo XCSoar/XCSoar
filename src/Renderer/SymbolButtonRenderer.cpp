@@ -34,7 +34,7 @@ SymbolButtonRenderer::DrawSymbol(Canvas &canvas, PixelRect rc, bool enabled,
 
   canvas.SelectNullPen();
   if (!enabled)
-    canvas.Select(look.disabled.brush);
+    canvas.Select(look.disabled.foreground_brush);
   else if (focused)
     canvas.Select(look.focused.foreground_brush);
   else
