@@ -47,14 +47,12 @@ void ButtonFrameRenderer::DrawButton(Canvas &canvas, PixelRect rc,
   //space around buttons
   int space = 1;
 
-  int height = rc.bottom - rc.top;
+  int bevel_bottom = Layout::VptScale(3);
+  int bevel_right = Layout::VptScale(3);
 
-  //bottom line
-  int bottom_line_height = height / 10;
-  bottom_line_height = (bottom_line_height != 0) ? bottom_line_height : 5;
-
-  PixelRect rectangle = PixelRect(rc.left + space, rc.top + space, rc.right - space, rc.bottom - space - bottom_line_height);
-  PixelRect rectangle_bottom = PixelRect(rc.left + space, rc.bottom - space - bottom_line_height, rc.right - space, rc.bottom - space);
+  PixelRect rectangle = PixelRect(rc.left + space, rc.top + space, rc.right - space - bevel_right, rc.bottom - space - bevel_bottom);
+  PixelRect rectangle_bottom = PixelRect(rectangle.left, rectangle.bottom, rectangle.right, rc.bottom - space);
+  PixelRect rectangle_right = PixelRect(rectangle.right, rc.top + space, rc.right - space, rc.bottom - space);
 
   //check if button is enabled
   if (enabled)
@@ -64,6 +62,7 @@ void ButtonFrameRenderer::DrawButton(Canvas &canvas, PixelRect rc,
     {
       canvas.DrawFilledRectangle(rectangle, look.pressed.background_color);
       canvas.DrawFilledRectangle(rectangle_bottom, look.pressed.background_color2);
+      canvas.DrawFilledRectangle(rectangle_right, look.pressed.background_color2);
     }
 
     //check if button has focus
@@ -72,7 +71,6 @@ void ButtonFrameRenderer::DrawButton(Canvas &canvas, PixelRect rc,
       PixelRect focus_rect = PixelRect(rc.left + 5, rc.top + 5, rc.right - 5, rc.bottom - 5);
       canvas.DrawFilledRectangle(rc, look.focused.background_color2);
       canvas.DrawFilledRectangle(focus_rect, look.focused.background_color);
-
     }
 
     //normal button
@@ -80,6 +78,7 @@ void ButtonFrameRenderer::DrawButton(Canvas &canvas, PixelRect rc,
     {
       canvas.DrawFilledRectangle(rectangle, look.standard.background_color);
       canvas.DrawFilledRectangle(rectangle_bottom, look.standard.background_color2);
+      canvas.DrawFilledRectangle(rectangle_right, look.standard.background_color2);
     }
   }
 
@@ -88,6 +87,7 @@ void ButtonFrameRenderer::DrawButton(Canvas &canvas, PixelRect rc,
   {
     canvas.DrawFilledRectangle(rectangle, look.disabled.background_color);
     canvas.DrawFilledRectangle(rectangle_bottom, look.disabled.background_color2);
+    canvas.DrawFilledRectangle(rectangle_right, look.disabled.background_color2);
   }
 }
 
