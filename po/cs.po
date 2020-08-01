@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-07-27 16:12+0000\n"
+"PO-Revision-Date: 2020-08-02 05:41+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -579,7 +579,7 @@ msgstr "Nepodařilo se stáhnout seznam letů."
 #: src/Logger/ExternalLogger.cpp:270 src/Logger/ExternalLogger.cpp:281
 #: src/Logger/ExternalLogger.cpp:302 src/Logger/ExternalLogger.cpp:325
 msgid "Download flight"
-msgstr "Stáhnout let"
+msgstr "Stáhni let"
 
 #: src/Logger/ExternalLogger.cpp:280
 msgid "Logger is empty."
@@ -642,7 +642,7 @@ msgstr "Bez kroužení"
 #: src/Dialogs/Weather/PCMetDialog.cpp:50
 #: src/Dialogs/Weather/NOAADetails.cpp:153
 msgid "Close"
-msgstr "Zavřít"
+msgstr "Zavři"
 
 #: src/Gauge/FlarmTrafficWindow.cpp:241
 msgid "No Traffic"
@@ -770,7 +770,7 @@ msgid ""
 "Abort\n"
 "Start"
 msgstr ""
-"Přerušit\n"
+"Přeruš\n"
 "Start"
 
 #: src/Menu/ExpandMacros.cpp:187
@@ -786,7 +786,7 @@ msgid ""
 "Abort\n"
 "Turn"
 msgstr ""
-"Přerušit\n"
+"Přeruš\n"
 "Otočení"
 
 #: src/Menu/ExpandMacros.cpp:193
@@ -800,12 +800,12 @@ msgstr ""
 #: src/Menu/ExpandMacros.cpp:202 src/Menu/ExpandMacros.cpp:206
 #: src/Dialogs/Device/PortMonitor.cpp:175
 msgid "Resume"
-msgstr "Obnovit"
+msgstr "Pokračuj"
 
 #: src/Menu/ExpandMacros.cpp:203 src/Menu/ExpandMacros.cpp:207
 #: src/Dialogs/Message.cpp:128
 msgid "Abort"
-msgstr "Přerušit"
+msgstr "Přeruš"
 
 #: src/Menu/ExpandMacros.cpp:227 src/Menu/ExpandMacros.cpp:359
 #: src/Menu/ExpandMacros.cpp:380 src/Menu/ExpandMacros.cpp:430
@@ -844,7 +844,7 @@ msgstr "Sever nahoru"
 #: src/Menu/ExpandMacros.cpp:313 src/Dialogs/Settings/dlgBasicSettings.cpp:141
 #: src/Dialogs/ReplayDialog.cpp:56
 msgid "Stop"
-msgstr "Zastavit"
+msgstr "Zastav"
 
 #: src/Menu/ExpandMacros.cpp:314 src/Dialogs/ReplayDialog.cpp:55
 msgid "Start"
@@ -1966,7 +1966,7 @@ msgstr "Týmový kód"
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:250
 #, no-c-format
 msgid "Team Code"
-msgstr "Tým kód"
+msgstr "Týmový kód"
 
 #: src/InfoBoxes/Content/Factory.cpp:588
 #, no-c-format
@@ -1980,7 +1980,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:594
 #, no-c-format
 msgid "Team bearing"
-msgstr "Týmový kurz"
+msgstr "Kurz k týmu"
 
 #: src/InfoBoxes/Content/Factory.cpp:595
 #, no-c-format
@@ -2012,7 +2012,7 @@ msgstr "Relativní směr k k poslední známé poloze týmového letadla."
 #: src/InfoBoxes/Content/Factory.cpp:610
 #, no-c-format
 msgid "Team range"
-msgstr "Týmová vzdálenost"
+msgstr "Vzdálenost k týmu"
 
 #: src/InfoBoxes/Content/Factory.cpp:611
 #, no-c-format
@@ -3062,7 +3062,7 @@ msgstr "Info"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:166
 #, no-c-format
 msgid "Setup"
-msgstr "Nastavení"
+msgstr "Nastav"
 
 #: src/InfoBoxes/Content/Altitude.cpp:70 src/InfoBoxes/Content/Altitude.cpp:128
 #: src/InfoBoxes/Content/Altitude.cpp:194
@@ -3076,7 +3076,7 @@ msgstr "není QNH"
 #: src/Dialogs/Waypoint/Manager.cpp:123
 #, no-c-format
 msgid "Edit"
-msgstr "Upravit"
+msgstr "Uprav"
 
 #: src/InfoBoxes/Content/MacCready.cpp:70
 msgid "MC AUTO"
@@ -3241,7 +3241,7 @@ msgstr "Poloha"
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:59
 #: src/Dialogs/Task/TaskPointDialog.cpp:277
 msgid "Relocate"
-msgstr "Přemístit"
+msgstr "Přemísti"
 
 #: src/InfoBoxes/Panel/ATCReference.cpp:92
 #: src/Dialogs/Device/PortMonitor.cpp:150
@@ -3251,7 +3251,7 @@ msgstr "Přemístit"
 #: src/Dialogs/TouchTextEntry.cpp:217 src/Dialogs/TimeEntry.cpp:79
 #: src/Dialogs/GeoPointEntry.cpp:85
 msgid "Clear"
-msgstr "Vymazat"
+msgstr "Vymaž"
 
 #: src/Input/InputEventsActions.cpp:143
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:300
@@ -3474,7 +3474,7 @@ msgstr "Nenalezeno"
 
 #: src/Input/InputEventsLua.cpp:65 src/Dialogs/FileManager.cpp:550
 msgid "Select a file"
-msgstr "Vybrat soubor"
+msgstr "Vyber soubor"
 
 #: src/PageSettings.cpp:44 src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:84
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:166
@@ -4034,7 +4034,7 @@ msgstr "Pomoc"
 #: src/Dialogs/ProfileListDialog.cpp:387
 #: src/Dialogs/Waypoint/WaypointList.cpp:239
 msgid "Select"
-msgstr "Vybrat"
+msgstr "Vyber"
 
 #: src/Dialogs/FileManager.cpp:404 src/Dialogs/FilePicker.cpp:48
 #: src/Dialogs/Weather/RASPDialog.cpp:178
@@ -4048,13 +4048,13 @@ msgstr "Vybrat"
 #: src/Dialogs/DownloadFilePicker.cpp:282
 #: src/Dialogs/DownloadFilePicker.cpp:380
 msgid "Download"
-msgstr "Stáhnout"
+msgstr "Stáhni"
 
 #: src/Dialogs/FileManager.cpp:405
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:117
 #: src/Dialogs/Weather/NOAAList.cpp:120 src/Monitor/MatTaskMonitor.cpp:63
 msgid "Add"
-msgstr "Přidat"
+msgstr "Přidej"
 
 #: src/Dialogs/FileManager.cpp:439
 msgid "Queued"
@@ -4250,7 +4250,7 @@ msgstr "Povolte tuto volbu, pokud používáte K6Bt pro připojení zařízení.
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:283
 msgid "Flight download"
-msgstr "Stáhnout let"
+msgstr "Stáhni let"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:284
 #: src/Dialogs/Device/DeviceListDialog.cpp:510
@@ -4271,13 +4271,13 @@ msgstr "Monitor"
 #: src/Dialogs/Device/DeviceListDialog.cpp:487
 #: src/Dialogs/Device/PortMonitor.cpp:151
 msgid "Reconnect"
-msgstr "Znovu připojit"
+msgstr "Znovu připoj"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:287
 #: src/Dialogs/Device/DeviceListDialog.cpp:301
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:226
 msgid "Disable"
-msgstr "Vypnout"
+msgstr "Vypni"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:288
 #: src/Dialogs/Device/DeviceListDialog.cpp:390
@@ -4290,7 +4290,7 @@ msgstr "Ladit"
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:116
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:107
 msgid "Enable"
-msgstr "Povolit"
+msgstr "Povol"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:348
 #, c-format
@@ -4478,7 +4478,7 @@ msgstr "Output mód"
 #: src/Dialogs/Waypoint/Manager.cpp:124
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:118
 msgid "Save"
-msgstr "Uložit"
+msgstr "Ulož"
 
 #: src/Dialogs/Device/LX/ManageV7Dialog.cpp:69
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:63
@@ -4757,12 +4757,12 @@ msgstr "Bez sledování"
 #: src/Dialogs/dlgAnalysis.cpp:523 src/Dialogs/dlgAnalysis.cpp:532
 #: src/Dialogs/dlgAnalysis.cpp:541
 msgid "Settings"
-msgstr "Nastavení"
+msgstr "Nastav"
 
 #: src/Dialogs/MapItemListDialog.cpp:176
 #: src/Dialogs/Task/AlternatesListDialog.cpp:109
 msgid "Goto"
-msgstr "Jít na"
+msgstr "Jdi na"
 
 #: src/Dialogs/MapItemListDialog.cpp:177
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:116
@@ -4799,7 +4799,7 @@ msgstr ""
 
 #: src/Dialogs/ColorListDialog.cpp:74
 msgid "Select Color"
-msgstr "Vybrat barvu"
+msgstr "Vyber barvu"
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:120
 #: src/Dialogs/Airspace/dlgAirspace.cpp:121 Data/Input/default.xci:436
@@ -4819,11 +4819,11 @@ msgstr "Varuj"
 #: Data/Input/default.xci:521
 #, no-c-format
 msgid "Airspace"
-msgstr "Prostor"
+msgstr "Prostory"
 
 #: src/Dialogs/Airspace/dlgAirspacePatterns.cpp:65
 msgid "Select Pattern"
-msgstr "Vybrat vzor"
+msgstr "Vyber vzor"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:72
 msgid "Radio"
@@ -4860,7 +4860,7 @@ msgstr "Jméno"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:471
 msgid "Select Airspace"
-msgstr "Vybrat prostor"
+msgstr "Vyber prostor"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:35
 msgid "Airspace Renderer Settings"
@@ -4869,11 +4869,11 @@ msgstr "Nastavení zobrazení prostorů"
 #. Add controls
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:76
 msgid "Change Border Color"
-msgstr "Změnit barvu ohraničení"
+msgstr "Změň barvu ohraničení"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:77
 msgid "Change Fill Color"
-msgstr "Změnit barvu výplně"
+msgstr "Změň barvu výplně"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:84
 msgid "Change Fill Brush"
@@ -5049,7 +5049,7 @@ msgid ""
 "pick up bugs or gets wet.  50% indicates the glider's sink rate is doubled."
 msgstr ""
 "Čistota kluzáku. Nastavte 0% pro čistý, vyšší číslo tak, jak přibývají "
-"mouchy na křídlech nebo jsou mokrá. 50% znamená dvojnásobné opadání."
+"mouchy na křídlech nebo zmoknou. 50% znamená dvojnásobné opadání."
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:320
 msgid "Max. temp."
@@ -5201,11 +5201,11 @@ msgstr "Obsah"
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:286
 #: src/Dialogs/ProfileListDialog.cpp:190
 msgid "Copy"
-msgstr "Kopírovat"
+msgstr "Kopíruj"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:288
 msgid "Paste"
-msgstr "Vložit"
+msgstr "Vlož"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:353
 msgid "Overwrite?"
@@ -5238,7 +5238,7 @@ msgstr "Provoz"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:138
 msgid "Team"
-msgstr "Tým"
+msgstr "Partner"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:145
 msgid "Callsign"
@@ -5246,7 +5246,7 @@ msgstr "Volací značka"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:146
 msgid "Change callsign"
-msgstr "Změnit volací znak"
+msgstr "Změň volací znak"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:152
 msgid "Pilot"
@@ -5283,11 +5283,11 @@ msgstr "Nový partner"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:92
 msgid "Set code"
-msgstr "Nastavení kódu"
+msgstr "Nastav kód"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:93
 msgid "Set WP"
-msgstr "Nastavit OB"
+msgstr "Ref OB"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:94
 msgid "Flarm Lock"
@@ -5347,7 +5347,7 @@ msgstr "Výškový profil větru"
 
 #: src/Dialogs/dlgAnalysis.cpp:513
 msgid "Set Wind"
-msgstr "Nastavit vítr"
+msgstr "Nastav vítr"
 
 #: src/Dialogs/dlgAnalysis.cpp:518
 msgid "Glide Polar"
@@ -5405,7 +5405,7 @@ msgstr "Heslo"
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:118
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:102
 msgid "Delete"
-msgstr "Smazat"
+msgstr "Smaž"
 
 #: src/Dialogs/ProfileListDialog.cpp:206 src/Dialogs/ProfileListDialog.cpp:273
 msgid "Profile name"
@@ -5426,7 +5426,7 @@ msgstr "Profily"
 
 #: src/Dialogs/ProfileListDialog.cpp:386
 msgid "Select profile"
-msgstr "Vybrat profil"
+msgstr "Vyber profil"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:160
 msgid "Activate"
@@ -5537,7 +5537,7 @@ msgstr "Celková vzletová hmotnost letadla bez vodní přítěže"
 #. let the user select
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:188
 msgid "Load Polar"
-msgstr "Nahrát poláru"
+msgstr "Nahraj poláru"
 
 #. let the user select
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:220
@@ -5587,7 +5587,9 @@ msgstr ""
 #: src/Dialogs/ReplayDialog.cpp:111 src/Dialogs/ReplayDialog.cpp:153
 #: Data/Input/default.xci:613
 msgid "Replay"
-msgstr "Přehrát"
+msgstr ""
+"Přehraj\n"
+"záznam"
 
 #: src/Dialogs/SimulatorPromptWindow.cpp:60 src/Dialogs/StartupDialog.cpp:93
 #: Data/Input/default.xci:914
@@ -5704,7 +5706,7 @@ msgstr "Rychlost průměrná"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:148
 msgid "Set MacCready"
-msgstr "Nastavit MacCready"
+msgstr "Nastav MacCready"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:149
 msgid ""
@@ -5942,7 +5944,7 @@ msgstr "Nastav záložní frekvenci"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:433 Data/Input/default.xci:1015
 msgid "GoTo"
-msgstr "Jít na"
+msgstr "Jdi na"
 
 #: src/Dialogs/Waypoint/Manager.cpp:270
 msgid "Delete waypoint?"
@@ -5991,7 +5993,7 @@ msgstr "Vyberte filtr nebo klikněte zde"
 
 #: src/Dialogs/Waypoint/WaypointList.cpp:541
 msgid "Select Waypoint"
-msgstr "Vybrat otočný bod"
+msgstr "Vyber otočný bod"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:57
 #, no-c-format
@@ -7844,7 +7846,7 @@ msgstr "Reference použitá pro pravidlo minimální výšky."
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:192
 #, no-c-format
 msgid "Gate width"
-msgstr "Šířka pásky"
+msgstr "Šíře pásky"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:80
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:42
@@ -8701,11 +8703,11 @@ msgstr "Úloha nezměněna"
 
 #: src/Dialogs/Task/Manager/TaskClosePanel.cpp:112
 msgid "Revert Changes"
-msgstr "Vrátit změny"
+msgstr "Vrať změny"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:164
 msgid "Edit Point"
-msgstr "Edit Bod"
+msgstr "Edit bod"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:167
 msgid "Make Finish"
@@ -8745,7 +8747,7 @@ msgstr "Minimální čas AAT úlohy v minutách."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:218
 msgid "Arm start manually"
-msgstr "Označ start ručně"
+msgstr "Označit start ručně"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:219
 msgid "Configure whether the start must be armed manually or automatically."
@@ -8791,19 +8793,19 @@ msgstr "Nový úkol"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:116
 msgid "Declare"
-msgstr "Deklarovat"
+msgstr "Deklaruj"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:117
 msgid "Browse"
-msgstr "Prohlížet"
+msgstr "Prohlížej"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:100
 msgid "Load"
-msgstr "Nahrát"
+msgstr "Nahraj"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:101
 msgid "Rename"
-msgstr "Přejmenovat"
+msgstr "Přejmenuj"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:103
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:343
@@ -8846,7 +8848,7 @@ msgstr "Méně"
 #: src/Dialogs/Weather/NOAADetails.cpp:73
 #: src/Dialogs/Weather/NOAADetails.cpp:115
 msgid "Remove"
-msgstr "Odstranit"
+msgstr "Smaž"
 
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:140
 msgid "(Add Alternate Start)"
@@ -8859,7 +8861,7 @@ msgstr "Alternativní místa startu"
 #: src/Dialogs/Task/TaskPointDialog.cpp:239
 #: src/Dialogs/Task/TaskPointDialog.cpp:284
 msgid "Change Type"
-msgstr "Změnit typ"
+msgstr "Jiný typ"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:292
 #: src/Dialogs/Task/TaskPointDialog.cpp:392
@@ -9158,7 +9160,7 @@ msgstr "Chyba stažení souboru."
 #: src/Dialogs/Weather/NOAAList.cpp:121 src/Dialogs/Weather/NOAADetails.cpp:72
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:227
 msgid "Update"
-msgstr "Aktualizovat"
+msgstr "Aktualizuj"
 
 #: src/Dialogs/Weather/NOAAList.cpp:181
 msgid "Airport ICAO code"
@@ -9935,7 +9937,7 @@ msgid ""
 "Mark\n"
 "Drop"
 msgstr ""
-"Udělat\n"
+"Udělej\n"
 "značku"
 
 #: Data/Input/default.xci:718
@@ -9976,7 +9978,7 @@ msgstr ""
 
 #: Data/Input/default.xci:727
 msgid "Store"
-msgstr "Uložit"
+msgstr "Ulož"
 
 #: Data/Input/default.xci:817
 msgid ""
@@ -10060,7 +10062,7 @@ msgid ""
 "Message\n"
 "Repeat"
 msgstr ""
-"Opakovat\n"
+"Opakuj\n"
 "zprávu"
 
 #: Data/Input/default.xci:1112
