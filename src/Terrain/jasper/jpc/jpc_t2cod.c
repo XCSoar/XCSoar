@@ -292,10 +292,10 @@ static int jpc_pi_nextrpcl(register jpc_pi_t *pi)
 					try0 = JPC_CEILDIV(pi->ystart, pi->picomp->vsamp << r);
 					if (((pi->x == pi->xstart &&
 					  ((trx0 << r) % (JAS_CAST(uint_fast32_t, 1) << rpx)))
-					  || !(pi->x % (JAS_CAST(uint_fast32_t, 1) << rpx))) &&
+					  || !(pi->x % (pi->picomp->hsamp << rpx))) &&
 					  ((pi->y == pi->ystart &&
 					  ((try0 << r) % (JAS_CAST(uint_fast32_t, 1) << rpy)))
-					  || !(pi->y % (JAS_CAST(uint_fast32_t, 1) << rpy)))) {
+					  || !(pi->y % (pi->picomp->vsamp << rpy)))) {
 						prchind = JPC_FLOORDIVPOW2(JPC_CEILDIV(pi->x,
 						  pi->picomp->hsamp << r), pi->pirlvl->prcwidthexpn) -
 						  JPC_FLOORDIVPOW2(trx0, pi->pirlvl->prcwidthexpn);

@@ -81,9 +81,11 @@
 #ifdef __GNUC__
 #define JAS_ATTRIBUTE_CONST __attribute__((const))
 #define JAS_ATTRIBUTE_PURE __attribute__((pure))
+#define JAS_UNREACHABLE() __builtin_unreachable()
 #else
 #define JAS_ATTRIBUTE_CONST
 #define JAS_ATTRIBUTE_PURE
+#define JAS_UNREACHABLE()
 #endif
 
 #if defined(__GNUC__) && !defined(__clang__)

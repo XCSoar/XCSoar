@@ -1161,7 +1161,7 @@ static void jpc_ft_invlift_colres(jpc_fix_t *a, unsigned numrows, unsigned numco
 			}
 			lptr += stride;
 		}
-		for (unsigned n = n = llen - (!parity) - (parity != (numrows & 1)); n > 0; --n) {
+		for (unsigned n = llen - (!parity) - (parity != (numrows & 1)); n > 0; --n) {
 			lptr2 = lptr;
 			hptr2 = hptr;
 			for (unsigned i = 0; i < numcols; ++i) {

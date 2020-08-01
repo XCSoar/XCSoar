@@ -109,7 +109,8 @@ jas_matrix_t *jas_matrix_create(jas_matind_t numrows, jas_matind_t numcols)
 	}
 
 	// matrix->datasize_ = numrows * numcols;
-	if (!jas_safe_size_mul(numrows, numcols, &size)) {
+	if (!jas_safe_size_mul(numrows, numcols, &size) ||
+	    size > UINT_FAST32_MAX) {
 		return NULL;
 	}
 
