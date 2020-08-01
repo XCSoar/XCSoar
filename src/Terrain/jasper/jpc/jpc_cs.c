@@ -518,7 +518,10 @@ static int jpc_siz_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate,
 		}
 		siz->comps[i].sgnd = (tmp >> 7) & 1;
 		siz->comps[i].prec = (tmp & 0x7f) + 1;
-		if (siz->comps[i].prec > 38) {
+		/* we need at least 1 bit of precision for unsigned
+		   samples and 2 bits for signed samples */
+		if (siz->comps[i].prec < 1U + siz->comps[i].sgnd ||
+		    siz->comps[i].prec > 38) {
 			jas_eprintf("invalid component bit depth %d\n", siz->comps[i].prec);
 			goto error;
 		}

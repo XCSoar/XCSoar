@@ -1189,7 +1189,7 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 				}
 				jpc_undo_roi(band->data, band->roishift, ccp->roishift -
 				  band->roishift, band->numbps);
-				if (tile->realmode) {
+				if (ccp->qmfbid == JPC_COX_INS) {
 					jas_matrix_asl(band->data, JPC_FIX_FRACBITS);
 					jpc_dequantize(band->data, band->absstepsize);
 				}
@@ -1239,9 +1239,10 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 #endif /* ENABLE_JASPER_MULTICOMPONENT */
 
 	/* Perform rounding and convert to integer values. */
-	if (tile->realmode) {
-		for (compno = 0, tcomp = tile->tcomps; compno < dec->numcomps;
+	for (compno = 0, tcomp = tile->tcomps; compno < dec->numcomps;
 		  ++compno, ++tcomp) {
+		ccp = &tile->cp->ccps[compno];
+		if (ccp->qmfbid == JPC_COX_INS) {
 			for (jas_matind_t i = 0; i < jas_matrix_numrows(tcomp->data); ++i) {
 				for (jas_matind_t j = 0; j < jas_matrix_numcols(tcomp->data); ++j) {
 					v = jas_matrix_get(tcomp->data, i, j);
@@ -1309,7 +1310,8 @@ static int jpc_dec_process_eoc(jpc_dec_t *dec, jpc_ms_t *ms)
 
 	for (tileno = 0, tile = dec->tiles; tileno < dec->numtiles; ++tileno,
 	  ++tile) {
-		if (tile->state == JPC_TILE_ACTIVE) {
+		if (tile->state == JPC_TILE_ACTIVE ||
+			tile->state == JPC_TILE_ACTIVELAST) {
 			if (jpc_dec_tiledecode(dec, tile)) {
 				return -1;
 			}
@@ -1859,6 +1861,8 @@ static int calcstepsizes(uint_fast16_t refstepsize, int numrlvls,
 {
 	int bandno;
 	int numbands;
+	int r;
+	int nb;
 	uint_fast16_t expn;
 	uint_fast16_t mant;
 	expn = JPC_QCX_GETEXPN(refstepsize);
@@ -1866,7 +1870,9 @@ static int calcstepsizes(uint_fast16_t refstepsize, int numrlvls,
 	numbands = 3 * numrlvls - 2;
 	for (bandno = 0; bandno < numbands; ++bandno) {
 //jas_eprintf("DEBUG %d %d %d %d %d\n", bandno, expn, numrlvls, bandno, ((numrlvls - 1) - (numrlvls - 1 - ((bandno > 0) ? ((bandno + 2) / 3) : (0)))));
-		uint_fast16_t e = expn + (bandno + 2) / 3;
+		r = (bandno + 2) / 3;
+		nb = (r == 0) ? (numrlvls - 1) - r : (numrlvls - 1) - r + 1;
+		uint_fast16_t e = expn - (numrlvls - 1) + nb;
 		if (e >= 0x20)
 			return -1;
 		stepsizes[bandno] = JPC_QCX_MANT(mant) | JPC_QCX_EXPN(e);
@@ -2048,6 +2054,9 @@ static jpc_fix_t jpc_calcabsstepsize(int stepsize, int numbits)
 
 static void jpc_dequantize(jas_matrix_t *x, jpc_fix_t absstepsize)
 {
+	// a reconstruction parameter defined in E 1.1.2 of the ISO/IEC 15444-1
+	jpc_fix_t recparam = JPC_FIX_HALF;
+
 	assert(absstepsize >= 0);
 	if (absstepsize == jpc_inttofix(1)) {
 		return;
@@ -2057,9 +2066,9 @@ static void jpc_dequantize(jas_matrix_t *x, jpc_fix_t absstepsize)
 		for (jas_matind_t j = 0; j < jas_matrix_numcols(x); ++j) {
 			jas_seqent_t t = jas_matrix_get(x, i, j);
 			if (t) {
+				// mid-point reconstruction
+				t = (t > 0) ? jpc_fix_add(t, recparam) : jpc_fix_sub(t, recparam);
 				t = jpc_fix_mul(t, absstepsize);
-			} else {
-				t = 0;
 			}
 			jas_matrix_set(x, i, j, t);
 		}
