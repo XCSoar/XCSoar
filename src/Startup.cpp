@@ -191,6 +191,10 @@ Startup()
 
   style.Resizable();
 
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  style.InitialOrientation(Display::DetectInitialOrientation());
+#endif
+
   MainWindow *const main_window = CommonInterface::main_window =
     new MainWindow();
   main_window->Create(SystemWindowSize(), style);
@@ -262,9 +266,7 @@ Startup()
 
   main_window->InitialiseConfigured();
 
-  {
-    file_cache = new FileCache(LocalPath(_T("cache")));
-  }
+  file_cache = new FileCache(LocalPath(_T("cache")));
 
   ReadLanguageFile();
 

@@ -1,7 +1,8 @@
-/* Copyright_License {
+/*
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2016 The XCSoar Project
+  Copyright (C) 2000-2015 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -18,19 +19,13 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
- */
+*/
 
-#ifndef OLC_CLASSIC_HPP
-#define OLC_CLASSIC_HPP
+#include "Font.hpp"
+#include "Util/TStringView.hxx"
 
-#include "ContestDijkstra.hpp"
-
-/**
- * Specialisation of OLC Dijkstra for OLC Classic rules
- */
-class OLCClassic : public ContestDijkstra {
-public:
-  explicit OLCClassic(const Trace &_trace) noexcept;
-};
-
-#endif
+PixelSize
+Font::TextSize(const TCHAR *text) const noexcept
+{
+  return TextSize(TStringView(text));
+}

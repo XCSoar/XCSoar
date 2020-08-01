@@ -23,7 +23,7 @@
 #include "TaskDijkstraMin.hpp"
 
 bool
-TaskDijkstraMin::DistanceMin(const SearchPoint &currentLocation)
+TaskDijkstraMin::DistanceMin(const SearchPoint &currentLocation) noexcept
 {
   dijkstra.Clear();
   dijkstra.Reserve(256);

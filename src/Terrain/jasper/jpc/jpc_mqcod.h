@@ -87,7 +87,7 @@
 typedef struct {
 
 	/* The most probable symbol (MPS). */
-	int mps;
+	bool mps;
 
 	/* The state index. */
 	int_fast16_t ind;
@@ -104,7 +104,7 @@ typedef struct jpc_mqstate_s {
 	uint_fast16_t qeval;
 
 	/* The MPS. */
-	int mps;
+	bool mps;
 
 	/* The NMPS state. */
 	const struct jpc_mqstate_s *nmps;

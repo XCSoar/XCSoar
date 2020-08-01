@@ -10,6 +10,7 @@
 #if 1
 
 #define JAS_VERSION "unknown"
+#define JAS_ENABLE_32BIT 1
 #define JAS_HAVE_FCNTL_H		1
 #undef  JAS_HAVE_IO_H
 #define JAS_HAVE_UNISTD_H 1
@@ -75,6 +76,14 @@
 
 #if !defined(JAS_DEC_DEFAULT_MAX_SAMPLES)
 #define JAS_DEC_DEFAULT_MAX_SAMPLES (64 * ((size_t) 1048576))
+#endif
+
+#ifdef __GNUC__
+#define JAS_ATTRIBUTE_CONST __attribute__((const))
+#define JAS_ATTRIBUTE_PURE __attribute__((pure))
+#else
+#define JAS_ATTRIBUTE_CONST
+#define JAS_ATTRIBUTE_PURE
 #endif
 
 #if defined(__GNUC__) && !defined(__clang__)

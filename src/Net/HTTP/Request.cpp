@@ -76,6 +76,12 @@ Net::Request::SetRequestBody(const MultiPartFormData &body)
   handle.SetHttpPost(body.Get());
 }
 
+void
+Net::Request::SetVerifyPeer(bool value)
+{
+  handle.SetVerifyPeer(value);
+}
+
 size_t
 Net::Request::ResponseData(const uint8_t *ptr, size_t size)
 {

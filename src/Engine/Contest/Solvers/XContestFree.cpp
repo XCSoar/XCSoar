@@ -23,12 +23,12 @@
 #include "XContestFree.hpp"
 
 XContestFree::XContestFree(const Trace &_trace,
-                           const bool _is_dhv)
+                           const bool _is_dhv) noexcept
   :ContestDijkstra(_trace, true, 4, 1000),
    is_dhv(_is_dhv) {}
 
 ContestResult
-XContestFree::CalculateResult() const
+XContestFree::CalculateResult() const noexcept
 {
   ContestResult result = ContestDijkstra::CalculateResult();
   // DHV-XC: 1.5 points per km

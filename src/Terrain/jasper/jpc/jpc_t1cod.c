@@ -83,16 +83,17 @@
 #include <assert.h>
 #include <math.h>
 
+JAS_ATTRIBUTE_CONST
 static double jpc_pow2i(int n);
 
 /******************************************************************************\
 * Global data.
 \******************************************************************************/
 
-int jpc_zcctxnolut[4 * 256];
-int jpc_spblut[256];
-int jpc_scctxnolut[256];
-int jpc_magctxnolut[4096];
+uint_least8_t jpc_zcctxnolut[4 * 256];
+bool jpc_spblut[256];
+uint_least8_t jpc_scctxnolut[256];
+uint_least8_t jpc_magctxnolut[4096];
 
 jpc_fix_t jpc_signmsedec[1 << JPC_NMSEDEC_BITS];
 jpc_fix_t jpc_refnmsedec[1 << JPC_NMSEDEC_BITS];
@@ -104,6 +105,18 @@ jpc_mqctx_t jpc_mqctxs[JPC_NUMCTXS];
 /******************************************************************************\
 *
 \******************************************************************************/
+
+JAS_ATTRIBUTE_CONST
+static uint_least8_t jpc_getzcctxno(int f, int orient);
+
+JAS_ATTRIBUTE_CONST
+static bool jpc_getspb(int f);
+
+JAS_ATTRIBUTE_CONST
+static uint_least8_t jpc_getscctxno(int f);
+
+JAS_ATTRIBUTE_CONST
+static uint_least8_t jpc_getmagctxno(int f);
 
 static void jpc_initmqctxs(void);
 
@@ -135,7 +148,7 @@ int JPC_PASSTYPE(int passno)
 int JPC_NOMINALGAIN(int qmfbid, int numlvls, int lvlno, int orient)
 {
 	/* Avoid compiler warnings about unused parameters. */
-	numlvls = 0;
+	(void)numlvls;
 
 	if (qmfbid == JPC_COX_INS) {
 		return 0;
@@ -283,15 +296,7 @@ jpc_initmqctxs();
 	}
 }
 
-jpc_fix_t jpc_getsignmsedec_func(jpc_fix_t x, int bitpos)
-{
-	jpc_fix_t y;
-	assert(!(x & (~JAS_ONES(bitpos + 1))));
-	y = jpc_getsignmsedec_macro(x, bitpos);
-	return y;
-}
-
-int jpc_getzcctxno(int f, int orient)
+static uint_least8_t jpc_getzcctxno(int f, int orient)
 {
 	int h;
 	int v;
@@ -301,7 +306,7 @@ int jpc_getzcctxno(int f, int orient)
 	int hv;
 
 	/* Avoid compiler warning. */
-	n = 0;
+	(void)n;
 
 	h = ((f & JPC_WSIG) != 0) + ((f & JPC_ESIG) != 0);
 	v = ((f & JPC_NSIG) != 0) + ((f & JPC_SSIG) != 0);
@@ -311,7 +316,7 @@ int jpc_getzcctxno(int f, int orient)
 		t = h;
 		h = v;
 		v = t;
-		/* fallthrough */
+		/* fall through */
 		gcc_fallthrough;
 	case JPC_TSFB_LL:
 	case JPC_TSFB_LH:
@@ -376,11 +381,11 @@ int jpc_getzcctxno(int f, int orient)
 	return JPC_ZCCTXNO + n;
 }
 
-int jpc_getspb(int f)
+static bool jpc_getspb(int f)
 {
 	int hc;
 	int vc;
-	int n;
+	bool n;
 
 	hc = JAS_MIN(((f & (JPC_ESIG | JPC_ESGN)) == JPC_ESIG) + ((f & (JPC_WSIG | JPC_WSGN)) == JPC_WSIG), 1) -
 	  JAS_MIN(((f & (JPC_ESIG | JPC_ESGN)) == (JPC_ESIG | JPC_ESGN)) + ((f & (JPC_WSIG | JPC_WSGN)) == (JPC_WSIG | JPC_WSGN)), 1);
@@ -394,14 +399,11 @@ int jpc_getspb(int f)
 	return n;
 }
 
-int jpc_getscctxno(int f)
+static uint_least8_t jpc_getscctxno(int f)
 {
 	int hc;
 	int vc;
 	int n;
-
-	/* Avoid compiler warning. */
-	n = 0;
 
 	hc = JAS_MIN(((f & (JPC_ESIG | JPC_ESGN)) == JPC_ESIG) + ((f & (JPC_WSIG | JPC_WSGN)) == JPC_WSIG),
 	  1) - JAS_MIN(((f & (JPC_ESIG | JPC_ESGN)) == (JPC_ESIG | JPC_ESGN)) +
@@ -422,7 +424,9 @@ int jpc_getscctxno(int f)
 		} else {
 			n = 1;
 		}
-	} else if (hc == 1) {
+	} else {
+		assert(hc == 1);
+
 		if (vc == -1) {
 			n = 2;
 		} else if (!vc) {
@@ -435,7 +439,7 @@ int jpc_getscctxno(int f)
 	return JPC_SCCTXNO + n;
 }
 
-int jpc_getmagctxno(int f)
+static uint_least8_t jpc_getmagctxno(int f)
 {
 	int n;
 
@@ -449,7 +453,7 @@ int jpc_getmagctxno(int f)
 	return JPC_MAGCTXNO + n;
 }
 
-void jpc_initctxs(jpc_mqctx_t *ctxs)
+static void jpc_initctxs(jpc_mqctx_t *ctxs)
 {
 	jpc_mqctx_t *ctx;
 	int i;

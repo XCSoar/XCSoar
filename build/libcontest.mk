@@ -11,7 +11,8 @@ CONTEST_SOURCES = \
 	$(CONTEST_SRC_DIR)/Solvers/OLCLeague.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/OLCSprint.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/OLCClassic.cpp \
-	$(CONTEST_SRC_DIR)/Solvers/OLCTriangle.cpp \
+	$(CONTEST_SRC_DIR)/Solvers/TriangleContest.cpp \
+	$(CONTEST_SRC_DIR)/Solvers/OLCTriangleRules.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/OLCFAI.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/OLCPlus.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/DMStQuad.cpp \

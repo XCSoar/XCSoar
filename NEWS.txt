@@ -73,11 +73,20 @@ Version 7.0 - not yet released
 * Raspberry Pi
   - resizable mouse cursor
 
-Version 6.8.16 - not yet released
+Version 6.8.16 - 2020/07/26
+* input events
+  - fix two crash bugs with malformed files
+* user interface
+  - fix crash bug in waypoint editor
+* devices
+  - added ports 8880, 8881, 8882 to tcp-client
 * glide computer
   - fix crash bug
 * terrain
   - fix several crash bugs (JasPer)
+* Android
+  - fix several crash bugs
+  - fix rendering errors on very wide text lines
 
 Version 6.8.15 - 2020/06/13
 * user interface

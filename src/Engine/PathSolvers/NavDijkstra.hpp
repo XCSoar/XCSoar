@@ -46,13 +46,13 @@ protected:
 
   struct DijkstraMap {
     struct Hash {
-      std::size_t operator()(ScanTaskPoint p) const {
+      std::size_t operator()(ScanTaskPoint p) const noexcept {
         return p.Key();
       }
     };
 
     struct Equal {
-      std::size_t operator()(ScanTaskPoint a, ScanTaskPoint b) const {
+      std::size_t operator()(ScanTaskPoint a, ScanTaskPoint b) const noexcept {
         return a.Key() == b.Key();
       }
     };
@@ -83,7 +83,7 @@ protected:
    *
    * @return Initialised object
    */
-  NavDijkstra(const unsigned _num_stages)
+  NavDijkstra(const unsigned _num_stages) noexcept
   {
     SetStageCount(_num_stages);
   }
@@ -95,7 +95,7 @@ protected:
    * Set the number of stages to search for, and clear the solution
    * array
    */
-  void SetStageCount(const unsigned _num_stages) {
+  void SetStageCount(const unsigned _num_stages) noexcept {
     assert(_num_stages <= MAX_STAGES);
     num_stages =_num_stages;
   }
@@ -107,7 +107,7 @@ protected:
    *
    * @return True if this terminal point completes a valid solution
    */
-  bool IsFinishSatisfied(gcc_unused const ScanTaskPoint sp) const {
+  bool IsFinishSatisfied(gcc_unused const ScanTaskPoint sp) const noexcept {
     return true;
   }
 
@@ -116,10 +116,10 @@ protected:
    *
    * @param curNode Origin node to add edges from
    */
-  virtual void AddEdges(const ScanTaskPoint curNode) = 0;
+  virtual void AddEdges(const ScanTaskPoint curNode) noexcept = 0;
 
   gcc_pure
-  bool IsFinal(unsigned stage_number) const {
+  bool IsFinal(unsigned stage_number) const noexcept {
     assert(stage_number < num_stages);
 
     return stage_number + 1 == num_stages;
@@ -133,18 +133,18 @@ protected:
    * @return True if point is terminal
    */
   gcc_pure
-  bool IsFinal(const ScanTaskPoint sp) const {
+  bool IsFinal(const ScanTaskPoint sp) const noexcept {
     assert(num_stages <= MAX_STAGES);
 
     return IsFinal(sp.GetStageNumber());
   }
 
   bool Link(const ScanTaskPoint node, const ScanTaskPoint parent,
-            unsigned value) {
+            unsigned value) noexcept {
     return dijkstra.Link(node, parent, value);
   }
 
-  void LinkStart(const ScanTaskPoint node, unsigned value=0) {
+  void LinkStart(const ScanTaskPoint node, unsigned value=0) noexcept {
     Link(node, node, value);
   }
 
@@ -156,7 +156,7 @@ protected:
    *
    * @return True if algorithm returns a terminal path or no path found
    */
-  SolverResult DistanceGeneral(unsigned max_steps = 0 - 1) {
+  SolverResult DistanceGeneral(unsigned max_steps = 0 - 1) noexcept {
     while (!dijkstra.IsEmpty()) {
       const ScanTaskPoint destination = dijkstra.Pop();
 
@@ -188,7 +188,8 @@ protected:
    * Search the chain for the ScanTaskPoint at the specified stage.
    */
   gcc_pure
-  ScanTaskPoint FindStage(ScanTaskPoint p, unsigned stage_number) const {
+  ScanTaskPoint FindStage(ScanTaskPoint p,
+                          unsigned stage_number) const noexcept {
     assert(stage_number <= p.GetStageNumber());
 
     while (p.GetStageNumber() > stage_number) {
@@ -206,7 +207,7 @@ protected:
    * Find the first ScanTaskPoint in the chain.
    */
   gcc_pure
-  ScanTaskPoint FindStart(ScanTaskPoint p) const {
+  ScanTaskPoint FindStart(ScanTaskPoint p) const noexcept {
     return FindStage(p, 0);
   }
 
@@ -215,7 +216,7 @@ protected:
    *
    * @param destination Terminal point to query
    */
-  void FindSolution(const ScanTaskPoint destination) {
+  void FindSolution(const ScanTaskPoint destination) noexcept {
     ScanTaskPoint p(destination);
     unsigned last_stage_number;
 

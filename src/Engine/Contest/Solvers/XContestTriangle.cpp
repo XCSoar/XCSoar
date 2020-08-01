@@ -23,14 +23,14 @@
 #include "XContestTriangle.hpp"
 
 XContestTriangle::XContestTriangle(const Trace &_trace,
-                                   bool predict, bool _is_dhv)
-  :OLCTriangle(_trace, true, predict),
+                                   bool predict, bool _is_dhv) noexcept
+  :TriangleContest(_trace, predict),
    is_dhv(_is_dhv) {}
 
 ContestResult
-XContestTriangle::CalculateResult() const
+XContestTriangle::CalculateResult() const noexcept
 {
-  ContestResult result = OLCTriangle::CalculateResult();
+  ContestResult result = TriangleContest::CalculateResult();
 
   if (result.distance > 0) {
     // approximation for now: gap is distance from start to finish
@@ -49,6 +49,7 @@ XContestTriangle::CalculateResult() const
   // DHV-XC: 2.0 or 1.75 points per km for FAI vs non-FAI triangle
   // XContest: 1.4 or 1.2 points per km for FAI vs non-FAI triangle
 
+  constexpr bool is_fai = true; // TODO: how to set this flag?
   const auto score_factor = is_dhv
     ? (is_fai ? 0.002 : 0.00175)
     : (is_fai ? 0.0014 : 0.0012);
@@ -58,9 +59,9 @@ XContestTriangle::CalculateResult() const
 }
 
 SolverResult
-XContestTriangle::Solve(bool exhaustive)
+XContestTriangle::Solve(bool exhaustive) noexcept
 {
-  SolverResult result = OLCTriangle::Solve(exhaustive);
+  SolverResult result = TriangleContest::Solve(exhaustive);
   if (result != SolverResult::FAILED)
     best_d = 0; // reset heuristic
 

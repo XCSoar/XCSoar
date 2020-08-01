@@ -20,7 +20,7 @@
 }
 */
 
-#include "OLCTriangle.hpp"
+#include "TriangleContest.hpp"
 #include "Cast.hpp"
 #include "Trace/Trace.hpp"
 #include "Util/QuadTree.hxx"
@@ -55,21 +55,17 @@
  */
 static constexpr double max_distance(1000);
 
-OLCTriangle::OLCTriangle(const Trace &_trace,
-                         const bool _is_fai, bool _predict,
-                         const unsigned _finish_alt_diff)
+TriangleContest::TriangleContest(const Trace &_trace,
+                                 bool _predict,
+                                 const unsigned _finish_alt_diff) noexcept
   : AbstractContest(_finish_alt_diff),
    TraceManager(_trace),
-   is_fai(_is_fai), predict(_predict),
-   is_closed(false),
-   is_complete(false),
-   max_iterations(1e6),
-   max_tree_size(5e5)
+   predict(_predict)
 {
 }
 
 void
-OLCTriangle::Reset()
+TriangleContest::Reset() noexcept
 {
   is_complete = false;
   is_closed = false;
@@ -87,7 +83,7 @@ OLCTriangle::Reset()
 }
 
 void
-OLCTriangle::ResetBranchAndBound()
+TriangleContest::ResetBranchAndBound() noexcept
 {
   running = false;
   branch_and_bound.clear();
@@ -95,7 +91,8 @@ OLCTriangle::ResetBranchAndBound()
 
 gcc_pure
 static double
-CalcLegDistance(const ContestTraceVector &solution, const unsigned index)
+CalcLegDistance(const ContestTraceVector &solution,
+                const unsigned index) noexcept
 {
   // leg 0: 1-2
   // leg 1: 2-3
@@ -108,7 +105,7 @@ CalcLegDistance(const ContestTraceVector &solution, const unsigned index)
 }
 
 void
-OLCTriangle::UpdateTrace(bool force)
+TriangleContest::UpdateTrace(bool force) noexcept
 {
   if (IsMasterAppended()) return; /* unmodified */
 
@@ -140,9 +137,8 @@ OLCTriangle::UpdateTrace(bool force)
   tick_iterations = n_points * n_points / 8;
 }
 
-
 SolverResult
-OLCTriangle::Solve(bool exhaustive)
+TriangleContest::Solve(bool exhaustive) noexcept
 {
   if (trace_master.size() < 3) {
     ClearTrace();
@@ -174,7 +170,7 @@ OLCTriangle::Solve(bool exhaustive)
 }
 
 void
-OLCTriangle::SolveTriangle(bool exhaustive)
+TriangleContest::SolveTriangle(bool exhaustive) noexcept
 {
   unsigned tp1 = 0,
            tp2 = 0,
@@ -218,9 +214,9 @@ OLCTriangle::SolveTriangle(bool exhaustive)
 
     for (const auto relaxed_pair : relaxed_pairs.closing_pairs) {
 
-      std::tuple<unsigned, unsigned, unsigned, unsigned> triangle;
-
-      triangle = RunBranchAndBound(relaxed_pair.first, relaxed_pair.second, best_d, exhaustive);
+      const auto triangle = RunBranchAndBound(relaxed_pair.first,
+                                              relaxed_pair.second,
+                                              best_d, exhaustive);
 
       if (std::get<3>(triangle) > best_d) {
         // solution is better than best_d
@@ -249,11 +245,9 @@ OLCTriangle::SolveTriangle(bool exhaustive)
     }
 
     for (const auto &close_look_pair : close_look.closing_pairs) {
-      std::tuple<unsigned, unsigned, unsigned, unsigned> triangle;
-
-      triangle = RunBranchAndBound(close_look_pair.first,
-                                   close_look_pair.second,
-                                   best_d, exhaustive);
+      const auto triangle = RunBranchAndBound(close_look_pair.first,
+                                              close_look_pair.second,
+                                              best_d, exhaustive);
 
       if (std::get<3>(triangle) > best_d) {
         // solution is better than best_d
@@ -274,9 +268,7 @@ OLCTriangle::SolveTriangle(bool exhaustive)
      * one closing pair only (0 -> n_points-1) which allows us to suspend the
      * solver...
      */
-    std::tuple<unsigned, unsigned, unsigned, unsigned> triangle;
-
-    triangle = RunBranchAndBound(0, n_points - 1, best_d, false);
+    const auto triangle = RunBranchAndBound(0, n_points - 1, best_d, false);
 
     if (std::get<3>(triangle) > best_d) {
       // solution is better than best_d
@@ -306,7 +298,8 @@ OLCTriangle::SolveTriangle(bool exhaustive)
 
 
 std::tuple<unsigned, unsigned, unsigned, unsigned>
-OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, bool exhaustive)
+TriangleContest::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d,
+                                   bool exhaustive) noexcept
 {
   /* Some general information about the branch and bound method can be found here:
    * http://eaton.math.rpi.edu/faculty/Mitchell/papers/leeejem.html
@@ -322,7 +315,7 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
     trace_master.ProjectRange(GetPoint(from).GetLocation(), fastskiprange);
 
   if (fastskiprange_flat < worst_d)
-    return std::tuple<unsigned, unsigned, unsigned, unsigned>(0, 0, 0, 0);
+    return {0, 0, 0, 0};
 
   bool integral_feasible = false;
   unsigned best_d = 0,
@@ -333,8 +326,9 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
 
   // note: this is _not_ the breakepoint between small and large triangles,
   // but a slightly lower value used for relaxed large triangle checking.
-  const unsigned large_triangle_check =
-    trace_master.ProjectRange(GetPoint(from).GetLocation(), 500000) * 0.99;
+  const auto validator =
+    OLCTriangleRules::MakeValidator(trace_master.GetProjection(),
+                                    GetPoint(from).GetLocation());
 
   if (!running) {
     // initiate algorithm. otherwise continue unfinished run
@@ -342,9 +336,9 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
 
     // initialize bound-and-branch tree with root node (note: Candidate set interval is [min, max))
     CandidateSet root_candidates(*this, from, to + 1);
-    if (root_candidates.IsFeasible(is_fai, large_triangle_check) &&
+    if (root_candidates.IsFeasible(validator) &&
         root_candidates.df_max >= worst_d)
-      branch_and_bound.insert(std::pair<unsigned, CandidateSet>(root_candidates.df_max, root_candidates));
+      branch_and_bound.emplace(root_candidates.df_max, root_candidates);
   }
 
   // set max_iterations only if non-exhaustive and predictive solving is enabled.
@@ -386,7 +380,7 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
     }
 
     if (node->second.df_min >= worst_d &&
-        node->second.IsIntegral(*this, is_fai, large_triangle_check)) {
+        node->second.IsIntegral(*this, validator)) {
       // node is integral feasible -> a possible solution
 
       worst_d = node->second.df_min;
@@ -407,62 +401,46 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
 
       const unsigned max_diag = std::max({tp1_diag, tp2_diag, tp3_diag});
 
-      CandidateSet left, right;
-      bool add = false;
-
       if (tp1_diag == max_diag && node->second.tp1.GetSize() != 1) {
         // split tp1 range
         const unsigned split = (node->second.tp1.index_min + node->second.tp1.index_max) / 2;
 
         if (split <= node->second.tp2.index_max) {
-          add = true;
+          CheckAddCandidate(worst_d, validator,
+                            {TurnPointRange(*this, node->second.tp1.index_min, split),
+                             node->second.tp2, node->second.tp3});
 
-          left = CandidateSet(TurnPointRange(*this, node->second.tp1.index_min, split),
-                              node->second.tp2, node->second.tp3);
-
-          right = CandidateSet(TurnPointRange(*this, split, node->second.tp1.index_max),
-                               node->second.tp2, node->second.tp3);
+          CheckAddCandidate(worst_d, validator,
+                            {TurnPointRange(*this, split, node->second.tp1.index_max),
+                             node->second.tp2, node->second.tp3});
         }
       } else if (tp2_diag == max_diag && node->second.tp2.GetSize() != 1) {
         // split tp2 range
         const unsigned split = (node->second.tp2.index_min + node->second.tp2.index_max) / 2;
 
         if (split <= node->second.tp3.index_max && split >= node->second.tp1.index_min) {
-          add = true;
+          CheckAddCandidate(worst_d, validator,
+                            {node->second.tp1,
+                             TurnPointRange(*this, node->second.tp2.index_min, split),
+                             node->second.tp3});
 
-          left = CandidateSet(node->second.tp1,
-                              TurnPointRange(*this, node->second.tp2.index_min, split),
-                              node->second.tp3);
-
-          right = CandidateSet(node->second.tp1,
-                               TurnPointRange(*this, split, node->second.tp2.index_max),
-                               node->second.tp3);
+          CheckAddCandidate(worst_d, validator,
+                            {node->second.tp1,
+                             TurnPointRange(*this, split, node->second.tp2.index_max),
+                             node->second.tp3});
         }
       } else if (node->second.tp3.GetSize() != 1) {
         // split tp3 range
         const unsigned split = (node->second.tp3.index_min + node->second.tp3.index_max) / 2;
 
         if (split >= node->second.tp2.index_min) {
-          add = true;
+          CheckAddCandidate(worst_d, validator,
+                            {node->second.tp1, node->second.tp2,
+                             TurnPointRange(*this, node->second.tp3.index_min, split)});
 
-          left = CandidateSet(node->second.tp1, node->second.tp2,
-                              TurnPointRange(*this, node->second.tp3.index_min, split));
-
-          right = CandidateSet(node->second.tp1, node->second.tp2,
-                               TurnPointRange(*this, split, node->second.tp3.index_max));
-        }
-      }
-
-      if (add) {
-        // add the new candidate set only if it it's feasible and has d_min >= worst_d
-        if (left.df_max >= worst_d &&
-            left.IsFeasible(is_fai, large_triangle_check)) {
-          branch_and_bound.insert(std::pair<unsigned, CandidateSet>(left.df_max, left));
-        }
-
-        if (right.df_max >= worst_d &&
-            right.IsFeasible(is_fai, large_triangle_check)) {
-          branch_and_bound.insert(std::pair<unsigned, CandidateSet>(right.df_max, right));
+          CheckAddCandidate(worst_d, validator,
+                            {node->second.tp1, node->second.tp2,
+                             TurnPointRange(*this, split, node->second.tp3.index_max)});
         }
       }
     }
@@ -480,14 +458,14 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
     if (tp2 > tp3) std::swap(tp2, tp3);
     if (tp1 > tp2) std::swap(tp1, tp2);
 
-    return std::tuple<unsigned, unsigned, unsigned, unsigned>(tp1, tp2, tp3, best_d);
+    return {tp1, tp2, tp3, best_d};
   } else {
-    return std::tuple<unsigned, unsigned, unsigned, unsigned>(0, 0, 0, 0);
+    return {0, 0, 0, 0};
   }
 }
 
 ContestResult
-OLCTriangle::CalculateResult() const
+TriangleContest::CalculateResult() const noexcept
 {
   ContestResult result;
   result.time = (is_complete && is_closed)
@@ -503,7 +481,7 @@ OLCTriangle::CalculateResult() const
 gcc_pure
 static bool
 IsInRange(const SearchPoint &a, const SearchPoint &b,
-          unsigned half_max_range_sq, double max_distance)
+          unsigned half_max_range_sq, double max_distance) noexcept
 {
   /* optimisation: if the flat distance is much smaller than the
      maximum range, we don't need to call the method
@@ -513,7 +491,7 @@ IsInRange(const SearchPoint &a, const SearchPoint &b,
 }
 
 bool
-OLCTriangle::FindClosingPairs(unsigned old_size)
+TriangleContest::FindClosingPairs(unsigned old_size) noexcept
 {
   if (predict) {
     return closing_pairs.Insert(ClosingPair(0, n_points-1));
@@ -526,12 +504,12 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
 
   struct TracePointNodeAccessor {
     gcc_pure
-    int GetX(const TracePointNode &node) const {
+    int GetX(const TracePointNode &node) const noexcept {
       return node.point->GetFlatLocation().x;
     }
 
     gcc_pure
-    int GetY(const TracePointNode &node) const {
+    int GetY(const TracePointNode &node) const noexcept {
       return node.point->GetFlatLocation().y;
     }
   };
@@ -596,13 +574,13 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
 }
 
 bool
-OLCTriangle::UpdateScore()
+TriangleContest::UpdateScore() noexcept
 {
   return false;
 }
 
 void
-OLCTriangle::CopySolution(ContestTraceVector &result) const
+TriangleContest::CopySolution(ContestTraceVector &result) const noexcept
 {
   result = solution;
   assert(result.size() == 5);

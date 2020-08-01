@@ -86,7 +86,10 @@ struct EventBuilder {
 
       // All modes are valid at this point
       int mode_id = config.MakeMode(token);
-      assert(mode_id >= 0);
+      if (mode_id < 0) {
+        LogFormat(_T("Too many modes: %.*s at %u"), int(token.size), token.data, line);
+        continue;
+      }
 
       // Make label event
       // TODO code: Consider Reuse existing entries...

@@ -35,7 +35,7 @@ static constexpr unsigned CONTEST_QUEUE_SIZE = 5000;
 ContestDijkstra::ContestDijkstra(const Trace &_trace,
                                  bool _continuous,
                                  const unsigned n_legs,
-                                 const unsigned finish_alt_diff)
+                                 const unsigned finish_alt_diff) noexcept
   :AbstractContest(finish_alt_diff),
    NavDijkstra(n_legs + 1),
    TraceManager(_trace),
@@ -48,7 +48,7 @@ ContestDijkstra::ContestDijkstra(const Trace &_trace,
 }
 
 void
-ContestDijkstra::UpdateTrace(bool force)
+ContestDijkstra::UpdateTrace(bool force) noexcept
 {
   if (IsMasterAppended()) return; /* unmodified */
 
@@ -84,7 +84,7 @@ ContestDijkstra::UpdateTrace(bool force)
 }
 
 SolverResult
-ContestDijkstra::Solve(bool exhaustive)
+ContestDijkstra::Solve(bool exhaustive) noexcept
 {
   assert(num_stages <= MAX_STAGES);
 
@@ -144,7 +144,7 @@ ContestDijkstra::Solve(bool exhaustive)
 }
 
 void
-ContestDijkstra::Reset()
+ContestDijkstra::Reset() noexcept
 {
   dijkstra.Clear();
   ClearTrace();
@@ -154,7 +154,7 @@ ContestDijkstra::Reset()
 }
 
 bool
-ContestDijkstra::SaveSolution()
+ContestDijkstra::SaveSolution() noexcept
 {
   solution.resize(num_stages);
 
@@ -172,7 +172,7 @@ ContestDijkstra::SaveSolution()
 }
 
 ContestResult
-ContestDijkstra::CalculateResult(const ContestTraceVector &solution) const
+ContestDijkstra::CalculateResult(const ContestTraceVector &solution) const noexcept
 {
   assert(num_stages <= MAX_STAGES);
 
@@ -196,13 +196,13 @@ ContestDijkstra::CalculateResult(const ContestTraceVector &solution) const
 }
 
 ContestResult
-ContestDijkstra::CalculateResult() const
+ContestDijkstra::CalculateResult() const noexcept
 {
   return CalculateResult(solution);
 }
 
 void
-ContestDijkstra::AddStartEdges()
+ContestDijkstra::AddStartEdges() noexcept
 {
   assert(num_stages <= MAX_STAGES);
   assert(n_points > 0);
@@ -222,7 +222,7 @@ ContestDijkstra::AddStartEdges()
 
 void
 ContestDijkstra::AddEdges(const ScanTaskPoint origin,
-                          const unsigned first_point)
+                          const unsigned first_point) noexcept
 {
   ScanTaskPoint destination(origin.GetStageNumber() + 1,
                             std::max(origin.GetPointIndex(), first_point));
@@ -270,13 +270,13 @@ ContestDijkstra::AddEdges(const ScanTaskPoint origin,
 }
 
 void
-ContestDijkstra::AddEdges(const ScanTaskPoint origin)
+ContestDijkstra::AddEdges(const ScanTaskPoint origin) noexcept
 {
   AddEdges(origin, 0);
 }
 
 void
-ContestDijkstra::AddIncrementalEdges(unsigned first_point)
+ContestDijkstra::AddIncrementalEdges(unsigned first_point) noexcept
 {
   assert(first_point < n_points);
   assert(continuous);
@@ -319,15 +319,15 @@ ContestDijkstra::AddIncrementalEdges(unsigned first_point)
 }
 
 void
-ContestDijkstra::CopySolution(ContestTraceVector &result) const
+ContestDijkstra::CopySolution(ContestTraceVector &result) const noexcept
 {
   assert(num_stages <= MAX_STAGES);
 
   result = solution;
 }
 
-void 
-ContestDijkstra::StartSearch()
+void
+ContestDijkstra::StartSearch() noexcept
 {
   // nothing required by default
 }

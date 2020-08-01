@@ -54,8 +54,8 @@ libstdcxx_musl_headers = LibstdcxxMuslHeadersProject(
 )
 
 openssl = OpenSSLProject(
-    'https://www.openssl.org/source/openssl-3.0.0-alpha4.tar.gz',
-    'ftp://ftp.cert.dfn.de/pub/tools/net/openssl/source/openssl-3.0.0-alpha4.tar.gz',
+    'https://www.openssl.org/source/old/3.0/openssl-3.0.0-alpha4.tar.gz',
+    'ftp://ftp.cert.dfn.de/pub/tools/net/old/3.0/openssl/source/openssl-3.0.0-alpha4.tar.gz',
     'd930b650e0899f5baca8b80c50e7401620c129fef6c50198400999776a39bd37',
     'include/openssl/ossl_typ.h',
 )
@@ -242,9 +242,9 @@ libgeotiff = AutotoolsProject(
 )
 
 sdl2 = SDL2Project(
-    'http://www.libsdl.org/release/SDL2-2.0.8.tar.gz',
-    'https://fossies.org/linux/misc/SDL2-2.0.8.tar.gz',
-    'edc77c57308661d576e843344d8638e025a7818bff73f8fbfab09c3c5fd092ec',
+    'http://www.libsdl.org/release/SDL2-2.0.12.tar.gz',
+    'https://fossies.org/linux/misc/SDL2-2.0.12.tar.gz',
+    '349268f695c02efbc9b9148a70b85e58cefbbf704abd3e91be654db7f1e2c863',
     'lib/libSDL2.a',
     [
         '--disable-shared', '--enable-static',

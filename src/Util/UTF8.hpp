@@ -30,12 +30,21 @@ Copyright_License {
 
 #include <cstddef>
 
+struct StringView;
+
 /**
  * Is this a valid UTF-8 string?
  */
 gcc_pure  gcc_nonnull_all
 bool
 ValidateUTF8(const char *p) noexcept;
+
+/**
+ * Is this a valid UTF-8 string?
+ */
+gcc_pure
+bool
+ValidateUTF8(StringView p) noexcept;
 
 /**
  * @return the number of the sequence beginning with the given

@@ -18,19 +18,19 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
- */
+*/
 
-#ifndef OLC_CLASSIC_HPP
-#define OLC_CLASSIC_HPP
+#include "OLCTriangleRules.hpp"
+#include "Geo/Flat/FlatProjection.hpp"
 
-#include "ContestDijkstra.hpp"
+OLCTriangleValidator
+OLCTriangleRules::MakeValidator(const FlatProjection &projection,
+                                const GeoPoint &reference) noexcept
+{
+  // note: this is _not_ the breakepoint between small and large triangles,
+  // but a slightly lower value used for relaxed large triangle checking.
+  const unsigned large_threshold_flat =
+    projection.ProjectRangeInteger(reference, large_threshold_m) * 0.99;
 
-/**
- * Specialisation of OLC Dijkstra for OLC Classic rules
- */
-class OLCClassic : public ContestDijkstra {
-public:
-  explicit OLCClassic(const Trace &_trace) noexcept;
-};
-
-#endif
+  return OLCTriangleValidator(large_threshold_flat);
+}

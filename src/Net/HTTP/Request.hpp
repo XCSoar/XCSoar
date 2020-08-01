@@ -78,6 +78,8 @@ namespace Net {
      */
     void SetRequestBody(const MultiPartFormData &body);
 
+    void SetVerifyPeer(bool value = true);
+
     /**
      * Send the request to the server and receive response headers.
      * This function fails if the connection could not be established

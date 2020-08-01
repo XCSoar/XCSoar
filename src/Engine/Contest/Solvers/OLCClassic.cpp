@@ -22,5 +22,5 @@
 
 #include "OLCClassic.hpp"
 
-OLCClassic::OLCClassic(const Trace &_trace):
-  ContestDijkstra(_trace, true, 6, 1000) {}
+OLCClassic::OLCClassic(const Trace &_trace) noexcept
+  :ContestDijkstra(_trace, true, 6, 1000) {}

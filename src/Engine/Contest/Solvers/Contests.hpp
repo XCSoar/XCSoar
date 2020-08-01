@@ -32,6 +32,7 @@ Copyright_License {
 enum class Contest : uint8_t;
 
 gcc_const
-const TCHAR* ContestToString(Contest contest);
+const TCHAR *
+ContestToString(Contest contest) noexcept;
 
 #endif

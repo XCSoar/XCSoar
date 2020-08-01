@@ -452,7 +452,7 @@ jas_stream_t *jas_stream_freopen(const char *path, const char *mode, FILE *fp)
 	  fp));
 
 	/* Eliminate compiler warning about unused variable. */
-	path = 0;
+	(void)path;
 
 	/* Allocate a stream object. */
 	if (!(stream = jas_stream_create())) {

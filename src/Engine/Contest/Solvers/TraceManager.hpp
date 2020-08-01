@@ -71,7 +71,7 @@ public:
    *
    * @param _trace Trace object reference to use for solving
    */
-  TraceManager(const Trace &_trace);
+  explicit TraceManager(const Trace &_trace) noexcept;
 
   /**
    * Sets the location of the "predicted" finish location.  If
@@ -81,40 +81,40 @@ public:
    *
    * @return true if the object was reset
    */
-  bool SetPredicted(const TracePoint &_predicted);
+  bool SetPredicted(const TracePoint &_predicted) noexcept;
 
 protected:
-  void ClearTrace();
+  void ClearTrace() noexcept;
 
   /**
    * Obtain a new #Trace copy.
    */
-  void UpdateTraceFull();
+  void UpdateTraceFull() noexcept;
 
   /**
    * Copy points that were added to the end of the master Trace.
    *
    * @return true if new points were added
    */
-  bool UpdateTraceTail();
+  bool UpdateTraceTail() noexcept;
 
   gcc_pure
-  const TracePoint &GetPoint(unsigned i) const {
+  const TracePoint &GetPoint(unsigned i) const noexcept {
     assert(i < n_points);
 
     return *trace[i];
   }
 
   gcc_pure
-  bool IsMasterUpdated(bool continuous) const;
+  bool IsMasterUpdated(bool continuous) const noexcept;
 
   gcc_pure
-  bool CheckMasterSerial() const {
+  bool CheckMasterSerial() const noexcept {
     return modify_serial != trace_master.GetModifySerial();
   }
 
   gcc_pure
-  bool IsMasterAppended() const {
+  bool IsMasterAppended() const noexcept {
     return append_serial == trace_master.GetAppendSerial();
   }
 
@@ -125,9 +125,9 @@ protected:
    * @param force disable lazy updates, force the trace to be up to
    * date before returning
    */
-  virtual void UpdateTrace(bool force);
+  virtual void UpdateTrace(bool force) noexcept;
 
-  virtual void Reset() = 0;
+  virtual void Reset() noexcept = 0;
 };
 
 #endif /* TRACE_MANAGER_HPP */

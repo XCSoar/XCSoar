@@ -39,39 +39,40 @@ struct ContestTracePoint {
   GeoPoint location;
 
   ContestTracePoint() = default;
-  ContestTracePoint(const TracePoint &src);
+  ContestTracePoint(const TracePoint &src) noexcept;
 
-  void Clear() {
+  void Clear() noexcept {
     time = (unsigned)(0 - 1);
   }
 
-  bool IsDefined() const {
+  constexpr bool IsDefined() const noexcept {
     return time != (unsigned)(0 - 1);
   }
 
-  unsigned GetTime() const {
+  constexpr unsigned GetTime() const noexcept {
     return time;
   }
 
-  bool IsOlderThan(const ContestTracePoint &other) const {
+  constexpr bool IsOlderThan(const ContestTracePoint &other) const noexcept {
     return time < other.time;
   }
 
-  bool IsNewerThan(const ContestTracePoint &other) const {
+  constexpr bool IsNewerThan(const ContestTracePoint &other) const noexcept {
     return time > other.time;
   }
 
-  unsigned DeltaTime(const ContestTracePoint &previous) const {
+  unsigned DeltaTime(const ContestTracePoint &previous) const noexcept {
     assert(!IsOlderThan(previous));
 
     return time - previous.time;
   }
 
-  const GeoPoint &GetLocation() const {
+  constexpr const GeoPoint &GetLocation() const noexcept {
     return location;
   }
 
-  double DistanceTo(const GeoPoint &other) const {
+  gcc_pure
+  double DistanceTo(const GeoPoint &other) const noexcept {
     return location.Distance(other);
   }
 };

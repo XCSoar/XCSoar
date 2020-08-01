@@ -23,27 +23,27 @@ Copyright_License {
 
 #include "ContestDijkstra.hpp"
 
-AbstractContest::AbstractContest(const unsigned _finish_alt_diff)
+AbstractContest::AbstractContest(const unsigned _finish_alt_diff) noexcept
   :handicap(100),
    finish_alt_diff(_finish_alt_diff)
 {
 }
 
 void
-AbstractContest::Reset()
+AbstractContest::Reset() noexcept
 {
   best_result.Reset();
 }
 
 bool
-AbstractContest::UpdateScore()
+AbstractContest::UpdateScore() noexcept
 {
   // for normal contests, nothing needs to be done
   return false;
 }
 
 bool
-AbstractContest::SaveSolution()
+AbstractContest::SaveSolution() noexcept
 {
   ContestResult result = CalculateResult();
   const bool improved = result.score > best_result.score;
@@ -57,8 +57,8 @@ AbstractContest::SaveSolution()
 }
 
 bool
-AbstractContest::IsFinishAltitudeValid(const TracePoint& start,
-                                       const TracePoint& finish) const
+AbstractContest::IsFinishAltitudeValid(const TracePoint &start,
+                                       const TracePoint &finish) const noexcept
 {
   return finish.GetIntegerAltitude() + (int)finish_alt_diff >=
     start.GetIntegerAltitude();

@@ -50,9 +50,9 @@ public:
    * @param _handicap Contest handicap factor
    * @param finish_alt_diff Maximum height loss from start to finish (m)
    */
-  AbstractContest(const unsigned _finish_alt_diff = 1000);
+  AbstractContest(const unsigned _finish_alt_diff = 1000) noexcept;
 
-  void SetHandicap(unsigned _handicap) {
+  void SetHandicap(unsigned _handicap) noexcept {
     handicap = _handicap;
   }
 
@@ -64,11 +64,11 @@ public:
    *
    * @return True is solution was found, False otherwise
    */
-  const ContestResult &GetBestResult() const {
+  const ContestResult &GetBestResult() const noexcept {
     return best_result;
   }
 
-  const ContestTraceVector &GetBestSolution() const {
+  const ContestTraceVector &GetBestSolution() const noexcept {
     return best_solution;
   }
 
@@ -76,20 +76,20 @@ protected:
   /**
    * Calculate the result.
    */
-  virtual ContestResult CalculateResult() const = 0;
+  virtual ContestResult CalculateResult() const noexcept = 0;
 
   /**
    * Copy the best Contest path solution
    *
    * @param vec output vector
    */
-  virtual void CopySolution(ContestTraceVector &vec) const = 0;
+  virtual void CopySolution(ContestTraceVector &vec) const noexcept = 0;
 
 public:
   /**
    * Reset the optimiser as if never flown
    */
-  virtual void Reset();
+  virtual void Reset() noexcept;
 
   /**
    * Update the solver.  The solver is incremental, so this method can
@@ -98,7 +98,7 @@ public:
    * @param exhaustive true to find the final solution, false stops
    * after a number of iterations (incremental search)
    */
-  virtual SolverResult Solve(bool exhaustive) = 0;
+  virtual SolverResult Solve(bool exhaustive) noexcept = 0;
 
 protected:
   /**
@@ -108,18 +108,19 @@ protected:
    *
    * @return true if score is updated
    */
-  virtual bool UpdateScore();
-
-  bool IsFinishAltitudeValid(const TracePoint& start,
-                             const TracePoint& finish) const;
+  virtual bool UpdateScore() noexcept;
 
   gcc_pure
-  int GetMaximumStartAltitude(const TracePoint &finish) const {
+  bool IsFinishAltitudeValid(const TracePoint &start,
+                             const TracePoint &finish) const noexcept;
+
+  gcc_pure
+  int GetMaximumStartAltitude(const TracePoint &finish) const noexcept {
     return finish.GetIntegerAltitude() + finish_alt_diff;
   }
 
   gcc_pure
-  int GetMinimumFinishAltitude(const TracePoint &start) const {
+  int GetMinimumFinishAltitude(const TracePoint &start) const noexcept {
     return start.GetIntegerAltitude() - finish_alt_diff;
   }
 
@@ -130,7 +131,7 @@ protected:
    *
    * @return true if #best_result was updated
    */
-  bool SaveSolution();
+  bool SaveSolution() noexcept;
 
   /**
    * Apply handicap.
@@ -141,7 +142,7 @@ protected:
    * @return Handicap adjusted score
    */
   gcc_pure
-  double ApplyHandicap(double unhandicapped_score) const {
+  double ApplyHandicap(double unhandicapped_score) const noexcept {
     assert(handicap != 0);
 
     return 100 * unhandicapped_score / handicap;
@@ -152,7 +153,7 @@ protected:
    * rules.
    */
   gcc_pure
-  double ApplyShiftedHandicap(const double unhandicapped_score) const {
+  double ApplyShiftedHandicap(const double unhandicapped_score) const noexcept {
     assert(handicap != 0);
 
     return 400 * unhandicapped_score / (3 * handicap + 100);

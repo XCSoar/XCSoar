@@ -30,7 +30,7 @@ HOT_SOURCES = \
 	$(ENGINE_SRC_DIR)/Route/RoutePolars.cpp \
 	$(ENGINE_SRC_DIR)/Contest/Solvers/ContestDijkstra.cpp \
 	$(ENGINE_SRC_DIR)/Contest/Solvers/TraceManager.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/OLCTriangle.cpp
+	$(ENGINE_SRC_DIR)/Contest/Solvers/TriangleContest.cpp
 
 $(call SRC_TO_OBJ,$(HOT_SOURCES)): OPTIMIZE += -O3
 

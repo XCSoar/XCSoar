@@ -24,13 +24,13 @@
 #include "Trace/Trace.hpp"
 #include "Cast.hpp"
 
-OLCLeague::OLCLeague(const Trace &_trace)
+OLCLeague::OLCLeague(const Trace &_trace) noexcept
   :AbstractContest(0), trace(_trace)
 {
 }
 
 void
-OLCLeague::Reset()
+OLCLeague::Reset() noexcept
 {
   AbstractContest::Reset();
   solution_classic.clear();
@@ -41,7 +41,7 @@ OLCLeague::Reset()
 }
 
 SolverResult
-OLCLeague::Solve(bool exhaustive)
+OLCLeague::Solve(bool exhaustive) noexcept
 {
   if (trace.size() < 2)
     return SolverResult::FAILED;
@@ -82,13 +82,13 @@ OLCLeague::Solve(bool exhaustive)
 }
 
 void
-OLCLeague::CopySolution(ContestTraceVector &vec) const
+OLCLeague::CopySolution(ContestTraceVector &vec) const noexcept
 {
   vec = solution;
 }
 
 ContestResult
-OLCLeague::CalculateResult() const
+OLCLeague::CalculateResult() const noexcept
 {
   ContestResult result;
   if (!solution[4].IsDefined()) {
