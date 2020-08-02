@@ -68,9 +68,9 @@ freetype = FreeTypeProject(
 )
 
 curl = AutotoolsProject(
-    'http://curl.haxx.se/download/curl-7.69.1.tar.xz',
-    'https://github.com/curl/curl/releases/download/curl-7_69_1/curl-7.69.1.tar.xz',
-    '03c7d5e6697f7b7e40ada1b2256e565a555657398e6c1fcfa4cb251ccd819d4f',
+    'http://curl.haxx.se/download/curl-7.71.1.tar.xz',
+    'https://github.com/curl/curl/releases/download/curl-7_71_1/curl-7.71.1.tar.xz',
+    '40f83eda27cdbeb25cd4da48cefb639af1b9395d6026d2da1825bf059239658c',
     'lib/libcurl.a',
     [
         '--disable-shared', '--enable-static',
@@ -83,6 +83,7 @@ curl = AutotoolsProject(
         '--disable-tftp', '--disable-pop3', '--disable-imap', '--disable-smb',
         '--disable-smtp',
         '--disable-gopher',
+        '--disable-mqtt',
         '--disable-manual',
         '--enable-ipv6',
         '--disable-threaded-resolver', '--disable-verbose', '--disable-sspi',
