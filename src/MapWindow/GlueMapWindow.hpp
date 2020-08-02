@@ -155,6 +155,11 @@ public:
   void SetMapSettings(const MapSettings &new_value);
   void SetComputerSettings(const ComputerSettings &new_value);
   void SetUIState(const UIState &new_value);
+
+  /**
+   * Sets a relative margin at the bottom of the screen where no HUD
+   * elements should be drawn.
+   */
   void SetBottomMargin(unsigned int margin);
 
   /**

@@ -267,10 +267,6 @@ GlueMapWindow::DrawVario(Canvas &canvas, const PixelRect &rc) const
                                 true); //NOTE: AVG enabled for now, make it configurable ;
 }
 
-/*
-    Sets a relative margin at the bottom of the screen where no HUD
-    elements should be drawn
-*/
 void
 GlueMapWindow::SetBottomMargin(unsigned int margin_factor)
 {
