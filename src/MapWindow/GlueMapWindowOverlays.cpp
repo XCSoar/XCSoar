@@ -272,22 +272,22 @@ GlueMapWindow::DrawVario(Canvas &canvas, const PixelRect &rc) const
     elements should be drawn
 */
 void
-GlueMapWindow::SetBottomMargin(unsigned int margin_factor){
-
-    if (margin_factor == 0){
-        bottom_margin = 0;
-        QuickRedraw();
-        return;
-    }
-
-    PixelRect map_rect = GetClientRect();
-
-    if (map_rect.GetHeight() > map_rect.GetWidth()){
-        bottom_margin = map_rect.bottom / margin_factor;
-    } else {
-        bottom_margin = 0;
-    }
+GlueMapWindow::SetBottomMargin(unsigned int margin_factor)
+{
+  if (margin_factor == 0) {
+    bottom_margin = 0;
     QuickRedraw();
+    return;
+  }
+
+  PixelRect map_rect = GetClientRect();
+
+  if (map_rect.GetHeight() > map_rect.GetWidth()) {
+    bottom_margin = map_rect.bottom / margin_factor;
+  } else {
+    bottom_margin = 0;
+  }
+  QuickRedraw();
 }
 
 void
