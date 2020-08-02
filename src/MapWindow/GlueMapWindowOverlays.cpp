@@ -270,6 +270,10 @@ GlueMapWindow::DrawVario(Canvas &canvas, const PixelRect &rc) const
 void
 GlueMapWindow::SetBottomMargin(unsigned margin) noexcept
 {
+  if (margin == bottom_margin)
+    /* no change, don't redraw */
+    return;
+
   bottom_margin = margin;
   QuickRedraw();
 }
