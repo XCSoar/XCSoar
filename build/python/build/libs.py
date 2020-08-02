@@ -56,9 +56,9 @@ zlib = ZlibProject(
 )
 
 freetype = FreeTypeProject(
-    'http://download.savannah.gnu.org/releases/freetype/freetype-2.9.1.tar.bz2',
-    'http://downloads.sourceforge.net/project/freetype/freetype2/2.9.1/freetype-2.9.1.tar.bz2',
-    'db8d87ea720ea9d5edc5388fc7a0497bb11ba9fe972245e0f7f4c7e8b1e1e84d',
+    'http://download.savannah.gnu.org/releases/freetype/freetype-2.10.2.tar.xz',
+    'http://downloads.sourceforge.net/project/freetype/freetype2/2.10.2/freetype-2.10.2.tar.xz',
+    '1543d61025d2e6312e0a1c563652555f17378a204a61e99928c9fcef030a2d8b',
     'lib/libfreetype.a',
     [
         '--disable-shared', '--enable-static',
