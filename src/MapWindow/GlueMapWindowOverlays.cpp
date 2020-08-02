@@ -268,7 +268,7 @@ GlueMapWindow::DrawVario(Canvas &canvas, const PixelRect &rc) const
 }
 
 void
-GlueMapWindow::SetBottomMargin(unsigned int margin_factor)
+GlueMapWindow::SetBottomMarginFactor(unsigned margin_factor) noexcept
 {
   if (margin_factor == 0) {
     bottom_margin = 0;

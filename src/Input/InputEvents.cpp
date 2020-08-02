@@ -205,9 +205,9 @@ InputEvents::drawButtons(Mode mode, bool full)
   if (map != nullptr){
       if (mode != MODE_DEFAULT){
           // Set margin so that GlueMapWindow doesn't draw HUD underneath buttons
-          map->SetBottomMargin(menubar_height_scale_factor);
+          map->SetBottomMarginFactor(menubar_height_scale_factor);
       } else {
-          map->SetBottomMargin(0);
+          map->SetBottomMarginFactor(0);
       }
   }
 }

@@ -160,7 +160,7 @@ public:
    * Sets a relative margin at the bottom of the screen where no HUD
    * elements should be drawn.
    */
-  void SetBottomMargin(unsigned int margin);
+  void SetBottomMarginFactor(unsigned margin_factor) noexcept;
 
   /**
    * Update the blackboard from DeviceBlackboard and
