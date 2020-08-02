@@ -10,24 +10,6 @@ from build.libstdcxxmuslheaders import LibstdcxxMuslHeadersProject
 from build.sdl2 import SDL2Project
 from build.lua import LuaProject
 
-glibc = AutotoolsProject(
-    'http://mirror.netcologne.de/gnu/libc/glibc-2.23.tar.xz',
-    'http://ftp.gnu.org/gnu/glibc/glibc-2.23.tar.xz',
-    '456995968f3acadbed39f5eba31678df',
-    'include/unistd.h',
-    [
-        '--enable-kernel=2.6.35',
-        '--disable-werror',
-        '--disable-build-nscd',
-        '--disable-nscd',
-    ],
-    patches=abspath('lib/glibc/patches'),
-    shared=True,
-
-    # This is needed so glibc can find its NSS modules
-    make_args=['default-rpath=/opt/xcsoar/lib'],
-)
-
 musl = AutotoolsProject(
     'https://www.musl-libc.org/releases/musl-1.1.18.tar.gz',
     'https://fossies.org/linux/misc/musl-1.1.18.tar.gz',
@@ -107,9 +89,9 @@ zlib = ZlibProject(
 )
 
 freetype = FreeTypeProject(
-    'http://download.savannah.gnu.org/releases/freetype/freetype-2.9.1.tar.bz2',
-    'http://downloads.sourceforge.net/project/freetype/freetype2/2.9.1/freetype-2.9.1.tar.bz2',
-    'db8d87ea720ea9d5edc5388fc7a0497bb11ba9fe972245e0f7f4c7e8b1e1e84d',
+    'http://download.savannah.gnu.org/releases/freetype/freetype-2.10.2.tar.xz',
+    'http://downloads.sourceforge.net/project/freetype/freetype2/2.10.2/freetype-2.10.2.tar.xz',
+    '1543d61025d2e6312e0a1c563652555f17378a204a61e99928c9fcef030a2d8b',
     'lib/libfreetype.a',
     [
         '--disable-shared', '--enable-static',
@@ -119,25 +101,40 @@ freetype = FreeTypeProject(
 )
 
 curl = AutotoolsProject(
-    'http://curl.haxx.se/download/curl-7.70.0.tar.xz',
-    'https://github.com/curl/curl/releases/download/curl-7_69_1/curl-7.70.0.tar.xz',
-    '032f43f2674008c761af19bf536374128c16241fb234699a55f9fb603fcfbae7',
+    'http://curl.haxx.se/download/curl-7.71.1.tar.xz',
+    'https://github.com/curl/curl/releases/download/curl-7_71_1/curl-7.71.1.tar.xz',
+    '40f83eda27cdbeb25cd4da48cefb639af1b9395d6026d2da1825bf059239658c',
     'lib/libcurl.a',
     [
         '--disable-shared', '--enable-static',
         '--disable-debug',
+        '--disable-ares',
         '--enable-http',
-        '--enable-ipv6',
         '--enable-ftp', '--disable-file',
         '--disable-ldap', '--disable-ldaps',
         '--disable-rtsp', '--disable-proxy', '--disable-dict', '--disable-telnet',
         '--disable-tftp', '--disable-pop3', '--disable-imap', '--disable-smb',
         '--disable-smtp',
         '--disable-gopher',
+        '--disable-mqtt',
         '--disable-manual',
+        '--enable-ipv6',
         '--disable-threaded-resolver', '--disable-verbose', '--disable-sspi',
         '--disable-crypto-auth', '--disable-ntlm-wb', '--disable-tls-srp', '--disable-cookies',
-        '--with-ssl', '--without-gnutls', '--without-nss', '--without-libssh2',
+        '--disable-doh',
+        '--disable-mime',
+        '--disable-dateparse',
+        '--disable-netrc',
+        '--disable-progress-meter',
+        '--disable-dnsshuffle',
+        '--disable-alt-svc',
+        '--without-brotli',
+        '--with-ssl', '--without-gnutls',
+        '--without-mbedtls', '--without-wolfssl',
+        '--without-mesalink', '--without-bearssl',
+        '--without-nss', '--without-libssh2',
+        '--without-nghttp2', '--without-ngtcp2', '--without-nghttp3',
+        '--without-quiche',
     ],
     patches=abspath('lib/curl/patches'),
 )
