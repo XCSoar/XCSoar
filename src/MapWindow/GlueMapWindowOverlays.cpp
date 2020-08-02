@@ -268,22 +268,27 @@ GlueMapWindow::DrawVario(Canvas &canvas, const PixelRect &rc) const
 }
 
 void
+GlueMapWindow::SetBottomMargin(unsigned margin) noexcept
+{
+  bottom_margin = margin;
+  QuickRedraw();
+}
+
+void
 GlueMapWindow::SetBottomMarginFactor(unsigned margin_factor) noexcept
 {
   if (margin_factor == 0) {
-    bottom_margin = 0;
-    QuickRedraw();
+    SetBottomMargin(0);
     return;
   }
 
   PixelRect map_rect = GetClientRect();
 
   if (map_rect.GetHeight() > map_rect.GetWidth()) {
-    bottom_margin = map_rect.bottom / margin_factor;
+    SetBottomMargin(map_rect.bottom / margin_factor);
   } else {
-    bottom_margin = 0;
+    SetBottomMargin(0);
   }
-  QuickRedraw();
 }
 
 void

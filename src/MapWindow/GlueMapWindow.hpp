@@ -160,6 +160,8 @@ public:
    * Sets a relative margin at the bottom of the screen where no HUD
    * elements should be drawn.
    */
+  void SetBottomMargin(unsigned margin) noexcept;
+
   void SetBottomMarginFactor(unsigned margin_factor) noexcept;
 
   /**
