@@ -5,24 +5,6 @@ from build.autotools import AutotoolsProject
 from build.freetype import FreeTypeProject
 from build.libstdcxxmuslheaders import LibstdcxxMuslHeadersProject
 
-glibc = AutotoolsProject(
-    'http://mirror.netcologne.de/gnu/libc/glibc-2.23.tar.xz',
-    'http://ftp.gnu.org/gnu/glibc/glibc-2.23.tar.xz',
-    '456995968f3acadbed39f5eba31678df',
-    'include/unistd.h',
-    [
-        '--enable-kernel=2.6.35',
-        '--disable-werror',
-        '--disable-build-nscd',
-        '--disable-nscd',
-    ],
-    patches=abspath('lib/glibc/patches'),
-    shared=True,
-
-    # This is needed so glibc can find its NSS modules
-    make_args=['default-rpath=/opt/xcsoar/lib'],
-)
-
 musl = AutotoolsProject(
     'https://www.musl-libc.org/releases/musl-1.1.18.tar.gz',
     'https://fossies.org/linux/misc/musl-1.1.18.tar.gz',
