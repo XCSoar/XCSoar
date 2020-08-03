@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-08-02 05:41+0000\n"
+"PO-Revision-Date: 2020-08-03 22:25+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -267,12 +267,12 @@ msgstr "Symetrická výseč s vlastním poloměrem."
 #: src/Task/TypeStrings.cpp:99
 #, no-c-format
 msgid "A keyhole.  Scored by farthest point reached in area."
-msgstr "Kružnice + výseč, bodováno dle nejzazšího dosaženého hodu v oblasti."
+msgstr "Kruh+výseč, bodováno dle nejzazšího dosaženého hodu v oblasti."
 
 #: src/Task/TypeStrings.cpp:112
 #, no-c-format
 msgid "FAI start quadrant"
-msgstr "FAI startovní sektor"
+msgstr "FAI startovní kvadrant"
 
 #: src/Task/TypeStrings.cpp:113
 #, no-c-format
@@ -282,12 +282,12 @@ msgstr "Startovní páska"
 #: src/Task/TypeStrings.cpp:114
 #, no-c-format
 msgid "Start cylinder"
-msgstr "Startovní cylindr"
+msgstr "Startovní válec"
 
 #: src/Task/TypeStrings.cpp:115 src/Dialogs/Task/dlgTaskHelpers.cpp:181
 #, no-c-format
 msgid "FAI quadrant"
-msgstr "FAI sektor"
+msgstr "FAI kvadrant"
 
 #: src/Task/TypeStrings.cpp:116
 #, no-c-format
@@ -297,17 +297,17 @@ msgstr "Sektor kruh+výseč (DAeC)"
 #: src/Task/TypeStrings.cpp:117
 #, no-c-format
 msgid "BGA Fixed Course sector"
-msgstr "Sektor s daným kurzem (BGA)"
+msgstr "BGA sektor s daným kurzem"
 
 #: src/Task/TypeStrings.cpp:118
 #, no-c-format
 msgid "BGA Enhanced Option Fixed Course sector"
-msgstr "Sektor s daným kurzem a rozšířenými možnostmi (BGA)"
+msgstr "BGA sektor s daným kurzem a více možnostmi"
 
 #: src/Task/TypeStrings.cpp:119
 #, no-c-format
 msgid "Turn point cylinder"
-msgstr "Válec otočného bodu"
+msgstr "Válec"
 
 #: src/Task/TypeStrings.cpp:120
 #, no-c-format
@@ -322,12 +322,12 @@ msgstr "Válcová oblast"
 #: src/Task/TypeStrings.cpp:122
 #, no-c-format
 msgid "Area sector"
-msgstr "Výseč oblasti"
+msgstr "Sektor oblasti"
 
 #: src/Task/TypeStrings.cpp:123
 #, no-c-format
 msgid "FAI finish quadrant"
-msgstr "FAI cílový sektor"
+msgstr "FAI cílový kvadrant"
 
 #: src/Task/TypeStrings.cpp:124
 #, no-c-format
@@ -337,7 +337,7 @@ msgstr "Cílová páska"
 #: src/Task/TypeStrings.cpp:125
 #, no-c-format
 msgid "Finish cylinder"
-msgstr "Cílový cylindr"
+msgstr "Cílový válec"
 
 #: src/Task/TypeStrings.cpp:126
 #, no-c-format
@@ -347,7 +347,7 @@ msgstr "BGA startovní sektor"
 #: src/Task/TypeStrings.cpp:127
 #, no-c-format
 msgid "Area sector with inner radius"
-msgstr "Výseč oblasti s vnitřním poloměrem"
+msgstr "Sektor oblasti s vnitřním poloměrem"
 
 #: src/Task/TypeStrings.cpp:128 src/Dialogs/Task/dlgTaskHelpers.cpp:230
 #, no-c-format
@@ -8961,7 +8961,7 @@ msgstr "DAeC kruh+výseč"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:218
 msgid "BGA Fixed Course"
-msgstr "BGA pevný kurz"
+msgstr "BGA daný kurz"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:222
 msgid "BGA Enhanced Option"
