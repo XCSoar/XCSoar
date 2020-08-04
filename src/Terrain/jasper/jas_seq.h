@@ -78,6 +78,7 @@
 #include <jasper/jas_config.h> /* IWYU pragma: keep */
 
 #include <jasper/jas_types.h>
+#include <jasper/jas_math.h>
 
 #include "Compiler.h"
 
@@ -267,13 +268,13 @@ JAS_DLLEXPORT void jas_matrix_clip(jas_matrix_t *matrix, jas_seqent_t minval,
   jas_seqent_t maxval);
 
 /* Arithmetic shift left of all elements in a matrix. */
-JAS_DLLEXPORT void jas_matrix_asl(jas_matrix_t *matrix, int n);
+JAS_DLLEXPORT void jas_matrix_asl(jas_matrix_t *matrix, unsigned n);
 
 /* Arithmetic shift right of all elements in a matrix. */
-JAS_DLLEXPORT void jas_matrix_asr(jas_matrix_t *matrix, int n);
+JAS_DLLEXPORT void jas_matrix_asr(jas_matrix_t *matrix, unsigned n);
 
 /* Almost-but-not-quite arithmetic shift right of all elements in a matrix. */
-JAS_DLLEXPORT void jas_matrix_divpow2(jas_matrix_t *matrix, int n);
+JAS_DLLEXPORT void jas_matrix_divpow2(jas_matrix_t *matrix, unsigned n);
 
 /* Set all elements of a matrix to the specified value. */
 JAS_DLLEXPORT void jas_matrix_setall(jas_matrix_t *matrix, jas_seqent_t val);
@@ -304,8 +305,17 @@ JAS_DLLEXPORT jas_matrix_t *jas_matrix_copy(jas_matrix_t *x);
 
 JAS_DLLEXPORT jas_matrix_t *jas_matrix_input(FILE *);
 
-#define jas_seqent_asl jas_fast32_asl
-#define jas_seqent_asr jas_fast32_asr
+JAS_ATTRIBUTE_CONST
+static inline jas_seqent_t jas_seqent_asl(jas_seqent_t x, unsigned n)
+{
+	return jas_fast32_asl(x, n);
+}
+
+JAS_ATTRIBUTE_CONST
+static inline jas_seqent_t jas_seqent_asr(jas_seqent_t x, unsigned n)
+{
+	return jas_fast32_asr(x, n);
+}
 
 /******************************************************************************\
 * Functions/macros for 2-D sequence class.

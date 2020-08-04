@@ -272,7 +272,7 @@ int jas_matrix_cmp(jas_matrix_t *mat0, jas_matrix_t *mat1)
 	return 0;
 }
 
-void jas_matrix_divpow2(jas_matrix_t *matrix, int n)
+void jas_matrix_divpow2(jas_matrix_t *matrix, unsigned n)
 {
 	jas_matind_t i;
 	jas_matind_t j;
@@ -323,7 +323,7 @@ void jas_matrix_clip(jas_matrix_t *matrix, jas_seqent_t minval,
 	}
 }
 
-void jas_matrix_asr(jas_matrix_t *matrix, int n)
+void jas_matrix_asr(jas_matrix_t *matrix, unsigned n)
 {
 	jas_matind_t i;
 	jas_matind_t j;
@@ -331,7 +331,6 @@ void jas_matrix_asr(jas_matrix_t *matrix, int n)
 	jas_matind_t rowstep;
 	jas_seqent_t *data;
 
-	assert(n >= 0);
 	if (jas_matrix_numrows(matrix) > 0 && jas_matrix_numcols(matrix) > 0) {
 		assert(matrix->rows_);
 		rowstep = jas_matrix_rowstep(matrix);
@@ -346,7 +345,7 @@ void jas_matrix_asr(jas_matrix_t *matrix, int n)
 	}
 }
 
-void jas_matrix_asl(jas_matrix_t *matrix, int n)
+void jas_matrix_asl(jas_matrix_t *matrix, unsigned n)
 {
 	jas_matind_t i;
 	jas_matind_t j;

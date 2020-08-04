@@ -85,11 +85,11 @@
 typedef struct {
 
 	/* The number of progression changes. */
-	int numpchgs;
+	unsigned numpchgs;
 
 	/* The maximum number of progression changes that can be accomodated
 	  without growing the progression change array. */
-	int maxpchgs;
+	unsigned maxpchgs;
 
 	/* The progression changes. */
 	jpc_pchg_t **pchgs;
@@ -199,7 +199,7 @@ typedef struct {
 	uint_fast32_t yend;
 
 	/* The current progression change. */
-	jpc_pchg_t *pchg;
+	const jpc_pchg_t *pchg;
 
 	/* The progression change list. */
 	jpc_pchglist_t *pchglist;
@@ -275,18 +275,18 @@ void jpc_pchglist_destroy(jpc_pchglist_t *pchglist);
 int jpc_pchglist_insert(jpc_pchglist_t *pchglist, int pchgno, jpc_pchg_t *pchg);
 
 /* Remove an element from a progression change list. */
-jpc_pchg_t *jpc_pchglist_remove(jpc_pchglist_t *pchglist, int pchgno);
+jpc_pchg_t *jpc_pchglist_remove(jpc_pchglist_t *pchglist, unsigned pchgno);
 
 /* Get an element from a progression change list. */
 JAS_ATTRIBUTE_PURE
-jpc_pchg_t *jpc_pchglist_get(jpc_pchglist_t *pchglist, int pchgno);
+const jpc_pchg_t *jpc_pchglist_get(const jpc_pchglist_t *pchglist, unsigned pchgno);
 
 /* Copy a progression change list. */
-jpc_pchglist_t *jpc_pchglist_copy(jpc_pchglist_t *pchglist);
+jpc_pchglist_t *jpc_pchglist_copy(const jpc_pchglist_t *pchglist);
 
 /* Get the number of elements in a progression change list. */
 JAS_ATTRIBUTE_PURE
-int jpc_pchglist_numpchgs(jpc_pchglist_t *pchglist);
+unsigned jpc_pchglist_numpchgs(const jpc_pchglist_t *pchglist);
 
 /******************************************************************************\
 * Functions/macros for progression changes.
@@ -296,6 +296,6 @@ int jpc_pchglist_numpchgs(jpc_pchglist_t *pchglist);
 void jpc_pchg_destroy(jpc_pchg_t *pchg);
 
 /* Copy a progression change. */
-jpc_pchg_t *jpc_pchg_copy(jpc_pchg_t *pchg);
+jpc_pchg_t *jpc_pchg_copy(const jpc_pchg_t *pchg);
 
 #endif

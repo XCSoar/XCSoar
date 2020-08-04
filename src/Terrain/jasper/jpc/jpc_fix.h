@@ -110,10 +110,29 @@ typedef int_fast64_t jpc_fix_big_t;
 #define	JPC_FIX_ONE		JAS_FIX_ONE(jpc_fix_t, JPC_FIX_FRACBITS)
 #define	JPC_FIX_HALF	JAS_FIX_HALF(jpc_fix_t, JPC_FIX_FRACBITS)
 
-#define jpc_inttofix(x)	JAS_INTTOFIX(jpc_fix_t, JPC_FIX_FRACBITS, x)
-#define jpc_fixtoint(x)	JAS_FIXTOINT(jpc_fix_t, JPC_FIX_FRACBITS, x)
-#define jpc_fixtodbl(x)	JAS_FIXTODBL(jpc_fix_t, JPC_FIX_FRACBITS, x)
-#define jpc_dbltofix(x)	JAS_DBLTOFIX(jpc_fix_t, JPC_FIX_FRACBITS, x)
+JAS_ATTRIBUTE_CONST
+static inline jpc_fix_t jpc_inttofix(int x)
+{
+	return JAS_INTTOFIX(jpc_fix_t, JPC_FIX_FRACBITS, x);
+}
+
+JAS_ATTRIBUTE_CONST
+static inline int jpc_fixtoint(jpc_fix_t x)
+{
+	return JAS_FIXTOINT(jpc_fix_t, JPC_FIX_FRACBITS, x);
+}
+
+JAS_ATTRIBUTE_CONST
+static inline double jpc_fixtodbl(jpc_fix_t x)
+{
+	return JAS_FIXTODBL(jpc_fix_t, JPC_FIX_FRACBITS, x);
+}
+
+JAS_ATTRIBUTE_CONST
+static inline jpc_fix_t jpc_dbltofix(double x)
+{
+	return JAS_DBLTOFIX(jpc_fix_t, JPC_FIX_FRACBITS, x);
+}
 
 JAS_ATTRIBUTE_CONST
 static inline jpc_fix_t jpc_fix_add(jpc_fix_t x, jpc_fix_t y)
@@ -133,8 +152,11 @@ static inline jpc_fix_t jpc_fix_mul(jpc_fix_big_t x, jpc_fix_big_t y)
 	return JAS_FIX_MUL(jpc_fix_t, JPC_FIX_FRACBITS, jpc_fix_big_t, x, y);
 }
 
-#define	jpc_fix_mulbyint(x, y) \
-	JAS_FIX_MULBYINT(jpc_fix_t, JPC_FIX_FRACBITS, x, y)
+JAS_ATTRIBUTE_CONST
+static inline jpc_fix_big_t jpc_fix_mulbyint(jpc_fix_big_t x, int y)
+{
+	return JAS_FIX_MUL(jpc_fix_t, JPC_FIX_FRACBITS, jpc_fix_big_t, x, y);
+}
 
 JAS_ATTRIBUTE_CONST
 static inline jpc_fix_t jpc_fix_div(jpc_fix_big_t x, jpc_fix_t y)
@@ -143,7 +165,7 @@ static inline jpc_fix_t jpc_fix_div(jpc_fix_big_t x, jpc_fix_t y)
 }
 
 JAS_ATTRIBUTE_CONST
-static inline jpc_fix_t jpc_fix_neg(jpc_fix_big_t x)
+static inline jpc_fix_t jpc_fix_neg(jpc_fix_t x)
 {
 	return JAS_FIX_NEG(jpc_fix_t, JPC_FIX_FRACBITS, x);
 }
@@ -158,18 +180,45 @@ static inline jpc_fix_t jpc_fix_neg(jpc_fix_big_t x)
 #define	jpc_fix_muleq(x, y)	\
 	JAS_FIX_MULEQ(jpc_fix_t, JPC_FIX_FRACBITS, jpc_fix_big_t, x, y)
 
-#define	jpc_fix_abs(x)		JAS_FIX_ABS(jpc_fix_t, JPC_FIX_FRACBITS, x)
-#define	jpc_fix_isint(x)	JAS_FIX_ISINT(jpc_fix_t, JPC_FIX_FRACBITS, x)
-#define jpc_fix_sgn(x)		JAS_FIX_SGN(jpc_fix_t, JPC_FIX_FRACBITS, x)
-#define	jpc_fix_round(x)	JAS_FIX_ROUND(jpc_fix_t, JPC_FIX_FRACBITS, x)
-#define	jpc_fix_floor(x)	JAS_FIX_FLOOR(jpc_fix_t, JPC_FIX_FRACBITS, x)
-#define jpc_fix_trunc(x)	JAS_FIX_TRUNC(jpc_fix_t, JPC_FIX_FRACBITS, x)
+JAS_ATTRIBUTE_CONST
+static inline jpc_fix_t jpc_fix_abs(jpc_fix_t x)
+{
+	return JAS_FIX_ABS(jpc_fix_t, JPC_FIX_FRACBITS, x);
+}
+
+JAS_ATTRIBUTE_CONST
+static inline bool jpc_fix_isint(jpc_fix_t x)
+{
+	return JAS_FIX_ISINT(jpc_fix_t, JPC_FIX_FRACBITS, x);
+}
+
+JAS_ATTRIBUTE_CONST
+static inline int jpc_fix_sgn(jpc_fix_t x)
+{
+	return JAS_FIX_SGN(jpc_fix_t, JPC_FIX_FRACBITS, x);
+}
+
+JAS_ATTRIBUTE_CONST
+static inline jpc_fix_t jpc_fix_round(jpc_fix_t x)
+{
+	return JAS_FIX_ROUND(jpc_fix_t, JPC_FIX_FRACBITS, x);
+}
+
+JAS_ATTRIBUTE_CONST
+static inline jpc_fix_t jpc_fix_floor(jpc_fix_t x)
+{
+	return JAS_FIX_FLOOR(jpc_fix_t, JPC_FIX_FRACBITS, x);
+}
 
 /******************************************************************************\
 * Extra macros for convenience.
 \******************************************************************************/
 
 /* Compute the sum of three fixed-point numbers. */
-#define jpc_fix_add3(x, y, z)	jpc_fix_add(jpc_fix_add(x, y), z)
+JAS_ATTRIBUTE_CONST
+static inline jpc_fix_t jpc_fix_add3(jpc_fix_t x, jpc_fix_t y, jpc_fix_t z)
+{
+	return jpc_fix_add(jpc_fix_add(x, y), z);
+}
 
 #endif

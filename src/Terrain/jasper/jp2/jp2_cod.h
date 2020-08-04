@@ -280,8 +280,8 @@ typedef struct jp2_boxops_s {
 
 typedef struct jp2_boxinfo_s {
 	int type;
-	const char *name;
 	int flags;
+	const char *name;
 	jp2_boxops_t ops;
 } jp2_boxinfo_t;
 

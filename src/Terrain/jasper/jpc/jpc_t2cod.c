@@ -84,7 +84,6 @@ static int jpc_pi_nextcprl(jpc_pi_t *pi);
 
 int jpc_pi_next(jpc_pi_t *pi)
 {
-	jpc_pchg_t *pchg;
 	int ret;
 
 	for (;;) {
@@ -98,16 +97,16 @@ int jpc_pi_next(jpc_pi_t *pi)
 			pi->prcno = 0;
 			pi->lyrno = 0;
 			pi->prgvolfirst = true;
-			if (pi->pchgno < jpc_pchglist_numpchgs(pi->pchglist)) {
+			if ((unsigned)pi->pchgno < jpc_pchglist_numpchgs(pi->pchglist)) {
 				pi->pchg = jpc_pchglist_get(pi->pchglist, pi->pchgno);
-			} else if (pi->pchgno == jpc_pchglist_numpchgs(pi->pchglist)) {
+			} else if ((unsigned)pi->pchgno == jpc_pchglist_numpchgs(pi->pchglist)) {
 				pi->pchg = &pi->defaultpchg;
 			} else {
 				return 1;
 			}
 		}
 
-		pchg = pi->pchg;
+		const jpc_pchg_t *pchg = pi->pchg;
 		switch (pchg->prgord) {
 		case JPC_COD_LRCPPRG:
 			ret = jpc_pi_nextlrcp(pi);
@@ -139,10 +138,9 @@ int jpc_pi_next(jpc_pi_t *pi)
 
 static int jpc_pi_nextlrcp(register jpc_pi_t *pi)
 {
-	jpc_pchg_t *pchg;
 	unsigned *prclyrno;
 
-	pchg = pi->pchg;
+	const jpc_pchg_t *pchg = pi->pchg;
 	if (!pi->prgvolfirst) {
 		prclyrno = &pi->pirlvl->prclyrnos[pi->prcno];
 		goto skip;
@@ -182,10 +180,9 @@ skip:
 
 static int jpc_pi_nextrlcp(register jpc_pi_t *pi)
 {
-	jpc_pchg_t *pchg;
 	unsigned *prclyrno;
 
-	pchg = pi->pchg;
+	const jpc_pchg_t *pchg = pi->pchg;
 	if (!pi->prgvolfirst) {
 		assert(pi->prcno < pi->pirlvl->numprcs);
 		prclyrno = &pi->pirlvl->prclyrnos[pi->prcno];
@@ -225,13 +222,10 @@ skip:
 static int jpc_pi_nextrpcl(register jpc_pi_t *pi)
 {
 	unsigned rlvlno;
-	jpc_pirlvl_t *pirlvl;
-	jpc_pchg_t *pchg;
 	int prchind;
 	int prcvind;
 	unsigned *prclyrno;
 	unsigned compno;
-	jpc_picomp_t *picomp;
 	unsigned xstep;
 	unsigned ystep;
 	uint_fast32_t r;
@@ -240,14 +234,16 @@ static int jpc_pi_nextrpcl(register jpc_pi_t *pi)
 	uint_fast32_t trx0;
 	uint_fast32_t try0;
 
-	pchg = pi->pchg;
+	const jpc_pchg_t *pchg = pi->pchg;
 	if (!pi->prgvolfirst) {
 		goto skip;
 	} else {
 		pi->xstep = 0;
 		pi->ystep = 0;
+		const jpc_picomp_t *picomp;
 		for (compno = 0, picomp = pi->picomps; compno < pi->numcomps;
 		  ++compno, ++picomp) {
+			const jpc_pirlvl_t *pirlvl;
 			for (rlvlno = 0, pirlvl = picomp->pirlvls; rlvlno <
 			  picomp->numrlvls; ++rlvlno, ++pirlvl) {
 				// Check for the potential for overflow problems.
@@ -328,13 +324,10 @@ skip:
 static int jpc_pi_nextpcrl(register jpc_pi_t *pi)
 {
 	unsigned rlvlno;
-	jpc_pirlvl_t *pirlvl;
-	jpc_pchg_t *pchg;
 	int prchind;
 	int prcvind;
 	unsigned *prclyrno;
 	unsigned compno;
-	jpc_picomp_t *picomp;
 	unsigned xstep;
 	unsigned ystep;
 	uint_fast32_t trx0;
@@ -343,14 +336,16 @@ static int jpc_pi_nextpcrl(register jpc_pi_t *pi)
 	uint_fast32_t rpx;
 	uint_fast32_t rpy;
 
-	pchg = pi->pchg;
+	const jpc_pchg_t *pchg = pi->pchg;
 	if (!pi->prgvolfirst) {
 		goto skip;
 	} else {
 		pi->xstep = 0;
 		pi->ystep = 0;
+		const jpc_picomp_t *picomp;
 		for (compno = 0, picomp = pi->picomps; compno < pi->numcomps;
 		  ++compno, ++picomp) {
+			const jpc_pirlvl_t *pirlvl;
 			for (rlvlno = 0, pirlvl = picomp->pirlvls; rlvlno <
 			  picomp->numrlvls; ++rlvlno, ++pirlvl) {
 				// Check for the potential for overflow problems.
@@ -428,8 +423,6 @@ skip:
 static int jpc_pi_nextcprl(register jpc_pi_t *pi)
 {
 	unsigned rlvlno;
-	jpc_pirlvl_t *pirlvl;
-	jpc_pchg_t *pchg;
 	int prchind;
 	int prcvind;
 	unsigned *prclyrno;
@@ -439,7 +432,7 @@ static int jpc_pi_nextcprl(register jpc_pi_t *pi)
 	uint_fast32_t rpx;
 	uint_fast32_t rpy;
 
-	pchg = pi->pchg;
+	const jpc_pchg_t *pchg = pi->pchg;
 	if (!pi->prgvolfirst) {
 		goto skip;
 	} else {
@@ -449,7 +442,7 @@ static int jpc_pi_nextcprl(register jpc_pi_t *pi)
 	for (pi->compno = pchg->compnostart, pi->picomp = &pi->picomps[pi->compno];
 	  pi->compno < pchg->compnoend && pi->compno < pi->numcomps;
 	  ++pi->compno, ++pi->picomp) {
-		pirlvl = pi->picomp->pirlvls;
+		const jpc_pirlvl_t *pirlvl = pi->picomp->pirlvls;
 		// Check for the potential for overflow problems.
 		if (pirlvl->prcwidthexpn + pi->picomp->numrlvls >
 		  JAS_UINTFAST32_NUMBITS - 2 ||
@@ -613,20 +606,19 @@ int jpc_pchglist_insert(jpc_pchglist_t *pchglist, int pchgno, jpc_pchg_t *pchg)
 	return 0;
 }
 
-jpc_pchg_t *jpc_pchglist_remove(jpc_pchglist_t *pchglist, int pchgno)
+jpc_pchg_t *jpc_pchglist_remove(jpc_pchglist_t *pchglist, unsigned pchgno)
 {
-	int i;
 	jpc_pchg_t *pchg;
 	assert(pchgno < pchglist->numpchgs);
 	pchg = pchglist->pchgs[pchgno];
-	for (i = pchgno + 1; i < pchglist->numpchgs; ++i) {
+	for (unsigned i = pchgno + 1; i < pchglist->numpchgs; ++i) {
 		pchglist->pchgs[i - 1] = pchglist->pchgs[i];
 	}
 	--pchglist->numpchgs;
 	return pchg;
 }
 
-jpc_pchg_t *jpc_pchg_copy(jpc_pchg_t *pchg)
+jpc_pchg_t *jpc_pchg_copy(const jpc_pchg_t *pchg)
 {
 	jpc_pchg_t *newpchg;
 	if (!(newpchg = jas_malloc(sizeof(jpc_pchg_t)))) {
@@ -636,15 +628,14 @@ jpc_pchg_t *jpc_pchg_copy(jpc_pchg_t *pchg)
 	return newpchg;
 }
 
-jpc_pchglist_t *jpc_pchglist_copy(jpc_pchglist_t *pchglist)
+jpc_pchglist_t *jpc_pchglist_copy(const jpc_pchglist_t *pchglist)
 {
 	jpc_pchglist_t *newpchglist;
 	jpc_pchg_t *newpchg;
-	int pchgno;
 	if (!(newpchglist = jpc_pchglist_create())) {
 		return 0;
 	}
-	for (pchgno = 0; pchgno < pchglist->numpchgs; ++pchgno) {
+	for (unsigned pchgno = 0; pchgno < pchglist->numpchgs; ++pchgno) {
 		if (!(newpchg = jpc_pchg_copy(pchglist->pchgs[pchgno])) ||
 		  jpc_pchglist_insert(newpchglist, -1, newpchg)) {
 			jpc_pchglist_destroy(newpchglist);
@@ -656,9 +647,8 @@ jpc_pchglist_t *jpc_pchglist_copy(jpc_pchglist_t *pchglist)
 
 void jpc_pchglist_destroy(jpc_pchglist_t *pchglist)
 {
-	int pchgno;
 	if (pchglist->pchgs) {
-		for (pchgno = 0; pchgno < pchglist->numpchgs; ++pchgno) {
+		for (unsigned pchgno = 0; pchgno < pchglist->numpchgs; ++pchgno) {
 			jpc_pchg_destroy(pchglist->pchgs[pchgno]);
 		}
 		jas_free(pchglist->pchgs);
@@ -671,12 +661,12 @@ void jpc_pchg_destroy(jpc_pchg_t *pchg)
 	jas_free(pchg);
 }
 
-jpc_pchg_t *jpc_pchglist_get(jpc_pchglist_t *pchglist, int pchgno)
+const jpc_pchg_t *jpc_pchglist_get(const jpc_pchglist_t *pchglist, unsigned pchgno)
 {
 	return pchglist->pchgs[pchgno];
 }
 
-int jpc_pchglist_numpchgs(jpc_pchglist_t *pchglist)
+unsigned jpc_pchglist_numpchgs(const jpc_pchglist_t *pchglist)
 {
 	return pchglist->numpchgs;
 }
@@ -686,8 +676,6 @@ int jpc_pi_init(jpc_pi_t *pi)
 	unsigned compno;
 	unsigned rlvlno;
 	unsigned prcno;
-	jpc_picomp_t *picomp;
-	jpc_pirlvl_t *pirlvl;
 	unsigned *prclyrno;
 
 	pi->prgvolfirst = 0;
@@ -696,8 +684,10 @@ int jpc_pi_init(jpc_pi_t *pi)
 	pi->pchgno = -1;
 	pi->pchg = 0;
 
+	const jpc_picomp_t *picomp;
 	for (compno = 0, picomp = pi->picomps; compno < pi->numcomps;
 	  ++compno, ++picomp) {
+		const jpc_pirlvl_t *pirlvl;
 		for (rlvlno = 0, pirlvl = picomp->pirlvls; rlvlno <
 		  picomp->numrlvls; ++rlvlno, ++pirlvl) {
 			for (prcno = 0, prclyrno = pirlvl->prclyrnos;

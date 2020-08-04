@@ -124,7 +124,7 @@ static void jpc_initmqctxs(void);
 * Code.
 \******************************************************************************/
 
-int JPC_PASSTYPE(int passno)
+int JPC_PASSTYPE(unsigned passno)
 {
 	int passtype;
 	switch (passno % 3) {
@@ -177,7 +177,7 @@ int JPC_NOMINALGAIN(int qmfbid, int numlvls, int lvlno, int orient)
 * Coding pass related functions.
 \******************************************************************************/
 
-int JPC_SEGTYPE(int passno, int firstpassno, int bypass)
+int JPC_SEGTYPE(unsigned passno, unsigned firstpassno, bool bypass)
 {
 	int passtype;
 	if (bypass) {
@@ -191,9 +191,9 @@ int JPC_SEGTYPE(int passno, int firstpassno, int bypass)
 	}
 }
 
-int JPC_SEGPASSCNT(int passno, int firstpassno, int numpasses, int bypass, int termall)
+unsigned JPC_SEGPASSCNT(unsigned passno, unsigned firstpassno, unsigned numpasses, bool bypass, bool termall)
 {
-	int ret;
+	unsigned ret;
 	int passtype;
 
 	if (termall) {
@@ -226,8 +226,8 @@ int JPC_SEGPASSCNT(int passno, int firstpassno, int numpasses, int bypass, int t
 	return ret;
 }
 
-int JPC_ISTERMINATED(int passno, int firstpassno, int numpasses, int termall,
-  int lazy)
+bool JPC_ISTERMINATED(unsigned passno, unsigned firstpassno, unsigned numpasses, bool termall,
+  bool lazy)
 {
 	int ret;
 	int n;

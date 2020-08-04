@@ -144,51 +144,51 @@ static void jp2_pclr_dumpdata(jp2_box_t *box, FILE *out);
 \******************************************************************************/
 
 static const jp2_boxinfo_t jp2_boxinfos[] = {
-	{JP2_BOX_JP, "JP", 0,
+	{JP2_BOX_JP, 0, "JP",
 	  {0, 0, jp2_jp_getdata}},
-	{JP2_BOX_FTYP, "FTYP", 0,
+	{JP2_BOX_FTYP, 0, "FTYP",
 	  {0, 0, jp2_ftyp_getdata}},
-	{JP2_BOX_JP2H, "JP2H", JP2_BOX_SUPER,
+	{JP2_BOX_JP2H, JP2_BOX_SUPER, "JP2H",
 	  {0, 0, 0}},
 #ifdef ENABLE_JASPER_IMAGE
-	{JP2_BOX_IHDR, "IHDR", 0,
+	{JP2_BOX_IHDR, 0, "IHDR",
 	  {0, 0, jp2_ihdr_getdata}},
-	{JP2_BOX_BPCC, "BPCC", 0,
+	{JP2_BOX_BPCC, 0, "BPCC",
 	  {0, jp2_bpcc_destroy, jp2_bpcc_getdata}},
-	{JP2_BOX_COLR, "COLR", 0,
+	{JP2_BOX_COLR, 0, "COLR",
 	  {0, jp2_colr_destroy, jp2_colr_getdata}},
-	{JP2_BOX_PCLR, "PCLR", 0,
+	{JP2_BOX_PCLR, 0, "PCLR",
 	  {0, jp2_pclr_destroy, jp2_pclr_getdata}},
-	{JP2_BOX_CMAP, "CMAP", 0,
+	{JP2_BOX_CMAP, 0, "CMAP",
 	  {0, jp2_cmap_destroy, jp2_cmap_getdata}},
-	{JP2_BOX_CDEF, "CDEF", 0,
-	  {0, jp2_cdef_destroy, jp2_cdef_getdata, jp2_cdef_putdata, jp2_cdef_dumpdata}},
+	{JP2_BOX_CDEF, 0, "CDEF",
+	  {0, jp2_cdef_destroy, jp2_cdef_getdata}},
 #endif /* ENABLE_JASPER_IMAGE */
-	{JP2_BOX_RES, "RES", JP2_BOX_SUPER,
+	{JP2_BOX_RES, JP2_BOX_SUPER, "RES",
 	  {0, 0, 0}},
-	{JP2_BOX_RESC, "RESC", 0,
+	{JP2_BOX_RESC, 0, "RESC",
 	  {0, 0, 0}},
-	{JP2_BOX_RESD, "RESD", 0,
+	{JP2_BOX_RESD, 0, "RESD",
 	  {0, 0, 0}},
-	{JP2_BOX_JP2C, "JP2C", JP2_BOX_NODATA,
+	{JP2_BOX_JP2C, JP2_BOX_NODATA, "JP2C",
 	  {0, 0, 0}},
-	{JP2_BOX_JP2I, "JP2I", 0,
+	{JP2_BOX_JP2I, 0, "JP2I",
 	  {0, 0, 0}},
-	{JP2_BOX_XML, "XML", 0,
+	{JP2_BOX_XML, 0, "XML",
 	  {0, 0, 0}},
-	{JP2_BOX_UUID, "UUID", 0,
+	{JP2_BOX_UUID, 0, "UUID",
 	  {0, 0, 0}},
-	{JP2_BOX_UINF, "UINF", JP2_BOX_SUPER,
+	{JP2_BOX_UINF, JP2_BOX_SUPER, "UINF",
 	  {0, 0, 0}},
-	{JP2_BOX_ULST, "ULST", 0,
+	{JP2_BOX_ULST, 0, "ULST",
 	  {0, 0, 0}},
-	{JP2_BOX_URL, "URL", 0,
+	{JP2_BOX_URL, 0, "URL",
 	  {0, 0, 0}},
 	{0, 0, 0, {0, 0, 0}},
 };
 
 static const jp2_boxinfo_t jp2_boxinfo_unk = {
-	0, "Unknown", 0, {0, 0, 0}
+	0, 0, "Unknown", {0, 0, 0}
 };
 
 /******************************************************************************\

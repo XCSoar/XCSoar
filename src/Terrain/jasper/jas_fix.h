@@ -330,12 +330,6 @@ extern "C" {
 #define	JAS_FIX_FLOOR(fix_t, fracbits, x) \
 	((x) & (~((JAS_CAST(fix_t, 1) << (fracbits)) - 1)))
 
-/* Round a fixed-point number to the nearest integer in the direction
-  of zero. */
-#define JAS_FIX_TRUNC(fix_t, fracbits, x) \
-	(((x) >= 0) ? JAS_FIX_FLOOR(fix_t, fracbits, x) : \
-	  JAS_FIX_CEIL(fix_t, fracbits, x))
-
 /******************************************************************************\
 * The below macros are for internal library use only.  Do not invoke them
 * directly in application code.
