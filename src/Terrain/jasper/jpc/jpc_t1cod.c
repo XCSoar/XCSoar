@@ -77,8 +77,6 @@
 
 #include "jasper/jas_math.h"
 
-#include "Compiler.h"
-
 #include <stdlib.h>
 #include <assert.h>
 #include <math.h>
@@ -307,7 +305,6 @@ static uint_least8_t jpc_getzcctxno(unsigned f, unsigned orient)
 		h = v;
 		v = t;
 		/* fall through */
-		gcc_fallthrough;
 	case JPC_TSFB_LL:
 	case JPC_TSFB_LH:
 		if (!h) {

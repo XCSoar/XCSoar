@@ -269,7 +269,7 @@ jas_image_t *jpc_decode(jas_stream_t *in, const char *optstr)
 
   // dima: define the default for color space
 	jas_image_setclrspc(dec->image, JAS_CLRSPC_SGRAY);
-  for (i=0; i<(unsigned int)jas_image_numcmpts(dec->image); ++i)
+  for (i=0; i<jas_image_numcmpts(dec->image); ++i)
 		jas_image_setcmpttype(dec->image, i, JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_GRAY_Y));
 
 
