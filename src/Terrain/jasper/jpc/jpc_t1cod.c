@@ -140,7 +140,6 @@ int JPC_PASSTYPE(unsigned passno)
 	default:
 		passtype = -1;
 		assert(0);
-		break;
 	}
 	return passtype;
 }
@@ -162,13 +161,10 @@ int JPC_NOMINALGAIN(int qmfbid, int numlvls, int lvlno, int orient)
 		case JPC_TSFB_LH:
 		case JPC_TSFB_HL:
 			return 1;
-			break;
 		case JPC_TSFB_HH:
 			return 2;
-			break;
 		default:
 			abort();
-			break;
 		}
 	}
 }
@@ -216,7 +212,6 @@ unsigned JPC_SEGPASSCNT(unsigned passno, unsigned firstpassno, unsigned numpasse
 			default:
 				ret = -1;
 				assert(0);
-				break;
 			}
 		}
 	} else {

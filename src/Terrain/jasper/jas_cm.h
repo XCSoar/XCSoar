@@ -77,7 +77,7 @@
 extern "C" {
 #endif
 
-typedef int jas_clrspc_t;
+typedef unsigned jas_clrspc_t;
 
 /* transform operations */
 #define	JAS_CMXFORM_OP_FWD	0
@@ -142,26 +142,26 @@ struct jas_cmpxform_s;
 
 typedef struct {
 	long *buf;
-	int prec;
+	unsigned prec;
 	int sgnd;
-	int width;
-	int height;
+	unsigned width;
+	unsigned height;
 } jas_cmcmptfmt_t;
 
 typedef struct {
-	int numcmpts;
+	unsigned numcmpts;
 	jas_cmcmptfmt_t *cmptfmts;
 } jas_cmpixmap_t;
 
 typedef struct {
 	void (*destroy)(struct jas_cmpxform_s *pxform);
-	int (*apply)(struct jas_cmpxform_s *pxform, jas_cmreal_t *in, jas_cmreal_t *out, int cnt);
+	int (*apply)(const struct jas_cmpxform_s *pxform, const jas_cmreal_t *in, jas_cmreal_t *out, unsigned  cnt);
 	void (*dump)(struct jas_cmpxform_s *pxform);
 } jas_cmpxformops_t;
 
 typedef struct {
 	jas_cmreal_t *data;
-	int size;
+	unsigned size;
 } jas_cmshapmatlut_t;
 
 typedef struct {
@@ -178,17 +178,17 @@ typedef struct {
 } jas_cmshaplut_t;
 
 typedef struct {
-	int inclrspc;
-	int outclrspc;
+	unsigned inclrspc;
+	unsigned outclrspc;
 } jas_cmclrspcconv_t;
 
 #define	jas_align_t	double
 
 typedef struct jas_cmpxform_s {
-	int refcnt;
-	jas_cmpxformops_t *ops;
-	int numinchans;
-	int numoutchans;
+	unsigned refcnt;
+	const jas_cmpxformops_t *ops;
+	unsigned numinchans;
+	unsigned numoutchans;
 	union {
 		jas_align_t dummy;
 		jas_cmshapmat_t shapmat;
@@ -198,14 +198,14 @@ typedef struct jas_cmpxform_s {
 } jas_cmpxform_t;
 
 typedef struct {
-	int numpxforms;
-	int maxpxforms;
+	unsigned numpxforms;
+	unsigned maxpxforms;
 	jas_cmpxform_t **pxforms;
 } jas_cmpxformseq_t;
 
 typedef struct {
-	int numinchans;
-	int numoutchans;
+	unsigned numinchans;
+	unsigned numoutchans;
 	jas_cmpxformseq_t *pxformseq;
 } jas_cmxform_t;
 
@@ -215,10 +215,10 @@ typedef struct {
 #define	JAS_CMPROF_NUMPXFORMSEQS	13
 
 typedef struct {
-	int clrspc;
-	int numchans;
-	int refclrspc;
-	int numrefchans;
+	jas_clrspc_t clrspc;
+	unsigned numchans;
+	unsigned refclrspc;
+	unsigned numrefchans;
 	jas_iccprof_t *iccprof;
 	jas_cmpxformseq_t *pxformseqs[JAS_CMPROF_NUMPXFORMSEQS];
 } jas_cmprof_t;
@@ -228,9 +228,9 @@ typedef int_fast32_t jas_cmattrname_t;
 typedef int_fast32_t jas_cmattrval_t;
 typedef int_fast32_t jas_cmattrtype_t;
 /* Load a profile. */
-int jas_cmprof_load(jas_cmprof_t *prof, jas_stream_t *in, int fmt);
+int jas_cmprof_load(jas_cmprof_t *prof, jas_stream_t *in, unsigned fmt);
 /* Save a profile. */
-int jas_cmprof_save(jas_cmprof_t *prof, jas_stream_t *out, int fmt);
+int jas_cmprof_save(jas_cmprof_t *prof, jas_stream_t *out, unsigned fmt);
 /* Set an attribute of a profile. */
 int jas_cm_prof_setattr(jas_cm_prof_t *prof, jas_cm_attrname_t name, void *val);
 /* Get an attribute of a profile. */
@@ -243,23 +243,21 @@ jas_cmxform_t *jas_cmxform_create(jas_cmprof_t *inprof, jas_cmprof_t *outprof,
 void jas_cmxform_destroy(jas_cmxform_t *xform);
 
 /* Apply a transform to data. */
-int jas_cmxform_apply(jas_cmxform_t *xform, jas_cmpixmap_t *in,
+int jas_cmxform_apply(const jas_cmxform_t *xform, const jas_cmpixmap_t *in,
   jas_cmpixmap_t *out);
 
-int jas_cxform_optimize(jas_cmxform_t *xform, int optimize);
-
 /* Create a profile. */
-JAS_DLLEXPORT jas_cmprof_t *jas_cmprof_createfromiccprof(jas_iccprof_t *iccprof);
-JAS_DLLEXPORT jas_cmprof_t *jas_cmprof_createfromclrspc(int clrspc);
+JAS_DLLEXPORT jas_cmprof_t *jas_cmprof_createfromiccprof(const jas_iccprof_t *iccprof);
+JAS_DLLEXPORT jas_cmprof_t *jas_cmprof_createfromclrspc(jas_clrspc_t clrspc);
 
 /* Destroy a profile. */
 JAS_DLLEXPORT void jas_cmprof_destroy(jas_cmprof_t *prof);
 
-int jas_clrspc_numchans(int clrspc);
-JAS_DLLEXPORT jas_iccprof_t *jas_iccprof_createfromcmprof(jas_cmprof_t *prof);
+unsigned jas_clrspc_numchans(jas_clrspc_t clrspc);
+JAS_DLLEXPORT jas_iccprof_t *jas_iccprof_createfromcmprof(const jas_cmprof_t *prof);
 
 #define	jas_cmprof_clrspc(prof) ((prof)->clrspc)
-JAS_DLLEXPORT jas_cmprof_t *jas_cmprof_copy(jas_cmprof_t *prof);
+JAS_DLLEXPORT jas_cmprof_t *jas_cmprof_copy(const jas_cmprof_t *prof);
 
 #ifdef __cplusplus
 }
