@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-08-03 22:25+0000\n"
+"PO-Revision-Date: 2020-08-09 19:00+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -272,7 +272,7 @@ msgstr "Kruh+výseč, bodováno dle nejzazšího dosaženého hodu v oblasti."
 #: src/Task/TypeStrings.cpp:112
 #, no-c-format
 msgid "FAI start quadrant"
-msgstr "FAI startovní kvadrant"
+msgstr "FAI startovní sektor"
 
 #: src/Task/TypeStrings.cpp:113
 #, no-c-format
@@ -287,7 +287,7 @@ msgstr "Startovní válec"
 #: src/Task/TypeStrings.cpp:115 src/Dialogs/Task/dlgTaskHelpers.cpp:181
 #, no-c-format
 msgid "FAI quadrant"
-msgstr "FAI kvadrant"
+msgstr "FAI sektor"
 
 #: src/Task/TypeStrings.cpp:116
 #, no-c-format
@@ -327,7 +327,7 @@ msgstr "Sektor oblasti"
 #: src/Task/TypeStrings.cpp:123
 #, no-c-format
 msgid "FAI finish quadrant"
-msgstr "FAI cílový kvadrant"
+msgstr "FAI cílový sektor"
 
 #: src/Task/TypeStrings.cpp:124
 #, no-c-format
