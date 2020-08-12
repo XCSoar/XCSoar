@@ -104,16 +104,22 @@ void
 Waypoints::WaypointNameTree::Add(WaypointPtr wp)
 {
   TCHAR normalized_name[wp->name.length() + 1];
+  TCHAR normalized_shortname[wp->shortname.length() +1];
   NormalizeSearchString(normalized_name, wp->name.c_str());
+  NormalizeSearchString(normalized_shortname, wp->shortname.c_str());
   RadixTree<WaypointPtr>::Add(normalized_name, std::move(wp));
+  RadixTree<WaypointPtr>::Add(normalized_shortname, std::move(wp));
 }
 
 void
 Waypoints::WaypointNameTree::Remove(const WaypointPtr &wp)
 {
   TCHAR normalized_name[wp->name.length() + 1];
+  TCHAR normalized_shortname[wp->shortname.length() + 1];
   NormalizeSearchString(normalized_name, wp->name.c_str());
+  NormalizeSearchString(normalized_shortname, wp->shortname.c_str());
   RadixTree<WaypointPtr>::Remove(normalized_name, wp);
+  RadixTree<WaypointPtr>::Remove(normalized_shortname, wp);
 }
 
 Waypoints::Waypoints()
