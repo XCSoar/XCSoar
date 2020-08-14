@@ -328,14 +328,36 @@ class PackedBE16 {
 	uint8_t hi, lo;
 
 public:
-	constexpr operator uint16_t() const {
-		return (hi << 8) | lo;
+	PackedBE16() = default;
+
+	constexpr PackedBE16(uint16_t src) noexcept
+		:hi(uint8_t(src >> 8)),
+		 lo(uint8_t(src)) {}
+
+	/**
+	 * Construct an instance from an integer which is already
+	 * big-endian.
+	 */
+	static constexpr auto FromBE(uint16_t src) noexcept {
+		union {
+			uint16_t in;
+			PackedBE16 out;
+		} u{src};
+		return u.out;
 	}
 
-	PackedBE16 &operator=(uint16_t new_value) {
-		lo = uint8_t(new_value);
-		hi = uint8_t(new_value >> 8);
-		return *this;
+	constexpr operator uint16_t() const {
+		return (uint16_t(hi) << 8) | uint16_t(lo);
+	}
+
+	/**
+	 * Reads the raw, big-endian value.
+	 */
+	constexpr uint16_t raw() const noexcept {
+		uint16_t x = *this;
+		if (IsLittleEndian())
+			x = ByteSwap16(x);
+		return x;
 	}
 };
 
@@ -349,14 +371,42 @@ class PackedLE16 {
 	uint8_t lo, hi;
 
 public:
+	PackedLE16() = default;
+
+	constexpr PackedLE16(uint16_t src) noexcept
+		:lo(uint8_t(src)),
+		 hi(uint8_t(src >> 8)) {}
+
+	/**
+	 * Construct an instance from an integer which is already
+	 * little-endian.
+	 */
+	static constexpr auto FromLE(uint16_t src) noexcept {
+		union {
+			uint16_t in;
+			PackedLE16 out;
+		} u{src};
+		return u.out;
+	}
+
 	constexpr operator uint16_t() const {
-		return (hi << 8) | lo;
+		return (uint16_t(hi) << 8) | uint16_t(lo);
 	}
 
 	PackedLE16 &operator=(uint16_t new_value) {
 		lo = uint8_t(new_value);
 		hi = uint8_t(new_value >> 8);
 		return *this;
+	}
+
+	/**
+	 * Reads the raw, little-endian value.
+	 */
+	constexpr uint16_t raw() const noexcept {
+		uint16_t x = *this;
+		if (IsBigEndian())
+			x = ByteSwap16(x);
+		return x;
 	}
 };
 
