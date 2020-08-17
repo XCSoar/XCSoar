@@ -82,6 +82,7 @@
 #include "jpc_tagtree.h"
 #include "jpc_cs.h"
 #include "jpc_mqdec.h"
+#include "jpc_t1cod.h"
 #include "jpc_t2cod.h"
 
 #include "Util/Compiler.h"
@@ -111,11 +112,11 @@ typedef struct {
 typedef struct {
 
 	/* The number of entries. */
-	int numents;
+	unsigned numents;
 
 	/* The maximum number of entries (i.e., the allocated size of the array
 	  below). */
-	int maxents;
+	unsigned maxents;
 
 	/* The table entries. */
 	jpc_ppxstabent_t **ents;
@@ -127,11 +128,11 @@ typedef struct {
 typedef struct {
 
 	/* The number of streams in this list. */
-	int numstreams;
+	unsigned numstreams;
 
 	/* The maximum number of streams that can be accomodated without
 	  growing the streams array. */
-	int maxstreams;
+	unsigned maxstreams;
 
 	/* The streams. */
 	jas_stream_t **streams;
@@ -148,7 +149,7 @@ typedef struct {
 typedef struct {
 
 	/* How were various coding parameters set? */
-	int flags;
+	unsigned flags;
 
 	/* Per-component coding style parameters (e.g., explicit precinct sizes) */
 	uint_fast8_t csty;
@@ -196,7 +197,7 @@ typedef struct {
 typedef struct {
 
 	/* How were these coding parameters set? */
-	int flags;
+	unsigned flags;
 
 	/* Progression change list. */
 	jpc_pchglist_t *pchglist;
@@ -214,7 +215,7 @@ typedef struct {
 	uint_fast8_t csty;
 
 	/* The number of components. */
-	int numcomps;
+	unsigned numcomps;
 
 	/* The per-component coding parameters. */
 	jpc_dec_ccp_t *ccps;
@@ -236,23 +237,23 @@ typedef struct jpc_dec_seg_s {
 	struct jpc_dec_seg_s *prev;
 
 	/* The starting pass number for this segment. */
-	int passno;
+	unsigned passno;
 
 	/* The number of passes in this segment. */
-	int numpasses;
+	unsigned numpasses;
 
 	/* The maximum number of passes in this segment. */
-	int maxpasses;
+	unsigned maxpasses;
 
 	/* The type of data in this segment (i.e., MQ or raw). */
-	int type;
+	enum jpc_segtype type;
 
 	/* A stream containing the data for this segment. */
 	jas_stream_t *stream;
 
 	/* The number of bytes destined for this segment from the packet
 	  currently being decoded. */
-	int cnt;
+	unsigned cnt;
 
 	/* A flag indicating if this segment has been terminated. */
 	int complete;
@@ -260,7 +261,7 @@ typedef struct jpc_dec_seg_s {
 	/* The layer number to which this segment belongs. */
 	/* If the segment spans multiple layers, then the largest layer number
 	  spanned by the segment is used. */
-	int lyrno;
+	unsigned lyrno;
 
 } jpc_dec_seg_t;
 
@@ -281,7 +282,7 @@ typedef struct {
 typedef struct {
 
 	/* The number of passes. */
-	int numpasses;
+	unsigned numpasses;
 
 	/* A list of segments that still need to be decoded. */
 	jpc_dec_seglist_t segs;
@@ -290,13 +291,13 @@ typedef struct {
 	jpc_dec_seg_t *curseg;
 
 	/* The number of leading insignificant bit planes for this code block. */
-	int numimsbs;
+	unsigned numimsbs;
 
 	/* The number of bits used to encode pass data lengths. */
-	int numlenbits;
+	unsigned numlenbits;
 
 	/* The first pass number containing data for this code block. */
-	int firstpassno;
+	unsigned firstpassno;
 
 	/* The MQ decoder. */
 	jpc_mqdec_t *mqdec;
@@ -332,14 +333,14 @@ typedef struct {
 
 	/* The number of code blocks spanning this precinct in the horizontal
 	  direction. */
-	int numhcblks;
+	unsigned numhcblks;
 
 	/* The number of code blocks spanning this precinct in the vertical
 	  direction. */
-	int numvcblks;
+	unsigned numvcblks;
 
 	/* The total number of code blocks in this precinct. */
-	int numcblks;
+	unsigned numcblks;
 
 	/* The per code block information. */
 	jpc_dec_cblk_t *cblks;
@@ -363,16 +364,16 @@ typedef struct {
 	jas_matrix_t *data;
 
 	/* The orientation of this band (i.e., LL, LH, HL, or HH). */
-	int orient;
+	enum jpc_tsfb_orient orient;
 
 	/* The encoded quantizer step size. */
-	int stepsize;
+	unsigned stepsize;
 
 	/* The absolute quantizer step size. */
 	jpc_fix_t absstepsize;
 
 	/* The number of bit planes for this band. */
-	int numbps;
+	unsigned numbps;
 
 	/* The analysis gain associated with this band. */
 	int analgain;
@@ -387,7 +388,7 @@ typedef struct {
 typedef struct {
 
 	/* The number of bands associated with this resolution level. */
-	int numbands;
+	unsigned numbands;
 
 	/* The per-band information. */
 	jpc_dec_band_t *bands;
@@ -410,30 +411,30 @@ typedef struct {
 
 	/* The exponent value for the nominal precinct width measured
 	  relative to the associated LL band. */
-	int prcwidthexpn;
+	unsigned prcwidthexpn;
 
 	/* The exponent value for the nominal precinct height measured
 	  relative to the associated LL band. */
-	int prcheightexpn;
+	unsigned prcheightexpn;
 
 	/* The number of precincts in the horizontal direction. */
-	int numhprcs;
+	unsigned numhprcs;
 
 	/* The number of precincts in the vertical direction. */
-	int numvprcs;
+	unsigned numvprcs;
 
 	/* The total number of precincts. */
-	int numprcs;
+	unsigned numprcs;
 
 	/* The exponent value for the nominal code block group width.
 	  This quantity is associated with the next lower resolution level
 	  (assuming that there is one). */
-	int cbgwidthexpn;
+	unsigned cbgwidthexpn;
 
 	/* The exponent value for the nominal code block group height
 	  This quantity is associated with the next lower resolution level
 	  (assuming that there is one). */
-	int cbgheightexpn;
+	unsigned cbgheightexpn;
 
 	/* The exponent value for the code block width. */
 	uint_fast16_t cblkwidthexpn;
@@ -527,10 +528,10 @@ typedef struct {
 	jpc_dec_tcomp_t *tcomps;
 
 	/* The next expected tile-part number. */
-	int partno;
+	unsigned partno;
 
 	/* The number of tile-parts. */
-	int numparts;
+	unsigned numparts;
 
 	/* The coding mode. */
 	int realmode;
@@ -613,14 +614,14 @@ typedef struct {
 
 	/* The number of tiles spanning the image area in the vertical
 	  direction. */
-	int numhtiles;
+	unsigned numhtiles;
 
 	/* The number of tiles spanning the image area in the horizontal
 	  direction. */
-	int numvtiles;
+	unsigned numvtiles;
 
 	/* The total number of tiles. */
-	int numtiles;
+	unsigned numtiles;
 
 	/* The per-tile information. */
 	jpc_dec_tile_t *tiles;
@@ -629,7 +630,7 @@ typedef struct {
 	jpc_dec_tile_t *curtile;
 
 	/* The number of components. */
-	int numcomps;
+	unsigned numcomps;
 
 	/* The stream containing the input JPEG-2000 code stream data. */
 	jas_stream_t *in;
@@ -638,18 +639,18 @@ typedef struct {
 	jpc_dec_cp_t *cp;
 
 	/* The maximum number of layers that may be decoded. */
-	int maxlyrs;
+	unsigned maxlyrs;
 
 	/* The maximum number of packets that may be decoded. */
 	int maxpkts;
 
 	/* The number of packets decoded so far in the processing of the entire
 	  code stream. */
-	int numpkts;
+	unsigned numpkts;
 
 #ifdef ENABLE_JASPER_PPM
 	/* The next expected PPM marker segment sequence number. */
-	int ppmseqno;
+	unsigned ppmseqno;
 #endif /* ENABLE_JASPER_PPM */
 
 	/* The current state for code stream processing. */
@@ -687,7 +688,7 @@ typedef struct {
 	int debug;
 
 	/* The maximum number of layers to decode. */
-	int maxlyrs;
+	unsigned maxlyrs;
 
 	/* The maximum number of packets to decode. */
 	int maxpkts;

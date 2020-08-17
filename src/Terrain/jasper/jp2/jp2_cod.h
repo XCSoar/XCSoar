@@ -270,7 +270,7 @@ typedef struct jp2_boxops_s {
 	void (*destroy)(jp2_box_t *box);
 	int (*getdata)(jp2_box_t *box, jas_stream_t *in);
 #ifdef JASPER_DISABLED
-	int (*putdata)(jp2_box_t *box, jas_stream_t *out);
+	int (*putdata)(const jp2_box_t *box, jas_stream_t *out);
 #endif /* JASPER_DISABLED */
 } jp2_boxops_t;
 
@@ -280,8 +280,8 @@ typedef struct jp2_boxops_s {
 
 typedef struct jp2_boxinfo_s {
 	int type;
-	const char *name;
 	int flags;
+	const char *name;
 	jp2_boxops_t ops;
 } jp2_boxinfo_t;
 

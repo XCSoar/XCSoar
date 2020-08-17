@@ -90,10 +90,12 @@
 #define	JPC_TSFB_MAXDEPTH	32
 #define	JPC_TSFB_RITIMODE	JPC_QMFB1D_RITIMODE
 
-#define JPC_TSFB_LL	0
-#define JPC_TSFB_LH	1
-#define JPC_TSFB_HL	2
-#define JPC_TSFB_HH	3
+enum jpc_tsfb_orient {
+	JPC_TSFB_LL = 0,
+	JPC_TSFB_LH = 1,
+	JPC_TSFB_HL = 2,
+	JPC_TSFB_HH = 3,
+};
 
 /******************************************************************************\
 * Types.
@@ -104,7 +106,7 @@ typedef struct {
 	int ystart;
 	int xend;
 	int yend;
-	int orient;
+	enum jpc_tsfb_orient orient;
 	int locxstart;
 	int locystart;
 	int locxend;
@@ -113,7 +115,7 @@ typedef struct {
 } jpc_tsfb_band_t;
 
 typedef struct {
-	int numlvls;
+	unsigned numlvls;
 	const jpc_qmfb2d_t *qmfb;
 } jpc_tsfb_t;
 
@@ -123,7 +125,7 @@ typedef struct {
 
 /* Create a TSFB. */
 gcc_malloc
-jpc_tsfb_t *jpc_cod_gettsfb(int qmfbid, int numlevels);
+jpc_tsfb_t *jpc_cod_gettsfb(unsigned qmfbid, unsigned numlevels);
 
 /* Destroy a TSFB. */
 void jpc_tsfb_destroy(jpc_tsfb_t *tsfb);
@@ -135,7 +137,7 @@ int jpc_tsfb_analyze(jpc_tsfb_t *tsfb, jas_seq2d_t *x);
 int jpc_tsfb_synthesize(jpc_tsfb_t *tsfb, jas_seq2d_t *x);
 
 int jpc_tsfb_analyze2(jpc_tsfb_t *tsfb, jpc_fix_t *a, int xstart, int ystart,
-  int width, int height, int stride, int numlvls);
+  unsigned width, unsigned height, unsigned stride, unsigned numlvls);
 
 /* Get band information for a TSFB. */
 int jpc_tsfb_getbands(jpc_tsfb_t *tsfb, uint_fast32_t xstart,

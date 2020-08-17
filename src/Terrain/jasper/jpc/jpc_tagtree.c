@@ -169,9 +169,7 @@ jpc_tagtree_t *jpc_tagtree_create(int numleafsh, int numleafsv)
 
 void jpc_tagtree_destroy(jpc_tagtree_t *tree)
 {
-	if (tree->nodes_) {
-		jas_free(tree->nodes_);
-	}
+	jas_free(tree->nodes_);
 	jas_free(tree);
 }
 
@@ -196,10 +194,9 @@ static jpc_tagtree_t *jpc_tagtree_alloc()
 
 /* Copy state information from one tag tree to another. */
 
-void jpc_tagtree_copy(jpc_tagtree_t *dsttree, jpc_tagtree_t *srctree)
+void jpc_tagtree_copy(jpc_tagtree_t *dsttree, const jpc_tagtree_t *srctree)
 {
 	int n;
-	jpc_tagtreenode_t *srcnode;
 	jpc_tagtreenode_t *dstnode;
 
 	/* The two tag trees must have similar sizes. */
@@ -207,7 +204,7 @@ void jpc_tagtree_copy(jpc_tagtree_t *dsttree, jpc_tagtree_t *srctree)
 	  srctree->numleafsv_ == dsttree->numleafsv_);
 
 	n = srctree->numnodes_;
-	srcnode = srctree->nodes_;
+	const jpc_tagtreenode_t *srcnode = srctree->nodes_;
 	dstnode = dsttree->nodes_;
 	while (--n >= 0) {
 		dstnode->value_ = srcnode->value_;

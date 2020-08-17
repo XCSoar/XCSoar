@@ -110,10 +110,10 @@
 
 typedef struct {
 
-	uint_fast16_t id;
+	uint_least16_t id;
 	/* The marker segment type. */
 
-	int validstates;
+	uint_least16_t validstates;
 	/* The states in which this type of marker segment can be
 	  validly encountered. */
 
@@ -142,7 +142,7 @@ typedef struct {
 #ifdef ENABLE_JASPER_PPM
 static jpc_ppxstab_t *jpc_ppxstab_create(void);
 static void jpc_ppxstab_destroy(jpc_ppxstab_t *tab);
-static int jpc_ppxstab_grow(jpc_ppxstab_t *tab, int maxents);
+static int jpc_ppxstab_grow(jpc_ppxstab_t *tab, unsigned maxents);
 static int jpc_ppxstab_insert(jpc_ppxstab_t *tab, jpc_ppxstabent_t *ent);
 static jpc_streamlist_t *jpc_ppmstabtostreams(jpc_ppxstab_t *tab);
 static int jpc_pptstabwrite(jas_stream_t *out, jpc_ppxstab_t *tab);
@@ -152,33 +152,33 @@ static void jpc_ppxstabent_destroy(jpc_ppxstabent_t *ent);
 static int jpc_streamlist_numstreams(jpc_streamlist_t *streamlist);
 static jpc_streamlist_t *jpc_streamlist_create(void);
 
-static int jpc_streamlist_insert(jpc_streamlist_t *streamlist, int streamno,
+static int jpc_streamlist_insert(jpc_streamlist_t *streamlist, unsigned streamno,
   jas_stream_t *stream);
-static jas_stream_t *jpc_streamlist_remove(jpc_streamlist_t *streamlist, int streamno);
+static jas_stream_t *jpc_streamlist_remove(jpc_streamlist_t *streamlist, unsigned streamno);
 static void jpc_streamlist_destroy(jpc_streamlist_t *streamlist);
 #endif /* ENABLE_JASPER_PPM */
 
 static void jpc_dec_cp_resetflags(jpc_dec_cp_t *cp);
 static jpc_dec_cp_t *jpc_dec_cp_create(uint_fast16_t numcomps);
-static int jpc_dec_cp_isvalid(jpc_dec_cp_t *cp);
-static jpc_dec_cp_t *jpc_dec_cp_copy(jpc_dec_cp_t *cp);
-static int jpc_dec_cp_setfromcod(jpc_dec_cp_t *cp, jpc_cod_t *cod);
-static int jpc_dec_cp_setfromcoc(jpc_dec_cp_t *cp, jpc_coc_t *coc);
+static int jpc_dec_cp_isvalid(const jpc_dec_cp_t *cp);
+static jpc_dec_cp_t *jpc_dec_cp_copy(const jpc_dec_cp_t *cp);
+static int jpc_dec_cp_setfromcod(jpc_dec_cp_t *cp, const jpc_cod_t *cod);
+static int jpc_dec_cp_setfromcoc(jpc_dec_cp_t *cp, const jpc_coc_t *coc);
 static int jpc_dec_cp_setfromcox(jpc_dec_cp_t *cp, jpc_dec_ccp_t *ccp,
-  jpc_coxcp_t *compparms, int flags);
-static int jpc_dec_cp_setfromqcd(jpc_dec_cp_t *cp, jpc_qcd_t *qcd);
-static int jpc_dec_cp_setfromqcc(jpc_dec_cp_t *cp, jpc_qcc_t *qcc);
+  const jpc_coxcp_t *compparms, unsigned flags);
+static int jpc_dec_cp_setfromqcd(jpc_dec_cp_t *cp, const jpc_qcd_t *qcd);
+static int jpc_dec_cp_setfromqcc(jpc_dec_cp_t *cp, const jpc_qcc_t *qcc);
 static int jpc_dec_cp_setfromqcx(jpc_dec_cp_t *cp, jpc_dec_ccp_t *ccp,
-  jpc_qcxcp_t *compparms, int flags);
-static int jpc_dec_cp_setfromrgn(jpc_dec_cp_t *cp, jpc_rgn_t *rgn);
+  const jpc_qcxcp_t *compparms, unsigned flags);
+static int jpc_dec_cp_setfromrgn(jpc_dec_cp_t *cp, const jpc_rgn_t *rgn);
 static int jpc_dec_cp_prepare(jpc_dec_cp_t *cp);
 static void jpc_dec_cp_destroy(jpc_dec_cp_t *cp);
-static int jpc_dec_cp_setfrompoc(jpc_dec_cp_t *cp, jpc_poc_t *poc, int reset);
-static int jpc_pi_addpchgfrompoc(jpc_pi_t *pi, jpc_poc_t *poc);
+static int jpc_dec_cp_setfrompoc(jpc_dec_cp_t *cp, const jpc_poc_t *poc, int reset);
+static int jpc_pi_addpchgfrompoc(jpc_pi_t *pi, const jpc_poc_t *poc);
 
 static void jpc_dequantize(jas_matrix_t *x, jpc_fix_t absstepsize);
-static void jpc_undo_roi(jas_matrix_t *x, int roishift, int bgshift, int numbps);
-static jpc_fix_t jpc_calcabsstepsize(int stepsize, int numbits);
+static void jpc_undo_roi(jas_matrix_t *x, int roishift, int bgshift, unsigned numbps);
+static jpc_fix_t jpc_calcabsstepsize(unsigned stepsize, unsigned numbits);
 static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile);
 static int jpc_dec_tileinit(jpc_dec_t *dec, jpc_dec_tile_t *tile);
 static int jpc_dec_tilefini(jpc_dec_t *dec, jpc_dec_tile_t *tile);
@@ -269,7 +269,7 @@ jas_image_t *jpc_decode(jas_stream_t *in, const char *optstr)
 
   // dima: define the default for color space
 	jas_image_setclrspc(dec->image, JAS_CLRSPC_SGRAY);
-  for (i=0; i<(unsigned int)jas_image_numcmpts(dec->image); ++i)
+  for (i=0; i<jas_image_numcmpts(dec->image); ++i)
 		jas_image_setcmpttype(dec->image, i, JAS_IMAGE_CT_COLOR(JAS_CLRSPC_CHANIND_GRAY_Y));
 
 
@@ -389,6 +389,7 @@ static void jpc_dec_opts_destroy(jpc_dec_importopts_t *opts)
 * Code for table-driven code stream decoder.
 \******************************************************************************/
 
+JAS_ATTRIBUTE_CONST
 static const jpc_dec_mstabent_t *jpc_dec_mstab_lookup(uint_fast16_t id)
 {
 	const jpc_dec_mstabent_t *mstabent;
@@ -474,11 +475,11 @@ int jpc_dec_decode(jpc_dec_t *dec)
 
 static int jpc_dec_process_crg(jpc_dec_t *dec, jpc_ms_t *ms)
 {
-	int cmptno;
 	jpc_dec_cmpt_t *cmpt;
 	jpc_crg_t *crg;
 
 	crg = &ms->parms.crg;
+	unsigned cmptno;
 	for (cmptno = 0, cmpt = dec->cmpts; cmptno < dec->numcomps; ++cmptno,
 	  ++cmpt) {
 		/* Ignore the information in the CRG marker segment for now.
@@ -513,7 +514,6 @@ static int jpc_dec_process_sot(jpc_dec_t *dec, jpc_ms_t *ms)
 	jas_image_cmptparm_t *compinfos;
 	jas_image_cmptparm_t *compinfo;
 	jpc_dec_cmpt_t *cmpt;
-	int cmptno;
 #endif /* ENABLE_JASPER_IMAGE */
 
 	if (dec->state == JPC_MH) {
@@ -523,6 +523,7 @@ static int jpc_dec_process_sot(jpc_dec_t *dec, jpc_ms_t *ms)
 		  sizeof(jas_image_cmptparm_t)))) {
 			return -1;
 		}
+		unsigned cmptno;
 		for (cmptno = 0, cmpt = dec->cmpts, compinfo = compinfos;
 		  cmptno < dec->numcomps; ++cmptno, ++cmpt, ++compinfo) {
 			compinfo->tlx = 0;
@@ -565,7 +566,7 @@ static int jpc_dec_process_sot(jpc_dec_t *dec, jpc_ms_t *ms)
 		dec->curtileendoff = 0;
 	}
 
-	if (JAS_CAST(int, sot->tileno) >= dec->numtiles) {
+	if (sot->tileno >= dec->numtiles) {
 		jas_eprintf("invalid tile number in SOT marker segment\n");
 		return -1;
 	}
@@ -742,18 +743,11 @@ static int jpc_dec_process_sod(jpc_dec_t *dec, jpc_ms_t *ms)
 static int jpc_dec_tileinit(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 {
 	jpc_dec_tcomp_t *tcomp;
-	int compno;
 	unsigned rlvlno;
 	jpc_dec_rlvl_t *rlvl;
 	jpc_dec_band_t *band;
 	jpc_dec_prc_t *prc;
-	int bndno;
-	jpc_tsfb_band_t *bnd;
-	int bandno;
-	jpc_dec_ccp_t *ccp;
-	int prccnt;
 	jpc_dec_cblk_t *cblk;
-	int cblkcnt;
 	uint_fast32_t tlprcxstart;
 	uint_fast32_t tlprcystart;
 	uint_fast32_t brprcxend;
@@ -777,21 +771,20 @@ static int jpc_dec_tileinit(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 	uint_fast32_t tmpystart;
 	uint_fast32_t tmpxend;
 	uint_fast32_t tmpyend;
-	jpc_dec_cp_t *cp;
 	jpc_tsfb_band_t bnds[JPC_MAXBANDS];
 	jpc_pchg_t *pchg;
-	int pchgno;
-	jpc_dec_cmpt_t *cmpt;
 
-	cp = tile->cp;
+	const jpc_dec_cp_t *cp = tile->cp;
 	tile->realmode = 0;
 	if (cp->mctid == JPC_MCT_ICT) {
 		tile->realmode = 1;
 	}
 
+	unsigned compno;
+	const jpc_dec_cmpt_t *cmpt;
 	for (compno = 0, tcomp = tile->tcomps, cmpt = dec->cmpts; compno <
 	  dec->numcomps; ++compno, ++tcomp, ++cmpt) {
-		ccp = &tile->cp->ccps[compno];
+		const jpc_dec_ccp_t *ccp = &tile->cp->ccps[compno];
 		if (ccp->qmfbid == JPC_COX_INS) {
 			tile->realmode = 1;
 		}
@@ -871,13 +864,13 @@ static int jpc_dec_tileinit(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 				tlcbgxstart = JPC_CEILDIVPOW2(tlprcxstart, 1);
 				tlcbgystart = JPC_CEILDIVPOW2(tlprcystart, 1);
 				brcbgxend = JPC_CEILDIVPOW2(brprcxend, 1);
-				rlvl->cbgwidthexpn = rlvl->prcwidthexpn - 1;
-				rlvl->cbgheightexpn = rlvl->prcheightexpn - 1;
-				if (rlvl->cbgwidthexpn < 0 || rlvl->cbgheightexpn < 0) {
+				if (rlvl->prcwidthexpn < 1 || rlvl->prcheightexpn < 1) {
 					/* the control block width/height offset
 					   exponent must not be negative */
 					return -1;
 				}
+				rlvl->cbgwidthexpn = rlvl->prcwidthexpn - 1;
+				rlvl->cbgheightexpn = rlvl->prcheightexpn - 1;
 			}
 			rlvl->cblkwidthexpn = JAS_MIN(ccp->cblkwidthexpn,
 			  rlvl->cbgwidthexpn);
@@ -889,11 +882,12 @@ static int jpc_dec_tileinit(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 			  sizeof(jpc_dec_band_t)))) {
 				return -1;
 			}
+			unsigned bandno;
 			for (bandno = 0, band = rlvl->bands;
 			  bandno < rlvl->numbands; ++bandno, ++band) {
-				bndno = (!rlvlno) ? 0 : (3 * (rlvlno - 1) +
+				unsigned bndno = (!rlvlno) ? 0 : (3 * (rlvlno - 1) +
 				  bandno + 1);
-				bnd = &bnds[bndno];
+				const jpc_tsfb_band_t *bnd = &bnds[bndno];
 
 				band->orient = bnd->orient;
 				band->stepsize = ccp->stepsizes[bndno];
@@ -929,7 +923,7 @@ static int jpc_dec_tileinit(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 /************************************************/
 				cbgxstart = tlcbgxstart;
 				cbgystart = tlcbgystart;
-				for (prccnt = rlvl->numprcs, prc = band->prcs;
+				unsigned prccnt;				for (prccnt = rlvl->numprcs, prc = band->prcs;
 				  prccnt > 0; --prccnt, ++prc) {
 					cbgxend = cbgxstart + (1 << rlvl->cbgwidthexpn);
 					cbgyend = cbgystart + (1 << rlvl->cbgheightexpn);
@@ -972,6 +966,7 @@ static int jpc_dec_tileinit(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 
 						cblkxstart = cbgxstart;
 						cblkystart = cbgystart;
+						unsigned cblkcnt;
 						for (cblkcnt = prc->numcblks, cblk = prc->cblks;
 						  cblkcnt > 0;) {
 							cblkxend = cblkxstart + (1 << rlvl->cblkwidthexpn);
@@ -1031,7 +1026,7 @@ static int jpc_dec_tileinit(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 		return -1;
 	}
 
-	for (pchgno = 0; pchgno < jpc_pchglist_numpchgs(tile->cp->pchglist);
+	for (unsigned pchgno = 0; pchgno < jpc_pchglist_numpchgs(tile->cp->pchglist);
 	  ++pchgno) {
 		pchg = jpc_pchg_copy(jpc_pchglist_get(tile->cp->pchglist, pchgno));
 		assert(pchg);
@@ -1045,34 +1040,34 @@ static int jpc_dec_tileinit(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 static int jpc_dec_tilefini(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 {
 	jpc_dec_tcomp_t *tcomp;
-	int compno;
-	int bandno;
 	unsigned rlvlno;
-	jpc_dec_band_t *band;
-	jpc_dec_rlvl_t *rlvl;
-	int prcno;
-	jpc_dec_prc_t *prc;
 	jpc_dec_seg_t *seg;
 	jpc_dec_cblk_t *cblk;
-	int cblkno;
 
 	if (tile->tcomps) {
 
+		unsigned compno;
 		for (compno = 0, tcomp = tile->tcomps; compno < dec->numcomps;
 		  ++compno, ++tcomp) {
+			const jpc_dec_rlvl_t *rlvl;
 			for (rlvlno = 0, rlvl = tcomp->rlvls; rlvlno < tcomp->numrlvls;
 			  ++rlvlno, ++rlvl) {
 				if (!rlvl->bands) {
 					continue;
 				}
+				unsigned bandno;
+				const jpc_dec_band_t *band;
 				for (bandno = 0, band = rlvl->bands; bandno < rlvl->numbands;
 				  ++bandno, ++band) {
 					if (band->prcs) {
+						unsigned prcno;
+						const jpc_dec_prc_t *prc;
 						for (prcno = 0, prc = band->prcs; prcno <
 						  rlvl->numprcs; ++prcno, ++prc) {
 							if (!prc->cblks) {
 								continue;
 							}
+							unsigned cblkno;
 							for (cblkno = 0, cblk = prc->cblks; cblkno <
 							  prc->numcblks; ++cblkno, ++cblk) {
 
@@ -1156,16 +1151,8 @@ static int jpc_dec_tilefini(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 
 static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 {
-	jpc_dec_tcomp_t *tcomp;
-	jpc_dec_rlvl_t *rlvl;
-	jpc_dec_band_t *band;
-	int compno;
 	unsigned rlvlno;
-	int bandno;
-	int adjust;
 	int v;
-	jpc_dec_ccp_t *ccp;
-	jpc_dec_cmpt_t *cmpt;
 
 	if (jpc_dec_decodecblks(dec, tile)) {
 		jas_eprintf("jpc_dec_decodecblks failed\n");
@@ -1173,15 +1160,19 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 	}
 
 	/* Perform dequantization. */
+	unsigned compno;
+	const jpc_dec_tcomp_t *tcomp;
 	for (compno = 0, tcomp = tile->tcomps; compno < dec->numcomps;
 	  ++compno, ++tcomp) {
-		ccp = &tile->cp->ccps[compno];
-		const int ilevel = tcomp->numrlvls;
-		for (rlvlno = 0, rlvl = tcomp->rlvls; rlvlno < ilevel;
+		const jpc_dec_ccp_t *ccp = &tile->cp->ccps[compno];
+		const jpc_dec_rlvl_t *rlvl;
+		for (rlvlno = 0, rlvl = tcomp->rlvls; rlvlno < tcomp->numrlvls;
 		  ++rlvlno, ++rlvl) {
 			if (!rlvl->bands) {
 				continue;
 			}
+			unsigned bandno;
+			const jpc_dec_band_t *band;
 			for (bandno = 0, band = rlvl->bands;
 			  bandno < rlvl->numbands; ++bandno, ++band) {
 				if (!band->data) {
@@ -1201,7 +1192,6 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 	/* Apply an inverse wavelet transform if necessary. */
 	for (compno = 0, tcomp = tile->tcomps; compno < dec->numcomps;
 	  ++compno, ++tcomp) {
-		ccp = &tile->cp->ccps[compno];
 		jpc_tsfb_synthesize(tcomp->tsfb, tcomp->data);
 	}
 
@@ -1241,7 +1231,7 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 	/* Perform rounding and convert to integer values. */
 	for (compno = 0, tcomp = tile->tcomps; compno < dec->numcomps;
 		  ++compno, ++tcomp) {
-		ccp = &tile->cp->ccps[compno];
+		const jpc_dec_ccp_t *ccp = &tile->cp->ccps[compno];
 		if (ccp->qmfbid == JPC_COX_INS) {
 			for (jas_matind_t i = 0; i < jas_matrix_numrows(tcomp->data); ++i) {
 				for (jas_matind_t j = 0; j < jas_matrix_numcols(tcomp->data); ++j) {
@@ -1254,9 +1244,10 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 	}
 
 	/* Perform level shift. */
+	const jpc_dec_cmpt_t *cmpt;
 	for (compno = 0, tcomp = tile->tcomps, cmpt = dec->cmpts; compno <
 	  dec->numcomps; ++compno, ++tcomp, ++cmpt) {
-		adjust = cmpt->sgnd ? 0 : (1 << (cmpt->prec - 1));
+		const unsigned adjust = cmpt->sgnd ? 0 : (1 << (cmpt->prec - 1));
 		for (jas_matind_t i = 0; i < jas_matrix_numrows(tcomp->data); ++i) {
 			for (jas_matind_t j = 0; j < jas_matrix_numcols(tcomp->data); ++j) {
 				*jas_matrix_getref(tcomp->data, i, j) += adjust;
@@ -1302,12 +1293,12 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 
 static int jpc_dec_process_eoc(jpc_dec_t *dec, jpc_ms_t *ms)
 {
-	int tileno;
 	jpc_dec_tile_t *tile;
 
 	/* Eliminate compiler warnings about unused variables. */
 	(void)ms;
 
+	unsigned tileno;
 	for (tileno = 0, tile = dec->tiles; tileno < dec->numtiles; ++tileno,
 	  ++tile) {
 		if (tile->state == JPC_TILE_ACTIVE ||
@@ -1332,12 +1323,8 @@ static int jpc_dec_process_eoc(jpc_dec_t *dec, jpc_ms_t *ms)
 static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
 {
 	jpc_siz_t *siz = &ms->parms.siz;
-	int compno;
-	int tileno;
 	jpc_dec_tile_t *tile;
 	jpc_dec_tcomp_t *tcomp;
-	int htileno;
-	int vtileno;
 	jpc_dec_cmpt_t *cmpt;
 	size_t size;
 	size_t num_samples;
@@ -1376,6 +1363,7 @@ static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
 	}
 
 	num_samples = 0;
+	unsigned compno;
 	for (compno = 0, cmpt = dec->cmpts; compno < dec->numcomps; ++compno,
 	  ++cmpt) {
 		cmpt->prec = siz->comps[compno].prec;
@@ -1411,8 +1399,6 @@ static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
 
 	dec->numhtiles = JPC_CEILDIV(dec->xend - dec->tilexoff, dec->tilewidth);
 	dec->numvtiles = JPC_CEILDIV(dec->yend - dec->tileyoff, dec->tileheight);
-	assert(dec->numhtiles >= 0);
-	assert(dec->numvtiles >= 0);
 	if (!jas_safe_size_mul(dec->numhtiles, dec->numvtiles, &size) ||
 	  size > INT_MAX) {
 		return -1;
@@ -1438,6 +1424,7 @@ static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
 		return -1;
 	}
 
+	unsigned tileno;
 	for (tileno = 0, tile = dec->tiles; tileno < dec->numtiles; ++tileno,
 	  ++tile) {
 		/* initialize all tiles with JPC_TILE_DONE so
@@ -1449,8 +1436,8 @@ static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
 
 	for (tileno = 0, tile = dec->tiles; tileno < dec->numtiles; ++tileno,
 	  ++tile) {
-		htileno = tileno % dec->numhtiles;
-		vtileno = tileno / dec->numhtiles;
+		const unsigned htileno = tileno % dec->numhtiles;
+		const unsigned vtileno = tileno / dec->numhtiles;
 		tile->realmode = 0;
 		tile->state = JPC_TILE_INIT;
 		tile->xstart = JAS_MAX(dec->tilexoff + htileno * dec->tilewidth,
@@ -1506,7 +1493,7 @@ static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
 
 static int jpc_dec_process_cod(jpc_dec_t *dec, jpc_ms_t *ms)
 {
-	jpc_cod_t *cod = &ms->parms.cod;
+	const jpc_cod_t *cod = &ms->parms.cod;
 	jpc_dec_tile_t *tile;
 
 	switch (dec->state) {
@@ -1528,10 +1515,10 @@ static int jpc_dec_process_cod(jpc_dec_t *dec, jpc_ms_t *ms)
 
 static int jpc_dec_process_coc(jpc_dec_t *dec, jpc_ms_t *ms)
 {
-	jpc_coc_t *coc = &ms->parms.coc;
+	const jpc_coc_t *coc = &ms->parms.coc;
 	jpc_dec_tile_t *tile;
 
-	if (JAS_CAST(int, coc->compno) >= dec->numcomps) {
+	if (coc->compno >= dec->numcomps) {
 		jas_eprintf("invalid component number in COC marker segment\n");
 		return -1;
 	}
@@ -1554,10 +1541,10 @@ static int jpc_dec_process_coc(jpc_dec_t *dec, jpc_ms_t *ms)
 
 static int jpc_dec_process_rgn(jpc_dec_t *dec, jpc_ms_t *ms)
 {
-	jpc_rgn_t *rgn = &ms->parms.rgn;
+	const jpc_rgn_t *rgn = &ms->parms.rgn;
 	jpc_dec_tile_t *tile;
 
-	if (JAS_CAST(int, rgn->compno) >= dec->numcomps) {
+	if (rgn->compno >= dec->numcomps) {
 		jas_eprintf("invalid component number in RGN marker segment\n");
 		return -1;
 	}
@@ -1581,7 +1568,7 @@ static int jpc_dec_process_rgn(jpc_dec_t *dec, jpc_ms_t *ms)
 
 static int jpc_dec_process_qcd(jpc_dec_t *dec, jpc_ms_t *ms)
 {
-	jpc_qcd_t *qcd = &ms->parms.qcd;
+	const jpc_qcd_t *qcd = &ms->parms.qcd;
 	jpc_dec_tile_t *tile;
 
 	switch (dec->state) {
@@ -1603,10 +1590,10 @@ static int jpc_dec_process_qcd(jpc_dec_t *dec, jpc_ms_t *ms)
 
 static int jpc_dec_process_qcc(jpc_dec_t *dec, jpc_ms_t *ms)
 {
-	jpc_qcc_t *qcc = &ms->parms.qcc;
+	const jpc_qcc_t *qcc = &ms->parms.qcc;
 	jpc_dec_tile_t *tile;
 
-	if (JAS_CAST(int, qcc->compno) >= dec->numcomps) {
+	if (qcc->compno >= dec->numcomps) {
 		jas_eprintf("invalid component number in QCC marker segment\n");
 		return -1;
 	}
@@ -1629,7 +1616,7 @@ static int jpc_dec_process_qcc(jpc_dec_t *dec, jpc_ms_t *ms)
 
 static int jpc_dec_process_poc(jpc_dec_t *dec, jpc_ms_t *ms)
 {
-	jpc_poc_t *poc = &ms->parms.poc;
+	const jpc_poc_t *poc = &ms->parms.poc;
 	jpc_dec_tile_t *tile;
 	switch (dec->state) {
 	case JPC_MH:
@@ -1673,6 +1660,7 @@ static int jpc_dec_process_ppm(jpc_dec_t *dec, jpc_ms_t *ms)
 	ppm->data = 0;
 	ppmstabent->len = ppm->len;
 	if (jpc_ppxstab_insert(dec->ppmstab, ppmstabent)) {
+		jpc_ppxstabent_destroy(ppmstabent);
 		return -1;
 	}
 	return 0;
@@ -1704,6 +1692,7 @@ static int jpc_dec_process_ppt(jpc_dec_t *dec, jpc_ms_t *ms)
 	ppt->data = 0;
 	pptstabent->len = ppt->len;
 	if (jpc_ppxstab_insert(tile->pptstab, pptstabent)) {
+		jpc_ppxstabent_destroy(pptstabent);
 		return -1;
 	}
 	return 0;
@@ -1736,7 +1725,6 @@ static int jpc_dec_process_unk(jpc_dec_t *dec, jpc_ms_t *ms)
 
 	jas_eprintf("warning: ignoring unknown marker segment (0x%x)\n",
 	  ms->id);
-	jpc_ms_dump(ms, stderr);
 	return 0;
 }
 
@@ -1748,7 +1736,6 @@ static jpc_dec_cp_t *jpc_dec_cp_create(uint_fast16_t numcomps)
 {
 	jpc_dec_cp_t *cp;
 	jpc_dec_ccp_t *ccp;
-	int compno;
 
 	if (!(cp = jas_malloc(sizeof(jpc_dec_cp_t)))) {
 		return 0;
@@ -1765,6 +1752,7 @@ static jpc_dec_cp_t *jpc_dec_cp_create(uint_fast16_t numcomps)
 	if (!(cp->pchglist = jpc_pchglist_create())) {
 		goto error;
 	}
+	unsigned compno;
 	for (compno = 0, ccp = cp->ccps; compno < cp->numcomps;
 	  ++compno, ++ccp) {
 		ccp->flags = 0;
@@ -1785,12 +1773,11 @@ error:
 	return 0;
 }
 
-static jpc_dec_cp_t *jpc_dec_cp_copy(jpc_dec_cp_t *cp)
+static jpc_dec_cp_t *jpc_dec_cp_copy(const jpc_dec_cp_t *cp)
 {
 	jpc_dec_cp_t *newcp;
 	jpc_dec_ccp_t *newccp;
-	jpc_dec_ccp_t *ccp;
-	int compno;
+	const jpc_dec_ccp_t *ccp;
 
 	if (!(newcp = jpc_dec_cp_create((uint_fast16_t)cp->numcomps))) {
 		return 0;
@@ -1806,6 +1793,7 @@ static jpc_dec_cp_t *jpc_dec_cp_copy(jpc_dec_cp_t *cp)
 		jas_free(newcp);
 		return 0;
 	}
+	unsigned compno;
 	for (compno = 0, newccp = newcp->ccps, ccp = cp->ccps;
 	  compno < cp->numcomps;
 	  ++compno, ++newccp, ++ccp) {
@@ -1816,9 +1804,10 @@ static jpc_dec_cp_t *jpc_dec_cp_copy(jpc_dec_cp_t *cp)
 
 static void jpc_dec_cp_resetflags(jpc_dec_cp_t *cp)
 {
-	int compno;
 	jpc_dec_ccp_t *ccp;
 	cp->flags &= (JPC_CSET | JPC_QSET);
+
+	unsigned compno;
 	for (compno = 0, ccp = cp->ccps; compno < cp->numcomps;
 	  ++compno, ++ccp) {
 		ccp->flags = 0;
@@ -1836,10 +1825,10 @@ static void jpc_dec_cp_destroy(jpc_dec_cp_t *cp)
 	jas_free(cp);
 }
 
-static int jpc_dec_cp_isvalid(jpc_dec_cp_t *cp)
+static int jpc_dec_cp_isvalid(const jpc_dec_cp_t *cp)
 {
 	uint_fast16_t compcnt;
-	jpc_dec_ccp_t *ccp;
+	const jpc_dec_ccp_t *ccp;
 
 	if (!(cp->flags & JPC_CSET) || !(cp->flags & JPC_QSET)) {
 		return 0;
@@ -1856,22 +1845,18 @@ static int jpc_dec_cp_isvalid(jpc_dec_cp_t *cp)
 	return 1;
 }
 
-static int calcstepsizes(uint_fast16_t refstepsize, int numrlvls,
+static int calcstepsizes(uint_fast16_t refstepsize, unsigned numrlvls,
   uint_fast16_t *stepsizes)
 {
-	int bandno;
-	int numbands;
-	int r;
-	int nb;
 	uint_fast16_t expn;
 	uint_fast16_t mant;
 	expn = JPC_QCX_GETEXPN(refstepsize);
 	mant = JPC_QCX_GETMANT(refstepsize);
-	numbands = 3 * numrlvls - 2;
-	for (bandno = 0; bandno < numbands; ++bandno) {
+	const unsigned numbands = 3 * numrlvls - 2;
+	for (unsigned bandno = 0; bandno < numbands; ++bandno) {
 //jas_eprintf("DEBUG %d %d %d %d %d\n", bandno, expn, numrlvls, bandno, ((numrlvls - 1) - (numrlvls - 1 - ((bandno > 0) ? ((bandno + 2) / 3) : (0)))));
-		r = (bandno + 2) / 3;
-		nb = (r == 0) ? (numrlvls - 1) - r : (numrlvls - 1) - r + 1;
+		const unsigned r = (bandno + 2) / 3;
+		const unsigned nb = (r == 0) ? (numrlvls - 1) - r : (numrlvls - 1) - r + 1;
 		uint_fast16_t e = expn - (numrlvls - 1) + nb;
 		if (e >= 0x20)
 			return -1;
@@ -1883,12 +1868,11 @@ static int calcstepsizes(uint_fast16_t refstepsize, int numrlvls,
 static int jpc_dec_cp_prepare(jpc_dec_cp_t *cp)
 {
 	jpc_dec_ccp_t *ccp;
-	int compno;
-	int i;
+	unsigned compno;
 	for (compno = 0, ccp = cp->ccps; compno < cp->numcomps;
 	  ++compno, ++ccp) {
 		if (!(ccp->csty & JPC_COX_PRT)) {
-			for (i = 0; i < JPC_MAXRLVLS; ++i) {
+			for (unsigned i = 0; i < JPC_MAXRLVLS; ++i) {
 				ccp->prcwidthexpns[i] = 15;
 				ccp->prcheightexpns[i] = 15;
 			}
@@ -1902,10 +1886,9 @@ static int jpc_dec_cp_prepare(jpc_dec_cp_t *cp)
 	return 0;
 }
 
-static int jpc_dec_cp_setfromcod(jpc_dec_cp_t *cp, jpc_cod_t *cod)
+static int jpc_dec_cp_setfromcod(jpc_dec_cp_t *cp, const jpc_cod_t *cod)
 {
 	jpc_dec_ccp_t *ccp;
-	int compno;
 	cp->flags |= JPC_CSET;
 	cp->prgord = cod->prg;
 	if (cod->mctrans) {
@@ -1915,6 +1898,7 @@ static int jpc_dec_cp_setfromcod(jpc_dec_cp_t *cp, jpc_cod_t *cod)
 	}
 	cp->numlyrs = cod->numlyrs;
 	cp->csty = cod->csty & (JPC_COD_SOP | JPC_COD_EPH);
+	unsigned compno;
 	for (compno = 0, ccp = cp->ccps; compno < cp->numcomps;
 	  ++compno, ++ccp) {
 		jpc_dec_cp_setfromcox(cp, ccp, &cod->compparms, 0);
@@ -1923,14 +1907,14 @@ static int jpc_dec_cp_setfromcod(jpc_dec_cp_t *cp, jpc_cod_t *cod)
 	return 0;
 }
 
-static int jpc_dec_cp_setfromcoc(jpc_dec_cp_t *cp, jpc_coc_t *coc)
+static int jpc_dec_cp_setfromcoc(jpc_dec_cp_t *cp, const jpc_coc_t *coc)
 {
 	jpc_dec_cp_setfromcox(cp, &cp->ccps[coc->compno], &coc->compparms, JPC_COC);
 	return 0;
 }
 
 static int jpc_dec_cp_setfromcox(jpc_dec_cp_t *cp, jpc_dec_ccp_t *ccp,
-  jpc_coxcp_t *compparms, int flags)
+  const jpc_coxcp_t *compparms, unsigned flags)
 {
 	int rlvlno;
 
@@ -1957,9 +1941,9 @@ static int jpc_dec_cp_setfromcox(jpc_dec_cp_t *cp, jpc_dec_ccp_t *ccp,
 	return 0;
 }
 
-static int jpc_dec_cp_setfromqcd(jpc_dec_cp_t *cp, jpc_qcd_t *qcd)
+static int jpc_dec_cp_setfromqcd(jpc_dec_cp_t *cp, const jpc_qcd_t *qcd)
 {
-	int compno;
+	unsigned compno;
 	jpc_dec_ccp_t *ccp;
 	for (compno = 0, ccp = cp->ccps; compno < cp->numcomps;
 	  ++compno, ++ccp) {
@@ -1969,13 +1953,13 @@ static int jpc_dec_cp_setfromqcd(jpc_dec_cp_t *cp, jpc_qcd_t *qcd)
 	return 0;
 }
 
-static int jpc_dec_cp_setfromqcc(jpc_dec_cp_t *cp, jpc_qcc_t *qcc)
+static int jpc_dec_cp_setfromqcc(jpc_dec_cp_t *cp, const jpc_qcc_t *qcc)
 {
 	return jpc_dec_cp_setfromqcx(cp, &cp->ccps[qcc->compno], &qcc->compparms, JPC_QCC);
 }
 
 static int jpc_dec_cp_setfromqcx(jpc_dec_cp_t *cp, jpc_dec_ccp_t *ccp,
-  jpc_qcxcp_t *compparms, int flags)
+  const jpc_qcxcp_t *compparms, unsigned flags)
 {
 	int bandno;
 
@@ -1994,7 +1978,7 @@ static int jpc_dec_cp_setfromqcx(jpc_dec_cp_t *cp, jpc_dec_ccp_t *ccp,
 	return 0;
 }
 
-static int jpc_dec_cp_setfromrgn(jpc_dec_cp_t *cp, jpc_rgn_t *rgn)
+static int jpc_dec_cp_setfromrgn(jpc_dec_cp_t *cp, const jpc_rgn_t *rgn)
 {
 	jpc_dec_ccp_t *ccp;
 	ccp = &cp->ccps[rgn->compno];
@@ -2002,7 +1986,7 @@ static int jpc_dec_cp_setfromrgn(jpc_dec_cp_t *cp, jpc_rgn_t *rgn)
 	return 0;
 }
 
-static int jpc_pi_addpchgfrompoc(jpc_pi_t *pi, jpc_poc_t *poc)
+static int jpc_pi_addpchgfrompoc(jpc_pi_t *pi, const jpc_poc_t *poc)
 {
 	int pchgno;
 	jpc_pchg_t *pchg;
@@ -2017,7 +2001,7 @@ static int jpc_pi_addpchgfrompoc(jpc_pi_t *pi, jpc_poc_t *poc)
 	return 0;
 }
 
-static int jpc_dec_cp_setfrompoc(jpc_dec_cp_t *cp, jpc_poc_t *poc, int reset)
+static int jpc_dec_cp_setfrompoc(jpc_dec_cp_t *cp, const jpc_poc_t *poc, int reset)
 {
 	int pchgno;
 	jpc_pchg_t *pchg;
@@ -2038,7 +2022,7 @@ static int jpc_dec_cp_setfrompoc(jpc_dec_cp_t *cp, jpc_poc_t *poc, int reset)
 	return 0;
 }
 
-static jpc_fix_t jpc_calcabsstepsize(int stepsize, int numbits)
+static jpc_fix_t jpc_calcabsstepsize(unsigned stepsize, unsigned numbits)
 {
 	jpc_fix_t absstepsize;
 	int n;
@@ -2076,7 +2060,7 @@ static void jpc_dequantize(jas_matrix_t *x, jpc_fix_t absstepsize)
 
 }
 
-static void jpc_undo_roi(jas_matrix_t *x, int roishift, int bgshift, int numbps)
+static void jpc_undo_roi(jas_matrix_t *x, int roishift, int bgshift, unsigned numbps)
 {
 	int thresh;
 	jpc_fix_t val;
@@ -2201,7 +2185,7 @@ void jpc_dec_destroy(jpc_dec_t *dec)
 	}
 
 	if (dec->tiles) {
-		int tileno;
+		unsigned tileno;
 		jpc_dec_tile_t *tile;
 
 		for (tileno = 0, tile = dec->tiles; tileno < dec->numtiles; ++tileno,
@@ -2296,7 +2280,6 @@ void jpc_seg_destroy(jpc_dec_seg_t *seg)
 static jpc_streamlist_t *jpc_streamlist_create()
 {
 	jpc_streamlist_t *streamlist;
-	int i;
 
 	if (!(streamlist = jas_malloc(sizeof(jpc_streamlist_t)))) {
 		return 0;
@@ -2308,26 +2291,24 @@ static jpc_streamlist_t *jpc_streamlist_create()
 		jas_free(streamlist);
 		return 0;
 	}
-	for (i = 0; i < streamlist->maxstreams; ++i) {
+	for (unsigned i = 0; i < streamlist->maxstreams; ++i) {
 		streamlist->streams[i] = 0;
 	}
 	return streamlist;
 }
 
-static int jpc_streamlist_insert(jpc_streamlist_t *streamlist, int streamno,
+static int jpc_streamlist_insert(jpc_streamlist_t *streamlist, unsigned streamno,
   jas_stream_t *stream)
 {
 	jas_stream_t **newstreams;
-	int newmaxstreams;
-	int i;
 	/* Grow the array of streams if necessary. */
 	if (streamlist->numstreams >= streamlist->maxstreams) {
-		newmaxstreams = streamlist->maxstreams + 1024;
+		const unsigned newmaxstreams = streamlist->maxstreams + 1024;
 		if (!(newstreams = jas_realloc2(streamlist->streams,
 		  (newmaxstreams + 1024), sizeof(jas_stream_t *)))) {
 			return -1;
 		}
-		for (i = streamlist->numstreams; i < streamlist->maxstreams; ++i) {
+		for (unsigned i = streamlist->numstreams; i < streamlist->maxstreams; ++i) {
 			streamlist->streams[i] = 0;
 		}
 		streamlist->maxstreams = newmaxstreams;
@@ -2342,15 +2323,13 @@ static int jpc_streamlist_insert(jpc_streamlist_t *streamlist, int streamno,
 	return 0;
 }
 
-static jas_stream_t *jpc_streamlist_remove(jpc_streamlist_t *streamlist, int streamno)
+static jas_stream_t *jpc_streamlist_remove(jpc_streamlist_t *streamlist, unsigned streamno)
 {
+	assert(streamno < streamlist->numstreams);
+
 	jas_stream_t *stream;
-	int i;
-	if (streamno >= streamlist->numstreams) {
-		abort();
-	}
 	stream = streamlist->streams[streamno];
-	for (i = streamno + 1; i < streamlist->numstreams; ++i) {
+	for (unsigned i = streamno + 1; i < streamlist->numstreams; ++i) {
 		streamlist->streams[i - 1] = streamlist->streams[i];
 	}
 	--streamlist->numstreams;
@@ -2359,9 +2338,8 @@ static jas_stream_t *jpc_streamlist_remove(jpc_streamlist_t *streamlist, int str
 
 static void jpc_streamlist_destroy(jpc_streamlist_t *streamlist)
 {
-	int streamno;
 	if (streamlist->streams) {
-		for (streamno = 0; streamno < streamlist->numstreams;
+		for (unsigned streamno = 0; streamno < streamlist->numstreams;
 		  ++streamno) {
 			jas_stream_close(streamlist->streams[streamno]);
 		}
@@ -2390,8 +2368,7 @@ static jpc_ppxstab_t *jpc_ppxstab_create()
 
 static void jpc_ppxstab_destroy(jpc_ppxstab_t *tab)
 {
-	int i;
-	for (i = 0; i < tab->numents; ++i) {
+	for (unsigned i = 0; i < tab->numents; ++i) {
 		jpc_ppxstabent_destroy(tab->ents[i]);
 	}
 	if (tab->ents) {
@@ -2400,7 +2377,7 @@ static void jpc_ppxstab_destroy(jpc_ppxstab_t *tab)
 	jas_free(tab);
 }
 
-static int jpc_ppxstab_grow(jpc_ppxstab_t *tab, int maxents)
+static int jpc_ppxstab_grow(jpc_ppxstab_t *tab, unsigned maxents)
 {
 	jpc_ppxstabent_t **newents;
 	if (tab->maxents < maxents) {
@@ -2417,15 +2394,14 @@ static int jpc_ppxstab_grow(jpc_ppxstab_t *tab, int maxents)
 
 static int jpc_ppxstab_insert(jpc_ppxstab_t *tab, jpc_ppxstabent_t *ent)
 {
-	int inspt;
-	int i;
+	unsigned i;
 
 	for (i = 0; i < tab->numents; ++i) {
 		if (tab->ents[i]->ind > ent->ind) {
 			break;
 		}
 	}
-	inspt = i;
+	const unsigned inspt = i;
 
 	if (tab->numents >= tab->maxents) {
 		if (jpc_ppxstab_grow(tab, tab->maxents + 128)) {
@@ -2445,11 +2421,8 @@ static int jpc_ppxstab_insert(jpc_ppxstab_t *tab, jpc_ppxstabent_t *ent)
 static jpc_streamlist_t *jpc_ppmstabtostreams(jpc_ppxstab_t *tab)
 {
 	jpc_streamlist_t *streams;
-	jas_uchar *dataptr;
 	uint_fast32_t datacnt;
 	uint_fast32_t tpcnt;
-	jpc_ppxstabent_t *ent;
-	int entno;
 	jas_stream_t *stream;
 	int n;
 
@@ -2461,9 +2434,9 @@ static jpc_streamlist_t *jpc_ppmstabtostreams(jpc_ppxstab_t *tab)
 		return streams;
 	}
 
-	entno = 0;
-	ent = tab->ents[entno];
-	dataptr = ent->data;
+	unsigned entno = 0;
+	const jpc_ppxstabent_t *ent = tab->ents[entno];
+	const jas_uchar *dataptr = ent->data;
 	datacnt = ent->len;
 	for (;;) {
 
@@ -2524,10 +2497,8 @@ error:
 
 static int jpc_pptstabwrite(jas_stream_t *out, jpc_ppxstab_t *tab)
 {
-	int i;
-	jpc_ppxstabent_t *ent;
-	for (i = 0; i < tab->numents; ++i) {
-		ent = tab->ents[i];
+	for (unsigned i = 0; i < tab->numents; ++i) {
+		const jpc_ppxstabent_t *ent = tab->ents[i];
 		if (jas_stream_write(out, ent->data, ent->len) != JAS_CAST(int, ent->len)) {
 			return -1;
 		}

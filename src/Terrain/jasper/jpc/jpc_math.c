@@ -81,7 +81,7 @@
 
 /* Calculate the integer quantity floor(log2(x)), where x is a positive
   integer. */
-int jpc_floorlog2(int x)
+unsigned jpc_floorlog2(uint_fast32_t x)
 {
 	int y;
 

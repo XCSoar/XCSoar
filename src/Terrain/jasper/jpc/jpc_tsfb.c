@@ -81,17 +81,17 @@
 #include <stdlib.h>
 
 static int jpc_tsfb_synthesize2(jpc_tsfb_t *tsfb, jpc_fix_t *a, int xstart, int ystart,
-  int width, int height, int stride, int numlvls);
+  unsigned width, unsigned height, unsigned stride, unsigned numlvls);
 
 static void jpc_tsfb_getbands2(jpc_tsfb_t *tsfb, int locxstart, int locystart,
   int xstart, int ystart, int xend, int yend, jpc_tsfb_band_t **bands,
-  int numlvls);
+  unsigned numlvls);
 
 /******************************************************************************\
 *
 \******************************************************************************/
 
-jpc_tsfb_t *jpc_cod_gettsfb(int qmfbid, int numlvls)
+jpc_tsfb_t *jpc_cod_gettsfb(unsigned qmfbid, unsigned numlvls)
 {
 	jpc_tsfb_t *tsfb;
 
@@ -130,7 +130,7 @@ int jpc_tsfb_analyze(jpc_tsfb_t *tsfb, jas_seq2d_t *a)
 }
 
 int jpc_tsfb_analyze2(jpc_tsfb_t *tsfb, jpc_fix_t *a, int xstart, int ystart,
-  int width, int height, int stride, int numlvls)
+  unsigned width, unsigned height, unsigned stride, unsigned numlvls)
 {
 	if (width > 0 && height > 0) {
 		if ((*tsfb->qmfb->analyze)(a, xstart, ystart, width, height, stride))
@@ -159,7 +159,7 @@ int jpc_tsfb_synthesize(jpc_tsfb_t *tsfb, jas_seq2d_t *a)
 }
 
 static int jpc_tsfb_synthesize2(jpc_tsfb_t *tsfb, jpc_fix_t *a, int xstart, int ystart,
-  int width, int height, int stride, int numlvls)
+  unsigned width, unsigned height, unsigned stride, unsigned numlvls)
 {
 	if (numlvls > 0) {
 		if (jpc_tsfb_synthesize2(tsfb, a, JPC_CEILDIVPOW2(xstart, 1),
@@ -207,7 +207,7 @@ int jpc_tsfb_getbands(jpc_tsfb_t *tsfb, uint_fast32_t xstart,
 
 void jpc_tsfb_getbands2(jpc_tsfb_t *tsfb, int locxstart, int locystart,
   int xstart, int ystart, int xend, int yend, jpc_tsfb_band_t **bands,
-  int numlvls)
+  unsigned numlvls)
 {
 	int newxstart;
 	int newystart;

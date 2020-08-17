@@ -181,7 +181,7 @@ typedef struct {
 	int (*read_)(jas_stream_obj_t *obj, char *buf, unsigned cnt);
 
 	/* Write characters to a file object. */
-	int (*write_)(jas_stream_obj_t *obj, char *buf, unsigned cnt);
+	int (*write_)(jas_stream_obj_t *obj, const char *buf, unsigned cnt);
 
 	/* Set the position for a file object. */
 	long (*seek_)(jas_stream_obj_t *obj, long offset, int origin);
@@ -377,7 +377,7 @@ JAS_DLLEXPORT int jas_stream_puts(jas_stream_t *stream, const char *s);
 JAS_DLLEXPORT char *jas_stream_gets(jas_stream_t *stream, char *buf, int bufsize);
 
 /* Look at the next character to be read from a stream without actually
-  removing it from the stream. */
+   removing it from the stream. */
 #define	jas_stream_peekc(stream) \
 	(((stream)->cnt_ <= 0) ? jas_stream_fillbuf(stream, 0) : \
 	  ((int)(*(stream)->ptr_)))
@@ -440,35 +440,61 @@ JAS_DLLEXPORT long jas_stream_length(jas_stream_t *stream);
 /* The following functions are for internal use only!  If you call them
 directly, you will die a horrible, miserable, and painful death! */
 
-/* Read a character from a stream. */
-#define jas_stream_getc_macro(stream) \
-	((!((stream)->flags_ & (JAS_STREAM_ERR | JAS_STREAM_EOF | \
-	  JAS_STREAM_RWLIMIT))) ? \
-	  (((stream)->rwlimit_ >= 0 && (stream)->rwcnt_ >= (stream)->rwlimit_) ? \
-	  (stream->flags_ |= JAS_STREAM_RWLIMIT, EOF) : \
-	  jas_stream_getc2(stream)) : EOF)
-#define jas_stream_getc2(stream) \
-	((--(stream)->cnt_ < 0) ? jas_stream_fillbuf(stream, 1) : \
-	  (++(stream)->rwcnt_, (int)(*(stream)->ptr_++)))
-
-/* Write a character to a stream. */
-#define jas_stream_putc_macro(stream, c) \
-	((!((stream)->flags_ & (JAS_STREAM_ERR | JAS_STREAM_EOF | \
-	  JAS_STREAM_RWLIMIT))) ? \
-	  (((stream)->rwlimit_ >= 0 && (stream)->rwcnt_ >= (stream)->rwlimit_) ? \
-	  (stream->flags_ |= JAS_STREAM_RWLIMIT, EOF) : \
-	  jas_stream_putc2(stream, c)) : EOF)
-#define jas_stream_putc2(stream, c) \
-	(((stream)->bufmode_ |= JAS_STREAM_WRBUF, --(stream)->cnt_ < 0) ? \
-	  jas_stream_flushbuf((stream), (jas_uchar)(c)) : \
-	  (++(stream)->rwcnt_, (int)(*(stream)->ptr_++ = (c))))
-
 /* These prototypes need to be here for the sake of the stream_getc and
 stream_putc macros. */
 JAS_DLLEXPORT int jas_stream_fillbuf(jas_stream_t *stream, int getflag);
 JAS_DLLEXPORT int jas_stream_flushbuf(jas_stream_t *stream, int c);
 JAS_DLLEXPORT int jas_stream_getc_func(jas_stream_t *stream);
 JAS_DLLEXPORT int jas_stream_putc_func(jas_stream_t *stream, int c);
+
+/* Read a character from a stream. */
+static inline int jas_stream_getc2(jas_stream_t *stream)
+{
+	if (--stream->cnt_ < 0)
+		return jas_stream_fillbuf(stream, 1);
+
+	++stream->rwcnt_;
+	return (int)(*stream->ptr_++);
+}
+
+static inline int jas_stream_getc_macro(jas_stream_t *stream)
+{
+	if (stream->flags_ & (JAS_STREAM_ERR | JAS_STREAM_EOF | JAS_STREAM_RWLIMIT))
+		return EOF;
+
+	if (stream->rwlimit_ >= 0 && stream->rwcnt_ >= stream->rwlimit_) {
+		stream->flags_ |= JAS_STREAM_RWLIMIT;
+		return EOF;
+	}
+
+	return jas_stream_getc2(stream);
+}
+
+/* Write a character to a stream. */
+static inline int jas_stream_putc2(jas_stream_t *stream, jas_uchar c)
+{
+	stream->bufmode_ |= JAS_STREAM_WRBUF;
+
+	if (--stream->cnt_ < 0)
+		return jas_stream_flushbuf(stream, c);
+	else {
+		++stream->rwcnt_;
+		return (int)(*stream->ptr_++ = c);
+	}
+}
+
+static inline int jas_stream_putc_macro(jas_stream_t *stream, jas_uchar c)
+{
+	if (stream->flags_ & (JAS_STREAM_ERR | JAS_STREAM_EOF | JAS_STREAM_RWLIMIT))
+	    return EOF;
+
+	if (stream->rwlimit_ >= 0 && stream->rwcnt_ >= stream->rwlimit_) {
+		stream->flags_ |= JAS_STREAM_RWLIMIT;
+		return EOF;
+	}
+
+	return jas_stream_putc2(stream, c);
+}
 
 #ifdef __cplusplus
 }
