@@ -80,21 +80,28 @@ extern "C" {
 typedef unsigned jas_clrspc_t;
 
 /* transform operations */
-#define	JAS_CMXFORM_OP_FWD	0
-#define	JAS_CMXFORM_OP_REV	1
-#define	JAS_CMXFORM_OP_PROOF	2
-#define	JAS_CMXFORM_OP_GAMUT	3
+typedef enum {
+	JAS_CMXFORM_OP_FWD = 0,
+	JAS_CMXFORM_OP_REV = 1,
+	JAS_CMXFORM_OP_PROOF = 2,
+	JAS_CMXFORM_OP_GAMUT = 3,
+} jas_cmxform_op_t;
 
 /* rendering intents */
-#define	JAS_CMXFORM_INTENT_PER		0
-#define	JAS_CMXFORM_INTENT_RELCLR	1
-#define	JAS_CMXFORM_INTENT_ABSCLR	2
-#define	JAS_CMXFORM_INTENT_SAT		3
+typedef enum {
+	JAS_CMXFORM_INTENT_PER = 0,
+	JAS_CMXFORM_INTENT_RELCLR = 1,
+	JAS_CMXFORM_INTENT_ABSCLR = 2,
+	JAS_CMXFORM_INTENT_SAT = 3,
+} jas_cmxform_intent_t;
+
 #define	JAS_CMXFORM_NUMINTENTS		4
 
-#define	JAS_CMXFORM_OPTM_SPEED	0
-#define JAS_CMXFORM_OPTM_SIZE	1
-#define	JAS_CMXFORM_OPTM_ACC	2
+typedef enum {
+	JAS_CMXFORM_OPTM_SPEED = 0,
+	JAS_CMXFORM_OPTM_SIZE = 1,
+	JAS_CMXFORM_OPTM_ACC = 2,
+} jas_cmxform_optm_t;
 
 
 #define	jas_clrspc_create(fam, mbr)	(((fam) << 8) | (mbr))
@@ -237,8 +244,8 @@ int jas_cm_prof_setattr(jas_cm_prof_t *prof, jas_cm_attrname_t name, void *val);
 void *jas_cm_prof_getattr(jas_cm_prof_t *prof, jas_cm_attrname_t name);
 #endif
 
-jas_cmxform_t *jas_cmxform_create(jas_cmprof_t *inprof, jas_cmprof_t *outprof,
-  jas_cmprof_t *proofprof, int op, int intent, int optimize);
+jas_cmxform_t *jas_cmxform_create(const jas_cmprof_t *inprof, const jas_cmprof_t *outprof,
+  const jas_cmprof_t *proofprof, jas_cmxform_op_t op, jas_cmxform_intent_t intent, jas_cmxform_optm_t optimize);
 
 void jas_cmxform_destroy(jas_cmxform_t *xform);
 

@@ -34,7 +34,7 @@ jas_zzip_read(jas_stream_obj_t *obj, char *buf, unsigned cnt)
 }
 
 static int
-jas_zzip_write(jas_stream_obj_t *obj, char *buf, unsigned cnt)
+jas_zzip_write(jas_stream_obj_t *obj, const char *buf, unsigned cnt)
 {
   return -1;
 }

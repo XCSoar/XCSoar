@@ -105,16 +105,16 @@ jpc_mqctx_t jpc_mqctxs[JPC_NUMCTXS];
 \******************************************************************************/
 
 JAS_ATTRIBUTE_CONST
-static uint_least8_t jpc_getzcctxno(unsigned f, unsigned orient);
+static uint_least8_t jpc_getzcctxno(unsigned f, enum jpc_tsfb_orient orient);
 
 JAS_ATTRIBUTE_CONST
-static bool jpc_getspb(int f);
+static bool jpc_getspb(unsigned f);
 
 JAS_ATTRIBUTE_CONST
-static uint_least8_t jpc_getscctxno(int f);
+static uint_least8_t jpc_getscctxno(unsigned f);
 
 JAS_ATTRIBUTE_CONST
-static uint_least8_t jpc_getmagctxno(int f);
+static uint_least8_t jpc_getmagctxno(unsigned f);
 
 static void jpc_initmqctxs(void);
 
@@ -122,9 +122,9 @@ static void jpc_initmqctxs(void);
 * Code.
 \******************************************************************************/
 
-int JPC_PASSTYPE(unsigned passno)
+enum jpc_passtype JPC_PASSTYPE(unsigned passno)
 {
-	int passtype;
+	unsigned passtype;
 	switch (passno % 3) {
 	case 0:
 		passtype = JPC_CLNPASS;
@@ -136,13 +136,13 @@ int JPC_PASSTYPE(unsigned passno)
 		passtype = JPC_REFPASS;
 		break;
 	default:
-		passtype = -1;
 		assert(0);
+		JAS_UNREACHABLE();
 	}
 	return passtype;
 }
 
-int JPC_NOMINALGAIN(int qmfbid, int numlvls, int lvlno, int orient)
+unsigned JPC_NOMINALGAIN(unsigned qmfbid, unsigned numlvls, unsigned lvlno, enum jpc_tsfb_orient orient)
 {
 	/* Avoid compiler warnings about unused parameters. */
 	(void)numlvls;
@@ -162,7 +162,8 @@ int JPC_NOMINALGAIN(int qmfbid, int numlvls, int lvlno, int orient)
 		case JPC_TSFB_HH:
 			return 2;
 		default:
-			abort();
+			assert(false);
+			JAS_UNREACHABLE();
 		}
 	}
 }
@@ -171,11 +172,10 @@ int JPC_NOMINALGAIN(int qmfbid, int numlvls, int lvlno, int orient)
 * Coding pass related functions.
 \******************************************************************************/
 
-int JPC_SEGTYPE(unsigned passno, unsigned firstpassno, bool bypass)
+enum jpc_segtype JPC_SEGTYPE(unsigned passno, unsigned firstpassno, bool bypass)
 {
-	int passtype;
 	if (bypass) {
-		passtype = JPC_PASSTYPE(passno);
+		enum jpc_passtype passtype = JPC_PASSTYPE(passno);
 		if (passtype == JPC_CLNPASS) {
 			return JPC_SEG_MQ;
 		}
@@ -188,7 +188,6 @@ int JPC_SEGTYPE(unsigned passno, unsigned firstpassno, bool bypass)
 unsigned JPC_SEGPASSCNT(unsigned passno, unsigned firstpassno, unsigned numpasses, bool bypass, bool termall)
 {
 	unsigned ret;
-	int passtype;
 
 	if (termall) {
 		ret = 1;
@@ -196,7 +195,7 @@ unsigned JPC_SEGPASSCNT(unsigned passno, unsigned firstpassno, unsigned numpasse
 		if (passno < firstpassno + 10) {
 			ret = 10 - (passno - firstpassno);
 		} else {
-			passtype = JPC_PASSTYPE(passno);
+			enum jpc_passtype passtype = JPC_PASSTYPE(passno);
 			switch (passtype) {
 			case JPC_SIGPASS:
 				ret = 2;
@@ -208,8 +207,8 @@ unsigned JPC_SEGPASSCNT(unsigned passno, unsigned firstpassno, unsigned numpasse
 				ret = 1;
 				break;
 			default:
-				ret = -1;
 				assert(0);
+				JAS_UNREACHABLE();
 			}
 		}
 	} else {
@@ -222,16 +221,12 @@ unsigned JPC_SEGPASSCNT(unsigned passno, unsigned firstpassno, unsigned numpasse
 bool JPC_ISTERMINATED(unsigned passno, unsigned firstpassno, unsigned numpasses, bool termall,
   bool lazy)
 {
-	int ret;
-	int n;
 	if (passno - firstpassno == numpasses - 1) {
-		ret = 1;
+		return true;
 	} else {
-		n = JPC_SEGPASSCNT(passno, firstpassno, numpasses, lazy, termall);
-		ret = (n <= 1) ? 1 : 0;
+		unsigned n = JPC_SEGPASSCNT(passno, firstpassno, numpasses, lazy, termall);
+		return n <= 1;
 	}
-
-	return ret;
 }
 
 /******************************************************************************\
@@ -240,8 +235,6 @@ bool JPC_ISTERMINATED(unsigned passno, unsigned firstpassno, unsigned numpasses,
 
 void jpc_initluts()
 {
-	int i;
-	int refine;
 	float u;
 	float v;
 	float t;
@@ -250,26 +243,26 @@ void jpc_initluts()
 jpc_initmqctxs();
 
 	for (unsigned orient = 0; orient < 4; ++orient) {
-		for (i = 0; i < 256; ++i) {
+		for (unsigned i = 0; i < 256; ++i) {
 			jpc_zcctxnolut[(orient << 8) | i] = jpc_getzcctxno(i, orient);
 		}
 	}
 
-	for (i = 0; i < 256; ++i) {
+	for (unsigned i = 0; i < 256; ++i) {
 		jpc_spblut[i] = jpc_getspb(i << 4);
 	}
 
-	for (i = 0; i < 256; ++i) {
+	for (unsigned i = 0; i < 256; ++i) {
 		jpc_scctxnolut[i] = jpc_getscctxno(i << 4);
 	}
 
-	for (refine = 0; refine < 2; ++refine) {
-		for (i = 0; i < 2048; ++i) {
+	for (unsigned refine = 0; refine < 2; ++refine) {
+		for (unsigned i = 0; i < 2048; ++i) {
 			jpc_magctxnolut[(refine << 11) + i] = jpc_getmagctxno((refine ? JPC_REFINE : 0) | i);
 		}
 	}
 
-	for (i = 0; i < (1 << JPC_NMSEDEC_BITS); ++i) {
+	for (unsigned i = 0; i < (1 << JPC_NMSEDEC_BITS); ++i) {
 		t = (float)(i * jpc_pow2i(-JPC_NMSEDEC_FRACBITS));
 		u = t;
 		v = t - 1.5f;
@@ -288,7 +281,7 @@ jpc_initmqctxs();
 	}
 }
 
-static uint_least8_t jpc_getzcctxno(unsigned f, unsigned orient)
+static uint_least8_t jpc_getzcctxno(unsigned f, enum jpc_tsfb_orient orient)
 {
 	assert(orient < 4);
 
@@ -372,7 +365,7 @@ static uint_least8_t jpc_getzcctxno(unsigned f, unsigned orient)
 	return JPC_ZCCTXNO + n;
 }
 
-static bool jpc_getspb(int f)
+static bool jpc_getspb(unsigned f)
 {
 	int hc;
 	int vc;
@@ -390,11 +383,10 @@ static bool jpc_getspb(int f)
 	return n;
 }
 
-static uint_least8_t jpc_getscctxno(int f)
+static uint_least8_t jpc_getscctxno(unsigned f)
 {
 	int hc;
 	int vc;
-	int n;
 
 	hc = JAS_MIN(((f & (JPC_ESIG | JPC_ESGN)) == JPC_ESIG) + ((f & (JPC_WSIG | JPC_WSGN)) == JPC_WSIG),
 	  1) - JAS_MIN(((f & (JPC_ESIG | JPC_ESGN)) == (JPC_ESIG | JPC_ESGN)) +
@@ -407,6 +399,8 @@ static uint_least8_t jpc_getscctxno(int f)
 		hc = -hc;
 		vc = -vc;
 	}
+
+	unsigned n;
 	if (!hc) {
 		if (vc == -1) {
 			n = 1;
@@ -430,9 +424,9 @@ static uint_least8_t jpc_getscctxno(int f)
 	return JPC_SCCTXNO + n;
 }
 
-static uint_least8_t jpc_getmagctxno(int f)
+static uint_least8_t jpc_getmagctxno(unsigned f)
 {
-	int n;
+	unsigned n;
 
 	if (!(f & JPC_REFINE)) {
 		n = (f & (JPC_OTHSIGMSK)) ? 1 : 0;
@@ -447,10 +441,9 @@ static uint_least8_t jpc_getmagctxno(int f)
 static void jpc_initctxs(jpc_mqctx_t *ctxs)
 {
 	jpc_mqctx_t *ctx;
-	int i;
 
 	ctx = ctxs;
-	for (i = 0; i < JPC_NUMCTXS; ++i) {
+	for (unsigned i = 0; i < JPC_NUMCTXS; ++i) {
 		ctx->mps = 0;
 		switch (i) {
 		case JPC_UCTXNO:

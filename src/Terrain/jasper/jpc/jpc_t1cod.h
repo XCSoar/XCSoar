@@ -76,6 +76,7 @@
 
 #include "jpc_fix.h"
 #include "jpc_mqcod.h"
+#include "jpc_tsfb.h"
 #include "jasper/jas_math.h"
 
 /******************************************************************************\
@@ -90,20 +91,26 @@
  * Segment types.
  */
 
-/* Invalid. */
-#define JPC_SEG_INVALID	0
-/* MQ. */
-#define JPC_SEG_MQ		1
-/* Raw. */
-#define JPC_SEG_RAW		2
+enum jpc_segtype {
+	/** Invalid. */
+	JPC_SEG_INVALID,
+
+	/* MQ. */
+	JPC_SEG_MQ,
+
+	/* Raw. */
+	JPC_SEG_RAW,
+};
 
 /* The nominal word size. */
 #define	JPC_PREC	32
 
 /* Tier-1 coding pass types. */
-#define	JPC_SIGPASS	0	/* significance */
-#define	JPC_REFPASS	1	/* refinement */
-#define	JPC_CLNPASS	2	/* cleanup */
+enum jpc_passtype {
+	JPC_SIGPASS, /*< significance */
+	JPC_REFPASS, /*< refinement */
+	JPC_CLNPASS, /*< cleanup */
+};
 
 /*
  * Per-sample state information for tier-1 coding.
@@ -206,9 +213,9 @@ static inline jpc_fix_t JPC_ASR(jpc_fix_t x, int n)
 
 /* Get the zero coding context. */
 JAS_ATTRIBUTE_CONST
-static inline uint_least8_t JPC_GETZCCTXNO(unsigned f, unsigned orient)
+static inline uint_least8_t JPC_GETZCCTXNO(unsigned f, enum jpc_tsfb_orient orient)
 {
-	return jpc_zcctxnolut[(orient << 8) | (f & JPC_OTHSIGMSK)];
+	return jpc_zcctxnolut[((unsigned)orient << 8) | (f & JPC_OTHSIGMSK)];
 }
 
 /* Get the sign prediction bit. */
@@ -291,15 +298,15 @@ void jpc_initluts(void);
 
 /* Get the nominal gain associated with a particular band. */
 JAS_ATTRIBUTE_CONST
-int JPC_NOMINALGAIN(int qmfbid, int numlvls, int lvlno, int orient);
+unsigned JPC_NOMINALGAIN(unsigned qmfbid, unsigned numlvls, unsigned lvlno, enum jpc_tsfb_orient orient);
 
 /* Get the coding pass type. */
 JAS_ATTRIBUTE_CONST
-int JPC_PASSTYPE(unsigned passno);
+enum jpc_passtype JPC_PASSTYPE(unsigned passno);
 
 /* Get the segment type. */
 JAS_ATTRIBUTE_CONST
-int JPC_SEGTYPE(unsigned passno, unsigned firstpassno, bool bypass);
+enum jpc_segtype JPC_SEGTYPE(unsigned passno, unsigned firstpassno, bool bypass);
 
 /* Get the number of coding passess in the segment. */
 JAS_ATTRIBUTE_CONST

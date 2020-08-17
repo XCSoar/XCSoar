@@ -222,8 +222,6 @@ skip:
 static int jpc_pi_nextrpcl(register jpc_pi_t *pi)
 {
 	unsigned rlvlno;
-	int prchind;
-	int prcvind;
 	unsigned *prclyrno;
 	unsigned compno;
 	unsigned xstep;
@@ -292,10 +290,10 @@ static int jpc_pi_nextrpcl(register jpc_pi_t *pi)
 					  ((pi->y == pi->ystart &&
 					  ((try0 << r) % (JAS_CAST(uint_fast32_t, 1) << rpy)))
 					  || !(pi->y % (pi->picomp->vsamp << rpy)))) {
-						prchind = JPC_FLOORDIVPOW2(JPC_CEILDIV(pi->x,
+						const unsigned prchind = JPC_FLOORDIVPOW2(JPC_CEILDIV(pi->x,
 						  pi->picomp->hsamp << r), pi->pirlvl->prcwidthexpn) -
 						  JPC_FLOORDIVPOW2(trx0, pi->pirlvl->prcwidthexpn);
-						prcvind = JPC_FLOORDIVPOW2(JPC_CEILDIV(pi->y,
+						const unsigned prcvind = JPC_FLOORDIVPOW2(JPC_CEILDIV(pi->y,
 						  pi->picomp->vsamp << r), pi->pirlvl->prcheightexpn) -
 						  JPC_FLOORDIVPOW2(try0, pi->pirlvl->prcheightexpn);
 						pi->prcno = prcvind * pi->pirlvl->numhprcs + prchind;
@@ -324,8 +322,6 @@ skip:
 static int jpc_pi_nextpcrl(register jpc_pi_t *pi)
 {
 	unsigned rlvlno;
-	int prchind;
-	int prcvind;
 	unsigned *prclyrno;
 	unsigned compno;
 	unsigned xstep;
@@ -393,10 +389,10 @@ static int jpc_pi_nextpcrl(register jpc_pi_t *pi)
 					  ((pi->y == pi->ystart &&
 					  ((try0 << r) % (JAS_CAST(uint_fast32_t, 1) << rpy))) ||
 					  !(pi->y % (pi->picomp->vsamp << rpy)))) {
-						prchind = JPC_FLOORDIVPOW2(JPC_CEILDIV(pi->x,
+						const unsigned prchind = JPC_FLOORDIVPOW2(JPC_CEILDIV(pi->x,
 						  pi->picomp->hsamp << r), pi->pirlvl->prcwidthexpn) -
 						  JPC_FLOORDIVPOW2(trx0, pi->pirlvl->prcwidthexpn);
-						prcvind = JPC_FLOORDIVPOW2(JPC_CEILDIV(pi->y,
+						const unsigned prcvind = JPC_FLOORDIVPOW2(JPC_CEILDIV(pi->y,
 						  pi->picomp->vsamp << r), pi->pirlvl->prcheightexpn) -
 						  JPC_FLOORDIVPOW2(try0, pi->pirlvl->prcheightexpn);
 						pi->prcno = prcvind * pi->pirlvl->numhprcs + prchind;
@@ -423,8 +419,6 @@ skip:
 static int jpc_pi_nextcprl(register jpc_pi_t *pi)
 {
 	unsigned rlvlno;
-	int prchind;
-	int prcvind;
 	unsigned *prclyrno;
 	uint_fast32_t trx0;
 	uint_fast32_t try0;
@@ -485,10 +479,10 @@ static int jpc_pi_nextcprl(register jpc_pi_t *pi)
 					  ((pi->y == pi->ystart &&
 					  ((try0 << r) % (JAS_CAST(uint_fast32_t, 1) << rpy))) ||
 					  !(pi->y % (pi->picomp->vsamp << rpy)))) {
-						prchind = JPC_FLOORDIVPOW2(JPC_CEILDIV(pi->x,
+						const unsigned prchind = JPC_FLOORDIVPOW2(JPC_CEILDIV(pi->x,
 						  pi->picomp->hsamp << r), pi->pirlvl->prcwidthexpn) -
 						  JPC_FLOORDIVPOW2(trx0, pi->pirlvl->prcwidthexpn);
-						prcvind = JPC_FLOORDIVPOW2(JPC_CEILDIV(pi->y,
+						const unsigned prcvind = JPC_FLOORDIVPOW2(JPC_CEILDIV(pi->y,
 						  pi->picomp->vsamp << r), pi->pirlvl->prcheightexpn) -
 						  JPC_FLOORDIVPOW2(try0, pi->pirlvl->prcheightexpn);
 						pi->prcno = prcvind * pi->pirlvl->numhprcs + prchind;
@@ -583,14 +577,12 @@ jpc_pchglist_t *jpc_pchglist_create()
 
 int jpc_pchglist_insert(jpc_pchglist_t *pchglist, int pchgno, jpc_pchg_t *pchg)
 {
-	int i;
-	int newmaxpchgs;
 	jpc_pchg_t **newpchgs;
 	if (pchgno < 0) {
 		pchgno = pchglist->numpchgs;
 	}
 	if (pchglist->numpchgs >= pchglist->maxpchgs) {
-		newmaxpchgs = pchglist->maxpchgs + 128;
+		const unsigned newmaxpchgs = pchglist->maxpchgs + 128;
 		if (!(newpchgs = jas_realloc2(pchglist->pchgs, newmaxpchgs,
 		  sizeof(jpc_pchg_t *)))) {
 			return -1;
@@ -598,7 +590,7 @@ int jpc_pchglist_insert(jpc_pchglist_t *pchglist, int pchgno, jpc_pchg_t *pchg)
 		pchglist->maxpchgs = newmaxpchgs;
 		pchglist->pchgs = newpchgs;
 	}
-	for (i = pchglist->numpchgs; i > pchgno; --i) {
+	for (unsigned i = pchglist->numpchgs; i > (unsigned)pchgno; --i) {
 		pchglist->pchgs[i] = pchglist->pchgs[i - 1];
 	}
 	pchglist->pchgs[pchgno] = pchg;

@@ -107,10 +107,10 @@ typedef struct {
 	unsigned *prclyrnos;
 
 	/* The precinct width exponent. */
-	int prcwidthexpn;
+	unsigned prcwidthexpn;
 
 	/* The precinct height exponent. */
-	int prcheightexpn;
+	unsigned prcheightexpn;
 
 	/* The number of precincts spanning the resolution level in the horizontal
 	  direction. */

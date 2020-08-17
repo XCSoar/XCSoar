@@ -979,7 +979,8 @@ static int jpc_qcx_getcompparms(jpc_qcxcp_t *compparms, jpc_cstate_t *cstate,
 	if (compparms->numstepsizes > 0) {
 		if (!(compparms->stepsizes = jas_alloc2(compparms->numstepsizes,
 		  sizeof(uint_fast16_t)))) {
-			abort();
+			jpc_qcx_destroycompparms(compparms);
+			return -1;
 		}
 		for (i = 0; i < compparms->numstepsizes; ++i) {
 			if (compparms->qntsty == JPC_QCX_NOQNT) {

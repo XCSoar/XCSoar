@@ -94,7 +94,7 @@ static long jpc_dec_lookahead(jas_stream_t *in);
 static int jpc_getcommacode(jpc_bitstream_t *in);
 static int jpc_getnumnewpasses(jpc_bitstream_t *in);
 static int jpc_dec_decodepkt(jpc_dec_t *dec, jas_stream_t *pkthdrstream, jas_stream_t *in, int compno, int lvlno,
-  int prcno, int lyrno);
+  int prcno, unsigned lyrno);
 
 /******************************************************************************\
 * Code.
@@ -150,7 +150,7 @@ static int jpc_getnumnewpasses(jpc_bitstream_t *in)
 }
 
 static int jpc_dec_decodepkt(jpc_dec_t *dec, jas_stream_t *pkthdrstream, jas_stream_t *in, int compno, int rlvlno,
-  int prcno, int lyrno)
+  int prcno, unsigned lyrno)
 {
 	jpc_bitstream_t *inb;
 	jpc_dec_tcomp_t *tcomp;
@@ -370,18 +370,16 @@ static int jpc_dec_decodepkt(jpc_dec_t *dec, jas_stream_t *pkthdrstream, jas_str
 #endif
 
 	if (cp->csty & JPC_COD_EPH) {
-		if (jpc_dec_lookahead(pkthdrstream) == JPC_MS_EPH) {
-			if (!(ms = jpc_getms(pkthdrstream, dec->cstate))) {
-				jas_eprintf("cannot get (EPH) marker segment\n");
-				return -1;
-			}
-			if (jpc_ms_gettype(ms) != JPC_MS_EPH) {
-				jpc_ms_destroy(ms);
-				jas_eprintf("missing EPH marker segment\n");
-				return -1;
-			}
-			jpc_ms_destroy(ms);
+		if (!(ms = jpc_getms(pkthdrstream, dec->cstate))) {
+			jas_eprintf("cannot get (EPH) marker segment\n");
+			return -1;
 		}
+		if (jpc_ms_gettype(ms) != JPC_MS_EPH) {
+			jpc_ms_destroy(ms);
+			jas_eprintf("missing EPH marker segment\n");
+			return -1;
+		}
+		jpc_ms_destroy(ms);
 	}
 
 	/* decode the packet body. */
@@ -469,7 +467,7 @@ int jpc_dec_decodepkts(jpc_dec_t *dec, jas_stream_t *pkthdrstream, jas_stream_t 
 		if ((ret = jpc_pi_next(pi))) {
 			return ret;
 		}
-		if (dec->maxpkts >= 0 && dec->numpkts >= dec->maxpkts) {
+		if (dec->maxpkts >= 0 && dec->numpkts >= (unsigned)dec->maxpkts) {
 			jas_eprintf("warning: stopping decode prematurely as requested\n");
 			return 0;
 		}

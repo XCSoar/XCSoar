@@ -73,31 +73,6 @@
 /* The configuration header file should be included first. */
 #include <jasper/jas_config.h>
 
-#ifdef JASPER_DISABLED
-
-#if !defined(JAS_CONFIGURE)
-
-#if defined(WIN32) || defined(JAS_HAVE_WINDOWS_H)
-// THIS SHOULD NO LONGER BE NEEDED SINCE MSVC SUPPORTS LONG LONG.
-/*
-   We are dealing with Microsoft Windows and most likely Microsoft
-   Visual C (MSVC).  (Heaven help us.)  Sadly, MSVC does not correctly
-   define some of the standard types specified in ISO/IEC 9899:1999.
-   In particular, it does not define the "long long" and "unsigned long
-   long" types.  So, we work around this problem by using the "INT64"
-   and "UINT64" types that are defined in the header file "windows.h".
- */
-#include <windows.h>
-//#undef longlong
-//#define	longlong	INT64
-//#undef ulonglong
-//#define	ulonglong	UINT64
-#endif
-
-#endif
-
-#endif /* JASPER_DISABLED */
-
 /* Note: The immediately following header files should eventually be removed. */
 #include <stddef.h> /* IWYU pragma: export */
 #include <stdint.h> /* IWYU pragma: export */
