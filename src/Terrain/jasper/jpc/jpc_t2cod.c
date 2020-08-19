@@ -262,6 +262,10 @@ static int jpc_pi_nextrpcl(register jpc_pi_t *pi)
 		pi->prgvolfirst = 0;
 	}
 
+	if (pi->xstep == 0 || pi->ystep == 0)
+		/* avoid division by zero */
+		return -1;
+
 	for (pi->rlvlno = pchg->rlvlnostart; pi->rlvlno < pchg->rlvlnoend &&
 	  pi->rlvlno < pi->maxrlvls; ++pi->rlvlno) {
 		for (pi->y = pi->ystart; pi->y < pi->yend; pi->y +=
@@ -362,6 +366,10 @@ static int jpc_pi_nextpcrl(register jpc_pi_t *pi)
 		pi->prgvolfirst = 0;
 	}
 
+	if (pi->xstep == 0 || pi->ystep == 0)
+		/* avoid division by zero */
+		return -1;
+
 	for (pi->y = pi->ystart; pi->y < pi->yend; pi->y += pi->ystep -
 	  (pi->y % pi->ystep)) {
 		for (pi->x = pi->xstart; pi->x < pi->xend; pi->x += pi->xstep -
@@ -432,6 +440,10 @@ static int jpc_pi_nextcprl(register jpc_pi_t *pi)
 	} else {
 		pi->prgvolfirst = 0;
 	}
+
+	if (pi->xstep == 0 || pi->ystep == 0)
+		/* avoid division by zero */
+		return -1;
 
 	for (pi->compno = pchg->compnostart, pi->picomp = &pi->picomps[pi->compno];
 	  pi->compno < pchg->compnoend && pi->compno < pi->numcomps;

@@ -136,9 +136,6 @@ int jpc_tsfb_analyze(jpc_tsfb_t *tsfb, jas_seq2d_t *x);
 /* Perform synthesis. */
 int jpc_tsfb_synthesize(jpc_tsfb_t *tsfb, jas_seq2d_t *x);
 
-int jpc_tsfb_analyze2(jpc_tsfb_t *tsfb, jpc_fix_t *a, int xstart, int ystart,
-  unsigned width, unsigned height, unsigned stride, unsigned numlvls);
-
 /* Get band information for a TSFB. */
 int jpc_tsfb_getbands(jpc_tsfb_t *tsfb, uint_fast32_t xstart,
   uint_fast32_t ystart, uint_fast32_t xend, uint_fast32_t yend,

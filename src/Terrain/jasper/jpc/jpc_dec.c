@@ -1233,11 +1233,14 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 		  ++compno, ++tcomp) {
 		const jpc_dec_ccp_t *ccp = &tile->cp->ccps[compno];
 		if (ccp->qmfbid == JPC_COX_INS) {
-			for (jas_matind_t i = 0; i < jas_matrix_numrows(tcomp->data); ++i) {
-				for (jas_matind_t j = 0; j < jas_matrix_numcols(tcomp->data); ++j) {
-					v = jas_matrix_get(tcomp->data, i, j);
+			jas_matrix_t *const data = tcomp->data;
+			const jas_matind_t numcols = jas_matrix_numcols(data);
+			for (jas_matind_t i = 0; i < jas_matrix_numrows(data); ++i) {
+				jpc_fix_t *p = jas_matrix_getref(data, i, 0);
+				for (jas_matind_t j = 0; j < numcols; ++j) {
+					v = p[j];
 					v = jpc_fix_round(v);
-					jas_matrix_set(tcomp->data, i, j, jpc_fixtoint(v));
+					p[j] = jpc_fixtoint(v);
 				}
 			}
 		}
@@ -2046,15 +2049,19 @@ static void jpc_dequantize(jas_matrix_t *x, jpc_fix_t absstepsize)
 		return;
 	}
 
-	for (jas_matind_t i = 0; i < jas_matrix_numrows(x); ++i) {
-		for (jas_matind_t j = 0; j < jas_matrix_numcols(x); ++j) {
-			jas_seqent_t t = jas_matrix_get(x, i, j);
+	const jas_matind_t height = jas_matrix_numrows(x);
+	const size_t width = jas_matrix_numcols(x);
+
+	for (jas_matind_t i = 0; i < height; ++i) {
+		jpc_fix_t *p = jas_matrix_getref(x, i, 0);
+		for (size_t j = 0; j < width; ++j) {
+			jas_seqent_t t = p[j];
 			if (t) {
 				// mid-point reconstruction
 				t = (t > 0) ? jpc_fix_add(t, recparam) : jpc_fix_sub(t, recparam);
 				t = jpc_fix_mul(t, absstepsize);
+				p[j] = t;
 			}
-			jas_matrix_set(x, i, j, t);
 		}
 	}
 
@@ -2082,14 +2089,15 @@ static void jpc_undo_roi(jas_matrix_t *x, int roishift, int bgshift, unsigned nu
 
 	warn = false;
 	for (jas_matind_t i = 0; i < jas_matrix_numrows(x); ++i) {
-		for (jas_matind_t j = 0; j < jas_matrix_numcols(x); ++j) {
-			val = jas_matrix_get(x, i, j);
+		jpc_fix_t *p = jas_matrix_getref(x, i, 0);
+		for (jas_matind_t j = 0; j < jas_matrix_numcols(x); ++j, ++p) {
+			val = *p;
 			mag = JAS_ABS(val);
 			if (mag >= thresh) {
 				/* We are dealing with ROI data. */
 				mag >>= roishift;
 				val = (val < 0) ? (-mag) : mag;
-				jas_matrix_set(x, i, j, val);
+				*p = val;
 			} else {
 				/* We are dealing with non-ROI (i.e., background) data. */
 				mag <<= bgshift;
@@ -2106,7 +2114,7 @@ static void jpc_undo_roi(jas_matrix_t *x, int roishift, int bgshift, unsigned nu
 					mag &= mask;
 				}
 				val = (val < 0) ? (-mag) : mag;
-				jas_matrix_set(x, i, j, val);
+				*p = val;
 			}
 		}
 	}
