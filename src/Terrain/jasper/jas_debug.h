@@ -106,7 +106,7 @@ JAS_DLLEXPORT int jas_setdbglevel(int dbglevel);
 JAS_DLLEXPORT int jas_eprintf(const char *fmt, ...);
 
 /* Dump memory to a stream. */
-int jas_memdump(FILE *out, void *data, size_t len);
+int jas_memdump(FILE *out, const void *data, size_t len);
 
 /* Warn about use of deprecated functionality. */
 void jas_deprecated(const char *s);

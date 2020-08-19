@@ -647,8 +647,7 @@ static int jp2_colr_putdata(const jp2_box_t *box, jas_stream_t *out)
 		}
 		break;
 	case JP2_COLR_ICC:
-		if (jas_stream_write(out, colr->iccp,
-		  JAS_CAST(int, colr->iccplen)) != JAS_CAST(int, colr->iccplen))
+		if (jas_stream_write(out, colr->iccp, colr->iccplen) != colr->iccplen)
 			return -1;
 		break;
 	}
@@ -696,46 +695,21 @@ static int jp2_getuint8(jas_stream_t *in, uint_fast8_t *val)
 
 static int jp2_getuint16(jas_stream_t *in, uint_fast16_t *val)
 {
-	uint_fast16_t v;
-	int c;
-	if ((c = jas_stream_getc(in)) == EOF) {
+	jas_uchar buffer[2];
+	if (jas_stream_read(in, buffer, sizeof(buffer)) != sizeof(buffer))
 		return -1;
-	}
-	v = c;
-	if ((c = jas_stream_getc(in)) == EOF) {
-		return -1;
-	}
-	v = (v << 8) | c;
-	if (val) {
-		*val = v;
-	}
+	*val = (uint_fast16_t)buffer[0] << 8 | (uint_fast16_t)buffer[1];
 	return 0;
 }
 #endif /* ENABLE_JASPER_IMAGE */
 
 static int jp2_getuint32(jas_stream_t *in, uint_fast32_t *val)
 {
-	uint_fast32_t v;
-	int c;
-	if ((c = jas_stream_getc(in)) == EOF) {
+	jas_uchar buffer[4];
+	if (jas_stream_read(in, buffer, sizeof(buffer)) != sizeof(buffer))
 		return -1;
-	}
-	v = c;
-	if ((c = jas_stream_getc(in)) == EOF) {
-		return -1;
-	}
-	v = (v << 8) | c;
-	if ((c = jas_stream_getc(in)) == EOF) {
-		return -1;
-	}
-	v = (v << 8) | c;
-	if ((c = jas_stream_getc(in)) == EOF) {
-		return -1;
-	}
-	v = (v << 8) | c;
-	if (val) {
-		*val = v;
-	}
+	*val = (uint_fast32_t)buffer[0] << 24 | (uint_fast32_t)buffer[1] << 16
+		| (uint_fast32_t)buffer[2] << 8 | (uint_fast32_t)buffer[3];
 	return 0;
 }
 

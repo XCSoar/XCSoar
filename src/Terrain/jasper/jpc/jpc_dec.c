@@ -2424,7 +2424,6 @@ static jpc_streamlist_t *jpc_ppmstabtostreams(jpc_ppxstab_t *tab)
 	uint_fast32_t datacnt;
 	uint_fast32_t tpcnt;
 	jas_stream_t *stream;
-	int n;
 
 	if (!(streams = jpc_streamlist_create())) {
 		goto error;
@@ -2467,7 +2466,7 @@ static jpc_streamlist_t *jpc_ppmstabtostreams(jpc_ppxstab_t *tab)
 				dataptr = ent->data;
 				datacnt = ent->len;
 			}
-			n = JAS_MIN(tpcnt, datacnt);
+			const size_t n = JAS_MIN(tpcnt, datacnt);
 			if (jas_stream_write(stream, dataptr, n) != n) {
 				goto error;
 			}
@@ -2499,7 +2498,7 @@ static int jpc_pptstabwrite(jas_stream_t *out, jpc_ppxstab_t *tab)
 {
 	for (unsigned i = 0; i < tab->numents; ++i) {
 		const jpc_ppxstabent_t *ent = tab->ents[i];
-		if (jas_stream_write(out, ent->data, ent->len) != JAS_CAST(int, ent->len)) {
+		if (jas_stream_write(out, ent->data, ent->len) != ent->len) {
 			return -1;
 		}
 	}
