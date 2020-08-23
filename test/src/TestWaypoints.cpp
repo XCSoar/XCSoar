@@ -150,7 +150,7 @@ TestNamePrefixVisitor(const Waypoints &waypoints, const TCHAR *prefix,
 static void
 TestNamePrefixVisitor(const Waypoints &waypoints)
 {
-  TestNamePrefixVisitor(waypoints, _T(""), 151);
+  TestNamePrefixVisitor(waypoints, _T(""), 302);
   TestNamePrefixVisitor(waypoints, _T("Foo"), 0);
   TestNamePrefixVisitor(waypoints, _T("a"), 0);
   TestNamePrefixVisitor(waypoints, _T("A"), 22);
