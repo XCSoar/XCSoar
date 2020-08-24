@@ -133,6 +133,7 @@ const char TeamcodeRefWaypoint[] = "TeamcodeRefWaypoint";
 const char AppInfoBoxBorder[] = "AppInfoBoxBorder";
 const char ShowMenuButton[] = "ShowMenuButton";
 const char CursorSize[] = "CursorSize";
+const char CursorColorsInverted[] = "CursorColorsInverted";
 
 const char AppAveNeedle[] = "AppAveNeedle";
 const char AppAveThermalNeedle[] = "AppAveThermalNeedle";

@@ -100,8 +100,13 @@ TopWindow::OnPaint(Canvas &canvas)
     { m.x, m.y + longDistance },
   };
 
-  canvas.SelectBlackPen();
-  canvas.SelectWhiteBrush();
+  if (invert_cursor_colors) {
+    canvas.SelectWhitePen(cursor_size);
+    canvas.SelectBlackBrush();
+  } else {
+    canvas.SelectBlackPen(cursor_size);
+    canvas.SelectWhiteBrush();
+  }
   canvas.DrawTriangleFan(p, ARRAY_SIZE(p));
 }
 #endif

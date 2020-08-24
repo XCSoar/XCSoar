@@ -156,6 +156,7 @@ class TopWindow : public ContainerWindow {
 #endif
 #ifdef DRAW_MOUSE_CURSOR
   uint8_t cursor_size = 1;
+  bool invert_cursor_colors = false;
 #endif
 
 #ifndef USE_WINUSER
@@ -362,6 +363,10 @@ public:
 #ifdef DRAW_MOUSE_CURSOR
   void SetCursorSize(const uint8_t &cursorSize) noexcept {
     cursor_size = cursorSize;
+  }
+
+  void SetCursorColorsInverted(bool inverted) {
+    invert_cursor_colors = inverted;
   }
 #endif
 

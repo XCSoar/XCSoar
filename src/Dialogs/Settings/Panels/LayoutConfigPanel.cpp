@@ -56,6 +56,7 @@ enum ControlIndex {
 #endif
 #ifdef DRAW_MOUSE_CURSOR
   CursorSize,
+  CursorInverted,
 #endif
 };
 
@@ -227,6 +228,8 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 #ifdef DRAW_MOUSE_CURSOR
   AddInteger(_("Cursor zoom"), _("Cursor zoom factor"), _T("%d x"), _T("%d x"), 1, 10, 1,
              (unsigned)ui_settings.display.cursor_size);
+  AddBoolean(_("Invert cursor color"), _("Enable black cursor"),
+             ui_settings.display.invert_cursor_colors);
 #endif
 }
 
@@ -284,6 +287,9 @@ LayoutConfigPanel::Save(bool &_changed)
 #ifdef DRAW_MOUSE_CURSOR
   changed |= SaveValue(CursorSize, ProfileKeys::CursorSize, ui_settings.display.cursor_size);
   CommonInterface::main_window->SetCursorSize(ui_settings.display.cursor_size);
+
+  changed |= SaveValue(CursorInverted, ProfileKeys::CursorColorsInverted, ui_settings.display.invert_cursor_colors);
+  CommonInterface::main_window->SetCursorColorsInverted(ui_settings.display.invert_cursor_colors);
 #endif
 
   if (orientation_changed) {

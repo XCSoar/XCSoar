@@ -173,6 +173,7 @@ MainWindow::Initialise()
                      CommonInterface::GetUISettings().custom_dpi);
 #ifdef DRAW_MOUSE_CURSOR
   SetCursorSize(CommonInterface::GetDisplaySettings().cursor_size);
+  SetCursorColorsInverted(CommonInterface::GetDisplaySettings().invert_cursor_colors);
 #endif
 
   LogFormat("Initialise fonts");

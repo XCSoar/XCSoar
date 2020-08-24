@@ -129,6 +129,7 @@ extern const char AppInfoBoxBorder[];
 extern const char AppAveNeedle[];
 extern const char AppAveThermalNeedle[];
 extern const char CursorSize[];
+extern const char CursorColorsInverted[];
 extern const char AutoAdvance[];
 extern const char UTCOffset[];
 extern const char UTCOffsetSigned[];
