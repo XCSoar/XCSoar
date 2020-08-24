@@ -119,8 +119,16 @@ public:
     pen = Pen(1, COLOR_WHITE);
   }
 
+  void SelectWhitePen(unsigned width) {
+    pen = Pen(width, COLOR_WHITE);
+  }
+
   void SelectBlackPen() {
     pen = Pen(1, COLOR_BLACK);
+  }
+
+  void SelectBlackPen(unsigned width) {
+    pen = Pen(width, COLOR_BLACK);
   }
 
   void SelectHollowBrush() {

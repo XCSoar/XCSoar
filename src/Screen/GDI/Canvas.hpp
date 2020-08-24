@@ -149,8 +149,16 @@ public:
     SelectStockObject(WHITE_PEN);
   }
 
+  void SelectWhitePen(unsigned width) {
+    Select(Pen(width, COLOR_WHITE));
+  }
+
   void SelectBlackPen() {
     SelectStockObject(BLACK_PEN);
+  }
+
+  void SelectBlackPen(unsigned width) {
+    Select(Pen(width, COLOR_BLACK));
   }
 
   void SelectHollowBrush() {
