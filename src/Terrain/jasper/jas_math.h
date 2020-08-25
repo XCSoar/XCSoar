@@ -156,6 +156,32 @@ inline static int jas_int_asl(int x, unsigned n)
 
 JAS_ATTRIBUTE_CONST
 JAS_ATTRIBUTE_DISABLE_USAN
+inline static int_least32_t jas_least32_asr(int_least32_t x, unsigned n)
+{
+	// Ensure that the shift of a negative value appears to behave as a
+	// signed arithmetic shift.
+	assert(((JAS_CAST(int_least32_t, -1)) >> 1) == JAS_CAST(int_least32_t, -1));
+	// The behavior is undefined when x is negative. */
+	// We tacitly assume the behavior is equivalent to a signed
+	// arithmetic right shift.
+	return x >> n;
+}
+
+JAS_ATTRIBUTE_CONST
+JAS_ATTRIBUTE_DISABLE_USAN
+inline static int_least32_t jas_least32_asl(int_least32_t x, unsigned n)
+{
+	// Ensure that the shift of a negative value appears to behave as a
+	// signed arithmetic shift.
+	assert(((JAS_CAST(int_least32_t, -1)) << 1) == JAS_CAST(int_least32_t, -2));
+	// The behavior is undefined when x is negative. */
+	// We tacitly assume the behavior is equivalent to a signed
+	// arithmetic left shift.
+	return x << n;
+}
+
+JAS_ATTRIBUTE_CONST
+JAS_ATTRIBUTE_DISABLE_USAN
 inline static int_fast32_t jas_fast32_asr(int_fast32_t x, unsigned n)
 {
 	// Ensure that the shift of a negative value appears to behave as a

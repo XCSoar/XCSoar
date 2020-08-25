@@ -1355,7 +1355,7 @@ static int mem_write(jas_stream_obj_t *obj, const char *buf, unsigned cnt)
 static long mem_seek(jas_stream_obj_t *obj, long offset, int origin)
 {
 	jas_stream_memobj_t *m = (jas_stream_memobj_t *)obj;
-	ssize_t newpos;
+	long newpos;
 
 	JAS_DBGLOG(100, ("mem_seek(%p, %ld, %d)\n", obj, offset, origin));
 	switch (origin) {
@@ -1369,8 +1369,7 @@ static long mem_seek(jas_stream_obj_t *obj, long offset, int origin)
 		newpos = m->pos_ + offset;
 		break;
 	default:
-		abort();
-		break;
+		return -1;
 	}
 	if (newpos < 0) {
 		return -1;

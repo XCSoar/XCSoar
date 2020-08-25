@@ -977,16 +977,12 @@ static int jpc_dec_tileinit(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 							tmpyend = JAS_MIN(cblkyend, prc->yend);
 							if (tmpxend > tmpxstart && tmpyend > tmpystart) {
 								cblk->firstpassno = -1;
-								cblk->mqdec = 0;
-								cblk->nulldec = 0;
-								cblk->flags = 0;
 								cblk->numpasses = 0;
 								cblk->segs.head = 0;
 								cblk->segs.tail = 0;
 								cblk->curseg = 0;
 								cblk->numimsbs = 0;
 								cblk->numlenbits = 3;
-								cblk->flags = 0;
 								if (!(cblk->data = jas_seq2d_create(0, 0, 0,
 								  0))) {
 									return -1;
@@ -1077,15 +1073,6 @@ static int jpc_dec_tilefini(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 									jpc_seg_destroy(seg);
 								}
 								jas_matrix_destroy(cblk->data);
-								if (cblk->mqdec) {
-									jpc_mqdec_destroy(cblk->mqdec);
-								}
-								if (cblk->nulldec) {
-									jpc_bitstream_close(cblk->nulldec);
-								}
-								if (cblk->flags) {
-									jas_matrix_destroy(cblk->flags);
-								}
 							}
 							if (prc->incltagtree) {
 								jpc_tagtree_destroy(prc->incltagtree);
@@ -1234,8 +1221,9 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 		const jpc_dec_ccp_t *ccp = &tile->cp->ccps[compno];
 		if (ccp->qmfbid == JPC_COX_INS) {
 			jas_matrix_t *const data = tcomp->data;
+			const jas_matind_t height = jas_matrix_numrows(data);
 			const jas_matind_t numcols = jas_matrix_numcols(data);
-			for (jas_matind_t i = 0; i < jas_matrix_numrows(data); ++i) {
+			for (jas_matind_t i = 0; i < height; ++i) {
 				jpc_fix_t *p = jas_matrix_getref(data, i, 0);
 				for (jas_matind_t j = 0; j < numcols; ++j) {
 					v = p[j];
@@ -1250,10 +1238,17 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 	const jpc_dec_cmpt_t *cmpt;
 	for (compno = 0, tcomp = tile->tcomps, cmpt = dec->cmpts; compno <
 	  dec->numcomps; ++compno, ++tcomp, ++cmpt) {
-		const unsigned adjust = cmpt->sgnd ? 0 : (1 << (cmpt->prec - 1));
-		for (jas_matind_t i = 0; i < jas_matrix_numrows(tcomp->data); ++i) {
-			for (jas_matind_t j = 0; j < jas_matrix_numcols(tcomp->data); ++j) {
-				*jas_matrix_getref(tcomp->data, i, j) += adjust;
+		if (cmpt->sgnd)
+			continue;
+
+		jas_matrix_t *const data = tcomp->data;
+		const jas_matind_t width = jas_matrix_numcols(data);
+		const jas_matind_t height = jas_matrix_numrows(data);
+		const jas_seqent_t adjust = (jas_seqent_t)1 << (cmpt->prec - 1);
+		for (jas_matind_t i = 0; i < height; ++i) {
+			jpc_fix_t *p = jas_matrix_getref(data, i, 0);
+			for (jas_matind_t j = 0; j < width; ++j) {
+				p[j] += adjust;
 			}
 		}
 	}
@@ -1261,11 +1256,18 @@ static int jpc_dec_tiledecode(jpc_dec_t *dec, jpc_dec_tile_t *tile)
 	/* Perform clipping. */
 	for (compno = 0, tcomp = tile->tcomps, cmpt = dec->cmpts; compno <
 	  dec->numcomps; ++compno, ++tcomp, ++cmpt) {
-		jpc_fix_t mn;
-		jpc_fix_t mx;
-		mn = cmpt->sgnd ? (-(1 << (cmpt->prec - 1))) : (0);
-		mx = cmpt->sgnd ? ((1 << (cmpt->prec - 1)) - 1) : ((1 <<
-		  cmpt->prec) - 1);
+		if (cmpt->prec >= sizeof(jpc_fix_t) * 8 - 2 + cmpt->sgnd)
+			/* no need to clip, because the calculated
+			   minimum/maximum values would overflow our
+			   integer type anyway */
+			continue;
+
+		const jas_seqent_t mn = cmpt->sgnd
+			? (-((jpc_fix_t)1 << (cmpt->prec - 1)))
+			: (0);
+		const jas_seqent_t mx = cmpt->sgnd
+			? (((jpc_fix_t)1 << (cmpt->prec - 1)) - 1)
+			: (((jpc_fix_t)1 << cmpt->prec) - 1);
 		jas_matrix_clip(tcomp->data, mn, mx);
 	}
 
@@ -1455,7 +1457,6 @@ static int jpc_dec_process_siz(jpc_dec_t *dec, jpc_ms_t *ms)
 		tile->partno = 0;
 #ifdef ENABLE_JASPER_PPM
 		tile->pkthdrstream = 0;
-		tile->pkthdrstreampos = 0;
 		tile->pptstab = 0;
 #endif /* ENABLE_JASPER_PPM */
 		tile->cp = 0;
@@ -2088,9 +2089,12 @@ static void jpc_undo_roi(jas_matrix_t *x, int roishift, int bgshift, unsigned nu
 	thresh = 1 << roishift;
 
 	warn = false;
-	for (jas_matind_t i = 0; i < jas_matrix_numrows(x); ++i) {
+
+	const jas_matind_t width = jas_matrix_numcols(x);
+	const jas_matind_t height = jas_matrix_numrows(x);
+	for (jas_matind_t i = 0; i < height; ++i) {
 		jpc_fix_t *p = jas_matrix_getref(x, i, 0);
-		for (jas_matind_t j = 0; j < jas_matrix_numcols(x); ++j, ++p) {
+		for (jas_matind_t j = 0; j < width; ++j, ++p) {
 			val = *p;
 			mag = JAS_ABS(val);
 			if (mag >= thresh) {

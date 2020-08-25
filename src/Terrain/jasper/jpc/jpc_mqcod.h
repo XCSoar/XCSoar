@@ -90,7 +90,7 @@ typedef struct {
 	bool mps;
 
 	/* The state index. */
-	int_fast16_t ind;
+	int_least8_t ind;
 
 } jpc_mqctx_t;
 
@@ -101,7 +101,7 @@ typedef struct {
 typedef struct jpc_mqstate_s {
 
 	/* The Qe value. */
-	uint_fast16_t qeval;
+	uint_least16_t qeval;
 
 	/* The MPS. */
 	bool mps;

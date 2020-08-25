@@ -518,21 +518,21 @@ JAS_DLLEXPORT int jas_image_getfmt(jas_stream_t *in);
 
 #define	jas_image_cmprof(image)	((image)->cmprof_)
 JAS_ATTRIBUTE_PURE
-int jas_image_ishomosamp(const jas_image_t *image);
-int jas_image_sampcmpt(jas_image_t *image, unsigned cmptno, unsigned newcmptno,
+JAS_DLLEXPORT int jas_image_ishomosamp(const jas_image_t *image);
+JAS_DLLEXPORT int jas_image_sampcmpt(jas_image_t *image, unsigned cmptno, unsigned newcmptno,
   jas_image_coord_t ho, jas_image_coord_t vo, jas_image_coord_t hs,
   jas_image_coord_t vs, int sgnd, unsigned prec);
-int jas_image_writecmpt2(jas_image_t *image, unsigned cmptno, jas_image_coord_t x,
+JAS_DLLEXPORT int jas_image_writecmpt2(jas_image_t *image, unsigned cmptno, jas_image_coord_t x,
   jas_image_coord_t y, jas_image_coord_t width, jas_image_coord_t height,
   const long *buf);
-int jas_image_readcmpt2(jas_image_t *image, unsigned cmptno, jas_image_coord_t x,
+JAS_DLLEXPORT int jas_image_readcmpt2(jas_image_t *image, unsigned cmptno, jas_image_coord_t x,
   jas_image_coord_t y, jas_image_coord_t width, jas_image_coord_t height,
   long *buf);
 
 #define	jas_image_setcmprof(image, cmprof) ((image)->cmprof_ = cmprof)
 JAS_DLLEXPORT jas_image_t *jas_image_chclrspc(jas_image_t *image, const jas_cmprof_t *outprof,
   jas_cmxform_intent_t intent);
-void jas_image_dump(jas_image_t *image, FILE *out);
+JAS_DLLEXPORT void jas_image_dump(jas_image_t *image, FILE *out);
 
 /******************************************************************************\
 * Image format-dependent operations.
@@ -540,58 +540,58 @@ void jas_image_dump(jas_image_t *image, FILE *out);
 
 #if !defined(EXCLUDE_JPG_SUPPORT)
 /* Format-dependent operations for JPG support. */
-jas_image_t *jpg_decode(jas_stream_t *in, const char *optstr);
-int jpg_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
-int jpg_validate(jas_stream_t *in);
+JAS_DLLEXPORT jas_image_t *jpg_decode(jas_stream_t *in, const char *optstr);
+JAS_DLLEXPORT int jpg_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
+JAS_DLLEXPORT int jpg_validate(jas_stream_t *in);
 #endif
 
 #if !defined(EXCLUDE_MIF_SUPPORT)
 /* Format-dependent operations for MIF support. */
-jas_image_t *mif_decode(jas_stream_t *in, const char *optstr);
-int mif_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
-int mif_validate(jas_stream_t *in);
+JAS_DLLEXPORT jas_image_t *mif_decode(jas_stream_t *in, const char *optstr);
+JAS_DLLEXPORT int mif_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
+JAS_DLLEXPORT int mif_validate(jas_stream_t *in);
 #endif
 
 #if !defined(EXCLUDE_PNM_SUPPORT)
 /* Format-dependent operations for PNM support. */
-jas_image_t *pnm_decode(jas_stream_t *in, const char *optstr);
-int pnm_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
-int pnm_validate(jas_stream_t *in);
+JAS_DLLEXPORT jas_image_t *pnm_decode(jas_stream_t *in, const char *optstr);
+JAS_DLLEXPORT int pnm_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
+JAS_DLLEXPORT int pnm_validate(jas_stream_t *in);
 #endif
 
 #if !defined(EXCLUDE_RAS_SUPPORT)
 /* Format-dependent operations for Sun Rasterfile support. */
-jas_image_t *ras_decode(jas_stream_t *in, const char *optstr);
-int ras_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
-int ras_validate(jas_stream_t *in);
+JAS_DLLEXPORT jas_image_t *ras_decode(jas_stream_t *in, const char *optstr);
+JAS_DLLEXPORT int ras_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
+JAS_DLLEXPORT int ras_validate(jas_stream_t *in);
 #endif
 
 #if !defined(EXCLUDE_BMP_SUPPORT)
 /* Format-dependent operations for BMP support. */
-jas_image_t *bmp_decode(jas_stream_t *in, const char *optstr);
-int bmp_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
-int bmp_validate(jas_stream_t *in);
+JAS_DLLEXPORT jas_image_t *bmp_decode(jas_stream_t *in, const char *optstr);
+JAS_DLLEXPORT int bmp_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
+JAS_DLLEXPORT int bmp_validate(jas_stream_t *in);
 #endif
 
 #if !defined(EXCLUDE_JP2_SUPPORT)
 /* Format-dependent operations for JP2 support. */
-jas_image_t *jp2_decode(jas_stream_t *in, const char *optstr);
-int jp2_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
-int jp2_validate(jas_stream_t *in);
+JAS_DLLEXPORT jas_image_t *jp2_decode(jas_stream_t *in, const char *optstr);
+JAS_DLLEXPORT int jp2_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
+JAS_DLLEXPORT int jp2_validate(jas_stream_t *in);
 #endif
 
 #if !defined(EXCLUDE_JPC_SUPPORT)
 /* Format-dependent operations for JPEG-2000 code stream support. */
-jas_image_t *jpc_decode(jas_stream_t *in, const char *optstr);
-int jpc_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
-int jpc_validate(jas_stream_t *in);
+JAS_DLLEXPORT jas_image_t *jpc_decode(jas_stream_t *in, const char *optstr);
+JAS_DLLEXPORT int jpc_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
+JAS_DLLEXPORT int jpc_validate(jas_stream_t *in);
 #endif
 
 #if !defined(EXCLUDE_PGX_SUPPORT)
 /* Format-dependent operations for PGX support. */
-jas_image_t *pgx_decode(jas_stream_t *in, const char *optstr);
-int pgx_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
-int pgx_validate(jas_stream_t *in);
+JAS_DLLEXPORT jas_image_t *pgx_decode(jas_stream_t *in, const char *optstr);
+JAS_DLLEXPORT int pgx_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
+JAS_DLLEXPORT int pgx_validate(jas_stream_t *in);
 #endif
 
 #ifdef __cplusplus

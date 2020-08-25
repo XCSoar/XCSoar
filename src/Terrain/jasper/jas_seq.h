@@ -190,7 +190,7 @@ static inline jas_matind_t jas_matrix_size(const jas_matrix_t *matrix)
 JAS_ATTRIBUTE_PURE
 static inline bool jas_matrix_empty(const jas_matrix_t *matrix)
 {
-	return jas_matrix_numcols(matrix) == 0 && jas_matrix_numrows(matrix) == 0;
+	return jas_matrix_numcols(matrix) == 0 || jas_matrix_numrows(matrix) == 0;
 }
 
 /* Get a matrix element. */
@@ -314,13 +314,21 @@ JAS_DLLEXPORT jas_matrix_t *jas_matrix_input(FILE *);
 JAS_ATTRIBUTE_CONST
 static inline jas_seqent_t jas_seqent_asl(jas_seqent_t x, unsigned n)
 {
+#ifdef JAS_ENABLE_32BIT
+	return jas_least32_asl(x, n);
+#else
 	return jas_fast32_asl(x, n);
+#endif
 }
 
 JAS_ATTRIBUTE_CONST
 static inline jas_seqent_t jas_seqent_asr(jas_seqent_t x, unsigned n)
 {
+#ifdef JAS_ENABLE_32BIT
+	return jas_least32_asr(x, n);
+#else
 	return jas_fast32_asr(x, n);
+#endif
 }
 
 /******************************************************************************\
@@ -410,7 +418,7 @@ static inline jas_matind_t jas_seq2d_size(const jas_seq2d_t *s)
 JAS_ATTRIBUTE_PURE
 static inline bool jas_seq2d_empty(const jas_seq2d_t *s)
 {
-	return jas_seq2d_width(s) == 0 && jas_seq2d_height(s) == 0;
+	return jas_seq2d_width(s) == 0 || jas_seq2d_height(s) == 0;
 }
 
 JAS_DLLEXPORT int jas_seq2d_bindsub(jas_matrix_t *s, jas_matrix_t *s1, jas_matind_t xstart,

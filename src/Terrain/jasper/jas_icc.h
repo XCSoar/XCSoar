@@ -397,10 +397,10 @@ JAS_DLLEXPORT jas_iccattrval_t *jas_iccattrval_create(jas_iccuint32_t type);
 
 JAS_DLLEXPORT void jas_iccattrtab_dump(const jas_iccattrtab_t *attrtab, FILE *out);
 
-extern const jas_uchar jas_iccprofdata_srgb[];
-extern const unsigned jas_iccprofdata_srgblen;
-extern const jas_uchar jas_iccprofdata_sgray[];
-extern const unsigned jas_iccprofdata_sgraylen;
+JAS_DLLEXPORT extern const jas_uchar jas_iccprofdata_srgb[];
+JAS_DLLEXPORT extern const unsigned jas_iccprofdata_srgblen;
+JAS_DLLEXPORT extern const jas_uchar jas_iccprofdata_sgray[];
+JAS_DLLEXPORT extern const unsigned jas_iccprofdata_sgraylen;
 JAS_DLLEXPORT jas_iccprof_t *jas_iccprof_createfrombuf(const jas_uchar *buf, unsigned len);
 JAS_DLLEXPORT jas_iccprof_t *jas_iccprof_createfromclrspc(unsigned clrspc);
 

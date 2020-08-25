@@ -78,10 +78,8 @@
 #include "jasper/jas_image.h"
 
 #include "jpc_tsfb.h"
-#include "jpc_bs.h"
 #include "jpc_tagtree.h"
 #include "jpc_cs.h"
-#include "jpc_mqdec.h"
 #include "jpc_t1cod.h"
 #include "jpc_t2cod.h"
 
@@ -299,15 +297,6 @@ typedef struct {
 	/* The first pass number containing data for this code block. */
 	unsigned firstpassno;
 
-	/* The MQ decoder. */
-	jpc_mqdec_t *mqdec;
-
-	/* The raw bit stream decoder. */
-	jpc_bitstream_t *nulldec;
-
-	/* The per-sample state information for this code block. */
-	jas_matrix_t *flags;
-
 	/* The sample data associated with this code block. */
 	jas_matrix_t *data;
 
@@ -516,9 +505,6 @@ typedef struct {
 
 	/* A stream containing the packed packet header data for this tile. */
 	jas_stream_t *pkthdrstream;
-
-	/* The current position within the packed packet header stream. */
-	long pkthdrstreampos;
 #endif /* ENABLE_JASPER_PPM */
 
 	/* The coding parameters for this tile. */
