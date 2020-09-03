@@ -186,15 +186,7 @@ jas_stream_t *jas_stream_create(void)
 
 /*
 This function will eventually replace jas_stream_memopen.
-If buf is 0 and bufsize > 0:
-	a buffer is dynamically allocated with size bufsize and this buffer is
-	not growable.
-If buf is 0 and bufsize is 0:
-	a buffer is dynamically allocated whose size will automatically grow to
-	accommodate the amount of data written.
-If buf is not 0:
-	bufsize (which, in this case, is not currently allowed to be zero) is
-	the size of the (nongrowable) buffer pointed to by buf.
+For documentation of the interface for this function, see jas_stream.h.
 */
 
 jas_stream_t *jas_stream_memopen2(char *buf, size_t bufsize)
@@ -817,6 +809,7 @@ int jas_stream_puts(jas_stream_t *stream, const char *s)
 	return 0;
 }
 
+/* TODO/FIXME: this function should return null upon error (buffer overrun or I/O error */
 /* FIXME integral type */
 char *jas_stream_gets(jas_stream_t *stream, char *buf, int bufsize)
 {
@@ -1177,6 +1170,16 @@ long jas_stream_setrwcount(jas_stream_t *stream, long rwcnt)
 
 	old = stream->rwcnt_;
 	stream->rwcnt_ = rwcnt;
+	return old;
+}
+
+JAS_DLLEXPORT
+long jas_stream_setrwlimit(jas_stream_t *stream, long rwlimit)
+{
+	long old;
+
+	old = stream->rwlimit_;
+	stream->rwlimit_ = rwlimit;
 	return old;
 }
 

@@ -61,10 +61,9 @@
  * __END_OF_JASPER_LICENSE__
  */
 
-/*
- * Math-Related Code
- *
- * $Id$
+/*!
+ * @file jas_math.h
+ * @brief Math-Related Code
  */
 
 #ifndef	JAS_MATH_H

@@ -61,10 +61,9 @@
  * __END_OF_JASPER_LICENSE__
  */
 
-/*
- * Fixed-Point Number Class
- *
- * $Id$
+/*!
+ * @file jas_fix.h
+ * @brief JasPer Fixed-Point Number Class
  */
 
 #ifndef JAS_FIX_H

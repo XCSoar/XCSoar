@@ -59,10 +59,9 @@
  * __END_OF_JASPER_LICENSE__
  */
 
-/*
- * Color Management
- *
- * $Id$
+/*!
+ * @file jas_cm.h
+ * @brief JasPer Color Management
  */
 
 #ifndef JAS_CM_H

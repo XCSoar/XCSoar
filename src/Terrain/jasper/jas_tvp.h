@@ -59,10 +59,9 @@
  * __END_OF_JASPER_LICENSE__
  */
 
-/*
- * Tag/Value Parser
- *
- * $Id$
+/*!
+ * @file jas_tvp.h
+ * @brief Tag/Value Pair Parser
  */
 
 #ifndef JAS_TVP_H

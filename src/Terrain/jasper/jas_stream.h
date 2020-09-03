@@ -61,10 +61,9 @@
  * __END_OF_JASPER_LICENSE__
  */
 
-/*
- * I/O Stream Class
- *
- * $Id$
+/*!
+ * @file jas_stream.h
+ * @brief I/O Stream Class
  */
 
 #ifndef JAS_STREAM_H
@@ -89,6 +88,11 @@
 extern "C" {
 #endif
 
+/*!
+ * @addtogroup iostreams
+ * @{
+ */
+
 /******************************************************************************\
 * Constants.
 \******************************************************************************/
@@ -112,7 +116,6 @@ extern "C" {
 #define JAS_STREAM_BINARY	0x0008
 /* The stream should be created/truncated. */
 #define JAS_STREAM_CREATE	0x0010
-
 
 /*
  * Stream buffering flags.
@@ -253,7 +256,9 @@ typedef struct {
 	char pathname[L_tmpnam + 1];
 } jas_stream_fileobj_t;
 
+/* Delete underlying file object upon stream close. */
 #define	JAS_STREAM_FILEOBJ_DELONCLOSE	0x01
+/* Do not close underlying file object upon stream close. */
 #define JAS_STREAM_FILEOBJ_NOCLOSE	0x02
 
 /*
@@ -290,58 +295,244 @@ jas_stream_t *jas_stream_create(void);
 
 void jas_stream_initbuf(jas_stream_t *stream, int bufmode, char *buf, int bufsize);
 
-/* Open a file as a stream. */
-JAS_DLLEXPORT jas_stream_t *jas_stream_fopen(const char *filename, const char *mode);
+/*!
+@brief Open a file as a stream.
 
-/* Open a memory buffer as a stream. */
+@param filename
+A pointer to the pathname of the file to be opened.
+@param mode
+A pointer to the string specifying the open mode.
+The open mode is similar to that used by the fopen function in the
+C standard library.
+
+@return
+Upon success, a pointer to the opened stream is returned.
+Otherwise, a null pointer is returned.
+*/
+JAS_DLLEXPORT
+jas_stream_t *jas_stream_fopen(const char *filename, const char *mode);
+
+/*!
+@brief Open a memory buffer as a stream.
+
+@param buffer
+A pointer to the buffer to be used to store stream data.
+@param buffer_size
+The size of the buffer.
+
+@details
+<ul>
+<li>
+If buffer is 0 and buffer_size > 0:
+a buffer is dynamically allocated with size buffer_size and this buffer is
+not growable.
+<li>
+If buffer is 0 and buffer_size is 0:
+a buffer is dynamically allocated whose size will automatically grow to
+accommodate the amount of data written.
+<li>
+If buffer is not 0:
+buffer_size (which, in this case, is not currently allowed to be zero) is
+the size of the (nongrowable) buffer pointed to by buffer.
+</ul>
+
+@warning
+TODO/FIXME: The type of the buffer_size parameter will be
+changed to size_t in the future.
+
+@warning
+TODO/FIXME:
+In a later release, this function will be changed to have the same
+prototype as jas_stream_memopen2, at which point jas_stream_memopen2
+will be removed.
+*/
 gcc_malloc
-JAS_DLLEXPORT jas_stream_t *jas_stream_memopen(char *buf, int bufsize);
+JAS_DLLEXPORT
+jas_stream_t *jas_stream_memopen(char *buffer, int buffer_size);
 
-/* Do not use this function.
-It will eventually replace jas_stream_memopen. */
-JAS_DLLEXPORT jas_stream_t *jas_stream_memopen2(char *buf, size_t bufsize);
+/*!
+@warning
+This function will be renamed jas_stream_memopen in a future release.
+Do not use this function.
+*/
+JAS_DLLEXPORT
+jas_stream_t *jas_stream_memopen2(char *buffer, size_t buffer_size);
 
-/* Open a file descriptor as a stream. */
-JAS_DLLEXPORT jas_stream_t *jas_stream_fdopen(int fd, const char *mode);
+/*!
+@brief Open a file descriptor as a stream.
 
-/* Open a stdio stream as a stream. */
-JAS_DLLEXPORT jas_stream_t *jas_stream_freopen(const char *path, const char *mode, FILE *fp);
+@param fd
+The file descriptor of the file to open as a stream.
+@param mode
+A pointer to a string specifying the open mode.
+The format of this string is similar to that of the fdopen function
+in the C standard library.
 
-/* Open a temporary file as a stream. */
+@return
+Upon success, a pointer to the opened stream is returned.
+Otherwise, a null pointer is returned.
+*/
+JAS_DLLEXPORT
+jas_stream_t *jas_stream_fdopen(int fd, const char *mode);
+
+/*!
+@brief Open a stdio (i.e., C standard library) stream as a stream.
+
+@param path
+A pointer to a string containing the path of the filename associated
+with the stdio stream.
+@param mode
+A pointer to a string containing the open mode to be used for the
+(JasPer) stream.
+This string is similar to that used by the fdopen function in the
+C standard library.
+@param fp
+A pointer to the stdio stream.
+
+@details
+It is unspecified whether the open mode specified by mode can be
+changed from the open mode used for opening the stdio stream.
+
+@return
+Upon success, a pointer to the opened stream is returned.
+Otherwise, a null pointer is returned.
+*/
+JAS_DLLEXPORT
+jas_stream_t *jas_stream_freopen(const char *path, const char *mode, FILE *fp);
+
+/*!
+@brief Open a temporary file as a stream.
+
+@details
+A temporary file is created and opened as a stream.
+The temporary file is deleted when closed via jas_stream_close().
+Some operating systems provide a mechanism for ensuring that a file
+is removed when closed.
+Such functionality may be used by the implementation when available.
+
+@return
+Upon success, a pointer to the opened stream is returned.
+Otherwise, a null pointer is returned.
+*/
 JAS_DLLEXPORT jas_stream_t *jas_stream_tmpfile(void);
 
-/* Close a stream. */
-JAS_DLLEXPORT int jas_stream_close(jas_stream_t *stream);
+/*!
+@brief Close a stream.
+
+@param stream
+A (nonnull) pointer to the stream to be closed.
+
+@details
+The close operation will implicitly flush any pending output
+to the stream before closing.
+If such a flush operation fails, this will be reflected in
+the return value of this function.
+For many systems, it is likely that the main reason that this function
+can fail is due to an I/O error when flushing buffered output.
+
+@return
+If no errors are encountered when closing the stream, 0 is returned.
+Otherwise, a nonzero value is returned.
+*/
+JAS_DLLEXPORT
+int jas_stream_close(jas_stream_t *stream);
 
 /******************************************************************************\
 * Macros/functions for getting/setting the stream state.
 \******************************************************************************/
 
-/* Get the EOF indicator for a stream. */
+/*!
+@brief Get the EOF indicator for a stream.
+
+@param stream
+The stream whose EOF indicator is to be queried.
+
+@return
+The value of the EOF indicator is returned.
+A nonzero value indicates that the stream has encountered EOF.
+*/
 #define jas_stream_eof(stream) \
 	(((stream)->flags_ & JAS_STREAM_EOF) != 0)
 
-/* Get the error indicator for a stream. */
+/*!
+@brief Get the error indicator for a stream.
+@param stream
+The stream whose error indicator is to be queried.
+@return
+The value of the error indicator is returned.
+A nonzero value indicates that the stream has encountered an error
+of some type (such as an I/O error).
+Note that EOF is not an error.
+*/
 #define jas_stream_error(stream) \
 	(((stream)->flags_ & JAS_STREAM_ERR) != 0)
 
-/* Clear the error indicator for a stream. */
+/*!
+@brief Clear the error indicator for a stream.
+@param stream
+The stream whose error indicator is to be cleared.
+
+@todo
+TODO/FIXME: Should this macro evaluate to void?
+*/
 #define jas_stream_clearerr(stream) \
 	((stream)->flags_ &= ~(JAS_STREAM_ERR | JAS_STREAM_EOF))
 
-/* Get the read/write limit for a stream. */
+/*!
+@brief Get the read/write limit for a stream.
+@param stream
+A pointer to the stream whose read/write limit is to be queried.
+@return
+The read/write limit for the stream is returned.
+This operation cannot fail.
+A negative read/write limit indicates no limit (i.e., an limit that is
+effectively infinite).
+*/
 #define	jas_stream_getrwlimit(stream) \
 	(((const jas_stream_t *)(stream))->rwlimit_)
 
-/* Set the read/write limit for a stream. */
-JAS_DLLEXPORT int jas_stream_setrwlimit(jas_stream_t *stream, long rwlimit);
+/*!
+@brief Set the read/write limit for a stream.
+@param stream
+A pointer to the stream whose read/write limit is to be set.
+@param rwlimit
+The new value for the read/write limit.
 
-/* Get the read/write count for a stream. */
+@details
+A negative read/write limit is treated as if it were infinity
+(i.e., there is no read/write limit).
+
+@return
+The old read/write limit is returned.
+*/
+JAS_DLLEXPORT long jas_stream_setrwlimit(jas_stream_t *stream, long rwlimit);
+
+/*!
+@brief Get the read/write count for a stream.
+
+@param stream
+A pointer to the stream whose read/write count is to be queried.
+
+@return
+The read/write count is returned.
+This operation cannot fail.
+*/
 #define	jas_stream_getrwcount(stream) \
 	(((const jas_stream_t *)(stream))->rwcnt_)
 
-/* Set the read/write count for a stream. */
-JAS_DLLEXPORT long jas_stream_setrwcount(jas_stream_t *stream, long rwcnt);
+/*!
+@brief Set the read/write count for a stream.
+@param stream
+A pointer to the stream whose read/write count is to be set.
+@param rw_count
+The new value for the read/write count.
+@return
+The old value of the read/write count is returned.
+This operation cannot fail.
+@todo
+TODO/FIXME: Should this macro evaluate to void?
+*/
+JAS_DLLEXPORT long jas_stream_setrwcount(jas_stream_t *stream, long rw_count);
 
 /******************************************************************************\
 * Macros/functions for I/O.
@@ -349,6 +540,10 @@ JAS_DLLEXPORT long jas_stream_setrwcount(jas_stream_t *stream, long rwcnt);
 
 /* Read a character from a stream. */
 #ifndef NDEBUG
+/*!
+@brief jas_stream_getc
+Read a character from a stream.
+*/
 #define	jas_stream_getc(stream)	jas_stream_getc_func(stream)
 #else
 #define jas_stream_getc(stream)	jas_stream_getc_macro(stream)
@@ -356,87 +551,440 @@ JAS_DLLEXPORT long jas_stream_setrwcount(jas_stream_t *stream, long rwcnt);
 
 /* Write a character to a stream. */
 #ifndef NDEBUG
+/*!
+@brief jas_stream_putc
+Write a character to a stream.
+*/
 #define jas_stream_putc(stream, c)	jas_stream_putc_func(stream, c)
 #else
 #define jas_stream_putc(stream, c)	jas_stream_putc_macro(stream, c)
 #endif
 
-/* Read characters from a stream into a buffer. */
-JAS_DLLEXPORT unsigned jas_stream_read(jas_stream_t *stream, void *buf, unsigned cnt);
+/*!
+@brief Read characters from a stream into a buffer.
 
-/* Read characters from a stream into a buffer without actually
-   removing them from the stream.  Returns the number of bytes copied
-   to the given buffer, or 0 on error. */
-JAS_DLLEXPORT unsigned jas_stream_peek(jas_stream_t *stream, void *buf, size_t cnt);
+@param stream
+A pointer to the stream from which to read data.
+@param buffer
+A pointer to the start of the buffer.
+@param count
+A count of the number of characters to read (nominally).
 
-/* Write characters from a buffer to a stream. */
-JAS_DLLEXPORT unsigned jas_stream_write(jas_stream_t *stream, const void *buf, unsigned cnt);
+@details
+If @c count is zero, the function has no effect (and therefore cannot fail).
+Otherwise, the function attempts to read @c count characters from the
+stream @c stream into the buffer starting at @c buffer.
+The number of characters read can be less than @c count, due to
+end-of-file (EOF) or an I/O error.
 
-/* Write formatted output to a stream. */
-JAS_DLLEXPORT int jas_stream_printf(jas_stream_t *stream, const char *fmt, ...);
+@return
+The number of characters read is returned.
+In the case that the number of characters read is less than @c count,
+jas_stream_eof() and/or jas_stream_error() must be used
+to distinguish between:
+<ol>
+<li>a failure due to an I/O error
+<li>a failure due to the read/write limit being exceeded
+<li>EOF.
+</ol>
+TODO/CHECK: can items 1 and 2 be distinguished currently?
 
-/* Write a string to a stream. */
+@warning
+TODO/FIXME/CHECK: jas_stream_error should be true if RWLIMIT exceeded?
+or need a jas_stream_rwlimit predicate?
+
+@warning
+TODO/FIXME: In the future, the type of the count parameter and the
+return type will be changed to size_t.
+*/
+JAS_DLLEXPORT
+unsigned jas_stream_read(jas_stream_t *stream, void *buffer, unsigned count);
+
+/*!
+@brief Attempt to retrieve one or more pending characters of input
+from a stream into a buffer
+without actually removing the characters from the stream.
+
+@param stream
+A pointer to the stream from which to retrieve pending input.
+@param buffer
+A pointer to the start of the buffer.
+@param count
+A count of how many characters to retrieve.
+
+@details
+The extent to which one can peek into the stream is limited.
+Therefore, this function can fail if count is sufficiently large.
+
+@return
+Returns the number of bytes copied to the given buffer, or 0 on error
+or EOF.
+
+@warning
+TODO/FIXME: peeking at EOF should be distinguishable from an I/O error
+*/
+JAS_DLLEXPORT
+unsigned jas_stream_peek(jas_stream_t *stream, void *buffer, size_t count);
+
+/*!
+@brief Write characters from a buffer to a stream.
+@param stream
+A pointer to the stream to which to write data.
+@param buffer
+A pointer to the start of the buffer.
+@param count
+A count of the number of characters to write.
+
+@details
+If @c count is zero, the function has no effect (and therefore cannot fail).
+Otherwise, the function will attempt to write @c count characters
+from the buffer starting at @c buffer to the stream @c stream.
+The number of characters written can be less than @c count due to
+an I/O error or the read/write limit being exceeded.
+
+@return
+Upon success, the number of characters successfully written is returned.
+If an error occurs, the value returned will be less than @c count.
+The jas_stream_error() and jas_stream_rwlimit() function (TODO/CHECK: the latter
+of which does not currently exist?) can be used to distinguish between:
+<ol>
+<li>failure due to an I/O error
+<li>failure due to the read/write limit being exceeded
+</ol>
+
+@warning
+TODO/FIXME:
+The type of the count parameter should be size_t.
+The return type should be size_t.
+*/
+JAS_DLLEXPORT
+unsigned jas_stream_write(jas_stream_t *stream, const void *buffer,
+  unsigned count);
+
+/*!
+@brief Write formatted output to a stream.
+
+@param stream
+A pointer to the stream to which to write output.
+@param format
+A pointer to a format string similar to the printf function in the C standard
+library.
+
+@details
+The function prints the information associated with the format string
+to the specified stream.
+
+@return
+Upon success, the number of characters output to the stream is returned.
+If an error is encountered, a negative value is returned.
+
+@todo
+I think that the return type of int is okay here.
+It is consistent with printf and friends.
+*/
+JAS_DLLEXPORT
+int jas_stream_printf(jas_stream_t *stream, const char *format, ...);
+
+/*!
+@brief Write a string to a stream.
+
+@param stream
+A pointer to the stream to which the string should be written.
+@param s
+A pointer to a null-terminated string for output.
+
+@details
+The null character is not output.
+
+@return
+Upon success, a nonnegative value is returned.
+Upon failure, a negative value is returned.
+*/
 JAS_DLLEXPORT int jas_stream_puts(jas_stream_t *stream, const char *s);
 
-/* Read a line of input from a stream. */
-JAS_DLLEXPORT char *jas_stream_gets(jas_stream_t *stream, char *buf, int bufsize);
+/*!
+@brief Read a line of input from a stream.
 
-/* Look at the next character to be read from a stream without actually
-   removing it from the stream. */
+@param stream
+A pointer to the stream from which to read input.
+@param buffer
+A pointer to the start of the buffer to hold to input to be read.
+@param buffer_size
+The size of the buffer in characters.
+
+@details
+The function reads a line of input from a stream into a buffer.
+If a newline character is read, it is placed in the buffer.
+Since the buffer may be too small to hold the input,
+this operation can fail due to attempted buffer overrun.
+
+@return
+If the operation fails (e.g., due to an I/O error or attempted buffer overrun),
+a null pointer is returned.
+Otherwise, buffer is returned.
+*/
+JAS_DLLEXPORT char *
+jas_stream_gets(jas_stream_t *stream, char *buffer, int buffer_size);
+
+/*!
+@brief Look at the next character to be read from a stream without actually
+removing the character from the stream.
+
+@param stream
+A pointer to the stream to be examined.
+
+@details
+This function examines the next character that would be read from the
+stream and returns this character without actually removing it from the
+stream.
+
+@return
+If the peek operation fails (e.g., due to EOF or I/O error),
+EOF is returned.
+Otherwise, the character that would be next read from the stream
+is returned.
+*/
 #define	jas_stream_peekc(stream) \
 	(((stream)->cnt_ <= 0) ? jas_stream_fillbuf(stream, 0) : \
 	  ((int)(*(stream)->ptr_)))
 
-/* Put a character back on a stream. */
-JAS_DLLEXPORT int jas_stream_ungetc(jas_stream_t *stream, int c);
+/*!
+@brief Put a character back on a stream.
+
+@param stream
+A pointer to the stream to which the character should be put back.
+@param c
+The character to put back.
+
+@details
+The character @c c (which was presumably read previously from the stream
+@c stream) is put back on the stream (as if it had not yet been read).
+In other words, this function undoes the effect of jas_stream_getc().
+It is unspecified what happens if the character put back was not the
+one originally read.
+The number of characters that can be pushed back onto the stream
+for subsequent reading is limited.
+Trying to push back too many characters on a stream will result in an error.
+The approximate limit is given by the value of JAS_STREAM_MAXPUTBACK.
+
+@return
+Upon success, zero is returned.
+If the specified character cannot be pushed back, a negative value is returned.
+*/
+JAS_DLLEXPORT int
+jas_stream_ungetc(jas_stream_t *stream, int c);
 
 /******************************************************************************\
 * Macros/functions for getting/setting the stream position.
 \******************************************************************************/
 
-/* Is it possible to seek on this stream? */
-JAS_ATTRIBUTE_PURE
-JAS_DLLEXPORT int jas_stream_isseekable(jas_stream_t *stream);
+/*!
+@brief Determine if stream supports seeking.
 
-/* Set the current position within the stream. */
-JAS_DLLEXPORT long jas_stream_seek(jas_stream_t *stream, long offset, int origin);
+@param stream
+A pointer to the stream to query.
 
-/* Get the current position within the stream. */
-JAS_ATTRIBUTE_PURE
-JAS_DLLEXPORT long jas_stream_tell(jas_stream_t *stream);
+@details
+The function is a predicate that tests if the underlying file object
+supports seek operations.
 
-/* Seek to the beginning of a stream. */
+@return
+If the underlying file object supports seek operations, a (strictly)
+positive value is returned.
+Otherwise, 0 is returned.
+*/
+JAS_ATTRIBUTE_PURE JAS_DLLEXPORT
+int jas_stream_isseekable(jas_stream_t *stream);
+
+/*!
+@brief Set the current position within the stream.
+
+@param stream
+A pointer to the stream for which to set the current position.
+@param offset
+The new position for the stream.
+@param origin
+The origin to which this new position is relative.
+
+@details
+The origin can be SEEK_CUR, SEEK_SET, or SEEK_END
+in a similar fashion as the fseek function in the C standard library
+(and the lseek function in POSIX).
+
+@return
+Upon success, the new stream position is returned.
+Upon failure, a negative value is returned.
+*/
+JAS_DLLEXPORT
+long jas_stream_seek(jas_stream_t *stream, long offset, int origin);
+
+/*!
+@brief Get the current position within the stream.
+@param stream
+A pointer to the stream whose current position is to be queried.
+
+@details
+The current position of the stream is returned.
+
+@return
+Upon success, the current stream position is returned.
+If an error is encountered, a negative value is returned.
+*/
+JAS_ATTRIBUTE_PURE JAS_DLLEXPORT
+long jas_stream_tell(jas_stream_t *stream);
+
+/*!
+@brief Seek to the beginning of a stream.
+@param stream
+A pointer to the stream whose position is to be set.
+@details
+The stream position is set to the start of the stream.
+This function is equivalent to returning the value
+of jas_stream_seek(stream, 0, SEEK_SET).
+@return
+Upon success, the new stream position is returned.
+Otherwise, a negative value is returned.
+*/
 JAS_DLLEXPORT int jas_stream_rewind(jas_stream_t *stream);
 
 /******************************************************************************\
 * Macros/functions for flushing.
 \******************************************************************************/
 
-/* Flush any pending output to a stream. */
+/*!
+@brief Flush any pending output to a stream.
+@param stream
+A pointer to the stream for which output should be flushed.
+@details
+The function flushes any buffered output to the underlying file object.
+@return
+Upon success, zero is returned.
+Otherwise, a negative value is returned.
+*/
 JAS_DLLEXPORT int jas_stream_flush(jas_stream_t *stream);
 
 /******************************************************************************\
 * Miscellaneous macros/functions.
 \******************************************************************************/
 
-/* Copy data from one stream to another. */
-JAS_DLLEXPORT int jas_stream_copy(jas_stream_t *dst, jas_stream_t *src, int n);
+/*!
+@brief Copy data from one stream to another.
+
+@param destination
+A pointer to the stream that is the destination for the copy.
+@param source
+A pointer to the stream that is the source for the copy.
+@param count
+The number of characters to copy.
+
+@details
+The function copies the specified number of characters from the
+source stream to the destination stream.
+
+@return
+Upon success, 0 is returned; otherwise, -1 is returned.
+
+@todo
+TODO/FIXME: count should probably be a size_t; return type ssize_t?
+*/
+JAS_DLLEXPORT int jas_stream_copy(jas_stream_t *destination, jas_stream_t *source, int count);
 
 #if 0
-/* Display stream contents (for debugging purposes). */
-JAS_DLLEXPORT int jas_stream_display(jas_stream_t *stream, FILE *fp, int n);
+/*!
+@brief Print a hex dump of data read from a stream.
+
+@param stream
+A pointer to the stream from which to read data.
+@param fp
+A pointer to a stdio stream (i.e., FILE) to which to print the hex dump.
+@param count
+The number of characters to include in the hex dump.
+
+@details
+This function prints a hex dump of data read from a stream to a
+stdio stream.
+This function is most likely to be useful for debugging.
+
+@return
+Upon success, 0 is returned.
+Otherwise, a negative value is returned.
+
+@todo
+TODO/FIXME: should count be unsigned int or size_t instead of int?
+*/
+JAS_DLLEXPORT
+int jas_stream_display(jas_stream_t *stream, FILE *fp, int count);
 #endif
 
-/* Consume (i.e., discard) characters from stream. */
-JAS_DLLEXPORT int jas_stream_gobble(jas_stream_t *stream, int n);
+/*!
+@brief Consume (i.e., discard) characters from stream.
 
-/* Write a character multiple times to a stream. */
-JAS_DLLEXPORT int jas_stream_pad(jas_stream_t *stream, int n, int c);
+@param stream
+A pointer to the stream from which to discard data.
+@param count
+The number of characters to discard.
 
-/* Get the size of the file associated with the specified stream.
-  The specified stream must be seekable. */
-JAS_ATTRIBUTE_PURE
-JAS_DLLEXPORT long jas_stream_length(jas_stream_t *stream);
+@details
+This function reads and discards  the specified number of characters from the
+given stream.
+
+@return
+This function returns the number of characters read and discarded.
+If an error or EOF is encountered, the number of characters read
+will be less than count.
+To distinguish EOF from an I/O error, jas_stream_eof() and jas_stream_error()
+can be used.
+
+@warning
+TODO/FIXME: count be size_t and return type should be ssize_t
+*/
+JAS_DLLEXPORT int jas_stream_gobble(jas_stream_t *stream, int count);
+
+/*!
+@brief Write a fill character multiple times to a stream.
+
+@param stream
+A pointer to the stream to which to write.
+@param count
+The number of times to write the fill character to the stream.
+@param value
+The fill character.
+
+@details
+This function writes the given fill character to a stream a
+specified number of times.
+If a count of zero is specified, the function should have no effect.
+
+@return
+The number of times the fill character was written to the stream is
+returned.
+If this value is less than the specified count, an error must have
+occurred.
+
+@todo
+TODO: should the count be size_t; return type maybe size_t?
+*/
+JAS_DLLEXPORT int jas_stream_pad(jas_stream_t *stream, int count, int value);
+
+/*!
+@brief Get the size of the file associated with the specified stream.
+
+@param stream
+
+@details
+This function queries the size (i.e., length) of the underlying file object
+associated with the specified stream.
+The specified stream must be seekable.
+
+@return
+Upon success, the size of the stream is returned.
+If an error occurs, a negative value is returned.
+
+@warning
+TODO/FIXME: the return type should be ssize_t?
+*/
+JAS_ATTRIBUTE_PURE JAS_DLLEXPORT
+long jas_stream_length(jas_stream_t *stream);
 
 /******************************************************************************\
 * Internal functions.
@@ -447,6 +995,7 @@ directly, you will die a horrible, miserable, and painful death! */
 
 /* These prototypes need to be here for the sake of the stream_getc and
 stream_putc macros. */
+/* Library users must not invoke these functions directly. */
 JAS_DLLEXPORT int jas_stream_fillbuf(jas_stream_t *stream, int getflag);
 JAS_DLLEXPORT int jas_stream_flushbuf(jas_stream_t *stream, int c);
 JAS_DLLEXPORT int jas_stream_getc_func(jas_stream_t *stream);
@@ -500,6 +1049,10 @@ static inline int jas_stream_putc_macro(jas_stream_t *stream, jas_uchar c)
 
 	return jas_stream_putc2(stream, c);
 }
+
+/*!
+ * @}
+ */
 
 #ifdef __cplusplus
 }

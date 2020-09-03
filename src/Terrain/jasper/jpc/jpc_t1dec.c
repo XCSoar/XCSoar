@@ -287,7 +287,7 @@ if (bpno < 0) {
 				JAS_UNREACHABLE();
 			}
 			/* Do we need to reset after each coding pass? */
-			if (ccp->cblkctx & JPC_COX_RESET) {
+			if ((ccp->cblkctx & JPC_COX_RESET) && mqdec) {
 				jpc_mqdec_setctxs(mqdec, JPC_NUMCTXS, jpc_mqctxs);
 			}
 

@@ -1,10 +1,3 @@
-/*
- * Copyright (c) 1999-2000 Image Power, Inc. and the University of
- *   British Columbia.
- * Copyright (c) 2001-2004 Michael David Adams.
- * All rights reserved.
- */
-
 /* __START_OF_JASPER_LICENSE__
  * 
  * JasPer License Version 2.0
@@ -61,86 +54,47 @@
  * __END_OF_JASPER_LICENSE__
  */
 
-/*
- * Tree-Structured Filter Bank (TSFB) Library
- *
- * $Id$
+/*!
+ * @file jas_compiler.h
+ * @brief Compiler-related macros.
  */
 
-#ifndef JPC_TSFB_H
-#define JPC_TSFB_H
+#ifndef JAS_COMPILER_H
+#define JAS_COMPILER_H
 
-/******************************************************************************\
-* Includes.
-\******************************************************************************/
-
-#include "jasper/jas_seq.h"
-#include "jasper/jas_types.h"
-
-#include "jpc_fix.h"
-#include "jpc_qmfb.h"
-
-#include "Compiler.h"
-
-/******************************************************************************\
-* Constants.
-\******************************************************************************/
-
-#define	JPC_TSFB_MAXBANDS	(JPC_TSFB_MAXDEPTH * 3 + 1)
-#define	JPC_TSFB_MAXDEPTH	32
-#define	JPC_TSFB_RITIMODE	JPC_QMFB1D_RITIMODE
-
-enum jpc_tsfb_orient {
-	JPC_TSFB_LL = 0,
-	JPC_TSFB_LH = 1,
-	JPC_TSFB_HL = 2,
-	JPC_TSFB_HH = 3,
-};
-
-/******************************************************************************\
-* Types.
-\******************************************************************************/
-
-typedef struct {
-	int xstart;
-	int ystart;
-	int xend;
-	int yend;
-	enum jpc_tsfb_orient orient;
-	int locxstart;
-	int locystart;
-	int locxend;
-	int locyend;
-	jpc_fix_t synenergywt;
-} jpc_tsfb_band_t;
-
-typedef struct {
-	unsigned numlvls;
-	const jpc_qmfb2d_t *qmfb;
-} jpc_tsfb_t;
-
-/******************************************************************************\
-* Functions.
-\******************************************************************************/
-
-/* Create a TSFB. */
-gcc_malloc
-jpc_tsfb_t *jpc_cod_gettsfb(unsigned qmfbid, unsigned numlevels);
-
-/* Destroy a TSFB. */
-void jpc_tsfb_destroy(jpc_tsfb_t *tsfb);
-
-#ifdef JAS_ENABLE_ENCODER
-/* Perform analysis. */
-int jpc_tsfb_analyze(jpc_tsfb_t *tsfb, jas_seq2d_t *x);
+#ifdef _MSC_VER
+#ifndef __cplusplus
+#undef inline
+#define inline __inline
+#endif
 #endif
 
-/* Perform synthesis. */
-int jpc_tsfb_synthesize(jpc_tsfb_t *tsfb, jas_seq2d_t *x);
+#ifdef __GNUC__
+#define JAS_DEPRECATED __attribute__((deprecated))
+#define JAS_ATTRIBUTE_CONST __attribute__((const))
+#define JAS_ATTRIBUTE_PURE __attribute__((pure))
+#define JAS_FORCE_INLINE inline __attribute__((always_inline))
+#define JAS_UNREACHABLE() __builtin_unreachable()
+#define JAS_LIKELY(x) __builtin_expect (!!(x), 1)
+#define JAS_UNLIKELY(x) __builtin_expect (!!(x), 0)
+#else
+#define JAS_DEPRECATED
+#define JAS_ATTRIBUTE_CONST
+#define JAS_ATTRIBUTE_PURE
+#define JAS_FORCE_INLINE inline
+#define JAS_UNREACHABLE()
+#define JAS_LIKELY(x) (x)
+#define JAS_UNLIKELY(x) (x)
+#endif
 
-/* Get band information for a TSFB. */
-int jpc_tsfb_getbands(jpc_tsfb_t *tsfb, uint_fast32_t xstart,
-  uint_fast32_t ystart, uint_fast32_t xend, uint_fast32_t yend,
-  jpc_tsfb_band_t *bands);
+#ifdef __clang__
+#define JAS_ATTRIBUTE_DISABLE_USAN \
+  __attribute__((no_sanitize("undefined")))
+#elif defined(__GNUC__) && __GNUC__ >= 6
+#define JAS_ATTRIBUTE_DISABLE_USAN \
+  __attribute__((no_sanitize_undefined))
+#else
+#define JAS_ATTRIBUTE_DISABLE_USAN
+#endif
 
 #endif

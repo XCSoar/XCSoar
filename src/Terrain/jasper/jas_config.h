@@ -1,13 +1,7 @@
 #ifndef JAS_CONFIG_H
 #define JAS_CONFIG_H
 
-#define JAS_CONFIGURE
-
-#if defined(_MSC_VER)
-#undef JAS_CONFIGURE
-#endif
-
-#if 1
+#include <jasper/jas_compiler.h>
 
 #define JAS_VERSION "unknown"
 #define JAS_ENABLE_32BIT 1
@@ -25,83 +19,8 @@
 #define JAS_DLLEXPORT
 #define JAS_DLLLOCAL
 
-#else
-
-#if defined(JAS_CONFIGURE)
-
-/* This preprocessor symbol identifies the version of JasPer. */
-#define	JAS_VERSION "@JAS_VERSION@"
-
-@JAS_HAVE_FCNTL_H@
-@JAS_HAVE_IO_H@
-@JAS_HAVE_UNISTD_H@
-@JAS_HAVE_WINDOWS_H@
-@JAS_HAVE_SYS_TIME_H@
-@JAS_HAVE_SYS_TYPES_H@
-
-@JAS_HAVE_GETTIMEOFDAY@
-@JAS_HAVE_GETRUSAGE@
-
-#define JAS_HAVE_SNPRINTF	1
-
-#else
-
-/* We are not using a configure-based build. */
-/* This probably means we are building with MSVC under Windows. */
-
-#define JAS_VERSION "unknown"
-#define JAS_HAVE_FCNTL_H		1
-#define JAS_HAVE_IO_H			1
-#undef JAS_HAVE_UNISTD_H
-#define JAS_HAVE_WINDOWS_H		1
-#undef JAS_HAVE_SYS_TIME_H
-#define JAS_HAVE_SYS_TYPES_H	1
-#undef JAS_HAVE_GETTIMEOFDAY
-#undef JAS_HAVE_GETRUSAGE
-
-#undef JAS_HAVE_SNPRINTF
-
-// I don't think that this should be needed anymore.
-#if 1
-#ifndef __cplusplus
-#undef inline
-#define inline __inline
-#endif
-#endif
-
-#define ssize_t long long
-
-#endif
-#endif
-
 #if !defined(JAS_DEC_DEFAULT_MAX_SAMPLES)
 #define JAS_DEC_DEFAULT_MAX_SAMPLES (64 * ((size_t) 1048576))
-#endif
-
-#ifdef __GNUC__
-#define JAS_ATTRIBUTE_CONST __attribute__((const))
-#define JAS_ATTRIBUTE_PURE __attribute__((pure))
-#define JAS_FORCE_INLINE inline __attribute__((always_inline))
-#define JAS_UNREACHABLE() __builtin_unreachable()
-#define JAS_LIKELY(x) __builtin_expect (!!(x), 1)
-#define JAS_UNLIKELY(x) __builtin_expect (!!(x), 0)
-#else
-#define JAS_ATTRIBUTE_CONST
-#define JAS_ATTRIBUTE_PURE
-#define JAS_FORCE_INLINE inline
-#define JAS_UNREACHABLE()
-#define JAS_LIKELY(x) (x)
-#define JAS_UNLIKELY(x) (x)
-#endif
-
-#if defined(__GNUC__) && !defined(__clang__)
-#define JAS_ATTRIBUTE_DISABLE_USAN \
-  __attribute__((no_sanitize_undefined))
-#elif defined(__clang__)
-#define JAS_ATTRIBUTE_DISABLE_USAN \
-  __attribute__((no_sanitize("undefined")))
-#else
-#define JAS_ATTRIBUTE_DISABLE_USAN
 #endif
 
 #define EXCLUDE_MIF_SUPPORT

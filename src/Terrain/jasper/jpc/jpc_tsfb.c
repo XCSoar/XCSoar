@@ -80,10 +80,10 @@
 
 #include <stdlib.h>
 
-#ifdef ENABLE_JASPER_ENCODE
+#ifdef JAS_ENABLE_ENCODER
 static int jpc_tsfb_analyze2(jpc_tsfb_t *tsfb, jpc_fix_t *a, int xstart, int ystart,
   unsigned width, unsigned height, unsigned stride, unsigned numlvls);
-#endif /* ENABLE_JASPER_ENCODE */
+#endif
 
 static int jpc_tsfb_synthesize2(jpc_tsfb_t *tsfb, jpc_fix_t *a, int xstart, int ystart,
   unsigned width, unsigned height, unsigned stride, unsigned numlvls);
@@ -125,7 +125,8 @@ void jpc_tsfb_destroy(jpc_tsfb_t *tsfb)
 	free(tsfb);
 }
 
-#ifdef ENABLE_JASPER_ENCODE
+#ifdef JAS_ENABLE_ENCODER
+
 int jpc_tsfb_analyze(jpc_tsfb_t *tsfb, jas_seq2d_t *a)
 {
 	if (tsfb->numlvls == 0)
@@ -157,7 +158,8 @@ static int jpc_tsfb_analyze2(jpc_tsfb_t *tsfb, jpc_fix_t *a, int xstart, int yst
 				 JPC_CEILDIVPOW2(ystart + height, 1) - JPC_CEILDIVPOW2(ystart, 1),
 				 stride, numlvls - 1);
 }
-#endif /* ENABLE_JASPER_ENCODE */
+
+#endif /* JAS_ENABLE_ENCODER */
 
 int jpc_tsfb_synthesize(jpc_tsfb_t *tsfb, jas_seq2d_t *a)
 {

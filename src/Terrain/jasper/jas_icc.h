@@ -59,6 +59,11 @@
  * __END_OF_JASPER_LICENSE__
  */
 
+/*!
+ * @file jas_icc.h
+ * @brief ICC Profile
+ */
+
 #ifndef JAS_ICC_H
 #define	JAS_ICC_H
 
@@ -301,7 +306,9 @@ typedef struct {
 	void (*destroy)(struct jas_iccattrval_s *);
 	int (*copy)(struct jas_iccattrval_s *, const struct jas_iccattrval_s *);
 	int (*input)(struct jas_iccattrval_s *, jas_stream_t *, unsigned);
+#ifdef JAS_ENABLE_ENCODER
 	int (*output)(struct jas_iccattrval_s *, jas_stream_t *);
+#endif
 	unsigned (*getsize)(const struct jas_iccattrval_s *);
 } jas_iccattrvalops_t;
 

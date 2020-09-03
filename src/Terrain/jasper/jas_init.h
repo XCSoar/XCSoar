@@ -59,6 +59,11 @@
  * __END_OF_JASPER_LICENSE__
  */
 
+/*!
+ * @file jas_init.h
+ * @brief JasPer Initialization/Cleanup Code
+ */
+
 #ifndef JAS_INIT_H
 #define JAS_INIT_H
 
@@ -73,8 +78,10 @@ extern "C" {
 * Functions.
 \******************************************************************************/
 
+JAS_DEPRECATED
 JAS_DLLEXPORT int jas_init(void);
 
+JAS_DEPRECATED
 JAS_DLLEXPORT void jas_cleanup(void);
 
 #ifdef __cplusplus

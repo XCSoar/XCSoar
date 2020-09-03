@@ -61,10 +61,9 @@
  * __END_OF_JASPER_LICENSE__
  */
 
-/*
- * Sequence/Matrix Library
- *
- * $Id$
+/*!
+ * @file jas_seq.h
+ * @brief Sequence/Matrix Library
  */
 
 #ifndef JAS_SEQ_H

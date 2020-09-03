@@ -59,10 +59,9 @@
  * __END_OF_JASPER_LICENSE__
  */
 
-/*
- * Debugging-Related Code
- *
- * $Id$
+/*!
+ * @file jas_debug.h
+ * @brief JasPer Debugging-Related Functionality
  */
 
 #ifndef JAS_DEBUG_H

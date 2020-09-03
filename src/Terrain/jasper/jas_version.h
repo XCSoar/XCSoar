@@ -61,8 +61,9 @@
  * __END_OF_JASPER_LICENSE__
  */
 
-/*
- * $Id$
+/*!
+ * @file jas_version.h
+ * @brief JasPer Version
  */
 
 #ifndef JAS_VERSION_H
