@@ -80,7 +80,9 @@
 
 #include "jasper/jas_types.h"
 #include "jasper/jas_math.h"
+#ifdef ENABLE_JASPER_IMAGE
 #include "jasper/jas_tvp.h"
+#endif
 #include "jasper/jas_malloc.h"
 #include "jasper/jas_debug.h"
 
