@@ -99,9 +99,9 @@ typedef struct {
 
 static const jpc_mstabent_t *jpc_mstab_lookup(int id);
 
-#ifdef ENABLE_JASPER_ENCODE
+#ifdef JAS_ENABLE_ENCODER
 static int jpc_poc_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out);
-#endif /* ENABLE_JASPER_ENCODE */
+#endif
 static int jpc_poc_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in);
 static void jpc_poc_destroyparms(jpc_ms_t *ms);
 
@@ -121,7 +121,7 @@ static int jpc_ppt_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in
 static int jpc_crg_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in);
 static int jpc_com_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in);
 
-#ifdef ENABLE_JASPER_ENCODE
+#ifdef JAS_ENABLE_ENCODER
 static int jpc_sot_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out);
 static int jpc_siz_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out);
 static int jpc_cod_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out);
@@ -137,7 +137,7 @@ static int jpc_ppt_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 #endif /* ENABLE_JASPER_PPM */
 static int jpc_crg_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out);
 static int jpc_com_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out);
-#endif /* ENABLE_JASPER_ENCODE */
+#endif /* JAS_ENABLE_ENCODER */
 
 static void jpc_siz_destroyparms(jpc_ms_t *ms);
 static void jpc_qcd_destroyparms(jpc_ms_t *ms);
@@ -155,48 +155,212 @@ static void jpc_com_destroyparms(jpc_ms_t *ms);
 static void jpc_qcx_destroycompparms(jpc_qcxcp_t *compparms);
 static int jpc_qcx_getcompparms(jpc_qcxcp_t *compparms, jpc_cstate_t *cstate,
   jas_stream_t *in, uint_fast16_t len);
-#ifdef ENABLE_JASPER_ENCODE
+#ifdef JAS_ENABLE_ENCODER
 static int jpc_qcx_putcompparms(jpc_qcxcp_t *compparms, jpc_cstate_t *cstate,
   jas_stream_t *out);
-#endif /* ENABLE_JASPER_ENCODE */
+#endif
 static void jpc_cox_destroycompparms(jpc_coxcp_t *compparms);
 static int jpc_cox_getcompparms(jpc_ms_t *ms, jpc_cstate_t *cstate,
   jas_stream_t *in, int prtflag, jpc_coxcp_t *compparms);
-#ifdef ENABLE_JASPER_ENCODE
+#ifdef JAS_ENABLE_ENCODER
 static int jpc_cox_putcompparms(jpc_ms_t *ms, jpc_cstate_t *cstate,
   jas_stream_t *out, int prtflag, jpc_coxcp_t *compparms);
-#endif /* ENABLE_JASPER_ENCODE */
+#endif
 
 /******************************************************************************\
 * Global data.
 \******************************************************************************/
 
 static const jpc_mstabent_t jpc_mstab[] = {
-	{JPC_MS_SOC, "SOC", {0, 0}},
-	{JPC_MS_SOT, "SOT", {0, jpc_sot_getparms, }},
-	{JPC_MS_SOD, "SOD", {0, 0}},
-	{JPC_MS_EOC, "EOC", {0, 0}},
-	{JPC_MS_SIZ, "SIZ", {jpc_siz_destroyparms, jpc_siz_getparms, }},
-	{JPC_MS_COD, "COD", {jpc_cod_destroyparms, jpc_cod_getparms, }},
-	{JPC_MS_COC, "COC", {jpc_coc_destroyparms, jpc_coc_getparms, }},
-	{JPC_MS_RGN, "RGN", {0, jpc_rgn_getparms, }},
-	{JPC_MS_QCD, "QCD", {jpc_qcd_destroyparms, jpc_qcd_getparms, }},
-	{JPC_MS_QCC, "QCC", {jpc_qcc_destroyparms, jpc_qcc_getparms, }},
-	{JPC_MS_POC, "POC", {jpc_poc_destroyparms, jpc_poc_getparms, }},
-	{JPC_MS_TLM, "TLM", {jpc_unk_destroyparms, jpc_unk_getparms}},
-	{JPC_MS_PLM, "PLM", {jpc_unk_destroyparms, jpc_unk_getparms}},
+	{
+		JPC_MS_SOC, "SOC",
+		{
+			0, 0,
+#ifdef JAS_ENABLE_ENCODER
+			0,
+#endif
+		},
+	},
+	{
+		JPC_MS_SOT, "SOT",
+		{
+			0,
+			jpc_sot_getparms,
+#ifdef JAS_ENABLE_ENCODER
+			jpc_sot_putparms,
+#endif
+		},
+	},
+	{
+		JPC_MS_SOD, "SOD",
+		{
+			0, 0,
+#ifdef JAS_ENABLE_ENCODER
+			0,
+#endif
+		},
+	},
+	{
+		JPC_MS_EOC, "EOC",
+		{
+			0, 0,
+#ifdef JAS_ENABLE_ENCODER
+			0,
+#endif
+		},
+	},
+	{
+		JPC_MS_SIZ, "SIZ",
+		{
+			jpc_siz_destroyparms,
+			jpc_siz_getparms,
+#ifdef JAS_ENABLE_ENCODER
+			jpc_siz_putparms,
+#endif
+		},
+	},
+	{
+		JPC_MS_COD, "COD",
+		{
+			jpc_cod_destroyparms,
+			jpc_cod_getparms,
+#ifdef JAS_ENABLE_ENCODER
+			jpc_cod_putparms,
+#endif
+		},
+	},
+	{
+		JPC_MS_COC, "COC",
+		{
+			jpc_coc_destroyparms,
+			jpc_coc_getparms,
+#ifdef JAS_ENABLE_ENCODER
+			jpc_coc_putparms,
+#endif
+		},
+	},
+	{
+		JPC_MS_RGN, "RGN",
+		{
+			0,
+			jpc_rgn_getparms,
+#ifdef JAS_ENABLE_ENCODER
+			jpc_rgn_putparms,
+#endif
+		},
+	},
+	{
+		JPC_MS_QCD, "QCD",
+		{
+			jpc_qcd_destroyparms,
+			jpc_qcd_getparms,
+#ifdef JAS_ENABLE_ENCODER
+			jpc_qcd_putparms,
+#endif
+		},
+	},
+	{
+		JPC_MS_QCC, "QCC", {
+			jpc_qcc_destroyparms,
+			jpc_qcc_getparms,
+#ifdef JAS_ENABLE_ENCODER
+			jpc_qcc_putparms,
+#endif
+		},
+	},
+	{
+		JPC_MS_POC, "POC",
+		{
+			jpc_poc_destroyparms,
+			jpc_poc_getparms,
+#ifdef JAS_ENABLE_ENCODER
+			jpc_poc_putparms,
+#endif
+		},
+	},
+	{
+		JPC_MS_TLM, "TLM", {
+			jpc_unk_destroyparms,
+			jpc_unk_getparms,
+#ifdef JAS_ENABLE_ENCODER
+			jpc_unk_putparms,
+#endif
+		},
+	},
+	{
+		JPC_MS_PLM, "PLM", {
+			jpc_unk_destroyparms,
+			jpc_unk_getparms,
+#ifdef JAS_ENABLE_ENCODER
+			jpc_unk_putparms,
+#endif
+		},
+	},
 #ifdef ENABLE_JASPER_PPM
-	{JPC_MS_PPM, "PPM", {jpc_ppm_destroyparms, jpc_ppm_getparms, }},
-	{JPC_MS_PPT, "PPT", {jpc_ppt_destroyparms, jpc_ppt_getparms, }},
+	{
+		JPC_MS_PPM, "PPM", {
+			jpc_ppm_destroyparms,
+			jpc_ppm_getparms,
+#ifdef JAS_ENABLE_ENCODER
+			jpc_ppm_putparms,
+#endif
+		},
+	},
+	{
+		JPC_MS_PPT, "PPT", {
+			jpc_ppt_destroyparms,
+			jpc_ppt_getparms,
+#ifdef JAS_ENABLE_ENCODER
+			jpc_ppt_putparms,
+#endif
+		},
+	},
 #endif /* ENABLE_JASPER_PPM */
-	{JPC_MS_SOP, "SOP", {0, jpc_sop_getparms}},
-	{JPC_MS_EPH, "EPH", {0, 0}},
-	{JPC_MS_CRG, "CRG", {jpc_crg_destroyparms, jpc_crg_getparms,
-	  }},
-	{JPC_MS_COM, "COM", {jpc_com_destroyparms, jpc_com_getparms,
-	  }},
-	{-1, "UNKNOWN",  {jpc_unk_destroyparms, jpc_unk_getparms,
-	  }}
+	{
+		JPC_MS_SOP, "SOP", {
+			0,
+			jpc_sop_getparms,
+#ifdef JAS_ENABLE_ENCODER
+			jpc_sop_putparms,
+#endif
+		},
+	},
+	{
+		JPC_MS_EPH, "EPH", {
+			0, 0,
+#ifdef JAS_ENABLE_ENCODER
+			0,
+#endif
+		},
+	},
+	{
+		JPC_MS_CRG, "CRG", {
+			jpc_crg_destroyparms,
+			jpc_crg_getparms,
+#ifdef JAS_ENABLE_ENCODER
+			jpc_crg_putparms,
+#endif
+		},
+	},
+	{
+		JPC_MS_COM, "COM", {
+			jpc_com_destroyparms,
+			jpc_com_getparms,
+#ifdef JAS_ENABLE_ENCODER
+			jpc_com_putparms,
+#endif
+		},
+	},
+	{
+		-1, "UNKNOWN",
+		{
+			jpc_unk_destroyparms,
+			jpc_unk_getparms,
+#ifdef JAS_ENABLE_ENCODER
+			jpc_unk_putparms,
+#endif
+		},
+	}
 };
 
 /******************************************************************************\
@@ -305,7 +469,7 @@ jpc_ms_t *jpc_getms(jas_stream_t *in, jpc_cstate_t *cstate)
 	return ms;
 }
 
-#ifdef ENABLE_JASPER_ENCODE
+#ifdef JAS_ENABLE_ENCODER
 /* Write a marker segment to a stream. */
 int jpc_putms(jas_stream_t *out, jpc_cstate_t *cstate, jpc_ms_t *ms)
 {
@@ -354,7 +518,7 @@ int jpc_putms(jas_stream_t *out, jpc_cstate_t *cstate, jpc_ms_t *ms)
 
 	return 0;
 }
-#endif /* ENABLE_JASPER_ENCODE */
+#endif /* JAS_ENABLE_ENCODER */
 
 /******************************************************************************\
 * Marker segment operations.
@@ -412,7 +576,7 @@ static int jpc_sot_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in
 	return 0;
 }
 
-#ifdef ENABLE_JASPER_ENCODE
+#ifdef JAS_ENABLE_ENCODER
 static int jpc_sot_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out)
 {
 	jpc_sot_t *sot = &ms->parms.sot;
@@ -428,7 +592,7 @@ static int jpc_sot_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	}
 	return 0;
 }
-#endif /* ENABLE_JASPER_ENCODE */
+#endif /* JAS_ENABLE_ENCODER */
 
 /******************************************************************************\
 * SIZ marker segment operations.
@@ -538,7 +702,7 @@ error:
 	return -1;
 }
 
-#ifdef ENABLE_JASPER_ENCODE
+#ifdef JAS_ENABLE_ENCODER
 static int jpc_siz_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out)
 {
 	jpc_siz_t *siz = &ms->parms.siz;
@@ -571,7 +735,7 @@ static int jpc_siz_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	}
 	return 0;
 }
-#endif /* ENABLE_JASPER_ENCODE */
+#endif /* JAS_ENABLE_ENCODER */
 
 /******************************************************************************\
 * COD marker segment operations.
@@ -608,7 +772,7 @@ static int jpc_cod_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in
 	return 0;
 }
 
-#ifdef ENABLE_JASPER_ENCODE
+#ifdef JAS_ENABLE_ENCODER
 static int jpc_cod_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out)
 {
 	jpc_cod_t *cod = &ms->parms.cod;
@@ -626,7 +790,7 @@ static int jpc_cod_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	}
 	return 0;
 }
-#endif /* ENABLE_JASPER_ENCODE */
+#endif /* JAS_ENABLE_ENCODER */
 
 #ifdef ENABLE_JASPER_DUMP
 static int jpc_cod_dumpparms(jpc_ms_t *ms, FILE *out)
@@ -689,7 +853,7 @@ static int jpc_coc_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in
 	return 0;
 }
 
-#ifdef ENABLE_JASPER_ENCODE
+#ifdef JAS_ENABLE_ENCODER
 static int jpc_coc_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out)
 {
 	jpc_coc_t *coc = &ms->parms.coc;
@@ -712,7 +876,7 @@ static int jpc_coc_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	}
 	return 0;
 }
-#endif /* ENABLE_JASPER_ENCODE */
+#endif
 
 /******************************************************************************\
 * COD/COC marker segment operation helper functions.
@@ -772,7 +936,7 @@ error:
 	return -1;
 }
 
-#ifdef ENABLE_JASPER_ENCODE
+#ifdef JAS_ENABLE_ENCODER
 static int jpc_cox_putcompparms(jpc_ms_t *ms, jpc_cstate_t *cstate,
   jas_stream_t *out, int prtflag, jpc_coxcp_t *compparms)
 {
@@ -801,7 +965,7 @@ static int jpc_cox_putcompparms(jpc_ms_t *ms, jpc_cstate_t *cstate,
 	}
 	return 0;
 }
-#endif /* ENABLE_JASPER_ENCODE */
+#endif /* JAS_ENABLE_ENCODER */
 
 /******************************************************************************\
 * RGN marker segment operations.
@@ -828,7 +992,7 @@ static int jpc_rgn_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in
 	return 0;
 }
 
-#ifdef ENABLE_JASPER_ENCODE
+#ifdef JAS_ENABLE_ENCODER
 static int jpc_rgn_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out)
 {
 	jpc_rgn_t *rgn = &ms->parms.rgn;
@@ -847,7 +1011,7 @@ static int jpc_rgn_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	}
 	return 0;
 }
-#endif /* ENABLE_JASPER_ENCODE */
+#endif
 
 /******************************************************************************\
 * QCD marker segment operations.
@@ -865,13 +1029,13 @@ static int jpc_qcd_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in
 	return jpc_qcx_getcompparms(compparms, cstate, in, ms->len);
 }
 
-#ifdef ENABLE_JASPER_ENCODE
+#ifdef JAS_ENABLE_ENCODER
 static int jpc_qcd_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out)
 {
 	jpc_qcxcp_t *compparms = &ms->parms.qcd.compparms;
 	return jpc_qcx_putcompparms(compparms, cstate, out);
 }
-#endif /* ENABLE_JASPER_ENCODE */
+#endif /* JAS_ENABLE_ENCODER */
 
 /******************************************************************************\
 * QCC marker segment operations.
@@ -911,7 +1075,7 @@ static int jpc_qcc_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in
 	return 0;
 }
 
-#ifdef ENABLE_JASPER_ENCODE
+#ifdef JAS_ENABLE_ENCODER
 static int jpc_qcc_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out)
 {
 	jpc_qcc_t *qcc = &ms->parms.qcc;
@@ -929,7 +1093,7 @@ static int jpc_qcc_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	}
 	return 0;
 }
-#endif /* ENABLE_JASPER_ENCODE */
+#endif /* JAS_ENABLE_ENCODER */
 
 /******************************************************************************\
 * QCD/QCC marker segment helper functions.
@@ -1006,7 +1170,7 @@ static int jpc_qcx_getcompparms(jpc_qcxcp_t *compparms, jpc_cstate_t *cstate,
 	return 0;
 }
 
-#ifdef ENABLE_JASPER_ENCODE
+#ifdef JAS_ENABLE_ENCODER
 static int jpc_qcx_putcompparms(jpc_qcxcp_t *compparms, jpc_cstate_t *cstate,
   jas_stream_t *out)
 {
@@ -1032,7 +1196,7 @@ static int jpc_qcx_putcompparms(jpc_qcxcp_t *compparms, jpc_cstate_t *cstate,
 	}
 	return 0;
 }
-#endif /* ENABLE_JASPER_ENCODE */
+#endif /* JAS_ENABLE_ENCODER */
 
 /******************************************************************************\
 * SOP marker segment operations.
@@ -1051,7 +1215,7 @@ static int jpc_sop_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in
 	return 0;
 }
 
-#ifdef ENABLE_JASPER_ENCODE
+#ifdef JAS_ENABLE_ENCODER
 static int jpc_sop_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out)
 {
 	jpc_sop_t *sop = &ms->parms.sop;
@@ -1064,7 +1228,7 @@ static int jpc_sop_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	}
 	return 0;
 }
-#endif /* ENABLE_JASPER_ENCODE */
+#endif
 
 #ifdef ENABLE_JASPER_PPM
 /******************************************************************************\
@@ -1113,6 +1277,7 @@ error:
 	return -1;
 }
 
+#ifdef JAS_ENABLE_ENCODER
 static int jpc_ppm_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out)
 {
 	jpc_ppm_t *ppm = &ms->parms.ppm;
@@ -1125,6 +1290,7 @@ static int jpc_ppm_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	}
 	return 0;
 }
+#endif /* JAS_ENABLE_ENCODER */
 
 /******************************************************************************\
 * PPT marker segment operations.
@@ -1158,7 +1324,7 @@ static int jpc_ppt_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in
 		if (!(ppt->data = jas_malloc(ppt->len))) {
 			goto error;
 		}
-		if (jas_stream_read(in, (char *) ppt->data, ppt->len) != JAS_CAST(int, ppt->len)) {
+		if (jas_stream_read(in, (char *) ppt->data, ppt->len) != ppt->len) {
 			goto error;
 		}
 	} else {
@@ -1171,6 +1337,7 @@ error:
 	return -1;
 }
 
+#ifdef JAS_ENABLE_ENCODER
 static int jpc_ppt_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out)
 {
 	jpc_ppt_t *ppt = &ms->parms.ppt;
@@ -1181,11 +1348,13 @@ static int jpc_ppt_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	if (jpc_putuint8(out, ppt->ind)) {
 		return -1;
 	}
-	if (jas_stream_write(out, (char *) ppt->data, ppt->len) != JAS_CAST(int, ppt->len)) {
+	if (jas_stream_write(out, (char *) ppt->data, ppt->len) != ppt->len) {
 		return -1;
 	}
 	return 0;
 }
+#endif /* JAS_ENABLE_ENCODER */
+
 #endif /* ENABLE_JASPER_PPM */
 
 /******************************************************************************\
@@ -1255,7 +1424,7 @@ error:
 	return -1;
 }
 
-#ifdef ENABLE_JASPER_ENCODE
+#ifdef JAS_ENABLE_ENCODER
 static int jpc_poc_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out)
 {
 	jpc_poc_t *poc = &ms->parms.poc;
@@ -1278,7 +1447,7 @@ static int jpc_poc_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	}
 	return 0;
 }
-#endif /* ENABLE_JASPER_ENCODE */
+#endif /* JAS_ENABLE_ENCODER */
 
 /******************************************************************************\
 * CRG marker segment operations.
@@ -1312,7 +1481,7 @@ static int jpc_crg_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in
 	return 0;
 }
 
-#ifdef ENABLE_JASPER_ENCODE
+#ifdef JAS_ENABLE_ENCODER
 static int jpc_crg_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out)
 {
 	jpc_crg_t *crg = &ms->parms.crg;
@@ -1331,7 +1500,7 @@ static int jpc_crg_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	}
 	return 0;
 }
-#endif /* ENABLE_JASPER_ENCODE */
+#endif /* JAS_ENABLE_ENCODER */
 
 /******************************************************************************\
 * Operations for COM marker segment.
@@ -1360,7 +1529,7 @@ static int jpc_com_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in
 		if (!(com->data = jas_malloc(com->len))) {
 			return -1;
 		}
-		if (jas_stream_read(in, com->data, com->len) != JAS_CAST(int, com->len)) {
+		if (jas_stream_read(in, com->data, com->len) != com->len) {
 			return -1;
 		}
 	} else {
@@ -1369,7 +1538,7 @@ static int jpc_com_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in
 	return 0;
 }
 
-#ifdef ENABLE_JASPER_ENCODE
+#ifdef JAS_ENABLE_ENCODER
 static int jpc_com_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out)
 {
 	jpc_com_t *com = &ms->parms.com;
@@ -1380,12 +1549,12 @@ static int jpc_com_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	if (jpc_putuint16(out, com->regid)) {
 		return -1;
 	}
-	if (jas_stream_write(out, com->data, com->len) != JAS_CAST(int, com->len)) {
+	if (jas_stream_write(out, com->data, com->len) != com->len) {
 		return -1;
 	}
 	return 0;
 }
-#endif /* ENABLE_JASPER_ENCODE */
+#endif /* JAS_ENABLE_ENCODER */
 
 /******************************************************************************\
 * Operations for unknown types of marker segments.
@@ -1412,8 +1581,7 @@ static int jpc_unk_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in
 		if (!(unk->data = jas_alloc2(ms->len, sizeof(unsigned char)))) {
 			return -1;
 		}
-		if (jas_stream_read(in, (char *) unk->data, ms->len) !=
-		  JAS_CAST(int, ms->len)) {
+		if (jas_stream_read(in, (char *) unk->data, ms->len) != ms->len) {
 			jas_free(unk->data);
 			return -1;
 		}
@@ -1425,7 +1593,7 @@ static int jpc_unk_getparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *in
 	return 0;
 }
 
-#ifdef ENABLE_JASPER_ENCODE
+#ifdef JAS_ENABLE_ENCODER
 static int jpc_unk_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *out)
 {
 	/* Eliminate compiler warning about unused variables. */
@@ -1437,7 +1605,7 @@ static int jpc_unk_putparms(jpc_ms_t *ms, jpc_cstate_t *cstate, jas_stream_t *ou
 	  type of marker segment.  Return with an error indication.  */
 	return -1;
 }
-#endif /* ENABLE_JASPER_ENCODE */
+#endif /* JAS_ENABLE_ENCODER */
 
 /******************************************************************************\
 * Primitive I/O operations.
@@ -1465,19 +1633,10 @@ int jpc_putuint8(jas_stream_t *out, uint_fast8_t val)
 
 int jpc_getuint16(jas_stream_t *in, uint_fast16_t *val)
 {
-	uint_fast16_t v;
-	int c;
-	if ((c = jas_stream_getc(in)) == EOF) {
+	jas_uchar buffer[2];
+	if (jas_stream_read(in, buffer, sizeof(buffer)) != sizeof(buffer))
 		return -1;
-	}
-	v = c;
-	if ((c = jas_stream_getc(in)) == EOF) {
-		return -1;
-	}
-	v = (v << 8) | c;
-	if (val) {
-		*val = v;
-	}
+	*val = (uint_fast16_t)buffer[0] << 8 | (uint_fast16_t)buffer[1];
 	return 0;
 }
 
@@ -1492,27 +1651,11 @@ int jpc_putuint16(jas_stream_t *out, uint_fast16_t val)
 
 int jpc_getuint32(jas_stream_t *in, uint_fast32_t *val)
 {
-	uint_fast32_t v;
-	int c;
-	if ((c = jas_stream_getc(in)) == EOF) {
+	jas_uchar buffer[4];
+	if (jas_stream_read(in, buffer, sizeof(buffer)) != sizeof(buffer))
 		return -1;
-	}
-	v = c;
-	if ((c = jas_stream_getc(in)) == EOF) {
-		return -1;
-	}
-	v = (v << 8) | c;
-	if ((c = jas_stream_getc(in)) == EOF) {
-		return -1;
-	}
-	v = (v << 8) | c;
-	if ((c = jas_stream_getc(in)) == EOF) {
-		return -1;
-	}
-	v = (v << 8) | c;
-	if (val) {
-		*val = v;
-	}
+	*val = (uint_fast32_t)buffer[0] << 24 | (uint_fast32_t)buffer[1] << 16
+		| (uint_fast32_t)buffer[2] << 8 | (uint_fast32_t)buffer[3];
 	return 0;
 }
 
@@ -1546,23 +1689,13 @@ static const jpc_mstabent_t *jpc_mstab_lookup(int id)
 #ifdef JASPER_DISABLED
 int jpc_validate(jas_stream_t *in)
 {
-	int n;
-	int i;
 	unsigned char buf[2];
 
 	assert(JAS_STREAM_MAXPUTBACK >= 2);
 
-	if ((n = jas_stream_read(in, (char *) buf, 2)) < 0) {
+	if (jas_stream_peek(in, buf, sizeof(buf)) != sizeof(buf))
 		return -1;
-	}
-	for (i = n - 1; i >= 0; --i) {
-		if (jas_stream_ungetc(in, buf[i]) == EOF) {
-			return -1;
-		}
-	}
-	if (n < 2) {
-		return -1;
-	}
+
 	if (buf[0] == (JPC_MS_SOC >> 8) && buf[1] == (JPC_MS_SOC & 0xff)) {
 		return 0;
 	}

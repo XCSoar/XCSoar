@@ -186,15 +186,7 @@ jas_stream_t *jas_stream_create(void)
 
 /*
 This function will eventually replace jas_stream_memopen.
-If buf is 0 and bufsize > 0:
-	a buffer is dynamically allocated with size bufsize and this buffer is
-	not growable.
-If buf is 0 and bufsize is 0:
-	a buffer is dynamically allocated whose size will automatically grow to
-	accommodate the amount of data written.
-If buf is not 0:
-	bufsize (which, in this case, is not currently allowed to be zero) is
-	the size of the (nongrowable) buffer pointed to by buf.
+For documentation of the interface for this function, see jas_stream.h.
 */
 
 jas_stream_t *jas_stream_memopen2(char *buf, size_t bufsize)
@@ -216,7 +208,6 @@ jas_stream_t *jas_stream_memopen2(char *buf, size_t bufsize)
 
 	/* Since the stream data is already resident in memory, buffering
 	is not necessary. */
-	/* But... It still may be faster to use buffering anyways. */
 	jas_stream_initbuf(stream, JAS_STREAM_UNBUF, 0, 0);
 
 	/* Select the operations for a memory stream. */
@@ -638,6 +629,16 @@ int jas_stream_close(jas_stream_t *stream)
 	return 0;
 }
 
+static bool jas_stream_is_unbuffered(const jas_stream_t *stream)
+{
+	return stream->bufsize_ <= 1;
+}
+
+static bool jas_stream_is_input_buffer_empty(const jas_stream_t *stream)
+{
+	return stream->cnt_ == 0;
+}
+
 /******************************************************************************\
 * Code for reading and writing streams.
 \******************************************************************************/
@@ -673,14 +674,43 @@ int jas_stream_ungetc(jas_stream_t *stream, int c)
 }
 
 /* FIXME integral type */
-int jas_stream_read(jas_stream_t *stream, void *buf, unsigned cnt)
+unsigned jas_stream_read(jas_stream_t *stream, void *buf, unsigned cnt)
 {
 	int c;
 	char *bufptr;
 
 	JAS_DBGLOG(100, ("jas_stream_read(%p, %p, %u)\n", stream, buf, cnt));
 
+	if (cnt == 0)
+		return 0;
+
 	bufptr = buf;
+
+	if (jas_stream_is_unbuffered(stream) && stream->rwlimit_ < 0 &&
+	    jas_stream_is_input_buffer_empty(stream)) {
+		/* fast path for unbuffered streams */
+
+		if ((stream->flags_ & JAS_STREAM_ERRMASK) != 0)
+			return 0;
+
+		if ((stream->openmode_ & JAS_STREAM_READ) == 0)
+			return 0;
+
+		assert((stream->bufmode_ & JAS_STREAM_WRBUF) == 0);
+
+		stream->bufmode_ |= JAS_STREAM_RDBUF;
+
+		int nbytes = stream->ops_->read_(stream->obj_, bufptr, cnt);
+		if (nbytes <= 0) {
+			stream->flags_ |= nbytes < 0
+				? JAS_STREAM_ERR
+				: JAS_STREAM_EOF;
+			return 0;
+		}
+
+		stream->rwcnt_ += nbytes;
+		return nbytes;
+	}
 
 	unsigned n = 0;
 	while (n < cnt) {
@@ -694,14 +724,51 @@ int jas_stream_read(jas_stream_t *stream, void *buf, unsigned cnt)
 	return n;
 }
 
+unsigned jas_stream_peek(jas_stream_t *stream, void *buf, size_t cnt)
+{
+	char *bufptr = buf;
+
+	const unsigned n = jas_stream_read(stream, bufptr, cnt);
+
+	/* Put the characters read back onto the stream. */
+	for (unsigned i = n; i-- > 0;)
+		if (jas_stream_ungetc(stream, bufptr[i]) == EOF)
+			return 0;
+
+	return n;
+}
+
 /* FIXME integral type */
-int jas_stream_write(jas_stream_t *stream, const void *buf, unsigned cnt)
+unsigned jas_stream_write(jas_stream_t *stream, const void *buf, unsigned cnt)
 {
 	const char *bufptr;
 
 	JAS_DBGLOG(100, ("jas_stream_write(%p, %p, %d)\n", stream, buf, cnt));
 
+	if (cnt == 0)
+		return 0;
+
 	bufptr = buf;
+
+	if (jas_stream_is_unbuffered(stream) && stream->rwlimit_ < 0) {
+		/* fast path for unbuffered streams */
+
+		/* need to flush the output buffer before we do a raw
+		   write */
+		if (jas_stream_flushbuf(stream, EOF))
+			return 0;
+
+		stream->bufmode_ |= JAS_STREAM_WRBUF;
+
+		int nbytes = stream->ops_->write_(stream->obj_, bufptr, cnt);
+		if (nbytes != (int)cnt) {
+			stream->flags_ |= JAS_STREAM_ERR;
+			return 0;
+		}
+
+		stream->rwcnt_ += nbytes;
+		return nbytes;
+	}
 
 	unsigned n = 0;
 	while (n < cnt) {
@@ -742,6 +809,7 @@ int jas_stream_puts(jas_stream_t *stream, const char *s)
 	return 0;
 }
 
+/* TODO/FIXME: this function should return null upon error (buffer overrun or I/O error */
 /* FIXME integral type */
 char *jas_stream_gets(jas_stream_t *stream, char *buf, int bufsize)
 {
@@ -1073,25 +1141,25 @@ static int jas_strtoopenmode(const char *s)
 /* FIXME integral type */
 int jas_stream_copy(jas_stream_t *out, jas_stream_t *in, int n)
 {
-	int c;
 	int m;
 
 	const bool all = n < 0;
 
+	char buffer[JAS_STREAM_BUFSIZE];
+
 	m = n;
 	while (all || m > 0) {
-		if ((c = jas_stream_getc_macro(in)) == EOF) {
-			/* The next character of input could not be read. */
-			/* Return with an error if an I/O error occured
-			  (not including EOF) or if an explicit copy count
-			  was specified. */
-			return (!all || jas_stream_error(in)) ? (-1) : 0;
-		}
-		if (jas_stream_putc_macro(out, c) == EOF) {
+		unsigned nbytes = jas_stream_read(in, buffer,
+						  JAS_MIN((size_t)m, sizeof(buffer)));
+		if (nbytes == 0)
+			return !all || jas_stream_error(in) ? -1 : 0;
+
+		if (jas_stream_write(out, buffer, nbytes) != nbytes)
 			return -1;
-		}
-		--m;
+
+		m -= nbytes;
 	}
+
 	return 0;
 }
 
@@ -1102,6 +1170,16 @@ long jas_stream_setrwcount(jas_stream_t *stream, long rwcnt)
 
 	old = stream->rwcnt_;
 	stream->rwcnt_ = rwcnt;
+	return old;
+}
+
+JAS_DLLEXPORT
+long jas_stream_setrwlimit(jas_stream_t *stream, long rwlimit)
+{
+	long old;
+
+	old = stream->rwlimit_;
+	stream->rwlimit_ = rwlimit;
 	return old;
 }
 
@@ -1280,7 +1358,7 @@ static int mem_write(jas_stream_obj_t *obj, const char *buf, unsigned cnt)
 static long mem_seek(jas_stream_obj_t *obj, long offset, int origin)
 {
 	jas_stream_memobj_t *m = (jas_stream_memobj_t *)obj;
-	ssize_t newpos;
+	long newpos;
 
 	JAS_DBGLOG(100, ("mem_seek(%p, %ld, %d)\n", obj, offset, origin));
 	switch (origin) {
@@ -1294,8 +1372,7 @@ static long mem_seek(jas_stream_obj_t *obj, long offset, int origin)
 		newpos = m->pos_ + offset;
 		break;
 	default:
-		abort();
-		break;
+		return -1;
 	}
 	if (newpos < 0) {
 		return -1;

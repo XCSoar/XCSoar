@@ -172,8 +172,14 @@ static inline jpc_fix_t jpc_fix_neg(jpc_fix_t x)
 
 //#define	jpc_fix_asl(x, n)	JAS_FIX_ASL(jpc_fix_t, JPC_FIX_FRACBITS, x, n)
 //#define	jpc_fix_asr(x, n)	JAS_FIX_ASR(jpc_fix_t, JPC_FIX_FRACBITS, x, n)
+
+#ifdef JAS_ENABLE_32BIT
+#define jpc_fix_asl jas_least32_asl
+#define jpc_fix_asr jas_least32_asr
+#else
 #define jpc_fix_asl jas_fast32_asl
 #define jpc_fix_asr jas_fast32_asr
+#endif
 
 #define jpc_fix_pluseq(x, y)	JAS_FIX_PLUSEQ(jpc_fix_t, JPC_FIX_FRACBITS, x, y)
 #define jpc_fix_minuseq(x, y)	JAS_FIX_MINUSEQ(jpc_fix_t, JPC_FIX_FRACBITS, x, y)

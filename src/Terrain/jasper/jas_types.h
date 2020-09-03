@@ -61,10 +61,9 @@
  * __END_OF_JASPER_LICENSE__
  */
 
-/*
- * Primitive Types
- *
- * $Id$
+/*!
+ * @file jas_types.h
+ * @brief Primitive Types
  */
 
 #ifndef JAS_TYPES_H

@@ -90,13 +90,13 @@
 typedef struct {
 
 	/* The C register. */
-	uint_fast32_t creg;
+	uint_least32_t creg;
 
 	/* The A register. */
-	uint_fast32_t areg;
+	uint_least32_t areg;
 
 	/* The CT register. */
-	uint_fast32_t ctreg;
+	uint_least32_t ctreg;
 
 	/* The current context. */
 	const jpc_mqstate_t **curctx;
@@ -144,8 +144,10 @@ void jpc_mqdec_init(jpc_mqdec_t *dec);
 \******************************************************************************/
 
 /* Set the current context for a MQ decoder. */
-#define	jpc_mqdec_setcurctx(dec, ctxno) \
-	((mqdec)->curctx = &(mqdec)->ctxs[ctxno]);
+static inline void jpc_mqdec_setcurctx(jpc_mqdec_t *dec, unsigned ctxno)
+{
+	dec->curctx = &dec->ctxs[ctxno];
+}
 
 /* Set the state information for all contexts of a MQ decoder. */
 void jpc_mqdec_setctxs(const jpc_mqdec_t *dec, unsigned numctxs, const jpc_mqctx_t *ctxs);
@@ -185,87 +187,58 @@ void jpc_mqdec_dump(const jpc_mqdec_t *dec, FILE *out);
 * GIVEN BELOW.
 \******************************************************************************/
 
-#define	jpc_mqdec_getbit_macro(dec) \
-	((((dec)->areg -= (*(dec)->curctx)->qeval), \
-	  (dec)->creg >> 16 >= (*(dec)->curctx)->qeval) ? \
-	  ((((dec)->creg -= (*(dec)->curctx)->qeval << 16), \
-	  (dec)->areg & 0x8000) ?  (*(dec)->curctx)->mps : \
-	  jpc_mqdec_mpsexchrenormd(dec)) : \
-	  jpc_mqdec_lpsexchrenormd(dec))
+bool jpc_mqdec_mpsexchrenormd(jpc_mqdec_t *dec);
+bool jpc_mqdec_lpsexchrenormd(jpc_mqdec_t *dec);
 
-#define	jpc_mqdec_mpsexchange(areg, delta, curctx, bit) \
-{ \
-	if ((areg) < (delta)) { \
-		register const jpc_mqstate_t *state = *(curctx); \
-		/* LPS decoded. */ \
-		(bit) = !state->mps; \
-		*(curctx) = state->nlps; \
-	} else { \
-		register const jpc_mqstate_t *state = *(curctx); \
-		/* MPS decoded. */ \
-		(bit) = state->mps; \
-		*(curctx) = state->nmps; \
-	} \
+JAS_FORCE_INLINE
+static bool jpc_mqdec_getbit_macro(jpc_mqdec_t *dec)
+{
+	const jpc_mqstate_t *const state = *dec->curctx;
+
+	dec->areg -= state->qeval;
+
+	if (dec->creg >= (uint_least32_t)state->qeval << 16) {
+		dec->creg -= (uint_least32_t)state->qeval << 16;
+		return dec->areg & 0x8000
+			? state->mps
+			: jpc_mqdec_mpsexchrenormd(dec);
+	} else {
+		return jpc_mqdec_lpsexchrenormd(dec);
+	}
 }
 
-#define	jpc_mqdec_lpsexchange(areg, delta, curctx, bit) \
-{ \
-	if ((areg) >= (delta)) { \
-		register const jpc_mqstate_t *state = *(curctx); \
-		(areg) = (delta); \
-		(bit) = !state->mps; \
-		*(curctx) = state->nlps; \
-	} else { \
-		register const jpc_mqstate_t *state = *(curctx); \
-		(areg) = (delta); \
-		(bit) = state->mps; \
-		*(curctx) = state->nmps; \
-	} \
+JAS_FORCE_INLINE
+static bool jpc_mqdec_mpsexchange(uint_least32_t areg, uint_least32_t delta, const jpc_mqstate_t **curctx)
+{
+	if (areg < delta) {
+		const jpc_mqstate_t *state = *curctx;
+		/* LPS decoded. */
+		*curctx = state->nlps;
+		return !state->mps;
+	} else {
+		const jpc_mqstate_t *state = *curctx;
+		/* MPS decoded. */
+		*curctx = state->nmps;
+		return state->mps;
+	}
 }
 
-#define	jpc_mqdec_renormd(areg, creg, ctreg, in, eof, inbuf) \
-{ \
-	do { \
-		if (!(ctreg)) { \
-			jpc_mqdec_bytein2(creg, ctreg, in, eof, inbuf); \
-		} \
-		(areg) <<= 1; \
-		(creg) <<= 1; \
-		--(ctreg); \
-	} while (!((areg) & 0x8000)); \
-}
-
-#define	jpc_mqdec_bytein2(creg, ctreg, in, eof, inbuf) \
-{ \
-	int c; \
-	unsigned char prevbuf; \
-	if (!(eof)) { \
-		if ((c = jas_stream_getc(in)) == EOF) { \
-			(eof) = true; \
-			c = 0xff; \
-		} \
-		prevbuf = (inbuf); \
-		(inbuf) = c; \
-		if (prevbuf == 0xff) { \
-			if (c > 0x8f) { \
-				(creg) += 0xff00; \
-				(ctreg) = 8; \
-			} else { \
-				(creg) += c << 9; \
-				(ctreg) = 7; \
-			} \
-		} else { \
-			(creg) += c << 8; \
-			(ctreg) = 8; \
-		} \
-	} else { \
-		(creg) += 0xff00; \
-		(ctreg) = 8; \
-	} \
+JAS_FORCE_INLINE
+static bool jpc_mqdec_lpsexchange(uint_least32_t *areg_p, uint_least32_t delta, const jpc_mqstate_t **curctx)
+{
+	if (*areg_p >= delta) {
+		const jpc_mqstate_t *state = *curctx;
+		*areg_p = delta;
+		*curctx = state->nlps;
+		return !state->mps;
+	} else {
+		const jpc_mqstate_t *state = *curctx;
+		*areg_p = delta;
+		*curctx = state->nmps;
+		return state->mps;
+	}
 }
 
 bool jpc_mqdec_getbit_func(jpc_mqdec_t *dec);
-bool jpc_mqdec_mpsexchrenormd(jpc_mqdec_t *dec);
-bool jpc_mqdec_lpsexchrenormd(jpc_mqdec_t *dec);
 
 #endif

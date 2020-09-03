@@ -101,9 +101,9 @@ any particular platform.  Hopefully, it is not too unreasonable, however. */
 #endif
 
 typedef struct {
-#ifdef ENABLE_JASPER_ENCODE
+#ifdef JAS_ENABLE_ENCODER
 	int (*analyze)(jpc_fix_t *, int, int, int, int, int);
-#endif /* ENABLE_JASPER_ENCODE */
+#endif
 	int (*synthesize)(jpc_fix_t *, int, int, int, int, int);
 	const double *lpenergywts;
 	const double *hpenergywts;

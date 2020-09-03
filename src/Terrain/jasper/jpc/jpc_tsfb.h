@@ -130,14 +130,13 @@ jpc_tsfb_t *jpc_cod_gettsfb(unsigned qmfbid, unsigned numlevels);
 /* Destroy a TSFB. */
 void jpc_tsfb_destroy(jpc_tsfb_t *tsfb);
 
+#ifdef JAS_ENABLE_ENCODER
 /* Perform analysis. */
 int jpc_tsfb_analyze(jpc_tsfb_t *tsfb, jas_seq2d_t *x);
+#endif
 
 /* Perform synthesis. */
 int jpc_tsfb_synthesize(jpc_tsfb_t *tsfb, jas_seq2d_t *x);
-
-int jpc_tsfb_analyze2(jpc_tsfb_t *tsfb, jpc_fix_t *a, int xstart, int ystart,
-  unsigned width, unsigned height, unsigned stride, unsigned numlvls);
 
 /* Get band information for a TSFB. */
 int jpc_tsfb_getbands(jpc_tsfb_t *tsfb, uint_fast32_t xstart,

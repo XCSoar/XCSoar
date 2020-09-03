@@ -195,7 +195,15 @@ static int jpc_dec_decodepkt(jpc_dec_t *dec, jas_stream_t *pkthdrstream, jas_str
 			}
 			if (jpc_ms_gettype(ms) != JPC_MS_SOP) {
 				jpc_ms_destroy(ms);
-				jas_eprintf("missing SOP marker segment\n");
+				jas_eprintf("cannot get (SOP) marker segment\n");
+				return -1;
+			}
+			unsigned int maxNsop = 65536;
+			/* checking the packet sequence number */
+			if (tile->pi->pktno % maxNsop != ms->parms.sop.seqno) {
+				jas_eprintf("incorrect packet sequence number %d was found, but expected %d\n",
+					ms->parms.sop.seqno, tile->pi->pktno % maxNsop);
+				jpc_ms_destroy(ms);
 				return -1;
 			}
 			jpc_ms_destroy(ms);

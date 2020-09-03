@@ -1,10 +1,3 @@
-/*
- * Copyright (c) 1999-2000 Image Power, Inc. and the University of
- *   British Columbia.
- * Copyright (c) 2001-2002 Michael David Adams.
- * All rights reserved.
- */
-
 /* __START_OF_JASPER_LICENSE__
  * 
  * JasPer License Version 2.0
@@ -61,38 +54,47 @@
  * __END_OF_JASPER_LICENSE__
  */
 
-/*
- * String Library
- *
- * $Id$
+/*!
+ * @file jas_compiler.h
+ * @brief Compiler-related macros.
  */
 
-#ifndef	JAS_STRING_H
-#define	JAS_STRING_H
+#ifndef JAS_COMPILER_H
+#define JAS_COMPILER_H
 
-/******************************************************************************\
-* Includes.
-\******************************************************************************/
-
-/* The configuration header file should be included first. */
-#include <jasper/jas_config.h>
-
-#include "Util/Compiler.h"
-
-#ifdef __cplusplus
-extern "C" {
+#ifdef _MSC_VER
+#ifndef __cplusplus
+#undef inline
+#define inline __inline
+#endif
 #endif
 
-/******************************************************************************\
-* Functions.
-\******************************************************************************/
+#ifdef __GNUC__
+#define JAS_DEPRECATED __attribute__((deprecated))
+#define JAS_ATTRIBUTE_CONST __attribute__((const))
+#define JAS_ATTRIBUTE_PURE __attribute__((pure))
+#define JAS_FORCE_INLINE inline __attribute__((always_inline))
+#define JAS_UNREACHABLE() __builtin_unreachable()
+#define JAS_LIKELY(x) __builtin_expect (!!(x), 1)
+#define JAS_UNLIKELY(x) __builtin_expect (!!(x), 0)
+#else
+#define JAS_DEPRECATED
+#define JAS_ATTRIBUTE_CONST
+#define JAS_ATTRIBUTE_PURE
+#define JAS_FORCE_INLINE inline
+#define JAS_UNREACHABLE()
+#define JAS_LIKELY(x) (x)
+#define JAS_UNLIKELY(x) (x)
+#endif
 
-/* Copy a string (a la strdup). */
-gcc_malloc
-JAS_DLLEXPORT char *jas_strdup(const char *);
-
-#ifdef __cplusplus
-}
+#ifdef __clang__
+#define JAS_ATTRIBUTE_DISABLE_USAN \
+  __attribute__((no_sanitize("undefined")))
+#elif defined(__GNUC__) && __GNUC__ >= 6
+#define JAS_ATTRIBUTE_DISABLE_USAN \
+  __attribute__((no_sanitize_undefined))
+#else
+#define JAS_ATTRIBUTE_DISABLE_USAN
 #endif
 
 #endif
