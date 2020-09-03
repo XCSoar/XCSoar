@@ -76,10 +76,14 @@
 /* The configuration header file should be included first. */
 #include <jasper/jas_config.h>
 
+#ifdef ENABLE_JASPER_IMAGE
 #include <jasper/jas_stream.h>
+#endif
 #include <jasper/jas_types.h>
+#ifdef ENABLE_JASPER_IMAGE
 #include <jasper/jas_seq.h> /* IWYU pragma: export */
 #include <jasper/jas_cm.h> /* IWYU pragma: export */
+#endif
 #include <stdio.h>
 
 #ifdef __cplusplus
@@ -89,6 +93,8 @@ extern "C" {
 /******************************************************************************\
 * Constants.
 \******************************************************************************/
+
+#ifdef ENABLE_JASPER_IMAGE
 
 /*
  * Miscellaneous constants.
@@ -469,6 +475,8 @@ JAS_DLLEXPORT int jas_image_addcmpt(jas_image_t *image, int cmptno,
 JAS_DLLEXPORT int jas_image_copycmpt(jas_image_t *dstimage, unsigned dstcmptno,
   jas_image_t *srcimage, unsigned srccmptno);
 
+#endif /* ENABLE_JASPER_IMAGE */
+
 JAS_ATTRIBUTE_CONST
 static inline bool JAS_IMAGE_CDT_GETSGND(uint_least8_t dtype)
 {
@@ -492,6 +500,8 @@ static inline uint_least8_t JAS_IMAGE_CDT_SETPREC(uint_least8_t dtype)
 {
 	return dtype & 0x7f;
 }
+
+#ifdef ENABLE_JASPER_IMAGE
 
 JAS_ATTRIBUTE_PURE
 static inline uint_least8_t jas_image_cmptdtype(const jas_image_t *image, unsigned cmptno)
@@ -625,6 +635,8 @@ JAS_DLLEXPORT jas_image_t *pgx_decode(jas_stream_t *in, const char *optstr);
 JAS_DLLEXPORT int pgx_encode(jas_image_t *image, jas_stream_t *out, const char *optstr);
 JAS_DLLEXPORT int pgx_validate(jas_stream_t *in);
 #endif
+
+#endif /* ENABLE_JASPER_IMAGE */
 
 #ifdef __cplusplus
 }
