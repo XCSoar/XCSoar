@@ -86,8 +86,6 @@ extern "C" {
 #define	JAS_VERSION		"unknown"
 #endif
 
-#define GJAS_VERSION "1.3.1"
-
 #define	JAS_COPYRIGHT \
 	"Copyright (c) 2001-2006 Michael David Adams.\n" \
 	"Copyright (c) 1999-2000 Image Power, Inc. and the University of\n" \
@@ -97,11 +95,16 @@ extern "C" {
 #define	JAS_NOTES \
 	"For more information about this software, please visit the following\n" \
 	"web sites/pages:\n" \
-	"\nGeographical implementation:\n" \
-	"    dimin@dimin.net <http://www.dimin.net>\n" \
-	"\nJPEG-2000 implementation:\n" \
-	"    http://www.ece.uvic.ca/~mdadams/jasper\n"
-
+	"    http://www.ece.uvic.ca/~mdadams/jasper\n" \
+	"    http://www.jpeg.org/software\n" \
+	"To be added to the (moderated) JasPer software announcements\n" \
+	"mailing list, send an email to:\n" \
+	"    jasper-announce-subscribe@yahoogroups.com\n" \
+	"To be added to the (unmoderated) JasPer software discussion\n" \
+	"mailing list, send an email to:\n" \
+	"    jasper-discussion-subscribe@yahoogroups.com\n" \
+	"Please send any bug reports to:\n" \
+	"    mdadams@ieee.org\n"
 
 /******************************************************************************\
 * Functions.
