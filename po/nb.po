@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-06-18 08:41+0000\n"
+"PO-Revision-Date: 2020-09-11 17:17+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/xcsoar/"
 "translations/nb_NO/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.1.1-dev\n"
+"X-Generator: Weblate 4.3-dev\n"
 "X-Launchpad-Export-Date: 2015-04-20 16:44+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -2846,7 +2846,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1013
 #, no-c-format
 msgid "OLC Speed"
-msgstr ""
+msgstr "OLC-hastighet"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
 #, no-c-format
@@ -3485,7 +3485,7 @@ msgstr "FLARM Trafikk"
 #: src/Dialogs/Traffic/TrafficList.cpp:687
 #, c-format
 msgid "%u minutes ago"
-msgstr ""
+msgstr "%u minutter siden"
 
 #: src/Renderer/WaypointListRenderer.cpp:146
 msgid "Arrival Alt"
@@ -3896,7 +3896,7 @@ msgstr "GPS mellomdriver"
 #: src/Device/Config.cpp:243 src/Dialogs/Device/DeviceEditWidget.cpp:66
 #, no-c-format
 msgid "Built-in GPS & sensors"
-msgstr ""
+msgstr "Innebygd GPS og sensorer"
 
 #. create buttons
 #: src/Dialogs/Message.cpp:99 src/Dialogs/WidgetDialog.cpp:250
@@ -3981,11 +3981,11 @@ msgstr "Legg til"
 
 #: src/Dialogs/FileManager.cpp:439
 msgid "Queued"
-msgstr ""
+msgstr "Satt i kø"
 
 #: src/Dialogs/FileManager.cpp:441 src/Dialogs/FileManager.cpp:447
 msgid "Downloading"
-msgstr ""
+msgstr "Laster ned"
 
 #: src/Dialogs/FileManager.cpp:452 src/Dialogs/FileManager.cpp:690
 #: src/Dialogs/Device/DeviceListDialog.cpp:417
@@ -4014,15 +4014,15 @@ msgstr ""
 #: src/Dialogs/FileManager.cpp:698 src/Dialogs/FileManager.cpp:727
 #: src/Dialogs/DownloadFilePicker.cpp:374 Data/Input/default.xci:605
 msgid "File Manager"
-msgstr ""
+msgstr "Filbehandler"
 
 #: src/Dialogs/FileManager.cpp:721 src/Dialogs/DownloadFilePicker.cpp:373
 msgid "The file manager is not available on this device."
-msgstr ""
+msgstr "Filbehandler er ikke tilgjengelig på denne enheten."
 
 #: src/Dialogs/FileManager.cpp:724
 msgid "The file manager requires Android 2.3."
-msgstr ""
+msgstr "Filbehandleren krever Android 2.3."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:72
 #, no-c-format
@@ -4042,7 +4042,7 @@ msgstr ""
 #: src/Dialogs/Device/DeviceEditWidget.cpp:78
 #, no-c-format
 msgid "TCP client"
-msgstr ""
+msgstr "TCP-klient"
 
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
@@ -4055,11 +4055,11 @@ msgstr "TCP Port"
 #: src/Dialogs/Device/DeviceEditWidget.cpp:83
 #, no-c-format
 msgid "UDP Port"
-msgstr ""
+msgstr "UDP-port"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:355
 msgid "Bluetooth LE"
-msgstr ""
+msgstr "Lavenergi-Blåtann"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:583
 msgid "Port"
@@ -4069,7 +4069,7 @@ msgstr "Port"
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:94
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:117
 msgid "Baud rate"
-msgstr ""
+msgstr "Baudrate"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:595
 msgid "Bulk baud rate"
@@ -4084,12 +4084,13 @@ msgstr ""
 "oppgavedeklarasjoner og flyturer."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:601
+#, fuzzy
 msgid "IP Address"
-msgstr ""
+msgstr "IP-adresse"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:611
 msgid "I2C Bus"
-msgstr ""
+msgstr "I²C-buss"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:611
 msgid "Select the description or bus number that matches your configuration."
@@ -4097,7 +4098,7 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid "I2C Addr"
-msgstr ""
+msgstr "I²C-adresse"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid ""
@@ -4106,6 +4107,9 @@ msgid ""
 "not understand the previous sentence you may assume that this field is not "
 "used."
 msgstr ""
+"I²C-adressen som passer oppsettet ditt. Dette feltet er ikke i bruk når ditt "
+"valg i «I²C-buss»-feltet ikke er et I²C-bussnummer. I fall du ikke forstår "
+"forrige setning, kan du anta at dette feltet ikke er i bruk."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:625
 msgid "Pressure use"
@@ -4517,12 +4521,12 @@ msgstr ""
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:53
 #, no-c-format
 msgid "Locked"
-msgstr ""
+msgstr "Låst"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:54
 #, no-c-format
 msgid "Not locked"
-msgstr ""
+msgstr "Ulåst"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:72
 msgid "Airbrake locked"
@@ -4566,7 +4570,7 @@ msgstr ""
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:119
 msgid "Threshold"
-msgstr ""
+msgstr "Terskel"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:120
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:103
@@ -4576,7 +4580,7 @@ msgstr "Rekkevidde"
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:123
 #, no-c-format
 msgid "Unkown"
-msgstr ""
+msgstr "Ukjent"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:124
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:182
@@ -4592,12 +4596,12 @@ msgstr ""
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:126
 #, no-c-format
 msgid "Helicopter"
-msgstr ""
+msgstr "Helikopter"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:127
 #, no-c-format
 msgid "Parachute"
-msgstr ""
+msgstr "Fallskjerm"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:128
 #, no-c-format
@@ -4632,9 +4636,9 @@ msgid "Flying saucer"
 msgstr ""
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:136
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Balloon"
-msgstr ""
+msgstr "Luftballong"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:137
 #, no-c-format
@@ -4712,7 +4716,7 @@ msgstr ""
 
 #: src/Dialogs/ColorListDialog.cpp:74
 msgid "Select Color"
-msgstr ""
+msgstr "Velg farge"
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:120
 #: src/Dialogs/Airspace/dlgAirspace.cpp:121 Data/Input/default.xci:436
@@ -5529,7 +5533,7 @@ msgstr "Fortsett"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:63
 msgid "Enter your password"
-msgstr ""
+msgstr "Skriv inn passordet ditt"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:88
 #, fuzzy
@@ -5538,7 +5542,7 @@ msgstr "Passord"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:103
 msgid "Enter a new password"
-msgstr ""
+msgstr "Skriv inn et nytt passord"
 
 #: src/Dialogs/dlgStatus.cpp:47 src/Dialogs/dlgStatus.cpp:66
 #: src/Dialogs/Weather/WeatherDialog.cpp:62 Data/Input/default.xci:809
@@ -5552,7 +5556,7 @@ msgstr ""
 
 #: src/Dialogs/dlgStatus.cpp:92 Data/Input/default.xci:539
 msgid "System"
-msgstr ""
+msgstr "System"
 
 #: src/Dialogs/dlgStatus.cpp:98
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:142
@@ -5594,7 +5598,7 @@ msgstr "Spenning"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:136
 msgid "Network"
-msgstr ""
+msgstr "Nettverk"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:140
 msgid "Assigned task time"
@@ -5725,11 +5729,11 @@ msgstr "Lokaltid"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:110
 msgid "UTC time"
-msgstr ""
+msgstr "UTC-tid"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:111
 msgid "UTC date"
-msgstr ""
+msgstr "UTC-dato"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:112
 msgid "Flight time"
@@ -5855,7 +5859,7 @@ msgstr "Flytt Kart Til Vendepunkt"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:324
 msgid "Set Active Frequency"
-msgstr ""
+msgstr "Sett aktiv frekvens"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:325
 #, fuzzy
@@ -8660,7 +8664,7 @@ msgstr "Gi nytt navn"
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:343
 #: src/Monitor/AirspaceWarningMonitor.cpp:82
 msgid "More"
-msgstr ""
+msgstr "Mer"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:241
 msgid "Load the selected task?"
@@ -8689,7 +8693,7 @@ msgstr "Gi nytt navn Feil"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:343
 msgid "Less"
-msgstr ""
+msgstr "Mindre"
 
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:60
 #: src/Dialogs/Task/TaskPointDialog.cpp:274
