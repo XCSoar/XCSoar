@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-04-23 17:11+0000\n"
-"Last-Translator: NEOX <exitneox+weblate@outlook.com>\n"
+"PO-Revision-Date: 2020-09-14 17:36+0000\n"
+"Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/xcsoar/"
 "translations/fr/>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.0.2-dev\n"
+"X-Generator: Weblate 4.3-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -491,7 +491,7 @@ msgstr "Inconnu"
 #: src/FLARM/Error.cpp:48
 #, no-c-format
 msgid "Firmware timeout"
-msgstr "Firmware  expiré"
+msgstr "Firmware expiré"
 
 #: src/FLARM/Error.cpp:49
 #, no-c-format
