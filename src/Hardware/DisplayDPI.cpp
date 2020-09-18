@@ -132,8 +132,17 @@ void
 Display::ProvideSizeMM(unsigned width_pixels, unsigned height_pixels,
                        unsigned width_mm, unsigned height_mm) noexcept
 {
-  detected_x_dpi = MMToDPI(width_pixels, width_mm);
-  detected_y_dpi = MMToDPI(height_pixels, height_mm);
+  if (width_mm == 0) { // usually means the active width is unknown
+    detected_x_dpi = Display::GetXDPI();
+  } else {
+    detected_x_dpi = MMToDPI(width_pixels, width_mm);
+  }
+
+  if (height_mm == 0) { // usually means the active height is unknown
+    detected_y_dpi = Display::GetYDPI();
+  } else {
+    detected_y_dpi = MMToDPI(height_pixels, height_mm);
+  }
 }
 
 #endif
