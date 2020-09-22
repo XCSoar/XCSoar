@@ -55,6 +55,8 @@ Copyright_License {
 #endif
 #endif
 
+#include <cassert>
+
 #ifndef ANDROID
   static unsigned forced_x_dpi = 0;
   static unsigned forced_y_dpi = 0;
@@ -132,6 +134,11 @@ void
 Display::ProvideSizeMM(unsigned width_pixels, unsigned height_pixels,
                        unsigned width_mm, unsigned height_mm) noexcept
 {
+  assert(width_pixels > 0);
+  assert(height_pixels > 0);
+  assert(width_mm > 0);
+  assert(height_mm > 0);
+
   detected_x_dpi = MMToDPI(width_pixels, width_mm);
   detected_y_dpi = MMToDPI(height_pixels, height_mm);
 }
