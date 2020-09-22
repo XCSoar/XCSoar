@@ -228,7 +228,9 @@ TopCanvas::Create(PixelSize new_size,
 
   new_size = ::GetSize(vinfo);
 
-  Display::ProvideSizeMM(new_size.cx, new_size.cy, vinfo.width, vinfo.height);
+  if (vinfo.width > 0 && vinfo.height > 0)
+    Display::ProvideSizeMM(new_size.cx, new_size.cy,
+                           vinfo.width, vinfo.height);
 
 #elif defined(USE_VFB)
   /* allocate buffer as requested by caller */

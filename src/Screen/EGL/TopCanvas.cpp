@@ -210,9 +210,10 @@ TopCanvas::Create(PixelSize new_size,
     exit(EXIT_FAILURE);
   }
 
-  Display::ProvideSizeMM(mode.hdisplay, mode.vdisplay,
-                         connector->mmWidth,
-                         connector->mmHeight);
+  if (connector->mmWidth > 0 && connector->mmHeight > 0)
+    Display::ProvideSizeMM(mode.hdisplay, mode.vdisplay,
+                           connector->mmWidth,
+                           connector->mmHeight);
 #endif
 
   CreateEGL(native_display, native_window);
