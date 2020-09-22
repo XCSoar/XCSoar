@@ -1,4 +1,4 @@
-Version 6.8.17 - not yet released
+Version 6.8.17 - 2020/09/22
 * tracking
   - SkyLines: update tracking IP address
 * terrain
