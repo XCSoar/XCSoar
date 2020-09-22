@@ -81,7 +81,9 @@
 
 #include "Util/Compiler.h"
 
+#ifdef JAS_ENABLE_DUMP
 #include <stdio.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -248,7 +250,7 @@ JAS_DLLEXPORT void jas_matrix_destroy(jas_matrix_t *matrix);
 /* Resize a matrix.  The previous contents of the matrix are lost. */
 JAS_DLLEXPORT int jas_matrix_resize(jas_matrix_t *matrix, jas_matind_t numrows, jas_matind_t numcols);
 
-#if 0
+#ifdef JAS_ENABLE_DUMP
 JAS_DLLEXPORT int jas_matrix_output(jas_matrix_t *matrix, FILE *out);
 #endif
 
@@ -307,8 +309,6 @@ JAS_DLLEXPORT int jas_matrix_cmp(jas_matrix_t *mat0, jas_matrix_t *mat1);
 
 gcc_malloc
 JAS_DLLEXPORT jas_matrix_t *jas_matrix_copy(jas_matrix_t *x);
-
-JAS_DLLEXPORT jas_matrix_t *jas_matrix_input(FILE *);
 
 JAS_ATTRIBUTE_CONST
 static inline jas_seqent_t jas_seqent_asl(jas_seqent_t x, unsigned n)

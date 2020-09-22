@@ -78,7 +78,9 @@
 #include "jasper/jas_stream.h"
 #include "jasper/jas_image.h"
 
+#ifdef JAS_ENABLE_DUMP
 #include <stdio.h>
+#endif
 
 /******************************************************************************\
 * Macros.

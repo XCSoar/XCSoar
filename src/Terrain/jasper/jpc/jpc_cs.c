@@ -440,9 +440,11 @@ jpc_ms_t *jpc_getms(jas_stream_t *in, jpc_cstate_t *cstate)
 			return 0;
 		}
 
+#ifdef JAS_ENABLE_DUMP
 		if (jas_getdbglevel() > 0) {
 			jpc_ms_dump(ms, stderr);
 		}
+#endif
 
 		if (JAS_CAST(jas_ulong, jas_stream_tell(tmpstream)) != ms->len) {
 			jas_eprintf(

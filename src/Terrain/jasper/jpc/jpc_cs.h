@@ -77,7 +77,10 @@
 #include "jasper/jas_stream.h"
 
 #include <assert.h>
+
+#ifdef JAS_ENABLE_DUMP
 #include <stdio.h>
+#endif
 
 /******************************************************************************\
 * Constants and Types.
@@ -781,8 +784,6 @@ int jpc_putdata(jas_stream_t *out, jas_stream_t *in, long n);
 #ifdef ENABLE_JASPER_DUMP
 /* Dump a marker segment (for debugging). */
 void jpc_ms_dump(jpc_ms_t *ms, FILE *out);
-#else
-#define jpc_ms_dump(ms, out)
 #endif
 
 /* Read a 8-bit unsigned integer from a stream. */
