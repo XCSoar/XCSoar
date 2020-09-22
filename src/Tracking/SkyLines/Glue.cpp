@@ -220,7 +220,7 @@ SkyLinesTracking::Glue::SetSettings(const Settings &settings)
 
   if (!client.IsDefined())
     // TODO: fix hard-coded IP address:
-    client.Open(IPv4Address(212, 51, 149, 149, Client::GetDefaultPort()));
+    client.Open(IPv4Address(212, 51, 149, 222, Client::GetDefaultPort()));
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   traffic_enabled = settings.traffic_enabled;
