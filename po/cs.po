@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-09-08 06:36+0000\n"
+"PO-Revision-Date: 2020-09-26 07:40+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -1458,7 +1458,7 @@ msgstr "AAT Dmax"
 #: src/InfoBoxes/Content/Factory.cpp:368
 #, no-c-format
 msgid "Assigned Area Task maximum distance possible for remainder of task."
-msgstr "Maximální možná zbývající vzdálenost v dané úloze AAT."
+msgstr "Maximální vzdálenost, dosažitelná ve zbývající AAT úloze."
 
 #: src/InfoBoxes/Content/Factory.cpp:374
 #, no-c-format
@@ -1473,7 +1473,7 @@ msgstr "AAT Dmin"
 #: src/InfoBoxes/Content/Factory.cpp:376
 #, no-c-format
 msgid "Assigned Area Task minimum distance possible for remainder of task."
-msgstr "Minimální možná zbývající vzdálenost v dané úloze AAT."
+msgstr "Minimální vzdálenost, dosažitelná ve zbývající AAT úloze."
 
 #: src/InfoBoxes/Content/Factory.cpp:382
 #, no-c-format
@@ -1491,8 +1491,8 @@ msgid ""
 "Assigned Area Task average speed achievable if flying maximum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
-"Průměrná rychlost dosažitelná v dané úloze AAT, pokud by byla maximální "
-"zbývající vzdálenost uletěna v minimálním zbývajícím čase."
+"Průměrná rychlost dosažitelná v AAT úloze, při průletu maximální zbývající "
+"vzdálenosti v minimálním čase."
 
 #: src/InfoBoxes/Content/Factory.cpp:390
 #, no-c-format
@@ -1510,8 +1510,8 @@ msgid ""
 "Assigned Area Task average speed achievable if flying minimum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
-"Průměrná rychlost dosažitelná v dané úloze AAT, pokud by byla minimální "
-"zbývající vzdálenost uletěna v minimálním zbývajícím čase."
+"Průměrná rychlost dosažitelná v úloze AAT, při průletu minimální zbývající "
+"vzdálenosti v minimálním AAT čase."
 
 #: src/InfoBoxes/Content/Factory.cpp:398
 #, no-c-format
@@ -1897,7 +1897,7 @@ msgstr "AAT Dcíl"
 #: src/InfoBoxes/Content/Factory.cpp:556
 #, no-c-format
 msgid "Assigned Area Task distance around target points for remainder of task."
-msgstr "Vzdálenost okolo zbývajících otočných bodů v úloze AAT."
+msgstr "Vzdálenost AAT úlohy přes cílové body ve zbytku úlohy."
 
 #: src/InfoBoxes/Content/Factory.cpp:562
 #, no-c-format
@@ -1915,8 +1915,8 @@ msgid ""
 "Assigned Area Task average speed achievable around target points remaining "
 "in minimum AAT time."
 msgstr ""
-"Dosažitelná průměrná rychlost okolo zbývajících otočných bodů v úloze AAT za "
-"minimum času."
+"Dosažitelná průměrná rychlost AAT přes zbývající cílové body v minimálním "
+"AAT čase."
 
 #: src/InfoBoxes/Content/Factory.cpp:570
 #, no-c-format
@@ -2074,8 +2074,8 @@ msgid ""
 "Achieved cross country speed while on current task, compensated for "
 "altitude.  Equivalent to Pirker cross-country speed remaining."
 msgstr ""
-"Dosažená rychlost v úloze, kompenzovaná o výšku. Ekvivalent zbývající "
-"rychlost Pirker cross-country."
+"Dosažená rychlost v úloze, kompenzovaná o výšku. Ekvivalent Pirkerovi "
+"rychlosti přeletu."
 
 #: src/InfoBoxes/Content/Factory.cpp:642
 #, no-c-format
@@ -3557,7 +3557,7 @@ msgstr "před %u minutami"
 
 #: src/Renderer/WaypointListRenderer.cpp:146
 msgid "Arrival Alt"
-msgstr "Příletová výška"
+msgstr "Př. výška"
 
 #: src/MapWindow/GlueMapWindowItems.cpp:115
 msgid "There is nothing interesting near this location."
@@ -3835,7 +3835,7 @@ msgstr "Hmotnost"
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:288
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:237
 msgid "Wing loading"
-msgstr "Plošné zatížení"
+msgstr "Pl. zatížení"
 
 #: src/Renderer/CuRenderer.cpp:144
 msgid "Thermal height"
@@ -3847,11 +3847,11 @@ msgstr "Základna mraků"
 
 #: src/Renderer/MacCreadyRenderer.cpp:51 src/Renderer/TaskSpeedRenderer.cpp:49
 msgid "Vave"
-msgstr "V prům"
+msgstr "Vprům"
 
 #: src/Renderer/TaskSpeedRenderer.cpp:52
 msgid "Vest"
-msgstr "V odh"
+msgstr "Vodh"
 
 #: src/UIActions.cpp:52
 msgid "Quit program?"
@@ -4284,7 +4284,7 @@ msgstr "Vypni"
 #: src/Dialogs/Device/DeviceListDialog.cpp:403
 #: src/Dialogs/Device/DeviceListDialog.cpp:651
 msgid "Debug"
-msgstr "Ladit"
+msgstr "Debug"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:301
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:116
@@ -8707,7 +8707,7 @@ msgstr "Vrať změny"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:164
 msgid "Edit Point"
-msgstr "Edit bod"
+msgstr "Uprav bod"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:167
 msgid "Make Finish"
@@ -8719,7 +8719,7 @@ msgstr "Reverz"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:179
 msgid "Clear All"
-msgstr "Maž vše"
+msgstr "Smaž vše"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:354
 msgid "Clear all points?"
