@@ -1,4 +1,5 @@
 XCSoar
+//pls consider my pull request
 ======
 .. image:: https://circleci.com/gh/XCSoar/XCSoar.svg?style=svg
     :target: https://circleci.com/gh/XCSoar/XCSoar
