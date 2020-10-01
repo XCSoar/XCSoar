@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-09-30 19:41+0000\n"
+"PO-Revision-Date: 2020-10-02 22:41+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/xcsoar/"
 "translations/pt/>\n"
@@ -7518,7 +7518,7 @@ msgid ""
 msgstr ""
 "Em locais de ascendente, a linha é desenhada verde e mais espessa, enquanto "
 "em descendentes a linha é mostrada marrom e fina. Vário zerado é apresentada "
-"como uma linha cinza."
+"como uma linha cinzenta."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:101
 #, no-c-format
