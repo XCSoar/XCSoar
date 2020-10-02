@@ -51,6 +51,7 @@ Version 7.0 - not yet released
   - new algorithm, with improved statistics
   - separate active climb and encounter-averaged bands
 * infoboxes
+  - improved formula for the title font size
   - added ":1" unit for gradient type displays
   - new infobox: % time non-circling climb
   - new infobox: % climb chart showing proportions of time spent circling climb (gray), cruise,

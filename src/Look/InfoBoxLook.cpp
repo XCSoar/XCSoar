@@ -75,8 +75,13 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
 void
 InfoBoxLook::ReinitialiseLayout(unsigned width)
 {
+  const unsigned max_font_height = Layout::FontScale(12);
+
   FontDescription title_font_d(8);
   AutoSizeFont(title_font_d, width, _T("123456789012345"));
+  if (title_font_d.GetHeight() > max_font_height)
+    title_font_d.SetHeight(max_font_height);
+
   title_font.Load(title_font_d);
 
   FontDescription value_font_d(10, true);
