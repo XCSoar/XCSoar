@@ -40,9 +40,9 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
   assert(text != NULL);
 
   SingleWindow &main_window = UIGlobals::GetMainWindow();
+  const auto main_rc = main_window.GetClientRect();
 
-  const unsigned dialog_width = Layout::Scale(200u);
-  unsigned dialog_height = Layout::Scale(160u);
+  PixelSize client_area_size(Layout::Scale(200u), Layout::Scale(160u));
 
   const unsigned button_width = Layout::Scale(60u);
   const unsigned button_height = Layout::Scale(32u);
@@ -57,8 +57,8 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
   PixelRect form_rc;
   form_rc.left = 0;
   form_rc.top = 0;
-  form_rc.right = dialog_width;
-  form_rc.bottom = dialog_height;
+  form_rc.right = client_area_size.cx;
+  form_rc.bottom = client_area_size.cy;
 
   WndForm wf(main_window, dialog_look, form_rc, caption, style);
 
@@ -71,14 +71,16 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
   text_frame->SetAlignCenter();
 
   const unsigned text_height = text_frame->GetTextHeight();
-  text_frame->Resize(dialog_width, text_height + Layout::GetTextPadding());
+  text_frame->Resize(client_area_size.cx,
+                     text_height + Layout::GetTextPadding());
 
-  const PixelSize root_size = main_window.GetSize();
+  client_area_size.cy = Layout::Scale(10) + text_height + button_height;
 
-  dialog_height = wf.GetTitleHeight() + Layout::Scale(10) + text_height + button_height;
-  const int dialog_x = (root_size.cx - dialog_width) / 2;
-  const int dialog_y = (root_size.cy - dialog_height) / 2;
-  wf.Move(dialog_x, dialog_y, dialog_width, dialog_height);
+  const auto dialog_size = wf.ClientAreaToDialogSize(client_area_size);
+  const auto dialog_position = main_rc.CenteredTopLeft(dialog_size);
+
+  const PixelRect dialog_rc(dialog_position, dialog_size);
+  wf.Move(dialog_rc);
 
   PixelRect button_rc;
   button_rc.left = 0;
@@ -133,7 +135,7 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
                  button_style, wf, IDIGNORE);
   }
 
-  const unsigned max_button_width = dialog_width / buttons.size();
+  const unsigned max_button_width = client_area_size.cx / buttons.size();
   int button_x = max_button_width / 2 - button_width / 2;
 
   // Move buttons to the right positions

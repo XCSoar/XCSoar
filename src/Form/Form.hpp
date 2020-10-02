@@ -137,8 +137,13 @@ public:
     return client_area;
   }
 
-  unsigned GetTitleHeight() const {
-    return title_rect.GetHeight();
+  /**
+   * Calculate the dialog size from the desired effective client area
+   * size.
+   */
+  PixelSize ClientAreaToDialogSize(PixelSize s) const noexcept {
+    return PixelSize((unsigned)s.cx,
+                     (unsigned)s.cy + title_rect.GetHeight());
   }
 
   void SetForceOpen(bool _force) {

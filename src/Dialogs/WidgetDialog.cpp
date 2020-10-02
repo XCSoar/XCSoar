@@ -126,12 +126,10 @@ WidgetDialog::AutoSize()
   PrepareWidget();
 
   // Calculate the minimum size of the dialog
-  PixelSize min_size = widget.Get()->GetMinimumSize();
-  min_size.cy += GetTitleHeight();
+  const auto min_size = ClientAreaToDialogSize(widget.Get()->GetMinimumSize());
 
   // Calculate the maximum size of the dialog
-  PixelSize max_size = widget.Get()->GetMaximumSize();
-  max_size.cy += GetTitleHeight();
+  const auto max_size = ClientAreaToDialogSize(widget.Get()->GetMaximumSize());
 
   // Calculate sizes with one button row at the bottom
   const int min_height_with_buttons =
