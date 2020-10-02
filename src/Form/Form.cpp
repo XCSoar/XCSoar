@@ -55,13 +55,6 @@ Copyright_License {
 #include "Event/Windows/Loop.hpp"
 #endif
 
-static WindowStyle
-AddBorder(WindowStyle style)
-{
-  style.Border();
-  return style;
-}
-
 WndForm::WndForm(const DialogLook &_look)
   :look(_look)
 {
@@ -92,7 +85,7 @@ WndForm::Create(SingleWindow &main_window, const PixelRect &rc,
   else
     caption.clear();
 
-  ContainerWindow::Create(main_window, rc, AddBorder(style));
+  ContainerWindow::Create(main_window, rc, style);
 
 #if defined(USE_WINUSER) && !defined(NDEBUG)
   ::SetWindowText(hWnd, caption.c_str());
