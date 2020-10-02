@@ -142,8 +142,9 @@ public:
    * size.
    */
   PixelSize ClientAreaToDialogSize(PixelSize s) const noexcept {
-    return PixelSize((unsigned)s.cx,
-                     (unsigned)s.cy + title_rect.GetHeight());
+    /* the "2" is the 1 pixel border at each side */
+    return PixelSize((unsigned)s.cx + 2,
+                     (unsigned)s.cy + title_rect.GetHeight() + 2);
   }
 
   void SetForceOpen(bool _force) {

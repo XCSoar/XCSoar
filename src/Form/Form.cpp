@@ -118,11 +118,24 @@ WndForm::UpdateLayout()
   PixelRect rc = GetClientRect();
 
   title_rect = rc;
+
+  if (!IsMaximised()) {
+    ++title_rect.left;
+    ++title_rect.top;
+    --title_rect.right;
+  }
+
   title_rect.bottom = rc.top +
     (caption.empty() ? 0 : look.caption.font->GetHeight());
 
   client_rect = rc;
   client_rect.top = title_rect.bottom;
+
+  if (!IsMaximised()) {
+    ++client_rect.left;
+    --client_rect.right;
+    --client_rect.bottom;
+  }
 }
 
 void
