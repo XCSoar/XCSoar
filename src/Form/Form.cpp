@@ -489,7 +489,7 @@ WndForm::OnPaint(Canvas &canvas)
 #ifndef USE_GDI
     if (IsDithered())
       canvas.DrawOutlineRectangle(rcClient.left, rcClient.top,
-                                  rcClient.right - 1, rcClient.bottom - 1,
+                                  rcClient.right, rcClient.bottom,
                                   COLOR_BLACK);
     else
 #endif

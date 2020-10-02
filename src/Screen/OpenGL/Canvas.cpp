@@ -124,9 +124,9 @@ Canvas::OutlineRectangleGL(int left, int top, int right, int bottom)
 {
   const ExactPixelPoint vertices[] = {
     PixelPoint{left, top},
-    PixelPoint{right, top},
-    PixelPoint{right, bottom},
-    PixelPoint{left, bottom},
+    PixelPoint{right - 1, top},
+    PixelPoint{right - 1, bottom - 1},
+    PixelPoint{left, bottom - 1},
   };
 
   const ScopeVertexPointer vp(vertices);
