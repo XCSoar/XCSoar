@@ -323,8 +323,7 @@ InfoBoxWindow::OnResize(PixelSize new_size)
   title_rect.bottom = rc.top + look.title_font.GetHeight();
 
   comment_rect = rc;
-  comment_rect.bottom -= Layout::Scale(2);
-  comment_rect.top = comment_rect.bottom - (look.title_font.GetHeight() + Layout::Scale(2));
+  comment_rect.top = comment_rect.bottom - look.title_font.GetHeight();
 
   value_rect = rc;
   value_rect.top = title_rect.bottom;
