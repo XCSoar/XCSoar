@@ -115,9 +115,3 @@ Display::DetectInitialOrientation()
 #endif
   return orientation;
 }
-
-DisplayOrientation
-Display::DetectInitialOrientation()
-{
-  return DisplayOrientation::DEFAULT;
-}
