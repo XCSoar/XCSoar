@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Util/Compiler.h"
 
-#if defined(USE_FB) || defined(MESA_KMS) || defined(ANDROID)
+#if defined(USE_FB) || defined(MESA_KMS) || defined(ANDROID) || defined(USE_X11)
 #define HAVE_DPI_DETECTION
 #endif
 
