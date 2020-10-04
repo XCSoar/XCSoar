@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-10-02 22:41+0000\n"
+"PO-Revision-Date: 2020-10-05 12:12+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/xcsoar/"
 "translations/pt/>\n"
@@ -1966,13 +1966,13 @@ msgid ""
 "The current Team code for this aircraft. Use this to report to other team "
 "members. The last team aircraft code entered is displayed underneath."
 msgstr ""
-"Código de equipe para a aeronave. Use o código para reportar aos outros "
-"membros da equipe. O último código registrado é reportado logo abaixo."
+"Código de equipa para a aeronave. Use o código para reportar aos outros "
+"membros da equipa. O último código registado é reportado logo abaixo."
 
 #: src/InfoBoxes/Content/Factory.cpp:594
 #, no-c-format
 msgid "Team bearing"
-msgstr "Proa da equipe"
+msgstr "Proa da equipa"
 
 #: src/InfoBoxes/Content/Factory.cpp:595
 #, no-c-format
@@ -1987,7 +1987,7 @@ msgstr "Trajetória para a localização do planador do último código reportad
 #: src/InfoBoxes/Content/Factory.cpp:602
 #, no-c-format
 msgid "Team bearing difference"
-msgstr "Diferença de proa p/ equipe"
+msgstr "Diferença de proa p/ equipa"
 
 #: src/InfoBoxes/Content/Factory.cpp:603
 #, no-c-format
@@ -2009,7 +2009,7 @@ msgstr "Raio Team"
 #: src/InfoBoxes/Content/Factory.cpp:611
 #, no-c-format
 msgid "Team Dist"
-msgstr "Equipe Dist"
+msgstr "Equipa Dist"
 
 #: src/InfoBoxes/Content/Factory.cpp:612
 #, no-c-format
@@ -2137,7 +2137,7 @@ msgid ""
 "Displays percentage of device battery remaining (where applicable) and "
 "status/voltage of external power supply."
 msgstr ""
-"Mostra a porcentagem restante de bateria (quando aplicável) e status/"
+"Mostra a percentagem restante de bateria (quando aplicável) e estado/"
 "voltagem da fonte externa de energia."
 
 #: src/InfoBoxes/Content/Factory.cpp:674
@@ -6733,7 +6733,7 @@ msgstr "Centro"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:134
 #, no-c-format
 msgid "Center the status message boxes."
-msgstr "Centralizar caixas de mensagem de status."
+msgstr "Centralizar caixas de mensagem de estado."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:135
 #, no-c-format
@@ -6743,7 +6743,7 @@ msgstr "Cima Esq."
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:136
 #, no-c-format
 msgid "Show status message boxes ina the top left corner."
-msgstr "Mostrar caixas de mensagem de status no canto superior esquerdo."
+msgstr "Mostrar caixas de mensagem de estado no canto superior esquerdo."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:142
 #, no-c-format
