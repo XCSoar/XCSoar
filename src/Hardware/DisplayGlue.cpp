@@ -27,7 +27,6 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
-#include "OS/Path.hpp"
 #include "OS/FileUtil.hpp"
 
 #ifdef KOBO
@@ -100,7 +99,7 @@ Display::DetectInitialOrientation()
   // When running in DRM/KMS mode, infer the display orientation from the linux
   // console rotation.
   char buf[3];
-  auto rotatepath = Path("/sys/class/graphics/fbcon/rotate");
+  const TCHAR *rotatepath = "/sys/class/graphics/fbcon/rotate";
   if (File::ReadString(rotatepath, buf, sizeof(buf))) {
     switch (*buf) {
     case '0': orientation = DisplayOrientation::LANDSCAPE; break;
