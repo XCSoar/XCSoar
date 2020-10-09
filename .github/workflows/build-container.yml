@@ -1,0 +1,21 @@
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ./ide/docker/
+      - ./ide/provisioning/
+
+jobs:
+ xcsoar-docker-env:
+    runs-on: ubuntu-latest
+    env:
+      REGISTRY: ghcr.io
+      IMAGENAME: xcsoar-build
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: True
+      - run: echo ${{ secrets.GHRCIO }} | docker login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
+      - run: docker pull ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGENAME }} || true
+      - run: docker build ./ide/ --file ide/docker/Dockerfile --cache-from=${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGENAME }} -t ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGENAME }} 
+      - run: docker push ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGENAME }}
