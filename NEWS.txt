@@ -47,6 +47,7 @@ Version 7.0 - not yet released
   - glide polar: dolphin speed line drawn on polar
 * map display
   - new display: glide range line drawn to working floor
+  - new terrain color ramp "black"
 * thermal band
   - new algorithm, with improved statistics
   - separate active climb and encounter-averaged bands
