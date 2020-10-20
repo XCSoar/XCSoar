@@ -73,6 +73,7 @@ PageActions::LeavePage()
     const MapSettings &map_settings = CommonInterface::GetMapSettings();
     page.cruise_scale = map_settings.cruise_scale;
     page.circling_scale = map_settings.circling_scale;
+    page.auto_zoom_enabled = map_settings.auto_zoom_enabled;
   }
 }
 
@@ -93,6 +94,8 @@ PageActions::RestoreMapZoom()
       map_settings.cruise_scale = page.cruise_scale;
     if (page.circling_scale > 0)
       map_settings.circling_scale = page.circling_scale;
+
+    map_settings.auto_zoom_enabled = page.auto_zoom_enabled;
 
     GlueMapWindow *map = UIGlobals::GetMapIfActive();
     if (map != nullptr) {
