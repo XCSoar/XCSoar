@@ -36,6 +36,8 @@
 #include <array>
 #include <cstddef> // for std::byte
 
+using SHA256Digest = std::array<std::byte, crypto_hash_sha256_BYTES>;
+
 class SHA256State {
 	crypto_hash_sha256_state state;
 
@@ -60,7 +62,7 @@ public:
 	}
 
 	auto Final() noexcept {
-		std::array<std::byte, crypto_hash_sha256_BYTES> out;
+		SHA256Digest out;
 		Final(&out);
 		return out;
 	}
