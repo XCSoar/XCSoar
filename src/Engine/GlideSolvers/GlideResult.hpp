@@ -24,7 +24,7 @@
 
 #include "Geo/GeoVector.hpp"
 #include "GlideSettings.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <type_traits>
 

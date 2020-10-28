@@ -28,7 +28,7 @@ Copyright_License {
 #include "Dialogs/GeoPointEntry.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Formatter/GeoPointFormatter.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 #include <stdio.h>
 

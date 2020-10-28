@@ -24,7 +24,7 @@
 #include "TaskAccessor.hpp"
 #include "Task/Stats/ElementStat.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "Util/Clamp.hpp"
+#include "util/Clamp.hpp"
 
 #include <stdlib.h>
 

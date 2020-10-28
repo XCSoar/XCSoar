@@ -25,10 +25,10 @@ Copyright_License {
 #define XCSOAR_THREAD_OPERATION_HPP
 
 #include "Operation/Operation.hpp"
-#include "Event/DelayedNotify.hpp"
-#include "Thread/Mutex.hxx"
-#include "Thread/Cond.hxx"
-#include "Util/StaticString.hxx"
+#include "event/DelayedNotify.hpp"
+#include "thread/Mutex.hxx"
+#include "thread/Cond.hxx"
+#include "util/StaticString.hxx"
 
 /**
  * This is an OperationEnvironment implementation that can be run in

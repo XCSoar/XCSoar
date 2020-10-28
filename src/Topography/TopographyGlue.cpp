@@ -27,9 +27,9 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "LogFile.hpp"
 #include "Operation/Operation.hpp"
-#include "IO/MapFile.hpp"
-#include "IO/ZipArchive.hpp"
-#include "IO/ZipLineReader.hpp"
+#include "io/MapFile.hpp"
+#include "io/ZipArchive.hpp"
+#include "io/ZipLineReader.hpp"
 
 /**
  * Load topography from the map file (ZIP), load the other files from

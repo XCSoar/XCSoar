@@ -33,7 +33,7 @@ Copyright_License {
 #endif
 
 #include <stdio.h>
-#include "Util/StaticArray.hxx"
+#include "util/StaticArray.hxx"
 
 typedef std::vector<BulkPixelPoint> BulkPixelPointVector;
 

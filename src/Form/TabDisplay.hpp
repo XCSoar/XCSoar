@@ -26,8 +26,8 @@ Copyright_License {
 
 #include "Screen/PaintWindow.hpp"
 #include "Renderer/TabRenderer.hpp"
-#include "Util/StaticArray.hxx"
-#include "Util/StaticString.hxx"
+#include "util/StaticArray.hxx"
+#include "util/StaticString.hxx"
 
 #include <tchar.h>
 

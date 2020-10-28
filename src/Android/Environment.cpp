@@ -22,10 +22,10 @@ Copyright_License {
 */
 
 #include "Environment.hpp"
-#include "Java/Class.hxx"
-#include "Java/String.hxx"
-#include "Java/File.hxx"
-#include "Util/StringUtil.hpp"
+#include "java/Class.hxx"
+#include "java/String.hxx"
+#include "java/File.hxx"
+#include "util/StringUtil.hpp"
 
 namespace Environment {
   static Java::TrivialClass cls;

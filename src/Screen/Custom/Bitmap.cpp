@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Screen/Bitmap.hpp"
 #include "Screen/Debug.hpp"
-#include "OS/Path.hpp"
+#include "system/Path.hpp"
 
 #ifdef ENABLE_COREGRAPHICS
 #include "Screen/Apple/ImageDecoder.hpp"
@@ -37,7 +37,7 @@ Copyright_License {
 #endif
 
 #include "UncompressedImage.hpp"
-#include "Util/ConstBuffer.hxx"
+#include "util/ConstBuffer.hxx"
 
 #include <tchar.h>
 

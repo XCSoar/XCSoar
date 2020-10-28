@@ -24,7 +24,7 @@
 #ifndef XCSOAR_DEVICE_PORT_NMEA_READER_HPP
 #define XCSOAR_DEVICE_PORT_NMEA_READER_HPP
 
-#include "Util/StaticFifoBuffer.hxx"
+#include "util/StaticFifoBuffer.hxx"
 
 class Port;
 class OperationEnvironment;

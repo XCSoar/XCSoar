@@ -28,8 +28,8 @@ Copyright_License {
 #include "PCMMixer.hpp"
 
 #include "LogFile.hpp"
-#include "Util/Macros.hpp"
-#include "Util/StringAPI.hxx"
+#include "util/Macros.hpp"
+#include "util/StringAPI.hxx"
 
 #include <cassert>
 

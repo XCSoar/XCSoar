@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "LineSplitter.hpp"
-#include "Util/TextFile.hxx"
-#include "Util/StringStrip.hxx"
+#include "util/TextFile.hxx"
+#include "util/StringStrip.hxx"
 
 #include <algorithm>
 

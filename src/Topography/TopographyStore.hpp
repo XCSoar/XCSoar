@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef TOPOGRAPHY_STORE_HPP
 #define TOPOGRAPHY_STORE_HPP
 
-#include "Util/NonCopyable.hpp"
-#include "Util/StaticArray.hxx"
-#include "Util/Compiler.h"
+#include "util/NonCopyable.hpp"
+#include "util/StaticArray.hxx"
+#include "util/Compiler.h"
 
 #include <tchar.h>
 

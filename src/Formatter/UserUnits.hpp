@@ -25,8 +25,8 @@ Copyright_License {
 #define XCSOAR_USER_UNITS_FORMATTER_HPP
 
 #include "Units/Unit.hpp"
-#include "Util/StringBuffer.hxx"
-#include "Util/Compiler.h"
+#include "util/StringBuffer.hxx"
+#include "util/Compiler.h"
 
 #include <tchar.h>
 

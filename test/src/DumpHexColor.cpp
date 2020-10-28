@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "Formatter/HexColor.hpp"
 #include "Screen/PortableColor.hpp"
-#include "OS/Args.hpp"
-#include "Util/Macros.hpp"
+#include "system/Args.hpp"
+#include "util/Macros.hpp"
 
 #include <tchar.h>
 #include <stdio.h>

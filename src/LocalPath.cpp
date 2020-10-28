@@ -22,24 +22,24 @@ Copyright_License {
 */
 
 #include "LocalPath.hpp"
-#include "OS/Path.hpp"
+#include "system/Path.hpp"
 #include "Compatibility/path.h"
-#include "Util/StringCompare.hxx"
-#include "Util/StringFormat.hpp"
-#include "Util/StringAPI.hxx"
-#include "Util/StringBuilder.hxx"
+#include "util/StringCompare.hxx"
+#include "util/StringFormat.hpp"
+#include "util/StringAPI.hxx"
+#include "util/StringBuilder.hxx"
 #include "Asset.hpp"
 
-#include "OS/FileUtil.hpp"
+#include "system/FileUtil.hpp"
 
 #ifdef ANDROID
 #include "Android/Environment.hpp"
 #endif
 
 #ifdef _WIN32
-#include "OS/PathName.hpp"
+#include "system/PathName.hpp"
 #else
-#include "Util/tstring.hpp"
+#include "util/tstring.hpp"
 #endif
 
 #include <algorithm>

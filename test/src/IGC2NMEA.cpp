@@ -22,10 +22,10 @@ Copyright_License {
 */
 
 #include "DebugReplay.hpp"
-#include "IO/TextWriter.hpp"
+#include "io/TextWriter.hpp"
 #include "NMEA/Checksum.hpp"
 #include "Units/System.hpp"
-#include "OS/Args.hpp"
+#include "system/Args.hpp"
 
 #include <stdio.h>
 

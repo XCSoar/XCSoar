@@ -21,8 +21,8 @@
 */
 
 #include "Formatter/IGCFilenameFormatter.hpp"
-#include "Util/StringAPI.hxx"
-#include "Time/BrokenDate.hpp"
+#include "util/StringAPI.hxx"
+#include "time/BrokenDate.hpp"
 #include "TestUtil.hpp"
 
 static void

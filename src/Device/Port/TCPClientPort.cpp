@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #include "TCPClientPort.hpp"
-#include "IO/Async/AsioUtil.hpp"
-#include "Net/Option.hpp"
-#include "Util/StaticString.hxx"
+#include "io/async/AsioUtil.hpp"
+#include "net/Option.hpp"
+#include "util/StaticString.hxx"
 
 TCPClientPort::TCPClientPort(boost::asio::io_context &io_context,
                              PortListener *_listener, DataHandler &_handler)

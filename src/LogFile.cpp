@@ -24,13 +24,13 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 #include "Asset.hpp"
-#include "IO/TextWriter.hpp"
+#include "io/TextWriter.hpp"
 #include "Formatter/TimeFormatter.hpp"
-#include "Time/BrokenDateTime.hpp"
-#include "OS/Path.hpp"
-#include "OS/FileUtil.hpp"
-#include "OS/UniqueFileDescriptor.hxx"
-#include "Util/Exception.hxx"
+#include "time/BrokenDateTime.hpp"
+#include "system/Path.hpp"
+#include "system/FileUtil.hpp"
+#include "io/UniqueFileDescriptor.hxx"
+#include "util/Exception.hxx"
 
 #include <stdio.h>
 #include <stdarg.h>

@@ -31,8 +31,8 @@ Copyright_License {
 #include "Math/Point2D.hpp"
 #include "Math/Quadrilateral.hpp"
 #include "Math/Boost/Point.hpp"
-#include "OS/Path.hpp"
-#include "Util/StaticArray.hxx"
+#include "system/Path.hpp"
+#include "util/StaticArray.hxx"
 
 #include <boost/geometry/geometries/register/ring.hpp>
 #include <boost/geometry/geometries/polygon.hpp>

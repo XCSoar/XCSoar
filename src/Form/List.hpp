@@ -25,10 +25,10 @@ Copyright_License {
 #define XCSOAR_FORM_LIST_HPP
 
 #include "Screen/PaintWindow.hpp"
-#include "Event/PeriodicTimer.hpp"
+#include "event/PeriodicTimer.hpp"
 #include "Form/ScrollBar.hpp"
 #include "UIUtil/KineticManager.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 struct DialogLook;
 class ContainerWindow;

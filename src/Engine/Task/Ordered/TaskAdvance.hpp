@@ -23,7 +23,7 @@
 #ifndef TASKADVANCE_HPP
 #define TASKADVANCE_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 class TaskPoint;
 struct AircraftState;

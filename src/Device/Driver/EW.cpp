@@ -32,8 +32,8 @@ Copyright_License {
 #include "Device/Declaration.hpp"
 #include "NMEA/Checksum.hpp"
 #include "Operation/Operation.hpp"
-#include "Util/TruncateString.hpp"
-#include "Util/ConvertString.hpp"
+#include "util/TruncateString.hpp"
+#include "util/ConvertString.hpp"
 
 #include <tchar.h>
 #include <stdio.h>

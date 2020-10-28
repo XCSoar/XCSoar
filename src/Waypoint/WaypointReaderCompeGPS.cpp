@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "WaypointReaderCompeGPS.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "IO/LineReader.hpp"
+#include "io/LineReader.hpp"
 #include "Geo/UTM.hpp"
 
 static bool

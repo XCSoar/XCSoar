@@ -23,7 +23,7 @@
 #ifndef PYTHON_FLIGHTTIMES_HPP
 #define PYTHON_FLIGHTTIMES_HPP
 
-#include "Time/BrokenDateTime.hpp"
+#include "time/BrokenDateTime.hpp"
 #include "Geo/GeoPoint.hpp"
 #include <vector>
 

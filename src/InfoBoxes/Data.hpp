@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_INFO_BOX_DATA_HPP
 #define XCSOAR_INFO_BOX_DATA_HPP
 
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 #include "Units/Unit.hpp"
 
 #include <tchar.h>

@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_FONT_HPP
 
 #include "Screen/Point.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #if defined(USE_APPKIT) || defined(USE_UIKIT)
 #import <Foundation/Foundation.h>

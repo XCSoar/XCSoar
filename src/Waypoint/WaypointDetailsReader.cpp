@@ -27,8 +27,8 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
-#include "IO/ConfiguredFile.hpp"
-#include "IO/LineReader.hpp"
+#include "io/ConfiguredFile.hpp"
+#include "io/LineReader.hpp"
 #include "Operation/Operation.hpp"
 
 #include <vector>

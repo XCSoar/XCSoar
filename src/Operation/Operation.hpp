@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_OPERATION_HPP
 #define XCSOAR_OPERATION_HPP
 
-#include "Util/NonCopyable.hpp"
+#include "util/NonCopyable.hpp"
 
 #include <chrono>
 

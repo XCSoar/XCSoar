@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "Device.hpp"
-#include "Util/Macros.hpp"
-#include "Util/StringAPI.hxx"
+#include "util/Macros.hpp"
+#include "util/StringAPI.hxx"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 

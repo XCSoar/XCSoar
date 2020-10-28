@@ -24,11 +24,11 @@ Copyright_License {
 #include "RasterTerrain.hpp"
 #include "Loader.hpp"
 #include "Profile/Profile.hpp"
-#include "IO/ZipArchive.hpp"
-#include "IO/FileCache.hpp"
-#include "OS/ConvertPathName.hpp"
+#include "io/ZipArchive.hpp"
+#include "io/FileCache.hpp"
+#include "system/ConvertPathName.hpp"
 #include "Operation/Operation.hpp"
-#include "Util/ConvertString.hpp"
+#include "util/ConvertString.hpp"
 
 static const TCHAR *const terrain_cache_name = _T("terrain");
 

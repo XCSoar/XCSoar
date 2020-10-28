@@ -21,11 +21,11 @@ Copyright_License {
 }
 */
 
-#include "OS/Args.hpp"
-#include "IO/FileLineReader.hpp"
+#include "system/Args.hpp"
+#include "io/FileLineReader.hpp"
 #include "Logger/FlightParser.hpp"
 #include "FlightInfo.hpp"
-#include "Util/PrintException.hxx"
+#include "util/PrintException.hxx"
 
 static void
 Print(const FlightInfo &flight)

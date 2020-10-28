@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_MAP_ITEM_LIST_HPP
 #define XCSOAR_MAP_ITEM_LIST_HPP
 
-#include "Util/StaticArray.hxx"
+#include "util/StaticArray.hxx"
 
 struct MapItem;
 

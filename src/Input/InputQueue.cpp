@@ -23,9 +23,9 @@ Copyright_License {
 
 #include "InputQueue.hpp"
 #include "InputEvents.hpp"
-#include "Thread/Mutex.hxx"
-#include "Thread/Debug.hpp"
-#include "Util/Macros.hpp"
+#include "thread/Mutex.hxx"
+#include "thread/Debug.hpp"
+#include "util/Macros.hpp"
 
 #include <algorithm>
 

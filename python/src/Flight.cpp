@@ -28,7 +28,7 @@
 #include "PythonGlue.hpp"
 #include "PythonConverters.hpp"
 #include "Flight/Flight.hpp"
-#include "Time/BrokenDateTime.hpp"
+#include "time/BrokenDateTime.hpp"
 #include "Flight/IGCFixEnhanced.hpp"
 #include "Tools/GoogleEncode.hpp"
 

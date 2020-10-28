@@ -40,8 +40,8 @@ Copyright_License {
 #include "Math/Angle.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/UTM.hpp"
-#include "Util/StringFormat.hpp"
-#include "Util/StringAPI.hxx"
+#include "util/StringFormat.hpp"
+#include "util/StringAPI.hxx"
 
 bool
 FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,

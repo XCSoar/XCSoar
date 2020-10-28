@@ -26,8 +26,8 @@ Copyright_License {
 
 #include "RasterTraits.hpp"
 #include "Height.hpp"
-#include "Util/AllocatedGrid.hxx"
-#include "Util/Compiler.h"
+#include "util/AllocatedGrid.hxx"
+#include "util/Compiler.h"
 
 #include <cstdint>
 

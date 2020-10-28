@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef TASK_STORE_HPP
 #define TASK_STORE_HPP
 
-#include "Util/Compiler.h"
-#include "OS/Path.hpp"
-#include "Util/tstring.hpp"
+#include "util/Compiler.h"
+#include "system/Path.hpp"
+#include "util/tstring.hpp"
 
 #include <vector>
 

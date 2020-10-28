@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "RulesStatusPanel.hpp"
-#include "Util/Macros.hpp"
-#include "Util/TruncateString.hpp"
+#include "util/Macros.hpp"
+#include "util/TruncateString.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "Formatter/UserUnits.hpp"

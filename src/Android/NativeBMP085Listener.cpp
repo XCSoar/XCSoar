@@ -25,7 +25,7 @@ Copyright_License {
 #include "BMP085Listener.hpp"
 #include "Atmosphere/Temperature.hpp"
 #include "Atmosphere/Pressure.hpp"
-#include "Java/Class.hxx"
+#include "java/Class.hxx"
 #include "org_xcsoar_NativeBMP085Listener.h"
 
 #include <cstddef>

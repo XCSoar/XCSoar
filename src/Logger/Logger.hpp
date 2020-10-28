@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_LOGGER_HPP
 
 #include "LoggerImpl.hpp"
-#include "Thread/SharedMutex.hpp"
+#include "thread/SharedMutex.hpp"
 
 #include <tchar.h>
 

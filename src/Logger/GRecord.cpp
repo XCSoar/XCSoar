@@ -21,13 +21,13 @@
  */
 
 #include "Logger/GRecord.hpp"
-#include "Util/MD5.hpp"
+#include "util/MD5.hpp"
 #include "IGC/IGCString.hpp"
-#include "IO/FileLineReader.hpp"
-#include "IO/FileOutputStream.hxx"
-#include "IO/BufferedOutputStream.hxx"
-#include "OS/Path.hpp"
-#include "Util/Macros.hpp"
+#include "io/FileLineReader.hpp"
+#include "io/FileOutputStream.hxx"
+#include "io/BufferedOutputStream.hxx"
+#include "system/Path.hpp"
+#include "util/Macros.hpp"
 
 #include <stdexcept>
 

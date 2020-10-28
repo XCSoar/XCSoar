@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Form/Control.hpp"
 #include "Screen/Point.hpp"
-#include "Util/tstring.hpp"
+#include "util/tstring.hpp"
 
 struct DialogLook;
 class DataField;

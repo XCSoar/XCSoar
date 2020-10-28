@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_NMEA_INPUT_LINE_HPP
 #define XCSOAR_NMEA_INPUT_LINE_HPP
 
-#include "IO/CSVLine.hpp"
+#include "io/CSVLine.hpp"
 
 /**
  * A helper class which can dissect a NMEA input line.

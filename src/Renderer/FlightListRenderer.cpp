@@ -24,7 +24,7 @@ Copyright_License {
 #include "FlightListRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 
 void
 FlightListRenderer::AddFlight(const FlightInfo &_flight)

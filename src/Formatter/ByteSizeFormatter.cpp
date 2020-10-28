@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "ByteSizeFormatter.hpp"
-#include "Util/Macros.hpp"
-#include "Util/StringFormat.hpp"
+#include "util/Macros.hpp"
+#include "util/StringFormat.hpp"
 
 #include <cassert>
 

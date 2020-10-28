@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_JOB_THREAD_HPP
 #define XCSOAR_JOB_THREAD_HPP
 
-#include "Thread/Thread.hpp"
+#include "thread/Thread.hpp"
 #include "Operation/ThreadedOperationEnvironment.hpp"
 
 #include <atomic>

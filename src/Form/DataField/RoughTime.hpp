@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_DATA_FIELD_ROUGH_TIME_HPP
 
 #include "Base.hpp"
-#include "Time/RoughTime.hpp"
+#include "time/RoughTime.hpp"
 
 /**
  * This #DataField implementation stores a UTC time of day with a

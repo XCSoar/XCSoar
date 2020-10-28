@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_FORM_CHECK_BOX_HPP
 
 #include "Screen/PaintWindow.hpp"
-#include "Util/tstring.hpp"
+#include "util/tstring.hpp"
 
 struct DialogLook;
 class ContainerWindow;

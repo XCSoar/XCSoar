@@ -32,13 +32,13 @@ Copyright_License {
 #include "Device/device.hpp"
 #include "Device/Config.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
-#include "OS/Args.hpp"
+#include "system/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
-#include "IO/Async/GlobalAsioThread.hpp"
-#include "IO/Async/AsioThread.hpp"
-#include "IO/NullDataHandler.hpp"
-#include "Util/ConvertString.hpp"
-#include "Util/PrintException.hxx"
+#include "io/async/GlobalAsioThread.hpp"
+#include "io/async/AsioThread.hpp"
+#include "io/NullDataHandler.hpp"
+#include "util/ConvertString.hpp"
+#include "util/PrintException.hxx"
 
 #include <stdio.h>
 

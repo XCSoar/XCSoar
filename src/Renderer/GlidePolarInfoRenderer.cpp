@@ -29,7 +29,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
 #include "Formatter/UserUnits.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 
 
 void

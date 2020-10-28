@@ -1,6 +1,6 @@
 # Build rules for the generic utility library
 
-UTIL_SRC_DIR = $(SRC)/Util
+UTIL_SRC_DIR = $(SRC)/util
 
 UTIL_SOURCES = \
 	$(UTIL_SRC_DIR)/Exception.cxx \

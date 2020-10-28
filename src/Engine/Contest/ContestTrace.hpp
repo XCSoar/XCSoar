@@ -23,8 +23,8 @@
 #ifndef XCSOAR_CONTEST_TRACE_HPP
 #define XCSOAR_CONTEST_TRACE_HPP
 
-#include "Util/TrivialArray.hxx"
-#include "Util/TypeTraits.hpp"
+#include "util/TrivialArray.hxx"
+#include "util/TypeTraits.hpp"
 #include "Geo/GeoPoint.hpp"
 
 class TracePoint;

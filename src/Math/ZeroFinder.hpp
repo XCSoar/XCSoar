@@ -23,7 +23,7 @@
 #ifndef ZERO_FINDER_HPP
 #define ZERO_FINDER_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <cassert>
 

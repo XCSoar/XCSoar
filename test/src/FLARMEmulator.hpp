@@ -30,9 +30,9 @@ Copyright_License {
 #include "Device/Util/NMEAWriter.hpp"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
-#include "Util/Macros.hpp"
-#include "Util/StaticFifoBuffer.hxx"
-#include "Util/StaticString.hxx"
+#include "util/Macros.hpp"
+#include "util/StaticFifoBuffer.hxx"
+#include "util/StaticString.hxx"
 
 #include <string>
 #include <map>

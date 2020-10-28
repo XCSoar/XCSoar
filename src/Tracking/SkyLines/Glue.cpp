@@ -27,8 +27,8 @@ Copyright_License {
 #include "Assemble.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
-#include "Net/State.hpp"
-#include "OS/ByteOrder.hpp"
+#include "net/State.hpp"
+#include "system/ByteOrder.hpp"
 
 #include <cassert>
 

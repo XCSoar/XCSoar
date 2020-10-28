@@ -29,7 +29,7 @@ Copyright_License {
 #include "Profile/ProfileMap.hpp"
 // IWYU pragma: end_exports
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 class Path;
 class AllocatedPath;

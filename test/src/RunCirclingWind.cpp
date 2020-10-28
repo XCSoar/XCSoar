@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Computer/CirclingComputer.hpp"
 #include "Computer/Wind/CirclingWind.hpp"
-#include "OS/Args.hpp"
+#include "system/Args.hpp"
 #include "DebugReplay.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Computer/Settings.hpp"

@@ -23,14 +23,14 @@ Copyright_License {
 
 #include "CommandLine.hpp"
 #include "Profile/Profile.hpp"
-#include "OS/Args.hpp"
-#include "OS/ConvertPathName.hpp"
+#include "system/Args.hpp"
+#include "system/ConvertPathName.hpp"
 #include "Hardware/DisplayDPI.hpp"
 #include "Simulator.hpp"
 #include "LocalPath.hpp"
-#include "Util/StringCompare.hxx"
-#include "Util/StringAPI.hxx"
-#include "Util/NumberParser.hpp"
+#include "util/StringCompare.hxx"
+#include "util/StringAPI.hxx"
+#include "util/NumberParser.hpp"
 #include "Asset.hpp"
 
 #ifdef _WIN32

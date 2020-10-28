@@ -20,7 +20,7 @@
 }
 */
 
-#include "Time/RoughTime.hpp"
+#include "time/RoughTime.hpp"
 #include "TestUtil.hpp"
 
 int main(int argc, char **argv)

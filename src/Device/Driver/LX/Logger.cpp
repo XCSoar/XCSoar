@@ -28,11 +28,11 @@
 #include "Device/Port/Port.hpp"
 #include "Device/RecordedFlight.hpp"
 #include "Operation/Operation.hpp"
-#include "OS/ByteOrder.hpp"
-#include "OS/Path.hpp"
-#include "IO/BufferedOutputStream.hxx"
-#include "IO/FileOutputStream.hxx"
-#include "Util/ScopeExit.hxx"
+#include "system/ByteOrder.hpp"
+#include "system/Path.hpp"
+#include "io/BufferedOutputStream.hxx"
+#include "io/FileOutputStream.hxx"
+#include "util/ScopeExit.hxx"
 
 #include <memory>
 

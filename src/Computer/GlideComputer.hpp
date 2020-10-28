@@ -25,15 +25,15 @@ Copyright_License {
 #define XCSOAR_GLIDECOMPUTER_HPP
 
 #include "GlideComputerBlackboard.hpp"
-#include "Time/PeriodClock.hpp"
-#include "Time/DeltaTime.hpp"
+#include "time/PeriodClock.hpp"
+#include "time/DeltaTime.hpp"
 #include "GlideComputerAirData.hpp"
 #include "StatsComputer.hpp"
 #include "TaskComputer.hpp"
 #include "LogComputer.hpp"
 #include "WarningComputer.hpp"
 #include "CuComputer.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 #include "Engine/Contest/Solvers/Retrospective.hpp"
 
 class Waypoints;

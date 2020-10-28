@@ -24,7 +24,7 @@ Copyright_License {
 #include "NOAAUpdater.hpp"
 #include "NOAADownloader.hpp"
 #include "METARParser.hpp"
-#include "Net/HTTP/Session.hpp"
+#include "net/http/Session.hpp"
 #include "LogFile.hpp"
 
 namespace NOAAUpdater {

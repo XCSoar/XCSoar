@@ -21,10 +21,10 @@
 */
 
 #include "Device/Driver/LX/Convert.hpp"
-#include "OS/ConvertPathName.hpp"
-#include "IO/BufferedOutputStream.hxx"
-#include "IO/FileOutputStream.hxx"
-#include "Util/PrintException.hxx"
+#include "system/ConvertPathName.hpp"
+#include "io/BufferedOutputStream.hxx"
+#include "io/FileOutputStream.hxx"
+#include "util/PrintException.hxx"
 #include "TestUtil.hpp"
 
 #include <stdio.h>

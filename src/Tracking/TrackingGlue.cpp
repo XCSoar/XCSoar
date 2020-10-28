@@ -27,7 +27,7 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Operation/Operation.hpp"
 #include "LogFile.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 static LiveTrack24::VehicleType
 MapVehicleTypeToLivetrack24(LiveTrack24::Settings::VehicleType vt)

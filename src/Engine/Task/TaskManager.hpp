@@ -23,8 +23,8 @@
 #ifndef TASKMANAGER_H
 #define TASKMANAGER_H
 
-#include "Util/Compiler.h"
-#include "Util/NonCopyable.hpp"
+#include "util/Compiler.h"
+#include "util/NonCopyable.hpp"
 #include "Stats/TaskStats.hpp"
 #include "Stats/CommonStats.hpp"
 #include "GlideSolvers/GlidePolar.hpp"

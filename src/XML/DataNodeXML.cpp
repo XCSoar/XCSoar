@@ -22,7 +22,7 @@
 
 #include "DataNodeXML.hpp"
 #include "Node.hpp"
-#include "Util/StringAPI.hxx"
+#include "util/StringAPI.hxx"
 
 const TCHAR *
 ConstDataNodeXML::GetName() const

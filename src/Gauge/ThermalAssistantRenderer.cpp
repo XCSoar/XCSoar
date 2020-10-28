@@ -22,8 +22,8 @@
 */
 
 #include "ThermalAssistantRenderer.hpp"
-#include "Util/Macros.hpp"
-#include "Util/Clamp.hpp"
+#include "util/Macros.hpp"
+#include "util/Clamp.hpp"
 #include "NMEA/Attitude.hpp"
 #include "NMEA/Derived.hpp"
 #include "Screen/Canvas.hpp"

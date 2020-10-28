@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Device/Driver.hpp"
 #include "Device/SettingsMap.hpp"
-#include "Thread/Mutex.hxx"
+#include "thread/Mutex.hxx"
 #include "Volatile.hpp"
 
 class NMEAInputLine;

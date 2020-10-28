@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_RADIO_FREQUENCY_HPP
 #define XCSOAR_RADIO_FREQUENCY_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <cassert>
 #include <cstdint>

@@ -24,7 +24,7 @@ Copyright_License {
 #include "Form/List.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Canvas.hpp"
-#include "Event/KeyCode.hpp"
+#include "event/KeyCode.hpp"
 #include "Screen/Point.hpp"
 #include "Asset.hpp"
 

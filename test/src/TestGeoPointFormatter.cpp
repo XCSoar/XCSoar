@@ -21,8 +21,8 @@
 */
 
 #include "Formatter/GeoPointFormatter.hpp"
-#include "Util/Macros.hpp"
-#include "Util/StringAPI.hxx"
+#include "util/Macros.hpp"
+#include "util/StringAPI.hxx"
 #include "TestUtil.hpp"
 
 static bool

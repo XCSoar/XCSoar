@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_ATMOSPHERE_PRESSURE_H
 #define XCSOAR_ATMOSPHERE_PRESSURE_H
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 /**
  * ICAO Standard Atmosphere calculations (valid in Troposphere, alt<11000m)

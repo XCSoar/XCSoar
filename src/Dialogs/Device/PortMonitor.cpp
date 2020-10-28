@@ -29,12 +29,12 @@ Copyright_License {
 #include "Dialogs/WidgetDialog.hpp"
 #include "Form/ActionListener.hpp"
 #include "Device/Descriptor.hpp"
-#include "Util/Macros.hpp"
-#include "Util/StaticFifoBuffer.hxx"
+#include "util/Macros.hpp"
+#include "util/StaticFifoBuffer.hxx"
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
-#include "Event/DelayedNotify.hpp"
-#include "Thread/Mutex.hxx"
+#include "event/DelayedNotify.hpp"
+#include "thread/Mutex.hxx"
 #include "UIGlobals.hpp"
 
 enum Buttons {

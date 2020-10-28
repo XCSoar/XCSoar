@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "WorldFile.hpp"
 #include "Geo/GeoBounds.hpp"
-#include "IO/ZipLineReader.hpp"
-#include "Util/NumberParser.hpp"
+#include "io/ZipLineReader.hpp"
+#include "util/NumberParser.hpp"
 
 #include <algorithm>
 #include <stdexcept>

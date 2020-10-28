@@ -36,7 +36,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Profile/Profile.hpp"
 #include "LogFile.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 #include "Panels/ConfigPanel.hpp"
 #include "Panels/PagesConfigPanel.hpp"
 #include "Panels/UnitsConfigPanel.hpp"

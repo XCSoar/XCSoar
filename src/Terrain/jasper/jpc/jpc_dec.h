@@ -83,7 +83,7 @@
 #include "jpc_t1cod.h"
 #include "jpc_t2cod.h"
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 /******************************************************************************\
 * Below are some ugly warts necessary to support packed packet headers.

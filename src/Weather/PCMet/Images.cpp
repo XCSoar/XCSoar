@@ -24,13 +24,13 @@ Copyright_License {
 #include "Images.hpp"
 #include "Settings.hpp"
 #include "Screen/Bitmap.hpp"
-#include "Net/HTTP/Session.hpp"
-#include "Net/HTTP/ToBuffer.hpp"
-#include "Net/HTTP/ToFile.hpp"
+#include "net/http/Session.hpp"
+#include "net/http/ToBuffer.hpp"
+#include "net/http/ToFile.hpp"
 #include "Job/Runner.hpp"
 #include "LocalPath.hpp"
-#include "OS/FileUtil.hpp"
-#include "Util/ConvertString.hpp"
+#include "system/FileUtil.hpp"
+#include "util/ConvertString.hpp"
 
 #include <stdexcept>
 

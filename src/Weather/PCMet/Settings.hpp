@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_WEATHER_PCMET_SETTINGS_HPP
 #define XCSOAR_WEATHER_PCMET_SETTINGS_HPP
 
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 
 struct PCMetSettings {
   struct Credentials {

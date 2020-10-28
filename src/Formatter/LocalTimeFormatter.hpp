@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_LOCAL_TIME_FORMATTER_HPP
 #define XCSOAR_LOCAL_TIME_FORMATTER_HPP
 
-#include "Time/RoughTime.hpp"
-#include "Util/StringBuffer.hxx"
-#include "Util/Compiler.h"
+#include "time/RoughTime.hpp"
+#include "util/StringBuffer.hxx"
+#include "util/Compiler.h"
 
 #include <tchar.h>
 

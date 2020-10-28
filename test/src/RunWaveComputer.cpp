@@ -22,13 +22,13 @@ Copyright_License {
 */
 
 #include "DebugReplay.hpp"
-#include "OS/Args.hpp"
+#include "system/Args.hpp"
 #include "Computer/WaveComputer.hpp"
 #include "Computer/WaveResult.hpp"
 #include "Computer/WaveSettings.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Formatter/GeoPointFormatter.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 int main(int argc, char **argv)
 {

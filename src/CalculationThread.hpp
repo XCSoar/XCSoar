@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_CALCULATION_THREAD_HPP
 #define XCSOAR_CALCULATION_THREAD_HPP
 
-#include "Thread/WorkerThread.hpp"
-#include "Thread/Mutex.hxx"
+#include "thread/WorkerThread.hpp"
+#include "thread/Mutex.hxx"
 #include "Computer/Settings.hpp"
 
 class GlideComputer;

@@ -24,8 +24,8 @@ Copyright_License {
 #include "DebugReplay.hpp"
 #include "DebugReplayIGC.hpp"
 #include "DebugReplayNMEA.hpp"
-#include "OS/Args.hpp"
-#include "OS/PathName.hpp"
+#include "system/Args.hpp"
+#include "system/PathName.hpp"
 #include "Computer/Settings.hpp"
 
 DebugReplay::DebugReplay()

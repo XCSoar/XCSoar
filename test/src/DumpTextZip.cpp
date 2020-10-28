@@ -21,10 +21,10 @@ Copyright_License {
 }
 */
 
-#include "IO/ZipArchive.hpp"
-#include "IO/ZipLineReader.hpp"
-#include "OS/Args.hpp"
-#include "Util/PrintException.hxx"
+#include "io/ZipArchive.hpp"
+#include "io/ZipLineReader.hpp"
+#include "system/Args.hpp"
+#include "util/PrintException.hxx"
 
 #include <zzip/zzip.h>
 

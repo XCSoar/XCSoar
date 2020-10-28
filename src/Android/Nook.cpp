@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "Nook.hpp"
-#include "OS/FileUtil.hpp"
-#include "OS/Sleep.h"
+#include "system/FileUtil.hpp"
+#include "system/Sleep.h"
 
 #include <stdlib.h>
 

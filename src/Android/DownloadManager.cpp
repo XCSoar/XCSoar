@@ -23,14 +23,14 @@ Copyright_License {
 
 #include "DownloadManager.hpp"
 #include "Main.hpp"
-#include "Net/HTTP/DownloadManager.hpp"
+#include "net/http/DownloadManager.hpp"
 #include "Context.hpp"
-#include "Java/Class.hxx"
-#include "Java/String.hxx"
+#include "java/Class.hxx"
+#include "java/String.hxx"
 #include "LocalPath.hpp"
-#include "OS/FileUtil.hpp"
-#include "Util/Macros.hpp"
-#include "Util/StringAPI.hxx"
+#include "system/FileUtil.hpp"
+#include "util/Macros.hpp"
+#include "util/StringAPI.hxx"
 #include "org_xcsoar_DownloadUtil.h"
 
 #include <algorithm>

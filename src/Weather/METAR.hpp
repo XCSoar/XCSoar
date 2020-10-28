@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef METAR_HPP
 #define METAR_HPP
 
-#include "Time/BrokenDateTime.hpp"
-#include "Util/StaticString.hxx"
+#include "time/BrokenDateTime.hpp"
+#include "util/StaticString.hxx"
 
 struct METAR
 {

@@ -23,9 +23,9 @@ Copyright_License {
 
 #include "Polar/PolarFileGlue.hpp"
 #include "Parser.hpp"
-#include "IO/FileLineReader.hpp"
-#include "IO/FileOutputStream.hxx"
-#include "IO/BufferedOutputStream.hxx"
+#include "io/FileLineReader.hpp"
+#include "io/FileOutputStream.hxx"
+#include "io/BufferedOutputStream.hxx"
 
 bool
 PolarGlue::LoadFromFile(PolarInfo &polar, NLineReader &reader)

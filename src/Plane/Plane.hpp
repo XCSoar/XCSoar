@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef PLANE_HPP
 #define PLANE_HPP
 
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 #include "Polar/Shape.hpp"
 
 struct Plane

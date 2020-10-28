@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Screen/PaintWindow.hpp"
 #include "Renderer/TabRenderer.hpp"
-#include "Util/StaticArray.hxx"
+#include "util/StaticArray.hxx"
 
 struct TabMenuGroup;
 struct DialogLook;

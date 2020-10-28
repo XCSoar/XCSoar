@@ -26,7 +26,7 @@ Copyright_License {
 
 #ifdef ANDROID
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 /**
  * This macro specifies whether this platform has support for a

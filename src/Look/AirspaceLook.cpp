@@ -25,7 +25,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "Resources.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 const RGB8Color AirspaceLook::preset_colors[] = {
   RGB8_RED,

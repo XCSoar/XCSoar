@@ -21,11 +21,11 @@ Copyright_License {
 }
 */
 
-#include "OS/Args.hpp"
+#include "system/Args.hpp"
 #include "DebugReplay.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Formatter/GeoPointFormatter.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 #include <stdio.h>
 

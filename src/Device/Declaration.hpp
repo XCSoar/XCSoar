@@ -25,8 +25,8 @@ Copyright_License {
 #define XCSOAR_DEVICE_DECLARATION_HPP
 
 #include "Engine/Waypoint/Waypoint.hpp"
-#include "Util/StaticString.hxx"
-#include "Util/Compiler.h"
+#include "util/StaticString.hxx"
+#include "util/Compiler.h"
 
 #include <vector>
 #include <tchar.h>

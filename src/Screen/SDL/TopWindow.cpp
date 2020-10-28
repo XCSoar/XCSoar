@@ -23,16 +23,16 @@ Copyright_License {
 
 #include "Screen/Features.hpp"
 #include "Screen/TopWindow.hpp"
-#include "Event/SDL/Event.hpp"
-#include "Event/SDL/Loop.hpp"
-#include "Event/Globals.hpp"
-#include "Event/Queue.hpp"
+#include "event/sdl/Event.hpp"
+#include "event/sdl/Loop.hpp"
+#include "event/Globals.hpp"
+#include "event/Queue.hpp"
 #include "Screen/Custom/TopCanvas.hpp"
-#include "Util/ConvertString.hpp"
-#include "Util/UTF8.hpp"
+#include "util/ConvertString.hpp"
+#include "util/UTF8.hpp"
 
 #ifdef UNICODE
-#include "Util/ConvertString.hpp"
+#include "util/ConvertString.hpp"
 #endif
 
 #if defined(__MACOSX__) && __MACOSX__

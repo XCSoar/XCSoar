@@ -24,7 +24,7 @@ Copyright_License {
 #include "Form/TabDisplay.hpp"
 #include "Widget/TabWidget.hpp"
 #include "Look/DialogLook.hpp"
-#include "Event/KeyCode.hpp"
+#include "event/KeyCode.hpp"
 #include "Screen/Icon.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"

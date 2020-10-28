@@ -28,7 +28,7 @@ Copyright_License {
 
 #include "Screen/OpenGL/Scissor.hpp"
 #include "Screen/OpenGL/VertexPointer.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 #include <algorithm>
 

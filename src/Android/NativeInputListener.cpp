@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "NativeInputListener.hpp"
-#include "IO/DataHandler.hpp"
-#include "Java/Class.hxx"
+#include "io/DataHandler.hpp"
+#include "java/Class.hxx"
 #include "org_xcsoar_NativeInputListener.h"
 
 #include <cstddef>

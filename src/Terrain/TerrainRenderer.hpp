@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_TERRAIN_RENDERER_HPP
 
 #include "RasterRenderer.hpp"
-#include "Util/Serial.hpp"
+#include "util/Serial.hpp"
 #include "Terrain/TerrainSettings.hpp"
 
 #ifndef ENABLE_OPENGL

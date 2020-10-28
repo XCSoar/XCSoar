@@ -25,7 +25,7 @@
 #include "GlideSolvers/GlideResult.hpp"
 #include "GlideSolvers/MacCready.hpp"
 #include "Geo/Flat/FlatGeoPoint.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 GlideResult
 RoutePolar::SolveTask(const GlideSettings &settings,

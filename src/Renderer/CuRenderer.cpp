@@ -27,7 +27,7 @@ Copyright_License {
 #include "Atmosphere/Temperature.hpp"
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
-#include "Util/StringFormat.hpp"
+#include "util/StringFormat.hpp"
 
 #include <algorithm>
 

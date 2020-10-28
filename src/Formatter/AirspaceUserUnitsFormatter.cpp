@@ -26,7 +26,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Units/Descriptor.hpp"
 #include "Math/Util.hpp"
-#include "Util/StringFormat.hpp"
+#include "util/StringFormat.hpp"
 
 #include <string.h>
 

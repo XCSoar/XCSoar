@@ -25,7 +25,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/ButtonLook.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 unsigned
 ButtonFrameRenderer::GetMargin()

@@ -22,12 +22,12 @@ Copyright_License {
 */
 
 #include "Map.hpp"
-#include "Util/UTF8.hpp"
-#include "Util/TruncateString.hpp"
-#include "Util/Macros.hpp"
+#include "util/UTF8.hpp"
+#include "util/TruncateString.hpp"
+#include "util/Macros.hpp"
 
 #ifdef _UNICODE
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 #include <windows.h>
 #endif

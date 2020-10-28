@@ -24,11 +24,11 @@ Copyright_License {
 #include "Config.hpp"
 #include "Asset.hpp"
 #include "Language/Language.hpp"
-#include "Util/StringCompare.hxx"
+#include "util/StringCompare.hxx"
 
 #ifdef ANDROID
 #include "Android/BluetoothHelper.hpp"
-#include "Java/Global.hxx"
+#include "java/Global.hxx"
 #endif
 
 bool

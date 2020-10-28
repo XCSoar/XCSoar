@@ -31,7 +31,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Interface.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
-#include "Util/Algorithm.hpp"
+#include "util/Algorithm.hpp"
 
 static void
 devInitOne(DeviceDescriptor &device, const DeviceConfig &config)

@@ -27,7 +27,7 @@ Copyright_License {
 struct GeoPoint;
 class WindowProjection;
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <glm/fwd.hpp>
 

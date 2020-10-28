@@ -24,10 +24,10 @@ Copyright_License {
 #include "Tracking/SkyLines/Client.hpp"
 #include "Tracking/SkyLines/Handler.hpp"
 #include "NMEA/Info.hpp"
-#include "OS/Args.hpp"
-#include "Util/NumberParser.hpp"
-#include "Util/StringUtil.hpp"
-#include "Util/PrintException.hxx"
+#include "system/Args.hpp"
+#include "util/NumberParser.hpp"
+#include "util/StringUtil.hpp"
+#include "util/PrintException.hxx"
 #include "DebugReplay.hpp"
 
 #include <boost/asio/steady_timer.hpp>

@@ -29,8 +29,8 @@ Copyright_License {
 #include "WaypointReaderOzi.hpp"
 #include "WaypointReaderCompeGPS.hpp"
 #include "WaypointFileType.hpp"
-#include "IO/ZipLineReader.hpp"
-#include "IO/FileLineReader.hpp"
+#include "io/ZipLineReader.hpp"
+#include "io/FileLineReader.hpp"
 
 #include <memory>
 

@@ -24,7 +24,7 @@ Copyright_License {
 #include "ApplyVegaSwitches.hpp"
 #include "Interface.hpp"
 #include "Input/InputQueue.hpp"
-#include "Thread/Debug.hpp"
+#include "thread/Debug.hpp"
 
 static VegaSwitchState last_vega_switches;
 

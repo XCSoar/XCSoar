@@ -22,7 +22,7 @@
 #ifndef THERMAL_BAND_HPP
 #define THERMAL_BAND_HPP
 
-#include "Util/TrivialArray.hxx"
+#include "util/TrivialArray.hxx"
 #include "ThermalSlice.hpp"
 #include <type_traits>
 

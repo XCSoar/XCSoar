@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "GeoPoint.hpp"
 #include "Formatter/GeoPointFormatter.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 void
 GeoPointDataField::ModifyValue(GeoPoint _value)

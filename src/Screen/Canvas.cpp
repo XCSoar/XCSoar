@@ -24,7 +24,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Bitmap.hpp"
-#include "Util/TStringView.hxx"
+#include "util/TStringView.hxx"
 
 void
 Canvas::ScaleCopy(int dest_x, int dest_y,

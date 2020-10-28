@@ -25,8 +25,8 @@ Copyright_License {
 #define XCSOAR_MAIN_WINDOW_HXX
 
 #include "Screen/SingleWindow.hpp"
-#include "Event/PeriodicTimer.hpp"
-#include "Event/Notify.hpp"
+#include "event/PeriodicTimer.hpp"
+#include "event/Notify.hpp"
 #include "BatteryTimer.hpp"
 #include "Widget/ManagedWidget.hpp"
 #include "UIUtil/GestureManager.hpp"

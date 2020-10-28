@@ -24,9 +24,9 @@
 #include "Serialiser.hpp"
 #include "XML/DataNodeXML.hpp"
 #include "XML/Node.hpp"
-#include "IO/FileOutputStream.hxx"
-#include "IO/BufferedOutputStream.hxx"
-#include "OS/Path.hpp"
+#include "io/FileOutputStream.hxx"
+#include "io/BufferedOutputStream.hxx"
+#include "system/Path.hpp"
 
 #include <tchar.h>
 

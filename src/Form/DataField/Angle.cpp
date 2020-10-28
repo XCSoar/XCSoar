@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "Angle.hpp"
 #include "ComboList.hpp"
-#include "Util/NumberParser.hpp"
-#include "Util/Macros.hpp"
+#include "util/NumberParser.hpp"
+#include "util/Macros.hpp"
 
 #include <stdio.h>
 

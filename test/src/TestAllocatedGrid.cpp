@@ -20,7 +20,7 @@
 }
 */
 
-#include "Util/AllocatedGrid.hxx"
+#include "util/AllocatedGrid.hxx"
 
 extern "C" {
 #include "tap.h"

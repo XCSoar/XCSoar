@@ -25,7 +25,7 @@
 #include "MapSettings.hpp"
 #include "Screen/Ramp.hpp"
 #include "Screen/Layout.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 #include <algorithm>
 

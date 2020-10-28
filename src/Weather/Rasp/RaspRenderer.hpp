@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "RaspCache.hpp"
 #include "Terrain/RasterRenderer.hpp"
-#include "Time/BrokenTime.hpp"
+#include "time/BrokenTime.hpp"
 
 #ifndef ENABLE_OPENGL
 #include "Projection/CompareProjection.hpp"

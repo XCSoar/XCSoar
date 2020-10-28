@@ -24,7 +24,7 @@
 #include "harness_task.hpp"
 #include "harness_flight.hpp"
 #include "Contest/Solvers/ContestDijkstra.hpp"
-#include "OS/ConvertPathName.hpp"
+#include "system/ConvertPathName.hpp"
 #include "test_debug.hpp"
 
 #include <stdlib.h>

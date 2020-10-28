@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Math/ARange.hpp"
 #include "GeoPoint.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 /**
  * A rectangle on earth's surface with very simple semantics.  Similar

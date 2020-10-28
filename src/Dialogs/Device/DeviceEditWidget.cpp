@@ -24,9 +24,9 @@
 #include "DeviceEditWidget.hpp"
 #include "Dialogs/ComboPicker.hpp"
 #include "UIGlobals.hpp"
-#include "Util/Compiler.h"
-#include "Util/Macros.hpp"
-#include "Util/NumberParser.hpp"
+#include "util/Compiler.h"
+#include "util/Macros.hpp"
+#include "util/NumberParser.hpp"
 #include "Language/Language.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Boolean.hpp"
@@ -42,7 +42,7 @@
 #endif
 
 #ifdef ANDROID
-#include "Java/Global.hxx"
+#include "java/Global.hxx"
 #include "Android/BluetoothHelper.hpp"
 #include "Device/Port/AndroidIOIOUartPort.hpp"
 #include "ScanBluetoothLeDialog.hpp"

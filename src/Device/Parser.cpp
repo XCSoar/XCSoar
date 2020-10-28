@@ -30,7 +30,7 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "Units/System.hpp"
 #include "Driver/FLARM/StaticParser.hpp"
-#include "Util/CharUtil.hxx"
+#include "util/CharUtil.hxx"
 
 NMEAParser::NMEAParser()
 {

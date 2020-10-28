@@ -23,15 +23,15 @@ Copyright_License {
 
 #include "Map.hpp"
 #include "LocalPath.hpp"
-#include "OS/Path.hpp"
+#include "system/Path.hpp"
 #include "Compatibility/path.h"
-#include "Util/StringAPI.hxx"
-#include "Util/StringCompare.hxx"
-#include "Util/StringPointer.hxx"
-#include "Util/Macros.hpp"
+#include "util/StringAPI.hxx"
+#include "util/StringCompare.hxx"
+#include "util/StringPointer.hxx"
+#include "util/Macros.hpp"
 
 #ifdef _UNICODE
-#include "Util/AllocatedString.hxx"
+#include "util/AllocatedString.hxx"
 #endif
 
 #include <windef.h> /* for MAX_PATH */

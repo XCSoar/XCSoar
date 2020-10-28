@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef BUTTON_LABEL_HPP
 #define BUTTON_LABEL_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <tchar.h>
 #include <cstddef>

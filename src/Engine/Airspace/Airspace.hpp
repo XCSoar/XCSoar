@@ -23,7 +23,7 @@
 #define AIRSPACE_HPP
 
 #include "Geo/Flat/FlatBoundingBox.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #ifdef DO_PRINT
 #include <iostream>

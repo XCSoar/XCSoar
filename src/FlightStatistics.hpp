@@ -27,7 +27,7 @@ Copyright_License {
 #include "Math/LeastSquares.hpp"
 #include "Math/ConvexFilter.hpp"
 #include "Math/Histogram.hpp"
-#include "Thread/Mutex.hxx"
+#include "thread/Mutex.hxx"
 
 class FlightStatistics {
 public:

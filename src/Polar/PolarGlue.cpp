@@ -27,11 +27,11 @@ Copyright_License {
 #include "Polar/PolarStore.hpp"
 #include "Parser.hpp"
 #include "Profile/Profile.hpp"
-#include "IO/ConfiguredFile.hpp"
-#include "IO/LineReader.hpp"
+#include "io/ConfiguredFile.hpp"
+#include "io/LineReader.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
-#include "Util/StringCompare.hxx"
+#include "util/StringCompare.hxx"
 
 #include <memory>
 

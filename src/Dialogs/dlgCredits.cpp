@@ -35,7 +35,7 @@ Copyright_License {
 #include "Screen/Font.hpp"
 #include "Version.hpp"
 #include "Inflate.hpp"
-#include "Util/ConvertString.hpp"
+#include "util/ConvertString.hpp"
 #include "Resources.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"

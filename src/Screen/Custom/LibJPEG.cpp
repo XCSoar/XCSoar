@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "LibJPEG.hpp"
 #include "UncompressedImage.hpp"
-#include "OS/Path.hpp"
-#include "Util/ScopeExit.hxx"
+#include "system/Path.hpp"
+#include "util/ScopeExit.hxx"
 
 #include <algorithm>
 #include <stdexcept>

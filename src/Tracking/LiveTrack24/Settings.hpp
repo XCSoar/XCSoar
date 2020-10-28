@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TRACKING_LIVETRACK24_SETTINGS_HPP
 #define XCSOAR_TRACKING_LIVETRACK24_SETTINGS_HPP
 
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 
 #include <tchar.h>
 

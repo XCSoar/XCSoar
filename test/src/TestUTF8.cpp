@@ -20,8 +20,8 @@
 }
 */
 
-#include "Util/UTF8.hpp"
-#include "Util/Macros.hpp"
+#include "util/UTF8.hpp"
+#include "util/Macros.hpp"
 #include "TestUtil.hpp"
 
 #include <cassert>

@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "Error.hpp"
 #include "Message.hpp"
-#include "Util/ConvertString.hpp"
-#include "Util/Exception.hxx"
+#include "util/ConvertString.hpp"
+#include "util/Exception.hxx"
 
 void
 ShowError(std::exception_ptr e, const TCHAR *caption) noexcept

@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #include "InputKeys.hpp"
-#include "Event/KeyCode.hpp"
-#include "Util/CharUtil.hxx"
-#include "Util/StringAPI.hxx"
+#include "event/KeyCode.hpp"
+#include "util/CharUtil.hxx"
+#include "util/StringAPI.hxx"
 
 struct string_to_key {
   const TCHAR *name;

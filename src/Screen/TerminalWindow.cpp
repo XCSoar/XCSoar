@@ -24,7 +24,7 @@ Copyright_License {
 #include "TerminalWindow.hpp"
 #include "Screen/Canvas.hpp"
 #include "Look/TerminalLook.hpp"
-#include "Util/CharUtil.hxx"
+#include "util/CharUtil.hxx"
 
 void
 TerminalWindow::Write(const char *p, size_t length)

@@ -24,7 +24,7 @@ Copyright_License {
 #include "Geo/UTM.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "WGS84.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 static constexpr double k0 = 0.9996;
 

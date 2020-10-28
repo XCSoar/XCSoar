@@ -26,13 +26,13 @@ Copyright_License {
 #include "Device/Port/ConfiguredPort.hpp"
 #include "Device/Config.hpp"
 #include "DebugPort.hpp"
-#include "OS/Args.hpp"
+#include "system/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
-#include "Util/Macros.hpp"
-#include "Util/PrintException.hxx"
-#include "IO/Async/GlobalAsioThread.hpp"
-#include "IO/Async/AsioThread.hpp"
-#include "IO/NullDataHandler.hpp"
+#include "util/Macros.hpp"
+#include "util/PrintException.hxx"
+#include "io/async/GlobalAsioThread.hpp"
+#include "io/async/AsioThread.hpp"
+#include "io/NullDataHandler.hpp"
 
 #include <stdio.h>
 

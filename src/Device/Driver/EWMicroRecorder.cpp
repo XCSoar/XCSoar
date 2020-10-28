@@ -35,9 +35,9 @@ Copyright_License {
 #include "NMEA/Checksum.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Units/System.hpp"
-#include "Time/TimeoutClock.hpp"
+#include "time/TimeoutClock.hpp"
 #include "Operation/Operation.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 
 #include <cassert>
 #include <stdio.h>

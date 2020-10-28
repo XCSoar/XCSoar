@@ -22,7 +22,7 @@
 #ifndef TASK_SUMMARY_HPP
 #define TASK_SUMMARY_HPP
 
-#include "Util/TrivialArray.hxx"
+#include "util/TrivialArray.hxx"
 
 #include <type_traits>
 

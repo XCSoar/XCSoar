@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_FORM_LAMBDA_ACTION_LISTENER_HPP
 
 #include "ActionListener.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <utility>
 

@@ -25,8 +25,8 @@ Copyright_License {
 #include "Assemble.hpp"
 #include "Protocol.hpp"
 #include "Import.hpp"
-#include "OS/ByteOrder.hpp"
-#include "Util/CRC.hpp"
+#include "system/ByteOrder.hpp"
+#include "util/CRC.hpp"
 
 namespace SkyLinesTracking {
 

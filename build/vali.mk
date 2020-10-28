@@ -2,7 +2,7 @@
 
 VALI_XCS_SOURCES = \
 	$(SRC)/Logger/GRecord.cpp \
-	$(SRC)/Util/MD5.cpp \
+	$(SRC)/util/MD5.cpp \
 	$(SRC)/Version.cpp \
 	$(SRC)/VALI-XCS.cpp
 VALI_XCS_DEPENDS = IO OS UTIL

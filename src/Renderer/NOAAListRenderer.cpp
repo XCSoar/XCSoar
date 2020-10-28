@@ -24,7 +24,7 @@ Copyright_License {
 #include "NOAAListRenderer.hpp"
 #include "TwoTextRowsRenderer.hpp"
 #include "Look/NOAALook.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 #include "Language/Language.hpp"
 
 void

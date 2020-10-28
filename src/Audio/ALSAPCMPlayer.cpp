@@ -25,10 +25,10 @@ Copyright_License {
 
 #include "ALSAEnv.hpp"
 #include "PCMDataSource.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 #include "LogFile.hpp"
 
-#include "IO/Async/AsioUtil.hpp"
+#include "io/async/AsioUtil.hpp"
 
 #include <alsa/asoundlib.h>
 

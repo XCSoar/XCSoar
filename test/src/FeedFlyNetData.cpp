@@ -22,19 +22,19 @@ Copyright_License {
 */
 
 #include "DebugPort.hpp"
-#include "OS/Args.hpp"
+#include "system/Args.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Port/ConfiguredPort.hpp"
 #include "Device/Config.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
-#include "IO/Async/GlobalAsioThread.hpp"
-#include "IO/Async/AsioThread.hpp"
-#include "IO/NullDataHandler.hpp"
-#include "Util/StaticString.hxx"
-#include "Util/PrintException.hxx"
+#include "io/async/GlobalAsioThread.hpp"
+#include "io/async/AsioThread.hpp"
+#include "io/NullDataHandler.hpp"
+#include "util/StaticString.hxx"
+#include "util/PrintException.hxx"
 #include "Math/Util.hpp"
-#include "Time/PeriodClock.hpp"
-#include "Time/Cast.hxx"
+#include "time/PeriodClock.hpp"
+#include "time/Cast.hxx"
 
 #include <stdio.h>
 #include <stdlib.h>

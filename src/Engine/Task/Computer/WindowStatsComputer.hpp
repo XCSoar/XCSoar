@@ -24,7 +24,7 @@
 #define XCSOAR_WINDOW_STATS_COMPUTER_HPP
 
 #include "Math/DifferentialWindowFilter.hpp"
-#include "Time/DeltaTime.hpp"
+#include "time/DeltaTime.hpp"
 
 struct WindowStats;
 class TaskStats;

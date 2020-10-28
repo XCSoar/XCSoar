@@ -27,7 +27,7 @@ Copyright_License {
 #include "Dijkstra.hpp"
 #include "ScanTaskPoint.hpp"
 #include "SolverResult.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <unordered_map>
 #include <cassert>

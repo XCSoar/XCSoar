@@ -26,9 +26,9 @@ Copyright_License {
 #include "Main.hpp"
 #include "NativeLeScanCallback.hpp"
 #include "PortBridge.hpp"
-#include "Java/String.hxx"
-#include "Java/Class.hxx"
-#include "Java/Exception.hxx"
+#include "java/String.hxx"
+#include "java/Class.hxx"
+#include "java/Exception.hxx"
 
 #include <map>
 #include <string>

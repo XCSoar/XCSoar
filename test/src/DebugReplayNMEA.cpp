@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "DebugReplayNMEA.hpp"
-#include "IO/FileLineReader.hpp"
+#include "io/FileLineReader.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Register.hpp"
 #include "Device/Port/NullPort.hpp"

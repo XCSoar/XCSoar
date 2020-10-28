@@ -29,7 +29,7 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_REGISTRY_HPP
 #define XCSOAR_DEVICE_REGISTRY_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <tchar.h>
 

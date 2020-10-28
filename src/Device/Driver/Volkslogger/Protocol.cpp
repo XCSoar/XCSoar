@@ -22,10 +22,10 @@ Copyright_License {
 */
 
 #include "Protocol.hpp"
-#include "Util/CRC.hpp"
+#include "util/CRC.hpp"
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"
-#include "Time/TimeoutClock.hpp"
+#include "time/TimeoutClock.hpp"
 
 #include <string.h>
 

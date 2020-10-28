@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_FLIGHT_INFO_HPP
 #define XCSOAR_FLIGHT_INFO_HPP
 
-#include "Time/BrokenDate.hpp"
-#include "Time/BrokenTime.hpp"
+#include "time/BrokenDate.hpp"
+#include "time/BrokenTime.hpp"
 
 struct FlightInfo {
   BrokenDate date;

@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_CAI302_WAYPOINT_UPLOADER_HPP
 
 #include "Job/Job.hpp"
-#include "OS/Path.hpp"
+#include "system/Path.hpp"
 
 class CAI302Device;
 

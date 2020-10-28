@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_RATE_LIMITER_HPP
 #define XCSOAR_RATE_LIMITER_HPP
 
-#include "Event/Timer.hpp"
-#include "Time/PeriodClock.hpp"
+#include "event/Timer.hpp"
+#include "time/PeriodClock.hpp"
 
 /**
  * A class that limits the rate at which events are processed.  It

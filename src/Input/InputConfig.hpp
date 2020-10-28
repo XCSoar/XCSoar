@@ -26,10 +26,10 @@ Copyright_License {
 
 #include "InputQueue.hpp"
 #include "Menu/MenuData.hpp"
-#include "Util/RadixTree.hpp"
-#include "Util/StaticString.hxx"
-#include "Util/TrivialArray.hxx"
-#include "Util/TStringView.hxx"
+#include "util/RadixTree.hpp"
+#include "util/StaticString.hxx"
+#include "util/TrivialArray.hxx"
+#include "util/TStringView.hxx"
 
 #include <cassert>
 #include <tchar.h>

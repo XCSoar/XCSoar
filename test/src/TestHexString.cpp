@@ -20,7 +20,7 @@
 }
 */
 
-#include "Util/HexString.hpp"
+#include "util/HexString.hpp"
 #include "TestUtil.hpp"
 
 #include <stdio.h>

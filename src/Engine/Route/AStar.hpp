@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef ASTAR_HPP
 #define ASTAR_HPP
 
-#include "Util/ReservablePriorityQueue.hpp"
-#include "Util/Compiler.h"
+#include "util/ReservablePriorityQueue.hpp"
+#include "util/Compiler.h"
 
 #include <unordered_map>
 

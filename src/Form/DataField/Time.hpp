@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_DATA_FIELD_TIME_HPP
 
 #include "Base.hpp"
-#include "Time/PeriodClock.hpp"
+#include "time/PeriodClock.hpp"
 
 class DataFieldTime final : public DataField {
 private:

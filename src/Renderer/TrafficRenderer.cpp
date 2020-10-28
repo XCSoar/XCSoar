@@ -28,7 +28,7 @@
 #include "FLARM/Traffic.hpp"
 #include "GliderLink/Traffic.hpp"
 #include "Math/Screen.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 void
 TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,

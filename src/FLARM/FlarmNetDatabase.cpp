@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "FlarmNetDatabase.hpp"
-#include "Util/StringUtil.hpp"
+#include "util/StringUtil.hpp"
 
 #include <cassert>
 

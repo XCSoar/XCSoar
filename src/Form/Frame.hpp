@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/PaintWindow.hpp"
 #include "Screen/Color.hpp"
 #include "Renderer/TextRenderer.hpp"
-#include "Util/tstring.hpp"
+#include "util/tstring.hpp"
 
 #include <tchar.h>
 

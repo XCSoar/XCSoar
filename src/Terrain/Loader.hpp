@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TERRAIN_LOADER_HPP
 #define XCSOAR_TERRAIN_LOADER_HPP
 
-#include "Thread/SharedMutex.hpp"
+#include "thread/SharedMutex.hpp"
 
 struct zzip_dir;
 struct GeoPoint;

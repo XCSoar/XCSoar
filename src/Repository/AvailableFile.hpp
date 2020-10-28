@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_AVAILABLE_FILE_HPP
 #define XCSOAR_AVAILABLE_FILE_HPP
 
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 #include "FileType.hpp"
-#include "Time/BrokenDate.hpp"
+#include "time/BrokenDate.hpp"
 
 #include <string>
 

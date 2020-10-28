@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_TRACKING_CLOUD_SETTINGS_HPP
 
 #include "Features.hpp"
-#include "Util/TriState.hpp"
+#include "util/TriState.hpp"
 
 #ifdef HAVE_SKYLINES_TRACKING
 

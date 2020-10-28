@@ -31,8 +31,8 @@ Copyright_License {
 #include "Plane/Plane.hpp"
 #include "Plane/PlaneGlue.hpp"
 #include "Plane/PlaneFileGlue.hpp"
-#include "OS/FileUtil.hpp"
-#include "OS/Path.hpp"
+#include "system/FileUtil.hpp"
+#include "system/Path.hpp"
 #include "LocalPath.hpp"
 #include "Components.hpp"
 #include "Profile/Profile.hpp"
@@ -41,7 +41,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "Util/StringAPI.hxx"
+#include "util/StringAPI.hxx"
 
 #include <vector>
 #include <cassert>

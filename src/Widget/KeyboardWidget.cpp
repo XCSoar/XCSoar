@@ -23,9 +23,9 @@ Copyright_License {
 
 #include "KeyboardWidget.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
-#include "Util/StringAPI.hxx"
-#include "Util/StringCompare.hxx"
-#include "Util/CharUtil.hxx"
+#include "util/StringAPI.hxx"
+#include "util/StringCompare.hxx"
+#include "util/CharUtil.hxx"
 #include "Screen/Layout.hpp"
 
 #include <cassert>

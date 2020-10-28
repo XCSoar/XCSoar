@@ -24,7 +24,7 @@ Copyright_License {
 #include "GlideRatioCalculator.hpp"
 #include "Math/LowPassFilter.hpp"
 #include "Settings.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 #include <cassert>
 

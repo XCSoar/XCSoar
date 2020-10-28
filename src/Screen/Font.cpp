@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Font.hpp"
-#include "Util/TStringView.hxx"
+#include "util/TStringView.hxx"
 
 PixelSize
 Font::TextSize(const TCHAR *text) const noexcept

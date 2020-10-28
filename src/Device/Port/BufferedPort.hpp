@@ -25,10 +25,10 @@ Copyright_License {
 #define XCSOAR_DEVICE_BUFFERED_PORT_HPP
 
 #include "Port.hpp"
-#include "IO/DataHandler.hpp"
-#include "Thread/Mutex.hxx"
-#include "Thread/Cond.hxx"
-#include "Util/StaticFifoBuffer.hxx"
+#include "io/DataHandler.hpp"
+#include "thread/Mutex.hxx"
+#include "thread/Cond.hxx"
+#include "util/StaticFifoBuffer.hxx"
 
 #include <cstdint>
 

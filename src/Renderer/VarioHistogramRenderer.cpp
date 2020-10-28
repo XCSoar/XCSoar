@@ -30,7 +30,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
 #include "Formatter/UserUnits.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 #include "GradientRenderer.hpp"
 
 #ifdef ENABLE_OPENGL

@@ -21,12 +21,12 @@ Copyright_License {
 }
 */
 
-#include "Lua/Basic.hpp"
-#include "Lua/Log.hpp"
-#include "Lua/RunFile.hxx"
-#include "Lua/Ptr.hpp"
-#include "OS/Args.hpp"
-#include "Util/PrintException.hxx"
+#include "lua/Basic.hpp"
+#include "lua/Log.hpp"
+#include "lua/RunFile.hxx"
+#include "lua/Ptr.hpp"
+#include "system/Args.hpp"
+#include "util/PrintException.hxx"
 
 extern "C" {
 #include <lua.h>

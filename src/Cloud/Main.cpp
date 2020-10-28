@@ -27,15 +27,15 @@ Copyright_License {
 #include "Serialiser.hpp"
 #include "Tracking/SkyLines/Server.hpp"
 #include "Tracking/SkyLines/Protocol.hpp"
-#include "OS/ByteOrder.hpp"
-#include "IO/FileOutputStream.hxx"
-#include "IO/FileReader.hxx"
-#include "Util/PrintException.hxx"
-#include "Util/Exception.hxx"
-#include "Util/Compiler.h"
+#include "system/ByteOrder.hpp"
+#include "io/FileOutputStream.hxx"
+#include "io/FileReader.hxx"
+#include "util/PrintException.hxx"
+#include "util/Exception.hxx"
+#include "util/Compiler.h"
 
 #ifdef __linux__
-#include "IO/Async/SignalListener.hpp"
+#include "io/async/SignalListener.hpp"
 #endif
 
 #include <boost/asio/steady_timer.hpp>

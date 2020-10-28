@@ -31,9 +31,9 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "Operation/Operation.hpp"
-#include "OS/Path.hpp"
-#include "IO/MapFile.hpp"
-#include "IO/ZipArchive.hpp"
+#include "system/Path.hpp"
+#include "io/MapFile.hpp"
+#include "io/ZipArchive.hpp"
 
 static bool
 LoadWaypointFile(Waypoints &waypoints, Path path,

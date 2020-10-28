@@ -30,7 +30,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "NMEA/ClimbHistory.hpp"
 #include "Formatter/UserUnits.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 #include "GlidePolarInfoRenderer.hpp"
 
 #include <stdio.h>

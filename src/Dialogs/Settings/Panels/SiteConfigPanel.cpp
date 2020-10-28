@@ -30,7 +30,7 @@ Copyright_License {
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Waypoint/Patterns.hpp"
-#include "OS/Path.hpp"
+#include "system/Path.hpp"
 
 enum ControlIndex {
   DataPath,

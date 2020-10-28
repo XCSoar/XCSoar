@@ -23,8 +23,8 @@
 #ifndef XCSOAR_PROTECTED_AIRSPACE_WARNING_MANAGER_HPP
 #define XCSOAR_PROTECTED_AIRSPACE_WARNING_MANAGER_HPP
 
-#include "Thread/Guard.hpp"
-#include "Util/Compiler.h"
+#include "thread/Guard.hpp"
+#include "util/Compiler.h"
 
 class AirspaceWarningManager;
 class AbstractAirspace;

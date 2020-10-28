@@ -32,7 +32,7 @@ Copyright_License {
 #include "Screen/Brush.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/Pen.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <tchar.h>
 

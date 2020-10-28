@@ -23,8 +23,8 @@
 #ifndef AV_FILTER_HPP
 #define AV_FILTER_HPP
 
-#include "Util/StaticArray.hxx"
-#include "Util/Compiler.h"
+#include "util/StaticArray.hxx"
+#include "util/Compiler.h"
 
 #include <numeric>
 #include <cassert>

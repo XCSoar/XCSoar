@@ -32,7 +32,7 @@ Copyright_License {
 #include "Tracking/SkyLines/Settings.hpp"
 #include "Tracking/LiveTrack24/Settings.hpp"
 
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 
 
 struct TrackingSettings {

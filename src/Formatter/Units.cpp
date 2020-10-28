@@ -26,7 +26,7 @@ Copyright_License {
 #include "Units/Descriptor.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Math/Util.hpp"
-#include "Util/StringFormat.hpp"
+#include "util/StringFormat.hpp"
 
 static void
 FormatInteger(TCHAR *buffer,

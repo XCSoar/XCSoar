@@ -36,7 +36,7 @@ Copyright_License {
 #include "Look/Look.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 #include "Language/Language.hpp"
 #include "Widget/CallbackWidget.hpp"
 

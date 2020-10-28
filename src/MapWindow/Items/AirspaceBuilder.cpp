@@ -24,7 +24,7 @@ Copyright_License {
 #include "Builder.hpp"
 #include "MapItem.hpp"
 #include "List.hpp"
-#include "Util/StaticArray.hxx"
+#include "util/StaticArray.hxx"
 #include "Engine/Airspace/AirspaceWarning.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Engine/Airspace/Airspaces.hpp"

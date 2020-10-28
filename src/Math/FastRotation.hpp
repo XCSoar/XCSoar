@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_MATH_FASTROTATION_HPP
 #define XCSOAR_MATH_FASTROTATION_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 #include "Math/Angle.hpp"
 #include "Point2D.hpp"
 

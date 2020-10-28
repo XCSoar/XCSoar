@@ -40,7 +40,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
-#include "Event/PeriodicTimer.hpp"
+#include "event/PeriodicTimer.hpp"
 
 #include <math.h>
 

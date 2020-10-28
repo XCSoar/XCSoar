@@ -21,11 +21,11 @@ Copyright_License {
 }
 */
 
-#include "OS/ConvertPathName.hpp"
+#include "system/ConvertPathName.hpp"
 #include "IGC/IGCWriter.hpp"
-#include "Time/GPSClock.hpp"
+#include "time/GPSClock.hpp"
 #include "DebugReplay.hpp"
-#include "OS/Args.hpp"
+#include "system/Args.hpp"
 
 #include <stdio.h>
 

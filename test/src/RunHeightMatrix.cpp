@@ -26,10 +26,10 @@ Copyright_License {
 #include "Terrain/Loader.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Screen/Layout.hpp"
-#include "OS/Args.hpp"
-#include "IO/ZipArchive.hpp"
+#include "system/Args.hpp"
+#include "io/ZipArchive.hpp"
 #include "Operation/Operation.hpp"
-#include "Util/PrintException.hxx"
+#include "util/PrintException.hxx"
 
 #include <stdio.h>
 #include <string.h>

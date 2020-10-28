@@ -22,9 +22,9 @@
 
 #include "DataNode.hpp"
 #include "Math/Angle.hpp"
-#include "Util/StaticString.hxx"
-#include "Util/NumberParser.hpp"
-#include "Time/RoughTime.hpp"
+#include "util/StaticString.hxx"
+#include "util/NumberParser.hpp"
+#include "time/RoughTime.hpp"
 
 ConstDataNode::~ConstDataNode()
 {

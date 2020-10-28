@@ -25,7 +25,7 @@ Copyright_License {
 #include "Message.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <tchar.h>
 #include <algorithm>

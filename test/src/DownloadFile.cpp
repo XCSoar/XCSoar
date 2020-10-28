@@ -21,12 +21,12 @@ Copyright_License {
 }
 */
 
-#include "Net/HTTP/Session.hpp"
-#include "Net/HTTP/Request.hpp"
-#include "Net/HTTP/Handler.hpp"
-#include "Net/HTTP/Init.hpp"
-#include "OS/ConvertPathName.hpp"
-#include "Util/PrintException.hxx"
+#include "net/http/Session.hpp"
+#include "net/http/Request.hpp"
+#include "net/http/Handler.hpp"
+#include "net/http/Init.hpp"
+#include "system/ConvertPathName.hpp"
+#include "util/PrintException.hxx"
 
 #include <exception>
 #include <iostream>

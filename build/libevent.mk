@@ -1,56 +1,56 @@
 EVENT_SOURCES = \
-	$(SRC)/Event/Globals.cpp \
-	$(SRC)/Event/Idle.cpp \
-	$(SRC)/Event/DelayedNotify.cpp \
-	$(SRC)/Event/Notify.cpp
+	$(SRC)/event/Globals.cpp \
+	$(SRC)/event/Idle.cpp \
+	$(SRC)/event/DelayedNotify.cpp \
+	$(SRC)/event/Notify.cpp
 
 ifeq ($(USE_POLL_EVENT),y)
 EVENT_SOURCES += \
-	$(SRC)/Event/Poll/Timer.cpp \
-	$(SRC)/Event/Poll/Loop.cpp \
-	$(SRC)/Event/Poll/Queue.cpp
+	$(SRC)/event/poll/Timer.cpp \
+	$(SRC)/event/poll/Loop.cpp \
+	$(SRC)/event/poll/Queue.cpp
 POLL_EVENT_CPPFLAGS = -DUSE_POLL_EVENT
 else
 EVENT_SOURCES += \
-	$(SRC)/Event/Shared/Timer.cpp \
-	$(SRC)/Event/Shared/TimerQueue.cpp
+	$(SRC)/event/shared/Timer.cpp \
+	$(SRC)/event/shared/TimerQueue.cpp
 endif
 
 ifeq ($(TARGET),ANDROID)
 EVENT_SOURCES += \
-	$(SRC)/Event/Android/Loop.cpp \
-	$(SRC)/Event/Android/Queue.cpp
+	$(SRC)/event/android/Loop.cpp \
+	$(SRC)/event/android/Queue.cpp
 else ifeq ($(VFB),y)
 VFB_CPPFLAGS = -DNON_INTERACTIVE
 else ifeq ($(USE_X11),y)
-EVENT_SOURCES += $(SRC)/Event/Poll/X11Queue.cpp
+EVENT_SOURCES += $(SRC)/event/poll/X11Queue.cpp
 else ifeq ($(USE_WAYLAND),y)
-EVENT_SOURCES += $(SRC)/Event/Poll/WaylandQueue.cpp
+EVENT_SOURCES += $(SRC)/event/poll/WaylandQueue.cpp
 else ifeq ($(USE_CONSOLE),y)
 EVENT_SOURCES += \
-	$(SRC)/Event/Poll/InputQueue.cpp
+	$(SRC)/event/poll/InputQueue.cpp
 CONSOLE_CPPFLAGS = -DUSE_CONSOLE
 
 ifeq ($(USE_LIBINPUT),y)
 EVENT_SOURCES += \
-	$(SRC)/Event/Poll/LibInput/LibInputHandler.cpp
+	$(SRC)/event/poll/libinput/LibInputHandler.cpp
 ifeq ($(ENABLE_UDEV),y)
-EVENT_SOURCES += $(SRC)/Event/Poll/LibInput/UdevContext.cpp
+EVENT_SOURCES += $(SRC)/event/poll/libinput/UdevContext.cpp
 endif
 else
 EVENT_SOURCES += \
-	$(SRC)/Event/Poll/Linux/MergeMouse.cpp \
-	$(SRC)/Event/Poll/Linux/Input.cpp
+	$(SRC)/event/poll/linux/MergeMouse.cpp \
+	$(SRC)/event/poll/linux/Input.cpp
 endif
 
 else ifeq ($(ENABLE_SDL),y)
 EVENT_SOURCES += \
-	$(SRC)/Event/SDL/Loop.cpp \
-	$(SRC)/Event/SDL/Queue.cpp
+	$(SRC)/event/sdl/Loop.cpp \
+	$(SRC)/event/sdl/Queue.cpp
 else ifeq ($(HAVE_WIN32),y)
 EVENT_SOURCES += \
-	$(SRC)/Event/Windows/Loop.cpp \
-	$(SRC)/Event/Windows/Queue.cpp
+	$(SRC)/event/windows/Loop.cpp \
+	$(SRC)/event/windows/Queue.cpp
 endif
 
 ifeq ($(USE_LIBINPUT),y)

@@ -37,8 +37,8 @@ Copyright_License {
 #include "InfoBoxes/Content/Factory.hpp"
 #include "Look/InfoBoxLook.hpp"
 #include "Language/Language.hpp"
-#include "Util/StringAPI.hxx"
-#include "Util/StaticArray.hxx"
+#include "util/StringAPI.hxx"
+#include "util/StaticArray.hxx"
 
 #include <cassert>
 

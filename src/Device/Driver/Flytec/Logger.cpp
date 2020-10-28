@@ -26,14 +26,14 @@ Copyright_License {
 #include "NMEA/Checksum.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/RecordedFlight.hpp"
-#include "Time/TimeoutClock.hpp"
-#include "Util/Macros.hpp"
-#include "OS/Path.hpp"
-#include "IO/FileOutputStream.hxx"
-#include "IO/BufferedOutputStream.hxx"
+#include "time/TimeoutClock.hpp"
+#include "util/Macros.hpp"
+#include "system/Path.hpp"
+#include "io/FileOutputStream.hxx"
+#include "io/BufferedOutputStream.hxx"
 #include "Operation/Operation.hpp"
 #include "IGC/IGCParser.hpp"
-#include "Util/StringCompare.hxx"
+#include "util/StringCompare.hxx"
 
 #include <stdlib.h>
 #include <string.h>

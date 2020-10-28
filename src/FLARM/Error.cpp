@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Error.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 #include "Language/Language.hpp"
 
 static const TCHAR *const severity_strings[] = {

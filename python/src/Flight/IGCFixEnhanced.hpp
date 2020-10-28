@@ -24,7 +24,7 @@
 #define PYTHON_IGC_FIX_ENHANCED_HPP
 
 #include "IGC/IGCFix.hpp"
-#include "Time/BrokenDate.hpp"
+#include "time/BrokenDate.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 

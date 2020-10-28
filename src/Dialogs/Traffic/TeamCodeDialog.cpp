@@ -39,10 +39,10 @@
 #include "Blackboard/BlackboardListener.hpp"
 #include "Language/Language.hpp"
 #include "TeamActions.hpp"
-#include "Util/StringCompare.hxx"
-#include "Util/StringStrip.hxx"
-#include "Util/TruncateString.hpp"
-#include "Util/Macros.hpp"
+#include "util/StringCompare.hxx"
+#include "util/StringStrip.hxx"
+#include "util/TruncateString.hpp"
+#include "util/Macros.hpp"
 
 class TeamCodeWidget final
   : public RowFormWidget, NullBlackboardListener, ActionListener {

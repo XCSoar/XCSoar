@@ -27,8 +27,8 @@
 #include "Task/AbstractTask.hpp"
 #include "SmartTaskAdvance.hpp"
 #include "Waypoint/Ptr.hpp"
-#include "Util/DereferenceIterator.hxx"
-#include "Util/StaticString.hxx"
+#include "util/DereferenceIterator.hxx"
+#include "util/StaticString.hxx"
 
 #include <cassert>
 #include <vector>

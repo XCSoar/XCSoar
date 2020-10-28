@@ -25,7 +25,7 @@ Copyright_License {
 #include "Canvas.hpp"
 #include "Features.hpp"
 #include "Look/Colors.hpp"
-#include "Thread/Debug.hpp"
+#include "thread/Debug.hpp"
 #include "Asset.hpp"
 
 void

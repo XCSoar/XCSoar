@@ -28,7 +28,7 @@ Copyright_License {
 #include "Math/FastRotation.hpp"
 #include "Math/Util.hpp"
 #include "Screen/Point.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <cassert>
 

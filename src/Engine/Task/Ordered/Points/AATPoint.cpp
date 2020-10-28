@@ -23,7 +23,7 @@
 #include "AATPoint.hpp"
 #include "Geo/Flat/FlatProjection.hpp"
 #include "Geo/Flat/FlatLine.hpp"
-#include "Util/Clamp.hpp"
+#include "util/Clamp.hpp"
 
 const GeoPoint&
 AATPoint::GetLocationRemaining() const

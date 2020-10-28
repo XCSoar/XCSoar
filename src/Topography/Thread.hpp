@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TOPOGRAPHY_THREAD_HPP
 #define XCSOAR_TOPOGRAPHY_THREAD_HPP
 
-#include "Thread/StandbyThread.hpp"
+#include "thread/StandbyThread.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Geo/GeoBounds.hpp"
 

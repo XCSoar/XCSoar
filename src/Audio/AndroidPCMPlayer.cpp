@@ -28,7 +28,7 @@ Copyright_License {
 #include "SLES/Init.hpp"
 #include "SLES/Engine.hpp"
 
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 #include "LogFile.hpp"
 
 #include <SLES/OpenSLES_Android.h>

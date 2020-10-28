@@ -22,8 +22,8 @@
 
 #include "Profile/Profile.hpp"
 #include "LocalPath.hpp"
-#include "OS/Args.hpp"
-#include "OS/Path.hpp"
+#include "system/Args.hpp"
+#include "system/Path.hpp"
 
 #include <stdio.h>
 

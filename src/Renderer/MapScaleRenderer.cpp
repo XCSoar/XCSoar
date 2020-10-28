@@ -26,7 +26,7 @@
 #include "Screen/Layout.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Look/OverlayLook.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 #include "Formatter/UserUnits.hpp"
 
 void

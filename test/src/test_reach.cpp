@@ -28,13 +28,13 @@
 #include "Engine/Route/ReachResult.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "Terrain/Loader.hpp"
-#include "OS/ConvertPathName.hpp"
+#include "system/ConvertPathName.hpp"
 #include "Compatibility/path.h"
 #include "GlideSolvers/GlideSettings.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Geo/SpeedVector.hpp"
 #include "Operation/Operation.hpp"
-#include "OS/FileUtil.hpp"
+#include "system/FileUtil.hpp"
 
 #include <zzip/zzip.h>
 

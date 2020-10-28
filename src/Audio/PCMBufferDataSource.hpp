@@ -26,8 +26,8 @@ Copyright_License {
 
 #include "PCMDataSource.hpp"
 
-#include "Thread/Mutex.hxx"
-#include "Util/ConstBuffer.hxx"
+#include "thread/Mutex.hxx"
+#include "util/ConstBuffer.hxx"
 
 #include <cstdint>
 #include <list>

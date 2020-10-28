@@ -24,7 +24,7 @@ Copyright_License {
 #include "Builder.hpp"
 #include "MapItem.hpp"
 #include "List.hpp"
-#include "Util/StaticArray.hxx"
+#include "util/StaticArray.hxx"
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"

@@ -23,11 +23,11 @@ Copyright_License {
 
 #include "org_xcsoar_EventBridge.h"
 #include "Product.hpp"
-#include "Event/Queue.hpp"
-#include "Event/Idle.hpp"
-#include "Event/Globals.hpp"
-#include "OS/Clock.hpp"
-#include "Util/Compiler.h"
+#include "event/Queue.hpp"
+#include "event/Idle.hpp"
+#include "event/Globals.hpp"
+#include "system/Clock.hpp"
+#include "util/Compiler.h"
 
 /**
  * @see http://developer.android.com/reference/android/view/KeyEvent.html

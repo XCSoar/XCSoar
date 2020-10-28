@@ -22,10 +22,10 @@
 */
 
 #include "IGCFileCleanup.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 #include "LocalPath.hpp"
-#include "OS/FileUtil.hpp"
-#include "OS/Path.hpp"
+#include "system/FileUtil.hpp"
+#include "system/Path.hpp"
 #include "UtilsSystem.hpp"
 
 #include <tchar.h>

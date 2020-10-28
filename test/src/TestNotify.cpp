@@ -20,25 +20,25 @@
 }
 */
 
-#include "Thread/Thread.hpp"
-#include "Event/Notify.hpp"
-#include "Event/Globals.hpp"
+#include "thread/Thread.hpp"
+#include "event/Notify.hpp"
+#include "event/Globals.hpp"
 #include "Screen/Init.hpp"
 #include "TestUtil.hpp"
 
 #ifdef ANDROID
-#include "Event/Android/Loop.hpp"
-#include "Event/Shared/Event.hpp"
+#include "event/android/Loop.hpp"
+#include "event/shared/Event.hpp"
 #elif defined(USE_POLL_EVENT)
-#include "Event/Shared/Event.hpp"
-#include "Event/Poll/Loop.hpp"
+#include "event/shared/Event.hpp"
+#include "event/poll/Loop.hpp"
 #include "Screen/TopWindow.hpp"
 #elif defined(ENABLE_SDL)
-#include "Event/SDL/Event.hpp"
-#include "Event/SDL/Loop.hpp"
+#include "event/sdl/Event.hpp"
+#include "event/sdl/Loop.hpp"
 #else
-#include "Event/Windows/Event.hpp"
-#include "Event/Windows/Loop.hpp"
+#include "event/windows/Event.hpp"
+#include "event/windows/Loop.hpp"
 #endif
 
 #ifdef USE_FB

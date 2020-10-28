@@ -30,7 +30,7 @@
 #ifndef KINETIC_MANAGER_HPP
 #define KINETIC_MANAGER_HPP
 
-#include "Time/PeriodClock.hpp"
+#include "time/PeriodClock.hpp"
 
 /**
  * A manager class that can be used for kinetic scrolling

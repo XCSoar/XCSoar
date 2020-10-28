@@ -33,7 +33,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 #include "Screen/Layout.hpp"
-#include "Event/KeyCode.hpp"
+#include "event/KeyCode.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Language/Language.hpp"
@@ -46,7 +46,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Blackboard/RateLimitedBlackboardListener.hpp"
 #include "Interface.hpp"
-#include "Util/Clamp.hpp"
+#include "util/Clamp.hpp"
 
 class TargetWidget;
 

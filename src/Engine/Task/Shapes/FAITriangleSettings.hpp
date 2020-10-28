@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FAI_TRIANGLE_SETTINGS_HPP
 #define XCSOAR_FAI_TRIANGLE_SETTINGS_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <cstdint>
 

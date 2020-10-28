@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Apple/InternalSensors.hpp"
-#include "Thread/Mutex.hxx"
+#include "thread/Mutex.hxx"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 

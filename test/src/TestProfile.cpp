@@ -21,12 +21,12 @@
 */
 
 #include "Profile/Profile.hpp"
-#include "IO/FileLineReader.hpp"
-#include "OS/Path.hpp"
+#include "io/FileLineReader.hpp"
+#include "system/Path.hpp"
 #include "TestUtil.hpp"
-#include "Util/StringAPI.hxx"
-#include "Util/StaticString.hxx"
-#include "Util/PrintException.hxx"
+#include "util/StringAPI.hxx"
+#include "util/StaticString.hxx"
+#include "util/PrintException.hxx"
 
 #include <stdlib.h>
 

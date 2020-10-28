@@ -27,7 +27,7 @@ Copyright_License {
 #include "ActionListener.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/SolidContainerWindow.hpp"
-#include "Util/tstring.hpp"
+#include "util/tstring.hpp"
 
 #include <functional>
 

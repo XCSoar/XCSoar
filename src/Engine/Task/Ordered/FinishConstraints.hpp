@@ -24,7 +24,7 @@
 #define XCSOAR_FINISH_CONSTRAINTS_HPP
 
 #include "Geo/AltitudeReference.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 struct AircraftState;
 

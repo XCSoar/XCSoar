@@ -27,7 +27,7 @@ Copyright_License {
 #include "K6BtPort.hpp"
 #include "Device/Config.hpp"
 #include "LogFile.hpp"
-#include "Util/ConvertString.hpp"
+#include "util/ConvertString.hpp"
 #include "TCPClientPort.hpp"
 
 #ifdef ANDROID

@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "TrafficDatabases.hpp"
-#include "Util/StringCompare.hxx"
+#include "util/StringCompare.hxx"
 
 const TCHAR *
 TrafficDatabases::FindNameById(FlarmId id) const

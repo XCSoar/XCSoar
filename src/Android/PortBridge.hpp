@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_PORT_BRIDGE_HPP
 #define XCSOAR_ANDROID_PORT_BRIDGE_HPP
 
-#include "Java/Object.hxx"
+#include "java/Object.hxx"
 
 #include <cstddef>
 

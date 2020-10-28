@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "ValidationErrorStrings.hpp"
 #include "Language/Language.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 #include <windef.h> // for MAX_PATH
 #include <string.h>

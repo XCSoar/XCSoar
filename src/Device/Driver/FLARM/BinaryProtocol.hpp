@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_BINARY_PROTOCOL_HPP
 #define XCSOAR_FLARM_BINARY_PROTOCOL_HPP
 
-#include "OS/ByteOrder.hpp"
-#include "Util/Compiler.h"
+#include "system/ByteOrder.hpp"
+#include "util/Compiler.h"
 
 #include <chrono>
 #include <type_traits>

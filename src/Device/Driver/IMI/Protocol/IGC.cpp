@@ -24,9 +24,9 @@ Copyright_License {
 #include "IGC.hpp"
 #include "Conversion.hpp"
 #include "Checksum.hpp"
-#include "IO/BufferedOutputStream.hxx"
-#include "Time/BrokenDateTime.hpp"
-#include "Util/Macros.hpp"
+#include "io/BufferedOutputStream.hxx"
+#include "time/BrokenDateTime.hpp"
+#include "util/Macros.hpp"
 
 namespace IMI
 {

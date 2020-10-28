@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef ABSTRACT_TASK_FACTORY_HPP
 #define ABSTRACT_TASK_FACTORY_HPP
 
-#include "Util/NonCopyable.hpp"
-#include "Util/Compiler.h"
+#include "util/NonCopyable.hpp"
+#include "util/Compiler.h"
 #include "TaskPointFactoryType.hpp"
 #include "ValidationError.hpp"
 #include "LegalPointSet.hpp"

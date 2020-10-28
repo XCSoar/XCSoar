@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_FORM_CONTROL_HPP
 
 #include "Screen/PaintWindow.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 
 #include <tchar.h>
 

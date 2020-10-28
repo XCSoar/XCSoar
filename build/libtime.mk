@@ -1,6 +1,6 @@
 # Build rules for the generic utility library
 
-TIME_SRC_DIR = $(SRC)/Time
+TIME_SRC_DIR = $(SRC)/time
 
 TIME_SOURCES = \
 	$(TIME_SRC_DIR)/DeltaTime.cpp \

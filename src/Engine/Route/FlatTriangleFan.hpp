@@ -25,7 +25,7 @@
 
 #include "Geo/Flat/FlatGeoPoint.hpp"
 #include "Geo/Flat/FlatBoundingBox.hpp"
-#include "Util/ConstBuffer.hxx"
+#include "util/ConstBuffer.hxx"
 
 #include <vector>
 

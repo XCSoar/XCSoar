@@ -24,7 +24,7 @@
 #define FLAT_TRIANGLE_FAN_TREE_HPP
 
 #include "Geo/Flat/FlatBoundingBox.hpp"
-#include "Util/SliceAllocator.hxx"
+#include "util/SliceAllocator.hxx"
 #include "FlatTriangleFan.hpp"
 
 #include <list>

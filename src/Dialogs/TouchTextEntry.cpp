@@ -29,11 +29,11 @@ Copyright_License {
 #include "Form/LambdaActionListener.hpp"
 #include "Widget/KeyboardWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Event/KeyCode.hpp"
+#include "event/KeyCode.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
-#include "Util/StringCompare.hxx"
-#include "Util/TruncateString.hpp"
+#include "util/StringCompare.hxx"
+#include "util/TruncateString.hpp"
 
 #include <algorithm>
 

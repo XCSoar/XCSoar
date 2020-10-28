@@ -24,7 +24,7 @@ Copyright_License {
 #include "Thread.hpp"
 #include "RasterTerrain.hpp"
 #include "Projection/WindowProjection.hpp"
-#include "Thread/Util.hpp"
+#include "thread/Util.hpp"
 
 TerrainThread::TerrainThread(RasterTerrain &_terrain,
                              std::function<void()> &&_callback)

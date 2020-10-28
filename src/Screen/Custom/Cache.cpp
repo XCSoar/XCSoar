@@ -24,21 +24,21 @@ Copyright_License {
 #include "Cache.hpp"
 #include "Screen/Point.hpp"
 #include "Screen/Font.hpp"
-#include "Util/Cache.hxx"
-#include "Util/StringCompare.hxx"
-#include "Util/StringAPI.hxx"
-#include "Util/StringView.hxx"
-#include "Util/TStringView.hxx"
+#include "util/Cache.hxx"
+#include "util/StringCompare.hxx"
+#include "util/StringAPI.hxx"
+#include "util/StringView.hxx"
+#include "util/TStringView.hxx"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Debug.hpp"
 #else
-#include "Thread/Mutex.hxx"
+#include "thread/Mutex.hxx"
 #endif
 
 #ifdef UNICODE
-#include "Util/ConvertString.hpp"
+#include "util/ConvertString.hpp"
 #endif
 
 #include <cassert>

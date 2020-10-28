@@ -30,9 +30,9 @@ Copyright_License {
 #include "Device/Config.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Input/InputEvents.hpp"
-#include "OS/Args.hpp"
-#include "Util/ConvertString.hpp"
-#include "Util/StringStrip.hxx"
+#include "system/Args.hpp"
+#include "util/ConvertString.hpp"
+#include "util/StringStrip.hxx"
 
 #include <stdio.h>
 

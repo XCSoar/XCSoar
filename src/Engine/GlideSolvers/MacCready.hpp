@@ -22,7 +22,7 @@
 #ifndef MACCREADY_HPP
 #define MACCREADY_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 struct GlideSettings;
 struct GlideState;

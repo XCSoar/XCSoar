@@ -25,7 +25,7 @@ Copyright_License {
 #define ENABLE_CLOSE_BUTTON
 
 #include "Main.hpp"
-#include "Event/PeriodicTimer.hpp"
+#include "event/PeriodicTimer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Form/Button.hpp"
 #include "Form/ActionListener.hpp"

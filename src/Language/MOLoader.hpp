@@ -25,8 +25,8 @@ Copyright_License {
 #define XCSOAR_MO_LOADER_HPP
 
 #include "MOFile.hpp"
-#include "OS/FileMapping.hpp"
-#include "OS/Path.hpp"
+#include "system/FileMapping.hpp"
+#include "system/Path.hpp"
 
 /**
  * Loader for GNU gettext *.mo files.

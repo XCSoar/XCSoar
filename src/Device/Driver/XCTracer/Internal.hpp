@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_XCTRACERVARIO_INTERNAL_HPP
 
 #include "Device/Driver.hpp"
-#include "Time/BrokenDate.hpp"
+#include "time/BrokenDate.hpp"
 
 struct NMEAInfo;
 class NMEAInputLine;

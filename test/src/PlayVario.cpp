@@ -25,7 +25,7 @@ Copyright_License {
 #include "Audio/PCMPlayerFactory.hpp"
 #include "Audio/VarioSynthesiser.hpp"
 #include "Screen/Init.hpp"
-#include "OS/Args.hpp"
+#include "system/Args.hpp"
 #include "DebugReplay.hpp"
 
 #include <boost/asio.hpp>

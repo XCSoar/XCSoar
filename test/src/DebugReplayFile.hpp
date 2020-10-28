@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_DEBUG_REPLAY_FILE_HPP
 
 #include "DebugReplay.hpp"
-#include "IO/FileLineReader.hpp"
+#include "io/FileLineReader.hpp"
 
 class DebugReplayFile : public DebugReplay {
 protected:

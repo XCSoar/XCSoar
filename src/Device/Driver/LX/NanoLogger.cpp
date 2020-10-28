@@ -27,10 +27,10 @@
 #include "Device/Util/NMEAWriter.hpp"
 #include "Device/Util/NMEAReader.hpp"
 #include "Operation/Operation.hpp"
-#include "OS/Path.hpp"
-#include "IO/BufferedOutputStream.hxx"
-#include "IO/FileOutputStream.hxx"
-#include "Time/TimeoutClock.hpp"
+#include "system/Path.hpp"
+#include "io/BufferedOutputStream.hxx"
+#include "io/FileOutputStream.hxx"
+#include "time/TimeoutClock.hpp"
 #include "NMEA/InputLine.hpp"
 
 #include <algorithm>

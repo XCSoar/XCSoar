@@ -1,22 +1,22 @@
 # Build rules for the HTTP client library
 
 LIBNET_SOURCES = \
-	$(SRC)/Net/State.cpp \
-	$(SRC)/Net/IPv4Address.cxx \
-	$(SRC)/Net/IPv6Address.cxx \
-	$(SRC)/Net/StaticSocketAddress.cxx \
-	$(SRC)/Net/AllocatedSocketAddress.cxx \
-	$(SRC)/Net/SocketAddress.cxx \
-	$(SRC)/Net/SocketDescriptor.cxx
+	$(SRC)/net/State.cpp \
+	$(SRC)/net/IPv4Address.cxx \
+	$(SRC)/net/IPv6Address.cxx \
+	$(SRC)/net/StaticSocketAddress.cxx \
+	$(SRC)/net/AllocatedSocketAddress.cxx \
+	$(SRC)/net/SocketAddress.cxx \
+	$(SRC)/net/SocketDescriptor.cxx
 
 HAVE_HTTP := y
 
 LIBNET_SOURCES += \
-	$(SRC)/Net/HTTP/Multi.cpp \
-	$(SRC)/Net/HTTP/Session.cpp \
-	$(SRC)/Net/HTTP/Request.cpp \
-	$(SRC)/Net/HTTP/FormData.cpp \
-	$(SRC)/Net/HTTP/Init.cpp
+	$(SRC)/net/http/Multi.cpp \
+	$(SRC)/net/http/Session.cpp \
+	$(SRC)/net/http/Request.cpp \
+	$(SRC)/net/http/FormData.cpp \
+	$(SRC)/net/http/Init.cpp
 
 ifeq ($(TARGET_IS_OSX),y)
 # We use the libcurl which is included in Mac OS X.
@@ -36,9 +36,9 @@ LIBNET_LDLIBS += $(LIBSODIUM_LDLIBS)
 ifeq ($(HAVE_HTTP),y)
 
 LIBNET_SOURCES += \
-	$(SRC)/Net/HTTP/DownloadManager.cpp \
-	$(SRC)/Net/HTTP/ToFile.cpp \
-	$(SRC)/Net/HTTP/ToBuffer.cpp
+	$(SRC)/net/http/DownloadManager.cpp \
+	$(SRC)/net/http/ToFile.cpp \
+	$(SRC)/net/http/ToBuffer.cpp
 
 endif
 

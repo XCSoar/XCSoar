@@ -25,11 +25,11 @@ Copyright_License {
 #include "TabMenuData.hpp"
 #include "Widget/PagerWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Event/KeyCode.hpp"
+#include "event/KeyCode.hpp"
 #include "Screen/Canvas.hpp"
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
-#include "Util/StringFormat.hpp"
+#include "util/StringFormat.hpp"
 
 #include <cassert>
 

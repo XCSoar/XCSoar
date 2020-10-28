@@ -25,7 +25,7 @@ Copyright_License {
 #define NMEA_REPLAY_HPP
 
 #include "AbstractReplay.hpp"
-#include "Time/ReplayClock.hpp"
+#include "time/ReplayClock.hpp"
 #include "Device/Port/NullPort.hpp"
 
 #include <memory>

@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "WaypointReaderBase.hpp"
 #include "Operation/Operation.hpp"
-#include "IO/LineReader.hpp"
+#include "io/LineReader.hpp"
 
 void
 WaypointReaderBase::Parse(Waypoints &way_points, TLineReader &reader,

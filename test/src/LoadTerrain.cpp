@@ -28,11 +28,11 @@ Copyright_License {
 
 #include "Terrain/RasterTileCache.hpp"
 #include "Terrain/Loader.hpp"
-#include "OS/Args.hpp"
-#include "OS/ConvertPathName.hpp"
-#include "IO/ZipArchive.hpp"
+#include "system/Args.hpp"
+#include "system/ConvertPathName.hpp"
+#include "io/ZipArchive.hpp"
 #include "Operation/Operation.hpp"
-#include "Util/PrintException.hxx"
+#include "util/PrintException.hxx"
 
 #include <stdio.h>
 #include <string.h>

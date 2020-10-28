@@ -29,7 +29,7 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "Screen/Color.hpp"
 #include "Gauge/LogoView.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 
 /**
  * The XCSoar splash screen with a progress bar.

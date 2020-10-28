@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Screen/Util.hpp"
 #include "Screen/Canvas.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 #include "Math/Angle.hpp"
 
 static constexpr unsigned CIRCLE_SEGS = 64;

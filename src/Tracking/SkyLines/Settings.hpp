@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "CloudSettings.hpp"
 #include "Features.hpp"
-#include "Util/TriState.hpp"
+#include "util/TriState.hpp"
 
 #ifdef HAVE_SKYLINES_TRACKING
 

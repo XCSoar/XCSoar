@@ -33,7 +33,7 @@
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Geo/GeoVector.hpp"
-#include "Util/StringCompare.hxx"
+#include "util/StringCompare.hxx"
 
 /**
  * Local visitor class used for rendering airspaces in the CrossSectionRenderer

@@ -28,7 +28,7 @@ Copyright_License {
 
 #ifndef USE_WINUSER
 #include "Renderer/TextRenderer.hpp"
-#include "Util/tstring.hpp"
+#include "util/tstring.hpp"
 #endif
 
 #include <tchar.h>

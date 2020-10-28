@@ -22,11 +22,11 @@ Copyright_License {
 */
 
 #include "DebugReplayIGC.hpp"
-#include "IO/FileLineReader.hpp"
+#include "io/FileLineReader.hpp"
 #include "IGC/IGCParser.hpp"
 #include "IGC/IGCFix.hpp"
 #include "Units/System.hpp"
-#include "OS/Path.hpp"
+#include "system/Path.hpp"
 
 DebugReplay*
 DebugReplayIGC::Create(Path input_file)

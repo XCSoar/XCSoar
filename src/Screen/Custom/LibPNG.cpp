@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "LibPNG.hpp"
 #include "UncompressedImage.hpp"
-#include "OS/Path.hpp"
-#include "OS/FileMapping.hpp"
+#include "system/Path.hpp"
+#include "system/FileMapping.hpp"
 
 #include <png.h>
 

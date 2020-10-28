@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_FUNCTION_HPP
 #define XCSOAR_SCREEN_OPENGL_FUNCTION_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #ifdef USE_EGL
 #include "Screen/EGL/System.hpp"

@@ -23,9 +23,9 @@ Copyright_License {
 
 #include "XML/Node.hpp"
 #include "XML/Parser.hpp"
-#include "IO/StdioOutputStream.hxx"
-#include "IO/BufferedOutputStream.hxx"
-#include "OS/Args.hpp"
+#include "io/StdioOutputStream.hxx"
+#include "io/BufferedOutputStream.hxx"
+#include "system/Args.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>

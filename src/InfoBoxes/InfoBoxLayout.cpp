@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Border.hpp"
-#include "Util/Macros.hpp"
-#include "Util/Clamp.hpp"
+#include "util/Macros.hpp"
+#include "util/Clamp.hpp"
 
 static constexpr double CONTROLHEIGHTRATIO = 7.4;
 

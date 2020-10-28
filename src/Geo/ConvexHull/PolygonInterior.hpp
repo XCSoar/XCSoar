@@ -23,7 +23,7 @@
 #define POLYGON_INTERIOR_HPP
 
 #include "Geo/SearchPointVector.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 struct GeoPoint;
 struct FlatGeoPoint;

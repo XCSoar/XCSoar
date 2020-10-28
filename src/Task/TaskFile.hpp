@@ -23,8 +23,8 @@
 #ifndef XCSOAR_TASK_FILE_HPP
 #define XCSOAR_TASK_FILE_HPP
 
-#include "OS/Path.hpp"
-#include "Util/StaticArray.hxx"
+#include "system/Path.hpp"
+#include "util/StaticArray.hxx"
 
 #include <tchar.h>
 

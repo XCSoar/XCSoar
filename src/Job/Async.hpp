@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_ASYNC_JOB_RUNNER_HPP
 #define XCSOAR_ASYNC_JOB_RUNNER_HPP
 
-#include "Thread/Thread.hpp"
+#include "thread/Thread.hpp"
 
 #include <atomic>
 #include <exception>

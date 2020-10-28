@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_NULL_PORT_HPP
 #define XCSOAR_DEVICE_NULL_PORT_HPP
 
-#include "IO/DataHandler.hpp"
+#include "io/DataHandler.hpp"
 #include "Port.hpp"
 
 /**

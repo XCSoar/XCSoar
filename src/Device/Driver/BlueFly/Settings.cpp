@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Internal.hpp"
 #include "Device/Util/NMEAWriter.hpp"
-#include "Util/StringView.hxx"
+#include "util/StringView.hxx"
 
 #include <stdio.h>
 #include <limits.h>

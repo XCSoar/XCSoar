@@ -24,9 +24,9 @@ Copyright_License {
 #include "WaypointGlue.hpp"
 #include "CupWriter.hpp"
 #include "LogFile.hpp"
-#include "OS/Path.hpp"
-#include "IO/FileOutputStream.hxx"
-#include "IO/BufferedOutputStream.hxx"
+#include "system/Path.hpp"
+#include "io/FileOutputStream.hxx"
+#include "io/BufferedOutputStream.hxx"
 #include "LocalPath.hpp"
 
 void

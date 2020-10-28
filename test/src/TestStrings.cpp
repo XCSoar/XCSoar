@@ -20,8 +20,8 @@
 }
 */
 
-#include "Util/StringAPI.hxx"
-#include "Util/StringCompare.hxx"
+#include "util/StringAPI.hxx"
+#include "util/StringCompare.hxx"
 #include "TestUtil.hpp"
 
 #include <tchar.h>

@@ -24,7 +24,7 @@
 #include "Replay/IgcReplay.hpp"
 #include "IGC/IGCParser.hpp"
 #include "IGC/IGCFix.hpp"
-#include "IO/LineReader.hpp"
+#include "io/LineReader.hpp"
 #include "NMEA/Info.hpp"
 #include "Units/System.hpp"
 

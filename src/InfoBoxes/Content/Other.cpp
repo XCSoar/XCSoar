@@ -26,7 +26,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Renderer/HorizonRenderer.hpp"
 #include "Hardware/Battery.hpp"
-#include "OS/SystemLoad.hpp"
+#include "system/SystemLoad.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"

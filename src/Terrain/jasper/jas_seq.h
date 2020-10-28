@@ -79,7 +79,7 @@
 #include <jasper/jas_types.h>
 #include <jasper/jas_math.h>
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #ifdef JAS_ENABLE_DUMP
 #include <stdio.h>

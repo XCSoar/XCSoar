@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Bitmap.hpp"
-#include "Java/Class.hxx"
+#include "java/Class.hxx"
 
 jmethodID AndroidBitmap::recycle_method;
 jmethodID AndroidBitmap::getWidth_method;

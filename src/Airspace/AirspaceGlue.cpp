@@ -28,11 +28,11 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "Language/Language.hpp"
 #include "LogFile.hpp"
-#include "OS/Path.hpp"
-#include "IO/FileLineReader.hpp"
-#include "IO/ZipArchive.hpp"
-#include "IO/ZipLineReader.hpp"
-#include "IO/MapFile.hpp"
+#include "system/Path.hpp"
+#include "io/FileLineReader.hpp"
+#include "io/ZipArchive.hpp"
+#include "io/ZipLineReader.hpp"
+#include "io/MapFile.hpp"
 #include "Profile/Profile.hpp"
 
 #include <string.h>

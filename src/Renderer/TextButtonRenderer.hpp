@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "ButtonRenderer.hpp"
 #include "TextRenderer.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 
 /**
  * A #ButtonRenderer instance that renders a regular button frame and

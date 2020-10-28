@@ -284,7 +284,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/IGC/IGCWriter.cpp \
 	$(SRC)/IGC/IGCString.cpp \
 	$(SRC)/IGC/Generator.cpp \
-	$(SRC)/Util/MD5.cpp \
+	$(SRC)/util/MD5.cpp \
 	$(SRC)/Logger/NMEALogger.cpp \
 	$(SRC)/Logger/ExternalLogger.cpp \
 	$(SRC)/Logger/FlightLogger.cpp \
@@ -605,7 +605,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/FLARM/TrafficDatabases.cpp \
 	$(SRC)/UtilsSettings.cpp \
 	$(SRC)/UtilsSystem.cpp \
-	$(SRC)/OS/LogError.cpp \
+	$(SRC)/system/LogError.cpp \
 	$(SRC)/Version.cpp \
 	$(SRC)/Audio/Sound.cpp \
 	$(SRC)/Compatibility/fmode.c \
@@ -710,13 +710,13 @@ endif
 ifeq ($(TARGET),ANDROID)
 XCSOAR_SOURCES += \
 	$(SRC)/Dialogs/Device/ScanBluetoothLeDialog.cpp \
-	$(SRC)/Java/Global.cxx \
-	$(SRC)/Java/Object.cxx \
-	$(SRC)/Java/String.cxx \
-	$(SRC)/Java/Exception.cxx \
-	$(SRC)/Java/File.cxx \
-	$(SRC)/Java/InputStream.cxx \
-	$(SRC)/Java/URL.cxx \
+	$(SRC)/java/Global.cxx \
+	$(SRC)/java/Object.cxx \
+	$(SRC)/java/String.cxx \
+	$(SRC)/java/Exception.cxx \
+	$(SRC)/java/File.cxx \
+	$(SRC)/java/InputStream.cxx \
+	$(SRC)/java/URL.cxx \
 	$(SRC)/Device/Port/AndroidPort.cpp \
 	$(SRC)/Device/Port/AndroidBluetoothPort.cpp \
 	$(SRC)/Device/Port/AndroidIOIOUartPort.cpp \

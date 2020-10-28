@@ -39,9 +39,9 @@ Copyright_License {
 #include "Weather/Rasp/RaspStore.hpp"
 #include "Device/device.hpp"
 #include "PageActions.hpp"
-#include "Util/DollarExpand.hpp"
-#include "Util/Macros.hpp"
-#include "Net/HTTP/Features.hpp"
+#include "util/DollarExpand.hpp"
+#include "util/Macros.hpp"
+#include "net/http/Features.hpp"
 #include "UIState.hpp"
 
 #include <stdlib.h>

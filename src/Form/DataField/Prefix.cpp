@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "Prefix.hpp"
-#include "Util/StringAPI.hxx"
-#include "Util/StringCompare.hxx"
+#include "util/StringAPI.hxx"
+#include "util/StringCompare.hxx"
 
 const TCHAR *
 PrefixDataField::GetAsDisplayString() const

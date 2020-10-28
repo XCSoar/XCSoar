@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TRACKING_FEATURES_HPP
 #define XCSOAR_TRACKING_FEATURES_HPP
 
-#include "Net/HTTP/Features.hpp"
+#include "net/http/Features.hpp"
 #include "Tracking/SkyLines/Features.hpp"
 
 /* live tracking requires networking */

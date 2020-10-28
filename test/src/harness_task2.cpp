@@ -25,7 +25,7 @@
 #include "harness_waypoints.hpp"
 
 #include "Task/Factory/AbstractTaskFactory.hpp"
-#include "Util/StaticArray.hxx"
+#include "util/StaticArray.hxx"
 
 extern "C" {
 #include "tap.h"

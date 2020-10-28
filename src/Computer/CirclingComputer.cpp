@@ -27,7 +27,7 @@ Copyright_License {
 #include "NMEA/FlyingState.hpp"
 #include "Settings.hpp"
 #include "Math/LowPassFilter.hpp"
-#include "Util/Clamp.hpp"
+#include "util/Clamp.hpp"
 
 static constexpr Angle MIN_TURN_RATE = Angle::Degrees(4);
 static constexpr double CRUISE_CLIMB_SWITCH(15);

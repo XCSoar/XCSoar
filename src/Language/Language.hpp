@@ -42,7 +42,7 @@ static inline void DisallowLanguage() {}
 
 #else // !HAVE_POSIX
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <tchar.h>
 

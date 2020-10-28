@@ -28,18 +28,18 @@ Copyright_License {
 #include "RasterCanvas.hpp"
 #include "Screen/Custom/Cache.hpp"
 #include "Math/Angle.hpp"
-#include "Util/TStringView.hxx"
+#include "util/TStringView.hxx"
 
 #ifdef __ARM_NEON__
 #include "NEON.hpp"
 #endif
 
 #ifndef NDEBUG
-#include "Util/UTF8.hpp"
+#include "util/UTF8.hpp"
 #endif
 
 #ifdef UNICODE
-#include "Util/ConvertString.hpp"
+#include "util/ConvertString.hpp"
 #endif
 
 #include <algorithm>

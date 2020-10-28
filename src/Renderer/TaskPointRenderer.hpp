@@ -27,7 +27,7 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "Geo/Flat/FlatBoundingBox.hpp"
 #include "MapWindow/MapCanvas.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 class Canvas;
 class WindowProjection;

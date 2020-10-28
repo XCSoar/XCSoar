@@ -38,8 +38,8 @@ Copyright_License {
 #include "ActionInterface.hpp"
 
 #ifdef USE_POLL_EVENT
-#include "Event/Globals.hpp"
-#include "Event/Queue.hpp"
+#include "event/Globals.hpp"
+#include "event/Queue.hpp"
 #endif
 
 enum ControlIndex {

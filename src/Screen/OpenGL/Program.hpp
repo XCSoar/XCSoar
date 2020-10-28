@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_PROGRAM_HPP
 
 #include "System.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 /**
  * This class represents an OpenGL 3.0 / ES2.0 shader.

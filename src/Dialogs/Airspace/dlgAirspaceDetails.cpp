@@ -32,7 +32,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <cassert>
 

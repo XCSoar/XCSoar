@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/SingleWindow.hpp"
-#include "Event/Windows/Event.hpp"
+#include "event/windows/Event.hpp"
 #include "Resources.hpp"
 
 #include <cassert>

@@ -43,10 +43,10 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "LogFile.hpp"
-#include "IO/ConfiguredFile.hpp"
-#include "IO/LineReader.hpp"
+#include "io/ConfiguredFile.hpp"
+#include "io/LineReader.hpp"
 #include "Operation/Operation.hpp"
-#include "Thread/Debug.hpp"
+#include "thread/Debug.hpp"
 
 void
 DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const double alt) {}

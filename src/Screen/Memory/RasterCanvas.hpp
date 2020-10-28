@@ -28,8 +28,8 @@ Copyright_License {
 #include "Bresenham.hpp"
 #include "Murphy.hpp"
 #include "Screen/Point.hpp"
-#include "Util/AllocatedArray.hxx"
-#include "Util/Compiler.h"
+#include "util/AllocatedArray.hxx"
+#include "util/Compiler.h"
 
 #include <cassert>
 

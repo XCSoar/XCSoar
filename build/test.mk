@@ -135,7 +135,7 @@ TEST_HEX_STRING_SOURCES = \
 $(eval $(call link-program,TestHexString,TEST_HEX_STRING))
 
 TEST_CRC_SOURCES = \
-	$(SRC)/Util/CRC.cpp \
+	$(SRC)/util/CRC.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestCRC.cpp
 $(eval $(call link-program,TestCRC,TEST_CRC))
@@ -390,7 +390,7 @@ QUADRILATERAL_ARANGE_DEPENDS = MATH
 $(eval $(call link-program,TestMath,TEST_MATH))
 
 TEST_CSV_LINE_SOURCES = \
-	$(SRC)/IO/CSVLine.cpp \
+	$(SRC)/io/CSVLine.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestCSVLine.cpp
 TEST_CSV_LINE_DEPENDS = MATH
@@ -530,8 +530,8 @@ TEST_GLIDE_POLAR_DEPENDS = GEO MATH IO
 $(eval $(call link-program,TestGlidePolar,TEST_GLIDE_POLAR))
 
 TEST_FILE_UTIL_SOURCES = \
-	$(SRC)/OS/FileUtil.cpp \
-	$(SRC)/OS/Path.cpp \
+	$(SRC)/system/FileUtil.cpp \
+	$(SRC)/system/Path.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestFileUtil.cpp
 TEST_FILE_UTIL_DEPENDS = UTIL
@@ -628,7 +628,7 @@ TEST_LOGGER_SOURCES = \
 	$(SRC)/Logger/LoggerFRecord.cpp \
 	$(SRC)/Logger/GRecord.cpp \
 	$(SRC)/Logger/LoggerEPE.cpp \
-	$(SRC)/Util/MD5.cpp \
+	$(SRC)/util/MD5.cpp \
 	$(SRC)/Version.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/tap.c \
@@ -638,7 +638,7 @@ $(eval $(call link-program,TestLogger,TEST_LOGGER))
 
 TEST_GRECORD_SOURCES = \
 	$(SRC)/Logger/GRecord.cpp \
-	$(SRC)/Util/MD5.cpp \
+	$(SRC)/util/MD5.cpp \
 	$(SRC)/Version.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestGRecord.cpp
@@ -974,8 +974,8 @@ $(eval $(call link-program,DownloadFile,DOWNLOAD_FILE))
 
 RUN_DOWNLOAD_TO_FILE_SOURCES = \
 	$(SRC)/Version.cpp \
-	$(SRC)/Util/MD5.cpp \
-	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/util/MD5.cpp \
+	$(SRC)/system/FileUtil.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/RunDownloadToFile.cpp
@@ -1054,7 +1054,7 @@ $(eval $(call link-program,RunXMLParser,RUN_XML_PARSER))
 
 READ_MO_SOURCES = \
 	$(SRC)/Language/MOFile.cpp \
-	$(SRC)/OS/FileMapping.cpp \
+	$(SRC)/system/FileMapping.cpp \
 	$(TEST_SRC_DIR)/ReadMO.cpp
 READ_MO_DEPENDS = UTIL
 $(eval $(call link-program,ReadMO,READ_MO))
@@ -1076,7 +1076,7 @@ READ_PROFILE_INT_DEPENDS = PROFILE IO OS UTIL
 $(eval $(call link-program,ReadProfileInt,READ_PROFILE_INT))
 
 RUN_MD5_SOURCES = \
-	$(SRC)/Util/MD5.cpp \
+	$(SRC)/util/MD5.cpp \
 	$(TEST_SRC_DIR)/RunMD5.cpp
 RUN_MD5_DEPENDS = IO OS UTIL
 $(eval $(call link-program,RunMD5,RUN_MD5))
@@ -1088,28 +1088,28 @@ $(eval $(call link-program,RunSHA256,RUN_SHA256))
 
 READ_GRECORD_SOURCES = \
 	$(SRC)/Logger/GRecord.cpp \
-	$(SRC)/Util/MD5.cpp \
+	$(SRC)/util/MD5.cpp \
 	$(TEST_SRC_DIR)/ReadGRecord.cpp
 READ_GRECORD_DEPENDS = IO OS UTIL
 $(eval $(call link-program,ReadGRecord,READ_GRECORD))
 
 VERIFY_GRECORD_SOURCES = \
 	$(SRC)/Logger/GRecord.cpp \
-	$(SRC)/Util/MD5.cpp \
+	$(SRC)/util/MD5.cpp \
 	$(TEST_SRC_DIR)/VerifyGRecord.cpp
 VERIFY_GRECORD_DEPENDS = IO OS UTIL
 $(eval $(call link-program,VerifyGRecord,VERIFY_GRECORD))
 
 APPEND_GRECORD_SOURCES = \
 	$(SRC)/Logger/GRecord.cpp \
-	$(SRC)/Util/MD5.cpp \
+	$(SRC)/util/MD5.cpp \
 	$(TEST_SRC_DIR)/AppendGRecord.cpp
 APPEND_GRECORD_DEPENDS = IO OS UTIL
 $(eval $(call link-program,AppendGRecord,APPEND_GRECORD))
 
 FIX_GRECORD_SOURCES = \
 	$(SRC)/Logger/GRecord.cpp \
-	$(SRC)/Util/MD5.cpp \
+	$(SRC)/util/MD5.cpp \
 	$(TEST_SRC_DIR)/FixGRecord.cpp
 FIX_GRECORD_DEPENDS = IO OS UTIL
 $(eval $(call link-program,FixGRecord,FIX_GRECORD))
@@ -1245,7 +1245,7 @@ $(eval $(call link-program,EnumeratePorts,ENUMERATE_PORTS))
 READ_PORT_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Config.cpp \
-	$(SRC)/OS/LogError.cpp \
+	$(SRC)/system/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
@@ -1258,7 +1258,7 @@ $(eval $(call link-program,ReadPort,READ_PORT))
 RUN_PORT_HANDLER_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Config.cpp \
-	$(SRC)/OS/LogError.cpp \
+	$(SRC)/system/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
@@ -1271,7 +1271,7 @@ $(eval $(call link-program,RunPortHandler,RUN_PORT_HANDLER))
 LOG_PORT_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Config.cpp \
-	$(SRC)/OS/LogError.cpp \
+	$(SRC)/system/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
@@ -1336,7 +1336,7 @@ RUN_DECLARE_SOURCES = \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/IGC/Generator.cpp \
-	$(SRC)/OS/LogError.cpp \
+	$(SRC)/system/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
 	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
@@ -1354,7 +1354,7 @@ RUN_DECLARE_DEPENDS = DRIVER PORT ASYNC IO LIBNET OS THREAD WAYPOINT GEO TIME MA
 $(eval $(call link-program,RunDeclare,RUN_DECLARE))
 
 RUN_ENABLE_NMEA_SOURCES = \
-	$(SRC)/OS/LogError.cpp \
+	$(SRC)/system/LogError.cpp \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
@@ -1395,7 +1395,7 @@ RUN_VEGA_SETTINGS_SOURCES = \
 	$(SRC)/Device/Config.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
-	$(SRC)/OS/LogError.cpp \
+	$(SRC)/system/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
@@ -1412,7 +1412,7 @@ RUN_FLARM_UTILS_SOURCES = \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
-	$(SRC)/OS/LogError.cpp \
+	$(SRC)/system/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
@@ -1430,7 +1430,7 @@ RUN_LX1600_UTILS_SOURCES = \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
-	$(SRC)/OS/LogError.cpp \
+	$(SRC)/system/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
@@ -1463,7 +1463,7 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/IGC/Generator.cpp \
-	$(SRC)/OS/LogError.cpp \
+	$(SRC)/system/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
 	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
@@ -1497,7 +1497,7 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/IGC/Generator.cpp \
-	$(SRC)/OS/LogError.cpp \
+	$(SRC)/system/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
 	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
@@ -1532,7 +1532,7 @@ CAI302_TOOL_SOURCES = \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
 	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
-	$(SRC)/OS/LogError.cpp \
+	$(SRC)/system/LogError.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
@@ -1567,7 +1567,7 @@ RUN_IGC_WRITER_SOURCES = \
 	$(SRC)/Logger/LoggerFRecord.cpp \
 	$(SRC)/Logger/GRecord.cpp \
 	$(SRC)/Logger/LoggerEPE.cpp \
-	$(SRC)/Util/MD5.cpp \
+	$(SRC)/util/MD5.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/RunIGCWriter.cpp
 RUN_IGC_WRITER_LDADD = $(DEBUG_REPLAY_LDADD)
@@ -2366,7 +2366,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Renderer/AirspaceRendererSettings.cpp \
 	$(SRC)/Math/SunEphemeris.cpp \
 	$(IO_SRC_DIR)/MapFile.cpp \
-	$(SRC)/IO/ConfiguredFile.cpp \
+	$(SRC)/io/ConfiguredFile.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
 	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
@@ -2531,7 +2531,7 @@ $(eval $(call link-program,RunTaskEditorDialog,RUN_TASK_EDITOR_DIALOG))
 
 TEST_NOTIFY_SOURCES = \
 	$(SRC)/Hardware/CPU.cpp \
-	$(SRC)/Event/Idle.cpp \
+	$(SRC)/event/Idle.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestNotify.cpp
@@ -2541,7 +2541,7 @@ $(eval $(call link-program,TestNotify,TEST_NOTIFY))
 FEED_NMEA_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Config.cpp \
-	$(SRC)/OS/LogError.cpp \
+	$(SRC)/system/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
@@ -2554,7 +2554,7 @@ $(eval $(call link-program,FeedNMEA,FEED_NMEA))
 FEED_VEGA_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Config.cpp \
-	$(SRC)/OS/LogError.cpp \
+	$(SRC)/system/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
@@ -2574,8 +2574,8 @@ EMULATE_DEVICE_SOURCES = \
 	$(SRC)/Device/Config.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
-	$(SRC)/IO/CSVLine.cpp \
-	$(SRC)/OS/LogError.cpp \
+	$(SRC)/io/CSVLine.cpp \
+	$(SRC)/system/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
@@ -2588,7 +2588,7 @@ $(eval $(call link-program,EmulateDevice,EMULATE_DEVICE))
 FEED_FLYNET_DATA_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Config.cpp \
-	$(SRC)/OS/LogError.cpp \
+	$(SRC)/system/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \

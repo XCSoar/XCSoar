@@ -25,7 +25,7 @@ Copyright_License {
 #include "Protocol/Protocol.hpp"
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"
-#include "OS/Path.hpp"
+#include "system/Path.hpp"
 
 bool
 IMIDevice::ReadFlightList(RecordedFlightList &flight_list,

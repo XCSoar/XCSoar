@@ -21,7 +21,7 @@
  */
 
 #include "SelfTimingKalmanFilter1d.hpp"
-#include "OS/Clock.hpp"
+#include "system/Clock.hpp"
 
 #include <algorithm>
 

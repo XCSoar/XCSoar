@@ -31,16 +31,16 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Settings.hpp"
 #include "Profile/Current.hpp"
-#include "Util/Macros.hpp"
-#include "Util/EnumCast.hpp"
+#include "util/Macros.hpp"
+#include "util/EnumCast.hpp"
 #include "Units/Units.hpp"
 #include "Protection.hpp"
 #include "UtilsSettings.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Audio/VarioGlue.hpp"
-#include "OS/Path.hpp"
-#include "Util/StringCompare.hxx"
+#include "system/Path.hpp"
+#include "util/StringCompare.hxx"
 
 void
 InputEvents::eventSounds(const TCHAR *misc)

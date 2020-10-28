@@ -30,7 +30,7 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "NMEA/Derived.hpp"
 #include "Units/Units.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 #include <tchar.h>
 

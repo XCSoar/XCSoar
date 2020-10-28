@@ -21,9 +21,9 @@ Copyright_License {
 }
 */
 
-#include "IO/FileLineReader.hpp"
-#include "OS/Args.hpp"
-#include "Util/PrintException.hxx"
+#include "io/FileLineReader.hpp"
+#include "system/Args.hpp"
+#include "util/PrintException.hxx"
 
 #include <stdio.h>
 

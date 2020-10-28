@@ -66,7 +66,7 @@
 #include "FaultInjectionPort.hpp"
 #include "TestUtil.hpp"
 #include "Units/System.hpp"
-#include "IO/NullDataHandler.hpp"
+#include "io/NullDataHandler.hpp"
 
 #include <memory>
 

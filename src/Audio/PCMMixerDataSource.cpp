@@ -25,7 +25,7 @@ Copyright_License {
 
 #include "AudioAlgorithms.hpp"
 
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 #include <cassert>
 

@@ -28,7 +28,7 @@ Copyright_License {
 #include "Renderer/UnitSymbolRenderer.hpp"
 #include "Math/FastRotation.hpp"
 #include "Units/Units.hpp"
-#include "Util/Clamp.hpp"
+#include "util/Clamp.hpp"
 
 #define DELTA_V_STEP 4.
 #define DELTA_V_LIMIT 16.

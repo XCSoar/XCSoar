@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "VarioSynthesiser.hpp"
 #include "Math/FastMath.hpp"
-#include "Util/Clamp.hpp"
+#include "util/Clamp.hpp"
 
 #include <algorithm>
 

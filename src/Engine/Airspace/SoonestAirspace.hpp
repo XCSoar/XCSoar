@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef SOONEST_AIRSPACE_HPP
 #define SOONEST_AIRSPACE_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 class AbstractAirspace;
 class Airspaces;

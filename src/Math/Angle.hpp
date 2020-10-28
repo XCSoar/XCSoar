@@ -26,7 +26,7 @@ Copyright_License {
 #include "Trig.hpp"
 #include "FastTrig.hpp"
 #include "Constants.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <type_traits>
 

@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #include "Audio/VarioSynthesiser.hpp"
-#include "OS/Args.hpp"
+#include "system/Args.hpp"
 #include "DebugReplay.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>

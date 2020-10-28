@@ -26,8 +26,8 @@ Copyright_License {
 #include "Terrain/RasterMap.hpp"
 #include "Terrain/Loader.hpp"
 #include "Language/Language.hpp"
-#include "OS/Path.hpp"
-#include "IO/ZipArchive.hpp"
+#include "system/Path.hpp"
+#include "io/ZipArchive.hpp"
 
 #include <cassert>
 #include <windef.h> // for MAX_PATH

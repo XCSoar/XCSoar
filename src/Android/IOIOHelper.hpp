@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_IOIOHELPER_HPP
 #define XCSOAR_ANDROID_IOIOHELPER_HPP
 
-#include "Java/Object.hxx"
-#include "Java/Class.hxx"
+#include "java/Object.hxx"
+#include "java/Class.hxx"
 
 class PortBridge;
 

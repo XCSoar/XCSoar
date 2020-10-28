@@ -25,9 +25,9 @@ Copyright_License {
 #include "NanoDeclare.hpp"
 #include "Protocol.hpp"
 #include "Device/Declaration.hpp"
-#include "OS/ByteOrder.hpp"
+#include "system/ByteOrder.hpp"
 #include "Operation/Operation.hpp"
-#include "Time/BrokenDate.hpp"
+#include "time/BrokenDate.hpp"
 
 /**
  * fills dest with src and appends spaces to end

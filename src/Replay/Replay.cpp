@@ -25,14 +25,14 @@
 #include "IgcReplay.hpp"
 #include "NmeaReplay.hpp"
 #include "DemoReplayGlue.hpp"
-#include "IO/FileLineReader.hpp"
+#include "io/FileLineReader.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Logger/Logger.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "CatmullRomInterpolator.hpp"
-#include "Time/Cast.hxx"
-#include "Util/Clamp.hpp"
+#include "time/Cast.hxx"
+#include "util/Clamp.hpp"
 
 #include <stdexcept>
 

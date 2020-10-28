@@ -29,8 +29,8 @@ Copyright_License {
 #include "Profile/File.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Language/Language.hpp"
-#include "OS/Path.hpp"
-#include "Util/StringAPI.hxx"
+#include "system/Path.hpp"
+#include "util/StringAPI.hxx"
 
 TriState
 ProfileFileHasPassword(Path path)

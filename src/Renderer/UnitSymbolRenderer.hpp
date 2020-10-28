@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_UNIT_SYMBOL_RENDERER_HPP
 
 #include "Units/Units.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 struct PixelPoint;
 struct PixelSize;

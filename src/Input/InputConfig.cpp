@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "InputConfig.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 #include <algorithm>
 

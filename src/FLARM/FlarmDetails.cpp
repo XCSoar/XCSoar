@@ -25,7 +25,7 @@ Copyright_License {
 #include "Global.hpp"
 #include "TrafficDatabases.hpp"
 #include "FLARM/FlarmId.hpp"
-#include "Util/StringCompare.hxx"
+#include "util/StringCompare.hxx"
 
 #include <cassert>
 

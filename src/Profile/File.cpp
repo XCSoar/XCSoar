@@ -23,13 +23,13 @@ Copyright_License {
 
 #include "File.hpp"
 #include "Map.hpp"
-#include "IO/KeyValueFileReader.hpp"
-#include "IO/FileLineReader.hpp"
-#include "IO/FileOutputStream.hxx"
-#include "IO/BufferedOutputStream.hxx"
-#include "IO/KeyValueFileWriter.hpp"
-#include "OS/Path.hpp"
-#include "Util/StringAPI.hxx"
+#include "io/KeyValueFileReader.hpp"
+#include "io/FileLineReader.hpp"
+#include "io/FileOutputStream.hxx"
+#include "io/BufferedOutputStream.hxx"
+#include "io/KeyValueFileWriter.hpp"
+#include "system/Path.hpp"
+#include "util/StringAPI.hxx"
 
 void
 Profile::LoadFile(ProfileMap &map, Path path)

@@ -29,7 +29,7 @@ Copyright_License {
 #include "Renderer/TextRowRenderer.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 
 static const ComboList *ComboListPopup;
 

@@ -25,10 +25,10 @@
  * to validate the GRecord of an XCSoar-generated IGC file
  */
 
-#include "OS/ConvertPathName.hpp"
+#include "system/ConvertPathName.hpp"
 #include "Logger/GRecord.hpp"
 #include "Version.hpp"
-#include "Util/PrintException.hxx"
+#include "util/PrintException.hxx"
 
 #include <stdio.h>
 #include <stdlib.h>

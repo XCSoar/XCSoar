@@ -28,7 +28,7 @@
  */
 
 #include "KineticManager.hpp"
-#include "Time/Cast.hxx"
+#include "time/Cast.hxx"
 
 void
 KineticManager::MouseDown(int x)

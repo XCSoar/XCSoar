@@ -33,12 +33,12 @@ Copyright_License {
 #include "DebugPort.hpp"
 #include "Device/Port/ConfiguredPort.hpp"
 #include "Device/Config.hpp"
-#include "OS/Args.hpp"
-#include "OS/Sleep.h"
+#include "system/Args.hpp"
+#include "system/Sleep.h"
 #include "Operation/ConsoleOperationEnvironment.hpp"
-#include "IO/Async/GlobalAsioThread.hpp"
-#include "IO/Async/AsioThread.hpp"
-#include "Util/PrintException.hxx"
+#include "io/async/GlobalAsioThread.hpp"
+#include "io/async/AsioThread.hpp"
+#include "util/PrintException.hxx"
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_GROUND_SPEED_COMPUTER_HPP
 #define XCSOAR_GROUND_SPEED_COMPUTER_HPP
 
-#include "Time/DeltaTime.hpp"
+#include "time/DeltaTime.hpp"
 #include "NMEA/Validity.hpp"
 #include "Geo/GeoPoint.hpp"
 

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef LOW_PASS_FILTER_HPP
 #define LOW_PASS_FILTER_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 /**
  * Implements a low-pass filter

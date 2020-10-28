@@ -23,7 +23,7 @@
 #define FLATBOUNDINGBOX_HPP
 
 #include "FlatGeoPoint.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <algorithm>
 

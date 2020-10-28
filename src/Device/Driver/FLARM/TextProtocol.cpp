@@ -25,7 +25,7 @@ Copyright_License {
 #include "Device.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Util/NMEAWriter.hpp"
-#include "Time/TimeoutClock.hpp"
+#include "time/TimeoutClock.hpp"
 
 #include <cassert>
 #include <string.h>

@@ -27,11 +27,11 @@ Copyright_License {
 
 #include "shapelib/mapserver.h"
 #include "Geo/GeoBounds.hpp"
-#include "Util/AllocatedArray.hxx"
-#include "Util/Serial.hpp"
+#include "util/AllocatedArray.hxx"
+#include "util/Serial.hpp"
 #include "Screen/Color.hpp"
 #include "ResourceId.hpp"
-#include "Thread/Mutex.hxx"
+#include "thread/Mutex.hxx"
 
 #ifdef ENABLE_OPENGL
 #include "XShapePoint.hpp"

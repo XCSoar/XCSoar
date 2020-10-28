@@ -23,10 +23,10 @@ Copyright_License {
 
 #include "DebugPort.hpp"
 #include "Device/Port/Port.hpp"
-#include "OS/Args.hpp"
-#include "IO/DataHandler.hpp"
+#include "system/Args.hpp"
+#include "io/DataHandler.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
-#include "Util/PrintException.hxx"
+#include "util/PrintException.hxx"
 
 #include <boost/asio/io_service.hpp>
 

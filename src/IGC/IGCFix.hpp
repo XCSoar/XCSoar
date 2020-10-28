@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_IGC_FIX_HPP
 
 #include "Geo/GeoPoint.hpp"
-#include "Time/BrokenTime.hpp"
+#include "time/BrokenTime.hpp"
 
 struct NMEAInfo;
 

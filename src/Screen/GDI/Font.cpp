@@ -26,7 +26,7 @@ Copyright_License {
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/AnyCanvas.hpp"
 #include "Look/FontDescription.hpp"
-#include "Util/TStringView.hxx"
+#include "util/TStringView.hxx"
 #include "Asset.hpp"
 
 #include <cassert>

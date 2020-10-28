@@ -28,15 +28,15 @@ Copyright_License {
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "Math/FastMath.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 #include "Interface.hpp"
 #include "Pan.hpp"
-#include "Util/Clamp.hpp"
+#include "util/Clamp.hpp"
 #include "Topography/Thread.hpp"
 
 #ifdef USE_X11
-#include "Event/Globals.hpp"
-#include "Event/Queue.hpp"
+#include "event/Globals.hpp"
+#include "event/Queue.hpp"
 #endif
 
 #ifdef ENABLE_SDL

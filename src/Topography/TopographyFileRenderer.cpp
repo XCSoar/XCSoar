@@ -31,8 +31,8 @@ Copyright_License {
 #include "Screen/Features.hpp"
 #include "Screen/Layout.hpp"
 #include "shapelib/mapserver.h"
-#include "Util/AllocatedArray.hxx"
-#include "Util/tstring.hpp"
+#include "util/AllocatedArray.hxx"
+#include "util/tstring.hpp"
 #include "Geo/GeoClip.hpp"
 #include "Geo/FAISphere.hpp"
 

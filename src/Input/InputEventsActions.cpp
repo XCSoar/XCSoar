@@ -80,7 +80,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Task/ProtectedTaskManager.hpp"
 #include "UtilsSettings.hpp"
 #include "PageActions.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Simulator.hpp"
 #include "Formatter/TimeFormatter.hpp"

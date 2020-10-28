@@ -24,12 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_CHART_RENDERER_HPP
 #define XCSOAR_CHART_RENDERER_HPP
 
-#include "Util/ReusableArray.hpp"
+#include "util/ReusableArray.hpp"
 #include "Screen/Point.hpp"
 #include "Screen/BulkPoint.hpp"
 #include "Look/ChartLook.hpp"
 #include "Language/Language.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <tchar.h>
 #include <vector>

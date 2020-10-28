@@ -26,9 +26,9 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 #include "Widget/RowFormWidget.hpp"
-#include "OS/FileUtil.hpp"
-#include "OS/Process.hpp"
-#include "Util/StringAPI.hxx"
+#include "system/FileUtil.hpp"
+#include "system/Process.hpp"
+#include "util/StringAPI.hxx"
 
 #include <vector>
 #include <windef.h> /* for MAX_PATH */

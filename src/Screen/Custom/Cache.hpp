@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_CACHE_HPP
 #define XCSOAR_SCREEN_OPENGL_CACHE_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 struct PixelSize;
 struct StringView;

@@ -32,7 +32,7 @@ Copyright_License {
 #include "Form/DataField/Listener.hpp"
 #include "Form/DataField/Float.hpp"
 #include "Form/DataField/Boolean.hpp"
-#include "Time/PeriodClock.hpp"
+#include "time/PeriodClock.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
 #include "Math/Util.hpp"
 

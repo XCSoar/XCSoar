@@ -24,10 +24,10 @@ Copyright_License {
 #ifndef REPLAY_HPP
 #define REPLAY_HPP
 
-#include "Event/Timer.hpp"
+#include "event/Timer.hpp"
 #include "NMEA/Info.hpp"
-#include "Time/PeriodClock.hpp"
-#include "OS/Path.hpp"
+#include "time/PeriodClock.hpp"
+#include "system/Path.hpp"
 
 class Logger;
 class ProtectedTaskManager;

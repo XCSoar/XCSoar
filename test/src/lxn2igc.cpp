@@ -24,10 +24,10 @@ Copyright_License {
 /* Convert LXN files to IGC */
 
 #include "Device/Driver/LX/Convert.hpp"
-#include "OS/Args.hpp"
-#include "IO/BufferedOutputStream.hxx"
-#include "IO/StdioOutputStream.hxx"
-#include "Util/PrintException.hxx"
+#include "system/Args.hpp"
+#include "io/BufferedOutputStream.hxx"
+#include "io/StdioOutputStream.hxx"
+#include "util/PrintException.hxx"
 
 #include <stdio.h>
 #include <stdlib.h>

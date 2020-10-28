@@ -27,7 +27,7 @@ Copyright_License {
 #include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
-#include "OS/Sleep.h"
+#include "system/Sleep.h"
 
 static const char *const flarm_setting_names[] = {
   "BAUD",

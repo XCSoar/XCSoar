@@ -23,12 +23,12 @@ Copyright_License {
 
 #include "Device.hpp"
 #include "Device/Port/Port.hpp"
-#include "Util/ConvertString.hpp"
-#include "Util/StaticString.hxx"
-#include "Util/TruncateString.hpp"
-#include "Util/Macros.hpp"
-#include "Util/NumberParser.hpp"
-#include "Util/StringCompare.hxx"
+#include "util/ConvertString.hpp"
+#include "util/StaticString.hxx"
+#include "util/TruncateString.hpp"
+#include "util/Macros.hpp"
+#include "util/NumberParser.hpp"
+#include "util/StringCompare.hxx"
 #include "NMEA/Checksum.hpp"
 
 void

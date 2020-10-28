@@ -24,10 +24,10 @@ Copyright_License {
 #include "WaypointReaderWinPilot.hpp"
 #include "Units/System.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "Util/ExtractParameters.hpp"
-#include "Util/StringAPI.hxx"
-#include "Util/NumberParser.hpp"
-#include "Util/Macros.hpp"
+#include "util/ExtractParameters.hpp"
+#include "util/StringAPI.hxx"
+#include "util/NumberParser.hpp"
+#include "util/Macros.hpp"
 
 static bool
 ParseAngle(const TCHAR* src, Angle& dest, const bool lat)

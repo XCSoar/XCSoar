@@ -24,12 +24,12 @@ Copyright_License {
 #include "Screen/Font.hpp"
 #include "Screen/Debug.hpp"
 #include "Look/FontDescription.hpp"
-#include "Java/Global.hxx"
-#include "Java/Class.hxx"
-#include "Java/String.hxx"
+#include "java/Global.hxx"
+#include "java/Class.hxx"
+#include "java/String.hxx"
 #include "Android/TextUtil.hpp"
-#include "Util/StringCompare.hxx"
-#include "Util/TStringView.hxx"
+#include "util/StringCompare.hxx"
+#include "util/TStringView.hxx"
 
 #include <cassert>
 

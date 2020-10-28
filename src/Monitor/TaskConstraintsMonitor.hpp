@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TASK_CONSTRAINTS_MONITOR_HPP
 #define XCSOAR_TASK_CONSTRAINTS_MONITOR_HPP
 
-#include "Time/PeriodClock.hpp"
+#include "time/PeriodClock.hpp"
 
 class TaskConstraintsMonitor {
   PeriodClock max_start_speed_clock;

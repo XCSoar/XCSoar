@@ -32,11 +32,11 @@ Copyright_License {
 #include "Tracking/SkyLines/Handler.hpp"
 #include "Tracking/SkyLines/Glue.hpp"
 #include "Tracking/SkyLines/Data.hpp"
-#include "Thread/StandbyThread.hpp"
+#include "thread/StandbyThread.hpp"
 #include "Tracking/LiveTrack24.hpp"
-#include "Time/PeriodClock.hpp"
+#include "time/PeriodClock.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Time/BrokenDateTime.hpp"
+#include "time/BrokenDateTime.hpp"
 
 struct MoreData;
 struct DerivedInfo;

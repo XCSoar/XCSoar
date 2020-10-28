@@ -28,7 +28,7 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "Geo/Quadrilateral.hpp"
 #include "Geo/GeoBounds.hpp"
-#include "Util/tstring.hpp"
+#include "util/tstring.hpp"
 
 class Canvas;
 class WindowProjection;

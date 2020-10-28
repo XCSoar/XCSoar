@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_FLARM_VERSION_HPP
 
 #include "NMEA/Validity.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 
 #include <type_traits>
 

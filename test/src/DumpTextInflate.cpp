@@ -21,11 +21,11 @@ Copyright_License {
 }
 */
 
-#include "IO/FileReader.hxx"
-#include "IO/GunzipReader.hxx"
-#include "IO/BufferedReader.hxx"
-#include "OS/Args.hpp"
-#include "Util/PrintException.hxx"
+#include "io/FileReader.hxx"
+#include "io/GunzipReader.hxx"
+#include "io/BufferedReader.hxx"
+#include "system/Args.hpp"
+#include "util/PrintException.hxx"
 
 #include <stdio.h>
 

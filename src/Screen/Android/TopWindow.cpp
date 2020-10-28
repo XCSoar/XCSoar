@@ -26,9 +26,9 @@ Copyright_License {
 #include "Screen/OpenGL/Surface.hpp"
 #include "Screen/OpenGL/Shapes.hpp"
 #include "Screen/Custom/TopCanvas.hpp"
-#include "Event/Queue.hpp"
-#include "Event/Android/Loop.hpp"
-#include "Event/Globals.hpp"
+#include "event/Queue.hpp"
+#include "event/android/Loop.hpp"
+#include "event/Globals.hpp"
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
 

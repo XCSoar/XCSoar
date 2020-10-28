@@ -26,10 +26,10 @@
 #include "Terrain/RasterMap.hpp"
 #include "Units/System.hpp"
 #include "TestUtil.hpp"
-#include "OS/Path.hpp"
-#include "Util/tstring.hpp"
-#include "Util/StringAPI.hxx"
-#include "Util/ExtractParameters.hpp"
+#include "system/Path.hpp"
+#include "util/tstring.hpp"
+#include "util/StringAPI.hxx"
+#include "util/ExtractParameters.hpp"
 #include "Operation/Operation.hpp"
 
 #include <vector>

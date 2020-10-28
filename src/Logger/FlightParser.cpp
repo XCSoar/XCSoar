@@ -22,10 +22,10 @@ Copyright_License {
 */
 
 #include "FlightParser.hpp"
-#include "IO/LineReader.hpp"
+#include "io/LineReader.hpp"
 #include "FlightInfo.hpp"
-#include "Time/BrokenDateTime.hpp"
-#include "Util/StringAPI.hxx"
+#include "time/BrokenDateTime.hpp"
+#include "util/StringAPI.hxx"
 
 #include <stdio.h>
 

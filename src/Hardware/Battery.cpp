@@ -22,13 +22,13 @@ Copyright_License {
 */
 
 #include "Battery.hpp"
-#include "Util/StringAPI.hxx"
+#include "util/StringAPI.hxx"
 
 #ifdef HAVE_BATTERY
 
 #ifdef KOBO
 
-#include "OS/FileUtil.hpp"
+#include "system/FileUtil.hpp"
 #include "Kobo/Model.hpp"
 
 #include <string.h>

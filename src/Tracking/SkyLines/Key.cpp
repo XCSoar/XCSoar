@@ -22,13 +22,13 @@ Copyright_License {
 */
 
 #include "Key.hpp"
-#include "OS/UniqueFileDescriptor.hxx"
+#include "io/UniqueFileDescriptor.hxx"
 
 #include <stdlib.h>
 #include <string.h>
 
 #ifdef __linux__
-#include "Util/ScopeExit.hxx"
+#include "util/ScopeExit.hxx"
 
 #include <sys/socket.h>
 #include <sys/ioctl.h>

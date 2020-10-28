@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_KOBO_KERNEL_HPP
 #define XCSOAR_KOBO_KERNEL_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 /**
  * Install the given kernel image on /dev/mmcblk0.

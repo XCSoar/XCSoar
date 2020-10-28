@@ -28,7 +28,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Profile/Profile.hpp"
 #include "Screen/Layout.hpp"
-#include "Util/Clamp.hpp"
+#include "util/Clamp.hpp"
 
 void
 OffsetHistory::Reset()

@@ -25,8 +25,8 @@ Copyright_License {
 #define XCSOAR_FLARM_DEVICE_HPP
 
 #include "BinaryProtocol.hpp"
-#include "Util/AllocatedArray.hxx"
-#include "Util/Compiler.h"
+#include "util/AllocatedArray.hxx"
+#include "util/Compiler.h"
 #include "tchar.h"
 #include "Device/Driver.hpp"
 #include "Device/SettingsMap.hpp"

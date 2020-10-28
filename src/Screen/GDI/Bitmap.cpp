@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Screen/Bitmap.hpp"
 #include "Screen/Debug.hpp"
-#include "OS/Path.hpp"
+#include "system/Path.hpp"
 
 #include <cassert>
 

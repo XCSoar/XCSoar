@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "FlightInfo.hpp"
-#include "Time/BrokenDateTime.hpp"
+#include "time/BrokenDateTime.hpp"
 
 int FlightInfo::Duration() const {
   if (!date.IsPlausible() ||

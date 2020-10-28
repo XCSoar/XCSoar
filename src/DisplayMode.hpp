@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DISPLAY_MODE_HPP
 #define XCSOAR_DISPLAY_MODE_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <cstdint>
 

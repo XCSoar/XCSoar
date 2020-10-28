@@ -28,7 +28,7 @@ Copyright_License {
 #ifndef _XYDATASTORE_H
 #define _XYDATASTORE_H
 
-#include "Util/TrivialArray.hxx"
+#include "util/TrivialArray.hxx"
 
 #include <type_traits>
 #define LEASTSQS_WEIGHT_STORE

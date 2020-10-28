@@ -24,7 +24,7 @@
 #ifndef XCSOAR_DEVICE_DRIVER_LX_LXN_HPP
 #define XCSOAR_DEVICE_DRIVER_LX_LXN_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <cstdint>
 

@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
-#include "Time/DeltaTime.hpp"
+#include "time/DeltaTime.hpp"
 
 class Airspaces;
 struct ComputerSettings;

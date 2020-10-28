@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_LEGAL_POINT_SET_HPP
 #define XCSOAR_LEGAL_POINT_SET_HPP
 
-#include "Util/EnumBitSet.hpp"
+#include "util/EnumBitSet.hpp"
 #include "TaskPointFactoryType.hpp"
 
 typedef EnumBitSet<TaskPointFactoryType> LegalPointSet;

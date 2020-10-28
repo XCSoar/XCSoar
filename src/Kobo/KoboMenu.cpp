@@ -29,7 +29,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Screen/Init.hpp"
 #include "Screen/Layout.hpp"
-#include "Event/KeyCode.hpp"
+#include "event/KeyCode.hpp"
 #include "../test/src/Fonts.hpp"
 #include "Language/Language.hpp"
 #include "Form/ActionListener.hpp"

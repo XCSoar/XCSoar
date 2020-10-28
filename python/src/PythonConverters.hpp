@@ -25,7 +25,7 @@
 
 #include <Python.h>
 
-#include "Util/tstring.hpp"
+#include "util/tstring.hpp"
 
 struct BrokenDateTime;
 struct GeoPoint;

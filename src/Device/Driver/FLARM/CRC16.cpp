@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "CRC16.hpp"
-#include "Util/CRC.hpp"
+#include "util/CRC.hpp"
 
 #include <cassert>
 

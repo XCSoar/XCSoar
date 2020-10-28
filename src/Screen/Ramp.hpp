@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_RAMP_HPP
 
 #include "PortableColor.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 class RGB8Color;
 

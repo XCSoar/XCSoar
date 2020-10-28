@@ -27,7 +27,7 @@
 #include "Look/Look.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
-#include "Util/Clamp.hpp"
+#include "util/Clamp.hpp"
 
 void
 CrossSectionWidget::Update(const MoreData &basic,

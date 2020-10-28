@@ -23,10 +23,10 @@ Copyright_License {
 
 #include "Look/FontDescription.hpp"
 #include "Screen/Font.hpp"
-#include "Util/ScopeExit.hxx"
+#include "util/ScopeExit.hxx"
 
 #ifndef ENABLE_OPENGL
-#include "Thread/Mutex.hxx"
+#include "thread/Mutex.hxx"
 #endif
 
 #include <cassert>

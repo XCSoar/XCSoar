@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_TIME_FORMATTER_HPP
 #define XCSOAR_TIME_FORMATTER_HPP
 
-#include "Util/StringBuffer.hxx"
-#include "Util/Compiler.h"
+#include "util/StringBuffer.hxx"
+#include "util/Compiler.h"
 
 #include <tchar.h>
 

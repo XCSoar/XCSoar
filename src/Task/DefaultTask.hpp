@@ -23,7 +23,7 @@
 #ifndef DEFAULT_TASK_HPP
 #define DEFAULT_TASK_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 struct TaskBehaviour;
 class OrderedTask;

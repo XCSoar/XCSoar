@@ -35,8 +35,8 @@ Copyright_License {
 #endif
 
 #ifdef ANDROID
-#include "Thread/Mutex.hxx"
-#include "Thread/Cond.hxx"
+#include "thread/Mutex.hxx"
+#include "thread/Cond.hxx"
 
 struct Event;
 

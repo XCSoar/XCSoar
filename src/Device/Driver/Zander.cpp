@@ -27,7 +27,7 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 #include "Units/System.hpp"
-#include "Util/StringAPI.hxx"
+#include "util/StringAPI.hxx"
 
 class ZanderDevice : public AbstractDevice {
 public:

@@ -26,8 +26,8 @@ Copyright_License {
 
 #include "Logger/GRecord.hpp"
 #include "IGCFix.hpp"
-#include "IO/FileOutputStream.hxx"
-#include "IO/BufferedOutputStream.hxx"
+#include "io/FileOutputStream.hxx"
+#include "io/BufferedOutputStream.hxx"
 
 #include <tchar.h>
 

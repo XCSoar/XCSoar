@@ -25,7 +25,7 @@
 
 #include "Math/Util.hpp"
 #include "Math/Point2D.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <type_traits>
 

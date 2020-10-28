@@ -58,8 +58,8 @@ Copyright_License {
 #include "Device/Driver/ATR833.hpp"
 #include "Device/Driver/XCTracer.hpp"
 #include "Device/Driver/KRT2.hpp"
-#include "Util/Macros.hpp"
-#include "Util/StringAPI.hxx"
+#include "util/Macros.hpp"
+#include "util/StringAPI.hxx"
 
 #include <cassert>
 

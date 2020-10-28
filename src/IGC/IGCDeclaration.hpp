@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_IGC_DECLARATION_HPP
 #define XCSOAR_IGC_DECLARATION_HPP
 
-#include "Time/BrokenDateTime.hpp"
-#include "Util/StaticString.hxx"
+#include "time/BrokenDateTime.hpp"
+#include "util/StaticString.hxx"
 #include "Geo/GeoPoint.hpp"
 
 struct IGCDeclarationHeader {

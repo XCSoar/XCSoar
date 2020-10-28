@@ -23,7 +23,7 @@
 #ifndef GRECORD_HPP
 #define GRECORD_HPP
 
-#include "Util/MD5.hpp"
+#include "util/MD5.hpp"
 
 #define XCSOAR_IGC_CODE "XCS"
 

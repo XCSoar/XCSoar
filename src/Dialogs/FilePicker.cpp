@@ -26,10 +26,10 @@ Copyright_License {
 #include "Form/DataField/File.hpp"
 #include "Form/DataField/ComboList.hpp"
 #include "Language/Language.hpp"
-#include "Net/HTTP/Features.hpp"
+#include "net/http/Features.hpp"
 
 #ifdef HAVE_DOWNLOAD_MANAGER
-#include "Net/HTTP/DownloadManager.hpp"
+#include "net/http/DownloadManager.hpp"
 #include "DownloadFilePicker.hpp"
 #endif
 

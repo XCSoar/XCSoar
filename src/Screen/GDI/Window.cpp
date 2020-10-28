@@ -25,7 +25,7 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/Debug.hpp"
-#include "Event/Idle.hpp"
+#include "event/Idle.hpp"
 #include "Asset.hpp"
 
 #include <cassert>

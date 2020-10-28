@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "Kobo/WPASupplicant.hpp"
-#include "OS/Args.hpp"
-#include "Util/PrintException.cxx"
+#include "system/Args.hpp"
+#include "util/PrintException.cxx"
 
 #include <array>
 

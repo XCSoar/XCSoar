@@ -23,9 +23,9 @@
 
 #include "Device.hpp"
 #include "Device/RecordedFlight.hpp"
-#include "IO/FileOutputStream.hxx"
-#include "IO/BufferedOutputStream.hxx"
-#include "OS/Path.hpp"
+#include "io/FileOutputStream.hxx"
+#include "io/BufferedOutputStream.hxx"
+#include "system/Path.hpp"
 #include "Operation/Operation.hpp"
 
 #include <cstdlib>

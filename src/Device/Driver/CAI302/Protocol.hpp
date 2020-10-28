@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_CAI302_PROTOCOL_HPP
 #define XCSOAR_CAI302_PROTOCOL_HPP
 
-#include "OS/ByteOrder.hpp"
-#include "Util/Compiler.h"
+#include "system/ByteOrder.hpp"
+#include "util/Compiler.h"
 
 #include <chrono>
 #include <cstdint>

@@ -25,9 +25,9 @@ Copyright_License {
 #include "Input/InputConfig.hpp"
 #include "Input/InputLookup.hpp"
 #include "Menu/MenuData.hpp"
-#include "IO/FileLineReader.hpp"
-#include "OS/Args.hpp"
-#include "Util/PrintException.hxx"
+#include "io/FileLineReader.hpp"
+#include "system/Args.hpp"
+#include "util/PrintException.hxx"
 
 #include <stdio.h>
 #include <tchar.h>

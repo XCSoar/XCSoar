@@ -26,10 +26,10 @@ Copyright_License {
 
 #include "RasterMap.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Thread/Guard.hpp"
-#include "OS/Path.hpp"
-#include "IO/ZipArchive.hpp"
-#include "Util/Compiler.h"
+#include "thread/Guard.hpp"
+#include "system/Path.hpp"
+#include "io/ZipArchive.hpp"
+#include "util/Compiler.h"
 
 class FileCache;
 class OperationEnvironment;

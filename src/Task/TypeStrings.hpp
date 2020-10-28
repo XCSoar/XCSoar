@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TASK_TYPE_STRINGS_HPP
 #define XCSOAR_TASK_TYPE_STRINGS_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <tchar.h>
 #include <cstdint>

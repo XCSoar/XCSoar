@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_PCMET_OVERLAYS_HPP
 #define XCSOAR_PCMET_OVERLAYS_HPP
 
-#include "OS/Path.hpp"
-#include "Time/BrokenDateTime.hpp"
-#include "Util/tstring.hpp"
+#include "system/Path.hpp"
+#include "time/BrokenDateTime.hpp"
+#include "util/tstring.hpp"
 
 #include <list>
 

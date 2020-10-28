@@ -22,9 +22,9 @@
 #ifndef WAYPOINTS_HPP
 #define WAYPOINTS_HPP
 
-#include "Util/RadixTree.hpp"
-#include "Util/QuadTree.hxx"
-#include "Util/Serial.hpp"
+#include "util/RadixTree.hpp"
+#include "util/QuadTree.hxx"
+#include "util/Serial.hpp"
 #include "Ptr.hpp"
 #include "Waypoint.hpp"
 #include "Geo/Flat/TaskProjection.hpp"

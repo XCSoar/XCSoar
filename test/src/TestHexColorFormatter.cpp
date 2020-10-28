@@ -22,8 +22,8 @@
 
 #include "Formatter/HexColor.hpp"
 #include "Screen/PortableColor.hpp"
-#include "Util/Macros.hpp"
-#include "Util/StringAPI.hxx"
+#include "util/Macros.hpp"
+#include "util/StringAPI.hxx"
 #include "TestUtil.hpp"
 
 int

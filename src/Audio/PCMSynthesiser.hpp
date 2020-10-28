@@ -28,7 +28,7 @@ Copyright_License {
 #include <cstdint>
 
 #include "PCMDataSource.hpp"
-#include "OS/ByteOrder.hpp"
+#include "system/ByteOrder.hpp"
 
 class PCMSynthesiser : public PCMDataSource {
 public:

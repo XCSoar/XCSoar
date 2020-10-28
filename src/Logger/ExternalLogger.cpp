@@ -36,13 +36,13 @@
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Dialogs/JobDialog.hpp"
 #include "Job/TriStateJob.hpp"
-#include "OS/Path.hpp"
-#include "IO/FileLineReader.hpp"
-#include "IO/FileTransaction.hpp"
+#include "system/Path.hpp"
+#include "io/FileLineReader.hpp"
+#include "io/FileTransaction.hpp"
 #include "IGC/IGCParser.hpp"
 #include "IGC/IGCHeader.hpp"
 #include "Formatter/IGCFilenameFormatter.hpp"
-#include "Time/BrokenDate.hpp"
+#include "time/BrokenDate.hpp"
 
 class DeclareJob {
   DeviceDescriptor &device;

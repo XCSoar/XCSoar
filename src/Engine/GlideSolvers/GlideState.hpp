@@ -24,7 +24,7 @@
 
 #include "Geo/SpeedVector.hpp"
 #include "Geo/GeoVector.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 struct AircraftState;
 class TaskPoint;

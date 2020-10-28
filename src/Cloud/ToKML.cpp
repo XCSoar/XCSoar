@@ -23,11 +23,11 @@ Copyright_License {
 
 #include "Data.hpp"
 #include "Serialiser.hpp"
-#include "IO/FileOutputStream.hxx"
-#include "IO/FileReader.hxx"
-#include "IO/BufferedOutputStream.hxx"
-#include "Util/PrintException.hxx"
-#include "Util/Compiler.h"
+#include "io/FileOutputStream.hxx"
+#include "io/FileReader.hxx"
+#include "io/BufferedOutputStream.hxx"
+#include "util/PrintException.hxx"
+#include "util/Compiler.h"
 
 #include <iostream>
 

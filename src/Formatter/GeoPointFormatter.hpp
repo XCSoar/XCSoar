@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_GEOPOINT_FORMATTER_HPP
 #define XCSOAR_GEOPOINT_FORMATTER_HPP
 
-#include "Util/StringBuffer.hxx"
+#include "util/StringBuffer.hxx"
 #include "Geo/CoordinateFormat.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <tchar.h>
 #include <cstddef>

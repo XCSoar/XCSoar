@@ -26,7 +26,7 @@
 #include "Geo/GeoVector.hpp"
 #include "Geo/Memento/DistanceMemento.hpp"
 #include "Geo/Memento/GeoVectorMemento.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 struct AircraftState;
 

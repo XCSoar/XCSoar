@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FLIGHT_LIST_RENDERER_HPP
 #define XCSOAR_FLIGHT_LIST_RENDERER_HPP
 
-#include "Util/OverwritingRingBuffer.hpp"
+#include "util/OverwritingRingBuffer.hpp"
 #include "FlightInfo.hpp"
 
 struct PixelRect;

@@ -22,12 +22,12 @@ Copyright_License {
 */
 
 #include "Logger/NMEALogger.hpp"
-#include "IO/TextWriter.hpp"
+#include "io/TextWriter.hpp"
 #include "LocalPath.hpp"
-#include "Time/BrokenDateTime.hpp"
-#include "Thread/Mutex.hxx"
-#include "OS/Path.hpp"
-#include "Util/StaticString.hxx"
+#include "time/BrokenDateTime.hpp"
+#include "thread/Mutex.hxx"
+#include "system/Path.hpp"
+#include "util/StaticString.hxx"
 
 namespace NMEALogger
 {

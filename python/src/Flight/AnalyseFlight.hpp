@@ -26,7 +26,7 @@
 #include "FlightPhaseDetector.hpp"
 #include "Contest/Settings.hpp"
 #include "Geo/SpeedVector.hpp"
-#include "Time/BrokenDateTime.hpp"
+#include "time/BrokenDateTime.hpp"
 
 #include <list>
 

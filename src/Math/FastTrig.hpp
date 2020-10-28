@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_MATH_FAST_TRIG_HPP
 
 #include "Constants.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 static constexpr unsigned INT_ANGLE_RANGE = 4096;
 static constexpr unsigned INT_ANGLE_MASK = INT_ANGLE_RANGE - 1;

@@ -1,6 +1,6 @@
 # Build rules for the multithreading library
 
-THREAD_SRC_DIR = $(SRC)/Thread
+THREAD_SRC_DIR = $(SRC)/thread
 
 THREAD_SOURCES = \
 	$(THREAD_SRC_DIR)/Thread.cpp \

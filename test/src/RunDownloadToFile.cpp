@@ -21,12 +21,12 @@ Copyright_License {
 }
 */
 
-#include "Net/HTTP/ToFile.hpp"
-#include "Net/HTTP/Session.hpp"
-#include "OS/Args.hpp"
+#include "net/http/ToFile.hpp"
+#include "net/http/Session.hpp"
+#include "system/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
-#include "Util/ConstBuffer.hxx"
-#include "Util/PrintException.hxx"
+#include "util/ConstBuffer.hxx"
+#include "util/PrintException.hxx"
 
 #include <stdio.h>
 

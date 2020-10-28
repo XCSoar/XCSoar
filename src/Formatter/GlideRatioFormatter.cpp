@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "GlideRatioFormatter.hpp"
-#include "Util/StringFormat.hpp"
+#include "util/StringFormat.hpp"
 
 #include <cassert>
 #include <math.h>

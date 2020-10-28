@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_NMEA_CHECKSUM_HPP
 #define XCSOAR_NMEA_CHECKSUM_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <cstdint>
 

@@ -33,7 +33,7 @@ Copyright_License {
 #ifndef XCSOAR_GEO_SIMPLIFIED_MATH_HPP
 #define XCSOAR_GEO_SIMPLIFIED_MATH_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 struct GeoPoint;
 class Angle;

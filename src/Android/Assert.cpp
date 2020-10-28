@@ -22,7 +22,7 @@ Copyright_License {
  */
 
 #include "LogFile.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <cassert>
 #include <stdlib.h>

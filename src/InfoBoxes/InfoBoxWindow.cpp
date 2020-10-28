@@ -30,7 +30,7 @@ Copyright_License {
 #include "Renderer/UnitSymbolRenderer.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Canvas.hpp"
-#include "Event/KeyCode.hpp"
+#include "event/KeyCode.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 
 #include <algorithm>

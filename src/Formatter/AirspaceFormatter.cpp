@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "AirspaceFormatter.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 static const TCHAR *const airspace_class_names[] = {
   _T("Unknown"),

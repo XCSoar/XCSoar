@@ -30,7 +30,7 @@
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Task/ObservationZones/SymmetricSectorZone.hpp"
 #include "XML/DataNode.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <memory>
 

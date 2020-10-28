@@ -22,12 +22,12 @@ Copyright_License {
 */
 
 #include "LiveTrack24.hpp"
-#include "Util/StringCompare.hxx"
-#include "Util/ConvertString.hpp"
-#include "Net/HTTP/Session.hpp"
-#include "Net/HTTP/ToBuffer.hpp"
+#include "util/StringCompare.hxx"
+#include "util/ConvertString.hpp"
+#include "net/http/Session.hpp"
+#include "net/http/ToBuffer.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 #include "Version.hpp"
 
 #include <cassert>

@@ -25,9 +25,9 @@ Copyright_License {
 #include <utility>
 
 #include "ImageDecoder.hpp"
-#include "OS/Path.hpp"
+#include "system/Path.hpp"
 #include "Screen/Custom/UncompressedImage.hpp"
-#include "Util/ScopeExit.hxx"
+#include "util/ScopeExit.hxx"
 
 #import <CoreGraphics/CoreGraphics.h>
 

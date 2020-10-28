@@ -24,7 +24,7 @@
 #define SAMPLEDTASKPOINT_H
 
 #include "Geo/SearchPointVector.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 class FlatProjection;
 class OZBoundary;

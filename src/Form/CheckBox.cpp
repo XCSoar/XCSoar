@@ -25,9 +25,9 @@ Copyright_License {
 #include "Form/ActionListener.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Canvas.hpp"
-#include "Event/KeyCode.hpp"
+#include "event/KeyCode.hpp"
 #include "Asset.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 void
 CheckBoxControl::Create(ContainerWindow &parent, const DialogLook &_look,

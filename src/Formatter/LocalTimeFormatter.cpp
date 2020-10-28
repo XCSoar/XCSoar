@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "LocalTimeFormatter.hpp"
 #include "TimeFormatter.hpp"
-#include "Time/LocalTime.hpp"
-#include "Time/RoughTime.hpp"
+#include "time/LocalTime.hpp"
+#include "time/RoughTime.hpp"
 
 void
 FormatLocalTimeHHMM(TCHAR *buffer, int time, RoughTimeDelta utc_offset)

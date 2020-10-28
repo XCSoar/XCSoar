@@ -24,8 +24,8 @@ Copyright_License {
 #include "MapWindowProjection.hpp"
 #include "Screen/Layout.hpp"
 #include "Waypoint/Waypoint.hpp"
-#include "Util/Macros.hpp"
-#include "Util/Clamp.hpp"
+#include "util/Macros.hpp"
+#include "util/Clamp.hpp"
 
 #include <cassert>
 

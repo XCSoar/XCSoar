@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "LogFile.hpp"
-#include "Util/Exception.hxx"
+#include "util/Exception.hxx"
 
 #include <exception>
 #include <cstdarg>

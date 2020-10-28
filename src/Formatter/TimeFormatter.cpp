@@ -22,10 +22,10 @@ Copyright_License {
 */
 
 #include "TimeFormatter.hpp"
-#include "Time/BrokenDateTime.hpp"
+#include "time/BrokenDateTime.hpp"
 #include "Math/Util.hpp"
-#include "Util/StringCompare.hxx"
-#include "Util/StaticString.hxx"
+#include "util/StringCompare.hxx"
+#include "util/StaticString.hxx"
 
 #include <stdio.h>
 #include <stdlib.h>

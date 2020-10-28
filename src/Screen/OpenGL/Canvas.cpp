@@ -36,10 +36,10 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "Screen/Util.hpp"
 #include "Math/Angle.hpp"
-#include "Util/AllocatedArray.hxx"
-#include "Util/Macros.hpp"
-#include "Util/TStringView.hxx"
-#include "Util/UTF8.hpp"
+#include "util/AllocatedArray.hxx"
+#include "util/Macros.hpp"
+#include "util/TStringView.hxx"
+#include "util/UTF8.hpp"
 
 #include "Shaders.hpp"
 #include "Program.hpp"
@@ -48,11 +48,11 @@ Copyright_License {
 #include <glm/gtc/type_ptr.hpp>
 
 #ifdef UNICODE
-#include "Util/ConvertString.hpp"
+#include "util/ConvertString.hpp"
 #endif
 
 #ifndef NDEBUG
-#include "Util/UTF8.hpp"
+#include "util/UTF8.hpp"
 #endif
 
 #include <cassert>

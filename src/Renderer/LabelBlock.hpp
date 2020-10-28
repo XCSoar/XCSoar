@@ -25,8 +25,8 @@ Copyright_License {
 #define SCREEN_LABELBLOCK_HPP
 
 #include "Screen/Point.hpp"
-#include "Util/StaticArray.hxx"
-#include "Util/Compiler.h"
+#include "util/StaticArray.hxx"
+#include "util/Compiler.h"
 
 /**
  * Simple code to prevent text writing over map city names.

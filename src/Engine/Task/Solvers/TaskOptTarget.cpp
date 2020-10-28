@@ -24,7 +24,7 @@
 #include "Task/Ordered/Points/AATPoint.hpp"
 #include "Task/Ordered/Points/StartPoint.hpp"
 #include "Util/Tolerances.hpp"
-#include "Util/Clamp.hpp"
+#include "util/Clamp.hpp"
 
 TaskOptTarget::TaskOptTarget(const std::vector<OrderedTaskPoint*>& tps,
                              const unsigned activeTaskPoint,

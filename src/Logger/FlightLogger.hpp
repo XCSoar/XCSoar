@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_FLIGHT_LOGGER_HPP
 #define XCSOAR_FLIGHT_LOGGER_HPP
 
-#include "Time/BrokenDateTime.hpp"
-#include "OS/Path.hpp"
+#include "time/BrokenDateTime.hpp"
+#include "system/Path.hpp"
 
 struct MoreData;
 struct DerivedInfo;

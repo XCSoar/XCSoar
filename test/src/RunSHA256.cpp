@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #include "Crypto/SHA256.hxx"
-#include "OS/Args.hpp"
-#include "IO/FileReader.hxx"
-#include "Util/PrintException.hxx"
+#include "system/Args.hpp"
+#include "io/FileReader.hxx"
+#include "util/PrintException.hxx"
 
 #include <stdio.h>
 

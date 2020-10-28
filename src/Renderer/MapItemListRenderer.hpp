@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_MAP_ITEM_LIST_RENDERER_HPP
 #define XCSOAR_MAP_ITEM_LIST_RENDERER_HPP
 
-#include "Time/RoughTime.hpp"
+#include "time/RoughTime.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 
 struct PixelRect;

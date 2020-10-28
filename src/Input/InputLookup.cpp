@@ -24,7 +24,7 @@ Copyright_License {
 #include "InputLookup.hpp"
 #include "InputEvents.hpp"
 #include "InputQueue.hpp"
-#include "Util/StringAPI.hxx"
+#include "util/StringAPI.hxx"
 
 // Mapping text names of events to the real thing
 struct Text2EventSTRUCT {

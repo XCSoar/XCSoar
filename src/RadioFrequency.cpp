@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "RadioFrequency.hpp"
-#include "Util/StringFormat.hpp"
-#include "Util/NumberParser.hpp"
+#include "util/StringFormat.hpp"
+#include "util/NumberParser.hpp"
 
 TCHAR *
 RadioFrequency::Format(TCHAR *buffer, size_t max_size) const

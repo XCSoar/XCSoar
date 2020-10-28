@@ -24,7 +24,7 @@ Copyright_License {
 #include "Polar/PolarStore.hpp"
 #include "Polar/Polar.hpp"
 #include "Units/System.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 #include <cassert>
 

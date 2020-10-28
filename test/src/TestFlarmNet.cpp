@@ -24,7 +24,7 @@
 #include "FLARM/FlarmNetReader.hpp"
 #include "FLARM/FlarmNetRecord.hpp"
 #include "FLARM/FlarmId.hpp"
-#include "OS/Path.hpp"
+#include "system/Path.hpp"
 #include "TestUtil.hpp"
 
 int main(int argc, char **argv)

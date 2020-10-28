@@ -28,7 +28,7 @@ Copyright_License {
 #include "Map.hpp"
 #include "ProfileKeys.hpp"
 #include "MapSettings.hpp"
-#include "Util/Clamp.hpp"
+#include "util/Clamp.hpp"
 
 static bool
 IsValidMapOrientation(unsigned value)

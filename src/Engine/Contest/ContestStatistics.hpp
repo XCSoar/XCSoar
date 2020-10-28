@@ -25,7 +25,7 @@
 
 #include "ContestResult.hpp"
 #include "ContestTrace.hpp"
-#include "Util/TypeTraits.hpp"
+#include "util/TypeTraits.hpp"
 
 struct ContestStatistics
 {

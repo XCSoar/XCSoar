@@ -22,10 +22,10 @@ Copyright_License {
 */
 
 #include "Screen/Canvas.hpp"
-#include "Util/StringAPI.hxx"
+#include "util/StringAPI.hxx"
 
 #ifndef NDEBUG
-#include "Util/UTF8.hpp"
+#include "util/UTF8.hpp"
 #endif
 
 #include <algorithm>

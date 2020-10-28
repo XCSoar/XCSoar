@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "UnitSymbolRenderer.hpp"
 #include "Screen/Canvas.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 #include <algorithm>
 

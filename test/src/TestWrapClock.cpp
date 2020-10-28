@@ -22,9 +22,9 @@
 
 #define ACCURACY 1000000
 
-#include "Time/BrokenDate.hpp"
-#include "Time/BrokenTime.hpp"
-#include "Time/WrapClock.hpp"
+#include "time/BrokenDate.hpp"
+#include "time/BrokenTime.hpp"
+#include "time/WrapClock.hpp"
 #include "TestUtil.hpp"
 
 static double

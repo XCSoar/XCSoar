@@ -25,7 +25,7 @@ Copyright_License {
 #include "AndroidPort.hpp"
 #include "Android/IOIOHelper.hpp"
 #include "Android/Main.hpp"
-#include "Java/Global.hxx"
+#include "java/Global.hxx"
 
 #include <cassert>
 

@@ -29,15 +29,15 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "Device/Config.hpp"
 #include "Device/Driver/LX/LX1600.hpp"
-#include "OS/Args.hpp"
-#include "Util/StringUtil.hpp"
-#include "Util/PrintException.hxx"
+#include "system/Args.hpp"
+#include "util/StringUtil.hpp"
+#include "util/PrintException.hxx"
 #include "Operation/ConsoleOperationEnvironment.hpp"
-#include "IO/Async/GlobalAsioThread.hpp"
-#include "IO/Async/AsioThread.hpp"
+#include "io/async/GlobalAsioThread.hpp"
+#include "io/async/AsioThread.hpp"
 #include "Units/System.hpp"
 #include "Atmosphere/Pressure.hpp"
-#include "IO/NullDataHandler.hpp"
+#include "io/NullDataHandler.hpp"
 
 #include <stdio.h>
 

@@ -30,7 +30,7 @@ Copyright_License {
 #include "Screen/Pen.hpp"
 #include "Screen/Point.hpp"
 #include "Screen/BulkPoint.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <cassert>
 #include <windows.h>

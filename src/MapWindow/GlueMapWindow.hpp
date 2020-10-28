@@ -25,18 +25,18 @@ Copyright_License {
 #define XCSOAR_GLUE_MAP_WINDOW_HPP
 
 #include "MapWindow.hpp"
-#include "Time/PeriodClock.hpp"
+#include "time/PeriodClock.hpp"
 #include "UIUtil/TrackingGestureManager.hpp"
 #include "UIUtil/KineticManager.hpp"
 #include "Renderer/ThermalBandRenderer.hpp"
 #include "Renderer/FinalGlideBarRenderer.hpp"
 #include "Renderer/VarioBarRenderer.hpp"
-#include "Event/Timer.hpp"
-#include "Event/Notify.hpp"
+#include "event/Timer.hpp"
+#include "event/Notify.hpp"
 #include "Screen/Features.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Event/PeriodicTimer.hpp"
+#include "event/PeriodicTimer.hpp"
 #endif
 
 #include <array>

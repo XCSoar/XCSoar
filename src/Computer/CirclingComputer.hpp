@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_CIRCLING_COMPUTER_HPP
 
 #include "Geo/GeoPoint.hpp"
-#include "Time/DeltaTime.hpp"
+#include "time/DeltaTime.hpp"
 
 struct CirclingInfo;
 struct NMEAInfo;

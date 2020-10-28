@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "WaypointLabelList.hpp"
-#include "Util/StringUtil.hpp"
-#include "Util/Macros.hpp"
+#include "util/StringUtil.hpp"
+#include "util/Macros.hpp"
 
 #include <algorithm>
 

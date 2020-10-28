@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "HexColor.hpp"
 #include "Screen/PortableColor.hpp"
-#include "Util/NumberParser.hpp"
+#include "util/NumberParser.hpp"
 
 #include <stdio.h>
 #include <cassert>

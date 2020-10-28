@@ -26,7 +26,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "Screen/Point.hpp"
-#include "OS/Path.hpp"
+#include "system/Path.hpp"
 
 #ifdef ANDROID
 #include "Android/NativeView.hpp"

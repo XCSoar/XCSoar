@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_TEXT_PROTOCOL_HPP
 #define XCSOAR_FLARM_TEXT_PROTOCOL_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 /**
  * Copy a string, ignoring all characters that are illegal in a

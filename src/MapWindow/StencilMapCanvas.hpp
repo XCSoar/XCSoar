@@ -27,7 +27,7 @@ Copyright_License {
 #ifndef ENABLE_OPENGL
 
 #include "Geo/GeoClip.hpp"
-#include "Util/AllocatedArray.hxx"
+#include "util/AllocatedArray.hxx"
 
 struct PixelPoint;
 class Canvas;

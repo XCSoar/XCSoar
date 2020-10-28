@@ -80,7 +80,7 @@
 #include "jpc_fix.h"
 #include "jpc_qmfb.h"
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 /******************************************************************************\
 * Constants.

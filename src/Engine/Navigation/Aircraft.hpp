@@ -24,7 +24,7 @@
 
 #include "Geo/GeoPoint.hpp"
 #include "Geo/SpeedVector.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <type_traits>
 

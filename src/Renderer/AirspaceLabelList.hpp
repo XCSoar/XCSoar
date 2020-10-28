@@ -27,8 +27,8 @@ Copyright_License {
 #include "Engine/Airspace/AirspaceAltitude.hpp"
 #include "Engine/Airspace/AirspaceClass.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Util/NonCopyable.hpp"
-#include "Util/StaticArray.hxx"
+#include "util/NonCopyable.hpp"
+#include "util/StaticArray.hxx"
 
 struct AirspaceWarningConfig;
 

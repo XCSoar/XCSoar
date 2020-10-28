@@ -21,7 +21,7 @@
  */
 
 #include "Gradient.hpp"
-#include "Util/Clamp.hpp"
+#include "util/Clamp.hpp"
 
 #include <math.h>
 

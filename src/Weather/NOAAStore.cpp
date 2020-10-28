@@ -24,8 +24,8 @@ Copyright_License {
 #include "NOAAStore.hpp"
 
 #ifdef _UNICODE
-#include "Util/Macros.hpp"
-#include "Util/ConvertString.hpp"
+#include "util/Macros.hpp"
+#include "util/ConvertString.hpp"
 
 #include <windows.h>
 #endif

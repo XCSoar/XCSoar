@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "WaveResult.hpp"
 #include "StateClock.hpp"
-#include "Time/DeltaTime.hpp"
+#include "time/DeltaTime.hpp"
 #include "Math/LeastSquares.hpp"
 #include "NMEA/Validity.hpp"
 #include "Geo/Flat/FlatProjection.hpp"

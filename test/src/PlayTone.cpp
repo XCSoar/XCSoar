@@ -31,7 +31,7 @@ Copyright_License {
 #include "Audio/PCMPlayerFactory.hpp"
 #include "Audio/ToneSynthesiser.hpp"
 #include "Screen/Init.hpp"
-#include "OS/Args.hpp"
+#include "system/Args.hpp"
 
 #include <boost/asio/io_service.hpp>
 #include <boost/asio/steady_timer.hpp>

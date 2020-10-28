@@ -24,9 +24,9 @@ Copyright_License {
 #include "NOAADownloader.hpp"
 #include "METAR.hpp"
 #include "TAF.hpp"
-#include "Net/HTTP/ToBuffer.hpp"
+#include "net/http/ToBuffer.hpp"
 #include "Job/Runner.hpp"
-#include "Util/StringStrip.hxx"
+#include "util/StringStrip.hxx"
 
 #include <cstdlib>
 

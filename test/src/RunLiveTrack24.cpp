@@ -22,10 +22,10 @@ Copyright_License {
 */
 
 #include "Tracking/LiveTrack24.hpp"
-#include "Net/HTTP/Init.hpp"
-#include "Time/BrokenDateTime.hpp"
+#include "net/http/Init.hpp"
+#include "time/BrokenDateTime.hpp"
 #include "Units/System.hpp"
-#include "OS/Args.hpp"
+#include "system/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "DebugReplay.hpp"
 

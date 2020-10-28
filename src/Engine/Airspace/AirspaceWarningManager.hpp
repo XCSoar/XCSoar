@@ -25,7 +25,7 @@
 #include "AirspaceWarning.hpp"
 #include "AirspaceWarningConfig.hpp"
 #include "Util/AircraftStateFilter.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <list>
 

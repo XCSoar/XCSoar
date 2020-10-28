@@ -35,7 +35,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Look/GlobalFonts.hpp"
 #include "Screen/Init.hpp"
-#include "Net/HTTP/Init.hpp"
+#include "net/http/Init.hpp"
 #include "UtilsSystem.hpp"
 #include "ResourceLoader.hpp"
 #include "Language/Language.hpp"
@@ -44,8 +44,8 @@ Copyright_License {
 #include "Audio/GlobalPCMMixer.hpp"
 #include "Audio/GlobalPCMResourcePlayer.hpp"
 #include "Audio/GlobalVolumeController.hpp"
-#include "OS/Args.hpp"
-#include "IO/Async/GlobalAsioThread.hpp"
+#include "system/Args.hpp"
+#include "io/async/GlobalAsioThread.hpp"
 
 #ifdef ENABLE_SDL
 /* this is necessary on Mac OS X, to let libSDL bootstrap Quartz

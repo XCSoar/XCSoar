@@ -23,9 +23,9 @@ Copyright_License {
 
 #include "InputEvents.hpp"
 #include "InputConfig.hpp"
-#include "Event/KeyCode.hpp"
+#include "event/KeyCode.hpp"
 #include "Asset.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 #include <cassert>
 

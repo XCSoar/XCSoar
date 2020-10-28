@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "Context.hpp"
-#include "Java/Class.hxx"
-#include "Java/String.hxx"
+#include "java/Class.hxx"
+#include "java/String.hxx"
 
 jobject
 Context::GetSystemService(JNIEnv *env, jstring name)

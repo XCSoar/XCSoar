@@ -29,14 +29,14 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "Device/Driver/FLARM/Device.hpp"
 #include "Device/Config.hpp"
-#include "OS/Args.hpp"
-#include "Util/StringStrip.hxx"
-#include "Util/ConvertString.hpp"
-#include "Util/PrintException.hxx"
+#include "system/Args.hpp"
+#include "util/StringStrip.hxx"
+#include "util/ConvertString.hpp"
+#include "util/PrintException.hxx"
 #include "Operation/ConsoleOperationEnvironment.hpp"
-#include "IO/Async/GlobalAsioThread.hpp"
-#include "IO/Async/AsioThread.hpp"
-#include "IO/NullDataHandler.hpp"
+#include "io/async/GlobalAsioThread.hpp"
+#include "io/async/AsioThread.hpp"
+#include "io/NullDataHandler.hpp"
 
 #include <stdio.h>
 

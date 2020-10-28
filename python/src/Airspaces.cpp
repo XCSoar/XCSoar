@@ -35,8 +35,8 @@
 #include "Engine/Airspace/AirspaceAltitude.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
 #include "NMEA/Aircraft.hpp"
-#include "Util/tstring.hpp"
-#include "Util/Macros.hpp"
+#include "util/tstring.hpp"
+#include "util/Macros.hpp"
 
 #include <vector>
 #include <algorithm>

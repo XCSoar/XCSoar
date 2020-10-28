@@ -24,7 +24,7 @@
 #ifndef OBSERVATIONZONE_HPP
 #define OBSERVATIONZONE_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <cstdint>
 

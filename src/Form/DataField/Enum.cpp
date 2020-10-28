@@ -24,7 +24,7 @@ Copyright_License {
 #include "Enum.hpp"
 #include "ComboList.hpp"
 #include "Language/Language.hpp"
-#include "Util/StringAPI.hxx"
+#include "util/StringAPI.hxx"
 
 #include <algorithm>
 

@@ -22,8 +22,8 @@
 
 #include "Logger/GRecord.hpp"
 #include "TestUtil.hpp"
-#include "OS/Path.hpp"
-#include "Util/PrintException.hxx"
+#include "system/Path.hpp"
+#include "util/PrintException.hxx"
 
 #include <tchar.h>
 #include <stdlib.h>

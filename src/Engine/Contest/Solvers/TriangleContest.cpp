@@ -23,7 +23,7 @@
 #include "TriangleContest.hpp"
 #include "Cast.hpp"
 #include "Trace/Trace.hpp"
-#include "Util/QuadTree.hxx"
+#include "util/QuadTree.hxx"
 
 /*
  @todo potential to use 3d convex hull to speed search

@@ -57,10 +57,10 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Blackboard/InterfaceBlackboard.hpp"
 #include "DebugReplay.hpp"
-#include "IO/FileLineReader.hpp"
+#include "io/FileLineReader.hpp"
 #include "Operation/Operation.hpp"
 #include "Look/Look.hpp"
-#include "OS/Args.hpp"
+#include "system/Args.hpp"
 
 #ifdef _WIN32
 #include <shellapi.h>

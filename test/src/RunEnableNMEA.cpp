@@ -29,13 +29,13 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "Device/Config.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
-#include "IO/Async/GlobalAsioThread.hpp"
-#include "IO/Async/AsioThread.hpp"
-#include "IO/NullDataHandler.hpp"
-#include "Util/PrintException.hxx"
+#include "io/async/GlobalAsioThread.hpp"
+#include "io/async/AsioThread.hpp"
+#include "io/NullDataHandler.hpp"
+#include "util/PrintException.hxx"
 
 #define MORE_USAGE
-#include "OS/Args.hpp"
+#include "system/Args.hpp"
 
 #include <stdio.h>
 

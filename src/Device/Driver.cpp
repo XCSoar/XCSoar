@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Device/Driver.hpp"
 #include "RadioFrequency.hpp"
-#include "OS/Path.hpp"
+#include "system/Path.hpp"
 
 Device::~Device() {}
 

@@ -4,13 +4,13 @@
 #include "Computer/FlyingComputer.hpp"
 #include "Engine/Contest/ContestManager.hpp"
 #include "Computer/Settings.hpp"
-#include "OS/ConvertPathName.hpp"
-#include "OS/FileUtil.hpp"
-#include "IO/FileLineReader.hpp"
+#include "system/ConvertPathName.hpp"
+#include "system/FileUtil.hpp"
+#include "io/FileLineReader.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "test_debug.hpp"
-#include "Util/PrintException.hxx"
+#include "util/PrintException.hxx"
 
 #include <fstream>
 

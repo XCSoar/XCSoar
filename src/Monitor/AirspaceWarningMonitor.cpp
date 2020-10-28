@@ -27,7 +27,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Audio/Sound.hpp"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
-#include "Event/Idle.hpp"
+#include "event/Idle.hpp"
 #include "PageActions.hpp"
 #include "Widget/QuestionWidget.hpp"
 #include "Form/ActionListener.hpp"

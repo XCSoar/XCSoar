@@ -23,7 +23,7 @@
 #include "TeamCode/TeamCode.hpp"
 #include "TestUtil.hpp"
 #include "Math/Util.hpp"
-#include "Util/StringUtil.hpp"
+#include "util/StringUtil.hpp"
 
 int main(int argc, char **argv)
 {

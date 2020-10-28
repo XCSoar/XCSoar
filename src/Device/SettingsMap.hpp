@@ -24,10 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_SETTINGS_MAP_HPP
 #define XCSOAR_DEVICE_SETTINGS_MAP_HPP
 
-#include "Util/Serial.hpp"
-#include "Time/TimeoutClock.hpp"
-#include "Thread/Mutex.hxx"
-#include "Thread/Cond.hxx"
+#include "util/Serial.hpp"
+#include "time/TimeoutClock.hpp"
+#include "thread/Mutex.hxx"
+#include "thread/Cond.hxx"
 #include "Operation/Operation.hpp"
 
 #include <map>

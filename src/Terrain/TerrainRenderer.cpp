@@ -26,7 +26,7 @@ Copyright_License {
 #include "Screen/Ramp.hpp"
 #include "Screen/RawBitmap.hpp"
 #include "Projection/WindowProjection.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 #include <cassert>
 

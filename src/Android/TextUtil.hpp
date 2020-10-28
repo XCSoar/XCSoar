@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_TEXT_UTIL_HPP
 #define XCSOAR_ANDROID_TEXT_UTIL_HPP
 
-#include "Java/Object.hxx"
-#include "Util/Compiler.h"
+#include "java/Object.hxx"
+#include "util/Compiler.h"
 
 #include <utility>
 

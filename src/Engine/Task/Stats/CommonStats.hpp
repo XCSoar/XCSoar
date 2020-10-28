@@ -22,7 +22,7 @@
 #ifndef COMMON_STATS_HPP
 #define COMMON_STATS_HPP
 
-#include "Time/RoughTime.hpp"
+#include "time/RoughTime.hpp"
 #include "Geo/GeoVector.hpp"
 #include "TaskSummary.hpp"
 #include "../TaskType.hpp"

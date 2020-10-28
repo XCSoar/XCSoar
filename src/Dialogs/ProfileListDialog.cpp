@@ -29,14 +29,14 @@ Copyright_License {
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/TextListWidget.hpp"
 #include "Form/Button.hpp"
-#include "OS/FileUtil.hpp"
-#include "OS/Path.hpp"
+#include "system/FileUtil.hpp"
+#include "system/Path.hpp"
 #include "LocalPath.hpp"
 #include "Profile/Map.hpp"
 #include "Profile/File.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 
 #include <vector>
 

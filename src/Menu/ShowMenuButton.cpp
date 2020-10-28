@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/Pen.hpp"
 #include "Screen/Layout.hpp"
 #include "Input/InputEvents.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scope.hpp"

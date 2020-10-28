@@ -32,7 +32,7 @@
 #include "Task/ObservationZones/SymmetricSectorZone.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
-#include "Util/StaticArray.hxx"
+#include "util/StaticArray.hxx"
 #include "test_debug.hpp"
 
 #include "harness_waypoints.hpp"

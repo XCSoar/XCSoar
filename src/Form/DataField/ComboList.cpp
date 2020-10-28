@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "ComboList.hpp"
-#include "Util/StringAPI.hxx"
+#include "util/StringAPI.hxx"
 
 #include <algorithm>
 

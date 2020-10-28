@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TRACE_COMPUTER_HPP
 #define XCSOAR_TRACE_COMPUTER_HPP
 
-#include "Thread/Mutex.hxx"
+#include "thread/Mutex.hxx"
 #include "Engine/Trace/Trace.hpp"
 
 struct ComputerSettings;

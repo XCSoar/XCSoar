@@ -29,8 +29,8 @@ Copyright_License {
 #include "Polar/Polar.hpp"
 #include "Polar/PolarGlue.hpp"
 #include "Computer/Settings.hpp"
-#include "OS/Path.hpp"
-#include "Util/Clamp.hpp"
+#include "system/Path.hpp"
+#include "util/Clamp.hpp"
 
 void
 PlaneGlue::FromProfile(Plane &plane, const ProfileMap &profile)

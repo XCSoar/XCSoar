@@ -22,7 +22,7 @@
 #ifndef GRADIENT_HPP
 #define GRADIENT_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 /** 
  * Convert angle or (approximate) inverse-gradient to gradient.

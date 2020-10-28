@@ -27,7 +27,7 @@ Copyright_License {
 #include "ZzipStream.hpp"
 #include "WorldFile.hpp"
 #include "Operation/Operation.hpp"
-#include "OS/ConvertPathName.hpp"
+#include "system/ConvertPathName.hpp"
 
 extern "C" {
 #include "jasper/jp2/jp2_cod.h"

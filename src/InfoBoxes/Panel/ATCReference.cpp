@@ -28,7 +28,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 #include "Formatter/GeoPointFormatter.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 #include "Components.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"

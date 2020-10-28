@@ -24,7 +24,7 @@ Copyright_License {
 #include "Device/Driver/BlueFlyVario.hpp"
 #include "Internal.hpp"
 #include "NMEA/Info.hpp"
-#include "Util/IterableSplitString.hxx"
+#include "util/IterableSplitString.hxx"
 
 bool
 BlueFlyDevice::ParseBAT(const char *content, NMEAInfo &info)

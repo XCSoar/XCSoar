@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "IGCFilenameFormatter.hpp"
-#include "Time/BrokenDate.hpp"
-#include "Util/StringFormat.hpp"
+#include "time/BrokenDate.hpp"
+#include "util/StringFormat.hpp"
 
 #ifdef _UNICODE
 #include <algorithm>

@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "Internal.hpp"
 #include "Protocol.hpp"
-#include "Util/Macros.hpp"
-#include "Util/CharUtil.hxx"
+#include "util/Macros.hpp"
+#include "util/CharUtil.hxx"
 #include "Engine/Waypoint/Waypoint.hpp"
 
 bool

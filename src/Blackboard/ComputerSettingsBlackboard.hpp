@@ -25,7 +25,7 @@ Copyright_License {
 #define COMPUTER_SETTINGS_BLACKBOARD_HPP
 
 #include "Computer/Settings.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 class ComputerSettingsBlackboard
 {

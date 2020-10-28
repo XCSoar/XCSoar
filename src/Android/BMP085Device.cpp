@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "BMP085Device.hpp"
 #include "NativeBMP085Listener.hpp"
-#include "Java/Class.hxx"
+#include "java/Class.hxx"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 

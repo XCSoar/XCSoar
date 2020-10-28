@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Math/Angle.hpp"
 #include "Math/Screen.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scope.hpp"

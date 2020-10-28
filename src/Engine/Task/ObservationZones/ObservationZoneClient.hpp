@@ -23,7 +23,7 @@
 #ifndef OBSERVATIONZONECLIENT_HPP
 #define OBSERVATIONZONECLIENT_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 class ObservationZonePoint;
 class OZBoundary;

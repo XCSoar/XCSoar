@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_TRACKING_SKYLINES_QUEUE_HPP
 
 #include "Protocol.hpp"
-#include "Util/OverwritingRingBuffer.hpp"
+#include "util/OverwritingRingBuffer.hpp"
 
 #include <cstdint>
 

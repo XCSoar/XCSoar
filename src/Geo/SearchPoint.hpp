@@ -24,7 +24,7 @@
 
 #include "GeoPoint.hpp"
 #include "Flat/FlatGeoPoint.hpp"
-#include "Util/TypeTraits.hpp"
+#include "util/TypeTraits.hpp"
 
 #include <cassert>
 

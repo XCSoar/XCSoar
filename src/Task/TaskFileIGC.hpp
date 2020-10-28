@@ -24,7 +24,7 @@
 #define XCSOAR_TASK_FILE_IGC_HPP
 
 #include "TaskFile.hpp"
-#include "OS/Path.hpp"
+#include "system/Path.hpp"
 
 class TaskFileIGC: public TaskFile
 {

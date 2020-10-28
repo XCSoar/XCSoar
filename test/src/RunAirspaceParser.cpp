@@ -23,10 +23,10 @@ Copyright_License {
 
 #include "Airspace/AirspaceParser.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
-#include "OS/Args.hpp"
-#include "IO/FileLineReader.hpp"
+#include "system/Args.hpp"
+#include "io/FileLineReader.hpp"
 #include "Operation/Operation.hpp"
-#include "Util/PrintException.hxx"
+#include "util/PrintException.hxx"
 
 #include <stdio.h>
 #include <tchar.h>

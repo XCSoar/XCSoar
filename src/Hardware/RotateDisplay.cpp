@@ -30,7 +30,7 @@ Copyright_License {
 #endif
 
 #ifdef KOBO
-#include "OS/FileUtil.hpp"
+#include "system/FileUtil.hpp"
 #endif
 
 #ifdef ENABLE_OPENGL

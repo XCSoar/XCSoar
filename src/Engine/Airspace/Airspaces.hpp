@@ -25,10 +25,10 @@
 
 #include "AirspacesInterface.hpp"
 #include "AirspaceActivity.hpp"
-#include "Util/Serial.hpp"
+#include "util/Serial.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
 #include "Atmosphere/Pressure.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <deque>
 

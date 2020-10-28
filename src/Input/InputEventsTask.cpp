@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "InputEvents.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 #include "Language/Language.hpp"
 #include "Message.hpp"
 #include "Components.hpp"
@@ -43,7 +43,7 @@ Copyright_License {
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
-#include "OS/Path.hpp"
+#include "system/Path.hpp"
 
 static void
 trigger_redraw()

@@ -25,10 +25,10 @@ Copyright_License {
 #define XCSOAR_LOGGER_IMPL_HPP
 
 #include "LoggerFRecord.hpp"
-#include "Time/BrokenDateTime.hpp"
+#include "time/BrokenDateTime.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "OS/Path.hpp"
-#include "Util/OverwritingRingBuffer.hpp"
+#include "system/Path.hpp"
+#include "util/OverwritingRingBuffer.hpp"
 
 #include <tchar.h>
 

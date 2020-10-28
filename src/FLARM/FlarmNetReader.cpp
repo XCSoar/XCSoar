@@ -24,13 +24,13 @@ Copyright_License {
 #include "FlarmNetReader.hpp"
 #include "FlarmNetRecord.hpp"
 #include "FlarmNetDatabase.hpp"
-#include "Util/CharUtil.hxx"
-#include "Util/StringStrip.hxx"
-#include "IO/LineReader.hpp"
-#include "IO/FileLineReader.hpp"
+#include "util/CharUtil.hxx"
+#include "util/StringStrip.hxx"
+#include "io/LineReader.hpp"
+#include "io/FileLineReader.hpp"
 
 #ifndef _UNICODE
-#include "Util/UTF8.hpp"
+#include "util/UTF8.hpp"
 #endif
 
 #include <stdio.h>

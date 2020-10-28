@@ -27,10 +27,10 @@ Copyright_License {
 #include "Device/Util/NMEAReader.hpp"
 #include "Device/Declaration.hpp"
 #include "IGC/Generator.hpp"
-#include "Time/TimeoutClock.hpp"
-#include "Time/BrokenDateTime.hpp"
+#include "time/TimeoutClock.hpp"
+#include "time/BrokenDateTime.hpp"
 #include "Operation/Operation.hpp"
-#include "Util/ConvertString.hpp"
+#include "util/ConvertString.hpp"
 
 static bool
 NanoWriteDecl(Port &port, OperationEnvironment &env, PortNMEAReader &reader,

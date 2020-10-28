@@ -23,7 +23,7 @@
 #ifndef XCSOAR_START_CONSTRAINTS_HPP
 #define XCSOAR_START_CONSTRAINTS_HPP
 
-#include "Time/RoughTime.hpp"
+#include "time/RoughTime.hpp"
 #include "Geo/AltitudeReference.hpp"
 
 struct AircraftState;

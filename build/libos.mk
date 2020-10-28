@@ -1,10 +1,9 @@
 # Build rules for the OS specific utility/abstraction library
 
-OS_SRC_DIR = $(SRC)/OS
+OS_SRC_DIR = $(SRC)/system
 
 OS_SOURCES := \
 	$(OS_SRC_DIR)/Clock.cpp \
-	$(OS_SRC_DIR)/FileDescriptor.cxx \
 	$(OS_SRC_DIR)/FileMapping.cpp \
 	$(OS_SRC_DIR)/FileUtil.cpp \
 	$(OS_SRC_DIR)/RunFile.cpp \

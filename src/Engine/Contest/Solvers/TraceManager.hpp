@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef TRACE_MANAGER_HPP
 #define TRACE_MANAGER_HPP
 
-#include "Util/Serial.hpp"
+#include "util/Serial.hpp"
 #include "Trace/Trace.hpp"
 #include "Trace/Vector.hpp"
 #include "Trace/Point.hpp"

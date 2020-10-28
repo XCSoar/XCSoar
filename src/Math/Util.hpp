@@ -23,7 +23,7 @@
 #ifndef XCSOAR_MATH_UTIL_HPP
 #define XCSOAR_MATH_UTIL_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <math.h>
 

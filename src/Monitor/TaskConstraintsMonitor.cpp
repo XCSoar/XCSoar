@@ -28,7 +28,7 @@ Copyright_License {
 #include "Message.hpp"
 #include "Language/Language.hpp"
 #include "Formatter/UserUnits.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 
 gcc_pure
 static bool

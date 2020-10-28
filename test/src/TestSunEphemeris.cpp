@@ -22,8 +22,8 @@
 
 #include "Math/SunEphemeris.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Time/BrokenDateTime.hpp"
-#include "Time/RoughTime.hpp"
+#include "time/BrokenDateTime.hpp"
+#include "time/RoughTime.hpp"
 #include "TestUtil.hpp"
 
 static void

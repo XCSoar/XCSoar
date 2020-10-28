@@ -26,9 +26,9 @@
 #include "XML/DataNodeXML.hpp"
 #include "XML/Parser.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
-#include "OS/Path.hpp"
-#include "Util/StringUtil.hpp"
-#include "Util/StringAPI.hxx"
+#include "system/Path.hpp"
+#include "util/StringUtil.hpp"
+#include "util/StringAPI.hxx"
 
 #include <memory>
 

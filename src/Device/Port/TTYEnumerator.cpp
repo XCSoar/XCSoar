@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "TTYEnumerator.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <string.h>
 #include <stdio.h>

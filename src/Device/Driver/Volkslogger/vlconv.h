@@ -18,7 +18,7 @@
 #ifndef VLCONV_H
 #define VLCONV_H
 
-#include "Time/BrokenDateTime.hpp"
+#include "time/BrokenDateTime.hpp"
 
 #include <vector>
 

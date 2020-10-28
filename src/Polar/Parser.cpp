@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Parser.hpp"
 #include "Polar.hpp"
-#include "Util/NumberParser.hpp"
+#include "util/NumberParser.hpp"
 #include "Units/System.hpp"
 
 #include <cstdio>

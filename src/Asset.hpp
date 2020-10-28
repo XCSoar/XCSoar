@@ -23,7 +23,7 @@ Copyright_License {
 #ifndef ASSET_H
 #define ASSET_H
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #ifdef ANDROID
 #include "Android/Product.hpp"

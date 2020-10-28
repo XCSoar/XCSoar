@@ -25,7 +25,7 @@ Copyright_License {
 #define MAP_SETTINGS_BLACKBOARD_HPP
 
 #include "MapSettings.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 /**
  * Blackboard for clients requiring read access to map settings

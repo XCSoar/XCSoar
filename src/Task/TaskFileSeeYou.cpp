@@ -22,10 +22,10 @@
  */
 
 #include "Task/TaskFileSeeYou.hpp"
-#include "Util/ExtractParameters.hpp"
-#include "Util/StringAPI.hxx"
-#include "Util/Macros.hpp"
-#include "IO/FileLineReader.hpp"
+#include "util/ExtractParameters.hpp"
+#include "util/StringAPI.hxx"
+#include "util/Macros.hpp"
+#include "io/FileLineReader.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointReaderSeeYou.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"

@@ -27,7 +27,7 @@ Copyright_License {
 #include "NMEA/Validity.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "RadioFrequency.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 
 #include <stdlib.h>
 #include <math.h>

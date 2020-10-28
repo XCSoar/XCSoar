@@ -28,7 +28,7 @@ Copyright_License {
 #include "BulkPoint.hpp"
 #include "Asset.hpp"
 #include "Scope.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 #include "Shaders.hpp"
 #include "Program.hpp"
 

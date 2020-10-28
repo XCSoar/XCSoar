@@ -22,7 +22,7 @@
 
 #include "Math/FastMath.hpp"
 #include "Math/Util.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 #include "TestUtil.hpp"
 
 #include <stdio.h>

@@ -28,7 +28,7 @@ Copyright_License {
 #include "Look/AirspaceLook.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 #include <string.h>
 #include <stdio.h>

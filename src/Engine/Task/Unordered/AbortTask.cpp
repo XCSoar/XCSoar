@@ -29,8 +29,8 @@
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointVisitor.hpp"
-#include "Util/ReservablePriorityQueue.hpp"
-#include "Util/Clamp.hpp"
+#include "util/ReservablePriorityQueue.hpp"
+#include "util/Clamp.hpp"
 
 /** min search range in m */
 static constexpr double min_search_range = 50000;

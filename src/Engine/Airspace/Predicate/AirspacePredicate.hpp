@@ -23,7 +23,7 @@
 #ifndef AIRSPACE_PREDICATE_HPP
 #define AIRSPACE_PREDICATE_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <utility>
 

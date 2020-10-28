@@ -26,7 +26,7 @@
 
 #include "Type.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 /**
  * Base class for all task points 

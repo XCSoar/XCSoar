@@ -26,7 +26,7 @@ Copyright_License {
 #include "Checksum.hpp"
 #include "MessageParser.hpp"
 #include "Device/Port/Port.hpp"
-#include "Time/TimeoutClock.hpp"
+#include "time/TimeoutClock.hpp"
 
 #include <string.h>
 

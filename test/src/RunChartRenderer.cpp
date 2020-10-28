@@ -30,7 +30,7 @@ Copyright_License {
 #include "Form/List.hpp"
 #include "Form/Button.hpp"
 #include "Form/ActionListener.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 #include "Renderer/ChartRenderer.hpp"
 
 static const TCHAR *const chart_names[] = {

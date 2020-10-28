@@ -39,15 +39,15 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Util/Compiler.h"
-#include "Util/Macros.hpp"
+#include "util/Compiler.h"
+#include "util/Macros.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "UIGlobals.hpp"
 #include "Interface.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 #include "Language/Language.hpp"
-#include "Util/StringCompare.hxx"
+#include "util/StringCompare.hxx"
 
 #include <cassert>
 #include <stdio.h>

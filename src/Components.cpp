@@ -25,8 +25,8 @@ Copyright_License {
 #include "Computer/GlideComputer.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "Thread/Debug.hpp"
-#include "Thread/Handle.hpp"
+#include "thread/Debug.hpp"
+#include "thread/Handle.hpp"
 
 FileCache *file_cache;
 TopographyStore *topography;

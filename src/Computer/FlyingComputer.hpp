@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "StateClock.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Time/DeltaTime.hpp"
+#include "time/DeltaTime.hpp"
 
 struct NMEAInfo;
 struct DerivedInfo;

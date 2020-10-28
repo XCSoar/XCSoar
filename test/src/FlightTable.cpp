@@ -23,11 +23,11 @@
 #include "IGC/IGCParser.hpp"
 #include "IGC/IGCFix.hpp"
 #include "IGC/IGCExtensions.hpp"
-#include "IO/FileLineReader.hpp"
-#include "OS/FileUtil.hpp"
-#include "Util/StaticString.hxx"
-#include "Util/PrintException.hxx"
-#include "Util/Compiler.h"
+#include "io/FileLineReader.hpp"
+#include "system/FileUtil.hpp"
+#include "util/StaticString.hxx"
+#include "util/PrintException.hxx"
+#include "util/Compiler.h"
 
 #include <cstdio>
 

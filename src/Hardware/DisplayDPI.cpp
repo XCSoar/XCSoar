@@ -30,8 +30,8 @@ Copyright_License {
 #endif
 
 #ifdef USE_X11
-#include "Event/Globals.hpp"
-#include "Event/Queue.hpp"
+#include "event/Globals.hpp"
+#include "event/Queue.hpp"
 
 #define Font X11Font
 #define Window X11Window

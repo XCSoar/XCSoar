@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_EXTENSION_HPP
 #define XCSOAR_SCREEN_OPENGL_EXTENSION_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 namespace OpenGL {
   gcc_pure

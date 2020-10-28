@@ -26,14 +26,14 @@ Copyright_License {
 #include "Assemble.hpp"
 #include "Protocol.hpp"
 #include "Import.hpp"
-#include "OS/ByteOrder.hpp"
+#include "system/ByteOrder.hpp"
 #include "Math/Angle.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Util/CRC.hpp"
-#include "Util/ConstBuffer.hxx"
-#include "IO/Async/AsioUtil.hpp"
-#include "Util/UTF8.hpp"
-#include "Util/ConvertString.hpp"
+#include "util/CRC.hpp"
+#include "util/ConstBuffer.hxx"
+#include "io/async/AsioUtil.hpp"
+#include "util/UTF8.hpp"
+#include "util/ConvertString.hpp"
 
 #include <string>
 

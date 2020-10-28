@@ -30,7 +30,7 @@ Copyright_License {
 #include "Renderer/TrafficRenderer.hpp"
 #include "FLARM/Friends.hpp"
 #include "Tracking/SkyLines/Data.hpp"
-#include "Util/StringCompare.hxx"
+#include "util/StringCompare.hxx"
 
 /**
  * Draws the FLARM traffic icons onto the given canvas

@@ -25,17 +25,17 @@ Copyright_License {
 #include "Screen/Debug.hpp"
 #include "Screen/Custom/Files.hpp"
 #include "Look/FontDescription.hpp"
-#include "Util/TStringView.hxx"
+#include "util/TStringView.hxx"
 #include "Init.hpp"
 #include "Asset.hpp"
-#include "OS/Path.hpp"
+#include "system/Path.hpp"
 
 #ifndef ENABLE_OPENGL
-#include "Thread/Mutex.hxx"
+#include "thread/Mutex.hxx"
 #endif
 
 #ifndef _UNICODE
-#include "Util/UTF8.hpp"
+#include "util/UTF8.hpp"
 #endif
 
 #if defined(__clang__) && defined(__arm__)

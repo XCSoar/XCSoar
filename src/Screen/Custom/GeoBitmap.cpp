@@ -24,7 +24,7 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "UncompressedImage.hpp"
 #include "Geo/Quadrilateral.hpp"
-#include "OS/Path.hpp"
+#include "system/Path.hpp"
 
 #ifdef USE_GEOTIFF
 #include "LibTiff.hpp"

@@ -24,15 +24,15 @@ Copyright_License {
 #include "Overlays.hpp"
 #include "Settings.hpp"
 #include "Screen/Bitmap.hpp"
-#include "Net/HTTP/Session.hpp"
-#include "Net/HTTP/ToBuffer.hpp"
-#include "Net/HTTP/ToFile.hpp"
+#include "net/http/Session.hpp"
+#include "net/http/ToBuffer.hpp"
+#include "net/http/ToFile.hpp"
 #include "Job/Runner.hpp"
 #include "LocalPath.hpp"
-#include "OS/FileUtil.hpp"
-#include "Util/StaticString.hxx"
-#include "Util/ConvertString.hpp"
-#include "Util/Macros.hpp"
+#include "system/FileUtil.hpp"
+#include "util/StaticString.hxx"
+#include "util/ConvertString.hpp"
+#include "util/Macros.hpp"
 
 #include <stdexcept>
 

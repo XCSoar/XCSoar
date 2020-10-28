@@ -28,12 +28,12 @@
 #include "Device/Declaration.hpp"
 #include "NMEA/Info.hpp"
 #include "Simulator.hpp"
-#include "OS/FileUtil.hpp"
+#include "system/FileUtil.hpp"
 #include "Formatter/IGCFilenameFormatter.hpp"
 #include "Interface.hpp"
 #include "IGCFileCleanup.hpp"
 #include "IGC/IGCWriter.hpp"
-#include "Util/CharUtil.hxx"
+#include "util/CharUtil.hxx"
 
 #include <tchar.h>
 #include <algorithm>

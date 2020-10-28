@@ -27,12 +27,12 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
-#include "OS/Path.hpp"
-#include "OS/FileUtil.hpp"
+#include "system/Path.hpp"
+#include "system/FileUtil.hpp"
 
 #ifdef USE_POLL_EVENT
-#include "Event/Globals.hpp"
-#include "Event/Queue.hpp"
+#include "event/Globals.hpp"
+#include "event/Queue.hpp"
 #endif
 
 void

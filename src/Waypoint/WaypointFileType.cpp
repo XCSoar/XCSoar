@@ -26,8 +26,8 @@ Copyright_License {
 #include "WaypointReaderFS.hpp"
 #include "WaypointReaderOzi.hpp"
 #include "WaypointReaderCompeGPS.hpp"
-#include "OS/Path.hpp"
-#include "IO/FileLineReader.hpp"
+#include "system/Path.hpp"
+#include "io/FileLineReader.hpp"
 
 #include <stdexcept>
 

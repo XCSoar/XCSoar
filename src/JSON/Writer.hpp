@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_JSON_WRITER_HPP
 #define XCSOAR_JSON_WRITER_HPP
 
-#include "IO/BufferedOutputStream.hxx"
+#include "io/BufferedOutputStream.hxx"
 
 #include <cassert>
 

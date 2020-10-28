@@ -26,9 +26,9 @@ Copyright_License {
 
 #include "Main.hpp"
 #include "Dialogs/TextEntry.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 #include "LocalPath.hpp"
-#include "Time/RoughTime.hpp"
+#include "time/RoughTime.hpp"
 
 static void
 Main()

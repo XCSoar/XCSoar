@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_DOWNLOAD_MANAGER_HPP
 #define XCSOAR_ANDROID_DOWNLOAD_MANAGER_HPP
 
-#include "Java/Object.hxx"
-#include "Thread/Mutex.hxx"
+#include "java/Object.hxx"
+#include "thread/Mutex.hxx"
 
 #include <list>
 

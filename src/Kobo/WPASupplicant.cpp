@@ -22,10 +22,10 @@ Copyright_License {
 */
 
 #include "WPASupplicant.hpp"
-#include "Net/AllocatedSocketAddress.hxx"
-#include "Util/NumberParser.hpp"
-#include "Util/StaticString.hxx"
-#include "Util/StringCompare.hxx"
+#include "net/AllocatedSocketAddress.hxx"
+#include "util/NumberParser.hpp"
+#include "util/StaticString.hxx"
+#include "util/StringCompare.hxx"
 
 #include <string.h>
 #include <stdlib.h>

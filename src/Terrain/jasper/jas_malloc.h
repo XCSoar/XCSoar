@@ -79,7 +79,7 @@
 
 #include <stdio.h>
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #ifdef __cplusplus
 extern "C" {

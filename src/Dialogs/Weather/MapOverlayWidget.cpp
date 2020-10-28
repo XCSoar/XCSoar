@@ -39,11 +39,11 @@ Copyright_License {
 #include "Weather/PCMet/Overlays.hpp"
 #include "Interface.hpp"
 #include "LocalPath.hpp"
-#include "OS/Path.hpp"
-#include "OS/FileUtil.hpp"
-#include "Util/StaticString.hxx"
-#include "Util/StringAPI.hxx"
-#include "Util/StringCompare.hxx"
+#include "system/Path.hpp"
+#include "system/FileUtil.hpp"
+#include "util/StaticString.hxx"
+#include "util/StringAPI.hxx"
+#include "util/StringCompare.hxx"
 
 #include <vector>
 

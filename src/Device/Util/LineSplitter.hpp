@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_LINE_SPLITTER_HPP
 #define XCSOAR_DEVICE_LINE_SPLITTER_HPP
 
-#include "IO/DataHandler.hpp"
+#include "io/DataHandler.hpp"
 #include "LineHandler.hpp"
-#include "Util/StaticFifoBuffer.hxx"
+#include "util/StaticFifoBuffer.hxx"
 
 class PortLineSplitter : public DataHandler, protected PortLineHandler {
   typedef StaticFifoBuffer<char, 256u> Buffer;

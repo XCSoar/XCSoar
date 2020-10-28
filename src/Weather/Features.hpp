@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef WEATHER_FEATURES_HPP
 #define WEATHER_FEATURES_HPP
 
-#include "Net/HTTP/Features.hpp"
+#include "net/http/Features.hpp"
 
 #ifdef HAVE_HTTP
 #define HAVE_NOAA

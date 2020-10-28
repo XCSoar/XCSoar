@@ -22,13 +22,13 @@
 
 #include "Plane/Plane.hpp"
 #include "Plane/PlaneFileGlue.hpp"
-#include "IO/FileLineReader.hpp"
-#include "IO/KeyValueFileReader.hpp"
-#include "IO/KeyValueFileWriter.hpp"
+#include "io/FileLineReader.hpp"
+#include "io/KeyValueFileReader.hpp"
+#include "io/KeyValueFileWriter.hpp"
 #include "Units/System.hpp"
 #include "TestUtil.hpp"
-#include "Util/StringAPI.hxx"
-#include "Util/PrintException.hxx"
+#include "util/StringAPI.hxx"
+#include "util/PrintException.hxx"
 
 #include <stdlib.h>
 

@@ -27,8 +27,8 @@ Copyright_License {
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Look/Look.hpp"
 #include "Interface.hpp"
-#include "Time/PeriodClock.hpp"
-#include "Event/Idle.hpp"
+#include "time/PeriodClock.hpp"
+#include "event/Idle.hpp"
 #include "Topography/Thread.hpp"
 #include "Terrain/Thread.hpp"
 

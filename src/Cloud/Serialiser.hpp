@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_SERIALISER_HPP
 #define XCSOAR_SERIALISER_HPP
 
-#include "IO/BufferedOutputStream.hxx"
-#include "IO/BufferedReader.hxx"
-#include "OS/ByteOrder.hpp"
+#include "io/BufferedOutputStream.hxx"
+#include "io/BufferedReader.hxx"
+#include "system/ByteOrder.hpp"
 
 #include <string>
 #include <chrono>

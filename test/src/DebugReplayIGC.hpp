@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "DebugReplayFile.hpp"
 #include "IGC/IGCExtensions.hpp"
-#include "IO/FileLineReader.hpp"
+#include "io/FileLineReader.hpp"
 
 struct IGCFix;
 

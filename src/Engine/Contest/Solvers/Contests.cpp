@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Contests.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 static const TCHAR *const contest_to_string[] = {
   _T("OLC Sprint"),

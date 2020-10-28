@@ -29,7 +29,7 @@ Copyright_License {
 #include "Device/Util/NMEAWriter.hpp"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 
 #include <string>

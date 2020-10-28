@@ -21,11 +21,11 @@
 */
 
 #include "IGC/IGCWriter.hpp"
-#include "OS/FileUtil.hpp"
+#include "system/FileUtil.hpp"
 #include "NMEA/Info.hpp"
-#include "IO/FileLineReader.hpp"
+#include "io/FileLineReader.hpp"
 #include "TestUtil.hpp"
-#include "Util/PrintException.hxx"
+#include "util/PrintException.hxx"
 
 #include <cassert>
 #include <cstdio>

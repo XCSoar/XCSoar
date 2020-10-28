@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_FORM_GRIDVIEW_HPP
 
 #include "Panel.hpp"
-#include "Util/StaticArray.hxx"
+#include "util/StaticArray.hxx"
 
 class GridView : public PanelControl {
 public:

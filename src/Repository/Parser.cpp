@@ -23,9 +23,9 @@ Copyright_License {
 
 #include "Parser.hpp"
 #include "FileRepository.hpp"
-#include "IO/LineReader.hpp"
-#include "Util/StringStrip.hxx"
-#include "Util/HexString.hpp"
+#include "io/LineReader.hpp"
+#include "util/StringStrip.hxx"
+#include "util/HexString.hpp"
 
 /**
  * Parses a line of the repository file.

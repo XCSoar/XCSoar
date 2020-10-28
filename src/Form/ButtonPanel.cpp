@@ -26,7 +26,7 @@ Copyright_License {
 #include "Renderer/SymbolButtonRenderer.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Layout.hpp"
-#include "Event/KeyCode.hpp"
+#include "event/KeyCode.hpp"
 
 ButtonPanel::ButtonPanel(ContainerWindow &_parent, const ButtonLook &_look)
   :parent(_parent), look(_look), selected_index(-1) {

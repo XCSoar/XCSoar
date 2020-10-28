@@ -23,7 +23,7 @@
 #ifndef AIRSPACE_CLASS_HPP
 #define AIRSPACE_CLASS_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <cstdint>
 

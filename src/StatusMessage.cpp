@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "StatusMessage.hpp"
-#include "Util/StringAPI.hxx"
-#include "Util/Macros.hpp"
+#include "util/StringAPI.hxx"
+#include "util/Macros.hpp"
 
 #include <cassert>
 

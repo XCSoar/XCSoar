@@ -31,8 +31,8 @@ Copyright_License {
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "Language/Language.hpp"
-#include "Util/StaticString.hxx"
-#include "Util/Macros.hpp"
+#include "util/StaticString.hxx"
+#include "util/Macros.hpp"
 
 typedef StaticString<256u> Buffer;
 

@@ -27,7 +27,7 @@ Copyright_License {
 #include "Blackboard/BaseBlackboard.hpp"
 #include "Blackboard/ComputerSettingsBlackboard.hpp"
 #include "Blackboard/MapSettingsBlackboard.hpp"
-#include "Thread/Debug.hpp"
+#include "thread/Debug.hpp"
 #include "UIState.hpp"
 
 /**

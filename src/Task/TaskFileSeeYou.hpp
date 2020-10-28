@@ -24,7 +24,7 @@
 #define XCSOAR_TASK_FILE_SEEYOU_HPP
 
 #include "TaskFile.hpp"
-#include "OS/Path.hpp"
+#include "system/Path.hpp"
 
 /**
  * A class that reads and parses a SeeYou task file to an XCSoar internal

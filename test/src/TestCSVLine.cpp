@@ -20,7 +20,7 @@
 }
 */
 
-#include "IO/CSVLine.hpp"
+#include "io/CSVLine.hpp"
 #include "TestUtil.hpp"
 
 #include <cstring>

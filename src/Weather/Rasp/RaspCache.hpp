@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_WEATHER_RASP_CACHE_HPP
 #define XCSOAR_WEATHER_RASP_CACHE_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <tchar.h>
 

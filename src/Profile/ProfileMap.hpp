@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_PROFILE_MAP_HPP
 #define XCSOAR_PROFILE_MAP_HPP
 
-#include "Util/StringBuffer.hxx"
-#include "Util/Compiler.h"
+#include "util/StringBuffer.hxx"
+#include "util/Compiler.h"
 
 #include <tchar.h>
 #include <cstdint>

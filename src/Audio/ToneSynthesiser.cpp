@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "ToneSynthesiser.hpp"
 #include "Math/FastTrig.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 #include <cassert>
 

@@ -25,8 +25,8 @@ Copyright_License {
 #define XCSOAR_INTERFACE_HPP
 
 #include "Blackboard/InterfaceBlackboard.hpp"
-#include "Thread/Debug.hpp"
-#include "Util/Compiler.h"
+#include "thread/Debug.hpp"
+#include "util/Compiler.h"
 
 struct UIState;
 class MainWindow;

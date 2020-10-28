@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_CONFIG_HPP
 #define XCSOAR_DEVICE_CONFIG_HPP
 
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 
 #include <cstdint>
 

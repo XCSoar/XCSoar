@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TASK_VALIDATION_ERROR_HPP
 #define XCSOAR_TASK_VALIDATION_ERROR_HPP
 
-#include "Util/EnumBitSet.hpp"
+#include "util/EnumBitSet.hpp"
 
 #include <cstdint>
 

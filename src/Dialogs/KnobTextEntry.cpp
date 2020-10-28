@@ -26,14 +26,14 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Widget/WindowWidget.hpp"
 #include "Screen/Canvas.hpp"
-#include "Event/KeyCode.hpp"
+#include "event/KeyCode.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
-#include "Util/CharUtil.hxx"
-#include "Util/Macros.hpp"
-#include "Util/StringStrip.hxx"
-#include "Util/TruncateString.hpp"
-#include "Util/TStringView.hxx"
+#include "util/CharUtil.hxx"
+#include "util/Macros.hpp"
+#include "util/StringStrip.hxx"
+#include "util/TruncateString.hpp"
+#include "util/TStringView.hxx"
 
 #include <algorithm>
 

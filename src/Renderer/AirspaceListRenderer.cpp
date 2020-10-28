@@ -31,7 +31,7 @@ Copyright_License {
 #include "Formatter/UserUnits.hpp"
 #include "Renderer/AirspacePreviewRenderer.hpp"
 #include "Geo/GeoVector.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 
 static void
 Draw(Canvas &canvas, PixelRect rc,

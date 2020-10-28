@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "Util/StringCompare.hxx"
-#include "OS/Path.hpp"
+#include "util/StringCompare.hxx"
+#include "system/Path.hpp"
 #include "Screen/Custom/LibTiff.hpp"
 #include "Screen/Custom/UncompressedImage.hpp"
 #include "NativeView.hpp"

@@ -23,8 +23,8 @@ Copyright_License {
 */
 
 #include "Language/Language.hpp"
-#include "Util/StringCompare.hxx"
-#include "Util/UTF8.hpp"
+#include "util/StringCompare.hxx"
+#include "util/UTF8.hpp"
 
 #include <cassert>
 #include <string.h>
@@ -44,8 +44,8 @@ Copyright_License {
 const MOFile *mo_file;
 
 #ifdef _UNICODE
-#include "Util/Macros.hpp"
-#include "Util/tstring.hpp"
+#include "util/Macros.hpp"
+#include "util/tstring.hpp"
 #include <map>
 typedef std::map<tstring,tstring> translation_map;
 static translation_map translations;

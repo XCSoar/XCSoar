@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_UNITS_SYSTEM_HPP
 
 #include "Unit.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 namespace Units
 {

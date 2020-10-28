@@ -28,7 +28,7 @@ Copyright_License {
 #include "Asset.hpp" /* for needclipping */
 #include "AlphaBlend.hpp"
 #include "Math/Angle.hpp"
-#include "Util/TStringView.hxx"
+#include "util/TStringView.hxx"
 
 #include <algorithm>
 

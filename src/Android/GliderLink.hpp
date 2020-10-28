@@ -26,9 +26,9 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_GLIDER_LINK_HPP
 #define XCSOAR_ANDROID_GLIDER_LINK_HPP
 
-#include "Java/Object.hxx"
-#include "Java/Class.hxx"
-#include "Util/Compiler.h"
+#include "java/Object.hxx"
+#include "java/Class.hxx"
+#include "util/Compiler.h"
 
 #include <jni.h>
 #include <vector>

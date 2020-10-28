@@ -25,7 +25,7 @@ Copyright_License {
 #include "ProgressWindow.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "UIGlobals.hpp"
-#include "Time/PeriodClock.hpp"
+#include "time/PeriodClock.hpp"
 
 static ProgressWindow *global_progress_window;
 

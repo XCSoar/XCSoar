@@ -44,7 +44,7 @@ Copyright_License {
 #include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Task/TypeStrings.hpp"
 #include "Gauge/TaskView.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 #include "UIGlobals.hpp"
 #include "Look/MapLook.hpp"
 #include "Look/DialogLook.hpp"

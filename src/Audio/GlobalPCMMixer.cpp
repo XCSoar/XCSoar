@@ -26,8 +26,8 @@ Copyright_License {
 #include "PCMPlayerFactory.hpp"
 #include "PCMMixer.hpp"
 
-#include "IO/Async/AsioThread.hpp"
-#include "IO/Async/GlobalAsioThread.hpp"
+#include "io/async/AsioThread.hpp"
+#include "io/async/GlobalAsioThread.hpp"
 
 #include <memory>
 

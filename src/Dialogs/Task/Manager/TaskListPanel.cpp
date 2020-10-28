@@ -35,13 +35,13 @@ Copyright_License {
 #include "Widget/TwoWidgets.hpp"
 #include "Task/TaskStore.hpp"
 #include "LocalPath.hpp"
-#include "OS/FileUtil.hpp"
+#include "system/FileUtil.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
-#include "Util/StringCompare.hxx"
+#include "util/StringCompare.hxx"
 
 #include <cassert>
 

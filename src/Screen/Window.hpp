@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Screen/Point.hpp"
 #include "Screen/Features.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <cassert>
 

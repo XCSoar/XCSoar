@@ -30,13 +30,13 @@
 #include "Screen/Canvas.hpp"
 #include "Form/Button.hpp"
 #include "Widget/ListWidget.hpp"
-#include "Java/Global.hxx"
+#include "java/Global.hxx"
 #include "Android/LeScanCallback.hpp"
 #include "Android/BluetoothHelper.hpp"
 #include "Language/Language.hpp"
-#include "Thread/Mutex.hxx"
-#include "Event/Notify.hpp"
-#include "Util/StringCompare.hxx"
+#include "thread/Mutex.hxx"
+#include "event/Notify.hpp"
+#include "util/StringCompare.hxx"
 
 #include <vector>
 #include <forward_list>

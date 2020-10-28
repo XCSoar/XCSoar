@@ -21,10 +21,10 @@ Copyright_License {
 }
 */
 
-#include "OS/Args.hpp"
-#include "IO/FileLineReader.hpp"
+#include "system/Args.hpp"
+#include "io/FileLineReader.hpp"
 #include "Math/KalmanFilter1d.hpp"
-#include "Util/PrintException.hxx"
+#include "util/PrintException.hxx"
 
 #include <stdio.h>
 

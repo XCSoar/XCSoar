@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Geo/GeoClip.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <cassert>
 

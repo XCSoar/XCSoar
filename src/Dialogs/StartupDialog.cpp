@@ -40,7 +40,7 @@ Copyright_License {
 #include "Gauge/LogoView.hpp"
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
-#include "OS/FileUtil.hpp"
+#include "system/FileUtil.hpp"
 
 class LogoWindow final : public PaintWindow {
   LogoView logo;

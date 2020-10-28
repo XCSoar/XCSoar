@@ -26,7 +26,7 @@ Copyright_License {
 #include "NMEA/LiftDatabase.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/CirclingInfo.hpp"
-#include "Util/Clamp.hpp"
+#include "util/Clamp.hpp"
 
 void
 LiftDatabaseComputer::Clear(LiftDatabase &lift_database,

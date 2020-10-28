@@ -34,14 +34,14 @@ Copyright_License {
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
 #include "UIGlobals.hpp"
-#include "Util/StaticString.hxx"
-#include "Util/Macros.hpp"
+#include "util/StaticString.hxx"
+#include "util/Macros.hpp"
 #include "Device/MultipleDevices.hpp"
 #include "Device/Descriptor.hpp"
 #include "Device/Register.hpp"
 #include "Device/Port/Listener.hpp"
 #include "Device/Driver/LX/Internal.hpp"
-#include "Event/Notify.hpp"
+#include "event/Notify.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 #include "Components.hpp"
@@ -60,7 +60,7 @@ Copyright_License {
 #include "Interface.hpp"
 
 #ifdef ANDROID
-#include "Java/Global.hxx"
+#include "java/Global.hxx"
 #include "Android/BluetoothHelper.hpp"
 #endif
 

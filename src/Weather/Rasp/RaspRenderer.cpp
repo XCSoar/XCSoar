@@ -28,7 +28,7 @@ Copyright_License {
 #include "Terrain/TerrainSettings.hpp"
 #include "Screen/Ramp.hpp"
 #include "Projection/WindowProjection.hpp"
-#include "Util/StringAPI.hxx"
+#include "util/StringAPI.hxx"
 
 gcc_pure
 static const RaspStyle &

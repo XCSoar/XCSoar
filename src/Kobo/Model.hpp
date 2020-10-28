@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_KOBO_MODEL_HPP
 #define XCSOAR_KOBO_MODEL_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 enum class KoboModel {
   UNKNOWN,

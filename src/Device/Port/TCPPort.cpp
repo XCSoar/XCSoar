@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "TCPPort.hpp"
-#include "Net/Option.hpp"
-#include "IO/Async/AsioUtil.hpp"
+#include "net/Option.hpp"
+#include "io/async/AsioUtil.hpp"
 
 TCPPort::TCPPort(boost::asio::io_context &io_context,
                  unsigned port,

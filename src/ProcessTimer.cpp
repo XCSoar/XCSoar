@@ -29,7 +29,7 @@ Copyright_License {
 #include "Device/MultipleDevices.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
-#include "Time/PeriodClock.hpp"
+#include "time/PeriodClock.hpp"
 #include "MainWindow.hpp"
 #include "PopupMessage.hpp"
 #include "Simulator.hpp"
@@ -39,7 +39,7 @@ Copyright_License {
 #include "BallastDumpManager.hpp"
 #include "Operation/Operation.hpp"
 #include "Tracking/TrackingGlue.hpp"
-#include "Event/Idle.hpp"
+#include "event/Idle.hpp"
 #include "Dialogs/Tracking/CloudEnableDialog.hpp"
 
 static void

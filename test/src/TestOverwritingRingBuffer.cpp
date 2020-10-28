@@ -20,7 +20,7 @@
 }
 */
 
-#include "Util/OverwritingRingBuffer.hpp"
+#include "util/OverwritingRingBuffer.hpp"
 #include "TestUtil.hpp"
 
 int main(int argc, char **argv)

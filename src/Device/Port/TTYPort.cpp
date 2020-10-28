@@ -23,10 +23,10 @@ Copyright_License {
 
 #include "TTYPort.hpp"
 #include "Asset.hpp"
-#include "OS/FileDescriptor.hxx"
-#include "OS/Error.hxx"
-#include "IO/Async/AsioUtil.hpp"
-#include "Util/StringFormat.hpp"
+#include "io/FileDescriptor.hxx"
+#include "system/Error.hxx"
+#include "io/async/AsioUtil.hpp"
+#include "util/StringFormat.hpp"
 
 #include <system_error>
 #include <boost/system/system_error.hpp>

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_COMPONENTS_HPP
 #define XCSOAR_COMPONENTS_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 class FileCache;
 class TopographyStore;

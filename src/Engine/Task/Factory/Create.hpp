@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_TASK_FACTORY_CREATE_HPP
 
 #include "TaskFactoryType.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 class AbstractTaskFactory;
 class OrderedTask;

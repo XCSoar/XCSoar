@@ -4,10 +4,10 @@
  *
  */
 
-#include "Util/PrintException.hxx"
+#include "util/PrintException.hxx"
 
 #if defined(ENABLE_CMDLINE) || defined(ENABLE_MAIN_WINDOW)
-#include "OS/Args.hpp"
+#include "system/Args.hpp"
 #endif
 
 #if defined(ENABLE_MAIN_WINDOW) && !defined(ENABLE_CMDLINE)
@@ -34,8 +34,8 @@
 #include "Screen/SingleWindow.hpp"
 #include "Form/ActionListener.hpp"
 #include "UIGlobals.hpp"
-#include "Util/CharUtil.hxx"
-#include "Util/NumberParser.hpp"
+#include "util/CharUtil.hxx"
+#include "util/NumberParser.hpp"
 #define ENABLE_SCREEN
 #endif
 

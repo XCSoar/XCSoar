@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Screen/OpenGL/BulkPoint.hpp"
 #include "VertexPointer.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 template<unsigned n>
 struct GLVertexArray {

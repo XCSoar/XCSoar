@@ -34,7 +34,7 @@ Copyright_License {
 #include "Computer/Settings.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Event/KeyCode.hpp"
+#include "event/KeyCode.hpp"
 #include "Look/Look.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Renderer/FlightStatisticsRenderer.hpp"
@@ -51,8 +51,8 @@ Copyright_License {
 #include "Blackboard/FullBlackboard.hpp"
 #include "Language/Language.hpp"
 #include "Engine/Contest/Solvers/Contests.hpp"
-#include "Event/PeriodicTimer.hpp"
-#include "Util/StringCompare.hxx"
+#include "event/PeriodicTimer.hpp"
+#include "util/StringCompare.hxx"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scissor.hpp"

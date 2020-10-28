@@ -24,8 +24,8 @@ Copyright_License {
 #include "FlightLogger.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
-#include "IO/FileOutputStream.hxx"
-#include "IO/BufferedOutputStream.hxx"
+#include "io/FileOutputStream.hxx"
+#include "io/BufferedOutputStream.hxx"
 #include "LogFile.hpp"
 
 void

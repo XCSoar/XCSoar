@@ -24,8 +24,8 @@
 #include "NMEAReader.hpp"
 #include "Device/Port/Port.hpp"
 #include "NMEA/Checksum.hpp"
-#include "Time/TimeoutClock.hpp"
-#include "Util/StringCompare.hxx"
+#include "time/TimeoutClock.hpp"
+#include "util/StringCompare.hxx"
 
 #include <algorithm>
 

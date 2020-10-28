@@ -27,7 +27,7 @@ Copyright_License {
 #include "RasterTraits.hpp"
 #include "RasterLocation.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 class GeoBounds;
 

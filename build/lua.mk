@@ -10,31 +10,31 @@ $(eval $(call pkg-config-library,LIBLUA,lua5.2))
 endif
 
 LUA_SOURCES = \
-	$(SRC)/Lua/Ptr.cpp \
-	$(SRC)/Lua/Error.cxx \
-	$(SRC)/Lua/Catch.cpp \
-	$(SRC)/Lua/Persistent.cpp \
-	$(SRC)/Lua/Background.cpp \
-	$(SRC)/Lua/Associate.cpp \
-	$(SRC)/Lua/RunFile.cxx \
-	$(SRC)/Lua/StartFile.cpp \
-	$(SRC)/Lua/Log.cpp \
-	$(SRC)/Lua/Timer.cpp \
-	$(SRC)/Lua/Geo.cpp \
-	$(SRC)/Lua/Map.cpp \
-	$(SRC)/Lua/Blackboard.cpp \
-	$(SRC)/Lua/Airspace.cpp \
-	$(SRC)/Lua/Dialogs.cpp \
-	$(SRC)/Lua/Legacy.cpp \
-	$(SRC)/Lua/Full.cpp \
-	$(SRC)/Lua/Basic.cpp \
-        $(SRC)/Lua/Task.cpp \
-        $(SRC)/Lua/Settings.cpp \
-        $(SRC)/Lua/Wind.cpp \
-        $(SRC)/Lua/Logger.cpp \
-        $(SRC)/Lua/Tracking.cpp \
-		$(SRC)/Lua/Replay.cpp \
-	    $(SRC)/Lua/InputEvent.cpp \
+	$(SRC)/lua/Ptr.cpp \
+	$(SRC)/lua/Error.cxx \
+	$(SRC)/lua/Catch.cpp \
+	$(SRC)/lua/Persistent.cpp \
+	$(SRC)/lua/Background.cpp \
+	$(SRC)/lua/Associate.cpp \
+	$(SRC)/lua/RunFile.cxx \
+	$(SRC)/lua/StartFile.cpp \
+	$(SRC)/lua/Log.cpp \
+	$(SRC)/lua/Timer.cpp \
+	$(SRC)/lua/Geo.cpp \
+	$(SRC)/lua/Map.cpp \
+	$(SRC)/lua/Blackboard.cpp \
+	$(SRC)/lua/Airspace.cpp \
+	$(SRC)/lua/Dialogs.cpp \
+	$(SRC)/lua/Legacy.cpp \
+	$(SRC)/lua/Full.cpp \
+	$(SRC)/lua/Basic.cpp \
+	$(SRC)/lua/Task.cpp \
+	$(SRC)/lua/Settings.cpp \
+	$(SRC)/lua/Wind.cpp \
+	$(SRC)/lua/Logger.cpp \
+	$(SRC)/lua/Tracking.cpp \
+	$(SRC)/lua/Replay.cpp \
+	$(SRC)/lua/InputEvent.cpp \
 
 LUA_CPPFLAGS_INTERNAL = $(LIBLUA_CPPFLAGS) $(SCREEN_CPPFLAGS)
 LUA_LDLIBS = $(LIBLUA_LDLIBS)

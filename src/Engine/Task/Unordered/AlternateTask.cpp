@@ -23,7 +23,7 @@
 #include "AlternateTask.hpp"
 #include "Task/Points/TaskWaypoint.hpp"
 #include "Geo/Math.hpp"
-#include "Util/ReservablePriorityQueue.hpp"
+#include "util/ReservablePriorityQueue.hpp"
 #include "Navigation/Aircraft.hpp"
 
 AlternateTask::AlternateTask(const TaskBehaviour &tb,

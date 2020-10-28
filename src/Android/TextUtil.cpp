@@ -22,12 +22,12 @@ Copyright_License {
 */
 
 #include "TextUtil.hpp"
-#include "Java/Class.hxx"
-#include "Java/String.hxx"
-#include "Java/Exception.hxx"
+#include "java/Class.hxx"
+#include "java/String.hxx"
+#include "java/Exception.hxx"
 #include "Screen/Point.hpp"
 #include "Look/FontDescription.hpp"
-#include "Util/StringView.hxx"
+#include "util/StringView.hxx"
 #include "Asset.hpp"
 
 JNIEnv *TextUtil::env;

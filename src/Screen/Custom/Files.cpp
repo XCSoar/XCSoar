@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #include "Files.hpp"
-#include "OS/FileUtil.hpp"
-#include "OS/Path.hpp"
-#include "Util/Compiler.h"
+#include "system/FileUtil.hpp"
+#include "system/Path.hpp"
+#include "util/Compiler.h"
 
 #ifdef __APPLE__
 #include <TargetConditionals.h>

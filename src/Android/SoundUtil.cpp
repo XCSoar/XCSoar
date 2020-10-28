@@ -22,10 +22,10 @@ Copyright_License {
 */
 
 #include "SoundUtil.hpp"
-#include "Java/Class.hxx"
-#include "Java/String.hxx"
+#include "java/Class.hxx"
+#include "java/String.hxx"
 #include "LocalPath.hpp"
-#include "OS/Path.hpp"
+#include "system/Path.hpp"
 
 namespace SoundUtil {
   static Java::TrivialClass cls;

@@ -23,7 +23,7 @@
 #ifndef GRAHAM_SCAN_HPP
 #define GRAHAM_SCAN_HPP
 
-#include "Util/NonCopyable.hpp"
+#include "util/NonCopyable.hpp"
 
 #include <list>
 #include <vector>

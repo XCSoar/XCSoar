@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DATA_FIELD_BASE_HPP
 #define XCSOAR_DATA_FIELD_BASE_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <cassert>
 #include <tchar.h>

@@ -22,15 +22,15 @@ Copyright_License {
 */
 
 #include "Form/Form.hpp"
-#include "Time/PeriodClock.hpp"
+#include "time/PeriodClock.hpp"
 #include "Asset.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
-#include "Event/KeyCode.hpp"
-#include "Util/Macros.hpp"
+#include "event/KeyCode.hpp"
+#include "util/Macros.hpp"
 #include "Look/DialogLook.hpp"
-#include "Event/Globals.hpp"
+#include "event/Globals.hpp"
 
 #ifndef USE_WINUSER
 #include "Screen/Custom/Reference.hpp"
@@ -42,17 +42,17 @@ Copyright_License {
 #endif
 
 #ifdef ANDROID
-#include "Event/Shared/Event.hpp"
-#include "Event/Android/Loop.hpp"
+#include "event/shared/Event.hpp"
+#include "event/android/Loop.hpp"
 #elif defined(ENABLE_SDL)
-#include "Event/SDL/Event.hpp"
-#include "Event/SDL/Loop.hpp"
+#include "event/sdl/Event.hpp"
+#include "event/sdl/Loop.hpp"
 #elif defined(USE_POLL_EVENT)
-#include "Event/Shared/Event.hpp"
-#include "Event/Poll/Loop.hpp"
+#include "event/shared/Event.hpp"
+#include "event/poll/Loop.hpp"
 #elif defined(_WIN32)
-#include "Event/Windows/Event.hpp"
-#include "Event/Windows/Loop.hpp"
+#include "event/windows/Event.hpp"
+#include "event/windows/Loop.hpp"
 #endif
 
 WndForm::WndForm(const DialogLook &_look)

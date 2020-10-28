@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_WEATHER_UI_STATE_HPP
 #define XCSOAR_WEATHER_UI_STATE_HPP
 
-#include "Time/BrokenTime.hpp"
+#include "time/BrokenTime.hpp"
 
 /**
  * The state of weather display on the user interface.

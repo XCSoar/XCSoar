@@ -24,7 +24,7 @@
 #include "LoadFile.hpp"
 #include "LocalPath.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
-#include "OS/Path.hpp"
+#include "system/Path.hpp"
 
 OrderedTask *
 LoadDefaultTask(const TaskBehaviour &task_behaviour,

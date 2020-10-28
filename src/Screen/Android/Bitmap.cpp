@@ -27,7 +27,7 @@ Copyright_License {
 #include "Android/Bitmap.hpp"
 #include "Android/NativeView.hpp"
 #include "Android/Main.hpp"
-#include "OS/Path.hpp"
+#include "system/Path.hpp"
 #include "ResourceId.hpp"
 #include "android_drawable.h"
 

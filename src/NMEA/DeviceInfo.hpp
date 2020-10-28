@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_VERSION_INFO_H
 #define XCSOAR_VERSION_INFO_H
 
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 
 #include <type_traits>
 

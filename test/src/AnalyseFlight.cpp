@@ -22,18 +22,18 @@
 
 #include "Engine/Trace/Trace.hpp"
 #include "Contest/ContestManager.hpp"
-#include "OS/Args.hpp"
+#include "system/Args.hpp"
 #include "Computer/CirclingComputer.hpp"
 #include "DebugReplay.hpp"
-#include "Util/Macros.hpp"
-#include "IO/StdioOutputStream.hxx"
+#include "util/Macros.hpp"
+#include "io/StdioOutputStream.hxx"
 #include "Formatter/TimeFormatter.hpp"
 #include "JSON/Writer.hpp"
 #include "JSON/GeoWriter.hpp"
 #include "FlightPhaseDetector.hpp"
 #include "FlightPhaseJSON.hpp"
 #include "Computer/Settings.hpp"
-#include "Util/StringCompare.hxx"
+#include "util/StringCompare.hxx"
 
 struct Result {
   BrokenDateTime takeoff_time, release_time, landing_time;

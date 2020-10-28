@@ -28,8 +28,8 @@ Copyright_License {
 #include "RasterTile.hpp"
 #include "RasterLocation.hpp"
 #include "Geo/GeoBounds.hpp"
-#include "Util/StaticArray.hxx"
-#include "Util/Serial.hpp"
+#include "util/StaticArray.hxx"
+#include "util/Serial.hpp"
 
 #include <cassert>
 #include <stdio.h>

@@ -21,10 +21,10 @@ Copyright_License {
 }
 */
 
-#include "IO/FileReader.hxx"
-#include "OS/Args.hpp"
-#include "Util/MD5.hpp"
-#include "Util/PrintException.hxx"
+#include "io/FileReader.hxx"
+#include "system/Args.hpp"
+#include "util/MD5.hpp"
+#include "util/PrintException.hxx"
 
 #include <stdio.h>
 

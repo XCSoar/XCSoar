@@ -22,8 +22,8 @@
 #ifndef TASK_MACCREADY_HPP
 #define TASK_MACCREADY_HPP
 
-#include "Util/NonCopyable.hpp"
-#include "Util/StaticArray.hxx"
+#include "util/NonCopyable.hpp"
+#include "util/StaticArray.hxx"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideSolvers/GlideResult.hpp"
 

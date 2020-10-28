@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "IO/TextWriter.hpp"
-#include "OS/Args.hpp"
+#include "io/TextWriter.hpp"
+#include "system/Args.hpp"
 
 #include <stdio.h>
 #include <string.h>

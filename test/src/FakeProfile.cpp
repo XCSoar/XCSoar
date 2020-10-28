@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Profile/Profile.hpp"
 #include "Profile/ProfileKeys.hpp"
-#include "OS/Path.hpp"
+#include "system/Path.hpp"
 
 void
 Profile::Save() noexcept

@@ -24,12 +24,12 @@
 #define WAYPOINT_HPP
 
 #include "Origin.hpp"
-#include "Util/tstring.hpp"
+#include "util/tstring.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/Flat/FlatGeoPoint.hpp"
 #include "RadioFrequency.hpp"
 #include "Runway.hpp"
-#include "OS/RunFile.hpp"
+#include "system/RunFile.hpp"
 
 #include <forward_list>
 

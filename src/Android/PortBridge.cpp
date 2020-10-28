@@ -24,7 +24,7 @@ Copyright_License {
 #include "PortBridge.hpp"
 #include "NativePortListener.hpp"
 #include "NativeInputListener.hpp"
-#include "Java/Class.hxx"
+#include "java/Class.hxx"
 
 #include <string.h>
 

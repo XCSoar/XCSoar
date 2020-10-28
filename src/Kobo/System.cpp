@@ -23,11 +23,11 @@ Copyright_License {
 
 #include "System.hpp"
 #include "Model.hpp"
-#include "OS/FileUtil.hpp"
-#include "OS/PathName.hpp"
-#include "OS/Process.hpp"
-#include "OS/Sleep.h"
-#include "Util/StaticString.hxx"
+#include "system/FileUtil.hpp"
+#include "system/PathName.hpp"
+#include "system/Process.hpp"
+#include "system/Sleep.h"
+#include "util/StaticString.hxx"
 
 #include <unistd.h>
 #include <sys/stat.h>

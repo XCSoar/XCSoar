@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "Screen/TopWindow.hpp"
 #include "Screen/Custom/TopCanvas.hpp"
-#include "Event/Globals.hpp"
-#include "Event/Poll/Queue.hpp"
+#include "event/Globals.hpp"
+#include "event/poll/Queue.hpp"
 
 static void
 handle_ping(void *data, struct wl_shell_surface *shell_surface,

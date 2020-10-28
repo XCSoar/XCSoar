@@ -22,7 +22,7 @@
 #ifndef ROUTEPOLAR_HPP
 #define ROUTEPOLAR_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 class Angle;
 class GlidePolar;

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_PAGES_HPP
 #define XCSOAR_PAGES_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 struct PageLayout;
 class GlueMapWindow;

@@ -23,10 +23,10 @@ Copyright_License {
 
 #include "Topography/XShape.hpp"
 #include "Convert.hpp"
-#include "Util/StringAPI.hxx"
-#include "Util/UTF8.hpp"
-#include "Util/StringStrip.hxx"
-#include "Util/ScopeExit.hxx"
+#include "util/StringAPI.hxx"
+#include "util/UTF8.hpp"
+#include "util/StringStrip.hxx"
+#include "util/ScopeExit.hxx"
 
 #ifdef ENABLE_OPENGL
 #include "Projection/Projection.hpp"
@@ -34,7 +34,7 @@ Copyright_License {
 #endif
 
 #ifdef _UNICODE
-#include "Util/ConvertString.hpp"
+#include "util/ConvertString.hpp"
 #endif
 
 #include <algorithm>

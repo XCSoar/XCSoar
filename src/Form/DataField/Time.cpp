@@ -24,8 +24,8 @@ Copyright_License {
 #include "Time.hpp"
 #include "ComboList.hpp"
 #include "Formatter/TimeFormatter.hpp"
-#include "Util/StringFormat.hpp"
-#include "Util/NumberParser.hpp"
+#include "util/StringFormat.hpp"
+#include "util/NumberParser.hpp"
 
 static bool data_field_key_up = false;
 

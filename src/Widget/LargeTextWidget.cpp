@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "LargeTextWidget.hpp"
 #include "Screen/LargeTextWindow.hpp"
-#include "Event/KeyCode.hpp"
+#include "event/KeyCode.hpp"
 #include "Look/DialogLook.hpp"
 
 void

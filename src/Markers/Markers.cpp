@@ -23,9 +23,9 @@ Copyright_License {
 
 #include "Markers.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Time/BrokenDateTime.hpp"
-#include "IO/FileOutputStream.hxx"
-#include "IO/BufferedOutputStream.hxx"
+#include "time/BrokenDateTime.hpp"
+#include "io/FileOutputStream.hxx"
+#include "io/BufferedOutputStream.hxx"
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 

@@ -20,7 +20,7 @@
 }
 */
 
-#include "Util/CRC.hpp"
+#include "util/CRC.hpp"
 #include "TestUtil.hpp"
 
 #include <stdio.h>

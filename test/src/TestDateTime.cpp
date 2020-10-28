@@ -20,7 +20,7 @@
 }
 */
 
-#include "Time/BrokenDateTime.hpp"
+#include "time/BrokenDateTime.hpp"
 #include "TestUtil.hpp"
 
 #include <stdio.h>

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_WAY_POINT_RENDERER_HPP
 #define XCSOAR_WAY_POINT_RENDERER_HPP
 
-#include "Util/NonCopyable.hpp"
+#include "util/NonCopyable.hpp"
 
 struct WaypointRendererSettings;
 struct WaypointLook;

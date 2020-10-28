@@ -20,7 +20,7 @@
 #include "dbbconv.h"
 #include "Database.hpp"
 #include "Util.hpp"
-#include "Util/CharUtil.hxx"
+#include "util/CharUtil.hxx"
 
 #include <string.h>
 

@@ -29,8 +29,8 @@ Copyright_License {
 #include "Computer/BasicComputer.hpp"
 #include "Computer/FlyingComputer.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
-#include "Time/WrapClock.hpp"
-#include "OS/Args.hpp"
+#include "time/WrapClock.hpp"
+#include "system/Args.hpp"
 #include "Atmosphere/Pressure.hpp"
 
 

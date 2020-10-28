@@ -23,7 +23,7 @@
 #ifndef TASK_SOLUTION_HPP
 #define TASK_SOLUTION_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 struct GlideSettings;
 struct GlideResult;

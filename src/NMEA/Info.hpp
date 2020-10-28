@@ -30,7 +30,7 @@ Copyright_License {
 #include "NMEA/Acceleration.hpp"
 #include "NMEA/Attitude.hpp"
 #include "SwitchState.hpp"
-#include "Time/BrokenDateTime.hpp"
+#include "time/BrokenDateTime.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Atmosphere/Temperature.hpp"

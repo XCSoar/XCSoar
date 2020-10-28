@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "Glue.hpp"
-#include "Net/HTTP/DownloadManager.hpp"
-#include "OS/Path.hpp"
+#include "net/http/DownloadManager.hpp"
+#include "system/Path.hpp"
 
 #include <tchar.h>
 

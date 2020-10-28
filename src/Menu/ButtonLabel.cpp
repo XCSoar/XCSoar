@@ -25,11 +25,11 @@ Copyright_License {
 #include "MenuBar.hpp"
 #include "MenuData.hpp"
 #include "Language/Language.hpp"
-#include "Util/StringAPI.hxx"
-#include "Util/StringBuilder.hxx"
-#include "Util/StringStrip.hxx"
-#include "Util/CharUtil.hxx"
-#include "Util/Macros.hpp"
+#include "util/StringAPI.hxx"
+#include "util/StringBuilder.hxx"
+#include "util/StringStrip.hxx"
+#include "util/CharUtil.hxx"
+#include "util/Macros.hpp"
 
 #include <algorithm>
 

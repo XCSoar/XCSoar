@@ -24,7 +24,7 @@ Copyright_License {
 #include "Sender.hpp"
 #include "Tracking/SkyLines/Export.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Util/CRC.hpp"
+#include "util/CRC.hpp"
 
 void
 TrafficResponseSender::Add(uint32_t pilot_id, uint32_t time,

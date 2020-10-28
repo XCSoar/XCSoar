@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Point.hpp"
 #include "Screen/BulkPoint.hpp"
-#include "Util/Clamp.hpp"
+#include "util/Clamp.hpp"
 
 #include <algorithm>
 

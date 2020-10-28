@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "I2CbaroDevice.hpp"
 #include "NativeI2CbaroListener.hpp"
-#include "Java/Class.hxx"
+#include "java/Class.hxx"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"

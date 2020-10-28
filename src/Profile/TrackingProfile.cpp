@@ -25,7 +25,7 @@ Copyright_License {
 #include "Map.hpp"
 #include "ProfileKeys.hpp"
 #include "Tracking/TrackingSettings.hpp"
-#include "Util/NumberParser.hpp"
+#include "util/NumberParser.hpp"
 
 #ifdef HAVE_TRACKING
 

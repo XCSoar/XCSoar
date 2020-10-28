@@ -1,9 +1,10 @@
 # Build rules for the I/O library
 
-IO_SRC_DIR = $(SRC)/IO
+IO_SRC_DIR = $(SRC)/io
 
 IO_SOURCES = \
 	$(IO_SRC_DIR)/BufferedReader.cxx \
+	$(IO_SRC_DIR)/FileDescriptor.cxx \
 	$(IO_SRC_DIR)/FileReader.cxx \
 	$(IO_SRC_DIR)/BufferedOutputStream.cxx \
 	$(IO_SRC_DIR)/FileOutputStream.cxx \

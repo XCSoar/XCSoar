@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_STATUS_MESSAGE_H
 #define XCSOAR_STATUS_MESSAGE_H
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <chrono>
 

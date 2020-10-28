@@ -28,7 +28,7 @@ Copyright_License {
 #include "Schemes.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 
 #include <stdio.h>
 

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_VOLKSLOGGER_DATABASE_HPP
 #define XCSOAR_DEVICE_DRIVER_VOLKSLOGGER_DATABASE_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <cstdint>
 

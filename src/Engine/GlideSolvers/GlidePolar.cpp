@@ -27,7 +27,7 @@
 #include "Math/Quadratic.hpp"
 #include "Math/Util.hpp"
 #include "Util/Tolerances.hpp"
-#include "Util/Clamp.hpp"
+#include "util/Clamp.hpp"
 #include "Navigation/Aircraft.hpp"
 
 #include <algorithm>

@@ -26,9 +26,9 @@ Copyright_License {
 #include "ParsedMETAR.hpp"
 #include "Units/System.hpp"
 #include "Atmosphere/Temperature.hpp"
-#include "Util/CharUtil.hxx"
-#include "Util/StringAPI.hxx"
-#include "Util/NumberParser.hpp"
+#include "util/CharUtil.hxx"
+#include "util/StringAPI.hxx"
+#include "util/NumberParser.hpp"
 
 #include <tchar.h>
 #include <cctype>

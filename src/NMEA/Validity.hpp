@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_VALIDITY_HPP
 #define XCSOAR_VALIDITY_HPP
 
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <chrono>
 #include <type_traits>

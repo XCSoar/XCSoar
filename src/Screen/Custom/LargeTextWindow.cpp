@@ -24,8 +24,8 @@ Copyright_License {
 #include "Screen/LargeTextWindow.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Event/KeyCode.hpp"
-#include "Util/StringAPI.hxx"
+#include "event/KeyCode.hpp"
+#include "util/StringAPI.hxx"
 
 void
 LargeTextWindow::Create(ContainerWindow &parent, PixelRect rc,

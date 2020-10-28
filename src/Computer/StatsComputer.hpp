@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Geo/GeoPoint.hpp"
 #include "FlightStatistics.hpp"
-#include "Time/GPSClock.hpp"
+#include "time/GPSClock.hpp"
 
 struct NMEAInfo;
 struct MoreData;

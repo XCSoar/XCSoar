@@ -36,8 +36,8 @@ using DoubleBufferWindow = BufferWindow;
 
 #include "Screen/PaintWindow.hpp"
 #include "Screen/BufferCanvas.hpp"
-#include "Event/Notify.hpp"
-#include "Thread/Mutex.hxx"
+#include "event/Notify.hpp"
+#include "thread/Mutex.hxx"
 
 /**
  * A #PaintWindow with double buffered painting, to avoid flickering.

@@ -30,7 +30,7 @@
 #ifndef GESTURE_MANAGER_HPP
 #define GESTURE_MANAGER_HPP
 
-#include "Util/StaticString.hxx"
+#include "util/StaticString.hxx"
 #include "Screen/Point.hpp"
 
 #include <tchar.h>

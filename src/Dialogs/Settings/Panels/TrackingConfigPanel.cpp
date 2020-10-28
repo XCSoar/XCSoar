@@ -31,13 +31,13 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Tracking/TrackingSettings.hpp"
 #include "Tracking/SkyLines/Key.hpp"
-#include "Net/State.hpp"
+#include "net/State.hpp"
 #include "Form/DataField/Base.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Screen/Layout.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
-#include "Util/NumberParser.hpp"
+#include "util/NumberParser.hpp"
 
 enum ControlIndex {
 #ifdef HAVE_SKYLINES_TRACKING

@@ -24,7 +24,7 @@
 #define AIRSPACE_WARNING_HPP
 
 #include "AirspaceInterceptSolution.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <cstdint>
 

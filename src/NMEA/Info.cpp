@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "NMEA/Info.hpp"
-#include "OS/Clock.hpp"
+#include "system/Clock.hpp"
 #include "Atmosphere/AirDensity.hpp"
 
 void

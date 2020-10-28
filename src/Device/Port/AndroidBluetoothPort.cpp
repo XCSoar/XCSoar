@@ -24,7 +24,7 @@ Copyright_License {
 #include "AndroidBluetoothPort.hpp"
 #include "AndroidPort.hpp"
 #include "Android/BluetoothHelper.hpp"
-#include "Java/Global.hxx"
+#include "java/Global.hxx"
 
 #include <cassert>
 

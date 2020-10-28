@@ -28,7 +28,7 @@ Copyright_License {
 #include "FlightStatistics.hpp"
 #include "Language/Language.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
-#include "Util/StringFormat.hpp"
+#include "util/StringFormat.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "Engine/Task/TaskManager.hpp"

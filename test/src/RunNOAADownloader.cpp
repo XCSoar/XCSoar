@@ -25,12 +25,12 @@ Copyright_License {
 #include "Weather/METAR.hpp"
 #include "Weather/NOAAStore.hpp"
 #include "Weather/NOAAUpdater.hpp"
-#include "Net/HTTP/Init.hpp"
+#include "net/http/Init.hpp"
 #include "ConsoleJobRunner.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/GeoPointFormatter.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 #include <cstdio>
 

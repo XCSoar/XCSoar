@@ -24,7 +24,7 @@
 #define OLC_TRIANGLE_RULES_HPP
 
 #include "Engine/Task/Shapes/FAITriangleRules.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 #include <algorithm>
 

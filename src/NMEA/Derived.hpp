@@ -40,12 +40,12 @@ Copyright_License {
 #include "NMEA/ClimbHistory.hpp"
 #include "TeamCode/TeamCode.hpp"
 #include "Engine/Navigation/TraceHistory.hpp"
-#include "Time/BrokenDateTime.hpp"
+#include "time/BrokenDateTime.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Engine/Route/Route.hpp"
 #include "Computer/WaveResult.hpp"
-#include "Util/TypeTraits.hpp"
+#include "util/TypeTraits.hpp"
 
 /** Derived terrain altitude information, including glide range */
 struct TerrainInfo

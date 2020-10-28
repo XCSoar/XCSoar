@@ -24,7 +24,7 @@ Copyright_License {
 #include "Engine/Task/Shapes/FAITriangleArea.hpp"
 #include "Engine/Task/Shapes/FAITriangleSettings.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Util/Compiler.h"
+#include "util/Compiler.h"
 
 int
 main(gcc_unused int argc, gcc_unused char **argv)

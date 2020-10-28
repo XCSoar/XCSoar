@@ -24,7 +24,7 @@ Copyright_License {
 #include "Map.hpp"
 #include "Screen/PortableColor.hpp"
 #include "Formatter/HexColor.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 void
 ProfileMap::SetColor(const char *key, const RGB8Color color)

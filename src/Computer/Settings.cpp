@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Settings.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
-#include "OS/Clock.hpp"
+#include "system/Clock.hpp"
 
 void
 PolarSettings::SetDefaults()

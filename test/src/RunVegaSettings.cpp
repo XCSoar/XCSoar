@@ -26,12 +26,12 @@ Copyright_License {
 #include "Device/Port/ConfiguredPort.hpp"
 #include "Device/Driver/Vega/Internal.hpp"
 #include "Device/Config.hpp"
-#include "OS/Args.hpp"
+#include "system/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
-#include "IO/Async/GlobalAsioThread.hpp"
-#include "IO/Async/AsioThread.hpp"
-#include "IO/NullDataHandler.hpp"
-#include "Util/PrintException.hxx"
+#include "io/async/GlobalAsioThread.hpp"
+#include "io/async/AsioThread.hpp"
+#include "io/NullDataHandler.hpp"
+#include "util/PrintException.hxx"
 
 #include <stdio.h>
 #include <string.h>

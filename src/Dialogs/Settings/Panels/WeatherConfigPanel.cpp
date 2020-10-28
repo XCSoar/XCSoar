@@ -28,7 +28,7 @@ Copyright_License {
 #include "Widget/RowFormWidget.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
-#include "Util/NumberParser.hpp"
+#include "util/NumberParser.hpp"
 
 enum ControlIndex {
 #ifdef HAVE_PCMET

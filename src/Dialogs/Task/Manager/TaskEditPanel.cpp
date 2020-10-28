@@ -28,7 +28,7 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Screen/Layout.hpp"
-#include "Event/KeyCode.hpp"
+#include "event/KeyCode.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Interface.hpp"
 #include "Form/Button.hpp"
@@ -46,8 +46,8 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Renderer/OZPreviewRenderer.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
-#include "Util/Macros.hpp"
-#include "Util/StringCompare.hxx"
+#include "util/Macros.hpp"
+#include "util/StringCompare.hxx"
 #include "UIGlobals.hpp"
 
 #include <cassert>

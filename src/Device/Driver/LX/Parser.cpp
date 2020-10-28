@@ -27,8 +27,8 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "Geo/SpeedVector.hpp"
 #include "Units/System.hpp"
-#include "Util/Macros.hpp"
-#include "Util/StringCompare.hxx"
+#include "util/Macros.hpp"
+#include "util/StringCompare.hxx"
 
 static bool
 ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)

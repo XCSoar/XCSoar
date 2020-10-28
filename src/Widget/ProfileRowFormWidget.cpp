@@ -26,7 +26,7 @@ Copyright_License {
 #include "Form/DataField/File.hpp"
 #include "Profile/Profile.hpp"
 #include "LocalPath.hpp"
-#include "Util/ConvertString.hpp"
+#include "util/ConvertString.hpp"
 
 WndProperty *
 RowFormWidget::AddFile(const TCHAR *label, const TCHAR *help,

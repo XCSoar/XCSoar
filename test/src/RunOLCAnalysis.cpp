@@ -23,7 +23,7 @@
 #include "Engine/Trace/Trace.hpp"
 #include "Contest/ContestManager.hpp"
 #include "Printing.hpp"
-#include "OS/Args.hpp"
+#include "system/Args.hpp"
 #include "DebugReplay.hpp"
 
 #include <cassert>

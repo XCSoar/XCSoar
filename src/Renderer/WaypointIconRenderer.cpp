@@ -28,7 +28,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "WaypointRendererSettings.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
-#include "Util/Macros.hpp"
+#include "util/Macros.hpp"
 
 #include <algorithm>
 

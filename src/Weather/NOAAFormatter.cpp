@@ -25,8 +25,8 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Language/Language.hpp"
-#include "Util/StringAPI.hxx"
-#include "Util/Macros.hpp"
+#include "util/StringAPI.hxx"
+#include "util/Macros.hpp"
 
 #include <algorithm>
 
