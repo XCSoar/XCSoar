@@ -131,7 +131,6 @@ class ManagedFileListWidget
   enum Buttons {
     DOWNLOAD,
     ADD,
-    REMOVE,
     CANCEL,
     UPDATE,
   };
@@ -183,7 +182,7 @@ class ManagedFileListWidget
   TwoTextRowsRenderer row_renderer;
 
 #ifdef HAVE_DOWNLOAD_MANAGER
-  Button *download_button, *add_button, *remove_button, *cancel_button, *update_button;
+  Button *download_button, *add_button, *cancel_button, *update_button;
 
   /**
   * Whether at least one file is out of date.
@@ -294,7 +293,6 @@ protected:
 
   void Download();
   void Add();
-  void Remove();
   void Cancel();
   void UpdateFiles();
 
@@ -450,7 +448,6 @@ ManagedFileListWidget::CreateButtons(WidgetDialog &dialog)
   if (Net::DownloadManager::IsAvailable()) {
     download_button = dialog.AddButton(_("Download"), *this, DOWNLOAD);
     add_button = dialog.AddButton(_("Add"), *this, ADD);
-    remove_button = dialog.AddButton(_("Remove"), *this, REMOVE);
     cancel_button = dialog.AddButton(_("Cancel"), *this, CANCEL);
     update_button = dialog.AddButton(_("Update all"), *this, UPDATE);
   }
@@ -620,22 +617,6 @@ ManagedFileListWidget::Add()
 }
 
 void
-ManagedFileListWidget::Remove()
-{
-  if (items.empty())
-    return;
-
-  const unsigned current = GetList().GetCursorIndex();
-  assert(current < items.size());
-
-  const FileItem &item = items[current];
-  if(File::Exists(LocalPath(_T(item.name))))  {
-    File::Delete(LocalPath(_T(item.name)));
-    RefreshList();
-  }
-}
-
-void
 ManagedFileListWidget::UpdateFiles() {
 #ifdef HAVE_DOWNLOAD_MANAGER
   assert(Net::DownloadManager::IsAvailable());
@@ -683,10 +664,6 @@ ManagedFileListWidget::OnAction(int id) noexcept
 
   case ADD:
     Add();
-    break;
-
-  case REMOVE:
-    Remove();
     break;
 
   case CANCEL:
