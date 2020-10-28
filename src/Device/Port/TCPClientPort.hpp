@@ -25,27 +25,36 @@ Copyright_License {
 #define XCSOAR_DEVICE_TCP_CLIENT_PORT_HPP
 
 #include "BufferedPort.hpp"
+#include "event/SocketEvent.hxx"
+#include "event/net/ConnectSocket.hxx"
+#include "event/net/cares/SimpleResolver.hxx"
+#include "util/Cancellable.hxx"
 
-#include <boost/asio/ip/tcp.hpp>
+#include <optional>
+
+namespace Cares { class Channel; }
 
 /**
  * A #Port implementation that connects to a TCP port.
  */
 class TCPClientPort final
-  : public BufferedPort
+  : public BufferedPort, Cares::SimpleHandler, ConnectSocketHandler
 {
-  boost::asio::ip::tcp::resolver resolver;
-  boost::asio::ip::tcp::socket socket;
-
-  char input[4096];
+  std::optional<Cares::SimpleResolver> resolver;
+  std::optional<ConnectSocket> connect;
+  SocketEvent socket;
 
   PortState state = PortState::LIMBO;
 
 public:
-  TCPClientPort(boost::asio::io_context &io_context,
+  TCPClientPort(EventLoop &event_loop, Cares::Channel &cares,
                 const char *host, unsigned port,
                 PortListener *_listener, DataHandler &_handler);
   virtual ~TCPClientPort();
+
+  auto &GetEventLoop() const noexcept {
+    return socket.GetEventLoop();
+  }
 
   /* virtual methods from class Port */
   PortState GetState() const override {
@@ -68,10 +77,15 @@ public:
   size_t Write(const void *data, size_t length) override;
 
 private:
-  void OnResolved(const boost::system::error_code &ec,
-                  boost::asio::ip::tcp::resolver::iterator i);
-  void OnConnect(const boost::system::error_code &ec);
-  void OnRead(const boost::system::error_code &ec, size_t nbytes);
+  void OnSocketReady(unsigned events) noexcept;
+
+  /* virtual methods from Cares::SimpleHandler */
+  void OnResolverSuccess(std::forward_list<AllocatedSocketAddress> addresses) noexcept override;
+  void OnResolverError(std::exception_ptr error) noexcept override;
+
+  /* virtual methods from ConnectSocketHandler */
+  void OnSocketConnectSuccess(UniqueSocketDescriptor &&fd) noexcept override;
+  void OnSocketConnectError(std::exception_ptr ep) noexcept override;
 };
 
 #endif

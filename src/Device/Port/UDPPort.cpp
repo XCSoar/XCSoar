@@ -22,24 +22,40 @@ Copyright_License {
 */
 
 #include "UDPPort.hpp"
-#include "io/async/AsioUtil.hpp"
+#include "net/IPv4Address.hxx"
+#include "net/UniqueSocketDescriptor.hxx"
+#include "event/Call.hxx"
+#include "system/Error.hxx"
 
-UDPPort::UDPPort(boost::asio::io_context &io_context,
+UDPPort::UDPPort(EventLoop &event_loop,
                  unsigned port,
                  PortListener *_listener, DataHandler &_handler)
   :BufferedPort(_listener, _handler),
-   socket(io_context,
-          boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port))
+   socket(event_loop, BIND_THIS_METHOD(OnSocketReady))
 {
-  AsyncRead();
+  const IPv4Address address(port);
+
+  UniqueSocketDescriptor s;
+  if (!s.Create(AF_INET, SOCK_DGRAM, 0))
+    throw MakeErrno("Failed to create socket");
+
+  if (!s.Bind(address))
+    throw MakeErrno("Failed to bind socket");
+
+  socket.Open(s.Release());
+
+  BlockingCall(event_loop, [this](){
+    socket.ScheduleRead();
+  });
 }
 
 UDPPort::~UDPPort()
 {
   BufferedPort::BeginClose();
 
-  if (socket.is_open())
-    CancelWait(socket);
+  BlockingCall(GetEventLoop(), [this](){
+    socket.Close();
+  });
 
   BufferedPort::EndClose();
 }
@@ -47,7 +63,7 @@ UDPPort::~UDPPort()
 PortState
 UDPPort::GetState() const
 {
-  if (socket.is_open())
+  if (socket.IsDefined())
     return PortState::READY;
   else
     return PortState::FAILED;
@@ -56,33 +72,35 @@ UDPPort::GetState() const
 size_t
 UDPPort::Write(const void *data, size_t length)
 {
-  if (!socket.is_open())
+  if (!socket.IsDefined())
     return 0;
 
-  boost::system::error_code ec;
-  size_t nbytes = socket.send(boost::asio::buffer(data, length), 0, ec);
-  if (ec)
-    nbytes = 0;
+  ssize_t nbytes = socket.GetSocket().Write(data, length);
+  if (nbytes < 0)
+    // TODO check EAGAIN?
+    return 0;
 
   return nbytes;
 }
 
 void
-UDPPort::OnRead(const boost::system::error_code &ec, size_t nbytes)
+UDPPort::OnSocketReady(unsigned) noexcept
 {
-  if (ec == boost::asio::error::operation_aborted)
-    /* this object has already been deleted; bail out quickly without
-       touching anything */
-    return;
-
-  if (ec) {
-    socket.close();
+  char input[4096];
+  ssize_t nbytes = socket.GetSocket().Read(input, sizeof(input));
+  if (nbytes < 0) {
+    int e = errno;
+    socket.Close();
     StateChanged();
-    Error(ec.message().c_str());
+    Error(strerror(e));
+    return;
+  }
+
+  if (nbytes == 0) {
+    socket.Close();
+    StateChanged();
     return;
   }
 
   DataReceived(input, nbytes);
-
-  AsyncRead();
 }

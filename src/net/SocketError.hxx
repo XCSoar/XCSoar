@@ -31,12 +31,13 @@
 #define SOCKET_ERROR_HXX
 
 #include "util/Compiler.h"
-#include "system/Error.hxx"
 
 #ifdef _WIN32
+#include "util/RuntimeError.hxx"
 #include <winsock2.h>
 typedef DWORD socket_error_t;
 #else
+#include "system/Error.hxx"
 #include <cerrno>
 typedef int socket_error_t;
 #endif
@@ -54,12 +55,12 @@ GetSocketError() noexcept
 
 gcc_const
 static inline bool
-IsSocketErrorAgain(socket_error_t code) noexcept
+IsSocketErrorWouldBlock(socket_error_t code) noexcept
 {
 #ifdef _WIN32
-	return code == WSAEINPROGRESS;
+	return code == WSAEWOULDBLOCK;
 #else
-	return code == EAGAIN;
+	return code == EWOULDBLOCK;
 #endif
 }
 
@@ -107,18 +108,21 @@ public:
 };
 
 gcc_const
-static inline std::system_error
+static inline auto
 MakeSocketError(socket_error_t code, const char *msg) noexcept
 {
 #ifdef _WIN32
-	return MakeLastError(code, msg);
+	// TODO: use a new std::error_category for WinSock error codes?
+	SocketErrorMessage buffer(code);
+	const char *msg2 = buffer;
+	return FormatRuntimeError("%s: %s", msg, msg2);
 #else
 	return MakeErrno(code, msg);
 #endif
 }
 
 gcc_pure
-static inline std::system_error
+static inline auto
 MakeSocketError(const char *msg) noexcept
 {
 	return MakeSocketError(GetSocketError(), msg);

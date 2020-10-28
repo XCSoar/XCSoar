@@ -25,17 +25,15 @@ Copyright_License {
 #define XCSOAR_AUDIO_ALSA_PCM_PLAYER_HPP
 
 #include "PCMPlayer.hpp"
-
+#include "event/SocketEvent.hxx"
 #include "util/Compiler.h"
 
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
 
-#include <list>
+#include <forward_list>
 #include <memory>
-
-#include <boost/asio/posix/stream_descriptor.hpp>
 
 #include <alsa/asoundlib.h>
 
@@ -47,7 +45,7 @@ namespace boost { namespace asio { class io_context; }}
 class ALSAPCMPlayer : public PCMPlayer {
   static inline void CloseAlsaHandle(snd_pcm_t *handle) {
     if (nullptr != handle)
-      BOOST_VERIFY(0 == snd_pcm_close(handle));
+      snd_pcm_close(handle);
   }
 
   using AlsaHandleUniquePtr =
@@ -60,16 +58,13 @@ class ALSAPCMPlayer : public PCMPlayer {
 
   AlsaHandleUniquePtr alsa_handle = MakeAlsaHandleUniquePtr();
 
-  boost::asio::io_context &io_context;
+  EventLoop &event_loop;
 
   snd_pcm_uframes_t buffer_size;
   std::unique_ptr<int16_t[]> buffer;
 
-  std::list<boost::asio::posix::stream_descriptor> read_poll_descs;
-  std::list<boost::asio::posix::stream_descriptor> write_poll_descs;
-  bool poll_descs_registered = false;
+  std::forward_list<SocketEvent> poll_events;
 
-  void StartEventHandling();
   void StopEventHandling();
 
   static bool TryRecoverFromError(snd_pcm_t &alsa_handle, int error);
@@ -88,22 +83,20 @@ class ALSAPCMPlayer : public PCMPlayer {
 
   bool OnEvent();
 
-  void OnReadEvent(boost::asio::posix::stream_descriptor &fd,
-                   const boost::system::error_code &ec);
-  void OnWriteEvent(boost::asio::posix::stream_descriptor &fd,
-                    const boost::system::error_code &ec);
-
   static bool SetParameters(snd_pcm_t &alsa_handle, unsigned sample_rate,
                             bool big_endian_source, unsigned latency,
                             unsigned &channels);
 
 public:
-  explicit ALSAPCMPlayer(boost::asio::io_context &_io_context);
+  explicit ALSAPCMPlayer(EventLoop &event_loop) noexcept;
   virtual ~ALSAPCMPlayer();
 
   /* virtual methods from class PCMPlayer */
   bool Start(PCMDataSource &source) override;
   void Stop() override;
+
+private:
+  void OnSocketReady(unsigned events) noexcept;
 };
 
 #endif

@@ -25,14 +25,13 @@ Copyright_License {
 #define XCSOAR_ASIO_THREAD_HPP
 
 #include "thread/Thread.hpp"
-
-#include <boost/asio.hpp>
+#include "event/Loop.hxx"
 
 /**
  * A thread which runs a boost::asio::io_context.
  */
 class AsioThread final : protected Thread {
-  boost::asio::io_context io_context;
+  EventLoop event_loop{ThreadId::Null()};
 
 public:
   AsioThread():Thread("asio") {}
@@ -49,12 +48,12 @@ public:
    */
   void Stop();
 
-  auto &Get() {
-    return io_context;
+  auto &GetEventLoop() noexcept {
+    return event_loop;
   }
 
-  operator boost::asio::io_context &() {
-    return io_context;
+  operator EventLoop &() noexcept {
+    return event_loop;
   }
 
 protected:

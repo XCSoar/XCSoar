@@ -22,28 +22,22 @@ Copyright_License {
 */
 
 #include "GlobalPCMMixer.hpp"
-
 #include "PCMPlayerFactory.hpp"
 #include "PCMMixer.hpp"
 
-#include "io/async/AsioThread.hpp"
-#include "io/async/GlobalAsioThread.hpp"
-
+#include <cassert>
 #include <memory>
 
 PCMMixer *pcm_mixer = nullptr;
 
 void
-InitialisePCMMixer()
+InitialisePCMMixer(EventLoop &event_loop)
 {
   assert(nullptr == pcm_mixer);
 
   pcm_mixer =
       new PCMMixer(44100,
-                   std::unique_ptr<PCMPlayer>(
-                       PCMPlayerFactory::CreateInstanceForDirectAccess(
-                           asio_thread->Get()
-                           )));
+                   std::unique_ptr<PCMPlayer>(PCMPlayerFactory::CreateInstanceForDirectAccess(event_loop)));
 }
 
 void

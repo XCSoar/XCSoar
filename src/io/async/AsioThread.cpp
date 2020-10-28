@@ -28,6 +28,7 @@ AsioThread::Start()
 {
   assert(!IsDefined());
 
+  event_loop.SetAlive(true);
   return Thread::Start();
 }
 
@@ -35,7 +36,7 @@ void
 AsioThread::Stop()
 {
   /* set the "stop" flag and wake up the thread */
-  io_context.stop();
+  event_loop.Break();
 
   /* wait for the thread to finish */
   Join();
@@ -44,9 +45,5 @@ AsioThread::Stop()
 void
 AsioThread::Run() noexcept
 {
-  /* a dummy work to keep the io_context alive even if we're
-     completely idle */
-  boost::asio::io_context::work work(io_context);
-
-  io_context.run();
+  event_loop.Run();
 }

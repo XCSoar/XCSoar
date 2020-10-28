@@ -24,6 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_SOCKET_OPTION_HPP
 #define XCSOAR_SOCKET_OPTION_HPP
 
+#ifdef _WIN32
+#include <winsock2.h>
+#else
+#include <sys/socket.h>
+#endif
+
 /**
  * Parameter type for boost::asio::basic_stream_socket::set_option()
  * which sets SO_SNDTIMEO.

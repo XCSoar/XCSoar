@@ -25,8 +25,11 @@ Copyright_License {
 #define XCSOAR_GLOBAL_ASIO_THREAD_HPP
 
 class AsioThread;
+class EventThread;
+namespace Cares { class Channel; }
 
 extern AsioThread *asio_thread;
+extern Cares::Channel *global_cares_channel;
 
 void
 InitialiseAsioThread();

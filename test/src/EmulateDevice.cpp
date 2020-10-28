@@ -67,7 +67,8 @@ try {
 
   ScopeGlobalAsioThread global_asio_thread;
 
-  auto port = debug_port.Open(*asio_thread, *emulator->handler);
+  auto port = debug_port.Open(*asio_thread, *global_cares_channel,
+                              *emulator->handler);
 
   emulator->port = port.get();
 

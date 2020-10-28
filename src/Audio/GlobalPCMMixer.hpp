@@ -27,6 +27,7 @@ Copyright_License {
 
 #include "Features.hpp"
 
+class EventLoop;
 
 #ifdef HAVE_PCM_MIXER
 class PCMMixer;
@@ -34,13 +35,13 @@ class PCMMixer;
 extern PCMMixer *pcm_mixer;
 
 void
-InitialisePCMMixer();
+InitialisePCMMixer(EventLoop &event_loop);
 
 void
 DeinitialisePCMMixer();
 #else
 static inline void
-InitialisePCMMixer()
+InitialisePCMMixer(EventLoop &)
 {
 }
 
@@ -52,8 +53,8 @@ DeinitialisePCMMixer()
 
 class ScopeGlobalPCMMixer final {
 public:
-  ScopeGlobalPCMMixer() {
-    InitialisePCMMixer();
+  ScopeGlobalPCMMixer(EventLoop &event_loop) {
+    InitialisePCMMixer(event_loop);
   }
 
   ~ScopeGlobalPCMMixer() {

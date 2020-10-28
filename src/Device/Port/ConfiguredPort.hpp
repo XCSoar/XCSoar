@@ -26,18 +26,19 @@ Copyright_License {
 
 #include <memory>
 
+namespace Cares { class Channel; }
+class EventLoop;
 class Port;
 class PortListener;
 class DataHandler;
 struct DeviceConfig;
-namespace boost { namespace asio { class io_context; }}
 
 /**
  * Open the port described by #DeviceConfig.  On error, throws a
  * #std::runtime_error or returns nullptr.
  */
 std::unique_ptr<Port>
-OpenPort(boost::asio::io_context &io_context,
+OpenPort(EventLoop &event_loop, Cares::Channel &cares,
          const DeviceConfig &config, PortListener *listener,
          DataHandler &handler);
 

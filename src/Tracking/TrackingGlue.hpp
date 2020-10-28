@@ -83,7 +83,7 @@ class TrackingGlue final
   bool flying = false, last_flying;
 
 public:
-  explicit TrackingGlue(boost::asio::io_context &io_context);
+  explicit TrackingGlue(EventLoop &event_loop);
 
   void StopAsync();
   void WaitStopped();

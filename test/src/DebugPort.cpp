@@ -89,10 +89,10 @@ ParsePortArgs(Args &args)
 }
 
 std::unique_ptr<Port>
-DebugPort::Open(boost::asio::io_context &io_context,
+DebugPort::Open(EventLoop &event_loop, Cares::Channel &cares,
                 DataHandler &handler)
 {
-  auto port = OpenPort(io_context, config, this, handler);
+  auto port = OpenPort(event_loop, cares, config, this, handler);
   if (port == nullptr)
     throw std::runtime_error("Failed to open port");
 

@@ -25,7 +25,6 @@ Copyright_License {
 #include "Listener.hpp"
 #include "time/TimeoutClock.hpp"
 #include "Operation/Operation.hpp"
-#include "util/ConvertString.hpp"
 #include "util/Exception.hxx"
 
 #include <algorithm>

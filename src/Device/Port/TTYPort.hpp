@@ -25,8 +25,7 @@ Copyright_License {
 #define XCSOAR_DEVICE_TTY_PORT_HPP
 
 #include "BufferedPort.hpp"
-
-#include <boost/asio/serial_port.hpp>
+#include "event/SocketEvent.hxx"
 
 #include <atomic>
 
@@ -37,7 +36,7 @@ Copyright_License {
  */
 class TTYPort : public BufferedPort
 {
-  boost::asio::serial_port serial_port;
+  SocketEvent socket;
 
   std::atomic<bool> valid;
 
@@ -48,9 +47,13 @@ public:
    * @param _handler the callback object for input received on the
    * port
    */
-  TTYPort(boost::asio::io_context &io_context,
+  TTYPort(EventLoop &event_loop,
           PortListener *_listener, DataHandler &_handler);
   virtual ~TTYPort();
+
+  auto &GetEventLoop() const noexcept {
+    return socket.GetEventLoop();
+  }
 
   /**
    * Opens the serial port
@@ -78,13 +81,7 @@ public:
   virtual size_t Write(const void *data, size_t length) override;
 
 private:
-  void OnReadReady(const boost::system::error_code &ec);
-
-  void AsyncRead() {
-    serial_port.async_read_some(boost::asio::null_buffers(),
-                                std::bind(&TTYPort::OnReadReady, this,
-                                          std::placeholders::_1));
-  }
+  void OnSocketReady(unsigned events) noexcept;
 };
 
 #endif

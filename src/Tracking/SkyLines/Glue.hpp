@@ -57,7 +57,7 @@ class Glue {
   double last_climb_time = -1;
 
 public:
-  Glue(boost::asio::io_context &io_context, Handler *_handler);
+  Glue(EventLoop &event_loop, Handler *_handler);
   ~Glue();
 
   void SetSettings(const Settings &settings);

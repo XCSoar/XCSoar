@@ -33,7 +33,8 @@ class Args;
 class Port;
 class DataHandler;
 struct DeviceConfig;
-namespace boost { namespace asio { class io_context; }}
+class EventLoop;
+namespace Cares { class Channel; }
 
 DeviceConfig
 ParsePortArgs(Args &args);
@@ -51,7 +52,7 @@ public:
     return config;
   }
 
-  std::unique_ptr<Port> Open(boost::asio::io_context &io_context,
+  std::unique_ptr<Port> Open(EventLoop &event_loop, Cares::Channel &cares,
                              DataHandler &handler);
 
   void SetListener(PortListener &_listener) {

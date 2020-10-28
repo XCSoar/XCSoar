@@ -25,26 +25,26 @@ Copyright_License {
 #include "Device/Port/Port.hpp"
 #include "system/Args.hpp"
 #include "io/DataHandler.hpp"
+#include "event/Loop.hxx"
+#include "event/net/cares/Channel.hxx"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "util/PrintException.hxx"
-
-#include <boost/asio/io_service.hpp>
 
 #include <stdio.h>
 #include <stdlib.h>
 
 class MyListener final : public PortListener {
-  boost::asio::io_service &io_service;
+  EventLoop &event_loop;
 
   Port &port;
 
 public:
-  MyListener(boost::asio::io_service &_io_service, Port &_port)
-    :io_service(_io_service), port(_port) {}
+  MyListener(EventLoop &_event_loop, Port &_port)
+    :event_loop(_event_loop), port(_port) {}
 
   void PortStateChanged() noexcept override {
     if (port.GetState() == PortState::FAILED)
-      io_service.stop();
+      event_loop.Break();
   }
 };
 
@@ -61,11 +61,12 @@ try {
   DebugPort debug_port(args);
   args.ExpectEnd();
 
-  boost::asio::io_service io_service;
+  EventLoop event_loop;
+  Cares::Channel cares(event_loop);
 
   MyHandler handler;
-  auto port = debug_port.Open(io_service, handler);
-  MyListener listener(io_service, *port);
+  auto port = debug_port.Open(event_loop, cares, handler);
+  MyListener listener(event_loop, *port);
   debug_port.SetListener(listener);
 
   ConsoleOperationEnvironment env;
@@ -78,7 +79,7 @@ try {
     return EXIT_FAILURE;
   }
 
-  io_service.run();
+  event_loop.Run();
 
   return EXIT_SUCCESS;
 } catch (const std::exception &exception) {

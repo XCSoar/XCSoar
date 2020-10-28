@@ -22,34 +22,33 @@ Copyright_License {
 */
 
 #include "TCPClientPort.hpp"
-#include "io/async/AsioUtil.hpp"
 #include "net/Option.hpp"
+#include "event/Call.hxx"
 #include "util/StaticString.hxx"
 
-TCPClientPort::TCPClientPort(boost::asio::io_context &io_context,
+#include <tchar.h>
+
+TCPClientPort::TCPClientPort(EventLoop &event_loop, Cares::Channel &cares,
                              const char *host, unsigned port,
                              PortListener *_listener, DataHandler &_handler)
   :BufferedPort(_listener, _handler),
-   resolver(io_context),
-   socket(io_context)
+   socket(event_loop, BIND_THIS_METHOD(OnSocketReady))
 {
-  NarrowString<32> service;
-  service.UnsafeFormat("%u", port);
-
-  resolver.async_resolve({host, service.c_str()},
-                         std::bind(&TCPClientPort::OnResolved, this,
-                                   std::placeholders::_1,
-                                   std::placeholders::_2));
+  BlockingCall(GetEventLoop(), [this, &cares, host, port](){
+    Cares::SimpleHandler &resolver_handler = *this;
+    resolver.emplace(cares, resolver_handler, host, port);
+  });
 }
 
 TCPClientPort::~TCPClientPort()
 {
   BufferedPort::BeginClose();
 
-  if (socket.is_open())
-    CancelWait(socket);
-  else
-    CancelWait(resolver);
+  BlockingCall(GetEventLoop(), [this](){
+    socket.Close();
+    connect.reset();
+    resolver.reset();
+  });
 
   BufferedPort::EndClose();
 }
@@ -57,86 +56,97 @@ TCPClientPort::~TCPClientPort()
 size_t
 TCPClientPort::Write(const void *data, size_t length)
 {
-  if (!socket.is_open())
+  if (!socket.IsDefined())
     return 0;
 
-  boost::system::error_code ec;
-  size_t nbytes = socket.send(boost::asio::buffer(data, length), 0, ec);
-  if (ec)
-    nbytes = 0;
+  ssize_t nbytes = socket.GetSocket().Write(data, length);
+  if (nbytes < 0)
+    // TODO check EAGAIN?
+    return 0;
 
   return nbytes;
 }
 
 void
-TCPClientPort::OnResolved(const boost::system::error_code &ec,
-                          boost::asio::ip::tcp::resolver::iterator i)
+TCPClientPort::OnSocketReady(unsigned) noexcept
 {
-  if (ec == boost::asio::error::operation_aborted)
-    /* this object has already been deleted; bail out quickly without
-       touching anything */
-    return;
-
-  if (ec) {
-    state = PortState::FAILED;
+  char input[4096];
+  ssize_t nbytes = socket.GetSocket().Read(input, sizeof(input));
+  if (nbytes < 0) {
+    int e = errno;
+    socket.Close();
     StateChanged();
-    Error(ec.message().c_str());
+    Error(strerror(e));
     return;
   }
 
-  socket.async_connect(*i,
-                       std::bind(&TCPClientPort::OnConnect, this,
-                                 std::placeholders::_1));
-}
-
-void
-TCPClientPort::OnConnect(const boost::system::error_code &ec)
-{
-  if (ec == boost::asio::error::operation_aborted)
-    /* this object has already been deleted; bail out quickly without
-       touching anything */
-    return;
-
-  if (ec) {
-    socket.close();
-    state = PortState::FAILED;
+  if (nbytes == 0) {
+    socket.Close();
     StateChanged();
-    Error(ec.message().c_str());
-    return;
-  }
-
-  SendTimeoutS send_timeout(1);
-  socket.set_option(send_timeout);
-
-  state = PortState::READY;
-  StateChanged();
-
-  socket.async_receive(boost::asio::buffer(input, sizeof(input)),
-                       std::bind(&TCPClientPort::OnRead, this,
-                                 std::placeholders::_1,
-                                 std::placeholders::_2));
-}
-
-void
-TCPClientPort::OnRead(const boost::system::error_code &ec, size_t nbytes)
-{
-  if (ec == boost::asio::error::operation_aborted)
-    /* this object has already been deleted; bail out quickly without
-       touching anything */
-    return;
-
-  if (ec) {
-    socket.close();
-    state = PortState::FAILED;
-    StateChanged();
-    Error(ec.message().c_str());
     return;
   }
 
   DataReceived(input, nbytes);
+}
 
-  socket.async_receive(boost::asio::buffer(input, sizeof(input)),
-                       std::bind(&TCPClientPort::OnRead, this,
-                                 std::placeholders::_1,
-                                 std::placeholders::_2));
+void
+TCPClientPort::OnResolverSuccess(std::forward_list<AllocatedSocketAddress> addresses) noexcept
+{
+  assert(resolver);
+  resolver.reset();
+
+  if (addresses.empty()) {
+    state = PortState::FAILED;
+    StateChanged();
+    Error("No address");
+    return;
+  }
+
+  ConnectSocketHandler &handler = *this;
+  connect.emplace(GetEventLoop(), handler);
+  connect->Connect(addresses.front(), std::chrono::seconds(30));
+}
+
+void
+TCPClientPort::OnResolverError(std::exception_ptr error) noexcept
+{
+  assert(resolver);
+  resolver.reset();
+
+  state = PortState::FAILED;
+  StateChanged();
+  Error(error);
+}
+
+void
+TCPClientPort::OnSocketConnectSuccess(UniqueSocketDescriptor &&fd) noexcept
+{
+  assert(connect);
+
+#ifdef _WIN32
+  const DWORD value = 1000;
+#else
+  const struct timeval value{1, 0};
+#endif
+
+  fd.SetOption(SOL_SOCKET, SO_SNDTIMEO, &value, sizeof(value));
+
+  socket.Open(fd.Release());
+  socket.ScheduleRead();
+
+  connect.reset();
+
+  state = PortState::READY;
+  StateChanged();
+}
+
+void
+TCPClientPort::OnSocketConnectError(std::exception_ptr ep) noexcept
+{
+  assert(connect);
+  connect.reset();
+
+  state = PortState::FAILED;
+  StateChanged();
+  Error(std::move(ep));
 }

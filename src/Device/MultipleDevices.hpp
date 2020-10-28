@@ -38,8 +38,8 @@ Copyright_License {
 
 #include <tchar.h>
 
-namespace boost { namespace asio { class io_context; }}
-
+namespace Cares { class Channel; }
+class EventLoop;
 class DeviceDescriptor;
 class DeviceDispatcher;
 struct MoreData;
@@ -59,7 +59,7 @@ class MultipleDevices final : PortListener {
   std::list<PortListener *> listeners;
 
 public:
-  MultipleDevices(boost::asio::io_context &io_context);
+  MultipleDevices(EventLoop &event_loop, Cares::Channel &cares);
   ~MultipleDevices();
 
   DeviceDescriptor &operator[](unsigned i) const {

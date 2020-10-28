@@ -18,6 +18,13 @@ OS_SOURCES += \
 	$(OS_SRC_DIR)/EventFD.cxx
 endif
 
+ifeq ($(TARGET_IS_LINUX),y)
+OS_SOURCES += \
+	$(OS_SRC_DIR)/EpollFD.cxx \
+	$(OS_SRC_DIR)/EventFD.cxx \
+	$(OS_SRC_DIR)/SignalFD.cxx
+endif
+
 $(eval $(call link-library,libos,OS))
 
 ifeq ($(HAVE_POSIX),n)

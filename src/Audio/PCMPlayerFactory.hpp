@@ -36,7 +36,7 @@ Copyright_License {
 #include "MixerPCMPlayer.hpp"
 #endif
 
-namespace boost { namespace asio { class io_context; }}
+class EventLoop;
 
 namespace PCMPlayerFactory
 {
@@ -63,12 +63,12 @@ inline PCMPlayer *CreateInstance()
  * @return Pointer to the created PCMPlayer instance
  */
 inline PCMPlayer *
-CreateInstanceForDirectAccess(boost::asio::io_context &io_context)
+CreateInstanceForDirectAccess(EventLoop &event_loop)
 {
 #if defined(ENABLE_SDL)
   return new SDLPCMPlayer();
 #elif defined(ENABLE_ALSA)
-  return new ALSAPCMPlayer(io_context);
+  return new ALSAPCMPlayer(event_loop);
 #else
   return CreateInstance();
 #endif

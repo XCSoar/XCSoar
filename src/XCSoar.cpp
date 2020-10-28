@@ -46,6 +46,7 @@ Copyright_License {
 #include "Audio/GlobalVolumeController.hpp"
 #include "system/Args.hpp"
 #include "io/async/GlobalAsioThread.hpp"
+#include "io/async/AsioThread.hpp"
 
 #ifdef ENABLE_SDL
 /* this is necessary on Mac OS X, to let libSDL bootstrap Quartz
@@ -108,7 +109,7 @@ Main()
 
   ScopeGlobalAsioThread global_asio_thread;
 
-  ScopeGlobalPCMMixer global_pcm_mixer;
+  ScopeGlobalPCMMixer global_pcm_mixer(asio_thread->GetEventLoop());
   ScopeGlobalPCMResourcePlayer global_pcm_resouce_player;
   ScopeGlobalVolumeController global_volume_controller;
 

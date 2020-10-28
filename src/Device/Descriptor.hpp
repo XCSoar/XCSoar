@@ -48,8 +48,8 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
-namespace boost { namespace asio { class io_context; }}
-
+namespace Cares { class Channel; }
+class EventLoop;
 struct NMEAInfo;
 struct MoreData;
 struct DerivedInfo;
@@ -73,9 +73,14 @@ class OpenDeviceJob;
 
 class DeviceDescriptor final : PortListener, PortLineSplitter {
   /**
-   * The io_context instance used by Port instances.
+   * The #EventLoop instance used by #Port instances.
    */
-  boost::asio::io_context &io_context;
+  EventLoop &event_loop;
+
+  /**
+   * The asynchronous DNS resolver used by #Port instances.
+   */
+  Cares::Channel &cares;
 
   UI::Notify job_finished_notify{[this]{ OnJobFinished(); }};
 
@@ -237,7 +242,7 @@ class DeviceDescriptor final : PortListener, PortLineSplitter {
   bool borrowed;
 
 public:
-  DeviceDescriptor(boost::asio::io_context &_io_context,
+  DeviceDescriptor(EventLoop &_event_loop, Cares::Channel &_cares,
                    unsigned index, PortListener *port_listener);
   ~DeviceDescriptor() noexcept;
 

@@ -1,6 +1,9 @@
 # Build rules for the HTTP client library
 
 LIBNET_SOURCES = \
+	$(SRC)/net/AddressInfo.cxx \
+	$(SRC)/net/HostParser.cxx \
+	$(SRC)/net/Resolver.cxx \
 	$(SRC)/net/SocketError.cxx \
 	$(SRC)/net/State.cpp \
 	$(SRC)/net/IPv4Address.cxx \

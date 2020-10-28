@@ -83,7 +83,7 @@ WrapPort(const DeviceConfig &config, PortListener *listener,
 }
 
 static std::unique_ptr<Port>
-OpenPortInternal(boost::asio::io_context &io_context,
+OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
                  const DeviceConfig &config, PortListener *listener,
                  DataHandler &handler)
 {
@@ -151,17 +151,17 @@ OpenPortInternal(boost::asio::io_context &io_context,
     if (!ip_address.IsValid())
       throw std::runtime_error("No IP address configured");
 
-    return std::make_unique<TCPClientPort>(io_context,
+    return std::make_unique<TCPClientPort>(event_loop, cares,
                                            ip_address, config.tcp_port,
                                            listener, handler);
   }
 
   case DeviceConfig::PortType::TCP_LISTENER:
-    return std::make_unique<TCPPort>(io_context, config.tcp_port,
+    return std::make_unique<TCPPort>(event_loop, config.tcp_port,
                                      listener, handler);
 
   case DeviceConfig::PortType::UDP_LISTENER:
-    return std::make_unique<UDPPort>(io_context, config.tcp_port,
+    return std::make_unique<UDPPort>(event_loop, config.tcp_port,
                                      listener, handler);
 
   case DeviceConfig::PortType::PTY: {
@@ -174,7 +174,7 @@ OpenPortInternal(boost::asio::io_context &io_context,
                                               std::system_category()),
                               "Failed to delete pty");
 
-    auto port = std::make_unique<TTYPort>(io_context, listener, handler);
+    auto port = std::make_unique<TTYPort>(event_loop, listener, handler);
     const char *slave_path = port->OpenPseudo();
 
     if (symlink(slave_path, config.path.c_str()) < 0)
@@ -193,7 +193,7 @@ OpenPortInternal(boost::asio::io_context &io_context,
     throw std::runtime_error("No port path configured");
 
 #ifdef HAVE_POSIX
-  auto port = std::make_unique<TTYPort>(io_context, listener, handler);
+  auto port = std::make_unique<TTYPort>(event_loop, listener, handler);
 #else
   auto port = std::make_unique<SerialPort>(listener, handler);
 #endif
@@ -202,11 +202,11 @@ OpenPortInternal(boost::asio::io_context &io_context,
 }
 
 std::unique_ptr<Port>
-OpenPort(boost::asio::io_context &io_context,
+OpenPort(EventLoop &event_loop, Cares::Channel &cares,
          const DeviceConfig &config, PortListener *listener,
          DataHandler &handler)
 {
-  auto port = OpenPortInternal(io_context, config, listener, handler);
+  auto port = OpenPortInternal(event_loop, cares, config, listener, handler);
   if (port != nullptr)
     port = WrapPort(config, listener, handler, std::move(port));
   return port;

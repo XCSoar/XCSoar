@@ -28,16 +28,17 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "net/State.hpp"
+#include "io/async/GlobalAsioThread.hpp"
 #include "system/ByteOrder.hpp"
 
 #include <cassert>
 
 static constexpr auto CLOUD_INTERVAL = std::chrono::minutes(1);
 
-SkyLinesTracking::Glue::Glue(boost::asio::io_context &io_context,
+SkyLinesTracking::Glue::Glue(EventLoop &event_loop,
                              Handler *_handler)
-  :client(io_context, _handler),
-   cloud_client(io_context, _handler)
+  :client(event_loop, _handler),
+   cloud_client(event_loop, _handler)
 {
 }
 
@@ -193,10 +194,7 @@ SkyLinesTracking::Glue::SetSettings(const Settings &settings)
   if (settings.cloud.enabled == TriState::TRUE && settings.cloud.key != 0) {
     cloud_client.SetKey(settings.cloud.key);
     if (!cloud_client.IsDefined()) {
-      const boost::asio::ip::udp::resolver::query query(boost::asio::ip::udp::v4(),
-                                                        "cloud.xcsoar.net",
-                                                        Client::GetDefaultPortString());
-      cloud_client.Open(query);
+      cloud_client.Open(*global_cares_channel, "cloud.xcsoar.net");
     }
   } else
     cloud_client.Close();
@@ -213,12 +211,7 @@ SkyLinesTracking::Glue::SetSettings(const Settings &settings)
   interval = std::chrono::seconds(settings.interval);
 
   if (!client.IsDefined()) {
-    /* IPv4 only for now, because the official SkyLines tracking server
-       doesn't support IPv6 yet */
-    const boost::asio::ip::udp::resolver::query query(boost::asio::ip::udp::v4(),
-                                                      "tracking.skylines.aero",
-                                                      Client::GetDefaultPortString());
-    client.Open(query);
+    client.Open(*global_cares_channel, "tracking.skylines.aero");
   }
 
   traffic_enabled = settings.traffic_enabled;

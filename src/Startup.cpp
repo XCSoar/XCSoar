@@ -274,7 +274,7 @@ Startup()
 
   // Initialize DeviceBlackboard
   device_blackboard = new DeviceBlackboard();
-  devices = new MultipleDevices(*asio_thread);
+  devices = new MultipleDevices(*asio_thread, *global_cares_channel);
   device_blackboard->SetDevices(*devices);
 
   // Initialize main blackboard data

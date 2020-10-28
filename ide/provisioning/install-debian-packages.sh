@@ -37,6 +37,7 @@ apt-get install $APTOPTS make g++ \
   libpng-dev libjpeg-dev \
   libtiff5-dev libgeotiff-dev \
   libcurl4-openssl-dev \
+  libc-ares-dev \
   liblua5.2-dev lua5.2-dev \
   libxml-parser-perl \
   libasound2-dev \
