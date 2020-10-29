@@ -52,7 +52,7 @@ $(OUT)/include/InputEvents_default.cpp: $(topdir)/Data/Input/default.xci \
 $(call SRC_TO_OBJ,$(SRC)/Input/InputDefaults.cpp): $(XCI_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Input/InputLookup.cpp): $(OUT)/include/InputEvents_Text2Event.cpp $(OUT)/include/InputEvents_Text2GCE.cpp $(OUT)/include/InputEvents_Text2NE.cpp
 
-$(call SRC_TO_OBJ,$(SRC)/Lua/InputEvent.cpp): $(OUT)/include/InputEvents_Char2GCE.cpp $(OUT)/include/InputEvents_Char2NE.cpp
+$(call SRC_TO_OBJ,$(SRC)/lua/InputEvent.cpp): $(OUT)/include/InputEvents_Char2GCE.cpp $(OUT)/include/InputEvents_Char2NE.cpp
 
 $(OUT)/include/Status_defaults.cpp: Data/Status/default.xcs \
 	tools/xcs2cpp.pl | $(OUT)/include/dirstamp
