@@ -70,6 +70,7 @@ enum Controls {
 
 enum Buttons {
   SELECT,
+  LRU,
 };
 
 static constexpr unsigned distance_filter_items[] = {
@@ -154,6 +155,7 @@ public:
   void UpdateList();
 
   void OnWaypointListEnter();
+  void ShowLRU();
 
   WaypointPtr GetCursorObject() const {
     return items.empty()
@@ -238,6 +240,7 @@ public:
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override {
     AddButton(_("Select"), *list, SELECT);
     AddButton(_("Cancel"), dialog, mrCancel);
+    AddButton(_("Last WP"), *list, LRU);
   }
 };
 
@@ -314,11 +317,14 @@ WaypointListWidget::UpdateList()
   if (dialog_state.type_index == TypeFilter::LAST_USED)
     FillLastUsedList(items, LastUsedWaypoints::GetList(),
                      way_points);
-  else
+  else {
     FillList(items, way_points, location, last_heading,
-             dialog_state,
-             ordered_task, ordered_task_index);
-
+             dialog_state, ordered_task, ordered_task_index);
+    if (items.empty()) {
+        FillLastUsedList(items, LastUsedWaypoints::GetList(),
+                         way_points);
+    }
+  }
   auto &list = GetList();
   list.SetLength(std::max(1u, (unsigned)items.size()));
   list.SetOrigin(0);
@@ -479,6 +485,18 @@ WaypointListWidget::OnWaypointListEnter()
 }
 
 void
+WaypointListWidget::ShowLRU() {
+    items.clear();
+    FillLastUsedList(items, LastUsedWaypoints::GetList(),
+        way_points);
+    auto& list = GetList();
+    list.SetLength(std::max(1u, (unsigned)items.size()));
+    list.SetOrigin(0);
+    list.SetCursorIndex(0);
+    list.Invalidate();
+}
+
+void
 WaypointListWidget::OnActivateItem(unsigned index) noexcept
 {
   OnWaypointListEnter();
@@ -490,6 +508,9 @@ WaypointListWidget::OnAction(int id) noexcept
   switch (Buttons(id)) {
   case SELECT:
     OnWaypointListEnter();
+    break;
+  case LRU:
+    ShowLRU();
     break;
   }
 }
