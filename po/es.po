@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-09-19 22:40+0000\n"
-"Last-Translator: Darío Hereñú <magallania@gmail.com>\n"
+"PO-Revision-Date: 2020-11-09 11:27+0000\n"
+"Last-Translator: Jorge Martínez <jorgemarmor@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/xcsoar/"
 "translations/es/>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3-dev\n"
+"X-Generator: Weblate 4.3.2\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -2906,7 +2906,7 @@ msgstr "Diámetro del viraje"
 #: src/InfoBoxes/Content/Factory.cpp:998
 #, no-c-format
 msgid "Circle D"
-msgstr "Circle D"
+msgstr "Diámetro del círculo"
 
 #: src/InfoBoxes/Content/Factory.cpp:999
 #, no-c-format
@@ -2959,7 +2959,7 @@ msgstr "Diferencia de altitud MC0 final"
 #: src/InfoBoxes/Content/Factory.cpp:1020
 #, no-c-format
 msgid "Fin MC0 AltD"
-msgstr ""
+msgstr "Altitud de llegada con MC 0"
 
 #: src/InfoBoxes/Content/Factory.cpp:1021
 #, no-c-format
@@ -3024,27 +3024,27 @@ msgid ""
 "Percentage of time spent climbing without circling. These statistics are "
 "reset upon starting the task."
 msgstr ""
-"Porcentaje de tiempo que se pasa escalando sin dar vueltas. Estas "
-"estadísticas se reajustan al comenzar la misión."
+"Porcentaje de tiempo en ascenso. Estas estadísticas son reiniciadas al "
+"iniciar la tarea."
 
 #: src/InfoBoxes/Content/Factory.cpp:1056
 #, no-c-format
 msgid "Percentage climb chart"
-msgstr "Tabla de ascenso porcentual"
+msgstr "Tabla de porcentaje de ascenso"
 
 #: src/InfoBoxes/Content/Factory.cpp:1057
 #, no-c-format
 msgid "Climb %"
-msgstr "Ascenso %"
+msgstr "% Ascenso"
 
 #: src/InfoBoxes/Content/Factory.cpp:1058
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "Pie chart of time circling and climbing, circling and descending, and "
 "climbing non-circling."
 msgstr ""
-"Gráfico del tiempo transcurrido virando y ascendiente, virando y "
-"descendiendo, y ascendiendo sin virar."
+"Gráfica circular compuesta con tiempo virando en ascenso, virando en "
+"descenso y ascendiendo sin virar"
 
 #: src/InfoBoxes/Content/Factory.cpp:1064
 #, no-c-format
