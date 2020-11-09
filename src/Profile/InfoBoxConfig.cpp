@@ -129,6 +129,7 @@ Profile::Load(const ProfileMap &map, InfoBoxSettings &settings)
 
   map.Get(ProfileKeys::AppInverseInfoBox, settings.inverse);
   map.Get(ProfileKeys::AppInfoBoxColors, settings.use_colors);
+  map.Get(ProfileKeys::AppInfoBoxLargeComment, settings.large_comments);
 
   map.GetEnum(ProfileKeys::AppInfoBoxBorder, settings.border_style);
 
