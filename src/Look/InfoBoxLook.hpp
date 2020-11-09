@@ -59,6 +59,8 @@ struct InfoBoxLook {
 
   Font title_font;
 
+  Font comment_font;
+
   Color colors[6];
 
   void Initialise(bool inverse, bool use_colors,

@@ -26,6 +26,7 @@ Copyright_License {
 #include "Colors.hpp"
 #include "Screen/Layout.hpp"
 #include "AutoFont.hpp"
+#include "Interface.hpp"
 
 #ifdef HAVE_TEXT_CACHE
 #include "Screen/Custom/Cache.hpp"
@@ -75,6 +76,7 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
 void
 InfoBoxLook::ReinitialiseLayout(unsigned width)
 {
+  const UISettings &ui_settings = CommonInterface::GetUISettings();
   const unsigned max_font_height = Layout::FontScale(12);
 
   FontDescription title_font_d(8);
@@ -91,6 +93,15 @@ InfoBoxLook::ReinitialiseLayout(unsigned width)
   FontDescription small_value_font_d(10);
   AutoSizeFont(small_value_font_d, width, _T("12345m"));
   small_value_font.Load(small_value_font_d);
+
+  FontDescription comment_font_d(8);
+  if (ui_settings.info_boxes.large_comments) {
+    AutoSizeFont(comment_font_d, width, _T("123456789"));
+  }
+  else {
+    AutoSizeFont(comment_font_d, width, _T("123456789012345"));
+  }
+  comment_font.Load(comment_font_d);
 
   unsigned unit_font_height = std::max(value_font_d.GetHeight() * 2u / 5u, 7u);
   unit_font.Load(FontDescription(unit_font_height));

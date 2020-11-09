@@ -150,6 +150,7 @@ extern const char DetourCostMarker[];
 extern const char DisplayTrackBearing[];
 extern const char GliderScreenPosition[];
 extern const char SetSystemTimeFromGPS[];
+extern const char AppInfoBoxLargeComment[];
 
 extern const char FinishMinHeight[];
 extern const char FinishHeightRef[];

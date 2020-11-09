@@ -51,6 +51,7 @@ enum ControlIndex {
   AppInverseInfoBox,
   AppInfoBoxColors,
   AppInfoBoxBorder,
+  AppInfoBoxLargeComment,
 #ifdef KOBO
   ShowMenuButton,
 #endif
@@ -219,6 +220,13 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           unsigned(ui_settings.info_boxes.border_style));
   SetExpertRow(AppInfoBoxBorder);
 
+  AddBoolean(_("Big InfoBox comment"),
+              _("If true, Info Box comments will be larger. Useful for smaller displays, "
+                "although long comments will be truncated."),
+              ui_settings.info_boxes.large_comments);
+  SetExpertRow(AppInfoBoxLargeComment);
+
+
 #ifdef KOBO
   AddBoolean(_("Show Menubutton"), _("Show the Menubutton"),
              ui_settings.show_menu_button);
@@ -275,6 +283,10 @@ LayoutConfigPanel::Save(bool &_changed)
       SaveValue(AppInfoBoxColors, ProfileKeys::AppInfoBoxColors,
                 ui_settings.info_boxes.use_colors))
     require_restart = changed = true;
+
+  info_box_geometry_changed |= SaveValue(AppInfoBoxLargeComment, ProfileKeys::AppInfoBoxLargeComment,
+            ui_settings.info_boxes.large_comments);
+
 
 #ifdef KOBO
   if (SaveValue(ShowMenuButton, ProfileKeys::ShowMenuButton,ui_settings.show_menu_button))
