@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-11-13 23:11+0000\n"
+"PO-Revision-Date: 2020-11-17 17:28+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -735,19 +735,19 @@ msgstr "Výchozí bod trati"
 
 #: src/Menu/ExpandMacros.cpp:141
 msgid "Arm start"
-msgstr "Aktivovat start"
+msgstr "Aktivuj start"
 
 #: src/Menu/ExpandMacros.cpp:144
 msgid "Arm turn"
-msgstr "Aktivovat otočení"
+msgstr "Aktivuj otočení"
 
 #: src/Menu/ExpandMacros.cpp:165
 msgid "Disarm start"
-msgstr "Deaktivovat start"
+msgstr "Odlož start"
 
 #: src/Menu/ExpandMacros.cpp:168
 msgid "Disarm turn"
-msgstr "Deaktivovat otočení"
+msgstr "Odlož otočení"
 
 #: src/Menu/ExpandMacros.cpp:177
 msgid ""
@@ -4767,7 +4767,7 @@ msgstr "Jdi na"
 #: src/Dialogs/MapItemListDialog.cpp:177
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:116
 msgid "Ack Day"
-msgstr "ACK den"
+msgstr "ACK dnes"
 
 #: src/Dialogs/MapItemListSettingsDialog.cpp:34
 msgid "Map Item List Settings"
@@ -4921,7 +4921,7 @@ msgstr "ACK"
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:106
 #: src/Monitor/AirspaceWarningMonitor.cpp:81
 msgid "ACK Day"
-msgstr "ACK Den"
+msgstr "ACK dnes"
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:325
 msgid "No Warnings"
@@ -4968,7 +4968,7 @@ msgstr "Použít CikCak a kroužení."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:63
 msgid "Auto wind"
-msgstr "Automat. výpočet větru"
+msgstr "Výpočet větru"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:64
 msgid "This allows switching on or off the automatic wind algorithm."
@@ -5851,11 +5851,11 @@ msgstr "Rozdíl výšek MC0"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:178
 msgid "Alt. diff. MC safety"
-msgstr "Rozdíl výšek MC bezp."
+msgstr "Rozdíl výšek MC bezp"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:183
 msgid "Alt. diff. MC current"
-msgstr "Rozdíl výšek MC akt."
+msgstr "Rozdíl výšek MC akt"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:201
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:120
@@ -6114,7 +6114,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:193
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:155
 msgid "Label visibility"
-msgstr "Zobrazit popisy"
+msgstr "Popisy pro"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:194
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:156
@@ -6192,7 +6192,7 @@ msgstr "Čas, po který se nebude opakovat potvrzená výstraha."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:231
 msgid "Use black outline"
-msgstr "Použít černé obrysy"
+msgstr "Černé obrysy prostorů"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:232
 msgid ""
@@ -6201,7 +6201,7 @@ msgstr "Vykreslí černý okraj kolem každého prostoru místo barvy prostoru."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:236
 msgid "Airspace fill mode"
-msgstr "Způsob vyplnění prostorů"
+msgstr "Styl vyplnění prostorů"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:237
 msgid "Specifies the mode for filling the airspace area."
@@ -6218,7 +6218,7 @@ msgstr "Prostory budou vyplněny transparentně."
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:45
 #, no-c-format
 msgid "Disable final glide bar."
-msgstr "Deaktivovat dokluzový indikátor."
+msgstr "Deaktivuj dokluzový indikátor."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:47
 #, no-c-format
@@ -6244,7 +6244,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:88
 msgid "Auto close FLARM"
-msgstr "Skrýt FLARM automaticky"
+msgstr "Skryj FLARM automaticky"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:89
 msgid ""
@@ -6316,7 +6316,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:65
 msgid "Show average"
-msgstr "Zobrazit průměr"
+msgstr "Průměrné stoupání"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:66
 msgid ""
@@ -6328,7 +6328,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:71
 msgid "Show MacReady"
-msgstr "Zobrazit MacCready"
+msgstr "MacCready"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:71
 msgid "Whether to show the MacCready setting."
@@ -6336,7 +6336,7 @@ msgstr "Aktivace zobrazení nastavení MacCready."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:74
 msgid "Show bugs"
-msgstr "Zobrazit znečištění křídel"
+msgstr "Znečištění křídel"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:74
 msgid "Whether to show the bugs percentage."
@@ -6344,7 +6344,7 @@ msgstr "Určuje, zda zobrazit znečištění křídel."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:77
 msgid "Show ballast"
-msgstr "Zobrazit zátěž"
+msgstr "Zátěž"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:77
 msgid "Whether to show the ballast percentage."
@@ -6352,7 +6352,7 @@ msgstr "Určuje, zda zobrazit procento přítěže."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:80
 msgid "Show gross"
-msgstr "Zobrazit hrubé vário"
+msgstr "Hrubé vário"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:80
 msgid "Whether to show the gross climb rate."
@@ -6434,7 +6434,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:84
 msgid "Nav. by baro altitude"
-msgstr "Používat baro výšku"
+msgstr "Tlaková výška"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:85
 msgid ""
@@ -6482,14 +6482,14 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:112
 msgid "Predict wind drift"
-msgstr "Předpovídat snos větru"
+msgstr "Snos větrem"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:113
 msgid ""
 "Account for wind drift for the predicted circling duration. This reduces the "
 "arrival height for legs with head wind."
 msgstr ""
-"Při výpočtu doby kroužení je počítáno se snosem větru. To snižuje výšku "
+"Při výpočtu doby kroužení je počítáno se snosem větrem. To snižuje výšku "
 "příletu pro ramena s čelní složkou větru."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:117
@@ -6498,7 +6498,7 @@ msgstr "Vlnový asistent"
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:87
 msgid "Use final glide mode"
-msgstr "Použij režim dokluzu"
+msgstr "Režim dokluzu"
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:88
 msgid ""
@@ -6526,7 +6526,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:104
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:129
 msgid "Automatic"
-msgstr "Automatický"
+msgstr "Auto"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:107
 #, c-format
@@ -6869,7 +6869,7 @@ msgstr "Okraje InfoBoxu"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:210
 msgid "Show Menubutton"
-msgstr "Zobrazit tlačítko Menu"
+msgstr "Tlačítko Menu"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:210
 msgid "Show the Menubutton"
@@ -6894,7 +6894,7 @@ msgstr "Interval mezi body záznamu mimo kroužení."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:75
 msgid "Time step circling"
-msgstr "Interval z. kroužení"
+msgstr "Interval v kroužení"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:76
 msgid "This is the time interval between logged points when circling."
@@ -6996,7 +6996,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:58
 #, no-c-format
 msgid "Disable adjustments."
-msgstr "Deaktivovat nastavení."
+msgstr "Zruš úpravy."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:60
 #, no-c-format
@@ -7073,7 +7073,7 @@ msgstr "Horní limit vzdálenosti pro automatické zvětšení."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:146
 msgid "Distinct page zoom"
-msgstr "Rozlišuj zvětšení stránek"
+msgstr "Odlišné zvětšení stránek"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:147
 msgid "Maintain one map zoom level on each page."
@@ -7331,7 +7331,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:175
 msgid "Reach display"
-msgstr "Zobraz. akčního rádiusu"
+msgstr "Zobraz akční rádius"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:65
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:124
@@ -8009,7 +8009,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:124
 msgid "Predict Contest"
-msgstr "Odhad soutěže"
+msgstr "Boduj dosažitelné body"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:125
 msgid ""
@@ -8037,7 +8037,7 @@ msgstr "Určuje hranici použitou pro \"velké\" FAI trijúhelníky."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:197
 msgid "Terrain display"
-msgstr "Terén zobrazit"
+msgstr "Terén"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:198
 msgid "Draw a digital elevation terrain on the map."
@@ -8045,7 +8045,7 @@ msgstr "Na mapě zobrazovat digitální elevaci terénu."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:202
 msgid "Topography display"
-msgstr "Topo zobrazit"
+msgstr "Topografie"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:203
 msgid "Draw topographical features (roads, rivers, lakes etc.) on the map."
@@ -8303,7 +8303,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:90
 msgid "Use GPS time"
-msgstr "Použít GPS čas"
+msgstr "GPS čas"
 
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:91
 msgid ""
@@ -8587,7 +8587,7 @@ msgstr "Získá polohu vašich přátel živě ze SkyLines serveru."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:213
 msgid "Show nearby traffic"
-msgstr "Zobraz okolní provoz"
+msgstr "Okolní provoz"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:214
 msgid ""
@@ -8731,7 +8731,7 @@ msgstr "Uprav úlohu"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:407
 msgid "Add Turnpoint"
-msgstr "Přidat otočný bod"
+msgstr "Přidej otočný bod"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:213
 msgid "Task type"
@@ -8747,7 +8747,7 @@ msgstr "Minimální čas AAT úlohy v minutách."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:218
 msgid "Arm start manually"
-msgstr "Označit start ručně"
+msgstr "Aktivuj start ručně"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:219
 msgid "Configure whether the start must be armed manually or automatically."
@@ -9093,7 +9093,7 @@ msgstr "Emuluje tón akustického variometru."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:77
 msgid "Enable Deadband"
-msgstr "Aktivovat pásmo ticha"
+msgstr "Pásmo ticha"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:78
 msgid ""
@@ -9192,7 +9192,7 @@ msgstr "Uvnitř prostoru"
 
 #: src/Monitor/AirspaceWarningMonitor.cpp:64
 msgid "Near airspace"
-msgstr "Blízko prostoru"
+msgstr "Poblíž prostoru"
 
 #: src/Monitor/TaskConstraintsMonitor.cpp:57
 msgid "Maximum start speed exceeded"
@@ -9200,7 +9200,7 @@ msgstr "Maximální startovní rychlost překročena"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:46
 msgid "In sector, arm advance when ready"
-msgstr "V sektoru - aktivujte Dále až budete připraven/a"
+msgstr "V sektoru - aktivuj Dále pro další OB"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:48
 msgid "Arm"
@@ -9937,7 +9937,7 @@ msgid ""
 "Mark\n"
 "Drop"
 msgstr ""
-"Udělej\n"
+"Vytvoř\n"
 "značku"
 
 #: Data/Input/default.xci:718
