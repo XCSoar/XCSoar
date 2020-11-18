@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2019-08-28 12:24+0000\n"
-"Last-Translator: leela <53352@protonmail.com>\n"
+"PO-Revision-Date: 2020-11-19 19:29+0000\n"
+"Last-Translator: Martin Peters <twinpiloot@hotmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/xcsoar/"
 "translations/nl/>\n"
 "Language: nl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.9-dev\n"
+"X-Generator: Weblate 4.4-dev\n"
 "X-Launchpad-Export-Date: 2013-05-22 09:28+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -69,7 +69,7 @@ msgstr "AAT"
 #: src/Task/TypeStrings.cpp:37
 #, no-c-format
 msgid "Modified area task (MAT)"
-msgstr ""
+msgstr "Modified area task (MAT)"
 
 #: src/Task/TypeStrings.cpp:38
 #, no-c-format
@@ -87,9 +87,9 @@ msgid ""
 "FAI rules, allows only FAI start, finish and turn point types, for badges "
 "and records.  Enables FAI finish height for final glide calculation."
 msgstr ""
-"FAI regels, staat alleen FAI starts, finishes en keerpunt types toe, voor "
+"FAI regels, staan alleen FAI starts, finishes en keerpunt types toe, voor "
 "diploma's en records. Schakelt FAI finish hoogte in voor final glide "
-"berekeningen"
+"berekeningen."
 
 #: src/Task/TypeStrings.cpp:54
 #, no-c-format
@@ -99,12 +99,12 @@ msgstr "FAI regels, pad van een start naar twee keerpunten en terug."
 #: src/Task/TypeStrings.cpp:55
 #, no-c-format
 msgid "FAI rules, path from start to a single turn point and return."
-msgstr "FAI regels, pad van een strat naar 1 keerpunt en terug"
+msgstr "FAI regels, pad van de start naar 1 keerpunt en terug."
 
 #: src/Task/TypeStrings.cpp:56
 #, no-c-format
 msgid "FAI rules, path from start to a goal destination."
-msgstr "FAI regels, pad naar een doel."
+msgstr "FAI regels, pad vanaf start naar een eind bestemming."
 
 #: src/Task/TypeStrings.cpp:57
 #, no-c-format
@@ -112,7 +112,7 @@ msgid ""
 "Racing task around turn points.  Can also be used for FAI badge and record "
 "tasks.  Allows all shapes of observation zones."
 msgstr ""
-"Snelheidsopdracht rond keerpunten. Kan gebruikt worden voor FAI brevetten en "
+"Snelheidsopdracht rond keerpunten. Kan gebruikt worden voor FAI diploma's en "
 "records. Staat alle vormen van Observatie Zones (keerpunt sectoren) toe."
 
 #: src/Task/TypeStrings.cpp:59
@@ -131,6 +131,9 @@ msgid ""
 "mile cylinder.  Pilot can add additional points as needed.  Minimum task "
 "time applies."
 msgstr ""
+"Modified area task. Opdracht met start, finish en minimaal 1 gedefinieerde 1 "
+"-mijl cilinder. Vlieger kan meerdere keerpunten toevoegen indien gewenst. "
+"Minimale tijd voor de oprdracht is van toepassing."
 
 #: src/Task/TypeStrings.cpp:62
 #, no-c-format
@@ -155,7 +158,7 @@ msgid ""
 "A 90 degree sector with 1km radius. Cross corner edge from inside area to "
 "start."
 msgstr ""
-"Een 90 graden sector met een straat van 1 km. Startlijn overgaan vanuit dit "
+"Een 90 graden sector met een straal van 1 km. Startlijn overgaan vanuit dit "
 "gebied."
 
 #: src/Task/TypeStrings.cpp:77
@@ -241,12 +244,12 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:93
 #, no-c-format
 msgid "Cross finish gate line into area to finish."
-msgstr "Vlieg de finishlijn over om te finishen"
+msgstr "Vlieg de finishlijn over om te finishen."
 
 #: src/Task/TypeStrings.cpp:94
 #, no-c-format
 msgid "Enter cylinder to finish."
-msgstr "Vlieg een cilinder binnen om te fnishen"
+msgstr "Vlieg een cilinder binnen om te finishen."
 
 #: src/Task/TypeStrings.cpp:95
 #, no-c-format
@@ -272,7 +275,7 @@ msgstr "Een symetrisch kwadrant met een instelbare straal."
 #: src/Task/TypeStrings.cpp:99
 #, no-c-format
 msgid "A keyhole.  Scored by farthest point reached in area."
-msgstr ""
+msgstr "Een sleutelgat. Score op basis van het verste punt in het gebied."
 
 #: src/Task/TypeStrings.cpp:112
 #, no-c-format
@@ -362,7 +365,7 @@ msgstr "Symetrisch kwadrant"
 #: src/Task/TypeStrings.cpp:129
 #, no-c-format
 msgid "Area keyhole"
-msgstr ""
+msgstr "Sleutelgat gebied"
 
 #: src/Task/ValidationErrorStrings.cpp:32
 #, no-c-format
@@ -417,7 +420,7 @@ msgstr "niet-FAI keerpunten"
 #: src/Task/ValidationErrorStrings.cpp:42
 #, no-c-format
 msgid "non-MAT turn points"
-msgstr ""
+msgstr "niet-MAT keerpunten"
 
 #: src/Airspace/AirspaceGlue.cpp:84
 msgid "Loading Airspace File..."
@@ -604,9 +607,8 @@ msgid "Loading Waypoints..."
 msgstr "Keerpunten laden..."
 
 #: src/CrossSection/CrossSectionRenderer.cpp:67
-#, fuzzy
 msgid "Not moving"
-msgstr "Niet Thermieken"
+msgstr "Beweegt niet"
 
 #: src/Gauge/ThermalAssistantRenderer.cpp:193
 msgid "Not Circling"
@@ -969,7 +971,7 @@ msgstr "GPS hoogte"
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:83
 #, no-c-format
 msgid "Alt GPS"
-msgstr ""
+msgstr "GPS hoogte"
 
 #: src/InfoBoxes/Content/Factory.cpp:137
 #, no-c-format
@@ -978,6 +980,9 @@ msgid ""
 "PC only: In simulation mode, this value is adjustable with the up/down arrow "
 "keys and the right/left arrow keys also cause the glider to turn."
 msgstr ""
+"Dit is de MSL hoogte aangegeven door de GPS. Touch-screen/PC: In "
+"simulatiemodus kun je de waarde aanpassen met de omhoog/omlaag pijlen. De "
+"links/rechts pijlen veroorzaken het maken van een bocht."
 
 #: src/InfoBoxes/Content/Factory.cpp:143
 #, no-c-format
@@ -997,6 +1002,9 @@ msgid ""
 "the terrain file. The value is coloured red when the glider is below the "
 "terrain safety clearance height."
 msgstr ""
+"Dit is de navigatiehoogte minus de terreinhoogte uit het terreinbestand. De "
+"waarde wordt rood als het zweefvliegtuig zich onder de veiligheidshoogte "
+"bevindt."
 
 #: src/InfoBoxes/Content/Factory.cpp:152
 #, no-c-format
@@ -1020,7 +1028,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:160
 #, no-c-format
 msgid "Next bearing"
-msgstr ""
+msgstr "Volgende koers"
 
 #: src/InfoBoxes/Content/Factory.cpp:161
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:104
@@ -1141,9 +1149,9 @@ msgid "Total altitude gain/loss in the last thermal."
 msgstr "Totale hoogtewinst/verlies in de laatste bel."
 
 #: src/InfoBoxes/Content/Factory.cpp:209
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Last thermal duration"
-msgstr "Hoogtewinst laatste bel"
+msgstr "Duur laatste bel"
 
 #: src/InfoBoxes/Content/Factory.cpp:210
 #, fuzzy, no-c-format
@@ -1175,7 +1183,7 @@ msgstr ""
 "De huidige MacCready instelling en de huidige MacCready modus (handmatig of "
 "automatisch).\n"
 "(Alleen Touch-screen/PC: ook te gebruiken om de MC instelling aan te passen "
-"indien er een BerichtVenster actief is door pijltje omhoog/omlaag.)"
+"indien er een BerichtVenster actief is door pijltje omhoog/omlaag)."
 
 #: src/InfoBoxes/Content/Factory.cpp:225
 #, no-c-format
@@ -1257,7 +1265,7 @@ msgstr ""
 "gebruik pijltje omhoog/omlaag om het volgende/vorige keerpunt van de "
 "opdracht te selecteren.\n"
 "(Alleen Touch-screen/PC: Door op Enter te drukken worden de keerpunt details "
-"weergegeven.)"
+"weergegeven)."
 
 #: src/InfoBoxes/Content/Factory.cpp:260
 #, no-c-format
@@ -1333,7 +1341,7 @@ msgstr "Terreinhoogte"
 #: src/InfoBoxes/Content/Factory.cpp:301
 #, no-c-format
 msgid "Terr Elev"
-msgstr ""
+msgstr "Terr Hoogte"
 
 #: src/InfoBoxes/Content/Factory.cpp:302
 #, no-c-format
@@ -1394,7 +1402,7 @@ msgstr ""
 "Magnetische koers volgens de GPS.\n"
 "(Alleen Touch-screen/PC: Wanneer het InfoBox actief is in simulatie modus "
 "kan de koers worden aangepast door de omhoog en omlaag pijltjes toetsen te "
-"gebruiken.)"
+"gebruiken)."
 
 #: src/InfoBoxes/Content/Factory.cpp:334
 #, no-c-format
@@ -1421,6 +1429,9 @@ msgid ""
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
 msgstr ""
+"Windsnelheid berekend door XCSoar. Handmatige aanpassing is mogelijk met de "
+"InfoBox dialoog. Gebruik de omhoog/omlaag toetsen om door de instellingen te "
+"bladeren, aanpassen met de links/rechts toetsen."
 
 #: src/InfoBoxes/Content/Factory.cpp:349
 #, no-c-format
@@ -1439,6 +1450,9 @@ msgid ""
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
 msgstr ""
+"Windrichting berekend door XCSoar. Handmatige aanpassing is mogelijk met de "
+"InfoBox dialoog. Gebruik de omhoog/omlaag toetsen om door de instellingen te "
+"bladeren, aanpassen met de links/rechts toetsen."
 
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
@@ -1901,7 +1915,7 @@ msgstr ""
 "convectie hoogte en wolkenbasis in te schatten in samen werking met "
 "luchttemperatuur en relatieve vochtigheid sensoren.\n"
 "(Alleen Touch-screen/PC: Door op pijltje omhoog/omlaag te drukken is de "
-"temperatuur te wijzigen.)"
+"temperatuur te wijzigen)."
 
 #: src/InfoBoxes/Content/Factory.cpp:554
 #, no-c-format
@@ -2069,7 +2083,7 @@ msgid ""
 "altitude. Equivalent to instantaneous Pirker cross-country speed."
 msgstr ""
 "Actuele overland snelheid tijdens de huidige taak, gecompenseerd voor "
-"hoogte. (Vergelijkbaar met actuele Pirker overlandsnelheid.)"
+"hoogte. (Vergelijkbaar met actuele Pirker overlandsnelheid)."
 
 #: src/InfoBoxes/Content/Factory.cpp:626
 #, no-c-format
@@ -2103,7 +2117,7 @@ msgid ""
 "altitude.  Equivalent to Pirker cross-country speed remaining."
 msgstr ""
 "Bereikte overlandsnelheid tijdens de huidige opdracht, gecompenseerd voor "
-"hoogte. (Vergelijkbaar met resterende Pirker overlandsnelheid.)"
+"hoogte. (Vergelijkbaar met resterende Pirker overlandsnelheid)."
 
 #: src/InfoBoxes/Content/Factory.cpp:642
 #, no-c-format
@@ -2177,8 +2191,8 @@ msgid ""
 "Displays percentage of device battery remaining (where applicable) and "
 "status/voltage of external power supply."
 msgstr ""
-"Toont de resterende accucapaciteit van het apparaat en  status/voltage van "
-"de aangesloten externe voeding."
+"Toont de resterende accucapaciteit van het apparaat en status/voltage van de "
+"aangesloten externe voeding."
 
 #: src/InfoBoxes/Content/Factory.cpp:674
 #, no-c-format
@@ -2248,13 +2262,13 @@ msgid ""
 "Geometric gradient to the arrival height above the best alternate. This is "
 "not adjusted for total energy."
 msgstr ""
-"Geometrische verloop naar de aankomsthoogte boven het beste alternatief. "
-"(Niet gecorrigeerd voor de totale energie.)"
+"Geometrische verloop naar de aankomsthoogte boven het beste alternatief. ("
+"Niet gecorrigeerd voor de totale energie)."
 
 #: src/InfoBoxes/Content/Factory.cpp:706
 #, no-c-format
 msgid "Height above take-off"
-msgstr ""
+msgstr "Hoogte boven vertrek"
 
 #: src/InfoBoxes/Content/Factory.cpp:707
 #, no-c-format
@@ -2267,6 +2281,8 @@ msgid ""
 "Height based on an automatic take-off reference elevation (like a QFE "
 "reference)."
 msgstr ""
+"Hoogte gebaseerd op een automatische referentie vertrekhoogte (zoals een QFE "
+"referentie)."
 
 #: src/InfoBoxes/Content/Factory.cpp:715
 #, no-c-format
@@ -2291,6 +2307,13 @@ msgid ""
 "have made even in a zigzag glide. This value is not calculated while "
 "circling."
 msgstr ""
+"De afgelegde afstand in de geconfigureerde periode gedeeld door de verloren "
+"hoogte. Negatieve waardes worden getoond als ^^^ en geven een klimmend pad "
+"aan (hoogtewinst). Een glijgetal boven 200 wordt getoond als +++. Je kunt de "
+"periode configureren in de systeeminstellingen. Voorbeeldwaardes zijn 60, 90 "
+"of 120. Merk op dat de afstand niet een rechte lijn is tussen de vorige en "
+"huidige positie. Het is de afstand die werkelijk is gevolgd, zelfs bij een "
+"zigzag steek. Deze waarde wordt niet berekend tijdens thermieken."
 
 #: src/InfoBoxes/Content/Factory.cpp:723
 #, no-c-format
@@ -2308,9 +2331,9 @@ msgid "On-Line Contest distance"
 msgstr "OLC afstand"
 
 #: src/InfoBoxes/Content/Factory.cpp:732
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "OLC Dist"
-msgstr "KP Afst"
+msgstr "OLC Afst"
 
 #: src/InfoBoxes/Content/Factory.cpp:733
 #, no-c-format
@@ -2354,7 +2377,7 @@ msgstr "Volgende aankomsthoogte"
 #: src/InfoBoxes/Content/Factory.cpp:756
 #, no-c-format
 msgid "WP AltA"
-msgstr ""
+msgstr "KP AltA"
 
 #: src/InfoBoxes/Content/Factory.cpp:757
 #, no-c-format
@@ -2476,7 +2499,7 @@ msgstr "Klim Graf."
 msgid ""
 "Graph of average circling climb rate (horizontal axis) as a function of "
 "altitude (vertical axis)."
-msgstr ""
+msgstr "Grafiek van gemiddeld stijgen (X-as) als functie van de hoogte (Y-as)."
 
 #: src/InfoBoxes/Content/Factory.cpp:821
 #, no-c-format
@@ -2647,7 +2670,7 @@ msgid ""
 "estimated wind is used for the calculation."
 msgstr ""
 "De huidige tegenwind component. Tegenwind wordt berekend uit TAS en de GPS-"
-"snelheid over de grond wanneer de luchtsnelheid  beschikbaar is vanaf een "
+"snelheid over de grond wanneer de luchtsnelheid beschikbaar is vanaf een "
 "extern apparaat. Anders wordt de geschatte wind gebruikt voor de berekening."
 
 #: src/InfoBoxes/Content/Factory.cpp:896
@@ -2828,7 +2851,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:965
 #, no-c-format
 msgid "Next radial"
-msgstr ""
+msgstr "Volgende radiaal"
 
 #: src/InfoBoxes/Content/Factory.cpp:966 src/Dialogs/Task/TargetDialog.cpp:438
 #, no-c-format
@@ -2839,11 +2862,12 @@ msgstr "Radiaal"
 #, no-c-format
 msgid "True bearing from the next waypoint to your position."
 msgstr ""
+"Werkelijke kompaskoers van het volgende keerpunt tot de huidige positie."
 
 #: src/InfoBoxes/Content/Factory.cpp:973 src/InfoBoxes/Content/Factory.cpp:974
 #, no-c-format
 msgid "ATC radial"
-msgstr ""
+msgstr "ATC radiaal"
 
 #: src/InfoBoxes/Content/Factory.cpp:975
 #, no-c-format
@@ -2851,16 +2875,19 @@ msgid ""
 "True bearing from the selected reference location to your position.  The "
 "distance is displayed in nautical miles for communication with ATC."
 msgstr ""
+"Werkelijke kompaskoers vanuit de geselecteerde locatie tot je huidige "
+"positie. De afstand wordt getoond in nautische mijlen voor de communicatie "
+"met ATC."
 
 #: src/InfoBoxes/Content/Factory.cpp:981
 #, no-c-format
 msgid "Speed task last hour"
-msgstr ""
+msgstr "Snelheid opdracht laatste uur"
 
 #: src/InfoBoxes/Content/Factory.cpp:982
 #, no-c-format
 msgid "V Task H"
-msgstr ""
+msgstr "V Opdracht H"
 
 #: src/InfoBoxes/Content/Factory.cpp:983
 #, no-c-format
@@ -2868,16 +2895,18 @@ msgid ""
 "Average cross country speed while on current task over the last hour, not "
 "compensated for altitude."
 msgstr ""
+"Gemiddelde snelheid huidige opdracht gedurende het afgelopen uur, niet "
+"gecorrigeerd voor hoogte."
 
 #: src/InfoBoxes/Content/Factory.cpp:989
 #, no-c-format
 msgid "Next distance (nominal)"
-msgstr ""
+msgstr "Volgende afstand (nominaal)"
 
 #: src/InfoBoxes/Content/Factory.cpp:990
 #, no-c-format
 msgid "WP Dist-N"
-msgstr ""
+msgstr "KP Afst-N"
 
 #: src/InfoBoxes/Content/Factory.cpp:991
 #, no-c-format
@@ -2885,16 +2914,18 @@ msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the origin of the AAT sector."
 msgstr ""
+"De afstand naar het geselecteerde keerpunt. Dit is de afstand tot de bron "
+"van de AAT sector voor AAT opdrachten."
 
 #: src/InfoBoxes/Content/Factory.cpp:997
 #, no-c-format
 msgid "Circle diameter"
-msgstr ""
+msgstr "Diameter thermiekbel"
 
 #: src/InfoBoxes/Content/Factory.cpp:998
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Circle D"
-msgstr "Thermieken"
+msgstr "Bel Diam"
 
 #: src/InfoBoxes/Content/Factory.cpp:999
 #, no-c-format
@@ -2903,63 +2934,68 @@ msgid ""
 "time. Useful for evaluating best thermalling mode with a glider at different "
 "wing loading."
 msgstr ""
+"Diameter thermiekbel. Toont de geschatte diameter en tijd voor 1 volledige "
+"cirkel van de thermiekbel. Nuttig om de beste thermiekmodus te bepalen voor "
+"een zweefvliegtuig met verschillende vleugelbelasting."
 
 #: src/InfoBoxes/Content/Factory.cpp:1004
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Distance takeoff"
-msgstr "Afstand resterend"
+msgstr "Afgelegde afstand"
 
 #: src/InfoBoxes/Content/Factory.cpp:1005
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Takeoff Dist"
-msgstr "Starttijd (Vlucht)"
+msgstr "Afgel Afst"
 
 #: src/InfoBoxes/Content/Factory.cpp:1006
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Distance to where take-off was detected."
-msgstr "Tijd verstreken sinds het starten (vlucht)."
+msgstr "Afstand sinds de gedetecteerde start."
 
 #: src/InfoBoxes/Content/Factory.cpp:1012
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "On-Line Contest speed"
-msgstr "OLC"
+msgstr "OLC Snelheid"
 
 #: src/InfoBoxes/Content/Factory.cpp:1013
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "OLC Speed"
-msgstr "Snelheid"
+msgstr "V OLC"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Instantaneous evaluation of the flown speed according to the configured On-"
 "Line Contest rule set."
 msgstr ""
-"Actuele beoordeling van de gevlogen afstand volgens de geconfigureerde "
-"OnLine Contest regels."
+"Actuele berekening van de gevlogen afstand volgens de geconfigureerde OLC "
+"regels."
 
 #: src/InfoBoxes/Content/Factory.cpp:1019
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Final MC0 altitude difference"
-msgstr "Final hoogteverschil"
+msgstr "Final MC0 hoogteverschil"
 
 #: src/InfoBoxes/Content/Factory.cpp:1020
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Fin MC0 AltD"
-msgstr "Fin HD"
+msgstr "Fin MC0 HD"
 
 #: src/InfoBoxes/Content/Factory.cpp:1021
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the final waypoint with MC 0 setting relative to the "
 "safety arrival height."
-msgstr "Aankomsthoogte bij het laatste keerpunt t.o.v. de veiligheidshoogte."
+msgstr ""
+"Aankomsthoogte bij het laatste keerpunt met MC 0 instelling t.o.v. de "
+"veiligheidshoogte."
 
 #: src/InfoBoxes/Content/Factory.cpp:1027
 #: src/InfoBoxes/Content/Factory.cpp:1028 src/InfoBoxes/Content/Task.cpp:904
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next arrow"
-msgstr "Volgend Startpunt"
+msgstr "Volgende pijl"
 
 #: src/InfoBoxes/Content/Factory.cpp:1029
 #, no-c-format
@@ -2969,11 +3005,16 @@ msgid ""
 "of the active waypoint in the current task, the center of a selected goto "
 "waypoint or the target within the AAT sector for AAT tasks."
 msgstr ""
+"Pijl naar het geselecteerde keerpunt. De naam van en afstand tot het "
+"keerpunt worden ook getoond. De gebruikte positie is de geoptimaliseerde "
+"positie van het actieve keerpunt in de huidige opdracht, het midden van het "
+"geselecteerde goto keerpunt of het target binnen de AAT sector voor AAT "
+"opdrachten."
 
 #: src/InfoBoxes/Content/Factory.cpp:1039
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next waypoint arrival time (ground speed)"
-msgstr "Tijd tot volgende (grond snelheid)"
+msgstr "Aankomsttijd volgende keerpunt (grondsnelheid)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1040
 #, fuzzy, no-c-format
@@ -2981,42 +3022,42 @@ msgid "WP ETA VMG"
 msgstr "KP ETE VGG"
 
 #: src/InfoBoxes/Content/Factory.cpp:1041
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Estimated arrival time at next waypoint, assuming current ground speed is "
 "maintained."
 msgstr ""
-"Geschatte tijd die nodig is om het volgende keerpunt te bereiken, ervan "
-"uitgaande dat de huidige snelheid wordt gehandhaafd."
+"Geschatte aankomsttijd bij het volgende keerpunt, ervan uitgaande dat de "
+"huidige snelheid wordt gehandhaafd."
 
 #: src/InfoBoxes/Content/Factory.cpp:1048
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Percentage non-circling climb"
-msgstr "Percentage stijgen"
+msgstr "Percentage stijgen tijdens steken"
 
 #: src/InfoBoxes/Content/Factory.cpp:1049
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "% Str Climb"
-msgstr "% Stijgen"
+msgstr "% Stk Stijgen"
 
 #: src/InfoBoxes/Content/Factory.cpp:1050
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Percentage of time spent climbing without circling. These statistics are "
 "reset upon starting the task."
 msgstr ""
-"Tijdspercentage doorgebracht in thermiek modus. Deze statistiek wordt bij "
-"het starten van de opdracht gereset."
+"Tijdspercentage stijgen tijdens steken. Deze statistiek wordt bij het "
+"starten van de opdracht gereset."
 
 #: src/InfoBoxes/Content/Factory.cpp:1056
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Percentage climb chart"
-msgstr "Percentage stijgen"
+msgstr "Percentage stijgen grafiek"
 
 #: src/InfoBoxes/Content/Factory.cpp:1057
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Climb %"
-msgstr "Stijgen"
+msgstr "Stijgen %"
 
 #: src/InfoBoxes/Content/Factory.cpp:1058
 #, no-c-format
@@ -3024,11 +3065,13 @@ msgid ""
 "Pie chart of time circling and climbing, circling and descending, and "
 "climbing non-circling."
 msgstr ""
+"Taartdiagram van de tijd klimmend thermieken, dalend thermieken en klimmend "
+"steken."
 
 #: src/InfoBoxes/Content/Factory.cpp:1064
 #, no-c-format
 msgid "Number of used satellites"
-msgstr ""
+msgstr "Aantal satellieten"
 
 #: src/InfoBoxes/Content/Factory.cpp:1065
 #, fuzzy, no-c-format
@@ -3041,6 +3084,8 @@ msgid ""
 "The number of actually used (seen) satellites by GPS module. If this "
 "information is unavailable, the displayed value is '---'."
 msgstr ""
+"Het werkelijke aantal gevonden satellieten door de GPS module. '---' als "
+"deze informatie niet beschikbaar is."
 
 #: src/InfoBoxes/Content/Alternate.cpp:49
 #: src/Dialogs/Task/AlternatesListDialog.cpp:162 Data/Input/default.xci:388
@@ -3134,9 +3179,8 @@ msgid "3D fix"
 msgstr "3D fix"
 
 #: src/InfoBoxes/Content/Other.cpp:195
-#, fuzzy
 msgid "No GPS"
-msgstr "H GPS"
+msgstr "Geen GPS"
 
 #: src/InfoBoxes/Content/Speed.cpp:120
 msgid "BLOCK"
@@ -3169,7 +3213,7 @@ msgstr "Wachtende"
 #: src/InfoBoxes/Content/Places.cpp:79
 #, no-c-format
 msgid "Reference"
-msgstr ""
+msgstr "Referentie"
 
 #: src/InfoBoxes/Content/Contest.cpp:54 src/InfoBoxes/Content/Trace.cpp:165
 #: src/Dialogs/dlgAnalysis.cpp:474 src/Dialogs/dlgAnalysis.cpp:483
@@ -3269,9 +3313,8 @@ msgstr "Wis"
 #: src/Input/InputEventsActions.cpp:143
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:300
 #: src/Dialogs/Waypoint/Manager.cpp:253
-#, fuzzy
 msgid "Failed to save waypoints"
-msgstr "Wissen van keerpunten mislukt."
+msgstr "Wissen van keerpunten mislukt"
 
 #: src/Input/InputEventsActions.cpp:218
 msgid "Screen Mode Full"
@@ -3471,9 +3514,8 @@ msgstr "Ballast %"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:142
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:182
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:226
-#, fuzzy
 msgid "Failed to save file."
-msgstr "Bestand laden mislukt."
+msgstr "Bestand opslaan mislukt."
 
 #: src/Input/InputEventsSettings.cpp:336
 msgid "Waypoint labels"
@@ -3546,7 +3588,7 @@ msgstr "om terrein"
 
 #: src/Renderer/MapItemListRenderer.cpp:183
 msgid "Unreachable due to terrain."
-msgstr "Onbereikbaar vanwege terrein"
+msgstr "Onbereikbaar vanwege terrein."
 
 #: src/Renderer/MapItemListRenderer.cpp:188
 msgid "Arrival altitude"
@@ -3725,7 +3767,7 @@ msgstr ""
 "De temperatuur op een hoogte van 2 m boven de grond. Deze kan worden "
 "vergeleken met temperatuurwaarnemingen als indicatie van de modelsimulatie-"
 "nauwkeurigheid. Als bijvoorbeeld de temperatuurwaarnemingen aanzienlijk "
-"lager zijn dan die, die volgen uit de modelberekening, zullen de "
+"lager zijn dan die volgen uit de modelberekening, zullen de "
 "zweefvliegcondities slechter zijn dan verwacht."
 
 #: src/Weather/Rasp/RaspStore.cpp:83
@@ -3865,11 +3907,11 @@ msgstr "Wolkenbasis"
 
 #: src/Renderer/MacCreadyRenderer.cpp:51 src/Renderer/TaskSpeedRenderer.cpp:49
 msgid "Vave"
-msgstr ""
+msgstr "Spoedig"
 
 #: src/Renderer/TaskSpeedRenderer.cpp:52
 msgid "Vest"
-msgstr ""
+msgstr "Hesje"
 
 #: src/UIActions.cpp:52
 msgid "Quit program?"
@@ -4132,12 +4174,12 @@ msgstr "IOIO i2c druk sensor"
 #: src/Dialogs/Device/DeviceEditWidget.cpp:75
 #, no-c-format
 msgid "IOIO voltage sensor"
-msgstr ""
+msgstr "IOIO voltage sensor"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:78
 #, no-c-format
 msgid "TCP client"
-msgstr ""
+msgstr "TCP client"
 
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
@@ -4180,9 +4222,8 @@ msgstr ""
 "opdracht declaratie of het downloaden van vluchten."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:601
-#, fuzzy
 msgid "IP Address"
-msgstr "I2C Adr"
+msgstr "IP Adres"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:611
 msgid "I2C Bus"
@@ -4192,7 +4233,7 @@ msgstr "I2C Bus"
 msgid "Select the description or bus number that matches your configuration."
 msgstr ""
 "Selecteer de omschrijving of het bus nummer welke met de configuratie "
-"overeenkomt"
+"overeenkomt."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid "I2C Addr"
@@ -4230,18 +4271,19 @@ msgstr "Stuurprogramma"
 #. for a passthrough device, offer additional driver
 #: src/Dialogs/Device/DeviceEditWidget.cpp:642
 msgid "Passthrough device"
-msgstr ""
+msgstr "Doorgeef apparaat"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:643
 msgid ""
 "This option lets you configure if this device has a passed  through device "
 "connected."
 msgstr ""
+"Met deze optie kun je configureren of er een doorgeef apparaat aangesloten "
+"is."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:654
-#, fuzzy
 msgid "Second Driver"
-msgstr "Stuurprogramma"
+msgstr "Tweede Stuurprogramma"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:656
 msgid "Sync. from device"
@@ -4300,16 +4342,15 @@ msgstr "Opnieuw verbinden"
 #: src/Dialogs/Device/DeviceListDialog.cpp:287
 #: src/Dialogs/Device/DeviceListDialog.cpp:301
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:226
-#, fuzzy
 msgid "Disable"
-msgstr "Uitgeschakeld"
+msgstr "Uitzetten"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:288
 #: src/Dialogs/Device/DeviceListDialog.cpp:390
 #: src/Dialogs/Device/DeviceListDialog.cpp:403
 #: src/Dialogs/Device/DeviceListDialog.cpp:651
 msgid "Debug"
-msgstr ""
+msgstr "Debug"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:301
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:116
@@ -4359,7 +4400,7 @@ msgstr "Bluetooth is uitgeschakeld"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:414
 msgid "Duplicate"
-msgstr ""
+msgstr "Dubbele"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:421
 msgid "Not connected"
@@ -4384,7 +4425,7 @@ msgstr "Bewerk apparaat"
 #: src/Dialogs/Device/DeviceListDialog.cpp:649
 #, c-format
 msgid "Communication with this device will be logged for the next %u minutes."
-msgstr ""
+msgstr "Communicatie met dit apparaat wordt de komende %u minuten gelogd."
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:701 Data/Input/default.xci:555
 #: Data/Input/default.xci:1143
@@ -4444,9 +4485,8 @@ msgid "Pressure"
 msgstr "Druk"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:87
-#, fuzzy
 msgid "Sink tone"
-msgstr "Zandsteen"
+msgstr "Geluid dalen"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:41
 #: src/Dialogs/ProfileListDialog.cpp:235 src/Dialogs/ProfileListDialog.cpp:264
@@ -4459,7 +4499,7 @@ msgstr "Te veel keerpunten."
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:50
 msgid "Uploading Waypoints"
-msgstr "Keerpunten Versturen..."
+msgstr "Keerpunten Versturen"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:56
 msgid "Failed to erase waypoints."
@@ -4494,9 +4534,9 @@ msgid "Volume"
 msgstr "Volume"
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:66
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Output mode"
-msgstr "Route modus"
+msgstr "Output modus"
 
 #: src/Dialogs/Device/BlueFly/BlueFlyConfigurationDialog.cpp:68
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:126
@@ -4777,7 +4817,7 @@ msgstr "Logger interval"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:148
 msgid "No tracking mode"
-msgstr ""
+msgstr "Geen tracking modus"
 
 #: src/Dialogs/MapItemListDialog.cpp:175 src/Dialogs/dlgAnalysis.cpp:479
 #: src/Dialogs/dlgAnalysis.cpp:523 src/Dialogs/dlgAnalysis.cpp:532
@@ -4940,9 +4980,8 @@ msgstr "Bepaald hoe het luchtruim wordt gevuld met de ingestelde kleur."
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:105
 #: src/Monitor/AirspaceWarningMonitor.cpp:80
-#, fuzzy
 msgid "ACK"
-msgstr "ACC Dag"
+msgstr "ACK"
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:106
 #: src/Monitor/AirspaceWarningMonitor.cpp:81
@@ -5004,13 +5043,12 @@ msgstr ""
 "Dit maakt in- of uitschakelen van de automatische wind berekening mogelijk."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:67
-#, fuzzy
 msgid "External wind"
-msgstr "Extern"
+msgstr "Externe wind"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:68
 msgid "Should XCSoar accept wind estimates from other instruments?"
-msgstr ""
+msgstr "Moet XCSoar windberekeningen accepteren van andere instrumenten?"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:72
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:156
@@ -5024,10 +5062,12 @@ msgid ""
 "in circling mode. Switched Off, the snail trail stays uncompensated for wind "
 "drift."
 msgstr ""
+"Bepaalt of het slakkenspoor drift met de wind tijdens thermieken. Indien uit "
+"wordt het slakkenspoor niet gecompenseerd voor wind drift."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:83
 msgid "Source"
-msgstr ""
+msgstr "Bron"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:86
 msgid "Manual adjustment of wind speed."
@@ -5132,9 +5172,9 @@ msgid "Route"
 msgstr "Route"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:112
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Scoring"
-msgstr "Toeren"
+msgstr "Score"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:117
 #, no-c-format
@@ -5169,12 +5209,12 @@ msgstr "Schermindeling"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:134
 #, no-c-format
 msgid "Pages"
-msgstr ""
+msgstr "Paginas"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:135
 #, no-c-format
 msgid "InfoBox Sets"
-msgstr ""
+msgstr "InfoBox Groepen"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:140
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:134
@@ -5190,9 +5230,9 @@ msgid "Tracking"
 msgstr "Volgen"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:154
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Audio"
-msgstr "Vario Geluid"
+msgstr "Geluid"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:161
 #, no-c-format
@@ -5317,7 +5357,6 @@ msgid "New Teammate"
 msgstr "Nieuwe teamgenoot"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:92
-#, fuzzy
 msgid "Set code"
 msgstr "Stel Code In"
 
@@ -5355,7 +5394,7 @@ msgstr "Niet gevonden"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:219
 msgid "Set new teammate"
-msgstr ""
+msgstr "Selecteer nieuwe teammaat"
 
 #: src/Dialogs/dlgAnalysis.cpp:475
 msgid "Barograph"
@@ -5374,9 +5413,8 @@ msgid "Thermal Band"
 msgstr "Thermiek Grafiek"
 
 #: src/Dialogs/dlgAnalysis.cpp:502
-#, fuzzy
 msgid "Vario Histogram"
-msgstr "Vario spoor"
+msgstr "Vario Histogram"
 
 #: src/Dialogs/dlgAnalysis.cpp:510
 msgid "Wind at Altitude"
@@ -5391,9 +5429,8 @@ msgid "Glide Polar"
 msgstr "Glijpolaire"
 
 #: src/Dialogs/dlgAnalysis.cpp:528
-#, fuzzy
 msgid "MacCready Speeds"
-msgstr "MacCready "
+msgstr "MacCready snelheden"
 
 #: src/Dialogs/dlgAnalysis.cpp:537
 msgid "Temperature Trace"
@@ -5422,7 +5459,7 @@ msgstr "Checklist niet geladen"
 
 #: src/Dialogs/dlgChecklist.cpp:134
 msgid "Create xcsoar-checklist.txt"
-msgstr ""
+msgstr "Creeer xcsoar-checklist.txt"
 
 #: src/Dialogs/ProfileListDialog.cpp:188
 #: src/Dialogs/Plane/PlaneListDialog.cpp:157
@@ -5446,42 +5483,38 @@ msgid "Delete"
 msgstr "Wissen"
 
 #: src/Dialogs/ProfileListDialog.cpp:206 src/Dialogs/ProfileListDialog.cpp:273
-#, fuzzy
 msgid "Profile name"
-msgstr "Korte bestandsnaam"
+msgstr "Profielnaam"
 
 #: src/Dialogs/ProfileListDialog.cpp:215 src/Dialogs/ProfileListDialog.cpp:283
 msgid "File exists already."
-msgstr ""
+msgstr "Bestand bestaat reeds."
 
 #: src/Dialogs/ProfileListDialog.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Delete \"%s\"?"
-msgstr "Wissen"
+msgstr "\"%s\" verwijderen?"
 
 #: src/Dialogs/ProfileListDialog.cpp:372 Data/Input/default.xci:589
-#, fuzzy
 msgid "Profiles"
-msgstr "Profiel"
+msgstr "Profielen"
 
 #: src/Dialogs/ProfileListDialog.cpp:386
-#, fuzzy
 msgid "Select profile"
-msgstr "Kies een bestand"
+msgstr "Kies een profiel"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:160
-#, fuzzy
 msgid "Activate"
-msgstr "Actief"
+msgstr "Activeren"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:186
 msgid "Active"
 msgstr "Actief"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:226
-#, fuzzy, c-format
+#, c-format
 msgid "Activating plane \"%s\" failed."
-msgstr "Laden van vliegtuigprofiel \"%s\" mislukt!"
+msgstr "Laden van vliegtuigprofiel \"%s\" mislukt."
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:248
 #: src/Dialogs/Plane/PlaneListDialog.cpp:293
@@ -5490,9 +5523,9 @@ msgstr "Vul de registratie van het vliegtuig in!"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:260
 #: src/Dialogs/Plane/PlaneListDialog.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Plane \"%s\" already exists. Overwrite it?"
-msgstr "Vliegtuigprofiel \"% s\" bestaat al. Deze overschrijven?"
+msgstr "Vliegtuigprofiel \"%s\" bestaat al. Deze overschrijven?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:263
 #: src/Dialogs/Plane/PlaneListDialog.cpp:310
@@ -5502,12 +5535,12 @@ msgstr "Overschrijven"
 #: src/Dialogs/Plane/PlaneListDialog.cpp:355
 #, c-format
 msgid "Delete plane \"%s\"?"
-msgstr ""
+msgstr "Vliegtuigprofiel \"%s\" verwijderen?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:392
-#, fuzzy, c-format
+#, c-format
 msgid "Activate plane \"%s\"?"
-msgstr "Laden van vliegtuigprofiel \"%s\" mislukt!"
+msgstr "Vliegtuigprofiel \"%s\" activeren?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:404
 msgid "Planes"
@@ -5565,9 +5598,8 @@ msgid "Reference Mass"
 msgstr "Referentie Massa"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:141
-#, fuzzy
 msgid "Reference mass of the polar"
-msgstr "Referentie massa"
+msgstr "Referentiemassa van de polaire"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:146
 msgid "Dry Mass"
@@ -5575,7 +5607,7 @@ msgstr "Droge Massa"
 
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:146
 msgid "Dry all-up flying mass of your plane"
-msgstr ""
+msgstr "Leeggewicht van je zweefvliegtuig"
 
 #. let the user select
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:188
@@ -5651,16 +5683,15 @@ msgstr "Vervolgen"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:63
 msgid "Enter your password"
-msgstr ""
+msgstr "Wachtwoord ingeven"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:88
-#, fuzzy
 msgid "Wrong password."
-msgstr "Wachtwoord"
+msgstr "Fout wachtwoord."
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:103
 msgid "Enter a new password"
-msgstr ""
+msgstr "Geef een nieuw wachtwoord op"
 
 #: src/Dialogs/dlgStatus.cpp:47 src/Dialogs/dlgStatus.cpp:66
 #: src/Dialogs/Weather/WeatherDialog.cpp:62 Data/Input/default.xci:809
@@ -5696,7 +5727,7 @@ msgstr "Nabij"
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:60
 #, no-c-format
 msgid "Roaming"
-msgstr ""
+msgstr "Roaming"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:130
 msgid "GPS lock"
@@ -5716,7 +5747,7 @@ msgstr "Voedingsspanning"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:136
 msgid "Network"
-msgstr ""
+msgstr "Netwerk"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:140
 msgid "Assigned task time"
@@ -5979,14 +6010,12 @@ msgid "Pan to Waypoint"
 msgstr "Verplaats Naar Keerpunt"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:324
-#, fuzzy
 msgid "Set Active Frequency"
-msgstr "Min. Frequentie"
+msgstr "Instellen Actieve Frequentie"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:325
-#, fuzzy
 msgid "Set Standby Frequency"
-msgstr "Min. Frequentie"
+msgstr "Instellen Standby Frequentie"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:433 Data/Input/default.xci:1015
 msgid "GoTo"
@@ -5994,7 +6023,7 @@ msgstr "Ga naar"
 
 #: src/Dialogs/Waypoint/Manager.cpp:270
 msgid "Delete waypoint?"
-msgstr ""
+msgstr "Verwijder keerpunt?"
 
 #: src/Dialogs/Waypoint/Manager.cpp:316 Data/Input/default.xci:597
 msgid "Waypoints Editor"
@@ -6009,14 +6038,14 @@ msgid "Waypoints edited"
 msgstr "Keerpunten gewijzigd"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:69
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Turnpoint"
 msgstr "Keerpunt"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:71
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Landable"
-msgstr "Landingsveld grootte"
+msgstr "Buitenlandingsveld"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:80
 msgid "Comment"
@@ -6117,26 +6146,26 @@ msgstr ""
 "luchtruim"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:76
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No fill"
 msgstr "Niet gevuld"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:77
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Don't fill the airspace area."
-msgstr "Geeft de modus voor het vullen van het luchtruim gebied weer."
+msgstr "Luchtruim niet opvullen."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:83
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:151
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No labels will be displayed."
-msgstr "Geen keerpunt labels worden weergegeven."
+msgstr "Geen labels weergeven."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:85
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:140
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "All labels will be displayed."
-msgstr "Alle keerpunt labels worden weergegeven."
+msgstr "Alle labels weergeven."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:151
 msgid "Colours"
@@ -6167,9 +6196,8 @@ msgstr "Zichtbaarheid label"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:194
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:156
-#, fuzzy
 msgid "Determines what labels are displayed."
-msgstr "Hiermee bepaalt u hoe labels worden weergegeven met elk keerpunt"
+msgstr "Bepaalt welke labels worden getoond."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:198
 msgid "Clip altitude"
@@ -6200,14 +6228,12 @@ msgid "Enable/disable all airspace warnings."
 msgstr "In/uitschakelen van alle luchtruim waarschuwingen."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:211
-#, fuzzy
 msgid "Warnings dialog"
-msgstr "Waarschuwingen"
+msgstr "Waarschuwingsvenster"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:212
-#, fuzzy
 msgid "Enable/disable displaying airspaces warnings dialog."
-msgstr "In/uitschakelen van alle luchtruim waarschuwingen."
+msgstr "In/uitschakelen van luchtruim waarschuwingsvenster."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:216
 msgid "Warning time"
@@ -6223,13 +6249,15 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:221
 msgid "Repetitive sound"
-msgstr ""
+msgstr "Herhalend geluid"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:222
 msgid ""
 "Enable/disable repetitive warning sound when airspaces warnings dialog is "
 "displayed."
 msgstr ""
+"Aan/uit zetten herhalend waarschuwingsgeluid wanneer luchtruim "
+"waarschuwingsvenster wordt getoond."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:226
 msgid "Acknowledge time"
@@ -6295,7 +6323,7 @@ msgstr ""
 "Dit schakelt de weergave van de FLARM radar in. De koers van het object ten "
 "opzichte van de koers van het vliegtuig wordt weergegeven als een pijlpunt. "
 "Een driehoek naar boven of naar beneden toont de relatieve hoogte van het "
-"object ten opzichte van het vliegtuig. In alle modi,  geeft de kleur van het "
+"object ten opzichte van het vliegtuig. In alle modi, geeft de kleur van het "
 "object de dreiging aan."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:88
@@ -6354,11 +6382,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:118
 msgid "Vario bar"
-msgstr ""
+msgstr "Variobalk"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:119
 msgid "If set to ON the vario bar will be shown"
-msgstr ""
+msgstr "Indien AAN wordt de variobalk getoond"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:59
 msgid "Speed arrows"
@@ -6531,7 +6559,7 @@ msgstr "Voorkeursperiode voor zweefvliegers."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:106
 msgid "GR average period"
-msgstr ""
+msgstr "GH gemiddelde"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:107
 msgid ""
@@ -6556,9 +6584,8 @@ msgstr ""
 "zal de aankomst hoogte voor benen met tegenwind verkleinen."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:117
-#, fuzzy
 msgid "Wave assistant"
-msgstr "Thermiekassistent"
+msgstr "Golfassistent"
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:87
 msgid "Use final glide mode"
@@ -6573,20 +6600,20 @@ msgstr ""
 "gebruikt."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:88
-#, fuzzy
 msgid "Text size"
-msgstr "Thmk Volgend Been"
+msgstr "Tekstgrootte"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:93
-#, fuzzy
 msgid "Display Resolution"
-msgstr "Scherm oriëntatie"
+msgstr "Schermresolutie"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:94
 msgid ""
 "The display resolution is used to adapt line widths, font size, landable "
 "size and more."
 msgstr ""
+"De schermresolutie wordt gebruikt om de regelbreedte, tekst- en veldgrootte "
+"aan te passen."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:104
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:129
@@ -6596,7 +6623,7 @@ msgstr "Automatisch"
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:107
 #, c-format
 msgid "%d dpi"
-msgstr ""
+msgstr "%d dpi"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:115
 msgid "Events"
@@ -6695,12 +6722,12 @@ msgstr "Draai Landschap"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:74
 #, no-c-format
 msgid "8 Split"
-msgstr ""
+msgstr "8 Verdeeld"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:76
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "8 Bottom or Right"
-msgstr "Rechtsonder"
+msgstr "8 Onder of Rechts"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:78
 #, no-c-format
@@ -6708,14 +6735,14 @@ msgid "8 Bottom + Vario (Portrait)"
 msgstr "8 Onder + Vario (Staand)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:80
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "8 Top or Left"
-msgstr "Linksboven"
+msgstr "8 Boven of Links"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:82
 #, no-c-format
 msgid "8 Top + Vario (Portrait)"
-msgstr ""
+msgstr "8 Boven + Vario (Staand)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:84
 #, no-c-format
@@ -6728,9 +6755,9 @@ msgid "9 Left + Right + Vario (Landscape)"
 msgstr "9 Links + Rechts + Vario (Liggend)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:88
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "12 Left + 3 Right Vario (Landscape)"
-msgstr "9 Links + Rechts + Vario (Liggend)"
+msgstr "12 Links + 3 Rechts + Vario (Liggend)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:90
 #, no-c-format
@@ -6738,19 +6765,19 @@ msgid "5 Right (Square)"
 msgstr "5 Rechts (Vierkant)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:92
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "12 Bottom or Right"
-msgstr "Rechtsonder"
+msgstr "12 Onder of Rechts"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:94
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "12 Top or Left"
-msgstr "Linksboven"
+msgstr "12 Boven of Links"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:96
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "16 Right (Landscape)"
-msgstr "12 Rechts (Liggend)"
+msgstr "16 Rechts (Liggend)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:98
 #, no-c-format
@@ -6758,14 +6785,14 @@ msgid "24 Right (Landscape)"
 msgstr "24 Rechts (Liggend)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:100
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "4 Top or Left"
-msgstr "Linksboven"
+msgstr "4 Boven of Links"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:102
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "4 Bottom or Right"
-msgstr "Rechtsonder"
+msgstr "4 Onder of Rechts"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:108
 #, no-c-format
@@ -6865,7 +6892,7 @@ msgstr "Tekent een tabblad aan de bovenkant van de InfoBox over de titel."
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:146
 #, no-c-format
 msgid "Shaded"
-msgstr ""
+msgstr "Gearceerd"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:148
 #, no-c-format
@@ -6935,11 +6962,11 @@ msgstr "InfoBox rand"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:210
 msgid "Show Menubutton"
-msgstr ""
+msgstr "Toon Menuknop"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:210
 msgid "Show the Menubutton"
-msgstr ""
+msgstr "Toon de Menuknop"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:56
 #, no-c-format
@@ -7148,7 +7175,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:147
 msgid "Maintain one map zoom level on each page."
-msgstr ""
+msgstr "Gebruik een vaste zoomafstand op iedere pagina."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:171
 msgid "Main area"
@@ -7161,12 +7188,12 @@ msgstr "Specificeer wat op het hoofdscherm getoond moet worden"
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:177
 #, no-c-format
 msgid "Displays either the Circling, Cruise or Final glide infoxboxes"
-msgstr ""
+msgstr "Toont hetzij de Thermiek, Steek of Final glide informatievakken"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:178
 #, no-c-format
 msgid "Show fullscreen (no InfoBoxes)"
-msgstr ""
+msgstr "Toon volledig scherm (geen Informatievakken)"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:182
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:354
@@ -7184,12 +7211,16 @@ msgid ""
 "For cruise mode.  Displayed when 'Auto' is selected and ship is below final "
 "glide altitude"
 msgstr ""
+"Tijdens steken. Wordt getoond wanneer 'Auto' is geselecteerd en het "
+"vliegtuig is onder final glide hoogte"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:188
 #, no-c-format
 msgid ""
 "For circling mode.  Displayed when 'Auto' is selected and ship is circling"
 msgstr ""
+"Tijdens thermieken. Wordt getoond wanneer 'Auto' is geselecteerd en het "
+"vliegtuig thermiekt"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:189
 #, no-c-format
@@ -7197,11 +7228,13 @@ msgid ""
 "For final glide mode.  Displayed when 'Auto' is selected and ship is above "
 "final glide altitude"
 msgstr ""
+"Tijdens final glide. Wordt getoond wanneer 'Auto' is geselecteerd en het "
+"vliegtuig is boven final glide hoogte"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:191
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A custom InfoBox set"
-msgstr "InfoBox plakken"
+msgstr "Eigen InfoVakken"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:209
 #, no-c-format
@@ -7212,11 +7245,11 @@ msgstr "Niets"
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:370
 #, no-c-format
 msgid "Cross section"
-msgstr ""
+msgstr "Dwarsdoorsnede"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:214
 msgid "Bottom area"
-msgstr ""
+msgstr "Onderzijde"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:215
 msgid "Specifies what should be displayed below the main area."
@@ -7347,19 +7380,19 @@ msgid "Disables the reach display."
 msgstr "Schakelt bereik weergave uit."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:162
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terrain line"
-msgstr "Terrein AAN"
+msgstr "Terrein lijn"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:163
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Draws a dashed line at the terrain glide reach."
-msgstr "Tekent een stippellijn op het maximale glij bereik."
+msgstr "Tekent een stippellijn op het maximale glijbereik."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:164
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terrain shade"
-msgstr "Terreinhoogte"
+msgstr "Terrein schaduw"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:165
 #, no-c-format
@@ -7367,34 +7400,34 @@ msgid "Shades terrain outside glide reach."
 msgstr "Maakt het gebied dat buiten glijbereik is donkerder."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:166
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Working line"
-msgstr "Werkgebied"
+msgstr "Werklijn"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:167
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Draws a dashed line at the working glide reach."
-msgstr "Tekent een stippellijn op het maximale glij bereik."
+msgstr "Tekent een stippellijn op het maximale glijbereik."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:168
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Working line, terrain line"
-msgstr "Direct & terrein glijvlucht"
+msgstr "Werklijn, terrein lijn"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:169
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Draws a dashed line at the working and terrain glide reaches."
-msgstr "Tekent een stippellijn op het maximale glij bereik."
+msgstr "Tekent een stippellijn op het maximale glijbereik."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:170
 #, no-c-format
 msgid "Working line, terrain shade"
-msgstr ""
+msgstr "Werkgebied, terreinhoogte"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:171
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Draws a dashed line at working, and shade terrain, glide reaches."
-msgstr "Tekent een stippellijn op het maximale glij bereik."
+msgstr "Tekent een stippellijn op het werkbare en schaduwterrein glijbereik."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:175
 msgid "Reach display"
@@ -7434,6 +7467,8 @@ msgid ""
 "The alternates will only be sorted by waypoint type (airport/outlanding "
 "field) and arrival height."
 msgstr ""
+"De alternatieven worden gesorteerd op keerpunttype (vliegveld, "
+"buitenlandingsveld) en aankomsthoogte."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:81
 #, no-c-format
@@ -7464,6 +7499,8 @@ msgstr "Alternativen modus"
 msgid ""
 "Determines sorting of alternates in the alternates dialog and in abort mode."
 msgstr ""
+"Bepaalt het sorteren van alternatieven in het alternatieven venster en in de "
+"afbreken modus."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:91
 msgid "Polar degradation"
@@ -7480,13 +7517,13 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:100
 msgid "Auto bugs"
-msgstr ""
+msgstr "Auto insecten"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:101
 #, no-c-format
 msgid ""
 "If enabled, adds 1% to the bugs setting after each full hour while flying."
-msgstr ""
+msgstr "Indien AAN, telt 1% bij de insecten instelling voor ieder vlieguur."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:106
 msgid ""
@@ -7663,7 +7700,7 @@ msgstr "Vario #2 (met stippen)"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:109
 #, no-c-format
 msgid "Vario-scaled dots and lines"
-msgstr ""
+msgstr "Vario-geschaalde punten en lijnen"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:110
 #, no-c-format
@@ -7671,6 +7708,8 @@ msgid ""
 "Vario-scaled dots with lines. Orange to red = climb. Light blue to dark blue "
 "= sink. Zero lift is presented as a yellow line."
 msgstr ""
+"Vario-geschaalde punten en lijnen. Oranje tot rood = stijgen. Lichtblauw tot "
+"donkerblauw = dalen. Geen stijgen is een gele lijn."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:113
 #, no-c-format
@@ -7998,7 +8037,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:92
 #, no-c-format
 msgid "Disable OLC Calculations"
-msgstr ""
+msgstr "OLC berekeningen uitzetten"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:94
 #, no-c-format
@@ -8017,7 +8056,7 @@ msgid ""
 "Up to seven points including start and finish, finish height must not be "
 "lower than start height less 1000 meters."
 msgstr ""
-"Tot zeven punten, waaronder de start en finish, aankomst hoogte moet  niet "
+"Tot zeven punten, waaronder de start en finish, aankomst hoogte moet niet "
 "lager zijn dan de start-hoogte min 1000 meter."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:100
@@ -8040,6 +8079,8 @@ msgid ""
 "PG online contest with different track values: Free flight - 1 km = 1.0 "
 "point; flat trianlge - 1 km = 1.2 p; FAI triangle - 1 km = 1.4 p."
 msgstr ""
+"PG online wedstrijd met verschillende opdrachtscores: Vrije vlucht - 1 km = "
+"1.0 punt; Driehoek - 1 km = 1.2 p; FAI driehoek - 1 km = 1.4 p."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:110
 #, no-c-format
@@ -8048,6 +8089,9 @@ msgid ""
 "the XContest rules, but with different track values: 1 km = 1.5 points, 1.75 "
 "p and 2.0 p for FAI triangles respectively."
 msgstr ""
+"Europese PG online wedstrijd van de DHV organisatie. Vrijwel gelijk aan de "
+"XContest regels, maar met andere opdrachtscores: 1 km = 1.5 punten, 1.75 p "
+"and 2.0 p voor FAI driehoeken respectievelijk."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:113
 #, no-c-format
@@ -8056,6 +8100,9 @@ msgid ""
 "The bounding box part with 1 km = 1.0 point and the additional zick-zack "
 "part with 1 km = 0.5 p."
 msgstr ""
+"Oostenrijkse online zweefvliegwedstrijd. Opdrachten tot max. zes keerpunten "
+"worden meegeteld. Het grensgebied met 1 km = 1.0 punt en het additionele zig-"
+"zag gebied met 1 km = 0.5 p."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:116
 #, no-c-format
@@ -8096,15 +8143,12 @@ msgid "Show FAI triangle areas on the map."
 msgstr "Geef FAI driehoek gebieden weer op de kaart."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:137
-#, fuzzy
 msgid "FAI triangle threshold"
-msgstr "FAI driehoek gebieden"
+msgstr "FAI driehoek drempel"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:138
-#, fuzzy
 msgid "Specifies which threshold is used for \"large\" FAI triangles."
-msgstr ""
-"Specificeer welke informatievakken op deze pagina getoond moeten worden."
+msgstr "Specificeer welke drempel gebruikt wordt voor \"grote\" FAI driehoeken."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:197
 msgid "Terrain display"
@@ -8161,7 +8205,7 @@ msgstr "ICAO"
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:214
 #, no-c-format
 msgid "Vibrant"
-msgstr ""
+msgstr "Levendig"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:215
 #, no-c-format
@@ -8186,17 +8230,17 @@ msgstr "Pastel"
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:219
 #, no-c-format
 msgid "Italian Avioportolano VFR Chart"
-msgstr ""
+msgstr "Italiaanse Avioportolano VFR kaart"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:220
 #, no-c-format
 msgid "German DFS VFR Chart"
-msgstr ""
+msgstr "Duitse DFS VFR Kaart"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:221
 #, no-c-format
 msgid "French SIA VFR Chart"
-msgstr ""
+msgstr "Franse SIA VFR Kaart"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:225
 msgid "Terrain colors"
@@ -8225,6 +8269,8 @@ msgid ""
 "The terrain can be shaded among slopes to indicate either wind direction, "
 "sun position or a fixed shading from North-West."
 msgstr ""
+"Het terrein kan gearceerd worden op de hellingen om de windrichting, "
+"zonnestraling of een vaste arcering vanuit Noord-West aan te geven."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:244
 msgid "Terrain contrast"
@@ -8254,11 +8300,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:266
 msgid "Contours"
-msgstr ""
+msgstr "Contouren"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:267
 msgid "If enabled, draws contour lines on the terrain."
-msgstr ""
+msgstr "Indien aangezet, tekent contourlijnen op het terrein."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:127
 msgid "Preset"
@@ -8313,12 +8359,12 @@ msgstr "Eenheden gebruikt voor verticale snelheden (vario)."
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:180
 #, no-c-format
 msgid "feet"
-msgstr ""
+msgstr "feet"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:181
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "meters"
-msgstr "meter"
+msgstr "meters"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:184
 msgid "Units used for altitude and heights."
@@ -8341,14 +8387,12 @@ msgid "Units used for pressures."
 msgstr "Eenheden voor druk."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:227
-#, fuzzy
 msgid "Units used for mass."
-msgstr "Gebruikte eenheden voor opdracht snelheden."
+msgstr "Gebruikte eenheden voor gewichten."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:237
-#, fuzzy
 msgid "Units used for wing loading."
-msgstr "Eenheden voor lengte- en breedtegraad."
+msgstr "Eenheden voor vleugelbelasting."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:253
 msgid "Lat./Lon."
@@ -8508,12 +8552,12 @@ msgstr "Label opmaak"
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:142
 #, no-c-format
 msgid "Task waypoints & airfields"
-msgstr ""
+msgstr "Opdracht keerpunten en vliegvelden"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:143
 #, no-c-format
 msgid "All waypoints part of a task and all airfields will be displayed."
-msgstr ""
+msgstr "Alle keerpunten uit de opdracht en alle vliegvelden worden getoond."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:145
 #, no-c-format
@@ -8643,14 +8687,14 @@ msgid "Hot-air balloon"
 msgstr "Hete Luchtballon"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:186
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Hangglider (Flex/FAI1)"
-msgstr "Deltavlieger"
+msgstr "Deltavlieger (Flex/FAI1)"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:187
 #, no-c-format
 msgid "Hangglider (Rigid/FAI5)"
-msgstr ""
+msgstr "Deltavlieger (Rigid/FAI5)"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:206
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:232
@@ -8666,15 +8710,14 @@ msgid "Download the position of your friends live from the SkyLines server."
 msgstr "Download de positie van vrienden rechtstreeks van de SkyLines server."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:213
-#, fuzzy
 msgid "Show nearby traffic"
-msgstr "Vluchtspoor KORT"
+msgstr "Toon verkeer dichtbij"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:214
-#, fuzzy
 msgid ""
 "Download the position of your nearby traffic live from the SkyLines server."
-msgstr "Download de positie van vrienden rechtstreeks van de SkyLines server."
+msgstr ""
+"Download de positie van dichtbij verkeer rechtstreeks van de SkyLines server."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:234
 msgid "Vehicle Type"
@@ -8685,9 +8728,8 @@ msgid "Type of vehicle used."
 msgstr "Type voertuig gebruikt."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:236
-#, fuzzy
 msgid "Vehicle Name"
-msgstr "Voertuig Type"
+msgstr "Voertuig Naam"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:239
 msgid "Server"
@@ -8702,10 +8744,12 @@ msgid ""
 "Participate in the XCSoar Cloud field test?  This transmits your location, "
 "thermal/wave locations and other weather data to our test server."
 msgstr ""
+"Deelnemen aan de XCSoar Cloud test? Dit verstuurt je locatie, thermiek/golf "
+"locaties en andere weergegevens naar onze testserver."
 
 #: src/Dialogs/Settings/Panels/CloudConfigPanel.cpp:88
 msgid "Obtain and show thermal locations reported by others."
-msgstr ""
+msgstr "Ophalen en tonen thermieklocaties door anderen gemeld."
 
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:42
 msgid "Radius of the OZ cylinder."
@@ -8748,7 +8792,7 @@ msgstr "Binnenstraal van de OZ sector."
 
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:54
 msgid "Angle"
-msgstr ""
+msgstr "Hoek"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:140
 msgid "Turn Points"
@@ -8794,9 +8838,8 @@ msgid "Make Finish"
 msgstr "Maak Finish"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:176
-#, fuzzy
 msgid "Reverse"
-msgstr "Draai Staand"
+msgstr "Omkeren"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:179
 msgid "Clear All"
@@ -8951,7 +8994,7 @@ msgstr "Schakel Alternatieve Startpunten in"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:295
 msgid "Score exit"
-msgstr ""
+msgstr "Score verlaten"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:395
 msgid "Edit Alternates"
@@ -8960,11 +9003,11 @@ msgstr "Pas Alternatieven aan"
 #: src/Dialogs/Task/TaskPointDialog.cpp:416
 #: src/Dialogs/Task/TaskPointDialog.cpp:487
 msgid "Task point"
-msgstr ""
+msgstr "Opdrachtpunt"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:421
 msgid "Assigned area point"
-msgstr ""
+msgstr "Assigned area punt"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:487
 msgid "Remove task point?"
@@ -9030,11 +9073,11 @@ msgstr "Cilinder"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:204
 msgid "MAT cylinder"
-msgstr ""
+msgstr "MAT cilinder"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:208
 msgid "Keyhole"
-msgstr ""
+msgstr "Sleutelgat"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:214
 msgid "DAeC Keyhole"
@@ -9054,7 +9097,7 @@ msgstr "BGA Start Sector"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:242
 msgid "Enter a task name"
-msgstr ""
+msgstr "Kies opdrachtnaam"
 
 #: src/Dialogs/Task/TargetDialog.cpp:433
 msgid ""
@@ -9084,7 +9127,7 @@ msgstr "ETE"
 
 #: src/Dialogs/Task/TargetDialog.cpp:446
 msgid "Estimated time en-route to the next AAT target."
-msgstr ""
+msgstr "Geschatte tijdsduur tot volgende AAT doel."
 
 #: src/Dialogs/Task/TargetDialog.cpp:448
 msgid "Delta T"
@@ -9112,17 +9155,16 @@ msgid "V ach"
 msgstr ""
 
 #: src/Dialogs/Task/TargetDialog.cpp:458
-#, fuzzy
 msgid ""
 "AA Speed - Assigned Area Task average speed achievable around target points "
 "remaining in minimum AAT time."
 msgstr ""
-"AAT gemiddeld haalbare snelheid via gewenste nog te ronden doel keerpunten "
-"in minimale AAT tijd."
+"AA Snelheid - AAT gemiddeld haalbare snelheid via nog te ronden doel "
+"keerpunten in minimale AAT tijd."
 
 #: src/Dialogs/Task/TargetDialog.cpp:463
 msgid "Optimized"
-msgstr "Geooptimaliseerd"
+msgstr "Geoptimaliseerd"
 
 #: src/Dialogs/Tracking/CloudEnableDialog.cpp:71
 msgid ""
@@ -9133,6 +9175,13 @@ msgid ""
 "test server. You can disable it at any time in the \"Tracking\" settings.\n"
 "Please help us improve XCSoar!"
 msgstr ""
+"Het XCSoar project ontwikkelt momenteel een revolutionaire dienst die het "
+"delen van thermiekbellen en golf tussen vliegers mogelijk maakt. \n"
+"Wil je meedoen aan met testen? Dit betekent dat je positie, de positie van "
+"thermiekbellen en golf en andere weergegevens verstuurd worden naar onze "
+"testserver. Je kunt het op elk moment uitzetten in de \"Tracking\" "
+"instellingen.\n"
+"Help ons met het verbeteren van XCSoar!"
 
 #: src/Dialogs/TimeEntry.cpp:73 src/Dialogs/Weather/RASPDialog.cpp:131
 msgid "Now"
@@ -9180,9 +9229,8 @@ msgstr ""
 "ligt"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:84
-#, fuzzy
 msgid "Min. Frequency"
-msgstr "Max. Frequentie"
+msgstr "Min. Frequentie"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:85
 msgid "The tone frequency that is played at maximum sink rate."
@@ -9229,14 +9277,12 @@ msgstr ""
 "ingeschakeld."
 
 #: src/Dialogs/Settings/Panels/AudioConfigPanel.cpp:60
-#, fuzzy
 msgid "Master Volume"
-msgstr "Volume"
+msgstr "Hoofd Volume"
 
 #: src/Dialogs/Weather/PCMetDialog.cpp:68
-#, fuzzy
 msgid "Failed to download file."
-msgstr "Bestand laden mislukt."
+msgstr "Bestand opslaan mislukt."
 
 #: src/Dialogs/Weather/NOAAList.cpp:121 src/Dialogs/Weather/NOAADetails.cpp:72
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:227
@@ -9267,20 +9313,16 @@ msgid "This function is not available on your platform yet."
 msgstr "Deze functie is helaas nog niet op het huidige platform beschikbaar."
 
 #: src/Monitor/AirspaceWarningMonitor.cpp:62
-#, fuzzy
 msgid "Inside airspace"
-msgstr "Meerdere luchtruimen"
+msgstr "Binnen luchtruim"
 
 #: src/Monitor/AirspaceWarningMonitor.cpp:64
-#, fuzzy
 msgid "Near airspace"
-msgstr ""
-"Dichtbijzijnste\n"
-"Luchtruim"
+msgstr "Nader luchtruim"
 
 #: src/Monitor/TaskConstraintsMonitor.cpp:57
 msgid "Maximum start speed exceeded"
-msgstr ""
+msgstr "Maximale startsnelheid overschreden"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:46
 msgid "In sector, arm advance when ready"
@@ -9292,17 +9334,15 @@ msgstr ""
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:49 src/Monitor/MatTaskMonitor.cpp:64
 msgid "Dismiss"
-msgstr ""
+msgstr "Overslaan"
 
 #: src/Monitor/MatTaskMonitor.cpp:55
-#, fuzzy
 msgid "Add this turn point?"
-msgstr "Keerpunt toevoegen"
+msgstr "Keerpunt toevoegen?"
 
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:225
-#, fuzzy
 msgid "Use"
-msgstr "Gebruiker boven"
+msgstr "Gebruik"
 
 #: src/Renderer/NOAAListRenderer.cpp:45
 msgid "No METAR available"
@@ -9339,44 +9379,44 @@ msgid "No TAF available!"
 msgstr "Geen TAF beschikbaar!"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:33
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Gear on delay"
-msgstr "Wiel uit"
+msgstr "Wiel uit vertraging"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:36
 #, no-c-format
 msgid "Gear off delay"
-msgstr ""
+msgstr "Wiel in vertraging"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:39
 #, no-c-format
 msgid "Interval; gear"
-msgstr ""
+msgstr "Interval; wiel"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:42
 #, no-c-format
 msgid "Radio com. max. delay"
-msgstr ""
+msgstr "Radiocomm. max. vertraging"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:45
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Battery low delay"
-msgstr "Accu bijna leeg"
+msgstr "Accu bijna leeg vertraging"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:48
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Battery empty delay"
-msgstr "Accu bijna leeg"
+msgstr "Accu leeg vertraging"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:51
 #, no-c-format
 msgid "Interval; battery"
-msgstr ""
+msgstr "Interval; accu"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:32
 #, no-c-format
 msgid "Step"
-msgstr ""
+msgstr "Stap"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:33
 #, no-c-format
@@ -9444,9 +9484,9 @@ msgid "Low limit of cruise dead band"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:72
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Climb fast trigger"
-msgstr "Stijgsnelheid"
+msgstr "Snel stijgen trigger"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:73
 #, no-c-format
@@ -9476,50 +9516,51 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:82
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Climb averager scale"
-msgstr "Stijgsnelheid"
+msgstr "Gemiddelde stijgsnelheid schaal"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:82
 #, no-c-format
 msgid "Time scale used for vario averager."
-msgstr ""
+msgstr "Tijdschaal voor vario gemiddelde."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:86
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cruise averager scale"
-msgstr "Gemiddelde stijg trend"
+msgstr "Steek gemiddelde schaal"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:87
 #, no-c-format
 msgid "Time scale used for cruise speed command averager."
-msgstr ""
+msgstr "Tijdschaal voor steeksnelheid gemiddelde."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:91
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Circling volume"
-msgstr "Zoom thermieken"
+msgstr "Thermieken volume"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:92
 #, no-c-format
 msgid "Mean volume level in circling modes."
-msgstr ""
+msgstr "Gemiddeld volume tijdens thermieken."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:96
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cruise volume"
-msgstr "Steken"
+msgstr "Steken volume"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:97
 #, no-c-format
 msgid ""
 "Mean volume level in cruise modes.  If set to zero, scales with airspeed."
 msgstr ""
+"Gemiddelde volume tijdens steken. Schaalt met vliegsnelheid bij waarde 0."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:101
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Base frequency"
-msgstr "Radio frequentie"
+msgstr "Frequentie thuisveld"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:102
 #, no-c-format
@@ -9527,9 +9568,9 @@ msgid "Adjustment to base frequency of tones in all modes."
 msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:106
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Filter circling"
-msgstr "Tijdstap thermieken"
+msgstr "Filter thermieken"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:107
 #, no-c-format
@@ -9537,9 +9578,9 @@ msgid "Variometer low pass filter time constant in circling mode."
 msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:111
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Filter cruise"
-msgstr "Tijdstap kruisvlucht"
+msgstr "Filter steken"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:112
 #, no-c-format
@@ -9558,25 +9599,23 @@ msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:105
 msgid "Beep type"
-msgstr ""
+msgstr "Pieptype"
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:108
 msgid "Pitch scheme"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:111
-#, fuzzy
 msgid "Pitch scale"
-msgstr "Spoor geschaald"
+msgstr "Spoor schaal"
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:114
 msgid "Period scheme"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:117
-#, fuzzy
 msgid "Period scale"
-msgstr "Spoor geschaald"
+msgstr "Tijdschaal"
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:33
 #, no-c-format
@@ -9589,6 +9628,8 @@ msgid ""
 "Proportion of TE probe value used in total energy mixing with pitot/static "
 "total energy."
 msgstr ""
+"Verhouding TE waarde in totale energie berekening gemixt met stuw/statisch "
+"totale energie."
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:38
 #, no-c-format
@@ -9600,11 +9641,13 @@ msgstr ""
 msgid ""
 "Calibration factor applied to measured airspeed to obtain indicated airspeed."
 msgstr ""
+"Calibratiefactor toegepast voor gemeten vliegsnelheid om de aangewezen "
+"vliegsnelheid te bepalen."
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:43
 #, no-c-format
 msgid "TE static cal."
-msgstr ""
+msgstr "TE statisch ber."
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:44
 #, no-c-format
@@ -9612,18 +9655,19 @@ msgid ""
 "Calibration factor applied to static pressure used in total energy "
 "calculation."
 msgstr ""
+"Calibratiefactor toegepast voor statische druk in totale energie berekening."
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:48
 #, no-c-format
 msgid "TE dynamic cal."
-msgstr ""
+msgstr "TE dynamische ber."
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:49
 #, no-c-format
 msgid ""
 "Calibration factor applied to dynamic pressure used in total energy "
 "calculation."
-msgstr ""
+msgstr "Calibratiefactor toegepast voor stuwdruk in totale energie berekening."
 
 #: src/Dialogs/Device/Vega/DisplayParameters.hpp:40
 #, no-c-format
@@ -9638,12 +9682,12 @@ msgstr ""
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:42
 #, no-c-format
 msgid "Max. objects reported"
-msgstr ""
+msgstr "Max. aantal objecten getoond"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:44
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Max. reported"
-msgstr "Max. steek snelheid"
+msgstr "Max. gemeld"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:46
 #, no-c-format
@@ -9651,9 +9695,9 @@ msgid "Flarm interface"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:48
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disable circling"
-msgstr "Tijdstap thermieken"
+msgstr "Uitzetten thermieken"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:50
 #, no-c-format
@@ -9661,9 +9705,9 @@ msgid "No mode reports"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:52
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No aircraft type"
-msgstr "Vliegtuigtype"
+msgstr "Geen vliegtuigtype"
 
 #: src/Dialogs/Device/Vega/FlarmIdentificationParameters.hpp:52
 #, no-c-format
@@ -9691,9 +9735,9 @@ msgid "Interval; warning"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:52
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "TE port"
-msgstr "Exporteren"
+msgstr "TE poort"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:52
 #, no-c-format
@@ -9703,17 +9747,17 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:55
 #, no-c-format
 msgid "Pitot port"
-msgstr ""
+msgstr "Pitot buis"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:55
 #, no-c-format
 msgid "Whether the Pitot port is connected."
-msgstr ""
+msgstr "Of de pitot buis is verbonden."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:58
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Static port"
-msgstr "Statisch object"
+msgstr "Statische poort"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:58
 #, no-c-format
@@ -9731,9 +9775,9 @@ msgid "Whether the Stall pressure port is connected."
 msgstr ""
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:64
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Accelerometer"
-msgstr "Versnellingsmeter geijkt"
+msgstr "Versnellingsmeter"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:65
 #, no-c-format
@@ -9752,9 +9796,9 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:73
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Baud rate Vega"
-msgstr "Baudrate"
+msgstr "Baudrate Vega"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:74
 #, no-c-format
@@ -9766,9 +9810,9 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:78
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "FLARM connected"
-msgstr "Niet verbonden"
+msgstr "FLARM verbonden"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:79
 #, no-c-format
@@ -9778,9 +9822,9 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:82
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "PDA power"
-msgstr "Power"
+msgstr "PDA power"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:83
 #, no-c-format
@@ -9792,17 +9836,17 @@ msgstr ""
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:32
 #, no-c-format
 msgid "VNE"
-msgstr ""
+msgstr "VNE"
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:34
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "V terrain"
-msgstr "Terrein"
+msgstr "V Terrein"
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:36
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Height terrain"
-msgstr "Direct & terrein glijvlucht"
+msgstr "Hoogte terrein"
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:38
 #, no-c-format
@@ -9835,9 +9879,9 @@ msgid "Mute vario on radio"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:34
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Vario muting"
-msgstr "Vario thermieken"
+msgstr "Vario dempen"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:36
 #, no-c-format
@@ -9845,14 +9889,14 @@ msgid "Voice muting"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:38
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Speaker threshold"
-msgstr "FAI driehoek gebieden"
+msgstr "Luidspreker drempel"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:40
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Headset threshold"
-msgstr "FAI driehoek gebieden"
+msgstr "Headset drempel"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:42
 #, no-c-format
@@ -9877,7 +9921,7 @@ msgid ""
 "Nearest\n"
 "Airspace"
 msgstr ""
-"Dichtbijzijnste\n"
+"Dichtsbijzijnde\n"
 "Luchtruim"
 
 #: Data/Input/default.xci:638 Data/Input/default.xci:1135
@@ -9913,7 +9957,9 @@ msgstr ""
 msgid ""
 "What's\n"
 "here?"
-msgstr "POI in de buurt"
+msgstr ""
+"POI in \n"
+"de buurt?"
 
 #: Data/Input/default.xci:825
 msgid "Traffic List"
