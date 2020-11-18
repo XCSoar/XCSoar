@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-11-17 17:28+0000\n"
+"PO-Revision-Date: 2020-11-19 19:29+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -6182,7 +6182,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:226
 msgid "Acknowledge time"
-msgstr "Doba potvrzení výstrahy"
+msgstr "Potvrzení výstrahy"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:227
 msgid ""
@@ -6894,7 +6894,7 @@ msgstr "Interval mezi body záznamu mimo kroužení."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:75
 msgid "Time step circling"
-msgstr "Interval v kroužení"
+msgstr "Interval z. kroužení"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:76
 msgid "This is the time interval between logged points when circling."
