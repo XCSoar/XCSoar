@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-11-19 19:29+0000\n"
+"PO-Revision-Date: 2020-11-24 10:29+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -739,7 +739,7 @@ msgstr "Aktivuj start"
 
 #: src/Menu/ExpandMacros.cpp:144
 msgid "Arm turn"
-msgstr "Aktivuj otočení"
+msgstr "Aktivuj obrat"
 
 #: src/Menu/ExpandMacros.cpp:165
 msgid "Disarm start"
@@ -747,14 +747,14 @@ msgstr "Odlož start"
 
 #: src/Menu/ExpandMacros.cpp:168
 msgid "Disarm turn"
-msgstr "Odlož otočení"
+msgstr "Odlož obrat"
 
 #: src/Menu/ExpandMacros.cpp:177
 msgid ""
 "Advance\n"
 "(manual)"
 msgstr ""
-"Dále\n"
+"Další \n"
 "(ručně)"
 
 #: src/Menu/ExpandMacros.cpp:181
@@ -762,7 +762,7 @@ msgid ""
 "Advance\n"
 "(auto)"
 msgstr ""
-"Dále\n"
+"Další \n"
 "(auto)"
 
 #: src/Menu/ExpandMacros.cpp:184
@@ -787,7 +787,7 @@ msgid ""
 "Turn"
 msgstr ""
 "Přeruš\n"
-"Otočení"
+"Obrat"
 
 #: src/Menu/ExpandMacros.cpp:193
 msgid ""
@@ -795,7 +795,7 @@ msgid ""
 "Turn"
 msgstr ""
 "Aktivuj\n"
-"Otočení"
+"Obrat"
 
 #: src/Menu/ExpandMacros.cpp:202 src/Menu/ExpandMacros.cpp:206
 #: src/Dialogs/Device/PortMonitor.cpp:175
@@ -3317,11 +3317,11 @@ msgstr "Zobrazení prostorů Zap"
 
 #: src/Input/InputEventsTask.cpp:80
 msgid "Advance manually"
-msgstr "Dále manuálně"
+msgstr "Obrat manuálně"
 
 #: src/Input/InputEventsTask.cpp:83
 msgid "Advance automatically"
-msgstr "Dále automaticky"
+msgstr "Obrat automaticky"
 
 #: src/Input/InputEventsTask.cpp:86
 msgid "Ready to start"
@@ -3333,11 +3333,11 @@ msgstr "Pozdržet start"
 
 #: src/Input/InputEventsTask.cpp:92
 msgid "Ready to turn"
-msgstr "Připraven k otočení"
+msgstr "Připraven k obratu"
 
 #: src/Input/InputEventsTask.cpp:95
 msgid "Hold turn"
-msgstr "Pozdržet otočení"
+msgstr "Pozdržet obrat"
 
 #: src/Input/InputEventsTask.cpp:161
 msgid "Auto. MacCready on"
@@ -8747,11 +8747,11 @@ msgstr "Minimální čas AAT úlohy v minutách."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:218
 msgid "Arm start manually"
-msgstr "Aktivuj start ručně"
+msgstr "Start ručně"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:219
 msgid "Configure whether the start must be armed manually or automatically."
-msgstr "Určuje, zda má start být označen ručně nebo automaticky."
+msgstr "Určuje, zda má být start úlohy označen ručně nebo automaticky."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:224
 msgid "Start open time"
@@ -9200,11 +9200,11 @@ msgstr "Maximální startovní rychlost překročena"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:46
 msgid "In sector, arm advance when ready"
-msgstr "V sektoru - aktivuj Dále pro další OB"
+msgstr "V sektoru, postup v úloze -> Obrat"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:48
 msgid "Arm"
-msgstr "Dále"
+msgstr "Obrat"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:49 src/Monitor/MatTaskMonitor.cpp:64
 msgid "Dismiss"
