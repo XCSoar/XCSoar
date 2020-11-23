@@ -55,6 +55,9 @@ void
 UpdateInfoBoxThermalGain(InfoBoxData &data);
 
 void
+UpdateInfoBoxThermalTime(InfoBoxData& data);
+
+void
 UpdateInfoBoxThermalRatio(InfoBoxData &data);
 
 void

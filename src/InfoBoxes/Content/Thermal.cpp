@@ -141,6 +141,18 @@ UpdateInfoBoxThermalGain(InfoBoxData &data)
 }
 
 void
+UpdateInfoBoxThermalTime(InfoBoxData& data)
+{
+    const OneClimbInfo& thermal = CommonInterface::Calculated().current_thermal;
+    if (!thermal.IsDefined()) {
+        data.SetInvalid();
+        return;
+    }
+    data.SetValueFromTimeTwoLines((int)thermal.duration);
+}
+
+
+void
 UpdateInfoBoxThermalRatio(InfoBoxData &data)
 {
   // Set Value
