@@ -266,6 +266,7 @@ public:
 	 * item exists.
 	 */
 	template<typename K>
+	gcc_pure
 	Data *Get(K &&key) noexcept {
 		auto i = map.find(std::forward<K>(key),
 				  map.hash_function(), map.key_eq());
