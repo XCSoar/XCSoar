@@ -138,6 +138,8 @@ class Cache {
 	};
 
 	struct ItemEqual : Equal {
+		using Equal::operator();
+
 		gcc_pure
 		bool operator()(const Item &a, const Item &b) const noexcept {
 			return Equal::operator()(a.GetKey(), b.GetKey());
@@ -218,6 +220,9 @@ class Cache {
 	}
 
 public:
+	using hasher = typename KeyMap::hasher;
+	using key_equal = typename KeyMap::key_equal;
+
 	Cache() noexcept
 		:map(typename KeyMap::bucket_traits(&buckets.front(), buckets.size())) {
 		for (auto &i : buffer)
@@ -230,6 +235,14 @@ public:
 
 	Cache(const Cache &) = delete;
 	Cache &operator=(const Cache &) = delete;
+
+	decltype(auto) hash_function() const noexcept {
+		return map.hash_function();
+	}
+
+	decltype(auto) key_eq() const noexcept {
+		return map.key_eq();
+	}
 
 	bool IsEmpty() const noexcept {
 		return chronological_list.empty();
