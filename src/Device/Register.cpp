@@ -35,6 +35,7 @@ Copyright_License {
 #include "Device/Driver/NmeaOut.hpp"
 #include "Device/Driver/PosiGraph.hpp"
 #include "Device/Driver/BorgeltB50.hpp"
+#include "Device/Driver/XCVario.hpp"
 #include "Device/Driver/Volkslogger.hpp"
 #include "Device/Driver/EWMicroRecorder.hpp"
 #include "Device/Driver/LX.hpp"
@@ -75,6 +76,7 @@ static const struct DeviceRegister *const driver_list[] = {
   &nmea_out_driver,
   &posigraph_driver,
   &b50_driver,
+  &xcv_driver,
   &volkslogger_driver,
   &ew_microrecorder_driver,
   &lx_driver,
