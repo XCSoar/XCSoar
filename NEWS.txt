@@ -36,6 +36,8 @@ Version 7.0 - not yet released
   - enable SkyLines traffic display on Windows
   - add option to show SkyLines traffic names on the map
   - show thermals obtained from the XCSoar Cloud server
+* FLARM radar
+  - preserve zoom level when switch between pages
 * analysis
   - enhanced graphics: minor tics, color scheme, layout
   - key labels drawn on lines in several pages
