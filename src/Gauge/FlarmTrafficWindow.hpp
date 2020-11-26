@@ -82,7 +82,8 @@ public:
 public:
   FlarmTrafficWindow(const FlarmTrafficLook &_look,
                      unsigned _h_padding, unsigned _v_padding,
-                     bool _small = false);
+                     bool _small = false,
+                     double distance = 2000.0);
 
 public:
   bool WarningMode() const;

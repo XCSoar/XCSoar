@@ -362,6 +362,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Gauge/GlueGaugeVario.cpp \
 	$(SRC)/Gauge/TaskView.cpp \
 	$(SRC)/Gauge/LogoView.cpp \
+	$(SRC)/Gauge/TrafficUIState.cpp \
 	\
 	$(SRC)/Waypoint/WaypointDetailsReader.cpp \
 	$(SRC)/Menu/MenuData.cpp \

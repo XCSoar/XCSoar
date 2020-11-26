@@ -28,6 +28,7 @@ Copyright_License {
 #include "util/StaticString.hxx"
 #include "PageState.hpp"
 #include "Weather/WeatherUIState.hpp"
+#include "Gauge/TrafficUIState.hpp"
 
 /**
  * The state of the user interface.
@@ -79,6 +80,8 @@ struct UIState {
   PagesState pages;
 
   WeatherUIState weather;
+
+  TrafficUIState traffic;
 
   void Clear();
 };

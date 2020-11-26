@@ -21,18 +21,21 @@ Copyright_License {
 }
 */
 
-#include "UIState.hpp"
+#ifndef XCSOAR_TRAFFIC_UI_STATE_HPP
+#define XCSOAR_TRAFFIC_UI_STATE_HPP
 
-void
-UIState::Clear()
-{
-  screen_blanked = false;
-  force_display_mode = DisplayMode::NONE;
-  display_mode = DisplayMode::NONE;
-  auxiliary_enabled = false;
-  panel_index = 0;
-  panel_name.clear();
-  pages.Clear();
-  weather.Clear();
-  traffic.Clear();
-}
+/**
+ * The state of traffic display on the user interface.
+ */
+struct TrafficUIState {
+
+  /**
+   * Traffic map zoom level from 0 to 4
+   */
+  unsigned zoom;
+
+  void Clear();
+
+};
+
+#endif

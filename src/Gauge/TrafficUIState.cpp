@@ -21,18 +21,9 @@ Copyright_License {
 }
 */
 
-#include "UIState.hpp"
+#include "TrafficUIState.hpp"
 
 void
-UIState::Clear()
-{
-  screen_blanked = false;
-  force_display_mode = DisplayMode::NONE;
-  display_mode = DisplayMode::NONE;
-  auxiliary_enabled = false;
-  panel_index = 0;
-  panel_name.clear();
-  pages.Clear();
-  weather.Clear();
-  traffic.Clear();
+TrafficUIState::Clear() {
+  zoom = 2;
 }
