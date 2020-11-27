@@ -132,7 +132,7 @@ You may specify one of the following targets with \texttt{TARGET=x}:
 For Android, you need:
 
 \begin{itemize}
-\item \href{http://developer.android.com/sdk/}{Android SDK level 22}
+\item \href{http://developer.android.com/sdk/}{Android SDK level 26}
 \item \href{http://developer.android.com/sdk/ndk/}{Android NDK r21d}
 \item \href{http://www.vorbis.com/}{Ogg Vorbis}
 \item {Java JDK 
@@ -144,7 +144,7 @@ sudo apt-get install default-jdk-headless vorbis-tools adb
 The required Android SDK components are:
 \begin{itemize}
 \item Android SDK Build-Tools 28.0.3
-\item SDK Platform 22
+\item SDK Platform 26
 \end{itemize}
 These can be installed from the Android Studio SDK Manager, or using the SDK
 command line tools:
@@ -152,7 +152,7 @@ command line tools:
 \begin{verbatim*}
 tools/bin/sdkmanager \
   "build-tools;28.0.3" \
-  "platforms;android-22"
+  "platforms;android-26"
 \end{verbatim*}
 
 The \texttt{Makefile} assumes that the Android SDK is installed in
