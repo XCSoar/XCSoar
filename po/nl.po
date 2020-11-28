@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-11-19 19:29+0000\n"
+"PO-Revision-Date: 2020-11-29 21:29+0000\n"
 "Last-Translator: Martin Peters <twinpiloot@hotmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/xcsoar/"
 "translations/nl/>\n"
@@ -1154,9 +1154,9 @@ msgid "Last thermal duration"
 msgstr "Duur laatste bel"
 
 #: src/InfoBoxes/Content/Factory.cpp:210
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "TL duration"
-msgstr "Vluchtduur"
+msgstr "LB duur"
 
 #: src/InfoBoxes/Content/Factory.cpp:211
 #, no-c-format
@@ -3017,9 +3017,9 @@ msgid "Next waypoint arrival time (ground speed)"
 msgstr "Aankomsttijd volgende keerpunt (grondsnelheid)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1040
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "WP ETA VMG"
-msgstr "KP ETE VGG"
+msgstr "KP ETA V GND"
 
 #: src/InfoBoxes/Content/Factory.cpp:1041
 #, no-c-format
@@ -3074,7 +3074,7 @@ msgid "Number of used satellites"
 msgstr "Aantal satellieten"
 
 #: src/InfoBoxes/Content/Factory.cpp:1065
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Satellites"
 msgstr "Satellieten gevonden"
 
@@ -4195,9 +4195,8 @@ msgid "UDP Port"
 msgstr "UDP-poort"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:355
-#, fuzzy
 msgid "Bluetooth LE"
-msgstr "Bluetooth server"
+msgstr "Bluetooth LE"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:583
 msgid "Port"
@@ -6143,7 +6142,7 @@ msgid ""
 "Draws a solid outline with a half transparent border around the airspace."
 msgstr ""
 "Tekent een onafgebroken omtrek met een half transparante rand om het "
-"luchtruim"
+"luchtruim."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:76
 #, no-c-format
@@ -6300,12 +6299,12 @@ msgstr "Indien ingeschakeld wordt de luchtruim structuur transparant gevuld."
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:45
 #, no-c-format
 msgid "Disable final glide bar."
-msgstr "Final glide balk uitschakelen"
+msgstr "Final glide balk uitschakelen."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:47
 #, no-c-format
 msgid "Always show final glide bar."
-msgstr "Final glide balk altijd zichtbaar"
+msgstr "Final glide balk altijd zichtbaar."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:49
 #, no-c-format
@@ -6867,7 +6866,7 @@ msgstr "Linksboven"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:136
 #, no-c-format
 msgid "Show status message boxes ina the top left corner."
-msgstr "Toon de status berichtvensters in de linker boven hoek"
+msgstr "Toon de status berichtvensters in de linker boven hoek."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:142
 #, no-c-format
@@ -7183,7 +7182,7 @@ msgstr "Hoofdscherm"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:172
 msgid "Specifies what should be displayed in the main area."
-msgstr "Specificeer wat op het hoofdscherm getoond moet worden"
+msgstr "Specificeer wat op het hoofdscherm getoond moet worden."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:177
 #, no-c-format
@@ -7922,12 +7921,12 @@ msgstr "Referentie is de MSL hoogte."
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:97
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:247
 msgid "Start height ref."
-msgstr "Starthoogte ref"
+msgstr "Starthoogte ref."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:98
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:248
 msgid "Reference used for start max height rule."
-msgstr "Referentie die gebruikt wordt voor de start max hoogte regel"
+msgstr "Referentie die gebruikt wordt voor de start max hoogte regel."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:106
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:251
@@ -7951,7 +7950,7 @@ msgstr "Aankomst hoogte ref."
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:114
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:257
 msgid "Reference used for finish min height rule."
-msgstr "Referentie die gebruikt wordt voor de minimale finish hoogte regel"
+msgstr "Referentie die gebruikt wordt voor de minimale finish hoogte regel."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:79
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
@@ -8396,7 +8395,7 @@ msgstr "Eenheden voor vleugelbelasting."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:253
 msgid "Lat./Lon."
-msgstr "Lengte/Breedte"
+msgstr "Lengte/Breedtegraad"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:253
 msgid "Units used for latitude and longitude."
@@ -8671,7 +8670,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:194
 msgid "Scale runway length"
-msgstr "Omvang start-en landingsbaan."
+msgstr "Schaal lengte landingsbaan"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:195
 msgid ""
@@ -8956,7 +8955,7 @@ msgstr "De geselecteerde opdracht verwijderen?"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:317
 msgid "Can't rename .CUP files"
-msgstr "Kan geen .cup bestanden hernoemen."
+msgstr "Kan geen .cup bestanden hernoemen"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:317
 msgid "Rename Error"
@@ -9363,7 +9362,7 @@ msgstr "meer dan %s"
 
 #: src/Weather/NOAAFormatter.cpp:184
 msgid "Sky Conditions"
-msgstr "Vlieg condieties"
+msgstr "Vlieg condities"
 
 #: src/Weather/NOAAFormatter.cpp:247
 #, c-format
@@ -9501,7 +9500,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:77
 #, no-c-format
 msgid "Cruise lift trigger"
-msgstr ""
+msgstr "Steken stijgen trigger"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:78
 #, no-c-format
@@ -9565,7 +9564,7 @@ msgstr "Frequentie thuisveld"
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:102
 #, no-c-format
 msgid "Adjustment to base frequency of tones in all modes."
-msgstr ""
+msgstr "Instellen van basisfrequentie voor alle tonen in alle modi."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:106
 #, no-c-format
@@ -9672,12 +9671,12 @@ msgstr "Calibratiefactor toegepast voor stuwdruk in totale energie berekening."
 #: src/Dialogs/Device/Vega/DisplayParameters.hpp:40
 #, no-c-format
 msgid "Needle gauge type"
-msgstr ""
+msgstr "Meter naald type"
 
 #: src/Dialogs/Device/Vega/DisplayParameters.hpp:42
 #, no-c-format
 msgid "LED bright"
-msgstr ""
+msgstr "LED helder"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:42
 #, no-c-format
@@ -9692,7 +9691,7 @@ msgstr "Max. gemeld"
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:46
 #, no-c-format
 msgid "Flarm interface"
-msgstr ""
+msgstr "Flarm interface"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:48
 #, no-c-format
@@ -9712,7 +9711,7 @@ msgstr "Geen vliegtuigtype"
 #: src/Dialogs/Device/Vega/FlarmIdentificationParameters.hpp:52
 #, no-c-format
 msgid "Privacy"
-msgstr ""
+msgstr "Privacy"
 
 #: src/Dialogs/Device/Vega/FlarmIdentificationParameters.hpp:54
 #, no-c-format
@@ -9722,57 +9721,57 @@ msgstr "Vliegtuigtype"
 #: src/Dialogs/Device/Vega/FlarmRepeatParameters.hpp:33
 #, no-c-format
 msgid "Interval; info"
-msgstr ""
+msgstr "Interval; info"
 
 #: src/Dialogs/Device/Vega/FlarmRepeatParameters.hpp:36
 #, no-c-format
 msgid "Interval; caution"
-msgstr ""
+msgstr "Interval; voorzichtig"
 
 #: src/Dialogs/Device/Vega/FlarmRepeatParameters.hpp:39
 #, no-c-format
 msgid "Interval; warning"
-msgstr ""
+msgstr "Interval; waarschuwing"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:52
 #, no-c-format
 msgid "TE port"
-msgstr "TE poort"
+msgstr "TE aansluiting"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:52
 #, no-c-format
 msgid "Whether the Total Energy port is connected."
-msgstr ""
+msgstr "Of de TE aansluiting verbonden is."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:55
 #, no-c-format
 msgid "Pitot port"
-msgstr "Pitot buis"
+msgstr "Pitot aansluiting"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:55
 #, no-c-format
 msgid "Whether the Pitot port is connected."
-msgstr "Of de pitot buis is verbonden."
+msgstr "Of de pitot aansluiting is verbonden."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:58
 #, no-c-format
 msgid "Static port"
-msgstr "Statische poort"
+msgstr "Statische aansluiting"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:58
 #, no-c-format
 msgid "Whether the Static port is connected."
-msgstr ""
+msgstr "Of de statische aansluiting is verbonden."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:61
 #, no-c-format
 msgid "Stall port"
-msgstr ""
+msgstr "Overtrek aansluiting"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:61
 #, no-c-format
 msgid "Whether the Stall pressure port is connected."
-msgstr ""
+msgstr "Of de overtrek aansluiting is verbonden."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:64
 #, no-c-format
@@ -9786,6 +9785,8 @@ msgid ""
 "accelerometer has malfunctioned or the instrument cannot be installed with "
 "correct alignment."
 msgstr ""
+"Of de interne versnellingsmeter wordt gebruikt. Alleen wijzigen als de "
+"versnellingsmeter niet goed werkt of niet correct geinstalleerd kan worden."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:69
 #, no-c-format
@@ -9794,6 +9795,8 @@ msgid ""
 "disable, 255 to enable auto-detect; otherwise the 1Wire device ID can be "
 "specified."
 msgstr ""
+"Of de temperatuur en vochtigheidssensor is geinstalleerd. Zet op 0 om uit te "
+"zetten, 255 voor automatische detectie en anders het ID van het 1W apparaat."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:73
 #, no-c-format
@@ -9820,6 +9823,8 @@ msgid ""
 "Enable detection of FLARM.  Disable only if FLARM is not used or "
 "disconnected."
 msgstr ""
+"FLARM detectie aanzetten. Alleen uitzetten als de FLARM niet gebruikt wordt "
+"of niet aangesloten is."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:82
 #, no-c-format
@@ -9851,42 +9856,42 @@ msgstr "Hoogte terrein"
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:38
 #, no-c-format
 msgid "V manoeuvering"
-msgstr ""
+msgstr "V manouvreer"
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:40
 #, no-c-format
 msgid "V airbrake"
-msgstr ""
+msgstr "V kleppen"
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:42
 #, no-c-format
 msgid "V flap"
-msgstr ""
+msgstr "V flaps"
 
 #: src/Dialogs/Device/Vega/LoggerParameters.hpp:37
 #, no-c-format
 msgid "IGC logging"
-msgstr ""
+msgstr "IGC logging"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:32
 #, no-c-format
 msgid "Mute vario on voice"
-msgstr ""
+msgstr "Vario dempen bij spraak"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:33
 #, no-c-format
 msgid "Mute vario on radio"
-msgstr ""
+msgstr "Vario dempen bij radioverkeer"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:34
 #, no-c-format
 msgid "Vario muting"
-msgstr "Vario dempen"
+msgstr "Vario demping"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:36
 #, no-c-format
 msgid "Voice muting"
-msgstr ""
+msgstr "Spraak demping"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:38
 #, no-c-format
@@ -9901,7 +9906,7 @@ msgstr "Headset drempel"
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:42
 #, no-c-format
 msgid "Urgent min. volume"
-msgstr ""
+msgstr "Dringend min. volume"
 
 #: Data/Input/default.xci:833 Data/Input/default.xci:1206
 msgid "Thermal Assistant"
@@ -9963,7 +9968,7 @@ msgstr ""
 
 #: Data/Input/default.xci:825
 msgid "Traffic List"
-msgstr ""
+msgstr "Lijst met Vliegtuigen"
 
 #: Data/Input/default.xci:514 Data/Input/default.xci:1079
 msgid "Topo."
@@ -9971,7 +9976,7 @@ msgstr "Topografie"
 
 #: Data/Input/default.xci:64
 msgid "Below final glide"
-msgstr "Beneden Final Glide"
+msgstr "Onder Final Glide"
 
 #: Data/Input/default.xci:350 Data/Input/default.xci:399
 #: Data/Input/default.xci:878
@@ -10133,7 +10138,7 @@ msgstr "Vliegtuig Instelling"
 
 #: Data/Input/default.xci:693
 msgid "Accel"
-msgstr "Versnell."
+msgstr "Versnel"
 
 #: Data/Input/default.xci:646
 msgid "Lua"
