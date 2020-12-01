@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-11-24 10:29+0000\n"
+"PO-Revision-Date: 2020-12-02 14:29+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -3440,7 +3440,7 @@ msgstr "Úplná pozemní stopa"
 
 #: src/Input/InputEventsSettings.cpp:203
 msgid "Bugs performance"
-msgstr "Znečištění mouchami"
+msgstr "Zamoušení"
 
 #: src/Input/InputEventsSettings.cpp:246
 #, no-c-format
@@ -4229,8 +4229,8 @@ msgid ""
 "This option lets you configure if XCSoar should use settings like the "
 "MacCready value, bugs and ballast from the device."
 msgstr ""
-"Určuje, zda má XCSoar použít nastavení jako MacCready, znečištění křídel a "
-"vodní zátěž z externího zařízení."
+"Určuje, zda má XCSoar použít nastavení MacCready, zamoušení a vodní zátěž z "
+"externího zařízení."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:662
 msgid "Sync. to device"
@@ -4241,8 +4241,8 @@ msgid ""
 "This option lets you configure if XCSoar should send settings like the "
 "MacCready value, bugs and ballast to the device."
 msgstr ""
-"Určuje, zda má XCSoar odesílat nastavení jako MacCready, znečištění křídel a "
-"vodní zátěž do externího zařízení."
+"Určuje, zda má XCSoar odesílat nastavení MacCready, zamoušení a vodní zátěž "
+"do externího zařízení."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:669
 msgid "Enable this if you use a K6Bt to connect the device."
@@ -4831,11 +4831,11 @@ msgstr "Rádio"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:77
 msgid "Top"
-msgstr "Vrchol"
+msgstr "Horní hr."
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:80
 msgid "Base"
-msgstr "Základna"
+msgstr "Spodní hr."
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:110
 msgid "Airspace Details"
@@ -4844,7 +4844,7 @@ msgstr "Podrobnosti vzdušného prostoru"
 #: src/Dialogs/Airspace/AirspaceList.cpp:321
 #: src/Dialogs/Waypoint/WaypointList.cpp:455
 msgid "No Match!"
-msgstr "Neodpovídá!"
+msgstr "Žádná shoda!"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:344
 msgid "Heading"
@@ -5040,7 +5040,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:295
 msgid "Bugs"
-msgstr "Znečištění"
+msgstr "Zamoušení"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:296
 #, no-c-format
@@ -5048,8 +5048,8 @@ msgid ""
 "How clean the glider is. Set to 0% for clean, larger numbers as the wings "
 "pick up bugs or gets wet.  50% indicates the glider's sink rate is doubled."
 msgstr ""
-"Čistota kluzáku. Nastavte 0% pro čistý, vyšší číslo tak, jak přibývají "
-"mouchy na křídlech nebo zmoknou. 50% znamená dvojnásobné opadání."
+"Čistota kluzáku. Nastavte 0% pro čistý, vyšší číslo pro zamoušení, nebo "
+"mokrá křídla. 50% znamená dvojnásobné opadání."
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:320
 msgid "Max. temp."
@@ -6336,11 +6336,11 @@ msgstr "Aktivace zobrazení nastavení MacCready."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:74
 msgid "Show bugs"
-msgstr "Znečištění křídel"
+msgstr "Zamoušení"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:74
 msgid "Whether to show the bugs percentage."
-msgstr "Určuje, zda zobrazit znečištění křídel."
+msgstr "Určuje, zda zobrazit zamoušení křídel."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:77
 msgid "Show ballast"
@@ -6921,8 +6921,8 @@ msgid ""
 "Enable the NMEA logger on startup? If this option is disabled, the NMEA "
 "logger can still be started manually."
 msgstr ""
-"Povolit NMEA logger při vzletu? Pokud je zakázáno lze NMEA logger i tak "
-"zapnout ručně."
+"Povolit NMEA záznam při vzletu? Pokud je tato volba zakázána, lze NMEA "
+"záznam zapnout ručně."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:92
 msgid "Log book"
@@ -7413,13 +7413,13 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:100
 msgid "Auto bugs"
-msgstr "Auto znečištění"
+msgstr "Auto zamoušení"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:101
 #, no-c-format
 msgid ""
 "If enabled, adds 1% to the bugs setting after each full hour while flying."
-msgstr "Pokud je povoleno, přidá 1% much každou hodinu letu."
+msgstr "Pokud je aktivní, zvyšuje zamoušení o 1% každou hodinu letu."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:106
 msgid ""
@@ -8021,7 +8021,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:132
 msgid "FAI triangle areas"
-msgstr "Oblast FAI trojúhelníků"
+msgstr "Oblasti FAI trojúhelníků"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:133
 msgid "Show FAI triangle areas on the map."
