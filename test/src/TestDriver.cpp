@@ -32,6 +32,7 @@
 #include "Device/Driver/EWMicroRecorder.hpp"
 #include "Device/Driver/Eye.hpp"
 #include "Device/Driver/FLARM.hpp"
+#include "Device/Driver/FANET.hpp"
 #include "Device/Driver/FlymasterF1.hpp"
 #include "Device/Driver/FlyNet.hpp"
 #include "Device/Driver/Flytec.hpp"
@@ -1532,6 +1533,49 @@ TestACD()
 }
 
 static void
+TestFANET() {
+  NullPort null;
+  Device *device = fanet_driver.CreateOnPort(dummy_config, null);
+  ok1(device != NULL);
+
+  NMEAInfo nmea_info;
+  nmea_info.Reset();
+  nmea_info.clock = 1;
+
+  // Basic test for parser, should always pass
+  ok1(device->ParseNMEA("#FNF FD,FFFF,1,0,4,F,7a0000000000002200e4e9c88e170f", nmea_info));
+
+  // TODO: find better values for testing latitude / longitude
+  ok1(nmea_info.fanet.stations.list[0].location.longitude.Degrees() == 0.0);
+  ok1(nmea_info.fanet.stations.list[0].location.latitude.Degrees() == 0.0);
+  ok1(nmea_info.fanet.stations.list[0].address == FanetAddress(0xFD, 0xFFFF));
+  ok1(nmea_info.fanet.stations.list[0].wind_dir_deg == 0.0);
+  ok1(nmea_info.fanet.stations.list[0].wind_speed_kmph == 100.0);
+  ok1(nmea_info.fanet.stations.list[0].wind_gust_kmph == 105.0);
+  ok1(nmea_info.fanet.stations.list[0].rel_humidity == 80.0);
+  ok1(nmea_info.fanet.stations.list[0].temperature == 17.0);
+  ok1(nmea_info.fanet.stations.list[0].preasure_hpa == 1033.0);
+  ok1(nmea_info.fanet.stations.list[0].soc_percent == 100);
+
+  nmea_info.Reset();
+  nmea_info.clock = 1;
+
+  // Empty #FNF line
+  ok1(! device->ParseNMEA("#FNF ,,,,,,,", nmea_info));
+
+  // Bad data
+  ok1(! device->ParseNMEA("#FNF", nmea_info));
+  ok1(! device->ParseNMEA("#FNF *,,,,", nmea_info));
+  ok1(! device->ParseNMEA("#FNF #,,,,", nmea_info));
+  ok1(! device->ParseNMEA("#FNF 1000000000000000001,,,,", nmea_info));
+  ok1(! device->ParseNMEA("#FNF FD,FFFF,1000000000000000001,,", nmea_info));
+  ok1(! device->ParseNMEA("#FNF RZ,,,,,", nmea_info));
+
+  // Payload length longer than payload
+  ok1(! device->ParseNMEA("#FNF FD,FFFF,1,0,4,10,7a00000000000012aeb7cb17c91601", nmea_info));
+}
+
+static void
 TestDeclare(const struct DeviceRegister &driver)
 {
   NullDataHandler handler;
@@ -1602,7 +1646,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(827);
+  plan_tests(847);
 
   TestGeneric();
   TestTasman();
@@ -1629,6 +1673,7 @@ int main(int argc, char **argv)
   TestVaulter();
   TestXCTracer();
   TestACD();
+  TestFANET();
 
   /* XXX the Triadis drivers have too many dependencies, not enabling
      for now */

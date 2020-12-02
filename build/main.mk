@@ -248,6 +248,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/FLARM/FlarmComputer.cpp \
 	$(SRC)/FLARM/Global.cpp \
 	$(SRC)/FLARM/Glue.cpp \
+	$(SRC)/FANET/FanetStation.cpp \
 	$(SRC)/Computer/CuComputer.cpp \
 	$(SRC)/Computer/FlyingComputer.cpp \
 	$(SRC)/Computer/CirclingComputer.cpp \
@@ -490,6 +491,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/MapWindow/MapWindowTraffic.cpp \
 	$(SRC)/MapWindow/MapWindowTrail.cpp \
 	$(SRC)/MapWindow/MapWindowWaypoints.cpp \
+	$(SRC)/MapWindow/MapWindowFanetStation.cpp \
 	$(SRC)/MapWindow/GlueMapWindow.cpp \
 	$(SRC)/MapWindow/GlueMapWindowItems.cpp \
 	$(SRC)/MapWindow/GlueMapWindowEvents.cpp \

@@ -22,12 +22,14 @@ Version 7.0 - not yet released
   - GliderLink: new driver
   - AirControlDisplay: read radio frequencies from PAAVS,COM sentence
   - driver for LXNano modified, so declaration contains copilot
+  - driver for parsing FANET #FNF sentences
 * weather
   - merge all weather data in one dialog
   - allow showing both terrain and RASP
   - RASP download from various well-known providers
   - show satellite images from pc_met (Deutscher Wetterdienst)
   - show wave forecast from pc_met (Deutscher Wetterdienst)
+  - show wind arrow, speed and gust from parsed FANET #FNF sentences
 * calculations
   - merge redundant waves
   - task restart

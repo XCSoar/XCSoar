@@ -180,6 +180,8 @@ NMEAInfo::Reset()
   device.Clear();
   secondary_device.Clear();
   flarm.Clear();
+
+  fanet.Clear();
 }
 
 void
@@ -201,6 +203,18 @@ NMEAInfo::ExpireWallClock()
     time_available.Clear();
     gps.Reset();
     flarm.Clear();
+
+    /*
+     * If we have fanet station left let this stay alive so we can show them
+     * for longer than 10 seconds, otherwise they wont survive the Merge
+     */
+    {
+    fanet.Expire(clock);
+    if(fanet.stations.IsEmpty())
+      fanet.Clear();
+    else
+      alive.Update(clock);
+    }
   } else {
     time_available.Expire(clock, std::chrono::seconds(10));
   }
@@ -239,6 +253,7 @@ NMEAInfo::Expire()
   voltage_available.Expire(clock, std::chrono::minutes(5));
   battery_level_available.Expire(clock, std::chrono::minutes(5));
   flarm.Expire(clock);
+  fanet.Expire(clock);
 #ifdef ANDROID
   glink_data.Expire(clock);
 #endif
@@ -356,6 +371,8 @@ NMEAInfo::Complement(const NMEAInfo &add)
     stall_ratio = add.stall_ratio;
 
   flarm.Complement(add.flarm);
+
+  fanet.Complement(add.fanet);
 
 #ifdef ANDROID
   glink_data.Complement(add.glink_data);

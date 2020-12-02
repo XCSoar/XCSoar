@@ -656,6 +656,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
+	$(SRC)/FANET/FanetStation.cpp \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/GPSState.cpp \
 	$(SRC)/NMEA/Attitude.cpp \
@@ -875,6 +876,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/FLARM/List.cpp \
+	$(SRC)/FANET/FanetStation.cpp \
 	$(SRC)/Computer/BasicComputer.cpp \
 	$(SRC)/Computer/GroundSpeedComputer.cpp \
 	$(SRC)/Computer/FlyingComputer.cpp \
@@ -1294,6 +1296,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/Device/Config.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/FLARM/List.cpp \
+	$(SRC)/FANET/FanetStation.cpp \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/GPSState.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
@@ -1326,6 +1329,7 @@ RUN_DECLARE_SOURCES = \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(SRC)/FANET/FanetStation.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
@@ -1362,6 +1366,7 @@ RUN_ENABLE_NMEA_SOURCES = \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(SRC)/FANET/FanetStation.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
@@ -1453,6 +1458,7 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(SRC)/FANET/FanetStation.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
@@ -1487,6 +1493,7 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(SRC)/FANET/FanetStation.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
@@ -1829,6 +1836,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/MapWindow/MapWindowTask.cpp \
 	$(SRC)/MapWindow/MapWindowThermal.cpp \
 	$(SRC)/MapWindow/MapWindowTraffic.cpp \
+	$(SRC)/MapWindow/MapWindowFanetStation.cpp \
 	$(SRC)/MapWindow/MapWindowTrail.cpp \
 	$(SRC)/MapWindow/MapWindowWaypoints.cpp \
 	$(SRC)/MapWindow/MapCanvas.cpp \

@@ -301,6 +301,8 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
   if (basic.location_available)
     DrawFLARMTraffic(canvas, aircraft_pos);
 
+  DrawFANETWeather(canvas, aircraft_pos);
+
   //////////////////////////////////////////////// own aircraft
   // Finally, draw you!
   if (basic.location_available)

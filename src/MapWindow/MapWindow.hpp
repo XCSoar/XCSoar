@@ -308,6 +308,8 @@ protected:
   void DrawFLARMTraffic(Canvas &canvas, PixelPoint aircraft_pos) const;
   void DrawGLinkTraffic(Canvas &canvas, PixelPoint aircraft_pos) const;
 
+  void DrawFANETWeather(Canvas &canvas, PixelPoint aircraft_pos) const;
+
   // thread, main functions
   /**
    * Renders all the components of the moving map

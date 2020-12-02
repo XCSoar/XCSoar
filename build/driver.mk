@@ -87,7 +87,11 @@ XCTRACER_SOURCES = \
 
 THERMALEXPRESS_SOURCES = \
 	$(DRIVER_SRC_DIR)/ThermalExpress/Driver.cpp
- 
+
+FANET_SOURCES = \
+	$(DRIVER_SRC_DIR)/FANET/Register.cpp \
+	$(DRIVER_SRC_DIR)/FANET/Parser.cpp
+
 DRIVER_SOURCES = \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
@@ -101,6 +105,7 @@ DRIVER_SOURCES = \
 	$(BLUEFLY_SOURCES) \
 	$(XCTRACER_SOURCES) \
 	$(THERMALEXPRESS_SOURCES) \
+	$(FANET_SOURCES) \
 	$(DRIVER_SRC_DIR)/AltairPro.cpp \
 	$(DRIVER_SRC_DIR)/BorgeltB50.cpp \
 	$(DRIVER_SRC_DIR)/XCVario.cpp \

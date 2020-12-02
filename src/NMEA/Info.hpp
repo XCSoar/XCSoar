@@ -36,6 +36,7 @@ Copyright_License {
 #include "Atmosphere/Temperature.hpp"
 #include "DeviceInfo.hpp"
 #include "FLARM/Data.hpp"
+#include "FANET/Data.hpp"
 #include "Geo/SpeedVector.hpp"
 
 #ifdef ANDROID
@@ -362,6 +363,8 @@ struct NMEAInfo {
   DeviceInfo secondary_device;
 
   FlarmData flarm;
+
+  FanetData fanet;
 
 #ifdef ANDROID
   GliderLinkData glink_data;
