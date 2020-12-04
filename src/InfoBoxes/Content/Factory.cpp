@@ -1083,6 +1083,14 @@ static constexpr MetaData meta_data[] = {
     IBFHelper<InfoBoxContentStandbyRadioFrequency>::Create,
   },
 
+  // e_Thermal_Time
+  {
+    N_("Thermal time"),
+    N_("TC Time"),
+    N_("The time spend in the current thermal."),
+    UpdateInfoBoxThermalTime,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,
