@@ -90,9 +90,22 @@ static int
 ReadCheckedLatitudeLongitude(NMEAInputLine &line, double &value_latitude, double &value_longitude)
 {
   int valid_fields = 0;
+  double latitude, longitude;
+  double epsilon = std::numeric_limits<double>::epsilon();
 
-  valid_fields += ReadCheckedRange(line, value_latitude, -90.0, 90.0);
-  valid_fields += ReadCheckedRange(line, value_longitude, -180.0, 180.0);
+  valid_fields += ReadCheckedRange(line, latitude, -90.0, 90.0);
+  valid_fields += ReadCheckedRange(line, longitude, -180.0, 180.0);
+
+  if(valid_fields == 2 && !(fabs(latitude) < epsilon && fabs(longitude) < epsilon)) {
+    value_latitude = latitude;
+    value_longitude = longitude;
+  } else {
+    /**
+     * While inactive on the ground XCTracer send the 0.0/0.0 location.
+     * We mark as invalid here, so map is not jumping to the 0.0/0.0
+     */
+    valid_fields = 0;
+  }
 
   return valid_fields;
 }

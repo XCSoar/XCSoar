@@ -1485,6 +1485,15 @@ TestXCTracer()
   ok1(nmea_info.battery_level_available);
   ok1(equals(nmea_info.battery_level,77));
 
+  /* latitude,longitude=0,0 while inactive on the ground must be ignored */
+  ok1(device->ParseNMEA("$XCTRC,2020,11,27,18,47,31,0,0.000000,0.000000,"
+      "-0.26,0.00,0.0,-0.02,,,,1013.26,40*78",nmea_info));
+  
+  /* now check location and time, it should be last one as we skip the recent one */
+  ok1(equals(nmea_info.time, 10 * 3600 + 56 * 60 + 23.80));
+  ok1(equals(nmea_info.location.longitude, 8.104885));
+  ok1(equals(nmea_info.location.latitude, 48.62825));
+
   delete device;
 }
 
@@ -1602,7 +1611,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(827);
+  plan_tests(831);
 
   TestGeneric();
   TestTasman();
