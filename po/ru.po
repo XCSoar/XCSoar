@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2017-09-17 23:10+0000\n"
-"Last-Translator: Евгений Набиулин <evgnab@gmail.com>\n"
-"Language-Team: Russian "
-"<https://hosted.weblate.org/projects/xcsoar/translations/ru/>\n"
+"PO-Revision-Date: 2020-09-28 20:40+0000\n"
+"Last-Translator: Artem <KovalevArtem.ru@gmail.com>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/xcsoar/"
+"translations/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
-"4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 2.17-dev\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.3-dev\n"
 "X-Launchpad-Export-Date: 2015-02-20 18:36+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -3291,7 +3291,7 @@ msgstr "ИнфоБоксы по умолчанию"
 
 #: src/Input/InputEventsActions.cpp:330
 msgid "No active waypoint!"
-msgstr "Нет активной путевой точки"
+msgstr "Нет активной путевой точки!"
 
 #: src/Input/InputEventsActions.cpp:434
 msgid "NMEA log on"
@@ -3870,7 +3870,7 @@ msgstr ""
 
 #: src/Polar/PolarGlue.cpp:109
 msgid "Warning"
-msgstr "Внимание !!!"
+msgstr "Внимание"
 
 #. TODO feature: Show the user what the batt status is.
 #: src/BatteryTimer.cpp:61
@@ -4822,7 +4822,7 @@ msgstr "Подробн. Возд.простр."
 #: src/Dialogs/Airspace/AirspaceList.cpp:321
 #: src/Dialogs/Waypoint/WaypointList.cpp:455
 msgid "No Match!"
-msgstr "Нет совпадений"
+msgstr "Нет совпадений!"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:344
 msgid "Heading"
@@ -5399,9 +5399,9 @@ msgid "File exists already."
 msgstr ""
 
 #: src/Dialogs/ProfileListDialog.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Delete \"%s\"?"
-msgstr "Удалить"
+msgstr "Удалить \"%s\"?"
 
 #: src/Dialogs/ProfileListDialog.cpp:372 Data/Input/default.xci:589
 #, fuzzy
@@ -5429,7 +5429,7 @@ msgstr ""
 #: src/Dialogs/Plane/PlaneListDialog.cpp:248
 #: src/Dialogs/Plane/PlaneListDialog.cpp:293
 msgid "Please enter the registration of the plane!"
-msgstr "Пожалуйста, введите регитрационный номер планера"
+msgstr "Пожалуйста, введите регистрационный номер планера!"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:260
 #: src/Dialogs/Plane/PlaneListDialog.cpp:307
@@ -8799,7 +8799,7 @@ msgstr "Подробнее"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:241
 msgid "Load the selected task?"
-msgstr "Загрузить выбранную Задачу"
+msgstr "Загрузить выбранную Задачу?"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:244
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:280
@@ -9233,11 +9233,11 @@ msgstr "METAR для %s:"
 
 #: src/Weather/NOAAFormatter.cpp:273
 msgid "No METAR available!"
-msgstr "Данные METAR не доступны"
+msgstr "Данные METAR не доступны!"
 
 #: src/Weather/NOAAFormatter.cpp:287
 msgid "No TAF available!"
-msgstr "Данные TAF не доступны"
+msgstr "Данные TAF не доступны!"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:33
 #, no-c-format

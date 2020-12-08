@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2018-06-20 08:22+0000\n"
+"PO-Revision-Date: 2020-09-11 17:17+0000\n"
 "Last-Translator: flypluswangzhe <216188@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "xcsoar/translations/zh_Hans/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.0.1\n"
+"X-Generator: Weblate 4.3-dev\n"
 "X-Launchpad-Export-Date: 2016-03-01 23:01+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -41,7 +41,7 @@ msgstr "FAI 记录"
 #: src/Task/TypeStrings.cpp:32 src/Dialogs/Task/dlgTaskHelpers.cpp:82
 #, no-c-format
 msgid "FAI triangle"
-msgstr "FAI 三角形"
+msgstr "FAI 三角航线"
 
 #: src/Task/TypeStrings.cpp:33
 #, no-c-format
@@ -76,7 +76,7 @@ msgstr "混合"
 #: src/Task/TypeStrings.cpp:39
 #, no-c-format
 msgid "Touring"
-msgstr "旅行"
+msgstr "巡航"
 
 #: src/Task/TypeStrings.cpp:52
 #, no-c-format
@@ -728,7 +728,7 @@ msgid ""
 "(manual)"
 msgstr ""
 "高级\n"
-"(手册)"
+"(手动)"
 
 #: src/Menu/ExpandMacros.cpp:181
 msgid ""
@@ -2890,11 +2890,11 @@ msgstr "手动MC"
 
 #: src/InfoBoxes/Content/Other.cpp:57 src/InfoBoxes/Content/Other.cpp:60
 msgid "AC Off"
-msgstr "断开交流电"
+msgstr "断开充电器"
 
 #: src/InfoBoxes/Content/Other.cpp:64
 msgid "AC ON"
-msgstr "接通交流电"
+msgstr "接通充电器"
 
 #: src/InfoBoxes/Content/Other.cpp:177
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:47
@@ -7336,7 +7336,7 @@ msgstr "最大开始速度"
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:230
 msgid ""
 "Maximum speed allowed in start observation zone.  Set to 0 for no limit."
-msgstr "开始观测区域允许的最大速度。设置为0，无限制。"
+msgstr "开始观测区域允许的最大速度。  设置为0，无限制。"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:67
 msgid "Start max. speed margin"
@@ -8049,7 +8049,9 @@ msgstr "可着陆区详情"
 msgid ""
 "[Off] Display fixed icons for landables.\n"
 "[On] Show landables with variable information like runway length and heading."
-msgstr "[关闭]显示可着陆区的固定图标。[打开]显示具有可变信息的可着陆区，如跑道长度和航向。"
+msgstr ""
+"[关闭]显示可着陆区的固定图标。\n"
+"[打开]显示具有可变信息的可着陆区，如跑道长度和航向。"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:189
 msgid "Landable size"
@@ -8067,7 +8069,9 @@ msgstr "跑道长度"
 msgid ""
 "[Off] Display fixed length for runways.\n"
 "[On] Scale displayed runway length based on real length."
-msgstr "[关闭]显示跑道固定长度[打开]根据实际长度显示跑道长度。"
+msgstr ""
+"[关闭]显示跑道固定长度\n"
+"[打开]根据实际长度显示跑道长度。"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:185
 #, no-c-format
@@ -8198,7 +8202,9 @@ msgstr "错误确认"
 msgid ""
 "Task not valid. Changes will be lost.\n"
 "Continue?"
-msgstr "任务无效。更改将丢失。继续？"
+msgstr ""
+"任务无效。更改将丢失。\n"
+"继续？"
 
 #: src/Dialogs/Task/Manager/TaskClosePanel.cpp:65
 msgid "Task has been modified"
@@ -8542,8 +8548,9 @@ msgid ""
 "test server. You can disable it at any time in the \"Tracking\" settings.\n"
 "Please help us improve XCSoar!"
 msgstr ""
-"XCSOAR项目目前正在开发一种革命性的服务，允许与其他飞行员共享热/波状气流位置。你想参加现场测试吗？这意味着您的位置、热/波状气流位置和其他天气数据将"
-"被发送到我们的测试服务器。您可以在'跟踪'设置中的任何时候禁用它。请帮助我们改善XCSoar！"
+"XCSOAR项目目前正在开发一种革命性的服务，允许与其他飞行员共享热/波状气流位置。\n"
+"你想参加现场测试吗？这意味着您的位置、热/波状气流位置和其他天气数据将被发送到我们的测试服务器。您可以在'跟踪'设置中的任何时候禁用它。\n"
+"请帮助我们改善XCSoar！"
 
 #: src/Dialogs/TimeEntry.cpp:73 src/Dialogs/Weather/RASPDialog.cpp:131
 msgid "Now"
@@ -8853,8 +8860,10 @@ msgid ""
 "[AVERAGE]: State HIGH if gross vario value is greater than average gross "
 "vario value."
 msgstr ""
-"比较法用于检测爬升状态（高/低）。[无]：低状态禁用[MACCREADY]:如果总高度值大于MacCready设置，则状态为高。[平均值]：如果总值大于平"
-"均总值，则状态为高。"
+"比较法用于检测爬升状态（高/低）。\n"
+"[无]：低状态禁用\n"
+"[MACCREADY]:如果总高度值大于MacCready设置，则状态为高。\n"
+"[平均值]：如果总值大于平均总值，则状态为高。"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:77
 #, no-c-format
@@ -8872,8 +8881,12 @@ msgid ""
 "[RELATIVE MC/2] LIFT tone when relative vario greater than half MC.\n"
 "[NET MC/2] LIFT tone when airmass velocity greater than half MC."
 msgstr ""
-"比较法用于检测巡航状态时为巡航时切换升力音调。[无]：在巡航中禁用提升音调[相对零]当相对变量大于0时提升音调。[升零]滑翔机爬升时提升音调。[相对MC/"
-"2 ]当相对变量大于MC.一半时提升音调[净MC/2]气团垂直速度大于半MC一半时提升音调。"
+"比较法用于检测巡航状态时为巡航时切换升力音调。\n"
+"[无]：在巡航中禁用提升音调\n"
+"[相对零]当相对变量大于0时提升音调。\n"
+"[升零]滑翔机爬升时提升音调。\n"
+"[相对MC/2 ]当相对变量大于MC.一半时提升音调\n"
+"[净MC/2]气团垂直速度大于半MC一半时提升音调。"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:82
 #, no-c-format
@@ -9426,7 +9439,9 @@ msgstr ""
 msgid ""
 "Setup\n"
 "Wind"
-msgstr "设置风"
+msgstr ""
+"设置\n"
+"风"
 
 #: Data/Input/default.xci:727
 msgid "Store"
@@ -9444,7 +9459,9 @@ msgstr ""
 msgid ""
 "Pan\n"
 "Off"
-msgstr "关闭Pan"
+msgstr ""
+"平移\n"
+"关闭"
 
 #: Data/Input/default.xci:128 Data/Input/default.xci:444
 #: Data/Input/default.xci:929

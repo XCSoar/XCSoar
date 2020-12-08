@@ -8,15 +8,17 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2016-06-09 19:20+0000\n"
-"Last-Translator: Igor <igor.araujo.torres@gmail.com>\n"
-"Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
+"PO-Revision-Date: 2019-02-18 19:18+0000\n"
+"Last-Translator: Mário Machado <mario.spm@mail.com>\n"
+"Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
+"xcsoar/translations/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 3.5-dev\n"
 "X-Launchpad-Export-Date: 2016-06-10 13:16+0000\n"
-"X-Generator: Launchpad (build 18097)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -407,7 +409,7 @@ msgstr ""
 #: src/Task/ValidationErrorStrings.cpp:40
 #, no-c-format
 msgid "Empty task"
-msgstr "Tarefa vazia"
+msgstr "Prova vazia"
 
 #: src/Task/ValidationErrorStrings.cpp:41
 #, no-c-format
@@ -456,7 +458,7 @@ msgstr "Informação"
 #: src/FLARM/Error.cpp:31
 #, no-c-format
 msgid "Reduced functionality"
-msgstr "reduzir  funcionalidade"
+msgstr "Funcionalidade reduzida"
 
 #: src/FLARM/Error.cpp:32
 #, no-c-format
@@ -579,7 +581,7 @@ msgstr "Nenhum Logger conectado"
 
 #: src/Logger/ExternalLogger.cpp:269
 msgid "Failed to download flight list."
-msgstr "Falha ao descarregar a lista de vôos"
+msgstr "Falha ao descarregar a lista de vôos."
 
 #: src/Logger/ExternalLogger.cpp:270 src/Logger/ExternalLogger.cpp:281
 #: src/Logger/ExternalLogger.cpp:302 src/Logger/ExternalLogger.cpp:325
@@ -588,11 +590,11 @@ msgstr "Descarregar o vôo"
 
 #: src/Logger/ExternalLogger.cpp:280
 msgid "Logger is empty."
-msgstr "O registrador está vazio"
+msgstr "O registrador está vazio."
 
 #: src/Logger/ExternalLogger.cpp:301
 msgid "Failed to download flight."
-msgstr "Falha ao descarregar o vôo"
+msgstr "Falha ao descarregar o vôo."
 
 #: src/Logger/ExternalLogger.cpp:324
 msgid "Do you want to download another flight?"
@@ -1138,7 +1140,7 @@ msgstr "ULT GANHO TERM"
 #: src/InfoBoxes/Content/Factory.cpp:203
 #, no-c-format
 msgid "Total altitude gain/loss in the last thermal."
-msgstr "Ganho/perda total na última térmica"
+msgstr "Ganho/perda total na última térmica."
 
 #: src/InfoBoxes/Content/Factory.cpp:209
 #, no-c-format
@@ -1153,7 +1155,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:211
 #, no-c-format
 msgid "Time spent circling in the last thermal."
-msgstr "Tempo girando na última térmica"
+msgstr "Tempo girando na última térmica."
 
 #: src/InfoBoxes/Content/Factory.cpp:217
 #, no-c-format
@@ -1264,7 +1266,7 @@ msgstr "DIF ALT ATUAL"
 msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
 "height."
-msgstr "Altitude de chegada no ponto final relativa à altitude de segurança"
+msgstr "Altitude de chegada no ponto final relativa à altitude de segurança."
 
 #: src/InfoBoxes/Content/Factory.cpp:268
 #, no-c-format
@@ -1296,7 +1298,7 @@ msgstr "Vmed Prova"
 msgid ""
 "Average cross country speed while on current task, not compensated for "
 "altitude."
-msgstr "Velocidade média de navegação na prova atual, sem compensar a altitude"
+msgstr "Velocidade média de navegação na prova atual, sem compensar a altitude."
 
 #: src/InfoBoxes/Content/Factory.cpp:284
 #, no-c-format
@@ -1311,7 +1313,7 @@ msgstr "Fin Dist"
 #: src/InfoBoxes/Content/Factory.cpp:286
 #, no-c-format
 msgid "Distance to finish around remaining turn points."
-msgstr "Distância para chegada passando pelos pontos restantes"
+msgstr "Distância para chegada passando pelos pontos restantes."
 
 #: src/InfoBoxes/Content/Factory.cpp:300
 #, no-c-format
@@ -1348,7 +1350,7 @@ msgid ""
 "Altitude gained/lost in the current thermal, divided by time spent "
 "thermalling."
 msgstr ""
-"Altitude ganha/perdida na térmica atual, dividida pelo tempo gasto girando"
+"Altitude ganha/perdida na térmica atual, dividida pelo tempo gasto girando."
 
 #: src/InfoBoxes/Content/Factory.cpp:316
 #, no-c-format
@@ -1659,7 +1661,7 @@ msgstr "Hora Loc"
 #: src/InfoBoxes/Content/Factory.cpp:458
 #, no-c-format
 msgid "GPS time expressed in local time zone."
-msgstr "Hora do GPS expressa em hora local"
+msgstr "Hora do GPS expressa em hora local."
 
 #: src/InfoBoxes/Content/Factory.cpp:464 src/InfoBoxes/Content/Factory.cpp:465
 #, no-c-format
@@ -1669,7 +1671,7 @@ msgstr "Hora UTC"
 #: src/InfoBoxes/Content/Factory.cpp:466
 #, no-c-format
 msgid "GPS time expressed in UTC."
-msgstr "Hora GPS expressa em UTC"
+msgstr "Hora GPS expressa em UTC."
 
 #: src/InfoBoxes/Content/Factory.cpp:472
 #, no-c-format
@@ -2335,7 +2337,7 @@ msgstr "RAM livre"
 #: src/InfoBoxes/Content/Factory.cpp:766
 #, no-c-format
 msgid "Free RAM as reported by OS."
-msgstr "RAM livre reportada pelo SO"
+msgstr "RAM livre reportada pelo SO."
 
 #: src/InfoBoxes/Content/Factory.cpp:772
 #, no-c-format
@@ -2492,7 +2494,7 @@ msgid ""
 "maintained."
 msgstr ""
 "Tempo estimado para completar a prova, assumindo que velocidade atual no "
-"solo seja mantida"
+"solo seja mantida."
 
 #: src/InfoBoxes/Content/Factory.cpp:845
 #, no-c-format
@@ -2862,7 +2864,7 @@ msgstr "Distância Decolagem"
 #: src/InfoBoxes/Content/Factory.cpp:1006
 #, no-c-format
 msgid "Distance to where take-off was detected."
-msgstr "Distância de onde a decolagem foi detectada"
+msgstr "Distância de onde a decolagem foi detectada."
 
 #: src/InfoBoxes/Content/Factory.cpp:1012
 #, no-c-format
@@ -3571,7 +3573,7 @@ msgid ""
 "through the BL."
 msgstr ""
 "A velocidade e direção do vento vetor-média na BL. Esta previsão pode ser "
-"enganosa se ​​houver uma grande mudança na direção do vento através do BL."
+"enganosa se houver uma grande mudança na direção do vento através do BL."
 
 #: src/Weather/Rasp/RaspStore.cpp:63
 #, no-c-format
@@ -4377,11 +4379,11 @@ msgstr ""
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:41
 #: src/Dialogs/ProfileListDialog.cpp:235 src/Dialogs/ProfileListDialog.cpp:264
 msgid "Failed to load file."
-msgstr "Falha ao carregar arquivo"
+msgstr "Falha ao carregar arquivo."
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:46
 msgid "Too many waypoints."
-msgstr "Waypoints de mais"
+msgstr "Waypoints de mais."
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:50
 msgid "Uploading Waypoints"
@@ -4389,15 +4391,15 @@ msgstr "Subindo waypoints"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:56
 msgid "Failed to erase waypoints."
-msgstr "Falha ao apagar waipoints"
+msgstr "Falha ao apagar waypoints."
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:62
 msgid "Failed to switch baud rate."
-msgstr "Falha ao escolher baudrate"
+msgstr "Falha ao escolher baudrate."
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:75
 msgid "Failed to write waypoint."
-msgstr "Falha ao escrever waypoint"
+msgstr "Falha ao escrever waypoint."
 
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:66
 #: src/Dialogs/Device/LX/ManageV7Dialog.cpp:81
@@ -4892,7 +4894,7 @@ msgstr ""
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:55
 #, no-c-format
 msgid "Requires only a GPS source."
-msgstr "Requer apenas uma fonte de GPS"
+msgstr "Requer apenas uma fonte de GPS."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:56
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:213
@@ -4915,7 +4917,7 @@ msgstr "Ambos"
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:59
 #, no-c-format
 msgid "Use ZigZag and circling."
-msgstr "Usar zigzag e giros"
+msgstr "Usar zigzag e giros."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:63
 msgid "Auto wind"
@@ -4923,7 +4925,7 @@ msgstr "Vento aut"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:64
 msgid "This allows switching on or off the automatic wind algorithm."
-msgstr "Possibilita ligar ou desligar o algorítimo automático de vento"
+msgstr "Possibilita ligar ou desligar o algorítimo automático de vento."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:67
 #, fuzzy
@@ -5843,7 +5845,7 @@ msgstr "A prova não será válida após a mudança."
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:120
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:160
 msgid "Created Goto Task."
-msgstr "Criada Prova de Goto"
+msgstr "Criada Prova de Goto."
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:120
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:125
@@ -5855,7 +5857,7 @@ msgstr "Sucesso"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:125
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:165
 msgid "Created 2-point task from Goto Task."
-msgstr "Criada prova com 2-pontos a partir de Prova de GoTo"
+msgstr "Criada prova com 2-pontos a partir de Prova de Goto."
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:194
 msgid "Waypoint not in task."
@@ -6308,7 +6310,7 @@ msgstr "Para mostrar a porcentagem de erros."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:77
 msgid "Show ballast"
-msgstr "Mostrar lastro."
+msgstr "Mostrar lastro"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:77
 msgid "Whether to show the ballast percentage."
@@ -6796,7 +6798,7 @@ msgstr "FLARM display"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:179
 msgid "Choose a location for the FLARM display."
-msgstr "Escolher local para exibir FLARM"
+msgstr "Escolher local para exibir FLARM."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:184
 msgid "Tab dialog style"
@@ -6987,7 +6989,7 @@ msgstr "Orientação em cruzeiro"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:112
 msgid "Determines how the screen is rotated with the glider"
-msgstr "Determina como a tela é rotacionada de acordo com o planador."
+msgstr "Determina como a tela é rotacionada de acordo com o planador"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:117
 msgid "Circling orientation"
@@ -6997,7 +6999,7 @@ msgstr "Orientação em giro"
 msgid "Determines how the screen is rotated with the glider while circling"
 msgstr ""
 "Determina como a tela é rotacionada de acordo com o planador quando estiver "
-"girando."
+"girando"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:123
 msgid "Circling zoom"
@@ -7017,11 +7019,11 @@ msgstr "Referência do deslocamento do mapa"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:128
 msgid "Determines what is used to shift the glider from the map center"
-msgstr "Determina o que é usado para deslocar o planador do centro do mapa."
+msgstr "Determina o que é usado para deslocar o planador do centro do mapa"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:134
 msgid "Glider position offset"
-msgstr "Offset da posição do glider."
+msgstr "Offset da posição do glider"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:135
 msgid ""
@@ -7221,7 +7223,7 @@ msgstr "Mc de Segurança"
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:150
 #, no-c-format
 msgid "Uses safety MacCready value"
-msgstr "Usa valores MacCready de segurança."
+msgstr "Usa valores MacCready de segurança"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:154
 msgid "Reach polar"
@@ -7292,7 +7294,7 @@ msgstr "Desenhar linha pontilhada na chegada do planador."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:175
 msgid "Reach display"
-msgstr "Exibir chegada."
+msgstr "Exibir chegada"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:65
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:124
@@ -7491,7 +7493,7 @@ msgstr "Desativar a exibição da trilha."
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:84
 #, no-c-format
 msgid "Always display ground track line."
-msgstr "Sempre exibir a trilha"
+msgstr "Sempre exibir a trilha."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:85
 #, no-c-format
@@ -8314,7 +8316,7 @@ msgstr "Formato do rótulo"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:101
 msgid "Determines how labels are displayed with each waypoint"
-msgstr "Determina como os rótulos são exibidos em cada waypoint."
+msgstr "Determina como os rótulos são exibidos em cada waypoint"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:107
 #, no-c-format
@@ -8334,7 +8336,7 @@ msgstr "Altura de chegada em planeio direto (não considera terreno)."
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:112
 #, no-c-format
 msgid "Terrain avoidance glide"
-msgstr "Planeio evitando terreno."
+msgstr "Planeio evitando terreno"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:113
 #, no-c-format
@@ -8361,7 +8363,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:124
 msgid "Determines how arrival height is displayed in waypoint labels"
-msgstr "Determina como a altura de chegada é exibida nos nomes dos waypoints."
+msgstr "Determina como a altura de chegada é exibida nos nomes dos waypoints"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:129
 #, no-c-format
@@ -8467,10 +8469,10 @@ msgid ""
 "(monochrome) style, or orange. The rendering differs for landable field and "
 "airport. All styles mark the waypoints within reach green."
 msgstr ""
-"Três estilos estão disponíveis: Círculos roxos (estilo WinPilot), ou alto "
+"Três estilos estão disponíveis: Círculos roxos (estilo WinPilot), alto "
 "contraste (monocromático), ou laranja. A renderização difere para campos "
-"pousáveis e aeroportos. Todos os estilos marcam os waypoints possiveis de "
-"alcançar de verde.a"
+"pousáveis e aeroportos. Todos os estilos marcam os waypoints possíveis de "
+"alcançar de verde."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:183
 msgid "Detailed landables"
@@ -8576,7 +8578,7 @@ msgstr ""
 
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:42
 msgid "Radius of the OZ cylinder."
-msgstr "Raio do cilindro OZ"
+msgstr "Raio do cilindro OZ."
 
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
 msgid "Width of the start/finish gate."
@@ -8611,7 +8613,7 @@ msgstr "Raio interno"
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:68
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:48
 msgid "Inner radius of the OZ sector."
-msgstr "Raio interno do setor OZ"
+msgstr "Raio interno do setor OZ."
 
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:54
 msgid "Angle"
@@ -9177,7 +9179,7 @@ msgstr "Condições do Céu"
 #: src/Weather/NOAAFormatter.cpp:247
 #, c-format
 msgid "METAR for %s:"
-msgstr "METAR para %s"
+msgstr "METAR para %s:"
 
 #: src/Weather/NOAAFormatter.cpp:273
 msgid "No METAR available!"

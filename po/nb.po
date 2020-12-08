@@ -8,15 +8,17 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2015-04-20 12:56+0000\n"
-"Last-Translator: Rob Hazes <Unknown>\n"
-"Language-Team: Norwegian Bokmal <nb@li.org>\n"
+"PO-Revision-Date: 2020-09-11 17:17+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/xcsoar/"
+"translations/nb_NO/>\n"
 "Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.3-dev\n"
 "X-Launchpad-Export-Date: 2015-04-20 16:44+0000\n"
-"X-Generator: Launchpad (build 17430)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 "X-Poedit-Bookmarks: -1,-1,-1,-1,-1,-1,-1,-1,891,-1\n"
@@ -269,7 +271,7 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:98
 #, no-c-format
 msgid "A symmetric quadrant with a custom radius."
-msgstr "Symetrisk kvadrant med egendefinert radius"
+msgstr "Symetrisk kvadrant med egendefinert radius."
 
 #: src/Task/TypeStrings.cpp:99
 #, no-c-format
@@ -379,7 +381,7 @@ msgstr "Ikke gyldig målpassering"
 #: src/Task/ValidationErrorStrings.cpp:34
 #, no-c-format
 msgid "Task not closed"
-msgstr ""
+msgstr "Oppgave ikke lukket"
 
 #: src/Task/ValidationErrorStrings.cpp:35
 #, no-c-format
@@ -409,7 +411,7 @@ msgstr "Vendepunktet(er) eksisterer fra før"
 #: src/Task/ValidationErrorStrings.cpp:40
 #, no-c-format
 msgid "Empty task"
-msgstr ""
+msgstr "Tom oppgave"
 
 #: src/Task/ValidationErrorStrings.cpp:41
 #, no-c-format
@@ -496,7 +498,7 @@ msgstr "GPS kommunikasjon"
 #: src/FLARM/Error.cpp:51
 #, no-c-format
 msgid "GPS configuration"
-msgstr "GPS konfigurasjon"
+msgstr "GPS-oppsett"
 
 #: src/FLARM/Error.cpp:52
 #, no-c-format
@@ -573,7 +575,7 @@ msgid ""
 "Task NOT declared!"
 msgstr ""
 "En feil oppsto,\n"
-"Oppgave IKKE deklarert"
+"Oppgave IKKE deklarert!"
 
 #: src/Logger/ExternalLogger.cpp:131
 msgid "No logger connected"
@@ -1135,9 +1137,9 @@ msgid "Total altitude gain/loss in the last thermal."
 msgstr "Sum høydeendring i siste boble."
 
 #: src/InfoBoxes/Content/Factory.cpp:209
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Last thermal duration"
-msgstr "Høydeendring siste boble"
+msgstr "Siste termikkvarighet"
 
 #: src/InfoBoxes/Content/Factory.cpp:210
 #, fuzzy, no-c-format
@@ -1405,7 +1407,7 @@ msgid ""
 "through settings, adjust the values with left/right cursor keys."
 msgstr ""
 "Vindhastighet estimert av XCSoar. Mulighet for justering gjennom dialogene i "
-"den gjeldene infoboksen.  Trykk på opp/ned-tastene for å bla gjennom "
+"den gjeldene infoboksen. Trykk på opp/ned-tastene for å bla gjennom "
 "innstillingene, og venstre/høyre-taster for å velge verdier."
 
 #: src/InfoBoxes/Content/Factory.cpp:349
@@ -1542,7 +1544,7 @@ msgstr "Høyde Baro"
 msgid ""
 "This is the barometric altitude obtained from a device equipped with a "
 "pressure sensor."
-msgstr "Dette er den barometriske høyde fra en enhet utstyrt med trykksensor"
+msgstr "Dette er den barometriske høyde fra en enhet utstyrt med trykksensor."
 
 #: src/InfoBoxes/Content/Factory.cpp:415
 #, no-c-format
@@ -1659,7 +1661,7 @@ msgstr "UTC Tid"
 #: src/InfoBoxes/Content/Factory.cpp:466
 #, no-c-format
 msgid "GPS time expressed in UTC."
-msgstr "UTC Tid fra GPS"
+msgstr "UTC Tid fra GPS."
 
 #: src/InfoBoxes/Content/Factory.cpp:472
 #, no-c-format
@@ -1896,7 +1898,7 @@ msgid ""
 "Assigned Area Task average speed achievable around target points remaining "
 "in minimum AAT time."
 msgstr ""
-"AAT mulig snitthastighet rundt målpunktene for gjenstående minimum AAT tid"
+"AAT mulig snitthastighet rundt målpunktene for gjenstående minimum AAT tid."
 
 #: src/InfoBoxes/Content/Factory.cpp:570
 #, no-c-format
@@ -2259,8 +2261,8 @@ msgid ""
 "Instantaneous evaluation of the flown distance according to the configured "
 "On-Line Contest rule set."
 msgstr ""
-"Aktuell evaluering av tilbakelagt distanse i forhold til det konfigurerte "
-"OLC reglementet."
+"Aktuell evaluering av tilbakelagt distanse i forhold til det oppsatte OLC "
+"reglementet."
 
 #: src/InfoBoxes/Content/Factory.cpp:739
 #, no-c-format
@@ -2601,8 +2603,7 @@ msgid ""
 "altitude."
 msgstr ""
 "Distansen til neste terrengkonflikt i det aktuelle oppgavestrekket. Ved "
-"dette punktet er flyhøyden lavere enn den konfigurerte minstehøyde til "
-"terreng."
+"dette punktet er flyhøyden lavere enn den oppsatte minstehøyde til terreng."
 
 #: src/InfoBoxes/Content/Factory.cpp:903
 #, no-c-format
@@ -2845,7 +2846,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1013
 #, no-c-format
 msgid "OLC Speed"
-msgstr ""
+msgstr "OLC-hastighet"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
 #, no-c-format
@@ -2873,9 +2874,9 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1027
 #: src/InfoBoxes/Content/Factory.cpp:1028 src/InfoBoxes/Content/Task.cpp:904
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next arrow"
-msgstr "Neste Startpunkt"
+msgstr "Neste pil"
 
 #: src/InfoBoxes/Content/Factory.cpp:1029
 #, no-c-format
@@ -2887,9 +2888,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1039
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next waypoint arrival time (ground speed)"
-msgstr "Neste gjenværende tid (bakkehast.)"
+msgstr "Ankomsttid for neste vendepunkt (bakkehast.)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1040
 #, fuzzy, no-c-format
@@ -2897,18 +2898,18 @@ msgid "WP ETA VMG"
 msgstr "VP ETE VMG"
 
 #: src/InfoBoxes/Content/Factory.cpp:1041
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Estimated arrival time at next waypoint, assuming current ground speed is "
 "maintained."
 msgstr ""
-"Forventet nødvendig tid for å nå neste vendepunkt, forutsett at den aktuelle "
-"bakkehastigheten opprettholdes."
+"Forventet ankomsttid for neste rutepunkt, forutsett at nåværende "
+"bakkehastighet opprettholdes."
 
 #: src/InfoBoxes/Content/Factory.cpp:1048
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Percentage non-circling climb"
-msgstr "Prosent Stig"
+msgstr "Prosent ikke-sirkulerende stigning"
 
 #: src/InfoBoxes/Content/Factory.cpp:1049
 #, fuzzy, no-c-format
@@ -2990,7 +2991,7 @@ msgstr "Info"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:166
 #, no-c-format
 msgid "Setup"
-msgstr "Konfig."
+msgstr "Oppsett"
 
 #: src/InfoBoxes/Content/Altitude.cpp:70 src/InfoBoxes/Content/Altitude.cpp:128
 #: src/InfoBoxes/Content/Altitude.cpp:194
@@ -3484,7 +3485,7 @@ msgstr "FLARM Trafikk"
 #: src/Dialogs/Traffic/TrafficList.cpp:687
 #, c-format
 msgid "%u minutes ago"
-msgstr ""
+msgstr "%u minutter siden"
 
 #: src/Renderer/WaypointListRenderer.cpp:146
 msgid "Arrival Alt"
@@ -3895,7 +3896,7 @@ msgstr "GPS mellomdriver"
 #: src/Device/Config.cpp:243 src/Dialogs/Device/DeviceEditWidget.cpp:66
 #, no-c-format
 msgid "Built-in GPS & sensors"
-msgstr ""
+msgstr "Innebygd GPS og sensorer"
 
 #. create buttons
 #: src/Dialogs/Message.cpp:99 src/Dialogs/WidgetDialog.cpp:250
@@ -3980,11 +3981,11 @@ msgstr "Legg til"
 
 #: src/Dialogs/FileManager.cpp:439
 msgid "Queued"
-msgstr ""
+msgstr "Satt i kø"
 
 #: src/Dialogs/FileManager.cpp:441 src/Dialogs/FileManager.cpp:447
 msgid "Downloading"
-msgstr ""
+msgstr "Laster ned"
 
 #: src/Dialogs/FileManager.cpp:452 src/Dialogs/FileManager.cpp:690
 #: src/Dialogs/Device/DeviceListDialog.cpp:417
@@ -4013,15 +4014,15 @@ msgstr ""
 #: src/Dialogs/FileManager.cpp:698 src/Dialogs/FileManager.cpp:727
 #: src/Dialogs/DownloadFilePicker.cpp:374 Data/Input/default.xci:605
 msgid "File Manager"
-msgstr ""
+msgstr "Filbehandler"
 
 #: src/Dialogs/FileManager.cpp:721 src/Dialogs/DownloadFilePicker.cpp:373
 msgid "The file manager is not available on this device."
-msgstr ""
+msgstr "Filbehandler er ikke tilgjengelig på denne enheten."
 
 #: src/Dialogs/FileManager.cpp:724
 msgid "The file manager requires Android 2.3."
-msgstr ""
+msgstr "Filbehandleren krever Android 2.3."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:72
 #, no-c-format
@@ -4041,7 +4042,7 @@ msgstr ""
 #: src/Dialogs/Device/DeviceEditWidget.cpp:78
 #, no-c-format
 msgid "TCP client"
-msgstr ""
+msgstr "TCP-klient"
 
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
@@ -4054,11 +4055,11 @@ msgstr "TCP Port"
 #: src/Dialogs/Device/DeviceEditWidget.cpp:83
 #, no-c-format
 msgid "UDP Port"
-msgstr ""
+msgstr "UDP-port"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:355
 msgid "Bluetooth LE"
-msgstr ""
+msgstr "Lavenergi-Blåtann"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:583
 msgid "Port"
@@ -4068,7 +4069,7 @@ msgstr "Port"
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:94
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:117
 msgid "Baud rate"
-msgstr ""
+msgstr "Baudrate"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:595
 msgid "Bulk baud rate"
@@ -4083,12 +4084,13 @@ msgstr ""
 "oppgavedeklarasjoner og flyturer."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:601
+#, fuzzy
 msgid "IP Address"
-msgstr ""
+msgstr "IP-adresse"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:611
 msgid "I2C Bus"
-msgstr ""
+msgstr "I²C-buss"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:611
 msgid "Select the description or bus number that matches your configuration."
@@ -4096,7 +4098,7 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid "I2C Addr"
-msgstr ""
+msgstr "I²C-adresse"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid ""
@@ -4105,6 +4107,9 @@ msgid ""
 "not understand the previous sentence you may assume that this field is not "
 "used."
 msgstr ""
+"I²C-adressen som passer oppsettet ditt. Dette feltet er ikke i bruk når ditt "
+"valg i «I²C-buss»-feltet ikke er et I²C-bussnummer. I fall du ikke forstår "
+"forrige setning, kan du anta at dette feltet ikke er i bruk."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:625
 msgid "Pressure use"
@@ -4516,12 +4521,12 @@ msgstr ""
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:53
 #, no-c-format
 msgid "Locked"
-msgstr ""
+msgstr "Låst"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:54
 #, no-c-format
 msgid "Not locked"
-msgstr ""
+msgstr "Ulåst"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:72
 msgid "Airbrake locked"
@@ -4565,7 +4570,7 @@ msgstr ""
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:119
 msgid "Threshold"
-msgstr ""
+msgstr "Terskel"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:120
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:103
@@ -4575,7 +4580,7 @@ msgstr "Rekkevidde"
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:123
 #, no-c-format
 msgid "Unkown"
-msgstr ""
+msgstr "Ukjent"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:124
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:182
@@ -4591,12 +4596,12 @@ msgstr ""
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:126
 #, no-c-format
 msgid "Helicopter"
-msgstr ""
+msgstr "Helikopter"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:127
 #, no-c-format
 msgid "Parachute"
-msgstr ""
+msgstr "Fallskjerm"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:128
 #, no-c-format
@@ -4631,9 +4636,9 @@ msgid "Flying saucer"
 msgstr ""
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:136
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Balloon"
-msgstr ""
+msgstr "Luftballong"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:137
 #, no-c-format
@@ -4711,7 +4716,7 @@ msgstr ""
 
 #: src/Dialogs/ColorListDialog.cpp:74
 msgid "Select Color"
-msgstr ""
+msgstr "Velg farge"
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:120
 #: src/Dialogs/Airspace/dlgAirspace.cpp:121 Data/Input/default.xci:436
@@ -4979,7 +4984,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:361
 msgid "Flight Setup"
-msgstr "Flytur Konfig."
+msgstr "Flytur Oppsett"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:94
 #: src/Dialogs/Settings/dlgConfiguration.cpp:160
@@ -5071,9 +5076,9 @@ msgid "Tracking"
 msgstr "Tracking"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:154
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Audio"
-msgstr "Lyd Konfig."
+msgstr "Lyd"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:161
 #, no-c-format
@@ -5102,7 +5107,7 @@ msgstr "Ekspert"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:337
 #: src/Dialogs/Settings/dlgConfiguration.cpp:368
 msgid "Configuration"
-msgstr "Konfigurasjon"
+msgstr "Innstillinger"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:385
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
@@ -5335,9 +5340,9 @@ msgid "File exists already."
 msgstr ""
 
 #: src/Dialogs/ProfileListDialog.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Delete \"%s\"?"
-msgstr "Slett"
+msgstr "Slett «%s»?"
 
 #: src/Dialogs/ProfileListDialog.cpp:372 Data/Input/default.xci:589
 #, fuzzy
@@ -5528,7 +5533,7 @@ msgstr "Fortsett"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:63
 msgid "Enter your password"
-msgstr ""
+msgstr "Skriv inn passordet ditt"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:88
 #, fuzzy
@@ -5537,7 +5542,7 @@ msgstr "Passord"
 
 #: src/Dialogs/ProfilePasswordDialog.cpp:103
 msgid "Enter a new password"
-msgstr ""
+msgstr "Skriv inn et nytt passord"
 
 #: src/Dialogs/dlgStatus.cpp:47 src/Dialogs/dlgStatus.cpp:66
 #: src/Dialogs/Weather/WeatherDialog.cpp:62 Data/Input/default.xci:809
@@ -5551,7 +5556,7 @@ msgstr ""
 
 #: src/Dialogs/dlgStatus.cpp:92 Data/Input/default.xci:539
 msgid "System"
-msgstr ""
+msgstr "System"
 
 #: src/Dialogs/dlgStatus.cpp:98
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:142
@@ -5593,7 +5598,7 @@ msgstr "Spenning"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:136
 msgid "Network"
-msgstr ""
+msgstr "Nettverk"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:140
 msgid "Assigned task time"
@@ -5724,11 +5729,11 @@ msgstr "Lokaltid"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:110
 msgid "UTC time"
-msgstr ""
+msgstr "UTC-tid"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:111
 msgid "UTC date"
-msgstr ""
+msgstr "UTC-dato"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:112
 msgid "Flight time"
@@ -5854,7 +5859,7 @@ msgstr "Flytt Kart Til Vendepunkt"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:324
 msgid "Set Active Frequency"
-msgstr ""
+msgstr "Sett aktiv frekvens"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:325
 #, fuzzy
@@ -7766,7 +7771,7 @@ msgstr "Standard radius for vendepunktsylinder og sektor i nye oppgaver."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:177
 msgid "Default task type for new tasks you create."
-msgstr "Standard oppgavetype for  nye oppgaver."
+msgstr "Forvalgt oppgavetype for opprettede oppgaver."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:194
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:215
@@ -8460,7 +8465,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:239
 msgid "Server"
-msgstr "Server"
+msgstr "Tjener"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:243
 msgid "Username"
@@ -8659,7 +8664,7 @@ msgstr "Gi nytt navn"
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:343
 #: src/Monitor/AirspaceWarningMonitor.cpp:82
 msgid "More"
-msgstr ""
+msgstr "Mer"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:241
 msgid "Load the selected task?"
@@ -8688,7 +8693,7 @@ msgstr "Gi nytt navn Feil"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:343
 msgid "Less"
-msgstr ""
+msgstr "Mindre"
 
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:60
 #: src/Dialogs/Task/TaskPointDialog.cpp:274
@@ -9060,9 +9065,8 @@ msgid "Add this turn point?"
 msgstr ""
 
 #: src/Dialogs/Weather/MapOverlayWidget.cpp:225
-#, fuzzy
 msgid "Use"
-msgstr "Bruker opp"
+msgstr "Bruk"
 
 #: src/Renderer/NOAAListRenderer.cpp:45
 msgid "No METAR available"
@@ -9645,7 +9649,7 @@ msgstr "Rå Logger"
 #: Data/Input/default.xci:531 Data/Input/default.xci:581
 #: Data/Input/default.xci:623 Data/Input/default.xci:892
 msgid "Config"
-msgstr "Konfig."
+msgstr "Innstilling"
 
 #: Data/Input/default.xci:380 Data/Input/default.xci:991
 msgid ""
@@ -9705,8 +9709,8 @@ msgid ""
 "Setup\n"
 "Stall"
 msgstr ""
-"Steil\n"
-"Konfig."
+"Oppsett\n"
+"Steil"
 
 #: Data/Input/default.xci:719
 msgid ""
@@ -9722,7 +9726,7 @@ msgid ""
 "Setup"
 msgstr ""
 "Flytur\n"
-"Konfig."
+"Oppsett"
 
 #: Data/Input/default.xci:473 Data/Input/default.xci:1049
 msgid ""
@@ -9741,8 +9745,8 @@ msgid ""
 "Settings\n"
 "Airspace"
 msgstr ""
-"Luftrom\n"
-"Konfig."
+"Innstillinger\n"
+"Luftrom"
 
 #: Data/Input/default.xci:417 Data/Input/default.xci:1042
 msgid ""
@@ -9783,8 +9787,8 @@ msgid ""
 "Setup\n"
 "Wind"
 msgstr ""
-"Vind\n"
-"Konfig."
+"Oppsett\n"
+"Vind"
 
 #: Data/Input/default.xci:727
 msgid "Store"
@@ -9878,8 +9882,8 @@ msgid ""
 "Setup\n"
 "System"
 msgstr ""
-"System\n"
-"Konfig."
+"Oppsett\n"
+"System"
 
 #: Data/Input/default.xci:726
 msgid "Stored to EEPROM"

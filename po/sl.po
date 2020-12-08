@@ -8,15 +8,18 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2013-11-16 21:09+0000\n"
-"Last-Translator: Iztok <kodric.iztok@gmail.com>\n"
-"Language-Team: Slovenian <sl@li.org>\n"
+"PO-Revision-Date: 2018-03-18 14:41+0000\n"
+"Last-Translator: a <androspudic@gmail.com>\n"
+"Language-Team: Slovenian <https://hosted.weblate.org/projects/xcsoar/"
+"translations/sl/>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
+"n%100==4 ? 2 : 3;\n"
+"X-Generator: Weblate 2.20-dev\n"
 "X-Launchpad-Export-Date: 2013-11-21 12:32+0000\n"
-"X-Generator: Launchpad (build 16831)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -55,7 +58,7 @@ msgstr "FAI cilj"
 #: src/Task/TypeStrings.cpp:35
 #, no-c-format
 msgid "Racing"
-msgstr ""
+msgstr "Dirkanje"
 
 #: src/Task/TypeStrings.cpp:36
 #, no-c-format
@@ -65,7 +68,7 @@ msgstr "AAT"
 #: src/Task/TypeStrings.cpp:37
 #, no-c-format
 msgid "Modified area task (MAT)"
-msgstr ""
+msgstr "Naloga s prilagojenimi območji (MAT)"
 
 #: src/Task/TypeStrings.cpp:38
 #, no-c-format
@@ -75,7 +78,7 @@ msgstr "Mešani"
 #: src/Task/TypeStrings.cpp:39
 #, no-c-format
 msgid "Touring"
-msgstr ""
+msgstr "Potovalni način"
 
 #: src/Task/TypeStrings.cpp:52
 #, no-c-format
@@ -83,21 +86,23 @@ msgid ""
 "FAI rules, allows only FAI start, finish and turn point types, for badges "
 "and records.  Enables FAI finish height for final glide calculation."
 msgstr ""
+"FAI pravila, dovoljeni so le FAI start, cilj in tipi obratni točk, za značke "
+"in rekorde. Omogoči FAI ciljno višino za računar zadnjega doleta."
 
 #: src/Task/TypeStrings.cpp:54
 #, no-c-format
 msgid "FAI rules, path from a start to two turn points and return."
-msgstr ""
+msgstr "FAI pravila, pot od starta do dveh točk in povratek."
 
 #: src/Task/TypeStrings.cpp:55
 #, no-c-format
 msgid "FAI rules, path from start to a single turn point and return."
-msgstr ""
+msgstr "FAI pravila, pot od starta do ene obratne točke in povratek."
 
 #: src/Task/TypeStrings.cpp:56
 #, no-c-format
 msgid "FAI rules, path from start to a goal destination."
-msgstr ""
+msgstr "FAI pravila, pot od starta do cilja."
 
 #: src/Task/TypeStrings.cpp:57
 #, no-c-format
@@ -105,6 +110,8 @@ msgid ""
 "Racing task around turn points.  Can also be used for FAI badge and record "
 "tasks.  Allows all shapes of observation zones."
 msgstr ""
+"Dirkalna naloga okoli obratnih točk. Lahko se uporabi tudi za FAI značke in "
+"rekorde. Dovoljene so vse oblike območij opazovanja."
 
 #: src/Task/TypeStrings.cpp:59
 #, no-c-format
@@ -112,6 +119,8 @@ msgid ""
 "Task through assigned areas, minimum task time applies.  Restricted to "
 "cylinder and sector observation zones."
 msgstr ""
+"Naloga skozi določena območja, velja minimalni čas naloge. Opazovalna "
+"območja omejena na cilindre in sektorje."
 
 #: src/Task/TypeStrings.cpp:61
 #, no-c-format
@@ -120,6 +129,9 @@ msgid ""
 "mile cylinder.  Pilot can add additional points as needed.  Minimum task "
 "time applies."
 msgstr ""
+"Naloga s prilagojenimi območji. Naloga s startom, ciljem, in najmanj enim "
+"določenim 1-miljskim cilindrom. Pilot lahko po potrebi doda dodatne točke. "
+"Velja minimalni čas naloge."
 
 #: src/Task/TypeStrings.cpp:62
 #, no-c-format
@@ -127,6 +139,8 @@ msgid ""
 "Racing task with a mix of assigned areas and turn points, minimum task time "
 "applies."
 msgstr ""
+"Dirkalna naloga z mešanico določenih območij in obratnih točk, velja "
+"minimalni čas naloge."
 
 #: src/Task/TypeStrings.cpp:63
 #, no-c-format
@@ -134,6 +148,8 @@ msgid ""
 "Casual touring task, uses start and finish cylinders and FAI sector turn "
 "points."
 msgstr ""
+"Vsakdanja potovalna naloga, uporablja se startni in ciljni cilinder ter FAI "
+"sektor za obratne točke."
 
 #: src/Task/TypeStrings.cpp:76
 #, no-c-format
@@ -141,17 +157,19 @@ msgid ""
 "A 90 degree sector with 1km radius. Cross corner edge from inside area to "
 "start."
 msgstr ""
+"90 stopinjski sektor z polmerom 1 km. Prečkaj krak iz notranjosti sektorja "
+"za start."
 
 #: src/Task/TypeStrings.cpp:77
 #, no-c-format
 msgid ""
 "A straight line start gate.  Cross start gate from inside area to start."
-msgstr ""
+msgstr "Ravna startna črta. Začni iz območja za start, da začneš nalogo."
 
 #: src/Task/TypeStrings.cpp:78
 #, no-c-format
 msgid "A cylinder.  Exit area to start."
-msgstr ""
+msgstr "Cilinder. Zapusti njegovo območje za start."
 
 #: src/Task/TypeStrings.cpp:79
 #, no-c-format
@@ -159,6 +177,8 @@ msgid ""
 "A 90 degree sector with 'infinite' length sides.  Cross any edge, scored "
 "from corner point."
 msgstr ""
+"90 stopinjski sektor z neskončnimi stranicami. Prečkaj kateri koli rob "
+"selektorja, točkuje se kot sektorja."
 
 #: src/Task/TypeStrings.cpp:81
 #, no-c-format
@@ -166,6 +186,8 @@ msgid ""
 "(German rules) Any point within 1/2 km of center or 10km of a 90 degree "
 "sector.  Scored from center."
 msgstr ""
+"(Nemška pravila) Katera koli točka v razdalji 0,5 km od centra ali pa točka "
+"v 90 stopinjskem, 10 km dolgem sektorju. Točkuje se center."
 
 #: src/Task/TypeStrings.cpp:83
 #, no-c-format
@@ -173,6 +195,8 @@ msgid ""
 "(British rules) Any point within 1/2 km of center or 20km of a 90 degree "
 "sector.  Scored from center."
 msgstr ""
+"(Britanska pravila) Katera koli točka 0,5 km od centra ali točka v 90 "
+"stopinjskem 20 km sektorju. Točkuje se center."
 
 #: src/Task/TypeStrings.cpp:85
 #, no-c-format
@@ -180,21 +204,23 @@ msgid ""
 "(British rules) Any point within 1/2 km of center or 10km of a 180 degree "
 "sector.  Scored from center."
 msgstr ""
+"(Britanska pravila) Katera koli točka v 0,5 km okoli centra ali 10 km 180 "
+"stopinjski sektor. Točkuje se center."
 
 #: src/Task/TypeStrings.cpp:87
 #, no-c-format
 msgid "A cylinder.  Any point within area scored from center."
-msgstr ""
+msgstr "Cilinder. Katera koli točka v površini cilindra. Točkuje se center."
 
 #: src/Task/TypeStrings.cpp:88
 #, no-c-format
 msgid "A 1 mile cylinder.  Scored by farthest point reached in area."
-msgstr ""
+msgstr "Cilinder z r. 1 milje. Točkuje se najbolj oddaljena točka v površini."
 
 #: src/Task/TypeStrings.cpp:89
 #, no-c-format
 msgid "A cylinder.  Scored by farthest point reached in area."
-msgstr ""
+msgstr "Cilinder. Točkuje se najbolj oddaljena točka dosežena v površini."
 
 #: src/Task/TypeStrings.cpp:90
 #, no-c-format
@@ -202,27 +228,31 @@ msgid ""
 "A sector that can vary in angle and radius.  Scored by farthest point "
 "reached inside area."
 msgstr ""
+"Sektor z različnimi koti in polmeri. Točkuje se najbolj oddaljena točka "
+"dosežena v površini."
 
 #: src/Task/TypeStrings.cpp:92
 #, no-c-format
 msgid "A 90 degree sector with 1km radius.  Cross edge to finish."
-msgstr ""
+msgstr "90 stopinjski sektor z radijem 1 km. Prečkaj rob za cilj."
 
 #: src/Task/TypeStrings.cpp:93
 #, no-c-format
 msgid "Cross finish gate line into area to finish."
-msgstr ""
+msgstr "Prečkaj ciljna vrata v območje za finiš."
 
 #: src/Task/TypeStrings.cpp:94
 #, no-c-format
 msgid "Enter cylinder to finish."
-msgstr ""
+msgstr "Vstopi v cilinder za dosego cilja."
 
 #: src/Task/TypeStrings.cpp:95
 #, no-c-format
 msgid ""
 "A 180 degree sector with 5km radius.  Exit area in any direction to start."
 msgstr ""
+"180 stopinjski sektor z polmerom 5 km. Zapusti območje v kateri koli smeri "
+"za start."
 
 #: src/Task/TypeStrings.cpp:96
 #, no-c-format
@@ -230,26 +260,28 @@ msgid ""
 "A sector that can vary in angle, inner and outer radius.  Scored by farthest "
 "point reached inside area."
 msgstr ""
+"Sektor z različnimi koti, notranjimi in zunanjimi polmeri. Točkuje se "
+"najbolj oddaljena točka dosežena znotraj območja."
 
 #: src/Task/TypeStrings.cpp:98
 #, no-c-format
 msgid "A symmetric quadrant with a custom radius."
-msgstr ""
+msgstr "Simetrični kvadrant s poljubnim polmerom."
 
 #: src/Task/TypeStrings.cpp:99
 #, no-c-format
 msgid "A keyhole.  Scored by farthest point reached in area."
-msgstr ""
+msgstr "Ključavnica. Točkuje se najbolj oddaljena točka dosežena v območju."
 
 #: src/Task/TypeStrings.cpp:112
 #, no-c-format
 msgid "FAI start quadrant"
-msgstr ""
+msgstr "FAI startni kvadrant"
 
 #: src/Task/TypeStrings.cpp:113
 #, no-c-format
 msgid "Start line"
-msgstr "Začetna linija"
+msgstr "Startna črta"
 
 #: src/Task/TypeStrings.cpp:114
 #, no-c-format
@@ -259,102 +291,102 @@ msgstr "Začetni cilinder"
 #: src/Task/TypeStrings.cpp:115 src/Dialogs/Task/dlgTaskHelpers.cpp:181
 #, no-c-format
 msgid "FAI quadrant"
-msgstr ""
+msgstr "FAI kvadrant"
 
 #: src/Task/TypeStrings.cpp:116
 #, no-c-format
 msgid "Keyhole sector (DAeC)"
-msgstr ""
+msgstr "Ključavnični sektor (DAeC)"
 
 #: src/Task/TypeStrings.cpp:117
 #, no-c-format
 msgid "BGA Fixed Course sector"
-msgstr ""
+msgstr "BGA sektor določene poti"
 
 #: src/Task/TypeStrings.cpp:118
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "BGA Enhanced Option Fixed Course sector"
-msgstr ""
+msgstr "BGA sektor povečanih možnosti določene poti"
 
 #: src/Task/TypeStrings.cpp:119
 #, no-c-format
 msgid "Turn point cylinder"
-msgstr ""
+msgstr "Cilinder obratne točke"
 
 #: src/Task/TypeStrings.cpp:120
 #, no-c-format
 msgid "Cylinder with 1 mile radius."
-msgstr ""
+msgstr "Cilinder z polmerom 1 milje."
 
 #: src/Task/TypeStrings.cpp:121
 #, no-c-format
 msgid "Area cylinder"
-msgstr ""
+msgstr "Območni cilinder"
 
 #: src/Task/TypeStrings.cpp:122
 #, no-c-format
 msgid "Area sector"
-msgstr ""
+msgstr "Območni sektor"
 
 #: src/Task/TypeStrings.cpp:123
 #, no-c-format
 msgid "FAI finish quadrant"
-msgstr ""
+msgstr "FAI ciljni kvadrant"
 
 #: src/Task/TypeStrings.cpp:124
 #, no-c-format
 msgid "Finish line"
-msgstr ""
+msgstr "Ciljna črta"
 
 #: src/Task/TypeStrings.cpp:125
 #, no-c-format
 msgid "Finish cylinder"
-msgstr ""
+msgstr "Ciljni cilinder"
 
 #: src/Task/TypeStrings.cpp:126
 #, no-c-format
 msgid "BGA start sector"
-msgstr ""
+msgstr "BGA startni sektor"
 
 #: src/Task/TypeStrings.cpp:127
 #, no-c-format
 msgid "Area sector with inner radius"
-msgstr ""
+msgstr "Območni sektor z notranjim polmerom"
 
 #: src/Task/TypeStrings.cpp:128 src/Dialogs/Task/dlgTaskHelpers.cpp:230
 #, no-c-format
 msgid "Symmetric quadrant"
-msgstr ""
+msgstr "Simetrični kvadrant"
 
 #: src/Task/TypeStrings.cpp:129
 #, no-c-format
 msgid "Area keyhole"
-msgstr ""
+msgstr "Območna ključavnica"
 
 #: src/Task/ValidationErrorStrings.cpp:32
 #, no-c-format
 msgid "No valid start"
-msgstr ""
+msgstr "Ni veljavnega starta"
 
 #: src/Task/ValidationErrorStrings.cpp:33
 #, no-c-format
 msgid "No valid finish"
-msgstr ""
+msgstr "Ni veljavnega finiša"
 
 #: src/Task/ValidationErrorStrings.cpp:34
 #, no-c-format
 msgid "Task not closed"
-msgstr ""
+msgstr "Naloga ni zaključena"
 
 #: src/Task/ValidationErrorStrings.cpp:35
 #, no-c-format
 msgid "All turnpoints not the same type"
-msgstr ""
+msgstr "Vse obratne točke niso enakega tipa"
 
 #: src/Task/ValidationErrorStrings.cpp:36
 #, no-c-format
 msgid "Incorrect number of turnpoints"
-msgstr ""
+msgstr "Nepravilno število obratnih točk"
 
 #: src/Task/ValidationErrorStrings.cpp:37
 #, no-c-format
@@ -369,7 +401,7 @@ msgstr "Premalo obratnih točk"
 #: src/Task/ValidationErrorStrings.cpp:39
 #, no-c-format
 msgid "Turnpoints not unique"
-msgstr ""
+msgstr "Obratne točke niso unikatne"
 
 #: src/Task/ValidationErrorStrings.cpp:40
 #, no-c-format
@@ -379,12 +411,12 @@ msgstr "Prazna naloga"
 #: src/Task/ValidationErrorStrings.cpp:41
 #, no-c-format
 msgid "non-FAI turn points"
-msgstr ""
+msgstr "točke niso po FAI pravilih"
 
 #: src/Task/ValidationErrorStrings.cpp:42
 #, no-c-format
 msgid "non-MAT turn points"
-msgstr ""
+msgstr "točke niso po MAT pravilih"
 
 #: src/Airspace/AirspaceGlue.cpp:84
 msgid "Loading Airspace File..."
@@ -396,11 +428,11 @@ msgstr ""
 
 #: src/Airspace/AirspaceParser.cpp:892
 msgid "Unknown airspace filetype"
-msgstr ""
+msgstr "Neznan tip datoteke zračnega prostora"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorAATTime.cpp:51
 msgid "Expect early task arrival"
-msgstr ""
+msgstr "Pričakuj prezgoden finiš naloge"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorSunset.cpp:65
 msgid "Expect arrival past sunset"
@@ -408,7 +440,7 @@ msgstr "Pričakuj prihod po sončnem  zahodu"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorWind.cpp:54
 msgid "Significant wind change"
-msgstr "Močna sprememba vetra"
+msgstr "Pomembna sprememba vetra"
 
 #: src/FLARM/Error.cpp:29
 #, no-c-format
@@ -423,12 +455,12 @@ msgstr "Informacija"
 #: src/FLARM/Error.cpp:31
 #, no-c-format
 msgid "Reduced functionality"
-msgstr ""
+msgstr "Zmanjšana funkcionalnost"
 
 #: src/FLARM/Error.cpp:32
 #, no-c-format
 msgid "Fatal problem"
-msgstr ""
+msgstr "Huda sistemska napaka"
 
 #. valid but unknown number of sats
 #: src/FLARM/Error.cpp:41 src/FLARM/Error.cpp:71
@@ -451,12 +483,12 @@ msgstr ""
 #: src/FLARM/Error.cpp:49
 #, no-c-format
 msgid "Power"
-msgstr ""
+msgstr "Napajanje"
 
 #: src/FLARM/Error.cpp:50
 #, no-c-format
 msgid "GPS communication"
-msgstr ""
+msgstr "GPS komunikacija"
 
 #: src/FLARM/Error.cpp:51
 #, no-c-format
@@ -496,7 +528,7 @@ msgstr "Zapisovalec leta"
 #: src/FLARM/Error.cpp:59
 #, no-c-format
 msgid "Transponder receiver"
-msgstr ""
+msgstr "Sprejemnik transponderja"
 
 #: src/FLARM/Error.cpp:60
 #, no-c-format
@@ -505,11 +537,11 @@ msgstr "Ostalo"
 
 #: src/Logger/Logger.cpp:112 src/Dialogs/Device/ManageCAI302Dialog.cpp:69
 msgid "Start Logger"
-msgstr ""
+msgstr "Vključi logger"
 
 #: src/Logger/Logger.cpp:119
 msgid "Logger inactive, insufficient storage!"
-msgstr ""
+msgstr "Zapisovalnik leta neaktiven, premalo spomina!"
 
 #: src/Logger/Logger.cpp:120
 msgid "Logger Error"
@@ -517,7 +549,7 @@ msgstr "Napaka zapisovalca"
 
 #: src/Logger/Logger.cpp:148 src/Dialogs/Device/ManageCAI302Dialog.cpp:70
 msgid "Stop Logger"
-msgstr ""
+msgstr "Ustavi zapisovalec"
 
 #: src/Logger/ExternalLogger.cpp:84
 msgid "Declare task?"
@@ -536,7 +568,9 @@ msgstr "Naloga najavljena"
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
-msgstr "Prišlo je do napake. Naloga ni najavljena!"
+msgstr ""
+"Prišlo je do napake. \n"
+"Naloga NI najavljena!"
 
 #: src/Logger/ExternalLogger.cpp:131
 msgid "No logger connected"
@@ -570,11 +604,11 @@ msgstr "Nalaganje obratnih točk"
 
 #: src/CrossSection/CrossSectionRenderer.cpp:67
 msgid "Not moving"
-msgstr ""
+msgstr "Ni premikanja"
 
 #: src/Gauge/ThermalAssistantRenderer.cpp:193
 msgid "Not Circling"
-msgstr ""
+msgstr "Ne krožiš"
 
 #: src/Gauge/BigThermalAssistantWidget.cpp:70
 #: src/Gauge/BigTrafficWidget.cpp:884 src/Dialogs/FileManager.cpp:699
@@ -612,11 +646,11 @@ msgstr ""
 #: src/Dialogs/Weather/PCMetDialog.cpp:50
 #: src/Dialogs/Weather/NOAADetails.cpp:153
 msgid "Close"
-msgstr "Zaprto"
+msgstr "Zapri"
 
 #: src/Gauge/FlarmTrafficWindow.cpp:241
 msgid "No Traffic"
-msgstr ""
+msgstr "NI Prometa"
 
 #: src/Gauge/BigTrafficWidget.cpp:306 src/Gauge/BigTrafficWidget.cpp:307
 #: src/InfoBoxes/Content/Factory.cpp:332 src/InfoBoxes/Content/Factory.cpp:333
@@ -627,7 +661,7 @@ msgstr ""
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:150
 #, no-c-format
 msgid "Vario"
-msgstr "Vario"
+msgstr "Variometer"
 
 #: src/Gauge/BigTrafficWidget.cpp:382 src/Renderer/MapItemListRenderer.cpp:77
 #: src/Renderer/MapItemListRenderer.cpp:83
@@ -648,7 +682,7 @@ msgstr "Razdalja"
 
 #: src/Gauge/BigTrafficWidget.cpp:425 src/Gauge/BigTrafficWidget.cpp:428
 msgid "Rel. Alt."
-msgstr ""
+msgstr "Rel. Viš."
 
 #: src/Gauge/BigTrafficWidget.cpp:881 src/InfoBoxes/Content/Task.cpp:67
 #: src/Dialogs/MapItemListDialog.cpp:178
@@ -677,19 +711,19 @@ msgstr "Prejšnja točka"
 
 #: src/Menu/ExpandMacros.cpp:94
 msgid "Furthest Landpoint"
-msgstr ""
+msgstr "Najbolj oddaljena točka pristanka"
 
 #: src/Menu/ExpandMacros.cpp:95
 msgid "Next Landpoint"
-msgstr ""
+msgstr "Naslednja točka pristanka"
 
 #: src/Menu/ExpandMacros.cpp:101
 msgid "Closest Landpoint"
-msgstr ""
+msgstr "Najbližja točka pristanka"
 
 #: src/Menu/ExpandMacros.cpp:102
 msgid "Previous Landpoint"
-msgstr ""
+msgstr "Prejšnja točka pristanka"
 
 #: src/Menu/ExpandMacros.cpp:115 src/Menu/ExpandMacros.cpp:137
 msgid "Finish Turnpoint"
@@ -705,55 +739,67 @@ msgstr "Začetna obratna točka"
 
 #: src/Menu/ExpandMacros.cpp:141
 msgid "Arm start"
-msgstr ""
+msgstr "Omogoči start"
 
 #: src/Menu/ExpandMacros.cpp:144
 msgid "Arm turn"
-msgstr ""
+msgstr "Omogoči obrat"
 
 #: src/Menu/ExpandMacros.cpp:165
 msgid "Disarm start"
-msgstr ""
+msgstr "Onemogoči start"
 
 #: src/Menu/ExpandMacros.cpp:168
 msgid "Disarm turn"
-msgstr ""
+msgstr "Onemogoči obrat"
 
 #: src/Menu/ExpandMacros.cpp:177
 msgid ""
 "Advance\n"
 "(manual)"
 msgstr ""
+"Naprej\n"
+"(ročno)"
 
 #: src/Menu/ExpandMacros.cpp:181
 msgid ""
 "Advance\n"
 "(auto)"
 msgstr ""
+"Naprej\n"
+"(avtomatsko)"
 
 #: src/Menu/ExpandMacros.cpp:184
 msgid ""
 "Abort\n"
 "Start"
 msgstr ""
+"Prenehaj\n"
+"s startom"
 
 #: src/Menu/ExpandMacros.cpp:187
 msgid ""
 "Arm\n"
 "Start"
 msgstr ""
+"Omogoči\n"
+"Start"
 
 #: src/Menu/ExpandMacros.cpp:190
 msgid ""
 "Abort\n"
 "Turn"
 msgstr ""
+"Onemogoči\n"
+"Obrat"
 
 #: src/Menu/ExpandMacros.cpp:193
 msgid ""
 "Arm\n"
 "Turn"
 msgstr ""
+"Omogoči\n"
+"Obrat"
 
 #: src/Menu/ExpandMacros.cpp:202 src/Menu/ExpandMacros.cpp:206
 #: src/Dialogs/Device/PortMonitor.cpp:175
@@ -771,7 +817,7 @@ msgstr "Opusti"
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:205
 #, no-c-format
 msgid "Manual"
-msgstr ""
+msgstr "Ročno"
 
 #: src/Menu/ExpandMacros.cpp:227 src/Menu/ExpandMacros.cpp:359
 #: src/Menu/ExpandMacros.cpp:380 src/Menu/ExpandMacros.cpp:430
@@ -845,7 +891,7 @@ msgstr "Poln"
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:32
 #, no-c-format
 msgid "Off"
-msgstr ""
+msgstr "izključi"
 
 #: src/Menu/ExpandMacros.cpp:332 src/Menu/ExpandMacros.cpp:357
 #: src/Menu/ExpandMacros.cpp:362 src/Menu/ExpandMacros.cpp:364
@@ -861,7 +907,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:33
 #, no-c-format
 msgid "On"
-msgstr ""
+msgstr "Vključi"
 
 #: src/Menu/ExpandMacros.cpp:343
 msgid "Topography On"
@@ -884,12 +930,12 @@ msgstr "Izključi teren"
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:140
 #, no-c-format
 msgid "All"
-msgstr ""
+msgstr "Vse"
 
 #: src/Menu/ExpandMacros.cpp:370 src/Input/InputEventsSettings.cpp:314
 #, no-c-format
 msgid "Task & Landables"
-msgstr ""
+msgstr "Naloga & pristanki"
 
 #: src/Menu/ExpandMacros.cpp:372 src/Input/InputEventsSettings.cpp:316
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:201
@@ -903,12 +949,12 @@ msgstr ""
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:33
 #, no-c-format
 msgid "None"
-msgstr ""
+msgstr "Nič"
 
 #: src/Menu/ExpandMacros.cpp:373 src/Input/InputEventsSettings.cpp:317
 #, no-c-format
 msgid "Task & Airfields"
-msgstr ""
+msgstr "Naloge & letališča"
 
 #: src/InfoBoxes/Content/Factory.cpp:135
 #, no-c-format
@@ -928,6 +974,9 @@ msgid ""
 "PC only: In simulation mode, this value is adjustable with the up/down arrow "
 "keys and the right/left arrow keys also cause the glider to turn."
 msgstr ""
+"To je višina nad srednjo gladino morja, ki jo poroča GPS. Samo za naprave z "
+"zaslonom na dotik/pc: V načinu simulacije se lahko to vrednost spreminja z "
+"gor/dol puščicami, puščici levo/desno pa obračata jadralnik."
 
 #: src/InfoBoxes/Content/Factory.cpp:143
 #, no-c-format
@@ -938,7 +987,7 @@ msgstr "Višina nad terenom"
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:85
 #, no-c-format
 msgid "H AGL"
-msgstr ""
+msgstr "V AGL"
 
 #: src/InfoBoxes/Content/Factory.cpp:145
 #, no-c-format
@@ -947,6 +996,9 @@ msgid ""
 "the terrain file. The value is coloured red when the glider is below the "
 "terrain safety clearance height."
 msgstr ""
+"To je višina za navigacijo, pridobljena tako, da se od trenutne višine "
+"odšteje višina terena, pridobljena iz datoteke s podatki o terenu. Ko je "
+"letalo pod varnostno višino nad terenom, se obarva rdeče."
 
 #: src/InfoBoxes/Content/Factory.cpp:152
 #, no-c-format
@@ -954,9 +1006,9 @@ msgid "Thermal climb, last 30 s"
 msgstr "Dviganje v zadnjih 30 s"
 
 #: src/InfoBoxes/Content/Factory.cpp:153
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "TC 30s"
-msgstr ""
+msgstr "TC 30s"
 
 #: src/InfoBoxes/Content/Factory.cpp:154
 #, no-c-format
@@ -964,35 +1016,39 @@ msgid ""
 "A 30 second rolling average climb rate based of the reported GPS altitude, "
 "or vario if available."
 msgstr ""
+"30 sekundno povprečje dviganja, dobljeno GPS podatkov o višini ali "
+"variometra, če je na voljo."
 
 #: src/InfoBoxes/Content/Factory.cpp:160
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Next bearing"
-msgstr ""
+msgstr "Naslednji bearing"
 
 #: src/InfoBoxes/Content/Factory.cpp:161
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:104
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:82
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Bearing"
-msgstr ""
+msgstr "Bearing"
 
 #: src/InfoBoxes/Content/Factory.cpp:162
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "True bearing of the next waypoint.  For AAT tasks, this is the true bearing "
 "to the target within the AAT sector."
 msgstr ""
+"Pravi bearing do naslednje obratne točke. ZA AAT naloge je to pravi bearing "
+"do tarčne točke v območju AAT sektorja."
 
 #: src/InfoBoxes/Content/Factory.cpp:169
 #, no-c-format
 msgid "GR instantaneous"
-msgstr ""
+msgstr "Trenutna finesa"
 
 #: src/InfoBoxes/Content/Factory.cpp:170
 #, no-c-format
 msgid "GR Inst"
-msgstr ""
+msgstr "Finesa tr"
 
 #: src/InfoBoxes/Content/Factory.cpp:171
 #, no-c-format
@@ -1002,16 +1058,20 @@ msgid ""
 "indicate climbing cruise. If the vertical speed is close to zero, the "
 "displayed value is '---'."
 msgstr ""
+"Trenutno drsno razmerje (finesa), izračunana iz hitrosti, glede na tla "
+"deljene z vertikalno hitrostjo (GPS hitrost) v zadnjih 20ih sekundah. "
+"Negativne vrednosti pomenijo vzpenjanje med ravnim letom. Če je vertikalna "
+"hitrost blizu 0, je prikazana vrednost '---'."
 
 #: src/InfoBoxes/Content/Factory.cpp:177
 #, no-c-format
 msgid "GR cruise"
-msgstr ""
+msgstr "Finesa križarjenje"
 
 #: src/InfoBoxes/Content/Factory.cpp:178
 #, no-c-format
 msgid "GR Cruise"
-msgstr ""
+msgstr "GR križarjenje"
 
 #: src/InfoBoxes/Content/Factory.cpp:179
 #, no-c-format
@@ -1021,16 +1081,19 @@ msgid ""
 "(height gain since leaving the last thermal). If the vertical speed is close "
 "to zero, the displayed value is '---'."
 msgstr ""
+"Razdalja od vrha zadnjega dviganja deljena z izgubljeno višino od zadnjega "
+"dviganja. Negativne vrednosti pomenijo pridobivanje višine med križarjenjem. "
+"Če je vertikalna hitrost blizu 0, je prikazana vrednost '---'."
 
 #: src/InfoBoxes/Content/Factory.cpp:185
 #, no-c-format
 msgid "Speed ground"
-msgstr ""
+msgstr "Hitrost glede na tla"
 
 #: src/InfoBoxes/Content/Factory.cpp:186
 #, no-c-format
 msgid "V GND"
-msgstr ""
+msgstr "V Tla"
 
 #: src/InfoBoxes/Content/Factory.cpp:187
 #, no-c-format
@@ -1039,16 +1102,18 @@ msgid ""
 "mode, pressing the up and down arrows adjusts the speed, and left and right "
 "turn the glider."
 msgstr ""
+"Hitrost, glede na tla, merjena z GPS. V načinu simulacije lahko s pritiskom "
+"na puščici gor/dol prilagodimo vrednost, puščici levo/desno obračata letalo."
 
 #: src/InfoBoxes/Content/Factory.cpp:193
 #, no-c-format
 msgid "Last thermal average"
-msgstr ""
+msgstr "Povprečje zadnjega dviganja"
 
 #: src/InfoBoxes/Content/Factory.cpp:194
 #, no-c-format
 msgid "TL Avg"
-msgstr ""
+msgstr "ZD povp"
 
 #: src/InfoBoxes/Content/Factory.cpp:195
 #, no-c-format
@@ -1056,41 +1121,43 @@ msgid ""
 "Total altitude gain/loss in the last thermal divided by the time spent "
 "circling."
 msgstr ""
+"Celotna višina pridobljena/izgubljena v zadnjem dviganju deljena z časom, "
+"porabljenim za kroženje."
 
 #: src/InfoBoxes/Content/Factory.cpp:201
 #, no-c-format
 msgid "Last thermal gain"
-msgstr ""
+msgstr "Dobitek višine zadnjega dviganja"
 
 #: src/InfoBoxes/Content/Factory.cpp:202
 #, no-c-format
 msgid "TL Gain"
-msgstr ""
+msgstr "+ viš. dvg"
 
 #: src/InfoBoxes/Content/Factory.cpp:203
 #, no-c-format
 msgid "Total altitude gain/loss in the last thermal."
-msgstr ""
+msgstr "Celotna pridobljena/izgubljena višina v zadnjem dviganju."
 
 #: src/InfoBoxes/Content/Factory.cpp:209
 #, no-c-format
 msgid "Last thermal duration"
-msgstr ""
+msgstr "Trajanje zadnjega dviganja"
 
 #: src/InfoBoxes/Content/Factory.cpp:210
 #, no-c-format
 msgid "TL duration"
-msgstr ""
+msgstr "Čas dviganja"
 
 #: src/InfoBoxes/Content/Factory.cpp:211
 #, no-c-format
 msgid "Time spent circling in the last thermal."
-msgstr ""
+msgstr "Čas porabljen s kroženjem v zadnjem dviganju."
 
 #: src/InfoBoxes/Content/Factory.cpp:217
 #, no-c-format
 msgid "MacCready setting"
-msgstr ""
+msgstr "Nastavitev MacCready"
 
 #: src/InfoBoxes/Content/Factory.cpp:218
 #, no-c-format
@@ -1104,16 +1171,19 @@ msgid ""
 "auto). (Touch-screen/PC only) Also used to adjust the MacCready setting if "
 "the InfoBox is active, by using the up/down cursor keys."
 msgstr ""
+"Trenutna MacCready nastavitev in trenutni MacCready način (ročni ali "
+"atomatski). N načinu simulacije lahko na PC/napravah z zaslonom na dotik "
+"spreminjaš vrednosti z uporabo gor/dol puščic."
 
 #: src/InfoBoxes/Content/Factory.cpp:225
 #, no-c-format
 msgid "Next distance"
-msgstr ""
+msgstr "Naslednja razdalja"
 
 #: src/InfoBoxes/Content/Factory.cpp:226 src/InfoBoxes/Content/Task.cpp:182
 #, no-c-format
 msgid "WP Dist"
-msgstr ""
+msgstr "WP Razd"
 
 #: src/InfoBoxes/Content/Factory.cpp:227
 #, no-c-format
@@ -1121,16 +1191,18 @@ msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the target within the AAT sector."
 msgstr ""
+"Razdalja do trenutno izbrane točke. Za naloge AAT je to točka do izbrane "
+"tarče v območju AAT."
 
 #: src/InfoBoxes/Content/Factory.cpp:234
 #, no-c-format
 msgid "Next altitude difference"
-msgstr ""
+msgstr "Naslednja razlika višine"
 
 #: src/InfoBoxes/Content/Factory.cpp:235
 #, no-c-format
 msgid "WP AltD"
-msgstr ""
+msgstr "T V Raz"
 
 #: src/InfoBoxes/Content/Factory.cpp:236
 #, no-c-format
@@ -1138,16 +1210,18 @@ msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival height. "
 "For AAT tasks, the target within the AAT sector is used."
 msgstr ""
+"Višina ob prihodu na naslednjo obratno točko relativna na varnostno višino. "
+"Za AAT naloge je v uporabi tarčna točka v AAT območju."
 
 #: src/InfoBoxes/Content/Factory.cpp:243
 #, no-c-format
 msgid "Next altitude required"
-msgstr ""
+msgstr "Naslednja potrebna višina"
 
 #: src/InfoBoxes/Content/Factory.cpp:244
 #, no-c-format
 msgid "WP AltR"
-msgstr ""
+msgstr "T Viš Pot"
 
 #: src/InfoBoxes/Content/Factory.cpp:245
 #, no-c-format
@@ -1155,6 +1229,8 @@ msgid ""
 "Additional altitude required to reach the next turn point. For AAT tasks, "
 "the target within the AAT sector is used."
 msgstr ""
+"Dodatna višina, potrebna za doseg naslednje obratne točke. Za AAT naloge se "
+"uporabi tarčna točka v AAT sektorju."
 
 #: src/InfoBoxes/Content/Factory.cpp:252
 #, no-c-format
@@ -1164,7 +1240,7 @@ msgstr "Naslednja točka"
 #: src/InfoBoxes/Content/Factory.cpp:253
 #, no-c-format
 msgid "Next WP"
-msgstr "Naslednja točka"
+msgstr "T nas"
 
 #: src/InfoBoxes/Content/Factory.cpp:254
 #, no-c-format
@@ -1174,80 +1250,83 @@ msgid ""
 "task. (Touch-screen/PC only) Pressing the enter cursor key brings up the "
 "waypoint details."
 msgstr ""
+"Ime trenutno izbrane obratne točke. Ko je ta InfoŠkatla aktivna, lahko z "
+"uporabo puščic izberemo naslednjo/prejšnjo točko v nalogi. (Zaslon na dotik/"
+"PC, pritisk na enter gumb prikaže podatke o točki)"
 
 #: src/InfoBoxes/Content/Factory.cpp:260
 #, no-c-format
 msgid "Final altitude difference"
-msgstr ""
+msgstr "Končna razlika višine"
 
 #: src/InfoBoxes/Content/Factory.cpp:261
 #, no-c-format
 msgid "Fin AltD"
-msgstr ""
+msgstr "Konč ViR"
 
 #: src/InfoBoxes/Content/Factory.cpp:262
 #, no-c-format
 msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
 "height."
-msgstr ""
+msgstr "Višina prihoda na končni točki naloge glede na varnostno višino."
 
 #: src/InfoBoxes/Content/Factory.cpp:268
 #, no-c-format
 msgid "Final altitude required"
-msgstr ""
+msgstr "Končna potrebna višina"
 
 #: src/InfoBoxes/Content/Factory.cpp:269
 #, no-c-format
 msgid "Fin AltR"
-msgstr ""
+msgstr "Viš Kon"
 
 #: src/InfoBoxes/Content/Factory.cpp:270
 #, no-c-format
 msgid "Additional altitude required to finish the task."
-msgstr ""
+msgstr "Dodatna višina, potrebna za uspešen zaključek naloge."
 
 #: src/InfoBoxes/Content/Factory.cpp:276
 #, no-c-format
 msgid "Speed task average"
-msgstr ""
+msgstr "Povprečna hitrost na nalogi"
 
 #: src/InfoBoxes/Content/Factory.cpp:277
 #, no-c-format
 msgid "V Task Avg"
-msgstr ""
+msgstr "PovpHitrNal"
 
 #: src/InfoBoxes/Content/Factory.cpp:278
 #, no-c-format
 msgid ""
 "Average cross country speed while on current task, not compensated for "
 "altitude."
-msgstr ""
+msgstr "Povprečna hitrost na trenutni nalogi, brez kompenzacije višine."
 
 #: src/InfoBoxes/Content/Factory.cpp:284
 #, no-c-format
 msgid "Final distance"
-msgstr ""
+msgstr "Razdalja do cilja"
 
 #: src/InfoBoxes/Content/Factory.cpp:285
 #, no-c-format
 msgid "Fin Dist"
-msgstr ""
+msgstr "Fin Raz"
 
 #: src/InfoBoxes/Content/Factory.cpp:286
 #, no-c-format
 msgid "Distance to finish around remaining turn points."
-msgstr ""
+msgstr "Razdalja do cilja okoli preostalih obratnih točk."
 
 #: src/InfoBoxes/Content/Factory.cpp:300
 #, no-c-format
 msgid "Terrain elevation"
-msgstr ""
+msgstr "Višina terena"
 
 #: src/InfoBoxes/Content/Factory.cpp:301
 #, no-c-format
 msgid "Terr Elev"
-msgstr ""
+msgstr "Viš Teren"
 
 #: src/InfoBoxes/Content/Factory.cpp:302
 #, no-c-format
@@ -1255,16 +1334,18 @@ msgid ""
 "This is the elevation of the terrain above mean sea level, obtained from the "
 "terrain file at the current GPS location."
 msgstr ""
+"To je višina terena nad morsko gladino, pridobljena iz datoteke s podatki o "
+"terenu na trenutni GPS poziciji."
 
 #: src/InfoBoxes/Content/Factory.cpp:308
 #, no-c-format
 msgid "Thermal average"
-msgstr ""
+msgstr "Povprečje dviganja"
 
 #: src/InfoBoxes/Content/Factory.cpp:309
 #, no-c-format
 msgid "TC Avg"
-msgstr ""
+msgstr "DvgPovp"
 
 #: src/InfoBoxes/Content/Factory.cpp:310
 #, no-c-format
@@ -1272,27 +1353,29 @@ msgid ""
 "Altitude gained/lost in the current thermal, divided by time spent "
 "thermalling."
 msgstr ""
+"Višina, pridobljena v trenutnem dviganju, deljena z časom, porabljenim v "
+"kroženju."
 
 #: src/InfoBoxes/Content/Factory.cpp:316
 #, no-c-format
 msgid "Thermal gain"
-msgstr ""
+msgstr "Dobitek višine"
 
 #: src/InfoBoxes/Content/Factory.cpp:317
 #, no-c-format
 msgid "TC Gain"
-msgstr ""
+msgstr "+Viš"
 
 #: src/InfoBoxes/Content/Factory.cpp:318
 #, no-c-format
 msgid "The altitude gained/lost in the current thermal."
-msgstr ""
+msgstr "Višina, pridobljena/izgubljena v trenutnem dviganju."
 
 #: src/InfoBoxes/Content/Factory.cpp:324 src/InfoBoxes/Content/Factory.cpp:325
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:59
-#, no-c-format
+#, fuzzy, no-c-format
 msgid "Track"
-msgstr ""
+msgstr "Pot"
 
 #: src/InfoBoxes/Content/Factory.cpp:326
 #, no-c-format
