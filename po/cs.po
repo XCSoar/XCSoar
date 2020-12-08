@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-12-06 08:29+0000\n"
+"PO-Revision-Date: 2020-12-09 23:29+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -83,8 +83,8 @@ msgid ""
 "FAI rules, allows only FAI start, finish and turn point types, for badges "
 "and records.  Enables FAI finish height for final glide calculation."
 msgstr ""
-"FAI pravidla, pouze FAI start, cíl a otočné body pro odznaky a rekordy. "
-"Zapíná FAI cílovou výšku pro výpočet dokluzu."
+"FAI pravidla, pouze start, cíl a otočné body FAI typu, pro odznaky a "
+"rekordy. Aktivuje FAI cílovou výšku pro výpočet dokluzu."
 
 #: src/Task/TypeStrings.cpp:54
 #, no-c-format
@@ -94,7 +94,8 @@ msgstr "FAI pravidla, trasa od startu přes dva otočné body do cíle."
 #: src/Task/TypeStrings.cpp:55
 #, no-c-format
 msgid "FAI rules, path from start to a single turn point and return."
-msgstr "FAI pravidla, trasa od startu přes jediný otočný bod a návrat."
+msgstr ""
+"FAI pravidla, trasa od startu k jedinému otočnému bodu a návrat do cíle."
 
 #: src/Task/TypeStrings.cpp:56
 #, no-c-format
@@ -145,8 +146,8 @@ msgid ""
 "Casual touring task, uses start and finish cylinders and FAI sector turn "
 "points."
 msgstr ""
-"Běžná přeletová úloha, používá startovní a cílové válce a FAI sektory jako "
-"otočné body."
+"Neformální \"cestovní\" úloha, používá startovní a cílový válec a FAI "
+"sektory pro otočné body."
 
 #: src/Task/TypeStrings.cpp:76
 #, no-c-format
@@ -174,7 +175,7 @@ msgid ""
 "A 90 degree sector with 'infinite' length sides.  Cross any edge, scored "
 "from corner point."
 msgstr ""
-"90° výseč s \"nekonečnými\" rameny. Protni kteroukoli hranu, boduje se "
+"90° výseč s \"nekonečnými\" rameny. Protni kteroukoliv hranu, boduje se "
 "rohový bod."
 
 #: src/Task/TypeStrings.cpp:81
@@ -604,7 +605,7 @@ msgstr "Bez pohybu"
 
 #: src/Gauge/ThermalAssistantRenderer.cpp:193
 msgid "Not Circling"
-msgstr "Bez kroužení"
+msgstr "Nekroužím"
 
 #: src/Gauge/BigThermalAssistantWidget.cpp:70
 #: src/Gauge/BigTrafficWidget.cpp:884 src/Dialogs/FileManager.cpp:699
@@ -4290,7 +4291,7 @@ msgstr "Debug"
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:116
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:107
 msgid "Enable"
-msgstr "Povol"
+msgstr "Aktivuj"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:348
 #, c-format
@@ -4762,12 +4763,12 @@ msgstr "Nastav"
 #: src/Dialogs/MapItemListDialog.cpp:176
 #: src/Dialogs/Task/AlternatesListDialog.cpp:109
 msgid "Goto"
-msgstr "Jdi na"
+msgstr "Cíl sem"
 
 #: src/Dialogs/MapItemListDialog.cpp:177
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:116
 msgid "Ack Day"
-msgstr "ACK dnes"
+msgstr "Deaktivuj"
 
 #: src/Dialogs/MapItemListSettingsDialog.cpp:34
 msgid "Map Item List Settings"
@@ -4921,7 +4922,7 @@ msgstr "ACK"
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:106
 #: src/Monitor/AirspaceWarningMonitor.cpp:81
 msgid "ACK Day"
-msgstr "ACK dnes"
+msgstr "Deaktivuj"
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:325
 msgid "No Warnings"
@@ -5071,7 +5072,7 @@ msgstr "Nastavení letu"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:160
 #, no-c-format
 msgid "Site Files"
-msgstr "Soubory stránek"
+msgstr "Soubory"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:99
 #, no-c-format
@@ -5086,7 +5087,7 @@ msgstr "Prvky"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:108
 #, no-c-format
 msgid "Safety Factors"
-msgstr "Bezpečnostní prvky"
+msgstr "Bezpečnost"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:109
 #: src/Dialogs/Settings/dlgConfiguration.cpp:162
@@ -5112,7 +5113,7 @@ msgstr "FLARM, jiné"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:120
 #, no-c-format
 msgid "Audio Vario"
-msgstr "Audio Vário"
+msgstr "Audio vário"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:126
 #, no-c-format
@@ -5122,7 +5123,7 @@ msgstr "Pravidla úlohy"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:127
 #, no-c-format
 msgid "Turnpoint Types"
-msgstr "Typy otočných bodů"
+msgstr "Typ otočných bodů"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:132
 #, no-c-format
@@ -5142,7 +5143,7 @@ msgstr "Stránky"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:135
 #, no-c-format
 msgid "InfoBox Sets"
-msgstr "Nastavení InfoBoxů"
+msgstr "InfoBoxy"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:140
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:134
@@ -5174,7 +5175,7 @@ msgstr "Přístroje"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:164
 #, no-c-format
 msgid "Task Defaults"
-msgstr "Nastavení úlohy"
+msgstr "Úloha"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:165
 #, no-c-format
@@ -5944,7 +5945,7 @@ msgstr "Nastav záložní frekvenci"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:433 Data/Input/default.xci:1015
 msgid "GoTo"
-msgstr "Jdi na"
+msgstr "Cíl sem"
 
 #: src/Dialogs/Waypoint/Manager.cpp:270
 msgid "Delete waypoint?"
@@ -9994,7 +9995,7 @@ msgid ""
 "Off"
 msgstr ""
 "Posun\n"
-"Vypnout"
+"Vypni"
 
 #: Data/Input/default.xci:128 Data/Input/default.xci:444
 #: Data/Input/default.xci:929
