@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-12-09 23:29+0000\n"
+"PO-Revision-Date: 2020-12-12 08:29+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -1620,8 +1620,8 @@ msgid ""
 "Magnitude of G loading reported by a supported external intelligent vario. "
 "This value is negative for pitch-down manoeuvres."
 msgstr ""
-"Velikost přetížení v G dle podporovaného externího inteligentního vária ("
-"pokud je připojeno). Hodnota je negativní při manévrech se záporným "
+"Velikost násobku přetížení v G dle podporovaného externího inteligentního "
+"vária (pokud je připojeno). Hodnota je negativní při manévrech se záporným "
 "přetížením."
 
 #: src/InfoBoxes/Content/Factory.cpp:447
@@ -1730,11 +1730,11 @@ msgid ""
 "speed to fly is selected, this InfoBox displays the MacCready speed."
 msgstr ""
 "Okamžitá optimální rychlost letu MacCready (STF), využívající výpočty netto "
-"varia k určení rychlosti delfínování v současném kurzu. Během přeskoku je "
-"tato rychlost optimalizována pro udržení výšky. Na dokluzu tato optimální "
-"rychlost počítá s klesáním. V režimu stoupání ukazuje rychlost minimálního "
-"opadání vzhledem k aktuálnímu zatížení (pokud je připojen senzor zrychlení). "
-"Pokud je vybrán BLOK mód, tento InfoBox zobrazuje rychlost MacCready."
+"varia k určení rychlosti delfínového letu v současném kurzu. Během přeskoku "
+"je STF rychlost optimalizována pro udržení výšky. Na dokluzu počítá s "
+"klesáním. V režimu stoupání ukazuje rychlost minimálního opadání vztažené k "
+"aktuálnímu násobku zatížení (pokud je připojen akcelerometr). Pokud je "
+"vybrán BLOK mód, tento InfoBox zobrazuje rychlost MacCready."
 
 #: src/InfoBoxes/Content/Factory.cpp:497
 #, no-c-format
@@ -2395,7 +2395,7 @@ msgid ""
 "total energy vario value if connected to one."
 msgstr ""
 "Stopa vertikální rychlosti, z údajů GPS nebo celkové energie z "
-"inteligentního varia, pokud je k připojené."
+"inteligentního varia, pokud je připojené."
 
 #: src/InfoBoxes/Content/Factory.cpp:797
 #, no-c-format
@@ -2950,8 +2950,8 @@ msgid ""
 "of the active waypoint in the current task, the center of a selected goto "
 "waypoint or the target within the AAT sector for AAT tasks."
 msgstr ""
-"Šipka směřující k současnému otočnému bodu. Dále je zobrazeno jeho jméno a "
-"vzdálenost k OB. Je použita optimalizovaná pozice aktivního otočného bodu "
+"Šipka směřující k aktuálně zvolenému otočnému bodu. Dále je zobrazeno jeho "
+"jméno a vzdálenost. Je použita optimalizovaná pozice aktivního otočného bodu "
 "současné úlohy, střed vybrané jednobodové úlohy (GoTo), nebo cílový bod "
 "uvnitř AAT sektoru."
 
@@ -4543,9 +4543,9 @@ msgid ""
 "in circling mode to demonstrate the lift tones.  When not in circling mode, "
 "set this to a realistic negative value so speed command tones are produced."
 msgstr ""
-"Nastavení generuje \"falešné\" hrubé stoupání/klesání TE vária. Lze použít v "
-"režimu kroužení k demonstraci tónů vária. Mimo režim kroužení nastavte na "
-"realistickou zápornou hodnotu, aby došlo ke generování tónů Speed Command-u."
+"Nastavení generuje \"falešné\" brutto stoupání/klesání TE vária. Lze použít "
+"v režimu kroužení k demonstraci tónů vária. Mimo režim kroužení nastavte na "
+"realistickou zápornou hodnotu, aby došlo ke generování tónů Speed Commanderu."
 
 #: src/Dialogs/Device/Vega/VegaDemoDialog.cpp:107
 msgid ""
@@ -4763,7 +4763,7 @@ msgstr "Nastav"
 #: src/Dialogs/MapItemListDialog.cpp:176
 #: src/Dialogs/Task/AlternatesListDialog.cpp:109
 msgid "Goto"
-msgstr "Cíl sem"
+msgstr "GoTo"
 
 #: src/Dialogs/MapItemListDialog.cpp:177
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:116
@@ -5945,7 +5945,7 @@ msgstr "Nastav záložní frekvenci"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:433 Data/Input/default.xci:1015
 msgid "GoTo"
-msgstr "Cíl sem"
+msgstr "GoTo"
 
 #: src/Dialogs/Waypoint/Manager.cpp:270
 msgid "Delete waypoint?"
@@ -6252,8 +6252,8 @@ msgid ""
 "Setting this to \"On\" will automatically close the FLARM dialog if there is "
 "no traffic. \"Off\" will keep the dialog open even without current traffic."
 msgstr ""
-"Povolením této volby se automaticky zavře FLARM obrazovka, pokud není v "
-"okolí žádný provoz. Zakázáním zůstane FLARM obrazovka aktivní i pokud nic "
+"Zapnutím této volby se automaticky zavře FLARM obrazovka, pokud není v okolí "
+"žádný provoz. Vypnutím zůstane FLARM obrazovka aktivní i pokud nic "
 "nedetekuje."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:94
@@ -6353,11 +6353,11 @@ msgstr "Určuje, zda zobrazit procento přítěže."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:80
 msgid "Show gross"
-msgstr "Hrubé vário"
+msgstr "Brutto vário"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:80
 msgid "Whether to show the gross climb rate."
-msgstr "Určuje, zda zobrazit hrubou hodnotu stoupání."
+msgstr "Určuje, zda zobrazit brutto hodnotu stoupání."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:83
 msgid "Averager needle"
@@ -6369,10 +6369,10 @@ msgid ""
 "cruise, this needle displays the average netto value.  During circling, this "
 "needle displays the average gross value."
 msgstr ""
-"Pokud aktivní, zobrazení variometru bude obsahovat nevyplněný indikátor "
+"Pokud je zapnuto, zobrazení variometru bude obsahovat nevyplněný indikátor "
 "průměrovacího vária. V přímém letu indikátor zobrazuje průměrnou netto "
-"hodnotu stoupání. V kroužení indikátor zobrazuje průměrnou hrubou hodnotu "
-"stoupání."
+"hodnotu stoupání (stoupání vzduchové hmoty). V kroužení indikátor zobrazuje "
+"průměrnou brutto hodnotu stoupání."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:62
 #, no-c-format
@@ -6428,7 +6428,7 @@ msgid ""
 "is set to the dolphin speed to fly, equivalent to the MacCready speed with "
 "vertical air-mass movement."
 msgstr ""
-"Pokud je aktivní, je Speed Command v přímém letu nastaven na MacCready "
+"Pokud je zapnuto, je Speed Command v přímém letu nastaven na MacCready "
 "rychlost letu v ovzduší bez vertikálních pohybů vzdušné hmoty. Jinak je "
 "Speed Command nastaven na rychlost letu pro delfínování, odpovídající "
 "MacCready rychlosti pro let v ovzduší s vertikálními pohyby vzduchové hmoty."
@@ -6443,7 +6443,7 @@ msgid ""
 "is used for all navigation functions. Otherwise GPS altitude is used."
 msgstr ""
 "Pokud je povoleno a je připojen barometrický výškoměr, je barometrická výška "
-"použita pro všechny navigační funkce. Jinak je použita výška GPS."
+"použita pro všechny navigační funkce. V opačném případě je použita výška GPS."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:90
 msgid "Flap forces cruise"
@@ -6849,8 +6849,8 @@ msgstr "Inverzní InfoBoxy"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:192
 msgid "If true, the InfoBoxes are white on black, otherwise black on white."
 msgstr ""
-"Pokud je volba aktivní, InfoBoxy jsou černé na bílém pozadí, v opačném "
-"případě bílé na černém pozadí."
+"Pokud je zapnuto, InfoBoxy jsou černé na bílém pozadí, v opačném případě "
+"bílé na černém pozadí."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:197
 msgid "Colored InfoBoxes"
@@ -6861,7 +6861,7 @@ msgid ""
 "If true, certain InfoBoxes will have coloured text.  For example, the active "
 "waypoint InfoBox will be blue when the glider is above final glide."
 msgstr ""
-"Pokud aktivováno, určité InfoBoxy budou mít barevný text. Například aktivní "
+"Pokud je zapnuto, určité InfoBoxy budou mít barevný text. Například aktivní "
 "otočný bod bude modrý, pokud je kluzák nad výškou dokluzu."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:205
@@ -7420,7 +7420,7 @@ msgstr "Auto zamoušení"
 #, no-c-format
 msgid ""
 "If enabled, adds 1% to the bugs setting after each full hour while flying."
-msgstr "Pokud je aktivní, zvyšuje zamoušení o 1% každou hodinu letu."
+msgstr "Pokud je zapnuto, zvyšuje zamoušení o 1% každou hodinu letu."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:106
 msgid ""
@@ -7428,7 +7428,7 @@ msgid ""
 "calculations, in task abort mode and for determining arrival altitude at "
 "airfields."
 msgstr ""
-"Použité nastavení MacCready, pokud je aktivní bezpečností nastavení MC pro "
+"Použité nastavení MacCready, pokud je zapnuto bezpečností nastavení MC pro "
 "výpočet akčního rádiusu, v režimu přerušení úlohy a pro určení výšky příletu "
 "na letiště."
 
@@ -7458,7 +7458,7 @@ msgid ""
 "The name of the file (.xcm) containing terrain, topography, and optionally "
 "waypoints, their details and airspaces."
 msgstr ""
-"Název souboru (.xcm) obsahující terén, topografii a volitelně otočné body, "
+"Název souboru (.xcm) obsahující terén, topografii a případně otočné body, "
 "jejich detaily a prostory."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:73
@@ -7478,8 +7478,7 @@ msgid ""
 "Secondary waypoints file.  This may be used to add waypoints for a "
 "competition."
 msgstr ""
-"Dodatečný soubor otočných bodů. Lze použít k přidání otočných bodů pro "
-"soutěže."
+"Sekundární soubor otočných bodů. Lze použít k přidání otočných bodů soutěže."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:84
 msgid "Watched waypoints"
@@ -7492,9 +7491,9 @@ msgid ""
 "for waypoints like known reliable thermal sources (e.g. powerplants) or "
 "mountain passes."
 msgstr ""
-"Soubor speciálních bodů, pro které budou zvláštní výpočty vždy prováděny ("
-"např. výpočet příletové výšky v mapě). Užitečné pro body, jako jsou známé "
-"termální zóny (elektrárny) nebo horské průsmyky."
+"Soubor speciálních bodů, pro které se vždy provádí zvláštní výpočty (např. "
+"výpočet příletové výšky v mapě). Užitečné pro body, jako jsou známé termální "
+"zóny (elektrárny) nebo horské průsmyky."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:92
 #: Data/Input/default.xci:860
@@ -7511,7 +7510,7 @@ msgstr "Více prostorů"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:96
 msgid "The file name of the secondary airspace file."
-msgstr "Jméno druhého souboru prostorů."
+msgstr "Jméno sekundárního souboru prostorů."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:101
 msgid "Waypoint details"
@@ -9135,7 +9134,7 @@ msgid ""
 "Below this lift threshold the vario will start to play sounds if the "
 "'Deadband' feature is enabled."
 msgstr ""
-"Pod touto hodnotou stoupání začne variometr přehrávat zvuk, pokud je aktivní "
+"Pod touto hodnotou stoupání začne variometr přehrávat zvuk, pokud je zapnuta "
 "volba \"Pásmo ticha\"."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:115
@@ -9147,7 +9146,7 @@ msgid ""
 "Above this lift threshold the vario will start to play sounds if the "
 "'Deadband' feature is enabled."
 msgstr ""
-"Nad touto hodnotou stoupání začne variometr přehrávat zvuk, pokud je aktivní "
+"Nad touto hodnotou stoupání začne variometr přehrávat zvuk, pokud je zapnuta "
 "volba \"Pásmo ticha\"."
 
 #: src/Dialogs/Settings/Panels/AudioConfigPanel.cpp:60
@@ -9374,8 +9373,8 @@ msgid ""
 msgstr ""
 "Metoda použitá pro detekci rychlosti stoupání (RYCHLÉ/POMALÉ).\n"
 "[NENÍ]: Stav POMALÉ deaktivován\n"
-"[MACCREADY]: Stav RYCHLÉ když hrubé vário > nastavení MacCready.\n"
-"[PRŮMĚROVÁNÍ]: Stav RYCHLÉ když hrubé vário > hrubá průměrná hodnota vária."
+"[MACCREADY]: Stav RYCHLÉ, když hodnota brutto vária > nastavení MacCready.\n"
+"[PRŮMĚROVÁNÍ]: Stav RYCHLÉ, když hodnota brutto vária > průměr brutto vária."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:77
 #, no-c-format
@@ -9393,12 +9392,12 @@ msgid ""
 "[RELATIVE MC/2] LIFT tone when relative vario greater than half MC.\n"
 "[NET MC/2] LIFT tone when airmass velocity greater than half MC."
 msgstr ""
-"Metoda použitá pro detekci stavů přímého letu pro přepínání tónu.\n"
+"Komparační metoda, použitá pro generování tónu stoupání na přeskoku.\n"
 "[NENÍ]: Tón STOUPÁNÍ je v přímém letu deaktivován\n"
-"[RELATIVNÍ NULA]: Tón STOUPÁNÍ když je relativní vário > 0.\n"
-"[HRUBÁ NULA]: Tón STOUPÁNÍ když kluzák stoupá.\n"
-"[RELATIVNÍ MC/2]: Tón STOUPÁNÍ když je relativní vário > 1/2 MC.\n"
-"[NETTO MC/2]: Tón STOUPÁNÍ když je rychlost vzduchové hmoty > 1/2 MC."
+"[RELATIVNÍ NULA]: Tón STOUPÁNÍ, když relativní vário > 0.\n"
+"[BRUTTO NULA]: Tón STOUPÁNÍ, když kluzák stoupá.\n"
+"[RELATIVNÍ MC/2]: Tón STOUPÁNÍ, když relativní vário > polovina MC.\n"
+"[NETTO MC/2]: Tón STOUPÁNÍ, když rychlost vzduchové hmoty > polovina MC."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:82
 #, no-c-format
