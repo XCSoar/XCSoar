@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-12-12 08:29+0000\n"
+"PO-Revision-Date: 2020-12-19 11:29+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -5659,11 +5659,11 @@ msgstr "Volný let"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:130
 msgid "GPS lock"
-msgstr "GPS zachycen"
+msgstr "GPS signál"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:131
 msgid "Satellites in view"
-msgstr "Satelity v dohledu"
+msgstr "Počet satelitů"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:132
 msgid "Variometer"
