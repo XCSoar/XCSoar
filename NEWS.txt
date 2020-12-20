@@ -1,4 +1,6 @@
 Version 7.20 - not yet released
+*user interace
+ - ensure uniqueness in waypoint picker
 
 Version 7.19 - 2021/10/01
 * data files

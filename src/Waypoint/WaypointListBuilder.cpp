@@ -39,5 +39,12 @@ inline void
 WaypointListBuilder::operator()(const WaypointPtr &waypoint) noexcept
 {
   if (filter.Matches(*waypoint, location, triangle_validator))
-    list.emplace_back(waypoint);
+    {
+        for (const auto &w: list)
+          {
+            if (w.waypoint==waypoint)
+		return;
+          }
+      list.emplace_back(waypoint);
+    }
 }
