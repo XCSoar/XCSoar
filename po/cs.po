@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-12-19 11:29+0000\n"
+"PO-Revision-Date: 2020-12-23 13:29+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -690,7 +690,7 @@ msgstr "Rel. výška"
 #: src/Dialogs/Weather/NOAAList.cpp:119
 #, no-c-format
 msgid "Details"
-msgstr "Detaily"
+msgstr "Detail"
 
 #: src/Waypoint/WaypointDetailsReader.cpp:150
 msgid "Loading Airfield Details File..."
@@ -4355,7 +4355,7 @@ msgstr "Zařízení není připojeno"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:536
 msgid "Edit device"
-msgstr "Upravit zařízení"
+msgstr "Detail zařízení"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:649
 #, c-format
@@ -4840,7 +4840,7 @@ msgstr "Spodní hr."
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:110
 msgid "Airspace Details"
-msgstr "Podrobnosti vzdušného prostoru"
+msgstr "Detail vzdušného prostoru"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:321
 #: src/Dialogs/Waypoint/WaypointList.cpp:455
@@ -5271,7 +5271,7 @@ msgstr "Letadlo"
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:243
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:390
 msgid "FLARM Traffic Details"
-msgstr "FLARM Detaily provozu"
+msgstr "FLARM detail provozu"
 
 #. Ask for confirmation
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:312
@@ -5475,7 +5475,7 @@ msgstr "Letadla"
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:83
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:192
 msgid "Plane Details"
-msgstr "Letadlo Detaily"
+msgstr "Detail letadla"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:90
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:113
@@ -7514,7 +7514,7 @@ msgstr "Jméno sekundárního souboru prostorů."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:101
 msgid "Waypoint details"
-msgstr "Detaily ot. bodu"
+msgstr "Detail ot. bodu"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:102
 msgid ""
