@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-12-23 13:29+0000\n"
+"PO-Revision-Date: 2020-12-24 16:29+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -9038,7 +9038,7 @@ msgstr ""
 
 #: src/Dialogs/Task/TargetDialog.cpp:463
 msgid "Optimized"
-msgstr "Optimalizovat"
+msgstr "Optimalizuj"
 
 #: src/Dialogs/Tracking/CloudEnableDialog.cpp:71
 msgid ""
