@@ -8,15 +8,19 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2014-01-10 09:13+0000\n"
+"PO-Revision-Date: 2020-12-26 09:29+0000\n"
 "Last-Translator: Donatas <donatas.povilionis@gmail.com>\n"
-"Language-Team: Lithuanian <lt@li.org>\n"
+"Language-Team: Lithuanian <https://hosted.weblate.org/projects/xcsoar/"
+"translations/lt/>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
+"19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
+"1 : 2);\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 "X-Launchpad-Export-Date: 2014-01-13 14:11+0000\n"
-"X-Generator: Launchpad (build 16890)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -65,7 +69,7 @@ msgstr "AAT"
 #: src/Task/TypeStrings.cpp:37
 #, no-c-format
 msgid "Modified area task (MAT)"
-msgstr ""
+msgstr "Modifikuoto ploto užduotis (MAT)"
 
 #: src/Task/TypeStrings.cpp:38
 #, no-c-format
@@ -83,7 +87,7 @@ msgid ""
 "FAI rules, allows only FAI start, finish and turn point types, for badges "
 "and records.  Enables FAI finish height for final glide calculation."
 msgstr ""
-"FAI taisyklės, leidžia tiktai FAI startą, finišą ir posūkio punktų tipus, "
+"FAI taisyklės, leidžia tiktais FAI startą, finišą ir posūkio punktų tipus, "
 "ženkliukams arba rekordams. Įjungia FAI finišo aukčio skaičiavimą finaliniam "
 "sklendimui."
 
@@ -108,6 +112,9 @@ msgid ""
 "Racing task around turn points.  Can also be used for FAI badge and record "
 "tasks.  Allows all shapes of observation zones."
 msgstr ""
+"Lenktynių užduotis aplink posūkio taškus. Taip pat gali būti naudojama "
+"atliekant FAI užduotį ženkleliuir įrašant užduotis. Leidžia visų formų "
+"stebėjimo zonas."
 
 #: src/Task/TypeStrings.cpp:59
 #, no-c-format
@@ -123,6 +130,9 @@ msgid ""
 "mile cylinder.  Pilot can add additional points as needed.  Minimum task "
 "time applies."
 msgstr ""
+"Modifikuoto  užduotis. Užduotis su startu, finišu ir bent vienu iš anksto "
+"nustatytu 1 mylios cilindru. Pagal poreikį pilotas gali pridėti papildomų "
+"taškų. Taikomas minimalus užduoties laikas."
 
 #: src/Task/TypeStrings.cpp:62
 #, no-c-format
@@ -130,6 +140,8 @@ msgid ""
 "Racing task with a mix of assigned areas and turn points, minimum task time "
 "applies."
 msgstr ""
+"Mišri lenktynių užduotis su priskirtaisplotais ir posūkio taškais, taikomas "
+"minimalus užduoties laikas."
 
 #: src/Task/TypeStrings.cpp:63
 #, no-c-format
@@ -9381,13 +9393,15 @@ msgstr ""
 
 #: Data/Input/default.xci:727
 msgid "Store"
-msgstr ""
+msgstr "Išsaugoti"
 
 #: Data/Input/default.xci:817
 msgid ""
 "Team\n"
 "Code"
-msgstr "Komandos Kodas"
+msgstr ""
+"Komandos\n"
+"Kodas"
 
 #: Data/Input/default.xci:121
 msgid ""
@@ -9408,7 +9422,7 @@ msgstr "Pritraukti"
 msgid ""
 "Check\n"
 "list"
-msgstr ""
+msgstr "Patikros"
 
 #: Data/Input/default.xci:492 Data/Input/default.xci:1057
 msgid "Labels"
@@ -9416,7 +9430,7 @@ msgstr "Pavadinimai"
 
 #: Data/Input/default.xci:414 Data/Input/default.xci:1039
 msgid "Dropped marker"
-msgstr ""
+msgstr "Pažymėtas"
 
 #: Data/Input/default.xci:135 Data/Input/default.xci:451
 #: Data/Input/default.xci:936
@@ -9443,7 +9457,7 @@ msgstr ""
 
 #: Data/Input/default.xci:69
 msgid "Final glide through terrain"
-msgstr "Daliotas per kliūtis"
+msgstr "Galutinis  sklendimasper kliūtis"
 
 #: Data/Input/default.xci:653 Data/Input/default.xci:664
 #: Data/Input/default.xci:704
@@ -9468,7 +9482,7 @@ msgstr ""
 
 #: Data/Input/default.xci:726
 msgid "Stored to EEPROM"
-msgstr ""
+msgstr "Išsaugota EEPROm"
 
 #: Data/Input/default.xci:741
 msgid ""
