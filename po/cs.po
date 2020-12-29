@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-12-24 16:29+0000\n"
+"PO-Revision-Date: 2020-12-30 10:29+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -4783,7 +4783,7 @@ msgid ""
 "If enabled a row at the top will be added showing you the distance and "
 "bearing to the location and the elevation."
 msgstr ""
-"Pokud je povoleno, bude nahoru přidán řádek, zobrazující vzdálenost a směr k "
+"Pokud je zapnuto, bude nahoru přidán řádek, zobrazující vzdálenost a směr k "
 "vybranému místu a jeho výšku."
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:45
@@ -4795,8 +4795,8 @@ msgid ""
 "If enabled a row at the top will be added showing you the arrival altitude "
 "at the location."
 msgstr ""
-"Pokud je povoleno, bude nahoru přidán řádek, zobrazující výšku příletu na "
-"danou pozici."
+"Pokud je zapnuto, bude nahoře zobrazen řádek s výškou příletu na danou "
+"pozici."
 
 #: src/Dialogs/ColorListDialog.cpp:74
 msgid "Select Color"
@@ -6312,8 +6312,8 @@ msgid ""
 "cruise mode, arrows point up to command slow down; arrows point down to "
 "command speed up."
 msgstr ""
-"Určuje, zda zobrazit rychlostní šipky (STF) na variometru. Pokud je "
-"zobrazeno při přeskoku, šipka nahoru znamená zpomal, šipka dolů zrychli."
+"Určuje, zda zobrazit rychlostní šipky (STF) na variometru. Při přeskoku "
+"šipka nahoru znamená zpomal, šipka dolů zrychli."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:65
 msgid "Show average"
@@ -6442,7 +6442,7 @@ msgid ""
 "When enabled and if connected to a barometric altimeter, barometric altitude "
 "is used for all navigation functions. Otherwise GPS altitude is used."
 msgstr ""
-"Pokud je povoleno a je připojen barometrický výškoměr, je barometrická výška "
+"Pokud je zapnuto a je připojen barometrický výškoměr, je barometrická výška "
 "použita pro všechny navigační funkce. V opačném případě je použita výška GPS."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:90
@@ -6604,7 +6604,7 @@ msgstr "Hmatová odezva"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:194
 msgid "Determines if haptic feedback like vibration is used."
-msgstr "Určuje, zda je hmatové odezva (vibrace) používána."
+msgstr "Určuje, zda je používána hmatové odezva (vibrace)."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:62
 #, no-c-format
@@ -7041,7 +7041,7 @@ msgid ""
 "If enabled, then the map will zoom in automatically when entering circling "
 "mode and zoom out automatically when leaving circling mode."
 msgstr ""
-"Pokud je povoleno, mapa se automaticky přiblíží při vstupu do kroužení a "
+"Pokud je zapnuto, mapa se automaticky přiblíží při zahájení kroužení a "
 "vzdálí při opuštění kroužení."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:127
@@ -7078,7 +7078,7 @@ msgstr "Odlišné zvětšení stránek"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:147
 msgid "Maintain one map zoom level on each page."
-msgstr "Nastavuje stejné zvětšení mapy na všech obrazovkách."
+msgstr "Nastavuje zvětšení mapy na jednotlivých obrazovkách."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:171
 msgid "Main area"
@@ -7189,7 +7189,7 @@ msgid ""
 "When enabled and MC is positive, route planning allows climbs between the "
 "aircraft location and destination."
 msgstr ""
-"Pokud je povoleno a nastavení MC je kladné, plánování trasy umožňuje fáze "
+"Pokud je zapnuto a nastavení MC je kladné, plánování trasy připouští fáze "
 "stoupání mezi pozicí kluzáku a cílem."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:122
@@ -7202,9 +7202,9 @@ msgid ""
 "greater of current aircraft altitude plus 500 m and the thermal ceiling.  If "
 "disabled, climbs are unlimited."
 msgstr ""
-"Pokud je povoleno, plánované stoupání na trase jsou omezeny stropem, "
+"Pokud je zapnuto, plánovaná stoupání na trase jsou omezena stropem, "
 "definovaným větší hodnotou z aktuální výšky plus 500m nebo termickým "
-"stropem. Pokud je zakázáno, stoupání je neomezeno."
+"stropem. Pokud je vypnuto, stoupání je neomezeno."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:131
 #, no-c-format
@@ -7700,7 +7700,7 @@ msgstr "Délka stopy"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:151
 msgid ""
 "Determines whether and how long a snail trail is drawn behind the glider."
-msgstr "Určuje, zda a jak dlouhou pozemní stopu vykreslí do mapy za kluzákem."
+msgstr "Určuje zobrazení a délku pozemní stopy kluzáku v mapě."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:163
 msgid "Trail type"
@@ -8016,7 +8016,7 @@ msgid ""
 "If enabled, then the next task point is included in the score calculation, "
 "assuming that you will reach it."
 msgstr ""
-"Pokud je povoleno, následující otočný bod je zahrnut do výpočtu skóre, za "
+"Pokud je zapnuto, následující otočný bod je zahrnut do výpočtu skóre, za "
 "předpokladu že na něj doletíte."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:132
@@ -8188,7 +8188,7 @@ msgstr "Obrysy"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:267
 msgid "If enabled, draws contour lines on the terrain."
-msgstr "Pokud je povoleno, vykreslí obrysové čáry terénu."
+msgstr "Pokud je zapnuto, vykreslí obrysové čáry terénu."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:127
 msgid "Preset"
@@ -8312,8 +8312,8 @@ msgid ""
 "battery backup or your computer frequently runs out of battery power or "
 "otherwise loses time."
 msgstr ""
-"Pokud je povoleno, nastaví hodiny zažízení na GPS čas, jakmile získá fix. "
-"Tato volba je potřebná pouze pokud vaše zažízení nemá vlastní hodiny "
+"Pokud je zapnuto, nastaví hodiny zažízení na GPS čas, jakmile získá fix. "
+"Tato volba je potřebná pouze pokud vaše zařízení nemá vlastní hodiny "
 "zálohované baterií, často se vybíjí, nebo jinak ztrácí správný čas."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:86
@@ -8533,9 +8533,9 @@ msgid ""
 "[Off] Display fixed icons for landables.\n"
 "[On] Show landables with variable information like runway length and heading."
 msgstr ""
-"[Vypnuto] Zobrazí stejné ikony pro všechny přistávací plochy.\n"
-"[Zapnuto] Zobrazí přistávací plochy s dodatečnou informací, jako délka a "
-"směr dráhy."
+"[Vyp] Zobrazí stejné ikony pro všechny přistávací plochy.\n"
+"[Zap] Zobrazí přistávací plochy s dodatečnou informací, jako délka a směr "
+"dráhy."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:189
 msgid "Landable size"
@@ -8554,8 +8554,8 @@ msgid ""
 "[Off] Display fixed length for runways.\n"
 "[On] Scale displayed runway length based on real length."
 msgstr ""
-"[Vypnuto] Zobrazí jednotnou délku dráhy.\n"
-"[Zapnuto] Zobrazí délku dráhy v odpovídajícím měřítku."
+"[Vyp] Zobrazí jednotnou délku dráhy.\n"
+"[Zap] Zobrazí délku dráhy v odpovídajícím měřítku."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:185
 #, no-c-format
@@ -9726,8 +9726,8 @@ msgid ""
 "Enable output of +5V power supply for PDA etc. at Vega connector~X2.  If "
 "Vega is connected to Altair, this should be set to False."
 msgstr ""
-"Povolí výstup +5V napájení pro PDA apod. na Vega portu X2. Pokud je Vega "
-"napojena na Altair, mělo by být vypnuto."
+"Povolí výstup +5V napájení pro PDA na Vega portu ~X2. Pokud je Vega "
+"připojena na Altair, mělo by být vypnuto."
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:32
 #, no-c-format
