@@ -1,5 +1,5 @@
 # Czech translation for XCSoar
-# Copyright (C) 2000-2011 The XCSoar Project
+# Copyright (C) 2000-2021 The XCSoar Project
 # This file is distributed under the same license as the XCSoar package.
 msgid ""
 msgstr ""
