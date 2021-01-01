@@ -50,9 +50,9 @@ Copyright_License {
 #include "ListPicker.hpp"
 #include "Form/Button.hpp"
 #include "net/http/DownloadManager.hpp"
-#include "event/Notify.hpp"
+#include "ui/event/Notify.hpp"
 #include "thread/Mutex.hxx"
-#include "event/PeriodicTimer.hpp"
+#include "ui/event/PeriodicTimer.hpp"
 
 #include <map>
 #include <set>

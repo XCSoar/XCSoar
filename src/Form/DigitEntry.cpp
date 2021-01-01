@@ -26,7 +26,7 @@ Copyright_License {
 #include "Screen/Font.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Point.hpp"
-#include "event/KeyCode.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "Screen/Canvas.hpp"
 #include "Look/DialogLook.hpp"
 #include "Units/Descriptor.hpp"

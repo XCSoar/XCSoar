@@ -34,7 +34,7 @@ Copyright_License {
 #include "NMEA/ExternalSettings.hpp"
 #include "time/PeriodClock.hpp"
 #include "Job/Async.hpp"
-#include "event/Notify.hpp"
+#include "ui/event/Notify.hpp"
 #include "thread/Mutex.hxx"
 #include "thread/Debug.hpp"
 #include "util/tstring.hpp"

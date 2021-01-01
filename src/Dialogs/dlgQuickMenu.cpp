@@ -32,7 +32,7 @@ Copyright_License {
 #include "Input/InputEvents.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Canvas.hpp"
-#include "event/KeyCode.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "util/StaticArray.hxx"
 #include "util/StaticString.hxx"
 #include "util/Macros.hpp"

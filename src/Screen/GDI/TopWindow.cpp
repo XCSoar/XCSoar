@@ -22,10 +22,10 @@ Copyright_License {
 */
 
 #include "Screen/TopWindow.hpp"
-#include "event/Globals.hpp"
-#include "event/windows/Event.hpp"
-#include "event/windows/Loop.hpp"
-#include "event/Queue.hpp"
+#include "ui/event/Globals.hpp"
+#include "ui/event/windows/Event.hpp"
+#include "ui/event/windows/Loop.hpp"
+#include "ui/event/Queue.hpp"
 
 void
 TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelSize size,

@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/SingleWindow.hpp"
-#include "event/shared/Event.hpp"
+#include "ui/event/shared/Event.hpp"
 
 bool
 SingleWindow::FilterEvent(const Event &event, Window *allowed) const noexcept

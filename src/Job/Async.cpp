@@ -24,7 +24,7 @@ Copyright_License {
 #include "Async.hpp"
 #include "Job.hpp"
 #include "Operation/ThreadedOperationEnvironment.hpp"
-#include "event/Notify.hpp"
+#include "ui/event/Notify.hpp"
 
 void
 AsyncJobRunner::Start(Job *_job, OperationEnvironment &_env, Notify *_notify)

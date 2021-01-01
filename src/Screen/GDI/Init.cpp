@@ -25,8 +25,8 @@ Copyright_License {
 #include "Screen/Debug.hpp"
 #include "Screen/PaintWindow.hpp"
 #include "Screen/SingleWindow.hpp"
-#include "event/Globals.hpp"
-#include "event/Queue.hpp"
+#include "ui/event/Globals.hpp"
+#include "ui/event/Queue.hpp"
 
 #include <windows.h>
 

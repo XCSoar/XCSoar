@@ -62,7 +62,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "MapWindow/GlueMapWindow.hpp"
 
 #ifdef KOBO
-#include "event/KeyCode.hpp"
+#include "ui/event/KeyCode.hpp"
 #endif
 
 #include "lua/InputEvent.hpp"

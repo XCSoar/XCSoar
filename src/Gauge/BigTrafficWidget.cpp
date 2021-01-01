@@ -26,7 +26,7 @@
 #include "Math/Screen.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "event/KeyCode.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "Form/Button.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
 #include "UIState.hpp"

@@ -2531,7 +2531,7 @@ $(eval $(call link-program,RunTaskEditorDialog,RUN_TASK_EDITOR_DIALOG))
 
 TEST_NOTIFY_SOURCES = \
 	$(SRC)/Hardware/CPU.cpp \
-	$(SRC)/event/Idle.cpp \
+	$(SRC)/ui/event/Idle.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestNotify.cpp

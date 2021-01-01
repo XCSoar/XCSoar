@@ -32,7 +32,7 @@ Copyright_License {
 #include "Renderer/GeoBitmapRenderer.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Asset.hpp"
-#include "event/Idle.hpp"
+#include "ui/event/Idle.hpp"
 
 #include <cassert>
 #include <cstdint>

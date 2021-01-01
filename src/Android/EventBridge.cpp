@@ -23,9 +23,9 @@ Copyright_License {
 
 #include "org_xcsoar_EventBridge.h"
 #include "Product.hpp"
-#include "event/Queue.hpp"
-#include "event/Idle.hpp"
-#include "event/Globals.hpp"
+#include "ui/event/Queue.hpp"
+#include "ui/event/Idle.hpp"
+#include "ui/event/Globals.hpp"
 #include "system/Clock.hpp"
 #include "util/Compiler.h"
 

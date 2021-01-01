@@ -28,7 +28,7 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Screen/Layout.hpp"
-#include "event/KeyCode.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Interface.hpp"
 #include "Form/Button.hpp"

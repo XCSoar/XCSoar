@@ -21,24 +21,24 @@
 */
 
 #include "thread/Thread.hpp"
-#include "event/Notify.hpp"
-#include "event/Globals.hpp"
+#include "ui/event/Notify.hpp"
+#include "ui/event/Globals.hpp"
 #include "Screen/Init.hpp"
 #include "TestUtil.hpp"
 
 #ifdef ANDROID
-#include "event/android/Loop.hpp"
-#include "event/shared/Event.hpp"
+#include "ui/event/android/Loop.hpp"
+#include "ui/event/shared/Event.hpp"
 #elif defined(USE_POLL_EVENT)
-#include "event/shared/Event.hpp"
-#include "event/poll/Loop.hpp"
+#include "ui/event/shared/Event.hpp"
+#include "ui/event/poll/Loop.hpp"
 #include "Screen/TopWindow.hpp"
 #elif defined(ENABLE_SDL)
-#include "event/sdl/Event.hpp"
-#include "event/sdl/Loop.hpp"
+#include "ui/event/sdl/Event.hpp"
+#include "ui/event/sdl/Loop.hpp"
 #else
-#include "event/windows/Event.hpp"
-#include "event/windows/Loop.hpp"
+#include "ui/event/windows/Event.hpp"
+#include "ui/event/windows/Loop.hpp"
 #endif
 
 #ifdef USE_FB

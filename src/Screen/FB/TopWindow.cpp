@@ -23,10 +23,10 @@ Copyright_License {
 
 #include "Screen/TopWindow.hpp"
 #include "Screen/Custom/TopCanvas.hpp"
-#include "event/shared/Event.hpp"
-#include "event/poll/Loop.hpp"
-#include "event/Queue.hpp"
-#include "event/Globals.hpp"
+#include "ui/event/shared/Event.hpp"
+#include "ui/event/poll/Loop.hpp"
+#include "ui/event/Queue.hpp"
+#include "ui/event/Globals.hpp"
 
 #ifdef DRAW_MOUSE_CURSOR
 #include "util/Macros.hpp"

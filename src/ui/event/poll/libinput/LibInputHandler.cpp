@@ -23,9 +23,9 @@ Copyright_License {
 
 #include "LibInputHandler.hpp"
 #include "UdevContext.hpp"
-#include "event/Queue.hpp"
-#include "event/shared/Event.hpp"
-#include "event/poll/linux/Translate.hpp"
+#include "ui/event/Queue.hpp"
+#include "ui/event/shared/Event.hpp"
+#include "ui/event/poll/linux/Translate.hpp"
 #include "util/Clamp.hpp"
 
 #include <errno.h>

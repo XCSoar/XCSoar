@@ -29,8 +29,8 @@ Copyright_License {
 #include "Widget/TwoWidgets.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
-#include "event/Timer.hpp"
-#include "event/PeriodicTimer.hpp"
+#include "ui/event/Timer.hpp"
+#include "ui/event/PeriodicTimer.hpp"
 
 #include <cassert>
 

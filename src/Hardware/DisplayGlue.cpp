@@ -31,8 +31,8 @@ Copyright_License {
 #include "system/FileUtil.hpp"
 
 #ifdef USE_POLL_EVENT
-#include "event/Globals.hpp"
-#include "event/Queue.hpp"
+#include "ui/event/Globals.hpp"
+#include "ui/event/Queue.hpp"
 #endif
 
 void

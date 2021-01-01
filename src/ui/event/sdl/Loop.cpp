@@ -24,7 +24,7 @@ Copyright_License {
 #include "Loop.hpp"
 #include "Queue.hpp"
 #include "Event.hpp"
-#include "event/Idle.hpp"
+#include "ui/event/Idle.hpp"
 #include "Screen/TopWindow.hpp"
 
 bool

@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Screen/Features.hpp"
 #include "Screen/SingleWindow.hpp"
-#include "event/sdl/Event.hpp"
+#include "ui/event/sdl/Event.hpp"
 
 #include <SDL_events.h>
 

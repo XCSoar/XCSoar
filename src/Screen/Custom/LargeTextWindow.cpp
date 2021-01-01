@@ -24,7 +24,7 @@ Copyright_License {
 #include "Screen/LargeTextWindow.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "event/KeyCode.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "util/StringAPI.hxx"
 
 void

@@ -26,7 +26,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Widget/WindowWidget.hpp"
 #include "Screen/Canvas.hpp"
-#include "event/KeyCode.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "util/CharUtil.hxx"

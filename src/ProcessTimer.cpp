@@ -39,7 +39,7 @@ Copyright_License {
 #include "BallastDumpManager.hpp"
 #include "Operation/Operation.hpp"
 #include "Tracking/TrackingGlue.hpp"
-#include "event/Idle.hpp"
+#include "ui/event/Idle.hpp"
 #include "Dialogs/Tracking/CloudEnableDialog.hpp"
 
 static void

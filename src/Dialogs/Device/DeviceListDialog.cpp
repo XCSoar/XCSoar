@@ -41,7 +41,7 @@ Copyright_License {
 #include "Device/Register.hpp"
 #include "Device/Port/Listener.hpp"
 #include "Device/Driver/LX/Internal.hpp"
-#include "event/Notify.hpp"
+#include "ui/event/Notify.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 #include "Components.hpp"

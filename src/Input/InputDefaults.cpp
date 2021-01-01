@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "InputEvents.hpp"
 #include "InputConfig.hpp"
-#include "event/KeyCode.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "Asset.hpp"
 #include "util/Macros.hpp"
 

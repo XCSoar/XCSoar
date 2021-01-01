@@ -24,8 +24,8 @@ Copyright_License {
 #include "Screen/Window.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Debug.hpp"
-#include "event/Globals.hpp"
-#include "event/Queue.hpp"
+#include "ui/event/Globals.hpp"
+#include "ui/event/Queue.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Debug.hpp"

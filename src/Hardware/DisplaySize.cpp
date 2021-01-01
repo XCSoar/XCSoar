@@ -28,8 +28,8 @@ Copyright_License {
 #include "Screen/GDI/RootDC.hpp"
 #include <windows.h>
 #elif defined(USE_X11)
-#include "event/Globals.hpp"
-#include "event/Queue.hpp"
+#include "ui/event/Globals.hpp"
+#include "ui/event/Queue.hpp"
 #define Font X11Font
 #define Window X11Window
 #define Display X11Display

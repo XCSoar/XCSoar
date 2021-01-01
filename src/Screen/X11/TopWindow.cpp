@@ -24,8 +24,8 @@ Copyright_License {
 #include "Screen/TopWindow.hpp"
 #include "Screen/Custom/TopCanvas.hpp"
 #include "Hardware/DisplayDPI.hpp"
-#include "event/Globals.hpp"
-#include "event/poll/Queue.hpp"
+#include "ui/event/Globals.hpp"
+#include "ui/event/poll/Queue.hpp"
 #include "util/Macros.hpp"
 
 #ifdef USE_GLX

@@ -35,7 +35,7 @@
 #include "Android/BluetoothHelper.hpp"
 #include "Language/Language.hpp"
 #include "thread/Mutex.hxx"
-#include "event/Notify.hpp"
+#include "ui/event/Notify.hpp"
 #include "util/StringCompare.hxx"
 
 #include <vector>

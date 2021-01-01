@@ -35,7 +35,7 @@ Copyright_License {
 #include "Widget/ListWidget.hpp"
 #include "WPASupplicant.hpp"
 #include "net/IPv4Address.hxx"
-#include "event/PeriodicTimer.hpp"
+#include "ui/event/PeriodicTimer.hpp"
 
 class WifiListWidget final
   : public ListWidget, ActionListener {

@@ -26,7 +26,7 @@ Copyright_License {
 #include "Main.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/TerminalWindow.hpp"
-#include "event/PeriodicTimer.hpp"
+#include "ui/event/PeriodicTimer.hpp"
 #include "Look/TerminalLook.hpp"
 
 class TestWindow : public SingleWindow {

@@ -25,7 +25,7 @@ Copyright_License {
 #include "WifiDialog.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "UIGlobals.hpp"
-#include "event/KeyCode.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "Language/Language.hpp"
 #include "Form/Form.hpp"
 #include "Form/ActionListener.hpp"

@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "InfoBoxes/Content/Base.hpp"
 #include "Screen/LazyPaintWindow.hpp"
-#include "event/Timer.hpp"
+#include "ui/event/Timer.hpp"
 #include "Data.hpp"
 
 #include <memory>

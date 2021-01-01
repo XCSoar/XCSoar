@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef REPLAY_HPP
 #define REPLAY_HPP
 
-#include "event/Timer.hpp"
+#include "ui/event/Timer.hpp"
 #include "NMEA/Info.hpp"
 #include "time/PeriodClock.hpp"
 #include "system/Path.hpp"

@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "Input.hpp"
 #include "MergeMouse.hpp"
-#include "event/shared/Event.hpp"
-#include "event/Queue.hpp"
+#include "ui/event/shared/Event.hpp"
+#include "ui/event/Queue.hpp"
 #include "io/FileDescriptor.hxx"
 #include "Asset.hpp"
 #include "Translate.hpp"

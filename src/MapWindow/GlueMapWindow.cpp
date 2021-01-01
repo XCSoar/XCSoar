@@ -28,7 +28,7 @@ Copyright_License {
 #include "Look/Look.hpp"
 #include "Interface.hpp"
 #include "time/PeriodClock.hpp"
-#include "event/Idle.hpp"
+#include "ui/event/Idle.hpp"
 #include "Topography/Thread.hpp"
 #include "Terrain/Thread.hpp"
 

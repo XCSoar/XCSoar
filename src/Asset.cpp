@@ -24,8 +24,8 @@ Copyright_License {
 #include "Asset.hpp"
 
 #ifdef USE_CONSOLE
-#include "event/Globals.hpp"
-#include "event/Queue.hpp"
+#include "ui/event/Globals.hpp"
+#include "ui/event/Queue.hpp"
 #endif
 
 #include <string.h>

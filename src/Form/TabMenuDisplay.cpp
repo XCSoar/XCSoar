@@ -25,7 +25,7 @@ Copyright_License {
 #include "TabMenuData.hpp"
 #include "Widget/PagerWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "event/KeyCode.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "Screen/Canvas.hpp"
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"

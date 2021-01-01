@@ -29,7 +29,7 @@ Copyright_License {
 #include "Formatter/UserUnits.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "event/PeriodicTimer.hpp"
+#include "ui/event/PeriodicTimer.hpp"
 #include "Airspace/AirspaceWarning.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"

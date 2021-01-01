@@ -31,12 +31,12 @@ Copyright_License {
 #include "Renderer/ThermalBandRenderer.hpp"
 #include "Renderer/FinalGlideBarRenderer.hpp"
 #include "Renderer/VarioBarRenderer.hpp"
-#include "event/Timer.hpp"
-#include "event/Notify.hpp"
+#include "ui/event/Timer.hpp"
+#include "ui/event/Notify.hpp"
 #include "Screen/Features.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "event/PeriodicTimer.hpp"
+#include "ui/event/PeriodicTimer.hpp"
 #endif
 
 #include <array>

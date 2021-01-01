@@ -35,8 +35,8 @@ Copyright_License {
 #include "Topography/Thread.hpp"
 
 #ifdef USE_X11
-#include "event/Globals.hpp"
-#include "event/Queue.hpp"
+#include "ui/event/Globals.hpp"
+#include "ui/event/Queue.hpp"
 #endif
 
 #ifdef ENABLE_SDL

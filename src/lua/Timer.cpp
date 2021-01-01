@@ -29,7 +29,7 @@ Copyright_License {
 #include "Catch.hpp"
 #include "Class.hxx"
 #include "Persistent.hpp"
-#include "event/PeriodicTimer.hpp"
+#include "ui/event/PeriodicTimer.hpp"
 
 extern "C" {
 #include <lauxlib.h>

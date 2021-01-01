@@ -33,7 +33,7 @@ Copyright_License {
 #include "util/StaticFifoBuffer.hxx"
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
-#include "event/DelayedNotify.hpp"
+#include "ui/event/DelayedNotify.hpp"
 #include "thread/Mutex.hxx"
 #include "UIGlobals.hpp"
 
