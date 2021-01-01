@@ -50,7 +50,7 @@ enum Buttons {
 };
 
 static DialogSettings dialog_settings;
-static SingleWindow *global_main_window;
+static UI::SingleWindow *global_main_window;
 static DialogLook *global_dialog_look;
 
 const DialogSettings &
@@ -59,7 +59,7 @@ UIGlobals::GetDialogSettings()
   return dialog_settings;
 }
 
-SingleWindow &
+UI::SingleWindow &
 UIGlobals::GetMainWindow()
 {
   assert(global_main_window != nullptr);
@@ -154,7 +154,7 @@ KoboMenuWidget::OnAction(int id) noexcept
 }
 
 static int
-Main(SingleWindow &main_window, const DialogLook &dialog_look)
+Main(UI::SingleWindow &main_window, const DialogLook &dialog_look)
 {
   WidgetDialog dialog(WidgetDialog::Full{}, main_window,
                       dialog_look, nullptr);
@@ -179,10 +179,10 @@ Main()
   DialogLook dialog_look;
   dialog_look.Initialise();
 
-  TopWindowStyle main_style;
+  UI::TopWindowStyle main_style;
   main_style.Resizable();
 
-  SingleWindow main_window;
+  UI::SingleWindow main_window;
   main_window.Create(_T("XCSoar/KoboMenu"), {600, 800}, main_style);
   main_window.Show();
 

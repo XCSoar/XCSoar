@@ -25,6 +25,8 @@ Copyright_License {
 #include "../Globals.hpp"
 #include "../Queue.hpp"
 
+namespace UI {
+
 Timer::Timer(Callback _callback) noexcept
   :timer(event_queue->get_io_context()),
    callback(std::move(_callback)) {}
@@ -65,3 +67,5 @@ Timer::Invoke(const boost::system::error_code &ec)
 
   callback();
 }
+
+} // namespace UI

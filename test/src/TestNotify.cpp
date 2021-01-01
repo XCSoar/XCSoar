@@ -52,6 +52,8 @@ Display::Rotate(DisplayOrientation orientation)
 
 #ifndef KOBO
 
+namespace UI {
+
 #if defined(USE_EGL) || defined(USE_GLX)
 /* avoid TopWindow.cpp from being linked, as it brings some heavy
    dependencies */
@@ -59,18 +61,20 @@ void TopWindow::Refresh() noexcept {}
 #endif
 
 #ifdef USE_POLL_EVENT
-bool TopWindow::OnEvent(const Event &event) { return false; }
+bool TopWindow::OnEvent(const UI::Event &event) { return false; }
 #endif
+
+} // namespace UI
 
 #endif
 
 static bool quit;
 
 class TestThread final : public Thread {
-  Notify &notify;
+  UI::Notify &notify;
 
 public:
-  TestThread(Notify &_notify):notify(_notify) {}
+  explicit TestThread(UI::Notify &_notify):notify(_notify) {}
 
 protected:
   void Run() noexcept override {
@@ -84,10 +88,10 @@ int main(int argc, char **argv)
 
   ScreenGlobalInit screen;
 
-  EventLoop loop(*event_queue);
-  Event event;
+  UI::EventLoop loop(*UI::event_queue);
+  UI::Event event;
 
-  Notify notify{[]{ quit = true; }};
+  UI::Notify notify{[]{ quit = true; }};
   TestThread thread(notify);
   thread.Start();
 

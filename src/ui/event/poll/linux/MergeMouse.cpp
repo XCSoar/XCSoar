@@ -24,6 +24,8 @@ Copyright_License {
 #include "MergeMouse.hpp"
 #include "ui/event/shared/Event.hpp"
 
+namespace UI {
+
 void
 MergeMouse::SetScreenSize(unsigned width, unsigned height)
 {
@@ -133,3 +135,5 @@ MergeMouse::Generate()
 
   return Event(Event::Type::NOP);
 }
+
+} // namespace UI

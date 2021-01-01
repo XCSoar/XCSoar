@@ -26,6 +26,8 @@ Copyright_License {
 #include "../shared/Event.hpp"
 #include "Screen/TopWindow.hpp"
 
+namespace UI {
+
 bool
 EventLoop::Get(Event &event)
 {
@@ -62,3 +64,5 @@ EventLoop::Dispatch(const Event &event)
 #endif
   }
 }
+
+} // namespace UI

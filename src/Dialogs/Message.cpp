@@ -39,7 +39,7 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
 {
   assert(text != NULL);
 
-  SingleWindow &main_window = UIGlobals::GetMainWindow();
+  auto &main_window = UIGlobals::GetMainWindow();
   const auto main_rc = main_window.GetClientRect();
 
   PixelSize client_area_size(Layout::Scale(200u), Layout::Scale(160u));

@@ -196,7 +196,7 @@ OZWindow::OnPaint(Canvas &canvas)
   }
 }
 
-class TestWindow : public SingleWindow,
+class TestWindow : public UI::SingleWindow,
                    ActionListener,
                    ListItemRenderer, ListCursorHandler {
   Button close_button;

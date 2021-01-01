@@ -88,7 +88,7 @@ class ThreadedOperationEnvironment
     }
   };
 
-  DelayedNotify notify{
+  UI::DelayedNotify notify{
     std::chrono::milliseconds(250),
     [this]{ OnNotification(); },
   };

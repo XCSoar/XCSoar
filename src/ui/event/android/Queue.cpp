@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "Queue.hpp"
 
+namespace UI {
+
 void
 EventQueue::Push(const Event &event)
 {
@@ -144,3 +146,5 @@ EventQueue::CancelTimer(Timer &timer)
 
   timers.Cancel(timer);
 }
+
+} // namespace UI

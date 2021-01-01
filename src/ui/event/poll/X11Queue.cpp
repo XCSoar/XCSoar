@@ -41,6 +41,8 @@ Copyright_License {
 #include <stdio.h>
 #include <stdlib.h>
 
+namespace UI {
+
 X11EventQueue::X11EventQueue(boost::asio::io_context &io_context, EventQueue &_queue)
   :queue(_queue),
    display(XOpenDisplay(nullptr)),
@@ -181,3 +183,5 @@ X11EventQueue::OnReadReady(const boost::system::error_code &ec)
 
   AsyncRead();
 }
+
+} // namespace UI

@@ -60,7 +60,7 @@ Display::LoadOrientation(VerboseOperationEnvironment &env)
   }
 
 #ifdef USE_POLL_EVENT
-  event_queue->SetDisplayOrientation(orientation);
+  UI::event_queue->SetDisplayOrientation(orientation);
 #endif
 
   LogFormat("Display rotated");
@@ -87,7 +87,7 @@ Display::RestoreOrientation()
   Display::RotateRestore();
 
 #ifdef USE_POLL_EVENT
-  event_queue->SetDisplayOrientation(DisplayOrientation::DEFAULT);
+  UI::event_queue->SetDisplayOrientation(DisplayOrientation::DEFAULT);
 #endif
 }
 

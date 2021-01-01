@@ -27,6 +27,8 @@ Copyright_License {
 
 #include <cassert>
 
+namespace UI {
+
 bool
 SingleWindow::RegisterClass(HINSTANCE hInstance) noexcept
 {
@@ -47,7 +49,7 @@ SingleWindow::RegisterClass(HINSTANCE hInstance) noexcept
 }
 
 bool
-SingleWindow::FilterEvent(const Event &event, Window *allowed) const noexcept
+SingleWindow::FilterEvent(const UI::Event &event, Window *allowed) const noexcept
 {
   assert(allowed != nullptr);
 
@@ -60,3 +62,5 @@ SingleWindow::FilterEvent(const Event &event, Window *allowed) const noexcept
   } else
     return true;
 }
+
+} // namespace UI

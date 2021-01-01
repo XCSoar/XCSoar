@@ -24,6 +24,8 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "ui/event/shared/Event.hpp"
 
+namespace UI {
+
 bool
 SingleWindow::FilterEvent(const Event &event, Window *allowed) const noexcept
 {
@@ -39,3 +41,5 @@ SingleWindow::FilterEvent(const Event &event, Window *allowed) const noexcept
     return true;
   }
 }
+
+} // namespace UI

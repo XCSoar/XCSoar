@@ -35,7 +35,7 @@ Copyright_License {
 
 struct UISettings;
 struct DialogLook;
-class SingleWindow;
+namespace UI { class SingleWindow; }
 
 /**
  * - Single window, created in GUI thread.
@@ -108,7 +108,7 @@ private:
                   std::chrono::steady_clock::time_point now) noexcept;
   };
 
-  SingleWindow &parent;
+  UI::SingleWindow &parent;
   const DialogLook &look;
 
   PixelRect rc; // maximum message size
@@ -126,7 +126,7 @@ private:
   bool enable_sound;
 
 public:
-  PopupMessage(SingleWindow &_parent, const DialogLook &_look,
+  PopupMessage(UI::SingleWindow &_parent, const DialogLook &_look,
                const UISettings &settings);
 
   void Create(const PixelRect _rc);

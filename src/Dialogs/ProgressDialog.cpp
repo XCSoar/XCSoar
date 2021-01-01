@@ -29,6 +29,8 @@ Copyright_License {
 
 #include <cassert>
 
+using namespace UI;
+
 ProgressDialog::ProgressDialog(SingleWindow &parent,
                                const DialogLook &dialog_look,
                                const TCHAR *caption)

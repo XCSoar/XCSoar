@@ -24,6 +24,8 @@ Copyright_License {
 #include "Queue.hpp"
 #include "DisplayOrientation.hpp"
 
+namespace UI {
+
 EventQueue::EventQueue()
   :SignalListener(io_context),
    thread(ThreadHandle::GetCurrent()),
@@ -183,3 +185,5 @@ EventQueue::OnEventPipe(const boost::system::error_code &ec)
 
   AsyncReadEventPipe();
 }
+
+} // namespace UI

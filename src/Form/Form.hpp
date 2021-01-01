@@ -34,7 +34,7 @@ Copyright_License {
 #include <tchar.h>
 
 struct DialogLook;
-class SingleWindow;
+namespace UI { class SingleWindow; }
 class PeriodClock;
 
 enum ModalResult {
@@ -95,7 +95,7 @@ public:
    *
    * @param caption titlebar text of the dialog
    */
-  WndForm(SingleWindow &_main_window, const DialogLook &_look,
+  WndForm(UI::SingleWindow &_main_window, const DialogLook &_look,
           const PixelRect &rc,
           const TCHAR *caption=nullptr,
           const WindowStyle style = WindowStyle());
@@ -103,18 +103,18 @@ public:
   /**
    * Construct a full-screen dialog.
    */
-  WndForm(SingleWindow &_main_window, const DialogLook &_look,
+  WndForm(UI::SingleWindow &_main_window, const DialogLook &_look,
           const TCHAR *caption=nullptr,
           const WindowStyle style={}) noexcept;
 
-  void Create(SingleWindow &main_window, const PixelRect &rc,
+  void Create(UI::SingleWindow &main_window, const PixelRect &rc,
               const TCHAR *caption=nullptr,
               const WindowStyle style=WindowStyle());
 
   /**
    * Create a full-screen dialog.
    */
-  void Create(SingleWindow &main_window,
+  void Create(UI::SingleWindow &main_window,
               const TCHAR *caption=nullptr,
               const WindowStyle style=WindowStyle());
 
@@ -127,7 +127,7 @@ public:
    * when they want to open another dialog.
    */
   gcc_pure
-  SingleWindow &GetMainWindow();
+  UI::SingleWindow &GetMainWindow();
 
   const DialogLook &GetLook() const {
     return look;

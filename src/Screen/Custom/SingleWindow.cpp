@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "Screen/SingleWindow.hpp"
 
+namespace UI {
+
 gcc_pure
 static const ContainerWindow *
 IsAncestor(const Window *maybe_ancestor, const Window *w) noexcept
@@ -62,3 +64,5 @@ SingleWindow::FilterMouseEvent(PixelPoint pt,
     container = next;
   }
 }
+
+} // namespace UI

@@ -27,7 +27,8 @@ Copyright_License {
 #include "ui/event/Notify.hpp"
 
 void
-AsyncJobRunner::Start(Job *_job, OperationEnvironment &_env, Notify *_notify)
+AsyncJobRunner::Start(Job *_job, OperationEnvironment &_env,
+                      UI::Notify *_notify)
 {
   assert(_job != NULL);
   assert(!IsBusy());

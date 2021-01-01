@@ -36,11 +36,13 @@ Copyright_License {
 
 #include <stdio.h>
 
+namespace UI {
+
 void
 TopWindow::CreateNative(const TCHAR *text, PixelSize size,
                         TopWindowStyle style) noexcept
 {
-  x_display = event_queue->GetDisplay();
+  x_display = UI::event_queue->GetDisplay();
   assert(x_display != nullptr);
 
   /* query the display dimensions from Xlib to calculate the DPI
@@ -142,7 +144,7 @@ TopWindow::CreateNative(const TCHAR *text, PixelSize size,
 bool
 TopWindow::IsVisible() const noexcept
 {
-  return event_queue->IsVisible();
+  return UI::event_queue->IsVisible();
 }
 
 void
@@ -161,3 +163,5 @@ TopWindow::DisableCapture() noexcept
 {
   XUngrabPointer(x_display, CurrentTime);
 }
+
+} // namespace UI

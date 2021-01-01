@@ -130,7 +130,7 @@ MainWindow::~MainWindow()
 }
 
 void
-MainWindow::Create(PixelSize size, TopWindowStyle style)
+MainWindow::Create(PixelSize size, UI::TopWindowStyle style)
 {
   SingleWindow::Create(title, size, style);
 }

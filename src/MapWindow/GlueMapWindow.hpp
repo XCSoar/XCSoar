@@ -92,7 +92,7 @@ class GlueMapWindow : public MapWindow {
 
 #ifdef ENABLE_OPENGL
   KineticManager kinetic_x = 700, kinetic_y = 700;
-  PeriodicTimer kinetic_timer{[this]{ OnKineticTimer(); }};
+  UI::PeriodicTimer kinetic_timer{[this]{ OnKineticTimer(); }};
 #endif
 
   /** flag to indicate if the MapItemList should be shown on mouse up */
@@ -141,9 +141,9 @@ class GlueMapWindow : public MapWindow {
 
   const GestureLook &gesture_look;
 
-  Timer map_item_timer{[this]{ OnMapItemTimer(); }};
+  UI::Timer map_item_timer{[this]{ OnMapItemTimer(); }};
 
-  Notify redraw_notify{[this]{ PartialRedraw(); }};
+  UI::Notify redraw_notify{[this]{ PartialRedraw(); }};
 
 public:
   GlueMapWindow(const Look &look);

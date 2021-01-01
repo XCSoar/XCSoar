@@ -60,6 +60,8 @@ Copyright_License {
 
 #include <stdio.h>
 
+using namespace UI;
+
 static AnalysisPage page = AnalysisPage::BAROGRAPH;
 
 class AnalysisWidget;

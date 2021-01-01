@@ -36,10 +36,6 @@ Copyright_License {
 #include <boost/intrusive/list_hook.hpp>
 #endif
 
-#ifdef ANDROID
-struct Event;
-#endif
-
 class Font;
 class Canvas;
 class ContainerWindow;

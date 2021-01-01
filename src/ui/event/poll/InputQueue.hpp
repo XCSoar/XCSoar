@@ -36,6 +36,9 @@ Copyright_License {
 #include <cstdint>
 
 enum class DisplayOrientation : uint8_t;
+
+namespace UI {
+
 class EventQueue;
 struct Event;
 
@@ -94,5 +97,7 @@ public:
 
   bool Generate(Event &event);
 };
+
+} // namespace UI
 
 #endif

@@ -27,6 +27,8 @@ Copyright_License {
 #include "ui/event/Idle.hpp"
 #include "Screen/TopWindow.hpp"
 
+namespace UI {
+
 bool
 EventLoop::Get(Event &event)
 {
@@ -63,3 +65,5 @@ EventLoop::Dispatch(const Event &_event)
       ResetUserIdle();
   }
 }
+
+} // namespace UI

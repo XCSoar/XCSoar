@@ -38,10 +38,13 @@ Copyright_License {
 #undef Window
 #undef Display
 
-class EventQueue;
-struct Event;
 struct _XDisplay;
 union _XEvent;
+
+namespace UI {
+
+class EventQueue;
+struct Event;
 
 /**
  * This class opens a connection to the X11 server using Xlib and
@@ -103,5 +106,7 @@ private:
 
   void OnReadReady(const boost::system::error_code &ec);
 };
+
+} // namespace UI
 
 #endif

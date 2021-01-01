@@ -27,6 +27,8 @@ Copyright_License {
 #include <windows.h>
 #include <cassert>
 
+namespace UI {
+
 struct Event {
   MSG msg;
 
@@ -68,5 +70,7 @@ struct Event {
     return IsKey() || (GetCharacterCount() > 0) || IsMouse();
   }
 };
+
+} // namespace UI
 
 #endif

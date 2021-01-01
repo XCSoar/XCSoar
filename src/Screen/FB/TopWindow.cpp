@@ -33,6 +33,12 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #endif
 
+#ifdef KOBO
+#include "Screen/Canvas.hpp"
+#endif
+
+namespace UI {
+
 #ifdef USE_FB
 
 #include "Screen/Memory/Canvas.hpp"
@@ -198,3 +204,5 @@ TopWindow::PostQuit() noexcept
 {
   event_queue->Quit();
 }
+
+} // namespace UI

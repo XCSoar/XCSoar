@@ -25,11 +25,11 @@ Copyright_License {
 #define XCSOAR_MANAGE_CAI302_DIALOG_HPP
 
 struct DialogLook;
-class SingleWindow;
+namespace UI { class SingleWindow; }
 class Device;
 
 void
-ManageCAI302Dialog(SingleWindow &parent, const DialogLook &look,
+ManageCAI302Dialog(UI::SingleWindow &parent, const DialogLook &look,
                    Device &device);
 
 #endif

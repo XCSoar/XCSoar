@@ -47,9 +47,9 @@ Display::GetSize(PixelSize fallback)
   return PixelSize(GetDeviceCaps(dc, HORZRES),
                    GetDeviceCaps(dc, VERTRES));
 #elif defined(USE_X11)
-  assert(event_queue != nullptr);
+  assert(UI::event_queue != nullptr);
 
-  auto display = event_queue->GetDisplay();
+  auto display = UI::event_queue->GetDisplay();
   assert(display != nullptr);
 
   return PixelSize(DisplayWidth(display, 0), DisplayHeight(display, 0));

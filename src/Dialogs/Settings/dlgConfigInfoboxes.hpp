@@ -28,13 +28,13 @@ Copyright_License {
 
 struct DialogLook;
 struct InfoBoxLook;
-class SingleWindow;
+namespace UI { class SingleWindow; }
 
 /**
  * @return true when the #InfoBoxPanelConfig object has been modified
  */
 bool
-dlgConfigInfoboxesShowModal(SingleWindow &parent,
+dlgConfigInfoboxesShowModal(UI::SingleWindow &parent,
                             const DialogLook &dialog_look,
                             const InfoBoxLook &look,
                             InfoBoxSettings::Geometry geometry,

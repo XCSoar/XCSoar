@@ -112,7 +112,7 @@ extern "C"
 }
 
 void
-dlgCreditsShowModal(SingleWindow &parent)
+dlgCreditsShowModal(UI::SingleWindow &parent)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
 

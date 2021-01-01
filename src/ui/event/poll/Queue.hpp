@@ -60,6 +60,8 @@ public:
   }
 };
 
+namespace UI {
+
 class EventQueue final : public IOContextOwner, private SignalListener {
   const ThreadHandle thread;
 
@@ -196,5 +198,7 @@ private:
 
   void OnEventPipe(const boost::system::error_code &ec);
 };
+
+} // namespace UI
 
 #endif

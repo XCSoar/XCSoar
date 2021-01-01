@@ -24,7 +24,7 @@ Copyright_License {
 #if !defined(XCSOAR_DIALOGS_H)
 #define XCSOAR_DIALOGS_H
 
-class SingleWindow;
+namespace UI { class SingleWindow; }
 
 void dlgBasicSettingsShowModal();
 
@@ -36,8 +36,8 @@ void ShowWindSettingsDialog();
 
 void dlgStatusShowModal(int page);
 
-void dlgCreditsShowModal(SingleWindow &parent);
+void dlgCreditsShowModal(UI::SingleWindow &parent);
 
-void dlgQuickMenuShowModal(SingleWindow &parent);
+void dlgQuickMenuShowModal(UI::SingleWindow &parent);
 
 #endif

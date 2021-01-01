@@ -156,7 +156,7 @@ protected:
   ListCursorHandler *cursor_handler = nullptr;
 
   KineticManager kinetic;
-  PeriodicTimer kinetic_timer{[this]{ OnKineticTimer(); }};
+  UI::PeriodicTimer kinetic_timer{[this]{ OnKineticTimer(); }};
 
 public:
   explicit ListControl(const DialogLook &_look) noexcept;

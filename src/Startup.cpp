@@ -185,7 +185,7 @@ Startup()
 
   // Creates the main window
 
-  TopWindowStyle style;
+  UI::TopWindowStyle style;
   if (CommandLine::full_screen)
     style.FullScreen();
 

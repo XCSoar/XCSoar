@@ -26,6 +26,8 @@ Copyright_License {
 #include "../Timer.hpp"
 #include "thread/Debug.hpp"
 
+namespace UI {
+
 EventQueue::EventQueue()
   :trigger(::CreateEvent(nullptr, true, false, nullptr)) {}
 
@@ -112,3 +114,5 @@ EventQueue::CancelTimer(Timer &timer)
 
   timers.Cancel(timer);
 }
+
+} // namespace UI

@@ -25,6 +25,8 @@ Copyright_License {
 #include "../Globals.hpp"
 #include "../Queue.hpp"
 
+namespace UI {
+
 void
 Timer::Schedule(std::chrono::steady_clock::duration d) noexcept
 {
@@ -56,3 +58,5 @@ Timer::Invoke()
 
   callback();
 }
+
+} // namespace UI

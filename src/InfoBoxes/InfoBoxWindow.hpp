@@ -61,14 +61,14 @@ class InfoBoxWindow : public LazyPaintWindow
   bool force_draw_selector = false;
 
   /** a timer which returns keyboard focus back to the map window after a while */
-  Timer focus_timer{[this]{ FocusParent(); }};
+  UI::Timer focus_timer{[this]{ FocusParent(); }};
 
   /**
    * This timer opens the dialog.  It is used to check for "long
    * click" and to delay the dialog a bit (for double click
    * detection).
    */
-  Timer dialog_timer{[this]{ OnDialogTimer(); }};
+  UI::Timer dialog_timer{[this]{ OnDialogTimer(); }};
 
   PixelRect title_rect;
   PixelRect value_rect;

@@ -166,9 +166,9 @@ Display::GetXDPI(unsigned custom_dpi)
   RootDC dc;
   return GetDeviceCaps(dc, LOGPIXELSX);
 #elif defined(USE_X11)
-  assert(event_queue != nullptr);
+  assert(UI::event_queue != nullptr);
 
-  auto display = event_queue->GetDisplay();
+  auto display = UI::event_queue->GetDisplay();
   assert(display != nullptr);
 
   return MMToDPI(DisplayWidth(display, 0), DisplayWidthMM(display, 0));
@@ -197,9 +197,9 @@ Display::GetYDPI(unsigned custom_dpi)
   RootDC dc;
   return GetDeviceCaps(dc, LOGPIXELSY);
 #elif defined(USE_X11)
-  assert(event_queue != nullptr);
+  assert(UI::event_queue != nullptr);
 
-  auto display = event_queue->GetDisplay();
+  auto display = UI::event_queue->GetDisplay();
   assert(display != nullptr);
 
   return MMToDPI(DisplayHeight(display, 0), DisplayHeightMM(display, 0));

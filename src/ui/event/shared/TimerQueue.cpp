@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "TimerQueue.hpp"
 
+namespace UI {
+
 std::chrono::steady_clock::duration
 TimerQueue::GetTimeout(std::chrono::steady_clock::time_point now) const noexcept
 {
@@ -66,3 +68,5 @@ TimerQueue::Cancel(Timer &timer)
     }
   }
 }
+
+} // namespace UI

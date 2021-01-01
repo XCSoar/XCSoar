@@ -23,4 +23,8 @@ Copyright_License {
 
 #include "Globals.hpp"
 
+namespace UI {
+
 EventQueue *event_queue;
+
+} // namespace UI

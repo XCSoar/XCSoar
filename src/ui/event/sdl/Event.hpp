@@ -30,6 +30,8 @@ Copyright_License {
 
 #include <cassert>
 
+namespace UI {
+
 enum {
   /**
    * A function pointer with a pointer argument gets called.
@@ -81,5 +83,7 @@ struct Event {
     return IsKey() || IsMouse();
   }
 };
+
+} // namespace UI
 
 #endif

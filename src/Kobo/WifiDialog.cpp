@@ -64,7 +64,7 @@ class WifiListWidget final
 
   WPASupplicant wpa_supplicant;
 
-  PeriodicTimer update_timer{[this]{ UpdateList(); }};
+  UI::PeriodicTimer update_timer{[this]{ UpdateList(); }};
 
 public:
   void CreateButtons(WidgetDialog &dialog) {

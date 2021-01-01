@@ -76,7 +76,7 @@ class DeviceDescriptor final : PortListener, PortLineSplitter {
    */
   boost::asio::io_context &io_context;
 
-  Notify job_finished_notify{[this]{ OnJobFinished(); }};
+  UI::Notify job_finished_notify{[this]{ OnJobFinished(); }};
 
   /**
    * This mutex protects modifications of the attribute "device".  If

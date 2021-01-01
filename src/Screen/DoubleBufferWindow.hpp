@@ -45,7 +45,7 @@ using DoubleBufferWindow = BufferWindow;
  * copies the other buffer to the screen.
  */
 class DoubleBufferWindow : public PaintWindow {
-  Notify invalidate_notify{[this]{ Invalidate(); }};
+  UI::Notify invalidate_notify{[this]{ Invalidate(); }};
 
   BufferCanvas buffers[2];
 

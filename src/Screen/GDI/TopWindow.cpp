@@ -27,6 +27,8 @@ Copyright_License {
 #include "ui/event/windows/Loop.hpp"
 #include "ui/event/Queue.hpp"
 
+namespace UI {
+
 void
 TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelSize size,
                   TopWindowStyle style) noexcept
@@ -118,3 +120,5 @@ TopWindow::PostQuit() noexcept
 {
   ::PostQuitMessage(0);
 }
+
+} // namespace UI

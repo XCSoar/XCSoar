@@ -31,6 +31,8 @@ Copyright_License {
 #include <stdio.h>
 #include <stdlib.h>
 
+namespace UI {
+
 static void
 WaylandRegistryGlobal(void *data, struct wl_registry *registry, uint32_t id,
                       const char *interface, uint32_t version)
@@ -238,3 +240,5 @@ WaylandEventQueue::PointerButton(bool pressed)
   Push(Event(pressed ? Event::MOUSE_DOWN : Event::MOUSE_UP,
              PixelPoint(pointer_position.x, pointer_position.y)));
 }
+
+} // namespace UI

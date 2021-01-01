@@ -28,6 +28,8 @@ Copyright_License {
 
 #include <cassert>
 
+namespace UI {
+
 struct Event {
   enum Type {
     NOP,
@@ -165,5 +167,7 @@ struct Event {
     return IsKey() || IsMouseDown();
   }
 };
+
+} // namespace UI
 
 #endif

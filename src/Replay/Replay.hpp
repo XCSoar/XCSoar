@@ -37,7 +37,7 @@ class Error;
 
 class Replay final
 {
-  Timer timer{[this]{ OnTimer(); }};
+  UI::Timer timer{[this]{ OnTimer(); }};
 
   double time_scale;
 

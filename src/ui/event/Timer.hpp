@@ -32,6 +32,8 @@ Copyright_License {
 #include <cassert>
 #include <functional>
 
+namespace UI {
+
 /**
  * A timer that calls a given function after a specified amount of
  * time.
@@ -101,5 +103,7 @@ public:
   void Invoke();
 #endif
 };
+
+} // namespace UI
 
 #endif

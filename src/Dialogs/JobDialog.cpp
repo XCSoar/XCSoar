@@ -26,6 +26,8 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Job/Thread.hpp"
 
+using namespace UI;
+
 class DialogJobThread : public JobThread {
   WndForm &form;
 

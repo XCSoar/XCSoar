@@ -77,7 +77,7 @@ Main()
   wind.Create(main_window, main_window.GetClientRect(), with_border);
   main_window.SetFullWindow(wind);
 
-  PeriodicTimer timer([&wind](){
+  UI::PeriodicTimer timer([&wind](){
     SpeedVector _wind = wind.GetWind();
 
     _wind.bearing = (_wind.bearing + Angle::Degrees(5)).AsBearing();

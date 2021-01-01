@@ -57,7 +57,7 @@ protected:
   }
 };
 
-class MainWindow final : public SingleWindow, ActionListener
+class MainWindow final : public UI::SingleWindow, ActionListener
 {
   enum Buttons {
     CLOSE = 1,

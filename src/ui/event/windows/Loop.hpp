@@ -28,6 +28,8 @@ Copyright_License {
 
 #include <windows.h>
 
+namespace UI {
+
 struct Event;
 class EventQueue;
 
@@ -52,5 +54,7 @@ public:
 
   void Dispatch(Event &msg);
 };
+
+} // namespace UI
 
 #endif

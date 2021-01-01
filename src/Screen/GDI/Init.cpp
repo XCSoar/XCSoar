@@ -30,6 +30,8 @@ Copyright_License {
 
 #include <windows.h>
 
+using namespace UI;
+
 ScreenGlobalInit::ScreenGlobalInit()
 {
   event_queue = new EventQueue();

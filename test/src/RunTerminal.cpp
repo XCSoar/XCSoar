@@ -29,10 +29,10 @@ Copyright_License {
 #include "ui/event/PeriodicTimer.hpp"
 #include "Look/TerminalLook.hpp"
 
-class TestWindow : public SingleWindow {
+class TestWindow : public UI::SingleWindow {
   TerminalWindow terminal;
 
-  PeriodicTimer timer{[this]{ WriteRandomChar(); }};
+  UI::PeriodicTimer timer{[this]{ WriteRandomChar(); }};
 
 public:
   TestWindow(const TerminalLook &look)

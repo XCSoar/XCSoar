@@ -30,6 +30,8 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 
+using namespace UI;
+
 gcc_const
 static WindowStyle
 GetDialogStyle()

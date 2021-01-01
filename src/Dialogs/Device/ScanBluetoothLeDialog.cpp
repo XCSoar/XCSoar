@@ -55,7 +55,7 @@ class ScanBluetoothLeWidget final
 
   WidgetDialog &dialog;
 
-  Notify le_scan_notify{[this]{ OnLeScanNotification(); }};
+  UI::Notify le_scan_notify{[this]{ OnLeScanNotification(); }};
 
   std::vector<Item> items;
 

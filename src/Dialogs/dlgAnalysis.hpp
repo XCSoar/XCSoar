@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_ANALYSIS_DIALOG_HPP
 
 struct Look;
-class SingleWindow;
+namespace UI { class SingleWindow; }
 class FullBlackboard;
 class GlideComputer;
 class Airspaces;
@@ -48,7 +48,7 @@ enum class AnalysisPage {
 };
 
 void
-dlgAnalysisShowModal(SingleWindow &parent, const Look &look,
+dlgAnalysisShowModal(UI::SingleWindow &parent, const Look &look,
                      const FullBlackboard &blackboard,
                      GlideComputer &glide_computer,
                      const Airspaces *airspaces,

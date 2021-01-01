@@ -30,6 +30,15 @@ Copyright_License {
 
 #include <cstdint>
 
+struct wl_display;
+struct wl_compositor;
+struct wl_seat;
+struct wl_pointer;
+struct wl_shell;
+struct wl_registry;
+
+namespace UI {
+
 class EventQueue;
 struct Event;
 
@@ -98,5 +107,7 @@ private:
 
   void OnReadReady(const boost::system::error_code &ec);
 };
+
+} // namespace UI
 
 #endif

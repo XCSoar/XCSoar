@@ -82,6 +82,8 @@ Copyright_License {
 #include <cassert>
 #include <stdlib.h>
 
+using namespace UI;
+
 unsigned android_api_level;
 
 Context *context;

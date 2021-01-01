@@ -29,6 +29,8 @@ Copyright_License {
 #include "Screen/Memory/Canvas.hpp"
 #endif
 
+namespace UI {
+
 TopWindow::~TopWindow() noexcept
 {
   delete screen;
@@ -152,3 +154,5 @@ TopWindow::OnClose() noexcept
   Destroy();
   return true;
 }
+
+} // namespace UI

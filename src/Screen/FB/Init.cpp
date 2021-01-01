@@ -33,6 +33,8 @@ Copyright_License {
 #include "Hardware/RotateDisplay.hpp"
 #endif
 
+using namespace UI;
+
 ScreenGlobalInit::ScreenGlobalInit()
 {
   Font::Initialise();

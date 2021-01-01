@@ -60,7 +60,7 @@ enum Actions {
 class FlightSetupPanel final
   : public RowFormWidget, DataFieldListener,
     public ActionListener {
-  PeriodicTimer timer{[this]{ OnTimer(); }};
+  UI::PeriodicTimer timer{[this]{ OnTimer(); }};
 
   Button *dump_button;
 

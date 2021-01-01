@@ -32,6 +32,8 @@ Copyright_License {
 
 #include <windows.h>
 
+namespace UI {
+
 struct Event;
 
 class EventQueue {
@@ -81,5 +83,7 @@ private:
     steady_clock_cache.flush();
   }
 };
+
+} // namespace UI
 
 #endif

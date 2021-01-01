@@ -30,6 +30,8 @@ Copyright_License {
 
 #include <algorithm>
 
+namespace UI {
+
 /**
  * This class knows how to rotate the coordinates of a pointer device
  * (touch screen) to match the coordinates of a rotated screen.
@@ -117,5 +119,7 @@ public:
     return p;
   }
 };
+
+} // namespace UI
 
 #endif

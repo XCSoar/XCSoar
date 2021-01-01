@@ -42,6 +42,8 @@ Copyright_License {
 
 #include <cassert>
 
+using namespace UI;
+
 static InfoBoxSettings::Panel clipboard;
 static unsigned clipboard_size;
 

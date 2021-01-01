@@ -28,11 +28,15 @@ Copyright_License {
 
 #include <cassert>
 
-class EventQueue;
+struct libinput;
+struct libinput_event;
+struct libinput_interface;
+
 class UdevContext;
 
-struct libinput;
-struct libinput_interface;
+namespace UI {
+
+class EventQueue;
 
 /**
  * A driver for handling libinput events.
@@ -116,5 +120,7 @@ private:
 
   void OnReadReady(const boost::system::error_code &ec);
 };
+
+} // namespace UI
 
 #endif

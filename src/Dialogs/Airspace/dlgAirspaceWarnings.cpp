@@ -78,7 +78,7 @@ class AirspaceWarningListWidget final
 
   ProtectedAirspaceWarningManager &airspace_warnings;
 
-  PeriodicTimer update_list_timer{[this]{ UpdateList(); }};
+  UI::PeriodicTimer update_list_timer{[this]{ UpdateList(); }};
 
   Button *ack_button;
   Button *ack_day_button;

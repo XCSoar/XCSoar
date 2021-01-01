@@ -44,7 +44,7 @@ ReadAssetNumber()
 bool
 HasPointer()
 {
-  return event_queue->HasPointer();
+  return UI::event_queue->HasPointer();
 }
 
 #endif
@@ -54,13 +54,13 @@ HasPointer()
 bool
 HasTouchScreen()
 {
-  return event_queue->HasTouchScreen();
+  return UI::event_queue->HasTouchScreen();
 }
 
 bool
 HasKeyboard()
 {
-  return event_queue->HasKeyboard();
+  return UI::event_queue->HasKeyboard();
 }
 
 #endif

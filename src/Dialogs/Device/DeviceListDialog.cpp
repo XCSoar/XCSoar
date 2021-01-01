@@ -64,6 +64,8 @@ Copyright_License {
 #include "Android/BluetoothHelper.hpp"
 #endif
 
+using namespace UI;
+
 class DeviceListWidget final
   : public ListWidget, private ActionListener,
     NullBlackboardListener, PortListener {

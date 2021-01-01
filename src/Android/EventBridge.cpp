@@ -29,6 +29,8 @@ Copyright_License {
 #include "system/Clock.hpp"
 #include "util/Compiler.h"
 
+using namespace UI;
+
 /**
  * @see http://developer.android.com/reference/android/view/KeyEvent.html
  */

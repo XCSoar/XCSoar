@@ -33,6 +33,8 @@ Copyright_License {
 
 #include <chrono>
 
+namespace UI {
+
 class EventQueue {
   ClockCache<std::chrono::steady_clock> steady_clock_cache;
 
@@ -91,5 +93,7 @@ private:
     steady_clock_cache.flush();
   }
 };
+
+} // namespace UI
 
 #endif

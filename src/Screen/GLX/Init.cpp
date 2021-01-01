@@ -29,6 +29,8 @@ Copyright_License {
 #include "Screen/OpenGL/Init.hpp"
 #include "Screen/FreeType/Init.hpp"
 
+using namespace UI;
+
 ScreenGlobalInit::ScreenGlobalInit()
 {
   OpenGL::Initialise();

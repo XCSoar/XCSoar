@@ -71,7 +71,7 @@ public:
     return *task;
   }
 
-  void Create(SingleWindow &parent);
+  void Create(UI::SingleWindow &parent);
   void Destroy();
 
   void UpdateCaption();

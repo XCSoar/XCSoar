@@ -26,6 +26,8 @@ Copyright_License {
 #include "../Timer.hpp"
 #include "system/Sleep.h"
 
+namespace UI {
+
 EventQueue::EventQueue()
   :quit(false) {}
 
@@ -143,3 +145,5 @@ EventQueue::CancelTimer(Timer &timer)
 
   timers.Cancel(timer);
 }
+
+} // namespace UI

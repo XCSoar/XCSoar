@@ -190,7 +190,7 @@ Main()
   LoadReplay(replay, glide_computer, blackboard);
   delete replay;
 
-  SingleWindow main_window;
+  UI::SingleWindow main_window;
   main_window.Create(_T("RunAnalysis"),
                      {640, 480});
 

@@ -27,6 +27,8 @@ Copyright_License {
 #include "Notify.hpp"
 #include "Timer.hpp"
 
+namespace UI {
+
 /**
  * This class is similar to #Notify, but it delivers the notification
  * with a certain delay, to limit the rate of redundant notifications.
@@ -53,5 +55,7 @@ public:
     notify.SendNotification();
   }
 };
+
+} // namespace UI
 
 #endif

@@ -41,6 +41,8 @@ Copyright_License {
 #include <alloca.h>
 #endif
 
+namespace UI {
+
 static constexpr Uint32
 MakeSDLFlags(bool full_screen, bool resizable) noexcept
 {
@@ -310,3 +312,5 @@ TopWindow::OnResize(PixelSize new_size)
   screen->OnResize(new_size);
 #endif
 }
+
+} // namespace UI

@@ -28,6 +28,8 @@ Copyright_License {
 
 #include <boost/asio/posix/stream_descriptor.hpp>
 
+namespace UI {
+
 class EventQueue;
 class MergeMouse;
 struct Event;
@@ -104,5 +106,7 @@ private:
 
   void OnReadReady(const boost::system::error_code &ec);
 };
+
+} // namespace UI
 
 #endif

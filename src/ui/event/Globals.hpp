@@ -24,8 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_GLOBALS_HPP
 #define XCSOAR_EVENT_GLOBALS_HPP
 
-class EventQueue;
+namespace UI {
 
+class EventQueue;
 extern EventQueue *event_queue;
+
+} // namespace UI
 
 #endif

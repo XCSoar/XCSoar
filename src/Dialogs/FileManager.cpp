@@ -211,9 +211,9 @@ class ManagedFileListWidget
    */
   std::set<std::string> failures;
 
-  PeriodicTimer refresh_download_timer{[this]{ OnTimer(); }};
+  UI::PeriodicTimer refresh_download_timer{[this]{ OnTimer(); }};
 
-  Notify download_notify{[this]{ OnDownloadNotification(); }};
+  UI::Notify download_notify{[this]{ OnDownloadNotification(); }};
 
   /**
    * Was the repository file modified, and needs to be reloaded by

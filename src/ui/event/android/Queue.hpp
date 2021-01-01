@@ -33,6 +33,8 @@ Copyright_License {
 #include <chrono>
 #include <queue>
 
+namespace UI {
+
 class EventQueue {
   std::queue<Event> events;
 
@@ -94,5 +96,7 @@ private:
 
   bool Generate(Event &event);
 };
+
+} // namespace UI
 
 #endif

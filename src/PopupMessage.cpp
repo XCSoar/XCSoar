@@ -93,7 +93,7 @@ PopupMessage::Message::AppendTo(StaticString<2000> &buffer,
   return true;
 }
 
-PopupMessage::PopupMessage(SingleWindow &_parent, const DialogLook &_look,
+PopupMessage::PopupMessage(UI::SingleWindow &_parent, const DialogLook &_look,
                            const UISettings &_settings)
   :parent(_parent), look(_look),
    settings(_settings),

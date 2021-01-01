@@ -115,7 +115,7 @@ protected:
   }
 };
 
-class TestWindow final : public SingleWindow, ActionListener {
+class TestWindow final : public UI::SingleWindow, ActionListener {
   KeyCodeDumper key_code_dumper;
   Button close_button;
 

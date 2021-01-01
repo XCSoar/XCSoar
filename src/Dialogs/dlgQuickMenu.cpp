@@ -264,7 +264,7 @@ QuickMenu::OnAction(int id) noexcept
 }
 
 void
-dlgQuickMenuShowModal(SingleWindow &parent)
+dlgQuickMenuShowModal(UI::SingleWindow &parent)
 {
   const auto *menu = InputEvents::GetMenu(_T("RemoteStick"));
   if (menu == nullptr)

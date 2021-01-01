@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "util/Compiler.h"
 
-class SingleWindow;
+namespace UI { class SingleWindow; }
 class GlueMapWindow;
 struct DialogSettings;
 struct Look;
@@ -48,7 +48,7 @@ struct FormatSettings;
  */
 namespace UIGlobals {
   gcc_const
-  SingleWindow &GetMainWindow();
+  UI::SingleWindow &GetMainWindow();
 
   gcc_const
   GlueMapWindow *GetMap();

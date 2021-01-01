@@ -26,6 +26,8 @@ Copyright_License {
 #include "Queue.hpp"
 #include "Asset.hpp"
 
+namespace UI {
+
 bool
 EventLoop::Get(Event &event)
 {
@@ -47,3 +49,5 @@ DialogEventLoop::Dispatch(Event &event)
 
   EventLoop::Dispatch(event);
 }
+
+} // namespace UI

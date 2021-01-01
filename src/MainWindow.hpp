@@ -54,7 +54,7 @@ namespace InfoBoxLayout { struct Layout; }
 /**
  * The XCSoar main window.
  */
-class MainWindow : public SingleWindow {
+class MainWindow : public UI::SingleWindow {
   static constexpr const TCHAR *title = _T("XCSoar");
 
   Look *look = nullptr;
@@ -94,20 +94,20 @@ private:
   /**
    * Called by the #MergeThread when new GPS data is available.
    */
-  Notify gps_notify{[this]{ OnGpsNotify(); }};
+  UI::Notify gps_notify{[this]{ OnGpsNotify(); }};
 
   /**
    * Called by the calculation thread when new calculation results are
    * available.  This updates the map and the info boxes.
    */
-  Notify calculated_notify{[this]{ OnCalculatedNotify(); }};
+  UI::Notify calculated_notify{[this]{ OnCalculatedNotify(); }};
 
   /**
    * @see DeferredRestorePage()
    */
-  Notify restore_page_notify{[this]{ OnRestorePageNotify(); }};
+  UI::Notify restore_page_notify{[this]{ OnRestorePageNotify(); }};
 
-  PeriodicTimer timer{[this]{ RunTimer(); }};
+  UI::PeriodicTimer timer{[this]{ RunTimer(); }};
 
   BatteryTimer battery_timer;
 
@@ -159,7 +159,7 @@ protected:
   void KillBottomWidget();
 
 public:
-  void Create(PixelSize size, TopWindowStyle style=TopWindowStyle());
+  void Create(PixelSize size, UI::TopWindowStyle style={});
 
   void Destroy();
 

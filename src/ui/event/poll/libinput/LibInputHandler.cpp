@@ -36,6 +36,8 @@ Copyright_License {
 
 #include <libinput.h>
 
+namespace UI {
+
 bool
 LibInputHandler::Open()
 {
@@ -267,3 +269,5 @@ LibInputHandler::OnReadReady(const boost::system::error_code &ec)
   HandlePendingEvents();
   AsyncRead();
 }
+
+} // namespace UI

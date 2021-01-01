@@ -36,7 +36,7 @@ Copyright_License {
  * be used in the main thread.
  */
 class RateLimiter {
-  Timer timer{[this]{ OnTimer(); }};
+  UI::Timer timer{[this]{ OnTimer(); }};
 
   /**
    * Remember the last Run() invocation.

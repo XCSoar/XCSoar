@@ -28,6 +28,8 @@ Copyright_License {
 
 #include <cassert>
 
+namespace UI {
+
 struct Event;
 
 /**
@@ -98,5 +100,7 @@ public:
 
   Event Generate();
 };
+
+} // namespace UI
 
 #endif

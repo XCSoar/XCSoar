@@ -32,6 +32,8 @@ Copyright_License {
 #include "bcm_host.h"
 #endif
 
+using namespace UI;
+
 ScreenGlobalInit::ScreenGlobalInit()
 {
 #ifdef USE_VIDEOCORE

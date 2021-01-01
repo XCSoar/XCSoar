@@ -27,6 +27,8 @@ Copyright_License {
 #include "../Timer.hpp"
 #include "Screen/TopWindow.hpp"
 
+namespace UI {
+
 bool
 EventLoop::Get(Event &event)
 {
@@ -61,3 +63,5 @@ EventLoop::Dispatch(const Event &event)
   } else if (event.type != Event::NOP)
     top_window.OnEvent(event);
 }
+
+} // namespace UI

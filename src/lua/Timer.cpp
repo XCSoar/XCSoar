@@ -36,7 +36,7 @@ extern "C" {
 }
 
 class LuaTimer final {
-  PeriodicTimer timer_event{[this]{ OnTimer(); }};
+  UI::PeriodicTimer timer_event{[this]{ OnTimer(); }};
 
   Lua::Value callback;
 

@@ -31,6 +31,8 @@ Copyright_License {
 #include <atomic>
 #include <functional>
 
+namespace UI {
+
 /**
  * This class implements message passing from any thread to the main
  * thread.
@@ -82,5 +84,7 @@ private:
   virtual bool OnUser(unsigned id) override;
 #endif
 };
+
+} // namespace UI
 
 #endif

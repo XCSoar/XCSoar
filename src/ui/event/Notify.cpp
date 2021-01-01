@@ -25,6 +25,8 @@ Copyright_License {
 #include "Globals.hpp"
 #include "Queue.hpp"
 
+namespace UI {
+
 Notify::Notify(CallbackFunction _callback) noexcept
   :callback(std::move(_callback))
 {
@@ -83,3 +85,5 @@ Notify::Callback(void *ctx)
 }
 
 #endif
+
+} // namespace UI

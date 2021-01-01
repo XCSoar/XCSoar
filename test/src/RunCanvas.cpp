@@ -38,7 +38,7 @@ Copyright_License {
 
 #include <algorithm>
 
-class TestWindow final : public SingleWindow, ActionListener {
+class TestWindow final : public UI::SingleWindow, ActionListener {
 #ifndef ENABLE_OPENGL
   Button buffer_button;
 #endif

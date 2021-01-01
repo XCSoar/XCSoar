@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_ANDROID_LOOP_HPP
 #define XCSOAR_EVENT_ANDROID_LOOP_HPP
 
+namespace UI {
+
 struct Event;
 class EventQueue;
 class TopWindow;
@@ -47,5 +49,7 @@ public:
   bool Get(Event &event);
   void Dispatch(const Event &event);
 };
+
+} // namespace UI
 
 #endif

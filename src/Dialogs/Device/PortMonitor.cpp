@@ -52,7 +52,7 @@ class PortTerminalBridge final : public DataHandler {
   Mutex mutex;
   StaticFifoBuffer<char, 1024> buffer;
 
-  DelayedNotify notify{
+  UI::DelayedNotify notify{
     std::chrono::milliseconds(100),
     [this]{ OnNotification(); },
   };

@@ -34,7 +34,7 @@ Copyright_License {
 void
 ShowLockBox()
 {
-  SingleWindow &main_window = UIGlobals::GetMainWindow();
+  auto &main_window = UIGlobals::GetMainWindow();
 
   const unsigned button_height = Layout::GetMinimumControlHeight();
   const unsigned button_width = button_height;

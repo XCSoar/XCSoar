@@ -56,6 +56,8 @@ CheckBit(const T bits[], unsigned i)
   return bits[i / BitSize<T>()] & (T(1) << (i % BitSize<T>()));
 }
 
+namespace UI {
+
 /**
  * Check if the EVDEV supports EV_ABS or EV_REL..
  */
@@ -266,3 +268,5 @@ LinuxInputDevice::OnReadReady(const boost::system::error_code &ec)
   if (fd.is_open())
     AsyncRead();
 }
+
+} // namespace UI

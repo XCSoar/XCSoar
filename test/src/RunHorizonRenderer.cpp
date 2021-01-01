@@ -67,7 +67,7 @@ Main()
   horizon.Create(main_window, main_window.GetClientRect(), with_border);
   main_window.SetFullWindow(horizon);
 
-  PeriodicTimer timer([&horizon](){
+  UI::PeriodicTimer timer([&horizon](){
     AttitudeState attitude;
     attitude.bank_angle_computed = true;
     attitude.pitch_angle_computed = true;

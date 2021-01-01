@@ -52,7 +52,7 @@ class ListPickerWidget : public ListWidget, public ActionListener {
    * initialised yet in Show(), and recursively calling into Widget
    * methods is dangerous anyway.
    */
-  Timer postpone_update_help{[this]{
+  UI::Timer postpone_update_help{[this]{
     UpdateHelp(GetList().GetCursorIndex());
   }};
 
@@ -190,7 +190,7 @@ ListPicker(const TCHAR *caption,
 
   dialog.EnableCursorSelection();
 
-  PeriodicTimer update_timer([list_widget](){
+  UI::PeriodicTimer update_timer([list_widget](){
     list_widget->GetList().Invalidate();
   });
   if (update)

@@ -132,7 +132,7 @@ IsCtrlKeyPressed()
 #elif defined(USE_WINUSER)
   return GetKeyState(VK_CONTROL) & 0x8000;
 #elif defined(USE_X11)
-  return event_queue->WasCtrlClick();
+  return UI::event_queue->WasCtrlClick();
 #else
   return false;
 #endif

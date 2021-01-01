@@ -30,8 +30,11 @@ Copyright_License {
 
 #include <cassert>
 
-struct Event;
 class WndForm;
+
+namespace UI {
+
+struct Event;
 
 /**
  * The single top-level window of an application.  When it is closed,
@@ -110,5 +113,7 @@ protected:
   void OnDestroy() override;
   void OnResize(PixelSize new_size) override;
 };
+
+} // namespace UI
 
 #endif

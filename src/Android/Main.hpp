@@ -26,7 +26,6 @@ Copyright_License {
 
 class Context;
 class NativeView;
-class EventQueue;
 class Vibrator;
 class IOIOHelper;
 

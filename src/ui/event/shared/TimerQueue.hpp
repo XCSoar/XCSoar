@@ -31,6 +31,8 @@ Copyright_License {
 
 #include <cstdint>
 
+namespace UI {
+
 class Timer;
 
 class TimerQueue {
@@ -103,5 +105,7 @@ public:
    */
   void Cancel(Timer &timer);
 };
+
+} // namespace UI
 
 #endif

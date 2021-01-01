@@ -40,7 +40,7 @@ class ProgressDialog
   std::function<void()> cancel_callback;
 
 public:
-  ProgressDialog(SingleWindow &parent, const DialogLook &dialog_look,
+  ProgressDialog(UI::SingleWindow &parent, const DialogLook &dialog_look,
                  const TCHAR *caption);
 
   void AddCancelButton(std::function<void()> &&callback);

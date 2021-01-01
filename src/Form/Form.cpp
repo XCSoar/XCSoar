@@ -55,6 +55,8 @@ Copyright_License {
 #include "ui/event/windows/Loop.hpp"
 #endif
 
+using namespace UI;
+
 WndForm::WndForm(const DialogLook &_look)
   :look(_look)
 {

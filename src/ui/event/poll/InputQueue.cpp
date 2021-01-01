@@ -25,6 +25,8 @@ Copyright_License {
 #include "../shared/Event.hpp"
 #include "DisplayOrientation.hpp"
 
+namespace UI {
+
 InputEventQueue::InputEventQueue(boost::asio::io_context &io_context,
                                  EventQueue &queue)
   :
@@ -61,3 +63,5 @@ InputEventQueue::Generate(Event &event)
 
   return false;
 }
+
+} // namespace UI

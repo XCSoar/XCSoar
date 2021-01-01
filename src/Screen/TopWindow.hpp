@@ -38,10 +38,10 @@ Copyright_License {
 #include "thread/Mutex.hxx"
 #include "thread/Cond.hxx"
 
-struct Event;
+namespace UI { struct Event; }
 
 #elif defined(USE_POLL_EVENT)
-struct Event;
+namespace UI { struct Event; }
 #elif defined(ENABLE_SDL)
 union SDL_Event;
 struct SDL_Window;
@@ -73,6 +73,13 @@ class TopCanvas;
 #undef KeyPress
 struct _XDisplay;
 #endif
+
+#ifdef USE_WAYLAND
+struct wl_display;
+struct wl_egl_window;
+#endif
+
+namespace UI {
 
 class TopWindowStyle : public WindowStyle {
 #if defined(ENABLE_SDL) || defined(USE_X11)
@@ -427,5 +434,7 @@ public:
    */
   int RunEventLoop() noexcept;
 };
+
+} // namespace UI
 
 #endif

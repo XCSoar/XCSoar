@@ -32,6 +32,8 @@ Copyright_License {
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
 
+namespace UI {
+
 void
 TopWindow::Invalidate() noexcept
 {
@@ -270,3 +272,5 @@ TopWindow::PostQuit() noexcept
 {
   event_queue->Quit();
 }
+
+} // namespace UI

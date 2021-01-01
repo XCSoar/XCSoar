@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Timer.hpp"
 
+namespace UI {
+
 /**
  * A timer that, once initialized, periodically calls a given function
  * after a specified amount of time, until Cancel() gets called.
@@ -84,5 +86,7 @@ public:
       timer.Schedule(interval);
   }
 };
+
+} // namespace UI
 
 #endif

@@ -58,9 +58,9 @@ class DownloadProgress final : Net::DownloadListener {
   ThreadedOperationEnvironment env;
   const Path path_relative;
 
-  PeriodicTimer update_timer{[this]{ Net::DownloadManager::Enumerate(*this); }};
+  UI::PeriodicTimer update_timer{[this]{ Net::DownloadManager::Enumerate(*this); }};
 
-  Notify download_complete_notify{[this]{ OnDownloadCompleteNotification(); }};
+  UI::Notify download_complete_notify{[this]{ OnDownloadCompleteNotification(); }};
 
   bool got_size = false, complete = false, success;
 
@@ -144,7 +144,7 @@ class DownloadFilePickerWidget final
 
   WidgetDialog &dialog;
 
-  Notify download_complete_notify{[this]{ OnDownloadCompleteNotification(); }};
+  UI::Notify download_complete_notify{[this]{ OnDownloadCompleteNotification(); }};
 
   const FileType file_type;
 

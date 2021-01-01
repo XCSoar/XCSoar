@@ -24,6 +24,8 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "Form/Form.hpp"
 
+namespace UI {
+
 void
 SingleWindow::AddDialog(WndForm *dialog) noexcept
 {
@@ -74,3 +76,5 @@ SingleWindow::OnResize(PixelSize new_size)
   for (WndForm *dialog : dialogs)
     dialog->ReinitialiseLayout(rc);
 }
+
+} // namespace UI

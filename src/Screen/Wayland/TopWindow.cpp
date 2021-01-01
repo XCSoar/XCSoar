@@ -26,6 +26,8 @@ Copyright_License {
 #include "ui/event/Globals.hpp"
 #include "ui/event/poll/Queue.hpp"
 
+namespace UI {
+
 static void
 handle_ping(void *data, struct wl_shell_surface *shell_surface,
             uint32_t serial) noexcept
@@ -97,3 +99,5 @@ TopWindow::DisableCapture() noexcept
 {
   // TODO: implement
 }
+
+} // namespace UI

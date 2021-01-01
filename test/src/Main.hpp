@@ -116,7 +116,7 @@ UIGlobals::GetDialogLook()
 
 #ifdef ENABLE_MAIN_WINDOW
 
-class TestMainWindow : public SingleWindow, public ActionListener {
+class TestMainWindow : public UI::SingleWindow, public ActionListener {
   Window *full_window;
 
 #ifdef ENABLE_CLOSE_BUTTON
@@ -184,7 +184,7 @@ protected:
 
 static TestMainWindow main_window;
 
-SingleWindow &
+UI::SingleWindow &
 UIGlobals::GetMainWindow()
 {
   return main_window;

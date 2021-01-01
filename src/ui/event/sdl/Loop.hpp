@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_SDL_LOOP_HPP
 #define XCSOAR_EVENT_SDL_LOOP_HPP
 
-class TopWindow;
+namespace UI {
+
 struct Event;
 class EventQueue;
+class TopWindow;
 
 class EventLoop {
   EventQueue &queue;
@@ -52,5 +54,7 @@ public:
   bool Get(Event &event);
   void Dispatch(const Event &event);
 };
+
+} // namespace UI
 
 #endif

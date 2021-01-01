@@ -38,6 +38,8 @@ Copyright_License {
 #include <stdio.h>
 #include <stdlib.h>
 
+using namespace UI;
+
 ScreenGlobalInit::ScreenGlobalInit()
 {
   Uint32 flags = SDL_INIT_VIDEO;

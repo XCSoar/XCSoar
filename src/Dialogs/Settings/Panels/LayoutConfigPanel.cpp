@@ -303,7 +303,7 @@ LayoutConfigPanel::Save(bool &_changed)
     }
 
 #ifdef USE_POLL_EVENT
-    event_queue->SetDisplayOrientation(ui_settings.display.orientation);
+    UI::event_queue->SetDisplayOrientation(ui_settings.display.orientation);
 #endif
 
     CommonInterface::main_window->CheckResize();

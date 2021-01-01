@@ -26,7 +26,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Look/Look.hpp"
 
-SingleWindow &
+UI::SingleWindow &
 UIGlobals::GetMainWindow()
 {
   assert(CommonInterface::main_window != nullptr);

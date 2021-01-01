@@ -36,6 +36,8 @@ Copyright_License {
 #include "Device/Driver/CAI302/Protocol.hpp"
 #include "Waypoint/Patterns.hpp"
 
+using namespace UI;
+
 class ManageCAI302Widget final
   : public RowFormWidget, private ActionListener {
   enum Controls {

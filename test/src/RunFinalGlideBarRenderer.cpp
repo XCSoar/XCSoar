@@ -117,7 +117,7 @@ Main()
   double step(10);
   double mc_mc0_step(100);
 
-  PeriodicTimer timer([&](){
+  UI::PeriodicTimer timer([&](){
     double altitude_difference = final_glide.GetAltitudeDifference();
     double altitude_difference0 = final_glide.GetAltitudeDifference0();
 
