@@ -1,7 +1,7 @@
-Index: boost_1_60_0/boost/numeric/ublas/matrix.hpp
+Index: boost_1_75_0/boost/numeric/ublas/matrix.hpp
 ===================================================================
---- boost_1_60_0.orig/boost/numeric/ublas/matrix.hpp
-+++ boost_1_60_0/boost/numeric/ublas/matrix.hpp
+--- boost_1_75_0.orig/boost/numeric/ublas/matrix.hpp
++++ boost_1_75_0/boost/numeric/ublas/matrix.hpp
 @@ -18,9 +18,11 @@
  #include <boost/numeric/ublas/vector.hpp>
  #include <boost/numeric/ublas/matrix_expression.hpp>
@@ -14,7 +14,7 @@ Index: boost_1_60_0/boost/numeric/ublas/matrix.hpp
  
  // Iterators based on ideas of Jeremy Siek
  
-@@ -1156,6 +1158,7 @@ namespace boost { namespace numeric {
+@@ -1180,6 +1182,7 @@ namespace boost { namespace numeric {
              return reverse_iterator2 (begin2 ());
          }
  
@@ -22,7 +22,7 @@ Index: boost_1_60_0/boost/numeric/ublas/matrix.hpp
          // Serialization
          template<class Archive>
          void serialize(Archive & ar, const unsigned int /* file_version */){
-@@ -1176,6 +1179,7 @@ namespace boost { namespace numeric {
+@@ -1200,6 +1203,7 @@ namespace boost { namespace numeric {
              }
              ar & serialization::make_nvp("data",data_);
          }
@@ -30,7 +30,7 @@ Index: boost_1_60_0/boost/numeric/ublas/matrix.hpp
  
      private:
          size_type size1_;
-@@ -2238,11 +2242,13 @@ namespace boost { namespace numeric {
+@@ -2263,11 +2267,13 @@ namespace boost { namespace numeric {
              return reverse_iterator2 (begin2 ());
          }
  
@@ -44,7 +44,7 @@ Index: boost_1_60_0/boost/numeric/ublas/matrix.hpp
  
      private:
          array_type data_;
-@@ -3389,6 +3395,7 @@ namespace boost { namespace numeric {
+@@ -3414,6 +3420,7 @@ namespace boost { namespace numeric {
              return reverse_iterator2 (begin2 ());
          }
  
@@ -52,7 +52,7 @@ Index: boost_1_60_0/boost/numeric/ublas/matrix.hpp
          // Serialization
          template<class Archive>
          void serialize(Archive & ar, const unsigned int /* file_version */){
-@@ -3409,6 +3416,7 @@ namespace boost { namespace numeric {
+@@ -3434,6 +3441,7 @@ namespace boost { namespace numeric {
              }
              ar & serialization::make_nvp("data",data_);
          }
@@ -60,7 +60,7 @@ Index: boost_1_60_0/boost/numeric/ublas/matrix.hpp
  
      private:
          size_type size1_;
-@@ -3862,6 +3870,7 @@ namespace boost { namespace numeric {
+@@ -3887,6 +3895,7 @@ namespace boost { namespace numeric {
              return rend2 ();
          }
  
@@ -68,7 +68,7 @@ Index: boost_1_60_0/boost/numeric/ublas/matrix.hpp
           // Serialization
          template<class Archive>
          void serialize(Archive & ar, const unsigned int /* file_version */){
-@@ -3881,6 +3890,7 @@ namespace boost { namespace numeric {
+@@ -3906,6 +3915,7 @@ namespace boost { namespace numeric {
                  size2_ = s2;
              }
          }
@@ -76,7 +76,7 @@ Index: boost_1_60_0/boost/numeric/ublas/matrix.hpp
  
      private:
          size_type size1_;
-@@ -4361,6 +4371,7 @@ namespace boost { namespace numeric {
+@@ -4386,6 +4396,7 @@ namespace boost { namespace numeric {
              return rend2 ();
          }
  
@@ -84,7 +84,7 @@ Index: boost_1_60_0/boost/numeric/ublas/matrix.hpp
           // Serialization
          template<class Archive>
          void serialize(Archive & ar, const unsigned int /* file_version */){
-@@ -4381,6 +4392,7 @@ namespace boost { namespace numeric {
+@@ -4406,6 +4417,7 @@ namespace boost { namespace numeric {
                  size_common_ = ((std::min)(size1_, size2_));
              }
          }
@@ -92,7 +92,7 @@ Index: boost_1_60_0/boost/numeric/ublas/matrix.hpp
  
      private:
          size_type size1_;
-@@ -4916,6 +4928,7 @@ namespace boost { namespace numeric {
+@@ -4941,6 +4953,7 @@ namespace boost { namespace numeric {
              return rend2 ();
          }
  
@@ -100,7 +100,7 @@ Index: boost_1_60_0/boost/numeric/ublas/matrix.hpp
           // Serialization
          template<class Archive>
          void serialize(Archive & ar, const unsigned int /* file_version */){
-@@ -4937,6 +4950,7 @@ namespace boost { namespace numeric {
+@@ -4962,6 +4975,7 @@ namespace boost { namespace numeric {
  
              ar & serialization::make_nvp("value", value_);
          }
@@ -108,7 +108,7 @@ Index: boost_1_60_0/boost/numeric/ublas/matrix.hpp
  
      private:
          size_type size1_;
-@@ -5955,6 +5969,7 @@ namespace boost { namespace numeric {
+@@ -5980,6 +5994,7 @@ namespace boost { namespace numeric {
              return reverse_iterator2 (begin2 ());
          }
  
@@ -116,7 +116,7 @@ Index: boost_1_60_0/boost/numeric/ublas/matrix.hpp
           // Serialization
          template<class Archive>
          void serialize(Archive & ar, const unsigned int /* file_version */){
-@@ -5976,6 +5991,7 @@ namespace boost { namespace numeric {
+@@ -6001,6 +6016,7 @@ namespace boost { namespace numeric {
              // could probably use make_array( &(data[0][0]), N*M ) 
              ar & serialization::make_array(data_, N);
          }
@@ -124,10 +124,10 @@ Index: boost_1_60_0/boost/numeric/ublas/matrix.hpp
  
      private:
          size_type size1_;
-Index: boost_1_60_0/boost/numeric/ublas/vector.hpp
+Index: boost_1_75_0/boost/numeric/ublas/vector.hpp
 ===================================================================
---- boost_1_60_0.orig/boost/numeric/ublas/vector.hpp
-+++ boost_1_60_0/boost/numeric/ublas/vector.hpp
+--- boost_1_75_0.orig/boost/numeric/ublas/vector.hpp
++++ boost_1_75_0/boost/numeric/ublas/vector.hpp
 @@ -21,8 +21,10 @@
  #include <boost/numeric/ublas/storage.hpp>
  #include <boost/numeric/ublas/vector_expression.hpp>
@@ -155,7 +155,7 @@ Index: boost_1_60_0/boost/numeric/ublas/vector.hpp
  
  	 private:
  	     array_type data_;
-@@ -1587,6 +1591,7 @@ namespace boost { namespace numeric { na
+@@ -1580,6 +1584,7 @@ namespace boost { namespace numeric { na
              return reverse_iterator (begin ());
          }
  
@@ -163,7 +163,7 @@ Index: boost_1_60_0/boost/numeric/ublas/vector.hpp
      // -------------
          // Serialization
      // -------------
-@@ -1598,6 +1603,7 @@ namespace boost { namespace numeric { na
+@@ -1591,6 +1596,7 @@ namespace boost { namespace numeric { na
           void serialize(Archive & ar, const unsigned int /* file_version */){
               ar & serialization::make_nvp("data",data_);
           }
@@ -171,7 +171,7 @@ Index: boost_1_60_0/boost/numeric/ublas/vector.hpp
  
       private:
           array_type data_;
-@@ -1883,6 +1889,7 @@ namespace boost { namespace numeric { na
+@@ -1876,6 +1882,7 @@ namespace boost { namespace numeric { na
               return rend ();
           }
  
@@ -179,7 +179,7 @@ Index: boost_1_60_0/boost/numeric/ublas/vector.hpp
  	      // Serialization
  	     template<class Archive>
  	     void serialize(Archive & ar, const unsigned int /* file_version */){
-@@ -1892,6 +1899,7 @@ namespace boost { namespace numeric { na
+@@ -1885,6 +1892,7 @@ namespace boost { namespace numeric { na
  	             size_ = s;
  	         }
  	     }
@@ -187,7 +187,7 @@ Index: boost_1_60_0/boost/numeric/ublas/vector.hpp
  
  	 private:
  	     size_type size_;
-@@ -2143,6 +2151,7 @@ namespace boost { namespace numeric { na
+@@ -2136,6 +2144,7 @@ namespace boost { namespace numeric { na
               return rend ();
           }
  
@@ -195,7 +195,7 @@ Index: boost_1_60_0/boost/numeric/ublas/vector.hpp
  	      // Serialization
  	     template<class Archive>
  	     void serialize(Archive & ar, const unsigned int /* file_version */){
-@@ -2153,6 +2162,7 @@ namespace boost { namespace numeric { na
+@@ -2146,6 +2155,7 @@ namespace boost { namespace numeric { na
  	         }
  	         ar & serialization::make_nvp("index", index_);
  	     }
@@ -203,7 +203,7 @@ Index: boost_1_60_0/boost/numeric/ublas/vector.hpp
  
  	 private:
  	     size_type size_;
-@@ -2407,6 +2417,7 @@ namespace boost { namespace numeric { na
+@@ -2400,6 +2410,7 @@ namespace boost { namespace numeric { na
               return rend ();
           }
  
@@ -211,7 +211,7 @@ Index: boost_1_60_0/boost/numeric/ublas/vector.hpp
  	      // Serialization
  	     template<class Archive>
  	     void serialize(Archive & ar, const unsigned int /* file_version */){
-@@ -2417,6 +2428,7 @@ namespace boost { namespace numeric { na
+@@ -2410,6 +2421,7 @@ namespace boost { namespace numeric { na
  	         }
  	         ar & serialization::make_nvp("value", value_);
  	     }
@@ -219,7 +219,7 @@ Index: boost_1_60_0/boost/numeric/ublas/vector.hpp
  
  	 private:
  	     size_type size_;
-@@ -2929,6 +2941,7 @@ namespace boost { namespace numeric { na
+@@ -2922,6 +2934,7 @@ namespace boost { namespace numeric { na
  	         return reverse_iterator (begin ());
  	     }
  
@@ -227,7 +227,7 @@ Index: boost_1_60_0/boost/numeric/ublas/vector.hpp
  	     // Serialization
  	     template<class Archive>
  	     void serialize(Archive & ar, const unsigned int /* file_version */){
-@@ -2943,6 +2956,7 @@ namespace boost { namespace numeric { na
+@@ -2936,6 +2949,7 @@ namespace boost { namespace numeric { na
  	         // ISSUE: this writes the full array
  	         ar & serialization::make_nvp("data",data_);
  	     }
@@ -235,14 +235,14 @@ Index: boost_1_60_0/boost/numeric/ublas/vector.hpp
  
  	 private:
  	     size_type size_;
-Index: boost_1_60_0/boost/numeric/ublas/storage.hpp
+Index: boost_1_75_0/boost/numeric/ublas/storage.hpp
 ===================================================================
---- boost_1_60_0.orig/boost/numeric/ublas/storage.hpp
-+++ boost_1_60_0/boost/numeric/ublas/storage.hpp
-@@ -18,9 +18,11 @@
- #include <boost/shared_array.hpp>
+--- boost_1_75_0.orig/boost/numeric/ublas/storage.hpp
++++ boost_1_75_0/boost/numeric/ublas/storage.hpp
+@@ -19,9 +19,11 @@
  #endif
  
+ #include <boost/core/allocator_access.hpp>
 +#ifdef BOOST_UBLAS_SERIALIZATION
  #include <boost/serialization/array.hpp>
  #include <boost/serialization/collection_size_type.hpp>
@@ -251,7 +251,7 @@ Index: boost_1_60_0/boost/numeric/ublas/storage.hpp
  
  #include <boost/numeric/ublas/exception.hpp>
  #include <boost/numeric/ublas/traits.hpp>
-@@ -284,6 +286,7 @@ namespace boost { namespace numeric { na
+@@ -327,6 +329,7 @@ namespace boost { namespace numeric { na
              return alloc_;
          }
  
@@ -259,7 +259,7 @@ Index: boost_1_60_0/boost/numeric/ublas/storage.hpp
      private:
          friend class boost::serialization::access;
  
-@@ -298,6 +301,7 @@ namespace boost { namespace numeric { na
+@@ -341,6 +344,7 @@ namespace boost { namespace numeric { na
              }
              ar & serialization::make_array(data_, s);
          }
@@ -267,7 +267,7 @@ Index: boost_1_60_0/boost/numeric/ublas/storage.hpp
  
      private:
          // Handle explict destroy on a (possibly indexed) iterator
-@@ -478,6 +482,7 @@ namespace boost { namespace numeric { na
+@@ -522,6 +526,7 @@ namespace boost { namespace numeric { na
              return reverse_iterator (begin ());
          }
  
@@ -275,7 +275,7 @@ Index: boost_1_60_0/boost/numeric/ublas/storage.hpp
      private:
          // Serialization
          friend class boost::serialization::access;
-@@ -493,6 +498,7 @@ namespace boost { namespace numeric { na
+@@ -537,6 +542,7 @@ namespace boost { namespace numeric { na
              }
              ar & serialization::make_array(data_, s);
          }
