@@ -20,9 +20,7 @@ CFLAGS += -Wnested-externs
 
 # make warnings fatal (for perfectionists)
 
-ifneq ($(TARGET),CYGWIN)
 WERROR ?= $(DEBUG)
-endif
 
 ifeq ($(WERROR),y)
 CXXFLAGS += -Werror

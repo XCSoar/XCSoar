@@ -17,9 +17,7 @@ JASPER_CFLAGS_INTERNAL = -Wno-type-limits
 JASPER_CFLAGS_INTERNAL += -Wno-shift-negative-value -Wno-sign-compare -Wno-tautological-compare
 
 ifneq ($(CLANG),y)
-ifneq ($(TARGET),CYGWIN)
 JASPER_CFLAGS_INTERNAL += -Wno-unused-but-set-parameter -Wno-unused-but-set-variable
-endif
 endif
 
 JASPER_CPPFLAGS = -I$(JASSRC)/..
