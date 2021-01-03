@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2021 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2013-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,29 +27,38 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "EventPipe.hxx"
-#include "Error.hxx"
+#ifndef EVENT_FD_HXX
+#define EVENT_FD_HXX
 
-#include <cassert>
-#include <cstdint>
+#include "io/UniqueFileDescriptor.hxx"
 
-EventPipe::EventPipe()
-{
-	if (!UniqueFileDescriptor::CreatePipeNonBlock(r, w))
-		throw MakeErrno("pipe() has failed");
-}
+/**
+ * A class that wraps eventfd().
+ */
+class EventFD {
+	UniqueFileDescriptor fd;
 
-void
-EventPipe::Write() noexcept
-{
-	static constexpr char dummy = 0;
-	w.Write(&dummy, 1);
-}
+public:
+	/**
+	 * Throws on error.
+	 */
+	EventFD();
 
-bool
-EventPipe::Read() noexcept
-{
-	char buffer[256];
-	ssize_t nbytes = r.Read(buffer, sizeof(buffer));
-	return nbytes > 0;
-}
+	FileDescriptor GetReadFD() const noexcept {
+		return fd;
+	}
+
+	/**
+	 * Checks if Write() was called at least once since the last
+	 * Read() call.
+	 */
+	bool Read() noexcept;
+
+	/**
+	 * Wakes up the reader.  Multiple calls to this function will
+	 * be combined to one wakeup.
+	 */
+	void Write() noexcept;
+};
+
+#endif

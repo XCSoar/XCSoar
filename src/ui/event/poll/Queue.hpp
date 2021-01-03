@@ -27,7 +27,7 @@ Copyright_License {
 #include "thread/Handle.hpp"
 #include "../shared/Event.hpp"
 #include "thread/Mutex.hxx"
-#include "system/EventPipe.hxx"
+#include "event/WakeFD.hxx"
 #include "io/async/SignalListener.hpp"
 
 #ifdef USE_X11
@@ -77,7 +77,7 @@ class EventQueue final : public IOContextOwner, private SignalListener {
 
   std::queue<Event> events;
 
-  EventPipe event_pipe;
+  WakeFD event_pipe;
   boost::asio::posix::stream_descriptor event_pipe_asio;
 
   bool quit;

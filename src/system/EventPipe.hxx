@@ -39,9 +39,7 @@
 class EventPipe {
 	UniqueFileDescriptor r;
 
-#ifndef __linux__
 	UniqueFileDescriptor w;
-#endif
 
 public:
 	/**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2021 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2013-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,29 +27,35 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "EventPipe.hxx"
-#include "Error.hxx"
+#include "EventFD.hxx"
+#include "system/Error.hxx"
+#include "util/Compiler.h"
 
 #include <cassert>
-#include <cstdint>
 
-EventPipe::EventPipe()
-{
-	if (!UniqueFileDescriptor::CreatePipeNonBlock(r, w))
-		throw MakeErrno("pipe() has failed");
-}
+#include <sys/eventfd.h>
 
-void
-EventPipe::Write() noexcept
+EventFD::EventFD()
 {
-	static constexpr char dummy = 0;
-	w.Write(&dummy, 1);
+	if (!fd.CreateEventFD(0))
+		throw MakeErrno("eventfd() failed");
 }
 
 bool
-EventPipe::Read() noexcept
+EventFD::Read() noexcept
 {
-	char buffer[256];
-	ssize_t nbytes = r.Read(buffer, sizeof(buffer));
-	return nbytes > 0;
+	assert(fd.IsDefined());
+
+	eventfd_t value;
+	return fd.Read(&value, sizeof(value)) == (ssize_t)sizeof(value);
+}
+
+void
+EventFD::Write() noexcept
+{
+	assert(fd.IsDefined());
+
+	static constexpr eventfd_t value = 1;
+	[[maybe_unused]] ssize_t nbytes =
+		fd.Write(&value, sizeof(value));
 }

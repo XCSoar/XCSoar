@@ -17,6 +17,11 @@ OS_SOURCES += \
 	$(OS_SRC_DIR)/EventPipe.cxx
 endif
 
+ifeq ($(HOST_IS_LINUX),y)
+OS_SOURCES += \
+	$(OS_SRC_DIR)/EventFD.cxx
+endif
+
 $(eval $(call link-library,libos,OS))
 
 ifeq ($(HAVE_POSIX),n)
