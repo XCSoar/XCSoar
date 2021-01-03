@@ -52,21 +52,21 @@ public:
 	/**
 	 * Returns the file descriptor that should be polled on.
 	 */
-	FileDescriptor GetReadFD() const {
+	FileDescriptor GetReadFD() const noexcept {
 		return r;
 	}
 
 	/**
 	 * Send a wakeup signal to the reader.
 	 */
-	void Write();
+	void Write() noexcept;
 
 	/**
 	 * Read from the file descriptor.
 	 *
 	 * @return true if a signal was received
 	 */
-	bool Read();
+	bool Read() noexcept;
 };
 
 #endif

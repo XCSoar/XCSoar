@@ -45,7 +45,7 @@ EventPipe::EventPipe()
 }
 
 void
-EventPipe::Write()
+EventPipe::Write() noexcept
 {
 #ifdef __linux__
 	static constexpr uint64_t value = 1;
@@ -57,7 +57,7 @@ EventPipe::Write()
 }
 
 bool
-EventPipe::Read()
+EventPipe::Read() noexcept
 {
 #ifdef __linux__
 	uint64_t value;
