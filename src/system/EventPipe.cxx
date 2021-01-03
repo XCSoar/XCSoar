@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2012-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,7 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "EventPipe.hpp"
+#include "EventPipe.hxx"
 
 #include <cassert>
 #include <cstdint>
@@ -35,18 +35,18 @@
 bool
 EventPipe::Create()
 {
-  assert(!IsDefined());
+	assert(!IsDefined());
 
 #ifdef __linux__
-  return r.CreateEventFD();
+	return r.CreateEventFD();
 #else
-  if (!UniqueFileDescriptor::CreatePipe(r, w))
-    return false;
+	if (!UniqueFileDescriptor::CreatePipe(r, w))
+		return false;
 
-  r.SetNonBlocking();
-  w.SetNonBlocking();
+	r.SetNonBlocking();
+	w.SetNonBlocking();
 
-  return true;
+	return true;
 #endif
 }
 
@@ -54,11 +54,11 @@ void
 EventPipe::Signal()
 {
 #ifdef __linux__
-  static constexpr uint64_t value = 1;
-  r.Write(&value, sizeof(value));
+	static constexpr uint64_t value = 1;
+	r.Write(&value, sizeof(value));
 #else
-  static constexpr char dummy = 0;
-  w.Write(&dummy, 1);
+	static constexpr char dummy = 0;
+	w.Write(&dummy, 1);
 #endif
 }
 
@@ -66,11 +66,11 @@ bool
 EventPipe::Read()
 {
 #ifdef __linux__
-  uint64_t value;
-  return r.Read(&value, sizeof(value)) > 0;
+	uint64_t value;
+	return r.Read(&value, sizeof(value)) > 0;
 #else
-  char buffer[256];
-  ssize_t nbytes = r.Read(buffer, sizeof(buffer));
-  return nbytes > 0;
+	char buffer[256];
+	ssize_t nbytes = r.Read(buffer, sizeof(buffer));
+	return nbytes > 0;
 #endif
 }

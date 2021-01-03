@@ -14,7 +14,7 @@ OS_SOURCES := \
 
 ifeq ($(HAVE_POSIX),y)
 OS_SOURCES += \
-	$(OS_SRC_DIR)/EventPipe.cpp
+	$(OS_SRC_DIR)/EventPipe.cxx
 endif
 
 $(eval $(call link-library,libos,OS))

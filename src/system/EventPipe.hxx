@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_EVENT_PIPE_HPP
-#define XCSOAR_EVENT_PIPE_HPP
+#ifndef EVENT_PIPE_HXX
+#define EVENT_PIPE_HXX
 
 #include "io/UniqueFileDescriptor.hxx"
 
@@ -37,42 +37,42 @@
  * poll().
  */
 class EventPipe {
-  UniqueFileDescriptor r;
+	UniqueFileDescriptor r;
 
 #ifndef __linux__
-  UniqueFileDescriptor w;
+	UniqueFileDescriptor w;
 #endif
 
 public:
-  bool IsDefined() const {
-    return r.IsDefined();
-  }
+	bool IsDefined() const {
+		return r.IsDefined();
+	}
 
-  /**
-   * Create the pipe.
-   *
-   * @return false on error
-   */
-  bool Create();
+	/**
+	 * Create the pipe.
+	 *
+	 * @return false on error
+	 */
+	bool Create();
 
-  /**
-   * Returns the file descriptor that should be polled on.
-   */
-  FileDescriptor GetReadFD() const {
-    return r;
-  }
+	/**
+	 * Returns the file descriptor that should be polled on.
+	 */
+	FileDescriptor GetReadFD() const {
+		return r;
+	}
 
-  /**
-   * Send a wakeup signal to the reader.
-   */
-  void Signal();
+	/**
+	 * Send a wakeup signal to the reader.
+	 */
+	void Signal();
 
-  /**
-   * Read from the file descriptor.
-   *
-   * @return true if a signal was received
-   */
-  bool Read();
+	/**
+	 * Read from the file descriptor.
+	 *
+	 * @return true if a signal was received
+	 */
+	bool Read();
 };
 
 #endif
