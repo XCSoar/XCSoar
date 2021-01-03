@@ -28,25 +28,19 @@
  */
 
 #include "EventPipe.hxx"
+#include "Error.hxx"
 
 #include <cassert>
 #include <cstdint>
 
-bool
-EventPipe::Create()
+EventPipe::EventPipe()
 {
-	assert(!IsDefined());
-
 #ifdef __linux__
-	return r.CreateEventFD();
+	if (!r.CreateEventFD())
+		throw MakeErrno("eventfd() has failed");
 #else
-	if (!UniqueFileDescriptor::CreatePipe(r, w))
-		return false;
-
-	r.SetNonBlocking();
-	w.SetNonBlocking();
-
-	return true;
+	if (!UniqueFileDescriptor::CreatePipeNonBlock(r, w))
+		throw MakeErrno("pipe() has failed");
 #endif
 }
 

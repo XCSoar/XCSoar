@@ -37,7 +37,6 @@ EventQueue::EventQueue()
 {
   SignalListener::Create(SIGINT, SIGTERM);
 
-  event_pipe.Create();
   event_pipe_asio.assign(event_pipe.GetReadFD().Get());
 }
 

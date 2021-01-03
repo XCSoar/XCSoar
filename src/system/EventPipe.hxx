@@ -44,16 +44,10 @@ class EventPipe {
 #endif
 
 public:
-	bool IsDefined() const {
-		return r.IsDefined();
-	}
-
 	/**
-	 * Create the pipe.
-	 *
-	 * @return false on error
+	 * Throws on error.
 	 */
-	bool Create();
+	EventPipe();
 
 	/**
 	 * Returns the file descriptor that should be polled on.
