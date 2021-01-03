@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2012-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -59,7 +59,7 @@ public:
 	/**
 	 * Send a wakeup signal to the reader.
 	 */
-	void Signal();
+	void Write();
 
 	/**
 	 * Read from the file descriptor.

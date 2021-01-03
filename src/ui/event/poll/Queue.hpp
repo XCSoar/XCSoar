@@ -161,7 +161,7 @@ public:
 
   void WakeUp() {
     if (!thread.IsInside())
-      event_pipe.Signal();
+      event_pipe.Write();
   }
 
 private:

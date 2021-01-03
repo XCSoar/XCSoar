@@ -45,7 +45,7 @@ EventPipe::EventPipe()
 }
 
 void
-EventPipe::Signal()
+EventPipe::Write()
 {
 #ifdef __linux__
 	static constexpr uint64_t value = 1;
