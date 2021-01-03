@@ -89,6 +89,35 @@ SocketDescriptor::Accept() noexcept
 		: Undefined();
 }
 
+SocketDescriptor
+SocketDescriptor::AcceptNonBlock() const noexcept
+{
+#ifdef __linux__
+	int connection_fd = ::accept4(Get(), nullptr, nullptr,
+				      SOCK_CLOEXEC|SOCK_NONBLOCK);
+#else
+	int connection_fd = ::accept(Get(), nullptr, nullptr);
+	if (connection_fd >= 0)
+		SocketDescriptor(connection_fd).SetNonBlocking();
+#endif
+	return SocketDescriptor(connection_fd);
+}
+
+SocketDescriptor
+SocketDescriptor::AcceptNonBlock(StaticSocketAddress &address) const noexcept
+{
+	address.SetMaxSize();
+#ifdef __linux__
+	int connection_fd = ::accept4(Get(), address, &address.size,
+				      SOCK_CLOEXEC|SOCK_NONBLOCK);
+#else
+	int connection_fd = ::accept(Get(), address, &address.size);
+	if (connection_fd >= 0)
+		SocketDescriptor(connection_fd).SetNonBlocking();
+#endif
+	return SocketDescriptor(connection_fd);
+}
+
 bool
 SocketDescriptor::Connect(SocketAddress address) noexcept
 {

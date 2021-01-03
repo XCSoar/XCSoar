@@ -228,6 +228,8 @@ public:
 	bool Listen(int backlog) noexcept;
 
 	SocketDescriptor Accept() noexcept;
+	SocketDescriptor AcceptNonBlock() const noexcept;
+	SocketDescriptor AcceptNonBlock(StaticSocketAddress &address) const noexcept;
 
 	bool Connect(SocketAddress address) noexcept;
 
