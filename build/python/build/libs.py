@@ -2,6 +2,7 @@ from os.path import abspath
 
 from build.zlib import ZlibProject
 from build.autotools import AutotoolsProject
+from build.cmake import CmakeProject
 from build.openssl import OpenSSLProject
 from build.freetype import FreeTypeProject
 from build.curl import CurlProject
