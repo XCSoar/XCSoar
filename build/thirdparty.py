@@ -79,6 +79,7 @@ if 'mingw32' in actual_host_triplet:
         zlib,
         libsodium,
         openssl,
+        cares,
         curl,
         lua,
     ]
@@ -91,6 +92,7 @@ elif re.match('(arm.*|aarch64)-apple-darwin', actual_host_triplet) is not None:
     thirdparty_libs = [
         libsodium,
         openssl,
+        cares,
         curl,
         lua,
         proj,
@@ -111,6 +113,7 @@ elif target == 'ANDROID':
     thirdparty_libs = [
         libsodium,
         openssl,
+        cares,
         curl,
         lua,
         proj,
@@ -123,6 +126,7 @@ elif toolchain_host_triplet.endswith('-musleabihf'):
         libsodium,
         freetype,
         openssl,
+        cares,
         curl,
         libpng,
         libjpeg,
@@ -139,6 +143,7 @@ else:
         libsodium,
         freetype,
         openssl,
+        cares,
         curl,
         libpng,
         libjpeg,

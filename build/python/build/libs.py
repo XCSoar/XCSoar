@@ -101,6 +101,22 @@ freetype = FreeTypeProject(
     ],
 )
 
+cares = CmakeProject(
+    'https://c-ares.haxx.se/download/c-ares-1.17.1.tar.gz',
+    'https://c-ares.haxx.se/download/c-ares-1.17.1.tar.gz',
+    'd73dd0f6de824afd407ce10750ea081af47eba52b8a6cb307d220131ad93fc40',
+    'lib/libcares.a',
+    [
+        '-DCARES_STATIC=ON',
+        '-DCARES_SHARED=OFF',
+        '-DCARES_STATIC_PIC=ON',
+        '-DCARES_BUILD_TOOLS=OFF',
+    ],
+    patches=abspath('lib/c-ares/patches'),
+    #autogen=True,
+    #subdirs=['include', 'src/lib'],
+)
+
 curl = CmakeProject(
     'http://curl.haxx.se/download/curl-7.71.1.tar.xz',
     'https://github.com/curl/curl/releases/download/curl-7_71_1/curl-7.71.1.tar.xz',
@@ -109,7 +125,7 @@ curl = CmakeProject(
     [
         '-DBUILD_CURL_EXE=OFF',
         '-DBUILD_SHARED_LIBS=OFF',
-        '-DENABLE_ARES=OFF',
+        '-DENABLE_ARES=ON',
         '-DCURL_DISABLE_LDAP=ON',
         '-DCURL_DISABLE_TELNET=ON',
         '-DCURL_DISABLE_DICT=ON',
