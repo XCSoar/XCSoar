@@ -14,6 +14,7 @@ class AutotoolsProject(MakeProject):
                  make_args=[],
                  config_script='configure',
                  use_actual_arch=False,
+                 subdirs=None,
                  **kwargs):
         MakeProject.__init__(self, url, alternative_url, md5, installed, **kwargs)
         self.configure_args = configure_args
@@ -27,6 +28,7 @@ class AutotoolsProject(MakeProject):
         self.make_args = make_args
         self.config_script = config_script
         self.use_actual_arch = use_actual_arch
+        self.subdirs = subdirs
 
     def _filter_cflags(self, flags):
         if self.shared:
@@ -97,4 +99,8 @@ class AutotoolsProject(MakeProject):
 
     def build(self, toolchain):
         build = self.configure(toolchain)
-        MakeProject.build(self, toolchain, build)
+        if self.subdirs is not None:
+            for subdir in self.subdirs:
+                MakeProject.build(self, toolchain, os.path.join(build, subdir))
+        else:
+            MakeProject.build(self, toolchain, build)
