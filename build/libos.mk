@@ -17,7 +17,7 @@ OS_SOURCES += \
 	$(OS_SRC_DIR)/EventPipe.cxx
 endif
 
-ifeq ($(HOST_IS_LINUX),y)
+ifeq ($(TARGET_IS_LINUX),y)
 OS_SOURCES += \
 	$(OS_SRC_DIR)/EventFD.cxx
 endif
