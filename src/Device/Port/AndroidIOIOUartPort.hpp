@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "util/Compiler.h"
 
+#include <memory>
+
 #include <tchar.h>
 
 class Port;
@@ -52,8 +54,7 @@ namespace AndroidIOIOUartPort
   }
 }
 
-gcc_malloc
-Port *
+std::unique_ptr<Port>
 OpenAndroidIOIOUartPort(unsigned uart_id, unsigned baud_rate,
                         PortListener *listener, DataHandler &handler);
 

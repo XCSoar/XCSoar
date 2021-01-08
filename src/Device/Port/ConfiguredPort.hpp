@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_CONFIGURED_PORT_HPP
 #define XCSOAR_DEVICE_CONFIGURED_PORT_HPP
 
+#include <memory>
+
 class Port;
 class PortListener;
 class DataHandler;
@@ -34,7 +36,7 @@ namespace boost { namespace asio { class io_context; }}
  * Open the port described by #DeviceConfig.  On error, throws a
  * #std::runtime_error or returns nullptr.
  */
-Port *
+std::unique_ptr<Port>
 OpenPort(boost::asio::io_context &io_context,
          const DeviceConfig &config, PortListener *listener,
          DataHandler &handler);

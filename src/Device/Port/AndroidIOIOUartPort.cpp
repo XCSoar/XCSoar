@@ -29,7 +29,7 @@ Copyright_License {
 
 #include <cassert>
 
-Port *
+std::unique_ptr<Port>
 OpenAndroidIOIOUartPort(unsigned uart_id, unsigned baud_rate,
                         PortListener *listener, DataHandler &handler)
 {
@@ -40,5 +40,5 @@ OpenAndroidIOIOUartPort(unsigned uart_id, unsigned baud_rate,
   if (bridge == nullptr)
     return nullptr;
 
-  return new AndroidPort(listener, handler, bridge);
+  return std::make_unique<AndroidPort>(listener, handler, bridge);
 }

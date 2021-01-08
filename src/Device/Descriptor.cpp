@@ -126,6 +126,11 @@ DeviceDescriptor::DeviceDescriptor(boost::asio::io_context &_io_context,
 #endif
 }
 
+DeviceDescriptor::~DeviceDescriptor() noexcept
+{
+  assert(!IsOccupied());
+}
+
 void
 DeviceDescriptor::SetConfig(const DeviceConfig &_config)
 {
@@ -235,8 +240,8 @@ DeviceDescriptor::CancelAsync()
   open_job = nullptr;
 }
 
-bool
-DeviceDescriptor::OpenOnPort(DumpPort *_port, OperationEnvironment &env)
+inline bool
+DeviceDescriptor::OpenOnPort(std::unique_ptr<DumpPort> &&_port, OperationEnvironment &env)
 {
   assert(port == nullptr);
   assert(device == nullptr);
@@ -257,7 +262,7 @@ DeviceDescriptor::OpenOnPort(DumpPort *_port, OperationEnvironment &env)
   settings_received.Clear();
   was_alive = false;
 
-  port = _port;
+  port = std::move(_port);
 
   parser.Reset();
   parser.SetReal(!StringIsEqual(driver->name, _T("Condor")));
@@ -461,7 +466,7 @@ try {
 
   reopen_clock.Update();
 
-  Port *port;
+  std::unique_ptr<Port> port;
   try {
     port = OpenPort(io_context, config, this, *this);
   } catch (...) {
@@ -497,14 +502,13 @@ try {
     return false;
   }
 
-  DumpPort *dump_port = new DumpPort(port);
+  auto dump_port = std::make_unique<DumpPort>(std::move(port));
   dump_port->Disable();
 
-  if (!port->WaitConnected(env) || !OpenOnPort(dump_port, env)) {
+  if (!port->WaitConnected(env) || !OpenOnPort(std::move(dump_port), env)) {
     if (!env.IsCancelled())
       ++n_failures;
 
-    delete dump_port;
     return false;
   }
 
@@ -588,9 +592,7 @@ DeviceDescriptor::Close()
   delete second_device;
   second_device = nullptr;
 
-  Port *old_port = port;
-  port = nullptr;
-  delete old_port;
+  port.reset();
 
   ticker = false;
 
@@ -781,7 +783,7 @@ DeviceDescriptor::ForwardLine(const char *line)
      any thread, and if the Port gets closed, bad things happen */
 
   if (IsNMEAOut() && port != nullptr) {
-    Port *p = port;
+    Port *p = port.get();
     p->Write(line);
     p->Write("\r\n");
   }

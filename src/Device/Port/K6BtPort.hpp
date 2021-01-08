@@ -27,6 +27,7 @@ Copyright_License {
 #include "Port.hpp"
 
 #include <cstdint>
+#include <memory>
 
 /**
  * Wraps the K6Bt protocol over an existing Port instance.
@@ -39,15 +40,13 @@ class K6BtPort : public Port {
   static constexpr uint8_t CHANGE_BAUD_RATE = 0x30;
   static constexpr uint8_t FLUSH_BUFFERS = 0x40;
 
-  Port *port;
+  std::unique_ptr<Port> port;
 
   unsigned baud_rate;
 
 public:
-  K6BtPort(Port *port, unsigned baud_rate,
-           PortListener *listener, DataHandler &handler);
-
-  virtual ~K6BtPort();
+  K6BtPort(std::unique_ptr<Port> port, unsigned baud_rate,
+           PortListener *listener, DataHandler &handler) noexcept;
 
 protected:
   bool SendCommand(uint8_t cmd);

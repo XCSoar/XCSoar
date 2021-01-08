@@ -28,7 +28,7 @@ Copyright_License {
 
 #include <cassert>
 
-Port *
+std::unique_ptr<Port>
 OpenAndroidBluetoothPort(const TCHAR *address, PortListener *listener,
                          DataHandler &handler)
 {
@@ -38,15 +38,15 @@ OpenAndroidBluetoothPort(const TCHAR *address, PortListener *listener,
   if (bridge == nullptr)
     return nullptr;
 
-  return new AndroidPort(listener, handler, bridge);
+  return std::make_unique<AndroidPort>(listener, handler, bridge);
 }
 
-Port *
+std::unique_ptr<Port>
 OpenAndroidBluetoothServerPort(PortListener *listener, DataHandler &handler)
 {
   PortBridge *bridge = BluetoothHelper::createServer(Java::GetEnv());
   if (bridge == nullptr)
     return nullptr;
 
-  return new AndroidPort(listener, handler, bridge);
+  return std::make_unique<AndroidPort>(listener, handler, bridge);
 }

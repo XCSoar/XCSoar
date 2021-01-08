@@ -92,11 +92,11 @@ std::unique_ptr<Port>
 DebugPort::Open(boost::asio::io_context &io_context,
                 DataHandler &handler)
 {
-  Port *port = OpenPort(io_context, config, this, handler);
+  auto port = OpenPort(io_context, config, this, handler);
   if (port == nullptr)
     throw std::runtime_error("Failed to open port");
 
-  return std::unique_ptr<Port>(port);
+  return port;
 }
 
 void

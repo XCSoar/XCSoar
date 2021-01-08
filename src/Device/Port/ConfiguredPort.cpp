@@ -66,22 +66,23 @@ DetectGPS(TCHAR *path, size_t path_max_size)
   return false;
 }
 
-static Port *
+static std::unique_ptr<Port>
 WrapPort(const DeviceConfig &config, PortListener *listener,
-         DataHandler &handler, Port *port)
+         DataHandler &handler, std::unique_ptr<Port> port) noexcept
 {
   if (config.k6bt && config.MaybeBluetooth())
-    port = new K6BtPort(port, config.baud_rate, listener, handler);
+    port = std::make_unique<K6BtPort>(std::move(port), config.baud_rate,
+                                      listener, handler);
 
 #ifndef NDEBUG
   if (config.dump_port)
-    port = new DumpPort(port);
+    port = std::make_unique<DumpPort>(std::move(port));
 #endif
 
   return port;
 }
 
-static Port *
+static std::unique_ptr<Port>
 OpenPortInternal(boost::asio::io_context &io_context,
                  const DeviceConfig &config, PortListener *listener,
                  DataHandler &handler)
@@ -150,21 +151,20 @@ OpenPortInternal(boost::asio::io_context &io_context,
     if (!ip_address.IsValid())
       throw std::runtime_error("No IP address configured");
 
-    auto port = new TCPClientPort(io_context, listener, handler);
-    if (!port->Connect(ip_address, config.tcp_port)) {
-      delete port;
+    auto port = std::make_unique<TCPClientPort>(io_context, listener, handler);
+    if (!port->Connect(ip_address, config.tcp_port))
       return nullptr;
-    }
 
     return port;
   }
 
   case DeviceConfig::PortType::TCP_LISTENER:
-    return new TCPPort(io_context, config.tcp_port,
-                       listener, handler);
+    return std::make_unique<TCPPort>(io_context, config.tcp_port,
+                                     listener, handler);
 
   case DeviceConfig::PortType::UDP_LISTENER:
-    return new UDPPort(io_context, config.tcp_port, listener, handler);
+    return std::make_unique<UDPPort>(io_context, config.tcp_port,
+                                     listener, handler);
 
   case DeviceConfig::PortType::PTY: {
 #if defined(HAVE_POSIX) && !defined(ANDROID)
@@ -176,12 +176,10 @@ OpenPortInternal(boost::asio::io_context &io_context,
                                               std::system_category()),
                               "Failed to delete pty");
 
-    TTYPort *port = new TTYPort(io_context, listener, handler);
+    auto port = std::make_unique<TTYPort>(io_context, listener, handler);
     const char *slave_path = port->OpenPseudo();
-    if (slave_path == nullptr) {
-      delete port;
+    if (slave_path == nullptr)
       return nullptr;
-    }
 
     if (symlink(slave_path, config.path.c_str()) < 0)
       throw std::system_error(std::error_code(errno,
@@ -199,25 +197,23 @@ OpenPortInternal(boost::asio::io_context &io_context,
     throw std::runtime_error("No port path configured");
 
 #ifdef HAVE_POSIX
-  TTYPort *port = new TTYPort(io_context, listener, handler);
+  auto port = std::make_unique<TTYPort>(io_context, listener, handler);
 #else
-  SerialPort *port = new SerialPort(listener, handler);
+  auto port = std::make_unique<SerialPort>(listener, handler);
 #endif
-  if (!port->Open(path, config.baud_rate)) {
-    delete port;
+  if (!port->Open(path, config.baud_rate))
     return nullptr;
-  }
 
   return port;
 }
 
-Port *
+std::unique_ptr<Port>
 OpenPort(boost::asio::io_context &io_context,
          const DeviceConfig &config, PortListener *listener,
          DataHandler &handler)
 {
-  Port *port = OpenPortInternal(io_context, config, listener, handler);
+  auto port = OpenPortInternal(io_context, config, listener, handler);
   if (port != nullptr)
-    port = WrapPort(config, listener, handler, port);
+    port = WrapPort(config, listener, handler, std::move(port));
   return port;
 }

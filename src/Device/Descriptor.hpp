@@ -42,6 +42,7 @@ Copyright_License {
 #include "Android/GliderLink.hpp"
 
 #include <chrono>
+#include <memory>
 
 #include <cassert>
 #include <tchar.h>
@@ -113,7 +114,7 @@ class DeviceDescriptor final : PortListener, PortLineSplitter {
    * The #Port used by this device.  This is not applicable to some
    * devices, and is nullptr in that case.
    */
-  DumpPort *port;
+  std::unique_ptr<DumpPort> port;
 
   /**
    * A handler that will receive all data, to display it on the
@@ -238,9 +239,7 @@ class DeviceDescriptor final : PortListener, PortLineSplitter {
 public:
   DeviceDescriptor(boost::asio::io_context &_io_context,
                    unsigned index, PortListener *port_listener);
-  ~DeviceDescriptor() {
-    assert(!IsOccupied());
-  }
+  ~DeviceDescriptor() noexcept;
 
   unsigned GetIndex() const {
     return index;
@@ -331,7 +330,7 @@ private:
    * Port object.
    */
   gcc_nonnull_all
-  bool OpenOnPort(DumpPort *port, OperationEnvironment &env);
+  bool OpenOnPort(std::unique_ptr<DumpPort> &&port, OperationEnvironment &env);
 
   bool OpenInternalSensors();
 
