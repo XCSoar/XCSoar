@@ -30,7 +30,7 @@
 #ifndef UNIQUE_FILE_DESCRIPTOR_HXX
 #define UNIQUE_FILE_DESCRIPTOR_HXX
 
-#include "FileDescriptor.hxx"
+#include "FileDescriptor.hxx" // IWYU pragma: export
 
 #include <cassert>
 #include <utility>
@@ -84,6 +84,11 @@ public:
 #ifndef _WIN32
 	static bool CreatePipe(UniqueFileDescriptor &r, UniqueFileDescriptor &w) noexcept {
 		return FileDescriptor::CreatePipe(r, w);
+	}
+
+	static bool CreatePipeNonBlock(UniqueFileDescriptor &r,
+				       UniqueFileDescriptor &w) noexcept {
+		return FileDescriptor::CreatePipeNonBlock(r, w);
 	}
 
 	static bool CreatePipe(FileDescriptor &r, FileDescriptor &w) noexcept;
