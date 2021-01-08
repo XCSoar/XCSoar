@@ -25,6 +25,8 @@ Copyright_License {
 #include "Listener.hpp"
 #include "time/TimeoutClock.hpp"
 #include "Operation/Operation.hpp"
+#include "util/ConvertString.hpp"
+#include "util/Exception.hxx"
 
 #include <algorithm>
 #include <string.h>
@@ -280,4 +282,12 @@ Port::Error(const char *msg)
   PortListener *l = listener;
   if (l != nullptr)
     l->PortError(msg);
+}
+
+void
+Port::Error(std::exception_ptr e) noexcept
+{
+  PortListener *l = listener;
+  if (l != nullptr)
+    l->PortError(GetFullMessage(e).c_str());
 }

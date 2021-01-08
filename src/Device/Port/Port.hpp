@@ -28,7 +28,7 @@ Copyright_License {
 #include "util/Compiler.h"
 
 #include <chrono>
-
+#include <exception>
 #include <cstddef>
 
 class OperationEnvironment;
@@ -295,6 +295,11 @@ protected:
    * Call PortListener::PortError().
    */
   void Error(const char *msg);
+
+  /**
+   * Call PortListener::PortError().
+   */
+  void Error(std::exception_ptr e) noexcept;
 };
 
 #endif
