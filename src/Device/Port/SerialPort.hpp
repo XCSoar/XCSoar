@@ -56,9 +56,10 @@ public:
 
   /**
    * Opens the serial port
-   * @return True on success, False on failure
+   *
+   * Throws on error.
    */
-  bool Open(const TCHAR *path, unsigned baud_rate);
+  void Open(const TCHAR *path, unsigned baud_rate);
 
 protected:
   bool SetRxTimeout(unsigned Timeout);

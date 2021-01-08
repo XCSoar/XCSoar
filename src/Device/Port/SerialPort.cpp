@@ -56,7 +56,7 @@ SerialPort::~SerialPort()
   BufferedPort::EndClose();
 }
 
-bool
+void
 SerialPort::Open(const TCHAR *path, unsigned _baud_rate)
 {
   assert(!Thread::IsInside());
@@ -118,8 +118,6 @@ SerialPort::Open(const TCHAR *path, unsigned _baud_rate)
   StoppableThread::Start();
 
   StateChanged();
-
-  return true;
 }
 
 PortState

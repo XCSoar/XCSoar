@@ -82,7 +82,7 @@ IsCharDev(const char *path)
 }
 #endif
 
-bool
+void
 TTYPort::Open(const TCHAR *path, unsigned baud_rate)
 {
 #ifndef __APPLE__
@@ -129,7 +129,6 @@ TTYPort::Open(const TCHAR *path, unsigned baud_rate)
   AsyncRead();
 
   StateChanged();
-  return true;
 }
 
 const char *

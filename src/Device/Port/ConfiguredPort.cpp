@@ -176,8 +176,6 @@ OpenPortInternal(boost::asio::io_context &io_context,
 
     auto port = std::make_unique<TTYPort>(io_context, listener, handler);
     const char *slave_path = port->OpenPseudo();
-    if (slave_path == nullptr)
-      return nullptr;
 
     if (symlink(slave_path, config.path.c_str()) < 0)
       throw std::system_error(std::error_code(errno,
@@ -199,9 +197,7 @@ OpenPortInternal(boost::asio::io_context &io_context,
 #else
   auto port = std::make_unique<SerialPort>(listener, handler);
 #endif
-  if (!port->Open(path, config.baud_rate))
-    return nullptr;
-
+  port->Open(path, config.baud_rate);
   return port;
 }
 

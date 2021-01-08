@@ -54,8 +54,10 @@ public:
 
   /**
    * Opens the serial port
+   *
+   * Throws on error.
    */
-  bool Open(const TCHAR *path, unsigned baud_rate);
+  void Open(const TCHAR *path, unsigned baud_rate);
 
   /**
    * Opens this object with a new pseudo-terminal.  This is only used
