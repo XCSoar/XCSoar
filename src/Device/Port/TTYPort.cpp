@@ -95,40 +95,12 @@ TTYPort::Open(const TCHAR *path, unsigned baud_rate)
   }
 #endif
 
-  boost::system::error_code ec;
-  serial_port.open(path, ec);
-  if (ec) {
-    char error_msg[MAX_PATH + 16];
-    StringFormat(error_msg, sizeof(error_msg), "Failed to open %s", path);
-    throw boost::system::system_error(ec);
-  }
-
-  if (!SetBaudrate(baud_rate))
-    return false;
-
-  serial_port.set_option(boost::asio::serial_port_base::parity(
-                             boost::asio::serial_port_base::parity::none),
-                         ec);
-  if (ec)
-    return false;
-
-  serial_port.set_option(boost::asio::serial_port_base::character_size(
-                             boost::asio::serial_port_base::character_size(8)),
-                         ec);
-  if (ec)
-    return false;
-
-  serial_port.set_option(boost::asio::serial_port_base::stop_bits(
-                             boost::asio::serial_port_base::stop_bits::one),
-                         ec);
-  if (ec)
-    return false;
-
-  serial_port.set_option(boost::asio::serial_port_base::flow_control(
-                             boost::asio::serial_port_base::flow_control::none),
-                         ec);
-  if (ec)
-    return false;
+  serial_port.open(path);
+  serial_port.set_option(boost::asio::serial_port_base::baud_rate(baud_rate));
+  serial_port.set_option(boost::asio::serial_port_base::parity(boost::asio::serial_port_base::parity::none));
+  serial_port.set_option(boost::asio::serial_port_base::character_size(boost::asio::serial_port_base::character_size(8)));
+  serial_port.set_option(boost::asio::serial_port_base::stop_bits(boost::asio::serial_port_base::stop_bits::one));
+  serial_port.set_option(boost::asio::serial_port_base::flow_control(boost::asio::serial_port_base::flow_control::none));
 
   class
   {
@@ -150,9 +122,7 @@ TTYPort::Open(const TCHAR *path, unsigned baud_rate)
       return ec;
     }
   } custom_options;
-  serial_port.set_option(custom_options, ec);
-  if (ec)
-    return false;
+  serial_port.set_option(custom_options);
 
   valid.store(true, std::memory_order_relaxed);
 
