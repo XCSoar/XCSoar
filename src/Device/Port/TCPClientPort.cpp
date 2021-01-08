@@ -27,11 +27,19 @@ Copyright_License {
 #include "util/StaticString.hxx"
 
 TCPClientPort::TCPClientPort(boost::asio::io_context &io_context,
+                             const char *host, unsigned port,
                              PortListener *_listener, DataHandler &_handler)
   :BufferedPort(_listener, _handler),
    resolver(io_context),
    socket(io_context)
 {
+  NarrowString<32> service;
+  service.UnsafeFormat("%u", port);
+
+  resolver.async_resolve({host, service.c_str()},
+                         std::bind(&TCPClientPort::OnResolved, this,
+                                   std::placeholders::_1,
+                                   std::placeholders::_2));
 }
 
 TCPClientPort::~TCPClientPort()
@@ -44,20 +52,6 @@ TCPClientPort::~TCPClientPort()
     CancelWait(resolver);
 
   BufferedPort::EndClose();
-}
-
-bool
-TCPClientPort::Connect(const char *host, unsigned port)
-{
-  NarrowString<32> service;
-  service.UnsafeFormat("%u", port);
-
-  resolver.async_resolve({host, service.c_str()},
-                         std::bind(&TCPClientPort::OnResolved, this,
-                                   std::placeholders::_1,
-                                   std::placeholders::_2));
-
-  return true;
 }
 
 size_t

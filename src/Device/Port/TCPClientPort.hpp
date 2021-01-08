@@ -43,10 +43,9 @@ class TCPClientPort final
 
 public:
   TCPClientPort(boost::asio::io_context &io_context,
+                const char *host, unsigned port,
                 PortListener *_listener, DataHandler &_handler);
   virtual ~TCPClientPort();
-
-  bool Connect(const char *host, unsigned port);
 
   /* virtual methods from class Port */
   PortState GetState() const override {

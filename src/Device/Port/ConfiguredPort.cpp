@@ -151,11 +151,9 @@ OpenPortInternal(boost::asio::io_context &io_context,
     if (!ip_address.IsValid())
       throw std::runtime_error("No IP address configured");
 
-    auto port = std::make_unique<TCPClientPort>(io_context, listener, handler);
-    if (!port->Connect(ip_address, config.tcp_port))
-      return nullptr;
-
-    return port;
+    return std::make_unique<TCPClientPort>(io_context,
+                                           ip_address, config.tcp_port,
+                                           listener, handler);
   }
 
   case DeviceConfig::PortType::TCP_LISTENER:
