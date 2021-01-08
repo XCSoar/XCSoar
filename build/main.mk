@@ -605,7 +605,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/FLARM/TrafficDatabases.cpp \
 	$(SRC)/UtilsSettings.cpp \
 	$(SRC)/UtilsSystem.cpp \
-	$(SRC)/system/LogError.cpp \
 	$(SRC)/Version.cpp \
 	$(SRC)/Audio/Sound.cpp \
 	$(SRC)/Compatibility/fmode.c \
