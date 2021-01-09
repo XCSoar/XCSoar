@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-09-11 17:17+0000\n"
+"PO-Revision-Date: 2021-01-11 15:32+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/xcsoar/"
 "translations/nb_NO/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3-dev\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 "X-Launchpad-Export-Date: 2015-04-20 16:44+0000\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -4933,7 +4933,7 @@ msgstr "Ekstern"
 
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:35
 msgid "Wind Settings"
-msgstr "Vindinstillinger"
+msgstr "Vindinnstillinger"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:141
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:367
