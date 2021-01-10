@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2020-12-30 10:29+0000\n"
+"PO-Revision-Date: 2021-01-11 15:32+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -946,7 +946,7 @@ msgstr "Úloha+Plochy"
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:33
 #, no-c-format
 msgid "None"
-msgstr "Žádné"
+msgstr "Nic"
 
 #: src/Menu/ExpandMacros.cpp:373 src/Input/InputEventsSettings.cpp:317
 #, no-c-format
@@ -1620,9 +1620,8 @@ msgid ""
 "Magnitude of G loading reported by a supported external intelligent vario. "
 "This value is negative for pitch-down manoeuvres."
 msgstr ""
-"Velikost násobku přetížení v G dle podporovaného externího inteligentního "
-"vária (pokud je připojeno). Hodnota je negativní při manévrech se záporným "
-"přetížením."
+"Velikost násobku přetížení v G, udávaná externím inteligentním váriem (pokud "
+"je připojeno ). Hodnota je negativní při manévrech se záporným přetížením."
 
 #: src/InfoBoxes/Content/Factory.cpp:447
 #, no-c-format
@@ -2394,8 +2393,8 @@ msgid ""
 "Trace of vertical speed, as reported by the GPS, or the intelligent vario "
 "total energy vario value if connected to one."
 msgstr ""
-"Stopa vertikální rychlosti, z údajů GPS nebo celkové energie z "
-"inteligentního varia, pokud je připojené."
+"Stopa vertikální rychlosti, získaná z GPS nebo inteligentního vária celkové "
+"energie (pokud je připojeno)."
 
 #: src/InfoBoxes/Content/Factory.cpp:797
 #, no-c-format
@@ -3223,7 +3222,7 @@ msgid ""
 "automatically if Vega connected."
 msgstr ""
 "Tlak pro barometrickou kalibraci výškoměru. Je nastaven automaticky, pokud "
-"je připojena Vega."
+"je připojen variometr Vega."
 
 #: src/InfoBoxes/Panel/ATCReference.cpp:88
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:644
@@ -4096,7 +4095,7 @@ msgstr "Správce souborů"
 
 #: src/Dialogs/FileManager.cpp:721 src/Dialogs/DownloadFilePicker.cpp:373
 msgid "The file manager is not available on this device."
-msgstr "Správce souborů není dostupný na tomto zařízení."
+msgstr "Správce souborů není na tomto zařízení dostupný."
 
 #: src/Dialogs/FileManager.cpp:724
 msgid "The file manager requires Android 2.3."
@@ -4230,7 +4229,7 @@ msgid ""
 "This option lets you configure if XCSoar should use settings like the "
 "MacCready value, bugs and ballast from the device."
 msgstr ""
-"Určuje, zda má XCSoar použít nastavení MacCready, zamoušení a vodní zátěž z "
+"Určuje, zda má XCSoar použít nastavení MacCready, zamoušení a vodní zátěže z "
 "externího zařízení."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:662
@@ -4242,12 +4241,12 @@ msgid ""
 "This option lets you configure if XCSoar should send settings like the "
 "MacCready value, bugs and ballast to the device."
 msgstr ""
-"Určuje, zda má XCSoar odesílat nastavení MacCready, zamoušení a vodní zátěž "
+"Určuje, zda má XCSoar odesílat nastavení MacCready, zamoušení a vodní zátěže "
 "do externího zařízení."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:669
 msgid "Enable this if you use a K6Bt to connect the device."
-msgstr "Povolte tuto volbu, pokud používáte K6Bt pro připojení zařízení."
+msgstr "Zapněte tuto volbu, pokud používáte K6Bt pro připojení zařízení."
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:283
 msgid "Flight download"
@@ -4261,7 +4260,7 @@ msgstr "Stáhni let"
 #: src/Dialogs/Device/PortMonitor.cpp:159
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:141
 msgid "Manage"
-msgstr "Správa"
+msgstr "Spravuj"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:285
 msgid "Monitor"
@@ -4937,7 +4936,9 @@ msgstr "Varování před prostory"
 msgid ""
 "When the algorithm is switched off, the pilot is responsible for setting the "
 "wind estimate."
-msgstr "Pokud je výpočet vypnut, pilot je odpovědný za nastavení odhadu větru."
+msgstr ""
+"Pokud je nastaveno na ručně, je výpočet vypnut a pilot je odpovědný za "
+"nastavení odhadnutého směru větru."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:55
 #, no-c-format
@@ -4948,24 +4949,26 @@ msgstr "Vyžaduje pouze zdroj GPS."
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:213
 #, no-c-format
 msgid "ZigZag"
-msgstr "CikCak"
+msgstr "Cik-cak"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:57
 #, no-c-format
 msgid "Requires GPS and an intelligent vario with airspeed output."
-msgstr "Vyžaduje GPS a inteligentní vário s výstupem vzdušné rychlosti."
+msgstr "Vyžaduje zdroj GPS a inteligentní vário s výstupem vzdušné rychlosti."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:58
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:67
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:108
 #, no-c-format
 msgid "Both"
-msgstr "Kroužení + CikCak"
+msgstr "Oba"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:59
 #, no-c-format
 msgid "Use ZigZag and circling."
-msgstr "Použít CikCak a kroužení."
+msgstr ""
+"Je použit cik-cak let i kroužení. Vyžaduje zdroj GPS a inteligentní vário s "
+"výstupem vzdušné rychlosti."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:63
 msgid "Auto wind"
@@ -5021,7 +5024,7 @@ msgstr "Nastavení větru"
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:141
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:367
 msgid "Dump"
-msgstr "Vypustit"
+msgstr "Vypusť"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:282
 msgid "Ballast"
@@ -5034,10 +5037,10 @@ msgid ""
 "75kg).  Press ENTER on this field to toggle count-down of the ballast volume "
 "according to the dump rate specified in the configuration settings."
 msgstr ""
-"Přítěž kluzáku. Zvyšte toto číslo pokud je zátěž v kabině/pilot těžší než "
-"referenční hmotnost pro poláru (typicky 75kg). Stiskněte ENTER na tomto "
-"políčku pro spuštění odpočtu vypouštění vodní zátěže vzhledem k nastavené "
-"rychlosti vypouštění v menu konfigurace."
+"Zátěž kluzáku. Zvyšte toto číslo pokud je zátěž v kabině/pilot těžší než "
+"referenční hmotnost pro poláru (typicky 75kg). Stiskněte tlačítko Vypusť/"
+"Zastav pro spuštění/zastavení odpočtu vypouštění vodní zátěže rychlostí "
+"zadanou v nastavení letadla."
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:295
 msgid "Bugs"
@@ -5767,8 +5770,8 @@ msgstr ""
 "Efektivita přeskoku. 100 značí perfektní výkon dle MacCreadyho teorie. Číslo "
 "vyšší než 100 značí lepší výkon než MacCready, dosažený letem pod řadami. "
 "Méně než 100 je přiměřené pouze pokud jste letěli hodně mimo plánovanou "
-"trasu. Tato hodnota odhaduje Vaši efektivitu při přeskoku vzhledem k "
-"aktuální historii letu s nastaveným MC. Výpočet začne po startu úlohy."
+"trasu. Tato hodnota odhaduje efektivitu přeskoku na základě aktuální "
+"historie letu s nastavenou hodnotou MacCready. Výpočet začne po startu úlohy."
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:101
 msgid "Valid start"
@@ -6156,7 +6159,7 @@ msgstr "Okno výstrahy"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:212
 msgid "Enable/disable displaying airspaces warnings dialog."
-msgstr "Povolit/zakázat okno varování před prostory."
+msgstr "Zapne/vypne okno varování před prostory."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:216
 msgid "Warning time"
@@ -6178,8 +6181,7 @@ msgid ""
 "Enable/disable repetitive warning sound when airspaces warnings dialog is "
 "displayed."
 msgstr ""
-"Povolit/zakázat opakující se zvuk při zobrazení varování před vzdušným "
-"prostorem."
+"Zapne/vypne opakující se zvuk při zobrazení varování před vzdušným prostorem."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:226
 msgid "Acknowledge time"
@@ -6193,7 +6195,7 @@ msgstr "Čas, po který se nebude opakovat potvrzená výstraha."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:231
 msgid "Use black outline"
-msgstr "Černé obrysy prostorů"
+msgstr "Černé obrysy"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:232
 msgid ""
@@ -6202,7 +6204,7 @@ msgstr "Vykreslí černý okraj kolem každého prostoru místo barvy prostoru."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:236
 msgid "Airspace fill mode"
-msgstr "Styl vyplnění prostorů"
+msgstr "Styl vyplnění"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:237
 msgid "Specifies the mode for filling the airspace area."
@@ -6239,9 +6241,9 @@ msgid ""
 "of the target relative to you. In all modes, the color of the target "
 "indicates the threat level."
 msgstr ""
-"Povolí zobrazení FLARM radaru. Směr letu cíle relativní k letadlu je "
-"zobrazen šipkou a trojúhelník směřující nahoru nebo dolů ukazuje relativní "
-"výšku vůči Vám. Ve všech režimech barva cíle indikuje míru hrozby."
+"Zapne zobrazení FLARM radaru. Směr letu cíle relativní k letadlu je zobrazen "
+"šipkou a trojúhelník směřující nahoru nebo dolů ukazuje relativní výšku vůči "
+"Vám. Ve všech režimech barva cíle indikuje míru hrozby."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:88
 msgid "Auto close FLARM"
@@ -6268,7 +6270,7 @@ msgstr "Profil stoupání"
 msgid ""
 "This enables the display of the thermal profile (climb band) display on the "
 "map."
-msgstr "Povoluje zobrazení profilu stoupání na mapě."
+msgstr "Zapne zobrazení profilu stoupání na mapě."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:101
 msgid "Final glide bar"
@@ -6454,7 +6456,7 @@ msgid ""
 "When Vega variometer is connected and this option is true, the positive flap "
 "setting switches the flight mode between circling and cruise."
 msgstr ""
-"Pokud je připojen Vega variometr a tato volba je zapnuta, nastavení klapky "
+"Pokud je připojen variometr Vega a tato volba je zapnuta, nastavení klapky "
 "na pozitivní hodnotu přepíná letový režim mezi kroužením a přeskokem."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:97
@@ -6910,8 +6912,8 @@ msgid ""
 "Enables the automatic starting and stopping of logger on takeoff and landing "
 "respectively. Disable when flying paragliders."
 msgstr ""
-"Povoluje automatický start a zastavení záznamu při vzletu a přistání. "
-"Zakažte pokud létáte s paraglidem."
+"Zapne automatický start a zastavení záznamu při vzletu a přistání. Vypněte, "
+"pokud létáte s paraglidem."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:86
 msgid "NMEA logger"
@@ -6922,8 +6924,8 @@ msgid ""
 "Enable the NMEA logger on startup? If this option is disabled, the NMEA "
 "logger can still be started manually."
 msgstr ""
-"Povolit NMEA záznam při vzletu? Pokud je tato volba zakázána, lze NMEA "
-"záznam zapnout ručně."
+"Zapnout NMEA záznam při vzletu? Pokud je tato volba vypnuta, lze NMEA záznam "
+"zapnout ručně."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:92
 msgid "Log book"
@@ -7274,7 +7276,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:161
 #, no-c-format
 msgid "Disables the reach display."
-msgstr "Akční rádius není zobrazován."
+msgstr "Akční rádius není zobrazen."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:162
 #, no-c-format
@@ -7332,7 +7334,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:175
 msgid "Reach display"
-msgstr "Zobraz akční rádius"
+msgstr "Akční rádius"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:65
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:124
@@ -7718,8 +7720,8 @@ msgstr "Stopa v měřítku"
 msgid ""
 "If set to ON the snail trail width is scaled according to the vario signal."
 msgstr ""
-"Pokud je zapnuto, šíře pozemní stopy je proporcionální vzhledem k signálu "
-"vária."
+"Pokud je zapnuto, šíře pozemní stopy je proporcionální vzhledem k rychlosti "
+"stoupání."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:172
 msgid "Detour cost markers"
@@ -7732,9 +7734,9 @@ msgid ""
 "extra distance required to reach that point as a percentage of straight-line "
 "distance to the waypoint."
 msgstr ""
-"Pokud se letadlo odchýlí od aktuální trati, zobrazí se před letadlem značky. "
-"Hodnota každého bodu je extra vzdálenost k dosažení bodu trati jako "
-"procentní podíl z přímé vzdálenosti k bodu."
+"Pokud se aktuální kurz letadla liší od požadovaném kurzu k traťovému bodu, "
+"zobrazí se před letadlem značky. Číslo vyjadřuje procentuální prodloužení "
+"trati vzhledem k přímé vzdálenosti k traťovému bodu."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:179
 msgid "Aircraft symbol"
@@ -7932,8 +7934,8 @@ msgid ""
 "leg less than 28% of total except for tasks longer than 500km: No leg less "
 "than 25% or larger than 45%."
 msgstr ""
-"Vyhovuje FAI pravidlům pro trojúhelníky. Tři otočné body a společný start a "
-"cíl. Žádné rameno není kratší než 28% z celkové vzdálenosti mimo úlohy nad "
+"Splňuje FAI pravidla pro trojúhelníky. Tři otočné body a společný start a "
+"cíl. Žádné rameno není kratší než 28% z celkové vzdálenosti, mimo úlohy nad "
 "500km; pak žádné rameno menší než 25% nebo větší než 45%."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:97
@@ -7966,7 +7968,7 @@ msgid ""
 "point; flat trianlge - 1 km = 1.2 p; FAI triangle - 1 km = 1.4 p."
 msgstr ""
 "PG online soutěž s různými hodnotami tratí: Volný let - 1 km= 1.0 bodu; "
-"trojúhelník - 1 km = 1.2 b; FAI trojúhelník - 1km = 1.4 b."
+"trojúhelník - 1 km = 1.2 bodu; FAI trojúhelník - 1km = 1.4 bodu."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:110
 #, no-c-format
@@ -7976,8 +7978,8 @@ msgid ""
 "p and 2.0 p for FAI triangles respectively."
 msgstr ""
 "Evropská PG online soutěž organizace DHV. Podobné jako XContest pravidla, "
-"ale s jinou hodnotou tratí: volná 1 km = 1.5 bodu, trojúhelníky 1.75 b a 2.0 "
-"b pro FAI trojúhelníky."
+"ale s jinou hodnotou tratí: volná 1 km = 1.5 bodu, trojúhelníky 1.75 bodu a "
+"2.0 bodu pro FAI trojúhelníky."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:113
 #, no-c-format
@@ -7988,7 +7990,7 @@ msgid ""
 msgstr ""
 "Australská online soutěž kluzáků. Jsou hodnoceny tratě okolo max. 6 otočných "
 "bodů. Hraniční box je hodnocený 1km = 1.0 bodu a přídavná cik-cak část 1km = "
-"0.5bodu."
+"0.5 bodu."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:116
 #, no-c-format
@@ -8009,27 +8011,27 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:124
 msgid "Predict Contest"
-msgstr "Boduj dosažitelné body"
+msgstr "Body za dosažitelné"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:125
 msgid ""
 "If enabled, then the next task point is included in the score calculation, "
 "assuming that you will reach it."
 msgstr ""
-"Pokud je zapnuto, následující otočný bod je zahrnut do výpočtu skóre, za "
-"předpokladu že na něj doletíte."
+"Pokud je zapnuto, bude následující otočný bod úlohy zahrnut do výpočtu "
+"skóre, za předpokladu, že na něj doletíte."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:132
 msgid "FAI triangle areas"
-msgstr "Oblasti FAI trojúhelníků"
+msgstr "Oblasti FAI trojúhelníku"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:133
 msgid "Show FAI triangle areas on the map."
-msgstr "Zobrazí oblasti FAI trojúhelníků na mapu."
+msgstr "Zobrazí oblasti FAI trojúhelníku na mapu plánování úlohy."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:137
 msgid "FAI triangle threshold"
-msgstr "Hranice FAI trojúhelníků"
+msgstr "Hranice FAI trojúhelníku"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:138
 msgid "Specifies which threshold is used for \"large\" FAI triangles."
@@ -8797,7 +8799,7 @@ msgstr "Deklaruj"
 
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:117
 msgid "Browse"
-msgstr "Prohlížej"
+msgstr "Procházej"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:100
 msgid "Load"
@@ -9698,10 +9700,10 @@ msgid ""
 "connected the baud rate will be fixed at 38400.  For OzFLARM, the value can "
 "be set to 19200."
 msgstr ""
-"Přenosová rychlost zařízení, přiojeného na Vega port X1. Použijte dle "
-"potřeby, pokud používáte logger nebo GPS jiný než FLARM. Pokud je připojen "
-"FLARM, přenosová rychlost bude nastavena na 38400. Pro OzFLARM může být "
-"rychlost 19200."
+"Přenosová rychlost zařízení, připojeného na port X1 variometru Vega. "
+"Použijte dle potřeby, pokud používáte logger nebo GPS jiný než FLARM. Pokud "
+"je připojen FLARM, přenosová rychlost bude nastavena pevně na 38400 baudů. "
+"Pro OzFLARM může být přenosová rychlost nastavena na 19200 baudů."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:78
 #, no-c-format
@@ -9726,8 +9728,8 @@ msgid ""
 "Enable output of +5V power supply for PDA etc. at Vega connector~X2.  If "
 "Vega is connected to Altair, this should be set to False."
 msgstr ""
-"Povolí výstup +5V napájení pro PDA na Vega portu ~X2. Pokud je Vega "
-"připojena na Altair, mělo by být vypnuto."
+"Zapne na portu X2 variometru Vega výstup napájení +5V pro PDA aj. Pokud je "
+"Vega připojena na Altair, mělo by tato volba být vypnuta."
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:32
 #, no-c-format
