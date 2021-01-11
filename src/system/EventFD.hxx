@@ -44,7 +44,7 @@ public:
 	 */
 	EventFD();
 
-	FileDescriptor GetReadFD() const noexcept {
+	FileDescriptor Get() const noexcept {
 		return fd;
 	}
 
