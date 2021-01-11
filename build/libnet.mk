@@ -26,6 +26,11 @@ LIBNET_LDLIBS = -lcurl
 else
 $(eval $(call pkg-config-library,CURL,libcurl))
 
+ifeq ($(USE_THIRDPARTY_LIBS),y)
+# This definition is missing in the CURL cmake build
+CURL_CPPFLAGS += -DCURL_STATICLIB
+endif
+
 LIBNET_CPPFLAGS = $(CURL_CPPFLAGS)
 LIBNET_LDADD = $(ZLIB_LDADD)
 LIBNET_LDLIBS = $(CURL_LDLIBS) $(ZLIB_LDLIBS)
