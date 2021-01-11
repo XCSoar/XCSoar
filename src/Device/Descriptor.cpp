@@ -502,10 +502,17 @@ try {
     return false;
   }
 
+  if (!port->WaitConnected(env)) {
+    if (!env.IsCancelled())
+      ++n_failures;
+
+    return false;
+  }
+
   auto dump_port = std::make_unique<DumpPort>(std::move(port));
   dump_port->Disable();
 
-  if (!port->WaitConnected(env) || !OpenOnPort(std::move(dump_port), env)) {
+  if (!OpenOnPort(std::move(dump_port), env)) {
     if (!env.IsCancelled())
       ++n_failures;
 
