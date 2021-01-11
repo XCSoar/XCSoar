@@ -37,7 +37,7 @@ EventQueue::EventQueue()
 {
   SignalListener::Create(SIGINT, SIGTERM);
 
-  event_pipe_asio.assign(event_pipe.Get().Get());
+  event_pipe_asio.assign(event_pipe.GetSocket().Get());
 }
 
 EventQueue::~EventQueue()
