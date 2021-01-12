@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/Font.hpp"
 #include "ui/event/Globals.hpp"
 #include "ui/event/Queue.hpp"
+#include "util/RuntimeError.hxx"
 #include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL
@@ -35,9 +36,6 @@ Copyright_License {
 #include <SDL.h>
 #include <SDL_hints.h>
 
-#include <stdio.h>
-#include <stdlib.h>
-
 using namespace UI;
 
 ScreenGlobalInit::ScreenGlobalInit()
@@ -46,10 +44,8 @@ ScreenGlobalInit::ScreenGlobalInit()
   if (!IsKobo())
     flags |= SDL_INIT_AUDIO;
 
-  if (::SDL_Init(flags) != 0) {
-    fprintf(stderr, "SDL_Init() has failed: %s\n", ::SDL_GetError());
-    exit(EXIT_FAILURE);
-  }
+  if (::SDL_Init(flags) != 0)
+    throw FormatRuntimeError("SDL_Init() has failed: %s", ::SDL_GetError());
 
 #ifdef HAVE_GLES
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
