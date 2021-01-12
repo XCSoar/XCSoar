@@ -178,7 +178,7 @@ public:
 	/**
 	 * Is this an IPv4 address mapped inside struct sockaddr_in6?
 	 */
-#if !GCC_OLDER_THAN(5,0) && !defined(_WIN32)
+#if defined(__linux__)
 	constexpr
 #endif
 	bool IsV4Mapped() const noexcept {
