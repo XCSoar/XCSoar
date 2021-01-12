@@ -38,8 +38,7 @@ Copyright_License {
 #undef Window
 #undef Display
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <stdexcept>
 
 namespace UI {
 
@@ -48,10 +47,8 @@ X11EventQueue::X11EventQueue(EventQueue &_queue)
    display(XOpenDisplay(nullptr)),
    socket_event(queue.GetEventLoop(), BIND_THIS_METHOD(OnSocketReady))
 {
-  if (display == nullptr) {
-    fprintf(stderr, "XOpenDisplay() failed\n");
-    exit(EXIT_FAILURE);
-  }
+  if (display == nullptr)
+    throw std::runtime_error("XOpenDisplay() failed");
 
   wm_delete_window = XInternAtom(display, "WM_DELETE_WINDOW", false);
 

@@ -28,8 +28,7 @@ Copyright_License {
 
 #include <wayland-client.h>
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <stdexcept>
 
 namespace UI {
 
@@ -127,10 +126,8 @@ WaylandEventQueue::WaylandEventQueue(EventQueue &_queue)
    display(wl_display_connect(nullptr)),
    socket_event(queue.GetEventLoop(), BIND_THIS_METHOD(OnSocketReady))
 {
-  if (display == nullptr) {
-    fprintf(stderr, "wl_display_connect() failed\n");
-    exit(EXIT_FAILURE);
-  }
+  if (display == nullptr)
+    throw std::runtime_error("wl_display_connect() failed");
 
   auto registry = wl_display_get_registry(display);
   wl_registry_add_listener(registry, &registry_listener, this);
@@ -138,20 +135,14 @@ WaylandEventQueue::WaylandEventQueue(EventQueue &_queue)
   wl_display_dispatch(display);
   wl_display_roundtrip(display);
 
-  if (compositor == nullptr) {
-    fprintf(stderr, "No Wayland compositor found\n");
-    exit(EXIT_FAILURE);
-  }
+  if (compositor == nullptr)
+    throw std::runtime_error("No Wayland compositor found");
 
-  if (seat == nullptr) {
-    fprintf(stderr, "No Wayland seat found\n");
-    exit(EXIT_FAILURE);
-  }
+  if (seat == nullptr)
+    throw std::runtime_error("No Wayland seat found");
 
-  if (shell == nullptr) {
-    fprintf(stderr, "No Wayland shell found\n");
-    exit(EXIT_FAILURE);
-  }
+  if (shell == nullptr)
+    throw std::runtime_error("No Wayland shell found");
 
   socket_event.Open(SocketDescriptor(wl_display_get_fd(display)));
   socket_event.ScheduleRead();
