@@ -24,14 +24,22 @@ Copyright_License {
 #ifndef XCSOAR_CLOUD_DUMP_HPP
 #define XCSOAR_CLOUD_DUMP_HPP
 
+#include "net/AllocatedSocketAddress.hxx"
+#include "net/ToString.hxx"
+
 #include <iostream>
 #include <iomanip>
 
 inline std::ostream &
-operator<<(std::ostream &stream,
-           const boost::asio::ip::udp::endpoint &endpoint)
+operator<<(std::ostream &stream, SocketAddress address)
 {
-  return stream << endpoint.address().to_string();
+  return stream << ToString(address);
+}
+
+inline std::ostream &
+operator<<(std::ostream &stream, const AllocatedSocketAddress &address)
+{
+  return stream << SocketAddress(address);
 }
 
 template<char positive, char negative>

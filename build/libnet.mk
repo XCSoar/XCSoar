@@ -6,6 +6,7 @@ LIBNET_SOURCES = \
 	$(SRC)/net/Resolver.cxx \
 	$(SRC)/net/SocketError.cxx \
 	$(SRC)/net/State.cpp \
+	$(SRC)/net/ToString.cxx \
 	$(SRC)/net/IPv4Address.cxx \
 	$(SRC)/net/IPv6Address.cxx \
 	$(SRC)/net/StaticSocketAddress.cxx \

@@ -24,6 +24,7 @@ Copyright_License {
 #include "Data.hpp"
 #include "Dump.hpp"
 #include "Serialiser.hpp"
+#include "net/ToString.hxx"
 
 #include <iostream>
 #include <iomanip>
@@ -39,7 +40,7 @@ void
 CloudData::DumpClients()
 {
   for (const auto &client : clients) {
-    cout << client.endpoint << '\t'
+    cout << ToString(client.address) << '\t'
          << std::hex << client.key << std::dec << '\t'
          << client.id << '\t'
          << client.location << '\t'

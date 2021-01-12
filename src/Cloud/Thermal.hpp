@@ -29,7 +29,6 @@ Copyright_License {
 #include <boost/intrusive/list.hpp>
 #include <boost/geometry/index/rtree.hpp>
 #include <boost/range/iterator_range_core.hpp>
-#include <boost/asio/ip/udp.hpp>
 
 #include <memory>
 #include <chrono>
