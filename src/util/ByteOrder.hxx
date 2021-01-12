@@ -245,6 +245,17 @@ ToLE64(uint64_t value) noexcept
 }
 
 /**
+ * Converts a 16 bit integer from little endian to the host byte order
+ * and returns it as a signed integer.
+ */
+constexpr int16_t
+FromLE16S(uint16_t value) noexcept
+{
+	/* assuming two's complement representation */
+	return static_cast<int16_t>(FromLE16(value));
+}
+
+/**
  * A packed big-endian 16 bit integer.
  */
 class PackedBE16 {
