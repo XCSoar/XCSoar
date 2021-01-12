@@ -386,12 +386,6 @@ SocketDescriptor::Bind(SocketAddress address) noexcept
 	return bind(Get(), address.GetAddress(), address.GetSize()) == 0;
 }
 
-bool
-SocketDescriptor::BindPort(unsigned port) noexcept
-{
-	return Bind(IPv4Address(port));
-}
-
 #ifdef __linux__
 
 bool

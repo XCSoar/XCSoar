@@ -211,13 +211,6 @@ public:
 
 	bool Bind(SocketAddress address) noexcept;
 
-	/**
-	 * Binds the socket to the port on INADDR_ANY
-	 * @param port is the port to bound
-	 * @return True on success False on failure
-	 */
-	bool BindPort(unsigned port) noexcept;
-
 #ifdef __linux__
 	/**
 	 * Binds the socket to a unique abstract address.
