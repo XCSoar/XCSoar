@@ -37,8 +37,6 @@ Copyright_License {
 
 #include <alsa/asoundlib.h>
 
-namespace boost { namespace asio { class io_context; }}
-
 /**
  * PCMPlayer implementation for the ALSA sound system
  */
