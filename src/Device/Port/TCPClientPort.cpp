@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "TCPClientPort.hpp"
-#include "net/Option.hpp"
 #include "net/SocketError.hxx"
 #include "event/Call.hxx"
 #include "util/StaticString.hxx"

@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "TCPPort.hpp"
-#include "net/Option.hpp"
 #include "net/IPv4Address.hxx"
 #include "net/SocketError.hxx"
 #include "net/UniqueSocketDescriptor.hxx"
