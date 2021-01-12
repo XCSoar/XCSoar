@@ -24,9 +24,9 @@ Copyright_License {
 #include "TCPPort.hpp"
 #include "net/Option.hpp"
 #include "net/IPv4Address.hxx"
+#include "net/SocketError.hxx"
 #include "net/UniqueSocketDescriptor.hxx"
 #include "event/Call.hxx"
-#include "system/Error.hxx"
 
 TCPPort::TCPPort(EventLoop &event_loop,
                  unsigned port,
@@ -39,13 +39,13 @@ TCPPort::TCPPort(EventLoop &event_loop,
 
   UniqueSocketDescriptor s;
   if (!s.Create(AF_INET, SOCK_STREAM, 0))
-    throw MakeErrno("Failed to create socket");
+    throw MakeSocketError("Failed to create socket");
 
   if (!s.Bind(address))
-    throw MakeErrno("Failed to bind socket");
+    throw MakeSocketError("Failed to bind socket");
 
   if (!s.Listen(1))
-    throw MakeErrno("Failed to listen on socket");
+    throw MakeSocketError("Failed to listen on socket");
 
   listener.Open(s.Release());
 
@@ -93,15 +93,10 @@ TCPPort::Write(const void *data, size_t length)
 
 void
 TCPPort::OnListenerReady(unsigned) noexcept
-{
+try {
   SocketDescriptor s = listener.GetSocket().Accept();
-  if (!s.IsDefined()) {
-    int e = errno;
-    listener.Close();
-    StateChanged();
-    Error(strerror(e));
-    return;
-  }
+  if (!s.IsDefined())
+    throw MakeSocketError("Failed to accept");
 
 #ifdef _WIN32
   const DWORD value = 1000;
@@ -114,20 +109,19 @@ TCPPort::OnListenerReady(unsigned) noexcept
   connection.Close();
   connection.Open(s);
   connection.ScheduleRead();
+} catch (...) {
+  listener.Close();
+  StateChanged();
+  Error(std::current_exception());
 }
 
 void
 TCPPort::OnConnectionReady(unsigned) noexcept
-{
+try {
   char input[4096];
   ssize_t nbytes = connection.GetSocket().Read(input, sizeof(input));
-  if (nbytes < 0) {
-    int e = errno;
-    connection.Close();
-    StateChanged();
-    Error(strerror(e));
-    return;
-  }
+  if (nbytes < 0)
+    throw MakeSocketError("Failed to receive");
 
   if (nbytes == 0) {
     connection.Close();
@@ -136,4 +130,8 @@ TCPPort::OnConnectionReady(unsigned) noexcept
   }
 
   DataReceived(input, nbytes);
+} catch (...) {
+  connection.Close();
+  StateChanged();
+  Error(std::current_exception());
 }

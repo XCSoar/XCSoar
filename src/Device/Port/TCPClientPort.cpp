@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "TCPClientPort.hpp"
 #include "net/Option.hpp"
+#include "net/SocketError.hxx"
 #include "event/Call.hxx"
 #include "util/StaticString.hxx"
 
@@ -69,16 +70,11 @@ TCPClientPort::Write(const void *data, size_t length)
 
 void
 TCPClientPort::OnSocketReady(unsigned) noexcept
-{
+try {
   char input[4096];
   ssize_t nbytes = socket.GetSocket().Read(input, sizeof(input));
-  if (nbytes < 0) {
-    int e = errno;
-    socket.Close();
-    StateChanged();
-    Error(strerror(e));
-    return;
-  }
+  if (nbytes < 0)
+    throw MakeSocketError("Failed to receive");
 
   if (nbytes == 0) {
     socket.Close();
@@ -87,6 +83,10 @@ TCPClientPort::OnSocketReady(unsigned) noexcept
   }
 
   DataReceived(input, nbytes);
+} catch (...) {
+  socket.Close();
+  StateChanged();
+  Error(std::current_exception());
 }
 
 void

@@ -24,8 +24,8 @@ Copyright_License {
 #include "UDPPort.hpp"
 #include "net/IPv4Address.hxx"
 #include "net/UniqueSocketDescriptor.hxx"
+#include "net/SocketError.hxx"
 #include "event/Call.hxx"
-#include "system/Error.hxx"
 
 UDPPort::UDPPort(EventLoop &event_loop,
                  unsigned port,
@@ -37,10 +37,10 @@ UDPPort::UDPPort(EventLoop &event_loop,
 
   UniqueSocketDescriptor s;
   if (!s.Create(AF_INET, SOCK_DGRAM, 0))
-    throw MakeErrno("Failed to create socket");
+    throw MakeSocketError("Failed to create socket");
 
   if (!s.Bind(address))
-    throw MakeErrno("Failed to bind socket");
+    throw MakeSocketError("Failed to bind socket");
 
   socket.Open(s.Release());
 
@@ -85,16 +85,11 @@ UDPPort::Write(const void *data, size_t length)
 
 void
 UDPPort::OnSocketReady(unsigned) noexcept
-{
+try {
   char input[4096];
   ssize_t nbytes = socket.GetSocket().Read(input, sizeof(input));
-  if (nbytes < 0) {
-    int e = errno;
-    socket.Close();
-    StateChanged();
-    Error(strerror(e));
-    return;
-  }
+  if (nbytes < 0)
+    throw MakeSocketError("Failed to receive");
 
   if (nbytes == 0) {
     socket.Close();
@@ -103,4 +98,8 @@ UDPPort::OnSocketReady(unsigned) noexcept
   }
 
   DataReceived(input, nbytes);
+} catch (...) {
+  socket.Close();
+  StateChanged();
+  Error(std::current_exception());
 }
