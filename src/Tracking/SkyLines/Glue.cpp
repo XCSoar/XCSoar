@@ -29,7 +29,7 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "net/State.hpp"
 #include "io/async/GlobalAsioThread.hpp"
-#include "system/ByteOrder.hpp"
+#include "util/ByteOrder.hxx"
 
 #include <cassert>
 

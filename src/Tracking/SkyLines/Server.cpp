@@ -25,7 +25,7 @@ Copyright_License {
 #include "Assemble.hpp"
 #include "Protocol.hpp"
 #include "Import.hpp"
-#include "system/ByteOrder.hpp"
+#include "util/ByteOrder.hxx"
 #include "net/SocketError.hxx"
 #include "net/UniqueSocketDescriptor.hxx"
 #include "util/CRC.hpp"

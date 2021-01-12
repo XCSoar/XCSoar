@@ -12,7 +12,7 @@
 #define XCSOAR_SCREEN_RAW_BITMAP_HPP
 
 #include "PortableColor.hpp"
-#include "system/ByteOrder.hpp"
+#include "util/ByteOrder.hxx"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Surface.hpp"

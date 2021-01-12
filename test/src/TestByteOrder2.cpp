@@ -24,6 +24,6 @@
 
 #include <cstdint>
 
-#include "system/ByteOrder.hpp"
+#include "util/ByteOrder.hxx"
 
 #include "TestByteOrder.inc.cpp"

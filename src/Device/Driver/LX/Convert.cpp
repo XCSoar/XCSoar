@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Convert.hpp"
 #include "LXN.hpp"
-#include "system/ByteOrder.hpp"
+#include "util/ByteOrder.hxx"
 #include "io/BufferedOutputStream.hxx"
 
 #include <cstdint>

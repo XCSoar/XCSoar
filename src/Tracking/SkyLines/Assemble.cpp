@@ -25,7 +25,7 @@ Copyright_License {
 #include "Export.hpp"
 #include "Protocol.hpp"
 #include "NMEA/Info.hpp"
-#include "system/ByteOrder.hpp"
+#include "util/ByteOrder.hxx"
 #include "util/CRC.hpp"
 
 SkyLinesTracking::PingPacket

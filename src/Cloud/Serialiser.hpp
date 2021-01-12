@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "io/BufferedOutputStream.hxx"
 #include "io/BufferedReader.hxx"
-#include "system/ByteOrder.hpp"
+#include "util/ByteOrder.hxx"
 
 #include <string>
 #include <chrono>

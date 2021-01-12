@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_AUDIO_ALGORITHMS_HPP
 
 #include "util/Compiler.h"
-#include "system/ByteOrder.hpp"
+#include "util/ByteOrder.hxx"
 
 #include <algorithm>
 #include <type_traits>

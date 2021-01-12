@@ -18,7 +18,7 @@
 // Low-Level Funktionen für DBB Behandlung (Schreiben)
 
 #include "dbbconv.h"
-#include "system/ByteOrder.hpp"
+#include "util/ByteOrder.hxx"
 #include "util/CharUtil.hxx"
 
 #include <string.h>

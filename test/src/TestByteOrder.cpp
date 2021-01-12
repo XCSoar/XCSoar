@@ -25,6 +25,6 @@
 #include <cstdint>
 
 #define FORCE_ALIGNED_READ_WRITE
-#include "system/ByteOrder.hpp"
+#include "util/ByteOrder.hxx"
 
 #include "TestByteOrder.inc.cpp"

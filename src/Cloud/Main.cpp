@@ -27,7 +27,7 @@ Copyright_License {
 #include "Serialiser.hpp"
 #include "Tracking/SkyLines/Server.hpp"
 #include "Tracking/SkyLines/Protocol.hpp"
-#include "system/ByteOrder.hpp"
+#include "util/ByteOrder.hxx"
 #include "event/Loop.hxx"
 #include "event/TimerEvent.hxx"
 #include "event/SignalMonitor.hxx"

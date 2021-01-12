@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_PIXEL_TRAITS_HPP
 
 #include "Screen/PortableColor.hpp"
-#include "system/ByteOrder.hpp"
+#include "util/ByteOrder.hxx"
 #include "util/Cast.hxx"
 #include "util/Compiler.h"
 #include "util/OffsetPointer.hxx"

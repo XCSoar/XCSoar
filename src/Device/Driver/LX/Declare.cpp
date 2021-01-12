@@ -25,7 +25,7 @@ Copyright_License {
 #include "NanoDeclare.hpp"
 #include "Protocol.hpp"
 #include "Device/Declaration.hpp"
-#include "system/ByteOrder.hpp"
+#include "util/ByteOrder.hxx"
 #include "Operation/Operation.hpp"
 #include "time/BrokenDate.hpp"
 

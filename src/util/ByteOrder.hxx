@@ -28,10 +28,10 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_BYTE_ORDER_HPP
-#define XCSOAR_BYTE_ORDER_HPP
+#ifndef BYTE_ORDER_HXX
+#define BYTE_ORDER_HXX
 
-#include "util/Compiler.h"
+#include "Compiler.h"
 
 #include <cstdint>
 

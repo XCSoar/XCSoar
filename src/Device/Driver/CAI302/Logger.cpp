@@ -25,7 +25,7 @@ Copyright_License {
 #include "Protocol.hpp"
 #include "Device/RecordedFlight.hpp"
 #include "Operation/Operation.hpp"
-#include "system/ByteOrder.hpp"
+#include "util/ByteOrder.hxx"
 #include "system/Path.hpp"
 #include "io/FileOutputStream.hxx"
 #include "io/BufferedOutputStream.hxx"

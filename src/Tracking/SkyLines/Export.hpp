@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Protocol.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "system/ByteOrder.hpp"
+#include "util/ByteOrder.hxx"
 
 namespace SkyLinesTracking {
 

@@ -22,7 +22,7 @@
 
 #include "util/MD5.hpp"
 #include "util/Macros.hpp"
-#include "system/ByteOrder.hpp"
+#include "util/ByteOrder.hxx"
 
 #include <algorithm>
 #include <stdio.h>

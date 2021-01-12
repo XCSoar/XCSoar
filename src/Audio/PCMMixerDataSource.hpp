@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "PCMDataSource.hpp"
 
-#include "system/ByteOrder.hpp"
+#include "util/ByteOrder.hxx"
 #include "thread/Mutex.hxx"
 
 
