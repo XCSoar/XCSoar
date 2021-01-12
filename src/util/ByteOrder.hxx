@@ -65,20 +65,6 @@
 #  endif
 #endif
 
-/* x86 always allows unaligned access */
-#if defined(__i386__) || defined(__x86_64__) || \
-  /* ARM has it from ARMv6 on */ \
-  defined(__ARM_ARCH_6__) || \
-  defined(__ARM_ARCH_7__) || \
-  defined(__ARM_ARCH_7A__) || \
-  /* _M_ARM is the Microsoft way of checking the ARM generation \
-     (supported by mingw32ce) */ \
-  (defined(_M_ARM) && _M_ARM >= 6)
-#ifndef FORCE_ALIGNED_READ_WRITE
-#define CAN_READ_WRITE_UNALIGNED
-#endif
-#endif
-
 constexpr bool
 IsLittleEndian()
 {
@@ -247,78 +233,6 @@ constexpr uint64_t
 ToLE64(uint64_t value)
 {
   return IsLittleEndian() ? value : ByteSwap64(value);
-}
-
-gcc_pure
-static inline uint16_t
-ReadUnalignedLE16(const uint16_t *p)
-{
-#ifdef CAN_READ_WRITE_UNALIGNED
-  return FromLE16(*p);
-#else
-  const uint8_t *c = (const uint8_t *)p;
-  return c[0] | (c[1] << 8);
-#endif
-}
-
-gcc_pure
-static inline uint16_t
-ReadUnalignedBE16(const uint16_t *p)
-{
-#ifdef CAN_READ_WRITE_UNALIGNED
-  return FromBE16(*p);
-#else
-  const uint8_t *c = (const uint8_t *)p;
-  return c[1] | (c[0] << 8);
-#endif
-}
-
-static inline void
-WriteUnalignedLE16(uint16_t *p, uint16_t value)
-{
-#ifdef CAN_READ_WRITE_UNALIGNED
-  *p = ToLE16(value);
-#else
-  uint8_t *c = (uint8_t *)p;
-  c[0] = value;
-  c[1] = value >> 8;
-#endif
-}
-
-static inline void
-WriteUnalignedBE16(uint16_t *p, uint16_t value)
-{
-#ifdef CAN_READ_WRITE_UNALIGNED
-  *p = ToBE16(value);
-#else
-  uint8_t *c = (uint8_t *)p;
-  c[0] = value >> 8;
-  c[1] = value;
-#endif
-}
-
-gcc_pure
-static inline uint32_t
-ReadUnalignedLE32(const uint32_t *p)
-{
-#ifdef CAN_READ_WRITE_UNALIGNED
-  return FromLE32(*p);
-#else
-  const uint8_t *c = (const uint8_t *)p;
-  return c[0] | (c[1] << 8) | (c[2] << 16) | (c[3] << 24);
-#endif
-}
-
-gcc_pure
-static inline uint32_t
-ReadUnalignedBE32(const uint32_t *p)
-{
-#ifdef CAN_READ_WRITE_UNALIGNED
-  return FromBE32(*p);
-#else
-  const uint8_t *c = (const uint8_t *)p;
-  return c[3] | (c[2] << 8) | (c[1] << 16) | (c[0] << 24);
-#endif
 }
 
 /**

@@ -111,8 +111,6 @@ TEST_NAMES = \
 	TestAirspaceParser \
 	TestMETARParser \
 	TestIGCParser \
-	TestByteOrder \
-	TestByteOrder2 \
 	TestStrings TestUTF8 \
 	TestCRC \
 	TestUnitsFormatter \
@@ -168,16 +166,6 @@ TEST_IGC_PARSER_SOURCES = \
 	$(TEST_SRC_DIR)/TestIGCParser.cpp
 TEST_IGC_PARSER_DEPENDS = MATH UTIL
 $(eval $(call link-program,TestIGCParser,TEST_IGC_PARSER))
-
-TEST_BYTE_ORDER_SOURCES = \
-	$(TEST_SRC_DIR)/tap.c \
-	$(TEST_SRC_DIR)/TestByteOrder.cpp
-$(eval $(call link-program,TestByteOrder,TEST_BYTE_ORDER))
-
-TEST_BYTE_ORDER2_SOURCES = \
-	$(TEST_SRC_DIR)/tap.c \
-	$(TEST_SRC_DIR)/TestByteOrder2.cpp
-$(eval $(call link-program,TestByteOrder2,TEST_BYTE_ORDER2))
 
 TEST_METAR_PARSER_SOURCES = \
 	$(SRC)/Weather/METARParser.cpp \
