@@ -25,9 +25,10 @@ Copyright_License {
 #include "Screen/OpenGL/Init.hpp"
 #include "Screen/OpenGL/Globals.hpp"
 #include "Screen/OpenGL/Features.hpp"
+#include "system/Error.hxx"
+#include "util/RuntimeError.hxx"
 
 #include <stdio.h>
-#include <stdlib.h>
 
 #ifdef MESA_KMS
 #include "Hardware/DisplayDPI.hpp"
@@ -140,16 +141,12 @@ TopCanvas::Create(PixelSize new_size,
            "DRI_DEVICE to override)\n",
          dri_device);
   dri_fd = open(dri_device, O_RDWR);
-  if (dri_fd == -1) {
-    fprintf(stderr, "Could not open DRI device %s: %s\n", dri_device,
-            strerror(errno));
-    exit(EXIT_FAILURE);
-  }
+  if (dri_fd == -1)
+    throw FormatErrno("Could not open DRI device %s", dri_device);
+
   native_display = gbm_create_device(dri_fd);
-  if (native_display == nullptr) {
-    fprintf(stderr, "Could not create GBM device\n");
-    exit(EXIT_FAILURE);
-  }
+  if (native_display == nullptr)
+    throw std::runtime_error("Could not create GBM device");
 
   evctx = { 0 };
   evctx.version = DRM_EVENT_CONTEXT_VERSION;
@@ -159,10 +156,8 @@ TopCanvas::Create(PixelSize new_size,
   };
 
   drmModeRes *resources = drmModeGetResources(dri_fd);
-  if (resources == nullptr) {
-    fprintf(stderr, "drmModeGetResources() failed\n");
-    exit(EXIT_FAILURE);
-  }
+  if (resources == nullptr)
+    throw std::runtime_error("drmModeGetResources() failed");
 
   for (int i = 0;
        (i < resources->count_connectors) && (connector == nullptr);
@@ -177,10 +172,8 @@ TopCanvas::Create(PixelSize new_size,
     }
   }
 
-  if (nullptr == connector) {
-    fprintf(stderr, "No usable DRM connector found\n");
-    exit(EXIT_FAILURE);
-  }
+  if (nullptr == connector)
+    throw std::runtime_error("No usable DRM connector found");
 
   for (int i = 0;
        (i < resources->count_encoders) && (encoder == nullptr);
@@ -194,10 +187,8 @@ TopCanvas::Create(PixelSize new_size,
     }
   }
 
-  if (encoder == nullptr) {
-    fprintf(stderr, "No usable DRM encoder found\n");
-    exit(EXIT_FAILURE);
-  }
+  if (encoder == nullptr)
+    throw std::runtime_error("No usable DRM encoder found");
 
   mode = connector->modes[0];
 
@@ -205,10 +196,8 @@ TopCanvas::Create(PixelSize new_size,
                                      mode.vdisplay,
                                      XCSOAR_GBM_FORMAT,
                                      GBM_BO_USE_SCANOUT | GBM_BO_USE_RENDERING);
-  if (native_window == nullptr) {
-    fprintf(stderr, "Could not create GBM surface\n");
-    exit(EXIT_FAILURE);
-  }
+  if (native_window == nullptr)
+    throw std::runtime_error("Could not create GBM surface");
 
   if (connector->mmWidth > 0 && connector->mmHeight > 0)
     Display::ProvideSizeMM(mode.hdisplay, mode.vdisplay,
@@ -251,20 +240,14 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
                      EGLNativeWindowType native_window)
 {
   display = eglGetDisplay(native_display);
-  if (display == EGL_NO_DISPLAY) {
-    fprintf(stderr, "eglGetDisplay(EGL_DEFAULT_DISPLAY) failed\n");
-    exit(EXIT_FAILURE);
-  }
+  if (display == EGL_NO_DISPLAY)
+    throw std::runtime_error("eglGetDisplay(EGL_DEFAULT_DISPLAY) failed");
 
-  if (!eglInitialize(display, nullptr, nullptr)) {
-    fprintf(stderr, "eglInitialize() failed\n");
-    exit(EXIT_FAILURE);
-  }
+  if (!eglInitialize(display, nullptr, nullptr))
+    throw std::runtime_error("eglInitialize() failed");
 
-  if (!eglBindAPI(GetBindAPI())) {
-    fprintf(stderr, "eglBindAPI() failed\n");
-    exit(EXIT_FAILURE);
-  }
+  if (!eglBindAPI(GetBindAPI()))
+    throw std::runtime_error("eglBindAPI() failed");
 
   static constexpr EGLint attributes[] = {
     EGL_STENCIL_SIZE, 1,
@@ -284,16 +267,12 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
   static constexpr EGLint MAX_CONFIGS = 64;
   EGLConfig configs[MAX_CONFIGS];
   EGLint num_configs;
- if (!eglChooseConfig(display, attributes, configs,
-                       MAX_CONFIGS, &num_configs)) {
-    fprintf(stderr, "eglChooseConfig() failed: %#x\n", eglGetError());
-    exit(EXIT_FAILURE);
-  }
+  if (!eglChooseConfig(display, attributes, configs,
+                       MAX_CONFIGS, &num_configs))
+    throw FormatRuntimeError("eglChooseConfig() failed: %#x", eglGetError());
 
-  if (num_configs == 0) {
-    fprintf(stderr, "eglChooseConfig() failed\n");
-    exit(EXIT_FAILURE);
-  }
+  if (num_configs == 0)
+    throw std::runtime_error("eglChooseConfig() failed");
 
 #ifdef MESA_KMS
   /* On some GBM targets, such as the Raspberry Pi 4,
@@ -314,16 +293,12 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
 
   surface = eglCreateWindowSurface(display, chosen_config,
                                    native_window, nullptr);
-  if (surface == nullptr) {
-    fprintf(stderr, "eglCreateWindowSurface() failed: %#x\n", eglGetError());
-    exit(EXIT_FAILURE);
-  }
+  if (surface == nullptr)
+    throw FormatRuntimeError("eglCreateWindowSurface() failed: %#x", eglGetError());
 
   const PixelSize effective_size = GetNativeSize();
-  if (effective_size.cx <= 0 || effective_size.cy <= 0) {
-    fprintf(stderr, "eglQuerySurface() failed\n");
-    exit(EXIT_FAILURE);
-  }
+  if (effective_size.cx <= 0 || effective_size.cy <= 0)
+    throw std::runtime_error("eglQuerySurface() failed");
 
 #ifdef HAVE_GLES2
   static constexpr EGLint context_attributes[] = {
@@ -337,10 +312,8 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
   context = eglCreateContext(display, chosen_config,
                              EGL_NO_CONTEXT, context_attributes);
 
-  if (!eglMakeCurrent(display, surface, surface, context)) {
-    fprintf(stderr, "eglMakeCurrent() failed\n");
-    exit(EXIT_FAILURE);
-  }
+  if (!eglMakeCurrent(display, surface, surface, context))
+    throw std::runtime_error("eglMakeCurrent() failed");
 
   OpenGL::SetupContext();
   SetupViewport(effective_size);

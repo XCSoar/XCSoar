@@ -26,6 +26,8 @@ Copyright_License {
 #include "ui/event/Globals.hpp"
 #include "ui/event/poll/Queue.hpp"
 
+#include <stdexcept>
+
 namespace UI {
 
 static void
@@ -54,17 +56,15 @@ static constexpr struct wl_shell_surface_listener shell_surface_listener = {
 
 void
 TopWindow::CreateNative(const TCHAR *text, PixelSize size,
-                        TopWindowStyle style) noexcept
+                        TopWindowStyle style)
 {
   auto display = event_queue->GetDisplay();
   auto compositor = event_queue->GetCompositor();
   auto shell = event_queue->GetShell();
 
   auto surface = wl_compositor_create_surface(compositor);
-  if (surface == nullptr) {
-    fprintf(stderr, "Failed to create Wayland surface\n");
-    exit(EXIT_FAILURE);
-  }
+  if (surface == nullptr)
+    throw std::runtime_error("Failed to create Wayland surface");
 
   auto shell_surface = wl_shell_get_shell_surface(shell, surface);
   wl_shell_surface_add_listener(shell_surface,
@@ -76,10 +76,8 @@ TopWindow::CreateNative(const TCHAR *text, PixelSize size,
 
   native_display = display;
   native_window = wl_egl_window_create(surface, size.cx, size.cy);
-  if (native_window == EGL_NO_SURFACE) {
-    fprintf(stderr, "Failed to create Wayland EGL window\n");
-    exit(EXIT_FAILURE);
-  }
+  if (native_window == EGL_NO_SURFACE)
+    throw std::runtime_error("Failed to create Wayland EGL window");
 }
 
 bool

@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/Custom/TopCanvas.hpp"
 #include "Screen/Canvas.hpp"
+#include "system/Error.hxx"
 
 #ifdef USE_FB
 #include "Screen/Memory/Export.hpp"
@@ -44,7 +45,6 @@ Copyright_License {
 #include <sys/ioctl.h>
 #include <sys/mman.h>
 #include <cassert>
-#include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -121,23 +121,15 @@ TopCanvas::Create(PixelSize new_size,
 
   const char *path = "/dev/fb0";
   fd = open(path, O_RDWR | O_NOCTTY | O_CLOEXEC);
-  if (fd < 0) {
-    fprintf(stderr, "Failed to open %s: %s\n", path, strerror(errno));
-    return;
-  }
+  if (fd < 0)
+    throw FormatErrno("Failed to open %s", path);
 
   struct fb_fix_screeninfo finfo;
-  if (ioctl(fd, FBIOGET_FSCREENINFO, &finfo) < 0) {
-    fprintf(stderr, "FBIOGET_FSCREENINFO failed: %s\n", strerror(errno));
-    Destroy();
-    return;
-  }
+  if (ioctl(fd, FBIOGET_FSCREENINFO, &finfo) < 0)
+    throw MakeErrno("FBIOGET_FSCREENINFO failed");
 
-  if (finfo.type != FB_TYPE_PACKED_PIXELS) {
-    fprintf(stderr, "Unsupported console hardware\n");
-    Destroy();
-    return;
-  }
+  if (finfo.type != FB_TYPE_PACKED_PIXELS)
+    throw std::runtime_error("Unsupported console hardware");
 
   switch (finfo.visual) {
   case FB_VISUAL_TRUECOLOR:
@@ -147,9 +139,7 @@ TopCanvas::Create(PixelSize new_size,
     break;
 
   default:
-    fprintf(stderr, "Unsupported console hardware\n");
-    Destroy();
-    return;
+    throw std::runtime_error("Unsupported console hardware");
   }
 
   /* Memory map the device, compensating for buggy PPC mmap() */
@@ -159,22 +149,13 @@ TopCanvas::Create(PixelSize new_size,
   off_t map_size = finfo.smem_len + offset;
 
   map = mmap(nullptr, map_size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
-  if (map == (void *)-1) {
-    fprintf(stderr, "Unable to memory map the video hardware: %s\n",
-            strerror(errno));
-    map = nullptr;
-    Destroy();
-    return;
-  }
+  if (map == (void *)-1)
+    throw MakeErrno("Unable to memory map the video hardware");
 
   /* Determine the current screen depth */
   struct fb_var_screeninfo vinfo;
-  if (ioctl(fd, FBIOGET_VSCREENINFO, &vinfo) < 0 ) {
-    fprintf(stderr, "Couldn't get console pixel format: %s\n",
-            strerror(errno));
-    Destroy();
-    return;
-  }
+  if (ioctl(fd, FBIOGET_VSCREENINFO, &vinfo) < 0)
+    throw MakeErrno("Couldn't get console pixel format");
 
 #ifdef GREYSCALE
   /* switch the frame buffer to 8 bits per pixel greyscale */
@@ -182,12 +163,8 @@ TopCanvas::Create(PixelSize new_size,
   vinfo.bits_per_pixel = 8;
   vinfo.grayscale = true;
 
-  if (ioctl(fd, FBIOPUT_VSCREENINFO, &vinfo) < 0) {
-    fprintf(stderr, "Couldn't set greyscale pixel format: %s\n",
-            strerror(errno));
-    Destroy();
-    return;
-  }
+  if (ioctl(fd, FBIOPUT_VSCREENINFO, &vinfo) < 0)
+    throw MakeErrno("Couldn't set greyscale pixel format");
 
   /* read new finfo */
   ioctl(fd, FBIOGET_FSCREENINFO, &finfo);
@@ -195,11 +172,8 @@ TopCanvas::Create(PixelSize new_size,
   map_bpp = 1;
 #else
   map_bpp = vinfo.bits_per_pixel / 8;
-  if (map_bpp != 2 && map_bpp != 4) {
-    fprintf(stderr, "Unsupported console hardware\n");
-    Destroy();
-    return;
-  }
+  if (map_bpp != 2 && map_bpp != 4)
+    throw std::runtime_error("Unsupported console hardware");
 #endif
 
   map_pitch = finfo.line_length;

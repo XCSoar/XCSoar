@@ -34,13 +34,11 @@ Copyright_License {
 
 #include <X11/Xatom.h>
 
-#include <stdio.h>
-
 namespace UI {
 
 void
 TopWindow::CreateNative(const TCHAR *text, PixelSize size,
-                        TopWindowStyle style) noexcept
+                        TopWindowStyle style)
 {
   x_display = UI::event_queue->GetDisplay();
   assert(x_display != nullptr);
@@ -73,19 +71,15 @@ TopWindow::CreateNative(const TCHAR *text, PixelSize size,
   int fb_cfg_count;
   fb_cfg = glXChooseFBConfig(x_display, x_screen,
                              attributes, &fb_cfg_count);
-  if ((fb_cfg == nullptr) || (fb_cfg_count == 0)) {
-    fprintf(stderr, "Failed to retrieve framebuffer configuration for GLX\n");
-    exit(EXIT_FAILURE);
-  }
+  if ((fb_cfg == nullptr) || (fb_cfg_count == 0))
+    throw std::runtime_error("Failed to retrieve framebuffer configuration for GLX");
 
   XVisualInfo *vi = glXGetVisualFromFBConfig(x_display, *fb_cfg);
 #endif
 
   const X11Window x_root = DefaultRootWindow(x_display);
-  if (x_root == 0) {
-    fprintf(stderr, "DefaultRootWindow() failed\n");
-    exit(EXIT_FAILURE);
-  }
+  if (x_root == 0)
+    throw std::runtime_error("DefaultRootWindow() failed");
 
   XSetWindowAttributes swa;
   swa.event_mask = KeyPressMask | KeyReleaseMask | KeymapStateMask |
@@ -113,10 +107,8 @@ TopWindow::CreateNative(const TCHAR *text, PixelSize size,
                            depth, InputOutput,
                            visual, valuemask,
                            &swa);
-  if (x_window == 0) {
-    fprintf(stderr, "XCreateWindow() failed\n");
-    exit(EXIT_FAILURE);
-  }
+  if (x_window == 0)
+    throw std::runtime_error("XCreateWindow() failed");
 
 #ifdef USE_GLX
   XFree(vi);

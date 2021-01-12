@@ -24,6 +24,7 @@ Copyright_License {
 #include "Screen/Custom/TopCanvas.hpp"
 #include "Screen/Features.hpp"
 #include "Screen/Point.hpp"
+#include "util/RuntimeError.hxx"
 #include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL
@@ -52,7 +53,6 @@ Copyright_License {
 #endif
 
 #include <cassert>
-#include <stdio.h>
 
 #ifndef ENABLE_OPENGL
 
@@ -75,33 +75,26 @@ TopCanvas::Create(SDL_Window *_window, PixelSize new_size)
 
 #ifdef USE_MEMORY_CANVAS
   renderer = SDL_CreateRenderer(window, -1, 0);
-  if (renderer == nullptr) {
-    fprintf(stderr,
-            "SDL_CreateRenderer(%p, %d, %d) has failed: %s\n",
-            window, -1, 0, ::SDL_GetError());
-        return;
-  }
+  if (renderer == nullptr)
+    throw FormatRuntimeError("SDL_CreateRenderer(%p, %d, %d) has failed: %s",
+                             window, -1, 0, ::SDL_GetError());
+
   int width, height;
   SDL_GetWindowSize(window, &width, &height);
   texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB888,
                               SDL_TEXTUREACCESS_STREAMING,
                               width, height);
-  if (texture == nullptr) {
-      fprintf(stderr,
-              "SDL_CreateTexture(%p, %d, %d, %d, %d) has failed: %s\n",
-              renderer, (int) SDL_PIXELFORMAT_UNKNOWN,
-              (int) SDL_TEXTUREACCESS_STREAMING, width, height,
-              ::SDL_GetError());
-          return;
-    }
+  if (texture == nullptr)
+    throw FormatRuntimeError("SDL_CreateTexture(%p, %d, %d, %d, %d) has failed: %s",
+                             renderer, (int) SDL_PIXELFORMAT_UNKNOWN,
+                             (int) SDL_TEXTUREACCESS_STREAMING, width, height,
+                             ::SDL_GetError());
 #endif
 
 #ifdef ENABLE_OPENGL
-  if (::SDL_GL_CreateContext(window) == nullptr) {
-    fprintf(stderr, "SDL_GL_CreateContext(%p) has failed: %s\n",
-            window, ::SDL_GetError());
-    return;
-  }
+  if (::SDL_GL_CreateContext(window) == nullptr)
+    throw FormatRuntimeError("SDL_GL_CreateContext(%p) has failed: %s",
+                             window, ::SDL_GetError());
 
   OpenGL::SetupContext();
 

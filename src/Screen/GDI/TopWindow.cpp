@@ -31,7 +31,7 @@ namespace UI {
 
 void
 TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelSize size,
-                  TopWindowStyle style) noexcept
+                  TopWindowStyle style)
 {
   hSavedFocus = nullptr;
 

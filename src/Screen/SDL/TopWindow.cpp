@@ -29,6 +29,7 @@ Copyright_License {
 #include "ui/event/Queue.hpp"
 #include "Screen/Custom/TopCanvas.hpp"
 #include "util/ConvertString.hpp"
+#include "util/RuntimeError.hxx"
 #include "util/UTF8.hpp"
 
 #ifdef UNICODE
@@ -76,7 +77,7 @@ MakeSDLFlags(bool full_screen, bool resizable) noexcept
 
 void
 TopWindow::CreateNative(const TCHAR *_text, PixelSize new_size,
-                        TopWindowStyle style) noexcept
+                        TopWindowStyle style)
 {
 #ifdef UNICODE
   const WideToUTF8Converter text(_text);
@@ -91,15 +92,12 @@ TopWindow::CreateNative(const TCHAR *_text, PixelSize new_size,
   window = ::SDL_CreateWindow(text, SDL_WINDOWPOS_UNDEFINED,
                               SDL_WINDOWPOS_UNDEFINED, new_size.cx,
                               new_size.cy, flags);
-  if (window == nullptr) {
-    fprintf(stderr,
-            "SDL_CreateWindow(%s, %u, %u, %u, %u, %#x) has failed: %s\n",
-            text, (unsigned) SDL_WINDOWPOS_UNDEFINED,
-            (unsigned) SDL_WINDOWPOS_UNDEFINED, (unsigned) new_size.cx,
-            (unsigned) new_size.cy, (unsigned)flags,
-            ::SDL_GetError());
-    return;
-  }
+  if (window == nullptr)
+    throw FormatRuntimeError("SDL_CreateWindow(%s, %u, %u, %u, %u, %#x) has failed: %s\n",
+                             text, (unsigned) SDL_WINDOWPOS_UNDEFINED,
+                             (unsigned) SDL_WINDOWPOS_UNDEFINED, (unsigned) new_size.cx,
+                             (unsigned) new_size.cy, (unsigned)flags,
+                             ::SDL_GetError());
 
 #if defined(__MACOSX__) && __MACOSX__
   SDL_SysWMinfo *wm_info =

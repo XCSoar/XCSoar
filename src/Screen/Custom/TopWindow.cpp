@@ -38,7 +38,7 @@ TopWindow::~TopWindow() noexcept
 
 void
 TopWindow::Create(const TCHAR *text, PixelSize size,
-                  TopWindowStyle style) noexcept
+                  TopWindowStyle style)
 {
   invalidated = true;
 
@@ -61,11 +61,7 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
   screen->Create(size, style.GetFullScreen(), style.GetResizable());
 #endif
 
-  if (!screen->IsDefined()) {
-    delete screen;
-    screen = nullptr;
-    return;
-  }
+  assert(screen->IsDefined());
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
   screen->SetDisplayOrientation(style.GetInitialOrientation());

@@ -26,7 +26,7 @@ Copyright_License {
 #include "Screen/OpenGL/Globals.hpp"
 #include "Screen/OpenGL/Features.hpp"
 
-#include <stdio.h>
+#include <stdexcept>
 
 void
 TopCanvas::CreateGLX(_XDisplay *_x_display,
@@ -37,23 +37,18 @@ TopCanvas::CreateGLX(_XDisplay *_x_display,
 
   glx_context = glXCreateNewContext(_x_display, *fb_cfg, GLX_RGBA_TYPE,
                                     nullptr, true);
-  if (glx_context == nullptr) {
-    fprintf(stderr, "Failed to create GLX context\n");
-    exit(EXIT_FAILURE);
-  }
+  if (glx_context == nullptr)
+    throw std::runtime_error("Failed to create GLX context");
+
   glx_window = glXCreateWindow(_x_display, *fb_cfg, x_window, nullptr);
   XSync(x_display, false);
 
-  if (!glXMakeContextCurrent(_x_display, glx_window, glx_window, glx_context)) {
-    fprintf(stderr, "Failed to attach GLX context to GLX window\n");
-    exit(EXIT_FAILURE);
-  }
+  if (!glXMakeContextCurrent(_x_display, glx_window, glx_window, glx_context))
+    throw std::runtime_error("Failed to attach GLX context to GLX window");
 
   const PixelSize effective_size = GetNativeSize();
-  if (effective_size.cx <= 0 || effective_size.cy <= 0) {
-    fprintf(stderr, "Failed to query GLX drawable size\n");
-    exit(EXIT_FAILURE);
-  }
+  if (effective_size.cx <= 0 || effective_size.cy <= 0)
+    throw std::runtime_error("Failed to query GLX drawable size");
 
   OpenGL::SetupContext();
   SetupViewport(effective_size);

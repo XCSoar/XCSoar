@@ -224,18 +224,24 @@ public:
   ~TopWindow() noexcept override;
 #endif
 
+  /**
+   * Throws on error.
+   */
 #ifdef USE_WINUSER
   void Create(const TCHAR *cls, const TCHAR *text, PixelSize size,
-              TopWindowStyle style=TopWindowStyle()) noexcept;
+              TopWindowStyle style=TopWindowStyle());
 #else
   void Create(const TCHAR *text, PixelSize size,
-              TopWindowStyle style=TopWindowStyle()) noexcept;
+              TopWindowStyle style=TopWindowStyle());
 #endif
 
 #if defined(USE_X11) || defined(USE_WAYLAND) || defined(ENABLE_SDL)
 private:
+  /**
+   * Throws on error.
+   */
   void CreateNative(const TCHAR *text, PixelSize size,
-                    TopWindowStyle style) noexcept;
+                    TopWindowStyle style);
 
 public:
 #endif
