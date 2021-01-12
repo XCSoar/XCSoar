@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_LIBINPUT_LIBINPUT_HPP
 #define XCSOAR_EVENT_LIBINPUT_LIBINPUT_HPP
 
-#include <boost/asio/posix/stream_descriptor.hpp>
+#include "event/SocketEvent.hxx"
 
 #include <cassert>
 
@@ -49,7 +49,7 @@ class LibInputHandler final {
   struct libinput* li = nullptr;
   struct libinput_interface* li_if = nullptr;
 
-  boost::asio::posix::stream_descriptor fd;
+  SocketEvent fd;
 
   double x = -1.0, y = -1.0;
   unsigned width = 0, height = 0;
@@ -60,9 +60,7 @@ class LibInputHandler final {
   unsigned n_pointers = 0, n_touch_screens = 0, n_keyboards = 0;
 
 public:
-  explicit LibInputHandler(boost::asio::io_context &io_context,
-                           EventQueue &_queue)
-    :queue(_queue), fd(io_context) {}
+  explicit LibInputHandler(EventQueue &_queue) noexcept;
 
   ~LibInputHandler() {
     Close();
@@ -112,13 +110,7 @@ private:
   void HandleEvent(struct libinput_event *li_event);
   void HandlePendingEvents();
 
-  void AsyncRead() {
-    fd.async_read_some(boost::asio::null_buffers(),
-                       std::bind(&LibInputHandler::OnReadReady, this,
-                                 std::placeholders::_1));
-  }
-
-  void OnReadReady(const boost::system::error_code &ec);
+  void OnSocketReady(unsigned events) noexcept;
 };
 
 } // namespace UI

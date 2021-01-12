@@ -24,9 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_X11_EVENT_QUEUE_HPP
 #define XCSOAR_EVENT_X11_EVENT_QUEUE_HPP
 
+#include "event/SocketEvent.hxx"
 #include "Math/Point2D.hpp"
-
-#include <boost/asio/posix/stream_descriptor.hpp>
 
 #include <cstdint>
 
@@ -57,16 +56,14 @@ class WaylandEventQueue final {
 
   IntPoint2D pointer_position = {0, 0};
 
-  boost::asio::posix::stream_descriptor fd;
+  SocketEvent socket_event;
 
 public:
   /**
-   * @param io_context the boost::asio::io_context that shall be used
-   * to register the Wayland client socket
    * @param queue the #EventQueue that shall receive Wayland input
    * events
    */
-  WaylandEventQueue(boost::asio::io_context &io_context, EventQueue &queue);
+  explicit WaylandEventQueue(EventQueue &queue);
 
   ~WaylandEventQueue();
 
@@ -99,13 +96,7 @@ public:
   void PointerButton(bool pressed);
 
 private:
-  void AsyncRead() {
-    fd.async_read_some(boost::asio::null_buffers(),
-                       std::bind(&WaylandEventQueue::OnReadReady,
-                                 this, std::placeholders::_1));
-  }
-
-  void OnReadReady(const boost::system::error_code &ec);
+  void OnSocketReady(unsigned events) noexcept;
 };
 
 } // namespace UI

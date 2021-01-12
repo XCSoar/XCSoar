@@ -204,6 +204,10 @@ public:
 	 */
 	void Break() noexcept;
 
+	void ResetBreak() noexcept {
+		quit = false;
+	}
+
 	bool AddFD(int fd, unsigned events, SocketEvent &event) noexcept;
 	bool ModifyFD(int fd, unsigned events, SocketEvent &event) noexcept;
 	bool RemoveFD(int fd, SocketEvent &event) noexcept;

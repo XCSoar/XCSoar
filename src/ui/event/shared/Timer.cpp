@@ -25,6 +25,8 @@ Copyright_License {
 #include "../Globals.hpp"
 #include "../Queue.hpp"
 
+#include <cassert>
+
 namespace UI {
 
 void

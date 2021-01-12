@@ -28,18 +28,13 @@ Copyright_License {
 namespace UI {
 
 Timer::Timer(Callback _callback) noexcept
-  :timer(event_queue->get_io_context()),
+  :timer_event(event_queue->GetEventLoop(), BIND_THIS_METHOD(OnTimer)),
    callback(std::move(_callback)) {}
 
 void
 Timer::Schedule(std::chrono::steady_clock::duration d) noexcept
 {
-  Cancel();
-
-  pending = true;
-
-  timer.expires_from_now(d);
-  timer.async_wait(std::bind(&Timer::Invoke, this, std::placeholders::_1));
+  timer_event.Schedule(d);
 }
 
 void
@@ -52,19 +47,12 @@ Timer::SchedulePreserve(std::chrono::steady_clock::duration d) noexcept
 void
 Timer::Cancel()
 {
-  if (std::exchange(pending, false))
-    timer.cancel();
+  timer_event.Cancel();
 }
 
 void
-Timer::Invoke(const boost::system::error_code &ec)
+Timer::OnTimer() noexcept
 {
-  if (ec)
-    return;
-
-  assert(pending);
-  pending = false;
-
   callback();
 }
 

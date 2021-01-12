@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_X11_EVENT_QUEUE_HPP
 #define XCSOAR_EVENT_X11_EVENT_QUEUE_HPP
 
-#include <boost/asio/posix/stream_descriptor.hpp>
+#include "event/SocketEvent.hxx"
 
 /* kludges to work around namespace collisions with X11 headers */
 
@@ -55,7 +55,7 @@ class X11EventQueue {
 
   _XDisplay *const display;
 
-  boost::asio::posix::stream_descriptor asio;
+  SocketEvent socket_event;
 
   Atom wm_delete_window;
 
@@ -65,11 +65,9 @@ class X11EventQueue {
 
 public:
   /**
-   * @param io_context the boost::asio::io_context that shall be used
-   * to register the Xlib socket
    * @param queue the #EventQueue that shall receive X11 events
    */
-  X11EventQueue(boost::asio::io_context &io_context, EventQueue &queue);
+  explicit X11EventQueue(EventQueue &queue);
 
   ~X11EventQueue();
 
@@ -98,13 +96,7 @@ public:
 private:
   void HandleEvent(_XEvent &event);
 
-  void AsyncRead() {
-    asio.async_read_some(boost::asio::null_buffers(),
-                         std::bind(&X11EventQueue::OnReadReady, this,
-                                   std::placeholders::_1));
-  }
-
-  void OnReadReady(const boost::system::error_code &ec);
+  void OnSocketReady(unsigned events) noexcept;
 };
 
 } // namespace UI

@@ -21,11 +21,6 @@ ASYNC_SOURCES = \
 	$(SRC)/io/async/AsioThread.cpp \
 	$(SRC)/io/async/GlobalAsioThread.cpp
 
-ifeq ($(TARGET_IS_LINUX)$(TARGET_IS_ANDROID),yn)
-ASYNC_SOURCES += \
-	$(SRC)/io/async/SignalListener.cpp
-endif
-
 ifeq ($(HAVE_WIN32),y)
 ASYNC_SOURCES += \
 	$(SRC)/event/WinSelectBackend.cxx

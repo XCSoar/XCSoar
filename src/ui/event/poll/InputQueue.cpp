@@ -27,14 +27,13 @@ Copyright_License {
 
 namespace UI {
 
-InputEventQueue::InputEventQueue(boost::asio::io_context &io_context,
-                                 EventQueue &queue)
+InputEventQueue::InputEventQueue(EventQueue &queue)
   :
 #ifdef KOBO
-   keyboard(io_context, queue, merge_mouse),
-   mouse(io_context, queue, merge_mouse)
+   keyboard(queue, merge_mouse),
+   mouse(queue, merge_mouse)
 #else
-   libinput_handler(io_context, queue)
+   libinput_handler(queue)
 #endif
 {
 #ifdef KOBO

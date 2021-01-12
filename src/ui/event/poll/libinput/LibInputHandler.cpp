@@ -38,13 +38,17 @@ Copyright_License {
 
 namespace UI {
 
+LibInputHandler::LibInputHandler(EventQueue &_queue) noexcept
+  :queue(_queue),
+   fd(queue.GetEventLoop(), BIND_THIS_METHOD(OnSocketReady)) {}
+
 bool
 LibInputHandler::Open()
 {
   if ((nullptr != udev_context)
       || (nullptr != li_if)
       || (nullptr != li)
-      || fd.is_open())
+      || fd.IsDefined())
     return false;
 
   if (nullptr == udev_context) {
@@ -77,18 +81,15 @@ LibInputHandler::Open()
   if (_fd < 0)
     return false;
 
-  fd.assign(_fd);
-  AsyncRead();
+  fd.Open(SocketDescriptor(_fd));
+  fd.ScheduleRead();
   return true;
 }
 
 void
 LibInputHandler::Close()
 {
-  if (fd.is_open()) {
-    fd.cancel();
-    fd.release();
-  }
+  fd.ReleaseSocket();
 
   if (nullptr != li)
     libinput_unref(li);
@@ -261,13 +262,9 @@ LibInputHandler::HandlePendingEvents()
 }
 
 void
-LibInputHandler::OnReadReady(const boost::system::error_code &ec)
+LibInputHandler::OnSocketReady(unsigned) noexcept
 {
-  if (ec)
-    return;
-
   HandlePendingEvents();
-  AsyncRead();
 }
 
 } // namespace UI

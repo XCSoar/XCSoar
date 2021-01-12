@@ -24,11 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_POLL_QUEUE_HPP
 #define XCSOAR_EVENT_POLL_QUEUE_HPP
 
-#include "thread/Handle.hpp"
 #include "../shared/Event.hpp"
 #include "thread/Mutex.hxx"
-#include "event/WakeFD.hxx"
-#include "io/async/SignalListener.hpp"
+#include "event/InjectEvent.hxx"
+#include "event/Loop.hxx"
 
 #ifdef USE_X11
 #include "X11Queue.hpp"
@@ -38,47 +37,30 @@ Copyright_License {
 #include "InputQueue.hpp"
 #endif
 
-#include <boost/asio.hpp>
-
 #include <cstdint>
 
 #include <queue>
 
 enum class DisplayOrientation : uint8_t;
 
-/**
- * Helper class to guarantee that io_context gets initialised before
- * SignalListener.
- */
-class IOContextOwner {
-protected:
-  boost::asio::io_context io_context;
-
-public:
-  boost::asio::io_context &get_io_context() {
-    return io_context;
-  }
-};
-
 namespace UI {
 
-class EventQueue final : public IOContextOwner, private SignalListener {
-  const ThreadHandle thread;
+class EventQueue final {
+  ::EventLoop event_loop;
 
 #ifdef USE_X11
-  X11EventQueue input_queue;
+  X11EventQueue input_queue{*this};
 #elif defined(USE_WAYLAND)
-  WaylandEventQueue input_queue;
+  WaylandEventQueue input_queue{*this};
 #elif !defined(NON_INTERACTIVE)
-  InputEventQueue input_queue;
+  InputEventQueue input_queue{*this};
 #endif
 
   Mutex mutex;
 
   std::queue<Event> events;
 
-  WakeFD event_pipe;
-  boost::asio::posix::stream_descriptor event_pipe_asio;
+  InjectEvent wake_event{event_loop, BIND_THIS_METHOD(OnWakeUp)};
 
   bool quit;
 
@@ -86,7 +68,9 @@ public:
   EventQueue();
   ~EventQueue();
 
-  using IOContextOwner::get_io_context;
+  auto &GetEventLoop() noexcept {
+    return event_loop;
+  }
 
 #ifdef USE_X11
   _XDisplay *GetDisplay() const {
@@ -155,13 +139,12 @@ public:
     return quit;
   }
 
-  void Quit() {
+  void Quit() noexcept {
     quit = true;
   }
 
   void WakeUp() {
-    if (!thread.IsInside())
-      event_pipe.Write();
+    wake_event.Schedule();
   }
 
 private:
@@ -187,16 +170,9 @@ public:
   void Purge(Event::Callback callback, void *ctx);
 
 private:
-  /* virtual methods from SignalListener */
-  void OnSignal(int signo) override;
-
-  void AsyncReadEventPipe() {
-    event_pipe_asio.async_read_some(boost::asio::null_buffers(),
-                                    std::bind(&EventQueue::OnEventPipe, this,
-                                              std::placeholders::_1));
+  void OnWakeUp() noexcept {
+    event_loop.Break();
   }
-
-  void OnEventPipe(const boost::system::error_code &ec);
 };
 
 } // namespace UI

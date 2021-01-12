@@ -52,7 +52,7 @@ class InputEventQueue final {
 #endif /* !USE_LIBINPUT */
 
 public:
-  InputEventQueue(boost::asio::io_context &io_context, EventQueue &queue);
+  explicit InputEventQueue(EventQueue &queue);
   ~InputEventQueue();
 
   void SetScreenSize(unsigned width, unsigned height) {

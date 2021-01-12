@@ -122,10 +122,10 @@ static constexpr struct wl_pointer_listener pointer_listener = {
   WaylandPointerAxis,
 };
 
-WaylandEventQueue::WaylandEventQueue(boost::asio::io_context &io_context,
-                                     EventQueue &_queue)
+WaylandEventQueue::WaylandEventQueue(EventQueue &_queue)
   :queue(_queue),
-   display(wl_display_connect(nullptr)), fd(io_context)
+   display(wl_display_connect(nullptr)),
+   socket_event(queue.GetEventLoop(), BIND_THIS_METHOD(OnSocketReady))
 {
   if (display == nullptr) {
     fprintf(stderr, "wl_display_connect() failed\n");
@@ -153,13 +153,13 @@ WaylandEventQueue::WaylandEventQueue(boost::asio::io_context &io_context,
     exit(EXIT_FAILURE);
   }
 
-  fd.assign(wl_display_get_fd(display));
-  AsyncRead();
+  socket_event.Open(SocketDescriptor(wl_display_get_fd(display)));
+  socket_event.ScheduleRead();
 }
 
 WaylandEventQueue::~WaylandEventQueue()
 {
-  fd.cancel();
+  socket_event.Cancel();
   wl_display_disconnect(display);
 }
 
@@ -171,13 +171,9 @@ WaylandEventQueue::Generate(Event &event)
 }
 
 void
-WaylandEventQueue::OnReadReady(const boost::system::error_code &ec)
+WaylandEventQueue::OnSocketReady(unsigned events) noexcept
 {
-  if (ec)
-    return;
-
   wl_display_dispatch(display);
-  AsyncRead();
 }
 
 inline void

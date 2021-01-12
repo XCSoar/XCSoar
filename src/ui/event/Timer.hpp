@@ -25,11 +25,10 @@ Copyright_License {
 #define XCSOAR_EVENT_TIMER_HPP
 
 #ifdef USE_POLL_EVENT
-#include <boost/asio/steady_timer.hpp>
+#include "event/TimerEvent.hxx"
 #endif
 
 #include <chrono>
-#include <cassert>
 #include <functional>
 
 namespace UI {
@@ -44,10 +43,10 @@ namespace UI {
  * from the main thread.
  */
 class Timer final {
-  bool pending = false;
-
 #ifdef USE_POLL_EVENT
-  boost::asio::steady_timer timer;
+  TimerEvent timer_event;
+#else
+  bool pending = false;
 #endif
 
   using Callback = std::function<void()>;
@@ -73,7 +72,11 @@ public:
    * Is the timer pending?
    */
   bool IsPending() const noexcept {
+#ifdef USE_POLL_EVENT
+    return timer_event.IsPending();
+#else
     return pending;
+#endif
   }
 
   /**
@@ -96,7 +99,7 @@ public:
 
 #ifdef USE_POLL_EVENT
 private:
-  void Invoke(const boost::system::error_code &ec);
+  void OnTimer() noexcept;
 
 #else
 public:

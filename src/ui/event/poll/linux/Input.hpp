@@ -24,9 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_LINUX_INPUT_HPP
 #define XCSOAR_EVENT_LINUX_INPUT_HPP
 
+#include "event/SocketEvent.hxx"
 #include "Math/Point2D.hpp"
-
-#include <boost/asio/posix/stream_descriptor.hpp>
 
 namespace UI {
 
@@ -74,15 +73,10 @@ class LinuxInputDevice final {
 
   bool is_pointer;
 
-  boost::asio::posix::stream_descriptor fd;
+  SocketEvent socket_event;
 
 public:
-  explicit LinuxInputDevice(boost::asio::io_context &io_context,
-                            EventQueue &_queue,
-                            MergeMouse &_merge)
-    :queue(_queue), merge(_merge),
-     edit_position(0, 0), public_position(0, 0),
-     fd(io_context) {}
+  LinuxInputDevice(EventQueue &_queue, MergeMouse &_merge);
 
   ~LinuxInputDevice() {
     Close();
@@ -92,19 +86,13 @@ public:
   void Close();
 
   bool IsOpen() const {
-    return fd.is_open();
+    return socket_event.IsDefined();
   }
 
 private:
   void Read();
 
-  void AsyncRead() {
-    fd.async_read_some(boost::asio::null_buffers(),
-                       std::bind(&LinuxInputDevice::OnReadReady,
-                                 this, std::placeholders::_1));
-  }
-
-  void OnReadReady(const boost::system::error_code &ec);
+  void OnSocketReady(unsigned events) noexcept;
 };
 
 } // namespace UI

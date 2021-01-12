@@ -43,10 +43,10 @@ Copyright_License {
 
 namespace UI {
 
-X11EventQueue::X11EventQueue(boost::asio::io_context &io_context, EventQueue &_queue)
+X11EventQueue::X11EventQueue(EventQueue &_queue)
   :queue(_queue),
    display(XOpenDisplay(nullptr)),
-   asio(io_context)
+   socket_event(queue.GetEventLoop(), BIND_THIS_METHOD(OnSocketReady))
 {
   if (display == nullptr) {
     fprintf(stderr, "XOpenDisplay() failed\n");
@@ -55,13 +55,13 @@ X11EventQueue::X11EventQueue(boost::asio::io_context &io_context, EventQueue &_q
 
   wm_delete_window = XInternAtom(display, "WM_DELETE_WINDOW", false);
 
-  asio.assign(ConnectionNumber(display));
-  AsyncRead();
+  socket_event.Open(SocketDescriptor(ConnectionNumber(display)));
+  socket_event.ScheduleRead();
 }
 
 X11EventQueue::~X11EventQueue()
 {
-  asio.cancel();
+  socket_event.Cancel();
   XCloseDisplay(display);
 }
 
@@ -170,18 +170,13 @@ X11EventQueue::HandleEvent(_XEvent &event)
 }
 
 void
-X11EventQueue::OnReadReady(const boost::system::error_code &ec)
+X11EventQueue::OnSocketReady(unsigned) noexcept
 {
-  if (ec)
-    return;
-
   while(XPending(display)) {
     XEvent event;
     XNextEvent(display, &event);
     HandleEvent(event);
   }
-
-  AsyncRead();
 }
 
 } // namespace UI

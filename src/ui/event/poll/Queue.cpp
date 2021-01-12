@@ -23,26 +23,22 @@ Copyright_License {
 
 #include "Queue.hpp"
 #include "DisplayOrientation.hpp"
+#include "event/SignalMonitor.hxx"
 
 namespace UI {
 
 EventQueue::EventQueue()
-  :SignalListener(io_context),
-   thread(ThreadHandle::GetCurrent()),
-#ifndef NON_INTERACTIVE
-   input_queue(io_context, *this),
-#endif
-   event_pipe_asio(io_context),
-   quit(false)
+  :quit(false)
 {
-  SignalListener::Create(SIGINT, SIGTERM);
-
-  event_pipe_asio.assign(event_pipe.GetSocket().Get());
+  SignalMonitorInit(event_loop);
+  SignalMonitorRegister(SIGINT, BIND_THIS_METHOD(Quit));
+  SignalMonitorRegister(SIGTERM, BIND_THIS_METHOD(Quit));
+  SignalMonitorRegister(SIGQUIT, BIND_THIS_METHOD(Quit));
 }
 
 EventQueue::~EventQueue()
 {
-  SignalListener::Destroy();
+  SignalMonitorFinish();
 }
 
 void
@@ -56,8 +52,8 @@ EventQueue::Push(const Event &event)
 void
 EventQueue::Poll()
 {
-  io_context.run_one();
-  io_context.reset();
+  event_loop.ResetBreak();
+  event_loop.Run();
 }
 
 void
@@ -165,24 +161,6 @@ EventQueue::Purge(Event::Callback callback, void *ctx)
 {
   Event match(callback, ctx);
   Purge(MatchCallback, (void *)&match);
-}
-
-void
-EventQueue::OnSignal(int signo)
-{
-  Quit();
-}
-
-void
-EventQueue::OnEventPipe(const boost::system::error_code &ec)
-{
-  if (ec)
-    return;
-
-  if (event_pipe.Read())
-    get_io_context().stop();
-
-  AsyncReadEventPipe();
 }
 
 } // namespace UI

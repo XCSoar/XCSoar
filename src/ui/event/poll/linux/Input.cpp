@@ -58,6 +58,13 @@ CheckBit(const T bits[], unsigned i)
 
 namespace UI {
 
+LinuxInputDevice::LinuxInputDevice(EventQueue &_queue, MergeMouse &_merge)
+  :queue(_queue), merge(_merge),
+   edit_position(0, 0), public_position(0, 0),
+   socket_event(queue.GetEventLoop(), BIND_THIS_METHOD(OnSocketReady))
+{
+}
+
 /**
  * Check if the EVDEV supports EV_ABS or EV_REL..
  */
@@ -82,12 +89,12 @@ LinuxInputDevice::Open(const char *path)
     return false;
 
   _fd.SetNonBlocking();
-  fd.assign(_fd.Get());
-  AsyncRead();
+  socket_event.Open(SocketDescriptor::FromFileDescriptor(_fd));
+  socket_event.ScheduleRead();
 
   min_x = max_x = min_y = max_y = 0;
 
-  is_pointer = IsPointerDevice(fd.native_handle());
+  is_pointer = IsPointerDevice(socket_event.GetSocket().Get());
   if (is_pointer) {
     merge.AddPointer();
 
@@ -96,13 +103,15 @@ LinuxInputDevice::Open(const char *path)
       /* no need to do that on the Kobo, because we know its touch
          screen is well-calibrated */
 
+      const int fd = socket_event.GetSocket().Get();
+
       input_absinfo abs;
-      if (ioctl(fd.native_handle(), EVIOCGABS(ABS_X), &abs) == 0) {
+      if (ioctl(fd, EVIOCGABS(ABS_X), &abs) == 0) {
         min_x = abs.minimum;
         max_x = abs.maximum;
       }
 
-      if (ioctl(fd.native_handle(), EVIOCGABS(ABS_Y), &abs) == 0) {
+      if (ioctl(fd, EVIOCGABS(ABS_Y), &abs) == 0) {
         min_y = abs.minimum;
         max_y = abs.maximum;
       }
@@ -124,22 +133,19 @@ LinuxInputDevice::Close()
   if (is_pointer)
     merge.RemovePointer();
 
-  fd.cancel();
-  fd.close();
+  socket_event.Close();
 }
 
 inline void
 LinuxInputDevice::Read()
 {
+  FileDescriptor fd = socket_event.GetSocket().ToFileDescriptor();
+
   struct input_event buffer[64];
-  boost::system::error_code ec;
-  const size_t nbytes = fd.read_some(boost::asio::buffer(buffer,
-                                                         sizeof(buffer)),
-                                     ec);
-  if (ec) {
+  const auto nbytes = fd.Read(buffer, sizeof(buffer));
+  if (nbytes < 0) {
     /* device has failed or was unplugged - bail out */
-    if (errno != boost::asio::error::try_again &&
-        errno != boost::asio::error::interrupted)
+    if (errno != EAGAIN && errno != EINTR)
       Close();
     return;
   }
@@ -258,15 +264,9 @@ LinuxInputDevice::Read()
 }
 
 void
-LinuxInputDevice::OnReadReady(const boost::system::error_code &ec)
+LinuxInputDevice::OnSocketReady(unsigned) noexcept
 {
-  if (ec)
-    return;
-
   Read();
-
-  if (fd.is_open())
-    AsyncRead();
 }
 
 } // namespace UI
