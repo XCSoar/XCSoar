@@ -71,6 +71,9 @@ public:
 	explicit BasicAllocatedString(const_pointer src)
 		:value(Duplicate(src)) {}
 
+	BasicAllocatedString(const BasicAllocatedString &src) noexcept
+		:BasicAllocatedString(Duplicate(src.value)) {}
+
 	BasicAllocatedString(BasicAllocatedString &&src) noexcept
 		:value(src.Steal()) {}
 
@@ -135,10 +138,6 @@ public:
 
 	pointer Steal() noexcept {
 		return std::exchange(value, nullptr);
-	}
-
-	BasicAllocatedString Clone() const {
-		return BasicAllocatedString(Duplicate(*this));
 	}
 
 private:
