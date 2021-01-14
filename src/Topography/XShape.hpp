@@ -89,7 +89,7 @@ class XShape {
   GeoPoint *points;
 #endif
 
-  AllocatedString<TCHAR> label;
+  BasicAllocatedString<TCHAR> label;
 
 public:
   XShape(shapefileObj *shpfile, const GeoPoint &file_center, int i,

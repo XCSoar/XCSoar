@@ -169,7 +169,7 @@ public:
   typedef Path::char_type char_type;
   typedef Path::const_pointer const_pointer;
   typedef Path::pointer pointer;
-  typedef AllocatedString<char_type> value_type;
+  typedef BasicAllocatedString<char_type> value_type;
 
   static constexpr auto SENTINEL = value_type::SENTINEL;
 

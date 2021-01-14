@@ -64,7 +64,7 @@ ConvertWideToACP(const TCHAR *p);
  */
 class UTF8ToWideConverter {
 #ifdef _UNICODE
-  typedef AllocatedString<TCHAR> Value;
+  typedef BasicAllocatedString<TCHAR> Value;
 #else
   typedef StringPointer<> Value;
 #endif
@@ -109,7 +109,7 @@ public:
  */
 class WideToUTF8Converter {
 #ifdef _UNICODE
-  typedef AllocatedString<> Value;
+  typedef AllocatedString Value;
 #else
   typedef StringPointer<> Value;
 #endif
@@ -155,7 +155,7 @@ public:
  */
 class WideToACPConverter {
 #ifdef _UNICODE
-  typedef AllocatedString<> Value;
+  typedef AllocatedString Value;
 #else
   typedef StringPointer<> Value;
 #endif

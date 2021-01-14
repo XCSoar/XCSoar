@@ -74,7 +74,7 @@ BackslashBaseName(const TCHAR *p)
 
 #ifdef _UNICODE
 
-AllocatedString<TCHAR>
+BasicAllocatedString<TCHAR>
 ProfileMap::GetPathBase(const char *key) const
 {
   TCHAR buffer[MAX_PATH];
@@ -85,7 +85,7 @@ ProfileMap::GetPathBase(const char *key) const
   if (base == nullptr)
     return nullptr;
 
-  return AllocatedString<TCHAR>::Duplicate(base);
+  return BasicAllocatedString<TCHAR>::Duplicate(base);
 }
 
 #else

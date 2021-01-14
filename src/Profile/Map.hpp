@@ -38,7 +38,7 @@ class RGB8Color;
 class Path;
 class AllocatedPath;
 template<typename T> class StringPointer;
-template<typename T> class AllocatedString;
+template<typename T> class BasicAllocatedString;
 
 class ProfileMap : public std::map<std::string, std::string> {
   bool modified;
@@ -153,7 +153,7 @@ public:
    * Gets a path from the profile and return its base name only.
    */
 #ifdef _UNICODE
-  AllocatedString<TCHAR> GetPathBase(const char *key) const;
+  BasicAllocatedString<TCHAR> GetPathBase(const char *key) const;
 #else
   gcc_pure
   StringPointer<TCHAR> GetPathBase(const char *key) const;

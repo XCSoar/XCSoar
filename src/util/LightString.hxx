@@ -47,11 +47,11 @@ public:
 	typedef typename StringPointer<T>::const_pointer const_pointer;
 
 private:
-	AllocatedString<T> allocation;
+	BasicAllocatedString<T> allocation;
 
 	explicit LightString(pointer _allocation)
 		:StringPointer<T>(_allocation),
-		allocation(AllocatedString<T>::Donate(_allocation)) {}
+		allocation(BasicAllocatedString<T>::Donate(_allocation)) {}
 
 public:
 	explicit LightString(const_pointer _value)
