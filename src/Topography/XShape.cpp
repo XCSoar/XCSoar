@@ -59,7 +59,7 @@ ImportLabel(const char *src)
   if (!ValidateUTF8(src))
     return nullptr;
 
-  return BasicAllocatedString<TCHAR>::Duplicate(src);
+  return BasicAllocatedString<TCHAR>(src);
 #endif
 }
 

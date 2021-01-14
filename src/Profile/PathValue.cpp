@@ -85,7 +85,7 @@ ProfileMap::GetPathBase(const char *key) const
   if (base == nullptr)
     return nullptr;
 
-  return BasicAllocatedString<TCHAR>::Duplicate(base);
+  return BasicAllocatedString<TCHAR>(base);
 }
 
 #else

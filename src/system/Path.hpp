@@ -186,13 +186,13 @@ public:
   AllocatedPath(std::nullptr_t n):value(n) {}
 
   AllocatedPath(Path src)
-    :value(src.IsNull() ? nullptr : value_type::Duplicate(src.c_str())) {}
+    :value(src.IsNull() ? nullptr : value_type(src.c_str())) {}
 
   explicit AllocatedPath(const_pointer src)
     :AllocatedPath(Path(src)) {}
 
   AllocatedPath(const_pointer _begin, const_pointer _end)
-    :AllocatedPath(value_type::Duplicate({_begin, size_t(_end - _begin)})) {}
+    :AllocatedPath(value_type({_begin, size_t(_end - _begin)})) {}
 
   static AllocatedPath Donate(pointer value) {
     return value_type::Donate(value);
