@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2021-01-13 13:32+0000\n"
+"PO-Revision-Date: 2021-01-16 09:32+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -1406,8 +1406,8 @@ msgid ""
 "through settings, adjust the values with left/right cursor keys."
 msgstr ""
 "Rychlost větru odhadnutá XCSoar. Manuální úprava je možná pomocí propojeného "
-"InfoBoxu. Klávesy nahoru/dolů prochází položky, hodnoty se mění šipkami "
-"vpravo/vlevo."
+"InfoBoxu. Klávesy nahoru/dolů prochází položky, šipky vpravo/vlevo mění "
+"hodnoty."
 
 #: src/InfoBoxes/Content/Factory.cpp:349
 #, no-c-format
@@ -1427,8 +1427,8 @@ msgid ""
 "through settings, adjust the values with left/right cursor keys."
 msgstr ""
 "Směr větru odhadnutý XCSoar. Ruční úpravy jsou možné pomocí propojeného "
-"InfoBoxu. Klávesy nahoru/dolů prochází položky, hodnoty se mění šipkami "
-"vpravo/vlevo."
+"InfoBoxu. Klávesy nahoru/dolů prochází položky, šipky vpravo/vlevo mění "
+"hodnoty."
 
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
@@ -5064,8 +5064,8 @@ msgid ""
 "Set to forecast ground temperature.  Used by convection estimator "
 "(temperature trace page of Analysis dialog)"
 msgstr ""
-"Nastaví předpovídanou pozemní teplotu. Použito v odhadu konvekce (strana "
-"sledování teplot v dialogu analýza)"
+"Zadejte předpovídanou přízemní teplotu. Hodnota je použita v odhadu výskytu "
+"konvekce (strana Teplotní křivka v menu Analýza)"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:361
 msgid "Flight Setup"
@@ -7667,7 +7667,7 @@ msgstr "Šipka"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:133
 #, no-c-format
 msgid "Draws an arrow head only."
-msgstr "Zobrazí pouze špičku šipky."
+msgstr "Zobrazí pouze hlavu šipky."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:134
 #, no-c-format
@@ -7677,7 +7677,7 @@ msgstr "Plná šipka"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:134
 #, no-c-format
 msgid "Draws an arrow head with a dashed arrow line."
-msgstr "Zobrazí špičku šipky s čárkovanou čárou."
+msgstr "Zobrazí hlavu šipky s čárkovanou čárou."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:143
 msgid "Ground track"
