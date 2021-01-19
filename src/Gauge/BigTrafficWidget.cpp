@@ -59,9 +59,10 @@ protected:
 public:
   FlarmTrafficControl(const FlarmTrafficLook &look)
     :FlarmTrafficWindow(look, Layout::Scale(10),
-                        Layout::GetMinimumControlHeight() + Layout::Scale(2)),
+                        Layout::GetMinimumControlHeight() + Layout::Scale(2),
+                        false, GetZoomDistance(CommonInterface::GetUIState().traffic.zoom)),
      enable_auto_zoom(true), dragging(false),
-     zoom(2),
+     zoom(CommonInterface::GetUIState().traffic.zoom),
      task_direction(Angle::Degrees(-1)) {}
 
 protected:
@@ -87,6 +88,10 @@ public:
   }
 
   static unsigned GetZoomDistance(unsigned zoom);
+
+  unsigned GetZoom() {
+    return zoom;
+  }
 
   void SetZoom(unsigned _zoom) {
     zoom = _zoom;
@@ -888,6 +893,13 @@ TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
   view->Create(GetContainer(), rc);
 
   UpdateLayout();
+}
+
+bool
+TrafficWidget::Leave()
+{
+  CommonInterface::SetUIState().traffic.zoom = view->GetZoom();
+  return true;
 }
 
 void

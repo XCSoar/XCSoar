@@ -46,9 +46,10 @@
 FlarmTrafficWindow::FlarmTrafficWindow(const FlarmTrafficLook &_look,
                                        unsigned _h_padding,
                                        unsigned _v_padding,
-                                       bool _small)
+                                       bool _small,
+                                       double _distance)
   :look(_look),
-   distance(2000),
+   distance(_distance),
    selection(-1), warning(-1),
    h_padding(_h_padding), v_padding(_v_padding),
    small(_small),
