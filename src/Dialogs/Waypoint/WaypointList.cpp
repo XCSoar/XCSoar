@@ -384,7 +384,7 @@ ReplaceProfilePathBase(DataFieldEnum &df, unsigned i,
                        const char *profile_key)
 {
   const auto p = Profile::map.GetPathBase(profile_key);
-  if (!p.IsNull())
+  if (p != nullptr)
     df.replaceEnumText(i, p.c_str());
 }
 

@@ -88,16 +88,16 @@ public:
   gcc_pure
   bool IsValid() const {
 #ifdef _UNICODE
-    return !value.IsNull();
+    return value != nullptr;
 #else
-    assert(!value.IsNull());
+    assert(value != nullptr);
 
     return ValidateUTF8(value.c_str());
 #endif
   }
 
   operator const_pointer() const {
-    assert(!value.IsNull());
+    assert(value != nullptr);
 
     return value.c_str();
   }
@@ -133,16 +133,16 @@ public:
   gcc_pure
   bool IsValid() const {
 #ifdef _UNICODE
-    return !value.IsNull();
+    return value != nullptr;
 #else
-    assert(!value.IsNull());
+    assert(value != nullptr);
 
     return true;
 #endif
   }
 
   operator const_pointer() const {
-    assert(!value.IsNull());
+    assert(value != nullptr);
 
     return value.c_str();
   }
@@ -179,16 +179,16 @@ public:
   gcc_pure
   bool IsValid() const {
 #ifdef _UNICODE
-    return !value.IsNull();
+    return value != nullptr;
 #else
-    assert(!value.IsNull());
+    assert(value != nullptr);
 
     return true;
 #endif
   }
 
   operator const_pointer() const {
-    assert(!value.IsNull());
+    assert(value != nullptr);
 
     return value.c_str();
   }

@@ -673,7 +673,7 @@ UpdateCaption(WndForm *form, const Waypoint &waypoint)
 
   if (key != nullptr) {
     const auto filename = Profile::map.GetPathBase(key);
-    if (!filename.IsNull())
+    if (filename != nullptr)
       buffer.AppendFormat(_T(" (%s)"), filename.c_str());
   } else if (name != nullptr)
     buffer.AppendFormat(_T(" (%s)"), name);

@@ -70,7 +70,7 @@ public:
   AllocatedPath operator+(const_pointer other) const;
 
   constexpr bool IsNull() const {
-    return value.IsNull();
+    return value == nullptr;
   }
 
   bool IsEmpty() const {
@@ -228,7 +228,7 @@ public:
   }
 
   bool IsNull() const {
-    return value.IsNull();
+    return value == nullptr;
   }
 
   bool IsEmpty() const {
@@ -255,12 +255,12 @@ public:
 
   gcc_pure
   bool operator==(std::nullptr_t) const {
-    return value.IsNull();
+    return value == nullptr;
   }
 
   gcc_pure
   bool operator!=(std::nullptr_t) const {
-    return !value.IsNull();
+    return value != nullptr;
   }
 
   operator Path() const {
