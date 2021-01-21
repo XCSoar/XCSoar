@@ -53,8 +53,7 @@ GetSocketError() noexcept
 #endif
 }
 
-gcc_const
-static inline bool
+constexpr bool
 IsSocketErrorWouldBlock(socket_error_t code) noexcept
 {
 #ifdef _WIN32
@@ -64,8 +63,7 @@ IsSocketErrorWouldBlock(socket_error_t code) noexcept
 #endif
 }
 
-gcc_const
-static inline bool
+constexpr bool
 IsSocketErrorInterruped(socket_error_t code) noexcept
 {
 #ifdef _WIN32
@@ -75,8 +73,7 @@ IsSocketErrorInterruped(socket_error_t code) noexcept
 #endif
 }
 
-gcc_const
-static inline bool
+constexpr bool
 IsSocketErrorClosed(socket_error_t code) noexcept
 {
 #ifdef _WIN32
