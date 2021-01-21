@@ -43,18 +43,12 @@
 #include <ifaddrs.h>
 #endif
 
-static const struct sockaddr_in *
-CastToIPv4(const struct sockaddr *p) noexcept
-{
-	assert(p->sa_family == AF_INET);
-
-	/* cast through void to work around the bogus alignment warning */
-	const void *q = reinterpret_cast<const void *>(p);
-	return reinterpret_cast<const struct sockaddr_in *>(q);
-}
-
 IPv4Address::IPv4Address(SocketAddress src) noexcept
-	:address(*CastToIPv4(src.GetAddress())) {}
+	:address(src.CastTo<struct sockaddr_in>())
+{
+	assert(!src.IsNull());
+	assert(src.GetFamily() == AF_INET);
+}
 
 #if !defined(_WIN32) && !defined(__BIONIC__)
 
@@ -78,7 +72,8 @@ GetIpAddressInner(const ifaddrs *ifaddr, const char *device) noexcept
 		/* is this the (droid) device we're looking for and it's IPv4? */
 		if (ifa->ifa_addr != nullptr && strcmp(ifa->ifa_name, device) == 0 &&
 		    ifa->ifa_addr->sa_family == AF_INET)
-			return CastToIPv4(ifa->ifa_addr);
+			return &SocketAddress(ifa->ifa_addr, sizeof(struct sockaddr_in))
+				.CastTo<struct sockaddr_in>();
 
 	return nullptr;
 }
