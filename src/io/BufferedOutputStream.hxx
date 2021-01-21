@@ -88,4 +88,13 @@ private:
 #endif
 };
 
+template<typename F>
+void
+WithBufferedOutputStream(OutputStream &os, F &&f)
+{
+	BufferedOutputStream bos(os);
+	f(bos);
+	bos.Flush();
+}
+
 #endif
