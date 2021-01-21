@@ -77,7 +77,7 @@ Connect(const SocketAddress address)
 
 	if (!fd.Connect(address)) {
 		const auto e = GetSocketError();
-		if (!IsSocketErrorWouldBlock(e))
+		if (!IsSocketErrorConnectWouldBlock(e))
 			throw MakeSocketError(e, "Failed to connect");
 	}
 
@@ -109,7 +109,7 @@ Connect(const AddressInfo &address)
 
 	if (!fd.Connect(address)) {
 		const auto e = GetSocketError();
-		if (!IsSocketErrorWouldBlock(e))
+		if (!IsSocketErrorConnectWouldBlock(e))
 			throw MakeSocketError(e, "Failed to connect");
 	}
 
