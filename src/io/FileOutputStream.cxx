@@ -136,7 +136,7 @@ FileOutputStream::Cancel() noexcept
 #include <unistd.h>
 #include <errno.h>
 
-#ifdef __linux__
+#ifdef HAVE_O_TMPFILE
 #ifndef O_TMPFILE
 /* supported since Linux 3.11 */
 #define __O_TMPFILE 020000000
@@ -157,12 +157,12 @@ OpenTempFile(FileDescriptor &fd, Path path) noexcept
 	return fd.Open(directory.c_str(), O_TMPFILE|O_WRONLY, 0666);
 }
 
-#endif /* __linux__ */
+#endif /* HAVE_O_TMPFILE */
 
 inline void
 FileOutputStream::OpenCreate(bool visible)
 {
-#ifdef __linux__
+#ifdef HAVE_O_TMPFILE
 	/* try Linux's O_TMPFILE first */
 	is_tmpfile = !visible && OpenTempFile(fd, GetPath());
 	if (!is_tmpfile) {
@@ -173,7 +173,7 @@ FileOutputStream::OpenCreate(bool visible)
 			     0666))
 			throw FormatErrno("Failed to create %s",
 					  GetPath().c_str());
-#ifdef __linux__
+#ifdef HAVE_O_TMPFILE
 	}
 #endif
 }
@@ -214,7 +214,7 @@ FileOutputStream::Commit()
 {
 	assert(IsDefined());
 
-#ifdef __linux__
+#ifdef HAVE_O_TMPFILE
 	if (is_tmpfile) {
 		unlink(GetPath().c_str());
 
@@ -248,7 +248,7 @@ FileOutputStream::Cancel() noexcept
 
 	switch (mode) {
 	case Mode::CREATE:
-#ifdef __linux__
+#ifdef HAVE_O_TMPFILE
 		if (!is_tmpfile)
 #endif
 			unlink(GetPath().c_str());
