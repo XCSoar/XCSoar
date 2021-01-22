@@ -25,8 +25,8 @@ Copyright_License {
 #include "Math/Angle.hpp"
 #include "Math/FastMath.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Point.hpp"
-#include "Screen/BulkPoint.hpp"
+#include "ui/dim/Point.hpp"
+#include "ui/dim/BulkPoint.hpp"
 #include "util/Clamp.hpp"
 
 #include <algorithm>

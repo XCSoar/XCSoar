@@ -21,47 +21,38 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_ICON_HPP
-#define XCSOAR_SCREEN_ICON_HPP
+#ifndef XCSOAR_SCREEN_GDI_BULK_POINT_HPP
+#define XCSOAR_SCREEN_GDI_BULK_POINT_HPP
 
-#include "Screen/Bitmap.hpp"
 #include "ui/dim/Point.hpp"
-#include "ui/dim/Size.hpp"
-#include "ResourceId.hpp"
 
-struct PixelRect;
-class Canvas;
+#include <windows.h>
 
 /**
- * An icon with a mask which marks transparent pixels.
+ * A point structure to be used in arrays.
  */
-class MaskedIcon {
-protected:
-  Bitmap bitmap;
+struct BulkPixelPoint : public tagPOINT {
+  BulkPixelPoint() = default;
 
-  PixelSize size;
+  constexpr BulkPixelPoint(LONG _x, LONG _y)
+    :tagPOINT({_x, _y}) {}
 
-  PixelPoint origin;
+  explicit constexpr BulkPixelPoint(const POINT &other):tagPOINT(other) {}
 
-public:
-  const PixelSize &GetSize() const {
-    return size;
+  constexpr BulkPixelPoint(PixelPoint src)
+    :tagPOINT({src.x, src.y}) {}
+
+  constexpr operator PixelPoint() const {
+    return PixelPoint(x, y);
   }
 
-  bool IsDefined() const {
-    return bitmap.IsDefined();
+  constexpr BulkPixelPoint operator+(BulkPixelPoint other) const {
+    return { x + other.x, y + other.y };
   }
 
-  void LoadResource(ResourceId id, ResourceId big_id = ResourceId::Null(),
-                    bool center=true);
-
-  void Reset() {
-    bitmap.Reset();
+  constexpr BulkPixelPoint operator-(BulkPixelPoint other) const {
+    return { x - other.x, y - other.y };
   }
-
-  void Draw(Canvas &canvas, PixelPoint p) const;
-
-  void Draw(Canvas &canvas, const PixelRect &rc, bool inverse) const;
 };
 
 #endif

@@ -30,9 +30,9 @@ Copyright_License {
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Scope.hpp"
 #include "Screen/OpenGL/VertexPointer.hpp"
-#include "Screen/OpenGL/BulkPoint.hpp"
 #include "Screen/OpenGL/Shaders.hpp"
 #include "Screen/OpenGL/Program.hpp"
+#include "ui/dim/BulkPoint.hpp"
 
 void
 DrawGeoBitmap(const RawBitmap &bitmap, PixelSize bitmap_size,

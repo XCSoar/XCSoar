@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_WAYPOINT_LABEL_LIST_HPP
 
 #include "Renderer/TextInBox.hpp"
-#include "Screen/Point.hpp"
+#include "ui/dim/Point.hpp"
 #include "util/NonCopyable.hpp"
 #include "util/StaticArray.hxx"
 #include "Sizes.h" /* for NAME_SIZE */

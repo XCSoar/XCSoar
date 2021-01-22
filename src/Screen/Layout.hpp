@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_LAYOUT_HPP
 #define XCSOAR_SCREEN_LAYOUT_HPP
 
-#include "Screen/Point.hpp"
+#include "ui/dim/Point.hpp"
 #include "Asset.hpp"
 #include "util/Compiler.h"
+
+struct PixelSize;
 
 namespace Layout
 {

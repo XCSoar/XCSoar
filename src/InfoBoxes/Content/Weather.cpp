@@ -31,6 +31,7 @@ Copyright_License {
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "Screen/Layout.hpp"
+#include "ui/dim/Rect.hpp"
 #include "Renderer/WindArrowRenderer.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"

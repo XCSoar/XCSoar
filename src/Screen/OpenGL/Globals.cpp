@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Screen/OpenGL/Globals.hpp"
 #include "Screen/OpenGL/Debug.hpp"
-#include "Screen/Point.hpp"
+#include "ui/dim/Point.hpp"
 
 #include <glm/mat4x4.hpp>
 

@@ -25,9 +25,9 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_CANVAS_ROTATE_SHIFT_HPP
 
 #include "Math/Angle.hpp"
-#include "Screen/Point.hpp"
+#include "ui/dim/Point.hpp"
+#include "ui/opengl/System.hpp"
 #include "Screen/Layout.hpp"
-#include "System.hpp"
 #include "Shaders.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>

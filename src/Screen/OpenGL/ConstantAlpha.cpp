@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #include "ConstantAlpha.hpp"
-#include "System.hpp"
 #include "Shaders.hpp"
 #include "Program.hpp"
+#include "ui/opengl/System.hpp"
 
 /**
  * Combine texture alpha and constant alpha.

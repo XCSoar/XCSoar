@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_SHARED_EVENT_HPP
 #define XCSOAR_EVENT_SHARED_EVENT_HPP
 
-#include "Screen/Point.hpp"
+#include "ui/dim/Point.hpp"
 
 #include <cassert>
 

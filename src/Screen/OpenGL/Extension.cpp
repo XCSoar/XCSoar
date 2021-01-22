@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "Extension.hpp"
-#include "Features.hpp"
-#include "System.hpp"
+#include "ui/opengl/Features.hpp"
+#include "ui/opengl/System.hpp"
 
 #include <string.h>
 

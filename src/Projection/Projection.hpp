@@ -27,7 +27,7 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "Math/FastRotation.hpp"
 #include "Math/Util.hpp"
-#include "Screen/Point.hpp"
+#include "ui/dim/Point.hpp"
 #include "util/Compiler.h"
 
 #include <cassert>

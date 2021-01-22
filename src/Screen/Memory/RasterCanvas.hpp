@@ -27,7 +27,7 @@ Copyright_License {
 #include "Buffer.hpp"
 #include "Bresenham.hpp"
 #include "Murphy.hpp"
-#include "Screen/Point.hpp"
+#include "ui/dim/Point.hpp"
 #include "util/AllocatedArray.hxx"
 #include "util/Compiler.h"
 

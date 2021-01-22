@@ -25,7 +25,7 @@ Copyright_License {
 #define GAUGE_VARIO_H
 
 #include "Screen/AntiFlickerWindow.hpp"
-#include "Screen/BulkPoint.hpp"
+#include "ui/dim/BulkPoint.hpp"
 #include "Blackboard/FullBlackboard.hpp"
 #include "Math/Point2D.hpp"
 

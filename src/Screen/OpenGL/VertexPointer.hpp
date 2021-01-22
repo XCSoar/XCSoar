@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_VERTEX_POINTER_HPP
 #define XCSOAR_SCREEN_OPENGL_VERTEX_POINTER_HPP
 
-#include "System.hpp"
-#include "Types.hpp"
+#include "ui/opengl/System.hpp"
+#include "ui/opengl/Types.hpp"
 #include "Attribute.hpp"
 
 struct FloatPoint2D;

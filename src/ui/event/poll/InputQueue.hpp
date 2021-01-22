@@ -31,7 +31,7 @@ Copyright_License {
 #include "libinput/LibInputHandler.hpp"
 #endif
 
-#include "Screen/Point.hpp"
+#include "ui/dim/Point.hpp"
 
 #include <cstdint>
 

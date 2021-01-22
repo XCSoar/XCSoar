@@ -27,6 +27,7 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "Screen/Font.hpp"
 
+struct PixelRect;
 class Canvas;
 
 class LogoView {

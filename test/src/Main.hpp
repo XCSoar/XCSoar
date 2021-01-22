@@ -59,6 +59,7 @@
 #ifdef ENABLE_SCREEN
 #include "Screen/Init.hpp"
 #include "Screen/Layout.hpp"
+#include "ui/dim/Size.hpp"
 #include "Fonts.hpp"
 #endif
 

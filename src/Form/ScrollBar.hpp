@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FORM_SCROLL_BAR_HPP
 #define XCSOAR_FORM_SCROLL_BAR_HPP
 
-#include "Screen/Point.hpp"
+#include "ui/dim/Rect.hpp"
 #include "Renderer/ButtonRenderer.hpp"
 
 #include <algorithm>

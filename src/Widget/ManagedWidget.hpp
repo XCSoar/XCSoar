@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_MANAGED_WIDGET_HPP
 #define XCSOAR_MANAGED_WIDGET_HPP
 
-#include "Screen/Point.hpp"
+#include "ui/dim/Rect.hpp"
 
 class ContainerWindow;
 class Widget;

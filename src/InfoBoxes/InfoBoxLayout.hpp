@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_INFO_BOX_LAYOUT_HPP
 
 #include "InfoBoxSettings.hpp"
-#include "Screen/Point.hpp"
+#include "ui/dim/Rect.hpp"
 #include "util/Compiler.h"
 
 namespace InfoBoxLayout

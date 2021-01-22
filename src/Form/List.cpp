@@ -25,7 +25,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Screen/Canvas.hpp"
 #include "ui/event/KeyCode.hpp"
-#include "Screen/Point.hpp"
+#include "ui/dim/Rect.hpp"
 #include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL

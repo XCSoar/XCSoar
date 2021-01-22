@@ -25,7 +25,8 @@ Copyright_License {
 #define SHAPE_RENDERER_HPP
 
 #include "Screen/Pen.hpp"
-#include "Screen/Point.hpp"
+#include "ui/dim/Point.hpp"
+#include "ui/dim/BulkPoint.hpp"
 #include "util/NonCopyable.hpp"
 #include "util/AllocatedArray.hxx"
 #include "Screen/Canvas.hpp"

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_MAP_CANVAS_HPP
 #define XCSOAR_MAP_CANVAS_HPP
 
-#include "Screen/BulkPoint.hpp"
+#include "ui/dim/BulkPoint.hpp"
 #include "Geo/GeoClip.hpp"
 #include "util/AllocatedArray.hxx"
 

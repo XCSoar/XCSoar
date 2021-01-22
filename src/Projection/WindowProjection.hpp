@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_WINDOW_PROJECTION_HPP
 #define XCSOAR_WINDOW_PROJECTION_HPP
 
-#include "Screen/Point.hpp"
 #include "Projection.hpp"
+#include "ui/dim/Rect.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "Math/Point2D.hpp"
 

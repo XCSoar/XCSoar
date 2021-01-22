@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "DisplaySize.hpp"
-#include "Screen/Point.hpp"
+#include "ui/dim/Size.hpp"
 
 #ifdef _WIN32
 #include "Screen/GDI/RootDC.hpp"

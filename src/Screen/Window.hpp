@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_WINDOW_HPP
 #define XCSOAR_SCREEN_WINDOW_HPP
 
-#include "Screen/Point.hpp"
+#include "ui/dim/Rect.hpp"
 #include "Screen/Features.hpp"
 #include "util/Compiler.h"
 

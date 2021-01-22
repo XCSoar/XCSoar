@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_TRIANGULATE_HPP
 #define XCSOAR_SCREEN_OPENGL_TRIANGULATE_HPP
 
-#include "System.hpp"
+#include "ui/opengl/System.hpp"
 
 struct BulkPixelPoint;
 struct FloatPoint2D;

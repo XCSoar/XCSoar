@@ -21,21 +21,38 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_BULK_POINT_HPP
-#define XCSOAR_SCREEN_BULK_POINT_HPP
+#ifndef XCSOAR_UI_SIZE_HPP
+#define XCSOAR_UI_SIZE_HPP
 
-// IWYU pragma: begin_exports
+#include "Point.hpp"
 
-#ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/BulkPoint.hpp"
-#elif defined(USE_MEMORY_CANVAS)
-#include "Screen/Memory/BulkPoint.hpp"
-#elif defined(USE_GDI)
-#include "Screen/GDI/BulkPoint.hpp"
-#else
-#error No Point implementation
-#endif
+struct PixelSize {
+  int cx, cy;
 
-// IWYU pragma: end_exports
+  PixelSize() = default;
+
+  constexpr PixelSize(int _width, int _height) noexcept
+    :cx(_width), cy(_height) {}
+
+  constexpr PixelSize(unsigned _width, unsigned _height) noexcept
+    :cx(_width), cy(_height) {}
+
+  constexpr PixelSize(long _width, long _height) noexcept
+    :cx(_width), cy(_height) {}
+
+  bool operator==(const PixelSize &other) const noexcept {
+    return cx == other.cx && cy == other.cy;
+  }
+
+  bool operator!=(const PixelSize &other) const noexcept {
+    return !(*this == other);
+  }
+};
+
+constexpr PixelPoint
+operator+(PixelPoint p, PixelSize size) noexcept
+{
+  return { p.x + size.cx, p.y + size.cy };
+}
 
 #endif

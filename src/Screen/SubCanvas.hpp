@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/Point.hpp"
+#include "ui/dim/Point.hpp"
 #endif
 
 /**

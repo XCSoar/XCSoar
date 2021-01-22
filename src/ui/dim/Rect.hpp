@@ -21,51 +21,15 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_POINT_HPP
-#define XCSOAR_SCREEN_POINT_HPP
+#ifndef XCSOAR_UI_RECT_HPP
+#define XCSOAR_UI_RECT_HPP
 
-#include "Math/Point2D.hpp"
+#include "Point.hpp"
+#include "Size.hpp"
 
 #ifdef USE_WINUSER
 #include <windows.h>
 #endif
-
-struct PixelPoint : IntPoint2D {
-  PixelPoint() = default;
-
-  template<typename... Args>
-  constexpr PixelPoint(Args&&... args) noexcept
-    :IntPoint2D(args...) {}
-};
-
-struct PixelSize {
-  int cx, cy;
-
-  PixelSize() = default;
-
-  constexpr PixelSize(int _width, int _height) noexcept
-    :cx(_width), cy(_height) {}
-
-  constexpr PixelSize(unsigned _width, unsigned _height) noexcept
-    :cx(_width), cy(_height) {}
-
-  constexpr PixelSize(long _width, long _height) noexcept
-    :cx(_width), cy(_height) {}
-
-  bool operator==(const PixelSize &other) const noexcept {
-    return cx == other.cx && cy == other.cy;
-  }
-
-  bool operator!=(const PixelSize &other) const noexcept {
-    return !(*this == other);
-  }
-};
-
-constexpr PixelPoint
-operator+(PixelPoint p, PixelSize size) noexcept
-{
-  return { p.x + size.cx, p.y + size.cy };
-}
 
 /**
  * @brief PixelRect structure and operations

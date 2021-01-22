@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Cache.hpp"
-#include "Screen/Point.hpp"
+#include "ui/dim/Size.hpp"
 #include "Screen/Font.hpp"
 #include "util/Cache.hxx"
 #include "util/StringCompare.hxx"

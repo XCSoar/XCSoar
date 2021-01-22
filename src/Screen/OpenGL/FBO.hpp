@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_OPENGL_FBO_HPP
 #define XCSOAR_OPENGL_FBO_HPP
 
-#include "Features.hpp"
-#include "SystemExt.hpp"
+#include "ui/opengl/Features.hpp"
+#include "ui/opengl/SystemExt.hpp"
 #include "util/Compiler.h"
 
 /**

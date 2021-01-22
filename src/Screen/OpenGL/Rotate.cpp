@@ -22,11 +22,11 @@ Copyright_License {
 */
 
 #include "Rotate.hpp"
-#include "Features.hpp"
+#include "ui/opengl/Features.hpp"
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
 #include "Globals.hpp"
-#include "Screen/Point.hpp"
+#include "ui/dim/Rect.hpp"
 #include "DisplayOrientation.hpp"
 
 #include <algorithm>

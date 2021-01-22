@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/Layout.hpp"
+#include "ui/dim/Size.hpp"
 #include "Hardware/DisplayDPI.hpp"
 #include "Hardware/DisplaySize.hpp"
 

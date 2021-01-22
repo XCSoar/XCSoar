@@ -21,47 +21,21 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_ICON_HPP
-#define XCSOAR_SCREEN_ICON_HPP
+#ifndef XCSOAR_SCREEN_BULK_POINT_HPP
+#define XCSOAR_SCREEN_BULK_POINT_HPP
 
-#include "Screen/Bitmap.hpp"
-#include "ui/dim/Point.hpp"
-#include "ui/dim/Size.hpp"
-#include "ResourceId.hpp"
+// IWYU pragma: begin_exports
 
-struct PixelRect;
-class Canvas;
+#ifdef ENABLE_OPENGL
+#include "opengl/BulkPoint.hpp"
+#elif defined(USE_MEMORY_CANVAS)
+#include "memory/BulkPoint.hpp"
+#elif defined(USE_GDI)
+#include "gdi/BulkPoint.hpp"
+#else
+#error No Point implementation
+#endif
 
-/**
- * An icon with a mask which marks transparent pixels.
- */
-class MaskedIcon {
-protected:
-  Bitmap bitmap;
-
-  PixelSize size;
-
-  PixelPoint origin;
-
-public:
-  const PixelSize &GetSize() const {
-    return size;
-  }
-
-  bool IsDefined() const {
-    return bitmap.IsDefined();
-  }
-
-  void LoadResource(ResourceId id, ResourceId big_id = ResourceId::Null(),
-                    bool center=true);
-
-  void Reset() {
-    bitmap.Reset();
-  }
-
-  void Draw(Canvas &canvas, PixelPoint p) const;
-
-  void Draw(Canvas &canvas, const PixelRect &rc, bool inverse) const;
-};
+// IWYU pragma: end_exports
 
 #endif

@@ -25,7 +25,7 @@ Copyright_License {
 #include "CommandLine.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
-#include "Screen/Point.hpp"
+#include "ui/dim/Size.hpp"
 #include "system/Path.hpp"
 
 #ifdef ANDROID

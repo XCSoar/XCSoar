@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_EXACT_PIXEL_POINT_HPP
 #define XCSOAR_SCREEN_OPENGL_EXACT_PIXEL_POINT_HPP
 
-#include "Types.hpp"
+#include "ui/opengl/Types.hpp"
 #include "Math/Point2D.hpp"
 
 struct ExactPixelPoint : Point2D<GLexact> {

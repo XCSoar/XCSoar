@@ -25,10 +25,10 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_CANVAS_HPP
 
 #include "Color.hpp"
-#include "Screen/Point.hpp"
-#include "BulkPoint.hpp"
-#include "Features.hpp"
-#include "System.hpp"
+#include "ui/dim/Rect.hpp"
+#include "ui/dim/BulkPoint.hpp"
+#include "ui/opengl/Features.hpp"
+#include "ui/opengl/System.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/Pen.hpp"

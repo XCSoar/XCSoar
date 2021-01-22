@@ -23,13 +23,14 @@ Copyright_License {
 
 #include "Screen/Custom/TopCanvas.hpp"
 #include "Screen/Features.hpp"
-#include "Screen/Point.hpp"
+#include "ui/dim/Size.hpp"
 #include "util/RuntimeError.hxx"
 #include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL
+#include "ui/dim/Rect.hpp"
 #include "Screen/OpenGL/Init.hpp"
-#include "Screen/OpenGL/Features.hpp"
+#include "ui/opengl/Features.hpp"
 #include "Math/Point2D.hpp"
 #else
 #include "Screen/Memory/Export.hpp"

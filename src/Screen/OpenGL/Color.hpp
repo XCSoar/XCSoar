@@ -25,8 +25,8 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_COLOR_HPP
 
 #include "Screen/PortableColor.hpp"
-#include "Features.hpp"
-#include "System.hpp"
+#include "ui/opengl/Features.hpp"
+#include "ui/opengl/System.hpp"
 #include "Attribute.hpp"
 
 #include <cstdint>

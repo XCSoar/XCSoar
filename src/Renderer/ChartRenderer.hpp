@@ -25,8 +25,8 @@ Copyright_License {
 #define XCSOAR_CHART_RENDERER_HPP
 
 #include "util/ReusableArray.hpp"
-#include "Screen/Point.hpp"
-#include "Screen/BulkPoint.hpp"
+#include "ui/dim/Rect.hpp"
+#include "ui/dim/BulkPoint.hpp"
 #include "Look/ChartLook.hpp"
 #include "Language/Language.hpp"
 #include "util/Compiler.h"

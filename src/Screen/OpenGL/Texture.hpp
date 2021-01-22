@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_TEXTURE_HPP
 #define XCSOAR_SCREEN_OPENGL_TEXTURE_HPP
 
-#include "Features.hpp"
-#include "System.hpp"
-#include "Screen/Point.hpp"
+#include "ui/opengl/Features.hpp"
+#include "ui/opengl/System.hpp"
+#include "ui/dim/Rect.hpp"
 #include "FBO.hpp"
 #include "Asset.hpp"
 

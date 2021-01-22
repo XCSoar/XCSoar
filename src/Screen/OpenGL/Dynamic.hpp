@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_DYNAMIC_HPP
 #define XCSOAR_SCREEN_OPENGL_DYNAMIC_HPP
 
-#include "SystemExt.hpp"
-#include "Features.hpp"
+#include "ui/opengl/SystemExt.hpp"
+#include "ui/opengl/Features.hpp"
 
 #if defined(GL_EXT_multi_draw_arrays) && defined(HAVE_GLES)
 #define HAVE_DYNAMIC_MULTI_DRAW_ARRAYS

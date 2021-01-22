@@ -31,8 +31,8 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_GLOBALS_HPP
 #define XCSOAR_SCREEN_OPENGL_GLOBALS_HPP
 
-#include "Screen/OpenGL/Features.hpp"
-#include "System.hpp"
+#include "ui/opengl/Features.hpp"
+#include "ui/opengl/System.hpp"
 
 #include <glm/fwd.hpp>
 

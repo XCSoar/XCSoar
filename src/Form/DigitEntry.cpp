@@ -25,7 +25,7 @@ Copyright_License {
 #include "ActionListener.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Point.hpp"
+#include "ui/dim/Rect.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "Screen/Canvas.hpp"
 #include "Look/DialogLook.hpp"

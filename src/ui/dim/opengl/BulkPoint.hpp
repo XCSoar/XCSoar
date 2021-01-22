@@ -21,37 +21,28 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_GDI_BULK_POINT_HPP
-#define XCSOAR_SCREEN_GDI_BULK_POINT_HPP
+#ifndef XCSOAR_SCREEN_OPENGL_BULK_POINT_HPP
+#define XCSOAR_SCREEN_OPENGL_BULK_POINT_HPP
 
-#include "Screen/Point.hpp"
-
-#include <windows.h>
+#include "ui/opengl/Types.hpp"
+#include "ui/dim/Point.hpp"
+#include "Math/Point2D.hpp"
 
 /**
  * A point structure to be used in arrays.
  */
-struct BulkPixelPoint : public tagPOINT {
+struct BulkPixelPoint : Point2D<GLvalue, int> {
   BulkPixelPoint() = default;
 
-  constexpr BulkPixelPoint(LONG _x, LONG _y)
-    :tagPOINT({_x, _y}) {}
-
-  explicit constexpr BulkPixelPoint(const POINT &other):tagPOINT(other) {}
+  template<typename... Args>
+  constexpr BulkPixelPoint(Args&&... args)
+    :Point2D(args...) {}
 
   constexpr BulkPixelPoint(PixelPoint src)
-    :tagPOINT({src.x, src.y}) {}
+    :Point2D(src.x, src.y) {}
 
   constexpr operator PixelPoint() const {
     return PixelPoint(x, y);
-  }
-
-  constexpr BulkPixelPoint operator+(BulkPixelPoint other) const {
-    return { x + other.x, y + other.y };
-  }
-
-  constexpr BulkPixelPoint operator-(BulkPixelPoint other) const {
-    return { x - other.x, y - other.y };
   }
 };
 

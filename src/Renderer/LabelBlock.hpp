@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef SCREEN_LABELBLOCK_HPP
 #define SCREEN_LABELBLOCK_HPP
 
-#include "Screen/Point.hpp"
+#include "ui/dim/Rect.hpp"
 #include "util/StaticArray.hxx"
 #include "util/Compiler.h"
 

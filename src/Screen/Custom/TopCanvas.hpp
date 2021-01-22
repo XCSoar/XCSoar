@@ -30,13 +30,13 @@ Copyright_License {
 #include "Screen/Memory/PixelTraits.hpp"
 #include "Screen/Memory/ActivePixelTraits.hpp"
 #include "Screen/Memory/Buffer.hpp"
-#include "Screen/Point.hpp"
+#include "ui/dim/Size.hpp"
 #else
 #include "Screen/Canvas.hpp"
 #endif
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Features.hpp"
+#include "ui/opengl/Features.hpp"
 #endif
 
 #ifdef USE_EGL

@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_FORM_EDIT_HPP
 
 #include "Form/Control.hpp"
-#include "Screen/Point.hpp"
+#include "ui/dim/Rect.hpp"
 #include "util/tstring.hpp"
 
 struct DialogLook;

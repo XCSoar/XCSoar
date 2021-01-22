@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_BUFFER_HPP
 #define XCSOAR_SCREEN_OPENGL_BUFFER_HPP
 
-#include "SystemExt.hpp"
+#include "ui/opengl/SystemExt.hpp"
+#include "ui/opengl/Features.hpp"
 #include "Globals.hpp"
-#include "Features.hpp"
 
 #ifdef HAVE_DYNAMIC_MAPBUFFER
 #include "Dynamic.hpp"

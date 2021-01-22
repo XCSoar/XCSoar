@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Geo.hpp"
-#include "System.hpp"
+#include "ui/opengl/System.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/FAISphere.hpp"

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_BULK_POINT_HPP
 #define XCSOAR_SCREEN_OPENGL_BULK_POINT_HPP
 
-#include "Screen/Point.hpp"
+#include "ui/dim/Point.hpp"
 
 /**
  * A point structure to be used in arrays.

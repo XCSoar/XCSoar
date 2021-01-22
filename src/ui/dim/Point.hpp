@@ -21,29 +21,17 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_OPENGL_BULK_POINT_HPP
-#define XCSOAR_SCREEN_OPENGL_BULK_POINT_HPP
+#ifndef XCSOAR_UI_POINT_HPP
+#define XCSOAR_UI_POINT_HPP
 
-#include "Types.hpp"
-#include "Screen/Point.hpp"
 #include "Math/Point2D.hpp"
 
-/**
- * A point structure to be used in arrays.
- */
-struct BulkPixelPoint : Point2D<GLvalue, int> {
-  BulkPixelPoint() = default;
+struct PixelPoint : IntPoint2D {
+  PixelPoint() = default;
 
   template<typename... Args>
-  constexpr BulkPixelPoint(Args&&... args)
-    :Point2D(args...) {}
-
-  constexpr BulkPixelPoint(PixelPoint src)
-    :Point2D(src.x, src.y) {}
-
-  constexpr operator PixelPoint() const {
-    return PixelPoint(x, y);
-  }
+  constexpr PixelPoint(Args&&... args) noexcept
+    :IntPoint2D(args...) {}
 };
 
 #endif

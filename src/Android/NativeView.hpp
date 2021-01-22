@@ -30,7 +30,7 @@ Copyright_License {
 #include "system/Path.hpp"
 
 #ifndef NO_SCREEN
-#include "Screen/Point.hpp"
+#include "ui/dim/Size.hpp"
 #endif
 
 #include <cassert>

@@ -28,8 +28,8 @@ Copyright_License {
 #include "Screen/Color.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/Pen.hpp"
-#include "Screen/Point.hpp"
-#include "Screen/BulkPoint.hpp"
+#include "ui/dim/Rect.hpp"
+#include "ui/dim/BulkPoint.hpp"
 #include "util/Compiler.h"
 
 #include <cassert>

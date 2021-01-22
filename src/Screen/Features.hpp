@@ -33,7 +33,7 @@ Copyright_License {
 #endif
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Features.hpp"
+#include "ui/opengl/Features.hpp"
 #endif
 
 #ifdef USE_GDI

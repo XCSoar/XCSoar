@@ -26,14 +26,15 @@
 
 #include "NMEA/CirclingInfo.hpp"
 #include "NMEA/VarioInfo.hpp"
-#include "Screen/Point.hpp"
-#include "Screen/BulkPoint.hpp"
+#include "ui/dim/Point.hpp"
+#include "ui/dim/BulkPoint.hpp"
 
 #include <array>
 
 struct ThermalAssistantLook;
 struct AttitudeState;
 struct DerivedInfo;
+struct PixelRect;
 class Canvas;
 
 class ThermalAssistantRenderer

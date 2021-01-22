@@ -25,7 +25,7 @@ Copyright_License {
 #include "java/Class.hxx"
 #include "java/String.hxx"
 #include "java/Exception.hxx"
-#include "Screen/Point.hpp"
+#include "ui/dim/Size.hpp"
 #include "Look/FontDescription.hpp"
 #include "util/StringView.hxx"
 #include "Asset.hpp"

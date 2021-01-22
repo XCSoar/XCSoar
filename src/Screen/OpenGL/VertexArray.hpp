@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_VERTEX_ARRAY_HPP
 #define XCSOAR_SCREEN_OPENGL_VERTEX_ARRAY_HPP
 
-#include "Screen/OpenGL/BulkPoint.hpp"
 #include "VertexPointer.hpp"
+#include "ui/dim/BulkPoint.hpp"
 #include "util/Compiler.h"
 
 template<unsigned n>

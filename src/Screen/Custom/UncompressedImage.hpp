@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_UNCOMPRESSED_IMAGE_HPP
 #define XCSOAR_UNCOMPRESSED_IMAGE_HPP
 
-#include "Screen/Point.hpp"
+#include "ui/dim/Size.hpp"
 
 #include <memory>
 

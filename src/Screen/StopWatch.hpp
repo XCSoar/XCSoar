@@ -39,7 +39,7 @@ Copyright_License {
 #endif /* STOP_WATCH */
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/System.hpp"
+#include "ui/opengl/System.hpp"
 #endif
 
 /**

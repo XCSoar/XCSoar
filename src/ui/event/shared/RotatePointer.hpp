@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_ROTATE_POINTER_HPP
 #define XCSOAR_EVENT_ROTATE_POINTER_HPP
 
-#include "Screen/Point.hpp"
 #include "DisplayOrientation.hpp"
+#include "ui/dim/Point.hpp"
 #include "util/Compiler.h"
 
 #include <algorithm>

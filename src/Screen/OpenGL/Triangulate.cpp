@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "Screen/OpenGL/Triangulate.hpp"
-#include "Screen/Point.hpp"
-#include "Screen/BulkPoint.hpp"
+#include "ui/dim/Point.hpp"
+#include "ui/dim/BulkPoint.hpp"
 #include "Math/Line2D.hpp"
 #include "util/AllocatedArray.hxx"
 

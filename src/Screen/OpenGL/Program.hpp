@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_PROGRAM_HPP
 #define XCSOAR_SCREEN_OPENGL_PROGRAM_HPP
 
-#include "System.hpp"
+#include "ui/opengl/System.hpp"
 #include "util/Compiler.h"
 
 /**
