@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2014-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,6 +28,7 @@
  */
 
 #include "FileReader.hxx"
+#include "Open.hxx"
 #include "system/Error.hxx"
 
 #include <cassert>
@@ -88,11 +89,9 @@ FileReader::Close() noexcept
 #else
 
 FileReader::FileReader(Path _path)
-	:path(_path)
+	:path(_path),
+	 fd(OpenReadOnly(path.c_str()))
 {
-	fd.OpenReadOnly(path.c_str());
-	if (!fd.IsDefined())
-		throw FormatErrno("Failed to open %s", path.ToUTF8().c_str());
 }
 
 size_t
