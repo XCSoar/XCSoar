@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2017 Max Kellermann <max@duempel.org>
+ * Copyright 2008-2018 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -33,6 +33,7 @@
 #include <curl/curl.h>
 
 #include <algorithm>
+#include <stdexcept>
 
 /**
  * OO wrapper for "struct curl_slist *".
