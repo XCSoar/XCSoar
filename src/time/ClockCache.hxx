@@ -57,4 +57,11 @@ public:
 	void flush() noexcept {
 		value = {};
 	}
+
+	/**
+	 * Inject a fake value.  This can be helpful for unit tests.
+	 */
+	void Mock(value_type _value) noexcept {
+		value = _value;
+	}
 };
