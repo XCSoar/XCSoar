@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2018 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2012-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -243,6 +243,12 @@ public:
 	ssize_t Write(const void *buffer, std::size_t length) noexcept {
 		return ::write(fd, buffer, length);
 	}
+
+	/**
+	 * Write until all of the given buffer has been written.
+	 * Throws on error.
+	 */
+	void FullWrite(const void *buffer, std::size_t length);
 
 #ifndef _WIN32
 	int Poll(short events, int timeout) const noexcept;
