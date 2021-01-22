@@ -25,7 +25,7 @@ Copyright_License {
 
 #ifndef ENABLE_OPENGL
 
-#include "Screen/WindowCanvas.hpp"
+#include "ui/canvas/WindowCanvas.hpp"
 
 void
 DoubleBufferWindow::OnCreate()

@@ -38,9 +38,9 @@ Copyright_License {
 #include "Engine/Task/ObservationZones/CylinderZone.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scissor.hpp"
+#include "ui/canvas/opengl/Scissor.hpp"
 #else
-#include "Screen/WindowCanvas.hpp"
+#include "ui/canvas/WindowCanvas.hpp"
 #endif
 
 static const ComputerSettings &

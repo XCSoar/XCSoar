@@ -27,7 +27,7 @@
 #include "Form/DataField/Float.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Font.hpp"
+#include "ui/canvas/Font.hpp"
 #include "UIGlobals.hpp"
 #include "util/Macros.hpp"
 #include "Language/Language.hpp"

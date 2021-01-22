@@ -31,7 +31,7 @@ Copyright_License {
 
 #include "Main.hpp"
 #include "Screen/SingleWindow.hpp"
-#include "Screen/BufferCanvas.hpp"
+#include "ui/canvas/BufferCanvas.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Look/TaskLook.hpp"
 #include "Form/List.hpp"

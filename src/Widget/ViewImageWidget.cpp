@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "ViewImageWidget.hpp"
-#include "Screen/Canvas.hpp"
-#include "Screen/Bitmap.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/Bitmap.hpp"
 #include "Screen/PaintWindow.hpp"
 
 class ViewImageWindow final : public PaintWindow {

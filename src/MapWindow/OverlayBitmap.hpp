@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_MAP_OVERLAY_BITMAP_HPP
 
 #include "Overlay.hpp"
-#include "Screen/Bitmap.hpp"
+#include "ui/canvas/Bitmap.hpp"
 #include "Geo/Quadrilateral.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "util/tstring.hpp"

@@ -30,7 +30,7 @@ Copyright_License {
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Form/List.hpp"
 #include "Widget/ListWidget.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "system/FileUtil.hpp"

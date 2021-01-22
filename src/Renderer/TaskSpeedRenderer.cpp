@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "TaskSpeedRenderer.hpp"
 #include "ChartRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Units/Units.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"

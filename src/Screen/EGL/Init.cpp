@@ -22,11 +22,11 @@ Copyright_License {
 */
 
 #include "Screen/Init.hpp"
+#include "Screen/Debug.hpp"
+#include "ui/canvas/Font.hpp"
+#include "ui/canvas/opengl/Init.hpp"
 #include "ui/event/Globals.hpp"
 #include "ui/event/Queue.hpp"
-#include "Screen/Debug.hpp"
-#include "Screen/Font.hpp"
-#include "Screen/OpenGL/Init.hpp"
 
 #ifdef USE_VIDEOCORE
 #include "bcm_host.h"

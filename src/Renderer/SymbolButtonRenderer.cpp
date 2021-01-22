@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "SymbolButtonRenderer.hpp"
 #include "SymbolRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Look/ButtonLook.hpp"
 
 inline void

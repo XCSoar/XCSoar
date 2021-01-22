@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef THERMAL_BAND_LOOK_HPP
 #define THERMAL_BAND_LOOK_HPP
 
-#include "Screen/Pen.hpp"
-#include "Screen/Brush.hpp"
+#include "ui/canvas/Pen.hpp"
+#include "ui/canvas/Brush.hpp"
 
 struct ThermalBandLook {
   bool inverse;

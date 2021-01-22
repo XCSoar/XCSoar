@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef CHART_LOOK_HPP
 #define CHART_LOOK_HPP
 
-#include "Screen/Font.hpp"
-#include "Screen/Pen.hpp"
-#include "Screen/Brush.hpp"
+#include "ui/canvas/Font.hpp"
+#include "ui/canvas/Pen.hpp"
+#include "ui/canvas/Brush.hpp"
 
 #include <cassert>
 

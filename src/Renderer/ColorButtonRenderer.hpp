@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_COLOR_BUTTON_RENDERER_HPP
 
 #include "ButtonRenderer.hpp"
-#include "Screen/Color.hpp"
+#include "ui/canvas/Color.hpp"
 
 /**
  * A #ButtonRenderer instance that renders a regular button frame

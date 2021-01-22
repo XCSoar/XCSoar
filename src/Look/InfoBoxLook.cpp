@@ -28,7 +28,7 @@ Copyright_License {
 #include "AutoFont.hpp"
 
 #ifdef HAVE_TEXT_CACHE
-#include "Screen/Custom/Cache.hpp"
+#include "ui/canvas/custom/Cache.hpp"
 #endif
 
 #include <algorithm>

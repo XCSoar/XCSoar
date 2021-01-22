@@ -28,7 +28,7 @@ Copyright_License {
 #include "Renderer/AirspaceRenderer.hpp"
 #include "Screen/DoubleBufferWindow.hpp"
 #ifndef ENABLE_OPENGL
-#include "Screen/BufferCanvas.hpp"
+#include "ui/canvas/BufferCanvas.hpp"
 #endif
 #include "Renderer/LabelBlock.hpp"
 #include "Screen/StopWatch.hpp"

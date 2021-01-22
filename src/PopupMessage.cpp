@@ -26,7 +26,7 @@ Copyright_License {
 #include "PopupMessage.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Look/DialogLook.hpp"
 #include "Audio/Sound.hpp"
 #include "StatusMessage.hpp"

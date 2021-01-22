@@ -22,16 +22,16 @@ Copyright_License {
 */
 
 #include "GeoBitmapRenderer.hpp"
-#include "Screen/RawBitmap.hpp"
+#include "ui/canvas/RawBitmap.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "Projection/Projection.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Texture.hpp"
-#include "Screen/OpenGL/Scope.hpp"
-#include "Screen/OpenGL/VertexPointer.hpp"
-#include "Screen/OpenGL/Shaders.hpp"
-#include "Screen/OpenGL/Program.hpp"
+#include "ui/canvas/opengl/Texture.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
+#include "ui/canvas/opengl/VertexPointer.hpp"
+#include "ui/canvas/opengl/Shaders.hpp"
+#include "ui/canvas/opengl/Program.hpp"
 #include "ui/dim/BulkPoint.hpp"
 
 void

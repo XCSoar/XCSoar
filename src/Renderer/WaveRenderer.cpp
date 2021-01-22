@@ -26,7 +26,7 @@ Copyright_License {
 #include "Tracking/Features.hpp"
 #include "Tracking/SkyLines/Data.hpp"
 #include "Look/WaveLook.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Geo/GeoClip.hpp"
 

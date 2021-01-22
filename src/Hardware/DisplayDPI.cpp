@@ -24,7 +24,7 @@ Copyright_License {
 #include "DisplayDPI.hpp"
 
 #ifdef _WIN32
-#include "Screen/GDI/RootDC.hpp"
+#include "ui/canvas/gdi/RootDC.hpp"
 
 #include <windows.h>
 #endif

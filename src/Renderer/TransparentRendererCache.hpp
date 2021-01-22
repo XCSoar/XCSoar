@@ -26,7 +26,7 @@ Copyright_License {
 
 #ifndef ENABLE_OPENGL
 #include "Projection/CompareProjection.hpp"
-#include "Screen/BufferCanvas.hpp"
+#include "ui/canvas/BufferCanvas.hpp"
 #endif
 
 #include <cstdint>

@@ -29,7 +29,7 @@ Copyright_License {
 #endif
 
 #ifdef USE_MEMORY_CANVAS
-#include "Screen/Memory/Features.hpp"
+#include "ui/canvas/memory/Features.hpp"
 #endif
 
 #ifdef ENABLE_OPENGL
@@ -37,7 +37,7 @@ Copyright_License {
 #endif
 
 #ifdef USE_GDI
-#include "Screen/GDI/Features.hpp"
+#include "ui/canvas/gdi/Features.hpp"
 #endif
 
 #ifdef ENABLE_SDL

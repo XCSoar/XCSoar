@@ -24,7 +24,7 @@
 #include "CrossSectionRenderer.hpp"
 #include "Renderer/ChartRenderer.hpp"
 #include "Renderer/GradientRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Look/CrossSectionLook.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "MapSettings.hpp"

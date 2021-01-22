@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Gauge/GaugeVario.hpp"
 #include "Look/VarioLook.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Renderer/UnitSymbolRenderer.hpp"
 #include "Math/FastRotation.hpp"

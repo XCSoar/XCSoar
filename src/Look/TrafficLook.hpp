@@ -24,10 +24,10 @@
 #ifndef XCSOAR_TRAFFIC_LOOK_HPP
 #define XCSOAR_TRAFFIC_LOOK_HPP
 
-#include "Screen/Color.hpp"
-#include "Screen/Pen.hpp"
-#include "Screen/Brush.hpp"
-#include "Screen/Icon.hpp"
+#include "ui/canvas/Color.hpp"
+#include "ui/canvas/Pen.hpp"
+#include "ui/canvas/Brush.hpp"
+#include "ui/canvas/Icon.hpp"
 
 class Font;
 

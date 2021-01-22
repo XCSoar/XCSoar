@@ -24,12 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_ROTATED_POLYGON_RENDERER_HPP
 #define XCSOAR_SCREEN_ROTATED_POLYGON_RENDERER_HPP
 
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Math/Angle.hpp"
 #include "util/Macros.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/CanvasRotateShift.hpp"
+#include "ui/canvas/opengl/CanvasRotateShift.hpp"
 #else
 #include "Math/Screen.hpp"
 #endif

@@ -24,13 +24,13 @@ Copyright_License {
 #ifndef SHAPE_RENDERER_HPP
 #define SHAPE_RENDERER_HPP
 
-#include "Screen/Pen.hpp"
+#include "ui/canvas/Pen.hpp"
 #include "ui/dim/Point.hpp"
 #include "ui/dim/BulkPoint.hpp"
 #include "util/NonCopyable.hpp"
 #include "util/AllocatedArray.hxx"
-#include "Screen/Canvas.hpp"
-#include "Screen/Brush.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/Brush.hpp"
 
 #include <cassert>
 

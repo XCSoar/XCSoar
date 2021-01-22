@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_OVERLAY_LOOK_HPP
 #define XCSOAR_OVERLAY_LOOK_HPP
 
-#include "Screen/Icon.hpp"
-#include "Screen/Font.hpp"
-#include "Screen/Pen.hpp"
+#include "ui/canvas/Icon.hpp"
+#include "ui/canvas/Font.hpp"
+#include "ui/canvas/Pen.hpp"
 
 struct OverlayLook {
 

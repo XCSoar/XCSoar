@@ -27,7 +27,7 @@ Copyright_License {
 #include "Widget/TwoWidgets.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Form/DataField/Prefix.hpp"
 #include "Form/DataField/Listener.hpp"

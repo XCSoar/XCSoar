@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "GlidePolarInfoRenderer.hpp"
 #include "ChartRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Units/Units.hpp"

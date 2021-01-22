@@ -37,7 +37,7 @@ Copyright_License {
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Look/MapLook.hpp"
 #include "Look/DialogLook.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "util/Compiler.h"
 #include "util/Macros.hpp"

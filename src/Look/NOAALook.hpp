@@ -24,7 +24,7 @@
 #ifndef XCSOAR_NOAA_LOOK_HPP
 #define XCSOAR_NOAA_LOOK_HPP
 
-#include "Screen/Icon.hpp"
+#include "ui/canvas/Icon.hpp"
 
 struct NOAALook {
   MaskedIcon icon;

@@ -27,13 +27,13 @@ Copyright_License {
 #include "Main.hpp"
 #include "Math/Angle.hpp"
 #include "Screen/SingleWindow.hpp"
-#include "Screen/BufferCanvas.hpp"
+#include "ui/canvas/BufferCanvas.hpp"
 #include "Form/Button.hpp"
 #include "Form/ActionListener.hpp"
 #include "Renderer/ButtonRenderer.hpp"
 
 #ifndef ENABLE_OPENGL
-#include "Screen/WindowCanvas.hpp"
+#include "ui/canvas/WindowCanvas.hpp"
 #endif
 
 #include <algorithm>

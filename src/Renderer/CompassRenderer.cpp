@@ -23,14 +23,14 @@ Copyright_License {
 
 #include "CompassRenderer.hpp"
 #include "Look/MapLook.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/Angle.hpp"
 #include "Math/Screen.hpp"
 #include "util/Macros.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
 #endif
 
 void

@@ -24,12 +24,12 @@ Copyright_License {
 
 #include "Gauge/GaugeThermalAssistant.hpp"
 #include "Gauge/ThermalAssistantWindow.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Blackboard/LiveBlackboard.hpp"
 #include "Input/InputEvents.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
 #endif
 
 class GaugeThermalAssistantWindow : public ThermalAssistantWindow {

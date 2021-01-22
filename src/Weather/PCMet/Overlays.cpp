@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Overlays.hpp"
 #include "Settings.hpp"
-#include "Screen/Bitmap.hpp"
+#include "ui/canvas/Bitmap.hpp"
 #include "net/http/Session.hpp"
 #include "net/http/ToBuffer.hpp"
 #include "net/http/ToFile.hpp"

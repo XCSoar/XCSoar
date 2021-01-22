@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "TargetMapWindow.hpp"
 #include "Look/TaskLook.hpp"
-#include "Screen/Icon.hpp"
+#include "ui/canvas/Icon.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"

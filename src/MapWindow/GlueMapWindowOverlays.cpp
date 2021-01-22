@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "GlueMapWindow.hpp"
 #include "Look/MapLook.hpp"
-#include "Screen/Icon.hpp"
+#include "ui/canvas/Icon.hpp"
 #include "Language/Language.hpp"
 #include "Screen/Layout.hpp"
 #include "Task/ProtectedTaskManager.hpp"

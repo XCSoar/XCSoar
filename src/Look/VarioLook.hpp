@@ -24,11 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_VARIO_LOOK_HPP
 #define XCSOAR_VARIO_LOOK_HPP
 
-#include "Screen/Color.hpp"
-#include "Screen/Brush.hpp"
-#include "Screen/Pen.hpp"
-#include "Screen/Bitmap.hpp"
-#include "Screen/Font.hpp"
+#include "ui/canvas/Color.hpp"
+#include "ui/canvas/Brush.hpp"
+#include "ui/canvas/Pen.hpp"
+#include "ui/canvas/Bitmap.hpp"
+#include "ui/canvas/Font.hpp"
 
 class Font;
 

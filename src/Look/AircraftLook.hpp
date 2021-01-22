@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef AIRCRAFT_LOOK_HPP
 #define AIRCRAFT_LOOK_HPP
 
-#include "Screen/Pen.hpp"
-#include "Screen/Brush.hpp"
+#include "ui/canvas/Pen.hpp"
+#include "ui/canvas/Brush.hpp"
 
 struct AircraftLook {
   Pen aircraft_pen;

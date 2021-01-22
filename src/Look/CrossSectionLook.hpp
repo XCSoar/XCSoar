@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef CROSS_SECTION_LOOK_HPP
 #define CROSS_SECTION_LOOK_HPP
 
-#include "Screen/Pen.hpp"
-#include "Screen/Brush.hpp"
+#include "ui/canvas/Pen.hpp"
+#include "ui/canvas/Brush.hpp"
 
 class Font;
 

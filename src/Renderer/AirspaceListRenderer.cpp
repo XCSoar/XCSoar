@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "AirspaceListRenderer.hpp"
 #include "TwoTextRowsRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Airspace/AbstractAirspace.hpp"
 #include "Formatter/AirspaceFormatter.hpp"

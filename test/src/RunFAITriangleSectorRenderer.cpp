@@ -25,7 +25,7 @@ Copyright_License {
 #define ENABLE_CLOSE_BUTTON
 
 #include "Main.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Form/Button.hpp"
 #include "Form/ActionListener.hpp"
 #include "Renderer/FAITriangleAreaRenderer.hpp"

@@ -26,7 +26,7 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoClip.hpp"
 #include "Projection/WindowProjection.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 
 void
 RenderFAISector(Canvas &canvas, const WindowProjection &projection,

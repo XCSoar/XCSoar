@@ -31,7 +31,7 @@ Copyright_License {
 #define USAGE "{PATH|ID}"
 
 #include "Main.hpp"
-#include "Screen/Bitmap.hpp"
+#include "ui/canvas/Bitmap.hpp"
 #include "util/NumberParser.hpp"
 #include "util/StringCompare.hxx"
 #include "ResourceId.hpp"

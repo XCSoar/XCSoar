@@ -23,14 +23,14 @@ Copyright_License {
 */
 
 #include "Gauge/GaugeFLARM.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "FlarmTrafficWindow.hpp"
 #include "Blackboard/LiveBlackboard.hpp"
 #include "Computer/Settings.hpp"
 #include "PageActions.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
 #endif
 
 class SmallTrafficWindow : public FlarmTrafficWindow {

@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "ColorButtonRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 
 void
 ColorButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,

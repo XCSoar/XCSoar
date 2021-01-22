@@ -27,8 +27,8 @@ Copyright_License {
 
 #include "Main.hpp"
 #include "Screen/SingleWindow.hpp"
-#include "Screen/Bitmap.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Bitmap.hpp"
+#include "ui/canvas/Canvas.hpp"
 
 class TestWindow : public UI::SingleWindow {
   Bitmap bitmap;

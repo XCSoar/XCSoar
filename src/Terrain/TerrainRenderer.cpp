@@ -24,7 +24,7 @@ Copyright_License {
 #include "Terrain/TerrainRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Screen/Ramp.hpp"
-#include "Screen/RawBitmap.hpp"
+#include "ui/canvas//RawBitmap.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "util/Macros.hpp"
 

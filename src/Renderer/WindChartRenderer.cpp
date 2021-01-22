@@ -29,7 +29,7 @@ Copyright_License {
 #include "Math/LeastSquares.hpp"
 #include "Units/Units.hpp"
 #include "Math/FastRotation.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 
 static void

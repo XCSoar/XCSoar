@@ -28,7 +28,7 @@ Copyright_License {
 
 #include "Main.hpp"
 #include "Screen/SingleWindow.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Form/Button.hpp"
 #include "Form/ActionListener.hpp"
 #include "Fonts.hpp"

@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "util/StringCompare.hxx"
 #include "system/Path.hpp"
-#include "Screen/Custom/LibTiff.hpp"
-#include "Screen/Custom/UncompressedImage.hpp"
+#include "ui/canvas/custom/LibTiff.hpp"
+#include "ui/canvas/custom/UncompressedImage.hpp"
 #include "NativeView.hpp"
 #include "Hardware/DisplayDPI.hpp"
 

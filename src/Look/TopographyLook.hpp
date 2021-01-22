@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TOPOGRAPHY_LOOK_HPP
 #define XCSOAR_TOPOGRAPHY_LOOK_HPP
 
-#include "Screen/Font.hpp"
+#include "ui/canvas/Font.hpp"
 
 struct TopographyLook {
   Font regular_label_font;

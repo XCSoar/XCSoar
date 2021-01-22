@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "TabRenderer.hpp"
-#include "Screen/Canvas.hpp"
-#include "Screen/Icon.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/Icon.hpp"
 #include "Look/DialogLook.hpp"
 
 void

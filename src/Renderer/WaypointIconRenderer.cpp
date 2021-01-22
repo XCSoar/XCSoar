@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "WaypointIconRenderer.hpp"
 #include "Look/WaypointLook.hpp"
-#include "Screen/Icon.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Icon.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "WaypointRendererSettings.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"

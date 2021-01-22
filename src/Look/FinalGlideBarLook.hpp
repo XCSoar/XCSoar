@@ -24,8 +24,8 @@
 #ifndef XCSOAR_FINAL_GLIDE_BAR_LOOK_HPP
 #define XCSOAR_FINAL_GLIDE_BAR_LOOK_HPP
 
-#include "Screen/Pen.hpp"
-#include "Screen/Brush.hpp"
+#include "ui/canvas/Pen.hpp"
+#include "ui/canvas/Brush.hpp"
 
 class Font;
 

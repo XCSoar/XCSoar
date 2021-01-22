@@ -23,11 +23,11 @@ Copyright_License {
 
 #include "DigitEntry.hpp"
 #include "ActionListener.hpp"
-#include "Screen/Font.hpp"
+#include "ui/canvas/Font.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/dim/Rect.hpp"
 #include "ui/event/KeyCode.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Look/DialogLook.hpp"
 #include "Units/Descriptor.hpp"
 #include "time/RoughTime.hpp"

@@ -24,7 +24,7 @@
 #include "TerrainXSRenderer.hpp"
 #include "CrossSectionRenderer.hpp"
 #include "Renderer/ChartRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Look/CrossSectionLook.hpp"
 #include "util/StaticArray.hxx"
 

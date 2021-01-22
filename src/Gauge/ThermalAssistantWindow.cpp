@@ -23,10 +23,10 @@
 
 #include "ThermalAssistantWindow.hpp"
 #include "Look/ThermalAssistantLook.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
 #endif
 
 ThermalAssistantWindow::ThermalAssistantWindow(const ThermalAssistantLook &_look,

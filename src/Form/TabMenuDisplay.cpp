@@ -26,7 +26,7 @@ Copyright_License {
 #include "Widget/PagerWidget.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/event/KeyCode.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
 #include "util/StringFormat.hpp"

@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_BUTTON_LOOK_HPP
 #define XCSOAR_BUTTON_LOOK_HPP
 
-#include "Screen/Color.hpp"
-#include "Screen/Brush.hpp"
-#include "Screen/Pen.hpp"
+#include "ui/canvas/Color.hpp"
+#include "ui/canvas/Brush.hpp"
+#include "ui/canvas/Pen.hpp"
 
 class Font;
 

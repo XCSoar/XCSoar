@@ -22,11 +22,11 @@ Copyright_License {
 */
 
 #include "OverlayBitmap.hpp"
-#include "Screen/Canvas.hpp"
-#include "Screen/OpenGL/Texture.hpp"
-#include "Screen/OpenGL/Scope.hpp"
-#include "Screen/OpenGL/ConstantAlpha.hpp"
-#include "Screen/OpenGL/VertexPointer.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/opengl/Texture.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
+#include "ui/canvas/opengl/ConstantAlpha.hpp"
+#include "ui/canvas/opengl/VertexPointer.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Math/Point2D.hpp"
 #include "Math/Quadrilateral.hpp"

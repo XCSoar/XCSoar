@@ -32,7 +32,7 @@ Copyright_License {
 #include "CrossSection/CrossSectionRenderer.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Computer/Settings.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "Look/Look.hpp"
@@ -55,7 +55,7 @@ Copyright_License {
 #include "util/StringCompare.hxx"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scissor.hpp"
+#include "ui/canvas/opengl/Scissor.hpp"
 #endif
 
 #include <stdio.h>

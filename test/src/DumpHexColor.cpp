@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Formatter/HexColor.hpp"
-#include "Screen/PortableColor.hpp"
+#include "ui/canvas/PortableColor.hpp"
 #include "system/Args.hpp"
 #include "util/Macros.hpp"
 

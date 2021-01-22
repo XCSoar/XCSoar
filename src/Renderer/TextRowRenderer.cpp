@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "TextRowRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 
 #include <algorithm>

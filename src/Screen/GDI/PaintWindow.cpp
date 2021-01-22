@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/PaintWindow.hpp"
-#include "PaintCanvas.hpp"
+#include "ui/canvas/gdi/PaintCanvas.hpp"
 
 bool
 PaintWindow::register_class(HINSTANCE hInstance) noexcept

@@ -27,7 +27,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Look/DialogLook.hpp"
 #include "Formatter/UserUnits.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 #include "Airspace/AirspaceWarning.hpp"

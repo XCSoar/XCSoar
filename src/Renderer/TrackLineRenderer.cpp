@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "TrackLineRenderer.hpp"
 #include "Look/MapLook.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Math/Angle.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"

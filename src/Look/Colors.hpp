@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_LOOK_COLORS_HPP
 #define XCSOAR_LOOK_COLORS_HPP
 
-#include "Screen/Color.hpp"
+#include "ui/canvas/Color.hpp"
 
 #ifdef XCSOAR_TESTING
 static constexpr Color COLOR_XCSOAR_LIGHT = Color(0xed, 0x90, 0x90);

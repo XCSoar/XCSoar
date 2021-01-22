@@ -24,7 +24,7 @@ Copyright_License {
 #include "Form/CheckBox.hpp"
 #include "Form/ActionListener.hpp"
 #include "Look/DialogLook.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "Asset.hpp"
 #include "util/Macros.hpp"

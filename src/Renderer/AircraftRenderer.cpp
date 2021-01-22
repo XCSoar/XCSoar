@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "AircraftRenderer.hpp"
 #include "RotatedPolygonRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Look/AircraftLook.hpp"
 #include "MapSettings.hpp"
 #include "Asset.hpp"

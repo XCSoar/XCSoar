@@ -26,7 +26,7 @@
 #include "Look/Look.hpp"
 #include "Interface.hpp"
 #include "Screen/AntiFlickerWindow.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Renderer/HorizonRenderer.hpp"
 
 /**

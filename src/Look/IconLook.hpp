@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_ICON_LOOK_HPP
 #define XCSOAR_ICON_LOOK_HPP
 
-#include "Screen/Icon.hpp"
+#include "ui/canvas/Icon.hpp"
 
 /**
  * This class manages the icons of various XCSoar dialogs.

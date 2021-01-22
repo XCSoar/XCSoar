@@ -23,15 +23,15 @@ Copyright_License {
 
 #include "Form/List.hpp"
 #include "Look/DialogLook.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "ui/dim/Rect.hpp"
 #include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scissor.hpp"
+#include "ui/canvas/opengl/Scissor.hpp"
 #elif defined(USE_GDI)
-#include "Screen/WindowCanvas.hpp"
+#include "ui/canvas/WindowCanvas.hpp"
 #endif
 
 #include <cassert>

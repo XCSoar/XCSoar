@@ -47,7 +47,7 @@ Copyright_License {
 #include "Look/GlobalFonts.hpp"
 #include "ui/event/Globals.hpp"
 #include "ui/event/Queue.hpp"
-#include "Screen/OpenGL/Init.hpp"
+#include "ui/canvas/opengl/Init.hpp"
 #include "Dialogs/Message.hpp"
 #include "Simulator.hpp"
 #include "Profile/Profile.hpp"
@@ -75,8 +75,8 @@ Copyright_License {
 #include "VoltageDevice.hpp"
 
 #ifndef NDEBUG
-#include "Screen/OpenGL/Texture.hpp"
-#include "Screen/OpenGL/Buffer.hpp"
+#include "ui/canvas/opengl/Texture.hpp"
+#include "ui/canvas/opengl/Buffer.hpp"
 #endif
 
 #include <cassert>

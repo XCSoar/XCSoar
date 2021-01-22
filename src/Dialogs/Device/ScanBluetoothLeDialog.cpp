@@ -27,7 +27,7 @@
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Form/Button.hpp"
 #include "Widget/ListWidget.hpp"
 #include "java/Global.hxx"

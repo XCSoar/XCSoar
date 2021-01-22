@@ -25,8 +25,8 @@ Copyright_License {
 #include "Widget/TabWidget.hpp"
 #include "Look/DialogLook.hpp"
 #include "ui/event/KeyCode.hpp"
-#include "Screen/Icon.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Icon.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Asset.hpp"
 

@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Map.hpp"
-#include "Screen/PortableColor.hpp"
+#include "ui/canvas/PortableColor.hpp"
 #include "Formatter/HexColor.hpp"
 #include "util/Macros.hpp"
 

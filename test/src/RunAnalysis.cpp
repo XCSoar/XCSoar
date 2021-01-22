@@ -29,7 +29,7 @@ Copyright_License {
 
 #include "Main.hpp"
 #include "Screen/SingleWindow.hpp"
-#include "Screen/BufferCanvas.hpp"
+#include "ui/canvas/BufferCanvas.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Logger/Logger.hpp"
 #include "Terrain/RasterTerrain.hpp"

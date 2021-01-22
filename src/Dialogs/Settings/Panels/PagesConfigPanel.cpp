@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "PagesConfigPanel.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Form/ActionListener.hpp"
 #include "Form/Button.hpp"
 #include "Form/ButtonPanel.hpp"

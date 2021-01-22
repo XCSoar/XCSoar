@@ -24,7 +24,7 @@ Copyright_License {
 #include "BarographRenderer.hpp"
 #include "ChartRenderer.hpp"
 #include "Look/CrossSectionLook.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Units/Units.hpp"
 #include "Task/ProtectedTaskManager.hpp"

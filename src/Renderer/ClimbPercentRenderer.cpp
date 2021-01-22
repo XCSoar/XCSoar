@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "ClimbPercentRenderer.hpp"
 #include "NMEA/CirclingInfo.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/Angle.hpp"
 #include "Look/ClimbPercentLook.hpp"

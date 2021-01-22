@@ -26,7 +26,7 @@ Copyright_License {
 #include "AirspaceRenderer.hpp"
 #include "AirspaceRendererSettings.hpp"
 #include "Projection/WindowProjection.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "MapWindow/MapCanvas.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Airspace/Airspaces.hpp"
@@ -34,7 +34,7 @@ Copyright_License {
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspaceWarningCopy.hpp"
 #include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
-#include "Screen/OpenGL/Scope.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
 
 class AirspaceVisitorRenderer final
   : protected MapCanvas

@@ -3,16 +3,17 @@
 USE_MEMORY_CANVAS ?= n
 
 SCREEN_SRC_DIR = $(SRC)/Screen
+CANVAS_SRC_DIR = $(SRC)/ui/canvas
 
 SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/Debug.cpp \
 	$(SCREEN_SRC_DIR)/ProgressBar.cpp \
-	$(SCREEN_SRC_DIR)/Util.cpp \
-	$(SCREEN_SRC_DIR)/Font.cpp \
-	$(SCREEN_SRC_DIR)/Icon.cpp \
-	$(SCREEN_SRC_DIR)/Canvas.cpp \
-	$(SCREEN_SRC_DIR)/Color.cpp \
-	$(SCREEN_SRC_DIR)/BufferCanvas.cpp \
+	$(CANVAS_SRC_DIR)/Util.cpp \
+	$(CANVAS_SRC_DIR)/Font.cpp \
+	$(CANVAS_SRC_DIR)/Icon.cpp \
+	$(CANVAS_SRC_DIR)/Canvas.cpp \
+	$(CANVAS_SRC_DIR)/Color.cpp \
+	$(CANVAS_SRC_DIR)/BufferCanvas.cpp \
 	$(SCREEN_SRC_DIR)/Window.cpp \
 	$(SCREEN_SRC_DIR)/SolidContainerWindow.cpp \
 	$(SCREEN_SRC_DIR)/BufferWindow.cpp \
@@ -21,31 +22,31 @@ SCREEN_SOURCES = \
 
 SCREEN_CUSTOM_SOURCES = \
 	$(SCREEN_SRC_DIR)/Custom/DoubleClick.cpp \
-	$(SCREEN_SRC_DIR)/Custom/GeoBitmap.cpp \
-	$(SCREEN_SRC_DIR)/Custom/Pen.cpp \
+	$(CANVAS_SRC_DIR)/custom/GeoBitmap.cpp \
+	$(CANVAS_SRC_DIR)/custom/Pen.cpp \
 	$(SCREEN_SRC_DIR)/Custom/LargeTextWindow.cpp \
 	$(SCREEN_SRC_DIR)/Custom/Window.cpp \
 	$(SCREEN_SRC_DIR)/Custom/WList.cpp \
 	$(SCREEN_SRC_DIR)/Custom/ContainerWindow.cpp \
 	$(SCREEN_SRC_DIR)/Custom/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/Custom/SingleWindow.cpp \
-	$(SCREEN_SRC_DIR)/Custom/MoreCanvas.cpp
+	$(CANVAS_SRC_DIR)/custom/MoreCanvas.cpp
 
 ifeq ($(COREGRAPHICS),y)
 SCREEN_CUSTOM_SOURCES_IMG = \
-	$(SCREEN_SRC_DIR)/Apple/ImageDecoder.cpp
+	$(SCREEN_SRC_DIR)/apple/ImageDecoder.cpp
 endif
 
 ifeq ($(LIBPNG),y)
-SCREEN_CUSTOM_SOURCES_IMG += $(SCREEN_SRC_DIR)/Custom/LibPNG.cpp
+SCREEN_CUSTOM_SOURCES_IMG += $(CANVAS_SRC_DIR)/custom/LibPNG.cpp
 endif
 
 ifeq ($(LIBJPEG),y)
-SCREEN_CUSTOM_SOURCES_IMG += $(SCREEN_SRC_DIR)/Custom/LibJPEG.cpp
+SCREEN_CUSTOM_SOURCES_IMG += $(CANVAS_SRC_DIR)/custom/LibJPEG.cpp
 endif
 
 ifeq ($(TIFF),y)
-SCREEN_CUSTOM_SOURCES_IMG += $(SCREEN_SRC_DIR)/Custom/LibTiff.cpp
+SCREEN_CUSTOM_SOURCES_IMG += $(CANVAS_SRC_DIR)/custom/LibTiff.cpp
 endif
 
 ifeq ($(TARGET),ANDROID)
@@ -54,27 +55,27 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/Android/Window.cpp \
 	$(SCREEN_SRC_DIR)/Android/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/Android/SingleWindow.cpp \
-	$(SCREEN_SRC_DIR)/Android/TopCanvas.cpp \
-	$(SCREEN_SRC_DIR)/Android/Bitmap.cpp \
-	$(SCREEN_SRC_DIR)/Android/Font.cpp
+	$(CANVAS_SRC_DIR)/android/TopCanvas.cpp \
+	$(CANVAS_SRC_DIR)/android/Bitmap.cpp \
+	$(CANVAS_SRC_DIR)/android/Font.cpp
 ifeq ($(TIFF),y)
-SCREEN_SOURCES += $(SCREEN_SRC_DIR)/Custom/LibTiff.cpp
+SCREEN_SOURCES += $(CANVAS_SRC_DIR)/custom/LibTiff.cpp
 endif
 endif
 
 ifeq ($(DITHER),y)
 SCREEN_SOURCES += \
-	$(SCREEN_SRC_DIR)/Memory/Dither.cpp
+	$(CANVAS_SRC_DIR)/memory/Dither.cpp
 endif
 
 ifeq ($(FREETYPE),y)
 SCREEN_SOURCES += \
-	$(SCREEN_SRC_DIR)/FreeType/Font.cpp \
-	$(SCREEN_SRC_DIR)/FreeType/Init.cpp
+	$(CANVAS_SRC_DIR)/freetype/Font.cpp \
+	$(CANVAS_SRC_DIR)/freetype/Init.cpp
 endif
 
 ifeq ($(call bool_or,$(APPKIT),$(UIKIT)),y)
-SCREEN_SOURCES += $(SCREEN_SRC_DIR)/Apple/Font.cpp
+SCREEN_SOURCES += $(CANVAS_SRC_DIR)/apple/Font.cpp
 endif
 
 ifeq ($(USE_X11),y)
@@ -89,42 +90,42 @@ endif
 
 ifeq ($(OPENGL),y)
 SCREEN_SOURCES += \
-	$(SCREEN_SRC_DIR)/Custom/Cache.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/Init.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/Dynamic.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/Rotate.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/Geo.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/Globals.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/Extension.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/FBO.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/VertexArray.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/ConstantAlpha.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/Bitmap.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/RawBitmap.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/Canvas.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/BufferCanvas.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/TopCanvas.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/SubCanvas.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/Texture.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/UncompressedImage.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/Buffer.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/Shapes.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/Surface.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/Shaders.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/Triangulate.cpp
+	$(CANVAS_SRC_DIR)/custom/Cache.cpp \
+	$(CANVAS_SRC_DIR)/opengl/Init.cpp \
+	$(CANVAS_SRC_DIR)/opengl/Dynamic.cpp \
+	$(CANVAS_SRC_DIR)/opengl/Rotate.cpp \
+	$(CANVAS_SRC_DIR)/opengl/Geo.cpp \
+	$(CANVAS_SRC_DIR)/opengl/Globals.cpp \
+	$(CANVAS_SRC_DIR)/opengl/Extension.cpp \
+	$(CANVAS_SRC_DIR)/opengl/FBO.cpp \
+	$(CANVAS_SRC_DIR)/opengl/VertexArray.cpp \
+	$(CANVAS_SRC_DIR)/opengl/ConstantAlpha.cpp \
+	$(CANVAS_SRC_DIR)/opengl/Bitmap.cpp \
+	$(CANVAS_SRC_DIR)/opengl/RawBitmap.cpp \
+	$(CANVAS_SRC_DIR)/opengl/Canvas.cpp \
+	$(CANVAS_SRC_DIR)/opengl/BufferCanvas.cpp \
+	$(CANVAS_SRC_DIR)/opengl/TopCanvas.cpp \
+	$(CANVAS_SRC_DIR)/opengl/SubCanvas.cpp \
+	$(CANVAS_SRC_DIR)/opengl/Texture.cpp \
+	$(CANVAS_SRC_DIR)/opengl/UncompressedImage.cpp \
+	$(CANVAS_SRC_DIR)/opengl/Buffer.cpp \
+	$(CANVAS_SRC_DIR)/opengl/Shapes.cpp \
+	$(CANVAS_SRC_DIR)/opengl/Surface.cpp \
+	$(CANVAS_SRC_DIR)/opengl/Shaders.cpp \
+	$(CANVAS_SRC_DIR)/opengl/Triangulate.cpp
 endif
 
 ifeq ($(ENABLE_SDL),y)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
 SCREEN_SOURCES += \
-	$(SCREEN_SRC_DIR)/Custom/Files.cpp \
-	$(SCREEN_SRC_DIR)/Custom/Bitmap.cpp \
-	$(SCREEN_SRC_DIR)/Custom/ResourceBitmap.cpp \
+	$(CANVAS_SRC_DIR)/custom/Files.cpp \
+	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
+	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Window.cpp \
 	$(SCREEN_SRC_DIR)/SDL/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/SDL/SingleWindow.cpp \
-	$(SCREEN_SRC_DIR)/SDL/TopCanvas.cpp \
+	$(CANVAS_SRC_DIR)/sdl/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Init.cpp
 ifeq ($(OPENGL),n)
 USE_MEMORY_CANVAS = y
@@ -133,12 +134,12 @@ else ifeq ($(EGL)$(TARGET_IS_ANDROID),yn)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
 SCREEN_SOURCES += \
 	$(SCREEN_CUSTOM_SOURCES) \
-	$(SCREEN_SRC_DIR)/Custom/Files.cpp \
-	$(SCREEN_SRC_DIR)/Custom/Bitmap.cpp \
-	$(SCREEN_SRC_DIR)/Custom/ResourceBitmap.cpp \
-	$(SCREEN_SRC_DIR)/TTY/TopCanvas.cpp \
+	$(CANVAS_SRC_DIR)/custom/Files.cpp \
+	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
+	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
+	$(CANVAS_SRC_DIR)/tty/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/EGL/Init.cpp \
-	$(SCREEN_SRC_DIR)/EGL/TopCanvas.cpp \
+	$(CANVAS_SRC_DIR)/egl/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/FB/Window.cpp \
 	$(SCREEN_SRC_DIR)/FB/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/FB/SingleWindow.cpp
@@ -146,11 +147,11 @@ else ifeq ($(GLX),y)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
 SCREEN_SOURCES += \
 	$(SCREEN_CUSTOM_SOURCES) \
-	$(SCREEN_SRC_DIR)/Custom/Files.cpp \
-	$(SCREEN_SRC_DIR)/Custom/Bitmap.cpp \
-	$(SCREEN_SRC_DIR)/Custom/ResourceBitmap.cpp \
+	$(CANVAS_SRC_DIR)/custom/Files.cpp \
+	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
+	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
 	$(SCREEN_SRC_DIR)/GLX/Init.cpp \
-	$(SCREEN_SRC_DIR)/GLX/TopCanvas.cpp \
+	$(CANVAS_SRC_DIR)/glx/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/FB/Window.cpp \
 	$(SCREEN_SRC_DIR)/FB/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/FB/SingleWindow.cpp
@@ -158,10 +159,10 @@ else ifeq ($(VFB),y)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
 SCREEN_SOURCES += \
 	$(SCREEN_CUSTOM_SOURCES) \
-	$(SCREEN_SRC_DIR)/Custom/Files.cpp \
-	$(SCREEN_SRC_DIR)/Custom/Bitmap.cpp \
-	$(SCREEN_SRC_DIR)/Custom/ResourceBitmap.cpp \
-	$(SCREEN_SRC_DIR)/FB/TopCanvas.cpp \
+	$(CANVAS_SRC_DIR)/custom/Files.cpp \
+	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
+	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
+	$(CANVAS_SRC_DIR)/fb/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/FB/Window.cpp \
 	$(SCREEN_SRC_DIR)/FB/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/FB/SingleWindow.cpp \
@@ -171,37 +172,37 @@ else ifeq ($(USE_FB),y)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
 SCREEN_SOURCES += \
 	$(SCREEN_CUSTOM_SOURCES) \
-	$(SCREEN_SRC_DIR)/Custom/Files.cpp \
-	$(SCREEN_SRC_DIR)/Custom/Bitmap.cpp \
-	$(SCREEN_SRC_DIR)/Custom/ResourceBitmap.cpp \
-	$(SCREEN_SRC_DIR)/Memory/Export.cpp \
-	$(SCREEN_SRC_DIR)/TTY/TopCanvas.cpp \
+	$(CANVAS_SRC_DIR)/custom/Files.cpp \
+	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
+	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
+	$(CANVAS_SRC_DIR)/memory/Export.cpp \
+	$(CANVAS_SRC_DIR)/tty/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/FB/TopWindow.cpp \
-	$(SCREEN_SRC_DIR)/FB/TopCanvas.cpp \
+	$(CANVAS_SRC_DIR)/fb/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/FB/Window.cpp \
 	$(SCREEN_SRC_DIR)/FB/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/FB/Init.cpp
 FB_CPPFLAGS = -DUSE_FB
 else ifeq ($(HAVE_WIN32),y)
 SCREEN_SOURCES += \
-	$(SCREEN_SRC_DIR)/GDI/WindowCanvas.cpp \
-	$(SCREEN_SRC_DIR)/GDI/VirtualCanvas.cpp \
+	$(CANVAS_SRC_DIR)/gdi/WindowCanvas.cpp \
+	$(CANVAS_SRC_DIR)/gdi/VirtualCanvas.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Init.cpp \
-	$(SCREEN_SRC_DIR)/GDI/Font.cpp \
+	$(CANVAS_SRC_DIR)/gdi/Font.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Window.cpp \
 	$(SCREEN_SRC_DIR)/GDI/PaintWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/ContainerWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/LargeTextWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/TopWindow.cpp \
-	$(SCREEN_SRC_DIR)/GDI/Pen.cpp \
-	$(SCREEN_SRC_DIR)/GDI/Brush.cpp \
-	$(SCREEN_SRC_DIR)/GDI/Bitmap.cpp \
-	$(SCREEN_SRC_DIR)/GDI/ResourceBitmap.cpp \
-	$(SCREEN_SRC_DIR)/GDI/RawBitmap.cpp \
-	$(SCREEN_SRC_DIR)/GDI/Canvas.cpp \
-	$(SCREEN_SRC_DIR)/GDI/BufferCanvas.cpp \
-	$(SCREEN_SRC_DIR)/GDI/PaintCanvas.cpp
+	$(CANVAS_SRC_DIR)/gdi/Pen.cpp \
+	$(CANVAS_SRC_DIR)/gdi/Brush.cpp \
+	$(CANVAS_SRC_DIR)/gdi/Bitmap.cpp \
+	$(CANVAS_SRC_DIR)/gdi/ResourceBitmap.cpp \
+	$(CANVAS_SRC_DIR)/gdi/RawBitmap.cpp \
+	$(CANVAS_SRC_DIR)/gdi/Canvas.cpp \
+	$(CANVAS_SRC_DIR)/gdi/BufferCanvas.cpp \
+	$(CANVAS_SRC_DIR)/gdi/PaintCanvas.cpp
 GDI_CPPFLAGS = -DUSE_GDI
 GDI_CPPFLAGS += -DUSE_WINUSER
 GDI_LDLIBS = -luser32 -lgdi32 -lmsimg32
@@ -213,12 +214,12 @@ endif
 
 ifeq ($(USE_MEMORY_CANVAS),y)
 SCREEN_SOURCES += \
-	$(SCREEN_SRC_DIR)/Custom/Cache.cpp \
-	$(SCREEN_SRC_DIR)/Memory/Bitmap.cpp \
-	$(SCREEN_SRC_DIR)/Memory/RawBitmap.cpp \
-	$(SCREEN_SRC_DIR)/Memory/VirtualCanvas.cpp \
-	$(SCREEN_SRC_DIR)/Memory/SubCanvas.cpp \
-	$(SCREEN_SRC_DIR)/Memory/Canvas.cpp
+	$(CANVAS_SRC_DIR)/custom/Cache.cpp \
+	$(CANVAS_SRC_DIR)/memory/Bitmap.cpp \
+	$(CANVAS_SRC_DIR)/memory/RawBitmap.cpp \
+	$(CANVAS_SRC_DIR)/memory/VirtualCanvas.cpp \
+	$(CANVAS_SRC_DIR)/memory/SubCanvas.cpp \
+	$(CANVAS_SRC_DIR)/memory/Canvas.cpp
 MEMORY_CANVAS_CPPFLAGS = -DUSE_MEMORY_CANVAS
 endif
 

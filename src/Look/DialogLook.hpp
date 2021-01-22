@@ -26,13 +26,13 @@ Copyright_License {
 
 #include "ButtonLook.hpp"
 #include "CheckBoxLook.hpp"
-#include "Screen/Color.hpp"
-#include "Screen/Pen.hpp"
-#include "Screen/Brush.hpp"
-#include "Screen/Font.hpp"
+#include "ui/canvas/Color.hpp"
+#include "ui/canvas/Pen.hpp"
+#include "ui/canvas/Brush.hpp"
+#include "ui/canvas/Font.hpp"
 
 #ifdef EYE_CANDY
-#include "Screen/Bitmap.hpp"
+#include "ui/canvas/Bitmap.hpp"
 #endif
 
 struct DialogLook {

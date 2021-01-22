@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Screen/Ramp.hpp"
-#include "PortableColor.hpp"
 
 #include <cassert>
 

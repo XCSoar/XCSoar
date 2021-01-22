@@ -24,7 +24,7 @@ Copyright_License {
 #include "MapWindow.hpp"
 
 #ifndef ENABLE_OPENGL
-#include "Screen/WindowCanvas.hpp"
+#include "ui/canvas/WindowCanvas.hpp"
 #endif
 
 #include "Weather/Features.hpp"

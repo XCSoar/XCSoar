@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef ENABLE_OPENGL
 
 #include "StencilMapCanvas.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "Geo/SearchPointVector.hpp"

@@ -27,7 +27,7 @@ Copyright_License {
 #include "ui/event/sdl/Loop.hpp"
 #include "ui/event/Globals.hpp"
 #include "ui/event/Queue.hpp"
-#include "Screen/Custom/TopCanvas.hpp"
+#include "ui/canvas/custom/TopCanvas.hpp"
 #include "util/ConvertString.hpp"
 #include "util/RuntimeError.hxx"
 #include "util/UTF8.hpp"

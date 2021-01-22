@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef WAYPOINT_LOOK_HPP
 #define WAYPOINT_LOOK_HPP
 
-#include "Screen/Icon.hpp"
-#include "Screen/Brush.hpp"
+#include "ui/canvas/Icon.hpp"
+#include "ui/canvas/Brush.hpp"
 
 class Font;
 struct WaypointRendererSettings;

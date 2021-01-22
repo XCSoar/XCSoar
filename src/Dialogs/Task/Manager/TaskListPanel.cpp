@@ -38,7 +38,7 @@ Copyright_License {
 #include "system/FileUtil.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "util/StringCompare.hxx"

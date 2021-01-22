@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "SymbolRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 
 #include <algorithm>
 

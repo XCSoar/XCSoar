@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "FinalGlideBarRenderer.hpp"
 #include "TextInBox.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "NMEA/Derived.hpp"
 #include "Look/FinalGlideBarLook.hpp"
@@ -31,7 +31,7 @@ Copyright_License {
 #include "Formatter/UserUnits.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
 #endif
 
 void

@@ -22,7 +22,7 @@
  */
 
 #include "TrafficRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/TrafficLook.hpp"
 #include "FLARM/Traffic.hpp"

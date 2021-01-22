@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "ButtonRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/ButtonLook.hpp"
 #include "util/Macros.hpp"

@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "TaskLegRenderer.hpp"
 #include "ChartRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "Engine/Task/TaskManager.hpp"

@@ -38,7 +38,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scissor.hpp"
+#include "ui/canvas/opengl/Scissor.hpp"
 #endif
 
 enum ControlIndex {

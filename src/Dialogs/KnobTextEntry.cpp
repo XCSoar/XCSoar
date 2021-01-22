@@ -25,7 +25,7 @@ Copyright_License {
 #include "WidgetDialog.hpp"
 #include "Language/Language.hpp"
 #include "Widget/WindowWidget.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"

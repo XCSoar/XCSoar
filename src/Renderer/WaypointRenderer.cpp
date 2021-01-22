@@ -41,7 +41,7 @@ Copyright_License {
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/ProtectedRoutePlanner.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Units/Units.hpp"
 #include "util/TruncateString.hpp"
 #include "util/StaticArray.hxx"

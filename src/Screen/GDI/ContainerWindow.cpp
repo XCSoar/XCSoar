@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Screen/ContainerWindow.hpp"
-#include "Canvas.hpp"
 
 bool
 ContainerWindow::FocusFirstControl() noexcept

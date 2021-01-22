@@ -26,9 +26,9 @@ Copyright_License {
 #include "Look/MapLook.hpp"
 
 #ifndef ENABLE_OPENGL
-#include "Screen/BufferCanvas.hpp"
+#include "ui/canvas/BufferCanvas.hpp"
 #else
-#include "Screen/OpenGL/Scope.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
 #endif
 
 static void

@@ -22,12 +22,12 @@ Copyright_License {
 */
 
 #include "GlassRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 
 #if defined(EYE_CANDY) && defined(ENABLE_OPENGL)
 
-#include "Screen/OpenGL/Scissor.hpp"
-#include "Screen/OpenGL/VertexPointer.hpp"
+#include "ui/canvas/opengl/Scissor.hpp"
+#include "ui/canvas/opengl/VertexPointer.hpp"
 #include "util/Macros.hpp"
 
 #include <algorithm>

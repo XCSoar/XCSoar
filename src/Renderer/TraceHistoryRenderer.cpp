@@ -24,7 +24,7 @@ Copyright_License {
 #include "TraceHistoryRenderer.hpp"
 #include "ChartRenderer.hpp"
 #include "Navigation/TraceHistory.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/TraceHistoryLook.hpp"
 #include "Look/VarioLook.hpp"

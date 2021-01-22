@@ -22,7 +22,7 @@
 */
 
 #include "Gauge/TaskView.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Projection/ChartProjection.hpp"
 #include "Renderer/BackgroundRenderer.hpp"
 #include "Renderer/AirspaceRenderer.hpp"
@@ -39,9 +39,9 @@
 #include "MapSettings.hpp"
 
 #ifndef ENABLE_OPENGL
-#include "Screen/BufferCanvas.hpp"
+#include "ui/canvas/BufferCanvas.hpp"
 #else
-#include "Screen/OpenGL/Scope.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
 #endif
 
 gcc_pure

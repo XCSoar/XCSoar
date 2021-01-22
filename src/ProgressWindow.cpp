@@ -27,9 +27,9 @@ Copyright_License {
 #include "Resources.hpp"
 
 #ifdef USE_WINUSER
-#include "Screen/AnyCanvas.hpp"
+#include "ui/canvas/AnyCanvas.hpp"
 #else
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #endif
 
 ProgressWindow::ProgressWindow(ContainerWindow &parent)

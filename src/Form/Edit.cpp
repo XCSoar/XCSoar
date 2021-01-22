@@ -24,7 +24,7 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Look/DialogLook.hpp"
 #include "DataField/Base.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "Screen/Features.hpp"

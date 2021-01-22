@@ -24,15 +24,15 @@ Copyright_License {
 #ifndef TOPOGRAPHY_FILE_RENDERER_HPP
 #define TOPOGRAPHY_FILE_RENDERER_HPP
 
-#include "Screen/Pen.hpp"
-#include "Screen/Icon.hpp"
+#include "ui/canvas/Pen.hpp"
+#include "ui/canvas/Icon.hpp"
 #include "util/Serial.hpp"
 #include "Geo/GeoBounds.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Surface.hpp"
+#include "ui/canvas/opengl/Surface.hpp"
 #else
-#include "Screen/Brush.hpp"
+#include "ui/canvas/Brush.hpp"
 #include "Topography/ShapeRenderer.hpp"
 #endif
 

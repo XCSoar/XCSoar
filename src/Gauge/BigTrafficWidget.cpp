@@ -24,7 +24,7 @@
 #include "BigTrafficWidget.hpp"
 #include "Dialogs/Traffic/TrafficDialogs.hpp"
 #include "Math/Screen.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "Form/Button.hpp"

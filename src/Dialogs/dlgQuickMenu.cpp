@@ -31,7 +31,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Input/InputEvents.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "util/StaticArray.hxx"
 #include "util/StaticString.hxx"

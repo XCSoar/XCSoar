@@ -27,7 +27,7 @@ Copyright_License {
 #include "Main.hpp"
 #include "Form/List.hpp"
 #include "Form/Form.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 
 static void
 PaintItemCallback(Canvas &canvas, const PixelRect rc, unsigned idx)

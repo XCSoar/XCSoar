@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Form/Frame.hpp"
-#include "Screen/AnyCanvas.hpp"
+#include "ui/canvas/AnyCanvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/DialogLook.hpp"
 

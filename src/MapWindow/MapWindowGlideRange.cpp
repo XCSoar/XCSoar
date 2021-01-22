@@ -27,9 +27,9 @@ Copyright_License {
 #include "Task/ProtectedRoutePlanner.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
-#include "Screen/OpenGL/VertexPointer.hpp"
-#include "Screen/OpenGL/Triangulate.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
+#include "ui/canvas/opengl/VertexPointer.hpp"
+#include "ui/canvas/opengl/Triangulate.hpp"
 #endif
 
 #include <stdio.h>

@@ -25,7 +25,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Form/Frame.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Font.hpp"
+#include "ui/canvas/Font.hpp"
 #include "Look/DialogLook.hpp"
 
 void

@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "SolidContainerWindow.hpp"
-#include "Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 
 void
 SolidContainerWindow::OnPaint(Canvas &canvas)

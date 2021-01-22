@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_INFO_BOX_LOOK_HPP
 #define XCSOAR_INFO_BOX_LOOK_HPP
 
-#include "Screen/Pen.hpp"
-#include "Screen/Brush.hpp"
-#include "Screen/Font.hpp"
+#include "ui/canvas/Pen.hpp"
+#include "ui/canvas/Brush.hpp"
+#include "ui/canvas/Font.hpp"
 #include "util/Macros.hpp"
 
 class Font;

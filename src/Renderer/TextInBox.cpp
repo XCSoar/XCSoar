@@ -23,11 +23,11 @@ Copyright_License {
 
 #include "TextInBox.hpp"
 #include "LabelBlock.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
 #endif
 
 static PixelPoint

@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_SOLID_CONTAINER_WINDOW_HPP
 
 #include "ContainerWindow.hpp"
-#include "Color.hpp"
+#include "ui/canvas/Color.hpp"
 
 /**
  * A #ContainerWindow with a solid background color.

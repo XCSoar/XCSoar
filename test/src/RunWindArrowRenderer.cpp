@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Main.hpp"
 #include "ui/event/PeriodicTimer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Look/WindArrowLook.hpp"
 #include "Renderer/WindArrowRenderer.hpp"
 #include "Geo/SpeedVector.hpp"

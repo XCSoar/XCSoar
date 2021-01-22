@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "MapWindow.hpp"
 #include "Look/MapLook.hpp"
-#include "Screen/Icon.hpp"
+#include "ui/canvas/Icon.hpp"
 #include "Tracking/SkyLines/Data.hpp"
 
 template<typename T>

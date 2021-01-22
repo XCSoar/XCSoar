@@ -25,7 +25,7 @@ Copyright_License {
 #include "ui/dim/Size.hpp"
 
 #ifdef _WIN32
-#include "Screen/GDI/RootDC.hpp"
+#include "ui/canvas/gdi/RootDC.hpp"
 #include <windows.h>
 #elif defined(USE_X11)
 #include "ui/event/Globals.hpp"

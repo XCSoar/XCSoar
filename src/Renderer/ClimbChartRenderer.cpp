@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "ClimbChartRenderer.hpp"
 #include "ChartRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Units/Units.hpp"
 #include "FlightStatistics.hpp"
 #include "Language/Language.hpp"

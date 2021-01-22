@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_GESTURE_LOOK_HPP
 #define XCSOAR_GESTURE_LOOK_HPP
 
-#include "Screen/Color.hpp"
-#include "Screen/Pen.hpp"
+#include "ui/canvas/Color.hpp"
+#include "ui/canvas/Pen.hpp"
 
 struct GestureLook
 {

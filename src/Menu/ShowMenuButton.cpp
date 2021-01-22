@@ -23,14 +23,14 @@ Copyright_License {
 
 #include "ShowMenuButton.hpp"
 #include "Renderer/ButtonRenderer.hpp"
-#include "Screen/Canvas.hpp"
-#include "Screen/Pen.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/Pen.hpp"
 #include "Screen/Layout.hpp"
 #include "Input/InputEvents.hpp"
 #include "util/Macros.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
 #endif
 
 class ShowMenuButtonRenderer : public ButtonRenderer {

@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "NextArrowRenderer.hpp"
 #include "Look/WindArrowLook.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/Screen.hpp"
 #include "Math/Angle.hpp"

@@ -26,8 +26,8 @@ Copyright_License {
 
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/ProgressBar.hpp"
-#include "Screen/Bitmap.hpp"
-#include "Screen/Color.hpp"
+#include "ui/canvas/Bitmap.hpp"
+#include "ui/canvas/Color.hpp"
 #include "Gauge/LogoView.hpp"
 #include "util/StaticString.hxx"
 

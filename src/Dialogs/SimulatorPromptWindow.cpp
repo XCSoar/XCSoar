@@ -27,7 +27,7 @@ Copyright_License {
 
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Gauge/LogoView.hpp"
 #include "Screen/Layout.hpp"
 #include "Renderer/BitmapButtonRenderer.hpp"

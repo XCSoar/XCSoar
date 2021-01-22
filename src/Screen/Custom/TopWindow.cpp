@@ -22,11 +22,11 @@ Copyright_License {
 */
 
 #include "Screen/TopWindow.hpp"
-#include "Screen/Custom/TopCanvas.hpp"
+#include "ui/canvas/custom/TopCanvas.hpp"
 #include "Hardware/CPU.hpp"
 
 #ifdef USE_MEMORY_CANVAS
-#include "Screen/Memory/Canvas.hpp"
+#include "ui/canvas/memory/Canvas.hpp"
 #endif
 
 namespace UI {

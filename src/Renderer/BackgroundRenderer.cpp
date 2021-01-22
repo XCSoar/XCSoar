@@ -24,7 +24,7 @@ Copyright_License {
 #include "BackgroundRenderer.hpp"
 #include "Terrain/TerrainRenderer.hpp"
 #include "Projection/WindowProjection.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "NMEA/Derived.hpp"
 
 const Angle BackgroundRenderer::DEFAULT_SHADING_ANGLE = Angle::Degrees(-45);

@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "VarioHistogramRenderer.hpp"
 #include "ChartRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "FlightStatistics.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
@@ -34,7 +34,7 @@ Copyright_License {
 #include "GradientRenderer.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
 #endif
 
 void

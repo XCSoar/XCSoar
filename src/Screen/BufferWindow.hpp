@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_BUFFER_WINDOW_HXX
 
 #include "Screen/PaintWindow.hpp"
-#include "Screen/BufferCanvas.hpp"
+#include "ui/canvas/BufferCanvas.hpp"
 
 /**
  * A #PaintWindow with buffered painting, to avoid flickering.

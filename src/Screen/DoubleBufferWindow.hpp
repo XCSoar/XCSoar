@@ -35,7 +35,7 @@ using DoubleBufferWindow = BufferWindow;
 #else
 
 #include "Screen/PaintWindow.hpp"
-#include "Screen/BufferCanvas.hpp"
+#include "ui/canvas/BufferCanvas.hpp"
 #include "ui/event/Notify.hpp"
 #include "thread/Mutex.hxx"
 

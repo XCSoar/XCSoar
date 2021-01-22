@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "HLine.hpp"
 #include "Look/DialogLook.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 
 void
 HLine::OnPaint(Canvas &canvas)

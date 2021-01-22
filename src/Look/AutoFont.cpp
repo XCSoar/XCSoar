@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "AutoFont.hpp"
 #include "FontDescription.hpp"
-#include "Screen/Font.hpp"
+#include "ui/canvas/Font.hpp"
 
 #include <algorithm>
 

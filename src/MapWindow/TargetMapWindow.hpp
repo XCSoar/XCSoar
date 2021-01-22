@@ -34,7 +34,7 @@ Copyright_License {
 #include "util/Compiler.h"
 
 #ifndef ENABLE_OPENGL
-#include "Screen/BufferCanvas.hpp"
+#include "ui/canvas/BufferCanvas.hpp"
 #endif
 
 struct WaypointLook;

@@ -27,7 +27,7 @@ Copyright_License {
 #include "Look/TopographyLook.hpp"
 #include "Renderer/LabelBlock.hpp"
 #include "Projection/WindowProjection.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Features.hpp"
 #include "Screen/Layout.hpp"
 #include "shapelib/mapserver.h"
@@ -37,13 +37,13 @@ Copyright_License {
 #include "Geo/FAISphere.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/VertexPointer.hpp"
-#include "Screen/OpenGL/Buffer.hpp"
-#include "Screen/OpenGL/Dynamic.hpp"
-#include "Screen/OpenGL/Geo.hpp"
+#include "ui/canvas/opengl/VertexPointer.hpp"
+#include "ui/canvas/opengl/Buffer.hpp"
+#include "ui/canvas/opengl/Dynamic.hpp"
+#include "ui/canvas/opengl/Geo.hpp"
 
-#include "Screen/OpenGL/Program.hpp"
-#include "Screen/OpenGL/Shaders.hpp"
+#include "ui/canvas/opengl/Program.hpp"
+#include "ui/canvas/opengl/Shaders.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 #endif

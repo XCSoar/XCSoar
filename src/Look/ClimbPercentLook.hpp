@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_CLIMB_PERCENT_LOOK_HPP
 #define XCSOAR_CLIMB_PERCENT_LOOK_HPP
 
-#include "Screen/Pen.hpp"
-#include "Screen/Brush.hpp"
-#include "Screen/Icon.hpp"
+#include "ui/canvas/Pen.hpp"
+#include "ui/canvas/Brush.hpp"
+#include "ui/canvas/Icon.hpp"
 #include "Screen/Features.hpp"
 
 struct ClimbPercentLook {

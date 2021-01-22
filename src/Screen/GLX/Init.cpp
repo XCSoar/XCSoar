@@ -25,9 +25,9 @@ Copyright_License {
 #include "ui/event/Globals.hpp"
 #include "ui/event/Queue.hpp"
 #include "Screen/Debug.hpp"
-#include "Screen/Font.hpp"
-#include "Screen/OpenGL/Init.hpp"
-#include "Screen/FreeType/Init.hpp"
+#include "ui/canvas/Font.hpp"
+#include "ui/canvas/opengl/Init.hpp"
+#include "ui/canvas/freetype/Init.hpp"
 
 using namespace UI;
 

@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
-#include "Screen/Icon.hpp"
+#include "ui/canvas/Icon.hpp"
 #include "Screen/Layout.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Look/TrafficLook.hpp"

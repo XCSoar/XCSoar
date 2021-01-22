@@ -28,7 +28,7 @@ Copyright_License {
 #include "ui/event/Queue.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Debug.hpp"
+#include "ui/canvas/opengl/Debug.hpp"
 #endif
 
 #include <cassert>

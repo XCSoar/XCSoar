@@ -24,7 +24,7 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "time/PeriodClock.hpp"
 #include "Asset.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/event/KeyCode.hpp"
@@ -37,8 +37,8 @@ Copyright_License {
 #endif
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
-#include "Screen/OpenGL/VertexPointer.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
+#include "ui/canvas/opengl/VertexPointer.hpp"
 #endif
 
 #ifdef ANDROID

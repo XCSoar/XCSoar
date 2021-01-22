@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "BitmapButtonRenderer.hpp"
-#include "Screen/Canvas.hpp"
-#include "Screen/Bitmap.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/Bitmap.hpp"
 
 unsigned
 BitmapButtonRenderer::GetMinimumButtonWidth() const

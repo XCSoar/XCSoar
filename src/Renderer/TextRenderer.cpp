@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "TextRenderer.hpp"
-#include "Screen/Canvas.hpp"
-#include "Screen/AnyCanvas.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/AnyCanvas.hpp"
 #include "Asset.hpp"
 
 #include <winuser.h>

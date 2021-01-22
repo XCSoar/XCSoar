@@ -26,14 +26,14 @@
 #include "util/Clamp.hpp"
 #include "NMEA/Attitude.hpp"
 #include "NMEA/Derived.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Language/Language.hpp"
 #include "Look/ThermalAssistantLook.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
 #endif
 
 PixelPoint

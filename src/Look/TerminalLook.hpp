@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_TERMINAL_LOOK_HPP
 #define XCSOAR_TERMINAL_LOOK_HPP
 
-#include "Screen/Color.hpp"
-#include "Screen/Font.hpp"
+#include "ui/canvas/Color.hpp"
+#include "ui/canvas/Font.hpp"
 
 struct TerminalLook {
   Color background_color, text_color;

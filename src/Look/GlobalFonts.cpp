@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "GlobalFonts.hpp"
 #include "FontSettings.hpp"
-#include "Screen/Font.hpp"
+#include "ui/canvas/Font.hpp"
 
 /// text names on the map
 Font Fonts::map;

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_WAVE_LOOK_HPP
 #define XCSOAR_WAVE_LOOK_HPP
 
-#include "Screen/Pen.hpp"
+#include "ui/canvas/Pen.hpp"
 
 struct WaveLook {
   Pen pen;

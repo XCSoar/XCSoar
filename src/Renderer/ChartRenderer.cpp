@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "ChartRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/LeastSquares.hpp"
 #include "util/StaticString.hxx"
@@ -31,7 +31,7 @@ Copyright_License {
 #include <windef.h> /* for MAX_PATH */
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
 #endif
 
 void

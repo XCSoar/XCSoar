@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "WList.hpp"
 #include "Screen/ContainerWindow.hpp"
-#include "Screen/SubCanvas.hpp"
+#include "ui/canvas/SubCanvas.hpp"
 
 #include <iterator>
 

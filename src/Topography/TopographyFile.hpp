@@ -29,7 +29,7 @@ Copyright_License {
 #include "Geo/GeoBounds.hpp"
 #include "util/AllocatedArray.hxx"
 #include "util/Serial.hpp"
-#include "Screen/Color.hpp"
+#include "ui/canvas/Color.hpp"
 #include "ResourceId.hpp"
 #include "thread/Mutex.hxx"
 

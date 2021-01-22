@@ -24,8 +24,8 @@
 #ifndef XCSOAR_TRAIL_LOOK_HPP
 #define XCSOAR_TRAIL_LOOK_HPP
 
-#include "Screen/Brush.hpp"
-#include "Screen/Pen.hpp"
+#include "ui/canvas/Brush.hpp"
+#include "ui/canvas/Pen.hpp"
 
 struct TrailSettings;
 

@@ -22,10 +22,10 @@ Copyright_License {
 */
 
 #include "Screen/TopWindow.hpp"
-#include "Screen/Custom/Cache.hpp"
-#include "Screen/OpenGL/Surface.hpp"
-#include "Screen/OpenGL/Shapes.hpp"
-#include "Screen/Custom/TopCanvas.hpp"
+#include "ui/canvas/custom/Cache.hpp"
+#include "ui/canvas/opengl/Surface.hpp"
+#include "ui/canvas/opengl/Shapes.hpp"
+#include "ui/canvas/custom/TopCanvas.hpp"
 #include "ui/event/Queue.hpp"
 #include "ui/event/android/Loop.hpp"
 #include "ui/event/Globals.hpp"

@@ -34,7 +34,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Form/ActionListener.hpp"
 #include "Screen/SingleWindow.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Kernel.hpp"
 #include "System.hpp"
 #include "NetworkDialog.hpp"

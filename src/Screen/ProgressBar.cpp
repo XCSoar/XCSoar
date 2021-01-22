@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "ProgressBar.hpp"
-#include "Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Features.hpp"
 #include "Look/Colors.hpp"
 #include "thread/Debug.hpp"

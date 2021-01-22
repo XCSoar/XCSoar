@@ -103,8 +103,8 @@ Copyright_License {
 #include "lua/Background.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Globals.hpp"
-#include "Screen/OpenGL/Dynamic.hpp"
+#include "ui/canvas/opengl/Globals.hpp"
+#include "ui/canvas/opengl/Dynamic.hpp"
 #else
 #include "DrawThread.hpp"
 #endif

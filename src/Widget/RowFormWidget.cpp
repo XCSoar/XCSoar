@@ -30,7 +30,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/LargeTextWindow.hpp"
-#include "Screen/Font.hpp"
+#include "ui/canvas/Font.hpp"
 
 #include <cassert>
 

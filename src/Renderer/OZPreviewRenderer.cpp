@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "OZPreviewRenderer.hpp"
 #include "OZRenderer.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Screen/Features.hpp"
 #include "Engine/Task/ObservationZones/CylinderZone.hpp"
 #include "Engine/Task/ObservationZones/Boundary.hpp"

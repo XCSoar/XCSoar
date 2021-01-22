@@ -23,14 +23,14 @@ Copyright_License {
 
 #include "Screen/Init.hpp"
 #include "Screen/Debug.hpp"
-#include "Screen/Font.hpp"
+#include "ui/canvas/Font.hpp"
 #include "ui/event/Globals.hpp"
 #include "ui/event/Queue.hpp"
 #include "util/RuntimeError.hxx"
 #include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Init.hpp"
+#include "ui/canvas/opengl/Init.hpp"
 #endif
 
 #include <SDL.h>

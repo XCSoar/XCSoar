@@ -33,7 +33,7 @@ Copyright_License {
 #include "Widget/DockWindow.hpp"
 #include "Widget/PanelWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Font.hpp"
+#include "ui/canvas/Font.hpp"
 #include "Components.hpp"
 #include "Units/Units.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
@@ -56,7 +56,7 @@ Copyright_License {
 #include "Widgets/KeyholeZoneEditWidget.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scissor.hpp"
+#include "ui/canvas/opengl/Scissor.hpp"
 #endif
 
 class TaskPointWidget final

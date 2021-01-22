@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "TrailRenderer.hpp"
 #include "Look/TrailLook.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "MapSettings.hpp"

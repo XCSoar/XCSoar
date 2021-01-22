@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_TASK_MAP_BUTTON_RENDERER_HPP
 
 #include "Renderer/ButtonRenderer.hpp"
-#include "Screen/BufferCanvas.hpp"
+#include "ui/canvas/BufferCanvas.hpp"
 
 struct MapLook;
 class OrderedTask;

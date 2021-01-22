@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Fonts.hpp"
 #include "Look/FontDescription.hpp"
-#include "Screen/Font.hpp"
+#include "ui/canvas/Font.hpp"
 #include "Screen/Layout.hpp"
 
 Font normal_font, bold_font;

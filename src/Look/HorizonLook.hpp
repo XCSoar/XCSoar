@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef HORIZON_LOOK_HPP
 #define HORIZON_LOOK_HPP
 
-#include "Screen/Pen.hpp"
-#include "Screen/Brush.hpp"
+#include "ui/canvas/Pen.hpp"
+#include "ui/canvas/Brush.hpp"
 
 struct HorizonLook {
   Pen aircraft_pen;

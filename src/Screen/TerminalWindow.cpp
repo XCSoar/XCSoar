@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "TerminalWindow.hpp"
-#include "Screen/Canvas.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Look/TerminalLook.hpp"
 #include "util/CharUtil.hxx"
 
