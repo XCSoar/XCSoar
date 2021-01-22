@@ -131,7 +131,7 @@ public:
 		SetOption(CURLOPT_FAILONERROR, (long)value);
 	}
 
-	void SetVerifyPeer(bool value=false) {
+	void SetVerifyPeer(bool value) {
 		SetOption(CURLOPT_SSL_VERIFYPEER, (long)value);
 	}
 
