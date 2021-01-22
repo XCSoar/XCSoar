@@ -207,7 +207,7 @@
 #     endif
 
 
-#if defined ZZIP_EXPORTS || defined ZZIPLIB_EXPORTS
+#if defined ZZIP_EXPORTS || defined ZZIPLIB_EXPORTS || defined libzzip_EXPORTS // CMake export defines
 # undef ZZIP_DLL
 #define ZZIP_DLL 1
 #endif
