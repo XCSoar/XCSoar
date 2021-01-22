@@ -78,7 +78,9 @@ namespace Net {
      */
     void SetRequestBody(const MultiPartFormData &body);
 
-    void SetVerifyPeer(bool value);
+    void SetVerifyPeer(bool value) {
+      handle.SetVerifyPeer(value);
+    }
 
     /**
      * Send the request to the server and receive response headers.
