@@ -96,17 +96,6 @@ bool os_haptic_feedback_enabled;
 IOIOHelper *ioio_helper;
 
 gcc_visibility_default
-JNIEXPORT jint JNICALL
-Java_org_xcsoar_NativeView_getEglContextClientVersion(JNIEnv *env, jobject obj)
-{
-#ifdef HAVE_GLES2
-  return 2;
-#else
-  return 1;
-#endif
-}
-
-gcc_visibility_default
 JNIEXPORT jboolean JNICALL
 Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
                                             jobject _context,

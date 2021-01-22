@@ -183,17 +183,11 @@ class NativeView extends SurfaceView
 
     if (context == EGL10.EGL_NO_CONTEXT) {
       final int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
-      final int contextClientVersion = getEglContextClientVersion();
-      int[] contextAttribList = null;
-      if (contextClientVersion != 1)
-        /* the default EGL_CONTEXT_CLIENT_VERSION is 1, so we need to
-         * specify this only if using GLES2; some old Androids (e.g. HTC
-         * Magic) will fail eglCreateContext() with EGL_BAD_ATTRIBUTE if
-         * EGL_CONTEXT_CLIENT_VERSION is specified */
-        contextAttribList = new int[]{
-          EGL_CONTEXT_CLIENT_VERSION, getEglContextClientVersion(),
-          EGL10.EGL_NONE
-        };
+      final int contextClientVersion = 2;
+      final int[] contextAttribList = new int[]{
+        EGL_CONTEXT_CLIENT_VERSION, contextClientVersion,
+        EGL10.EGL_NONE
+      };
 
       context = egl.eglCreateContext(display, config,
                                      EGL10.EGL_NO_CONTEXT, contextAttribList);
@@ -330,8 +324,6 @@ class NativeView extends SurfaceView
     Log.d(TAG, "sending message to quitHandler");
     quitHandler.sendMessage(quitHandler.obtainMessage());
   }
-
-  protected native int getEglContextClientVersion();
 
   protected native boolean initializeNative(Context context,
                                             int width, int height,
