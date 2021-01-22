@@ -37,11 +37,13 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #endif
 
+#ifdef USE_FB
+#include "Screen/Memory/Canvas.hpp"
+#endif
+
 namespace UI {
 
 #ifdef USE_FB
-
-#include "Screen/Memory/Canvas.hpp"
 
 void
 TopWindow::CheckResize() noexcept
