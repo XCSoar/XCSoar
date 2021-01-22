@@ -95,13 +95,6 @@ bool os_haptic_feedback_enabled;
 
 IOIOHelper *ioio_helper;
 
-extern "C" {
-  /* workaround for
-     http://code.google.com/p/android/issues/detail?id=23203 copied
-     from https://bugzilla.mozilla.org/show_bug.cgi?id=734832 */
-  __attribute__((weak)) void *__dso_handle;
-}
-
 gcc_visibility_default
 JNIEXPORT jint JNICALL
 Java_org_xcsoar_NativeView_getEglContextClientVersion(JNIEnv *env, jobject obj)
