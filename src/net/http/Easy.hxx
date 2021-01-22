@@ -172,7 +172,7 @@ public:
 	}
 
 	template<typename T>
-	bool GetInfo(CURLINFO info, T value_r) const {
+	bool GetInfo(CURLINFO info, T value_r) const noexcept {
 		return ::curl_easy_getinfo(handle, info, value_r) == CURLE_OK;
 	}
 
@@ -180,14 +180,14 @@ public:
 	 * Returns the response body's size, or -1 if that is unknown.
 	 */
 	gcc_pure
-	int64_t GetContentLength() const {
+	int64_t GetContentLength() const noexcept {
 		double value;
 		return GetInfo(CURLINFO_CONTENT_LENGTH_DOWNLOAD, &value)
 			? (int64_t)value
 			: -1;
 	}
 
-	bool Unpause() {
+	bool Unpause() noexcept {
 		return ::curl_easy_pause(handle, CURLPAUSE_CONT) == CURLE_OK;
 	}
 };
