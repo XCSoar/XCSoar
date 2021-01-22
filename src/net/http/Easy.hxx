@@ -119,6 +119,10 @@ public:
 		SetOption(CURLOPT_USERPWD, userpwd);
 	}
 
+	void SetUpload(bool value=true) {
+		SetOption(CURLOPT_UPLOAD, (long)value);
+	}
+
 	void SetNoProgress(bool value=true) {
 		SetOption(CURLOPT_NOPROGRESS, (long)value);
 	}
@@ -131,12 +135,20 @@ public:
 		SetOption(CURLOPT_FAILONERROR, (long)value);
 	}
 
+	void SetVerifyHost(bool value) {
+		SetOption(CURLOPT_SSL_VERIFYHOST, value ? 2L : 0L);
+	}
+
 	void SetVerifyPeer(bool value) {
 		SetOption(CURLOPT_SSL_VERIFYPEER, (long)value);
 	}
 
 	void SetConnectTimeout(long timeout) {
 		SetOption(CURLOPT_CONNECTTIMEOUT, timeout);
+	}
+
+	void SetTimeout(long timeout) {
+		SetOption(CURLOPT_TIMEOUT, timeout);
 	}
 
 	void SetHeaderFunction(size_t (*function)(char *buffer, size_t size,
@@ -152,6 +164,13 @@ public:
 			      void *userdata) {
 		SetOption(CURLOPT_WRITEFUNCTION, function);
 		SetOption(CURLOPT_WRITEDATA, userdata);
+	}
+
+	void SetReadFunction(size_t (*function)(char *ptr, size_t size,
+						size_t nmemb, void *userdata),
+			      void *userdata) {
+		SetOption(CURLOPT_READFUNCTION, function);
+		SetOption(CURLOPT_READDATA, userdata);
 	}
 
 	void SetNoBody(bool value=true) {
