@@ -24,11 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_LAYOUT_HPP
 #define XCSOAR_SCREEN_LAYOUT_HPP
 
-#include "ui/dim/Point.hpp"
+#include "ui/dim/Size.hpp"
 #include "Asset.hpp"
 #include "util/Compiler.h"
-
-struct PixelSize;
 
 namespace Layout
 {
@@ -144,6 +142,16 @@ Scale(long x)
     return x;
 
   return (x * long(scale_1024)) >> 10;
+}
+
+gcc_const
+static inline PixelSize
+Scale(PixelSize size) noexcept
+{
+  if (!ScaleSupported())
+    return size;
+
+  return {Scale(size.cx), Scale(size.cy)};
 }
 
 gcc_const
