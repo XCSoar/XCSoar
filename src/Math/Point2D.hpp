@@ -126,13 +126,11 @@ struct FloatPoint2D : Point2D<float> {
 static_assert(std::is_trivial<FloatPoint2D>::value, "type is not trivial");
 
 template<typename P>
-struct IsPoint2D : std::is_base_of<Point2D<typename P::scalar_type,
-                                           typename P::product_type>, P> {
-};
+using IsPoint2D = std::is_base_of<Point2D<typename P::scalar_type,
+                                          typename P::product_type>, P>;
 
 template<typename P>
-struct EnableIfPoint2D : std::enable_if<IsPoint2D<P>::value> {
-};
+using EnableIfPoint2D = std::enable_if<IsPoint2D<P>::value>;
 
 template<typename P, typename RT=typename P::product_type,
          typename=typename EnableIfPoint2D<P>::type>
