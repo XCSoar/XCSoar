@@ -301,7 +301,7 @@ TextCache::Get(const Font &font, StringView text) noexcept
   }
 
   font.Render(text2, size, buffer);
-  RenderedText rt(size.cx, size.cy, buffer);
+  RenderedText rt(size.width, size.height, buffer);
 #ifdef ENABLE_OPENGL
   delete[] buffer;
 #endif
@@ -311,8 +311,8 @@ TextCache::Get(const Font &font, StringView text) noexcept
   if (texture_id == 0)
     return nullptr;
 
-  RenderedText rt(texture_id, size.cx, size.cy,
-                  allocated_size.cx, allocated_size.cy);
+  RenderedText rt(texture_id, size.width, size.height,
+                  allocated_size.width, allocated_size.height);
 #else
 #error No font renderer
 #endif

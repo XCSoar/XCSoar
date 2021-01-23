@@ -80,7 +80,7 @@ Canvas::DrawFormattedText(PixelRect r, const TCHAR *text, unsigned format)
     TCHAR *prev_p = nullptr;
 
     // remove words from behind till line fits or no more space is found
-    while (unsigned(sz.cx) > r.GetWidth() &&
+    while (sz.width > r.GetWidth() &&
            (p = StringFindLast(duplicated + i, _T(' '))) != nullptr) {
       if (prev_p)
         *prev_p = _T(' ');
@@ -110,8 +110,8 @@ Canvas::DrawFormattedText(PixelRect r, const TCHAR *text, unsigned format)
       if (format & (DT_RIGHT | DT_CENTER)) {
         PixelSize sz = CalcTextSize(duplicated + i);
         x = (format & DT_CENTER)
-          ? (r.left + r.right - sz.cx) / 2
-          : r.right - sz.cx;  // DT_RIGHT
+          ? (r.left + r.right - (int)sz.width) / 2
+          : r.right - (int)sz.width;  // DT_RIGHT
       } else {  // default is DT_LEFT
         x = r.left;
       }

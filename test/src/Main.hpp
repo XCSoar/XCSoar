@@ -213,11 +213,11 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   if (a != nullptr && a[0] == '-' && IsDigitASCII(a[1])) {
     args.GetNext();
     char *p;
-    window_size.cx = ParseUnsigned(a + 1, &p);
+    window_size.width = ParseUnsigned(a + 1, &p);
     if (*p != 'x' && *p != 'X')
       args.UsageError();
     a = p;
-    window_size.cy = ParseUnsigned(a + 1, &p);
+    window_size.height = ParseUnsigned(a + 1, &p);
     if (*p != '\0')
       args.UsageError();
   }

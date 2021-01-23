@@ -58,9 +58,9 @@ TextWidget::GetMaximumSize() const
 
   if (IsDefined()) {
     const WndFrame &w = (const WndFrame &)GetWindow();
-    int text_height = w.GetTextHeight() + Layout::Scale(4);
-    if (text_height > size.cy)
-      size.cy = text_height;
+    const unsigned text_height = w.GetTextHeight() + Layout::Scale(4);
+    if (text_height > size.height)
+      size.height = text_height;
   }
 
   return size;

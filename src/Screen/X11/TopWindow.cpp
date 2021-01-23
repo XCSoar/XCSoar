@@ -103,7 +103,7 @@ TopWindow::CreateNative(const TCHAR *text, PixelSize size,
 #endif
 
   x_window = XCreateWindow(x_display, x_root,
-                           0, 0, size.cx, size.cy, 0,
+                           0, 0, size.width, size.height, 0,
                            depth, InputOutput,
                            visual, valuemask,
                            &swa);

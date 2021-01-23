@@ -125,9 +125,9 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
       PixelSize topSize = canvas.CalcTextSize(topText);
       AirspaceFormatter::FormatAltitudeShort(baseText, label.base, false);
       PixelSize baseSize = canvas.CalcTextSize(baseText);
-      int labelWidth = std::max(topSize.cx, baseSize.cx) +
-                       2 * Layout::GetTextPadding();
-      int labelHeight = topSize.cy + baseSize.cy;
+      const unsigned labelWidth =
+        std::max(topSize.width, baseSize.width) + 2 * Layout::GetTextPadding();
+      const unsigned labelHeight = topSize.height + baseSize.height;
 
       // box
       const auto pos = projection.GeoToScreen(label.pos);
@@ -150,13 +150,13 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
 #endif
 
       // top text
-      int x = rect.right - Layout::GetTextPadding() - topSize.cx;
+      int x = rect.right - Layout::GetTextPadding() - topSize.width;
       int y = rect.top;
       canvas.DrawText(x, y, topText);
 
       // base text
-      x = rect.right - Layout::GetTextPadding() - baseSize.cx;
-      y = rect.bottom - baseSize.cy;
+      x = rect.right - Layout::GetTextPadding() - baseSize.width;
+      y = rect.bottom - baseSize.height;
       canvas.DrawText(x, y, baseText);
     }
   }

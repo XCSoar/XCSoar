@@ -69,14 +69,14 @@ GaugeVario::BallastGeometry::BallastGeometry(const VarioLook &look,
   tSize = look.text_font->TextSize(TEXT_BALLAST);
 
   // update back rect with max label size
-  label_rect.right = label_rect.left + tSize.cx;
+  label_rect.right = label_rect.left + tSize.width;
   label_rect.bottom = label_rect.top +
     look.text_font->GetCapitalHeight();
 
   // get max value size
   tSize = look.text_font->TextSize(_T("100%"));
 
-  value_rect.right = value_rect.left + tSize.cx;
+  value_rect.right = value_rect.left + tSize.width;
   // update back rect with max label size
   value_rect.bottom = value_rect.top +
     look.text_font->GetCapitalHeight();
@@ -108,7 +108,7 @@ GaugeVario::BugsGeometry::BugsGeometry(const VarioLook &look,
 
   tSize = look.text_font->TextSize(TEXT_BUG);
 
-  label_rect.right = label_rect.left + tSize.cx;
+  label_rect.right = label_rect.left + tSize.width;
   label_rect.bottom = label_rect.top
     + look.text_font->GetCapitalHeight()
     + look.text_font->GetHeight()
@@ -116,7 +116,7 @@ GaugeVario::BugsGeometry::BugsGeometry(const VarioLook &look,
 
   tSize = look.text_font->TextSize(_T("100%"));
 
-  value_rect.right = value_rect.left + tSize.cx;
+  value_rect.right = value_rect.left + tSize.width;
   value_rect.bottom = value_rect.top +
     look.text_font->GetCapitalHeight();
 }
@@ -131,7 +131,7 @@ GaugeVario::LabelValueGeometry::LabelValueGeometry(const VarioLook &look,
            - look.text_font->GetAscentHeight()),
    // TODO: update after units got reconfigured?
    value_right(position.x - UnitSymbolRenderer::GetSize(look.unit_font,
-                                                        Units::current.vertical_speed_unit).cx),
+                                                        Units::current.vertical_speed_unit).width),
    value_top(label_bottom + Layout::Scale(2)),
    value_bottom(value_top + look.value_font.GetCapitalHeight()),
    value_y(value_top + look.value_font.GetCapitalHeight()
@@ -433,7 +433,7 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
   if (!IsPersistent() || (dirty && !StringIsEqual(di.label.last_text, label))) {
     canvas.SetTextColor(look.dimmed_text_color);
     canvas.Select(*look.text_font);
-    const unsigned width = canvas.CalcTextSize(label).cx;
+    const unsigned width = canvas.CalcTextSize(label).width;
 
     const PixelPoint text_position{g.label_right - width, g.label_y};
 
@@ -460,7 +460,7 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
     canvas.SetTextColor(look.text_color);
     _stprintf(buffer, _T("%.1f"), (double)value);
     canvas.Select(look.value_font);
-    const unsigned width = canvas.CalcTextSize(buffer).cx;
+    const unsigned width = canvas.CalcTextSize(buffer).width;
 
     const PixelPoint text_position{g.value_right - width, g.value_y};
 

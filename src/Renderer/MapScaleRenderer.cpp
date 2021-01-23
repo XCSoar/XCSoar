@@ -48,7 +48,7 @@ RenderMapScale(Canvas &canvas,
   PixelSize text_size = canvas.CalcTextSize(buffer);
 
   // check if window too small to bother drawing
-  if ((unsigned)text_size.cx*3 > rc.GetWidth())
+  if (text_size.width * 3 > rc.GetWidth())
     return;
 
   const int text_padding_x = Layout::GetTextPadding();
@@ -58,9 +58,9 @@ RenderMapScale(Canvas &canvas,
   int x = rc.left;
   look.map_scale_left_icon.Draw(canvas, PixelPoint(x, rc.bottom - height));
 
-  x += look.map_scale_left_icon.GetSize().cx;
+  x += look.map_scale_left_icon.GetSize().width;
   canvas.DrawFilledRectangle(x, rc.bottom - height,
-                             x + 2 * text_padding_x + text_size.cx,
+                             x + 2 * text_padding_x + text_size.width,
                              rc.bottom, COLOR_WHITE);
 
   canvas.SetBackgroundTransparent();
@@ -70,6 +70,6 @@ RenderMapScale(Canvas &canvas,
                   rc.bottom - font.GetAscentHeight() - Layout::Scale(1),
                   buffer);
 
-  x += text_padding_x + text_size.cx;
+  x += text_padding_x + text_size.width;
   look.map_scale_right_icon.Draw(canvas, PixelPoint(x, rc.bottom - height));
 }

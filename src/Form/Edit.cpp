@@ -132,7 +132,7 @@ WndProperty::~WndProperty() noexcept
 unsigned
 WndProperty::GetRecommendedCaptionWidth() const noexcept
 {
-  return look.text_font.TextSize(caption).cx + Layout::GetTextPadding() * 2;
+  return look.text_font.TextSize(caption).width + Layout::GetTextPadding() * 2;
 }
 
 void
@@ -302,10 +302,10 @@ WndProperty::OnPaint(Canvas &canvas)
     PixelPoint org;
     if (caption_width < 0) {
       org.x = edit_rc.left;
-      org.y = edit_rc.top - tsize.cy;
+      org.y = edit_rc.top - tsize.height;
     } else {
-      org.x = caption_width - tsize.cx - Layout::GetTextPadding();
-      org.y = (GetHeight() - tsize.cy) / 2;
+      org.x = caption_width - tsize.width - Layout::GetTextPadding();
+      org.y = (GetHeight() - tsize.height) / 2;
     }
 
     if (org.x < 1)

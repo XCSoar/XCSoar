@@ -49,7 +49,7 @@ unsigned
 TextButtonRenderer::GetMinimumButtonWidth() const
 {
   return 2 * (frame_renderer.GetMargin() + Layout::GetTextPadding())
-    + GetLook().font->TextSize(caption.c_str()).cx;
+    + GetLook().font->TextSize(caption.c_str()).width;
 }
 
 void

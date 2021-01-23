@@ -68,7 +68,7 @@ public:
 unsigned
 QuickMenuButtonRenderer::GetMinimumButtonWidth() const
 {
-  return 2 * Layout::GetTextPadding() + look.button.font->TextSize(caption).cx;
+  return 2 * Layout::GetTextPadding() + look.button.font->TextSize(caption).width;
 }
 
 void

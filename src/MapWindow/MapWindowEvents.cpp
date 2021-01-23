@@ -60,7 +60,7 @@ MapWindow::OnCreate()
   const PixelSize size = GetSize();
   visible_projection.SetScreenSize(size);
   visible_projection.SetMapScale(5000);
-  visible_projection.SetScreenOrigin(size.cx / 2, size.cy / 2);
+  visible_projection.SetScreenOrigin(size.width / 2, size.height / 2);
   visible_projection.UpdateScreenBounds();
 
 #ifndef ENABLE_OPENGL

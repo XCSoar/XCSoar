@@ -203,7 +203,7 @@ TopCanvas::Create(PixelSize new_size,
   new_size = ::GetSize(vinfo);
 
   if (vinfo.width > 0 && vinfo.height > 0)
-    Display::ProvideSizeMM(new_size.cx, new_size.cy,
+    Display::ProvideSizeMM(new_size.width, new_size.height,
                            vinfo.width, vinfo.height);
 
 #elif defined(USE_VFB)
@@ -212,7 +212,7 @@ TopCanvas::Create(PixelSize new_size,
 #error No implementation
 #endif
 
-  buffer.Allocate(new_size.cx, new_size.cy);
+  buffer.Allocate(new_size.width, new_size.height);
 }
 
 #ifdef USE_FB
@@ -251,7 +251,7 @@ TopCanvas::CheckResize(const PixelSize new_native_size)
 #endif
 
   buffer.Free();
-  buffer.Allocate(new_size.cx, new_size.cy);
+  buffer.Allocate(new_size.width, new_size.height);
   return true;
 }
 

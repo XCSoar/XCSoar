@@ -30,8 +30,6 @@ BufferCanvas::Grow(PixelSize new_size)
 {
   const unsigned old_width = GetWidth();
   const unsigned old_height = GetHeight();
-  const unsigned new_width = new_size.cx;
-  const unsigned new_height = new_size.cy;
 
-  Resize({std::max(old_width, new_width), std::max(old_height, new_height)});
+  Resize({std::max(old_width, new_size.width), std::max(old_height, new_size.height)});
 }

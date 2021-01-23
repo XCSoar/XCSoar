@@ -106,8 +106,8 @@ PixelSize
 ArrowPagerWidget::GetMinimumSize() const
 {
   PixelSize result = PagerWidget::GetMinimumSize();
-  result.cx += ::Layout::Scale(50);
-  result.cy += 2 * ::Layout::GetMinimumControlHeight();
+  result.width += ::Layout::Scale(50u);
+  result.height += 2 * ::Layout::GetMinimumControlHeight();
   return result;
 }
 
@@ -115,8 +115,8 @@ PixelSize
 ArrowPagerWidget::GetMaximumSize() const
 {
   PixelSize result = PagerWidget::GetMinimumSize();
-  result.cx += ::Layout::Scale(80);
-  result.cy += 2 * ::Layout::GetMaximumControlHeight();
+  result.width += ::Layout::Scale(80u);
+  result.height += 2 * ::Layout::GetMaximumControlHeight();
   return result;
 }
 

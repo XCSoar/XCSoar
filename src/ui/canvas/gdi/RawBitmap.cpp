@@ -76,12 +76,12 @@ RawBitmap::StretchTo(PixelSize src_size,
   HDC source_dc = ::CreateCompatibleDC(dest_canvas);
   ::SelectObject(source_dc, bitmap);
   if (transparent_white)
-    ::TransparentBlt(dest_canvas, 0, 0, dest_size.cx, dest_size.cy,
-                     source_dc, 0, 0, src_size.cx, src_size.cy,
+    ::TransparentBlt(dest_canvas, 0, 0, dest_size.width, dest_size.height,
+                     source_dc, 0, 0, src_size.width, src_size.height,
                      COLOR_WHITE);
   else
-    ::StretchBlt(dest_canvas, 0, 0, dest_size.cx, dest_size.cy,
-                 source_dc, 0, 0, src_size.cx, src_size.cy,
+    ::StretchBlt(dest_canvas, 0, 0, dest_size.width, dest_size.height,
+                 source_dc, 0, 0, src_size.width, src_size.height,
                  SRCCOPY);
   ::DeleteDC(source_dc);
 }

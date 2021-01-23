@@ -57,8 +57,8 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
   PixelRect form_rc;
   form_rc.left = 0;
   form_rc.top = 0;
-  form_rc.right = client_area_size.cx;
-  form_rc.bottom = client_area_size.cy;
+  form_rc.right = client_area_size.width;
+  form_rc.bottom = client_area_size.height;
 
   WndForm wf(main_window, dialog_look, form_rc, caption, style);
 
@@ -71,10 +71,10 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
   text_frame->SetAlignCenter();
 
   const unsigned text_height = text_frame->GetTextHeight();
-  text_frame->Resize(client_area_size.cx,
+  text_frame->Resize(client_area_size.width,
                      text_height + Layout::GetTextPadding());
 
-  client_area_size.cy = Layout::Scale(10) + text_height + button_height;
+  client_area_size.height = Layout::Scale(10) + text_height + button_height;
 
   const auto dialog_size = wf.ClientAreaToDialogSize(client_area_size);
   const auto dialog_position = main_rc.CenteredTopLeft(dialog_size);
@@ -135,7 +135,7 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
                  button_style, wf, IDIGNORE);
   }
 
-  const unsigned max_button_width = client_area_size.cx / buttons.size();
+  const unsigned max_button_width = client_area_size.width / buttons.size();
   int button_x = max_button_width / 2 - button_width / 2;
 
   // Move buttons to the right positions

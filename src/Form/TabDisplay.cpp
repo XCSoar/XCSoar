@@ -54,16 +54,16 @@ inline unsigned
 TabButton::GetRecommendedWidth(const DialogLook &look) const
 {
   if (icon != nullptr)
-    return icon->GetSize().cx + 2 * Layout::GetTextPadding();
+    return icon->GetSize().width + 2 * Layout::GetTextPadding();
 
-  return look.button.font->TextSize(caption).cx + 2 * Layout::GetTextPadding();
+  return look.button.font->TextSize(caption).width + 2 * Layout::GetTextPadding();
 }
 
 inline unsigned
 TabButton::GetRecommendedHeight(const DialogLook &look) const
 {
   if (icon != nullptr)
-    return icon->GetSize().cy + 2 * Layout::GetTextPadding();
+    return icon->GetSize().height + 2 * Layout::GetTextPadding();
 
   return look.button.font->GetHeight() + 2 * Layout::GetTextPadding();
 }

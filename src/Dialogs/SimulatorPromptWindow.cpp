@@ -68,7 +68,7 @@ SimulatorPromptWindow::OnResize(PixelSize new_size)
 
   const PixelRect rc = GetClientRect();
 
-  const unsigned h_middle = new_size.cx / 2;
+  const unsigned h_middle = new_size.width / 2;
   const unsigned bottom_padding = Layout::Scale(15);
   const unsigned button_width = Layout::Scale(112);
   const unsigned button_height = Layout::Scale(30);

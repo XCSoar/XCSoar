@@ -603,34 +603,34 @@ WaypointDetailsWidget::OnImagePaint(gcc_unused Canvas &canvas,
     PixelPoint img_pos, screen_pos;
     PixelSize screen_size;
     PixelSize img_size = img.GetSize();
-    double scale = std::min((double)canvas.GetWidth() / img_size.cx,
-                            (double)canvas.GetHeight() / img_size.cy) *
+    double scale = std::min((double)canvas.GetWidth() / img_size.width,
+                            (double)canvas.GetHeight() / img_size.height) *
       zoom_factors[zoom];
 
     // centered image and optionally zoomed into the center of the image
-    double scaled_size = img_size.cx * scale;
+    double scaled_size = img_size.width * scale;
     if (scaled_size <= canvas.GetWidth()) {
       img_pos.x = 0;
       screen_pos.x = (int) ((canvas.GetWidth() - scaled_size) / 2);
-      screen_size.cx = (int) scaled_size;
+      screen_size.width = (unsigned) scaled_size;
     } else {
       scaled_size = canvas.GetWidth() / scale;
-      img_pos.x = (int) ((img_size.cx - scaled_size) / 2);
-      img_size.cx = (int) scaled_size;
+      img_pos.x = (int(img_size.width - scaled_size) / 2);
+      img_size.width = (unsigned) scaled_size;
       screen_pos.x = 0;
-      screen_size.cx = canvas.GetWidth();
+      screen_size.width = canvas.GetWidth();
     }
-    scaled_size = img_size.cy * scale;
+    scaled_size = img_size.height * scale;
     if (scaled_size <= canvas.GetHeight()) {
       img_pos.y = 0;
       screen_pos.y = (int) ((canvas.GetHeight() - scaled_size) / 2);
-      screen_size.cy = (int) scaled_size;
+      screen_size.height = (unsigned) scaled_size;
     } else {
       scaled_size = canvas.GetHeight() / scale;
-      img_pos.y = (int) ((img_size.cy - scaled_size) / 2);
-      img_size.cy = (int) scaled_size;
+      img_pos.y = (int) ((img_size.height - scaled_size) / 2);
+      img_size.height = (unsigned) scaled_size;
       screen_pos.y = 0;
-      screen_size.cy = canvas.GetHeight();
+      screen_size.height = canvas.GetHeight();
     }
     canvas.Stretch(screen_pos, screen_size, img, img_pos, img_size);
   }

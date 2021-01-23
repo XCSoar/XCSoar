@@ -64,8 +64,8 @@ public:
             bool _flipped = false)
     :id(_id), size(_size), allocated_size(_allocated_size), flipped(_flipped) {
 #ifndef NDEBUG
-    assert(allocated_size.cx >= size.cx);
-    assert(allocated_size.cy >= size.cy);
+    assert(allocated_size.width >= size.width);
+    assert(allocated_size.height >= size.height);
 
     ++num_textures;
 #endif
@@ -101,11 +101,11 @@ public:
   }
 
   unsigned GetWidth() const {
-    return size.cx;
+    return size.width;
   }
 
   unsigned GetHeight() const {
-    return size.cy;
+    return size.height;
   }
 
   gcc_pure

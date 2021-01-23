@@ -69,7 +69,7 @@ gcc_const
 static inline PixelSize
 ValidateTextureSize(PixelSize size)
 {
-  return { ValidateTextureSize(size.cx), ValidateTextureSize(size.cy) };
+  return { ValidateTextureSize(size.width), ValidateTextureSize(size.height) };
 }
 
 /**
@@ -85,13 +85,13 @@ LoadTextureAutoAlign(GLint internal_format, PixelSize size,
   PixelSize validated_size = ValidateTextureSize(size);
 
   if (validated_size == size)
-    glTexImage2D(GL_TEXTURE_2D, 0, internal_format, size.cx, size.cy, 0,
+    glTexImage2D(GL_TEXTURE_2D, 0, internal_format, size.width, size.height, 0,
                  format, type, pixels);
   else {
     glTexImage2D(GL_TEXTURE_2D, 0, internal_format,
-                 validated_size.cx, validated_size.cy, 0,
+                 validated_size.width, validated_size.height, 0,
                  format, type, nullptr);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, size.cx, size.cy,
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, size.width, size.height,
                     format, type, pixels);
   }
 }
@@ -102,7 +102,7 @@ GLTexture::GLTexture(PixelSize _size, bool _flipped)
   Initialise();
 
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-               allocated_size.cx, allocated_size.cy,
+               allocated_size.width, allocated_size.height,
                0, GL_RGB, GetType(), nullptr);
 }
 
@@ -131,7 +131,7 @@ GLTexture::ResizeDiscard(PixelSize new_size)
   Bind();
 
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-               validated_size.cx, validated_size.cy,
+               validated_size.width, validated_size.height,
                0, GL_RGB, GetType(), nullptr);
 
 }
@@ -211,10 +211,10 @@ GLTexture::Draw(PixelRect dest, PixelRect src) const
   const ScopeVertexPointer vp(vertices);
 
   const PixelSize allocated = GetAllocatedSize();
-  GLfloat x0 = (GLfloat)src.left / allocated.cx;
-  GLfloat y0 = (GLfloat)src.top / allocated.cy;
-  GLfloat x1 = (GLfloat)src.right / allocated.cx;
-  GLfloat y1 = (GLfloat)src.bottom / allocated.cy;
+  GLfloat x0 = (GLfloat)src.left / allocated.width;
+  GLfloat y0 = (GLfloat)src.top / allocated.height;
+  GLfloat x1 = (GLfloat)src.right / allocated.width;
+  GLfloat y1 = (GLfloat)src.bottom / allocated.height;
 
   const GLfloat coord[] = {
     x0, flipped ? y1 : y0,

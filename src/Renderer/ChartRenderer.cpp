@@ -179,12 +179,12 @@ ChartRenderer::DrawLabel(const TCHAR *text, const double xv, const double yv)
     const ScopeAlphaBlend alpha_blend;
 #endif
     canvas.Select(look.label_blank_brush);
-    canvas.Rectangle(pt.x - tsize.cx / 2 - padding_text,
-                     pt.y - tsize.cy / 2 - padding_text,
-                     pt.x + tsize.cx / 2 + padding_text,
-                     pt.y + tsize.cy / 2 + padding_text);
+    canvas.Rectangle(pt.x - tsize.width / 2 - padding_text,
+                     pt.y - tsize.height / 2 - padding_text,
+                     pt.x + tsize.width / 2 + padding_text,
+                     pt.y + tsize.height / 2 + padding_text);
   }
-  canvas.DrawText(pt.x - tsize.cx / 2, pt.y - tsize.cy / 2, text);
+  canvas.DrawText(pt.x - tsize.width / 2, pt.y - tsize.height / 2, text);
 }
 
 void
@@ -195,8 +195,8 @@ ChartRenderer::DrawNoData(const TCHAR *text)
 
   PixelSize tsize = canvas.CalcTextSize(text);
 
-  int x = (rc.left + rc.right - tsize.cx) / 2;
-  int y = (rc.top + rc.bottom - tsize.cy) / 2;
+  int x = (rc.left + rc.right - tsize.width) / 2;
+  int y = (rc.top + rc.bottom - tsize.height) / 2;
 
   canvas.DrawText(x, y, text);
 }
@@ -208,8 +208,8 @@ ChartRenderer::DrawXLabel(const TCHAR *text)
   canvas.SetBackgroundTransparent();
 
   PixelSize tsize = canvas.CalcTextSize(text);
-  int x = rc.right - tsize.cx - Layout::GetTextPadding();
-  int y = rc.bottom - tsize.cy - Layout::GetTextPadding();
+  int x = rc.right - tsize.width - Layout::GetTextPadding();
+  int y = rc.bottom - tsize.height - Layout::GetTextPadding();
 
   canvas.DrawText(x, y, text);
 }
@@ -459,7 +459,7 @@ ChartRenderer::DrawXGrid(double tic_step, double unit_step, UnitFormat unit_form
           if (unit_format != UnitFormat::NONE) {
             TCHAR unit_text[MAX_PATH];
             FormatTicText(unit_text, xval * unit_step / tic_step, unit_step, unit_format);
-            const auto w = canvas.CalcTextSize(unit_text).cx;
+            const auto w = canvas.CalcTextSize(unit_text).width;
             xmin -= w/2;
             if ((xmin >= next_text) && ((int)(xmin + Layout::VptScale(30)) < rc_chart.right)) {
               canvas.DrawText(xmin, y, unit_text);
@@ -520,7 +520,7 @@ ChartRenderer::DrawYGrid(double tic_step, double unit_step, UnitFormat unit_form
             TCHAR unit_text[MAX_PATH];
             FormatTicText(unit_text, yval * unit_step / tic_step, unit_step, unit_format);
             const auto c = canvas.CalcTextSize(unit_text);
-            canvas.DrawText(std::max(x-c.cx, rc.left + padding_text), ymin-c.cy/2, unit_text);
+            canvas.DrawText(std::max(x - (int)c.width, rc.left + padding_text), ymin-c.height/2, unit_text);
           }
         }
       }

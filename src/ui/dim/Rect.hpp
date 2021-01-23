@@ -49,10 +49,10 @@ struct PixelRect {
 
   constexpr PixelRect(PixelPoint origin, PixelSize size) noexcept
     :left(origin.x), top(origin.y),
-     right(origin.x + size.cx), bottom(origin.y + size.cy) {}
+     right(origin.x + size.width), bottom(origin.y + size.height) {}
 
   explicit constexpr PixelRect(PixelSize size) noexcept
-    :left(0), top(0), right(size.cx), bottom(size.cy) {}
+    :left(0), top(0), right(size.width), bottom(size.height) {}
 
   bool IsEmpty() noexcept {
     return left >= right || top >= bottom;
@@ -151,8 +151,8 @@ struct PixelRect {
    * one.
    */
   constexpr PixelPoint CenteredTopLeft(PixelSize size) const noexcept {
-    return PixelPoint((left + right - size.cx) / 2,
-                      (top + bottom - size.cy) / 2);
+    return PixelPoint((left + right - size.width) / 2,
+                      (top + bottom - size.height) / 2);
   }
 
 #ifdef USE_WINUSER

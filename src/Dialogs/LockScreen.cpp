@@ -47,8 +47,8 @@ ShowLockBox()
   const PixelSize root_size = main_window.GetSize();
   
   // Position dialog where it shouldn't cover anything important on the screen
-  const int dialog_x = root_size.cx * 0.25 - button_width;
-  const int dialog_y = root_size.cy * 0.75 - button_height;
+  const int dialog_x = root_size.width * 0.25 - button_width;
+  const int dialog_y = root_size.height * 0.75 - button_height;
 
   PixelRect form_rc;
   form_rc.left = dialog_x;

@@ -86,11 +86,7 @@ UnitSymbolRenderer::GetSize(const Font &font, const Unit unit) noexcept
   PixelSize size1 = font.TextSize(strings.line1);
   PixelSize size2 = font.TextSize(strings.line2);
 
-  PixelSize size;
-  size.cy = size1.cy + size2.cy;
-  size.cx = std::max(size1.cx, size2.cx);
-
-  return size;
+  return {std::max(size1.width, size2.width), size1.height + size2.height};
 }
 
 PixelSize
@@ -111,11 +107,7 @@ UnitSymbolRenderer::GetSize(const Canvas &canvas, const Unit unit) noexcept
   PixelSize size1 = canvas.CalcTextSize(strings.line1);
   PixelSize size2 = canvas.CalcTextSize(strings.line2);
 
-  PixelSize size;
-  size.cy = size1.cy + size2.cy;
-  size.cx = std::max(size1.cx, size2.cx);
-
-  return size;
+  return {std::max(size1.width, size2.width), size1.height + size2.height};
 }
 
 unsigned
@@ -158,23 +150,25 @@ UnitSymbolRenderer::Draw(Canvas &canvas, const PixelPoint pos,
   PixelSize size1 = canvas.CalcTextSize(strings.line1);
   PixelSize size2 = canvas.CalcTextSize(strings.line2);
 
-  if (size1.cx > size2.cx) {
+  if (size1.width > size2.width) {
     if (strings.is_fraction) {
       canvas.Select(unit_fraction_pen);
-      canvas.DrawLine(pos.x, pos.y + size1.cy, pos.x + size1.cx, pos.y + size1.cy);
+      canvas.DrawLine(pos.x, pos.y + size1.height,
+                      pos.x + size1.width, pos.y + size1.height);
     }
 
     canvas.DrawText(pos.x, pos.y, strings.line1);
-    int x = pos.x + (size1.cx - size2.cx) / 2;
-    canvas.DrawText(x, pos.y + size1.cy, strings.line2);
+    int x = pos.x + (size1.width - size2.width) / 2;
+    canvas.DrawText(x, pos.y + size1.height, strings.line2);
   } else {
     if (strings.is_fraction) {
       canvas.Select(unit_fraction_pen);
-      canvas.DrawLine(pos.x, pos.y + size1.cy, pos.x + size2.cx, pos.y + size1.cy);
+      canvas.DrawLine(pos.x, pos.y + size1.height,
+                      pos.x + size2.width, pos.y + size1.height);
     }
 
-    int x = pos.x + (size2.cx - size1.cx) / 2;
+    int x = pos.x + (size2.width - size1.width) / 2;
     canvas.DrawText(x, pos.y, strings.line1);
-    canvas.DrawText(pos.x, pos.y + size1.cy, strings.line2);
+    canvas.DrawText(pos.x, pos.y + size1.height, strings.line2);
   }
 }

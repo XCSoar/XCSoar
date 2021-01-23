@@ -577,7 +577,7 @@ Canvas::CalcTextSize(TStringView text) const noexcept
 
   /* see if the TextCache can handle this request */
   size = TextCache::LookupSize(*font, text2);
-  if (size.cy > 0)
+  if (size.height > 0)
     return size;
 
   return TextCache::GetSize(*font, text2);
@@ -611,7 +611,7 @@ Canvas::DrawText(int x, int y, const TCHAR *text)
   if (font == nullptr)
     return;
 
-  const StringView text3 = ClipText(text2, x, size.cx);
+  const StringView text3 = ClipText(text2, x, size.width);
   if (text3.empty())
     return;
 
@@ -650,7 +650,7 @@ Canvas::DrawTransparentText(int x, int y, const TCHAR *text)
   if (font == nullptr)
     return;
 
-  const StringView text3 = ClipText(text2, x, size.cx);
+  const StringView text3 = ClipText(text2, x, size.width);
   if (text3.empty())
     return;
 

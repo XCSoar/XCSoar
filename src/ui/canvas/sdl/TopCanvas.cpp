@@ -103,7 +103,7 @@ TopCanvas::Create(SDL_Window *_window, PixelSize new_size)
 #endif
 
 #ifdef GREYSCALE
-  buffer.Allocate(new_size.cx, new_size.cy);
+  buffer.Allocate(new_size.width, new_size.height);
 #endif
 }
 
@@ -140,12 +140,12 @@ TopCanvas::OnResize(PixelSize new_size)
   Uint32 texture_format;
   if (SDL_QueryTexture(texture, &texture_format, NULL, &texture_width, &texture_height) != 0)
     return;
-  if (new_size.cx == texture_width && new_size.cy == texture_height)
+  if ((int)new_size.width == texture_width && (int)new_size.height == texture_height)
     return;
 
   SDL_Texture *t = SDL_CreateTexture(renderer, texture_format,
                                      SDL_TEXTUREACCESS_STREAMING,
-                                     new_size.cx, new_size.cy);
+                                     new_size.width, new_size.height);
   if (t == nullptr)
     return;
 
@@ -155,7 +155,7 @@ TopCanvas::OnResize(PixelSize new_size)
 
 #ifdef GREYSCALE
   buffer.Free();
-  buffer.Allocate(new_size.cx, new_size.cy);
+  buffer.Allocate(new_size.width, new_size.height);
 #endif
 }
 

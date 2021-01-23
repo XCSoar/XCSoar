@@ -85,8 +85,8 @@ Bitmap::Set(JNIEnv *env, jobject _bmp, Type _type, bool flipped)
 
   type = _type;
 
-  size.cx = AndroidBitmap::GetWidth(env, bmp);
-  size.cy = AndroidBitmap::GetHeight(env, bmp);
+  size.width = AndroidBitmap::GetWidth(env, bmp);
+  size.height = AndroidBitmap::GetHeight(env, bmp);
 
   AddSurfaceListener(*this);
 

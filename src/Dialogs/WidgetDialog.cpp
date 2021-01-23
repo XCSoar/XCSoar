@@ -134,27 +134,27 @@ WidgetDialog::AutoSize()
   const auto max_size = ClientAreaToDialogSize(widget.Get()->GetMaximumSize());
 
   // Calculate sizes with one button row at the bottom
-  const int min_height_with_buttons =
-    min_size.cy + Layout::GetMaximumControlHeight();
-  const int max_height_with_buttons =
-    max_size.cy + Layout::GetMaximumControlHeight();
+  const unsigned min_height_with_buttons =
+    min_size.height + Layout::GetMaximumControlHeight();
+  const unsigned max_height_with_buttons =
+    max_size.height + Layout::GetMaximumControlHeight();
 
   if (/* need full dialog height even for minimum widget height? */
-      min_height_with_buttons >= parent_size.cy ||
+      min_height_with_buttons >= parent_size.height ||
       /* try to avoid putting buttons left on portrait screens; try to
          comply with maximum widget height only on landscape
          screens */
-      (parent_size.cx > parent_size.cy &&
-       max_height_with_buttons >= parent_size.cy)) {
+      (parent_size.width > parent_size.height &&
+       max_height_with_buttons >= parent_size.height)) {
     /* need full height, buttons must be left */
     PixelRect rc = parent_rc;
-    if (max_size.cy < parent_size.cy)
-      rc.bottom = rc.top + max_size.cy;
+    if (max_size.height < parent_size.height)
+      rc.bottom = rc.top + max_size.height;
 
     PixelRect remaining = buttons.LeftLayout(rc);
     PixelSize remaining_size = remaining.GetSize();
-    if (remaining_size.cx > max_size.cx)
-      rc.right -= remaining_size.cx - max_size.cx;
+    if (remaining_size.width > max_size.width)
+      rc.right -= remaining_size.width - max_size.width;
 
     Resize(rc.GetSize());
     widget.Move(buttons.LeftLayout());
@@ -166,14 +166,14 @@ WidgetDialog::AutoSize()
   /* see if buttons fit at the bottom */
 
   PixelRect rc = parent_rc;
-  if (max_size.cx < parent_size.cx)
-    rc.right = rc.left + max_size.cx;
+  if (max_size.width < parent_size.width)
+    rc.right = rc.left + max_size.width;
 
   PixelRect remaining = buttons.BottomLayout(rc);
   PixelSize remaining_size = remaining.GetSize();
 
-  if (remaining_size.cy > max_size.cy)
-    rc.bottom -= remaining_size.cy - max_size.cy;
+  if (remaining_size.height > max_size.height)
+    rc.bottom -= remaining_size.height - max_size.height;
 
   Resize(rc.GetSize());
   widget.Move(buttons.BottomLayout());

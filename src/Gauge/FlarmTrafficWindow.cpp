@@ -75,8 +75,8 @@ FlarmTrafficWindow::OnResize(PixelSize new_size)
 {
   PaintWindow::OnResize(new_size);
 
-  const unsigned half_width = new_size.cx / 2;
-  const unsigned half_height = new_size.cy / 2;
+  const unsigned half_width = new_size.width / 2;
+  const unsigned half_height = new_size.height / 2;
 
   // Calculate Radar size
   radius = std::min(half_width - h_padding, half_height - v_padding);
@@ -242,7 +242,7 @@ FlarmTrafficWindow::PaintRadarNoTraffic(Canvas &canvas) const
   canvas.Select(look.no_traffic_font);
   PixelSize ts = canvas.CalcTextSize(str);
   canvas.SetTextColor(look.default_color);
-  canvas.DrawText(radar_mid.x - (ts.cx / 2), radar_mid.y - (radius / 2), str);
+  canvas.DrawText(radar_mid.x - (ts.width / 2), radar_mid.y - (radius / 2), str);
 }
 
 gcc_const
@@ -458,15 +458,15 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   // Draw vertical speed shadow
   canvas.SetTextColor(COLOR_WHITE);
   canvas.DrawText(sc[i].x + Layout::FastScale(11) + 1,
-                  sc[i].y - sz.cy / 2 + 1, tmp);
+                  sc[i].y - sz.height / 2 + 1, tmp);
   canvas.DrawText(sc[i].x + Layout::FastScale(11) - 1,
-                  sc[i].y - sz.cy / 2 - 1, tmp);
+                  sc[i].y - sz.height / 2 - 1, tmp);
 
   // Select color
   canvas.SetTextColor(*text_color);
 
   // Draw vertical speed
-  canvas.DrawText(sc[i].x + Layout::FastScale(11), sc[i].y - sz.cy / 2, tmp);
+  canvas.DrawText(sc[i].x + Layout::FastScale(11), sc[i].y - sz.height / 2, tmp);
 }
 
 void
@@ -496,7 +496,7 @@ FlarmTrafficWindow::PaintTargetInfoSmall(
   unsigned dist = Layout::FastScale(traffic.HasAlarm() ? 12 : 8);
 
   // Draw string
-  canvas.DrawText(sc[i].x + dist, sc[i].y - tsize.cy / 2, buffer);
+  canvas.DrawText(sc[i].x + dist, sc[i].y - tsize.height / 2, buffer);
 
   // Set target_brush for the up/down arrow
   canvas.Select(arrow_brush);
@@ -521,8 +521,8 @@ FlarmTrafficWindow::PaintTargetInfoSmall(
     triangle[j].x = Layout::FastScale(triangle[j].x);
     triangle[j].y = Layout::FastScale(triangle[j].y);
 
-    triangle[j].x = sc[i].x + dist + triangle[j].x + tsize.cx / 2;
-    triangle[j].y = sc[i].y + flip * (triangle[j].y  - tsize.cy / 2);
+    triangle[j].x = sc[i].x + dist + triangle[j].x + tsize.width / 2;
+    triangle[j].y = sc[i].y + flip * (triangle[j].y  - tsize.height / 2);
   }
   triangle[3].x = triangle[0].x;
   triangle[3].y = triangle[0].y;
@@ -637,9 +637,9 @@ FlarmTrafficWindow::PaintNorth(Canvas &canvas) const
 
   PixelSize s = canvas.CalcTextSize(_T("N"));
   canvas.DrawCircle(radar_mid.x + iround(p.x * radius),
-                radar_mid.y + iround(p.y * radius), s.cy * 0.65);
-  canvas.DrawText(radar_mid.x + iround(p.x * radius) - s.cx / 2,
-                  radar_mid.y + iround(p.y * radius) - s.cy / 2, _T("N"));
+                radar_mid.y + iround(p.y * radius), s.height * 0.65);
+  canvas.DrawText(radar_mid.x + iround(p.x * radius) - s.width / 2,
+                  radar_mid.y + iround(p.y * radius) - s.height / 2, _T("N"));
 }
 
 /**
@@ -671,14 +671,14 @@ FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
   FormatUserDistanceSmart(distance, distance_string,
                           ARRAY_SIZE(distance_string), 1000);
   PixelSize s = canvas.CalcTextSize(distance_string);
-  canvas.DrawText(radar_mid.x - s.cx / 2,
-                  radar_mid.y + radius - s.cy * 0.75, distance_string);
+  canvas.DrawText(radar_mid.x - s.width / 2,
+                  radar_mid.y + radius - s.height * 0.75, distance_string);
 
   FormatUserDistanceSmart(distance / 2, distance_string,
                           ARRAY_SIZE(distance_string), 1000);
   s = canvas.CalcTextSize(distance_string);
-  canvas.DrawText(radar_mid.x - s.cx / 2,
-                  radar_mid.y + radius / 2 - s.cy * 0.75, distance_string);
+  canvas.DrawText(radar_mid.x - s.width / 2,
+                  radar_mid.y + radius / 2 - s.height * 0.75, distance_string);
 
   canvas.SetBackgroundTransparent();
 

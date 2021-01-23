@@ -58,8 +58,8 @@ PixelSize
 ButtonPanelWidget::GetMinimumSize() const
 {
   PixelSize size = widget->GetMinimumSize();
-  if (size.cy > 0)
-    size.cy += Layout::GetMinimumControlHeight();
+  if (size.height > 0)
+    size.height += Layout::GetMinimumControlHeight();
   return size;
 }
 
@@ -67,8 +67,8 @@ PixelSize
 ButtonPanelWidget::GetMaximumSize() const
 {
   PixelSize size = widget->GetMaximumSize();
-  if (size.cy > 0)
-    size.cy += Layout::GetMaximumControlHeight();
+  if (size.height > 0)
+    size.height += Layout::GetMaximumControlHeight();
   return size;
 }
 

@@ -641,8 +641,8 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
     const PixelSize size = canvas.CalcTextSize(tmp);
     canvas.Rectangle(rc.left + row_renderer.GetX() - frame_padding,
                      rc.top + row_renderer.GetFirstY() - frame_padding,
-                     rc.left + row_renderer.GetX() + size.cx + frame_padding,
-                     rc.top + row_renderer.GetFirstY() + size.cy + frame_padding);
+                     rc.left + row_renderer.GetX() + size.width + frame_padding,
+                     rc.top + row_renderer.GetFirstY() + size.height + frame_padding);
   }
 
   row_renderer.DrawFirstRow(canvas, rc, tmp);

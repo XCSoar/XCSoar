@@ -172,7 +172,7 @@ Canvas::DrawClippedText(int x, int y, unsigned width,
   const PixelSize size = CalcTextSize(text);
 
   RECT rc;
-  ::SetRect(&rc, x, y, x + std::min(width, unsigned(size.cx)), y + size.cy);
+  ::SetRect(&rc, x, y, x + std::min(width, size.width), y + size.height);
   ::ExtTextOut(dc, x, y, ETO_CLIPPED, &rc, text, _tcslen(text), nullptr);
 }
 
@@ -220,7 +220,7 @@ void
 Canvas::Copy(const Bitmap &src)
 {
   const PixelSize size = src.GetSize();
-  Copy(0, 0, size.cx, size.cy, src, 0, 0);
+  Copy(0, 0, size.width, size.height, src, 0, 0);
 }
 
 void
@@ -232,10 +232,10 @@ Canvas::CopyTransparentWhite(PixelPoint dest_position, PixelSize dest_size,
   assert(src.IsDefined());
 
   ::TransparentBlt(dc, dest_position.x, dest_position.y,
-                   dest_size.cx, dest_size.cy,
+                   dest_size.width, dest_size.height,
                    src.dc,
                    src_position.x, src_position.y,
-                   dest_size.cx, dest_size.cy,
+                   dest_size.width, dest_size.height,
                    COLOR_WHITE);
 }
 
@@ -351,9 +351,9 @@ Canvas::AlphaBlend(PixelPoint dest_position, PixelSize dest_size,
   fn.AlphaFormat = 0;
 
   ::AlphaBlend(dc, dest_position.x, dest_position.y,
-               dest_size.cx, dest_size.cy,
+               dest_size.width, dest_size.height,
                src, src_position.x, src_position.y,
-               src_size.cx, src_size.cy,
+               src_size.width, src_size.height,
                fn);
 }
 

@@ -122,7 +122,7 @@ public:
 #if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
   gcc_const
   static size_t BufferSize(const PixelSize size) {
-    return size.cx * size.cy;
+    return size.width * size.height;
   }
 
   void Render(TStringView text, const PixelSize size, void *buffer) const;

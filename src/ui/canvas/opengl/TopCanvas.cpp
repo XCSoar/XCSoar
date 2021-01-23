@@ -29,8 +29,8 @@ Copyright_License {
 void
 TopCanvas::SetupViewport(PixelSize native_size)
 {
-  auto new_size = OpenGL::SetupViewport(UnsignedPoint2D(native_size.cx,
-                                                        native_size.cy));
+  auto new_size = OpenGL::SetupViewport(UnsignedPoint2D(native_size.width,
+                                                        native_size.height));
   Canvas::Create(PixelSize(new_size.x, new_size.y));
 }
 
@@ -42,14 +42,14 @@ TopCanvas::Resume()
 #endif
 
   OpenGL::SetupContext();
-  OpenGL::SetupViewport(UnsignedPoint2D(size.cx, size.cy));
+  OpenGL::SetupViewport(UnsignedPoint2D(size.width, size.height));
 }
 
 bool
 TopCanvas::CheckResize(PixelSize new_native_size)
 {
-  if ((unsigned)new_native_size.cx == OpenGL::window_size.x &&
-      (unsigned)new_native_size.cy == OpenGL::window_size.y)
+  if (new_native_size.width == OpenGL::window_size.x &&
+      new_native_size.height == OpenGL::window_size.y)
     return false;
 
   SetupViewport(new_native_size);
@@ -62,7 +62,7 @@ void
 TopCanvas::SetDisplayOrientation(DisplayOrientation orientation)
 {
   const auto native_size = GetNativeSize();
-  if (native_size.cx <= 0 || native_size.cy <= 0)
+  if (native_size.width == 0 || native_size.height == 0)
     return;
 
   OpenGL::display_orientation = orientation;

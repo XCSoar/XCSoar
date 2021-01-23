@@ -53,13 +53,13 @@ DrawGeoBitmap(const RawBitmap &bitmap, PixelSize bitmap_size,
   const GLTexture &texture = bitmap.BindAndGetTexture();
   const PixelSize allocated = texture.GetAllocatedSize();
 
-  const GLfloat src_x = 0, src_y = 0, src_width = bitmap_size.cx,
-    src_height = bitmap_size.cy;
+  const GLfloat src_x = 0, src_y = 0, src_width = bitmap_size.width,
+    src_height = bitmap_size.height;
 
-  GLfloat x0 = src_x / allocated.cx;
-  GLfloat y0 = src_y / allocated.cy;
-  GLfloat x1 = (src_x + src_width) / allocated.cx;
-  GLfloat y1 = (src_y + src_height) / allocated.cy;
+  GLfloat x0 = src_x / allocated.width;
+  GLfloat y0 = src_y / allocated.height;
+  GLfloat x1 = (src_x + src_width) / allocated.width;
+  GLfloat y1 = (src_y + src_height) / allocated.height;
 
   const GLfloat coord[] = {
     x0, y0,

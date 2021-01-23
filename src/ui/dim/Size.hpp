@@ -27,21 +27,21 @@ Copyright_License {
 #include "Point.hpp"
 
 struct PixelSize {
-  int cx, cy;
+  unsigned width, height;
 
   PixelSize() = default;
 
   constexpr PixelSize(int _width, int _height) noexcept
-    :cx(_width), cy(_height) {}
+    :width(_width), height(_height) {}
 
   constexpr PixelSize(unsigned _width, unsigned _height) noexcept
-    :cx(_width), cy(_height) {}
+    :width(_width), height(_height) {}
 
   constexpr PixelSize(long _width, long _height) noexcept
-    :cx(_width), cy(_height) {}
+    :width(_width), height(_height) {}
 
   bool operator==(const PixelSize &other) const noexcept {
-    return cx == other.cx && cy == other.cy;
+    return width == other.width && height == other.height;
   }
 
   bool operator!=(const PixelSize &other) const noexcept {
@@ -52,7 +52,7 @@ struct PixelSize {
 constexpr PixelPoint
 operator+(PixelPoint p, PixelSize size) noexcept
 {
-  return { p.x + size.cx, p.y + size.cy };
+  return { p.x + size.width, p.y + size.height };
 }
 
 #endif

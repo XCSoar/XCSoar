@@ -143,8 +143,8 @@ MapOverlayBitmap::Draw(Canvas &canvas,
 
   GLTexture &texture = *bitmap.GetNative();
   const PixelSize allocated = texture.GetAllocatedSize();
-  const double x_factor = double(texture.GetWidth()) / allocated.cx;
-  const double y_factor = double(texture.GetHeight()) / allocated.cy;
+  const double x_factor = double(texture.GetWidth()) / allocated.width;
+  const double y_factor = double(texture.GetHeight()) / allocated.height;
 
   Point2D<GLfloat> coord[16];
   BulkPixelPoint vertices[16];

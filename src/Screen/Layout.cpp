@@ -73,13 +73,13 @@ static constexpr bool
 IsSmallScreen(PixelSize size,
               unsigned x_dpi, unsigned y_dpi)
 {
-  return IsSmallScreen(size.cx, size.cy, x_dpi, y_dpi);
+  return IsSmallScreen(size.width, size.height, x_dpi, y_dpi);
 }
 
 void
 Layout::Initialize(PixelSize new_size, unsigned ui_scale, unsigned custom_dpi)
 {
-  const unsigned width = new_size.cx, height = new_size.cy;
+  const unsigned width = new_size.width, height = new_size.height;
 
   min_screen_pixels = std::min(width, height);
   landscape = width > height;

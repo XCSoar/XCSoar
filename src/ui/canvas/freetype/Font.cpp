@@ -409,7 +409,7 @@ Font::Render(TStringView text, const PixelSize size, void *_buffer) const
 
   ForEachGlyph(face, ascent_height, text,
                [size, buffer](int x, int y, const FT_GlyphSlot glyph){
-      RenderGlyph(buffer, size.cx, size.cy, glyph,
+      RenderGlyph(buffer, size.width, size.height, glyph,
                   x, y);
     });
 }

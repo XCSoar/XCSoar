@@ -77,7 +77,7 @@ public:
 
 protected:
   void OnResize(PixelSize new_size) override {
-    projection.SetScreenOrigin(new_size.cx / 2, new_size.cy / 2);
+    projection.SetScreenOrigin(new_size.width / 2, new_size.height / 2);
     projection.SetGeoLocation(a.Middle(b));
     projection.SetScreenSize(new_size);
     projection.SetScaleFromRadius(400000);

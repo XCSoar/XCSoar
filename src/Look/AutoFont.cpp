@@ -43,7 +43,7 @@ AutoSizeFont(FontDescription &d, unsigned width, const TCHAR *text)
   /* double the font size until it is large enough */
 
   PixelSize tsize = font.TextSize(text);
-  while (unsigned(tsize.cx) < width) {
+  while (tsize.width < width) {
     d.SetHeight(d.GetHeight() * 2);
     if (!font.Load(d)) {
       d.SetHeight(d.GetHeight() / 2);
@@ -63,7 +63,7 @@ AutoSizeFont(FontDescription &d, unsigned width, const TCHAR *text)
       break;
 
     tsize = font.TextSize(text);
-  } while ((unsigned)tsize.cx > width);
+  } while (tsize.width > width);
 
   d.SetHeight(d.GetHeight() + 1);
 }

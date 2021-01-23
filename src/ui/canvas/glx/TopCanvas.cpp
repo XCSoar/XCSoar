@@ -47,7 +47,7 @@ TopCanvas::CreateGLX(_XDisplay *_x_display,
     throw std::runtime_error("Failed to attach GLX context to GLX window");
 
   const PixelSize effective_size = GetNativeSize();
-  if (effective_size.cx <= 0 || effective_size.cy <= 0)
+  if (effective_size.width == 0 || effective_size.height == 0)
     throw std::runtime_error("Failed to query GLX drawable size");
 
   OpenGL::SetupContext();

@@ -28,7 +28,7 @@ Copyright_License {
 unsigned
 BitmapButtonRenderer::GetMinimumButtonWidth() const
 {
-  return bitmap.GetSize().cx;
+  return bitmap.GetSize().width;
 }
 
 void

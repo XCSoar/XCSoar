@@ -110,11 +110,11 @@ public:
   }
 
   unsigned GetWidth() const {
-    return size.cx;
+    return size.width;
   }
 
   unsigned GetHeight() const {
-    return size.cy;
+    return size.height;
   }
 
   gcc_pure
@@ -343,7 +343,7 @@ public:
 
   gcc_pure
   unsigned CalcTextWidth(const TCHAR *text) const {
-    return CalcTextSize(text).cx;
+    return CalcTextSize(text).width;
   }
 
   gcc_pure

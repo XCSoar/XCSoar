@@ -51,10 +51,10 @@ ScrollBar::SetSize(const PixelSize size)
     width = Layout::SmallScale(12);
 
   // Update the coordinates of the scrollbar
-  rc.left = size.cx - width;
+  rc.left = size.width - width;
   rc.top = 0;
-  rc.right = size.cx;
-  rc.bottom = size.cy;
+  rc.right = size.width;
+  rc.bottom = size.height;
 }
 
 void

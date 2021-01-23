@@ -58,7 +58,7 @@ public:
                   bool enabled, bool focused, bool pressed) const override;
 
   void InvalidateBuffer() {
-    size.cx = 0;
+    size.width = 0;
   }
 
 private:

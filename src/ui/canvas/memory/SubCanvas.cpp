@@ -35,6 +35,6 @@ SubCanvas::SubCanvas(Canvas &canvas, PixelPoint _offset, PixelSize _size)
 {
   buffer = canvas.buffer;
   buffer.data = buffer.At(_offset.x, _offset.y);
-  buffer.width = ClipMax(buffer.width, _offset.x, _size.cx);
-  buffer.height = ClipMax(buffer.height, _offset.y, _size.cy);
+  buffer.width = ClipMax(buffer.width, _offset.x, _size.width);
+  buffer.height = ClipMax(buffer.height, _offset.y, _size.height);
 }

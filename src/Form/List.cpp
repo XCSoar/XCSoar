@@ -113,9 +113,9 @@ ListControl::OnResize(PixelSize new_size)
 {
   PaintWindow::OnResize(new_size);
 
-  items_visible = new_size.cy / item_height;
+  items_visible = new_size.height / item_height;
 
-  if (unsigned(new_size.cy) >= length * item_height) {
+  if (new_size.height >= length * item_height) {
     /* after the resize, there is enough room for all list items -
        scroll back to the top */
     origin = pixel_pan = 0;

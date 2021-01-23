@@ -80,23 +80,23 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
   // Determine title image size
   PixelSize title_size = bitmap_title.GetSize();
 
-  unsigned spacing = title_size.cy / 2;
+  unsigned spacing = title_size.height / 2;
 
   unsigned estimated_width, estimated_height;
   switch (orientation) {
   case LANDSCAPE:
-    estimated_width = logo_size.cx + spacing + title_size.cx;
-    estimated_height = logo_size.cy;
+    estimated_width = logo_size.width + spacing + title_size.width;
+    estimated_height = logo_size.height;
     break;
 
   case PORTRAIT:
-    estimated_width = title_size.cx;
-    estimated_height = logo_size.cy + spacing + title_size.cy;
+    estimated_width = title_size.width;
+    estimated_height = logo_size.height + spacing + title_size.height;
     break;
 
   case SQUARE:
-    estimated_width = logo_size.cx;
-    estimated_height = logo_size.cy;
+    estimated_width = logo_size.width;
+    estimated_height = logo_size.height;
     break;
   }
 
@@ -105,10 +105,10 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
              (height - 16u) / estimated_height);
 
   if (magnification > 1) {
-    logo_size.cx *= magnification;
-    logo_size.cy *= magnification;
-    title_size.cx *= magnification;
-    title_size.cy *= magnification;
+    logo_size.width *= magnification;
+    logo_size.height *= magnification;
+    title_size.width *= magnification;
+    title_size.height *= magnification;
     spacing *= magnification;
   }
 
@@ -117,20 +117,20 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
   // Determine logo and title positions
   switch (orientation) {
   case LANDSCAPE:
-    logo_position.x = Center(width, logo_size.cx + spacing + title_size.cx);
-    logo_position.y = Center(height, logo_size.cy);
-    title_position.x = logo_position.x + logo_size.cx + spacing;
-    title_position.y = Center(height, title_size.cy);
+    logo_position.x = Center(width, logo_size.width + spacing + title_size.width);
+    logo_position.y = Center(height, logo_size.height);
+    title_position.x = logo_position.x + logo_size.width + spacing;
+    title_position.y = Center(height, title_size.height);
     break;
   case PORTRAIT:
-    logo_position.x = Center(width, logo_size.cx);
-    logo_position.y = Center(height, logo_size.cy + spacing + title_size.cy);
-    title_position.x = Center(width, title_size.cx);
-    title_position.y = logo_position.y + logo_size.cy + spacing;
+    logo_position.x = Center(width, logo_size.width);
+    logo_position.y = Center(height, logo_size.height + spacing + title_size.height);
+    title_position.x = Center(width, title_size.width);
+    title_position.y = logo_position.y + logo_size.height + spacing;
     break;
   case SQUARE:
-    logo_position.x = Center(width, logo_size.cx);
-    logo_position.y = Center(height, logo_size.cy);
+    logo_position.x = Center(width, logo_size.width);
+    logo_position.y = Center(height, logo_size.height);
     // not needed - silence compiler "may be used uninitialized"
     title_position.x = 0;
     title_position.y = 0;

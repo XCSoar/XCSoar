@@ -87,9 +87,9 @@ Font::TextTextureGL(TStringView text, PixelSize &size,
 
   const TextUtil::Texture texture =
     text_util_object->getTextTextureGL(text);
-  size.cx = texture.width;
-  size.cy = texture.height;
-  allocated_size.cx = texture.allocated_width;
-  allocated_size.cy = texture.allocated_height;
+  size.width = texture.width;
+  size.height = texture.height;
+  allocated_size.width = texture.allocated_width;
+  allocated_size.height = texture.allocated_height;
   return texture.id;
 }

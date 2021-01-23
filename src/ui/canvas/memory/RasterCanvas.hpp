@@ -106,11 +106,11 @@ protected:
     return true;
   }
 
-  static bool ClipScaleAxis(int &dest_position, int &dest_length,
+  static bool ClipScaleAxis(int &dest_position, unsigned &dest_length,
                             unsigned dest_max,
-                            unsigned &src_position, int &src_length) {
+                            unsigned &src_position, unsigned &src_length) {
     if (dest_position < 0) {
-      if (dest_length <= int(-dest_position))
+      if (dest_length <= unsigned(-dest_position))
         return false;
 
       const unsigned dest_delta = -dest_position;
@@ -874,8 +874,8 @@ public:
                       PixelSize src_size,
                       PixelOperations operations) {
     unsigned src_x = 0, src_y = 0;
-    if (!ClipScaleAxis(dest_position.x, dest_size.cx, buffer.width, src_x, src_size.cx) ||
-        !ClipScaleAxis(dest_position.y, dest_size.cy, buffer.height, src_y, src_size.cy))
+    if (!ClipScaleAxis(dest_position.x, dest_size.width, buffer.width, src_x, src_size.width) ||
+        !ClipScaleAxis(dest_position.y, dest_size.height, buffer.height, src_y, src_size.height))
       return;
 
     src = SPT::At(src, src_pitch, src_x, src_y);
@@ -884,7 +884,7 @@ public:
 
     unsigned j = 0;
     rpointer dest = At(dest_position.x, dest_position.y);
-    for (unsigned i = dest_size.cy; i > 0; --i,
+    for (unsigned i = dest_size.height; i > 0; --i,
            dest = PixelTraits::NextRow(dest, buffer.pitch, 1)) {
       if (src == old_src) {
         /* the previous iteration has already scaled this row: copy
@@ -892,17 +892,17 @@ public:
            row, to avoid redundant ScalePixels() calls */
         PixelTraits::CopyPixels(dest,
                                 PixelTraits::NextRow(dest, buffer.pitch, -1),
-                                dest_size.cx);
+                                dest_size.width);
       } else {
-        ScalePixels<decltype(operations), SPT>(dest, dest_size.cx, src,
-                                               src_size.cx,
+        ScalePixels<decltype(operations), SPT>(dest, dest_size.width, src,
+                                               src_size.width,
                                                operations);
         old_src = src;
       }
 
-      j += src_size.cy;
-      while (j >= unsigned(dest_size.cy)) {
-        j -= dest_size.cy;
+      j += src_size.height;
+      while (j >= dest_size.height) {
+        j -= dest_size.height;
         src = SPT::NextRow(src, src_pitch, 1);
       }
     }

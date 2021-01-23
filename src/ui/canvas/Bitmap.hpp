@@ -148,11 +148,11 @@ public:
   }
 
   unsigned GetWidth() const {
-    return size.cx;
+    return size.width;
   }
 
   unsigned GetHeight() const {
-    return size.cy;
+    return size.height;
   }
 
   bool IsFlipped() const {
@@ -175,11 +175,11 @@ public:
   PixelSize GetSize() const;
 
   unsigned GetWidth() const {
-    return GetSize().cx;
+    return GetSize().width;
   }
 
   unsigned GetHeight() const {
-    return GetSize().cy;
+    return GetSize().height;
   }
 #endif
 

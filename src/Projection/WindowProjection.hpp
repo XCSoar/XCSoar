@@ -81,11 +81,11 @@ public:
   bool ScreenVisible(const PixelPoint &P) const;
 
   void SetScreenSize(PixelSize new_size) {
-    assert(new_size.cx > 0);
-    assert(new_size.cy > 0);
+    assert(new_size.width > 0);
+    assert(new_size.height > 0);
 
-    screen_size.x = new_size.cx;
-    screen_size.y = new_size.cy;
+    screen_size.x = new_size.width;
+    screen_size.y = new_size.height;
 
 #ifndef NDEBUG
     screen_size_initialised = true;

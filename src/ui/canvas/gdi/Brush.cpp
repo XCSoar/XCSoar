@@ -42,8 +42,8 @@ Brush::Create(const Bitmap &bitmap)
 {
   /* GDI works best when the bitmap is 8x8 - to avoid bad performance,
      disallow using any other bitmap size */
-  assert(bitmap.GetSize().cx == 8);
-  assert(bitmap.GetSize().cy == 8);
+  assert(bitmap.GetSize().width == 8);
+  assert(bitmap.GetSize().height == 8);
 
   Destroy();
   brush = ::CreatePatternBrush(bitmap.GetNative());

@@ -28,7 +28,7 @@ Copyright_License {
 BufferCanvas::BufferCanvas(const Canvas &canvas, PixelSize new_size)
   :VirtualCanvas(canvas, new_size)
 {
-  bitmap = ::CreateCompatibleBitmap(canvas, new_size.cx, new_size.cy);
+  bitmap = ::CreateCompatibleBitmap(canvas, new_size.width, new_size.height);
   ::SelectObject(dc, bitmap);
 }
 
@@ -44,7 +44,7 @@ BufferCanvas::Create(const Canvas &canvas, PixelSize new_size)
 
   Destroy();
   VirtualCanvas::Create(canvas, new_size);
-  bitmap = ::CreateCompatibleBitmap(canvas, new_size.cx, new_size.cy);
+  bitmap = ::CreateCompatibleBitmap(canvas, new_size.width, new_size.height);
   ::SelectObject(dc, bitmap);
 }
 
@@ -93,7 +93,7 @@ BufferCanvas::Resize(PixelSize new_size)
   assert(success);
 
   Canvas::Resize(new_size);
-  bitmap = ::CreateCompatibleBitmap(dc, new_size.cx, new_size.cy);
+  bitmap = ::CreateCompatibleBitmap(dc, new_size.width, new_size.height);
   ::SelectObject(dc, bitmap);
 
   /* delete the temporary HBITMAP */

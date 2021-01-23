@@ -90,13 +90,13 @@ TopWindow::CreateNative(const TCHAR *_text, PixelSize new_size,
   const Uint32 flags = MakeSDLFlags(full_screen, resizable);
 
   window = ::SDL_CreateWindow(text, SDL_WINDOWPOS_UNDEFINED,
-                              SDL_WINDOWPOS_UNDEFINED, new_size.cx,
-                              new_size.cy, flags);
+                              SDL_WINDOWPOS_UNDEFINED, new_size.width,
+                              new_size.height, flags);
   if (window == nullptr)
     throw FormatRuntimeError("SDL_CreateWindow(%s, %u, %u, %u, %u, %#x) has failed: %s\n",
                              text, (unsigned) SDL_WINDOWPOS_UNDEFINED,
-                             (unsigned) SDL_WINDOWPOS_UNDEFINED, (unsigned) new_size.cx,
-                             (unsigned) new_size.cy, (unsigned)flags,
+                             (unsigned) SDL_WINDOWPOS_UNDEFINED, new_size.width,
+                             new_size.height, (unsigned)flags,
                              ::SDL_GetError());
 
 #if defined(__MACOSX__) && __MACOSX__

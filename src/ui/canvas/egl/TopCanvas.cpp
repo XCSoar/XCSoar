@@ -102,13 +102,13 @@ TopCanvas::Create(PixelSize new_size,
 
   VC_RECT_T dst_rect;
   dst_rect.x = dst_rect.y = 0;
-  dst_rect.width = new_size.cx;
-  dst_rect.height = new_size.cy;
+  dst_rect.width = new_size.width;
+  dst_rect.height = new_size.height;
 
   VC_RECT_T src_rect = dst_rect;
   src_rect.x = src_rect.y = 0;
-  src_rect.width = new_size.cx << 16;
-  src_rect.height = new_size.cy << 16;
+  src_rect.width = new_size.width << 16;
+  src_rect.height = new_size.height << 16;
 
   vc_element = vc_dispmanx_element_add(vc_update, vc_display,
                                        0, &dst_rect, 0, &src_rect,
@@ -118,15 +118,15 @@ TopCanvas::Create(PixelSize new_size,
   vc_dispmanx_update_submit_sync(vc_update);
 
   vc_window.element = vc_element;
-  vc_window.width = new_size.cx;
-  vc_window.height = new_size.cy;
+  vc_window.width = new_size.width;
+  vc_window.height = new_size.height;
 
   const EGLNativeDisplayType native_display = EGL_DEFAULT_DISPLAY;
   const EGLNativeWindowType native_window = &vc_window;
 #elif defined(HAVE_MALI)
   const EGLNativeDisplayType native_display = EGL_DEFAULT_DISPLAY;
-  mali_native_window.width = new_size.cx;
-  mali_native_window.height = new_size.cy;
+  mali_native_window.width = new_size.width;
+  mali_native_window.height = new_size.height;
   struct mali_native_window *native_window = &mali_native_window;
 #elif defined(MESA_KMS)
   current_bo = nullptr;
@@ -297,7 +297,7 @@ TopCanvas::CreateEGL(EGLNativeDisplayType native_display,
     throw FormatRuntimeError("eglCreateWindowSurface() failed: %#x", eglGetError());
 
   const PixelSize effective_size = GetNativeSize();
-  if (effective_size.cx <= 0 || effective_size.cy <= 0)
+  if (effective_size.width == 0 || effective_size.height == 0)
     throw std::runtime_error("eglQuerySurface() failed");
 
 #ifdef HAVE_GLES2

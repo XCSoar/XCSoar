@@ -239,7 +239,7 @@ Canvas::CalcTextSize(TStringView text) const noexcept
 
   /* see if the TextCache can handle this request */
   size = TextCache::LookupSize(*font, text2);
-  if (size.cy > 0)
+  if (size.height > 0)
     return size;
 
   return TextCache::GetSize(*font, text2);
@@ -380,28 +380,6 @@ Clip(int &position, unsigned &length, unsigned max,
   return true;
 }
 
-static bool
-Clip(int &position, int &length, unsigned max,
-     int &src_position) noexcept
-{
-  if (position < 0) {
-    if (length <= int(-position))
-      return false;
-
-    length -= -position;
-    src_position -= position;
-    position = 0;
-  }
-
-  if (unsigned(position) >= max)
-    return false;
-
-  if (position + unsigned(length) >= max)
-    length = max - position;
-
-  return true;
-}
-
 void
 Canvas::Copy(int dest_x, int dest_y,
              unsigned dest_width, unsigned dest_height,
@@ -450,14 +428,14 @@ Canvas::CopyTransparentWhite(PixelPoint dest_position, PixelSize dest_size,
                              const Canvas &src,
                              PixelPoint src_position) noexcept
 {
-  if (!Clip(dest_position.x, dest_size.cx, GetWidth(), src_position.x) ||
-      !Clip(dest_position.y, dest_size.cy, GetHeight(), src_position.y))
+  if (!Clip(dest_position.x, dest_size.width, GetWidth(), src_position.x) ||
+      !Clip(dest_position.y, dest_size.height, GetHeight(), src_position.y))
     return;
 
   SDLRasterCanvas canvas(buffer);
   TransparentPixelOperations<ActivePixelTraits> operations(canvas.Import(COLOR_WHITE));
   canvas.CopyRectangle(dest_position.x, dest_position.y,
-                       dest_size.cx, dest_size.cy,
+                       dest_size.width, dest_size.height,
                        src.buffer.At(src_position.x, src_position.y),
                        src.buffer.pitch,
                        operations);
@@ -468,8 +446,8 @@ Canvas::StretchTransparentWhite(PixelPoint dest_position, PixelSize dest_size,
                                 ConstImageBuffer src, PixelPoint src_position,
                                 PixelSize src_size) noexcept
 {
-  if (!Clip(dest_position.x, dest_size.cx, GetWidth(), src_position.x) ||
-      !Clip(dest_position.y, dest_size.cy, GetHeight(), src_position.y))
+  if (!Clip(dest_position.x, dest_size.width, GetWidth(), src_position.x) ||
+      !Clip(dest_position.y, dest_size.height, GetHeight(), src_position.y))
     return;
 
   SDLRasterCanvas canvas(buffer);
@@ -504,17 +482,17 @@ Canvas::Stretch(PixelPoint dest_position, PixelSize dest_size,
                 ConstImageBuffer src,
                 PixelPoint src_position, PixelSize src_size) noexcept
 {
-  assert(dest_size.cx < 0x4000);
-  assert(dest_size.cy < 0x4000);
+  assert(dest_size.width < 0x4000);
+  assert(dest_size.height < 0x4000);
 
   if (dest_size == src_size) {
     /* fast path: no zooming needed */
-    Copy(dest_position.x, dest_position.y, dest_size.cx, dest_size.cy,
+    Copy(dest_position.x, dest_position.y, dest_size.width, dest_size.height,
          src, src_position.x, src_position.y);
     return;
   }
 
-  if (dest_size.cx >= 0x4000 || dest_size.cy >= 0x4000)
+  if (dest_size.width >= 0x4000 || dest_size.height >= 0x4000)
     /* paranoid sanity check; shouldn't ever happen */
     return;
 
@@ -566,10 +544,10 @@ Canvas::StretchMono(PixelPoint dest_position, PixelSize dest_size,
                     Color fg_color, Color bg_color)
 {
   assert(IsDefined());
-  assert(dest_size.cx < 0x4000);
-  assert(dest_size.cy < 0x4000);
+  assert(dest_size.width < 0x4000);
+  assert(dest_size.height < 0x4000);
 
-  if (dest_size.cx >= 0x4000 || dest_size.cy >= 0x4000)
+  if (dest_size.width >= 0x4000 || dest_size.height >= 0x4000)
     /* paranoid sanity check; shouldn't ever happen */
     return;
 
@@ -706,7 +684,7 @@ Canvas::AlphaBlend(PixelPoint dest_position, PixelSize dest_size,
   AlphaPixelOperations<ActivePixelTraits> operations(alpha);
 
   canvas.CopyRectangle(dest_position.x, dest_position.y,
-                       dest_size.cx, dest_size.cy,
+                       dest_size.width, dest_size.height,
                        src.At(src_position.x, src_position.y), src.pitch,
                        operations);
 }
@@ -737,7 +715,7 @@ Canvas::AlphaBlendNotWhite(PixelPoint dest_position, PixelSize dest_size,
                                                              PortableAlphaPixelOperations<ActivePixelTraits>(alpha));
 
   canvas.CopyRectangle(dest_position.x, dest_position.y,
-                       dest_size.cx, dest_size.cy,
+                       dest_size.width, dest_size.height,
                        src.At(src_position.x, src_position.y), src.pitch,
                        operations);
 }

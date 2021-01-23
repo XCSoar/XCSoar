@@ -150,7 +150,7 @@ MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
       _stprintf(Buffer, _T("%d"), idist);
       auto sc = render_projection.GeoToScreen(dloc);
       PixelSize tsize = canvas.CalcTextSize(Buffer);
-      canvas.DrawText(sc.x - tsize.cx / 2, sc.y - tsize.cy / 2, Buffer);
+      canvas.DrawText(sc.x - tsize.width / 2, sc.y - tsize.height / 2, Buffer);
       ilast = idist;
     }
   }

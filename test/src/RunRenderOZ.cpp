@@ -167,8 +167,8 @@ protected:
 
   virtual void OnResize(PixelSize new_size) override {
     PaintWindow::OnResize(new_size);
-    projection.SetScale(new_size.cx / 21000.);
-    projection.SetScreenOrigin(new_size.cx / 2, new_size.cy / 2);
+    projection.SetScale(new_size.width / 21000.);
+    projection.SetScreenOrigin(new_size.width / 2, new_size.height / 2);
   }
 };
 

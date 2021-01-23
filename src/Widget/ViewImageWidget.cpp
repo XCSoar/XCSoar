@@ -79,14 +79,15 @@ ViewImageWindow::OnPaint(Canvas &canvas)
   const PixelRect rc = GetClientRect();
   const PixelSize window_size = rc.GetSize();
 
-  PixelSize fit_size(window_size.cx,
-                     window_size.cx * bitmap_size.cy / bitmap_size.cx);
-  if (fit_size.cy > window_size.cy) {
-    fit_size.cy = window_size.cy;
-    fit_size.cx = window_size.cy * bitmap_size.cx / bitmap_size.cy;
+  PixelSize fit_size(window_size.width,
+                     window_size.width * bitmap_size.height / bitmap_size.width);
+  if (fit_size.height > window_size.height) {
+    fit_size.height = window_size.height;
+    fit_size.width = window_size.height * bitmap_size.width / bitmap_size.height;
   }
 
-  canvas.Stretch({(rc.left + rc.right - fit_size.cx) / 2, (rc.top + rc.bottom - fit_size.cy) / 2},
+  canvas.Stretch({(rc.left + rc.right - (int)fit_size.width) / 2,
+      (rc.top + rc.bottom - (int)fit_size.height) / 2},
                  fit_size,
                  *bitmap);
 }

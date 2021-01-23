@@ -186,10 +186,10 @@ PagerWidget::GetMinimumSize() const
 
   for (const auto &i : children) {
     PixelSize size = i.widget->GetMinimumSize();
-    if (size.cx > result.cx)
-      result.cx = size.cx;
-    if (size.cy > result.cy)
-      result.cy = size.cy;
+    if (size.width > result.width)
+      result.width = size.width;
+    if (size.height > result.height)
+      result.height = size.height;
   }
 
   return result;
@@ -204,10 +204,10 @@ PagerWidget::GetMaximumSize() const
 
   for (const auto &i : children) {
     PixelSize size = i.widget->GetMaximumSize();
-    if (size.cx > result.cx)
-      result.cx = size.cx;
-    if (size.cy > result.cy)
-      result.cy = size.cy;
+    if (size.width > result.width)
+      result.width = size.width;
+    if (size.height > result.height)
+      result.height = size.height;
   }
 
   return result;

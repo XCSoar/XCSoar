@@ -236,7 +236,7 @@ TaskPointWidget::Layout::Layout(PixelRect rc, const DialogLook &look)
 
   type_label = change_type = type_rc;
   type_label.right = change_type.left = type_rc.right
-    - look.button.font->TextSize(_("Change Type")).cx - 3 * padding;
+    - look.button.font->TextSize(_("Change Type")).width - 3 * padding;
 
   PixelRect buttons_rc = tp_rc;
   buttons_rc.top = buttons_rc.bottom - button_height;

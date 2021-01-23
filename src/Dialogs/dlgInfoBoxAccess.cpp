@@ -112,8 +112,8 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
 
   const PixelRect client_rc = dialog.GetClientAreaWindow().GetClientRect();
   const PixelSize max_size = tab_widget.GetMaximumSize();
-  if (unsigned(max_size.cy) < client_rc.GetHeight()) {
-    form_rc.top += client_rc.GetHeight() - max_size.cy;
+  if (max_size.height < client_rc.GetHeight()) {
+    form_rc.top += client_rc.GetHeight() - max_size.height;
     dialog.Move(form_rc);
   }
 

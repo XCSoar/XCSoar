@@ -151,7 +151,7 @@ Scale(PixelSize size) noexcept
   if (!ScaleSupported())
     return size;
 
-  return {Scale(size.cx), Scale(size.cy)};
+  return {Scale(size.width), Scale(size.height)};
 }
 
 gcc_const

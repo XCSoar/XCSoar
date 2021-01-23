@@ -165,7 +165,7 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
                rc.bottom - Layout::FastScale(35));
   icon->Draw(canvas, p);
 
-  p.x += icon->GetSize().cx + Layout::FastScale(4);
+  p.x += icon->GetSize().width + Layout::FastScale(4);
   p.y = rc.bottom - Layout::FastScale(34);
 
   TextInBoxMode mode;
@@ -193,11 +193,11 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
   else
     bmp = &look.cruise_mode_icon;
 
-  offset += bmp->GetSize().cx + Layout::Scale(6);
+  offset += bmp->GetSize().width + Layout::Scale(6);
 
   bmp->Draw(canvas,
             PixelPoint(rc.right - offset,
-                       rc.bottom - bmp->GetSize().cy - Layout::Scale(4)));
+                       rc.bottom - bmp->GetSize().height - Layout::Scale(4)));
 
   // draw flarm status
   if (!GetMapSettings().show_flarm_alarm_level)
@@ -222,11 +222,11 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
     break;
   };
 
-  offset += bmp->GetSize().cx + Layout::Scale(6);
+  offset += bmp->GetSize().width + Layout::Scale(6);
 
   bmp->Draw(canvas,
             PixelPoint(rc.right - offset,
-                       rc.bottom - bmp->GetSize().cy - Layout::Scale(2)));
+                       rc.bottom - bmp->GetSize().height - Layout::Scale(2)));
 }
 
 void

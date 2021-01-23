@@ -72,7 +72,7 @@ RowFormWidget::Row::GetMinimumHeight(const DialogLook &look,
     return 0;
 
   case Type::WIDGET:
-    return widget->GetMinimumSize().cy;
+    return widget->GetMinimumSize().height;
 
   case Type::GENERIC:
     break;
@@ -102,7 +102,7 @@ RowFormWidget::Row::GetMaximumHeight(const DialogLook &look,
     return 0;
 
   case Type::WIDGET:
-    return widget->GetMaximumSize().cy;
+    return widget->GetMaximumSize().height;
 
   case Type::GENERIC:
     break;
@@ -421,7 +421,7 @@ PixelSize
 RowFormWidget::GetMinimumSize() const
 {
   const unsigned value_width =
-    look.text_font.TextSize(_T("Foo Bar Foo Bar")).cx;
+    look.text_font.TextSize(_T("Foo Bar Foo Bar")).width;
 
   const bool expert = UIGlobals::GetDialogSettings().expert;
 
@@ -432,7 +432,7 @@ RowFormWidget::GetMinimumSize() const
   PixelSize size(edit_width, 0u);
   for (const auto &i : rows)
     if (i.IsAvailable(expert))
-      size.cy += i.GetMinimumHeight(look, vertical);
+      size.height += i.GetMinimumHeight(look, vertical);
 
   return size;
 }
@@ -441,7 +441,7 @@ PixelSize
 RowFormWidget::GetMaximumSize() const
 {
   const unsigned value_width =
-    look.text_font.TextSize(_T("Foo Bar Foo Bar")).cx * 2;
+    look.text_font.TextSize(_T("Foo Bar Foo Bar")).width * 2;
 
   const unsigned edit_width = vertical
     ? std::max(GetRecommendedCaptionWidth(), value_width)
@@ -449,7 +449,7 @@ RowFormWidget::GetMaximumSize() const
 
   PixelSize size(edit_width, 0u);
   for (const auto &i : rows)
-    size.cy += i.GetMaximumHeight(look, vertical);
+    size.height += i.GetMaximumHeight(look, vertical);
 
   return size;
 }

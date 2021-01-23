@@ -165,13 +165,13 @@ KnobTextEntryWindow::OnPaint(Canvas &canvas)
 
   BulkPixelPoint p[5];
   p[0].x = 10;
-  p[0].y = (rc.GetHeight() - tsize.cy - 5) / 2;
+  p[0].y = (rc.GetHeight() - tsize.height - 5) / 2;
 
-  p[2].x = p[0].x + tsizec.cx;
-  p[2].y = p[0].y + tsize.cy + 5;
+  p[2].x = p[0].x + tsizec.width;
+  p[2].y = p[0].y + tsize.height + 5;
 
-  p[3].x = p[0].x + tsizea.cx;
-  p[3].y = p[0].y + tsize.cy + 5;
+  p[3].x = p[0].x + tsizea.width;
+  p[3].y = p[0].y + tsize.height + 5;
 
   p[1].x = p[2].x;
   p[1].y = p[2].y - 2;

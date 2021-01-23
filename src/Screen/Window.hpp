@@ -238,7 +238,7 @@ protected:
 public:
   bool IsDefined() const noexcept {
 #ifndef USE_WINUSER
-    return size.cx > 0;
+    return size.width > 0;
 #else
     return hWnd != nullptr;
 #endif
@@ -266,13 +266,13 @@ public:
   unsigned GetWidth() const noexcept {
     assert(IsDefined());
 
-    return size.cx;
+    return size.width;
   }
 
   unsigned GetHeight() const noexcept {
     assert(IsDefined());
 
-    return size.cy;
+    return size.height;
   }
 
   int GetRight() const {
@@ -284,11 +284,11 @@ public:
   }
 #else /* USE_WINUSER */
   unsigned GetWidth() const noexcept {
-    return GetSize().cx;
+    return GetSize().width;
   }
 
   unsigned GetHeight() const noexcept {
-    return GetSize().cy;
+    return GetSize().height;
   }
 #endif
 
@@ -364,8 +364,8 @@ public:
   void MoveToCenter() noexcept {
     const PixelSize window_size = GetSize();
     const PixelSize parent_size = GetParentClientRect().GetSize();
-    int dialog_x = (parent_size.cx - window_size.cx) / 2;
-    int dialog_y = (parent_size.cy - window_size.cy) / 2;
+    int dialog_x = (int(parent_size.width) - int(window_size.width)) / 2;
+    int dialog_y = (int(parent_size.height) - int(window_size.height)) / 2;
     Move(dialog_x, dialog_y);
   }
 
@@ -428,7 +428,7 @@ public:
   }
 
   void Resize(PixelSize size) noexcept {
-    Resize(size.cx, size.cy);
+    Resize(size.width, size.height);
   }
 
 #ifndef USE_WINUSER
@@ -775,8 +775,8 @@ public:
     assert(IsDefined());
 
     const PixelSize size = GetSize();
-    return unsigned(p.x) < unsigned(size.cx) &&
-        unsigned(p.y) < unsigned(size.cy);
+    return unsigned(p.x) < size.width &&
+        unsigned(p.y) < size.height;
   }
 
   /**

@@ -248,18 +248,18 @@ DigitEntry::CalculateLayout()
   const unsigned min_value_height = control_height * 3 / 2;
 
   PixelSize digit_size = look.text_font.TextSize(_T("8"));
-  digit_size.cy += 2 * padding;
-  if (digit_size.cy < (int)min_value_height)
-    digit_size.cy = min_value_height;
+  digit_size.height += 2 * padding;
+  if (digit_size.height < min_value_height)
+    digit_size.height = min_value_height;
 
   top = control_height;
-  bottom = top + digit_size.cy;
+  bottom = top + digit_size.height;
 
   unsigned last_right = 0;
   for (unsigned i = 0; i < length; ++i) {
     Column &digit = columns[i];
 
-    unsigned value_width = digit.GetWidth() * digit_size.cx;
+    unsigned value_width = digit.GetWidth() * digit_size.width;
     value_width += 2 * padding;
     if (value_width < control_height)
       value_width = control_height;

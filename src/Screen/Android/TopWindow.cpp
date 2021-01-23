@@ -102,7 +102,7 @@ void
 TopWindow::OnResize(PixelSize new_size)
 {
   if (native_view != nullptr)
-    native_view->SetSize(new_size.cx, new_size.cy);
+    native_view->SetSize(new_size.width, new_size.height);
 
   ContainerWindow::OnResize(new_size);
 }

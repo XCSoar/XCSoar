@@ -51,7 +51,7 @@ BufferCanvas::Create(PixelSize new_size)
     stencil_buffer = new GLRenderBuffer();
     stencil_buffer->Bind();
     PixelSize size = texture->GetAllocatedSize();
-    stencil_buffer->Storage(OpenGL::render_buffer_stencil, size.cx, size.cy);
+    stencil_buffer->Storage(OpenGL::render_buffer_stencil, size.width, size.height);
     stencil_buffer->Unbind();
   }
 
@@ -98,7 +98,7 @@ BufferCanvas::Resize(PixelSize new_size)
 
     stencil_buffer->Bind();
     PixelSize size = texture->GetAllocatedSize();
-    stencil_buffer->Storage(OpenGL::render_buffer_stencil, size.cx, size.cy);
+    stencil_buffer->Storage(OpenGL::render_buffer_stencil, size.width, size.height);
     stencil_buffer->Unbind();
   }
 

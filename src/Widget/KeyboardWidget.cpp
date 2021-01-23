@@ -203,8 +203,8 @@ void
 KeyboardWidget::PrepareSize(const PixelRect &rc)
 {
   const PixelSize new_size = rc.GetSize();
-  button_width = new_size.cx / 10;
-  button_height = new_size.cy / 5;
+  button_width = new_size.width / 10;
+  button_height = new_size.height / 5;
 }
 
 void

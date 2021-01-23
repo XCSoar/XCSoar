@@ -70,8 +70,8 @@ protected:
 
   void Create(HDC _dc, PixelSize new_size) {
     assert(_dc != nullptr);
-    assert(new_size.cx > 0);
-    assert(new_size.cy > 0);
+    assert(new_size.width > 0);
+    assert(new_size.height > 0);
 
     Destroy();
 
@@ -106,13 +106,13 @@ public:
   unsigned GetWidth() const {
     assert(IsDefined());
 
-    return size.cx;
+    return size.width;
   }
 
   unsigned GetHeight() const {
     assert(IsDefined());
 
-    return size.cy;
+    return size.height;
   }
 
   gcc_pure
@@ -409,7 +409,7 @@ public:
 
   gcc_pure
   unsigned CalcTextWidth(const TCHAR *text) const {
-    return CalcTextSize(text).cx;
+    return CalcTextSize(text).width;
   }
 
   gcc_pure
@@ -480,9 +480,9 @@ public:
     assert(src != nullptr);
 
     ::StretchBlt(dc, dest_position.x, dest_position.y,
-                 dest_size.cx, dest_size.cy,
+                 dest_size.width, dest_size.height,
                  src, src_position.x, src_position.y,
-                 src_size.cx, src_size.cy,
+                 src_size.width, src_size.height,
                  dwRop);
   }
 

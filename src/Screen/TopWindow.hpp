@@ -292,10 +292,7 @@ public:
     /* this is implemented again because Window::get_size() would call
        Window::GetClientRect() (method is not virtual) */
     PixelRect rc = GetClientRect();
-    PixelSize s;
-    s.cx = rc.right;
-    s.cy = rc.bottom;
-    return s;
+    return {rc.right, rc.bottom};
   }
 #endif
 

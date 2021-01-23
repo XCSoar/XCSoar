@@ -104,7 +104,7 @@ protected:
     canvas.SetBackgroundTransparent();
     canvas.Select(normal_font);
 
-    unsigned text_height = canvas.CalcTextSize(_T("W")).cy;
+    unsigned text_height = canvas.CalcTextSize(_T("W")).height;
     for (int i = num_events - 1, y = 4; i >= 0; --i, y += text_height) {
       const struct key_event &event = events[i];
       TCHAR buffer[64];
@@ -149,10 +149,10 @@ protected:
     SingleWindow::OnResize(new_size);
 
     if (key_code_dumper.IsDefined())
-      key_code_dumper.Move(0, 0, new_size.cx, (new_size.cy + 1) / 2);
+      key_code_dumper.Move(0, 0, new_size.width, (new_size.height + 1) / 2);
 
     if (close_button.IsDefined())
-      close_button.Move(0, (new_size.cy + 1) / 2, new_size.cx, new_size.cy / 2);
+      close_button.Move(0, (new_size.height + 1) / 2, new_size.width, new_size.height / 2);
   }
 
   /* virtual methods from class ActionListener */

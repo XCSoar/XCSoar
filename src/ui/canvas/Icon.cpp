@@ -86,16 +86,16 @@ MaskedIcon::LoadResource(ResourceId id, ResourceId big_id, bool center)
   size = bitmap.GetSize();
 #ifdef ENABLE_OPENGL
   /* let the GPU stretch on-the-fly */
-  size.cx = size.cx * stretch >> 10;
-  size.cy = size.cy * stretch >> 10;
+  size.width = size.width * stretch >> 10;
+  size.height = size.height * stretch >> 10;
 #else
   /* left half is mask, right half is icon */
-  size.cx /= 2;
+  size.width /= 2;
 #endif
 
   if (center) {
-    origin.x = size.cx / 2;
-    origin.y = size.cy / 2;
+    origin.x = size.width / 2;
+    origin.y = size.height / 2;
   } else {
     origin.x = 0;
     origin.y = 0;
@@ -126,10 +126,10 @@ MaskedIcon::Draw(Canvas &canvas, PixelPoint p) const
   canvas.SetBackgroundColor(COLOR_WHITE);
 #endif
 
-  canvas.CopyOr(p.x, p.y, size.cx, size.cy,
+  canvas.CopyOr(p.x, p.y, size.width, size.height,
                  bitmap, 0, 0);
-  canvas.CopyAnd(p.x, p.y, size.cx, size.cy,
-                  bitmap, size.cx, 0);
+  canvas.CopyAnd(p.x, p.y, size.width, size.height,
+                  bitmap, size.width, 0);
 #endif
 }
 
@@ -151,12 +151,12 @@ MaskedIcon::Draw(Canvas &canvas, const PixelRect &rc, bool inverse) const
   texture.Draw(PixelRect(position, size), texture.GetRect());
 #else
   if (inverse) // black background
-    canvas.CopyNotOr(position.x, position.y, size.cx, size.cy,
-                     bitmap, size.cx, 0);
+    canvas.CopyNotOr(position.x, position.y, size.width, size.height,
+                     bitmap, size.width, 0);
 
   else
-    canvas.CopyAnd(position.x, position.y, size.cx, size.cy,
-                   bitmap, size.cx, 0);
+    canvas.CopyAnd(position.x, position.y, size.width, size.height,
+                   bitmap, size.width, 0);
 #endif
 
 }

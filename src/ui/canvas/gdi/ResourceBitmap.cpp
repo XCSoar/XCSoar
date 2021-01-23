@@ -54,13 +54,13 @@ Bitmap::LoadStretch(ResourceId id, unsigned zoom)
 
   const PixelSize src_size = GetSize();
   PixelSize dest_size;
-  dest_size.cx = src_size.cx * zoom;
-  dest_size.cy = src_size.cy * zoom;
+  dest_size.width = src_size.width * zoom;
+  dest_size.height = src_size.height * zoom;
 
   HDC dc = ::GetDC(nullptr), src_dc = ::CreateCompatibleDC(dc),
     dest_dc = ::CreateCompatibleDC(dc);
   HBITMAP dest_bitmap = ::CreateCompatibleBitmap(dc,
-                                                 dest_size.cx, dest_size.cy);
+                                                 dest_size.width, dest_size.height);
   ::ReleaseDC(nullptr, dc);
 
   if (dest_bitmap == nullptr) {
@@ -72,8 +72,8 @@ Bitmap::LoadStretch(ResourceId id, unsigned zoom)
   ::SelectObject(src_dc, bitmap);
   ::SelectObject(dest_dc, dest_bitmap);
 
-  ::StretchBlt(dest_dc, 0, 0, dest_size.cx, dest_size.cy,
-               src_dc, 0, 0, src_size.cx, src_size.cy,
+  ::StretchBlt(dest_dc, 0, 0, dest_size.width, dest_size.height,
+               src_dc, 0, 0, src_size.width, src_size.height,
                SRCCOPY);
 
   ::DeleteDC(src_dc);

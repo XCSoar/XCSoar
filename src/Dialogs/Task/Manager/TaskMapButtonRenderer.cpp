@@ -72,8 +72,7 @@ TaskMapButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
     buffer.Begin(canvas);
 #endif
 
-    const PixelRect buffer_rc(0, 0, new_size.cx, new_size.cy);
-    DrawTask(buffer, buffer_rc, look, *task);
+    DrawTask(buffer, PixelRect{new_size}, look, *task);
 
 #ifdef ENABLE_OPENGL
     buffer.Commit(canvas);

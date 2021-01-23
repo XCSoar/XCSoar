@@ -92,7 +92,7 @@ public:
    * @return The x-Coordinate of the ScrollBar
    */
   unsigned GetLeft(const PixelSize size) const {
-    return IsDefined() ? rc.left : size.cx;
+    return IsDefined() ? rc.left : size.width;
   }
 
   /**

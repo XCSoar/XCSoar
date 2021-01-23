@@ -135,11 +135,11 @@ Font::Render(const TCHAR *text, const PixelSize size, void *buffer) const
       [NSString stringWithCString: text encoding: NSUTF8StringEncoding];
   assert(nil != ns_str);
 
-  memset(buffer, 0, size.cx * size.cy);
+  memset(buffer, 0, size.width * size.height);
 
   static CGColorSpaceRef grey_colorspace = CGColorSpaceCreateDeviceGray();
-  CGContextRef ctx = CGBitmapContextCreate(buffer, size.cx, size.cy, 8,
-                                           size.cx, grey_colorspace,
+  CGContextRef ctx = CGBitmapContextCreate(buffer, size.width, size.height, 8,
+                                           size.width, grey_colorspace,
                                            kCGImageAlphaOnly);
   assert(nullptr != ctx);
 
@@ -157,7 +157,7 @@ Font::Render(const TCHAR *text, const PixelSize size, void *buffer) const
   [NSGraphicsContext saveGraphicsState];
   [NSGraphicsContext setCurrentContext: ns_ctx];
 #else
-  CGContextTranslateCTM(ctx, 0, size.cy);
+  CGContextTranslateCTM(ctx, 0, size.height);
   CGContextScaleCTM(ctx, 1, -1);
 
   UIGraphicsPushContext(ctx);

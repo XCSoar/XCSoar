@@ -99,21 +99,21 @@ TextInBox(Canvas &canvas, const TCHAR *text, int x, int y,
   PixelSize tsize = canvas.CalcTextSize(text);
 
   if (mode.align == TextInBoxMode::Alignment::RIGHT)
-    x -= tsize.cx;
+    x -= tsize.width;
   else if (mode.align == TextInBoxMode::Alignment::CENTER)
-    x -= tsize.cx / 2;
+    x -= tsize.width / 2;
 
   if (mode.vertical_position == TextInBoxMode::VerticalPosition::ABOVE)
-    y -= tsize.cy;
+    y -= tsize.height;
   else if (mode.vertical_position == TextInBoxMode::VerticalPosition::CENTERED)
-    y -= tsize.cy / 2;
+    y -= tsize.height / 2;
 
   const unsigned padding = Layout::GetTextPadding();
   PixelRect rc;
   rc.left = x - padding - 1;
-  rc.right = x + tsize.cx + padding;
+  rc.right = x + tsize.width + padding;
   rc.top = y;
-  rc.bottom = y + tsize.cy + 1;
+  rc.bottom = y + tsize.height + 1;
 
   if (mode.move_in_view) {
     auto offset = TextInBoxMoveInView(rc, map_rc);

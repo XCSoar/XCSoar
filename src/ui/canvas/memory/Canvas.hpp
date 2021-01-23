@@ -320,7 +320,7 @@ public:
 
   gcc_pure
   unsigned CalcTextWidth(const TCHAR *text) const {
-    return CalcTextSize(text).cx;
+    return CalcTextSize(text).width;
   }
 
   gcc_pure
