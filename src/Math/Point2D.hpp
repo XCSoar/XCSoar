@@ -130,10 +130,10 @@ using IsPoint2D = std::is_base_of<Point2D<typename P::scalar_type,
                                           typename P::product_type>, P>;
 
 template<typename P>
-using EnableIfPoint2D = std::enable_if<IsPoint2D<P>::value>;
+using EnableIfPoint2D = std::enable_if_t<IsPoint2D<P>::value>;
 
 template<typename P, typename RT=typename P::product_type,
-         typename=typename EnableIfPoint2D<P>::type>
+         typename=EnableIfPoint2D<P>>
 constexpr P
 operator+(P a, P b) noexcept
 {
@@ -141,7 +141,7 @@ operator+(P a, P b) noexcept
 }
 
 template<typename P, typename RT=typename P::product_type,
-         typename=typename EnableIfPoint2D<P>::type>
+         typename=EnableIfPoint2D<P>>
 constexpr P
 operator-(P a, P b) noexcept
 {
@@ -149,9 +149,9 @@ operator-(P a, P b) noexcept
 }
 
 template<typename P, typename RT=typename P::product_type,
-         typename=typename EnableIfPoint2D<P>::type,
+         typename=EnableIfPoint2D<P>,
          typename Z,
-         typename=typename std::enable_if<std::is_arithmetic<Z>::value>::type>
+         typename=std::enable_if_t<std::is_arithmetic<Z>::value>>
 constexpr P
 operator*(P a, Z z) noexcept
 {
@@ -159,9 +159,9 @@ operator*(P a, Z z) noexcept
 }
 
 template<typename P, typename RT=typename P::product_type,
-         typename=typename EnableIfPoint2D<P>::type,
+         typename=EnableIfPoint2D<P>,
          typename Z,
-         typename=typename std::enable_if<std::is_arithmetic<Z>::value>::type>
+         typename=std::enable_if_t<std::is_arithmetic<Z>::value>>
 constexpr P
 operator/(P a, Z z) noexcept
 {
@@ -169,7 +169,7 @@ operator/(P a, Z z) noexcept
 }
 
 template<typename P, typename RT=typename P::product_type,
-         typename=typename EnableIfPoint2D<P>::type>
+         typename=EnableIfPoint2D<P>>
 constexpr RT
 DotProduct(P a, P b) noexcept
 {
@@ -177,7 +177,7 @@ DotProduct(P a, P b) noexcept
 }
 
 template<typename P, typename RT=typename P::product_type,
-         typename=typename EnableIfPoint2D<P>::type>
+         typename=EnableIfPoint2D<P>>
 constexpr RT
 CrossProduct(P a, P b) noexcept
 {
@@ -188,7 +188,7 @@ CrossProduct(P a, P b) noexcept
  * Calculates the "manhattan distance" or "taxicab distance".
  */
 template<typename P, typename RT=typename P::scalar_type,
-         typename=typename EnableIfPoint2D<P>::type>
+         typename=EnableIfPoint2D<P>>
 constexpr RT
 ManhattanDistance(P a, P b) noexcept
 {
