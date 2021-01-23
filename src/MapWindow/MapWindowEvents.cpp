@@ -104,6 +104,7 @@ MapWindow::OnPaint(Canvas &canvas)
 
     /* do the projection */
 
+    const auto buffer_size = buffer_projection.GetScreenSize();
     const int buffer_width = buffer_projection.GetScreenWidth();
     const int buffer_height = buffer_projection.GetScreenHeight();
 
@@ -150,9 +151,9 @@ MapWindow::OnPaint(Canvas &canvas)
 
     std::lock_guard<Mutex> lock(DoubleBufferWindow::mutex);
     const Canvas &src = GetVisibleCanvas();
-    canvas.Stretch(top_left.x, top_left.y,
-                   bottom_right.x - top_left.x, bottom_right.y - top_left.y,
-                   src, 0, 0, buffer_width, buffer_height);
+    canvas.Stretch(top_left,
+                   {bottom_right.x - top_left.x, bottom_right.y - top_left.y},
+                   src, {0, 0}, buffer_size);
   } else
     /* the UI has changed since the last DrawThread iteration has
        started: the buffer has invalid data, paint a white window

@@ -343,10 +343,8 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working)
     visitor.fans.DrawFill(buffer);
 
     // Copy everything non-white to the buffer
-    canvas.CopyTransparentWhite(0, 0,
-                                render_projection.GetScreenWidth(),
-                                render_projection.GetScreenHeight(),
-                                buffer, 0, 0);
+    canvas.CopyTransparentWhite({0, 0}, render_projection.GetScreenSize(),
+                                buffer, {0, 0});
 
     /* skip the separate terrain line step below, because we have done
        it already */
@@ -435,10 +433,8 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working)
   visitor.fans.DrawFill(buffer);
 
   // Copy everything non-white to the buffer
-  canvas.CopyTransparentWhite(0, 0,
-                              render_projection.GetScreenWidth(),
-                              render_projection.GetScreenHeight(),
-                              buffer, 0, 0);
+  canvas.CopyTransparentWhite({0, 0}, render_projection.GetScreenSize(),
+                              buffer, {0, 0});
 
 #endif
   }

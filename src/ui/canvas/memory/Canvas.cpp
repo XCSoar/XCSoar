@@ -380,6 +380,28 @@ Clip(int &position, unsigned &length, unsigned max,
   return true;
 }
 
+static bool
+Clip(int &position, int &length, unsigned max,
+     int &src_position) noexcept
+{
+  if (position < 0) {
+    if (length <= int(-position))
+      return false;
+
+    length -= -position;
+    src_position -= position;
+    position = 0;
+  }
+
+  if (unsigned(position) >= max)
+    return false;
+
+  if (position + unsigned(length) >= max)
+    length = max - position;
+
+  return true;
+}
+
 void
 Canvas::Copy(int dest_x, int dest_y,
              unsigned dest_width, unsigned dest_height,
@@ -424,35 +446,37 @@ Canvas::Copy(const Bitmap &_src)
 }
 
 void
-Canvas::CopyTransparentWhite(int dest_x, int dest_y,
-                             unsigned dest_width, unsigned dest_height,
-                             const Canvas &src, int src_x, int src_y)
+Canvas::CopyTransparentWhite(PixelPoint dest_position, PixelSize dest_size,
+                             const Canvas &src,
+                             PixelPoint src_position) noexcept
 {
-  if (!Clip(dest_x, dest_width, GetWidth(), src_x) ||
-      !Clip(dest_y, dest_height, GetHeight(), src_y))
+  if (!Clip(dest_position.x, dest_size.cx, GetWidth(), src_position.x) ||
+      !Clip(dest_position.y, dest_size.cy, GetHeight(), src_position.y))
     return;
 
   SDLRasterCanvas canvas(buffer);
   TransparentPixelOperations<ActivePixelTraits> operations(canvas.Import(COLOR_WHITE));
-  canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
-                       src.buffer.At(src_x, src_y), src.buffer.pitch,
+  canvas.CopyRectangle(dest_position.x, dest_position.y,
+                       dest_size.cx, dest_size.cy,
+                       src.buffer.At(src_position.x, src_position.y),
+                       src.buffer.pitch,
                        operations);
 }
 
 void
-Canvas::StretchTransparentWhite(int dest_x, int dest_y,
-                                unsigned dest_width, unsigned dest_height,
-                                ConstImageBuffer src, int src_x, int src_y,
-                                unsigned src_width, unsigned src_height)
+Canvas::StretchTransparentWhite(PixelPoint dest_position, PixelSize dest_size,
+                                ConstImageBuffer src, PixelPoint src_position,
+                                PixelSize src_size) noexcept
 {
-  if (!Clip(dest_x, dest_width, GetWidth(), src_x) ||
-      !Clip(dest_y, dest_height, GetHeight(), src_y))
+  if (!Clip(dest_position.x, dest_size.cx, GetWidth(), src_position.x) ||
+      !Clip(dest_position.y, dest_size.cy, GetHeight(), src_position.y))
     return;
 
   SDLRasterCanvas canvas(buffer);
   TransparentPixelOperations<ActivePixelTraits> operations(canvas.Import(COLOR_WHITE));
-  canvas.ScaleRectangle(dest_x, dest_y, dest_width, dest_height,
-                        src.At(src_x, src_y), src.pitch, src.width, src.height,
+  canvas.ScaleRectangle(dest_position, dest_size,
+                        src.At(src_position.x, src_position.y),
+                        src.pitch, src_size,
                         operations);
 }
 
@@ -464,94 +488,88 @@ Canvas::StretchNot(const Bitmap &_src)
   ConstImageBuffer src = _src.GetNative();
   const unsigned src_x = 0, src_y = 0;
   const unsigned dest_x = 0, dest_y = 0;
-  const unsigned dest_width = GetWidth();
-  const unsigned dest_height = GetHeight();
+  const auto dest_size = GetSize();
 
   SDLRasterCanvas canvas(buffer);
   BitNotPixelOperations<ActivePixelTraits> operations;
 
-  canvas.ScaleRectangle(dest_x, dest_y, dest_width, dest_height,
-                        src.At(src_x, src_y), src.pitch, src.width, src.height,
+  canvas.ScaleRectangle({dest_x, dest_y}, dest_size,
+                        src.At(src_x, src_y),
+                        src.pitch, {src.width, src.height},
                         operations);
 }
 
 void
-Canvas::Stretch(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
+Canvas::Stretch(PixelPoint dest_position, PixelSize dest_size,
                 ConstImageBuffer src,
-                int src_x, int src_y,
-                unsigned src_width, unsigned src_height)
+                PixelPoint src_position, PixelSize src_size) noexcept
 {
-  assert(dest_width < 0x4000);
-  assert(dest_height < 0x4000);
+  assert(dest_size.cx < 0x4000);
+  assert(dest_size.cy < 0x4000);
 
-  if (dest_width == src_width && dest_height == src_height) {
+  if (dest_size == src_size) {
     /* fast path: no zooming needed */
-    Copy(dest_x, dest_y, dest_width, dest_height, src, src_x, src_y);
+    Copy(dest_position.x, dest_position.y, dest_size.cx, dest_size.cy,
+         src, src_position.x, src_position.y);
     return;
   }
 
-  if (dest_width >= 0x4000 || dest_height >= 0x4000)
+  if (dest_size.cx >= 0x4000 || dest_size.cy >= 0x4000)
     /* paranoid sanity check; shouldn't ever happen */
     return;
 
   SDLRasterCanvas canvas(buffer);
 
-  canvas.ScaleRectangle(dest_x, dest_y, dest_width, dest_height,
-                        src.At(src_x, src_y), src.pitch, src_width, src_height);
+  canvas.ScaleRectangle(dest_position, dest_size,
+                        src.At(src_position.x, src_position.y),
+                        src.pitch, src_size);
 }
 
 void
 Canvas::Stretch(const Canvas &src,
-                int src_x, int src_y,
-                unsigned src_width, unsigned src_height)
+                PixelPoint src_position, PixelSize src_size) noexcept
 {
   // XXX
-  Stretch(0, 0, GetWidth(), GetHeight(),
-          src, src_x, src_y, src_width, src_height);
+  Stretch({0, 0}, GetSize(),
+          src, src_position, src_size);
 }
 
 void
-Canvas::Stretch(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
+Canvas::Stretch(PixelPoint dest_position, PixelSize dest_size,
                 const Bitmap &src,
-                int src_x, int src_y,
-                unsigned src_width, unsigned src_height)
+                PixelPoint src_position, PixelSize src_size) noexcept
 {
   assert(IsDefined());
   assert(src.IsDefined());
 
-  Stretch(dest_x, dest_y, dest_width, dest_height,
+  Stretch(dest_position, dest_size,
           src.GetNative(),
-          src_x, src_y, src_width, src_height);
+          src_position, src_size);
 }
 
 void
-Canvas::Stretch(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
+Canvas::Stretch(PixelPoint dest_position, PixelSize dest_size,
                 const Bitmap &_src)
 {
   assert(IsDefined());
   assert(_src.IsDefined());
 
   ConstImageBuffer src = _src.GetNative();
-  Stretch(dest_x, dest_y, dest_width, dest_height,
-          src, 0, 0, src.width, src.height);
+  Stretch(dest_position, dest_size,
+          src, {0, 0}, {src.width, src.height});
 }
 
 void
-Canvas::StretchMono(int dest_x, int dest_y,
-                    unsigned dest_width, unsigned dest_height,
+Canvas::StretchMono(PixelPoint dest_position, PixelSize dest_size,
                     ::ConstImageBuffer<GreyscalePixelTraits> src,
-                    int src_x, int src_y,
-                    unsigned src_width, unsigned src_height,
+                    PixelPoint src_position, PixelSize src_size,
                     Color fg_color, Color bg_color)
 {
   assert(IsDefined());
-  assert(dest_width < 0x4000);
-  assert(dest_height < 0x4000);
+  assert(dest_size.cx < 0x4000);
+  assert(dest_size.cy < 0x4000);
 
-  if (dest_width >= 0x4000 || dest_height >= 0x4000)
+  if (dest_size.cx >= 0x4000 || dest_size.cy >= 0x4000)
     /* paranoid sanity check; shouldn't ever happen */
     return;
 
@@ -561,9 +579,8 @@ Canvas::StretchMono(int dest_x, int dest_y,
     opaque(canvas.Import(fg_color), canvas.Import(bg_color));
 
   canvas.ScaleRectangle<decltype(opaque), GreyscalePixelTraits>
-    (dest_x, dest_y,
-     dest_width, dest_height,
-     src.At(src_x, src_y), src.pitch, src_width, src_height,
+    (dest_position, dest_size,
+     src.At(src_position.x, src_position.y), src.pitch, src_size,
      opaque);
 }
 
@@ -677,11 +694,9 @@ Canvas::DrawRoundRectangle(int left, int top,
 }
 
 void
-Canvas::AlphaBlend(int dest_x, int dest_y,
-                   unsigned dest_width, unsigned dest_height,
+Canvas::AlphaBlend(PixelPoint dest_position, PixelSize dest_size,
                    ConstImageBuffer src,
-                   int src_x, int src_y,
-                   unsigned src_width, unsigned src_height,
+                   PixelPoint src_position, PixelSize src_size,
                    uint8_t alpha)
 {
   // TODO: support scaling
@@ -690,31 +705,27 @@ Canvas::AlphaBlend(int dest_x, int dest_y,
 
   AlphaPixelOperations<ActivePixelTraits> operations(alpha);
 
-  canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
-                       src.At(src_x, src_y), src.pitch,
+  canvas.CopyRectangle(dest_position.x, dest_position.y,
+                       dest_size.cx, dest_size.cy,
+                       src.At(src_position.x, src_position.y), src.pitch,
                        operations);
 }
 
 void
-Canvas::AlphaBlend(int dest_x, int dest_y,
-                   unsigned dest_width, unsigned dest_height,
+Canvas::AlphaBlend(PixelPoint dest_position, PixelSize dest_size,
                    const Canvas &src,
-                   int src_x, int src_y,
-                   unsigned src_width, unsigned src_height,
+                   PixelPoint src_position, PixelSize src_size,
                    uint8_t alpha)
 {
-  AlphaBlend(dest_x, dest_y, dest_width, dest_height,
-             src.buffer,
-             src_x, src_y, src_width, src_height,
+  AlphaBlend(dest_position, dest_size,
+             src.buffer, src_position, src_size,
              alpha);
 }
 
 void
-Canvas::AlphaBlendNotWhite(int dest_x, int dest_y,
-                           unsigned dest_width, unsigned dest_height,
+Canvas::AlphaBlendNotWhite(PixelPoint dest_position, PixelSize dest_size,
                            ConstImageBuffer src,
-                           int src_x, int src_y,
-                           unsigned src_width, unsigned src_height,
+                           PixelPoint src_position, PixelSize src_size,
                            uint8_t alpha)
 {
   // TODO: support scaling
@@ -725,21 +736,19 @@ Canvas::AlphaBlendNotWhite(int dest_x, int dest_y,
   NotWhiteAlphaPixelOperations<ActivePixelTraits> operations(c,
                                                              PortableAlphaPixelOperations<ActivePixelTraits>(alpha));
 
-  canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
-                       src.At(src_x, src_y), src.pitch,
+  canvas.CopyRectangle(dest_position.x, dest_position.y,
+                       dest_size.cx, dest_size.cy,
+                       src.At(src_position.x, src_position.y), src.pitch,
                        operations);
 }
 
 void
-Canvas::AlphaBlendNotWhite(int dest_x, int dest_y,
-                           unsigned dest_width, unsigned dest_height,
+Canvas::AlphaBlendNotWhite(PixelPoint dest_position, PixelSize dest_size,
                            const Canvas src,
-                           int src_x, int src_y,
-                           unsigned src_width, unsigned src_height,
+                           PixelPoint src_position, PixelSize src_size,
                            uint8_t alpha)
 {
-  AlphaBlendNotWhite(dest_x, dest_y, dest_width, dest_height,
-                     src.buffer,
-                     src_x, src_y, src_width, src_height,
+  AlphaBlendNotWhite(dest_position, dest_size,
+                     src.buffer, src_position, src_size,
                      alpha);
 }

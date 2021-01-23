@@ -516,9 +516,7 @@ WndForm::OnPaint(Canvas &canvas)
 #ifdef EYE_CANDY
     if (!IsDithered() && is_active) {
       canvas.SetBackgroundTransparent();
-      canvas.Stretch(title_rect.left, title_rect.top,
-                     title_rect.GetWidth(),
-                     title_rect.GetHeight(),
+      canvas.Stretch(title_rect.GetTopLeft(), title_rect.GetSize(),
                      look.caption.background_bitmap);
 
       // Draw titlebar text

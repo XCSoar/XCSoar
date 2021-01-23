@@ -177,12 +177,11 @@ void
 GaugeVario::OnPaintBuffer(Canvas &canvas)
 {
   const PixelRect rc = GetClientRect();
-  const unsigned width = rc.GetWidth(), height = rc.GetHeight();
 
   if (!IsPersistent() || background_dirty) {
-    canvas.Stretch(rc.left, rc.top, width, height,
+    canvas.Stretch(rc.GetTopLeft(), rc.GetSize(),
                    look.background_bitmap,
-                   look.background_x, 0, 58, 120);
+                   {look.background_x, 0}, {58, 120});
 
     background_dirty = false;
   }
@@ -328,7 +327,7 @@ GaugeVario::RenderClimb(Canvas &canvas) noexcept
     return;
 
   if (Basic().switch_state.flight_mode == SwitchState::FlightMode::CIRCLING)
-    canvas.ScaleCopy(x, y, look.climb_bitmap, 12, 0, 12, 12);
+    canvas.ScaleCopy({x, y}, look.climb_bitmap, {12, 0}, {12, 12});
   else if (IsPersistent())
     canvas.DrawFilledRectangle(x, y, x + Layout::Scale(12), y + Layout::Scale(12),
                           look.background_color);

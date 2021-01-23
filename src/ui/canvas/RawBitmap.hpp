@@ -28,6 +28,7 @@
 
 #include <cstdint>
 
+struct PixelSize;
 class Canvas;
 
 #ifdef ENABLE_OPENGL
@@ -213,8 +214,8 @@ public:
   GLTexture &BindAndGetTexture() const;
 #endif
 
-  void StretchTo(unsigned width, unsigned height, Canvas &dest_canvas,
-                 unsigned dest_width, unsigned dest_height,
+  void StretchTo(PixelSize src_size,
+                 Canvas &dest_canvas, PixelSize dest_size,
                  bool transparent_white=false) const;
 
 #ifdef ENABLE_OPENGL

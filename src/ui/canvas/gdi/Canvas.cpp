@@ -224,15 +224,18 @@ Canvas::Copy(const Bitmap &src)
 }
 
 void
-Canvas::CopyTransparentWhite(int dest_x, int dest_y,
-                             unsigned dest_width, unsigned dest_height,
-                             const Canvas &src, int src_x, int src_y)
+Canvas::CopyTransparentWhite(PixelPoint dest_position, PixelSize dest_size,
+                             const Canvas &src,
+                             PixelPoint src_position) noexcept
 {
   assert(IsDefined());
   assert(src.IsDefined());
 
-  ::TransparentBlt(dc, dest_x, dest_y, dest_width, dest_height,
-                   src.dc, src_x, src_y, dest_width, dest_height,
+  ::TransparentBlt(dc, dest_position.x, dest_position.y,
+                   dest_size.cx, dest_size.cy,
+                   src.dc,
+                   src_position.x, src_position.y,
+                   dest_size.cx, dest_size.cy,
                    COLOR_WHITE);
 }
 
@@ -242,19 +245,15 @@ Canvas::StretchNot(const Bitmap &src)
   assert(IsDefined());
   assert(src.IsDefined());
 
-  const PixelSize size = src.GetSize();
-
-  Stretch(0, 0, GetWidth(), GetHeight(),
-          src.GetNative(), 0, 0, size.cx, size.cy,
+  Stretch({0, 0}, GetSize(),
+          src.GetNative(), {0, 0}, src.GetSize(),
           NOTSRCCOPY);
 }
 
 void
-Canvas::Stretch(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
+Canvas::Stretch(PixelPoint dest_position, PixelSize dest_size,
                 HBITMAP src,
-                int src_x, int src_y,
-                unsigned src_width, unsigned src_height,
+                PixelPoint src_position, PixelSize src_size,
                 DWORD dwRop)
 {
   assert(IsDefined());
@@ -262,47 +261,42 @@ Canvas::Stretch(int dest_x, int dest_y,
 
   HDC virtual_dc = GetCompatibleDC();
   HBITMAP old = (HBITMAP)::SelectObject(virtual_dc, src);
-  Stretch(dest_x, dest_y, dest_width, dest_height,
-          virtual_dc, src_x, src_y, src_width, src_height,
+  Stretch(dest_position, dest_size,
+          virtual_dc, src_position, src_size,
           dwRop);
   ::SelectObject(virtual_dc, old);
 }
 
 void
-Canvas::Stretch(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
+Canvas::Stretch(PixelPoint dest_position, PixelSize dest_size,
                 const Bitmap &src,
-                int src_x, int src_y,
-                unsigned src_width, unsigned src_height,
+                PixelPoint src_position, PixelSize src_size,
                 DWORD dwRop)
 {
   assert(IsDefined());
   assert(src.IsDefined());
 
-  Stretch(dest_x, dest_y, dest_width, dest_height,
-          src.GetNative(), src_x, src_y, src_width, src_height,
+  Stretch(dest_position, dest_size,
+          src.GetNative(), src_position, src_size,
           dwRop);
 }
 
 void
 Canvas::Stretch(const Canvas &src,
-                int src_x, int src_y,
-                unsigned src_width, unsigned src_height)
+                PixelPoint src_position, PixelSize src_size) noexcept
 {
-  Stretch(0, 0, GetWidth(), GetHeight(),
-          src, src_x, src_y, src_width, src_height);
+  Stretch({0, 0}, GetSize(),
+          src, src_position, src_size);
 }
 
 void
-Canvas::Stretch(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
+Canvas::Stretch(PixelPoint dest_position, PixelSize dest_size,
                 const Bitmap &src)
 {
   assert(src.IsDefined());
 
-  const PixelSize size = src.GetSize();
-  Stretch(dest_x, dest_y, dest_width, dest_height,
-          src, 0, 0, size.cx, size.cy);
+  Stretch(dest_position, dest_size,
+          src, {0, 0}, src.GetSize());
 }
 
 void
@@ -310,29 +304,25 @@ Canvas::Stretch(const Bitmap &src)
 {
   assert(src.IsDefined());
 
-  const PixelSize size = src.GetSize();
-  Stretch(src, 0, 0, size.cx, size.cy);
+  Stretch(src, {0, 0}, src.GetSize());
 }
 
 void
-Canvas::StretchMono(int dest_x, int dest_y,
-                    unsigned dest_width, unsigned dest_height,
+Canvas::StretchMono(PixelPoint dest_position, PixelSize dest_size,
                     const Bitmap &src,
-                    int src_x, int src_y,
-                    unsigned src_width, unsigned src_height,
+                    PixelPoint src_position, PixelSize src_size,
                     Color fg_color, Color bg_color)
 {
   assert(IsDefined());
   assert(src.IsDefined());
 
-  if (bg_color == COLOR_BLACK && (src_width != dest_width ||
-                                  src_height != dest_height)) {
+  if (bg_color == COLOR_BLACK && src_size != dest_size) {
     /* workaround for a WINE bug: stretching a mono bitmap ignores the
        text color; this kludge makes the text color white */
     SetTextColor(COLOR_BLACK);
     SetBackgroundColor(COLOR_WHITE);
-    Stretch(dest_x, dest_y, dest_width, dest_height,
-            src, src_x, src_y, src_width, src_height,
+    Stretch(dest_position, dest_size,
+            src, src_position, src_size,
             MERGEPAINT);
     return;
   }
@@ -342,18 +332,16 @@ Canvas::StretchMono(int dest_x, int dest_y,
   SetTextColor(fg_color);
   SetBackgroundTransparent();
 
-  Stretch(dest_x, dest_y, dest_width, dest_height,
-          src, src_x, src_y, src_width, src_height);
+  Stretch(dest_position, dest_size,
+          src, src_position, src_size);
 }
 
 #ifdef HAVE_ALPHA_BLEND
 
 void
-Canvas::AlphaBlend(int dest_x, int dest_y,
-                   unsigned dest_width, unsigned dest_height,
+Canvas::AlphaBlend(PixelPoint dest_position, PixelSize dest_size,
                    HDC src,
-                   int src_x, int src_y,
-                   unsigned src_width, unsigned src_height,
+                   PixelPoint src_position, PixelSize src_size,
                    uint8_t alpha)
 {
   BLENDFUNCTION fn;
@@ -362,8 +350,10 @@ Canvas::AlphaBlend(int dest_x, int dest_y,
   fn.SourceConstantAlpha = alpha;
   fn.AlphaFormat = 0;
 
-  ::AlphaBlend(dc, dest_x, dest_y, dest_width, dest_height,
-               src, src_x, src_y, src_width, src_height,
+  ::AlphaBlend(dc, dest_position.x, dest_position.y,
+               dest_size.cx, dest_size.cy,
+               src, src_position.x, src_position.y,
+               src_size.cx, src_size.cy,
                fn);
 }
 

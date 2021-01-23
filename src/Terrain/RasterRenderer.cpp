@@ -510,9 +510,8 @@ RasterRenderer::Draw(Canvas &canvas,
                   bounds,
                   projection);
 #else
-  image->StretchTo(height_matrix.GetWidth(), height_matrix.GetHeight(),
-                   canvas, projection.GetScreenWidth(),
-                   projection.GetScreenHeight(),
+  image->StretchTo({height_matrix.GetWidth(), height_matrix.GetHeight()},
+                   canvas, projection.GetScreenSize(),
                    transparent_white);
 #endif
 }

@@ -102,15 +102,13 @@ RawBitmap::BindAndGetTexture() const
 }
 
 void
-RawBitmap::StretchTo(unsigned width, unsigned height,
-                     Canvas &dest_canvas,
-                     unsigned dest_width, unsigned dest_height,
+RawBitmap::StretchTo(PixelSize src_size,
+                     Canvas &dest_canvas, PixelSize dest_size,
                      gcc_unused bool transparent_white) const
 {
   GLTexture &texture = BindAndGetTexture();
 
   OpenGL::texture_shader->Use();
 
-  texture.Draw(PixelRect(0, 0, dest_width, dest_height),
-               PixelRect(0, 0, width, height));
+  texture.Draw(PixelRect{dest_size}, PixelRect{src_size});
 }

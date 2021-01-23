@@ -467,81 +467,69 @@ public:
 
   void Copy(const Bitmap &src);
 
-  void CopyTransparentWhite(int dest_x, int dest_y,
-                            unsigned dest_width, unsigned dest_height,
-                            const Canvas &src, int src_x, int src_y);
+  void CopyTransparentWhite(PixelPoint dest_position, PixelSize dest_size,
+                            const Canvas &src,
+                            PixelPoint src_position) noexcept;
 
   void StretchNot(const Bitmap &src);
 
-  void Stretch(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
-               HDC src,
-               int src_x, int src_y,
-               unsigned src_width, unsigned src_height,
+  void Stretch(PixelPoint dest_position, PixelSize dest_size,
+               HDC src, PixelPoint src_position, PixelSize src_size,
                DWORD dwRop=SRCCOPY) {
     assert(IsDefined());
     assert(src != nullptr);
 
-    ::StretchBlt(dc, dest_x, dest_y, dest_width, dest_height,
-                 src, src_x, src_y, src_width, src_height,
+    ::StretchBlt(dc, dest_position.x, dest_position.y,
+                 dest_size.cx, dest_size.cy,
+                 src, src_position.x, src_position.y,
+                 src_size.cx, src_size.cy,
                  dwRop);
   }
 
-  void Stretch(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
+  void Stretch(PixelPoint dest_position, PixelSize dest_size,
                const Canvas &src,
-               int src_x, int src_y,
-               unsigned src_width, unsigned src_height,
+               PixelPoint src_position, PixelSize src_size,
                DWORD dwRop=SRCCOPY) {
     assert(IsDefined());
     assert(src.IsDefined());
 
-    Stretch(dest_x, dest_y, dest_width, dest_height,
-            src.dc, src_x, src_y, src_width, src_height,
+    Stretch(dest_position, dest_size,
+            src.dc, src_position, src_size,
             dwRop);
   }
 
-  void Stretch(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
-               HBITMAP src,
-               int src_x, int src_y,
-               unsigned src_width, unsigned src_height,
+  void Stretch(PixelPoint dest_position, PixelSize dest_size,
+               HBITMAP src, PixelPoint src_position, PixelSize src_size,
                DWORD dwRop=SRCCOPY);
 
-  void Stretch(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
+  void Stretch(PixelPoint dest_position, PixelSize dest_size,
                const Bitmap &src,
-               int src_x, int src_y,
-               unsigned src_width, unsigned src_height,
+               PixelPoint src_position, PixelSize src_size,
                DWORD dwRop=SRCCOPY);
 
-  void Stretch(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
+  void Stretch(PixelPoint dest_position, PixelSize dest_size,
                HDC src,
-               int src_x, int src_y,
-               unsigned src_width, unsigned src_height) {
+               PixelPoint src_position, PixelSize src_size) noexcept {
     assert(IsDefined());
     assert(src != nullptr);
 
-    Stretch(dest_x, dest_y, dest_width, dest_height,
-            src, src_x, src_y, src_width, src_height,
+    Stretch(dest_position, dest_size,
+            src, src_position, src_size,
             SRCCOPY);
   }
 
   void Stretch(const Canvas &src,
-               int src_x, int src_y, unsigned src_width, unsigned src_height);
+               PixelPoint src_position, PixelSize src_size) noexcept;
 
   void Stretch(const Canvas &src);
 
   void Stretch(const Bitmap &src,
-               int src_x, int src_y,
-               unsigned src_width, unsigned src_height) {
-    Stretch(0, 0, GetWidth(), GetHeight(),
-            src, src_x, src_y, src_width, src_height);
+               PixelPoint src_position, PixelSize src_size) noexcept {
+    Stretch({0, 0}, GetSize(),
+            src, src_position, src_size);
   }
 
-  void Stretch(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
+  void Stretch(PixelPoint dest_position, PixelSize dest_size,
                const Bitmap &src);
 
   void Stretch(const Bitmap &src);
@@ -555,30 +543,23 @@ public:
    * @param fg_color draw this color instead of "black"
    * @param bg_color draw this color instead of "white"
    */
-  void StretchMono(int dest_x, int dest_y,
-                   unsigned dest_width, unsigned dest_height,
+  void StretchMono(PixelPoint dest_position, PixelSize dest_size,
                    const Bitmap &src,
-                   int src_x, int src_y,
-                   unsigned src_width, unsigned src_height,
+                   PixelPoint src_position, PixelSize src_size,
                    Color fg_color, Color bg_color);
 
 #ifdef HAVE_ALPHA_BLEND
-  void AlphaBlend(int dest_x, int dest_y,
-                  unsigned dest_width, unsigned dest_height,
-                  HDC src,
-                  int src_x, int src_y,
-                  unsigned src_width, unsigned src_height,
+  void AlphaBlend(PixelPoint dest_position, PixelSize dest_size,
+                  HDC src, PixelPoint src_position, PixelSize src_size,
                   uint8_t alpha);
 
-  void AlphaBlend(int dest_x, int dest_y,
-                  unsigned dest_width, unsigned dest_height,
+  void AlphaBlend(PixelPoint dest_position, PixelSize dest_size,
                   const Canvas &src,
-                  int src_x, int src_y,
-                  unsigned src_width, unsigned src_height,
+                  PixelPoint src_position, PixelSize src_size,
                   uint8_t alpha) {
-    AlphaBlend(dest_x, dest_y, dest_width, dest_height,
-                src.dc, src_x, src_y, src_width, src_height,
-                alpha);
+    AlphaBlend(dest_position, dest_size,
+               src.dc, src_position, src_size,
+               alpha);
   }
 #endif
 
@@ -640,10 +621,9 @@ public:
          SRCAND);
   }
 
-  void ScaleCopy(int dest_x, int dest_y,
+  void ScaleCopy(PixelPoint dest_position,
                  const Bitmap &src,
-                 int src_x, int src_y,
-                 unsigned src_width, unsigned src_height);
+                 PixelPoint src_position, PixelSize src_size) noexcept;
 
   gcc_pure
   HWColor GetPixel(int x, int y) const {

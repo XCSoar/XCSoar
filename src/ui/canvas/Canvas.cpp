@@ -27,18 +27,16 @@ Copyright_License {
 #include "util/TStringView.hxx"
 
 void
-Canvas::ScaleCopy(int dest_x, int dest_y,
+Canvas::ScaleCopy(PixelPoint dest_position,
                   const Bitmap &src,
-                  int src_x, int src_y,
-                  unsigned src_width, unsigned src_height)
+                  PixelPoint src_position, PixelSize src_size) noexcept
 {
   if (Layout::ScaleEnabled())
-    Stretch(dest_x, dest_y,
-            Layout::Scale(src_width), Layout::Scale(src_height),
-            src, src_x, src_y, src_width, src_height);
+    Stretch(dest_position, Layout::Scale(src_size),
+            src, src_position, src_size);
   else
-    Copy(dest_x, dest_y, src_width, src_height,
-         src, src_x, src_y);
+    Copy(dest_position.x, dest_position.y, src_size.cx, src_size.cy,
+         src, src_position.x, src_position.y);
 }
 
 const PixelSize

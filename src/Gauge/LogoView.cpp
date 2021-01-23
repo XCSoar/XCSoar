@@ -112,37 +112,37 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
     spacing *= magnification;
   }
 
-  int logox, logoy, titlex, titley;
+  PixelPoint logo_position, title_position;
 
   // Determine logo and title positions
   switch (orientation) {
   case LANDSCAPE:
-    logox = Center(width, logo_size.cx + spacing + title_size.cx);
-    logoy = Center(height, logo_size.cy);
-    titlex = logox + logo_size.cx + spacing;
-    titley = Center(height, title_size.cy);
+    logo_position.x = Center(width, logo_size.cx + spacing + title_size.cx);
+    logo_position.y = Center(height, logo_size.cy);
+    title_position.x = logo_position.x + logo_size.cx + spacing;
+    title_position.y = Center(height, title_size.cy);
     break;
   case PORTRAIT:
-    logox = Center(width, logo_size.cx);
-    logoy = Center(height, logo_size.cy + spacing + title_size.cy);
-    titlex = Center(width, title_size.cx);
-    titley = logoy + logo_size.cy + spacing;
+    logo_position.x = Center(width, logo_size.cx);
+    logo_position.y = Center(height, logo_size.cy + spacing + title_size.cy);
+    title_position.x = Center(width, title_size.cx);
+    title_position.y = logo_position.y + logo_size.cy + spacing;
     break;
   case SQUARE:
-    logox = Center(width, logo_size.cx);
-    logoy = Center(height, logo_size.cy);
+    logo_position.x = Center(width, logo_size.cx);
+    logo_position.y = Center(height, logo_size.cy);
     // not needed - silence compiler "may be used uninitialized"
-    titlex = 0;
-    titley = 0;
+    title_position.x = 0;
+    title_position.y = 0;
     break;
   }
 
   // Draw 'XCSoar N.N' title
   if (orientation != SQUARE)
-    canvas.Stretch(titlex, titley, title_size.cx, title_size.cy, bitmap_title);
+    canvas.Stretch(title_position, title_size, bitmap_title);
 
   // Draw XCSoar swift logo
-  canvas.Stretch(logox, logoy, logo_size.cx, logo_size.cy, bitmap_logo);
+  canvas.Stretch(logo_position, logo_size, bitmap_logo);
 
   // Draw full XCSoar version number
 

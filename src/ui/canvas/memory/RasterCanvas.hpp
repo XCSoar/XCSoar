@@ -106,11 +106,11 @@ protected:
     return true;
   }
 
-  static bool ClipScaleAxis(int &dest_position, unsigned &dest_length,
+  static bool ClipScaleAxis(int &dest_position, int &dest_length,
                             unsigned dest_max,
-                            unsigned &src_position, unsigned &src_length) {
+                            unsigned &src_position, int &src_length) {
     if (dest_position < 0) {
-      if (dest_length <= unsigned(-dest_position))
+      if (dest_length <= int(-dest_position))
         return false;
 
       const unsigned dest_delta = -dest_position;
@@ -869,14 +869,13 @@ public:
   }
 
   template<typename PixelOperations, typename SPT=PixelTraits>
-  void ScaleRectangle(int dest_x, int dest_y,
-                      unsigned dest_width, unsigned dest_height,
+  void ScaleRectangle(PixelPoint dest_position, PixelSize dest_size,
                       typename SPT::const_rpointer src, unsigned src_pitch,
-                      unsigned src_width, unsigned src_height,
+                      PixelSize src_size,
                       PixelOperations operations) {
     unsigned src_x = 0, src_y = 0;
-    if (!ClipScaleAxis(dest_x, dest_width, buffer.width, src_x, src_width) ||
-        !ClipScaleAxis(dest_y, dest_height, buffer.height, src_y, src_height))
+    if (!ClipScaleAxis(dest_position.x, dest_size.cx, buffer.width, src_x, src_size.cx) ||
+        !ClipScaleAxis(dest_position.y, dest_size.cy, buffer.height, src_y, src_size.cy))
       return;
 
     src = SPT::At(src, src_pitch, src_x, src_y);
@@ -884,8 +883,8 @@ public:
     typename SPT::const_rpointer old_src = nullptr;
 
     unsigned j = 0;
-    rpointer dest = At(dest_x, dest_y);
-    for (unsigned i = dest_height; i > 0; --i,
+    rpointer dest = At(dest_position.x, dest_position.y);
+    for (unsigned i = dest_size.cy; i > 0; --i,
            dest = PixelTraits::NextRow(dest, buffer.pitch, 1)) {
       if (src == old_src) {
         /* the previous iteration has already scaled this row: copy
@@ -893,27 +892,27 @@ public:
            row, to avoid redundant ScalePixels() calls */
         PixelTraits::CopyPixels(dest,
                                 PixelTraits::NextRow(dest, buffer.pitch, -1),
-                                dest_width);
+                                dest_size.cx);
       } else {
-        ScalePixels<decltype(operations), SPT>(dest, dest_width, src, src_width,
+        ScalePixels<decltype(operations), SPT>(dest, dest_size.cx, src,
+                                               src_size.cx,
                                                operations);
         old_src = src;
       }
 
-      j += src_height;
-      while (j >= dest_height) {
-        j -= dest_height;
+      j += src_size.cy;
+      while (j >= unsigned(dest_size.cy)) {
+        j -= dest_size.cy;
         src = SPT::NextRow(src, src_pitch, 1);
       }
     }
   }
 
-  void ScaleRectangle(int dest_x, int dest_y,
-                      unsigned dest_width, unsigned dest_height,
+  void ScaleRectangle(PixelPoint dest_position, PixelSize dest_size,
                       const_rpointer src, unsigned src_pitch,
-                      unsigned src_width, unsigned src_height) {
-    ScaleRectangle(dest_x, dest_y, dest_width, dest_height,
-                   src, src_pitch, src_width, src_height,
+                      PixelSize src_size) noexcept {
+    ScaleRectangle(dest_position, dest_size,
+                   src, src_pitch, src_size,
                    GetPixelTraits());
   }
 };

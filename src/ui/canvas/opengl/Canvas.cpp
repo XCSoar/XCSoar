@@ -709,11 +709,9 @@ Canvas::DrawClippedText(int x, int y,
 }
 
 void
-Canvas::Stretch(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
+Canvas::Stretch(PixelPoint dest_position, PixelSize dest_size,
                 const GLTexture &texture,
-                int src_x, int src_y,
-                unsigned src_width, unsigned src_height)
+                PixelPoint src_position, PixelSize src_size) noexcept
 {
 #ifdef HAVE_GLES
   assert(offset == OpenGL::translate);
@@ -721,19 +719,15 @@ Canvas::Stretch(int dest_x, int dest_y,
 
   OpenGL::texture_shader->Use();
 
-  texture.Draw(PixelRect(PixelPoint(dest_x, dest_y),
-                         PixelSize(dest_width, dest_height)),
-               PixelRect(PixelPoint(src_x, src_y),
-                         PixelSize(src_width, src_height)));
+  texture.Draw({dest_position, dest_size}, {src_position, src_size});
 }
 
 void
-Canvas::Stretch(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
+Canvas::Stretch(PixelPoint dest_position, PixelSize dest_size,
                 const GLTexture &texture)
 {
-  Stretch(dest_x, dest_y, dest_width, dest_height,
-          texture, 0, 0, texture.GetWidth(), texture.GetHeight());
+  Stretch(dest_position, dest_size,
+          texture, {0, 0}, texture.GetSize());
 }
 
 void
@@ -741,8 +735,8 @@ Canvas::Copy(int dest_x, int dest_y,
              unsigned dest_width, unsigned dest_height,
              const Bitmap &src, int src_x, int src_y)
 {
-  Stretch(dest_x, dest_y, dest_width, dest_height,
-          src, src_x, src_y, dest_width, dest_height);
+  Stretch({dest_x, dest_y}, {dest_width, dest_height},
+          src, {src_x, src_y}, {dest_width, dest_height});
 }
 
 void
@@ -764,10 +758,9 @@ Canvas::StretchNot(const Bitmap &src)
 }
 
 void
-Canvas::Stretch(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
-                const Bitmap &src, int src_x, int src_y,
-                unsigned src_width, unsigned src_height)
+Canvas::Stretch(PixelPoint dest_position, PixelSize dest_size,
+                const Bitmap &src,
+                PixelPoint src_position, PixelSize src_size) noexcept
 {
 #ifdef HAVE_GLES
   assert(offset == OpenGL::translate);
@@ -778,15 +771,11 @@ Canvas::Stretch(int dest_x, int dest_y,
 
   GLTexture &texture = *src.GetNative();
   texture.Bind();
-  texture.Draw(PixelRect(PixelPoint(dest_x, dest_y),
-                         PixelSize(dest_width, dest_height)),
-               PixelRect(PixelPoint(src_x, src_y),
-                         PixelSize(src_width, src_height)));
+  texture.Draw({dest_position, dest_size}, {src_position, src_size});
 }
 
 void
-Canvas::Stretch(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
+Canvas::Stretch(PixelPoint dest_position, PixelSize dest_size,
                 const Bitmap &src)
 {
 #ifdef HAVE_GLES
@@ -799,17 +788,13 @@ Canvas::Stretch(int dest_x, int dest_y,
   GLTexture &texture = *src.GetNative();
   texture.Bind();
 
-  texture.Draw(PixelRect(PixelPoint(dest_x, dest_y),
-                         PixelSize(dest_width, dest_height)),
-               PixelRect(src.GetSize()));
+  texture.Draw({dest_position, dest_size}, PixelRect{src.GetSize()});
 }
 
 void
-Canvas::StretchMono(int dest_x, int dest_y,
-                    unsigned dest_width, unsigned dest_height,
+Canvas::StretchMono(PixelPoint dest_position, PixelSize dest_size,
                     const Bitmap &src,
-                    int src_x, int src_y,
-                    unsigned src_width, unsigned src_height,
+                    PixelPoint src_position, PixelSize src_size,
                     Color fg_color, Color bg_color)
 {
   /* note that this implementation ignores the background color; it is
@@ -825,10 +810,7 @@ Canvas::StretchMono(int dest_x, int dest_y,
 
   GLTexture &texture = *src.GetNative();
   texture.Bind();
-  texture.Draw(PixelRect(PixelPoint(dest_x, dest_y),
-                         PixelSize(dest_width, dest_height)),
-               PixelRect(PixelPoint(src_x, src_y),
-                         PixelSize(src_width, src_height)));
+  texture.Draw({dest_position, dest_size}, {src_position, src_size});
 }
 
 void

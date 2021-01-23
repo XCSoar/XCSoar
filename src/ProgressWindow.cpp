@@ -154,9 +154,7 @@ ProgressWindow::OnPaint(Canvas &canvas)
   logo.draw(canvas, logo_position);
 
   // Draw progress bar background
-  canvas.Stretch(bottom_position.left, bottom_position.top,
-                 bottom_position.GetWidth(),
-                 bottom_position.GetHeight(),
+  canvas.Stretch(bottom_position.GetTopLeft(), bottom_position.GetSize(),
                  bitmap_progress_border);
 
 #ifndef USE_WINUSER

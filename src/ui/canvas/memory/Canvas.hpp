@@ -374,57 +374,48 @@ public:
             const Bitmap &src, int src_x, int src_y);
   void Copy(const Bitmap &src);
 
-  void CopyTransparentWhite(int dest_x, int dest_y,
-                            unsigned dest_width, unsigned dest_height,
-                            const Canvas &src, int src_x, int src_y);
+  void CopyTransparentWhite(PixelPoint dest_position, PixelSize dest_size,
+                            const Canvas &src,
+                            PixelPoint src_position) noexcept;
 
-  void StretchTransparentWhite(int dest_x, int dest_y,
-                               unsigned dest_width, unsigned dest_height,
-                               ConstImageBuffer src, int src_x, int src_y,
-                               unsigned src_width, unsigned src_height);
+  void StretchTransparentWhite(PixelPoint dest_position, PixelSize dest_size,
+                               ConstImageBuffer src, PixelPoint src_position,
+                               PixelSize src_size) noexcept;
 
   void StretchNot(const Bitmap &src);
 
-  void Stretch(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
+  void Stretch(PixelPoint dest_position, PixelSize dest_size,
                ConstImageBuffer src,
-               int src_x, int src_y, unsigned src_width, unsigned src_height);
+               PixelPoint src_position, PixelSize src_size) noexcept;
 
   void Stretch(ConstImageBuffer src) {
-    Stretch(0, 0, GetWidth(), GetHeight(),
-            src, 0, 0, src.width, src.height);
+    Stretch({0, 0}, GetSize(),
+            src, {0, 0}, {src.width, src.height});
   }
 
-  void Stretch(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
+  void Stretch(PixelPoint dest_position, PixelSize dest_size,
                const Canvas &src,
-               int src_x, int src_y,
-               unsigned src_width, unsigned src_height) {
-    Stretch(dest_x, dest_y, dest_width, dest_height,
-            src.buffer, src_x, src_y, src_width, src_height);
+               PixelPoint src_position, PixelSize src_size) noexcept {
+    Stretch(dest_position, dest_size,
+            src.buffer, src_position, src_size);
   }
 
   void Stretch(const Canvas &src,
-               int src_x, int src_y, unsigned src_width, unsigned src_height);
+               PixelPoint src_position, PixelSize src_size) noexcept;
 
-  void Stretch(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
+  void Stretch(PixelPoint dest_position, PixelSize dest_size,
                const Bitmap &src,
-               int src_x, int src_y,
-               unsigned src_width, unsigned src_height);
-  void Stretch(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
+               PixelPoint src_position, PixelSize src_size) noexcept;
+  void Stretch(PixelPoint dest_position, PixelSize dest_size,
                const Bitmap &src);
 
   void Stretch(const Bitmap &src) {
-    Stretch(0, 0, buffer.width, buffer.height, src);
+    Stretch({0, 0}, {buffer.width, buffer.height}, src);
   }
 
-  void StretchMono(int dest_x, int dest_y,
-                   unsigned dest_width, unsigned dest_height,
+  void StretchMono(PixelPoint dest_position, PixelSize dest_size,
                    ::ConstImageBuffer<GreyscalePixelTraits> src,
-                   int src_x, int src_y,
-                   unsigned src_width, unsigned src_height,
+                   PixelPoint src_position, PixelSize src_size,
                    Color fg_color, Color bg_color);
 
   void CopyNot(int dest_x, int dest_y,
@@ -484,40 +475,31 @@ public:
 
   void CopyAnd(const Bitmap &src);
 
-  void ScaleCopy(int dest_x, int dest_y,
+  void ScaleCopy(PixelPoint dest_position,
                  const Bitmap &src,
-                 int src_x, int src_y,
-                 unsigned src_width, unsigned src_height);
+                 PixelPoint src_position, PixelSize src_size) noexcept;
 
-  void AlphaBlend(int dest_x, int dest_y,
-                  unsigned dest_width, unsigned dest_height,
+  void AlphaBlend(PixelPoint dest_position, PixelSize dest_size,
                   ConstImageBuffer src,
-                  int src_x, int src_y,
-                  unsigned src_width, unsigned src_height,
+                  PixelPoint src_position, PixelSize src_size,
                   uint8_t alpha);
 
-  void AlphaBlend(int dest_x, int dest_y,
-                  unsigned dest_width, unsigned dest_height,
+  void AlphaBlend(PixelPoint dest_position, PixelSize dest_size,
                   const Canvas &src,
-                  int src_x, int src_y,
-                  unsigned src_width, unsigned src_height,
+                  PixelPoint src_position, PixelSize src_size,
                   uint8_t alpha);
 
   /**
    * Like AlphaBlend(), but skip source pixels that are white.
    */
-  void AlphaBlendNotWhite(int dest_x, int dest_y,
-                          unsigned dest_width, unsigned dest_height,
+  void AlphaBlendNotWhite(PixelPoint dest_position, PixelSize dest_size,
                           ConstImageBuffer src,
-                          int src_x, int src_y,
-                          unsigned src_width, unsigned src_height,
+                          PixelPoint src_position, PixelSize src_size,
                           uint8_t alpha);
 
-  void AlphaBlendNotWhite(int dest_x, int dest_y,
-                          unsigned dest_width, unsigned dest_height,
+  void AlphaBlendNotWhite(PixelPoint dest_position, PixelSize dest_size,
                           const Canvas src,
-                          int src_x, int src_y,
-                          unsigned src_width, unsigned src_height,
+                          PixelPoint src_position, PixelSize src_size,
                           uint8_t alpha);
 };
 

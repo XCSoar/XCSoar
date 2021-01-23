@@ -44,9 +44,8 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
 }
 
 void
-RawBitmap::StretchTo(unsigned width, unsigned height,
-                     Canvas &dest_canvas,
-                     unsigned dest_width, unsigned dest_height,
+RawBitmap::StretchTo(PixelSize src_size,
+                     Canvas &dest_canvas, PixelSize dest_size,
                      bool transparent_white) const
 {
   ConstImageBuffer<ActivePixelTraits> src(ActivePixelTraits::const_pointer(GetBuffer()),
@@ -54,9 +53,9 @@ RawBitmap::StretchTo(unsigned width, unsigned height,
                                           width, height);
 
   if (transparent_white)
-    dest_canvas.StretchTransparentWhite(0, 0, dest_width, dest_height,
-                                        src, 0, 0, width, height);
+    dest_canvas.StretchTransparentWhite({0, 0}, dest_size,
+                                        src, {0, 0}, src_size);
   else
-    dest_canvas.Stretch(0, 0, dest_width, dest_height,
-                        src, 0, 0, width, height);
+    dest_canvas.Stretch({0, 0}, dest_size,
+                        src, {0, 0}, src_size);
 }
