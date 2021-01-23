@@ -106,6 +106,16 @@ public:
   void SetScaleFromRadius(double radius);
 
   /**
+   * Returns the size of the map area in pixels.
+   */
+  gcc_pure
+  PixelSize GetScreenSize() const noexcept {
+    assert(screen_size_initialised);
+
+    return {screen_size.x, screen_size.y};
+  }
+
+  /**
    * Returns the width of the map area in pixels.
    */
   gcc_pure
