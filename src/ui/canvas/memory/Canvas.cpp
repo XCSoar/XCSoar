@@ -28,7 +28,6 @@ Copyright_License {
 #include "RasterCanvas.hpp"
 #include "ui/canvas/custom/Cache.hpp"
 #include "Math/Angle.hpp"
-#include "util/TStringView.hxx"
 
 #ifdef __ARM_NEON__
 #include "NEON.hpp"
@@ -219,7 +218,7 @@ Canvas::DrawArc(PixelPoint center, unsigned radius,
 }
 
 const PixelSize
-Canvas::CalcTextSize(TStringView text) const noexcept
+Canvas::CalcTextSize(BasicStringView<TCHAR> text) const noexcept
 {
   assert(text != nullptr);
 #ifdef UNICODE
@@ -243,7 +242,7 @@ Canvas::CalcTextSize(TStringView text) const noexcept
 }
 
 static TextCache::Result
-RenderText(const Font *font, const TCHAR *text)
+RenderText(const Font *font, BasicStringView<TCHAR> text) noexcept
 {
   if (font == nullptr)
     return TextCache::Result::Null();
@@ -290,7 +289,7 @@ CopyTextRectangle(SDLRasterCanvas &canvas, int x, int y,
 }
 
 void
-Canvas::DrawText(PixelPoint p, const TCHAR *text) noexcept
+Canvas::DrawText(PixelPoint p, BasicStringView<TCHAR> text) noexcept
 {
   assert(text != nullptr);
 #ifndef UNICODE
@@ -308,7 +307,7 @@ Canvas::DrawText(PixelPoint p, const TCHAR *text) noexcept
 }
 
 void
-Canvas::DrawTransparentText(PixelPoint p, const TCHAR *text) noexcept
+Canvas::DrawTransparentText(PixelPoint p, BasicStringView<TCHAR> text) noexcept
 {
   assert(text != nullptr);
 #ifndef UNICODE
@@ -327,7 +326,7 @@ Canvas::DrawTransparentText(PixelPoint p, const TCHAR *text) noexcept
 
 void
 Canvas::DrawClippedText(PixelPoint p, const PixelRect &rc,
-                        const TCHAR *text) noexcept
+                        BasicStringView<TCHAR> text) noexcept
 {
   // TODO: implement full clipping
   if (rc.right > p.x)
@@ -336,7 +335,7 @@ Canvas::DrawClippedText(PixelPoint p, const PixelRect &rc,
 
 void
 Canvas::DrawClippedText(PixelPoint p, unsigned width,
-                        const TCHAR *text) noexcept
+                        BasicStringView<TCHAR> text) noexcept
 {
   assert(text != nullptr);
 #ifndef UNICODE

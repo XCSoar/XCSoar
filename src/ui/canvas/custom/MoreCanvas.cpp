@@ -34,7 +34,7 @@ Copyright_License {
 #include <winuser.h>
 
 unsigned
-Canvas::DrawFormattedText(PixelRect r, const TCHAR *text,
+Canvas::DrawFormattedText(PixelRect r, BasicStringView<TCHAR> text,
                           unsigned format) noexcept
 {
   assert(text != nullptr);
@@ -49,11 +49,9 @@ Canvas::DrawFormattedText(PixelRect r, const TCHAR *text,
   unsigned max_lines = (format & DT_CALCRECT) ? -1 :
     (r.GetHeight() + skip - 1) / skip;
 
-  size_t len = _tcslen(text);
-  TCHAR *duplicated = new TCHAR[len + 1], *p = duplicated;
+  TCHAR *duplicated = new TCHAR[text.size + 1], *p = duplicated;
   unsigned lines = 1;
-  for (const TCHAR *i = text; *i != _T('\0'); ++i) {
-    TCHAR ch = *i;
+  for (TCHAR ch : text) {
     if (ch == _T('\n')) {
       /* explicit line break */
 
@@ -72,7 +70,7 @@ Canvas::DrawFormattedText(PixelRect r, const TCHAR *text,
   }
 
   *p = _T('\0');
-  len = p - duplicated;
+  const size_t len = p - duplicated;
 
   // simple wordbreak algorithm. looks for single spaces only, no tabs,
   // no grouping of multiple spaces
@@ -133,29 +131,9 @@ Canvas::DrawFormattedText(PixelRect r, const TCHAR *text,
 }
 
 void
-Canvas::DrawText(PixelPoint p, const TCHAR *_text, size_t length) noexcept
-{
-  assert(_text != nullptr);
-
-  TCHAR copy[length + 1];
-  *std::copy_n(_text, length, copy) = _T('\0');
-
-#ifndef UNICODE
-  assert(ValidateUTF8(copy));
-#endif
-
-  DrawText(p, copy);
-}
-
-void
 Canvas::DrawOpaqueText(PixelPoint p, const PixelRect &rc,
-                       const TCHAR *_text) noexcept
+                       BasicStringView<TCHAR> text) noexcept
 {
-  assert(_text != nullptr);
-#ifndef UNICODE
-  assert(ValidateUTF8(_text));
-#endif
-
   DrawFilledRectangle(rc, background_color);
-  DrawTransparentText(p, _text);
+  DrawTransparentText(p, text);
 }

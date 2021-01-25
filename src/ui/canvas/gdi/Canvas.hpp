@@ -31,6 +31,7 @@ Copyright_License {
 #include "ui/dim/Rect.hpp"
 #include "ui/dim/BulkPoint.hpp"
 #include "util/Compiler.h"
+#include "util/StringView.hxx"
 
 #include <cassert>
 #include <windows.h>
@@ -375,39 +376,35 @@ public:
   }
 
   gcc_pure
-  const PixelSize CalcTextSize(TStringView text) const noexcept;
+  const PixelSize CalcTextSize(BasicStringView<TCHAR> text) const noexcept;
 
   gcc_pure
-  const PixelSize CalcTextSize(const TCHAR *text) const;
-
-  gcc_pure
-  unsigned CalcTextWidth(const TCHAR *text) const {
+  unsigned CalcTextWidth(BasicStringView<TCHAR> text) const {
     return CalcTextSize(text).width;
   }
 
   gcc_pure
   unsigned GetFontHeight() const;
 
-  void DrawText(PixelPoint p, const TCHAR *text) noexcept;
-  void DrawText(PixelPoint p, const TCHAR *text, size_t length) noexcept;
+  void DrawText(PixelPoint p, BasicStringView<TCHAR> text) noexcept;
   void DrawOpaqueText(PixelPoint p, const PixelRect &rc,
-                      const TCHAR *text);
+                      BasicStringView<TCHAR> text) noexcept;
 
   void DrawClippedText(PixelPoint p, const PixelRect &rc,
-                       const TCHAR *text);
+                       BasicStringView<TCHAR> text) noexcept;
   void DrawClippedText(PixelPoint p, unsigned width,
-                       const TCHAR *text);
+                       BasicStringView<TCHAR> text) noexcept;
 
   /**
    * Render text, clip it within the bounds of this Canvas.
    */
-  void TextAutoClipped(PixelPoint p, const TCHAR *t) {
+  void TextAutoClipped(PixelPoint p, BasicStringView<TCHAR> t) noexcept {
     DrawText(p, t);
   }
 
-  unsigned DrawFormattedText(RECT rc, const TCHAR *text, unsigned format) {
+  unsigned DrawFormattedText(RECT rc, BasicStringView<TCHAR> text, unsigned format) {
     format |= DT_NOPREFIX | DT_WORDBREAK;
-    ::DrawText(dc, text, -1, &rc, format);
+    ::DrawText(dc, text.data, text.size, &rc, format);
     return rc.bottom - rc.top;
   }
 

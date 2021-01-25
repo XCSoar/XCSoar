@@ -38,11 +38,3 @@ Canvas::ScaleCopy(PixelPoint dest_position,
     Copy(dest_position, src_size,
          src, src_position);
 }
-
-const PixelSize
-Canvas::CalcTextSize(const TCHAR *text) const
-{
-  assert(text != nullptr);
-
-  return CalcTextSize(TStringView(text));
-}

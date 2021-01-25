@@ -562,7 +562,7 @@ Canvas::DrawFocusRectangle(PixelRect rc)
 }
 
 const PixelSize
-Canvas::CalcTextSize(TStringView text) const noexcept
+Canvas::CalcTextSize(BasicStringView<TCHAR> text) const noexcept
 {
   assert(text != nullptr);
 #ifdef UNICODE
@@ -596,13 +596,13 @@ PrepareColoredAlphaTexture(Color color)
 }
 
 void
-Canvas::DrawText(PixelPoint p, const TCHAR *text) noexcept
+Canvas::DrawText(PixelPoint p, BasicStringView<TCHAR> text) noexcept
 {
   assert(text != nullptr);
 #ifdef UNICODE
   const WideToUTF8Converter text2(text);
 #else
-  const char* text2 = text;
+  const StringView text2 = text;
   assert(ValidateUTF8(text));
 #endif
 
@@ -633,13 +633,13 @@ Canvas::DrawText(PixelPoint p, const TCHAR *text) noexcept
 }
 
 void
-Canvas::DrawTransparentText(PixelPoint p, const TCHAR *text) noexcept
+Canvas::DrawTransparentText(PixelPoint p, BasicStringView<TCHAR> text) noexcept
 {
   assert(text != nullptr);
 #ifdef UNICODE
   const WideToUTF8Converter text2(text);
 #else
-  const char* text2 = text;
+  const StringView text2 = text;
   assert(ValidateUTF8(text));
 #endif
 
@@ -668,13 +668,13 @@ Canvas::DrawTransparentText(PixelPoint p, const TCHAR *text) noexcept
 
 void
 Canvas::DrawClippedText(PixelPoint p, PixelSize size,
-                        const TCHAR *text)
+                        BasicStringView<TCHAR> text) noexcept
 {
   assert(text != nullptr);
 #ifdef UNICODE
   const WideToUTF8Converter text2(text);
 #else
-  const char* text2 = text;
+  const StringView text2 = text;
   assert(ValidateUTF8(text));
 #endif
 

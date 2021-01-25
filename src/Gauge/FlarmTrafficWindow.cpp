@@ -481,7 +481,7 @@ FlarmTrafficWindow::PaintTargetInfoSmall(
 
   // Write the relativ altitude devided by 100 to the Buffer
   StaticString<10> buffer;
-  buffer.Format(_T("%d"), abs(relalt));
+  const auto relalt_s = buffer.Format(_T("%d"), abs(relalt));
 
   // Select font
   canvas.SetBackgroundTransparent();
@@ -489,12 +489,12 @@ FlarmTrafficWindow::PaintTargetInfoSmall(
   canvas.SetTextColor(text_color);
 
   // Calculate size of the output string
-  PixelSize tsize = canvas.CalcTextSize(buffer);
+  PixelSize tsize = canvas.CalcTextSize(relalt_s);
 
   unsigned dist = Layout::FastScale(traffic.HasAlarm() ? 12 : 8);
 
   // Draw string
-  canvas.DrawText({sc[i].x + dist, sc[i].y - tsize.height / 2}, buffer);
+  canvas.DrawText({sc[i].x + dist, sc[i].y - tsize.height / 2}, relalt_s);
 
   // Set target_brush for the up/down arrow
   canvas.Select(arrow_brush);

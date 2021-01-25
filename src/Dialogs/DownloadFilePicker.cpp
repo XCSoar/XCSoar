@@ -291,7 +291,8 @@ DownloadFilePickerWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   const auto &file = items[i];
 
   const UTF8ToWideConverter name(file.GetName());
-  canvas.DrawText(rc.WithPadding(Layout::GetTextPadding()).GetTopLeft(), name);
+  canvas.DrawText(rc.WithPadding(Layout::GetTextPadding()).GetTopLeft(),
+                  name.c_str());
 }
 
 void
