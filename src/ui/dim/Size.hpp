@@ -31,6 +31,9 @@ struct PixelSize {
 
   PixelSize() = default;
 
+  explicit constexpr PixelSize(unsigned _size) noexcept
+    :width(_size), height(_size) {}
+
   constexpr PixelSize(int _width, int _height) noexcept
     :width(_width), height(_height) {}
 
