@@ -25,7 +25,7 @@ Copyright_License {
 #include "Queue.hpp"
 #include "Event.hpp"
 #include "ui/event/Idle.hpp"
-#include "Screen/TopWindow.hpp"
+#include "ui/window/TopWindow.hpp"
 
 namespace UI {
 

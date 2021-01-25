@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_FIXED_WINDOW_WIDGET_HPP
 
 #include "WindowWidget.hpp"
-#include "Screen/Window.hpp"
+#include "ui/window/Window.hpp"
 
 class FixedWindowWidget : public WindowWidget {
 public:

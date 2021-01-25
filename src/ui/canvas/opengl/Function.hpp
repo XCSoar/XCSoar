@@ -27,7 +27,7 @@ Copyright_License {
 #include "util/Compiler.h"
 
 #ifdef USE_EGL
-#include "Screen/EGL/System.hpp"
+#include "ui/egl/System.hpp"
 #elif defined(USE_GLX)
 
 /* kludges to work around namespace collisions with X11 headers */

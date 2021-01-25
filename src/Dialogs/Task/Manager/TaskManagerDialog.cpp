@@ -37,7 +37,7 @@ Copyright_License {
 #include "Dialogs/Error.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/event/KeyCode.hpp"
-#include "Screen/SingleWindow.hpp"
+#include "ui/window/SingleWindow.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/ValidationErrorStrings.hpp"

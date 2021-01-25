@@ -24,7 +24,7 @@ Copyright_License {
 #include "Form/ScrollBar.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/PaintWindow.hpp"
+#include "ui/window/PaintWindow.hpp"
 #include "Asset.hpp"
 #include "util/Macros.hpp"
 

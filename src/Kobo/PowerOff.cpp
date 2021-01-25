@@ -29,7 +29,7 @@ Copyright_License {
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/custom/TopCanvas.hpp"
 #include "ui/canvas/freetype/Init.hpp"
-#include "Screen/Init.hpp"
+#include "ui/window/Init.hpp"
 #include "Screen/Layout.hpp"
 #include "Renderer/FlightListRenderer.hpp"
 #include "FlightInfo.hpp"

@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "ProgressGlue.hpp"
 #include "ProgressWindow.hpp"
-#include "Screen/SingleWindow.hpp"
+#include "ui/window/SingleWindow.hpp"
 #include "UIGlobals.hpp"
 #include "time/PeriodClock.hpp"
 

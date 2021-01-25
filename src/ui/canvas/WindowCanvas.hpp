@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_WINDOW_CANVAS_HXX
 #define XCSOAR_SCREEN_WINDOW_CANVAS_HXX
 
-#include "Screen/Window.hpp"
+#include "ui/window/Window.hpp"
 #include "ui/canvas/Canvas.hpp"
 
 class PaintWindow;

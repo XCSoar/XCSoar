@@ -23,7 +23,7 @@
 #include "thread/Thread.hpp"
 #include "ui/event/Notify.hpp"
 #include "ui/event/Globals.hpp"
-#include "Screen/Init.hpp"
+#include "ui/window/Init.hpp"
 #include "TestUtil.hpp"
 
 #ifdef ANDROID
@@ -32,7 +32,7 @@
 #elif defined(USE_POLL_EVENT)
 #include "ui/event/shared/Event.hpp"
 #include "ui/event/poll/Loop.hpp"
-#include "Screen/TopWindow.hpp"
+#include "ui/window/TopWindow.hpp"
 #elif defined(ENABLE_SDL)
 #include "ui/event/sdl/Event.hpp"
 #include "ui/event/sdl/Loop.hpp"

@@ -24,7 +24,7 @@
 #ifndef THERMAL_ASSISTENT_WINDOW_HPP
 #define THERMAL_ASSISTENT_WINDOW_HPP
 
-#include "Screen/AntiFlickerWindow.hpp"
+#include "ui/window/AntiFlickerWindow.hpp"
 #include "ThermalAssistantRenderer.hpp"
 
 struct ThermalAssistantLook;

@@ -24,7 +24,7 @@
 #ifndef CROSS_SECTION_WINDOW_HPP
 #define CROSS_SECTION_WINDOW_HPP
 
-#include "Screen/BufferWindow.hpp"
+#include "ui/window/BufferWindow.hpp"
 #include "CrossSectionRenderer.hpp"
 #include "Look/InfoBoxLook.hpp"
 

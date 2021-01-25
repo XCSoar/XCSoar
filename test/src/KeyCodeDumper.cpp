@@ -25,7 +25,7 @@ Copyright_License {
 #define ENABLE_BUTTON_LOOK
 
 #include "Main.hpp"
-#include "Screen/SingleWindow.hpp"
+#include "ui/window/SingleWindow.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Form/Button.hpp"
 #include "Form/ActionListener.hpp"

@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "ListWidget.hpp"
-#include "Screen/Window.hpp"
+#include "ui/window/Window.hpp"
 #include "Screen/Layout.hpp"
 
 PixelSize

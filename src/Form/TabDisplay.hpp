@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FORM_TAB_DISPLAY_HPP
 #define XCSOAR_FORM_TAB_DISPLAY_HPP
 
-#include "Screen/PaintWindow.hpp"
+#include "ui/window/PaintWindow.hpp"
 #include "Renderer/TabRenderer.hpp"
 #include "util/StaticArray.hxx"
 #include "util/StaticString.hxx"

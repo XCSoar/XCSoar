@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_INFO_BOX_HPP
 
 #include "InfoBoxes/Content/Base.hpp"
-#include "Screen/LazyPaintWindow.hpp"
+#include "ui/window/LazyPaintWindow.hpp"
 #include "ui/event/Timer.hpp"
 #include "Data.hpp"
 

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FORM_DIGIT_ENTRY_HPP
 #define XCSOAR_FORM_DIGIT_ENTRY_HPP
 
-#include "Screen/PaintWindow.hpp"
+#include "ui/window/PaintWindow.hpp"
 #include "Renderer/ButtonRenderer.hpp"
 
 #include <cassert>

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_MAIN_WINDOW_HXX
 #define XCSOAR_MAIN_WINDOW_HXX
 
-#include "Screen/SingleWindow.hpp"
+#include "ui/window/SingleWindow.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 #include "ui/event/Notify.hpp"
 #include "BatteryTimer.hpp"

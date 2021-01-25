@@ -24,7 +24,7 @@ Copyright_License {
 */
 
 #include "PopupMessage.hpp"
-#include "Screen/SingleWindow.hpp"
+#include "ui/window/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Look/DialogLook.hpp"

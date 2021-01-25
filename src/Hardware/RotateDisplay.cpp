@@ -37,7 +37,7 @@ Copyright_License {
 #include "ui/opengl/Features.hpp"
 #ifdef SOFTWARE_ROTATE_DISPLAY
 #include "UIGlobals.hpp"
-#include "Screen/SingleWindow.hpp"
+#include "ui/window/SingleWindow.hpp"
 #include "ui/canvas/opengl/Globals.hpp"
 #endif
 #endif

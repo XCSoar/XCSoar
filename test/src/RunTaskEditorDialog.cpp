@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "Screen/SingleWindow.hpp"
-#include "Screen/Init.hpp"
+#include "ui/window/SingleWindow.hpp"
+#include "ui/window/Init.hpp"
 #include "Dialogs/Dialogs.h"
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"

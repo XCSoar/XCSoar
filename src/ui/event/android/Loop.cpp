@@ -25,7 +25,7 @@ Copyright_License {
 #include "Queue.hpp"
 #include "../shared/Event.hpp"
 #include "../Timer.hpp"
-#include "Screen/TopWindow.hpp"
+#include "ui/window/TopWindow.hpp"
 
 namespace UI {
 

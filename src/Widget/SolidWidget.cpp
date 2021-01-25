@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "SolidWidget.hpp"
-#include "Screen/SolidContainerWindow.hpp"
+#include "ui/window/SolidContainerWindow.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 

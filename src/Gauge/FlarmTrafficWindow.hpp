@@ -24,7 +24,7 @@
 #ifndef FLARM_TRAFFIC_WINDOW_H
 #define FLARM_TRAFFIC_WINDOW_H
 
-#include "Screen/PaintWindow.hpp"
+#include "ui/window/PaintWindow.hpp"
 #include "FLARM/List.hpp"
 #include "FLARM/Color.hpp"
 #include "TeamCode/Settings.hpp"

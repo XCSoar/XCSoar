@@ -32,7 +32,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Profile/Profile.hpp"
 #include "UIGlobals.hpp"
-#include "Screen/SingleWindow.hpp"
+#include "ui/window/SingleWindow.hpp"
 
 void
 CloudEnableDialog()

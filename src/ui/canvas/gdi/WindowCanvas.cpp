@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "ui/canvas/WindowCanvas.hpp"
-#include "Screen/PaintWindow.hpp"
+#include "ui/window/PaintWindow.hpp"
 
 WindowCanvas::WindowCanvas(PaintWindow &window)
   :Canvas(::GetDC(window), window.GetSize()),

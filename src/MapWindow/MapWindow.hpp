@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Projection/MapWindowProjection.hpp"
 #include "Renderer/AirspaceRenderer.hpp"
-#include "Screen/DoubleBufferWindow.hpp"
+#include "ui/window/DoubleBufferWindow.hpp"
 #ifndef ENABLE_OPENGL
 #include "ui/canvas/BufferCanvas.hpp"
 #endif

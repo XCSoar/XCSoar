@@ -24,7 +24,7 @@ Copyright_License {
 #include "Audio/PCMPlayer.hpp"
 #include "Audio/PCMPlayerFactory.hpp"
 #include "Audio/VarioSynthesiser.hpp"
-#include "Screen/Init.hpp"
+#include "ui/window/Init.hpp"
 #include "system/Args.hpp"
 #include "event/Loop.hxx"
 #include "event/TimerEvent.hxx"

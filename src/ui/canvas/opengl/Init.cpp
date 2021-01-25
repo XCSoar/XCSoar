@@ -36,7 +36,7 @@ Copyright_License {
 #include "DisplayOrientation.hpp"
 
 #ifdef USE_EGL
-#include "Screen/EGL/System.hpp"
+#include "ui/egl/System.hpp"
 #endif
 
 #include "Shaders.hpp"

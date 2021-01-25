@@ -28,7 +28,7 @@ Copyright_License {
 #include "Form/Frame.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/SingleWindow.hpp"
+#include "ui/window/SingleWindow.hpp"
 #include "util/StaticArray.hxx"
 #include "UIGlobals.hpp"
 

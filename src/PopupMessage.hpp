@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_POPUP_MESSAGE_H
 #define XCSOAR_POPUP_MESSAGE_H
 
-#include "Screen/PaintWindow.hpp"
+#include "ui/window/PaintWindow.hpp"
 #include "Renderer/TextRenderer.hpp"
 #include "thread/Mutex.hxx"
 #include "util/StaticString.hxx"

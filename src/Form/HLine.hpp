@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FORM_HLINE_HPP
 #define XCSOAR_FORM_HLINE_HPP
 
-#include "Screen/PaintWindow.hpp"
+#include "ui/window/PaintWindow.hpp"
 
 struct DialogLook;
 

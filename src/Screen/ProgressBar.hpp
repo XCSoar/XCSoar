@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_PROGRESS_BAR_HXX
 #define XCSOAR_SCREEN_PROGRESS_BAR_HXX
 
-#include "PaintWindow.hpp"
+#include "ui/window/PaintWindow.hpp"
 
 class ProgressBar : public PaintWindow {
   unsigned min_value = 0, max_value = 0, value = 0, step_size = 1;

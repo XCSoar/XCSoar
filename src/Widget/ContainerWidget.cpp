@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "ContainerWidget.hpp"
-#include "Screen/ContainerWindow.hpp"
+#include "ui/window/ContainerWindow.hpp"
 
 void
 ContainerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)

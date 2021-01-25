@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_LARGE_TEXT_WINDOW_HPP
 #define XCSOAR_SCREEN_LARGE_TEXT_WINDOW_HPP
 
-#include "NativeWindow.hpp"
+#include "ui/window/NativeWindow.hpp"
 
 #ifndef USE_WINUSER
 #include "Renderer/TextRenderer.hpp"

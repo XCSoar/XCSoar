@@ -31,7 +31,7 @@
 #endif
 
 #ifdef ENABLE_MAIN_WINDOW
-#include "Screen/SingleWindow.hpp"
+#include "ui/window/SingleWindow.hpp"
 #include "Form/ActionListener.hpp"
 #include "UIGlobals.hpp"
 #include "util/CharUtil.hxx"
@@ -57,7 +57,7 @@
 #endif
 
 #ifdef ENABLE_SCREEN
-#include "Screen/Init.hpp"
+#include "ui/window/Init.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/dim/Size.hpp"
 #include "Fonts.hpp"

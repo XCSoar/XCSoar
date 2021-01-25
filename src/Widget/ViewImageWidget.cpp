@@ -24,7 +24,7 @@ Copyright_License {
 #include "ViewImageWidget.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Bitmap.hpp"
-#include "Screen/PaintWindow.hpp"
+#include "ui/window/PaintWindow.hpp"
 
 class ViewImageWindow final : public PaintWindow {
   const Bitmap *bitmap;

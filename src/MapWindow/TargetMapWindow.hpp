@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Projection/MapWindowProjection.hpp"
 #include "Renderer/AirspaceRenderer.hpp"
-#include "Screen/BufferWindow.hpp"
+#include "ui/window/BufferWindow.hpp"
 #include "Renderer/LabelBlock.hpp"
 #include "Renderer/BackgroundRenderer.hpp"
 #include "Renderer/WaypointRenderer.hpp"

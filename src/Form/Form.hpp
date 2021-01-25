@@ -25,8 +25,8 @@ Copyright_License {
 #define XCSOAR_FORM_FORM_HPP
 
 #include "ActionListener.hpp"
-#include "Screen/ContainerWindow.hpp"
-#include "Screen/SolidContainerWindow.hpp"
+#include "ui/window/ContainerWindow.hpp"
+#include "ui/window/SolidContainerWindow.hpp"
 #include "util/tstring.hpp"
 
 #include <functional>

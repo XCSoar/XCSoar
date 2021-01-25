@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DOCK_WINDOW_HPP
 #define XCSOAR_DOCK_WINDOW_HPP
 
-#include "Screen/ContainerWindow.hpp"
+#include "ui/window/ContainerWindow.hpp"
 
 class Widget;
 

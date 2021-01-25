@@ -27,7 +27,7 @@ Copyright_License {
 #include "Form/ButtonPanel.hpp"
 #include "Widget/Widget.hpp"
 #include "Language/Language.hpp"
-#include "Screen/SingleWindow.hpp"
+#include "ui/window/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 
 using namespace UI;

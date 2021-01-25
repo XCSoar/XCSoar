@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_TERMINAL_WINDOW_HPP
 #define XCSOAR_SCREEN_TERMINAL_WINDOW_HPP
 
-#include "Screen/PaintWindow.hpp"
+#include "ui/window/PaintWindow.hpp"
 #include "ui/dim/Size.hpp"
 #include "util/AllocatedGrid.hxx"
 

@@ -40,7 +40,7 @@ Copyright_License {
 #endif
 
 #ifdef USE_EGL
-#include "Screen/EGL/System.hpp"
+#include "ui/egl/System.hpp"
 
 #ifdef MESA_KMS
 #include <drm.h>
@@ -50,7 +50,7 @@ Copyright_License {
 #endif
 
 #ifdef USE_GLX
-#include "Screen/GLX/System.hpp"
+#include "ui/glx/System.hpp"
 
 #define Font X11Font
 #define Window X11Window

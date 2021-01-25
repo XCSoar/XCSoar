@@ -24,7 +24,7 @@ Copyright_License {
 #define ENABLE_DIALOG_LOOK
 
 #include "Main.hpp"
-#include "Screen/SingleWindow.hpp"
+#include "ui/window/SingleWindow.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Look/ChartLook.hpp"
 #include "Form/List.hpp"

@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_FEATURES_HPP
 
 #ifdef ANDROID
-#include "Screen/Android/Features.hpp"
+#include "ui/window/android/Features.hpp"
 #endif
 
 #ifdef USE_MEMORY_CANVAS
@@ -41,7 +41,7 @@ Copyright_License {
 #endif
 
 #ifdef ENABLE_SDL
-#include "Screen/SDL/Features.hpp"
+#include "ui/window/sdl/Features.hpp"
 #endif
 
 /**

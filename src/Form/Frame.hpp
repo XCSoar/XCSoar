@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FORM_FRAME_HPP
 #define XCSOAR_FORM_FRAME_HPP
 
-#include "Screen/PaintWindow.hpp"
+#include "ui/window/PaintWindow.hpp"
 #include "ui/canvas/Color.hpp"
 #include "Renderer/TextRenderer.hpp"
 #include "util/tstring.hpp"

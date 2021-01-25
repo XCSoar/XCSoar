@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_EVENT_NOTIFY_HPP
 
 #ifdef USE_WINUSER
-#include "Screen/Window.hpp"
+#include "ui/window/Window.hpp"
 #endif
 
 #include <atomic>

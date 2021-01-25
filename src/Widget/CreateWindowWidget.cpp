@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "CreateWindowWidget.hpp"
-#include "Screen/Window.hpp"
+#include "ui/window/Window.hpp"
 
 void
 CreateWindowWidget::Prepare(ContainerWindow &parent,

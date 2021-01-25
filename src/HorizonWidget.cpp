@@ -25,7 +25,7 @@
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 #include "Interface.hpp"
-#include "Screen/AntiFlickerWindow.hpp"
+#include "ui/window/AntiFlickerWindow.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Renderer/HorizonRenderer.hpp"
 

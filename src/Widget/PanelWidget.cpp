@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "PanelWidget.hpp"
-#include "Screen/Window.hpp"
+#include "ui/window/Window.hpp"
 #include "UIGlobals.hpp"
 #include "Form/Panel.hpp"
 

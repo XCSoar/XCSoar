@@ -30,7 +30,7 @@ Copyright_License {
 #define ENABLE_DIALOG_LOOK
 
 #include "Main.hpp"
-#include "Screen/SingleWindow.hpp"
+#include "ui/window/SingleWindow.hpp"
 #include "ui/canvas/BufferCanvas.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Look/TaskLook.hpp"

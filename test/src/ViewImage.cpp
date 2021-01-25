@@ -26,7 +26,7 @@ Copyright_License {
 #define USAGE "PATH"
 
 #include "Main.hpp"
-#include "Screen/SingleWindow.hpp"
+#include "ui/window/SingleWindow.hpp"
 #include "ui/canvas/Bitmap.hpp"
 #include "ui/canvas/Canvas.hpp"
 

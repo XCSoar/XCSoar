@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_PROGRESS_WINDOW_HXX
 #define XCSOAR_SCREEN_PROGRESS_WINDOW_HXX
 
-#include "Screen/ContainerWindow.hpp"
+#include "ui/window/ContainerWindow.hpp"
 #include "Screen/ProgressBar.hpp"
 #include "ui/canvas/Bitmap.hpp"
 #include "ui/canvas/Color.hpp"

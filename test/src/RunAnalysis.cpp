@@ -28,7 +28,7 @@ Copyright_License {
 #define USAGE "DRIVER FILE"
 
 #include "Main.hpp"
-#include "Screen/SingleWindow.hpp"
+#include "ui/window/SingleWindow.hpp"
 #include "ui/canvas/BufferCanvas.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Logger/Logger.hpp"

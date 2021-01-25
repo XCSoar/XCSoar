@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "ProgressDialog.hpp"
 #include "Look/DialogLook.hpp"
-#include "Screen/SingleWindow.hpp"
+#include "ui/window/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Language/Language.hpp"
 

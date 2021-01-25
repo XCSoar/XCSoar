@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_CONTAINER_WIDGET_HPP
 
 #include "WindowWidget.hpp"
-#include "Screen/ContainerWindow.hpp"
+#include "ui/window/ContainerWindow.hpp"
 
 /**
  * Utility base class that creates a ContainerWindow, allowing the

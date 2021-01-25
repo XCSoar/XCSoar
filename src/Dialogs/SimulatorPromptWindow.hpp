@@ -28,7 +28,7 @@ Copyright_License {
 
 #ifdef SIMULATOR_AVAILABLE
 
-#include "Screen/ContainerWindow.hpp"
+#include "ui/window/ContainerWindow.hpp"
 #include "ui/canvas/Bitmap.hpp"
 #include "Gauge/LogoView.hpp"
 #include "Form/Button.hpp"

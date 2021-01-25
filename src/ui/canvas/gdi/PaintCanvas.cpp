@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "PaintCanvas.hpp"
-#include "Screen/Window.hpp"
+#include "ui/window/Window.hpp"
 
 PaintCanvas::PaintCanvas(Window &_window)
   :window(_window)

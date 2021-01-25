@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "OverlappedWidget.hpp"
-#include "Screen/Window.hpp"
+#include "ui/window/Window.hpp"
 
 void
 OverlappedWidget::Raise()

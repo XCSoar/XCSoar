@@ -24,7 +24,7 @@ Copyright_License {
 #define ENABLE_SCREEN
 
 #include "Main.hpp"
-#include "Screen/SingleWindow.hpp"
+#include "ui/window/SingleWindow.hpp"
 #include "Screen/TerminalWindow.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 #include "Look/TerminalLook.hpp"

@@ -30,7 +30,7 @@ Copyright_License {
 #include "Audio/PCMPlayer.hpp"
 #include "Audio/PCMPlayerFactory.hpp"
 #include "Audio/ToneSynthesiser.hpp"
-#include "Screen/Init.hpp"
+#include "ui/window/Init.hpp"
 #include "event/Loop.hxx"
 #include "event/TimerEvent.hxx"
 #include "system/Args.hpp"

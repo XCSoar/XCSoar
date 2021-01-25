@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FORM_LIST_HPP
 #define XCSOAR_FORM_LIST_HPP
 
-#include "Screen/PaintWindow.hpp"
+#include "ui/window/PaintWindow.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 #include "Form/ScrollBar.hpp"
 #include "UIUtil/KineticManager.hpp"

@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "WindowWidget.hpp"
-#include "Screen/Window.hpp"
+#include "ui/window/Window.hpp"
 
 WindowWidget::WindowWidget(Window *_window)
   :window(_window) {

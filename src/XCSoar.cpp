@@ -34,7 +34,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Interface.hpp"
 #include "Look/GlobalFonts.hpp"
-#include "Screen/Init.hpp"
+#include "ui/window/Init.hpp"
 #include "net/http/Init.hpp"
 #include "UtilsSystem.hpp"
 #include "ResourceLoader.hpp"

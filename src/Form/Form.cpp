@@ -25,7 +25,7 @@ Copyright_License {
 #include "time/PeriodClock.hpp"
 #include "Asset.hpp"
 #include "ui/canvas/Canvas.hpp"
-#include "Screen/SingleWindow.hpp"
+#include "ui/window/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "util/Macros.hpp"
@@ -33,7 +33,7 @@ Copyright_License {
 #include "ui/event/Globals.hpp"
 
 #ifndef USE_WINUSER
-#include "Screen/Custom/Reference.hpp"
+#include "ui/window/custom/Reference.hpp"
 #endif
 
 #ifdef ENABLE_OPENGL
