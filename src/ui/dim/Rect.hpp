@@ -156,6 +156,22 @@ struct PixelRect {
   }
 
   /**
+   * Return a new #PixelRect grown by this number of pixels.
+   */
+  constexpr PixelRect WithMargin(PixelSize margin) const noexcept {
+    return {
+      left - (int)margin.width,
+      top - (int)margin.height,
+      right + (int)margin.width,
+      bottom + (int)margin.height,
+    };
+  }
+
+  constexpr PixelRect WithMargin(int margin) const noexcept {
+    return WithMargin({margin, margin});
+  }
+
+  /**
    * Return a new #PixelRect shrunk by this number of pixels.
    */
   constexpr PixelRect WithPadding(PixelSize padding) const noexcept {
