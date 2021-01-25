@@ -353,25 +353,23 @@ public:
    */
   unsigned DrawFormattedText(PixelRect r, const TCHAR *text, unsigned format);
 
-  void Copy(int dest_x, int dest_y,
-            unsigned dest_width, unsigned dest_height,
-            ConstImageBuffer src, int src_x, int src_y);
+  void Copy(PixelPoint dest_position, PixelSize dest_size,
+            ConstImageBuffer src, PixelPoint src_position) noexcept;
 
-  void Copy(int dest_x, int dest_y, ConstImageBuffer src) {
-    Copy(dest_x, dest_y, src.width, src.height, src, 0, 0);
+  void Copy(PixelPoint dest_position, ConstImageBuffer src) noexcept {
+    Copy(dest_position, {src.width, src.height}, src, {0, 0});
   }
 
-  void Copy(int dest_x, int dest_y, unsigned dest_width, unsigned dest_height,
-            const Canvas &src, int src_x, int src_y) {
-    Copy(dest_x, dest_y, dest_width, dest_height,
-         src.buffer, src_x, src_y);
+  void Copy(PixelPoint dest_position, PixelSize dest_size,
+            const Canvas &src, PixelPoint src_position) noexcept {
+    Copy(dest_position, dest_size, src.buffer, src_position);
   }
 
-  void Copy(const Canvas &src, int src_x, int src_y);
+  void Copy(const Canvas &src, PixelPoint src_position) noexcept;
   void Copy(const Canvas &src);
 
-  void Copy(int dest_x, int dest_y, unsigned dest_width, unsigned dest_height,
-            const Bitmap &src, int src_x, int src_y);
+  void Copy(PixelPoint dest_position, PixelSize dest_size,
+            const Bitmap &src, PixelPoint src_position) noexcept;
   void Copy(const Bitmap &src);
 
   void CopyTransparentWhite(PixelPoint dest_position, PixelSize dest_size,
@@ -418,60 +416,47 @@ public:
                    PixelPoint src_position, PixelSize src_size,
                    Color fg_color, Color bg_color);
 
-  void CopyNot(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
-               ConstImageBuffer src, int src_x, int src_y);
+  void CopyNot(PixelPoint dest_position, PixelSize dest_size,
+               ConstImageBuffer src, PixelPoint src_position) noexcept;
 
-  void CopyNot(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
-               const Bitmap &src, int src_x, int src_y);
+  void CopyNot(PixelPoint dest_position, PixelSize dest_size,
+               const Bitmap &src, PixelPoint src_position) noexcept;
 
-  void CopyOr(int dest_x, int dest_y,
-              unsigned dest_width, unsigned dest_height,
-              ConstImageBuffer src, int src_x, int src_y);
+  void CopyOr(PixelPoint dest_position, PixelSize dest_size,
+              ConstImageBuffer src, PixelPoint src_position) noexcept;
 
-  void CopyOr(int dest_x, int dest_y,
-              unsigned dest_width, unsigned dest_height,
-              const Canvas &src, int src_x, int src_y) {
-    CopyOr(dest_x, dest_y, dest_width, dest_height,
-           src.buffer, src_x, src_y);
+  void CopyOr(PixelPoint dest_position, PixelSize dest_size,
+              const Canvas &src, PixelPoint src_position) noexcept {
+    CopyOr(dest_position, dest_size, src.buffer, src_position);
   }
 
-  void CopyOr(int dest_x, int dest_y,
-              unsigned dest_width, unsigned dest_height,
-              const Bitmap &src, int src_x, int src_y);
+  void CopyOr(PixelPoint dest_position, PixelSize dest_size,
+              const Bitmap &src, PixelPoint src_position) noexcept;
 
   void CopyOr(const Bitmap &src) {
-    CopyOr(0, 0, GetWidth(), GetHeight(), src, 0, 0);
+    CopyOr({0, 0}, GetSize(), src, {0, 0});
   }
 
-  void CopyNotOr(int dest_x, int dest_y,
-                 unsigned dest_width, unsigned dest_height,
-                 ConstImageBuffer src, int src_x, int src_y);
+  void CopyNotOr(PixelPoint dest_position, PixelSize dest_size,
+                 ConstImageBuffer src, PixelPoint src_position) noexcept;
 
-  void CopyNotOr(int dest_x, int dest_y,
-                 unsigned dest_width, unsigned dest_height,
-                 const Bitmap &src, int src_x, int src_y);
+  void CopyNotOr(PixelPoint dest_position, PixelSize dest_size,
+                 const Bitmap &src, PixelPoint src_position) noexcept;
 
-  void CopyAnd(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
-               ConstImageBuffer src, int src_x, int src_y);
+  void CopyAnd(PixelPoint dest_position, PixelSize dest_size,
+               ConstImageBuffer src, PixelPoint src_position) noexcept;
 
-  void CopyAnd(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
-               const Canvas &src, int src_x, int src_y) {
-    CopyAnd(dest_x, dest_y, dest_width, dest_height,
-            src.buffer, src_x, src_y);
+  void CopyAnd(PixelPoint dest_position, PixelSize dest_size,
+               const Canvas &src, PixelPoint src_position) noexcept {
+    CopyAnd(dest_position, dest_size, src.buffer, src_position);
   }
 
   void CopyAnd(const Canvas &src) {
-    CopyAnd(0, 0, src.GetWidth(), src.GetHeight(),
-            src.buffer, 0, 0);
+    CopyAnd({0, 0}, src.GetSize(), src.buffer, {0, 0});
   }
 
-  void CopyAnd(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
-               const Bitmap &src, int src_x, int src_y);
+  void CopyAnd(PixelPoint dest_position, PixelSize dest_size,
+               const Bitmap &src, PixelPoint src_position) noexcept;
 
   void CopyAnd(const Bitmap &src);
 

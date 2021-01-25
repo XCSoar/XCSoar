@@ -35,8 +35,8 @@ Canvas::ScaleCopy(PixelPoint dest_position,
     Stretch(dest_position, Layout::Scale(src_size),
             src, src_position, src_size);
   else
-    Copy(dest_position.x, dest_position.y, src_size.width, src_size.height,
-         src, src_position.x, src_position.y);
+    Copy(dest_position, src_size,
+         src, src_position);
 }
 
 const PixelSize

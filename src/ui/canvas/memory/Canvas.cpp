@@ -87,8 +87,7 @@ Canvas::InvertRectangle(PixelRect r)
   if (r.IsEmpty())
     return;
 
-  CopyNot(r.left, r.top, r.GetWidth(), r.GetHeight(),
-          buffer, r.left, r.top);
+  CopyNot(r.GetTopLeft(), r.GetSize(), buffer, r.GetTopLeft());
 }
 
 template<typename Canvas, typename PixelOperations>
@@ -381,38 +380,36 @@ Clip(int &position, unsigned &length, unsigned max,
 }
 
 void
-Canvas::Copy(int dest_x, int dest_y,
-             unsigned dest_width, unsigned dest_height,
-             ConstImageBuffer src, int src_x, int src_y)
+Canvas::Copy(PixelPoint dest_position, PixelSize dest_size,
+             ConstImageBuffer src, PixelPoint src_position) noexcept
 {
-  if (!Clip(dest_x, dest_width, GetWidth(), src_x) ||
-      !Clip(dest_y, dest_height, GetHeight(), src_y))
+  if (!Clip(dest_position.x, dest_size.width, GetWidth(), src_position.x) ||
+      !Clip(dest_position.y, dest_size.height, GetHeight(), src_position.y))
     return;
 
   SDLRasterCanvas canvas(buffer);
-  canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
-                       src.At(src_x, src_y), src.pitch);
+  canvas.CopyRectangle(dest_position.x, dest_position.y,
+                       dest_size.width, dest_size.height,
+                       src.At(src_position.x, src_position.y), src.pitch);
 }
 
 void
-Canvas::Copy(const Canvas &src, int src_x, int src_y)
+Canvas::Copy(const Canvas &src, PixelPoint src_position) noexcept
 {
-  Copy(0, 0, src.GetWidth(), src.GetHeight(), src, src_x, src_y);
+  Copy({0, 0}, src.GetSize(), src, src_position);
 }
 
 void
 Canvas::Copy(const Canvas &src)
 {
-  Copy(src, 0, 0);
+  Copy(src, {0, 0});
 }
 
 void
-Canvas::Copy(int dest_x, int dest_y,
-             unsigned dest_width, unsigned dest_height,
-             const Bitmap &src, int src_x, int src_y)
+Canvas::Copy(PixelPoint dest_position, PixelSize dest_size,
+             const Bitmap &src, PixelPoint src_position) noexcept
 {
-  Copy(dest_x, dest_y, dest_width, dest_height,
-       src.GetNative(), src_x, src_y);
+  Copy(dest_position, dest_size, src.GetNative(), src_position);
 }
 
 void
@@ -420,7 +417,7 @@ Canvas::Copy(const Bitmap &_src)
 {
   ConstImageBuffer src = _src.GetNative();
 
-  Copy(0, 0, src.width, src.height, src, 0, 0);
+  Copy({0, 0}, {src.width, src.height}, src, {0, 0});
 }
 
 void
@@ -487,8 +484,7 @@ Canvas::Stretch(PixelPoint dest_position, PixelSize dest_size,
 
   if (dest_size == src_size) {
     /* fast path: no zooming needed */
-    Copy(dest_position.x, dest_position.y, dest_size.width, dest_size.height,
-         src, src_position.x, src_position.y);
+    Copy(dest_position, dest_size, src, src_position);
     return;
   }
 
@@ -563,102 +559,93 @@ Canvas::StretchMono(PixelPoint dest_position, PixelSize dest_size,
 }
 
 void
-Canvas::CopyNot(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
-                ConstImageBuffer src, int src_x, int src_y)
+Canvas::CopyNot(PixelPoint dest_position, PixelSize dest_size,
+                ConstImageBuffer src, PixelPoint src_position) noexcept
 {
   SDLRasterCanvas canvas(buffer);
 
-  canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
-                       src.At(src_x, src_y), src.pitch,
+  canvas.CopyRectangle(dest_position.x, dest_position.y,
+                       dest_size.width, dest_size.height,
+                       src.At(src_position.x, src_position.y), src.pitch,
                        BitNotPixelOperations<ActivePixelTraits>());
 }
 
 void
-Canvas::CopyOr(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
-               ConstImageBuffer src, int src_x, int src_y)
+Canvas::CopyOr(PixelPoint dest_position, PixelSize dest_size,
+               ConstImageBuffer src, PixelPoint src_position) noexcept
 {
   SDLRasterCanvas canvas(buffer);
 
-  canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
-                       src.At(src_x, src_y), src.pitch,
+  canvas.CopyRectangle(dest_position.x, dest_position.y,
+                       dest_size.width, dest_size.height,
+                       src.At(src_position.x, src_position.y), src.pitch,
                        BitOrPixelOperations<ActivePixelTraits>());
 }
 
 void
-Canvas::CopyNotOr(int dest_x, int dest_y,
-                  unsigned dest_width, unsigned dest_height,
-                  ConstImageBuffer src, int src_x, int src_y)
+Canvas::CopyNotOr(PixelPoint dest_position, PixelSize dest_size,
+                  ConstImageBuffer src, PixelPoint src_position) noexcept
 {
   SDLRasterCanvas canvas(buffer);
 
-  canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
-                       src.At(src_x, src_y), src.pitch,
+  canvas.CopyRectangle(dest_position.x, dest_position.y,
+                       dest_size.width, dest_size.height,
+                       src.At(src_position.x, src_position.y), src.pitch,
                        BitNotOrPixelOperations<ActivePixelTraits>());
 }
 
 void
-Canvas::CopyNotOr(int dest_x, int dest_y,
-                  unsigned dest_width, unsigned dest_height,
-                  const Bitmap &src, int src_x, int src_y)
+Canvas::CopyNotOr(PixelPoint dest_position, PixelSize dest_size,
+                  const Bitmap &src, PixelPoint src_position) noexcept
 {
   assert(src.IsDefined());
 
-  CopyNotOr(dest_x, dest_y, dest_width, dest_height,
-            src.GetNative(), src_x, src_y);
+  CopyNotOr(dest_position, dest_size, src.GetNative(), src_position);
 }
 
 void
-Canvas::CopyAnd(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
-                ConstImageBuffer src, int src_x, int src_y)
+Canvas::CopyAnd(PixelPoint dest_position, PixelSize dest_size,
+                ConstImageBuffer src, PixelPoint src_position) noexcept
 {
   SDLRasterCanvas canvas(buffer);
 
-  canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
-                       src.At(src_x, src_y), src.pitch,
+  canvas.CopyRectangle(dest_position.x, dest_position.y,
+                       dest_size.width, dest_size.height,
+                       src.At(src_position.x, src_position.y), src.pitch,
                        BitAndPixelOperations<ActivePixelTraits>());
 }
 
 void
-Canvas::CopyNot(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
-                const Bitmap &src, int src_x, int src_y)
+Canvas::CopyNot(PixelPoint dest_position, PixelSize dest_size,
+                const Bitmap &src, PixelPoint src_position) noexcept
 {
   assert(src.IsDefined());
 
-  CopyNot(dest_x, dest_y, dest_width, dest_height,
-          src.GetNative(), src_x, src_y);
+  CopyNot(dest_position, dest_size, src.GetNative(), src_position);
 }
 
 void
-Canvas::CopyOr(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
-               const Bitmap &src, int src_x, int src_y)
+Canvas::CopyOr(PixelPoint dest_position, PixelSize dest_size,
+               const Bitmap &src, PixelPoint src_position) noexcept
 {
   assert(src.IsDefined());
 
-  CopyOr(dest_x, dest_y, dest_width, dest_height,
-         src.GetNative(), src_x, src_y);
+  CopyOr(dest_position, dest_size, src.GetNative(), src_position);
 }
 
 void
-Canvas::CopyAnd(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
-                const Bitmap &src, int src_x, int src_y)
+Canvas::CopyAnd(PixelPoint dest_position, PixelSize dest_size,
+                const Bitmap &src, PixelPoint src_position) noexcept
 {
   assert(src.IsDefined());
 
-  CopyAnd(dest_x, dest_y, dest_width, dest_height,
-          src.GetNative(), src_x, src_y);
+  CopyAnd(dest_position, dest_size, src.GetNative(), src_position);
 }
 
 void
 Canvas::CopyAnd(const Bitmap &src)
 {
-  CopyAnd(0, 0, GetWidth(), GetHeight(),
-          src.GetNative(), 0, 0);
+  CopyAnd({0, 0}, GetSize(), src.GetNative(), {0, 0});
 }
 
 void

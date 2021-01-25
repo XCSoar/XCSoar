@@ -177,9 +177,8 @@ Canvas::DrawClippedText(int x, int y, unsigned width,
 }
 
 void
-Canvas::Copy(int dest_x, int dest_y,
-             unsigned dest_width, unsigned dest_height,
-             HBITMAP src, int src_x, int src_y,
+Canvas::Copy(PixelPoint dest_position, PixelSize dest_size,
+             HBITMAP src, PixelPoint src_position,
              DWORD dwRop)
 {
   assert(IsDefined());
@@ -187,40 +186,34 @@ Canvas::Copy(int dest_x, int dest_y,
 
   HDC virtual_dc = GetCompatibleDC();
   HBITMAP old = (HBITMAP)::SelectObject(virtual_dc, src);
-  Copy(dest_x, dest_y, dest_width, dest_height,
-       virtual_dc, src_x, src_y,
-       dwRop);
+  Copy(dest_position, dest_size, virtual_dc, src_position, dwRop);
   ::SelectObject(virtual_dc, old);
 }
 
 void
-Canvas::Copy(int dest_x, int dest_y,
-             unsigned dest_width, unsigned dest_height,
-             const Bitmap &src, int src_x, int src_y,
+Canvas::Copy(PixelPoint dest_position, PixelSize dest_size,
+             const Bitmap &src, PixelPoint src_position,
              DWORD dwRop)
 {
-  Copy(dest_x, dest_y, dest_width, dest_height,
-       src.GetNative(), src_x, src_y,
-       dwRop);
+  Copy(dest_position, dest_size, src.GetNative(), src_position, dwRop);
 }
 
 void
-Canvas::Copy(const Canvas &src, int src_x, int src_y)
+Canvas::Copy(const Canvas &src, PixelPoint src_position) noexcept
 {
-  Copy(0, 0, GetWidth(), GetHeight(), src, src_x, src_y);
+  Copy({0, 0}, GetSize(), src, src_position);
 }
 
 void
 Canvas::Copy(const Canvas &src)
 {
-  Copy(src, 0, 0);
+  Copy(src, {0, 0});
 }
 
 void
 Canvas::Copy(const Bitmap &src)
 {
-  const PixelSize size = src.GetSize();
-  Copy(0, 0, size.width, size.height, src, 0, 0);
+  Copy({0, 0}, src.GetSize(), src, {0, 0});
 }
 
 void

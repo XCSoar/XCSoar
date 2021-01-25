@@ -98,8 +98,7 @@ StencilMapCanvas::Commit()
   buffer_drawn = false;
 
   if (use_stencil) {
-    buffer.CopyOr(0, 0, proj.GetScreenWidth(), proj.GetScreenHeight(),
-                  stencil, 0, 0);
+    buffer.CopyOr({0, 0}, proj.GetScreenSize(), stencil, {0, 0});
   }
 
   return true;

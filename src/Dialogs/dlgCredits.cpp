@@ -63,7 +63,7 @@ LogoPageWindow::OnPaint(Canvas &canvas)
   PixelSize title_size = title.GetSize();
 
   // Draw 'XCSoar N.N' title
-  canvas.Copy(x, y, title_size.width, title_size.height, title, 0, 0);
+  canvas.Copy({x, y}, title_size, title, {0, 0});
   y += title_size.height + Layout::FastScale(20);
 
   Font font;

@@ -731,18 +731,17 @@ Canvas::Stretch(PixelPoint dest_position, PixelSize dest_size,
 }
 
 void
-Canvas::Copy(int dest_x, int dest_y,
-             unsigned dest_width, unsigned dest_height,
-             const Bitmap &src, int src_x, int src_y)
+Canvas::Copy(PixelPoint dest_position, PixelSize dest_size,
+             const Bitmap &src, PixelPoint src_position) noexcept
 {
-  Stretch({dest_x, dest_y}, {dest_width, dest_height},
-          src, {src_x, src_y}, {dest_width, dest_height});
+  Stretch(dest_position, dest_size,
+          src, src_position, dest_size);
 }
 
 void
 Canvas::Copy(const Bitmap &src)
 {
-  Copy(0, 0, src.GetWidth(), src.GetHeight(), src, 0, 0);
+  Copy({0, 0}, src.GetSize(), src, {0, 0});
 }
 
 void

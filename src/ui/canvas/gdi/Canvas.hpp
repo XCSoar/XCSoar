@@ -438,31 +438,31 @@ public:
     return rc.bottom - rc.top;
   }
 
-  void Copy(int dest_x, int dest_y, unsigned dest_width, unsigned dest_height,
-            HDC src, int src_x, int src_y,
+  void Copy(PixelPoint dest_position, PixelSize dest_size,
+            HDC src, PixelPoint src_position,
             DWORD dwRop=SRCCOPY) {
     assert(IsDefined());
     assert(src != nullptr);
 
-    ::BitBlt(dc, dest_x, dest_y, dest_width, dest_height,
-             src, src_x, src_y, dwRop);
+    ::BitBlt(dc, dest_position.x, dest_position.y,
+             dest_size.width, dest_size.height,
+             src, src_position.x, src_position.y, dwRop);
   }
 
-  void Copy(int dest_x, int dest_y, unsigned dest_width, unsigned dest_height,
-            const Canvas &src, int src_x, int src_y) {
-    Copy(dest_x, dest_y, dest_width, dest_height,
-         src.dc, src_x, src_y);
+  void Copy(PixelPoint dest_position, PixelSize dest_size,
+            const Canvas &src, PixelPoint src_position) noexcept {
+    Copy(dest_position, dest_size, src.dc, src_position);
   }
 
-  void Copy(int dest_x, int dest_y, unsigned dest_width, unsigned dest_height,
-            HBITMAP src, int src_x, int src_y,
+  void Copy(PixelPoint dest_position, PixelSize dest_size,
+            HBITMAP src, PixelPoint src_position,
             DWORD dwRop=SRCCOPY);
 
-  void Copy(int dest_x, int dest_y, unsigned dest_width, unsigned dest_height,
-            const Bitmap &src, int src_x, int src_y,
+  void Copy(PixelPoint dest_position, PixelSize dest_size,
+            const Bitmap &src, PixelPoint src_position,
             DWORD dwRop=SRCCOPY);
 
-  void Copy(const Canvas &src, int src_x, int src_y);
+  void Copy(const Canvas &src, PixelPoint src_position) noexcept;
   void Copy(const Canvas &src);
 
   void Copy(const Bitmap &src);
@@ -563,62 +563,46 @@ public:
   }
 #endif
 
-  void CopyOr(int dest_x, int dest_y,
-              unsigned dest_width, unsigned dest_height,
-              const Canvas &src, int src_x, int src_y) {
-    Copy(dest_x, dest_y, dest_width, dest_height,
-         src, src_x, src_y, SRCPAINT);
+  void CopyOr(PixelPoint dest_position, PixelSize dest_size,
+              const Canvas &src, PixelPoint src_position) noexcept {
+    Copy(dest_position, dest_size, src, src_position, SRCPAINT);
   }
 
   void CopyOr(const Canvas &src) {
-    CopyOr(0, 0, GetWidth(), GetHeight(), src, 0, 0);
+    CopyOr({0, 0}, GetSize(), src, {0, 0});
   }
 
-  void CopyOr(int dest_x, int dest_y,
-              unsigned dest_width, unsigned dest_height,
-              const Bitmap &src, int src_x, int src_y) {
-    Copy(dest_x, dest_y, dest_width, dest_height,
-         src, src_x, src_y,
-         SRCPAINT);
+  void CopyOr(PixelPoint dest_position, PixelSize dest_size,
+              const Bitmap &src, PixelPoint src_position) noexcept {
+    Copy(dest_position, dest_size, src, src_position, SRCPAINT);
   }
 
   /**
    * Merges the colors of the inverted source bitmap with the colors
    * of this Canvas using the "OR" operator.
    */
-  void CopyNotOr(int dest_x, int dest_y,
-                 unsigned dest_width, unsigned dest_height,
-                 const Bitmap &src, int src_x, int src_y) {
-    Copy(dest_x, dest_y, dest_width, dest_height,
-         src, src_x, src_y,
-         MERGEPAINT);
+  void CopyNotOr(PixelPoint dest_position, PixelSize dest_size,
+                 const Bitmap &src, PixelPoint src_position) noexcept {
+    Copy(dest_position, dest_size, src, src_position, MERGEPAINT);
   }
 
-  void CopyNot(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
-               const Bitmap &src, int src_x, int src_y) {
-    Copy(dest_x, dest_y, dest_width, dest_height,
-         src, src_x, src_y,
-         NOTSRCCOPY);
+  void CopyNot(PixelPoint dest_position, PixelSize dest_size,
+               const Bitmap &src, PixelPoint src_position) noexcept {
+    Copy(dest_position, dest_size, src, src_position, NOTSRCCOPY);
   }
 
-  void CopyAnd(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
-               const Canvas &src, int src_x, int src_y) {
-    Copy(dest_x, dest_y, dest_width, dest_height,
-         src.dc, src_x, src_y, SRCAND);
+  void CopyAnd(PixelPoint dest_position, PixelSize dest_size,
+               const Canvas &src, PixelPoint src_position) noexcept {
+    Copy(dest_position, dest_size, src.dc, src_position, SRCAND);
   }
 
   void CopyAnd(const Canvas &src) {
-    CopyAnd(0, 0, GetWidth(), GetHeight(), src, 0, 0);
+    CopyAnd({0, 0}, GetSize(), src, {0, 0});
   }
 
-  void CopyAnd(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
-               const Bitmap &src, int src_x, int src_y) {
-    Copy(dest_x, dest_y, dest_width, dest_height,
-         src, src_x, src_y,
-         SRCAND);
+  void CopyAnd(PixelPoint dest_position, PixelSize dest_size,
+               const Bitmap &src, PixelPoint src_position) noexcept {
+    Copy(dest_position, dest_size, src, src_position, SRCAND);
   }
 
   void ScaleCopy(PixelPoint dest_position,

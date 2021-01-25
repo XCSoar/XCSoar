@@ -76,9 +76,7 @@ TransparentRendererCache::CopyAndTo(Canvas &canvas,
   if (empty)
     return;
 
-  canvas.CopyAnd(0, 0,
-                 projection.GetScreenWidth(), projection.GetScreenHeight(),
-                 buffer, 0, 0);
+  canvas.CopyAnd({0, 0}, projection.GetScreenSize(), buffer, {0, 0});
 }
 
 void

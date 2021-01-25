@@ -402,9 +402,8 @@ public:
   void Stretch(PixelPoint dest_position, PixelSize dest_size,
                const GLTexture &texture);
 
-  void Copy(int dest_x, int dest_y,
-            unsigned dest_width, unsigned dest_height,
-            const Bitmap &src, int src_x, int src_y);
+  void Copy(PixelPoint dest_position, PixelSize dest_size,
+            const Bitmap &src, PixelPoint src_position) noexcept;
   void Copy(const Bitmap &src);
 
   void StretchNot(const Bitmap &src);
