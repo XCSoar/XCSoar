@@ -71,4 +71,10 @@ operator+(PixelPoint p, PixelSize size) noexcept
   return { p.x + (int)size.width, p.y + (int)size.height };
 }
 
+constexpr PixelPoint
+operator-(PixelPoint p, PixelSize size) noexcept
+{
+  return { p.x - (int)size.width, p.y - (int)size.height };
+}
+
 #endif
