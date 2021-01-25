@@ -158,8 +158,17 @@ struct PixelRect {
   /**
    * Return a new #PixelRect shrunk by this number of pixels.
    */
+  constexpr PixelRect WithPadding(PixelSize padding) const noexcept {
+    return {
+      left + (int)padding.width,
+      top + (int)padding.height,
+      right - (int)padding.width,
+      bottom - (int)padding.height,
+    };
+  }
+
   constexpr PixelRect WithPadding(int padding) const noexcept {
-    return {left + padding, top + padding, right - padding, bottom - padding};
+    return WithPadding({padding, padding});
   }
 
   /**
