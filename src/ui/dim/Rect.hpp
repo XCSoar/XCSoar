@@ -151,8 +151,8 @@ struct PixelRect {
    * one.
    */
   constexpr PixelPoint CenteredTopLeft(PixelSize size) const noexcept {
-    return PixelPoint((left + right - size.width) / 2,
-                      (top + bottom - size.height) / 2);
+    return PixelPoint((left + right - (int)size.width) / 2,
+                      (top + bottom - (int)size.height) / 2);
   }
 
 #ifdef USE_WINUSER
