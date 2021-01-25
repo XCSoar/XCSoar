@@ -48,6 +48,10 @@ struct PixelSize {
     return !(*this == other);
   }
 
+  constexpr PixelSize operator+(PixelSize other) const noexcept {
+    return {width + other.width, height + other.height};
+  }
+
   constexpr PixelSize operator*(unsigned v) const noexcept {
     return {width * v, height * v};
   }
