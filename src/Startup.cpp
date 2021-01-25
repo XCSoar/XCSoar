@@ -56,7 +56,6 @@ Copyright_License {
 #include "Audio/GlobalVolumeController.hpp"
 #include "Audio/VarioGlue.hpp"
 #include "Audio/VolumeController.hpp"
-#include "Screen/Busy.hpp"
 #include "CommandLine.hpp"
 #include "MainWindow.hpp"
 #include "Computer/GlideComputer.hpp"
@@ -475,7 +474,6 @@ void
 Shutdown()
 {
   VerboseOperationEnvironment operation;
-  gcc_unused ScopeBusyIndicator busy;
 
   MainWindow *const main_window = CommonInterface::main_window;
   auto &live_blackboard = CommonInterface::GetLiveBlackboard();
