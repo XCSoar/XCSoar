@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-15 23:14+0200\n"
-"PO-Revision-Date: 2021-01-16 09:32+0000\n"
+"PO-Revision-Date: 2021-01-26 22:32+0000\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -4943,7 +4943,7 @@ msgstr ""
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:55
 #, no-c-format
 msgid "Requires only a GPS source."
-msgstr "Vyžaduje pouze zdroj GPS."
+msgstr "Vyžaduje pouze GPS."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:56
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:213
@@ -4954,7 +4954,7 @@ msgstr "Cik-cak"
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:57
 #, no-c-format
 msgid "Requires GPS and an intelligent vario with airspeed output."
-msgstr "Vyžaduje zdroj GPS a inteligentní vário s výstupem vzdušné rychlosti."
+msgstr "Vyžaduje GPS a inteligentní vário s výstupem vzdušné rychlosti."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:58
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:67
@@ -4967,7 +4967,7 @@ msgstr "Oba"
 #, no-c-format
 msgid "Use ZigZag and circling."
 msgstr ""
-"Je použit cik-cak let i kroužení. Vyžaduje zdroj GPS a inteligentní vário s "
+"Je použit cik-cak let i kroužení. Vyžaduje GPS a inteligentní vário s "
 "výstupem vzdušné rychlosti."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:63
@@ -4984,7 +4984,7 @@ msgstr "Vítr externě"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:68
 msgid "Should XCSoar accept wind estimates from other instruments?"
-msgstr "Má XCSoar přijímat odhad větru z jiných přístrojů?"
+msgstr "Má XCSoar přijímat odhad větru z externích zařízení?"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:72
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:156
