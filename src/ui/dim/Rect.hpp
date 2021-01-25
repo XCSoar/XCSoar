@@ -54,6 +54,15 @@ struct PixelRect {
   explicit constexpr PixelRect(PixelSize size) noexcept
     :left(0), top(0), right(size.width), bottom(size.height) {}
 
+  /**
+   * Construct a #PixelRect that is centered at the given #PixelPoint
+   * with the given (total) size.
+   */
+  static constexpr PixelRect Centered(PixelPoint center, PixelSize size) noexcept {
+    const PixelPoint top_left = center - size / 2u;
+    return {top_left, size};
+  }
+
   bool IsEmpty() noexcept {
     return left >= right || top >= bottom;
   }
