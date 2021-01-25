@@ -193,12 +193,8 @@ ChartRenderer::DrawNoData(const TCHAR *text)
   canvas.Select(look.label_font);
   canvas.SetBackgroundTransparent();
 
-  PixelSize tsize = canvas.CalcTextSize(text);
-
-  int x = (rc.left + rc.right - tsize.width) / 2;
-  int y = (rc.top + rc.bottom - tsize.height) / 2;
-
-  canvas.DrawText(x, y, text);
+  const auto p = rc.CenteredTopLeft(canvas.CalcTextSize(text));
+  canvas.DrawText(p.x, p.y, text);
 }
 
 void

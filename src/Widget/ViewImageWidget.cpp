@@ -86,8 +86,5 @@ ViewImageWindow::OnPaint(Canvas &canvas)
     fit_size.width = window_size.height * bitmap_size.width / bitmap_size.height;
   }
 
-  canvas.Stretch({(rc.left + rc.right - (int)fit_size.width) / 2,
-      (rc.top + rc.bottom - (int)fit_size.height) / 2},
-                 fit_size,
-                 *bitmap);
+  canvas.Stretch(rc.CenteredTopLeft(fit_size), fit_size, *bitmap);
 }
