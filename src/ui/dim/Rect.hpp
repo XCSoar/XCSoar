@@ -147,6 +147,13 @@ struct PixelRect {
   }
 
   /**
+   * Return a new #PixelRect shrunk by this number of pixels.
+   */
+  constexpr PixelRect WithPadding(int padding) const noexcept {
+    return {left + padding, top + padding, right - padding, bottom - padding};
+  }
+
+  /**
    * Calculate the top-left point of a rectangle centered inside this
    * one.
    */
