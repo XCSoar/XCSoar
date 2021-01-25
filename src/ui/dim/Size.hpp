@@ -68,7 +68,7 @@ struct PixelSize {
 constexpr PixelPoint
 operator+(PixelPoint p, PixelSize size) noexcept
 {
-  return { p.x + size.width, p.y + size.height };
+  return { p.x + (int)size.width, p.y + (int)size.height };
 }
 
 #endif
