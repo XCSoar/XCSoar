@@ -55,6 +55,12 @@ struct PixelRect {
     :left(0), top(0), right(size.width), bottom(size.height) {}
 
   /**
+   * Construct an empty rectangle at the given position.
+   */
+  explicit constexpr PixelRect(PixelPoint origin) noexcept
+    :left(origin.x), top(origin.y), right(origin.x), bottom(origin.y) {}
+
+  /**
    * Construct a #PixelRect that is centered at the given #PixelPoint
    * with the given (total) size.
    */
