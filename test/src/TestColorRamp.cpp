@@ -20,7 +20,7 @@
 }
 */
 
-#include "Screen/Ramp.hpp"
+#include "ui/canvas/Ramp.hpp"
 #include "ui/canvas/Color.hpp"
 #include "TestUtil.hpp"
 

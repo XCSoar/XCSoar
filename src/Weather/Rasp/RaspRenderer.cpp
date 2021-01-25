@@ -26,7 +26,7 @@ Copyright_License {
 #include "RaspStyle.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "Terrain/TerrainSettings.hpp"
-#include "Screen/Ramp.hpp"
+#include "ui/canvas/Ramp.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "util/StringAPI.hxx"
 

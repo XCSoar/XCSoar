@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "RaspStyle.hpp"
-#include "Screen/Ramp.hpp"
+#include "ui/canvas/Ramp.hpp"
 #include "Terrain/RasterRenderer.hpp"
 
 static constexpr ColorRamp rasp_colors[6][NUM_COLOR_RAMP_LEVELS] = {

@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Screen/Ramp.hpp"
+#include "Ramp.hpp"
 
 #include <cassert>
 

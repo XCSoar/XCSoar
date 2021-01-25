@@ -23,7 +23,7 @@
 
 #include "TrailLook.hpp"
 #include "MapSettings.hpp"
-#include "Screen/Ramp.hpp"
+#include "ui/canvas/Ramp.hpp"
 #include "Screen/Layout.hpp"
 #include "util/Macros.hpp"
 

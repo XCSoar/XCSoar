@@ -570,7 +570,7 @@ TEST_EARTH_DEPENDS = GEO MATH
 $(eval $(call link-program,TestEarth,TEST_EARTH))
 
 TEST_COLOR_RAMP_SOURCES = \
-	$(SRC)/Screen/Ramp.cpp \
+	$(SRC)/ui/canvas/Ramp.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestColorRamp.cpp
 TEST_COLOR_RAMP_CPPFLAGS = $(SCREEN_CPPFLAGS)
@@ -1839,7 +1839,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Renderer/LabelBlock.cpp \
 	$(SRC)/Renderer/TextInBox.cpp \
-	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/UISettings.cpp \
 	$(SRC)/Audio/Settings.cpp \
 	$(SRC)/Audio/VarioSettings.cpp \
@@ -2269,7 +2268,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(MORE_SCREEN_SOURCES) \
-	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/XML/Parser.cpp \

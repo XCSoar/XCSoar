@@ -8,6 +8,7 @@ CANVAS_SRC_DIR = $(SRC)/ui/canvas
 SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/Debug.cpp \
 	$(SCREEN_SRC_DIR)/ProgressBar.cpp \
+	$(CANVAS_SRC_DIR)/Ramp.cpp \
 	$(CANVAS_SRC_DIR)/Util.cpp \
 	$(CANVAS_SRC_DIR)/Font.cpp \
 	$(CANVAS_SRC_DIR)/Icon.cpp \
