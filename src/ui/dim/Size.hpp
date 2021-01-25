@@ -47,6 +47,22 @@ struct PixelSize {
   constexpr bool operator!=(const PixelSize &other) const noexcept {
     return !(*this == other);
   }
+
+  constexpr PixelSize operator*(unsigned v) const noexcept {
+    return {width * v, height * v};
+  }
+
+  constexpr PixelSize operator/(unsigned v) const noexcept {
+    return {width / v, height / v};
+  }
+
+  constexpr PixelSize operator*(float v) const noexcept {
+    return {unsigned(width * v), unsigned(height * v)};
+  }
+
+  constexpr PixelSize operator/(float v) const noexcept {
+    return {unsigned(width / v), unsigned(height / v)};
+  }
 };
 
 constexpr PixelPoint
