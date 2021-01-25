@@ -100,20 +100,16 @@ AirspaceSettingsListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
   if (color_mode) {
     int second_x = row_renderer.NextColumn(canvas, rc, name);
 
-    const unsigned padding = Layout::GetTextPadding();
+    const int padding = Layout::GetTextPadding();
 
     if (AirspacePreviewRenderer::PrepareFill(
         canvas, (AirspaceClass)i, look, renderer)) {
-      canvas.Rectangle(second_x, rc.top + padding,
-                       rc.right - padding,
-                       rc.bottom - padding);
+      canvas.DrawRectangle({second_x, rc.top + padding, rc.right - padding, rc.bottom - padding});
       AirspacePreviewRenderer::UnprepareFill(canvas);
     }
     if (AirspacePreviewRenderer::PrepareOutline(
         canvas, (AirspaceClass)i, look, renderer)) {
-      canvas.Rectangle(second_x, rc.top + padding,
-                       rc.right - padding,
-                       rc.bottom - padding);
+      canvas.DrawRectangle({second_x, rc.top + padding, rc.right - padding, rc.bottom - padding});
     }
   } else {
     rc.right = renderer.classes[i].display

@@ -57,8 +57,8 @@ TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
   unsigned i = 0;
   for (auto it = summary.pts.begin(); it != summary.pts.end(); ++it, ++i) {
     Angle a = sweep * it->p;
-    int x = center.x + (int)(radius * a.fastsine());
-    int y = center.y - (int)(radius * a.fastcosine());
+    const PixelPoint p(center.x + (int)(radius * a.fastsine()),
+                       center.y - (int)(radius * a.fastcosine()));
     int w;
     if (i == summary.active) {
       if (it->achieved)
@@ -82,7 +82,7 @@ TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
 
       w = Layout::Scale(1);
     }
-    
-    canvas.Rectangle(x - w, y - w, x + w, y + w);
+
+    canvas.DrawRectangle(PixelRect{p}.WithMargin(w));
   }
 }

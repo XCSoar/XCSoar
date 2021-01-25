@@ -220,7 +220,7 @@ ContainerWindow::OnPaint(Canvas &canvas)
   children.Paint(canvas);
 
   if (HasBorder())
-    canvas.DrawOutlineRectangle(-1, -1, GetWidth(), GetHeight(),
+    canvas.DrawOutlineRectangle(PixelRect(-1, -1, GetWidth(), GetHeight()),
                                 COLOR_BLACK);
 }
 

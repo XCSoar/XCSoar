@@ -96,8 +96,7 @@ ClipText(TStringView text, int x, unsigned canvas_width) noexcept
 }
 
 void
-Canvas::DrawFilledRectangle(int left, int top, int right, int bottom,
-                            const Color color)
+Canvas::DrawFilledRectangle(PixelRect r, const Color color) noexcept
 {
   assert(offset == OpenGL::translate);
 
@@ -109,10 +108,10 @@ Canvas::DrawFilledRectangle(int left, int top, int right, int bottom,
      shader */
 
   const BulkPixelPoint vertices[] = {
-    { left, top },
-    { right, top },
-    { left, bottom },
-    { right, bottom },
+    {r.left, r.top},
+    {r.right, r.top},
+    {r.left, r.bottom},
+    {r.right, r.bottom},
   };
 
   const ScopeVertexPointer vp(vertices);
@@ -120,13 +119,16 @@ Canvas::DrawFilledRectangle(int left, int top, int right, int bottom,
 }
 
 void
-Canvas::OutlineRectangleGL(int left, int top, int right, int bottom)
+Canvas::DrawOutlineRectangleGL(PixelRect r) noexcept
 {
+  --r.right;
+  --r.bottom;
+
   const ExactPixelPoint vertices[] = {
-    PixelPoint{left, top},
-    PixelPoint{right - 1, top},
-    PixelPoint{right - 1, bottom - 1},
-    PixelPoint{left, bottom - 1},
+    r.GetTopLeft(),
+    r.GetTopRight(),
+    r.GetBottomRight(),
+    r.GetBottomLeft(),
   };
 
   const ScopeVertexPointer vp(vertices);
@@ -146,7 +148,7 @@ Canvas::FadeToWhite(PixelRect rc, GLubyte alpha)
 {
   const ScopeAlphaBlend alpha_blend;
   const Color color(0xff, 0xff, 0xff, alpha);
-  DrawFilledRectangle(rc.left, rc.right, rc.right, rc.bottom, color);
+  DrawFilledRectangle(rc, color);
 }
 
 void
@@ -556,7 +558,7 @@ Canvas::DrawKeyhole(PixelPoint center,
 void
 Canvas::DrawFocusRectangle(PixelRect rc)
 {
-  DrawOutlineRectangle(rc.left, rc.top, rc.right, rc.bottom, COLOR_DARK_GRAY);
+  DrawOutlineRectangle(rc, COLOR_DARK_GRAY);
 }
 
 const PixelSize
@@ -620,10 +622,7 @@ Canvas::DrawText(PixelPoint p, const TCHAR *text) noexcept
     return;
 
   if (background_mode == OPAQUE)
-    DrawFilledRectangle(p.x, p.y,
-                        p.x + texture->GetWidth(),
-                        p.y + texture->GetHeight(),
-                        background_color);
+    DrawFilledRectangle({p, texture->GetSize()}, background_color);
 
   PrepareColoredAlphaTexture(text_color);
 
@@ -827,12 +826,10 @@ Canvas::CopyToTexture(GLTexture &texture, PixelRect src_rc) const
 }
 
 void
-Canvas::DrawRoundRectangle(int left, int top, int right, int bottom,
-                           unsigned ellipse_width,
-                           unsigned ellipse_height)
+Canvas::DrawRoundRectangle(PixelRect r, PixelSize ellipse_size) noexcept
 {
-  unsigned radius = std::min(std::min(ellipse_width, ellipse_height),
-                             unsigned(std::min(bottom - top,
-                                               right - left))) / 2u;
-  ::RoundRect(*this, left, top, right, bottom, radius);
+  unsigned radius = std::min(std::min(ellipse_size.width, ellipse_size.height),
+                             std::min(r.GetWidth(),
+                                      r.GetHeight())) / 2u;
+  ::RoundRect(*this, r, radius);
 }

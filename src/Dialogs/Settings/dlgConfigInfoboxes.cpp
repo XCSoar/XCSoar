@@ -414,7 +414,7 @@ InfoBoxPreview::OnPaint(Canvas &canvas)
 
   canvas.SelectHollowBrush();
   canvas.SelectBlackPen();
-  canvas.Rectangle(0, 0, canvas.GetWidth() - 1, canvas.GetHeight() - 1);
+  canvas.DrawRectangle(PixelRect{PixelSize{canvas.GetWidth() - 1, canvas.GetHeight() - 1}});
 
   InfoBoxFactory::Type type = parent->GetContents(i);
   const TCHAR *caption = type < InfoBoxFactory::NUM_TYPES

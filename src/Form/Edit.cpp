@@ -337,8 +337,7 @@ WndProperty::OnPaint(Canvas &canvas)
 
   canvas.SelectHollowBrush();
   canvas.SelectBlackPen();
-  canvas.Rectangle(edit_rc.left, edit_rc.top,
-                   edit_rc.right, edit_rc.bottom);
+  canvas.DrawRectangle(edit_rc);
 
   if (!value.empty()) {
     canvas.SetTextColor(text_color);

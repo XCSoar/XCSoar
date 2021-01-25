@@ -51,7 +51,7 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i) noexcept
 #endif
 
   canvas.SelectBlackPen();
-  canvas.Rectangle(rc2.left, rc2.top, rc2.right, rc2.bottom);
+  canvas.DrawRectangle(rc2);
 }
 
 bool

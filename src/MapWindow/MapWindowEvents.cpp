@@ -134,18 +134,18 @@ MapWindow::OnPaint(Canvas &canvas)
     canvas.SelectWhiteBrush();
 
     if (top_left.x > 0)
-      canvas.Rectangle(0, 0, top_left.x, canvas.GetHeight());
+      canvas.DrawRectangle(PixelRect(0, 0, top_left.x, canvas.GetHeight()));
 
     if (bottom_right.x < (int)canvas.GetWidth())
-      canvas.Rectangle(bottom_right.x, 0,
-                       canvas.GetWidth(), canvas.GetHeight());
+      canvas.DrawRectangle(PixelRect(bottom_right.x, 0,
+                                     canvas.GetWidth(), canvas.GetHeight()));
 
     if (top_left.y > 0)
-      canvas.Rectangle(top_left.x, 0, bottom_right.x, top_left.y);
+      canvas.DrawRectangle({top_left.x, 0, bottom_right.x, top_left.y});
 
     if (bottom_right.y < (int)canvas.GetHeight())
-      canvas.Rectangle(top_left.x, bottom_right.y,
-                       bottom_right.x, canvas.GetHeight());
+      canvas.DrawRectangle(PixelRect(top_left.x, bottom_right.y,
+                                     bottom_right.x, canvas.GetHeight()));
 
     /* now stretch the buffer into the window Canvas */
 

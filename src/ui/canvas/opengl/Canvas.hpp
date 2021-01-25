@@ -192,46 +192,33 @@ public:
 
   void InvertRectangle(PixelRect r);
 
-  void Rectangle(int left, int top, int right, int bottom) {
-    DrawFilledRectangle(left, top, right, bottom, brush);
+  void DrawRectangle(PixelRect r) noexcept {
+    DrawFilledRectangle(r, brush);
 
     if (IsPenOverBrush())
-      DrawOutlineRectangle(left, top, right, bottom);
+      DrawOutlineRectangle(r);
   }
 
-  void DrawFilledRectangle(int left, int top,
-                           int right, int bottom,
-                           const Color color);
+  void DrawFilledRectangle(PixelRect r, const Color color) noexcept;
 
-  void DrawFilledRectangle(int left, int top,
-                           int right, int bottom,
-                           const Brush &brush) {
+  void DrawFilledRectangle(PixelRect r, const Brush &brush) noexcept {
     if (!brush.IsHollow())
-      DrawFilledRectangle(left, top, right, bottom, brush.GetColor());
-  }
-
-  void DrawFilledRectangle(const PixelRect &rc, const Color color) {
-    DrawFilledRectangle(rc.left, rc.top, rc.right, rc.bottom, color);
-  }
-
-  void DrawFilledRectangle(const PixelRect &rc, const Brush &brush) {
-    DrawFilledRectangle(rc.left, rc.top, rc.right, rc.bottom, brush);
+      DrawFilledRectangle(r, brush.GetColor());
   }
 
   /**
    * Draw a rectangle outline with the current OpenGL color and
    * settings.
    */
-  void OutlineRectangleGL(int left, int top, int right, int bottom);
+  void DrawOutlineRectangleGL(PixelRect r) noexcept;
 
-  void DrawOutlineRectangle(int left, int top, int right, int bottom) {
+  void DrawOutlineRectangle(PixelRect r) noexcept {
     pen.Bind();
-    OutlineRectangleGL(left, top, right, bottom);
+    DrawOutlineRectangleGL(r);
     pen.Unbind();
   }
 
-  void DrawOutlineRectangle(int left, int top, int right, int bottom,
-                            Color color) {
+  void DrawOutlineRectangle(PixelRect r, Color color) noexcept {
     color.Bind();
 #if defined(HAVE_GLES) && !defined(HAVE_GLES2)
     glLineWidthx(1 << 16);
@@ -239,7 +226,7 @@ public:
     glLineWidth(1);
 #endif
 
-    OutlineRectangleGL(left, top, right, bottom);
+    DrawOutlineRectangleGL(r);
   }
 
   /**
@@ -252,23 +239,22 @@ public:
   void FadeToWhite(GLubyte alpha);
 
   void Clear() {
-    Rectangle(0, 0, GetWidth(), GetHeight());
+    DrawRectangle(PixelRect{GetSize()});
   }
 
   void Clear(const Color color) {
-    DrawFilledRectangle(0, 0, GetWidth(), GetHeight(), color);
+    DrawFilledRectangle(PixelRect{GetSize()}, color);
   }
 
   void Clear(const Brush &brush) {
-    DrawFilledRectangle(0, 0, GetWidth(), GetHeight(), brush);
+    DrawFilledRectangle(PixelRect{GetSize()}, brush);
   }
 
   void ClearWhite() {
     Clear(COLOR_WHITE);
   }
 
-  void DrawRoundRectangle(int left, int top, int right, int bottom,
-                          unsigned ellipse_width, unsigned ellipse_height);
+  void DrawRoundRectangle(PixelRect r, PixelSize ellipse_size) noexcept;
 
   void DrawRaisedEdge(PixelRect &rc);
 

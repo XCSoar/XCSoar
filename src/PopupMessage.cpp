@@ -134,8 +134,7 @@ PopupMessage::OnPaint(Canvas &canvas)
 
   auto rc = GetClientRect();
 #ifndef USE_WINUSER
-  canvas.DrawOutlineRectangle(rc.left, rc.top, rc.right, rc.bottom,
-                              COLOR_BLACK);
+  canvas.DrawOutlineRectangle(rc, COLOR_BLACK);
 #endif
 
   const int padding = Layout::GetTextPadding();

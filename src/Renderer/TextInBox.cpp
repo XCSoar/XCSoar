@@ -139,8 +139,7 @@ TextInBox(Canvas &canvas, const TCHAR *text, PixelPoint p,
       canvas.SelectWhiteBrush();
 #endif
 
-      canvas.DrawRoundRectangle(rc.left, rc.top, rc.right, rc.bottom,
-                                Layout::VptScale(8), Layout::VptScale(8));
+      canvas.DrawRoundRectangle(rc, PixelSize{Layout::VptScale(8)});
     }
 
     canvas.SetBackgroundTransparent();

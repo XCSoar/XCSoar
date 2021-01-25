@@ -233,26 +233,10 @@ public:
     ::SetROP2(dc, R2_MASKPEN);
   }
 
-  void Rectangle(int left, int top, int right, int bottom) {
+  void DrawRectangle(PixelRect r) noexcept {
     assert(IsDefined());
 
-    ::Rectangle(dc, left, top, right, bottom);
-  }
-
-  void DrawFilledRectangle(int left, int top, int right, int bottom,
-                           const HWColor color) {
-    PixelRect rc;
-    rc.left = left;
-    rc.top = top;
-    rc.right = right;
-    rc.bottom = bottom;
-
-    DrawFilledRectangle(rc, color);
-  }
-
-  void DrawFilledRectangle(int left, int top, int right, int bottom,
-                           const Color color) {
-    DrawFilledRectangle(left, top, right, bottom, map(color));
+    ::Rectangle(dc, r.left, r.top, r.right, r.bottom);
   }
 
   void DrawFilledRectangle(const PixelRect &_rc, const HWColor color) {
@@ -277,16 +261,6 @@ public:
     ::FillRect(dc, &rc, brush.Native());
   }
 
-  void DrawFilledRectangle(int left, int top, int right, int bottom,
-                           const Brush &brush) {
-    PixelRect rc;
-    rc.left = left;
-    rc.top = top;
-    rc.right = right;
-    rc.bottom = bottom;
-    DrawFilledRectangle(rc, brush);
-  }
-
   void InvertRectangle(const RECT r) {
     ::InvertRect(dc, &r);
   }
@@ -296,19 +270,19 @@ public:
   }
 
   void Clear() {
-    Rectangle(0, 0, GetWidth(), GetHeight());
+    DrawRectangle(GetRect());
   }
 
   void Clear(const HWColor color) {
-    DrawFilledRectangle(0, 0, GetWidth(), GetHeight(), color);
+    DrawFilledRectangle(GetRect(), color);
   }
 
   void Clear(const Color color) {
-    DrawFilledRectangle(0, 0, GetWidth(), GetHeight(), color);
+    DrawFilledRectangle(GetRect(), color);
   }
 
   void Clear(const Brush &brush) {
-    DrawFilledRectangle(0, 0, GetWidth(), GetHeight(), brush);
+    DrawFilledRectangle(GetRect(), brush);
   }
 
   void ClearWhite() {
@@ -317,12 +291,11 @@ public:
     ::BitBlt(dc, 0, 0, GetWidth(), GetHeight(), nullptr, 0, 0, WHITENESS);
   }
 
-  void DrawRoundRectangle(int left, int top, int right, int bottom,
-                          unsigned ellipse_width,
-                          unsigned ellipse_height) {
+  void DrawRoundRectangle(PixelRect r, PixelSize ellipse_size) noexcept {
     assert(IsDefined());
 
-    ::RoundRect(dc, left, top, right, bottom, ellipse_width, ellipse_height);
+    ::RoundRect(dc, r.left, r.top, r.right, r.bottom,
+                ellipse_size.width, ellipse_size.height);
   }
 
   void DrawRaisedEdge(PixelRect &_rc) {

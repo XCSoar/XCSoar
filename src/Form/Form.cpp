@@ -496,9 +496,7 @@ WndForm::OnPaint(Canvas &canvas)
   if (!IsMaximised()) {
 #ifndef USE_GDI
     if (IsDithered())
-      canvas.DrawOutlineRectangle(rcClient.left, rcClient.top,
-                                  rcClient.right, rcClient.bottom,
-                                  COLOR_BLACK);
+      canvas.DrawOutlineRectangle(rcClient, COLOR_BLACK);
     else
 #endif
       canvas.DrawRaisedEdge(rcClient);
@@ -537,8 +535,7 @@ WndForm::OnPaint(Canvas &canvas)
   if (dragging) {
 #ifdef ENABLE_OPENGL
     const ScopeAlphaBlend alpha_blend;
-    canvas.DrawFilledRectangle(0, 0, canvas.GetWidth(), canvas.GetHeight(),
-                               COLOR_YELLOW.WithAlpha(80));
+    canvas.Clear(COLOR_YELLOW.WithAlpha(80));
 #elif defined(USE_GDI)
     canvas.InvertRectangle(title_rect);
 #else

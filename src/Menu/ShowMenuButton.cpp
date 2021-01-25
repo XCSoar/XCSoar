@@ -66,8 +66,8 @@ ShowMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
   const unsigned padding = Layout::GetTextPadding() + pen_width;
 
   canvas.Select(Pen(pen_width, COLOR_BLACK));
-  canvas.DrawRoundRectangle(rc.left, rc.top, rc.right - 1, rc.bottom - 1,
-                            Layout::VptScale(8), Layout::VptScale(8));
+  canvas.DrawRoundRectangle({rc.left, rc.top, rc.right - 1, rc.bottom - 1},
+                            PixelSize{Layout::VptScale(8u)});
 
   const BulkPixelPoint m[] = {
     BulkPixelPoint(rc.left + padding, rc.bottom - padding),

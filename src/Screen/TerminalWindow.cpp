@@ -147,15 +147,14 @@ TerminalWindow::OnPaint(Canvas &canvas, const PixelRect &p_dirty)
   for (int cell_y = cell_dirty.top, p_y = cell_y * cell_size.height;
        cell_y < cell_dirty.bottom;
        ++cell_y, p_y += cell_size.height, text += data.GetWidth()) {
-    canvas.DrawFilledRectangle(p_dirty.left, p_y,
-                          p_dirty.right, p_y + cell_size.height,
+    canvas.DrawFilledRectangle({p_dirty.left, p_y,
+        p_dirty.right, p_y + (int)cell_size.height},
                           look.background_color);
     canvas.DrawText({x, p_y}, text, length);
   }
 
   int cell_bottom_y(cell_dirty.bottom * cell_size.height);
   if (cell_bottom_y < p_dirty.bottom)
-    canvas.DrawFilledRectangle(p_dirty.left, cell_bottom_y,
-                          p_dirty.right, p_dirty.bottom,
-                          look.background_color);
+    canvas.DrawFilledRectangle({p_dirty.left, cell_bottom_y, p_dirty.right, p_dirty.bottom},
+                               look.background_color);
 }

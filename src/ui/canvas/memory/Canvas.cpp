@@ -61,23 +61,21 @@ public:
 };
 
 void
-Canvas::DrawOutlineRectangle(int left, int top, int right, int bottom,
-                             Color color)
+Canvas::DrawOutlineRectangle(PixelRect r, Color color) noexcept
 {
   SDLRasterCanvas canvas(buffer);
-  canvas.DrawRectangle(left, top, right, bottom,
+  canvas.DrawRectangle(r.left, r.top, r.right, r.bottom,
                        canvas.Import(color));
 }
 
 void
-Canvas::DrawFilledRectangle(int left, int top, int right, int bottom,
-                            Color color)
+Canvas::DrawFilledRectangle(PixelRect r, Color color) noexcept
 {
-  if (left >= right || top >= bottom)
+  if (r.IsEmpty())
     return;
 
   SDLRasterCanvas canvas(buffer);
-  canvas.FillRectangle(left, top, right, bottom,
+  canvas.FillRectangle(r.left, r.top, r.right, r.bottom,
                        canvas.Import(color));
 }
 
@@ -651,13 +649,10 @@ Canvas::CopyAnd(const Bitmap &src)
 }
 
 void
-Canvas::DrawRoundRectangle(int left, int top,
-                           int right, int bottom,
-                           unsigned ellipse_width,
-                           unsigned ellipse_height)
+Canvas::DrawRoundRectangle(PixelRect r, PixelSize ellipse_size) noexcept
 {
-  unsigned radius = std::min(ellipse_width, ellipse_height) / 2u;
-  ::RoundRect(*this, left, top, right, bottom, radius);
+  unsigned radius = std::min(ellipse_size.width, ellipse_size.height) / 2u;
+  ::RoundRect(*this, r, radius);
 }
 
 void

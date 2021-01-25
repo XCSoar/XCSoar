@@ -179,55 +179,43 @@ public:
     background_mode = TRANSPARENT;
   }
 
-  void DrawOutlineRectangle(int left, int top, int right, int bottom,
-                            Color color);
+  void DrawOutlineRectangle(PixelRect r, Color color) noexcept;
 
-  void Rectangle(int left, int top, int right, int bottom) {
-    DrawFilledRectangle(left, top, right, bottom, brush);
+  void DrawRectangle(PixelRect r) noexcept {
+    DrawFilledRectangle(r, brush);
 
     if (IsPenOverBrush())
-      DrawOutlineRectangle(left, top, right, bottom, pen.GetColor());
+      DrawOutlineRectangle(r, pen.GetColor());
   }
 
-  void DrawFilledRectangle(int left, int top, int right, int bottom,
-                           Color color);
+  void DrawFilledRectangle(PixelRect r, Color color) noexcept;
 
-  void DrawFilledRectangle(int left, int top, int right, int bottom,
-                           const Brush &brush) {
+  void DrawFilledRectangle(PixelRect r, const Brush &brush) noexcept {
     if (brush.IsHollow())
       return;
 
-    DrawFilledRectangle(left, top, right, bottom, brush.GetColor());
-  }
-
-  void DrawFilledRectangle(const PixelRect &rc, const Color color) {
-    DrawFilledRectangle(rc.left, rc.top, rc.right, rc.bottom, color);
-  }
-
-  void DrawFilledRectangle(const PixelRect &rc, const Brush &brush) {
-    DrawFilledRectangle(rc.left, rc.top, rc.right, rc.bottom, brush);
+    DrawFilledRectangle(r, brush.GetColor());
   }
 
   void InvertRectangle(PixelRect r);
 
   void Clear() {
-    Rectangle(0, 0, GetWidth(), GetHeight());
+    DrawRectangle(GetRect());
   }
 
   void Clear(const Color color) {
-    DrawFilledRectangle(0, 0, GetWidth(), GetHeight(), color);
+    DrawFilledRectangle(GetRect(), color);
   }
 
   void Clear(const Brush &brush) {
-    DrawFilledRectangle(0, 0, GetWidth(), GetHeight(), brush);
+    DrawFilledRectangle(GetRect(), brush);
   }
 
   void ClearWhite() {
     Clear(COLOR_WHITE);
   }
 
-  void DrawRoundRectangle(int left, int top, int right, int bottom,
-                          unsigned ellipse_width, unsigned ellipse_height);
+  void DrawRoundRectangle(PixelRect r, PixelSize ellipse_size) noexcept;
 
   void DrawRaisedEdge(PixelRect &rc) {
     Pen bright(1, Color(240, 240, 240));
@@ -308,8 +296,7 @@ public:
                Angle start, Angle end);
 
   void DrawFocusRectangle(const PixelRect &rc) {
-    DrawOutlineRectangle(rc.left, rc.top, rc.right, rc.bottom,
-                         COLOR_DARK_GRAY);
+    DrawOutlineRectangle(rc, COLOR_DARK_GRAY);
   }
 
   gcc_pure

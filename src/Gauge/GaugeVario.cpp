@@ -329,8 +329,8 @@ GaugeVario::RenderClimb(Canvas &canvas) noexcept
   if (Basic().switch_state.flight_mode == SwitchState::FlightMode::CIRCLING)
     canvas.ScaleCopy({x, y}, look.climb_bitmap, {12, 0}, {12, 12});
   else if (IsPersistent())
-    canvas.DrawFilledRectangle(x, y, x + Layout::Scale(12), y + Layout::Scale(12),
-                          look.background_color);
+    canvas.DrawFilledRectangle(PixelRect{{x, y}, PixelSize{Layout::Scale(12u)}},
+                               look.background_color);
 }
 
 inline void
@@ -532,18 +532,16 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y) noexcept
     last_v_diff = v_diff;
 
     if (IsPersistent()) {
+      const unsigned height = nary + arrow_y_size + Layout::FastScale(2);
+
       // bottom (too slow)
-      canvas.DrawFilledRectangle(x, ybottom + YOFFSET,
-                                 x + arrow_x_size * 2 + 1,
-                                 ybottom + YOFFSET + nary + arrow_y_size +
-                                 Layout::FastScale(2),
+      canvas.DrawFilledRectangle({{x, ybottom + YOFFSET},
+                                  {arrow_x_size * 2 + 1, height}},
                                  look.background_color);
 
       // top (too fast)
-      canvas.DrawFilledRectangle(x, ytop - YOFFSET + 1,
-                                 x + arrow_x_size * 2  +1,
-                                 ytop - YOFFSET - nary + 1 - arrow_y_size -
-                                 Layout::FastScale(2),
+      canvas.DrawFilledRectangle({{x, ytop - YOFFSET + 1 - (int)height},
+                                  {arrow_x_size * 2 + 1, height}},
                                  look.background_color);
     }
 
@@ -572,8 +570,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y) noexcept
 
       while (v_diff > 0) {
         if (v_diff > DELTA_V_STEP) {
-          canvas.Rectangle(x, y,
-                           x + arrow_x_size * 2 + 1, y + arrow_y_size - 1);
+          canvas.DrawRectangle({{x, y}, {arrow_x_size * 2 + 1, arrow_y_size - 1}});
         } else {
           BulkPixelPoint arrow[3];
           arrow[0].x = x;
@@ -594,8 +591,8 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y) noexcept
 
       while (v_diff < 0) {
         if (v_diff < -DELTA_V_STEP) {
-          canvas.Rectangle(x, y + 1,
-                           x + arrow_x_size * 2 + 1, y - arrow_y_size + 2);
+          canvas.DrawRectangle({{x, y + 1},
+                                {arrow_x_size * 2 + 1, y - arrow_y_size + 1}});
         } else {
           BulkPixelPoint arrow[3];
           arrow[0].x = x;

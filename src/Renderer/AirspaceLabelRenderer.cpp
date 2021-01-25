@@ -136,7 +136,7 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
       rect.top = pos.y;
       rect.right = rect.left + labelWidth;
       rect.bottom = rect.top + labelHeight;
-      canvas.Rectangle(rect.left, rect.top, rect.right, rect.bottom);
+      canvas.DrawRectangle(rect);
 
 #ifdef USE_GDI
       canvas.DrawLine(rect.left + Layout::GetTextPadding(),

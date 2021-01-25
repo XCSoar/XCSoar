@@ -639,10 +639,7 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
     canvas.SelectHollowBrush();
 
     const PixelSize size = canvas.CalcTextSize(tmp);
-    canvas.Rectangle(rc.left + row_renderer.GetX() - frame_padding,
-                     rc.top + row_renderer.GetFirstY() - frame_padding,
-                     rc.left + row_renderer.GetX() + size.width + frame_padding,
-                     rc.top + row_renderer.GetFirstY() + size.height + frame_padding);
+    canvas.DrawRectangle(PixelRect{{rc.left + row_renderer.GetX(), rc.top + row_renderer.GetFirstY()}, size}.WithMargin(frame_padding));
   }
 
   row_renderer.DrawFirstRow(canvas, rc, tmp);

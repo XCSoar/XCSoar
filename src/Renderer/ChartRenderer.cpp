@@ -179,10 +179,9 @@ ChartRenderer::DrawLabel(const TCHAR *text, const double xv, const double yv)
     const ScopeAlphaBlend alpha_blend;
 #endif
     canvas.Select(look.label_blank_brush);
-    canvas.Rectangle(pt.x - tsize.width / 2 - padding_text,
-                     pt.y - tsize.height / 2 - padding_text,
-                     pt.x + tsize.width / 2 + padding_text,
-                     pt.y + tsize.height / 2 + padding_text);
+
+    const PixelSize rect_size = tsize + PixelSize{padding_text * 2, padding_text * 2};
+    canvas.DrawRectangle(PixelRect::Centered(pt, rect_size));
   }
   canvas.DrawText({pt.x - tsize.width / 2, pt.y - tsize.height / 2}, text);
 }
@@ -329,7 +328,7 @@ ChartRenderer::DrawBarChart(const XYDataStore &lsdata)
     int ymin = ScreenY(y.min);
     int xmax((i + 1.8) * x.scale + rc_chart.left);
     int ymax = ScreenY(slots[i].y);
-    canvas.Rectangle(xmin, ymin, xmax, ymax);
+    canvas.DrawRectangle({xmin, ymin, xmax, ymax});
   }
 }
 
@@ -581,7 +580,7 @@ ChartRenderer::DrawBlankRectangle(double x_min, double y_min,
   if (x.unscaled || y.unscaled)
     return;
   canvas.Select(look.blank_brush);
-  canvas.Rectangle(ScreenX(x_min), ScreenY(y_min), ScreenX(x_max), ScreenY(y_max));
+  canvas.DrawRectangle({ScreenX(x_min), ScreenY(y_min), ScreenX(x_max), ScreenY(y_max)});
 }
 
 void
@@ -615,6 +614,6 @@ ChartRenderer::DrawWeightBarGraph(const XYDataStore &lsdata)
   for (const auto &i : slots) {
     auto pt_base = ToScreen(i.x, y.min);
     auto pt_top = ToScreen(i.x+i.weight, i.y);
-    canvas.Rectangle(pt_base.x, pt_base.y, pt_top.x, pt_top.y);
+    canvas.DrawRectangle({pt_base.x, pt_base.y, pt_top.x, pt_top.y});
   }
 }

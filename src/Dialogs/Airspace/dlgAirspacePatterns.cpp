@@ -52,8 +52,7 @@ public:
     canvas.SetBackgroundTransparent();
     canvas.Select(look.brushes[i]);
     canvas.SetTextColor(COLOR_BLACK);
-    canvas.Rectangle(rc.left + padding, rc.top + padding,
-                     rc.right - padding, rc.bottom - padding);
+    canvas.DrawRectangle(rc.WithPadding(padding));
   }
 };
 

@@ -136,8 +136,7 @@ DrawShape(Canvas &canvas, AbstractAirspace::Shape shape, const PixelPoint pt,
   if (shape == AbstractAirspace::Shape::CIRCLE)
     canvas.DrawCircle(pt.x, pt.y, radius);
   else if (IsAncientHardware())
-    canvas.Rectangle(pt.x - radius, pt.y - radius,
-                     pt.x + radius, pt.y + radius);
+    canvas.DrawRectangle(PixelRect{pt}.WithMargin(radius));
   else
     canvas.DrawPolygon(&pts[0], (unsigned)pts.size());
 }

@@ -170,24 +170,23 @@ KeyHole(Canvas &canvas, PixelPoint center, unsigned radius,
 }
 
 void
-RoundRect(Canvas &canvas, int left, int top,
-          int right, int bottom, unsigned radius) noexcept
+RoundRect(Canvas &canvas, PixelRect r, unsigned radius) noexcept
 {
   unsigned npoly = 0;
   BulkPixelPoint pt[(CIRCLE_SEGS+2)*4];
 
-  segment_poly(pt, PixelPoint(left + radius, top + radius), radius,
+  segment_poly(pt, {r.left + radius, r.top + radius}, radius,
                INT_ANGLE_RANGE * 3 / 4,
                INT_ANGLE_RANGE - 1,
                npoly);
-  segment_poly(pt, PixelPoint(right - radius, top + radius), radius,
+  segment_poly(pt, {r.right - radius, r.top + radius}, radius,
                0, INT_ANGLE_RANGE / 4 - 1,
                npoly);
-  segment_poly(pt, PixelPoint(right - radius, bottom - radius), radius,
+  segment_poly(pt, {r.right - radius, r.bottom - radius}, radius,
                INT_ANGLE_RANGE / 4,
                INT_ANGLE_RANGE / 2 - 1,
                npoly);
-  segment_poly(pt, PixelPoint(left + radius, bottom - radius), radius,
+  segment_poly(pt, {r.left + radius, r.bottom - radius}, radius,
                INT_ANGLE_RANGE / 2,
                INT_ANGLE_RANGE * 3 / 4 - 1,
                npoly);

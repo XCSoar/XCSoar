@@ -59,9 +59,8 @@ RenderMapScale(Canvas &canvas,
   look.map_scale_left_icon.Draw(canvas, PixelPoint(x, rc.bottom - height));
 
   x += look.map_scale_left_icon.GetSize().width;
-  canvas.DrawFilledRectangle(x, rc.bottom - height,
-                             x + 2 * text_padding_x + text_size.width,
-                             rc.bottom, COLOR_WHITE);
+  canvas.DrawFilledRectangle({{x, rc.bottom - height},
+                              {2 * text_padding_x + text_size.width, height}}, COLOR_WHITE);
 
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(COLOR_BLACK);

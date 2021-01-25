@@ -32,6 +32,7 @@ Copyright_License {
 class Canvas;
 class Angle;
 struct PixelPoint;
+struct PixelRect;
 
 bool
 Segment(Canvas &canvas, PixelPoint center, unsigned radius,
@@ -46,8 +47,7 @@ KeyHole(Canvas &canvas, PixelPoint center, unsigned radius,
         Angle start, Angle end, unsigned inner_radius) noexcept;
 
 void
-RoundRect(Canvas &canvas, int left, int top,
-          int right, int bottom, unsigned radius) noexcept;
+RoundRect(Canvas &canvas, PixelRect r, unsigned radius) noexcept;
 
 bool
 Arc(Canvas &canvas, PixelPoint center, unsigned radius,

@@ -144,8 +144,7 @@ SmallTrafficWindow::OnPaint(Canvas &canvas)
   if (pressed) {
 #ifdef ENABLE_OPENGL
     const ScopeAlphaBlend alpha_blend;
-    canvas.DrawFilledRectangle(0, 0, canvas.GetWidth(), canvas.GetHeight(),
-                               COLOR_YELLOW.WithAlpha(80));
+    canvas.Clear(COLOR_YELLOW.WithAlpha(80));
 #else
     canvas.InvertRectangle(GetClientRect());
 #endif
