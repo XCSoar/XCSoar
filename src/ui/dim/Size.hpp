@@ -40,11 +40,11 @@ struct PixelSize {
   constexpr PixelSize(long _width, long _height) noexcept
     :width(_width), height(_height) {}
 
-  bool operator==(const PixelSize &other) const noexcept {
+  constexpr bool operator==(const PixelSize &other) const noexcept {
     return width == other.width && height == other.height;
   }
 
-  bool operator!=(const PixelSize &other) const noexcept {
+  constexpr bool operator!=(const PixelSize &other) const noexcept {
     return !(*this == other);
   }
 };
