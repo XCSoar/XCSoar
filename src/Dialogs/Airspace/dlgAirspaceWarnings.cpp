@@ -321,8 +321,8 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
     /* the warnings were emptied between the opening of the dialog and
        this refresh, so only need to display "No Warnings" for top
        item, otherwise exit immediately */
-    canvas.DrawText(paint_rc.left + padding,
-                    paint_rc.top + padding, _("No Warnings"));
+    canvas.DrawText(paint_rc.WithPadding(padding).GetTopLeft(),
+                    _("No Warnings"));
     return;
   }
 
@@ -359,14 +359,14 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
                  airspace.GetName(),
                  AirspaceFormatter::GetClass(airspace));
 
-    canvas.DrawClippedText(paint_rc.left + left0, first_row_y,
+    canvas.DrawClippedText({paint_rc.left + left0, first_row_y},
                            rc_text_clip, buffer);
 
     AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetTop());
-    canvas.DrawText(paint_rc.left + left1, first_row_y, buffer);
+    canvas.DrawText({paint_rc.left + left1, first_row_y}, buffer);
 
     AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetBase());
-    canvas.DrawText(paint_rc.left + left1, second_row_y, buffer);
+    canvas.DrawText({paint_rc.left + left1, second_row_y}, buffer);
   }
 
   if (warning.state != AirspaceWarning::WARNING_INSIDE &&
@@ -388,7 +388,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
       FormatRelativeUserAltitude(delta, buffer + _tcslen(buffer), true);
     }
 
-    canvas.DrawClippedText(paint_rc.left + left0, second_row_y,
+    canvas.DrawClippedText({paint_rc.left + left0, second_row_y},
                            rc_text_clip, buffer);
   }
 
@@ -430,8 +430,8 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
 
   if (state_text != NULL) {
     // -- status text will be centered inside its table cell:
-    canvas.DrawText(paint_rc.left + left2 + padding + (status_width / 2) - (canvas.CalcTextWidth(state_text) / 2),
-                    (paint_rc.bottom + paint_rc.top - (int)state_text_size.height) / 2,
+    canvas.DrawText({paint_rc.left + left2 + padding + (status_width / 2) - (canvas.CalcTextWidth(state_text) / 2),
+        (paint_rc.bottom + paint_rc.top - (int)state_text_size.height) / 2},
                     state_text);
   }
 }

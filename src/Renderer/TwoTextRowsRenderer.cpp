@@ -56,7 +56,7 @@ TwoTextRowsRenderer::DrawFirstRow(Canvas &canvas, const PixelRect &rc,
                                   const TCHAR *text) const
 {
   canvas.Select(*first_font);
-  canvas.DrawClippedText(rc.left + x, rc.top + first_y, rc, text);
+  canvas.DrawClippedText({rc.left + x, rc.top + first_y}, rc, text);
 }
 
 void
@@ -64,7 +64,7 @@ TwoTextRowsRenderer::DrawSecondRow(Canvas &canvas, const PixelRect &rc,
                                    const TCHAR *text) const
 {
   canvas.Select(*second_font);
-  canvas.DrawClippedText(rc.left + x, rc.top + second_y, rc, text);
+  canvas.DrawClippedText({rc.left + x, rc.top + second_y}, rc, text);
 }
 
 int
@@ -79,7 +79,7 @@ TwoTextRowsRenderer::DrawRightFirstRow(Canvas &canvas, const PixelRect &rc,
        better we can do?) */
     return rc.right;
 
-  canvas.DrawText(text_x, rc.top + first_y, text);
+  canvas.DrawText({text_x, rc.top + first_y}, text);
   return text_x - x;
 }
 
@@ -95,6 +95,6 @@ TwoTextRowsRenderer::DrawRightSecondRow(Canvas &canvas, const PixelRect &rc,
        better we can do?) */
     return rc.right;
 
-  canvas.DrawText(text_x, rc.top + second_y, text);
+  canvas.DrawText({text_x, rc.top + second_y}, text);
   return text_x - x;
 }

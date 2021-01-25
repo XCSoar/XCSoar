@@ -184,7 +184,7 @@ ChartRenderer::DrawLabel(const TCHAR *text, const double xv, const double yv)
                      pt.x + tsize.width / 2 + padding_text,
                      pt.y + tsize.height / 2 + padding_text);
   }
-  canvas.DrawText(pt.x - tsize.width / 2, pt.y - tsize.height / 2, text);
+  canvas.DrawText({pt.x - tsize.width / 2, pt.y - tsize.height / 2}, text);
 }
 
 void
@@ -193,8 +193,7 @@ ChartRenderer::DrawNoData(const TCHAR *text)
   canvas.Select(look.label_font);
   canvas.SetBackgroundTransparent();
 
-  const auto p = rc.CenteredTopLeft(canvas.CalcTextSize(text));
-  canvas.DrawText(p.x, p.y, text);
+  canvas.DrawText(rc.CenteredTopLeft(canvas.CalcTextSize(text)), text);
 }
 
 void
@@ -207,7 +206,7 @@ ChartRenderer::DrawXLabel(const TCHAR *text)
   int x = rc.right - tsize.width - Layout::GetTextPadding();
   int y = rc.bottom - tsize.height - Layout::GetTextPadding();
 
-  canvas.DrawText(x, y, text);
+  canvas.DrawText({x, y}, text);
 }
 
 void
@@ -227,10 +226,7 @@ ChartRenderer::DrawYLabel(const TCHAR *text)
   canvas.Select(look.axis_label_font);
   canvas.SetBackgroundTransparent();
 
-  int x = rc.left + Layout::GetTextPadding();
-  int y = rc.top + Layout::GetTextPadding();
-
-  canvas.DrawText(x, y, text);
+  canvas.DrawText(rc.WithPadding(Layout::GetTextPadding()).GetTopLeft(), text);
 }
 
 void
@@ -458,7 +454,7 @@ ChartRenderer::DrawXGrid(double tic_step, double unit_step, UnitFormat unit_form
             const auto w = canvas.CalcTextSize(unit_text).width;
             xmin -= w/2;
             if ((xmin >= next_text) && ((int)(xmin + Layout::VptScale(30)) < rc_chart.right)) {
-              canvas.DrawText(xmin, y, unit_text);
+              canvas.DrawText({xmin, y}, unit_text);
               next_text = xmin + w + Layout::GetTextPadding();
             }
           }
@@ -516,7 +512,7 @@ ChartRenderer::DrawYGrid(double tic_step, double unit_step, UnitFormat unit_form
             TCHAR unit_text[MAX_PATH];
             FormatTicText(unit_text, yval * unit_step / tic_step, unit_step, unit_format);
             const auto c = canvas.CalcTextSize(unit_text);
-            canvas.DrawText(std::max(x - (int)c.width, rc.left + padding_text), ymin-c.height/2, unit_text);
+            canvas.DrawText({std::max(x - (int)c.width, rc.left + padding_text), ymin - c.height / 2}, unit_text);
           }
         }
       }

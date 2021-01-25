@@ -184,7 +184,7 @@ KnobTextEntryWindow::OnPaint(Canvas &canvas)
 
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(COLOR_WHITE);
-  canvas.DrawText(p[0].x, p[0].y, buffer);
+  canvas.DrawText(p[0], buffer);
 }
 
 void

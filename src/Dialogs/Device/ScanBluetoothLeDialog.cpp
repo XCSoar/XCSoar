@@ -176,7 +176,7 @@ ScanBluetoothLeWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   if (StringIsEmpty(name))
     name = item.address.c_str();
 
-  canvas.DrawText(rc.left + margin, rc.top + margin, name);
+  canvas.DrawText(rc.WithPadding(margin).GetTopLeft(), name);
 }
 
 std::string

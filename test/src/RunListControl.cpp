@@ -34,7 +34,7 @@ PaintItemCallback(Canvas &canvas, const PixelRect rc, unsigned idx)
 {
   TCHAR text[32];
   _stprintf(text, _T("%u"), idx);
-  canvas.DrawText(rc.left + 2, rc.top + 2, text);
+  canvas.DrawText(rc.WithPadding(2).GetTopLeft(), text);
 }
 
 static void

@@ -448,7 +448,7 @@ public:
 };
 
 static void
-MapWaypointLabelRender(Canvas &canvas, unsigned width, unsigned height,
+MapWaypointLabelRender(Canvas &canvas, PixelSize clip_size,
                        LabelBlock &label_block,
                        WaypointLabelList &labels,
                        const WaypointLook &look)
@@ -458,8 +458,7 @@ MapWaypointLabelRender(Canvas &canvas, unsigned width, unsigned height,
   for (const auto &l : labels) {
     canvas.Select(l.bold ? *look.bold_font : *look.font);
 
-    TextInBox(canvas, l.Name, l.Pos.x, l.Pos.y, l.Mode,
-              width, height, &label_block);
+    TextInBox(canvas, l.Name, l.Pos, l.Mode, clip_size, &label_block);
   }
 }
 
@@ -500,8 +499,6 @@ WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
 
   v.Draw(canvas);
 
-  MapWaypointLabelRender(canvas,
-                         projection.GetScreenWidth(),
-                         projection.GetScreenHeight(),
+  MapWaypointLabelRender(canvas, projection.GetScreenSize(),
                          label_block, v.labels, look);
 }

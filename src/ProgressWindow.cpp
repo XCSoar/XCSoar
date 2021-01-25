@@ -162,9 +162,9 @@ ProgressWindow::OnPaint(Canvas &canvas)
 #endif
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(COLOR_BLACK);
-  canvas.DrawText((message_position.left + message_position.right
-                   - canvas.CalcTextWidth(message.c_str())) / 2,
-                  message_position.top,
+  canvas.DrawText({(message_position.left + message_position.right
+                    - canvas.CalcTextWidth(message.c_str())) / 2,
+      message_position.top},
                   message.c_str());
 
   ContainerWindow::OnPaint(canvas);

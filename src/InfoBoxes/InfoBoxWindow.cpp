@@ -81,7 +81,7 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
   int x = std::max(1, title_rect.left + halftextwidth);
   int y = title_rect.top;
 
-  canvas.TextAutoClipped(x, y, data.title);
+  canvas.TextAutoClipped({x, y}, data.title);
 
   if (settings.border_style == InfoBoxSettings::BorderStyle::TAB &&
       halftextwidth > Layout::Scale(3)) {
@@ -136,7 +136,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas, Color background_color)
 
   int y = (value_rect.top + value_rect.bottom - value_size.height) / 2;
 
-  canvas.TextAutoClipped(x, y, data.value);
+  canvas.TextAutoClipped({x, y}, data.value);
 
   if (unit_width != 0) {
     const int unit_height =
@@ -167,7 +167,7 @@ InfoBoxWindow::PaintComment(Canvas &canvas)
                    (comment_rect.left + comment_rect.right - (int)tsize.width) / 2);
   int y = comment_rect.top;
 
-  canvas.TextAutoClipped(x, y, data.comment);
+  canvas.TextAutoClipped({x, y}, data.comment);
 }
 
 void

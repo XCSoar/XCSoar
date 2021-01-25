@@ -304,7 +304,7 @@ FlarmTrafficControl::PaintClimbRate(Canvas &canvas, PixelRect rc,
   // Paint label
   canvas.Select(look.info_labels_font);
   const unsigned label_width = canvas.CalcTextSize(_("Vario")).width;
-  canvas.DrawText(rc.right - label_width, rc.top, _("Vario"));
+  canvas.DrawText({rc.right - label_width, rc.top}, _("Vario"));
 
   // Format climb rate
   TCHAR buffer[20];
@@ -329,8 +329,7 @@ FlarmTrafficControl::PaintClimbRate(Canvas &canvas, PixelRect rc,
   const int y = rc.top + look.info_units_font.GetHeight() + max_height;
 
   // Paint value
-  canvas.DrawText(rc.right - unit_width - space_width - value_width,
-                  y - value_height,
+  canvas.DrawText({rc.right - unit_width - space_width - value_width, y - value_height},
                   buffer);
 
   // Paint unit
@@ -365,7 +364,7 @@ FlarmTrafficControl::PaintDistance(Canvas &canvas, PixelRect rc,
   const unsigned max_height = std::max(unit_height, value_height);
 
   // Paint value
-  canvas.DrawText(rc.left, rc.bottom - value_height, buffer);
+  canvas.DrawText({rc.left, rc.bottom - value_height}, buffer);
 
   // Paint unit
   canvas.Select(look.info_units_font);
@@ -377,8 +376,7 @@ FlarmTrafficControl::PaintDistance(Canvas &canvas, PixelRect rc,
 
   // Paint label
   canvas.Select(look.info_labels_font);
-  canvas.DrawText(rc.left,
-                  rc.bottom - max_height - look.info_labels_font.GetHeight(),
+  canvas.DrawText({rc.left, rc.bottom - max_height - look.info_labels_font.GetHeight()},
                   _("Distance"));
 }
 
@@ -408,8 +406,7 @@ FlarmTrafficControl::PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
   const unsigned max_height = std::max(unit_height, value_height);
 
   // Paint value
-  canvas.DrawText(rc.right - unit_width - space_width - value_width,
-                  rc.bottom - value_height,
+  canvas.DrawText({rc.right - unit_width - space_width - value_width, rc.bottom - value_height},
                   buffer);
 
   // Paint unit
@@ -423,8 +420,7 @@ FlarmTrafficControl::PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
   // Paint label
   canvas.Select(look.info_labels_font);
   const unsigned label_width = canvas.CalcTextSize(_("Rel. Alt.")).width;
-  canvas.DrawText(rc.right - label_width,
-                  rc.bottom - max_height - look.info_labels_font.GetHeight(),
+  canvas.DrawText({rc.right - label_width, rc.bottom - max_height - look.info_labels_font.GetHeight()},
                   _("Rel. Alt."));
 }
 
@@ -478,7 +474,7 @@ FlarmTrafficControl::PaintID(Canvas &canvas, PixelRect rc,
     }
   }
 
-  canvas.DrawText(rc.left, rc.top, buffer);
+  canvas.DrawText(rc.GetTopLeft(), buffer);
 }
 
 /**

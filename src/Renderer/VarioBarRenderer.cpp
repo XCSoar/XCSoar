@@ -230,7 +230,7 @@ VarioBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   if (text_size.width < Layout::Scale(18u)) {
     style.align = TextInBoxMode::Alignment::RIGHT;
-    TextInBox(canvas, Value, rc.right, y0, style, rc);
+    TextInBox(canvas, Value, {rc.right, y0}, style, rc);
   } else
-    TextInBox(canvas, Value, rc.right-Layout::Scale(18), y0, style, rc);
+    TextInBox(canvas, Value, {rc.right - Layout::Scale(18), y0}, style, rc);
 }

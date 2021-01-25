@@ -143,7 +143,7 @@ UnitSymbolRenderer::Draw(Canvas &canvas, const PixelPoint pos,
   assert(strings.line2 != nullptr);
 
   if (!strings.line1) {
-    canvas.DrawText(pos.x, pos.y, strings.line2);
+    canvas.DrawText(pos, strings.line2);
     return;
   }
 
@@ -157,9 +157,9 @@ UnitSymbolRenderer::Draw(Canvas &canvas, const PixelPoint pos,
                       pos.x + size1.width, pos.y + size1.height);
     }
 
-    canvas.DrawText(pos.x, pos.y, strings.line1);
-    int x = pos.x + (size1.width - size2.width) / 2;
-    canvas.DrawText(x, pos.y + size1.height, strings.line2);
+    canvas.DrawText(pos, strings.line1);
+    canvas.DrawText({pos.x + (size1.width - size2.width) / 2,
+        pos.y + size1.height}, strings.line2);
   } else {
     if (strings.is_fraction) {
       canvas.Select(unit_fraction_pen);
@@ -168,7 +168,7 @@ UnitSymbolRenderer::Draw(Canvas &canvas, const PixelPoint pos,
     }
 
     int x = pos.x + (size2.width - size1.width) / 2;
-    canvas.DrawText(x, pos.y, strings.line1);
-    canvas.DrawText(pos.x, pos.y + size1.height, strings.line2);
+    canvas.DrawText({x, pos.y}, strings.line1);
+    canvas.DrawText({pos.x, pos.y + size1.height}, strings.line2);
   }
 }

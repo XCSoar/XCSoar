@@ -129,51 +129,51 @@ Canvas::GetFontHeight() const
 }
 
 void
-Canvas::DrawText(int x, int y, const TCHAR *text)
+Canvas::DrawText(PixelPoint p, const TCHAR *text) noexcept
 {
   assert(IsDefined());
 
-  ::ExtTextOut(dc, x, y, 0, nullptr, text, _tcslen(text), nullptr);
+  ::ExtTextOut(dc, p.x, p.y, 0, nullptr, text, _tcslen(text), nullptr);
 }
 
 void
-Canvas::DrawText(int x, int y,
-                 const TCHAR *text, size_t length)
+Canvas::DrawText(PixelPoint p, const TCHAR *text, size_t length)
 {
   assert(IsDefined());
 
-  ::ExtTextOut(dc, x, y, 0, nullptr, text, length, nullptr);
+  ::ExtTextOut(dc, p.x, p.y, 0, nullptr, text, length, nullptr);
 }
 
 void
-Canvas::DrawOpaqueText(int x, int y, const PixelRect &_rc,
+Canvas::DrawOpaqueText(PixelPoint p, const PixelRect &_rc,
                        const TCHAR *text)
 {
   assert(IsDefined());
 
   RECT rc = _rc;
-  ::ExtTextOut(dc, x, y, ETO_OPAQUE, &rc, text, _tcslen(text), nullptr);
+  ::ExtTextOut(dc, p.x, p.y, ETO_OPAQUE, &rc, text, _tcslen(text), nullptr);
 }
 
 void
-Canvas::DrawClippedText(int x, int y, const PixelRect &_rc,
+Canvas::DrawClippedText(PixelPoint p, const PixelRect &_rc,
                         const TCHAR *text)
 {
   assert(IsDefined());
 
   RECT rc = _rc;
-  ::ExtTextOut(dc, x, y, ETO_CLIPPED, &rc, text, _tcslen(text), nullptr);
+  ::ExtTextOut(dc, p.x, p.y, ETO_CLIPPED, &rc, text, _tcslen(text), nullptr);
 }
 
 void
-Canvas::DrawClippedText(int x, int y, unsigned width,
+Canvas::DrawClippedText(PixelPoint p, unsigned width,
                         const TCHAR *text)
 {
   const PixelSize size = CalcTextSize(text);
 
   RECT rc;
-  ::SetRect(&rc, x, y, x + std::min(width, size.width), y + size.height);
-  ::ExtTextOut(dc, x, y, ETO_CLIPPED, &rc, text, _tcslen(text), nullptr);
+  ::SetRect(&rc, p.x, p.y,
+            p.x + std::min(width, size.width), p.y + size.height);
+  ::ExtTextOut(dc, p.x, p.y, ETO_CLIPPED, &rc, text, _tcslen(text), nullptr);
 }
 
 void

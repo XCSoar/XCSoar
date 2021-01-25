@@ -260,7 +260,7 @@ protected:
   /* virtual methods from ListItemRenderer */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
                    unsigned idx) noexcept override {
-    canvas.DrawText(rc.left + 2, rc.top + 2, oz_type_names[idx]);
+    canvas.DrawText(rc.WithPadding(2).GetTopLeft(), oz_type_names[idx]);
   }
 
   /* virtual methods from ListCursorHandler */

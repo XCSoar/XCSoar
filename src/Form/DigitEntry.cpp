@@ -1041,7 +1041,7 @@ DigitEntry::OnPaint(Canvas &canvas)
 
     const int x = (c.left + c.right - canvas.CalcTextWidth(text)) / 2;
 
-    canvas.DrawOpaqueText(x, y, rc, text);
+    canvas.DrawOpaqueText({x, y}, rc, text);
   }
 
   canvas.SetBackgroundTransparent();

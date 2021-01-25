@@ -97,8 +97,7 @@ WaypointExternalFileListHandler::OnPaintItem(Canvas &canvas,
 {
   auto file = waypoint->files_external.begin();
   std::advance(file, i);
-  canvas.DrawText(paint_rc.left + Layout::GetTextPadding(),
-                  paint_rc.top + Layout::GetTextPadding(),
+  canvas.DrawText(paint_rc.WithPadding(Layout::GetTextPadding()).GetTopLeft(),
                   file->c_str());
 }
 #endif

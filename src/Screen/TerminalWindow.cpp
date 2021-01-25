@@ -150,7 +150,7 @@ TerminalWindow::OnPaint(Canvas &canvas, const PixelRect &p_dirty)
     canvas.DrawFilledRectangle(p_dirty.left, p_y,
                           p_dirty.right, p_y + cell_size.height,
                           look.background_color);
-    canvas.DrawText(x, p_y, text, length);
+    canvas.DrawText({x, p_y}, text, length);
   }
 
   int cell_bottom_y(cell_dirty.bottom * cell_size.height);

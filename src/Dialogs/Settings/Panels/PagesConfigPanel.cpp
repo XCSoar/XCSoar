@@ -375,8 +375,7 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     gcc_unreachable();
   }
 
-  canvas.DrawText(rc.left + Layout::GetTextPadding(),
-                  rc.top + Layout::GetTextPadding(),
+  canvas.DrawText(rc.WithPadding(Layout::GetTextPadding()).GetTopLeft(),
                   buffer);
 }
 

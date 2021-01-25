@@ -594,7 +594,7 @@ PrepareColoredAlphaTexture(Color color)
 }
 
 void
-Canvas::DrawText(int x, int y, const TCHAR *text)
+Canvas::DrawText(PixelPoint p, const TCHAR *text) noexcept
 {
   assert(text != nullptr);
 #ifdef UNICODE
@@ -611,7 +611,7 @@ Canvas::DrawText(int x, int y, const TCHAR *text)
   if (font == nullptr)
     return;
 
-  const StringView text3 = ClipText(text2, x, size.width);
+  const StringView text3 = ClipText(text2, p.x, size.width);
   if (text3.empty())
     return;
 
@@ -620,8 +620,9 @@ Canvas::DrawText(int x, int y, const TCHAR *text)
     return;
 
   if (background_mode == OPAQUE)
-    DrawFilledRectangle(x, y,
-                        x + texture->GetWidth(), y + texture->GetHeight(),
+    DrawFilledRectangle(p.x, p.y,
+                        p.x + texture->GetWidth(),
+                        p.y + texture->GetHeight(),
                         background_color);
 
   PrepareColoredAlphaTexture(text_color);
@@ -629,11 +630,11 @@ Canvas::DrawText(int x, int y, const TCHAR *text)
   const ScopeAlphaBlend alpha_blend;
 
   texture->Bind();
-  texture->Draw(PixelPoint(x, y));
+  texture->Draw(p);
 }
 
 void
-Canvas::DrawTransparentText(int x, int y, const TCHAR *text)
+Canvas::DrawTransparentText(PixelPoint p, const TCHAR *text) noexcept
 {
   assert(text != nullptr);
 #ifdef UNICODE
@@ -650,7 +651,7 @@ Canvas::DrawTransparentText(int x, int y, const TCHAR *text)
   if (font == nullptr)
     return;
 
-  const StringView text3 = ClipText(text2, x, size.width);
+  const StringView text3 = ClipText(text2, p.x, size.width);
   if (text3.empty())
     return;
 
@@ -663,12 +664,11 @@ Canvas::DrawTransparentText(int x, int y, const TCHAR *text)
   const ScopeAlphaBlend alpha_blend;
 
   texture->Bind();
-  texture->Draw(PixelPoint(x, y));
+  texture->Draw(p);
 }
 
 void
-Canvas::DrawClippedText(int x, int y,
-                        unsigned width, unsigned height,
+Canvas::DrawClippedText(PixelPoint p, PixelSize size,
                         const TCHAR *text)
 {
   assert(text != nullptr);
@@ -686,7 +686,7 @@ Canvas::DrawClippedText(int x, int y,
   if (font == nullptr)
     return;
 
-  const StringView text3 = ClipText(text2, 0, width);
+  const StringView text3 = ClipText(text2, 0, size.width);
   if (text3.empty())
     return;
 
@@ -694,18 +694,17 @@ Canvas::DrawClippedText(int x, int y,
   if (texture == nullptr)
     return;
 
-  if (texture->GetHeight() < height)
-    height = texture->GetHeight();
-  if (texture->GetWidth() < width)
-    width = texture->GetWidth();
+  if (texture->GetHeight() < size.height)
+    size.height = texture->GetHeight();
+  if (texture->GetWidth() < size.width)
+    size.width = texture->GetWidth();
 
   PrepareColoredAlphaTexture(text_color);
 
   const ScopeAlphaBlend alpha_blend;
 
   texture->Bind();
-  texture->Draw(PixelRect(PixelPoint(x, y), PixelSize(width, height)),
-                PixelRect(0, 0, width, height));
+  texture->Draw({p, size}, PixelRect{size});
 }
 
 void

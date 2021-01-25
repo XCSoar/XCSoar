@@ -150,14 +150,12 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
 #endif
 
       // top text
-      int x = rect.right - Layout::GetTextPadding() - topSize.width;
-      int y = rect.top;
-      canvas.DrawText(x, y, topText);
+      canvas.DrawText({rect.right - Layout::GetTextPadding() - topSize.width, rect.top},
+                      topText);
 
       // base text
-      x = rect.right - Layout::GetTextPadding() - baseSize.width;
-      y = rect.bottom - baseSize.height;
-      canvas.DrawText(x, y, baseText);
+      canvas.DrawText({rect.right - Layout::GetTextPadding() - baseSize.width, rect.bottom - baseSize.height},
+                      baseText);
     }
   }
 }

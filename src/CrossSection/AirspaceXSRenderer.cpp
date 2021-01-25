@@ -201,7 +201,7 @@ AirspaceIntersectionVisitorSlice::Render(const AbstractAirspace &as) const
       : (min_x + max_x - name_size.width) / 2;
     const int y = (rcd.top + rcd.bottom - name_size.height) / 2;
 
-    canvas.DrawClippedText(x, y, max_x - x, name);
+    canvas.DrawClippedText({x, y}, max_x - x, name);
   }
 }
 

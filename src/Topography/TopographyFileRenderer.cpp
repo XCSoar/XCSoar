@@ -510,7 +510,7 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
       if (!drawn_labels.insert(label).second)
         continue;
 
-      canvas.DrawText(minx, miny, label);
+      canvas.DrawText({minx, miny}, label);
     }
   }
 }

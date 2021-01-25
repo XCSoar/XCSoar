@@ -46,10 +46,8 @@ void
 TextRowRenderer::DrawTextRow(Canvas &canvas, const PixelRect &rc,
                              const TCHAR *text) const
 {
-    canvas.DrawClippedText(rc.left + left_padding,
-                           rc.top + top_padding,
-                           rc,
-                           text);
+  canvas.DrawClippedText({rc.left + left_padding, rc.top + top_padding},
+                         rc, text);
 }
 
 int
@@ -93,6 +91,6 @@ TextRowRenderer::DrawRightColumn(Canvas &canvas, const PixelRect &rc,
        better we can do?) */
     return rc.right;
 
-  canvas.DrawText(x, rc.top + top_padding, text);
+  canvas.DrawText({x, rc.top + top_padding}, text);
   return x - left_padding;
 }

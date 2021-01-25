@@ -216,5 +216,5 @@ CheckBoxControl::OnPaint(Canvas &canvas)
   canvas.Select(*cb_look.font);
   canvas.SetTextColor(state_look.text_color);
   canvas.SetBackgroundTransparent();
-  canvas.DrawText(canvas.GetHeight() + 2, 2, caption.c_str());
+  canvas.DrawText({canvas.GetHeight() + 2, 2}, caption.c_str());
 }

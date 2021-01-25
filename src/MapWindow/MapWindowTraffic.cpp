@@ -97,7 +97,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     if (dx * dx + dy * dy > Layout::Scale(30 * 30)) {
       // If FLARM callsign/name available draw it to the canvas
       if (traffic.HasName() && !StringIsEmpty(traffic.name))
-        TextInBox(canvas, traffic.name, sc_name.x, sc_name.y,
+        TextInBox(canvas, traffic.name, sc_name,
                   mode, GetClientRect());
 
       if (traffic.climb_rate_avg30s >= 0.1) {
@@ -105,7 +105,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
         TCHAR label_avg[100];
         FormatUserVerticalSpeed(traffic.climb_rate_avg30s,
                                        label_avg, false);
-        TextInBox(canvas, label_avg, sc_av.x, sc_av.y, mode, GetClientRect());
+        TextInBox(canvas, label_avg, sc_av, mode, GetClientRect());
       }
     }
 
@@ -175,7 +175,7 @@ MapWindow::DrawGLinkTraffic(Canvas &canvas,
 
     // If callsign/name available draw it to the canvas
     if (traf.HasName() && !StringIsEmpty(traf.name))
-      TextInBox(canvas, traf.name, sc_name.x, sc_name.y,
+      TextInBox(canvas, traf.name, sc_name,
                 mode, GetClientRect());
 
     if (traf.climb_rate_received) {
@@ -185,7 +185,7 @@ MapWindow::DrawGLinkTraffic(Canvas &canvas,
       FormatUserVerticalSpeed(traf.climb_rate,
                                      label_avg, false);
       mode.align = TextInBoxMode::Alignment::LEFT;
-      TextInBox(canvas, label_avg, sc_av.x, sc_av.y, mode, GetClientRect());
+      TextInBox(canvas, label_avg, sc_av, mode, GetClientRect());
     }
 
     // use GPS altitude to be consistent with GliderLink
@@ -197,7 +197,7 @@ MapWindow::DrawGLinkTraffic(Canvas &canvas,
       FormatRelativeUserAltitude(alt, label_alt, false);
 
       mode.align = TextInBoxMode::Alignment::RIGHT;
-      TextInBox(canvas, label_alt, sc_alt.x, sc_alt.y, mode, GetClientRect());
+      TextInBox(canvas, label_alt, sc_alt, mode, GetClientRect());
     }
 
     TrafficRenderer::Draw(canvas, traffic_look, traf,
@@ -253,8 +253,7 @@ MapWindow::DrawSkyLinesTraffic(Canvas &canvas) const
 
         // Draw the name 16 points below the icon
         pt.y -= Layout::Scale(10);
-        TextInBox(canvas, buffer, pt.x, pt.y,
-                  mode, GetClientRect());
+        TextInBox(canvas, buffer, pt, mode, GetClientRect());
       }
     }
   }

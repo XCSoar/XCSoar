@@ -312,9 +312,9 @@ WndProperty::OnPaint(Canvas &canvas)
       org.x = 1;
 
     if (HaveClipping())
-      canvas.DrawText(org.x, org.y, caption.c_str());
+      canvas.DrawText(org, caption.c_str());
     else
-      canvas.DrawClippedText(org.x, org.y, caption_width - org.x,
+      canvas.DrawClippedText(org, caption_width - org.x,
                              caption.c_str());
   }
 
@@ -350,7 +350,7 @@ WndProperty::OnPaint(Canvas &canvas)
     const int text_height = canvas.GetFontHeight();
     const int y = edit_rc.top + (canvas_height - text_height) / 2;
 
-    canvas.TextAutoClipped(x, y, value.c_str());
+    canvas.TextAutoClipped({x, y}, value.c_str());
   }
 }
 

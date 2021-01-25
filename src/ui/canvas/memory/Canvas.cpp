@@ -292,7 +292,7 @@ CopyTextRectangle(SDLRasterCanvas &canvas, int x, int y,
 }
 
 void
-Canvas::DrawText(int x, int y, const TCHAR *text)
+Canvas::DrawText(PixelPoint p, const TCHAR *text) noexcept
 {
   assert(text != nullptr);
 #ifndef UNICODE
@@ -304,13 +304,13 @@ Canvas::DrawText(int x, int y, const TCHAR *text)
     return;
 
   SDLRasterCanvas canvas(buffer);
-  CopyTextRectangle(canvas, x, y, s.width, s.height, s,
+  CopyTextRectangle(canvas, p.x, p.y, s.width, s.height, s,
                     text_color, background_color,
                     background_mode == OPAQUE);
 }
 
 void
-Canvas::DrawTransparentText(int x, int y, const TCHAR *text)
+Canvas::DrawTransparentText(PixelPoint p, const TCHAR *text) noexcept
 {
   assert(text != nullptr);
 #ifndef UNICODE
@@ -324,19 +324,21 @@ Canvas::DrawTransparentText(int x, int y, const TCHAR *text)
   SDLRasterCanvas canvas(buffer);
   ColoredAlphaPixelOperations<ActivePixelTraits, GreyscalePixelTraits>
     transparent(canvas.Import(text_color));
-  CopyTextRectangle(canvas, x, y, s.width, s.height, transparent, s);
+  CopyTextRectangle(canvas, p.x, p.y, s.width, s.height, transparent, s);
 }
 
 void
-Canvas::DrawClippedText(int x, int y, const PixelRect &rc, const TCHAR *text)
+Canvas::DrawClippedText(PixelPoint p, const PixelRect &rc,
+                        const TCHAR *text) noexcept
 {
   // TODO: implement full clipping
-  if (rc.right > x)
-    DrawClippedText(x, y, rc.right - x, text);
+  if (rc.right > p.x)
+    DrawClippedText(p, rc.right - p.x, text);
 }
 
 void
-Canvas::DrawClippedText(int x, int y, unsigned width, const TCHAR *text)
+Canvas::DrawClippedText(PixelPoint p, unsigned width,
+                        const TCHAR *text) noexcept
 {
   assert(text != nullptr);
 #ifndef UNICODE
@@ -351,7 +353,7 @@ Canvas::DrawClippedText(int x, int y, unsigned width, const TCHAR *text)
     width = s.width;
 
   SDLRasterCanvas canvas(buffer);
-  CopyTextRectangle(canvas, x, y, width, s.height, s,
+  CopyTextRectangle(canvas, p.x, p.y, width, s.height, s,
                     text_color, background_color,
                     background_mode == OPAQUE);
 

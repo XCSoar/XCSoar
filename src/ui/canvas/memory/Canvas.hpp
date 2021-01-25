@@ -328,22 +328,24 @@ public:
     return font != nullptr ? font->GetHeight() : 0;
   }
 
-  void DrawText(int x, int y, const TCHAR *text);
-  void DrawText(int x, int y,
-                const TCHAR *text, size_t length);
+  void DrawText(PixelPoint p, const TCHAR *text) noexcept;
+  void DrawText(PixelPoint p, const TCHAR *text, size_t length) noexcept;
 
-  void DrawTransparentText(int x, int y, const TCHAR *text);
+  void DrawTransparentText(PixelPoint p, const TCHAR *text) noexcept;
 
-  void DrawOpaqueText(int x, int y, const PixelRect &rc, const TCHAR *text);
+  void DrawOpaqueText(PixelPoint p, const PixelRect &rc,
+                      const TCHAR *text) noexcept;
 
-  void DrawClippedText(int x, int y, const PixelRect &rc, const TCHAR *text);
-  void DrawClippedText(int x, int y, unsigned width, const TCHAR *text);
+  void DrawClippedText(PixelPoint p, const PixelRect &rc,
+                       const TCHAR *text) noexcept;
+  void DrawClippedText(PixelPoint p, unsigned width,
+                       const TCHAR *text) noexcept;
 
   /**
    * Render text, clip it within the bounds of this Canvas.
    */
-  void TextAutoClipped(int x, int y, const TCHAR *t) {
-    DrawText(x, y, t);
+  void TextAutoClipped(PixelPoint p, const TCHAR *t) noexcept {
+    DrawText(p, t);
   }
 
   /**
@@ -351,7 +353,8 @@ public:
    *
    * @return the resulting text height
    */
-  unsigned DrawFormattedText(PixelRect r, const TCHAR *text, unsigned format);
+  unsigned DrawFormattedText(PixelRect r, const TCHAR *text,
+                             unsigned format) noexcept;
 
   void Copy(PixelPoint dest_position, PixelSize dest_size,
             ConstImageBuffer src, PixelPoint src_position) noexcept;

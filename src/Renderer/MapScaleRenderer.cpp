@@ -66,8 +66,7 @@ RenderMapScale(Canvas &canvas,
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(COLOR_BLACK);
   x += text_padding_x;
-  canvas.DrawText(x,
-                  rc.bottom - font.GetAscentHeight() - Layout::Scale(1),
+  canvas.DrawText({x, rc.bottom - font.GetAscentHeight() - Layout::Scale(1)},
                   buffer);
 
   x += text_padding_x + text_size.width;

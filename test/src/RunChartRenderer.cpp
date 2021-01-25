@@ -168,7 +168,7 @@ protected:
                    unsigned idx) noexcept override {
     assert(idx < ARRAY_SIZE(chart_names));
 
-    canvas.DrawText(rc.left + 2, rc.top + 2, chart_names[idx]);
+    canvas.DrawText(rc.WithPadding(2).GetTopLeft(), chart_names[idx]);
   }
 
   /* virtual methods from ListCursorHandler */

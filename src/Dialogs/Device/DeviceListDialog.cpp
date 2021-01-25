@@ -357,7 +357,7 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   }
 
   canvas.Select(*look.list.font);
-  canvas.DrawText(rc.left + margin, rc.top + margin, text);
+  canvas.DrawText({rc.left + margin, rc.top + margin}, text);
 
   /* show a list of features that are available in the second row */
 
@@ -433,7 +433,7 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   }
 
   canvas.Select(look.small_font);
-  canvas.DrawText(rc.left + margin, rc.top + 2 * margin + font_height,
+  canvas.DrawText({rc.left + margin, rc.top + 2 * margin + font_height},
                   status);
 }
 

@@ -351,37 +351,36 @@ public:
     return font != nullptr ? font->GetHeight() : 0;
   }
 
-  void DrawText(int x, int y, const TCHAR *text);
-  void DrawText(int x, int y, const TCHAR *text, size_t length);
+  void DrawText(PixelPoint p, const TCHAR *text) noexcept;
+  void DrawText(PixelPoint p, const TCHAR *text, size_t length) noexcept;
 
-  void DrawTransparentText(int x, int y, const TCHAR *text);
+  void DrawTransparentText(PixelPoint p, const TCHAR *text) noexcept;
 
-  void DrawOpaqueText(int x, int y, const PixelRect &rc,
-                      const TCHAR *text);
+  void DrawOpaqueText(PixelPoint p, const PixelRect &rc,
+                      const TCHAR *text) noexcept;
 
-  void DrawClippedText(int x, int y, const PixelRect &rc,
-                       const TCHAR *text) {
+  void DrawClippedText(PixelPoint p, const PixelRect &rc,
+                       const TCHAR *text) noexcept {
     // XXX
 
-    if (x < rc.right)
-      DrawClippedText(x, y, rc.right - x, text);
+    if (p.x < rc.right)
+      DrawClippedText(p, rc.right - p.x, text);
   }
 
-  void DrawClippedText(int x, int y,
-                       unsigned width, unsigned height,
+  void DrawClippedText(PixelPoint p, PixelSize size,
                        const TCHAR *text);
 
-  void DrawClippedText(int x, int y, unsigned width,
+  void DrawClippedText(PixelPoint p, unsigned width,
                        const TCHAR *text) {
-    DrawClippedText(x, y, width, 16384, text);
+    DrawClippedText(p, {width, 16384u}, text);
   }
 
   /**
    * Render text, clip it within the bounds of this Canvas.
    */
-  void TextAutoClipped(int x, int y, const TCHAR *t) {
-    if (x < (int)GetWidth() && y < (int)GetHeight())
-      DrawClippedText(x, y, GetWidth() - x, GetHeight() - y, t);
+  void TextAutoClipped(PixelPoint p, const TCHAR *t) noexcept {
+    if (p.x < (int)GetWidth() && p.y < (int)GetHeight())
+      DrawClippedText(p, {GetWidth() - p.x, GetHeight() - p.y}, t);
   }
 
   /**
@@ -389,7 +388,8 @@ public:
    *
    * @return the resulting text height
    */
-  unsigned DrawFormattedText(PixelRect r, const TCHAR *text, unsigned format);
+  unsigned DrawFormattedText(PixelRect r, const TCHAR *text,
+                             unsigned format) noexcept;
 
   /**
    * Draws a texture.  The caller is responsible for binding it and
