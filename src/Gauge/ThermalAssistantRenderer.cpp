@@ -128,6 +128,25 @@ ThermalAssistantRenderer::PaintRadarPlane(Canvas &canvas) const
               mid.y + Layout::FastScale(small ? 2 : 4));
 }
 
+static void
+DrawCircleLabel(Canvas &canvas, PixelPoint p,
+                BasicStringView<TCHAR> text) noexcept
+{
+  const auto size = canvas.CalcTextSize(text);
+  p.x -= size.width / 2;
+  p.y -= size.height * 3 / 4;
+
+  canvas.DrawText(p, text);
+}
+
+static void
+DrawCircleLabelVSpeed(Canvas &canvas, PixelPoint p, double value) noexcept
+{
+  TCHAR buffer[10];
+  FormatUserVerticalSpeed(value, buffer, ARRAY_SIZE(buffer));
+  DrawCircleLabel(canvas, p, buffer);
+}
+
 void
 ThermalAssistantRenderer::PaintRadarBackground(Canvas &canvas, double max_lift) const
 {
@@ -146,16 +165,8 @@ ThermalAssistantRenderer::PaintRadarBackground(Canvas &canvas, double max_lift) 
   canvas.SetBackgroundColor(look.background_color);
   canvas.SetBackgroundOpaque();
 
-  TCHAR lift_string[10];
-  FormatUserVerticalSpeed(max_lift, lift_string, ARRAY_SIZE(lift_string));
-  PixelSize s = canvas.CalcTextSize(lift_string);
-  canvas.DrawText({mid.x - s.width / 2, mid.y + radius - s.height * 0.75},
-                  lift_string);
-
-  FormatUserVerticalSpeed(0, lift_string, ARRAY_SIZE(lift_string));
-  s = canvas.CalcTextSize(lift_string);
-  canvas.DrawText({mid.x - s.width / 2, mid.y + radius / 2 - s.height * 0.75},
-                  lift_string);
+  DrawCircleLabelVSpeed(canvas, mid + PixelSize{0u, radius}, max_lift);
+  DrawCircleLabelVSpeed(canvas, mid + PixelSize{0u, radius / 2}, 0);
 
   canvas.SetBackgroundTransparent();
 }
@@ -190,9 +201,9 @@ ThermalAssistantRenderer::PaintNotCircling(Canvas &canvas) const
 
   const TCHAR* str = _("Not Circling");
   canvas.Select(look.overlay_font);
-  PixelSize ts = canvas.CalcTextSize(str);
   canvas.SetTextColor(look.text_color);
-  canvas.DrawText({mid.x - (ts.width / 2), mid.y - (radius / 2)}, str);
+
+  DrawCircleLabel(canvas, mid - PixelSize{0u, radius / 2}, str);
 }
 
 void
