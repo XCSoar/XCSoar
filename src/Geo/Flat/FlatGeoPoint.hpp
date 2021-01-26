@@ -98,12 +98,12 @@ struct FlatGeoPoint : IntPoint2D {
    * @return True if coincident
    */
   constexpr
-  bool operator==(const FlatGeoPoint other) const {
+  bool operator==(const FlatGeoPoint &other) const noexcept {
     return IntPoint2D::operator==(other);
   };
 
   constexpr
-  bool operator!=(const FlatGeoPoint other) const {
+  bool operator!=(const FlatGeoPoint &other) const noexcept {
     return IntPoint2D::operator!=(other);
   };
 
@@ -152,9 +152,12 @@ struct AFlatGeoPoint : public FlatGeoPoint {
    *
    * @return true if location and altitude are equal
    */
-  constexpr
-  bool operator==(const AFlatGeoPoint other) const {
+  constexpr bool operator==(const AFlatGeoPoint &other) const noexcept {
     return FlatGeoPoint::operator==(other) && (altitude == other.altitude);
+  };
+
+  constexpr bool operator!=(const AFlatGeoPoint &other) const noexcept {
+    return !(*this == other);
   };
 
   /**
