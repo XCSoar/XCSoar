@@ -454,17 +454,21 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     FormatRelativeUserAltitude(traffic.relative_altitude, tmp, true);
 
   PixelSize sz = canvas.CalcTextSize(tmp);
+  const PixelPoint tp{
+    sc[i].x + int(Layout::FastScale(11u)),
+    sc[i].y - int(sz.height / 2),
+  };
 
   // Draw vertical speed shadow
   canvas.SetTextColor(COLOR_WHITE);
-  canvas.DrawText({sc[i].x + Layout::FastScale(11) + 1, sc[i].y - sz.height / 2 + 1}, tmp);
-  canvas.DrawText({sc[i].x + Layout::FastScale(11) - 1, sc[i].y - sz.height / 2 - 1}, tmp);
+  canvas.DrawText({tp.x + 1, tp.y + 1}, tmp);
+  canvas.DrawText({tp.y - 1, tp.y - 1}, tmp);
 
   // Select color
   canvas.SetTextColor(*text_color);
 
   // Draw vertical speed
-  canvas.DrawText({sc[i].x + Layout::FastScale(11), sc[i].y - sz.height / 2}, tmp);
+  canvas.DrawText(tp, tmp);
 }
 
 void
