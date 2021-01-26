@@ -54,7 +54,7 @@ ImportLabel(const char *src)
     return nullptr;
 
 #ifdef _UNICODE
-  return BasicAllocatedString<TCHAR>::Donate(ConvertUTF8ToWide(src));
+  return ConvertUTF8ToWide(src);
 #else
   if (!ValidateUTF8(src))
     return nullptr;

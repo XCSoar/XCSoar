@@ -57,7 +57,7 @@ public:
 
 #ifdef _UNICODE
   explicit PathName(const char *_value)
-    :value(Value::Donate(ConvertACPToWide(_value))) {}
+    :value(ConvertACPToWide(_value)) {}
 #endif
 
 public:
@@ -87,7 +87,7 @@ class NarrowPathName {
 public:
 #ifdef _UNICODE
   explicit NarrowPathName(Path _value)
-    :value(Value::Donate(ConvertWideToACP(_value.c_str()))) {}
+    :value(ConvertWideToACP(_value.c_str())) {}
 #else
   explicit NarrowPathName(Path _value)
     :value(_value.c_str()) {}
