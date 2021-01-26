@@ -31,18 +31,13 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Language/Language.hpp"
-#include "Form/ActionListener.hpp"
 #include "Widget/ListWidget.hpp"
 #include "WPASupplicant.hpp"
 #include "net/IPv4Address.hxx"
 #include "ui/event/PeriodicTimer.hpp"
 
 class WifiListWidget final
-  : public ListWidget, ActionListener {
-  enum Buttons {
-    SCAN,
-    CONNECT,
-  };
+  : public ListWidget {
 
   struct NetworkInfo {
     StaticString<32> bssid;
@@ -68,8 +63,12 @@ class WifiListWidget final
 
 public:
   void CreateButtons(WidgetDialog &dialog) {
-    dialog.AddButton(_("Scan"), *this, SCAN);
-    connect_button = dialog.AddButton(_("Connect"), *this, CONNECT);
+    dialog.AddButton(_("Scan"), [this](){
+      if (EnsureConnected() && wpa_supplicant.Scan())
+        UpdateList();
+    });
+
+    connect_button = dialog.AddButton(_("Connect"), [this](){ Connect(); });
   }
 
   void UpdateButtons();
@@ -128,9 +127,6 @@ private:
   void UpdateList();
 
   void Connect();
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
@@ -294,21 +290,6 @@ WifiListWidget::Connect()
   }
 
   UpdateList();
-}
-
-void
-WifiListWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case SCAN:
-    if (EnsureConnected() && wpa_supplicant.Scan())
-      UpdateList();
-    break;
-
-  case CONNECT:
-    Connect();
-    break;
-  }
 }
 
 bool

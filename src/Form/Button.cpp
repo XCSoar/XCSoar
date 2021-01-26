@@ -22,7 +22,6 @@
 */
 
 #include "Form/Button.hpp"
-#include "Form/ActionListener.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "Asset.hpp"
 #include "Renderer/TextButtonRenderer.hpp"
@@ -58,10 +57,9 @@ Button::Create(ContainerWindow &parent, const ButtonLook &look,
 void
 Button::Create(ContainerWindow &parent, const PixelRect &rc,
                WindowStyle style, ButtonRenderer *_renderer,
-               ActionListener &_listener, int _id)
+               Callback _callback) noexcept
 {
-  listener = &_listener;
-  id = _id;
+  callback = std::move(_callback);
 
   Create(parent, rc, style, _renderer);
 }
@@ -70,10 +68,10 @@ void
 Button::Create(ContainerWindow &parent, const ButtonLook &look,
                const TCHAR *caption, const PixelRect &rc,
                WindowStyle style,
-               ActionListener &_listener, int _id) {
+               Callback _callback) noexcept {
   Create(parent, rc, style,
          new TextButtonRenderer(look, caption),
-         _listener, _id);
+         std::move(_callback));
 }
 
 void
@@ -120,8 +118,8 @@ Button::SetDown(bool _down)
 bool
 Button::OnClicked()
 {
-  if (listener != nullptr) {
-    listener->OnAction(id);
+  if (callback) {
+    callback();
     return true;
   }
 

@@ -32,7 +32,7 @@ Copyright_License {
 #include "FLARM/Version.hpp"
 
 class ManageFLARMWidget final
-  : public RowFormWidget, private ActionListener {
+  : public RowFormWidget {
   enum Controls {
     Setup,
     Reboot,
@@ -48,10 +48,6 @@ public:
 
   /* virtual methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-
-private:
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
@@ -79,29 +75,16 @@ ManageFLARMWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     }
   }
 
-  AddButton(_("Setup"), *this, Setup);
-  AddButton(_("Reboot"), *this, Reboot);
-}
+  AddButton(_("Setup"), [this](){
+    FLARMConfigWidget widget(GetLook(), device);
+    DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(),
+                        _T("FLARM"), widget);
+  });
 
-void
-ManageFLARMWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case Setup:
-    {
-      FLARMConfigWidget widget(GetLook(), device);
-      DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(),
-                          _T("FLARM"), widget);
-    }
-    break;
-
-  case Reboot:
-    {
-      MessageOperationEnvironment env;
-      device.Restart(env);
-    }
-    break;
-  }
+  AddButton(_("Reboot"), [this](){
+    MessageOperationEnvironment env;
+    device.Restart(env);
+  });
 }
 
 void

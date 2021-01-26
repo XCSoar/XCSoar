@@ -26,11 +26,12 @@ Copyright_License {
 
 #include "ui/window/PaintWindow.hpp"
 
+#include <functional>
+
 #include <tchar.h>
 
 struct ButtonLook;
 class ContainerWindow;
-class ActionListener;
 class ButtonRenderer;
 
 /**
@@ -41,8 +42,11 @@ class Button : public PaintWindow {
 
   ButtonRenderer *renderer;
 
-  ActionListener *listener;
-  int id;
+public:
+  using Callback = std::function<void()>;
+
+private:
+  Callback callback;
 
   /**
    * This flag specifies whether the button is "selected".  The
@@ -56,18 +60,18 @@ class Button : public PaintWindow {
 public:
   Button(ContainerWindow &parent, const PixelRect &rc,
          WindowStyle style, ButtonRenderer *_renderer,
-         ActionListener &_listener, int _id) {
-    Create(parent, rc, style, _renderer, _listener, _id);
+         Callback _callback) noexcept {
+    Create(parent, rc, style, _renderer, std::move(_callback));
   }
 
   Button(ContainerWindow &parent, const ButtonLook &look,
          const TCHAR *caption, const PixelRect &rc,
          WindowStyle style,
-         ActionListener &_listener, int _id) {
-    Create(parent, look, caption, rc, style, _listener, _id);
+         Callback _callback) noexcept {
+    Create(parent, look, caption, rc, style, std::move(_callback));
   }
 
-  Button():listener(nullptr) {}
+  Button() = default;
 
   virtual ~Button();
 
@@ -80,19 +84,18 @@ public:
 
   void Create(ContainerWindow &parent, const PixelRect &rc,
               WindowStyle style, ButtonRenderer *_renderer,
-              ActionListener &listener, int id);
+              Callback _callback) noexcept;
 
   void Create(ContainerWindow &parent, const ButtonLook &look,
               const TCHAR *caption, const PixelRect &rc,
               WindowStyle style,
-              ActionListener &listener, int id);
+              Callback _callback) noexcept;
 
   /**
    * Set the object that will receive click events.
    */
-  void SetListener(ActionListener &_listener, int _id) {
-    id = _id;
-    listener = &_listener;
+  void SetCallback(Callback _callback) noexcept {
+    callback = std::move(_callback);
   }
 
   ButtonRenderer &GetRenderer() {

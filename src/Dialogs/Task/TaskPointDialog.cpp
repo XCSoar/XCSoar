@@ -61,15 +61,7 @@ Copyright_License {
 
 class TaskPointWidget final
   : public NullWidget,
-    ObservationZoneEditWidget::Listener,
-    ActionListener {
-  enum Buttons {
-    PREVIOUS, NEXT,
-    DETAILS, REMOVE, RELOCATE,
-    CHANGE_TYPE,
-    OPTIONAL_STARTS,
-    SCORE_EXIT,
-  };
+    ObservationZoneEditWidget::Listener {
 
   struct Layout {
     PixelRect waypoint_panel;
@@ -119,8 +111,13 @@ public:
   }
 
   void CreateButtons() {
-    previous_button = dialog.AddSymbolButton(_T("<"), *this, PREVIOUS);
-    next_button = dialog.AddSymbolButton(_T(">"), *this, NEXT);
+    previous_button = dialog.AddSymbolButton(_T("<"), [this](){
+      OnPreviousClicked();
+    });
+
+    next_button = dialog.AddSymbolButton(_T(">"), [this](){
+      OnNextClicked();
+    });
   }
 
 private:
@@ -187,9 +184,6 @@ public:
 private:
   /* virtual methods from class ObservationZoneEditWidget::Listener */
   void OnModified(ObservationZoneEditWidget &widget) override;
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 TaskPointWidget::Layout::Layout(PixelRect rc, const DialogLook &look)
@@ -270,20 +264,20 @@ TaskPointWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   waypoint_name.Create(waypoint_panel, layout.waypoint_name);
   waypoint_details.Create(waypoint_panel, look.button, _("Details"),
                           layout.waypoint_details,
-                          button_style, *this, DETAILS);
+                          button_style, [this](){ OnDetailsClicked(); });
   waypoint_remove.Create(waypoint_panel, look.button, _("Remove"),
                          layout.waypoint_remove,
-                         button_style, *this, REMOVE);
+                         button_style, [this](){ OnRemoveClicked(); });
   waypoint_relocate.Create(waypoint_panel, look.button, _("Relocate"),
                            layout.waypoint_relocate,
-                           button_style, *this, RELOCATE);
+                           button_style, [this](){ OnRelocateClicked(); });
 
   tp_panel.Create(parent, look, layout.tp_panel, panel_style);
 
   type_label.Create(tp_panel, layout.type_label);
   change_type.Create(tp_panel, look.button, _("Change Type"),
                      layout.change_type,
-                     button_style, *this, CHANGE_TYPE);
+                     button_style, [this](){ OnTypeClicked(); });
   map.Create(tp_panel, layout.map, WindowStyle(),
              [this](Canvas &canvas, const PixelRect &rc){
                PaintMap(canvas, rc);
@@ -291,46 +285,11 @@ TaskPointWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   properties_dock.Create(tp_panel, layout.properties, dock_style);
   optional_starts.Create(tp_panel, look.button, _("Enable Alternate Starts"),
                          layout.optional_starts, button_style,
-                         *this, OPTIONAL_STARTS);
+                         [this](){ OnOptionalStartsClicked(); });
   score_exit.Create(tp_panel, look, _("Score exit"),
-                    layout.score_exit, button_style,
-                    *this, SCORE_EXIT);
+                    layout.score_exit, button_style, {});
 
   RefreshView();
-}
-
-void
-TaskPointWidget::OnAction(int id) noexcept
-{
-    switch (id) {
-    case PREVIOUS:
-      OnPreviousClicked();
-      break;
-
-    case NEXT:
-      OnNextClicked();
-      break;
-
-    case DETAILS:
-      OnDetailsClicked();
-      break;
-
-    case REMOVE:
-      OnRemoveClicked();
-      break;
-
-    case RELOCATE:
-      OnRelocateClicked();
-      break;
-
-    case CHANGE_TYPE:
-      OnTypeClicked();
-      break;
-
-    case OPTIONAL_STARTS:
-      OnOptionalStartsClicked();
-      break;
-    }
 }
 
 static ObservationZoneEditWidget *

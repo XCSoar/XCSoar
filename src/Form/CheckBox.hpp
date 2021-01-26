@@ -27,9 +27,11 @@ Copyright_License {
 #include "ui/window/PaintWindow.hpp"
 #include "util/tstring.hpp"
 
+#include <cassert>
+#include <functional>
+
 struct DialogLook;
 class ContainerWindow;
-class ActionListener;
 
 /**
  * This class is used for creating buttons.
@@ -40,23 +42,23 @@ class CheckBoxControl : public PaintWindow {
   const DialogLook *look;
   tstring caption;
 
-  ActionListener *listener;
-  int id;
+  using Callback = std::function<void(bool)>;
+  Callback callback;
 
 public:
   void Create(ContainerWindow &parent, const DialogLook &look,
               tstring::const_pointer caption,
               const PixelRect &rc,
               const WindowStyle style,
-              ActionListener &listener, int id);
+              Callback _callback) noexcept;
 
   /**
-   * Set the object that will receive click events.
+   * Set the function that will receive click events.
    */
-  void SetListener(ActionListener &_listener) {
-    assert(listener == nullptr);
+  void SetCallback(Callback _callback) noexcept {
+    assert(!_callback);
 
-    listener = &_listener;
+    callback = std::move(_callback);
   }
 
   bool GetState() const {

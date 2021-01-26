@@ -76,13 +76,7 @@ HasDetails(const MapItem &item)
 }
 
 class MapItemListWidget final
-  : public ListWidget, private ActionListener {
-  enum Buttons {
-    SETTINGS,
-    GOTO,
-    ACK,
-  };
-
+  : public ListWidget {
   const MapItemList &list;
 
   const DialogLook &dialog_look;
@@ -164,17 +158,23 @@ public:
   }
 
   void OnActivateItem(unsigned index) noexcept override;
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
 MapItemListWidget::CreateButtons(WidgetDialog &dialog)
 {
-  settings_button = dialog.AddButton(_("Settings"), *this, SETTINGS);
-  goto_button = dialog.AddButton(_("Goto"), *this, GOTO);
-  ack_button = dialog.AddButton(_("Ack Day"), *this, ACK);
+  settings_button = dialog.AddButton(_("Settings"), [](){
+    ShowMapItemListSettingsDialog();
+  });
+
+  goto_button = dialog.AddButton(_("Goto"), [this](){
+    OnGotoClicked();
+  });
+
+  ack_button = dialog.AddButton(_("Ack Day"), [this](){
+    OnAckClicked();
+  });
+
   details_button = dialog.AddButton(_("Details"), mrOK);
   cancel_button = dialog.AddButton(_("Close"), mrCancel);
 }
@@ -243,23 +243,6 @@ MapItemListWidget::OnAckClicked()
     list[GetCursorIndex()];
   GetAirspaceWarnings()->AcknowledgeDay(*as_item.airspace);
   UpdateButtons();
-}
-
-void
-MapItemListWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case SETTINGS:
-    ShowMapItemListSettingsDialog();
-    break;
-  case GOTO:
-    OnGotoClicked();
-    break;
-
-  case ACK:
-    OnAckClicked();
-    break;
-  }
 }
 
 static int

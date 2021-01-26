@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "WindowWidget.hpp"
 
+#include <functional>
+
 #include <tchar.h>
 
 struct ButtonLook;
@@ -38,15 +40,15 @@ class ActionListener;
  */
 class ButtonWidget : public WindowWidget {
   ButtonRenderer *const renderer;
-  ActionListener &listener;
-  int id;
+  const std::function<void()> callback;
 
 public:
-  ButtonWidget(ButtonRenderer *_renderer, ActionListener &_listener, int _id)
-    :renderer(_renderer), listener(_listener), id(_id) {}
+  ButtonWidget(ButtonRenderer *_renderer,
+               std::function<void()> _callback) noexcept
+    :renderer(_renderer), callback(std::move(_callback)) {}
 
   ButtonWidget(const ButtonLook &look, const TCHAR *caption,
-               ActionListener &_listener, int _id);
+               std::function<void()> _callback) noexcept;
 
   virtual ~ButtonWidget();
 

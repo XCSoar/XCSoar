@@ -26,11 +26,10 @@ Copyright_License {
 #include "TextWidget.hpp"
 #include "Form/ButtonPanel.hpp"
 
-QuestionWidget::QuestionWidget(const TCHAR *_message,
-                               ActionListener &_listener)
+QuestionWidget::QuestionWidget(const TCHAR *_message) noexcept
   :SolidWidget(new ButtonPanelWidget(new TextWidget(),
                                      ButtonPanelWidget::Alignment::BOTTOM)),
-   message(_message), listener(_listener) {}
+   message(_message) {}
 
 void
 QuestionWidget::SetMessage(const TCHAR *_message)
@@ -52,7 +51,7 @@ QuestionWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   ButtonPanel &panel = bpw.GetButtonPanel();
 
   for (auto button : buttons)
-    panel.Add(button.caption, listener, button.id);
+    panel.Add(button.caption, button.callback);
 }
 
 

@@ -99,40 +99,41 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
       button_flags == MB_OKCANCEL)
     buttons.append() =
       new Button(client_area, dialog_look.button, _("OK"), button_rc,
-                 button_style, wf, IDOK);
+                 button_style,
+                 [&wf](){ wf.SetModalResult(IDOK); });
 
   if (button_flags == MB_YESNO ||
       button_flags == MB_YESNOCANCEL) {
     buttons.append() =
       new Button(client_area, dialog_look.button, _("Yes"), button_rc,
-                 button_style, wf, IDYES);
+                 button_style, wf.MakeModalResultCallback(IDYES));
 
     buttons.append() =
       new Button(client_area, dialog_look.button, _("No"), button_rc,
-                 button_style, wf, IDNO);
+                 button_style, wf.MakeModalResultCallback(IDNO));
   }
 
   if (button_flags == MB_ABORTRETRYIGNORE ||
       button_flags == MB_RETRYCANCEL)
     buttons.append() =
       new Button(client_area, dialog_look.button, _("Retry"), button_rc,
-                 button_style, wf, IDRETRY);
+                 button_style, wf.MakeModalResultCallback(IDRETRY));
 
   if (button_flags == MB_OKCANCEL ||
       button_flags == MB_RETRYCANCEL ||
       button_flags == MB_YESNOCANCEL)
     buttons.append() =
       new Button(client_area, dialog_look.button, _("Cancel"), button_rc,
-                 button_style, wf, IDCANCEL);
+                 button_style, wf.MakeModalResultCallback(IDCANCEL));
 
   if (button_flags == MB_ABORTRETRYIGNORE) {
     buttons.append() =
       new Button(client_area, dialog_look.button, _("Abort"), button_rc,
-                 button_style, wf, IDABORT);
+                 button_style, wf.MakeModalResultCallback(IDABORT));
 
     buttons.append() =
       new Button(client_area, dialog_look.button, _("Ignore"), button_rc,
-                 button_style, wf, IDIGNORE);
+                 button_style, wf.MakeModalResultCallback(IDIGNORE));
   }
 
   const unsigned max_button_width = client_area_size.width / buttons.size();

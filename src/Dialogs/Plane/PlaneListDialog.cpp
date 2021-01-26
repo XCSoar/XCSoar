@@ -52,7 +52,7 @@ Copyright_License {
 #endif
 
 class PlaneListWidget final
-  : public ListWidget, private ActionListener {
+  : public ListWidget {
 
   struct ListItem {
     StaticString<32> name;
@@ -76,13 +76,6 @@ class PlaneListWidget final
     void Visit(Path path, Path filename) override {
       list.emplace_back(filename.c_str(), path);
     }
-  };
-
-  enum Buttons {
-    NEW,
-    EDIT,
-    DELETE,
-    LOAD,
   };
 
   WndForm *form;
@@ -121,10 +114,6 @@ protected:
   }
 
   void OnActivateItem(unsigned index) noexcept override;
-
-private:
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
@@ -155,10 +144,10 @@ PlaneListWidget::CreateButtons(WidgetDialog &dialog)
 {
   form = &dialog;
 
-  dialog.AddButton(_("New"), *this, NEW);
-  edit_button = dialog.AddButton(_("Edit"), *this, EDIT);
-  delete_button = dialog.AddButton(_("Delete"), *this, DELETE);
-  load_button = dialog.AddButton(_("Activate"), *this, LOAD);
+  dialog.AddButton(_("New"), [this](){ NewClicked(); });
+  edit_button = dialog.AddButton(_("Edit"), [this](){ EditClicked(); });
+  delete_button = dialog.AddButton(_("Delete"), [this](){ DeleteClicked(); });
+  load_button = dialog.AddButton(_("Activate"), [this](){ LoadClicked(); });
 }
 
 void
@@ -361,28 +350,6 @@ PlaneListWidget::DeleteClicked()
 
   File::Delete(list[GetList().GetCursorIndex()].path);
   UpdateList();
-}
-
-void
-PlaneListWidget::OnAction(int id) noexcept
-{
-  switch ((Buttons)id) {
-  case NEW:
-    NewClicked();
-    break;
-
-  case EDIT:
-    EditClicked();
-    break;
-
-  case DELETE:
-    DeleteClicked();
-    break;
-
-  case LOAD:
-    LoadClicked();
-    break;
-  }
 }
 
 void

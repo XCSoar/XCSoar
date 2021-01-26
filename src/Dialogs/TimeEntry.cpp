@@ -25,7 +25,6 @@ Copyright_License {
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/FixedWindowWidget.hpp"
 #include "Form/DigitEntry.hpp"
-#include "Form/LambdaActionListener.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "time/RoughTime.hpp"
@@ -58,25 +57,23 @@ TimeEntryDialog(const TCHAR *caption, RoughTime &value,
   entry.CreateTime(client_area, client_area.GetClientRect(), control_style);
   entry.Resize(entry.GetRecommendedSize());
   entry.SetValue(value + time_zone);
-  entry.SetActionListener(dialog, mrOK);
+  entry.SetCallback(dialog.MakeModalResultCallback(mrOK));
 
   /* create buttons */
 
-  dialog.AddButton(_("OK"), dialog, mrOK);
-  dialog.AddButton(_("Cancel"), dialog, mrCancel);
+  dialog.AddButton(_("OK"), mrOK);
+  dialog.AddButton(_("Cancel"), mrCancel);
 
-  auto now_listener = MakeLambdaActionListener([&entry, time_zone](unsigned){
-      const BrokenTime bt = BrokenDateTime::NowUTC();
-      RoughTime now_utc = RoughTime(bt.hour, bt.minute);
-      entry.SetValue(now_utc + time_zone);
-    });
-  dialog.AddButton(_("Now"), now_listener, 0);
+  dialog.AddButton(_("Now"), [&entry, time_zone](){
+    const BrokenTime bt = BrokenDateTime::NowUTC();
+    RoughTime now_utc = RoughTime(bt.hour, bt.minute);
+    entry.SetValue(now_utc + time_zone);
+  });
 
-  auto clear_listener = MakeLambdaActionListener([&entry](unsigned){
+  if (nullable)
+    dialog.AddButton(_("Clear"), [&entry](){
       entry.SetInvalid();
     });
-  if (nullable)
-    dialog.AddButton(_("Clear"), clear_listener, 0);
 
   /* run it */
 

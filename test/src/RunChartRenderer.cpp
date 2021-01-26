@@ -29,7 +29,6 @@ Copyright_License {
 #include "Look/ChartLook.hpp"
 #include "Form/List.hpp"
 #include "Form/Button.hpp"
-#include "Form/ActionListener.hpp"
 #include "util/Macros.hpp"
 #include "Renderer/ChartRenderer.hpp"
 
@@ -105,15 +104,10 @@ ChartWindow::DrawChart(ChartRenderer &renderer)
 }
 
 class TestWindow : public UI::SingleWindow,
-                   ActionListener,
                    ListItemRenderer, ListCursorHandler {
   Button close_button;
   ListControl *type_list;
   ChartWindow chart;
-
-  enum Buttons {
-    CLOSE,
-  };
 
 public:
   TestWindow(const ChartLook &chart_look)
@@ -148,21 +142,12 @@ public:
     button_rc.top = button_rc.bottom - 30;
     close_button.Create(*this, *button_look, _T("Close"), button_rc,
                         WindowStyle(),
-                        *this, CLOSE);
+                        [this](){ Close(); });
 
     type_list->SetFocus();
   }
 
 protected:
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override {
-    switch (id) {
-    case CLOSE:
-      Close();
-      break;
-    }
-  }
-
   /* virtual methods from ListItemRenderer */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
                    unsigned idx) noexcept override {

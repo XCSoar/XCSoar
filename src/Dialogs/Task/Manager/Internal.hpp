@@ -30,7 +30,7 @@ Copyright_License {
 class OrderedTask;
 class ButtonWidget;
 
-class TaskManagerDialog final : public TabWidget, ActionListener {
+class TaskManagerDialog final : public TabWidget {
   enum Tabs {
     TurnpointTab,
     PropertiesTab,
@@ -113,10 +113,6 @@ public:
 protected:
   /* virtual methods from class PagerWidget */
   void OnPageFlipped() override;
-
-private:
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 #endif /* DLGTASKMANAGER_HPP */

@@ -45,14 +45,8 @@
 #include "util/Macros.hpp"
 
 class TeamCodeWidget final
-  : public RowFormWidget, NullBlackboardListener, ActionListener {
+  : public RowFormWidget, NullBlackboardListener {
   enum Controls {
-    SET_CODE,
-    SET_WAYPOINT,
-    SET_FLARM_LOCK,
-  };
-
-  enum Buttons {
     OWN_CODE,
     MATE_CODE,
     RANGE,
@@ -79,9 +73,6 @@ private:
   virtual void Show(const PixelRect &rc) override;
   virtual void Hide() override;
 
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
-
   /* virtual methods from class BlackboardListener */
   virtual void OnCalculatedUpdate(const MoreData &basic,
                                   const DerivedInfo &calculated) override;
@@ -90,9 +81,9 @@ private:
 inline void
 TeamCodeWidget::CreateButtons(WidgetDialog &buttons)
 {
-  buttons.AddButton(_("Set code"), *this, SET_CODE);
-  buttons.AddButton(_("Set WP"), *this, SET_WAYPOINT);
-  buttons.AddButton(_("Flarm Lock"), *this, SET_FLARM_LOCK);
+  buttons.AddButton(_("Set code"), [this](){ OnCodeClicked(); });
+  buttons.AddButton(_("Set WP"), [this](){ OnSetWaypointClicked(); });
+  buttons.AddButton(_("Flarm Lock"), [this](){ OnFlarmLockClicked(); });
 }
 
 void
@@ -222,24 +213,6 @@ TeamCodeWidget::OnFlarmLockClicked()
     return;
 
   TeamActions::TrackFlarm(id, newTeamFlarmCNTarget);
-}
-
-void
-TeamCodeWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case SET_CODE:
-    OnCodeClicked();
-    break;
-
-  case SET_WAYPOINT:
-    OnSetWaypointClicked();
-    break;
-
-  case SET_FLARM_LOCK:
-    OnFlarmLockClicked();
-    break;
-  }
 }
 
 void

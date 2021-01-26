@@ -28,9 +28,9 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 
 ButtonWidget::ButtonWidget(const ButtonLook &look, const TCHAR *caption,
-                           ActionListener &_listener, int _id)
+                           std::function<void()> _callback) noexcept
   :renderer(new TextButtonRenderer(look, caption)),
-   listener(_listener), id(_id) {}
+   callback(std::move(_callback)) {}
 
 ButtonWidget::~ButtonWidget()
 {
@@ -69,7 +69,7 @@ ButtonWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
   style.Hide();
   style.TabStop();
 
-  SetWindow(new Button(parent, rc, style, renderer, listener, id));
+  SetWindow(new Button(parent, rc, style, renderer, callback));
 }
 
 bool

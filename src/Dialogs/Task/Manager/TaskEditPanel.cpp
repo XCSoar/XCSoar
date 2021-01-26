@@ -52,14 +52,7 @@ Copyright_License {
 
 #include <cassert>
 
-enum Buttons {
-  EDIT = 100,
-  MUTATE,
-  DOWN,
-  UP,
-  REVERSE,
-  CLEAR_ALL,
-};
+class TaskEditPanel;
 
 /**
  * The bottom panel showing four buttons.  Internally, there are five
@@ -67,7 +60,7 @@ enum Buttons {
  * exclusive.
  */
 class TaskEditButtons final : public NullWidget {
-  ActionListener *listener;
+  TaskEditPanel *edit_panel;
 
   Button edit_button, mutate_button;
   Button down_button, up_button;
@@ -85,10 +78,10 @@ public:
     :visible(false), show_edit(false), show_mutate(false),
      show_down(false), show_up(false), show_reverse(false) {}
 
-  void SetListener(ActionListener &_listener) {
+  void SetEditPanel(TaskEditPanel &_edit_panel) noexcept {
     assert(!visible);
 
-    listener = &_listener;
+    edit_panel = &_edit_panel;
   }
 
   void Update(bool _edit, bool _mutate, bool _down, bool _up, bool _reverse) {
@@ -151,35 +144,7 @@ public:
         ::Layout::GetMaximumControlHeight() };
   }
 
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) override {
-    assert(!visible);
-
-    WindowStyle style;
-    style.Hide();
-    style.TabStop();
-
-    const ButtonLook &look = UIGlobals::GetDialogLook().button;
-
-    const Layout layout = CalculateLayout(rc);
-    edit_button.Create(parent, look, _("Edit Point"),
-                       layout.edit, style,
-                       *listener, EDIT);
-    mutate_button.Create(parent, look, _("Make Finish"),
-                         layout.down, style,
-                         *listener, MUTATE);
-    down_button.Create(parent, layout.down, style,
-                       new SymbolButtonRenderer(look, _T("v")),
-                       *listener, DOWN);
-    up_button.Create(parent, layout.down, style,
-                     new SymbolButtonRenderer(look, _T("^")),
-                     *listener, UP);
-    reverse_button.Create(parent, look, _("Reverse"),
-                          layout.reverse, style,
-                          *listener, REVERSE);
-    clear_all_button.Create(parent, look, _("Clear All"),
-                            layout.clear_all, style,
-                            *listener, CLEAR_ALL);
-  }
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
 
   void Show(const PixelRect &rc) override {
     assert(!visible);
@@ -207,7 +172,7 @@ public:
 };
 
 class TaskEditPanel
-  : public ListWidget, public ActionListener {
+  : public ListWidget {
   TaskManagerDialog &dialog;
 
   const TaskLook &task_look;
@@ -262,9 +227,6 @@ protected:
   void RefreshView();
 
 private:
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override;
-
   /* virtual methods from List::Handler */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
                    unsigned idx) noexcept override;
@@ -359,36 +321,6 @@ TaskEditPanel::OnClearAllClicked()
     ordered_task->ClearName();
     *task_modified = true;
     RefreshView();
-  }
-}
-
-void
-TaskEditPanel::OnAction(int id) noexcept
-{
-  switch (id) {
-  case EDIT:
-    OnEditTurnpointClicked();
-    break;
-
-  case MUTATE:
-    OnMakeFinish();
-    break;
-
-  case UP:
-    MoveUp();
-    break;
-
-  case DOWN:
-    MoveDown();
-    break;
-
-  case REVERSE:
-    ReverseTask();
-    break;
-
-  case CLEAR_ALL:
-    OnClearAllClicked();
-    break;
   }
 }
 
@@ -591,6 +523,38 @@ TaskEditPanel::Show(const PixelRect &rc)
   ListWidget::Show(rc);
 }
 
+void
+TaskEditButtons::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  assert(!visible);
+
+  WindowStyle style;
+  style.Hide();
+  style.TabStop();
+
+  const ButtonLook &look = UIGlobals::GetDialogLook().button;
+
+  const Layout layout = CalculateLayout(rc);
+  edit_button.Create(parent, look, _("Edit Point"),
+                     layout.edit, style,
+                     [this](){ edit_panel->OnEditTurnpointClicked(); });
+  mutate_button.Create(parent, look, _("Make Finish"),
+                       layout.down, style,
+                       [this](){ edit_panel->OnMakeFinish(); });
+  down_button.Create(parent, layout.down, style,
+                     new SymbolButtonRenderer(look, _T("v")),
+                     [this](){ edit_panel->MoveDown(); });
+  up_button.Create(parent, layout.down, style,
+                   new SymbolButtonRenderer(look, _T("^")),
+                   [this](){ edit_panel->MoveUp(); });
+  reverse_button.Create(parent, look, _("Reverse"),
+                        layout.reverse, style,
+                        [this](){ edit_panel->ReverseTask(); });
+  clear_all_button.Create(parent, look, _("Clear All"),
+                          layout.clear_all, style,
+                          [this](){ edit_panel->OnClearAllClicked(); });
+}
+
 Widget *
 CreateTaskEditPanel(TaskManagerDialog &dialog,
                     const TaskLook &task_look,
@@ -602,7 +566,7 @@ CreateTaskEditPanel(TaskManagerDialog &dialog,
   TaskEditPanel *widget = new TaskEditPanel(dialog, task_look, airspace_look,
                                             active_task, task_modified,
                                             *summary, *buttons);
-  buttons->SetListener(*widget);
+  buttons->SetEditPanel(*widget);
   TwoWidgets *tw1 = new TwoWidgets(widget, summary);
   widget->SetTwoWidgets(*tw1);
   TwoWidgets *tw2 = new TwoWidgets(tw1, buttons);

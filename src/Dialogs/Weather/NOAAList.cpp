@@ -35,7 +35,6 @@ Copyright_License {
 #include "Dialogs/TextEntry.hpp"
 #include "Form/Button.hpp"
 #include "Form/ButtonPanel.hpp"
-#include "Form/ActionListener.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Widget/ButtonPanelWidget.hpp"
 #include "Weather/NOAAGlue.hpp"
@@ -48,7 +47,7 @@ Copyright_License {
 #include "Renderer/TwoTextRowsRenderer.hpp"
 
 class NOAAListWidget final
-  : public ListWidget, private ActionListener {
+  : public ListWidget {
   enum Buttons {
     DETAILS,
     ADD,
@@ -107,19 +106,15 @@ protected:
   }
 
   void OnActivateItem(unsigned index) noexcept override;
-
-private:
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
 NOAAListWidget::CreateButtons(ButtonPanel &buttons)
 {
-  details_button = buttons.Add(_("Details"), *this, DETAILS);
-  add_button = buttons.Add(_("Add"), *this, ADD);
-  update_button = buttons.Add(_("Update"), *this, UPDATE);
-  remove_button = buttons.Add(_("Remove"), *this, REMOVE);
+  details_button = buttons.Add(_("Details"), [this](){ DetailsClicked(); });
+  add_button = buttons.Add(_("Add"), [this](){ AddClicked(); });
+  update_button = buttons.Add(_("Update"), [this](){ UpdateClicked(); });
+  remove_button = buttons.Add(_("Remove"), [this](){ RemoveClicked(); });
 }
 
 void
@@ -254,28 +249,6 @@ void
 NOAAListWidget::OnActivateItem(unsigned index) noexcept
 {
   OpenDetails(index);
-}
-
-void
-NOAAListWidget::OnAction(int id) noexcept
-{
-  switch ((Buttons)id) {
-  case DETAILS:
-    DetailsClicked();
-    break;
-
-  case ADD:
-    AddClicked();
-    break;
-
-  case UPDATE:
-    UpdateClicked();
-    break;
-
-  case REMOVE:
-    RemoveClicked();
-    break;
-  }
 }
 
 Widget *

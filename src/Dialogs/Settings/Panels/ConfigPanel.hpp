@@ -24,14 +24,14 @@ Copyright_License {
 #ifndef CONFIGPANEL_HPP
 #define CONFIGPANEL_HPP
 
+#include <functional>
+
 #include <tchar.h>
 
-class ActionListener;
-
 namespace ConfigPanel {
-  void BorrowExtraButton(unsigned i, const TCHAR *caption,
-                         ActionListener &listener, int id);
-  void ReturnExtraButton(unsigned i);
+void BorrowExtraButton(unsigned i, const TCHAR *caption,
+                       std::function<void()> callback) noexcept;
+void ReturnExtraButton(unsigned i);
 };
 
 #endif

@@ -40,18 +40,13 @@ Copyright_License {
 #include "UIGlobals.hpp"
 
 class PlanePolarWidget final
-  : public RowFormWidget, DataFieldListener, ActionListener {
+  : public RowFormWidget, DataFieldListener {
   enum Controls {
     NAME,
     INVALID,
     SHAPE,
     REFERENCE_MASS,
     DRY_MASS,
-  };
-
-  enum Actions {
-    LIST,
-    IMPORT,
   };
 
   Plane plane;
@@ -65,8 +60,8 @@ public:
   }
 
   void CreateButtons(WidgetDialog &buttons) {
-    buttons.AddButton(_("List"), *this, LIST);
-    buttons.AddButton(_("Import"), *this, IMPORT);
+    buttons.AddButton(_("List"), [this](){ ListClicked(); });
+    buttons.AddButton(_("Import"), [this](){ ImportClicked(); });
   }
 
 private:
@@ -95,9 +90,6 @@ private:
 
   /* methods from DataFieldListener */
   virtual void OnModified(DataField &df) override;
-
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
@@ -242,20 +234,6 @@ PlanePolarWidget::ImportClicked()
   plane.polar_name = path.GetBase().c_str();
 
   Update();
-}
-
-void
-PlanePolarWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case LIST:
-    ListClicked();
-    break;
-
-  case IMPORT:
-    ImportClicked();
-    break;
-  }
 }
 
 void

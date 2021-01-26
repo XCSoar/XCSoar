@@ -112,22 +112,22 @@ public:
   }
 
   Button *AddButton(ButtonRenderer *renderer,
-                    ActionListener &listener, int id) {
-    return buttons.Add(renderer, listener, id);
+                    Button::Callback callback) noexcept {
+    return buttons.Add(renderer, std::move(callback));
   }
 
   Button *AddButton(const TCHAR *caption,
-                    ActionListener &listener, int id) {
-    return buttons.Add(caption, listener, id);
+                    Button::Callback callback) noexcept {
+    return buttons.Add(caption, std::move(callback));
   }
 
   Button *AddButton(const TCHAR *caption, int modal_result) {
-    return AddButton(caption, *this, modal_result);
+    return AddButton(caption, MakeModalResultCallback(modal_result));
   }
 
   Button *AddSymbolButton(const TCHAR *caption,
-                          ActionListener &listener, int id) {
-    return buttons.AddSymbol(caption, listener, id);
+                          Button::Callback callback) noexcept {
+    return buttons.AddSymbol(caption, std::move(callback));
   }
 
   void AddButtonKey(unsigned key_code) {
@@ -143,8 +143,8 @@ public:
 
   int ShowModal();
 
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
+  /* virtual methods from class WndForm */
+  void SetModalResult(int id) noexcept override;
 
 private:
   void AutoSize();

@@ -59,8 +59,8 @@ public:
     progress.SetValue(position);
   }
 
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override;
+  /* virtual methods from WndForm */
+  void SetModalResult(int id) noexcept override;
 };
 
 #endif

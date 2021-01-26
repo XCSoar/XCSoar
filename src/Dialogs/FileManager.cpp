@@ -123,18 +123,11 @@ UpdateAvailable(const FileRepository &repository, const TCHAR *name)
 #endif
 
 class ManagedFileListWidget
-  : public ListWidget,
+  : public ListWidget
 #ifdef HAVE_DOWNLOAD_MANAGER
-    private Net::DownloadListener,
+  , private Net::DownloadListener
 #endif
-    private ActionListener {
-  enum Buttons {
-    DOWNLOAD,
-    ADD,
-    CANCEL,
-    UPDATE,
-  };
-
+{
   struct DownloadStatus {
     int64_t size, position;
   };
@@ -306,9 +299,6 @@ public:
                    unsigned idx) noexcept override;
   void OnCursorMoved(unsigned index) noexcept override;
 
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
-
 #ifdef HAVE_DOWNLOAD_MANAGER
   void OnTimer();
 
@@ -446,10 +436,12 @@ ManagedFileListWidget::CreateButtons(WidgetDialog &dialog)
 {
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (Net::DownloadManager::IsAvailable()) {
-    download_button = dialog.AddButton(_("Download"), *this, DOWNLOAD);
-    add_button = dialog.AddButton(_("Add"), *this, ADD);
-    cancel_button = dialog.AddButton(_("Cancel"), *this, CANCEL);
-    update_button = dialog.AddButton(_("Update all"), *this, UPDATE);
+    download_button = dialog.AddButton(_("Download"), [this](){ Download(); });
+    add_button = dialog.AddButton(_("Add"), [this](){ Add(); });
+    cancel_button = dialog.AddButton(_("Cancel"), [this](){ Cancel(); });
+    update_button = dialog.AddButton(_("Update all"), [this](){
+      UpdateFiles();
+    });
   }
 #endif
 }
@@ -652,28 +644,6 @@ ManagedFileListWidget::Cancel()
   const FileItem &item = items[current];
   Net::DownloadManager::Cancel(Path(item.name));
 #endif
-}
-
-void
-ManagedFileListWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case DOWNLOAD:
-    Download();
-    break;
-
-  case ADD:
-    Add();
-    break;
-
-  case CANCEL:
-    Cancel();
-    break;
-
-  case UPDATE:
-    UpdateFiles();
-    break;
-  }
 }
 
 #ifdef HAVE_DOWNLOAD_MANAGER

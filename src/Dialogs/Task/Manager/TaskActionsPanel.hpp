@@ -25,13 +25,12 @@ Copyright_License {
 #define XCSOAR_TASK_ACTIONS_PANEL_HPP
 
 #include "Widget/RowFormWidget.hpp"
-#include "Form/ActionListener.hpp"
 
 class TaskManagerDialog;
 class TaskMiscPanel;
 class OrderedTask;
 
-class TaskActionsPanel : public RowFormWidget, ActionListener {
+class TaskActionsPanel : public RowFormWidget {
   enum Controls {
     NEW_TASK,
     DECLARE,
@@ -59,9 +58,6 @@ private:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
   void ReClick() override;
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 #endif

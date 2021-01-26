@@ -68,10 +68,6 @@ enum Controls {
   TYPE,
 };
 
-enum Buttons {
-  SELECT,
-};
-
 static constexpr unsigned distance_filter_items[] = {
   0, 25, 50, 75, 100, 150, 250, 500, 1000
 };
@@ -124,8 +120,8 @@ class WaypointFilterWidget;
 
 class WaypointListWidget final
   : public ListWidget, public DataFieldListener,
-    public ActionListener, NullBlackboardListener {
-  ActionListener &action_listener;
+    NullBlackboardListener {
+  WndForm &dialog;
 
   WaypointFilterWidget &filter_widget;
 
@@ -140,12 +136,12 @@ class WaypointListWidget final
   const unsigned ordered_task_index;
 
 public:
-  WaypointListWidget(ActionListener &_action_listener,
+  WaypointListWidget(WndForm &_dialog,
                      WaypointFilterWidget &_filter_widget,
                      GeoPoint _location, Angle _heading,
                      OrderedTask *_ordered_task,
                      unsigned _ordered_task_index)
-    :action_listener(_action_listener),
+    :dialog(_dialog),
      filter_widget(_filter_widget),
      location(_location), last_heading(_heading),
      ordered_task(_ordered_task),
@@ -191,9 +187,6 @@ public:
 
   void OnActivateItem(unsigned index) noexcept override;
 
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override;
-
   /* virtual methods from DataFieldListener */
   void OnModified(DataField &df) override;
 
@@ -223,21 +216,24 @@ public:
 };
 
 class WaypointListButtons : public RowFormWidget {
-  ActionListener &dialog;
-  ActionListener *list;
+  WndForm &dialog;
+  WaypointListWidget *list;
 
 public:
-  WaypointListButtons(const DialogLook &look, ActionListener &_dialog)
+  WaypointListButtons(const DialogLook &look, WndForm &_dialog)
     :RowFormWidget(look), dialog(_dialog) {}
 
-  void SetList(ActionListener *_list) {
+  void SetList(WaypointListWidget *_list) {
     list = _list;
   }
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override {
-    AddButton(_("Select"), *list, SELECT);
-    AddButton(_("Cancel"), dialog, mrCancel);
+    AddButton(_("Select"), [this](){
+      list->OnWaypointListEnter();
+    });
+
+    AddButton(_("Cancel"), dialog.MakeModalResultCallback(mrCancel));
   }
 };
 
@@ -473,7 +469,7 @@ void
 WaypointListWidget::OnWaypointListEnter()
 {
   if (!items.empty())
-    action_listener.OnAction(mrOK);
+    dialog.SetModalResult(mrOK);
   else
     filter_widget.GetControl(NAME).BeginEditing();
 }
@@ -482,16 +478,6 @@ void
 WaypointListWidget::OnActivateItem(unsigned index) noexcept
 {
   OnWaypointListEnter();
-}
-
-void
-WaypointListWidget::OnAction(int id) noexcept
-{
-  switch (Buttons(id)) {
-  case SELECT:
-    OnWaypointListEnter();
-    break;
-  }
 }
 
 void

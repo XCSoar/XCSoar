@@ -91,7 +91,7 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
                                     Layout::GetMaximumControlHeight());
 
         auto *button = new ButtonWidget(look.button, _("Switch InfoBox"),
-                                        dialog, SWITCH_INFO_BOX);
+                                        dialog.MakeModalResultCallback(SWITCH_INFO_BOX));
 
         widget = new TwoWidgets(widget, button, false);
       }
@@ -103,11 +103,11 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
   if (!found_setup) {
     /* the InfoBox did not provide a "Setup" tab - create a default
        one that allows switching the contents */
-    Widget *wSwitch = new ActionWidget(dialog, SWITCH_INFO_BOX);
+    Widget *wSwitch = new ActionWidget(dialog.MakeModalResultCallback(SWITCH_INFO_BOX));
     tab_widget.AddTab(wSwitch, _("Switch InfoBox"));
   }
 
-  Widget *wClose = new ActionWidget(dialog, mrOK);
+  Widget *wClose = new ActionWidget(dialog.MakeModalResultCallback(mrOK));
   tab_widget.AddTab(wClose, _("Close"));
 
   const PixelRect client_rc = dialog.GetClientAreaWindow().GetClientRect();

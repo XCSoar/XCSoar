@@ -53,13 +53,8 @@ enum ControlIndex {
   Temperature,
 };
 
-enum Actions {
-  DUMP = 100,
-};
-
 class FlightSetupPanel final
-  : public RowFormWidget, DataFieldListener,
-    public ActionListener {
+  : public RowFormWidget, DataFieldListener {
   UI::PeriodicTimer timer{[this]{ OnTimer(); }};
 
   Button *dump_button;
@@ -120,9 +115,6 @@ public:
     timer.Cancel();
     RowFormWidget::Hide();
   }
-
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override;
 
 private:
   void OnTimer();
@@ -346,13 +338,6 @@ FlightSetupPanel::Save(bool &changed)
 }
 
 void
-FlightSetupPanel::OnAction(int id) noexcept
-{
-  if (id == DUMP)
-    FlipBallastTimer();
-}
-
-void
 dlgBasicSettingsShowModal()
 {
   FlightSetupPanel *instance = new FlightSetupPanel();
@@ -365,7 +350,10 @@ dlgBasicSettingsShowModal()
   WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
                       UIGlobals::GetDialogLook(),
                       caption, instance);
-  instance->SetDumpButton(dialog.AddButton(_("Dump"), *instance, DUMP));
+  instance->SetDumpButton(dialog.AddButton(_("Dump"), [instance](){
+    instance->FlipBallastTimer();
+  }));
+
   dialog.AddButton(_("OK"), mrOK);
 
   dialog.ShowModal();

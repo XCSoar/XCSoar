@@ -59,15 +59,11 @@ enum Controls {
   TYPE,
 };
 
-enum Buttons {
-  DETAILS,
-};
-
 class AirspaceFilterWidget;
 
 class AirspaceListWidget final
   : public ListWidget, public DataFieldListener,
-    public ActionListener, NullBlackboardListener {
+    NullBlackboardListener {
   AirspaceFilterWidget &filter_widget;
 
   AirspaceSelectInfoVector items;
@@ -81,6 +77,10 @@ public:
   void UpdateList();
   void FilterMode(bool direction);
   void OnAirspaceListEnter(unsigned index);
+
+  void ShowDetails() noexcept {
+    OnAirspaceListEnter(GetList().GetCursorIndex());
+  }
 
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
@@ -113,9 +113,6 @@ public:
 
   void OnActivateItem(unsigned index) noexcept override;
 
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override;
-
   /* virtual methods from DataFieldListener */
   virtual void OnModified(DataField &df) override;
 
@@ -143,21 +140,24 @@ public:
 };
 
 class AirspaceListButtons final : public RowFormWidget {
-  ActionListener &dialog;
-  ActionListener *list;
+  WndForm &dialog;
+  AirspaceListWidget *list;
 
 public:
-  AirspaceListButtons(const DialogLook &look, ActionListener &_dialog)
+  AirspaceListButtons(const DialogLook &look, WndForm &_dialog) noexcept
     :RowFormWidget(look), dialog(_dialog) {}
 
-  void SetList(ActionListener *_list) {
+  void SetList(AirspaceListWidget *_list) {
     list = _list;
   }
 
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override {
-    AddButton(_("Details"), *list, DETAILS);
-    AddButton(_("Close"), dialog, mrCancel);
+    AddButton(_("Details"), [this](){
+      list->ShowDetails();
+    });
+
+    AddButton(_("Close"), dialog.MakeModalResultCallback(mrCancel));
   }
 };
 
@@ -222,16 +222,6 @@ void
 AirspaceListWidget::OnActivateItem(unsigned index) noexcept
 {
   OnAirspaceListEnter(index);
-}
-
-void
-AirspaceListWidget::OnAction(int id) noexcept
-{
-  switch (Buttons(id)) {
-  case DETAILS:
-    OnAirspaceListEnter(GetList().GetCursorIndex());
-    break;
-  }
 }
 
 void

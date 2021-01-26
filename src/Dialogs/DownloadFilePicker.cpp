@@ -136,11 +136,7 @@ DownloadFile(const char *uri, const char *_base)
 
 class DownloadFilePickerWidget final
   : public ListWidget,
-    Net::DownloadListener,
-    ActionListener {
-  enum Buttons {
-    DOWNLOAD,
-  };
+    Net::DownloadListener {
 
   WidgetDialog &dialog;
 
@@ -210,9 +206,6 @@ public:
     Download();
   }
 
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
-
   /* virtual methods from class Net::DownloadListener */
   void OnDownloadAdded(Path path_relative,
                        int64_t size, int64_t position) override;
@@ -281,7 +274,7 @@ try {
 void
 DownloadFilePickerWidget::CreateButtons()
 {
-  download_button = dialog.AddButton(_("Download"), *this, DOWNLOAD);
+  download_button = dialog.AddButton(_("Download"), [this](){ Download(); });
 }
 
 void
@@ -308,16 +301,6 @@ DownloadFilePickerWidget::Download()
   path = DownloadFile(file.GetURI(), file.GetName());
   if (path.IsNull())
     dialog.SetModalResult(mrOK);
-}
-
-void
-DownloadFilePickerWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case DOWNLOAD:
-    Download();
-    break;
-  }
 }
 
 void

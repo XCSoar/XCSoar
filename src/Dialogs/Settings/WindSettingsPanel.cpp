@@ -41,6 +41,14 @@ WindSettingsPanel::WindSettingsPanel(bool _edit_manual_wind,
    clear_manual_window(nullptr) {}
 
 void
+WindSettingsPanel::ClearManual() noexcept
+{
+  CommonInterface::SetComputerSettings().wind.manual_wind_available.Clear();
+  manual_modified = false;
+  UpdateVector();
+}
+
+void
 WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   RowFormWidget::Prepare(parent, rc);
@@ -103,7 +111,7 @@ WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   }
 
   if (clear_manual_button)
-    AddButton(_("Clear"), *this, CLEAR_MANUAL);
+    AddButton(_("Clear"), [this](){ ClearManual(); });
 
   UpdateVector();
 }
@@ -151,18 +159,6 @@ WindSettingsPanel::Save(bool &_changed)
 
   _changed |= changed;
   return true;
-}
-
-void
-WindSettingsPanel::OnAction(int id) noexcept
-{
-  switch (id) {
-  case CLEAR_MANUAL:
-    CommonInterface::SetComputerSettings().wind.manual_wind_available.Clear();
-    manual_modified = false;
-    UpdateVector();
-    break;
-  }
 }
 
 void

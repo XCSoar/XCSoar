@@ -54,14 +54,14 @@ protected:
 
 class LogoQuitWidget final : public NullWidget {
   const ButtonLook &look;
-  ActionListener &action_listener;
+  WndForm &dialog;
 
   LogoWindow logo;
   Button quit;
 
 public:
-  LogoQuitWidget(const ButtonLook &_look, ActionListener &_action_listener)
-    :look(_look), action_listener(_action_listener) {}
+  LogoQuitWidget(const ButtonLook &_look, WndForm &_dialog) noexcept
+    :look(_look), dialog(_dialog) {}
 
 private:
   PixelRect GetButtonRect(PixelRect rc) {
@@ -91,7 +91,7 @@ public:
     button_style.TabStop();
 
     quit.Create(parent, look, _("Quit"), rc,
-                button_style, action_listener, mrCancel);
+                button_style, dialog.MakeModalResultCallback(mrCancel));
     logo.Create(parent, rc, style);
   }
 
@@ -122,13 +122,13 @@ class StartupWidget final : public RowFormWidget {
     CONTINUE,
   };
 
-  ActionListener &action_listener;
+  WndForm &dialog;
   DataField *const df;
 
 public:
-  StartupWidget(const DialogLook &look, ActionListener &_action_listener,
+  StartupWidget(const DialogLook &look, WndForm &_dialog,
                 DataField *_df)
-    :RowFormWidget(look), action_listener(_action_listener), df(_df) {}
+    :RowFormWidget(look), dialog(_dialog), df(_df) {}
 
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
@@ -163,7 +163,7 @@ StartupWidget::Prepare(ContainerWindow &parent,
   auto *pe = Add(_("Profile"), nullptr, df);
   pe->SetEditCallback(SelectProfileCallback);
 
-  AddButton(_("Continue"), action_listener, mrOK);
+  AddButton(_("Continue"), dialog.MakeModalResultCallback(mrOK));
 }
 
 static bool

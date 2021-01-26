@@ -97,7 +97,7 @@ QuickMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
   text_renderer.Draw(canvas, rc, caption);
 }
 
-class QuickMenu final : public WindowWidget, ActionListener {
+class QuickMenu final : public WindowWidget {
   WndForm &dialog;
   const Menu &menu;
 
@@ -119,10 +119,6 @@ protected:
   void Unprepare() override;
   bool SetFocus() override;
   bool KeyPress(unsigned key_code) override;
-
-private:
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
@@ -169,7 +165,10 @@ QuickMenu::Prepare(ContainerWindow &parent, const PixelRect &rc)
     auto *button = new Button(grid_view, button_rc, buttonStyle,
                               new QuickMenuButtonRenderer(dialog_look,
                                                           expanded.text),
-                              *this, menuItem.event);
+                              [this, &menuItem](){
+                                clicked_event = menuItem.event;
+                                dialog.SetModalResult(mrOK);
+                              });
     button->SetEnabled(expanded.enabled);
 
     buttons.append(button);
@@ -254,13 +253,6 @@ QuickMenu::KeyPress(unsigned key_code)
 
   UpdateCaption();
   return true;
-}
-
-void
-QuickMenu::OnAction(int id) noexcept
-{
-  clicked_event = id;
-  dialog.SetModalResult(mrOK);
 }
 
 void

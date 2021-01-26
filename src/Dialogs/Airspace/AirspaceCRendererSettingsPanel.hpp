@@ -25,12 +25,11 @@ Copyright_License {
 #define XCSOAR_AIRSPACE_CLASS_RENDERER_SETTINGS_PANEL_HPP
 
 #include "Widget/RowFormWidget.hpp"
-#include "Form/ActionListener.hpp"
 #include "Airspace/AirspaceClass.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
 
 class AirspaceClassRendererSettingsPanel:
-  public RowFormWidget, ActionListener
+  public RowFormWidget
 {
   enum ControlIndex {
     BorderColor,
@@ -51,10 +50,6 @@ public:
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
   virtual bool Save(bool &changed) override;
-
-protected:
-  /* methods from ActionListener */
-  void OnAction(int id) noexcept override;
 
 private:
   void FillAirspaceClasses();

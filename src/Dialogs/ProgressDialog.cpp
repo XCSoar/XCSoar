@@ -55,17 +55,17 @@ ProgressDialog::AddCancelButton(std::function<void()> &&callback)
 
   cancel_button.Create(client_area, GetLook().button,
                        _("Cancel"), rc, style,
-                       *this, mrCancel);
+                       [this](){ SetModalResult(mrCancel); });
   cancel_button.BringToTop();
 
   cancel_callback = std::move(callback);
 }
 
 void
-ProgressDialog::OnAction(int id) noexcept
+ProgressDialog::SetModalResult(int id) noexcept
 {
   if (id == mrCancel && cancel_callback)
     cancel_callback();
   else
-    WndForm::OnAction(id);
+    WndForm::SetModalResult(id);
 }

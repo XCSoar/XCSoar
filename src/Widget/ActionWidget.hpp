@@ -32,11 +32,12 @@ Copyright_License {
 #include "Widget.hpp"
 #endif
 
+#include <functional>
+
 class ActionListener;
 
 /**
- * A #Widget implementation that triggers an action via
- * #ActionListener when clicked.
+ * A #Widget implementation that calls a function when clicked.
  */
 class ActionWidget
 #ifdef HAVE_CLIPPING
@@ -49,12 +50,11 @@ class ActionWidget
   : public NullWidget
 #endif
 {
-  ActionListener &listener;
-  const int id;
+  const std::function<void()> callback;
 
 public:
-  ActionWidget(ActionListener &_listener, int _id)
-    :listener(_listener), id(_id) {}
+  explicit ActionWidget(std::function<void()> _callback) noexcept
+    :callback(std::move(_callback)) {}
 
 public:
   bool Click() override;

@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_BIG_THERMAL_ASSISTANT_WIDGET_HPP
 
 #include "Widget/ContainerWidget.hpp"
-#include "Form/ActionListener.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 
 struct AttitudeState;
@@ -36,16 +35,11 @@ class BigThermalAssistantWindow;
 
 class BigThermalAssistantWidget
   : public ContainerWidget,
-    private ActionListener,
     private NullBlackboardListener {
   LiveBlackboard &blackboard;
   const ThermalAssistantLook &look;
 
   BigThermalAssistantWindow *view;
-
-  enum Action {
-    CLOSE,
-  };
 
   Button *close_button;
 
@@ -66,9 +60,6 @@ public:
 private:
   void UpdateLayout();
   void Update(const AttitudeState &attitude, const DerivedInfo &calculated);
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 
   /* virtual methods from class BlackboardListener */
   virtual void OnCalculatedUpdate(const MoreData &basic,

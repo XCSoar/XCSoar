@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Form/CheckBox.hpp"
-#include "Form/ActionListener.hpp"
 #include "Look/DialogLook.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/event/KeyCode.hpp"
@@ -34,14 +33,14 @@ CheckBoxControl::Create(ContainerWindow &parent, const DialogLook &_look,
                         tstring::const_pointer _caption,
                         const PixelRect &rc,
                         const WindowStyle style,
-                        ActionListener &_listener, int _id)
+                        Callback _callback) noexcept
 {
   checked = dragging = pressed = false;
   look = &_look;
   caption = _caption;
 
-  listener = &_listener;
-  id = _id;
+  callback = std::move(_callback);
+
   PaintWindow::Create(parent, rc, style);
 }
 
@@ -68,8 +67,8 @@ CheckBoxControl::SetPressed(bool value)
 bool
 CheckBoxControl::OnClicked()
 {
-  if (listener != nullptr) {
-    listener->OnAction(id);
+  if (callback) {
+    callback(GetState());
     return true;
   }
 

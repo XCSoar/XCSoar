@@ -67,14 +67,8 @@ Copyright_License {
 using namespace UI;
 
 class DeviceListWidget final
-  : public ListWidget, private ActionListener,
+  : public ListWidget,
     NullBlackboardListener, PortListener {
-  enum Buttons {
-    DISABLE,
-    RECONNECT, FLIGHT, EDIT, MANAGE, MONITOR,
-    DEBUG,
-  };
-
   const DialogLook &look;
 
   unsigned font_height;
@@ -226,9 +220,6 @@ public:
   void OnCursorMoved(unsigned index) noexcept override;
 
 private:
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
-
   /* virtual methods from class BlackboardListener */
   virtual void OnGPSUpdate(const MoreData &basic) override;
 
@@ -284,13 +275,33 @@ DeviceListWidget::RefreshList()
 void
 DeviceListWidget::CreateButtons(WidgetDialog &dialog)
 {
-  edit_button = dialog.AddButton(_("Edit"), *this, EDIT);
-  flight_button = dialog.AddButton(_("Flight download"), *this, FLIGHT);
-  manage_button = dialog.AddButton(_("Manage"), *this, MANAGE);
-  monitor_button = dialog.AddButton(_("Monitor"), *this, MONITOR);
-  reconnect_button = dialog.AddButton(_("Reconnect"), *this, RECONNECT);
-  disable_button = dialog.AddButton(_("Disable"), *this, DISABLE);
-  debug_button = dialog.AddButton(_("Debug"), *this, DEBUG);
+  edit_button = dialog.AddButton(_("Edit"), [this](){
+    EditCurrent();
+  });
+
+  flight_button = dialog.AddButton(_("Flight download"), [this](){
+    DownloadFlightFromCurrent();
+  });
+
+  manage_button = dialog.AddButton(_("Manage"), [this](){
+    ManageCurrent();
+  });
+
+  monitor_button = dialog.AddButton(_("Monitor"), [this](){
+    MonitorCurrent();
+  });
+
+  reconnect_button = dialog.AddButton(_("Reconnect"), [this](){
+    ReconnectCurrent();
+  });
+
+  disable_button = dialog.AddButton(_("Disable"), [this](){
+    EnableDisableCurrent();
+  });
+
+  debug_button = dialog.AddButton(_("Debug"), [this](){
+    DebugCurrent();
+  });
 }
 
 void
@@ -666,40 +677,6 @@ DeviceListWidget::DebugCurrent()
   msg.Format(_("Communication with this device will be logged for the next %u minutes."),
              MINUTES);
   ShowMessageBox(msg, _("Debug"), MB_OK | MB_ICONINFORMATION);
-}
-
-void
-DeviceListWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case DISABLE:
-    EnableDisableCurrent();
-    break;
-
-  case RECONNECT:
-    ReconnectCurrent();
-    break;
-
-  case FLIGHT:
-    DownloadFlightFromCurrent();
-    break;
-
-  case EDIT:
-    EditCurrent();
-    break;
-
-  case MANAGE:
-    ManageCurrent();
-    break;
-
-  case MONITOR:
-    MonitorCurrent();
-    break;
-
-  case DEBUG:
-    DebugCurrent();
-    break;
-  }
 }
 
 void

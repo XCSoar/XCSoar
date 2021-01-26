@@ -55,7 +55,7 @@ ShowWeatherDialog(const TCHAR *page)
                       look, _("Status"));
 
   auto *close_button = new ButtonWidget(look.button, _("Close"),
-                                        dialog, mrOK);
+                                        dialog.MakeModalResultCallback(mrOK));
 
   TabWidget widget(TabWidget::Orientation::AUTO, close_button);
   widget.SetPageFlippedCallback([&dialog, &widget]() {

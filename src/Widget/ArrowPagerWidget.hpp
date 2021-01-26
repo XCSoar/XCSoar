@@ -26,9 +26,9 @@ Copyright_License {
 
 #include "PagerWidget.hpp"
 #include "Form/Button.hpp"
-#include "Form/ActionListener.hpp"
 
 #include <cassert>
+#include <functional>
 
 struct ButtonLook;
 
@@ -36,7 +36,7 @@ struct ButtonLook;
  * A wrapper for #PagerWidget that adds arrow buttons on the
  * left/bottom for page navigation.
  */
-class ArrowPagerWidget : public PagerWidget, ActionListener {
+class ArrowPagerWidget : public PagerWidget {
   enum Buttons {
     PREVIOUS,
     NEXT,
@@ -51,8 +51,8 @@ class ArrowPagerWidget : public PagerWidget, ActionListener {
     Layout(PixelRect rc, const Widget *extra);
   };
 
-  ActionListener &action_listener;
   const ButtonLook &look;
+  const std::function<void()> close_callback;
 
   /**
    * An optional #Widget that is shown in the remaining area in the
@@ -64,10 +64,11 @@ class ArrowPagerWidget : public PagerWidget, ActionListener {
   Button close_button;
 
 public:
-  ArrowPagerWidget(ActionListener &_action_listener,
-                   const ButtonLook &_look,
+  ArrowPagerWidget(const ButtonLook &_look,
+                   std::function<void()> _close_callback,
                    Widget *const _extra=nullptr)
-    :action_listener(_action_listener), look(_look),
+    :look(_look),
+     close_callback(std::move(_close_callback)),
      extra(_extra) {}
 
   virtual ~ArrowPagerWidget();
@@ -88,10 +89,6 @@ public:
   void Move(const PixelRect &rc) override;
   bool SetFocus() override;
   bool KeyPress(unsigned key_code) override;
-
-private:
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 #endif

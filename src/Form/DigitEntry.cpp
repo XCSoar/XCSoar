@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "DigitEntry.hpp"
-#include "ActionListener.hpp"
 #include "ui/canvas/Font.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/dim/Rect.hpp"
@@ -42,8 +41,7 @@ Copyright_License {
 
 DigitEntry::DigitEntry(const DialogLook &_look)
   :look(_look),
-   button_renderer(look.button),
-   action_listener(nullptr)
+   button_renderer(look.button)
 {
 }
 
@@ -909,8 +907,8 @@ DigitEntry::OnKeyDown(unsigned key_code)
     return true;
 
   case KEY_RETURN:
-    if (action_listener != nullptr) {
-      action_listener->OnAction(action_id);
+    if (callback) {
+      callback();
       return true;
     }
 

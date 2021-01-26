@@ -38,7 +38,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 
 class AlternatesListWidget final
-  : public ListWidget, private ActionListener {
+  : public ListWidget {
   enum Buttons {
     SETTINGS,
     GOTO,
@@ -98,15 +98,22 @@ public:
   }
 
   void OnActivateItem(unsigned index) noexcept override;
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
 AlternatesListWidget::CreateButtons(WidgetDialog &dialog)
 {
-  goto_button = dialog.AddButton(_("Goto"), *this, GOTO);
+  goto_button = dialog.AddButton(_("Goto"), [this](){
+    unsigned index = GetCursorIndex();
+    assert(index < alternates.size());
+
+    auto const &item = alternates[index];
+    auto const &waypoint = item.waypoint;
+
+    protected_task_manager->DoGoto(waypoint);
+    cancel_button->Click();
+  });
+
   details_button = dialog.AddButton(_("Details"), mrOK);
   cancel_button = dialog.AddButton(_("Close"), mrCancel);
 }
@@ -125,24 +132,6 @@ void
 AlternatesListWidget::OnActivateItem(unsigned index) noexcept
 {
   details_button->Click();
-}
-
-void
-AlternatesListWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case GOTO:
-    unsigned index = GetCursorIndex();
-    assert(index < alternates.size());
-
-    auto const &item = alternates[index];
-    auto const &waypoint = item.waypoint;
-
-    protected_task_manager->DoGoto(waypoint);
-    cancel_button->Click();
-
-    break;
-  }
 }
 
 void

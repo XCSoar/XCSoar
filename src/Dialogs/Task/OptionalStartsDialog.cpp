@@ -38,12 +38,7 @@ Copyright_License {
 
 #include <cassert>
 
-class OptionStartsWidget : public ListWidget, private ActionListener {
-  enum Buttons {
-    RELOCATE,
-    REMOVE,
-  };
-
+class OptionStartsWidget : public ListWidget {
   OrderedTask &task;
   bool modified = false;
 
@@ -56,8 +51,14 @@ public:
     :task(_task) {}
 
   void CreateButtons(WidgetDialog &dialog) {
-    relocate_button = dialog.AddButton(_("Relocate"), *this, RELOCATE);
-    remove_button = dialog.AddButton(_("Remove"), *this, REMOVE);
+    relocate_button = dialog.AddButton(_("Relocate"), [this](){
+      Relocate(GetList().GetCursorIndex());
+    });
+
+    remove_button = dialog.AddButton(_("Remove"), [this](){
+      Remove(GetList().GetCursorIndex());
+    });
+
     dialog.AddButton(_("Close"), mrCancel);
   }
 
@@ -113,9 +114,6 @@ public:
   void OnActivateItem(unsigned index) noexcept override {
     Relocate(index);
   }
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
@@ -150,20 +148,6 @@ OptionStartsWidget::OnPaintItem(Canvas &canvas, PixelRect rc,
     assert(tp != nullptr);
 
     row_renderer.DrawTextRow(canvas, rc, tp->GetWaypoint().name.c_str());
-  }
-}
-
-void
-OptionStartsWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case RELOCATE:
-    Relocate(GetList().GetCursorIndex());
-    break;
-
-  case REMOVE:
-    Remove(GetList().GetCursorIndex());
-    break;
   }
 }
 

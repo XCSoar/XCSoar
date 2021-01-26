@@ -75,21 +75,6 @@ TaskClosePanel::CommitAndClose()
 }
 
 void
-TaskClosePanel::OnAction(int id) noexcept
-{
-  switch (id) {
-  case CLOSE:
-    CommitAndClose();
-    break;
-
-  case REVERT:
-    dialog.Revert();
-    RefreshStatus();
-    break;
-  }
-}
-
-void
 TaskClosePanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const Layout layout(rc, look);
@@ -103,7 +88,7 @@ TaskClosePanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   close_button.Create(parent, look.button, _("Close"),
                       layout.close_button, button_style,
-                      *this, CLOSE);
+                      [this](){ CommitAndClose(); });
 
   message.Create(parent, layout.message, style);
   message.SetAlignCenter();
@@ -111,7 +96,10 @@ TaskClosePanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   revert_button.Create(parent, look.button, _("Revert Changes"),
                        layout.revert_button, button_style,
-                       *this, REVERT);
+                       [this](){
+                         dialog.Revert();
+                         RefreshStatus();
+                       });
 }
 
 bool

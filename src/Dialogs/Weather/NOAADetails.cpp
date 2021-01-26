@@ -38,12 +38,7 @@ Copyright_License {
 #include "Weather/NOAAFormatter.hpp"
 #include "UIGlobals.hpp"
 
-class NOAADetailsWidget final : public LargeTextWidget, ActionListener {
-  enum Buttons {
-    UPDATE,
-    REMOVE,
-  };
-
+class NOAADetailsWidget final : public LargeTextWidget {
   WndForm &dialog;
   NOAAStore::iterator station_iterator;
 
@@ -61,16 +56,13 @@ private:
 
   /* virtual methods from class Widget */
   virtual void Show(const PixelRect &rc) override;
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
 NOAADetailsWidget::CreateButtons(WidgetDialog &buttons)
 {
-  buttons.AddButton(_("Update"), *this, UPDATE);
-  buttons.AddButton(_("Remove"), *this, REMOVE);
+  buttons.AddButton(_("Update"), [this](){ UpdateClicked(); });
+  buttons.AddButton(_("Remove"), [this](){ RemoveClicked(); });
 }
 
 void
@@ -126,20 +118,6 @@ NOAADetailsWidget::Show(const PixelRect &rc)
 {
   LargeTextWidget::Show(rc);
   Update();
-}
-
-void
-NOAADetailsWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case UPDATE:
-    UpdateClicked();
-    break;
-
-  case REMOVE:
-    RemoveClicked();
-    break;
-  }
 }
 
 void

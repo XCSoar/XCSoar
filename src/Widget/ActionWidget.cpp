@@ -22,19 +22,18 @@ Copyright_License {
 */
 
 #include "ActionWidget.hpp"
-#include "Form/ActionListener.hpp"
 
 bool
 ActionWidget::Click()
 {
-  listener.OnAction(id);
+  callback();
   return false;
 }
 
 void
 ActionWidget::ReClick()
 {
-  listener.OnAction(id);
+  callback();
 }
 
 #ifndef HAVE_CLIPPING

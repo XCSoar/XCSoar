@@ -25,18 +25,16 @@ Copyright_License {
 #define XCSOAR_OFFSET_BUTTONS_WIDGET_HPP
 
 #include "Widget.hpp"
-#include "Form/ActionListener.hpp"
 
 #include <tchar.h>
 
 struct ButtonLook;
-class ActionListener;
 class Button;
 
 /**
  * Show four buttons to increment/decrement a value.
  */
-class OffsetButtonsWidget : public NullWidget, private ActionListener {
+class OffsetButtonsWidget : public NullWidget {
   const ButtonLook &look;
   const TCHAR *const format;
   const double offsets[4];
@@ -61,10 +59,6 @@ public:
 
 protected:
   virtual void OnOffset(double offset) = 0;
-
-private:
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 #endif

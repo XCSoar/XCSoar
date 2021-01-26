@@ -857,11 +857,11 @@ static Button *
 NewSymbolButton(ContainerWindow &parent, const ButtonLook &look,
                 const TCHAR *caption,
                 const PixelRect &rc,
-                ActionListener &listener, int id)
+                Button::Callback callback) noexcept
 {
   return new Button(parent, rc, WindowStyle(),
                     new SymbolButtonRenderer(look, caption),
-                    listener, id);
+                    std::move(callback));
 }
 
 void
@@ -874,19 +874,23 @@ TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
   const PixelRect rc = GetContainer().GetClientRect();
 
   zoom_in_button = NewSymbolButton(GetContainer(), look.dialog.button,
-                                   _T("+"), rc, *this, ZOOM_IN);
+                                   _T("+"), rc,
+                                   [this](){ ZoomIn(); });
   zoom_out_button = NewSymbolButton(GetContainer(), look.dialog.button,
-                                    _T("-"), rc, *this, ZOOM_OUT);
+                                    _T("-"), rc,
+                                    [this](){ ZoomOut(); });
   previous_item_button = NewSymbolButton(GetContainer(), look.dialog.button,
-                                         _T("<"), rc, *this, PREVIOUS_ITEM);
+                                         _T("<"), rc,
+                                         [this](){ PreviousTarget(); });
   next_item_button = NewSymbolButton(GetContainer(), look.dialog.button,
-                                     _T(">"), rc, *this, NEXT_ITEM);
+                                     _T(">"), rc,
+                                     [this](){ NextTarget(); });
   details_button = new Button(GetContainer(), look.dialog.button,
                               _("Details"), rc, WindowStyle(),
-                              *this, DETAILS);
+                              [this](){ OpenDetails(); });
   close_button = new Button(GetContainer(), look.dialog.button,
                             _("Close"), rc, WindowStyle(),
-                            *this, CLOSE);
+                            [](){ PageActions::Restore(); });
 
   view = new FlarmTrafficControl(look.flarm_dialog);
   view->Create(GetContainer(), rc);
@@ -945,36 +949,6 @@ TrafficWidget::SetFocus()
 {
   view->SetFocus();
   return true;
-}
-
-void
-TrafficWidget::OnAction(int id) noexcept
-{
-  switch ((Action)id) {
-  case CLOSE:
-    PageActions::Restore();
-    break;
-
-  case DETAILS:
-    OpenDetails();
-    break;
-
-  case PREVIOUS_ITEM:
-    PreviousTarget();
-    break;
-
-  case NEXT_ITEM:
-    NextTarget();
-    break;
-
-  case ZOOM_IN:
-    ZoomIn();
-    break;
-
-  case ZOOM_OUT:
-    ZoomOut();
-    break;
-  }
 }
 
 void

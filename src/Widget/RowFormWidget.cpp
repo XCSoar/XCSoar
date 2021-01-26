@@ -292,7 +292,8 @@ RowFormWidget::AddMultiLine(const TCHAR *text)
 }
 
 Button *
-RowFormWidget::AddButton(const TCHAR *label, ActionListener &listener, int id)
+RowFormWidget::AddButton(const TCHAR *label,
+                         std::function<void()> callback) noexcept
 {
   assert(IsDefined());
 
@@ -305,7 +306,7 @@ RowFormWidget::AddButton(const TCHAR *label, ActionListener &listener, int id)
   ContainerWindow &panel = (ContainerWindow &)GetWindow();
 
   Button *button = new Button(panel, look.button, label, button_rc,
-                              button_style, listener, id);
+                              button_style, std::move(callback));
 
   Add(Row::Type::BUTTON, button);
   return button;

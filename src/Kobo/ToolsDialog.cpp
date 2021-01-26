@@ -61,7 +61,7 @@ public:
 
 
 class ToolsWidget final
-  : public RowFormWidget, ActionListener {
+  : public RowFormWidget {
 
   const unsigned MAX_SCRIPTS = 12;
 
@@ -73,11 +73,6 @@ public:
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
-
-private:
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
-
 };
 
 
@@ -93,14 +88,9 @@ ToolsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   unsigned max_script_buttons = std::min(len, MAX_SCRIPTS);
   for (unsigned i = 0; i < max_script_buttons; i++)
-    AddButton(list[i].name, *this, i);
-}
-
-void
-ToolsWidget::OnAction(int id) noexcept
-{
-  if (id >= 0 && id < (int) list.size())
-    Run(list[id].path.c_str());
+    AddButton(list[i].name, [this, i](){
+      Run(list[i].path.c_str());
+    });
 }
 
 void

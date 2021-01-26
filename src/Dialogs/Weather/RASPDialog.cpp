@@ -34,7 +34,6 @@ Copyright_License {
 #include "Form/List.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
-#include "Form/ActionListener.hpp"
 #include "Protection.hpp"
 #include "DataGlobals.hpp"
 #include "UIGlobals.hpp"
@@ -49,7 +48,7 @@ Copyright_License {
 #include <stdio.h>
 
 class RASPSettingsPanel final
-  : public RowFormWidget, DataFieldListener, ActionListener {
+  : public RowFormWidget, DataFieldListener {
 
   enum Controls {
     ITEM,
@@ -82,15 +81,6 @@ private:
       UpdateTimeControl();
     else if (IsDataField(TIME, df))
       OnTimeModified((const DataFieldEnum &)df);
-  }
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override {
-    switch (id) {
-    case DOWNLOAD:
-      Download();
-      break;
-    }
   }
 };
 
@@ -226,7 +216,7 @@ RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddEnum(_("Time"), nullptr, this);
   UpdateTimeControl();
 
-  AddButton(_("Download"), *this, DOWNLOAD);
+  AddButton(_("Download"), [this](){ Download(); });
 }
 
 bool

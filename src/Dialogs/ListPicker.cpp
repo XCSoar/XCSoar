@@ -34,9 +34,7 @@ Copyright_License {
 
 #include <cassert>
 
-static constexpr int HELP = 100;
-
-class ListPickerWidget : public ListWidget, public ActionListener {
+class ListPickerWidget : public ListWidget {
   unsigned num_items;
   unsigned initial_value;
   unsigned row_height;
@@ -44,7 +42,7 @@ class ListPickerWidget : public ListWidget, public ActionListener {
   bool visible;
 
   ListItemRenderer &item_renderer;
-  ActionListener &action_listener;
+  WndForm &dialog;
 
   /**
    * This timer is used to postpone the initial UpdateHelp() call.
@@ -65,13 +63,13 @@ public:
   ListPickerWidget(unsigned _num_items, unsigned _initial_value,
                    unsigned _row_height,
                    ListItemRenderer &_item_renderer,
-                   ActionListener &_action_listener,
+                   WndForm &_dialog,
                    const TCHAR *_caption, const TCHAR *_help_text)
     :num_items(_num_items), initial_value(_initial_value),
      row_height(_row_height),
      visible(false),
      item_renderer(_item_renderer),
-     action_listener(_action_listener),
+     dialog(_dialog),
      caption(_caption), help_text(_help_text),
      item_help_callback(nullptr) {}
 
@@ -91,6 +89,10 @@ public:
 
     help_widget->SetText(item_help_callback(index));
     two_widgets->UpdateLayout();
+  }
+
+  void ShowHelp() noexcept {
+    HelpDialog(caption, help_text);
   }
 
   /* virtual methods from class Widget */
@@ -136,13 +138,7 @@ public:
   }
 
   void OnActivateItem(unsigned index) noexcept override {
-    action_listener.OnAction(mrOK);
-  }
-
-  /* virtual methods from class ActionListener */
-
-  void OnAction(int id) noexcept override {
-    HelpDialog(caption, help_text);
+    dialog.SetModalResult(mrOK);
   }
 };
 
@@ -178,7 +174,9 @@ ListPicker(const TCHAR *caption,
   }
 
   if (help_text != nullptr)
-    dialog.AddButton(_("Help"), *list_widget, HELP);
+    dialog.AddButton(_("Help"), [list_widget](){
+      list_widget->ShowHelp();
+    });
 
   if (num_items > 0)
     dialog.AddButton(_("Select"), mrOK);

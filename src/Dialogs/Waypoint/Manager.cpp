@@ -48,14 +48,7 @@ Copyright_License {
 #endif
 
 class WaypointManagerWidget final
-  : public ListWidget, private ActionListener {
-  enum Buttons {
-    NEW,
-    IMPORT,
-    EDIT,
-    SAVE,
-    DELETE,
-  };
+  : public ListWidget {
 
   Button *new_button, *edit_button, *save_button, *delete_button;
 
@@ -100,9 +93,6 @@ private:
 
   void OnActivateItem(unsigned index) noexcept override;
 
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override;
-
 private:
   void UpdateList();
   void UpdateButtons();
@@ -122,11 +112,25 @@ private:
 void
 WaypointManagerWidget::CreateButtons(WidgetDialog &dialog)
 {
-  new_button = dialog.AddButton(_("New"), *this, NEW);
-  edit_button = dialog.AddButton(_("Import"), *this, IMPORT);
-  edit_button = dialog.AddButton(_("Edit"), *this, EDIT);
-  save_button = dialog.AddButton(_("Save"), *this, SAVE);
-  delete_button = dialog.AddButton(_("Delete"), *this, DELETE);
+  new_button = dialog.AddButton(_("New"), [this](){
+    OnWaypointNewClicked();
+  });
+
+  edit_button = dialog.AddButton(_("Import"), [this](){
+    OnWaypointImportClicked();
+  });
+
+  edit_button = dialog.AddButton(_("Edit"), [this](){
+    OnWaypointEditClicked(GetList().GetCursorIndex());
+  });
+
+  save_button = dialog.AddButton(_("Save"), [this](){
+    OnWaypointSaveClicked();
+  });
+
+  delete_button = dialog.AddButton(_("Delete"), [this](){
+    OnWaypointDeleteClicked(GetList().GetCursorIndex());
+  });
 }
 
 void
@@ -282,32 +286,6 @@ WaypointManagerWidget::OnWaypointDeleteClicked(unsigned i)
     }
 
     Update();
-  }
-}
-
-void
-WaypointManagerWidget::OnAction(int id) noexcept
-{
-  switch (Buttons(id)) {
-  case NEW:
-    OnWaypointNewClicked();
-    break;
-
-  case IMPORT:
-    OnWaypointImportClicked();
-    break;
-
-  case EDIT:
-    OnWaypointEditClicked(GetList().GetCursorIndex());
-    break;
-
-  case SAVE:
-    OnWaypointSaveClicked();
-    break;
-
-  case DELETE:
-    OnWaypointDeleteClicked(GetList().GetCursorIndex());
-    break;
   }
 }
 

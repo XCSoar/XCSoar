@@ -56,8 +56,8 @@ NumberEntryDialog(const TCHAR *caption,
 
   /* create buttons */
 
-  dialog.AddButton(_("OK"), dialog, mrOK);
-  dialog.AddButton(_("Cancel"), dialog, mrCancel);
+  dialog.AddButton(_("OK"), mrOK);
+  dialog.AddButton(_("Cancel"), mrCancel);
 
   /* run it */
 
@@ -100,8 +100,8 @@ NumberEntryDialog(const TCHAR *caption,
 
   /* create buttons */
 
-  dialog.AddButton(_("OK"), dialog, mrOK);
-  dialog.AddButton(_("Cancel"), dialog, mrCancel);
+  dialog.AddButton(_("OK"), mrOK);
+  dialog.AddButton(_("Cancel"), mrCancel);
 
   /* run it */
 
@@ -142,8 +142,8 @@ AngleEntryDialog(const TCHAR *caption, Angle &value)
 
   /* create buttons */
 
-  dialog.AddButton(_("OK"), dialog, mrOK);
-  dialog.AddButton(_("Cancel"), dialog, mrCancel);
+  dialog.AddButton(_("OK"), mrOK);
+  dialog.AddButton(_("Cancel"), mrCancel);
 
   /* run it */
 

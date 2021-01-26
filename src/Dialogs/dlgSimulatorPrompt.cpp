@@ -35,8 +35,8 @@ class SimulatorPromptWidget final : public WindowWidget {
 
 public:
   SimulatorPromptWidget(const DialogLook &_look,
-                        ActionListener &_action_listener)
-    :w(_look, _action_listener, true) {}
+                        std::function<void(SimulatorPromptWindow::Result)> callback) noexcept
+    :w(_look, std::move(callback), true) {}
 
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
@@ -59,23 +59,32 @@ dlgSimulatorPromptShowModal()
   const DialogLook &look = UIGlobals::GetDialogLook();
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, nullptr);
-  SimulatorPromptWidget widget(look, dialog);
+
+  SimulatorPromptResult result = SPR_QUIT;
+  SimulatorPromptWidget widget(look, [&](SimulatorPromptWindow::Result r){
+    switch (r) {
+    case SimulatorPromptWindow::Result::FLY:
+      result = SPR_FLY;
+      break;
+
+    case SimulatorPromptWindow::Result::SIMULATOR:
+      result = SPR_SIMULATOR;
+      break;
+
+    case SimulatorPromptWindow::Result::QUIT:
+      result = SPR_QUIT;
+      break;
+    }
+
+    dialog.SetModalResult(mrOK);
+  });
 
   dialog.FinishPreliminary(&widget);
 
-  const int result = dialog.ShowModal();
+  dialog.ShowModal();
   dialog.StealWidget();
 
-  switch (result) {
-  case SimulatorPromptWindow::FLY:
-    return SPR_FLY;
-
-  case SimulatorPromptWindow::SIMULATOR:
-    return SPR_SIMULATOR;
-
-  default:
-    return SPR_QUIT;
-  }
+  return result;
 #else
   return SPR_FLY;
 #endif

@@ -24,7 +24,6 @@ Copyright_License {
 #include "MatTaskMonitor.hpp"
 #include "PageActions.hpp"
 #include "Widget/QuestionWidget.hpp"
-#include "Form/ActionListener.hpp"
 #include "Language/Language.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/TaskManager.hpp"
@@ -38,13 +37,9 @@ Copyright_License {
 #include "Interface.hpp"
 
 class MatTaskAddWidget final
-  : public QuestionWidget, private ActionListener {
+  : public QuestionWidget
+{
   MatTaskMonitor &monitor;
-
-  enum Action {
-    DISMISS,
-    ADD,
-  };
 
   const WaypointPtr waypoint;
 
@@ -58,10 +53,15 @@ class MatTaskAddWidget final
 
 public:
   MatTaskAddWidget(MatTaskMonitor &_monitor, WaypointPtr &&_waypoint)
-    :QuestionWidget(MakeMessage(*_waypoint), *this),
+    :QuestionWidget(MakeMessage(*_waypoint)),
      monitor(_monitor), waypoint(std::move(_waypoint)) {
-    AddButton(_("Add"), ADD);
-    AddButton(_("Dismiss"), DISMISS);
+    AddButton(_("Add"), [this](){
+      OnAdd();
+      PageActions::RestoreBottom();
+    });
+    AddButton(_("Dismiss"), [](){
+      PageActions::RestoreBottom();
+    });
   }
 
   ~MatTaskAddWidget() {
@@ -71,9 +71,6 @@ public:
 
 private:
   void OnAdd();
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 inline void
@@ -92,21 +89,6 @@ MatTaskAddWidget::OnAdd()
     factory.Insert(*tp, idx, false);
     delete tp;
   }
-}
-
-void
-MatTaskAddWidget::OnAction(int id) noexcept
-{
-  switch ((Action)id) {
-  case DISMISS:
-    break;
-
-  case ADD:
-    OnAdd();
-    break;
-  }
-
-  PageActions::RestoreBottom();
 }
 
 /**

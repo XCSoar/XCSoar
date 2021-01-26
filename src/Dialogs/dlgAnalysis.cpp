@@ -126,13 +126,7 @@ protected:
   virtual void OnPaint(Canvas &canvas) override;
 };
 
-class AnalysisWidget final : public NullWidget, ActionListener {
-  enum Buttons {
-    PREVIOUS,
-    NEXT,
-    DETAILS,
-  };
-
+class AnalysisWidget final : public NullWidget {
   struct Layout {
     PixelRect info;
     PixelRect details_button, previous_button, next_button, close_button;
@@ -224,24 +218,6 @@ protected:
   }
 
   bool KeyPress(unsigned key_code) override;
-
-private:
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override {
-    switch (id) {
-    case PREVIOUS:
-      NextPage(-1);
-      break;
-
-    case NEXT:
-      NextPage(1);
-      break;
-
-    case DETAILS:
-      OnCalcClicked();
-      break;
-    }
-  }
 };
 
 AnalysisWidget::Layout::Layout(const PixelRect rc)
@@ -303,13 +279,13 @@ AnalysisWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   const auto &button_look = dialog.GetLook().button;
   details_button.Create(parent, button_look, _T("Calc"), layout.details_button,
-                        button_style, *this, DETAILS);
+                        button_style, [this](){ OnCalcClicked(); });
   previous_button.Create(parent, button_look, _T("<"), layout.previous_button,
-                         button_style, *this, PREVIOUS);
+                         button_style, [this](){ NextPage(-1); });
   next_button.Create(parent, button_look, _T(">"), layout.next_button,
-                     button_style, *this, NEXT);
+                     button_style, [this](){ NextPage(1); });
   close_button.Create(parent, button_look, _("Close"), layout.close_button,
-                      button_style, dialog, mrOK);
+                      button_style, dialog.MakeModalResultCallback(mrOK));
 
   WindowStyle style;
   style.Hide();

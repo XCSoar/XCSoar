@@ -26,7 +26,6 @@ Copyright_License {
 #include "Widget/FixedWindowWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
 #include "Form/DigitEntry.hpp"
-#include "Form/LambdaActionListener.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Geo/GeoPoint.hpp"
@@ -55,13 +54,13 @@ GeoPointEntryDialog(const TCHAR *caption, GeoPoint &value,
   latitude_entry.CreateLatitude(client_area, client_area.GetClientRect(),
                                 control_style, format);
   latitude_entry.Resize(latitude_entry.GetRecommendedSize());
-  latitude_entry.SetActionListener(dialog, mrOK);
+  latitude_entry.SetCallback(dialog.MakeModalResultCallback(mrOK));
 
   DigitEntry longitude_entry(look);
   longitude_entry.CreateLongitude(client_area, client_area.GetClientRect(),
                                   control_style, format);
   longitude_entry.Resize(longitude_entry.GetRecommendedSize());
-  longitude_entry.SetActionListener(dialog, mrOK);
+  longitude_entry.SetCallback(dialog.MakeModalResultCallback(mrOK));
 
   if (value.IsValid()) {
     latitude_entry.SetLatitude(value.latitude, format);
@@ -73,16 +72,14 @@ GeoPointEntryDialog(const TCHAR *caption, GeoPoint &value,
 
   /* create buttons */
 
-  dialog.AddButton(_("OK"), dialog, mrOK);
-  dialog.AddButton(_("Cancel"), dialog, mrCancel);
+  dialog.AddButton(_("OK"), mrOK);
+  dialog.AddButton(_("Cancel"), mrCancel);
 
-  auto clear_listener = MakeLambdaActionListener([&latitude_entry,
-                                                  &longitude_entry](unsigned){
+  if (nullable)
+    dialog.AddButton(_("Clear"), [&latitude_entry, &longitude_entry](){
       latitude_entry.SetInvalid();
       longitude_entry.SetInvalid();
     });
-  if (nullable)
-    dialog.AddButton(_("Clear"), clear_listener, 0);
 
   /* run it */
 

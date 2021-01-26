@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_FORM_FORM_HPP
 #define XCSOAR_FORM_FORM_HPP
 
-#include "ActionListener.hpp"
 #include "ui/window/ContainerWindow.hpp"
 #include "ui/window/SolidContainerWindow.hpp"
 #include "util/tstring.hpp"
@@ -45,8 +44,7 @@ enum ModalResult {
 /**
  * A modal dialog.
  */
-class WndForm : public ContainerWindow,
-                public ActionListener
+class WndForm : public ContainerWindow
 {
 public:
   typedef std::function<bool(unsigned)> KeyDownFunction;
@@ -151,13 +149,14 @@ public:
     force = _force;
   }
 
-  void SetModalResult(int Value) {
+  virtual void SetModalResult(int Value) noexcept {
     modal_result = Value;
   }
 
-  /** inherited from ActionListener */
-  void OnAction(int id) noexcept override {
-    SetModalResult(id);
+  auto MakeModalResultCallback(int value) noexcept {
+    return [this, value](){
+      SetModalResult(value);
+    };
   }
 
   /**

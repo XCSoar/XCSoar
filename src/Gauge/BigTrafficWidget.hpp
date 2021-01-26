@@ -25,7 +25,6 @@
 #define XCSOAR_TRAFFIC_WIDGET_HPP
 
 #include "Widget/ContainerWidget.hpp"
-#include "Form/ActionListener.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 #include "util/Compiler.h"
 
@@ -33,17 +32,7 @@ class Button;
 class FlarmTrafficControl;
 
 class TrafficWidget : public ContainerWidget,
-                      private ActionListener,
                       private NullBlackboardListener {
-  enum Action {
-    CLOSE,
-    ZOOM_IN,
-    ZOOM_OUT,
-    PREVIOUS_ITEM,
-    NEXT_ITEM,
-    DETAILS,
-  };
-
   Button *zoom_in_button, *zoom_out_button;
   Button *previous_item_button, *next_item_button;
   Button *details_button;
@@ -84,9 +73,6 @@ public:
   virtual bool SetFocus() override;
 
 private:
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
-
   /* virtual methods from class BlackboardListener */
   virtual void OnGPSUpdate(const MoreData &basic) override;
 };

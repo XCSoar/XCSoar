@@ -42,13 +42,8 @@ Copyright_License {
 
 #include <cassert>
 
-/* this macro exists in the WIN32 API */
-#ifdef DELETE
-#undef DELETE
-#endif
-
 class ProfileListWidget final
-  : public TextListWidget, private ActionListener {
+  : public TextListWidget {
 
   struct ListItem {
     StaticString<32> name;
@@ -72,13 +67,6 @@ class ProfileListWidget final
     void Visit(Path path, Path filename) override {
       list.emplace_back(filename.c_str(), path);
     }
-  };
-
-  enum Buttons {
-    NEW,
-    PASSWORD,
-    COPY,
-    DELETE,
   };
 
   const bool select;
@@ -134,10 +122,6 @@ protected:
   void OnActivateItem(unsigned index) noexcept override {
     form->SetModalResult(mrOK);
   }
-
-private:
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
@@ -186,10 +170,10 @@ ProfileListWidget::CreateButtons(WidgetDialog &dialog)
 {
   form = &dialog;
 
-  dialog.AddButton(_("New"), *this, NEW);
-  password_button = dialog.AddButton(_("Password"), *this, PASSWORD);
-  copy_button = dialog.AddButton(_("Copy"), *this, COPY);
-  delete_button = dialog.AddButton(_("Delete"), *this, DELETE);
+  dialog.AddButton(_("New"), [this](){ NewClicked(); });
+  password_button = dialog.AddButton(_("Password"), [this](){ PasswordClicked(); });
+  copy_button = dialog.AddButton(_("Copy"), [this](){ CopyClicked(); });
+  delete_button = dialog.AddButton(_("Delete"), [this](){ DeleteClicked(); });
 }
 
 void
@@ -341,28 +325,6 @@ ProfileListWidget::DeleteClicked()
 
   File::Delete(item.path);
   UpdateList();
-}
-
-void
-ProfileListWidget::OnAction(int id) noexcept
-{
-  switch ((Buttons)id) {
-  case NEW:
-    NewClicked();
-    break;
-
-  case PASSWORD:
-    PasswordClicked();
-    break;
-
-  case COPY:
-    CopyClicked();
-    break;
-
-  case DELETE:
-    DeleteClicked();
-    break;
-  }
 }
 
 void

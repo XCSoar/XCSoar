@@ -39,16 +39,7 @@ Copyright_License {
 using namespace UI;
 
 class ManageCAI302Widget final
-  : public RowFormWidget, private ActionListener {
-  enum Controls {
-    Units,
-    Waypoints,
-    StartLogger,
-    StopLogger,
-    DeleteAllFlights,
-    Reboot,
-  };
-
+  : public RowFormWidget {
   CAI302Device &device;
 
 public:
@@ -57,22 +48,7 @@ public:
 
   /* virtual methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-
-private:
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override;
 };
-
-void
-ManageCAI302Widget::Prepare(ContainerWindow &parent, const PixelRect &rc)
-{
-  AddButton(_("Units"), *this, Units);
-  AddButton(_("Waypoints"), *this, Waypoints);
-  AddButton(_("Start Logger"), *this, StartLogger);
-  AddButton(_("Stop Logger"), *this, StopLogger);
-  AddButton(_("Delete all flights"), *this, DeleteAllFlights);
-  AddButton(_("Reboot"), *this, Reboot);
-}
 
 static void
 EditUnits(const DialogLook &look, CAI302Device &device)
@@ -104,49 +80,39 @@ UploadWaypoints(const DialogLook &look, CAI302Device &device)
 }
 
 void
-ManageCAI302Widget::OnAction(int id) noexcept
+ManageCAI302Widget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  switch (id) {
-  case Units:
+  AddButton(_("Units"), [this](){
     EditUnits(GetLook(), device);
-    break;
+  });
 
-  case Waypoints:
+  AddButton(_("Waypoints"), [this](){
     UploadWaypoints(GetLook(), device);
-    break;
+  });
 
-  case StartLogger:
-    {
-      MessageOperationEnvironment env;
-      device.StartLogging(env);
-    }
-    break;
+  AddButton(_("Start Logger"), [this](){
+    MessageOperationEnvironment env;
+    device.StartLogging(env);
+  });
 
-  case StopLogger:
-    {
-      MessageOperationEnvironment env;
-      device.StopLogging(env);
-    }
-    break;
+  AddButton(_("Stop Logger"), [this](){
+    MessageOperationEnvironment env;
+    device.StopLogging(env);
+  });
 
-  case DeleteAllFlights:
-    {
+  AddButton(_("Delete all flights"), [this](){
       if (ShowMessageBox(_("Do you really want to delete all flights from the device?"),
                       _T("CAI 302"), MB_YESNO) != IDYES)
         return;
 
       MessageOperationEnvironment env;
       device.ClearLog(env);
-    }
-    break;
+  });
 
-  case Reboot:
-    {
-      MessageOperationEnvironment env;
-      device.Reboot(env);
-    }
-    break;
-  }
+  AddButton(_("Reboot"), [this](){
+    MessageOperationEnvironment env;
+    device.Reboot(env);
+  });
 }
 
 void

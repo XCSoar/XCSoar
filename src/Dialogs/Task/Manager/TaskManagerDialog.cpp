@@ -50,10 +50,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 
-enum Buttons {
-  MAP = 100,
-};
-
 TaskManagerDialog::~TaskManagerDialog()
 {
   delete task;
@@ -94,16 +90,6 @@ TaskManagerDialog::OnPageFlipped()
 }
 
 void
-TaskManagerDialog::OnAction(int id) noexcept
-{
-  switch (id) {
-  case MAP:
-    TaskViewClicked();
-    break;
-  }
-}
-
-void
 TaskManagerDialog::Initialise(ContainerWindow &parent, const PixelRect &rc)
 {
   task = protected_task_manager->TaskClone();
@@ -111,7 +97,7 @@ TaskManagerDialog::Initialise(ContainerWindow &parent, const PixelRect &rc)
   /* create the controls */
 
   SetExtra(new ButtonWidget(new TaskMapButtonRenderer(UIGlobals::GetMapLook()),
-                            *this, MAP));
+                            [this](){ TaskViewClicked(); }));
 
   TabWidget::Initialise(parent, rc);
 

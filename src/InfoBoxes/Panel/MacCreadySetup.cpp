@@ -25,14 +25,12 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Widget/WindowWidget.hpp"
 #include "Form/CheckBox.hpp"
-#include "Form/ActionListener.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 #include "Profile/Profile.hpp"
 
-class MacCreadySetupPanel : public WindowWidget,
-                            private ActionListener {
+class MacCreadySetupPanel : public WindowWidget {
   CheckBoxControl auto_mc;
 
 public:
@@ -45,18 +43,7 @@ public:
                        const PixelRect &rc) override;
 
   virtual void Show(const PixelRect &rc) override;
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
-
-void
-MacCreadySetupPanel::OnAction(int id) noexcept
-{
-  TaskBehaviour &task_behaviour = CommonInterface::SetComputerSettings().task;
-  task_behaviour.auto_mc = auto_mc.GetState();
-  Profile::Set(ProfileKeys::AutoMc, task_behaviour.auto_mc);
-}
 
 void
 MacCreadySetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
@@ -66,7 +53,11 @@ MacCreadySetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   style.TabStop();
 
   auto_mc.Create(parent, UIGlobals::GetDialogLook(), _("Auto"), rc, style,
-                 *this, 1);
+                 [](bool value){
+                   TaskBehaviour &task_behaviour = CommonInterface::SetComputerSettings().task;
+                   task_behaviour.auto_mc = value;
+                   Profile::Set(ProfileKeys::AutoMc, task_behaviour.auto_mc);
+                 });
   SetWindow(&auto_mc);
 }
 

@@ -29,7 +29,6 @@ Copyright_License {
 #include "ui/window/SingleWindow.hpp"
 #include "ui/canvas/BufferCanvas.hpp"
 #include "Form/Button.hpp"
-#include "Form/ActionListener.hpp"
 #include "Renderer/ButtonRenderer.hpp"
 
 #ifndef ENABLE_OPENGL
@@ -38,7 +37,7 @@ Copyright_License {
 
 #include <algorithm>
 
-class TestWindow final : public UI::SingleWindow, ActionListener {
+class TestWindow final : public UI::SingleWindow {
 #ifndef ENABLE_OPENGL
   Button buffer_button;
 #endif
@@ -50,13 +49,6 @@ class TestWindow final : public UI::SingleWindow, ActionListener {
 #endif
 
   ButtonFrameRenderer button_renderer;
-
-  enum Buttons {
-#ifndef ENABLE_OPENGL
-    BUFFER,
-#endif
-    CLOSE
-  };
 
 public:
   TestWindow():page(0)
@@ -80,8 +72,16 @@ public:
     button_rc.right = button_rc.left + 65;
 
     buffer_button.Create(*this, *button_look, _T("Buffer"), button_rc,
-                        WindowStyle(),
-                         *this, BUFFER);
+                         WindowStyle(),
+                         [this](){
+                           buffered = !buffered;
+                           if (buffered) {
+                             WindowCanvas canvas(*this);
+                             buffer.Create(canvas, canvas.GetSize());
+                           } else
+                             buffer.Destroy();
+                           update();
+                         });
 #endif
 
     button_rc.right = rc.right - 5;
@@ -89,7 +89,7 @@ public:
 
     close_button.Create(*this, *button_look, _T("Close"), button_rc,
                         WindowStyle(),
-                        *this, CLOSE);
+                        [this](){ Close(); });
   }
 
 private:
@@ -210,27 +210,6 @@ protected:
 #endif
 
     SingleWindow::OnPaint(canvas);
-  }
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override {
-    switch (id) {
-    case CLOSE:
-      Close();
-      break;
-
-#ifndef ENABLE_OPENGL
-    case BUFFER:
-      buffered = !buffered;
-      if (buffered) {
-        WindowCanvas canvas(*this);
-        buffer.Create(canvas, canvas.GetSize());
-      } else
-        buffer.Destroy();
-      update();
-      break;
-#endif
-    }
   }
 };
 

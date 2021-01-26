@@ -112,34 +112,12 @@ TaskActionsPanel::ReClick()
 void
 TaskActionsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  AddButton(_("New Task"), *this, NEW_TASK);
-  AddButton(_("Declare"), *this, DECLARE);
-  AddButton(_("Browse"), *this, BROWSE);
-  AddButton(_("Save"), *this, SAVE);
+  AddButton(_("New Task"), [this](){ OnNewTaskClicked(); });
+  AddButton(_("Declare"), [this](){ OnDeclareClicked(); });
+  AddButton(_("Browse"), [this](){ OnBrowseClicked(); });
+  AddButton(_("Save"), [this](){ SaveTask(); });
 
   if (is_simulator())
     /* cannot communicate with real devices in simulator mode */
     SetRowEnabled(DECLARE, false);
-}
-
-void
-TaskActionsPanel::OnAction(int id) noexcept
-{
-  switch (id) {
-  case NEW_TASK:
-    OnNewTaskClicked();
-    break;
-
-  case DECLARE:
-    OnDeclareClicked();
-    break;
-
-  case BROWSE:
-    OnBrowseClicked();
-    break;
-
-  case SAVE:
-    SaveTask();
-    break;
-  }
 }

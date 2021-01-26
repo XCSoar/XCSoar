@@ -81,12 +81,7 @@ static VegaDevice *device;
 static bool changed, dirty;
 
 class VegaConfigurationExtraButtons final
-  : public NullWidget, ActionListener {
-  enum Buttons {
-    DEMO,
-    SAVE,
-  };
-
+  : public NullWidget {
   struct Layout {
     PixelRect demo, save;
 
@@ -121,9 +116,11 @@ protected:
 
     const auto &button_look = dialog.GetLook().button;
     demo_button.Create(parent, button_look, _("Demo"),
-                       layout.demo, style, *this, DEMO);
+                       layout.demo, style,
+                       [this](){ OnDemo(); });
     save_button.Create(parent, button_look, _("Save"),
-                       layout.save, style, *this, SAVE);
+                       layout.save, style,
+                       [this](){ OnSave(); });
   }
 
   void Show(const PixelRect &rc) override {
@@ -146,19 +143,6 @@ protected:
 private:
   void OnDemo();
   void OnSave();
-
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override {
-    switch (id) {
-    case DEMO:
-      OnDemo();
-      break;
-
-    case SAVE:
-      OnSave();
-      break;
-    }
-  }
 };
 
 static void
@@ -178,6 +162,12 @@ SetParametersScheme(PagerWidget &pager, int schemetype)
     pager.PrepareWidget(4 + i);
     ((VegaAudioParametersWidget &)pager.GetWidget(4 + i)).LoadScheme(scheme.audio[i]);
   }
+}
+
+static auto
+MakeSetParametersScheme(PagerWidget &pager, int schemetype) noexcept
+{
+  return [&pager, schemetype](){ SetParametersScheme(pager, schemetype); };
 }
 
 static void
@@ -212,7 +202,7 @@ VegaConfigurationExtraButtons::OnDemo()
   dlgVegaDemoShowModal();
 }
 
-class VegaSchemeButtonsPage : public RowFormWidget, ActionListener {
+class VegaSchemeButtonsPage : public RowFormWidget {
   PagerWidget &pager;
 
 public:
@@ -223,15 +213,10 @@ public:
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override {
     RowFormWidget::Prepare(parent, rc);
 
-    AddButton(_T("Vega"), *this, 0);
-    AddButton(_T("Borgelt"), *this, 1);
-    AddButton(_T("Cambridge"), *this, 2);
-    AddButton(_T("Zander"), *this, 3);
-  }
-
-  /* methods from ActionListener */
-  void OnAction(int id) noexcept override {
-    SetParametersScheme(pager, id);
+    AddButton(_T("Vega"), MakeSetParametersScheme(pager, 0));
+    AddButton(_T("Borgelt"), MakeSetParametersScheme(pager, 1));
+    AddButton(_T("Cambridge"), MakeSetParametersScheme(pager, 2));
+    AddButton(_T("Zander"), MakeSetParametersScheme(pager, 3));
   }
 };
 
@@ -278,7 +263,8 @@ dlgConfigurationVarioShowModal(Device &_device)
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, _("Vario Configuration"));
 
-  ArrowPagerWidget widget(dialog, look.button,
+  ArrowPagerWidget widget(look.button,
+                          dialog.MakeModalResultCallback(mrOK),
                           new VegaConfigurationExtraButtons(dialog));
   FillPager(widget);
 

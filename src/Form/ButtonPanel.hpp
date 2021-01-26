@@ -74,18 +74,15 @@ public:
     style.Hide();
   }
 
-  Button *Add(ButtonRenderer *renderer,
-              ActionListener &listener, int id);
+  Button *Add(ButtonRenderer *renderer, Button::Callback callback) noexcept;
 
-  Button *Add(const TCHAR *caption,
-              ActionListener &listener, int id);
+  Button *Add(const TCHAR *caption, Button::Callback callback) noexcept;
 
   /**
    * Add a symbol button.  The caption is one of the "special"
    * #WndSymbolButton strings.
    */
-  Button *AddSymbol(const TCHAR *caption,
-                    ActionListener &listener, int id);
+  Button *AddSymbol(const TCHAR *caption, Button::Callback callback) noexcept;
 
   /**
    * Assign a hot key to the most recently added button.

@@ -34,10 +34,10 @@ Copyright_License {
 
 #include <cassert>
 #include <cstdint>
+#include <functional>
 
 struct DialogLook;
 struct StaticEnumChoice;
-class ActionListener;
 class Angle;
 class RoughTime;
 class RoughTimeDelta;
@@ -437,7 +437,7 @@ public:
    */
   void AddMultiLine(const TCHAR *text=nullptr);
 
-  Button *AddButton(const TCHAR *label, ActionListener &listener, int id);
+  Button *AddButton(const TCHAR *label, std::function<void()> callback) noexcept;
 
   gcc_pure
   Widget &GetRowWidget(unsigned i) {

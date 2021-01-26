@@ -28,7 +28,6 @@ Copyright_License {
 #include "ui/window/SingleWindow.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Form/Button.hpp"
-#include "Form/ActionListener.hpp"
 
 #include <algorithm>
 
@@ -115,13 +114,9 @@ protected:
   }
 };
 
-class TestWindow final : public UI::SingleWindow, ActionListener {
+class TestWindow final : public UI::SingleWindow {
   KeyCodeDumper key_code_dumper;
   Button close_button;
-
-  enum Buttons {
-    CLOSE,
-  };
 
 public:
   void Create(PixelSize size) {
@@ -139,7 +134,7 @@ public:
     close_button.Create(*this, *button_look,
                         _T("Close"), button_rc,
                         WindowStyle(),
-                        *this, CLOSE);
+                        [this](){ Close(); });
 
     key_code_dumper.SetFocus();
   }
@@ -153,15 +148,6 @@ protected:
 
     if (close_button.IsDefined())
       close_button.Move(0, (new_size.height + 1) / 2, new_size.width, new_size.height / 2);
-  }
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override {
-    switch (id) {
-    case CLOSE:
-      Close();
-      break;
-    }
   }
 };
 

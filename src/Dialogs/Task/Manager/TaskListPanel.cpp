@@ -53,13 +53,7 @@ static unsigned task_list_serial;
 #endif
 
 class TaskListPanel final
-  : public ListWidget, private ActionListener {
-  enum Buttons {
-    LOAD = 100,
-    RENAME,
-    DELETE,
-    MORE,
-  };
+  : public ListWidget {
 
   TaskManagerDialog &dialog;
 
@@ -97,10 +91,10 @@ public:
   }
 
   void CreateButtons(ButtonPanel &buttons) {
-    buttons.Add(_("Load"), *this, LOAD);
-    buttons.Add(_("Rename"), *this, RENAME);
-    buttons.Add(_("Delete"), *this, DELETE);
-    more_button = buttons.Add(_("More"), *this, MORE);
+    buttons.Add(_("Load"), [this](){ LoadTask(); });
+    buttons.Add(_("Rename"), [this](){ RenameTask(); });
+    buttons.Add(_("Delete"), [this](){ DeleteTask(); });
+    more_button = buttons.Add(_("More"), [this](){ OnMoreClicked(); });
   }
 
   void RefreshView();
@@ -123,9 +117,6 @@ protected:
   const TCHAR *get_cursor_name();
 
 private:
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override;
-
   /* virtual methods from class ListControl::Handler */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
                    unsigned idx) noexcept override;
@@ -173,28 +164,6 @@ TaskListPanel::get_cursor_name()
     return _T("");
 
   return task_store->GetName(cursor_index);
-}
-
-void
-TaskListPanel::OnAction(int id) noexcept
-{
-  switch (id) {
-  case LOAD:
-    LoadTask();
-    break;
-
-  case RENAME:
-    RenameTask();
-    break;
-
-  case DELETE:
-    DeleteTask();
-    break;
-
-  case MORE:
-    OnMoreClicked();
-    break;
-  }
 }
 
 void

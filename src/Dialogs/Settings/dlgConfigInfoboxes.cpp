@@ -69,14 +69,10 @@ protected:
 };
 
 class InfoBoxesConfigWidget final
-  : public RowFormWidget, DataFieldListener, ActionListener {
+  : public RowFormWidget, DataFieldListener {
 
   enum Controls {
     NAME, INFOBOX, CONTENT, DESCRIPTION
-  };
-
-  enum Buttons {
-    COPY, PASTE,
   };
 
   struct Layout {
@@ -89,7 +85,7 @@ class InfoBoxesConfigWidget final
     Layout(PixelRect rc, InfoBoxSettings::Geometry geometry);
   };
 
-  ActionListener &dialog;
+  WndForm &dialog;
   const InfoBoxLook &look;
 
   InfoBoxSettings::Panel &data;
@@ -104,7 +100,7 @@ class InfoBoxesConfigWidget final
   Button copy_button, paste_button, close_button;
 
 public:
-  InfoBoxesConfigWidget(ActionListener &_dialog,
+  InfoBoxesConfigWidget(WndForm &_dialog,
                         const DialogLook &dialog_look,
                         const InfoBoxLook &_look,
                         InfoBoxSettings::Panel &_data,
@@ -214,19 +210,6 @@ private:
       RefreshEditContentDescription();
     }
   }
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override {
-    switch (id) {
-    case COPY:
-      OnCopy();
-      break;
-
-    case PASTE:
-      OnPaste();
-      break;
-    }
-  }
 };
 
 InfoBoxesConfigWidget::Layout::Layout(PixelRect rc,
@@ -286,11 +269,11 @@ InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
 
   const auto &button_look = GetLook().button;
   copy_button.Create(parent, button_look, _("Copy"), layout.copy_button,
-                     button_style, *this, COPY);
+                     button_style, [this](){ OnCopy(); });
   paste_button.Create(parent, button_look, _("Paste"), layout.paste_button,
-                      button_style, *this, PASTE);
+                      button_style, [this](){ OnPaste(); });
   close_button.Create(parent, button_look, _("Close"), layout.close_button,
-                      button_style, dialog, mrOK);
+                      button_style, dialog.MakeModalResultCallback(mrOK));
 
   WindowStyle preview_style;
   preview_style.Hide();

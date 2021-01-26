@@ -68,7 +68,7 @@ BigThermalAssistantWidget::Prepare(ContainerWindow &parent,
   close_button = new Button(GetContainer(),
                             UIGlobals::GetDialogLook().button,
                             _("Close"), rc, WindowStyle(),
-                            *this, CLOSE);
+                            [](){ PageActions::Restore(); });
 
   view = new BigThermalAssistantWindow(look, Layout::FastScale(10));
   view->Create(GetContainer(), rc);
@@ -116,16 +116,6 @@ bool
 BigThermalAssistantWidget::SetFocus()
 {
   return false;
-}
-
-void
-BigThermalAssistantWidget::OnAction(int id) noexcept
-{
-  switch ((Action)id) {
-  case CLOSE:
-    PageActions::Restore();
-    break;
-  }
 }
 
 void

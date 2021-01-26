@@ -28,7 +28,6 @@ Copyright_License {
 #include "ui/canvas/Bitmap.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Form/ButtonPanel.hpp"
-#include "Form/ActionListener.hpp"
 #include "Widget/ButtonPanelWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
 #include "Widget/TextListWidget.hpp"
@@ -48,7 +47,7 @@ Copyright_License {
 #include <vector>
 
 class WeatherMapOverlayListWidget final
-  : public TextListWidget, ActionListener {
+  : public TextListWidget {
 
   enum Buttons {
     USE,
@@ -215,17 +214,17 @@ private:
   }
 
   void UpdateClicked();
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
 WeatherMapOverlayListWidget::CreateButtons(ButtonPanel &buttons)
 {
-  use_button = buttons.Add(_("Use"), *this, USE);
-  disable_button = buttons.Add(_("Disable"), *this, DISABLE);
-  update_button = buttons.Add(_("Update"), *this, UPDATE);
+  use_button = buttons.Add(_("Use"), [this](){
+    UseClicked(GetList().GetCursorIndex());
+  });
+
+  disable_button = buttons.Add(_("Disable"), [this](){ DisableClicked(); });
+  update_button = buttons.Add(_("Update"), [this](){ UpdateClicked(); });
 }
 
 void
@@ -408,24 +407,6 @@ WeatherMapOverlayListWidget::UpdateClicked()
     ++i;
   }
   UpdatePreview();
-}
-
-void
-WeatherMapOverlayListWidget::OnAction(int id) noexcept
-{
-  switch ((Buttons)id) {
-  case USE:
-    UseClicked(GetList().GetCursorIndex());
-    break;
-
-  case DISABLE:
-    DisableClicked();
-    break;
-
-  case UPDATE:
-    UpdateClicked();
-    break;
-  }
 }
 
 Widget *

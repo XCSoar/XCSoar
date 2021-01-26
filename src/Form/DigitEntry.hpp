@@ -29,6 +29,7 @@ Copyright_License {
 
 #include <cassert>
 #include <cstdint>
+#include <functional>
 
 enum class CoordinateFormat : uint8_t;
 class RoughTime;
@@ -116,8 +117,7 @@ class DigitEntry : public PaintWindow {
 
   ButtonFrameRenderer button_renderer;
 
-  ActionListener *action_listener;
-  int action_id;
+  std::function<void()> callback;
 
   /**
    * Total number of columns.
@@ -176,9 +176,8 @@ public:
    * Sets a listener that will be notified when the user "activates"
    * the control (for example by pressing the "enter" key).
    */
-  void SetActionListener(ActionListener &listener, int id) {
-    action_listener = &listener;
-    action_id = id;
+  void SetCallback(std::function<void()> _callback) noexcept {
+    callback = std::move(_callback);
   }
 
   void SetCursor(unsigned cursor);

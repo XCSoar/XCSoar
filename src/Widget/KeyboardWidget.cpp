@@ -56,7 +56,7 @@ KeyboardWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     style.Hide();
     shift_button.Create(parent, { 0, 0, 16, 16 }, style,
                         new SymbolButtonRenderer(look, _T("v")),
-                        *this, SHIFT);
+                        [this](){ OnShiftClicked(); });
   }
   UpdateShiftState();
 }
@@ -262,14 +262,4 @@ KeyboardWidget::OnShiftClicked()
 
   shift_state = !shift_state;
   UpdateShiftState();
-}
-
-void
-KeyboardWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case SHIFT:
-    OnShiftClicked();
-    break;
-  }
 }

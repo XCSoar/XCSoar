@@ -63,7 +63,7 @@ enum Buttons {
 class TrafficListButtons;
 
 class TrafficListWidget : public ListWidget, public DataFieldListener,
-                          public ActionListener, NullBlackboardListener {
+                          NullBlackboardListener {
   struct Item {
     /**
      * The FLARM traffic id.  If this is "undefined", then this object
@@ -189,7 +189,7 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
 
   typedef std::vector<Item> ItemList;
 
-  ActionListener &action_listener;
+  WndForm &dialog;
 
   const RowFormWidget *const filter_widget;
 
@@ -206,9 +206,9 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
   TwoTextRowsRenderer row_renderer;
 
 public:
-  TrafficListWidget(ActionListener &_action_listener,
+  TrafficListWidget(WndForm &_dialog,
                     const FlarmId *array, size_t count)
-    :action_listener(_action_listener), filter_widget(nullptr),
+    :dialog(_dialog), filter_widget(nullptr),
      buttons(nullptr) {
     items.reserve(count);
 
@@ -216,10 +216,10 @@ public:
       items.emplace_back(array[i]);
   }
 
-  TrafficListWidget(ActionListener &_action_listener,
+  TrafficListWidget(WndForm &_dialog,
                     const RowFormWidget &_filter_widget,
                     TrafficListButtons &_buttons)
-    :action_listener(_action_listener), filter_widget(&_filter_widget),
+    :dialog(_dialog), filter_widget(&_filter_widget),
      buttons(&_buttons) {
   }
 
@@ -267,9 +267,18 @@ private:
   void UpdateButtons();
 
   void OpenDetails(unsigned index);
+
   void OpenMap(unsigned index);
 
 public:
+  void OpenDetails() noexcept {
+    OpenDetails(GetList().GetCursorIndex());
+  }
+
+  void OpenMap() noexcept {
+    OpenMap(GetList().GetCursorIndex());
+  }
+
   /* virtual methods from class Widget */
 
   virtual void Prepare(ContainerWindow &parent,
@@ -313,9 +322,6 @@ public:
     UpdateList();
   }
 
-  /* virtual methods from ActionListener */
-  void OnAction(int id) noexcept override;
-
 private:
   /* virtual methods from BlackboardListener */
   virtual void OnGPSUpdate(const MoreData &basic) override {
@@ -342,22 +348,22 @@ public:
 };
 
 class TrafficListButtons : public RowFormWidget {
-  ActionListener &dialog;
-  ActionListener *list;
+  WndForm &dialog;
+  TrafficListWidget *list;
 
 public:
-  TrafficListButtons(const DialogLook &look, ActionListener &_dialog)
+  TrafficListButtons(const DialogLook &look, WndForm &_dialog)
     :RowFormWidget(look), dialog(_dialog) {}
 
-  void SetList(ActionListener *_list) {
+  void SetList(TrafficListWidget *_list) noexcept {
     list = _list;
   }
 
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override {
-    AddButton(_("Details"), *list, DETAILS);
-    AddButton(_("Map"), *list, MAP);
-    AddButton(_("Close"), dialog, mrCancel);
+    AddButton(_("Details"), [this](){ list->OpenDetails(); });
+    AddButton(_("Map"), [this](){ list->OpenMap(); });
+    AddButton(_("Close"), dialog.MakeModalResultCallback(mrCancel));
   }
 };
 
@@ -727,7 +733,7 @@ TrafficListWidget::OpenMap(unsigned index)
     return;
 
   if (PanTo(item.location))
-    action_listener.OnAction(mrCancel);
+    dialog.SetModalResult(mrCancel);
 }
 
 void
@@ -735,23 +741,9 @@ TrafficListWidget::OnActivateItem(unsigned index) noexcept
 {
   if (buttons == nullptr)
     /* it's a traffic picker: finish the dialog */
-    action_listener.OnAction(mrOK);
+    dialog.SetModalResult(mrOK);
   else
     OpenDetails(index);
-}
-
-void
-TrafficListWidget::OnAction(int id) noexcept
-{
-  switch (Buttons(id)) {
-  case DETAILS:
-    OpenDetails(GetList().GetCursorIndex());
-    break;
-
-  case MAP:
-    OpenMap(GetList().GetCursorIndex());
-    break;
-  }
 }
 
 void

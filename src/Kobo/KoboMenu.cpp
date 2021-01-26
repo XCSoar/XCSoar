@@ -32,7 +32,6 @@ Copyright_License {
 #include "ui/event/KeyCode.hpp"
 #include "../test/src/Fonts.hpp"
 #include "Language/Language.hpp"
-#include "Form/ActionListener.hpp"
 #include "ui/window/SingleWindow.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Kernel.hpp"
@@ -75,15 +74,18 @@ UIGlobals::GetDialogLook()
   return *global_dialog_look;
 }
 
-class KoboMenuWidget final : public WindowWidget, ActionListener {
-  ActionListener &dialog;
+class KoboMenuWidget final : public WindowWidget {
+  WndForm &dialog;
   SimulatorPromptWindow w;
 
 public:
   KoboMenuWidget(const DialogLook &_look,
-                 ActionListener &_dialog)
+                 WndForm &_dialog)
     :dialog(_dialog),
-     w(_look, _dialog, false) {}
+     w(_look,
+       [this](SimulatorPromptWindow::Result result){
+         dialog.SetModalResult(int(result));
+       }, false) {}
 
   void CreateButtons(WidgetDialog &buttons);
 
@@ -92,20 +94,17 @@ public:
                        const PixelRect &rc) override;
 
   virtual bool KeyPress(unsigned key_code) override;
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
 KoboMenuWidget::CreateButtons(WidgetDialog &buttons)
 {
-  buttons.AddButton(("Nickel"), dialog, LAUNCH_NICKEL)
+  buttons.AddButton(("Nickel"), dialog.MakeModalResultCallback(LAUNCH_NICKEL))
       ->SetEnabled(!IsKoboOTGKernel());
-  buttons.AddButton(("Tools"), *this, TOOLS);
-  buttons.AddButton(_("Network"), *this, NETWORK);
-  buttons.AddButton("System", *this, SYSTEM);
-  buttons.AddButton(("Poweroff"), dialog, POWEROFF);
+  buttons.AddButton(("Tools"), [](){ ShowToolsDialog(); });
+  buttons.AddButton(_("Network"), [](){ ShowNetworkDialog(); });
+  buttons.AddButton("System", [](){ ShowSystemDialog(); });
+  buttons.AddButton(("Poweroff"), dialog.MakeModalResultCallback(POWEROFF));
 }
 
 void
@@ -126,30 +125,12 @@ KoboMenuWidget::KeyPress(unsigned key_code)
   switch (key_code) {
 #ifdef KOBO
   case KEY_POWER:
-    dialog.OnAction(POWEROFF);
+    dialog.SetModalResult(POWEROFF);
     return true;
 #endif
 
   default:
     return false;
-  }
-}
-
-void
-KoboMenuWidget::OnAction(int id) noexcept
-{
-  switch (id) {
-  case TOOLS:
-    ShowToolsDialog();
-    break;
-
-  case NETWORK:
-    ShowNetworkDialog();
-    break;
-
-  case SYSTEM:
-    ShowSystemDialog();
-    break;
   }
 }
 
@@ -208,12 +189,12 @@ int main(int argc, char **argv)
       KoboExecNickel();
       return EXIT_FAILURE;
 
-    case SimulatorPromptWindow::FLY:
+    case int(SimulatorPromptWindow::Result::FLY):
       KoboRunXCSoar("-fly");
       /* return to menu after XCSoar quits */
       break;
 
-    case SimulatorPromptWindow::SIMULATOR:
+    case int(SimulatorPromptWindow::Result::SIMULATOR):
       KoboRunXCSoar("-simulator");
       /* return to menu after XCSoar quits */
       break;

@@ -24,7 +24,6 @@ Copyright_License {
 #include "ATCReference.hpp"
 #include "Interface.hpp"
 #include "Widget/RowFormWidget.hpp"
-#include "Form/ActionListener.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 #include "Formatter/GeoPointFormatter.hpp"
@@ -40,7 +39,7 @@ enum Controls {
   CLEAR,
 };
 
-class ATCReferencePanel : public RowFormWidget, ActionListener {
+class ATCReferencePanel : public RowFormWidget {
 public:
   ATCReferencePanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
@@ -50,10 +49,6 @@ public:
   /* virtual methods from Widget */
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
-
-private:
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
@@ -88,33 +83,22 @@ ATCReferencePanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddReadOnly(_("Waypoint"));
   AddReadOnly(_("Location"));
 
-  AddButton(_("Relocate"), *this, RELOCATE);
-  AddButton(_("Clear"), *this, CLEAR);
-
-  UpdateValues();
-}
-
-void
-ATCReferencePanel::OnAction(int id) noexcept
-{
-  GeoPoint &location =
-    CommonInterface::SetComputerSettings().poi.atc_reference;
-
-  switch (id) {
-  case RELOCATE: {
+  AddButton(_("Relocate"), [this](){
+    auto &location = CommonInterface::SetComputerSettings().poi.atc_reference;
     auto waypoint = ShowWaypointListDialog(CommonInterface::Basic().location);
     if (waypoint != nullptr) {
       location = waypoint->location;
       UpdateValues();
     }
-  }
-    break;
+  });
 
-  case CLEAR:
+  AddButton(_("Clear"), [this](){
+    auto &location = CommonInterface::SetComputerSettings().poi.atc_reference;
     location.SetInvalid();
     UpdateValues();
-    break;
-  }
+  });
+
+  UpdateValues();
 }
 
 Widget *

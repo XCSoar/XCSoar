@@ -69,7 +69,7 @@ FindEntryLetter(TCHAR ch)
   return 0;
 }
 
-class KnobTextEntryWindow final : public PaintWindow, public ActionListener {
+class KnobTextEntryWindow final : public PaintWindow {
   const size_t max_width;
 
   unsigned int cursor;
@@ -112,6 +112,7 @@ private:
     UpdateCursor();
   }
 
+public:
   bool MoveCursorLeft() {
     if (cursor < 1)
       return false;
@@ -143,9 +144,6 @@ private:
 protected:
   /* virtual methods from class Window */
   void OnPaint(Canvas &canvas) override;
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
@@ -187,28 +185,6 @@ KnobTextEntryWindow::OnPaint(Canvas &canvas)
   canvas.DrawText(p[0], buffer);
 }
 
-void
-KnobTextEntryWindow::OnAction(int id) noexcept
-{
-  switch (id) {
-  case DOWN:
-    IncrementLetter();
-    break;
-
-  case UP:
-    DecrementLetter();
-    break;
-
-  case LEFT:
-    MoveCursorLeft();
-    break;
-
-  case RIGHT:
-    MoveCursorRight();
-    break;
-  }
-}
-
 class KnobTextEntryWidget final : public WindowWidget {
   KnobTextEntryWindow window;
 
@@ -240,16 +216,16 @@ public:
 inline void
 KnobTextEntryWidget::CreateButtons(WidgetDialog &dialog)
 {
-  dialog.AddButton(_T("A+"), window, DOWN);
+  dialog.AddButton(_T("A+"), [this](){ window.IncrementLetter(); });
   dialog.AddButtonKey(KEY_UP);
 
-  dialog.AddButton(_T("A-"), window, UP);
+  dialog.AddButton(_T("A-"), [this](){ window.DecrementLetter(); });
   dialog.AddButtonKey(KEY_DOWN);
 
-  dialog.AddSymbolButton(_T("<"), window, LEFT);
+  dialog.AddSymbolButton(_T("<"), [this](){ window.MoveCursorLeft(); });
   dialog.AddButtonKey(KEY_LEFT);
 
-  dialog.AddSymbolButton(_T(">"), window, RIGHT);
+  dialog.AddSymbolButton(_T(">"), [this](){ window.MoveCursorRight(); });
   dialog.AddButtonKey(KEY_RIGHT);
 }
 

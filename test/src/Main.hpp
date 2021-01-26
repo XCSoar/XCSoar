@@ -32,7 +32,6 @@
 
 #ifdef ENABLE_MAIN_WINDOW
 #include "ui/window/SingleWindow.hpp"
-#include "Form/ActionListener.hpp"
 #include "UIGlobals.hpp"
 #include "util/CharUtil.hxx"
 #include "util/NumberParser.hpp"
@@ -117,7 +116,7 @@ UIGlobals::GetDialogLook()
 
 #ifdef ENABLE_MAIN_WINDOW
 
-class TestMainWindow : public UI::SingleWindow, public ActionListener {
+class TestMainWindow : public UI::SingleWindow {
   Window *full_window;
 
 #ifdef ENABLE_CLOSE_BUTTON
@@ -140,15 +139,6 @@ public:
     full_window = &w;
   }
 
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override {
-    switch (id) {
-    case CLOSE:
-      Close();
-      break;
-    }
-  }
-
 protected:
   /* virtual methods from class Window */
   void OnCreate() override {
@@ -158,7 +148,7 @@ protected:
     close_button.Create(*this, *button_look, _T("Close"),
                         GetCloseButtonRect(GetClientRect()),
                         WindowStyle(),
-                        *this, CLOSE);
+                        [this](){ Close(); });
 #endif
   }
 

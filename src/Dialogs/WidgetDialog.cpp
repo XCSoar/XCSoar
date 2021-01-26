@@ -196,14 +196,14 @@ WidgetDialog::ShowModal()
 }
 
 void
-WidgetDialog::OnAction(int id) noexcept
+WidgetDialog::SetModalResult(int id) noexcept
 {
   if (id == mrOK) {
     if (!widget.Get()->Save(changed))
       return;
   }
 
-  WndForm::OnAction(id);
+  WndForm::SetModalResult(id);
 }
 
 void

@@ -27,9 +27,9 @@ Copyright_License {
 #include "SolidWidget.hpp"
 #include "util/StaticArray.hxx"
 
-#include <tchar.h>
+#include <functional>
 
-class ActionListener;
+#include <tchar.h>
 
 /**
  * A #Widget that displays a message and a number of buttons.  It is
@@ -39,22 +39,21 @@ class ActionListener;
 class QuestionWidget : public SolidWidget {
   struct Button {
     const TCHAR *caption;
-    int id;
+    std::function<void()> callback;
   };
 
   const TCHAR *const message;
 
-  ActionListener &listener;
-
   StaticArray<Button, 8> buttons;
 
 public:
-  QuestionWidget(const TCHAR *_message, ActionListener &_listener);
+  explicit QuestionWidget(const TCHAR *_message) noexcept;
 
   void SetMessage(const TCHAR *_message);
 
-  void AddButton(const TCHAR *caption, int id) {
-    buttons.append({caption, id});
+  void AddButton(const TCHAR *caption,
+                 std::function<void()> callback) noexcept {
+    buttons.append({caption, std::move(callback)});
   }
 
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;

@@ -103,14 +103,7 @@ WaypointExternalFileListHandler::OnPaintItem(Canvas &canvas,
 #endif
 
 class WaypointDetailsWidget final
-  : public NullWidget,
-    ActionListener {
-  enum Buttons {
-    GOTO,
-    MAGNIFY, SHRINK,
-    PREVIOUS, NEXT,
-  };
-
+  : public NullWidget {
   struct Layout {
     PixelRect goto_button;
     PixelRect magnify_button, shrink_button;
@@ -289,32 +282,6 @@ public:
   }
 
   bool KeyPress(unsigned key_code) override;
-
-private:
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override {
-    switch (id) {
-    case GOTO:
-      OnGotoClicked();
-      break;
-
-    case MAGNIFY:
-      OnMagnifyClicked();
-      break;
-
-    case SHRINK:
-      OnShrinkClicked();
-      break;
-
-    case PREVIOUS:
-      NextPage(-1);
-      break;
-
-    case NEXT:
-      NextPage(1);
-      break;
-    }
-  }
 };
 
 WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
@@ -430,26 +397,27 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   if (task_manager != nullptr)
     goto_button.Create(parent, look.button, _("GoTo"), layout.goto_button,
-                       button_style, *this, GOTO);
+                       button_style, [this](){ OnGotoClicked(); });
 
   if (!images.empty()) {
     magnify_button.Create(parent, layout.magnify_button, button_style,
                           new SymbolButtonRenderer(look.button, _T("+")),
-                          *this, MAGNIFY);
+                          [this](){ OnMagnifyClicked(); });
     shrink_button.Create(parent, layout.shrink_button, button_style,
                          new SymbolButtonRenderer(look.button, _T("-")),
-                         *this, SHRINK);
+                         [this](){ OnShrinkClicked(); });
   }
 
   previous_button.Create(parent, layout.previous_button, button_style,
                          new SymbolButtonRenderer(look.button, _T("<")),
-                         *this, PREVIOUS);
+                         [this](){ NextPage(-1); });
+
   next_button.Create(parent, layout.next_button, button_style,
                      new SymbolButtonRenderer(look.button, _T(">")),
-                     *this, NEXT);
+                     [this](){ NextPage(1); });
 
   close_button.Create(parent, look.button, _("Close"), layout.close_button,
-                      button_style, dialog, mrOK);
+                      button_style, dialog.MakeModalResultCallback(mrOK));
 
   info_dock.Create(parent, layout.main, dock_style);
   info_dock.SetWidget(&info_widget);

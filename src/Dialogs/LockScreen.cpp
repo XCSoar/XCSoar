@@ -64,7 +64,8 @@ ShowLockBox()
 
   WindowStyle button_style;
   
-  const Button button(client_area, dialog_look.button, _T("U"), button_rc, button_style, wf, 3);
+  const Button button(client_area, dialog_look.button, _T("U"), button_rc, button_style,
+                      [&wf](){ wf.SetModalResult(mrCancel); });
 
   wf.ShowModal();
 }

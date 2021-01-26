@@ -24,7 +24,6 @@ Copyright_License {
 #include "Airspace.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/RowFormWidget.hpp"
-#include "Form/ActionListener.hpp"
 #include "Airspace/AbstractAirspace.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Formatter/UserUnits.hpp"
@@ -37,7 +36,7 @@ Copyright_License {
 #include <cassert>
 
 class AirspaceDetailsWidget final
-  : public RowFormWidget, public ActionListener {
+  : public RowFormWidget {
   const AbstractAirspace &airspace;
   ProtectedAirspaceWarningManager *warnings;
 
@@ -45,19 +44,18 @@ public:
   /**
    * Hack to allow the widget to close its surrounding dialog.
    */
-  ActionListener *listener;
+  WndForm *dialog;
 
   AirspaceDetailsWidget(const AbstractAirspace &_airspace,
                         ProtectedAirspaceWarningManager *_warnings)
     :RowFormWidget(UIGlobals::GetDialogLook()),
      airspace(_airspace), warnings(_warnings) {}
 
+  void AckDayOrEnable() noexcept;
+
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
-
-  /* methods from ActionListener */
-  void OnAction(int id) noexcept override;
 };
 
 void
@@ -90,14 +88,14 @@ AirspaceDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-AirspaceDetailsWidget::OnAction(int id) noexcept
+AirspaceDetailsWidget::AckDayOrEnable() noexcept
 {
   assert(warnings != nullptr);
 
   const bool acked = warnings->GetAckDay(airspace);
   warnings->AcknowledgeDay(airspace, !acked);
 
-  listener->OnAction(mrOK);
+  dialog->SetModalResult(mrOK);
 }
 
 void
@@ -112,10 +110,10 @@ dlgAirspaceDetails(const AbstractAirspace &airspace,
   dialog.AddButton(_("Close"), mrOK);
 
   if (warnings != nullptr) {
-    widget->listener = &dialog;
+    widget->dialog = &dialog;
     dialog.AddButton(warnings->GetAckDay(airspace)
                      ? _("Enable") : _("Ack Day"),
-                     *widget, 1);
+                     [widget](){ widget->AckDayOrEnable(); });
   }
 
   dialog.ShowModal();

@@ -70,7 +70,9 @@ OffsetButtonsWidget::Prepare(ContainerWindow &parent,
     TCHAR caption[16];
     _stprintf(caption, format, (double)offsets[i]);
     buttons[i] = new Button(parent, look, caption, rc[i], style,
-                            *this, i);
+                            [this, i](){
+                              OnOffset(offsets[i]);
+                            });
   }
 }
 
@@ -113,12 +115,4 @@ OffsetButtonsWidget::SetFocus()
 {
   buttons[2]->SetFocus();
   return true;
-}
-
-void
-OffsetButtonsWidget::OnAction(int id) noexcept
-{
-  assert(unsigned(id) < ARRAY_SIZE(offsets));
-
-  OnOffset(offsets[id]);
 }

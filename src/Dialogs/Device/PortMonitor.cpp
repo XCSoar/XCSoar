@@ -27,7 +27,6 @@ Copyright_License {
 #include "Screen/TerminalWindow.hpp"
 #include "Widget/WindowWidget.hpp"
 #include "Dialogs/WidgetDialog.hpp"
-#include "Form/ActionListener.hpp"
 #include "Device/Descriptor.hpp"
 #include "util/Macros.hpp"
 #include "util/StaticFifoBuffer.hxx"
@@ -36,12 +35,6 @@ Copyright_License {
 #include "ui/event/DelayedNotify.hpp"
 #include "thread/Mutex.hxx"
 #include "UIGlobals.hpp"
-
-enum Buttons {
-  CLEAR = 100,
-  RECONNECT,
-  PAUSE,
-};
 
 /**
  * A bridge between DataHandler and TerminalWindow: copy all data
@@ -99,7 +92,7 @@ private:
   }
 };
 
-class PortMonitorWidget final : public WindowWidget, public ActionListener {
+class PortMonitorWidget final : public WindowWidget {
   DeviceDescriptor &device;
   TerminalWindow terminal;
   PortTerminalBridge bridge;
@@ -133,31 +126,14 @@ public:
   void Unprepare() override {
     device.SetMonitor(nullptr);
   }
-
-  /* virtual methods from class ActionListener */
-  void OnAction(int id) noexcept override {
-    switch (id) {
-    case CLEAR:
-      Clear();
-      break;
-
-    case RECONNECT:
-      Reconnect();
-      break;
-
-    case PAUSE:
-      TogglePause();
-      break;
-    }
-  }
 };
 
 void
 PortMonitorWidget::CreateButtons(WidgetDialog &dialog)
 {
-  dialog.AddButton(_("Clear"), *this, CLEAR);
-  dialog.AddButton(_("Reconnect"), *this, RECONNECT);
-  pause_button = dialog.AddButton(_("Pause"), *this, PAUSE);
+  dialog.AddButton(_("Clear"), [this](){ Clear(); });
+  dialog.AddButton(_("Reconnect"), [this](){ Reconnect(); });
+  pause_button = dialog.AddButton(_("Pause"), [this](){ TogglePause(); });
 }
 
 void

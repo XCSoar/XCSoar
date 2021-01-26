@@ -125,7 +125,7 @@ dlgCreditsShowModal(UI::SingleWindow &parent)
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, _("Credits"));
 
-  ArrowPagerWidget pager(dialog, look.button);
+  ArrowPagerWidget pager(look.button, dialog.MakeModalResultCallback(mrOK));
   pager.Add(new CreateWindowWidget(CreateLogoPage));
   pager.Add(new LargeTextWidget(look, authors2));
   pager.Add(new LargeTextWidget(look, license2));
