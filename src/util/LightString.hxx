@@ -61,7 +61,7 @@ public:
 		:StringPointer<T>(n), allocation(n) {}
 
 	LightString(LightString &&src) noexcept
-		:StringPointer<T>(std::move(src)),
+		:StringPointer<T>(src),
 		 allocation(std::move(src.allocation)) {}
 
 	static LightString Donate(pointer allocation) noexcept {
@@ -73,7 +73,7 @@ public:
 	}
 
 	LightString &operator=(LightString &&src) noexcept {
-		*(StringPointer<T> *)this = std::move(src);
+		*(StringPointer<T> *)this = src;
 		allocation = std::move(src.allocation);
 		return *this;
 	}
