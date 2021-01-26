@@ -99,8 +99,8 @@ TopWindow::OnPaint(Canvas &canvas)
   /* draw the mouse cursor */
 
   const auto m = event_queue->GetMousePosition();
-  unsigned shortDistance = Layout::Scale(cursor_size * 4);
-  unsigned longDistance = Layout::Scale(cursor_size * 6);
+  const int shortDistance = Layout::Scale(cursor_size * 4);
+  const int longDistance = Layout::Scale(cursor_size * 6);
 
   const BulkPixelPoint p[] = {
     { m.x, m.y },
