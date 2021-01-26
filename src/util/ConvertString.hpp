@@ -39,21 +39,33 @@ Copyright_License {
 
 #include <tchar.h>
 
+/**
+ * @return nullptr on error
+ */
 gcc_malloc gcc_nonnull_all
 TCHAR *
-ConvertUTF8ToWide(const char *p);
+ConvertUTF8ToWide(const char *p) noexcept;
 
+/**
+ * @return nullptr on error
+ */
 gcc_malloc gcc_nonnull_all
 TCHAR *
-ConvertACPToWide(const char *p);
+ConvertACPToWide(const char *p) noexcept;
 
+/**
+ * @return nullptr on error
+ */
 gcc_malloc gcc_nonnull_all
 char *
-ConvertWideToUTF8(const TCHAR *p);
+ConvertWideToUTF8(const TCHAR *p) noexcept;
 
+/**
+ * @return nullptr on error
+ */
 gcc_malloc gcc_nonnull_all
 char *
-ConvertWideToACP(const TCHAR *p);
+ConvertWideToACP(const TCHAR *p) noexcept;
 
 #endif
 
@@ -74,10 +86,12 @@ class UTF8ToWideConverter {
 
 public:
 #ifdef _UNICODE
-  UTF8ToWideConverter(const char *_value)
+  UTF8ToWideConverter(const char *_value) noexcept
     :value(Value::Donate(ConvertUTF8ToWide(_value))) {}
 #else
-  UTF8ToWideConverter(const_pointer _value):value(_value) {
+  UTF8ToWideConverter(const_pointer _value) noexcept
+    :value(_value)
+  {
     assert(_value != nullptr);
   }
 #endif
@@ -86,7 +100,7 @@ public:
   UTF8ToWideConverter &operator=(const UTF8ToWideConverter &other) = delete;
 
   gcc_pure
-  bool IsValid() const {
+  bool IsValid() const noexcept {
 #ifdef _UNICODE
     return value != nullptr;
 #else
@@ -96,7 +110,7 @@ public:
 #endif
   }
 
-  operator const_pointer() const {
+  operator const_pointer() const noexcept {
     assert(value != nullptr);
 
     return value.c_str();
@@ -119,10 +133,12 @@ class WideToUTF8Converter {
 
 public:
 #ifdef _UNICODE
-  WideToUTF8Converter(const TCHAR *_value)
+  WideToUTF8Converter(const TCHAR *_value) noexcept
     :value(Value::Donate(ConvertWideToUTF8(_value))) {}
 #else
-  WideToUTF8Converter(const_pointer _value):value(_value) {
+  WideToUTF8Converter(const_pointer _value) noexcept
+    :value(_value)
+  {
     assert(_value != nullptr);
   }
 #endif
@@ -131,7 +147,7 @@ public:
   WideToUTF8Converter &operator=(const WideToUTF8Converter &other) = delete;
 
   gcc_pure
-  bool IsValid() const {
+  bool IsValid() const noexcept {
 #ifdef _UNICODE
     return value != nullptr;
 #else
@@ -141,7 +157,7 @@ public:
 #endif
   }
 
-  operator const_pointer() const {
+  operator const_pointer() const noexcept {
     assert(value != nullptr);
 
     return value.c_str();
@@ -165,10 +181,12 @@ class WideToACPConverter {
 
 public:
 #ifdef _UNICODE
-  WideToACPConverter(const TCHAR *_value)
+  WideToACPConverter(const TCHAR *_value) noexcept
     :value(Value::Donate(ConvertWideToACP(_value))) {}
 #else
-  WideToACPConverter(const_pointer _value):value(_value) {
+  WideToACPConverter(const_pointer _value) noexcept
+    :value(_value)
+  {
     assert(_value != nullptr);
   }
 #endif
@@ -177,7 +195,7 @@ public:
   WideToACPConverter &operator=(const WideToACPConverter &other) = delete;
 
   gcc_pure
-  bool IsValid() const {
+  bool IsValid() const noexcept {
 #ifdef _UNICODE
     return value != nullptr;
 #else
@@ -187,7 +205,7 @@ public:
 #endif
   }
 
-  operator const_pointer() const {
+  operator const_pointer() const noexcept {
     assert(value != nullptr);
 
     return value.c_str();

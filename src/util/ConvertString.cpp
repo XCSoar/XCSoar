@@ -27,7 +27,7 @@ Copyright_License {
 #include <windows.h>
 
 static TCHAR *
-ConvertToWide(const char *p, UINT codepage)
+ConvertToWide(const char *p, UINT codepage) noexcept
 {
   assert(p != nullptr);
 
@@ -46,7 +46,7 @@ ConvertToWide(const char *p, UINT codepage)
 }
 
 TCHAR *
-ConvertUTF8ToWide(const char *p)
+ConvertUTF8ToWide(const char *p) noexcept
 {
   assert(p != nullptr);
 
@@ -54,7 +54,7 @@ ConvertUTF8ToWide(const char *p)
 }
 
 TCHAR *
-ConvertACPToWide(const char *p)
+ConvertACPToWide(const char *p) noexcept
 {
   assert(p != nullptr);
 
@@ -62,7 +62,7 @@ ConvertACPToWide(const char *p)
 }
 
 static char *
-ConvertFromWide(const TCHAR *p, UINT codepage)
+ConvertFromWide(const TCHAR *p, UINT codepage) noexcept
 {
   assert(p != nullptr);
 
@@ -83,7 +83,7 @@ ConvertFromWide(const TCHAR *p, UINT codepage)
 }
 
 char *
-ConvertWideToUTF8(const TCHAR *p)
+ConvertWideToUTF8(const TCHAR *p) noexcept
 {
   assert(p != nullptr);
 
@@ -91,7 +91,7 @@ ConvertWideToUTF8(const TCHAR *p)
 }
 
 char *
-ConvertWideToACP(const TCHAR *p)
+ConvertWideToACP(const TCHAR *p) noexcept
 {
   assert(p != nullptr);
 
