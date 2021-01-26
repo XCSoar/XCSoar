@@ -615,6 +615,13 @@ FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
                   radar_mid.x + p2.x, radar_mid.y + p2.y);
 }
 
+gcc_const
+static PixelPoint
+iround(DoublePoint2D p) noexcept
+{
+  return {iround(p.x), iround(p.y)};
+}
+
 /**
  * Paints the radar circle on the given canvas
  * @param canvas The canvas to paint on
@@ -633,11 +640,11 @@ FlarmTrafficWindow::PaintNorth(Canvas &canvas) const
   canvas.SetBackgroundTransparent();
   canvas.Select(look.label_font);
 
+  const PixelPoint q = radar_mid + iround(p * radius);
+
   PixelSize s = canvas.CalcTextSize(_T("N"));
-  canvas.DrawCircle(radar_mid.x + iround(p.x * radius),
-                radar_mid.y + iround(p.y * radius), s.height * 0.65);
-  canvas.DrawText({radar_mid.x + iround(p.x * radius) - s.width / 2,
-      radar_mid.y + iround(p.y * radius) - s.height / 2}, _T("N"));
+  canvas.DrawCircle(q.x, q.y, s.height * 0.65);
+  canvas.DrawText(q - s / 2u, _T("N"));
 }
 
 static void
