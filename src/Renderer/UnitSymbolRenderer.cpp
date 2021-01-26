@@ -158,8 +158,9 @@ UnitSymbolRenderer::Draw(Canvas &canvas, const PixelPoint pos,
     }
 
     canvas.DrawText(pos, strings.line1);
-    canvas.DrawText({pos.x + (size1.width - size2.width) / 2,
-        pos.y + size1.height}, strings.line2);
+    canvas.DrawText(pos.At((size1.width - size2.width) / 2,
+                           size1.height),
+                    strings.line2);
   } else {
     if (strings.is_fraction) {
       canvas.Select(unit_fraction_pen);
@@ -167,8 +168,7 @@ UnitSymbolRenderer::Draw(Canvas &canvas, const PixelPoint pos,
                       pos.x + size2.width, pos.y + size1.height);
     }
 
-    int x = pos.x + (size2.width - size1.width) / 2;
-    canvas.DrawText({x, pos.y}, strings.line1);
-    canvas.DrawText({pos.x, pos.y + size1.height}, strings.line2);
+    canvas.DrawText(pos.At((size2.width - size1.width) / 2, 0), strings.line1);
+    canvas.DrawText(pos.At(0, size1.height), strings.line2);
   }
 }

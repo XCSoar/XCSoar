@@ -518,14 +518,14 @@ WndForm::OnPaint(Canvas &canvas)
                      look.caption.background_bitmap);
 
       // Draw titlebar text
-      canvas.DrawText({title_rect.left + Layout::GetTextPadding(), title_rect.top},
+      canvas.DrawText(title_rect.GetTopLeft().At(Layout::GetTextPadding(), 0),
                       caption.c_str());
     } else {
 #endif
       canvas.SetBackgroundColor(is_active
                                 ? look.caption.background_color
                                 : look.caption.inactive_background_color);
-      canvas.DrawOpaqueText({title_rect.left + Layout::GetTextPadding(), title_rect.top},
+      canvas.DrawOpaqueText(title_rect.GetTopLeft().At(Layout::GetTextPadding(), 0),
                             title_rect, caption.c_str());
 #ifdef EYE_CANDY
     }

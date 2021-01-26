@@ -48,7 +48,7 @@ RenderGlidePolarInfo(Canvas &canvas, const PixelRect rc,
   int left = rc.left*0.8 + rc.right*0.2;
 
   text.Format(_T("%s: %s"), _("Mass"), value.c_str());
-  canvas.DrawText({left, rc.bottom - Layout::Scale(50u)}, text);
+  canvas.DrawText({left, rc.bottom - (int)Layout::Scale(50u)}, text);
 
   double wl = glide_polar.GetWingLoading();
   if (wl != 0) {
@@ -56,7 +56,7 @@ RenderGlidePolarInfo(Canvas &canvas, const PixelRect rc,
 
     text.Format(_T("%s: %s"), _("Wing loading"), value.c_str());
 
-    canvas.DrawText({left, rc.bottom - Layout::Scale(35u)},
+    canvas.DrawText({left, rc.bottom - (int)Layout::Scale(35u)},
                     text);
   }
 }

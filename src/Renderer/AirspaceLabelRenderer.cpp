@@ -150,11 +150,13 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
 #endif
 
       // top text
-      canvas.DrawText({rect.right - Layout::GetTextPadding() - topSize.width, rect.top},
+      canvas.DrawText(rect.GetTopRight().At(-int(Layout::GetTextPadding() + topSize.width),
+                                            0),
                       topText);
 
       // base text
-      canvas.DrawText({rect.right - Layout::GetTextPadding() - baseSize.width, rect.bottom - baseSize.height},
+      canvas.DrawText(rect.GetBottomRight().At(-int(Layout::GetTextPadding() + baseSize.width),
+                                               -(int)baseSize.height),
                       baseText);
     }
   }

@@ -181,7 +181,7 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
   if (!IsPersistent() || background_dirty) {
     canvas.Stretch(rc.GetTopLeft(), rc.GetSize(),
                    look.background_bitmap,
-                   {look.background_x, 0}, {58, 120});
+                   {(int)look.background_x, 0}, {58, 120});
 
     background_dirty = false;
   }
@@ -435,7 +435,7 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
     canvas.Select(*look.text_font);
     const unsigned width = canvas.CalcTextSize(label).width;
 
-    const PixelPoint text_position{g.label_right - width, g.label_y};
+    const PixelPoint text_position{g.label_right - (int)width, g.label_y};
 
     if (IsPersistent()) {
       PixelRect rc;
@@ -461,7 +461,7 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
     canvas.Select(look.value_font);
     const unsigned width = canvas.CalcTextSize(buffer).width;
 
-    const PixelPoint text_position{g.value_right - width, g.value_y};
+    const PixelPoint text_position{g.value_right - (int)width, g.value_y};
 
     if (IsPersistent()) {
       PixelRect rc;

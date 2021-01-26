@@ -52,7 +52,7 @@ RenderMapScale(Canvas &canvas,
     return;
 
   const int text_padding_x = Layout::GetTextPadding();
-  const unsigned height = font.GetCapitalHeight()
+  const int height = font.GetCapitalHeight()
       + Layout::GetTextPadding();
 
   int x = rc.left;
@@ -60,12 +60,12 @@ RenderMapScale(Canvas &canvas,
 
   x += look.map_scale_left_icon.GetSize().width;
   canvas.DrawFilledRectangle({{x, rc.bottom - height},
-                              {2 * text_padding_x + text_size.width, height}}, COLOR_WHITE);
+                              {2 * text_padding_x + (int)text_size.width, height}}, COLOR_WHITE);
 
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(COLOR_BLACK);
   x += text_padding_x;
-  canvas.DrawText({x, rc.bottom - font.GetAscentHeight() - Layout::Scale(1)},
+  canvas.DrawText({x, rc.bottom - (int)(font.GetAscentHeight() + Layout::Scale(1u))},
                   buffer);
 
   x += text_padding_x + text_size.width;

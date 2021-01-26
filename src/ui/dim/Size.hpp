@@ -75,13 +75,13 @@ struct PixelSize {
 constexpr PixelPoint
 operator+(PixelPoint p, PixelSize size) noexcept
 {
-  return { p.x + (int)size.width, p.y + (int)size.height };
+  return p.At(size.width, size.height);
 }
 
 constexpr PixelPoint
 operator-(PixelPoint p, PixelSize size) noexcept
 {
-  return { p.x - (int)size.width, p.y - (int)size.height };
+  return p.At(-int(size.width), -int(size.height));
 }
 
 #endif

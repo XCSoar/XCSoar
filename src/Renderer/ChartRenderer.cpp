@@ -183,7 +183,7 @@ ChartRenderer::DrawLabel(const TCHAR *text, const double xv, const double yv)
     const PixelSize rect_size = tsize + PixelSize{padding_text * 2, padding_text * 2};
     canvas.DrawRectangle(PixelRect::Centered(pt, rect_size));
   }
-  canvas.DrawText({pt.x - tsize.width / 2, pt.y - tsize.height / 2}, text);
+  canvas.DrawText(pt + tsize / 2u, text);
 }
 
 void
@@ -511,7 +511,7 @@ ChartRenderer::DrawYGrid(double tic_step, double unit_step, UnitFormat unit_form
             TCHAR unit_text[MAX_PATH];
             FormatTicText(unit_text, yval * unit_step / tic_step, unit_step, unit_format);
             const auto c = canvas.CalcTextSize(unit_text);
-            canvas.DrawText({std::max(x - (int)c.width, rc.left + padding_text), ymin - c.height / 2}, unit_text);
+            canvas.DrawText({std::max(x - (int)c.width, rc.left + padding_text), ymin - (int)c.height / 2}, unit_text);
           }
         }
       }

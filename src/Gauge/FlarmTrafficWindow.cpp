@@ -498,7 +498,7 @@ FlarmTrafficWindow::PaintTargetInfoSmall(
   unsigned dist = Layout::FastScale(traffic.HasAlarm() ? 12 : 8);
 
   // Draw string
-  canvas.DrawText({sc[i].x + dist, sc[i].y - tsize.height / 2}, relalt_s);
+  canvas.DrawText(sc[i].At(dist, -int(tsize.height / 2)), relalt_s);
 
   // Set target_brush for the up/down arrow
   canvas.Select(arrow_brush);
@@ -523,8 +523,8 @@ FlarmTrafficWindow::PaintTargetInfoSmall(
     triangle[j].x = Layout::FastScale(triangle[j].x);
     triangle[j].y = Layout::FastScale(triangle[j].y);
 
-    triangle[j].x = sc[i].x + dist + triangle[j].x + tsize.width / 2;
-    triangle[j].y = sc[i].y + flip * (triangle[j].y  - tsize.height / 2);
+    triangle[j] = sc[i].At(dist + triangle[j].x + int(tsize.width / 2),
+                           flip * (triangle[j].y - int(tsize.height / 2)));
   }
   triangle[3].x = triangle[0].x;
   triangle[3].y = triangle[0].y;

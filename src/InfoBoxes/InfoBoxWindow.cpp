@@ -130,22 +130,23 @@ InfoBoxWindow::PaintValue(Canvas &canvas, Color background_color)
     value_size = canvas.CalcTextSize(data.value);
   }
 
-  int x = std::max(0,
-                   (value_rect.left + value_rect.right
-                    - (int)value_size.width - (int)unit_width) / 2);
+  const PixelSize value_unit_size = value_size + PixelSize{unit_width, 0u};
 
-  int y = (value_rect.top + value_rect.bottom - value_size.height) / 2;
+  auto value_p = value_rect.CenteredTopLeft(value_unit_size);
+  if (value_p.x < 0)
+    value_p.x = 0;
 
-  canvas.TextAutoClipped({x, y}, data.value);
+  canvas.TextAutoClipped(value_p, data.value);
 
   if (unit_width != 0) {
     const int unit_height =
       UnitSymbolRenderer::GetAscentHeight(look.unit_font, data.value_unit);
 
+    const auto unit_p = value_p.At(value_size.width,
+                                   ascent_height - unit_height);
+
     canvas.Select(look.unit_font);
-    UnitSymbolRenderer::Draw(canvas,
-                             { x + value_size.width,
-                                 y + ascent_height - unit_height },
+    UnitSymbolRenderer::Draw(canvas, unit_p,
                              data.value_unit, look.unit_fraction_pen);
   }
 }

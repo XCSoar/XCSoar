@@ -430,7 +430,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
 
   if (state_text != NULL) {
     // -- status text will be centered inside its table cell:
-    canvas.DrawText({paint_rc.left + left2 + padding + (status_width / 2) - (canvas.CalcTextWidth(state_text) / 2),
+    canvas.DrawText({paint_rc.left + left2 + (int)padding + (int)(status_width / 2) - (int)(canvas.CalcTextWidth(state_text) / 2),
         (paint_rc.bottom + paint_rc.top - (int)state_text_size.height) / 2},
                     state_text);
   }

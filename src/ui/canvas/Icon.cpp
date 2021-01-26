@@ -127,7 +127,7 @@ MaskedIcon::Draw(Canvas &canvas, PixelPoint p) const
 #endif
 
   canvas.CopyOr(p, size, bitmap, {0, 0});
-  canvas.CopyAnd(p, size, bitmap, {size.width, 0});
+  canvas.CopyAnd(p, size, bitmap, {(int)size.width, 0});
 #endif
 }
 
@@ -149,10 +149,10 @@ MaskedIcon::Draw(Canvas &canvas, const PixelRect &rc, bool inverse) const
   texture.Draw(PixelRect(position, size), texture.GetRect());
 #else
   if (inverse) // black background
-    canvas.CopyNotOr(position, size, bitmap, {size.width, 0});
+    canvas.CopyNotOr(position, size, bitmap, {(int)size.width, 0});
 
   else
-    canvas.CopyAnd(position, size, bitmap, {size.width, 0});
+    canvas.CopyAnd(position, size, bitmap, {(int)size.width, 0});
 #endif
 
 }

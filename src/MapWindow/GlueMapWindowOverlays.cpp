@@ -347,7 +347,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
 
     const Font &font = *look.overlay.overlay_font;
     canvas.Select(font);
-    const unsigned height = font.GetCapitalHeight()
+    const int height = font.GetCapitalHeight()
         + Layout::GetTextPadding();
 
     TextInBoxMode mode;

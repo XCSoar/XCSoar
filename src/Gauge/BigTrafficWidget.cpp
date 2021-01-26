@@ -304,7 +304,7 @@ FlarmTrafficControl::PaintClimbRate(Canvas &canvas, PixelRect rc,
   // Paint label
   canvas.Select(look.info_labels_font);
   const unsigned label_width = canvas.CalcTextSize(_("Vario")).width;
-  canvas.DrawText({rc.right - label_width, rc.top}, _("Vario"));
+  canvas.DrawText(rc.GetTopRight().At(-(int)label_width, 0), _("Vario"));
 
   // Format climb rate
   TCHAR buffer[20];
@@ -328,14 +328,18 @@ FlarmTrafficControl::PaintClimbRate(Canvas &canvas, PixelRect rc,
   const int max_height = std::max(unit_height, value_height);
   const int y = rc.top + look.info_units_font.GetHeight() + max_height;
 
+  const int unit_x = rc.right - unit_width;
+  const int unit_y = y - unit_height;
+
+  const int value_x = unit_x - space_width - value_width;
+  const int value_y = y - value_height;
+
   // Paint value
-  canvas.DrawText({rc.right - unit_width - space_width - value_width, y - value_height},
-                  buffer);
+  canvas.DrawText({value_x, value_y}, buffer);
 
   // Paint unit
   canvas.Select(look.info_units_font);
-  UnitSymbolRenderer::Draw(canvas,
-                           PixelPoint(rc.right - unit_width, y - unit_height),
+  UnitSymbolRenderer::Draw(canvas, {unit_x, unit_y},
                            unit, look.unit_fraction_pen);
 }
 
@@ -363,20 +367,22 @@ FlarmTrafficControl::PaintDistance(Canvas &canvas, PixelRect rc,
   // Calculate positions
   const unsigned max_height = std::max(unit_height, value_height);
 
+  const auto p0 = rc.GetBottomLeft();
+
   // Paint value
-  canvas.DrawText({rc.left, rc.bottom - value_height}, buffer);
+  canvas.DrawText(p0.At(0, -(int)value_height), buffer);
 
   // Paint unit
   canvas.Select(look.info_units_font);
   UnitSymbolRenderer::Draw(canvas,
-                           PixelPoint(rc.left + value_width + space_width,
-                                      rc.bottom - unit_height),
+                           p0.At(value_width + space_width,
+                                 -(int)unit_height),
                            unit, look.unit_fraction_pen);
 
 
   // Paint label
   canvas.Select(look.info_labels_font);
-  canvas.DrawText({rc.left, rc.bottom - max_height - look.info_labels_font.GetHeight()},
+  canvas.DrawText(p0.At(0, -int(max_height + look.info_labels_font.GetHeight())),
                   _("Distance"));
 }
 
@@ -405,22 +411,24 @@ FlarmTrafficControl::PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
   // Calculate positions
   const unsigned max_height = std::max(unit_height, value_height);
 
+  const auto p0 = rc.GetBottomRight();
+
   // Paint value
-  canvas.DrawText({rc.right - unit_width - space_width - value_width, rc.bottom - value_height},
+  canvas.DrawText(p0.At(-int(unit_width + space_width + value_width),
+                        -(int)value_height),
                   buffer);
 
   // Paint unit
   canvas.Select(look.info_units_font);
   UnitSymbolRenderer::Draw(canvas,
-                           PixelPoint(rc.right - unit_width,
-                                      rc.bottom - unit_height),
+                           p0.At(-(int)unit_width, -(int)unit_height),
                            unit, look.unit_fraction_pen);
 
 
   // Paint label
   canvas.Select(look.info_labels_font);
   const unsigned label_width = canvas.CalcTextSize(_("Rel. Alt.")).width;
-  canvas.DrawText({rc.right - label_width, rc.bottom - max_height - look.info_labels_font.GetHeight()},
+  canvas.DrawText(p0.At(-(int)label_width,  -int(max_height + look.info_labels_font.GetHeight())),
                   _("Rel. Alt."));
 }
 
