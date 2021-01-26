@@ -27,11 +27,7 @@ Copyright_License {
 #include "Math/Point2D.hpp"
 
 struct PixelPoint : IntPoint2D {
-  PixelPoint() = default;
-
-  template<typename... Args>
-  constexpr PixelPoint(Args&&... args) noexcept
-    :IntPoint2D(args...) {}
+  using IntPoint2D::IntPoint2D;
 
   /**
    * Return a point relative to this one.
