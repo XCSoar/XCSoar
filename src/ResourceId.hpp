@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_RESOURCE_ID_HPP
 #define XCSOAR_RESOURCE_ID_HPP
 
+#include "util/Compiler.h"
 #include "util/ConstBuffer.hxx"
 
 /**
