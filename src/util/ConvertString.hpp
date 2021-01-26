@@ -110,6 +110,12 @@ public:
 #endif
   }
 
+  const_pointer c_str() const noexcept {
+    assert(value != nullptr);
+
+    return value.c_str();
+  }
+
   operator const_pointer() const noexcept {
     assert(value != nullptr);
 
@@ -155,6 +161,12 @@ public:
 
     return true;
 #endif
+  }
+
+  const_pointer c_str() const noexcept {
+    assert(value != nullptr);
+
+    return value.c_str();
   }
 
   operator const_pointer() const noexcept {
@@ -203,6 +215,12 @@ public:
 
     return true;
 #endif
+  }
+
+  const_pointer c_str() const noexcept {
+    assert(value != nullptr);
+
+    return value.c_str();
   }
 
   operator const_pointer() const noexcept {
