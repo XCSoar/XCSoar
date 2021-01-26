@@ -34,6 +34,7 @@
 #include "StringAPI.hxx"
 #include "StringUtil.hpp"
 #include "StringFormat.hpp"
+#include "StringView.hxx"
 #include "UTF8.hpp"
 #include "ASCII.hxx"
 
@@ -273,8 +274,18 @@ public:
 	 * is truncated if it is too long for the buffer.
 	 */
 	template<typename... Args>
-	void Format(const_pointer fmt, Args&&... args) {
-		StringFormat(data(), capacity(), fmt, args...);
+	BasicStringView<T> Format(const_pointer fmt, Args&&... args) noexcept {
+		int s_length = StringFormat(data(), capacity(), fmt, args...);
+		if (s_length < 0)
+			/* error */
+			return nullptr;
+
+		size_type length = (size_type)s_length;
+		if (length >= capacity())
+			/* truncated */
+			length = capacity() - 1;
+
+		return {data(), length};
 	}
 
 	/**
@@ -294,8 +305,14 @@ public:
 	 * buffer is big enough!
 	 */
 	template<typename... Args>
-	void UnsafeFormat(const T *fmt, Args&&... args) {
-		StringFormatUnsafe(data(), fmt, args...);
+	BasicStringView<T> UnsafeFormat(const T *fmt, Args&&... args) noexcept {
+		int s_length = StringFormatUnsafe(data(), fmt, args...);
+		if (s_length < 0)
+			/* error */
+			return nullptr;
+
+		size_type length = (size_type)s_length;
+		return {data(), length};
 	}
 };
 
