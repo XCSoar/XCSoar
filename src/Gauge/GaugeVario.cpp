@@ -157,12 +157,12 @@ GaugeVario::Geometry::Geometry(const VarioLook &look, const PixelRect &rc) noexc
 
   offset = rc.GetMiddleRight();
 
-  unsigned value_height = LabelValueGeometry::GetHeight(look);
+  const PixelSize value_offset{0u, LabelValueGeometry::GetHeight(look)};
 
-  const PixelPoint gross_position{rc.right, offset.y - value_height / 2};
+  const PixelPoint gross_position = offset + value_offset / 2u;
   gross = {look, gross_position};
-  average = {look, {rc.right, gross_position.y - value_height}};
-  mc = {look, {rc.right, gross_position.y + value_height}};
+  average = {look, gross_position - value_offset};
+  mc = {look, gross_position + value_offset};
 }
 
 GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
