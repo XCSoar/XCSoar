@@ -46,7 +46,7 @@ void
 TextRowRenderer::DrawTextRow(Canvas &canvas, const PixelRect &rc,
                              const TCHAR *text) const
 {
-  canvas.DrawClippedText({rc.left + left_padding, rc.top + top_padding},
+  canvas.DrawClippedText(rc.GetTopLeft() + PixelSize{left_padding, top_padding},
                          rc, text);
 }
 
@@ -54,7 +54,7 @@ int
 TextRowRenderer::NextColumn(Canvas &canvas, const PixelRect &rc,
                             const TCHAR *text) const
 {
-  return std::min<int>(rc.left + 2 * left_padding + canvas.CalcTextWidth(text),
+  return std::min<int>(rc.left + int(2 * left_padding + canvas.CalcTextWidth(text)),
                        rc.right);
 }
 
@@ -71,7 +71,7 @@ TextRowRenderer::PreviousRightColumn(Canvas &canvas, const PixelRect &rc,
                                      const TCHAR *text) const
 {
   int text_width = canvas.CalcTextWidth(text);
-  int x = rc.right - left_padding - text_width;
+  int x = rc.right - int(left_padding + text_width);
   if (x < rc.left)
     /* text is too large: skip it completely (is there something
        better we can do?) */
@@ -85,12 +85,12 @@ TextRowRenderer::DrawRightColumn(Canvas &canvas, const PixelRect &rc,
                                  const TCHAR *text) const
 {
   int text_width = canvas.CalcTextWidth(text);
-  int x = rc.right - left_padding - text_width;
+  int x = rc.right - int(left_padding + text_width);
   if (x < rc.left)
     /* text is too large: skip it completely (is there something
        better we can do?) */
     return rc.right;
 
-  canvas.DrawText({x, rc.top + top_padding}, text);
+  canvas.DrawText({x, rc.top + (int)top_padding}, text);
   return x - left_padding;
 }
