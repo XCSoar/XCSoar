@@ -32,10 +32,10 @@ HLine::OnPaint(Canvas &canvas)
   canvas.Clear(look.background_color);
 #endif
 
-  const unsigned width = canvas.GetWidth();
+  const int width = canvas.GetWidth();
   const unsigned height = canvas.GetHeight();
-  const unsigned middle = height / 2;
+  const int middle = height / 2;
 
   canvas.SelectBlackPen();
-  canvas.DrawLine(0, middle, width, middle);
+  canvas.DrawLine({0, middle}, {width, middle});
 }

@@ -191,8 +191,8 @@ OZWindow::OnPaint(Canvas &canvas)
   const OZBoundary boundary = oz->GetBoundary();
   for (auto i = boundary.begin(), end = boundary.end(); i != end; ++i) {
     auto p = projection.GeoToScreen(*i);
-    canvas.DrawLine(p.x - 3, p.y - 3, p.x + 3, p.y + 3);
-    canvas.DrawLine(p.x + 3, p.y - 3, p.x - 3, p.y + 3);
+    canvas.DrawLine(p.At(-3, -3), p.At(3, 3));
+    canvas.DrawLine(p.At(3, -3), p.At(-3, 3));
   }
 }
 

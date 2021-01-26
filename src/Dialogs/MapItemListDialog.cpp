@@ -210,7 +210,7 @@ MapItemListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       (!settings.item_list.add_arrival_altitude &&
        item.type == MapItem::Type::LOCATION)) {
     canvas.SelectBlackPen();
-    canvas.DrawLine(rc.left, rc.bottom - 1, rc.right, rc.bottom - 1);
+    canvas.DrawLine({rc.left, rc.bottom - 1}, {rc.right, rc.bottom - 1});
   }
 }
 

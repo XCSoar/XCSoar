@@ -84,9 +84,9 @@ StencilMapCanvas::DrawSearchPointVector(const SearchPointVector &points)
 void
 StencilMapCanvas::DrawCircle(const PixelPoint &center, unsigned radius)
 {
-  buffer.DrawCircle(center.x, center.y, radius);
+  buffer.DrawCircle(center, radius);
   if (use_stencil)
-    stencil.DrawCircle(center.x, center.y, radius);
+    stencil.DrawCircle(center, radius);
 }
 
 bool

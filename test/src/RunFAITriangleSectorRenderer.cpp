@@ -49,7 +49,7 @@ RenderFAISectorDots(Canvas &canvas, const WindowProjection &projection,
   for (auto *i = geo_points; i != geo_end; ++i) {
     PixelPoint p;
     if (projection.GeoToScreenIfVisible(*i, p))
-      canvas.DrawCircle(p.x, p.y, 2);
+      canvas.DrawCircle(p, 2);
   }
 }
 
@@ -142,10 +142,10 @@ protected:
     canvas.SelectHollowBrush();
 
     auto pa = projection.GeoToScreen(a);
-    canvas.DrawCircle(pa.x, pa.y, 4);
+    canvas.DrawCircle(pa, 4);
 
     auto pb = projection.GeoToScreen(b);
-    canvas.DrawCircle(pb.x, pb.y, 4);
+    canvas.DrawCircle(pb, 4);
 
     RenderFAISector(canvas, projection, a, b, false, settings);
     RenderFAISectorDots(canvas, projection, a, b, false, settings);

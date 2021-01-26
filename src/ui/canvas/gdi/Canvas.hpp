@@ -346,14 +346,15 @@ public:
     DrawTwoLines(a.x, a.y, b.x, b.y, c.x, c.y);
   }
 
-  void DrawTwoLinesExact(int ax, int ay, int bx, int by, int cx, int cy) {
-    DrawTwoLines(ax, ay, bx, by, cx, cy);
+  void DrawTwoLinesExact(PixelPoint a, PixelPoint b, PixelPoint c) noexcept {
+    DrawTwoLines(a, b, c);
   }
 
-  void DrawCircle(int x, int y, unsigned radius) {
+  void DrawCircle(PixelPoint center, unsigned radius) noexcept {
     assert(IsDefined());
 
-    ::Ellipse(dc, x - radius, y - radius, x + radius, y + radius);
+    ::Ellipse(dc, center.x - radius, center.y - radius,
+              center.x + radius, center.y + radius);
   }
 
   void DrawSegment(PixelPoint center, unsigned radius,
@@ -580,8 +581,8 @@ public:
                  PixelPoint src_position, PixelSize src_size) noexcept;
 
   gcc_pure
-  HWColor GetPixel(int x, int y) const {
-    return HWColor(::GetPixel(dc, x, y));
+  HWColor GetPixel(PixelPoint p) const noexcept {
+    return HWColor(::GetPixel(dc, p.x, p.y));
   }
 };
 

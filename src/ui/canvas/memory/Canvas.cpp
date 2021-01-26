@@ -138,7 +138,7 @@ Canvas::DrawHLine(int x1, int x2, int y, Color color)
 }
 
 void
-Canvas::DrawLine(int ax, int ay, int bx, int by)
+Canvas::DrawLine(PixelPoint a, PixelPoint b) noexcept
 {
   const unsigned thickness = pen.GetWidth();
   const unsigned mask = pen.GetMask();
@@ -147,14 +147,14 @@ Canvas::DrawLine(int ax, int ay, int bx, int by)
   const auto color = canvas.Import(pen.GetColor());
   unsigned mask_position = 0;
   if (thickness > 1)
-    canvas.DrawThickLine(ax, ay, bx, by, thickness, color,
+    canvas.DrawThickLine(a.x, a.y, b.x, b.y, thickness, color,
                          mask, mask_position);
   else
-    canvas.DrawLine(ax, ay, bx, by, color, mask);
+    canvas.DrawLine(a.x, a.y, b.x, b.y, color, mask);
 }
 
 void
-Canvas::DrawCircle(int x, int y, unsigned radius)
+Canvas::DrawCircle(PixelPoint center, unsigned radius) noexcept
 {
   SDLRasterCanvas canvas(buffer);
 
@@ -162,21 +162,23 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
     const auto color = canvas.Import(brush.GetColor());
 
     if (brush.GetColor().IsOpaque())
-      canvas.FillCircle(x, y, radius, color);
+      canvas.FillCircle(center.x, center.y, radius, color);
     else
-      canvas.FillCircle(x, y, radius, color,
+      canvas.FillCircle(center.x, center.y, radius, color,
                         AlphaPixelOperations<ActivePixelTraits>(brush.GetColor().Alpha()));
   }
 
   if (IsPenOverBrush()) {
     if (pen.GetWidth() < 2) {
-      canvas.DrawCircle(x, y, radius, canvas.Import(pen.GetColor()));
+      canvas.DrawCircle(center.x, center.y, radius,
+                        canvas.Import(pen.GetColor()));
       return;
     }
 
     // no thickCircleColor in SDL_gfx, so need to emulate it with multiple draws (slow!)
     for (int i= (pen.GetWidth()/2); i>= -(int)(pen.GetWidth()-1)/2; --i) {
-      canvas.DrawCircle(x, y, radius + i, canvas.Import(pen.GetColor()));
+      canvas.DrawCircle(center.x, center.y, radius + i,
+                        canvas.Import(pen.GetColor()));
     }
   }
 }

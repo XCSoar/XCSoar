@@ -74,7 +74,7 @@ DrawLandableBase(Canvas &canvas, const PixelPoint &pt, bool airport,
 {
   int iradius = iround(radius);
   if (airport)
-    canvas.DrawCircle(pt.x, pt.y, iradius);
+    canvas.DrawCircle(pt, iradius);
   else {
     BulkPixelPoint diamond[4];
     diamond[0].x = pt.x + 0;

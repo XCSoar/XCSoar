@@ -76,10 +76,8 @@ GlueMapWindow::DrawCrossHairs(Canvas &canvas) const
 
   const auto center = render_projection.GetScreenOrigin();
 
-  canvas.DrawLine(center.x + 20, center.y,
-              center.x - 20, center.y);
-  canvas.DrawLine(center.x, center.y + 20,
-              center.x, center.y - 20);
+  canvas.DrawLine(center.At(20, 0), center.At(-20, 0));
+  canvas.DrawLine(center.At(0, 20), center.At(0, -20));
 }
 
 void
@@ -449,7 +447,9 @@ GlueMapWindow::DrawStallRatio(Canvas &canvas, const PixelRect &rc) const
     auto s = Clamp(Basic().stall_ratio, 0., 1.);
     int m = rc.GetHeight() * s * s;
 
+    const auto p = rc.GetBottomRight();
+
     canvas.SelectBlackPen();
-    canvas.DrawLine(rc.right - 1, rc.bottom - m, rc.right - 11, rc.bottom - m);
+    canvas.DrawLine(p.At(-1, -m), p.At(-11, -m));
   }
 }

@@ -80,14 +80,14 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   // draw aircraft symbol
   canvas.Select(look.aircraft_pen);
-  canvas.DrawLine(center.x + radius / 2, center.y, center.x - radius / 2, center.y);
-  canvas.DrawLine(center.x, center.y - radius / 4, center.x, center.y);
+  canvas.DrawLine({center.x + radius / 2, center.y}, {center.x - radius / 2, center.y});
+  canvas.DrawLine({center.x, center.y - radius / 4}, {center.x, center.y});
 
   // draw 45 degree dash marks
   const int rr2p = uround(radius * M_SQRT1_2) + Layout::Scale(1);
   const int rr2n = rr2p - Layout::Scale(2);
-  canvas.DrawLine(center.x + rr2p, center.y - rr2p,
-              center.x + rr2n, center.y - rr2n);
-  canvas.DrawLine(center.x - rr2p, center.y - rr2p,
-              center.x - rr2n, center.y - rr2n);
+  canvas.DrawLine({center.x + rr2p, center.y - rr2p},
+                  {center.x + rr2n, center.y - rr2n});
+  canvas.DrawLine({center.x - rr2p, center.y - rr2p},
+                  {center.x - rr2n, center.y - rr2n});
 }

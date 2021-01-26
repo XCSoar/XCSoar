@@ -57,8 +57,7 @@ ThermalAssistantWindow::OnResize(PixelSize new_size)
 void
 ThermalAssistantWindow::DrawCircle(Canvas &canvas)
 {
-  canvas.DrawCircle(renderer.GetMiddle().x, renderer.GetMiddle().y,
-                    renderer.GetRadius());
+  canvas.DrawCircle(renderer.GetMiddle(), renderer.GetRadius());
 }
 
 void

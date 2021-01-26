@@ -188,8 +188,8 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
     auto pt = projection.GeoToScreen(task.GetPoint(highlight_index).
                                      GetLocation());
     canvas.Select(task_look.highlight_pen);
-    canvas.DrawLine(pt.x - 7, pt.y - 7, pt.x + 7, pt.y + 7);
-    canvas.DrawLine(pt.x + 7, pt.y - 7, pt.x - 7, pt.y + 7);
+    canvas.DrawLine(pt.At(-7, -7), pt.At(7, 7));
+    canvas.DrawLine(pt.At(7, -7), pt.At(-7, 7));
   }
 }
 

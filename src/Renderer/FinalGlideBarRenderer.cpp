@@ -231,10 +231,10 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   if (cross_sign != 0) {
     canvas.Select(task_look.bearing_pen);
-    canvas.DrawLine(Layout::Scale(9 - 5), y0 + cross_sign * Layout::Scale(9 - 5),
-                Layout::Scale(9 + 5), y0 + cross_sign * Layout::Scale(9 + 5));
-    canvas.DrawLine(Layout::Scale(9 - 5), y0 + cross_sign * Layout::Scale(9 + 5),
-                Layout::Scale(9 + 5), y0 + cross_sign * Layout::Scale(9 - 5));
+    canvas.DrawLine({Layout::Scale(9 - 5), y0 + cross_sign * Layout::Scale(9 - 5)},
+                    {Layout::Scale(9 + 5), y0 + cross_sign * Layout::Scale(9 + 5)});
+    canvas.DrawLine({Layout::Scale(9 - 5), y0 + cross_sign * Layout::Scale(9 + 5)},
+                    {Layout::Scale(9 + 5), y0 + cross_sign * Layout::Scale(9 - 5)});
   }
 
   canvas.SetTextColor(COLOR_BLACK);

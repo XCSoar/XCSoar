@@ -112,20 +112,19 @@ ThermalAssistantRenderer::PaintRadarPlane(Canvas &canvas) const
 {
   canvas.Select(look.plane_pen);
 
-  int x = mid.x + (circling.TurningLeft() ? radius : -radius);
+  PixelPoint p = mid.At(circling.TurningLeft() ? (int)radius : (int)-radius,
+                        0);
 
-  canvas.DrawLine(x + Layout::FastScale(small ? 5 : 10),
-              mid.y - Layout::FastScale(small ? 1 : 2),
-              x - Layout::FastScale(small ? 5 : 10),
-              mid.y - Layout::FastScale(small ? 1 : 2));
-  canvas.DrawLine(x,
-              mid.y - Layout::FastScale(small ? 3 : 6),
-              x,
-              mid.y + Layout::FastScale(small ? 3 : 6));
-  canvas.DrawLine(x + Layout::FastScale(small ? 2 : 4),
-              mid.y + Layout::FastScale(small ? 2 : 4),
-              x - Layout::FastScale(small ? 2 : 4),
-              mid.y + Layout::FastScale(small ? 2 : 4));
+  canvas.DrawLine(p.At(+Layout::FastScale(small ? 5 : 10),
+                       -Layout::FastScale(small ? 1 : 2)),
+                  p.At(-Layout::FastScale(small ? 5 : 10),
+                       -Layout::FastScale(small ? 1 : 2)));
+  canvas.DrawLine(p.At(0, -Layout::FastScale(small ? 3 : 6)),
+                  p.At(0, +Layout::FastScale(small ? 3 : 6)));
+  canvas.DrawLine(p.At(+Layout::FastScale(small ? 2 : 4),
+                       +Layout::FastScale(small ? 2 : 4)),
+                  p.At(-Layout::FastScale(small ? 2 : 4),
+                       +Layout::FastScale(small ? 2 : 4)));
 }
 
 static void
@@ -153,9 +152,9 @@ ThermalAssistantRenderer::PaintRadarBackground(Canvas &canvas, double max_lift) 
   canvas.SelectHollowBrush();
 
   canvas.Select(look.inner_circle_pen);
-  canvas.DrawCircle(mid.x, mid.y, radius / 2);
+  canvas.DrawCircle(mid, radius / 2);
   canvas.Select(look.outer_circle_pen);
-  canvas.DrawCircle(mid.x, mid.y, radius);
+  canvas.DrawCircle(mid, radius);
 
   if (small)
     return;

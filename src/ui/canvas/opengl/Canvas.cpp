@@ -152,25 +152,6 @@ Canvas::FadeToWhite(PixelRect rc, GLubyte alpha)
 }
 
 void
-Canvas::DrawRaisedEdge(PixelRect &rc)
-{
-  Pen bright(1, Color(240, 240, 240));
-  Select(bright);
-  DrawTwoLinesExact(rc.left, rc.bottom - 2, rc.left, rc.top,
-                    rc.right - 1, rc.top);
-
-  Pen dark(1, Color(128, 128, 128));
-  Select(dark);
-  DrawTwoLinesExact(rc.left, rc.bottom - 1, rc.right - 1, rc.bottom - 1,
-                    rc.right - 1, rc.top + 1);
-
-  ++rc.left;
-  ++rc.top;
-  --rc.right;
-  --rc.bottom;
-}
-
-void
 Canvas::DrawPolyline(const BulkPixelPoint *points, unsigned num_points)
 {
   OpenGL::solid_shader->Use();
@@ -270,17 +251,13 @@ Canvas::DrawHLine(int x1, int x2, int y, Color color)
 }
 
 void
-Canvas::DrawLine(int ax, int ay, int bx, int by)
+Canvas::DrawLine(PixelPoint a, PixelPoint b) noexcept
 {
   OpenGL::solid_shader->Use();
 
   pen.Bind();
 
-  const BulkPixelPoint v[] = {
-    { GLvalue(ax), GLvalue(ay) },
-    { GLvalue(bx), GLvalue(by) },
-  };
-
+  const BulkPixelPoint v[] = { a, b };
   const ScopeVertexPointer vp(v);
   glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(v));
 
@@ -288,17 +265,13 @@ Canvas::DrawLine(int ax, int ay, int bx, int by)
 }
 
 void
-Canvas::DrawExactLine(int ax, int ay, int bx, int by)
+Canvas::DrawExactLine(PixelPoint a, PixelPoint b) noexcept
 {
   OpenGL::solid_shader->Use();
 
   pen.Bind();
 
-  const ExactPixelPoint v[] = {
-    { ToGLexact(ax), ToGLexact(ay) },
-    { ToGLexact(bx), ToGLexact(by) },
-  };
-
+  const ExactPixelPoint v[] = { a, b };
   const ScopeVertexPointer vp(v);
   glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(v));
 
@@ -333,18 +306,13 @@ Canvas::DrawLinePiece(const PixelPoint a, const PixelPoint b)
 }
 
 void
-Canvas::DrawTwoLines(int ax, int ay, int bx, int by, int cx, int cy)
+Canvas::DrawTwoLines(PixelPoint a, PixelPoint b, PixelPoint c) noexcept
 {
   OpenGL::solid_shader->Use();
 
   pen.Bind();
 
-  const BulkPixelPoint v[] = {
-    { GLvalue(ax), GLvalue(ay) },
-    { GLvalue(bx), GLvalue(by) },
-    { GLvalue(cx), GLvalue(cy) },
-  };
-
+  const BulkPixelPoint v[] = { a, b, c };
   const ScopeVertexPointer vp(v);
   glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(v));
 
@@ -352,18 +320,13 @@ Canvas::DrawTwoLines(int ax, int ay, int bx, int by, int cx, int cy)
 }
 
 void
-Canvas::DrawTwoLinesExact(int ax, int ay, int bx, int by, int cx, int cy)
+Canvas::DrawTwoLinesExact(PixelPoint a, PixelPoint b, PixelPoint c) noexcept
 {
   OpenGL::solid_shader->Use();
 
   pen.Bind();
 
-  const ExactPixelPoint v[] = {
-    { ToGLexact(ax), ToGLexact(ay) },
-    { ToGLexact(bx), ToGLexact(by) },
-    { ToGLexact(cx), ToGLexact(cy) },
-  };
-
+  const ExactPixelPoint v[] = { a, b, c };
   const ScopeVertexPointer vp(v);
   glDrawArrays(GL_LINE_STRIP, 0, ARRAY_SIZE(v));
 
@@ -371,13 +334,13 @@ Canvas::DrawTwoLinesExact(int ax, int ay, int bx, int by, int cx, int cy)
 }
 
 void
-Canvas::DrawCircle(int x, int y, unsigned radius)
+Canvas::DrawCircle(PixelPoint center, unsigned radius) noexcept
 {
   OpenGL::solid_shader->Use();
 
   if (IsPenOverBrush() && pen.GetWidth() > 2) {
     ScopeVertexPointer vp;
-    GLDonutVertices vertices(x, y,
+    GLDonutVertices vertices(center.x, center.y,
                              radius - pen.GetWidth() / 2,
                              radius + pen.GetWidth() / 2);
     if (!brush.IsHollow()) {
@@ -402,7 +365,7 @@ Canvas::DrawCircle(int x, int y, unsigned radius)
     const ScopeVertexPointer vp(points);
 
     glm::mat4 matrix2 = glm::scale(glm::translate(glm::mat4(1),
-                                                  glm::vec3(x, y, 0)),
+                                                  glm::vec3(center.x, center.y, 0)),
                                    glm::vec3(GLfloat(radius), GLfloat(radius),
                                              1.));
     glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,

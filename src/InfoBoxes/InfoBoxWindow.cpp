@@ -202,23 +202,23 @@ InfoBoxWindow::Paint(Canvas &canvas)
   if (border_kind != 0) {
     canvas.Select(look.border_pen);
 
-    const unsigned width = canvas.GetWidth(),
+    const int width = canvas.GetWidth(),
       height = canvas.GetHeight();
 
     if (border_kind & BORDERTOP) {
-      canvas.DrawExactLine(0, 0, width - 1, 0);
+      canvas.DrawExactLine({0, 0}, {width - 1, 0});
     }
 
     if (border_kind & BORDERRIGHT) {
-      canvas.DrawExactLine(width - 1, 0, width - 1, height);
+      canvas.DrawExactLine({width - 1, 0}, {width - 1, height});
     }
 
     if (border_kind & BORDERBOTTOM) {
-      canvas.DrawExactLine(0, height - 1, width - 1, height - 1);
+      canvas.DrawExactLine({0, height - 1}, {width - 1, height - 1});
     }
 
     if (border_kind & BORDERLEFT) {
-      canvas.DrawExactLine(0, 0, 0, height - 1);
+      canvas.DrawExactLine({0, 0}, {0, height - 1});
     }
   }
 }

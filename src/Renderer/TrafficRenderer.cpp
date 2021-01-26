@@ -86,7 +86,7 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
   }
 
   canvas.SelectHollowBrush();
-  canvas.DrawCircle(pt.x, pt.y, Layout::FastScale(11));
+  canvas.DrawCircle(pt, Layout::FastScale(11u));
 }
 
 
@@ -119,5 +119,5 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
   canvas.DrawPolygon(arrow, ARRAY_SIZE(arrow));
 
   canvas.SelectHollowBrush();
-  canvas.DrawCircle(pt.x, pt.y, Layout::FastScale(11));
+  canvas.DrawCircle(pt, Layout::FastScale(11u));
 }

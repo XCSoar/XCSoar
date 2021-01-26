@@ -58,7 +58,7 @@ protected:
 
     canvas.SelectBlackPen();
     canvas.SelectHollowBrush();
-    canvas.DrawCircle(pt.x, pt.y, 2);
+    canvas.DrawCircle(pt, 2);
 
     renderer.Draw(canvas, Angle::Zero(), wind, pt, rc, WindArrowStyle::ARROW_HEAD);
   }

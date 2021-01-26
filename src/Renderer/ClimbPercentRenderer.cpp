@@ -66,5 +66,5 @@ ClimbPercentRenderer::Draw(const CirclingInfo& stats, Canvas &canvas,
   const Pen pen_f(Layout::ScalePenWidth(1), inverse ? COLOR_WHITE : COLOR_BLACK);
   canvas.Select(pen_f);
   canvas.SelectHollowBrush();
-  canvas.DrawCircle(center.x, center.y, radius);
+  canvas.DrawCircle(center, radius);
 }

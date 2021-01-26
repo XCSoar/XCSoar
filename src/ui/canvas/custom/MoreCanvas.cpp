@@ -33,6 +33,27 @@ Copyright_License {
 #include <string.h>
 #include <winuser.h>
 
+void
+Canvas::DrawRaisedEdge(PixelRect &rc) noexcept
+{
+  Pen bright(1, Color(240, 240, 240));
+  Select(bright);
+  DrawTwoLinesExact({rc.left, rc.bottom - 2},
+                    {rc.left, rc.top},
+                    {rc.right - 1, rc.top});
+
+  Pen dark(1, Color(128, 128, 128));
+  Select(dark);
+  DrawTwoLinesExact({rc.left, rc.bottom - 1},
+                    {rc.right - 1, rc.bottom - 1},
+                    {rc.right - 1, rc.top + 1});
+
+  ++rc.left;
+  ++rc.top;
+  --rc.right;
+  --rc.bottom;
+}
+
 unsigned
 Canvas::DrawFormattedText(PixelRect r, BasicStringView<TCHAR> text,
                           unsigned format) noexcept

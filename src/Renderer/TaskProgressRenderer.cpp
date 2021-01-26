@@ -52,7 +52,7 @@ TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
   const Pen pen_f(Layout::ScalePenWidth(1), inverse ? COLOR_WHITE : COLOR_BLACK);
   canvas.Select(pen_f);
   canvas.SelectHollowBrush();
-  canvas.DrawCircle(center.x, center.y, radius);
+  canvas.DrawCircle(center, radius);
 
   unsigned i = 0;
   for (auto it = summary.pts.begin(); it != summary.pts.end(); ++it, ++i) {

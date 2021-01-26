@@ -47,16 +47,16 @@ ButtonFrameRenderer::DrawButton(Canvas &canvas, PixelRect rc,
     /* draw 1-pixel lines */
 
     canvas.Select(pressed ? _look.dark_border_pen : _look.light_border_pen);
-    for (unsigned i = 0; i < margin; ++i)
-      canvas.DrawTwoLinesExact(rc.left + i, rc.bottom - 2 - i,
-                               rc.left + i, rc.top + i,
-                               rc.right - 2 - i, rc.top + i);
+    for (int i = 0; (unsigned)i < margin; ++i)
+      canvas.DrawTwoLinesExact({rc.left + i, rc.bottom - 2 - i},
+                               {rc.left + i, rc.top + i},
+                               {rc.right - 2 - i, rc.top + i});
 
     canvas.Select(pressed ? _look.light_border_pen : _look.dark_border_pen);
-    for (unsigned i = 0; i < margin; ++i)
-      canvas.DrawTwoLinesExact(rc.left + 1 + i, rc.bottom - 1 - i,
-                               rc.right - 1 - i, rc.bottom - 1 - i,
-                               rc.right - 1 - i, rc.top + 1 + i);
+    for (int i = 0; (unsigned)i < margin; ++i)
+      canvas.DrawTwoLinesExact({rc.left + 1 + i, rc.bottom - 1 - i},
+                               {rc.right - 1 - i, rc.bottom - 1 - i},
+                               {rc.right - 1 - i, rc.top + 1 + i});
   } else {
     /* at 4 pixels or more, it's more efficient to draw a filled
        polygon */

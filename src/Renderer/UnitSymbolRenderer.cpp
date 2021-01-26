@@ -153,8 +153,8 @@ UnitSymbolRenderer::Draw(Canvas &canvas, const PixelPoint pos,
   if (size1.width > size2.width) {
     if (strings.is_fraction) {
       canvas.Select(unit_fraction_pen);
-      canvas.DrawLine(pos.x, pos.y + size1.height,
-                      pos.x + size1.width, pos.y + size1.height);
+      canvas.DrawLine(pos.At(0, size1.height),
+                      pos.At(size1.width, size1.height));
     }
 
     canvas.DrawText(pos, strings.line1);
@@ -164,8 +164,8 @@ UnitSymbolRenderer::Draw(Canvas &canvas, const PixelPoint pos,
   } else {
     if (strings.is_fraction) {
       canvas.Select(unit_fraction_pen);
-      canvas.DrawLine(pos.x, pos.y + size1.height,
-                      pos.x + size2.width, pos.y + size1.height);
+      canvas.DrawLine(pos.At(0, size1.height),
+                      pos.At(size2.width, size1.height));
     }
 
     canvas.DrawText(pos.At((size2.width - size1.width) / 2, 0), strings.line1);

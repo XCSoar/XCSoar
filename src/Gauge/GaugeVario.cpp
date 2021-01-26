@@ -341,10 +341,10 @@ GaugeVario::RenderZero(Canvas &canvas) noexcept
   else
     canvas.SelectBlackPen();
 
-  canvas.DrawLine(0, geometry.offset.y,
-                  Layout::Scale(17), geometry.offset.y);
-  canvas.DrawLine(0, geometry.offset.y + 1,
-                  Layout::Scale(17), geometry.offset.y + 1);
+  canvas.DrawLine({0, geometry.offset.y},
+                  {Layout::Scale(17), geometry.offset.y});
+  canvas.DrawLine({0, geometry.offset.y + 1},
+                  {Layout::Scale(17), geometry.offset.y + 1});
 }
 
 int

@@ -475,8 +475,8 @@ FlarmTrafficControl::PaintID(Canvas &canvas, PixelRect rc,
       }
 
       canvas.SelectNullPen();
-      canvas.DrawCircle(rc.left + Layout::FastScale(7), rc.top + (font_size / 2),
-                    Layout::FastScale(7));
+      canvas.DrawCircle(rc.GetTopLeft().At(Layout::FastScale(7u), (font_size / 2)),
+                        Layout::FastScale(7u));
 
       rc.left += Layout::FastScale(16);
     }

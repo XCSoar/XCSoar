@@ -134,7 +134,7 @@ DrawShape(Canvas &canvas, AbstractAirspace::Shape shape, const PixelPoint pt,
           unsigned radius, const std::vector<BulkPixelPoint> &pts)
 {
   if (shape == AbstractAirspace::Shape::CIRCLE)
-    canvas.DrawCircle(pt.x, pt.y, radius);
+    canvas.DrawCircle(pt, radius);
   else if (IsAncientHardware())
     canvas.DrawRectangle(PixelRect{pt}.WithMargin(radius));
   else

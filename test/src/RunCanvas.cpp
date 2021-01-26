@@ -101,18 +101,16 @@ private:
 
     const PixelRect rc = GetClientRect();
     const int width = rc.GetWidth(), height = rc.GetHeight();
-    const int hmiddle = (rc.left + rc.right) / 2;
-    const int vmiddle = (rc.top + rc.bottom) / 2;
-    const PixelPoint center(hmiddle, vmiddle);
+    const PixelPoint center = rc.GetCenter();
 
     BulkPixelPoint p1[3] = {
-      { -100, vmiddle },
+      { -100, center.y },
       { (width * 2) / 3, -100 },
-      { hmiddle, height * 2 },
+      { center.x, height * 2 },
     };
 
     BulkPixelPoint p2[3] = {
-      { -2000, vmiddle },
+      { -2000, center.y },
       { width * 10, -3000 },
       { width * 5, 3000 },
     };
@@ -136,7 +134,7 @@ private:
       break;
 
     case 2:
-      canvas.DrawCircle(hmiddle, vmiddle,
+      canvas.DrawCircle(center,
                         std::min(width, height) / 3);
       label = _T("circle");
       break;
@@ -144,10 +142,10 @@ private:
     case 3:
     case 4: {
       PixelRect rc;
-      rc.left = hmiddle - 50;
-      rc.top = vmiddle - 20;
-      rc.right = hmiddle + 50;
-      rc.bottom = vmiddle + 20;
+      rc.left = center.x - 50;
+      rc.top = center.y - 20;
+      rc.right = center.x + 50;
+      rc.bottom = center.y + 20;
       button_renderer.DrawButton(canvas, rc, page == 4, page == 4);
       label = page == 4
         ? _T("button down=true") : _T("button down=false");
