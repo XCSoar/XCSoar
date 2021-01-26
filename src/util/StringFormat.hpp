@@ -37,17 +37,17 @@
 #include <stdio.h>
 
 template<typename... Args>
-static inline void
+static inline int
 StringFormat(char *buffer, size_t size, const char *fmt, Args&&... args)
 {
-  snprintf(buffer, size, fmt, args...);
+  return snprintf(buffer, size, fmt, args...);
 }
 
 template<typename... Args>
-static inline void
+static inline int
 StringFormatUnsafe(char *buffer, const char *fmt, Args&&... args)
 {
-  sprintf(buffer, fmt, args...);
+  return sprintf(buffer, fmt, args...);
 }
 
 #endif

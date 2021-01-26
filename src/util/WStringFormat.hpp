@@ -39,7 +39,7 @@
 #endif
 
 template<typename... Args>
-static inline void
+static inline int
 StringFormat(wchar_t *buffer, size_t size, const wchar_t *fmt, Args&&... args)
 {
   /* unlike snprintf(), _sntprintf() does not guarantee that the
@@ -58,11 +58,11 @@ StringFormat(wchar_t *buffer, size_t size, const wchar_t *fmt, Args&&... args)
   --size;
 #endif
 
-  _snwprintf(buffer, size, fmt, args...);
+  return _snwprintf(buffer, size, fmt, args...);
 }
 
 template<typename... Args>
-static inline void
+static inline int
 StringFormatUnsafe(wchar_t *buffer, const wchar_t *fmt, Args&&... args)
 {
   /* work around a problem in mingw-w64/libstdc++: libstdc++ defines
@@ -72,7 +72,7 @@ StringFormatUnsafe(wchar_t *buffer, const wchar_t *fmt, Args&&... args)
      "%s" denotes a "narrow" string, not a "wide" string, and we'd
      need to use "%ls"; this workaround explicitly selects the
      Microsoft-compatible implementation */
-  _swprintf(buffer, fmt, args...);
+  return _swprintf(buffer, fmt, args...);
 }
 
 #endif
