@@ -172,10 +172,10 @@ public:
       } while (b.Next());
 
       const PixelPoint p[4] = {
-        { m1x, m1y },
-        { m2x, m2y },
-        { ml1bx, ml1by },
-        { ml2bx, ml2by },
+        { (int)m1x, (int)m1y },
+        { (int)m2x, (int)m2y },
+        { (int)ml1bx, (int)ml1by },
+        { (int)ml2bx, (int)ml2by },
       };
 
       canvas.FillPolygon(p, 4, color);
