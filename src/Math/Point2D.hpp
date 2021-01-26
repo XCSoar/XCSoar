@@ -81,27 +81,24 @@ struct Point2D {
 
 struct UnsignedPoint2D : Point2D<unsigned> {
   UnsignedPoint2D() = default;
+  using Point2D::Point2D;
 
-  constexpr UnsignedPoint2D(unsigned _x, unsigned _y) noexcept
-    :Point2D<unsigned>(_x, _y) {}
+  constexpr UnsignedPoint2D(Point2D<unsigned> src) noexcept
+    :Point2D(src) {}
 };
 
 static_assert(std::is_trivial<UnsignedPoint2D>::value, "type is not trivial");
 
 struct IntPoint2D : Point2D<int> {
   IntPoint2D() = default;
-
-  constexpr IntPoint2D(int _x, int _y) noexcept
-    :Point2D<int>(_x, _y) {}
+  using Point2D::Point2D;
 };
 
 static_assert(std::is_trivial<IntPoint2D>::value, "type is not trivial");
 
 struct DoublePoint2D : Point2D<double> {
   DoublePoint2D() = default;
-
-  constexpr DoublePoint2D(double _x, double _y) noexcept
-    :Point2D<double>(_x, _y) {}
+  using Point2D::Point2D;
 
   gcc_pure
   double Magnitude() const noexcept {
@@ -113,9 +110,7 @@ static_assert(std::is_trivial<DoublePoint2D>::value, "type is not trivial");
 
 struct FloatPoint2D : Point2D<float> {
   FloatPoint2D() = default;
-
-  constexpr FloatPoint2D(float _x, float _y) noexcept
-    :Point2D<float>(_x, _y) {}
+  using Point2D::Point2D;
 
   gcc_pure
   float Magnitude() const noexcept {

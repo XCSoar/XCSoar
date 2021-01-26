@@ -31,9 +31,7 @@ Copyright_License {
  * A point within a RasterMap.
  */
 struct RasterLocation : Point2D<unsigned> {
-  template<typename... Args>
-  constexpr RasterLocation(Args&&... args)
-    :Point2D(args...) {}
+  using Point2D::Point2D;
 
   constexpr RasterLocation operator>>(unsigned bits) const {
     return RasterLocation(x >> bits, y >> bits);
@@ -50,9 +48,7 @@ struct RasterLocation : Point2D<unsigned> {
 };
 
 struct SignedRasterLocation : Point2D<int> {
-  template<typename... Args>
-  constexpr SignedRasterLocation(Args&&... args)
-    :Point2D(args...) {}
+  using Point2D::Point2D;
 
   constexpr SignedRasterLocation(RasterLocation other)
     :Point2D(other.x, other.y) {}

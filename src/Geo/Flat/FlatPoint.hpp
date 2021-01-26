@@ -32,21 +32,8 @@ class Angle;
  */
 struct FlatPoint : DoublePoint2D
 {
-  /**
-   * Non-initialising default constructor.
-   */
   FlatPoint() = default;
-
-  /**
-   * Constructor given known location
-   *
-   * @param _x X position
-   * @param _y Y position
-   *
-   * @return Initialised object
-   */
-  constexpr
-  FlatPoint(const double _x, const double _y):DoublePoint2D(_x, _y) {}
+  using DoublePoint2D::DoublePoint2D;
 
   /**
    * Calculate cross product of two points

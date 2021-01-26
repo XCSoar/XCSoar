@@ -33,21 +33,8 @@
  * Integer projected (flat-earth) version of Geodetic coordinates
  */
 struct FlatGeoPoint : IntPoint2D {
-  /**
-   * Non-initialising constructor.
-   */
   FlatGeoPoint() = default;
-
-  /**
-   * Constructor at specified location (x,y)
-   *
-   * @param x x location
-   * @param y y location
-   *
-   * @return Initialised object at origin
-   */
-  constexpr
-  FlatGeoPoint(const int _x, const int _y):IntPoint2D(_x, _y) {}
+  using IntPoint2D::IntPoint2D;
 
   /**
    * Find distance from one point to another

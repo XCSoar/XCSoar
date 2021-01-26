@@ -29,9 +29,7 @@ Copyright_License {
 
 struct ShapePoint : FloatPoint2D {
   ShapePoint() = default;
-
-  template<typename... Args>
-  constexpr ShapePoint(Args&&... args):FloatPoint2D(args...) {}
+  using FloatPoint2D::FloatPoint2D;
 };
 
 typedef ShapePoint::scalar_type ShapeScalar;

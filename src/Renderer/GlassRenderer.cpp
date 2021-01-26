@@ -52,10 +52,10 @@ DrawGlassBackground(Canvas &canvas, const PixelRect &rc, Color color)
   const int size = std::min(rc.GetWidth(), rc.GetHeight()) / 4;
 
   const BulkPixelPoint vertices[] = {
-    { center.x + 1024, center.y - 1024 },
-    { center.x + 1024 + size, center.y - 1024 + size },
-    { center.x - 1024, center.y + 1024 },
-    { center.x - 1024 + size, center.y + 1024 + size },
+    center.At(1024, -1024),
+    center.At(1024 + size, -1024 + size),
+    center.At(-1024, 1024),
+    center.At(-1024 + size, 1024 + size),
   };
 
   const ScopeVertexPointer vp(vertices);

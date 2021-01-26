@@ -31,8 +31,7 @@ Copyright_License {
 
 struct Vector : DoublePoint2D {
   Vector() = default;
-
-  constexpr Vector(double _x, double _y):DoublePoint2D(_x, _y) {}
+  using DoublePoint2D::DoublePoint2D;
 
   Vector(Angle bearing, double norm) {
     auto sc = bearing.SinCos();
