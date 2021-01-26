@@ -64,6 +64,10 @@ public:
 		:StringPointer<T>(src),
 		 allocation(std::move(src.allocation)) {}
 
+	LightString(BasicAllocatedString<T> &&src) noexcept
+		:StringPointer<T>(src.c_str()),
+		 allocation(std::move(src)) {}
+
 	static LightString Donate(pointer allocation) noexcept {
 		return LightString(allocation);
 	}
