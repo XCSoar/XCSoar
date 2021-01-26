@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Max Kellermann <max.kellermann@gmail.com>
+ * Copyright 2015-2021 Max Kellermann <max.kellermann@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -49,36 +49,36 @@ public:
 private:
 	BasicAllocatedString<T> allocation;
 
-	explicit LightString(pointer _allocation)
+	explicit LightString(pointer _allocation) noexcept
 		:StringPointer<T>(_allocation),
 		allocation(BasicAllocatedString<T>::Donate(_allocation)) {}
 
 public:
-	explicit LightString(const_pointer _value)
+	explicit LightString(const_pointer _value) noexcept
 		:StringPointer<T>(_value), allocation(nullptr) {}
 
-	LightString(std::nullptr_t n)
+	LightString(std::nullptr_t n) noexcept
 		:StringPointer<T>(n), allocation(n) {}
 
-	LightString(LightString &&src)
+	LightString(LightString &&src) noexcept
 		:StringPointer<T>(std::move(src)),
 		 allocation(std::move(src.allocation)) {}
 
-	static LightString Donate(pointer allocation) {
+	static LightString Donate(pointer allocation) noexcept {
 		return LightString(allocation);
 	}
 
-	static LightString Null() {
+	static LightString Null() noexcept {
 		return nullptr;
 	}
 
-	LightString &operator=(LightString &&src) {
+	LightString &operator=(LightString &&src) noexcept {
 		*(StringPointer<T> *)this = std::move(src);
 		allocation = std::move(src.allocation);
 		return *this;
 	}
 
-	pointer Steal() {
+	pointer Steal() noexcept {
 		return allocation.Steal();
 	}
 };
