@@ -26,7 +26,7 @@ Copyright_License {
 #ifdef _UNICODE
 #include <windows.h>
 
-static TCHAR *
+static wchar_t *
 ConvertToWide(const char *p, UINT codepage) noexcept
 {
   assert(p != nullptr);
@@ -35,7 +35,7 @@ ConvertToWide(const char *p, UINT codepage) noexcept
   if (length <= 0)
     return nullptr;
 
-  TCHAR *buffer = new TCHAR[length];
+  wchar_t *buffer = new wchar_t[length];
   length = MultiByteToWideChar(codepage, 0, p, -1, buffer, length);
   if (length <= 0) {
     delete[] buffer;
@@ -45,7 +45,7 @@ ConvertToWide(const char *p, UINT codepage) noexcept
   return buffer;
 }
 
-TCHAR *
+wchar_t *
 ConvertUTF8ToWide(const char *p) noexcept
 {
   assert(p != nullptr);
@@ -53,7 +53,7 @@ ConvertUTF8ToWide(const char *p) noexcept
   return ConvertToWide(p, CP_UTF8);
 }
 
-TCHAR *
+wchar_t *
 ConvertACPToWide(const char *p) noexcept
 {
   assert(p != nullptr);
@@ -62,7 +62,7 @@ ConvertACPToWide(const char *p) noexcept
 }
 
 static char *
-ConvertFromWide(const TCHAR *p, UINT codepage) noexcept
+ConvertFromWide(const wchar_t *p, UINT codepage) noexcept
 {
   assert(p != nullptr);
 
@@ -83,7 +83,7 @@ ConvertFromWide(const TCHAR *p, UINT codepage) noexcept
 }
 
 char *
-ConvertWideToUTF8(const TCHAR *p) noexcept
+ConvertWideToUTF8(const wchar_t *p) noexcept
 {
   assert(p != nullptr);
 
@@ -91,7 +91,7 @@ ConvertWideToUTF8(const TCHAR *p) noexcept
 }
 
 char *
-ConvertWideToACP(const TCHAR *p) noexcept
+ConvertWideToACP(const wchar_t *p) noexcept
 {
   assert(p != nullptr);
 

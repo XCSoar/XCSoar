@@ -37,20 +37,20 @@ Copyright_License {
 
 #ifdef _UNICODE
 
-#include <tchar.h>
+#include <cwchar>
 
 /**
  * @return nullptr on error
  */
 gcc_malloc gcc_nonnull_all
-TCHAR *
+wchar_t *
 ConvertUTF8ToWide(const char *p) noexcept;
 
 /**
  * @return nullptr on error
  */
 gcc_malloc gcc_nonnull_all
-TCHAR *
+wchar_t *
 ConvertACPToWide(const char *p) noexcept;
 
 /**
@@ -58,14 +58,14 @@ ConvertACPToWide(const char *p) noexcept;
  */
 gcc_malloc gcc_nonnull_all
 char *
-ConvertWideToUTF8(const TCHAR *p) noexcept;
+ConvertWideToUTF8(const wchar_t *p) noexcept;
 
 /**
  * @return nullptr on error
  */
 gcc_malloc gcc_nonnull_all
 char *
-ConvertWideToACP(const TCHAR *p) noexcept;
+ConvertWideToACP(const wchar_t *p) noexcept;
 
 #endif
 
@@ -76,7 +76,7 @@ ConvertWideToACP(const TCHAR *p) noexcept;
  */
 class UTF8ToWideConverter {
 #ifdef _UNICODE
-  typedef BasicAllocatedString<TCHAR> Value;
+  typedef BasicAllocatedString<wchar_t> Value;
 #else
   typedef StringPointer<> Value;
 #endif
@@ -133,7 +133,7 @@ class WideToUTF8Converter {
 
 public:
 #ifdef _UNICODE
-  WideToUTF8Converter(const TCHAR *_value) noexcept
+  WideToUTF8Converter(const wchar_t *_value) noexcept
     :value(Value::Donate(ConvertWideToUTF8(_value))) {}
 #else
   WideToUTF8Converter(const_pointer _value) noexcept
@@ -181,7 +181,7 @@ class WideToACPConverter {
 
 public:
 #ifdef _UNICODE
-  WideToACPConverter(const TCHAR *_value) noexcept
+  WideToACPConverter(const wchar_t *_value) noexcept
     :value(Value::Donate(ConvertWideToACP(_value))) {}
 #else
   WideToACPConverter(const_pointer _value) noexcept
