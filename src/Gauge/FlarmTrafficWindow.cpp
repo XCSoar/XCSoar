@@ -242,7 +242,7 @@ FlarmTrafficWindow::PaintRadarNoTraffic(Canvas &canvas) const
   canvas.Select(look.no_traffic_font);
   PixelSize ts = canvas.CalcTextSize(str);
   canvas.SetTextColor(look.default_color);
-  canvas.DrawText({radar_mid.x - (ts.width / 2), radar_mid.y - (radius / 2)}, str);
+  canvas.DrawText(radar_mid - PixelSize{ts.width / 2, radius / 2}, str);
 }
 
 gcc_const
@@ -640,6 +640,17 @@ FlarmTrafficWindow::PaintNorth(Canvas &canvas) const
       radar_mid.y + iround(p.y * radius) - s.height / 2}, _T("N"));
 }
 
+static void
+DrawCircleLabel(Canvas &canvas, PixelPoint p,
+                BasicStringView<TCHAR> text) noexcept
+{
+  const auto size = canvas.CalcTextSize(text);
+  p.x -= size.width / 2;
+  p.y -= size.height * 3 / 4;
+
+  canvas.DrawText(p, text);
+}
+
 /**
  * Paints the radar circle on the given canvas
  * @param canvas The canvas to paint on
@@ -668,15 +679,12 @@ FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
   TCHAR distance_string[10];
   FormatUserDistanceSmart(distance, distance_string,
                           ARRAY_SIZE(distance_string), 1000);
-  PixelSize s = canvas.CalcTextSize(distance_string);
-  canvas.DrawText({radar_mid.x - s.width / 2,
-      radar_mid.y + radius - s.height * 0.75}, distance_string);
+  DrawCircleLabel(canvas, radar_mid + PixelSize{0u, radius}, distance_string);
 
   FormatUserDistanceSmart(distance / 2, distance_string,
                           ARRAY_SIZE(distance_string), 1000);
-  s = canvas.CalcTextSize(distance_string);
-  canvas.DrawText({radar_mid.x - s.width / 2,
-      radar_mid.y + radius / 2 - s.height * 0.75}, distance_string);
+  DrawCircleLabel(canvas, radar_mid + PixelSize{0u, radius / 2},
+                  distance_string);
 
   canvas.SetBackgroundTransparent();
 
