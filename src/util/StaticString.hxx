@@ -246,6 +246,10 @@ public:
 		return c_str();
 	}
 
+	operator BasicStringView<T>() const noexcept {
+		return c_str();
+	}
+
 	bool operator ==(const_pointer value) const {
 		return equals(value);
 	}
