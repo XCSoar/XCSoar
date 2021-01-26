@@ -68,8 +68,9 @@ public:
   gcc_pure
   Point Rotate(double x, double y) const;
 
+  template<typename P, typename=std::enable_if_t<std::is_base_of_v<Point, P>>>
   gcc_pure
-  Point Rotate(Point p) const {
+  P Rotate(P p) const noexcept {
     return Rotate(p.x, p.y);
   }
 };
@@ -111,8 +112,9 @@ public:
   gcc_pure
   Point Rotate(int x, int y) const;
 
+  template<typename P, typename=std::enable_if_t<std::is_base_of_v<Point, P>>>
   gcc_pure
-  Point Rotate(Point p) const {
+  P Rotate(P p) const noexcept {
     return Rotate(p.x, p.y);
   }
 };

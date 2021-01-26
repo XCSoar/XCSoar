@@ -27,6 +27,11 @@ Copyright_License {
 #include "Math/Point2D.hpp"
 
 struct PixelPoint : IntPoint2D {
+  PixelPoint() = default;
+
+  constexpr PixelPoint(IntPoint2D src) noexcept
+    :IntPoint2D(src) {}
+
   using IntPoint2D::IntPoint2D;
 
   /**
