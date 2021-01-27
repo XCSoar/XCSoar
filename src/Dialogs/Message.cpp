@@ -54,18 +54,14 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
 
   const DialogLook &dialog_look = UIGlobals::GetDialogLook();
 
-  PixelRect form_rc;
-  form_rc.left = 0;
-  form_rc.top = 0;
-  form_rc.right = client_area_size.width;
-  form_rc.bottom = client_area_size.height;
-
-  WndForm wf(main_window, dialog_look, form_rc, caption, style);
+  WndForm wf(main_window, dialog_look, PixelRect{client_area_size},
+             caption, style);
 
   ContainerWindow &client_area = wf.GetClientAreaWindow();
 
   // Create text element
-  WndFrame *text_frame = new WndFrame(client_area, dialog_look, form_rc);
+  WndFrame *text_frame = new WndFrame(client_area, dialog_look,
+                                      client_area.GetClientRect());
 
   text_frame->SetText(text);
   text_frame->SetAlignCenter();
