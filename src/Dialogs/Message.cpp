@@ -29,8 +29,9 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/window/SingleWindow.hpp"
-#include "util/StaticArray.hxx"
 #include "UIGlobals.hpp"
+
+#include <boost/container/static_vector.hpp>
 
 #include <cassert>
 
@@ -84,48 +85,40 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
   WindowStyle button_style;
   button_style.TabStop();
 
-  StaticArray<Button *, 10> buttons;
+  boost::container::static_vector<Button, 10> buttons;
 
   unsigned button_flags = flags & 0x000f;
   if (button_flags == MB_OK ||
       button_flags == MB_OKCANCEL)
-    buttons.append() =
-      new Button(client_area, dialog_look.button, _("OK"), button_rc,
-                 button_style,
-                 [&wf](){ wf.SetModalResult(IDOK); });
+    buttons.emplace_back(client_area, dialog_look.button, _("OK"), button_rc,
+                         button_style,
+                         [&wf](){ wf.SetModalResult(IDOK); });
 
   if (button_flags == MB_YESNO ||
       button_flags == MB_YESNOCANCEL) {
-    buttons.append() =
-      new Button(client_area, dialog_look.button, _("Yes"), button_rc,
-                 button_style, wf.MakeModalResultCallback(IDYES));
-
-    buttons.append() =
-      new Button(client_area, dialog_look.button, _("No"), button_rc,
-                 button_style, wf.MakeModalResultCallback(IDNO));
+    buttons.emplace_back(client_area, dialog_look.button, _("Yes"), button_rc,
+                         button_style, wf.MakeModalResultCallback(IDYES));
+    buttons.emplace_back(client_area, dialog_look.button, _("No"), button_rc,
+                         button_style, wf.MakeModalResultCallback(IDNO));
   }
 
   if (button_flags == MB_ABORTRETRYIGNORE ||
       button_flags == MB_RETRYCANCEL)
-    buttons.append() =
-      new Button(client_area, dialog_look.button, _("Retry"), button_rc,
-                 button_style, wf.MakeModalResultCallback(IDRETRY));
+    buttons.emplace_back(client_area, dialog_look.button, _("Retry"), button_rc,
+                         button_style, wf.MakeModalResultCallback(IDRETRY));
 
   if (button_flags == MB_OKCANCEL ||
       button_flags == MB_RETRYCANCEL ||
       button_flags == MB_YESNOCANCEL)
-    buttons.append() =
-      new Button(client_area, dialog_look.button, _("Cancel"), button_rc,
-                 button_style, wf.MakeModalResultCallback(IDCANCEL));
+    buttons.emplace_back(client_area, dialog_look.button, _("Cancel"), button_rc,
+                         button_style, wf.MakeModalResultCallback(IDCANCEL));
 
   if (button_flags == MB_ABORTRETRYIGNORE) {
-    buttons.append() =
-      new Button(client_area, dialog_look.button, _("Abort"), button_rc,
-                 button_style, wf.MakeModalResultCallback(IDABORT));
+    buttons.emplace_back(client_area, dialog_look.button, _("Abort"), button_rc,
+                         button_style, wf.MakeModalResultCallback(IDABORT));
 
-    buttons.append() =
-      new Button(client_area, dialog_look.button, _("Ignore"), button_rc,
-                 button_style, wf.MakeModalResultCallback(IDIGNORE));
+    buttons.emplace_back(client_area, dialog_look.button, _("Ignore"), button_rc,
+                         button_style, wf.MakeModalResultCallback(IDIGNORE));
   }
 
   const unsigned max_button_width = client_area_size.width / buttons.size();
@@ -133,15 +126,12 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
 
   // Move buttons to the right positions
   for (unsigned i = 0; i < buttons.size(); i++) {
-    buttons[i]->Move(button_x, button_rc.top);
+    buttons[i].Move(button_x, button_rc.top);
     button_x += max_button_width;
   }
 
   // Show MessageBox and save result
   unsigned res = wf.ShowModal();
-
-  for (unsigned i = 0; i < buttons.size(); ++i)
-    delete buttons[i];
 
   return res;
 }
