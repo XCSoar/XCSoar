@@ -255,6 +255,25 @@ QuickMenu::KeyPress(unsigned key_code)
   return true;
 }
 
+static int
+ShowQuickMenu(UI::SingleWindow &parent, const Menu &menu) noexcept
+{
+  const auto &dialog_look = UIGlobals::GetDialogLook();
+
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      dialog_look, nullptr);
+  QuickMenu quick_menu(dialog, menu);
+
+  dialog.FinishPreliminary(&quick_menu);
+
+  const auto result = dialog.ShowModal();
+  dialog.StealWidget();
+
+  return result == mrOK
+    ? int(quick_menu.clicked_event)
+    : -1;
+}
+
 void
 dlgQuickMenuShowModal(UI::SingleWindow &parent)
 {
@@ -262,17 +281,7 @@ dlgQuickMenuShowModal(UI::SingleWindow &parent)
   if (menu == nullptr)
     return;
 
-  const auto &dialog_look = UIGlobals::GetDialogLook();
-
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      dialog_look, nullptr);
-  QuickMenu quick_menu(dialog, *menu);
-
-  dialog.FinishPreliminary(&quick_menu);
-
-  const auto result = dialog.ShowModal();
-  dialog.StealWidget();
-
-  if (result == mrOK)
-    InputEvents::ProcessEvent(quick_menu.clicked_event);
+  const int event = ShowQuickMenu(parent, *menu);
+  if (event >= 0)
+    InputEvents::ProcessEvent(event);
 }
