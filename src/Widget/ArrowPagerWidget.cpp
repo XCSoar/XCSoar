@@ -144,10 +144,10 @@ ArrowPagerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   style.TabStop();
 
   previous_button.Create(parent, layout.previous_button, style,
-                         new SymbolButtonRenderer(look, _T("<")),
+                         std::make_unique<SymbolButtonRenderer>(look, _T("<")),
                          [this](){ Previous(false); });
   next_button.Create(parent, layout.next_button, style,
-                     new SymbolButtonRenderer(look, _T(">")),
+                     std::make_unique<SymbolButtonRenderer>(look, _T(">")),
                      [this](){ Next(false); });
   close_button.Create(parent, look, _("Close"), layout.close_button,
                       style, close_callback);

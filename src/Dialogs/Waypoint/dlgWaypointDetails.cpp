@@ -401,19 +401,19 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   if (!images.empty()) {
     magnify_button.Create(parent, layout.magnify_button, button_style,
-                          new SymbolButtonRenderer(look.button, _T("+")),
+                          std::make_unique<SymbolButtonRenderer>(look.button, _T("+")),
                           [this](){ OnMagnifyClicked(); });
     shrink_button.Create(parent, layout.shrink_button, button_style,
-                         new SymbolButtonRenderer(look.button, _T("-")),
+                         std::make_unique<SymbolButtonRenderer>(look.button, _T("-")),
                          [this](){ OnShrinkClicked(); });
   }
 
   previous_button.Create(parent, layout.previous_button, button_style,
-                         new SymbolButtonRenderer(look.button, _T("<")),
+                         std::make_unique<SymbolButtonRenderer>(look.button, _T("<")),
                          [this](){ NextPage(-1); });
 
   next_button.Create(parent, layout.next_button, button_style,
-                     new SymbolButtonRenderer(look.button, _T(">")),
+                     std::make_unique<SymbolButtonRenderer>(look.button, _T(">")),
                      [this](){ NextPage(1); });
 
   close_button.Create(parent, look.button, _("Close"), layout.close_button,

@@ -47,7 +47,8 @@ void
 ShowMenuButton::Create(ContainerWindow &parent, const PixelRect &rc,
                        WindowStyle style)
 {
-  Button::Create(parent, rc, style, new ShowMenuButtonRenderer());
+  Button::Create(parent, rc, style,
+                 std::make_unique<ShowMenuButtonRenderer>());
 }
 
 bool

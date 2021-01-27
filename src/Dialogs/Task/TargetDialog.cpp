@@ -400,11 +400,10 @@ TargetWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
                      button_style, [this](){ OnNameClicked(); });
 
   previous_button.Create(parent, layout.previous_button, button_style,
-                         new SymbolButtonRenderer(button_look,
-                                                  _T("<")),
+                         std::make_unique<SymbolButtonRenderer>(button_look, _T("<")),
                          [this](){ OnPrevClicked(); });
   next_button.Create(parent, layout.next_button, button_style,
-                     new SymbolButtonRenderer(button_look, _T(">")),
+                     std::make_unique<SymbolButtonRenderer>(button_look, _T(">")),
                      [this](){ OnNextClicked(); });
 
   const unsigned caption_width = ::Layout::Scale(50);

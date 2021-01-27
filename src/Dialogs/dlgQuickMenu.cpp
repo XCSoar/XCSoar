@@ -163,8 +163,8 @@ QuickMenu::Prepare(ContainerWindow &parent, const PixelRect &rc)
     button_rc.right = 80;
     button_rc.bottom = 30;
     auto *button = new Button(grid_view, button_rc, buttonStyle,
-                              new QuickMenuButtonRenderer(dialog_look,
-                                                          expanded.text),
+                              std::make_unique<QuickMenuButtonRenderer>(dialog_look,
+                                                                        expanded.text),
                               [this, &menuItem](){
                                 clicked_event = menuItem.event;
                                 dialog.SetModalResult(mrOK);

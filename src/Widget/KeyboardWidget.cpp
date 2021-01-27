@@ -55,7 +55,7 @@ KeyboardWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     WindowStyle style;
     style.Hide();
     shift_button.Create(parent, { 0, 0, 16, 16 }, style,
-                        new SymbolButtonRenderer(look, _T("v")),
+                        std::make_unique<SymbolButtonRenderer>(look, _T("v")),
                         [this](){ OnShiftClicked(); });
   }
   UpdateShiftState();

@@ -74,7 +74,8 @@ public:
     style.Hide();
   }
 
-  Button *Add(ButtonRenderer *renderer, Button::Callback callback) noexcept;
+  Button *Add(std::unique_ptr<ButtonRenderer> &&renderer,
+              Button::Callback callback) noexcept;
 
   Button *Add(const TCHAR *caption, Button::Callback callback) noexcept;
 

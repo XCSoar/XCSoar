@@ -96,7 +96,7 @@ TaskManagerDialog::Initialise(ContainerWindow &parent, const PixelRect &rc)
 
   /* create the controls */
 
-  SetExtra(new ButtonWidget(new TaskMapButtonRenderer(UIGlobals::GetMapLook()),
+  SetExtra(new ButtonWidget(std::make_unique<TaskMapButtonRenderer>(UIGlobals::GetMapLook()),
                             [this](){ TaskViewClicked(); }));
 
   TabWidget::Initialise(parent, rc);

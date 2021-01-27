@@ -27,6 +27,7 @@ Copyright_License {
 #include "ui/window/PaintWindow.hpp"
 
 #include <functional>
+#include <memory>
 
 #include <tchar.h>
 
@@ -40,7 +41,7 @@ class ButtonRenderer;
 class Button : public PaintWindow {
   bool dragging, down;
 
-  ButtonRenderer *renderer;
+  std::unique_ptr<ButtonRenderer> renderer;
 
 public:
   using Callback = std::function<void()>;
@@ -59,31 +60,27 @@ private:
 
 public:
   Button(ContainerWindow &parent, const PixelRect &rc,
-         WindowStyle style, ButtonRenderer *_renderer,
-         Callback _callback) noexcept {
-    Create(parent, rc, style, _renderer, std::move(_callback));
-  }
+         WindowStyle style, std::unique_ptr<ButtonRenderer> _renderer,
+         Callback _callback) noexcept;
 
   Button(ContainerWindow &parent, const ButtonLook &look,
          const TCHAR *caption, const PixelRect &rc,
          WindowStyle style,
-         Callback _callback) noexcept {
-    Create(parent, look, caption, rc, style, std::move(_callback));
-  }
+         Callback _callback) noexcept;
 
-  Button() = default;
+  Button();
 
-  virtual ~Button();
+  ~Button() noexcept override;
 
   void Create(ContainerWindow &parent, const PixelRect &rc,
-              WindowStyle style, ButtonRenderer *_renderer);
+              WindowStyle style, std::unique_ptr<ButtonRenderer> _renderer);
 
   void Create(ContainerWindow &parent, const ButtonLook &look,
               const TCHAR *caption, const PixelRect &rc,
               WindowStyle style);
 
   void Create(ContainerWindow &parent, const PixelRect &rc,
-              WindowStyle style, ButtonRenderer *_renderer,
+              WindowStyle style, std::unique_ptr<ButtonRenderer> _renderer,
               Callback _callback) noexcept;
 
   void Create(ContainerWindow &parent, const ButtonLook &look,
@@ -98,7 +95,11 @@ public:
     callback = std::move(_callback);
   }
 
-  ButtonRenderer &GetRenderer() {
+  ButtonRenderer &GetRenderer() noexcept {
+    return *renderer;
+  }
+
+  const ButtonRenderer &GetRenderer() const noexcept {
     return *renderer;
   }
 
@@ -127,9 +128,7 @@ protected:
    */
   virtual bool OnClicked();
 
-/* virtual methods from class Window */
-  void OnDestroy() override;
-
+  /* virtual methods from class Window */
   bool OnKeyCheck(unsigned key_code) const override;
   bool OnKeyDown(unsigned key_code) override;
   bool OnMouseMove(PixelPoint p, unsigned keys) override;

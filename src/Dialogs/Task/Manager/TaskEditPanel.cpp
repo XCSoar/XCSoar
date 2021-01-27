@@ -542,10 +542,10 @@ TaskEditButtons::Prepare(ContainerWindow &parent, const PixelRect &rc)
                        layout.down, style,
                        [this](){ edit_panel->OnMakeFinish(); });
   down_button.Create(parent, layout.down, style,
-                     new SymbolButtonRenderer(look, _T("v")),
+                     std::make_unique<SymbolButtonRenderer>(look, _T("v")),
                      [this](){ edit_panel->MoveDown(); });
   up_button.Create(parent, layout.down, style,
-                   new SymbolButtonRenderer(look, _T("^")),
+                   std::make_unique<SymbolButtonRenderer>(look, _T("^")),
                    [this](){ edit_panel->MoveUp(); });
   reverse_button.Create(parent, look, _("Reverse"),
                         layout.reverse, style,

@@ -111,9 +111,9 @@ public:
     return widget.Steal();
   }
 
-  Button *AddButton(ButtonRenderer *renderer,
+  Button *AddButton(std::unique_ptr<ButtonRenderer> &&renderer,
                     Button::Callback callback) noexcept {
-    return buttons.Add(renderer, std::move(callback));
+    return buttons.Add(std::move(renderer), std::move(callback));
   }
 
   Button *AddButton(const TCHAR *caption,

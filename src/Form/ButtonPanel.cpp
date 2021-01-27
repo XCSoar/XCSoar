@@ -60,10 +60,11 @@ ButtonPanel::UpdateLayout()
 static constexpr PixelRect dummy_rc = { 0, 0, 100, 40 };
 
 Button *
-ButtonPanel::Add(ButtonRenderer *renderer, Button::Callback callback) noexcept
+ButtonPanel::Add(std::unique_ptr<ButtonRenderer> &&renderer,
+                 Button::Callback callback) noexcept
 {
   auto *button = new Button(parent, dummy_rc, style,
-                            renderer, std::move(callback));
+                            std::move(renderer), std::move(callback));
   keys[buttons.size()] = 0;
   buttons.append(button);
 
@@ -73,14 +74,16 @@ ButtonPanel::Add(ButtonRenderer *renderer, Button::Callback callback) noexcept
 Button *
 ButtonPanel::Add(const TCHAR *caption, Button::Callback callback) noexcept
 {
-  return Add(new TextButtonRenderer(look, caption), std::move(callback));
+  return Add(std::make_unique<TextButtonRenderer>(look, caption),
+             std::move(callback));
 }
 
 Button *
 ButtonPanel::AddSymbol(const TCHAR *caption,
                        Button::Callback callback) noexcept
 {
-  return Add(new SymbolButtonRenderer(look, caption), std::move(callback));
+  return Add(std::make_unique<SymbolButtonRenderer>(look, caption),
+             std::move(callback));
 }
 
 void

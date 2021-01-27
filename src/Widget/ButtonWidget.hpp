@@ -27,6 +27,7 @@ Copyright_License {
 #include "WindowWidget.hpp"
 
 #include <functional>
+#include <memory>
 
 #include <tchar.h>
 
@@ -39,22 +40,20 @@ class ActionListener;
  * A #Widget that creates a #Button.
  */
 class ButtonWidget : public WindowWidget {
-  ButtonRenderer *const renderer;
+  std::unique_ptr<ButtonRenderer> renderer;
   const std::function<void()> callback;
 
 public:
-  ButtonWidget(ButtonRenderer *_renderer,
-               std::function<void()> _callback) noexcept
-    :renderer(_renderer), callback(std::move(_callback)) {}
+  ButtonWidget(std::unique_ptr<ButtonRenderer> _renderer,
+               std::function<void()> _callback) noexcept;
 
   ButtonWidget(const ButtonLook &look, const TCHAR *caption,
                std::function<void()> _callback) noexcept;
 
-  virtual ~ButtonWidget();
+  ~ButtonWidget() noexcept override;
 
-  ButtonRenderer &GetRenderer() {
-    return *renderer;
-  }
+  ButtonRenderer &GetRenderer() noexcept;
+  const ButtonRenderer &GetRenderer() const noexcept;
 
   /**
    * Schedule a repaint.

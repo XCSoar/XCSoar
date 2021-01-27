@@ -860,7 +860,7 @@ NewSymbolButton(ContainerWindow &parent, const ButtonLook &look,
                 Button::Callback callback) noexcept
 {
   return new Button(parent, rc, WindowStyle(),
-                    new SymbolButtonRenderer(look, caption),
+                    std::make_unique<SymbolButtonRenderer>(look, caption),
                     std::move(callback));
 }
 

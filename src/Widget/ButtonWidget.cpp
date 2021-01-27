@@ -27,17 +27,32 @@ Copyright_License {
 #include "Renderer/TextButtonRenderer.hpp"
 #include "Screen/Layout.hpp"
 
-ButtonWidget::ButtonWidget(const ButtonLook &look, const TCHAR *caption,
+ButtonWidget::ButtonWidget(std::unique_ptr<ButtonRenderer> _renderer,
                            std::function<void()> _callback) noexcept
-  :renderer(new TextButtonRenderer(look, caption)),
+  :renderer(std::move(_renderer)),
    callback(std::move(_callback)) {}
 
-ButtonWidget::~ButtonWidget()
+ButtonWidget::ButtonWidget(const ButtonLook &look, const TCHAR *caption,
+                           std::function<void()> _callback) noexcept
+  :renderer(std::make_unique<TextButtonRenderer>(look, caption)),
+   callback(std::move(_callback)) {}
+
+ButtonWidget::~ButtonWidget() noexcept = default;
+
+ButtonRenderer &
+ButtonWidget::GetRenderer() noexcept
 {
-  if (IsDefined())
-    DeleteWindow();
-  else
-    delete renderer;
+  return IsDefined()
+    ? ((Button &)GetWindow()).GetRenderer()
+    : *renderer;
+}
+
+const ButtonRenderer &
+ButtonWidget::GetRenderer() const noexcept
+{
+  return IsDefined()
+    ? ((const Button &)GetWindow()).GetRenderer()
+    : *renderer;
 }
 
 void
@@ -51,14 +66,14 @@ ButtonWidget::Invalidate()
 PixelSize
 ButtonWidget::GetMinimumSize() const
 {
-  return PixelSize(renderer->GetMinimumButtonWidth(),
+  return PixelSize(GetRenderer().GetMinimumButtonWidth(),
                    Layout::GetMinimumControlHeight());
 }
 
 PixelSize
 ButtonWidget::GetMaximumSize() const
 {
-  return PixelSize(renderer->GetMinimumButtonWidth() + Layout::GetMaximumControlHeight(),
+  return PixelSize(GetRenderer().GetMinimumButtonWidth() + Layout::GetMaximumControlHeight(),
                    Layout::GetMaximumControlHeight());
 }
 
@@ -69,7 +84,7 @@ ButtonWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
   style.Hide();
   style.TabStop();
 
-  SetWindow(new Button(parent, rc, style, renderer, callback));
+  SetWindow(new Button(parent, rc, style, std::move(renderer), callback));
 }
 
 bool

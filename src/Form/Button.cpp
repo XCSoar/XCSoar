@@ -27,21 +27,33 @@
 #include "Renderer/TextButtonRenderer.hpp"
 #include "Hardware/Vibrator.hpp"
 
-Button::~Button() {
-  /* we must override ~Window(), because in ~Window(), our own
-     OnDestroy() method won't be called (during object destruction,
-     this object loses its identity) */
-  Destroy();
+Button::Button(ContainerWindow &parent, const PixelRect &rc,
+               WindowStyle style, std::unique_ptr<ButtonRenderer> _renderer,
+               Callback _callback) noexcept
+{
+  Create(parent, rc, style, std::move(_renderer), std::move(_callback));
 }
+
+Button::Button(ContainerWindow &parent, const ButtonLook &look,
+               const TCHAR *caption, const PixelRect &rc,
+               WindowStyle style,
+               Callback _callback) noexcept
+{
+  Create(parent, look, caption, rc, style, std::move(_callback));
+}
+
+Button::Button() = default;
+
+Button::~Button() noexcept = default;
 
 void
 Button::Create(ContainerWindow &parent,
                const PixelRect &rc,
                WindowStyle style,
-               ButtonRenderer *_renderer)
+               std::unique_ptr<ButtonRenderer> _renderer)
 {
   dragging = down = selected = false;
-  renderer = _renderer;
+  renderer = std::move(_renderer);
 
   PaintWindow::Create(parent, rc, style);
 }
@@ -51,17 +63,17 @@ Button::Create(ContainerWindow &parent, const ButtonLook &look,
                const TCHAR *caption, const PixelRect &rc,
                WindowStyle style)
 {
-  Create(parent, rc, style, new TextButtonRenderer(look, caption));
+  Create(parent, rc, style, std::make_unique<TextButtonRenderer>(look, caption));
 }
 
 void
 Button::Create(ContainerWindow &parent, const PixelRect &rc,
-               WindowStyle style, ButtonRenderer *_renderer,
+               WindowStyle style, std::unique_ptr<ButtonRenderer> _renderer,
                Callback _callback) noexcept
 {
   callback = std::move(_callback);
 
-  Create(parent, rc, style, _renderer);
+  Create(parent, rc, style, std::move(_renderer));
 }
 
 void
@@ -70,7 +82,7 @@ Button::Create(ContainerWindow &parent, const ButtonLook &look,
                WindowStyle style,
                Callback _callback) noexcept {
   Create(parent, rc, style,
-         new TextButtonRenderer(look, caption),
+         std::make_unique<TextButtonRenderer>(look, caption),
          std::move(_callback));
 }
 
@@ -79,7 +91,7 @@ Button::SetCaption(const TCHAR *caption)
 {
   assert(caption != nullptr);
 
-  TextButtonRenderer &r = *(TextButtonRenderer *)renderer;
+  auto &r = (TextButtonRenderer &)*renderer;
   r.SetCaption(caption);
 
   Invalidate();
@@ -131,16 +143,6 @@ Button::Click()
 {
   SetDown(false);
   OnClicked();
-}
-
-void
-Button::OnDestroy()
-{
-  assert(renderer != nullptr);
-
-  delete renderer;
-
-  PaintWindow::OnDestroy();
 }
 
 bool
