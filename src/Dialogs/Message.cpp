@@ -59,15 +59,15 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
   ContainerWindow &client_area = wf.GetClientAreaWindow();
 
   // Create text element
-  WndFrame *text_frame = new WndFrame(client_area, dialog_look,
-                                      client_area.GetClientRect());
+  WndFrame text_frame(client_area, dialog_look,
+                      client_area.GetClientRect());
 
-  text_frame->SetText(text);
-  text_frame->SetAlignCenter();
+  text_frame.SetText(text);
+  text_frame.SetAlignCenter();
 
-  const unsigned text_height = text_frame->GetTextHeight();
-  text_frame->Resize(client_area_size.width,
-                     text_height + Layout::GetTextPadding());
+  const unsigned text_height = text_frame.GetTextHeight();
+  text_frame.Resize(client_area_size.width,
+                    text_height + Layout::GetTextPadding());
 
   client_area_size.height = Layout::Scale(10) + text_height + button_size.height;
 
@@ -140,7 +140,6 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
   // Show MessageBox and save result
   unsigned res = wf.ShowModal();
 
-  delete text_frame;
   for (unsigned i = 0; i < buttons.size(); ++i)
     delete buttons[i];
 
