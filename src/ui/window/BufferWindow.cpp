@@ -27,29 +27,6 @@ Copyright_License {
 #include "ui/canvas/WindowCanvas.hpp"
 #endif
 
-#ifndef ENABLE_OPENGL
-
-void
-BufferWindow::OnCreate()
-{
-  PaintWindow::OnCreate();
-
-  dirty = true;
-
-  WindowCanvas a_canvas(*this);
-  buffer.Create(a_canvas);
-}
-
-void
-BufferWindow::OnDestroy()
-{
-  PaintWindow::OnDestroy();
-
-  buffer.Destroy();
-}
-
-#endif
-
 void
 BufferWindow::OnResize(PixelSize new_size)
 {
@@ -66,12 +43,12 @@ BufferWindow::OnResize(PixelSize new_size)
 void
 BufferWindow::OnPaint(Canvas &canvas)
 {
-#ifdef ENABLE_OPENGL
   if (!buffer.IsDefined()) {
-    buffer.Create(canvas.GetSize());
+    buffer.Create(canvas);
     dirty = true;
   }
 
+#ifdef ENABLE_OPENGL
   if (dirty) {
     dirty = false;
     buffer.Begin(canvas);
