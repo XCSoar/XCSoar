@@ -44,8 +44,7 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
 
   PixelSize client_area_size(Layout::Scale(200u), Layout::Scale(160u));
 
-  const unsigned button_width = Layout::Scale(60u);
-  const unsigned button_height = Layout::Scale(32u);
+  const auto button_size = Layout::Scale(PixelSize{60u, 32u});
 
   // Create dialog
   WindowStyle style;
@@ -70,7 +69,7 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
   text_frame->Resize(client_area_size.width,
                      text_height + Layout::GetTextPadding());
 
-  client_area_size.height = Layout::Scale(10) + text_height + button_height;
+  client_area_size.height = Layout::Scale(10) + text_height + button_size.height;
 
   const auto dialog_size = wf.ClientAreaToDialogSize(client_area_size);
   const auto dialog_position = main_rc.CenteredTopLeft(dialog_size);
@@ -78,11 +77,8 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
   const PixelRect dialog_rc(dialog_position, dialog_size);
   wf.Move(dialog_rc);
 
-  PixelRect button_rc;
-  button_rc.left = 0;
-  button_rc.top = Layout::Scale(6) + text_height;
-  button_rc.right = button_rc.left + button_width;
-  button_rc.bottom = button_rc.top + button_height;
+  const PixelRect button_rc(PixelPoint(0, Layout::Scale(6u) + text_height),
+                            button_size);
 
   // Create buttons
   WindowStyle button_style;
@@ -133,7 +129,7 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
   }
 
   const unsigned max_button_width = client_area_size.width / buttons.size();
-  int button_x = max_button_width / 2 - button_width / 2;
+  int button_x = max_button_width / 2 - button_size.width / 2;
 
   // Move buttons to the right positions
   for (unsigned i = 0; i < buttons.size(); i++) {
