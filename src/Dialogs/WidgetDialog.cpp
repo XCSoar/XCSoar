@@ -120,6 +120,12 @@ WidgetDialog::FinishPreliminary(Widget *_widget)
 }
 
 void
+WidgetDialog::FinishPreliminary(std::unique_ptr<Widget> _widget) noexcept
+{
+  FinishPreliminary(_widget.release());
+}
+
+void
 WidgetDialog::AutoSize()
 {
   const PixelRect parent_rc = GetParentClientRect();

@@ -28,6 +28,8 @@ Copyright_License {
 #include "Form/ButtonPanel.hpp"
 #include "Widget/ManagedWidget.hpp"
 
+#include <memory>
+
 #include <tchar.h>
 
 class Widget;
@@ -88,6 +90,7 @@ public:
   }
 
   void FinishPreliminary(Widget *widget);
+  void FinishPreliminary(std::unique_ptr<Widget> widget) noexcept;
 
   bool GetChanged() const {
     return changed;
