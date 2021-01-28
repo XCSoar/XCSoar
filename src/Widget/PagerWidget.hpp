@@ -26,7 +26,8 @@ Copyright_License {
 
 #include "Widget.hpp"
 #include "ui/dim/Rect.hpp"
-#include "util/StaticArray.hxx"
+
+#include <boost/container/static_vector.hpp>
 
 #include <functional>
 
@@ -45,8 +46,6 @@ class PagerWidget : public Widget {
      */
     bool prepared;
 
-    Child() = default;
-
     constexpr
     Child(Widget *_widget):widget(_widget), prepared(false) {}
   };
@@ -57,7 +56,7 @@ class PagerWidget : public Widget {
   PixelRect position;
 
   unsigned current;
-  StaticArray<Child, 32u> children;
+  boost::container::static_vector<Child, 32u> children;
 
   PageFlippedCallback page_flipped_callback;
 

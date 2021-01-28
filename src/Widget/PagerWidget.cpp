@@ -42,13 +42,13 @@ PagerWidget::Add(Widget *w)
     assert(current < children.size());
   }
 
-  children.append(w);
+  auto &child = children.emplace_back(w);
 
   if (initialised) {
     w->Initialise(*parent, position);
 
     if (prepared) {
-      children.back().prepared = true;
+      child.prepared = true;
       w->Prepare(*parent, position);
 
       if (visible && was_empty)
