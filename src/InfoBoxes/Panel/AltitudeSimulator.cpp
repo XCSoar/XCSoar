@@ -53,14 +53,14 @@ AltitudeSimulatorOffsetButtons::OnOffset(const double step)
                                  Units::ToSysAltitude(step));
 }
 
-Widget *
+std::unique_ptr<Widget>
 LoadAltitudeSimulatorPanel(unsigned id)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   if (!basic.gps.simulator)
     return nullptr;
 
-  return new AltitudeSimulatorOffsetButtons(UIGlobals::GetDialogLook().button,
-                                            _T("%+.0f"),
-                                            10, 100);
+  return std::make_unique<AltitudeSimulatorOffsetButtons>(UIGlobals::GetDialogLook().button,
+                                                          _T("%+.0f"),
+                                                          10, 100);
 }

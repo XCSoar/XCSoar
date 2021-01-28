@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_MC_SETUP_PANEL_HPP
 #define XCSOAR_MC_SETUP_PANEL_HPP
 
+#include <memory>
+
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 LoadMacCreadySetupPanel(unsigned id);
 
 #endif

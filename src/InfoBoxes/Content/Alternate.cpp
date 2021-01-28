@@ -38,10 +38,10 @@ Copyright_License {
 #include <stdio.h>
 #include <tchar.h>
 
-static Widget *
+static std::unique_ptr<Widget>
 LoadAlternatesPanel(unsigned id)
 {
-  return new CallbackWidget(dlgAlternatesListShowModal);
+  return std::make_unique<CallbackWidget>(dlgAlternatesListShowModal);
 }
 
 static constexpr

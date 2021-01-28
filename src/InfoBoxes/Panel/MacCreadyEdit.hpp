@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_MC_EDIT_PANEL_HPP
 #define XCSOAR_MC_EDIT_PANEL_HPP
 
+#include <memory>
+
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 LoadMacCreadyEditPanel(unsigned id);
 
 #endif

@@ -53,10 +53,10 @@ ShowNextWaypointDetails()
   dlgWaypointDetailsShowModal(std::move(wp), false);
 }
 
-static Widget *
+static std::unique_ptr<Widget>
 LoadNextWaypointDetailsPanel(unsigned id)
 {
-  return new CallbackWidget(ShowNextWaypointDetails);
+  return std::make_unique<CallbackWidget>(ShowNextWaypointDetails);
 }
 
 #ifdef __clang__

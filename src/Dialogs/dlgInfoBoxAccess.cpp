@@ -73,7 +73,7 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
     for (; panels->load != nullptr; ++panels) {
       assert(panels->name != nullptr);
 
-      Widget *widget = panels->load(id);
+      auto widget = panels->load(id);
 
       if (widget == NULL)
         continue;
@@ -93,10 +93,10 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
         auto *button = new ButtonWidget(look.button, _("Switch InfoBox"),
                                         dialog.MakeModalResultCallback(SWITCH_INFO_BOX));
 
-        widget = new TwoWidgets(widget, button, false);
+        widget = std::make_unique<TwoWidgets>(widget.release(), button, false);
       }
 
-      tab_widget.AddTab(widget, gettext(panels->name));
+      tab_widget.AddTab(widget.release(), gettext(panels->name));
     }
   }
 

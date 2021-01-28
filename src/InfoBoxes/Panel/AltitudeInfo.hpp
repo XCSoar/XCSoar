@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_ALTITUDE_INFO_PANEL_HPP
 #define XCSOAR_ALTITUDE_INFO_PANEL_HPP
 
+#include <memory>
+
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 LoadAltitudeInfoPanel(unsigned id);
 
 #endif

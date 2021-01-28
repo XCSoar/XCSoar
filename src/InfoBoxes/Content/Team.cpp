@@ -40,10 +40,10 @@ ShowTeamCodeDialog()
   dlgTeamCodeShowModal();
 }
 
-static Widget *
+static std::unique_ptr<Widget>
 LoadTeamCodeDialog(unsigned id)
 {
-  return new CallbackWidget(ShowTeamCodeDialog);
+  return std::make_unique<CallbackWidget>(ShowTeamCodeDialog);
 }
 
 static constexpr InfoBoxPanel team_code_infobox_panels[] = {

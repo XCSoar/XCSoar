@@ -155,10 +155,10 @@ ShowAnalysisBarograph()
                        terrain, AnalysisPage::BAROGRAPH);
 }
 
-static Widget *
+static std::unique_ptr<Widget>
 LoadAnalysisBarographPanel(unsigned id)
 {
-  return new CallbackWidget(ShowAnalysisBarograph);
+  return std::make_unique<CallbackWidget>(ShowAnalysisBarograph);
 }
 
 static constexpr

@@ -51,15 +51,14 @@ RadioOffsetButtons::OnOffset(double offset)
 
 }
 
-Widget *
+std::unique_ptr<Widget>
 LoadActiveRadioFrequencyEditPanel(unsigned id)
 {
-  return new RadioOffsetButtons(true);
+  return std::make_unique<RadioOffsetButtons>(true);
 }
 
-Widget *
+std::unique_ptr<Widget>
 LoadStandbyRadioFrequencyEditPanel(unsigned id)
 {
-  return new RadioOffsetButtons(false);
+  return std::make_unique<RadioOffsetButtons>(false);
 }
-

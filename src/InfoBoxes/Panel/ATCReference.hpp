@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_ATC_REFERENCE_PANEL_HPP
 #define XCSOAR_ATC_REFERENCE_PANEL_HPP
 
+#include <memory>
+
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 LoadATCReferencePanel(unsigned id);
 
 #endif

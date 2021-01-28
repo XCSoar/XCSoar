@@ -45,11 +45,11 @@ MacCreadyOffsetButtons::OnOffset(double offset)
   ActionInterface::OffsetManualMacCready(Units::ToSysVSpeed(offset));
 }
 
-Widget *
+std::unique_ptr<Widget>
 LoadMacCreadyEditPanel(unsigned id)
 {
   const auto step = GetUserVerticalSpeedStep();
-  return new MacCreadyOffsetButtons(UIGlobals::GetDialogLook().button,
-                                    GetUserVerticalSpeedFormat(false, true),
-                                    step, 5 * step);
+  return std::make_unique<MacCreadyOffsetButtons>(UIGlobals::GetDialogLook().button,
+                                                  GetUserVerticalSpeedFormat(false, true),
+                                                  step, 5 * step);
 }

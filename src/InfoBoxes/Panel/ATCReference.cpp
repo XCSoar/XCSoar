@@ -101,8 +101,8 @@ ATCReferencePanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   UpdateValues();
 }
 
-Widget *
+std::unique_ptr<Widget>
 LoadATCReferencePanel(unsigned id)
 {
-  return new ATCReferencePanel();
+  return std::make_unique<ATCReferencePanel>();
 }

@@ -43,10 +43,10 @@ ShowAnalysis8()
                        terrain, AnalysisPage::OLC);
 }
 
-static Widget *
+static std::unique_ptr<Widget>
 LoadAnalysis8Panel(unsigned id)
 {
-  return new CallbackWidget(ShowAnalysis8);
+  return std::make_unique<CallbackWidget>(ShowAnalysis8);
 }
 
 static constexpr

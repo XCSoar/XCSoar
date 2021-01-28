@@ -68,8 +68,8 @@ MacCreadySetupPanel::Show(const PixelRect &rc)
   WindowWidget::Show(rc);
 }
 
-Widget *
+std::unique_ptr<Widget>
 LoadMacCreadySetupPanel(unsigned id)
 {
-  return new MacCreadySetupPanel();
+  return std::make_unique<MacCreadySetupPanel>();
 }

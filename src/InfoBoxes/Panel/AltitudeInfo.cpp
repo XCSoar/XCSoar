@@ -109,8 +109,8 @@ AltitudeInfoPanel::OnGPSUpdate(const MoreData &basic)
   Refresh();
 }
 
-Widget *
+std::unique_ptr<Widget>
 LoadAltitudeInfoPanel(unsigned id)
 {
-  return new AltitudeInfoPanel();
+  return std::make_unique<AltitudeInfoPanel>();
 }

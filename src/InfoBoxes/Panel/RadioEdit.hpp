@@ -24,11 +24,14 @@ Copyright_License {
 #ifndef XCSOAR_RADIO_EDIT_PANEL_HPP
 #define XCSOAR_RADIO_EDIT_PANEL_HPP
 
+#include <memory>
+
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 LoadActiveRadioFrequencyEditPanel(unsigned id);
-Widget *
+
+std::unique_ptr<Widget>
 LoadStandbyRadioFrequencyEditPanel(unsigned id);
 
 #endif

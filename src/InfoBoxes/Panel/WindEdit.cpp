@@ -24,8 +24,8 @@ Copyright_License {
 #include "WindEdit.hpp"
 #include "Dialogs/Settings/WindSettingsPanel.hpp"
 
-Widget *
+std::unique_ptr<Widget>
 LoadWindEditPanel(unsigned id)
 {
-  return new WindSettingsPanel(true, true, true);
+  return std::make_unique<WindSettingsPanel>(true, true, true);
 }

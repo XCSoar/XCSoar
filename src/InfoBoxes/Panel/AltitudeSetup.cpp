@@ -84,8 +84,8 @@ AltitudeSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   }
 }
 
-Widget *
+std::unique_ptr<Widget>
 LoadAltitudeSetupPanel(unsigned id)
 {
-  return new AltitudeSetupPanel();
+  return std::make_unique<AltitudeSetupPanel>();
 }
