@@ -147,6 +147,9 @@ class RowFormWidget : public WindowWidget {
       assert(_widget != nullptr);
     }
 
+    Row(const Row &) = delete;
+    Row &operator=(const Row &) = delete;
+
     /**
      * Determines whether this row is available.  A row that is not
      * available is hidden and will not be considered in the layout.
