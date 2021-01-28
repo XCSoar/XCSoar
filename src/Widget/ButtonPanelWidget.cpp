@@ -32,7 +32,6 @@ Copyright_License {
 ButtonPanelWidget::~ButtonPanelWidget()
 {
   delete buttons;
-  delete widget;
 }
 
 PixelRect

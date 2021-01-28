@@ -449,7 +449,7 @@ CreatePagesConfigPanel()
   auto &editor = (PageLayoutEditWidget &)two->GetSecond();
   list.SetEditor(editor);
 
-  auto buttons = std::make_unique<ButtonPanelWidget>(two.release(),
+  auto buttons = std::make_unique<ButtonPanelWidget>(std::move(two),
                                                      ButtonPanelWidget::Alignment::BOTTOM);
   list.SetButtonPanel(*buttons);
 

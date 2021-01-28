@@ -374,7 +374,7 @@ CreateTaskListPanel(TaskManagerDialog &dialog,
   list.SetTwoWidgets(*tw);
 
   auto buttons =
-    std::make_unique<ButtonPanelWidget>(tw.release(),
+    std::make_unique<ButtonPanelWidget>(std::move(tw),
                                         ButtonPanelWidget::Alignment::BOTTOM);
   list.SetButtonPanel(*buttons);
 

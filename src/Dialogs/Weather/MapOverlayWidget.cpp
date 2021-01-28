@@ -419,7 +419,7 @@ CreateWeatherMapOverlayWidget()
   auto &view = (ViewImageWidget &)two->GetSecond();
 
   auto buttons =
-    std::make_unique<ButtonPanelWidget>(two.release(),
+    std::make_unique<ButtonPanelWidget>(std::move(two),
                                         ButtonPanelWidget::Alignment::BOTTOM);
   list.SetPreview(view);
   list.SetButtonPanel(*buttons);
