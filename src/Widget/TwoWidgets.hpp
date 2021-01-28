@@ -46,8 +46,6 @@ class TwoWidgets : public NullWidget {
   PixelRect rc;
 
 public:
-  TwoWidgets(bool _vertical=true):vertical(_vertical) {}
-
   TwoWidgets(Widget *_first, Widget *_second, bool _vertical=true)
     :vertical(_vertical), first(_first), second(_second) {
     assert(first != nullptr);
@@ -64,18 +62,6 @@ public:
   void UpdateLayout();
 
 protected:
-  /**
-   * Call this method if the default constructor has been used.  It
-   * must be called before Initialise().
-   */
-  void Set(Widget *_first, Widget *_second) {
-    first = _first;
-    second = _second;
-
-    assert(first != nullptr);
-    assert(second != nullptr);
-  }
-
   Widget &GetFirst() {
     return *first;
   }

@@ -32,7 +32,10 @@ Copyright_License {
 
 class AltitudeInfoPanel : public TwoWidgets, NullBlackboardListener {
 public:
-  AltitudeInfoPanel():TwoWidgets(false) {}
+  explicit AltitudeInfoPanel(const DialogLook &look) noexcept
+    :TwoWidgets(new RowFormWidget(look),
+                new RowFormWidget(look),
+                false) {}
 
   void Refresh();
 
@@ -73,17 +76,15 @@ AltitudeInfoPanel::Refresh()
 void
 AltitudeInfoPanel::Initialise(ContainerWindow &parent, const PixelRect &rc)
 {
-  const DialogLook &look = UIGlobals::GetDialogLook();
-
-  RowFormWidget *first = new RowFormWidget(look);
-  RowFormWidget *second = new RowFormWidget(look);
-  TwoWidgets::Set(first, second);
   TwoWidgets::Initialise(parent, rc);
 
-  first->AddReadOnly(_("Alt GPS"));
-  first->AddReadOnly(_("Alt Baro"));
-  second->AddReadOnly(_("H AGL"));
-  second->AddReadOnly(_("Terrain"));
+  RowFormWidget &first = (RowFormWidget &)GetFirst();
+  first.AddReadOnly(_("Alt GPS"));
+  first.AddReadOnly(_("Alt Baro"));
+
+  RowFormWidget &second = (RowFormWidget &)GetSecond();
+  second.AddReadOnly(_("H AGL"));
+  second.AddReadOnly(_("Terrain"));
 }
 
 void
@@ -112,5 +113,5 @@ AltitudeInfoPanel::OnGPSUpdate(const MoreData &basic)
 std::unique_ptr<Widget>
 LoadAltitudeInfoPanel(unsigned id)
 {
-  return std::make_unique<AltitudeInfoPanel>();
+  return std::make_unique<AltitudeInfoPanel>(UIGlobals::GetDialogLook());
 }
