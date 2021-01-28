@@ -249,7 +249,7 @@ RowFormWidget::Add(Row::Type type, Window *window)
   /* cannot append rows after a REMAINING row */
   assert(rows.empty() || rows.back().type != Row::Type::REMAINING);
 
-  rows.push_back(Row(type, window));
+  rows.emplace_back(type, window);
 }
 
 void

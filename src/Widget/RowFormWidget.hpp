@@ -28,9 +28,10 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Form/DataField/Base.hpp"
 #include "Repository/FileType.hpp"
-#include "util/StaticArray.hxx"
 #include "util/EnumCast.hpp"
 #include "Units/Group.hpp"
+
+#include <boost/container/static_vector.hpp>
 
 #include <cassert>
 #include <cstdint>
@@ -124,8 +125,6 @@ class RowFormWidget : public WindowWidget {
      * expect a PixelRect parameter in their Show() method.
      */
     PixelRect position;
-
-    Row() = default;
 
     Row(Type _type)
       :type(_type), available(true), visible(false), expert(false),
@@ -279,7 +278,7 @@ class RowFormWidget : public WindowWidget {
    */
   const bool vertical;
 
-  StaticArray<Row, 32u> rows;
+  boost::container::static_vector<Row, 32u> rows;
 
 public:
   RowFormWidget(const DialogLook &look, bool vertical=false);
@@ -302,14 +301,14 @@ public:
    * not present in a certain instance of the form.
    */
   void AddDummy() {
-    rows.push_back(Row::Type::DUMMY);
+    rows.emplace_back(Row::Type::DUMMY);
   }
 
   /**
    * Add a #Widget row.  The object will be deleted automatically.
    */
   void Add(Widget *widget) {
-    rows.push_back(widget);
+    rows.emplace_back(widget);
   }
 
   void Add(Window *window) {
