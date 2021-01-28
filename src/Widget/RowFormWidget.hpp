@@ -91,7 +91,7 @@ class RowFormWidget : public WindowWidget {
       REMAINING,
     };
 
-    Type type;
+    const Type type;
 
     /**
      * Only used for #type==WIDGET.
@@ -102,7 +102,7 @@ class RowFormWidget : public WindowWidget {
      * Shall this row be available?  If not, it is hidden and no
      * screen space is reserved for it.
      */
-    bool available;
+    bool available = true;
 
     /**
      * Shall this row be visible?  The "expert" flag overrides it in
@@ -113,11 +113,11 @@ class RowFormWidget : public WindowWidget {
     /**
      * If true, then the row is only visible in "expert" mode.
      */
-    bool expert;
+    bool expert = false;
 
-    Widget *widget;
+    Widget *widget = nullptr;
 
-    Window *window;
+    Window *window = nullptr;
 
     /**
      * The position determined by RowFormWidget::UpdateLayout().  This
@@ -127,14 +127,13 @@ class RowFormWidget : public WindowWidget {
     PixelRect position;
 
     Row(Type _type)
-      :type(_type), available(true), visible(false), expert(false),
-       widget(nullptr), window(nullptr) {
+      :type(_type), visible(false) {
       assert(_type == Type::DUMMY);
     }
 
     Row(Type _type, Window *_window)
-      :type(_type), available(true), visible(true), expert(false),
-       widget(nullptr), window(_window) {
+      :type(_type), visible(true),
+       window(_window) {
       assert(_type != Type::DUMMY);
       assert(_window != nullptr);
     }
@@ -142,8 +141,8 @@ class RowFormWidget : public WindowWidget {
     Row(Widget *_widget)
       :type(Type::WIDGET),
        initialised(false), prepared(false), shown(false),
-       available(true), visible(true), expert(false),
-       widget(_widget), window(nullptr) {
+       visible(true),
+       widget(_widget) {
       assert(_widget != nullptr);
     }
 
