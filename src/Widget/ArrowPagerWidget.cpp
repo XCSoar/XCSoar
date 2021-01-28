@@ -97,11 +97,6 @@ ArrowPagerWidget::Layout::Layout(PixelRect rc, const Widget *extra_widget)
   }
 }
 
-ArrowPagerWidget::~ArrowPagerWidget()
-{
-  delete extra;
-}
-
 PixelSize
 ArrowPagerWidget::GetMinimumSize() const
 {
@@ -133,7 +128,7 @@ ArrowPagerWidget::Initialise(ContainerWindow &parent,
 void
 ArrowPagerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  const Layout layout(rc, extra);
+  const Layout layout(rc, extra.get());
   PagerWidget::Prepare(parent, layout.main);
 
   if (extra != nullptr)
@@ -156,7 +151,7 @@ ArrowPagerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 void
 ArrowPagerWidget::Show(const PixelRect &rc)
 {
-  const Layout layout(rc, extra);
+  const Layout layout(rc, extra.get());
   PagerWidget::Show(layout.main);
 
   previous_button.MoveAndShow(layout.previous_button);
@@ -183,7 +178,7 @@ ArrowPagerWidget::Hide()
 void
 ArrowPagerWidget::Move(const PixelRect &rc)
 {
-  const Layout layout(rc, extra);
+  const Layout layout(rc, extra.get());
   PagerWidget::Move(layout.main);
 
   previous_button.Move(layout.previous_button);

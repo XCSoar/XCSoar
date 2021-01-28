@@ -265,7 +265,7 @@ dlgConfigurationVarioShowModal(Device &_device)
 
   ArrowPagerWidget widget(look.button,
                           dialog.MakeModalResultCallback(mrOK),
-                          new VegaConfigurationExtraButtons(dialog));
+                          std::make_unique<VegaConfigurationExtraButtons>(dialog));
   FillPager(widget);
 
   dialog.FinishPreliminary(&widget);

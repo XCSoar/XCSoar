@@ -29,6 +29,7 @@ Copyright_License {
 
 #include <cassert>
 #include <functional>
+#include <memory>
 
 struct ButtonLook;
 
@@ -58,7 +59,7 @@ class ArrowPagerWidget : public PagerWidget {
    * An optional #Widget that is shown in the remaining area in the
    * buttons row/column.  This object will be deleted automatically.
    */
-  Widget *const extra;
+  const std::unique_ptr<Widget> extra;
 
   Button previous_button, next_button;
   Button close_button;
@@ -66,12 +67,10 @@ class ArrowPagerWidget : public PagerWidget {
 public:
   ArrowPagerWidget(const ButtonLook &_look,
                    std::function<void()> _close_callback,
-                   Widget *const _extra=nullptr)
+                   std::unique_ptr<Widget> _extra=nullptr)
     :look(_look),
      close_callback(std::move(_close_callback)),
-     extra(_extra) {}
-
-  virtual ~ArrowPagerWidget();
+     extra(std::move(_extra)) {}
 
   Widget &GetExtra() {
     assert(extra != nullptr);

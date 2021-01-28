@@ -327,7 +327,7 @@ void dlgConfigurationShowModal()
 
   pager = new ArrowPagerWidget(look.button,
                                [&dialog](){ OnCloseClicked(dialog); },
-                               new ConfigurationExtraButtons(look));
+                               std::make_unique<ConfigurationExtraButtons>(look));
 
   TabMenuDisplay *menu = new TabMenuDisplay(*pager, look);
   pager->Add(std::make_unique<CreateWindowWidget>([menu](ContainerWindow &parent,
