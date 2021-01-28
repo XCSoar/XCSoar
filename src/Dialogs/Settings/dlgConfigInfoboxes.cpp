@@ -261,7 +261,7 @@ InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
   Add(_("Content"), nullptr, dfe);
 
   ContainerWindow &form_parent = (ContainerWindow &)RowFormWidget::GetWindow();
-  AddRemaining(new WndFrame(form_parent, GetLook(), rc));
+  AddRemaining(std::make_unique<WndFrame>(form_parent, GetLook(), rc));
 
   WindowStyle button_style;
   button_style.Hide();

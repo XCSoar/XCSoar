@@ -41,9 +41,9 @@ Copyright_License {
 
 #include <cassert>
 
-WndProperty *
+std::unique_ptr<WndProperty>
 RowFormWidget::CreateEdit(const TCHAR *label, const TCHAR *help,
-                          bool read_only)
+                          bool read_only) noexcept
 {
   assert(IsDefined());
 
@@ -55,10 +55,10 @@ RowFormWidget::CreateEdit(const TCHAR *label, const TCHAR *help,
     style.TabStop();
 
   ContainerWindow &panel = (ContainerWindow &)GetWindow();
-  WndProperty *edit =
-    new WndProperty(panel, look, label,
-                    edit_rc, (*label == '\0') ? 0 : 100,
-                    style);
+  auto edit =
+    std::make_unique<WndProperty>(panel, look, label,
+                                  edit_rc, (*label == '\0') ? 0 : 100,
+                                  style);
   edit->SetReadOnly(read_only);
 
   if (help != nullptr)
@@ -70,9 +70,8 @@ RowFormWidget::CreateEdit(const TCHAR *label, const TCHAR *help,
 WndProperty *
 RowFormWidget::Add(const TCHAR *label, const TCHAR *help, bool read_only)
 {
-  WndProperty *edit = CreateEdit(label, help, read_only);
-  Add(Row::Type::EDIT, edit);
-  return edit;
+  return (WndProperty *)&Add(Row::Type::EDIT,
+                             CreateEdit(label, help, read_only));
 }
 
 void

@@ -273,9 +273,9 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     WindowStyle style;
     style.Border();
 
-    TerrainPreviewWindow *preview = new TerrainPreviewWindow(*::terrain);
+    auto preview = std::make_unique<TerrainPreviewWindow>(*::terrain);
     preview->Create((ContainerWindow &)GetWindow(), {0, 0, 100, 100}, style);
-    AddRemaining(preview);
+    AddRemaining(std::move(preview));
   }
 
   terrain_settings = terrain;

@@ -125,10 +125,11 @@ PlanePolarWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   AddReadOnly(_("Name"), nullptr, plane.polar_name);
 
-  Add(new TextWidget());
+  Add(std::make_unique<TextWidget>());
   SetRowVisible(INVALID, false);
 
-  Add(new PolarShapeEditWidget(plane.polar_shape, this));
+  DataFieldListener *listener = this;
+  Add(std::make_unique<PolarShapeEditWidget>(plane.polar_shape, listener));
 
   AddFloat(_("Reference Mass"), _("Reference mass of the polar"),
            _T("%.0f %s"), _T("%.0f"),

@@ -36,6 +36,7 @@ Copyright_License {
 #include <cassert>
 #include <cstdint>
 #include <functional>
+#include <memory>
 
 struct DialogLook;
 struct StaticEnumChoice;
@@ -115,9 +116,9 @@ class RowFormWidget : public WindowWidget {
      */
     bool expert = false;
 
-    Widget *widget = nullptr;
+    std::unique_ptr<Widget> widget;
 
-    Window *window = nullptr;
+    std::unique_ptr<Window> window;
 
     /**
      * The position determined by RowFormWidget::UpdateLayout().  This
@@ -131,19 +132,21 @@ class RowFormWidget : public WindowWidget {
       assert(_type == Type::DUMMY);
     }
 
-    Row(Type _type, Window *_window)
+    Row(Type _type, std::unique_ptr<Window> &&_window) noexcept
       :type(_type), visible(true),
-       window(_window) {
+       window(std::move(_window))
+    {
       assert(_type != Type::DUMMY);
-      assert(_window != nullptr);
+      assert(window != nullptr);
     }
 
-    Row(Widget *_widget)
+    Row(std::unique_ptr<Widget> &&_widget) noexcept
       :type(Type::WIDGET),
        initialised(false), prepared(false), shown(false),
        visible(true),
-       widget(_widget) {
-      assert(_widget != nullptr);
+       widget(std::move(_widget))
+    {
+      assert(widget != nullptr);
     }
 
     ~Row() noexcept{
@@ -154,12 +157,7 @@ class RowFormWidget : public WindowWidget {
         assert(window == nullptr);
         assert(!shown);
         assert(!prepared);
-
-        delete widget;
-        return;
       }
-
-      delete window;
     }
 
     Row(const Row &) = delete;
@@ -228,7 +226,7 @@ class RowFormWidget : public WindowWidget {
       assert(type == Type::EDIT);
       assert(window != nullptr);
 
-      return *(WndProperty *)window;
+      return (WndProperty &)*window;
     }
 
     gcc_pure
@@ -236,7 +234,7 @@ class RowFormWidget : public WindowWidget {
       assert(type == Type::EDIT);
       assert(window != nullptr);
 
-      return *(WndProperty *)window;
+      return (WndProperty &)*window;
     }
 
     /**
@@ -288,10 +286,11 @@ protected:
     return look;
   }
 
-  void Add(Row::Type type, Window *window);
+  Window &Add(Row::Type type, std::unique_ptr<Window> window) noexcept;
 
-  WndProperty *CreateEdit(const TCHAR *label, const TCHAR *help=nullptr,
-                          bool read_only=false);
+  std::unique_ptr<WndProperty> CreateEdit(const TCHAR *label,
+                                          const TCHAR *help=nullptr,
+                                          bool read_only=false) noexcept;
 
 public:
   /**
@@ -306,20 +305,22 @@ public:
   /**
    * Add a #Widget row.  The object will be deleted automatically.
    */
-  void Add(Widget *widget) {
-    rows.emplace_back(widget);
+  Widget &Add(std::unique_ptr<Widget> widget) noexcept {
+    rows.emplace_back(std::move(widget));
+    return *rows.back().widget;
   }
 
-  void Add(Window *window) {
-    Add(Row::Type::GENERIC, window);
+  Window &Add(std::unique_ptr<Window> window) noexcept {
+    Add(Row::Type::GENERIC, std::move(window));
+    return *rows.back().window;
   }
 
   /**
    * Add a #Window that fills the remaining vertical space at the
    * bottom.  It must be the last row, and there can only be one.
    */
-  void AddRemaining(Window *window) {
-    Add(Row::Type::REMAINING, window);
+  void AddRemaining(std::unique_ptr<Window> window) noexcept {
+    Add(Row::Type::REMAINING, std::move(window));
   }
 
   WndProperty *Add(const TCHAR *label, const TCHAR *help=nullptr,

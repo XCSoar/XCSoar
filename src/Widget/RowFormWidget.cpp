@@ -236,8 +236,8 @@ RowFormWidget::SetExpertRow(unsigned i)
   row.expert = true;
 }
 
-void
-RowFormWidget::Add(Row::Type type, Window *window)
+Window &
+RowFormWidget::Add(Row::Type type, std::unique_ptr<Window> window) noexcept
 {
   assert(IsDefined());
 #ifndef USE_WINUSER
@@ -247,7 +247,8 @@ RowFormWidget::Add(Row::Type type, Window *window)
   /* cannot append rows after a REMAINING row */
   assert(rows.empty() || rows.back().type != Row::Type::REMAINING);
 
-  rows.emplace_back(type, window);
+  rows.emplace_back(type, std::move(window));
+  return *rows.back().window;
 }
 
 void
@@ -255,11 +256,11 @@ RowFormWidget::AddSpacer()
 {
   assert(IsDefined());
 
-  HLine *window = new HLine(GetLook());
+  auto window = std::make_unique<HLine>(GetLook());
   ContainerWindow &panel = (ContainerWindow &)GetWindow();
   const PixelRect rc = InitialControlRect(Layout::Scale(3));
   window->Create(panel, rc);
-  Add(window);
+  Add(std::move(window));
 }
 
 void
@@ -279,14 +280,14 @@ RowFormWidget::AddMultiLine(const TCHAR *text)
     style.SunkenEdge();
 
   ContainerWindow &panel = (ContainerWindow &)GetWindow();
-  LargeTextWindow *ltw = new LargeTextWindow();
+  auto ltw = std::make_unique<LargeTextWindow>();
   ltw->Create(panel, rc, style);
   ltw->SetFont(look.text_font);
 
   if (text != nullptr)
     ltw->SetText(text);
 
-  Add(Row::Type::MULTI_LINE, ltw);
+  Add(Row::Type::MULTI_LINE, std::move(ltw));
 }
 
 Button *
@@ -303,11 +304,10 @@ RowFormWidget::AddButton(const TCHAR *label,
 
   ContainerWindow &panel = (ContainerWindow &)GetWindow();
 
-  Button *button = new Button(panel, look.button, label, button_rc,
-                              button_style, std::move(callback));
-
-  Add(Row::Type::BUTTON, button);
-  return button;
+  return (Button *)&Add(Row::Type::BUTTON,
+                        std::make_unique<Button>(panel, look.button, label,
+                                                 button_rc, button_style,
+                                                 std::move(callback)));
 }
 
 void
@@ -316,7 +316,7 @@ RowFormWidget::SetMultiLineText(unsigned i, const TCHAR *text)
   assert(text != nullptr);
   assert(rows[i].type == Row::Type::MULTI_LINE);
 
-  LargeTextWindow &ltw = *(LargeTextWindow *)rows[i].window;
+  auto &ltw = (LargeTextWindow &)*rows[i].window;
   ltw.SetText(text);
 }
 
