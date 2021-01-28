@@ -160,8 +160,6 @@ public:
  */
 class NullWidget : public Widget {
 public:
-  virtual ~NullWidget();
-
   PixelSize GetMinimumSize() const override;
   PixelSize GetMaximumSize() const override;
   void Initialise(ContainerWindow &parent, const PixelRect &rc) override;
