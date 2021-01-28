@@ -44,7 +44,7 @@ public:
    * A virtual destructor prototype that allows containers to delete
    * Widget pointers.
    */
-  virtual ~Widget();
+  virtual ~Widget() noexcept = default;
 
   /**
    * Estimate the minimum recommended size.  May return zero if the
