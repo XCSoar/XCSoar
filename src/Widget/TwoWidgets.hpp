@@ -61,7 +61,6 @@ public:
    */
   void UpdateLayout();
 
-protected:
   Widget &GetFirst() {
     return *first;
   }
@@ -78,6 +77,7 @@ protected:
     return *second;
   }
 
+protected:
   gcc_pure
   int CalculateSplit(const PixelRect &rc) const;
 
