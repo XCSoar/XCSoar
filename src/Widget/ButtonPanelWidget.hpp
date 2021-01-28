@@ -42,15 +42,15 @@ public:
 
 private:
   const std::unique_ptr<Widget> widget;
-  ButtonPanel *buttons;
+  std::unique_ptr<ButtonPanel> buttons;
   Alignment alignment;
 
 public:
   ButtonPanelWidget(std::unique_ptr<Widget> &&_widget,
                     Alignment _alignment=Alignment::AUTO) noexcept
-    :widget(std::move(_widget)), buttons(nullptr), alignment(_alignment) {}
+    :widget(std::move(_widget)), alignment(_alignment) {}
 
-  virtual ~ButtonPanelWidget();
+  ~ButtonPanelWidget() noexcept override;
 
   Widget &GetWidget() {
     return *widget;

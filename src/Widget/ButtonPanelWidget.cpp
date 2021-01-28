@@ -29,10 +29,7 @@ Copyright_License {
 
 #include <cassert>
 
-ButtonPanelWidget::~ButtonPanelWidget()
-{
-  delete buttons;
-}
+ButtonPanelWidget::~ButtonPanelWidget() noexcept = default;
 
 PixelRect
 ButtonPanelWidget::UpdateLayout(const PixelRect &rc)
@@ -76,7 +73,7 @@ ButtonPanelWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
 {
   assert(buttons == nullptr);
 
-  buttons = new ButtonPanel(parent, UIGlobals::GetDialogLook().button);
+  buttons = std::make_unique<ButtonPanel>(parent, UIGlobals::GetDialogLook().button);
   buttons->SetDefaultHidden();
 
   /* initialise with full dimensions for now, buttons will be added
