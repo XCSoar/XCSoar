@@ -132,7 +132,7 @@ public:
       LargeExtra();
   }
 
-  void AddTab(Widget *widget, const TCHAR *caption,
+  void AddTab(std::unique_ptr<Widget> widget, const TCHAR *caption,
               const MaskedIcon *icon=nullptr);
 
   gcc_pure

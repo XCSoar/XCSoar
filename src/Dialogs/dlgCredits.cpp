@@ -126,9 +126,9 @@ dlgCreditsShowModal(UI::SingleWindow &parent)
                       look, _("Credits"));
 
   ArrowPagerWidget pager(look.button, dialog.MakeModalResultCallback(mrOK));
-  pager.Add(new CreateWindowWidget(CreateLogoPage));
-  pager.Add(new LargeTextWidget(look, authors2));
-  pager.Add(new LargeTextWidget(look, license2));
+  pager.Add(std::make_unique<CreateWindowWidget>(CreateLogoPage));
+  pager.Add(std::make_unique<LargeTextWidget>(look, authors2));
+  pager.Add(std::make_unique<LargeTextWidget>(look, license2));
 
   dialog.FinishPreliminary(&pager);
   dialog.ShowModal();

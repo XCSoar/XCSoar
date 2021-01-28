@@ -157,18 +157,18 @@ protected:
   }
 };
 
-Widget *
+std::unique_ptr<Widget>
 CreatePCMetWidget()
 {
   const auto &settings = CommonInterface::GetComputerSettings().weather.pcmet;
   if (!settings.www_credentials.IsDefined())
-    return new LargeTextWidget(UIGlobals::GetDialogLook(),
-                               _T("No account was configured."));
+    return std::make_unique<LargeTextWidget>(UIGlobals::GetDialogLook(),
+                                             _T("No account was configured."));
 
   auto *area_widget = new ImageAreaListWidget();
   auto *type_widget = new ImageTypeListWidget(*area_widget);
 
-  return new TwoWidgets(type_widget, area_widget, false);
+  return std::make_unique<TwoWidgets>(type_widget, area_widget, false);
 }
 
 #endif

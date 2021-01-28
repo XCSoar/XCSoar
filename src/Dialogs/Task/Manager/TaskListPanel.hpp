@@ -24,11 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_TASK_LIST_PANEL_HPP
 #define XCSOAR_TASK_LIST_PANEL_HPP
 
+#include <memory>
+
 class Widget;
 class TaskManagerDialog;
 class OrderedTask;
 
-Widget *
+std::unique_ptr<Widget>
 CreateTaskListPanel(TaskManagerDialog &dialog,
                     OrderedTask **active_task, bool *task_modified);
 

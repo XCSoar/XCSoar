@@ -25,6 +25,11 @@ Copyright_License {
 
 #include <cassert>
 
+PagerWidget::Child::~Child() noexcept
+{
+  assert(!prepared);
+}
+
 PagerWidget::~PagerWidget()
 {
   assert(!initialised || !prepared);
@@ -33,7 +38,7 @@ PagerWidget::~PagerWidget()
 }
 
 void
-PagerWidget::Add(Widget *w)
+PagerWidget::Add(std::unique_ptr<Widget> w) noexcept
 {
   const bool was_empty = children.empty();
   if (was_empty) {
@@ -42,17 +47,17 @@ PagerWidget::Add(Widget *w)
     assert(current < children.size());
   }
 
-  auto &child = children.emplace_back(w);
+  auto &child = children.emplace_back(std::move(w));
 
   if (initialised) {
-    w->Initialise(*parent, position);
+    child.widget->Initialise(*parent, position);
 
     if (prepared) {
       child.prepared = true;
-      w->Prepare(*parent, position);
+      child.widget->Prepare(*parent, position);
 
       if (visible && was_empty)
-        w->Show(position);
+        child.widget->Show(position);
     }
   }
 }
@@ -61,12 +66,6 @@ void
 PagerWidget::Clear()
 {
   assert(!initialised || !prepared);
-
-  for (auto &i : children) {
-    assert(!i.prepared);
-
-    delete i.widget;
-  }
 
   children.clear();
 }

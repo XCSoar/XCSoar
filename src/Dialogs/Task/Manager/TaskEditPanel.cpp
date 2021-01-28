@@ -555,7 +555,7 @@ TaskEditButtons::Prepare(ContainerWindow &parent, const PixelRect &rc)
                           [this](){ edit_panel->OnClearAllClicked(); });
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateTaskEditPanel(TaskManagerDialog &dialog,
                     const TaskLook &task_look,
                     const AirspaceLook &airspace_look,
@@ -569,6 +569,5 @@ CreateTaskEditPanel(TaskManagerDialog &dialog,
   buttons->SetEditPanel(*widget);
   TwoWidgets *tw1 = new TwoWidgets(widget, summary);
   widget->SetTwoWidgets(*tw1);
-  TwoWidgets *tw2 = new TwoWidgets(tw1, buttons);
-  return tw2;
+  return std::make_unique<TwoWidgets>(tw1, buttons);
 }

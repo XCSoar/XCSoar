@@ -86,21 +86,21 @@ dlgStatusShowModal(int start_page)
   const auto *RulesIcon = enable_icons ? &icons.hBmpTabRules : nullptr;
   const auto *TimesIcon = enable_icons ? &icons.hBmpTabTimes : nullptr;
 
-  Widget *flight_panel = new FlightStatusPanel(look,
-                                               std::move(nearest_waypoint));
-  widget.AddTab(flight_panel, _("Flight"), FlightIcon);
+  widget.AddTab(std::make_unique<FlightStatusPanel>(look,
+                                                    std::move(nearest_waypoint)),
+                _("Flight"), FlightIcon);
 
-  Widget *system_panel = new SystemStatusPanel(look);
-  widget.AddTab(system_panel, _("System"), SystemIcon);
+  widget.AddTab(std::make_unique<SystemStatusPanel>(look),
+                _("System"), SystemIcon);
 
-  Widget *task_panel = new TaskStatusPanel(look);
-  widget.AddTab(task_panel, _("Task"), TaskIcon);
+  widget.AddTab(std::make_unique<TaskStatusPanel>(look),
+                _("Task"), TaskIcon);
 
-  Widget *rules_panel = new RulesStatusPanel(look);
-  widget.AddTab(rules_panel, _("Rules"), RulesIcon);
+  widget.AddTab(std::make_unique<RulesStatusPanel>(look),
+                _("Rules"), RulesIcon);
 
-  Widget *times_panel = new TimesStatusPanel(look);
-  widget.AddTab(times_panel, _("Times"), TimesIcon);
+  widget.AddTab(std::make_unique<TimesStatusPanel>(look),
+                _("Times"), TimesIcon);
 
   /* restore previous page */
 

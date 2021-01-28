@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_DIALOGS_WEATHER_PCMET_HPP
 #define XCSOAR_DIALOGS_WEATHER_PCMET_HPP
 
+#include <memory>
+
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreatePCMetWidget();
 
 #endif

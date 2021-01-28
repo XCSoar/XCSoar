@@ -330,13 +330,13 @@ void dlgConfigurationShowModal()
                                new ConfigurationExtraButtons(look));
 
   TabMenuDisplay *menu = new TabMenuDisplay(*pager, look);
-  pager->Add(new CreateWindowWidget([menu](ContainerWindow &parent,
-                                           const PixelRect &rc,
-                                           WindowStyle style) {
-                                      style.TabStop();
-                                      menu->Create(parent, rc, style);
-                                      return menu;
-                                    }));
+  pager->Add(std::make_unique<CreateWindowWidget>([menu](ContainerWindow &parent,
+                                                         const PixelRect &rc,
+                                                         WindowStyle style) {
+    style.TabStop();
+    menu->Create(parent, rc, style);
+    return menu;
+  }));
 
   menu->InitMenu(main_menu_captions, ARRAY_SIZE(main_menu_captions));
 

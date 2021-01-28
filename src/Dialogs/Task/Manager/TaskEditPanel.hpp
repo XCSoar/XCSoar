@@ -24,13 +24,15 @@ Copyright_License {
 #ifndef XCSOAR_TASK_EDIT_PANEL_HPP
 #define XCSOAR_TASK_EDIT_PANEL_HPP
 
+#include <memory>
+
 class Widget;
 class TaskManagerDialog;
 struct TaskLook;
 struct AirspaceLook;
 class OrderedTask;
 
-Widget *
+std::unique_ptr<Widget>
 CreateTaskEditPanel(TaskManagerDialog &dialog,
                     const TaskLook &task_look,
                     const AirspaceLook &airspace_look,

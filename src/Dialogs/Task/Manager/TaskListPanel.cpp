@@ -360,7 +360,7 @@ TaskListPanel::Hide()
   ListWidget::Hide();
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateTaskListPanel(TaskManagerDialog &dialog,
                     OrderedTask **active_task, bool *task_modified)
 {
@@ -370,8 +370,8 @@ CreateTaskListPanel(TaskManagerDialog &dialog,
   TwoWidgets *tw = new TwoWidgets(widget, summary);
   widget->SetTwoWidgets(*tw);
 
-  ButtonPanelWidget *buttons =
-    new ButtonPanelWidget(tw, ButtonPanelWidget::Alignment::BOTTOM);
+  auto buttons =
+    std::make_unique<ButtonPanelWidget>(tw, ButtonPanelWidget::Alignment::BOTTOM);
   widget->SetButtonPanel(*buttons);
 
   return buttons;

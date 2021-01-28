@@ -232,11 +232,11 @@ RASPSettingsPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateRaspWidget() noexcept
 {
   auto rasp = DataGlobals::GetRasp();
-  return new RASPSettingsPanel(std::move(rasp));
+  return std::make_unique<RASPSettingsPanel>(std::move(rasp));
 }
 
 /*

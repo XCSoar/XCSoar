@@ -30,6 +30,7 @@ Copyright_License {
 #include <boost/container/static_vector.hpp>
 
 #include <functional>
+#include <memory>
 
 /**
  * A #Widget that host multiple other widgets, displaying one at a
@@ -39,14 +40,16 @@ class PagerWidget : public Widget {
   typedef std::function<void()> PageFlippedCallback;
 
   struct Child {
-    Widget *widget;
+    std::unique_ptr<Widget> widget;
 
     /**
      * Has Widget::Prepare() been called?
      */
     bool prepared = false;
 
-    constexpr Child(Widget *_widget) noexcept:widget(_widget) {}
+    Child(std::unique_ptr<Widget> &&_widget) noexcept
+      :widget(std::move(_widget)) {}
+    ~Child() noexcept;
   };
 
   bool initialised, prepared, visible;
@@ -81,7 +84,7 @@ public:
    * @param w a #Widget that is "uninitialised"; it will be deleted by
    * this class
    */
-  void Add(Widget *w);
+  void Add(std::unique_ptr<Widget> w) noexcept;
 
   /**
    * Delete all widgets.  This may only be called after Unprepare().

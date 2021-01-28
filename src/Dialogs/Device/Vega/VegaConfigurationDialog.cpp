@@ -225,31 +225,31 @@ FillPager(PagerWidget &pager)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  pager.Add(new VegaParametersWidget(look, *device, hardware_parameters));
-  pager.Add(new VegaParametersWidget(look, *device, calibration_parameters));
-  pager.Add(new VegaParametersWidget(look, *device, audio_mode_parameters));
-  pager.Add(new VegaParametersWidget(look, *device,
-                                     audio_deadband_parameters));
-  pager.Add(new VegaAudioParametersWidget(look, *device, "CruiseFaster"));
-  pager.Add(new VegaAudioParametersWidget(look, *device, "CruiseSlower"));
-  pager.Add(new VegaAudioParametersWidget(look, *device, "CruiseLift"));
-  pager.Add(new VegaAudioParametersWidget(look, *device,
-                                          "CirclingClimbingHi"));
-  pager.Add(new VegaAudioParametersWidget(look, *device,
-                                          "CirclingClimbingLow"));
-  pager.Add(new VegaAudioParametersWidget(look, *device,
-                                          "CirclingDescending"));
-  pager.Add(new VegaParametersWidget(look, *device, logger_parameters));
-  pager.Add(new VegaParametersWidget(look, *device, mixer_parameters));
-  pager.Add(new VegaParametersWidget(look, *device, flarm_alert_parameters));
-  pager.Add(new VegaParametersWidget(look, *device, flarm_id_parameters));
-  pager.Add(new VegaParametersWidget(look, *device, flarm_repeat_parameters));
-  pager.Add(new VegaParametersWidget(look, *device, alert_parameters));
-  pager.Add(new VegaParametersWidget(look, *device, limit_parameters));
+  pager.Add(std::make_unique<VegaParametersWidget>(look, *device, hardware_parameters));
+  pager.Add(std::make_unique<VegaParametersWidget>(look, *device, calibration_parameters));
+  pager.Add(std::make_unique<VegaParametersWidget>(look, *device, audio_mode_parameters));
+  pager.Add(std::make_unique<VegaParametersWidget>(look, *device,
+                                                   audio_deadband_parameters));
+  pager.Add(std::make_unique<VegaAudioParametersWidget>(look, *device, "CruiseFaster"));
+  pager.Add(std::make_unique<VegaAudioParametersWidget>(look, *device, "CruiseSlower"));
+  pager.Add(std::make_unique<VegaAudioParametersWidget>(look, *device, "CruiseLift"));
+  pager.Add(std::make_unique<VegaAudioParametersWidget>(look, *device,
+                                                        "CirclingClimbingHi"));
+  pager.Add(std::make_unique<VegaAudioParametersWidget>(look, *device,
+                                                        "CirclingClimbingLow"));
+  pager.Add(std::make_unique<VegaAudioParametersWidget>(look, *device,
+                                                        "CirclingDescending"));
+  pager.Add(std::make_unique<VegaParametersWidget>(look, *device, logger_parameters));
+  pager.Add(std::make_unique<VegaParametersWidget>(look, *device, mixer_parameters));
+  pager.Add(std::make_unique<VegaParametersWidget>(look, *device, flarm_alert_parameters));
+  pager.Add(std::make_unique<VegaParametersWidget>(look, *device, flarm_id_parameters));
+  pager.Add(std::make_unique<VegaParametersWidget>(look, *device, flarm_repeat_parameters));
+  pager.Add(std::make_unique<VegaParametersWidget>(look, *device, alert_parameters));
+  pager.Add(std::make_unique<VegaParametersWidget>(look, *device, limit_parameters));
 
-  pager.Add(new VegaSchemeButtonsPage(pager, look));
+  pager.Add(std::make_unique<VegaSchemeButtonsPage>(pager, look));
 
-  pager.Add(new VegaParametersWidget(look, *device, display_parameters));
+  pager.Add(std::make_unique<VegaParametersWidget>(look, *device, display_parameters));
 }
 
 bool

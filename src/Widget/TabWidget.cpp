@@ -92,11 +92,11 @@ TabWidget::RestoreExtra()
 }
 
 void
-TabWidget::AddTab(Widget *widget, const TCHAR *caption,
+TabWidget::AddTab(std::unique_ptr<Widget> widget, const TCHAR *caption,
                   const MaskedIcon *icon)
 {
   tab_display->Add(caption, icon);
-  PagerWidget::Add(widget);
+  PagerWidget::Add(std::move(widget));
 }
 
 const TCHAR *

@@ -103,17 +103,7 @@ TaskManagerDialog::Initialise(ContainerWindow &parent, const PixelRect &rc)
 
   /* create pages */
 
-  TaskPropertiesPanel *wProps =
-    new TaskPropertiesPanel(*this, &task, &modified);
-
-  TaskClosePanel *wClose = new TaskClosePanel(*this, &modified,
-                                              UIGlobals::GetDialogLook());
-
   const MapLook &look = UIGlobals::GetMapLook();
-  Widget *wEdit = CreateTaskEditPanel(*this, look.task, look.airspace,
-                                      &task, &modified);
-
-  TaskMiscPanel *list_tab = new TaskMiscPanel(*this, &task, &modified);
 
   const bool enable_icons =
     CommonInterface::GetUISettings().dialog.tab_style
@@ -123,10 +113,16 @@ TaskManagerDialog::Initialise(ContainerWindow &parent, const PixelRect &rc)
   const auto *BrowseIcon = enable_icons ? &icons.hBmpTabWrench : nullptr;
   const auto *PropertiesIcon = enable_icons ? &icons.hBmpTabSettings : nullptr;
 
-  AddTab(wEdit, _("Turn Points"), TurnPointIcon);
-  AddTab(list_tab, _("Manage"), BrowseIcon);
-  AddTab(wProps, _("Rules"), PropertiesIcon);
-  AddTab(wClose, _("Close"));
+  AddTab(CreateTaskEditPanel(*this, look.task, look.airspace,
+                             &task, &modified),
+         _("Turn Points"), TurnPointIcon);
+  AddTab(std::make_unique<TaskMiscPanel>(*this, &task, &modified),
+         _("Manage"), BrowseIcon);
+  AddTab(std::make_unique<TaskPropertiesPanel>(*this, &task, &modified),
+         _("Rules"), PropertiesIcon);
+  AddTab(std::make_unique<TaskClosePanel>(*this, &modified,
+                                          UIGlobals::GetDialogLook()),
+         _("Close"));
 
   UpdateCaption();
 }

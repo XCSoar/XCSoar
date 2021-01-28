@@ -63,9 +63,7 @@ TabMenuDisplay::InitMenu(const TabMenuGroup groups[], unsigned n_groups)
       page_button.main_menu_index = i;
       page_button.caption = gettext(p->menu_caption);
 
-      auto w = p->Load();
-      assert(w != nullptr);
-      pager.Add(w.release());
+      pager.Add(p->Load());
     }
 
     mb.last_page_index = buttons.size() - 1;

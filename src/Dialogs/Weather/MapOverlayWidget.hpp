@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_DIALOGS_MAP_OVERLAY_WIDGET_HPP
 #define XCSOAR_DIALOGS_MAP_OVERLAY_WIDGET_HPP
 
+#include <memory>
+
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateWeatherMapOverlayWidget();
 
 #endif

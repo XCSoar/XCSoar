@@ -28,9 +28,7 @@ Copyright_License {
 TaskMiscPanel::TaskMiscPanel(TaskManagerDialog &dialog,
                              OrderedTask **_active_task, bool *_task_modified)
 {
-  TaskActionsPanel *actions_panel =
-    new TaskActionsPanel(dialog, *this, _active_task, _task_modified);
-  Add(actions_panel);
+  Add(std::make_unique<TaskActionsPanel>(dialog, *this, _active_task, _task_modified));
 
   Add(CreateTaskListPanel(dialog, _active_task, _task_modified));
 }

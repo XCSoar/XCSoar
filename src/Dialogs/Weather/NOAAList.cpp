@@ -251,12 +251,13 @@ NOAAListWidget::OnActivateItem(unsigned index) noexcept
   OpenDetails(index);
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateNOAAListWidget()
 {
   NOAAListWidget *list = new NOAAListWidget();
-  ButtonPanelWidget *buttons =
-    new ButtonPanelWidget(list, ButtonPanelWidget::Alignment::BOTTOM);
+  auto buttons =
+    std::make_unique<ButtonPanelWidget>(list,
+                                        ButtonPanelWidget::Alignment::BOTTOM);
   list->SetButtonPanel(*buttons);
   return buttons;
 }

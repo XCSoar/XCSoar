@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_DIALOGS_WEATHER_NOAA_LIST_HPP
 #define XCSOAR_DIALOGS_WEATHER_NOAA_LIST_HPP
 
+#include <memory>
+
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateNOAAListWidget();
 
 #endif

@@ -409,13 +409,14 @@ WeatherMapOverlayListWidget::UpdateClicked()
   UpdatePreview();
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateWeatherMapOverlayWidget()
 {
   auto *list = new WeatherMapOverlayListWidget();
   auto *view = new ViewImageWidget();
   auto *two = new TwoWidgets(list, view, false);
-  auto *buttons = new ButtonPanelWidget(two,
+  auto buttons =
+    std::make_unique<ButtonPanelWidget>(two,
                                         ButtonPanelWidget::Alignment::BOTTOM);
   list->SetPreview(*view);
   list->SetButtonPanel(*buttons);
