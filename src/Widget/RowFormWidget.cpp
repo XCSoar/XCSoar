@@ -205,9 +205,7 @@ RowFormWidget::RowFormWidget(const DialogLook &_look, bool _vertical)
 
 RowFormWidget::~RowFormWidget()
 {
-  /* destroy all rows */
-  for (auto &i : rows)
-    i.Delete();
+  rows.clear();
 
   if (IsDefined())
     DeleteWindow();

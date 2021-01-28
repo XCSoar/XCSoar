@@ -147,6 +147,22 @@ class RowFormWidget : public WindowWidget {
       assert(_widget != nullptr);
     }
 
+    ~Row() noexcept{
+      Unprepare();
+
+      if (type == Type::WIDGET) {
+        assert(widget != nullptr);
+        assert(window == nullptr);
+        assert(!shown);
+        assert(!prepared);
+
+        delete widget;
+        return;
+      }
+
+      delete window;
+    }
+
     Row(const Row &) = delete;
     Row &operator=(const Row &) = delete;
 
@@ -176,25 +192,6 @@ class RowFormWidget : public WindowWidget {
           prepared = false;
         }
       }
-    }
-
-    /**
-     * Delete the #Widget or #Window object.
-     */
-    void Delete() {
-      Unprepare();
-
-      if (type == Type::WIDGET) {
-        assert(widget != nullptr);
-        assert(window == nullptr);
-        assert(!shown);
-        assert(!prepared);
-
-        delete widget;
-        return;
-      }
-
-      delete window;
     }
 
     gcc_pure
