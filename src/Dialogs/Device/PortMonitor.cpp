@@ -94,19 +94,21 @@ private:
 
 class PortMonitorWidget final : public WindowWidget {
   DeviceDescriptor &device;
-  TerminalWindow terminal;
-  PortTerminalBridge bridge;
+  const TerminalLook &look;
+  std::unique_ptr<PortTerminalBridge> bridge;
 
   Button *pause_button;
   bool paused;
 
 public:
-  PortMonitorWidget(DeviceDescriptor &_device, const TerminalLook &look)
-    :device(_device), terminal(look), bridge(terminal), paused(false) {}
+  PortMonitorWidget(DeviceDescriptor &_device,
+                    const TerminalLook &_look) noexcept
+    :device(_device), look(_look), paused(false) {}
 
   void CreateButtons(WidgetDialog &dialog);
 
   void Clear() {
+    auto &terminal = (TerminalWindow &)GetWindow();
     terminal.Clear();
   }
 
@@ -118,13 +120,19 @@ public:
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override {
     WindowStyle style;
     style.Hide();
-    terminal.Create(parent, rc, style);
-    SetWindow(&terminal);
-    device.SetMonitor(&bridge);
+
+    auto w = std::make_unique<TerminalWindow>(look);
+    w->Create(parent, rc, style);
+
+    bridge = std::make_unique<PortTerminalBridge>(*w);
+    device.SetMonitor(bridge.get());
+
+    SetWindow(std::move(w));
   }
 
   void Unprepare() override {
     device.SetMonitor(nullptr);
+    bridge.reset();
   }
 };
 
@@ -160,7 +168,7 @@ PortMonitorWidget::TogglePause()
     device.SetMonitor(nullptr);
   } else {
     pause_button->SetCaption(_("Pause"));
-    device.SetMonitor(&bridge);
+    device.SetMonitor(bridge.get());
   }
 }
 

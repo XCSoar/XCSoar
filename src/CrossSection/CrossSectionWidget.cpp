@@ -61,13 +61,15 @@ CrossSectionWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   style.Hide();
   style.Disable();
 
-  CrossSectionWindow *w =
-      new CrossSectionWindow(look.cross_section, look.map.airspace, look.chart, look.info_box);
+  auto w =
+    std::make_unique<CrossSectionWindow>(look.cross_section,
+                                         look.map.airspace,
+                                         look.chart, look.info_box);
   w->SetAirspaces(&airspace_database);
   w->SetTerrain(terrain);
   w->Create(parent, rc, style);
 
-  SetWindow(w);
+  SetWindow(std::move(w));
 }
 
 void

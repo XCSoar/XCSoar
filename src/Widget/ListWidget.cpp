@@ -49,10 +49,10 @@ ListWidget::CreateList(ContainerWindow &parent, const DialogLook &look,
   list_style.TabStop();
   list_style.Border();
 
-  ListControl *list =
-    new ListControl(parent, look, rc, list_style, row_height);
+  auto list = std::make_unique<ListControl>(parent, look, rc,
+                                            list_style, row_height);
   list->SetItemRenderer(this);
   list->SetCursorHandler(this);
-  SetWindow(list);
-  return *list;
+  SetWindow(std::move(list));
+  return GetList();
 }

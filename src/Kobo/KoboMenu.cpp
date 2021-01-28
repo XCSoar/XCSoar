@@ -76,16 +76,11 @@ UIGlobals::GetDialogLook()
 
 class KoboMenuWidget final : public WindowWidget {
   WndForm &dialog;
-  SimulatorPromptWindow w;
 
 public:
   KoboMenuWidget(const DialogLook &_look,
                  WndForm &_dialog)
-    :dialog(_dialog),
-     w(_look,
-       [this](SimulatorPromptWindow::Result result){
-         dialog.SetModalResult(int(result));
-       }, false) {}
+    :dialog(_dialog) {}
 
   void CreateButtons(WidgetDialog &buttons);
 
@@ -115,8 +110,12 @@ KoboMenuWidget::Prepare(ContainerWindow &parent,
   style.Hide();
   style.ControlParent();
 
-  w.Create(parent, rc, style);
-  SetWindow(&w);
+  auto w = std::make_unique<SimulatorPromptWindow>(dialog.GetLook(),
+                                                   [this](SimulatorPromptWindow::Result result){
+                                                     dialog.SetModalResult(int(result));
+                                                   }, false);
+  w->Create(parent, rc, style);
+  SetWindow(std::move(w));
 }
 
 bool

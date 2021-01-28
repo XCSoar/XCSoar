@@ -93,11 +93,11 @@ LogoPageWindow::OnPaint(Canvas &canvas)
   canvas.DrawText({x, y}, _T("http://www.xcsoar.org"));
 }
 
-static Window *
+static std::unique_ptr<Window>
 CreateLogoPage(ContainerWindow &parent, const PixelRect &rc,
                WindowStyle style)
 {
-  LogoPageWindow *window = new LogoPageWindow();
+  auto window = std::make_unique<LogoPageWindow>();
   window->Create(parent, rc, style);
   return window;
 }

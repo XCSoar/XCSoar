@@ -29,8 +29,7 @@ Copyright_License {
 
 class FixedWindowWidget : public WindowWidget {
 public:
-  FixedWindowWidget() = default;
-  FixedWindowWidget(Window *window):WindowWidget(window) {}
+  using WindowWidget::WindowWidget;
 
   PixelSize GetMinimumSize() const override {
     return GetWindow().GetSize();

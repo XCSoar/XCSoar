@@ -186,14 +186,19 @@ KnobTextEntryWindow::OnPaint(Canvas &canvas)
 }
 
 class KnobTextEntryWidget final : public WindowWidget {
-  KnobTextEntryWindow window;
+  const TCHAR *const text;
+  const size_t width;
 
 public:
-  KnobTextEntryWidget(const TCHAR *text, size_t width)
-    :window(text, width) {}
+  KnobTextEntryWidget(const TCHAR *_text, size_t _width) noexcept
+    :text(_text), width(_width) {}
+
+  auto &GetWindow() noexcept {
+    return (KnobTextEntryWindow &)WindowWidget::GetWindow();
+  }
 
   TCHAR *GetValue() {
-    return window.GetValue();
+    return GetWindow().GetValue();
   }
 
   void CreateButtons(WidgetDialog &dialog);
@@ -204,28 +209,26 @@ public:
                        const PixelRect &rc) override {
     WindowStyle style;
     style.Hide();
-    window.Create(parent, rc, style);
-    SetWindow(&window);
-  }
 
-  virtual void Unprepare() override {
-    window.Destroy();
+    auto w = std::make_unique<KnobTextEntryWindow>(text, width);
+    w->Create(parent, rc, style);
+    SetWindow(std::move(w));
   }
 };
 
 inline void
 KnobTextEntryWidget::CreateButtons(WidgetDialog &dialog)
 {
-  dialog.AddButton(_T("A+"), [this](){ window.IncrementLetter(); });
+  dialog.AddButton(_T("A+"), [this](){ GetWindow().IncrementLetter(); });
   dialog.AddButtonKey(KEY_UP);
 
-  dialog.AddButton(_T("A-"), [this](){ window.DecrementLetter(); });
+  dialog.AddButton(_T("A-"), [this](){ GetWindow().DecrementLetter(); });
   dialog.AddButtonKey(KEY_DOWN);
 
-  dialog.AddSymbolButton(_T("<"), [this](){ window.MoveCursorLeft(); });
+  dialog.AddSymbolButton(_T("<"), [this](){ GetWindow().MoveCursorLeft(); });
   dialog.AddButtonKey(KEY_LEFT);
 
-  dialog.AddSymbolButton(_T(">"), [this](){ window.MoveCursorRight(); });
+  dialog.AddSymbolButton(_T(">"), [this](){ GetWindow().MoveCursorRight(); });
   dialog.AddButtonKey(KEY_RIGHT);
 }
 

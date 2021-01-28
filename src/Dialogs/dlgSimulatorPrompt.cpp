@@ -31,12 +31,13 @@ Copyright_License {
 #ifdef SIMULATOR_AVAILABLE
 
 class SimulatorPromptWidget final : public WindowWidget {
-  SimulatorPromptWindow w;
+  const DialogLook &look;
+  std::function<void(SimulatorPromptWindow::Result)> callback;
 
 public:
   SimulatorPromptWidget(const DialogLook &_look,
-                        std::function<void(SimulatorPromptWindow::Result)> callback) noexcept
-    :w(_look, std::move(callback), true) {}
+                        std::function<void(SimulatorPromptWindow::Result)> _callback) noexcept
+    :look(_look), callback(std::move(_callback)) {}
 
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
@@ -45,8 +46,10 @@ public:
     style.Hide();
     style.ControlParent();
 
-    w.Create(parent, rc, style);
-    SetWindow(&w);
+    auto w = std::make_unique<SimulatorPromptWindow>(look, std::move(callback),
+                                                     true);
+    w->Create(parent, rc, style);
+    SetWindow(std::move(w));
   }
 };
 

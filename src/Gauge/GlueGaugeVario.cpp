@@ -32,9 +32,8 @@ GlueGaugeVario::Prepare(ContainerWindow &parent, const PixelRect &rc)
   style.Hide();
   style.Disable();
 
-  GaugeVario *gauge = new GaugeVario(blackboard, parent, look,
-                                     rc, style);
-  SetWindow(gauge);
+  SetWindow(std::make_unique<GaugeVario>(blackboard, parent, look,
+                                         rc, style));
 }
 
 void

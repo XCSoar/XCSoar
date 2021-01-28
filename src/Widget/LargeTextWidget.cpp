@@ -40,13 +40,13 @@ LargeTextWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   style.Hide();
   style.TabStop();
 
-  LargeTextWindow *w = new LargeTextWindow();
+  auto w = std::make_unique<LargeTextWindow>();
   w->Create(parent, rc, style);
   w->SetFont(look.text_font);
   if (text != nullptr)
     w->SetText(text);
 
-  SetWindow(w);
+  SetWindow(std::move(w));
 }
 
 void

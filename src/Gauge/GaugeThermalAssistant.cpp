@@ -147,9 +147,8 @@ GaugeThermalAssistant::Prepare(ContainerWindow &parent, const PixelRect &rc)
   WindowStyle style;
   style.Hide();
 
-  GaugeThermalAssistantWindow *window =
-    new GaugeThermalAssistantWindow(parent, rc, look, style);
-  SetWindow(window);
+  SetWindow(std::make_unique<GaugeThermalAssistantWindow>(parent, rc,
+                                                          look, style));
 }
 
 void

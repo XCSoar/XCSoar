@@ -84,7 +84,8 @@ ButtonWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
   style.Hide();
   style.TabStop();
 
-  SetWindow(new Button(parent, rc, style, std::move(renderer), callback));
+  SetWindow(std::make_unique<Button>(parent, rc, style, std::move(renderer),
+                                     std::move(callback)));
 }
 
 bool

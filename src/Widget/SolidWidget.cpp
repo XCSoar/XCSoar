@@ -58,12 +58,12 @@ SolidWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
   style.ControlParent();
   style.Hide();
 
-  auto window = new SolidContainerWindow();
+  auto window = std::make_unique<SolidContainerWindow>();
   window->Create(parent, rc, UIGlobals::GetDialogLook().background_color,
                  style);
-  SetWindow(window);
+  SetWindow(std::move(window));
 
-  widget->Initialise(*window, ToOrigin(rc));
+  widget->Initialise((ContainerWindow &)GetWindow(), ToOrigin(rc));
 }
 
 void

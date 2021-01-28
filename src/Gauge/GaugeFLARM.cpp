@@ -157,7 +157,7 @@ GaugeFLARM::Prepare(ContainerWindow &parent, const PixelRect &rc)
   WindowStyle style;
   style.Hide();
 
-  SetWindow(new SmallTrafficWindow(parent, rc, look, style));
+  SetWindow(std::make_unique<SmallTrafficWindow>(parent, rc, look, style));
 }
 
 void

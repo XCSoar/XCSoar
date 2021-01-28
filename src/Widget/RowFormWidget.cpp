@@ -463,7 +463,7 @@ RowFormWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
   style.Hide();
   style.ControlParent();
 
-  SetWindow(new PanelControl(parent, look, rc, style));
+  SetWindow(std::make_unique<PanelControl>(parent, look, rc, style));
 }
 
 void

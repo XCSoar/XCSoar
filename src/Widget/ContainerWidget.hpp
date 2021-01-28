@@ -32,11 +32,9 @@ Copyright_License {
  * derived class to add child windows to it.
  */
 class ContainerWidget : public WindowWidget {
-  ContainerWindow container;
-
 protected:
   ContainerWindow &GetContainer() {
-    return container;
+    return (ContainerWindow &)GetWindow();
   }
 
 public:

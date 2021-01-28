@@ -27,6 +27,7 @@ Copyright_License {
 #include "WindowWidget.hpp"
 
 #include <functional>
+#include <memory>
 
 class WindowStyle;
 
@@ -35,9 +36,9 @@ class WindowStyle;
  * Prepare() and deletes the Window in Unprepare().
  */
 class CreateWindowWidget final : public WindowWidget {
-  typedef std::function<Window *(ContainerWindow &parent,
-                                 const PixelRect &rc,
-                                 WindowStyle style)> CreateFunction;
+  typedef std::function<std::unique_ptr<Window>(ContainerWindow &parent,
+                                                const PixelRect &rc,
+                                                WindowStyle style)> CreateFunction;
 
   CreateFunction create;
 

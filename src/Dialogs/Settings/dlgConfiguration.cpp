@@ -329,30 +329,31 @@ void dlgConfigurationShowModal()
                                [&dialog](){ OnCloseClicked(dialog); },
                                std::make_unique<ConfigurationExtraButtons>(look));
 
-  TabMenuDisplay *menu = new TabMenuDisplay(*pager, look);
-  pager->Add(std::make_unique<CreateWindowWidget>([menu](ContainerWindow &parent,
-                                                         const PixelRect &rc,
-                                                         WindowStyle style) {
+  auto _menu = std::make_unique<TabMenuDisplay>(*pager, look);
+  auto &menu = *_menu;
+  pager->Add(std::make_unique<CreateWindowWidget>([&_menu](ContainerWindow &parent,
+                                                           const PixelRect &rc,
+                                                           WindowStyle style) {
     style.TabStop();
-    menu->Create(parent, rc, style);
-    return menu;
+    _menu->Create(parent, rc, style);
+    return std::move(_menu);
   }));
 
-  menu->InitMenu(main_menu_captions, ARRAY_SIZE(main_menu_captions));
+  menu.InitMenu(main_menu_captions, ARRAY_SIZE(main_menu_captions));
 
   /* restore last selected menu item */
-  menu->SetCursor(current_page);
+  menu.SetCursor(current_page);
 
-  pager->SetPageFlippedCallback([&dialog, menu](){
-      OnPageFlipped(dialog, *menu);
-    });
+  pager->SetPageFlippedCallback([&dialog, &menu](){
+    OnPageFlipped(dialog, menu);
+  });
 
   dialog.FinishPreliminary(pager);
 
   dialog.ShowModal();
 
   /* save page number for next time this dialog is opened */
-  current_page = menu->GetCursor();
+  current_page = menu.GetCursor();
 
   bool changed = false;
   pager->Save(changed);

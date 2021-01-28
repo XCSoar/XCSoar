@@ -31,8 +31,6 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 
 class MacCreadySetupPanel : public WindowWidget {
-  CheckBoxControl auto_mc;
-
 public:
   /* virtual methods from class Widget */
   virtual PixelSize GetMinimumSize() const override {
@@ -52,18 +50,19 @@ MacCreadySetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   style.Hide();
   style.TabStop();
 
-  auto_mc.Create(parent, UIGlobals::GetDialogLook(), _("Auto"), rc, style,
-                 [](bool value){
-                   TaskBehaviour &task_behaviour = CommonInterface::SetComputerSettings().task;
-                   task_behaviour.auto_mc = value;
-                   Profile::Set(ProfileKeys::AutoMc, task_behaviour.auto_mc);
-                 });
-  SetWindow(&auto_mc);
+  auto w = std::make_unique<CheckBoxControl>();
+  w->Create(parent, UIGlobals::GetDialogLook(), _("Auto"), rc, style, [](bool value){
+    TaskBehaviour &task_behaviour = CommonInterface::SetComputerSettings().task;
+    task_behaviour.auto_mc = value;
+    Profile::Set(ProfileKeys::AutoMc, task_behaviour.auto_mc);
+  });
+  SetWindow(std::move(w));
 }
 
 void
 MacCreadySetupPanel::Show(const PixelRect &rc)
 {
+  auto &auto_mc = (CheckBoxControl &)GetWindow();
   auto_mc.SetState(CommonInterface::GetComputerSettings().task.auto_mc);
   WindowWidget::Show(rc);
 }

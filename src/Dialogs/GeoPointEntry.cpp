@@ -50,24 +50,24 @@ GeoPointEntryDialog(const TCHAR *caption, GeoPoint &value,
   control_style.Hide();
   control_style.TabStop();
 
-  DigitEntry latitude_entry(look);
-  latitude_entry.CreateLatitude(client_area, client_area.GetClientRect(),
+  auto latitude_entry = std::make_unique<DigitEntry>(look);
+  latitude_entry->CreateLatitude(client_area, client_area.GetClientRect(),
                                 control_style, format);
-  latitude_entry.Resize(latitude_entry.GetRecommendedSize());
-  latitude_entry.SetCallback(dialog.MakeModalResultCallback(mrOK));
+  latitude_entry->Resize(latitude_entry->GetRecommendedSize());
+  latitude_entry->SetCallback(dialog.MakeModalResultCallback(mrOK));
 
-  DigitEntry longitude_entry(look);
-  longitude_entry.CreateLongitude(client_area, client_area.GetClientRect(),
+  auto longitude_entry = std::make_unique<DigitEntry>(look);
+  longitude_entry->CreateLongitude(client_area, client_area.GetClientRect(),
                                   control_style, format);
-  longitude_entry.Resize(longitude_entry.GetRecommendedSize());
-  longitude_entry.SetCallback(dialog.MakeModalResultCallback(mrOK));
+  longitude_entry->Resize(longitude_entry->GetRecommendedSize());
+  longitude_entry->SetCallback(dialog.MakeModalResultCallback(mrOK));
 
   if (value.IsValid()) {
-    latitude_entry.SetLatitude(value.latitude, format);
-    longitude_entry.SetLongitude(value.longitude, format);
+    latitude_entry->SetLatitude(value.latitude, format);
+    longitude_entry->SetLongitude(value.longitude, format);
   } else {
-    latitude_entry.SetInvalid();
-    longitude_entry.SetInvalid();
+    latitude_entry->SetInvalid();
+    longitude_entry->SetInvalid();
   }
 
   /* create buttons */
@@ -76,15 +76,15 @@ GeoPointEntryDialog(const TCHAR *caption, GeoPoint &value,
   dialog.AddButton(_("Cancel"), mrCancel);
 
   if (nullable)
-    dialog.AddButton(_("Clear"), [&latitude_entry, &longitude_entry](){
+    dialog.AddButton(_("Clear"), [&latitude_entry=*latitude_entry, &longitude_entry=*longitude_entry](){
       latitude_entry.SetInvalid();
       longitude_entry.SetInvalid();
     });
 
   /* run it */
 
-  TwoWidgets widget(std::make_unique<FixedWindowWidget>(&latitude_entry),
-                    std::make_unique<FixedWindowWidget>(&longitude_entry),
+  TwoWidgets widget(std::make_unique<FixedWindowWidget>(std::move(latitude_entry)),
+                    std::make_unique<FixedWindowWidget>(std::move(longitude_entry)),
                     true);
   dialog.FinishPreliminary(&widget);
 
@@ -93,7 +93,10 @@ GeoPointEntryDialog(const TCHAR *caption, GeoPoint &value,
   if (!result)
     return false;
 
-  value = GeoPoint(longitude_entry.GetLongitude(format),
-                   latitude_entry.GetLatitude(format));
+  auto &lo_entry = (DigitEntry &)((FixedWindowWidget &)widget.GetFirst()).GetWindow();
+  auto &la_entry = (DigitEntry &)((FixedWindowWidget &)widget.GetSecond()).GetWindow();
+
+  value = GeoPoint(lo_entry.GetLongitude(format),
+                   la_entry.GetLatitude(format));
   return true;
 }

@@ -102,8 +102,6 @@ class QuickMenu final : public WindowWidget {
   WndForm &dialog;
   const Menu &menu;
 
-  GridView grid_view;
-
   boost::container::static_vector<Button, GridView::MAX_ITEMS> buttons;
 
 public:
@@ -111,6 +109,10 @@ public:
 
   QuickMenu(WndForm &_dialog, const Menu &_menu)
     :dialog(_dialog), menu(_menu) {}
+
+  auto &GetWindow() noexcept {
+    return (GridView &)WindowWidget::GetWindow();
+  }
 
   void UpdateCaption();
 
@@ -137,9 +139,9 @@ QuickMenu::Prepare(ContainerWindow &parent, const PixelRect &rc)
     std::max(2 * (Layout::GetTextPadding() + font.GetHeight()),
              Layout::GetMaximumControlHeight());
 
-  grid_view.Create(parent, dialog_look, rc, grid_view_style,
-                   column_width, row_height);
-  SetWindow(&grid_view);
+  auto grid_view = std::make_unique<GridView>();
+  grid_view->Create(parent, dialog_look, rc, grid_view_style,
+                    column_width, row_height);
 
   WindowStyle buttonStyle;
   buttonStyle.TabStop();
@@ -164,7 +166,7 @@ QuickMenu::Prepare(ContainerWindow &parent, const PixelRect &rc)
     button_rc.right = 80;
     button_rc.bottom = 30;
 
-    auto &button = buttons.emplace_back(grid_view, button_rc, buttonStyle,
+    auto &button = buttons.emplace_back(*grid_view, button_rc, buttonStyle,
                                         std::make_unique<QuickMenuButtonRenderer>(dialog_look,
                                                                                   expanded.text),
                                         [this, &menuItem](){
@@ -173,10 +175,11 @@ QuickMenu::Prepare(ContainerWindow &parent, const PixelRect &rc)
                                         });
     button.SetEnabled(expanded.enabled);
 
-    grid_view.AddItem(button);
+    grid_view->AddItem(button);
   }
 
-  grid_view.RefreshLayout();
+  grid_view->RefreshLayout();
+  SetWindow(std::move(grid_view));
   UpdateCaption();
 }
 
@@ -189,8 +192,9 @@ QuickMenu::Unprepare()
 void
 QuickMenu::UpdateCaption()
 {
+  auto &grid_view = GetWindow();
   StaticString<32> buffer;
-  unsigned pageSize = grid_view.GetNumColumns() * grid_view.GetNumRows();
+  unsigned pageSize = GetWindow().GetNumColumns() * grid_view.GetNumRows();
   unsigned lastPage = buttons.size() / pageSize;
   buffer.Format(_T("Quick Menu  %d/%d"),
                 grid_view.GetCurrentPage() + 1, lastPage + 1);
@@ -200,6 +204,7 @@ QuickMenu::UpdateCaption()
 bool
 QuickMenu::SetFocus()
 {
+  auto &grid_view = GetWindow();
   unsigned numColumns = grid_view.GetNumColumns();
   unsigned pageSize = numColumns * grid_view.GetNumRows();
   unsigned lastPage = buttons.size() / pageSize;
@@ -225,6 +230,8 @@ QuickMenu::SetFocus()
 bool
 QuickMenu::KeyPress(unsigned key_code)
 {
+  auto &grid_view = GetWindow();
+
   switch (key_code) {
   case KEY_LEFT:
     grid_view.MoveFocus(GridView::Direction::LEFT);

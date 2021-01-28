@@ -29,8 +29,10 @@ ContainerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   WindowStyle style;
   style.Hide();
-  container.Create(parent, rc, style);
-  SetWindow(&container);
+
+  auto container = std::make_unique<ContainerWindow>();
+  container->Create(parent, rc, style);
+  SetWindow(std::move(container));
 }
 
 

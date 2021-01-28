@@ -84,9 +84,9 @@ HorizonWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   style.Hide();
   style.Disable();
 
-  HorizonWindow *w = new HorizonWindow(look.horizon, look.info_box.inverse);
+  auto w = std::make_unique<HorizonWindow>(look.horizon, look.info_box.inverse);
   w->Create(parent, rc, style);
-  SetWindow(w);
+  SetWindow(std::move(w));
 }
 
 void
