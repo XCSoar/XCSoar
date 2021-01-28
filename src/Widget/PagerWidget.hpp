@@ -44,10 +44,9 @@ class PagerWidget : public Widget {
     /**
      * Has Widget::Prepare() been called?
      */
-    bool prepared;
+    bool prepared = false;
 
-    constexpr
-    Child(Widget *_widget):widget(_widget), prepared(false) {}
+    constexpr Child(Widget *_widget) noexcept:widget(_widget) {}
   };
 
   bool initialised, prepared, visible;
