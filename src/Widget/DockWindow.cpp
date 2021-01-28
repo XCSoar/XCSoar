@@ -25,12 +25,12 @@ Copyright_License {
 #include "Widget.hpp"
 
 void
-DockWindow::SetWidget(Widget *_widget)
+DockWindow::SetWidget(std::unique_ptr<Widget> _widget) noexcept
 {
   assert(IsDefined());
   assert(widget == nullptr);
 
-  widget = _widget;
+  widget = std::move(_widget);
 
   if (widget != nullptr) {
     const PixelRect rc = GetClientRect();
@@ -56,8 +56,7 @@ DockWindow::DeleteWidget()
     return;
 
   UnprepareWidget();
-  delete widget;
-  widget = nullptr;
+  widget.reset();
 }
 
 void

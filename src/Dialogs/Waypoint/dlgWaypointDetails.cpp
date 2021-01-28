@@ -136,10 +136,8 @@ class WaypointDetailsWidget final
   int page, last_page;
 
   DockWindow info_dock;
-  WaypointInfoWidget info_widget;
   PanelControl details_panel;
   DockWindow commands_dock;
-  WaypointCommandsWidget commands_widget;
   WndOwnerDrawFrame image_window;
 
 #ifdef HAVE_RUN_FILE
@@ -152,19 +150,19 @@ class WaypointDetailsWidget final
   StaticArray<Bitmap, 5> images;
   int zoom;
 
+  const bool allow_edit;
+
 public:
   WaypointDetailsWidget(WidgetDialog &_dialog, WaypointPtr _waypoint,
-                        ProtectedTaskManager *_task_manager, bool allow_edit)
+                        ProtectedTaskManager *_task_manager, bool _allow_edit) noexcept
     :dialog(_dialog), look(dialog.GetLook()),
      waypoint(std::move(_waypoint)),
      task_manager(_task_manager),
      page(0), last_page(0),
-     info_widget(look, waypoint),
-     commands_widget(look, &_dialog, waypoint, _task_manager, allow_edit),
 #ifdef HAVE_RUN_FILE
      file_list(look), file_list_handler(waypoint),
 #endif
-     zoom(0) {}
+     zoom(0), allow_edit(_allow_edit) {}
 
   void UpdatePage();
   void UpdateZoomControls();
@@ -420,7 +418,7 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
                       button_style, dialog.MakeModalResultCallback(mrOK));
 
   info_dock.Create(parent, layout.main, dock_style);
-  info_dock.SetWidget(&info_widget);
+  info_dock.SetWidget(std::make_unique<WaypointInfoWidget>(look, waypoint));
 
   details_panel.Create(parent, look, layout.main, dock_style);
   details_text.Create(details_panel, layout.details_text);
@@ -440,7 +438,7 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 #endif
 
   commands_dock.Create(parent, layout.main, dock_style);
-  commands_dock.SetWidget(&commands_widget);
+  commands_dock.SetWidget(std::make_unique<WaypointCommandsWidget>(look, &dialog, waypoint, task_manager, allow_edit));
 
   if (!images.empty())
     image_window.Create(parent, layout.main, dock_style,

@@ -292,23 +292,23 @@ TaskPointWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   RefreshView();
 }
 
-static ObservationZoneEditWidget *
+static std::unique_ptr<ObservationZoneEditWidget>
 CreateObservationZoneEditWidget(ObservationZonePoint &oz, bool is_fai_general)
 {
   switch (oz.GetShape()) {
   case ObservationZone::Shape::SECTOR:
   case ObservationZone::Shape::ANNULAR_SECTOR:
   case ObservationZone::Shape::SYMMETRIC_QUADRANT:
-    return new SectorZoneEditWidget((SectorZone &)oz);
+    return std::make_unique<SectorZoneEditWidget>((SectorZone &)oz);
 
   case ObservationZone::Shape::LINE:
-    return new LineSectorZoneEditWidget((LineSectorZone &)oz, !is_fai_general);
+    return std::make_unique<LineSectorZoneEditWidget>((LineSectorZone &)oz, !is_fai_general);
 
   case ObservationZone::Shape::CYLINDER:
-    return new CylinderZoneEditWidget((CylinderZone &)oz, !is_fai_general);
+    return std::make_unique<CylinderZoneEditWidget>((CylinderZone &)oz, !is_fai_general);
 
   case ObservationZone::Shape::CUSTOM_KEYHOLE:
-    return new KeyholeZoneEditWidget((KeyholeZone &)oz);
+    return std::make_unique<KeyholeZoneEditWidget>((KeyholeZone &)oz);
 
   case ObservationZone::Shape::FAI_SECTOR:
   case ObservationZone::Shape::DAEC_KEYHOLE:
@@ -334,12 +334,12 @@ TaskPointWidget::RefreshView()
   ObservationZonePoint &oz = tp.GetObservationZone();
   const bool is_fai_general =
     ordered_task.GetFactoryType() == TaskFactoryType::FAI_GENERAL;
-  auto *properties_widget = CreateObservationZoneEditWidget(oz, is_fai_general);
+  auto properties_widget = CreateObservationZoneEditWidget(oz, is_fai_general);
   if (properties_widget != nullptr) {
     properties_widget->SetListener(this);
-    properties_dock.SetWidget(properties_widget);
+    properties_dock.SetWidget(std::move(properties_widget));
   } else
-    properties_dock.SetWidget(new PanelWidget());
+    properties_dock.SetWidget(std::make_unique<PanelWidget>());
 
   type_label.SetText(OrderedTaskPointName(ordered_task.GetFactory().GetType(tp)));
 

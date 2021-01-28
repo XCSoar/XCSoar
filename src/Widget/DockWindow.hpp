@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "ui/window/ContainerWindow.hpp"
 
+#include <memory>
+
 class Widget;
 
 /**
@@ -33,10 +35,10 @@ class Widget;
  * container to place one #Widget on the screen.
  */
 class DockWindow : public ContainerWindow {
-  Widget *widget;
+  std::unique_ptr<Widget> widget;
 
 public:
-  DockWindow():widget(nullptr) {}
+  DockWindow() = default;
 
   /**
    * Show the specified #Widget.
@@ -45,14 +47,14 @@ public:
    *
    * @param widget the new Widget (must not be initialised/prepared)
    */
-  void SetWidget(Widget *widget);
+  void SetWidget(std::unique_ptr<Widget> _widget) noexcept;
 
-  Widget *GetWidget() {
-    return widget;
+  Widget &GetWidget() noexcept {
+    return *widget;
   }
 
-  const Widget *GetWidget() const {
-    return widget;
+  const Widget &GetWidget() const noexcept{
+    return *widget;
   }
 
   /**
