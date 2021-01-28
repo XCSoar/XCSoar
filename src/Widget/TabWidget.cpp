@@ -64,7 +64,6 @@ TabWidget::Layout::Layout(Orientation orientation, PixelRect rc,
 TabWidget::~TabWidget()
 {
   delete tab_display;
-  delete extra;
 }
 
 void
@@ -177,7 +176,7 @@ TabWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
 void
 TabWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  const Layout layout(orientation, rc, *tab_display, extra);
+  const Layout layout(orientation, rc, *tab_display, extra.get());
 
   tab_display->UpdateLayout(layout.tab_display, layout.vertical);
 
@@ -201,7 +200,7 @@ TabWidget::Unprepare()
 void
 TabWidget::Show(const PixelRect &rc)
 {
-  const Layout layout(orientation, rc, *tab_display, extra);
+  const Layout layout(orientation, rc, *tab_display, extra.get());
 
   tab_display->UpdateLayout(layout.tab_display, layout.vertical);
   tab_display->Show();
@@ -228,7 +227,7 @@ TabWidget::Hide()
 void
 TabWidget::Move(const PixelRect &rc)
 {
-  const Layout layout(orientation, rc, *tab_display, extra);
+  const Layout layout(orientation, rc, *tab_display, extra.get());
 
   tab_display->UpdateLayout(layout.tab_display, layout.vertical);
 
