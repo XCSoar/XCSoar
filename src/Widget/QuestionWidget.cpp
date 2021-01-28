@@ -27,8 +27,8 @@ Copyright_License {
 #include "Form/ButtonPanel.hpp"
 
 QuestionWidget::QuestionWidget(const TCHAR *_message) noexcept
-  :SolidWidget(new ButtonPanelWidget(std::make_unique<TextWidget>(),
-                                     ButtonPanelWidget::Alignment::BOTTOM)),
+  :SolidWidget(std::make_unique<ButtonPanelWidget>(std::make_unique<TextWidget>(),
+                                                   ButtonPanelWidget::Alignment::BOTTOM)),
    message(_message) {}
 
 void

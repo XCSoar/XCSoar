@@ -28,7 +28,7 @@ Copyright_License {
 
 SolidWidget::~SolidWidget()
 {
-  delete widget;
+  widget.reset();
   DeleteWindow();
 }
 
