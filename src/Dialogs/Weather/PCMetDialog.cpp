@@ -165,10 +165,12 @@ CreatePCMetWidget()
     return std::make_unique<LargeTextWidget>(UIGlobals::GetDialogLook(),
                                              _T("No account was configured."));
 
-  auto *area_widget = new ImageAreaListWidget();
-  auto *type_widget = new ImageTypeListWidget(*area_widget);
+  auto area_widget = std::make_unique<ImageAreaListWidget>();
+  auto type_widget = std::make_unique<ImageTypeListWidget>(*area_widget);
 
-  return std::make_unique<TwoWidgets>(type_widget, area_widget, false);
+  return std::make_unique<TwoWidgets>(std::move(type_widget),
+                                      std::move(area_widget),
+                                      false);
 }
 
 #endif

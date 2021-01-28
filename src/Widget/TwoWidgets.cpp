@@ -24,12 +24,7 @@ Copyright_License {
 #include "TwoWidgets.hpp"
 
 #include <algorithm>
-
-TwoWidgets::~TwoWidgets()
-{
-  delete second;
-  delete first;
-}
+#include <cassert>
 
 void
 TwoWidgets::UpdateLayout()

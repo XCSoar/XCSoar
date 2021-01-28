@@ -110,7 +110,9 @@ public:
 class SwitchesDialog : public TwoWidgets, private NullBlackboardListener {
 public:
   SwitchesDialog(const DialogLook &look)
-    :TwoWidgets(new SwitchesLeft(look), new SwitchesRight(look), false) {}
+    :TwoWidgets(std::make_unique<SwitchesLeft>(look),
+                std::make_unique<SwitchesRight>(look),
+                false) {}
 
   void Update(const SwitchState &switches) {
     ((SwitchesLeft &)GetFirst()).Update(switches);

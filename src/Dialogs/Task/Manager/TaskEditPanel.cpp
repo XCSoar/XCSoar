@@ -561,13 +561,14 @@ CreateTaskEditPanel(TaskManagerDialog &dialog,
                     const AirspaceLook &airspace_look,
                     OrderedTask **active_task, bool *task_modified)
 {
-  TaskEditButtons *buttons = new TaskEditButtons();
-  TextWidget *summary = new TextWidget();
-  TaskEditPanel *widget = new TaskEditPanel(dialog, task_look, airspace_look,
-                                            active_task, task_modified,
-                                            *summary, *buttons);
+  auto buttons = std::make_unique<TaskEditButtons>();
+  auto summary = std::make_unique<TextWidget>();
+  auto widget = std::make_unique<TaskEditPanel>(dialog, task_look, airspace_look,
+                                                active_task, task_modified,
+                                                *summary, *buttons);
   buttons->SetEditPanel(*widget);
-  TwoWidgets *tw1 = new TwoWidgets(widget, summary);
-  widget->SetTwoWidgets(*tw1);
-  return std::make_unique<TwoWidgets>(tw1, buttons);
+  auto tw1 = std::make_unique<TwoWidgets>(std::move(widget),
+                                          std::move(summary));
+  ((TaskEditPanel &)tw1->GetFirst()).SetTwoWidgets(*tw1);
+  return std::make_unique<TwoWidgets>(std::move(tw1), std::move(buttons));
 }

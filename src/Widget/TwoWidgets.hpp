@@ -27,8 +27,8 @@ Copyright_License {
 #include "Widget.hpp"
 #include "ui/dim/Rect.hpp"
 
+#include <memory>
 #include <utility>
-#include <cassert>
 
 /**
  * A #Widget that contains two other widgets, the second one following
@@ -41,18 +41,15 @@ Copyright_License {
 class TwoWidgets : public NullWidget {
   const bool vertical;
 
-  Widget *first, *second;
+  const std::unique_ptr<Widget> first, second;
 
   PixelRect rc;
 
 public:
-  TwoWidgets(Widget *_first, Widget *_second, bool _vertical=true)
-    :vertical(_vertical), first(_first), second(_second) {
-    assert(first != nullptr);
-    assert(second != nullptr);
-  }
-
-  virtual ~TwoWidgets();
+  TwoWidgets(std::unique_ptr<Widget> &&_first, std::unique_ptr<Widget> &&_second, bool _vertical=true) noexcept
+    :vertical(_vertical),
+     first(std::move(_first)),
+     second(std::move(_second)) {}
 
   /**
    * Update the layout after one of the widgets has indicated a size

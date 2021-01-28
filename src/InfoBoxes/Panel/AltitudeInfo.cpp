@@ -33,8 +33,8 @@ Copyright_License {
 class AltitudeInfoPanel : public TwoWidgets, NullBlackboardListener {
 public:
   explicit AltitudeInfoPanel(const DialogLook &look) noexcept
-    :TwoWidgets(new RowFormWidget(look),
-                new RowFormWidget(look),
+    :TwoWidgets(std::make_unique<RowFormWidget>(look),
+                std::make_unique<RowFormWidget>(look),
                 false) {}
 
   void Refresh();

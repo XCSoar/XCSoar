@@ -412,13 +412,16 @@ WeatherMapOverlayListWidget::UpdateClicked()
 std::unique_ptr<Widget>
 CreateWeatherMapOverlayWidget()
 {
-  auto *list = new WeatherMapOverlayListWidget();
-  auto *view = new ViewImageWidget();
-  auto *two = new TwoWidgets(list, view, false);
+  auto two = std::make_unique<TwoWidgets>(std::make_unique<WeatherMapOverlayListWidget>(),
+                                          std::make_unique<ViewImageWidget>(),
+                                          false);
+  auto &list = (WeatherMapOverlayListWidget &)two->GetFirst();
+  auto &view = (ViewImageWidget &)two->GetSecond();
+
   auto buttons =
-    std::make_unique<ButtonPanelWidget>(two,
+    std::make_unique<ButtonPanelWidget>(two.release(),
                                         ButtonPanelWidget::Alignment::BOTTOM);
-  list->SetPreview(*view);
-  list->SetButtonPanel(*buttons);
+  list.SetPreview(view);
+  list.SetButtonPanel(*buttons);
   return buttons;
 }

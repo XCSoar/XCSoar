@@ -754,22 +754,27 @@ TrafficListDialog()
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, _("Traffic"));
 
-  TrafficFilterWidget *filter_widget = new TrafficFilterWidget(look);
+  auto filter_widget = std::make_unique<TrafficFilterWidget>(look);
 
-  TrafficListButtons *buttons_widget = new TrafficListButtons(look, dialog);
+  auto buttons_widget = std::make_unique<TrafficListButtons>(look, dialog);
 
-  TwoWidgets *left_widget =
-    new TwoWidgets(filter_widget, buttons_widget, true);
+  auto list_widget =
+    std::make_unique<TrafficListWidget>(dialog, *filter_widget,
+                                        *buttons_widget);
 
-  TrafficListWidget *const list_widget =
-    new TrafficListWidget(dialog, *filter_widget, *buttons_widget);
+  filter_widget->SetListener(list_widget.get());
+  buttons_widget->SetList(list_widget.get());
 
-  filter_widget->SetListener(list_widget);
-  buttons_widget->SetList(list_widget);
+  auto left_widget =
+    std::make_unique<TwoWidgets>(std::move(filter_widget),
+                                 std::move(buttons_widget),
+                                 true);
 
-  TwoWidgets *widget = new TwoWidgets(left_widget, list_widget, false);
+  auto widget = std::make_unique<TwoWidgets>(std::move(left_widget),
+                                             std::move(list_widget),
+                                             false);
 
-  dialog.FinishPreliminary(widget);
+  dialog.FinishPreliminary(widget.release());
   dialog.ShowModal();
 }
 

@@ -83,8 +83,8 @@ GeoPointEntryDialog(const TCHAR *caption, GeoPoint &value,
 
   /* run it */
 
-  TwoWidgets widget(new FixedWindowWidget(&latitude_entry),
-                    new FixedWindowWidget(&longitude_entry),
+  TwoWidgets widget(std::make_unique<FixedWindowWidget>(&latitude_entry),
+                    std::make_unique<FixedWindowWidget>(&longitude_entry),
                     true);
   dialog.FinishPreliminary(&widget);
 

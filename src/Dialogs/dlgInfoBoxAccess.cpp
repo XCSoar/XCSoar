@@ -90,10 +90,13 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
         button_rc.bottom = std::max(2u * Layout::GetMinimumControlHeight(),
                                     Layout::GetMaximumControlHeight());
 
-        auto *button = new ButtonWidget(look.button, _("Switch InfoBox"),
-                                        dialog.MakeModalResultCallback(SWITCH_INFO_BOX));
+        auto button = std::make_unique<ButtonWidget>(look.button,
+                                                     _("Switch InfoBox"),
+                                                     dialog.MakeModalResultCallback(SWITCH_INFO_BOX));
 
-        widget = std::make_unique<TwoWidgets>(widget.release(), button, false);
+        widget = std::make_unique<TwoWidgets>(std::move(widget),
+                                              std::move(button),
+                                              false);
       }
 
       tab_widget.AddTab(std::move(widget), gettext(panels->name));

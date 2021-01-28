@@ -508,25 +508,29 @@ ShowWaypointListDialog(const GeoPoint &_location,
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, _("Select Waypoint"));
 
-  auto *filter_widget = new WaypointFilterWidget(look, heading);
+  auto left_widget =
+    std::make_unique<TwoWidgets>(std::make_unique<WaypointFilterWidget>(look, heading),
+                                 std::make_unique<WaypointListButtons>(look, dialog),
+                                 true);
 
-  WaypointListButtons *buttons_widget = new WaypointListButtons(look, dialog);
+  auto &filter_widget = (WaypointFilterWidget &)left_widget->GetFirst();
+  auto &buttons_widget = (WaypointListButtons &)left_widget->GetSecond();
 
-  TwoWidgets *left_widget =
-    new TwoWidgets(filter_widget, buttons_widget, true);
+  auto list_widget =
+    std::make_unique<WaypointListWidget>(dialog, filter_widget,
+                                         _location, heading,
+                                         _ordered_task, _ordered_task_index);
+  const auto &list_widget_ = *list_widget;
 
-  WaypointListWidget *const list_widget =
-    new WaypointListWidget(dialog, *filter_widget,
-                           _location, heading,
-                           _ordered_task, _ordered_task_index);
+  filter_widget.SetListener(list_widget.get());
+  buttons_widget.SetList(list_widget.get());
 
-  filter_widget->SetListener(list_widget);
-  buttons_widget->SetList(list_widget);
-
-  TwoWidgets *widget = new TwoWidgets(left_widget, list_widget, false);
+  TwoWidgets *widget = new TwoWidgets(std::move(left_widget),
+                                      std::move(list_widget),
+                                      false);
 
   dialog.FinishPreliminary(widget);
   return dialog.ShowModal() == mrOK
-    ? list_widget->GetCursorObject()
+    ? list_widget_.GetCursorObject()
     : nullptr;
 }

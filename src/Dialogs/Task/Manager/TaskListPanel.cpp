@@ -364,15 +364,19 @@ std::unique_ptr<Widget>
 CreateTaskListPanel(TaskManagerDialog &dialog,
                     OrderedTask **active_task, bool *task_modified)
 {
-  TextWidget *summary = new TextWidget();
-  TaskListPanel *widget = new TaskListPanel(dialog, active_task, task_modified,
-                                            *summary);
-  TwoWidgets *tw = new TwoWidgets(widget, summary);
-  widget->SetTwoWidgets(*tw);
+  auto summary = std::make_unique<TextWidget>();
+  auto widget = std::make_unique<TaskListPanel>(dialog, active_task, task_modified,
+                                                *summary);
+  auto tw = std::make_unique<TwoWidgets>(std::move(widget),
+                                         std::move(summary));
+  auto &list = (TaskListPanel &)tw->GetFirst();
+
+  list.SetTwoWidgets(*tw);
 
   auto buttons =
-    std::make_unique<ButtonPanelWidget>(tw, ButtonPanelWidget::Alignment::BOTTOM);
-  widget->SetButtonPanel(*buttons);
+    std::make_unique<ButtonPanelWidget>(tw.release(),
+                                        ButtonPanelWidget::Alignment::BOTTOM);
+  list.SetButtonPanel(*buttons);
 
   return buttons;
 }

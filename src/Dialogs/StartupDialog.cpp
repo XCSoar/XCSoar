@@ -243,8 +243,8 @@ dlgStartupShowModal()
   const DialogLook &look = UIGlobals::GetDialogLook();
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       UIGlobals::GetDialogLook(), nullptr);
-  TwoWidgets widget(new LogoQuitWidget(look.button, dialog),
-                    new StartupWidget(look, dialog, dff));
+  TwoWidgets widget(std::make_unique<LogoQuitWidget>(look.button, dialog),
+                    std::make_unique<StartupWidget>(look, dialog, dff));
 
   dialog.FinishPreliminary(&widget);
 

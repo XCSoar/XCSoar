@@ -439,14 +439,19 @@ PageListWidget::OnModified(const PageLayout &new_value)
 std::unique_ptr<Widget>
 CreatePagesConfigPanel()
 {
-  PageListWidget *list = new PageListWidget();
-  PageLayoutEditWidget *editor =
-    new PageLayoutEditWidget(UIGlobals::GetDialogLook(), *list);
-  list->SetEditor(*editor);
+  auto _list = std::make_unique<PageListWidget>();
+  auto _editor = std::make_unique<PageLayoutEditWidget>(UIGlobals::GetDialogLook(),
+                                                        *_list);
 
-  TwoWidgets *two = new TwoWidgets(list, editor);
-  auto buttons = std::make_unique<ButtonPanelWidget>(two, ButtonPanelWidget::Alignment::BOTTOM);
-  list->SetButtonPanel(*buttons);
+  auto two = std::make_unique<TwoWidgets>(std::move(_list),
+                                          std::move(_editor));
+  auto &list = (PageListWidget &)two->GetFirst();
+  auto &editor = (PageLayoutEditWidget &)two->GetSecond();
+  list.SetEditor(editor);
+
+  auto buttons = std::make_unique<ButtonPanelWidget>(two.release(),
+                                                     ButtonPanelWidget::Alignment::BOTTOM);
+  list.SetButtonPanel(*buttons);
 
   return buttons;
 }
