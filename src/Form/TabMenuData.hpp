@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_FORM_TAB_MENU_DATA_HPP
 #define XCSOAR_FORM_TAB_MENU_DATA_HPP
 
+#include <memory>
+
 #include <tchar.h>
 
 class Widget;
@@ -31,7 +33,7 @@ class Widget;
 struct TabMenuPage {
   const TCHAR *menu_caption;
 
-  Widget *(*Load)();
+  std::unique_ptr<Widget> (*Load)();
 };
 
 struct TabMenuGroup {

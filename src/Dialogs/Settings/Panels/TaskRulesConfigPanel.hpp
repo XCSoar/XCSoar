@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef TASKRULESCONFIGPANEL_HPP
 #define TASKRULESCONFIGPANEL_HPP
 
+#include <memory>
+
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateTaskRulesConfigPanel();
 
 #endif /* TASKRULESCONFIGPANEL_HPP */

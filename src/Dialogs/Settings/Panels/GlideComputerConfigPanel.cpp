@@ -152,8 +152,8 @@ GlideComputerConfigPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateGlideComputerConfigPanel()
 {
-  return new GlideComputerConfigPanel();
+  return std::make_unique<GlideComputerConfigPanel>();
 }

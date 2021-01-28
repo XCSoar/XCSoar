@@ -161,8 +161,8 @@ AudioVarioConfigPanel::Save(bool &changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateAudioVarioConfigPanel()
 {
-  return new AudioVarioConfigPanel();
+  return std::make_unique<AudioVarioConfigPanel>();
 }

@@ -74,10 +74,10 @@ AudioConfigPanel::Save(bool &changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateAudioConfigPanel()
 {
-  return new AudioConfigPanel();
+  return std::make_unique<AudioConfigPanel>();
 }
 
 #endif /* HAVE_VOLUME_CONTROLLER */

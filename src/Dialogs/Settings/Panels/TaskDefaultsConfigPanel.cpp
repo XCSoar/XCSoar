@@ -249,8 +249,8 @@ TaskDefaultsConfigPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateTaskDefaultsConfigPanel()
 {
-  return new TaskDefaultsConfigPanel();
+  return std::make_unique<TaskDefaultsConfigPanel>();
 }

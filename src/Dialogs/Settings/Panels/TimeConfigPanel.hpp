@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef TIMECONFIGPANEL_HPP
 #define TIMECONFIGPANEL_HPP
 
+#include <memory>
+
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateTimeConfigPanel();
 
 #endif /* TIMECONFIGPANEL_HPP */

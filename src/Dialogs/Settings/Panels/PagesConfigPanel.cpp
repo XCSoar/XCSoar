@@ -436,7 +436,7 @@ PageListWidget::OnModified(const PageLayout &new_value)
   GetList().Invalidate();
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreatePagesConfigPanel()
 {
   PageListWidget *list = new PageListWidget();
@@ -445,7 +445,7 @@ CreatePagesConfigPanel()
   list->SetEditor(*editor);
 
   TwoWidgets *two = new TwoWidgets(list, editor);
-  ButtonPanelWidget *buttons = new ButtonPanelWidget(two, ButtonPanelWidget::Alignment::BOTTOM);
+  auto buttons = std::make_unique<ButtonPanelWidget>(two, ButtonPanelWidget::Alignment::BOTTOM);
   list->SetButtonPanel(*buttons);
 
   return buttons;

@@ -156,8 +156,8 @@ TaskRulesConfigPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateTaskRulesConfigPanel()
 {
-  return new TaskRulesConfigPanel();
+  return std::make_unique<TaskRulesConfigPanel>();
 }

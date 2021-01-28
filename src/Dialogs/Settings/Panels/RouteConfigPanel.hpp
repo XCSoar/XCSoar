@@ -24,10 +24,11 @@ Copyright_License {
 #ifndef ROUTECONFIGPANEL_HPP
 #define ROUTECONFIGPANEL_HPP
 
+#include <memory>
 
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateRouteConfigPanel();
 
 #endif /* ROUTECONFIGPANEL_HPP */

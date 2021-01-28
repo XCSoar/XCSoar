@@ -98,8 +98,8 @@ InfoBoxesConfigPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateInfoBoxesConfigPanel()
 {
-  return new InfoBoxesConfigPanel();
+  return std::make_unique<InfoBoxesConfigPanel>();
 }

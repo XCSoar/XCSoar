@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef INTERFACECONFIGPANEL_HPP
 #define INTERFACECONFIGPANEL_HPP
 
+#include <memory>
+
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateInterfaceConfigPanel();
 
 #endif /* INTERFACECONFIGPANEL_HPP */

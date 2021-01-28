@@ -24,8 +24,8 @@ Copyright_License {
 #include "WindConfigPanel.hpp"
 #include "../WindSettingsPanel.hpp"
 
-Widget *
+std::unique_ptr<Widget>
 CreateWindConfigPanel()
 {
-  return new WindSettingsPanel(false, false, false);
+  return std::make_unique<WindSettingsPanel>(false, false, false);
 }

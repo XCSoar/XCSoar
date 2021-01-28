@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef WINDCONFIGPANEL_HPP
 #define WINDCONFIGPANEL_HPP
 
+#include <memory>
+
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateWindConfigPanel();
 
 #endif

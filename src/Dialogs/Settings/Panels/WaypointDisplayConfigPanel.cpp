@@ -238,8 +238,8 @@ WaypointDisplayConfigPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateWaypointDisplayConfigPanel()
 {
-  return new WaypointDisplayConfigPanel();
+  return std::make_unique<WaypointDisplayConfigPanel>();
 }

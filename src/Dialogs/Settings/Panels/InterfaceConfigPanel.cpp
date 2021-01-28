@@ -277,8 +277,8 @@ InterfaceConfigPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateInterfaceConfigPanel()
 {
-  return new InterfaceConfigPanel();
+  return std::make_unique<InterfaceConfigPanel>();
 }

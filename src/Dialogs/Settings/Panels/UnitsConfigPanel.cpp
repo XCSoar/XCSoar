@@ -296,9 +296,9 @@ UnitsConfigPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateUnitsConfigPanel()
 {
-  return new UnitsConfigPanel();
+  return std::make_unique<UnitsConfigPanel>();
 }
 

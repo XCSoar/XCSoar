@@ -95,8 +95,8 @@ WeatherConfigPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateWeatherConfigPanel()
 {
-  return new WeatherConfigPanel();
+  return std::make_unique<WeatherConfigPanel>();
 }

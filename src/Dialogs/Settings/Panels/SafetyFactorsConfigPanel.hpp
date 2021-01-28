@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef SAFETYFACTORSCONFIGPANEL_HPP
 #define SAFETYFACTORSCONFIGPANEL_HPP
 
+#include <memory>
+
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateSafetyFactorsConfigPanel();
 
 #endif /* SAFETYFACTORSCONFIGPANEL_HPP */

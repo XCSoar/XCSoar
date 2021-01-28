@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef LAYOUTCONFIGPANEL_HPP
 #define LAYOUTCONFIGPANEL_HPP
 
+#include <memory>
+
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateLayoutConfigPanel();
 
 #endif /* LAYOUTCONFIGPANEL_HPP */

@@ -139,8 +139,8 @@ SiteConfigPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateSiteConfigPanel()
 {
-  return new SiteConfigPanel();
+  return std::make_unique<SiteConfigPanel>();
 }

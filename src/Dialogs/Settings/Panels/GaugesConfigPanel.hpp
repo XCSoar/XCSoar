@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef GAUGESCONFIGPANEL_HPP
 #define GAUGESCONFIGPANEL_HPP
 
+#include <memory>
+
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateGaugesConfigPanel();
 
 #endif /* GAUGESCONFIGPANEL_HPP */

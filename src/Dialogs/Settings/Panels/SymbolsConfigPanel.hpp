@@ -24,10 +24,11 @@ Copyright_License {
 #ifndef SYMBOLSCONFIGPANEL_HPP
 #define SYMBOLSCONFIGPANEL_HPP
 
+#include <memory>
 
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateSymbolsConfigPanel();
 
 #endif /* SYMBOLSCONFIGPANEL_HPP */

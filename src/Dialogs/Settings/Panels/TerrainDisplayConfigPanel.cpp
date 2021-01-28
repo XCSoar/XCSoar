@@ -307,8 +307,8 @@ TerrainDisplayConfigPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateTerrainDisplayConfigPanel()
 {
-  return new TerrainDisplayConfigPanel();
+  return std::make_unique<TerrainDisplayConfigPanel>();
 }

@@ -24,10 +24,11 @@ Copyright_License {
 #ifndef WAYPOINTDISPLAYCONFIGPANEL_HPP
 #define WAYPOINTDISPLAYCONFIGPANEL_HPP
 
+#include <memory>
 
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateWaypointDisplayConfigPanel();
 
 #endif /* WAYPOINTDISPLAYCONFIGPANEL_HPP */

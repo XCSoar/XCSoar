@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef WEATHER_CONFIGPANEL_HPP
 #define WEATHER_CONFIGPANEL_HPP
 
+#include <memory>
+
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateWeatherConfigPanel();
 
 #endif

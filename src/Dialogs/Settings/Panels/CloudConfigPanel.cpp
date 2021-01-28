@@ -125,8 +125,8 @@ CloudConfigPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateCloudConfigPanel()
 {
-  return new CloudConfigPanel();
+  return std::make_unique<CloudConfigPanel>();
 }

@@ -236,8 +236,8 @@ SymbolsConfigPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateSymbolsConfigPanel()
 {
-  return new SymbolsConfigPanel();
+  return std::make_unique<SymbolsConfigPanel>();
 }

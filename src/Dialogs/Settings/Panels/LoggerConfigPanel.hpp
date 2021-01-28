@@ -24,10 +24,11 @@ Copyright_License {
 #ifndef LOGGERCONFIGPANEL_HPP
 #define LOGGERCONFIGPANEL_HPP
 
+#include <memory>
 
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateLoggerConfigPanel();
 
 #endif /* LOGGERCONFIGPANEL_HPP */

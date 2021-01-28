@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_SCORING_CONFIG_PANEL_HPP
 #define XCSOAR_SCORING_CONFIG_PANEL_HPP
 
+#include <memory>
+
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateScoringConfigPanel();
 
 #endif /* TASKRULESCONFIGPANEL_HPP */

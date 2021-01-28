@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef GLIDECOMPUTERCONFIGPANEL_HPP
 #define GLIDECOMPUTERCONFIGPANEL_HPP
 
+#include <memory>
+
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateGlideComputerConfigPanel();
 
 #endif /* GLIDECOMPUTERCONFIGPANEL_HPP */

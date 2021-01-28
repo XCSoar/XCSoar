@@ -124,8 +124,8 @@ VarioConfigPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateVarioConfigPanel()
 {
-  return new VarioConfigPanel();
+  return std::make_unique<VarioConfigPanel>();
 }

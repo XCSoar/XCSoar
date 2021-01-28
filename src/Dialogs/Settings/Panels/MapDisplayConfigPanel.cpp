@@ -186,8 +186,8 @@ MapDisplayConfigPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateMapDisplayConfigPanel()
 {
-  return new MapDisplayConfigPanel();
+  return std::make_unique<MapDisplayConfigPanel>();
 }

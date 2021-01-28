@@ -24,10 +24,11 @@ Copyright_License {
 #ifndef AUDIO_VARIOCONFIGPANEL_HPP
 #define AUDIO_VARIOCONFIGPANEL_HPP
 
+#include <memory>
 
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateAudioVarioConfigPanel();
 
 #endif /* AUDIO_VARIOCONFIGPANEL_HPP */

@@ -170,8 +170,8 @@ ScoringConfigPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateScoringConfigPanel()
 {
-  return new ScoringConfigPanel();
+  return std::make_unique<ScoringConfigPanel>();
 }

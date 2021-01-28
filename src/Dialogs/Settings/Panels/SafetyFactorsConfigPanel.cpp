@@ -170,8 +170,8 @@ SafetyFactorsConfigPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateSafetyFactorsConfigPanel()
 {
-  return new SafetyFactorsConfigPanel();
+  return std::make_unique<SafetyFactorsConfigPanel>();
 }

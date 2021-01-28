@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef CLOUD_CONFIG_PANEL_HPP
 #define CLOUD_CONFIG_PANEL_HPP
 
+#include <memory>
+
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateCloudConfigPanel();
 
 #endif

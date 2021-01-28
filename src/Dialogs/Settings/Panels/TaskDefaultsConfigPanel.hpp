@@ -26,7 +26,7 @@ Copyright_License {
 
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateTaskDefaultsConfigPanel();
 
 #endif /* TASKDEFAULTSCONFIGPANEL_HPP */

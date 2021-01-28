@@ -327,8 +327,8 @@ TrackingConfigPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateTrackingConfigPanel()
 {
-  return new TrackingConfigPanel();
+  return std::make_unique<TrackingConfigPanel>();
 }

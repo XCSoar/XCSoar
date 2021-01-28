@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef MAPDISPLAYCONFIGPANEL_HPP
 #define MAPDISPLAYCONFIGPANEL_HPP
 
+#include <memory>
+
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateMapDisplayConfigPanel();
 
 #endif /* MAPDISPLAYCONFIGPANEL_HPP */

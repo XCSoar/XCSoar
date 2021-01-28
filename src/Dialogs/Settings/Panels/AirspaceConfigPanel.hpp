@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef AIRSPACECONFIGPANEL_HPP
 #define AIRSPACECONFIGPANEL_HPP
 
+#include <memory>
+
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateAirspaceConfigPanel();
 
 #endif /* AIRSPACECONFIGPANEL_HPP */

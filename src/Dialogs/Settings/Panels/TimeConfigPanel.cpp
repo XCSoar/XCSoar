@@ -120,8 +120,8 @@ TimeConfigPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateTimeConfigPanel()
 {
-  return new TimeConfigPanel();
+  return std::make_unique<TimeConfigPanel>();
 }

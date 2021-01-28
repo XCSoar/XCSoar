@@ -24,10 +24,11 @@ Copyright_License {
 #ifndef INFOBOXESCONFIGPANEL_HPP
 #define INFOBOXESCONFIGPANEL_HPP
 
+#include <memory>
 
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateInfoBoxesConfigPanel();
 
 #endif /* INFOBOXESCONFIGPANEL_HPP */

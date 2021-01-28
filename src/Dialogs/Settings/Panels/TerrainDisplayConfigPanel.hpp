@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef TERRAINDISPLAYCONFIGPANEL_HPP
 #define TERRAINDISPLAYCONFIGPANEL_HPP
 
+#include <memory>
+
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateTerrainDisplayConfigPanel();
 
 #endif /* TERRAINDISPLAYCONFIGPANEL_HPP */

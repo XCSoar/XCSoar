@@ -24,10 +24,11 @@ Copyright_License {
 #ifndef UNITSCONFIGPANEL_HPP
 #define UNITSCONFIGPANEL_HPP
 
+#include <memory>
 
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateUnitsConfigPanel();
 
 #endif /* UNITSCONFIGPANEL_HPP */

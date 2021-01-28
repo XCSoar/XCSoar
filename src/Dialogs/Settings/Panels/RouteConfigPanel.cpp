@@ -208,8 +208,8 @@ RouteConfigPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateRouteConfigPanel()
 {
-  return new RouteConfigPanel();
+  return std::make_unique<RouteConfigPanel>();
 }

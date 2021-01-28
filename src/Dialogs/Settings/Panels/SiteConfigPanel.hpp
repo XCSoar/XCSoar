@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef SITECONFIGPANEL_HPP
 #define SITECONFIGPANEL_HPP
 
+#include <memory>
+
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateSiteConfigPanel();
 
 #endif /* SITECONFIGPANEL_HPP */

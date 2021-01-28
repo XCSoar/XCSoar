@@ -24,10 +24,11 @@ Copyright_License {
 #ifndef VARIOCONFIGPANEL_HPP
 #define VARIOCONFIGPANEL_HPP
 
+#include <memory>
 
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateVarioConfigPanel();
 
 #endif /* VARIOCONFIGPANEL_HPP */

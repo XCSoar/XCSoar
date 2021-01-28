@@ -315,8 +315,8 @@ LayoutConfigPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateLayoutConfigPanel()
 {
-  return new LayoutConfigPanel();
+  return std::make_unique<LayoutConfigPanel>();
 }

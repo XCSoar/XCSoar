@@ -287,10 +287,9 @@ AirspaceConfigPanel::Save(bool &_changed)
   return true;
 }
 
-
-Widget *
+std::unique_ptr<Widget>
 CreateAirspaceConfigPanel()
 {
-  return new AirspaceConfigPanel();
+  return std::make_unique<AirspaceConfigPanel>();
 }
 

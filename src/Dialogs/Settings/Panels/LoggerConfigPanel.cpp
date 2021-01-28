@@ -143,8 +143,8 @@ LoggerConfigPanel::Save(bool &changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateLoggerConfigPanel()
 {
-  return new LoggerConfigPanel();
+  return std::make_unique<LoggerConfigPanel>();
 }

@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef TRACKING_CONFIGPANEL_HPP
 #define TRACKING_CONFIGPANEL_HPP
 
+#include <memory>
+
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreateTrackingConfigPanel();
 
 #endif /* TRACKING_CONFIGPANEL_HPP */

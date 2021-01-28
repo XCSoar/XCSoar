@@ -24,9 +24,11 @@ Copyright_License {
 #ifndef PAGESCONFIGPANEL_HPP
 #define PAGESCONFIGPANEL_HPP
 
+#include <memory>
+
 class Widget;
 
-Widget *
+std::unique_ptr<Widget>
 CreatePagesConfigPanel();
 
 #endif /* PAGESCONFIGPANEL_HPP */

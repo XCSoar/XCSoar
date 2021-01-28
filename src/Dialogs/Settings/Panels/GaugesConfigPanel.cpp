@@ -180,8 +180,8 @@ GaugesConfigPanel::Save(bool &_changed)
   return true;
 }
 
-Widget *
+std::unique_ptr<Widget>
 CreateGaugesConfigPanel()
 {
-  return new GaugesConfigPanel();
+  return std::make_unique<GaugesConfigPanel>();
 }
