@@ -22,11 +22,7 @@ Copyright_License {
 */
 
 #include "OffsetButtonsWidget.hpp"
-#include "Form/Button.hpp"
-#include "util/Macros.hpp"
 #include "Screen/Layout.hpp"
-
-#include <array>
 
 #include <stdio.h>
 
@@ -60,31 +56,41 @@ LayoutOffsetButtons(const PixelRect &total_rc) noexcept
   return buttons;
 }
 
-void
-OffsetButtonsWidget::Prepare(ContainerWindow &parent,
-                             const PixelRect &total_rc)
+inline Button
+OffsetButtonsWidget::MakeButton(ContainerWindow &parent, const PixelRect &r,
+                                unsigned i) noexcept
 {
-  const auto rc = LayoutOffsetButtons(total_rc);
+  TCHAR caption[16];
+  _stprintf(caption, format, offsets[i]);
 
   WindowStyle style;
   style.TabStop();
   style.Hide();
 
-  for (unsigned i = 0; i < buttons.size(); ++i) {
-    TCHAR caption[16];
-    _stprintf(caption, format, (double)offsets[i]);
-    buttons[i] = new Button(parent, look, caption, rc[i], style,
-                            [this, i](){
-                              OnOffset(offsets[i]);
-                            });
-  }
+  return Button(parent, look, caption, r, style, [this, i](){
+    OnOffset(offsets[i]);
+  });
+}
+
+inline std::array<Button, 4>
+OffsetButtonsWidget::MakeButtons(ContainerWindow &parent,
+                                 const PixelRect &total) noexcept
+{
+  const auto r = LayoutOffsetButtons(total);
+
+  return {
+    MakeButton(parent, r[0], 0),
+    MakeButton(parent, r[1], 1),
+    MakeButton(parent, r[2], 2),
+    MakeButton(parent, r[3], 3),
+  };
 }
 
 void
-OffsetButtonsWidget::Unprepare()
+OffsetButtonsWidget::Prepare(ContainerWindow &parent,
+                             const PixelRect &total_rc)
 {
-  for (auto *i : buttons)
-    delete i;
+  buttons.reset(new std::array<Button, 4>{MakeButtons(parent, total_rc)});
 }
 
 void
@@ -92,15 +98,15 @@ OffsetButtonsWidget::Show(const PixelRect &total_rc)
 {
   const auto rc = LayoutOffsetButtons(total_rc);
 
-  for (unsigned i = 0; i < buttons.size(); ++i)
-    buttons[i]->MoveAndShow(rc[i]);
+  for (unsigned i = 0; i < buttons->size(); ++i)
+    (*buttons)[i].MoveAndShow(rc[i]);
 }
 
 void
 OffsetButtonsWidget::Hide()
 {
-  for (auto *i : buttons)
-    i->Hide();
+  for (auto &i : *buttons)
+    i.Hide();
 }
 
 void
@@ -108,13 +114,13 @@ OffsetButtonsWidget::Move(const PixelRect &total_rc)
 {
   const auto rc = LayoutOffsetButtons(total_rc);
 
-  for (unsigned i = 0; i < buttons.size(); ++i)
-    buttons[i]->Move(rc[i]);
+  for (unsigned i = 0; i < buttons->size(); ++i)
+    (*buttons)[i].Move(rc[i]);
 }
 
 bool
 OffsetButtonsWidget::SetFocus()
 {
-  buttons[2]->SetFocus();
+  (*buttons)[2].SetFocus();
   return true;
 }

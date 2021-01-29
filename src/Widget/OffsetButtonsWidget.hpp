@@ -25,6 +25,10 @@ Copyright_License {
 #define XCSOAR_OFFSET_BUTTONS_WIDGET_HPP
 
 #include "Widget.hpp"
+#include "Form/Button.hpp"
+
+#include <array>
+#include <memory>
 
 #include <array>
 
@@ -40,7 +44,7 @@ class OffsetButtonsWidget : public NullWidget {
   const ButtonLook &look;
   const TCHAR *const format;
   const double offsets[4];
-  std::array<Button *, 4> buttons;
+  std::unique_ptr<std::array<Button, 4>> buttons;
 
 public:
   OffsetButtonsWidget(const ButtonLook &_look, const TCHAR *_format,
@@ -53,7 +57,6 @@ public:
   PixelSize GetMinimumSize() const override;
   PixelSize GetMaximumSize() const override;
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Unprepare() override;
   void Show(const PixelRect &rc) override;
   void Hide() override;
   void Move(const PixelRect &rc) override;
@@ -61,6 +64,12 @@ public:
 
 protected:
   virtual void OnOffset(double offset) = 0;
+
+private:
+  Button MakeButton(ContainerWindow &parent, const PixelRect &r,
+                    unsigned i) noexcept;
+  std::array<Button, 4> MakeButtons(ContainerWindow &parent,
+                                    const PixelRect &r) noexcept;
 };
 
 #endif
