@@ -39,8 +39,9 @@ GeoPointEntryDialog(const TCHAR *caption, GeoPoint &value,
 
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
-                      look, caption);
+  TWidgetDialog<TwoWidgets> dialog(WidgetDialog::Auto{},
+                                   UIGlobals::GetMainWindow(),
+                                   look, caption);
 
   ContainerWindow &client_area = dialog.GetClientAreaWindow();
 
@@ -52,13 +53,13 @@ GeoPointEntryDialog(const TCHAR *caption, GeoPoint &value,
 
   auto latitude_entry = std::make_unique<DigitEntry>(look);
   latitude_entry->CreateLatitude(client_area, client_area.GetClientRect(),
-                                control_style, format);
+                                 control_style, format);
   latitude_entry->Resize(latitude_entry->GetRecommendedSize());
   latitude_entry->SetCallback(dialog.MakeModalResultCallback(mrOK));
 
   auto longitude_entry = std::make_unique<DigitEntry>(look);
   longitude_entry->CreateLongitude(client_area, client_area.GetClientRect(),
-                                  control_style, format);
+                                   control_style, format);
   longitude_entry->Resize(longitude_entry->GetRecommendedSize());
   longitude_entry->SetCallback(dialog.MakeModalResultCallback(mrOK));
 
@@ -83,18 +84,15 @@ GeoPointEntryDialog(const TCHAR *caption, GeoPoint &value,
 
   /* run it */
 
-  TwoWidgets widget(std::make_unique<FixedWindowWidget>(std::move(latitude_entry)),
-                    std::make_unique<FixedWindowWidget>(std::move(longitude_entry)),
-                    true);
-  dialog.FinishPreliminary(&widget);
+  dialog.SetWidget(std::make_unique<FixedWindowWidget>(std::move(latitude_entry)),
+                   std::make_unique<FixedWindowWidget>(std::move(longitude_entry)),
+                   true);
 
-  bool result = dialog.ShowModal() == mrOK;
-  dialog.StealWidget();
-  if (!result)
+  if (dialog.ShowModal() != mrOK)
     return false;
 
-  auto &lo_entry = (DigitEntry &)((FixedWindowWidget &)widget.GetFirst()).GetWindow();
-  auto &la_entry = (DigitEntry &)((FixedWindowWidget &)widget.GetSecond()).GetWindow();
+  auto &lo_entry = (DigitEntry &)((FixedWindowWidget &)dialog.GetWidget().GetFirst()).GetWindow();
+  auto &la_entry = (DigitEntry &)((FixedWindowWidget &)dialog.GetWidget().GetSecond()).GetWindow();
 
   value = GeoPoint(lo_entry.GetLongitude(format),
                    la_entry.GetLatitude(format));
