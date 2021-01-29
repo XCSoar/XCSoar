@@ -50,10 +50,11 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 
-TaskManagerDialog::~TaskManagerDialog()
-{
-  delete task;
-}
+TaskManagerDialog::TaskManagerDialog(WndForm &_dialog) noexcept
+    :TabWidget(Orientation::AUTO),
+     dialog(_dialog) {}
+
+TaskManagerDialog::~TaskManagerDialog() noexcept = default;
 
 bool
 TaskManagerDialog::KeyPress(unsigned key_code)
@@ -114,11 +115,11 @@ TaskManagerDialog::Initialise(ContainerWindow &parent, const PixelRect &rc)
   const auto *PropertiesIcon = enable_icons ? &icons.hBmpTabSettings : nullptr;
 
   AddTab(CreateTaskEditPanel(*this, look.task, look.airspace,
-                             &task, &modified),
+                             task, &modified),
          _("Turn Points"), TurnPointIcon);
-  AddTab(std::make_unique<TaskMiscPanel>(*this, &task, &modified),
+  AddTab(std::make_unique<TaskMiscPanel>(*this, task, &modified),
          _("Manage"), BrowseIcon);
-  AddTab(std::make_unique<TaskPropertiesPanel>(*this, &task, &modified),
+  AddTab(std::make_unique<TaskPropertiesPanel>(*this, task, &modified),
          _("Rules"), PropertiesIcon);
   AddTab(std::make_unique<TaskClosePanel>(*this, &modified,
                                           UIGlobals::GetDialogLook()),
@@ -224,9 +225,7 @@ void
 TaskManagerDialog::Revert()
 {
   // create new task first to guarantee pointers are different
-  OrderedTask *temp = protected_task_manager->TaskClone();
-  delete task;
-  task = temp;
+  task = protected_task_manager->TaskClone();
   /**
    * \todo Having local pointers scattered about is an accident waiting to
    *       happen. Need a semantic that provides the authoritative pointer to
@@ -237,7 +236,7 @@ TaskManagerDialog::Revert()
    */
   auto &task_view = (ButtonWidget &)GetExtra();
   auto &renderer = (TaskMapButtonRenderer &)task_view.GetRenderer();
-  renderer.SetTask(task);
+  renderer.SetTask(task.get());
   modified = false;
 }
 

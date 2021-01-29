@@ -36,6 +36,7 @@ std::unique_ptr<Widget>
 CreateTaskEditPanel(TaskManagerDialog &dialog,
                     const TaskLook &task_look,
                     const AirspaceLook &airspace_look,
-                    OrderedTask **active_task, bool *task_modified);
+                    std::unique_ptr<OrderedTask> &active_task,
+                    bool *task_modified) noexcept;
 
 #endif

@@ -41,12 +41,13 @@ class TaskActionsPanel : public RowFormWidget {
   TaskManagerDialog &dialog;
   TaskMiscPanel &parent;
 
-  OrderedTask **active_task;
+  std::unique_ptr<OrderedTask> &active_task;
   bool *task_modified;
 
 public:
   TaskActionsPanel(TaskManagerDialog &_dialog, TaskMiscPanel &_parent,
-                   OrderedTask **_active_task, bool *_task_modified);
+                   std::unique_ptr<OrderedTask> &_active_task,
+                   bool *_task_modified) noexcept;
 
 private:
   void SaveTask();

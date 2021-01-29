@@ -32,7 +32,8 @@ class OrderedTask;
 class TaskMiscPanel final : public PagerWidget {
 public:
   TaskMiscPanel(TaskManagerDialog &dialog,
-                OrderedTask **_active_task, bool *_task_modified);
+                std::unique_ptr<OrderedTask> &_active_task,
+                bool *_task_modified) noexcept;
 
   /* virtual methods from class Widget */
   void ReClick() override;

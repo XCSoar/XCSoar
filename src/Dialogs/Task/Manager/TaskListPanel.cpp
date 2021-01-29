@@ -60,7 +60,7 @@ class TaskListPanel final
 
   TextRowRenderer row_renderer;
 
-  OrderedTask **active_task;
+  std::unique_ptr<OrderedTask> &active_task;
   bool *task_modified;
 
   TaskStore task_store;
@@ -78,7 +78,7 @@ class TaskListPanel final
 
 public:
   TaskListPanel(TaskManagerDialog &_dialog,
-                OrderedTask **_active_task, bool *_task_modified,
+                std::unique_ptr<OrderedTask> &_active_task, bool *_task_modified,
                 TextWidget &_summary)
     :dialog(_dialog),
      active_task(_active_task), task_modified(_task_modified),
@@ -215,12 +215,10 @@ TaskListPanel::LoadTask()
     return;
 
   // create new task first to guarantee pointers are different
-  OrderedTask* temptask = orig->Clone(CommonInterface::GetComputerSettings().task);
-  delete *active_task;
-  *active_task = temptask;
+  active_task = orig->Clone(CommonInterface::GetComputerSettings().task);
 
   const unsigned cursor_index = GetList().GetCursorIndex();
-  (*active_task)->SetName(StaticString<64>(task_store.GetName(cursor_index)));
+  active_task->SetName(StaticString<64>(task_store.GetName(cursor_index)));
 
   RefreshView();
   *task_modified = true;
@@ -356,7 +354,8 @@ TaskListPanel::Hide()
 
 std::unique_ptr<Widget>
 CreateTaskListPanel(TaskManagerDialog &dialog,
-                    OrderedTask **active_task, bool *task_modified)
+                    std::unique_ptr<OrderedTask> &active_task,
+                    bool *task_modified) noexcept
 {
   auto summary = std::make_unique<TextWidget>();
   auto widget = std::make_unique<TaskListPanel>(dialog, active_task, task_modified,

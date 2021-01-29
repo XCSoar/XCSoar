@@ -1228,10 +1228,10 @@ OrderedTask::HasTargets() const
   return false;
 }
 
-OrderedTask*
-OrderedTask::Clone(const TaskBehaviour &tb) const
+std::unique_ptr<OrderedTask>
+OrderedTask::Clone(const TaskBehaviour &tb) const noexcept
 {
-  OrderedTask* new_task = new OrderedTask(tb);
+  auto new_task = std::make_unique<OrderedTask>(tb);
 
   new_task->SetFactory(factory_mode);
 

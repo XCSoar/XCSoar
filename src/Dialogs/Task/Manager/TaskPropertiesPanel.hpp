@@ -39,14 +39,16 @@ class TaskPropertiesPanel final
 
   TaskManagerDialog &dialog;
 
-  OrderedTask **ordered_task_pointer, *ordered_task;
+  std::unique_ptr<OrderedTask> &ordered_task_pointer;
+  OrderedTask *ordered_task;
   bool *task_changed;
 
   TaskFactoryType orig_taskType;
 
 public:
   TaskPropertiesPanel(TaskManagerDialog &_dialog,
-                      OrderedTask **_active_task, bool *_task_modified);
+                      std::unique_ptr<OrderedTask> &_active_task,
+                      bool *_task_modified) noexcept;
 
   void OnFAIFinishHeightChange(DataFieldBoolean &df);
   void OnTaskTypeChange(DataFieldEnum &df);

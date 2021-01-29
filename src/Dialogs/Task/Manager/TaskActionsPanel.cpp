@@ -40,8 +40,8 @@ Copyright_License {
 
 TaskActionsPanel::TaskActionsPanel(TaskManagerDialog &_dialog,
                                    TaskMiscPanel &_parent,
-                                   OrderedTask **_active_task,
-                                   bool *_task_modified)
+                                   std::unique_ptr<OrderedTask> &_active_task,
+                                   bool *_task_modified) noexcept
   :RowFormWidget(_dialog.GetLook()),
    dialog(_dialog), parent(_parent),
    active_task(_active_task), task_modified(_task_modified) {}
@@ -49,13 +49,13 @@ TaskActionsPanel::TaskActionsPanel(TaskManagerDialog &_dialog,
 void
 TaskActionsPanel::SaveTask()
 {
-  AbstractTaskFactory &factory = (*active_task)->GetFactory();
+  AbstractTaskFactory &factory = active_task->GetFactory();
   factory.UpdateStatsGeometry();
   if (factory.CheckAddFinish())
     factory.UpdateGeometry();
 
-  if ((*active_task)->CheckTask()) {
-    if (!OrderedTaskSave(**active_task))
+  if (active_task->CheckTask()) {
+    if (!OrderedTaskSave(*active_task))
       return;
 
     *task_modified = true;
@@ -63,7 +63,7 @@ TaskActionsPanel::SaveTask()
     DirtyTaskListPanel();
   } else {
     ShowMessageBox(getTaskValidationErrors(
-        (*active_task)->GetFactory().GetValidationErrors()), _("Task not saved"),
+        active_task->GetFactory().GetValidationErrors()), _("Task not saved"),
         MB_ICONEXCLAMATION);
   }
 }
@@ -77,11 +77,11 @@ TaskActionsPanel::OnBrowseClicked()
 inline void
 TaskActionsPanel::OnNewTaskClicked()
 {
-  if (((*active_task)->TaskSize() < 2) ||
+  if ((active_task->TaskSize() < 2) ||
       (ShowMessageBox(_("Create new task?"), _("Task New"),
                    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
-    (*active_task)->Clear();
-    (*active_task)->SetFactory(CommonInterface::GetComputerSettings().task.task_type_default);
+    active_task->Clear();
+    active_task->SetFactory(CommonInterface::GetComputerSettings().task.task_type_default);
     *task_modified = true;
     dialog.SwitchToPropertiesPanel();
   }
@@ -90,16 +90,16 @@ TaskActionsPanel::OnNewTaskClicked()
 inline void
 TaskActionsPanel::OnDeclareClicked()
 {
-  if (!(*active_task)->CheckTask()) {
+  if (!active_task->CheckTask()) {
     const auto errors =
-      (*active_task)->GetFactory().GetValidationErrors();
+      active_task->GetFactory().GetValidationErrors();
     ShowMessageBox(getTaskValidationErrors(errors), _("Declare task"),
                 MB_ICONEXCLAMATION);
     return;
   }
 
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
-  Declaration decl(settings.logger, settings.plane, *active_task);
+  Declaration decl(settings.logger, settings.plane, active_task.get());
   ExternalLogger::Declare(decl, way_points.GetHome().get());
 }
 

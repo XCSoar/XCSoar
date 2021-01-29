@@ -32,7 +32,8 @@ class OrderedTask;
 
 std::unique_ptr<Widget>
 CreateTaskListPanel(TaskManagerDialog &dialog,
-                    OrderedTask **active_task, bool *task_modified);
+                    std::unique_ptr<OrderedTask> &active_task,
+                    bool *task_modified) noexcept;
 
 /**
  * Mark the previously scanned list of tasks as "dirty".  Before the

@@ -116,8 +116,8 @@ ProtectedTaskManager::DoGoto(WaypointPtr &&wp)
   return lease->DoGoto(std::move(wp));
 }
 
-OrderedTask*
-ProtectedTaskManager::TaskClone() const
+std::unique_ptr<OrderedTask>
+ProtectedTaskManager::TaskClone() const noexcept
 {
   Lease lease(*this);
   return lease->Clone(task_behaviour);

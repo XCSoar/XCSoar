@@ -513,8 +513,8 @@ TaskManager::TargetLock(const unsigned index, bool do_lock)
   return true;
 }
 
-OrderedTask *
-TaskManager::Clone(const TaskBehaviour &tb) const
+std::unique_ptr<OrderedTask>
+TaskManager::Clone(const TaskBehaviour &tb) const noexcept
 {
   return ordered_task->Clone(tb);
 }

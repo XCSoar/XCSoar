@@ -154,8 +154,7 @@ public:
    *
    * @return Initialised object
    */
-  gcc_malloc
-  OrderedTask *Clone(const TaskBehaviour &tb) const;
+  std::unique_ptr<OrderedTask> Clone(const TaskBehaviour &tb) const noexcept;
 
   /**
    * Copy task into this task

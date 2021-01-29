@@ -27,6 +27,8 @@ Copyright_License {
 #include "Widget/TabWidget.hpp"
 #include "Form/Form.hpp"
 
+#include <memory>
+
 class OrderedTask;
 class ButtonWidget;
 
@@ -40,18 +42,16 @@ class TaskManagerDialog final : public TabWidget {
 
   WndForm &dialog;
 
-  OrderedTask *task = nullptr;
+  std::unique_ptr<OrderedTask> task;
 
   bool fullscreen = false;
 
   bool modified = false;
 
 public:
-  explicit TaskManagerDialog(WndForm &_dialog)
-    :TabWidget(Orientation::AUTO),
-     dialog(_dialog) {}
+  explicit TaskManagerDialog(WndForm &_dialog) noexcept;
 
-  virtual ~TaskManagerDialog();
+  ~TaskManagerDialog() noexcept override;
 
   const DialogLook &GetLook() const {
     return dialog.GetLook();
@@ -87,7 +87,7 @@ public:
   void ShowTaskView(const OrderedTask *task);
 
   void ResetTaskView() {
-      ShowTaskView(task);
+    ShowTaskView(task.get());
   }
 
   void SwitchToEditTab();

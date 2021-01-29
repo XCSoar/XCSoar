@@ -178,7 +178,8 @@ class TaskEditPanel
   const TaskLook &task_look;
   const AirspaceLook &airspace_look;
 
-  OrderedTask **ordered_task_pointer, *ordered_task;
+  std::unique_ptr<OrderedTask> &ordered_task_pointer;
+  OrderedTask *ordered_task;
   bool *task_modified;
 
   TextWidget &summary;
@@ -191,7 +192,7 @@ class TaskEditPanel
 public:
   TaskEditPanel(TaskManagerDialog &_dialog,
                 const TaskLook &_task_look, const AirspaceLook &_airspace_look,
-                OrderedTask **_active_task, bool *_task_modified,
+                std::unique_ptr<OrderedTask> &_active_task, bool *_task_modified,
                 TextWidget &_summary, TaskEditButtons &_buttons)
     :dialog(_dialog),
      task_look(_task_look), airspace_look(_airspace_look),
@@ -497,7 +498,7 @@ TaskEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              row_renderer.CalculateLayout(*look.list.font_bold,
                                           look.small_font));
 
-  ordered_task = *ordered_task_pointer;
+  ordered_task = ordered_task_pointer.get();
 }
 
 void
@@ -509,8 +510,8 @@ TaskEditPanel::ReClick()
 void
 TaskEditPanel::Show(const PixelRect &rc)
 {
-  if (ordered_task != *ordered_task_pointer) {
-    ordered_task = *ordered_task_pointer;
+  if (ordered_task != ordered_task_pointer.get()) {
+    ordered_task = ordered_task_pointer.get();
     GetList().SetCursorIndex(0);
   }
 
@@ -555,7 +556,8 @@ std::unique_ptr<Widget>
 CreateTaskEditPanel(TaskManagerDialog &dialog,
                     const TaskLook &task_look,
                     const AirspaceLook &airspace_look,
-                    OrderedTask **active_task, bool *task_modified)
+                    std::unique_ptr<OrderedTask> &active_task,
+                    bool *task_modified) noexcept
 {
   auto buttons = std::make_unique<TaskEditButtons>();
   auto summary = std::make_unique<TextWidget>();

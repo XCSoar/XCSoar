@@ -28,6 +28,8 @@
 #include "Engine/Waypoint/Ptr.hpp"
 #include "util/Compiler.h"
 
+#include <memory>
+
 struct AGeoPoint;
 struct TaskBehaviour;
 struct OrderedTaskSettings;
@@ -83,8 +85,7 @@ public:
     return DoGoto(WaypointPtr(wp));
   }
 
-  gcc_malloc
-  OrderedTask* TaskClone() const;
+  std::unique_ptr<OrderedTask> TaskClone() const noexcept;
 
   /**
    * Copy task into this task

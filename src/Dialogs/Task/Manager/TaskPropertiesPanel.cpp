@@ -47,10 +47,11 @@ enum Controls {
 };
 
 TaskPropertiesPanel::TaskPropertiesPanel(TaskManagerDialog &_dialog,
-                                         OrderedTask **_active_task,
-                                         bool *_task_modified)
+                                         std::unique_ptr<OrderedTask> &_active_task,
+                                         bool *_task_modified) noexcept
   :RowFormWidget(_dialog.GetLook()), dialog(_dialog),
-   ordered_task_pointer(_active_task), ordered_task(*ordered_task_pointer),
+   ordered_task_pointer(_active_task),
+   ordered_task(ordered_task_pointer.get()),
    task_changed(_task_modified) {}
 
 void
@@ -271,7 +272,7 @@ TaskPropertiesPanel::ReClick()
 void
 TaskPropertiesPanel::Show(const PixelRect &rc)
 {
-  ordered_task = *ordered_task_pointer;
+  ordered_task = ordered_task_pointer.get();
   orig_taskType = ordered_task->GetFactoryType();
 
   RefreshView();

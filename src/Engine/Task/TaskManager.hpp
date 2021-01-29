@@ -31,6 +31,8 @@
 #include "TaskBehaviour.hpp"
 #include "Waypoint/Ptr.hpp"
 
+#include <memory>
+
 class AbstractTaskFactory;
 class TaskEvents;
 class TaskAdvance;
@@ -284,8 +286,7 @@ public:
    *
    * @return Initialised object
    */
-  gcc_malloc
-  OrderedTask *Clone(const TaskBehaviour &tb) const;
+  std::unique_ptr<OrderedTask> Clone(const TaskBehaviour &tb) const noexcept;
 
   /**
    * Copy task into this task

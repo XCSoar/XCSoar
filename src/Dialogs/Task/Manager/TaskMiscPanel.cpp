@@ -26,7 +26,8 @@ Copyright_License {
 #include "TaskListPanel.hpp"
 
 TaskMiscPanel::TaskMiscPanel(TaskManagerDialog &dialog,
-                             OrderedTask **_active_task, bool *_task_modified)
+                             std::unique_ptr<OrderedTask> &_active_task,
+                             bool *_task_modified) noexcept
 {
   Add(std::make_unique<TaskActionsPanel>(dialog, *this, _active_task, _task_modified));
 
