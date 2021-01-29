@@ -27,6 +27,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Look/DialogLook.hpp"
 #include "Formatter/UserUnits.hpp"
+#include "Renderer/TwoTextRowsRenderer.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/event/PeriodicTimer.hpp"
@@ -84,6 +85,8 @@ class AirspaceWarningListWidget final
    * Current list cursor airspace.
    */
   const AbstractAirspace *selected_airspace;
+
+  TwoTextRowsRenderer row_renderer;
 
   /**
    * Airspace repetitive warning sound interval counter.
@@ -183,12 +186,8 @@ AirspaceWarningListWidget::Prepare(ContainerWindow &parent,
 {
   const auto &look = UIGlobals::GetDialogLook();
 
-  const unsigned padding = Layout::GetTextPadding();
-  const unsigned font_height = look.list.font->GetHeight();
-  const unsigned row_height = 3 * padding + 2 * font_height;
-
   CreateList(parent, look, rc,
-             std::max(Layout::GetMaximumControlHeight(), row_height));
+             row_renderer.CalculateLayout(*look.list.font, *look.list.font));
 }
 
 void
@@ -308,8 +307,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
     /* the warnings were emptied between the opening of the dialog and
        this refresh, so only need to display "No Warnings" for top
        item, otherwise exit immediately */
-    canvas.DrawText(paint_rc.WithPadding(padding).GetTopLeft(),
-                    _("No Warnings"));
+    row_renderer.DrawFirstRow(canvas, paint_rc, _("No Warnings"));
     return;
   }
 
@@ -318,10 +316,6 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
   const WarningItem &warning = warning_list[i];
   const AbstractAirspace &airspace = *warning.airspace;
   const AirspaceInterceptSolution &solution = warning.solution;
-
-  const unsigned text_height = canvas.GetFontHeight();
-  const int first_row_y = paint_rc.top + padding;
-  const int second_row_y = first_row_y + text_height + padding;
 
   // word "inside" is used as the etalon, because it is longer than "near" and
   // currently (9.4.2011) there is no other possibility for the status text.
@@ -337,8 +331,6 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
     text_altitude_rc.VerticalSplit(text_altitude_rc.right - (padding + altitude_width));
   text_rc.right -= padding;
 
-  const int left0 = padding;
-
   if (!warning.ack_expired)
     canvas.SetTextColor(COLOR_GRAY);
 
@@ -347,14 +339,13 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
                  airspace.GetName(),
                  AirspaceFormatter::GetClass(airspace));
 
-    canvas.DrawClippedText({paint_rc.left + left0, first_row_y},
-                           text_rc, buffer);
+    row_renderer.DrawFirstRow(canvas, text_rc, buffer);
 
     AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetTop());
-    canvas.DrawText({altitude_rc.left, first_row_y}, buffer);
+    row_renderer.DrawRightFirstRow(canvas, text_altitude_rc, buffer);
 
     AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetBase());
-    canvas.DrawText({altitude_rc.left, second_row_y}, buffer);
+    row_renderer.DrawRightSecondRow(canvas, text_altitude_rc, buffer);
   }
 
   if (warning.state != AirspaceWarning::WARNING_INSIDE &&
@@ -376,8 +367,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
       FormatRelativeUserAltitude(delta, buffer + _tcslen(buffer), true);
     }
 
-    canvas.DrawClippedText({paint_rc.left + left0, second_row_y},
-                           text_rc, buffer);
+    row_renderer.DrawSecondRow(canvas, text_rc, buffer);
   }
 
   /* draw the warning state indicator */
