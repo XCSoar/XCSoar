@@ -36,6 +36,7 @@ Copyright_License {
 #include "Version.hpp"
 #include "Inflate.hpp"
 #include "util/ConvertString.hpp"
+#include "util/AllocatedString.hxx"
 #include "Resources.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
@@ -116,11 +117,11 @@ dlgCreditsShowModal(UI::SingleWindow &parent)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  char *authors = InflateToString(AUTHORS_gz, AUTHORS_gz_size);
-  const UTF8ToWideConverter authors2(authors);
+  const auto authors = InflateToString(AUTHORS_gz, AUTHORS_gz_size);
+  const UTF8ToWideConverter authors2(authors.c_str());
 
-  char *license = InflateToString(COPYING_gz, COPYING_gz_size);
-  const UTF8ToWideConverter license2(license);
+  const auto license = InflateToString(COPYING_gz, COPYING_gz_size);
+  const UTF8ToWideConverter license2(license.c_str());
 
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, _("Credits"));
@@ -133,7 +134,4 @@ dlgCreditsShowModal(UI::SingleWindow &parent)
   dialog.FinishPreliminary(&pager);
   dialog.ShowModal();
   dialog.StealWidget();
-
-  delete[] authors;
-  delete[] license;
 }

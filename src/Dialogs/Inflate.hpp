@@ -26,10 +26,13 @@ Copyright_License {
 
 #include <cstddef>
 
+class AllocatedString;
+
 /**
- * Uncompress the given buffer, and return it as a C string.  The
- * caller is responsible for freeing it with delete[].
+ * Uncompress the given buffer, and return it as a C string.  Returns
+ * nullptr on error.
  */
-char *InflateToString(const void *compressed, size_t length);
+AllocatedString
+InflateToString(const void *compressed, size_t length) noexcept;
 
 #endif
