@@ -26,8 +26,7 @@
 #include "Dialogs/Message.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
-#include "Screen/Layout.hpp"
-#include "ui/canvas/Canvas.hpp"
+#include "Renderer/TextRowRenderer.hpp"
 #include "Form/Button.hpp"
 #include "Widget/ListWidget.hpp"
 #include "java/Global.hxx"
@@ -58,6 +57,8 @@ class ScanBluetoothLeWidget final
   UI::Notify le_scan_notify{[this]{ OnLeScanNotification(); }};
 
   std::vector<Item> items;
+
+  TextRowRenderer row_renderer;
 
   Mutex mutex;
   std::set<std::string> addresses;
@@ -147,12 +148,9 @@ void
 ScanBluetoothLeWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  const unsigned margin = Layout::GetTextPadding();
-  const unsigned font_height = look.list.font->GetHeight();
 
-  unsigned row_height = std::max(2u * margin + font_height,
-                                 Layout::GetMaximumControlHeight());
-  CreateList(parent, look, rc, row_height);
+  CreateList(parent, look, rc,
+             row_renderer.CalculateLayout(*look.list.font));
 }
 
 void
@@ -161,13 +159,11 @@ ScanBluetoothLeWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 {
   const auto &item = items[i];
 
-  const unsigned margin = Layout::GetTextPadding();
-
   const char *name = item.name.c_str();
   if (StringIsEmpty(name))
     name = item.address.c_str();
 
-  canvas.DrawText(rc.WithPadding(margin).GetTopLeft(), name);
+  row_renderer.DrawTextRow(canvas, rc, name);
 }
 
 std::string
