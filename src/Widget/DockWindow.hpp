@@ -40,6 +40,10 @@ class DockWindow : public ContainerWindow {
 public:
   DockWindow() = default;
 
+  ~DockWindow() noexcept {
+    DeleteWidget();
+  }
+
   /**
    * Show the specified #Widget.
    *
