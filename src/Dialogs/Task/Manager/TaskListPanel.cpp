@@ -60,7 +60,7 @@ class TaskListPanel final
   OrderedTask **active_task;
   bool *task_modified;
 
-  TaskStore *task_store;
+  TaskStore task_store;
   unsigned serial;
 
   /**
@@ -143,12 +143,12 @@ const OrderedTask *
 TaskListPanel::get_cursor_task()
 {
   const unsigned cursor_index = GetList().GetCursorIndex();
-  if (cursor_index >= task_store->Size())
+  if (cursor_index >= task_store.Size())
     return nullptr;
 
   const OrderedTask *ordered_task =
-    task_store->GetTask(cursor_index,
-                        CommonInterface::GetComputerSettings().task);
+    task_store.GetTask(cursor_index,
+                       CommonInterface::GetComputerSettings().task);
 
   if (ordered_task == nullptr || !ordered_task->CheckTask())
     return nullptr;
@@ -160,26 +160,26 @@ const TCHAR *
 TaskListPanel::get_cursor_name()
 {
   const unsigned cursor_index = GetList().GetCursorIndex();
-  if (cursor_index >= task_store->Size())
+  if (cursor_index >= task_store.Size())
     return _T("");
 
-  return task_store->GetName(cursor_index);
+  return task_store.GetName(cursor_index);
 }
 
 void
 TaskListPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned DrawListIndex) noexcept
 {
-  assert(DrawListIndex <= task_store->Size());
+  assert(DrawListIndex <= task_store.Size());
 
   canvas.DrawText(rc.WithPadding(Layout::GetTextPadding()).GetTopLeft(),
-                  task_store->GetName(DrawListIndex));
+                  task_store.GetName(DrawListIndex));
 }
 
 void
 TaskListPanel::RefreshView()
 {
-  GetList().SetLength(task_store->Size());
+  GetList().SetLength(task_store.Size());
 
   dialog.InvalidateTaskView();
 
@@ -219,7 +219,7 @@ TaskListPanel::LoadTask()
   *active_task = temptask;
 
   const unsigned cursor_index = GetList().GetCursorIndex();
-  (*active_task)->SetName(StaticString<64>(task_store->GetName(cursor_index)));
+  (*active_task)->SetName(StaticString<64>(task_store.GetName(cursor_index)));
 
   RefreshView();
   *task_modified = true;
@@ -231,17 +231,17 @@ void
 TaskListPanel::DeleteTask()
 {
   const unsigned cursor_index = GetList().GetCursorIndex();
-  if (cursor_index >= task_store->Size())
+  if (cursor_index >= task_store.Size())
     return;
 
-  const auto path = task_store->GetPath(cursor_index);
+  const auto path = task_store.GetPath(cursor_index);
   if (StringEndsWithIgnoreCase(path.c_str(), _T(".cup"))) {
     ShowMessageBox(_("Can't delete .CUP files"), _("Error"),
                    MB_OK | MB_ICONEXCLAMATION);
     return;
   }
 
-  const TCHAR *fname = task_store->GetName(cursor_index);
+  const TCHAR *fname = task_store.GetName(cursor_index);
 
   StaticString<1024> text;
   text.Format(_T("%s\n(%s)"), _("Delete the selected task?"), fname);
@@ -251,7 +251,7 @@ TaskListPanel::DeleteTask()
 
   File::Delete(path);
 
-  task_store->Scan(more);
+  task_store.Scan(more);
   RefreshView();
 }
 
@@ -275,10 +275,10 @@ void
 TaskListPanel::RenameTask()
 {
   const unsigned cursor_index = GetList().GetCursorIndex();
-  if (cursor_index >= task_store->Size())
+  if (cursor_index >= task_store.Size())
     return;
 
-  const TCHAR *oldname = task_store->GetName(cursor_index);
+  const TCHAR *oldname = task_store.GetName(cursor_index);
   StaticString<40> newname(oldname);
 
   if (ClearSuffix(newname.buffer(), _T(".cup"))) {
@@ -296,10 +296,10 @@ TaskListPanel::RenameTask()
 
   const auto tasks_path = MakeLocalPath(_T("tasks"));
 
-  File::Rename(task_store->GetPath(cursor_index),
+  File::Rename(task_store.GetPath(cursor_index),
                AllocatedPath::Build(tasks_path, newname));
 
-  task_store->Scan(more);
+  task_store.Scan(more);
   RefreshView();
 }
 
@@ -310,7 +310,7 @@ TaskListPanel::OnMoreClicked()
 
   more_button->SetCaption(more ? _("Less") : _("More"));
 
-  task_store->Scan(more);
+  task_store.Scan(more);
   RefreshView();
 }
 
@@ -322,8 +322,6 @@ TaskListPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   CreateButtons(buttons->GetButtonPanel());
 
-  task_store = new TaskStore();
-
   /* mark the new TaskStore as "dirty" until the data directory really
      gets scanned */
   serial = task_list_serial - 1;
@@ -332,7 +330,6 @@ TaskListPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 void
 TaskListPanel::Unprepare()
 {
-  delete task_store;
   DeleteWindow();
 }
 
@@ -342,7 +339,7 @@ TaskListPanel::Show(const PixelRect &rc)
   if (serial != task_list_serial) {
     serial = task_list_serial;
     // Scan XCSoarData for available tasks
-    task_store->Scan(more);
+    task_store.Scan(more);
   }
 
   dialog.ShowTaskView(get_cursor_task());
