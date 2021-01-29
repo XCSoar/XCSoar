@@ -241,15 +241,13 @@ dlgStartupShowModal()
 
   /* show the dialog */
   const DialogLook &look = UIGlobals::GetDialogLook();
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      UIGlobals::GetDialogLook(), nullptr);
-  TwoWidgets widget(std::make_unique<LogoQuitWidget>(look.button, dialog),
-                    std::make_unique<StartupWidget>(look, dialog, dff));
+  TWidgetDialog<TwoWidgets> dialog(WidgetDialog::Full{},
+                                   UIGlobals::GetMainWindow(),
+                                   UIGlobals::GetDialogLook(),
+                                   nullptr);
 
-  dialog.FinishPreliminary(&widget);
+  dialog.SetWidget(std::make_unique<LogoQuitWidget>(look.button, dialog),
+                   std::make_unique<StartupWidget>(look, dialog, dff));
 
-  const int result = dialog.ShowModal();
-  dialog.StealWidget();
-
-  return result == mrOK;
+  return dialog.ShowModal() == mrOK;
 }
