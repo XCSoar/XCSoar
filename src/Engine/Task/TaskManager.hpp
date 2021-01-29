@@ -63,9 +63,9 @@ class TaskManager:
 
   TaskBehaviour task_behaviour;
 
-  OrderedTask *const ordered_task;
-  GotoTask *const goto_task;
-  AlternateTask *const abort_task;
+  const std::unique_ptr<OrderedTask> ordered_task;
+  const std::unique_ptr<GotoTask> goto_task;
+  const std::unique_ptr<AlternateTask> abort_task;
 
   TaskType mode;
   AbstractTask* active_task;
@@ -83,7 +83,7 @@ public:
    * @return Initialised object
    */
   TaskManager(const TaskBehaviour &task_behaviour, const Waypoints &wps);
-  ~TaskManager();
+  ~TaskManager() noexcept;
 
   void SetTaskEvents(TaskEvents &_task_events);
 
