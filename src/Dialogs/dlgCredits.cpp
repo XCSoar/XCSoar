@@ -126,12 +126,12 @@ dlgCreditsShowModal(UI::SingleWindow &parent)
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, _("Credits"));
 
-  ArrowPagerWidget pager(look.button, dialog.MakeModalResultCallback(mrOK));
-  pager.Add(std::make_unique<CreateWindowWidget>(CreateLogoPage));
-  pager.Add(std::make_unique<LargeTextWidget>(look, authors2));
-  pager.Add(std::make_unique<LargeTextWidget>(look, license2));
+  auto pager = std::make_unique<ArrowPagerWidget>(look.button,
+                                                  dialog.MakeModalResultCallback(mrOK));
+  pager->Add(std::make_unique<CreateWindowWidget>(CreateLogoPage));
+  pager->Add(std::make_unique<LargeTextWidget>(look, authors2));
+  pager->Add(std::make_unique<LargeTextWidget>(look, license2));
 
-  dialog.FinishPreliminary(&pager);
+  dialog.FinishPreliminary(std::move(pager));
   dialog.ShowModal();
-  dialog.StealWidget();
 }
