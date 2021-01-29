@@ -141,20 +141,19 @@ dlgChecklistShowModal()
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, _("Checklist"));
 
-  ArrowPagerWidget widget(look.button,
-                          dialog.MakeModalResultCallback(mrOK));
+  auto pager = std::make_unique<ArrowPagerWidget>(look.button,
+                                                   dialog.MakeModalResultCallback(mrOK));
   for (int i = 0; i < nLists; ++i)
-    widget.Add(std::make_unique<LargeTextWidget>(look, ChecklistText[i]));
-  widget.SetCurrent(current_page);
+    pager->Add(std::make_unique<LargeTextWidget>(look, ChecklistText[i]));
+  pager->SetCurrent(current_page);
+  pager->SetPageFlippedCallback([&dialog, &pager=*pager](){
+    UpdateCaption(dialog, pager.GetCurrentIndex());
+  });
 
-  dialog.FinishPreliminary(&widget);
+  UpdateCaption(dialog, pager->GetCurrentIndex());
 
-  widget.SetPageFlippedCallback([&dialog, &widget](){
-      UpdateCaption(dialog, widget.GetCurrentIndex());
-    });
-  UpdateCaption(dialog, widget.GetCurrentIndex());
-
+  dialog.FinishPreliminary(std::move(pager));
   dialog.ShowModal();
-  dialog.StealWidget();
-  current_page = widget.GetCurrentIndex();
+
+  current_page = ((ArrowPagerWidget &)dialog.GetWidget()).GetCurrentIndex();
 }
