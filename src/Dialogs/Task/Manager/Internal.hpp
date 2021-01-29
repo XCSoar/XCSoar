@@ -40,18 +40,16 @@ class TaskManagerDialog final : public TabWidget {
 
   WndForm &dialog;
 
-  OrderedTask *task;
+  OrderedTask *task = nullptr;
 
-  bool fullscreen;
+  bool fullscreen = false;
 
-  bool modified;
+  bool modified = false;
 
 public:
   explicit TaskManagerDialog(WndForm &_dialog)
     :TabWidget(Orientation::AUTO),
-     dialog(_dialog),
-     task(nullptr),
-     fullscreen(false), modified(false) {}
+     dialog(_dialog) {}
 
   virtual ~TaskManagerDialog();
 
