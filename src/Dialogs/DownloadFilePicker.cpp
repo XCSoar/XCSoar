@@ -27,10 +27,9 @@ Copyright_License {
 #include "Message.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
+#include "Renderer/TextRowRenderer.hpp"
 #include "Form/Button.hpp"
 #include "Widget/ListWidget.hpp"
-#include "ui/canvas/Canvas.hpp"
-#include "Screen/Layout.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "system/Path.hpp"
@@ -150,6 +149,8 @@ class DownloadFilePickerWidget final
 
   std::vector<AvailableFile> items;
 
+  TextRowRenderer row_renderer;
+
   /**
    * This mutex protects the attribute "repository_modified".
    */
@@ -218,12 +219,9 @@ void
 DownloadFilePickerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  const unsigned margin = Layout::GetTextPadding();
-  font_height = look.list.font->GetHeight();
 
-  unsigned row_height = std::max(3u * margin + 2u * font_height,
-                                 Layout::GetMaximumControlHeight());
-  CreateList(parent, look, rc, row_height);
+  CreateList(parent, look, rc,
+             row_renderer.CalculateLayout(*look.list.font));
   RefreshList();
 
   Net::DownloadManager::AddListener(*this);
@@ -280,8 +278,7 @@ DownloadFilePickerWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   const auto &file = items[i];
 
   const UTF8ToWideConverter name(file.GetName());
-  canvas.DrawText(rc.WithPadding(Layout::GetTextPadding()).GetTopLeft(),
-                  name.c_str());
+  row_renderer.DrawTextRow(canvas, rc, name);
 }
 
 void
