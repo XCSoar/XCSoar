@@ -37,8 +37,6 @@ Copyright_License {
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Look/MapLook.hpp"
 #include "Look/DialogLook.hpp"
-#include "ui/canvas/Canvas.hpp"
-#include "Screen/Layout.hpp"
 #include "util/Compiler.h"
 #include "util/Macros.hpp"
 #include "Units/Units.hpp"
@@ -303,8 +301,7 @@ AirspaceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   if (items.empty()) {
     assert(i == 0);
 
-    canvas.DrawText(rc.WithPadding(Layout::GetTextPadding()).GetTopLeft(),
-                    _("No Match!"));
+    row_renderer.DrawFirstRow(canvas, rc, _("No Match!"));
     return;
   }
 
