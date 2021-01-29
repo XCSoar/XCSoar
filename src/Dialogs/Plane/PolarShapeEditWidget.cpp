@@ -42,6 +42,8 @@ PolarShapeEditWidget::PolarShapeEditWidget(const PolarShape &_shape,
                                            DataFieldListener *_listener)
   :shape(_shape), listener(_listener) {}
 
+PolarShapeEditWidget::~PolarShapeEditWidget() noexcept = default;
+
 static void
 LoadValue(WndProperty &e, double value, UnitGroup unit_group)
 {
@@ -135,7 +137,7 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
   style.TabStop();
 
   PixelRect label_rc(0, 0, label_width, row_height);
-  v_label = new WndFrame(panel, look, label_rc);
+  v_label = std::make_unique<WndFrame>(panel, look, label_rc);
   v_label->SetText(v_text);
 
   PixelRect rc;
@@ -145,8 +147,8 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
   rc.bottom = row_height;
   for (unsigned i = 0; i < ARRAY_SIZE(points);
        ++i, rc.left += edit_width, rc.right += edit_width) {
-    points[i].v = new WndProperty(panel, look, _T(""),
-                                  rc, 0, style);
+    points[i].v = std::make_unique<WndProperty>(panel, look, _T(""),
+                                                rc, 0, style);
     DataFieldFloat *df = new DataFieldFloat(_T("%.0f"), _T("%.0f %s"),
                                             0, 300, 0, 1, false,
                                             listener);
@@ -155,7 +157,7 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
 
   label_rc.top += row_height;
   label_rc.bottom += row_height;
-  w_label = new WndFrame(panel, look, label_rc);
+  w_label = std::make_unique<WndFrame>(panel, look, label_rc);
   w_label->SetText(w_text);
 
   rc.left = label_width;
@@ -181,8 +183,8 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
 
   for (unsigned i = 0; i < ARRAY_SIZE(points);
        ++i, rc.left += edit_width, rc.right += edit_width) {
-    points[i].w = new WndProperty(panel, look, _T(""),
-                                  rc, 0, style);
+    points[i].w = std::make_unique<WndProperty>(panel, look, _T(""),
+                                                rc, 0, style);
     DataFieldFloat *df = new DataFieldFloat(_T("%.2f"), _T("%.2f %s"),
                                             min, 0, 0, step, false,
                                             listener);
@@ -192,17 +194,6 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
 
   for (unsigned i = 0; i < ARRAY_SIZE(points); ++i)
     LoadPoint(points[i], shape[i]);
-}
-
-void
-PolarShapeEditWidget::Unprepare()
-{
-  for (auto &i : points) {
-    delete i.v;
-    delete i.w;
-  }
-
-  PanelWidget::Unprepare();
 }
 
 bool
