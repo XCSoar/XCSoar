@@ -693,16 +693,14 @@ dlgAnalysisShowModal(SingleWindow &parent, const Look &look,
                      const RasterTerrain *terrain,
                      AnalysisPage _page)
 {
-  WidgetDialog dialog(WidgetDialog::Full{}, parent,
-                      look.dialog, _("Analysis"));
-  AnalysisWidget analysis(dialog, look,
-                          airspaces, terrain,
-                          blackboard, glide_computer);
-  dialog.FinishPreliminary(&analysis);
+  TWidgetDialog<AnalysisWidget> dialog(WidgetDialog::Full{}, parent,
+                                       look.dialog, _("Analysis"));
+  dialog.SetWidget(dialog, look,
+                   airspaces, terrain,
+                   blackboard, glide_computer);
 
   if (_page != AnalysisPage::COUNT)
     page = (AnalysisPage)_page;
 
   dialog.ShowModal();
-  dialog.StealWidget();
 }
