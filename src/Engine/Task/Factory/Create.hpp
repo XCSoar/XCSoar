@@ -25,15 +25,15 @@ Copyright_License {
 #define XCSOAR_TASK_FACTORY_CREATE_HPP
 
 #include "TaskFactoryType.hpp"
-#include "util/Compiler.h"
+
+#include <memory>
 
 class AbstractTaskFactory;
 class OrderedTask;
 struct TaskBehaviour;
 
-gcc_malloc
-AbstractTaskFactory *
+std::unique_ptr<AbstractTaskFactory>
 CreateTaskFactory(TaskFactoryType type, OrderedTask &task,
-                  const TaskBehaviour &task_behaviour);
+                  const TaskBehaviour &task_behaviour) noexcept;
 
 #endif

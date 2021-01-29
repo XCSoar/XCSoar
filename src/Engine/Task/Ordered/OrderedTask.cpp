@@ -98,8 +98,6 @@ OrderedTask::~OrderedTask()
 {
   RemoveAllPoints();
 
-  delete active_factory;
-
   delete dijkstra_min;
   delete dijkstra_max;
 }
@@ -1377,7 +1375,6 @@ OrderedTask::SetFactory(const TaskFactoryType the_factory)
   }
   factory_mode = the_factory;
 
-  delete active_factory;
   active_factory = CreateTaskFactory(factory_mode, *this, task_behaviour);
   active_factory->UpdateOrderedTaskSettings(ordered_settings);
 

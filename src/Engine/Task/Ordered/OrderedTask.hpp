@@ -31,6 +31,7 @@
 #include "util/StaticString.hxx"
 
 #include <cassert>
+#include <memory>
 #include <vector>
 
 class SearchPoint;
@@ -80,7 +81,7 @@ private:
   GeoPoint last_min_location;
 
   TaskFactoryType factory_mode;
-  AbstractTaskFactory *active_factory = nullptr;
+  std::unique_ptr<AbstractTaskFactory> active_factory;
   OrderedTaskSettings ordered_settings;
   SmartTaskAdvance task_advance;
   TaskDijkstraMin *dijkstra_min = nullptr;
