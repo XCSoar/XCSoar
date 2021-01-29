@@ -27,6 +27,8 @@ Copyright_License {
 #include "Point.hpp"
 #include "Size.hpp"
 
+#include <utility>
+
 #ifdef USE_WINUSER
 #include <windows.h>
 #endif
@@ -200,6 +202,18 @@ struct PixelRect {
   constexpr PixelPoint CenteredTopLeft(PixelSize size) const noexcept {
     return PixelPoint((left + right - (int)size.width) / 2,
                       (top + bottom - (int)size.height) / 2);
+  }
+
+  constexpr std::pair<PixelRect, PixelRect> VerticalSplit(int x) const noexcept {
+    PixelRect a = *this, b = *this;
+    a.right = b.left = x;
+    return {a, b};
+  }
+
+  constexpr std::pair<PixelRect, PixelRect> HorizontalSplit(int y) const noexcept {
+    PixelRect a = *this, b = *this;
+    a.bottom = b.top = y;
+    return {a, b};
   }
 
 #ifdef USE_WINUSER
