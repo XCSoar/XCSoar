@@ -32,6 +32,7 @@ Copyright_License {
 #include "Form/Draw.hpp"
 #include "Form/Button.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
+#include "Renderer/TextRowRenderer.hpp"
 #include "Widget/DockWindow.hpp"
 #include "Widget/Widget.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
@@ -66,9 +67,15 @@ class WaypointExternalFileListHandler final
   : public ListItemRenderer, public ListCursorHandler {
   const WaypointPtr waypoint;
 
+  TextRowRenderer row_renderer;
+
 public:
   explicit WaypointExternalFileListHandler(WaypointPtr _waypoint)
     :waypoint(std::move(_waypoint)) {}
+
+  auto &GetRowRenderer() noexcept {
+    return row_renderer;
+  }
 
   /* virtual methods from class ListItemRenderer */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
@@ -97,8 +104,7 @@ WaypointExternalFileListHandler::OnPaintItem(Canvas &canvas,
 {
   auto file = waypoint->files_external.begin();
   std::advance(file, i);
-  canvas.DrawText(paint_rc.WithPadding(Layout::GetTextPadding()).GetTopLeft(),
-                  file->c_str());
+  row_renderer.DrawTextRow(canvas, paint_rc, file->c_str());
 }
 #endif
 
@@ -118,7 +124,11 @@ class WaypointDetailsWidget final
     PixelRect file_list;
 #endif
 
-    explicit Layout(const PixelRect &rc, const Waypoint &waypoint);
+    explicit Layout(const PixelRect &rc,
+#ifdef HAVE_RUN_FILE
+                    TextRowRenderer &row_renderer,
+#endif
+                    const Waypoint &waypoint) noexcept;
   };
 
   WidgetDialog &dialog;
@@ -189,7 +199,11 @@ public:
   void Unprepare() override;
 
   void Show(const PixelRect &rc) override {
-    const Layout layout(rc, *waypoint);
+    const Layout layout(rc,
+#ifdef HAVE_RUN_FILE
+                        file_list_handler.GetRowRenderer(),
+#endif
+                        *waypoint);
 
     if (task_manager != nullptr)
       goto_button.MoveAndShow(layout.goto_button);
@@ -243,7 +257,11 @@ public:
   }
 
   void Move(const PixelRect &rc) override {
-    const Layout layout(rc, *waypoint);
+    const Layout layout(rc,
+#ifdef HAVE_RUN_FILE
+                        file_list_handler.GetRowRenderer(),
+#endif
+                        *waypoint);
 
     if (task_manager != nullptr)
       goto_button.Move(layout.goto_button);
@@ -283,7 +301,10 @@ public:
 };
 
 WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
-                                      const Waypoint &waypoint)
+#ifdef HAVE_RUN_FILE
+                                      TextRowRenderer &row_renderer,
+#endif
+                                      const Waypoint &waypoint) noexcept
 {
   const unsigned width = rc.GetWidth(), height = rc.GetHeight();
   const unsigned button_height = ::Layout::GetMaximumControlHeight();
@@ -356,7 +377,7 @@ WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
   const unsigned num_files = std::distance(waypoint.files_external.begin(),
                                            waypoint.files_external.end());
   if (num_files > 0) {
-    file_list_item_height = ::Layout::Scale(18);
+    file_list_item_height = row_renderer.CalculateLayout(*UIGlobals::GetDialogLook().list.font);
     file_list = details_text;
 
     unsigned list_height = file_list_item_height * std::min(num_files, 5u);
@@ -383,7 +404,11 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     }
   }
 
-  const Layout layout(rc, *waypoint);
+  const Layout layout(rc,
+#ifdef HAVE_RUN_FILE
+                      file_list_handler.GetRowRenderer(),
+#endif
+                      *waypoint);
 
   WindowStyle dock_style;
   dock_style.Hide();
