@@ -132,7 +132,6 @@ public:
 
   void Unprepare() override {
     device.SetMonitor(nullptr);
-    bridge.reset();
   }
 };
 

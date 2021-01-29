@@ -86,7 +86,6 @@ public:
 private:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Unprepare() override;
 
   /* virtual methods from class ListItemRenderer */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
@@ -154,12 +153,6 @@ ScanBluetoothLeWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   unsigned row_height = std::max(2u * margin + font_height,
                                  Layout::GetMaximumControlHeight());
   CreateList(parent, look, rc, row_height);
-}
-
-void
-ScanBluetoothLeWidget::Unprepare()
-{
-  le_scan_notify.ClearNotification();
 }
 
 void

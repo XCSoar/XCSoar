@@ -339,12 +339,8 @@ void
 ManagedFileListWidget::Unprepare()
 {
 #ifdef HAVE_DOWNLOAD_MANAGER
-  refresh_download_timer.Cancel();
-
   if (Net::DownloadManager::IsAvailable())
     Net::DownloadManager::RemoveListener(*this);
-
-  download_notify.ClearNotification();
 #endif
 }
 

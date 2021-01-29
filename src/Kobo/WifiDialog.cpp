@@ -85,11 +85,6 @@ public:
     update_timer.Schedule(std::chrono::seconds(1));
   }
 
-  virtual void Unprepare() override {
-    update_timer.Cancel();
-    DeleteWindow();
-  }
-
   /* virtual methods from class ListItemRenderer */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
                    unsigned idx) noexcept override;

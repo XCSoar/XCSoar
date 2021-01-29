@@ -161,13 +161,6 @@ GaugeFLARM::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-GaugeFLARM::Unprepare()
-{
-  DeleteWindow();
-  OverlappedWidget::Unprepare();
-}
-
-void
 GaugeFLARM::Show(const PixelRect &rc)
 {
   Update(blackboard.Basic());
