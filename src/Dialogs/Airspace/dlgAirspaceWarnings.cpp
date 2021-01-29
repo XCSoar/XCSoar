@@ -331,12 +331,13 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
 
   // Dynamic columns scaling - "name" column is flexible, altitude and state
   // columns are fixed-width.
-  const int left0 = padding,
-    left2 = paint_rc.right - padding - (status_width + 2 * padding),
-    left1 = left2 - padding - altitude_width;
+  auto [text_altitude_rc, status_rc] =
+    paint_rc.VerticalSplit(paint_rc.right - (2 * padding + status_width));
+  auto [text_rc, altitude_rc] =
+    text_altitude_rc.VerticalSplit(text_altitude_rc.right - (padding + altitude_width));
+  text_rc.right -= padding;
 
-  PixelRect rc_text_clip = paint_rc;
-  rc_text_clip.right = left1 - padding;
+  const int left0 = padding;
 
   if (!warning.ack_expired)
     canvas.SetTextColor(COLOR_GRAY);
@@ -347,13 +348,13 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
                  AirspaceFormatter::GetClass(airspace));
 
     canvas.DrawClippedText({paint_rc.left + left0, first_row_y},
-                           rc_text_clip, buffer);
+                           text_rc, buffer);
 
     AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetTop());
-    canvas.DrawText({paint_rc.left + left1, first_row_y}, buffer);
+    canvas.DrawText({altitude_rc.left, first_row_y}, buffer);
 
     AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetBase());
-    canvas.DrawText({paint_rc.left + left1, second_row_y}, buffer);
+    canvas.DrawText({altitude_rc.left, second_row_y}, buffer);
   }
 
   if (warning.state != AirspaceWarning::WARNING_INSIDE &&
@@ -376,7 +377,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
     }
 
     canvas.DrawClippedText({paint_rc.left + left0, second_row_y},
-                           rc_text_clip, buffer);
+                           text_rc, buffer);
   }
 
   /* draw the warning state indicator */
@@ -400,12 +401,10 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
 
   if (state_color != COLOR_WHITE) {
     /* colored background */
-    PixelRect rc;
-
-    rc.left = paint_rc.left + left2;
-    rc.top = paint_rc.top + padding;
-    rc.right = paint_rc.right - padding;
-    rc.bottom = paint_rc.bottom - padding;
+    PixelRect rc = status_rc;
+    rc.top += padding;
+    rc.right -= padding;
+    rc.bottom -= padding;
 
     canvas.DrawFilledRectangle(rc, state_color);
 
@@ -417,9 +416,7 @@ AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
 
   if (state_text != NULL) {
     // -- status text will be centered inside its table cell:
-    canvas.DrawText({paint_rc.left + left2 + (int)padding + (int)(status_width / 2) - (int)(canvas.CalcTextWidth(state_text) / 2),
-        (paint_rc.bottom + paint_rc.top - (int)state_text_size.height) / 2},
-                    state_text);
+    canvas.DrawText(status_rc.CenteredTopLeft(state_text_size), state_text);
   }
 }
 
