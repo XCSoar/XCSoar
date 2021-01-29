@@ -60,11 +60,12 @@ dlgSimulatorPromptShowModal()
 {
 #ifdef SIMULATOR_AVAILABLE
   const DialogLook &look = UIGlobals::GetDialogLook();
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look, nullptr);
+  TWidgetDialog<SimulatorPromptWidget> dialog(WidgetDialog::Full{},
+                                              UIGlobals::GetMainWindow(),
+                                              look, nullptr);
 
   SimulatorPromptResult result = SPR_QUIT;
-  SimulatorPromptWidget widget(look, [&](SimulatorPromptWindow::Result r){
+  dialog.SetWidget(look, [&](SimulatorPromptWindow::Result r){
     switch (r) {
     case SimulatorPromptWindow::Result::FLY:
       result = SPR_FLY;
@@ -82,10 +83,7 @@ dlgSimulatorPromptShowModal()
     dialog.SetModalResult(mrOK);
   });
 
-  dialog.FinishPreliminary(&widget);
-
   dialog.ShowModal();
-  dialog.StealWidget();
 
   return result;
 #else
