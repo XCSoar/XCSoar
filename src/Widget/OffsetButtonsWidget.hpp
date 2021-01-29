@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Widget.hpp"
 
+#include <array>
+
 #include <tchar.h>
 
 struct ButtonLook;
@@ -38,7 +40,7 @@ class OffsetButtonsWidget : public NullWidget {
   const ButtonLook &look;
   const TCHAR *const format;
   const double offsets[4];
-  Button *buttons[4];
+  std::array<Button *, 4> buttons;
 
 public:
   OffsetButtonsWidget(const ButtonLook &_look, const TCHAR *_format,

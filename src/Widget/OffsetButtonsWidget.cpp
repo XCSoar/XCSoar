@@ -70,7 +70,7 @@ OffsetButtonsWidget::Prepare(ContainerWindow &parent,
   style.TabStop();
   style.Hide();
 
-  for (unsigned i = 0; i < ARRAY_SIZE(buttons); ++i) {
+  for (unsigned i = 0; i < buttons.size(); ++i) {
     TCHAR caption[16];
     _stprintf(caption, format, (double)offsets[i]);
     buttons[i] = new Button(parent, look, caption, rc[i], style,
@@ -83,8 +83,8 @@ OffsetButtonsWidget::Prepare(ContainerWindow &parent,
 void
 OffsetButtonsWidget::Unprepare()
 {
-  for (unsigned i = 0; i < ARRAY_SIZE(offsets); ++i)
-    delete buttons[i];
+  for (auto *i : buttons)
+    delete i;
 }
 
 void
@@ -92,15 +92,15 @@ OffsetButtonsWidget::Show(const PixelRect &total_rc)
 {
   const auto rc = LayoutOffsetButtons(total_rc);
 
-  for (unsigned i = 0; i < ARRAY_SIZE(buttons); ++i)
+  for (unsigned i = 0; i < buttons.size(); ++i)
     buttons[i]->MoveAndShow(rc[i]);
 }
 
 void
 OffsetButtonsWidget::Hide()
 {
-  for (unsigned i = 0; i < ARRAY_SIZE(buttons); ++i)
-    buttons[i]->Hide();
+  for (auto *i : buttons)
+    i->Hide();
 }
 
 void
@@ -108,7 +108,7 @@ OffsetButtonsWidget::Move(const PixelRect &total_rc)
 {
   const auto rc = LayoutOffsetButtons(total_rc);
 
-  for (unsigned i = 0; i < ARRAY_SIZE(buttons); ++i)
+  for (unsigned i = 0; i < buttons.size(); ++i)
     buttons[i]->Move(rc[i]);
 }
 
