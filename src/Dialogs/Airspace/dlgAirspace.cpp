@@ -67,10 +67,6 @@ public:
     list.SetLength(AIRSPACECLASSCOUNT);
   }
 
-  virtual void Unprepare() override {
-    DeleteWindow();
-  }
-
   /* virtual methods from class ListItemRenderer */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
                    unsigned idx) noexcept override;

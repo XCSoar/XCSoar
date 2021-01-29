@@ -238,8 +238,6 @@ DownloadFilePickerWidget::Unprepare()
   Net::DownloadManager::RemoveListener(*this);
 
   download_complete_notify.ClearNotification();
-
-  DeleteWindow();
 }
 
 void

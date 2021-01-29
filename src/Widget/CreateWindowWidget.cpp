@@ -32,9 +32,3 @@ CreateWindowWidget::Prepare(ContainerWindow &parent,
   style.Hide();
   SetWindow(create(parent, rc, style));
 }
-
-void
-CreateWindowWidget::Unprepare()
-{
-  DeleteWindow();
-}

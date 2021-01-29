@@ -40,7 +40,6 @@ protected:
 public:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Unprepare() override;
 
 protected:
   /* virtual methods from ListItemRenderer */

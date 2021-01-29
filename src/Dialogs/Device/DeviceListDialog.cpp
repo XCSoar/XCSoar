@@ -193,9 +193,6 @@ protected:
 public:
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual void Unprepare() override {
-    DeleteWindow();
-  }
 
   virtual void Show(const PixelRect &rc) override {
     ListWidget::Show(rc);

@@ -93,7 +93,6 @@ public:
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
-  virtual void Unprepare() override;
 
 protected:
   /* virtual methods from ListItemRenderer */
@@ -127,12 +126,6 @@ NOAAListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
              row_renderer.CalculateLayout(*look.list.font_bold,
                                           look.small_font));
   UpdateList();
-}
-
-void
-NOAAListWidget::Unprepare()
-{
-  DeleteWindow();
 }
 
 void

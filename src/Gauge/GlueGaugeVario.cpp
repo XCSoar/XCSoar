@@ -37,12 +37,6 @@ GlueGaugeVario::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-GlueGaugeVario::Unprepare()
-{
-  DeleteWindow();
-}
-
-void
 GlueGaugeVario::Show(const PixelRect &rc)
 {
   WindowWidget::Show(rc);

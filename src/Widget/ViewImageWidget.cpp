@@ -62,12 +62,6 @@ ViewImageWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-ViewImageWidget::Unprepare()
-{
-  DeleteWindow();
-}
-
-void
 ViewImageWindow::OnPaint(Canvas &canvas)
 {
   canvas.ClearWhite();

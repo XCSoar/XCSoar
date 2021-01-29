@@ -90,12 +90,6 @@ HorizonWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-HorizonWidget::Unprepare()
-{
-  DeleteWindow();
-}
-
-void
 HorizonWidget::Show(const PixelRect &rc)
 {
   Update(CommonInterface::Basic());

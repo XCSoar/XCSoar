@@ -45,7 +45,6 @@ public:
     :blackboard(_blackboard), look(_look) {}
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual void Unprepare() override;
   virtual void Show(const PixelRect &rc) override;
   virtual void Hide() override;
   virtual bool SetFocus() override;

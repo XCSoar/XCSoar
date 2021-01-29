@@ -34,7 +34,6 @@ class HorizonWidget final : public WindowWidget,
 public:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Unprepare() override;
   void Show(const PixelRect &rc) override;
   void Hide() override;
 

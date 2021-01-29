@@ -76,10 +76,4 @@ TextWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
                                        rc, style));
 }
 
-void
-TextWidget::Unprepare()
-{
-  DeleteWindow();
-}
-
 

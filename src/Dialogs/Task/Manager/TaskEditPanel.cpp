@@ -216,10 +216,6 @@ public:
   /* virtual methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
 
-  void Unprepare() override {
-    DeleteWindow();
-  }
-
   void ReClick() override;
   void Show(const PixelRect &rc) override;
 

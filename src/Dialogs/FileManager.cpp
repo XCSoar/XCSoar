@@ -346,8 +346,6 @@ ManagedFileListWidget::Unprepare()
 
   download_notify.ClearNotification();
 #endif
-
-  DeleteWindow();
 }
 
 int

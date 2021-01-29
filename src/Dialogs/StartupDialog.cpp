@@ -95,11 +95,6 @@ public:
     logo.Create(parent, rc, style);
   }
 
-  virtual void Unprepare() override {
-    logo.Destroy();
-    quit.Destroy();
-  }
-
   virtual void Show(const PixelRect &rc) override {
     quit.MoveAndShow(GetButtonRect(rc));
     logo.MoveAndShow(rc);

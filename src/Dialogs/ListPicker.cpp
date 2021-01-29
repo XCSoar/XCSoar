@@ -105,10 +105,6 @@ public:
     list.SetCursorIndex(initial_value);
   }
 
-  virtual void Unprepare() override {
-    DeleteWindow();
-  }
-
   virtual void Show(const PixelRect &rc) override {
     ListWidget::Show(rc);
 

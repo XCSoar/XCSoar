@@ -39,10 +39,4 @@ PanelWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
                                            style));
 }
 
-void
-PanelWidget::Unprepare()
-{
-  DeleteWindow();
-}
-
 

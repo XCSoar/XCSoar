@@ -152,13 +152,6 @@ GaugeThermalAssistant::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-GaugeThermalAssistant::Unprepare()
-{
-  DeleteWindow();
-  OverlappedWidget::Unprepare();
-}
-
-void
 GaugeThermalAssistant::Show(const PixelRect &rc)
 {
   Update(blackboard.Basic().attitude, blackboard.Calculated());

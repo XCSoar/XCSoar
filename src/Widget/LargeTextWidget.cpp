@@ -49,12 +49,6 @@ LargeTextWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   SetWindow(std::move(w));
 }
 
-void
-LargeTextWidget::Unprepare()
-{
-  DeleteWindow();
-}
-
 bool
 LargeTextWidget::KeyPress(unsigned key_code)
 {

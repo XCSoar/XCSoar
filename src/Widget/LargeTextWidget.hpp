@@ -45,7 +45,6 @@ public:
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Unprepare() override;
   bool KeyPress(unsigned key_code) override;
 };
 

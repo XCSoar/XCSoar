@@ -101,7 +101,6 @@ private:
 public:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Unprepare() override;
 
 protected:
   /* virtual methods from ListItemRenderer */
@@ -158,12 +157,6 @@ PlaneListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
              row_renderer.CalculateLayout(*look.list.font_bold,
                                           look.small_font));
   UpdateList();
-}
-
-void
-PlaneListWidget::Unprepare()
-{
-  DeleteWindow();
 }
 
 void

@@ -43,7 +43,6 @@ public:
   PixelSize GetMaximumSize() const override;
 
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Unprepare() override;
 };
 
 #endif

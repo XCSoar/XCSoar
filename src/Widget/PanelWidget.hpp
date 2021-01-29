@@ -29,13 +29,12 @@ Copyright_License {
 /**
  * Class to be inherited.
  * Window widget with a panel the size of the rect passed to Prepare().
- * Panel is automatically created by Prepare() and deleted in Unprepare().
+ * Panel is automatically created by Prepare().
  * Panel is accessed via WindowWidget's GetWindow().
  */
 class PanelWidget : public WindowWidget {
 public:
   void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  void Unprepare();
 };
 
 #endif

@@ -106,7 +106,6 @@ public:
   void OnMoreClicked();
 
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Unprepare() override;
   void Show(const PixelRect &rc) override;
   void Hide() override;
 
@@ -325,12 +324,6 @@ TaskListPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   /* mark the new TaskStore as "dirty" until the data directory really
      gets scanned */
   serial = task_list_serial - 1;
-}
-
-void
-TaskListPanel::Unprepare()
-{
-  DeleteWindow();
 }
 
 void

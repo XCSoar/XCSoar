@@ -152,10 +152,6 @@ public:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
 
-  void Unprepare() override {
-    properties_dock.DeleteWidget();
-  }
-
   bool Save(bool &changed) override {
     ReadValues();
     changed = task_modified;

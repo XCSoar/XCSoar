@@ -160,10 +160,6 @@ public:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
 
-  void Unprepare() override {
-    DeleteWindow();
-  }
-
   void Show(const PixelRect &rc) override {
     ListWidget::Show(rc);
     UpdateList();

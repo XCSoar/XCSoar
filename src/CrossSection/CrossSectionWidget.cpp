@@ -73,12 +73,6 @@ CrossSectionWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-CrossSectionWidget::Unprepare()
-{
-  DeleteWindow();
-}
-
-void
 CrossSectionWidget::Show(const PixelRect &rc)
 {
   Update(CommonInterface::Basic(), CommonInterface::Calculated(),

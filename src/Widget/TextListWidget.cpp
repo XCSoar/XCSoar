@@ -36,14 +36,6 @@ TextListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-TextListWidget::Unprepare()
-{
-  DeleteWindow();
-
-  ListWidget::Unprepare();
-}
-
-void
 TextListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                             unsigned i) noexcept
 {

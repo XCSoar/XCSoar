@@ -119,7 +119,6 @@ public:
 protected:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  void Unprepare() override;
   bool SetFocus() override;
   bool KeyPress(unsigned key_code) override;
 };
@@ -181,12 +180,6 @@ QuickMenu::Prepare(ContainerWindow &parent, const PixelRect &rc)
   grid_view->RefreshLayout();
   SetWindow(std::move(grid_view));
   UpdateCaption();
-}
-
-void
-QuickMenu::Unprepare()
-{
-  buttons.clear();
 }
 
 void

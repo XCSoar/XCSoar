@@ -160,8 +160,6 @@ void
 ScanBluetoothLeWidget::Unprepare()
 {
   le_scan_notify.ClearNotification();
-
-  DeleteWindow();
 }
 
 void
