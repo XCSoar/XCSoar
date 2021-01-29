@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "PagesConfigPanel.hpp"
-#include "Screen/Layout.hpp"
-#include "ui/canvas/Canvas.hpp"
+#include "Look/DialogLook.hpp"
+#include "Renderer/TextRowRenderer.hpp"
 #include "Form/Button.hpp"
 #include "Form/ButtonPanel.hpp"
 #include "Form/DataField/Enum.hpp"
@@ -83,6 +83,8 @@ private:
 class PageListWidget
   : public ListWidget,
     public PageLayoutEditWidget::Listener {
+
+  TextRowRenderer row_renderer;
 
   PageLayoutEditWidget *editor;
 
@@ -299,10 +301,13 @@ PageLayoutEditWidget::OnModified(DataField &df)
 void
 PageListWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
 {
+  const DialogLook &look = UIGlobals::GetDialogLook();
+
   settings = CommonInterface::GetUISettings().pages;
 
-  CreateList(parent, UIGlobals::GetDialogLook(),
-             rc, Layout::Scale(18)).SetLength(settings.n_pages);
+  CreateList(parent, UIGlobals::GetDialogLook(), rc,
+             row_renderer.CalculateLayout(*look.list.font))
+    .SetLength(settings.n_pages);
 
   CreateButtons(buttons->GetButtonPanel());
   UpdateButtons();
@@ -402,8 +407,7 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     gcc_unreachable();
   }
 
-  canvas.DrawText(rc.WithPadding(Layout::GetTextPadding()).GetTopLeft(),
-                  buffer);
+  row_renderer.DrawTextRow(canvas, rc, buffer);
 }
 
 void
