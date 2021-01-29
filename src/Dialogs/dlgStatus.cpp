@@ -57,15 +57,15 @@ dlgStatusShowModal(int start_page)
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, _("Status"));
 
-  TabWidget widget(TabWidget::Orientation::AUTO,
-                   std::make_unique<ButtonWidget>(look.button, _("Close"),
-                                                  dialog.MakeModalResultCallback(mrOK)));
+  dialog.FinishPreliminary(std::make_unique<TabWidget>(TabWidget::Orientation::AUTO,
+                                                       std::make_unique<ButtonWidget>(look.button, _("Close"),
+                                                                                      dialog.MakeModalResultCallback(mrOK))));
+  dialog.PrepareWidget();
+  auto &widget = (TabWidget &)dialog.GetWidget();
+
   widget.SetPageFlippedCallback([&dialog, &widget]() {
       SetTitle(dialog, widget);
     });
-
-  dialog.FinishPreliminary(&widget);
-  dialog.PrepareWidget();
 
   const NMEAInfo &basic = CommonInterface::Basic();
   auto nearest_waypoint = basic.location_available
@@ -112,7 +112,6 @@ dlgStatusShowModal(int start_page)
   SetTitle(dialog, widget);
 
   dialog.ShowModal();
-  dialog.StealWidget();
 
   /* save page number for next time this dialog is opened */
   status_page = widget.GetCurrentIndex();
