@@ -86,12 +86,8 @@ GetCylinderRadiusOrMinusOne(const ObservationZoneClient &p)
 
 OrderedTask::OrderedTask(const TaskBehaviour &tb)
   :AbstractTask(TaskType::ORDERED, tb),
-   taskpoint_start(nullptr),
-   taskpoint_finish(nullptr),
    factory_mode(tb.task_type_default),
-   active_factory(nullptr),
-   ordered_settings(tb.ordered_defaults),
-   dijkstra_min(nullptr), dijkstra_max(nullptr)
+   ordered_settings(tb.ordered_defaults)
 {
   ClearName();
   active_factory = CreateTaskFactory(factory_mode, *this, task_behaviour);

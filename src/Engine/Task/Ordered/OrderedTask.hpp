@@ -72,19 +72,19 @@ private:
   OrderedTaskPointVector task_points;
   OrderedTaskPointVector optional_start_points;
 
-  StartPoint *taskpoint_start;
-  FinishPoint *taskpoint_finish;
+  StartPoint *taskpoint_start = nullptr;
+  FinishPoint *taskpoint_finish = nullptr;
 
   TaskProjection task_projection;
 
   GeoPoint last_min_location;
 
   TaskFactoryType factory_mode;
-  AbstractTaskFactory* active_factory;
+  AbstractTaskFactory *active_factory = nullptr;
   OrderedTaskSettings ordered_settings;
   SmartTaskAdvance task_advance;
-  TaskDijkstraMin *dijkstra_min;
-  TaskDijkstraMax *dijkstra_max;
+  TaskDijkstraMin *dijkstra_min = nullptr;
+  TaskDijkstraMax *dijkstra_max = nullptr;
 
   StaticString<64> name;
 
