@@ -567,36 +567,138 @@ FlarmTrafficControl::OpenDetails()
   dlgFlarmTrafficDetailsShowModal(traffic->id);
 }
 
+static Button
+MakeSymbolButton(ContainerWindow &parent, const ButtonLook &look,
+                const TCHAR *caption,
+                const PixelRect &rc,
+                Button::Callback callback) noexcept
+{
+  return Button(parent, rc, WindowStyle(),
+                std::make_unique<SymbolButtonRenderer>(look, caption),
+                std::move(callback));
+}
+
+struct TrafficWidget::Windows {
+  Button zoom_in_button, zoom_out_button;
+  Button previous_item_button, next_item_button;
+  Button details_button;
+  Button close_button;
+
+  FlarmTrafficControl view;
+
+  Windows(TrafficWidget &widget, ContainerWindow &parent, const PixelRect &r,
+          const ButtonLook &button_look, const FlarmTrafficLook &flarm_look)
+    :zoom_in_button(MakeSymbolButton(parent, button_look, _T("+"), r,
+                                     [&widget](){ widget.ZoomIn(); })),
+     zoom_out_button(MakeSymbolButton(parent, button_look,
+                                    _T("-"), r,
+                                      [&widget](){ widget.ZoomOut(); })),
+     previous_item_button(MakeSymbolButton(parent, button_look,
+                                           _T("<"), r,
+                                           [&widget](){ widget.PreviousTarget(); })),
+     next_item_button(MakeSymbolButton(parent, button_look,
+                                       _T(">"), r,
+                                       [&widget](){ widget.NextTarget(); })),
+     details_button(parent, button_look,
+                    _("Details"), r, WindowStyle(),
+                    [&widget](){ widget.OpenDetails(); }),
+     close_button(parent, button_look,
+                  _("Close"), r, WindowStyle(),
+                  [](){ PageActions::Restore(); }),
+     view(flarm_look)
+  {
+    view.Create(parent, r);
+    UpdateLayout(r);
+  }
+
+  void UpdateLayout(const PixelRect &rc) noexcept;
+};
+
+void
+TrafficWidget::Windows::UpdateLayout(const PixelRect &rc) noexcept
+{
+  view.Move(rc);
+
+  const unsigned margin = Layout::Scale(1);
+  const unsigned button_height = Layout::GetMinimumControlHeight();
+  const unsigned button_width = std::max(unsigned(rc.right / 6),
+                                         button_height);
+
+  const int x1 = rc.right / 2;
+  const int x0 = x1 - button_width;
+  const int x2 = x1 + button_width;
+
+  const int y0 = margin;
+  const int y1 = y0 + button_height;
+  const int y3 = rc.bottom - margin;
+  const int y2 = y3 - button_height;
+
+  PixelRect button_rc;
+
+  button_rc.left = x0;
+  button_rc.top = y0;
+  button_rc.right = x1 - margin;
+  button_rc.bottom = y1;
+  zoom_in_button.Move(button_rc);
+
+  button_rc.left = x1;
+  button_rc.right = x2 - margin;
+  zoom_out_button.Move(button_rc);
+
+  button_rc.left = x0;
+  button_rc.top = y2;
+  button_rc.right = x1 - margin;
+  button_rc.bottom = y3;
+  previous_item_button.Move(button_rc);
+
+  button_rc.left = x1;
+  button_rc.right = x2 - margin;
+  next_item_button.Move(button_rc);
+
+  button_rc.left = margin;
+  button_rc.top = button_height * 3 / 2;
+  button_rc.right = button_rc.left + Layout::Scale(50);
+  button_rc.bottom = button_rc.top + button_height;
+  details_button.Move(button_rc);
+
+  button_rc.right = rc.right - margin;
+  button_rc.left = button_rc.right - Layout::Scale(50);
+  close_button.Move(button_rc);
+}
+
+TrafficWidget::TrafficWidget() = default;
+TrafficWidget::~TrafficWidget() noexcept = default;
+
 void
 TrafficWidget::OpenDetails()
 {
-  view->OpenDetails();
+  windows->view.OpenDetails();
 }
 
 void
 TrafficWidget::ZoomIn()
 {
-  view->ZoomIn();
+  windows->view.ZoomIn();
   UpdateButtons();
 }
 
 void
 TrafficWidget::ZoomOut()
 {
-  view->ZoomOut();
+  windows->view.ZoomOut();
   UpdateButtons();
 }
 
 void
 TrafficWidget::PreviousTarget()
 {
-  view->PrevTarget();
+  windows->view.PrevTarget();
 }
 
 void
 TrafficWidget::NextTarget()
 {
-  view->NextTarget();
+  windows->view.NextTarget();
 }
 
 void
@@ -613,43 +715,43 @@ FlarmTrafficControl::SwitchData()
 void
 TrafficWidget::SwitchData()
 {
-  view->SwitchData();
+  windows->view.SwitchData();
 }
 
 bool
 TrafficWidget::GetAutoZoom() const
 {
-  return view->GetAutoZoom();
+  return windows->view.GetAutoZoom();
 }
 
 void
 TrafficWidget::SetAutoZoom(bool value)
 {
-  view->SetAutoZoom(value);
+  windows->view.SetAutoZoom(value);
 }
 
 void
 TrafficWidget::ToggleAutoZoom()
 {
-  view->ToggleAutoZoom();
+  windows->view.ToggleAutoZoom();
 }
 
 bool
 TrafficWidget::GetNorthUp() const
 {
-  return view->GetNorthUp();
+  return windows->view.GetNorthUp();
 }
 
 void
 TrafficWidget::SetNorthUp(bool value)
 {
-  view->SetAutoZoom(value);
+  windows->view.SetAutoZoom(value);
 }
 
 void
 TrafficWidget::ToggleNorthUp()
 {
-  view->ToggleNorthUp();
+  windows->view.ToggleNorthUp();
 }
 
 void
@@ -670,11 +772,11 @@ TrafficWidget::Update()
     return;
   }
 
-  view->Update(basic.track,
+  windows->view.Update(basic.track,
                basic.flarm.traffic,
                CommonInterface::GetComputerSettings().team_code);
 
-  view->UpdateTaskDirection(calculated.task_stats.task_valid &&
+  windows->view.UpdateTaskDirection(calculated.task_stats.task_valid &&
                             calculated.task_stats.current_leg.solution_remaining.IsOk(),
                             calculated.task_stats.
                             current_leg.solution_remaining.cruise_track_bearing);
@@ -788,80 +890,22 @@ FlarmTrafficControl::OnKeyDown(unsigned key_code)
 void
 TrafficWidget::UpdateLayout()
 {
-  const PixelRect rc = GetContainer().GetClientRect();
-  view->Move(rc);
-
-  const unsigned margin = Layout::Scale(1);
-  const unsigned button_height = Layout::GetMinimumControlHeight();
-  const unsigned button_width = std::max(unsigned(rc.right / 6),
-                                         button_height);
-
-  const int x1 = rc.right / 2;
-  const int x0 = x1 - button_width;
-  const int x2 = x1 + button_width;
-
-  const int y0 = margin;
-  const int y1 = y0 + button_height;
-  const int y3 = rc.bottom - margin;
-  const int y2 = y3 - button_height;
-
-  PixelRect button_rc;
-
-  button_rc.left = x0;
-  button_rc.top = y0;
-  button_rc.right = x1 - margin;
-  button_rc.bottom = y1;
-  zoom_in_button->Move(button_rc);
-
-  button_rc.left = x1;
-  button_rc.right = x2 - margin;
-  zoom_out_button->Move(button_rc);
-
-  button_rc.left = x0;
-  button_rc.top = y2;
-  button_rc.right = x1 - margin;
-  button_rc.bottom = y3;
-  previous_item_button->Move(button_rc);
-
-  button_rc.left = x1;
-  button_rc.right = x2 - margin;
-  next_item_button->Move(button_rc);
-
-  button_rc.left = margin;
-  button_rc.top = button_height * 3 / 2;
-  button_rc.right = button_rc.left + Layout::Scale(50);
-  button_rc.bottom = button_rc.top + button_height;
-  details_button->Move(button_rc);
-
-  button_rc.right = rc.right - margin;
-  button_rc.left = button_rc.right - Layout::Scale(50);
-  close_button->Move(button_rc);
+  windows->UpdateLayout(GetContainer().GetClientRect());
 }
 
 void
 TrafficWidget::UpdateButtons()
 {
-  const bool unlocked = !view->WarningMode();
+  const bool unlocked = !windows->view.WarningMode();
   const TrafficList &traffic = CommonInterface::Basic().flarm.traffic;
   const bool not_empty = !traffic.IsEmpty();
   const bool two_or_more = traffic.GetActiveTrafficCount() >= 2;
 
-  zoom_in_button->SetEnabled(unlocked && view->CanZoomIn());
-  zoom_out_button->SetEnabled(unlocked && view->CanZoomOut());
-  previous_item_button->SetEnabled(unlocked && two_or_more);
-  next_item_button->SetEnabled(unlocked && two_or_more);
-  details_button->SetEnabled(unlocked && not_empty);
-}
-
-static Button *
-NewSymbolButton(ContainerWindow &parent, const ButtonLook &look,
-                const TCHAR *caption,
-                const PixelRect &rc,
-                Button::Callback callback) noexcept
-{
-  return new Button(parent, rc, WindowStyle(),
-                    std::make_unique<SymbolButtonRenderer>(look, caption),
-                    std::move(callback));
+  windows->zoom_in_button.SetEnabled(unlocked && windows->view.CanZoomIn());
+  windows->zoom_out_button.SetEnabled(unlocked && windows->view.CanZoomOut());
+  windows->previous_item_button.SetEnabled(unlocked && two_or_more);
+  windows->next_item_button.SetEnabled(unlocked && two_or_more);
+  windows->details_button.SetEnabled(unlocked && not_empty);
 }
 
 void
@@ -871,46 +915,10 @@ TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
 
   const Look &look = UIGlobals::GetLook();
 
-  const PixelRect rc = GetContainer().GetClientRect();
-
-  zoom_in_button = NewSymbolButton(GetContainer(), look.dialog.button,
-                                   _T("+"), rc,
-                                   [this](){ ZoomIn(); });
-  zoom_out_button = NewSymbolButton(GetContainer(), look.dialog.button,
-                                    _T("-"), rc,
-                                    [this](){ ZoomOut(); });
-  previous_item_button = NewSymbolButton(GetContainer(), look.dialog.button,
-                                         _T("<"), rc,
-                                         [this](){ PreviousTarget(); });
-  next_item_button = NewSymbolButton(GetContainer(), look.dialog.button,
-                                     _T(">"), rc,
-                                     [this](){ NextTarget(); });
-  details_button = new Button(GetContainer(), look.dialog.button,
-                              _("Details"), rc, WindowStyle(),
-                              [this](){ OpenDetails(); });
-  close_button = new Button(GetContainer(), look.dialog.button,
-                            _("Close"), rc, WindowStyle(),
-                            [](){ PageActions::Restore(); });
-
-  view = new FlarmTrafficControl(look.flarm_dialog);
-  view->Create(GetContainer(), rc);
-
+  windows = std::make_unique<Windows>(*this, GetContainer(),
+                                      GetContainer().GetClientRect(),
+                                      look.dialog.button, look.flarm_dialog);
   UpdateLayout();
-}
-
-void
-TrafficWidget::Unprepare()
-{
-  delete zoom_in_button;
-  delete zoom_out_button;
-  delete previous_item_button;
-  delete next_item_button;
-  delete details_button;
-  delete close_button;
-
-  delete view;
-
-  ContainerWidget::Unprepare();
 }
 
 void
@@ -923,7 +931,7 @@ TrafficWidget::Show(const PixelRect &rc)
   UpdateLayout();
 
   /* show the "Close" button only if this is a "special" page */
-  close_button->SetVisible(CommonInterface::GetUIState().pages.special_page.IsDefined());
+  windows->close_button.SetVisible(CommonInterface::GetUIState().pages.special_page.IsDefined());
 
   CommonInterface::GetLiveBlackboard().AddListener(*this);
 }
@@ -947,7 +955,7 @@ TrafficWidget::Move(const PixelRect &rc)
 bool
 TrafficWidget::SetFocus()
 {
-  view->SetFocus();
+  windows->view.SetFocus();
   return true;
 }
 

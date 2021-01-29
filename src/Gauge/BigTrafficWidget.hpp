@@ -28,17 +28,20 @@
 #include "Blackboard/BlackboardListener.hpp"
 #include "util/Compiler.h"
 
+#include <memory>
+
 class Button;
 class FlarmTrafficControl;
 
 class TrafficWidget : public ContainerWidget,
                       private NullBlackboardListener {
-  Button *zoom_in_button, *zoom_out_button;
-  Button *previous_item_button, *next_item_button;
-  Button *details_button;
-  Button *close_button;
+  struct Windows;
 
-  FlarmTrafficControl *view;
+  std::unique_ptr<Windows> windows;
+
+public:
+  TrafficWidget();
+  ~TrafficWidget() noexcept;
 
 protected:
   void UpdateLayout();
@@ -66,7 +69,6 @@ public:
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
-  virtual void Unprepare() override;
   virtual void Show(const PixelRect &rc) override;
   virtual void Hide() override;
   virtual void Move(const PixelRect &rc) override;
