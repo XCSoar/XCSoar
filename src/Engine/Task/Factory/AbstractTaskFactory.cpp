@@ -1114,7 +1114,7 @@ AbstractTaskFactory::AppendOptionalStart(WaypointPtr wp)
   OrderedTaskPoint* tp = NULL;
   if (task.TaskSize())
     tp = task.GetPoint(0).Clone(behaviour, GetOrderedTaskSettings(),
-                                std::move(wp));
+                                std::move(wp)).release();
   else
     tp = CreateStart(std::move(wp));
 

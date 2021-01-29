@@ -31,6 +31,8 @@
 #include "Geo/Flat/FlatBoundingBox.hpp"
 #include "util/Compiler.h"
 
+#include <memory>
+
 struct TaskBehaviour;
 struct OrderedTaskSettings;
 class FlatProjection;
@@ -102,10 +104,9 @@ public:
    * @param ordered_task_settings Ordered task behaviour of clone
    * @param waypoint Waypoint to shift to (or NULL)
    */
-  gcc_malloc
-  OrderedTaskPoint *Clone(const TaskBehaviour &task_behaviour,
-                          const OrderedTaskSettings &ordered_task_settings,
-                          WaypointPtr &&waypoint=WaypointPtr()) const;
+  std::unique_ptr<OrderedTaskPoint> Clone(const TaskBehaviour &task_behaviour,
+                                          const OrderedTaskSettings &ordered_task_settings,
+                                          WaypointPtr &&waypoint=WaypointPtr()) const;
 
   /**
    * Update observation zone geometry (or other internal data) when

@@ -776,7 +776,7 @@ OrderedTask::Append(const OrderedTaskPoint &new_tp)
     return false;
 
   const unsigned i = task_points.size();
-  task_points.push_back(new_tp.Clone(task_behaviour, ordered_settings));
+  task_points.push_back(new_tp.Clone(task_behaviour, ordered_settings).release());
   if (i > 0)
     SetNeighbours(i - 1);
   else {
@@ -792,7 +792,7 @@ bool
 OrderedTask::AppendOptionalStart(const OrderedTaskPoint &new_tp)
 {
   optional_start_points.push_back(new_tp.Clone(task_behaviour,
-                                               ordered_settings));
+                                               ordered_settings).release());
   if (task_points.size() > 1)
     SetNeighbours(0);
   return true;
@@ -816,7 +816,7 @@ OrderedTask::Insert(const OrderedTaskPoint &new_tp, const unsigned position)
     active_task_point++;
 
   task_points.insert(task_points.begin() + position,
-                     new_tp.Clone(task_behaviour, ordered_settings));
+                     new_tp.Clone(task_behaviour, ordered_settings).release());
 
   if (position)
     SetNeighbours(position - 1);
@@ -843,7 +843,7 @@ OrderedTask::Replace(const OrderedTaskPoint &new_tp, const unsigned position)
     return false;
 
   delete task_points[position];
-  task_points[position] = new_tp.Clone(task_behaviour, ordered_settings);
+  task_points[position] = new_tp.Clone(task_behaviour, ordered_settings).release();
 
   if (position)
     SetNeighbours(position - 1);
@@ -869,7 +869,7 @@ OrderedTask::ReplaceOptionalStart(const OrderedTaskPoint &new_tp,
 
   delete optional_start_points[position];
   optional_start_points[position] = new_tp.Clone(task_behaviour,
-                                                 ordered_settings);
+                                                 ordered_settings).release();
 
   SetNeighbours(0);
   return true;
@@ -1255,7 +1255,7 @@ OrderedTask::CheckDuplicateWaypoints(Waypoints& waypoints,
     auto wp = waypoints.CheckExistsOrAppend((*i)->GetWaypointPtr());
 
     const OrderedTaskPoint *new_tp =
-      (*i)->Clone(task_behaviour, ordered_settings, std::move(wp));
+      (*i)->Clone(task_behaviour, ordered_settings, std::move(wp)).release();
     if (is_task)
       Replace(*new_tp, std::distance(begin, i));
     else
@@ -1337,11 +1337,11 @@ OrderedTask::RelocateOptionalStart(const unsigned position,
   if (position >= optional_start_points.size())
     return false;
 
-  OrderedTaskPoint *new_tp =
+  auto new_tp =
     optional_start_points[position]->Clone(task_behaviour, ordered_settings,
                                            std::move(waypoint));
   delete optional_start_points[position];
-  optional_start_points[position]= new_tp;
+  optional_start_points[position] = new_tp.release();
   return true;
 }
 
@@ -1351,11 +1351,10 @@ OrderedTask::Relocate(const unsigned position, WaypointPtr &&waypoint)
   if (position >= TaskSize())
     return false;
 
-  OrderedTaskPoint *new_tp = task_points[position]->Clone(task_behaviour,
-                                                          ordered_settings,
-                                                          std::move(waypoint));
+  auto new_tp = task_points[position]->Clone(task_behaviour,
+                                             ordered_settings,
+                                             std::move(waypoint));
   bool success = Replace(*new_tp, position);
-  delete new_tp;
   return success;
 }
 

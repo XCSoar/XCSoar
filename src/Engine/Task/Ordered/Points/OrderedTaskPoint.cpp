@@ -144,7 +144,7 @@ OrderedTaskPoint::Equals(const OrderedTaskPoint &other) const
     other.GetObservationZone().Equals(GetObservationZone());
 }
 
-OrderedTaskPoint *
+std::unique_ptr<OrderedTaskPoint>
 OrderedTaskPoint::Clone(const TaskBehaviour &task_behaviour,
                         const OrderedTaskSettings &ordered_task_settings,
                         WaypointPtr &&waypoint) const
@@ -154,28 +154,28 @@ OrderedTaskPoint::Clone(const TaskBehaviour &task_behaviour,
 
   switch (GetType()) {
   case TaskPointType::START:
-    return new StartPoint(GetObservationZone().Clone(waypoint->location),
-                          std::move(waypoint), task_behaviour,
-                          ordered_task_settings.start_constraints);
+    return std::make_unique<StartPoint>(GetObservationZone().Clone(waypoint->location),
+                                        std::move(waypoint), task_behaviour,
+                                        ordered_task_settings.start_constraints);
 
   case TaskPointType::AST: {
     const ASTPoint &src = *(const ASTPoint *)this;
-    ASTPoint *dest =
-      new ASTPoint(GetObservationZone().Clone(waypoint->location),
+    auto dest =
+      std::make_unique<ASTPoint>(GetObservationZone().Clone(waypoint->location),
                    std::move(waypoint), task_behaviour, IsBoundaryScored());
     dest->SetScoreExit(src.GetScoreExit());
     return dest;
   }
 
   case TaskPointType::AAT:
-    return new AATPoint(GetObservationZone().Clone(waypoint->location),
-                        std::move(waypoint), task_behaviour);
+    return std::make_unique<AATPoint>(GetObservationZone().Clone(waypoint->location),
+                                      std::move(waypoint), task_behaviour);
 
   case TaskPointType::FINISH:
-    return new FinishPoint(GetObservationZone().Clone(waypoint->location),
-                           std::move(waypoint), task_behaviour,
-                           ordered_task_settings.finish_constraints,
-                           IsBoundaryScored());
+    return std::make_unique<FinishPoint>(GetObservationZone().Clone(waypoint->location),
+                                         std::move(waypoint), task_behaviour,
+                                         ordered_task_settings.finish_constraints,
+                                         IsBoundaryScored());
 
   case TaskPointType::UNORDERED:
     /* an OrderedTaskPoint must never be UNORDERED */
