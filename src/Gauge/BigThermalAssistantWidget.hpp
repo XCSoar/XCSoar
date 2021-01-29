@@ -27,6 +27,8 @@ Copyright_License {
 #include "Widget/ContainerWidget.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 
+#include <memory>
+
 struct AttitudeState;
 class LiveBlackboard;
 struct ThermalAssistantLook;
@@ -39,19 +41,19 @@ class BigThermalAssistantWidget
   LiveBlackboard &blackboard;
   const ThermalAssistantLook &look;
 
-  BigThermalAssistantWindow *view;
+  std::unique_ptr<BigThermalAssistantWindow> view;
 
-  Button *close_button;
+  std::unique_ptr<Button> close_button;
 
 public:
   BigThermalAssistantWidget(LiveBlackboard &_blackboard,
-                            const ThermalAssistantLook &_look)
-    :blackboard(_blackboard), look(_look) {}
+                            const ThermalAssistantLook &_look) noexcept;
+
+  ~BigThermalAssistantWidget() noexcept;
 
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
-  virtual void Unprepare() override;
   virtual void Show(const PixelRect &rc) override;
   virtual void Hide() override;
   virtual void Move(const PixelRect &rc) override;

@@ -33,6 +33,12 @@ Copyright_License {
 #include "Interface.hpp"
 #include "PageActions.hpp"
 
+BigThermalAssistantWidget::BigThermalAssistantWidget(LiveBlackboard &_blackboard,
+                                                     const ThermalAssistantLook &_look) noexcept
+    :blackboard(_blackboard), look(_look) {}
+
+BigThermalAssistantWidget::~BigThermalAssistantWidget() noexcept = default;
+
 void
 BigThermalAssistantWidget::UpdateLayout()
 {
@@ -65,22 +71,14 @@ BigThermalAssistantWidget::Prepare(ContainerWindow &parent,
 
   const PixelRect rc = GetContainer().GetClientRect();
 
-  close_button = new Button(GetContainer(),
-                            UIGlobals::GetDialogLook().button,
-                            _("Close"), rc, WindowStyle(),
-                            [](){ PageActions::Restore(); });
+  close_button = std::make_unique<Button>(GetContainer(),
+                                          UIGlobals::GetDialogLook().button,
+                                          _("Close"), rc, WindowStyle(),
+                                          [](){ PageActions::Restore(); });
 
-  view = new BigThermalAssistantWindow(look, Layout::FastScale(10));
+  view = std::make_unique<BigThermalAssistantWindow>(look,
+                                                     Layout::FastScale(10));
   view->Create(GetContainer(), rc);
-}
-
-void
-BigThermalAssistantWidget::Unprepare()
-{
-  delete view;
-  delete close_button;
-
-  ContainerWidget::Unprepare();
 }
 
 void
