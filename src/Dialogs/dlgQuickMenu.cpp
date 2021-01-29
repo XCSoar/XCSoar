@@ -267,18 +267,15 @@ ShowQuickMenu(UI::SingleWindow &parent, const Menu &menu) noexcept
 {
   const auto &dialog_look = UIGlobals::GetDialogLook();
 
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      dialog_look, nullptr);
-  QuickMenu quick_menu(dialog, menu);
+  TWidgetDialog<QuickMenu> dialog(WidgetDialog::Full{},
+                                  UIGlobals::GetMainWindow(),
+                                  dialog_look, nullptr);
 
-  dialog.FinishPreliminary(&quick_menu);
+  dialog.SetWidget(dialog, menu);
+  if (dialog.ShowModal() != mrOK)
+    return -1;
 
-  const auto result = dialog.ShowModal();
-  dialog.StealWidget();
-
-  return result == mrOK
-    ? int(quick_menu.clicked_event)
-    : -1;
+  return dialog.GetWidget().clicked_event;
 }
 
 void
