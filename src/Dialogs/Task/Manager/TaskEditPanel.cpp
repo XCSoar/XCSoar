@@ -402,7 +402,6 @@ TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
     }
   } else if (!ordered_task->IsFull()) {
 
-    OrderedTaskPoint* point = nullptr;
     AbstractTaskFactory &factory = ordered_task->GetFactory();
     auto way_point =
       ShowWaypointListDialog(ordered_task->TaskSize() > 0
@@ -412,11 +411,9 @@ TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
     if (!way_point)
       return;
 
-    if (ItemIndex == 0) {
-      point = factory.CreateStart(std::move(way_point));
-    } else {
-      point = factory.CreateIntermediate(std::move(way_point));
-     }
+    auto point = ItemIndex == 0
+      ? (std::unique_ptr<OrderedTaskPoint>)factory.CreateStart(std::move(way_point))
+      : (std::unique_ptr<OrderedTaskPoint>)factory.CreateIntermediate(std::move(way_point));
     if (point == nullptr)
       return;
 
@@ -426,8 +423,6 @@ TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
       ordered_task->UpdateGeometry();
       RefreshView();
     }
-
-    delete point;
   }
 }
 

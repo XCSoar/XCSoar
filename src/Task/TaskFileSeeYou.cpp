@@ -411,12 +411,12 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
  * @param factType The XCSoar factory type
  * @return The point
  */
-static OrderedTaskPoint*
+static std::unique_ptr<OrderedTaskPoint>
 CreatePoint(unsigned pos, unsigned n_waypoints, WaypointPtr &&wp,
     AbstractTaskFactory& fact, ObservationZonePoint* oz,
     const TaskFactoryType factType)
 {
-  OrderedTaskPoint *pt = nullptr;
+  std::unique_ptr<OrderedTaskPoint> pt;
 
   if (pos == 0)
     pt = oz
@@ -567,14 +567,12 @@ try {
     ObservationZonePoint* oz = CreateOZ(turnpoint_infos[i], i, n_waypoints,
                                         waypoints_in_task, factType);
     assert(waypoints_in_task[i]);
-    OrderedTaskPoint *pt = CreatePoint(i, n_waypoints,
-                                       WaypointPtr(waypoints_in_task[i]),
-                                       fact, oz, factType);
+    auto pt = CreatePoint(i, n_waypoints,
+                          WaypointPtr(waypoints_in_task[i]),
+                          fact, oz, factType);
 
     if (pt != nullptr)
       fact.Append(*pt, false);
-
-    delete pt;
   }
   return task;
 } catch (const std::runtime_error &e) {

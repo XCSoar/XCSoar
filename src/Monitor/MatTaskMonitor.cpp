@@ -82,12 +82,11 @@ MatTaskAddWidget::OnAdd()
   AbstractTaskFactory &factory = task_manager->GetFactory();
 
   auto wp = waypoint;
-  IntermediateTaskPoint *tp =
+  auto tp =
     factory.CreateIntermediate(TaskPointFactoryType::MAT_CYLINDER,
                                std::move(wp));
   if (tp != nullptr) {
     factory.Insert(*tp, idx, false);
-    delete tp;
   }
 }
 

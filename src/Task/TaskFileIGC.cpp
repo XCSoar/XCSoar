@@ -123,7 +123,7 @@ TaskFileIGC::GetTask(const TaskBehaviour &task_behaviour,
 
     auto wp = MakeWaypoint(it.location, waypoint_name.c_str());
 
-    OrderedTaskPoint *tp;
+    std::unique_ptr<OrderedTaskPoint> tp;
 
     if (i == 0)
       tp = fact.CreateStart(std::move(wp));
@@ -134,7 +134,6 @@ TaskFileIGC::GetTask(const TaskBehaviour &task_behaviour,
 
     if (tp != nullptr) {
       fact.Append(*tp);
-      delete tp;
     }
 
     ++i;

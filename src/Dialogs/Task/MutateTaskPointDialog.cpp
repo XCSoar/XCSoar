@@ -88,17 +88,11 @@ SetPointType(OrderedTask &task, unsigned index,
     // no change
     return false;
 
-  bool task_modified = false;
-
   auto point = factory.CreateMutatedPoint(old_point, type);
   if (point == nullptr)
     return false;
 
-  if (factory.Replace(*point, index, true))
-    task_modified = true;
-  delete point;
-
-  return task_modified;
+  return factory.Replace(*point, index, true);
 }
 
 bool

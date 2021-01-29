@@ -25,6 +25,9 @@
 #include "harness_waypoints.hpp"
 
 #include "Task/Factory/AbstractTaskFactory.hpp"
+#include "Task/Ordered/Points/StartPoint.hpp"
+#include "Task/Ordered/Points/FinishPoint.hpp"
+#include "Task/Ordered/Points/IntermediatePoint.hpp"
 #include "util/StaticArray.hxx"
 
 extern "C" {

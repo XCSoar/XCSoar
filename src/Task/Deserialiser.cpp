@@ -201,33 +201,33 @@ DeserialiseTaskpoint(OrderedTask &data, const ConstDataNode &node,
   }
 
   if (StringIsEqual(type, _T("Start"))) {
-    pt.reset(oz != nullptr
-             ? fact.CreateStart(oz, std::move(wp))
-             : fact.CreateStart(std::move(wp)));
+    pt = oz != nullptr
+      ? fact.CreateStart(oz, std::move(wp))
+      : fact.CreateStart(std::move(wp));
 
   } else if (StringIsEqual(type, _T("OptionalStart"))) {
-    pt.reset(oz != nullptr
-             ? fact.CreateStart(oz, std::move(wp))
-             : fact.CreateStart(std::move(wp)));
+    pt = oz != nullptr
+      ? fact.CreateStart(oz, std::move(wp))
+      : fact.CreateStart(std::move(wp));
     fact.AppendOptionalStart(*pt);
 
     // don't let generic code below add it
     pt.reset();
 
   } else if (StringIsEqual(type, _T("Turn"))) {
-    pt.reset(oz != nullptr
-             ? fact.CreateASTPoint(oz, std::move(wp))
-             : fact.CreateIntermediate(std::move(wp)));
+    pt = oz != nullptr
+      ? fact.CreateASTPoint(oz, std::move(wp))
+      : fact.CreateIntermediate(std::move(wp));
 
   } else if (StringIsEqual(type, _T("Area"))) {
-    pt.reset(oz != nullptr
-             ? fact.CreateAATPoint(oz, std::move(wp))
-             : fact.CreateIntermediate(std::move(wp)));
+    pt = oz != nullptr
+      ? fact.CreateAATPoint(oz, std::move(wp))
+      : fact.CreateIntermediate(std::move(wp));
 
   } else if (StringIsEqual(type, _T("Finish"))) {
-    pt.reset(oz != nullptr
-             ? fact.CreateFinish(oz, std::move(wp))
-             : fact.CreateFinish(std::move(wp)));
+    pt = oz != nullptr
+      ? fact.CreateFinish(oz, std::move(wp))
+      : fact.CreateFinish(std::move(wp));
   } 
 
   if (!pt)

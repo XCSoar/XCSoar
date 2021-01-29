@@ -32,6 +32,7 @@ Copyright_License {
 #include "Engine/Waypoint/Ptr.hpp"
 
 #include <cstdint>
+#include <memory>
 
 struct TaskFactoryConstraints;
 class AATPoint;
@@ -274,9 +275,8 @@ public:
    * 
    * @return Initialised object.  Transfers ownership to client.
    */
-  gcc_malloc
-  OrderedTaskPoint* CreatePoint(const TaskPointFactoryType type,
-                                WaypointPtr wp) const;
+  std::unique_ptr<OrderedTaskPoint> CreatePoint(const TaskPointFactoryType type,
+                                                WaypointPtr wp) const noexcept;
 
   /**
    * Create a point of supplied type
@@ -289,12 +289,11 @@ public:
    * @param finish_radius.  if < 0 then use default, else use for new point
    * @return Initialised object.  Transfers ownership to client.
    */
-  gcc_malloc
-  OrderedTaskPoint* CreatePoint(const TaskPointFactoryType type,
-                                WaypointPtr wp,
-                                double start_radius,
-                                double turnpoint_radius,
-                                double finish_radius) const;
+  std::unique_ptr<OrderedTaskPoint> CreatePoint(const TaskPointFactoryType type,
+                                                WaypointPtr wp,
+                                                double start_radius,
+                                                double turnpoint_radius,
+                                                double finish_radius) const noexcept;
 
   /**
    * Create start point of specified type
@@ -304,9 +303,8 @@ public:
    *
    * @return Initialised StartPoint if valid, otherwise NULL
    */
-  gcc_malloc
-  StartPoint *CreateStart(const TaskPointFactoryType type,
-                          WaypointPtr wp) const;
+  std::unique_ptr<StartPoint> CreateStart(const TaskPointFactoryType type,
+                                          WaypointPtr wp) const noexcept;
 
   /**
    * Create intermediate point of specified type
@@ -316,9 +314,8 @@ public:
    *
    * @return Initialised IntermediateTaskPoint if valid, otherwise NULL
    */
-  gcc_malloc
-  IntermediateTaskPoint* CreateIntermediate(const TaskPointFactoryType type,
-                                            WaypointPtr wp) const;
+  std::unique_ptr<IntermediateTaskPoint> CreateIntermediate(const TaskPointFactoryType type,
+                                                            WaypointPtr wp) const noexcept;
 
   /**
    * Create finish point of specified type
@@ -328,9 +325,8 @@ public:
    *
    * @return Initialised FinishPoint if valid, otherwise NULL
    */
-  gcc_malloc
-  FinishPoint* CreateFinish(const TaskPointFactoryType type,
-                            WaypointPtr wp) const;
+  std::unique_ptr<FinishPoint> CreateFinish(const TaskPointFactoryType type,
+                                            WaypointPtr wp) const noexcept;
 
   /**
    * Create start point of default type
@@ -339,8 +335,7 @@ public:
    *
    * @return Initialised StartPoint if valid, otherwise NULL
    */
-  gcc_malloc
-  StartPoint *CreateStart(WaypointPtr wp) const;
+  std::unique_ptr<StartPoint> CreateStart(WaypointPtr wp) const noexcept;
 
   /**
    * Create intermediate point of default type
@@ -349,8 +344,7 @@ public:
    *
    * @return Initialised IntermediateTaskPoint if valid, otherwise NULL
    */
-  gcc_malloc
-  IntermediateTaskPoint *CreateIntermediate(WaypointPtr wp) const;
+  std::unique_ptr<IntermediateTaskPoint> CreateIntermediate(WaypointPtr wp) const noexcept;
 
   /**
    * Create finish point of default type
@@ -359,8 +353,7 @@ public:
    *
    * @return Initialised FinishPoint if valid, otherwise NULL
    */
-  gcc_malloc
-  FinishPoint *CreateFinish(WaypointPtr wp) const;
+  std::unique_ptr<FinishPoint> CreateFinish(WaypointPtr wp) const noexcept;
 
   /**
    * Create start point given an OZ
@@ -370,9 +363,8 @@ public:
    *
    * @return Initialised object.  Ownership is transferred to client.
    */
-  gcc_malloc
-  StartPoint *CreateStart(ObservationZonePoint *pt,
-                          WaypointPtr wp) const;
+  std::unique_ptr<StartPoint> CreateStart(ObservationZonePoint *pt,
+                                          WaypointPtr wp) const noexcept;
 
   /**
    * Creates new OrderedTaskPoint of a different type with the
@@ -381,9 +373,8 @@ public:
    * @param tp
    * @return pointer to the point
    */
-  gcc_malloc
-  OrderedTaskPoint* CreateMutatedPoint(const OrderedTaskPoint &tp,
-                                       const TaskPointFactoryType newtype) const;
+  std::unique_ptr<OrderedTaskPoint> CreateMutatedPoint(const OrderedTaskPoint &tp,
+                                                       const TaskPointFactoryType newtype) const noexcept;
 
   /**
   * Returns "suggested/best" type for the current factory based on the type
@@ -409,8 +400,8 @@ public:
    *
    * @return Initialised object.  Ownership is transferred to client.
    */
-  gcc_malloc
-  ASTPoint *CreateASTPoint(ObservationZonePoint *pt, WaypointPtr wp) const;
+  std::unique_ptr<ASTPoint> CreateASTPoint(ObservationZonePoint *pt,
+                                           WaypointPtr wp) const noexcept;
 
   /**
    * Create an AAT point given an OZ
@@ -420,8 +411,8 @@ public:
    *
    * @return Initialised object.  Ownership is transferred to client.
    */
-  gcc_malloc
-  AATPoint *CreateAATPoint(ObservationZonePoint* pt, WaypointPtr wp) const;
+  std::unique_ptr<AATPoint> CreateAATPoint(ObservationZonePoint* pt,
+                                           WaypointPtr wp) const noexcept;
 
   /**
    * Create a finish point given an OZ
@@ -431,8 +422,8 @@ public:
    *
    * @return Initialised object.  Ownership is transferred to client.
    */
-  gcc_malloc
-  FinishPoint *CreateFinish(ObservationZonePoint* pt, WaypointPtr wp) const;
+  std::unique_ptr<FinishPoint> CreateFinish(ObservationZonePoint* pt,
+                                            WaypointPtr wp) const noexcept;
 
   /**
    * Check whether task is complete and valid according to factory rules

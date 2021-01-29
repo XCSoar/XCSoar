@@ -56,13 +56,11 @@ AppendToTask(OrderedTask &task, WaypointPtr &&waypoint) noexcept
   }
 
   const AbstractTaskFactory &factory = task.GetFactory();
-  auto *task_point = factory.CreateIntermediate(std::move(waypoint));
+  auto task_point = factory.CreateIntermediate(std::move(waypoint));
   if (task_point == nullptr)
     return MapTaskManager::UNMODIFIED;
 
   bool success = i >= 0 ? task.Insert(*task_point, i) : task.Append(*task_point);
-  delete task_point;
-
   if (!success)
     return MapTaskManager::UNMODIFIED;
 
@@ -77,23 +75,18 @@ MutateFromGoto(OrderedTask &task, WaypointPtr &&finish_waypoint,
                WaypointPtr &&start_waypoint) noexcept
 {
   const AbstractTaskFactory &factory = task.GetFactory();
-  auto *start_point = factory.CreateStart(std::move(start_waypoint));
+  auto start_point = factory.CreateStart(std::move(start_waypoint));
   if (start_point == nullptr)
     return MapTaskManager::UNMODIFIED;
 
-  bool success = task.Append(*start_point);
-  delete start_point;
-  if (!success)
+  if (!task.Append(*start_point))
     return MapTaskManager::UNMODIFIED;
 
-  auto *finish_point = factory.CreateFinish(std::move(finish_waypoint));
+  auto finish_point = factory.CreateFinish(std::move(finish_waypoint));
   if (finish_point == nullptr)
     return MapTaskManager::UNMODIFIED;
 
-  success = task.Append(*finish_point);
-  delete finish_point;
-
-  if (!success)
+  if (!task.Append(*finish_point))
     return MapTaskManager::UNMODIFIED;
 
   return MapTaskManager::MUTATED_FROM_GOTO;
@@ -158,13 +151,11 @@ InsertInTask(OrderedTask &task, WaypointPtr &&waypoint) noexcept
   }
 
   const AbstractTaskFactory &factory = task.GetFactory();
-  auto *task_point = factory.CreateIntermediate(std::move(waypoint));
+  auto task_point = factory.CreateIntermediate(std::move(waypoint));
   if (task_point == nullptr)
     return MapTaskManager::UNMODIFIED;
 
-  bool success = task.Insert(*task_point, i);
-  delete task_point;
-  if (!success)
+  if (!task.Insert(*task_point, i))
     return MapTaskManager::UNMODIFIED;
   if (!task.CheckTask())
     return MapTaskManager::INVALID;
