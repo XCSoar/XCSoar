@@ -38,10 +38,11 @@ Copyright_License {
 #include "system/FileUtil.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
-#include "ui/canvas/Canvas.hpp"
-#include "Screen/Layout.hpp"
+#include "Renderer/TextRowRenderer.hpp"
+#include "Look/DialogLook.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "util/StringCompare.hxx"
+#include "UIGlobals.hpp"
 
 #include <cassert>
 
@@ -56,6 +57,8 @@ class TaskListPanel final
   : public ListWidget {
 
   TaskManagerDialog &dialog;
+
+  TextRowRenderer row_renderer;
 
   OrderedTask **active_task;
   bool *task_modified;
@@ -171,8 +174,7 @@ TaskListPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
 {
   assert(DrawListIndex <= task_store.Size());
 
-  canvas.DrawText(rc.WithPadding(Layout::GetTextPadding()).GetTopLeft(),
-                  task_store.GetName(DrawListIndex));
+  row_renderer.DrawTextRow(canvas, rc, task_store.GetName(DrawListIndex));
 }
 
 void
@@ -316,8 +318,10 @@ TaskListPanel::OnMoreClicked()
 void
 TaskListPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  CreateList(parent, dialog.GetLook(),
-             rc, Layout::GetMinimumControlHeight());
+  const DialogLook &look = UIGlobals::GetDialogLook();
+
+  CreateList(parent, dialog.GetLook(), rc,
+             row_renderer.CalculateLayout(*look.list.font));
 
   CreateButtons(buttons->GetButtonPanel());
 
