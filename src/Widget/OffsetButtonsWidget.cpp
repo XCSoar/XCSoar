@@ -26,6 +26,8 @@ Copyright_License {
 #include "util/Macros.hpp"
 #include "Screen/Layout.hpp"
 
+#include <array>
+
 #include <stdio.h>
 
 PixelSize
@@ -42,25 +44,27 @@ OffsetButtonsWidget::GetMaximumSize() const
       Layout::GetMaximumControlHeight() };
 }
 
-static void
-LayoutOffsetButtons(const PixelRect &total_rc, PixelRect buttons[4])
+static constexpr std::array<PixelRect, 4>
+LayoutOffsetButtons(const PixelRect &total_rc) noexcept
 {
   const unsigned total_width = total_rc.GetWidth();
   PixelRect rc = { 0, total_rc.top, total_rc.left, total_rc.bottom };
 
+  std::array<PixelRect, 4> buttons{};
   for (unsigned i = 0; i < 4; ++i) {
     rc.left = rc.right;
     rc.right = total_rc.left + (i + 1) * total_width / 4;
     buttons[i] = rc;
   }
+
+  return buttons;
 }
 
 void
 OffsetButtonsWidget::Prepare(ContainerWindow &parent,
                              const PixelRect &total_rc)
 {
-  PixelRect rc[ARRAY_SIZE(buttons)];
-  LayoutOffsetButtons(total_rc, rc);
+  const auto rc = LayoutOffsetButtons(total_rc);
 
   WindowStyle style;
   style.TabStop();
@@ -86,8 +90,7 @@ OffsetButtonsWidget::Unprepare()
 void
 OffsetButtonsWidget::Show(const PixelRect &total_rc)
 {
-  PixelRect rc[ARRAY_SIZE(buttons)];
-  LayoutOffsetButtons(total_rc, rc);
+  const auto rc = LayoutOffsetButtons(total_rc);
 
   for (unsigned i = 0; i < ARRAY_SIZE(buttons); ++i)
     buttons[i]->MoveAndShow(rc[i]);
@@ -103,8 +106,7 @@ OffsetButtonsWidget::Hide()
 void
 OffsetButtonsWidget::Move(const PixelRect &total_rc)
 {
-  PixelRect rc[ARRAY_SIZE(buttons)];
-  LayoutOffsetButtons(total_rc, rc);
+  const auto rc = LayoutOffsetButtons(total_rc);
 
   for (unsigned i = 0; i < ARRAY_SIZE(buttons); ++i)
     buttons[i]->Move(rc[i]);
