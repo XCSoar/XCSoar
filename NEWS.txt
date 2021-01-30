@@ -6,6 +6,7 @@ Version 7.0 - not yet released
   - new Logger-setting "CoPilot"
   - new setting "Thermal Averager needle"
   - select position of Thermal Assistant
+  - new setting "Cruise/Circling mode switch period"
 * data files
   - optimise the terrain loader
   - support runway width in CUP files

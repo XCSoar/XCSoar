@@ -165,9 +165,13 @@ struct FeaturesSettings {
 
 struct CirclingSettings {
   bool external_trigger_cruise_enabled;
+  double cruise_to_circling_mode_switch_threshold;
+  double circling_to_cruise_mode_switch_threshold;
 
   void SetDefaults() {
     external_trigger_cruise_enabled = false;
+    cruise_to_circling_mode_switch_threshold = 15;
+    circling_to_cruise_mode_switch_threshold = 10;
   }
 };
 

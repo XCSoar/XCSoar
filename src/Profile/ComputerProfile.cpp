@@ -112,6 +112,10 @@ Profile::Load(const ProfileMap &map, CirclingSettings &settings)
 {
   map.Get(ProfileKeys::EnableExternalTriggerCruise,
           settings.external_trigger_cruise_enabled);
+  map.Get(ProfileKeys::CruiseToCirclingModeSwitchThreshold,
+          settings.cruise_to_circling_mode_switch_threshold);
+  map.Get(ProfileKeys::CirclingToCruiseModeSwitchThreshold,
+          settings.circling_to_cruise_mode_switch_threshold);
 }
 
 void
